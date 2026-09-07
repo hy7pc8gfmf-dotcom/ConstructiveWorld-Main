@@ -11,3 +11,9 @@
 
 ## 教训（甄别工具链）
 初轮 shell comm 甄别因 CRLF 残留 + locale 全体失敏报假零；Python 声明级终审（CR 清洗）才见真相——9 件已收录（含 GRPO/Extras 改名吸收）。见 已合并存档/README-甄别报告.md。
+
+## 扩展层交付附录（2026-09-08）
+- CW220_Extensions.v 四关全绿：15,254 行 / 553 Qed+11 Defined / SHA256 14d4f48a...cee6 / coqchk 通过
+- v3 生成器 4 个结构性 bug（后续重生成时必须回写）：①多行 Extraction 探针被提头截断；②消费 Import 注在单元尾而非头；③漏建 Module Constitution 包裹；④单元间互撞重名检测缺失（tid/nle/leb 前置机三重名 → UpRecast/UpCLQuery 需 ISO 隔离）
+- 其他装配级修复：Q_scope 泄漏包裹（UpMinP/PredRelax）、S/O 遮蔽（UpPLA Section + Local Notation）、EnhancedMod 劫持（EvictId 13 条别名前缀化）、Constitution.uc_qle_bool_false_inv 真坏证明重写（-vos 探测不到该类，全量才现形）
+- v3 原始态备份：attn/_CW220_Extensions.v.bak_v3
