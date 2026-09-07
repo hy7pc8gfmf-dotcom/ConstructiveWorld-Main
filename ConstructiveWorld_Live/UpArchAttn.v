@@ -49,7 +49,6 @@ From Stdlib Require Import QArith.QArith.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpBudgetReal.
 Require Import CW_ConstructiveWorld_219.
-Require Import UpLogMono.
 Require Import UpBudgetReal.
 
 Local Open Scope Q_scope.
