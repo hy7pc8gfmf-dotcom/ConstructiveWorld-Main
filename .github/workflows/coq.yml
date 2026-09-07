@@ -54,13 +54,25 @@ jobs:
           cd ConstructiveWorld_vo
           bash build.sh
 
-      - name: coqchk full-tree certification
+      - name: coqchk full-tree certification (quiet; logs to artifact)
         run: |
           eval "$(opam env)"
           cd ConstructiveWorld_vo
-          for f in *.vo; do m="${f%.vo}"; echo "coqchk $m"; coqchk -Q . "" "$m" || exit 1; done
+          pass=0; fail=0
+          for f in *.vo; do m="${f%.vo}"
+            coqchk -Q . "" "$m" > "_chk_$m.log" 2>&1
+            if grep -q "Modules were successfully checked" "_chk_$m.log"; then pass=$((pass+1)); echo "$m PASS"
+            else fail=$((fail+1)); echo "$m FAIL"; tail -20 "_chk_$m.log"; fi
+          done
+          echo "coqchk summary: $pass pass / $fail fail"
+          [ $fail -eq 0 ]
+      - name: Upload coqchk logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coqchk-logs
+          path: ConstructiveWorld_vo/_chk_*.log
 
-      # 合并单文件版（约 40 分钟；ubuntu 环境无 Windows 端冻结史；失败不阻塞模块认证结论）
       - name: Merged single-file build (long; non-fatal)
         continue-on-error: true
         run: |
