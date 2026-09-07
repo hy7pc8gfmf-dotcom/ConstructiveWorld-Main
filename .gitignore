@@ -4,3 +4,8 @@ _tmp*/
 .lia.cache
 .nia.cache
 *.glob
+*.vo
+*.vos
+*.vok
+*.glob
+*.aux
