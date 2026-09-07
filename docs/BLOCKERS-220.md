@@ -1,0 +1,13 @@
+# 220 单文件版阻塞图谱（模块化拆分的依据）
+
+单文件 `releases/CW_ConstructiveWorld_220.v`（129,396 行）截至 2026-09-08 的阻塞点：
+
+| # | 位置 | 阻塞 | 模块级归属 | 模块化后状态 |
+|---|---|---|---|---|
+| 1 | L114786 | `sqrt_witness already exists`（顶层声明与基座吸收内容同名） | UpDebtSqrtAbs.v | **消解**（独立编译单元不拼接） |
+| 2 | 同类隐患 8 件 | Z_thermo/boltzmann_dist_attn/boltzmann_factor/real_pow_pos/real_softmax_temp 等跨件同名 | EvictId/SigMigrate/DebtGibbsT/DebtDual/BudgetReal | **消解**（各自 .vo 命名空间） |
+| 3 | L1021 起 | Q_scope 泄漏（219 尾部 Open Scope 影响追加文本，裸 0 解析为 Q） | StepKLM3（已补 nat_scope）；其余件编译时逐处一行修复 | 模块树逐一暴露、逐件修复 |
+| 4 | 6MB 级编译 | harness 后台上下文 0 CPU 阻塞（交互终端正常，~40 分钟） | 基座/单文件 | 信任缓存绕开；基座终编留交互终端 |
+
+## 教训（甄别工具链）
+初轮 shell comm 甄别因 CRLF 残留 + locale 全体失敏报假零；Python 声明级终审（CR 清洗）才见真相——9 件已收录（含 GRPO/Extras 改名吸收）。见 已合并存档/README-甄别报告.md。
