@@ -1,5 +1,5 @@
 ConstructiveWorld-Main — 构造世界模块化形式化库（基座 + 28 模块信任缓存）
-Copyright 2026 王宝军 (Wang Baojun) & Contributors
+Copyright 2026 王宝军、夏挽岚（通讯作者 xiawanlan33@163.com）、祖光照、周志农、高雪峰 & Contributors
 
 ==========================================================================
 SOURCE CODE LICENSE
