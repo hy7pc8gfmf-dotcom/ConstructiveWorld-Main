@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: cw-main-ci
+  cancel-in-progress: true
+
 jobs:
   coq-build:
     name: Rocq 9.0 build + coqchk (modular trust cache + merged)
@@ -34,13 +38,13 @@ jobs:
           opam install -y coq.9.0.0
 
       # 信任缓存：基座 219 产物（源码哈希 key，基座 .v 不变则秒级跳过 6MB 编译）
-      - name: Cache base 219 artifacts
-        uses: actions/cache@v5
+      - name: Cache build artifacts (base + modules, incremental)
+        uses: actions/cache@v4
         with:
-          path: |
-            ConstructiveWorld_vo/CW_ConstructiveWorld_219.vo
-            ConstructiveWorld_vo/CW_ConstructiveWorld_219.glob
-          key: ${{ runner.os }}-base219-${{ hashFiles('ConstructiveWorld_Live/CW_ConstructiveWorld_219.v') }}
+          path: ConstructiveWorld_vo
+          key: cw-vo-${{ hashFiles('ConstructiveWorld_Live/**/*.v', 'scripts/order.txt') }}
+          restore-keys: |
+            cw-vo-
 
       - name: Build base (skipped if cached)
         run: |

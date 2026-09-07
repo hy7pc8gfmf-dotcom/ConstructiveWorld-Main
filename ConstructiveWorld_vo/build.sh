@@ -1,16 +1,18 @@
 #!/bin/bash
-# ConstructiveWorld220 模块树编译（依赖拓扑序；基座走信任缓存 219.vo）
+# ConstructiveWorld-Main 增量构建：.vo 比 .v 新则跳过（指纹信任缓存语义）
 cd "$(dirname "$0")"
 C="${COQC:-coqc}"
 fail=0
-for f in $(grep -v '^-' _CoqProject | grep '\.v$'); do
-  if [ ! -f "${f%.v}.vo" ]; then
-    "$C" -Q . "" "$f" > "_${f%.v}.build.log" 2>&1
-    e=$?
-    echo "$f EXIT=$e"
-    [ $e -ne 0 ] && { fail=1; tail -4 "_${f%.v}.build.log"; }
-  else
-    echo "$f SKIP(vo 已存在)"
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  v="${f%.v}.vo"
+  if [ -f "$v" ] && [ "$v" -nt "$f" ]; then
+    echo "$f SKIP(vo 新于源)"
+    continue
   fi
-done
+  "$C" -Q . "" "$f" > "_${f%.v}.build.log" 2>&1
+  e=$?
+  echo "$f EXIT=$e"
+  if [ $e -ne 0 ]; then fail=1; tail -6 "_${f%.v}.build.log"; fi
+done < <(grep '\.v$' _CoqProject)
 exit $fail
