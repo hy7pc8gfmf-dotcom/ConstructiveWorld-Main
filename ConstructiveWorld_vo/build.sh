@@ -1,7 +1,7 @@
 #!/bin/bash
 # ConstructiveWorld220 模块树编译（依赖拓扑序；基座走信任缓存 219.vo）
 cd "$(dirname "$0")"
-C="C:\Rocq-Platform~9.1~2026.01\bin\coqc.exe"
+C="${COQC:-coqc}"
 fail=0
 for f in $(grep -v '^-' _CoqProject | grep '\.v$'); do
   if [ ! -f "${f%.v}.vo" ]; then

@@ -1,0 +1,69 @@
+name: Coq CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  coq-build:
+    name: Rocq 9.0 build + coqchk (modular trust cache + merged)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ocaml-variants.4.14.2+options
+          opam-disable-sandboxing: true
+
+      # 信任缓存：opam switch 固定 key，恢复后 Install 秒级跳过
+      - name: Cache opam switch (coq 9.0)
+        uses: actions/cache@v5
+        with:
+          path: ~/.opam/default
+          key: ${{ runner.os }}-opam-switch-rocq90
+
+      - name: Install Rocq 9.0
+        run: |
+          export OPAMSANDBOXING=disabled
+          eval "$(opam env)"
+          opam install -y coq.9.0.0
+
+      # 信任缓存：基座 219 产物（源码哈希 key，基座 .v 不变则秒级跳过 6MB 编译）
+      - name: Cache base 219 artifacts
+        uses: actions/cache@v5
+        with:
+          path: |
+            ConstructiveWorld_vo/CW_ConstructiveWorld_219.vo
+            ConstructiveWorld_vo/CW_ConstructiveWorld_219.glob
+          key: ${{ runner.os }}-base219-${{ hashFiles('ConstructiveWorld_Live/CW_ConstructiveWorld_219.v') }}
+
+      - name: Build base (skipped if cached)
+        run: |
+          eval "$(opam env)"
+          cd ConstructiveWorld_vo
+          [ -f CW_ConstructiveWorld_219.vo ] || coqc -Q . "" CW_ConstructiveWorld_219.v
+
+      - name: Build 28 modules (order.txt topology)
+        run: |
+          eval "$(opam env)"
+          cd ConstructiveWorld_vo
+          bash build.sh
+
+      - name: coqchk full-tree certification
+        run: |
+          eval "$(opam env)"
+          cd ConstructiveWorld_vo
+          for f in *.vo; do m="${f%.vo}"; echo "coqchk $m"; coqchk -Q . "" "$m" || exit 1; done
+
+      # 合并单文件版（约 40 分钟；ubuntu 环境无 Windows 端冻结史；失败不阻塞模块认证结论）
+      - name: Merged single-file build (long; non-fatal)
+        continue-on-error: true
+        run: |
+          eval "$(opam env)"
+          cd releases
+          coqc -Q . "" CW_ConstructiveWorld_220.v
