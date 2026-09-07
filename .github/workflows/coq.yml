@@ -66,4 +66,4 @@ jobs:
         run: |
           eval "$(opam env)"
           cd releases
-          coqc -Q . "" CW_ConstructiveWorld_220.v
+          coqc -async-proofs off -Q . "" CW_ConstructiveWorld_220.v

@@ -17,3 +17,9 @@
 - v3 生成器 4 个结构性 bug（后续重生成时必须回写）：①多行 Extraction 探针被提头截断；②消费 Import 注在单元尾而非头；③漏建 Module Constitution 包裹；④单元间互撞重名检测缺失（tid/nle/leb 前置机三重名 → UpRecast/UpCLQuery 需 ISO 隔离）
 - 其他装配级修复：Q_scope 泄漏包裹（UpMinP/PredRelax）、S/O 遮蔽（UpPLA Section + Local Notation）、EnhancedMod 劫持（EvictId 13 条别名前缀化）、Constitution.uc_qle_bool_false_inv 真坏证明重写（-vos 探测不到该类，全量才现形）
 - v3 原始态备份：attn/_CW220_Extensions.v.bak_v3
+
+## 大文件编译冻结机制画像（2026-09-08 攻坚席破壁，主会话归档）
+- **根因**：coqc 默认异步证明机制（async proof workers）在大文件累积阈值处死锁——冻结跟随处理前沿（-vos 于 ~5.85MB / L112098 real_lt_le_bridge 实测），线程 Wait=EventPairLow（worker 交接等待），与文件内容具体命令无关（切片夹逼实证）。
+- **CPU 计数器失真**：本机 coqc 产出 5.77MB 日志同时 bash time user=0.000s——0 CPU 不构成挂死证据；**活体判据 = `-time-file` 时间日志的持续推进**。
+- **解药**：`-async-proofs off`（内联证明；切片 A 同挂点完整越墙实证）。大文件编译一律加此旗标。
+- **适用**：单文件版全量、基座源码终编、一切 >1MB 级 .v；小文件（≤100KB）未复现。
