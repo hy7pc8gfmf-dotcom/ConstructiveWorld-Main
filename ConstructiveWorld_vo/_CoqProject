@@ -44,3 +44,5 @@ UpReqAlignRestA.v
 UpSigMigrate2.v
 UpReqAlignRestB.v
 UpEvictIdReq.v
+UpReqSampling.v
+UpReqAttnGibbs.v
