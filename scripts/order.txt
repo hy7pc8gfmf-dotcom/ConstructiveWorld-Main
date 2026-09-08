@@ -39,3 +39,5 @@ UpReqAlign.v
 UpReqAlign2.v
 UpReqAlignRestA.v
 UpSigMigrate2.v
+UpReqAlignRestB.v
+UpEvictIdReq.v

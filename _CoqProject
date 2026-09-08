@@ -45,3 +45,5 @@ ConstructiveWorld_vo/UpReqAlign.v
 ConstructiveWorld_vo/UpReqAlign2.v
 ConstructiveWorld_vo/UpReqAlignRestA.v
 ConstructiveWorld_vo/UpSigMigrate2.v
+ConstructiveWorld_vo/UpReqAlignRestB.v
+ConstructiveWorld_vo/UpEvictIdReq.v
