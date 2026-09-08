@@ -32,3 +32,10 @@ UpLoebD2.v
 UpQKBound.v
 UpRefuted.v
 UpIDL.v
+UpReqAlgebra.v
+UpReqDist.v
+UpReqTempEntropy.v
+UpReqAlign.v
+UpReqAlign2.v
+UpReqAlignRestA.v
+UpSigMigrate2.v
