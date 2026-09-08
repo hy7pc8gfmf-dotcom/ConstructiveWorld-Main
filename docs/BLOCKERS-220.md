@@ -26,3 +26,6 @@
 
 ## 补充：大文件 -vos 确定性冻结（2026-09-08 定罪）
 冻结元凶 = `-vos` 模式本身（非内容/非平台/非上下文）：绝对字符位 ~5,850,9xx 处确定性冻结（五连证），全量模式免疫。**单文件 220 全量编译不用 -vos，直接 `coqc -async-proofs off`**。详见经验卡 E-STAGING-WangWW-runcoqc泛化 终版机制节。
+
+## 全树 coqchk 认证态刷新（2026-09-08 实测）
+**34/34 全过、0 败**（9.0.1 内核，`coqchk -Q . "" <模块名>` 逐件独立调用，判定 = 日志含 "Modules were successfully checked" 且退出码 0）。基座 CW_ConstructiveWorld_219 与全部新件（含 UpKVDrift/UpQKBound/UpLoeb/UpLoebD2/UpRefuted 五件）均实测 PASS。据此，"28 模块态 coqchk 29 过 0 败、5 新件认证在补"的旧口径**升级为全量认证态**：现存 .vo 面无任何"认证在补"尾项。逐模块结果/日志字节/时间戳见 `docs/coqchk认证总表-20260908.md`；注：UpIDL 源码在树但无 .vo，不占 .vo 认证面（34 .vo = 全树 .vo 面）。
