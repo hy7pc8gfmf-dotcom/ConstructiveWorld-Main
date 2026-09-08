@@ -10,3 +10,7 @@ _tmp*/
 *.glob
 *.aux
 docs/analysis/论文1-*对齐版.md
+upkvdrift_probe.*
+_new_build.sh
+_test_*
+*.nra.cache
