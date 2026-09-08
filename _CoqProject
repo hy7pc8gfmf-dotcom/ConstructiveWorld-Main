@@ -49,3 +49,5 @@ ConstructiveWorld_vo/UpReqAlignRestB.v
 ConstructiveWorld_vo/UpEvictIdReq.v
 ConstructiveWorld_vo/UpReqSampling.v
 ConstructiveWorld_vo/UpReqAttnGibbs.v
+ConstructiveWorld_vo/UpReqPPO.v
+ConstructiveWorld_vo/UpRealLeB.v

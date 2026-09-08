@@ -46,3 +46,5 @@ UpReqAlignRestB.v
 UpEvictIdReq.v
 UpReqSampling.v
 UpReqAttnGibbs.v
+UpReqPPO.v
+UpRealLeB.v
