@@ -20,10 +20,12 @@
 (*   3) 根内既有资产直接消费不重证：real_minp_*（RealMinPMain）、  *)
 (*      real_list_sum 骨架、real_gibbs/real_kl_term、real_inv_inv、*)
 (*      real_log_* 单调族。本文件为 list 世界对接层（根内无此内容）。*)
-(*   4) 217 基线：219 .vo 与本机可用 coqc（9.1.0 release，期望     *)
-(*      vo 幻数 0x5f91）不兼容（219.vo 幻数 0x5ff4，由另一编译器    *)
-(*      产出，9.0/9.1 均拒读），按任务书回退条款 Require          *)
-(*      CW214KL_scan（RealMinPMain/KL/求和机器全部在位，行号同源）。 *)
+(*   4) 219 基座（2026-09-09 回并）：树内 219.vo 已重建为 9.0 同轨   *)
+(*      （幻数 90001；旧 9.1 盘留档 .vo.bak-90100），本机 9.0 编译器 *)
+(*      直读通过，回退条款解除：Require CW_ConstructiveWorld_219。   *)
+(*      消费名 48 项探针核对逐位在位（含 RealSetoid 七字段与        *)
+(*      MinP 三机器），声明与定理陈述零数学改动。CW214 回退版备份   *)
+(*      于 UpAuditBridge-CW214基线备份-20260909.v。                  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

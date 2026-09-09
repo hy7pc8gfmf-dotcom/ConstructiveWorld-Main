@@ -55,3 +55,10 @@ UpReqAttnGibbs.v
 UpReqPPO.v
 UpRealLeB.v
 UpReqMinPAntitone.v
+UpDebtSqrtAbsReq.v
+UpPredRelaxReq.v
+UpEntropyGainReq.v
+UpFirewallReq.v
+UpReqRDF.v
+UpRealLeB2.v
+UpReqPPOPlain.v

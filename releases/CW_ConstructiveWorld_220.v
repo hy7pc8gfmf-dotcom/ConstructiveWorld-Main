@@ -114783,7 +114783,7 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
 (* 平方维数见证（镜像根内 sqrt_witness）：r·r == d *)
-Definition sqrt_witness (d r : R) : Set := Id (mult r r) d.
+Definition sqrt_witness_mirror (d r : R) : Set := Id (mult r r) d.
 
 (* two := 1+1（字面 2）；two > 0（plus_positive × one_pos 组装） *)
 Definition two_abs : R := plus one one.
@@ -114824,7 +114824,7 @@ Qed.
      r > 0：exp_neg_pos + lt_le_iff。
    右支（d ≡ 0，Id 证书）：r := zero；0 ≤ 0（le_refl）；
      0·0 == 0（mult_zero）== d（Hdeq）。 *)
-Theorem sqrt_witness_exists_abstract :
+Theorem sqrt_witness_mirror_exists_abstract :
   forall d : R, Or (lt zero d) (Id zero d) ->
   sigT (fun r : R => And (le zero r) (Id (mult r r) d)).
 Proof.
@@ -114868,10 +114868,10 @@ Qed.
 (* 见证形态重述（sqrt_witness 命名式） *)
 Lemma sqrt_witness_exists_abstract_witness :
   forall d : R, Or (lt zero d) (Id zero d) ->
-  sigT (fun r : R => And (le zero r) (sqrt_witness d r)).
+  sigT (fun r : R => And (le zero r) (sqrt_witness_mirror d r)).
 Proof.
   intros d H.
-  exact (sqrt_witness_exists_abstract d H).
+  exact (sqrt_witness_mirror_exists_abstract d H).
 Qed.
 
 (* 实例（机器可检查的健全性检查）：1 的抽象平方根可构造——
@@ -114879,7 +114879,7 @@ Qed.
 Lemma sqrt_one_abstract :
   sigT (fun r : R => And (le zero r) (Id (mult r r) one)).
 Proof.
-  exact (sqrt_witness_exists_abstract one (inl one_pos)).
+  exact (sqrt_witness_mirror_exists_abstract one (inl one_pos)).
 Qed.
 
 End SqrtAbstract.

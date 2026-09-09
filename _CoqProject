@@ -61,3 +61,10 @@ ConstructiveWorld_vo/UpReqAttnGibbs.v
 ConstructiveWorld_vo/UpReqPPO.v
 ConstructiveWorld_vo/UpRealLeB.v
 ConstructiveWorld_vo/UpReqMinPAntitone.v
+ConstructiveWorld_vo/UpDebtSqrtAbsReq.v
+ConstructiveWorld_vo/UpPredRelaxReq.v
+ConstructiveWorld_vo/UpEntropyGainReq.v
+ConstructiveWorld_vo/UpFirewallReq.v
+ConstructiveWorld_vo/UpReqRDF.v
+ConstructiveWorld_vo/UpRealLeB2.v
+ConstructiveWorld_vo/UpReqPPOPlain.v
