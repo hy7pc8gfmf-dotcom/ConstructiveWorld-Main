@@ -27,8 +27,14 @@
    【冻结清单（规划书 (d) 关卡逐件理由回写）】
      1. softmax_gap_concentration<-28282：集中不等式需逐 eps 有界和机器
         （min/r_max 家 req 场未建）；密度低，留批 5。
+        ——批5扫尾席 2026-09-09 解冻：机器三件 + 平移件交付（尾增量节）；
+        Id 证明路径核读实为纯代数（relative + exp 单调 + mult 保序），
+        机器缺口与语句可迁性解耦，对照见增量节头注。
      2. temperature_zero_limit<-28337：T→0 极限语义需 lim/metric 因果链
         （接口字段在而链长 >30 步）；留批 5。
+        ——批5扫尾席 2026-09-09 解冻：lim 簇消费（UpReqCauchy req_r_pow 系
+        + exp_neg_geo_break 假设位 r_arch_pow 同位平移）+
+        ag_hard_attention_collapse_eps 逐 eps 收口交付（尾增量节）。
      3. list 机器 13 件：规划书 (d) 明示冻结复用（evicted/list 段，L29360 起）。
      4. boltzmann 块余件（attention_is_gibbs_temp<-28634 /
         scale_inv_T_eq_softmax_temp<-28679 / scaled_attention_is_gibbs_temp<-28694 /
@@ -108,6 +114,7 @@
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
+Require Import UpReqCauchy.
 From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
@@ -1779,6 +1786,451 @@ Proof.
                                             (tail_mass_of_r k kd))).
               ** exact (mult_one (mult (inv_pos Z_thermo_r Z_thermo_r_pos)
                                        (tail_mass_of_r k kd))).
+Qed.
+
+(* ============================================================ *)
+(* 【批5扫尾席增量节·min/r_max 逐 eps 有界和机器 + gap 集中/零温族】 *)
+(*   2026-09-09 扫尾席（三小块之一/之二；冻结清单件 1/2 解冻）。    *)
+(*   ---------------------------------------------------------------- *)
+(*   【A. 逐 eps 有界和机器（判词 1 机器缺口落地；三件真证）】        *)
+(*   消费接口 min/r_max 逐 eps 字段场（基座 L40529-40539：            *)
+(*   min_le_l / r_max_le_l / r_max_l_iff 全逐 eps 形）+ 节内          *)
+(*   sum_le / sum_add / sum_ext 假设位；plain 形不可导（序无消去，    *)
+(*   RestB Part4 metric_nonneg 同判），故机器为逐 eps 口径——          *)
+(*   与接口原生形式同构（log_le_linear_eps 同款口径）。               *)
+(*   【解冻对照（判词 1）】Id @28282 证明体核读 = 纯代数              *)
+(*   （softmax_temp_relative + exp_neg_le_decr + le_mult_compat_r）， *)
+(*   未消费任何有界和机器——首席判词的机器缺口真实存在（req 场此前     *)
+(*   确未建），但与该语句的可迁移性解耦。本节两者均交付：机器三件     *)
+(*   （A 组）独立成件，平移件（B 组）按 Id 纯代数路径组装。           *)
+(*   【B. gap 集中 + 零温极限（Id @28282 / @28337 平移；真证/组装）】  *)
+(*   约定换位台账（沿首段 ag_softmax_temp_relative 同款）：           *)
+(*   Id e^{+z/T} 约定前提 minus (z s_star) (z s) → req 原生           *)
+(*   e^{-z/T}（Boltzmann）约定前提 req_minus (z s) (z s_star）        *)
+(*   （gap 位 = loss 差正半轴），结论因子 exp_neg (invT·gamma)        *)
+(*   两约定同形；softmax_temp → reqd_softmax_temp_param。             *)
+(*   【C. 退火引擎（B 组系数泛化重放，供 D 组消费）】                 *)
+(*   ag_softmax_temp_relative 系数泛化（T 位 → 自由系数 kappa，       *)
+(*   reqd_softmax_scaled 族；节 T 件签名不含温度槽，诚实重放非降级）。*)
+(*   【D. T→0 逐 eps 收口（Id 注释语义 L28330-28335 构造性读法）】     *)
+(*   ag_hard_attention_collapse_eps：任意 eps>0 存在逆温系数          *)
+(*   kappa := (1/T)·2^N 使比值 ≤ eps（温度 1/κ → 0 对位 Id "T→0"）。   *)
+(*   lim 簇消费面：UpReqCauchy（波2 已交付稳定，本席新增 Require）    *)
+(*   req_r_pow / req_r_pow_pos 闭包件 + exp_neg_geo_break 假设位      *)
+(*   （UpReqCauchy r_arch_pow Variable 同位平移，B 类槽 T2①；        *)
+(*   Real 实例可满足：2^N·d → ∞）。                                   *)
+(*   【诚实边界注记（判词 2 精确化）】cauchy_complete/lim 字段虽然     *)
+(*   已在接口（L40589-40596），但 lim u zero 形需 metric 范数兼容槽   *)
+(*   （metric_abs_norm / abs_nonneg_plain / lim_metric_approx /      *)
+(*   le_all_eps_zero 四槽组——全部以 Variable 位活在 UpReqCauchy 节内， *)
+(*   接口无对应字段），即判词"链长"的精确落点；本节按接口原生逐 eps   *)
+(*   形式交付同语义内容，四槽组列为后续升级路径（不硬凑）。           *)
+(* ============================================================ *)
+
+(* ---- A. 逐 eps 有界和机器（三件真证） ---- *)
+
+(* 上界：Σf ≤ Σ(r_max f g) + Σ(常值 eps)（sum_le 逐点 r_max_le_l +
+   sum_add 移出 + le_id_l；真证） *)
+Lemma ag_sum_le_r_max_eps :
+  forall (f g : S -> R) (eps : R), lt zero eps ->
+    le (sumf f)
+       (plus (sumf (fun s : S => r_max (f s) (g s)))
+             (sumf (fun _ : S => eps))).
+Proof.
+  intros f g eps Heps.
+  apply (le_trans (sumf f)
+                  (sumf (fun s : S => plus (r_max (f s) (g s)) eps))
+                  (plus (sumf (fun s : S => r_max (f s) (g s)))
+                        (sumf (fun _ : S => eps)))).
+  - apply (sum_le f (fun s : S => plus (r_max (f s) (g s)) eps)).
+    intro s. exact (r_max_le_l (f s) (g s) eps Heps).
+  - apply (le_id_l
+             (sumf (fun s : S => plus (r_max (f s) (g s)) eps))
+             (plus (sumf (fun s : S => r_max (f s) (g s)))
+                   (sumf (fun _ : S => eps)))
+             (plus (sumf (fun s : S => r_max (f s) (g s)))
+                   (sumf (fun _ : S => eps)))).
+    + exact (sum_add (fun s : S => r_max (f s) (g s)) (fun _ : S => eps)).
+    + apply le_refl.
+Qed.
+
+(* min 上界：Σ(min f g) ≤ Σf + Σ(常值 eps)（sum_le 逐点 min_le_l +
+   sum_add 移出；真证） *)
+Lemma ag_sum_min_le_eps :
+  forall (f g : S -> R) (eps : R), lt zero eps ->
+    le (sumf (fun s : S => min (f s) (g s)))
+       (plus (sumf f) (sumf (fun _ : S => eps))).
+Proof.
+  intros f g eps Heps.
+  apply (le_trans (sumf (fun s : S => min (f s) (g s)))
+                  (sumf (fun s : S => plus (f s) eps))
+                  (plus (sumf f) (sumf (fun _ : S => eps)))).
+  - apply (sum_le (fun s : S => min (f s) (g s))
+                  (fun s : S => plus (f s) eps)).
+    intro s. exact (min_le_l (f s) (g s) eps Heps).
+  - apply (le_id_l
+             (sumf (fun s : S => plus (f s) eps))
+             (plus (sumf f) (sumf (fun _ : S => eps)))
+             (plus (sumf f) (sumf (fun _ : S => eps)))).
+    + exact (sum_add f (fun _ : S => eps)).
+    + apply le_refl.
+Qed.
+
+(* 收口：g 逐点 ≤ f ⟹ Σ(r_max f g) == Σf（r_max_l_iff 点态 + sum_ext；
+   真证） *)
+Lemma ag_sum_r_max_collapse :
+  forall f g : S -> R, (forall s : S, le (g s) (f s)) ->
+    req (sumf (fun s : S => r_max (f s) (g s))) (sumf f).
+Proof.
+  intros f g Hle.
+  apply (sum_ext (fun s : S => r_max (f s) (g s)) f).
+  intro s. exact (r_max_l_iff (f s) (g s) (Hle s)).
+Qed.
+
+(* ---- B. gap 集中 + 零温极限（Id @28282 / @28337 平移） ---- *)
+
+(* gap 集中（Id @28282；真证：ag_softmax_temp_relative + exp_neg_le_decr
+   + req_le_mult_compat_r 组装；换位台账见增量节头注 B 组） *)
+Theorem ag_softmax_gap_concentration :
+  forall (z : S -> R) (s_star : S) (gamma : R),
+    lt zero gamma ->
+    forall s : S,
+      le (mult (inv_pos T T_pos) gamma)
+         (mult (inv_pos T T_pos) (req_minus (z s) (z s_star))) ->
+      le (reqd_softmax_temp_param S sumf sum_pos T T_pos z s)
+         (mult (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+               (exp_neg (mult (inv_pos T T_pos) gamma))).
+Proof.
+  intros z s_star gamma Hgamma s Hgap.
+  apply (le_id_l
+           (reqd_softmax_temp_param S sumf sum_pos T T_pos z s)
+           (mult (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+                 (exp_neg (mult (inv_pos T T_pos)
+                                (req_minus (z s) (z s_star)))))
+           (mult (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+                 (exp_neg (mult (inv_pos T T_pos) gamma)))).
+  - exact (ag_softmax_temp_relative z s s_star).
+  - exact (req_le_mult_compat_r
+             (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+             (exp_neg (mult (inv_pos T T_pos) (req_minus (z s) (z s_star))))
+             (exp_neg (mult (inv_pos T T_pos) gamma))
+             (lt_le_iff zero
+                (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+                (inl (ag_softmax_temp_pos z s_star)))
+             (exp_neg_le_decr
+                (mult (inv_pos T T_pos) gamma)
+                (mult (inv_pos T T_pos) (req_minus (z s) (z s_star)))
+                Hgap)).
+Qed.
+
+(* 零温极限比值形式（Id @28337；真证：ag_softmax_gap_concentration +
+   inv 消去链（req_markov_temperature_zero_limit 同构重放）） *)
+Theorem ag_temperature_zero_limit :
+  forall (z : S -> R) (s_star : S) (gamma : R),
+    lt zero gamma ->
+    forall s : S,
+      le (mult (inv_pos T T_pos) gamma)
+         (mult (inv_pos T T_pos) (req_minus (z s) (z s_star))) ->
+      le (mult (reqd_softmax_temp_param S sumf sum_pos T T_pos z s)
+               (inv_pos (reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star)
+                        (ag_softmax_temp_pos z s_star)))
+         (exp_neg (mult (inv_pos T T_pos) gamma)).
+Proof.
+  intros z s_star gamma Hgamma s Hgap.
+  pose (A := reqd_softmax_temp_param S sumf sum_pos T T_pos z s).
+  pose (B := reqd_softmax_temp_param S sumf sum_pos T T_pos z s_star).
+  pose (HB := ag_softmax_temp_pos z s_star).
+  pose (C := exp_neg (mult (inv_pos T T_pos) gamma)).
+  assert (Hgc : le A (mult B C)).
+  { exact (ag_softmax_gap_concentration z s_star gamma Hgamma s Hgap). }
+  assert (Hinv : le zero (inv_pos B HB)).
+  { apply (lt_le_iff zero (inv_pos B HB)). left. apply inv_pos_pos. }
+  assert (Hdiv : le (mult (inv_pos B HB) A) (mult (inv_pos B HB) (mult B C)))
+    by exact (req_le_mult_compat_r (inv_pos B HB) A (mult B C) Hinv Hgc).
+  assert (Hsw : req (mult A (inv_pos B HB)) (mult (inv_pos B HB) A))
+    by exact (mult_comm A (inv_pos B HB)).
+  assert (Hlhs : le (mult A (inv_pos B HB)) (mult (inv_pos B HB) (mult B C)))
+    by exact (le_id_l _ _ _ Hsw Hdiv).
+  assert (Hrhs : req (mult (inv_pos B HB) (mult B C)) C).
+  { exact (req_trans
+             (mult (inv_pos B HB) (mult B C))
+             (mult (mult (inv_pos B HB) B) C)
+             C
+             (mult_assoc (inv_pos B HB) B C)
+             (req_trans
+                (mult (mult (inv_pos B HB) B) C)
+                (mult one C)
+                C
+                (req_mult_compat (mult (inv_pos B HB) B) one C C
+                   (req_trans (mult (inv_pos B HB) B)
+                              (mult B (inv_pos B HB))
+                              one
+                              (mult_comm (inv_pos B HB) B)
+                              (inv_pos_correct B HB))
+                   (req_refl C))
+                (req_trans (mult one C) (mult C one) C
+                   (mult_comm one C) (mult_one C)))). }
+  assert (Hfin : le (mult A (inv_pos B HB)) C) by exact (le_id_r _ _ _ Hrhs Hlhs).
+  unfold A, B, C in Hfin. exact Hfin.
+Qed.
+
+(* ---- C. 退火引擎（系数泛化重放；消费面 = D 组） ---- *)
+
+(* scaled 族相对形：ag_softmax_temp_relative 系数泛化（T 位 → kappa；
+   真） *)
+Lemma ag_softmax_scaled_relative :
+  forall (kappa : R) (z : S -> R) (s s' : S),
+    req (reqd_softmax_scaled S sumf sum_pos kappa z s)
+        (mult (reqd_softmax_scaled S sumf sum_pos kappa z s')
+              (exp_neg (mult kappa (req_minus (z s) (z s'))))).
+Proof.
+  intros kappa z s s'.
+  assert (Hzs : req (z s) (plus (z s') (req_minus (z s) (z s'))))
+    by exact (req_sym _ _ (req_minus_plus_cancel (z s') (z s))).
+  assert (Hf : req (exp_neg (mult kappa (z s)))
+                   (mult (exp_neg (mult kappa (z s')))
+                         (exp_neg (mult kappa (req_minus (z s) (z s')))))).
+  { exact (req_trans
+             (exp_neg (mult kappa (z s)))
+             (exp_neg (plus (mult kappa (z s'))
+                            (mult kappa (req_minus (z s) (z s')))))
+             (mult (exp_neg (mult kappa (z s')))
+                   (exp_neg (mult kappa (req_minus (z s) (z s')))))
+             (exp_neg_req_compat_setoid
+                (mult kappa (z s))
+                (plus (mult kappa (z s'))
+                      (mult kappa (req_minus (z s) (z s'))))
+                (req_trans (mult kappa (z s))
+                           (mult kappa (plus (z s') (req_minus (z s) (z s'))))
+                           (plus (mult kappa (z s'))
+                                 (mult kappa (req_minus (z s) (z s'))))
+                           (req_mult_compat kappa kappa (z s)
+                              (plus (z s') (req_minus (z s) (z s')))
+                              (req_refl _) Hzs)
+                           (distrib kappa (z s') (req_minus (z s) (z s')))))
+             (exp_neg_plus (mult kappa (z s'))
+                           (mult kappa (req_minus (z s) (z s'))))). }
+  unfold reqd_softmax_scaled.
+  pose (Pw := (fun s0 : S => exp_neg (mult kappa (z s0)))).
+  pose (Wp := (sum_pos Pw (fun s0 : S => exp_neg_pos (mult kappa (z s0))))).
+  pose (IV := (inv_pos (sumf Pw) Wp)).
+  assert (Has : req (mult (exp_neg (mult kappa (z s))) IV)
+                   (mult IV
+                      (mult (exp_neg (mult kappa (z s')))
+                            (exp_neg (mult kappa
+                                           (req_minus (z s) (z s'))))))).
+  { apply (req_trans _ (mult IV (exp_neg (mult kappa (z s)))) _).
+    - exact (mult_comm (exp_neg (mult kappa (z s))) IV).
+    - exact (req_mult_compat IV IV (exp_neg (mult kappa (z s)))
+                (mult (exp_neg (mult kappa (z s')))
+                      (exp_neg (mult kappa (req_minus (z s) (z s')))))
+                (req_refl _) Hf). }
+  assert (Har : req (mult IV
+                       (mult (exp_neg (mult kappa (z s')))
+                             (exp_neg (mult kappa (req_minus (z s) (z s'))))))
+                   (mult (mult (exp_neg (mult kappa (z s'))) IV)
+                         (exp_neg (mult kappa (req_minus (z s) (z s')))))).
+  { exact (req_trans
+             (mult IV
+                (mult (exp_neg (mult kappa (z s')))
+                      (exp_neg (mult kappa (req_minus (z s) (z s'))))))
+             (mult (mult IV (exp_neg (mult kappa (z s'))))
+                   (exp_neg (mult kappa (req_minus (z s) (z s')))))
+             (mult (mult (exp_neg (mult kappa (z s'))) IV)
+                   (exp_neg (mult kappa (req_minus (z s) (z s')))))
+             (mult_assoc IV (exp_neg (mult kappa (z s')))
+                (exp_neg (mult kappa (req_minus (z s) (z s')))))
+             (req_mult_compat (mult IV (exp_neg (mult kappa (z s'))))
+                (mult (exp_neg (mult kappa (z s'))) IV)
+                (exp_neg (mult kappa (req_minus (z s) (z s'))))
+                (exp_neg (mult kappa (req_minus (z s) (z s'))))
+                (mult_comm IV (exp_neg (mult kappa (z s'))))
+                (req_refl _))). }
+  apply (req_trans _ (mult IV
+         (mult (exp_neg (mult kappa (z s')))
+               (exp_neg (mult kappa (req_minus (z s) (z s')))))) _).
+  - exact Has.
+  - exact Har.
+Qed.
+
+(* scaled 族 gap 集中（B 组 ag_softmax_gap_concentration 的 kappa 泛化；
+   真证同型） *)
+Lemma ag_softmax_scaled_gap :
+  forall (kappa : R) (z : S -> R) (s_star : S) (gamma : R) (s : S),
+    le (mult kappa gamma) (mult kappa (req_minus (z s) (z s_star))) ->
+    le (reqd_softmax_scaled S sumf sum_pos kappa z s)
+       (mult (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+             (exp_neg (mult kappa gamma))).
+Proof.
+  intros kappa z s_star gamma s Hgap.
+  apply (le_id_l
+           (reqd_softmax_scaled S sumf sum_pos kappa z s)
+           (mult (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+                 (exp_neg (mult kappa (req_minus (z s) (z s_star)))))
+           (mult (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+                 (exp_neg (mult kappa gamma)))).
+  - exact (ag_softmax_scaled_relative kappa z s s_star).
+  - exact (req_le_mult_compat_r
+             (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+             (exp_neg (mult kappa (req_minus (z s) (z s_star))))
+             (exp_neg (mult kappa gamma))
+             (lt_le_iff zero (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+                        (inl (ag_softmax_scaled_pos kappa z s_star)))
+             (exp_neg_le_decr (mult kappa gamma)
+                              (mult kappa (req_minus (z s) (z s_star)))
+                              Hgap)).
+Qed.
+
+(* scaled 族比值形式（B 组 ag_temperature_zero_limit 的 kappa 泛化；
+   真证同型） *)
+Lemma ag_softmax_scaled_ratio_limit :
+  forall (kappa : R) (z : S -> R) (s_star : S) (gamma : R) (s : S),
+    le (mult kappa gamma) (mult kappa (req_minus (z s) (z s_star))) ->
+    le (mult (reqd_softmax_scaled S sumf sum_pos kappa z s)
+             (inv_pos (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+                      (ag_softmax_scaled_pos kappa z s_star)))
+       (exp_neg (mult kappa gamma)).
+Proof.
+  intros kappa z s_star gamma s Hgap.
+  pose (A := reqd_softmax_scaled S sumf sum_pos kappa z s).
+  pose (B := reqd_softmax_scaled S sumf sum_pos kappa z s_star).
+  pose (HB := ag_softmax_scaled_pos kappa z s_star).
+  pose (C := exp_neg (mult kappa gamma)).
+  assert (Hgc : le A (mult B C)).
+  { exact (ag_softmax_scaled_gap kappa z s_star gamma s Hgap). }
+  assert (Hinv : le zero (inv_pos B HB)).
+  { apply (lt_le_iff zero (inv_pos B HB)). left. apply inv_pos_pos. }
+  assert (Hdiv : le (mult (inv_pos B HB) A) (mult (inv_pos B HB) (mult B C)))
+    by exact (req_le_mult_compat_r (inv_pos B HB) A (mult B C) Hinv Hgc).
+  assert (Hsw : req (mult A (inv_pos B HB)) (mult (inv_pos B HB) A))
+    by exact (mult_comm A (inv_pos B HB)).
+  assert (Hlhs : le (mult A (inv_pos B HB)) (mult (inv_pos B HB) (mult B C)))
+    by exact (le_id_l _ _ _ Hsw Hdiv).
+  assert (Hrhs : req (mult (inv_pos B HB) (mult B C)) C).
+  { exact (req_trans
+             (mult (inv_pos B HB) (mult B C))
+             (mult (mult (inv_pos B HB) B) C)
+             C
+             (mult_assoc (inv_pos B HB) B C)
+             (req_trans
+                (mult (mult (inv_pos B HB) B) C)
+                (mult one C)
+                C
+                (req_mult_compat (mult (inv_pos B HB) B) one C C
+                   (req_trans (mult (inv_pos B HB) B)
+                              (mult B (inv_pos B HB))
+                              one
+                              (mult_comm (inv_pos B HB) B)
+                              (inv_pos_correct B HB))
+                   (req_refl C))
+                (req_trans (mult one C) (mult C one) C
+                   (mult_comm one C) (mult_one C)))). }
+  assert (Hfin : le (mult A (inv_pos B HB)) C) by exact (le_id_r _ _ _ Hrhs Hlhs).
+  unfold A, B, C in Hfin. exact Hfin.
+Qed.
+
+(* ---- D. T→0 逐 eps 收口（lim 簇消费 + 假设位平移） ---- *)
+
+(* 逐 eps 几何击穿槽（UpReqCauchy r_arch_pow Variable 同位平移，B 类槽
+   T2①；exp 形：exp_neg (2^N·d) ≤ eps。Real 实例可满足：2^N·d → ∞。
+   End 时作显式参入闭包签名，Print Assumptions 仍 Closed） *)
+Hypothesis exp_neg_geo_break :
+  forall d : R, lt zero d ->
+    forall eps : R, lt zero eps ->
+      sigT (fun N : nat =>
+        le (exp_neg (mult (req_r_pow (plus one one) N) d)) eps).
+
+(* T→0 语义收口：任意 eps>0 存在逆温系数 kappa := (1/T)·2^N 使
+   softmax 比值 ≤ eps（温度 1/κ → 0 对位 Id "T→0" 读法，即硬注意力坍缩
+   的构造性逐 eps 形；消费 exp_neg_geo_break 槽 + UpReqCauchy
+   req_r_pow/req_r_pow_pos/req_mult_swap_mid + C 组三件） *)
+Theorem ag_hard_attention_collapse_eps :
+  forall (z : S -> R) (s_star : S) (gamma : R) (s : S),
+    lt zero gamma ->
+    le (mult (inv_pos T T_pos) gamma)
+       (mult (inv_pos T T_pos) (req_minus (z s) (z s_star))) ->
+    forall eps : R, lt zero eps ->
+    sigT (fun kappa : R =>
+      le (mult (reqd_softmax_scaled S sumf sum_pos kappa z s)
+               (inv_pos (reqd_softmax_scaled S sumf sum_pos kappa z s_star)
+                        (ag_softmax_scaled_pos kappa z s_star)))
+          eps).
+Proof.
+  intros z s_star gamma s Hgamma Hgap eps Heps.
+  destruct (exp_neg_geo_break (mult (inv_pos T T_pos) gamma)
+             (mult_positive (inv_pos T T_pos) gamma (inv_pos_pos T T_pos) Hgamma)
+             eps Heps)
+    as [N HN].
+  exists (mult (inv_pos T T_pos) (req_r_pow (plus one one) N)).
+  (* kappa·x == 2^N·(invT·x)（系数换位，req_mult_swap_mid + mult_comm） *)
+  assert (Hkap : forall x : R,
+           req (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N)) x)
+               (mult (req_r_pow (plus one one) N) (mult (inv_pos T T_pos) x))).
+  { intro x.
+    exact (req_trans
+             (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N)) x)
+             (mult (mult (inv_pos T T_pos) x) (req_r_pow (plus one one) N))
+             (mult (req_r_pow (plus one one) N) (mult (inv_pos T T_pos) x))
+             (req_mult_swap_mid (inv_pos T T_pos)
+                                (req_r_pow (plus one one) N) x)
+             (mult_comm (mult (inv_pos T T_pos) x)
+                        (req_r_pow (plus one one) N))). }
+  (* gap 系数换算：kappa·gamma ≤ kappa·(z s − z s_star)（Hgap 乘 2^N） *)
+  assert (Hscale : le (mult (mult (inv_pos T T_pos)
+                                  (req_r_pow (plus one one) N)) gamma)
+                      (mult (mult (inv_pos T T_pos)
+                                  (req_r_pow (plus one one) N))
+                            (req_minus (z s) (z s_star)))).
+  { apply (le_id_l
+             (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N)) gamma)
+             (mult (req_r_pow (plus one one) N) (mult (inv_pos T T_pos) gamma))
+             (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+                   (req_minus (z s) (z s_star)))
+             (Hkap gamma)
+             (le_id_r
+                (mult (req_r_pow (plus one one) N)
+                      (mult (inv_pos T T_pos) gamma))
+                (mult (req_r_pow (plus one one) N)
+                      (mult (inv_pos T T_pos) (req_minus (z s) (z s_star))))
+                (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+                      (req_minus (z s) (z s_star)))
+                (req_sym _ _
+                   (Hkap (req_minus (z s) (z s_star))))
+                (req_le_mult_compat_r (req_r_pow (plus one one) N)
+                   (mult (inv_pos T T_pos) gamma)
+                   (mult (inv_pos T T_pos) (req_minus (z s) (z s_star)))
+                   (lt_le_iff zero (req_r_pow (plus one one) N)
+                      (inl (req_r_pow_pos (plus one one) N req_two_pos)))
+                   Hgap))). }
+  apply (le_trans
+           (mult (reqd_softmax_scaled S sumf sum_pos
+                    (mult (inv_pos T T_pos) (req_r_pow (plus one one) N)) z s)
+                 (inv_pos
+                    (reqd_softmax_scaled S sumf sum_pos
+                       (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+                       z s_star)
+                    (ag_softmax_scaled_pos
+                       (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+                       z s_star)))
+           (exp_neg (mult (mult (inv_pos T T_pos)
+                                (req_r_pow (plus one one) N)) gamma))
+           eps).
+  - exact (ag_softmax_scaled_ratio_limit
+             (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+             z s_star gamma s Hscale).
+  - exact (le_id_l
+             (exp_neg (mult (mult (inv_pos T T_pos)
+                                  (req_r_pow (plus one one) N)) gamma))
+             (exp_neg (mult (req_r_pow (plus one one) N)
+                            (mult (inv_pos T T_pos) gamma)))
+             eps
+             (exp_neg_req_compat_setoid
+                (mult (mult (inv_pos T T_pos) (req_r_pow (plus one one) N))
+                      gamma)
+                (mult (req_r_pow (plus one one) N)
+                      (mult (inv_pos T T_pos) gamma))
+                (Hkap gamma))
+             HN).
 Qed.
 
 End ReqAttnGibbs.

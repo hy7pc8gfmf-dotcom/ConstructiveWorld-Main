@@ -45,6 +45,15 @@ UpSigMigrate2.v
 UpReqAlignRestB.v
 UpEvictIdReq.v
 UpReqSampling.v
+UpReqIndex.v
+UpReqOrderArgmin.v
+UpReqSLM.v
+UpReqCauchy.v
+UpReqMisc5.v
+UpReqMisc5B.v
+UpReqPCT.v
+UpReqDpoLoss.v
+UpReqAttnIter.v
 UpReqAttnGibbs.v
 UpReqPPO.v
 UpRealLeB.v

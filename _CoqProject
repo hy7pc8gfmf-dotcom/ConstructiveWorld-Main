@@ -48,6 +48,15 @@ ConstructiveWorld_vo/UpSigMigrate2.v
 ConstructiveWorld_vo/UpReqAlignRestB.v
 ConstructiveWorld_vo/UpEvictIdReq.v
 ConstructiveWorld_vo/UpReqSampling.v
+ConstructiveWorld_vo/UpReqIndex.v
+ConstructiveWorld_vo/UpReqOrderArgmin.v
+ConstructiveWorld_vo/UpReqSLM.v
+ConstructiveWorld_vo/UpReqCauchy.v
+ConstructiveWorld_vo/UpReqMisc5.v
+ConstructiveWorld_vo/UpReqMisc5B.v
+ConstructiveWorld_vo/UpReqPCT.v
+ConstructiveWorld_vo/UpReqDpoLoss.v
+ConstructiveWorld_vo/UpReqAttnIter.v
 ConstructiveWorld_vo/UpReqAttnGibbs.v
 ConstructiveWorld_vo/UpReqPPO.v
 ConstructiveWorld_vo/UpRealLeB.v
