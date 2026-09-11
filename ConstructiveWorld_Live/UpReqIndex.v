@@ -67,6 +67,16 @@
 (* 席T16）；UpReqEntropyDeficitTemp v2.1 在册 582/8 盘面复测相符；ng_UpReqAlign4 盘面漂移维持      *)
 (* v2.2 只记不改（改账权因禁改既有条目红线仍冻结，留总账席）；自指件注记：af_UpReqIndex 33 为      *)
 (* v2.2 快照，v2.3 后实测 36（+3 条核对引理，只记不改，对账权留下一席）。                          *)
+(* v2.4（席T31：注册扫尾+Align4 漂移改账席，20260911）：承 v2.3 ng_ 第三轨 19 件与全部既有登记面    *)
+(* 零缩水（append-only；唯一例外=下述受权改账一笔），ng_ 轨续写 2 件：                              *)
+(* UpReqNegFactorB(183 行/5 封口，席T27 负右因子反变面)/UpReqEntropyUniqueNeg(568/9，席T22b        *)
+(* 4.6c 逆否形)——行数和 751、封口和 14；入库判据=稳定窗口双测同 md5 + 现态单件编译 EXIT=0。          *)
+(* 改账权行使（v2.2/v2.3 先后冻结移交，本席=受权总账席）：ng_UpReqAlign4 登记行 968/18 → 1431/28     *)
+(* （Z2 批A+Z3 批B+T24 批C 三批增量全量落盘；双测 1431/28 同 md5 62e30e10），连带 NewGreenLineSum/  *)
+(* NewGreenQedSum 字面值 5474→5937、101→111 以维持 reflexivity 编译期对账闭合，改账算术 4 条引理     *)
+(* 在案（文末 v2.4 改账段）；任务书 16 件批中 14 件经 grep 证实在册且盘面复测零漂移，不重复登记；      *)
+(* UpReqTopKTVChain 仍未绿不入面（本席窗口 1104/21 仍漂移，翻牌权留席T16）；自指件注记：v2.3 后 36，  *)
+(* v2.4 后实测 43（本席 +7 条核对引理，只记不改，对账权留下一席）。                                  *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -977,8 +987,10 @@ Definition ng_UpReqPowMonoBridge : NewGreenFace :=
   MkNewGreenFace "UpReqPowMonoBridge.v" 337 6 20260911 "I4 pow-monotone bridge synthesizer".
 
 (* ng_UpReqAlign4 —— UpReqAlign4.v：KLCvx 批A+批B（两槽供给+核销演示） *)
+(*   [v2.4 改账：总账席T31 行使 v2.2/v2.3 移交之改账权，登记行 968/18 → 1431/28；批C 增量后 *)
+(*    全量口径，双测同 md5 62e30e10、补绑编译 EXIT=0，改账细节见文末 v2.4 改账段] *)
 Definition ng_UpReqAlign4 : NewGreenFace :=
-  MkNewGreenFace "UpReqAlign4.v" 968 18 20260911 "KLCvx batch A+B: two-slot supply and redemption demo".
+  MkNewGreenFace "UpReqAlign4.v" 1431 28 20260911 "KLCvx batch A+B: two-slot supply and redemption demo".
 
 Definition NewGreenList : list NewGreenFace :=
   cons ng_UpReqKLSTangent
@@ -996,10 +1008,11 @@ Definition NewGreenList : list NewGreenFace :=
   (cons ng_UpReqPowMonoBridge
   (cons ng_UpReqAlign4 nil))))))))))))).
 
-(* 今日新绿面统计：14 件 / 行数和 5474 / Qed 和 101（字面值；一致性由下方等式引理编译期核对）。 *)
+(* 今日新绿面统计：14 件 / 行数和 5937 / Qed 和 111（字面值；一致性由下方等式引理编译期核对； *)
+(*  v2.4 改账后口径，改账前原值 5474/101，见文末 v2.4 改账段）。 *)
 Definition NewGreenPieces  : nat := 14.
-Definition NewGreenLineSum : nat := 5474.
-Definition NewGreenQedSum  : nat := 101.
+Definition NewGreenLineSum : nat := 5937.
+Definition NewGreenQedSum  : nat := 111.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenPieces_matches : NewGreenPieces = cnt_ng NewGreenList.
@@ -1118,4 +1131,82 @@ Proof. reflexivity. Qed.
 (* 4) UpReqTempDual 四树对账：Live_X/CW_Live/CW_vo md5 一致 005d7ece；_Live 快照树缺件        *)
 (*    （v2.1/v2.2 同款观察），补齐权在原席/主会话。 *)
 (* 5) 自指件：af_UpReqIndex 33 为 v2.2 快照；v2.3 后实测 36（本席 +3 条核对引理，只记不改，    *)
+(*    对账权留下一席）。 *)
+
+
+(* ================= v2.4 增册（席T31：注册扫尾+Align4 漂移改账席，20260911） ================= *)
+(* ng_ 第三轨续写：v2.3 后流水线新绿 2 件逐件实测登记 + 总账席行使 v2.2/v2.3 移交之改账权一笔。  *)
+(* 口径同 v2.1/v2.2/v2.3：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（本席经剥注释     *)
+(* token 级 \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等；G1 表九词逐件全零）。             *)
+(* 入库判据（T28/T29 卡定式）：稳定窗口双测一致（同 md5，间隔 >45s）+ 现态补绑单件编译 EXIT=0。   *)
+
+(* ng_UpReqNegFactorB —— UpReqNegFactorB.v：席T27，le_b 乘法保序·负右因子反变面补全（五件） *)
+(*   （X3d PowMonoBridge 头注诚实边界注记之邻接缺口补全；取负共轭路线，eps 证人翻转零手工重排；  *)
+(*   本席双测 183/5 同 md5 5a8b6fe6，补绑 CW_vo 树单件编译 EXIT=0，件内 5 处假设清查全 Closed） *)
+Definition ng_UpReqNegFactorB : NewGreenFace :=
+  MkNewGreenFace "UpReqNegFactorB.v" 183 5 20260911 "leB multiplication contravariant face, nonpositive right factor".
+
+(* ng_UpReqEntropyUniqueNeg —— UpReqEntropyUniqueNeg.v：席T22b，定理 4.6c 逆否形（九件） *)
+(*   （熵最大点唯一性之逆否可达形；基座 CW_219 壳+TempDefs+EntropyDeficitTemp+EntropyUniqueTemp   *)
+(*   +G07_KLWall；本席双测 568/9 同 md5 d349d56c，依赖链补绑后单件编译 EXIT=0，件内 10 处         *)
+(*   假设清查全 Closed；链上三件陈旧 .vo 之原树重编译见观察段 2） *)
+Definition ng_UpReqEntropyUniqueNeg : NewGreenFace :=
+  MkNewGreenFace "UpReqEntropyUniqueNeg.v" 568 9 20260911 "4.6c entropy max unique contrapositive form".
+
+Definition NewGreenListV24 : list NewGreenFace :=
+  cons ng_UpReqNegFactorB
+  (cons ng_UpReqEntropyUniqueNeg nil).
+
+(* v2.4 续写统计：2 件 / 行数和 751 / 封口和 14（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV24Pieces  : nat := 2.
+Definition NewGreenV24LineSum : nat := 751.
+Definition NewGreenV24QedSum  : nat := 14.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV24Pieces_matches : NewGreenV24Pieces = cnt_ng NewGreenListV24.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV24LineSum_matches : NewGreenV24LineSum = sum_ng_lines NewGreenListV24.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV24QedSum_matches : NewGreenV24QedSum = sum_ng_qed NewGreenListV24.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.4 改账段（总账席行使 v2.2/v2.3 移交之 Align4 改账权） ---------- *)
+(* ng_UpReqAlign4 登记行就地改账：968 行/18 封口 → 1431 行/28 封口（漂移 +463/+10，Z2 批A+       *)
+(* Z3 批B+T24 批C 三批增量全量落盘）。本席双测 1431/28 同 md5 62e30e10（间隔 >45s），补绑         *)
+(* CW_vo 树单件编译 EXIT=0 绿态确认。连带字面值（reflexivity 对账闭合所需，上方已改）：           *)
+(* NewGreenLineSum 5474 → 5937、NewGreenQedSum 101 → 111。v2.1 版记所记 5474/101 为改账前历史      *)
+(* 口径，只留不改。除本笔受权改账（登记行数字+统计字面值+相邻注释）外，既有条目零触碰、零缩水。   *)
+
+(* 改账算术对账（编译期机械核对） *)
+Lemma Align4AmendLines : 1431 = plus 968 463.
+Proof. reflexivity. Qed.
+
+Lemma Align4AmendQed : 28 = plus 18 10.
+Proof. reflexivity. Qed.
+
+Lemma Align4AmendLineSum : NewGreenLineSum = plus 5474 463.
+Proof. reflexivity. Qed.
+
+Lemma Align4AmendQedSum : NewGreenQedSum = plus 101 10.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.4 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 任务书 16 件批中 14 件经 grep 证实在册：v2.1 九件（KLSTangent 205/6、SteadyThermo 129/1、   *)
+(*    FEPCanon 135/2、MinFreeEps 268/3、ELBOEps 400/6、ELBOTight 420/6、TrainingEquiv 489/8、      *)
+(*    TVAbsEps 180/6、PowMonoBridge 337/6）+ v2.2 三件（EntropyMaxTemp 407/5、EntropyUniqueTemp     *)
+(*    378/8、I4Bridge 215/5）+ v2.1 一件 EntropyDeficitTemp 582/8 + v2.3 一件 TempDual 417/8——     *)
+(*    本席盘面复测逐件与登记口径相符零漂移（简报口径滞后于登记面，T28/T29 卡定式三度再现）。      *)
+(* 2) UpReqEntropyUniqueNeg 依赖链补绑观察：CW_vo 树 03:42–03:44 有他席刷新（CW 219 壳、           *)
+(*    UpRealLeB、UpRealLeB3、G07_KLWall），03:20 批次之 TempDefs/EntropyDeficitTemp/                *)
+(*    EntropyUniqueTemp 三件 .vo 相对新壳为陈旧（单件补绑报库一致性错配）；且显式 CW_vo 绑定        *)
+(*    恒压过工作树新 .vo（装载路径遮蔽，与 -Q 次序无关）；本席于 Live_X 原树重编译该三件           *)
+(*    （各 EXIT=0，源文件零触碰、仅 .vo 翻新）后 EntropyUniqueNeg 补绑编译 EXIT=0；CW_vo 树内      *)
+(*    该三件陈旧 .vo 之补齐权在原席/主会话。 *)
+(* 3) UpReqTopKTVChain 仍未绿不入面：本席窗口实测 1104/21（md5 56dab1e6），四席位窗口横跨           *)
+(*    1064→1104 仍漂移，现态未验绿；翻牌权留席T16。 *)
+(* 4) 自指件：af_UpReqIndex 36 为 v2.3 快照；v2.4 后实测 43（本席 +7 条核对引理，只记不改，        *)
 (*    对账权留下一席）。 *)

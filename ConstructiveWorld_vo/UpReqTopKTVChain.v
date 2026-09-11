@@ -317,3 +317,788 @@ End RealTopKTVChain.
 (*   （_t16_g3.v）+ Recursive Extraction 顶级名 Obj.magic=0；             *)
 (*   G4 coqchk 无 unsafe。                                               *)
 (* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqTopKTVChain.v —— 席T17：定理 7.6 topk_tv_identity        *)
+(*   Real 层平移·后半段收官（TV 点态链 8 件 + 旗舰闭合）2026-09-11 *)
+(* ------------------------------------------------------------------ *)
+(* 【使命】续 T16 前半段（件1-11 + kept 家载体 4），本席交付余 8 件：  *)
+(*   件12 rtk_tv_pointwise_keep       <- S06 5667（keep 分支符号恒等） *)
+(*   件13 rtk_tv_pointwise_evict      <- S06 5725（evict |x-0|==x）   *)
+(*   件14 rtk_if_split                <- S06 5742（逐点 if 加法分解）  *)
+(*   件15 rtk_eviction_if_linear_else <- S06 5753（else 线性对偶）     *)
+(*   件16 rtk_tv_pointwise            <- S06 5764（逐点总恒等，条件化）*)
+(*   件17 rtk_sum_decomp              <- S06 5780（求和分解）          *)
+(*   件18 rtk_sum_collapse            <- S06 5840（收口 2·invZ·T）    *)
+(*   件19 rtk_tv_identity_strict      <- S06 5886（旗舰 TV==tail/Z）  *)
+(* ------------------------------------------------------------------ *)
+(* 【新增载体（T16 升参名直引，零重建；Id 同位锚见行尾）】              *)
+(*   rtk2_bfactor<-T16 rtk_boltzmann_factor  rtk2_Z<-rtk_Z_thermo      *)
+(*   rtk2_kept<-rtk_kept_partition @5541  rtk2_tail<-rtk_tail_mass @5537 *)
+(*   rtk2_topk_renorm<-S06 5548  rtk2_boltzmann_dist_attn<-S06 3847    *)
+(*   rtk2_tv_dist<-S06 4033（inv2 := 1/(1+1)，real_two_pos S08 593）   *)
+(* 【诚实接口申报】real_sum_over_S_linear 新增槽（Id SumOver 字段同位   *)
+(*   S01 1402；T16 头注预留 T17 补槽，件17 消费）。辅件两件（消费面）：  *)
+(*   rtk_minus_plus_cancel_r_cc（Id minus_plus_cancel_r 镜像，件18 消费）*)
+(*   rtk_eviction_if_linear<-S06 4653（keep 分支线性，件17 消费）。     *)
+(* 【消费锚】T16 件9 lt_minus_cc/件10 abs_neg_cc/件11 minus_zero_cc    *)
+(*   （符号腿引擎）+ 基座：real_distrib S02 2375 / real_distrib_r S09   *)
+(*   111 / real_mult_opp_l S08 49 / real_opp_plus S07 7786 /            *)
+(*   real_opp_opp S08 95 / real_plus_assoc S02 2333 / real_plus_opp     *)
+(*   S02 2345 / real_abs_mult_req S07 7268 / real_abs_eq_compat S08     *)
+(*   5112 / real_abs_pos_req S07 7280 / real_mult_positive S07 6960 /   *)
+(*   real_inv_pos_pos S03 6771 / real_inv_pos_correct S03 6722。        *)
+(* 【红线】纯构造性；Set 层零 Prop 泄露；real_eq 非 Id 禁改写——全链     *)
+(*   real_eq_trans 显式端点（T16 双卡参序坑：族件 x y 显式首参）；       *)
+(*   全件 Qed 闭合。                                                    *)
+(* ============================================================ *)
+
+Section RealTopKTVFinish.
+
+(* 世界：状态类型与求和槽（E246 坑2 同款抽象位；本席补 linear 槽） *)
+Variable S : Type.
+Variable real_sum_over_S : (S -> Real) -> Real.
+Variable real_sum_over_S_ext : forall (f g : S -> Real),
+  (forall s : S, real_eq (f s) (g s)) ->
+  real_eq (real_sum_over_S f) (real_sum_over_S g).
+Variable real_sum_over_S_add : forall (f g : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+          (real_plus (real_sum_over_S f) (real_sum_over_S g)).
+Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+          (real_mult a (real_sum_over_S f)).
+
+(* ---- 热力学载体（Id @3837-3843 逐位对位；T16 节同形） ---- *)
+Variable D : Real.
+Variable D_pos : real_lt real_zero D.
+Variable energy : S -> Real.
+
+(* ---- Boltzmann 载体实例化（T16 升参名直引） ---- *)
+Definition rtk2_bfactor (s : S) : Real :=
+  rtk_boltzmann_factor S D D_pos energy s.
+
+Definition rtk2_Z : Real := rtk_Z_thermo S real_sum_over_S D D_pos energy.
+
+Variable rtk2_Zpos : real_lt real_zero rtk2_Z.
+
+Definition rtk2_invZ : Real := real_inv_pos rtk2_Z rtk2_Zpos.
+
+Definition rtk2_kept (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) : Real :=
+  rtk_kept_partition S real_sum_over_S D D_pos energy k kd.
+
+Definition rtk2_tail (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) : Real :=
+  rtk_tail_mass S real_sum_over_S D D_pos energy k kd.
+
+Definition rtk2_invK (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+  (Hkpos : real_lt real_zero (rtk2_kept k kd)) : Real :=
+  real_inv_pos (rtk2_kept k kd) Hkpos.
+
+(* Top-K 重归一化分布 <- S06 5548 *)
+Definition rtk2_topk_renorm (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+  (Hkpos : real_lt real_zero (rtk2_kept k kd)) (s : S) : Real :=
+  if kd s then real_mult (rtk2_invK k kd Hkpos) (rtk2_bfactor s) else real_zero.
+
+(* Boltzmann 分布 <- S06 3847 *)
+Definition rtk2_boltzmann_dist_attn (s : S) : Real :=
+  real_mult rtk2_invZ (rtk2_bfactor s).
+
+(* 总变差距离 <- S06 4033（inv2 := 1/(1+1)） *)
+Definition rtk2_tv_dist (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+  (Hkpos : real_lt real_zero (rtk2_kept k kd)) : Real :=
+  real_mult (real_inv_pos (real_plus real_one real_one) real_two_pos)
+            (real_sum_over_S (fun s : S =>
+               real_abs (real_minus_r (rtk2_boltzmann_dist_attn s)
+                                      (rtk2_topk_renorm k kd Hkpos s)))).
+
+(* ============================================================ *)
+(* 辅件 A1：x + y − x == y（Id minus_plus_cancel_r 镜像；件18 消费）   *)
+(* ============================================================ *)
+Lemma rtk_minus_plus_cancel_r_cc :
+  forall m x : Real,
+    real_eq (real_minus_r (real_plus m x) m) x.
+Proof.
+  intros m x.
+  apply (real_eq_trans _ (real_plus x real_zero) _).
+  - apply (real_eq_trans _ (real_plus x (real_plus m (real_opp m))) _).
+    + apply (real_eq_trans _ (real_plus (real_plus x m) (real_opp m)) _).
+      * apply (RealSetoid.real_eq_plus_compat
+                 (real_plus m x) (real_opp m)
+                 (real_plus x m) (real_opp m)
+                 (real_plus_comm m x) (real_eq_refl (real_opp m))).
+      * exact (real_eq_sym _ _ (real_plus_assoc x m (real_opp m))).
+    + apply (RealSetoid.real_eq_plus_compat
+               x (real_plus m (real_opp m)) x real_zero
+               (real_eq_refl x) (real_plus_opp m)).
+  - exact (real_plus_zero x).
+Qed.
+
+(* ---- 件14（Id @5742）：逐点 if 加法分解 ---- *)
+Lemma rtk_if_split :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (X Y : Real) (s : S),
+    real_eq (if kd s then X else Y)
+            (real_plus (if kd s then X else real_zero)
+                       (if kd s then real_zero else Y)).
+Proof.
+  intros k kd X Y s. destruct (kd s) as [Hk | Hnk].
+  - exact (real_eq_sym _ _ (real_plus_zero X)).
+  - exact (real_eq_trans _ _ _ (real_eq_sym _ _ (real_plus_zero Y))
+             (real_eq_sym _ _ (real_plus_comm real_zero Y))).
+Qed.
+
+(* ---- 辅件 A2（Id @4653）：keep 分支线性（件17 消费） ---- *)
+Lemma rtk_eviction_if_linear :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (a : Real) (f : S -> Real) (s : S),
+    real_eq (if kd s then real_mult a (f s) else real_zero)
+            (real_mult a (if kd s then f s else real_zero)).
+Proof.
+  intros k kd a f s. destruct (kd s) as [Hk | Hnk].
+  - apply real_eq_refl.
+  - exact (real_eq_sym _ _ (real_mult_zero a)).
+Qed.
+
+(* ---- 件15（Id @5753）：else 分支线性（对偶 A2） ---- *)
+Lemma rtk_eviction_if_linear_else :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (a : Real) (f : S -> Real) (s : S),
+    real_eq (if kd s then real_zero else real_mult a (f s))
+            (real_mult a (if kd s then real_zero else f s)).
+Proof.
+  intros k kd a f s. destruct (kd s) as [Hk | Hnk].
+  - exact (real_eq_sym _ _ (real_mult_zero a)).
+  - apply real_eq_refl.
+Qed.
+
+(* ============================================================ *)
+(* 件12（Id @5667）：keep 分支点态符号恒等                              *)
+(*   |b·invZ − invK·b| == b·(invK − invZ)，前提 invZ < invK（严格逐出， *)
+(*   Real 层由 T > 0 实例化）；符号腿 = T16 件9+件10 引擎。             *)
+(* ============================================================ *)
+Lemma rtk_tv_pointwise_keep :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S)
+         (Hk : k s)
+         (Hkpos : real_lt real_zero (rtk2_kept k kd))
+         (Hst : real_lt (real_inv_pos rtk2_Z rtk2_Zpos)
+                        (real_inv_pos (rtk2_kept k kd) Hkpos)),
+    real_eq (real_abs (real_minus_r
+              (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+              (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos) (rtk2_bfactor s))))
+            (real_mult (rtk2_bfactor s)
+                       (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                     (real_inv_pos rtk2_Z rtk2_Zpos))).
+Proof.
+  intros k kd s Hk Hkpos Hst.
+  (* 腿1（提公因子，Id mult_minus_distr_r 反向镜像） *)
+  assert (Hfac : real_eq
+           (real_minus_r (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                         (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos) (rtk2_bfactor s)))
+           (real_mult (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                    (real_inv_pos (rtk2_kept k kd) Hkpos))
+                      (rtk2_bfactor s))).
+  { apply (real_eq_trans _ (real_plus (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                        (real_opp (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                             (rtk2_bfactor s)))) _).
+    - apply real_eq_refl.
+    - apply (real_eq_trans _ (real_plus (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                          (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                     (real_opp (rtk2_bfactor s)))) _).
+      + apply (RealSetoid.real_eq_plus_compat
+                 (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                 (real_opp (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                      (rtk2_bfactor s)))
+                 (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                 (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                            (real_opp (rtk2_bfactor s)))
+                 (real_eq_refl (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+                 (real_eq_sym _ _
+                    (real_mult_opp_l (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                     (rtk2_bfactor s)))).
+      + apply (real_eq_trans _ (real_plus (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                            (real_mult (rtk2_bfactor s)
+                                       (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+        * apply (RealSetoid.real_eq_plus_compat
+                   (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                   (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                              (real_opp (rtk2_bfactor s)))
+                   (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                   (real_mult (rtk2_bfactor s)
+                              (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                   (real_eq_refl (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+                   (real_eq_trans _ _ _
+                      (real_mult_opp_l (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                       (rtk2_bfactor s))
+                      (real_eq_trans _ _ _
+                         (RealSetoid.real_eq_opp_compat
+                            (real_mult (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                       (rtk2_bfactor s))
+                            (real_mult (rtk2_bfactor s)
+                                       (real_inv_pos (rtk2_kept k kd) Hkpos))
+                            (real_mult_comm (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                            (rtk2_bfactor s)))
+                         (real_eq_sym _ _
+                            (real_mult_opp_l (rtk2_bfactor s)
+                                             (real_inv_pos (rtk2_kept k kd) Hkpos)))))).
+        * apply (real_eq_trans _ (real_mult (rtk2_bfactor s)
+                              (real_plus (real_inv_pos rtk2_Z rtk2_Zpos)
+                                         (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+          -- apply (real_eq_trans _
+                      (real_plus (real_mult (rtk2_bfactor s)
+                                            (real_inv_pos rtk2_Z rtk2_Zpos))
+                                 (real_mult (rtk2_bfactor s)
+                                            (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+            ++ apply (RealSetoid.real_eq_plus_compat
+                        (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                        (real_mult (rtk2_bfactor s)
+                                   (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                        (real_mult (rtk2_bfactor s) (real_inv_pos rtk2_Z rtk2_Zpos))
+                        (real_mult (rtk2_bfactor s)
+                                   (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                        (real_mult_comm (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                        (real_eq_refl
+                           (real_mult (rtk2_bfactor s)
+                                      (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos))))).
+            ++ exact (real_eq_sym _ _
+                         (real_distrib (rtk2_bfactor s) (real_inv_pos rtk2_Z rtk2_Zpos)
+                                       (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))).
+          -- exact (real_mult_comm (rtk2_bfactor s)
+                       (real_plus (real_inv_pos rtk2_Z rtk2_Zpos)
+                                  (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))). }
+  (* 腿2（|D'·b| == b·|D'|）：real_abs_mult_req + comm + |b|==b *)
+  assert (Habs : real_eq
+           (real_abs (real_mult (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                              (real_inv_pos (rtk2_kept k kd) Hkpos))
+                                (rtk2_bfactor s)))
+           (real_mult (rtk2_bfactor s)
+                      (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                              (real_inv_pos (rtk2_kept k kd) Hkpos))))).
+  { apply (real_eq_trans _ (real_mult (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                        (real_abs (rtk2_bfactor s))) _).
+    - exact (real_abs_mult_req
+               (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                             (real_inv_pos (rtk2_kept k kd) Hkpos))
+               (rtk2_bfactor s)).
+    - apply (real_eq_trans _ (real_mult (real_abs (rtk2_bfactor s))
+                          (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                  (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+      + exact (real_mult_comm
+                 (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                         (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                 (real_abs (rtk2_bfactor s))).
+      + apply (RealSetoid.real_eq_mult_compat
+                 (real_abs (rtk2_bfactor s))
+                 (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                         (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                 (rtk2_bfactor s)
+                 (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                         (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                 (real_abs_pos_req (rtk2_bfactor s)
+                    (rtk_boltzmann_factor_pos_attn S D D_pos energy s))
+                 (real_eq_refl
+                    (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                            (real_inv_pos (rtk2_kept k kd) Hkpos))))). }
+  (* 腿3（符号，前提 invZ < invK）：T16 件9+件10 引擎 *)
+  assert (Hsign : real_eq
+           (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                   (real_inv_pos (rtk2_kept k kd) Hkpos)))
+           (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                         (real_inv_pos rtk2_Z rtk2_Zpos))).
+  { apply (real_eq_trans _ (real_opp (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                     (real_inv_pos (rtk2_kept k kd) Hkpos))) _).
+    - exact (rtk_abs_neg_cc
+               (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                             (real_inv_pos (rtk2_kept k kd) Hkpos))
+               (rtk_lt_minus_cc (real_inv_pos rtk2_Z rtk2_Zpos)
+                                (real_inv_pos (rtk2_kept k kd) Hkpos) Hst)).
+    - apply (real_eq_trans _ (real_plus (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))
+                          (real_opp (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+      + exact (real_opp_plus (real_inv_pos rtk2_Z rtk2_Zpos)
+                 (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos))).
+      + apply (real_eq_trans _ (real_plus (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))
+                            (real_inv_pos (rtk2_kept k kd) Hkpos)) _).
+        * apply (RealSetoid.real_eq_plus_compat
+                   (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))
+                   (real_opp (real_opp (real_inv_pos (rtk2_kept k kd) Hkpos)))
+                   (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))
+                   (real_inv_pos (rtk2_kept k kd) Hkpos)
+                   (real_eq_refl (real_opp (real_inv_pos rtk2_Z rtk2_Zpos)))
+                   (real_opp_opp (real_inv_pos (rtk2_kept k kd) Hkpos))).
+        * exact (real_plus_comm (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))
+                                (real_inv_pos (rtk2_kept k kd) Hkpos)). }
+  (* 组装：|b·invZ − invK·b| == b·(invK − invZ) *)
+  apply (real_eq_trans _ (real_abs (real_mult (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                              (real_inv_pos (rtk2_kept k kd) Hkpos))
+                                (rtk2_bfactor s))) _).
+  - apply real_abs_eq_compat. exact Hfac.
+  - apply (real_eq_trans _ (real_mult (rtk2_bfactor s)
+                        (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                (real_inv_pos (rtk2_kept k kd) Hkpos)))) _).
+    + exact Habs.
+    + apply (RealSetoid.real_eq_mult_compat
+               (rtk2_bfactor s)
+               (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
+                                       (real_inv_pos (rtk2_kept k kd) Hkpos)))
+               (rtk2_bfactor s)
+               (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                             (real_inv_pos rtk2_Z rtk2_Zpos))
+               (real_eq_refl (rtk2_bfactor s)) Hsign).
+Qed.
+
+(* ---- 件13（Id @5725）：evict 分支 |b·invZ − 0| == b·invZ ---- *)
+Lemma rtk_tv_pointwise_evict :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S)
+         (Hnk : Not (k s)),
+    real_eq (real_abs (real_minus_r
+              (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)) real_zero))
+            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)).
+Proof.
+  intros k kd s Hnk.
+  apply (real_eq_trans _ (real_abs (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))) _).
+  - apply real_abs_eq_compat.
+    exact (rtk_minus_zero_cc
+             (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))).
+  - apply real_abs_pos_req.
+    apply (real_mult_positive (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)).
+    + apply (real_inv_pos_pos rtk2_Z rtk2_Zpos).
+    + exact (rtk_boltzmann_factor_pos_attn S D D_pos energy s).
+Qed.
+
+(* ---- 件16（Id @5764）：逐点总恒等（条件化） ---- *)
+Lemma rtk_tv_pointwise :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (Hkpos : real_lt real_zero (rtk2_kept k kd)) (s : S)
+         (Hst : real_lt (real_inv_pos rtk2_Z rtk2_Zpos)
+                        (real_inv_pos (rtk2_kept k kd) Hkpos)),
+    real_eq (real_abs (real_minus_r
+              (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+              (rtk2_topk_renorm k kd Hkpos s)))
+            (if kd s
+             then real_mult (rtk2_bfactor s)
+                            (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                          (real_inv_pos rtk2_Z rtk2_Zpos))
+             else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)).
+Proof.
+  intros k kd Hkpos s Hst. unfold rtk2_topk_renorm.
+  destruct (kd s) as [Hk | Hnk].
+  - exact (rtk_tv_pointwise_keep k kd s Hk Hkpos Hst).
+  - exact (rtk_tv_pointwise_evict k kd s Hnk).
+Qed.
+
+(* ============================================================ *)
+(* 件17（Id @5780）：求和分解                                           *)
+(*   Σ(if keep then b·D' else invZ·b) == kept·D' + invZ·T               *)
+(*   链：if 加法分解（件14）→ 求和可加 → 双 linear 腿（linear 槽 +       *)
+(*   A2/件15）→ kept/tail 端点定义性收口。                              *)
+(* ============================================================ *)
+Lemma rtk_sum_decomp :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (Hkpos : real_lt real_zero (rtk2_kept k kd))
+         (Hst : real_lt (real_inv_pos rtk2_Z rtk2_Zpos)
+                        (real_inv_pos (rtk2_kept k kd) Hkpos)),
+    real_eq (real_sum_over_S (fun s : S =>
+               if kd s
+               then real_mult (rtk2_bfactor s)
+                              (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                            (real_inv_pos rtk2_Z rtk2_Zpos))
+               else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+            (real_plus (real_mult (rtk2_kept k kd)
+                                  (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                (real_inv_pos rtk2_Z rtk2_Zpos)))
+                       (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+Proof.
+  intros k kd Hkpos Hst.
+  apply (real_eq_trans _ (real_plus
+              (real_sum_over_S (fun s : S =>
+                 if kd s
+                 then real_mult (rtk2_bfactor s)
+                                (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                              (real_inv_pos rtk2_Z rtk2_Zpos))
+                 else real_zero))
+              (real_sum_over_S (fun s : S =>
+                 if kd s then real_zero
+                 else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))) _).
+  - (* 逐点 if 分解（件14）→ 求和可加 *)
+    apply (real_eq_trans _ (real_sum_over_S (fun s : S =>
+                real_plus (if kd s
+                           then real_mult (rtk2_bfactor s)
+                                          (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                        (real_inv_pos rtk2_Z rtk2_Zpos))
+                           else real_zero)
+                          (if kd s then real_zero
+                           else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))) _).
+    + apply real_sum_over_S_ext. intro s.
+      exact (rtk_if_split k kd
+               (real_mult (rtk2_bfactor s)
+                          (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                        (real_inv_pos rtk2_Z rtk2_Zpos)))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)) s).
+    + exact (real_sum_over_S_add
+               (fun s : S =>
+                  if kd s
+                  then real_mult (rtk2_bfactor s)
+                                 (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                               (real_inv_pos rtk2_Z rtk2_Zpos))
+                  else real_zero)
+               (fun s : S =>
+                  if kd s then real_zero
+                  else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))).
+  - (* 双 linear 腿 *)
+    apply (RealSetoid.real_eq_plus_compat
+             (real_sum_over_S (fun s : S =>
+                if kd s
+                then real_mult (rtk2_bfactor s)
+                               (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                             (real_inv_pos rtk2_Z rtk2_Zpos))
+                else real_zero))
+             (real_sum_over_S (fun s : S =>
+                if kd s then real_zero
+                else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+             (real_mult (rtk2_kept k kd)
+                        (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                      (real_inv_pos rtk2_Z rtk2_Zpos)))
+             (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+    + (* LEFT：Σ(if k then b·D' else 0) == (Σ if-kept)·D' *)
+      apply (real_eq_trans _ (real_sum_over_S (fun s : S =>
+                  real_mult (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                          (real_inv_pos rtk2_Z rtk2_Zpos))
+                            (if kd s then rtk2_bfactor s else real_zero))) _).
+      * apply real_sum_over_S_ext. intro s.
+        apply (real_eq_trans _ (if kd s
+                  then real_mult (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                (real_inv_pos rtk2_Z rtk2_Zpos))
+                                 (rtk2_bfactor s)
+                  else real_zero) _).
+        -- destruct (kd s) as [Hks | Hnks].
+           ++ exact (real_mult_comm (rtk2_bfactor s)
+                       (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                     (real_inv_pos rtk2_Z rtk2_Zpos))).
+           ++ apply real_eq_refl.
+        -- exact (rtk_eviction_if_linear k kd
+                    (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                  (real_inv_pos rtk2_Z rtk2_Zpos))
+                    rtk2_bfactor s).
+      * apply (real_eq_trans _ (real_mult (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                          (real_inv_pos rtk2_Z rtk2_Zpos))
+                            (real_sum_over_S (fun s : S =>
+                               if kd s then rtk2_bfactor s else real_zero))) _).
+        -- exact (real_sum_over_S_linear
+                    (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                  (real_inv_pos rtk2_Z rtk2_Zpos))
+                    (fun s : S => if kd s then rtk2_bfactor s else real_zero)).
+        -- exact (real_mult_comm
+                    (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                  (real_inv_pos rtk2_Z rtk2_Zpos))
+                    (real_sum_over_S (fun s : S =>
+                       if kd s then rtk2_bfactor s else real_zero))).
+    + (* RIGHT：Σ(if k then 0 else invZ·b) == invZ·(Σ if-tail)（件15） *)
+      apply (real_eq_trans _ (real_sum_over_S (fun s : S =>
+                  real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                            (if kd s then real_zero else rtk2_bfactor s))) _).
+      * apply real_sum_over_S_ext. intro s.
+        exact (rtk_eviction_if_linear_else k kd
+                 (real_inv_pos rtk2_Z rtk2_Zpos) rtk2_bfactor s).
+      * exact (real_sum_over_S_linear (real_inv_pos rtk2_Z rtk2_Zpos)
+                  (fun s : S => if kd s then real_zero else rtk2_bfactor s)).
+Qed.
+
+(* ============================================================ *)
+(* 件18（Id @5840）：收口代数 kept·D' + invZ·T == (1+1)·(invZ·T)        *)
+(* ============================================================ *)
+Lemma rtk_sum_collapse :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (Hkpos : real_lt real_zero (rtk2_kept k kd)),
+    real_eq (real_plus (real_mult (rtk2_kept k kd)
+                                  (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                (real_inv_pos rtk2_Z rtk2_Zpos)))
+                       (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+            (real_mult (real_plus real_one real_one)
+                       (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+Proof.
+  intros k kd Hkpos.
+  (* kept·invK == 1（real_inv_pos_correct 直引） *)
+  assert (Hkept1 : real_eq
+             (real_mult (rtk2_kept k kd) (real_inv_pos (rtk2_kept k kd) Hkpos))
+             real_one)
+    by exact (real_inv_pos_correct (rtk2_kept k kd) Hkpos).
+  (* Hk1：kept·(invK − invZ) == 1 − kept·invZ *)
+  assert (Hk1 : real_eq
+           (real_mult (rtk2_kept k kd)
+                      (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                    (real_inv_pos rtk2_Z rtk2_Zpos)))
+           (real_minus_r real_one
+                         (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))).
+  { unfold real_minus_r.
+    apply (real_eq_trans _ (real_plus real_one
+                          (real_opp (real_mult (rtk2_kept k kd)
+                                               (real_inv_pos rtk2_Z rtk2_Zpos)))) _).
+    - apply (real_eq_trans _ (real_plus (real_mult (rtk2_kept k kd)
+                                                       (real_inv_pos (rtk2_kept k kd) Hkpos))
+                          (real_mult (rtk2_kept k kd)
+                                     (real_opp (real_inv_pos rtk2_Z rtk2_Zpos)))) _).
+      + apply (real_eq_trans _ (real_plus (real_mult (rtk2_kept k kd)
+                                                       (real_inv_pos (rtk2_kept k kd) Hkpos))
+                            (real_mult (rtk2_kept k kd)
+                                       (real_opp (real_inv_pos rtk2_Z rtk2_Zpos)))) _).
+        * exact (real_distrib (rtk2_kept k kd) (real_inv_pos (rtk2_kept k kd) Hkpos)
+                              (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))).
+        * exact (real_eq_refl
+                   (real_plus (real_mult (rtk2_kept k kd)
+                                          (real_inv_pos (rtk2_kept k kd) Hkpos))
+                              (real_mult (rtk2_kept k kd)
+                                         (real_opp (real_inv_pos rtk2_Z rtk2_Zpos))))).
+      + apply (RealSetoid.real_eq_plus_compat
+                 (real_mult (rtk2_kept k kd) (real_inv_pos (rtk2_kept k kd) Hkpos))
+                 (real_mult (rtk2_kept k kd) (real_opp (real_inv_pos rtk2_Z rtk2_Zpos)))
+                 real_one
+                 (real_opp (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+                 Hkept1
+                 (real_mult_opp_l (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))).
+    - apply real_eq_refl. }
+  (* Hk2：kept·invZ + invZ·T == 1（守恒 + inv_pos_correct） *)
+  assert (Hk2 : real_eq
+           (real_plus (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+                      (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+           real_one).
+  { apply (real_eq_trans _ (real_plus (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+                        (real_mult (rtk2_tail k kd) (real_inv_pos rtk2_Z rtk2_Zpos))) _).
+    - apply (RealSetoid.real_eq_plus_compat
+               (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+               (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+               (real_mult (rtk2_tail k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+               (real_eq_refl
+                  (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+               (real_mult_comm (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+    - apply (real_eq_trans _ (real_mult rtk2_Z (real_inv_pos rtk2_Z rtk2_Zpos)) _).
+      + apply (real_eq_trans _
+                  (real_mult (real_plus (rtk2_kept k kd) (rtk2_tail k kd))
+                             (real_inv_pos rtk2_Z rtk2_Zpos)) _).
+        * exact (real_distrib_r (rtk2_kept k kd) (rtk2_tail k kd)
+                                (real_inv_pos rtk2_Z rtk2_Zpos)).
+        * apply (RealSetoid.real_eq_mult_compat
+                   (real_plus (rtk2_kept k kd) (rtk2_tail k kd))
+                   (real_inv_pos rtk2_Z rtk2_Zpos)
+                   rtk2_Z
+                   (real_inv_pos rtk2_Z rtk2_Zpos)
+                   (rtk_kept_plus_tail_full S real_sum_over_S real_sum_over_S_ext
+                      real_sum_over_S_add D D_pos energy k kd)
+                   (real_eq_refl (real_inv_pos rtk2_Z rtk2_Zpos))).
+      + exact (real_inv_pos_correct rtk2_Z rtk2_Zpos). }
+  (* Hk3：1 − kept·invZ == invZ·T（A1 收口） *)
+  assert (Hk3 : real_eq
+           (real_minus_r real_one
+                         (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+           (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+  { apply (real_eq_trans _ (real_minus_r
+                (real_plus (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+                           (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))) _).
+    - apply (RealSetoid.real_eq_plus_compat real_one
+               (real_opp (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+               (real_plus (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+               (real_opp (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+               (real_eq_sym _ _ Hk2)
+               (real_eq_refl
+                  (real_opp (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))))).
+    - exact (rtk_minus_plus_cancel_r_cc
+               (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))). }
+  (* 组装：kept·D' + invZ·T == (1 − kept·invZ) + invZ·T == X + X == (1+1)·X *)
+  apply (real_eq_trans _ (real_plus (real_minus_r real_one
+                                   (real_mult (rtk2_kept k kd)
+                                              (real_inv_pos rtk2_Z rtk2_Zpos)))
+                      (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))) _).
+  - apply (RealSetoid.real_eq_plus_compat
+             (real_mult (rtk2_kept k kd)
+                        (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                      (real_inv_pos rtk2_Z rtk2_Zpos)))
+             (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+             (real_minus_r real_one
+                           (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+             (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+             Hk1 (real_eq_refl (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                          (rtk2_tail k kd)))).
+  - apply (real_eq_trans _ (real_plus (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+                        (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))) _).
+    + apply (RealSetoid.real_eq_plus_compat
+               (real_minus_r real_one
+                             (real_mult (rtk2_kept k kd) (real_inv_pos rtk2_Z rtk2_Zpos)))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+               (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+               Hk3 (real_eq_refl (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                            (rtk2_tail k kd)))).
+    + apply (real_eq_trans _ (real_plus (real_mult real_one
+                                     (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                (rtk2_tail k kd)))
+                          (real_mult real_one
+                                     (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                (rtk2_tail k kd)))) _).
+      * apply (RealSetoid.real_eq_plus_compat
+                 (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+                 (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+                 (real_mult real_one
+                            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                 (real_mult real_one
+                            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                 (real_eq_trans _ _ _
+                    (real_eq_sym _ _
+                       (real_mult_one
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))))
+                    (real_eq_sym _ _
+                       (real_mult_comm real_one
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))))
+                 (real_eq_trans _ _ _
+                    (real_eq_sym _ _
+                       (real_mult_one
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))))
+                    (real_eq_sym _ _
+                       (real_mult_comm real_one
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))))).
+      * exact (real_distrib_r real_one real_one
+                 (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+Qed.
+
+(* ============================================================ *)
+(* 件19（Id @5886，旗舰）：严格逐出 ⟹ TV(boltzmann, topk) == tail/Z    *)
+(* ============================================================ *)
+Theorem rtk_tv_identity_strict :
+  forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
+         (Hkpos : real_lt real_zero (rtk2_kept k kd))
+         (Hst : real_lt (real_inv_pos rtk2_Z rtk2_Zpos)
+                        (real_inv_pos (rtk2_kept k kd) Hkpos)),
+    real_eq (rtk2_tv_dist k kd Hkpos)
+            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)).
+Proof.
+  intros k kd Hkpos Hst.
+  (* 逐点替换（件16） *)
+  assert (Hpt : real_eq
+           (real_sum_over_S (fun s : S =>
+              real_abs (real_minus_r
+                          (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                          (rtk2_topk_renorm k kd Hkpos s))))
+           (real_sum_over_S (fun s : S =>
+              if kd s
+              then real_mult (rtk2_bfactor s)
+                             (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                           (real_inv_pos rtk2_Z rtk2_Zpos))
+              else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))).
+  { apply real_sum_over_S_ext. intro s.
+    exact (rtk_tv_pointwise k kd Hkpos s Hst). }
+  apply (real_eq_trans _ (real_mult (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                      (real_sum_over_S (fun s : S =>
+                         if kd s
+                         then real_mult (rtk2_bfactor s)
+                                        (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                      (real_inv_pos rtk2_Z rtk2_Zpos))
+                         else real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                        (rtk2_bfactor s)))) _).
+  - (* inv2·Σ|…| == inv2·Σif（unfold rtk2_tv_dist 端点定义性） *)
+    apply (RealSetoid.real_eq_mult_compat
+             (real_inv_pos (real_plus real_one real_one) real_two_pos)
+             (real_sum_over_S (fun s : S =>
+                real_abs (real_minus_r
+                            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s))
+                            (rtk2_topk_renorm k kd Hkpos s))))
+             (real_inv_pos (real_plus real_one real_one) real_two_pos)
+             (real_sum_over_S (fun s : S =>
+                if kd s
+                then real_mult (rtk2_bfactor s)
+                               (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                             (real_inv_pos rtk2_Z rtk2_Zpos))
+                else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+             (real_eq_refl (real_inv_pos (real_plus real_one real_one) real_two_pos))
+             Hpt).
+  - apply (real_eq_trans _ (real_mult (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                        (real_plus
+                           (real_mult (rtk2_kept k kd)
+                                      (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                                    (real_inv_pos rtk2_Z rtk2_Zpos)))
+                           (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))) _).
+    + (* 件17：求和分解 *)
+      apply (RealSetoid.real_eq_mult_compat
+               (real_inv_pos (real_plus real_one real_one) real_two_pos)
+               (real_sum_over_S (fun s : S =>
+                  if kd s
+                  then real_mult (rtk2_bfactor s)
+                                 (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                               (real_inv_pos rtk2_Z rtk2_Zpos))
+                  else real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_bfactor s)))
+               (real_inv_pos (real_plus real_one real_one) real_two_pos)
+               (real_plus
+                  (real_mult (rtk2_kept k kd)
+                             (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                           (real_inv_pos rtk2_Z rtk2_Zpos)))
+                  (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+               (real_eq_refl (real_inv_pos (real_plus real_one real_one) real_two_pos))
+               (rtk_sum_decomp k kd Hkpos Hst)).
+    + apply (real_eq_trans _ (real_mult (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                          (real_mult (real_plus real_one real_one)
+                                     (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                                (rtk2_tail k kd)))) _).
+      * (* 件18：收口代数 *)
+        apply (RealSetoid.real_eq_mult_compat
+                 (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                 (real_plus
+                    (real_mult (rtk2_kept k kd)
+                               (real_minus_r (real_inv_pos (rtk2_kept k kd) Hkpos)
+                                             (real_inv_pos rtk2_Z rtk2_Zpos)))
+                    (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                 (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                 (real_mult (real_plus real_one real_one)
+                            (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                 (real_eq_refl (real_inv_pos (real_plus real_one real_one) real_two_pos))
+                 (rtk_sum_collapse k kd Hkpos)).
+      * (* inv2·((1+1)·X) == X：assoc + inv_pos_correct + one *)
+        apply (real_eq_trans _ (real_mult
+                    (real_mult (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                               (real_plus real_one real_one))
+                    (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))) _).
+        -- exact (real_mult_assoc
+                     (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                     (real_plus real_one real_one)
+                     (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+        -- apply (real_eq_trans _ (real_mult real_one
+                                (real_mult (real_inv_pos rtk2_Z rtk2_Zpos)
+                                           (rtk2_tail k kd))) _).
+           ++ apply (RealSetoid.real_eq_mult_compat
+                       (real_mult
+                          (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                          (real_plus real_one real_one))
+                       (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))
+                       real_one
+                       (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd))).
+              ** exact (real_eq_trans _ _ _
+                            (real_mult_comm
+                               (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                               (real_plus real_one real_one))
+                            (real_inv_pos_correct
+                               (real_plus real_one real_one) real_two_pos)).
+              ** apply real_eq_refl.
+           ++ exact (real_eq_trans _ _ _
+                        (real_mult_comm real_one
+                           (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))
+                        (real_mult_one
+                           (real_mult (real_inv_pos rtk2_Z rtk2_Zpos) (rtk2_tail k kd)))).
+Qed.
+
+End RealTopKTVFinish.
+
+(* ============================================================ *)
+(* 【T17 后半段交付对账（本席 8 引理件 + 2 辅件 + 6 定义载体 + 1 补槽）】 *)
+(*   件12 rtk_tv_pointwise_keep<-5667   件13 rtk_tv_pointwise_evict<-5725*)
+(*   件14 rtk_if_split<-5742            件15 rtk_eviction_if_linear_else  *)
+(*   件16 rtk_tv_pointwise<-5764        件17 rtk_sum_decomp<-5780         *)
+(*   件18 rtk_sum_collapse<-5840        件19 rtk_tv_identity_strict<-5886 *)
+(*   （旗舰闭合：TV(boltzmann, topk 重归一) == tail/Z 精确恒等）          *)
+(*   辅件：rtk_minus_plus_cancel_r_cc（Id minus_plus_cancel_r 镜像）      *)
+(*   rtk_eviction_if_linear<-4653；载体：rtk2_bfactor/rtk2_Z/rtk2_invZ    *)
+(*   rtk2_kept/rtk2_tail/rtk2_invK/rtk2_topk_renorm/rtk2_boltzmann_dist_ *)
+(*   attn/rtk2_tv_dist（TopK 家 8 载体全平移）。                          *)
+(*   补槽：real_sum_over_S_linear（Id SumOver 字段同位，T16 头注预留）。   *)
+(* 【四关验证】G2 全量 coqc EXIT=0（cpu_guard CoreN 3）；                 *)
+(*   G1 禁词 0（自查脚本）；G3 Print Assumptions 全闭（全量模式，         *)
+(*   _t17_g3.v）+ Recursive Extraction Obj.magic=0；G4 coqchk 无 unsafe。 *)
+(* ============================================================ *)
