@@ -72,9 +72,9 @@ Definition tB (t : R) (Ht : lt zero t) : S -> R :=
   reqd_boltzmann_dist_temp S sumf fsum_pos base_loss Z_temp Z_temp_spec t Ht.
 Definition tE (t : R) (Ht : lt zero t) : R :=
   reqd_energy_exp_temp S sumf fsum_pos base_loss Z_temp Z_temp_spec t Ht.
-Definition tBpos (t : R) (Ht : lt zero t) : positive_dist S (tB t Ht) :=
+Definition tBpos (t : R) (Ht : lt zero t) : reqd_positive_dist S (tB t Ht) :=
   reqd_boltzmann_dist_temp_pos S sumf fsum_pos base_loss Z_temp Z_temp_spec t Ht.
-Definition tBnorm (t : R) (Ht : lt zero t) : normalized S sumf (tB t Ht) :=
+Definition tBnorm (t : R) (Ht : lt zero t) : reqd_normalized S sumf (tB t Ht) :=
   reqd_boltzmann_dist_temp_normalized S sumf fsum_linear fsum_pos
     base_loss Z_temp Z_temp_spec t Ht.
 Definition tZpos (t : R) (Ht : lt zero t) : lt zero (Z_temp t) :=
@@ -89,7 +89,7 @@ Definition tZpos (t : R) (Ht : lt zero t) : lt zero (Z_temp t) :=
 (* ============================================================ *)
 Theorem req_entropy_temp_explicit :
   forall (t : R) (Ht : lt zero t),
-    req (entropy_dist S sumf (tB t Ht) (tBpos t Ht))
+    req (reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht))
         (plus (mult (inv_pos t Ht) (tE t Ht))
               (log (Z_temp t) (tZpos t Ht))).
 Proof.
@@ -98,7 +98,7 @@ Proof.
   set (LZ := log (Z_temp t) (tZpos t Ht)).
   set (p := tB t Ht).
   set (Hp := tBpos t Ht).
-  unfold entropy_dist.
+  unfold reqd_entropy_dist.
   (* 主链：Σ p·(−log p) == Σ (p·βe + p·logZ) == β·Σ p·e + logZ *)
   apply (req_trans
     (sumf (fun s : S => mult (p s) (opp (log (p s) (Hp s)))))
@@ -223,12 +223,12 @@ Qed.
 (*   plus_assoc。                                                *)
 (* ============================================================ *)
 Theorem req_relative_entropy_temp_decomp :
-  forall (t : R) (Ht : lt zero t) (q : S -> R) (Hq : positive_dist S q),
-    normalized S sumf q ->
+  forall (t : R) (Ht : lt zero t) (q : S -> R) (Hq : reqd_positive_dist S q),
+    reqd_normalized S sumf q ->
     req (req_relative_entropy S sumf q (tB t Ht) Hq (tBpos t Ht))
-        (plus (plus (opp (entropy_dist S sumf q Hq))
+        (plus (plus (opp (reqd_entropy_dist S sumf q Hq))
                     (mult (inv_pos t Ht)
-                          (energy_expectation S sumf base_loss q)))
+                          (reqd_energy_expectation S sumf base_loss q)))
               (log (Z_temp t) (tZpos t Ht))).
 Proof.
   intros t Ht q Hq Hnq.
@@ -236,8 +236,8 @@ Proof.
   set (LZ := log (Z_temp t) (tZpos t Ht)).
   set (pB := tB t Ht).
   set (HpB := tBpos t Ht).
-  set (Hq0 := entropy_dist S sumf q Hq).
-  set (Eq := energy_expectation S sumf base_loss q).
+  set (Hq0 := reqd_entropy_dist S sumf q Hq).
+  set (Eq := reqd_energy_expectation S sumf base_loss q).
   unfold req_relative_entropy, req_minus.
   (* 预平衡原子项 P2：q·(βe) == β·(q·e)（交换/结合重排） *)
   assert (P2 : forall s : S,
@@ -467,20 +467,20 @@ Qed.
 (*   req_minus 展开后 Hse 正向 / Hsub 反向闭合。                  *)
 (* ============================================================ *)
 Theorem req_entropy_deficit_temp :
-  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : positive_dist S p),
-    normalized S sumf p ->
-    req (energy_expectation S sumf base_loss p) (tE t Ht) ->
-    req (req_minus (entropy_dist S sumf (tB t Ht) (tBpos t Ht))
-                   (entropy_dist S sumf p Hp))
+  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : reqd_positive_dist S p),
+    reqd_normalized S sumf p ->
+    req (reqd_energy_expectation S sumf base_loss p) (tE t Ht) ->
+    req (req_minus (reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht))
+                   (reqd_entropy_dist S sumf p Hp))
         (req_relative_entropy S sumf p (tB t Ht) Hp (tBpos t Ht)).
 Proof.
   intros t Ht p Hp Hnp Henergy.
   set (bta := inv_pos t Ht).
   set (LZ := log (Z_temp t) (tZpos t Ht)).
-  set (Sp := entropy_dist S sumf p Hp).
-  set (Spt := entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
+  set (Sp := reqd_entropy_dist S sumf p Hp).
+  set (Spt := reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
   set (K := req_relative_entropy S sumf p (tB t Ht) Hp (tBpos t Ht)).
-  set (Ep := energy_expectation S sumf base_loss p).
+  set (Ep := reqd_energy_expectation S sumf base_loss p).
   (* KL(p‖p_β) == −S[p] + β·E(p) + logZ（件 2） *)
   assert (Hkl : req K (plus (plus (opp Sp) (mult bta Ep)) LZ))
     by exact (req_relative_entropy_temp_decomp t Ht p Hp Hnp).
@@ -535,15 +535,15 @@ Qed.
 (*   （le_id_r + req_minus_plus_cancel + req_le_plus_nonneg_r）。 *)
 (* ============================================================ *)
 Theorem req_max_entropy_is_boltzmann_temp :
-  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : positive_dist S p),
-    normalized S sumf p ->
-    req (energy_expectation S sumf base_loss p) (tE t Ht) ->
-    le (entropy_dist S sumf p Hp)
-       (entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
+  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : reqd_positive_dist S p),
+    reqd_normalized S sumf p ->
+    req (reqd_energy_expectation S sumf base_loss p) (tE t Ht) ->
+    le (reqd_entropy_dist S sumf p Hp)
+       (reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
 Proof.
   intros t Ht p Hp Hnp Henergy.
-  set (Sp := entropy_dist S sumf p Hp).
-  set (Spt := entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
+  set (Sp := reqd_entropy_dist S sumf p Hp).
+  set (Spt := reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
   set (K := req_relative_entropy S sumf p (tB t Ht) Hp (tBpos t Ht)).
   (* 1. S[p_β] − S[p] == KL（件 3） *)
   assert (Hdef : req (req_minus Spt Sp) K)
@@ -568,16 +568,16 @@ Qed.
 (*   req_gibbs_equality（KL == 0 ⟹ 逐点相等）。                   *)
 (* ============================================================ *)
 Theorem req_entropy_max_unique_temp :
-  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : positive_dist S p),
-    normalized S sumf p ->
-    req (energy_expectation S sumf base_loss p) (tE t Ht) ->
-    req (entropy_dist S sumf p Hp)
-        (entropy_dist S sumf (tB t Ht) (tBpos t Ht)) ->
+  forall (t : R) (Ht : lt zero t) (p : S -> R) (Hp : reqd_positive_dist S p),
+    reqd_normalized S sumf p ->
+    req (reqd_energy_expectation S sumf base_loss p) (tE t Ht) ->
+    req (reqd_entropy_dist S sumf p Hp)
+        (reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht)) ->
     forall s : S, req (p s) (tB t Ht s).
 Proof.
   intros t Ht p Hp Hnp Henergy Hent s.
-  set (Sp := entropy_dist S sumf p Hp).
-  set (Spt := entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
+  set (Sp := reqd_entropy_dist S sumf p Hp).
+  set (Spt := reqd_entropy_dist S sumf (tB t Ht) (tBpos t Ht)).
   set (K := req_relative_entropy S sumf p (tB t Ht) Hp (tBpos t Ht)).
   (* 1. S[p_β] − S[p] == KL（件 3） *)
   assert (Hdef : req (req_minus Spt Sp) K)
@@ -726,7 +726,7 @@ Qed.
 (* ============================================================ *)
 Theorem req_temp_strict_A_chain2 :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
-    req (plus (plus (opp (entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)))
+    req (plus (plus (opp (reqd_entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)))
                     (mult (inv_pos t1 Ht1) (tE t2 Ht2)))
               (log (Z_temp t1) (tZpos t1 Ht1)))
         (plus (mult (req_minus (inv_pos t1 Ht1) (inv_pos t2 Ht2))
@@ -738,7 +738,7 @@ Proof.
   set (b1 := inv_pos t1 Ht1).
   set (b2 := inv_pos t2 Ht2).
   set (E2 := tE t2 Ht2).
-  set (S2 := entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)).
+  set (S2 := reqd_entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)).
   set (LZ1 := log (Z_temp t1) (tZpos t1 Ht1)).
   set (LZ2 := log (Z_temp t2) (tZpos t2 Ht2)).
   (* 熵显式（件 1）：S2 == b2·E2 + LZ2 *)
@@ -870,15 +870,15 @@ Qed.
 (*   真证移项链（le_id_l/le_id_r + le_plus_compat + 4 步代数链）。*)
 (* ============================================================ *)
 Theorem req_variational_temp_bound :
-  forall (t : R) (Ht : lt zero t) (q : S -> R) (Hq : positive_dist S q),
-    normalized S sumf q ->
-    le (req_minus (entropy_dist S sumf q Hq)
-                  (mult (inv_pos t Ht) (energy_expectation S sumf base_loss q)))
+  forall (t : R) (Ht : lt zero t) (q : S -> R) (Hq : reqd_positive_dist S q),
+    reqd_normalized S sumf q ->
+    le (req_minus (reqd_entropy_dist S sumf q Hq)
+                  (mult (inv_pos t Ht) (reqd_energy_expectation S sumf base_loss q)))
        (log (Z_temp t) (tZpos t Ht)).
 Proof.
   intros t Ht q Hq Hnq.
-  set (Sq := entropy_dist S sumf q Hq).
-  set (bE := mult (inv_pos t Ht) (energy_expectation S sumf base_loss q)).
+  set (Sq := reqd_entropy_dist S sumf q Hq).
+  set (bE := mult (inv_pos t Ht) (reqd_energy_expectation S sumf base_loss q)).
   set (LZ := log (Z_temp t) (tZpos t Ht)).
   (* KL(q‖p_t) ≥ 0（req_gibbs_inequality） *)
   assert (Hkl : le zero (req_relative_entropy S sumf q (tB t Ht) Hq (tBpos t Ht))).
@@ -968,8 +968,8 @@ Proof.
   intros t1 t2 Ht1 Ht2 Ht12 Hbd.
   set (b1 := inv_pos t1 Ht1). set (b2 := inv_pos t2 Ht2).
   set (E1 := tE t1 Ht1). set (E2 := tE t2 Ht2).
-  set (S1 := entropy_dist S sumf (tB t1 Ht1) (tBpos t1 Ht1)).
-  set (S2 := entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)).
+  set (S1 := reqd_entropy_dist S sumf (tB t1 Ht1) (tBpos t1 Ht1)).
+  set (S2 := reqd_entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)).
   set (LZ1 := log (Z_temp t1) (tZpos t1 Ht1)).
   set (LZ2 := log (Z_temp t2) (tZpos t2 Ht2)).
   (* β2 < β1（放电件） *)
@@ -1225,7 +1225,7 @@ Proof.
                (tBpos t1 Ht1) (tBpos t2 Ht2)).
   assert (HK1 : req K1 (plus (mult (req_minus b1 b2) E2) (req_minus LZ1 LZ2))).
   { exact (req_trans K1
-             (plus (plus (opp (entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)))
+             (plus (plus (opp (reqd_entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)))
                          (mult (inv_pos t1 Ht1) (tE t2 Ht2)))
                    LZ1)
              (plus (mult (req_minus b1 b2) E2) (req_minus LZ1 LZ2))
@@ -1234,7 +1234,7 @@ Proof.
              (req_temp_strict_A_chain2 t1 t2 Ht1 Ht2)). }
   assert (HK2 : req K2 (plus (mult (req_minus b2 b1) E1) (req_minus LZ2 LZ1))).
   { exact (req_trans K2
-             (plus (plus (opp (entropy_dist S sumf (tB t1 Ht1) (tBpos t1 Ht1)))
+             (plus (plus (opp (reqd_entropy_dist S sumf (tB t1 Ht1) (tBpos t1 Ht1)))
                          (mult (inv_pos t2 Ht2) (tE t1 Ht1)))
                    LZ2)
              (plus (mult (req_minus b2 b1) E1) (req_minus LZ2 LZ1))
@@ -1472,19 +1472,19 @@ Qed.
 Theorem req_temp_energy_dual_closed :
   forall (t : R) (Ht : lt zero t),
     sigT (fun pb : S -> R =>
-      sigT (fun Hpb : positive_dist S pb =>
-        And (normalized S sumf pb)
-            (And (req (energy_expectation S sumf base_loss pb) (tE t Ht))
-                 (And (forall (p : S -> R) (Hp : positive_dist S p),
-                        normalized S sumf p ->
-                        req (energy_expectation S sumf base_loss p) (tE t Ht) ->
-                        le (entropy_dist S sumf p Hp)
-                           (entropy_dist S sumf pb Hpb))
-                      (forall (p : S -> R) (Hp : positive_dist S p),
-                        normalized S sumf p ->
-                        req (energy_expectation S sumf base_loss p) (tE t Ht) ->
-                        req (entropy_dist S sumf p Hp)
-                            (entropy_dist S sumf pb Hpb) ->
+      sigT (fun Hpb : reqd_positive_dist S pb =>
+        And (reqd_normalized S sumf pb)
+            (And (req (reqd_energy_expectation S sumf base_loss pb) (tE t Ht))
+                 (And (forall (p : S -> R) (Hp : reqd_positive_dist S p),
+                        reqd_normalized S sumf p ->
+                        req (reqd_energy_expectation S sumf base_loss p) (tE t Ht) ->
+                        le (reqd_entropy_dist S sumf p Hp)
+                           (reqd_entropy_dist S sumf pb Hpb))
+                      (forall (p : S -> R) (Hp : reqd_positive_dist S p),
+                        reqd_normalized S sumf p ->
+                        req (reqd_energy_expectation S sumf base_loss p) (tE t Ht) ->
+                        req (reqd_entropy_dist S sumf p Hp)
+                            (reqd_entropy_dist S sumf pb Hpb) ->
                         forall s : S, req (p s) (pb s)))))).
 Proof.
   intros t Ht.
@@ -1523,7 +1523,7 @@ End ReqTempEntropy.
 (*   c) Id rewrite 链 → req_trans + compat 桥（零 rewrite）；     *)
 (*   d) 接口 mult_assoc 方向反向（req (a·(b·c)) ((a·b)·c)），     *)
 (*     结合步以 req_sym 对齐；                                    *)
-(*   e) 件 3 的 Hpp（positive_dist p）与 Id 同为诚实现位（未用）。 *)
+(*   e) 件 3 的 Hpp（reqd_positive_dist p）与 Id 同为诚实现位（未用）。 *)
 (* 消费入口：Require Import UpReqTempEntropy.（依赖 CW219 +        *)
 (*   UpReqAlgebra + UpReqDist 三 .vo 已编译可载）。                *)
 (* -------------------------------------------------------------- *)
@@ -1553,8 +1553,8 @@ End ReqTempEntropy.
 (*     Id L17121 lt_minus_nonneg 系接口抽象层 Variable（Real 层逐  *)
 (*     eps 直构），req 接口无 lt↔minus 连接字段，不可放电——逐位    *)
 (*     保留（Real 实例化下为定理，不放大主张）。                    *)
-(*   2. dual_closed 的 positive_dist pb 合取支升入 sigT 见证位     *)
-(*     （Hpb）：req 系 entropy_dist 的正性位 proof-relevant，抽象   *)
+(*   2. dual_closed 的 reqd_positive_dist pb 合取支升入 sigT 见证位     *)
+(*     （Hpb）：req 系 reqd_entropy_dist 的正性位 proof-relevant，抽象   *)
 (*     pb 无见证不可类型化——信息与 Id 逐位等价（正性即数据）。     *)
 (*   3. dual_closed 各约束口结论改 req/le 形（Id 系 Id→req 常规）。 *)
 (* 本文件合计：14 Qed = 批 2 五件 [1]-[5] + 本批 3 助手 + 6 件      *)

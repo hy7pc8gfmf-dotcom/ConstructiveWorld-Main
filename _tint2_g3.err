@@ -1,0 +1,117 @@
+File ".\_tint2_g3_probe.v", line 4, characters 0-48:
+Warning: The extraction is currently set to bypass opacity, the following
+opaque constant bodies have been accessed
+: CW_ConstructiveWorld_219.real_inv_pos_lt_contra
+  UpTempWindow.tw_ring_mult_one_l CW_ConstructiveWorld_219.real_eq_refl
+  CW_ConstructiveWorld_219.log_testA_eps_true_lt
+  CW_ConstructiveWorld_219.RealSetoid.real_le_compat
+  CW_ConstructiveWorld_219.approx_root_pt_bound
+  CW_ConstructiveWorld_219.cauchy_real_exp_gt_one
+  CW_ConstructiveWorld_219.real_inv_pos_correct
+  CW_ConstructiveWorld_219.real_weak_trich UpTempWindow.tw_ring_t2
+  CW_ConstructiveWorld_219.real_inv_unique
+  CW_ConstructiveWorld_219.qleT'_mult_ltT_compat
+  CW_ConstructiveWorld_219.exp_const_lt
+  CW_ConstructiveWorld_219.real_inv_lt_contra
+  CW_ConstructiveWorld_219.qltT_plus_leT'_ltT
+  UpTempWindow.tw_ring_one_eps_minus ti_Th_pos
+  CW_ConstructiveWorld_219.log_scan_spec
+  CW_ConstructiveWorld_219.qltT_eq_compat_r
+  CW_ConstructiveWorld_219.qltT_eq_compat_l
+  CW_ConstructiveWorld_219.qleT'_ltT_ltT
+  CW_ConstructiveWorld_219.real_lt_zero_one
+  CW_ConstructiveWorld_219.exp_series_arch
+  CW_ConstructiveWorld_219.qleT'_plus_nonneg_rT
+  CW_ConstructiveWorld_219.cw_log_exp_right
+  CW_ConstructiveWorld_219.real_le_trans
+  CW_ConstructiveWorld_219.real_lt_plus_compat
+  CW_ConstructiveWorld_219.real_le_mult_compat
+  CW_ConstructiveWorld_219.real_const_lt
+  CW_ConstructiveWorld_219.approx_span_pt UpTempWindow.tw_lt_plus_r_zero
+  CW_ConstructiveWorld_219.exp_lower_q CW_ConstructiveWorld_219.qltT_plus_ltT
+  CW_ConstructiveWorld_219.RealSetoid.real_eq_mult_compat
+  CW_ConstructiveWorld_219.q_arch_geom CW_ConstructiveWorld_219.real_eq_sym
+  CW_ConstructiveWorld_219.qeq_leT' UpTempWindow.tw_exp_mono_le
+  CW_ConstructiveWorld_219.real_mult_comm CW_ConstructiveWorld_219.real_arch
+  ti_temp_interp CW_ConstructiveWorld_219.exp_neg_recip
+  CW_ConstructiveWorld_219.exp_partial_tail_small
+  CW_ConstructiveWorld_219.qltT_plus_pos_r
+  CW_ConstructiveWorld_219.cauchy_real_exp_gt_const UpTempWindow.tw_le_eq_l
+  CW_ConstructiveWorld_219.approx_def_test
+  CW_ConstructiveWorld_219.real_const_pos
+  CW_ConstructiveWorld_219.cauchy_bounded ti_two_pos
+  CW_ConstructiveWorld_219.qabs_nonnegT
+  CW_ConstructiveWorld_219.qleT'_plus_compat
+  CW_ConstructiveWorld_219.real_abs_diff_le_lift
+  CW_ConstructiveWorld_219.q_eps16_posT
+  CW_ConstructiveWorld_219.exp_partial_cauchy
+  CW_ConstructiveWorld_219.real_log_lt_mono
+  CW_ConstructiveWorld_219.qleT'_plus_ltT_ltT
+  CW_ConstructiveWorld_219.qmult_ltT_0_compat
+  CW_ConstructiveWorld_219.real_le_plus_compat
+  CW_ConstructiveWorld_219.real_abs_lift
+  CW_ConstructiveWorld_219.RealSetoid.real_eq_plus_compat
+  CW_ConstructiveWorld_219.qleT'_refl real_le_mult_compat_l_aux
+  CW_ConstructiveWorld_219.cauchy_real_exp_minus_one_pos
+  CW_ConstructiveWorld_219.approx_root
+  CW_ConstructiveWorld_219.real_mult_lt_compat
+  CW_ConstructiveWorld_219.real_inv_pos_le_compat
+  CW_ConstructiveWorld_219.real_eq_trans
+  CW_ConstructiveWorld_219.real_eq_lt_lt CW_ConstructiveWorld_219.qltT_leT'
+  CW_ConstructiveWorld_219.RealSetoid.real_lt_le_iff_req
+  CW_ConstructiveWorld_219.real_lt_not_eq
+  CW_ConstructiveWorld_219.real_lt_le_iff
+  CW_ConstructiveWorld_219.real_inv_pos_pos
+  CW_ConstructiveWorld_219.real_inv_pos_ext
+  CW_ConstructiveWorld_219.real_lt_trans
+  CW_ConstructiveWorld_219.real_lt_pt_lt
+  CW_ConstructiveWorld_219.real_lt_eq_lt CW_ConstructiveWorld_219.q_pow_arch
+  CW_ConstructiveWorld_219.RealSetoid.real_lt_compat
+  CW_ConstructiveWorld_219.qeq_imp_qeqT
+  CW_ConstructiveWorld_219.real_norm_bounded
+  CW_ConstructiveWorld_219.cauchy_real_exp_pos
+  CW_ConstructiveWorld_219.NatLe_lift UpTempWindow.tw_ring_ddl
+  ti_err_antitone CW_ConstructiveWorld_219.arch_decay
+  CW_ConstructiveWorld_219.real_mult_lt_compat_l
+  CW_ConstructiveWorld_219.real_mult_one
+  CW_ConstructiveWorld_219.cauchy_real_exp_wd
+  CW_ConstructiveWorld_219.exp_trunc_arch_seq
+  CW_ConstructiveWorld_219.qltT_mult_ltT_compat_r UpTempWindow.tw_lt_le
+  UpTempWindow.tw_eq_le CW_ConstructiveWorld_219.log_seq_cauchy
+  CW_ConstructiveWorld_219.real_mult_assoc
+  CW_ConstructiveWorld_219.qltT_div_pos
+  CW_ConstructiveWorld_219.log_inv_one_thm
+  CW_ConstructiveWorld_219.real_lt_plus_translate
+  CW_ConstructiveWorld_219.real_le_refl
+  CW_ConstructiveWorld_219.RealSetoid.real_le_id_r
+  CW_ConstructiveWorld_219.RealSetoid.real_le_id_l
+  CW_ConstructiveWorld_219.qleT'_trans UpTempWindow.tw_ring_abc_acb
+  ti_one_eps_lt_one CW_ConstructiveWorld_219.RealSetoid.real_eq_le
+  CW_ConstructiveWorld_219.qleT'_mult_compat_l
+  CW_ConstructiveWorld_219.exp_pos_shape
+  CW_ConstructiveWorld_219.real_mult_minus_factor
+  CW_ConstructiveWorld_219.exp_series_arch_shape
+  CW_ConstructiveWorld_219.exp_upper_q
+  CW_ConstructiveWorld_219.real_lt_opp_plus
+  CW_ConstructiveWorld_219.real_lt_le_trans
+  CW_ConstructiveWorld_219.real_eq_of_zero_diff
+  CW_ConstructiveWorld_219.log_testB_eps_true_gt
+  UpTempWindow.tw_le_plus_nonneg_r CW_ConstructiveWorld_219.Qle_to_QleT'
+  ti_log_one_eps_pos CW_ConstructiveWorld_219.exp_partial_cauchy_bounded
+  CW_ConstructiveWorld_219.real_mult_pos_compat
+  CW_ConstructiveWorld_219.real_plus_zero
+  CW_ConstructiveWorld_219.real_plus_comm
+  CW_ConstructiveWorld_219.Qlt_to_QltT CW_ConstructiveWorld_219.qltT_leT'_ltT
+  CW_ConstructiveWorld_219.qltT_0_3 CW_ConstructiveWorld_219.qltT_0_2
+  CW_ConstructiveWorld_219.qltT_0_1 ti_one_eps_pos
+  CW_ConstructiveWorld_219.cauchy_real_exp_zero
+  CW_ConstructiveWorld_219.cauchy_real_exp_plus
+  CW_ConstructiveWorld_219.cauchy_real_exp_mono
+  CW_ConstructiveWorld_219.real_lt_plus_compat_lt_le.
+ [extraction-opaque-accessed,extraction,default]
+File ".\_tint2_g3_probe.v", line 4, characters 0-48:
+Warning: Setting extraction output directory by default to
+"D:\ComplexAnalysis\ConstructiveWorld-Main". Use
+"Set Extraction Output Directory" or command line option "-output-directory"
+to set a different directory for extracted files to appear in.
+[extraction-default-directory,extraction,default]

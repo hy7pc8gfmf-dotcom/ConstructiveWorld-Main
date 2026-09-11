@@ -291,8 +291,8 @@ Fixpoint reqd_of_nat (n : nat) : R :=
 
 Variable Group : Set.
 Variable group_enum : list Group.
-Definition group_size : nat := length group_enum.
-Variable group_size_pos : lt zero (reqd_of_nat group_size).
+Definition reqd_group_size : nat := length group_enum.
+Variable group_size_pos : lt zero (reqd_of_nat reqd_group_size).
 Variable reward_group : Group -> R.
 
 (* 组求和（列表 fold，同 Id 形） *)
@@ -422,7 +422,7 @@ Qed.
 
 (* 组均值：μ = (1/G)·Σ r_i（Id group_mean @23903 同形） *)
 Definition req_group_mean : R :=
-  mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
        (reqd_list_sum_g reward_group group_enum).
 
 (* 组相对优势：A_i = r_i − μ（Id grpo_advantage @23907 同形） *)
@@ -431,29 +431,29 @@ Definition req_grpo_advantage (i : Group) : R :=
 
 (* μ 的定义恒等：G·μ == Σr（zero_mean 与 variance_identity 共用） *)
 Lemma req_group_mean_def :
-  req (mult (reqd_of_nat group_size) req_group_mean)
+  req (mult (reqd_of_nat reqd_group_size) req_group_mean)
       (reqd_list_sum_g reward_group group_enum).
 Proof.
   unfold req_group_mean.
-  apply (req_trans (mult (reqd_of_nat group_size)
-                         (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  apply (req_trans (mult (reqd_of_nat reqd_group_size)
+                         (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                (reqd_list_sum_g reward_group group_enum)))
-                   (mult (mult (reqd_of_nat group_size)
-                               (inv_pos (reqd_of_nat group_size) group_size_pos))
+                   (mult (mult (reqd_of_nat reqd_group_size)
+                               (inv_pos (reqd_of_nat reqd_group_size) group_size_pos))
                          (reqd_list_sum_g reward_group group_enum))
                    (reqd_list_sum_g reward_group group_enum)).
   - apply mult_assoc.
-  - apply (req_trans (mult (mult (reqd_of_nat group_size)
-                                (inv_pos (reqd_of_nat group_size) group_size_pos))
+  - apply (req_trans (mult (mult (reqd_of_nat reqd_group_size)
+                                (inv_pos (reqd_of_nat reqd_group_size) group_size_pos))
                            (reqd_list_sum_g reward_group group_enum))
                      (mult one (reqd_list_sum_g reward_group group_enum))
                      (reqd_list_sum_g reward_group group_enum)).
-    + exact (req_mult_compat (mult (reqd_of_nat group_size)
-                                   (inv_pos (reqd_of_nat group_size) group_size_pos))
+    + exact (req_mult_compat (mult (reqd_of_nat reqd_group_size)
+                                   (inv_pos (reqd_of_nat reqd_group_size) group_size_pos))
                              one
                              (reqd_list_sum_g reward_group group_enum)
                              (reqd_list_sum_g reward_group group_enum)
-                             (inv_pos_correct (reqd_of_nat group_size) group_size_pos)
+                             (inv_pos_correct (reqd_of_nat reqd_group_size) group_size_pos)
                              (req_refl (reqd_list_sum_g reward_group group_enum))).
     + apply (req_trans (mult one (reqd_list_sum_g reward_group group_enum))
                        (mult (reqd_list_sum_g reward_group group_enum) one)
@@ -480,32 +480,32 @@ Proof.
                                   (reqd_list_sum_g (fun _ => req_group_mean) group_enum)))
       by exact (req_list_sum_g_minus reward_group (fun _ => req_group_mean) group_enum).
     assert (Hconst : req (reqd_list_sum_g (fun _ => req_group_mean) group_enum)
-                         (mult (reqd_of_nat group_size) req_group_mean))
+                         (mult (reqd_of_nat reqd_group_size) req_group_mean))
       by exact (req_list_sum_g_const req_group_mean group_enum).
     assert (Hcc := req_group_mean_def).
     apply (req_trans (reqd_list_sum_g (fun i => req_minus (reward_group i) req_group_mean) group_enum)
                      (req_minus (reqd_list_sum_g reward_group group_enum)
-                                (mult (reqd_of_nat group_size) req_group_mean))
+                                (mult (reqd_of_nat reqd_group_size) req_group_mean))
                      zero).
     - apply (req_trans (reqd_list_sum_g (fun i => req_minus (reward_group i) req_group_mean) group_enum)
                        (req_minus (reqd_list_sum_g reward_group group_enum)
                                   (reqd_list_sum_g (fun _ => req_group_mean) group_enum))
                        (req_minus (reqd_list_sum_g reward_group group_enum)
-                                  (mult (reqd_of_nat group_size) req_group_mean))).
+                                  (mult (reqd_of_nat reqd_group_size) req_group_mean))).
       + exact Hmin.
       + exact (reqd_minus_compat (reqd_list_sum_g reward_group group_enum)
                                  (reqd_list_sum_g reward_group group_enum)
                                  (reqd_list_sum_g (fun _ => req_group_mean) group_enum)
-                                 (mult (reqd_of_nat group_size) req_group_mean)
+                                 (mult (reqd_of_nat reqd_group_size) req_group_mean)
                                  (req_refl (reqd_list_sum_g reward_group group_enum)) Hconst).
     - apply (req_trans (req_minus (reqd_list_sum_g reward_group group_enum)
-                                  (mult (reqd_of_nat group_size) req_group_mean))
+                                  (mult (reqd_of_nat reqd_group_size) req_group_mean))
                        (req_minus (reqd_list_sum_g reward_group group_enum)
                                   (reqd_list_sum_g reward_group group_enum))
                        zero).
       + exact (reqd_minus_compat (reqd_list_sum_g reward_group group_enum)
                                  (reqd_list_sum_g reward_group group_enum)
-                                 (mult (reqd_of_nat group_size) req_group_mean)
+                                 (mult (reqd_of_nat reqd_group_size) req_group_mean)
                                  (reqd_list_sum_g reward_group group_enum)
                                  (req_refl (reqd_list_sum_g reward_group group_enum)) Hcc).
       + apply req_minus_self_zero. apply req_refl. }
@@ -645,7 +645,7 @@ Qed.
 Theorem req_grpo_variance_identity :
   req req_group_centered_second_moment
       (req_minus req_group_raw_second_moment
-                 (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))).
+                 (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))).
 Proof.
   unfold req_group_centered_second_moment, req_group_raw_second_moment.
   (* 逐点展开 *)
@@ -710,42 +710,42 @@ Proof.
     - exact (req_opp_compat _ _ HA). }
   (* Σ μ² == G·μ²；Σr == G·μ *)
   assert (Hconst : req (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum)
-                       (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+                       (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
     by exact (req_list_sum_g_const (mult req_group_mean req_group_mean) group_enum).
   assert (Hmu : req (reqd_list_sum_g reward_group group_enum)
-                    (mult (reqd_of_nat group_size) req_group_mean))
-    by exact (req_sym (mult (reqd_of_nat group_size) req_group_mean)
+                    (mult (reqd_of_nat reqd_group_size) req_group_mean))
+    by exact (req_sym (mult (reqd_of_nat reqd_group_size) req_group_mean)
                       (reqd_list_sum_g reward_group group_enum) req_group_mean_def).
   assert (Hcross : req (opp (mult (mult (plus one one) (reqd_list_sum_g reward_group group_enum)) req_group_mean))
-                       (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean)))
+                       (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean)))
     by (apply (req_opp_compat _ _ (req_mult_compat (mult (plus one one) (reqd_list_sum_g reward_group group_enum))
-                                                   (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean))
+                                                   (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean))
                                                    req_group_mean req_group_mean
                                                    (req_mult_compat (plus one one) (plus one one)
                                                                     (reqd_list_sum_g reward_group group_enum)
-                                                                    (mult (reqd_of_nat group_size) req_group_mean)
+                                                                    (mult (reqd_of_nat reqd_group_size) req_group_mean)
                                                                     (req_refl (plus one one)) Hmu)
                                                    (req_refl req_group_mean)))).
   (* 2x − x == −x（x := G·μ²） *)
-  assert (Hcancel2 : req (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                               (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
-                         (opp (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))).
-  { assert (H2a : req (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean)
-                      (mult (plus one one) (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))).
-    { apply (req_trans (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean)
-                       (mult (plus one one) (mult (mult (reqd_of_nat group_size) req_group_mean) req_group_mean))
-                       (mult (plus one one) (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))).
-      - apply (req_sym (mult (plus one one) (mult (mult (reqd_of_nat group_size) req_group_mean) req_group_mean))
-                       (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean)).
+  assert (Hcancel2 : req (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                               (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
+                         (opp (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))).
+  { assert (H2a : req (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean)
+                      (mult (plus one one) (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))).
+    { apply (req_trans (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean)
+                       (mult (plus one one) (mult (mult (reqd_of_nat reqd_group_size) req_group_mean) req_group_mean))
+                       (mult (plus one one) (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))).
+      - apply (req_sym (mult (plus one one) (mult (mult (reqd_of_nat reqd_group_size) req_group_mean) req_group_mean))
+                       (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean)).
         apply mult_assoc.
       - exact (req_mult_compat (plus one one) (plus one one)
-                               (mult (mult (reqd_of_nat group_size) req_group_mean) req_group_mean)
-                               (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))
+                               (mult (mult (reqd_of_nat reqd_group_size) req_group_mean) req_group_mean)
+                               (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))
                                (req_refl (plus one one))
-                               (req_sym (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))
-                                        (mult (mult (reqd_of_nat group_size) req_group_mean) req_group_mean)
-                                        (mult_assoc (reqd_of_nat group_size) req_group_mean req_group_mean))). }
-    set (x := mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)).
+                               (req_sym (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))
+                                        (mult (mult (reqd_of_nat reqd_group_size) req_group_mean) req_group_mean)
+                                        (mult_assoc (reqd_of_nat reqd_group_size) req_group_mean req_group_mean))). }
+    set (x := mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)).
     assert (H2c : req (plus (opp (mult (plus one one) x)) x) (opp x)).
     { apply (req_trans (plus (opp (mult (plus one one) x)) x)
                        (plus (opp (plus x x)) x) (opp x)).
@@ -765,12 +765,12 @@ Proof.
                                                  (plus_comm (opp x) x) (plus_opp x))).
             -- apply (req_trans (plus (opp x) zero) (opp x) (opp x)
                                 (plus_zero (opp x)) (req_refl (opp x))). }
-    exact (req_trans (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                           (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+    exact (req_trans (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                           (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
                      (plus (opp (mult (plus one one) x)) x) (opp x)
-                     (req_plus_compat (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
+                     (req_plus_compat (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
                                       (opp (mult (plus one one) x))
-                                      (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)) x
+                                      (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)) x
                                       (req_opp_compat _ _ H2a) (req_refl x))
                      H2c). }
   (* 总装：CSM →(Hext/Hadd1/Hadd2/Hopp/Hcross/Hconst)→ Σr² + (opp(2·Gμ·μ) + Gμ²) →(Hcancel2)→ Σr² − Gμ² *)
@@ -825,29 +825,29 @@ Proof.
   }
   assert (Hl3 : req (reqd_list_sum_g (fun i => mult (req_grpo_advantage i) (req_grpo_advantage i)) group_enum)
                     (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
-                          (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                                (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))).
+                          (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                                (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))).
   { apply (req_trans (reqd_list_sum_g (fun i => mult (req_grpo_advantage i) (req_grpo_advantage i)) group_enum)
                      (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
                            (plus (reqd_list_sum_g (fun i => opp (mult (mult (plus one one) (reward_group i)) req_group_mean)) group_enum)
                                  (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum)))
                      (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
-                           (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                                 (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))).
+                           (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                                 (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))).
     - exact Hl1.
     - exact (req_plus_compat (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
                              (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
                              (plus (reqd_list_sum_g (fun i => opp (mult (mult (plus one one) (reward_group i)) req_group_mean)) group_enum)
                                    (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum))
-                             (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                                   (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+                             (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                                   (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
                              (req_refl (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum))
                              (req_trans (plus (reqd_list_sum_g (fun i => opp (mult (mult (plus one one) (reward_group i)) req_group_mean)) group_enum)
                                                   (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum))
                                             (plus (opp (mult (mult (plus one one) (reqd_list_sum_g reward_group group_enum)) req_group_mean))
                                                   (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum))
-                                            (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                                                  (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+                                            (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                                                  (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
                                    (req_plus_compat (reqd_list_sum_g (fun i => opp (mult (mult (plus one one) (reward_group i)) req_group_mean)) group_enum)
                                                     (opp (mult (mult (plus one one) (reqd_list_sum_g reward_group group_enum)) req_group_mean))
                                                     (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum)
@@ -855,32 +855,32 @@ Proof.
                                                     Hopp
                                                     (req_refl (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum)))
                                    (req_plus_compat (opp (mult (mult (plus one one) (reqd_list_sum_g reward_group group_enum)) req_group_mean))
-                                                    (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
+                                                    (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
                                                     (reqd_list_sum_g (fun _ => mult req_group_mean req_group_mean) group_enum)
-                                                    (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))
+                                                    (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))
                                                     Hcross
                                                     Hconst))).
   }
   unfold req_minus.
   exact (req_trans (reqd_list_sum_g (fun i => mult (req_grpo_advantage i) (req_grpo_advantage i)) group_enum)
                    (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
-                         (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                               (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))
+                         (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                               (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))
                    (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
-                         (opp (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))
+                         (opp (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))
            Hl3
            (req_plus_compat (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
                             (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
-                            (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat group_size) req_group_mean)) req_group_mean))
-                                  (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
-                            (opp (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+                            (plus (opp (mult (mult (plus one one) (mult (reqd_of_nat reqd_group_size) req_group_mean)) req_group_mean))
+                                  (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
+                            (opp (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
                             (req_refl (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum))
                             Hcancel2)).
 Qed.
 
 (* 组方差（Id group_variance @24242 同形） *)
 Definition req_group_variance : R :=
-  mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
        req_group_centered_second_moment.
 
 (* Id inv_G_absorb @24247：inv(G)·(G·x) == x *)
@@ -902,47 +902,47 @@ Qed.
 (* Id group_variance_identity @24261：Var == (1/G)·Σr² − μ² *)
 Theorem req_group_variance_identity :
   req req_group_variance
-      (req_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+      (req_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                        req_group_raw_second_moment)
                  (mult req_group_mean req_group_mean)).
 Proof.
   unfold req_group_variance.
-  apply (req_trans (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  apply (req_trans (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                          req_group_centered_second_moment)
-                   (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                   (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                          (req_minus req_group_raw_second_moment
-                                    (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))
-                   (req_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                                    (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))
+                   (req_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                     req_group_raw_second_moment)
                               (mult req_group_mean req_group_mean))).
-  - exact (req_mult_compat (inv_pos (reqd_of_nat group_size) group_size_pos)
-                           (inv_pos (reqd_of_nat group_size) group_size_pos)
+  - exact (req_mult_compat (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
+                           (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                            req_group_centered_second_moment
                            (req_minus req_group_raw_second_moment
-                                      (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
-                           (req_refl (inv_pos (reqd_of_nat group_size) group_size_pos))
+                                      (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
+                           (req_refl (inv_pos (reqd_of_nat reqd_group_size) group_size_pos))
                            req_grpo_variance_identity).
-  - apply (req_trans (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  - apply (req_trans (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                            (req_minus req_group_raw_second_moment
-                                      (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))
-                     (req_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                                      (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))
+                     (req_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                       req_group_raw_second_moment)
-                                (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
-                                      (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean))))
-                     (req_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                                (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
+                                      (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean))))
+                     (req_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                       req_group_raw_second_moment)
                                 (mult req_group_mean req_group_mean))).
     + apply req_mult_minus_distr_l.
-    + exact (reqd_minus_compat (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+    + exact (reqd_minus_compat (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                      req_group_raw_second_moment)
-                               (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                               (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                      req_group_raw_second_moment)
-                               (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
-                                     (mult (reqd_of_nat group_size) (mult req_group_mean req_group_mean)))
+                               (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
+                                     (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)))
                                (mult req_group_mean req_group_mean)
-                               (req_refl (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                               (req_refl (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                                req_group_raw_second_moment))
-                               (req_inv_G_absorb (reqd_of_nat group_size) group_size_pos
+                               (req_inv_G_absorb (reqd_of_nat reqd_group_size) group_size_pos
                                                  (mult req_group_mean req_group_mean))).
 Qed.
 
@@ -965,18 +965,18 @@ Qed.
 Theorem req_group_variance_le_raw_second_moment :
   (forall a : R, le zero (mult a a)) ->
   le req_group_variance
-     (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+     (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
            req_group_raw_second_moment).
 Proof.
   intros square_nonneg.
   apply (le_id_l req_group_variance
-                 (req_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                 (req_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                   req_group_raw_second_moment)
                             (mult req_group_mean req_group_mean))
-                 (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+                 (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                        req_group_raw_second_moment)).
   - exact req_group_variance_identity.
-  - apply (req_grpo_le_minus (mult (inv_pos (reqd_of_nat group_size) group_size_pos)
+  - apply (req_grpo_le_minus (mult (inv_pos (reqd_of_nat reqd_group_size) group_size_pos)
                                    req_group_raw_second_moment)
                              (mult req_group_mean req_group_mean)).
     apply square_nonneg.
@@ -1033,32 +1033,32 @@ Hypothesis dist_log_eq_linear :
     req (log x Hx) (req_minus x one) -> req x one.
 
 (* ---- 节内定义（setoid 惯例形态；log 前提化见台账 1） ---- *)
-Definition positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
-Definition normalized (p : S -> R) : Set := req (sumf p) one.
-Definition boltzmann_dist : S -> R :=
+Definition reqd_positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
+Definition reqd_normalized (p : S -> R) : Set := req (sumf p) one.
+Definition reqd_boltzmann_dist : S -> R :=
   fun s => mult (inv_pos Z Z_pos) (exp_neg (mult (inv_pos D D_pos) (base_loss s))).
-Definition free_energy (p : S -> R) (Hp : positive_dist p) : R :=
+Definition reqd_free_energy (p : S -> R) (Hp : reqd_positive_dist p) : R :=
   plus (sumf (fun s => mult (p s) (base_loss s)))
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
-Definition req_relative_entropy (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q) : R :=
+Definition req_relative_entropy (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q) : R :=
   sumf (fun s => mult (p s) (req_minus (log (p s) (Hp s)) (log (q s) (Hq s)))).
-Definition entropy_dist (p : S -> R) (Hp : positive_dist p) : R :=
+Definition reqd_entropy_dist (p : S -> R) (Hp : reqd_positive_dist p) : R :=
   sumf (fun s => mult (p s) (opp (log (p s) (Hp s)))).
-Definition energy_expectation (p : S -> R) : R :=
+Definition reqd_energy_expectation (p : S -> R) : R :=
   sumf (fun s => mult (p s) (base_loss s)).
-Definition cross_entropy (p q : S -> R) (Hq : positive_dist q) : R :=
+Definition reqd_cross_entropy (p q : S -> R) (Hq : reqd_positive_dist q) : R :=
   sumf (fun s => mult (p s) (opp (log (q s) (Hq s)))).
-Definition reqd_elbo (q : S -> R) (Hq : positive_dist q) : R := opp (free_energy q Hq).
+Definition reqd_elbo (q : S -> R) (Hq : reqd_positive_dist q) : R := opp (reqd_free_energy q Hq).
 
-Lemma req_boltzmann_positive : forall s : S, lt zero (boltzmann_dist s).
+Lemma req_boltzmann_positive : forall s : S, lt zero (reqd_boltzmann_dist s).
 Proof.
-  intro s. unfold boltzmann_dist.
+  intro s. unfold reqd_boltzmann_dist.
   apply mult_positive.
   - apply inv_pos_pos.
   - apply exp_neg_pos.
 Defined.
 
-Definition reqd_evidence : R := opp (free_energy boltzmann_dist req_boltzmann_positive).
+Definition reqd_evidence : R := opp (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
 
 (* 节内求和辅助：Σ opp f == opp Σ f（Id sum_opp @15801） *)
 Lemma fsum_opp :
@@ -1100,9 +1100,9 @@ Proof.
 Qed.
 
 (* Id boltzmann_normalized @15846（= UpSigMigrate req_boltzmann_normalized 同构） *)
-Theorem req_boltzmann_normalized : normalized boltzmann_dist.
+Theorem req_boltzmann_normalized : reqd_normalized reqd_boltzmann_dist.
 Proof.
-  apply (req_trans (sumf boltzmann_dist)
+  apply (req_trans (sumf reqd_boltzmann_dist)
                    (mult (inv_pos Z Z_pos)
                          (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))))
                    one).
@@ -1125,7 +1125,7 @@ Qed.
 Theorem req_boltzmann_mix_normalized :
   forall (p q : S -> R) (alpha : R) (Halpha : lt zero alpha)
          (Halpha1 : lt zero (req_minus one alpha)),
-    normalized p -> normalized q ->
+    reqd_normalized p -> reqd_normalized q ->
     req (sumf (fun s => plus (mult alpha (p s)) (mult (req_minus one alpha) (q s)))) one.
 Proof.
   intros p q alpha Halpha Halpha1 Hp Hq.
@@ -1177,10 +1177,10 @@ Qed.
 (* Id boltzmann_log_decomp @15912：log p_b == -log Z - E/D *)
 Theorem req_boltzmann_log_decomp :
   forall s : S,
-    req (log (boltzmann_dist s) (req_boltzmann_positive s))
+    req (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
         (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) (base_loss s)))).
 Proof.
-  intro s. unfold boltzmann_dist, req_boltzmann_positive.
+  intro s. unfold reqd_boltzmann_dist, req_boltzmann_positive.
   assert (Hlm : req (log (mult (inv_pos Z Z_pos)
                               (exp_neg (mult (inv_pos D D_pos) (base_loss s))))
                         (mult_positive (inv_pos Z Z_pos)
@@ -1223,18 +1223,18 @@ Qed.
 Lemma req_energy_in_log_boltzmann :
   forall s : S,
     req (base_loss s)
-        (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+        (opp (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                            (log Z Z_pos)))).
 Proof.
   intro s.
-  assert (H2 : req (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
+  assert (H2 : req (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
                    (opp (mult (inv_pos D D_pos) (base_loss s)))).
-  { apply (req_trans (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
+  { apply (req_trans (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
                      (plus (plus (opp (log Z Z_pos))
                                  (opp (mult (inv_pos D D_pos) (base_loss s))))
                            (log Z Z_pos))
                      (opp (mult (inv_pos D D_pos) (base_loss s)))).
-    - exact (req_plus_compat (log (boltzmann_dist s) (req_boltzmann_positive s))
+    - exact (req_plus_compat (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                              (plus (opp (log Z Z_pos))
                                    (opp (mult (inv_pos D D_pos) (base_loss s))))
                              (log Z Z_pos) (log Z Z_pos)
@@ -1260,15 +1260,15 @@ Proof.
                                             (plus_opp (log Z Z_pos)))
                                  (req_refl (opp (mult (inv_pos D D_pos) (base_loss s))))).
         * apply req_plus_zero_l. }
-  assert (H3 : req (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+  assert (H3 : req (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                  (log Z Z_pos)))
                    (opp (base_loss s))).
-  { apply (req_trans (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+  { apply (req_trans (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                    (log Z Z_pos)))
                      (mult D (opp (mult (inv_pos D D_pos) (base_loss s))))
                      (opp (base_loss s))).
     - exact (req_mult_compat D D
-                             (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+                             (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                    (log Z Z_pos))
                              (opp (mult (inv_pos D D_pos) (base_loss s)))
                              (req_refl D) H2).
@@ -1295,31 +1295,31 @@ Proof.
                                                (mult_one (base_loss s))))).
   }
   apply (req_trans (base_loss s) (opp (opp (base_loss s)))
-                   (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+                   (opp (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                       (log Z Z_pos))))).
   - apply (req_sym (opp (opp (base_loss s))) (base_loss s)). apply req_double_neg.
   - exact (req_opp_compat (opp (base_loss s))
-                          (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+                          (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                         (log Z Z_pos)))
                           (req_sym _ _ H3)).
 Qed.
 
 (* Σ p_b·log Z == log Z（归一化折叠；Σ p_b·X == X·Σ p_b == X） *)
 Lemma fsum_pb_logZ :
-  req (sumf (fun s => mult (boltzmann_dist s) (log Z Z_pos))) (log Z Z_pos).
+  req (sumf (fun s => mult (reqd_boltzmann_dist s) (log Z Z_pos))) (log Z Z_pos).
 Proof.
-  apply (req_trans (sumf (fun s => mult (boltzmann_dist s) (log Z Z_pos)))
-                   (sumf (fun s => mult (log Z Z_pos) (boltzmann_dist s)))
+  apply (req_trans (sumf (fun s => mult (reqd_boltzmann_dist s) (log Z Z_pos)))
+                   (sumf (fun s => mult (log Z Z_pos) (reqd_boltzmann_dist s)))
                    (log Z Z_pos)).
-  - apply (fsum_ext (fun s => mult (boltzmann_dist s) (log Z Z_pos))
-                    (fun s => mult (log Z Z_pos) (boltzmann_dist s))).
+  - apply (fsum_ext (fun s => mult (reqd_boltzmann_dist s) (log Z Z_pos))
+                    (fun s => mult (log Z Z_pos) (reqd_boltzmann_dist s))).
     intro s. apply mult_comm.
-  - apply (req_trans (sumf (fun s => mult (log Z Z_pos) (boltzmann_dist s)))
-                     (mult (log Z Z_pos) (sumf boltzmann_dist)) (log Z Z_pos)).
-    + exact (fsum_linear (log Z Z_pos) boltzmann_dist).
-    + apply (req_trans (mult (log Z Z_pos) (sumf boltzmann_dist))
+  - apply (req_trans (sumf (fun s => mult (log Z Z_pos) (reqd_boltzmann_dist s)))
+                     (mult (log Z Z_pos) (sumf reqd_boltzmann_dist)) (log Z Z_pos)).
+    + exact (fsum_linear (log Z Z_pos) reqd_boltzmann_dist).
+    + apply (req_trans (mult (log Z Z_pos) (sumf reqd_boltzmann_dist))
                        (mult (log Z Z_pos) one) (log Z Z_pos)).
-      * exact (req_mult_compat (log Z Z_pos) (log Z Z_pos) (sumf boltzmann_dist) one
+      * exact (req_mult_compat (log Z Z_pos) (log Z Z_pos) (sumf reqd_boltzmann_dist) one
                              (req_refl (log Z Z_pos)) req_boltzmann_normalized).
       * apply (req_trans (mult (log Z Z_pos) one) (mult one (log Z Z_pos)) (log Z Z_pos)
                        (mult_comm (log Z Z_pos) one) (req_mult_one_l (log Z Z_pos))).
@@ -1342,10 +1342,10 @@ Proof.
                        (mult_zero (sumf (fun _ : S => zero)))).
 Qed.
 
-(* 归一化折叠一般形：Σ p·c == c（Hnp : normalized p；fsum_pb_logZ 的
+(* 归一化折叠一般形：Σ p·c == c（Hnp : reqd_normalized p；fsum_pb_logZ 的
    任意常数泛化，kl_decomp 中 Σ p·log Z 用） *)
 Lemma fsum_norm_const :
-  forall (p : S -> R) (c : R), normalized p ->
+  forall (p : S -> R) (c : R), reqd_normalized p ->
     req (sumf (fun s => mult (p s) c)) c.
 Proof.
   intros p c Hnp.
@@ -1365,122 +1365,122 @@ Qed.
 (* Id free_energy_boltzmann @15945：F[p_b] == -D·log Z（训练-推理闭环
    的显式闭合值；逐点对数分解 → 求和线性 → 归一化 → 环坍缩） *)
 Theorem req_free_energy_boltzmann :
-  req (free_energy boltzmann_dist req_boltzmann_positive)
+  req (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
       (mult (opp D) (log Z Z_pos)).
 Proof.
-  unfold free_energy.
-  set (Eavg := sumf (fun s => mult (boltzmann_dist s) (base_loss s))).
-  set (A := sumf (fun s => mult (boltzmann_dist s)
-                                (log (boltzmann_dist s) (req_boltzmann_positive s)))).
+  unfold reqd_free_energy.
+  set (Eavg := sumf (fun s => mult (reqd_boltzmann_dist s) (base_loss s))).
+  set (A := sumf (fun s => mult (reqd_boltzmann_dist s)
+                                (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))).
   (* 步骤 1：逐点 p_b·log p_b == p_b·(-log Z) + opp((1/D)·p_b·E) *)
   assert (Hpoint :
     forall s : S,
-      req (mult (boltzmann_dist s) (log (boltzmann_dist s) (req_boltzmann_positive s)))
-          (plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
-                (opp (mult (inv_pos D D_pos) (mult (boltzmann_dist s) (base_loss s)))))).
+      req (mult (reqd_boltzmann_dist s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
+          (plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
+                (opp (mult (inv_pos D D_pos) (mult (reqd_boltzmann_dist s) (base_loss s)))))).
   {
     intro s.
-    assert (H1 : req (mult (boltzmann_dist s)
-                           (log (boltzmann_dist s) (req_boltzmann_positive s)))
-                     (mult (boltzmann_dist s)
+    assert (H1 : req (mult (reqd_boltzmann_dist s)
+                           (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
+                     (mult (reqd_boltzmann_dist s)
                            (plus (opp (log Z Z_pos))
                                  (opp (mult (inv_pos D D_pos) (base_loss s))))))
-      by exact (req_mult_compat (boltzmann_dist s) (boltzmann_dist s)
-                                (log (boltzmann_dist s) (req_boltzmann_positive s))
+      by exact (req_mult_compat (reqd_boltzmann_dist s) (reqd_boltzmann_dist s)
+                                (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
                                 (plus (opp (log Z Z_pos))
                                       (opp (mult (inv_pos D D_pos) (base_loss s))))
-                                (req_refl (boltzmann_dist s))
+                                (req_refl (reqd_boltzmann_dist s))
                                 (req_boltzmann_log_decomp s)).
     apply (req_trans _ _ _ H1).
-    apply (req_trans (mult (boltzmann_dist s)
+    apply (req_trans (mult (reqd_boltzmann_dist s)
                            (plus (opp (log Z Z_pos))
                                  (opp (mult (inv_pos D D_pos) (base_loss s)))))
-                     (plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
-                           (mult (boltzmann_dist s)
+                     (plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
+                           (mult (reqd_boltzmann_dist s)
                                  (opp (mult (inv_pos D D_pos) (base_loss s)))))
-                     (plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
+                     (plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
                            (opp (mult (inv_pos D D_pos)
-                                      (mult (boltzmann_dist s) (base_loss s)))))).
+                                      (mult (reqd_boltzmann_dist s) (base_loss s)))))).
     - apply distrib.
     - apply req_plus_compat.
       + apply req_refl.
       + (* p_b·(opp((1/D)·E)) == opp((1/D)·(p_b·E))：opp_mult_l + 交换重组 *)
-        apply (req_trans (mult (boltzmann_dist s)
+        apply (req_trans (mult (reqd_boltzmann_dist s)
                                (opp (mult (inv_pos D D_pos) (base_loss s))))
-                         (opp (mult (boltzmann_dist s)
+                         (opp (mult (reqd_boltzmann_dist s)
                                     (mult (inv_pos D D_pos) (base_loss s))))
                          (opp (mult (inv_pos D D_pos)
-                                    (mult (boltzmann_dist s) (base_loss s))))).
+                                    (mult (reqd_boltzmann_dist s) (base_loss s))))).
         * apply req_opp_mult_l.
-        * apply (req_opp_compat (mult (boltzmann_dist s)
+        * apply (req_opp_compat (mult (reqd_boltzmann_dist s)
                                       (mult (inv_pos D D_pos) (base_loss s)))
                                 (mult (inv_pos D D_pos)
-                                      (mult (boltzmann_dist s) (base_loss s)))).
-          exact (req_trans (mult (boltzmann_dist s)
+                                      (mult (reqd_boltzmann_dist s) (base_loss s)))).
+          exact (req_trans (mult (reqd_boltzmann_dist s)
                                  (mult (inv_pos D D_pos) (base_loss s)))
-                           (mult (mult (boltzmann_dist s) (inv_pos D D_pos))
+                           (mult (mult (reqd_boltzmann_dist s) (inv_pos D D_pos))
                                  (base_loss s))
                            (mult (inv_pos D D_pos)
-                                 (mult (boltzmann_dist s) (base_loss s)))
-                           (mult_assoc (boltzmann_dist s) (inv_pos D D_pos) (base_loss s))
-                           (req_trans (mult (mult (boltzmann_dist s) (inv_pos D D_pos))
+                                 (mult (reqd_boltzmann_dist s) (base_loss s)))
+                           (mult_assoc (reqd_boltzmann_dist s) (inv_pos D D_pos) (base_loss s))
+                           (req_trans (mult (mult (reqd_boltzmann_dist s) (inv_pos D D_pos))
                                             (base_loss s))
-                                      (mult (mult (inv_pos D D_pos) (boltzmann_dist s))
+                                      (mult (mult (inv_pos D D_pos) (reqd_boltzmann_dist s))
                                             (base_loss s))
                                       (mult (inv_pos D D_pos)
-                                            (mult (boltzmann_dist s) (base_loss s)))
-                                      (req_mult_compat (mult (boltzmann_dist s) (inv_pos D D_pos))
-                                                       (mult (inv_pos D D_pos) (boltzmann_dist s))
+                                            (mult (reqd_boltzmann_dist s) (base_loss s)))
+                                      (req_mult_compat (mult (reqd_boltzmann_dist s) (inv_pos D D_pos))
+                                                       (mult (inv_pos D D_pos) (reqd_boltzmann_dist s))
                                                        (base_loss s) (base_loss s)
-                                                       (mult_comm (boltzmann_dist s) (inv_pos D D_pos))
+                                                       (mult_comm (reqd_boltzmann_dist s) (inv_pos D D_pos))
                                                        (req_refl (base_loss s)))
                                       (req_sym (mult (inv_pos D D_pos)
-                                                     (mult (boltzmann_dist s) (base_loss s)))
-                                               (mult (mult (inv_pos D D_pos) (boltzmann_dist s))
+                                                     (mult (reqd_boltzmann_dist s) (base_loss s)))
+                                               (mult (mult (inv_pos D D_pos) (reqd_boltzmann_dist s))
                                                      (base_loss s))
                                                (mult_assoc (inv_pos D D_pos)
-                                                           (boltzmann_dist s) (base_loss s))))).
+                                                           (reqd_boltzmann_dist s) (base_loss s))))).
   }
   (* 步骤 2：求和 Σ p_b·log p_b == -log Z - (1/D)·⟨E⟩ *)
   assert (Hsum :
     req A (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) Eavg)))).
   {
     apply (req_trans A
-      (sumf (fun s => plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
+      (sumf (fun s => plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
                            (opp (mult (inv_pos D D_pos)
-                                      (mult (boltzmann_dist s) (base_loss s))))))
+                                      (mult (reqd_boltzmann_dist s) (base_loss s))))))
       (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) Eavg)))).
-    - apply (fsum_ext (fun s => mult (boltzmann_dist s)
-                                     (log (boltzmann_dist s) (req_boltzmann_positive s)))
-                      (fun s => plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
+    - apply (fsum_ext (fun s => mult (reqd_boltzmann_dist s)
+                                     (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
+                      (fun s => plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
                                      (opp (mult (inv_pos D D_pos)
-                                                (mult (boltzmann_dist s) (base_loss s)))))).
+                                                (mult (reqd_boltzmann_dist s) (base_loss s)))))).
       exact Hpoint.
-    - apply (req_trans (sumf (fun s => plus (mult (boltzmann_dist s) (opp (log Z Z_pos)))
+    - apply (req_trans (sumf (fun s => plus (mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
                                             (opp (mult (inv_pos D D_pos)
-                                                       (mult (boltzmann_dist s) (base_loss s))))))
-                       (plus (sumf (fun s => mult (boltzmann_dist s) (opp (log Z Z_pos))))
+                                                       (mult (reqd_boltzmann_dist s) (base_loss s))))))
+                       (plus (sumf (fun s => mult (reqd_boltzmann_dist s) (opp (log Z Z_pos))))
                              (sumf (fun s => opp (mult (inv_pos D D_pos)
-                                                       (mult (boltzmann_dist s) (base_loss s))))))
+                                                       (mult (reqd_boltzmann_dist s) (base_loss s))))))
                        (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) Eavg)))).
       + apply fsum_add.
       + apply req_plus_compat.
         * (* Σ p_b·(-log Z) == -log Z：交换 → 线性 → 归一化 → 单位元 *)
-          apply (req_trans (sumf (fun s => mult (boltzmann_dist s) (opp (log Z Z_pos))))
-                           (sumf (fun s => mult (opp (log Z Z_pos)) (boltzmann_dist s)))
+          apply (req_trans (sumf (fun s => mult (reqd_boltzmann_dist s) (opp (log Z Z_pos))))
+                           (sumf (fun s => mult (opp (log Z Z_pos)) (reqd_boltzmann_dist s)))
                            (opp (log Z Z_pos))).
-          -- apply (fsum_ext (fun s => mult (boltzmann_dist s) (opp (log Z Z_pos)))
-                             (fun s => mult (opp (log Z Z_pos)) (boltzmann_dist s))).
+          -- apply (fsum_ext (fun s => mult (reqd_boltzmann_dist s) (opp (log Z Z_pos)))
+                             (fun s => mult (opp (log Z Z_pos)) (reqd_boltzmann_dist s))).
              intro s. apply mult_comm.
-          -- apply (req_trans (sumf (fun s => mult (opp (log Z Z_pos)) (boltzmann_dist s)))
-                              (mult (opp (log Z Z_pos)) (sumf boltzmann_dist))
+          -- apply (req_trans (sumf (fun s => mult (opp (log Z Z_pos)) (reqd_boltzmann_dist s)))
+                              (mult (opp (log Z Z_pos)) (sumf reqd_boltzmann_dist))
                               (opp (log Z Z_pos))).
-             ++ apply (fsum_linear (opp (log Z Z_pos)) boltzmann_dist).
-             ++ apply (req_trans (mult (opp (log Z Z_pos)) (sumf boltzmann_dist))
+             ++ apply (fsum_linear (opp (log Z Z_pos)) reqd_boltzmann_dist).
+             ++ apply (req_trans (mult (opp (log Z Z_pos)) (sumf reqd_boltzmann_dist))
                                  (mult (opp (log Z Z_pos)) one)
                                  (opp (log Z Z_pos))).
                 ** exact (req_mult_compat (opp (log Z Z_pos)) (opp (log Z Z_pos))
-                                          (sumf boltzmann_dist) one
+                                          (sumf reqd_boltzmann_dist) one
                                           (req_refl (opp (log Z Z_pos)))
                                           req_boltzmann_normalized).
                 ** apply (req_trans (mult (opp (log Z Z_pos)) one)
@@ -1490,16 +1490,16 @@ Proof.
                                     (req_mult_one_l (opp (log Z Z_pos)))).
         * (* Σ opp((1/D)·p_b·E) == opp((1/D)·⟨E⟩) *)
           apply (req_trans (sumf (fun s => opp (mult (inv_pos D D_pos)
-                                                     (mult (boltzmann_dist s) (base_loss s)))))
+                                                     (mult (reqd_boltzmann_dist s) (base_loss s)))))
                            (opp (sumf (fun s => mult (inv_pos D D_pos)
-                                                      (mult (boltzmann_dist s) (base_loss s)))))
+                                                      (mult (reqd_boltzmann_dist s) (base_loss s)))))
                            (opp (mult (inv_pos D D_pos) Eavg))).
           -- apply fsum_opp.
           -- exact (req_opp_compat (sumf (fun s => mult (inv_pos D D_pos)
-                                                        (mult (boltzmann_dist s) (base_loss s))))
+                                                        (mult (reqd_boltzmann_dist s) (base_loss s))))
                                    (mult (inv_pos D D_pos) Eavg)
                                    (fsum_linear (inv_pos D D_pos)
-                                                (fun s => mult (boltzmann_dist s) (base_loss s)))).
+                                                (fun s => mult (reqd_boltzmann_dist s) (base_loss s)))).
   }
   (* 步骤 3：D·(-log Z - (1/D)⟨E⟩) == -D·log Z - ⟨E⟩ *)
   assert (Hmd : req (mult D (plus (opp (log Z Z_pos))
@@ -1595,11 +1595,11 @@ Qed.
 Lemma req_p_times_energy_decomp :
   forall (p : S -> R) (s : S),
     req (mult (p s) (base_loss s))
-        (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+        (plus (opp (mult D (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))
               (opp (mult D (mult (p s) (log Z Z_pos))))).
 Proof.
   intros p s.
-  set (Lp := log (boltzmann_dist s) (req_boltzmann_positive s)).
+  set (Lp := log (reqd_boltzmann_dist s) (req_boltzmann_positive s)).
   set (Lz := log Z Z_pos).
   set (E := base_loss s).
   set (ps := p s).
@@ -1651,63 +1651,63 @@ Qed.
 (* ============================================================ *)
 (* 训练-推理闭环皇冠定理：F[p] == F[p_b] + D·KL(p || p_b)        *)
 (*   （Id free_energy_kl_decomp @16259；req 旗舰件——除节内      *)
-(*   sumf 三性质与 log 前提化 positive_dist 参数外零新增假设）  *)
+(*   sumf 三性质与 log 前提化 reqd_positive_dist 参数外零新增假设）  *)
 (* ============================================================ *)
 Theorem req_free_energy_kl_decomp :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (free_energy p Hp)
-        (plus (free_energy boltzmann_dist req_boltzmann_positive)
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (reqd_free_energy p Hp)
+        (plus (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
               (mult D (sumf (fun s => mult (p s)
                                            (req_minus (log (p s) (Hp s))
-                                                      (log (boltzmann_dist s)
+                                                      (log (reqd_boltzmann_dist s)
                                                              (req_boltzmann_positive s))))))).
 Proof.
   intros p Hp Hnp.
-  unfold free_energy.
+  unfold reqd_free_energy.
   set (Eavg := sumf (fun s => mult (p s) (base_loss s))).
   set (A := sumf (fun s => mult (p s) (log (p s) (Hp s)))).
-  set (B := sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))).
+  set (B := sumf (fun s => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))).
   set (KL := sumf (fun s => mult (p s)
                                  (req_minus (log (p s) (Hp s))
-                                            (log (boltzmann_dist s)
+                                            (log (reqd_boltzmann_dist s)
                                                    (req_boltzmann_positive s))))).
   (* 步骤 1：Σ p·E == -D·B - D·log Z（p_times_energy_decomp 逐点 + 求和机器） *)
   assert (Hse : req Eavg (plus (opp (mult D B)) (opp (mult D (log Z Z_pos))))).
   {
     apply (req_trans Eavg
-      (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s)
+      (sumf (fun s => plus (opp (mult D (mult (p s) (log (reqd_boltzmann_dist s)
                                                             (req_boltzmann_positive s)))))
                            (opp (mult D (mult (p s) (log Z Z_pos))))))
       (plus (opp (mult D B)) (opp (mult D (log Z Z_pos))))).
     - apply (fsum_ext (fun s => mult (p s) (base_loss s))
-                      (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s)
+                      (fun s => plus (opp (mult D (mult (p s) (log (reqd_boltzmann_dist s)
                                                                         (req_boltzmann_positive s)))))
                                      (opp (mult D (mult (p s) (log Z Z_pos)))))).
       intro s. exact (req_p_times_energy_decomp p s).
-    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s)
+    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (reqd_boltzmann_dist s)
                                                                         (req_boltzmann_positive s)))))
                                             (opp (mult D (mult (p s) (log Z Z_pos))))))
                        (plus (sumf (fun s => opp (mult D (mult (p s)
-                                                               (log (boltzmann_dist s)
+                                                               (log (reqd_boltzmann_dist s)
                                                                        (req_boltzmann_positive s))))))
                              (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos))))))
                        (plus (opp (mult D B)) (opp (mult D (log Z Z_pos))))).
       + apply fsum_add.
       + apply req_plus_compat.
         * apply (req_trans (sumf (fun s => opp (mult D (mult (p s)
-                                                             (log (boltzmann_dist s)
+                                                             (log (reqd_boltzmann_dist s)
                                                                      (req_boltzmann_positive s))))))
                            (opp (sumf (fun s => mult D (mult (p s)
-                                                             (log (boltzmann_dist s)
+                                                             (log (reqd_boltzmann_dist s)
                                                                      (req_boltzmann_positive s))))))
                            (opp (mult D B))).
           -- apply fsum_opp.
           -- exact (req_opp_compat (sumf (fun s => mult D (mult (p s)
-                                                                (log (boltzmann_dist s)
+                                                                (log (reqd_boltzmann_dist s)
                                                                         (req_boltzmann_positive s)))))
                                    (mult D B)
                                    (fsum_linear D (fun s => mult (p s)
-                                                                 (log (boltzmann_dist s)
+                                                                 (log (reqd_boltzmann_dist s)
                                                                          (req_boltzmann_positive s))))).
         * apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos)))))
                            (opp (sumf (fun s => mult D (mult (p s) (log Z Z_pos)))))
@@ -1731,21 +1731,21 @@ Proof.
   {
     apply (req_trans KL
                      (sumf (fun s => req_minus (mult (p s) (log (p s) (Hp s)))
-                                               (mult (p s) (log (boltzmann_dist s)
+                                               (mult (p s) (log (reqd_boltzmann_dist s)
                                                                 (req_boltzmann_positive s)))))
                      (req_minus A B)).
     - apply (fsum_ext (fun s => mult (p s)
                                      (req_minus (log (p s) (Hp s))
-                                                (log (boltzmann_dist s)
+                                                (log (reqd_boltzmann_dist s)
                                                        (req_boltzmann_positive s))))
                       (fun s => req_minus (mult (p s) (log (p s) (Hp s)))
-                                          (mult (p s) (log (boltzmann_dist s)
+                                          (mult (p s) (log (reqd_boltzmann_dist s)
                                                            (req_boltzmann_positive s))))).
       intro s. exact (req_mult_minus_distr_l (p s) (log (p s) (Hp s))
-                                             (log (boltzmann_dist s)
+                                             (log (reqd_boltzmann_dist s)
                                                     (req_boltzmann_positive s))).
     - exact (fsum_minus (fun s => mult (p s) (log (p s) (Hp s)))
-                        (fun s => mult (p s) (log (boltzmann_dist s)
+                        (fun s => mult (p s) (log (reqd_boltzmann_dist s)
                                                  (req_boltzmann_positive s)))).
   }
   (* 步骤 3 总装：
@@ -1810,51 +1810,51 @@ Proof.
   }
   exact (req_trans _ _ _ Hmain
            (req_plus_compat (mult (opp D) (log Z Z_pos))
-                            (free_energy boltzmann_dist req_boltzmann_positive)
+                            (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
                             (mult D KL) (mult D KL)
-                            (req_sym (free_energy boltzmann_dist req_boltzmann_positive)
+                            (req_sym (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
                                      (mult (opp D) (log Z Z_pos))
                                      req_free_energy_boltzmann)
                             (req_refl (mult D KL)))).
 Qed.
 (* Id free_energy_kl_diff @16443：F[p] - F[p_b] == D·KL(p||p_b)（差形式） *)
 Theorem req_free_energy_kl_diff :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (req_minus (free_energy p Hp)
-                   (free_energy boltzmann_dist req_boltzmann_positive))
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (req_minus (reqd_free_energy p Hp)
+                   (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive))
         (mult D (sumf (fun s => mult (p s)
                                      (req_minus (log (p s) (Hp s))
-                                                (log (boltzmann_dist s)
+                                                (log (reqd_boltzmann_dist s)
                                                        (req_boltzmann_positive s)))))).
 Proof.
   intros p Hp Hnp. unfold req_minus.
   assert (Hdec := req_free_energy_kl_decomp p Hp Hnp).
-  apply (req_trans (plus (free_energy p Hp)
-                         (opp (free_energy boltzmann_dist req_boltzmann_positive)))
-                   (plus (plus (free_energy boltzmann_dist req_boltzmann_positive)
+  apply (req_trans (plus (reqd_free_energy p Hp)
+                         (opp (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)))
+                   (plus (plus (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
                                (mult D (sumf (fun s => mult (p s)
                                                             (req_minus (log (p s) (Hp s))
-                                                                       (log (boltzmann_dist s)
+                                                                       (log (reqd_boltzmann_dist s)
                                                                               (req_boltzmann_positive s)))))))
-                         (opp (free_energy boltzmann_dist req_boltzmann_positive)))
+                         (opp (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)))
                    (mult D (sumf (fun s => mult (p s)
                                                 (req_minus (log (p s) (Hp s))
-                                                           (log (boltzmann_dist s)
+                                                           (log (reqd_boltzmann_dist s)
                                                                   (req_boltzmann_positive s))))))).
-  - exact (req_plus_compat (free_energy p Hp)
-                           (plus (free_energy boltzmann_dist req_boltzmann_positive)
+  - exact (req_plus_compat (reqd_free_energy p Hp)
+                           (plus (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
                                  (mult D (sumf (fun s => mult (p s)
                                                               (req_minus (log (p s) (Hp s))
-                                                                         (log (boltzmann_dist s)
+                                                                         (log (reqd_boltzmann_dist s)
                                                                                 (req_boltzmann_positive s)))))))
-                           (opp (free_energy boltzmann_dist req_boltzmann_positive))
-                           (opp (free_energy boltzmann_dist req_boltzmann_positive))
-                           Hdec (req_refl (opp (free_energy boltzmann_dist
+                           (opp (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive))
+                           (opp (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive))
+                           Hdec (req_refl (opp (reqd_free_energy reqd_boltzmann_dist
                                                             req_boltzmann_positive)))).
-  - set (Fb := free_energy boltzmann_dist req_boltzmann_positive).
+  - set (Fb := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
     set (KL := sumf (fun s => mult (p s)
                                    (req_minus (log (p s) (Hp s))
-                                              (log (boltzmann_dist s)
+                                              (log (reqd_boltzmann_dist s)
                                                      (req_boltzmann_positive s))))).
     apply (req_trans (plus (plus Fb (mult D KL)) (opp Fb))
                      (plus Fb (plus (mult D KL) (opp Fb))) (mult D KL)).
@@ -1881,34 +1881,34 @@ Qed.
 
 (* Id free_energy_diff_kl @16489：F[p] - F[q] == D·(KL(p||p_b) - KL(q||p_b)) *)
 Theorem req_free_energy_diff_kl :
-  forall (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q),
-    normalized p -> normalized q ->
-    req (req_minus (free_energy p Hp) (free_energy q Hq))
+  forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
+    reqd_normalized p -> reqd_normalized q ->
+    req (req_minus (reqd_free_energy p Hp) (reqd_free_energy q Hq))
         (mult D (req_minus
                    (sumf (fun s => mult (p s)
                                         (req_minus (log (p s) (Hp s))
-                                                   (log (boltzmann_dist s)
+                                                   (log (reqd_boltzmann_dist s)
                                                           (req_boltzmann_positive s)))))
                    (sumf (fun s => mult (q s)
                                         (req_minus (log (q s) (Hq s))
-                                                   (log (boltzmann_dist s)
+                                                   (log (reqd_boltzmann_dist s)
                                                           (req_boltzmann_positive s))))))).
 Proof.
   intros p q Hp Hq Hnp Hnq.
-  set (Fb := free_energy boltzmann_dist req_boltzmann_positive).
+  set (Fb := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
   set (KLp := sumf (fun s => mult (p s)
                                   (req_minus (log (p s) (Hp s))
-                                             (log (boltzmann_dist s)
+                                             (log (reqd_boltzmann_dist s)
                                                     (req_boltzmann_positive s))))).
   set (KLq := sumf (fun s => mult (q s)
                                   (req_minus (log (q s) (Hq s))
-                                             (log (boltzmann_dist s)
+                                             (log (reqd_boltzmann_dist s)
                                                     (req_boltzmann_positive s))))).
-  apply (req_trans (req_minus (free_energy p Hp) (free_energy q Hq))
+  apply (req_trans (req_minus (reqd_free_energy p Hp) (reqd_free_energy q Hq))
                    (req_minus (plus Fb (mult D KLp)) (plus Fb (mult D KLq)))
                    (mult D (req_minus KLp KLq))).
-  - exact (reqd_minus_compat (free_energy p Hp) (plus Fb (mult D KLp))
-                             (free_energy q Hq) (plus Fb (mult D KLq))
+  - exact (reqd_minus_compat (reqd_free_energy p Hp) (plus Fb (mult D KLp))
+                             (reqd_free_energy q Hq) (plus Fb (mult D KLq))
                              (req_free_energy_kl_decomp p Hp Hnp)
                              (req_free_energy_kl_decomp q Hq Hnq)).
   - apply (req_trans (req_minus (plus Fb (mult D KLp)) (plus Fb (mult D KLq)))
@@ -1921,7 +1921,7 @@ Qed.
 (* Id relative_entropy_self_zero' @18483：KL(p||p) == 0（无条件件——旗舰演示：
    除节内 sumf 接口外零新增假设、零桥假设） *)
 Lemma req_relative_entropy_self_zero :
-  forall (p : S -> R) (Hp : positive_dist p),
+  forall (p : S -> R) (Hp : reqd_positive_dist p),
     req (req_relative_entropy p p Hp Hp) zero.
 Proof.
   intros p Hp. unfold req_relative_entropy.
@@ -1945,11 +1945,11 @@ Qed.
 
 (* Id entropy_neg_sum @16946：Σ p·log p == opp S[p]（熵的负和形式；无条件件） *)
 Lemma req_entropy_neg_sum :
-  forall (p : S -> R) (Hp : positive_dist p),
+  forall (p : S -> R) (Hp : reqd_positive_dist p),
     req (sumf (fun s => mult (p s) (log (p s) (Hp s))))
-        (opp (entropy_dist p Hp)).
+        (opp (reqd_entropy_dist p Hp)).
 Proof.
-  intros p Hp. unfold entropy_dist.
+  intros p Hp. unfold reqd_entropy_dist.
   apply (req_trans (sumf (fun s => mult (p s) (log (p s) (Hp s))))
                    (sumf (fun s => opp (mult (p s) (opp (log (p s) (Hp s))))))
                    (opp (sumf (fun s => mult (p s) (opp (log (p s) (Hp s))))))).
@@ -1972,20 +1972,20 @@ Qed.
 
 (* Id free_energy_entropy @16976：F[p] == <E>_p - D·S[p]（无条件件） *)
 Lemma req_free_energy_entropy :
-  forall (p : S -> R) (Hp : positive_dist p),
-    req (free_energy p Hp)
-        (plus (energy_expectation p) (mult D (opp (entropy_dist p Hp)))).
+  forall (p : S -> R) (Hp : reqd_positive_dist p),
+    req (reqd_free_energy p Hp)
+        (plus (reqd_energy_expectation p) (mult D (opp (reqd_entropy_dist p Hp)))).
 Proof.
   intros p Hp.
-  unfold free_energy, energy_expectation.
+  unfold reqd_free_energy, reqd_energy_expectation.
   exact (req_plus_compat (sumf (fun s => mult (p s) (base_loss s)))
                          (sumf (fun s => mult (p s) (base_loss s)))
                          (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s)))))
-                         (mult D (opp (entropy_dist p Hp)))
+                         (mult D (opp (reqd_entropy_dist p Hp)))
                          (req_refl (sumf (fun s => mult (p s) (base_loss s))))
                          (req_mult_compat D D
                                           (sumf (fun s => mult (p s) (log (p s) (Hp s))))
-                                          (opp (entropy_dist p Hp))
+                                          (opp (reqd_entropy_dist p Hp))
                                           (req_refl D) (req_entropy_neg_sum p Hp))).
 Qed.
 (* ---- Gibbs 簇公共辅件（R 层代数，导出给 equality 复用） ---- *)
@@ -2120,8 +2120,8 @@ Qed.
 
 (* Id gibbs_inequality @16629：归一化正分布的 KL ≥ 0（Gibbs 不等式） *)
 Theorem req_gibbs_inequality :
-  forall (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q),
-    normalized p -> normalized q ->
+  forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
+    reqd_normalized p -> reqd_normalized q ->
     le zero (req_relative_entropy p q Hp Hq).
 Proof.
   intros p q Hp Hq Hnp Hnq. unfold req_relative_entropy.
@@ -2146,8 +2146,8 @@ Qed.
 (* Id gibbs_equality @16678：KL(p||q) == 0 ⟹ p == q（逐点；
    等号条件经 dist_log_eq_linear 桥——log 严格凹的唯一缺字段） *)
 Theorem req_gibbs_equality :
-  forall (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q),
-    normalized p -> normalized q ->
+  forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
+    reqd_normalized p -> reqd_normalized q ->
     req (req_relative_entropy p q Hp Hq) zero ->
     forall s : S, req (p s) (q s).
 Proof.
@@ -2246,7 +2246,7 @@ Proof.
 Qed.
 
 (* Id boltzmann_dist_pos @16824（与节内 req_boltzmann_positive 同件；命名对齐台账） *)
-Lemma req_boltzmann_dist_pos : forall s : S, lt zero (boltzmann_dist s).
+Lemma req_boltzmann_dist_pos : forall s : S, lt zero (reqd_boltzmann_dist s).
 Proof. exact req_boltzmann_positive. Qed.
 
 (* ============================================================ *)
@@ -2261,18 +2261,18 @@ Proof. exact req_boltzmann_positive. Qed.
 (* Id min_free_energy_is_boltzmann @16838：F[p_b] ≤ F[p]
    【旗舰 req 无条件形态】分解恒等式 + KL ≥ 0 + D>0 保序，零额外假设位 *)
 Theorem req_min_free_energy_is_boltzmann :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    le (free_energy boltzmann_dist req_boltzmann_positive) (free_energy p Hp).
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    le (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive) (reqd_free_energy p Hp).
 Proof.
   intros p Hp Hnp.
-  set (K := req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive).
-  set (FB := free_energy boltzmann_dist req_boltzmann_positive).
+  set (K := req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive).
+  set (FB := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
   (* 1. F[p] == F[p_b] + D·KL（req_relative_entropy 与 decomp 的 sumf 展开可转换） *)
-  assert (Hdecomp : req (free_energy p Hp) (plus FB (mult D K)))
+  assert (Hdecomp : req (reqd_free_energy p Hp) (plus FB (mult D K)))
     by exact (req_free_energy_kl_decomp p Hp Hnp).
   (* 2. KL ≥ 0（req_gibbs_inequality） *)
   assert (Hkl : le zero K)
-    by exact (req_gibbs_inequality p boltzmann_dist Hp req_boltzmann_positive
+    by exact (req_gibbs_inequality p reqd_boltzmann_dist Hp req_boltzmann_positive
                                 Hnp req_boltzmann_normalized).
   (* 3. D > 0 ⟹ 0 ≤ D·KL *)
   assert (Hdkl : le zero (mult D K)).
@@ -2289,7 +2289,7 @@ Proof.
       + apply le_refl.
       + exact Hdkl. }
   (* 5. 右侧换形回 F[p] *)
-  exact (le_id_r FB (plus FB (mult D K)) (free_energy p Hp)
+  exact (le_id_r FB (plus FB (mult D K)) (reqd_free_energy p Hp)
                    (req_sym _ _ Hdecomp) Hfin).
 Qed.
 
@@ -2297,15 +2297,15 @@ Qed.
    F[p] == F[p_b] ⟹ p == p_b 逐点。链：decomp ⟹ D·KL==0（加法消去）
    ⟹ KL==0（D>0 乘法消去）⟹ gibbs_equality。 *)
 Theorem req_free_energy_min_unique :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (free_energy p Hp) (free_energy boltzmann_dist req_boltzmann_positive) ->
-    forall s : S, req (p s) (boltzmann_dist s).
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (reqd_free_energy p Hp) (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive) ->
+    forall s : S, req (p s) (reqd_boltzmann_dist s).
 Proof.
   intros p Hp Hnp Hfeq s.
-  set (K := req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive).
-  set (FB := free_energy boltzmann_dist req_boltzmann_positive).
+  set (K := req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive).
+  set (FB := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
   (* 1. F[p] == F[p_b] + D·KL *)
-  assert (Hdecomp : req (free_energy p Hp) (plus FB (mult D K)))
+  assert (Hdecomp : req (reqd_free_energy p Hp) (plus FB (mult D K)))
     by exact (req_free_energy_kl_decomp p Hp Hnp).
   (* 2. F[p_b] + D·KL == F[p_b] ⟹ D·KL == 0 *)
   assert (Hplus : req (plus FB (mult D K)) FB)
@@ -2317,33 +2317,33 @@ Proof.
   { apply (req_mult_cancel_l D K zero D_pos).
     exact (req_trans _ _ _ Hdkl0 (req_sym _ _ (req_mult_zero_r D))). }
   (* 4. gibbs_equality 收口 *)
-  exact (req_gibbs_equality p boltzmann_dist Hp req_boltzmann_positive
+  exact (req_gibbs_equality p reqd_boltzmann_dist Hp req_boltzmann_positive
                             Hnp req_boltzmann_normalized Hkl0 s).
 Qed.
 
 (* Id entropy_deficit_kl @16993：同能量约束下 S[p_b] − S[p] == KL(p‖p_b)。
    链：自由能恒等式（两端）+ 同能量消去（req_plus_cancel_l）+ 环消去（req_ring_d_cancel）。 *)
 Theorem req_entropy_deficit_kl :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (energy_expectation p) (energy_expectation boltzmann_dist) ->
-    req (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                   (entropy_dist p Hp))
-       (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive).
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (reqd_energy_expectation p) (reqd_energy_expectation reqd_boltzmann_dist) ->
+    req (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                   (reqd_entropy_dist p Hp))
+       (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive).
 Proof.
   intros p Hp Hnp Henergy.
-  set (Sp := entropy_dist p Hp).
-  set (Sb := entropy_dist boltzmann_dist req_boltzmann_positive).
-  set (K := req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive).
-  set (Ep := energy_expectation p).
-  set (Eb := energy_expectation boltzmann_dist).
-  set (FB0 := free_energy boltzmann_dist req_boltzmann_positive).
+  set (Sp := reqd_entropy_dist p Hp).
+  set (Sb := reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive).
+  set (K := req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive).
+  set (Ep := reqd_energy_expectation p).
+  set (Eb := reqd_energy_expectation reqd_boltzmann_dist).
+  set (FB0 := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
   (* 1. 三条自由能恒等式 *)
-  assert (Hdecomp : req (free_energy p Hp) (plus FB0 (mult D K)))
+  assert (Hdecomp : req (reqd_free_energy p Hp) (plus FB0 (mult D K)))
     by exact (req_free_energy_kl_decomp p Hp Hnp).
-  assert (Hfe_p : req (free_energy p Hp) (plus Ep (mult D (opp Sp))))
+  assert (Hfe_p : req (reqd_free_energy p Hp) (plus Ep (mult D (opp Sp))))
     by exact (req_free_energy_entropy p Hp).
   assert (Hfe_b : req FB0 (plus Eb (mult D (opp Sb))))
-    by exact (req_free_energy_entropy boltzmann_dist req_boltzmann_positive).
+    by exact (req_free_energy_entropy reqd_boltzmann_dist req_boltzmann_positive).
   (* 2. ⟨E⟩_p − D·S[p] == (⟨E⟩_b − D·S[p_b]) + D·KL *)
   assert (Htot : req (plus Ep (mult D (opp Sp)))
                      (plus (plus Eb (mult D (opp Sb))) (mult D K))).
@@ -2373,55 +2373,55 @@ Qed.
 
 (* Id max_entropy_is_boltzmann @17069：同能量 ⟹ S[p] ≤ S[p_b] *)
 Theorem req_max_entropy_is_boltzmann :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (energy_expectation p) (energy_expectation boltzmann_dist) ->
-    le (entropy_dist p Hp) (entropy_dist boltzmann_dist req_boltzmann_positive).
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (reqd_energy_expectation p) (reqd_energy_expectation reqd_boltzmann_dist) ->
+    le (reqd_entropy_dist p Hp) (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive).
 Proof.
   intros p Hp Hnp Henergy.
-  assert (Hdef : req (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                (entropy_dist p Hp))
-                     (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive))
+  assert (Hdef : req (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                (reqd_entropy_dist p Hp))
+                     (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive))
     by exact (req_entropy_deficit_kl p Hp Hnp Henergy).
-  assert (Hkl : le zero (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive))
-    by exact (req_gibbs_inequality p boltzmann_dist Hp req_boltzmann_positive
+  assert (Hkl : le zero (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive))
+    by exact (req_gibbs_inequality p reqd_boltzmann_dist Hp req_boltzmann_positive
                                    Hnp req_boltzmann_normalized).
-  assert (Hnonneg : le zero (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                       (entropy_dist p Hp)))
-    by exact (le_id_r zero (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive)
-                       (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                  (entropy_dist p Hp))
+  assert (Hnonneg : le zero (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                       (reqd_entropy_dist p Hp)))
+    by exact (le_id_r zero (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive)
+                       (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                  (reqd_entropy_dist p Hp))
                        (req_sym _ _ Hdef) Hkl).
-  apply (le_id_r (entropy_dist p Hp)
-                 (plus (entropy_dist p Hp)
-                       (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                  (entropy_dist p Hp)))
-                 (entropy_dist boltzmann_dist req_boltzmann_positive)).
-  - exact (req_minus_plus_cancel (entropy_dist p Hp)
-                                 (entropy_dist boltzmann_dist req_boltzmann_positive)).
-  - exact (req_le_plus_nonneg_r (entropy_dist p Hp)
-                                (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                           (entropy_dist p Hp))
+  apply (le_id_r (reqd_entropy_dist p Hp)
+                 (plus (reqd_entropy_dist p Hp)
+                       (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                  (reqd_entropy_dist p Hp)))
+                 (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)).
+  - exact (req_minus_plus_cancel (reqd_entropy_dist p Hp)
+                                 (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)).
+  - exact (req_le_plus_nonneg_r (reqd_entropy_dist p Hp)
+                                (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                           (reqd_entropy_dist p Hp))
                                 Hnonneg).
 Qed.
 
 (* Id entropy_max_unique @17653：同能量且同熵 ⟹ p == p_b 逐点（唯一性 4 件之三） *)
 Theorem req_entropy_max_unique :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
-    req (energy_expectation p) (energy_expectation boltzmann_dist) ->
-    req (entropy_dist p Hp) (entropy_dist boltzmann_dist req_boltzmann_positive) ->
-    forall s : S, req (p s) (boltzmann_dist s).
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
+    req (reqd_energy_expectation p) (reqd_energy_expectation reqd_boltzmann_dist) ->
+    req (reqd_entropy_dist p Hp) (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive) ->
+    forall s : S, req (p s) (reqd_boltzmann_dist s).
 Proof.
   intros p Hp Hnp Henergy Hent s.
-  assert (Hdef : req (req_minus (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                (entropy_dist p Hp))
-                     (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive))
+  assert (Hdef : req (req_minus (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                (reqd_entropy_dist p Hp))
+                     (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive))
     by exact (req_entropy_deficit_kl p Hp Hnp Henergy).
-  assert (Hkl0 : req (req_relative_entropy p boltzmann_dist Hp req_boltzmann_positive) zero).
+  assert (Hkl0 : req (req_relative_entropy p reqd_boltzmann_dist Hp req_boltzmann_positive) zero).
   { exact (req_trans _ _ _ (req_sym _ _ Hdef)
-                           (req_minus_self_zero (entropy_dist boltzmann_dist req_boltzmann_positive)
-                                                (entropy_dist p Hp)
+                           (req_minus_self_zero (reqd_entropy_dist reqd_boltzmann_dist req_boltzmann_positive)
+                                                (reqd_entropy_dist p Hp)
                                                 (req_sym _ _ Hent))). }
-  exact (req_gibbs_equality p boltzmann_dist Hp req_boltzmann_positive
+  exact (req_gibbs_equality p reqd_boltzmann_dist Hp req_boltzmann_positive
                             Hnp req_boltzmann_normalized Hkl0 s).
 Qed.
 
@@ -2429,11 +2429,11 @@ Qed.
    逐点 p·(−log q) == p·(−log p) + p·(log p − log q)（distrib+assoc+opp 抵消），
    fsum_ext + fsum_add 收口。 *)
 Theorem req_cross_entropy_decomp :
-  forall (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q),
-    req (cross_entropy p q Hq)
-        (plus (entropy_dist p Hp) (req_relative_entropy p q Hp Hq)).
+  forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
+    req (reqd_cross_entropy p q Hq)
+        (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q Hp Hq)).
 Proof.
-  intros p q Hp Hq. unfold cross_entropy, entropy_dist, req_relative_entropy.
+  intros p q Hp Hq. unfold reqd_cross_entropy, reqd_entropy_dist, req_relative_entropy.
   assert (Hpt : forall s : S,
             req (mult (p s) (opp (log (q s) (Hq s))))
                 (plus (mult (p s) (opp (log (p s) (Hp s))))
@@ -2539,86 +2539,86 @@ Qed.
 
 (* Id cross_entropy_minus_self：H(p,q) − H(p,p) == KL(p‖q)（训练目标 KL 等价核心） *)
 Theorem req_cross_entropy_minus_self :
-  forall (p q : S -> R) (Hp : positive_dist p) (Hq : positive_dist q),
-    req (req_minus (cross_entropy p q Hq) (cross_entropy p p Hp))
+  forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
+    req (req_minus (reqd_cross_entropy p q Hq) (reqd_cross_entropy p p Hp))
        (req_relative_entropy p q Hp Hq).
 Proof.
   intros p q Hp Hq.
-  assert (H1 : req (cross_entropy p q Hq)
-                   (plus (entropy_dist p Hp) (req_relative_entropy p q Hp Hq)))
+  assert (H1 : req (reqd_cross_entropy p q Hq)
+                   (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q Hp Hq)))
     by exact (req_cross_entropy_decomp p q Hp Hq).
-  assert (H2 : req (cross_entropy p p Hp) (entropy_dist p Hp)).
-  { apply (req_trans (cross_entropy p p Hp)
-                     (plus (entropy_dist p Hp) (req_relative_entropy p p Hp Hp))
-                     (entropy_dist p Hp)).
+  assert (H2 : req (reqd_cross_entropy p p Hp) (reqd_entropy_dist p Hp)).
+  { apply (req_trans (reqd_cross_entropy p p Hp)
+                     (plus (reqd_entropy_dist p Hp) (req_relative_entropy p p Hp Hp))
+                     (reqd_entropy_dist p Hp)).
     - exact (req_cross_entropy_decomp p p Hp Hp).
-    - apply (req_trans (plus (entropy_dist p Hp) (req_relative_entropy p p Hp Hp))
-                       (plus (entropy_dist p Hp) zero)
-                       (entropy_dist p Hp)).
-      + exact (req_plus_compat _ _ _ _ (req_refl (entropy_dist p Hp))
+    - apply (req_trans (plus (reqd_entropy_dist p Hp) (req_relative_entropy p p Hp Hp))
+                       (plus (reqd_entropy_dist p Hp) zero)
+                       (reqd_entropy_dist p Hp)).
+      + exact (req_plus_compat _ _ _ _ (req_refl (reqd_entropy_dist p Hp))
                                       (req_relative_entropy_self_zero p Hp)).
-      + exact (req_plus_zero_r (entropy_dist p Hp)). }
-  apply (req_trans (req_minus (cross_entropy p q Hq) (cross_entropy p p Hp))
-                   (req_minus (plus (entropy_dist p Hp)
+      + exact (req_plus_zero_r (reqd_entropy_dist p Hp)). }
+  apply (req_trans (req_minus (reqd_cross_entropy p q Hq) (reqd_cross_entropy p p Hp))
+                   (req_minus (plus (reqd_entropy_dist p Hp)
                                     (req_relative_entropy p q Hp Hq))
-                              (entropy_dist p Hp))
+                              (reqd_entropy_dist p Hp))
                    (req_relative_entropy p q Hp Hq)).
-  - exact (reqd_minus_compat (cross_entropy p q Hq)
-                             (plus (entropy_dist p Hp)
+  - exact (reqd_minus_compat (reqd_cross_entropy p q Hq)
+                             (plus (reqd_entropy_dist p Hp)
                                    (req_relative_entropy p q Hp Hq))
-                             (cross_entropy p p Hp)
-                             (entropy_dist p Hp)
+                             (reqd_cross_entropy p p Hp)
+                             (reqd_entropy_dist p Hp)
                              H1 H2).
-  - exact (req_minus_plus_cancel_r (entropy_dist p Hp)
+  - exact (req_minus_plus_cancel_r (reqd_entropy_dist p Hp)
                                    (req_relative_entropy p q Hp Hq)).
 Qed.
 
 (* Id training_equivalence @18657：交叉熵下降 ⟹ KL 下降（固定目标 p）
    【req 无条件形态】差分恒等式 + 共同项消去 + 非负差链。 *)
 Theorem req_training_equivalence :
-  forall (p q1 q2 : S -> R) (Hp : positive_dist p)
-         (Hq1 : positive_dist q1) (Hq2 : positive_dist q2),
-    le (cross_entropy p q2 Hq2) (cross_entropy p q1 Hq1) ->
+  forall (p q1 q2 : S -> R) (Hp : reqd_positive_dist p)
+         (Hq1 : reqd_positive_dist q1) (Hq2 : reqd_positive_dist q2),
+    le (reqd_cross_entropy p q2 Hq2) (reqd_cross_entropy p q1 Hq1) ->
     le (req_relative_entropy p q2 Hp Hq2) (req_relative_entropy p q1 Hp Hq1).
 Proof.
   intros p q1 q2 Hp Hq1 Hq2 Hce.
-  assert (H1d : req (cross_entropy p q1 Hq1)
-                    (plus (entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1)))
+  assert (H1d : req (reqd_cross_entropy p q1 Hq1)
+                    (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1)))
     by exact (req_cross_entropy_decomp p q1 Hp Hq1).
-  assert (H2d : req (cross_entropy p q2 Hq2)
-                    (plus (entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2)))
+  assert (H2d : req (reqd_cross_entropy p q2 Hq2)
+                    (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2)))
     by exact (req_cross_entropy_decomp p q2 Hp Hq2).
   (* 差分恒等：H2 − H1 == KL2 − KL1 *)
-  assert (Hdiff : req (req_minus (cross_entropy p q2 Hq2) (cross_entropy p q1 Hq1))
+  assert (Hdiff : req (req_minus (reqd_cross_entropy p q2 Hq2) (reqd_cross_entropy p q1 Hq1))
                       (req_minus (req_relative_entropy p q2 Hp Hq2)
                                  (req_relative_entropy p q1 Hp Hq1))).
-  { apply (req_trans (req_minus (cross_entropy p q2 Hq2) (cross_entropy p q1 Hq1))
-                     (req_minus (plus (entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2))
-                                (plus (entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1)))
+  { apply (req_trans (req_minus (reqd_cross_entropy p q2 Hq2) (reqd_cross_entropy p q1 Hq1))
+                     (req_minus (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2))
+                                (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1)))
                      (req_minus (req_relative_entropy p q2 Hp Hq2)
                                 (req_relative_entropy p q1 Hp Hq1))).
     - exact (reqd_minus_compat _ _ _ _ H2d H1d).
-    - exact (req_minus_plus_common_local (entropy_dist p Hp)
+    - exact (req_minus_plus_common_local (reqd_entropy_dist p Hp)
                                          (req_relative_entropy p q2 Hp Hq2)
                                          (req_relative_entropy p q1 Hp Hq1)). }
   (* 同型：H1 − H2 == KL1 − KL2 *)
-  assert (Hdiff' : req (req_minus (cross_entropy p q1 Hq1) (cross_entropy p q2 Hq2))
+  assert (Hdiff' : req (req_minus (reqd_cross_entropy p q1 Hq1) (reqd_cross_entropy p q2 Hq2))
                        (req_minus (req_relative_entropy p q1 Hp Hq1)
                                   (req_relative_entropy p q2 Hp Hq2))).
-  { apply (req_trans (req_minus (cross_entropy p q1 Hq1) (cross_entropy p q2 Hq2))
-                     (req_minus (plus (entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1))
-                                (plus (entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2)))
+  { apply (req_trans (req_minus (reqd_cross_entropy p q1 Hq1) (reqd_cross_entropy p q2 Hq2))
+                     (req_minus (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q1 Hp Hq1))
+                                (plus (reqd_entropy_dist p Hp) (req_relative_entropy p q2 Hp Hq2)))
                      (req_minus (req_relative_entropy p q1 Hp Hq1)
                                 (req_relative_entropy p q2 Hp Hq2))).
     - exact (reqd_minus_compat _ _ _ _ H1d H2d).
-    - exact (req_minus_plus_common_local (entropy_dist p Hp)
+    - exact (req_minus_plus_common_local (reqd_entropy_dist p Hp)
                                          (req_relative_entropy p q1 Hp Hq1)
                                          (req_relative_entropy p q2 Hp Hq2)). }
-  assert (Hd : le zero (req_minus (cross_entropy p q1 Hq1) (cross_entropy p q2 Hq2)))
-    by exact (req_le_minus_nonneg (cross_entropy p q2 Hq2) (cross_entropy p q1 Hq1) Hce).
+  assert (Hd : le zero (req_minus (reqd_cross_entropy p q1 Hq1) (reqd_cross_entropy p q2 Hq2)))
+    by exact (req_le_minus_nonneg (reqd_cross_entropy p q2 Hq2) (reqd_cross_entropy p q1 Hq1) Hce).
   assert (Hd' : le zero (req_minus (req_relative_entropy p q1 Hp Hq1)
                                    (req_relative_entropy p q2 Hp Hq2)))
-    by exact (le_id_r zero (req_minus (cross_entropy p q1 Hq1) (cross_entropy p q2 Hq2))
+    by exact (le_id_r zero (req_minus (reqd_cross_entropy p q1 Hq1) (reqd_cross_entropy p q2 Hq2))
                        (req_minus (req_relative_entropy p q1 Hp Hq1)
                                   (req_relative_entropy p q2 Hp Hq2))
                        Hdiff' Hd).
@@ -2643,27 +2643,27 @@ Qed.
 
 (* Id elbo_lower_bound @18359：ELBO(q) ≤ evidence（变分下界） *)
 Theorem req_elbo_lower_bound :
-  forall (q : S -> R) (Hq : positive_dist q), normalized q ->
+  forall (q : S -> R) (Hq : reqd_positive_dist q), reqd_normalized q ->
     le (reqd_elbo q Hq) reqd_evidence.
 Proof.
   intros q Hq Hnq. unfold reqd_elbo, reqd_evidence.
-  apply (opp_le_compat (free_energy boltzmann_dist req_boltzmann_positive)
-                       (free_energy q Hq)).
+  apply (opp_le_compat (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive)
+                       (reqd_free_energy q Hq)).
   exact (req_min_free_energy_is_boltzmann q Hq Hnq).
 Qed.
 
 (* Id evidence_kl_decomp @18373：evidence == ELBO(q) + D·KL(q‖p_b)
    （−F_b == −F_q + D·KL：opp 分配 + 抵消重组） *)
 Theorem req_evidence_kl_decomp :
-  forall (q : S -> R) (Hq : positive_dist q), normalized q ->
+  forall (q : S -> R) (Hq : reqd_positive_dist q), reqd_normalized q ->
     req reqd_evidence
         (plus (reqd_elbo q Hq)
-              (mult D (req_relative_entropy q boltzmann_dist Hq req_boltzmann_positive))).
+              (mult D (req_relative_entropy q reqd_boltzmann_dist Hq req_boltzmann_positive))).
 Proof.
   intros q Hq Hnq.
-  set (K := req_relative_entropy q boltzmann_dist Hq req_boltzmann_positive).
-  set (Fq := free_energy q Hq).
-  set (FB := free_energy boltzmann_dist req_boltzmann_positive).
+  set (K := req_relative_entropy q reqd_boltzmann_dist Hq req_boltzmann_positive).
+  set (Fq := reqd_free_energy q Hq).
+  set (FB := reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive).
   unfold reqd_evidence, reqd_elbo.
   assert (Hdecomp : req Fq (plus FB (mult D K)))
     by exact (req_free_energy_kl_decomp q Hq Hnq).
@@ -2699,62 +2699,62 @@ Qed.
 
 (* Id elbo_explicit @18428：−F[q] == −⟨E⟩_q + D·S[q] *)
 Theorem req_elbo_explicit :
-  forall (q : S -> R) (Hq : positive_dist q),
+  forall (q : S -> R) (Hq : reqd_positive_dist q),
     req (reqd_elbo q Hq)
-        (plus (opp (energy_expectation q)) (mult D (entropy_dist q Hq))).
+        (plus (opp (reqd_energy_expectation q)) (mult D (reqd_entropy_dist q Hq))).
 Proof.
-  intro q. intro Hq. unfold reqd_elbo, free_energy, energy_expectation.
+  intro q. intro Hq. unfold reqd_elbo, reqd_free_energy, reqd_energy_expectation.
   assert (Hml : req (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))
-                    (opp (mult D (entropy_dist q Hq)))).
+                    (opp (mult D (reqd_entropy_dist q Hq)))).
   { apply (req_trans (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))
-                     (mult D (opp (entropy_dist q Hq)))
-                     (opp (mult D (entropy_dist q Hq)))).
+                     (mult D (opp (reqd_entropy_dist q Hq)))
+                     (opp (mult D (reqd_entropy_dist q Hq)))).
     - exact (req_mult_compat D D (sumf (fun s => mult (q s) (log (q s) (Hq s))))
-                             (opp (entropy_dist q Hq))
+                             (opp (reqd_entropy_dist q Hq))
                              (req_refl D) (req_entropy_neg_sum q Hq)).
-    - exact (req_opp_mult_l D (entropy_dist q Hq)). }
+    - exact (req_opp_mult_l D (reqd_entropy_dist q Hq)). }
   apply (req_trans (opp (plus (sumf (fun s => mult (q s) (base_loss s)))
                               (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))))
                    (plus (opp (sumf (fun s => mult (q s) (base_loss s))))
                          (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))))
                    (plus (opp (sumf (fun s => mult (q s) (base_loss s))))
-                         (mult D (entropy_dist q Hq)))).
+                         (mult D (reqd_entropy_dist q Hq)))).
   - exact (req_opp_plus (sumf (fun s => mult (q s) (base_loss s)))
                         (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))).
-  - exact (req_plus_compat (opp (sumf (fun s => mult (q s) (base_loss s)))) (opp (sumf (fun s => mult (q s) (base_loss s)))) (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (mult D (entropy_dist q Hq))
+  - exact (req_plus_compat (opp (sumf (fun s => mult (q s) (base_loss s)))) (opp (sumf (fun s => mult (q s) (base_loss s)))) (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (mult D (reqd_entropy_dist q Hq))
                             (req_refl (opp (sumf (fun s => mult (q s) (base_loss s)))))
-                            (req_trans (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (opp (opp (mult D (entropy_dist q Hq)))) (mult D (entropy_dist q Hq))
-                                       (req_trans (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (opp (mult D (opp (entropy_dist q Hq)))) (opp (opp (mult D (entropy_dist q Hq))))
-                                                  (req_opp_compat (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s))))) (mult D (opp (entropy_dist q Hq)))
-                                                                  (req_mult_compat D D (sumf (fun s => mult (q s) (log (q s) (Hq s)))) (opp (entropy_dist q Hq)) (req_refl D)
+                            (req_trans (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (opp (opp (mult D (reqd_entropy_dist q Hq)))) (mult D (reqd_entropy_dist q Hq))
+                                       (req_trans (opp (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s)))))) (opp (mult D (opp (reqd_entropy_dist q Hq)))) (opp (opp (mult D (reqd_entropy_dist q Hq))))
+                                                  (req_opp_compat (mult D (sumf (fun s => mult (q s) (log (q s) (Hq s))))) (mult D (opp (reqd_entropy_dist q Hq)))
+                                                                  (req_mult_compat D D (sumf (fun s => mult (q s) (log (q s) (Hq s)))) (opp (reqd_entropy_dist q Hq)) (req_refl D)
                                                                                    (req_entropy_neg_sum q Hq)))
-                                                  (req_opp_compat (mult D (opp (entropy_dist q Hq))) (opp (mult D (entropy_dist q Hq))) (req_opp_mult_l D (entropy_dist q Hq))))
-                                       (req_double_neg (mult D (entropy_dist q Hq))))).
+                                                  (req_opp_compat (mult D (opp (reqd_entropy_dist q Hq))) (opp (mult D (reqd_entropy_dist q Hq))) (req_opp_mult_l D (reqd_entropy_dist q Hq))))
+                                       (req_double_neg (mult D (reqd_entropy_dist q Hq))))).
 Qed.
 
 (* Id elbo_tight @18520：ELBO[p_b] == evidence（零间隙态） *)
 Theorem req_elbo_tight :
-  req (reqd_elbo boltzmann_dist req_boltzmann_positive) reqd_evidence.
+  req (reqd_elbo reqd_boltzmann_dist req_boltzmann_positive) reqd_evidence.
 Proof.
   unfold reqd_elbo, reqd_evidence. apply req_refl.
 Qed.
 (* Id evidence_gap_kl @18578：evidence − ELBO(q) == D·KL(q‖p_b)（变分差距精确诊断） *)
 Theorem req_evidence_gap_kl :
-  forall (q : S -> R) (Hq : positive_dist q), normalized q ->
+  forall (q : S -> R) (Hq : reqd_positive_dist q), reqd_normalized q ->
     req (req_minus reqd_evidence (reqd_elbo q Hq))
-       (mult D (req_relative_entropy q boltzmann_dist Hq req_boltzmann_positive)).
+       (mult D (req_relative_entropy q reqd_boltzmann_dist Hq req_boltzmann_positive)).
 Proof.
   intros q Hq Hnq.
   apply (req_trans (req_minus reqd_evidence (reqd_elbo q Hq))
                    (req_minus (plus (reqd_elbo q Hq)
-                                    (mult D (req_relative_entropy q boltzmann_dist Hq
+                                    (mult D (req_relative_entropy q reqd_boltzmann_dist Hq
                                                                   req_boltzmann_positive)))
                               (reqd_elbo q Hq))
-                   (mult D (req_relative_entropy q boltzmann_dist Hq req_boltzmann_positive))).
+                   (mult D (req_relative_entropy q reqd_boltzmann_dist Hq req_boltzmann_positive))).
   - exact (reqd_minus_compat _ _ _ _
              (req_evidence_kl_decomp q Hq Hnq) (req_refl (reqd_elbo q Hq))).
   - exact (req_minus_plus_cancel_r (reqd_elbo q Hq)
-                                   (mult D (req_relative_entropy q boltzmann_dist Hq
+                                   (mult D (req_relative_entropy q reqd_boltzmann_dist Hq
                                                                 req_boltzmann_positive))).
 Qed.
 
@@ -2766,13 +2766,13 @@ Qed.
 Section ReqKLDiv.
 Variable qk : S -> R.
 Hypothesis qk_pos : forall s : S, lt zero (qk s).
-Hypothesis qk_norm : normalized qk.
-Definition req_kl_divergence (p : S -> R) (Hp : positive_dist p) : R :=
+Hypothesis qk_norm : reqd_normalized qk.
+Definition req_kl_divergence (p : S -> R) (Hp : reqd_positive_dist p) : R :=
   req_relative_entropy p qk Hp qk_pos.
 
 (* Id kl_nonneg @24982 *)
 Theorem req_kl_nonneg :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
     le zero (req_kl_divergence p Hp).
 Proof.
   intros p Hp Hnp. unfold req_kl_divergence.
@@ -2781,7 +2781,7 @@ Qed.
 
 (* Id kl_zero_iff_eq @24992 *)
 Theorem req_kl_zero_iff_eq :
-  forall (p : S -> R) (Hp : positive_dist p), normalized p ->
+  forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
     req (req_kl_divergence p Hp) zero -> forall s : S, req (p s) (qk s).
 Proof.
   intros p Hp Hnp Hkl0 s. unfold req_kl_divergence in Hkl0.
@@ -2817,7 +2817,7 @@ Definition reqd_energy_exp_temp (t : R) (Ht : lt zero t) : R :=
   sumf (fun s => mult (reqd_boltzmann_dist_temp t Ht s) (base_loss s)).
 
 Theorem reqd_boltzmann_dist_temp_normalized :
-  forall (t : R) (Ht : lt zero t), normalized (reqd_boltzmann_dist_temp t Ht).
+  forall (t : R) (Ht : lt zero t), reqd_normalized (reqd_boltzmann_dist_temp t Ht).
 Proof.
   intros t Ht.
   apply (req_trans (sumf (fun s => mult (inv_pos (Z_temp t) (req_Z_temp_pos t Ht))
@@ -2899,95 +2899,95 @@ End ReqTemp.
 (* ============================================================ *)
 Theorem req_energy_cross_entropy :
   forall p : S -> R,
-    normalized p ->
-    req (energy_expectation p)
-        (plus (mult D (cross_entropy p boltzmann_dist req_boltzmann_positive))
+    reqd_normalized p ->
+    req (reqd_energy_expectation p)
+        (plus (mult D (reqd_cross_entropy p reqd_boltzmann_dist req_boltzmann_positive))
               (opp (mult D (log Z Z_pos)))).
 Proof.
   intros p Hnp.
-  unfold energy_expectation, cross_entropy.
+  unfold reqd_energy_expectation, reqd_cross_entropy.
   (* 逐点：p·e == opp (D·(p·log p_b + p·logZ)) *)
   assert (Hpt : forall s : S,
     req (mult (p s) (base_loss s))
-        (opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))
+        (opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
                            (mult (p s) (log Z Z_pos)))))).
   { intro s.
     apply (req_trans (mult (p s) (base_loss s))
-                     (mult (p s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
-                     (opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
+                     (mult (p s) (opp (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
+                     (opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
     - exact (req_mult_compat (p s) (p s) (base_loss s)
-               (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+               (opp (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
                (req_refl (p s)) (req_energy_in_log_boltzmann s)).
-    - apply (req_trans (mult (p s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
-                       (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
-                       (opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
-      + exact (req_opp_mult_l (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
-      + apply (req_opp_compat (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
-                              (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))).
-        apply (req_trans (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
-                         (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
-                         (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))).
-        * apply (req_trans (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
-                           (mult (mult (p s) D) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
-                           (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
-          -- exact (mult_assoc (p s) D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
+    - apply (req_trans (mult (p s) (opp (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
+                       (opp (mult (p s) (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))
+                       (opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
+      + exact (req_opp_mult_l (p s) (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
+      + apply (req_opp_compat (mult (p s) (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+                              (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))).
+        apply (req_trans (mult (p s) (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+                         (mult (mult D (p s)) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
+                         (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))).
+        * apply (req_trans (mult (p s) (mult D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+                           (mult (mult (p s) D) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
+                           (mult (mult D (p s)) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
+          -- exact (mult_assoc (p s) D (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
           -- exact (req_mult_compat (mult (p s) D) (mult D (p s))
-                       (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
-                       (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
-                       (mult_comm (p s) D) (req_refl (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
-        * exact (req_trans (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
-                           (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
-                           (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
-                           (req_sym _ _ (mult_assoc D (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+                       (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
+                       (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))
+                       (mult_comm (p s) D) (req_refl (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))).
+        * exact (req_trans (mult (mult D (p s)) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
+                           (mult D (mult (p s) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
+                           (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
+                           (req_sym _ _ (mult_assoc D (p s) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))
                            (req_mult_compat D D
-                              (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
-                              (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))
-                              (req_refl D) (distrib (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
+                              (mult (p s) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
+                              (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))
+                              (req_refl D) (distrib (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
   (* Σ 层：Σ p·e == opp (D·(Σ p·log p_b + Σ p·logZ)) *)
   assert (Hsum : req (sumf (fun s : S => mult (p s) (base_loss s)))
-                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))
+                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
                                         (sumf (fun s : S => mult (p s) (log Z Z_pos))))))).
   { apply (req_trans (sumf (fun s : S => mult (p s) (base_loss s)))
-                     (sumf (fun s : S => opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
-                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))).
+                     (sumf (fun s : S => opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
+                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))).
     - apply (fsum_ext (fun s : S => mult (p s) (base_loss s))
-                      (fun s : S => opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
+                      (fun s : S => opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))).
       exact Hpt.
-    - exact (req_trans (sumf (fun s : S => opp (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
-                       (opp (sumf (fun s : S => mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
-                       (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))
-                       (fsum_opp (fun s : S => mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
-                       (req_opp_compat (sumf (fun s : S => mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
-                                       (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
-                                       (req_trans (sumf (fun s : S => mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
-                                                  (mult D (sumf (fun s : S => plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
-                                                  (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
-                                                  (fsum_linear D (fun s : S => plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
+    - exact (req_trans (sumf (fun s : S => opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
+                       (opp (sumf (fun s : S => mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))))
+                       (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))
+                       (fsum_opp (fun s : S => mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
+                       (req_opp_compat (sumf (fun s : S => mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
+                                       (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
+                                       (req_trans (sumf (fun s : S => mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
+                                                  (mult D (sumf (fun s : S => plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))))
+                                                  (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
+                                                  (fsum_linear D (fun s : S => plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
                                                   (req_mult_compat D D
-                                                     (sumf (fun s : S => plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
-                                                     (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))
+                                                     (sumf (fun s : S => plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos))))
+                                                     (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))
                                                      (req_refl D)
-                                                     (fsum_add (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))
+                                                     (fsum_add (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
                                                               (fun s : S => mult (p s) (log Z Z_pos))))))). }
   (* 预平衡 A：Σ p·log p_b == opp CE（opp_mult_l 换形 + fsum_opp + δ） *)
-  assert (HA : req (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                   (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-  { apply (req_trans (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                     (sumf (fun s : S => opp (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                     (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-    - apply (fsum_ext (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))
-                      (fun s : S => opp (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+  assert (HA : req (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
+                   (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))).
+  { apply (req_trans (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
+                     (sumf (fun s : S => opp (mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
+                     (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))).
+    - apply (fsum_ext (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
+                      (fun s : S => opp (mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))).
       intro s.
-      apply (req_trans (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))
-                       (mult (p s) (opp (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                       (opp (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+      apply (req_trans (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
+                       (mult (p s) (opp (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))
+                       (opp (mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))).
       + exact (req_mult_compat (p s) (p s)
-                 (log (boltzmann_dist s) (req_boltzmann_positive s))
-                 (opp (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))
+                 (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
+                 (opp (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
                  (req_refl (p s))
-                 (req_sym _ _ (req_double_neg (log (boltzmann_dist s) (req_boltzmann_positive s))))).
-      + exact (req_opp_mult_l (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))).
-    - exact (fsum_opp (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))). }
+                 (req_sym _ _ (req_double_neg (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))).
+      + exact (req_opp_mult_l (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))).
+    - exact (fsum_opp (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))). }
   (* 预平衡 C：Σ p·logZ == logZ（常数提取 + 归一化） *)
   assert (HC : req (sumf (fun s : S => mult (p s) (log Z Z_pos))) (log Z Z_pos)).
   { apply (req_trans (sumf (fun s : S => mult (p s) (log Z Z_pos)))
@@ -3008,58 +3008,58 @@ Proof.
         * exact (mult_one (log Z Z_pos)). }
   (* 收尾：opp (D·(opp CE + logZ)) == D·CE + opp (D·logZ) *)
   apply (req_trans (sumf (fun s : S => mult (p s) (base_loss s)))
-                   (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                   (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                                       (log Z Z_pos))))
-                   (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                   (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                          (opp (mult D (log Z Z_pos))))).
   - exact (req_trans (sumf (fun s : S => mult (p s) (base_loss s)))
-                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))
-                     (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))))
+                     (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))))
+                     (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))))
                      Hsum
-                     (req_opp_compat (mult D (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
-                                     (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
+                     (req_opp_compat (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos)))))
+                                     (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
                                      (req_mult_compat D D
-                                        (plus (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))
-                                        (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))
+                                        (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))) (sumf (fun s : S => mult (p s) (log Z Z_pos))))
+                                        (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))
                                         (req_refl D)
-                                        (req_plus_compat (sumf (fun s : S => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                                                         (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                                        (req_plus_compat (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
+                                                         (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                                                          (sumf (fun s : S => mult (p s) (log Z Z_pos)))
                                                          (log Z Z_pos)
                                                          HA
                                                          HC)))).
-  - apply (req_trans (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+  - apply (req_trans (opp (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                                         (log Z Z_pos))))
-                     (opp (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                     (opp (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                 (mult D (log Z Z_pos))))
-                     (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                     (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                            (opp (mult D (log Z Z_pos))))).
-    + exact (req_opp_compat (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
-                            (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+    + exact (req_opp_compat (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
+                            (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                   (mult D (log Z Z_pos)))
-                            (req_trans (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
-                                       (plus (mult D (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (log Z Z_pos)))
-                                       (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (log Z Z_pos)))
-                                       (distrib D (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))
-                                       (req_plus_compat (mult D (opp (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
-                                                        (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                            (req_trans (mult D (plus (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos)))
+                                       (plus (mult D (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (log Z Z_pos)))
+                                       (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (log Z Z_pos)))
+                                       (distrib D (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))) (log Z Z_pos))
+                                       (req_plus_compat (mult D (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                                        (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                                         (mult D (log Z Z_pos))
                                                         (mult D (log Z Z_pos))
-                                                        (req_opp_mult_l D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                                                        (req_opp_mult_l D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                                                         (req_refl (mult D (log Z Z_pos)))))).
-    + exact (req_trans (opp (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+    + exact (req_trans (opp (plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                   (mult D (log Z Z_pos))))
-                       (plus (opp (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))))
+                       (plus (opp (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))))
                              (opp (mult D (log Z Z_pos))))
-                       (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (plus (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                              (opp (mult D (log Z Z_pos))))
-                       (req_opp_plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                       (req_opp_plus (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                      (mult D (log Z Z_pos)))
-                       (req_plus_compat (opp (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))))
-                                        (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (req_plus_compat (opp (opp (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))))
+                                        (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))
                                         (opp (mult D (log Z Z_pos)))
                                         (opp (mult D (log Z Z_pos)))
-                                        (req_double_neg (mult D (sumf (fun s : S => mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                        (req_double_neg (mult D (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))))))
                                         (req_refl (opp (mult D (log Z Z_pos)))))).
 Qed.
 

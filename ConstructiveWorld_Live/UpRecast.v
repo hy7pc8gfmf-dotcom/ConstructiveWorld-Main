@@ -50,157 +50,157 @@ Open Scope Z_scope.
 (* ===================================================================== *)
 
 (* Set 层恒等型（语句零 Prop 的等式载体） *)
-Inductive tid (A : Type) : A -> A -> Type := tid_refl : forall x : A, tid A x x.
+Inductive rc_tid (A : Type) : A -> A -> Type := rc_tid_refl : forall x : A, rc_tid A x x.
 
-Definition tid_sym (A : Type) (x y : A) (H : tid A x y) : tid A y x :=
-  match H in tid _ a b return tid _ b a with
-  | tid_refl _ a0 => @tid_refl _ a0
+Definition rc_tid_sym (A : Type) (x y : A) (H : rc_tid A x y) : rc_tid A y x :=
+  match H in rc_tid _ a b return rc_tid _ b a with
+  | rc_tid_refl _ a0 => @rc_tid_refl _ a0
   end.
 
-Definition tid_trans (A : Type) (x y z : A) (H1 : tid A x y) (H2 : tid A y z) :
-  tid A x z :=
-  match H1 in tid _ a b return tid _ b z -> tid _ a z with
-  | tid_refl _ a0 => fun H => H
+Definition rc_tid_trans (A : Type) (x y z : A) (H1 : rc_tid A x y) (H2 : rc_tid A y z) :
+  rc_tid A x z :=
+  match H1 in rc_tid _ a b return rc_tid _ b z -> rc_tid _ a z with
+  | rc_tid_refl _ a0 => fun H => H
   end H2.
 
 (* 恒等型的泛函同余（transport 万能件） *)
-Definition tid_cong {A B : Type} (f : A -> B) (x y : A) (H : tid A x y) :
-  tid B (f x) (f y) :=
-  match H in tid _ a b return tid B (f a) (f b) with
-  | tid_refl _ a0 => @tid_refl _ (f a0)
+Definition rc_tid_cong {A B : Type} (f : A -> B) (x y : A) (H : rc_tid A x y) :
+  rc_tid B (f x) (f y) :=
+  match H in rc_tid _ a b return rc_tid B (f a) (f b) with
+  | rc_tid_refl _ a0 => @rc_tid_refl _ (f a0)
   end.
 
 (* Set 层自然数序型（k < m 编码为 nle (S k) m） *)
-Inductive nle (n : nat) : nat -> Set :=
-| nle_n : nle n n
-| nle_S : forall m : nat, nle n m -> nle n (S m).
+Inductive rc_nle (n : nat) : nat -> Set :=
+| rc_nle_n : rc_nle n n
+| rc_nle_S : forall m : nat, rc_nle n m -> rc_nle n (S m).
 
 Ltac tidE H :=
-  pose proof (match H in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE.
+  pose proof (match H in rc_tid _ a b return a = b with rc_tid_refl _ _ => eq_refl end) as HE.
 
-(* bool 恒等矛盾关闭器：H1 : tid bool X true、H2 : tid bool X false *)
+(* bool 恒等矛盾关闭器：H1 : rc_tid bool X true、H2 : rc_tid bool X false *)
 Ltac tid_kill H1 H2 :=
-  pose proof (match H1 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE1;
-  pose proof (match H2 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE2;
+  pose proof (match H1 in rc_tid _ a b return a = b with rc_tid_refl _ _ => eq_refl end) as KE1;
+  pose proof (match H2 in rc_tid _ a b return a = b with rc_tid_refl _ _ => eq_refl end) as KE2;
   rewrite KE1 in KE2; discriminate KE2.
 
-Lemma leb_refl_tid : forall a : nat, tid bool (Nat.leb a a) true.
+Lemma rc_leb_refl_tid : forall a : nat, rc_tid bool (Nat.leb a a) true.
 Proof.
-  intros a. rewrite Nat.leb_refl. apply tid_refl.
+  intros a. rewrite Nat.leb_refl. apply rc_tid_refl.
 Qed.
 
-Lemma leb_S : forall a m : nat,
-  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (S m)) true.
+Lemma rc_leb_S : forall a m : nat,
+  rc_tid bool (Nat.leb a m) true -> rc_tid bool (Nat.leb a (S m)) true.
 Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
-    + apply tid_refl.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply rc_tid_refl.
+    + change (rc_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply tid_refl.
+    + apply rc_tid_refl.
     + exact (IH a1 H).
 Qed.
 
-Fixpoint nle_lebF (a b : nat) (H : nle a b) {struct H} :
-  tid bool (Nat.leb a b) true :=
-  match H as H0 in nle _ bb
-  return tid bool (Nat.leb a bb) true with
-  | nle_n _ => leb_refl_tid a
-  | nle_S _ m H1 => leb_S a m (nle_lebF a m H1)
+Fixpoint rc_nle_lebF (a b : nat) (H : rc_nle a b) {struct H} :
+  rc_tid bool (Nat.leb a b) true :=
+  match H as H0 in rc_nle _ bb
+  return rc_tid bool (Nat.leb a bb) true with
+  | rc_nle_n _ => rc_leb_refl_tid a
+  | rc_nle_S _ m H1 => rc_leb_S a m (rc_nle_lebF a m H1)
   end.
 
-Definition nle_leb (b a : nat) (H : nle a b) : tid bool (Nat.leb a b) true :=
-  nle_lebF a b H.
+Definition rc_nle_leb (b a : nat) (H : rc_nle a b) : rc_tid bool (Nat.leb a b) true :=
+  rc_nle_lebF a b H.
 
-(* nle -> nat ≤ 提取（仅证明内部推理用） *)
+(* rc_nle -> nat ≤ 提取（仅证明内部推理用） *)
 Ltac nleP H :=
   let HN := fresh "HNle" in
   pose proof
     (proj1 (Nat.leb_le _ _)
-       (match (nle_leb _ _ H) in tid _ x y return x = y with
-        | tid_refl _ _ => eq_refl
+       (match (rc_nle_leb _ _ H) in rc_tid _ x y return x = y with
+        | rc_tid_refl _ _ => eq_refl
         end)) as HN.
 
-Lemma nle_SS : forall a b : nat, nle a b -> nle (S a) (S b).
+Lemma rc_nle_SS : forall a b : nat, rc_nle a b -> rc_nle (S a) (S b).
 Proof.
   intros a b H. induction H as [| m H IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply rc_nle_n.
+  - apply rc_nle_S. exact IH.
 Qed.
 
-Lemma nle_0 : forall m : nat, nle O m.
+Lemma rc_nle_0 : forall m : nat, rc_nle O m.
 Proof.
   induction m as [| m1 IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply rc_nle_n.
+  - apply rc_nle_S. exact IH.
 Qed.
 
-Lemma nle_of_leb : forall b a : nat,
-  tid bool (Nat.leb a b) true -> nle a b.
+Lemma rc_nle_of_leb : forall b a : nat,
+  rc_tid bool (Nat.leb a b) true -> rc_nle a b.
 Proof.
   induction b as [| b1 IB]; intros a H.
   - destruct a as [| a1].
-    + apply nle_n.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply rc_nle_n.
+    + change (rc_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply nle_0.
-    + apply nle_SS. exact (IB a1 H).
+    + apply rc_nle_0.
+    + apply rc_nle_SS. exact (IB a1 H).
 Qed.
 
-Lemma nle_trans : forall a b c : nat, nle a b -> nle b c -> nle a c.
+Lemma rc_nle_trans : forall a b c : nat, rc_nle a b -> rc_nle b c -> rc_nle a c.
 Proof.
   intros a b c H1 H2. induction H2 as [| c H2 IH].
   - exact H1.
-  - apply nle_S. exact IH.
+  - apply rc_nle_S. exact IH.
 Qed.
 
-(* nle (S a) (S b) -> nle a b *)
-Lemma nle_pred : forall a b : nat, nle (S a) (S b) -> nle a b.
+(* rc_nle (S a) (S b) -> rc_nle a b *)
+Lemma rc_nle_pred : forall a b : nat, rc_nle (S a) (S b) -> rc_nle a b.
 Proof.
-  intros a b H. apply nle_of_leb.
-  exact (nle_leb (S b) (S a) H).
+  intros a b H. apply rc_nle_of_leb.
+  exact (rc_nle_leb (S b) (S a) H).
 Qed.
 
-Lemma nle_add_r : forall a b : nat, nle a (a + b).
+Lemma rc_nle_add_r : forall a b : nat, rc_nle a (a + b).
 Proof.
   intros a b. revert b. induction a as [| a1 IH]; intro b.
-  - apply nle_0.
-  - exact (nle_SS a1 (a1 + b) (IH b)).
+  - apply rc_nle_0.
+  - exact (rc_nle_SS a1 (a1 + b) (IH b)).
 Qed.
 
 (* ---- 本件新增基建 ---- *)
 
-Lemma nle_S_diag : forall a : nat, nle a (S a).
+Lemma nle_S_diag : forall a : nat, rc_nle a (S a).
 Proof.
   induction a as [| a IH].
-  - apply nle_0.
-  - apply nle_SS. exact IH.
+  - apply rc_nle_0.
+  - apply rc_nle_SS. exact IH.
 Qed.
 
-Lemma nle_add_r_any : forall a b c : nat, nle a b -> nle (a + c) (b + c).
+Lemma nle_add_r_any : forall a b c : nat, rc_nle a b -> rc_nle (a + c) (b + c).
 Proof.
   intros a b c H. induction H as [| m H IH].
-  - apply nle_n.
+  - apply rc_nle_n.
   - replace (Nat.add (S m) c) with (S (Nat.add m c)) by reflexivity.
-    apply nle_S. exact IH.
+    apply rc_nle_S. exact IH.
 Qed.
 
-Lemma nle_add_l_any : forall a b c : nat, nle b c -> nle (a + b) (a + c).
+Lemma nle_add_l_any : forall a b c : nat, rc_nle b c -> rc_nle (a + b) (a + c).
 Proof.
   intros a b c H. induction a as [| a IH].
   - exact H.
-  - apply nle_SS. exact IH.
+  - apply rc_nle_SS. exact IH.
 Qed.
 
-(* nat/bool 层 eq -> tid 桥（证明内部收尾用） *)
-Lemma tid_nat_eq : forall a b : nat, a = b -> tid nat a b.
+(* nat/bool 层 eq -> rc_tid 桥（证明内部收尾用） *)
+Lemma tid_nat_eq : forall a b : nat, a = b -> rc_tid nat a b.
 Proof.
-  intros a b H. rewrite H. apply tid_refl.
+  intros a b H. rewrite H. apply rc_tid_refl.
 Qed.
 
-Lemma tid_bool_eq : forall x y : bool, x = y -> tid bool x y.
+Lemma tid_bool_eq : forall x y : bool, x = y -> rc_tid bool x y.
 Proof.
-  intros x y H. rewrite H. apply tid_refl.
+  intros x y H. rewrite H. apply rc_tid_refl.
 Qed.
 
 (* ---- 通用列表算术（自证防 stdlib 改名漂移） ---- *)
@@ -292,20 +292,20 @@ Definition use_cnt (f : fid) (l : list evt) : nat :=
   length (filter (is_use_f f) l).
 
 Theorem ledger_len_step : forall (l : list evt) (e : evt),
-  tid nat (S (length l)) (length (ledger_step l e)).
+  rc_tid nat (S (length l)) (length (ledger_step l e)).
 Proof.
   intros l e. apply tid_nat_eq. unfold ledger_step. rewrite rc_len_app. simpl. lia.
 Qed.
 
 (* 账本推进守恒/单调：use 事件只增不减逐字段账户 *)
 Theorem ledger_use_mono : forall (f : fid) (l : list evt) (e : evt),
-  nle (use_cnt f l) (use_cnt f (ledger_step l e)).
+  rc_nle (use_cnt f l) (use_cnt f (ledger_step l e)).
 Proof.
   intros f l. induction l as [| a l IH]; intros e.
-  - apply nle_0.
+  - apply rc_nle_0.
   - destruct a as [g ev]. unfold use_cnt in *. simpl.
     destruct (Nat.eqb f g).
-    + apply nle_SS. exact (IH e).
+    + apply rc_nle_SS. exact (IH e).
     + exact (IH e).
 Qed.
 
@@ -333,7 +333,7 @@ Definition occurs (f : fid) (l : list (fid * tier)) : bool :=
 
 (* 扫描完备性之一：长度分割守恒——幸存 + 击穿 = 全普查，一枚不丢 *)
 Theorem scan_partition_len : forall (f : fid) (l : list (fid * tier)),
-  tid nat (length l)
+  rc_tid nat (length l)
            (Nat.add (length (survive_scan f l)) (length (pierced f l))).
 Proof.
   intros f l. apply tid_nat_eq. unfold survive_scan, pierced.
@@ -343,7 +343,7 @@ Qed.
 
 (* 扫描完备性之二：幸存者纯净——幸存子证书不再含被击穿字段 *)
 Theorem scan_survivor_pure : forall (f : fid) (l : list (fid * tier)),
-  tid bool (occurs f (survive_scan f l)) false.
+  rc_tid bool (occurs f (survive_scan f l)) false.
 Proof.
   intros f l. apply tid_bool_eq. unfold occurs, survive_scan.
   exact (rc_existsb_filter_neg (fid * tier) (hitF f) l).
@@ -351,19 +351,19 @@ Qed.
 
 (* 扫描完备性之三：判定全覆盖——击穿侧恰捕获全部在册条目 *)
 Theorem scan_pierce_capture : forall (f : fid) (l : list (fid * tier)),
-  tid bool (occurs f (pierced f l)) (occurs f l).
+  rc_tid bool (occurs f (pierced f l)) (occurs f l).
 Proof.
   intros f l. apply tid_bool_eq. unfold occurs, pierced.
   exact (rc_existsb_filter_id (fid * tier) (hitF f) l).
 Qed.
 
 (* bool 判定全覆盖：在册性总判定器（Type 排序双分支，零 Prop）。              *)
-(* 定稿决策：Rocq 9.1 的 sumbool 参数已改 (A B : Prop)，装不下 tid 的 Type    *)
+(* 定稿决策：Rocq 9.1 的 sumbool 参数已改 (A B : Prop)，装不下 rc_tid 的 Type    *)
 (* 载荷，故自建 Type 排序双分支载体 pick（判定器语义不变：分支即判定结果）。   *)
 Inductive pick (A B : Type) : Type := pick_l : A -> pick A B | pick_r : B -> pick A B.
 
 Theorem occurs_dec : forall (f : fid) (l : list (fid * tier)),
-  pick (tid bool (occurs f l) true) (tid bool (occurs f l) false).
+  pick (rc_tid bool (occurs f l) true) (rc_tid bool (occurs f l) false).
 Proof.
   intros f l. unfold occurs.
   destruct (existsb (hitF f) l).
@@ -373,10 +373,10 @@ Qed.
 
 (* 幸存子证书规模不超原普查 *)
 Theorem scan_scan_mono : forall (f : fid) (l : list (fid * tier)),
-  nle (length (survive_scan f l)) (length l).
+  rc_nle (length (survive_scan f l)) (length l).
 Proof.
   intros f l. pose proof (scan_partition_len f l) as HP. tidE HP.
-  rewrite HE. apply nle_add_r.
+  rewrite HE. apply rc_nle_add_r.
 Qed.
 
 (* 等级质量：普查条目的等级总和 *)
@@ -449,28 +449,28 @@ Definition total_acc (c : Cert) : nat :=
 
 (* 再铸分档辅助：通过档普查恒等 *)
 Theorem recast_pass_census : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid (list (fid * tier)) (census c) (census (recast c (use f ev))).
+  rc_tid bool (passes f ev c) true ->
+  rc_tid (list (fid * tier)) (census c) (census (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. exact (tid_refl (list (fid * tier)) (census c)).
+  tidE H. rewrite HE. exact (rc_tid_refl (list (fid * tier)) (census c)).
 Qed.
 
 (* 再铸分档辅助：通过档旧义务全保留（义务不灭半边） *)
 Theorem recast_pass_obls : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid (list (fid * tier)) (obls c) (obls (recast c (use f ev))).
+  rc_tid bool (passes f ev c) true ->
+  rc_tid (list (fid * tier)) (obls c) (obls (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. exact (tid_refl (list (fid * tier)) (obls c)).
+  tidE H. rewrite HE. exact (rc_tid_refl (list (fid * tier)) (obls c)).
 Qed.
 
 (* 再铸击穿档：普查缩减恰为被击穿条目（义务转移的来源侧） *)
 Theorem recast_pierce_partition : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (length (census c))
+  rc_tid bool (passes f ev c) false ->
+  rc_tid nat (length (census c))
            (Nat.add (length (census (recast c (use f ev))))
                     (length (pierced f (census c)))).
 Proof.
@@ -482,8 +482,8 @@ Qed.
 
 (* 再铸击穿档：新义务恰为降级条目（义务转移的去向侧；旧义务消⟹新义务生） *)
 Theorem recast_pierce_obls_len : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (length (obls (recast c (use f ev))))
+  rc_tid bool (passes f ev c) false ->
+  rc_tid nat (length (obls (recast c (use f ev))))
            (Nat.add (length (obls c)) (length (pierced f (census c)))).
 Proof.
   intros c f ev H.
@@ -494,34 +494,34 @@ Qed.
 
 (* 普查单调：再铸永不增发普查条目 *)
 Theorem recast_census_mono : forall (c : Cert) (e : evt),
-  nle (length (census (recast c e))) (length (census c)).
+  rc_nle (length (census (recast c e))) (length (census c)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply nle_n.
+  - apply rc_nle_n.
   - exact (scan_scan_mono f (census c)).
 Qed.
 
 (* 义务单调：再铸永不销毁既有义务 *)
 Theorem recast_obls_mono : forall (c : Cert) (e : evt),
-  nle (length (obls c)) (length (obls (recast c e))).
+  rc_nle (length (obls c)) (length (obls (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply nle_n.
-  - unfold recast_b. cbn [obls]. rewrite rc_len_app. apply nle_add_r.
+  - apply rc_nle_n.
+  - unfold recast_b. cbn [obls]. rewrite rc_len_app. apply rc_nle_add_r.
 Qed.
 
 (* 义务转移封闭性·总账平衡：任意再铸后总账守恒（账户总账平衡） *)
 Theorem acc_balance : forall (c : Cert) (e : evt),
-  tid nat (total_acc c) (total_acc (recast c e)).
+  rc_tid nat (total_acc c) (total_acc (recast c e)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply tid_refl.
+  - apply rc_tid_refl.
   - apply tid_nat_eq. unfold total_acc, recast_b. cbn [census obls].
     rewrite rc_len_app.
     pose proof (scan_partition_len f (census c)) as HP. tidE HP.
@@ -530,13 +530,13 @@ Qed.
 
 (* 义务转移封闭性·等级质量守恒：降级 verbatim 转账，质量分毫不差 *)
 Theorem tier_balance : forall (c : Cert) (e : evt),
-  tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
+  rc_tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
            (Nat.add (tsum (census (recast c e))) (tsum (obls (recast c e)))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply tid_refl.
+  - apply rc_tid_refl.
   - apply tid_nat_eq. unfold recast_b. cbn [census obls].
     rewrite rc_tsum_app.
     rewrite (rc_tsum_scan f (census c)).
@@ -552,18 +552,18 @@ Definition friction (c : Cert) : nat := Nat.add (m_ev (mtr c)) (m_rc (mtr c)).
 
 (* 通过档精确差值：恰 +1（行使计数 +1，再铸计数不动） *)
 Theorem friction_pass_step : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid nat (S (friction c)) (friction (recast c (use f ev))).
+  rc_tid bool (passes f ev c) true ->
+  rc_tid nat (S (friction c)) (friction (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. apply tid_refl.
+  tidE H. rewrite HE. apply rc_tid_refl.
 Qed.
 
 (* 击穿档精确差值：恰 +2（行使 +1、再铸 +1） *)
 Theorem friction_pierce_step : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (S (S (friction c))) (friction (recast c (use f ev))).
+  rc_tid bool (passes f ev c) false ->
+  rc_tid nat (S (S (friction c))) (friction (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
@@ -572,14 +572,14 @@ Qed.
 
 (* 摩擦计量单调：任意再铸摩擦不减 *)
 Theorem friction_mono : forall (c : Cert) (e : evt),
-  nle (friction c) (friction (recast c e)).
+  rc_nle (friction c) (friction (recast c e)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
   - exact (nle_add_r_any (m_ev (mtr c)) (S (m_ev (mtr c))) (m_rc (mtr c))
              (nle_S_diag (m_ev (mtr c)))).
-  - exact (nle_trans (Nat.add (m_ev (mtr c)) (m_rc (mtr c)))
+  - exact (rc_nle_trans (Nat.add (m_ev (mtr c)) (m_rc (mtr c)))
                      (Nat.add (S (m_ev (mtr c))) (m_rc (mtr c)))
                      (Nat.add (S (m_ev (mtr c))) (S (m_rc (mtr c))))
                      (nle_add_r_any (m_ev (mtr c)) (S (m_ev (mtr c)))
@@ -590,7 +590,7 @@ Qed.
 
 (* 行使计数单调 *)
 Theorem meter_ev_mono : forall (c : Cert) (e : evt),
-  nle (m_ev (mtr c)) (m_ev (mtr (recast c e))).
+  rc_nle (m_ev (mtr c)) (m_ev (mtr (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
@@ -601,12 +601,12 @@ Qed.
 
 (* 再铸计数单调 *)
 Theorem meter_rc_mono : forall (c : Cert) (e : evt),
-  nle (m_rc (mtr c)) (m_rc (mtr (recast c e))).
+  rc_nle (m_rc (mtr c)) (m_rc (mtr (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - exact (nle_n (m_rc (mtr c))).
+  - exact (rc_nle_n (m_rc (mtr c))).
   - exact (nle_S_diag (m_rc (mtr c))).
 Qed.
 
@@ -620,7 +620,7 @@ Definition rebridge (c : Cert) (f : fid) : Cert :=
 
 (* 再入守恒之一：总账平衡 *)
 Theorem rebridge_balance : forall (c : Cert) (f : fid),
-  tid nat (total_acc c) (total_acc (rebridge c f)).
+  rc_tid nat (total_acc c) (total_acc (rebridge c f)).
 Proof.
   intros c f. apply tid_nat_eq. unfold total_acc, rebridge. cbn [census obls].
   rewrite rc_len_app.
@@ -630,7 +630,7 @@ Qed.
 
 (* 再入守恒之二：等级质量守恒 *)
 Theorem rebridge_tier_balance : forall (c : Cert) (f : fid),
-  tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
+  rc_tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
            (Nat.add (tsum (census (rebridge c f))) (tsum (obls (rebridge c f)))).
 Proof.
   intros c f. apply tid_nat_eq. unfold rebridge. cbn [census obls].
@@ -641,7 +641,7 @@ Qed.
 
 (* 再入清账：义务账中 f 的在册性清零（该字段义务全部清偿回普查） *)
 Theorem rebridge_clears : forall (c : Cert) (f : fid),
-  tid bool (occurs f (obls (rebridge c f))) false.
+  rc_tid bool (occurs f (obls (rebridge c f))) false.
 Proof.
   intros c f. apply tid_bool_eq. unfold rebridge, occurs. cbn [obls].
   unfold survive_scan.
@@ -654,7 +654,7 @@ Definition cnt (f : fid) (l : list (fid * tier)) : nat :=
 
 (* 再入回补：普查上 f 的条目数 = 原普查条目 + 义务账条目（可再入的记账面） *)
 Theorem rebridge_cnt_reentry : forall (c : Cert) (f : fid),
-  tid nat (cnt f (census (rebridge c f)))
+  rc_tid nat (cnt f (census (rebridge c f)))
            (Nat.add (cnt f (census c)) (cnt f (obls c))).
 Proof.
   intros c f. apply tid_nat_eq. unfold rebridge, cnt. cbn [census].
@@ -666,17 +666,17 @@ Qed.
 (* 首尾咬合·循环总账平衡：rebridge 再入后任意再铸，总账仍守恒——           *)
 (* 义务账（尾）回补普查（头），循环可无限再入                              *)
 Theorem cycle_balance : forall (c : Cert) (f : fid) (e : evt),
-  tid nat (total_acc c) (total_acc (recast (rebridge c f) e)).
+  rc_tid nat (total_acc c) (total_acc (recast (rebridge c f) e)).
 Proof.
-  intros c f e. apply tid_trans with (y := total_acc (rebridge c f)).
+  intros c f e. apply rc_tid_trans with (y := total_acc (rebridge c f)).
   - apply rebridge_balance.
   - apply acc_balance.
 Qed.
 
 (* 首尾咬合·循环严格推进：击穿再铸一轮摩擦精确 +2（链不死锁、单调递增） *)
 Theorem cycle_friction_strict : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev (rebridge c f)) false ->
-  tid nat (S (S (friction c))) (friction (recast (rebridge c f) (use f ev))).
+  rc_tid bool (passes f ev (rebridge c f)) false ->
+  rc_tid nat (S (S (friction c))) (friction (recast (rebridge c f) (use f ev))).
 Proof.
   intros c f ev H. exact (friction_pierce_step (rebridge c f) f ev H).
 Qed.
@@ -694,26 +694,26 @@ Fixpoint chain (n : nat) (c : Cert) (es : list evt) {struct n} : Cert :=
 
 (* 链守恒：任意长度再铸链总账平衡 *)
 Theorem chain_balance : forall (n : nat) (c : Cert) (es : list evt),
-  tid nat (total_acc c) (total_acc (chain n c es)).
+  rc_tid nat (total_acc c) (total_acc (chain n c es)).
 Proof.
   intros n. induction n as [| n IH]; intros c es; simpl.
-  - apply tid_refl.
+  - apply rc_tid_refl.
   - destruct es as [| e rest].
-    + apply tid_refl.
-    + apply tid_trans with (y := total_acc (recast c e)).
+    + apply rc_tid_refl.
+    + apply rc_tid_trans with (y := total_acc (recast c e)).
       * apply acc_balance.
       * apply IH.
 Qed.
 
 (* 链单调：任意长度再铸链摩擦不减（计量沿链累计） *)
 Theorem chain_friction_mono : forall (n : nat) (c : Cert) (es : list evt),
-  nle (friction c) (friction (chain n c es)).
+  rc_nle (friction c) (friction (chain n c es)).
 Proof.
   intros n. induction n as [| n IH]; intros c es; simpl.
-  - apply nle_n.
+  - apply rc_nle_n.
   - destruct es as [| e rest].
-    + apply nle_n.
-    + apply nle_trans with (b := friction (recast c e)).
+    + apply rc_nle_n.
+    + apply rc_nle_trans with (b := friction (recast c e)).
       * apply friction_mono.
       * apply IH.
 Qed.

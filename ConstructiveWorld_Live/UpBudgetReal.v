@@ -36,8 +36,8 @@
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia.
 Require Import CW_ConstructiveWorld_219.
-Require Import UpHlogZ.
-Require Import UpHlogZ.
+Require Export G01_CoreMicro.
+Require Export G01_CoreMicro.
 
 Local Open Scope Q_scope.
 
@@ -65,7 +65,7 @@ Proof.
 Qed.
 
 (* 幂正性：0 < x ⟹ 0 < x^n *)
-Lemma real_pow_pos : forall (x : Real) (n : nat),
+Lemma bud_real_pow_pos : forall (x : Real) (n : nat),
   real_lt real_zero x -> real_lt real_zero (real_pow x n).
 Proof.
   intros x n Hx. induction n as [| m IH].
@@ -125,7 +125,7 @@ Proof.
 Qed.
 
 (* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
-(* （此处不重证；见 CW_ConstructiveWorld_219.real_inv_one_local） *)
+(* （此处不重证；见 CW214KL_scan.real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
 
@@ -186,7 +186,7 @@ Qed.
 
 (* ============ 3. le/lt 辅助（1 ≤ 1+x、0 ≤ (n#1)·x、y < 1+y） ============ *)
 
-Lemma real_le_one_plus : forall x : Real,
+Lemma bud_real_le_one_plus : forall x : Real,
   real_le real_zero x -> real_le real_one (real_plus real_one x).
 Proof.
   intros x Hx.
@@ -267,7 +267,7 @@ Proof.
           by exact (real_nat_mult_nonneg m c Hc).
         assert (H1P : real_le real_one (real_pow (real_plus real_one c) m)).
         { apply (real_le_trans _ (real_plus real_one (real_mult (real_const (Z.of_nat m # 1)) c))).
-          - exact (real_le_one_plus _ Hx0).
+          - exact (bud_real_le_one_plus _ Hx0).
           - exact IH. }
         apply (real_le_plus_compat _ _ _ _ IH).
         (* c ≤ c·(1+c)^m *)
@@ -362,7 +362,7 @@ Proof.
     - apply (real_pow_eq_compat _ _ N Honec). }
   (* κ^N == 1/(1/κ)^N（pow·inv 恒等式 + 倒数唯一） *)
   assert (HposN : real_lt real_zero (real_pow (real_inv_pos kappa Hk1) N))
-    by exact (real_pow_pos _ N Hinvpos).
+    by exact (bud_real_pow_pos _ N Hinvpos).
   assert (Hpowinv : real_eq (real_pow kappa N)
                             (real_inv_pos (real_pow (real_inv_pos kappa Hk1) N) HposN)).
   { apply (real_inv_unique (real_pow (real_inv_pos kappa Hk1) N) (real_pow kappa N)
@@ -441,7 +441,7 @@ Qed.
 
 (* log 幂恒等式：log(κ^N) == (N#1)·log κ（real_log_mult 归纳） *)
 Lemma real_pow_log_form : forall (k : Real) (Hk : real_lt real_zero k) (n : nat),
-  real_eq (real_log (real_pow k n) (real_pow_pos k n Hk))
+  real_eq (real_log (real_pow k n) (bud_real_pow_pos k n Hk))
           (real_mult (real_const (Z.of_nat n # 1)) (real_log k Hk)).
 Proof.
   intros k Hk n. induction n as [| m IH].
@@ -457,9 +457,9 @@ Proof.
                               (real_mult_zero_l (real_log k Hk)))).
   - cbn [real_pow].
     apply (real_eq_trans _ (real_plus (real_log k Hk)
-                                      (real_log (real_pow k m) (real_pow_pos k m Hk)))).
-    + exact (log_inv_mult_thm k (real_pow k m) Hk (real_pow_pos k m Hk)
-               (real_pow_pos k (Datatypes.S m) Hk)).
+                                      (real_log (real_pow k m) (bud_real_pow_pos k m Hk)))).
+    + exact (log_inv_mult_thm k (real_pow k m) Hk (bud_real_pow_pos k m Hk)
+               (bud_real_pow_pos k (Datatypes.S m) Hk)).
     + apply (real_eq_trans _ (real_plus (real_log k Hk)
                    (real_mult (real_const (Z.of_nat m # 1)) (real_log k Hk)))).
       * apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _) IH).
@@ -496,13 +496,13 @@ Proof.
 
   (* log(a·κ^N) == log a + N#1·logκ *)
   assert (Hlogpow : real_eq (real_log (real_mult a (real_pow kappa N))
-                                      (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))
+                                      (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)))
                             (real_plus (real_log a Ha)
                                        (real_mult (real_const (Z.of_nat N # 1))
                                                   (real_log kappa Hk1)))).
   { apply (real_eq_trans _ (real_plus (real_log a Ha)
-                                      (real_log (real_pow kappa N) (real_pow_pos kappa N Hk1)))).
-    - exact (real_log_mult a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)).
+                                      (real_log (real_pow kappa N) (bud_real_pow_pos kappa N Hk1)))).
+    - exact (real_log_mult a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)).
     - apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _)
                (real_pow_log_form kappa Hk1 N)). }
   (* N#1·logκ == −(N#1·(−logκ)) *)
@@ -577,7 +577,7 @@ Proof.
                        (sf_real_plus_zero_l Le0)))). }
   (* 组装：log(a·κ^N) == La + −(N#1·(−logκ))、La < W + Le ⟹ log(a·κ^N) < Le *)
   assert (Hlt : real_lt (real_log (real_mult a (real_pow kappa N))
-                                  (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))
+                                  (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)))
                         (real_log eps Heps)).
   { apply (Hshift _ (real_log a Ha) (real_log eps Heps)
              (real_mult (real_const (Z.of_nat N # 1)) (real_opp (real_log kappa Hk1)))).
@@ -589,10 +589,10 @@ Proof.
   (* exp 严格单调 + e^{log y} == y 反演闭合 *)
   apply (real_eq_lt_lt (real_mult a (real_pow kappa N))
            (cauchy_real_exp (real_log (real_mult a (real_pow kappa N))
-              (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1))))
+              (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1))))
            eps).
   - apply (real_eq_sym _ _ (cw_log_exp_right (real_mult a (real_pow kappa N))
-              (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))).
+              (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)))).
   - apply (real_lt_eq_lt _ (cauchy_real_exp (real_log eps Heps))).
     + exact (cauchy_real_exp_mono _ _ Hlt).
     + exact (cw_log_exp_right eps Heps).
@@ -661,7 +661,7 @@ Proof.
       + apply real_eq_le_bridge. exact (real_mult_comm (real_pow k p) (real_pow k j)).
       + apply (real_le_trans _ (real_mult real_one (real_pow k p))).
         * exact (real_le_mult_compat (real_pow k j) real_one (real_pow k p)
-                   (real_pow_pos k p Hk1) (real_pow_le_one k Hk1 Hk2 j)).
+                   (bud_real_pow_pos k p Hk1) (real_pow_le_one k Hk1 Hk2 j)).
         * apply real_eq_le_bridge. exact (real_mult_one_l (real_pow k p)). }
   assert (Hq : q = (p + (q - p))%nat) by lia.
   rewrite Hq. apply Hcore.
@@ -710,4 +710,7 @@ Proof.
 Qed.
 
 (* ============ 8. 提取探针（可执行 OCaml，G3 关卡） ============ *)
+From Stdlib Require Import Extraction.
 Set Warnings "-extraction-opaque-accessed".
+Set Extraction Output Directory ".".
+Extraction "upbudgetreal.ml" r_arch_pow_real budget_cond_sufficient geo_tail_budget budget_min_tail.

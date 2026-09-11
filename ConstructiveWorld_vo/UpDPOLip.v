@@ -68,7 +68,7 @@ Proof.
 Qed.
 
 (* 代数：e^{−b} == e^{−a}·e^{−(b−a)}（参数换形 + exp 加法性）。 *)
-Lemma real_exp_neg_split : forall a b : Real,
+Lemma dpo_real_exp_neg_split : forall a b : Real,
   real_eq (real_exp_neg b)
           (real_mult (real_exp_neg a)
                      (real_exp_neg (real_plus b (real_opp a)))).
@@ -133,11 +133,11 @@ Proof.
                                             (real_mult E (real_exp_neg a))
                                             E (real_exp_neg b)).
       + exact (real_mult_one E).
-      + (* E·e^{−a} == e^{−b}：real_exp_neg_split + 乘法交换 *)
+      + (* E·e^{−a} == e^{−b}：dpo_real_exp_neg_split + 乘法交换 *)
         apply real_eq_sym.
         apply (real_eq_trans (real_exp_neg b)
                              (real_mult (real_exp_neg a) E) _).
-        * exact (real_exp_neg_split a b).
+        * exact (dpo_real_exp_neg_split a b).
         * exact (real_mult_comm (real_exp_neg a) E).
   }
   (* 步 3：B ≤ A·E（1 ≤ E 加法保序 + 恒等式换形） *)

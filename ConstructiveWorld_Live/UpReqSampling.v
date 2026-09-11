@@ -132,7 +132,7 @@ Variable lt_plus_compat_lt_le_h : forall a b c d : R,
 Let omd := req_minus one delta.
 
 (* 1−δ > 0（Id @95773；幂等δ对偶首段：omd δ 展开 req_refl 支路） *)
-Lemma u_omd_pos_next : lt zero omd.
+Lemma rsq_u_omd_pos_next : lt zero omd.
 Proof.
   apply (lt_id_l zero (plus delta (opp delta)) omd
                  (req_sym _ _ (plus_opp delta))
@@ -140,7 +140,7 @@ Proof.
                                          delta_lt_one (le_refl (opp delta)))).
 Qed.
 
-Let inv_omd := inv_pos omd u_omd_pos_next.
+Let inv_omd := inv_pos omd rsq_u_omd_pos_next.
 
 (* aux_delta_plus_omd：δ + (1−δ) == 1（delta_absorb_u / u_step_norm 共用尾链） *)
 Lemma aux_delta_plus_omd : req (plus delta omd) one.
@@ -176,24 +176,24 @@ Proof.
   - exact (le_mult_compat_weak zero b a (lt_le_iff zero a (inl Ha)) Hb).
 Qed.
 
-Definition u_r_kernel (s s' : S) : R :=
+Definition rsq_u_r_kernel (s s' : S) : R :=
   mult inv_omd (req_minus (transition s s') (mult delta (u s'))).
 
 (* R 核逐点非负（Id @95787） *)
-Lemma u_r_nonneg : forall s s' : S, le zero (u_r_kernel s s').
+Lemma rsq_u_r_nonneg : forall s s' : S, le zero (rsq_u_r_kernel s s').
 Proof.
-  intros s s'. unfold u_r_kernel.
+  intros s s'. unfold rsq_u_r_kernel.
   apply (aux_le_mult_nonneg_t12 inv_omd
                                 (req_minus (transition s s') (mult delta (u s')))).
-  - exact (inv_pos_pos omd u_omd_pos_next).
+  - exact (inv_pos_pos omd rsq_u_omd_pos_next).
   - exact (req_le_minus_nonneg (mult delta (u s')) (transition s s')
                                (minorization s s')).
 Qed.
 
 (* R 核行归一（Id @95796；组装：Id 链 req_trans 逐段重放） *)
-Lemma u_r_norm : forall s : S, req (sumf (fun s' : S => u_r_kernel s s')) one.
+Lemma rsq_u_r_norm : forall s : S, req (sumf (fun s' : S => rsq_u_r_kernel s s')) one.
 Proof.
-  intro s. unfold u_r_kernel.
+  intro s. unfold rsq_u_r_kernel.
   apply (req_trans _ (mult inv_omd
          (sumf (fun s' : S => req_minus (transition s s') (mult delta (u s'))))) _).
   - exact (sum_linear inv_omd
@@ -231,15 +231,15 @@ Proof.
                                        (req_refl one) (mult_one delta))).
         -- exact (req_trans (mult inv_omd omd) (mult omd inv_omd) one
                    (mult_comm inv_omd omd)
-                   (inv_pos_correct omd u_omd_pos_next)).
+                   (inv_pos_correct omd rsq_u_omd_pos_next)).
 Qed.
 
 (* T == δ·u + (1−δ)·R（Id @95813） *)
-Lemma u_tr_decomp : forall s s' : S,
+Lemma rsq_u_tr_decomp : forall s s' : S,
   req (transition s s')
-      (plus (mult delta (u s')) (mult omd (u_r_kernel s s'))).
+      (plus (mult delta (u s')) (mult omd (rsq_u_r_kernel s s'))).
 Proof.
-  intros s s'. unfold u_r_kernel.
+  intros s s'. unfold rsq_u_r_kernel.
   assert (Habs : req (mult omd (mult inv_omd
                           (req_minus (transition s s') (mult delta (u s')))))
                      (req_minus (transition s s') (mult delta (u s')))).
@@ -252,7 +252,7 @@ Proof.
       + exact (req_mult_compat (mult omd inv_omd) one
                   (req_minus (transition s s') (mult delta (u s')))
                   (req_minus (transition s s') (mult delta (u s')))
-                  (inv_pos_correct omd u_omd_pos_next) (req_refl _)).
+                  (inv_pos_correct omd rsq_u_omd_pos_next) (req_refl _)).
       + exact (req_mult_one_l (req_minus (transition s s') (mult delta (u s')))). }
   assert (H1 : req (transition s s')
                    (plus (mult delta (u s'))
@@ -270,7 +270,7 @@ Proof.
 Qed.
 
 (* δ·a + (1−δ)·a == a（Id @95833；消费 aux_delta_plus_omd） *)
-Lemma delta_absorb_u : forall a : R,
+Lemma rsq_delta_absorb_u : forall a : R,
   req (plus (mult delta a) (mult omd a)) a.
 Proof.
   intro a.
@@ -290,34 +290,34 @@ Let u_step (mu : S -> R) (s' : S) : R :=
   sumf (fun s : S => mult (mu s) (transition s s')).
 
 (* 单步分解：Tμ == δ·u + (1−δ)·Rμ（Id @95852） *)
-Lemma u_step_decomp : forall (mu : S -> R) (s' : S),
+Lemma rsq_u_step_decomp : forall (mu : S -> R) (s' : S),
   req (sumf mu) one ->
   req (u_step mu s')
       (plus (mult delta (u s'))
-            (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))).
+            (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))).
 Proof.
   intros mu s' Hmu. unfold u_step.
   apply (req_trans _ (sumf (fun s : S => mult (mu s)
-         (plus (mult delta (u s')) (mult omd (u_r_kernel s s'))))) _).
+         (plus (mult delta (u s')) (mult omd (rsq_u_r_kernel s s'))))) _).
   - exact (sum_ext (fun s : S => mult (mu s) (transition s s'))
                    (fun s : S => mult (mu s)
-                      (plus (mult delta (u s')) (mult omd (u_r_kernel s s'))))
+                      (plus (mult delta (u s')) (mult omd (rsq_u_r_kernel s s'))))
                    (fun s : S => req_mult_compat (mu s) (mu s) (transition s s')
-                      (plus (mult delta (u s')) (mult omd (u_r_kernel s s')))
-                      (req_refl (mu s)) (u_tr_decomp s s'))).
+                      (plus (mult delta (u s')) (mult omd (rsq_u_r_kernel s s')))
+                      (req_refl (mu s)) (rsq_u_tr_decomp s s'))).
   - apply (req_trans _ (sumf (fun s : S =>
            plus (mult (mu s) (mult delta (u s')))
-                (mult (mu s) (mult omd (u_r_kernel s s'))))) _).
+                (mult (mu s) (mult omd (rsq_u_r_kernel s s'))))) _).
     + exact (sum_ext (fun s : S => mult (mu s)
-                        (plus (mult delta (u s')) (mult omd (u_r_kernel s s'))))
+                        (plus (mult delta (u s')) (mult omd (rsq_u_r_kernel s s'))))
                      (fun s : S => plus (mult (mu s) (mult delta (u s')))
-                                        (mult (mu s) (mult omd (u_r_kernel s s'))))
+                                        (mult (mu s) (mult omd (rsq_u_r_kernel s s'))))
                      (fun s : S => distrib (mu s) (mult delta (u s'))
-                                           (mult omd (u_r_kernel s s')))).
+                                           (mult omd (rsq_u_r_kernel s s')))).
     + apply (req_trans _ (plus (sumf (fun s : S => mult (mu s) (mult delta (u s'))))
-                               (sumf (fun s : S => mult (mu s) (mult omd (u_r_kernel s s'))))) _).
+                               (sumf (fun s : S => mult (mu s) (mult omd (rsq_u_r_kernel s s'))))) _).
       * exact (sum_add (fun s : S => mult (mu s) (mult delta (u s')))
-                       (fun s : S => mult (mu s) (mult omd (u_r_kernel s s')))).
+                       (fun s : S => mult (mu s) (mult omd (rsq_u_r_kernel s s')))).
       * assert (Hfirst : req (sumf (fun s : S => mult (mu s) (mult delta (u s'))))
                              (mult delta (u s'))).
         { apply (req_trans _ (sumf (fun s : S => mult (mult (mu s) delta) (u s'))) _).
@@ -357,57 +357,57 @@ Proof.
                                  (mult_comm one (u s')) (mult_one (u s'))). }
         exact (req_plus_compat (sumf (fun s : S => mult (mu s) (mult delta (u s'))))
                                (mult delta (u s'))
-                               (sumf (fun s : S => mult (mu s) (mult omd (u_r_kernel s s'))))
-                               (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))
+                               (sumf (fun s : S => mult (mu s) (mult omd (rsq_u_r_kernel s s'))))
+                               (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))
                                Hfirst
                                (req_trans
                                   (sumf (fun s : S =>
-                                     mult (mu s) (mult omd (u_r_kernel s s'))))
+                                     mult (mu s) (mult omd (rsq_u_r_kernel s s'))))
                                   (sumf (fun s : S =>
-                                     mult omd (mult (mu s) (u_r_kernel s s'))))
+                                     mult omd (mult (mu s) (rsq_u_r_kernel s s'))))
                                   (mult omd
-                                     (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))
+                                     (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))
                                   (sum_ext
-                                     (fun s : S => mult (mu s) (mult omd (u_r_kernel s s')))
-                                     (fun s : S => mult omd (mult (mu s) (u_r_kernel s s')))
+                                     (fun s : S => mult (mu s) (mult omd (rsq_u_r_kernel s s')))
+                                     (fun s : S => mult omd (mult (mu s) (rsq_u_r_kernel s s')))
                                      (fun s : S =>
                                         req_trans
-                                          (mult (mu s) (mult omd (u_r_kernel s s')))
-                                          (mult (mult (mu s) omd) (u_r_kernel s s'))
-                                          (mult omd (mult (mu s) (u_r_kernel s s')))
-                                          (mult_assoc (mu s) omd (u_r_kernel s s'))
+                                          (mult (mu s) (mult omd (rsq_u_r_kernel s s')))
+                                          (mult (mult (mu s) omd) (rsq_u_r_kernel s s'))
+                                          (mult omd (mult (mu s) (rsq_u_r_kernel s s')))
+                                          (mult_assoc (mu s) omd (rsq_u_r_kernel s s'))
                                           (req_trans
-                                             (mult (mult (mu s) omd) (u_r_kernel s s'))
-                                             (mult (mult omd (mu s)) (u_r_kernel s s'))
-                                             (mult omd (mult (mu s) (u_r_kernel s s')))
+                                             (mult (mult (mu s) omd) (rsq_u_r_kernel s s'))
+                                             (mult (mult omd (mu s)) (rsq_u_r_kernel s s'))
+                                             (mult omd (mult (mu s) (rsq_u_r_kernel s s')))
                                              (req_mult_compat (mult (mu s) omd)
-                                                (mult omd (mu s)) (u_r_kernel s s')
-                                                (u_r_kernel s s')
+                                                (mult omd (mu s)) (rsq_u_r_kernel s s')
+                                                (rsq_u_r_kernel s s')
                                                 (mult_comm (mu s) omd) (req_refl _))
                                              (req_sym _ _
-                                                (mult_assoc omd (mu s) (u_r_kernel s s'))))))
+                                                (mult_assoc omd (mu s) (rsq_u_r_kernel s s'))))))
                                   (sum_linear omd
-                                     (fun s : S => mult (mu s) (u_r_kernel s s'))))).
+                                     (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))).
 Qed.
 
 (* 单步保持归一化（Id @95991） *)
-Lemma u_step_norm : forall mu : S -> R,
+Lemma rsq_u_step_norm : forall mu : S -> R,
   req (sumf mu) one -> req (sumf (fun s' : S => u_step mu s')) one.
 Proof.
   intros mu Hmu.
   apply (req_trans _ (sumf (fun s' : S =>
         plus (mult delta (u s'))
-             (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))) _).
+             (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))) _).
   - exact (sum_ext (fun s' : S => u_step mu s') (fun s' : S =>
         plus (mult delta (u s'))
-             (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))
-        (fun s' : S => u_step_decomp mu s' Hmu)).
+             (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))
+        (fun s' : S => rsq_u_step_decomp mu s' Hmu)).
   - apply (req_trans _ (plus (sumf (fun s' : S => mult delta (u s')))
         (sumf (fun s' : S => mult omd
-                 (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))) _).
+                 (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))) _).
     + exact (sum_add (fun s' : S => mult delta (u s'))
                      (fun s' : S => mult omd
-                        (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))).
+                        (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))).
     + assert (HL : req (sumf (fun s' : S => mult delta (u s'))) (mult delta one)).
       { exact (req_trans (sumf (fun s' : S => mult delta (u s')))
                          (mult delta (sumf u)) (mult delta one)
@@ -415,30 +415,30 @@ Proof.
                          (req_mult_compat delta delta (sumf u) one
                                           (req_refl delta) u_norm)). }
       assert (HR : req (sumf (fun s' : S => mult omd
-                          (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))
+                          (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))
                      (mult omd (sumf mu))).
       { apply (req_trans _ (mult omd
-               (sumf (fun s' : S => sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))) _).
+               (sumf (fun s' : S => sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))) _).
         - exact (sum_linear omd
-                   (fun s' : S => sumf (fun s : S => mult (mu s) (u_r_kernel s s')))).
+                   (fun s' : S => sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))).
         - apply (req_mult_compat omd omd
-                    (sumf (fun s' : S => sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))
+                    (sumf (fun s' : S => sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))
                     (sumf mu) (req_refl omd)).
-          apply (req_trans (sumf (fun s2 : S => sumf (fun s : S => mult (mu s) (u_r_kernel s s2))))
-                           (sumf (fun s : S => sumf (fun s2 : S => mult (mu s) (u_r_kernel s s2)))) _).
+          apply (req_trans (sumf (fun s2 : S => sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s2))))
+                           (sumf (fun s : S => sumf (fun s2 : S => mult (mu s) (rsq_u_r_kernel s s2)))) _).
           * exact (req_sym _ _
-                      (sum_swap_cc (fun s s2 : S => mult (mu s) (u_r_kernel s s2)))).
+                      (sum_swap_cc (fun s s2 : S => mult (mu s) (rsq_u_r_kernel s s2)))).
           * apply (req_trans _ (sumf (fun s : S =>
-                mult (mu s) (sumf (fun s2 : S => u_r_kernel s s2)))) _).
-            + exact (sum_ext (fun s : S => sumf (fun s2 : S => mult (mu s) (u_r_kernel s s2)))
-                             (fun s : S => mult (mu s) (sumf (fun s2 : S => u_r_kernel s s2)))
-                             (fun s : S => sum_linear (mu s) (fun s2 : S => u_r_kernel s s2))).
+                mult (mu s) (sumf (fun s2 : S => rsq_u_r_kernel s s2)))) _).
+            + exact (sum_ext (fun s : S => sumf (fun s2 : S => mult (mu s) (rsq_u_r_kernel s s2)))
+                             (fun s : S => mult (mu s) (sumf (fun s2 : S => rsq_u_r_kernel s s2)))
+                             (fun s : S => sum_linear (mu s) (fun s2 : S => rsq_u_r_kernel s s2))).
             + apply (req_trans _ (sumf (fun s : S => mult (mu s) one)) _).
-              -- exact (sum_ext (fun s : S => mult (mu s) (sumf (fun s2 : S => u_r_kernel s s2)))
+              -- exact (sum_ext (fun s : S => mult (mu s) (sumf (fun s2 : S => rsq_u_r_kernel s s2)))
                                (fun s : S => mult (mu s) one)
                                (fun s : S => req_mult_compat (mu s) (mu s)
-                                  (sumf (fun s2 : S => u_r_kernel s s2)) one
-                                  (req_refl (mu s)) (u_r_norm s))).
+                                  (sumf (fun s2 : S => rsq_u_r_kernel s s2)) one
+                                  (req_refl (mu s)) (rsq_u_r_norm s))).
               -- exact (sum_ext (fun s : S => mult (mu s) one) (fun s : S => mu s)
                                (fun s : S => mult_one (mu s))). }
       apply (req_trans _ (plus (mult delta one) (mult omd (sumf mu))) _).
@@ -458,27 +458,27 @@ Proof.
 Qed.
 
 (* |Σ f·R| ≤ Σ |f|·R（Id @96018） *)
-Lemma u_abs_row : forall (f : S -> R) (s' : S),
-  le (abs (sumf (fun s : S => mult (f s) (u_r_kernel s s'))))
-     (sumf (fun s : S => mult (abs (f s)) (u_r_kernel s s'))).
+Lemma rsq_u_abs_row : forall (f : S -> R) (s' : S),
+  le (abs (sumf (fun s : S => mult (f s) (rsq_u_r_kernel s s'))))
+     (sumf (fun s : S => mult (abs (f s)) (rsq_u_r_kernel s s'))).
 Proof.
   intros f s'.
-  apply (le_id_r (abs (sumf (fun s : S => mult (f s) (u_r_kernel s s'))))
-                 (sumf (fun s : S => abs (mult (f s) (u_r_kernel s s'))))
-                 (sumf (fun s : S => mult (abs (f s)) (u_r_kernel s s')))).
-  - exact (sum_ext (fun s : S => abs (mult (f s) (u_r_kernel s s')))
-                   (fun s : S => mult (abs (f s)) (u_r_kernel s s'))
+  apply (le_id_r (abs (sumf (fun s : S => mult (f s) (rsq_u_r_kernel s s'))))
+                 (sumf (fun s : S => abs (mult (f s) (rsq_u_r_kernel s s'))))
+                 (sumf (fun s : S => mult (abs (f s)) (rsq_u_r_kernel s s')))).
+  - exact (sum_ext (fun s : S => abs (mult (f s) (rsq_u_r_kernel s s')))
+                   (fun s : S => mult (abs (f s)) (rsq_u_r_kernel s s'))
                    (fun s : S =>
-                      req_trans (abs (mult (f s) (u_r_kernel s s')))
-                                (mult (abs (f s)) (abs (u_r_kernel s s')))
-                                (mult (abs (f s)) (u_r_kernel s s'))
-                                (abs_mult (f s) (u_r_kernel s s'))
+                      req_trans (abs (mult (f s) (rsq_u_r_kernel s s')))
+                                (mult (abs (f s)) (abs (rsq_u_r_kernel s s')))
+                                (mult (abs (f s)) (rsq_u_r_kernel s s'))
+                                (abs_mult (f s) (rsq_u_r_kernel s s'))
                                 (req_mult_compat (abs (f s)) (abs (f s))
-                                   (abs (u_r_kernel s s')) (u_r_kernel s s')
+                                   (abs (rsq_u_r_kernel s s')) (rsq_u_r_kernel s s')
                                    (req_refl (abs (f s)))
-                                   (abs_ge_zero_req (u_r_kernel s s')
-                                                    (u_r_nonneg s s'))))).
-  - exact (abs_sum_le_h (fun s : S => mult (f s) (u_r_kernel s s'))).
+                                   (abs_ge_zero_req (rsq_u_r_kernel s s')
+                                                    (rsq_u_r_nonneg s s'))))).
+  - exact (abs_sum_le_h (fun s : S => mult (f s) (rsq_u_r_kernel s s'))).
 Qed.
 
 Let inv_two := inv_pos (plus one one) req_two_pos.
@@ -489,7 +489,7 @@ Let tv_req (mu nu : S -> R) : R :=
    Id @96034。真证：Hpt 逐点链（reqd_minus_compat 换 id_cong2 minus、
    req_minus_plus_congr_l / req_minus_factor / req_minus_factor_pt 换
    Id minus 系）+ abs 见证位（abs_mult + abs_ge_zero_req）+ Hsum 交换链。 *)
-Lemma u_tv_contraction : forall (mu nu : S -> R),
+Lemma rsq_u_tv_contraction : forall (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
   le (tv_req (u_step mu) (u_step nu)) (mult omd (tv_req mu nu)).
 Proof.
@@ -499,119 +499,119 @@ Proof.
   assert (Hpt : forall s' : S,
     le (abs (req_minus (u_step mu s') (u_step nu s')))
        (mult omd (sumf (fun s : S =>
-          mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s'))))).
+          mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s'))))).
   { intro s'.
     assert (Hd : req (req_minus (u_step mu s') (u_step nu s'))
                      (mult omd (sumf (fun s : S =>
-                        mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))).
+                        mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))).
     { apply (req_trans (req_minus (u_step mu s') (u_step nu s'))
              (req_minus (plus (mult delta (u s'))
-                              (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))
+                              (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))
                         (plus (mult delta (u s'))
-                              (mult omd (sumf (fun s : S => mult (nu s) (u_r_kernel s s')))))) _).
+                              (mult omd (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s')))))) _).
       - exact (reqd_minus_compat (u_step mu s')
                   (plus (mult delta (u s'))
-                        (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))))
+                        (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))))
                   (u_step nu s')
                   (plus (mult delta (u s'))
-                        (mult omd (sumf (fun s : S => mult (nu s) (u_r_kernel s s')))))
-                  (u_step_decomp mu s' Hmu) (u_step_decomp nu s' Hnu)).
+                        (mult omd (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s')))))
+                  (rsq_u_step_decomp mu s' Hmu) (rsq_u_step_decomp nu s' Hnu)).
       - apply (req_trans _ (req_minus (mult omd
-                  (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))
-                  (mult omd (sumf (fun s : S => mult (nu s) (u_r_kernel s s'))))) _).
+                  (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))
+                  (mult omd (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s'))))) _).
         + exact (req_minus_plus_congr_l (mult delta (u s'))
-                    (mult omd (sumf (fun s : S => mult (mu s) (u_r_kernel s s'))))
-                    (mult omd (sumf (fun s : S => mult (nu s) (u_r_kernel s s'))))).
+                    (mult omd (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))))
+                    (mult omd (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s'))))).
         + apply (req_trans _ (mult omd (req_minus
-                    (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))
-                    (sumf (fun s : S => mult (nu s) (u_r_kernel s s'))))) _).
+                    (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))
+                    (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s'))))) _).
           * exact (req_minus_factor omd
-                      (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))
-                      (sumf (fun s : S => mult (nu s) (u_r_kernel s s')))).
+                      (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))
+                      (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s')))).
           * apply (req_mult_compat omd omd
-                       (req_minus (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))
-                                  (sumf (fun s : S => mult (nu s) (u_r_kernel s s'))))
+                       (req_minus (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))
+                                  (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s'))))
                        (sumf (fun s : S =>
-                          mult (req_minus (mu s) (nu s)) (u_r_kernel s s')))
+                          mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s')))
                        (req_refl omd)).
-            apply (req_trans (req_minus (sumf (fun s : S => mult (mu s) (u_r_kernel s s')))
-                                        (sumf (fun s : S => mult (nu s) (u_r_kernel s s'))))
+            apply (req_trans (req_minus (sumf (fun s : S => mult (mu s) (rsq_u_r_kernel s s')))
+                                        (sumf (fun s : S => mult (nu s) (rsq_u_r_kernel s s'))))
                              (sumf (fun s : S =>
-                                req_minus (mult (mu s) (u_r_kernel s s'))
-                                          (mult (nu s) (u_r_kernel s s')))) _).
-            -- exact (req_sym _ _ (sum_minus (fun s : S => mult (mu s) (u_r_kernel s s'))
-                                            (fun s : S => mult (nu s) (u_r_kernel s s')))).
+                                req_minus (mult (mu s) (rsq_u_r_kernel s s'))
+                                          (mult (nu s) (rsq_u_r_kernel s s')))) _).
+            -- exact (req_sym _ _ (sum_minus (fun s : S => mult (mu s) (rsq_u_r_kernel s s'))
+                                            (fun s : S => mult (nu s) (rsq_u_r_kernel s s')))).
             -- exact (sum_ext (fun s : S =>
-                     req_minus (mult (mu s) (u_r_kernel s s')) (mult (nu s) (u_r_kernel s s')))
-                              (fun s : S => mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))
-                              (fun s : S => req_minus_factor_pt (mu s) (nu s) (u_r_kernel s s'))).
+                     req_minus (mult (mu s) (rsq_u_r_kernel s s')) (mult (nu s) (rsq_u_r_kernel s s')))
+                              (fun s : S => mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))
+                              (fun s : S => req_minus_factor_pt (mu s) (nu s) (rsq_u_r_kernel s s'))).
     }
     apply (le_id_l (abs (req_minus (u_step mu s') (u_step nu s')))
                    (mult omd (abs (sumf (fun s : S =>
-                      mult (req_minus (mu s) (nu s)) (u_r_kernel s s')))))
+                      mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s')))))
                    (mult omd (sumf (fun s : S =>
-                      mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s'))))).
+                      mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s'))))).
     - apply (req_trans (abs (req_minus (u_step mu s') (u_step nu s')))
                        (abs (mult omd (sumf (fun s : S =>
-                          mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))) _).
+                          mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))) _).
       + exact (req_abs_compat (req_minus (u_step mu s') (u_step nu s'))
                   (mult omd (sumf (fun s : S =>
-                     mult (req_minus (mu s) (nu s)) (u_r_kernel s s')))) Hd).
+                     mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s')))) Hd).
       + exact (req_trans (abs (mult omd (sumf (fun s : S =>
-                   mult (req_minus (mu s) (nu s)) (u_r_kernel s s')))))
+                   mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s')))))
               (mult (abs omd) (abs (sumf (fun s : S =>
-                 mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))) _
+                 mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))) _
               (abs_mult omd (sumf (fun s : S =>
-                 mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))
+                 mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))
               (req_mult_compat (abs omd) omd
-                 (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))
-                 (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))
+                 (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))
+                 (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))
                  (abs_ge_zero_req omd Hge) (req_refl _))).
     - exact (req_le_mult_compat_r omd
-               (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (u_r_kernel s s'))))
-               (sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))
-               Hge (u_abs_row (fun s : S => req_minus (mu s) (nu s)) s')). }
+               (abs (sumf (fun s : S => mult (req_minus (mu s) (nu s)) (rsq_u_r_kernel s s'))))
+               (sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))
+               Hge (rsq_u_abs_row (fun s : S => req_minus (mu s) (nu s)) s')). }
   assert (Hsum : le (sumf (fun s' : S => abs (req_minus (u_step mu s') (u_step nu s'))))
                    (mult omd (sumf (fun s : S => abs (req_minus (mu s) (nu s)))))).
   { apply (le_id_r (sumf (fun s' : S => abs (req_minus (u_step mu s') (u_step nu s'))))
                    (sumf (fun s' : S => mult omd
                             (sumf (fun s : S =>
-                               mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))))
+                               mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))))
                    (mult omd (sumf (fun s : S => abs (req_minus (mu s) (nu s)))))).
     - apply (req_trans _ (mult omd (sumf (fun s' : S =>
-           sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s'))))) _).
+           sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s'))))) _).
       + exact (sum_linear omd (fun s' : S =>
-            sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))).
+            sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))).
       + apply (req_mult_compat omd omd
                   (sumf (fun s' : S =>
-                     sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s'))))
+                     sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s'))))
                   (sumf (fun s : S => abs (req_minus (mu s) (nu s))))
                   (req_refl omd)).
         apply (req_trans (sumf (fun s' : S =>
-                   sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s'))))
+                   sumf (fun s : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s'))))
                          (sumf (fun s : S =>
-                   sumf (fun s' : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))) _).
+                   sumf (fun s' : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))) _).
         * exact (req_sym _ _
                     (sum_swap_cc (fun s s' : S =>
-                       mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))).
+                       mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))).
         * apply (req_trans _ (sumf (fun s : S =>
               mult (abs (req_minus (mu s) (nu s)))
-                   (sumf (fun s' : S => u_r_kernel s s')))) _).
+                   (sumf (fun s' : S => rsq_u_r_kernel s s')))) _).
           -- exact (sum_ext (fun s : S =>
-                   sumf (fun s' : S => mult (abs (req_minus (mu s) (nu s))) (u_r_kernel s s')))
+                   sumf (fun s' : S => mult (abs (req_minus (mu s) (nu s))) (rsq_u_r_kernel s s')))
                             (fun s : S =>
-                   mult (abs (req_minus (mu s) (nu s))) (sumf (fun s' : S => u_r_kernel s s')))
+                   mult (abs (req_minus (mu s) (nu s))) (sumf (fun s' : S => rsq_u_r_kernel s s')))
                             (fun s : S => sum_linear (abs (req_minus (mu s) (nu s)))
-                                          (fun s' : S => u_r_kernel s s'))).
+                                          (fun s' : S => rsq_u_r_kernel s s'))).
           -- apply (req_trans _ (sumf (fun s : S =>
                    mult (abs (req_minus (mu s) (nu s))) one)) _).
              ++ exact (sum_ext (fun s : S =>
-                    mult (abs (req_minus (mu s) (nu s))) (sumf (fun s' : S => u_r_kernel s s')))
+                    mult (abs (req_minus (mu s) (nu s))) (sumf (fun s' : S => rsq_u_r_kernel s s')))
                                (fun s : S => mult (abs (req_minus (mu s) (nu s))) one)
                                (fun s : S => req_mult_compat (abs (req_minus (mu s) (nu s)))
                                   (abs (req_minus (mu s) (nu s)))
-                                  (sumf (fun s' : S => u_r_kernel s s')) one
-                                  (req_refl (abs (req_minus (mu s) (nu s)))) (u_r_norm s))).
+                                  (sumf (fun s' : S => rsq_u_r_kernel s s')) one
+                                  (req_refl (abs (req_minus (mu s) (nu s)))) (rsq_u_r_norm s))).
              ++ exact (sum_ext (fun s : S => mult (abs (req_minus (mu s) (nu s))) one)
                                (fun s : S => abs (req_minus (mu s) (nu s)))
                                (fun s : S => mult_one (abs (req_minus (mu s) (nu s))))).
@@ -643,25 +643,25 @@ Proof.
 Qed.
 
 (* ========== 迭代收缩：几何率 (1−δ)ⁿ ========== *)
-Fixpoint u_titer (n : nat) (mu : S -> R) : S -> R :=
+Fixpoint rsq_u_titer (n : nat) (mu : S -> R) : S -> R :=
   match n with
   | 0%nat => mu
-  | Datatypes.S m => u_step (u_titer m mu)
+  | Datatypes.S m => u_step (rsq_u_titer m mu)
   end.
 
-Lemma u_titer_norm : forall (n : nat) (mu : S -> R),
-  req (sumf mu) one -> req (sumf (u_titer n mu)) one.
+Lemma rsq_u_titer_norm : forall (n : nat) (mu : S -> R),
+  req (sumf mu) one -> req (sumf (rsq_u_titer n mu)) one.
 Proof.
   intro n. induction n as [| n IH]; intros mu H.
   - exact H.
-  - exact (u_step_norm (u_titer n mu) (IH mu H)).
+  - exact (rsq_u_step_norm (rsq_u_titer n mu) (IH mu H)).
 Qed.
 
 (* ========== 迭代 TV 收缩【旗舰 2】（Id @96022；真证：
    底 case req 数乘单位换轨 + 递归步 req_le_mult_compat_r 对位） ========== *)
-Theorem u_tv_iter : forall (n : nat) (mu nu : S -> R),
+Theorem rsq_u_tv_iter : forall (n : nat) (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
-  le (tv_req (u_titer n mu) (u_titer n nu))
+  le (tv_req (rsq_u_titer n mu) (rsq_u_titer n nu))
      (mult (req_r_pow omd n) (tv_req mu nu)).
 Proof.
   intro n. induction n as [| n IH]; intros mu nu Hmu Hnu.
@@ -671,12 +671,12 @@ Proof.
                         (req_sym _ _ (mult_one (tv_req mu nu)))
                         (mult_comm (tv_req mu nu) one))
              (le_refl (mult one (tv_req mu nu)))).
-  - apply (le_trans _ (mult omd (tv_req (u_titer n mu) (u_titer n nu)))).
-    + exact (u_tv_contraction (u_titer n mu) (u_titer n nu)
-              (u_titer_norm n mu Hmu) (u_titer_norm n nu Hnu)).
+  - apply (le_trans _ (mult omd (tv_req (rsq_u_titer n mu) (rsq_u_titer n nu)))).
+    + exact (rsq_u_tv_contraction (rsq_u_titer n mu) (rsq_u_titer n nu)
+              (rsq_u_titer_norm n mu Hmu) (rsq_u_titer_norm n nu Hnu)).
     + exact (le_id_r _ _ _
               (mult_assoc omd (req_r_pow omd n) (tv_req mu nu))
-              (req_le_mult_compat_r omd (tv_req (u_titer n mu) (u_titer n nu))
+              (req_le_mult_compat_r omd (tv_req (rsq_u_titer n mu) (rsq_u_titer n nu))
                 (mult (req_r_pow omd n) (tv_req mu nu))
                 (req_le_minus_nonneg delta one (lt_le_iff _ _ (inl delta_lt_one)))
                 (IH mu nu Hmu Hnu))).
@@ -730,28 +730,28 @@ Variable bs_swap : forall f : S -> S -> R,
 Variable bs_abs : forall a : R, le zero a -> req (abs a) a.
 Variable bs_lpc : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 
-Fixpoint bs_list_sum (f : S -> R) (l : list S) : R :=
+Fixpoint rsq_bs_list_sum (f : S -> R) (l : list S) : R :=
   match l with
   | nil => zero
-  | x :: t => plus (f x) (bs_list_sum f t)
+  | x :: t => plus (f x) (rsq_bs_list_sum f t)
   end.
 
 (* 枚举求和规范化（Id Variable sum_eq_list req 化：签名变化 7） *)
-Variable sum_eq_list : forall g : S -> R, req (sumf g) (bs_list_sum g enum).
+Variable sum_eq_list : forall g : S -> R, req (sumf g) (rsq_bs_list_sum g enum).
 
 (* ---- 构造性指数：exp_neg 具体化（签名变化 8；epp_* 辅件家真证） ---- *)
-Definition exp_pos_fn (x : R) : R := exp_neg (opp x).
+Definition rsq_exp_pos_fn (x : R) : R := exp_neg (opp x).
 
-Lemma epp_pos : forall x : R, lt zero (exp_pos_fn x).
+Lemma epp_pos : forall x : R, lt zero (rsq_exp_pos_fn x).
 Proof. intro x. exact (exp_neg_pos (opp x)). Qed.
 
-Lemma epp_ext : forall x y : R, req x y -> req (exp_pos_fn x) (exp_pos_fn y).
+Lemma epp_ext : forall x y : R, req x y -> req (rsq_exp_pos_fn x) (rsq_exp_pos_fn y).
 Proof.
   intros x y H.
   exact (exp_neg_req_compat_setoid (opp x) (opp y) (req_opp_compat x y H)).
 Qed.
 
-Lemma epp_zero : req (exp_pos_fn zero) one.
+Lemma epp_zero : req (rsq_exp_pos_fn zero) one.
 Proof.
   exact (req_trans _ _ _
            (exp_neg_req_compat_setoid (opp zero) zero reqd_opp_zero)
@@ -759,7 +759,7 @@ Proof.
 Qed.
 
 Lemma epp_plus : forall a b : R,
-  req (exp_pos_fn (plus a b)) (mult (exp_pos_fn a) (exp_pos_fn b)).
+  req (rsq_exp_pos_fn (plus a b)) (mult (rsq_exp_pos_fn a) (rsq_exp_pos_fn b)).
 Proof.
   intros a b.
   apply (req_trans _ (exp_neg (plus (opp a) (opp b))) _).
@@ -768,27 +768,27 @@ Proof.
   - exact (exp_neg_plus (opp a) (opp b)).
 Qed.
 
-Lemma epp_mono_lt : forall a b : R, lt a b -> lt (exp_pos_fn a) (exp_pos_fn b).
+Lemma epp_mono_lt : forall a b : R, lt a b -> lt (rsq_exp_pos_fn a) (rsq_exp_pos_fn b).
 Proof.
   intros a b H. exact (exp_neg_decr (opp b) (opp a) (opp_lt_compat a b H)).
 Qed.
 
-Lemma epp_mono_le : forall a b : R, le a b -> le (exp_pos_fn a) (exp_pos_fn b).
+Lemma epp_mono_le : forall a b : R, le a b -> le (rsq_exp_pos_fn a) (rsq_exp_pos_fn b).
 Proof.
   intros a b H. exact (exp_neg_le_decr (opp b) (opp a) (opp_le_compat a b H)).
 Qed.
 
 (* ---- list 求和机器（Id @96085/96104/96121；组装） ---- *)
 
-Lemma bs_list_const_sum : forall (c : R) (l : list S),
-  req (bs_list_sum (fun _ : S => c) l) (mult (reqd_nat_to_R (length l)) c).
+Lemma rsq_bs_list_const_sum : forall (c : R) (l : list S),
+  req (rsq_bs_list_sum (fun _ : S => c) l) (mult (reqd_nat_to_R (length l)) c).
 Proof.
   intros c l. induction l as [| x t IH].
   - exact (req_sym _ _ (req_trans (mult zero c) (mult c zero) zero
              (mult_comm zero c) (mult_zero c))).
-  - assert (Hstep : req (plus c (bs_list_sum (fun _ : S => c) t))
+  - assert (Hstep : req (plus c (rsq_bs_list_sum (fun _ : S => c) t))
                         (plus (mult c one) (mult c (reqd_nat_to_R (length t))))).
-    { exact (req_plus_compat c (mult c one) (bs_list_sum (fun _ : S => c) t)
+    { exact (req_plus_compat c (mult c one) (rsq_bs_list_sum (fun _ : S => c) t)
                              (mult c (reqd_nat_to_R (length t)))
                              (req_sym _ _ (mult_one c))
                              (req_trans _ _ _ IH
@@ -800,16 +800,16 @@ Proof.
       * exact (mult_comm c (plus one (reqd_nat_to_R (length t)))).
 Qed.
 
-Lemma bs_list_le_const : forall (f : S -> R) (c : R) (l : list S),
+Lemma rsq_bs_list_le_const : forall (f : S -> R) (c : R) (l : list S),
   (forall x : S, le (f x) c) ->
-  le (bs_list_sum f l) (mult (reqd_nat_to_R (length l)) c).
+  le (rsq_bs_list_sum f l) (mult (reqd_nat_to_R (length l)) c).
 Proof.
   intros f c l H. induction l as [| x t IH].
   - exact (le_id_r zero zero (mult zero c)
              (req_sym _ _ (req_trans (mult zero c) (mult c zero) zero
                         (mult_comm zero c) (mult_zero c)))
              (le_refl zero)).
-  - apply (le_id_r (plus (f x) (bs_list_sum f t))
+  - apply (le_id_r (plus (f x) (rsq_bs_list_sum f t))
                    (plus c (mult c (reqd_nat_to_R (length t))))
                    (mult (plus one (reqd_nat_to_R (length t))) c)).
     + exact (req_sym _ _ (req_trans
@@ -825,16 +825,16 @@ Proof.
                             (mult c (reqd_nat_to_R (length t)))
                             (mult c (reqd_nat_to_R (length t)))
                             (mult_one c) (req_refl _))))).
-    + exact (le_plus_compat (f x) c (bs_list_sum f t)
+    + exact (le_plus_compat (f x) c (rsq_bs_list_sum f t)
                             (mult c (reqd_nat_to_R (length t)))
                             (H x)
                             (le_id_r _ _ _ (mult_comm (reqd_nat_to_R (length t)) c)
                                        IH)).
 Qed.
 
-Lemma bs_list_ge_const : forall (f : S -> R) (c : R) (l : list S),
+Lemma rsq_bs_list_ge_const : forall (f : S -> R) (c : R) (l : list S),
   (forall x : S, le c (f x)) ->
-  le (mult (reqd_nat_to_R (length l)) c) (bs_list_sum f l).
+  le (mult (reqd_nat_to_R (length l)) c) (rsq_bs_list_sum f l).
 Proof.
   intros f c l H. induction l as [| x t IH].
   - exact (le_id_l (mult zero c) zero zero
@@ -843,7 +843,7 @@ Proof.
              (le_refl zero)).
   - apply (le_id_l (mult (plus one (reqd_nat_to_R (length t))) c)
                    (plus c (mult c (reqd_nat_to_R (length t))))
-                   (plus (f x) (bs_list_sum f t))).
+                   (plus (f x) (rsq_bs_list_sum f t))).
     + exact (req_trans
               (mult (plus one (reqd_nat_to_R (length t))) c)
               (mult c (plus one (reqd_nat_to_R (length t))))
@@ -858,7 +858,7 @@ Proof.
                             (mult c (reqd_nat_to_R (length t)))
                             (mult_one c) (req_refl _)))).
     + exact (le_plus_compat c (f x) (mult c (reqd_nat_to_R (length t)))
-                            (bs_list_sum f t)
+                            (rsq_bs_list_sum f t)
                             (H x)
                             (le_id_l _ _ _ (req_sym _ _
                                (mult_comm (reqd_nat_to_R (length t)) c)) IH)).
@@ -866,7 +866,7 @@ Qed.
 
 Let nR := reqd_nat_to_R (length enum).
 
-Lemma bs_nR_pos : lt zero nR.
+Lemma rsq_bs_nR_pos : lt zero nR.
 Proof.
   destruct enum as [| x t].
   - destruct (enum_nonempty eq_refl).
@@ -874,19 +874,19 @@ Proof.
 Qed.
 
 Let invT := inv_pos temp temp_pos.
-Let factor (s s' : S) : R := exp_pos_fn (mult invT (z s s')).
-Let lo := exp_pos_fn (mult invT (opp Delta)).
-Let hi := exp_pos_fn (mult invT Delta).
+Let factor (s s' : S) : R := rsq_exp_pos_fn (mult invT (z s s')).
+Let lo := rsq_exp_pos_fn (mult invT (opp Delta)).
+Let hi := rsq_exp_pos_fn (mult invT Delta).
 Let delta_star := mult lo lo.
 
-Lemma bs_lo_pos : lt zero lo.
+Lemma rsq_bs_lo_pos : lt zero lo.
 Proof. exact (epp_pos (mult invT (opp Delta))). Qed.
 
-Lemma bs_hi_pos : lt zero hi.
+Lemma rsq_bs_hi_pos : lt zero hi.
 Proof. exact (epp_pos (mult invT Delta)). Qed.
 
 (* opp Delta < Delta（由 Delta > 0；Id @96160） *)
-Lemma bs_opp_lt : lt (opp Delta) Delta.
+Lemma rsq_bs_opp_lt : lt (opp Delta) Delta.
 Proof.
   apply (le_lt_trans (opp Delta) zero Delta).
   - exact (le_id_r (opp Delta) (opp zero) zero reqd_opp_zero
@@ -894,55 +894,55 @@ Proof.
   - exact Delta_pos.
 Qed.
 
-Lemma bs_lo_lt_hi : lt lo hi.
+Lemma rsq_bs_lo_lt_hi : lt lo hi.
 Proof.
   apply (epp_mono_lt (mult invT (opp Delta)) (mult invT Delta)).
   apply (lt_id_l _ (mult (opp Delta) invT) _ (mult_comm invT (opp Delta))).
   apply (req_lt_id_r_loc _ _ _ (mult_comm Delta invT)).
   exact (lt_mult_compat (opp Delta) Delta invT
-                        (inv_pos_pos temp temp_pos) bs_opp_lt).
+                        (inv_pos_pos temp temp_pos) rsq_bs_opp_lt).
 Qed.
 
 (* lo·hi == one（exp 同态性；Id @96178；真证） *)
-Lemma bs_lo_hi_eq : req (mult lo hi) one.
+Lemma rsq_bs_lo_hi_eq : req (mult lo hi) one.
 Proof.
   apply (req_trans (mult lo hi)
-                   (exp_pos_fn (plus (mult invT (opp Delta)) (mult invT Delta))) _).
+                   (rsq_exp_pos_fn (plus (mult invT (opp Delta)) (mult invT Delta))) _).
   - exact (req_sym _ _ (epp_plus (mult invT (opp Delta)) (mult invT Delta))).
-  - apply (req_trans _ (exp_pos_fn (mult invT (plus (opp Delta) Delta))) _).
+  - apply (req_trans _ (rsq_exp_pos_fn (mult invT (plus (opp Delta) Delta))) _).
     + exact (epp_ext _ _ (req_sym _ _ (distrib invT (opp Delta) Delta))).
-    + apply (req_trans _ (exp_pos_fn (mult invT zero)) _).
+    + apply (req_trans _ (rsq_exp_pos_fn (mult invT zero)) _).
       * exact (epp_ext _ _ (req_mult_compat invT invT (plus (opp Delta) Delta)
                                zero (req_refl invT)
                                (req_trans (plus (opp Delta) Delta)
                                           (plus Delta (opp Delta)) zero
                                           (plus_comm (opp Delta) Delta)
                                           (plus_opp Delta)))).
-      * apply (req_trans _ (exp_pos_fn zero) _).
+      * apply (req_trans _ (rsq_exp_pos_fn zero) _).
         -- exact (epp_ext _ _ (mult_zero invT)).
-        -- exact (req_trans (exp_pos_fn zero) (exp_neg zero) one
+        -- exact (req_trans (rsq_exp_pos_fn zero) (exp_neg zero) one
                    (exp_neg_req_compat_setoid (opp zero) zero reqd_opp_zero)
                    (exp_neg_zero)).
 Qed.
 
-Lemma bs_delta_star_lt_one : lt delta_star one.
+Lemma rsq_bs_delta_star_lt_one : lt delta_star one.
 Proof.
-  apply (req_lt_id_r_loc _ _ _ (bs_lo_hi_eq)).
+  apply (req_lt_id_r_loc _ _ _ (rsq_bs_lo_hi_eq)).
   apply (req_lt_id_r_loc _ _ _ (mult_comm hi lo)).
-  exact (lt_mult_compat lo hi lo bs_lo_pos bs_lo_lt_hi).
+  exact (lt_mult_compat lo hi lo rsq_bs_lo_pos rsq_bs_lo_lt_hi).
 Qed.
 
-Lemma bs_inv_hi_lo : req (inv_pos hi bs_hi_pos) lo.
+Lemma rsq_bs_inv_hi_lo : req (inv_pos hi rsq_bs_hi_pos) lo.
 Proof.
-  apply (req_mult_cancel_l hi _ _ bs_hi_pos).
-  exact (req_trans (mult hi (inv_pos hi bs_hi_pos)) one (mult hi lo)
-                   (inv_pos_correct hi bs_hi_pos)
+  apply (req_mult_cancel_l hi _ _ rsq_bs_hi_pos).
+  exact (req_trans (mult hi (inv_pos hi rsq_bs_hi_pos)) one (mult hi lo)
+                   (inv_pos_correct hi rsq_bs_hi_pos)
                    (req_sym _ _ (req_trans (mult hi lo) (mult lo hi) one
-                              (mult_comm hi lo) bs_lo_hi_eq))).
+                              (mult_comm hi lo) rsq_bs_lo_hi_eq))).
 Qed.
 
 (* 因子上下界（Id @96202/96211） *)
-Lemma bs_factor_ge_lo : forall s s' : S, le lo (factor s s').
+Lemma rsq_bs_factor_ge_lo : forall s s' : S, le lo (factor s s').
 Proof.
   intros s s'.
   apply (epp_mono_le (mult invT (opp Delta)) (mult invT (z s s'))).
@@ -950,7 +950,7 @@ Proof.
            (lt_le_iff _ _ (inl (inv_pos_pos temp temp_pos))) (z_lb s s')).
 Qed.
 
-Lemma bs_factor_le_hi : forall s s' : S, le (factor s s') hi.
+Lemma rsq_bs_factor_le_hi : forall s s' : S, le (factor s s') hi.
 Proof.
   intros s s'.
   apply (epp_mono_le (mult invT (z s s')) (mult invT Delta)).
@@ -958,109 +958,109 @@ Proof.
            (lt_le_iff _ _ (inl (inv_pos_pos temp temp_pos))) (z_ub s s')).
 Qed.
 
-Definition Zrow (s : S) : R := sumf (fun s' : S => factor s s').
+Definition rsq_Zrow (s : S) : R := sumf (fun s' : S => factor s s').
 
-Lemma bs_Zrow_ge : forall s : S, le (mult nR lo) (Zrow s).
+Lemma rsq_bs_Zrow_ge : forall s : S, le (mult nR lo) (rsq_Zrow s).
 Proof.
   intro s.
-  apply (le_id_r (mult nR lo) (bs_list_sum (fun s' : S => factor s s') enum)
-                 (Zrow s)
+  apply (le_id_r (mult nR lo) (rsq_bs_list_sum (fun s' : S => factor s s') enum)
+                 (rsq_Zrow s)
                  (req_sym _ _ (sum_eq_list (fun s' : S => factor s s')))).
-  exact (bs_list_ge_const (fun s' : S => factor s s') lo enum
-                          (fun x : S => bs_factor_ge_lo s x)).
+  exact (rsq_bs_list_ge_const (fun s' : S => factor s s') lo enum
+                          (fun x : S => rsq_bs_factor_ge_lo s x)).
 Qed.
 
-Lemma bs_Zrow_le : forall s : S, le (Zrow s) (mult nR hi).
+Lemma rsq_bs_Zrow_le : forall s : S, le (rsq_Zrow s) (mult nR hi).
 Proof.
   intro s.
-  apply (le_id_l (Zrow s) (bs_list_sum (fun s' : S => factor s s') enum)
+  apply (le_id_l (rsq_Zrow s) (rsq_bs_list_sum (fun s' : S => factor s s') enum)
                  (mult nR hi)).
   - exact (sum_eq_list (fun s' : S => factor s s')).
-  - exact (bs_list_le_const (fun s' : S => factor s s') hi enum
-                            (fun x : S => bs_factor_le_hi s x)).
+  - exact (rsq_bs_list_le_const (fun s' : S => factor s s') hi enum
+                            (fun x : S => rsq_bs_factor_le_hi s x)).
 Qed.
 
-Lemma bs_Zrow_pos : forall s : S, lt zero (Zrow s).
+Lemma rsq_bs_Zrow_pos : forall s : S, lt zero (rsq_Zrow s).
 Proof.
   intro s.
-  exact (lt_le_trans zero (mult nR lo) (Zrow s)
-                     (mult_positive nR lo bs_nR_pos bs_lo_pos) (bs_Zrow_ge s)).
+  exact (lt_le_trans zero (mult nR lo) (rsq_Zrow s)
+                     (mult_positive nR lo rsq_bs_nR_pos rsq_bs_lo_pos) (rsq_bs_Zrow_ge s)).
 Qed.
 
 (* softmax 核（温度 T；Id @96044 定义 req 形） *)
-Definition bs_kernel (s s' : S) : R :=
-  mult (factor s s') (inv_pos (Zrow s) (bs_Zrow_pos s)).
+Definition rsq_bs_kernel (s s' : S) : R :=
+  mult (factor s s') (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)).
 
-Lemma bs_kernel_pos : forall s s' : S, lt zero (bs_kernel s s').
+Lemma rsq_bs_kernel_pos : forall s s' : S, lt zero (rsq_bs_kernel s s').
 Proof.
   intros s s'. exact (mult_positive (factor s s')
-                        (inv_pos (Zrow s) (bs_Zrow_pos s))
+                        (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))
                         (epp_pos (mult invT (z s s')))
-                        (inv_pos_pos (Zrow s) (bs_Zrow_pos s))).
+                        (inv_pos_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))).
 Qed.
 
-Lemma bs_kernel_nonneg : forall s s' : S, le zero (bs_kernel s s').
+Lemma rsq_bs_kernel_nonneg : forall s s' : S, le zero (rsq_bs_kernel s s').
 Proof.
-  intros s s'. exact (lt_le_iff _ _ (inl (bs_kernel_pos s s'))).
+  intros s s'. exact (lt_le_iff _ _ (inl (rsq_bs_kernel_pos s s'))).
 Qed.
 
-Lemma bs_kernel_row : forall s : S, req (sumf (fun s' : S => bs_kernel s s')) one.
+Lemma rsq_bs_kernel_row : forall s : S, req (sumf (fun s' : S => rsq_bs_kernel s s')) one.
 Proof.
-  intro s. unfold bs_kernel.
+  intro s. unfold rsq_bs_kernel.
   apply (req_trans _ (sumf (fun s' : S =>
-        mult (inv_pos (Zrow s) (bs_Zrow_pos s)) (factor s s'))) _).
+        mult (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)) (factor s s'))) _).
   - exact (sum_ext
-             (fun s' : S => mult (factor s s') (inv_pos (Zrow s) (bs_Zrow_pos s)))
-             (fun s' : S => mult (inv_pos (Zrow s) (bs_Zrow_pos s)) (factor s s'))
+             (fun s' : S => mult (factor s s') (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)))
+             (fun s' : S => mult (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)) (factor s s'))
              (fun s' : S => mult_comm (factor s s')
-                                      (inv_pos (Zrow s) (bs_Zrow_pos s)))).
+                                      (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)))).
   - apply (req_trans _
-             (mult (inv_pos (Zrow s) (bs_Zrow_pos s))
+             (mult (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))
                    (sumf (fun s' : S => factor s s'))) _).
-    + exact (sum_linear (inv_pos (Zrow s) (bs_Zrow_pos s))
+    + exact (sum_linear (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))
                         (fun s' : S => factor s s')).
     + exact (req_trans _ _ _
-               (mult_comm (inv_pos (Zrow s) (bs_Zrow_pos s)) (Zrow s))
-               (inv_pos_correct (Zrow s) (bs_Zrow_pos s))).
+               (mult_comm (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)) (rsq_Zrow s))
+               (inv_pos_correct (rsq_Zrow s) (rsq_bs_Zrow_pos s))).
 Qed.
 
 (* 均匀分布 U = 1/enum 模 *)
-Let Unif : S -> R := fun _ : S => inv_pos nR bs_nR_pos.
+Let Unif : S -> R := fun _ : S => inv_pos nR rsq_bs_nR_pos.
 
-Lemma bs_Unif_norm : req (sumf Unif) one.
+Lemma rsq_bs_Unif_norm : req (sumf Unif) one.
 Proof.
-  apply (req_trans _ (bs_list_sum Unif enum) _).
+  apply (req_trans _ (rsq_bs_list_sum Unif enum) _).
   - exact (sum_eq_list Unif).
   - apply (req_trans _
-             (mult (reqd_nat_to_R (length enum)) (inv_pos nR bs_nR_pos)) _).
-    + exact (bs_list_const_sum (inv_pos nR bs_nR_pos) enum).
-    + exact (inv_pos_correct nR bs_nR_pos).
+             (mult (reqd_nat_to_R (length enum)) (inv_pos nR rsq_bs_nR_pos)) _).
+    + exact (rsq_bs_list_const_sum (inv_pos nR rsq_bs_nR_pos) enum).
+    + exact (inv_pos_correct nR rsq_bs_nR_pos).
 Qed.
 
 (* ---- 前置锚：消费 UpReqDist ReqSoftmaxDual reqd_softmax_scaled ----
    （幂等δ对偶 + 见证位桥；e^(z/T) = e^(-((-z)/T)) 换位为真证链） *)
 Lemma bs_kernel_eq_reqd_scaled :
   forall s s' : S,
-    req (bs_kernel s s')
+    req (rsq_bs_kernel s s')
         (reqd_softmax_scaled S sumf sum_pos invT (fun s0 : S => opp (z s s0)) s').
 Proof.
   intros s s'.
   apply (req_trans _ (mult (exp_neg (opp (mult invT (z s s'))))
-                           (inv_pos (Zrow s) (bs_Zrow_pos s))) _).
+                           (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))) _).
   - exact (req_refl (mult (exp_neg (opp (mult invT (z s s'))))
-                          (inv_pos (Zrow s) (bs_Zrow_pos s)))).
+                          (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)))).
   - apply (req_mult_compat _ _ _ _).
     + apply (exp_neg_req_compat_setoid _ _).
       exact (req_sym _ _ (req_opp_mult_l invT (z s s'))).
-    + apply (inv_pos_ext (Zrow s)
+    + apply (inv_pos_ext (rsq_Zrow s)
                          (sumf (fun s0 : S => exp_neg (mult invT (opp (z s s0)))))
-                         (bs_Zrow_pos s)
+                         (rsq_bs_Zrow_pos s)
                          (sum_pos (fun s0 : S => exp_neg (mult invT (opp (z s s0))))
                                   (fun s0 : S => exp_neg_pos (mult invT (opp (z s s0)))))).
       apply (sum_ext (fun s'0 : S => factor s s'0)
                      (fun s0 : S => exp_neg (mult invT (opp (z s s0))))).
       intro s0.
-      exact (req_trans (exp_pos_fn (mult invT (z s s0)))
+      exact (req_trans (rsq_exp_pos_fn (mult invT (z s s0)))
                        (exp_neg (opp (mult invT (z s s0))))
                        (exp_neg (mult invT (opp (z s s0))))
                        (req_refl _)
@@ -1071,55 +1071,55 @@ Qed.
 
 (* ===== 旗舰核心：显式 Doeblin 下界 =====
    P(s,s') >= del星·U(s')，del星 := lo·lo = e^(-2D/T)（精确，无损耗；Id @96283 真证） *)
-Lemma bs_minorization : forall s s' : S,
-  le (mult delta_star (Unif s')) (bs_kernel s s').
+Lemma rsq_bs_minorization : forall s s' : S,
+  le (mult delta_star (Unif s')) (rsq_bs_kernel s s').
 Proof.
   intros s s'.
   assert (Hchain : le (mult lo (inv_pos (mult nR hi)
-                              (mult_positive nR hi bs_nR_pos bs_hi_pos)))
-                      (bs_kernel s s')).
-  { apply (le_trans _ (mult lo (inv_pos (Zrow s) (bs_Zrow_pos s)))).
+                              (mult_positive nR hi rsq_bs_nR_pos rsq_bs_hi_pos)))
+                      (rsq_bs_kernel s s')).
+  { apply (le_trans _ (mult lo (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)))).
     - exact (req_le_mult_compat_r lo
-                (inv_pos (mult nR hi) (mult_positive nR hi bs_nR_pos bs_hi_pos))
-                (inv_pos (Zrow s) (bs_Zrow_pos s))
-                (lt_le_iff _ _ (inl bs_lo_pos))
-                (inv_pos_le_compat (Zrow s) (mult nR hi) (bs_Zrow_pos s)
-                                   (mult_positive nR hi bs_nR_pos bs_hi_pos)
-                                   (bs_Zrow_le s))).
-    - unfold bs_kernel.
-      exact (le_id_l _ _ _ (mult_comm lo (inv_pos (Zrow s) (bs_Zrow_pos s)))
+                (inv_pos (mult nR hi) (mult_positive nR hi rsq_bs_nR_pos rsq_bs_hi_pos))
+                (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))
+                (lt_le_iff _ _ (inl rsq_bs_lo_pos))
+                (inv_pos_le_compat (rsq_Zrow s) (mult nR hi) (rsq_bs_Zrow_pos s)
+                                   (mult_positive nR hi rsq_bs_nR_pos rsq_bs_hi_pos)
+                                   (rsq_bs_Zrow_le s))).
+    - unfold rsq_bs_kernel.
+      exact (le_id_l _ _ _ (mult_comm lo (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)))
                (le_id_r _ _ _
                  (req_sym _ _ (mult_comm (factor s s')
-                                         (inv_pos (Zrow s) (bs_Zrow_pos s))))
-                 (req_le_mult_compat_r (inv_pos (Zrow s) (bs_Zrow_pos s)) lo
+                                         (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s))))
+                 (req_le_mult_compat_r (inv_pos (rsq_Zrow s) (rsq_bs_Zrow_pos s)) lo
                                    (factor s s')
-                                   (lt_le_iff _ _ (inl (inv_pos_pos (Zrow s)
-                                                        (bs_Zrow_pos s))))
-                                   (bs_factor_ge_lo s s')))). }
+                                   (lt_le_iff _ _ (inl (inv_pos_pos (rsq_Zrow s)
+                                                        (rsq_bs_Zrow_pos s))))
+                                   (rsq_bs_factor_ge_lo s s')))). }
   assert (Heq : req (mult delta_star (Unif s'))
                    (mult lo (inv_pos (mult nR hi)
-                              (mult_positive nR hi bs_nR_pos bs_hi_pos)))).
+                              (mult_positive nR hi rsq_bs_nR_pos rsq_bs_hi_pos)))).
   { assert (Hd1 : req (mult lo (inv_pos (mult nR hi)
-                                   (mult_positive nR hi bs_nR_pos bs_hi_pos)))
-                      (mult lo (mult (inv_pos nR bs_nR_pos)
-                                     (inv_pos hi bs_hi_pos)))).
+                                   (mult_positive nR hi rsq_bs_nR_pos rsq_bs_hi_pos)))
+                      (mult lo (mult (inv_pos nR rsq_bs_nR_pos)
+                                     (inv_pos hi rsq_bs_hi_pos)))).
     { exact (req_mult_compat lo lo _ _
-               (req_refl lo) (req_inv_pos_mult_distr nR hi bs_nR_pos bs_hi_pos)). }
-    assert (Hd2 : req (mult lo (mult (inv_pos nR bs_nR_pos) (inv_pos hi bs_hi_pos)))
-                      (mult (mult lo lo) (inv_pos nR bs_nR_pos))).
+               (req_refl lo) (req_inv_pos_mult_distr nR hi rsq_bs_nR_pos rsq_bs_hi_pos)). }
+    assert (Hd2 : req (mult lo (mult (inv_pos nR rsq_bs_nR_pos) (inv_pos hi rsq_bs_hi_pos)))
+                      (mult (mult lo lo) (inv_pos nR rsq_bs_nR_pos))).
     { apply (req_trans
-                (mult lo (mult (inv_pos nR bs_nR_pos) (inv_pos hi bs_hi_pos)))
-                (mult lo (mult (inv_pos nR bs_nR_pos) lo)) _).
+                (mult lo (mult (inv_pos nR rsq_bs_nR_pos) (inv_pos hi rsq_bs_hi_pos)))
+                (mult lo (mult (inv_pos nR rsq_bs_nR_pos) lo)) _).
       - exact (req_mult_compat lo lo _ _ (req_refl lo)
-                 (req_mult_compat (inv_pos nR bs_nR_pos) (inv_pos nR bs_nR_pos)
-                    (inv_pos hi bs_hi_pos) lo (req_refl _) bs_inv_hi_lo)).
+                 (req_mult_compat (inv_pos nR rsq_bs_nR_pos) (inv_pos nR rsq_bs_nR_pos)
+                    (inv_pos hi rsq_bs_hi_pos) lo (req_refl _) rsq_bs_inv_hi_lo)).
       - apply (req_trans
-                  (mult lo (mult (inv_pos nR bs_nR_pos) lo))
-                  (mult lo (mult lo (inv_pos nR bs_nR_pos)))
-                  (mult (mult lo lo) (inv_pos nR bs_nR_pos))
+                  (mult lo (mult (inv_pos nR rsq_bs_nR_pos) lo))
+                  (mult lo (mult lo (inv_pos nR rsq_bs_nR_pos)))
+                  (mult (mult lo lo) (inv_pos nR rsq_bs_nR_pos))
                   (req_mult_compat lo lo _ _
-                     (req_refl lo) (mult_comm (inv_pos nR bs_nR_pos) lo))
-                  (mult_assoc lo lo (inv_pos nR bs_nR_pos))). }
+                     (req_refl lo) (mult_comm (inv_pos nR rsq_bs_nR_pos) lo))
+                  (mult_assoc lo lo (inv_pos nR rsq_bs_nR_pos))). }
     exact (req_sym _ _ (req_trans _ _ _ Hd1 Hd2)). }
   exact (le_id_l _ _ _ Heq Hchain).
 Qed.
@@ -1128,7 +1128,7 @@ Let inv_two := inv_pos (plus one one) req_two_pos.
 Let tv_req (mu nu : S -> R) : R :=
   mult inv_two (sumf (fun s : S => abs (req_minus (mu s) (nu s)))).
 Let k_step (mu : S -> R) (s' : S) : R :=
-  sumf (fun s : S => mult (mu s) (bs_kernel s s')).
+  sumf (fun s : S => mult (mu s) (rsq_bs_kernel s s')).
 Fixpoint k_titer (n : nat) (mu : S -> R) : S -> R :=
   match n with
   | 0%nat => mu
@@ -1137,28 +1137,28 @@ Fixpoint k_titer (n : nat) (mu : S -> R) : S -> R :=
 
 (* ===== 旗舰定理 1：有界 softmax 核的双点 TV 收缩 =====
    收缩率显式：1 - e^(-2D/T)（Id @96328；对位验证：全参投喂） *)
-Theorem bounded_softmax_tv_contraction : forall (mu nu : S -> R),
+Theorem rsq_bounded_softmax_tv_contraction : forall (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
   le (tv_req (k_step mu) (k_step nu))
      (mult (req_minus one delta_star) (tv_req mu nu)).
 Proof.
   intros mu nu Hmu Hnu.
-  exact (u_tv_contraction S sumf sum_ext sum_linear sum_add sum_le abs_sum_le_h
-           Unif bs_Unif_norm delta_star bs_delta_star_lt_one
-           bs_kernel bs_kernel_row bs_minorization
+  exact (rsq_u_tv_contraction S sumf sum_ext sum_linear sum_add sum_le abs_sum_le_h
+           Unif rsq_bs_Unif_norm delta_star rsq_bs_delta_star_lt_one
+           rsq_bs_kernel rsq_bs_kernel_row rsq_bs_minorization
            bs_swap bs_abs bs_lpc mu nu Hmu Hnu).
 Qed.
 
 (* ===== 旗舰定理 2：迭代收缩，显式几何率 (1 - e^(-2D/T))^n ===== *)
-Theorem bounded_softmax_tv_iter : forall (n : nat) (mu nu : S -> R),
+Theorem rsq_bounded_softmax_tv_iter : forall (n : nat) (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
   le (tv_req (k_titer n mu) (k_titer n nu))
      (mult (req_r_pow (req_minus one delta_star) n) (tv_req mu nu)).
 Proof.
   intros n mu nu Hmu Hnu.
-  exact (u_tv_iter S sumf sum_ext sum_linear sum_add sum_le abs_sum_le_h
-           Unif bs_Unif_norm delta_star bs_delta_star_lt_one
-           bs_kernel bs_kernel_row bs_minorization
+  exact (rsq_u_tv_iter S sumf sum_ext sum_linear sum_add sum_le abs_sum_le_h
+           Unif rsq_bs_Unif_norm delta_star rsq_bs_delta_star_lt_one
+           rsq_bs_kernel rsq_bs_kernel_row rsq_bs_minorization
            bs_swap bs_abs bs_lpc n mu nu Hmu Hnu).
 Qed.
 

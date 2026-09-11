@@ -1,0 +1,2 @@
+Require Import CW_ConstructiveWorld_219.
+Print Assumptions projected_distribution_minimizes_kl.

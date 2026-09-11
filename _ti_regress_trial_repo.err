@@ -1,0 +1,25 @@
+File ".\ConstructiveWorld_vo\UpReqTempInterp.v", line 80, characters 10-24:
+Error:
+In environment
+Delta, T, T' : Real
+HD : real_lt real_zero Delta
+Ht : real_lt real_zero T
+Ht' : real_lt real_zero T'
+Hle : real_le T T'
+Unable to unify
+ "(CW_ConstructiveWorld_219.real_lt
+     (CW_ConstructiveWorld_219.cauchy_real_exp ?M1833)
+     (CW_ConstructiveWorld_219.cauchy_real_exp ?M1834) +
+   CW_ConstructiveWorld_219.real_eq
+     (CW_ConstructiveWorld_219.cauchy_real_exp ?M1833)
+     (CW_ConstructiveWorld_219.cauchy_real_exp ?M1834))%type"
+with
+ "(real_lt
+     (cauchy_real_exp
+        (real_mult (real_plus Delta Delta) (real_inv_pos T' Ht')))
+     (cauchy_real_exp (real_mult (real_plus Delta Delta) (real_inv_pos T Ht))) +
+   real_eq
+     (cauchy_real_exp
+        (real_mult (real_plus Delta Delta) (real_inv_pos T' Ht')))
+     (cauchy_real_exp (real_mult (real_plus Delta Delta) (real_inv_pos T Ht))))%type".
+

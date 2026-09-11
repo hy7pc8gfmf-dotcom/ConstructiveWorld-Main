@@ -1,0 +1,2 @@
+Require Import CW_ConstructiveWorld_219.
+Print Assumptions dpo_total_loss_monotone.

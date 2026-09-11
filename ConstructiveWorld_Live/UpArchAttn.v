@@ -15,7 +15,7 @@
 (* 件 1（主件）r_arch_pow_attn_real：接口前提在具体 Real 层的实例化。 *)
 (*   形态对齐映射（探针结论）：                                    *)
 (*     R（抽象，RealInterfaceEnhanced 实例参数）                  *)
-(*         ⟿ CW_ConstructiveWorld_219.Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
+(*         ⟿ Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
 (*     lt zero / lt ⟿ real_lt real_zero / real_lt（Type 版）       *)
 (*     mult ⟿ real_mult                                          *)
 (*     minus one delta ⟿ real_plus real_one (real_opp delta)      *)
@@ -56,7 +56,7 @@ Local Open Scope Q_scope.
 (* ============ 1. 1−δ 的 Real 层序引理（κ := 1−δ 良定前提） ============ *)
 
 (* 根 L14270 one_minus_kappa_pos 的 Real 镜像：δ < 1 ⟹ 0 < 1−δ *)
-Lemma one_minus_delta_pos_real : forall delta : CW_ConstructiveWorld_219.Real,
+Lemma one_minus_delta_pos_real : forall delta : Real,
   real_lt delta real_one ->
   real_lt real_zero (real_plus real_one (real_opp delta)).
 Proof.
@@ -65,7 +65,7 @@ Qed.
 
 (* 根注意力区前提的对称支 Real 镜像：0 < δ ⟹ 1−δ < 1
    （逐点差零 + real_lt_eq_lt：1−(1−δ) == δ 逐点 ring） *)
-Lemma one_minus_delta_lt_one_real : forall delta : CW_ConstructiveWorld_219.Real,
+Lemma one_minus_delta_lt_one_real : forall delta : Real,
   real_lt real_zero delta ->
   real_lt (real_plus real_one (real_opp delta)) real_one.
 Proof.
@@ -88,9 +88,9 @@ Qed.
 (* ============ 2. 件 1 主件：接口前提的 Real 层实例化 ============ *)
 
 Theorem r_arch_pow_attn_real :
-  forall delta : CW_ConstructiveWorld_219.Real, real_lt real_zero delta -> real_lt delta real_one ->
-  forall a : CW_ConstructiveWorld_219.Real, real_lt real_zero a ->
-  forall eps : CW_ConstructiveWorld_219.Real, real_lt real_zero eps ->
+  forall delta : Real, real_lt real_zero delta -> real_lt delta real_one ->
+  forall a : Real, real_lt real_zero a ->
+  forall eps : Real, real_lt real_zero eps ->
   sigT (fun N : nat =>
     real_lt (real_mult a
               (real_pow (real_plus real_one (real_opp delta)) N)) eps).
@@ -109,9 +109,9 @@ Qed.
    （根 r_pow_dec_iter_attn 的幂反单调 Real 镜像即
      UpBudgetReal.real_pow_anti_mono，件 2 主定理直接复用，不重证。） *)
 Lemma tv_iter_decay_real :
-  forall (delta : CW_ConstructiveWorld_219.Real)
+  forall (delta : Real)
          (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
-         (tv_seq : nat -> CW_ConstructiveWorld_219.Real),
+         (tv_seq : nat -> Real),
   (forall n : nat,
     real_le (tv_seq (Datatypes.S n))
             (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
@@ -169,13 +169,13 @@ Qed.
    sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等接口前提，
    天级工程，不属本小件（主件 1 不受影响）。 *)
 Theorem attention_iterate_converges_real :
-  forall (delta : CW_ConstructiveWorld_219.Real)
+  forall (delta : Real)
          (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
-         (tv_seq : nat -> CW_ConstructiveWorld_219.Real),
+         (tv_seq : nat -> Real),
   (forall n : nat,
     real_le (tv_seq (Datatypes.S n))
             (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
-  forall eps : CW_ConstructiveWorld_219.Real, real_lt real_zero eps ->
+  forall eps : Real, real_lt real_zero eps ->
   real_lt real_zero (tv_seq Datatypes.O) ->
   sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
     real_lt (tv_seq n) eps).

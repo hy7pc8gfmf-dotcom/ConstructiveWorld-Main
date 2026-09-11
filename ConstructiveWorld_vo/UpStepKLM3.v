@@ -43,7 +43,7 @@ Definition m3_kl_list (n : nat) (f g : nat -> Real)
 (* 几何率底 κ := 1−η *)
 Definition m3_kappa (eta : Real) : Real := real_plus real_one (real_opp eta).
 
-(* κ 的 t 次幂（nat 重复乘）※ CW_ConstructiveWorld_219.S 遮蔽 Datatypes.S，须限定名 *)
+(* κ 的 t 次幂（nat 重复乘）※ S 遮蔽 Datatypes.S，须限定名 *)
 Fixpoint m3_rpow (a : Real) (t : nat) : Real :=
   match t with
   | Datatypes.O => real_one

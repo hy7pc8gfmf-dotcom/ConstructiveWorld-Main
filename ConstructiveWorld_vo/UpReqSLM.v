@@ -121,7 +121,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
 Require Import UpReqAlignRestB.
-Require Import UpReqOrderArgmin.
+Require Export G09_MiscSmall.
 From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
@@ -179,7 +179,7 @@ Variable total_loss : list Token -> R.   (* 序列损失（prefix ++ [w] 的损�
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
 
-(* ---- 定义块（清单 §3：temp_factor/list_sum/partition_temp/markov_kernel/ *)
+(* ---- 定义块（清单 §3：alb_temp_factor/list_sum/alb_partition_temp/alb_markov_kernel/ *)
 (*        expected_loss/markov_entropy/softmax 全部 exp_neg/inv_pos 表出；       *)
 (*        载体 rsum@RestB L126 逐字同构 list_sum） --------------------------- *)
 

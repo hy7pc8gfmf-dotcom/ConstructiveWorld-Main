@@ -1,0 +1,2 @@
+Require Import CW_ConstructiveWorld_219.
+Print Assumptions min_free_energy_is_boltzmann.

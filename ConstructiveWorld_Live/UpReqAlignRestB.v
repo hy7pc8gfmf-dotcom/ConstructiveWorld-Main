@@ -452,169 +452,169 @@ Hypothesis pick_max_in_vocab : forall prefix : list Token,
   InT (pick_max_token prefix) vocab.
 
 (* ---- 2. 基础设施（L30703-30715 同构；list_sum → rsum） ---- *)
-Definition temp_factor (prefix : list Token) (w : Token) : R :=
+Definition alb_temp_factor (prefix : list Token) (w : Token) : R :=
   exp_neg (mult (inv_pos temperature temperature_pos)
                 (total_loss (prefix ++ [w]))).
 
-Definition partition_temp (prefix : list Token) : R :=
-  rsum Token (temp_factor prefix) vocab.
+Definition alb_partition_temp (prefix : list Token) : R :=
+  rsum Token (alb_temp_factor prefix) vocab.
 
 (* 基座 req_partition_temp_pos L30768 *)
 Lemma req_partition_temp_pos : forall prefix : list Token,
-  lt zero (partition_temp prefix).
+  lt zero (alb_partition_temp prefix).
 Proof.
-  intro prefix. unfold partition_temp.
-  apply (rls_pos Token (temp_factor prefix)).
-  - intro w. unfold temp_factor. apply exp_neg_pos.
+  intro prefix. unfold alb_partition_temp.
+  apply (rls_pos Token (alb_temp_factor prefix)).
+  - intro w. unfold alb_temp_factor. apply exp_neg_pos.
   - apply vocab_nonempty.
 Qed.
 
-Definition markov_kernel (prefix : list Token) (w : Token) : R :=
-  mult (temp_factor prefix w)
-       (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix)).
+Definition alb_markov_kernel (prefix : list Token) (w : Token) : R :=
+  mult (alb_temp_factor prefix w)
+       (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)).
 
 (* 基座 markov_pos L30861 *)
 Lemma req_markov_pos : forall (prefix : list Token) (w : Token),
-  lt zero (markov_kernel prefix w).
+  lt zero (alb_markov_kernel prefix w).
 Proof.
-  intros prefix w. unfold markov_kernel. apply mult_positive.
-  - unfold temp_factor. apply exp_neg_pos.
-  - apply (inv_pos_pos (partition_temp prefix) (req_partition_temp_pos prefix)).
+  intros prefix w. unfold alb_markov_kernel. apply mult_positive.
+  - unfold alb_temp_factor. apply exp_neg_pos.
+  - apply (inv_pos_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)).
 Qed.
 
 (* 基座 markov_kernel_unfold L31156（定义性） *)
 Lemma req_markov_kernel_unfold : forall (prefix : list Token) (w : Token),
-  req (markov_kernel prefix w)
-      (mult (temp_factor prefix w)
-            (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))).
+  req (alb_markov_kernel prefix w)
+      (mult (alb_temp_factor prefix w)
+            (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))).
 Proof.
   intros prefix w. apply req_refl.
 Qed.
 
 (* ---- 4. Min-P 阈值与判定（L30919-30945 同构） ---- *)
-Definition max_markov_prob (prefix : list Token) : R :=
-  markov_kernel prefix (pick_max_token prefix).
+Definition alb_max_markov_prob (prefix : list Token) : R :=
+  alb_markov_kernel prefix (pick_max_token prefix).
 
-Definition minp_threshold (prefix : list Token) : R :=
-  mult min_p (max_markov_prob prefix).
+Definition alb_minp_threshold (prefix : list Token) : R :=
+  mult min_p (alb_max_markov_prob prefix).
 
-Definition minp_keep (prefix : list Token) (w : Token) : Set :=
-  le (minp_threshold prefix) (markov_kernel prefix w).
+Definition alb_minp_keep (prefix : list Token) (w : Token) : Set :=
+  le (alb_minp_threshold prefix) (alb_markov_kernel prefix w).
 
-Definition minp_keep_dec (prefix : list Token) (w : Token) :
-  Or (minp_keep prefix w) (Not (minp_keep prefix w)) :=
-  req_le_dec (minp_threshold prefix) (markov_kernel prefix w).
+Definition alb_minp_keep_dec (prefix : list Token) (w : Token) :
+  Or (alb_minp_keep prefix w) (Not (alb_minp_keep prefix w)) :=
+  req_le_dec (alb_minp_threshold prefix) (alb_markov_kernel prefix w).
 
-Definition minp_temp_sum (prefix : list Token) : R :=
-  rsum Token (fun w => match minp_keep_dec prefix w with
-                       | inl _ => temp_factor prefix w
+Definition alb_minp_temp_sum (prefix : list Token) : R :=
+  rsum Token (fun w => match alb_minp_keep_dec prefix w with
+                       | inl _ => alb_temp_factor prefix w
                        | inr _ => zero
                        end) vocab.
 
 (* 基座 pick_max_token_minp_keep L30954（消费 req_le_mult_le_one_r） *)
 Lemma req_pick_max_minp_keep : forall prefix : list Token,
-  minp_keep prefix (pick_max_token prefix).
+  alb_minp_keep prefix (pick_max_token prefix).
 Proof.
-  intro prefix. unfold minp_keep.
-  apply (req_le_mult_le_one_r (markov_kernel prefix (pick_max_token prefix))
+  intro prefix. unfold alb_minp_keep.
+  apply (req_le_mult_le_one_r (alb_markov_kernel prefix (pick_max_token prefix))
                               min_p).
-  - apply (lt_le_iff zero (markov_kernel prefix (pick_max_token prefix))).
+  - apply (lt_le_iff zero (alb_markov_kernel prefix (pick_max_token prefix))).
     left. apply req_markov_pos.
   - apply (lt_le_iff min_p one). left. exact min_p_lt_one.
 Qed.
 
-(* pick_max 的 tf 单项 ≤ minp_temp_sum（temp_factor_max_le_sum L31328 核心腿；
+(* pick_max 的 tf 单项 ≤ alb_minp_temp_sum（temp_factor_max_le_sum L31328 核心腿；
    req_minp_temp_sum_pos 与 scaled_sum_ge_max 共用） *)
 Lemma req_pick_max_tf_le_minp_sum : forall prefix : list Token,
-  le (temp_factor prefix (pick_max_token prefix)) (minp_temp_sum prefix).
+  le (alb_temp_factor prefix (pick_max_token prefix)) (alb_minp_temp_sum prefix).
 Proof.
-  intro prefix. unfold minp_temp_sum.
-  assert (Heq : req (temp_factor prefix (pick_max_token prefix))
-                    (match minp_keep_dec prefix (pick_max_token prefix) with
-                     | inl _ => temp_factor prefix (pick_max_token prefix)
+  intro prefix. unfold alb_minp_temp_sum.
+  assert (Heq : req (alb_temp_factor prefix (pick_max_token prefix))
+                    (match alb_minp_keep_dec prefix (pick_max_token prefix) with
+                     | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                      | inr _ => zero
                      end)).
-  { destruct (minp_keep_dec prefix (pick_max_token prefix)) as [Hk | Hd].
+  { destruct (alb_minp_keep_dec prefix (pick_max_token prefix)) as [Hk | Hd].
     - apply req_refl.
     - destruct (Hd (req_pick_max_minp_keep prefix)). }
-  apply (le_id_l (temp_factor prefix (pick_max_token prefix))
-                 (match minp_keep_dec prefix (pick_max_token prefix) with
-                  | inl _ => temp_factor prefix (pick_max_token prefix)
+  apply (le_id_l (alb_temp_factor prefix (pick_max_token prefix))
+                 (match alb_minp_keep_dec prefix (pick_max_token prefix) with
+                  | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                   | inr _ => zero
                   end)
                  (rsum Token
-                        (fun w => match minp_keep_dec prefix w with
-                                  | inl _ => temp_factor prefix w
+                        (fun w => match alb_minp_keep_dec prefix w with
+                                  | inl _ => alb_temp_factor prefix w
                                   | inr _ => zero
                                   end) vocab)).
   - exact Heq.
   - apply (rls_single_le Token
-           (fun w => match minp_keep_dec prefix w with
-                     | inl _ => temp_factor prefix w
+           (fun w => match alb_minp_keep_dec prefix w with
+                     | inl _ => alb_temp_factor prefix w
                      | inr _ => zero
                      end)
            (pick_max_token prefix) vocab).
     + apply pick_max_in_vocab.
-    + intro w. destruct (minp_keep_dec prefix w) as [Hk2 | Hd2].
-      * apply (lt_le_iff zero (temp_factor prefix w)). left.
-        unfold temp_factor. apply exp_neg_pos.
+    + intro w. destruct (alb_minp_keep_dec prefix w) as [Hk2 | Hd2].
+      * apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+        unfold alb_temp_factor. apply exp_neg_pos.
       * apply le_refl.
 Qed.
 
 (* 基座 req_minp_temp_sum_pos L30981 *)
 Lemma req_minp_temp_sum_pos : forall prefix : list Token,
-  lt zero (minp_temp_sum prefix).
+  lt zero (alb_minp_temp_sum prefix).
 Proof.
   intro prefix.
-  apply (req_lt_zero_le_trans (temp_factor prefix (pick_max_token prefix))
-                              (minp_temp_sum prefix)).
-  - unfold temp_factor. apply exp_neg_pos.
+  apply (req_lt_zero_le_trans (alb_temp_factor prefix (pick_max_token prefix))
+                              (alb_minp_temp_sum prefix)).
+  - unfold alb_temp_factor. apply exp_neg_pos.
   - exact (req_pick_max_tf_le_minp_sum prefix).
 Qed.
 
 (* ---- Min-P 截断核（L31009-31049 同构） ---- *)
-Definition minp_markov_kernel (prefix : list Token) (w : Token) : R :=
-  match minp_keep_dec prefix w with
+Definition alb_minp_markov_kernel (prefix : list Token) (w : Token) : R :=
+  match alb_minp_keep_dec prefix w with
   | inl _ =>
-      mult (temp_factor prefix w)
-           (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
+      mult (alb_temp_factor prefix w)
+           (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
   | inr _ => zero
   end.
 
 (* 基座 minp_markov_kernel_nonneg L31022（Or 分解形态逐位对应） *)
 Lemma req_minp_markov_kernel_nonneg : forall (prefix : list Token) (w : Token),
-  Or (req (minp_markov_kernel prefix w) zero)
-     (lt zero (minp_markov_kernel prefix w)).
+  Or (req (alb_minp_markov_kernel prefix w) zero)
+     (lt zero (alb_minp_markov_kernel prefix w)).
 Proof.
-  intros prefix w. unfold minp_markov_kernel.
-  destruct (minp_keep_dec prefix w) as [Hkeep | Hdrop].
+  intros prefix w. unfold alb_minp_markov_kernel.
+  destruct (alb_minp_keep_dec prefix w) as [Hkeep | Hdrop].
   - right. apply mult_positive.
-    + unfold temp_factor. apply exp_neg_pos.
-    + apply (inv_pos_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)).
+    + unfold alb_temp_factor. apply exp_neg_pos.
+    + apply (inv_pos_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)).
   - left. apply req_refl.
 Qed.
 
 (* 基座 minp_markov_kernel_keep_pos L31036（条件式正性） *)
 Lemma req_minp_markov_kernel_keep_pos : forall (prefix : list Token) (w : Token),
-  minp_keep prefix w -> lt zero (minp_markov_kernel prefix w).
+  alb_minp_keep prefix w -> lt zero (alb_minp_markov_kernel prefix w).
 Proof.
-  intros prefix w Hkeep. unfold minp_markov_kernel.
-  destruct (minp_keep_dec prefix w) as [Hk | Hdrop].
+  intros prefix w Hkeep. unfold alb_minp_markov_kernel.
+  destruct (alb_minp_keep_dec prefix w) as [Hk | Hdrop].
   - apply mult_positive.
-    + unfold temp_factor. apply exp_neg_pos.
-    + apply (inv_pos_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)).
+    + unfold alb_temp_factor. apply exp_neg_pos.
+    + apply (inv_pos_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)).
   - destruct (Hdrop Hkeep).
 Qed.
 
 (* 基座 minp_markov_kernel_unfold_keep L31166 *)
 Lemma req_minp_markov_kernel_unfold_keep : forall (prefix : list Token) (w : Token),
-  minp_keep prefix w ->
-  req (minp_markov_kernel prefix w)
-      (mult (temp_factor prefix w)
-            (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
+  alb_minp_keep prefix w ->
+  req (alb_minp_markov_kernel prefix w)
+      (mult (alb_temp_factor prefix w)
+            (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
 Proof.
-  intros prefix w Hkeep. unfold minp_markov_kernel.
-  destruct (minp_keep_dec prefix w) as [Hk | Hdrop].
+  intros prefix w Hkeep. unfold alb_minp_markov_kernel.
+  destruct (alb_minp_keep_dec prefix w) as [Hk | Hdrop].
   - apply req_refl.
   - destruct (Hdrop Hkeep).
 Qed.
@@ -622,49 +622,49 @@ Qed.
 (* ===== 基座 minp_markov_kernel_normalized L31050（定理 req 化旗舰） =====
    Id 系 rewrite Hext/Hlin/Hdef 三步替换；req 系 = rls_kernel_norm_gen
    （代数骨架一次真证）+ 本语句级实例（conversion 逐位对应：
-   minp_markov_kernel/minp_temp_sum 定义 δ 展开）。 *)
+   alb_minp_markov_kernel/alb_minp_temp_sum 定义 δ 展开）。 *)
 Theorem req_minp_markov_kernel_normalized : forall prefix : list Token,
-  req (rsum Token (fun w => minp_markov_kernel prefix w) vocab) one.
+  req (rsum Token (fun w => alb_minp_markov_kernel prefix w) vocab) one.
 Proof.
   intro prefix.
   exact (rls_kernel_norm_gen Token vocab
-           (fun w : Token => le (minp_threshold prefix) (markov_kernel prefix w))
-           (fun w : Token => minp_keep_dec prefix w) (temp_factor prefix)
+           (fun w : Token => le (alb_minp_threshold prefix) (alb_markov_kernel prefix w))
+           (fun w : Token => alb_minp_keep_dec prefix w) (alb_temp_factor prefix)
            (req_minp_temp_sum_pos prefix)).
 Qed.
 
 (* 基座 minp_temp_sum_le_partition L31112（rls_le 收尾） *)
 Lemma req_minp_temp_sum_le_partition : forall prefix : list Token,
-  le (minp_temp_sum prefix) (partition_temp prefix).
+  le (alb_minp_temp_sum prefix) (alb_partition_temp prefix).
 Proof.
-  intro prefix. unfold minp_temp_sum, partition_temp.
+  intro prefix. unfold alb_minp_temp_sum, alb_partition_temp.
   apply (rls_le Token
-           (fun w => match minp_keep_dec prefix w with
-                     | inl _ => temp_factor prefix w
+           (fun w => match alb_minp_keep_dec prefix w with
+                     | inl _ => alb_temp_factor prefix w
                      | inr _ => zero
                      end)
-           (temp_factor prefix)).
-  intro w. destruct (minp_keep_dec prefix w) as [Hk | Hd].
+           (alb_temp_factor prefix)).
+  intro w. destruct (alb_minp_keep_dec prefix w) as [Hk | Hd].
   - apply le_refl.
-  - apply (lt_le_iff zero (temp_factor prefix w)). left.
-    unfold temp_factor. apply exp_neg_pos.
+  - apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+    unfold alb_temp_factor. apply exp_neg_pos.
 Qed.
 
 (* ===== 基座 minp_markov_kernel_keep_ge_full L31127：保留者核 ≥ 完整核 ===== *)
 Lemma req_minp_markov_kernel_keep_ge_full : forall (prefix : list Token) (w : Token),
-  minp_keep prefix w ->
-  le (markov_kernel prefix w) (minp_markov_kernel prefix w).
+  alb_minp_keep prefix w ->
+  le (alb_markov_kernel prefix w) (alb_minp_markov_kernel prefix w).
 Proof.
-  intros prefix w Hkeep. unfold minp_markov_kernel, markov_kernel.
-  destruct (minp_keep_dec prefix w) as [Hk | Hd].
-  - apply (req_le_mult_compat_r (temp_factor prefix w)
-                                (inv_pos (partition_temp prefix)
+  intros prefix w Hkeep. unfold alb_minp_markov_kernel, alb_markov_kernel.
+  destruct (alb_minp_keep_dec prefix w) as [Hk | Hd].
+  - apply (req_le_mult_compat_r (alb_temp_factor prefix w)
+                                (inv_pos (alb_partition_temp prefix)
                                          (req_partition_temp_pos prefix))
-                                (inv_pos (minp_temp_sum prefix)
+                                (inv_pos (alb_minp_temp_sum prefix)
                                          (req_minp_temp_sum_pos prefix))).
-    + apply (lt_le_iff zero (temp_factor prefix w)). left.
-      unfold temp_factor. apply exp_neg_pos.
-    + apply (inv_pos_le_compat (minp_temp_sum prefix) (partition_temp prefix)
+    + apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+      unfold alb_temp_factor. apply exp_neg_pos.
+    + apply (inv_pos_le_compat (alb_minp_temp_sum prefix) (alb_partition_temp prefix)
                                (req_minp_temp_sum_pos prefix)
                                (req_partition_temp_pos prefix)).
       exact (req_minp_temp_sum_le_partition prefix).
@@ -673,10 +673,10 @@ Qed.
 
 (* ===== 基座 minp_markov_kernel_dropped_zero L31147（req 形态） ===== *)
 Lemma req_minp_markov_kernel_dropped_zero : forall (prefix : list Token) (w : Token),
-  Not (minp_keep prefix w) -> req (minp_markov_kernel prefix w) zero.
+  Not (alb_minp_keep prefix w) -> req (alb_minp_markov_kernel prefix w) zero.
 Proof.
-  intros prefix w Hdrop. unfold minp_markov_kernel.
-  destruct (minp_keep_dec prefix w) as [Hk | Hd].
+  intros prefix w Hdrop. unfold alb_minp_markov_kernel.
+  destruct (alb_minp_keep_dec prefix w) as [Hk | Hd].
   - destruct (Hdrop Hk).
   - apply req_refl.
 Qed.
@@ -685,352 +685,352 @@ Qed.
    Id 系 id_cong 五段链；req 系以内层恒等 Hinner + req_mult_compat 显式给参
    （req 化非平凡件：inv 链 5 段每段独立真证）。 *)
 Lemma req_minp_kernel_ratio : forall (prefix : list Token) (w : Token),
-  minp_keep prefix w ->
-  req (minp_markov_kernel prefix w)
-      (mult (markov_kernel prefix w)
-            (mult (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
-                  (partition_temp prefix))).
+  alb_minp_keep prefix w ->
+  req (alb_minp_markov_kernel prefix w)
+      (mult (alb_markov_kernel prefix w)
+            (mult (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
+                  (alb_partition_temp prefix))).
 Proof.
   intros prefix w Hkeep.
-  assert (Hinner : req (mult (inv_pos (partition_temp prefix)
+  assert (Hinner : req (mult (inv_pos (alb_partition_temp prefix)
                                        (req_partition_temp_pos prefix))
-                             (mult (inv_pos (minp_temp_sum prefix)
+                             (mult (inv_pos (alb_minp_temp_sum prefix)
                                             (req_minp_temp_sum_pos prefix))
-                                   (partition_temp prefix)))
-                       (inv_pos (minp_temp_sum prefix)
+                                   (alb_partition_temp prefix)))
+                       (inv_pos (alb_minp_temp_sum prefix)
                                 (req_minp_temp_sum_pos prefix))).
   { apply (req_trans
-      (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-            (mult (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
-                  (partition_temp prefix)))
-      (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-            (mult (partition_temp prefix)
-                  (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))))
-      (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
+      (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+            (mult (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
+                  (alb_partition_temp prefix)))
+      (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+            (mult (alb_partition_temp prefix)
+                  (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))))
+      (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
     - apply req_mult_compat.
       + apply req_refl.
       + apply mult_comm.
     - apply (req_trans
-        (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-              (mult (partition_temp prefix)
-                    (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))))
-        (mult (mult (inv_pos (partition_temp prefix)
+        (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+              (mult (alb_partition_temp prefix)
+                    (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))))
+        (mult (mult (inv_pos (alb_partition_temp prefix)
                                  (req_partition_temp_pos prefix))
-                    (partition_temp prefix))
-              (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
-        (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
+                    (alb_partition_temp prefix))
+              (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
+        (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
       + apply mult_assoc.
       + apply (req_trans
-          (mult (mult (inv_pos (partition_temp prefix)
+          (mult (mult (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix))
-                      (partition_temp prefix))
-                (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
-          (mult (mult (partition_temp prefix)
-                      (inv_pos (partition_temp prefix)
+                      (alb_partition_temp prefix))
+                (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
+          (mult (mult (alb_partition_temp prefix)
+                      (inv_pos (alb_partition_temp prefix)
                                (req_partition_temp_pos prefix)))
-                (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
-          (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
+                (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
+          (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
         * apply req_mult_compat.
           -- apply mult_comm.
           -- apply req_refl.
         * apply (req_trans
-            (mult (mult (partition_temp prefix)
-                        (inv_pos (partition_temp prefix)
+            (mult (mult (alb_partition_temp prefix)
+                        (inv_pos (alb_partition_temp prefix)
                                  (req_partition_temp_pos prefix)))
-                  (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
-            (mult one (inv_pos (minp_temp_sum prefix)
+                  (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix)))
+            (mult one (inv_pos (alb_minp_temp_sum prefix)
                                (req_minp_temp_sum_pos prefix)))
-            (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
+            (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))).
           -- apply req_mult_compat.
              ++ apply inv_pos_correct.
              ++ apply req_refl.
           -- apply (req_trans
-               (mult one (inv_pos (minp_temp_sum prefix)
+               (mult one (inv_pos (alb_minp_temp_sum prefix)
                                   (req_minp_temp_sum_pos prefix)))
-               (mult (inv_pos (minp_temp_sum prefix)
+               (mult (inv_pos (alb_minp_temp_sum prefix)
                               (req_minp_temp_sum_pos prefix)) one)
-               (inv_pos (minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
+               (inv_pos (alb_minp_temp_sum prefix) (req_minp_temp_sum_pos prefix))
                (mult_comm one
-                          (inv_pos (minp_temp_sum prefix)
+                          (inv_pos (alb_minp_temp_sum prefix)
                                    (req_minp_temp_sum_pos prefix)))
-               (mult_one (inv_pos (minp_temp_sum prefix)
+               (mult_one (inv_pos (alb_minp_temp_sum prefix)
                                   (req_minp_temp_sum_pos prefix)))). }
   exact (req_trans
-           (minp_markov_kernel prefix w)
-           (mult (temp_factor prefix w)
-                 (inv_pos (minp_temp_sum prefix)
+           (alb_minp_markov_kernel prefix w)
+           (mult (alb_temp_factor prefix w)
+                 (inv_pos (alb_minp_temp_sum prefix)
                           (req_minp_temp_sum_pos prefix)))
-           (mult (markov_kernel prefix w)
-                 (mult (inv_pos (minp_temp_sum prefix)
+           (mult (alb_markov_kernel prefix w)
+                 (mult (inv_pos (alb_minp_temp_sum prefix)
                                 (req_minp_temp_sum_pos prefix))
-                       (partition_temp prefix)))
+                       (alb_partition_temp prefix)))
            (req_minp_markov_kernel_unfold_keep prefix w Hkeep)
            (req_trans
-              (mult (temp_factor prefix w)
-                    (inv_pos (minp_temp_sum prefix)
+              (mult (alb_temp_factor prefix w)
+                    (inv_pos (alb_minp_temp_sum prefix)
                              (req_minp_temp_sum_pos prefix)))
-              (mult (temp_factor prefix w)
-                    (mult (inv_pos (partition_temp prefix)
+              (mult (alb_temp_factor prefix w)
+                    (mult (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix))
-                          (mult (inv_pos (minp_temp_sum prefix)
+                          (mult (inv_pos (alb_minp_temp_sum prefix)
                                          (req_minp_temp_sum_pos prefix))
-                                (partition_temp prefix))))
-              (mult (markov_kernel prefix w)
-                    (mult (inv_pos (minp_temp_sum prefix)
+                                (alb_partition_temp prefix))))
+              (mult (alb_markov_kernel prefix w)
+                    (mult (inv_pos (alb_minp_temp_sum prefix)
                                    (req_minp_temp_sum_pos prefix))
-                          (partition_temp prefix)))
+                          (alb_partition_temp prefix)))
               (req_mult_compat
-                 (temp_factor prefix w) (temp_factor prefix w)
-                 (inv_pos (minp_temp_sum prefix)
+                 (alb_temp_factor prefix w) (alb_temp_factor prefix w)
+                 (inv_pos (alb_minp_temp_sum prefix)
                           (req_minp_temp_sum_pos prefix))
-                 (mult (inv_pos (partition_temp prefix)
+                 (mult (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))
-                       (mult (inv_pos (minp_temp_sum prefix)
+                       (mult (inv_pos (alb_minp_temp_sum prefix)
                                       (req_minp_temp_sum_pos prefix))
-                             (partition_temp prefix)))
-                 (req_refl (temp_factor prefix w))
+                             (alb_partition_temp prefix)))
+                 (req_refl (alb_temp_factor prefix w))
                  (req_sym
-                    (mult (inv_pos (partition_temp prefix)
+                    (mult (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix))
-                          (mult (inv_pos (minp_temp_sum prefix)
+                          (mult (inv_pos (alb_minp_temp_sum prefix)
                                          (req_minp_temp_sum_pos prefix))
-                                (partition_temp prefix)))
-                    (inv_pos (minp_temp_sum prefix)
+                                (alb_partition_temp prefix)))
+                    (inv_pos (alb_minp_temp_sum prefix)
                              (req_minp_temp_sum_pos prefix))
                     Hinner))
-              (mult_assoc (temp_factor prefix w)
-                          (inv_pos (partition_temp prefix)
+              (mult_assoc (alb_temp_factor prefix w)
+                          (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix))
-                          (mult (inv_pos (minp_temp_sum prefix)
+                          (mult (inv_pos (alb_minp_temp_sum prefix)
                                          (req_minp_temp_sum_pos prefix))
-                                (partition_temp prefix))))).
+                                (alb_partition_temp prefix))))).
 Qed.
 
 (* ---- 5. 截断质量（L31257-31451；minus → req_minus 签名变化，台账 3） ---- *)
-Definition minp_dropped_mass (prefix : list Token) : R :=
+Definition alb_minp_dropped_mass (prefix : list Token) : R :=
   req_minus one
-            (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-                  (minp_temp_sum prefix)).
+            (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+                  (alb_minp_temp_sum prefix)).
 
 (* 基座 minp_dropped_mass_nonneg L31261（le_minus_nonneg → req_le_minus_nonneg） *)
 Lemma req_minp_dropped_mass_nonneg : forall prefix : list Token,
-  le zero (minp_dropped_mass prefix).
+  le zero (alb_minp_dropped_mass prefix).
 Proof.
-  intro prefix. unfold minp_dropped_mass.
+  intro prefix. unfold alb_minp_dropped_mass.
   apply req_le_minus_nonneg.
   apply (le_id_r
-    (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-          (minp_temp_sum prefix))
-    (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-          (partition_temp prefix))
+    (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+          (alb_minp_temp_sum prefix))
+    (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+          (alb_partition_temp prefix))
     one).
   - apply (req_trans
-      (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-            (partition_temp prefix))
-      (mult (partition_temp prefix)
-            (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix)))
+      (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+            (alb_partition_temp prefix))
+      (mult (alb_partition_temp prefix)
+            (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)))
       one).
     + apply mult_comm.
     + apply inv_pos_correct.
   - apply (req_le_mult_compat_r
-             (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-             (minp_temp_sum prefix) (partition_temp prefix)).
+             (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+             (alb_minp_temp_sum prefix) (alb_partition_temp prefix)).
     + apply (lt_le_iff zero
-                       (inv_pos (partition_temp prefix)
+                       (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))).
-      left. apply (inv_pos_pos (partition_temp prefix) (req_partition_temp_pos prefix)).
+      left. apply (inv_pos_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)).
     + exact (req_minp_temp_sum_le_partition prefix).
 Qed.
 
 (* 基座 temp_factor_max_eq L31298：tf(pick_max) == max_prob·partition
-   （max_prob 经 markov_kernel 定义 δ 展开 == tf·inv_p——req 化差异：
+   （max_prob 经 alb_markov_kernel 定义 δ 展开 == tf·inv_p——req 化差异：
    该 δ 步为 conversion req_refl，assoc 步真证） *)
 Lemma req_temp_factor_max_eq : forall prefix : list Token,
-  req (temp_factor prefix (pick_max_token prefix))
-      (mult (max_markov_prob prefix) (partition_temp prefix)).
+  req (alb_temp_factor prefix (pick_max_token prefix))
+      (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix)).
 Proof.
   intro prefix.
   apply (req_trans
-    (temp_factor prefix (pick_max_token prefix))
-    (mult (temp_factor prefix (pick_max_token prefix))
-          (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-                (partition_temp prefix)))
-    (mult (max_markov_prob prefix) (partition_temp prefix))).
+    (alb_temp_factor prefix (pick_max_token prefix))
+    (mult (alb_temp_factor prefix (pick_max_token prefix))
+          (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+                (alb_partition_temp prefix)))
+    (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix))).
   - apply (req_trans
-      (temp_factor prefix (pick_max_token prefix))
-      (mult (temp_factor prefix (pick_max_token prefix)) one)
-      (mult (temp_factor prefix (pick_max_token prefix))
-            (mult (inv_pos (partition_temp prefix)
+      (alb_temp_factor prefix (pick_max_token prefix))
+      (mult (alb_temp_factor prefix (pick_max_token prefix)) one)
+      (mult (alb_temp_factor prefix (pick_max_token prefix))
+            (mult (inv_pos (alb_partition_temp prefix)
                            (req_partition_temp_pos prefix))
-                  (partition_temp prefix)))).
-    + apply (req_sym (mult (temp_factor prefix (pick_max_token prefix)) one)
-                     (temp_factor prefix (pick_max_token prefix))).
+                  (alb_partition_temp prefix)))).
+    + apply (req_sym (mult (alb_temp_factor prefix (pick_max_token prefix)) one)
+                     (alb_temp_factor prefix (pick_max_token prefix))).
       apply mult_one.
     + apply req_mult_compat.
       * apply req_refl.
       * apply (req_trans
           one
-          (mult (partition_temp prefix)
-                (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix)))
-          (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-                (partition_temp prefix))).
+          (mult (alb_partition_temp prefix)
+                (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)))
+          (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+                (alb_partition_temp prefix))).
         -- apply (req_sym
-                    (mult (partition_temp prefix)
-                          (inv_pos (partition_temp prefix)
+                    (mult (alb_partition_temp prefix)
+                          (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix)))
                     one).
            apply inv_pos_correct.
         -- apply mult_comm.
   - apply (req_trans
-      (mult (temp_factor prefix (pick_max_token prefix))
-            (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-                  (partition_temp prefix)))
-      (mult (mult (temp_factor prefix (pick_max_token prefix))
-                  (inv_pos (partition_temp prefix)
+      (mult (alb_temp_factor prefix (pick_max_token prefix))
+            (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+                  (alb_partition_temp prefix)))
+      (mult (mult (alb_temp_factor prefix (pick_max_token prefix))
+                  (inv_pos (alb_partition_temp prefix)
                            (req_partition_temp_pos prefix)))
-            (partition_temp prefix))
-      (mult (max_markov_prob prefix) (partition_temp prefix))).
+            (alb_partition_temp prefix))
+      (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix))).
     + apply (req_sym
-        (mult (mult (temp_factor prefix (pick_max_token prefix))
-                    (inv_pos (partition_temp prefix)
+        (mult (mult (alb_temp_factor prefix (pick_max_token prefix))
+                    (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix)))
-              (partition_temp prefix))
-              (mult (temp_factor prefix (pick_max_token prefix))
-              (mult (inv_pos (partition_temp prefix)
+              (alb_partition_temp prefix))
+              (mult (alb_temp_factor prefix (pick_max_token prefix))
+              (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
-                    (partition_temp prefix)))).
+                    (alb_partition_temp prefix)))).
       (* 盘故障断点修复（接管席 20260909）：外层 req_sym 已翻转目标，
          assoc 步实为 mult_assoc 之对称——req_sym 显式翻回（正向修复）。 *)
       apply (req_sym
-        (mult (temp_factor prefix (pick_max_token prefix))
-              (mult (inv_pos (partition_temp prefix)
+        (mult (alb_temp_factor prefix (pick_max_token prefix))
+              (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
-                    (partition_temp prefix)))
-        (mult (mult (temp_factor prefix (pick_max_token prefix))
-                    (inv_pos (partition_temp prefix)
+                    (alb_partition_temp prefix)))
+        (mult (mult (alb_temp_factor prefix (pick_max_token prefix))
+                    (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix)))
-              (partition_temp prefix))).
+              (alb_partition_temp prefix))).
       apply mult_assoc.
     + apply req_refl.
 Qed.
 
 (* 基座 minp_scaled_sum_ge_max L31313：max_prob ≤ inv_p·minp_sum *)
 Lemma req_minp_scaled_sum_ge_max : forall prefix : list Token,
-  le (max_markov_prob prefix)
-     (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-           (minp_temp_sum prefix)).
+  le (alb_max_markov_prob prefix)
+     (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+           (alb_minp_temp_sum prefix)).
 Proof.
   intro prefix.
-  assert (Hid : req (mult (inv_pos (partition_temp prefix)
+  assert (Hid : req (mult (inv_pos (alb_partition_temp prefix)
                                    (req_partition_temp_pos prefix))
-                          (mult (max_markov_prob prefix)
-                                (partition_temp prefix)))
-                    (max_markov_prob prefix)).
+                          (mult (alb_max_markov_prob prefix)
+                                (alb_partition_temp prefix)))
+                    (alb_max_markov_prob prefix)).
   { apply (req_trans
-      (mult (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-            (mult (max_markov_prob prefix) (partition_temp prefix)))
-      (mult (mult (inv_pos (partition_temp prefix)
+      (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+            (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix)))
+      (mult (mult (inv_pos (alb_partition_temp prefix)
                            (req_partition_temp_pos prefix))
-                  (max_markov_prob prefix))
-            (partition_temp prefix))
-      (max_markov_prob prefix)).
+                  (alb_max_markov_prob prefix))
+            (alb_partition_temp prefix))
+      (alb_max_markov_prob prefix)).
     - apply mult_assoc.
     - apply (req_trans
-        (mult (mult (inv_pos (partition_temp prefix)
+        (mult (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
-                    (max_markov_prob prefix))
-              (partition_temp prefix))
-        (mult (mult (max_markov_prob prefix)
-                    (inv_pos (partition_temp prefix)
+                    (alb_max_markov_prob prefix))
+              (alb_partition_temp prefix))
+        (mult (mult (alb_max_markov_prob prefix)
+                    (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix)))
-              (partition_temp prefix))
-        (max_markov_prob prefix)).
+              (alb_partition_temp prefix))
+        (alb_max_markov_prob prefix)).
       + apply req_mult_compat.
         * apply mult_comm.
         * apply req_refl.
       + apply (req_trans
-          (mult (mult (max_markov_prob prefix)
-                      (inv_pos (partition_temp prefix)
+          (mult (mult (alb_max_markov_prob prefix)
+                      (inv_pos (alb_partition_temp prefix)
                                (req_partition_temp_pos prefix)))
-                (partition_temp prefix))
-          (mult (max_markov_prob prefix)
-                (mult (inv_pos (partition_temp prefix)
+                (alb_partition_temp prefix))
+          (mult (alb_max_markov_prob prefix)
+                (mult (inv_pos (alb_partition_temp prefix)
                                (req_partition_temp_pos prefix))
-                      (partition_temp prefix)))
-          (max_markov_prob prefix)).
+                      (alb_partition_temp prefix)))
+          (alb_max_markov_prob prefix)).
         * apply (req_sym
-            (mult (max_markov_prob prefix)
-                  (mult (inv_pos (partition_temp prefix)
+            (mult (alb_max_markov_prob prefix)
+                  (mult (inv_pos (alb_partition_temp prefix)
                                  (req_partition_temp_pos prefix))
-                        (partition_temp prefix)))
-            (mult (mult (max_markov_prob prefix)
-                        (inv_pos (partition_temp prefix)
+                        (alb_partition_temp prefix)))
+            (mult (mult (alb_max_markov_prob prefix)
+                        (inv_pos (alb_partition_temp prefix)
                                  (req_partition_temp_pos prefix)))
-                  (partition_temp prefix))).
+                  (alb_partition_temp prefix))).
           apply mult_assoc.
         * apply (req_trans
-            (mult (max_markov_prob prefix)
-                  (mult (inv_pos (partition_temp prefix)
+            (mult (alb_max_markov_prob prefix)
+                  (mult (inv_pos (alb_partition_temp prefix)
                                  (req_partition_temp_pos prefix))
-                        (partition_temp prefix)))
-            (mult (max_markov_prob prefix) one)
-            (max_markov_prob prefix)).
+                        (alb_partition_temp prefix)))
+            (mult (alb_max_markov_prob prefix) one)
+            (alb_max_markov_prob prefix)).
           -- apply req_mult_compat.
              ++ apply req_refl.
              ++ apply (req_trans
-                 (mult (inv_pos (partition_temp prefix)
+                 (mult (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))
-                       (partition_temp prefix))
-                 (mult (partition_temp prefix)
-                       (inv_pos (partition_temp prefix)
+                       (alb_partition_temp prefix))
+                 (mult (alb_partition_temp prefix)
+                       (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix)))
                  one).
                 ** apply mult_comm.
                 ** apply inv_pos_correct.
           -- apply mult_one. }
-  assert (H1 : le (mult (max_markov_prob prefix) (partition_temp prefix))
-                  (minp_temp_sum prefix)).
-  { exact (le_id_l (mult (max_markov_prob prefix) (partition_temp prefix))
-                   (temp_factor prefix (pick_max_token prefix))
-                   (minp_temp_sum prefix)
-                   (req_sym (temp_factor prefix (pick_max_token prefix))
-                            (mult (max_markov_prob prefix)
-                                  (partition_temp prefix))
+  assert (H1 : le (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix))
+                  (alb_minp_temp_sum prefix)).
+  { exact (le_id_l (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix))
+                   (alb_temp_factor prefix (pick_max_token prefix))
+                   (alb_minp_temp_sum prefix)
+                   (req_sym (alb_temp_factor prefix (pick_max_token prefix))
+                            (mult (alb_max_markov_prob prefix)
+                                  (alb_partition_temp prefix))
                             (req_temp_factor_max_eq prefix))
                    (req_pick_max_tf_le_minp_sum prefix)). }
-  apply (le_id_l (max_markov_prob prefix)
-                 (mult (inv_pos (partition_temp prefix)
+  apply (le_id_l (alb_max_markov_prob prefix)
+                 (mult (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))
-                       (mult (max_markov_prob prefix) (partition_temp prefix)))
-                 (mult (inv_pos (partition_temp prefix)
+                       (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix)))
+                 (mult (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))
-                       (minp_temp_sum prefix))).
-  - apply (req_sym (mult (inv_pos (partition_temp prefix)
+                       (alb_minp_temp_sum prefix))).
+  - apply (req_sym (mult (inv_pos (alb_partition_temp prefix)
                                   (req_partition_temp_pos prefix))
-                         (mult (max_markov_prob prefix) (partition_temp prefix)))
-                   (max_markov_prob prefix)).
+                         (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix)))
+                   (alb_max_markov_prob prefix)).
     exact Hid.
   - apply (req_le_mult_compat_r
-             (inv_pos (partition_temp prefix) (req_partition_temp_pos prefix))
-             (mult (max_markov_prob prefix) (partition_temp prefix))
-             (minp_temp_sum prefix)).
+             (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
+             (mult (alb_max_markov_prob prefix) (alb_partition_temp prefix))
+             (alb_minp_temp_sum prefix)).
     + apply (lt_le_iff zero
-                       (inv_pos (partition_temp prefix)
+                       (inv_pos (alb_partition_temp prefix)
                                 (req_partition_temp_pos prefix))).
-      left. apply (inv_pos_pos (partition_temp prefix) (req_partition_temp_pos prefix)).
+      left. apply (inv_pos_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix)).
     + exact H1.
 Qed.
 
 (* 基座 minp_dropped_mass_le_one_minus_max L31451（opp 反向 + 平移） *)
 Lemma req_minp_dropped_mass_le_one_minus_max : forall prefix : list Token,
-  le (minp_dropped_mass prefix) (req_minus one (max_markov_prob prefix)).
+  le (alb_minp_dropped_mass prefix) (req_minus one (alb_max_markov_prob prefix)).
 Proof.
-  intro prefix. unfold minp_dropped_mass.
+  intro prefix. unfold alb_minp_dropped_mass.
   apply (le_plus_compat one one
-           (opp (mult (inv_pos (partition_temp prefix)
+           (opp (mult (inv_pos (alb_partition_temp prefix)
                                (req_partition_temp_pos prefix))
-                      (minp_temp_sum prefix)))
-           (opp (max_markov_prob prefix))).
+                      (alb_minp_temp_sum prefix)))
+           (opp (alb_max_markov_prob prefix))).
   - apply le_refl.
   - apply opp_le_compat.
     exact (req_minp_scaled_sum_ge_max prefix).
@@ -1041,201 +1041,201 @@ Qed.
 (* ============================================================ *)
 
 (* 基座 topp_keep L31990（le 形态） *)
-Definition topp_keep (p : R) (prefix : list Token) (w : Token) : Set :=
-  le p (markov_kernel prefix w).
+Definition alb_topp_keep (p : R) (prefix : list Token) (w : Token) : Set :=
+  le p (alb_markov_kernel prefix w).
 
-Definition topp_keep_dec (p : R) (prefix : list Token) (w : Token) :
-  Or (topp_keep p prefix w) (Not (topp_keep p prefix w)) :=
-  req_le_dec p (markov_kernel prefix w).
+Definition alb_topp_keep_dec (p : R) (prefix : list Token) (w : Token) :
+  Or (alb_topp_keep p prefix w) (Not (alb_topp_keep p prefix w)) :=
+  req_le_dec p (alb_markov_kernel prefix w).
 
-Definition topp_temp_sum (p : R) (prefix : list Token) : R :=
-  rsum Token (fun w => match topp_keep_dec p prefix w with
-                       | inl _ => temp_factor prefix w
+Definition alb_topp_temp_sum (p : R) (prefix : list Token) : R :=
+  rsum Token (fun w => match alb_topp_keep_dec p prefix w with
+                       | inl _ => alb_temp_factor prefix w
                        | inr _ => zero
                        end) vocab.
 
 (* 基座 topp_temp_sum_pos L32014：pick_max 保留性由前提 le p max 承接
-   （topp_keep p prefix pick_max ≡ le p (max_markov_prob prefix) conversion） *)
+   （alb_topp_keep p prefix pick_max ≡ le p (alb_max_markov_prob prefix) conversion） *)
 Lemma req_topp_temp_sum_pos : forall (p : R) (prefix : list Token),
-  le p (max_markov_prob prefix) -> lt zero (topp_temp_sum p prefix).
+  le p (alb_max_markov_prob prefix) -> lt zero (alb_topp_temp_sum p prefix).
 Proof.
   intros p prefix Hp.
-  assert (Hle : le (temp_factor prefix (pick_max_token prefix))
-                   (topp_temp_sum p prefix)).
-  { unfold topp_temp_sum.
-    assert (Heq : req (temp_factor prefix (pick_max_token prefix))
-                      (match topp_keep_dec p prefix (pick_max_token prefix) with
-                       | inl _ => temp_factor prefix (pick_max_token prefix)
+  assert (Hle : le (alb_temp_factor prefix (pick_max_token prefix))
+                   (alb_topp_temp_sum p prefix)).
+  { unfold alb_topp_temp_sum.
+    assert (Heq : req (alb_temp_factor prefix (pick_max_token prefix))
+                      (match alb_topp_keep_dec p prefix (pick_max_token prefix) with
+                       | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                        | inr _ => zero
                        end)).
-    { destruct (topp_keep_dec p prefix (pick_max_token prefix)) as [Hk | Hd].
+    { destruct (alb_topp_keep_dec p prefix (pick_max_token prefix)) as [Hk | Hd].
       - apply req_refl.
       - destruct (Hd Hp). }
-    apply (le_id_l (temp_factor prefix (pick_max_token prefix))
-                   (match topp_keep_dec p prefix (pick_max_token prefix) with
-                    | inl _ => temp_factor prefix (pick_max_token prefix)
+    apply (le_id_l (alb_temp_factor prefix (pick_max_token prefix))
+                   (match alb_topp_keep_dec p prefix (pick_max_token prefix) with
+                    | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                     | inr _ => zero
                     end)
                    (rsum Token
-                          (fun w => match topp_keep_dec p prefix w with
-                                    | inl _ => temp_factor prefix w
+                          (fun w => match alb_topp_keep_dec p prefix w with
+                                    | inl _ => alb_temp_factor prefix w
                                     | inr _ => zero
                                     end) vocab)).
     - exact Heq.
     - apply (rls_single_le Token
-               (fun w => match topp_keep_dec p prefix w with
-                         | inl _ => temp_factor prefix w
+               (fun w => match alb_topp_keep_dec p prefix w with
+                         | inl _ => alb_temp_factor prefix w
                          | inr _ => zero
                          end)
                (pick_max_token prefix) vocab).
       + apply pick_max_in_vocab.
-      + intro w. destruct (topp_keep_dec p prefix w) as [Hk2 | Hd2].
-        * apply (lt_le_iff zero (temp_factor prefix w)). left.
-          unfold temp_factor. apply exp_neg_pos.
+      + intro w. destruct (alb_topp_keep_dec p prefix w) as [Hk2 | Hd2].
+        * apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+          unfold alb_temp_factor. apply exp_neg_pos.
         * apply le_refl. }
-  apply (req_lt_zero_le_trans (temp_factor prefix (pick_max_token prefix))
-                              (topp_temp_sum p prefix)).
-  - unfold temp_factor. apply exp_neg_pos.
+  apply (req_lt_zero_le_trans (alb_temp_factor prefix (pick_max_token prefix))
+                              (alb_topp_temp_sum p prefix)).
+  - unfold alb_temp_factor. apply exp_neg_pos.
   - exact Hle.
 Qed.
 
 (* 基座 topp_markov_kernel L32085（Hpmax 前提位逐位对应） *)
-Definition topp_markov_kernel (p : R)
-  (Hpmax : forall prefix : list Token, le p (max_markov_prob prefix))
+Definition alb_topp_markov_kernel (p : R)
+  (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token) (w : Token) : R :=
-  match topp_keep_dec p prefix w with
+  match alb_topp_keep_dec p prefix w with
   | inl _ =>
-      mult (temp_factor prefix w)
-           (inv_pos (topp_temp_sum p prefix)
+      mult (alb_temp_factor prefix w)
+           (inv_pos (alb_topp_temp_sum p prefix)
                     (req_topp_temp_sum_pos p prefix (Hpmax prefix)))
   | inr _ => zero
   end.
 
 (* ===== 基座 topp_markov_kernel_normalized L32084（定理 req 化旗舰） ===== *)
 Theorem req_topp_markov_kernel_normalized : forall (p : R)
-  (Hpmax : forall prefix : list Token, le p (max_markov_prob prefix))
+  (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token),
-  req (rsum Token (fun w => topp_markov_kernel p Hpmax prefix w) vocab) one.
+  req (rsum Token (fun w => alb_topp_markov_kernel p Hpmax prefix w) vocab) one.
 Proof.
   intros p Hpmax prefix.
-  exact (rls_kernel_norm_gen Token vocab (topp_keep p prefix)
-           (fun w => topp_keep_dec p prefix w) (temp_factor prefix)
+  exact (rls_kernel_norm_gen Token vocab (alb_topp_keep p prefix)
+           (fun w => alb_topp_keep_dec p prefix w) (alb_temp_factor prefix)
            (req_topp_temp_sum_pos p prefix (Hpmax prefix))).
 Qed.
 
 (* ---- 联合保留（Min-P ∧ Top-p，基座 L32152-32262） ---- *)
-Definition combined_keep (p : R) (prefix : list Token) (w : Token) : Set :=
-  And (minp_keep prefix w) (topp_keep p prefix w).
+Definition alb_combined_keep (p : R) (prefix : list Token) (w : Token) : Set :=
+  And (alb_minp_keep prefix w) (alb_topp_keep p prefix w).
 
-Definition combined_keep_dec (p : R) (prefix : list Token) (w : Token) :
-  Or (combined_keep p prefix w) (Not (combined_keep p prefix w)).
+Definition alb_combined_keep_dec (p : R) (prefix : list Token) (w : Token) :
+  Or (alb_combined_keep p prefix w) (Not (alb_combined_keep p prefix w)).
 Proof.
-  unfold combined_keep.
-  destruct (minp_keep_dec prefix w) as [Hmin | Hnotmin].
-  - destruct (topp_keep_dec p prefix w) as [Htp | Hntp].
+  unfold alb_combined_keep.
+  destruct (alb_minp_keep_dec prefix w) as [Hmin | Hnotmin].
+  - destruct (alb_topp_keep_dec p prefix w) as [Htp | Hntp].
     + left. split; assumption.
     + right. intros [Hm Ht]. exact (Hntp Ht).
   - right. intros [Hm Ht]. exact (Hnotmin Hm).
 Defined.
 
-Definition combined_temp_sum (p : R) (prefix : list Token) : R :=
-  rsum Token (fun w => match combined_keep_dec p prefix w with
-                       | inl _ => temp_factor prefix w
+Definition alb_combined_temp_sum (p : R) (prefix : list Token) : R :=
+  rsum Token (fun w => match alb_combined_keep_dec p prefix w with
+                       | inl _ => alb_temp_factor prefix w
                        | inr _ => zero
                        end) vocab.
 
 (* 基座 combined_temp_sum_pos L32182：pick_max 双保留（minp 内证 + topp 前提） *)
 Lemma req_combined_temp_sum_pos : forall (p : R) (prefix : list Token),
-  le p (max_markov_prob prefix) -> lt zero (combined_temp_sum p prefix).
+  le p (alb_max_markov_prob prefix) -> lt zero (alb_combined_temp_sum p prefix).
 Proof.
   intros p prefix Hp.
-  assert (Hle : le (temp_factor prefix (pick_max_token prefix))
-                   (combined_temp_sum p prefix)).
-  { unfold combined_temp_sum.
-    assert (Heq : req (temp_factor prefix (pick_max_token prefix))
-                      (match combined_keep_dec p prefix (pick_max_token prefix) with
-                       | inl _ => temp_factor prefix (pick_max_token prefix)
+  assert (Hle : le (alb_temp_factor prefix (pick_max_token prefix))
+                   (alb_combined_temp_sum p prefix)).
+  { unfold alb_combined_temp_sum.
+    assert (Heq : req (alb_temp_factor prefix (pick_max_token prefix))
+                      (match alb_combined_keep_dec p prefix (pick_max_token prefix) with
+                       | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                        | inr _ => zero
                        end)).
-    { destruct (combined_keep_dec p prefix (pick_max_token prefix)) as [Hk | Hd].
+    { destruct (alb_combined_keep_dec p prefix (pick_max_token prefix)) as [Hk | Hd].
       - apply req_refl.
       - destruct (Hd (pair (req_pick_max_minp_keep prefix) Hp)). }
-    apply (le_id_l (temp_factor prefix (pick_max_token prefix))
-                   (match combined_keep_dec p prefix (pick_max_token prefix) with
-                    | inl _ => temp_factor prefix (pick_max_token prefix)
+    apply (le_id_l (alb_temp_factor prefix (pick_max_token prefix))
+                   (match alb_combined_keep_dec p prefix (pick_max_token prefix) with
+                    | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                     | inr _ => zero
                     end)
                    (rsum Token
-                          (fun w => match combined_keep_dec p prefix w with
-                                    | inl _ => temp_factor prefix w
+                          (fun w => match alb_combined_keep_dec p prefix w with
+                                    | inl _ => alb_temp_factor prefix w
                                     | inr _ => zero
                                     end) vocab)).
     - exact Heq.
     - apply (rls_single_le Token
-               (fun w => match combined_keep_dec p prefix w with
-                         | inl _ => temp_factor prefix w
+               (fun w => match alb_combined_keep_dec p prefix w with
+                         | inl _ => alb_temp_factor prefix w
                          | inr _ => zero
                          end)
                (pick_max_token prefix) vocab).
       + apply pick_max_in_vocab.
-      + intro w. destruct (combined_keep_dec p prefix w) as [Hk2 | Hd2].
-        * apply (lt_le_iff zero (temp_factor prefix w)). left.
-          unfold temp_factor. apply exp_neg_pos.
+      + intro w. destruct (alb_combined_keep_dec p prefix w) as [Hk2 | Hd2].
+        * apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+          unfold alb_temp_factor. apply exp_neg_pos.
         * apply le_refl. }
-  apply (req_lt_zero_le_trans (temp_factor prefix (pick_max_token prefix))
-                              (combined_temp_sum p prefix)).
-  - unfold temp_factor. apply exp_neg_pos.
+  apply (req_lt_zero_le_trans (alb_temp_factor prefix (pick_max_token prefix))
+                              (alb_combined_temp_sum p prefix)).
+  - unfold alb_temp_factor. apply exp_neg_pos.
   - exact Hle.
 Qed.
 
 (* 基座 combined_markov_kernel L32354（Hpmax 显式前提位同基座） *)
-Definition combined_markov_kernel (p : R)
-  (Hpmax : forall prefix : list Token, le p (max_markov_prob prefix))
+Definition alb_combined_markov_kernel (p : R)
+  (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token) (w : Token) : R :=
-  match combined_keep_dec p prefix w with
+  match alb_combined_keep_dec p prefix w with
   | inl _ =>
-      mult (temp_factor prefix w)
-           (inv_pos (combined_temp_sum p prefix)
+      mult (alb_temp_factor prefix w)
+           (inv_pos (alb_combined_temp_sum p prefix)
                     (req_combined_temp_sum_pos p prefix (Hpmax prefix)))
   | inr _ => zero
   end.
 
 (* ===== 基座 combined_markov_kernel_normalized L32262（定理 req 化旗舰） ===== *)
 Theorem req_combined_markov_kernel_normalized : forall (p : R)
-  (Hpmax : forall prefix : list Token, le p (max_markov_prob prefix))
+  (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token),
-  req (rsum Token (fun w => combined_markov_kernel p Hpmax prefix w) vocab) one.
+  req (rsum Token (fun w => alb_combined_markov_kernel p Hpmax prefix w) vocab) one.
 Proof.
   intros p Hpmax prefix.
-  exact (rls_kernel_norm_gen Token vocab (combined_keep p prefix)
-           (fun w => combined_keep_dec p prefix w) (temp_factor prefix)
+  exact (rls_kernel_norm_gen Token vocab (alb_combined_keep p prefix)
+           (fun w => alb_combined_keep_dec p prefix w) (alb_temp_factor prefix)
            (req_combined_temp_sum_pos p prefix (Hpmax prefix))).
 Qed.
 
 (* ---- Top-k 计数保留（基座 L32366-32396 同构） ---- *)
 (* nat/bool/list 侧 Id 判定原样保留（规划书 §1.1 边界 2） *)
-Definition NatLt_tk (n m : nat) : Set := Id (Nat.ltb n m) true.
+Definition alb_NatLt_tk (n m : nat) : Set := Id (Nat.ltb n m) true.
 
 Lemma urb_id_false_true : forall (H : Id false true), Empty_set.
 Proof. intro H. inversion H. Qed.
 
-Fixpoint count_kernel_heavier (prefix : list Token) (w : Token)
+Fixpoint alb_count_kernel_heavier (prefix : list Token) (w : Token)
          (l : list Token) : nat :=
   match l with
   | nil => Datatypes.O
   | a :: rest =>
-      match req_lt_dec (markov_kernel prefix w) (markov_kernel prefix a) with
-      | inl _ => Datatypes.S (count_kernel_heavier prefix w rest)
-      | inr _ => count_kernel_heavier prefix w rest
+      match req_lt_dec (alb_markov_kernel prefix w) (alb_markov_kernel prefix a) with
+      | inl _ => Datatypes.S (alb_count_kernel_heavier prefix w rest)
+      | inr _ => alb_count_kernel_heavier prefix w rest
       end
   end.
 
-Definition topk_keep (K : nat) (prefix : list Token) (w : Token) : Set :=
-  NatLt_tk (count_kernel_heavier prefix w vocab) K.
+Definition alb_topk_keep (K : nat) (prefix : list Token) (w : Token) : Set :=
+  alb_NatLt_tk (alb_count_kernel_heavier prefix w vocab) K.
 
-Definition topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
-  Or (topk_keep K prefix w) (Not (topk_keep K prefix w)) :=
-  match Nat.ltb (count_kernel_heavier prefix w vocab) K as b
+Definition alb_topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
+  Or (alb_topk_keep K prefix w) (Not (alb_topk_keep K prefix w)) :=
+  match Nat.ltb (alb_count_kernel_heavier prefix w vocab) K as b
         return Or (Id b true) (Not (Id b true)) with
   | true => inl id_refl
   | false => inr (fun H => urb_id_false_true H)
@@ -1243,85 +1243,85 @@ Definition topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
 
 (* 诚实前提（基座 L32346 同位 Variable：排序正确性弱化 E211/E215 绕行） *)
 Variable topk_pickmax_head : forall (K : nat) (prefix : list Token),
-  (1 <= K)%nat -> topk_keep K prefix (pick_max_token prefix).
+  (1 <= K)%nat -> alb_topk_keep K prefix (pick_max_token prefix).
 
 (* ---- 联合保留（Min-P ∧ Top-k，基座 L32403-32481） ---- *)
-Definition combined_topk_keep (K : nat) (prefix : list Token) (w : Token) : Set :=
-  And (minp_keep prefix w) (topk_keep K prefix w).
+Definition alb_combined_topk_keep (K : nat) (prefix : list Token) (w : Token) : Set :=
+  And (alb_minp_keep prefix w) (alb_topk_keep K prefix w).
 
-Definition combined_topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
-  Or (combined_topk_keep K prefix w) (Not (combined_topk_keep K prefix w)).
+Definition alb_combined_topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
+  Or (alb_combined_topk_keep K prefix w) (Not (alb_combined_topk_keep K prefix w)).
 Proof.
-  unfold combined_topk_keep.
-  destruct (minp_keep_dec prefix w) as [Hmin | Hnotmin].
-  - destruct (topk_keep_dec K prefix w) as [Htop | Hntop].
+  unfold alb_combined_topk_keep.
+  destruct (alb_minp_keep_dec prefix w) as [Hmin | Hnotmin].
+  - destruct (alb_topk_keep_dec K prefix w) as [Htop | Hntop].
     + left. split; assumption.
     + right. intros [Hm Ht]. exact (Hntop Ht).
   - right. intros [Hm Ht]. exact (Hnotmin Hm).
 Defined.
 
-Definition combined_topk_temp_sum (K : nat) (prefix : list Token) : R :=
-  rsum Token (fun w => match combined_topk_keep_dec K prefix w with
-                       | inl _ => temp_factor prefix w
+Definition alb_combined_topk_temp_sum (K : nat) (prefix : list Token) : R :=
+  rsum Token (fun w => match alb_combined_topk_keep_dec K prefix w with
+                       | inl _ => alb_temp_factor prefix w
                        | inr _ => zero
                        end) vocab.
 
 (* 基座 combined_topk_temp_sum_pos L32406：K ≥ 1 + 诚实前提 topk_pickmax_head *)
 Lemma req_combined_topk_temp_sum_pos : forall (K : nat) (prefix : list Token),
-  (1 <= K)%nat -> lt zero (combined_topk_temp_sum K prefix).
+  (1 <= K)%nat -> lt zero (alb_combined_topk_temp_sum K prefix).
 Proof.
   intros K prefix HK.
-  assert (Hle : le (temp_factor prefix (pick_max_token prefix))
-                   (combined_topk_temp_sum K prefix)).
-  { unfold combined_topk_temp_sum.
-    assert (Heq : req (temp_factor prefix (pick_max_token prefix))
-                      (match combined_topk_keep_dec K prefix
+  assert (Hle : le (alb_temp_factor prefix (pick_max_token prefix))
+                   (alb_combined_topk_temp_sum K prefix)).
+  { unfold alb_combined_topk_temp_sum.
+    assert (Heq : req (alb_temp_factor prefix (pick_max_token prefix))
+                      (match alb_combined_topk_keep_dec K prefix
                                  (pick_max_token prefix) with
-                       | inl _ => temp_factor prefix (pick_max_token prefix)
+                       | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                        | inr _ => zero
                        end)).
-    { destruct (combined_topk_keep_dec K prefix (pick_max_token prefix))
+    { destruct (alb_combined_topk_keep_dec K prefix (pick_max_token prefix))
               as [Hk | Hd].
       - apply req_refl.
       - destruct (Hd (pair (req_pick_max_minp_keep prefix)
                            (topk_pickmax_head K prefix HK))). }
-    apply (le_id_l (temp_factor prefix (pick_max_token prefix))
-                   (match combined_topk_keep_dec K prefix
+    apply (le_id_l (alb_temp_factor prefix (pick_max_token prefix))
+                   (match alb_combined_topk_keep_dec K prefix
                                  (pick_max_token prefix) with
-                    | inl _ => temp_factor prefix (pick_max_token prefix)
+                    | inl _ => alb_temp_factor prefix (pick_max_token prefix)
                     | inr _ => zero
                     end)
                    (rsum Token
-                          (fun w => match combined_topk_keep_dec K prefix w with
-                                    | inl _ => temp_factor prefix w
+                          (fun w => match alb_combined_topk_keep_dec K prefix w with
+                                    | inl _ => alb_temp_factor prefix w
                                     | inr _ => zero
                                     end) vocab)).
     - exact Heq.
     - apply (rls_single_le Token
-               (fun w => match combined_topk_keep_dec K prefix w with
-                         | inl _ => temp_factor prefix w
+               (fun w => match alb_combined_topk_keep_dec K prefix w with
+                         | inl _ => alb_temp_factor prefix w
                          | inr _ => zero
                          end)
                (pick_max_token prefix) vocab).
       + apply pick_max_in_vocab.
-      + intro w. destruct (combined_topk_keep_dec K prefix w) as [Hk2 | Hd2].
-        * apply (lt_le_iff zero (temp_factor prefix w)). left.
-          unfold temp_factor. apply exp_neg_pos.
+      + intro w. destruct (alb_combined_topk_keep_dec K prefix w) as [Hk2 | Hd2].
+        * apply (lt_le_iff zero (alb_temp_factor prefix w)). left.
+          unfold alb_temp_factor. apply exp_neg_pos.
         * apply le_refl. }
-  apply (req_lt_zero_le_trans (temp_factor prefix (pick_max_token prefix))
-                              (combined_topk_temp_sum K prefix)).
-  - unfold temp_factor. apply exp_neg_pos.
+  apply (req_lt_zero_le_trans (alb_temp_factor prefix (pick_max_token prefix))
+                              (alb_combined_topk_temp_sum K prefix)).
+  - unfold alb_temp_factor. apply exp_neg_pos.
   - exact Hle.
 Qed.
 
 (* 基座 combined_topk_markov_kernel L32473（HK 显式前提位同基座） *)
-Definition combined_topk_markov_kernel (K : nat)
+Definition alb_combined_topk_markov_kernel (K : nat)
   (HK : forall prefix : list Token, (1 <= K)%nat)
   (prefix : list Token) (w : Token) : R :=
-  match combined_topk_keep_dec K prefix w with
+  match alb_combined_topk_keep_dec K prefix w with
   | inl _ =>
-      mult (temp_factor prefix w)
-           (inv_pos (combined_topk_temp_sum K prefix)
+      mult (alb_temp_factor prefix w)
+           (inv_pos (alb_combined_topk_temp_sum K prefix)
                     (req_combined_topk_temp_sum_pos K prefix (HK prefix)))
   | inr _ => zero
   end.
@@ -1330,11 +1330,11 @@ Definition combined_topk_markov_kernel (K : nat)
 Theorem req_combined_topk_markov_kernel_normalized :
   forall (K : nat) (HK : forall prefix : list Token, (1 <= K)%nat)
          (prefix : list Token),
-  req (rsum Token (fun w => combined_topk_markov_kernel K HK prefix w) vocab) one.
+  req (rsum Token (fun w => alb_combined_topk_markov_kernel K HK prefix w) vocab) one.
 Proof.
   intros K HK prefix.
-  exact (rls_kernel_norm_gen Token vocab (combined_topk_keep K prefix)
-           (fun w => combined_topk_keep_dec K prefix w) (temp_factor prefix)
+  exact (rls_kernel_norm_gen Token vocab (alb_combined_topk_keep K prefix)
+           (fun w => alb_combined_topk_keep_dec K prefix w) (alb_temp_factor prefix)
            (req_combined_topk_temp_sum_pos K prefix (HK prefix))).
 Qed.
 
@@ -2617,7 +2617,7 @@ End ReqKVQuantWorld.
       rls_kernel_norm_gen + req_lt_zero_le_trans/req_le_mult_le_one_r —— 全建。
       [Part 1] 14 件全建（另附 3 件辅助：req_partition_temp_pos/
       req_markov_pos/req_markov_kernel_unfold + req_pick_max_tf_le_minp_sum）。
-      [Part 2] 6 件全建（含三枚 markov_kernel 定义族 + topp_keep/topk_keep/
+      [Part 2] 6 件全建（含三枚 alb_markov_kernel 定义族 + alb_topp_keep/alb_topk_keep/
       combined_* 判定与计数结构）。
       [Part 3] req_exp_neg_ext_local/req_le_eps_Kone/req_scal_sum_ge/
       req_M_inv_absorb/req_abs_exp_pos + 熵定义组 3 件 + req_Omega_total_pos
@@ -2633,7 +2633,7 @@ End ReqKVQuantWorld.
    2. 非平凡性分级（红线 5）：真证 = Parts 0/1/2 全部核心件 + Part 3 全部 +
       Part 4 工具族/B1/B2c/B3a/B3b/B3c/B4（req 链 + 接口字段 + UpReqAlgebra
       引擎）；组装 = B3（P1 桥 + distrib + 单调链 + req 重排）；幂等 δ 对偶 =
-      markov_kernel 定义族（δ 展开 + rls_kernel_norm_gen 一击）。
+      alb_markov_kernel 定义族（δ 展开 + rls_kernel_norm_gen 一击）。
    3. 冻结沿用原席台账 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
       Q 逐点乘积界），续建未新增冻结件；新增诚实假设位 2 枚（bridge、
       transition_nonneg Or 形）均已逐位对账（头注台账 1）。

@@ -29,7 +29,7 @@
 (* 诚实签名变化台账（δ 记账）：                                   *)
 (*   1. log 前提化：req 侧 log 带 lt zero 前提，自由能 F_attn 对    *)
 (*      逐点正性位 (forall s, lt zero (p s)) 显式收参（Id 系       *)
-(*      normalized 前提在 req_fep_F_ext 保留为 raw req 形          *)
+(*      reqd_normalized 前提在 req_fep_F_ext 保留为 raw req 形          *)
 (*      req (sumf p) one 位，旗舰按 Id 证明路径真实消费面收参）。   *)
 (*   2. RowView 参数位剪除：Id bs_kernel 的 enum/enum_nonempty/    *)
 (*      Delta/z_lb/expf_mono_le/sum_eq_list 六位为其他引理服务，   *)

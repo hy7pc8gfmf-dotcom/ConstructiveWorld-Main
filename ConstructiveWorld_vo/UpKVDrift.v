@@ -64,7 +64,7 @@ Proof.
   intros A x y P p H. exact (match H with id_refl => p end).
 Qed.
 
-Definition Z_keep (s : Tok) : Real :=
+Definition kv_Z_keep (s : Tok) : Real :=
   real_list_sum Tok (fun s' : Tok => if keep s' then K s s' else real_zero) states.
 
 (* 非空有限表势的正性（states_ne 直用；kv_ofnat 族的前置件） *)
@@ -122,9 +122,9 @@ Proof.
       apply real_le_plus_nonneg_r_aux. apply Hnn.
 Qed.
 
-(* Z_keep 正性——升级为定理（对齐 UpKVEv.v：keep 见证项 K(s,s0) > 0
-   且 ≤ Z_keep s；原契约的 Z_keep_pos 前提由此免除） *)
-Theorem Z_keep_pos : forall s : Tok, real_lt real_zero (Z_keep s).
+(* kv_Z_keep 正性——升级为定理（对齐 UpKVEv.v：keep 见证项 K(s,s0) > 0
+   且 ≤ kv_Z_keep s；原契约的 Z_keep_pos 前提由此免除） *)
+Theorem kv_Z_keep_pos : forall s : Tok, real_lt real_zero (kv_Z_keep s).
 Proof.
   intro s.
   destruct keep_nonempty as [s0 [Hk0 Hin0]].
@@ -133,7 +133,7 @@ Proof.
              (fun b : bool => real_lt real_zero (if b then K s s0 else real_zero))).
     - apply Kpos.
     - exact (id_sym Hk0). }
-  assert (Hle : real_le (if keep s0 then K s s0 else real_zero) (Z_keep s)).
+  assert (Hle : real_le (if keep s0 then K s s0 else real_zero) (kv_Z_keep s)).
   { apply (kv_single_le_sum Tok
              (fun y : Tok => if keep y then K s y else real_zero)
              s0 states Hin0).
@@ -142,39 +142,39 @@ Proof.
     - apply real_le_refl. }
   destruct Hle as [Hlt | Heq].
   - exact (real_lt_trans real_zero
-             (if keep s0 then K s s0 else real_zero) (Z_keep s) Hlt0 Hlt).
+             (if keep s0 then K s s0 else real_zero) (kv_Z_keep s) Hlt0 Hlt).
   - exact (real_lt_eq_lt real_zero
-             (if keep s0 then K s s0 else real_zero) (Z_keep s) Hlt0 Heq).
+             (if keep s0 then K s s0 else real_zero) (kv_Z_keep s) Hlt0 Heq).
 Qed.
 
 (* 均匀分布与 δ minorization 前提（对齐 UpKVEv.v 交付契约：delta_minor
    对裸 K 逐点，不可省——数学修正警报已吸收）。件 3/4 的语句不消费
    minorization，本块按 Coq 段规则仅在各自使用处进入语句。 *)
-Definition N_R : Real := real_of_nat (length states).
-Theorem N_R_pos : real_lt real_zero N_R.
+Definition kv_N_R : Real := real_of_nat (length states).
+Theorem kv_N_R_pos : real_lt real_zero kv_N_R.
 Proof.
   exact kv_N_pos.
 Qed.
-Definition U (s' : Tok) : Real := real_inv_pos N_R N_R_pos.
+Definition kv_U (s' : Tok) : Real := real_inv_pos kv_N_R kv_N_R_pos.
 
 Variable delta : Real.
 Variable delta_pos : real_lt real_zero delta.
 Variable delta_le_one : real_le delta real_one.
 Variable delta_minor : forall s s' : Tok,
-  real_le (real_mult delta (U s')) (K s s').
+  real_le (real_mult delta (kv_U s')) (K s s').
 
-Definition K_ev (s s' : Tok) : Real :=
-  if keep s' then real_mult (K s s') (real_inv_pos (Z_keep s) (Z_keep_pos s)) else real_zero.
+Definition kv_K_ev (s s' : Tok) : Real :=
+  if keep s' then real_mult (K s s') (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) else real_zero.
 
 (* ---------- 1. 派生定义 ---------- *)
 
-Definition invZK (s : Tok) : Real := real_inv_pos (Z_keep s) (Z_keep_pos s).
+Definition invZK (s : Tok) : Real := real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s).
 
 (* 逐出行误差（drop 质量）与行 TV *)
 Definition tail_row (s : Tok) : Real :=
   real_list_sum Tok (fun s' : Tok => if keep s' then real_zero else K s s') states.
 Definition tv_row (s : Tok) : Real :=
-  real_list_sum Tok (fun s' : Tok => real_abs (real_minus_r (K s s') (K_ev s s'))) states.
+  real_list_sum Tok (fun s' : Tok => real_abs (real_minus_r (K s s') (kv_K_ev s s'))) states.
 
 (* 一致行误差常数（件 4 前提，规避 sup） *)
 Variable c : Real.
@@ -187,7 +187,7 @@ Definition lstep (P : Tok -> Tok -> Real) (mu : Tok -> Real) (s' : Tok) : Real :
 Fixpoint kev_iter (n : nat) (mu : Tok -> Real) : Tok -> Real :=
   match n with
   | 0%nat => mu
-  | Datatypes.S m => lstep K_ev (kev_iter m mu)
+  | Datatypes.S m => lstep kv_K_ev (kev_iter m mu)
   end.
 
 Fixpoint k_iter (n : nat) (mu : Tok -> Real) : Tok -> Real :=
@@ -593,22 +593,22 @@ Qed.
 Definition tvL (mu nu : Tok -> Real) : Real :=
   real_mult (real_inv_pos (real_plus real_one real_one) kv_two_R_pos) (Ddist mu nu).
 
-(* ---------- 4. 世界层：Z_keep / tail_row / invZK 代数 ---------- *)
+(* ---------- 4. 世界层：kv_Z_keep / tail_row / invZK 代数 ---------- *)
 
-(* Z_keep + tail_row == 1（keep 支 + drop 支 == 全行 == 1） *)
+(* kv_Z_keep + tail_row == 1（keep 支 + drop 支 == 全行 == 1） *)
 Lemma kv_ZK_plus_tail : forall s : Tok,
-  real_eq (real_plus (Z_keep s) (tail_row s)) real_one.
+  real_eq (real_plus (kv_Z_keep s) (tail_row s)) real_one.
 Proof.
   intro s.
   apply (real_eq_trans
-           (real_plus (Z_keep s) (tail_row s))
+           (real_plus (kv_Z_keep s) (tail_row s))
            (real_list_sum Tok
               (fun s' : Tok =>
                  real_plus (if keep s' then K s s' else real_zero)
                            (if keep s' then real_zero else K s s')) states)
            real_one).
   - apply (real_eq_trans
-             (real_plus (Z_keep s) (tail_row s))
+             (real_plus (kv_Z_keep s) (tail_row s))
              (real_plus
                 (real_list_sum Tok
                    (fun s' : Tok => if keep s' then K s s' else real_zero) states)
@@ -629,63 +629,63 @@ Proof.
       * apply kv_plus_zero_l.
     + exact (Krow s).
 Qed.
-(* tail_row == 1 − Z_keep（由 Z + tail == 1 换形） *)
+(* tail_row == 1 − kv_Z_keep（由 Z + tail == 1 换形） *)
 Lemma kv_tail_one_minus : forall s : Tok,
-  real_eq (tail_row s) (real_minus_r real_one (Z_keep s)).
+  real_eq (tail_row s) (real_minus_r real_one (kv_Z_keep s)).
 Proof.
   intro s.
-  assert (Hzt : real_eq (real_plus (Z_keep s) (tail_row s)) real_one)
+  assert (Hzt : real_eq (real_plus (kv_Z_keep s) (tail_row s)) real_one)
     by exact (kv_ZK_plus_tail s).
   apply real_eq_sym.
-  apply (real_eq_trans (real_minus_r real_one (Z_keep s))
-           (real_minus_r (real_plus (Z_keep s) (tail_row s)) (Z_keep s))
+  apply (real_eq_trans (real_minus_r real_one (kv_Z_keep s))
+           (real_minus_r (real_plus (kv_Z_keep s) (tail_row s)) (kv_Z_keep s))
            (tail_row s)).
   - unfold real_minus_r.
     apply (real_eq_trans
-             (real_plus real_one (real_opp (Z_keep s)))
-             (real_plus (real_plus (Z_keep s) (tail_row s)) (real_opp (Z_keep s)))
+             (real_plus real_one (real_opp (kv_Z_keep s)))
+             (real_plus (real_plus (kv_Z_keep s) (tail_row s)) (real_opp (kv_Z_keep s)))
              _).
-    + apply (RealSetoid.real_eq_plus_compat real_one (real_opp (Z_keep s))
-               (real_plus (Z_keep s) (tail_row s)) (real_opp (Z_keep s))
-               (real_eq_sym (real_plus (Z_keep s) (tail_row s)) real_one Hzt)
+    + apply (RealSetoid.real_eq_plus_compat real_one (real_opp (kv_Z_keep s))
+               (real_plus (kv_Z_keep s) (tail_row s)) (real_opp (kv_Z_keep s))
+               (real_eq_sym (real_plus (kv_Z_keep s) (tail_row s)) real_one Hzt)
                (real_eq_refl _)).
     + apply real_eq_refl.
   - unfold real_minus_r.
     assert (Hs1 : real_eq
-               (real_plus (real_plus (Z_keep s) (tail_row s)) (real_opp (Z_keep s)))
-               (real_plus (Z_keep s) (real_plus (tail_row s) (real_opp (Z_keep s))))).
+               (real_plus (real_plus (kv_Z_keep s) (tail_row s)) (real_opp (kv_Z_keep s)))
+               (real_plus (kv_Z_keep s) (real_plus (tail_row s) (real_opp (kv_Z_keep s))))).
     { apply real_eq_sym. apply real_plus_assoc. }
     assert (Hs2 : real_eq
-               (real_plus (Z_keep s) (real_plus (tail_row s) (real_opp (Z_keep s))))
-               (real_plus (Z_keep s) (real_plus (real_opp (Z_keep s)) (tail_row s)))).
+               (real_plus (kv_Z_keep s) (real_plus (tail_row s) (real_opp (kv_Z_keep s))))
+               (real_plus (kv_Z_keep s) (real_plus (real_opp (kv_Z_keep s)) (tail_row s)))).
     { apply (RealSetoid.real_eq_plus_compat _ _ _ _
                (real_eq_refl _) (real_plus_comm _ _)). }
     assert (Hs3 : real_eq
-               (real_plus (Z_keep s) (real_plus (real_opp (Z_keep s)) (tail_row s)))
-               (real_plus (real_plus (Z_keep s) (real_opp (Z_keep s))) (tail_row s))).
+               (real_plus (kv_Z_keep s) (real_plus (real_opp (kv_Z_keep s)) (tail_row s)))
+               (real_plus (real_plus (kv_Z_keep s) (real_opp (kv_Z_keep s))) (tail_row s))).
     { apply real_plus_assoc. }
     assert (Hs4 : real_eq
-               (real_plus (real_plus (Z_keep s) (real_opp (Z_keep s))) (tail_row s))
+               (real_plus (real_plus (kv_Z_keep s) (real_opp (kv_Z_keep s))) (tail_row s))
                (real_plus real_zero (tail_row s))).
     { apply (RealSetoid.real_eq_plus_compat
-               (real_plus (Z_keep s) (real_opp (Z_keep s))) (tail_row s)
+               (real_plus (kv_Z_keep s) (real_opp (kv_Z_keep s))) (tail_row s)
                real_zero (tail_row s)
-               (real_plus_opp (Z_keep s)) (real_eq_refl _)). }
+               (real_plus_opp (kv_Z_keep s)) (real_eq_refl _)). }
     apply (real_eq_trans _ _ _ Hs1
              (real_eq_trans _ _ _ Hs2
                 (real_eq_trans _ _ _ Hs3
                    (real_eq_trans _ _ _ Hs4 (kv_plus_zero_l _))))).
 Qed.
 (* 逐点符号证书恒等式（和式 RHS）：
-   |K − K_ev| == (if keep then K_ev − K else 0) + (if keep then 0 else K)
-   keep 支用 real_abs_minus_r_nonneg_aux（K ≤ K_ev 符号证书），drop 支 |K−0| == K *)
+   |K − kv_K_ev| == (if keep then kv_K_ev − K else 0) + (if keep then 0 else K)
+   keep 支用 real_abs_minus_r_nonneg_aux（K ≤ kv_K_ev 符号证书），drop 支 |K−0| == K *)
 
-Lemma kv_ZK_le_one : forall s : Tok, real_le (Z_keep s) real_one.
+Lemma kv_ZK_le_one : forall s : Tok, real_le (kv_Z_keep s) real_one.
 Proof.
   intro s.
-  apply (real_le_trans (Z_keep s)
+  apply (real_le_trans (kv_Z_keep s)
            (real_list_sum Tok (fun s' : Tok => K s s') states) real_one).
-  - unfold Z_keep. apply real_list_sum_le. intro w. destruct (keep w).
+  - unfold kv_Z_keep. apply real_list_sum_le. intro w. destruct (keep w).
     + apply real_le_refl.
     + apply real_le_from_lt_aux. apply Kpos.
   - apply RealSetoid.real_eq_le. exact (Krow s).
@@ -704,8 +704,8 @@ Proof.
                 (real_eq_sym _ _ (kv_one_mult_l
                    (real_inv_pos real_one real_lt_zero_one)))
                 (real_inv_pos_correct real_one real_lt_zero_one))).
-  - exact (real_inv_pos_le_compat (Z_keep s) real_one
-             (Z_keep_pos s) real_lt_zero_one (kv_ZK_le_one s)).
+  - exact (real_inv_pos_le_compat (kv_Z_keep s) real_one
+             (kv_Z_keep_pos s) real_lt_zero_one (kv_ZK_le_one s)).
 Qed.
 
 (* keep 支符号证书（缩放形）：K ≤ K·invZ（1 ≤ invZ 左乘保序） *)
@@ -719,58 +719,58 @@ Proof.
              (Kpos s s') (kv_invZ_ge_one s)).
 Qed.
 
-(* ext 逐点：K_ev 求和项 == (if keep then K else 0)·invZ（行归一化用） *)
+(* ext 逐点：kv_K_ev 求和项 == (if keep then K else 0)·invZ（行归一化用） *)
 Lemma kv_summand_eq : forall (s w : Tok),
   real_eq
     (if keep w
-     then real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s))
+     then real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
      else real_zero)
     (real_mult (if keep w then K s w else real_zero)
-               (real_inv_pos (Z_keep s) (Z_keep_pos s))).
+               (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))).
 Proof.
   intros s w. destruct (keep w).
   - apply real_eq_refl.
   - apply (real_eq_sym (real_mult real_zero
-                          (real_inv_pos (Z_keep s) (Z_keep_pos s))) real_zero
+                          (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))) real_zero
              (real_eq_trans
-                (real_mult real_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))
-                (real_mult (real_inv_pos (Z_keep s) (Z_keep_pos s)) real_zero)
+                (real_mult real_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
+                (real_mult (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) real_zero)
                 real_zero
                 (real_mult_comm real_zero
-                   (real_inv_pos (Z_keep s) (Z_keep_pos s)))
-                (real_mult_zero (real_inv_pos (Z_keep s) (Z_keep_pos s))))).
+                   (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
+                (real_mult_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))))).
 Qed.
 
-(* 乘法形逐点：(if keep then K_ev−K else 0) == (if keep then K else 0)·(invZ−1) *)
+(* 乘法形逐点：(if keep then kv_K_ev−K else 0) == (if keep then K else 0)·(invZ−1) *)
 Lemma kv_summand_scaled : forall (s w : Tok),
   real_eq
-    (if keep w then real_minus_r (K_ev s w) (K s w) else real_zero)
+    (if keep w then real_minus_r (kv_K_ev s w) (K s w) else real_zero)
     (real_mult (if keep w then K s w else real_zero)
                (real_minus_r (invZK s) real_one)).
 Proof.
-  intros s w. unfold K_ev. destruct (keep w).
+  intros s w. unfold kv_K_ev. destruct (keep w).
   - (* keep 支：(K·invZ) + (−K) == K·(invZ + (−1))，经 −K == K·(−1) 桥 + sym 分配 *)
     apply (real_eq_trans
              (real_minus_r
-                (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                 (K s w))
              (real_plus
-                (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                 (real_opp (K s w)))
              (real_mult (K s w) (real_minus_r (invZK s) real_one))).
     + apply real_eq_refl.
     + apply (real_eq_trans
                 (real_plus
-                   (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                   (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                    (real_opp (K s w)))
                 (real_plus
-                   (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                   (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                    (real_mult (K s w) (real_opp real_one)))
                 (real_mult (K s w) (real_minus_r (invZK s) real_one))).
       * apply (RealSetoid.real_eq_plus_compat
-                  (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                  (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                   (real_opp (K s w))
-                  (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+                  (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                   (real_mult (K s w) (real_opp real_one))
                   (real_eq_refl _)
                   (real_eq_trans (real_opp (K s w))
@@ -783,7 +783,7 @@ Proof.
                      (real_opp_mult (K s w) real_one))).
       * apply real_eq_sym.
         exact (real_distrib (K s w)
-                 (real_inv_pos (Z_keep s) (Z_keep_pos s)) (real_opp real_one)).
+                 (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) (real_opp real_one)).
   - (* drop 支：0 == 0·(invZ−1)（real_eq_sym 槽位：conclusion real_eq y x） *)
     apply (real_eq_sym (real_mult real_zero (real_minus_r (invZK s) real_one))
               real_zero
@@ -795,113 +795,113 @@ Proof.
                  (real_mult_zero (real_minus_r (invZK s) real_one)))).
 Qed.
 
-(* 件 1 副本：K_ev 行归一化 Σ_{s'} K_ev(s,s') == 1
+(* 件 1 副本：kv_K_ev 行归一化 Σ_{s'} kv_K_ev(s,s') == 1
    （依 _kv_tail.txt 快照还原；漂移归纳的归一化前提所需） *)
 Lemma kv_kev_row_one : forall s : Tok,
-  real_eq (real_list_sum Tok (K_ev s) states) real_one.
+  real_eq (real_list_sum Tok (kv_K_ev s) states) real_one.
 Proof.
-  intro s. unfold K_ev.
+  intro s. unfold kv_K_ev.
   apply (real_eq_trans
            (real_list_sum Tok
               (fun w : Tok =>
                  (if keep w
                   then real_mult (K s w)
-                       (real_inv_pos (Z_keep s) (Z_keep_pos s))
+                       (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
                   else real_zero)) states)
-           (real_mult (real_inv_pos (Z_keep s) (Z_keep_pos s)) (Z_keep s))
+           (real_mult (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) (kv_Z_keep s))
            real_one).
   - apply (real_eq_trans _ _ _
              (real_list_sum_ext Tok
                 (fun w : Tok =>
                    (if keep w
                     then real_mult (K s w)
-                         (real_inv_pos (Z_keep s) (Z_keep_pos s))
+                         (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
                     else real_zero))
                 (fun w : Tok =>
                    real_mult (if keep w then K s w else real_zero)
-                             (real_inv_pos (Z_keep s) (Z_keep_pos s))) states
+                             (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))) states
                 (kv_summand_eq s))
              (real_list_sum_linear_r Tok
-                (real_inv_pos (Z_keep s) (Z_keep_pos s))
+                (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
                 (fun w : Tok => if keep w then K s w else real_zero) states)).
   - apply (real_eq_trans
-              (real_mult (real_inv_pos (Z_keep s) (Z_keep_pos s)) (Z_keep s))
-              (real_mult (Z_keep s) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+              (real_mult (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) (kv_Z_keep s))
+              (real_mult (kv_Z_keep s) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
               real_one).
     + apply real_mult_comm.
-    + exact (real_inv_pos_correct (Z_keep s) (Z_keep_pos s)).
+    + exact (real_inv_pos_correct (kv_Z_keep s) (kv_Z_keep_pos s)).
 Qed.
 
-(* keep 支和的缩放：Σ_keep(K_ev − K) == (invZ − 1)·Z_keep
+(* keep 支和的缩放：Σ_keep(kv_K_ev − K) == (invZ − 1)·kv_Z_keep
    （快照重写：逐点 kv_summand_scaled + real_list_sum_linear_r 两行闭合） *)
 Lemma kv_gsum_scaled : forall s : Tok,
   real_eq
     (real_list_sum Tok
        (fun s' : Tok =>
-          if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+          if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
        states)
-    (real_mult (real_minus_r (invZK s) real_one) (Z_keep s)).
+    (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s)).
 Proof.
   intro s.
   apply (real_eq_trans
            (real_list_sum Tok
               (fun s' : Tok =>
-                 if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                 if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
               states)
            (real_list_sum Tok
               (fun w : Tok =>
                  real_mult (if keep w then K s w else real_zero)
                            (real_minus_r (invZK s) real_one))
               states)
-           (real_mult (real_minus_r (invZK s) real_one) (Z_keep s))).
+           (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s))).
   - apply real_list_sum_ext. intro w. apply kv_summand_scaled.
   - apply (real_list_sum_linear_r Tok
               (real_minus_r (invZK s) real_one)
               (fun w : Tok => if keep w then K s w else real_zero) states).
 Qed.
 
-(* (invZ − 1)·Z_keep == 1 − Z_keep == tail_row
+(* (invZ − 1)·kv_Z_keep == 1 − kv_Z_keep == tail_row
    （快照重写：kv_distrib_r + inv_pos_correct/opp 桥 compat，尾接 kv_tail_one_minus） *)
 Lemma kv_scaledZ_tail : forall s : Tok,
-  real_eq (real_mult (real_minus_r (invZK s) real_one) (Z_keep s)) (tail_row s).
+  real_eq (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s)) (tail_row s).
 Proof.
   intro s.
   apply (real_eq_trans
-           (real_mult (real_minus_r (invZK s) real_one) (Z_keep s))
-           (real_minus_r real_one (Z_keep s))
+           (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s))
+           (real_minus_r real_one (kv_Z_keep s))
            (tail_row s)).
   - apply (real_eq_trans
-              (real_mult (real_minus_r (invZK s) real_one) (Z_keep s))
-              (real_plus (real_mult (invZK s) (Z_keep s))
-                         (real_mult (real_opp real_one) (Z_keep s)))
-              (real_minus_r real_one (Z_keep s))).
-    + apply (kv_distrib_r (invZK s) (real_opp real_one) (Z_keep s)).
+              (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s))
+              (real_plus (real_mult (invZK s) (kv_Z_keep s))
+                         (real_mult (real_opp real_one) (kv_Z_keep s)))
+              (real_minus_r real_one (kv_Z_keep s))).
+    + apply (kv_distrib_r (invZK s) (real_opp real_one) (kv_Z_keep s)).
     + apply (RealSetoid.real_eq_plus_compat
-               (real_mult (invZK s) (Z_keep s))
-               (real_mult (real_opp real_one) (Z_keep s))
-               real_one (real_opp (Z_keep s))
-               (real_eq_trans (real_mult (invZK s) (Z_keep s))
-                  (real_mult (Z_keep s) (invZK s)) real_one
-                  (real_mult_comm (invZK s) (Z_keep s))
-                  (real_inv_pos_correct (Z_keep s) (Z_keep_pos s)))
-               (real_eq_trans (real_mult (real_opp real_one) (Z_keep s))
-                  (real_opp (real_mult real_one (Z_keep s)))
-                  (real_opp (Z_keep s))
-                  (real_eq_sym _ _ (real_opp_mult_r real_one (Z_keep s)))
-                  (RealSetoid.real_eq_opp_compat (real_mult real_one (Z_keep s))
-                     (Z_keep s) (kv_one_mult_l (Z_keep s))))).
+               (real_mult (invZK s) (kv_Z_keep s))
+               (real_mult (real_opp real_one) (kv_Z_keep s))
+               real_one (real_opp (kv_Z_keep s))
+               (real_eq_trans (real_mult (invZK s) (kv_Z_keep s))
+                  (real_mult (kv_Z_keep s) (invZK s)) real_one
+                  (real_mult_comm (invZK s) (kv_Z_keep s))
+                  (real_inv_pos_correct (kv_Z_keep s) (kv_Z_keep_pos s)))
+               (real_eq_trans (real_mult (real_opp real_one) (kv_Z_keep s))
+                  (real_opp (real_mult real_one (kv_Z_keep s)))
+                  (real_opp (kv_Z_keep s))
+                  (real_eq_sym _ _ (real_opp_mult_r real_one (kv_Z_keep s)))
+                  (RealSetoid.real_eq_opp_compat (real_mult real_one (kv_Z_keep s))
+                     (kv_Z_keep s) (kv_one_mult_l (kv_Z_keep s))))).
   - exact (real_eq_sym _ _ (kv_tail_one_minus s)).
 Qed.
 
-(* 逐点符号证书：|K − K_ev| == keep ? (K_ev − K) : K
+(* 逐点符号证书：|K − kv_K_ev| == keep ? (kv_K_ev − K) : K
    （keep 支 real_abs_minus_r_nonneg_aux；drop 支 −0/加零/|K|=K 桥） *)
 Lemma kv_tvrow_pointwise : forall s w : Tok,
-  real_eq (real_abs (real_minus_r (K s w) (K_ev s w)))
-          (if keep w then real_minus_r (K_ev s w) (K s w) else K s w).
+  real_eq (real_abs (real_minus_r (K s w) (kv_K_ev s w)))
+          (if keep w then real_minus_r (kv_K_ev s w) (K s w) else K s w).
 Proof.
-  intros s w. unfold K_ev. destruct (keep w).
+  intros s w. unfold kv_K_ev. destruct (keep w).
   - exact (real_abs_minus_r_nonneg_aux (K s w)
-             (real_mult (K s w) (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+             (real_mult (K s w) (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
              (kv_K_le_Kev_scaled s w)).
   - apply (real_eq_trans
              (real_abs (real_plus (K s w) (real_opp real_zero)))
@@ -917,13 +917,13 @@ Proof.
                (real_le_from_lt_aux real_zero (K s w) (Kpos s w))).
 Qed.
 
-(* 分部：tv_row == Σ_keep(K_ev−K) + Σ_drop K（逐点证书 ext + 逐项拆装 ext/add） *)
+(* 分部：tv_row == Σ_keep(kv_K_ev−K) + Σ_drop K（逐点证书 ext + 逐项拆装 ext/add） *)
 Lemma kv_tvrow_split : forall s : Tok,
   real_eq (tv_row s)
           (real_plus
              (real_list_sum Tok
                 (fun s' : Tok =>
-                   if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                   if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
                 states)
              (tail_row s)).
 Proof.
@@ -931,11 +931,11 @@ Proof.
   apply (real_eq_trans
            (real_list_sum Tok
               (fun s' : Tok =>
-                 real_abs (real_minus_r (K s s') (K_ev s s'))) states)
+                 real_abs (real_minus_r (K s s') (kv_K_ev s s'))) states)
            (real_plus
               (real_list_sum Tok
                  (fun w : Tok =>
-                    if keep w then real_minus_r (K_ev s w) (K s w) else real_zero)
+                    if keep w then real_minus_r (kv_K_ev s w) (K s w) else real_zero)
                  states)
               (real_list_sum Tok
                  (fun w : Tok => if keep w then real_zero else K s w)
@@ -943,21 +943,21 @@ Proof.
            (real_plus
               (real_list_sum Tok
                  (fun s' : Tok =>
-                    if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                    if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
                  states)
               (tail_row s))).
   - apply (real_eq_trans
               (real_list_sum Tok
                  (fun s' : Tok =>
-                    real_abs (real_minus_r (K s s') (K_ev s s'))) states)
+                    real_abs (real_minus_r (K s s') (kv_K_ev s s'))) states)
               (real_list_sum Tok
                  (fun w : Tok =>
-                    if keep w then real_minus_r (K_ev s w) (K s w) else K s w)
+                    if keep w then real_minus_r (kv_K_ev s w) (K s w) else K s w)
                  states)
               (real_plus
                  (real_list_sum Tok
                     (fun w : Tok =>
-                       if keep w then real_minus_r (K_ev s w) (K s w) else real_zero)
+                       if keep w then real_minus_r (kv_K_ev s w) (K s w) else real_zero)
                     states)
                  (real_list_sum Tok
                     (fun w : Tok => if keep w then real_zero else K s w)
@@ -966,19 +966,19 @@ Proof.
     + apply (real_eq_trans
                 (real_list_sum Tok
                    (fun w : Tok =>
-                      if keep w then real_minus_r (K_ev s w) (K s w) else K s w)
+                      if keep w then real_minus_r (kv_K_ev s w) (K s w) else K s w)
                    states)
                 (real_list_sum Tok
                    (fun w : Tok =>
                       real_plus
-                        (if keep w then real_minus_r (K_ev s w) (K s w)
+                        (if keep w then real_minus_r (kv_K_ev s w) (K s w)
                          else real_zero)
                         (if keep w then real_zero else K s w))
                    states)
                 (real_plus
                    (real_list_sum Tok
                       (fun w : Tok =>
-                         if keep w then real_minus_r (K_ev s w) (K s w)
+                         if keep w then real_minus_r (kv_K_ev s w) (K s w)
                          else real_zero)
                       states)
                    (real_list_sum Tok
@@ -992,7 +992,7 @@ Proof.
 Qed.
 
 (* ===================== 件 3 主交付：精确恒等式 =========================
-   tv_row(s) == tail_row(s) + tail_row(s)（== 2·tail_row == 2·(1 − Z_keep)） *)
+   tv_row(s) == tail_row(s) + tail_row(s)（== 2·tail_row == 2·(1 − kv_Z_keep)） *)
 Theorem kev_row_tv_exact : forall s : Tok,
   real_eq (tv_row s) (real_plus (tail_row s) (tail_row s)).
 Proof.
@@ -1001,7 +1001,7 @@ Proof.
            (real_plus
               (real_list_sum Tok
                  (fun s' : Tok =>
-                    if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                    if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
                  states)
               (tail_row s))
            (real_plus (tail_row s) (tail_row s))).
@@ -1009,16 +1009,16 @@ Proof.
   - apply (RealSetoid.real_eq_plus_compat
              (real_list_sum Tok
                 (fun s' : Tok =>
-                   if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                   if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
                 states)
              (tail_row s)
              (tail_row s) (tail_row s)
              (real_eq_trans
                 (real_list_sum Tok
                    (fun s' : Tok =>
-                      if keep s' then real_minus_r (K_ev s s') (K s s') else real_zero)
+                      if keep s' then real_minus_r (kv_K_ev s s') (K s s') else real_zero)
                    states)
-                (real_mult (real_minus_r (invZK s) real_one) (Z_keep s))
+                (real_mult (real_minus_r (invZK s) real_one) (kv_Z_keep s))
                 (tail_row s)
                 (kv_gsum_scaled s) (kv_scaledZ_tail s))
              (real_eq_refl _)).
@@ -1031,11 +1031,11 @@ Proof.
   intro s. apply RealSetoid.real_eq_le. exact (kev_row_tv_exact s).
 Qed.
 
-(* 论文形态：tv_row == 2·(1 − Z_keep)（语句依 _kv_tail.txt 快照还原） *)
+(* 论文形态：tv_row == 2·(1 − kv_Z_keep)（语句依 _kv_tail.txt 快照还原） *)
 Corollary kev_row_tv_one_minus_Z : forall s : Tok,
   real_eq (tv_row s)
           (real_mult (real_plus real_one real_one)
-                     (real_minus_r real_one (Z_keep s))).
+                     (real_minus_r real_one (kv_Z_keep s))).
 Proof.
   intro s.
   apply (real_eq_trans (tv_row s)
@@ -1045,7 +1045,7 @@ Proof.
     + apply kv_plus_self_two.
   - apply (RealSetoid.real_eq_mult_compat
              (real_plus real_one real_one) (tail_row s)
-             (real_plus real_one real_one) (real_minus_r real_one (Z_keep s))
+             (real_plus real_one real_one) (real_minus_r real_one (kv_Z_keep s))
              (real_eq_refl _) (kv_tail_one_minus s)).
 Qed.
 
@@ -1228,26 +1228,26 @@ Proof.
   - exact (real_le_mult_compat_weak real_zero (mu s) (P s s') (HP s s') (Hmu s)).
 Qed.
 
-(* K_ev ≥ 0（契约核的非负性） *)
-Lemma kv_K_ev_nonneg : forall s s' : Tok, real_le real_zero (K_ev s s').
+(* kv_K_ev ≥ 0（契约核的非负性） *)
+Lemma kv_K_ev_nonneg : forall s s' : Tok, real_le real_zero (kv_K_ev s s').
 Proof.
-  intros s s'. unfold K_ev. destruct (keep s').
+  intros s s'. unfold kv_K_ev. destruct (keep s').
   - apply (RealSetoid.real_le_id_l real_zero
-             (real_mult real_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))
-             (real_mult (K s s') (real_inv_pos (Z_keep s) (Z_keep_pos s)))).
-    + apply (real_eq_sym (real_mult real_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))
+             (real_mult real_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
+             (real_mult (K s s') (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))).
+    + apply (real_eq_sym (real_mult real_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                real_zero).
       exact (real_eq_trans
-                (real_mult real_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))
-                (real_mult (real_inv_pos (Z_keep s) (Z_keep_pos s)) real_zero)
+                (real_mult real_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
+                (real_mult (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)) real_zero)
                 real_zero
-                (real_mult_comm real_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))
-                (real_mult_zero (real_inv_pos (Z_keep s) (Z_keep_pos s)))).
+                (real_mult_comm real_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
+                (real_mult_zero (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s)))).
     + exact (real_le_mult_compat_weak real_zero (K s s')
-               (real_inv_pos (Z_keep s) (Z_keep_pos s))
+               (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
                (real_le_from_lt_aux real_zero
-                  (real_inv_pos (Z_keep s) (Z_keep_pos s))
-                  (real_inv_pos_pos (Z_keep s) (Z_keep_pos s)))
+                  (real_inv_pos (kv_Z_keep s) (kv_Z_keep_pos s))
+                  (real_inv_pos_pos (kv_Z_keep s) (kv_Z_keep_pos s)))
                (real_le_from_lt_aux real_zero (K s s') (Kpos s s'))).
   - apply real_le_refl.
 Qed.
@@ -1260,7 +1260,7 @@ Proof.
   intro n. induction n as [| n IH]; intros mu Hmu.
   - exact Hmu.
   - exact (real_eq_trans _ _ _
-             (kv_lstep_norm K_ev (fun s : Tok => kv_kev_row_one s) (kev_iter n mu))
+             (kv_lstep_norm kv_K_ev (fun s : Tok => kv_kev_row_one s) (kev_iter n mu))
              (IH mu Hmu)).
 Qed.
 
@@ -1281,7 +1281,7 @@ Lemma kv_kev_iter_nonneg : forall (n : nat) (mu : Tok -> Real),
 Proof.
   intro n. induction n as [| n IH]; intros mu Hmu s'.
   - exact (Hmu s').
-  - exact (kv_lstep_nonneg K_ev kv_K_ev_nonneg (kev_iter n mu) (IH mu Hmu) s').
+  - exact (kv_lstep_nonneg kv_K_ev kv_K_ev_nonneg (kev_iter n mu) (IH mu Hmu) s').
 Qed.
 
 Lemma kv_k_iter_nonneg : forall (n : nat) (mu : Tok -> Real),
@@ -1718,8 +1718,8 @@ Proof.
 Qed.
 
 (* 行误差一步漂移（件 4 的核心单步界）：
-   D(K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
-(* 加权双重和化简：Σ_s'Σ_s |μ(s)·(K_ev−K)(s,s')| == Σ_s μ(s)·tv_row(s) *)
+   D(kv_K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
+(* 加权双重和化简：Σ_s'Σ_s |μ(s)·(kv_K_ev−K)(s,s')| == Σ_s μ(s)·tv_row(s) *)
 Lemma kv_dsum_row_err : forall mu : Tok -> Real,
   (forall s : Tok, real_le real_zero (mu s)) ->
   real_eq (real_list_sum Tok
@@ -1727,7 +1727,7 @@ Lemma kv_dsum_row_err : forall mu : Tok -> Real,
                 real_list_sum Tok
                   (fun s : Tok =>
                      real_abs
-                       (real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))))
+                       (real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))))
                   states)
               states)
           (real_list_sum Tok
@@ -1740,7 +1740,7 @@ Proof.
                  real_list_sum Tok
                    (fun s : Tok =>
                       real_abs
-                        (real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))))
+                        (real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))))
                    states)
               states)
            (real_list_sum Tok
@@ -1748,7 +1748,7 @@ Proof.
                  real_list_sum Tok
                    (fun s' : Tok =>
                       real_abs
-                        (real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))))
+                        (real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))))
                    states)
               states) _).
   - apply kv_swap_list.
@@ -1757,40 +1757,40 @@ Proof.
              (real_list_sum Tok
                 (fun s' : Tok =>
                    real_abs
-                     (real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))))
+                     (real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))))
                 states)
              (real_list_sum Tok
                 (fun s' : Tok =>
                    real_mult (mu s)
-                     (real_abs (real_minus_r (K s s') (K_ev s s'))))
+                     (real_abs (real_minus_r (K s s') (kv_K_ev s s'))))
                 states)
              (real_mult (mu s) (tv_row s))).
     + apply real_list_sum_ext. intro s'.
       apply (real_eq_trans
                (real_abs
-                  (real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))))
+                  (real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))))
                (real_mult (real_abs (mu s))
-                          (real_abs (real_minus_r (K_ev s s') (K s s'))))
+                          (real_abs (real_minus_r (kv_K_ev s s') (K s s'))))
                (real_mult (mu s)
-                          (real_abs (real_minus_r (K s s') (K_ev s s'))))).
+                          (real_abs (real_minus_r (K s s') (kv_K_ev s s'))))).
       * exact (real_abs_mult_req (mu s)
-                 (real_minus_r (K_ev s s') (K s s'))).
+                 (real_minus_r (kv_K_ev s s') (K s s'))).
       * apply (RealSetoid.real_eq_mult_compat (real_abs (mu s))
-                 (real_abs (real_minus_r (K_ev s s') (K s s')))
+                 (real_abs (real_minus_r (kv_K_ev s s') (K s s')))
                  (mu s)
-                 (real_abs (real_minus_r (K s s') (K_ev s s')))
+                 (real_abs (real_minus_r (K s s') (kv_K_ev s s')))
                  (kv_abs_nonneg_id (mu s) (Hnn s))
-                 (kv_abs_minus_flip (K_ev s s') (K s s'))).
+                 (kv_abs_minus_flip (kv_K_ev s s') (K s s'))).
     + apply real_list_sum_linear.
 Qed.
 
 (* 行误差一步漂移（件 4 的核心单步界）：
-   D(K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
+   D(kv_K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
 Lemma kv_step_drift : forall (mu : Tok -> Real) (eps : Real),
   real_lt real_zero eps ->
   real_eq (real_list_sum Tok mu states) real_one ->
   (forall s : Tok, real_le real_zero (mu s)) ->
-  real_le (Ddist (lstep K_ev mu) (lstep K mu)) (real_plus c eps).
+  real_le (Ddist (lstep kv_K_ev mu) (lstep K mu)) (real_plus c eps).
 Proof.
   intros mu eps Heps Hnorm Hnn.
   assert (Hshare : real_lt real_zero
@@ -1800,7 +1800,7 @@ Proof.
   apply (real_le_trans
            (real_list_sum Tok
               (fun s' : Tok =>
-                 real_abs (real_minus_r (lstep K_ev mu s') (lstep K mu s'))) states)
+                 real_abs (real_minus_r (lstep kv_K_ev mu s') (lstep K mu s'))) states)
            (real_list_sum Tok
               (fun s' : Tok =>
                  real_plus
@@ -1808,7 +1808,7 @@ Proof.
                       (fun s : Tok =>
                          real_abs
                            (real_mult (mu s)
-                                      (real_minus_r (K_ev s s') (K s s'))))
+                                      (real_minus_r (kv_K_ev s s') (K s s'))))
                       states)
                    (real_mult (real_inv_pos (real_of_nat (length states)) kv_N_pos)
                               eps))
@@ -1816,25 +1816,25 @@ Proof.
            (real_plus c eps)).
   - apply real_list_sum_le. intro s'.
     apply (real_le_trans
-             (real_abs (real_minus_r (lstep K_ev mu s') (lstep K mu s')))
+             (real_abs (real_minus_r (lstep kv_K_ev mu s') (lstep K mu s')))
              (real_abs
                 (real_list_sum Tok
                    (fun s : Tok =>
-                      real_mult (mu s) (real_minus_r (K_ev s s') (K s s'))) states))
+                      real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s'))) states))
              (real_plus
                 (real_list_sum Tok
                    (fun s : Tok =>
                       real_abs
                         (real_mult (mu s)
-                                   (real_minus_r (K_ev s s') (K s s'))))
+                                   (real_minus_r (kv_K_ev s s') (K s s'))))
                    states)
                 (real_mult (real_inv_pos (real_of_nat (length states)) kv_N_pos)
                            eps))).
     + apply inr. apply real_abs_eq_compat.
-      exact (kv_lstep2_minus_pt K_ev K mu s').
+      exact (kv_lstep2_minus_pt kv_K_ev K mu s').
     + exact (kv_abs_triangle_list_eps Tok
                (fun s : Tok =>
-                  real_mult (mu s) (real_minus_r (K_ev s s') (K s s')))
+                  real_mult (mu s) (real_minus_r (kv_K_ev s s') (K s s')))
                states (real_mult (real_inv_pos (real_of_nat (length states)) kv_N_pos)
                                   eps) Hshare).
   - apply (real_le_trans
@@ -1845,7 +1845,7 @@ Proof.
                         (fun s : Tok =>
                            real_abs
                              (real_mult (mu s)
-                                        (real_minus_r (K_ev s s') (K s s'))))
+                                        (real_minus_r (kv_K_ev s s') (K s s'))))
                         states)
                      (real_mult (real_inv_pos (real_of_nat (length states)) kv_N_pos)
                                 eps))
@@ -1863,7 +1863,7 @@ Proof.
                        (fun s : Tok =>
                           real_abs
                             (real_mult (mu s)
-                                       (real_minus_r (K_ev s s') (K s s'))))
+                                       (real_minus_r (kv_K_ev s s') (K s s'))))
                        states)
                   (fun _ : Tok =>
                      real_mult (real_inv_pos (real_of_nat (length states)) kv_N_pos)
@@ -1877,7 +1877,7 @@ Proof.
                              (fun s : Tok =>
                                 real_abs
                                   (real_mult (mu s)
-                                             (real_minus_r (K_ev s s') (K s s'))))
+                                             (real_minus_r (kv_K_ev s s') (K s s'))))
                              states)
                          states)
                      (real_list_sum Tok
@@ -2074,7 +2074,7 @@ Proof.
         + exact (kv_inv_absorb (real_plus (real_plus real_one real_one) real_one) kv_three_R_pos eps0). }}
     (* 主链：三角(ε/3) + 行误差(ε/3) + 非扩张(ε/3)，总和恰好 ε0 *)
     apply (real_le_trans _ _ _ (kv_D_triangle
-              (lstep K_ev (kev_iter n mu)) (lstep K (kev_iter n mu))
+              (lstep kv_K_ev (kev_iter n mu)) (lstep K (kev_iter n mu))
               (lstep K (k_iter n mu)) (real_mult (real_inv_pos (real_plus (real_plus real_one real_one) real_one) kv_three_R_pos) eps0) Ht3)).
     + apply (real_le_trans _
                (real_plus
@@ -2232,7 +2232,7 @@ End UpKVDrift.
 
 (* ---- 提取探针（G3 关卡对象；G4 于 9.0 平台 coqchk 复核） ---- *)
 From Stdlib Require Import Extraction.
-Extraction "upkvdrift_probe.ml" Z_keep K_ev tail_row tv_row kev_iter k_iter
+Extraction "upkvdrift_probe.ml" kv_Z_keep kv_K_ev tail_row tv_row kev_iter k_iter
   lstep Ddist tvL
   kv_kev_row_one kv_ZK_le_one kv_invZ_ge_one
   kev_row_tv_exact kev_row_tv_bound kev_row_tv_one_minus_Z

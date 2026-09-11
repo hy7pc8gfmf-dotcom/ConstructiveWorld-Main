@@ -1,0 +1,2 @@
+Require Import CW_ConstructiveWorld_219.
+Print Assumptions real_cos_pi_half_zero.

@@ -197,21 +197,21 @@ Proof.
                 (nth Datatypes.O (p :: rest) real_zero)
                 (real_list_sum nat
                    (fun i : nat => nth i (p :: rest) real_zero)
-                   (seq 1 (length rest)))
+                   (seq 1%nat (length rest)))
                 p
                 (real_list_sum Real (fun x : Real => x) rest)).
       * apply real_eq_refl.
       * apply (real_eq_trans
                  (real_list_sum nat
                     (fun i : nat => nth i (p :: rest) real_zero)
-                    (seq 1 (length rest)))
+                    (seq 1%nat (length rest)))
                  (real_list_sum nat
                     (fun i : nat => nth i rest real_zero)
-                    (seq 0 (length rest)))).
+                    (seq 0%nat (length rest)))).
         -- exact (um_seq_shift
                     (fun i : nat => nth i (p :: rest) real_zero)
-                    (length rest) 0).
-        -- exact (IH 0).
+                    (length rest) 0%nat).
+        -- exact (IH 0%nat).
     + (* s = S k：位移 + IH(rest, S k) + 步进引理三段拼合 *)
       cbn [seq length real_list_sum].
       apply (real_eq_trans
@@ -260,7 +260,7 @@ Qed.
 
 (* 常值表：Σ_{seq 0 n} c == nreal(n)·c *)
 Lemma um_seq_const : forall (n : nat) (c : Real),
-  real_eq (real_list_sum nat (fun _ : nat => c) (seq 0 n))
+  real_eq (real_list_sum nat (fun _ : nat => c) (seq 0%nat n))
           (real_mult (um_nreal n) c).
 Proof.
   induction n as [| n IH]; intro c.
@@ -275,16 +275,16 @@ Proof.
     apply (real_eq_trans
              (real_plus c
                         (real_list_sum nat (fun _ : nat => c)
-                                       (seq (Datatypes.S 0) n)))
+                                       (seq (Datatypes.S 0%nat) n)))
              (real_plus c (real_mult (um_nreal n) c))).
     + apply (RealSetoid.real_eq_plus_compat c
-                (real_list_sum nat (fun _ : nat => c) (seq 1 n))
+                (real_list_sum nat (fun _ : nat => c) (seq 1%nat n))
                 c (real_mult (um_nreal n) c)).
       * apply real_eq_refl.
       * apply (real_eq_trans
-                 (real_list_sum nat (fun _ : nat => c) (seq 1 n))
-                 (real_list_sum nat (fun _ : nat => c) (seq 0 n))).
-        -- exact (um_seq_shift (fun _ : nat => c) n 0).
+                 (real_list_sum nat (fun _ : nat => c) (seq 1%nat n))
+                 (real_list_sum nat (fun _ : nat => c) (seq 0%nat n))).
+        -- exact (um_seq_shift (fun _ : nat => c) n 0%nat).
         -- exact (IH c).
     + apply real_eq_sym.
       apply (real_eq_trans
@@ -357,23 +357,23 @@ Qed.
 (* 索引和的逐点 ≤ *)
 Lemma um_rls_le_N : forall (f g : nat -> Real) (n : nat),
   (forall j : nat, NatLt j n -> real_le (f j) (g j)) ->
-  real_le (real_list_sum nat f (seq 0 n))
-          (real_list_sum nat g (seq 0 n)).
+  real_le (real_list_sum nat f (seq 0%nat n))
+          (real_list_sum nat g (seq 0%nat n)).
 Proof.
   intros f g n. revert f g. induction n as [| n IH]; intros f g Hpt.
   - cbn [seq real_list_sum]. apply real_le_refl.
   - cbn [seq real_list_sum].
     apply real_le_plus_compat.
-    + exact (Hpt 0 id_refl).
+    + exact (Hpt 0%nat id_refl).
     + apply (RealSetoid.real_le_compat
                 (real_list_sum nat (fun j : nat => f (Datatypes.S j))
-                                   (seq 0 n))
-                (real_list_sum nat f (seq 1 n))
+                                   (seq 0%nat n))
+                (real_list_sum nat f (seq 1%nat n))
                 (real_list_sum nat (fun j : nat => g (Datatypes.S j))
-                                   (seq 0 n))
-                (real_list_sum nat g (seq 1 n))).
-      * exact (real_eq_sym _ _ (um_seq_shift f n 0)).
-      * exact (real_eq_sym _ _ (um_seq_shift g n 0)).
+                                   (seq 0%nat n))
+                (real_list_sum nat g (seq 1%nat n))).
+      * exact (real_eq_sym _ _ (um_seq_shift f n 0%nat)).
+      * exact (real_eq_sym _ _ (um_seq_shift g n 0%nat)).
       * apply (IH (fun j : nat => f (Datatypes.S j))
                   (fun j : nat => g (Datatypes.S j))).
         intros j Hj. exact (Hpt (Datatypes.S j) Hj).
@@ -382,7 +382,7 @@ Qed.
 (* 索引和的非负 *)
 Lemma um_rls_nonneg_N : forall (g : nat -> Real) (n : nat),
   (forall j : nat, NatLt j n -> real_le real_zero (g j)) ->
-  real_le real_zero (real_list_sum nat g (seq 0 n)).
+  real_le real_zero (real_list_sum nat g (seq 0%nat n)).
 Proof.
   intros g n. revert g. induction n as [| n IH]; intros g Hnn.
   - cbn [seq real_list_sum]. apply real_le_refl.
@@ -390,33 +390,33 @@ Proof.
     assert (Htail : real_le real_zero
                       (real_list_sum nat
                          (fun j : nat => g (Datatypes.S j))
-                         (seq 0 n))).
+                         (seq 0%nat n))).
     { apply (IH (fun j : nat => g (Datatypes.S j))).
       intros j Hj. exact (Hnn (Datatypes.S j) Hj). }
     assert (Hstep : real_le (real_plus real_zero real_zero)
-                       (real_plus (g 0)
+                       (real_plus (g 0%nat)
                                   (real_list_sum nat
                                      (fun j : nat => g (Datatypes.S j))
-                                     (seq 0 n)))).
+                                     (seq 0%nat n)))).
     { apply real_le_plus_compat.
-      - exact (Hnn 0 id_refl).
+      - exact (Hnn 0%nat id_refl).
       - exact Htail. }
     exact (RealSetoid.real_le_compat
               (real_plus real_zero real_zero)
               real_zero
-              (real_plus (g 0)
+              (real_plus (g 0%nat)
                          (real_list_sum nat
                             (fun j : nat => g (Datatypes.S j))
-                            (seq 0 n)))
-              (real_plus (g 0) (real_list_sum nat g (seq 1 n)))
+                            (seq 0%nat n)))
+              (real_plus (g 0%nat) (real_list_sum nat g (seq 1%nat n)))
               (real_plus_zero real_zero)
-              (RealSetoid.real_eq_plus_compat (g 0)
+              (RealSetoid.real_eq_plus_compat (g 0%nat)
                  (real_list_sum nat
-                    (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                 (g 0)
-                 (real_list_sum nat g (seq 1 n))
-                 (real_eq_refl (g 0))
-                 (real_eq_sym _ _ (um_seq_shift g n 0)))
+                    (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                 (g 0%nat)
+                 (real_list_sum nat g (seq 1%nat n))
+                 (real_eq_refl (g 0%nat))
+                 (real_eq_sym _ _ (um_seq_shift g n 0%nat)))
               Hstep).
     (* 尾段 le 已由 Hstep 的 d 分量直接给出 *)
 Qed.
@@ -425,7 +425,7 @@ Qed.
 Lemma um_rls_single_le_N : forall (g : nat -> Real) (n i : nat),
   NatLt i n ->
   (forall j : nat, NatLt j n -> real_le real_zero (g j)) ->
-  real_le (g i) (real_list_sum nat g (seq 0 n)).
+  real_le (g i) (real_list_sum nat g (seq 0%nat n)).
 Proof.
   intros g n. revert g. induction n as [| n IH]; intros g i Hi Hnn.
   - exfalso. exact (um_Emptyset_false (id_false_true Hi)).
@@ -434,43 +434,43 @@ Proof.
       assert (Ht0 : real_le real_zero
                       (real_list_sum nat
                          (fun j : nat => g (Datatypes.S j))
-                         (seq 0 n))).
+                         (seq 0%nat n))).
       { apply (um_rls_nonneg_N (fun j : nat => g (Datatypes.S j)) n).
         intros j Hj. exact (Hnn (Datatypes.S j) Hj). }
       apply um_le_add_l.
       exact (RealSetoid.real_le_compat real_zero real_zero
                 (real_list_sum nat
-                   (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                (real_list_sum nat g (seq 1 n))
+                   (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                (real_list_sum nat g (seq 1%nat n))
                 (real_eq_refl real_zero)
-                (real_eq_sym _ _ (um_seq_shift g n 0))
+                (real_eq_sym _ _ (um_seq_shift g n 0%nat))
                 Ht0).
     + (* i = S i'：IH 于 S i'（NatLt (S i') n ≡ NatLt i' n），
          再沿 um_seq_shift 的 eq 换形到 Σ_{seq 1 n} g，加非负头项 *)
       assert (Htail : real_le (g (Datatypes.S i'))
                          (real_list_sum nat
                             (fun j : nat => g (Datatypes.S j))
-                            (seq 0 n))).
+                            (seq 0%nat n))).
       { apply (IH (fun j : nat => g (Datatypes.S j)) i'
                   Hi (fun j Hj => Hnn (Datatypes.S j) Hj)). }
       apply real_le_trans with
         (y := real_list_sum nat (fun j : nat => g (Datatypes.S j))
-                                (seq 0 n)).
+                                (seq 0%nat n)).
       * exact Htail.
       * apply (real_le_trans
-                 (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                 (real_list_sum nat g (seq 1 n))
-                 (real_plus (g 0) (real_list_sum nat g (seq 1 n)))).
+                 (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                 (real_list_sum nat g (seq 1%nat n))
+                 (real_plus (g 0%nat) (real_list_sum nat g (seq 1%nat n)))).
         -- apply (RealSetoid.real_le_compat
-                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n))
-                     (real_list_sum nat g (seq 1 n))
-                     (real_eq_refl (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n)))
-                     (real_eq_sym _ _ (um_seq_shift g n 0))
-                     (real_le_refl (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0 n)))).
-        -- apply (um_le_add_r (real_list_sum nat g (seq 1 n)) (g 0)).
-           exact (Hnn 0 id_refl).
+                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                     (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n))
+                     (real_list_sum nat g (seq 1%nat n))
+                     (real_eq_refl (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n)))
+                     (real_eq_sym _ _ (um_seq_shift g n 0%nat))
+                     (real_le_refl (real_list_sum nat (fun j : nat => g (Datatypes.S j)) (seq 0%nat n)))).
+        -- apply (um_le_add_r (real_list_sum nat g (seq 1%nat n)) (g 0%nat)).
+           exact (Hnn 0%nat id_refl).
 Qed.
 
 (* ============================================================ *)
@@ -650,7 +650,7 @@ Qed.
 Definition um_entropy : Real :=
   real_list_sum nat
     (fun i : nat => um_ent_term (nth i tokens real_zero) (tokens_pos i))
-    (seq 0 um_N).
+    (seq 0%nat um_N).
 
 (* Min-P 阈值与保留指示：thr = ratio·p_max；保留者取 k，淘汰者取 0 *)
 Definition um_thr : Real := real_mult ratio um_pmax.
@@ -664,7 +664,7 @@ Definition um_keepF (p : Real) : Real :=
 (* 保留质量 / 截断质量：kept = Σ keepF，dropped = 1 − kept（定义性） *)
 Definition um_kept : Real :=
   real_list_sum nat (fun i : nat => um_keepF (nth i tokens real_zero))
-                (seq 0 um_N).
+                (seq 0%nat um_N).
 
 Lemma um_keepF_nonneg_nth : forall (x : Real) (Hx : real_lt real_zero x),
   real_le real_zero (um_keepF x).
@@ -733,7 +733,7 @@ Proof.
             (fun i : nat =>
                real_mult (nth i tokens real_zero)
                          (real_opp (cw_log um_pmax um_Hpmax)))
-            (seq 0 um_N)).
+            (seq 0%nat um_N)).
   - (* (−log p_max) == (−log p_max)·Σ nth == (−log p_max)·1
        （反向即 Σ nth·(−log p_max)） *)
     apply um_eq_le.
@@ -742,34 +742,34 @@ Proof.
              (real_mult (real_opp (cw_log um_pmax um_Hpmax))
                         (real_list_sum nat
                            (fun i : nat => nth i tokens real_zero)
-                           (seq 0 um_N)))).
+                           (seq 0%nat um_N)))).
     + apply real_eq_sym.
       apply (real_eq_trans
                (real_mult (real_opp (cw_log um_pmax um_Hpmax))
                           (real_list_sum nat
                              (fun i : nat => nth i tokens real_zero)
-                             (seq 0 um_N)))
+                             (seq 0%nat um_N)))
                (real_mult (real_opp (cw_log um_pmax um_Hpmax)) real_one)).
       * apply (RealSetoid.real_eq_mult_compat
                   (real_opp (cw_log um_pmax um_Hpmax))
                   (real_list_sum nat
                      (fun i : nat => nth i tokens real_zero)
-                     (seq 0 um_N))
+                     (seq 0%nat um_N))
                   (real_opp (cw_log um_pmax um_Hpmax)) real_one).
         -- apply real_eq_refl.
         -- (* Σ_{seq 0 N} nth i tokens 0 == 1 *)
            apply (real_eq_trans
                     (real_list_sum nat
                        (fun i : nat => nth i tokens real_zero)
-                       (seq 0 (length tokens)))
+                       (seq 0%nat (length tokens)))
                     (real_list_sum Real (fun x : Real => x) tokens)).
-           ++ exact (um_seq_nth_sum tokens 0).
+           ++ exact (um_seq_nth_sum tokens 0%nat).
            ++ exact tokens_sum.
       * apply real_mult_one.
     + apply real_eq_sym.
       exact (real_list_sum_linear_r nat
                (real_opp (cw_log um_pmax um_Hpmax))
-               (fun i : nat => nth i tokens real_zero) (seq 0 um_N)).
+               (fun i : nat => nth i tokens real_zero) (seq 0%nat um_N)).
   - (* 逐项：nth i tokens 0 ≤ p_max ⟹ nth·(−log p_max) ≤ 熵项 *)
     apply (um_rls_le_N
               (fun i : nat =>
@@ -860,16 +860,16 @@ Proof.
   { (* 1 == Σnth ≤ Σ(const p_max) == N·p_max *)
     apply real_le_trans with
       (y := real_list_sum nat
-              (fun i : nat => nth i tokens real_zero) (seq 0 um_N)).
+              (fun i : nat => nth i tokens real_zero) (seq 0%nat um_N)).
     - apply um_eq_le.
       apply (real_eq_trans real_one
                (real_list_sum Real (fun x : Real => x) tokens)
                (real_list_sum nat
-                  (fun i : nat => nth i tokens real_zero) (seq 0 um_N))).
+                  (fun i : nat => nth i tokens real_zero) (seq 0%nat um_N))).
       * exact (real_eq_sym _ _ tokens_sum).
-      * exact (real_eq_sym _ _ (um_seq_nth_sum tokens 0)).
+      * exact (real_eq_sym _ _ (um_seq_nth_sum tokens 0%nat)).
     - apply real_le_trans with
-        (y := real_list_sum nat (fun _ : nat => um_pmax) (seq 0 um_N)).
+        (y := real_list_sum nat (fun _ : nat => um_pmax) (seq 0%nat um_N)).
       + apply (um_rls_le_N (fun i : nat => nth i tokens real_zero)
                  (fun _ : nat => um_pmax) um_N).
         intros j Hj. apply um_le_pmax. exact Hj.

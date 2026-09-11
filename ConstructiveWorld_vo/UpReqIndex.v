@@ -21,6 +21,17 @@
 (* 本席批外清账：Bishop 盘点清单 #24/25/28/32 翻「建成」+ 组合器 3 件登记（Bishop 扫描 §六，      *)
 (* 权威记录 E360 四关全绿；Real 层批外不占宇宙名额）；min plain-le 6 件维持冻结——在飞席          *)
 (* UpReqPPOPlain.v 23:42 仍增改（.vo 23:35 旧于 .v），终验闸未开，idx_UpPPOPlain 随其终验增册。  *)
+(* v1.7（wb10 影子预置席，diff-ready 预制；翻牌闸=件16 canonical log 占位 _clipup_chk_UpReqPPO.log（验后删；证据固化于总账 v1.7 件16 行证据列 md5、字节数、cst 尾行；已于 01:28 经主会话亲验 PASS），闸已落）： *)
+(* idx_UpPPOPlain 解除「暂不登记」增册 14 件（662 行/14 行首 Qed；_wb9_chk_ppoplain.log coqchk PASS）； *)
+(* 批外新件 UpReqMinPProjB(7 件/251 行，W2' 簇；_w2_* 四关 log) 补登；idx_UpReqAttnGibbs 63→65（分歧清偿增量 *)
+(* 节 2 件，总账 v1.6 增册口径）；idx_UpReqPPO 22→26（件16 终验翻牌，grep decl 实测 26）；宇宙行 659/3/71/1/0 *)
+(* →668/0/66/0/0（件16 挂账翻牌 + PPOPlain 簇冻结闸口件翻牌；和 734 不变）。 *)
+(* v1.8（wb27 影子预置席，diff-ready 预制；闸=主会话 v1.8 commit 令+§10.2 数字同步，闸未落本影子不覆盖真件）： *)
+(* 批外三新件补登（B 形扩展建造队列 T1/T2/T3，Real/B 层批外不占 734 名额）：idx_UpRealLeB3(8 件/220 行， *)
+(* ≤_B 序代数引擎固化层，旗舰 leb3_le_b_opp_rev) + idx_UpReqPPOB(2 件/98 行，定理 6.6 对应物升格， *)
+(* 旗舰 real_ppo_conservative_B_full) + idx_UpReqSumB(3 件/191 行，Σ ≤_B 自持机器，旗舰 sumb_list_sum_le_b)； *)
+(* 宇宙行 668/0/66/0/0 → 670/0/64/0/0（冻结 v1.8 候选两行翻牌：clip_lower 件7 + ppo_clipped_improvement 件8， *)
+(* 总账 v1.7 在案方向，件名随总账 v1.8 待与席25 产物互核；和 734 不变）。 *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -101,9 +112,10 @@ Definition idx_UpReqAlignRestA : ReqModule :=
 Definition idx_UpReqU2 : ReqModule :=
   MkReqModule "UpReqU2.v" 20 20260909 "req_u2_fixed_point_unique" true.
 
-(* idx_UpReqPPO —— UpReqPPO.v：批3 收尾席（未认领 15 件收口：交付 14 + 冻结 1；真证机器旗舰所在）*)
+(* idx_UpReqPPO —— UpReqPPO.v：批3 收尾席（未认领 15 件收口：交付 14 + 冻结 1；真证机器旗舰所在）； *)
+(* v1.7：件16 rppo_align_objective_advantage_decomp 终验翻牌（canonical log 占位 _clipup_chk_UpReqPPO.log（验后删；证据固化于总账 v1.7 件16 行证据列 md5、字节数、cst 尾行）），口径 22→26（grep decl 实测） *)
 Definition idx_UpReqPPO : ReqModule :=
-  MkReqModule "UpReqPPO.v" 22 20260909 "rppo_align_objective_decomp" true.
+  MkReqModule "UpReqPPO.v" 26 20260910 "rppo_align_objective_decomp" true.
 
 (* ---------- 已交付 req 模块清单（批4/批5 新增 12 模块，v1.1 增册） ---------- *)
 
@@ -111,9 +123,9 @@ Definition idx_UpReqPPO : ReqModule :=
 Definition idx_UpReqSampling : ReqModule :=
   MkReqModule "UpReqSampling.v" 43 20260909 "u_tv_contraction" true.
 
-(* idx_UpReqAttnGibbs —— UpReqAttnGibbs.v：批4 主件席（首段 14 + 中后段 39 + 扫尾席解冻增量节；旗舰 Print 假设清零）*)
+(* idx_UpReqAttnGibbs —— UpReqAttnGibbs.v：批4 主件席（首段 14 + 中后段 39 + 扫尾席解冻增量节 + 分歧清偿增量节 2 件；旗舰 Print 假设清零）*)
 Definition idx_UpReqAttnGibbs : ReqModule :=
-  MkReqModule "UpReqAttnGibbs.v" 63 20260909 "ag_topk_tv_identity_strict" true.
+  MkReqModule "UpReqAttnGibbs.v" 65 20260910 "ag_topk_tv_identity_strict" true.
 
 (* idx_UpReqAttnIter —— UpReqAttnIter.v：批4 收缩簇清账席（q_kernel/收缩迭代簇 26+1 邻接；脊柱对位消费 UpReqSampling）*)
 Definition idx_UpReqAttnIter : ReqModule :=
@@ -199,6 +211,14 @@ Definition idx_UpReqFEPAttn : ReqModule :=
 Definition idx_UpDebtSqrtAbsReq : ReqModule :=
   MkReqModule "UpDebtSqrtAbsReq.v" 6 20260909 "req_sqrt_one_abstract" true.
 
+(* ---------- v1.7 增册（wb10 影子预置席；_wb9_chk_ppoplain.log coqchk PASS，v1.5「暂不登记」解除） ---------- *)
+
+(* idx_UpReqPPOPlain —— UpReqPPOPlain.v：批5 PPO plain 收口席（min plain-le 6 + clip_lower 件7 + 件8
+   ppo_clipped_improvement 裁决书影响面 + 伴件/内机 6 件；662 行，14 行首 Qed 1:1；旗舰 rpl_ppo_clipped_improvement；
+   四关：G4=_wb9_chk_ppoplain.log 01:19 coqchk "Modules were successfully checked"，闭包 cst 在列） *)
+Definition idx_UpReqPPOPlain : ReqModule :=
+  MkReqModule "UpReqPPOPlain.v" 14 20260910 "rpl_ppo_clipped_improvement" true.
+
 (* ---------- 批外增量（不占 734 迁移宇宙名额） ---------- *)
 
 (* idx_UpAuditBridge —— UpAuditBridge.v：Min-P 截断采样 KL 投影审计桥（P8 全量；CW219 Real 层面；28 decl，coqchk 08:55 PASS）*)
@@ -215,6 +235,29 @@ Definition idx_UpRealLeB : ReqModule :=
    PASS；分立口径与 UpRealLeB(30) 并立不合并）*)
 Definition idx_UpRealLeB2 : ReqModule :=
   MkReqModule "UpRealLeB2.v" 8 20260909 "real_db_breaking_bound_B" false.
+
+(* idx_UpReqMinPProjB —— UpReqMinPProjB.v：批外 W2' 簇新件（MinP Bishop 形 B 面 7 件；251 行，
+   7 行首 Qed 1:1；旗舰 real_minp_projection_eps_B；四关 log _w2_g1g2_evidence/_w2_g3_objmagic/
+   _w2_g4_evidence/_w2_chk_UpReqMinPProjB 全绿；Real 层批外不占宇宙名额） *)
+Definition idx_UpReqMinPProjB : ReqModule :=
+  MkReqModule "UpReqMinPProjB.v" 7 20260910 "real_minp_projection_eps_B" false.
+
+(* ---------- v1.8 批外增册（wb27 影子预置席；B 形扩展建造队列 T1/T2/T3，Real 层批外不占宇宙名额） ---------- *)
+
+(* idx_UpRealLeB3 —— UpRealLeB3.v：≤_B 序代数引擎固化层（B 形扩展 T1；8 TLC = 8 行首 Qed，220 行； *)
+(*   反序/正缩放/恒等严格元三面新构造；旗舰 leb3_le_b_opp_rev） *)
+Definition idx_UpRealLeB3 : ReqModule :=
+  MkReqModule "UpRealLeB3.v" 8 20260910 "leb3_le_b_opp_rev" false.
+
+(* idx_UpReqPPOB —— UpReqPPOB.v：定理 6.6 对应物判词 5 升格席（B 形扩展 T2；ppo 保守性 Bishop 完整形， *)
+(*   sum_pos 槽接口前提在案；2 TLC = 2 行首 Qed，98 行；旗舰 real_ppo_conservative_B_full） *)
+Definition idx_UpReqPPOB : ReqModule :=
+  MkReqModule "UpReqPPOB.v" 2 20260910 "real_ppo_conservative_B_full" false.
+
+(* idx_UpReqSumB —— UpReqSumB.v：Σ ≤_B 自持机器席（B 形扩展 T3；3 TLC = 3 行首 Qed + 自持 Fixpoint *)
+(*   sumb_lenR 口径外机器（件数口径从众：Theorem/Lemma/Corollary 行）；191 行；旗舰 sumb_list_sum_le_b） *)
+Definition idx_UpReqSumB : ReqModule :=
+  MkReqModule "UpReqSumB.v" 3 20260910 "sumb_list_sum_le_b" false.
 
 (* ---------- 清单与统计（字面值；一致性由文末等式引理编译期核对） ---------- *)
 
@@ -252,25 +295,30 @@ Definition ReqModuleList : list ReqModule :=
   (cons idx_UpReqMisc5B
   (cons idx_UpReqRDF
   (cons idx_UpReqFEPAttn
-  (cons idx_UpDebtSqrtAbsReq nil))))))))))))))))))))))))))))))))).
+  (cons idx_UpDebtSqrtAbsReq
+  (cons idx_UpReqPPOPlain
+  (cons idx_UpReqMinPProjB
+  (cons idx_UpRealLeB3
+  (cons idx_UpReqPPOB
+  (cons idx_UpReqSumB nil)))))))))))))))))))))))))))))))))))))).
 
-(* 模块计数：宇宙内 req 模块 31 + 批外 3 = 34（v1.4：UpReqRDF/UpDebtSqrtAbsReq/UpReqFEPAttn 补登 + 批外 UpRealLeB2） *)
-Definition DeliveredModules : nat := 31.
-Definition ExtraModules     : nat := 3.
-Definition TotalModules     : nat := 34.
+(* 模块计数：宇宙内 req 模块 32 + 批外 7 = 39（v1.8：批外 UpRealLeB3 + UpReqPPOB + UpReqSumB 补登；v1.7：宇宙内 UpReqPPOPlain 增册 + 批外 UpReqMinPProjB 补登） *)
+Definition DeliveredModules : nat := 32.
+Definition ExtraModules     : nat := 7.
+Definition TotalModules     : nat := 39.
 
-(* 件数计数：grep decl 实测和 990 = 宇宙内 924 + 批外 66（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8；v1.3 增 Misc5 35 + Misc5B 20；v1.4 增 RDF 47 + DebtSqrtAbsReq 6 + FEPAttn 16 + LeB2 8） *)
-Definition DeliveredItems : nat := 990.
-Definition UniverseItems  : nat := 924.
+(* 件数计数：grep decl 实测和 1030 = 宇宙内 944 + 批外 86（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + UpReqMinPProjB 7 + UpRealLeB3 8 + UpReqPPOB 2 + UpReqSumB 3；v1.3 增 Misc5 35 + Misc5B 20；v1.4 增 RDF 47 + DebtSqrtAbsReq 6 + FEPAttn 16 + LeB2 8；v1.7 增 PPOPlain 14 + MinPProjB 7 + AttnGibbs +2 + PPO +4；v1.8 增 LeB3 8 + PPOB 2 + SumB 3） *)
+Definition DeliveredItems : nat := 1030.
+Definition UniverseItems  : nat := 944.
 
-(* 迁移宇宙表行解析实值（总账 v1.4，20260909；和 = 734） *)
+(* 迁移宇宙表行解析实值（总账 v1.8 闸目标，20260910；和 = 734；批外 Real/B 形三新件不占名额） *)
 Definition UniverseTotal          : nat := 734.
-Definition UniverseDeliveredRows  : nat := 659.
-Definition UniverseInFlightRows   : nat := 3.
-Definition UniverseFrozenRows     : nat := 71.
-Definition UniverseSuspendedRows  : nat := 1.
+Definition UniverseDeliveredRows  : nat := 670.
+Definition UniverseInFlightRows   : nat := 0.
+Definition UniverseFrozenRows     : nat := 64.
+Definition UniverseSuspendedRows  : nat := 0.
 Definition UniverseUnclaimedRows  : nat := 0.
-Definition LastAuditDay           : nat := 20260909.
+Definition LastAuditDay           : nat := 20260910.
 
 (* ---------- 机器核对引理（reflexivity 级：字面值 vs 清单折叠当场对账） ---------- *)
 
@@ -286,15 +334,24 @@ Proof. reflexivity. Qed.
 Lemma DeliveredModules_matches : DeliveredModules = minus TotalModules ExtraModules.
 Proof. reflexivity. Qed.
 
-(* 宇宙件数分账闭合：全量和 = 宇宙内 + 批外（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 件） *)
+(* 宇宙件数分账闭合：全量和 = 宇宙内 + 批外（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + UpReqMinPProjB 7 + UpRealLeB3 8 + UpReqPPOB 2 + UpReqSumB 3 件；v1.8 四重→七重 minus） *)
 Lemma UniverseItems_matches :
   UniverseItems = minus
-    (minus (minus DeliveredItems (rm_decl_cnt idx_UpRealLeB))
+    (minus
+    (minus
+    (minus
+    (minus
+    (minus
+    (minus DeliveredItems (rm_decl_cnt idx_UpRealLeB))
            (rm_decl_cnt idx_UpAuditBridge))
-    (rm_decl_cnt idx_UpRealLeB2).
+    (rm_decl_cnt idx_UpRealLeB2))
+    (rm_decl_cnt idx_UpReqMinPProjB))
+    (rm_decl_cnt idx_UpRealLeB3))
+    (rm_decl_cnt idx_UpReqPPOB))
+    (rm_decl_cnt idx_UpReqSumB).
 Proof. reflexivity. Qed.
 
-(* 迁移宇宙五态分解闭合（表行解析 659+3+71+1+0 = 734） *)
+(* 迁移宇宙五态分解闭合（表行解析 670+0+64+0+0 = 734；批外 LeB3/PPOB/SumB 不占 734） *)
 Lemma Universe_splits : UniverseTotal
   = plus (plus (plus (plus UniverseDeliveredRows UniverseInFlightRows)
                    UniverseFrozenRows)
@@ -302,7 +359,15 @@ Lemma Universe_splits : UniverseTotal
   UniverseUnclaimedRows.
 Proof. reflexivity. Qed.
 
-(* UpReqIndex v1.5（2026-09-09，账房尾项翻牌席 wb7 版记刷新，数值零变化；承 v1.4 账房翻牌+Index 刷新席：前段 C2 桥面 17 + 批4 在飞 9 +
-   v1.4 尾段批3 FEP 尾段 9 行核销 → 宇宙行 659/3/71/1/0；补登 UpReqRDF(47)/UpDebtSqrtAbsReq(6)/
-   UpReqFEPAttn(16) + 批外 UpRealLeB2(8)；idx_UpPPOPlain 暂不登记随终验增册；G1–G4 同轨复验见文件头注；
-   v1.3 总账回写席 / v1.2 批3行点火席 / v1.0 建立席 2026-09-09） *)
+(* UpReqIndex v1.7（2026-09-10，wb10 影子预置席 diff-ready 版记刷新；本影子零编译，覆盖真件后一次 G2 定账）： *)
+(* 承 v1.5 全部增册；本席四项：idx_UpPPOPlain(14) 解除暂不登记 + 批外 idx_UpReqMinPProjB(7，W2' 簇) 补登 + *)
+(* idx_UpReqAttnGibbs 63→65 + idx_UpReqPPO 22→26 → 模块 36 = 宇宙内 32 + 批外 4、件数 1017 = 宇宙内 944 + 批外 73； *)
+(* 宇宙行 659/3/71/1/0 → 668/0/66/0/0（件16 挂账翻牌 + PPOPlain 簇冻结闸口件翻牌；总账 v1.7 闸目标，和 734 不变）； *)
+(* 翻牌闸=件16 canonical log 占位（_clipup_chk_UpReqPPO.log（验后删；证据固化于总账 v1.7 件16 行证据列 md5、字节数、cst 尾行）；已于 01:28 经主会话亲验 PASS），闸已落；G1–G4 同轨复验见文件头注； *)
+(* UpReqIndex v1.8（2026-09-10，wb27 影子预置席 diff-ready 版记刷新；本影子零编译，覆盖真件后一次 G2 定账）： *)
+(* 承 v1.7 全部增册；本席批外三新件补登 idx_UpRealLeB3(8/220 行) + idx_UpReqPPOB(2/98 行) + idx_UpReqSumB(3/191 行) *)
+(* → 模块 39 = 宇宙内 32 + 批外 7、件数 1030 = 宇宙内 944 + 批外 86、UniverseItems_matches minus 链四重→七重； *)
+(* 宇宙行 668/0/66/0/0 → 670/0/64/0/0（冻结 v1.8 候选两行翻牌：clip_lower 件7 + ppo_clipped_improvement 件8， *)
+(* 总账 v1.7 在案方向，件名随总账 v1.8 待与席25 产物互核；和 734 不变）； *)
+(* 翻牌闸=主会话 v1.8 commit 令+§10.2 数字同步（闸未落本影子不覆盖真件）；G1–G4 同轨复验见文件头注； *)
+(* v1.5 账房尾项翻牌席 / v1.4 账房翻牌+Index 刷新席 / v1.3 总账回写席 / v1.2 批3行点火席 / v1.0 建立席 2026-09-09 *)

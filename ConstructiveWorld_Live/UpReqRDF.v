@@ -1691,32 +1691,32 @@ Variable Omega_B_wd : forall u v : R, req u v -> req (Omega_B u) (Omega_B v).
 Variable E_total : R.
 Variable k_B : R.
 
-Definition E_B_ent (E_A : R) : R := req_minus E_total E_A.
-Definition Omega_total_ent (E_A : R) : R := mult (Omega_A E_A) (Omega_B (E_B_ent E_A)).
-Definition Omega_total_pos_ent (E_A : R) : lt zero (Omega_total_ent E_A).
+Definition req_rdf_E_B_ent (E_A : R) : R := req_minus E_total E_A.
+Definition req_rdf_Omega_total_ent (E_A : R) : R := mult (Omega_A E_A) (Omega_B (req_rdf_E_B_ent E_A)).
+Definition Omega_total_pos_ent (E_A : R) : lt zero (req_rdf_Omega_total_ent E_A).
 Proof.
-  exact (mult_positive (Omega_A E_A) (Omega_B (E_B_ent E_A))
-                       (Omega_A_pos E_A) (Omega_B_pos (E_B_ent E_A))).
+  exact (mult_positive (Omega_A E_A) (Omega_B (req_rdf_E_B_ent E_A))
+                       (Omega_A_pos E_A) (Omega_B_pos (req_rdf_E_B_ent E_A))).
 Defined.
-Definition entropy_ent (E_A : R) : R :=
-  mult k_B (log (Omega_total_ent E_A) (Omega_total_pos_ent E_A)).
+Definition req_rdf_entropy_ent (E_A : R) : R :=
+  mult k_B (log (req_rdf_Omega_total_ent E_A) (Omega_total_pos_ent E_A)).
 
 Variable rdf_log_diff : forall (g : R -> R) (Hg : forall y : R, lt zero (g y)),
   reqRDF (fun z => log (g z) (Hg z)).
 
-Theorem req_entropy_differentiable : reqRDF entropy_ent.
+Theorem req_entropy_differentiable : reqRDF req_rdf_entropy_ent.
 Proof.
-  assert (HEB_d : reqRDF E_B_ent).
+  assert (HEB_d : reqRDF req_rdf_E_B_ent).
   { exact (req_rdf_minus (fun _ => E_total) (fun x => x)
              (req_rdf_const E_total) req_rdf_id). }
-  assert (HcompB : reqRDF (fun E_A => Omega_B (E_B_ent E_A))).
-  { exact (req_rdf_compose Omega_B E_B_ent dOmega_B HEB_d Omega_B_wd). }
-  assert (HOmega_d : reqRDF Omega_total_ent).
-  { exact (req_rdf_mult Omega_A (fun E_A => Omega_B (E_B_ent E_A)) dOmega_A HcompB). }
-  assert (Hlog_d : reqRDF (fun z => log (Omega_total_ent z) (Omega_total_pos_ent z))).
-  { exact (rdf_log_diff Omega_total_ent Omega_total_pos_ent). }
+  assert (HcompB : reqRDF (fun E_A => Omega_B (req_rdf_E_B_ent E_A))).
+  { exact (req_rdf_compose Omega_B req_rdf_E_B_ent dOmega_B HEB_d Omega_B_wd). }
+  assert (HOmega_d : reqRDF req_rdf_Omega_total_ent).
+  { exact (req_rdf_mult Omega_A (fun E_A => Omega_B (req_rdf_E_B_ent E_A)) dOmega_A HcompB). }
+  assert (Hlog_d : reqRDF (fun z => log (req_rdf_Omega_total_ent z) (Omega_total_pos_ent z))).
+  { exact (rdf_log_diff req_rdf_Omega_total_ent Omega_total_pos_ent). }
   exact (req_rdf_mult (fun _ => k_B)
-                      (fun z => log (Omega_total_ent z) (Omega_total_pos_ent z))
+                      (fun z => log (req_rdf_Omega_total_ent z) (Omega_total_pos_ent z))
                       (req_rdf_const k_B) Hlog_d).
 Qed.
 

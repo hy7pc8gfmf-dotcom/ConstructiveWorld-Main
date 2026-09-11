@@ -111,7 +111,7 @@ Definition fw_norm (t : R) (Ht : lt zero t) : req (sumf (fw_bt t Ht)) one :=
   reqd_boltzmann_dist_temp_normalized S sumf ssum_linear ssum_pos base_loss Z_temp
                                       req_Z_temp_spec t Ht.
 Definition fw_h (t : R) (Ht : lt zero t) : R :=
-  entropy_dist S sumf (fw_bt t Ht) (fw_bt_pos t Ht).
+  reqd_entropy_dist S sumf (fw_bt t Ht) (fw_bt_pos t Ht).
 Definition fw_et (t : R) (Ht : lt zero t) : R :=
   sumf (fun s => mult (fw_bt t Ht s) (base_loss s)).
 Definition fw_kl (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2) : R :=

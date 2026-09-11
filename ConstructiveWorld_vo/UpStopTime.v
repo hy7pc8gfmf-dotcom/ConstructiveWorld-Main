@@ -23,7 +23,7 @@
 (*   stsearch 线性搜索输出最小跨阈指数 + 逐前项未跨阈证书；           *)
 (*   阈值策略在证书可测策略类中同时极小化合并次数与无效服务数。        *)
 (*                                                              *)
-(* 层位纪律：语句全 Set 层（Id/NatLe/NatLt/QltT/QleT'/QId/sigT/     *)
+(* 层位纪律：语句全 Set 层（Id/NatLe/NatLt/QltT/QleT'/st_QId/sigT/     *)
 (*   And/Or/Not），无 Prop 泄露；纯构造性禁词零出现；全部 Qed。      *)
 (* ============================================================ *)
 
@@ -33,8 +33,6 @@ From Stdlib Require Import Arith.PeanoNat.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpBudgetReal.
 Require Import UpConstitution.
-Require Import UpBudgetReal.
-Require Import UpConstitution.
 
 Local Open Scope Q_scope.
 
@@ -42,7 +40,7 @@ Local Open Scope Q_scope.
 (* §0 本地桥（nat 序 / bool 反映 / Q 换形；宪法席解法口径）          *)
 (* ============================================================ *)
 
-(* NatLt 双向桥（CW_ConstructiveWorld_219.NatLt = Id (Nat.ltb n m) true；       *)
+(* NatLt 双向桥（CW214KL_scan.NatLt = Id (Nat.ltb n m) true；       *)
 (*   库内 natlt_elim/intro 困在 LiveCore section 不可达，本地重建）   *)
 Lemma st_natlt_drop : forall n m : nat, NatLt n m -> (n < m)%nat.
 Proof.
@@ -68,19 +66,19 @@ destruct (Q_dec x y) as [[H1 | H2] | H3].
 - apply Qle_to_QleT'. apply uc_qeq_le. apply Qeq_sym. exact H3.
 Qed.
 
-(* QId（Qeq_bool 反映）左元换形：x == y 且 y < z ⟹ x < z *)
-Definition QId (x y : Q) : Set := Id (Qeq_bool x y) true.
+(* st_QId（Qeq_bool 反映）左元换形：x == y 且 y < z ⟹ x < z *)
+Definition st_QId (x y : Q) : Set := Id (Qeq_bool x y) true.
 
-Lemma st_qid_refl : forall x : Q, QId x x.
+Lemma st_qid_refl : forall x : Q, st_QId x x.
 Proof. intro x. apply sf_qeq_id. apply Qeq_refl. Qed.
 
-Lemma st_qid_trans : forall a b c : Q, QId a b -> QId b c -> QId a c.
+Lemma st_qid_trans : forall a b c : Q, st_QId a b -> st_QId b c -> st_QId a c.
 Proof.
 intros a b c H1 H2. apply sf_qeq_id.
 apply (Qeq_trans a b c (sf_id_qeq a b H1) (sf_id_qeq b c H2)).
 Qed.
 
-Lemma st_qltT_qid_l : forall x y z : Q, QId x y -> QltT y z -> QltT x z.
+Lemma st_qltT_qid_l : forall x y z : Q, st_QId x y -> QltT y z -> QltT x z.
 Proof.
 intros x y z Hq Hlt. apply Qlt_to_QltT.
 apply (uc_qeq_lt_l y x z (Qeq_sym x y (sf_id_qeq x y Hq))).
@@ -251,9 +249,9 @@ Qed.
 Lemma st_mult_assoc_qeq : forall (a b p : Q), (a * b) * p == a * (b * p).
 Proof. intros a b p. ring. Qed.
 
-(* 参照值序列 == 幂形：gval k c n == c·(1−k)^n（QId 反映形） *)
+(* 参照值序列 == 幂形：gval k c n == c·(1−k)^n（st_QId 反映形） *)
 Lemma gval_pow_QId : forall (k : Q) (n : nat) (c : Q),
-  QId (gval k c n) (c * q_pow (1 - k) n).
+  st_QId (gval k c n) (c * q_pow (1 - k) n).
 Proof.
 intros k n. induction n as [| n IH]; intros c.
 - replace (q_pow (1 - k) 0) with 1%Q by reflexivity.
@@ -876,4 +874,7 @@ Proof. vm_compute. reflexivity. Qed.
 (*   提取停时判定器全链：谓词 / 搜索 / 报告 / 无效服务计数 / 幂核。      *)
 (* ============================================================ *)
 
+From Stdlib Require Import Extraction.
 Set Warnings "-extraction-opaque-accessed".
+Set Extraction Output Directory ".".
+Extraction "upstoptime.ml" st_pred_decay stsearch stsearch_report st_waste q_pow.

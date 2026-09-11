@@ -69,7 +69,7 @@ Definition real_markov_kernel (prefix : list Token) (w : Token) : Real :=
   real_mult (real_temp_factor w) (real_inv_pos Z_full uab_Z_full_pos).
 
 (* 审计质量 Z_aud := 完整核的保留质量 == temp_sum · inv(Z_full) *)
-Definition Z_aud (prefix : list Token) : Real :=
+Definition uab_Z_aud (prefix : list Token) : Real :=
   real_mult (uab_temp_sum prefix) (real_inv_pos Z_full uab_Z_full_pos).
 
 (* ---------- 透明证书（携带进 real_log 的正性证明项；           *)
@@ -87,7 +87,7 @@ Definition uab_full_pos_cert (prefix : list Token) (w : Token) :
                      (uab_temp_factor_pos w) (real_inv_pos_pos Z_full uab_Z_full_pos).
 
 Definition uab_Z_aud_pos_cert (prefix : list Token) :
-  real_lt real_zero (Z_aud prefix) :=
+  real_lt real_zero (uab_Z_aud prefix) :=
   real_mult_positive (uab_temp_sum prefix) (real_inv_pos Z_full uab_Z_full_pos)
                      (uab_temp_sum_pos prefix) (real_inv_pos_pos Z_full uab_Z_full_pos).
 
@@ -353,12 +353,12 @@ Proof.
                  --- apply S5.
 Qed.
 
-(* 逐点核心（P3）：log(minp形态) − log(full形态) == −log Z_aud
+(* 逐点核心（P3）：log(minp形态) − log(full形态) == −log uab_Z_aud
    （无分支形态：对 inline 乘积陈述，证书全透明一致） *)
-(* Z_aud 与其展开形的 log 转换桥（apply 统一器不展开 Section 内定义，
+(* uab_Z_aud 与其展开形的 log 转换桥（apply 统一器不展开 Section 内定义，
    以 exact 的完整转换检查显式过桥） *)
 Lemma uab_Z_aud_log_bridge : forall prefix : list Token,
-  real_eq (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))
+  real_eq (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))
           (real_log (real_mult (uab_temp_sum prefix) (real_inv_pos Z_full uab_Z_full_pos))
                     (uab_Z_aud_pos_cert prefix)).
 Proof.
@@ -372,7 +372,7 @@ Lemma uab_log_minp_minus_full : forall (prefix : list Token) (w : Token),
                      (real_opp (real_log (real_mult (real_temp_factor w)
                                                     (real_inv_pos Z_full uab_Z_full_pos))
                                          (uab_full_pos_cert prefix w))))
-          (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
+          (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
 Proof.
   intros prefix w.
   assert (Hm : real_eq (real_log (real_mult (real_temp_factor w)
@@ -552,14 +552,14 @@ Qed.
 
 (* ============================================================ *)
 (* 件 1（桥引理）：min-p 核 == 投影形态                          *)
-(*   keep 支：minp w == markov_kernel w · inv(Z_aud)             *)
+(*   keep 支：minp w == markov_kernel w · inv(uab_Z_aud)             *)
 (*   drop 支：两侧皆零                                           *)
 (* ============================================================ *)
 
 Definition uab_proj_kernel (prefix : list Token) (w : Token) : Real :=
   match real_minp_keep_dec prefix w with
   | inl _ => real_mult (real_markov_kernel prefix w)
-                       (real_inv_pos (Z_aud prefix) (uab_Z_aud_pos_cert prefix))
+                       (real_inv_pos (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))
   | inr _ => real_zero
   end.
 
@@ -569,7 +569,7 @@ Proof.
   intros prefix w.
   unfold uab_minp_kernel, real_minp_markov_kernel, uab_proj_kernel.
   destruct (real_minp_keep_dec prefix w) as [Hk | Hd].
-  - (* keep 支：尺度恒等式（Z_aud delta 展开 == S·inv(Z_full)） *)
+  - (* keep 支：尺度恒等式（uab_Z_aud delta 展开 == S·inv(Z_full)） *)
     apply (uab_scale_identity (real_temp_factor w) (uab_temp_sum prefix) Z_full
              (uab_temp_sum_pos prefix) uab_Z_full_pos).
   - (* drop 支：两侧皆零 *)
@@ -582,11 +582,11 @@ Lemma uab_temp_sum_list_bridge : forall prefix : list Token,
 Proof. intro prefix. exact (real_eq_refl _). Qed.
 
 (* ============================================================ *)
-(* 件 1b：Z_aud == 保留集上完整核质量；投影形态核归一化           *)
+(* 件 1b：uab_Z_aud == 保留集上完整核质量；投影形态核归一化           *)
 (* ============================================================ *)
 
 Theorem real_Z_aud_is_kept_mass : forall prefix : list Token,
-  real_eq (Z_aud prefix)
+  real_eq (uab_Z_aud prefix)
           (real_list_sum Token
              (fun w : Token =>
                 match real_minp_keep_dec prefix w with
@@ -594,7 +594,7 @@ Theorem real_Z_aud_is_kept_mass : forall prefix : list Token,
                 | inr _ => real_zero
                 end) vocab).
 Proof.
-  intro prefix. unfold Z_aud.
+  intro prefix. unfold uab_Z_aud.
   assert (Hfwd : real_eq (real_list_sum Token
                             (fun w : Token =>
                                match real_minp_keep_dec prefix w with
@@ -658,11 +658,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件 5（hlogz 接入）：Z_aud ≤ 1 ⟹ log Z_aud ≤ 0 ⟹ 代价项非负    *)
+(* 件 5（hlogz 接入）：uab_Z_aud ≤ 1 ⟹ log uab_Z_aud ≤ 0 ⟹ 代价项非负    *)
 (* ============================================================ *)
 
 Theorem real_Z_aud_le_one : forall prefix : list Token,
-  real_le (Z_aud prefix) real_one.
+  real_le (uab_Z_aud prefix) real_one.
 Proof.
   intro prefix.
   assert (Hpt : forall w : Token,
@@ -682,7 +682,7 @@ Proof.
                 | inl _ => real_temp_factor w
                 | inr _ => real_zero
                 end) real_temp_factor vocab Hpt). }
-  unfold Z_aud.
+  unfold uab_Z_aud.
   apply (RealSetoid.real_le_id_r
            (real_mult (uab_temp_sum prefix) (real_inv_pos Z_full uab_Z_full_pos))
            (real_mult Z_full (real_inv_pos Z_full uab_Z_full_pos)) real_one
@@ -693,32 +693,32 @@ Proof.
 Qed.
 
 Theorem real_log_Z_aud_le_zero : forall prefix : list Token,
-  real_le (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero.
+  real_le (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero.
 Proof.
   intro prefix.
   pose proof (real_Z_aud_le_one prefix) as HZ1.
   unfold real_le in HZ1. destruct HZ1 as [Hlt | Heq].
-  - apply (RealSetoid.real_le_id_r (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))
+  - apply (RealSetoid.real_le_id_r (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))
              (real_log real_one real_lt_zero_one) real_zero (real_log_one real_lt_zero_one)).
-    apply (RealSetoid.real_lt_le_iff_req (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))
+    apply (RealSetoid.real_lt_le_iff_req (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))
              (real_log real_one real_lt_zero_one)).
-    exact (inl (real_log_lt_mono (Z_aud prefix) real_one
+    exact (inl (real_log_lt_mono (uab_Z_aud prefix) real_one
                   (uab_Z_aud_pos_cert prefix) real_lt_zero_one Hlt)).
-  - apply (RealSetoid.real_eq_le (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero).
+  - apply (RealSetoid.real_eq_le (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero).
     apply (real_eq_trans _ (real_log real_one real_lt_zero_one) _).
-    + apply (real_log_wd (Z_aud prefix) real_one
+    + apply (real_log_wd (uab_Z_aud prefix) real_one
                (uab_Z_aud_pos_cert prefix) real_lt_zero_one Heq).
     + apply (real_log_one real_lt_zero_one).
 Qed.
 
 Theorem real_opp_log_Z_aud_nonneg : forall prefix : list Token,
-  real_le real_zero (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
+  real_le real_zero (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
 Proof.
   intro prefix.
   apply (RealSetoid.real_le_id_l real_zero (real_opp real_zero)
-           (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+           (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
            (real_eq_sym real_zero (real_opp real_zero) real_opp_zero)).
-  apply (real_opp_le_compat (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero).
+  apply (real_opp_le_compat (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)) real_zero).
   exact (real_log_Z_aud_le_zero prefix).
 Qed.
 
@@ -892,24 +892,24 @@ Proof.
               (uab_kl_tail prefix q Hq_pos) vocab).
 Qed.
 
-(* 尾项求值：Σ q·(log minp − log full) == −log Z_aud（root kl_tail_eval 骨架） *)
+(* 尾项求值：Σ q·(log minp − log full) == −log uab_Z_aud（root kl_tail_eval 骨架） *)
 Lemma uab_kl_tail_eval : forall (prefix : list Token) (q : Token -> Real)
   (Hq_norm : real_eq (real_list_sum Token q vocab) real_one)
   (Hq_pos : forall w : Token, real_minp_keep prefix w -> real_lt real_zero (q w))
   (Hq_fail : forall w : Token, Not (real_minp_keep prefix w) -> real_eq (q w) real_zero),
   real_eq (real_list_sum Token (uab_kl_tail prefix q Hq_pos) vocab)
-          (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
+          (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
 Proof.
   intros prefix q Hq_norm Hq_pos Hq_fail.
   assert (Hpt : forall w : Token,
              real_eq (uab_kl_tail prefix q Hq_pos w)
-                     (real_mult (real_opp (real_log (Z_aud prefix)
+                     (real_mult (real_opp (real_log (uab_Z_aud prefix)
                                                      (uab_Z_aud_pos_cert prefix))) (q w))).
   { intro w. unfold uab_kl_tail.
     destruct (real_minp_keep_dec prefix w) as [Hk | Hd].
     - apply (real_eq_trans _
                 (real_mult (q w)
-                   (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
+                   (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
       + apply (RealSetoid.real_eq_mult_compat (q w)
                    (real_plus (real_log (real_mult (real_temp_factor w)
                                                    (real_inv_pos (uab_temp_sum prefix)
@@ -920,45 +920,45 @@ Proof.
                                                                              uab_Z_full_pos))
                                                    (uab_full_pos_cert prefix w))))
                    (q w)
-                   (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                   (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                    (real_eq_refl _)
                    (uab_log_minp_minus_full prefix w)).
       + apply real_mult_comm.
     - pose proof (Hq_fail w Hd) as Hq0.
       apply (real_eq_trans real_zero
-                (real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                (real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                            real_zero)
-                (real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                (real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                            (q w))
                 (real_eq_sym _ _
                    (real_mult_zero
-                      (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))))
+                      (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))))
                 (RealSetoid.real_eq_mult_compat
-                   (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                   (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                    real_zero
-                   (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                   (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                    (q w) (real_eq_refl _) (real_eq_sym (q w) real_zero Hq0))). }
   apply (real_eq_trans _
            (real_list_sum Token
               (fun w : Token =>
-                 real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                 real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                            (q w)) vocab) _).
   - apply (real_list_sum_ext Token (uab_kl_tail prefix q Hq_pos)
               (fun w : Token =>
-                 real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                 real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                            (q w)) vocab Hpt).
   - apply (real_eq_trans _
-              (real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+              (real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                          (real_list_sum Token q vocab)) _).
     + apply (real_list_sum_linear Token
-                (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))) q vocab).
+                (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))) q vocab).
     + apply (real_eq_trans _
-                (real_mult (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                (real_mult (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                            real_one) _).
       * apply (RealSetoid.real_eq_mult_compat
-                  (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+                  (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
                   (real_list_sum Token q vocab)
-                  (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))) real_one
+                  (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))) real_one
                   (real_eq_refl _) Hq_norm).
       * apply real_mult_one.
 Qed.
@@ -970,7 +970,7 @@ Theorem real_kl_sum_split_list : forall (prefix : list Token) (q : Token -> Real
   (Hq_fail : forall w : Token, Not (real_minp_keep prefix w) -> real_eq (q w) real_zero),
   real_eq (real_list_sum Token (uab_kl_q_full prefix q Hq_pos) vocab)
           (real_plus (real_list_sum Token (uab_kl_q_minp prefix q Hq_pos) vocab)
-                     (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))).
+                     (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))).
 Proof.
   intros prefix q Hq_norm Hq_pos Hq_fail.
   apply (real_eq_trans _
@@ -982,8 +982,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件 3（精确代价）：KL_list(minp ‖ full) == −log Z_aud           *)
-(*   即截断代价 = 通过集质量亏损的对数（kept'==Z_aud，参照完整核） *)
+(* 件 3（精确代价）：KL_list(minp ‖ full) == −log uab_Z_aud           *)
+(*   即截断代价 = 通过集质量亏损的对数（kept'==uab_Z_aud，参照完整核） *)
 (* ============================================================ *)
 
 (* KL(dist‖dist) == 0（自 KL 归零） *)
@@ -1019,7 +1019,7 @@ Qed.
 Theorem real_minp_kl_cost : forall prefix : list Token,
   real_eq (real_list_sum Token
              (uab_kl_q_full prefix (uab_minp_kernel prefix) (uab_minp_keep_pos prefix)) vocab)
-          (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
+          (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix))).
 Proof.
   intro prefix.
   pose proof (uab_kl_sum_split prefix (uab_minp_kernel prefix)
@@ -1043,18 +1043,18 @@ Proof.
               (real_plus (real_list_sum Token
                             (uab_kl_q_minp prefix (uab_minp_kernel prefix)
                                           (uab_minp_keep_pos prefix)) vocab)
-                         (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
+                         (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
     + apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _) Htail).
     + apply (real_eq_trans _
                 (real_plus real_zero
-                           (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
+                           (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))) _).
       * apply (RealSetoid.real_eq_plus_compat _ _ _ _ Hself (real_eq_refl _)).
       * apply uab_plus_zero_l.
 Qed.
 
 (* ============================================================ *)
 (* 件 4（eps 最优性）：KL_list(q ‖ minp) ≤ KL_list(q ‖ full) + eps *)
-(*   由件 2 分解 + 尾项 = −log Z_aud ≥ 0（件 5）+ eps 余量；        *)
+(*   由件 2 分解 + 尾项 = −log uab_Z_aud ≥ 0（件 5）+ eps 余量；        *)
 (*   方向纪律：仅截断侧度量，不主张 KL(full‖minp)。               *)
 (* ============================================================ *)
 
@@ -1082,7 +1082,7 @@ Proof.
   assert (HT : real_le real_zero
                  (real_list_sum Token (uab_kl_tail prefix q Hq_pos) vocab)).
   { apply (RealSetoid.real_le_id_r real_zero
-             (real_opp (real_log (Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
+             (real_opp (real_log (uab_Z_aud prefix) (uab_Z_aud_pos_cert prefix)))
              (real_list_sum Token (uab_kl_tail prefix q Hq_pos) vocab)
              (real_eq_sym _ _ Htail) Hnonneg). }
   assert (HT2 : real_le real_zero

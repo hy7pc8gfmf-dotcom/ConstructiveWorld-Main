@@ -1,0 +1,576 @@
+
+type __ = Obj.t
+
+type empty_set = |
+
+type bool =
+| True
+| False
+
+type nat =
+| O
+| S of nat
+
+type ('a, 'b) sum =
+| Inl of 'a
+| Inr of 'b
+
+type ('a, 'b) prod =
+| Pair of 'a * 'b
+
+val fst : ('a1, 'a2) prod -> 'a1
+
+val snd : ('a1, 'a2) prod -> 'a2
+
+type comparison =
+| Eq
+| Lt
+| Gt
+
+val compOpp : comparison -> comparison
+
+type 'a sig0 = 'a
+  (* singleton inductive, whose constructor was exist *)
+
+type ('a, 'p) sigT =
+| ExistT of 'a * 'p
+
+val projT1 : ('a1, 'a2) sigT -> 'a1
+
+val projT2 : ('a1, 'a2) sigT -> 'a2
+
+type sumbool =
+| Left
+| Right
+
+val add : nat -> nat -> nat
+
+val mul : nat -> nat -> nat
+
+val sub : nat -> nat -> nat
+
+val max : nat -> nat -> nat
+
+type positive =
+| XI of positive
+| XO of positive
+| XH
+
+type z =
+| Z0
+| Zpos of positive
+| Zneg of positive
+
+module Nat :
+ sig
+  val leb : nat -> nat -> bool
+
+  val max : nat -> nat -> nat
+
+  val min : nat -> nat -> nat
+ end
+
+module Pos :
+ sig
+  val succ : positive -> positive
+
+  val add : positive -> positive -> positive
+
+  val add_carry : positive -> positive -> positive
+
+  val pred_double : positive -> positive
+
+  val mul : positive -> positive -> positive
+
+  val compare_cont : comparison -> positive -> positive -> comparison
+
+  val compare : positive -> positive -> comparison
+
+  val of_succ_nat : nat -> positive
+ end
+
+module Coq_Pos :
+ sig
+  val succ : positive -> positive
+
+  val add : positive -> positive -> positive
+
+  val add_carry : positive -> positive -> positive
+
+  val mul : positive -> positive -> positive
+
+  val iter_op : ('a1 -> 'a1 -> 'a1) -> positive -> 'a1 -> 'a1
+
+  val to_nat : positive -> nat
+ end
+
+module Z :
+ sig
+  val double : z -> z
+
+  val succ_double : z -> z
+
+  val pred_double : z -> z
+
+  val pos_sub : positive -> positive -> z
+
+  val add : z -> z -> z
+
+  val opp : z -> z
+
+  val mul : z -> z -> z
+
+  val compare : z -> z -> comparison
+
+  val of_nat : nat -> z
+
+  val abs : z -> z
+ end
+
+val z_lt_dec : z -> z -> sumbool
+
+val z_lt_ge_dec : z -> z -> sumbool
+
+val z_lt_le_dec : z -> z -> sumbool
+
+type q = { qnum : z; qden : positive }
+
+val qcompare : q -> q -> comparison
+
+val qplus : q -> q -> q
+
+val qmult : q -> q -> q
+
+val qopp : q -> q
+
+val qminus : q -> q -> q
+
+val qinv : q -> q
+
+val qdiv : q -> q -> q
+
+val qlt_le_dec : q -> q -> sumbool
+
+val qarchimedean : q -> positive
+
+val qabs : q -> q
+
+type 'a id =
+| Id_refl
+
+type ('a, 'b) and0 = ('a, 'b) prod
+
+type ('a, 'b) or0 = ('a, 'b) sum
+
+type 'a not = 'a -> empty_set
+
+type natLe = bool id
+
+val natLe_lift : nat -> nat -> natLe
+
+type qseq = nat -> q
+
+val qlt_bool : q -> q -> bool
+
+type qltT = bool id
+
+val qlt_to_QltT : q -> q -> qltT
+
+type qleT' = bool id
+
+val qle_to_QleT' : q -> q -> qleT'
+
+val qltT_0_1 : qltT
+
+val qltT_0_2 : qltT
+
+val qltT_0_3 : qltT
+
+val qleT'_refl : q -> qleT'
+
+val qleT'_trans : q -> q -> q -> qleT' -> qleT' -> qleT'
+
+val qltT_leT' : q -> q -> qltT -> qleT'
+
+val qleT'_ltT_ltT : q -> q -> q -> qleT' -> qltT -> qltT
+
+val qltT_leT'_ltT : q -> q -> q -> qltT -> qleT' -> qltT
+
+val qleT'_plus_compat : q -> q -> q -> q -> qleT' -> qleT' -> qleT'
+
+val qleT'_plus_nonneg_rT : q -> q -> qleT' -> qleT'
+
+val qltT_plus_ltT : q -> q -> q -> q -> qltT -> qltT -> qltT
+
+val qltT_plus_leT'_ltT : q -> q -> q -> q -> qltT -> qleT' -> qltT
+
+val qleT'_plus_ltT_ltT : q -> q -> q -> q -> qleT' -> qltT -> qltT
+
+val qleT'_mult_compat_l : q -> q -> q -> qleT' -> qleT' -> qleT'
+
+val qleT'_mult_ltT_compat :
+  q -> q -> q -> q -> qltT -> qleT' -> qleT' -> qltT -> qltT
+
+val qmult_ltT_0_compat : q -> q -> qltT -> qltT -> qltT
+
+val qeq_leT' : q -> q -> qleT'
+
+type qeqT = bool id
+
+val qeq_imp_qeqT : q -> q -> qeqT
+
+val qabs_nonnegT : q -> qleT'
+
+val qltT_plus_pos_r : q -> q -> qltT -> qltT -> qltT
+
+val qltT_div_pos : q -> q -> qltT -> qltT -> qltT
+
+val qltT_eq_compat_l : q -> q -> q -> qltT -> qltT
+
+val qltT_eq_compat_r : q -> q -> q -> qltT -> qltT
+
+val qltT_mult_ltT_compat_r : q -> q -> q -> qltT -> qltT -> qltT
+
+type cauchy = q -> qltT -> (nat, nat -> nat -> natLe -> natLe -> qltT) sigT
+
+type real = (qseq, cauchy) sigT
+
+type real_eq = q -> qltT -> (nat, nat -> natLe -> qltT) sigT
+
+val real_plus : real -> real -> real
+
+val real_opp : real -> real
+
+val real_zero : real
+
+type real_lt = (q, (qltT, (nat, nat -> natLe -> qltT) sigT) and0) sigT
+
+type real_le = (real_lt, real_eq) or0
+
+val real_lt_trans : real -> real -> real -> real_lt -> real_lt -> real_lt
+
+val sum_abs_prefix : qseq -> nat -> q
+
+val cauchy_bounded : qseq -> cauchy -> q
+
+val real_norm_bounded : real -> (q, (qltT, nat -> qleT') and0) sigT
+
+val real_mult : real -> real -> real
+
+val real_const : q -> real
+
+val real_eq_refl : real -> real_eq
+
+val real_eq_sym : real -> real -> real_eq -> real_eq
+
+val real_eq_trans : real -> real -> real -> real_eq -> real_eq -> real_eq
+
+val real_one : real
+
+val real_eq_of_zero_diff : real -> real -> real_eq
+
+val real_plus_comm : real -> real -> real_eq
+
+val real_plus_assoc : real -> real -> real -> real_eq
+
+val real_plus_zero : real -> real_eq
+
+val real_plus_opp : real -> real_eq
+
+val real_mult_comm : real -> real -> real_eq
+
+val real_mult_assoc : real -> real -> real -> real_eq
+
+val real_mult_one : real -> real_eq
+
+val real_mult_zero : real -> real_eq
+
+val real_distrib : real -> real -> real -> real_eq
+
+val real_le_refl : real -> real_le
+
+val real_lt_eq_lt : real -> real -> real -> real_lt -> real_eq -> real_lt
+
+val real_eq_lt_lt : real -> real -> real -> real_eq -> real_lt -> real_lt
+
+val real_le_trans : real -> real -> real -> real_le -> real_le -> real_le
+
+val real_lt_le_trans : real -> real -> real -> real_lt -> real_le -> real_lt
+
+val real_le_lt_trans : real -> real -> real -> real_le -> real_lt -> real_lt
+
+val real_lt_le_iff : real -> real -> (real_lt, real id) or0 -> real_le
+
+val real_lt_plus_compat :
+  real -> real -> real -> real -> real_lt -> real_lt -> real_lt
+
+val q_pow : q -> nat -> q
+
+val q_fact : nat -> q
+
+val exp_partial : nat -> q -> q
+
+val q_arch_geom : q -> (nat, nat -> natLe -> qleT') sigT
+
+val arch_decay : q -> q -> qleT' -> qltT -> (nat, qltT) sigT
+
+val exp_partial_cauchy : q -> q -> (nat, nat -> nat -> __ -> __ -> qltT) sigT
+
+val exp_series : nat -> q -> q
+
+val exp_partial_cauchy_bounded :
+  q -> q -> qleT' -> qltT -> (nat, nat -> nat -> natLe -> natLe -> q -> qleT'
+  -> qltT) sigT
+
+val exp_series_arch : q -> qleT' -> (q, (qleT', nat -> qleT') and0) sigT
+
+val cauchy_real_exp : real -> real
+
+val cauchy_real_exp_zero : real_eq
+
+val sum_upto : nat -> (nat -> q) -> q
+
+val exp_partial_tail_small : q -> q -> qleT' -> qleT' -> (nat, __) sigT
+
+val cauchy_real_exp_pos : real -> real_lt
+
+val real_abs : real -> real
+
+val real_inv_pos : real -> real_lt -> real
+
+val real_inv_pos_correct : real -> real_lt -> real_eq
+
+val real_inv_pos_pos : real -> real_lt -> real_lt
+
+module RealSetoid :
+ sig
+  val real_eq_le : real -> real -> real_eq -> real_le
+
+  val real_lt_le_iff_req : real -> real -> (real_lt, real_eq) or0 -> real_le
+
+  val real_eq_plus_compat :
+    real -> real -> real -> real -> real_eq -> real_eq -> real_eq
+
+  val real_eq_mult_compat :
+    real -> real -> real -> real -> real_eq -> real_eq -> real_eq
+ end
+
+val exp_trunc_arch_seq :
+  (nat -> q) -> (nat -> q) -> q -> q -> qleT' -> (nat -> qleT') -> (nat ->
+  qleT') -> qltT -> (nat, nat -> __ -> qltT) sigT
+
+val cauchy_real_exp_plus : real -> real -> real_eq
+
+val cauchy_real_exp_gt_one : real -> real_lt -> real_lt
+
+val real_lt_opp_plus : real -> real -> real_lt -> real_lt
+
+val real_mult_pos_compat : real -> real -> real_lt -> real_lt -> real_lt
+
+val cauchy_real_exp_minus_one_pos : real -> real_lt -> real_lt
+
+val cauchy_real_exp_wd : real -> real -> real_eq -> real_eq
+
+val real_mult_minus_factor : real -> real -> real_eq
+
+val cauchy_real_exp_mono : real -> real -> real_lt -> real_lt
+
+val real_arch : real -> (nat, (__, real_lt) and0) sigT
+
+val cauchy_real_exp_gt_const : nat -> real_lt
+
+val real_abs_diff_le_lift : real -> real -> q -> q -> nat -> real_lt
+
+val real_inv_unique : real -> real -> real -> real_eq -> real_eq -> real_eq
+
+val exp_neg_recip : real -> real_lt -> real_eq
+
+val real_const_pos : q -> qltT -> real_lt
+
+val real_inv_lt_contra :
+  real -> real -> real_lt -> real_lt -> real_lt -> real_lt
+
+val q_eps16_posT : q -> qltT
+
+val log_testA_eps : real -> q -> q -> q -> bool
+
+val log_testB_eps : real -> q -> q -> q -> bool
+
+val log_m_eps : q -> q -> q
+
+val log_d4_eps : q -> q
+
+val log_K1_eps : q -> q -> q -> nat
+
+val log_K2_eps : real -> q -> q -> q -> nat
+
+val log_q_eps : q -> q -> q -> q
+
+val log_r_eps : real -> q -> q -> q -> q
+
+val log_testA_eps_true_lt : real -> q -> q -> q -> real_lt
+
+val log_testB_eps_true_gt : real -> q -> q -> q -> real_lt
+
+val log_scan :
+  real -> q -> q -> q -> nat -> (((q, q) prod, qltT) sigT, bool) prod
+
+val log_scan_spec :
+  real -> q -> q -> q -> nat -> real_lt -> real_lt -> ((bool id, (real_lt,
+  (real_lt, qeqT) and0) and0) and0, (bool id, nat -> __ -> qleT') and0) or0
+
+val exp_lower_q : real -> real_lt -> (nat, (__, real_lt) and0) sigT
+
+val exp_upper_q : real -> real_lt -> (nat, (__, real_lt) and0) sigT
+
+val log_lower : real -> real_lt -> q
+
+val log_upper : real -> real_lt -> q
+
+val q_pow_arch : q -> q -> (nat, __) sigT
+
+val real_const_lt : q -> q -> real_lt
+
+val real_lt_pt_lt : real -> real -> real_lt -> (nat, __) sigT
+
+val exp_const_lt : q -> q -> real_lt
+
+val approx_span_pt :
+  real -> q -> q -> q -> q -> real_lt -> real_lt -> (nat -> qleT') -> (nat,
+  __) sigT
+
+val real_abs_lift : q -> real -> q -> q -> nat -> real_lt
+
+val approx_def_test : real -> q -> q -> nat -> real_lt
+
+val approx_root :
+  real -> real_lt -> q -> (q, (qltT, (qltT, real_lt) and0) and0) sigT
+
+val log_eps : nat -> q
+
+val log_seq : real -> real_lt -> nat -> q
+
+val approx_root_pt_bound : real -> real_lt -> nat -> (nat, __) sigT
+
+val exp_pos_shape :
+  real -> (q, (qltT, (nat, nat -> __ -> qltT) sigT) and0) sigT
+
+val log_seq_cauchy : real -> real_lt -> cauchy
+
+val cw_log : real -> real_lt -> real
+
+val exp_series_arch_shape : q -> qleT' -> (q, (qleT', nat -> qleT') and0) sigT
+
+val cw_log_exp_right : real -> real_lt -> real_eq
+
+val real_lt_not_eq : real -> real -> real_lt -> real_eq not
+
+val real_weak_trich : real -> real -> real_lt not -> real_lt not -> real_eq
+
+val log_inv_one_thm : real_lt -> real_eq
+
+val log_inv_mult_thm :
+  real -> real -> real_lt -> real_lt -> real_lt -> real_eq
+
+val real_mult_lt_compat :
+  real -> real -> real -> real_lt -> real_lt -> real_lt
+
+val real_mult_lt_compat_l :
+  real -> real -> real -> real_lt -> real_lt -> real_lt
+
+val real_inv_pos_lt_contra :
+  real -> real -> real_lt -> real_lt -> real_lt -> real_lt
+
+val real_lt_plus_translate : real -> real -> real -> real_lt -> real_lt
+
+val real_lt_plus_compat_lt_le :
+  real -> real -> real -> real -> real_lt -> real_le -> real_lt
+
+val real_le_plus_compat :
+  real -> real -> real -> real -> real_le -> real_le -> real_le
+
+val real_le_mult_compat :
+  real -> real -> real -> real_lt -> real_le -> real_le
+
+val real_lt_zero_one : real_lt
+
+val real_mult_positive : real -> real -> real_lt -> real_lt -> real_lt
+
+val real_log : real -> real_lt -> real
+
+val real_log_mult : real -> real -> real_lt -> real_lt -> real_eq
+
+val real_log_one : real_lt -> real_eq
+
+val real_mult_opp_l : real -> real -> real_eq
+
+val real_mult_div : real -> real -> real_lt -> real_eq
+
+val real_opp_opp : real -> real_eq
+
+val real_inv_one_local : real_eq
+
+val real_distrib_r_local : real -> real -> real -> real_eq
+
+val b4_const_eq : q -> q -> real_eq
+
+val b4_const_plus_one : q -> real_eq
+
+val b4_lift_succ : nat -> real_eq
+
+val sf_real_plus_zero_l : real -> real_eq
+
+val real_lt_le_bridge : real -> real -> real_lt -> real_le
+
+val real_eq_le_bridge : real -> real -> real_eq -> real_le
+
+module BudgetReal :
+ sig
+  val real_pow : real -> nat -> real
+
+  val real_pow_eq_compat : real -> real -> nat -> real_eq -> real_eq
+
+  val real_pow_pos : real -> nat -> real_lt -> real_lt
+
+  val real_const_zero_thm : real_eq
+
+  val real_mult_one_l : real -> real_eq
+
+  val real_mult_zero_l : real -> real_eq
+
+  val real_nat_mult_succ : nat -> real -> real_eq
+
+  val real_pow_inv_pair : real -> real_lt -> nat -> real_eq
+
+  val real_le_one_plus : real -> real_le -> real_le
+
+  val real_lt_plus_one : real -> real_lt
+
+  val real_nat_mult_nonneg : nat -> real -> real_lt -> real_le
+
+  val bernoulli_pow : real -> real_lt -> nat -> real_le
+
+  val r_arch_pow_real :
+    real -> real_lt -> real_lt -> real -> real_lt -> real -> real_lt -> (nat,
+    real_lt) sigT
+
+  val real_pow_log_form : real -> real_lt -> nat -> real_eq
+
+  val budget_cond_sufficient :
+    real -> real -> real -> real_lt -> real_lt -> real_lt -> real_lt -> nat
+    -> real_lt -> real_lt
+
+  val real_pow_add_thm : real -> nat -> nat -> real_eq
+
+  val real_pow_le_one : real -> real_lt -> real_le -> nat -> real_le
+
+  val real_pow_anti_mono : real -> real_lt -> real_le -> nat -> nat -> real_le
+
+  val geo_tail_budget :
+    real -> real -> real -> real_lt -> real_lt -> real_lt -> real_lt -> nat
+    -> nat -> nat -> real_lt -> real_lt
+
+  val budget_min_tail :
+    real -> real -> real -> real_lt -> real_lt -> real_lt -> real_lt -> (nat,
+    nat -> nat -> __ -> real_lt) sigT
+ end

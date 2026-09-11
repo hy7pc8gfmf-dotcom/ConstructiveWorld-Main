@@ -47,17 +47,17 @@ Import ListNotations.
 Open Scope Q_scope.
 
 (* ========== CS1：内积（逐项相乘有限和） ====================== *)
-Fixpoint dotp (a b : list Real) : Real :=
+Fixpoint cwe_dotp (a b : list Real) : Real :=
   match a, b with
-  | x :: xs, y :: ys => real_plus (real_mult x y) (dotp xs ys)
+  | x :: xs, y :: ys => real_plus (real_mult x y) (cwe_dotp xs ys)
   | _, _ => real_zero
   end.
 
 (* ========== CS2：平方和 ====================================== *)
-Fixpoint sql (a : list Real) : Real :=
+Fixpoint cwe_sql (a : list Real) : Real :=
   match a with
   | nil => real_zero
-  | x :: rest => real_plus (real_mult x x) (sql rest)
+  | x :: rest => real_plus (real_mult x x) (cwe_sql rest)
   end.
 
 (* ========== Q 层镜像（逐点求值目标） ========================= *)
@@ -216,15 +216,15 @@ Qed.
 (* ========== 逐点投影（Real 层 → Q 层镜像） =================== *)
 
 Lemma sql_proj : forall (a : list Real) (k : nat),
-  projT1 (sql a) k == sqlQ (map (fun x : Real => projT1 x k) a).
+  projT1 (cwe_sql a) k == sqlQ (map (fun x : Real => projT1 x k) a).
 Proof.
   induction a as [| x xs IH]; intro k.
   - reflexivity.
-  - cbn [sql]. rewrite real_plus_proj, real_mult_proj, IH. reflexivity.
+  - cbn [cwe_sql]. rewrite real_plus_proj, real_mult_proj, IH. reflexivity.
 Qed.
 
 Lemma dotp_proj : forall (a b : list Real) (k : nat),
-  projT1 (dotp a b) k
+  projT1 (cwe_dotp a b) k
     == dotpQ (map (fun x : Real => projT1 x k) a)
              (map (fun y : Real => projT1 y k) b).
 Proof.
@@ -232,11 +232,11 @@ Proof.
   - reflexivity.
   - destruct b as [| y ys].
     + reflexivity.
-    + cbn [dotp]. rewrite real_plus_proj, real_mult_proj, IH. reflexivity.
+    + cbn [cwe_dotp]. rewrite real_plus_proj, real_mult_proj, IH. reflexivity.
 Qed.
 
 (* ========== Real 层主定理（eps 版有限和 Cauchy–Schwarz） ======
-   关键观察：gap_n := (sql a)_n·(sql b)_n − (dotp a b)_n² ≥ 0 对**每个**
+   关键观察：gap_n := (cwe_sql a)_n·(cwe_sql b)_n − (cwe_dotp a b)_n² ≥ 0 对**每个**
    指标 n 逐点成立（纯 Q 层 cs_Q，无需分支/判别式/除法）。故
    (AA·BB + eps)_n − (AB²)_n = gap_n + eps_n ≥ eps_n > e1（最终一致下界），
    real_lt 见证一步构造（e1 := eps 正性见证，N1 := 其模数）。 *)
@@ -244,8 +244,8 @@ Qed.
 Theorem real_cauchy_schwarz_lt :
   forall (a b : list Real) (eps : Real),
     real_lt real_zero eps ->
-    real_lt (real_mult (dotp a b) (dotp a b))
-            (real_plus (real_mult (sql a) (sql b)) eps).
+    real_lt (real_mult (cwe_dotp a b) (cwe_dotp a b))
+            (real_plus (real_mult (cwe_sql a) (cwe_sql b)) eps).
 Proof.
   intros a b eps Heps.
   destruct Heps as [e1 [Hpos1 [N1 HN1]]].
@@ -253,7 +253,7 @@ Proof.
   - exact Hpos1.
   - exists N1. intros n Hn.
     apply Qlt_to_QltT.
-    (* 逐点投影展开：差 = (sql a)_n·(sql b)_n + eps_n − (dotp a b)_n² *)
+    (* 逐点投影展开：差 = (cwe_sql a)_n·(cwe_sql b)_n + eps_n − (cwe_dotp a b)_n² *)
     rewrite real_plus_proj, !real_mult_proj.
     rewrite (sql_proj a n), (sql_proj b n), (dotp_proj a b n).
     set (A := sqlQ (map (fun x : Real => projT1 x n) a)).
@@ -294,8 +294,8 @@ Qed.
 Theorem real_cauchy_schwarz :
   forall (a b : list Real) (eps : Real),
     real_lt real_zero eps ->
-    real_le (real_mult (dotp a b) (dotp a b))
-            (real_plus (real_mult (sql a) (sql b)) eps).
+    real_le (real_mult (cwe_dotp a b) (cwe_dotp a b))
+            (real_plus (real_mult (cwe_sql a) (cwe_sql b)) eps).
 Proof.
   intros a b eps Heps.
   exact (inl (real_cauchy_schwarz_lt a b eps Heps)).
@@ -309,18 +309,18 @@ Qed.
 Definition cs_point_a : list Real := [real_const 1; real_zero].
 Definition cs_point_b : list Real := [real_zero; real_const 1].
 
-Lemma sql_pt_a_one : forall n : nat, projT1 (sql cs_point_a) n == 1.
+Lemma sql_pt_a_one : forall n : nat, projT1 (cwe_sql cs_point_a) n == 1.
 Proof.
-  intro n. unfold cs_point_a. cbn [sql].
+  intro n. unfold cs_point_a. cbn [cwe_sql].
   repeat rewrite real_plus_proj. repeat rewrite real_mult_proj.
   rewrite !real_const_proj.
   change (projT1 real_zero n) with 0%Q.
   ring.
 Qed.
 
-Lemma sql_pt_b_one : forall n : nat, projT1 (sql cs_point_b) n == 1.
+Lemma sql_pt_b_one : forall n : nat, projT1 (cwe_sql cs_point_b) n == 1.
 Proof.
-  intro n. unfold cs_point_b. cbn [sql].
+  intro n. unfold cs_point_b. cbn [cwe_sql].
   repeat rewrite real_plus_proj. repeat rewrite real_mult_proj.
   rewrite !real_const_proj.
   change (projT1 real_zero n) with 0%Q.
@@ -328,9 +328,9 @@ Proof.
 Qed.
 
 Lemma dotp_pt_zero : forall n : nat,
-  projT1 (dotp cs_point_a cs_point_b) n == 0.
+  projT1 (cwe_dotp cs_point_a cs_point_b) n == 0.
 Proof.
-  intro n. unfold cs_point_a, cs_point_b. cbn [dotp].
+  intro n. unfold cs_point_a, cs_point_b. cbn [cwe_dotp].
   repeat rewrite real_plus_proj. repeat rewrite real_mult_proj.
   rewrite !real_const_proj.
   change (projT1 real_zero n) with 0%Q.
@@ -338,10 +338,10 @@ Proof.
 Qed.
 
 Lemma pt_sql_eq :
-  real_eq (real_mult (sql cs_point_a) (sql cs_point_b)) (real_const 1).
+  real_eq (real_mult (cwe_sql cs_point_a) (cwe_sql cs_point_b)) (real_const 1).
 Proof.
   apply (RealSetoid.real_eq_mult_compat
-           (sql cs_point_a) (sql cs_point_b) (real_const 1) (real_const 1)).
+           (cwe_sql cs_point_a) (cwe_sql cs_point_b) (real_const 1) (real_const 1)).
   - apply real_eq_of_zero_diff. intro n.
     rewrite sql_pt_a_one. rewrite real_const_proj. ring.
   - apply real_eq_of_zero_diff. intro n.
@@ -349,20 +349,20 @@ Proof.
 Qed.
 
 Lemma pt_rhs_eq :
-  real_eq (real_plus (real_mult (dotp cs_point_a cs_point_b)
-                                  (dotp cs_point_a cs_point_b))
+  real_eq (real_plus (real_mult (cwe_dotp cs_point_a cs_point_b)
+                                  (cwe_dotp cs_point_a cs_point_b))
                      (real_const (1/2)%Q))
           (real_const (1/2)%Q).
 Proof.
-  assert (Hd0 : real_eq (dotp cs_point_a cs_point_b) (real_const 0)).
+  assert (Hd0 : real_eq (cwe_dotp cs_point_a cs_point_b) (real_const 0)).
   { apply real_eq_of_zero_diff. intro n.
     rewrite dotp_pt_zero. rewrite real_const_proj. ring. }
   apply (RealSetoid.real_eq_plus_compat
-           (real_mult (dotp cs_point_a cs_point_b)
-                      (dotp cs_point_a cs_point_b))
+           (real_mult (cwe_dotp cs_point_a cs_point_b)
+                      (cwe_dotp cs_point_a cs_point_b))
            (real_const (1/2)%Q) (real_const 0) (real_const (1/2)%Q)).
-  - exact (RealSetoid.real_eq_mult_compat (dotp cs_point_a cs_point_b)
-             (dotp cs_point_a cs_point_b) (real_const 0) (real_const 0)
+  - exact (RealSetoid.real_eq_mult_compat (cwe_dotp cs_point_a cs_point_b)
+             (cwe_dotp cs_point_a cs_point_b) (real_const 0) (real_const 0)
              Hd0 Hd0).
   - apply real_eq_refl.
 Qed.
@@ -384,24 +384,24 @@ Qed.
 Theorem real_cauchy_schwarz_reversed_false :
   Not (forall (a b : list Real) (eps : Real),
         real_lt real_zero eps ->
-        real_le (real_mult (sql a) (sql b))
-                (real_plus (real_mult (dotp a b) (dotp a b)) eps)).
+        real_le (real_mult (cwe_sql a) (cwe_sql b))
+                (real_plus (real_mult (cwe_dotp a b) (cwe_dotp a b)) eps)).
 Proof.
   intro H.
   assert (Hbad : real_le (real_const 1) (real_const (1/2)%Q)).
   { assert (Hspec := H cs_point_a cs_point_b (real_const (1/2)%Q)
                        real_const_half_pos).
     exact (real_le_trans (real_const 1)
-             (real_mult (sql cs_point_a) (sql cs_point_b))
-             (real_plus (real_mult (dotp cs_point_a cs_point_b)
-                                   (dotp cs_point_a cs_point_b))
+             (real_mult (cwe_sql cs_point_a) (cwe_sql cs_point_b))
+             (real_plus (real_mult (cwe_dotp cs_point_a cs_point_b)
+                                   (cwe_dotp cs_point_a cs_point_b))
                         (real_const (1/2)%Q))
              (inr (real_eq_sym (real_const 1)
-                    (real_mult (sql cs_point_a) (sql cs_point_b))
+                    (real_mult (cwe_sql cs_point_a) (cwe_sql cs_point_b))
                     pt_sql_eq))
-             (real_le_trans (real_mult (sql cs_point_a) (sql cs_point_b))
-                (real_plus (real_mult (dotp cs_point_a cs_point_b)
-                                      (dotp cs_point_a cs_point_b))
+             (real_le_trans (real_mult (cwe_sql cs_point_a) (cwe_sql cs_point_b))
+                (real_plus (real_mult (cwe_dotp cs_point_a cs_point_b)
+                                      (cwe_dotp cs_point_a cs_point_b))
                            (real_const (1/2)%Q))
                 (real_const (1/2)%Q)
                 Hspec (inr pt_rhs_eq))). }
@@ -432,7 +432,7 @@ Qed.
 
 Set Warnings "-extraction-opaque-accessed".
 
-Extraction "upcs.ml" dotp sql cs_Q crossQ real_cauchy_schwarz real_cauchy_schwarz_lt.
+Extraction "upcs.ml" cwe_dotp cwe_sql cs_Q crossQ real_cauchy_schwarz real_cauchy_schwarz_lt.
 
 (* ---------- UpHlogZ ---------- *)
 From Stdlib Require Import Extraction.
@@ -574,7 +574,7 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
 (* 平方维数见证（镜像根内 sqrt_witness）：r·r == d *)
-Definition sqrt_witness (d r : R) : Set := Id (mult r r) d.
+Definition cwe_sqrt_witness (d r : R) : Set := Id (mult r r) d.
 
 (* two := 1+1（字面 2）；two > 0（plus_positive × one_pos 组装） *)
 Definition two_abs : R := plus one one.
@@ -656,10 +656,10 @@ Proof.
       exact (id_trans (mult_zero zero) Hdeq).
 Qed.
 
-(* 见证形态重述（sqrt_witness 命名式） *)
+(* 见证形态重述（cwe_sqrt_witness 命名式） *)
 Lemma sqrt_witness_exists_abstract_witness :
   forall d : R, Or (lt zero d) (Id zero d) ->
-  sigT (fun r : R => And (le zero r) (sqrt_witness d r)).
+  sigT (fun r : R => And (le zero r) (cwe_sqrt_witness d r)).
 Proof.
   intros d H.
   exact (sqrt_witness_exists_abstract d H).
@@ -937,41 +937,41 @@ Variable T_pos : real_lt real_zero T.
 Variable z_logits : S -> Real.
 
 (* 库式温度化配分（Section 温度形态） *)
-Definition real_partition_function_temp : Real :=
+Definition cwe_real_partition_function_temp : Real :=
   real_sum_over_S (fun s => real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s))).
 
-Lemma real_partition_function_temp_pos : real_lt real_zero real_partition_function_temp.
+Lemma cwe_real_partition_function_temp_pos : real_lt real_zero cwe_real_partition_function_temp.
 Proof.
-  unfold real_partition_function_temp, real_exp_pos_fn.
+  unfold cwe_real_partition_function_temp, real_exp_pos_fn.
   apply real_sum_pos_preserved.
   intro s. apply real_exp_neg_pos.
 Qed.
 
 (* 库式温度化 softmax（Section 温度形态） *)
-Definition real_softmax_temp (s : S) : Real :=
+Definition cwe_real_softmax_temp (s : S) : Real :=
   real_mult (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
-            (real_inv_pos real_partition_function_temp real_partition_function_temp_pos).
+            (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos).
 
 (* 桥（对偶引理 c := T 实例 + 配分定义性相等） *)
 Lemma real_scale_inv_T_eq_softmax_temp :
   forall s : S,
     real_eq (real_softmax_scaled (real_inv_pos T T_pos) z_logits s)
-            (real_softmax_temp s).
+            (cwe_real_softmax_temp s).
 Proof.
   intro s.
-  unfold real_softmax_scaled, real_softmax_temp.
+  unfold real_softmax_scaled, cwe_real_softmax_temp.
   apply (RealSetoid.real_eq_mult_compat_adapt
           (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
           (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
           (real_inv_pos (real_partition_function_scaled (real_inv_pos T T_pos) z_logits)
                         (real_partition_function_scaled_pos (real_inv_pos T T_pos) z_logits))
-          (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
+          (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
           (real_eq_refl _)
           (real_inv_pos_ext
             (real_partition_function_scaled (real_inv_pos T T_pos) z_logits)
-            real_partition_function_temp
+            cwe_real_partition_function_temp
             (real_partition_function_scaled_pos (real_inv_pos T T_pos) z_logits)
-            real_partition_function_temp_pos
+            cwe_real_partition_function_temp_pos
             (real_eq_refl _))).
 Qed.
 
@@ -1452,18 +1452,18 @@ Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
 (* ---- 节内定义（setoid 惯例形态） ---- *)
-Definition positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
-Definition boltzmann_dist : S -> R :=
+Definition cwe_positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
+Definition cwe_boltzmann_dist : S -> R :=
   fun s => mult (inv_pos Z Z_pos) (exp_neg (mult (inv_pos D D_pos) (base_loss s))).
 (* log 族带正性前提（setoid 接口 L40570），故 free_energy 限定在正性分布上 *)
-Definition free_energy (p : S -> R) (Hp : positive_dist p) : R :=
+Definition cwe_free_energy (p : S -> R) (Hp : cwe_positive_dist p) : R :=
   plus (sumf (fun s => mult (p s) (base_loss s)))
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
-Definition normalized (p : S -> R) : Set := req (sumf p) one.
+Definition cwe_normalized (p : S -> R) : Set := req (sumf p) one.
 Definition rminus (a b : R) : R := plus a (opp b).
 
 (* ---- Boltzmann 分布正性（setoid log 前提所需；接口字段直接组装） ---- *)
-Lemma req_boltzmann_positive : positive_dist boltzmann_dist.
+Lemma req_boltzmann_positive : cwe_positive_dist cwe_boltzmann_dist.
 Proof.
   intro s.
   apply mult_positive.
@@ -1475,10 +1475,10 @@ Qed.
 Hypothesis energy_in_log_boltzmann_bridge :
   forall s : S,
     req (base_loss s)
-        (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+        (opp (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))
                            (log Z Z_pos)))).
 Hypothesis free_energy_boltzmann_bridge :
-  req (free_energy boltzmann_dist req_boltzmann_positive)
+  req (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive)
       (mult (opp D) (log Z Z_pos)).
 
 (* ============================================================ *)
@@ -1651,9 +1651,9 @@ Proof.
 Qed.
 
 (* Boltzmann 分布归一化（Id 原件 L15846 boltzmann_normalized 的 req 版） *)
-Lemma req_boltzmann_normalized : req (sumf boltzmann_dist) one.
+Lemma req_boltzmann_normalized : req (sumf cwe_boltzmann_dist) one.
 Proof.
-  apply (req_trans (sumf boltzmann_dist)
+  apply (req_trans (sumf cwe_boltzmann_dist)
                    (mult (inv_pos Z Z_pos)
                          (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))))
                    one).
@@ -1678,94 +1678,94 @@ Qed.
 (* ============================================================ *)
 Lemma req_p_times_energy_decomp :
   forall (p : S -> R) (s : S),
-    req (mult (p s) (base_loss s)) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos))))).
+    req (mult (p s) (base_loss s)) (plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos))))).
 Proof.
   intros p s.
-  assert (HlegA : req (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
-  { apply (req_trans (mult (p s) (base_loss s)) (mult (p s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
-    - apply (req_mult_compat (p s) (p s) (base_loss s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+  assert (HlegA : req (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
+  { apply (req_trans (mult (p s) (base_loss s)) (mult (p s) (opp (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
+    - apply (req_mult_compat (p s) (p s) (base_loss s) (opp (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
       * apply req_refl.
       * apply (energy_in_log_boltzmann_bridge s).
-    - apply (req_mult_opp_l (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
-  assert (Hswap : req (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
-  { apply (req_trans (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult (p s) D) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+    - apply (req_mult_opp_l (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
+  assert (Hswap : req (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+  { apply (req_trans (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult (p s) D) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
     - apply mult_assoc.
-      - apply (req_trans (mult (mult (p s) D) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
-        * apply (req_mult_compat (mult (p s) D) (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
+      - apply (req_trans (mult (mult (p s) D) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult (mult D (p s)) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+        * apply (req_mult_compat (mult (p s) D) (mult D (p s)) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
           { apply mult_comm. }
           { apply req_refl. }
-        * apply (req_sym (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). apply mult_assoc.
+        * apply (req_sym (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult D (p s)) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). apply mult_assoc.
   }
-  assert (Hdist2 : req (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
-  { apply (req_trans (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
-    - apply (req_mult_compat D D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))).
+  assert (Hdist2 : req (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
+  { apply (req_trans (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (plus (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
+    - apply (req_mult_compat D D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (plus (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))).
       + apply req_refl.
       + apply distrib.
     - apply distrib. }
-  apply (req_trans (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+  apply (req_trans (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
   - exact HlegA.
-  - apply (req_trans (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
-    + apply (req_opp_compat (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))). exact Hswap.
-    + apply (req_trans (opp (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
-      * apply (req_opp_compat (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))). exact Hdist2.
+  - apply (req_trans (opp (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+    + apply (req_opp_compat (mult (p s) (mult D (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))). exact Hswap.
+    + apply (req_trans (opp (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (plus (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+      * apply (req_opp_compat (mult D (mult (p s) (plus (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))). exact Hdist2.
       * apply req_opp_plus.
 Qed.
 (* ============================================================ *)
 (* D. 旗舰迁移：req_free_energy_kl_decomp                        *)
 (*    F[p] == F[p_b] + D·KL(p‖p_b)（Id 原件 L16259 的 setoid 签名版） *)
-(*    记号：lgpb s := log (boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
+(*    记号：lgpb s := log (cwe_boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
 (*    A := D·Σ p·lgpb；B := D·Σ p·lgps；DlgZ := D·log Z；        *)
-(*    KL := fun s => p s · (lgps s − lgpb s)；Fpb := free_energy p_b *)
+(*    KL := fun s => p s · (lgps s − lgpb s)；Fpb := cwe_free_energy p_b *)
 (* ============================================================ *)
 Theorem req_free_energy_kl_decomp :
-  forall (p : S -> R) (Hp : normalized p) (p0 : positive_dist p),
-    req (free_energy p p0)
-        (plus (free_energy boltzmann_dist req_boltzmann_positive)
+  forall (p : S -> R) (Hp : cwe_normalized p) (p0 : cwe_positive_dist p),
+    req (cwe_free_energy p p0)
+        (plus (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive)
               (mult D (sumf (fun s =>
                 mult (p s) (rminus (log (p s) (p0 s))
-                                   (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                                   (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
 Proof.
   intros p Hp p0.
   (* 桥：F[p_b] == mult (opp D) lgZ == opp (D·lgZ)（Id 系步骤 2 的 req 形态） *)
-  assert (Hfb' : req (free_energy boltzmann_dist req_boltzmann_positive)
+  assert (Hfb' : req (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive)
                      (opp (mult D (log Z Z_pos)))).
-  { apply (req_trans (free_energy boltzmann_dist req_boltzmann_positive)
+  { apply (req_trans (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive)
                      (mult (opp D) (log Z Z_pos))
                      (opp (mult D (log Z Z_pos)))).
     - exact free_energy_boltzmann_bridge.
     - apply req_opp_mult_l. }
   (* 步骤 1：Σ p·E == opp A + opp DlgZ（Id 原件 Hse） *)
   assert (Hse : req (sumf (fun s => mult (p s) (base_loss s)))
-                    (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                    (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                           (opp (mult D (log Z Z_pos))))).
   { apply (req_trans (sumf (fun s => mult (p s) (base_loss s)))
-                     (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                     (sumf (fun s => plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                                           (opp (mult D (mult (p s) (log Z Z_pos))))))
-                     (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                     (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                            (opp (mult D (log Z Z_pos))))).
     - apply (sum_ext (fun s => mult (p s) (base_loss s))
-                     (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                     (fun s => plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                                     (opp (mult D (mult (p s) (log Z Z_pos)))))).
       { intro s. apply req_p_times_energy_decomp. }
-    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                                             (opp (mult D (mult (p s) (log Z Z_pos))))))
-                       (plus (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (plus (sumf (fun s => opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                              (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos))))))
-                       (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                              (opp (mult D (log Z Z_pos))))).
       { apply sum_add. }
-      { apply (req_plus_compat (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                               (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+      { apply (req_plus_compat (sumf (fun s => opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
+                               (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                                (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos)))))
                                (opp (mult D (log Z Z_pos)))).
         - (* Σ opp(D·p·lgpb) == opp(D·Σ p·lgpb)：sum_opp + D 线性提取 *)
-          apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (sumf (fun s => mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+          apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (sumf (fun s => mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
           { apply req_sum_opp. }
-          { apply (req_opp_compat (sumf (fun s => mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                                  (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
-            { apply (sum_linear D (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))). } }
+          { apply (req_opp_compat (sumf (fun s => mult D (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
+                                  (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
+            { apply (sum_linear D (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))). } }
         - (* Σ opp(D·p·lgZ) == opp(D·lgZ)：sum_opp + D 线性 + Σ p·lgZ = lgZ·Σp = lgZ 归一化链 *)
           apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos)))))
                            (opp (sumf (fun s => mult D (mult (p s) (log Z Z_pos)))))
@@ -1801,73 +1801,73 @@ Proof.
   }
   (* 步骤 3：D·KL == B + opp A（Id 原件 Hkl） *)
   assert (Hkl : req (mult D (sumf (fun s =>
-                      mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                      mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                     (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                          (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                          (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))).
   { assert (Hpt2 : forall s : S,
-        req (mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))
+        req (mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))
             (plus (mult (p s) (log (p s) (p0 s)))
-                  (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                  (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
     { intro s. unfold rminus.
-      apply (req_trans (mult (p s) (plus (log (p s) (p0 s)) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                       (plus (mult (p s) (log (p s) (p0 s))) (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+      apply (req_trans (mult (p s) (plus (log (p s) (p0 s)) (opp (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
+                       (plus (mult (p s) (log (p s) (p0 s))) (mult (p s) (opp (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                        (plus (mult (p s) (log (p s) (p0 s)))
-                             (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                             (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
       { apply distrib. }
       { apply (req_plus_compat (mult (p s) (log (p s) (p0 s))) (mult (p s) (log (p s) (p0 s)))
-                               (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                               (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))).
+                               (mult (p s) (opp (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))
+                               (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))).
         { apply req_refl. }
         { apply req_mult_opp_l. } } }
-    assert (Hinner : req (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+    assert (Hinner : req (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                          (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                               (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-    { apply (req_trans (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                       (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                               (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
+    { apply (req_trans (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
+                       (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                        (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                             (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-      { apply (sum_ext (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                       (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                             (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
+      { apply (sum_ext (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))
+                       (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
         { exact Hpt2. } }
-      { apply (req_trans (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                         (plus (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+      { apply (req_trans (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
+                         (plus (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                          (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                               (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                               (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
         { apply sum_add. }
         { apply (req_plus_compat (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                 (sumf (fun s => opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                                 (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                                 (sumf (fun s => opp (mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
+                                 (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
           { apply req_refl. }
           { apply req_sum_opp. } } } }
-    apply (req_trans (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+    apply (req_trans (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
                      (mult D (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                   (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                           (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { apply (req_mult_compat D D
-                             (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                             (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))
                              (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                                   (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
       { apply req_refl. }
       { exact Hinner. } }
     apply (req_trans (mult D (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                   (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (mult D (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                           (mult D (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                           (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { apply distrib. }
     apply (req_plus_compat (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
                            (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (mult D (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                           (mult D (opp (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
     { apply req_refl. }
     { apply req_mult_opp_l. } }
 
   (* 步骤 4：环代数坍缩（Id 原件 Hfin：(opp A + opp DlgZ) + B → opp DlgZ + (B + opp A)） *)
-  assert (Hfin : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
-                     (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))))).
-  { set (A := (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+  assert (Hfin : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
+                     (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))))).
+  { set (A := (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))).
     set (DlgZ := (mult D (log Z Z_pos))).
     set (B := (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
     apply (req_trans (plus (plus (opp A) (opp DlgZ)) B)
@@ -1893,20 +1893,20 @@ Proof.
       { apply plus_comm. }
       { apply req_refl. } }
     apply plus_comm. }
-  (* 总装：Hleg1（free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
-  assert (Hleg1 : req (free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
-  { unfold free_energy.
-    apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
+  (* 总装：Hleg1（cwe_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
+  assert (Hleg1 : req (cwe_free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
+  { unfold cwe_free_energy.
+    apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
     { exact Hse. }
     { apply req_refl. } }
-  assert (Hleg2 : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))) (plus (free_energy boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
-  { apply (req_trans (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
-                      (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))))
-                      (plus (free_energy boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+  assert (Hleg2 : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))) (plus (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))).
+  { apply (req_trans (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
+                      (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))))
+                      (plus (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { exact Hfin. }
-    { apply (req_plus_compat (opp (mult D (log Z Z_pos))) (free_energy boltzmann_dist req_boltzmann_positive) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-      { apply (req_sym (free_energy boltzmann_dist req_boltzmann_positive) (opp (mult D (log Z Z_pos)))). exact Hfb'. }
-      { apply (req_sym (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))). exact Hkl. } } }
+    { apply (req_plus_compat (opp (mult D (log Z Z_pos))) (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s))))))).
+      { apply (req_sym (cwe_free_energy cwe_boltzmann_dist req_boltzmann_positive) (opp (mult D (log Z Z_pos)))). exact Hfb'. }
+      { apply (req_sym (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))))). exact Hkl. } } }
   exact (req_trans _ _ _ Hleg1 Hleg2).
 Qed.
 
@@ -1937,13 +1937,13 @@ Variable D_pos : lt zero D.
 Variable energy : S -> R.
 Variable z : S -> R.
 
-Definition exp_pos_fn (x : R) : R := exp_neg (opp x).
-Definition partition_function_temp : R :=
-  sumf (fun s => exp_pos_fn (mult (inv_pos T T_pos) (z s))).
-Hypothesis partition_function_temp_pos : lt zero partition_function_temp.
-Definition softmax_temp (s : S) : R :=
-  mult (exp_pos_fn (mult (inv_pos T T_pos) (z s)))
-       (inv_pos partition_function_temp partition_function_temp_pos).
+Definition cwe_exp_pos_fn (x : R) : R := exp_neg (opp x).
+Definition cwe_partition_function_temp : R :=
+  sumf (fun s => cwe_exp_pos_fn (mult (inv_pos T T_pos) (z s))).
+Hypothesis partition_function_temp_pos : lt zero cwe_partition_function_temp.
+Definition cwe_softmax_temp (s : S) : R :=
+  mult (cwe_exp_pos_fn (mult (inv_pos T T_pos) (z s)))
+       (inv_pos cwe_partition_function_temp partition_function_temp_pos).
 Definition boltzmann_factor (s : S) : R :=
   exp_neg (mult (inv_pos D D_pos) (energy s)).
 Definition Z_thermo : R := sumf boltzmann_factor.
@@ -1954,8 +1954,8 @@ Definition boltzmann_dist_attn (s : S) : R :=
 Theorem req_attention_is_gibbs_temp :
   (req (inv_pos T T_pos) (inv_pos D D_pos)) ->
   (forall s : S, req (energy s) (opp (z s))) ->
-  (req Z_thermo partition_function_temp) ->
-  forall s : S, req (softmax_temp s) (boltzmann_dist_attn s).
+  (req Z_thermo cwe_partition_function_temp) ->
+  forall s : S, req (cwe_softmax_temp s) (boltzmann_dist_attn s).
 Proof.
   intros HD Henergy HZ s.
   assert (Hf : req (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
@@ -1972,22 +1972,22 @@ Proof.
       + exact HD.
       + apply (req_sym (energy s) (opp (z s))). apply Henergy. }
   assert (Hie : req (inv_pos Z_thermo Z_thermo_pos)
-                    (inv_pos partition_function_temp partition_function_temp_pos)).
-  { apply (inv_pos_ext Z_thermo partition_function_temp
+                    (inv_pos cwe_partition_function_temp partition_function_temp_pos)).
+  { apply (inv_pos_ext Z_thermo cwe_partition_function_temp
                        Z_thermo_pos partition_function_temp_pos HZ). }
-  unfold softmax_temp, boltzmann_dist_attn, boltzmann_factor, exp_pos_fn.
+  unfold cwe_softmax_temp, boltzmann_dist_attn, boltzmann_factor, cwe_exp_pos_fn.
   apply (req_trans (mult (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
-                             (inv_pos partition_function_temp partition_function_temp_pos))
+                             (inv_pos cwe_partition_function_temp partition_function_temp_pos))
                        (mult (exp_neg (mult (inv_pos D D_pos) (energy s)))
                              (inv_pos Z_thermo Z_thermo_pos))
                        (mult (inv_pos Z_thermo Z_thermo_pos)
                              (exp_neg (mult (inv_pos D D_pos) (energy s))))).
     { apply (req_mult_compat (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
                              (exp_neg (mult (inv_pos D D_pos) (energy s)))
-                             (inv_pos partition_function_temp partition_function_temp_pos)
+                             (inv_pos cwe_partition_function_temp partition_function_temp_pos)
                              (inv_pos Z_thermo Z_thermo_pos)).
       { exact Hf. }
-      { apply (req_sym (inv_pos Z_thermo Z_thermo_pos) (inv_pos partition_function_temp partition_function_temp_pos)). exact Hie. } }
+      { apply (req_sym (inv_pos Z_thermo Z_thermo_pos) (inv_pos cwe_partition_function_temp partition_function_temp_pos)). exact Hie. } }
     apply mult_comm.
 Qed.
 
@@ -7913,171 +7913,171 @@ Open Scope Z_scope.
 (* ===================================================================== *)
 
 (* Set 层恒等型（语句零 Prop 的等式载体） *)
-Inductive tid (A : Type) : A -> A -> Type := tid_refl : forall x : A, tid A x x.
+Inductive cwe_tid (A : Type) : A -> A -> Type := cwe_tid_refl : forall x : A, cwe_tid A x x.
 
-Definition tid_sym (A : Type) (x y : A) (H : tid A x y) : tid A y x :=
-  match H in tid _ a b return tid _ b a with
-  | tid_refl _ a0 => @tid_refl _ a0
+Definition cwe_tid_sym (A : Type) (x y : A) (H : cwe_tid A x y) : cwe_tid A y x :=
+  match H in cwe_tid _ a b return cwe_tid _ b a with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ a0
   end.
 
-Definition tid_trans (A : Type) (x y z : A) (H1 : tid A x y) (H2 : tid A y z) :
-  tid A x z :=
-  match H1 in tid _ a b return tid _ b z -> tid _ a z with
-  | tid_refl _ a0 => fun H => H
+Definition cwe_tid_trans (A : Type) (x y z : A) (H1 : cwe_tid A x y) (H2 : cwe_tid A y z) :
+  cwe_tid A x z :=
+  match H1 in cwe_tid _ a b return cwe_tid _ b z -> cwe_tid _ a z with
+  | cwe_tid_refl _ a0 => fun H => H
   end H2.
 
 (* 恒等型的泛函同余（transport 万能件） *)
-Definition tid_cong {A B : Type} (f : A -> B) (x y : A) (H : tid A x y) :
-  tid B (f x) (f y) :=
-  match H in tid _ a b return tid B (f a) (f b) with
-  | tid_refl _ a0 => @tid_refl _ (f a0)
+Definition cwe_tid_cong {A B : Type} (f : A -> B) (x y : A) (H : cwe_tid A x y) :
+  cwe_tid B (f x) (f y) :=
+  match H in cwe_tid _ a b return cwe_tid B (f a) (f b) with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ (f a0)
   end.
 
 (* Set 层自然数序型（k < m 编码为 nle (S k) m） *)
-Inductive nle (n : nat) : nat -> Set :=
-| nle_n : nle n n
-| nle_S : forall m : nat, nle n m -> nle n (S m).
+Inductive cwe_nle (n : nat) : nat -> Set :=
+| cwe_nle_n : cwe_nle n n
+| cwe_nle_S : forall m : nat, cwe_nle n m -> cwe_nle n (S m).
 
 Ltac tidE H :=
-  pose proof (match H in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE.
+  pose proof (match H in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as HE.
 
-(* bool 恒等矛盾关闭器：H1 : tid bool X true、H2 : tid bool X false *)
+(* bool 恒等矛盾关闭器：H1 : cwe_tid bool X true、H2 : cwe_tid bool X false *)
 Ltac tid_kill H1 H2 :=
-  pose proof (match H1 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE1;
-  pose proof (match H2 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE2;
+  pose proof (match H1 in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as KE1;
+  pose proof (match H2 in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as KE2;
   rewrite KE1 in KE2; discriminate KE2.
 
-(* Set 层 nle 基本件 *)
-Lemma leb_refl_tid : forall a : nat, tid bool (Nat.leb a a) true.
+(* Set 层 cwe_nle 基本件 *)
+Lemma cwe_leb_refl_tid : forall a : nat, cwe_tid bool (Nat.leb a a) true.
 Proof.
-  intros a. rewrite Nat.leb_refl. apply tid_refl.
+  intros a. rewrite Nat.leb_refl. apply cwe_tid_refl.
 Qed.
 
-Lemma leb_S : forall a m : nat,
-  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (S m)) true.
+Lemma cwe_leb_S : forall a m : nat,
+  cwe_tid bool (Nat.leb a m) true -> cwe_tid bool (Nat.leb a (S m)) true.
 Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
-    + apply tid_refl.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply cwe_tid_refl.
+    + change (cwe_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply tid_refl.
+    + apply cwe_tid_refl.
     + exact (IH a1 H).
 Qed.
 
-Fixpoint nle_lebF (a b : nat) (H : nle a b) {struct H} :
-  tid bool (Nat.leb a b) true :=
-  match H as H0 in nle _ bb
-  return tid bool (Nat.leb a bb) true with
-  | nle_n _ => leb_refl_tid a
-  | nle_S _ m H1 => leb_S a m (nle_lebF a m H1)
+Fixpoint cwe_nle_lebF (a b : nat) (H : cwe_nle a b) {struct H} :
+  cwe_tid bool (Nat.leb a b) true :=
+  match H as H0 in cwe_nle _ bb
+  return cwe_tid bool (Nat.leb a bb) true with
+  | cwe_nle_n _ => cwe_leb_refl_tid a
+  | cwe_nle_S _ m H1 => cwe_leb_S a m (cwe_nle_lebF a m H1)
   end.
 
-Definition nle_leb (b a : nat) (H : nle a b) : tid bool (Nat.leb a b) true :=
-  nle_lebF a b H.
+Definition cwe_nle_leb (b a : nat) (H : cwe_nle a b) : cwe_tid bool (Nat.leb a b) true :=
+  cwe_nle_lebF a b H.
 
-(* nle -> nat ≤ 提取（仅证明内部推理用；可重复调用，自动起新名） *)
+(* cwe_nle -> nat ≤ 提取（仅证明内部推理用；可重复调用，自动起新名） *)
 Ltac nleP H :=
   let HN := fresh "HNle" in
   pose proof
     (proj1 (Nat.leb_le _ _)
-       (match (nle_leb _ _ H) in tid _ x y return x = y with
-        | tid_refl _ _ => eq_refl
+       (match (cwe_nle_leb _ _ H) in cwe_tid _ x y return x = y with
+        | cwe_tid_refl _ _ => eq_refl
         end)) as HN.
 
-Lemma nle_SS : forall a b : nat, nle a b -> nle (S a) (S b).
+Lemma cwe_nle_SS : forall a b : nat, cwe_nle a b -> cwe_nle (S a) (S b).
 Proof.
   intros a b H. induction H as [| m H IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_0 : forall m : nat, nle O m.
+Lemma cwe_nle_0 : forall m : nat, cwe_nle O m.
 Proof.
   induction m as [| m1 IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_of_leb : forall b a : nat,
-  tid bool (Nat.leb a b) true -> nle a b.
+Lemma cwe_nle_of_leb : forall b a : nat,
+  cwe_tid bool (Nat.leb a b) true -> cwe_nle a b.
 Proof.
   induction b as [| b1 IB]; intros a H.
   - destruct a as [| a1].
-    + apply nle_n.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply cwe_nle_n.
+    + change (cwe_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply nle_0.
-    + exact (nle_SS a1 b1 (IB a1 H)).
+    + apply cwe_nle_0.
+    + exact (cwe_nle_SS a1 b1 (IB a1 H)).
 Qed.
 
-(* nat ≤ → tid bool (leb) true 桥（leb_le 的 bool 封装） *)
-Lemma lebT : forall a b : nat, (a <= b)%nat -> tid bool (Nat.leb a b) true.
+(* nat ≤ → cwe_tid bool (leb) true 桥（leb_le 的 bool 封装） *)
+Lemma cwe_lebT : forall a b : nat, (a <= b)%nat -> cwe_tid bool (Nat.leb a b) true.
 Proof.
-  intros a b H. rewrite (proj2 (Nat.leb_le _ _) H). apply tid_refl.
+  intros a b H. rewrite (proj2 (Nat.leb_le _ _) H). apply cwe_tid_refl.
 Qed.
 
 
-Lemma nle_trans : forall a b c : nat, nle a b -> nle b c -> nle a c.
+Lemma cwe_nle_trans : forall a b c : nat, cwe_nle a b -> cwe_nle b c -> cwe_nle a c.
 Proof.
   intros a b c H1 H2. induction H2 as [| c H2 IH].
   - exact H1.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-(* nle 前驱消解：nle (S a) (S b) -> nle a b *)
-Lemma nle_pred : forall a b : nat, nle (S a) (S b) -> nle a b.
+(* cwe_nle 前驱消解：cwe_nle (S a) (S b) -> cwe_nle a b *)
+Lemma cwe_nle_pred : forall a b : nat, cwe_nle (S a) (S b) -> cwe_nle a b.
 Proof.
-  intros a b H. apply nle_of_leb.
-  exact (nle_leb (S b) (S a) H).
+  intros a b H. apply cwe_nle_of_leb.
+  exact (cwe_nle_leb (S b) (S a) H).
 Qed.
 
-Lemma nle_add_r : forall a b : nat, nle a (a + b).
+Lemma cwe_nle_add_r : forall a b : nat, cwe_nle a (a + b).
 Proof.
   intros a b. revert b. induction a as [| a1 IH]; intro b.
-  - apply nle_0.
-  - exact (nle_SS a1 (a1 + b) (IH b)).
+  - apply cwe_nle_0.
+  - exact (cwe_nle_SS a1 (a1 + b) (IH b)).
 Qed.
 
 
-(* nle (S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
-Lemma nle_10_absurd : forall P : Type, nle (S O) O -> P.
+(* cwe_nle (S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
+Lemma cwe_nle_10_absurd : forall P : Type, cwe_nle (S O) O -> P.
 Proof.
   intros P H. inversion H.
 Qed.
 
-(* Z 层严格序 → nle 编码桥：0 ≤ a < b ⟹ nle (S (to_nat a)) (to_nat b) *)
-Lemma zle_to_nle_S : forall a b : Z, (0 <= a)%Z -> (a < b)%Z ->
-  nle (S (Z.to_nat a)) (Z.to_nat b).
+(* Z 层严格序 → cwe_nle 编码桥：0 ≤ a < b ⟹ cwe_nle (S (to_nat a)) (to_nat b) *)
+Lemma cwe_zle_to_nle_S : forall a b : Z, (0 <= a)%Z -> (a < b)%Z ->
+  cwe_nle (S (Z.to_nat a)) (Z.to_nat b).
 Proof.
   intros a b Ha Hlt.
   assert (Hb : (0 <= b)%Z) by lia.
-  apply nle_of_leb.
+  apply cwe_nle_of_leb.
   assert (Hleb : (Nat.leb (S (Z.to_nat a)) (Z.to_nat b)) = true).
   { apply Nat.leb_le.
     exact (proj1 (Z2Nat.inj_lt a b Ha Hb) Hlt). }
-  rewrite Hleb. apply tid_refl.
+  rewrite Hleb. apply cwe_tid_refl.
 Qed.
 
 (* n≠0 ⟹ |n| 的 nat 编码 ≥ (S O) *)
-Lemma to_nat_abs_pos : forall n : Z,
-  tid bool (Z.eqb n 0) false -> nle (S O) (Z.to_nat (Z.abs n)).
+Lemma cwe_to_nat_abs_pos : forall n : Z,
+  cwe_tid bool (Z.eqb n 0) false -> cwe_nle (S O) (Z.to_nat (Z.abs n)).
 Proof.
   intros n H. tidE H.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
-  apply (zle_to_nle_S 0 (Z.abs n)).
+  apply (cwe_zle_to_nle_S 0 (Z.abs n)).
   - lia.
   - pose proof (proj2 (Z.abs_pos n) Hne). lia.
 Qed.
 
 (* |x| ≥ (S O) ⟹ x ≠ 0 的 bool 形 *)
 Lemma eqb0_false_of_pos : forall x : Z,
-  nle (S O) (Z.to_nat (Z.abs x)) -> tid bool (Z.eqb x 0) false.
+  cwe_nle (S O) (Z.to_nat (Z.abs x)) -> cwe_tid bool (Z.eqb x 0) false.
 Proof.
   intros x H. destruct (Z.eqb x 0) eqn:HEq.
   - apply (proj1 (Z.eqb_eq _ _)) in HEq. rewrite HEq in H.
-    exact (nle_10_absurd _ H).
-  - apply tid_refl.
+    exact (cwe_nle_10_absurd _ H).
+  - apply cwe_tid_refl.
 Qed.
 
 (* ===================================================================== *)
@@ -8104,14 +8104,14 @@ Fixpoint vpF (p : nat) (f : nat) (n : Z) {struct f} : nat :=
 (* 公开估值：燃料取 |n|+1（n≠0 且 p≥2 时每步 |n| 至少折半，燃料充分） *)
 Definition vp (p : nat) (n : Z) : nat := vpF p (S (Z.to_nat (Z.abs n))) n.
 
-(* 关键递减：p≥2、n≠0、p∣n ⟹ |n/p| < |n|（nle (S k) m 编码 k<m） *)
+(* 关键递减：p≥2、n≠0、p∣n ⟹ |n/p| < |n|（cwe_nle (S k) m 编码 k<m） *)
 Lemma zdiv_abs_decr : forall (p : nat) (n : Z), (2 <= p)%nat ->
-  tid bool (Z.eqb n 0) false -> tid bool (dvdtest p n) true ->
-  nle (S (Z.to_nat (Z.abs (Z.div n (pZ p))))) (Z.to_nat (Z.abs n)).
+  cwe_tid bool (Z.eqb n 0) false -> cwe_tid bool (dvdtest p n) true ->
+  cwe_nle (S (Z.to_nat (Z.abs (Z.div n (pZ p))))) (Z.to_nat (Z.abs n)).
 Proof.
   intros p n Hp Hnz Hd.
   tidE Hnz.
-  pose proof (match Hd in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE2.
+  pose proof (match Hd in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as HE2.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
   assert (Hpz : (2 <= pZ p)%Z).
   { unfold pZ. apply (proj1 (Nat2Z.inj_le 2 p)). exact Hp. }
@@ -8132,28 +8132,28 @@ Proof.
     - apply Z.abs_nonneg.
     - exact Hpz. }
   assert (Hlt : (Z.abs (Z.div n (pZ p)) < Z.abs n)%Z) by lia.
-  apply zle_to_nle_S.
+  apply cwe_zle_to_nle_S.
   - apply Z.abs_nonneg.
   - exact Hlt.
 Qed.
 
 (* 除法保持非零：p≥2、n≠0、p∣n ⟹ n/p ≠ 0（bool 形） *)
 Lemma zdiv_nz : forall (p : nat) (n : Z), (2 <= p)%nat ->
-  tid bool (Z.eqb n 0) false -> tid bool (dvdtest p n) true ->
-  tid bool (Z.eqb (Z.div n (pZ p)) 0) false.
+  cwe_tid bool (Z.eqb n 0) false -> cwe_tid bool (dvdtest p n) true ->
+  cwe_tid bool (Z.eqb (Z.div n (pZ p)) 0) false.
 Proof.
   intros p n Hp Hnz Hd.
   assert (Hpz : (2 <= pZ p)%Z).
   { unfold pZ. apply (proj1 (Nat2Z.inj_le 2 p)). exact Hp. }
   assert (Hpz0 : pZ p <> 0) by lia.
   tidE Hnz.
-  pose proof (match Hd in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE2.
+  pose proof (match Hd in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as HE2.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
   assert (Hmod : Z.modulo n (pZ p) = 0) by (apply (proj1 (Z.eqb_eq _ _)); exact HE2).
   assert (Hdm : n = pZ p * (Z.div n (pZ p))).
   { pose proof (Z.div_mod n (pZ p) Hpz0) as Hd0. rewrite Hmod in Hd0. lia. }
   apply eqb0_false_of_pos.
-  apply (zle_to_nle_S 0 (Z.abs (Z.div n (pZ p)))).
+  apply (cwe_zle_to_nle_S 0 (Z.abs (Z.div n (pZ p)))).
   - lia.
   - apply (proj2 (Z.abs_pos (Z.div n (pZ p)))).
     intro Hc. rewrite Hc in Hdm. lia.
@@ -8162,37 +8162,37 @@ Qed.
 (* 燃料无关性：燃料均盖住 |n| 时计数唯一 *)
 Lemma vpF_indep : forall (p B : nat), (2 <= p)%nat ->
   forall (f1 f2 : nat) (n : Z),
-    nle (Z.to_nat (Z.abs n)) B ->
-    tid bool (Z.eqb n 0) false ->
-    nle (Z.to_nat (Z.abs n)) f1 ->
-    nle (Z.to_nat (Z.abs n)) f2 ->
-    tid nat (vpF p f1 n) (vpF p f2 n).
+    cwe_nle (Z.to_nat (Z.abs n)) B ->
+    cwe_tid bool (Z.eqb n 0) false ->
+    cwe_nle (Z.to_nat (Z.abs n)) f1 ->
+    cwe_nle (Z.to_nat (Z.abs n)) f2 ->
+    cwe_tid nat (vpF p f1 n) (vpF p f2 n).
 Proof.
   intros p B Hp. induction B as [| B1 IB]; intros f1 f2 n HnB Hnz Hf1 Hf2.
-  - assert (H1 := to_nat_abs_pos n Hnz).
-    pose proof (nle_trans _ _ _ H1 HnB) as HC. inversion HC.
+  - assert (H1 := cwe_to_nat_abs_pos n Hnz).
+    pose proof (cwe_nle_trans _ _ _ H1 HnB) as HC. inversion HC.
   - destruct f1 as [| g1].
-    + assert (H1 := to_nat_abs_pos n Hnz).
-      pose proof (nle_trans _ _ _ H1 Hf1) as HC. inversion HC.
+    + assert (H1 := cwe_to_nat_abs_pos n Hnz).
+      pose proof (cwe_nle_trans _ _ _ H1 Hf1) as HC. inversion HC.
     + destruct f2 as [| g2].
-      * assert (H1 := to_nat_abs_pos n Hnz).
-        pose proof (nle_trans _ _ _ H1 Hf2) as HC. inversion HC.
+      * assert (H1 := cwe_to_nat_abs_pos n Hnz).
+        pose proof (cwe_nle_trans _ _ _ H1 Hf2) as HC. inversion HC.
       * cbn [vpF]. tidE Hnz. rewrite HE.
         destruct (dvdtest p n) eqn:Hd.
         -- (* p ∣ n：两边同进入位支，递归比较 n/p 的计数 *)
-           assert (Hdt : tid bool (dvdtest p n) true)
-             by (rewrite Hd; apply tid_refl).
-           apply (tid_cong S).
+           assert (Hdt : cwe_tid bool (dvdtest p n) true)
+             by (rewrite Hd; apply cwe_tid_refl).
+           apply (cwe_tid_cong S).
            apply IB with (n := Z.div n (pZ p)).
-           ++ exact (nle_pred _ _
-                 (nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) HnB)).
+           ++ exact (cwe_nle_pred _ _
+                 (cwe_nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) HnB)).
            ++ exact (zdiv_nz p n Hp Hnz Hdt).
-           ++ exact (nle_pred _ _
-                 (nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) Hf1)).
-           ++ exact (nle_pred _ _
-                 (nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) Hf2)).
+           ++ exact (cwe_nle_pred _ _
+                 (cwe_nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) Hf1)).
+           ++ exact (cwe_nle_pred _ _
+                 (cwe_nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) Hf2)).
         -- (* p ∤ n：else 支直派 O（destruct 已代入，iota 归约即闭） *)
-           apply tid_refl.
+           apply cwe_tid_refl.
 Qed.
 
 End UpPLAScopeGuard.
@@ -8242,7 +8242,7 @@ Definition m3_kl_list (n : nat) (f g : nat -> Real)
 (* 几何率底 κ := 1−η *)
 Definition m3_kappa (eta : Real) : Real := real_plus real_one (real_opp eta).
 
-(* κ 的 t 次幂（nat 重复乘）※ CW_ConstructiveWorld_219.S 遮蔽 Datatypes.S，须限定名 *)
+(* κ 的 t 次幂（nat 重复乘）※ S 遮蔽 Datatypes.S，须限定名 *)
 Fixpoint m3_rpow (a : Real) (t : nat) : Real :=
   match t with
   | Datatypes.O => real_one
@@ -8916,7 +8916,7 @@ Local Notation O := Datatypes.O (only parsing).
 (*   ROUNDTABLE2.md 席 1 实验区【抢救一：WPM → GRM 账本上的再铸链】；        *)
 (*   成果存档/圆桌会议/排队席位方案-二轮成果Coq化-20260907.md Q3 条目。       *)
 (*                                                                       *)
-(* 载体全程 Z/nat/bool 判定层；语句零 Prop（Set/Type 层 tid 恒等型 + nle 序型  *)
+(* 载体全程 Z/nat/bool 判定层；语句零 Prop（Set/Type 层 cwe_tid 恒等型 + cwe_nle 序型  *)
 (* + pick 双分支判定，Rocq 9.1 sumbool 参数为 Prop 不可载 Type 见件 2 注）；    *)
 (* stdlib only；纯构造性。                                                  *)
 (*                                                                       *)
@@ -8951,161 +8951,161 @@ Import ListNotations.
 Open Scope Z_scope.
 
 (* ===================================================================== *)
-(* 0. Set 层基建：tid 恒等型 / nle 序型 / 判定存活工具（内联自 UpPLA §0）      *)
+(* 0. Set 层基建：cwe_tid 恒等型 / cwe_nle 序型 / 判定存活工具（内联自 UpPLA §0）      *)
 (* ===================================================================== *)
 
 (* Set 层恒等型（语句零 Prop 的等式载体） *)
-Inductive tid (A : Type) : A -> A -> Type := tid_refl : forall x : A, tid A x x.
+Inductive cwe_tid (A : Type) : A -> A -> Type := cwe_tid_refl : forall x : A, cwe_tid A x x.
 
-Definition tid_sym (A : Type) (x y : A) (H : tid A x y) : tid A y x :=
-  match H in tid _ a b return tid _ b a with
-  | tid_refl _ a0 => @tid_refl _ a0
+Definition cwe_tid_sym (A : Type) (x y : A) (H : cwe_tid A x y) : cwe_tid A y x :=
+  match H in cwe_tid _ a b return cwe_tid _ b a with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ a0
   end.
 
-Definition tid_trans (A : Type) (x y z : A) (H1 : tid A x y) (H2 : tid A y z) :
-  tid A x z :=
-  match H1 in tid _ a b return tid _ b z -> tid _ a z with
-  | tid_refl _ a0 => fun H => H
+Definition cwe_tid_trans (A : Type) (x y z : A) (H1 : cwe_tid A x y) (H2 : cwe_tid A y z) :
+  cwe_tid A x z :=
+  match H1 in cwe_tid _ a b return cwe_tid _ b z -> cwe_tid _ a z with
+  | cwe_tid_refl _ a0 => fun H => H
   end H2.
 
 (* 恒等型的泛函同余（transport 万能件） *)
-Definition tid_cong {A B : Type} (f : A -> B) (x y : A) (H : tid A x y) :
-  tid B (f x) (f y) :=
-  match H in tid _ a b return tid B (f a) (f b) with
-  | tid_refl _ a0 => @tid_refl _ (f a0)
+Definition cwe_tid_cong {A B : Type} (f : A -> B) (x y : A) (H : cwe_tid A x y) :
+  cwe_tid B (f x) (f y) :=
+  match H in cwe_tid _ a b return cwe_tid B (f a) (f b) with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ (f a0)
   end.
 
-(* Set 层自然数序型（k < m 编码为 nle (S k) m） *)
-Inductive nle (n : nat) : nat -> Set :=
-| nle_n : nle n n
-| nle_S : forall m : nat, nle n m -> nle n (S m).
+(* Set 层自然数序型（k < m 编码为 cwe_nle (S k) m） *)
+Inductive cwe_nle (n : nat) : nat -> Set :=
+| cwe_nle_n : cwe_nle n n
+| cwe_nle_S : forall m : nat, cwe_nle n m -> cwe_nle n (S m).
 
 Ltac tidE H :=
-  pose proof (match H in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE.
+  pose proof (match H in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as HE.
 
-(* bool 恒等矛盾关闭器：H1 : tid bool X true、H2 : tid bool X false *)
+(* bool 恒等矛盾关闭器：H1 : cwe_tid bool X true、H2 : cwe_tid bool X false *)
 Ltac tid_kill H1 H2 :=
-  pose proof (match H1 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE1;
-  pose proof (match H2 in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as KE2;
+  pose proof (match H1 in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as KE1;
+  pose proof (match H2 in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as KE2;
   rewrite KE1 in KE2; discriminate KE2.
 
-Lemma leb_refl_tid : forall a : nat, tid bool (Nat.leb a a) true.
+Lemma cwe_leb_refl_tid : forall a : nat, cwe_tid bool (Nat.leb a a) true.
 Proof.
-  intros a. rewrite Nat.leb_refl. apply tid_refl.
+  intros a. rewrite Nat.leb_refl. apply cwe_tid_refl.
 Qed.
 
-Lemma leb_S : forall a m : nat,
-  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (S m)) true.
+Lemma cwe_leb_S : forall a m : nat,
+  cwe_tid bool (Nat.leb a m) true -> cwe_tid bool (Nat.leb a (S m)) true.
 Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
-    + apply tid_refl.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply cwe_tid_refl.
+    + change (cwe_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply tid_refl.
+    + apply cwe_tid_refl.
     + exact (IH a1 H).
 Qed.
 
-Fixpoint nle_lebF (a b : nat) (H : nle a b) {struct H} :
-  tid bool (Nat.leb a b) true :=
-  match H as H0 in nle _ bb
-  return tid bool (Nat.leb a bb) true with
-  | nle_n _ => leb_refl_tid a
-  | nle_S _ m H1 => leb_S a m (nle_lebF a m H1)
+Fixpoint cwe_nle_lebF (a b : nat) (H : cwe_nle a b) {struct H} :
+  cwe_tid bool (Nat.leb a b) true :=
+  match H as H0 in cwe_nle _ bb
+  return cwe_tid bool (Nat.leb a bb) true with
+  | cwe_nle_n _ => cwe_leb_refl_tid a
+  | cwe_nle_S _ m H1 => cwe_leb_S a m (cwe_nle_lebF a m H1)
   end.
 
-Definition nle_leb (b a : nat) (H : nle a b) : tid bool (Nat.leb a b) true :=
-  nle_lebF a b H.
+Definition cwe_nle_leb (b a : nat) (H : cwe_nle a b) : cwe_tid bool (Nat.leb a b) true :=
+  cwe_nle_lebF a b H.
 
-(* nle -> nat ≤ 提取（仅证明内部推理用） *)
+(* cwe_nle -> nat ≤ 提取（仅证明内部推理用） *)
 Ltac nleP H :=
   let HN := fresh "HNle" in
   pose proof
     (proj1 (Nat.leb_le _ _)
-       (match (nle_leb _ _ H) in tid _ x y return x = y with
-        | tid_refl _ _ => eq_refl
+       (match (cwe_nle_leb _ _ H) in cwe_tid _ x y return x = y with
+        | cwe_tid_refl _ _ => eq_refl
         end)) as HN.
 
-Lemma nle_SS : forall a b : nat, nle a b -> nle (S a) (S b).
+Lemma cwe_nle_SS : forall a b : nat, cwe_nle a b -> cwe_nle (S a) (S b).
 Proof.
   intros a b H. induction H as [| m H IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_0 : forall m : nat, nle O m.
+Lemma cwe_nle_0 : forall m : nat, cwe_nle O m.
 Proof.
   induction m as [| m1 IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_of_leb : forall b a : nat,
-  tid bool (Nat.leb a b) true -> nle a b.
+Lemma cwe_nle_of_leb : forall b a : nat,
+  cwe_tid bool (Nat.leb a b) true -> cwe_nle a b.
 Proof.
   induction b as [| b1 IB]; intros a H.
   - destruct a as [| a1].
-    + apply nle_n.
-    + change (tid bool false true) in H. tidE H. discriminate HE.
+    + apply cwe_nle_n.
+    + change (cwe_tid bool false true) in H. tidE H. discriminate HE.
   - destruct a as [| a1].
-    + apply nle_0.
-    + apply nle_SS. exact (IB a1 H).
+    + apply cwe_nle_0.
+    + apply cwe_nle_SS. exact (IB a1 H).
 Qed.
 
-Lemma nle_trans : forall a b c : nat, nle a b -> nle b c -> nle a c.
+Lemma cwe_nle_trans : forall a b c : nat, cwe_nle a b -> cwe_nle b c -> cwe_nle a c.
 Proof.
   intros a b c H1 H2. induction H2 as [| c H2 IH].
   - exact H1.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-(* nle (S a) (S b) -> nle a b *)
-Lemma nle_pred : forall a b : nat, nle (S a) (S b) -> nle a b.
+(* cwe_nle (S a) (S b) -> cwe_nle a b *)
+Lemma cwe_nle_pred : forall a b : nat, cwe_nle (S a) (S b) -> cwe_nle a b.
 Proof.
-  intros a b H. apply nle_of_leb.
-  exact (nle_leb (S b) (S a) H).
+  intros a b H. apply cwe_nle_of_leb.
+  exact (cwe_nle_leb (S b) (S a) H).
 Qed.
 
-Lemma nle_add_r : forall a b : nat, nle a (a + b).
+Lemma cwe_nle_add_r : forall a b : nat, cwe_nle a (a + b).
 Proof.
   intros a b. revert b. induction a as [| a1 IH]; intro b.
-  - apply nle_0.
-  - exact (nle_SS a1 (a1 + b) (IH b)).
+  - apply cwe_nle_0.
+  - exact (cwe_nle_SS a1 (a1 + b) (IH b)).
 Qed.
 
 (* ---- 本件新增基建 ---- *)
 
-Lemma nle_S_diag : forall a : nat, nle a (S a).
+Lemma nle_S_diag : forall a : nat, cwe_nle a (S a).
 Proof.
   induction a as [| a IH].
-  - apply nle_0.
-  - apply nle_SS. exact IH.
+  - apply cwe_nle_0.
+  - apply cwe_nle_SS. exact IH.
 Qed.
 
-Lemma nle_add_r_any : forall a b c : nat, nle a b -> nle (a + c) (b + c).
+Lemma nle_add_r_any : forall a b c : nat, cwe_nle a b -> cwe_nle (a + c) (b + c).
 Proof.
   intros a b c H. induction H as [| m H IH].
-  - apply nle_n.
+  - apply cwe_nle_n.
   - replace (Nat.add (S m) c) with (S (Nat.add m c)) by reflexivity.
-    apply nle_S. exact IH.
+    apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_add_l_any : forall a b c : nat, nle b c -> nle (a + b) (a + c).
+Lemma nle_add_l_any : forall a b c : nat, cwe_nle b c -> cwe_nle (a + b) (a + c).
 Proof.
   intros a b c H. induction a as [| a IH].
   - exact H.
-  - apply nle_SS. exact IH.
+  - apply cwe_nle_SS. exact IH.
 Qed.
 
-(* nat/bool 层 eq -> tid 桥（证明内部收尾用） *)
-Lemma tid_nat_eq : forall a b : nat, a = b -> tid nat a b.
+(* nat/bool 层 eq -> cwe_tid 桥（证明内部收尾用） *)
+Lemma tid_nat_eq : forall a b : nat, a = b -> cwe_tid nat a b.
 Proof.
-  intros a b H. rewrite H. apply tid_refl.
+  intros a b H. rewrite H. apply cwe_tid_refl.
 Qed.
 
-Lemma tid_bool_eq : forall x y : bool, x = y -> tid bool x y.
+Lemma tid_bool_eq : forall x y : bool, x = y -> cwe_tid bool x y.
 Proof.
-  intros x y H. rewrite H. apply tid_refl.
+  intros x y H. rewrite H. apply cwe_tid_refl.
 Qed.
 
 (* ---- 通用列表算术（自证防 stdlib 改名漂移） ---- *)
@@ -9197,20 +9197,20 @@ Definition use_cnt (f : fid) (l : list evt) : nat :=
   length (filter (is_use_f f) l).
 
 Theorem ledger_len_step : forall (l : list evt) (e : evt),
-  tid nat (S (length l)) (length (ledger_step l e)).
+  cwe_tid nat (S (length l)) (length (ledger_step l e)).
 Proof.
   intros l e. apply tid_nat_eq. unfold ledger_step. rewrite rc_len_app. simpl. lia.
 Qed.
 
 (* 账本推进守恒/单调：use 事件只增不减逐字段账户 *)
 Theorem ledger_use_mono : forall (f : fid) (l : list evt) (e : evt),
-  nle (use_cnt f l) (use_cnt f (ledger_step l e)).
+  cwe_nle (use_cnt f l) (use_cnt f (ledger_step l e)).
 Proof.
   intros f l. induction l as [| a l IH]; intros e.
-  - apply nle_0.
+  - apply cwe_nle_0.
   - destruct a as [g ev]. unfold use_cnt in *. simpl.
     destruct (Nat.eqb f g).
-    + apply nle_SS. exact (IH e).
+    + apply cwe_nle_SS. exact (IH e).
     + exact (IH e).
 Qed.
 
@@ -9238,7 +9238,7 @@ Definition occurs (f : fid) (l : list (fid * tier)) : bool :=
 
 (* 扫描完备性之一：长度分割守恒——幸存 + 击穿 = 全普查，一枚不丢 *)
 Theorem scan_partition_len : forall (f : fid) (l : list (fid * tier)),
-  tid nat (length l)
+  cwe_tid nat (length l)
            (Nat.add (length (survive_scan f l)) (length (pierced f l))).
 Proof.
   intros f l. apply tid_nat_eq. unfold survive_scan, pierced.
@@ -9248,7 +9248,7 @@ Qed.
 
 (* 扫描完备性之二：幸存者纯净——幸存子证书不再含被击穿字段 *)
 Theorem scan_survivor_pure : forall (f : fid) (l : list (fid * tier)),
-  tid bool (occurs f (survive_scan f l)) false.
+  cwe_tid bool (occurs f (survive_scan f l)) false.
 Proof.
   intros f l. apply tid_bool_eq. unfold occurs, survive_scan.
   exact (rc_existsb_filter_neg (fid * tier) (hitF f) l).
@@ -9256,19 +9256,19 @@ Qed.
 
 (* 扫描完备性之三：判定全覆盖——击穿侧恰捕获全部在册条目 *)
 Theorem scan_pierce_capture : forall (f : fid) (l : list (fid * tier)),
-  tid bool (occurs f (pierced f l)) (occurs f l).
+  cwe_tid bool (occurs f (pierced f l)) (occurs f l).
 Proof.
   intros f l. apply tid_bool_eq. unfold occurs, pierced.
   exact (rc_existsb_filter_id (fid * tier) (hitF f) l).
 Qed.
 
 (* bool 判定全覆盖：在册性总判定器（Type 排序双分支，零 Prop）。              *)
-(* 定稿决策：Rocq 9.1 的 sumbool 参数已改 (A B : Prop)，装不下 tid 的 Type    *)
+(* 定稿决策：Rocq 9.1 的 sumbool 参数已改 (A B : Prop)，装不下 cwe_tid 的 Type    *)
 (* 载荷，故自建 Type 排序双分支载体 pick（判定器语义不变：分支即判定结果）。   *)
 Inductive pick (A B : Type) : Type := pick_l : A -> pick A B | pick_r : B -> pick A B.
 
 Theorem occurs_dec : forall (f : fid) (l : list (fid * tier)),
-  pick (tid bool (occurs f l) true) (tid bool (occurs f l) false).
+  pick (cwe_tid bool (occurs f l) true) (cwe_tid bool (occurs f l) false).
 Proof.
   intros f l. unfold occurs.
   destruct (existsb (hitF f) l).
@@ -9278,10 +9278,10 @@ Qed.
 
 (* 幸存子证书规模不超原普查 *)
 Theorem scan_scan_mono : forall (f : fid) (l : list (fid * tier)),
-  nle (length (survive_scan f l)) (length l).
+  cwe_nle (length (survive_scan f l)) (length l).
 Proof.
   intros f l. pose proof (scan_partition_len f l) as HP. tidE HP.
-  rewrite HE. apply nle_add_r.
+  rewrite HE. apply cwe_nle_add_r.
 Qed.
 
 (* 等级质量：普查条目的等级总和 *)
@@ -9354,28 +9354,28 @@ Definition total_acc (c : Cert) : nat :=
 
 (* 再铸分档辅助：通过档普查恒等 *)
 Theorem recast_pass_census : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid (list (fid * tier)) (census c) (census (recast c (use f ev))).
+  cwe_tid bool (passes f ev c) true ->
+  cwe_tid (list (fid * tier)) (census c) (census (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. exact (tid_refl (list (fid * tier)) (census c)).
+  tidE H. rewrite HE. exact (cwe_tid_refl (list (fid * tier)) (census c)).
 Qed.
 
 (* 再铸分档辅助：通过档旧义务全保留（义务不灭半边） *)
 Theorem recast_pass_obls : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid (list (fid * tier)) (obls c) (obls (recast c (use f ev))).
+  cwe_tid bool (passes f ev c) true ->
+  cwe_tid (list (fid * tier)) (obls c) (obls (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. exact (tid_refl (list (fid * tier)) (obls c)).
+  tidE H. rewrite HE. exact (cwe_tid_refl (list (fid * tier)) (obls c)).
 Qed.
 
 (* 再铸击穿档：普查缩减恰为被击穿条目（义务转移的来源侧） *)
 Theorem recast_pierce_partition : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (length (census c))
+  cwe_tid bool (passes f ev c) false ->
+  cwe_tid nat (length (census c))
            (Nat.add (length (census (recast c (use f ev))))
                     (length (pierced f (census c)))).
 Proof.
@@ -9387,8 +9387,8 @@ Qed.
 
 (* 再铸击穿档：新义务恰为降级条目（义务转移的去向侧；旧义务消⟹新义务生） *)
 Theorem recast_pierce_obls_len : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (length (obls (recast c (use f ev))))
+  cwe_tid bool (passes f ev c) false ->
+  cwe_tid nat (length (obls (recast c (use f ev))))
            (Nat.add (length (obls c)) (length (pierced f (census c)))).
 Proof.
   intros c f ev H.
@@ -9399,34 +9399,34 @@ Qed.
 
 (* 普查单调：再铸永不增发普查条目 *)
 Theorem recast_census_mono : forall (c : Cert) (e : evt),
-  nle (length (census (recast c e))) (length (census c)).
+  cwe_nle (length (census (recast c e))) (length (census c)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply nle_n.
+  - apply cwe_nle_n.
   - exact (scan_scan_mono f (census c)).
 Qed.
 
 (* 义务单调：再铸永不销毁既有义务 *)
 Theorem recast_obls_mono : forall (c : Cert) (e : evt),
-  nle (length (obls c)) (length (obls (recast c e))).
+  cwe_nle (length (obls c)) (length (obls (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply nle_n.
-  - unfold recast_b. cbn [obls]. rewrite rc_len_app. apply nle_add_r.
+  - apply cwe_nle_n.
+  - unfold recast_b. cbn [obls]. rewrite rc_len_app. apply cwe_nle_add_r.
 Qed.
 
 (* 义务转移封闭性·总账平衡：任意再铸后总账守恒（账户总账平衡） *)
 Theorem acc_balance : forall (c : Cert) (e : evt),
-  tid nat (total_acc c) (total_acc (recast c e)).
+  cwe_tid nat (total_acc c) (total_acc (recast c e)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply tid_refl.
+  - apply cwe_tid_refl.
   - apply tid_nat_eq. unfold total_acc, recast_b. cbn [census obls].
     rewrite rc_len_app.
     pose proof (scan_partition_len f (census c)) as HP. tidE HP.
@@ -9435,13 +9435,13 @@ Qed.
 
 (* 义务转移封闭性·等级质量守恒：降级 verbatim 转账，质量分毫不差 *)
 Theorem tier_balance : forall (c : Cert) (e : evt),
-  tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
+  cwe_tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
            (Nat.add (tsum (census (recast c e))) (tsum (obls (recast c e)))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - apply tid_refl.
+  - apply cwe_tid_refl.
   - apply tid_nat_eq. unfold recast_b. cbn [census obls].
     rewrite rc_tsum_app.
     rewrite (rc_tsum_scan f (census c)).
@@ -9457,18 +9457,18 @@ Definition friction (c : Cert) : nat := Nat.add (m_ev (mtr c)) (m_rc (mtr c)).
 
 (* 通过档精确差值：恰 +1（行使计数 +1，再铸计数不动） *)
 Theorem friction_pass_step : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) true ->
-  tid nat (S (friction c)) (friction (recast c (use f ev))).
+  cwe_tid bool (passes f ev c) true ->
+  cwe_tid nat (S (friction c)) (friction (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. apply tid_refl.
+  tidE H. rewrite HE. apply cwe_tid_refl.
 Qed.
 
 (* 击穿档精确差值：恰 +2（行使 +1、再铸 +1） *)
 Theorem friction_pierce_step : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev c) false ->
-  tid nat (S (S (friction c))) (friction (recast c (use f ev))).
+  cwe_tid bool (passes f ev c) false ->
+  cwe_tid nat (S (S (friction c))) (friction (recast c (use f ev))).
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
@@ -9477,14 +9477,14 @@ Qed.
 
 (* 摩擦计量单调：任意再铸摩擦不减 *)
 Theorem friction_mono : forall (c : Cert) (e : evt),
-  nle (friction c) (friction (recast c e)).
+  cwe_nle (friction c) (friction (recast c e)).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
   - exact (nle_add_r_any (m_ev (mtr c)) (S (m_ev (mtr c))) (m_rc (mtr c))
              (nle_S_diag (m_ev (mtr c)))).
-  - exact (nle_trans (Nat.add (m_ev (mtr c)) (m_rc (mtr c)))
+  - exact (cwe_nle_trans (Nat.add (m_ev (mtr c)) (m_rc (mtr c)))
                      (Nat.add (S (m_ev (mtr c))) (m_rc (mtr c)))
                      (Nat.add (S (m_ev (mtr c))) (S (m_rc (mtr c))))
                      (nle_add_r_any (m_ev (mtr c)) (S (m_ev (mtr c)))
@@ -9495,7 +9495,7 @@ Qed.
 
 (* 行使计数单调 *)
 Theorem meter_ev_mono : forall (c : Cert) (e : evt),
-  nle (m_ev (mtr c)) (m_ev (mtr (recast c e))).
+  cwe_nle (m_ev (mtr c)) (m_ev (mtr (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
@@ -9506,12 +9506,12 @@ Qed.
 
 (* 再铸计数单调 *)
 Theorem meter_rc_mono : forall (c : Cert) (e : evt),
-  nle (m_rc (mtr c)) (m_rc (mtr (recast c e))).
+  cwe_nle (m_rc (mtr c)) (m_rc (mtr (recast c e))).
 Proof.
   intros c e. destruct e as [f ev].
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
   destruct (passes f ev c).
-  - exact (nle_n (m_rc (mtr c))).
+  - exact (cwe_nle_n (m_rc (mtr c))).
   - exact (nle_S_diag (m_rc (mtr c))).
 Qed.
 
@@ -9525,7 +9525,7 @@ Definition rebridge (c : Cert) (f : fid) : Cert :=
 
 (* 再入守恒之一：总账平衡 *)
 Theorem rebridge_balance : forall (c : Cert) (f : fid),
-  tid nat (total_acc c) (total_acc (rebridge c f)).
+  cwe_tid nat (total_acc c) (total_acc (rebridge c f)).
 Proof.
   intros c f. apply tid_nat_eq. unfold total_acc, rebridge. cbn [census obls].
   rewrite rc_len_app.
@@ -9535,7 +9535,7 @@ Qed.
 
 (* 再入守恒之二：等级质量守恒 *)
 Theorem rebridge_tier_balance : forall (c : Cert) (f : fid),
-  tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
+  cwe_tid nat (Nat.add (tsum (census c)) (tsum (obls c)))
            (Nat.add (tsum (census (rebridge c f))) (tsum (obls (rebridge c f)))).
 Proof.
   intros c f. apply tid_nat_eq. unfold rebridge. cbn [census obls].
@@ -9546,7 +9546,7 @@ Qed.
 
 (* 再入清账：义务账中 f 的在册性清零（该字段义务全部清偿回普查） *)
 Theorem rebridge_clears : forall (c : Cert) (f : fid),
-  tid bool (occurs f (obls (rebridge c f))) false.
+  cwe_tid bool (occurs f (obls (rebridge c f))) false.
 Proof.
   intros c f. apply tid_bool_eq. unfold rebridge, occurs. cbn [obls].
   unfold survive_scan.
@@ -9559,7 +9559,7 @@ Definition cnt (f : fid) (l : list (fid * tier)) : nat :=
 
 (* 再入回补：普查上 f 的条目数 = 原普查条目 + 义务账条目（可再入的记账面） *)
 Theorem rebridge_cnt_reentry : forall (c : Cert) (f : fid),
-  tid nat (cnt f (census (rebridge c f)))
+  cwe_tid nat (cnt f (census (rebridge c f)))
            (Nat.add (cnt f (census c)) (cnt f (obls c))).
 Proof.
   intros c f. apply tid_nat_eq. unfold rebridge, cnt. cbn [census].
@@ -9571,17 +9571,17 @@ Qed.
 (* 首尾咬合·循环总账平衡：rebridge 再入后任意再铸，总账仍守恒——           *)
 (* 义务账（尾）回补普查（头），循环可无限再入                              *)
 Theorem cycle_balance : forall (c : Cert) (f : fid) (e : evt),
-  tid nat (total_acc c) (total_acc (recast (rebridge c f) e)).
+  cwe_tid nat (total_acc c) (total_acc (recast (rebridge c f) e)).
 Proof.
-  intros c f e. apply tid_trans with (y := total_acc (rebridge c f)).
+  intros c f e. apply cwe_tid_trans with (y := total_acc (rebridge c f)).
   - apply rebridge_balance.
   - apply acc_balance.
 Qed.
 
 (* 首尾咬合·循环严格推进：击穿再铸一轮摩擦精确 +2（链不死锁、单调递增） *)
 Theorem cycle_friction_strict : forall (c : Cert) (f : fid) (ev : evid),
-  tid bool (passes f ev (rebridge c f)) false ->
-  tid nat (S (S (friction c))) (friction (recast (rebridge c f) (use f ev))).
+  cwe_tid bool (passes f ev (rebridge c f)) false ->
+  cwe_tid nat (S (S (friction c))) (friction (recast (rebridge c f) (use f ev))).
 Proof.
   intros c f ev H. exact (friction_pierce_step (rebridge c f) f ev H).
 Qed.
@@ -9599,26 +9599,26 @@ Fixpoint chain (n : nat) (c : Cert) (es : list evt) {struct n} : Cert :=
 
 (* 链守恒：任意长度再铸链总账平衡 *)
 Theorem chain_balance : forall (n : nat) (c : Cert) (es : list evt),
-  tid nat (total_acc c) (total_acc (chain n c es)).
+  cwe_tid nat (total_acc c) (total_acc (chain n c es)).
 Proof.
   intros n. induction n as [| n IH]; intros c es; simpl.
-  - apply tid_refl.
+  - apply cwe_tid_refl.
   - destruct es as [| e rest].
-    + apply tid_refl.
-    + apply tid_trans with (y := total_acc (recast c e)).
+    + apply cwe_tid_refl.
+    + apply cwe_tid_trans with (y := total_acc (recast c e)).
       * apply acc_balance.
       * apply IH.
 Qed.
 
 (* 链单调：任意长度再铸链摩擦不减（计量沿链累计） *)
 Theorem chain_friction_mono : forall (n : nat) (c : Cert) (es : list evt),
-  nle (friction c) (friction (chain n c es)).
+  cwe_nle (friction c) (friction (chain n c es)).
 Proof.
   intros n. induction n as [| n IH]; intros c es; simpl.
-  - apply nle_n.
+  - apply cwe_nle_n.
   - destruct es as [| e rest].
-    + apply nle_n.
-    + apply nle_trans with (b := friction (recast c e)).
+    + apply cwe_nle_n.
+    + apply cwe_nle_trans with (b := friction (recast c e)).
       * apply friction_mono.
       * apply IH.
 Qed.
@@ -9661,8 +9661,8 @@ Local Notation O := Datatypes.O (only parsing).
 (*         gauge shift 下 [内]类裁决平移不变（qin_gauge_invariant），绝对读出  *)
 (*         恰平移 c（pot_shift_moves）——语言中无平移不变的绝对读出通道。       *)
 (*                                                                       *)
-(* 载体全程 Z/nat/bool 判定层；语句零 Prop：等式用 tid、序用 nle、            *)
-(* 存在用 sigT、分支用 sumbool / bool+tid、⟺ 用 iffT（Set 层双函数记录）。   *)
+(* 载体全程 Z/nat/bool 判定层；语句零 Prop：等式用 cwe_tid、序用 cwe_nle、            *)
+(* 存在用 sigT、分支用 sumbool / bool+cwe_tid、⟺ 用 iffT（Set 层双函数记录）。   *)
 (* 纪律：纯构造性、无任何公理式出口、stdlib only、全链可提取。                 *)
 (* 定稿决策（未定稿细节按「落地最短+判定天然」自定，见交付报告）：             *)
 (*   差量域取 Z（Q 的整数格，判定天然）；头元规范 h=0 固定（pot i = 差 i 0）；  *)
@@ -9674,117 +9674,117 @@ Local Notation O := Datatypes.O (only parsing).
 Open Scope Z_scope.
 
 (* ===================================================================== *)
-(* 0. Set 层基建（自 UpPLA.v 内联：tid 恒等型 + nle 序型 + 判定工具）          *)
+(* 0. Set 层基建（自 UpPLA.v 内联：cwe_tid 恒等型 + cwe_nle 序型 + 判定工具）          *)
 (* ===================================================================== *)
 
 (* Set 层恒等型（语句零 Prop 的等式载体） *)
-Inductive tid (A : Type) : A -> A -> Type := tid_refl : forall x : A, tid A x x.
+Inductive cwe_tid (A : Type) : A -> A -> Type := cwe_tid_refl : forall x : A, cwe_tid A x x.
 
-Definition tid_sym (A : Type) (x y : A) (H : tid A x y) : tid A y x :=
-  match H in tid _ a b return tid _ b a with
-  | tid_refl _ a0 => @tid_refl _ a0
+Definition cwe_tid_sym (A : Type) (x y : A) (H : cwe_tid A x y) : cwe_tid A y x :=
+  match H in cwe_tid _ a b return cwe_tid _ b a with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ a0
   end.
 
-Definition tid_trans (A : Type) (x y z : A) (H1 : tid A x y) (H2 : tid A y z) :
-  tid A x z :=
-  match H1 in tid _ a b return tid _ b z -> tid _ a z with
-  | tid_refl _ a0 => fun H => H
+Definition cwe_tid_trans (A : Type) (x y z : A) (H1 : cwe_tid A x y) (H2 : cwe_tid A y z) :
+  cwe_tid A x z :=
+  match H1 in cwe_tid _ a b return cwe_tid _ b z -> cwe_tid _ a z with
+  | cwe_tid_refl _ a0 => fun H => H
   end H2.
 
 (* 恒等型的泛函同余（transport 万能件） *)
-Definition tid_cong {A B : Type} (f : A -> B) (x y : A) (H : tid A x y) :
-  tid B (f x) (f y) :=
-  match H in tid _ a b return tid B (f a) (f b) with
-  | tid_refl _ a0 => @tid_refl _ (f a0)
+Definition cwe_tid_cong {A B : Type} (f : A -> B) (x y : A) (H : cwe_tid A x y) :
+  cwe_tid B (f x) (f y) :=
+  match H in cwe_tid _ a b return cwe_tid B (f a) (f b) with
+  | cwe_tid_refl _ a0 => @cwe_tid_refl _ (f a0)
   end.
 
-(* 从 tid 提取定义等式（仅证明内部推理用，命名受控） *)
+(* 从 cwe_tid 提取定义等式（仅证明内部推理用，命名受控） *)
 Ltac tidQ H E :=
-  pose proof (match H in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as E.
+  pose proof (match H in cwe_tid _ a b return a = b with cwe_tid_refl _ _ => eq_refl end) as E.
 
-(* x = y -> tid A x y（定义等式反灌回恒等型） *)
-Lemma tid_eq : forall (A : Type) (x y : A), x = y -> tid A x y.
+(* x = y -> cwe_tid A x y（定义等式反灌回恒等型） *)
+Lemma cwe_tid_eq : forall (A : Type) (x y : A), x = y -> cwe_tid A x y.
 Proof.
-  intros A x y H. rewrite H. apply tid_refl.
+  intros A x y H. rewrite H. apply cwe_tid_refl.
 Defined.
 
-(* Set 层自然数序型（k ≤ m 编码为 nle k m） *)
-Inductive nle (n : nat) : nat -> Set :=
-| nle_n : nle n n
-| nle_S : forall m : nat, nle n m -> nle n (S m).
+(* Set 层自然数序型（k ≤ m 编码为 cwe_nle k m） *)
+Inductive cwe_nle (n : nat) : nat -> Set :=
+| cwe_nle_n : cwe_nle n n
+| cwe_nle_S : forall m : nat, cwe_nle n m -> cwe_nle n (S m).
 
-Lemma leb_refl_tid : forall a : nat, tid bool (Nat.leb a a) true.
+Lemma cwe_leb_refl_tid : forall a : nat, cwe_tid bool (Nat.leb a a) true.
 Proof.
-  intros a. rewrite Nat.leb_refl. apply tid_refl.
+  intros a. rewrite Nat.leb_refl. apply cwe_tid_refl.
 Qed.
 
-Lemma leb_S : forall a m : nat,
-  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (S m)) true.
+Lemma cwe_leb_S : forall a m : nat,
+  cwe_tid bool (Nat.leb a m) true -> cwe_tid bool (Nat.leb a (S m)) true.
 Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
-    + apply tid_refl.
-    + change (tid bool false true) in H. tidQ H HE. discriminate HE.
+    + apply cwe_tid_refl.
+    + change (cwe_tid bool false true) in H. tidQ H HE. discriminate HE.
   - destruct a as [| a1].
-    + apply tid_refl.
+    + apply cwe_tid_refl.
     + exact (IH a1 H).
 Qed.
 
-Fixpoint nle_lebF (a b : nat) (H : nle a b) {struct H} :
-  tid bool (Nat.leb a b) true :=
-  match H as H0 in nle _ bb
-  return tid bool (Nat.leb a bb) true with
-  | nle_n _ => leb_refl_tid a
-  | nle_S _ m H1 => leb_S a m (nle_lebF a m H1)
+Fixpoint cwe_nle_lebF (a b : nat) (H : cwe_nle a b) {struct H} :
+  cwe_tid bool (Nat.leb a b) true :=
+  match H as H0 in cwe_nle _ bb
+  return cwe_tid bool (Nat.leb a bb) true with
+  | cwe_nle_n _ => cwe_leb_refl_tid a
+  | cwe_nle_S _ m H1 => cwe_leb_S a m (cwe_nle_lebF a m H1)
   end.
 
-Definition nle_leb (b a : nat) (H : nle a b) : tid bool (Nat.leb a b) true :=
-  nle_lebF a b H.
+Definition cwe_nle_leb (b a : nat) (H : cwe_nle a b) : cwe_tid bool (Nat.leb a b) true :=
+  cwe_nle_lebF a b H.
 
-(* nle -> nat ≤ 提取（仅证明内部推理用） *)
+(* cwe_nle -> nat ≤ 提取（仅证明内部推理用） *)
 Ltac nleP H :=
   let HN := fresh "HNle" in
   pose proof
     (proj1 (Nat.leb_le _ _)
-       (match (nle_leb _ _ H) in tid _ x y return x = y with
-        | tid_refl _ _ => eq_refl
+       (match (cwe_nle_leb _ _ H) in cwe_tid _ x y return x = y with
+        | cwe_tid_refl _ _ => eq_refl
         end)) as HN.
 
-Lemma nle_0 : forall m : nat, nle O m.
+Lemma cwe_nle_0 : forall m : nat, cwe_nle O m.
 Proof.
   induction m as [| m1 IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-Lemma nle_SS : forall a b : nat, nle a b -> nle (S a) (S b).
+Lemma cwe_nle_SS : forall a b : nat, cwe_nle a b -> cwe_nle (S a) (S b).
 Proof.
   intros a b H. induction H as [| m H IH].
-  - apply nle_n.
-  - apply nle_S. exact IH.
+  - apply cwe_nle_n.
+  - apply cwe_nle_S. exact IH.
 Qed.
 
-(* nle -> leb = true 反向桥 *)
-Lemma nle_of_leb : forall b a : nat,
-  tid bool (Nat.leb a b) true -> nle a b.
+(* cwe_nle -> leb = true 反向桥 *)
+Lemma cwe_nle_of_leb : forall b a : nat,
+  cwe_tid bool (Nat.leb a b) true -> cwe_nle a b.
 Proof.
   induction b as [| b1 IB]; intros a H.
   - destruct a as [| a1].
-    + apply nle_n.
-    + change (tid bool false true) in H. tidQ H HE. discriminate HE.
+    + apply cwe_nle_n.
+    + change (cwe_tid bool false true) in H. tidQ H HE. discriminate HE.
   - destruct a as [| a1].
-    + apply nle_S. apply nle_0.
-    + exact (nle_SS a1 b1 (IB a1 H)).
+    + apply cwe_nle_S. apply cwe_nle_0.
+    + exact (cwe_nle_SS a1 b1 (IB a1 H)).
 Qed.
 
-(* nat ≤ -> tid bool (leb) true 桥 *)
-Lemma lebT : forall a b : nat, (a <= b)%nat -> tid bool (Nat.leb a b) true.
+(* nat ≤ -> cwe_tid bool (leb) true 桥 *)
+Lemma cwe_lebT : forall a b : nat, (a <= b)%nat -> cwe_tid bool (Nat.leb a b) true.
 Proof.
-  intros a b H. rewrite (proj2 (Nat.leb_le _ _) H). apply tid_refl.
+  intros a b H. rewrite (proj2 (Nat.leb_le _ _) H). apply cwe_tid_refl.
 Qed.
 
-(* nle (S m) O 荒谬件（索引不交配的空消去，合法关闭任意 Type 目标） *)
-Lemma nle_S_absurd : forall (m : nat) (P : Type), nle (S m) O -> P.
+(* cwe_nle (S m) O 荒谬件（索引不交配的空消去，合法关闭任意 Type 目标） *)
+Lemma nle_S_absurd : forall (m : nat) (P : Type), cwe_nle (S m) O -> P.
 Proof.
   intros m P H. inversion H.
 Qed.
@@ -9823,10 +9823,10 @@ Definition dsub (d : dtab) (i j : nat) : Z := pot d i - pot d j.
 
 (* 件 3 核心定理：环形封闭律对一切 dtab 构造性成立（无任何前提） *)
 Theorem dsub_cocycle : forall (d : dtab) (i j k : nat),
-  tid Z (dsub d i j + dsub d j k) (dsub d i k).
+  cwe_tid Z (dsub d i j + dsub d j k) (dsub d i k).
 Proof.
   intros d i j k. unfold dsub.
-  apply (tid_eq Z (pot d i - pot d j + (pot d j - pot d k)) (pot d i - pot d k)).
+  apply (cwe_tid_eq Z (pot d i - pot d j + (pot d j - pot d k)) (pot d i - pot d k)).
   ring.
 Qed.
 
@@ -9837,39 +9837,39 @@ Fixpoint dshift (d : dtab) (c : Z) : dtab :=
   | dtabSnoc d0 w => dtabSnoc (dshift d0 c) (w + c)
   end.
 
-Lemma dlen_shift : forall (d : dtab) (c : Z), tid nat (dlen (dshift d c)) (dlen d).
+Lemma dlen_shift : forall (d : dtab) (c : Z), cwe_tid nat (dlen (dshift d c)) (dlen d).
 Proof.
   intros d c. induction d as [c0 | d0 IH w].
-  - simpl. apply tid_refl.
-  - simpl. tidQ IH Edl. rewrite Edl. apply tid_refl.
+  - simpl. apply cwe_tid_refl.
+  - simpl. tidQ IH Edl. rewrite Edl. apply cwe_tid_refl.
 Qed.
 
 (* 件 3 对照定理：绝对势读数在 gauge 平移下恰移动 c（语言无平移不变的绝对读出） *)
 Theorem pot_shift_moves : forall (d : dtab) (c : Z) (i : nat),
-  nle i (dlen d) -> tid Z (pot (dshift d c) i) (pot d i + c).
+  cwe_nle i (dlen d) -> cwe_tid Z (pot (dshift d c) i) (pot d i + c).
 Proof.
   intros d c i. induction d as [c0 | d0 IH w].
   - intros Hn. destruct i as [| i1].
-    + simpl. apply tid_refl.
+    + simpl. apply cwe_tid_refl.
     + exact (nle_S_absurd i1 _ Hn).
   - intros Hn. simpl in Hn.
     pose proof (dlen_shift d0 c) as DL. tidQ DL Edl.
     simpl. rewrite Edl.
     destruct (Nat.eqb i (S (dlen d0))) eqn:E.
-    + apply tid_refl.
-    + apply IH. apply nle_of_leb. apply lebT.
+    + apply cwe_tid_refl.
+    + apply IH. apply cwe_nle_of_leb. apply cwe_lebT.
       apply Nat.eqb_neq in E. nleP Hn. lia.
 Qed.
 
 (* [内]类差值读数 gauge 不变（合法指标域内） *)
 Theorem dsub_shift_invariant : forall (d : dtab) (c : Z) (i j : nat),
-  nle i (dlen d) -> nle j (dlen d) ->
-  tid Z (dsub (dshift d c) i j) (dsub d i j).
+  cwe_nle i (dlen d) -> cwe_nle j (dlen d) ->
+  cwe_tid Z (dsub (dshift d c) i j) (dsub d i j).
 Proof.
   intros d c i j Hi Hj. unfold dsub.
   pose proof (pot_shift_moves d c i Hi) as T1. tidQ T1 E1.
   pose proof (pot_shift_moves d c j Hj) as T2. tidQ T2 E2.
-  apply (tid_eq Z (pot (dshift d c) i - pot (dshift d c) j) (pot d i - pot d j)).
+  apply (cwe_tid_eq Z (pot (dshift d c) i - pot (dshift d c) j) (pot d i - pot d j)).
   rewrite E1, E2. ring.
 Qed.
 
@@ -9918,9 +9918,9 @@ Definition qans_isans (r : qans) : bool :=
   | qans_rej _ => false
   end.
 
-Definition tid_qans_val (z1 z2 : Z) (H : tid Z z1 z2) :
-  tid qans (qans_val z1) (qans_val z2) :=
-  tid_cong (@qans_val) z1 z2 H.
+Definition tid_qans_val (z1 z2 : Z) (H : cwe_tid Z z1 z2) :
+  cwe_tid qans (qans_val z1) (qans_val z2) :=
+  cwe_tid_cong (@qans_val) z1 z2 H.
 
 (* ===================================================================== *)
 (* 4. 件 1：可判定准入谓词——三分派（sdec：sumbool 的信息性凭证版）             *)
@@ -9935,22 +9935,22 @@ Inductive sdec (A B : Type) : Type :=
 | sdec_l (a : A)
 | sdec_r (b : B).
 
-(* nat 序的三分派：left = nle 凭证，right = leb=false 的 tid 证据
+(* nat 序的三分派：left = cwe_nle 凭证，right = leb=false 的 cwe_tid 证据
    （判定本体走全量化引理，避免 destruct 污染目标型中的 scrutinee） *)
 Lemma nle_dc_gen : forall (p : bool) (a b : nat),
-  p = Nat.leb a b -> sdec (nle a b) (tid bool (Nat.leb a b) false).
+  p = Nat.leb a b -> sdec (cwe_nle a b) (cwe_tid bool (Nat.leb a b) false).
 Proof.
   intros p a b E. destruct p as [] eqn:Ep.
-  - apply sdec_l. exact (nle_of_leb b a (tid_eq bool (Nat.leb a b) true (eq_sym E))).
-  - apply sdec_r. exact (tid_eq bool (Nat.leb a b) false (eq_sym E)).
+  - apply sdec_l. exact (cwe_nle_of_leb b a (cwe_tid_eq bool (Nat.leb a b) true (eq_sym E))).
+  - apply sdec_r. exact (cwe_tid_eq bool (Nat.leb a b) false (eq_sym E)).
 Defined.
 
-Definition nle_dc (a b : nat) : sdec (nle a b) (tid bool (Nat.leb a b) false) :=
+Definition nle_dc (a b : nat) : sdec (cwe_nle a b) (cwe_tid bool (Nat.leb a b) false) :=
   nle_dc_gen (Nat.leb a b) a b eq_refl.
 
-(* [内]类准入三分派：left = 双在册 nle 凭证；right = 缺在册型标 *)
+(* [内]类准入三分派：left = 双在册 cwe_nle 凭证；right = 缺在册型标 *)
 Definition qin_dc (d : dtab) (i j : nat)
-  : sdec (prod (nle i (dlen d)) (nle j (dlen d))) misscred.
+  : sdec (prod (cwe_nle i (dlen d)) (cwe_nle j (dlen d))) misscred.
 Proof.
   destruct (nle_dc i (dlen d)) as [Ha | Ha].
   - destruct (nle_dc j (dlen d)) as [Hb | Hb].
@@ -9964,13 +9964,13 @@ Definition qin_ok (d : dtab) (i j : nat) : bool :=
 
 (* [值]类准入三分派：left = 头券凭证（sigT 携券面绝对量）；right = 缺头券 *)
 Definition qval_dc (v : option (nat * Z)) (i : nat)
-  : sdec (sigT (fun w : Z => tid (option (nat * Z)) (Some (i, w)) v)) misscred.
+  : sdec (sigT (fun w : Z => cwe_tid (option (nat * Z)) (Some (i, w)) v)) misscred.
 Proof.
   destruct v as [[h w] |] eqn:Ev.
   - destruct (Nat.eqb h i) eqn:Eh.
     + apply sdec_l. apply (existT _ w).
       apply Nat.eqb_eq in Eh.
-      exact (tid_eq (option (nat * Z)) (Some (i, w)) (Some (h, w))
+      exact (cwe_tid_eq (option (nat * Z)) (Some (i, w)) (Some (h, w))
                (eq_sym (f_equal (fun n => Some (n, w)) Eh))).
     + apply sdec_r. apply MC_VSLOT.
   - apply sdec_r. apply MC_VSLOT.
@@ -9985,10 +9985,10 @@ Definition vs_val (v : option (nat * Z)) : Z :=
 
 (* [锚]类准入三分派：left = 锚闭凭证（sigT 携锚面绝对量）；right = 缺锚闭 *)
 Definition qanc_dc (a : acol) (i : nat)
-  : sdec (sigT (fun c : Z => tid (option Z) (Some c) (aread i a))) misscred.
+  : sdec (sigT (fun c : Z => cwe_tid (option Z) (Some c) (aread i a))) misscred.
 Proof.
   destruct (aread i a) as [c |] eqn:E.
-  - apply sdec_l. apply (existT _ c). apply tid_refl.
+  - apply sdec_l. apply (existT _ c). apply cwe_tid_refl.
   - apply sdec_r. apply (MC_ANCH i).
 Defined.
 
@@ -9997,58 +9997,58 @@ Definition qanc_ok (a : acol) (i : nat) : bool :=
 
 (* 三分派与 bool 准入的互通不经本体展开桥接，而经凭证型刻画：
    qin_dc/qval_dc/qanc_dc 的 left 支型 == qin_correct/qval_correct/qanc_correct
-   中与各自 bool 准入 ⟺ 的凭证型（prod nle 对 / sigT 券面 / sigT 锚面）——
+   中与各自 bool 准入 ⟺ 的凭证型（prod cwe_nle 对 / sigT 券面 / sigT 锚面）——
    两路定义被同一凭证型钉死，一致性由类型而非引理承担。 *)
 
 (* --- 正确性定理：准入 ⟺ 存在凭证（sigT 携带；⟺ 用 iffT） --- *)
 
 Theorem qin_correct : forall (d : dtab) (i j : nat),
-  iffT (tid bool (qin_ok d i j) true)
-       (prod (nle i (dlen d)) (nle j (dlen d))).
+  iffT (cwe_tid bool (qin_ok d i j) true)
+       (prod (cwe_nle i (dlen d)) (cwe_nle j (dlen d))).
 Proof.
   intros d i j. apply (mkIffT _ _).
   - intros H. unfold qin_ok in H.
     tidQ H E. apply andb_prop in E. destruct E as [E1 E2].
-    exact (pair (nle_of_leb (dlen d) i (tid_eq bool _ true E1))
-                (nle_of_leb (dlen d) j (tid_eq bool _ true E2))).
+    exact (pair (cwe_nle_of_leb (dlen d) i (cwe_tid_eq bool _ true E1))
+                (cwe_nle_of_leb (dlen d) j (cwe_tid_eq bool _ true E2))).
   - intros p. destruct p as [Ha Hb].
-    pose proof (nle_leb (dlen d) i Ha) as T1. tidQ T1 E1.
-    pose proof (nle_leb (dlen d) j Hb) as T2. tidQ T2 E2.
+    pose proof (cwe_nle_leb (dlen d) i Ha) as T1. tidQ T1 E1.
+    pose proof (cwe_nle_leb (dlen d) j Hb) as T2. tidQ T2 E2.
     unfold qin_ok.
-    apply (tid_eq bool (Nat.leb i (dlen d) && Nat.leb j (dlen d)) true).
+    apply (cwe_tid_eq bool (Nat.leb i (dlen d) && Nat.leb j (dlen d)) true).
     rewrite E1, E2. reflexivity.
 Qed.
 
 Theorem qval_correct : forall (v : option (nat * Z)) (i : nat),
-  iffT (tid bool (qval_ok v i) true)
-       (sigT (fun w : Z => tid (option (nat * Z)) (Some (i, w)) v)).
+  iffT (cwe_tid bool (qval_ok v i) true)
+       (sigT (fun w : Z => cwe_tid (option (nat * Z)) (Some (i, w)) v)).
 Proof.
   intros v i. apply (mkIffT _ _).
   - intros H. unfold qval_ok in H. destruct v as [[h w] |] eqn:Ev.
     + simpl in H. destruct (Nat.eqb h i) eqn:Eh.
       * apply (existT _ w).
         apply Nat.eqb_eq in Eh.
-        exact (tid_eq (option (nat * Z)) (Some (i, w)) (Some (h, w))
+        exact (cwe_tid_eq (option (nat * Z)) (Some (i, w)) (Some (h, w))
                  (eq_sym (f_equal (fun n => Some (n, w)) Eh))).
       * tidQ H E. discriminate E.
     + simpl in H. tidQ H E. discriminate E.
   - intros [w H]. unfold qval_ok. destruct v as [[h w0] |] eqn:Ev.
     + tidQ H E. injection E as Ei Ew.
       rewrite Ei. simpl.
-      exact (tid_eq bool (Nat.eqb h h) true (Nat.eqb_refl h)).
+      exact (cwe_tid_eq bool (Nat.eqb h h) true (Nat.eqb_refl h)).
     + tidQ H E. discriminate E.
 Qed.
 
 Theorem qanc_correct : forall (a : acol) (i : nat),
-  iffT (tid bool (qanc_ok a i) true)
-       (sigT (fun c : Z => tid (option Z) (Some c) (aread i a))).
+  iffT (cwe_tid bool (qanc_ok a i) true)
+       (sigT (fun c : Z => cwe_tid (option Z) (Some c) (aread i a))).
 Proof.
   intros a i. apply (mkIffT _ _).
   - intros H. unfold qanc_ok in H. destruct (aread i a) as [c |] eqn:E.
-    + apply (existT _ c). apply tid_refl.
+    + apply (existT _ c). apply cwe_tid_refl.
     + tidQ H E2. discriminate E2.
   - intros [c H]. unfold qanc_ok. destruct (aread i a) as [c0 |] eqn:E.
-    + apply tid_refl.
+    + apply cwe_tid_refl.
     + tidQ H E2. discriminate E2.
 Qed.
 
@@ -10094,39 +10094,39 @@ Definition qadmit (s : clst) (q : qtype) : bool := qadmitR (cld s) (clv s) (cla 
 
 (* 准入与答判读逐点一致（宪法内部自洽） *)
 Lemma qadmit_isin : forall (s : clst) (q : qtype),
-  tid bool (qadmit s q) (qans_isans (qask s q)).
+  cwe_tid bool (qadmit s q) (qans_isans (qask s q)).
 Proof.
   intros s q. destruct q as [i j | i | i a0].
   - unfold qadmit, qadmitR, qask, qaskR, qans_isans, qin_ok.
     destruct (Nat.leb i (dlen (cld s))); destruct (Nat.leb j (dlen (cld s)));
-      apply tid_refl.
+      apply cwe_tid_refl.
   - unfold qadmit, qadmitR, qask, qaskR, qans_isans.
-    destruct (qval_ok (clv s) i); apply tid_refl.
+    destruct (qval_ok (clv s) i); apply cwe_tid_refl.
   - unfold qadmit, qadmitR, qask, qaskR, qans_isans.
-    destruct (qanc_ok (cla s) i); apply tid_refl.
+    destruct (qanc_ok (cla s) i); apply cwe_tid_refl.
 Qed.
 
 (* 宪法判定面总分派：left = 答值见证；right = 结构性拒答见证（携型标） *)
 Definition qdc (s : clst) (q : qtype)
-  : sdec (sigT (fun z : Z => tid qans (qask s q) (qans_val z)))
-         (sigT (fun mc : misscred => tid qans (qask s q) (qans_rej mc))).
+  : sdec (sigT (fun z : Z => cwe_tid qans (qask s q) (qans_val z)))
+         (sigT (fun mc : misscred => cwe_tid qans (qask s q) (qans_rej mc))).
 Proof.
   destruct q as [i j | i | i a0].
   - unfold qask, qaskR.
     destruct (Nat.leb i (dlen (cld s))) eqn:Ei;
       destruct (Nat.leb j (dlen (cld s))) eqn:Ej.
-    + apply sdec_l. apply (existT _ (dsub (cld s) i j)). apply tid_refl.
-    + apply sdec_r. apply (existT _ (MC_RANGE j)). apply tid_refl.
-    + apply sdec_r. apply (existT _ (MC_RANGE i)). apply tid_refl.
-    + apply sdec_r. apply (existT _ (MC_RANGE i)). apply tid_refl.
+    + apply sdec_l. apply (existT _ (dsub (cld s) i j)). apply cwe_tid_refl.
+    + apply sdec_r. apply (existT _ (MC_RANGE j)). apply cwe_tid_refl.
+    + apply sdec_r. apply (existT _ (MC_RANGE i)). apply cwe_tid_refl.
+    + apply sdec_r. apply (existT _ (MC_RANGE i)). apply cwe_tid_refl.
   - unfold qask, qaskR. destruct (qval_ok (clv s) i) eqn:Ev.
-    + apply sdec_l. apply (existT _ (vs_val (clv s))). apply tid_refl.
-    + apply sdec_r. apply (existT _ MC_VSLOT). apply tid_refl.
+    + apply sdec_l. apply (existT _ (vs_val (clv s))). apply cwe_tid_refl.
+    + apply sdec_r. apply (existT _ MC_VSLOT). apply cwe_tid_refl.
   - unfold qask, qaskR. destruct (qanc_ok (cla s) i) eqn:Ea.
     + apply sdec_l.
       apply (existT _ (match aread i (cla s) with Some c => c - a0 | None => 0 end)).
-      apply tid_refl.
-    + apply sdec_r. apply (existT _ (MC_ANCH i)). apply tid_refl.
+      apply cwe_tid_refl.
+    + apply sdec_r. apply (existT _ (MC_ANCH i)). apply cwe_tid_refl.
 Defined.
 
 (* 总分派规范：裁决位 qdc_b 与准入 bool 逐点一致（宪法内部自洽的 bool 面）；
@@ -10134,73 +10134,73 @@ Defined.
 Definition qdc_b (s : clst) (q : qtype) : bool :=
   match qdc s q with sdec_l _ _ _ => true | sdec_r _ _ _ => false end.
 
-Theorem qdc_spec : forall (s : clst) (q : qtype), tid bool (qdc_b s q) (qadmit s q).
+Theorem qdc_spec : forall (s : clst) (q : qtype), cwe_tid bool (qdc_b s q) (qadmit s q).
 Proof.
   intros s q. unfold qdc_b. destruct (qdc s q) as [Cz | Cm].
   - destruct Cz as [w Hw].
-    exact (tid_sym bool (qadmit s q) true
-             (tid_trans bool (qadmit s q) (qans_isans (qask s q)) true
+    exact (cwe_tid_sym bool (qadmit s q) true
+             (cwe_tid_trans bool (qadmit s q) (qans_isans (qask s q)) true
                 (qadmit_isin s q)
-                  (tid_cong qans_isans (qask s q) (qans_val w) Hw))).
+                  (cwe_tid_cong qans_isans (qask s q) (qans_val w) Hw))).
   - destruct Cm as [mc Hmc].
-    exact (tid_sym bool (qadmit s q) false
-             (tid_trans bool (qadmit s q) (qans_isans (qask s q)) false
+    exact (cwe_tid_sym bool (qadmit s q) false
+             (cwe_tid_trans bool (qadmit s q) (qans_isans (qask s q)) false
                 (qadmit_isin s q)
-                  (tid_cong qans_isans (qask s q) (qans_rej mc) Hmc))).
+                  (cwe_tid_cong qans_isans (qask s q) (qans_rej mc) Hmc))).
 Qed.
 
 (* 拒答诚实性：凡 qask 输出拒答支，准入必为 false（拒答=显式构造，非失败） *)
 Theorem qrej_admit_false : forall (s : clst) (q : qtype) (mc : misscred),
-  tid qans (qask s q) (qans_rej mc) -> tid bool (qadmit s q) false.
+  cwe_tid qans (qask s q) (qans_rej mc) -> cwe_tid bool (qadmit s q) false.
 Proof.
   intros s q mc H.
-  exact (tid_trans bool (qadmit s q) (qans_isans (qask s q)) false
-           (qadmit_isin s q) (tid_cong qans_isans (qask s q) (qans_rej mc) H)).
+  exact (cwe_tid_trans bool (qadmit s q) (qans_isans (qask s q)) false
+           (qadmit_isin s q) (cwe_tid_cong qans_isans (qask s q) (qans_rej mc) H)).
 Qed.
 
 (* 准入真 ⟹ 答值支显式构造（携答值见证） *)
-Theorem qadmit_answer : forall (s : clst) (q : qtype), tid bool (qadmit s q) true ->
-  sigT (fun z : Z => tid qans (qask s q) (qans_val z)).
+Theorem qadmit_answer : forall (s : clst) (q : qtype), cwe_tid bool (qadmit s q) true ->
+  sigT (fun z : Z => cwe_tid qans (qask s q) (qans_val z)).
 Proof.
   intros s q H. destruct q as [i j | i | i a0].
   - unfold qadmit, qadmitR, qask, qaskR, qin_ok in *.
     destruct (Nat.leb i (dlen (cld s))) eqn:Ei;
       destruct (Nat.leb j (dlen (cld s))) eqn:Ej.
-    + apply (existT _ (dsub (cld s) i j)). apply tid_refl.
+    + apply (existT _ (dsub (cld s) i j)). apply cwe_tid_refl.
     + tidQ H E. discriminate E.
     + tidQ H E. discriminate E.
     + tidQ H E. discriminate E.
   - unfold qadmit, qadmitR, qask, qaskR in *.
     destruct (qval_ok (clv s) i) eqn:Ev.
-    + apply (existT _ (vs_val (clv s))). apply tid_refl.
+    + apply (existT _ (vs_val (clv s))). apply cwe_tid_refl.
     + tidQ H E. discriminate E.
   - unfold qadmit, qadmitR, qask, qaskR in *.
     destruct (qanc_ok (cla s) i) eqn:Ea.
     + apply (existT _ (match aread i (cla s) with Some c => c - a0 | None => 0 end)).
-      apply tid_refl.
+      apply cwe_tid_refl.
     + tidQ H E. discriminate E.
 Qed.
 
 (* 准入假 ⟹ 拒答支显式构造（携缺失凭证型标见证）——结构性拒答的存在性 *)
-Theorem qadmit_reject : forall (s : clst) (q : qtype), tid bool (qadmit s q) false ->
-  sigT (fun mc : misscred => tid qans (qask s q) (qans_rej mc)).
+Theorem qadmit_reject : forall (s : clst) (q : qtype), cwe_tid bool (qadmit s q) false ->
+  sigT (fun mc : misscred => cwe_tid qans (qask s q) (qans_rej mc)).
 Proof.
   intros s q H. destruct q as [i j | i | i a0].
   - unfold qadmit, qadmitR, qask, qaskR, qin_ok in *.
     destruct (Nat.leb i (dlen (cld s))) eqn:Ei;
       destruct (Nat.leb j (dlen (cld s))) eqn:Ej.
     + simpl in H. tidQ H E. discriminate E.
-    + apply (existT _ (MC_RANGE j)). apply tid_refl.
-    + apply (existT _ (MC_RANGE i)). apply tid_refl.
-    + apply (existT _ (MC_RANGE i)). apply tid_refl.
+    + apply (existT _ (MC_RANGE j)). apply cwe_tid_refl.
+    + apply (existT _ (MC_RANGE i)). apply cwe_tid_refl.
+    + apply (existT _ (MC_RANGE i)). apply cwe_tid_refl.
   - unfold qadmit, qadmitR, qask, qaskR in *.
     destruct (qval_ok (clv s) i) eqn:Ev.
     + simpl in H. tidQ H E. discriminate E.
-    + apply (existT _ MC_VSLOT). apply tid_refl.
+    + apply (existT _ MC_VSLOT). apply cwe_tid_refl.
   - unfold qadmit, qadmitR, qask, qaskR in *.
     destruct (qanc_ok (cla s) i) eqn:Ea.
     + simpl in H. tidQ H E. discriminate E.
-    + apply (existT _ (MC_ANCH i)). apply tid_refl.
+    + apply (existT _ (MC_ANCH i)). apply cwe_tid_refl.
 Qed.
 
 (* --- 头券生命周期：[值]类答一次即焚，焚后再问 = 结构性拒答附缺头券型标 --- *)
@@ -10208,16 +10208,16 @@ Qed.
 Definition clburn (s : clst) (i : nat) : clst := mkCL (cld s) None (cla s).
 
 Theorem val_fresh_answer : forall (d : dtab) (a : acol) (i : nat) (w : Z),
-  tid qans (qask (mkCL d (Some (i, w)) a) (QVAL i)) (qans_val w).
+  cwe_tid qans (qask (mkCL d (Some (i, w)) a) (QVAL i)) (qans_val w).
 Proof.
   intros d a i w. unfold qask, qaskR, qval_ok. simpl.
-  rewrite Nat.eqb_refl. apply tid_refl.
+  rewrite Nat.eqb_refl. apply cwe_tid_refl.
 Qed.
 
 Theorem val_burn_reject : forall (s : clst) (i : nat),
-  tid qans (qask (clburn s i) (QVAL i)) (qans_rej MC_VSLOT).
+  cwe_tid qans (qask (clburn s i) (QVAL i)) (qans_rej MC_VSLOT).
 Proof.
-  intros s i. unfold qask, qaskR, clburn, qval_ok. simpl. apply tid_refl.
+  intros s i. unfold qask, qaskR, clburn, qval_ok. simpl. apply cwe_tid_refl.
 Qed.
 
 (* ===================================================================== *)
@@ -10229,18 +10229,18 @@ Qed.
    不可问出（问了也必得到平移不变的答案，即被类型系统挡在差表语言外）。 *)
 Theorem qin_gauge_invariant : forall (d : dtab) (c : Z) (v : option (nat * Z))
                                      (a : acol) (i j : nat),
-  tid qans (qask (mkCL (dshift d c) v a) (QIN i j))
+  cwe_tid qans (qask (mkCL (dshift d c) v a) (QIN i j))
            (qask (mkCL d v a) (QIN i j)).
 Proof.
   intros d c v a i j. unfold qask, qaskR. cbn [cld clv cla].
   pose proof (dlen_shift d c) as DL. tidQ DL Edl. rewrite Edl.
   destruct (Nat.leb i (dlen d)) eqn:Ei; destruct (Nat.leb j (dlen d)) eqn:Ej.
   - apply tid_qans_val. apply dsub_shift_invariant.
-    + exact (nle_of_leb (dlen d) i (tid_eq bool (Nat.leb i (dlen d)) true Ei)).
-    + exact (nle_of_leb (dlen d) j (tid_eq bool (Nat.leb j (dlen d)) true Ej)).
-  - apply tid_refl.
-  - apply tid_refl.
-  - apply tid_refl.
+    + exact (cwe_nle_of_leb (dlen d) i (cwe_tid_eq bool (Nat.leb i (dlen d)) true Ei)).
+    + exact (cwe_nle_of_leb (dlen d) j (cwe_tid_eq bool (Nat.leb j (dlen d)) true Ej)).
+  - apply cwe_tid_refl.
+  - apply cwe_tid_refl.
+  - apply cwe_tid_refl.
 Qed.
 
 End CLQueryBody.
@@ -10315,7 +10315,7 @@ Proof.
 Qed.
 
 (* 幂正性：0 < x ⟹ 0 < x^n *)
-Lemma real_pow_pos : forall (x : Real) (n : nat),
+Lemma cwe_real_pow_pos : forall (x : Real) (n : nat),
   real_lt real_zero x -> real_lt real_zero (real_pow x n).
 Proof.
   intros x n Hx. induction n as [| m IH].
@@ -10375,7 +10375,7 @@ Proof.
 Qed.
 
 (* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
-(* （此处不重证；见 CW_ConstructiveWorld_219.real_inv_one_local） *)
+(* （此处不重证；见 real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
 
@@ -10436,7 +10436,7 @@ Qed.
 
 (* ============ 3. le/lt 辅助（1 ≤ 1+x、0 ≤ (n#1)·x、y < 1+y） ============ *)
 
-Lemma real_le_one_plus : forall x : Real,
+Lemma cwe_real_le_one_plus : forall x : Real,
   real_le real_zero x -> real_le real_one (real_plus real_one x).
 Proof.
   intros x Hx.
@@ -10517,7 +10517,7 @@ Proof.
           by exact (real_nat_mult_nonneg m c Hc).
         assert (H1P : real_le real_one (real_pow (real_plus real_one c) m)).
         { apply (real_le_trans _ (real_plus real_one (real_mult (real_const (Z.of_nat m # 1)) c))).
-          - exact (real_le_one_plus _ Hx0).
+          - exact (cwe_real_le_one_plus _ Hx0).
           - exact IH. }
         apply (real_le_plus_compat _ _ _ _ IH).
         (* c ≤ c·(1+c)^m *)
@@ -10612,7 +10612,7 @@ Proof.
     - apply (real_pow_eq_compat _ _ N Honec). }
   (* κ^N == 1/(1/κ)^N（pow·inv 恒等式 + 倒数唯一） *)
   assert (HposN : real_lt real_zero (real_pow (real_inv_pos kappa Hk1) N))
-    by exact (real_pow_pos _ N Hinvpos).
+    by exact (cwe_real_pow_pos _ N Hinvpos).
   assert (Hpowinv : real_eq (real_pow kappa N)
                             (real_inv_pos (real_pow (real_inv_pos kappa Hk1) N) HposN)).
   { apply (real_inv_unique (real_pow (real_inv_pos kappa Hk1) N) (real_pow kappa N)
@@ -10691,7 +10691,7 @@ Qed.
 
 (* log 幂恒等式：log(κ^N) == (N#1)·log κ（real_log_mult 归纳） *)
 Lemma real_pow_log_form : forall (k : Real) (Hk : real_lt real_zero k) (n : nat),
-  real_eq (real_log (real_pow k n) (real_pow_pos k n Hk))
+  real_eq (real_log (real_pow k n) (cwe_real_pow_pos k n Hk))
           (real_mult (real_const (Z.of_nat n # 1)) (real_log k Hk)).
 Proof.
   intros k Hk n. induction n as [| m IH].
@@ -10707,9 +10707,9 @@ Proof.
                               (real_mult_zero_l (real_log k Hk)))).
   - cbn [real_pow].
     apply (real_eq_trans _ (real_plus (real_log k Hk)
-                                      (real_log (real_pow k m) (real_pow_pos k m Hk)))).
-    + exact (log_inv_mult_thm k (real_pow k m) Hk (real_pow_pos k m Hk)
-               (real_pow_pos k (Datatypes.S m) Hk)).
+                                      (real_log (real_pow k m) (cwe_real_pow_pos k m Hk)))).
+    + exact (log_inv_mult_thm k (real_pow k m) Hk (cwe_real_pow_pos k m Hk)
+               (cwe_real_pow_pos k (Datatypes.S m) Hk)).
     + apply (real_eq_trans _ (real_plus (real_log k Hk)
                    (real_mult (real_const (Z.of_nat m # 1)) (real_log k Hk)))).
       * apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _) IH).
@@ -10746,13 +10746,13 @@ Proof.
 
   (* log(a·κ^N) == log a + N#1·logκ *)
   assert (Hlogpow : real_eq (real_log (real_mult a (real_pow kappa N))
-                                      (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))
+                                      (real_mult_positive a (real_pow kappa N) Ha (cwe_real_pow_pos kappa N Hk1)))
                             (real_plus (real_log a Ha)
                                        (real_mult (real_const (Z.of_nat N # 1))
                                                   (real_log kappa Hk1)))).
   { apply (real_eq_trans _ (real_plus (real_log a Ha)
-                                      (real_log (real_pow kappa N) (real_pow_pos kappa N Hk1)))).
-    - exact (real_log_mult a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)).
+                                      (real_log (real_pow kappa N) (cwe_real_pow_pos kappa N Hk1)))).
+    - exact (real_log_mult a (real_pow kappa N) Ha (cwe_real_pow_pos kappa N Hk1)).
     - apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _)
                (real_pow_log_form kappa Hk1 N)). }
   (* N#1·logκ == −(N#1·(−logκ)) *)
@@ -10827,7 +10827,7 @@ Proof.
                        (sf_real_plus_zero_l Le0)))). }
   (* 组装：log(a·κ^N) == La + −(N#1·(−logκ))、La < W + Le ⟹ log(a·κ^N) < Le *)
   assert (Hlt : real_lt (real_log (real_mult a (real_pow kappa N))
-                                  (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))
+                                  (real_mult_positive a (real_pow kappa N) Ha (cwe_real_pow_pos kappa N Hk1)))
                         (real_log eps Heps)).
   { apply (Hshift _ (real_log a Ha) (real_log eps Heps)
              (real_mult (real_const (Z.of_nat N # 1)) (real_opp (real_log kappa Hk1)))).
@@ -10839,10 +10839,10 @@ Proof.
   (* exp 严格单调 + e^{log y} == y 反演闭合 *)
   apply (real_eq_lt_lt (real_mult a (real_pow kappa N))
            (cauchy_real_exp (real_log (real_mult a (real_pow kappa N))
-              (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1))))
+              (real_mult_positive a (real_pow kappa N) Ha (cwe_real_pow_pos kappa N Hk1))))
            eps).
   - apply (real_eq_sym _ _ (cw_log_exp_right (real_mult a (real_pow kappa N))
-              (real_mult_positive a (real_pow kappa N) Ha (real_pow_pos kappa N Hk1)))).
+              (real_mult_positive a (real_pow kappa N) Ha (cwe_real_pow_pos kappa N Hk1)))).
   - apply (real_lt_eq_lt _ (cauchy_real_exp (real_log eps Heps))).
     + exact (cauchy_real_exp_mono _ _ Hlt).
     + exact (cw_log_exp_right eps Heps).
@@ -10911,7 +10911,7 @@ Proof.
       + apply real_eq_le_bridge. exact (real_mult_comm (real_pow k p) (real_pow k j)).
       + apply (real_le_trans _ (real_mult real_one (real_pow k p))).
         * exact (real_le_mult_compat (real_pow k j) real_one (real_pow k p)
-                   (real_pow_pos k p Hk1) (real_pow_le_one k Hk1 Hk2 j)).
+                   (cwe_real_pow_pos k p Hk1) (real_pow_le_one k Hk1 Hk2 j)).
         * apply real_eq_le_bridge. exact (real_mult_one_l (real_pow k p)). }
   assert (Hq : q = (p + (q - p))%nat) by lia.
   rewrite Hq. apply Hcore.
@@ -10986,7 +10986,7 @@ Import BudgetReal.
 (* 件 1（主件）r_arch_pow_attn_real：接口前提在具体 Real 层的实例化。 *)
 (*   形态对齐映射（探针结论）：                                    *)
 (*     R（抽象，RealInterfaceEnhanced 实例参数）                  *)
-(*         ⟿ CW_ConstructiveWorld_219.Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
+(*         ⟿ Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
 (*     lt zero / lt ⟿ real_lt real_zero / real_lt（Type 版）       *)
 (*     mult ⟿ real_mult                                          *)
 (*     minus one delta ⟿ real_plus real_one (real_opp delta)      *)
@@ -11022,7 +11022,7 @@ Local Open Scope Q_scope.
 (* ============ 1. 1−δ 的 Real 层序引理（κ := 1−δ 良定前提） ============ *)
 
 (* 根 L14270 one_minus_kappa_pos 的 Real 镜像：δ < 1 ⟹ 0 < 1−δ *)
-Lemma one_minus_delta_pos_real : forall delta : CW_ConstructiveWorld_219.Real,
+Lemma one_minus_delta_pos_real : forall delta : Real,
   real_lt delta real_one ->
   real_lt real_zero (real_plus real_one (real_opp delta)).
 Proof.
@@ -11031,7 +11031,7 @@ Qed.
 
 (* 根注意力区前提的对称支 Real 镜像：0 < δ ⟹ 1−δ < 1
    （逐点差零 + real_lt_eq_lt：1−(1−δ) == δ 逐点 ring） *)
-Lemma one_minus_delta_lt_one_real : forall delta : CW_ConstructiveWorld_219.Real,
+Lemma one_minus_delta_lt_one_real : forall delta : Real,
   real_lt real_zero delta ->
   real_lt (real_plus real_one (real_opp delta)) real_one.
 Proof.
@@ -11054,9 +11054,9 @@ Qed.
 (* ============ 2. 件 1 主件：接口前提的 Real 层实例化 ============ *)
 
 Theorem r_arch_pow_attn_real :
-  forall delta : CW_ConstructiveWorld_219.Real, real_lt real_zero delta -> real_lt delta real_one ->
-  forall a : CW_ConstructiveWorld_219.Real, real_lt real_zero a ->
-  forall eps : CW_ConstructiveWorld_219.Real, real_lt real_zero eps ->
+  forall delta : Real, real_lt real_zero delta -> real_lt delta real_one ->
+  forall a : Real, real_lt real_zero a ->
+  forall eps : Real, real_lt real_zero eps ->
   sigT (fun N : nat =>
     real_lt (real_mult a
               (real_pow (real_plus real_one (real_opp delta)) N)) eps).
@@ -11075,9 +11075,9 @@ Qed.
    （根 r_pow_dec_iter_attn 的幂反单调 Real 镜像即
      UpBudgetReal.real_pow_anti_mono，件 2 主定理直接复用，不重证。） *)
 Lemma tv_iter_decay_real :
-  forall (delta : CW_ConstructiveWorld_219.Real)
+  forall (delta : Real)
          (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
-         (tv_seq : nat -> CW_ConstructiveWorld_219.Real),
+         (tv_seq : nat -> Real),
   (forall n : nat,
     real_le (tv_seq (Datatypes.S n))
             (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
@@ -11135,13 +11135,13 @@ Qed.
    sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等接口前提，
    天级工程，不属本小件（主件 1 不受影响）。 *)
 Theorem attention_iterate_converges_real :
-  forall (delta : CW_ConstructiveWorld_219.Real)
+  forall (delta : Real)
          (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
-         (tv_seq : nat -> CW_ConstructiveWorld_219.Real),
+         (tv_seq : nat -> Real),
   (forall n : nat,
     real_le (tv_seq (Datatypes.S n))
             (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
-  forall eps : CW_ConstructiveWorld_219.Real, real_lt real_zero eps ->
+  forall eps : Real, real_lt real_zero eps ->
   real_lt real_zero (tv_seq Datatypes.O) ->
   sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
     real_lt (tv_seq n) eps).
@@ -11205,7 +11205,7 @@ Module Constitution.
 (*                       Q 层自足对应件（κ∈(0,1) ⟹ 有限预算存在）    *)
 (*                                                              *)
 (* 层位纪律：宪法面语句全 Set 层（QleT'/QltT/NatLe/Id/sigT/And/Or）；*)
-(*   内部代数微件沿 CW_ConstructiveWorld_219.LCAudit 先例口径（Qle/== 前提位）；  *)
+(*   内部代数微件沿 LCAudit 先例口径（Qle/== 前提位）；  *)
 (*   纯构造性：禁词零出现（见交付报告 G1）；全部 Qed 闭合。           *)
 (* ============================================================ *)
 
@@ -11350,7 +11350,7 @@ destruct (Q_dec a b) as [[H1 | H2] | H3].
 Qed.
 
 (* ============================================================ *)
-(* §2 q_pow 幂代数（消费 CW_ConstructiveWorld_219.q_pow）                      *)
+(* §2 q_pow 幂代数（消费 q_pow）                      *)
 (* ============================================================ *)
 
 Lemma uc_pow_eq_compat : forall (x y : Q) (n : nat), x == y -> q_pow x n == q_pow y n.
@@ -12477,18 +12477,18 @@ From Stdlib Require Import Extraction.
 
 (* 作用域重指向：EnhancedMod（KLM3 头部 Import 泄漏）的 req 形态代数引理
    与本件 Id 形态同名；此处恢复 219 RealInterface 投影形态。 *)
-Local Notation plus_assoc := CW_ConstructiveWorld_219.plus_assoc (only parsing).
-Local Notation plus_comm := CW_ConstructiveWorld_219.plus_comm (only parsing).
-Local Notation plus_zero := CW_ConstructiveWorld_219.plus_zero (only parsing).
-Local Notation plus_opp := CW_ConstructiveWorld_219.plus_opp (only parsing).
-Local Notation mult_assoc := CW_ConstructiveWorld_219.mult_assoc (only parsing).
-Local Notation mult_comm := CW_ConstructiveWorld_219.mult_comm (only parsing).
-Local Notation mult_one := CW_ConstructiveWorld_219.mult_one (only parsing).
-Local Notation mult_zero := CW_ConstructiveWorld_219.mult_zero (only parsing).
-Local Notation inv_pos_correct := CW_ConstructiveWorld_219.inv_pos_correct (only parsing).
-Local Notation le_refl := CW_ConstructiveWorld_219.le_refl (only parsing).
-Local Notation le_id_l := CW_ConstructiveWorld_219.le_id_l (only parsing).
-Local Notation abs_zero := CW_ConstructiveWorld_219.abs_zero (only parsing).
+Local Notation plus_assoc := plus_assoc (only parsing).
+Local Notation plus_comm := plus_comm (only parsing).
+Local Notation plus_zero := plus_zero (only parsing).
+Local Notation plus_opp := plus_opp (only parsing).
+Local Notation mult_assoc := mult_assoc (only parsing).
+Local Notation mult_comm := mult_comm (only parsing).
+Local Notation mult_one := mult_one (only parsing).
+Local Notation mult_zero := mult_zero (only parsing).
+Local Notation inv_pos_correct := inv_pos_correct (only parsing).
+Local Notation le_refl := le_refl (only parsing).
+Local Notation le_id_l := le_id_l (only parsing).
+Local Notation abs_zero := abs_zero (only parsing).
 (* ========================================================================= *)
 (* UpEvictId.v — §6 KV 逐出恒等式批（王中王 A1/B3 + A6/B1，2026-09-07）      *)
 (*                                                                           *)
@@ -12520,19 +12520,19 @@ Context {RI : RealInterfaceEnhanced}.
 Context {SS : StateSpace RI}.
 Context {SO : SumOver RI SS}.
 
-Let R := @CW_ConstructiveWorld_219.R RI.
-Let S := @CW_ConstructiveWorld_219.S RI SS.
-Let zero := @CW_ConstructiveWorld_219.zero RI.
-Let one := @CW_ConstructiveWorld_219.one RI.
-Let plus := @CW_ConstructiveWorld_219.plus RI.
-Let mult := @CW_ConstructiveWorld_219.mult RI.
-Let opp := @CW_ConstructiveWorld_219.opp RI.
-Let abs := @CW_ConstructiveWorld_219.abs RI.
-Let lt := @CW_ConstructiveWorld_219.lt RI.
-Let le := @CW_ConstructiveWorld_219.le RI.
-Let inv_pos := @CW_ConstructiveWorld_219.inv_pos RI.
-Let exp_neg := @CW_ConstructiveWorld_219.exp_neg RI.
-Let sum_over_S := @CW_ConstructiveWorld_219.sum_over_S RI SS SO.
+Let R := @R RI.
+Let S := @S RI SS.
+Let zero := @zero RI.
+Let one := @one RI.
+Let plus := @plus RI.
+Let mult := @mult RI.
+Let opp := @opp RI.
+Let abs := @abs RI.
+Let lt := @lt RI.
+Let le := @le RI.
+Let inv_pos := @inv_pos RI.
+Let exp_neg := @exp_neg RI.
+Let sum_over_S := @sum_over_S RI SS SO.
 
 (* ---- 与根 AttentionGibbsBridge 同款世界（变量名/前提形态对齐） ---- *)
 
@@ -12563,27 +12563,27 @@ Variable detailed_balance :
 Variable keep : S -> Set.
 Variable keep_dec : forall s, Or (keep s) (Not (keep s)).
 
-Definition evicted_transition (s s' : S) : R :=
+Definition cwe_evicted_transition (s s' : S) : R :=
   if keep_dec s then
     if keep_dec s' then transition s s' else zero
   else zero.
 
-Definition evicted_partition : R :=
+Definition cwe_evicted_partition : R :=
   sum_over_S (fun s => if keep_dec s then boltzmann_factor s else zero).
 
-Variable evicted_partition_pos : lt zero evicted_partition.
+Variable evicted_partition_pos : lt zero cwe_evicted_partition.
 
-Definition evicted_boltzmann (s : S) : R :=
+Definition cwe_evicted_boltzmann (s : S) : R :=
   if keep_dec s then
-    mult (inv_pos evicted_partition evicted_partition_pos) (boltzmann_factor s)
+    mult (inv_pos cwe_evicted_partition evicted_partition_pos) (boltzmann_factor s)
   else zero.
 
-Definition db_breaking (s s' : S) : R :=
-  abs (minus (mult (evicted_boltzmann s) (evicted_transition s s'))
-             (mult (evicted_boltzmann s') (evicted_transition s' s))).
+Definition cwe_db_breaking (s s' : S) : R :=
+  abs (minus (mult (cwe_evicted_boltzmann s) (cwe_evicted_transition s s'))
+             (mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s))).
 
 (* 保留集参数化的条件配分函数（单调性/增量比较所需，同根 L29446） *)
-Definition evicted_partition_of (k : S -> Set) (kd : forall s, Or (k s) (Not (k s))) : R :=
+Definition cwe_evicted_partition_of (k : S -> Set) (kd : forall s, Or (k s) (Not (k s))) : R :=
   sum_over_S (fun s => if kd s then boltzmann_factor s else zero).
 
 (* ---- 局部代数辅助（根内无现成 Set 层 minus_zero_r / opp_zero） ---- *)
@@ -12639,31 +12639,31 @@ Proof.
 Qed.
 
 (* ---- 掩码核逐点详细平衡（件 1a/1b 共用核心）：任一端逐出则两积同为
-   零；双保留时由因子层详细平衡 + evicted_partition 逆元缩放。4 分支全
+   零；双保留时由因子层详细平衡 + cwe_evicted_partition 逆元缩放。4 分支全
    构造性（对照根 L29573 全保留特例的同款分支工艺）。 *)
 Lemma evicted_db_products :
   forall s s' : S,
-    Id (mult (evicted_boltzmann s') (evicted_transition s' s))
-       (mult (evicted_boltzmann s) (evicted_transition s s')).
+    Id (mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s))
+       (mult (cwe_evicted_boltzmann s) (cwe_evicted_transition s s')).
 Proof.
   intros s s'.
-  unfold evicted_boltzmann, evicted_transition.
+  unfold cwe_evicted_boltzmann, cwe_evicted_transition.
   destruct (keep_dec s) as [Hs | Hs]; destruct (keep_dec s') as [Hs' | Hs'].
   - (* 双保留：inv_ev·f(s')·t(s',s) == inv_ev·f(s)·t(s,s') *)
     pose proof (id_sym (boltzmann_factor_detailed_balance s s')) as Hf.
     apply (id_trans (id_sym (mult_assoc
-                               (inv_pos evicted_partition evicted_partition_pos)
+                               (inv_pos cwe_evicted_partition evicted_partition_pos)
                                (boltzmann_factor s') (transition s' s)))).
-    apply (id_trans (id_cong (fun x => mult (inv_pos evicted_partition evicted_partition_pos) x)
+    apply (id_trans (id_cong (fun x => mult (inv_pos cwe_evicted_partition evicted_partition_pos) x)
                              Hf)).
-    apply (mult_assoc (inv_pos evicted_partition evicted_partition_pos)
+    apply (mult_assoc (inv_pos cwe_evicted_partition evicted_partition_pos)
                       (boltzmann_factor s) (transition s s')).
   - (* s 保留、s' 逐出：两积同为零 *)
     exact (id_trans (mult_zero zero)
-                    (id_sym (mult_zero (mult (inv_pos evicted_partition evicted_partition_pos)
+                    (id_sym (mult_zero (mult (inv_pos cwe_evicted_partition evicted_partition_pos)
                                              (boltzmann_factor s))))).
   - (* s 逐出、s' 保留：两积同为零 *)
-    exact (id_trans (mult_zero (mult (inv_pos evicted_partition evicted_partition_pos)
+    exact (id_trans (mult_zero (mult (inv_pos cwe_evicted_partition evicted_partition_pos)
                                      (boltzmann_factor s')))
                     (id_sym (mult_zero zero))).
   - (* 双逐出 *)
@@ -12673,13 +12673,13 @@ Qed.
 (* ================= 件 1a：破缺恒为零（涨落-耗散假设整体多余） ============ *)
 
 Theorem eviction_db_breaking_zero :
-  forall s s' : S, Id (db_breaking s s') zero.
+  forall s s' : S, Id (cwe_db_breaking s s') zero.
 Proof.
   intros s s'.
-  unfold db_breaking.
+  unfold cwe_db_breaking.
   apply (id_trans (id_cong abs
-    (minus_self_zero (mult (evicted_boltzmann s) (evicted_transition s s'))
-                     (mult (evicted_boltzmann s') (evicted_transition s' s))
+    (minus_self_zero (mult (cwe_evicted_boltzmann s) (cwe_evicted_transition s s'))
+                     (mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s))
                      (id_sym (evicted_db_products s s'))))).
   exact abs_zero.
 Qed.
@@ -12691,24 +12691,24 @@ Qed.
 
 Theorem evicted_boltzmann_steady_exact :
   forall s : S,
-    Id (sum_over_S (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s)))
-       (mult (evicted_boltzmann s) (sum_over_S (fun s' => evicted_transition s s'))).
+    Id (sum_over_S (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s)))
+       (mult (cwe_evicted_boltzmann s) (sum_over_S (fun s' => cwe_evicted_transition s s'))).
 Proof.
   intro s.
   apply (id_trans (sum_over_S_ext
-                    (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s))
-                    (fun s' => mult (evicted_boltzmann s) (evicted_transition s s'))
+                    (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s))
+                    (fun s' => mult (cwe_evicted_boltzmann s) (cwe_evicted_transition s s'))
                     (fun s' => id_sym (evicted_db_products s' s)))).
-  apply (sum_over_S_linear (evicted_boltzmann s) (fun s' => evicted_transition s s')).
+  apply (sum_over_S_linear (cwe_evicted_boltzmann s) (fun s' => cwe_evicted_transition s s')).
 Qed.
 
 (* 全保留桥：ev_t 逐点回到 t（对照根 L29506 eviction_transition_full） *)
 Lemma eviction_transition_pointwise_full :
   (forall s, keep s) ->
-  forall s s' : S, Id (evicted_transition s s') (transition s s').
+  forall s s' : S, Id (cwe_evicted_transition s s') (transition s s').
 Proof.
   intros Hkall s s'.
-  unfold evicted_transition.
+  unfold cwe_evicted_transition.
   destruct (keep_dec s) as [Hks | Hnks].
   - destruct (keep_dec s') as [Hks' | Hnks'].
     + reflexivity.
@@ -12719,10 +12719,10 @@ Qed.
 (* 全保留时掩码核行归一化：Σ ev_t(s,·) == 1（transition_normalization 吸收） *)
 Lemma evicted_transition_row_sum_one :
   (forall s, keep s) ->
-  forall s : S, Id (sum_over_S (fun s' => evicted_transition s s')) one.
+  forall s : S, Id (sum_over_S (fun s' => cwe_evicted_transition s s')) one.
 Proof.
   intros Hkall s.
-  apply (id_trans (sum_over_S_ext (fun s' => evicted_transition s s')
+  apply (id_trans (sum_over_S_ext (fun s' => cwe_evicted_transition s s')
                                   (fun s' => transition s s')
                                   (fun s' => eviction_transition_pointwise_full Hkall s s'))).
   apply (transition_normalization s).
@@ -12732,39 +12732,39 @@ Qed.
 Corollary evicted_boltzmann_steady_full_keep :
   (forall s, keep s) ->
   forall s : S,
-    Id (sum_over_S (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s)))
-       (evicted_boltzmann s).
+    Id (sum_over_S (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s)))
+       (cwe_evicted_boltzmann s).
 Proof.
   intros Hkall s.
   apply (id_trans (evicted_boltzmann_steady_exact s)).
-  apply (id_trans (id_cong (fun x => mult (evicted_boltzmann s) x)
+  apply (id_trans (id_cong (fun x => mult (cwe_evicted_boltzmann s) x)
                            (evicted_transition_row_sum_one Hkall s))).
-  apply (mult_one (evicted_boltzmann s)).
+  apply (mult_one (cwe_evicted_boltzmann s)).
 Qed.
 
 (* ================= 件 1c：定理 6.1 偏差恒为零（1b 一步推论） =============
-   根 L29626 的界 |稳态差| ≤ Σ db_breaking 之右端逐项为零，故稳态差
+   根 L29626 的界 |稳态差| ≤ Σ cwe_db_breaking 之右端逐项为零，故稳态差
    恒为零——"逐出代价在支撑收缩而非平稳性破坏"的精确形态。 *)
 
 Theorem eviction_steady_deviation_zero :
   forall s : S,
-    Id (abs (minus (sum_over_S (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s)))
-                   (mult (evicted_boltzmann s) (sum_over_S (fun s' => evicted_transition s s')))))
+    Id (abs (minus (sum_over_S (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s)))
+                   (mult (cwe_evicted_boltzmann s) (sum_over_S (fun s' => cwe_evicted_transition s s')))))
        zero.
 Proof.
   intro s.
   apply (id_trans (id_cong abs
     (minus_self_zero
-       (sum_over_S (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s)))
-       (mult (evicted_boltzmann s) (sum_over_S (fun s' => evicted_transition s s')))
+       (sum_over_S (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s)))
+       (mult (cwe_evicted_boltzmann s) (sum_over_S (fun s' => cwe_evicted_transition s s')))
        (evicted_boltzmann_steady_exact s)))).
   exact abs_zero.
 Qed.
 
 Corollary eviction_steady_deviation_le_zero :
   forall s : S,
-    le (abs (minus (sum_over_S (fun s' => mult (evicted_boltzmann s') (evicted_transition s' s)))
-                   (mult (evicted_boltzmann s) (sum_over_S (fun s' => evicted_transition s s')))))
+    le (abs (minus (sum_over_S (fun s' => mult (cwe_evicted_boltzmann s') (cwe_evicted_transition s' s)))
+                   (mult (cwe_evicted_boltzmann s) (sum_over_S (fun s' => cwe_evicted_transition s s')))))
        zero.
 Proof.
   intro s.
@@ -12804,12 +12804,12 @@ Theorem eviction_partition_increment :
   forall (k1 k2 : S -> Set) (Hsub : forall s, k1 s -> k2 s)
     (kd1 : forall s, Or (k1 s) (Not (k1 s)))
     (kd2 : forall s, Or (k2 s) (Not (k2 s))),
-    Id (minus (evicted_partition_of k2 kd2) (evicted_partition_of k1 kd1))
+    Id (minus (cwe_evicted_partition_of k2 kd2) (cwe_evicted_partition_of k1 kd1))
        (sum_over_S (fun s => if kd2 s then (if kd1 s then zero else boltzmann_factor s)
                             else zero)).
 Proof.
   intros k1 k2 Hsub kd1 kd2.
-  unfold evicted_partition_of.
+  unfold cwe_evicted_partition_of.
   apply (id_trans (id_sym (sum_over_S_minus
                             (fun s => if kd2 s then boltzmann_factor s else zero)
                             (fun s => if kd1 s then boltzmann_factor s else zero)))).
@@ -12822,14 +12822,14 @@ Proof.
 Qed.
 
 (* 并列：全配分差恒等式（L29526 ≤ 的等式升级）——
-   逐出质量损失 Z_thermo − evicted_partition(k) = 被逐出态质量之和。 *)
+   逐出质量损失 Z_thermo − cwe_evicted_partition(k) = 被逐出态质量之和。 *)
 Corollary eviction_partition_le_full_exact :
   forall (k : S -> Set) (kd : forall s, Or (k s) (Not (k s))),
-    Id (minus Z_thermo (evicted_partition_of k kd))
+    Id (minus Z_thermo (cwe_evicted_partition_of k kd))
        (sum_over_S (fun s => if kd s then zero else boltzmann_factor s)).
 Proof.
   intros k kd.
-  unfold Z_thermo, evicted_partition_of.
+  unfold Z_thermo, cwe_evicted_partition_of.
   apply (id_trans (id_sym (sum_over_S_minus boltzmann_factor
                             (fun s => if kd s then boltzmann_factor s else zero)))).
   apply (sum_over_S_ext
@@ -12855,14 +12855,14 @@ End EvictId.
 Module DebtGibbsT.
 
 (* 作用域重指向：同 EvictId——EnhancedMod req 形态代数引理名让位 219 Id 形态。 *)
-Local Notation plus_assoc := CW_ConstructiveWorld_219.plus_assoc (only parsing).
-Local Notation plus_comm := CW_ConstructiveWorld_219.plus_comm (only parsing).
-Local Notation plus_zero := CW_ConstructiveWorld_219.plus_zero (only parsing).
-Local Notation plus_opp := CW_ConstructiveWorld_219.plus_opp (only parsing).
-Local Notation mult_assoc := CW_ConstructiveWorld_219.mult_assoc (only parsing).
-Local Notation mult_comm := CW_ConstructiveWorld_219.mult_comm (only parsing).
-Local Notation mult_one := CW_ConstructiveWorld_219.mult_one (only parsing).
-Local Notation mult_zero := CW_ConstructiveWorld_219.mult_zero (only parsing).
+Local Notation plus_assoc := plus_assoc (only parsing).
+Local Notation plus_comm := plus_comm (only parsing).
+Local Notation plus_zero := plus_zero (only parsing).
+Local Notation plus_opp := plus_opp (only parsing).
+Local Notation mult_assoc := mult_assoc (only parsing).
+Local Notation mult_comm := mult_comm (only parsing).
+Local Notation mult_one := mult_one (only parsing).
+Local Notation mult_zero := mult_zero (only parsing).
 
 (* ============================================================ *)
 (* UpDebtGibbsT.v —— 债务清理打包席（件 1，方案三 c）            *)
@@ -12873,11 +12873,11 @@ Local Notation mult_zero := CW_ConstructiveWorld_219.mult_zero (only parsing).
 (*   （CW214KL_scan L43231）逐字平移：                           *)
 (*     温度相等前提 real_eq (inv T) (inv D)                      *)
 (*     + energy == −logits + 配分相等                            *)
-(*     ⟹ 逐点 real_eq (real_softmax_temp s) (real_boltzmann_dist_attn s). *)
+(*     ⟹ 逐点 real_eq (cwe_real_softmax_temp s) (real_boltzmann_dist_attn s). *)
 (*                                                              *)
 (*   Real 层原本无温度化 softmax/配分定义，此处先建：            *)
-(*     real_partition_function_temp := Σ e^{z/T}，               *)
-(*     real_softmax_temp s := e^{z_s/T}·inv(Z_T)，               *)
+(*     cwe_real_partition_function_temp := Σ e^{z/T}，               *)
+(*     cwe_real_softmax_temp s := e^{z_s/T}·inv(Z_T)，               *)
 (*   并配套正性/归一化小引理。证明核：real_inv 代数 +            *)
 (*   cauchy_real_exp_wd + real_inv_pos_ext + real_mult_comm ——   *)
 (*   单位温度版每一步都有对应。                                  *)
@@ -12926,43 +12926,43 @@ Proof.
 Qed.
 
 (* ---- 温度化配分函数（Real 层）：Z_T := Σ_s e^{z_s/T} ---- *)
-Definition real_partition_function_temp : Real :=
+Definition cwe_real_partition_function_temp : Real :=
   real_sum_over_S (fun s => real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s))).
 
-Lemma real_partition_function_temp_pos : real_lt real_zero real_partition_function_temp.
+Lemma cwe_real_partition_function_temp_pos : real_lt real_zero cwe_real_partition_function_temp.
 Proof.
-  unfold real_partition_function_temp, real_exp_pos_fn.
+  unfold cwe_real_partition_function_temp, real_exp_pos_fn.
   apply real_sum_pos_preserved.
   intro s. apply real_exp_neg_pos.
 Qed.
 
 (* ---- 温度化 softmax（Real 层）：e^{z_s/T}·inv(Z_T) ---- *)
-Definition real_softmax_temp (s : S) : Real :=
+Definition cwe_real_softmax_temp (s : S) : Real :=
   real_mult (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
-            (real_inv_pos real_partition_function_temp real_partition_function_temp_pos).
+            (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos).
 
 (* 配套正性：exp 恒正 × inv 正（real_mult_pos_compat） *)
-Theorem real_softmax_temp_pos : forall s : S, real_lt real_zero (real_softmax_temp s).
+Theorem real_softmax_temp_pos : forall s : S, real_lt real_zero (cwe_real_softmax_temp s).
 Proof.
-  intro s. unfold real_softmax_temp, real_exp_pos_fn.
+  intro s. unfold cwe_real_softmax_temp, real_exp_pos_fn.
   apply real_mult_pos_compat.
   - apply real_exp_neg_pos.
   - apply real_inv_pos_pos.
 Qed.
 
-(* 配套归一化：Σ_s softmax_temp(s) == 1
+(* 配套归一化：Σ_s cwe_softmax_temp(s) == 1
    链：逐 s 乘子交换（sum_ext + real_mult_comm）→ 标量线性提取
    （sum_linear）→ inv(Z_T)·Z_T == 1（real_inv_pos_correct）。 *)
 Theorem real_softmax_temp_normalized :
-  real_eq (real_sum_over_S (fun s => real_softmax_temp s)) real_one.
+  real_eq (real_sum_over_S (fun s => cwe_real_softmax_temp s)) real_one.
 Proof.
-  unfold real_softmax_temp.
+  unfold cwe_real_softmax_temp.
   apply (real_eq_trans
           (real_sum_over_S (fun s => real_mult
                              (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
-                             (real_inv_pos real_partition_function_temp
-                                           real_partition_function_temp_pos)))
-          (real_mult (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
+                             (real_inv_pos cwe_real_partition_function_temp
+                                           cwe_real_partition_function_temp_pos)))
+          (real_mult (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
                      (real_sum_over_S (fun s =>
                        real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))))
           real_one).
@@ -12970,11 +12970,11 @@ Proof.
     apply (real_eq_trans
             (real_sum_over_S (fun s => real_mult
                                (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))
-                               (real_inv_pos real_partition_function_temp
-                                             real_partition_function_temp_pos)))
+                               (real_inv_pos cwe_real_partition_function_temp
+                                             cwe_real_partition_function_temp_pos)))
             (real_sum_over_S (fun s => real_mult
-                               (real_inv_pos real_partition_function_temp
-                                             real_partition_function_temp_pos)
+                               (real_inv_pos cwe_real_partition_function_temp
+                                             cwe_real_partition_function_temp_pos)
                                (real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))))
             _).
     + apply real_sum_over_S_ext.
@@ -12982,18 +12982,18 @@ Proof.
     + apply real_sum_over_S_linear.
   - (* 2. inv(Z_T)·Z_T == 1 *)
     apply (real_eq_trans
-            (real_mult (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
+            (real_mult (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
                        (real_sum_over_S (fun s =>
                          real_exp_pos_fn (real_mult (real_inv_pos T T_pos) (z_logits s)))))
-            (real_mult (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
-                       real_partition_function_temp)
+            (real_mult (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
+                       cwe_real_partition_function_temp)
             real_one).
     + apply real_eq_refl.
     + apply (real_eq_trans
-              (real_mult (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
-                         real_partition_function_temp)
-              (real_mult real_partition_function_temp
-                         (real_inv_pos real_partition_function_temp real_partition_function_temp_pos))
+              (real_mult (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
+                         cwe_real_partition_function_temp)
+              (real_mult cwe_real_partition_function_temp
+                         (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos))
               real_one).
       * apply real_mult_comm.
       * apply real_inv_pos_correct.
@@ -13001,23 +13001,23 @@ Qed.
 
 (* ---- Boltzmann 侧（同单位温度版结构） ---- *)
 (* Boltzmann 因子（Real 层）：e^{−e(s)/D} *)
-Definition real_boltzmann_factor (s : S) : Real :=
+Definition cwe_real_boltzmann_factor (s : S) : Real :=
   real_exp_neg (real_mult (real_inv_pos D D_pos) (energy s)).
 
 (* 热力学配分（Real 层）：Σ_s boltzmann_factor *)
-Definition real_Z_thermo : Real := real_sum_over_S real_boltzmann_factor.
+Definition cwe_real_Z_thermo : Real := real_sum_over_S cwe_real_boltzmann_factor.
 
-Variable real_Z_thermo_pos : real_lt real_zero real_Z_thermo.
+Variable real_Z_thermo_pos : real_lt real_zero cwe_real_Z_thermo.
 
 (* Boltzmann 分布（Real 层）：inv(Z_thermo)·factor *)
-Definition real_boltzmann_dist_attn (s : S) : Real :=
-  real_mult (real_inv_pos real_Z_thermo real_Z_thermo_pos) (real_boltzmann_factor s).
+Definition cwe_real_boltzmann_dist_attn (s : S) : Real :=
+  real_mult (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos) (cwe_real_boltzmann_factor s).
 
 (* ---- 旗舰（件 1）：任意温度下 softmax == Boltzmann ----
    前提：① 1/T == 1/D（温度统一，real_inv_pos 按位相等）
          ② energy == −logits（逐 s）
          ③ Z_thermo == Z_T（配分相等）
-   结论：逐 s：real_softmax_temp s == real_boltzmann_dist_attn s。
+   结论：逐 s：cwe_real_softmax_temp s == cwe_real_boltzmann_dist_attn s。
    证明核（单位温度版每步对应）：
      因子桥（real_opp_mult + 温度统一 + energy 替换 + exp 外延）
      → 逆元统一（HZ + real_inv_pos_ext）
@@ -13025,11 +13025,11 @@ Definition real_boltzmann_dist_attn (s : S) : Real :=
 Theorem real_attention_is_gibbs_temp :
   (real_eq (real_inv_pos T T_pos) (real_inv_pos D D_pos)) ->
   (forall s : S, real_eq (energy s) (real_opp (z_logits s))) ->
-  real_eq real_Z_thermo real_partition_function_temp ->
-  forall s : S, real_eq (real_softmax_temp s) (real_boltzmann_dist_attn s).
+  real_eq cwe_real_Z_thermo cwe_real_partition_function_temp ->
+  forall s : S, real_eq (cwe_real_softmax_temp s) (cwe_real_boltzmann_dist_attn s).
 Proof.
   intros HDT Henergy HZ s.
-  unfold real_softmax_temp, real_boltzmann_dist_attn, real_boltzmann_factor, real_exp_pos_fn.
+  unfold cwe_real_softmax_temp, cwe_real_boltzmann_dist_attn, cwe_real_boltzmann_factor, real_exp_pos_fn.
   (* 1. 因子桥：e^{-(-z(s)/T)} == e^{-e(s)/D} *)
   assert (Hf : real_eq (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
                        (real_exp_neg (real_mult (real_inv_pos D D_pos) (energy s)))).
@@ -13051,31 +13051,31 @@ Proof.
               (real_eq_refl _) (real_eq_sym _ _ (Henergy s))).
   }
   (* 2. 逆元统一：inv(Z_thermo) == inv(Z_T)（HZ + real_inv_pos_ext） *)
-  assert (Hie : real_eq (real_inv_pos real_Z_thermo real_Z_thermo_pos)
-                        (real_inv_pos real_partition_function_temp
-                                      real_partition_function_temp_pos)).
-  { apply (real_inv_pos_ext real_Z_thermo real_partition_function_temp
-                            real_Z_thermo_pos real_partition_function_temp_pos).
+  assert (Hie : real_eq (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)
+                        (real_inv_pos cwe_real_partition_function_temp
+                                      cwe_real_partition_function_temp_pos)).
+  { apply (real_inv_pos_ext cwe_real_Z_thermo cwe_real_partition_function_temp
+                            real_Z_thermo_pos cwe_real_partition_function_temp_pos).
     exact HZ. }
   (* 3. 组装（镜像单位温度版第 3 步） *)
   apply (real_eq_trans _ (real_mult (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
-                                    (real_inv_pos real_partition_function_temp
-                                                  real_partition_function_temp_pos)) _).
+                                    (real_inv_pos cwe_real_partition_function_temp
+                                                  cwe_real_partition_function_temp_pos)) _).
   - apply real_eq_refl.
   - apply (real_eq_trans _ (real_mult (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
-                                      (real_inv_pos real_Z_thermo real_Z_thermo_pos)) _).
+                                      (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)) _).
     + apply (RealSetoid.real_eq_mult_compat_adapt
               (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
               (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
-              (real_inv_pos real_partition_function_temp real_partition_function_temp_pos)
-              (real_inv_pos real_Z_thermo real_Z_thermo_pos)
+              (real_inv_pos cwe_real_partition_function_temp cwe_real_partition_function_temp_pos)
+              (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)
               (real_eq_refl _) (real_eq_sym _ _ Hie)).
-    + apply (real_eq_trans _ (real_mult (real_inv_pos real_Z_thermo real_Z_thermo_pos)
+    + apply (real_eq_trans _ (real_mult (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)
                                         (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))) _).
       * apply real_mult_comm.
       * apply (RealSetoid.real_eq_mult_compat_adapt
-                (real_inv_pos real_Z_thermo real_Z_thermo_pos)
-                (real_inv_pos real_Z_thermo real_Z_thermo_pos)
+                (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)
+                (real_inv_pos cwe_real_Z_thermo real_Z_thermo_pos)
                 (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
                 (real_exp_neg (real_mult (real_inv_pos D D_pos) (energy s)))
                 (real_eq_refl _) Hf).
@@ -13155,7 +13155,7 @@ Proof.
 Qed.
 
 (* 代数：e^{−b} == e^{−a}·e^{−(b−a)}（参数换形 + exp 加法性）。 *)
-Lemma real_exp_neg_split : forall a b : Real,
+Lemma cwe_real_exp_neg_split : forall a b : Real,
   real_eq (real_exp_neg b)
           (real_mult (real_exp_neg a)
                      (real_exp_neg (real_plus b (real_opp a)))).
@@ -13220,11 +13220,11 @@ Proof.
                                             (real_mult E (real_exp_neg a))
                                             E (real_exp_neg b)).
       + exact (real_mult_one E).
-      + (* E·e^{−a} == e^{−b}：real_exp_neg_split + 乘法交换 *)
+      + (* E·e^{−a} == e^{−b}：cwe_real_exp_neg_split + 乘法交换 *)
         apply real_eq_sym.
         apply (real_eq_trans (real_exp_neg b)
                              (real_mult (real_exp_neg a) E) _).
-        * exact (real_exp_neg_split a b).
+        * exact (cwe_real_exp_neg_split a b).
         * exact (real_mult_comm (real_exp_neg a) E).
   }
   (* 步 3：B ≤ A·E（1 ≤ E 加法保序 + 恒等式换形） *)
@@ -13951,21 +13951,21 @@ Record query : Set := mk_query {
   qr_delta : Q        (* 耗散预算 δ *)
 }.
 
-Record iou : Set := mk_iou {
-  iou_from : nat;     (* 缺口源格式 *)
-  iou_to : nat;       (* 缺口目标格式 *)
-  iou_eps : Q;        (* 待重演的 eps 槽位 *)
-  iou_delta : Q;      (* 耗散预算 δ *)
-  iou_ref : nat       (* 回指查询 id：证成后新边长入图谱 *)
+Record cwe_iou : Set := cwe_mk_iou {
+  cwe_iou_from : nat;     (* 缺口源格式 *)
+  cwe_iou_to : nat;       (* 缺口目标格式 *)
+  cwe_iou_eps : Q;        (* 待重演的 eps 槽位 *)
+  cwe_iou_delta : Q;      (* 耗散预算 δ *)
+  cwe_iou_ref : nat       (* 回指查询 id：证成后新边长入图谱 *)
 }.
 
 (* 借据签发：查询的缺口义务（未命中的唯一产物，不报错） *)
-Definition iou_issue (q : query) : iou :=
-  mk_iou (qr_from q) (qr_to q) (qr_eps q) (qr_delta q) (qr_id q).
+Definition iou_issue (q : query) : cwe_iou :=
+  cwe_mk_iou (qr_from q) (qr_to q) (qr_eps q) (qr_delta q) (qr_id q).
 
 (* 布尔门：true 发 Id b true 证，false 发 (Id b false, 借据) 载荷 *)
-Definition bool_gate (b : bool) (w : iou) : Or (Id b true) (And (Id b false) iou) :=
-  match b as x return Or (Id x true) (And (Id x false) iou) with
+Definition bool_gate (b : bool) (w : cwe_iou) : Or (Id b true) (And (Id b false) cwe_iou) :=
+  match b as x return Or (Id x true) (And (Id x false) cwe_iou) with
   | true => inl (@id_refl bool true)
   | false => inr (@id_refl bool false, w)
   end.
@@ -13973,27 +13973,27 @@ Definition bool_gate (b : bool) (w : iou) : Or (Id b true) (And (Id b false) iou
 (* 五道门（Defined 可执行）：格式接续 src/dst、斜率正、耗散在预算内、出参正 *)
 Definition gate_src (e : edge_spec) (q : query)
   : Or (Id (Nat.eqb (ed_src e) (qr_from q)) true)
-       (And (Id (Nat.eqb (ed_src e) (qr_from q)) false) iou) :=
+       (And (Id (Nat.eqb (ed_src e) (qr_from q)) false) cwe_iou) :=
   bool_gate (Nat.eqb (ed_src e) (qr_from q)) (iou_issue q).
 
 Definition gate_dst (e : edge_spec) (q : query)
   : Or (Id (Nat.eqb (ed_dst e) (qr_to q)) true)
-       (And (Id (Nat.eqb (ed_dst e) (qr_to q)) false) iou) :=
+       (And (Id (Nat.eqb (ed_dst e) (qr_to q)) false) cwe_iou) :=
   bool_gate (Nat.eqb (ed_dst e) (qr_to q)) (iou_issue q).
 
 Definition gate_slope (e : edge_spec) (q : query)
   : Or (Id (Qlt_bool 0 (ed_a e)) true)
-       (And (Id (Qlt_bool 0 (ed_a e)) false) iou) :=
+       (And (Id (Qlt_bool 0 (ed_a e)) false) cwe_iou) :=
   bool_gate (Qlt_bool 0 (ed_a e)) (iou_issue q).
 
 Definition gate_diss (e : edge_spec) (q : query)
   : Or (Id (Qle_bool (edge_diss e (qr_eps q)) (qr_delta q)) true)
-       (And (Id (Qle_bool (edge_diss e (qr_eps q)) (qr_delta q)) false) iou) :=
+       (And (Id (Qle_bool (edge_diss e (qr_eps q)) (qr_delta q)) false) cwe_iou) :=
   bool_gate (Qle_bool (edge_diss e (qr_eps q)) (qr_delta q)) (iou_issue q).
 
 Definition gate_pos (e : edge_spec) (q : query)
   : Or (Id (Qlt_bool 0 (edge_map e (qr_eps q))) true)
-       (And (Id (Qlt_bool 0 (edge_map e (qr_eps q))) false) iou) :=
+       (And (Id (Qlt_bool 0 (edge_map e (qr_eps q))) false) cwe_iou) :=
   bool_gate (Qlt_bool 0 (edge_map e (qr_eps q))) (iou_issue q).
 
 (* 命中证书：五证包（全 Set 层 Id-of-bool，可提取） *)
@@ -14005,7 +14005,7 @@ Definition hit_cert (e : edge_spec) (q : query) : Set :=
                 (Id (Qlt_bool 0 (edge_map e (qr_eps q))) true))).
 
 (* 单边兑换判定：全过发证书，任一门不过发借据（inr 带载荷） *)
-Definition resolve1 (e : edge_spec) (q : query) : Or (hit_cert e q) iou :=
+Definition resolve1 (e : edge_spec) (q : query) : Or (hit_cert e q) cwe_iou :=
   match gate_src e q with
   | inr p => inr (snd p)
   | inl h1 =>
@@ -14054,7 +14054,7 @@ Proof.
 Qed.
 
 (* 布尔门拒绝分支的载荷恒为借据本身 *)
-Lemma bool_gate_inr : forall (b : bool) (w : iou) (p1 : Id b false) (p2 : iou),
+Lemma bool_gate_inr : forall (b : bool) (w : cwe_iou) (p1 : Id b false) (p2 : cwe_iou),
   Id (bool_gate b w) (inr (p1, p2)) -> Id p2 w.
 Proof.
   intros b w p1 p2 H.
@@ -14066,10 +14066,10 @@ Proof.
 Qed.
 
 (* 件 5 主定理：单边未命中 ⟹ 借据携带缺口义务（from/to/eps/δ 全回指查询） *)
-Theorem resolve1_inr_fields : forall (e : edge_spec) (q : query) (r : iou),
+Theorem resolve1_inr_fields : forall (e : edge_spec) (q : query) (r : cwe_iou),
   Id (resolve1 e q) (inr r) ->
-  And (And (Id (iou_from r) (qr_from q)) (Id (iou_to r) (qr_to q)))
-      (And (Id (iou_eps r) (qr_eps q)) (Id (iou_delta r) (qr_delta q))).
+  And (And (Id (cwe_iou_from r) (qr_from q)) (Id (cwe_iou_to r) (qr_to q)))
+      (And (Id (cwe_iou_eps r) (qr_eps q)) (Id (cwe_iou_delta r) (qr_delta q))).
 Proof.
   intros e q r H. unfold resolve1 in H.
   destruct (gate_src e q) as [h1 | [p11 p12]] eqn:Ep1;
@@ -14140,7 +14140,7 @@ Qed.
 
 (* 图谱级兑换：Some e 走单边判定，None 签发借据 *)
 Definition resolve_opt (o : option edge_spec) (q : query)
-  : Or (sigT (fun e => hit_cert e q)) iou :=
+  : Or (sigT (fun e => hit_cert e q)) cwe_iou :=
   match o with
   | None => inr (iou_issue q)
   | Some e =>
@@ -14151,7 +14151,7 @@ Definition resolve_opt (o : option edge_spec) (q : query)
   end.
 
 Definition resolve (g : list edge_spec) (q : query)
-  : Or (sigT (fun e => hit_cert e q)) iou :=
+  : Or (sigT (fun e => hit_cert e q)) cwe_iou :=
   resolve_opt (find_serving g (qr_from q) (qr_to q)) q.
 
 Lemma resolve_opt_some : forall (e : edge_spec) (q : query) (w : hit_cert e q),
@@ -14175,10 +14175,10 @@ Proof.
 Qed.
 
 (* 件 5 图谱级形态：未命中 ⟹ 借据携带缺口义务 *)
-Theorem resolve_miss_iou : forall (g : list edge_spec) (q : query) (r : iou),
+Theorem resolve_miss_iou : forall (g : list edge_spec) (q : query) (r : cwe_iou),
   Id (resolve g q) (inr r) ->
-  And (And (Id (iou_from r) (qr_from q)) (Id (iou_to r) (qr_to q)))
-      (And (Id (iou_eps r) (qr_eps q)) (Id (iou_delta r) (qr_delta q))).
+  And (And (Id (cwe_iou_from r) (qr_from q)) (Id (cwe_iou_to r) (qr_to q)))
+      (And (Id (cwe_iou_eps r) (qr_eps q)) (Id (cwe_iou_delta r) (qr_delta q))).
 Proof.
   intros g q r H. unfold resolve, resolve_opt in H.
   destruct (find_serving g (qr_from q) (qr_to q)) as [e |].
@@ -14212,18 +14212,18 @@ Qed.
 (*   兑换不过门则借据原样再入（义务不灭，可携新边重试）。              *)
 (* ============================================================ *)
 
-Definition iou_query (io : iou) : query :=
-  mk_query (iou_ref io) (iou_from io) (iou_to io) (iou_eps io) (iou_delta io).
+Definition iou_query (io : cwe_iou) : query :=
+  mk_query (cwe_iou_ref io) (cwe_iou_from io) (cwe_iou_to io) (cwe_iou_eps io) (cwe_iou_delta io).
 
-Definition redeem (io : iou) (e : edge_spec) : Or (hit_cert e (iou_query io)) iou :=
+Definition cwe_redeem (io : cwe_iou) (e : edge_spec) : Or (hit_cert e (iou_query io)) cwe_iou :=
   resolve1 e (iou_query io).
 
-(* 再入：redeem 拒绝 ⟹ 返回借据的缺口字段与原借据逐位相同（义务持久） *)
-Theorem redeem_reissue : forall (io : iou) (e : edge_spec) (r : iou),
-  Id (redeem io e) (inr r) ->
-  And (And (Id (iou_from r) (iou_from io))
-           (And (Id (iou_to r) (iou_to io)) (Id (iou_eps r) (iou_eps io))))
-      (Id (iou_delta r) (iou_delta io)).
+(* 再入：cwe_redeem 拒绝 ⟹ 返回借据的缺口字段与原借据逐位相同（义务持久） *)
+Theorem redeem_reissue : forall (io : cwe_iou) (e : edge_spec) (r : cwe_iou),
+  Id (cwe_redeem io e) (inr r) ->
+  And (And (Id (cwe_iou_from r) (cwe_iou_from io))
+           (And (Id (cwe_iou_to r) (cwe_iou_to io)) (Id (cwe_iou_eps r) (cwe_iou_eps io))))
+      (Id (cwe_iou_delta r) (cwe_iou_delta io)).
 Proof.
   intros io e r H.
   pose proof H as H'.
@@ -14234,9 +14234,9 @@ Proof.
 Qed.
 
 (* 证成：借据被新边闭合 ⟹ 新边长入图谱且原查询命中（图谱成长定理） *)
-Theorem redeem_closes : forall (io : iou) (e : edge_spec) (g : list edge_spec)
+Theorem redeem_closes : forall (io : cwe_iou) (e : edge_spec) (g : list edge_spec)
                                (w : hit_cert e (iou_query io)),
-  Id (redeem io e) (inl w) ->
+  Id (cwe_redeem io e) (inl w) ->
   sigT (fun w2 => Id (resolve (e :: g) (iou_query io)) (inl w2)).
 Proof.
   intros io e g w Hred.
@@ -14262,7 +14262,7 @@ Qed.
 
 Inductive resolve_verdict : Set :=
 | rv_hit : edge_spec -> Q -> resolve_verdict
-| rv_miss : iou -> resolve_verdict.
+| rv_miss : cwe_iou -> resolve_verdict.
 
 Definition resolve_report (g : list edge_spec) (q : query) : resolve_verdict :=
   match find_serving g (qr_from q) (qr_to q) with
@@ -14315,29 +14315,29 @@ Proof. vm_compute. reflexivity. Qed.
 
 (* 反向查询无边：未命中 ⟹ 借据（缺口 fmt3→fmt0，回指查询 8） *)
 Theorem demo_miss_back : Id (resolve_report atlas3 q_back)
-  (rv_miss (mk_iou 3 0 1 1 8)).
+  (rv_miss (cwe_mk_iou 3 0 1 1 8)).
 Proof. vm_compute. reflexivity. Qed.
 
 (* 预算不足：耗散 7/8 > δ=1/2 ⟹ 借据（缺口 fmt0→fmt3，回指查询 9） *)
 Theorem demo_tight_iou : Id (resolve_report atlas3 q_tight)
-  (rv_miss (mk_iou 0 3 1 (1#2) 9)).
+  (rv_miss (cwe_mk_iou 0 3 1 (1#2) 9)).
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
 (* 件 5b 数值自测：借据再入——好边兑换闭合缺口，新边长入图谱          *)
 (* ============================================================ *)
 
-Definition demo_io_tight : iou := mk_iou 0 3 1 (1#2) 9.
+Definition demo_io_tight : cwe_iou := cwe_mk_iou 0 3 1 (1#2) 9.
 
 (* 好边：fmt0→fmt3 斜率 15/16 —— 耗散 1/16 ≤ 1/2，出参 15/16 > 0 *)
 Definition e_good : edge_spec := mk_edge 4 0 3 (15#16) 0.
 
-(* redeem：借据 demo_io_tight 被 e_good 证成（五证全过） *)
+(* cwe_redeem：借据 demo_io_tight 被 e_good 证成（五证全过） *)
 Definition cert_good : hit_cert e_good (iou_query demo_io_tight) :=
   ((@id_refl bool true, @id_refl bool true),
    (@id_refl bool true, (@id_refl bool true, @id_refl bool true))).
 
-Theorem demo_redeem_ok : Id (redeem demo_io_tight e_good) (inl cert_good).
+Theorem demo_redeem_ok : Id (cwe_redeem demo_io_tight e_good) (inl cert_good).
 Proof. vm_compute. reflexivity. Qed.
 
 (* redeem_closes 数值实例：新边长入图谱后，原查询 9 命中 e_good *)
@@ -14351,10 +14351,10 @@ Proof. vm_compute. reflexivity. Qed.
 Definition e_bad : edge_spec := mk_edge 5 0 3 (15#16) (-1).
 
 Theorem demo_redeem_reissue :
-  sigT (fun r => Id (redeem demo_io_tight e_bad) (inr r)).
+  sigT (fun r => Id (cwe_redeem demo_io_tight e_bad) (inr r)).
 Proof.
   exists (iou_issue (iou_query demo_io_tight)).
-  unfold redeem. vm_compute. reflexivity.
+  unfold cwe_redeem. vm_compute. reflexivity.
 Qed.
 
 (* ============================================================ *)
@@ -14414,7 +14414,7 @@ Local Open Scope Q_scope.
 (* §0 本地桥（nat 序 / bool 反映 / Q 换形；宪法席解法口径）          *)
 (* ============================================================ *)
 
-(* NatLt 双向桥（CW_ConstructiveWorld_219.NatLt = Id (Nat.ltb n m) true；       *)
+(* NatLt 双向桥（NatLt = Id (Nat.ltb n m) true；       *)
 (*   库内 natlt_elim/intro 困在 LiveCore section 不可达，本地重建）   *)
 Lemma st_natlt_drop : forall n m : nat, NatLt n m -> (n < m)%nat.
 Proof.

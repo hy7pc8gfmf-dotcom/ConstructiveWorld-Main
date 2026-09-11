@@ -1,0 +1,2 @@
+Require Import CW_ConstructiveWorld_219.
+Print Assumptions real_exp_diff_with_deriv_self.

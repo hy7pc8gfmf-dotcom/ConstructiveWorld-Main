@@ -32,7 +32,7 @@
      agq_abs_kernel_bound<-29104(对位u_abs_row) agq_iter_norm<-29266(对位u_titer_norm)
      agq_tv_contraction<-29195(旗舰·对位u_tv_contraction两点强于单点 +
        稳态目标端换轨（p_steady_i 槽 + agq_tv_compat_r：step(p) ≡ p 逐点）；
-       req 形删非负前提位——同 u_tv_contraction 判，收缩主界不消费非负位)
+       req 形删非负前提位——同 rsq_u_tv_contraction 判，收缩主界不消费非负位)
    【单点特有 9 件·真证/组装（UpReqSampling 两点机不产出）】
      agq_p_norm<-28802(基带 setoid 件为 Id 形另席交付；本节 sumf 自持重建)
      agq_p_pos<-29012 agq_p_kernel_fixed<-29040(稳态不变性 p·Q==p：
@@ -52,7 +52,7 @@
      agq_r_pow_dec_iter<-29251(nat 层 lia/Nat.leb 与 Id 原件同构——Prop 位
        与 Id 原件同阶，先例 UpReqSampling 台账 7)
      agq_tv_iter<-29287(旗舰2·归纳重放：底 case 数乘单位换轨 + 递归步
-       req_le_mult_compat_r 对位；目标端稳态固定，两点 u_tv_iter 不直接产出)
+       req_le_mult_compat_r 对位；目标端稳态固定，两点 rsq_u_tv_iter 不直接产出)
      agq_iterate_converges<-29330(旗舰3·真证：arch_pow 槽位放电 +
        le_mult_compat_weak + lt_id_l 换序收口)
    【节参位 1】arch_pow_i<-29247(Id r_arch_pow_attn 诚实接口槽逐位保留；
@@ -166,10 +166,10 @@ Variable arch_pow_i :
 
 Let omd := req_minus one delta.
 
-(* 1−δ > 0（@28793 边界邻接件顺带核销；对位消费 u_omd_pos_next） *)
+(* 1−δ > 0（@28793 边界邻接件顺带核销；对位消费 rsq_u_omd_pos_next） *)
 Lemma agq_omd_pos : lt zero omd.
 Proof.
-  exact (@u_omd_pos_next R RIS delta delta_lt_one lt_plus_compat_lt_le_i).
+  exact (@rsq_u_omd_pos_next R RIS delta delta_lt_one lt_plus_compat_lt_le_i).
 Qed.
 
 Let inv_omd := inv_pos omd agq_omd_pos.
@@ -182,12 +182,12 @@ Definition tv_i (mu nu : S -> R) : R :=
 Definition attention_step_i (mu : S -> R) (s' : S) : R :=
   sumf (fun s : S => mult (mu s) (transition s s')).
 
-(* Q 核（Id q_kernel @28812 req 形）：定义性绑定 = ReqUContraction u_r_kernel
+(* Q 核（Id q_kernel @28812 req 形）：定义性绑定 = ReqUContraction rsq_u_r_kernel
    全参实例（inv 位见证 proof-relevant，δ 体同构 req (mult inv_omd
    (req_minus (transition s s') (mult delta (boltzmann_dist_i s'))))，
    绑定式避免见证位 conversion 断链——先例 ReqSampling4 k_step 直绑核） *)
 Definition q_kernel_i (s s' : S) : R :=
-  @u_r_kernel R RIS S boltzmann_dist_i delta delta_lt_one transition
+  @rsq_u_r_kernel R RIS S boltzmann_dist_i delta delta_lt_one transition
     lt_plus_compat_lt_le_i s s'.
 
 Fixpoint attention_iter_i (n : nat) (mu : S -> R) : S -> R :=
@@ -337,43 +337,43 @@ Qed.
 (* ---- 脊柱十件（对位消费 UpReqSampling.ReqUContraction 出节件；
    u := boltzmann_dist_i，q_kernel_i/attention_step_i/tv_i δ 透明合一） ---- *)
 
-(* Q 核逐点非负（@28817；对位 u_r_nonneg） *)
+(* Q 核逐点非负（@28817；对位 rsq_u_r_nonneg） *)
 Lemma agq_kernel_nonneg : forall s s' : S, le zero (q_kernel_i s s').
 Proof.
   intros s s'.
-  exact (@u_r_nonneg R RIS S boltzmann_dist_i delta delta_lt_one transition
+  exact (@rsq_u_r_nonneg R RIS S boltzmann_dist_i delta delta_lt_one transition
            minorization lt_plus_compat_lt_le_i s s').
 Qed.
 
-(* Q 核行归一（@28829；对位 u_r_norm） *)
+(* Q 核行归一（@28829；对位 rsq_u_r_norm） *)
 Lemma agq_kernel_row :
   forall s : S, req (sumf (fun s' : S => q_kernel_i s s')) one.
 Proof.
   intro s.
-  exact (@u_r_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
+  exact (@rsq_u_r_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
            agq_p_norm delta delta_lt_one transition transition_row_i
            lt_plus_compat_lt_le_i s).
 Qed.
 
-(* T == δ·p + (1−δ)·Q（@28848；对位 u_tr_decomp） *)
+(* T == δ·p + (1−δ)·Q（@28848；对位 rsq_u_tr_decomp） *)
 Lemma agq_tr_decomp : forall s s' : S,
   req (transition s s')
       (plus (mult delta (boltzmann_dist_i s'))
             (mult omd (q_kernel_i s s'))).
 Proof.
   intros s s'.
-  exact (@u_tr_decomp R RIS S boltzmann_dist_i delta delta_lt_one transition
+  exact (@rsq_u_tr_decomp R RIS S boltzmann_dist_i delta delta_lt_one transition
            lt_plus_compat_lt_le_i s s').
 Qed.
 
-(* δ·a + (1−δ)·a == a（@28874；对位 delta_absorb_u） *)
+(* δ·a + (1−δ)·a == a（@28874；对位 rsq_delta_absorb_u） *)
 Lemma agq_delta_absorb : forall a : R,
   req (plus (mult delta a) (mult omd a)) a.
 Proof.
-  intro a. exact (@delta_absorb_u R RIS delta a).
+  intro a. exact (@rsq_delta_absorb_u R RIS delta a).
 Qed.
 
-(* 单步分解：Tμ == δ·p + (1−δ)·Qμ（@28896；对位 u_step_decomp） *)
+(* 单步分解：Tμ == δ·p + (1−δ)·Qμ（@28896；对位 rsq_u_step_decomp） *)
 Lemma agq_step_decomp : forall (mu : S -> R) (s' : S),
   req (sumf mu) one ->
   req (attention_step_i mu s')
@@ -381,39 +381,39 @@ Lemma agq_step_decomp : forall (mu : S -> R) (s' : S),
             (mult omd (sumf (fun s : S => mult (mu s) (q_kernel_i s s'))))).
 Proof.
   intros mu s' Hmu.
-  exact (@u_step_decomp R RIS S sumf sum_ext sum_linear sum_add
+  exact (@rsq_u_step_decomp R RIS S sumf sum_ext sum_linear sum_add
            boltzmann_dist_i delta delta_lt_one transition
            lt_plus_compat_lt_le_i mu s' Hmu).
 Qed.
 
-(* 单步保持归一化（@28931；对位 u_step_norm） *)
+(* 单步保持归一化（@28931；对位 rsq_u_step_norm） *)
 Lemma agq_step_norm : forall mu : S -> R,
   req (sumf mu) one -> req (sumf (fun s' : S => attention_step_i mu s')) one.
 Proof.
   intros mu Hmu.
-  exact (@u_step_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
+  exact (@rsq_u_step_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
            agq_p_norm delta delta_lt_one transition transition_row_i
            sum_swap_i lt_plus_compat_lt_le_i mu Hmu).
 Qed.
 
-(* |Σ f·Q| ≤ Σ |f|·Q（@29104；对位 u_abs_row） *)
+(* |Σ f·Q| ≤ Σ |f|·Q（@29104；对位 rsq_u_abs_row） *)
 Lemma agq_abs_kernel_bound : forall (f : S -> R) (s' : S),
   le (abs (sumf (fun s : S => mult (f s) (q_kernel_i s s'))))
      (sumf (fun s : S => mult (abs (f s)) (q_kernel_i s s'))).
 Proof.
   intros f s'.
-  exact (@u_abs_row R RIS S sumf sum_ext abs_sum_le_h boltzmann_dist_i delta
+  exact (@rsq_u_abs_row R RIS S sumf sum_ext abs_sum_le_h boltzmann_dist_i delta
            delta_lt_one transition minorization abs_ge_zero_i
            lt_plus_compat_lt_le_i f s').
 Qed.
 
-(* 迭代保持归一化（@29266；对位 u_titer_norm；attention_iter_i 与
-   u_titer 在 transition 合一处 Fixpoint 结构 convertible） *)
+(* 迭代保持归一化（@29266；对位 rsq_u_titer_norm；attention_iter_i 与
+   rsq_u_titer 在 transition 合一处 Fixpoint 结构 convertible） *)
 Lemma agq_iter_norm : forall (n : nat) (mu : S -> R),
   req (sumf mu) one -> req (sumf (attention_iter_i n mu)) one.
 Proof.
   intros n mu Hmu.
-  exact (@u_titer_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
+  exact (@rsq_u_titer_norm R RIS S sumf sum_ext sum_linear sum_add boltzmann_dist_i
            agq_p_norm delta delta_lt_one transition transition_row_i
            sum_swap_i lt_plus_compat_lt_le_i n mu Hmu).
 Qed.
@@ -431,9 +431,9 @@ Proof.
 Qed.
 
 (* ========== 旗舰 1：单步 TV 收缩（@29195）==========
-   对位消费 u_tv_contraction 两点形于 nu := p + 稳态目标端换轨
+   对位消费 rsq_u_tv_contraction 两点形于 nu := p + 稳态目标端换轨
    （p_steady_i 槽：step(p) ≡ p 逐点）；req 形删非负前提位——同
-   u_tv_contraction 判。 *)
+   rsq_u_tv_contraction 判。 *)
 Lemma agq_tv_contraction : forall mu : S -> R,
   req (sumf mu) one ->
   le (tv_i (attention_step_i mu) boltzmann_dist_i)
@@ -445,7 +445,7 @@ Proof.
               (agq_tv_compat_r (attention_step_i mu)
                  (attention_step_i boltzmann_dist_i) boltzmann_dist_i
                  p_steady_i))).
-  exact (@u_tv_contraction R RIS S sumf sum_ext sum_linear sum_add sum_le
+  exact (@rsq_u_tv_contraction R RIS S sumf sum_ext sum_linear sum_add sum_le
            abs_sum_le_h boltzmann_dist_i agq_p_norm delta delta_lt_one
            transition transition_row_i minorization sum_swap_i abs_ge_zero_i
            lt_plus_compat_lt_le_i mu boltzmann_dist_i Hmu agq_p_norm).

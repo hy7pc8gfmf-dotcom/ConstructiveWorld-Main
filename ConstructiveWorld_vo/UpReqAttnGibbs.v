@@ -93,6 +93,15 @@
         一行组装。
      6. eviction_db_breaking_bound<-29385 / eviction_db_zero_full<-29573：
         禁区（RestB ReqKVQuantWorld 领地，首席冻结清单明示）。
+        ——分歧清偿席 2026-09-09 语句级比对更正：RestB 交付件
+        req_db_breaking_bound_eps@UpReqAlignRestB.v 自述对位为 L54841
+        real_db_breaking_bound_eps（Real 层 RealKVQuantMain 节），与
+        @29385 语句级异形（能量积界 vs invZ·T·(E·(U·eU)+(E·eps+eps'))
+        界；假设面 节 Variable vs keep/eps），对位核销不立 →
+        eviction_db_breaking_bound 维持冻结终态；eviction_db_zero_full
+        引擎件（ag_eviction_transition_full/@29540 +
+        ag_eviction_boltzmann_full/@29555）中后段已交付，由本席尾增量节
+        解冻交付 ag_eviction_db_zero_full（见分歧清偿增量节头注）。
      7. q_kernel/attention_step/收缩迭代簇<-28817-29330：他席领地，
         本席未触碰。
    【非平凡性分级（中后段）】真证：ag_attention_is_gibbs_temp（exp 兼容
@@ -2231,6 +2240,102 @@ Proof.
                       (mult (inv_pos T T_pos) gamma))
                 (Hkap gamma))
              HN).
+Qed.
+
+(* ============================================================ *)
+(* 【分歧清偿增量节】（分歧清偿席 2026-09-09；总账 v1.4 批4 分歧表   *)
+(*   3 行清偿之行 2/行 3 建设落位；行 1 异形判定维持冻结终态）       *)
+(*   Id 原件摘录（CW219）：                                        *)
+(*   行3 @28494 Definition partition_function_temp_param (T0 : R)   *)
+(*     (HT0 : lt zero T0) (z : logits) := sum_over_S (fun s =>      *)
+(*     exp_pos_fn (mult (inv_pos T0 HT0) (z s)))；                  *)
+(*      @28500 Lemma partition_function_temp_param_pos :            *)
+(*     forall T0 HT0 z, lt zero (partition_function_temp_param      *)
+(*     T0 HT0 z)（证：sum_pos_preserved + exp_neg_pos）。            *)
+(*   行2 @29573 Theorem eviction_db_zero_full : (forall s, keep s)  *)
+(*     -> Id evicted_partition Z_thermo -> forall s s' : S,         *)
+(*     Id (db_breaking s s') zero（证：eviction_boltzmann_full +    *)
+(*     eviction_transition_full + detailed_balance @28714 节        *)
+(*     Variable + minus_self_zero + abs_zero）。                    *)
+(*   Id→req 差异台账（真证非抄写，沿 63 件先例同款）：               *)
+(*     - sum_over_S→sumf（节内三性质诚实接口）+ sum_pos_preserved→   *)
+(*       sum_pos 槽；exp_pos_fn→exp_pos_fn_setoid（req 镜像）；      *)
+(*     - minus→req_minus（UpReqAlgebra L728 req_minus_self_zero），  *)
+(*       Id 恒等链→req_trans 链 + req_mult_compat 双腿；             *)
+(*     - detailed_balance（Id 节 Variable）→detailed_balance_r       *)
+(*       诚实 Hypothesis 逐位镜像（Id→req）；                        *)
+(*     - abs 消去：接口字段 abs_zero（req (abs zero) zero）经        *)
+(*       req_abs_compat 拉回，零新公理。                             *)
+(*   禁区注记更正：头注冻结清单6 / L662 禁区扣除注记由本节更正——     *)
+(*     行1（@29385）异形维持冻结；行2（@29573）解冻交付。            *)
+(* ============================================================ *)
+
+(* ---- 行3：温度参数化配分函数（Id @28494 镜像） ---- *)
+Definition partition_function_temp_param_r (T0 : R) (HT0 : lt zero T0)
+  (z : S -> R) : R :=
+  sumf (fun s : S => exp_pos_fn_setoid (mult (inv_pos T0 HT0) (z s))).
+
+(* ---- 行3 对位件（Id @28500；真证：sum_pos 槽 + exp_neg_pos，
+   与首段 ag_partition_function_temp_pos 同款证法） ---- *)
+Lemma ag_partition_function_temp_param_pos :
+  forall (T0 : R) (HT0 : lt zero T0) (z : S -> R),
+    lt zero (partition_function_temp_param_r T0 HT0 z).
+Proof.
+  intros T0 HT0 z.
+  unfold partition_function_temp_param_r.
+  apply sum_pos.
+  intro s. exact (exp_neg_pos (opp (mult (inv_pos T0 HT0) (z s)))).
+Qed.
+
+(* ---- detailed_balance 诚实接口位（Id @28714 节 Variable req 逐位
+   镜像；boltzmann_dist_attn→boltzmann_dist_attn_r，Id→req） ---- *)
+Hypothesis detailed_balance_r :
+  forall s s' : S,
+    req (mult (boltzmann_dist_attn_r s) (transition s s'))
+        (mult (boltzmann_dist_attn_r s') (transition s' s)).
+
+(* ---- 行2 对位件（Id @29573；全保留 ⟹ 破缺归零——逐出是破缺唯一
+   来源。组装真证：ag_eviction_boltzmann_full（@29555 对位）+
+   ag_eviction_transition_full（@29540 对位）+ detailed_balance_r +
+   req_minus_self_zero + req_abs_compat/abs_zero——零新公理） ---- *)
+Theorem ag_eviction_db_zero_full :
+  (forall s : S, keep s) ->
+  req evicted_partition_r Z_thermo_r ->
+  forall s s' : S, req (db_breaking_r s s') zero.
+Proof.
+  intros Hkall HZ s s'.
+  unfold db_breaking_r.
+  assert (Heb : forall t : S, req (evicted_boltzmann_r t) (boltzmann_dist_attn_r t))
+    by exact (ag_eviction_boltzmann_full Hkall HZ).
+  assert (Het : forall t u : S, req (evicted_transition_r t u) (transition t u))
+    by exact (ag_eviction_transition_full Hkall).
+  assert (Harg : req (req_minus (mult (evicted_boltzmann_r s) (evicted_transition_r s s'))
+                                (mult (evicted_boltzmann_r s') (evicted_transition_r s' s)))
+                     zero).
+  { apply (req_minus_self_zero
+             (mult (evicted_boltzmann_r s) (evicted_transition_r s s'))
+             (mult (evicted_boltzmann_r s') (evicted_transition_r s' s))).
+    apply (req_trans
+             (mult (evicted_boltzmann_r s) (evicted_transition_r s s'))
+             (mult (boltzmann_dist_attn_r s) (transition s s'))
+             (mult (evicted_boltzmann_r s') (evicted_transition_r s' s))).
+    - exact (req_mult_compat (evicted_boltzmann_r s) (boltzmann_dist_attn_r s)
+                (evicted_transition_r s s') (transition s s')
+                (Heb s) (Het s s')).
+    - apply (req_trans
+               (mult (boltzmann_dist_attn_r s) (transition s s'))
+               (mult (boltzmann_dist_attn_r s') (transition s' s))
+               (mult (evicted_boltzmann_r s') (evicted_transition_r s' s))).
+      + exact (detailed_balance_r s s').
+      + exact (req_sym _ _
+                  (req_mult_compat (evicted_boltzmann_r s') (boltzmann_dist_attn_r s')
+                    (evicted_transition_r s' s) (transition s' s)
+                    (Heb s') (Het s' s))). }
+  exact (req_trans
+           (abs (req_minus (mult (evicted_boltzmann_r s) (evicted_transition_r s s'))
+                           (mult (evicted_boltzmann_r s') (evicted_transition_r s' s))))
+           (abs zero) zero
+           (req_abs_compat _ _ Harg) abs_zero).
 Qed.
 
 End ReqAttnGibbs.

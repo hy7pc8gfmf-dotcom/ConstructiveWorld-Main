@@ -42,18 +42,18 @@ Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
 (* ---- 节内定义（setoid 惯例形态） ---- *)
-Definition positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
-Definition boltzmann_dist : S -> R :=
+Definition sigm_positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
+Definition sigm_boltzmann_dist : S -> R :=
   fun s => mult (inv_pos Z Z_pos) (exp_neg (mult (inv_pos D D_pos) (base_loss s))).
 (* log 族带正性前提（setoid 接口 L40570），故 free_energy 限定在正性分布上 *)
-Definition free_energy (p : S -> R) (Hp : positive_dist p) : R :=
+Definition sigm_free_energy (p : S -> R) (Hp : sigm_positive_dist p) : R :=
   plus (sumf (fun s => mult (p s) (base_loss s)))
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
-Definition normalized (p : S -> R) : Set := req (sumf p) one.
+Definition sigm_normalized (p : S -> R) : Set := req (sumf p) one.
 Definition rminus (a b : R) : R := plus a (opp b).
 
 (* ---- Boltzmann 分布正性（setoid log 前提所需；接口字段直接组装） ---- *)
-Lemma req_boltzmann_positive : positive_dist boltzmann_dist.
+Lemma req_boltzmann_positive : sigm_positive_dist sigm_boltzmann_dist.
 Proof.
   intro s.
   apply mult_positive.
@@ -65,10 +65,10 @@ Qed.
 Hypothesis energy_in_log_boltzmann_bridge :
   forall s : S,
     req (base_loss s)
-        (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s))
+        (opp (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))
                            (log Z Z_pos)))).
 Hypothesis free_energy_boltzmann_bridge :
-  req (free_energy boltzmann_dist req_boltzmann_positive)
+  req (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive)
       (mult (opp D) (log Z Z_pos)).
 
 (* ============================================================ *)
@@ -241,9 +241,9 @@ Proof.
 Qed.
 
 (* Boltzmann 分布归一化（Id 原件 L15846 boltzmann_normalized 的 req 版） *)
-Lemma req_boltzmann_normalized : req (sumf boltzmann_dist) one.
+Lemma req_boltzmann_normalized : req (sumf sigm_boltzmann_dist) one.
 Proof.
-  apply (req_trans (sumf boltzmann_dist)
+  apply (req_trans (sumf sigm_boltzmann_dist)
                    (mult (inv_pos Z Z_pos)
                          (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))))
                    one).
@@ -268,94 +268,94 @@ Qed.
 (* ============================================================ *)
 Lemma req_p_times_energy_decomp :
   forall (p : S -> R) (s : S),
-    req (mult (p s) (base_loss s)) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos))))).
+    req (mult (p s) (base_loss s)) (plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos))))).
 Proof.
   intros p s.
-  assert (HlegA : req (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
-  { apply (req_trans (mult (p s) (base_loss s)) (mult (p s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
-    - apply (req_mult_compat (p s) (p s) (base_loss s) (opp (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+  assert (HlegA : req (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
+  { apply (req_trans (mult (p s) (base_loss s)) (mult (p s) (opp (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))))).
+    - apply (req_mult_compat (p s) (p s) (base_loss s) (opp (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
       * apply req_refl.
       * apply (energy_in_log_boltzmann_bridge s).
-    - apply (req_mult_opp_l (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
-  assert (Hswap : req (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
-  { apply (req_trans (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult (p s) D) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+    - apply (req_mult_opp_l (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
+  assert (Hswap : req (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+  { apply (req_trans (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult (p s) D) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
     - apply mult_assoc.
-      - apply (req_trans (mult (mult (p s) D) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
-        * apply (req_mult_compat (mult (p s) D) (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
+      - apply (req_trans (mult (mult (p s) D) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult (mult D (p s)) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))).
+        * apply (req_mult_compat (mult (p s) D) (mult D (p s)) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))).
           { apply mult_comm. }
           { apply req_refl. }
-        * apply (req_sym (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult D (p s)) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). apply mult_assoc.
+        * apply (req_sym (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult (mult D (p s)) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). apply mult_assoc.
   }
-  assert (Hdist2 : req (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
-  { apply (req_trans (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
-    - apply (req_mult_compat D D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (plus (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))).
+  assert (Hdist2 : req (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
+  { apply (req_trans (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (plus (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))).
+    - apply (req_mult_compat D D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))) (plus (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))).
       + apply req_refl.
       + apply distrib.
     - apply distrib. }
-  apply (req_trans (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+  apply (req_trans (mult (p s) (base_loss s)) (opp (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
   - exact HlegA.
-  - apply (req_trans (opp (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
-    + apply (req_opp_compat (mult (p s) (mult D (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))). exact Hswap.
-    + apply (req_trans (opp (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
-      * apply (req_opp_compat (mult D (mult (p s) (plus (log (boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))). exact Hdist2.
+  - apply (req_trans (opp (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+    + apply (req_opp_compat (mult (p s) (mult D (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))). exact Hswap.
+    + apply (req_trans (opp (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos))))) (opp (plus (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))) (plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))) (opp (mult D (mult (p s) (log Z Z_pos)))))).
+      * apply (req_opp_compat (mult D (mult (p s) (plus (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))) (plus (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))) (mult D (mult (p s) (log Z Z_pos))))). exact Hdist2.
       * apply req_opp_plus.
 Qed.
 (* ============================================================ *)
 (* D. 旗舰迁移：req_free_energy_kl_decomp                        *)
 (*    F[p] == F[p_b] + D·KL(p‖p_b)（Id 原件 L16259 的 setoid 签名版） *)
-(*    记号：lgpb s := log (boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
+(*    记号：lgpb s := log (sigm_boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
 (*    A := D·Σ p·lgpb；B := D·Σ p·lgps；DlgZ := D·log Z；        *)
-(*    KL := fun s => p s · (lgps s − lgpb s)；Fpb := free_energy p_b *)
+(*    KL := fun s => p s · (lgps s − lgpb s)；Fpb := sigm_free_energy p_b *)
 (* ============================================================ *)
 Theorem req_free_energy_kl_decomp :
-  forall (p : S -> R) (Hp : normalized p) (p0 : positive_dist p),
-    req (free_energy p p0)
-        (plus (free_energy boltzmann_dist req_boltzmann_positive)
+  forall (p : S -> R) (Hp : sigm_normalized p) (p0 : sigm_positive_dist p),
+    req (sigm_free_energy p p0)
+        (plus (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive)
               (mult D (sumf (fun s =>
                 mult (p s) (rminus (log (p s) (p0 s))
-                                   (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                                   (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
 Proof.
   intros p Hp p0.
   (* 桥：F[p_b] == mult (opp D) lgZ == opp (D·lgZ)（Id 系步骤 2 的 req 形态） *)
-  assert (Hfb' : req (free_energy boltzmann_dist req_boltzmann_positive)
+  assert (Hfb' : req (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive)
                      (opp (mult D (log Z Z_pos)))).
-  { apply (req_trans (free_energy boltzmann_dist req_boltzmann_positive)
+  { apply (req_trans (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive)
                      (mult (opp D) (log Z Z_pos))
                      (opp (mult D (log Z Z_pos)))).
     - exact free_energy_boltzmann_bridge.
     - apply req_opp_mult_l. }
   (* 步骤 1：Σ p·E == opp A + opp DlgZ（Id 原件 Hse） *)
   assert (Hse : req (sumf (fun s => mult (p s) (base_loss s)))
-                    (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                    (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                           (opp (mult D (log Z Z_pos))))).
   { apply (req_trans (sumf (fun s => mult (p s) (base_loss s)))
-                     (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                     (sumf (fun s => plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                                           (opp (mult D (mult (p s) (log Z Z_pos))))))
-                     (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                     (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                            (opp (mult D (log Z Z_pos))))).
     - apply (sum_ext (fun s => mult (p s) (base_loss s))
-                     (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                     (fun s => plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                                     (opp (mult D (mult (p s) (log Z Z_pos)))))).
       { intro s. apply req_p_times_energy_decomp. }
-    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+    - apply (req_trans (sumf (fun s => plus (opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                                             (opp (mult D (mult (p s) (log Z Z_pos))))))
-                       (plus (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (plus (sumf (fun s => opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                              (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos))))))
-                       (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                       (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                              (opp (mult D (log Z Z_pos))))).
       { apply sum_add. }
-      { apply (req_plus_compat (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                               (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+      { apply (req_plus_compat (sumf (fun s => opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
+                               (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                                (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos)))))
                                (opp (mult D (log Z Z_pos)))).
         - (* Σ opp(D·p·lgpb) == opp(D·Σ p·lgpb)：sum_opp + D 线性提取 *)
-          apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (sumf (fun s => mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+          apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (sumf (fun s => mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
           { apply req_sum_opp. }
-          { apply (req_opp_compat (sumf (fun s => mult D (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                                  (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
-            { apply (sum_linear D (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))). } }
+          { apply (req_opp_compat (sumf (fun s => mult D (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
+                                  (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
+            { apply (sum_linear D (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))). } }
         - (* Σ opp(D·p·lgZ) == opp(D·lgZ)：sum_opp + D 线性 + Σ p·lgZ = lgZ·Σp = lgZ 归一化链 *)
           apply (req_trans (sumf (fun s => opp (mult D (mult (p s) (log Z Z_pos)))))
                            (opp (sumf (fun s => mult D (mult (p s) (log Z Z_pos)))))
@@ -391,73 +391,73 @@ Proof.
   }
   (* 步骤 3：D·KL == B + opp A（Id 原件 Hkl） *)
   assert (Hkl : req (mult D (sumf (fun s =>
-                      mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                      mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                     (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                          (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                          (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))).
   { assert (Hpt2 : forall s : S,
-        req (mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))
+        req (mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))
             (plus (mult (p s) (log (p s) (p0 s)))
-                  (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                  (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
     { intro s. unfold rminus.
-      apply (req_trans (mult (p s) (plus (log (p s) (p0 s)) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                       (plus (mult (p s) (log (p s) (p0 s))) (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+      apply (req_trans (mult (p s) (plus (log (p s) (p0 s)) (opp (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
+                       (plus (mult (p s) (log (p s) (p0 s))) (mult (p s) (opp (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                        (plus (mult (p s) (log (p s) (p0 s)))
-                             (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                             (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
       { apply distrib. }
       { apply (req_plus_compat (mult (p s) (log (p s) (p0 s))) (mult (p s) (log (p s) (p0 s)))
-                               (mult (p s) (opp (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                               (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))).
+                               (mult (p s) (opp (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))
+                               (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))).
         { apply req_refl. }
         { apply req_mult_opp_l. } } }
-    assert (Hinner : req (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+    assert (Hinner : req (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                          (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                               (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-    { apply (req_trans (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                       (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+                               (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
+    { apply (req_trans (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
+                       (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                        (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                             (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-      { apply (sum_ext (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))
-                       (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                             (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
+      { apply (sum_ext (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))
+                       (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
         { exact Hpt2. } }
-      { apply (req_trans (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                         (plus (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+      { apply (req_trans (sumf (fun s => plus (mult (p s) (log (p s) (p0 s))) (opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
+                         (plus (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                          (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                               (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                               (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
         { apply sum_add. }
         { apply (req_plus_compat (sumf (fun s => mult (p s) (log (p s) (p0 s)))) (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                 (sumf (fun s => opp (mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
-                                 (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+                                 (sumf (fun s => opp (mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
+                                 (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
           { apply req_refl. }
           { apply req_sum_opp. } } } }
-    apply (req_trans (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
+    apply (req_trans (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
                      (mult D (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                   (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                           (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { apply (req_mult_compat D D
-                             (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))
+                             (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))
                              (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                                   (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
       { apply req_refl. }
       { exact Hinner. } }
     apply (req_trans (mult D (plus (sumf (fun s => mult (p s) (log (p s) (p0 s))))
-                                   (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                                   (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (mult D (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))
+                           (mult D (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))
                      (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+                           (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { apply distrib. }
     apply (req_plus_compat (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
                            (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))
-                           (mult D (opp (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))
-                           (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
+                           (mult D (opp (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))
+                           (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
     { apply req_refl. }
     { apply req_mult_opp_l. } }
 
   (* 步骤 4：环代数坍缩（Id 原件 Hfin：(opp A + opp DlgZ) + B → opp DlgZ + (B + opp A)） *)
-  assert (Hfin : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
-                     (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))))).
-  { set (A := (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))).
+  assert (Hfin : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
+                     (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))))).
+  { set (A := (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))).
     set (DlgZ := (mult D (log Z Z_pos))).
     set (B := (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
     apply (req_trans (plus (plus (opp A) (opp DlgZ)) B)
@@ -483,20 +483,20 @@ Proof.
       { apply plus_comm. }
       { apply req_refl. } }
     apply plus_comm. }
-  (* 总装：Hleg1（free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
-  assert (Hleg1 : req (free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
-  { unfold free_energy.
-    apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
+  (* 总装：Hleg1（sigm_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
+  assert (Hleg1 : req (sigm_free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
+  { unfold sigm_free_energy.
+    apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
     { exact Hse. }
     { apply req_refl. } }
-  assert (Hleg2 : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))) (plus (free_energy boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
-  { apply (req_trans (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
-                      (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))))
-                      (plus (free_energy boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))).
+  assert (Hleg2 : req (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))) (plus (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))).
+  { apply (req_trans (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))
+                      (plus (opp (mult D (log Z Z_pos))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))))
+                      (plus (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))).
     { exact Hfin. }
-    { apply (req_plus_compat (opp (mult D (log Z Z_pos))) (free_energy boltzmann_dist req_boltzmann_positive) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s))))))).
-      { apply (req_sym (free_energy boltzmann_dist req_boltzmann_positive) (opp (mult D (log Z Z_pos)))). exact Hfb'. }
-      { apply (req_sym (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (boltzmann_dist s) (req_boltzmann_positive s)))))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist s) (req_boltzmann_positive s)))))))). exact Hkl. } } }
+    { apply (req_plus_compat (opp (mult D (log Z Z_pos))) (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))) (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s))))))).
+      { apply (req_sym (sigm_free_energy sigm_boltzmann_dist req_boltzmann_positive) (opp (mult D (log Z Z_pos)))). exact Hfb'. }
+      { apply (req_sym (mult D (sumf (fun s => mult (p s) (rminus (log (p s) (p0 s)) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (plus (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))))). exact Hkl. } } }
   exact (req_trans _ _ _ Hleg1 Hleg2).
 Qed.
 
@@ -527,25 +527,25 @@ Variable D_pos : lt zero D.
 Variable energy : S -> R.
 Variable z : S -> R.
 
-Definition exp_pos_fn (x : R) : R := exp_neg (opp x).
-Definition partition_function_temp : R :=
-  sumf (fun s => exp_pos_fn (mult (inv_pos T T_pos) (z s))).
-Hypothesis partition_function_temp_pos : lt zero partition_function_temp.
-Definition softmax_temp (s : S) : R :=
-  mult (exp_pos_fn (mult (inv_pos T T_pos) (z s)))
-       (inv_pos partition_function_temp partition_function_temp_pos).
-Definition boltzmann_factor (s : S) : R :=
+Definition sigm_exp_pos_fn (x : R) : R := exp_neg (opp x).
+Definition sigm_partition_function_temp : R :=
+  sumf (fun s => sigm_exp_pos_fn (mult (inv_pos T T_pos) (z s))).
+Hypothesis partition_function_temp_pos : lt zero sigm_partition_function_temp.
+Definition sigm_softmax_temp (s : S) : R :=
+  mult (sigm_exp_pos_fn (mult (inv_pos T T_pos) (z s)))
+       (inv_pos sigm_partition_function_temp partition_function_temp_pos).
+Definition sigm_boltzmann_factor (s : S) : R :=
   exp_neg (mult (inv_pos D D_pos) (energy s)).
-Definition Z_thermo : R := sumf boltzmann_factor.
-Variable Z_thermo_pos : lt zero Z_thermo.
-Definition boltzmann_dist_attn (s : S) : R :=
-  mult (inv_pos Z_thermo Z_thermo_pos) (boltzmann_factor s).
+Definition sigm_Z_thermo : R := sumf sigm_boltzmann_factor.
+Variable Z_thermo_pos : lt zero sigm_Z_thermo.
+Definition sigm_boltzmann_dist_attn (s : S) : R :=
+  mult (inv_pos sigm_Z_thermo Z_thermo_pos) (sigm_boltzmann_factor s).
 
 Theorem req_attention_is_gibbs_temp :
   (req (inv_pos T T_pos) (inv_pos D D_pos)) ->
   (forall s : S, req (energy s) (opp (z s))) ->
-  (req Z_thermo partition_function_temp) ->
-  forall s : S, req (softmax_temp s) (boltzmann_dist_attn s).
+  (req sigm_Z_thermo sigm_partition_function_temp) ->
+  forall s : S, req (sigm_softmax_temp s) (sigm_boltzmann_dist_attn s).
 Proof.
   intros HD Henergy HZ s.
   assert (Hf : req (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
@@ -561,23 +561,23 @@ Proof.
     - apply (req_mult_compat (inv_pos T T_pos) (inv_pos D D_pos) (opp (z s)) (energy s)).
       + exact HD.
       + apply (req_sym (energy s) (opp (z s))). apply Henergy. }
-  assert (Hie : req (inv_pos Z_thermo Z_thermo_pos)
-                    (inv_pos partition_function_temp partition_function_temp_pos)).
-  { apply (inv_pos_ext Z_thermo partition_function_temp
+  assert (Hie : req (inv_pos sigm_Z_thermo Z_thermo_pos)
+                    (inv_pos sigm_partition_function_temp partition_function_temp_pos)).
+  { apply (inv_pos_ext sigm_Z_thermo sigm_partition_function_temp
                        Z_thermo_pos partition_function_temp_pos HZ). }
-  unfold softmax_temp, boltzmann_dist_attn, boltzmann_factor, exp_pos_fn.
+  unfold sigm_softmax_temp, sigm_boltzmann_dist_attn, sigm_boltzmann_factor, sigm_exp_pos_fn.
   apply (req_trans (mult (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
-                             (inv_pos partition_function_temp partition_function_temp_pos))
+                             (inv_pos sigm_partition_function_temp partition_function_temp_pos))
                        (mult (exp_neg (mult (inv_pos D D_pos) (energy s)))
-                             (inv_pos Z_thermo Z_thermo_pos))
-                       (mult (inv_pos Z_thermo Z_thermo_pos)
+                             (inv_pos sigm_Z_thermo Z_thermo_pos))
+                       (mult (inv_pos sigm_Z_thermo Z_thermo_pos)
                              (exp_neg (mult (inv_pos D D_pos) (energy s))))).
     { apply (req_mult_compat (exp_neg (opp (mult (inv_pos T T_pos) (z s))))
                              (exp_neg (mult (inv_pos D D_pos) (energy s)))
-                             (inv_pos partition_function_temp partition_function_temp_pos)
-                             (inv_pos Z_thermo Z_thermo_pos)).
+                             (inv_pos sigm_partition_function_temp partition_function_temp_pos)
+                             (inv_pos sigm_Z_thermo Z_thermo_pos)).
       { exact Hf. }
-      { apply (req_sym (inv_pos Z_thermo Z_thermo_pos) (inv_pos partition_function_temp partition_function_temp_pos)). exact Hie. } }
+      { apply (req_sym (inv_pos sigm_Z_thermo Z_thermo_pos) (inv_pos sigm_partition_function_temp partition_function_temp_pos)). exact Hie. } }
     apply mult_comm.
 Qed.
 

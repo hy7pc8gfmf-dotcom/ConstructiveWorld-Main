@@ -1105,4 +1105,155 @@ Proof.
   exact (req_align_energy_exp S reward beta beta_pos pi_ref pi_ref_pos s).
 Qed.
 
+(* ============ 区4：挂账清偿席（总账 v1.3 挂账分歧表末笔 #1） ============ *)
+(* ---- 件16 align_objective_advantage_decomp（基座 CW219 L19350；真证组装） ----
+   J(π) == J(π_ref) + (Σ π·A_ref − β·KL(π‖π_ref))（单步 bandit 精确恒等式，非近似）。
+   Id 原文（CW219 L19349-19358，Alignment 节）：
+     Theorem align_objective_advantage_decomp : forall pi : S -> R,
+       normalized pi -> positive_dist pi ->
+       Id (align_objective pi)
+          (plus (align_objective pi_ref)
+                (minus (sum_over_S (fun s => mult (pi s) (advantage pi_ref s)))
+                       (mult beta (kl_to_ref pi)))).
+   req 组装链（全部消费本文件既有件，零新建桥假设）：
+     件8 rppo_align_objective_decomp（J = V − βKL，π 与 π_ref 双实例）
+       + rppo_KL_self_zero（KL 对角自零 → J(π_ref) = V(π_ref)）
+       + 内机5 rppo_advantage_sum_ref（Σ π·A_ref = V(π) − V(π_ref)，归一化位）
+       + 本席新塌缩引理 b + ((a−b)−c) = a−c（req_minus_plus_r 换形 + assoc/comm
+         三步 + plus_opp/plus_zero 归零）。
+   命名对位：state_value_req==V、advantage_req==A、relative_entropy_req==kl_to_ref
+     （kl_to_ref_req 同形 δ 可换，沿件3 语句惯例直用 relative_entropy_req）。
+   封存改道（2026-09-09 终验席）：原节内双 assert（塌缩引理 / J(π_ref)==V(π_ref)）
+     随主体单件封存，.vo 期膨胀致死（四轮实证 EXIT=127 零输出、glob 完成后
+     40min 无 .vo）；提级为独立件 rppo_b_collapse_minus（内机6）/
+     rppo_J_ref_eq_value（内机7）分段封口，主体装配层逐名直引。
+   根因修复（同席，定位探针二轮）：装配层尾腿原为 req_sym 内机5 裸喂
+     req_plus_compat H2 槽——槽型 req (req_minus (req_minus Vπ Vref) KL)
+     (req_minus A_sum KL) 与内机5 对称型 req (req_minus Vπ Vref) A_sum 差一层
+     req_minus 双参同态运输，apply 进 δ 展开搜索死旋（glob 停在语句行即此；
+     40min 内存爬升后 worker 静默亡=根源非封存非热载）；补 req_plus_compat
+     双 opp-KL 腿 + req_refl 运输（req_minus δ 透明 plus a (opp b) 可转换）。 *)
+(* 内机6（件16 提级伴件，2026-09-09 终验席封存改道）：塌缩引理
+   b + ((a−b)−c) == a−c（Id 第4/5步 req 合并形）——原为件16 节内 assert，
+   单件巨型封存在 .vo 期膨胀致死（四轮实证 EXIT=127 零输出），提级独立封口。 *)
+Lemma rppo_b_collapse_minus :
+  forall a b c : Real,
+  req (plus b (req_minus (req_minus a b) c)) (req_minus a c).
+Proof.
+  intros a b c. unfold req_minus.
+  apply (req_trans (plus b (plus (plus a (opp b)) (opp c)))
+                   (plus (plus b (plus a (opp b))) (opp c))
+                   (plus a (opp c))).
+  - apply plus_assoc.
+  - apply (req_trans (plus (plus b (plus a (opp b))) (opp c))
+                     (plus (plus a (plus b (opp b))) (opp c))
+                     (plus a (opp c))).
+    + apply (req_plus_compat (plus b (plus a (opp b)))
+                             (plus a (plus b (opp b)))
+                             (opp c) (opp c)
+                             (req_trans (plus b (plus a (opp b)))
+                                        (plus (plus b a) (opp b))
+                                        (plus a (plus b (opp b)))
+                                        (plus_assoc b a (opp b))
+                                        (req_trans (plus (plus b a) (opp b))
+                                                   (plus (plus a b) (opp b))
+                                                   (plus a (plus b (opp b)))
+                                                   (req_plus_compat (plus b a) (plus a b)
+                                                                    (opp b) (opp b)
+                                                                    (plus_comm b a)
+                                                                    (req_refl (opp b)))
+                                                   (req_sym _ _ (plus_assoc a b (opp b)))))
+                             (req_refl (opp c))).
+    + apply (req_trans (plus (plus a (plus b (opp b))) (opp c))
+                       (plus (plus a zero) (opp c))
+                       (plus a (opp c))).
+      * apply (req_plus_compat (plus a (plus b (opp b)))
+                               (plus a zero) (opp c) (opp c)
+                               (req_plus_compat a a (plus b (opp b)) zero
+                                                (req_refl a) (plus_opp b))
+                               (req_refl (opp c))).
+      * apply (req_plus_compat (plus a zero) a (opp c) (opp c)
+                               (plus_zero a) (req_refl (opp c))).
+Qed.
+
+(* 内机7（件16 提级伴件，同上改道）：J(π_ref) == V(π_ref)
+   （KL 对角自零 + 零右消去；件3 Hr 同位重建，纯 req 链） *)
+Lemma rppo_J_ref_eq_value :
+  req (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+      (state_value_req pi_ref).
+Proof.
+  apply (req_trans (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+                   (req_minus (state_value_req pi_ref)
+                              (mult beta (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos)))
+                   (state_value_req pi_ref)).
+  - exact (rppo_align_objective_decomp pi_ref pi_ref_pos).
+  - apply (req_trans (req_minus (state_value_req pi_ref)
+                                (mult beta (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos)))
+                     (req_minus (state_value_req pi_ref) zero)
+                     (state_value_req pi_ref)).
+    + apply (req_plus_compat (state_value_req pi_ref) (state_value_req pi_ref)
+                             (opp (mult beta (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos)))
+                             (opp zero)
+                             (req_refl (state_value_req pi_ref))).
+      apply (req_opp_compat (mult beta (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos)) zero).
+      apply (req_trans (mult beta (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos))
+                       (mult beta zero) zero).
+      * apply (req_mult_compat beta beta
+                               (relative_entropy_req S sumf pi_ref pi_ref pi_ref_pos pi_ref_pos) zero
+                               (req_refl beta) (rppo_KL_self_zero pi_ref pi_ref_pos)).
+      * apply mult_zero.
+    + apply (req_trans (req_minus (state_value_req pi_ref) zero)
+                       (plus (state_value_req pi_ref) (opp zero))
+                       (state_value_req pi_ref)).
+      * unfold req_minus. apply req_refl.
+      * apply (req_trans (plus (state_value_req pi_ref) (opp zero))
+                         (plus (state_value_req pi_ref) zero)
+                         (state_value_req pi_ref)).
+        -- apply (req_plus_compat (state_value_req pi_ref) (state_value_req pi_ref)
+                                  (opp zero) zero (req_refl (state_value_req pi_ref))).
+           exact (rkl_opp_zero).
+        -- apply plus_zero.
+Qed.
+
+(* ---- 件16 主体（装配层）：内机6/7 分段独立封口后逐名直引 ---- *)
+Lemma rppo_align_objective_advantage_decomp :
+  forall (pi : S -> Real) (Hnorm : req (sumf pi) one) (Hpos : pos_dist S pi),
+    req (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi Hpos)
+        (plus (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+              (req_minus (sumf (fun s => mult (pi s) (advantage_req pi_ref s)))
+                         (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))).
+Proof.
+  intros pi Hnorm Hpos.
+  (* 总装配：J(π) → Vπ−βKL → Vr+((Vπ−Vr)−βKL)[内机6 反向] → J(ref)+(ΣπA_ref−βKL) *)
+  apply (req_trans (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi Hpos)
+                   (req_minus (state_value_req pi)
+                              (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                   (plus (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+                         (req_minus (sumf (fun s => mult (pi s) (advantage_req pi_ref s)))
+                                    (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos))))).
+  - exact (rppo_align_objective_decomp pi Hpos).
+  - apply (req_trans (req_minus (state_value_req pi)
+                                (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                     (plus (state_value_req pi_ref)
+                           (req_minus (req_minus (state_value_req pi) (state_value_req pi_ref))
+                                      (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos))))
+                     (plus (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+                           (req_minus (sumf (fun s => mult (pi s) (advantage_req pi_ref s)))
+                                      (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos))))).
+    + exact (req_sym _ _ (rppo_b_collapse_minus (state_value_req pi) (state_value_req pi_ref)
+                           (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))).
+    + apply (req_plus_compat (state_value_req pi_ref)
+                             (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi_ref pi_ref_pos)
+                             (req_minus (req_minus (state_value_req pi) (state_value_req pi_ref))
+                                        (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                             (req_minus (sumf (fun s => mult (pi s) (advantage_req pi_ref s)))
+                                        (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                             (req_sym _ _ rppo_J_ref_eq_value)
+                             (req_plus_compat (req_minus (state_value_req pi) (state_value_req pi_ref))
+                                              (sumf (fun s => mult (pi s) (advantage_req pi_ref s)))
+                                              (opp (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                                              (opp (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))
+                                              (req_sym _ _ (rppo_advantage_sum_ref pi Hnorm))
+                                              (req_refl (opp (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))))).
+Qed.
 End ReqPPOAdvantage.

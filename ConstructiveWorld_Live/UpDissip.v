@@ -31,7 +31,6 @@ From Stdlib Require Import Lia.
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpConstitution.
-Require Import UpConstitution.
 
 Local Open Scope Q_scope.
 
@@ -618,12 +617,12 @@ Qed.
 Definition iou_query (io : iou) : query :=
   mk_query (iou_ref io) (iou_from io) (iou_to io) (iou_eps io) (iou_delta io).
 
-Definition redeem (io : iou) (e : edge_spec) : Or (hit_cert e (iou_query io)) iou :=
+Definition dis_redeem (io : iou) (e : edge_spec) : Or (hit_cert e (iou_query io)) iou :=
   resolve1 e (iou_query io).
 
-(* 再入：redeem 拒绝 ⟹ 返回借据的缺口字段与原借据逐位相同（义务持久） *)
+(* 再入：dis_redeem 拒绝 ⟹ 返回借据的缺口字段与原借据逐位相同（义务持久） *)
 Theorem redeem_reissue : forall (io : iou) (e : edge_spec) (r : iou),
-  Id (redeem io e) (inr r) ->
+  Id (dis_redeem io e) (inr r) ->
   And (And (Id (iou_from r) (iou_from io))
            (And (Id (iou_to r) (iou_to io)) (Id (iou_eps r) (iou_eps io))))
       (Id (iou_delta r) (iou_delta io)).
@@ -639,7 +638,7 @@ Qed.
 (* 证成：借据被新边闭合 ⟹ 新边长入图谱且原查询命中（图谱成长定理） *)
 Theorem redeem_closes : forall (io : iou) (e : edge_spec) (g : list edge_spec)
                                (w : hit_cert e (iou_query io)),
-  Id (redeem io e) (inl w) ->
+  Id (dis_redeem io e) (inl w) ->
   sigT (fun w2 => Id (resolve (e :: g) (iou_query io)) (inl w2)).
 Proof.
   intros io e g w Hred.
@@ -735,12 +734,12 @@ Definition demo_io_tight : iou := mk_iou 0 3 1 (1#2) 9.
 (* 好边：fmt0→fmt3 斜率 15/16 —— 耗散 1/16 ≤ 1/2，出参 15/16 > 0 *)
 Definition e_good : edge_spec := mk_edge 4 0 3 (15#16) 0.
 
-(* redeem：借据 demo_io_tight 被 e_good 证成（五证全过） *)
+(* dis_redeem：借据 demo_io_tight 被 e_good 证成（五证全过） *)
 Definition cert_good : hit_cert e_good (iou_query demo_io_tight) :=
   ((@id_refl bool true, @id_refl bool true),
    (@id_refl bool true, (@id_refl bool true, @id_refl bool true))).
 
-Theorem demo_redeem_ok : Id (redeem demo_io_tight e_good) (inl cert_good).
+Theorem demo_redeem_ok : Id (dis_redeem demo_io_tight e_good) (inl cert_good).
 Proof. vm_compute. reflexivity. Qed.
 
 (* redeem_closes 数值实例：新边长入图谱后，原查询 9 命中 e_good *)
@@ -754,10 +753,10 @@ Proof. vm_compute. reflexivity. Qed.
 Definition e_bad : edge_spec := mk_edge 5 0 3 (15#16) (-1).
 
 Theorem demo_redeem_reissue :
-  sigT (fun r => Id (redeem demo_io_tight e_bad) (inr r)).
+  sigT (fun r => Id (dis_redeem demo_io_tight e_bad) (inr r)).
 Proof.
   exists (iou_issue (iou_query demo_io_tight)).
-  unfold redeem. vm_compute. reflexivity.
+  unfold dis_redeem. vm_compute. reflexivity.
 Qed.
 
 (* ============================================================ *)

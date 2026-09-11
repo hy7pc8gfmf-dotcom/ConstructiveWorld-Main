@@ -6,8 +6,8 @@
    ----------------------------------------------------------------
    对账表（总账批 4 未认领 6 件 → 逐件判，grep UpReqAlignRestB.v decl 实证）：
      1. temp_factor_max_le_sum(L31333)  = RestB 已核销：req_pick_max_tf_le_minp_sum
-        （RestB L528）语句逐字同形 `le (temp_factor prefix (pick_max_token prefix))
-        (minp_temp_sum prefix)`——总账「对位待裁」裁定为已核销，不重建。
+        （RestB L528）语句逐字同形 `le (alb_temp_factor prefix (pick_max_token prefix))
+        (alb_minp_temp_sum prefix)`——总账「对位待裁」裁定为已核销，不重建。
         （与 req_temp_factor_max_eq 的对位：eq 件 RestB 已有，本件 le_sum 形
         已被 req_pick_max_tf_le_minp_sum 独立收口，无需再建。）
      2. minp_keep_p_antitone(L31504)        → 本席新建 req_minp_keep_p_antitone
@@ -18,8 +18,8 @@
         monotone（规划书代表件，旗舰 Print Assumptions Closed）
    ----------------------------------------------------------------
    p-antitone 方向件 req 化要点（检索索引 E-STAGING-ReqAlignRestB 坑 3/7 对位）：
-     Id 层 pick_max_token_correct 单点改写一处 → δ 展开 max_markov_prob
-     （RestB 定义体即 markov_kernel @ pick_max_token）+ req_markov_pos 放电；
+     Id 层 pick_max_token_correct 单点改写一处 → δ 展开 alb_max_markov_prob
+     （RestB 定义体即 alb_markov_kernel @ pick_max_token）+ req_markov_pos 放电；
      Id 层 id_cong/id_refl 桥零处需要（le 链全走 le 字段方向：le_mult_compat_weak
      固定右因子 + le_trans + req_le_mult_compat_r 固定左因子 + opp_le_compat）。
    诚实边界台账：
@@ -29,7 +29,7 @@
         Defined 消费之。
      2. minp_dropped_mass_p 的 minus → req_minus（= plus one (opp ·)，RestB
         台账 3 同款签名变化）；list_sum → rsum（req 世界和机器，RestB 同构）。
-     3. mp_max_markov_prob/temp_factor 等 6 枚 δ 透明包装 = UpReqAlignRestB
+     3. mp_max_markov_prob/alb_temp_factor 等 6 枚 δ 透明包装 = UpReqAlignRestB
         闭名显式参喂入（签名探针 _probe_minpant_sig 实证参数表），零物理重复。
    纪律：纯构造性；Set 层语句（le/lt/req/Or 按 RestB 先例）；核心件 Qed、
    判定件 Defined；纯 term-mode（apply/exact/unfold/destruct），零改写依赖。
@@ -68,11 +68,11 @@ Variable pick_max_token : list Token -> Token.
 
 (* ---- RestB minp 系成品 δ 透明包装（闭名显式参喂入；零物理重复） ---- *)
 Definition mp_temp_factor (prefix : list Token) (w : Token) : R :=
-  UpReqAlignRestB.temp_factor Token total_loss temperature temperature_pos
+  UpReqAlignRestB.alb_temp_factor Token total_loss temperature temperature_pos
                               prefix w.
 
 Definition mp_partition_temp (prefix : list Token) : R :=
-  UpReqAlignRestB.partition_temp Token vocab total_loss temperature
+  UpReqAlignRestB.alb_partition_temp Token vocab total_loss temperature
                                  temperature_pos prefix.
 
 Definition mp_partition_temp_pos (prefix : list Token)
@@ -81,7 +81,7 @@ Definition mp_partition_temp_pos (prefix : list Token)
                                          temperature temperature_pos prefix.
 
 Definition mp_markov_kernel (prefix : list Token) (w : Token) : R :=
-  UpReqAlignRestB.markov_kernel Token vocab vocab_nonempty total_loss
+  UpReqAlignRestB.alb_markov_kernel Token vocab vocab_nonempty total_loss
                                 temperature temperature_pos prefix w.
 
 Definition mp_markov_pos (prefix : list Token) (w : Token)
@@ -90,7 +90,7 @@ Definition mp_markov_pos (prefix : list Token) (w : Token)
                                  temperature temperature_pos prefix w.
 
 Definition mp_max_markov_prob (prefix : list Token) : R :=
-  UpReqAlignRestB.max_markov_prob Token vocab vocab_nonempty total_loss
+  UpReqAlignRestB.alb_max_markov_prob Token vocab vocab_nonempty total_loss
                                   temperature temperature_pos pick_max_token
                                   prefix.
 
@@ -117,13 +117,13 @@ Definition req_minp_dropped_mass_p (mp : R) (prefix : list Token) : R :=
                            (mp_partition_temp_pos prefix))
                   (req_minp_temp_sum_p mp prefix)).
 
-(* 基座 L31527 temp_factor_nonneg_p：temp_factor ≥ 0（exp_neg 正性） *)
+(* 基座 L31527 temp_factor_nonneg_p：alb_temp_factor ≥ 0（exp_neg 正性） *)
 Lemma req_temp_factor_nonneg_p : forall prefix w,
   le zero (mp_temp_factor prefix w).
 Proof.
   intros prefix w.
   apply (lt_le_iff zero (mp_temp_factor prefix w)). left.
-  unfold mp_temp_factor, UpReqAlignRestB.temp_factor. apply exp_neg_pos.
+  unfold mp_temp_factor, UpReqAlignRestB.alb_temp_factor. apply exp_neg_pos.
 Qed.
 
 (* 基座 L31534 minp_term_nonneg_p：参数化保留者项 ≥ 0（inl 分支 tf ≥ 0，
@@ -144,7 +144,7 @@ Qed.
    ⟹ keep2 w（threshold2 ≤ kernel）⟹ threshold1 ≤ kernel（le_trans）
    ⟹ keep1 w。
    基座 Id 层 pick_max_token_correct 单点改写一处 → 本席 δ 展开
-   max_markov_prob（= markov_kernel @ pick_max_token）+ req_markov_pos。 *)
+   alb_max_markov_prob（= alb_markov_kernel @ pick_max_token）+ req_markov_pos。 *)
 Lemma req_minp_keep_p_antitone : forall mp1 mp2 : R,
   le mp1 mp2 ->
   forall prefix w,
@@ -155,11 +155,11 @@ Proof.
   (* mp_max_markov_prob ≥ 0（req_markov_pos 经 δ 展开） *)
   assert (Hmax : le zero (mp_max_markov_prob prefix)).
   { unfold mp_max_markov_prob.
-    apply (lt_le_iff zero (UpReqAlignRestB.markov_kernel
+    apply (lt_le_iff zero (UpReqAlignRestB.alb_markov_kernel
                              Token vocab vocab_nonempty total_loss
                              temperature temperature_pos prefix
                              (pick_max_token prefix))).
-    left. unfold UpReqAlignRestB.max_markov_prob.
+    left. unfold UpReqAlignRestB.alb_max_markov_prob.
     exact (UpReqAlignRestB.req_markov_pos Token vocab vocab_nonempty
                                           total_loss temperature
                                           temperature_pos prefix
