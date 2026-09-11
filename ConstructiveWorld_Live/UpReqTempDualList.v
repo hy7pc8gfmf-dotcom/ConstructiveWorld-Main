@@ -78,23 +78,20 @@ Proof.
   - apply real_eq_refl.
   - (* cons：Σ(cons w l) ≡ 0+Σl ≡ Σl+0 ≡ Σl ≡ 0（refl/comm/plus_zero/IH； *)
     (*   零 simpl——simpl 会把 real_zero delta 展开，unfold 形与库件失配） *)
-    apply (real_eq_trans
+    exact (real_eq_trans
              (real_list_sum X (fun _ : X => real_zero) (cons w l))
              (real_list_sum X (fun _ : X => real_zero) l)
-             real_zero).
-    + apply (real_eq_trans
-               (real_plus real_zero
-                  (real_list_sum X (fun _ : X => real_zero) l))
-               (real_plus (real_list_sum X (fun _ : X => real_zero) l)
-                          real_zero)
-               (real_list_sum X (fun _ : X => real_zero) l)).
-      * exact (real_eq_refl
-                 (real_plus real_zero
-                    (real_list_sum X (fun _ : X => real_zero) l))).
-      * exact (real_plus_comm real_zero
-                 (real_list_sum X (fun _ : X => real_zero) l)).
-      * exact (real_plus_zero (real_list_sum X (fun _ : X => real_zero) l)).
-    + apply real_eq_sym. exact IH.
+             real_zero
+             (real_eq_trans
+                (real_plus real_zero
+                   (real_list_sum X (fun _ : X => real_zero) l))
+                (real_plus (real_list_sum X (fun _ : X => real_zero) l)
+                           real_zero)
+                (real_list_sum X (fun _ : X => real_zero) l)
+                (real_plus_comm real_zero
+                   (real_list_sum X (fun _ : X => real_zero) l))
+                (real_plus_zero (real_list_sum X (fun _ : X => real_zero) l)))
+             IH).
 Qed.
 
 (* A-2：逐点 0 ≤_B ⟹ 和 0 ≤_B（gibbsd_list_sum_le_b 常零实例 + A-1 换载） *)
@@ -103,12 +100,14 @@ Lemma t34_list_sum_le_b_nonneg : forall (X : Type) (f : X -> Real) (l : list X),
   real_le_b real_zero (real_list_sum X f l).
 Proof.
   intros X f l Hpt.
-  apply (gibbsd_le_b_id_l
-           (real_list_sum X (fun _ : X => real_zero) l)
+  exact (gibbsd_le_b_id_l
            real_zero
+           (real_list_sum X (fun _ : X => real_zero) l)
            (real_list_sum X f l)
-           (t34_list_sum_const_zero X l)).
-  exact (gibbsd_list_sum_le_b X (fun _ : X => real_zero) f l Hpt).
+           (real_eq_sym (real_list_sum X (fun _ : X => real_zero) l)
+                        real_zero
+                        (t34_list_sum_const_zero X l))
+           (gibbsd_list_sum_le_b X (fun _ : X => real_zero) f l Hpt)).
 Qed.
 
 (* A-3：分解位载体非空证（pos 接口槽用；前缀两案 discriminate） *)
@@ -145,7 +144,9 @@ Proof.
               (real_plus (f w) (real_list_sum X f (app l1 (cons s0 l2))))
               real_zero) in Hsum.
     assert (Htail : real_eq (real_list_sum X f (app l1 (cons s0 l2))) real_zero).
-    { exact (gibbe2_clamp_head_r (f w)
+    { apply (real_eq_sym real_zero
+               (real_list_sum X f (app l1 (cons s0 l2)))).
+      exact (gibbe2_clamp_head_r (f w)
                (real_list_sum X f (app l1 (cons s0 l2)))
                (Hpt w)
                (t34_list_sum_le_b_nonneg X f (app l1 (cons s0 l2)) Hpt)
@@ -194,8 +195,8 @@ Proof.
                real_zero).
       + apply (RealSetoid.real_eq_plus_compat
                  (real_list_sum X p (app l1 (cons s0 l2)))
-                 real_one
                  (real_opp (real_list_sum X q (app l1 (cons s0 l2))))
+                 real_one
                  (real_opp real_one)
                  Hnp
                  (RealSetoid.real_eq_opp_compat
@@ -255,10 +256,10 @@ Proof.
                     (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s))
                     (app l1 (cons s0 l2)))
                  (real_list_sum X
-                    (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s))
+                    (fun s : X => real_opp (real_plus (p s) (real_opp (q s))))
                     (app l1 (cons s0 l2)))
                  (real_list_sum X
-                    (fun s : X => real_opp (real_plus (p s) (real_opp (q s))))
+                    (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s))
                     (app l1 (cons s0 l2)))
                  (real_opp
                     (real_list_sum X
@@ -286,11 +287,11 @@ Proof.
                  (real_list_sum X
                     (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s))
                     (app l1 (cons s0 l2)))
-                 real_zero
                  (real_opp
                     (real_list_sum X
                        (fun s : X => real_plus (p s) (real_opp (q s)))
                        (app l1 (cons s0 l2))))
+                 real_zero
                  (real_opp real_zero)
                  Hkl
                  (RealSetoid.real_eq_opp_compat

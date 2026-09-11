@@ -98,6 +98,11 @@ UpReqLogCompD.v
 UpReqRealFEP.v
 UpReqLogCompD2.v
 UpReqAlign4.v
+UpReqPPOB.v
+UpReqSumB.v
+UpReqLatticeB.v
+UpReqGibbsE2.v
+UpReqKLStrict.v
 UpReqCSB.v
 UpReqELBOEps.v
 UpReqExpPos.v

@@ -1,0 +1,160 @@
+(* ============================================================ *)
+(* UpReqPPOB.v —— 定理 6.6 对应物判词 5 升格席：ppo 保守性 Bishop 完整形 *)
+(*   （B 形扩展建造队列 T2 席 · 侦察规格单目标 2 · 20260910）        *)
+(* 主件 real_ppo_conservative_B_full：Σ π_old·min(r,clip r)·adv ≤_B    *)
+(*   Σ π_old·r·adv——UpRealLeB.v 有条件件 real_ppo_conservative_B 的     *)
+(*   唯一缺口前提「E>0 显式证书」由本节内机导出，语句面零新增前提：      *)
+(*   ① T2① 求和正性槽 rplb_sum_pos（逐点正 ⟹ 和正）：Hypothesis 位     *)
+(*     显式参随节放电入出口签名——非公理零未闭合（UpReqPPOPlain         *)
+(*     rpl_sum_le/rpl_sum_nonneg 槽实例同款）；                        *)
+(*   ② 内机 lebR_res_weight_pos：逐点 π_old·adv 双正（两喂）经槽升 E>0； *)
+(*   ③ 主件证明体与 Part C 同构：closure_b 收口器 + res_fold 出节件     *)
+(*     （Require 消费，探针打表后全参显喂）+ eps 形源件直连（13 参全显）。*)
+(* 判词诚实边界：槽系接口前提（T2① 显式参放电），非推翻判词 5「无内在   *)
+(*   供给链」论证——总账回写口径=「完整升格（sum_pos 槽接口前提在案）」。*)
+(* 红线自审：real_le_b Set 值 forall 型、real_lt sigT Set 层零 Prop 泄露； *)
+(*   前提位 pi_old_pos/advantage_pos 照抄源件零新增；纯项模式（real_eq 非  *)
+(*   Id 禁改写全链显式组装）；三件全封口，证据=尾注三连打（日志在案）。     *)
+(* 编译配方：cpu_guard.ps1 包装，coqc -Q . "" -Q "..\001" "" UpReqPPOB.v *)
+(* ============================================================ *)
+From Stdlib Require Import QArith.Qring.
+Require Import CW_ConstructiveWorld_219.
+Require Import UpRealLeB.
+Section RealPPOLeBFull.
+
+Variable S : Type.
+Variable real_sum_over_S : (S -> Real) -> Real.
+Variable real_sum_over_S_ext : forall (f g : S -> Real),
+  (forall s : S, real_eq (f s) (g s)) -> real_eq (real_sum_over_S f) (real_sum_over_S g).
+Variable real_sum_over_S_le : forall (f g : S -> Real),
+  (forall s : S, real_le (f s) (g s)) -> real_le (real_sum_over_S f) (real_sum_over_S g).
+Variable real_sum_over_S_add : forall (f g : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+          (real_plus (real_sum_over_S f) (real_sum_over_S g)).
+(* 诚实接口：标量提取（Part C 同位复刻） *)
+Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+           (real_mult a (real_sum_over_S f)).
+(* T2① 求和正性槽（显式参位）：逐点正 ⟹ 和正 *)
+Hypothesis rplb_sum_pos :
+  forall f : S -> Real,
+    (forall s : S, real_lt real_zero (f s)) -> real_lt real_zero (real_sum_over_S f).
+Variable real_pi_star_ : S -> Real.
+Variable real_pi_old : S -> Real.
+Variable real_pi_old_pos : forall s : S, real_lt real_zero (real_pi_old s).
+Variable real_advantage_fn : S -> Real.
+Variable real_advantage_pos : forall s : S, real_lt real_zero (real_advantage_fn s).
+Variable epsilon : Real.
+(* 残差权系数 E := Σ π_old·adv（Part C 同位定义，与出节件定义可转换） *)
+Definition lebR_res_weight : Real :=
+  real_sum_over_S (fun s : S => real_mult (real_pi_old s) (real_advantage_fn s)).
+
+(* 内机：E>0——逐点双正（real_mult_positive 两喂）→ sum_pos 槽提升 *)
+Lemma lebR_res_weight_pos : real_lt real_zero lebR_res_weight.
+Proof.
+  unfold lebR_res_weight.
+  apply (rplb_sum_pos (fun s : S => real_mult (real_pi_old s) (real_advantage_fn s))).
+  intro s.
+  exact (real_mult_positive (real_pi_old s) (real_advantage_fn s)
+           (real_pi_old_pos s) (real_advantage_pos s)).
+Qed.
+(* 主件：≤_B 完整形（与 Part C 有条件件同构，E>0 证书由内机导出） *)
+Theorem real_ppo_conservative_B_full :
+  real_le_b
+    (real_sum_over_S (fun s : S =>
+      real_mult (real_pi_old s)
+        (real_mult (real_min (real_importance_ratio_ S real_pi_star_ real_pi_old real_pi_old_pos s)
+                             (real_ppo_clip_ epsilon (real_importance_ratio_ S real_pi_star_ real_pi_old real_pi_old_pos s)))
+                   (real_advantage_fn s))))
+    (real_sum_over_S (fun s : S =>
+      real_mult (real_pi_old s)
+        (real_mult (real_importance_ratio_ S real_pi_star_ real_pi_old real_pi_old_pos s)
+                   (real_advantage_fn s)))).
+Proof.
+  apply (real_le_closure_b _ _ lebR_res_weight lebR_res_weight_pos).
+  intros eps Heps.
+  apply (real_le_trans _
+           (real_plus
+              (real_sum_over_S (fun s : S =>
+                 real_mult (real_pi_old s)
+                   (real_mult (real_importance_ratio_ S real_pi_star_ real_pi_old real_pi_old_pos s)
+                              (real_advantage_fn s))))
+              (real_sum_over_S (fun s : S =>
+                 real_mult (real_pi_old s) (real_mult eps (real_advantage_fn s))))) _).
+  - exact (real_ppo_conservative_eps S real_sum_over_S real_sum_over_S_ext
+             real_sum_over_S_le real_sum_over_S_add real_pi_star_ real_pi_old
+             real_pi_old_pos real_advantage_fn real_advantage_pos epsilon eps Heps).
+  - apply (real_le_plus_compat _ _ _ _ (real_le_refl _)).
+    apply (RealSetoid.real_eq_le _ _).
+    exact (real_ppo_res_fold S real_sum_over_S real_sum_over_S_ext
+             real_sum_over_S_linear real_pi_old real_advantage_fn eps).
+Qed.
+End RealPPOLeBFull.
+
+(* 尾注：出口签名放电序探针打表在案（_wb17_sig_probe）；残差折叠
+   real_ppo_res_fold 7 参、eps 形源件 13 参，均全参显喂。 *)
+Print Assumptions lebR_res_weight_pos.
+Print Assumptions real_ppo_conservative_B_full.
+Print Assumptions lebR_res_weight.
+
+(* ============================================================ *)
+(* 放电节（槽放电战役 #7 · 20260910）：rplb_sum_pos 槽构造性放电件     *)
+(*   载体勘定：CW219 RealListSumMain 节 real_list_sum（list Fixpoint， *)
+(*   X 泛型，nil 支 real_zero）。语句形态按空支路裁决：空表支 sum 实为  *)
+(*   real_zero，严格正不真——放电语句必带非空前提 Not (Id l nil)        *)
+(*   （CW219 sum_temp_positive 同款；E385 收口器空支路判据同源）。      *)
+(*   先件=槽语句的 list 载体实例（归纳真理两支：nil 矛盾直击、cons      *)
+(*   real_plus_positive 两喂）；伴件以固定非空 vocab 无条件实例化内机    *)
+(*   lebR_res_weight_pos（π_old/adv 取常 real_one，证书 real_lt_zero_one, *)
+(*   CW219 L39486）——槽变量随节全参显喂，出口零残留。                 *)
+(* ============================================================ *)
+Section RplbSumPosDischarged.
+Variable X : Set.
+
+(* 放电件：有限和逐项正 ⟹ 和正（非空表前提；rplb_sum_pos 槽的载体实例） *)
+Lemma rplb_sum_pos_discharged :
+  forall (f : X -> Real) (l : list X),
+    Not (Id l nil) ->
+    (forall s : X, real_lt real_zero (f s)) ->
+    real_lt real_zero (real_list_sum X f l).
+Proof.
+  intros f l.
+  induction l as [| x rest IH]; intros Hnil Hpos.
+  - (* 空表支：非空前提矛盾直击（sum 实为 real_zero，前提在案而真） *)
+    contradiction Hnil. apply id_refl.
+  - destruct rest as [| y rest'].
+    + (* 单元素支：f x + 0 换形回 f x（real_plus_zero 经 real_lt_eq_lt） *)
+      exact (real_lt_eq_lt real_zero (f x)
+               (real_plus (f x) (real_list_sum X f nil))
+               (Hpos x)
+               (real_eq_sym (real_plus (f x) (real_list_sum X f nil)) (f x)
+                  (real_plus_zero (f x)))).
+    + (* 一般 cons 支：real_plus_positive 两喂——逐项正 + 尾表归纳正 *)
+      apply (real_plus_positive (f x) (real_list_sum X f (y :: rest'))).
+      * apply Hpos.
+      * apply IH. intro Hc. inversion Hc. apply Hpos.
+Qed.
+End RplbSumPosDischarged.
+
+(* 伴件：内机 lebR_res_weight_pos 的无条件实例化（E>0 证书零前提面） *)
+Section RplbResWeightPosUncond.
+Variable X : Set.
+Variable vocab : list X.
+Hypothesis vocab_nonempty : Not (Id vocab nil).
+
+Definition rplb_sum_vocab (f : X -> Real) : Real := real_list_sum X f vocab.
+
+Lemma rplb_res_weight_pos_uncond :
+  real_lt real_zero
+    (lebR_res_weight X rplb_sum_vocab (fun _ : X => real_one) (fun _ : X => real_one)).
+Proof.
+  apply (lebR_res_weight_pos X rplb_sum_vocab
+           (fun (f : X -> Real) (Hf : forall s : X, real_lt real_zero (f s)) =>
+             rplb_sum_pos_discharged X f vocab vocab_nonempty Hf)
+           (fun _ : X => real_one) (fun _ : X => real_lt_zero_one)
+           (fun _ : X => real_one) (fun _ : X => real_lt_zero_one)).
+Qed.
+End RplbResWeightPosUncond.
+
+Print Assumptions rplb_sum_pos_discharged.
+Print Assumptions rplb_res_weight_pos_uncond.
