@@ -44,11 +44,6 @@ jobs:
           path: ConstructiveWorld_vo/*.vo
           key: cw-vo-${{ hashFiles('ConstructiveWorld_Live/**/*.v', 'scripts/order.txt') }}
 
-      - name: Build base (skipped if cached)
-        run: |
-          eval "$(opam env)"
-          cd ConstructiveWorld_vo
-          [ -f CW_ConstructiveWorld_219.vo ] || coqc -Q . "" CW_ConstructiveWorld_219.v
 
       - name: Build 28 modules (order.txt topology)
         run: |
