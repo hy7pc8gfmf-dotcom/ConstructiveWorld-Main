@@ -12,50 +12,32 @@ concurrency:
 
 jobs:
   coq-build:
-    name: Rocq 9.0 build + coqchk (modular trust cache + merged)
-    runs-on: ubuntu-latest
+    name: Rocq 9.0 build + coqchk (self-hosted local trust cache)
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
-      - uses: ocaml/setup-ocaml@v3
-        with:
-          ocaml-compiler: ocaml-variants.4.14.2+options
-          opam-disable-sandboxing: true
-
-      # 信任缓存：opam switch 固定 key，恢复后 Install 秒级跳过
-      - name: Cache opam switch (coq 9.0)
-        uses: actions/cache@v5
-        with:
-          path: ~/.opam/default
-          key: ${{ runner.os }}-opam-switch-rocq90
-
-      - name: Install Rocq 9.0
+      # 本地信任缓存播种：自托管 runner 的检出目录是全新的，
+      # 从固定 vo 树复制 .vo 让 build.sh 吃指纹 SKIP（.vo 新于 .v 即跳）。
+      # 工具链=本机 Rocq Platform 9.0（与该 vo 树 .vo 同源，magic 90001）。
+      - name: Seed trust cache from local vo tree
+        shell: bash
         run: |
-          export OPAMSANDBOXING=disabled
-          eval "$(opam env)"
-          opam install -y coq.9.0.0
+          cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
+          echo "seeded $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
-      # 信任缓存：基座 219 产物（源码哈希 key，基座 .v 不变则秒级跳过 6MB 编译）
-      - name: Cache build artifacts (base + modules, incremental)
-        uses: actions/cache@v4
-        with:
-          path: ConstructiveWorld_vo/*.vo
-          key: cw-vo-${{ hashFiles('ConstructiveWorld_Live/**/*.v', 'scripts/order.txt') }}
-
-
-      - name: Build 28 modules (order.txt topology)
+      - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
+        shell: bash
         run: |
-          eval "$(opam env)"
-          cd ConstructiveWorld_vo
-          bash build.sh
+          pwsh -File D:/ComplexAnalysis/cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_build.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
 
-      - name: coqchk full-tree certification (shared-closure single pass)
+      - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
+        shell: bash
         run: |
-          eval "$(opam env)"
-          cd ConstructiveWorld_vo
-          bash coqchk_all.sh
+          pwsh -File D:/ComplexAnalysis/cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_chk.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
+
       - name: Upload coqchk logs
         if: always()
         uses: actions/upload-artifact@v5
