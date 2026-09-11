@@ -92,6 +92,20 @@
 (* v2.2/v2.3/v2.4 三席明示留席T16，本席不越权只记观察，登记权随翻牌权移交下一登记席；G06 合并件        *)
 (* token 复测 24 与在册 25 差 1（grep 25 含伪命中一处），G12 复测 44 相符；自指件注记：v2.4 后 43，      *)
 (* v2.5 后实测 46（本席 +3 条核对引理，只记不改，对账权留下一席）。                                  *)
+(* v2.6（席T42B：ExpPos 收口验证席，20260911）：承 v2.5 ng_ 第三轨 29 件与全部既有登记面    *)
+(* 零缩水（append-only；改前备份 UpReqIndex_t42b_backup.v 同 md5 13c3e863 留档），ng_ 轨      *)
+(* 续写 1 件：UpReqExpPos(165 行/5 封口，席T42 eˣ>0 构造性正性专席主件：目标定理 0<eˣ 对      *)
+(* 全实数无条件成立 + 0≠1 底座/单位元/非零/Or 消解四腿同件落盘)——行数和 165、封口和 5；       *)
+(* 入库判据=稳定窗口双测同 md5（间隔 7m09s）+ 全量编译 EXIT=0 且 5 件 Print Assumptions 全    *)
+(* Closed + G4 coqchk PASS；G1 表 11 禁词全零（含头注）。自指件注记：v2.5 后 46，v2.6 后实测   *)
+(* 49（本席 +3 条核对引理，只记不改，对账权留下一席）。                                       *)
+(* v2.7（席W：Index v2.7 登记席，20260912）：承 v2.6 ng_ 第三轨 30 件与全部既有登记面零缩水    *)
+(* （append-only；改前备份 attn/_w27_Index_backup.v 同 md5 ab5cb9b8 留档），ng_ 轨续写 1 件：    *)
+(* UpReqRealHalf(192 行/6 封口，席T42A Real 层 halving 基建件：eˣ>0 五步链步骤3 缺位底座，       *)
+(* ½x+½x=x 等式面；步骤4 LPO 等价面零触碰)——行数和 192、封口和 6；入库判据=稳定窗口双测同      *)
+(* md5 6fce813e + 全量编译 EXIT=0 且 .vo 晚于 .v + 接管报告四关在案（件内 6 件假设清查全        *)
+(* Closed + coqchk PASS，三方一致）；G1 表禁词全零（含头注）。自指件注记：v2.6 后 49，v2.7 后    *)
+(* 实测 52（本席 +3 条核对引理，只记不改，对账权留下一席）。                                   *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -1330,3 +1344,91 @@ Proof. reflexivity. Qed.
 (* 7) 四树同步：本席交付段 Live_X → _Live → CW_Live/CW_vo 三跳 cp 同步，md5 见交付报告。 *)
 (* 8) 自指件：af_UpReqIndex 43 为 v2.4 快照；v2.5 后实测 46（本席 +3 条核对引理，只记不改，              *)
 (*    对账权留下一席）。 *)
+
+(* ================= v2.6 增册（席T42B：UpReqIndex v2.6 滚动登记席，20260911） ================= *)
+(* ng_ 第三轨续写：v2.5 后流水线新绿 1 件逐件实测登记（append-only；v2.1–v2.5 既有 29 条目/       *)
+(* 清单/字面值/版记零触碰，本节全部新名，EOF 追加）。                                              *)
+(* 口径同 v2.1–v2.5：ng_lines = wc -l 实测 165；ng_qed = grep -c "Qed\." 实测 5（剥注释 token 级   *)
+(* \bQed\. 与 Theorem/Lemma/Corollary 行双复核相等；锚定 ^Qed\. 计 4 系件 4 单行 Proof...Qed.      *)
+(* 不在行首之伪差，封口实数 5）。G1 表 11 禁词逐词全零（含头注）。                                  *)
+(* 入库判据：稳定窗口双测同 md5（间隔 ≥5min）+ 全量编译 EXIT=0 且 .vo 晚于 .v + G3 件内 5 件       *)
+(* 假设清查全 Closed + G4 coqchk PASS。                                                            *)
+
+(* ng_UpReqExpPos —— UpReqExpPos.v：席T42，eˣ>0 构造性正性专席（五件：目标主件+四腿） *)
+(*   （目标定理 forall x, 0 < eˣ 无条件成立：real_exp_neg_pos 于 real_opp x 一词实例化，ε 见证  *)
+(*   由 S03 幂级数战役直供；件1 Real 层 0≠1 底座（QltT 1 1 归谬 Id false true，纯 Set 层）/     *)
+(*   件2 单位元 eˣ·e⁻ˣ==1/件3 eˣ≠0/件5 Or 消解形；本席双测 165/5 同 md5 99fb2d18（间隔 7m09s，   *)
+(*   首测 515c74b1 系 T42 收尾加 RealSetoid. 限定之在飞漂移，不采信），全量编译 EXIT=0 且       *)
+(*   5 件 Print Assumptions 全 Closed，coqchk PASS；G1 表 11 禁词全零） *)
+Definition ng_UpReqExpPos : NewGreenFace :=
+  MkNewGreenFace "UpReqExpPos.v" 165 5 20260911 "constructive positivity of exp over all reals, five pieces".
+
+Definition NewGreenListV26 : list NewGreenFace :=
+  cons ng_UpReqExpPos nil.
+
+(* v2.6 续写统计：1 件 / 行数和 165 / 封口和 5（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV26Pieces  : nat := 1.
+Definition NewGreenV26LineSum : nat := 165.
+Definition NewGreenV26QedSum  : nat := 5.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV26Pieces_matches : NewGreenV26Pieces = cnt_ng NewGreenListV26.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV26LineSum_matches : NewGreenV26LineSum = sum_ng_lines NewGreenListV26.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV26QedSum_matches : NewGreenV26QedSum = sum_ng_qed NewGreenListV26.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.6 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 双树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，三处 md5 一致 99fb2d18；CW_vo 树内    *)
+(*    补绑编译 EXIT=0 出 .vo（5 件 Closed）。 *)
+(* 2) 自指件：af_UpReqIndex 46 为 v2.5 快照；v2.6 后实测 49（本席 +3 条核对引理，只记不改，      *)
+(*    对账权留下一席）。 *)
+
+
+(* ================= v2.7 增册（席W：UpReqIndex v2.7 登记席，20260912） ================= *)
+(* ng_ 第三轨续写：v2.6 后流水线新绿 1 件逐件实测登记（append-only；v2.1–v2.6 既有 30 条目/       *)
+(* 清单/字面值/版记零触碰，本节全部新名，EOF 追加）。                                              *)
+(* 口径同 v2.1–v2.6：ng_lines = wc -l 实测 192；ng_qed = grep -c "Qed\." 实测 6（剥注释 token 级   *)
+(* \bQed\. 与 Theorem/Lemma/Corollary 行双复核相等，6=6=6；交接书 decl 7 系含 1 Definition 载体     *)
+(* upreq_half 之口径，封口实数 6）。G1 表禁词逐词全零（含头注）。                                    *)
+(* 入库判据：稳定窗口双测同 md5（06:24/06:27 两测同 6fce813e）+ 件现态 .vo 晚于 .v（Live_X 06:04   *)
+(* 对 05:56）+ 接管报告四关在案（全量 EXIT=0 + 件内 6 件假设清查全 Closed + coqchk PASS）。          *)
+
+(* ng_UpReqRealHalf —— UpReqRealHalf.v：席T42A，Real 层 halving 基建件（eˣ>0 五步链步骤3 底座） *)
+(*   （upreq_half x := real_mult (real_const (1#2)) x 构造性半元函数；主定理 upreq_half_plus：        *)
+(*   ½x+½x=x 逐 eps 相等，消费 AttnSqrt 现成件一跳 exact；等式面 zero-touch 纪律：步骤4（平方≥0     *)
+(*   Or 形）LPO 等价面零触碰；CW 双树已由原席同步同 md5；G1 表禁词全零） *)
+Definition ng_UpReqRealHalf : NewGreenFace :=
+  MkNewGreenFace "UpReqRealHalf.v" 192 6 20260912 "Real-layer halving base for exp chain step 3, equality face".
+
+Definition NewGreenListV27 : list NewGreenFace :=
+  cons ng_UpReqRealHalf nil.
+
+(* v2.7 续写统计：1 件 / 行数和 192 / 封口和 6（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV27Pieces  : nat := 1.
+Definition NewGreenV27LineSum : nat := 192.
+Definition NewGreenV27QedSum  : nat := 6.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV27Pieces_matches : NewGreenV27Pieces = cnt_ng NewGreenListV27.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV27LineSum_matches : NewGreenV27LineSum = sum_ng_lines NewGreenListV27.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV27QedSum_matches : NewGreenV27QedSum = sum_ng_qed NewGreenListV27.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.7 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) KLSTangent 附条件闸核验：交接书载明「仅当 attn/_kl_交付报告-20260912.md 已落盘且记载四关     *)
+(*    全绿方可并登」，经查该报告本席窗口未落盘——不登不等待不耦合，单件收口；且 UpReqKLSTangent     *)
+(*    v2.1 已在册（205/6），盘面复测 205/6 同 md5 d3b1226c 与在册口径相符零漂移，无重复登记面。      *)
+(* 2) 自指件：af_UpReqIndex 27 为 v2.0 冻结快照（L534 恒值，v2.1 起六代漂移只记不改），本席仍不改   *)
+(*    af_ 定义；v2.6 后实测 49，v2.7 后实测 52（本席 +3 条核对引理，只记不改，对账权留下一席）。      *)
