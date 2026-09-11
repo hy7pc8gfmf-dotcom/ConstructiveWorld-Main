@@ -861,10 +861,10 @@ Definition tid_cong {A B : Type} (f : A -> B) (x y : A) (H : tid A x y) :
   | tid_refl _ a0 => @tid_refl _ (f a0)
   end.
 
-(* Set 层自然数序型（k < m 编码为 nle (S k) m） *)
+(* Set 层自然数序型（k < m 编码为 nle (Datatypes.S k) m） *)
 Inductive nle (n : nat) : nat -> Set :=
 | nle_n : nle n n
-| nle_S : forall m : nat, nle n m -> nle n (S m).
+| nle_S : forall m : nat, nle n m -> nle n (Datatypes.S m).
 
 Ltac tidE H :=
   pose proof (match H in tid _ a b return a = b with tid_refl _ _ => eq_refl end) as HE.
@@ -882,7 +882,7 @@ Proof.
 Qed.
 
 Lemma leb_S : forall a m : nat,
-  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (S m)) true.
+  tid bool (Nat.leb a m) true -> tid bool (Nat.leb a (Datatypes.S m)) true.
 Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
@@ -913,7 +913,7 @@ Ltac nleP H :=
         | tid_refl _ _ => eq_refl
         end)) as HN.
 
-Lemma nle_SS : forall a b : nat, nle a b -> nle (S a) (S b).
+Lemma nle_SS : forall a b : nat, nle a b -> nle (Datatypes.S a) (Datatypes.S b).
 Proof.
   intros a b H. induction H as [| m H IH].
   - apply nle_n.
@@ -953,11 +953,11 @@ Proof.
   - apply nle_S. exact IH.
 Qed.
 
-(* nle 前驱消解：nle (S a) (S b) -> nle a b *)
-Lemma nle_pred : forall a b : nat, nle (S a) (S b) -> nle a b.
+(* nle 前驱消解：nle (Datatypes.S a) (Datatypes.S b) -> nle a b *)
+Lemma nle_pred : forall a b : nat, nle (Datatypes.S a) (Datatypes.S b) -> nle a b.
 Proof.
   intros a b H. apply nle_of_leb.
-  exact (nle_leb (S b) (S a) H).
+  exact (nle_leb (Datatypes.S b) (Datatypes.S a) H).
 Qed.
 
 Lemma nle_add_r : forall a b : nat, nle a (a + b).
@@ -968,28 +968,28 @@ Proof.
 Qed.
 
 
-(* nle (S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
-Lemma nle_10_absurd : forall P : Type, nle (S O) O -> P.
+(* nle (Datatypes.S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
+Lemma nle_10_absurd : forall P : Type, nle (Datatypes.S O) O -> P.
 Proof.
   intros P H. inversion H.
 Qed.
 
-(* Z 层严格序 → nle 编码桥：0 ≤ a < b ⟹ nle (S (to_nat a)) (to_nat b) *)
+(* Z 层严格序 → nle 编码桥：0 ≤ a < b ⟹ nle (Datatypes.S (to_nat a)) (to_nat b) *)
 Lemma zle_to_nle_S : forall a b : Z, (0 <= a)%Z -> (a < b)%Z ->
-  nle (S (Z.to_nat a)) (Z.to_nat b).
+  nle (Datatypes.S (Z.to_nat a)) (Z.to_nat b).
 Proof.
   intros a b Ha Hlt.
   assert (Hb : (0 <= b)%Z) by lia.
   apply nle_of_leb.
-  assert (Hleb : (Nat.leb (S (Z.to_nat a)) (Z.to_nat b)) = true).
+  assert (Hleb : (Nat.leb (Datatypes.S (Z.to_nat a)) (Z.to_nat b)) = true).
   { apply Nat.leb_le.
     exact (proj1 (Z2Nat.inj_lt a b Ha Hb) Hlt). }
   rewrite Hleb. apply tid_refl.
 Qed.
 
-(* n≠0 ⟹ |n| 的 nat 编码 ≥ (S O) *)
+(* n≠0 ⟹ |n| 的 nat 编码 ≥ (Datatypes.S O) *)
 Lemma to_nat_abs_pos : forall n : Z,
-  tid bool (Z.eqb n 0) false -> nle (S O) (Z.to_nat (Z.abs n)).
+  tid bool (Z.eqb n 0) false -> nle (Datatypes.S O) (Z.to_nat (Z.abs n)).
 Proof.
   intros n H. tidE H.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
@@ -998,9 +998,9 @@ Proof.
   - pose proof (proj2 (Z.abs_pos n) Hne). lia.
 Qed.
 
-(* |x| ≥ (S O) ⟹ x ≠ 0 的 bool 形 *)
+(* |x| ≥ (Datatypes.S O) ⟹ x ≠ 0 的 bool 形 *)
 Lemma eqb0_false_of_pos : forall x : Z,
-  nle (S O) (Z.to_nat (Z.abs x)) -> tid bool (Z.eqb x 0) false.
+  nle (Datatypes.S O) (Z.to_nat (Z.abs x)) -> tid bool (Z.eqb x 0) false.
 Proof.
   intros x H. destruct (Z.eqb x 0) eqn:HEq.
   - apply (proj1 (Z.eqb_eq _ _)) in HEq. rewrite HEq in H.
@@ -1023,19 +1023,19 @@ Definition dwtest (p k : nat) (x : Z) : bool := Z.eqb (Z.modulo x (powZN p k)) 0
 Fixpoint vpF (p : nat) (f : nat) (n : Z) {struct f} : nat :=
   match f with
   | O => O
-  | S g =>
+  | Datatypes.S g =>
       if Z.eqb n 0 then O
-      else if dvdtest p n then S (vpF p g (Z.div n (pZ p)))
+      else if dvdtest p n then Datatypes.S (vpF p g (Z.div n (pZ p)))
       else O
   end.
 
 (* 公开估值：燃料取 |n|+1（n≠0 且 p≥2 时每步 |n| 至少折半，燃料充分） *)
-Definition vp (p : nat) (n : Z) : nat := vpF p (S (Z.to_nat (Z.abs n))) n.
+Definition vp (p : nat) (n : Z) : nat := vpF p (Datatypes.S (Z.to_nat (Z.abs n))) n.
 
-(* 关键递减：p≥2、n≠0、p∣n ⟹ |n/p| < |n|（nle (S k) m 编码 k<m） *)
+(* 关键递减：p≥2、n≠0、p∣n ⟹ |n/p| < |n|（nle (Datatypes.S k) m 编码 k<m） *)
 Lemma zdiv_abs_decr : forall (p : nat) (n : Z), (2 <= p)%nat ->
   tid bool (Z.eqb n 0) false -> tid bool (dvdtest p n) true ->
-  nle (S (Z.to_nat (Z.abs (Z.div n (pZ p))))) (Z.to_nat (Z.abs n)).
+  nle (Datatypes.S (Z.to_nat (Z.abs (Z.div n (pZ p))))) (Z.to_nat (Z.abs n)).
 Proof.
   intros p n Hp Hnz Hd.
   tidE Hnz.
@@ -1110,7 +1110,7 @@ Proof.
         -- (* p ∣ n：两边同进入位支，递归比较 n/p 的计数 *)
            assert (Hdt : tid bool (dvdtest p n) true)
              by (rewrite Hd; apply tid_refl).
-           apply (tid_cong S).
+           apply (tid_cong Datatypes.S).
            apply IB with (n := Z.div n (pZ p)).
            ++ exact (nle_pred _ _
                  (nle_trans _ _ _ (zdiv_abs_decr p n Hp Hnz Hdt) HnB)).
