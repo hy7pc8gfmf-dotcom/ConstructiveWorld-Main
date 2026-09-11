@@ -56,6 +56,17 @@
 (* ng_UpReqPowMonoBridge(337/6) 盘面复测与登记口径相符；_Live 快照树缺本批 7 件（v2.1 同款观察，    *)
 (* 同步权在原席）；自指件注记：af_UpReqIndex 27 为 v2.0 快照，v2.1 后实测 30，v2.2 后实测 33       *)
 (* （+3 只记不改，对账权留下一席）。                                              *)
+(* v2.3（席T29：UpReqIndex 滚动登记席，20260911）：承 v2.2 ng_ 第三轨 18 件与全部既有登记面零改动  *)
+(* （append-only，既有条目/清单/字面值/版记无一触碰），ng_ 轨续写 1 件：                          *)
+(* UpReqTempDual(417 行/8 封口，席T13 4.6d sigT 对偶闭环)——稳定窗口三测 417/8 同 md5 005d7ece，    *)
+(* 现态补绑 CW_vo 树单件编译 EXIT=0 且 Print Assumptions 8 件全 Closed；四树对账 Live_X/CW_Live/   *)
+(* CW_vo md5 一致（_Live 快照缺件，v2.1/v2.2 同款观察，补齐权在原席/主会话）。逐件 wc -l 与        *)
+(* grep -c "Qed\." 实测（剥注释 token 级 \bQed\. 与 Theorem/Lemma/Corollary 行双复核相等；         *)
+(* G1 表九词逐件全零，含头注）。盘面观察只记不改：UpReqTopKTVChain 仍未绿不入面（本席窗口三测      *)
+(* 漂移 1064/21 → 1089/21 → 1092/21，末测 mtime 03:15 仍在写盘，现态补绑编译 EXIT=1，翻牌权留     *)
+(* 席T16）；UpReqEntropyDeficitTemp v2.1 在册 582/8 盘面复测相符；ng_UpReqAlign4 盘面漂移维持      *)
+(* v2.2 只记不改（改账权因禁改既有条目红线仍冻结，留总账席）；自指件注记：af_UpReqIndex 33 为      *)
+(* v2.2 快照，v2.3 后实测 36（+3 条核对引理，只记不改，对账权留下一席）。                          *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -1061,3 +1072,50 @@ Proof. reflexivity. Qed.
 (* 4) _Live 快照树缺本批 7 件（含 Align4/TVAbsEps/PowMonoBridge；v2.1 同款观察），Live_X/         *)
 (*    CW_Live/CW_vo 三树 md5 逐件一致；_Live 补齐权在原席/主会话。 *)
 (* 5) 自指件：af_UpReqIndex 27 为 v2.0 快照；v2.1 后 30；v2.2 后 33（本席 +3 条核对引理）。 *)
+
+
+(* ================= v2.3 增册（席T29：UpReqIndex 滚动登记席，20260911） ================= *)
+(* ng_ 第三轨续写：v2.2 后流水线新绿 1 件逐件实测登记（append-only；v2.1/v2.2 既有 18 条目/清单/ *)
+(* 字面值/版记零触碰，本节全部新名，EOF 追加）。                                           *)
+(* 口径同 v2.1/v2.2：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（本席经剥注释      *)
+(* token 级 \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等；三负证模式逐件全零）。       *)
+(* 入库判据（T28 卡定式）：稳定窗口多测一致（同 md5）+ 现态补绑 CW_vo 树单件编译 EXIT=0。     *)
+
+(* ng_UpReqTempDual —— UpReqTempDual.v：席T13，定理 4.6d 温度化最大熵对偶闭环（sigT 形组装） *)
+(*   （基座 TempDefs+EntropyDeficitTemp+KLSTangent 三件；本席稳定窗口三测 417/8 同 md5        *)
+(*   005d7ece，现态补绑单件编译 EXIT=0、Print Assumptions 8 件全 Closed；四树对账             *)
+(*   Live_X/CW_Live/CW_vo 一致，_Live 快照缺件只记不改） *)
+Definition ng_UpReqTempDual : NewGreenFace :=
+  MkNewGreenFace "UpReqTempDual.v" 417 8 20260911 "4.6d sigT dual closure under temperature".
+
+Definition NewGreenListV23 : list NewGreenFace :=
+  cons ng_UpReqTempDual nil.
+
+(* v2.3 续写统计：1 件 / 行数和 417 / 封口和 8（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV23Pieces  : nat := 1.
+Definition NewGreenV23LineSum : nat := 417.
+Definition NewGreenV23QedSum  : nat := 8.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV23Pieces_matches : NewGreenV23Pieces = cnt_ng NewGreenListV23.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV23LineSum_matches : NewGreenV23LineSum = sum_ng_lines NewGreenListV23.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV23QedSum_matches : NewGreenV23QedSum = sum_ng_qed NewGreenListV23.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.3 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) UpReqTopKTVChain 仍未绿不入面：本席窗口三测漂移（1064/21 → 1089/21 → 1092/21，md5 三值， *)
+(*    末测 mtime 03:15 仍在写盘）；现态补绑 CW_vo 树单件编译 EXIT=1（rtk2 段 real_plus/        *)
+(*    real_minus_r 放电错配）；稳定窗口双测不一致即不采信（T28 卡定式），翻牌权留席T16。 *)
+(* 2) UpReqEntropyDeficitTemp（v2.1 在册 582/8）盘面复测相符，零漂移，不重复登记。 *)
+(* 3) ng_UpReqAlign4 盘面漂移（v2.2 记 1431/28）维持只记不改：本席禁改既有条目红线优先，      *)
+(*    v2.2 移交之改账权冻结不行使，翻牌权留总账席（T7/T11 口径）。 *)
+(* 4) UpReqTempDual 四树对账：Live_X/CW_Live/CW_vo md5 一致 005d7ece；_Live 快照树缺件        *)
+(*    （v2.1/v2.2 同款观察），补齐权在原席/主会话。 *)
+(* 5) 自指件：af_UpReqIndex 33 为 v2.2 快照；v2.3 后实测 36（本席 +3 条核对引理，只记不改，    *)
+(*    对账权留下一席）。 *)
