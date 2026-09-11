@@ -121,7 +121,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
 Require Import UpReqAlignRestB.
-Require Export G09_MiscSmall.
+Require Import G09_MiscSmall.
 From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
@@ -1061,7 +1061,7 @@ End ReqLogDiff3.
 
 (* ===================================================================== *)
 (* Part 3：ReqSLMGreedy 两槽放电（批5扫尾席 2026-09-09；桥C1 挂账核销）       *)
-(*   消费：UpReqOrderArgmin（波4 已交付稳定，本席新增 Require）——           *)
+(*   消费：G09_MiscSmall（波4 已交付稳定，本席新增 Require）——           *)
 (*   req_pick_best_token / req_pick_best_token_optimal 闭包参数面 =         *)
 (*   {R}{RIS}{DO} Token vocab total_loss default_token prefix w            *)
 (*   （Check 探针在案）。                                                   *)
@@ -1288,7 +1288,7 @@ End ReqSLMGreedyDischarge.
 (*     语句纯 le 可 req 1:1；证明机 = ord_le_dec 归纳（E225 判词：DecidableOrder      *)
 (*     = 整体三分律 = LPO 等价、全库零 Instance，req 侧永久假设类与 Id 同构）。        *)
 (*     本文件 pick_best_optimal 槽随桥放电（req_greedy_kernel_limit 消费位）。       *)
-(*     ——批5扫尾席 2026-09-09 核销：波4 UpReqOrderArgmin 已交付，Part 3 两槽        *)
+(*     ——批5扫尾席 2026-09-09 核销：波4 G09_MiscSmall 已交付，Part 3 两槽        *)
 (*     放电（optimal = req_pick_best_token_optimal 1:1 消费；in_vocab = req 侧      *)
 (*     归纳自证）+ 消费面三件升级 _noslot 无槽定理，见 Part 3。原 ReqSLMGreedy      *)
 (*     槽位节保留为波 1 终版历史（终版稳定性纪律），消费面以 Part 3 无槽件为准。      *)

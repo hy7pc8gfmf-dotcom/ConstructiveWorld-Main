@@ -38,7 +38,7 @@
 (*      J*−J(π) ≡ β·KL）：消费 rfep_rlhf_free_energy_kl——J := −F，      *)
 (*      移项即得 F(π)−F(π＊) ≡ D·Σ kl_term(π,π＊)；KL≥0 半边沿              *)
 (*      real_gibbs_inequality_eps（CW219 L41704）/ logd_gibbs_sum_eps_  *)
-(*      boltzmann_list（UpReqLogD Part E）承重，不属本件。              *)
+(*      boltzmann_list（G05_LogSmall Part E）承重，不属本件。              *)
 (*   ⑥ R2-6 唯一性 4.2 镜像（real_rlhf_optimal_unique 前提承载形）：     *)
 (*      消费 rfep_rlhf_free_energy_kl 把「目标值相同」化到               *)
 (*      D·Σ kl_term ≡ 0，再逐项非负+和零提取逐点相等（C5 边界：等号     *)
@@ -52,7 +52,7 @@
 (* ------------------------------------------------------------------ *)
 (* 【红线】Set 层零 Prop（real_eq/real_lt 全 Set 值）；全 Qed 闭合；     *)
 (*   零 Axiom/Admitted/Classical*；既有文件零触碰（CW219/UpReqLogCompD/  *)
-(*   UpRealLeB/UpReqLogD 全只读，只消费 .vo）；real_eq 非 Id 禁 rewrite， *)
+(*   UpRealLeB/G05_LogSmall 全只读，只消费 .vo）；real_eq 非 Id 禁 rewrite， *)
 (*   全链 real_eq_trans/RealSetoid compat（E393 纪律）；纯等式零 eps     *)
 (*   账目（任务书 R2-2 坑位②）。坑卡对表：E404 五桥机组装配方（本件即   *)
 (*   其配方在抽象载体的兑现）；E406#1 coqchk 全路径高危；E406#2 distrib  *)
@@ -63,7 +63,7 @@
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
-Require Export G05_LogSmall.
+Require Import G05_LogSmall.
 
 (* ============================================================ *)
 (* Section RFEPMain：抽象 sumf 载体（CW219 RealRLHFMain 同名同型接口     *)
@@ -149,7 +149,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* Part 1：件1——real_kl_term_equiv 槽的 Real 实例（字面形 → kl_term）    *)
-(*   （UpReqLogD logd_kl_term_minus_form 的互逆双形，槽位同形喂件）      *)
+(*   （G05_LogSmall logd_kl_term_minus_form 的互逆双形，槽位同形喂件）      *)
 (* ---------------------------------------------------------- *)
 
 Lemma rfep_kl_term_equiv_real :

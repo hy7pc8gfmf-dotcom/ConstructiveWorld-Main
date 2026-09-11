@@ -314,7 +314,7 @@ Qed.
 (*   闭合，零新增结构。                                            *)
 (*                                                                *)
 (* ② sum_const（Σc == of_nat(len)·c）：换轨实读裁决——              *)
-(*   UpReqSumB sumb_sum_const 系 Real 层（real_eq/real_list_sum/    *)
+(*   G06_BForm sumb_sum_const 系 Real 层（real_eq/real_list_sum/    *)
 (*   real_mult/sumb_lenR），与本文件泛型接口层（R:Set）双名异型，    *)
 (*   直连不可行（E387 判据），仅作证明结构模板；UpReqDist GRPO 节   *)
 (*   req_list_sum_g_const 同 Context 同语句（reqd_of_nat 即         *)

@@ -41,10 +41,8 @@ jobs:
       - name: Cache build artifacts (base + modules, incremental)
         uses: actions/cache@v4
         with:
-          path: ConstructiveWorld_vo
+          path: ConstructiveWorld_vo/*.vo
           key: cw-vo-${{ hashFiles('ConstructiveWorld_Live/**/*.v', 'scripts/order.txt') }}
-          restore-keys: |
-            cw-vo-
 
       - name: Build base (skipped if cached)
         run: |

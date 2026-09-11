@@ -442,7 +442,7 @@ Print Assumptions zpi_fw_bt_pos.
 (*   ⑨ UpReqPPO.v:95      Zap 同形（节载体名 Real，语句同型）        *)
 (*   ⑩ UpSigMigrate.v:540 Z_thermo_pos : lt zero Z_thermo           *)
 (*      （键填充：zposd_Z_pos 直供，base_loss := energy，β := D）    *)
-(*   ⑪ UpEvictIdReq.v:88  Z_thermo_pos 同形（键填充）               *)
+(*   ⑪ G13_EvictFam.v:88  Z_thermo_pos 同形（键填充）               *)
 (*   ⑫ UpReqAttnIter.v:129 Z_thermo_i_pos（键填充）                 *)
 (*   ⑬ UpReqAttnGibbs.v:543 Z_thermo_r_pos（键填充）                *)
 (*   ⑭ UpSigMigrate2.v:891 Z_align_a_pos : lt zero Z_align_a_sum     *)
@@ -454,7 +454,7 @@ Print Assumptions zpi_fw_bt_pos.
 (*      sumf (fun s => if post_aud s then p s else zero)：零腿分支和  *)
 (*      （非 posting 态项为 zero），非全正项和；sumd_sum_pos 全正前提 *)
 (*      在零腿不可满足，posting 非空信息缺失，阻塞归 N。             *)
-(*   B2 UpEvictIdReq.v:117 evicted_partition_pos——evq_evicted_partition  *)
+(*   B2 G13_EvictFam.v:117 evicted_partition_pos——evq_evicted_partition  *)
 (*      := sumf (fun s => if keep_dec s then boltzmann_factor s      *)
 (*      else zero)：同零腿分支和（keep 分支），kept 非空信息缺失，    *)
 (*      阻塞归 N。                                                  *)
@@ -493,7 +493,7 @@ Require Import UpReqAlign.
 Require Import UpReqAlign2.
 Require Import UpSigMigrate.
 Require Import UpSigMigrate2.
-Require Export G13_EvictFam.
+Require Import G13_EvictFam.
 Require Import UpReqAttnIter.
 Require Import UpReqAttnGibbs.
 From Stdlib Require Import List.
@@ -736,14 +736,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件 ⑪：UpEvictIdReq.v:88 Z_thermo_pos 槽实例（键填充，同⑩形）     *)
+(* 主件 ⑪：G13_EvictFam.v:88 Z_thermo_pos 槽实例（键填充，同⑩形）     *)
 (* ============================================================ *)
 Lemma zpi2_evict_Z_thermo_pos
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S)
       (D : R) (D_pos : lt zero D) (energy : S -> R)
       (Hne : Not (enum = nil)) :
-  lt zero (@UpEvictIdReq.evq_Z_thermo R RIS S (@sumd_sumf R RIS S enum)
+  lt zero (@G13_EvictFam.evq_Z_thermo R RIS S (@sumd_sumf R RIS S enum)
              D D_pos energy).
 Proof.
   exact (@zposd_Z_pos R RIS S enum energy D D_pos Hne).

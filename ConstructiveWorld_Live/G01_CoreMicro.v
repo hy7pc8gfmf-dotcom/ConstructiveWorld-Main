@@ -359,7 +359,7 @@ Extraction "upextras.ml" softmax_temp partition_function_temp free_energy
 (* 红线：零 Axiom/Admitted；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
-Require Import CW214KL_scan AttnDoeblin.
+Require Import CW_ConstructiveWorld_219 AttnDoeblin.
 
 (* ################ Part 1：P5 FEP 闭环 ################ *)
 

@@ -4,7 +4,7 @@
 (* 蓝本：attn 工作区存档件 UpTVReal.v（1,518 行，只读零触碰）。      *)
 (* 本件为其并入模块化树的树兼容重建：                               *)
 (*   1. Require 仅基座 CW_ConstructiveWorld_219（替换存档件的        *)
-(*      CW214KL_scan 旧扫描座）；Stdlib 仅 List/QArith.Qring。       *)
+(*      CW_ConstructiveWorld_219 旧扫描座）；Stdlib 仅 List/QArith.Qring。       *)
 (*   2. Part 0 本地代数/求和辅助一律 tvd_ 前缀（其中                *)
 (*      real_eq_minus_compat / real_le_minus_nonneg 两名基座已有，   *)
 (*      改名防遮蔽；其余为树内防撞统一口径）。                       *)

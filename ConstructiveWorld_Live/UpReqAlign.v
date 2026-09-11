@@ -5,7 +5,7 @@
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
    盘点结论（批 3 清单 ~140 件三列对账，详见交付报告）：
-   [已覆盖→不重建] GRPO 14 件→UpReqDist.v；FEPAttention 4 + RowView 1→UpFEP.v
+   [已覆盖→不重建] GRPO 14 件→UpReqDist.v；FEPAttention 4 + RowView 1→G01_CoreMicro.v
      （Id 泛化件在案，req 化依赖批 2 FEP req 三件套）；代数/减法/消去辅件
      （minus_minus_distr/opp_eq/le_of_minus_nonneg/t12 环代数等）→UpReqAlgebra.v。
    [本席新建] 本文件：对齐节 req 基础设施 + RLHF/DPO 核心 + 旗舰链

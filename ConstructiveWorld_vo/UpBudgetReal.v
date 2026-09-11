@@ -4,7 +4,7 @@
 (* 论文 4（梯度动力学收敛）主贡献「显式迭代预算」的 Real 层载体：    *)
 (* 根文件 ConvergenceCauchy 节的接口前提                          *)
 (*   r_arch_pow : 0 < a -> 0 < eps -> sigT (fun n => a·κ^n < eps) *)
-(* 至今只有接口假设形态；本文件在具体柯西实数（CW214KL_scan 的     *)
+(* 至今只有接口假设形态；本文件在具体柯西实数（CW_ConstructiveWorld_219 的     *)
 (* Real := sigT (fun u : Qseq => cauchy u)）上闭合该缺口：        *)
 (*                                                              *)
 (* 主交付 r_arch_pow_real：                                      *)
@@ -36,8 +36,8 @@
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia.
 Require Import CW_ConstructiveWorld_219.
-Require Export G01_CoreMicro.
-Require Export G01_CoreMicro.
+Require Import G01_CoreMicro.
+Require Import G01_CoreMicro.
 
 Local Open Scope Q_scope.
 
@@ -125,7 +125,7 @@ Proof.
 Qed.
 
 (* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
-(* （此处不重证；见 CW214KL_scan.real_inv_one_local） *)
+(* （此处不重证；见 real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
 
@@ -426,7 +426,7 @@ Qed.
 
 (* ============ 6. 件 1：log 形态闭式条件（Real 层） ============ *)
 
-(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（UpHlogZ.hlogz_strict 放电）⟹ opp 反变 *)
+(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（G01_CoreMicro.hlogz_strict 放电）⟹ opp 反变 *)
 Lemma log_kappa_neg : forall (kappa : Real)
                          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one),
   real_lt real_zero (real_opp (real_log kappa Hk1)).

@@ -33,7 +33,7 @@ From Stdlib Require Import List.
 From Stdlib Require Import Wf_nat.
 
 (* ===================================================================== *)
-(* §0  Set 层恒等型基建（自 UpPLA/UpCLQuery 内联，零外部依赖）                *)
+(* §0  Set 层恒等型基建（自 G04_ProjFam/G11_IDLFam 内联，零外部依赖）                *)
 (* ===================================================================== *)
 
 Inductive loeb_tid (A : Type) : A -> A -> Type := loeb_tid_refl : forall x : A, loeb_tid A x x.
@@ -1355,7 +1355,7 @@ Proof. vm_compute. reflexivity. Qed.
 (* 形式化方针：每件 = 具体反例对象（显式 nat/Z/bool/列表构造）+ 其性质的       *)
 (* bool/tid 判定证明。语句零 Prop：等式用 tid、序用 nle、分支用 bool。         *)
 (* 荒谬关闭：tid bool true false 空指标消去 + nle (S O) O 空型消去。          *)
-(* 载体全程 Z/nat/bool 判定层；stdlib only；独立文件内联基建（不引 UpPLA）。   *)
+(* 载体全程 Z/nat/bool 判定层；stdlib only；独立文件内联基建（不引 G04_ProjFam）。   *)
 (* 纪律自检：四禁词零出现（含头注，便于 grep=0）；主定理语句到 Proof. 之间      *)
 (* 无裸 exists、无 Prop 层 and/or、无 -> False、无 Prop 前提；全链可提取       *)
 (* （Obj.magic = 0，见 _probe_refuted 验证记录）。                            *)
@@ -1370,7 +1370,7 @@ Open Scope Z_scope.
 Local Open Scope list_scope.
 
 (* ===================================================================== *)
-(* 0. Set 层基建（内联自 UpPLA.v 头部，独立文件不 Require）                    *)
+(* 0. Set 层基建（内联自 G04_ProjFam.v 头部，独立文件不 Require）                    *)
 (* ===================================================================== *)
 
 (* Set 层恒等型（语句零 Prop 的等式载体） *)

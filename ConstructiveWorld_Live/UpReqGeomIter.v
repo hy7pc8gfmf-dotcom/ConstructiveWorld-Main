@@ -7,7 +7,7 @@
 (* 先例件（全部只消费 .vo，零改已绿文件）：                              *)
 (*   UpReqGeomD：旗舰单步 geod_policy_iter_kl_geom_step_eps（L451）      *)
 (*     KL(r‖next) ≤ (1−η)·KL(r‖p)+eps ＋ geod_lsum/geod_kappa_pos；      *)
-(*   UpReqPowB：幂载体 powb_pow（(1−η)^t）；                             *)
+(*   G07_KLWall：幂载体 powb_pow（(1−η)^t）；                             *)
 (*   UpRealLeB：real_le_b/real_le_to_le_b（B 伴件语言）；                *)
 (*   UpGeomB：geod_b_half_double（半量机，KL Bishop 非负伴件消费）。      *)
 (* ---------------------------------------------------------------- *)
@@ -52,7 +52,7 @@ From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
 Require Import UpRealLeB2.
-Require Export G07_KLWall.
+Require Import G07_KLWall.
 Require Import UpReqGeomD.
 Require Import UpGeomB.
 
@@ -88,7 +88,7 @@ Proof.
 Qed.
 
 (* Z 正（n≥1 非平凡前提；逐项=正幂×正幂，real_list_sum_pos 非空和正） *)
-(*   n≥1 界走 CW_219 Set 层编码 NatLt := Id (ltb) true（UpMinP/UpReqPowB   *)
+(*   n≥1 界走 CW_219 Set 层编码 NatLt := Id (ltb) true（UpMinP/G07_KLWall   *)
 (*   先例同款；Prop 层 Datatypes.lt 构造性红线禁用，n=0 支路经              *)
 (*   id_false_true（CW_219：Id false true -> Empty_set）destruct 爆破）   *)
 Lemma geodi_zpos : forall (n : nat) (r q : nat -> Real) (kappa : Real)
@@ -106,7 +106,7 @@ Proof.
     + exact (geodi_pow_pos_lt (r i) (real_plus real_one (real_opp kappa)) (Hr i)).
     + exact (geodi_pow_pos_lt (q i) kappa (Hq i)).
   - destruct n as [| m].
-    + (* NatLt 0 0 ≡ Id false true：Empty_set 零构造子爆破（UpReqPowB 先例） *)
+    + (* NatLt 0 0 ≡ Id false true：Empty_set 零构造子爆破（G07_KLWall 先例） *)
       destruct (id_false_true Hn).
     + intro Hc. simpl in Hc. discriminate Hc.
 Qed.

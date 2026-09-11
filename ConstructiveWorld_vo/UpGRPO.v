@@ -16,7 +16,7 @@
 
 From Stdlib Require Import List.
 Import ListNotations.
-Require Import CW214KL_scan AttnDoeblin AttnSqrt.
+Require Import CW_ConstructiveWorld_219 AttnDoeblin AttnSqrt.
 
 (* ################ Part B：抽象层 NoDup 均匀化 ################ *)
 

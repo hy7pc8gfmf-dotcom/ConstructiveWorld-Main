@@ -28,7 +28,7 @@
 (*       语句全 Set 层（real_lt/real_le/real_eq + Or/sigT/prod + *)
 (*       NatLt），无 Prop 前提；全部 Qed. 闭合；                 *)
 (*       Real 层顶层名（um_ 前缀防遮蔽）。                       *)
-(* 注意：CW214KL_scan 将 S 遮蔽为 Set，nat 模式一律               *)
+(* 注意：CW_ConstructiveWorld_219 将 S 遮蔽为 Set，nat 模式一律               *)
 (* Datatypes.O / Datatypes.S。提取探针见 probe_minp_extract.v。  *)
 (* ============================================================ *)
 

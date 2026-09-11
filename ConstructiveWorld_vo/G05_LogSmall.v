@@ -16,9 +16,9 @@
 (*      real_gibbs_inequality_eps@41704 / real_kl_term@41696 /          *)
 (*      real_boltzmann_dist_r@43686（Section RealRLHFMain 出口）。       *)
 (*   ③ G5 供给（UpReqLogPrimD）：logd_log_inv_one_inv_real（log(1/x)    *)
-(*      ≡ −log x）——UpReqGibbsD 台账 E-GIBBSD-2 记名缺口件，本席到位。  *)
+(*      ≡ −log x）——G08_Gibbs 台账 E-GIBBSD-2 记名缺口件，本席到位。  *)
 (*   ④ 桥核对（红线）：real_le_to_le_b@78 / latb_real_lt_to_le_b@87 /   *)
-(*      real_lt_le_bridge@UpLogMono:16 全单向（real_le/lt → real_le_b）；*)
+(*      real_lt_le_bridge@G01_CoreMicro:16 全单向（real_le/lt → real_le_b）；*)
 (*      逆向 real_le_b → real_le = Or 形精确收口，构造性不可证。req 层   *)
 (*      Or 形无条件槽（log_le_linear 全字面形）据此不放电，改逐 eps /    *)
 (*      le_b 语言交付（§380 纪律 fallback，落点=Real 实例化定理）。      *)
@@ -39,7 +39,7 @@
 (*      实例化供给件：logd_list_sum_kl_minus_form /                      *)
 (*      logd_gibbs_inequality_minus_B（0 ≤_B Σ 字面形）/                 *)
 (*      logd_gibbs_inequality_minus_eps（0 ≤ Σ 字面形 + eps）。          *)
-(*      勘误：UpReqGibbsD 台账 E-GIBBSD-2「log 逆消去 CW219 未备、       *)
+(*      勘误：G08_Gibbs 台账 E-GIBBSD-2「log 逆消去 CW219 未备、       *)
 (*      字面形桥接留待」——本席经 G5 件闭合，字面形全通。                 *)
 (*   [槽族 4：real_gibbs_sum_eps@UpRealLeB:206 槽]                       *)
 (*      logd_gibbs_sum_eps_boltzmann_list —— real_sum_over_S :=          *)
@@ -73,7 +73,7 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
-Require Export G08_Gibbs.
+Require Import G08_Gibbs.
 
 From Stdlib Require Import List.
 
@@ -441,7 +441,7 @@ Extraction "_logd_g3_pure.ml" logd_le_b_id_r logd_log_le_linear_eps
 (* ======== G05_LogSmall 成员件：UpReqLogLinD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpReqLogLinD.v —— 槽放电战役 #2：log_le_linear 四站点同构族扫清      *)
-(*   （承 E-GIBBSD-1：席58 UpReqGibbsD.v Part A/C 缺口件跨战役复用）    *)
+(*   （承 E-GIBBSD-1：席58 G08_Gibbs.v Part A/C 缺口件跨战役复用）    *)
 (* ------------------------------------------------------------------ *)
 (* 四站点坐标（E-GIBBSD-1 卡；逐站 sed 实读勘误后确认同构）：            *)
 (*   站点 1  UpReqU2.v         L313  Hypothesis log_le_linear          *)
@@ -483,7 +483,7 @@ Extraction "_logd_g3_pure.ml" logd_le_b_id_r logd_log_le_linear_eps
 (*      携非空 datum 前提（CW219:41666），无法喂抽象 fsum_pos 参数位    *)
 (*      （δ 前提形不匹配）——故站点 3/4 温度对以本文件 BTReal 节具体     *)
 (*      重放（E354 装法先例）。                                          *)
-(*   c. datum 非空前提为既有先例签名形（zposd_Z_pos @UpReqZPosD:82      *)
+(*   c. datum 非空前提为既有先例签名形（zposd_Z_pos @G12_ZPosFam:82      *)
 (*      「Not (enum = nil) 基座 Set 版 Not」，CW219 real_list_sum_pos    *)
 (*      同位），零放大主张。                                             *)
 (* ------------------------------------------------------------------ *)
@@ -518,7 +518,7 @@ Extraction "_logd_g3_pure.ml" logd_le_b_id_r logd_log_le_linear_eps
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
-Require Export G08_Gibbs.
+Require Import G08_Gibbs.
 Require Import UpReqU2.
 Require Import UpReqFEPAttn.
 Require Import UpReqTempEntropy.

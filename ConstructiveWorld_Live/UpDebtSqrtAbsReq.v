@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpDebtSqrtAbsReq.v — 签名迁移批 4 第二席：UpDebtSqrtAbs 的     *)
+(* UpDebtSqrtAbsReq.v — 签名迁移批 4 第二席：G02_Debt 的     *)
 (*   req 伴件（5 件 + 1 冻结扣除）                                *)
 (*   冻结扣除：母件 sqrt_witness @L35 req 同位件批 2 已交付       *)
 (*   （UpReqDist reqd_sqrt_witness），本件不重建。                *)

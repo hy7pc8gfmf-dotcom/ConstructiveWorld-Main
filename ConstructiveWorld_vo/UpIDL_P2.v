@@ -1,10 +1,10 @@
 (* ===================================================================== *)
-(* UpIDL.v — 判词织机 IDL 熔锭差分两段制 Coq 落地                           *)
+(* G11_IDLFam.v — 判词织机 IDL 熔锭差分两段制 Coq 落地                           *)
 (*                                                                       *)
 (* 设计出处：ROUNDTABLE2 席 4 轮次 3 终稿「熔锭差分织机（Ingot-Differential    *)
 (*   Loom, IDL）——两段制，判词流永不逐条重放」（含席 3 异或击杀与席 2 活锁     *)
 (*   击杀的双重收编）；排队席位方案-二轮成果Coq化-20260907.md Q5 条目          *)
-(*   （依赖 Q4 语义——UpCLQuery.v 已交付，本件 Require Import 直接消费）。     *)
+(*   （依赖 Q4 语义——G11_IDLFam.v 已交付，本件 Require Import 直接消费）。     *)
 (*                                                                       *)
 (* 两段制：                                                                *)
 (*   构造段（熔炼 melt）：判词流单遍右折叠为锭 ingot——六洞钉位（同值累计       *)
@@ -22,7 +22,7 @@
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层（延续 Q4 Set 层路线：clq_tid/clq_nle/iffT/sigT）；      *)
 (* 语句零 Prop：等式 clq_tid、序 clq_nle、⟺ iffT、分支 bool/prod/sigT。              *)
-(* 纪律：纯构造性、零公理式出口、stdlib + UpCLQuery、全链可提取。              *)
+(* 纪律：纯构造性、零公理式出口、stdlib + G11_IDLFam、全链可提取。              *)
 (* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面咬合最紧」自定）：     *)
 (*   ① 六洞型 hole=k0 k1 kb kc ke kr 具象为六槽，槽位=Q4 dtab 指标 0..5，      *)
 (*      头元 k0 恒 0（gauge 规范），全部判词语义走头相对差 dsub d (hix h) 0。  *)
@@ -39,7 +39,7 @@ From Stdlib Require Import ZArith_dec.
 From Stdlib Require Import Lia.
 From Stdlib Require Import Bool.
 From Stdlib Require Import List.
-Require Export G11_IDLFam.
+Require Import G11_IDLFam.
 
 Open Scope Z_scope.
 

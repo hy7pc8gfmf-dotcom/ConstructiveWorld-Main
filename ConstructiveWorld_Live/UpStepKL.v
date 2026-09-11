@@ -634,7 +634,7 @@ Proof. intros eta W X Z. destruct eta as [e He]. destruct W as [w Hw].
   destruct X as [x Hx]. destruct Z as [z Hz]. apply real_eq_of_zero_diff.
   intro n. simpl. ring. Qed.
 
-(* log 单调 le 版（Or 编码逐支，UpLogMono 同款） *)
+(* log 单调 le 版（Or 编码逐支，G01_CoreMicro 同款） *)
 Lemma kl_log_le_mono : forall (a b : Real) (Ha : real_lt real_zero a)
     (Hb : real_lt real_zero b),
   real_le a b -> real_le (cw_log a Ha) (cw_log b Hb).

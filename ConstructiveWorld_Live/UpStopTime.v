@@ -40,7 +40,7 @@ Local Open Scope Q_scope.
 (* §0 本地桥（nat 序 / bool 反映 / Q 换形；宪法席解法口径）          *)
 (* ============================================================ *)
 
-(* NatLt 双向桥（CW214KL_scan.NatLt = Id (Nat.ltb n m) true；       *)
+(* NatLt 双向桥（NatLt = Id (Nat.ltb n m) true；       *)
 (*   库内 natlt_elim/intro 困在 LiveCore section 不可达，本地重建）   *)
 Lemma st_natlt_drop : forall n m : nat, NatLt n m -> (n < m)%nat.
 Proof.

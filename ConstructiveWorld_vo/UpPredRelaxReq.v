@@ -1,8 +1,8 @@
 (* ============================================================ *)
-(* UpPredRelaxReq.v — 签名迁移批 4 第二席 v2：UpPredRelax 的 req 伴件 *)
+(* UpPredRelaxReq.v — 签名迁移批 4 第二席 v2：G04_ProjFam 的 req 伴件 *)
 (*   （6 件：热弛豫 1 + 涨落 1 + Landauer 1 + 扰动传递 2 + 多 epoch 1） *)
 (*                                                                *)
-(* 母件：attn\UpPredRelax.v（B8 升级：预测区弛豫单调，2026-09-07）。 *)
+(* 母件：attn\G04_ProjFam.v（B8 升级：预测区弛豫单调，2026-09-07）。 *)
 (* 伴件形态：req_* 独立伴 Section，与母件同树（attn 目录）。        *)
 (* -------------------------------------------------------------- *)
 (* 覆盖对账（req 件名 -> 母件 Id 原件 @ 行号；grep 实测 6 全数交付   *)
@@ -24,7 +24,7 @@
 (*   2. 件 4/5/6（母件 5c/5d）零 Id 内容：纯 le_trans/le_refl 序论，  *)
 (*      req 化=换 RIS 世界承序；nat 归纳收口走 eq_ind+Nat.add_0_r/    *)
 (*      Nat.add_succ_r 项级换形（零 rewrite，纯 term-mode）。         *)
-(*   3. 件 4/5 领地型 PropType 沿 UpReqPCT 桥 C3 先例：母件领域类型   *)
+(*   3. 件 4/5 领地型 PropType 沿 G09_MiscSmall 桥 C3 先例：母件领域类型   *)
 (*      （PropositionConvergenceCore.Proposition，Id 领地）作纯类型   *)
 (*      域原位保留，序内容由 RIS 世界承载（Let 别名防投影歧义）。      *)
 (*   4. le N (N+1) 的 le_plus_nonneg_r 非 RIS 字段——le_plus_compat   *)
@@ -260,7 +260,7 @@ End PredRelaxLandauerReq.
 
 (* ============================================================ *)
 (* 件 4/5：层级稳定性的扰动传递（母件 L174-221 PredRelaxHier req 同位；*)
-(*   领地型 PropType 沿 UpReqPCT 桥 C3 先例：Id 领地领域类型作纯类型  *)
+(*   领地型 PropType 沿 G09_MiscSmall 桥 C3 先例：Id 领地领域类型作纯类型  *)
 (*   域原位保留，序内容由 RIS 世界承载）。                            *)
 (* ============================================================ *)
 Section PredRelaxHierReq.

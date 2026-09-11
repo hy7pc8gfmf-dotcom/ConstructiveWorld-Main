@@ -542,7 +542,7 @@ Qed.
 (*    a. 槽语句逐 eps 化：square_nonneg ⟦forall eps, lt zero eps ->     *)
 (*       le zero (plus (mult a a) eps)⟧——件1 即放电器，两消费件随      *)
 (*       逐 eps 改述全放（消费②的改述形态 = 件2 已示范）；              *)
-(*    b. 槽语句 le_b 化（普查 L375 UpReqLatticeB 路线）——               *)
+(*    b. 槽语句 le_b 化（普查 L375 G06_BForm 路线）——               *)
 (*       UpRealLeB.real_square_nonneg_B 直喂；                          *)
 (*    c. 维持诚实 Variable 位（与 Id 系 L24301 同判词）。               *)
 (* 本文件对两消费定理本体零改动（消费件本体不動）；件2 与件3/件4 并存。  *)

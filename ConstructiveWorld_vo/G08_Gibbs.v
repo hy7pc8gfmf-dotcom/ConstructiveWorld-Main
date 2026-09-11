@@ -14,7 +14,7 @@
 (*   下界形，也不是逐 eps 形。故放电路线勘定为：                     *)
 (*   Z_aud ≤ sumf p（req_Z_aud_le_one，通过集质量 ≤ 总质量）          *)
 (*     == one（Hp_norm 归一化）⟹ log Z_aud ≤ log one == 0            *)
-(*     （log 单调 le 版直推；Id 侧总放电先例 = UpHlogZ.hlogz_*，      *)
+(*     （log 单调 le 版直推；Id 侧总放电先例 = G01_CoreMicro.hlogz_*，      *)
 (*       Real 层种子 = CW219 real_log_le_mono/real_log_le_zero_of_le_one）。 *)
 (*   任务书草图「Z ≥ max p_i ⟹ log Z 下界」为下界槽路线，实测槽无     *)
 (*   此形态：max 提取不入职；「逐点正性见证」在二态实例里由           *)
@@ -63,7 +63,7 @@ Qed.
 
 (* ============================================================ *)
 (* T2 模板 ②：Real 具体放电（抽象单调槽由 CW219 种子直喂）             *)
-(*   real_log_le_mono（CW219 L112104 区，UpLogMono 镜像）喂单参槽；    *)
+(*   real_log_le_mono（CW219 L112104 区，G01_CoreMicro 镜像）喂单参槽；    *)
 (*   语句层 lt/le/log 经 RealEnhancedReal 实例 delta 等同 real_*。     *)
 (* ============================================================ *)
 Lemma hzlogd_discharge_real :
@@ -74,8 +74,8 @@ Proof.
            real_log_le_mono Z HZ HZ1).
 Qed.
 
-(* 双形并存：real_log_le_zero_of_le_one（UpLogMono 直用形态）直取，      *)
-(* 与上行殊途同归（同型语句双路互证，UpHlogZ 双交付先例）。             *)
+(* 双形并存：real_log_le_zero_of_le_one（G01_CoreMicro 直用形态）直取，      *)
+(* 与上行殊途同归（同型语句双路互证，G01_CoreMicro 双交付先例）。             *)
 Lemma hzlogd_discharge_real_direct :
   forall (Z : Real) (HZ : lt zero Z), le Z one -> le (log Z HZ) zero.
 Proof.
@@ -334,7 +334,7 @@ Print Assumptions hzlogd_proj_min_kl_bool.
 (*   dist_log_le_linear @UpReqDist:1029 输出接口序 le——                 *)
 (*   RealEnhancedReal 实例的 le 字段 := real_le（Or 编码）。            *)
 (*   桥核对：real_le_to_le_b@UpRealLeB:78 / latb_real_lt_to_le_b@       *)
-(*   UpReqLatticeB:87 / real_lt_le_bridge@UpLogMono:16 均单向           *)
+(*   G06_BForm:87 / real_lt_le_bridge@G01_CoreMicro:16 均单向           *)
 (*   （real_le / real_lt → real_le_b）；逆向 real_le_b → real_le 即     *)
 (*   Or 形精确收口，构造性不可证（UpRealLeB 尾注台账明示）。            *)
 (*   判词：req 层槽不可由 B 形引擎无条件放电（序异向，缺逆向桥件）；    *)
@@ -912,7 +912,7 @@ Qed.
 (*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（CW219:3448/3517），  *)
 (*      real_list_sum_pos（根内 L41660 区）背书「逐项正⟹和正」方向；           *)
 (*      逆向「和零⟹逐项零」经 le_b 反对称（根内缺件）本席自建闭合。            *)
-(*   2. log 引擎：real_log_le_mono（UpLogMono L24，lt 支 real_log_lt_mono      *)
+(*   2. log 引擎：real_log_le_mono（G01_CoreMicro L24，lt 支 real_log_lt_mono      *)
 (*      根内已证——严格单调在库）；log 单射/eq-linear 桥缺席——CW219 L41224      *)
 (*      诚实边界明示「log_eq_linear 需强三分/LPO，构造性不可证」。实测定：      *)
 (*      主件收口确须该桥。                                                     *)

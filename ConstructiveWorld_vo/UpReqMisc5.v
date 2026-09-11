@@ -28,7 +28,7 @@
       （grpo_count_one/count_zero_remove_id/remove_notin_aux/nodup_g/count_g/removeT_g），
       结论 @Id nat 原样零迁移（清单 §7.12 判词；总账预定路线）；
    5. iterate（CW219 L1394）：多态纯 nat 递归零 Id 内容，跨接口原样复用
-      （UpReqPCT.v 先例同款）；
+      （G09_MiscSmall.v 先例同款）；
    6. two_pos（Id 顶层件）req 侧以 UpReqAlgebra req_two_pos 内联；
    7. 向量载体位等号保持 Id（req 字段仅定义于 R 上，载体无 setoid 等位——
       Part 0 头注）；R 值位等号 req 逐件对账；

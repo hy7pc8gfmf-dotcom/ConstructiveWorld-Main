@@ -36,7 +36,7 @@
 (*              显式项：真支取正、假支空型消去——假设位 scrutinee     *)
 (*              停滞坑的件化消解）。                                *)
 (*   放电件 5：B1 brp_b1_Z_aud_pos（UpReqAlign HZ 槽实例形）        *)
-(*            B2 brp_b2_evicted_partition_pos（UpEvictIdReq 槽）     *)
+(*            B2 brp_b2_evicted_partition_pos（G13_EvictFam 槽）     *)
 (*            B3 brp_b3_evicted_partition_r_pos（UpReqAttnGibbs 槽） *)
 (*            B4 brp_b4_evicted_partition_pos + brp_b4_of_carrier   *)
 (*            （UpReqAlignRestB 槽：sumd 实例形 + 裸载体回接形）。    *)
@@ -299,7 +299,7 @@ Qed.
 End BrpDischargeB1.
 
 (* ============================================================ *)
-(* Section BrpDischargeB2：UpEvictIdReq evicted_partition_pos 槽      *)
+(* Section BrpDischargeB2：G13_EvictFam evicted_partition_pos 槽      *)
 (*   槽：evicted_partition = sumf (fun s => if keep_dec s then        *)
 (*   boltzmann_factor s else zero)；原位 Variable 位。保留项逐项正    *)
 (*   = exp_neg_pos（CW219 增强接口字段）。                            *)
@@ -314,7 +314,7 @@ Variable energy : S -> R.
 Variable keep : S -> Set.
 Variable keep_dec : forall s : S, Or (keep s) (Not (keep s)).
 
-(* 槽形 boltzmann 因子（UpEvictIdReq 同形） *)
+(* 槽形 boltzmann 因子（G13_EvictFam 同形） *)
 Definition brp_boltzmann_factor (s : S) : R :=
   exp_neg (mult (inv_pos D D_pos) (energy s)).
 

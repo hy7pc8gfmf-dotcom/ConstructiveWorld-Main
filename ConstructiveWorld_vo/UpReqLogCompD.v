@@ -1,6 +1,6 @@
 (* ============================================================ *)
 (* UpReqLogCompD.v —— 广义旗舰链 G5-S 复合族放电席（重启）：S 阻塞 7 槽    *)
-(*   复合清偿（G5 UpReqLogPrimD 18 件 + G6 UpReqLogD 10 件 引擎试装）      *)
+(*   复合清偿（G5 G05_LogSmall 18 件 + G6 G05_LogSmall 10 件 引擎试装）      *)
 (*   2026-09-10                                                            *)
 (* ------------------------------------------------------------------ *)
 (* 席 71 判词表 7 槽逐槽判定（本席复合重建）：                              *)
@@ -66,8 +66,8 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
-Require Export G05_LogSmall.
-Require Export G05_LogSmall.
+Require Import G05_LogSmall.
+Require Import G05_LogSmall.
 From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 

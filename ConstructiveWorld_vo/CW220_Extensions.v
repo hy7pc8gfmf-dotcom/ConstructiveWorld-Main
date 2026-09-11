@@ -5,24 +5,24 @@
 (* 瘦身依据（2026-09-11，R 席）：                                        *)
 (*   1. 全量编译 20/99 断于本文件 L12525（Module EvictId 内投影 Let 绑定     *)
 (*      `Let R := @R RI` 构建期 dedot 后误解析到 S01_BaseRing.R : Set）——    *)
-(*      该病灶随 UpEvictId 分区整体剔除而消失。                            *)
+(*      该病灶随 G13_EvictFam 分区整体剔除而消失。                            *)
 (*   2. 原 34 件合并区中 30 件与 Live_X 独立件（Up*.v，四关绿且已收录）      *)
 (*      /G 组成员同名冗余，均为旧拷贝，全部剔除。                          *)
 (*   3. 活价值只剩两个 Module 的 12 名：                                  *)
-(*      - G07_KLWall.UpReqKLCvx 需要 BudgetReal 4 名：                   *)
+(*      - G07_KLWall.G07_KLWall 需要 BudgetReal 4 名：                   *)
 (*        r_arch_pow_real / real_pow / one_minus_delta_pos_real /          *)
 (*        one_minus_delta_lt_one_real（后两名为根层 UpArchAttn 分区供给，    *)
 (*        其 Import BudgetReal 依赖 BudgetReal 先在）。                    *)
-(*      - G12_ZPosFam.UpReqZAuto 需要 SigMigrate 8 名：                   *)
+(*      - G12_ZPosFam.G12_ZPosFam 需要 SigMigrate 8 名：                   *)
 (*        Z_thermo / boltzmann_dist_attn / boltzmann_factor /              *)
 (*        cwe_exp_pos_fn / cwe_partition_function_temp / cwe_softmax_temp   *)
 (*        / req_attention_is_gibbs_temp / req_mult_opp_l。                 *)
-(*   4. 保留分区链闭包：UpHlogZ（BudgetReal 的 log_kappa_neg 消费           *)
+(*   4. 保留分区链闭包：G01_CoreMicro（BudgetReal 的 log_kappa_neg 消费           *)
 (*      hlogz_strict）。其余保留分区对被剔除分区零引用（声明名交叉核查       *)
 (*      + 限定名扫描双验证；real_log_le_mono 等来自基座 S14）。             *)
 (*                                                                    *)
 (* 保留分区清单（4 件，原顺序）：                                          *)
-(*   UpHlogZ      （原 L437–541）                                        *)
+(*   G01_CoreMicro      （原 L437–541）                                        *)
 (*   UpSigMigrate （原 L1410–1996，Module SigMigrate）                    *)
 (*   UpBudgetReal （原 L10250–10967，Module BudgetReal）                  *)
 (*   UpArchAttn   （原 L10968–11177，根层，Import BudgetReal）             *)
@@ -36,22 +36,22 @@
 
 Require Import CW_ConstructiveWorld_219.
 
-(* ---------- UpHlogZ ---------- *)
+(* ---------- G01_CoreMicro ---------- *)
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory ".".
 (* ============================================================ *)
-(* UpHlogZ.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总放电   *)
+(* G01_CoreMicro.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总放电   *)
 (*                                                              *)
 (* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
 (* 的显式前件 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
 (*   Z_aud ≤ 1（Z_aud_le_one，根内已证）                           *)
 (*   ⟹ log Z_aud ≤ log 1 = 0                                      *)
-(*     （log 单调 le 版 = UpLogMono.real_log_le_mono；              *)
+(*     （log 单调 le 版 = G01_CoreMicro.real_log_le_mono；              *)
 (*       log 1 == 0 = real_log_one，根内已证）。                    *)
 (*                                                              *)
 (* 交付清单：                                                      *)
 (*   hlogz_discharge       —— 主放电：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
-(*   hlogz_discharge_full  —— 同型对齐版（走 UpLogMono 直用形态）    *)
+(*   hlogz_discharge_full  —— 同型对齐版（走 G01_CoreMicro 直用形态）    *)
 (*   hlogz_strict          —— 严格版：0 < Z < 1 ⟹ log Z < 0         *)
 (*                            （过滤器确实拦截了质量）               *)
 (*   hlogz_opp_nonneg      —— KL 尾项形态：0 ≤ opp (log Z)          *)
@@ -85,7 +85,7 @@ Qed.
 
 (* ================================================================ *)
 (* 主交付 2：HlogZ 放电完整版（与 KLProjection 前件对齐）               *)
-(*   同型语句，走 UpLogMono 直用形态 real_log_le_zero_of_le_one，      *)
+(*   同型语句，走 G01_CoreMicro 直用形态 real_log_le_zero_of_le_one，      *)
 (*   双路互证（单调链合成 / 直用形态殊途同归）。                        *)
 (* ================================================================ *)
 Theorem hlogz_discharge_full :
@@ -740,7 +740,7 @@ Set Extraction Output Directory ".".
 (* 论文 4（梯度动力学收敛）主贡献「显式迭代预算」的 Real 层载体：    *)
 (* 根文件 ConvergenceCauchy 节的接口前提                          *)
 (*   r_arch_pow : 0 < a -> 0 < eps -> sigT (fun n => a·κ^n < eps) *)
-(* 至今只有接口假设形态；本文件在具体柯西实数（CW214KL_scan 的     *)
+(* 至今只有接口假设形态；本文件在具体柯西实数（CW_ConstructiveWorld_219 的     *)
 (* Real := sigT (fun u : Qseq => cauchy u)）上闭合该缺口：        *)
 (*                                                              *)
 (* 主交付 r_arch_pow_real：                                      *)
@@ -1157,7 +1157,7 @@ Qed.
 
 (* ============ 6. 件 1：log 形态闭式条件（Real 层） ============ *)
 
-(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（UpHlogZ.hlogz_strict 放电）⟹ opp 反变 *)
+(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（G01_CoreMicro.hlogz_strict 放电）⟹ opp 反变 *)
 Lemma log_kappa_neg : forall (kappa : Real)
                          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one),
   real_lt real_zero (real_opp (real_log kappa Hk1)).

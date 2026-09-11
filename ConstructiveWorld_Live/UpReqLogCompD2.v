@@ -26,8 +26,8 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
-Require Export G05_LogSmall.
-Require Export G05_LogSmall.
+Require Import G05_LogSmall.
+Require Import G05_LogSmall.
 Require Import UpReqLogCompD.
 Require Import UpReqAlgebra.
 From Stdlib Require Import List.
