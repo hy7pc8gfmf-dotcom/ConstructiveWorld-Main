@@ -13,7 +13,7 @@
 - **G01_CoreMicro**: UpHlogZ + UpExtras + UpFEP + UpLogMono + UpPPO
 - **G02_Debt**: UpDebtSqrtAbs + UpDebtDual + UpDebtGibbsT
 - **G04_ProjFam**: UpPLA + UpPredRelax + UpProj + UpProjBPC
-- **G05_LogSmall**: UpReqLogD + UpReqLogLinD + UpReqLogPrimD
+- **G05_LogSmall**: UpReqLogPrimD + UpReqLogD + UpReqLogLinD
 - **G06_BForm**: UpReqPPOB + UpReqSumB + UpReqMinPProjB + UpReqLatticeB
 - **G07_KLWall**: UpReqKLCvx + UpReqPowB + UpReqJensen + UpReqKLStrict + UpReqKLEnergy
 - **G08_Gibbs**: UpReqHlogZD + UpReqGibbsD + UpReqGibbsE2

@@ -608,6 +608,8 @@ Proof.
   - apply clq_tid_refl.
 Qed.
 
+Close Scope Z_scope.
+
 (* ======== G11_IDLFam 成员件：UpIDL（原样并入，自带 Require）======== *)
 (* ===================================================================== *)
 (* UpIDL.v — 判词织机 IDL 熔锭差分两段制 Coq 落地                           *)
@@ -1797,3 +1799,5 @@ Proof.
   pose proof (clq_nle_leb (dlen (dbuild (ipin (melt s)))) j Hj) as L2. tidQ L2 EL2.
   rewrite EL1, EL2. apply clq_tid_refl.
 Qed.
+
+Close Scope Z_scope.
