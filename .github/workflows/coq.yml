@@ -51,7 +51,7 @@ jobs:
           cd ConstructiveWorld_vo
           bash build.sh
 
-      - name: coqchk full-tree certification (shared-closure: one pass, deps verified once)
+      - name: coqchk full-tree certification (shared-closure single pass)
         run: |
           eval "$(opam env)"
           cd ConstructiveWorld_vo
