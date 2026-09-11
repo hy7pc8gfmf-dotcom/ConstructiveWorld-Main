@@ -77,6 +77,21 @@
 (* 在案（文末 v2.4 改账段）；任务书 16 件批中 14 件经 grep 证实在册且盘面复测零漂移，不重复登记；      *)
 (* UpReqTopKTVChain 仍未绿不入面（本席窗口 1104/21 仍漂移，翻牌权留席T16）；自指件注记：v2.3 后 36，  *)
 (* v2.4 后实测 43（本席 +7 条核对引理，只记不改，对账权留下一席）。                                  *)
+(* v2.5（席T40：UpReqIndex v2.5 滚动登记席，20260911）：承 v2.4 ng_ 第三轨 21 件与全部既有登记面    *)
+(* 零缩水（append-only；改前备份 _t40_backup.v 同 md5 768adc33 留档），ng_ 轨续写 8 件：             *)
+(* UpReqKLStrictB(296 行/10 封口，席T23 判词 C 挂账件收口)/UpReqLatbMaxList(238/8，席T19b max 侧     *)
+(* 列表格组合)/UpReqMinPKLChain(1038/27，X1 论文2 §10.2 复合熵链一步拼装)/UpReqCDispersion(467/22，    *)
+(* 席T26 C 档余槽批量放电)/UpReqCEqDispersion(180/3，席T34 S 档等号槽严格化)/UpReqELBOStrict(393/7，   *)
+(* 席T33 4.8 严格逆否腿)/UpReqTempDualList(507/8，席T34 4.6d list 载体总装)/UpReqI4Witness(391/12，    *)
+(* 席T30 判词 I4 证书位实例化)——行数和 3510、封口和 97；入库判据=稳定窗口双测同 md5（间隔 ≥45s）+       *)
+(* 现态单件编译 EXIT=0（重定向取真码，T29 卡定式）。Align4 改账复验：盘面 1431/28 同 md5 62e30e10，     *)
+(* 与 v2.4 改账口径逐字相符零再漂移，无需再行改账。盘面观察只记不改：LogRDF af_ 17→19 漂移且头注       *)
+(* 负证模式字面自触 G1 表两处（T21 卡坑再现，权在原席）；MpDomain 在册 859/23 → 盘面 1069/28 漂移       *)
+(* （X3 在飞续建）；ArgminEngine 在飞未绿不入面（本席窗口 276/12 → 344/12 增长中，补绑 EXIT=1）；        *)
+(* TopKTVChain 双测 1104/21 同 md5 56dab1e6 且补绑编译 EXIT=0（四席横跨同值、本席首验绿），唯翻牌权     *)
+(* v2.2/v2.3/v2.4 三席明示留席T16，本席不越权只记观察，登记权随翻牌权移交下一登记席；G06 合并件        *)
+(* token 复测 24 与在册 25 差 1（grep 25 含伪命中一处），G12 复测 44 相符；自指件注记：v2.4 后 43，      *)
+(* v2.5 后实测 46（本席 +3 条核对引理，只记不改，对账权留下一席）。                                  *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -1209,4 +1224,109 @@ Proof. reflexivity. Qed.
 (* 3) UpReqTopKTVChain 仍未绿不入面：本席窗口实测 1104/21（md5 56dab1e6），四席位窗口横跨           *)
 (*    1064→1104 仍漂移，现态未验绿；翻牌权留席T16。 *)
 (* 4) 自指件：af_UpReqIndex 36 为 v2.3 快照；v2.4 后实测 43（本席 +7 条核对引理，只记不改，        *)
+(*    对账权留下一席）。 *)
+
+
+(* ================= v2.5 增册（席T40：UpReqIndex v2.5 滚动登记席，20260911） ================= *)
+(* ng_ 第三轨续写：v2.4 后流水线新绿 8 件逐件实测登记（append-only；v2.1–v2.4 既有 21 条目/清单/    *)
+(* 字面值/版记零触碰，本节全部新名，EOF 追加）。                                                     *)
+(* 口径同 v2.1–v2.4：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（本席经剥注释 token 级     *)
+(* \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等；G1 表九词逐件全零）。                          *)
+(* 入库判据（T28/T29/T31 卡定式）：稳定窗口双测同 md5（间隔 ≥45s）+ 现态单件编译 EXIT=0（重定向取真码）。 *)
+
+(* ng_UpReqKLStrictB —— UpReqKLStrictB.v：席T23，KLStrict 族 ≤_B 显式对照/收口件席（判词 C 挂账件交付） *)
+(*   （G07_KLWall 成员 UpReqKLEnergy 尾注判词 C 之后续席位交付：逐项 Bishop 形严格化收口器 real_le_b 系； *)
+(*   本席双测 296/10 同 md5 34b64964，补绑单件编译 EXIT=0，件内假设清查全 Closed，G1 表九词全零） *)
+Definition ng_UpReqKLStrictB : NewGreenFace :=
+  MkNewGreenFace "UpReqKLStrictB.v" 296 10 20260911 "KL strict family Bishop-form closure, verdict C delivery".
+
+(* ng_UpReqLatbMaxList —— UpReqLatbMaxList.v：席T19b，B 形扩展线 max 侧列表版格组合件 *)
+(*   （B形扩展线仪表 §⑥3「侦察单未立项面」首项：r_max 上界格组合列表版；本席双测 238/8 同 md5        *)
+(*   c69bbf8b，补绑单件编译 EXIT=0，G1 表九词全零） *)
+Definition ng_UpReqLatbMaxList : NewGreenFace :=
+  MkNewGreenFace "UpReqLatbMaxList.v" 238 8 20260911 "B-form max-side list lattice combinator".
+
+(* ng_UpReqMinPKLChain —— UpReqMinPKLChain.v：X1 席，复合熵链一步拼装 *)
+(*   （论文 2 正式版 §10.2 第 6 项：KL(minp‖full) ≤ S ≤ log|S|；全在盘只读消费 UpAuditBridge/UpMinP 等； *)
+(*   本席双测 1038/27 同 md5 1ec0d177，补绑单件编译 EXIT=0，G1 表九词全零） *)
+Definition ng_UpReqMinPKLChain : NewGreenFace :=
+  MkNewGreenFace "UpReqMinPKLChain.v" 1038 27 20260911 "minP-full KL chain one-step assembly, paper2 s10.2 item 6".
+
+(* ng_UpReqCDispersion —— UpReqCDispersion.v：席T26，C 档余槽批量放电席（log_req_compat 9 实例打头） *)
+(*   （承席N2 Top3 判词「需新基座已降维成 Require+实例化纯组装，9 实例同形一喂即收」；本席双测          *)
+(*   467/22 同 md5 a2b68524，补绑单件编译 EXIT=0，G1 表九词全零） *)
+Definition ng_UpReqCDispersion : NewGreenFace :=
+  MkNewGreenFace "UpReqCDispersion.v" 467 22 20260911 "C-tier residual slots batch discharge, nine instances".
+
+(* ng_UpReqCEqDispersion —— UpReqCEqDispersion.v：席T34，CDispersion S 档等号槽严格化放电席 *)
+(*   （承席T26 头注诚实边界判词之 S 档等号槽（log_le/log_eq_linear 等号条件位）；本席双测 180/3 同     *)
+(*   md5 c9493f08，补绑单件编译 EXIT=0，件内假设清查全 Closed，G1 表九词全零） *)
+Definition ng_UpReqCEqDispersion : NewGreenFace :=
+  MkNewGreenFace "UpReqCEqDispersion.v" 180 3 20260911 "CDispersion S-tier equality-slot strict discharge".
+
+(* ng_UpReqELBOStrict —— UpReqELBOStrict.v：席T33，定理 4.8 ELBO 紧性补齐严格逆否腿 *)
+(*   （(b) 严格逆否腿 Real 层可达形：显式分歧见证（q 与 p_b 在某点 Set 层 Or (real_lt) 双向见证）；     *)
+(*   本席双测 393/7 同 md5 d706b044，补绑单件编译 EXIT=0，G1 表九词全零） *)
+Definition ng_UpReqELBOStrict : NewGreenFace :=
+  MkNewGreenFace "UpReqELBOStrict.v" 393 7 20260911 "4.8 ELBO tightness strict contrapositive leg".
+
+(* ng_UpReqTempDualList —— UpReqTempDualList.v：席T34，温度族 sigT 对偶·通用 list 载体总装 *)
+(*   （补建席T13 列余留「通用 list 逐点提取件」并总装 4.6d；本席三测 507/8：首测 md5 e84b4fd9 在飞      *)
+(*   漂移不采信，P2/P3 稳定 b5b32632（间隔 90s），现态绑定重编译 EXIT=0 且件内假设清查 8 件全 Closed；   *)
+(*   G1 表九词全零） *)
+Definition ng_UpReqTempDualList : NewGreenFace :=
+  MkNewGreenFace "UpReqTempDualList.v" 507 8 20260911 "4.6d sigT dual closure over generic list carrier".
+
+(* ng_UpReqI4Witness —— UpReqI4Witness.v：席T30，判词 I4 证书位实例化席 *)
+(*   （为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书：UpReqI4Bridge 主桥件2 的 Hkl0or 前提从接口化降为     *)
+(*   证书内部构造；本席双测 391/12 同 md5 c597266d，补绑单件编译 EXIT=0 且件内假设清查 12 件全 Closed；  *)
+(*   G1 表九词全零） *)
+Definition ng_UpReqI4Witness : NewGreenFace :=
+  MkNewGreenFace "UpReqI4Witness.v" 391 12 20260911 "verdict I4 certificate slot, internal Or-form KL certificate".
+
+Definition NewGreenListV25 : list NewGreenFace :=
+  cons ng_UpReqKLStrictB
+  (cons ng_UpReqLatbMaxList
+  (cons ng_UpReqMinPKLChain
+  (cons ng_UpReqCDispersion
+  (cons ng_UpReqCEqDispersion
+  (cons ng_UpReqELBOStrict
+  (cons ng_UpReqTempDualList
+  (cons ng_UpReqI4Witness nil))))))).
+
+(* v2.5 续写统计：8 件 / 行数和 3510 / 封口和 97（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV25Pieces  : nat := 8.
+Definition NewGreenV25LineSum : nat := 3510.
+Definition NewGreenV25QedSum  : nat := 97.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV25Pieces_matches : NewGreenV25Pieces = cnt_ng NewGreenListV25.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV25LineSum_matches : NewGreenV25LineSum = sum_ng_lines NewGreenListV25.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV25QedSum_matches : NewGreenV25QedSum = sum_ng_qed NewGreenListV25.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.5 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) Align4 改账复验：盘面 1431/28 同 md5 62e30e10，与 v2.4 改账口径（双测同 md5 62e30e10）逐字       *)
+(*    相符零再漂移，本席无需行使改账权（v2.2 记录之漂移已由 v2.4 改账闭合）。 *)
+(* 2) UpReqLogRDF（af_UpReqLogRDF v2.0 快照 17 封口）盘面 1630 行/19 封口（md5 669fa403 双测稳定），    *)
+(*    漂移 +2 封口；且头注 L60-61 罗列负证模式字面致 G1 表九词自触两处（T21 卡「头注禁词自触」坑再现，    *)
+(*    权在原席）；af_ 在册件不重复登记，且 G1 闸未过不入 ng_ 面。 *)
+(* 3) UpReqMpDomain（v2.1 在册 859/23）盘面 1069/28（md5 c82de3d8），漂移 +210/+5（X3 在飞续建），        *)
+(*    只记不改（禁改既有条目红线；改账权未经移交链条不行使）。 *)
+(* 4) UpReqArgminEngine 在飞未绿不入面：本席窗口 P1 276/12（md5 2bc9f53c）→ P2 344/12（md5 79bd0b4b）     *)
+(*    增长中，现态补绑编译 EXIT=1（line 214 环境失配）；仍在写盘，翻牌权留原席。 *)
+(* 5) UpReqTopKTVChain：本席双测 1104/21 同 md5 56dab1e6，与 v2.4 窗口（席T31）同值——两席横跨已稳；      *)
+(*    现态补绑编译 EXIT=0（本席首验绿）；唯 v2.2/v2.3/v2.4 三席明示「翻牌权留席T16」，本席不越权，        *)
+(*    不入面只记观察（登记权随翻牌权移交，下一登记席验 md5 仍同 56dab1e6 即可凭本条观察径行登记）。 *)
+(* 6) G 系合并件复测：G12_ZPosFam token 44 与在册 gqed_G12 44 相符零漂移；G06_BForm grep 25 与在册       *)
+(*    gqed_G06 25 相符而 token 复测 24（grep-token 差 1 为 "Qed." 子串伪命中，SFaceQed 同型），token      *)
+(*    口径较 v2.0 快照差 1，只记不改。 *)
+(* 7) 四树同步：本席交付段 Live_X → _Live → CW_Live/CW_vo 三跳 cp 同步，md5 见交付报告。 *)
+(* 8) 自指件：af_UpReqIndex 43 为 v2.4 快照；v2.5 后实测 46（本席 +3 条核对引理，只记不改，              *)
 (*    对账权留下一席）。 *)

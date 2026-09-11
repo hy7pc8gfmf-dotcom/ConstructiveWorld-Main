@@ -857,3 +857,213 @@ End ReqMpKernelWorld2.
 (* 席X3b2 收尾：12 件全清（首批 8 decl + 本批 6 件 + 辅件）。      *)
 (* 文件尾原余件清单（上文）由本节全数闭合，特此注记。            *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 席T33 续作（20260911）：mp 域收官 6 件（总账 MinPSampling      *)
+(* 批 4 余件：单项界 1 件对位裁决 + p-antitone 簇 5 件全新建）。   *)
+(* ------------------------------------------------------------
+   台账（req 件名 <- Id 原件 @ S06 行号 / 总账行号）：
+     0 temp_factor_max_le_sum（S06 L6581 / 总账 L31333）——对位裁决件：
+       二批辅件 mpd_pick_max_tf_le_minp_sum（ReqMpKernelWorld2）语句
+       逐位同形（le (tf pick_max) (minp_temp_sum)），对位成立、就此
+       销账；总账「未认领/对位待裁」注记由本席裁决，不重复建件。
+     1 mpd_minp_keep_p_antitone <- minp_keep_p_antitone
+       （S06 L6752 / 总账 L31504；le_mult_compat_weak 接口字段直用，
+       max ≥ 0 腿由 mpd_markov_pos 经 δ 展开免费取得）
+     2 mpd_temp_factor_nonneg_p <- temp_factor_nonneg_p
+       （S06 L6775 / 总账 L31527）
+     3 mpd_minp_term_nonneg_p <- minp_term_nonneg_p
+       （S06 L6782 / 总账 L31534）
+     4 mpd_minp_temp_sum_p_antitone <- minp_temp_sum_p_antitone
+       （S06 L6795 / 总账 L31547；list_sum_le → rls_le 逐点求和桥，
+       keep2 ⟹ keep1 反单调 + term_nonneg 逐点两腿同形）
+     5 mpd_minp_dropped_mass_p_monotone <- minp_dropped_mass_p_monotone
+       （S06 L6823 / 总账 L31575；req_le_mult_compat_r 正因子左乘 +
+       opp_le_compat 反向 + le_plus_compat 平移三腿组装）
+   定义簇（S06 L6726-6751 对位；p 簇阈值以 mp : R 显式参替代固定
+   min_p，故本节节假设不携 min_p/min_p_lt_one——比 S06 节更省；
+   二批 discharged 定义全闭包显式消费，mpd_pick_max_token 六参形 /
+   mpd_max_markov_prob 十参形经 -vos 探针实证写死）：
+     mpd_minp_threshold_p / mpd_minp_keep_p / mpd_minp_keep_dec_p /
+     mpd_minp_temp_sum_p / mpd_minp_dropped_mass_p
+   桥假设：req_le_dec（位 1，ReqMpKernelWorld2 同位）；p 簇不涉
+   argmin 三分步，无需位 2。
+   ============================================================ *)
+Section ReqMpKernelWorld3.
+Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
+Variable Token : Set.
+Variable vocab : list Token.
+Variable vocab_nonempty : Not (Id vocab nil).
+Variable total_loss : list Token -> R.
+Variable temperature : R.
+Variable temperature_pos : lt zero temperature.
+Variable default_token : Token.
+
+(* 桥假设位 1（ReqMpKernelWorld2 位 1 同位） *)
+Hypothesis req_le_dec : forall a b : R, Or (le a b) (Not (le a b)).
+
+(* ---- p 簇定义（S06 L6726-6751 对位；阈值 mp : R 显式参） ---- *)
+Definition mpd_minp_threshold_p (mp : R) (prefix : list Token) : R :=
+  mult mp (mpd_max_markov_prob Token vocab vocab_nonempty total_loss temperature
+                                  temperature_pos default_token req_le_dec prefix).
+
+Definition mpd_minp_keep_p (mp : R) (prefix : list Token) (w : Token) : Set :=
+  le (mpd_minp_threshold_p mp prefix)
+     (mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature
+                        temperature_pos prefix w).
+
+Definition mpd_minp_keep_dec_p (mp : R) (prefix : list Token) (w : Token) :
+  Or (mpd_minp_keep_p mp prefix w) (Not (mpd_minp_keep_p mp prefix w)) :=
+  req_le_dec (mpd_minp_threshold_p mp prefix)
+             (mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature
+                                temperature_pos prefix w).
+
+Definition mpd_minp_temp_sum_p (mp : R) (prefix : list Token) : R :=
+  rsum Token (fun w : Token =>
+           match mpd_minp_keep_dec_p mp prefix w with
+           | inl _ => mpd_temp_factor Token total_loss temperature temperature_pos prefix w
+           | inr _ => zero
+           end) vocab.
+
+Definition mpd_minp_dropped_mass_p (mp : R) (prefix : list Token) : R :=
+  req_minus one
+            (mult (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                           (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
+                  (mpd_minp_temp_sum_p mp prefix)).
+
+(* 2 <- temp_factor_nonneg_p（S06 L6775 / 总账 L31527）：
+   tf ≥ 0（exp_neg 恒正 + lt_le_iff 提升） *)
+Lemma mpd_temp_factor_nonneg_p : forall (prefix : list Token) (w : Token),
+  le zero (mpd_temp_factor Token total_loss temperature temperature_pos prefix w).
+Proof.
+  intros prefix w.
+  apply (lt_le_iff zero (mpd_temp_factor Token total_loss temperature temperature_pos prefix w)).
+  left. unfold mpd_temp_factor. apply exp_neg_pos.
+Qed.
+
+(* 3 <- minp_term_nonneg_p（S06 L6782 / 总账 L31534）：
+   参数化保留者项 ≥ 0（inl 分支 tf ≥ 0，inr 分支 0） *)
+Lemma mpd_minp_term_nonneg_p : forall (mp : R) (prefix : list Token) (w : Token),
+  le zero (match mpd_minp_keep_dec_p mp prefix w with
+           | inl _ => mpd_temp_factor Token total_loss temperature temperature_pos prefix w
+           | inr _ => zero
+           end).
+Proof.
+  intros mp prefix w. destruct (mpd_minp_keep_dec_p mp prefix w) as [Hk | Hd].
+  - exact (mpd_temp_factor_nonneg_p prefix w).
+  - apply le_refl.
+Qed.
+
+(* 1 <- minp_keep_p_antitone（S06 L6752 / 总账 L31504，T4a）：
+   mp1 ≤ mp2 ⟹ keep_p mp2 w ⟹ keep_p mp1 w（阈值增大保留集缩小）。
+   max ≥ 0 腿：mpd_max_markov_prob δ 展开 == kernel(pick_max)，
+   mpd_markov_pos 免费；单调腿 le_mult_compat_weak 接口字段直用。 *)
+Lemma mpd_minp_keep_p_antitone : forall (mp1 mp2 : R),
+  le mp1 mp2 ->
+  forall (prefix : list Token) (w : Token),
+    mpd_minp_keep_p mp2 prefix w -> mpd_minp_keep_p mp1 prefix w.
+Proof.
+  intros mp1 mp2 Hmp prefix w Hk2.
+  assert (Hmax : le zero (mpd_markov_kernel Token vocab vocab_nonempty total_loss
+                                temperature temperature_pos prefix
+                                (mpd_pick_max_token Token vocab total_loss default_token
+                                                       req_le_dec prefix))).
+  { apply (lt_le_iff zero (mpd_markov_kernel Token vocab vocab_nonempty total_loss
+                                temperature temperature_pos prefix
+                                (mpd_pick_max_token Token vocab total_loss default_token
+                                                       req_le_dec prefix))).
+    left. exact (mpd_markov_pos Token vocab vocab_nonempty total_loss temperature
+                                temperature_pos prefix
+                                (mpd_pick_max_token Token vocab total_loss default_token
+                                                       req_le_dec prefix)). }
+  apply (le_trans (mult mp1 (mpd_markov_kernel Token vocab vocab_nonempty total_loss
+                                  temperature temperature_pos prefix
+                                  (mpd_pick_max_token Token vocab total_loss default_token
+                                                         req_le_dec prefix)))
+                  (mult mp2 (mpd_markov_kernel Token vocab vocab_nonempty total_loss
+                                  temperature temperature_pos prefix
+                                  (mpd_pick_max_token Token vocab total_loss default_token
+                                                         req_le_dec prefix)))
+                  (mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature
+                                     temperature_pos prefix w)).
+  - apply (le_mult_compat_weak mp1 mp2
+             (mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature
+                                temperature_pos prefix
+                                (mpd_pick_max_token Token vocab total_loss default_token
+                                                       req_le_dec prefix)) Hmax Hmp).
+  - exact Hk2.
+Qed.
+
+(* 4 <- minp_temp_sum_p_antitone（S06 L6795 / 总账 L31547，T4b）：
+   mp1 ≤ mp2 ⟹ 截断和反单调（sum_p mp2 ≤ sum_p mp1）。
+   逐点两腿：keep2 ⟹ keep1（件 1）⟹ 项同（le_refl）；
+   keep2 逐出 ⟹ 项 2 = 0 ≤ 项 1（件 3）。 *)
+Lemma mpd_minp_temp_sum_p_antitone : forall (mp1 mp2 : R),
+  le mp1 mp2 ->
+  forall prefix : list Token,
+    le (mpd_minp_temp_sum_p mp2 prefix) (mpd_minp_temp_sum_p mp1 prefix).
+Proof.
+  intros mp1 mp2 Hmp prefix. unfold mpd_minp_temp_sum_p.
+  apply (rls_le Token
+           (fun w : Token =>
+              match mpd_minp_keep_dec_p mp2 prefix w with
+              | inl _ => mpd_temp_factor Token total_loss temperature temperature_pos prefix w
+              | inr _ => zero
+              end)
+           (fun w : Token =>
+              match mpd_minp_keep_dec_p mp1 prefix w with
+              | inl _ => mpd_temp_factor Token total_loss temperature temperature_pos prefix w
+              | inr _ => zero
+              end)).
+  intro w. destruct (mpd_minp_keep_dec_p mp2 prefix w) as [Hk2 | Hd2].
+  - assert (Hk1 : mpd_minp_keep_p mp1 prefix w)
+      by exact (mpd_minp_keep_p_antitone mp1 mp2 Hmp prefix w Hk2).
+    destruct (mpd_minp_keep_dec_p mp1 prefix w) as [Hk1' | Hd1'].
+    + apply le_refl.
+    + destruct (Hd1' Hk1).
+  - exact (mpd_minp_term_nonneg_p mp1 prefix w).
+Qed.
+
+(* 5 <- minp_dropped_mass_p_monotone（S06 L6823 / 总账 L31575，T4c）：
+   mp1 ≤ mp2 ⟹ 截断质量单调（mass_p mp1 ≤ mass_p mp2）。
+   三腿：sum_p 反单调（件 4）→ inv_p 左乘保序（req_le_mult_compat_r）
+   → 1−X 反向（opp_le_compat + le_plus_compat 平移）。 *)
+Lemma mpd_minp_dropped_mass_p_monotone : forall (mp1 mp2 : R),
+  le mp1 mp2 ->
+  forall prefix : list Token,
+    le (mpd_minp_dropped_mass_p mp1 prefix) (mpd_minp_dropped_mass_p mp2 prefix).
+Proof.
+  intros mp1 mp2 Hmp prefix. unfold mpd_minp_dropped_mass_p.
+  assert (Hsum : le (mpd_minp_temp_sum_p mp2 prefix) (mpd_minp_temp_sum_p mp1 prefix))
+    by exact (mpd_minp_temp_sum_p_antitone mp1 mp2 Hmp prefix).
+  assert (Hscaled : le (mult (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                                          (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
+                             (mpd_minp_temp_sum_p mp2 prefix))
+                       (mult (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                                      (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
+                             (mpd_minp_temp_sum_p mp1 prefix))).
+  { apply (req_le_mult_compat_r
+             (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                      (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))).
+    - apply (lt_le_iff zero (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                                     (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))).
+      left. apply (inv_pos_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                               (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix)).
+    - exact Hsum. }
+  apply (le_plus_compat one one
+           (opp (mult (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                               (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
+                      (mpd_minp_temp_sum_p mp1 prefix)))
+           (opp (mult (inv_pos (mpd_partition_temp Token vocab total_loss temperature temperature_pos prefix)
+                               (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
+                      (mpd_minp_temp_sum_p mp2 prefix)))).
+  - apply le_refl.
+  - apply opp_le_compat. exact Hscaled.
+Qed.
+
+End ReqMpKernelWorld3.
+
+(* ============================================================ *)
+(* 席T33 收尾：mp 域收官 6 件全清（对位裁决 1 + p 簇 5 件 + 定义   *)
+(* 簇 5 枚）。总账 MinPSampling 节至此批 4 余件零余留；mp 域 Real  *)
+(* 层对位全量在盘。                                              *)
+(* ============================================================ *)
