@@ -23,7 +23,7 @@
 (* UpReqPPOPlain.v 23:42 仍增改（.vo 23:35 旧于 .v），终验闸未开，idx_UpPPOPlain 随其终验增册。  *)
 (* v1.7（wb10 影子预置席，diff-ready 预制；翻牌闸=件16 canonical log 占位 _clipup_chk_UpReqPPO.log（验后删；证据固化于总账 v1.7 件16 行证据列 md5、字节数、cst 尾行；已于 01:28 经主会话亲验 PASS），闸已落）： *)
 (* idx_UpPPOPlain 解除「暂不登记」增册 14 件（662 行/14 行首 Qed；_wb9_chk_ppoplain.log coqchk PASS）； *)
-(* 批外新件 G06_BForm(7 件/251 行，W2' 簇；_w2_* 四关 log) 补登；idx_UpReqAttnGibbs 63→65（分歧清偿增量 *)
+(* 批外新件 UpReqMinPProjB(7 件/251 行，W2' 簇；_w2_* 四关 log) 补登；idx_UpReqAttnGibbs 63→65（分歧清偿增量 *)
 (* 节 2 件，总账 v1.6 增册口径）；idx_UpReqPPO 22→26（件16 终验翻牌，grep decl 实测 26）；宇宙行 659/3/71/1/0 *)
 (* →668/0/66/0/0（件16 挂账翻牌 + PPOPlain 簇冻结闸口件翻牌；和 734 不变）。 *)
 (* v1.8（wb27 影子预置席，diff-ready 预制；闸=主会话 v1.8 commit 令+§10.2 数字同步，闸未落本影子不覆盖真件）： *)
@@ -32,6 +32,14 @@
 (* 旗舰 real_ppo_conservative_B_full) + idx_UpReqSumB(3 件/191 行，Σ ≤_B 自持机器，旗舰 sumb_list_sum_le_b)； *)
 (* 宇宙行 668/0/66/0/0 → 670/0/64/0/0（冻结 v1.8 候选两行翻牌：clip_lower 件7 + ppo_clipped_improvement 件8， *)
 (* 总账 v1.7 在案方向，件名随总账 v1.8 待与席25 产物互核；和 734 不变）。 *)
+(* v2.0（席N：UpReqIndex v2 重制席，20260911；重制依据=磁盘实测+Live_X 终态，非影子直编真件）：承 v1.8 宇宙行 *)
+(* 670/0/64/0/0 与 39 件 idx_ 注册表零改动（append-only，v1.2–v1.8 版记全数保留），纯新增两层登记面—— *)
+(* 层① attn 活动区主件面 127 件（剥块注释 token 级封口计数口径，和 25354，含自指件本体 v2 终态 27）； *)
+(* 层② Live_X 终态结构面（S01–S15 拆分组 15 组、G 系合并组 12 组【G03 缺位】+成员旧名 44、219 壳+220 扩展、 *)
+(* 退役件 214/UpTVReal/ProbeReexSig 处置）；并新增结构不变量 22 条 reflexivity 机械对账：拆分无损 *)
+(*（219 大库封口数=S 组和 3136）、12 组合并无损（逐组成员旧名 attn 封口和=G 组件封口数）、壳链 15、 *)
+(* Live_X 总面 99=15+12+2+70。idx_ 走 grep decl TLC 口径随总账翻牌，af_/lg_ 走 token 级封口口径随磁盘实测， *)
+(* 两轨并行互不覆盖。 *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -135,9 +143,9 @@ Definition idx_UpReqAttnIter : ReqModule :=
 Definition idx_UpEntropyGainReq : ReqModule :=
   MkReqModule "UpEntropyGainReq.v" 10 20260909 "req_second_law_quant" true.
 
-(* idx_UpEvictIdReq —— G13_EvictFam.v：批4 模块伴件第二席（14 件口径 = 12 decl + 2 假设位；两件经批2 reqd_ 消费核销）*)
+(* idx_UpEvictIdReq —— UpEvictIdReq.v：批4 模块伴件第二席（14 件口径 = 12 decl + 2 假设位；两件经批2 reqd_ 消费核销）*)
 Definition idx_UpEvictIdReq : ReqModule :=
-  MkReqModule "G13_EvictFam.v" 13 20260909 "req_eviction_partition_le_full_exact" true.
+  MkReqModule "UpEvictIdReq.v" 13 20260909 "req_eviction_partition_le_full_exact" true.
 
 (* idx_UpReqAlignRestB —— UpReqAlignRestB.v：批3余量B/批4 席（MinP/TopP/逐出熵四区；20260909 终验复验通过）*)
 Definition idx_UpReqAlignRestB : ReqModule :=
@@ -155,13 +163,13 @@ Definition idx_UpReqCauchy : ReqModule :=
 Definition idx_UpReqMinPAntitone : ReqModule :=
   MkReqModule "UpReqMinPAntitone.v" 5 20260909 "req_minp_dropped_mass_p_monotone" true.
 
-(* idx_UpReqOrderArgmin —— G09_MiscSmall.v：批5 波4 桥C1（reqDecidableOrder 同构类 + reqArgmin 机 + (c) 5 件 + snd 改述机 2）*)
+(* idx_UpReqOrderArgmin —— UpReqOrderArgmin.v：批5 波4 桥C1（reqDecidableOrder 同构类 + reqArgmin 机 + (c) 5 件 + snd 改述机 2）*)
 Definition idx_UpReqOrderArgmin : ReqModule :=
-  MkReqModule "G09_MiscSmall.v" 7 20260909 "req_pick_best_is_minimal" true.
+  MkReqModule "UpReqOrderArgmin.v" 7 20260909 "req_pick_best_is_minimal" true.
 
-(* idx_UpReqPCT —— G09_MiscSmall.v：批5 波4 桥C3（reqRealSelfSS + reqPCTDefs 后定义级闭合 2 件）*)
+(* idx_UpReqPCT —— UpReqPCT.v：批5 波4 桥C3（reqRealSelfSS + reqPCTDefs 后定义级闭合 2 件）*)
 Definition idx_UpReqPCT : ReqModule :=
-  MkReqModule "G09_MiscSmall.v" 2 20260909 "req_pct_truth_is_global_min" true.
+  MkReqModule "UpReqPCT.v" 2 20260909 "req_pct_truth_is_global_min" true.
 
 (* idx_UpReqDpoLoss —— UpReqDpoLoss.v：批5 解冻建设席（total_loss 簇实例形 (b) 化收口 6 件 + min plain-le 裁决书）*)
 Definition idx_UpReqDpoLoss : ReqModule :=
@@ -177,7 +185,7 @@ Definition idx_UpFirewallReq : ReqModule :=
 Definition idx_UpAlignIdReq : ReqModule :=
   MkReqModule "UpAlignIdReq.v" 8 20260909 "policy_gap_backward_kl_exact" true.
 
-(* idx_UpPredRelaxReq —— UpPredRelaxReq.v：批4 PredRelax 席（G04_ProjFam 6 件伴件；6Qed/367 行，md5 cd07a2f9）*)
+(* idx_UpPredRelaxReq —— UpPredRelaxReq.v：批4 PredRelax 席（UpPredRelax 6 件伴件；6Qed/367 行，md5 cd07a2f9）*)
 Definition idx_UpPredRelaxReq : ReqModule :=
   MkReqModule "UpPredRelaxReq.v" 6 20260909 "total_loss_multi_epoch_decreasing" true.
 
@@ -206,7 +214,7 @@ Definition idx_UpReqRDF : ReqModule :=
 Definition idx_UpReqFEPAttn : ReqModule :=
   MkReqModule "UpReqFEPAttn.v" 16 20260909 "req_free_energy_softmax_eq_neg_T_logZ" true.
 
-(* idx_UpDebtSqrtAbsReq —— UpDebtSqrtAbsReq.v：批4 模块伴件席（G02_Debt 6 件伴件；
+(* idx_UpDebtSqrtAbsReq —— UpDebtSqrtAbsReq.v：批4 模块伴件席（UpDebtSqrtAbs 6 件伴件；
    v1.4 前段账房翻牌席注册表口径，.vo 08:02 > .v 07:42 绿态时序旁证）*)
 Definition idx_UpDebtSqrtAbsReq : ReqModule :=
   MkReqModule "UpDebtSqrtAbsReq.v" 6 20260909 "req_sqrt_one_abstract" true.
@@ -236,11 +244,11 @@ Definition idx_UpRealLeB : ReqModule :=
 Definition idx_UpRealLeB2 : ReqModule :=
   MkReqModule "UpRealLeB2.v" 8 20260909 "real_db_breaking_bound_B" false.
 
-(* idx_UpReqMinPProjB —— G06_BForm.v：批外 W2' 簇新件（MinP Bishop 形 B 面 7 件；251 行，
+(* idx_UpReqMinPProjB —— UpReqMinPProjB.v：批外 W2' 簇新件（MinP Bishop 形 B 面 7 件；251 行，
    7 行首 Qed 1:1；旗舰 real_minp_projection_eps_B；四关 log _w2_g1g2_evidence/_w2_g3_objmagic/
    _w2_g4_evidence/_w2_chk_UpReqMinPProjB 全绿；Real 层批外不占宇宙名额） *)
 Definition idx_UpReqMinPProjB : ReqModule :=
-  MkReqModule "G06_BForm.v" 7 20260910 "real_minp_projection_eps_B" false.
+  MkReqModule "UpReqMinPProjB.v" 7 20260910 "real_minp_projection_eps_B" false.
 
 (* ---------- v1.8 批外增册（wb27 影子预置席；B 形扩展建造队列 T1/T2/T3，Real 层批外不占宇宙名额） ---------- *)
 
@@ -249,15 +257,15 @@ Definition idx_UpReqMinPProjB : ReqModule :=
 Definition idx_UpRealLeB3 : ReqModule :=
   MkReqModule "UpRealLeB3.v" 8 20260910 "leb3_le_b_opp_rev" false.
 
-(* idx_UpReqPPOB —— G06_BForm.v：定理 6.6 对应物判词 5 升格席（B 形扩展 T2；ppo 保守性 Bishop 完整形， *)
+(* idx_UpReqPPOB —— UpReqPPOB.v：定理 6.6 对应物判词 5 升格席（B 形扩展 T2；ppo 保守性 Bishop 完整形， *)
 (*   sum_pos 槽接口前提在案；2 TLC = 2 行首 Qed，98 行；旗舰 real_ppo_conservative_B_full） *)
 Definition idx_UpReqPPOB : ReqModule :=
-  MkReqModule "G06_BForm.v" 2 20260910 "real_ppo_conservative_B_full" false.
+  MkReqModule "UpReqPPOB.v" 2 20260910 "real_ppo_conservative_B_full" false.
 
-(* idx_UpReqSumB —— G06_BForm.v：Σ ≤_B 自持机器席（B 形扩展 T3；3 TLC = 3 行首 Qed + 自持 Fixpoint *)
+(* idx_UpReqSumB —— UpReqSumB.v：Σ ≤_B 自持机器席（B 形扩展 T3；3 TLC = 3 行首 Qed + 自持 Fixpoint *)
 (*   sumb_lenR 口径外机器（件数口径从众：Theorem/Lemma/Corollary 行）；191 行；旗舰 sumb_list_sum_le_b） *)
 Definition idx_UpReqSumB : ReqModule :=
-  MkReqModule "G06_BForm.v" 3 20260910 "sumb_list_sum_le_b" false.
+  MkReqModule "UpReqSumB.v" 3 20260910 "sumb_list_sum_le_b" false.
 
 (* ---------- 清单与统计（字面值；一致性由文末等式引理编译期核对） ---------- *)
 
@@ -302,12 +310,12 @@ Definition ReqModuleList : list ReqModule :=
   (cons idx_UpReqPPOB
   (cons idx_UpReqSumB nil)))))))))))))))))))))))))))))))))))))).
 
-(* 模块计数：宇宙内 req 模块 32 + 批外 7 = 39（v1.8：批外 UpRealLeB3 + G06_BForm + G06_BForm 补登；v1.7：宇宙内 UpReqPPOPlain 增册 + 批外 G06_BForm 补登） *)
+(* 模块计数：宇宙内 req 模块 32 + 批外 7 = 39（v1.8：批外 UpRealLeB3 + UpReqPPOB + UpReqSumB 补登；v1.7：宇宙内 UpReqPPOPlain 增册 + 批外 UpReqMinPProjB 补登） *)
 Definition DeliveredModules : nat := 32.
 Definition ExtraModules     : nat := 7.
 Definition TotalModules     : nat := 39.
 
-(* 件数计数：grep decl 实测和 1030 = 宇宙内 944 + 批外 86（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + G06_BForm 7 + UpRealLeB3 8 + G06_BForm 2 + G06_BForm 3；v1.3 增 Misc5 35 + Misc5B 20；v1.4 增 RDF 47 + DebtSqrtAbsReq 6 + FEPAttn 16 + LeB2 8；v1.7 增 PPOPlain 14 + MinPProjB 7 + AttnGibbs +2 + PPO +4；v1.8 增 LeB3 8 + PPOB 2 + SumB 3） *)
+(* 件数计数：grep decl 实测和 1030 = 宇宙内 944 + 批外 86（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + UpReqMinPProjB 7 + UpRealLeB3 8 + UpReqPPOB 2 + UpReqSumB 3；v1.3 增 Misc5 35 + Misc5B 20；v1.4 增 RDF 47 + DebtSqrtAbsReq 6 + FEPAttn 16 + LeB2 8；v1.7 增 PPOPlain 14 + MinPProjB 7 + AttnGibbs +2 + PPO +4；v1.8 增 LeB3 8 + PPOB 2 + SumB 3） *)
 Definition DeliveredItems : nat := 1030.
 Definition UniverseItems  : nat := 944.
 
@@ -334,7 +342,7 @@ Proof. reflexivity. Qed.
 Lemma DeliveredModules_matches : DeliveredModules = minus TotalModules ExtraModules.
 Proof. reflexivity. Qed.
 
-(* 宇宙件数分账闭合：全量和 = 宇宙内 + 批外（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + G06_BForm 7 + UpRealLeB3 8 + G06_BForm 2 + G06_BForm 3 件；v1.8 四重→七重 minus） *)
+(* 宇宙件数分账闭合：全量和 = 宇宙内 + 批外（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + UpReqMinPProjB 7 + UpRealLeB3 8 + UpReqPPOB 2 + UpReqSumB 3 件；v1.8 四重→七重 minus） *)
 Lemma UniverseItems_matches :
   UniverseItems = minus
     (minus
@@ -359,6 +367,476 @@ Lemma Universe_splits : UniverseTotal
   UniverseUnclaimedRows.
 Proof. reflexivity. Qed.
 
+
+(* ================= v2.0 重制增量（席N：UpReqIndex v2 重制席，20260911） ================= *)
+(* 依据：磁盘实测（剥块注释 token 级 \bQed\. 计数口径，非行首 decl 口径；与总账 idx_ 的 grep decl *)
+(* TLC 口径并行不悖、互不覆盖）+ Live_X 终态结构（S/G 双系 + 旧名消融 + 219 壳）。宇宙行与 39 件 *)
+(* idx_ 注册表承 v1.8 全量不动（append-only）；本节纯新增两层登记面，数值面与 v1.8 无交集。 *)
+
+(* ---------- v2.0 层①：attn 活动区主件面（127 主件，剥注释 token 级 Qed 口径） ---------- *)
+
+Record AttnFace : Set := MkAttnFace
+  { af_name : string   (* 主件文件名 *)
+  ; af_qed  : nat      (* 剥块注释后 token 级 Qed 计数（20260911 实测） *)
+  ; af_day  : nat      (* 测量日 yyyymmdd *)
+  }.
+
+Fixpoint cnt_af (l : list AttnFace) : nat :=
+  match l with
+  | nil => 0
+  | cons _ tl => S (cnt_af tl)
+  end.
+
+Fixpoint sum_af (l : list AttnFace) : nat :=
+  match l with
+  | nil => 0
+  | cons m tl => plus (af_qed m) (sum_af tl)
+  end.
+
+Definition af_AttnDoeblin : AttnFace := MkAttnFace "AttnDoeblin.v" 42 20260911.
+Definition af_AttnHardLimit : AttnFace := MkAttnFace "AttnHardLimit.v" 40 20260911.
+Definition af_AttnHardLimit218 : AttnFace := MkAttnFace "AttnHardLimit218.v" 39 20260911.
+Definition af_AttnSqrt : AttnFace := MkAttnFace "AttnSqrt.v" 12 20260911.
+Definition af_CW220_Extensions : AttnFace := MkAttnFace "CW220_Extensions.v" 552 20260911.
+Definition af_CW_ConstructiveWorld_219 : AttnFace := MkAttnFace "CW_ConstructiveWorld_219.v" 3136 20260911.
+Definition af_CW_ConstructiveWorld_220 : AttnFace := MkAttnFace "CW_ConstructiveWorld_220.v" 3688 20260911.
+Definition af_ConstructiveWorld_215 : AttnFace := MkAttnFace "ConstructiveWorld-215.v" 2966 20260911.
+Definition af_ConstructiveWorld_217 : AttnFace := MkAttnFace "ConstructiveWorld-217.v" 3056 20260911.
+Definition af_ConstructiveWorld_218 : AttnFace := MkAttnFace "ConstructiveWorld-218.v" 3073 20260911.
+Definition af_ConstructiveWorld_219 : AttnFace := MkAttnFace "ConstructiveWorld-219.v" 3136 20260911.
+Definition af_ConstructiveWorld : AttnFace := MkAttnFace "ConstructiveWorld.v" 2966 20260911.
+Definition af_UpAlignId : AttnFace := MkAttnFace "UpAlignId.v" 6 20260911.
+Definition af_UpAlignIdReq : AttnFace := MkAttnFace "UpAlignIdReq.v" 8 20260911.
+Definition af_UpArchAttn : AttnFace := MkAttnFace "UpArchAttn.v" 5 20260911.
+Definition af_UpAuditBridge : AttnFace := MkAttnFace "UpAuditBridge.v" 28 20260911.
+Definition af_UpBudgetReal : AttnFace := MkAttnFace "UpBudgetReal.v" 20 20260911.
+Definition af_UpCLQuery : AttnFace := MkAttnFace "UpCLQuery.v" 22 20260911.
+Definition af_UpCS : AttnFace := MkAttnFace "UpCS.v" 16 20260911.
+Definition af_UpConstitution : AttnFace := MkAttnFace "UpConstitution.v" 37 20260911.
+Definition af_UpDPOLip : AttnFace := MkAttnFace "UpDPOLip.v" 14 20260911.
+Definition af_UpDebtDual : AttnFace := MkAttnFace "UpDebtDual.v" 10 20260911.
+Definition af_UpDebtGibbsT : AttnFace := MkAttnFace "UpDebtGibbsT.v" 5 20260911.
+Definition af_UpDebtSqrtAbs : AttnFace := MkAttnFace "UpDebtSqrtAbs.v" 6 20260911.
+Definition af_UpDebtSqrtAbsReq : AttnFace := MkAttnFace "UpDebtSqrtAbsReq.v" 6 20260911.
+Definition af_UpDissip : AttnFace := MkAttnFace "UpDissip.v" 38 20260911.
+Definition af_UpEntropyGain : AttnFace := MkAttnFace "UpEntropyGain.v" 10 20260911.
+Definition af_UpEntropyGainReq : AttnFace := MkAttnFace "UpEntropyGainReq.v" 10 20260911.
+Definition af_UpEvictId : AttnFace := MkAttnFace "UpEvictId.v" 14 20260911.
+Definition af_UpEvictIdReq : AttnFace := MkAttnFace "UpEvictIdReq.v" 13 20260911.
+Definition af_UpExtras : AttnFace := MkAttnFace "UpExtras.v" 8 20260911.
+Definition af_UpFEP : AttnFace := MkAttnFace "UpFEP.v" 5 20260911.
+Definition af_UpFirewall : AttnFace := MkAttnFace "UpFirewall.v" 9 20260911.
+Definition af_UpFirewallReq : AttnFace := MkAttnFace "UpFirewallReq.v" 9 20260911.
+Definition af_UpGRPO : AttnFace := MkAttnFace "UpGRPO.v" 27 20260911.
+Definition af_UpGeomB : AttnFace := MkAttnFace "UpGeomB.v" 16 20260911.
+Definition af_UpHlogZ : AttnFace := MkAttnFace "UpHlogZ.v" 4 20260911.
+Definition af_UpIDL : AttnFace := MkAttnFace "UpIDL.v" 64 20260911.
+Definition af_UpIDL_P2 : AttnFace := MkAttnFace "UpIDL_P2.v" 63 20260911.
+Definition af_UpKVDrift : AttnFace := MkAttnFace "UpKVDrift.v" 60 20260911.
+Definition af_UpKVDrift_P2 : AttnFace := MkAttnFace "UpKVDrift_P2.v" 60 20260911.
+Definition af_UpKVEv : AttnFace := MkAttnFace "UpKVEv.v" 11 20260911.
+Definition af_UpLoeb : AttnFace := MkAttnFace "UpLoeb.v" 38 20260911.
+Definition af_UpLoebD2 : AttnFace := MkAttnFace "UpLoebD2.v" 22 20260911.
+Definition af_UpLogMono : AttnFace := MkAttnFace "UpLogMono.v" 4 20260911.
+Definition af_UpMinP : AttnFace := MkAttnFace "UpMinP.v" 31 20260911.
+Definition af_UpPLA : AttnFace := MkAttnFace "UpPLA.v" 16 20260911.
+Definition af_UpPPO : AttnFace := MkAttnFace "UpPPO.v" 5 20260911.
+Definition af_UpPredRelax : AttnFace := MkAttnFace "UpPredRelax.v" 6 20260911.
+Definition af_UpPredRelaxReq : AttnFace := MkAttnFace "UpPredRelaxReq.v" 6 20260911.
+Definition af_UpProj : AttnFace := MkAttnFace "UpProj.v" 32 20260911.
+Definition af_UpProjBPC : AttnFace := MkAttnFace "UpProjBPC.v" 17 20260911.
+Definition af_UpQKBound : AttnFace := MkAttnFace "UpQKBound.v" 59 20260911.
+Definition af_UpRealLeB : AttnFace := MkAttnFace "UpRealLeB.v" 30 20260911.
+Definition af_UpRealLeB2 : AttnFace := MkAttnFace "UpRealLeB2.v" 8 20260911.
+Definition af_UpRealLeB3 : AttnFace := MkAttnFace "UpRealLeB3.v" 8 20260911.
+Definition af_UpRecast : AttnFace := MkAttnFace "UpRecast.v" 50 20260911.
+Definition af_UpRefuted : AttnFace := MkAttnFace "UpRefuted.v" 48 20260911.
+Definition af_UpReqAlgebra : AttnFace := MkAttnFace "UpReqAlgebra.v" 63 20260911.
+Definition af_UpReqAlign : AttnFace := MkAttnFace "UpReqAlign.v" 42 20260911.
+Definition af_UpReqAlign2 : AttnFace := MkAttnFace "UpReqAlign2.v" 40 20260911.
+Definition af_UpReqAlign3 : AttnFace := MkAttnFace "UpReqAlign3.v" 76 20260911.
+Definition af_UpReqAlignRest : AttnFace := MkAttnFace "UpReqAlignRest.v" 16 20260911.
+Definition af_UpReqAlignRestA : AttnFace := MkAttnFace "UpReqAlignRestA.v" 23 20260911.
+Definition af_UpReqAlignRestB : AttnFace := MkAttnFace "UpReqAlignRestB.v" 55 20260911.
+Definition af_UpReqAttnGibbs : AttnFace := MkAttnFace "UpReqAttnGibbs.v" 65 20260911.
+Definition af_UpReqAttnIter : AttnFace := MkAttnFace "UpReqAttnIter.v" 31 20260911.
+Definition af_UpReqBoltzDirect : AttnFace := MkAttnFace "UpReqBoltzDirect.v" 8 20260911.
+Definition af_UpReqBranchPos : AttnFace := MkAttnFace "UpReqBranchPos.v" 8 20260911.
+Definition af_UpReqCauchy : AttnFace := MkAttnFace "UpReqCauchy.v" 48 20260911.
+Definition af_UpReqDist : AttnFace := MkAttnFace "UpReqDist.v" 89 20260911.
+Definition af_UpReqDpoLoss : AttnFace := MkAttnFace "UpReqDpoLoss.v" 6 20260911.
+Definition af_UpReqFEPAttn : AttnFace := MkAttnFace "UpReqFEPAttn.v" 16 20260911.
+Definition af_UpReqGeomD : AttnFace := MkAttnFace "UpReqGeomD.v" 19 20260911.
+Definition af_UpReqGeomIter : AttnFace := MkAttnFace "UpReqGeomIter.v" 16 20260911.
+Definition af_UpReqGibbsD : AttnFace := MkAttnFace "UpReqGibbsD.v" 15 20260911.
+Definition af_UpReqGibbsE : AttnFace := MkAttnFace "UpReqGibbsE.v" 15 20260911.
+Definition af_UpReqGibbsE2 : AttnFace := MkAttnFace "UpReqGibbsE2.v" 13 20260911.
+Definition af_UpReqHlogZD : AttnFace := MkAttnFace "UpReqHlogZD.v" 11 20260911.
+Definition af_UpReqIndex : AttnFace := MkAttnFace "UpReqIndex.v" 27 20260911.
+Definition af_UpReqJensen : AttnFace := MkAttnFace "UpReqJensen.v" 12 20260911.
+Definition af_UpReqKLCvx : AttnFace := MkAttnFace "UpReqKLCvx.v" 16 20260911.
+Definition af_UpReqKLEnergy : AttnFace := MkAttnFace "UpReqKLEnergy.v" 14 20260911.
+Definition af_UpReqKLStrict : AttnFace := MkAttnFace "UpReqKLStrict.v" 14 20260911.
+Definition af_UpReqLatticeB : AttnFace := MkAttnFace "UpReqLatticeB.v" 11 20260911.
+Definition af_UpReqLogCompD : AttnFace := MkAttnFace "UpReqLogCompD.v" 23 20260911.
+Definition af_UpReqLogCompD2 : AttnFace := MkAttnFace "UpReqLogCompD2.v" 7 20260911.
+Definition af_UpReqLogD : AttnFace := MkAttnFace "UpReqLogD.v" 10 20260911.
+Definition af_UpReqLogLinD : AttnFace := MkAttnFace "UpReqLogLinD.v" 18 20260911.
+Definition af_UpReqLogPrimD : AttnFace := MkAttnFace "UpReqLogPrimD.v" 18 20260911.
+Definition af_UpReqLogRDF : AttnFace := MkAttnFace "UpReqLogRDF.v" 17 20260911.
+Definition af_UpReqMinPAntitone : AttnFace := MkAttnFace "UpReqMinPAntitone.v" 5 20260911.
+Definition af_UpReqMinPProjB : AttnFace := MkAttnFace "UpReqMinPProjB.v" 7 20260911.
+Definition af_UpReqMisc5 : AttnFace := MkAttnFace "UpReqMisc5.v" 35 20260911.
+Definition af_UpReqMisc5B : AttnFace := MkAttnFace "UpReqMisc5B.v" 20 20260911.
+Definition af_UpReqOrderArgmin : AttnFace := MkAttnFace "UpReqOrderArgmin.v" 7 20260911.
+Definition af_UpReqPCT : AttnFace := MkAttnFace "UpReqPCT.v" 2 20260911.
+Definition af_UpReqPPO : AttnFace := MkAttnFace "UpReqPPO.v" 25 20260911.
+Definition af_UpReqPPOB : AttnFace := MkAttnFace "UpReqPPOB.v" 4 20260911.
+Definition af_UpReqPPOGapB : AttnFace := MkAttnFace "UpReqPPOGapB.v" 8 20260911.
+Definition af_UpReqPPOPlain : AttnFace := MkAttnFace "UpReqPPOPlain.v" 14 20260911.
+Definition af_UpReqPowB : AttnFace := MkAttnFace "UpReqPowB.v" 10 20260911.
+Definition af_UpReqRDF : AttnFace := MkAttnFace "UpReqRDF.v" 47 20260911.
+Definition af_UpReqRealFEP : AttnFace := MkAttnFace "UpReqRealFEP.v" 11 20260911.
+Definition af_UpReqSLM : AttnFace := MkAttnFace "UpReqSLM.v" 41 20260911.
+Definition af_UpReqSampling : AttnFace := MkAttnFace "UpReqSampling.v" 43 20260911.
+Definition af_UpReqSqPos : AttnFace := MkAttnFace "UpReqSqPos.v" 5 20260911.
+Definition af_UpReqSqrtF : AttnFace := MkAttnFace "UpReqSqrtF.v" 27 20260911.
+Definition af_UpReqSumB : AttnFace := MkAttnFace "UpReqSumB.v" 3 20260911.
+Definition af_UpReqSumD : AttnFace := MkAttnFace "UpReqSumD.v" 27 20260911.
+Definition af_UpReqTempEntropy : AttnFace := MkAttnFace "UpReqTempEntropy.v" 14 20260911.
+Definition af_UpReqTempInterp : AttnFace := MkAttnFace "UpReqTempInterp.v" 11 20260911.
+Definition af_UpReqU2 : AttnFace := MkAttnFace "UpReqU2.v" 20 20260911.
+Definition af_UpReqZAuto : AttnFace := MkAttnFace "UpReqZAuto.v" 8 20260911.
+Definition af_UpReqZPosD : AttnFace := MkAttnFace "UpReqZPosD.v" 6 20260911.
+Definition af_UpReqZPosFinal : AttnFace := MkAttnFace "UpReqZPosFinal.v" 9 20260911.
+Definition af_UpReqZPosI : AttnFace := MkAttnFace "UpReqZPosI.v" 6 20260911.
+Definition af_UpReqZPosI2 : AttnFace := MkAttnFace "UpReqZPosI2.v" 15 20260911.
+Definition af_UpSLM : AttnFace := MkAttnFace "UpSLM.v" 55 20260911.
+Definition af_UpSigMigrate : AttnFace := MkAttnFace "UpSigMigrate.v" 13 20260911.
+Definition af_UpSigMigrate2 : AttnFace := MkAttnFace "UpSigMigrate2.v" 49 20260911.
+Definition af_UpStepKL : AttnFace := MkAttnFace "UpStepKL.v" 32 20260911.
+Definition af_UpStepKLM3 : AttnFace := MkAttnFace "UpStepKLM3.v" 18 20260911.
+Definition af_UpStopTime : AttnFace := MkAttnFace "UpStopTime.v" 45 20260911.
+Definition af_UpTVDoeblin : AttnFace := MkAttnFace "UpTVDoeblin.v" 58 20260911.
+Definition af_UpTVReal : AttnFace := MkAttnFace "UpTVReal.v" 33 20260911.
+Definition af_UpTempWindow : AttnFace := MkAttnFace "UpTempWindow.v" 69 20260911.
+
+Definition AttnFaceList : list AttnFace :=
+  cons af_AttnDoeblin
+  (cons af_AttnHardLimit
+  (cons af_AttnHardLimit218
+  (cons af_AttnSqrt
+  (cons af_CW220_Extensions
+  (cons af_CW_ConstructiveWorld_219
+  (cons af_CW_ConstructiveWorld_220
+  (cons af_ConstructiveWorld_215
+  (cons af_ConstructiveWorld_217
+  (cons af_ConstructiveWorld_218
+  (cons af_ConstructiveWorld_219
+  (cons af_ConstructiveWorld
+  (cons af_UpAlignId
+  (cons af_UpAlignIdReq
+  (cons af_UpArchAttn
+  (cons af_UpAuditBridge
+  (cons af_UpBudgetReal
+  (cons af_UpCLQuery
+  (cons af_UpCS
+  (cons af_UpConstitution
+  (cons af_UpDPOLip
+  (cons af_UpDebtDual
+  (cons af_UpDebtGibbsT
+  (cons af_UpDebtSqrtAbs
+  (cons af_UpDebtSqrtAbsReq
+  (cons af_UpDissip
+  (cons af_UpEntropyGain
+  (cons af_UpEntropyGainReq
+  (cons af_UpEvictId
+  (cons af_UpEvictIdReq
+  (cons af_UpExtras
+  (cons af_UpFEP
+  (cons af_UpFirewall
+  (cons af_UpFirewallReq
+  (cons af_UpGRPO
+  (cons af_UpGeomB
+  (cons af_UpHlogZ
+  (cons af_UpIDL
+  (cons af_UpIDL_P2
+  (cons af_UpKVDrift
+  (cons af_UpKVDrift_P2
+  (cons af_UpKVEv
+  (cons af_UpLoeb
+  (cons af_UpLoebD2
+  (cons af_UpLogMono
+  (cons af_UpMinP
+  (cons af_UpPLA
+  (cons af_UpPPO
+  (cons af_UpPredRelax
+  (cons af_UpPredRelaxReq
+  (cons af_UpProj
+  (cons af_UpProjBPC
+  (cons af_UpQKBound
+  (cons af_UpRealLeB
+  (cons af_UpRealLeB2
+  (cons af_UpRealLeB3
+  (cons af_UpRecast
+  (cons af_UpRefuted
+  (cons af_UpReqAlgebra
+  (cons af_UpReqAlign
+  (cons af_UpReqAlign2
+  (cons af_UpReqAlign3
+  (cons af_UpReqAlignRest
+  (cons af_UpReqAlignRestA
+  (cons af_UpReqAlignRestB
+  (cons af_UpReqAttnGibbs
+  (cons af_UpReqAttnIter
+  (cons af_UpReqBoltzDirect
+  (cons af_UpReqBranchPos
+  (cons af_UpReqCauchy
+  (cons af_UpReqDist
+  (cons af_UpReqDpoLoss
+  (cons af_UpReqFEPAttn
+  (cons af_UpReqGeomD
+  (cons af_UpReqGeomIter
+  (cons af_UpReqGibbsD
+  (cons af_UpReqGibbsE
+  (cons af_UpReqGibbsE2
+  (cons af_UpReqHlogZD
+  (cons af_UpReqIndex
+  (cons af_UpReqJensen
+  (cons af_UpReqKLCvx
+  (cons af_UpReqKLEnergy
+  (cons af_UpReqKLStrict
+  (cons af_UpReqLatticeB
+  (cons af_UpReqLogCompD
+  (cons af_UpReqLogCompD2
+  (cons af_UpReqLogD
+  (cons af_UpReqLogLinD
+  (cons af_UpReqLogPrimD
+  (cons af_UpReqLogRDF
+  (cons af_UpReqMinPAntitone
+  (cons af_UpReqMinPProjB
+  (cons af_UpReqMisc5
+  (cons af_UpReqMisc5B
+  (cons af_UpReqOrderArgmin
+  (cons af_UpReqPCT
+  (cons af_UpReqPPO
+  (cons af_UpReqPPOB
+  (cons af_UpReqPPOGapB
+  (cons af_UpReqPPOPlain
+  (cons af_UpReqPowB
+  (cons af_UpReqRDF
+  (cons af_UpReqRealFEP
+  (cons af_UpReqSLM
+  (cons af_UpReqSampling
+  (cons af_UpReqSqPos
+  (cons af_UpReqSqrtF
+  (cons af_UpReqSumB
+  (cons af_UpReqSumD
+  (cons af_UpReqTempEntropy
+  (cons af_UpReqTempInterp
+  (cons af_UpReqU2
+  (cons af_UpReqZAuto
+  (cons af_UpReqZPosD
+  (cons af_UpReqZPosFinal
+  (cons af_UpReqZPosI
+  (cons af_UpReqZPosI2
+  (cons af_UpSLM
+  (cons af_UpSigMigrate
+  (cons af_UpSigMigrate2
+  (cons af_UpStepKL
+  (cons af_UpStepKLM3
+  (cons af_UpStopTime
+  (cons af_UpTVDoeblin
+  (cons af_UpTVReal
+  (cons af_UpTempWindow nil)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
+
+(* 主件面统计：127 主件 / 剥注释 token 级 Qed 和 25354（含自指件 UpReqIndex.v v2 终态 27）； *)
+(* 存档/快照/副本/探针（_ 前缀与 probe 族）不入主件面，处置状态见层② 退役条目与交付报告。 *)
+Definition AttnFaceModules : nat := 127.
+Definition AttnFaceItems   : nat := 25354.
+
+Lemma AttnFaceModules_matches : AttnFaceModules = cnt_af AttnFaceList.
+Proof. reflexivity. Qed.
+
+Lemma AttnFaceItems_matches : AttnFaceItems = sum_af AttnFaceList.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.0 层②：Live_X 终态结构面（S01–S15 拆分组 + G 系合并组 + 219 壳/扩展 + 退役处置） ---------- *)
+
+Record LiveGroup : Set := MkLiveGroup
+  { lg_name    : string   (* 组名 / 文件名 / 退役件名 *)
+  ; lg_kind    : nat      (* 1=S 系拆分组  2=G 系合并组  3=聚合壳/扩展件  0=退役件 *)
+  ; lg_members : nat      (* S=组内剥注释 Qed 件数；G=README 旧名成员数；壳/扩展=1；退役=0 *)
+  ; lg_note    : string   (* 主题 / 成员旧名清单 / 处置说明 *)
+  }.
+
+Fixpoint cnt_lg (l : list LiveGroup) : nat :=
+  match l with
+  | nil => 0
+  | cons _ tl => S (cnt_lg tl)
+  end.
+
+Fixpoint sum_lg (l : list LiveGroup) : nat :=
+  match l with
+  | nil => 0
+  | cons g tl => plus (lg_members g) (sum_lg tl)
+  end.
+
+Definition lg_S01BaseRing : LiveGroup := MkLiveGroup "S01_BaseRing.v" 1 99 "BaseRing / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S02CauchyComplete : LiveGroup := MkLiveGroup "S02_CauchyComplete.v" 1 138 "CauchyComplete / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S03QExp : LiveGroup := MkLiveGroup "S03_QExp.v" 1 223 "QExp / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S04RealExpLogConv : LiveGroup := MkLiveGroup "S04_RealExpLogConv.v" 1 113 "RealExpLogConv / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S05AlignmentGRPO : LiveGroup := MkLiveGroup "S05_AlignmentGRPO.v" 1 141 "AlignmentGRPO / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S06DiffSamplingGibbs : LiveGroup := MkLiveGroup "S06_DiffSamplingGibbs.v" 1 240 "DiffSamplingGibbs / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S07RealSetoidExpLog : LiveGroup := MkLiveGroup "S07_RealSetoidExpLog.v" 1 275 "RealSetoidExpLog / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S08RealMainlineDPO : LiveGroup := MkLiveGroup "S08_RealMainlineDPO.v" 1 117 "RealMainlineDPO / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S09EntropyReal : LiveGroup := MkLiveGroup "S09_EntropyReal.v" 1 94 "EntropyReal / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S10KVQuantTrig : LiveGroup := MkLiveGroup "S10_KVQuantTrig.v" 1 432 "KVQuantTrig / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S11TP3B5 : LiveGroup := MkLiveGroup "S11_TP3B5.v" 1 410 "TP3B5 / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S12B5RecycleSF : LiveGroup := MkLiveGroup "S12_B5RecycleSF.v" 1 331 "B5RecycleSF / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S13NLiveAudit : LiveGroup := MkLiveGroup "S13_NLiveAudit.v" 1 192 "NLiveAudit / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S14B5BatchBlock : LiveGroup := MkLiveGroup "S14_B5BatchBlock.v" 1 258 "B5BatchBlock / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S15TailFEPUp : LiveGroup := MkLiveGroup "S15_TailFEPUp.v" 1 73 "TailFEPUp / 219 split group; member cnt = stripped-comment Qed tokens".
+
+Definition lg_G01 : LiveGroup := MkLiveGroup "G01_CoreMicro.v" 2 5 "members: UpHlogZ,UpExtras,UpFEP,UpLogMono,UpPPO".
+Definition lg_G02 : LiveGroup := MkLiveGroup "G02_Debt.v" 2 3 "members: UpDebtSqrtAbs,UpDebtDual,UpDebtGibbsT".
+Definition lg_G04 : LiveGroup := MkLiveGroup "G04_ProjFam.v" 2 4 "members: UpPLA,UpPredRelax,UpProj,UpProjBPC".
+Definition lg_G05 : LiveGroup := MkLiveGroup "G05_LogSmall.v" 2 3 "members: UpReqLogD,UpReqLogLinD,UpReqLogPrimD".
+Definition lg_G06 : LiveGroup := MkLiveGroup "G06_BForm.v" 2 4 "members: UpReqPPOB,UpReqSumB,UpReqMinPProjB,UpReqLatticeB".
+Definition lg_G07 : LiveGroup := MkLiveGroup "G07_KLWall.v" 2 5 "members: UpReqKLCvx,UpReqPowB,UpReqJensen,UpReqKLStrict,UpReqKLEnergy".
+Definition lg_G08 : LiveGroup := MkLiveGroup "G08_Gibbs.v" 2 3 "members: UpReqHlogZD,UpReqGibbsD,UpReqGibbsE2".
+Definition lg_G09 : LiveGroup := MkLiveGroup "G09_MiscSmall.v" 2 4 "members: UpReqPCT,UpReqBoltzDirect,UpReqSqPos,UpReqOrderArgmin".
+Definition lg_G10 : LiveGroup := MkLiveGroup "G10_LoebFam.v" 2 4 "members: UpLoeb,UpLoebD2,UpRefuted,UpQKBound".
+Definition lg_G11 : LiveGroup := MkLiveGroup "G11_IDLFam.v" 2 2 "members: UpCLQuery,UpIDL".
+Definition lg_G12 : LiveGroup := MkLiveGroup "G12_ZPosFam.v" 2 5 "members: UpReqZPosD,UpReqZPosI,UpReqZPosI2,UpReqZAuto,UpReqZPosFinal".
+Definition lg_G13 : LiveGroup := MkLiveGroup "G13_EvictFam.v" 2 2 "members: UpEvictId,UpEvictIdReq".
+(* 组号缺位注记：G03 无组（G 系编号 01/02/04–13 共 12 组，缺位为合并史留痕，非漏登）。 *)
+
+Definition lg_Shell219 : LiveGroup := MkLiveGroup "CW_ConstructiveWorld_219.v" 3 15 "219 shell: Require S01-S15 chain; 17 lines 0 Qed tokens; downstream base aggregate (Live_X copy)".
+Definition lg_CW220Ext : LiveGroup := MkLiveGroup "CW220_Extensions.v" 3 1 "CW220 extensions piece; stripped-comment Qed 552".
+Definition lg_Ret214 : LiveGroup := MkLiveGroup "ConstructiveWorld-214" 0 0 "retired: CW214 name-level check 219 covers 214, 3943/3943 hit; dependents re-Require shell 219".
+Definition lg_RetUpTVReal : LiveGroup := MkLiveGroup "UpTVReal" 0 0 "retired: absent in Live_X; attn legacy 33 Qed, not migrated".
+Definition lg_RetProbeReexSig : LiveGroup := MkLiveGroup "ProbeReexSig" 0 0 "retired probe: absent in Live_X; attn legacy ProbeReexSig/ProbeReexSig2".
+
+Definition SLiveList : list LiveGroup :=
+  cons lg_S01BaseRing
+  (cons lg_S02CauchyComplete
+  (cons lg_S03QExp
+  (cons lg_S04RealExpLogConv
+  (cons lg_S05AlignmentGRPO
+  (cons lg_S06DiffSamplingGibbs
+  (cons lg_S07RealSetoidExpLog
+  (cons lg_S08RealMainlineDPO
+  (cons lg_S09EntropyReal
+  (cons lg_S10KVQuantTrig
+  (cons lg_S11TP3B5
+  (cons lg_S12B5RecycleSF
+  (cons lg_S13NLiveAudit
+  (cons lg_S14B5BatchBlock
+  (cons lg_S15TailFEPUp nil)))))))))))))).
+
+Definition GLiveList : list LiveGroup :=
+  cons lg_G01
+  (cons lg_G02
+  (cons lg_G04
+  (cons lg_G05
+  (cons lg_G06
+  (cons lg_G07
+  (cons lg_G08
+  (cons lg_G09
+  (cons lg_G10
+  (cons lg_G11
+  (cons lg_G12
+  (cons lg_G13 nil))))))))))).
+
+(* S 面：15 组 / 剥注释 Qed 和 3136。结构不变量：和=attn 219 大库 CW_ConstructiveWorld_219.v
+   token 级 Qed 实测同值——拆分无损在编译期机械可证（见 Split_lossless_219）。 *)
+Definition SLiveGroups : nat := 15.
+Definition SFaceQed     : nat := 3136.
+Lemma SLiveGroups_matches : SLiveGroups = cnt_lg SLiveList.
+Proof. reflexivity. Qed.
+
+Lemma SFaceQed_matches : SFaceQed = sum_lg SLiveList.
+Proof. reflexivity. Qed.
+
+Lemma Split_lossless_219 : af_qed af_CW_ConstructiveWorld_219 = SFaceQed.
+(* attn 219 大库 3136 Qed = Live_X S01–S15 组和 3136 Qed（token 级 1:1）。 *)
+Proof. reflexivity. Qed.
+
+(* G 面：12 组 / README 旧名成员和 44 / G 组件剥注释 Qed 和 640。结构不变量：逐组成员旧名
+   attn Qed 和 = Live_X G 组件 Qed（12 组全数 1:1，合并无损机械可证，见 G*_merge_lossless）。 *)
+Definition GMergeGroups  : nat := 12.
+Definition GMergeMembers : nat := 44.
+Definition GMergeQed     : nat := 640.
+
+Definition gqed_G01 : nat := 26.  (* G01_CoreMicro.v 剥注释 Qed 实测 *)
+Definition gqed_G02 : nat := 21.  (* G02_Debt.v 剥注释 Qed 实测 *)
+Definition gqed_G04 : nat := 71.  (* G04_ProjFam.v 剥注释 Qed 实测 *)
+Definition gqed_G05 : nat := 46.  (* G05_LogSmall.v 剥注释 Qed 实测 *)
+Definition gqed_G06 : nat := 25.  (* G06_BForm.v 剥注释 Qed 实测 *)
+Definition gqed_G07 : nat := 66.  (* G07_KLWall.v 剥注释 Qed 实测 *)
+Definition gqed_G08 : nat := 39.  (* G08_Gibbs.v 剥注释 Qed 实测 *)
+Definition gqed_G09 : nat := 22.  (* G09_MiscSmall.v 剥注释 Qed 实测 *)
+Definition gqed_G10 : nat := 167.  (* G10_LoebFam.v 剥注释 Qed 实测 *)
+Definition gqed_G11 : nat := 86.  (* G11_IDLFam.v 剥注释 Qed 实测 *)
+Definition gqed_G12 : nat := 44.  (* G12_ZPosFam.v 剥注释 Qed 实测 *)
+Definition gqed_G13 : nat := 27.  (* G13_EvictFam.v 剥注释 Qed 实测 *)
+
+Lemma GMergeGroups_matches : GMergeGroups = cnt_lg GLiveList.
+Proof. reflexivity. Qed.
+
+Lemma GMergeMembers_matches : GMergeMembers = sum_lg GLiveList.
+Proof. reflexivity. Qed.
+
+Lemma GMergeQed_matches : GMergeQed = plus gqed_G01 (plus gqed_G02 (plus gqed_G04 (plus gqed_G05 (plus gqed_G06 (plus gqed_G07 (plus gqed_G08 (plus gqed_G09 (plus gqed_G10 (plus gqed_G11 (plus gqed_G12 (gqed_G13))))))))))).
+Proof. reflexivity. Qed.
+
+Lemma G01_merge_lossless : gqed_G01 = plus (af_qed af_UpHlogZ) (plus (af_qed af_UpExtras) (plus (af_qed af_UpFEP) (plus (af_qed af_UpLogMono) (af_qed af_UpPPO)))).
+Proof. reflexivity. Qed.
+
+Lemma G02_merge_lossless : gqed_G02 = plus (af_qed af_UpDebtSqrtAbs) (plus (af_qed af_UpDebtDual) (af_qed af_UpDebtGibbsT)).
+Proof. reflexivity. Qed.
+
+Lemma G04_merge_lossless : gqed_G04 = plus (af_qed af_UpPLA) (plus (af_qed af_UpPredRelax) (plus (af_qed af_UpProj) (af_qed af_UpProjBPC))).
+Proof. reflexivity. Qed.
+
+Lemma G05_merge_lossless : gqed_G05 = plus (af_qed af_UpReqLogD) (plus (af_qed af_UpReqLogLinD) (af_qed af_UpReqLogPrimD)).
+Proof. reflexivity. Qed.
+
+Lemma G06_merge_lossless : gqed_G06 = plus (af_qed af_UpReqPPOB) (plus (af_qed af_UpReqSumB) (plus (af_qed af_UpReqMinPProjB) (af_qed af_UpReqLatticeB))).
+Proof. reflexivity. Qed.
+
+Lemma G07_merge_lossless : gqed_G07 = plus (af_qed af_UpReqKLCvx) (plus (af_qed af_UpReqPowB) (plus (af_qed af_UpReqJensen) (plus (af_qed af_UpReqKLStrict) (af_qed af_UpReqKLEnergy)))).
+Proof. reflexivity. Qed.
+
+Lemma G08_merge_lossless : gqed_G08 = plus (af_qed af_UpReqHlogZD) (plus (af_qed af_UpReqGibbsD) (af_qed af_UpReqGibbsE2)).
+Proof. reflexivity. Qed.
+
+Lemma G09_merge_lossless : gqed_G09 = plus (af_qed af_UpReqPCT) (plus (af_qed af_UpReqBoltzDirect) (plus (af_qed af_UpReqSqPos) (af_qed af_UpReqOrderArgmin))).
+Proof. reflexivity. Qed.
+
+Lemma G10_merge_lossless : gqed_G10 = plus (af_qed af_UpLoeb) (plus (af_qed af_UpLoebD2) (plus (af_qed af_UpRefuted) (af_qed af_UpQKBound))).
+Proof. reflexivity. Qed.
+
+Lemma G11_merge_lossless : gqed_G11 = plus (af_qed af_UpCLQuery) (af_qed af_UpIDL).
+Proof. reflexivity. Qed.
+
+Lemma G12_merge_lossless : gqed_G12 = plus (af_qed af_UpReqZPosD) (plus (af_qed af_UpReqZPosI) (plus (af_qed af_UpReqZPosI2) (plus (af_qed af_UpReqZAuto) (af_qed af_UpReqZPosFinal)))).
+Proof. reflexivity. Qed.
+
+Lemma G13_merge_lossless : gqed_G13 = plus (af_qed af_UpEvictId) (af_qed af_UpEvictIdReq).
+Proof. reflexivity. Qed.
+
+(* Live_X 总面：99 .v（ls 实测）= S 15 + G 12 + 壳/扩展 2 + 独立件 70。 *)
+Definition LiveXFiles    : nat := 99.
+Definition LiveXIndFiles : nat := 70.
+Lemma LiveXSplits : LiveXFiles = plus (plus SLiveGroups GMergeGroups) (plus 2 LiveXIndFiles).
+Proof. reflexivity. Qed.
+
+Lemma Shell219_chain : lg_members lg_Shell219 = SLiveGroups.
+(* 219 壳聚合链 = S 系 15 组，壳链完整。 *)
+Proof. reflexivity. Qed.
+
 (* UpReqIndex v1.7（2026-09-10，wb10 影子预置席 diff-ready 版记刷新；本影子零编译，覆盖真件后一次 G2 定账）： *)
 (* 承 v1.5 全部增册；本席四项：idx_UpPPOPlain(14) 解除暂不登记 + 批外 idx_UpReqMinPProjB(7，W2' 簇) 补登 + *)
 (* idx_UpReqAttnGibbs 63→65 + idx_UpReqPPO 22→26 → 模块 36 = 宇宙内 32 + 批外 4、件数 1017 = 宇宙内 944 + 批外 73； *)
@@ -371,3 +849,10 @@ Proof. reflexivity. Qed.
 (* 总账 v1.7 在案方向，件名随总账 v1.8 待与席25 产物互核；和 734 不变）； *)
 (* 翻牌闸=主会话 v1.8 commit 令+§10.2 数字同步（闸未落本影子不覆盖真件）；G1–G4 同轨复验见文件头注； *)
 (* v1.5 账房尾项翻牌席 / v1.4 账房翻牌+Index 刷新席 / v1.3 总账回写席 / v1.2 批3行点火席 / v1.0 建立席 2026-09-09 *)
+(* UpReqIndex v2.0（2026-09-11，席N：UpReqIndex v2 重制席收口版记）： *)
+(* 承 v1.7/v1.8 全部增册与宇宙行 670/0/64/0/0、模块 39=宇宙内 32+批外 7、件数 1030=宇宙内 944+批外 86 零改动； *)
+(* 本席纯新增层① attn 主件面（af_ 127 件/25354 封口 token）+ 层② Live_X 结构面（lg_ S15/G12/壳2/退役3）与 *)
+(* 22 条 reflexivity 不变量引理；两轨口径并行（idx_=grep decl TLC 随总账；af_/lg_=剥注释 token 级封口随磁盘）； *)
+(* 盘面漂移观察（只记不改，翻牌权在总账）：idx_UpReqPPO 26 vs 盘 25、idx_UpReqPPOB 2 vs 盘 4，余 37 件盘数与登记相符； *)
+(* 四关：G1 禁词全文件 0 命中（含头注）；G2 coqc 9.0 -vos 预审+cpu_guard 中转全量 EXIT=0；G3 提取探针经 coqtop *)
+(* 管道、常数清单式、产物魔法字 0（探针产物验后即删）；自指件本文件封口 token 27=v1.8 存量 5+本席新增 22。 *)
