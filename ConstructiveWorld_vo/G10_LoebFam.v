@@ -84,14 +84,14 @@ Inductive Formula : Set :=
 Fixpoint numT (m : nat) : Term :=
   match m with
   | O => tzero
-  | S m' => tsucc (numT m')
+  | Datatypes.S m' => tsucc (numT m')
   end.
 
 (* 变元 0 的代入（语言无约束词栏 → 无捕获问题，纯结构递归） *)
 Fixpoint substT (u t : Term) : Term :=
   match u with
   | tvar O => t
-  | tvar (S k) => tvar (S k)
+  | tvar (Datatypes.S k) => tvar (Datatypes.S k)
   | tzero => tzero
   | tsucc u' => tsucc (substT u' t)
   | tsub a b => tsub (substT a t) (substT b t)
@@ -265,8 +265,8 @@ Qed.
 
 Fixpoint pairp (a b : nat) : nat :=
   match a with
-  | O => S (b + b)
-  | S a' => (pairp a' b) + (pairp a' b)
+  | O => Datatypes.S (b + b)
+  | Datatypes.S a' => (pairp a' b) + (pairp a' b)
   end.
 
 Lemma pairp_pos : forall a b, (1 <= pairp a b)%nat.
@@ -291,33 +291,33 @@ Proof.
 Qed.
 
 (* 偶性 / 折半算术小引理链 *)
-Lemma even_ss : forall x : nat, Nat.even (S (S x)) = Nat.even x.
+Lemma even_ss : forall x : nat, Nat.even (Datatypes.S (Datatypes.S x)) = Nat.even x.
 Proof. reflexivity. Qed.
 
 Lemma even_double : forall x : nat, Nat.even (x + x) = true.
 Proof.
   induction x as [|x IHx].
   - reflexivity.
-  - replace (S x + S x) with (S (S (x + x))) by lia.
+  - replace (Datatypes.S x + Datatypes.S x) with (Datatypes.S (Datatypes.S (x + x))) by lia.
     rewrite even_ss. exact IHx.
 Qed.
 
-Lemma even_succ_double : forall x : nat, Nat.even (S (x + x)) = false.
+Lemma even_succ_double : forall x : nat, Nat.even (Datatypes.S (x + x)) = false.
 Proof.
   induction x as [|x IHx].
   - reflexivity.
-  - replace (S x + S x) with (S (S (x + x))) by lia.
+  - replace (Datatypes.S x + Datatypes.S x) with (Datatypes.S (Datatypes.S (x + x))) by lia.
     rewrite even_ss. exact IHx.
 Qed.
 
-Lemma div2_ss : forall x : nat, Nat.div2 (S (S x)) = S (Nat.div2 x).
+Lemma div2_ss : forall x : nat, Nat.div2 (Datatypes.S (Datatypes.S x)) = Datatypes.S (Nat.div2 x).
 Proof. reflexivity. Qed.
 
 Lemma div2_add : forall x : nat, Nat.div2 (x + x) = x.
 Proof.
   induction x as [|x IHx].
   - reflexivity.
-  - replace (S x + S x) with (S (S (x + x))) by lia.
+  - replace (Datatypes.S x + Datatypes.S x) with (Datatypes.S (Datatypes.S (x + x))) by lia.
     rewrite div2_ss. rewrite IHx. reflexivity.
 Qed.
 
@@ -332,13 +332,13 @@ Qed.
 Fixpoint unp2 (f n : nat) {struct f} : option (nat * nat) :=
   match f with
   | O => None
-  | S f' =>
+  | Datatypes.S f' =>
       match n with
       | O => None
-      | S n' =>
-          if Nat.even (S n')
-          then (match unp2 f' (Nat.div2 (S n')) with
-                | Some (a, b) => Some (S a, b)
+      | Datatypes.S n' =>
+          if Nat.even (Datatypes.S n')
+          then (match unp2 f' (Nat.div2 (Datatypes.S n')) with
+                | Some (a, b) => Some (Datatypes.S a, b)
                 | None => None
                 end)
           else Some (O, Nat.div2 n')
@@ -347,13 +347,13 @@ Fixpoint unp2 (f n : nat) {struct f} : option (nat * nat) :=
 
 (* 单步展开引理：证明中受控展开的唯一通道（保持 unp2 折叠可重写） *)
 Lemma unp2_S : forall (f' n : nat),
-  unp2 (S f') n =
+  unp2 (Datatypes.S f') n =
   match n with
   | O => None
-  | S n' =>
-      if Nat.even (S n')
-      then (match unp2 f' (Nat.div2 (S n')) with
-            | Some (a, b) => Some (S a, b)
+  | Datatypes.S n' =>
+      if Nat.even (Datatypes.S n')
+      then (match unp2 f' (Nat.div2 (Datatypes.S n')) with
+            | Some (a, b) => Some (Datatypes.S a, b)
             | None => None
             end)
       else Some (O, Nat.div2 n')
@@ -374,26 +374,26 @@ Proof.
   - destruct g as [|[|g']].
     + exfalso. lia.
     + exfalso. lia.
-    + rewrite (unp2_S (S g') (S (S x''))).
-      rewrite (unp2_S (S x'') (S (S x''))).
+    + rewrite (unp2_S (Datatypes.S g') (Datatypes.S (Datatypes.S x''))).
+      rewrite (unp2_S (Datatypes.S x'') (Datatypes.S (Datatypes.S x''))).
       cbv iota.
-      destruct (Nat.even (S (S x''))).
+      destruct (Nat.even (Datatypes.S (Datatypes.S x''))).
       * rewrite (div2_ss x'').
         pose proof (div2_le x'') as Hd2.
-        pose proof (proj2 (Nat.succ_le_mono (S x'') (S g')) Hle) as Hs1.
+        pose proof (proj2 (Nat.succ_le_mono (Datatypes.S x'') (Datatypes.S g')) Hle) as Hs1.
         pose proof (proj2 (Nat.succ_le_mono x'' g') Hs1) as Hxg.
-        assert (Hv1 : (S (Nat.div2 x'') <= S g')%nat).
-        { apply Nat.le_trans with (S x'').
+        assert (Hv1 : (Datatypes.S (Nat.div2 x'') <= Datatypes.S g')%nat).
+        { apply Nat.le_trans with (Datatypes.S x'').
           - apply le_n_S. exact Hd2.
           - exact Hs1. }
-        assert (Hv2 : (S (Nat.div2 x'') <= S x'')%nat)
+        assert (Hv2 : (Datatypes.S (Nat.div2 x'') <= Datatypes.S x'')%nat)
           by (apply le_n_S; exact Hd2).
-        assert (Hlt : (S (Nat.div2 x'') < S (S x''))%nat).
-        { apply Nat.le_lt_trans with (S x'').
+        assert (Hlt : (Datatypes.S (Nat.div2 x'') < Datatypes.S (Datatypes.S x''))%nat).
+        { apply Nat.le_lt_trans with (Datatypes.S x'').
           - exact Hv2.
           - apply Nat.lt_succ_diag_r. }
-        pose proof (IH (S (Nat.div2 x'')) Hlt (S g') Hv1) as IH1.
-        pose proof (IH (S (Nat.div2 x'')) Hlt (S x'') Hv2) as IH2.
+        pose proof (IH (Datatypes.S (Nat.div2 x'')) Hlt (Datatypes.S g') Hv1) as IH1.
+        pose proof (IH (Datatypes.S (Nat.div2 x'')) Hlt (Datatypes.S x'') Hv2) as IH2.
         rewrite IH1. rewrite IH2.
         reflexivity.
       * reflexivity.
@@ -403,16 +403,16 @@ Qed.
 Lemma unp2_pair : forall a b : nat, unp2 (pairp a b) (pairp a b) = Some (a, b).
 Proof.
   induction a as [|a IHa]; intros b.
-  - cbn [pairp]. rewrite (unp2_S (b + b) (S (b + b))). cbv iota.
+  - cbn [pairp]. rewrite (unp2_S (b + b) (Datatypes.S (b + b))). cbv iota.
     rewrite even_succ_double. rewrite div2_add. reflexivity.
   - cbn [pairp]. destruct (pairp a b) as [|p] eqn:Ep.
     + exfalso. pose proof (pairp_pos a b) as Hp. rewrite Ep in Hp. lia.
-    + replace (S p + S p) with (S (S (p + p))) by lia.
-      rewrite (unp2_S (S (p + p)) (S (S (p + p)))). cbv iota.
+    + replace (Datatypes.S p + Datatypes.S p) with (Datatypes.S (Datatypes.S (p + p))) by lia.
+      rewrite (unp2_S (Datatypes.S (p + p)) (Datatypes.S (Datatypes.S (p + p)))). cbv iota.
       rewrite even_ss. rewrite even_double.
       rewrite div2_ss. rewrite div2_add.
-      assert (Hle : (S p <= S (p + p))%nat) by lia.
-      rewrite (unp2_fuel (S p) (S (p + p)) Hle).
+      assert (Hle : (Datatypes.S p <= Datatypes.S (p + p))%nat) by lia.
+      rewrite (unp2_fuel (Datatypes.S p) (Datatypes.S (p + p)) Hle).
       rewrite <- Ep. rewrite (IHa b). reflexivity.
 Qed.
 
@@ -435,16 +435,16 @@ Fixpoint gnF (f : Formula) : nat :=
 Fixpoint dT2 (f c : nat) {struct f} : option Term :=
   match f with
   | O => None
-  | S f' =>
+  | Datatypes.S f' =>
       match unp2 c c with
       | Some (O, p) => Some (tvar p)
-      | Some (S O, _) => Some tzero
-      | Some (S (S O), q) =>
+      | Some (Datatypes.S O, _) => Some tzero
+      | Some (Datatypes.S (Datatypes.S O), q) =>
           (match dT2 f' q with
            | Some x => Some (tsucc x)
            | None => None
            end)
-      | Some (S (S (S O)), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S O)), q) =>
           (match unp2 q q with
            | Some (a, b) =>
                (match dT2 f' a with
@@ -466,9 +466,9 @@ Definition dT (c : nat) : option Term := dT2 c c.
 Fixpoint dF2 (f c : nat) {struct f} : option Formula :=
   match f with
   | O => None
-  | S f' =>
+  | Datatypes.S f' =>
       match unp2 c c with
-      | Some (S (S (S (S O))), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S O))), q) =>
           (match unp2 q q with
            | Some (a, b) =>
                (match dT2 f' a with
@@ -481,7 +481,7 @@ Fixpoint dF2 (f c : nat) {struct f} : option Formula :=
                 end)
            | None => None
            end)
-      | Some (S (S (S (S (S O)))), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S O)))), q) =>
           (match unp2 q q with
            | Some (a, b) =>
                (match dF2 f' a with
@@ -606,14 +606,14 @@ Fixpoint valt (t : Term) (s : nat -> nat) : nat :=
   match t with
   | tvar k => s k
   | tzero => 0
-  | tsucc t' => S (valt t' s)
+  | tsucc t' => Datatypes.S (valt t' s)
   | tsub a b => gsubF (valt a s) (valt b s)
   end.
 
 Definition upd (s : nat -> nat) (v k : nat) : nat :=
   match k with
   | O => v
-  | S k' => s (S k')
+  | Datatypes.S k' => s (Datatypes.S k')
   end.
 
 Lemma valt_numT : forall (m : nat) (s : nat -> nat), valt (numT m) s = m.
@@ -817,7 +817,7 @@ Proof. exact diag_code_eq. Qed.
 (* Q2 席（第三棒）。理论来源：                                              *)
 (*   ROUNDTABLE2-未知算法强制变异实验-终版快照.md：                          *)
 (*     件 1  席 1 实验一（杀 WPM）：无界受偿流破产反例                        *)
-(*           —— S≡1 + 无限耗 1 受偿 ⟹ 第 ⌊R⌋+1 次破产，                      *)
+(*           —— Datatypes.S≡1 + 无限耗 1 受偿 ⟹ 第 ⌊R⌋+1 次破产，                      *)
 (*              而逐步定位方案（尾指针+每步覆盖 1）永不破产；                   *)
 (*     件 2  席 6 实验 E1（杀 GRM）：p-adic 进位级联连坐两字段                 *)
 (*           —— 一枚证据同时改写两字段坐标 + 剩余类环交替永不达不动点；          *)
@@ -828,7 +828,7 @@ Proof. exact diag_code_eq. Qed.
 (*                                                                       *)
 (* 形式化方针：每件 = 具体反例对象（显式 nat/Z/bool/列表构造）+ 其性质的       *)
 (* bool/tid 判定证明。语句零 Prop：等式用 tid、序用 nle、分支用 bool。         *)
-(* 荒谬关闭：tid bool true false 空指标消去 + nle (S O) O 空型消去。          *)
+(* 荒谬关闭：tid bool true false 空指标消去 + nle (Datatypes.S O) O 空型消去。          *)
 (* 载体全程 Z/nat/bool 判定层；stdlib only；独立文件内联基建（不引 G04_ProjFam）。   *)
 (* 纪律自检：四禁词零出现（含头注，便于 grep=0）；主定理语句到 Proof. 之间      *)
 (* 无裸 exists、无 Prop 层 and/or、无 -> False、无 Prop 前提；全链可提取       *)
@@ -878,13 +878,13 @@ Ltac tid_kill H1 H2 :=
   pose proof (match H2 in refu_tid _ a b return a = b with refu_tid_refl _ _ => eq_refl end) as KE2;
   rewrite KE1 in KE2; discriminate KE2.
 
-(* Set 层自然数序型（k < m 编码为 nle (S k) m） *)
+(* Set 层自然数序型（k < m 编码为 nle (Datatypes.S k) m） *)
 Inductive refu_nle (n : nat) : nat -> Set :=
 | refu_nle_n : refu_nle n n
-| refu_nle_S : forall m : nat, refu_nle n m -> refu_nle n (S m).
+| refu_nle_S : forall m : nat, refu_nle n m -> refu_nle n (Datatypes.S m).
 
-(* refu_nle (S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
-Lemma refu_nle_10_absurd : forall P : Type, refu_nle (S O) O -> P.
+(* refu_nle (Datatypes.S O) O 荒谬件（索引不交配的空消去，合法关闭任意 Set 目标） *)
+Lemma refu_nle_10_absurd : forall P : Type, refu_nle (Datatypes.S O) O -> P.
 Proof.
   intros P H. inversion H.
 Qed.
@@ -903,7 +903,7 @@ Proof.
   - apply refu_nle_S. exact IH.
 Qed.
 
-Lemma refu_nle_SS : forall a b : nat, refu_nle a b -> refu_nle (S a) (S b).
+Lemma refu_nle_SS : forall a b : nat, refu_nle a b -> refu_nle (Datatypes.S a) (Datatypes.S b).
 Proof.
   intros a b H. induction H as [| m H IH].
   - apply refu_nle_n.
@@ -992,12 +992,12 @@ Definition solvent (k : nat) : bool := Z.leb (Z.of_nat k) wpm_R.
 (* 第 k 次受偿后的清偿位：余额 ≤ 0 ⟹ 第 k+1 次必破产 *)
 Definition insolvent (k : nat) : bool := Z.leb (melt_wallet k) 0.
 
-(* 定位方案：逐位证书序列 S ≡ 1（每步覆盖 1）+ 尾指针，第 k 次受偿从第 k 张支付 *)
-Fixpoint loc_cov (k : nat) : Z := match k with O => 1 | S k' => loc_cov k' end.
+(* 定位方案：逐位证书序列 Datatypes.S ≡ 1（每步覆盖 1）+ 尾指针，第 k 次受偿从第 k 张支付 *)
+Fixpoint loc_cov (k : nat) : Z := match k with O => 1 | Datatypes.S k' => loc_cov k' end.
 Definition loc_solvent (k : nat) : bool := Z.leb 1 (loc_cov k).
 
 (* 熔可行域上 melt ≡ 求和：前 n 张证书之和（每张 1）一步可算 *)
-Fixpoint sum_S (n : nat) : Z := match n with O => 0 | S m => sum_S m + loc_cov m end.
+Fixpoint sum_S (n : nat) : Z := match n with O => 0 | Datatypes.S m => sum_S m + loc_cov m end.
 
 Lemma loc_cov_one : forall k : nat, refu_tid Z (loc_cov k) 1.
 Proof.
@@ -1032,7 +1032,7 @@ Proof.
 Qed.
 
 (* 破产主定理：第 ⌊R⌋+1 次受偿破产 *)
-Theorem wpm_melt_bankrupt : refu_tid bool (solvent (S (Z.to_nat wpm_R))) false.
+Theorem wpm_melt_bankrupt : refu_tid bool (solvent (Datatypes.S (Z.to_nat wpm_R))) false.
 Proof.
   unfold solvent, wpm_R. apply refu_tid_refl.
 Qed.
@@ -1042,31 +1042,31 @@ Proof.
   apply refu_tid_refl.
 Qed.
 
-Lemma wpm_wallet_negative_at_bankrupt : refu_tid Z (melt_wallet (S (Z.to_nat wpm_R))) (-1).
+Lemma wpm_wallet_negative_at_bankrupt : refu_tid Z (melt_wallet (Datatypes.S (Z.to_nat wpm_R))) (-1).
 Proof.
   apply refu_tid_refl.
 Qed.
 
-Lemma wpm_insolvent_at_bankrupt : refu_tid bool (insolvent (S (Z.to_nat wpm_R))) true.
+Lemma wpm_insolvent_at_bankrupt : refu_tid bool (insolvent (Datatypes.S (Z.to_nat wpm_R))) true.
 Proof.
   unfold insolvent, wpm_R. apply refu_tid_refl.
 Qed.
 
 (* 破产沿受偿流传播：一旦破产，此后每次受偿都破产（无界流 ⟹ 无限破产事件） *)
 Lemma insolvent_step : forall k : nat,
-  refu_tid bool (insolvent k) true -> refu_tid bool (insolvent (S k)) true.
+  refu_tid bool (insolvent k) true -> refu_tid bool (insolvent (Datatypes.S k)) true.
 Proof.
   intros k H. unfold insolvent in H.
   tidEqN H HE. unfold melt_wallet, wpm_R in HE. apply Z.leb_le in HE.
   unfold insolvent, melt_wallet, wpm_R.
-  destruct (Z.leb (3 - Z.of_nat (S k)) 0) eqn:E.
+  destruct (Z.leb (3 - Z.of_nat (Datatypes.S k)) 0) eqn:E.
   - apply refu_tid_refl.
   - apply Z.leb_gt in E. rewrite Nat2Z.inj_succ in E.
     exfalso. lia.
 Qed.
 
 Theorem wpm_insolvent_forever : forall j : nat,
-  refu_tid bool (insolvent (S (S (S (S j))))) true.
+  refu_tid bool (insolvent (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S j))))) true.
 Proof.
   intros j. induction j as [| j IH].
   - exact wpm_insolvent_at_bankrupt.
@@ -1083,8 +1083,8 @@ Qed.
 (* 合取收口（「聚合占优」反演为聚合破产）：同一受偿流、同一受偿序号，
    熔券偿付位为假而定位方案偿付位为真 *)
 Theorem wpm_unbounded_family_unsound :
-  refu_tid bool (andb (solvent (S (Z.to_nat wpm_R)))
-                 (loc_solvent (S (Z.to_nat wpm_R)))) false.
+  refu_tid bool (andb (solvent (Datatypes.S (Z.to_nat wpm_R)))
+                 (loc_solvent (Datatypes.S (Z.to_nat wpm_R)))) false.
 Proof.
   apply andb_false_left. apply wpm_melt_bankrupt.
 Qed.
@@ -1109,7 +1109,7 @@ Definition p3 : Z := 3.
 Fixpoint pla_step2 (j : nat) : Z * Z :=
   match j with
   | O => (0, 2)
-  | S j' => let ab := pla_step2 j' in (snd ab + 1, snd ab + 3)
+  | Datatypes.S j' => let ab := pla_step2 j' in (snd ab + 1, snd ab + 3)
   end.
 
 (* 字段一：Z/9 剩余类坐标 *)
@@ -1183,11 +1183,11 @@ Proof.
   - apply refu_tid_refl.
   - tidEqN IH HEc. apply andb_prop in HEc as [HE1 HE2].
     apply Z.eqb_eq in HE1. apply Z.eqb_eq in HE2.
-    replace (fst (pla_step2 (S j))) with (snd (pla_step2 j) + 1) by reflexivity.
-    replace (snd (pla_step2 (S j))) with (snd (pla_step2 j) + 3) by reflexivity.
-    replace (3 * Z.of_nat (S j)) with (3 * Z.of_nat j + 3)
+    replace (fst (pla_step2 (Datatypes.S j))) with (snd (pla_step2 j) + 1) by reflexivity.
+    replace (snd (pla_step2 (Datatypes.S j))) with (snd (pla_step2 j) + 3) by reflexivity.
+    replace (3 * Z.of_nat (Datatypes.S j)) with (3 * Z.of_nat j + 3)
       by (rewrite Nat2Z.inj_succ; lia).
-    replace (3 * Z.of_nat (S j) + 2) with (3 * Z.of_nat j + 5)
+    replace (3 * Z.of_nat (Datatypes.S j) + 2) with (3 * Z.of_nat j + 5)
       by (rewrite Nat2Z.inj_succ; lia).
     rewrite HE2.
     apply andb_true_both.
@@ -1217,13 +1217,13 @@ Qed.
    进位事件不是字段一的私事，粗坐标同步被拖动 *)
 Theorem ledger_trigger_couples_too : forall j : nat,
   refu_tid bool (andb
-    (negb (Bool.eqb (coordB (snd (pla_step2 j))) (coordB (fst (pla_step2 (S j))))))
-    (negb (Z.eqb (coordA (snd (pla_step2 j))) (coordA (fst (pla_step2 (S j))))))) true.
+    (negb (Bool.eqb (coordB (snd (pla_step2 j))) (coordB (fst (pla_step2 (Datatypes.S j))))))
+    (negb (Z.eqb (coordA (snd (pla_step2 j))) (coordA (fst (pla_step2 (Datatypes.S j))))))) true.
 Proof.
   intros j. unfold coordA, coordB.
   tidEqN (pla_pair_closed j) HEc. apply andb_prop in HEc as [HE1 HE2].
   apply Z.eqb_eq in HE1. apply Z.eqb_eq in HE2.
-  replace (fst (pla_step2 (S j))) with (snd (pla_step2 j) + 1) by reflexivity.
+  replace (fst (pla_step2 (Datatypes.S j))) with (snd (pla_step2 j) + 1) by reflexivity.
   rewrite HE2.
   tidEqN (mod3_3j2 j) HM2. rewrite HM2.
   assert (HM3' : (Z.modulo (3 * Z.of_nat j + 2 + 1) 3 = 0)%Z).
@@ -1238,12 +1238,12 @@ Qed.
 
 (* (b) 不达不动点：相邻两步状态永不重合（剩余类环 0↔2 永久交替） *)
 Theorem residue_class_never_freezes : forall j : nat,
-  refu_tid bool (Z.eqb (snd (pla_step2 j)) (fst (pla_step2 (S j)))) false.
+  refu_tid bool (Z.eqb (snd (pla_step2 j)) (fst (pla_step2 (Datatypes.S j)))) false.
 Proof.
   intros j.
   tidEqN (pla_pair_closed j) HEc. apply andb_prop in HEc as [HE1 HE2].
   apply Z.eqb_eq in HE1. apply Z.eqb_eq in HE2.
-  replace (fst (pla_step2 (S j))) with (snd (pla_step2 j) + 1) by reflexivity.
+  replace (fst (pla_step2 (Datatypes.S j))) with (snd (pla_step2 j) + 1) by reflexivity.
   rewrite HE2.
   apply Zeqb_diff_false. lia.
 Qed.
@@ -1289,12 +1289,12 @@ Definition loom_step (p : bool * bool) : bool * bool :=
 Fixpoint loom_iter (k : nat) : bool * bool :=
   match k with
   | O => (true, true)
-  | S k' => loom_step (loom_iter k')
+  | Datatypes.S k' => loom_step (loom_iter k')
   end.
 
 (* 摩擦计：每轮两洞各重织一次，各 +1 *)
 Fixpoint loom_fric (k : nat) : nat :=
-  match k with O => O | S k' => S (S (loom_fric k')) end.
+  match k with O => O | Datatypes.S k' => Datatypes.S (Datatypes.S (loom_fric k')) end.
 
 (* 一步重织保持吐件门真值（异或不变量的转移式） *)
 Lemma loom_step_inv : forall p : bool * bool,
@@ -1318,11 +1318,11 @@ Qed.
 
 (* 周期 2：织机轨迹两轮回到原态（自振荡载体） *)
 Lemma loom_period2 : forall k : nat,
-  refu_tid (bool * bool) (loom_iter (S (S k))) (loom_iter k).
+  refu_tid (bool * bool) (loom_iter (Datatypes.S (Datatypes.S k))) (loom_iter k).
 Proof.
   intros k. induction k as [| k IH].
   - apply refu_tid_refl.
-  - change (refu_tid (bool * bool) (loom_step (loom_iter (S (S k))))
+  - change (refu_tid (bool * bool) (loom_step (loom_iter (Datatypes.S (Datatypes.S k))))
                         (loom_step (loom_iter k))).
     exact (refu_tid_cong loom_step _ _ IH).
 Qed.
@@ -1338,13 +1338,13 @@ Qed.
 
 (* 自振荡：槽值逐轮翻转（非卡死空转），周期 2 内永在两非法元间振荡 *)
 Lemma loom_flips : forall k : nat,
-  refu_tid bool (xorb (fst (loom_iter (S k))) (fst (loom_iter k))) true.
+  refu_tid bool (xorb (fst (loom_iter (Datatypes.S k))) (fst (loom_iter k))) true.
 Proof.
   intros k. induction k as [| k IH].
   - apply refu_tid_refl.
   - tidEqN (loom_period2 k) HEp. rewrite HEp.
     exact (refu_tid_trans bool _ _ _
-      (xorb_comm_t (fst (loom_iter k)) (fst (loom_iter (S k)))) IH).
+      (xorb_comm_t (fst (loom_iter k)) (fst (loom_iter (Datatypes.S k)))) IH).
 Qed.
 
 (* 摩擦计闭形：k 轮后摩擦计 = 2k（真实现，非占位） *)
@@ -1352,25 +1352,25 @@ Lemma loom_fric_closed : forall k : nat, refu_tid nat (loom_fric k) (2 * k)%nat.
 Proof.
   intros k. induction k as [| k IH].
   - apply refu_tid_refl.
-  - change (refu_tid nat (S (S (loom_fric k))) (2 * S k)%nat).
+  - change (refu_tid nat (Datatypes.S (Datatypes.S (loom_fric k))) (2 * Datatypes.S k)%nat).
     rewrite (Nat.mul_succ_r 2 k).
     tidEqN IH HEk. rewrite HEk.
-    assert (HE2 : (2 * k + 2 = S (S (2 * k)))%nat) by lia.
+    assert (HE2 : (2 * k + 2 = Datatypes.S (Datatypes.S (2 * k)))%nat) by lia.
     rewrite HE2. apply refu_tid_refl.
 Qed.
 
 (* 重织代价无界：任意两轮窗口内摩擦计严格上升（贪心调度键 = 活锁驱动器，
-   预算无论多大终被突破——refu_nle (S fric j) fric (j+2)） *)
+   预算无论多大终被突破——refu_nle (Datatypes.S fric j) fric (j+2)） *)
 Theorem loom_cost_unbounded : forall j : nat,
-  refu_nle (S (loom_fric j)) (loom_fric (j + 2)%nat).
+  refu_nle (Datatypes.S (loom_fric j)) (loom_fric (j + 2)%nat).
 Proof.
   intros j.
   assert (HE : (loom_fric (j + 2) = loom_fric j + 4)%nat).
-  { replace ((j + 2)%nat) with (S (S j)) by lia. simpl. lia. }
+  { replace ((j + 2)%nat) with (Datatypes.S (Datatypes.S j)) by lia. simpl. lia. }
   rewrite HE.
-  apply (refu_nle_trans (S (loom_fric j)) (S (loom_fric j) + 3) (loom_fric j + 4)).
+  apply (refu_nle_trans (Datatypes.S (loom_fric j)) (Datatypes.S (loom_fric j) + 3) (loom_fric j + 4)).
   - apply refu_nle_add_r.
-  - assert (HEq : (S (loom_fric j) + 3 = loom_fric j + 4)%nat) by lia.
+  - assert (HEq : (Datatypes.S (loom_fric j) + 3 = loom_fric j + 4)%nat) by lia.
     rewrite HEq. apply refu_nle_n.
 Qed.
 
@@ -1515,7 +1515,7 @@ Close Scope Z_scope.
 (* 件 2（界转化·主件）real_logit_bound_of_norm_bounds：            *)
 (*   根有界前提（root⟨q,q⟩ ≤ Q、root⟨k,k⟩ ≤ K，Q,K > 0）⟹         *)
 (*   real_le |⟨q,k⟩| (Q·K·√d + eps)（eps 版；证明走 inl 严格支）。  *)
-(*   装配：C-S 严格版（eps 簿记显式：C-S 的 eps := (h/2)²，经       *)
+(*   装配：C-Datatypes.S 严格版（eps 簿记显式：C-Datatypes.S 的 eps := (h/2)²，经       *)
 (*   abs 转化件（abs_le_add_of_sq_lt）转化为 |⟨q,k⟩| < 根积 + h，   *)
 (*   再正数乘单调（根积 ≤ Q·K）+ 1 ≤ √d（k=1 时相等、k≥2 时严格    *)
 (*   ——k 分支）合并入最终 +eps。                                  *)
@@ -1959,7 +1959,7 @@ Proof.
   exact Hrsq.
 Qed.
 
-(* sqrt 见证的尾下界：r² == natQ(S k)（尾段）+ S k ≥ 1 ⟹ r_n² > 9/16（尾段） *)
+(* sqrt 见证的尾下界：r² == natQ(Datatypes.S k)（尾段）+ Datatypes.S k ≥ 1 ⟹ r_n² > 9/16（尾段） *)
 Lemma sq_bound_from_eq : forall (k : nat) (r : Real),
   real_eq (real_mult r r) (qkb_nat_to_R (Datatypes.S k)) ->
   sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
@@ -1981,7 +1981,7 @@ Proof.
   lra.
 Qed.
 
-(* 根的下界：S k ≥ 1 ⟹ 根 ≥ 3/4（尾段） *)
+(* 根的下界：Datatypes.S k ≥ 1 ⟹ 根 ≥ 3/4（尾段） *)
 Lemma sqrt_dim_ge_quarter : forall (k : nat) (r : Real),
   real_le real_zero r ->
   real_eq (real_mult r r) (qkb_nat_to_R (Datatypes.S k)) ->
@@ -2161,7 +2161,7 @@ Proof.
   lra.
 Qed.
 
-(* ################ 第 5 部分：本地投影 + 严格 C-S（CW219.Real 版） ## *)
+(* ################ 第 5 部分：本地投影 + 严格 C-Datatypes.S（CW219.Real 版） ## *)
 
 Lemma sql_proj_l : forall (a : list Real) (k : nat),
   projT1 (qkb_sql a) k == sqlQ (map (fun x : Real => projT1 x k) a).
@@ -2384,7 +2384,7 @@ Proof.
   assert (Hrbsq : real_eq (real_mult rb rb) (qkb_sql b)) by apply (root_sq_of (qkb_sql b) Hb).
   assert (Hra0 : real_le real_zero ra) by apply (root_zero_of (qkb_sql a) Ha).
   assert (Hrb0 : real_le real_zero rb) by apply (root_zero_of (qkb_sql b) Hb).
-  (* C-S 严格版，eps := ((1#4)*h)² *)
+  (* C-Datatypes.S 严格版，eps := ((1#4)*h)² *)
   assert (Hcs : real_lt (real_mult (qkb_dotp a b) (qkb_dotp a b))
                   (real_plus (real_mult (qkb_sql a) (qkb_sql b))
                               (real_const (((1#4) * h) * ((1#4) * h))))).
@@ -2476,7 +2476,7 @@ Proof.
 Qed.
 (* ################ 第 8 部分：件 2 rd-loss 链 + 主定理 ############ *)
 
-(* rd ≥ 0 尾段（inl 支精确；inr 支 rd≈0 与 rd²≈S k≥1 矛盾） *)
+(* rd ≥ 0 尾段（inl 支精确；inr 支 rd≈0 与 rd²≈Datatypes.S k≥1 矛盾） *)
 Lemma rd_pos_tail : forall (k : nat) (r : Real),
   real_le real_zero r -> real_eq (real_mult r r) (qkb_nat_to_R (Datatypes.S k)) ->
   sigT (fun N : nat => forall n : nat, (N <= n)%nat -> Qle 0 (projT1 r n)).
@@ -2542,7 +2542,7 @@ Proof.
     + assert (Hd1 : Qle 0 dq) by (apply Qlt_le_weak; exact Hdq0).
       lra.
     + exact (HN0 n Hn0).
-    + (* rd² ≈ S k 尾段 ⟹ rd_n² > S k − (1−(1−dq)²) ≥ (1−dq)² *)
+    + (* rd² ≈ Datatypes.S k 尾段 ⟹ rd_n² > Datatypes.S k − (1−(1−dq)²) ≥ (1−dq)² *)
       assert (Hs := HN1 n (NatLe_lift N1 n Hn1)).
       apply QltT_to_Qlt in Hs.
       assert (Hlow := Qabs_lt_low _ _ Hs).
@@ -3039,9 +3039,9 @@ Fixpoint gnPrf (f : Formula) (pf : Prf f) {struct pf} : nat :=
 Fixpoint dP2 (f c : nat) {struct f} : option Formula :=
   match f with
   | O => None
-  | S f' =>
+  | Datatypes.S f' =>
       match unp2 c c with
-      | Some (S (S (S (S (S (S O))))), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S O))))), q) =>
           (match unp2 q q with
            | Some (a, b) =>
                (match dT2 f' a with
@@ -3054,7 +3054,7 @@ Fixpoint dP2 (f c : nat) {struct f} : option Formula :=
                 end)
            | None => None
            end)
-      | Some (S (S (S (S (S (S (S O)))))), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S O)))))), q) =>
           (match unp2 q q with
            | Some (w1, w2) =>
                (match dP2 f' w1 with
@@ -3067,7 +3067,7 @@ Fixpoint dP2 (f c : nat) {struct f} : option Formula :=
                 end)
            | None => None
            end)
-      | Some (S (S (S (S (S (S (S (S O))))))), q) =>
+      | Some (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S O))))))), q) =>
           (match unp2 q q with
            | Some (p, r) =>
                (match unp2 p p with
@@ -3297,7 +3297,7 @@ Qed.
 Fixpoint bsearch (bd : nat) (p : nat -> bool) : bool :=
   match bd with
   | O => false
-  | S b' => orb (p b') (bsearch b' p)
+  | Datatypes.S b' => orb (p b') (bsearch b' p)
   end.
 
 (* 搜索的见证完整性：真 ⇒ 存在低于界的见证 *)
@@ -3311,7 +3311,7 @@ Proof.
     + rewrite <- Heq. tidQ Hp Ep. apply loeb_tid_eq. rewrite Ep. reflexivity.
     + assert (Hlt2 : loeb_tid bool (Nat.ltb w N') true).
       { apply loeb_tid_eq. tidQ Hlt Elt.
-        pose proof (proj1 (Nat.ltb_lt w (S N')) Elt) as H1.
+        pose proof (proj1 (Nat.ltb_lt w (Datatypes.S N')) Elt) as H1.
         apply (proj2 (Nat.ltb_lt w N')). lia. }
       apply (loeb_tid_trans bool (orb (p N') (bsearch N' p)) (orb (p N') true)).
       * exact (loeb_tid_cong (orb (p N')) (bsearch N' p) true (IHN p w Hlt2 Hp)).
@@ -3328,14 +3328,14 @@ Proof.
   - exfalso. cbn [bsearch] in H. tidQ H E. discriminate E.
   - cbn [bsearch] in H. destruct (p N') eqn:Ep.
     + exists N'. split.
-      * apply loeb_tid_eq. apply (proj2 (Nat.ltb_lt N' (S N'))). lia.
+      * apply loeb_tid_eq. apply (proj2 (Nat.ltb_lt N' (Datatypes.S N'))). lia.
       * apply loeb_tid_eq. rewrite Ep. reflexivity.
     + cbn [orb] in H.
       destruct (IHN p H) as [w [Hlt Hpw]].
       exists w. split.
       * apply loeb_tid_eq. tidQ Hlt Elt.
         pose proof (proj1 (Nat.ltb_lt w N') Elt) as H1.
-        apply (proj2 (Nat.ltb_lt w (S N'))). lia.
+        apply (proj2 (Nat.ltb_lt w (Datatypes.S N'))). lia.
       * exact Hpw.
 Qed.
 

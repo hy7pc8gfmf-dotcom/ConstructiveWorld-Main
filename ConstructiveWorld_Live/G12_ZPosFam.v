@@ -450,13 +450,13 @@ Context {SO : SumOver RI SS}.
 
 Let R := @R RI.
 Let S := @S RI SS.
-Let zero := @zero RI.
-Let one := @one RI.
-Let mult := @mult RI.
-Let opp := @opp RI.
-Let lt := @lt RI.
-Let inv_pos := @inv_pos RI.
-Let exp_neg := @exp_neg RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp := @S01_BaseRing.opp RI.
+Let lt := @S01_BaseRing.lt RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let exp_neg := @S01_BaseRing.exp_neg RI.
 Let sum_over_S := @sum_over_S RI SS SO.
 
 Variable D : R.
@@ -487,8 +487,8 @@ Proof.
   exact (id_cong (fun x : R => exp_neg x)
            (id_trans
               (id_trans (id_cong (fun x : R => mult x (energy s)) HD)
-                        (id_trans (@mult_comm RI one (energy s))
-                                  (@mult_one RI (energy s))))
+                        (id_trans (@S01_BaseRing.mult_comm RI one (energy s))
+                                  (@S01_BaseRing.mult_one RI (energy s))))
               (Henergy s))).
 Qed.
 
