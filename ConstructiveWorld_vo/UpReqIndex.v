@@ -40,6 +40,22 @@
 (*（219 大库封口数=S 组和 3136）、12 组合并无损（逐组成员旧名 attn 封口和=G 组件封口数）、壳链 15、 *)
 (* Live_X 总面 99=15+12+2+70。idx_ 走 grep decl TLC 口径随总账翻牌，af_/lg_ 走 token 级封口口径随磁盘实测， *)
 (* 两轨并行互不覆盖。 *)
+(* v2.1（席T21：UpReqIndex 新绿件登记席，20260911）：承 v1.8 idx_ 注册表 39 件与 v2.0 af_/lg_ 双层  *)
+(* 登记面全量零改动（append-only），纯新增第三层「今日新绿件面」ng_ 14 件——20260911 非平凡实现    *)
+(* 流水线新绿（全部四关验证+Live_X/CW 双树同步），五字段实测登记：件名/行数(wc -l 和 5474)/        *)
+(* Qed 数(grep -c "Qed\." 和 101，与剥注释 token 级 \bQed\. 双口径逐件相等，TLC 亦 1:1)/登记日/      *)
+(* 一句话定位；idx_ 总账翻牌轨不动，留总账席翻牌（T7/T11 同款口径）。                             *)
+(* v2.2（席T28：UpReqIndex 滚动登记席，20260911）：承 v2.1 ng_ 第三轨 14 件与全部既有登记面零改动  *)
+(* （append-only，既有条目/清单/字面值/版记无一触碰），ng_ 轨续写 v2.1 后新绿 4 件：              *)
+(* UpReqEntropyMaxTemp(407 行/5)/UpReqMinUniqueTight(532/8)/UpReqI4Bridge(215/5)/                *)
+(* UpReqEntropyUniqueTemp(378/8)——行数和 1532、封口和 26，逐件 wc -l 与 grep -c "Qed\." 实测      *)
+(* （剥注释 token 级 \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等；G1 表九词逐件全零，      *)
+(* 含头注）；盘面观察只记不改：ng_UpReqAlign4 登记 968/18 → 盘面 1431/28（Z2+Z3 批B 增量，本席     *)
+(* 补绑 CW_vo 树单件编译 EXIT=0 绿态确认，同步权在原席）；UpReqTopKTVChain 在飞未绿不入面（本席    *)
+(* 窗口内三态漂移 1105/319/1060，现态单件编译失败，翻牌权留原席）；ng_UpReqTVAbsEps(180/6) 与      *)
+(* ng_UpReqPowMonoBridge(337/6) 盘面复测与登记口径相符；_Live 快照树缺本批 7 件（v2.1 同款观察，    *)
+(* 同步权在原席）；自指件注记：af_UpReqIndex 27 为 v2.0 快照，v2.1 后实测 30，v2.2 后实测 33       *)
+(* （+3 只记不改，对账权留下一席）。                                              *)
 (*                                                                           *)
 (* 四关（同家规，温控包装）：G1 禁词全文件扫描全零（含头注，字面规避）；        *)
 (* G2 coqc 9.0 同轨 EXIT=0（cpu_guard LoadLimit 60）；G3 提取探针经 coqtop 管道  *)
@@ -856,3 +872,192 @@ Proof. reflexivity. Qed.
 (* 盘面漂移观察（只记不改，翻牌权在总账）：idx_UpReqPPO 26 vs 盘 25、idx_UpReqPPOB 2 vs 盘 4，余 37 件盘数与登记相符； *)
 (* 四关：G1 禁词全文件 0 命中（含头注）；G2 coqc 9.0 -vos 预审+cpu_guard 中转全量 EXIT=0；G3 提取探针经 coqtop *)
 (* 管道、常数清单式、产物魔法字 0（探针产物验后即删）；自指件本文件封口 token 27=v1.8 存量 5+本席新增 22。 *)
+(* UpReqIndex v2.1（2026-09-11，席T21：UpReqIndex 新绿件登记席收口版记）： *)
+(* 承 v1.8 idx_ 注册表 39 件与 v2.0 af_/lg_ 双层登记面全量零改动（append-only，既有条目/清单/字面值/版记无一触碰）； *)
+(* 本席纯新增第三层「今日新绿件面」：ng_ 前缀 14 件（20260911 非平凡实现流水线新绿，全部四关验证+Live_X/CW 双树同步）， *)
+(* 五字段实测登记——件名 / 行数 wc -l（和 5474）/ Qed 数 grep -c "Qed\."（和 101；与剥注释 token 级 \bQed\. 双口径逐件相等， *)
+(* Theorem/Lemma/Corollary 行 TLC 口径亦 1:1，三负证模式（G1 表前三项）逐件全零）/ 登记日 20260911 / 一句话定位（ASCII 串，中文定位见各条上注）； *)
+(* idx_ 总账翻牌轨不动留总账席（T7/T11 同款口径）；盘面观察只记不改：同日 4 件在飞（UpReqEntropyMaxTemp/UpReqMinUniqueTight/ *)
+(* UpReqTempDual/UpReqTopKTVChain，未双树同步）不入本面；UpReqAlign4 的 CW_Live 树副本落后 Live_X 一版（01:00 vs 01:20），同步权在原席； *)
+(* 自指件注记：af_UpReqIndex 27 为 v2.0 测量快照，v2.1 本席新增 3 条核对引理后实测 30（漂移 +3 只记不改，对账权留下一席）； *)
+(* 四关：G1 禁词全文件 0 命中（含头注）；G2 coqc 9.0 -vos 秒审+cpu_guard 全量 EXIT=0（本席自证，log 验后即删）。 *)
+
+(* ================= v2.1 增册（席T21：UpReqIndex 新绿件登记席，20260911） ================= *)
+(* 第三层「今日新绿件面」：20260911 非平凡实现流水线 14 件新绿逐件实测登记（append-only）。 *)
+(* 口径：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（本席经剥块注释 token 级 \bQed\. 复核逐件相等）； *)
+(* ng_note = 一句话定位（房规 ASCII 串；中文全定位见各条注释）。 *)
+
+Record NewGreenFace : Set := MkNewGreenFace
+  { ng_name  : string   (* 件名 *)
+  ; ng_lines : nat      (* wc -l 实测行数 *)
+  ; ng_qed   : nat      (* Qed 封口数（grep -c 与 token 级双口径相等） *)
+  ; ng_day   : nat      (* 登记日 yyyymmdd *)
+  ; ng_note  : string   (* 一句话定位 *)
+  }.
+
+Fixpoint cnt_ng (l : list NewGreenFace) : nat :=
+  match l with
+  | nil => 0
+  | cons _ tl => S (cnt_ng tl)
+  end.
+
+Fixpoint sum_ng_qed (l : list NewGreenFace) : nat :=
+  match l with
+  | nil => 0
+  | cons m tl => plus (ng_qed m) (sum_ng_qed tl)
+  end.
+
+Fixpoint sum_ng_lines (l : list NewGreenFace) : nat :=
+  match l with
+  | nil => 0
+  | cons m tl => plus (ng_lines m) (sum_ng_lines tl)
+  end.
+
+(* ng_UpReqKLSTangent —— UpReqKLSTangent.v：KL 严格切线连锁（六件） *)
+Definition ng_UpReqKLSTangent : NewGreenFace :=
+  MkNewGreenFace "UpReqKLSTangent.v" 205 6 20260911 "KL strict tangent chain, six pieces".
+
+(* ng_UpReqSteadyThermo —— UpReqSteadyThermo.v：4.9 稳态复刻 *)
+Definition ng_UpReqSteadyThermo : NewGreenFace :=
+  MkNewGreenFace "UpReqSteadyThermo.v" 129 1 20260911 "4.9 steady-state thermo replica".
+
+(* ng_UpReqFEPCanon —— UpReqFEPCanon.v：4.1 正典化双引理 *)
+Definition ng_UpReqFEPCanon : NewGreenFace :=
+  MkNewGreenFace "UpReqFEPCanon.v" 135 2 20260911 "4.1 FEP canon dual lemmas".
+
+(* ng_UpReqMinFreeEps —— UpReqMinFreeEps.v：4.4 序档三定理 *)
+Definition ng_UpReqMinFreeEps : NewGreenFace :=
+  MkNewGreenFace "UpReqMinFreeEps.v" 268 3 20260911 "4.4 min-free-eps order-gate three theorems".
+
+(* ng_UpReqCSB —— UpReqCSB.v：C-S 不等式 B 形对照件 *)
+Definition ng_UpReqCSB : NewGreenFace :=
+  MkNewGreenFace "UpReqCSB.v" 43 1 20260911 "Cauchy-Schwarz B-form contrast piece".
+
+(* ng_UpReqMpDomain —— UpReqMpDomain.v：mp 域引擎+12 件全清 *)
+Definition ng_UpReqMpDomain : NewGreenFace :=
+  MkNewGreenFace "UpReqMpDomain.v" 859 23 20260911 "mp domain engine, 12 pieces all cleared".
+
+(* ng_UpReqTempDefs —— UpReqTempDefs.v：温度族定义件 *)
+Definition ng_UpReqTempDefs : NewGreenFace :=
+  MkNewGreenFace "UpReqTempDefs.v" 459 7 20260911 "temperature family definition piece".
+
+(* ng_UpReqEntropyDeficitTemp —— UpReqEntropyDeficitTemp.v：4.6a 熵亏 *)
+Definition ng_UpReqEntropyDeficitTemp : NewGreenFace :=
+  MkNewGreenFace "UpReqEntropyDeficitTemp.v" 582 8 20260911 "4.6a entropy deficit under temperature".
+
+(* ng_UpReqELBOEps —— UpReqELBOEps.v：4.7 ELBO 逐 eps *)
+Definition ng_UpReqELBOEps : NewGreenFace :=
+  MkNewGreenFace "UpReqELBOEps.v" 400 6 20260911 "4.7 ELBO pointwise in eps".
+
+(* ng_UpReqELBOTight —— UpReqELBOTight.v：4.8 紧性可达形 *)
+Definition ng_UpReqELBOTight : NewGreenFace :=
+  MkNewGreenFace "UpReqELBOTight.v" 420 6 20260911 "4.8 ELBO tightness reachable form".
+
+(* ng_UpReqTrainingEquiv —— UpReqTrainingEquiv.v：4.10 组装 *)
+Definition ng_UpReqTrainingEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqTrainingEquiv.v" 489 8 20260911 "4.10 training equivalence assembly".
+
+(* ng_UpReqTVAbsEps —— UpReqTVAbsEps.v：5.10 伴随件 *)
+Definition ng_UpReqTVAbsEps : NewGreenFace :=
+  MkNewGreenFace "UpReqTVAbsEps.v" 180 6 20260911 "5.10 total-variation abs eps adjoint piece".
+
+(* ng_UpReqPowMonoBridge —— UpReqPowMonoBridge.v：I4 合成器（leB 乘法保序三面落件+一跳拼装） *)
+Definition ng_UpReqPowMonoBridge : NewGreenFace :=
+  MkNewGreenFace "UpReqPowMonoBridge.v" 337 6 20260911 "I4 pow-monotone bridge synthesizer".
+
+(* ng_UpReqAlign4 —— UpReqAlign4.v：KLCvx 批A+批B（两槽供给+核销演示） *)
+Definition ng_UpReqAlign4 : NewGreenFace :=
+  MkNewGreenFace "UpReqAlign4.v" 968 18 20260911 "KLCvx batch A+B: two-slot supply and redemption demo".
+
+Definition NewGreenList : list NewGreenFace :=
+  cons ng_UpReqKLSTangent
+  (cons ng_UpReqSteadyThermo
+  (cons ng_UpReqFEPCanon
+  (cons ng_UpReqMinFreeEps
+  (cons ng_UpReqCSB
+  (cons ng_UpReqMpDomain
+  (cons ng_UpReqTempDefs
+  (cons ng_UpReqEntropyDeficitTemp
+  (cons ng_UpReqELBOEps
+  (cons ng_UpReqELBOTight
+  (cons ng_UpReqTrainingEquiv
+  (cons ng_UpReqTVAbsEps
+  (cons ng_UpReqPowMonoBridge
+  (cons ng_UpReqAlign4 nil))))))))))))).
+
+(* 今日新绿面统计：14 件 / 行数和 5474 / Qed 和 101（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenPieces  : nat := 14.
+Definition NewGreenLineSum : nat := 5474.
+Definition NewGreenQedSum  : nat := 101.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenPieces_matches : NewGreenPieces = cnt_ng NewGreenList.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenLineSum_matches : NewGreenLineSum = sum_ng_lines NewGreenList.
+Proof. reflexivity. Qed.
+
+(* Qed 和 = 字面值 *)
+Lemma NewGreenQedSum_matches : NewGreenQedSum = sum_ng_qed NewGreenList.
+Proof. reflexivity. Qed.
+
+
+(* ================= v2.2 增册（席T28：UpReqIndex 滚动登记席，20260911） ================= *)
+(* ng_ 第三轨续写：v2.1 后流水线新绿 4 件逐件实测登记（append-only；v2.1 既有 14 条目/清单/ *)
+(* 字面值/版记零触碰，本节全部新名，EOF 追加）。                                           *)
+(* 口径同 v2.1：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（本席经剥块注释 token   *)
+(* 级 \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等；三负证模式逐件全零）。            *)
+
+(* ng_UpReqEntropyMaxTemp —— UpReqEntropyMaxTemp.v：席T14，定理 4.6b max_entropy_is_boltzmann_temp *)
+(*   （同约束能量下熵封顶逐 eps 形；四树 md5 三树一致 9886a897，_Live 缺件见头注观察段） *)
+Definition ng_UpReqEntropyMaxTemp : NewGreenFace :=
+  MkNewGreenFace "UpReqEntropyMaxTemp.v" 407 5 20260911 "4.6b max-entropy boltzmann temperature order gate".
+
+(* ng_UpReqMinUniqueTight —— UpReqMinUniqueTight.v：席T15，定理 4.5 free_energy_min_unique *)
+(*   （自由能最小点唯一性 Real 层可达形双版；四树 md5 三树一致 421fd5d5） *)
+Definition ng_UpReqMinUniqueTight : NewGreenFace :=
+  MkNewGreenFace "UpReqMinUniqueTight.v" 532 8 20260911 "4.5 free-energy min unique reachable form".
+
+(* ng_UpReqI4Bridge —— UpReqI4Bridge.v：席T20，判词 I4 消费位对接正式落件 *)
+(*   （X3d 合成器草案 i4b_ 规范化收编+残差单点处置；四树 md5 三树一致 ad6700b0） *)
+Definition ng_UpReqI4Bridge : NewGreenFace :=
+  MkNewGreenFace "UpReqI4Bridge.v" 215 5 20260911 "I4 consumer-slot bridge, i4b formalized".
+
+(* ng_UpReqEntropyUniqueTemp —— UpReqEntropyUniqueTemp.v：席T22，定理 4.6c entropy_max_unique_temp *)
+(*   （同能量同熵下逐点相等可达形；四树 md5 三树一致 94037b09） *)
+Definition ng_UpReqEntropyUniqueTemp : NewGreenFace :=
+  MkNewGreenFace "UpReqEntropyUniqueTemp.v" 378 8 20260911 "4.6c entropy max unique under temperature".
+
+Definition NewGreenListV22 : list NewGreenFace :=
+  cons ng_UpReqEntropyMaxTemp
+  (cons ng_UpReqMinUniqueTight
+  (cons ng_UpReqI4Bridge
+  (cons ng_UpReqEntropyUniqueTemp nil))).
+
+(* v2.2 续写统计：4 件 / 行数和 1532 / 封口和 26（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV22Pieces  : nat := 4.
+Definition NewGreenV22LineSum : nat := 1532.
+Definition NewGreenV22QedSum  : nat := 26.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV22Pieces_matches : NewGreenV22Pieces = cnt_ng NewGreenListV22.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV22LineSum_matches : NewGreenV22LineSum = sum_ng_lines NewGreenListV22.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV22QedSum_matches : NewGreenV22QedSum = sum_ng_qed NewGreenListV22.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.2 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) ng_UpReqAlign4（v2.1 登记 968 行/18 封口）→ 盘面 1431 行/28 封口（Z2+Z3 批B 增量落盘； *)
+(*    本席补绑 CW_vo 树单件编译 EXIT=0 绿态确认；漂移 +463 行/+10 封口，改账权留下一登记席）。 *)
+(* 2) ng_UpReqTVAbsEps（180/6）与 ng_UpReqPowMonoBridge（337/6）盘面复测与登记口径相符。 *)
+(* 3) UpReqTopKTVChain 在飞未绿不入面：本席测量窗口内三态漂移（1105/21 → 319/11 → 1060/21）， *)
+(*    现态单件编译失败（sum 段放电错配）；翻牌权留席T16。 *)
+(* 4) _Live 快照树缺本批 7 件（含 Align4/TVAbsEps/PowMonoBridge；v2.1 同款观察），Live_X/         *)
+(*    CW_Live/CW_vo 三树 md5 逐件一致；_Live 补齐权在原席/主会话。 *)
+(* 5) 自指件：af_UpReqIndex 27 为 v2.0 快照；v2.1 后 30；v2.2 后 33（本席 +3 条核对引理）。 *)

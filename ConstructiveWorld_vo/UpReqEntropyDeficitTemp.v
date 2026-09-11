@@ -1,0 +1,582 @@
+(* ============================================================ *)
+(* UpReqEntropyDeficitTemp.v —— 席T6b：定理 4.6a entropy_deficit_kl_temp *)
+(*   Real 层组装席 ｜ 2026-09-11 ｜ 后台独立席位（独占 CoreN 7）        *)
+(* ------------------------------------------------------------------ *)
+(* 【使命】同约束能量 E(p) == E_T 下 S[p_T] − S[p] == KL(p‖p_T)        *)
+(*   （论文正式版 L317-319；Id 原件 S04 L3903 entropy_deficit_kl_temp） *)
+(*   等式档 real_eq 真复刻收口。                                       *)
+(* ------------------------------------------------------------------ *)
+(* 【原料消费（只读）】UpReqTempDefs（席T6，8 Qed 四关绿）：            *)
+(*   real_entropy_temp_explicit（H(p_T) ≡ β·E_T + log Z）+             *)
+(*   real_neg_log_boltzmann_point（逐点 −log p_T(s) ≡ β·e_s + log Z）+ *)
+(*   real_entropy_dist / real_boltzmann_dist_temp(_pos) / real_Z_temp  *)
+(*   / real_energy_exp_temp。本席补欠件：real_kl_term 桥（CW219 大库   *)
+(*   L41696 规范形，拆分落点 S08 L482，经 _build_219 单体 .vo 在库，    *)
+(*   探针 Check 实证零 Section 抽象污染，直用零重建）+ Σ-opp /          *)
+(*   熵负和 / Σ(−log p_T) 三工作马 + real_KL_temp 温度分解 + 主件。     *)
+(* ------------------------------------------------------------------ *)
+(* 【Id 层原件对位表（S04 L3903-3933 逐槽实证）】                      *)
+(*   Id normalized p                     ↦ Hnp : real_eq (Σ p) one    *)
+(*      （Id S04 L1998 同义：Id (sum_over_S p) one）                   *)
+(*   Id positive_dist p                  ↦ Hp : forall s,             *)
+(*      real_lt real_zero (p s)（Id S04 L1999 同义；Real real_log 带    *)
+(*      正性证人，故 Hp 兼作 log 前提位——T6 real_entropy_dist 同位）    *)
+(*   Id (energy_expectation p)           ↦ Henergy LHS：              *)
+(*      real_sum_over_S (fun s => p s·e s)（Id S04 L3155 同构）        *)
+(*   Id (energy_exp_temp t Ht)           ↦ Henergy RHS：              *)
+(*      real_energy_exp_temp（T6 定义件 3）                            *)
+(*   Id minus (…) (…)                    ↦ real_minus_r（S12 L13224    *)
+(*      顶层件：real_plus a (real_opp b)，Id minus 同构展开）           *)
+(*   Id relative_entropy p p_T           ↦ real_KL_temp p Hp：        *)
+(*      Σ p·(log p − log p_T)（Id S04 L2745 sum_over_S (fun s =>       *)
+(*      mult (p s) (minus (log (p s)) (log (q s)))) 同构；minus 展开    *)
+(*      为 plus+opp。另供 CW219 L41696 real_kl_term 规范形桥            *)
+(*      real_KL_temp_kl_term_bridge——双形态都在库，零缩水）             *)
+(*   Id relative_entropy_temp_decomp     ↦ real_KL_temp_decomp（本席）  *)
+(*   Id entropy_temp_explicit            ↦ real_entropy_temp_explicit  *)
+(*      （T6 加做件，全 arity 9 参直喂）                               *)
+(*   组装骨架：req 先例 UpReqTempEntropy 件 3/5（req_entropy_deficit_   *)
+(*   temp）同构移植 req → Real。                                       *)
+(* ------------------------------------------------------------------ *)
+(* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt）；     *)
+(*   前提位照 Id 层对位（归一化/逐点正/同能量三前提，不弱化不加码）；    *)
+(*   全 Qed 收口；零新承认件。                                         *)
+(* 编译配方（同 T6）：coqc -vos -Q . "" -Q "../001" ""                 *)
+(*   -Q "../attn/_build_219" "" UpReqEntropyDeficitTemp.v（秒审后全量） *)
+(* ============================================================ *)
+
+Require Import CW_ConstructiveWorld_219.
+Require Import UpReqTempDefs.
+
+(* ---------------------------------------------------------- *)
+(* 件 0a：log(inv x) ≡ −log x（一般形；T6 real_log_inv_Z_aux 的       *)
+(*   去实例化镜像，同配方：log_mult + log_wd + inv_pos_correct）        *)
+(* ---------------------------------------------------------- *)
+Lemma real_log_inv_pos_gen :
+  forall (x : Real) (Hx : real_lt real_zero x),
+    real_eq (real_log (real_inv_pos x Hx) (real_inv_pos_pos x Hx))
+            (real_opp (real_log x Hx)).
+Proof.
+  intros x Hx.
+  set (X := real_log (real_inv_pos x Hx) (real_inv_pos_pos x Hx)).
+  set (L := real_log x Hx).
+  assert (Hsum : real_eq (real_plus X L) real_zero).
+  { apply (real_eq_trans (real_plus X L)
+             (real_log (real_mult (real_inv_pos x Hx) x)
+                       (real_mult_positive (real_inv_pos x Hx) x
+                          (real_inv_pos_pos x Hx) Hx))
+             real_zero).
+    - apply real_eq_sym.
+      exact (real_log_mult (real_inv_pos x Hx) x
+              (real_inv_pos_pos x Hx) Hx).
+    - apply (real_eq_trans
+               (real_log (real_mult (real_inv_pos x Hx) x)
+                         (real_mult_positive (real_inv_pos x Hx) x
+                            (real_inv_pos_pos x Hx) Hx))
+               (real_log real_one real_lt_zero_one)
+               real_zero).
+      + apply (real_log_wd
+                 (real_mult (real_inv_pos x Hx) x)
+                 real_one
+                 (real_mult_positive (real_inv_pos x Hx) x
+                    (real_inv_pos_pos x Hx) Hx)
+                 real_lt_zero_one).
+        apply (real_eq_trans
+                 (real_mult (real_inv_pos x Hx) x)
+                 (real_mult x (real_inv_pos x Hx))
+                 real_one).
+        -- exact (real_mult_comm (real_inv_pos x Hx) x).
+        -- exact (real_inv_pos_correct x Hx).
+      + exact (real_log_one real_lt_zero_one). }
+  apply (real_eq_trans X (real_plus X real_zero) (real_opp L)).
+  - apply real_eq_sym. exact (real_plus_zero X).
+  - apply (real_eq_trans
+             (real_plus X real_zero)
+             (real_plus X (real_plus L (real_opp L)))
+             (real_opp L)).
+    + apply (RealSetoid.real_eq_plus_compat_adapt X X real_zero
+               (real_plus L (real_opp L)) (real_eq_refl X)).
+      apply real_eq_sym. exact (real_plus_opp L).
+    + apply (real_eq_trans
+               (real_plus X (real_plus L (real_opp L)))
+               (real_plus (real_plus X L) (real_opp L))
+               (real_opp L)).
+      * exact (real_plus_assoc X L (real_opp L)).
+      * apply (real_eq_trans
+                 (real_plus (real_plus X L) (real_opp L))
+                 (real_plus real_zero (real_opp L))
+                 (real_opp L)).
+        -- apply (RealSetoid.real_eq_plus_compat_adapt
+                    (real_plus X L) real_zero (real_opp L) (real_opp L)
+                    Hsum (real_eq_refl (real_opp L))).
+        -- apply (real_eq_trans
+                    (real_plus real_zero (real_opp L))
+                    (real_plus (real_opp L) real_zero)
+                    (real_opp L)).
+           ++ exact (real_plus_comm real_zero (real_opp L)).
+           ++ exact (real_plus_zero (real_opp L)).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 0b：real_kl_term 桥（逐点）：p·(log p − log q) ≡ real_kl_term    *)
+(*   p q（CW219 L41696 规范形 p·(−log(q/p))）。配方：log_mult +        *)
+(*   件 0a + opp_plus/双否定/交换（T6 卡坑 2：opp 腿显式走 trans）。    *)
+(* ---------------------------------------------------------- *)
+Lemma real_kl_term_point_bridge :
+  forall (p q : Real) (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
+    real_eq (real_mult p (real_plus (real_log p Hp) (real_opp (real_log q Hq))))
+            (real_kl_term p q Hp Hq).
+Proof.
+  intros p q Hp Hq.
+  unfold real_kl_term.
+  assert (Hlogsum :
+    real_eq (real_log (real_mult q (real_inv_pos p Hp))
+                       (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp)))
+            (real_plus (real_log q Hq)
+                       (real_log (real_inv_pos p Hp) (real_inv_pos_pos p Hp))))
+    by exact (real_log_mult q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp)).
+  apply (RealSetoid.real_eq_mult_compat_adapt p p
+           (real_plus (real_log p Hp) (real_opp (real_log q Hq)))
+           (real_opp (real_log (real_mult q (real_inv_pos p Hp))
+                               (real_mult_positive q (real_inv_pos p Hp)
+                                  Hq (real_inv_pos_pos p Hp))))
+           (real_eq_refl p)).
+  apply (real_eq_trans
+           (real_plus (real_log p Hp) (real_opp (real_log q Hq)))
+           (real_opp (real_plus (real_log q Hq) (real_opp (real_log p Hp))))
+           (real_opp (real_log (real_mult q (real_inv_pos p Hp))
+                               (real_mult_positive q (real_inv_pos p Hp)
+                                  Hq (real_inv_pos_pos p Hp))))).
+  - (* 腿 1：log p − log q ≡ −(log q − log p)（opp_plus + 双否定 + 交换） *)
+    apply real_eq_sym.
+    apply (real_eq_trans
+             (real_opp (real_plus (real_log q Hq) (real_opp (real_log p Hp))))
+             (real_plus (real_opp (real_log q Hq)) (real_opp (real_opp (real_log p Hp))))
+             (real_plus (real_log p Hp) (real_opp (real_log q Hq)))).
+    + exact (real_opp_plus (real_log q Hq) (real_opp (real_log p Hp))).
+    + apply (real_eq_trans
+               (real_plus (real_opp (real_log q Hq)) (real_opp (real_opp (real_log p Hp))))
+               (real_plus (real_opp (real_log q Hq)) (real_log p Hp))
+               (real_plus (real_log p Hp) (real_opp (real_log q Hq)))).
+      * apply (RealSetoid.real_eq_plus_compat_adapt
+                 (real_opp (real_log q Hq)) (real_opp (real_log q Hq))
+                 (real_opp (real_opp (real_log p Hp))) (real_log p Hp)
+                 (real_eq_refl (real_opp (real_log q Hq)))
+                 (real_opp_opp (real_log p Hp))).
+      * exact (real_plus_comm (real_opp (real_log q Hq)) (real_log p Hp)).
+  - (* 腿 2：−log(q/p) ≡ −(log q − log p)（log_mult + 件 0a 两步） *)
+    apply (RealSetoid.real_eq_opp_compat
+             (real_plus (real_log q Hq) (real_opp (real_log p Hp)))
+             (real_log (real_mult q (real_inv_pos p Hp))
+                       (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp)))
+             (real_eq_trans
+                (real_plus (real_log q Hq) (real_opp (real_log p Hp)))
+                (real_plus (real_log q Hq)
+                           (real_log (real_inv_pos p Hp) (real_inv_pos_pos p Hp)))
+                (real_log (real_mult q (real_inv_pos p Hp))
+                          (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp)))
+                (RealSetoid.real_eq_plus_compat_adapt
+                   (real_log q Hq) (real_log q Hq)
+                   (real_opp (real_log p Hp))
+                   (real_log (real_inv_pos p Hp) (real_inv_pos_pos p Hp))
+                   (real_eq_refl (real_log q Hq))
+                   (real_eq_sym _ _ (real_log_inv_pos_gen p Hp)))
+                (real_eq_sym _ _ Hlogsum))).
+Qed.
+
+(* ============================================================ *)
+(* Section RealEntropyDeficitTemp：求和面/温度/能量参数照               *)
+(*   UpReqTempDefs Section 同名同序（供 T6 件全 arity 直喂）。          *)
+(* ============================================================ *)
+Section RealEntropyDeficitTemp.
+
+Variable S : Type.
+Variable real_sum_over_S : (S -> Real) -> Real.
+Variable real_sum_pos_preserved :
+  forall (f : S -> Real),
+    (forall s : S, real_lt real_zero (f s)) -> real_lt real_zero (real_sum_over_S f).
+Variable real_sum_over_S_ext : forall (f g : S -> Real),
+  (forall s : S, real_eq (f s) (g s)) -> real_eq (real_sum_over_S f) (real_sum_over_S g).
+Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+          (real_mult a (real_sum_over_S f)).
+Variable real_sum_over_S_add : forall (f g : S -> Real),
+  real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+          (real_plus (real_sum_over_S f) (real_sum_over_S g)).
+Variable T : Real.
+Variable T_pos : real_lt real_zero T.
+Variable energy : S -> Real.
+
+(* ---------------------------------------------------------- *)
+(* 件 1：Σ(−f) ≡ −(Σ f)（opp_one 线性提取；对位 req 层 fsum_opp）      *)
+(* ---------------------------------------------------------- *)
+Lemma real_sum_over_S_opp :
+  forall f : S -> Real,
+    real_eq (real_sum_over_S (fun s : S => real_opp (f s)))
+            (real_opp (real_sum_over_S f)).
+Proof.
+  intro f.
+  apply (real_eq_trans
+           (real_sum_over_S (fun s : S => real_opp (f s)))
+           (real_mult (real_opp real_one) (real_sum_over_S f))
+           (real_opp (real_sum_over_S f))).
+  - apply (real_eq_trans
+             (real_sum_over_S (fun s : S => real_opp (f s)))
+             (real_sum_over_S (fun s : S => real_mult (real_opp real_one) (f s)))
+             (real_mult (real_opp real_one) (real_sum_over_S f))).
+    + apply real_sum_over_S_ext.
+      intro s.
+      apply real_eq_sym.
+      apply (real_eq_trans
+               (real_mult (real_opp real_one) (f s))
+               (real_opp (real_mult real_one (f s)))
+               (real_opp (f s))).
+      * exact (real_eq_sym _ _ (real_opp_mult_r real_one (f s))).
+      * apply (RealSetoid.real_eq_opp_compat (real_mult real_one (f s)) (f s)).
+        apply (real_eq_trans
+                 (real_mult real_one (f s))
+                 (real_mult (f s) real_one)
+                 (f s)).
+        -- exact (real_mult_comm real_one (f s)).
+        -- exact (real_mult_one (f s)).
+    + apply real_sum_over_S_linear.
+  - apply (real_eq_trans
+             (real_mult (real_opp real_one) (real_sum_over_S f))
+             (real_opp (real_mult real_one (real_sum_over_S f)))
+             (real_opp (real_sum_over_S f))).
+    + exact (real_eq_sym _ _ (real_opp_mult_r real_one (real_sum_over_S f))).
+    + apply (RealSetoid.real_eq_opp_compat
+               (real_mult real_one (real_sum_over_S f)) (real_sum_over_S f)).
+      apply (real_eq_trans
+               (real_mult real_one (real_sum_over_S f))
+               (real_mult (real_sum_over_S f) real_one)
+               (real_sum_over_S f)).
+      -- exact (real_mult_comm real_one (real_sum_over_S f)).
+      -- exact (real_mult_one (real_sum_over_S f)).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 2：熵负和 Σ p·log p ≡ −S[p]（对位 Id entropy_neg_sum 槽；        *)
+(*   req 先例 req_entropy_neg_sum 同构）                               *)
+(* ---------------------------------------------------------- *)
+Lemma real_entropy_neg_sum :
+  forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
+    real_eq (real_sum_over_S (fun s : S => real_mult (p s) (real_log (p s) (Hp s))))
+            (real_opp (real_entropy_dist S real_sum_over_S p Hp)).
+Proof.
+  intros p Hp.
+  apply (real_eq_trans
+           (real_sum_over_S (fun s : S => real_mult (p s) (real_log (p s) (Hp s))))
+           (real_sum_over_S (fun s : S =>
+              real_opp (real_mult (p s) (real_opp (real_log (p s) (Hp s))))))
+           (real_opp (real_entropy_dist S real_sum_over_S p Hp))).
+  - apply real_sum_over_S_ext.
+    intro s.
+    (* 逐点：p·log p ≡ −(p·(−log p))（opp_mult + 双否定） *)
+    apply real_eq_sym.
+    apply (real_eq_trans
+             (real_opp (real_mult (p s) (real_opp (real_log (p s) (Hp s)))))
+             (real_mult (p s) (real_opp (real_opp (real_log (p s) (Hp s)))))
+             (real_mult (p s) (real_log (p s) (Hp s)))).
+    + exact (real_opp_mult (p s) (real_opp (real_log (p s) (Hp s)))).
+    + apply (RealSetoid.real_eq_mult_compat_adapt
+               (p s) (p s)
+               (real_opp (real_opp (real_log (p s) (Hp s))))
+               (real_log (p s) (Hp s))
+               (real_eq_refl (p s))
+               (real_opp_opp (real_log (p s) (Hp s)))).
+  - apply (real_eq_trans
+             (real_sum_over_S (fun s : S =>
+                real_opp (real_mult (p s) (real_opp (real_log (p s) (Hp s))))))
+             (real_opp (real_sum_over_S (fun s : S =>
+                real_mult (p s) (real_opp (real_log (p s) (Hp s))))))
+             (real_opp (real_entropy_dist S real_sum_over_S p Hp))).
+    + exact (real_sum_over_S_opp
+               (fun s : S => real_mult (p s) (real_opp (real_log (p s) (Hp s))))).
+    + apply real_eq_refl.
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 3：Σ q·(−log p_T) ≡ β·E(q) + log Z（q 任意归一化分布；            *)
+(*   T6 逐点件直喂 + distrib/add/β 提取/logZ 提取，T6 explicit          *)
+(*   步 2-4 同配方，归一化换 q）                                        *)
+(* ---------------------------------------------------------- *)
+Theorem real_sum_neglog_boltzmann :
+  forall (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+    real_eq (real_sum_over_S q) real_one ->
+    real_eq (real_sum_over_S (fun s : S =>
+               real_mult (q s)
+                 (real_opp (real_log
+                    (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy s)
+                    (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy s)))))
+            (real_plus (real_mult (real_inv_pos T T_pos)
+                                  (real_sum_over_S (fun s : S => real_mult (q s) (energy s))))
+                       (real_log (real_Z_temp S real_sum_over_S T T_pos energy)
+                                 (real_Z_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy))).
+Proof.
+  intros q Hq Hnormq.
+  set (bta := real_inv_pos T T_pos).
+  set (LZ := real_log (real_Z_temp S real_sum_over_S T T_pos energy)
+                      (real_Z_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy)).
+  set (B := real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy).
+  set (Bpos := real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy).
+  apply (real_eq_trans
+           (real_sum_over_S (fun s : S => real_mult (q s) (real_opp (real_log (B s) (Bpos s)))))
+           (real_sum_over_S (fun s : S => real_mult (q s) (real_plus (real_mult bta (energy s)) LZ)))
+           (real_plus (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s)))) LZ)).
+  - (* 步 1：T6 逐点件直喂（−log p_T ≡ β·e + log Z） *)
+    apply real_sum_over_S_ext.
+    intro s.
+    apply (RealSetoid.real_eq_mult_compat_adapt
+             (q s) (q s)
+             (real_opp (real_log (B s) (Bpos s)))
+             (real_plus (real_mult bta (energy s)) LZ)
+             (real_eq_refl (q s))
+             (real_neg_log_boltzmann_point S real_sum_over_S real_sum_pos_preserved
+                T T_pos energy s)).
+  - (* 步 2-4：distrib 逐点拆和 → add 分和 → β 提取 + logZ 提取 *)
+    apply (real_eq_trans
+             (real_sum_over_S (fun s : S => real_mult (q s) (real_plus (real_mult bta (energy s)) LZ)))
+             (real_plus (real_sum_over_S (fun s : S => real_mult (q s) (real_mult bta (energy s))))
+                        (real_sum_over_S (fun s : S => real_mult (q s) LZ)))
+             (real_plus (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s)))) LZ)).
+    + apply (real_eq_trans
+               (real_sum_over_S (fun s : S => real_mult (q s) (real_plus (real_mult bta (energy s)) LZ)))
+               (real_sum_over_S (fun s : S =>
+                  real_plus (real_mult (q s) (real_mult bta (energy s)))
+                            (real_mult (q s) LZ)))
+               (real_plus (real_sum_over_S (fun s : S => real_mult (q s) (real_mult bta (energy s))))
+                          (real_sum_over_S (fun s : S => real_mult (q s) LZ)))).
+      * apply real_sum_over_S_ext.
+        intro s. apply real_distrib.
+      * apply real_sum_over_S_add.
+    + apply (RealSetoid.real_eq_plus_compat_adapt
+               (real_sum_over_S (fun s : S => real_mult (q s) (real_mult bta (energy s))))
+               (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s))))
+               (real_sum_over_S (fun s : S => real_mult (q s) LZ))
+               LZ).
+      * (* β 支：Σ q·(β·e) ≡ β·Σ q·e（逐点重排 → 线性提取） *)
+        apply (real_eq_trans
+                 (real_sum_over_S (fun s : S => real_mult (q s) (real_mult bta (energy s))))
+                 (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s))))
+                 (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s))))).
+        -- apply (real_eq_trans
+                    (real_sum_over_S (fun s : S => real_mult (q s) (real_mult bta (energy s))))
+                    (real_sum_over_S (fun s : S => real_mult bta (real_mult (q s) (energy s))))
+                    (real_mult bta (real_sum_over_S (fun s : S => real_mult (q s) (energy s))))).
+           ++ apply real_sum_over_S_ext.
+              intro s.
+              apply (real_eq_trans
+                       (real_mult (q s) (real_mult bta (energy s)))
+                       (real_mult (real_mult (q s) bta) (energy s))
+                       (real_mult bta (real_mult (q s) (energy s)))).
+              ** exact (real_mult_assoc (q s) bta (energy s)).
+              ** apply (real_eq_trans
+                          (real_mult (real_mult (q s) bta) (energy s))
+                          (real_mult (real_mult bta (q s)) (energy s))
+                          (real_mult bta (real_mult (q s) (energy s)))).
+                 --- apply (RealSetoid.real_eq_mult_compat_adapt
+                              (real_mult (q s) bta) (real_mult bta (q s))
+                              (energy s) (energy s)
+                              (real_mult_comm (q s) bta) (real_eq_refl (energy s))).
+                 --- apply real_eq_sym.
+                     exact (real_mult_assoc bta (q s) (energy s)).
+           ++ apply real_sum_over_S_linear.
+        -- apply real_eq_refl.
+      * (* logZ 支：Σ q·LZ ≡ LZ·Σ q ≡ LZ·1 ≡ LZ *)
+        apply (real_eq_trans
+                 (real_sum_over_S (fun s : S => real_mult (q s) LZ))
+                 (real_mult LZ (real_sum_over_S q))
+                 LZ).
+        -- apply (real_eq_trans
+                    (real_sum_over_S (fun s : S => real_mult (q s) LZ))
+                    (real_sum_over_S (fun s : S => real_mult LZ (q s)))
+                    (real_mult LZ (real_sum_over_S q))).
+           ++ apply real_sum_over_S_ext.
+              intro s. apply real_mult_comm.
+           ++ apply real_sum_over_S_linear.
+        -- apply (real_eq_trans
+                    (real_mult LZ (real_sum_over_S q))
+                    (real_mult LZ real_one)
+                    LZ).
+           ++ apply (RealSetoid.real_eq_mult_compat_adapt LZ LZ
+                       (real_sum_over_S q) real_one
+                       (real_eq_refl LZ) Hnormq).
+           ++ exact (real_mult_one LZ).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 定义件：real_KL_temp（温度族分布级 KL；Id relative_entropy          *)
+(*   S04 L2745 同构 log 差形，minus 展开为 plus+opp）                  *)
+(* ---------------------------------------------------------- *)
+Definition real_KL_temp (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)) : Real :=
+  real_sum_over_S (fun s : S =>
+    real_mult (p s)
+      (real_plus (real_log (p s) (Hp s))
+                 (real_opp (real_log
+                    (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy s)
+                    (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy s))))).
+
+(* ---------------------------------------------------------- *)
+(* 件 4：KL 温度分解（Id relative_entropy_temp_decomp S04 L3568 对位）  *)
+(*   KL(p‖p_T) ≡ (β·E(p) + log Z) + (−S[p])。链：逐点 distrib →        *)
+(*   add 分和 → 熵负和（件 2）+ 件 3 → 交换重排。                       *)
+(* ---------------------------------------------------------- *)
+Theorem real_KL_temp_decomp :
+  forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
+    real_eq (real_sum_over_S p) real_one ->
+    real_eq (real_KL_temp p Hp)
+            (real_plus
+               (real_plus (real_mult (real_inv_pos T T_pos)
+                                     (real_sum_over_S (fun s : S => real_mult (p s) (energy s))))
+                          (real_log (real_Z_temp S real_sum_over_S T T_pos energy)
+                                    (real_Z_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy)))
+               (real_opp (real_entropy_dist S real_sum_over_S p Hp))).
+Proof.
+  intros p Hp Hnp.
+  set (bta := real_inv_pos T T_pos).
+  set (LZ := real_log (real_Z_temp S real_sum_over_S T T_pos energy)
+                      (real_Z_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy)).
+  set (Sp := real_entropy_dist S real_sum_over_S p Hp).
+  set (Ep := real_sum_over_S (fun s : S => real_mult (p s) (energy s))).
+  set (B := real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy).
+  set (Bpos := real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy).
+  apply (real_eq_trans
+           (real_sum_over_S (fun s : S =>
+              real_mult (p s)
+                (real_plus (real_log (p s) (Hp s)) (real_opp (real_log (B s) (Bpos s))))))
+           (real_plus (real_opp Sp) (real_plus (real_mult bta Ep) LZ))
+           (real_plus (real_plus (real_mult bta Ep) LZ) (real_opp Sp))).
+  - apply (real_eq_trans
+             (real_sum_over_S (fun s : S =>
+                real_mult (p s)
+                  (real_plus (real_log (p s) (Hp s)) (real_opp (real_log (B s) (Bpos s))))))
+             (real_plus (real_sum_over_S (fun s : S => real_mult (p s) (real_log (p s) (Hp s))))
+                        (real_sum_over_S (fun s : S =>
+                           real_mult (p s) (real_opp (real_log (B s) (Bpos s))))))
+             (real_plus (real_opp Sp) (real_plus (real_mult bta Ep) LZ))).
+    + apply (real_eq_trans
+               (real_sum_over_S (fun s : S =>
+                  real_mult (p s)
+                    (real_plus (real_log (p s) (Hp s)) (real_opp (real_log (B s) (Bpos s))))))
+               (real_sum_over_S (fun s : S =>
+                  real_plus (real_mult (p s) (real_log (p s) (Hp s)))
+                            (real_mult (p s) (real_opp (real_log (B s) (Bpos s))))))
+               (real_plus (real_sum_over_S (fun s : S => real_mult (p s) (real_log (p s) (Hp s))))
+                          (real_sum_over_S (fun s : S =>
+                             real_mult (p s) (real_opp (real_log (B s) (Bpos s))))))).
+      * apply real_sum_over_S_ext.
+        intro s. apply real_distrib.
+      * apply real_sum_over_S_add.
+    + apply (RealSetoid.real_eq_plus_compat_adapt
+               (real_sum_over_S (fun s : S => real_mult (p s) (real_log (p s) (Hp s))))
+               (real_opp Sp)
+               (real_sum_over_S (fun s : S =>
+                  real_mult (p s) (real_opp (real_log (B s) (Bpos s)))))
+               (real_plus (real_mult bta Ep) LZ)
+               (real_entropy_neg_sum p Hp)
+               (real_sum_neglog_boltzmann p Hp Hnp)).
+  - exact (real_plus_comm (real_opp Sp) (real_plus (real_mult bta Ep) LZ)).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 5：real_kl_term 规范形桥（CW219 L41696 分布级收口）：             *)
+(*   real_KL_temp ≡ Σ_s real_kl_term (p s) (p_T s)。                   *)
+(* ---------------------------------------------------------- *)
+Theorem real_KL_temp_kl_term_bridge :
+  forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
+    real_eq (real_KL_temp p Hp)
+            (real_sum_over_S (fun s : S =>
+               real_kl_term (p s)
+                 (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy s)
+                 (Hp s)
+                 (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy s))).
+Proof.
+  intros p Hp.
+  apply real_sum_over_S_ext.
+  intro s.
+  exact (real_kl_term_point_bridge (p s)
+           (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy s)
+           (Hp s)
+           (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy s)).
+Qed.
+
+(* ============================================================ *)
+(* 主件：real_entropy_deficit_kl_temp（Id S04 L3903 逐槽对位）          *)
+(*   同约束能量 E(p) == E_T ⟹ S[p_T] − S[p] == KL(p‖p_T)。             *)
+(*   链：熵显式（T6）+ 同能量替换（β·E_T ↦ β·E(p)）+ 分解（件 4）反向。 *)
+(* ============================================================ *)
+Theorem real_entropy_deficit_kl_temp :
+  forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
+    real_eq (real_sum_over_S p) real_one ->
+    real_eq (real_sum_over_S (fun s : S => real_mult (p s) (energy s)))
+            (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy) ->
+    real_eq (real_minus_r
+               (real_entropy_dist S real_sum_over_S
+                  (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy)
+                  (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy))
+               (real_entropy_dist S real_sum_over_S p Hp))
+            (real_KL_temp p Hp).
+Proof.
+  intros p Hp Hnp Henergy.
+  set (bta := real_inv_pos T T_pos).
+  set (LZ := real_log (real_Z_temp S real_sum_over_S T T_pos energy)
+                      (real_Z_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy)).
+  set (Sp := real_entropy_dist S real_sum_over_S p Hp).
+  set (Spt := real_entropy_dist S real_sum_over_S
+                (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy)
+                (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved T T_pos energy)).
+  set (Ep := real_sum_over_S (fun s : S => real_mult (p s) (energy s))).
+  set (K := real_KL_temp p Hp).
+  (* 目标：real_minus_r Spt Sp ≡ plus Spt (opp Sp) == K *)
+  unfold real_minus_r.
+  apply (real_eq_trans
+           (real_plus Spt (real_opp Sp))
+           (real_plus (real_plus (real_mult bta Ep) LZ) (real_opp Sp))
+           K).
+  - (* 腿 1a：Spt ≡ β·E_T + log Z（T6 熵显式直喂） *)
+    apply (real_eq_trans
+             (real_plus Spt (real_opp Sp))
+             (real_plus (real_plus (real_mult bta
+                                      (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
+                                         T T_pos energy))
+                                   LZ)
+                        (real_opp Sp))
+             (real_plus (real_plus (real_mult bta Ep) LZ) (real_opp Sp))).
+    + exact (RealSetoid.real_eq_plus_compat_adapt
+               Spt (real_plus (real_mult bta
+                                 (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
+                                    T T_pos energy))
+                              LZ)
+               (real_opp Sp) (real_opp Sp)
+               (real_entropy_temp_explicit S real_sum_over_S real_sum_pos_preserved
+                  real_sum_over_S_ext real_sum_over_S_linear real_sum_over_S_add
+                  T T_pos energy)
+               (real_eq_refl (real_opp Sp))).
+    + (* 腿 1b：同能量替换 β·E_T ↦ β·E(p)（Henergy 换载 + 逐字余项） *)
+      apply (RealSetoid.real_eq_plus_compat_adapt
+               (real_plus (real_mult bta
+                             (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
+                                T T_pos energy))
+                          LZ)
+               (real_plus (real_mult bta Ep) LZ)
+               (real_opp Sp) (real_opp Sp)
+               (RealSetoid.real_eq_plus_compat_adapt
+                  (real_mult bta
+                     (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy))
+                  (real_mult bta Ep)
+                  LZ LZ
+                  (RealSetoid.real_eq_mult_compat_adapt
+                     bta bta
+                     (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy)
+                     Ep
+                     (real_eq_refl bta)
+                     (real_eq_sym _ _ Henergy))
+                  (real_eq_refl LZ))
+               (real_eq_refl (real_opp Sp))).
+  - (* 腿 2：分解（件 4）反向收口 *)
+    exact (real_eq_sym _ _
+             (real_KL_temp_decomp p Hp Hnp)).
+Qed.
+
+End RealEntropyDeficitTemp.
