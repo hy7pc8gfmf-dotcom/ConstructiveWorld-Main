@@ -31,6 +31,7 @@ jobs:
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: bash
         run: |
+          bash ConstructiveWorld_vo/repair_tear.sh
           pwsh -File D:/ComplexAnalysis/cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_build.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
 
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
