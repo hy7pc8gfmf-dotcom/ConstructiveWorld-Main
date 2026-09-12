@@ -1540,3 +1540,67 @@ Proof. reflexivity. Qed.
 (* 3) 双树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，三处 md5 一致（数值见本席报告回填）。      *)
 (* 4) 自指件：af_UpReqIndex 27 为 v2.0 冻结快照（L541 恒值，v2.1 起历代漂移只记不改），本席仍不改    *)
 (*    af_ 定义；v2.7 后实测 52，v2.8 后实测 55（本席 +3 条核对引理，只记不改，对账权留下一席）。      *)
+
+(* ================= v2.9 增册（席W29：Index v2.9 登记席，20260913） ================= *)
+(* ng_ 第三轨续写：承 v2.8 后 39 件基面，第五波 Banach 注册批五件逐件实测登记 *)
+(* （append-only；v2.1–v2.8 既有 39 条目/清单/字面值/版记零触碰，本节全部新名，EOF 追加； *)
+(* 改前备份 attn/_tw29_Index_backup.v 同 md5 ea98bf48 留档）。                              *)
+(* 口径同 v2.1–v2.8：ng_lines = wc -l 实测；ng_qed = 剥块注释 token 级 \bQed\. 实测；        *)
+(* 五件均已 vo 树预验证双段绿（coqc 单件 EXIT=0 + coqchk -o 闭包抽查 Inst/LimUniq EXIT=0）。  *)
+
+(* ng_UpReqBanachExpAdd —— UpReqBanachExpAdd.v：S3 总装承重墙（席BASM） *)
+Definition ng_UpReqBanachExpAdd : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachExpAdd.v" 452 14 20260913 "exp addition e^a*e^b=e^(a+b) via limit product continuity bxadd_bmult_lim".
+
+(* ng_UpReqBanachClassExt —— UpReqBanachClassExt.v：BanachAlg 类扩字段原型（席BCE） *)
+Definition ng_UpReqBanachClassExt : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachClassExt.v" 206 5 20260913 "BanachAlg class extension prototype with Q-addition coefficient fields bxce_coef_plus/wd".
+
+(* ng_UpReqBanachLimUniq —— UpReqBanachLimUniq.v：极限唯一性（席UNQ） *)
+Definition ng_UpReqBanachLimUniq : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachLimUniq.v" 225 10 20260913 "limit uniqueness bxuq_lim_uniq realized from separability field bxce_sep".
+
+(* ng_UpReqBanachBinomBridge —— UpReqBanachBinomBridge.v：二项式系数桥（席CBR） *)
+Definition ng_UpReqBanachBinomBridge : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachBinomBridge.v" 166 10 20260913 "binomial coefficient bridge bpa_binom Pascal recursion iff q_choose factorial form".
+
+(* ng_UpReqBanachInst —— UpReqBanachInst.v：BanachAlg 第一个具体实例（席INS） *)
+Definition ng_UpReqBanachInst : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachInst.v" 336 12 20260913 "first concrete BanachAlg instance landed, in-class positive piece".
+
+Definition NewGreenListV29 : list NewGreenFace :=
+  cons ng_UpReqBanachExpAdd
+  (cons ng_UpReqBanachClassExt
+  (cons ng_UpReqBanachLimUniq
+  (cons ng_UpReqBanachBinomBridge
+  (cons ng_UpReqBanachInst nil)))).
+
+(* v2.9 续写统计：5 件 / 行数和 1385 / 封口和 51（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV29Pieces  : nat := 5.
+Definition NewGreenV29LineSum : nat := 1385.
+Definition NewGreenV29QedSum  : nat := 51.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV29Pieces_matches : NewGreenV29Pieces = cnt_ng NewGreenListV29.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV29LineSum_matches : NewGreenV29LineSum = sum_ng_lines NewGreenListV29.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV29QedSum_matches : NewGreenV29QedSum = sum_ng_qed NewGreenListV29.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.9 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 插入位：五件 vo 树 order.txt 表尾整块追加（L157–L161，块内 Kahn 序 ExpAdd→ClassExt→   *)
+(*    LimUniq→BinomBridge→Inst；LimUniq 依赖 ClassExt+ExpAdd 同块前位，其余仅存量依赖）；     *)
+(*    双树 order.txt cmp 字节一致，双树 topo 复验器 161 行 BAD_COUNT=0，_CoqProject 双树     *)
+(*    156→161 同步（157→162），scripts/order.txt 三处 wc 一致。                              *)
+(* 2) 预验证：五件 cp 自权威源 Live_X（五件 md5 留痕 2718eaa4/76a4dbf3/5bd04e4a/e2f1a86b/     *)
+(*    29871a96），cpu_guard CoreN 3 串行 coqc 全 EXIT=0；coqchk -o 闭包抽查 UpReqBanachInst   *)
+(*    与 UpReqBanachLimUniq 双 EXIT=0，零 Inconsistent assumptions 零 Anomaly。               *)
+(* 3) af_ 冻结纪律：af_UpReqIndex 27 为 v2.0 冻结快照（L541 恒值），本席未触碰；v2.8 后实测    *)
+(*    55，v2.9 后实测 58（本席 +3 条核对引理，只记不改，对账权留下一席）。                     *)
+(* 4) 三树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，UpReqIndex.v 三处 md5 一致         *)
+(*    （数值见本席报告回填）。                                                                *)

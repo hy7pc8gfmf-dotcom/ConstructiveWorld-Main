@@ -154,3 +154,8 @@ UpReqBanachAdd.v
 UpReqNormConv.v
 UpReqBanachProd2.v
 UpReqPadeDenPos.v
+UpReqBanachExpAdd.v
+UpReqBanachClassExt.v
+UpReqBanachLimUniq.v
+UpReqBanachBinomBridge.v
+UpReqBanachInst.v
