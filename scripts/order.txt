@@ -150,3 +150,7 @@ UpReqBanachExpNeg.v
 UpReqPadeSign.v
 UpReqQExpTail.v
 UpReqBanachInvPre.v
+UpReqBanachAdd.v
+UpReqNormConv.v
+UpReqBanachProd2.v
+UpReqPadeDenPos.v
