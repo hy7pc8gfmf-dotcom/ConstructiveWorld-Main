@@ -25,8 +25,12 @@ jobs:
       - name: Seed trust cache from local vo tree
         shell: bash
         run: |
+          # 治本（E-STAGING-P9）：runner 侧 _work 检出目录持久非易失，
+          # 旧版纯 cp 只增不改，陈旧 .vo 跨轮幸存 → coqchk digest 撕裂单件红。
+          # 改为镜像删除语义：先清空再播种，保证 _work vo 树 = 本地信任缓存的真镜像。
+          rm -f ConstructiveWorld_vo/*.vo 2>/dev/null || true
           cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
-          echo "seeded $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
+          echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: bash
