@@ -66,7 +66,14 @@ while IFS= read -r f; do
     fi
     d="$dep.vo"
     if [ -f "$d" ] && [ "$d" -nt "$v" ]; then
-      torn="mtime-older-than:$d"; break
+      # v2.2（run #54 复盘）：seed 纯 cp 字母序跨秒边界会让消费方 mtime 早于依赖
+      #   （219 壳最先拷→被 S 系"撕"→判据②级联 128 删）。真断代是分钟/天级差距，
+      #   拷贝噪声 ≤2 秒——差值 ≥5 秒才判撕裂。
+      gd=$(stat -c %Y "$d" 2>/dev/null || echo 0)
+      gv=$(stat -c %Y "$v" 2>/dev/null || echo 0)
+      if [ $((gd - gv)) -ge 5 ]; then
+        torn="mtime-older-than:$d"; break
+      fi
     fi
   done
   # ---- 判据③ digest 冒烟（仅高嫌疑集；便宜判据已撕裂则免烟）----
