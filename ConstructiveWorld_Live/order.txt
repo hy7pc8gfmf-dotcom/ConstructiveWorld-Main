@@ -159,3 +159,5 @@ UpReqBanachClassExt.v
 UpReqBanachLimUniq.v
 UpReqBanachBinomBridge.v
 UpReqBanachInst.v
+UpReqBanachExpOppOne.v
+UpReqBanachInstB.v
