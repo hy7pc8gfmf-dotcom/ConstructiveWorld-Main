@@ -101,6 +101,7 @@ UpReqAlign4.v
 UpReqPPOB.v
 UpReqSumB.v
 UpReqLatticeB.v
+UpReqGibbsD.v
 UpReqGibbsE2.v
 UpReqKLStrict.v
 UpReqCSB.v
@@ -136,3 +137,8 @@ UpReqTempDual.v
 UpReqCDispersion.v
 UpReqEntropyUniqueNeg.v
 UpReqTempDualList.v
+UpReqExpPosWitness.v
+UpReqExpPosQBound.v
+UpReqBanachExp.v
+UpReqPadeExp.v
+UpReqAltSumPos.v

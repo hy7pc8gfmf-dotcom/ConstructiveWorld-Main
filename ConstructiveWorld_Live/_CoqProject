@@ -137,3 +137,9 @@ UpReqTempDual.v
 UpReqCDispersion.v
 UpReqEntropyUniqueNeg.v
 UpReqTempDualList.v
+UpReqExpPosWitness.v
+UpReqExpPosQBound.v
+UpReqBanachExp.v
+UpReqPadeExp.v
+UpReqAltSumPos.v
+UpReqGibbsD.v
