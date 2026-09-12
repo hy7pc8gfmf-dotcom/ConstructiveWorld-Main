@@ -143,3 +143,10 @@ UpReqBanachExp.v
 UpReqPadeExp.v
 UpReqAltSumPos.v
 UpReqGibbsD.v
+UpReqBanachProd.v
+UpReqBanachDouble.v
+UpReqBanachExpDef.v
+UpReqBanachExpBasic.v
+UpReqBanachExpNeg.v
+UpReqPadeSign.v
+UpReqQExpTail.v

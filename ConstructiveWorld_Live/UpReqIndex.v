@@ -1432,3 +1432,111 @@ Proof. reflexivity. Qed.
 (*    v2.1 已在册（205/6），盘面复测 205/6 同 md5 d3b1226c 与在册口径相符零漂移，无重复登记面。      *)
 (* 2) 自指件：af_UpReqIndex 27 为 v2.0 冻结快照（L534 恒值，v2.1 起六代漂移只记不改），本席仍不改   *)
 (*    af_ 定义；v2.6 后实测 49，v2.7 后实测 52（本席 +3 条核对引理，只记不改，对账权留下一席）。      *)
+
+
+(* ================= v2.8 增册（席W28：UpReqIndex v2.8 登记席，20260912） ================= *)
+(* ng_ 第三轨续写：承 v2.7 后 31 件基面，八件收官 B/C 件逐件实测登记（append-only；v2.1–v2.7        *)
+(* 既有 31 条目/清单/字面值/版记零触碰，本节全部新名，EOF 追加；改前备份                           *)
+(* attn/_tw28_Index_backup.v 同 md5 7f98d83e 留档）。                                              *)
+(* 口径同 v2.1–v2.7：ng_lines = wc -l 实测；ng_qed = grep -c "Qed\." 实测（八件剥注释 token 级     *)
+(* \bQed\. 与 Theorem/Lemma/Corollary 行双复核逐件相等）；UpReqQExpTail 交接书口径 29 系少记 2，    *)
+(* 盘面实测 31（三口径一致，判报告少记非件面漂移，以实测入账）。G1 表禁词全文件全零（含头注）。      *)
+(* 入库判据：稳定窗口双测同 md5（间隔 20s 八件逐一相同）+ 件现态 .vo 晚于 .v（八件逐一核对）+      *)
+(* 接管报告四关在案（全量 EXIT=0 / 主件 Print Assumptions 全 Closed / coqchk PASS，各席报告在案）。 *)
+
+(* ng_UpReqBanachProd —— UpReqBanachProd.v：席B3Sv2，Banach 层级数乘积引擎件（13 件一次全绿：       *)
+(*   柯西方块主件 esp_prod_square（esp n a · esp n b = 双和方块恒等，交付②）+ 清项链 bpow_comm_r    *)
+(*   六步 + 换元三件 bsum_rot/shift_pred/shift_pred2 + bsum 部分和族；bpow_add 二项式组装挂账      *)
+(*   （蓝图铺毕继任直组）；coqc/coqchk 双证绿，G1 全零） *)
+Definition ng_UpReqBanachProd : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachProd.v" 413 12 20260912 "Cauchy product square identity and bsum engine, thirteen pieces".
+
+(* ng_UpReqBanachDouble —— UpReqBanachDouble.v：席BT，双和三角转置件（16 件三档全交（转置）：        *)
+(*   主件 bd2_tri_eq_diag 三角和 == 对角线分块和 + peel 几何引理 + 矩形化 rect_split +             *)
+(*   esp 对接 bd2_tri_eq_rect_row（exp(a+b) 总装拼法两路在卡）；bpow_add/exp_add 总装挂账上游；      *)
+(*   G2 双证 + G4 全检 PASS（公理面全无，尾行 successfully checked）） *)
+Definition ng_UpReqBanachDouble : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachDouble.v" 318 13 20260912 "double sum transpose, triangular equals diagonal blocks, sixteen pieces".
+
+(* ng_UpReqBanachExpBasic —— UpReqBanachExpBasic.v：席BXB，e^0=1 基础件（8 件 bxb_ 出口：           *)
+(*   主件 bxb_series_zero（e^0=1 的 Banach 层完全等式面，T42 Real 层件 2 单位元腿同构）+             *)
+(*   平凡柯西证书（N=0 显式闭式）+ 范数面 + 与 B25 expdef 对接件（邻域贴近，零触碰其文件）；         *)
+(*   le 消去禁入 Set 坑实录在卡；G1–G4 全绿） *)
+Definition ng_UpReqBanachExpBasic : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachExpBasic.v" 258 7 20260912 "exp at zero equals one, Banach equality face with Cauchy certificate".
+
+(* ng_UpReqBanachExpDef —— UpReqBanachExpDef.v：席B25，exp 元素定义席（路线甲字段见证形，无降档：    *)
+(*   bxdef_exp := projT1 (bcauchy_complete_sig … (exp_series_cauchy B a)) 元素定义 +                 *)
+(*   bxdef_exp_spec 收敛规格（projT2 一步）+ 零元幂/级数塌缩与 exp(0) 邻域面加分族；                 *)
+(*   9 常量 7 封口；sigT 投影实名坑（projT1 非 proj1）在卡；四关全绿） *)
+Definition ng_UpReqBanachExpDef : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachExpDef.v" 178 7 20260912 "exp element via completeness field witness pair, route A".
+
+(* ng_UpReqBanachExpNeg —— UpReqBanachExpNeg.v：席BXN，exp 负点元素化件（今日刚收口，14,580B：      *)
+(*   主件 bxn_exp_neg := bxdef_exp B (bopp a) 一行直构（零新证）+ spec 同位转引 +                   *)
+(*   (−1)^k 偶奇定形两件（双步归纳自建 bxn_double）+ 范数族两件 + 负零族塌缩链；                     *)
+(*   S4 可逆性前置引用面备齐，本体挂账 exp_add 上游；G1–G4 全绿，G3 提取 Obj.magic 计数 0） *)
+Definition ng_UpReqBanachExpNeg : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachExpNeg.v" 296 12 20260912 "exp at negated point, element with limit spec and norm faces".
+
+(* ng_UpReqBanachProd2 —— UpReqBanachProd2.v：席B2Tv2，B 类引理第二批量移植件（7 封口，12,038B：    *)
+(*   #23 sum_upto_div/bsum_div 除系数拉出 + #27 q_choose_div_fact 阶乘比 +                          *)
+(*   #29 exp_term_split/bterm_split 逐项系数分裂（Banach 面主件）+ wd 族两件附赠；                   *)
+(*   Q 引擎照抄 + Banach 面语境改写双层移植，排除域清单复核零冲突；G1–G3 全绿，探针验后删） *)
+Definition ng_UpReqBanachProd2 : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachProd2.v" 222 7 20260912 "B-class transplants: div pullout, choose divide fact, term split".
+
+(* ng_UpReqPadeSign —— UpReqPadeSign.v：席CS，Padé 符号席（9 封口，n=0/n=1 分母正性：              *)
+(*   主件 pds_den1_pos（0 < x < 2 蕴 QltT 0 (pade_den 1 x)，三层死路排除后定型：ring 桥 +           *)
+(*   正值乘法相容 + 差号判定引理）+ S1 pds_den0_pos 恒正 + S3 pds_den1_half 数值例                  *)
+(*   （与 PC 哨兵 3/4 闭式对账）+ 传桥件 pds_qlt0_eq_r（双 Q 构造子形 nia 一步收口）；               *)
+(*   通用 n 版分母正性未攻诚实挂账（接线图在案）；G1–G4 全绿，G3 提取 Obj.magic = 0） *)
+Definition ng_UpReqPadeSign : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeSign.v" 133 9 20260912 "Pade denominator positivity at n zero and n one".
+
+(* ng_UpReqQExpTail —— UpReqQExpTail.v：席QT2（PB2/PB2R 验尸接管，三方合并报告），Q 层阶乘尾和件    *)
+(*   （757 行 / 实测 31 封口：主件 qtail_cauchy_modulus(_ord) 构造性柯西模量显式出口 +              *)
+(*   term_decay/ratio_chain 几何衰减链 + qtail_fact_ge_pow 2^k ≤ k! 下界 + sum_mono/nonneg          *)
+(*   保号族；L118 replace 抽象歧义重构收口，18 处编译错逐条实录；报告载 29 系少记 2 以实测入账       *)
+(*   （见上方口径注）；四关全绿，G3 提取 Obj.magic = 0） *)
+Definition ng_UpReqQExpTail : NewGreenFace :=
+  MkNewGreenFace "UpReqQExpTail.v" 757 31 20260912 "Q factorial tail sums with explicit constructive Cauchy modulus".
+
+Definition NewGreenListV28 : list NewGreenFace :=
+  cons ng_UpReqBanachProd
+  (cons ng_UpReqBanachDouble
+  (cons ng_UpReqBanachExpBasic
+  (cons ng_UpReqBanachExpDef
+  (cons ng_UpReqBanachExpNeg
+  (cons ng_UpReqBanachProd2
+  (cons ng_UpReqPadeSign
+  (cons ng_UpReqQExpTail nil))))))).
+
+(* v2.8 续写统计：8 件 / 行数和 2575 / 封口和 98（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV28Pieces  : nat := 8.
+Definition NewGreenV28LineSum : nat := 2575.
+Definition NewGreenV28QedSum  : nat := 98.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV28Pieces_matches : NewGreenV28Pieces = cnt_ng NewGreenListV28.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV28LineSum_matches : NewGreenV28LineSum = sum_ng_lines NewGreenListV28.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV28QedSum_matches : NewGreenV28QedSum = sum_ng_qed NewGreenListV28.
+Proof. reflexivity. Qed.
+
+(* ---------- v2.8 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 挂账面（各席报告在案，本席只记不评价不并账）：BanachProd 之 bpow_add 组装（B3Sv2 蓝图铺毕，   *)
+(*    上游 BA 席在飞）；BanachDouble 之 exp_add 总装（同上游）；PadeSign 通用 n 版分母正性（CS       *)
+(*    接线图在案）；ExpDef/ExpNeg 之 exp(0)=1 完全等式面（Class 缺反可分性字段，接口扩容属上游       *)
+(*    裁决）。均无承认件落盘。                                                                     *)
+(* 2) 口径对账：UpReqQExpTail 交接书/报告载 29 封口，盘面实测 31（32 声明 = 31 Lemma + 1 Fixpoint    *)
+(*    载体，grep/token 级/TLC 三口径一致；行数 757 与 md5 6f44332c 及 .vo 时戳 00:24:40 > .v         *)
+(*    00:24:12 相符，件零漂移，判系报告少记，以实测入账）。                                         *)
+(* 3) 双树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，三处 md5 一致（数值见本席报告回填）。      *)
+(* 4) 自指件：af_UpReqIndex 27 为 v2.0 冻结快照（L541 恒值，v2.1 起历代漂移只记不改），本席仍不改    *)
+(*    af_ 定义；v2.7 后实测 52，v2.8 后实测 55（本席 +3 条核对引理，只记不改，对账权留下一席）。      *)
