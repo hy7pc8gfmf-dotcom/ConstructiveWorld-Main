@@ -161,3 +161,6 @@ UpReqBanachBinomBridge.v
 UpReqBanachInst.v
 UpReqBanachExpOppOne.v
 UpReqBanachInstB.v
+UpReqBanachExpAddEq.v
+UpReqBanachInstPre.v
+UpReqBanachInstEMult.v
