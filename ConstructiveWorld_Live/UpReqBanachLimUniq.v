@@ -159,15 +159,17 @@ Proof.
   assert (Hal : QltT (@bnorm B (@bplus B l1
                                  (@bopp B (u (Nat.max N1 N2)))))
                      (eps / 2)%Q).
-  { rewrite (@bnorm_wd B _ _ (bxuq_diff_opp B l1 (u (Nat.max N1 N2)))).
+  { pose proof (@bnorm_wd B _ _ (bxuq_diff_opp B l1 (u (Nat.max N1 N2)))) as HWd.
+    eapply (QeqT_Qlt_bool_cong _ _ _ (qeqT_sym_hw _ _ HWd)).
     rewrite (@bnorm_opp B (@bplus B (u (Nat.max N1 N2)) (@bopp B l1))).
     exact Ha. }
   (* ‖d‖ ≤T ‖R2‖ ≤T ‖l1-u‖ + ‖u-l2‖ <T eps（全程 QleT'/QltT 桥，Id 面
      rewrite 只在 QleT' 目标内——探针 q1a/q1b 定谳：Qlt 目标内不可用） *)
   eapply qleT'_ltT_ltT.
   - eapply qleT'_trans.
-    + rewrite (@bnorm_wd B _ _
-                 (bxuq_diff_split B l1 (u (Nat.max N1 N2)) l2)).
+    + eapply (QeqT_Qle_bool_cong _ _ _
+                (qeqT_sym_hw _ _ (@bnorm_wd B _ _
+                  (bxuq_diff_split B l1 (u (Nat.max N1 N2)) l2)))).
       apply qleT'_refl.
     + exact (@bnorm_plus B (@bplus B l1 (@bopp B (u (Nat.max N1 N2))))
                            (@bplus B (u (Nat.max N1 N2)) (@bopp B l2))).

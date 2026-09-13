@@ -270,7 +270,7 @@ Proof.
   intros B eps Heps.
   destruct (bxn_exp_neg_spec B (@bzero B) eps Heps) as [N HN].
   specialize (HN N (NatLe_lift N N (Nat.le_refl N))).
-  rewrite (@bnorm_wd B
+  pose proof (@bnorm_wd B
       (@bplus B (exp_series_partial B (@bopp B (@bzero B)) N)
                 (@bopp B (bxn_exp_neg B (@bzero B))))
       (@bplus B (@bone B) (@bopp B (bxn_exp_neg B (@bzero B))))
@@ -278,9 +278,8 @@ Proof.
                   (@bopp B (bxn_exp_neg B (@bzero B)))
                   (@bone B) (@bopp B (bxn_exp_neg B (@bzero B)))
                   (bxn_series_opp_zero B N)
-                  (@bae_refl B (@bopp B (bxn_exp_neg B (@bzero B))))))
-    in HN.
-  exact HN.
+                  (@bae_refl B (@bopp B (bxn_exp_neg B (@bzero B)))))) as HWn.
+  exact (QeqT_Qlt_bool_cong _ _ eps HWn HN).
 Qed.
 
 (* ============================================================ *)

@@ -1,6 +1,8 @@
 (* ============================================================ *)
 (* UpReqBanachInstPre.v —— 席INST3：路径 B 弱化类具体实例席        *)
 (* （弱化轨首例，20260913）                                       *)
+(* W6a 接线（20260913）：W5a 类手术二字段 bcoef_plus/bcoef_wd      *)
+(*   Pre 镜像对齐——类 37→39 + 首例补二字段 discharge（qnorm 链）。  *)
 (* ============================================================ *)
 (* 使命：把 S02 Real 载体装配进 BanachAlgPre 弱化类，交付 B 路首个  *)
 (*   具体实例。架构＝canon-germ（INSTB E-载体机器的 Real-类型移植）：*)
@@ -165,7 +167,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3：BanachAlgPre 弱化类（37 字段，钉定面按处方修正）＋首例装配    *)
+(* S3：BanachAlgPre 弱化类（39 字段＝W6a 对齐 W5a 手术后镜像，      *)
+(*   钉定面按处方修正）＋首例装配                                  *)
 (* ============================================================ *)
 
 Class bxip_BanachAlgPre := {
@@ -215,6 +218,11 @@ Class bxip_BanachAlgPre := {
     bxip_bae (bxip_bcoef (q * r)%Q) (bxip_bmult (bxip_bcoef q) (bxip_bcoef r));
   bxip_bcoef_comm : forall (q : Q) (a : bxip_BA),
     bxip_bae (bxip_bmult a (bxip_bcoef q)) (bxip_bmult (bxip_bcoef q) a);
+  (* ---- 20260913 W6a 联动：W5a 类手术二字段 Pre 镜像扩容（37→39，  *)
+  (*   语句形逐字承 UpReqBanachInst.v 镜像 L258-260）---- *)
+  bxip_bcoef_plus : forall q r : Q,
+    bxip_bae (bxip_bplus (bxip_bcoef q) (bxip_bcoef r)) (bxip_bcoef (q + r)%Q);
+  bxip_bcoef_wd : forall q r : Q, q == r -> bxip_bae (bxip_bcoef q) (bxip_bcoef r);
   bxip_bnorm_zero : Id (bxip_bnorm bxip_bzero) 0%Q;
   bxip_bnorm_one  : Id (bxip_bnorm bxip_bone) 1%Q;
   bxip_bnorm_opp  : forall a : bxip_BA, QeqT (bxip_bnorm (bxip_bopp a)) (bxip_bnorm a);
@@ -528,6 +536,34 @@ Proof.
   apply qeq_imp_qeqT. apply Qmult_comm.
 Qed.
 
+(* ---- W6a 二字段 discharge（INST3 已建 qnorm 机器同款链） ---- *)
+
+(* bcoef_plus：q+r 嵌入＝嵌入和（种型载体上归 qnorm 环链一发修） *)
+Lemma bxip_f_coef_plus : forall q r : Q,
+  bxip_bae_germ (bxip_bplus_f (bxip_bcoef_f q) (bxip_bcoef_f r))
+                (bxip_bcoef_f (q + r)%Q).
+Proof.
+  intros q r. unfold bxip_bae_germ.
+  rewrite (bxip_head_bplus (bxip_bcoef_f q) (bxip_bcoef_f r)).
+  unfold bxip_bcoef_f.
+  repeat rewrite bxip_head_cR.
+  rewrite (bxib_qnorm_fix_id (bxib_qnorm q + bxib_qnorm r)%Q).
+  rewrite (bxib_qnorm_fix_id (q + r)%Q).
+  apply bxib_qnorm_id_of_qeqT.
+  apply bxib_qeqT_cong_plus; apply bxib_qnorm_fix.
+Qed.
+
+(* bcoef_wd：Qeq 代表元无关（QeqT 过桥 qnorm 良定） *)
+Lemma bxip_f_coef_wd : forall q r : Q,
+  q == r -> bxip_bae_germ (bxip_bcoef_f q) (bxip_bcoef_f r).
+Proof.
+  intros q r Hqr. unfold bxip_bae_germ, bxip_bcoef_f.
+  repeat rewrite bxip_head_cR.
+  rewrite (bxib_qnorm_fix_id q), (bxib_qnorm_fix_id r).
+  apply bxib_qnorm_id_of_qeqT.
+  apply qeq_imp_qeqT. exact Hqr.
+Qed.
+
 (* ---- 范数面 ---- *)
 
 Lemma bxip_f_norm_zero : Id (bxip_bnorm_f bxip_bzero_f) 0%Q.
@@ -651,6 +687,8 @@ Instance bxip_real_pre : bxip_BanachAlgPre := {|
   bxip_bcoef_one := bxip_f_coef_one;
   bxip_bcoef_mult := bxip_f_coef_mult;
   bxip_bcoef_comm := bxip_f_coef_comm;
+  bxip_bcoef_plus := bxip_f_coef_plus;
+  bxip_bcoef_wd := bxip_f_coef_wd;
   bxip_bnorm_zero := bxip_f_norm_zero;
   bxip_bnorm_one := bxip_f_norm_one;
   bxip_bnorm_opp := bxip_f_norm_opp;
@@ -667,15 +705,33 @@ Lemma bxip_inst_smoke :
     (@bxip_bone bxip_real_pre).
 Proof. apply bxip_bcoef_one. Qed.
 
+(* 装配冒烟：W6a 二字段投影位（bcoef plus/wd 经实例字段） *)
+Lemma bxip_inst_smoke_plus : forall q r : Q,
+  @bxip_bae bxip_real_pre
+    (@bxip_bplus bxip_real_pre (@bxip_bcoef bxip_real_pre q)
+                               (@bxip_bcoef bxip_real_pre r))
+    (@bxip_bcoef bxip_real_pre (q + r)%Q).
+Proof. intros q r. apply bxip_bcoef_plus. Qed.
+
+Lemma bxip_inst_smoke_wd : forall q r : Q,
+  q == r ->
+  @bxip_bae bxip_real_pre
+    (@bxip_bcoef bxip_real_pre q) (@bxip_bcoef bxip_real_pre r).
+Proof. intros q r Hqr. apply bxip_bcoef_wd. exact Hqr. Qed.
+
 (* ============================================================ *)
 (* G3：提取探针 + 假设面自审                                      *)
 (* ============================================================ *)
 From Stdlib Require Import Extraction.
 Separate Extraction bxip_bnorm_f bxip_qeqT_cong_mult bxip_qabs_mult bxip_raw_pin_wall bxip_norm_wd_qeqt
-  bxip_norm_coef_qeqt.
+  bxip_norm_coef_qeqt bxip_f_coef_plus bxip_f_coef_wd.
 
 Print Assumptions bxip_raw_pin_wall.
 Print Assumptions bxip_norm_wd_qeqt.
 Print Assumptions bxip_f_plus_assoc.
 Print Assumptions bxip_f_norm_mult.
 Print Assumptions bxip_inst_smoke.
+Print Assumptions bxip_f_coef_plus.
+Print Assumptions bxip_f_coef_wd.
+Print Assumptions bxip_inst_smoke_plus.
+Print Assumptions bxip_inst_smoke_wd.

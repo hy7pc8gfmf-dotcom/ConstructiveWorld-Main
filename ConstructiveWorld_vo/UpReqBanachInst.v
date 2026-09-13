@@ -117,14 +117,21 @@ Proof.
     (@bnorm B (@bplus B (@bcoef B (1#(Pos.of_succ_nat m))%Q)
                         (@bopp B (@bcoef B (1#(Pos.of_succ_nat n))%Q))))
     (Qplus (1#(Pos.of_succ_nat m)%Q) (1#(Pos.of_succ_nat n)%Q))).
-  { eapply bxin_id_qle_r.
-    - (* Id 链：bnorm 搬运到 Qabs 和（Qabs (1#p) 定义级还原） *)
-      apply (id_cong2 Qplus
-        (@bnorm_coef B (1#(Pos.of_succ_nat m))%Q)
-        (id_trans (@bnorm_opp B (@bcoef B (1#(Pos.of_succ_nat n))%Q))
-                  (@bnorm_coef B (1#(Pos.of_succ_nat n))%Q))).
+  { assert (HQsum : (@bnorm B (@bcoef B (1#(Pos.of_succ_nat m))%Q)
+                     + @bnorm B (@bopp B (@bcoef B (1#(Pos.of_succ_nat n))%Q)))%Q
+                    == (Qabs (1#(Pos.of_succ_nat m)%Q)
+                        + Qabs (1#(Pos.of_succ_nat n)%Q))%Q).
+    { apply Qplus_comp.
+      - apply bnorm_coef_qeq.
+      - rewrite (@bnorm_opp B (@bcoef B (1#(Pos.of_succ_nat n))%Q)).
+        apply bnorm_coef_qeq. }
+    eapply Qle_trans with
+      (y := (@bnorm B (@bcoef B (1#(Pos.of_succ_nat m))%Q)
+              + @bnorm B (@bopp B (@bcoef B (1#(Pos.of_succ_nat n))%Q)))%Q).
     - (* bnorm_plus 次可加 *)
-      apply QleT'_to_Qle. apply bnorm_plus. }
+      apply QleT'_to_Qle. apply bnorm_plus.
+    - (* Qeq 换底（原 id_cong2 Id 链的 Qeq 面替代，CLS-R ⑤思路落地） *)
+      apply qeq_le. exact HQsum. }
   apply Qlt_to_QltT.
   eapply Qle_lt_trans with (y := (2#(4 * b)%positive)%Q).
   - eapply Qle_trans with (y := (Qplus (1#(Pos.of_succ_nat m)%Q) (1#(Pos.of_succ_nat n)%Q))).
@@ -153,7 +160,7 @@ Qed.
 (* 标量范数钉定探针：bnorm_coef 把 bcoef q 的范数逐点钉为 Qabs q。 *)
 (* 离散范数否证的类内承载：q := 1/2 处钉值为 1#2，离散值 1 直接矛盾。 *)
 Lemma bxin_bnorm_coef_pin : forall (B : BanachAlg) (q : Q),
-  Id (@bnorm B (@bcoef B q)) (Qabs q).
+  QeqT (@bnorm B (@bcoef B q)) (Qabs q).
 Proof. intros B q. apply bnorm_coef. Qed.
 
 (* 冒烟自测恒等面：bxin_bone_is_one 型（类内恒等，bcoef 1 ~ bone） *)
@@ -240,13 +247,17 @@ Class bxin_BanachAlgPre := {
   bxin_bopp_wd  : forall a b : bxin_BA,
     bxin_bae a b -> bxin_bae (bxin_bopp a) (bxin_bopp b);
   bxin_bnorm_wd : forall a b : bxin_BA,
-    bxin_bae a b -> Id (bxin_bnorm a) (bxin_bnorm b);
+    bxin_bae a b -> QeqT (bxin_bnorm a) (bxin_bnorm b);
   bxin_bcoef_zero : bxin_bae (bxin_bcoef 0%Q) bxin_bzero;
   bxin_bcoef_one  : bxin_bae (bxin_bcoef 1%Q) bxin_bone;
   bxin_bcoef_mult : forall q r : Q,
     bxin_bae (bxin_bcoef (q * r)%Q) (bxin_bmult (bxin_bcoef q) (bxin_bcoef r));
   bxin_bcoef_comm : forall (q : Q) (a : bxin_BA),
     bxin_bae (bxin_bmult a (bxin_bcoef q)) (bxin_bmult (bxin_bcoef q) a);
+  (* ---- 20260913 补丁 B 联动：BCE 二字段 Pre 镜像扩容（37→39）---- *)
+  bxin_bcoef_plus : forall q r : Q,
+    bxin_bae (bxin_bplus (bxin_bcoef q) (bxin_bcoef r)) (bxin_bcoef (q + r)%Q);
+  bxin_bcoef_wd : forall q r : Q, q == r -> bxin_bae (bxin_bcoef q) (bxin_bcoef r);
   bxin_bnorm_zero : Id (bxin_bnorm bxin_bzero) 0%Q;
   bxin_bnorm_one  : Id (bxin_bnorm bxin_bone) 1%Q;
   bxin_bnorm_opp  : forall a : bxin_BA, Id (bxin_bnorm (bxin_bopp a)) (bxin_bnorm a);
@@ -255,7 +266,7 @@ Class bxin_BanachAlgPre := {
     QleT' (bxin_bnorm (bxin_bplus a b)) (bxin_bnorm a + bxin_bnorm b)%Q;
   bxin_bnorm_mult : forall a b : bxin_BA,
     QleT' (bxin_bnorm (bxin_bmult a b)) (bxin_bnorm a * bxin_bnorm b)%Q;
-  bxin_bnorm_coef : forall q : Q, Id (bxin_bnorm (bxin_bcoef q)) (Qabs q);
+  bxin_bnorm_coef : forall q : Q, QeqT (bxin_bnorm (bxin_bcoef q)) (Qabs q);
 }.
 
 (* Pre 上的完备性语句（与类字段 bcauchy_complete 逐字同构） *)
@@ -307,6 +318,8 @@ Proof.
            bcoef_one := @bxin_bcoef_one p;
            bcoef_mult := @bxin_bcoef_mult p;
            bcoef_comm := @bxin_bcoef_comm p;
+           bcoef_plus := @bxin_bcoef_plus p;
+           bcoef_wd := @bxin_bcoef_wd p;
            bnorm_zero := @bxin_bnorm_zero p;
            bnorm_one := @bxin_bnorm_one p;
            bnorm_opp := @bxin_bnorm_opp p;

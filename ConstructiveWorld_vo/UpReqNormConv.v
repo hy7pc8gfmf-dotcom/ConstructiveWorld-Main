@@ -298,14 +298,18 @@ Proof.
   exact (@bae_sym B _ _ (@bplus_assoc B (@bplus B x (@bopp B y)) u (@bopp B v))).
 Qed.
 
-(* 范数差对称：‖x−y‖ == ‖y−x‖ *)
+(* 范数差对称：‖x−y‖ ≈ ‖y−x‖（QeqT 运移形；Id 面 wd 弱化后不可达，
+   语句面同步弱化——CLS-R2 沙箱偏差⑤放大位点处置实证） *)
 Lemma ncv_norm_diff_sym : forall (B : BanachAlg) (x y : (@BA B)),
-  Id (@bnorm B (@bplus B x (@bopp B y))) (@bnorm B (@bplus B y (@bopp B x))).
+  QeqT (@bnorm B (@bplus B x (@bopp B y))) (@bnorm B (@bplus B y (@bopp B x))).
 Proof.
   intros B x y.
-  rewrite (@bnorm_wd B _ _ (@bplus_comm B x (@bopp B y))).
-  rewrite (@bnorm_wd B _ _ (@bplus_opp_swap B y x)).
-  apply (@bnorm_opp B (@bplus B y (@bopp B x))).
+  apply qeq_imp_qeqT.
+  apply (Qeq_trans _ (@bnorm B (@bplus B (@bopp B y) x))).
+  - apply qeqT_imp_qeq. exact (@bnorm_wd B _ _ (@bplus_comm B x (@bopp B y))).
+  - apply (Qeq_trans _ (@bnorm B (@bopp B (@bplus B y (@bopp B x))))).
+    + apply qeqT_imp_qeq. exact (@bnorm_wd B _ _ (@bplus_opp_swap B y x)).
+    + rewrite (@bnorm_opp B (@bplus B y (@bopp B x))). apply Qeq_refl.
 Qed.
 
 (* 插角三角：‖x−z‖ ≤ ‖x−y‖ + ‖y−z‖ *)
@@ -314,7 +318,7 @@ Lemma ncv_norm_triangle_via : forall (B : BanachAlg) (x y z : (@BA B)),
         (@bnorm B (@bplus B x (@bopp B y)) + @bnorm B (@bplus B y (@bopp B z)))%Q.
 Proof.
   intros B x y z.
-  rewrite <- (@bnorm_wd B _ _ (ncv_bae_diff_join B x y z)).
+  eapply (QeqT_Qle_bool_cong _ _ _ (@bnorm_wd B _ _ (ncv_bae_diff_join B x y z))).
   exact (@bnorm_plus B (@bplus B x (@bopp B y)) (@bplus B y (@bopp B z))).
 Qed.
 
@@ -324,7 +328,7 @@ Lemma ncv_norm_quad_le : forall (B : BanachAlg) (x y u v : (@BA B)),
         (@bnorm B (@bplus B x (@bopp B y)) + @bnorm B (@bplus B u (@bopp B v)))%Q.
 Proof.
   intros B x y u v.
-  rewrite (@bnorm_wd B _ _ (ncv_bae_quad B x y u v)).
+  eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _ (ncv_bae_quad B x y u v)))).
   exact (@bnorm_plus B (@bplus B x (@bopp B y)) (@bplus B u (@bopp B v))).
 Qed.
 
@@ -342,7 +346,7 @@ Proof.
   induction n2 as [| n' IH]; intros Hn2.
   - assert (Hn10 : n1 = 0%nat) by lia. subst n1.
     change (ncv_row B a b k 0%nat) with (@bzero B).
-    rewrite (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))).
+    eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))))).
     rewrite (@bnorm_zero B).
     change (ncv_qtail (fun j => @bnorm B (b j)) 0%nat 0%nat) with 0%Q.
     apply Qle_to_QleT'. apply qeq_imp_qle. ring.
@@ -350,9 +354,10 @@ Proof.
     + assert (Hn1n' : (n1 <= n')%nat) by (apply Nat.leb_le; exact En).
       change (ncv_row B a b k (Datatypes.S n'))
         with (@bplus B (ncv_row B a b k n') (@bmult B (a k) (b n'))).
-      rewrite (@bnorm_wd B _ _
+      eapply (QeqT_Qle_bool_cong _ _ _
+        (qeqT_sym_hw _ _ (@bnorm_wd B _ _
         (@bplus_middle_swap B (ncv_row B a b k n') (@bmult B (a k) (b n'))
-                            (@bopp B (ncv_row B a b k n1)))).
+                            (@bopp B (ncv_row B a b k n1)))))).
       eapply qleT'_trans.
       * exact (@bnorm_plus B (@bplus B (ncv_row B a b k n') (@bopp B (ncv_row B a b k n1)))
                             (@bmult B (a k) (b n'))).
@@ -372,8 +377,9 @@ Proof.
       assert (Hn1S : n1 = Datatypes.S n') by lia. subst n1.
       change (ncv_row B a b k (Datatypes.S n'))
         with (@bplus B (ncv_row B a b k n') (@bmult B (a k) (b n'))).
-      rewrite (@bnorm_wd B _ _
-        (@bplus_opp B (@bplus B (ncv_row B a b k n') (@bmult B (a k) (b n'))))).
+      eapply (QeqT_Qle_bool_cong _ _ _
+        (qeqT_sym_hw _ _ (@bnorm_wd B _ _
+        (@bplus_opp B (@bplus B (ncv_row B a b k n') (@bmult B (a k) (b n'))))))).
       rewrite (@bnorm_zero B).
       change (ncv_qtail (fun j => @bnorm B (b j)) (Datatypes.S n') (Datatypes.S n'))
         with (ncv_qtail (fun j => @bnorm B (b j)) (Datatypes.S n') n'
@@ -402,7 +408,7 @@ Proof.
   intros B a b M. induction M as [| M' IH]; intros n1 n2 Hn.
   - change (ncv_conv B a b 0%nat n2) with (@bzero B).
     change (ncv_conv B a b 0%nat n1) with (@bzero B).
-    rewrite (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))).
+    eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))))).
     rewrite (@bnorm_zero B).
     change (ncv_qsum (fun k => @bnorm B (a k)) 0%nat) with 0%Q.
     apply Qle_to_QleT'. apply qeq_imp_qle. ring.
@@ -410,8 +416,9 @@ Proof.
       with (@bplus B (ncv_conv B a b M' n2) (ncv_row B a b M' n2)).
     change (ncv_conv B a b (Datatypes.S M') n1)
       with (@bplus B (ncv_conv B a b M' n1) (ncv_row B a b M' n1)).
-    rewrite (@bnorm_wd B _ _ (ncv_bae_quad B (ncv_conv B a b M' n2) (ncv_conv B a b M' n1)
-                                         (ncv_row B a b M' n2) (ncv_row B a b M' n1))).
+    eapply (QeqT_Qle_bool_cong _ _ _
+      (qeqT_sym_hw _ _ (@bnorm_wd B _ _ (ncv_bae_quad B (ncv_conv B a b M' n2) (ncv_conv B a b M' n1)
+                                         (ncv_row B a b M' n2) (ncv_row B a b M' n1))))).
     eapply qleT'_trans.
     + exact (@bnorm_plus B (@bplus B (ncv_conv B a b M' n2) (@bopp B (ncv_conv B a b M' n1)))
                           (@bplus B (ncv_row B a b M' n2) (@bopp B (ncv_row B a b M' n1)))).
@@ -437,7 +444,7 @@ Proof.
   induction M2 as [| M2' IH]; intros M1 HM.
   - assert (HM10 : M1 = 0%nat) by lia. subst M1.
     change (ncv_conv B a b 0%nat n) with (@bzero B).
-    rewrite (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))).
+    eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _ (@bplus_opp B (@bzero B))))).
     rewrite (@bnorm_zero B).
     change (ncv_qtail (fun k => @bnorm B (a k)) 0%nat 0%nat) with 0%Q.
     apply Qle_to_QleT'. apply qeq_imp_qle. ring.
@@ -445,9 +452,10 @@ Proof.
     + assert (HM1M2' : (M1 <= M2')%nat) by (apply Nat.leb_le; exact EM).
       change (ncv_conv B a b (Datatypes.S M2') n)
         with (@bplus B (ncv_conv B a b M2' n) (ncv_row B a b M2' n)).
-      rewrite (@bnorm_wd B _ _
+      eapply (QeqT_Qle_bool_cong _ _ _
+        (qeqT_sym_hw _ _ (@bnorm_wd B _ _
         (@bplus_middle_swap B (ncv_conv B a b M2' n) (ncv_row B a b M2' n)
-                            (@bopp B (ncv_conv B a b M1 n)))).
+                            (@bopp B (ncv_conv B a b M1 n)))))).
       eapply qleT'_trans.
       * exact (@bnorm_plus B (@bplus B (ncv_conv B a b M2' n) (@bopp B (ncv_conv B a b M1 n)))
                             (ncv_row B a b M2' n)).
@@ -467,8 +475,9 @@ Proof.
       assert (HMEq : M1 = Datatypes.S M2') by lia. subst M1.
       change (ncv_conv B a b (Datatypes.S M2') n)
         with (@bplus B (ncv_conv B a b M2' n) (ncv_row B a b M2' n)).
-      rewrite (@bnorm_wd B _ _
-        (@bplus_opp B (@bplus B (ncv_conv B a b M2' n) (ncv_row B a b M2' n)))).
+      eapply (QeqT_Qle_bool_cong _ _ _
+        (qeqT_sym_hw _ _ (@bnorm_wd B _ _
+        (@bplus_opp B (@bplus B (ncv_conv B a b M2' n) (ncv_row B a b M2' n)))))).
       rewrite (@bnorm_zero B).
       change (ncv_qtail (fun k => @bnorm B (a k)) (Datatypes.S M2') (Datatypes.S M2'))
         with (ncv_qtail (fun k => @bnorm B (a k)) (Datatypes.S M2') M2'
@@ -503,9 +512,10 @@ Lemma ncv_mertens : forall (B : BanachAlg) (a b : nat -> (@BA B)) (Ba Bb : Q),
          + Bb * ncv_qtail (fun k => @bnorm B (a k)) m1 m2)%Q.
 Proof.
   intros B a b Ba Bb Ha Hb m1 m2 n1 n2 Hm Hn.
-  rewrite <- (@bnorm_wd B _ _
+  eapply (QeqT_Qle_bool_cong _ _ _
+    (@bnorm_wd B _ _
     (ncv_bae_diff_join B (ncv_conv B a b m2 n2) (ncv_conv B a b m2 n1)
-                        (ncv_conv B a b m1 n1))).
+                        (ncv_conv B a b m1 n1)))).
   eapply qleT'_trans.
   - exact (@bnorm_plus B (@bplus B (ncv_conv B a b m2 n2) (@bopp B (ncv_conv B a b m2 n1)))
                         (@bplus B (ncv_conv B a b m2 n1) (@bopp B (ncv_conv B a b m1 n1)))).
@@ -563,15 +573,24 @@ Qed.
 
 Lemma ncv_norm_conv_diff_sym : forall (B : BanachAlg) (a b : nat -> (@BA B))
                                          (p q r s : nat),
-  Id (@bnorm B (@bplus B (ncv_conv B a b p q) (@bopp B (ncv_conv B a b r s))))
-     (@bnorm B (@bplus B (ncv_conv B a b r s) (@bopp B (ncv_conv B a b p q)))).
+  QeqT (@bnorm B (@bplus B (ncv_conv B a b p q) (@bopp B (ncv_conv B a b r s))))
+       (@bnorm B (@bplus B (ncv_conv B a b r s) (@bopp B (ncv_conv B a b p q)))).
 Proof.
   intros B a b p q r s.
-  rewrite (@bnorm_wd B _ _ (@bplus_comm B (ncv_conv B a b p q)
+  apply qeq_imp_qeqT.
+  apply (Qeq_trans _ (@bnorm B (@bplus B (@bopp B (ncv_conv B a b r s))
+                                         (ncv_conv B a b p q)))).
+  - apply qeqT_imp_qeq.
+    exact (@bnorm_wd B _ _ (@bplus_comm B (ncv_conv B a b p q)
                                           (@bopp B (ncv_conv B a b r s)))).
-  rewrite (@bnorm_wd B _ _ (@bplus_opp_swap B (ncv_conv B a b r s)
-                                          (ncv_conv B a b p q))).
-  apply (@bnorm_opp B (@bplus B (ncv_conv B a b r s) (@bopp B (ncv_conv B a b p q)))).
+  - apply (Qeq_trans _ (@bnorm B (@bopp B (@bplus B (ncv_conv B a b r s)
+                                                   (@bopp B (ncv_conv B a b p q)))))).
+    + apply qeqT_imp_qeq.
+      exact (@bnorm_wd B _ _ (@bplus_opp_swap B (ncv_conv B a b r s)
+                                              (ncv_conv B a b p q))).
+    + rewrite (@bnorm_opp B (@bplus B (ncv_conv B a b r s)
+                                      (@bopp B (ncv_conv B a b p q)))).
+      apply Qeq_refl.
 Qed.
 
 Lemma ncv_conv_rect_cauchy : forall (B : BanachAlg) (a b : nat -> (@BA B))
@@ -791,7 +810,8 @@ Proof.
                   * ncv_qsum (fun j => @bnorm B (b j)) n1)%Q
                  (Ba * (eps * / ((Ba + Bb)%Q + (1 + 1))%Q))%Q
                  (Bb * (eps * / ((Ba + Bb)%Q + (1 + 1))%Q))%Q).
-    + rewrite <- (ncv_norm_diff_sym B (ncv_conv B a b m2 n1) (ncv_conv B a b m2 n2)).
+    + eapply (QeqT_Qle_bool_cong _ _ _
+               (ncv_norm_diff_sym B (ncv_conv B a b m2 n1) (ncv_conv B a b m2 n2))).
       exact (ncv_norm_conv_coldiff_le B a b m2 n2 n1
                (Nat.lt_le_incl n2 n1 (proj1 (Nat.leb_gt n1 n2) En))).
     + exact (ncv_norm_conv_rowdiff_le B a b m1 m2 n1
@@ -809,7 +829,8 @@ Proof.
                   * ncv_qtail (fun j => @bnorm B (b j)) n1 n2)%Q
                  (Bb * (eps * / ((Ba + Bb)%Q + (1 + 1))%Q))%Q
                  (Ba * (eps * / ((Ba + Bb)%Q + (1 + 1))%Q))%Q).
-    + rewrite <- (ncv_norm_diff_sym B (ncv_conv B a b m1 n2) (ncv_conv B a b m2 n2)).
+    + eapply (QeqT_Qle_bool_cong _ _ _
+               (ncv_norm_diff_sym B (ncv_conv B a b m1 n2) (ncv_conv B a b m2 n2))).
       exact (ncv_norm_conv_rowdiff_le B a b m2 m1 n2
                (Nat.lt_le_incl m2 m1 (proj1 (Nat.leb_gt m1 m2) Em))).
     + exact (ncv_norm_conv_coldiff_le B a b m1 n1 n2
@@ -817,7 +838,8 @@ Proof.
     + exact (HscB m2 m1 n2 HPa2 HPa1).
     + exact (HscA m1 n1 n2 HPb1 HPb2).
   - (* m2<m1, n2<n1：对称换角后插角 (m2,n1) *)
-    rewrite (ncv_norm_conv_diff_sym B a b m2 n2 m1 n1).
+    eapply (QeqT_Qlt_bool_cong _ _ _
+             (qeqT_sym_hw _ _ (ncv_norm_conv_diff_sym B a b m2 n2 m1 n1))).
     apply Hfin.
     apply Hswap.
     apply (Hfin2 (ncv_conv B a b m1 n1) (ncv_conv B a b m2 n1)

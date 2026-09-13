@@ -995,16 +995,18 @@ Lemma bxae_block_norm_le : forall (B : BanachAlg) (a b : (@BA B)),
                (Datatypes.S n)).
 Proof.
   intros B a b hab hplus hwd n.
-  rewrite (@bnorm_wd B _ _ (bxae_diff_block B a b hab hplus hwd n)).
+  eapply (QeqT_Qle_bool_cong _ _ _
+            (qeqT_sym_hw _ _ (@bnorm_wd B _ _
+               (bxae_diff_block B a b hab hplus hwd n)))).
   eapply qleT'_trans.
-  - rewrite (@bnorm_wd B _ _
+  - eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _
                (bxae_bsum_ncvsum B
                   (fun i : nat =>
                      @bmult B (@bmult B (bpow B a i) (@bcoef B (/ q_fact i)))
                               (@bplus B (exp_series_partial B b n)
                                        (@bopp B (exp_series_partial B b
                                                   (Nat.sub n i)))))
-                  (Datatypes.S n))).
+                  (Datatypes.S n))))).
     exact (ncv_norm_sum_le B
              (fun i : nat =>
                 @bmult B (@bmult B (bpow B a i) (@bcoef B (/ q_fact i)))
@@ -1028,15 +1030,21 @@ Proof.
                              (@bplus B (exp_series_partial B b n)
                                       (@bopp B (exp_series_partial B b
                                                   (Nat.sub n 0))))).
-      * rewrite (@bnorm_wd B _ _ HA0).
-        rewrite (@bnorm_coef B 1%Q).
-        apply (bxae_qleT'_mul_le (Qabs 1%Q)
-                                 (q_pow (@bnorm B a) 0%nat / q_fact 0%nat)%Q).
-        -- apply Qle_refl.
-        -- apply QleT'_to_Qle.
-           exact (esp_diff_le_tail B b (Nat.sub n 0) n Hn0).
-        -- apply QleT'_to_Qle. apply (@bnorm_pos B).
-        -- exact (Qle_0_1).
+      * eapply qleT'_trans.
+        { eapply (qleT'_mult_compat_r).
+          { apply (@bnorm_pos B). }
+          { eapply (QeqT_Qle_bool_cong _ _ _
+                      (qeqT_sym_hw _ _ (@bnorm_wd B _ _ HA0))).
+            eapply (QeqT_Qle_bool_cong _ _ _
+                      (qeqT_sym_hw _ _ (@bnorm_coef B 1%Q))).
+            apply qleT'_refl. } }
+        { apply (bxae_qleT'_mul_le (Qabs 1%Q)
+                   (q_pow (@bnorm B a) 0%nat / q_fact 0%nat)%Q).
+          -- apply Qle_refl.
+          -- apply QleT'_to_Qle.
+             exact (esp_diff_le_tail B b (Nat.sub n 0) n Hn0).
+          -- apply QleT'_to_Qle. apply (@bnorm_pos B).
+          -- exact (Qle_0_1). }
     + (* i = S i'：bnorm_esp_term × esp_diff_le_tail *)
       assert (HnS : (Nat.sub n (Datatypes.S i') <= n)%nat) by lia.
       eapply qleT'_trans.
@@ -1097,7 +1105,9 @@ Proof.
   destruct (Hdiff (eps / 2)%Q Hh) as [N1 HN1].
   destruct (Hv (eps / 2)%Q Hh) as [N2 HN2].
   exists (Nat.max N1 N2). intros n Hn.
-  rewrite (@bnorm_wd B _ _ (bxuq_diff_split B (u n) (v n) l)).
+  eapply (QeqT_Qlt_bool_cong _ _ _
+            (qeqT_sym_hw _ _ (@bnorm_wd B _ _
+               (bxuq_diff_split B (u n) (v n) l)))).
   apply Qlt_to_QltT.
   apply (Qle_lt_trans _
            ((@bnorm B (@bplus B (u n) (@bopp B (v n)))) +

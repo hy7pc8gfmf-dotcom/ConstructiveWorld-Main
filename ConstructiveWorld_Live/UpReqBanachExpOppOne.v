@@ -23,12 +23,15 @@
 (*      再吃 ③唯一性 ⟹ 尾件 bae 全等式（本席真实现，参数化于③）。 *)
 (*   合取：bae_trans (①③) (④对称) ⟹ e^a·e^(−a) == e^0。        *)
 (*                                                             *)
-(* 降档声明（如实，非承认件）：闸门双件在飞（截至开工 ls：        *)
-(*   CauchyD.v 52KB 在飞无 .vo；LimUniq 全无踪），主件以          *)
-(*   bxoo_exp_opp_one_assembly 交付——全链 eps 记账之外的          *)
-(*   ①③④装配步骤全部真实现且机器核验，唯②③的两个闸门语句        *)
-(*   以显式 Set 面假设（blim 形/bxoo_uniq_shape）留槽。闸门开任一  *)
-(*   即按文末接线规格 30 分钟内换槽收口 bxoo_exp_opp_one。        *)
+(* 覆回声明（席W5c，20260913）：双闸全开，staged 换真形完成——      *)
+(*   ② CD12 落盘（UpReqBanachCauchyD.vo 四关绿），真件             *)
+(*     bxcd_prod_near_one 已入正册，其 hplus/hwd 两假设与 Ext 类   *)
+(*     字段 bxce_coef_plus/bxce_coef_wd 逐字同构，直接喂参；        *)
+(*   ③ bxuq_lim_uniq E 剥 E 后与 bxoo_uniq_shape 同构（S2 钉）。    *)
+(*   主件 bxoo_exp_opp_one（文末 S6）为无条件 bae 全等式（Ext 层    *)
+(*   接口实形，EQV 预案钉定），语句面零弱化——覆回=换真件。         *)
+(*   staged 期装配史（①③④真实现+Set 面槽位）原样保留于 S2-S5，    *)
+(*   全部为覆回后主件的在用前件，非遗留。                          *)
 (*                                                             *)
 (* 机械件（闸门无关，本席全绿交付）：bxoo_lim_esp_zero_bone       *)
 (*   （bzero 邻域换骨）、bxoo_nearone_blim（CD3 形→blim 换骨）、  *)
@@ -48,6 +51,7 @@ Require Import UpReqBanachExpDef.
 Require Import UpReqBanachExpAdd.
 Require Import UpReqBanachClassExt.
 Require Import UpReqBanachLimUniq.
+Require Import UpReqBanachCauchyD.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Lia.
 
@@ -65,7 +69,7 @@ Proof.
             QltT (@bnorm B (@bplus B (exp_series_partial B (@bzero B) n)
                                      (@bopp B (@bone B)))) q) 0%nat _).
   intros n Hn.
-  rewrite (@bnorm_wd B
+  pose proof (@bnorm_wd B
       (@bplus B (exp_series_partial B (@bzero B) n)
                (@bopp B (@bone B)))
       (@bplus B (@bone B) (@bopp B (@bone B)))
@@ -73,11 +77,13 @@ Proof.
                   (@bopp B (@bone B))
                   (@bone B) (@bopp B (@bone B))
                   (bxdef_esp_zero_series B n)
-                  (@bae_refl B (@bopp B (@bone B))))).
-  rewrite (@bnorm_wd B
+                  (@bae_refl B (@bopp B (@bone B))))) as HW1.
+  pose proof (@bnorm_wd B
       (@bplus B (@bone B) (@bopp B (@bone B)))
       (@bzero B)
-      (@bplus_opp B (@bone B))).
+      (@bplus_opp B (@bone B))) as HW2.
+  eapply (QeqT_Qlt_bool_cong _ _ _ (qeqT_sym_hw _ _ HW1)).
+  eapply (QeqT_Qlt_bool_cong _ _ _ (qeqT_sym_hw _ _ HW2)).
   rewrite (@bnorm_zero B).
   exact Hq.
 Qed.
@@ -187,42 +193,30 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 闸门开后接线规格（04:14 按 CD3/UNQ 在飞源件语句实形定稿；        *)
-(* 后继席照抄即收口，预算 ≤30 分钟）：                             *)
-(*                                                             *)
-(*   Require Import UpReqBanachClassExt.                        *)
-(*   Require Import UpReqBanachLimUniq.    (* ③ UNQ .vo 落盘 *)   *)
-(*   Require Import UpReqBanachCauchyD.    (* ② CD3 .vo 落盘 *)   *)
-(*                                                             *)
-(*   Theorem bxoo_exp_opp_one : forall (E : BanachAlgExt)        *)
-(*     (a : (@BA (@bxce_base E))),                                *)
-(*     @bae (@bxce_base E)                                        *)
-(*       (@bmult (@bxce_base E) (bxdef_exp (@bxce_base E) a)       *)
-(*                    (bxdef_exp (@bxce_base E)                   *)
-(*                       (@bopp (@bxce_base E) a)))               *)
-(*       (bxdef_exp (@bxce_base E) (@bzero (@bxce_base E))).       *)
-(*   Proof.                                                        *)
-(*     intros E a.                                                 *)
-(*     apply (bxoo_exp_opp_one_assembly (@bxce_base E) a           *)
-(*             (bxuq_lim_uniq E)).                                 *)
-(*     apply (bxoo_nearone_blim (@bxce_base E)).                   *)
-(*     apply (bxcd_prod_near_one (@bxce_base E) a                  *)
-(*             (@bxce_coef_plus E) (@bxce_coef_wd E)).             *)
-(*   Qed.                                                          *)
-(*                                                             *)
-(* 实形核验存照（04:14 在飞源读定）：                               *)
-(*   ③ bxuq_lim_uniq : forall E u l1 l2, blim base u l1 ->          *)
-(*        blim base u l2 -> bae l1 l2 ——剥 E 后=bxoo_uniq_shape     *)
-(*        base 同构（UNQ 另赠消费位 bxuq_prod_lim_joint：           *)
-(*        blim 乘积列 l ⟹ bae l (la·lb)，等价备选路线）。           *)
-(*   ② bxcd_prod_near_one : forall B a, hplus -> hwd ->             *)
-(*        forall q, 0<q -> sigT N, forall n, N<=n ->                *)
-(*        QltT (bnorm (bplus (esp a n·esp(−a) n) (bopp bone))) q     *)
-(*        ——邻域位与 bxoo_nearone_blim 假设形逐字同构；其 hplus/hwd  *)
-(*        两假设=恰 Ext 类字段 bxce_coef_plus/bxce_coef_wd，          *)
-(*        故终面定理量化在 BanachAlgExt 层（plain BanachAlg 无        *)
-(*        coef 相容性不可喂，UNQ bxce_sep 二波同层——接口实形）。     *)
-(*   探针 _tbxoo_probe_uniq.v 已 -vos 预校验本接线（除②未落.vo 外   *)
-(*   全链类型核验，LimUniq.vos 中间态 inconsistent=ClassExt.vo      *)
-(*   04:11 换代所致，UNQ 复编即愈，非本席病）。                      *)
+(* S6 覆回收口（20260913 席W5c）：双闸全开，staged 换真形。          *)
+(*   ② CD12 真件 bxcd_prod_near_one（UpReqBanachCauchyD.v，          *)
+(*     CD12 四关绿；W5b 14:35 级联修复 L588 垫片重编 .vo，语句面     *)
+(*     零变）：hplus/hwd 两假设与 Ext 类字段                 *)
+(*     bxce_coef_plus/bxce_coef_wd 逐字同构——直接喂参，             *)
+(*     plain BanachAlg 喂不进 coef 相容性，终面钉 Ext 层             *)
+(*     （EQV 接口实形，非语句面弱化）。                              *)
+(*   ③ bxuq_lim_uniq E 剥 E 后=bxoo_uniq_shape base 同构。          *)
+(*   主件 bxoo_exp_opp_one：无条件 bae 全等式——                     *)
+(*     bae_trans（唯一性：序列左极限 e^a·e^(−a) == 近邻极限 bone）   *)
+(*     （对称（④尾件）），与 S4 装配件合取面逐字一致。              *)
 (* ============================================================ *)
+
+Theorem bxoo_exp_opp_one : forall (E : BanachAlgExt)
+  (a : (@BA (@bxce_base E))),
+  @bae (@bxce_base E)
+    (@bmult (@bxce_base E) (bxdef_exp (@bxce_base E) a)
+                   (bxdef_exp (@bxce_base E) (@bopp (@bxce_base E) a)))
+    (bxdef_exp (@bxce_base E) (@bzero (@bxce_base E))).
+Proof.
+  intros E a.
+  apply (bxoo_exp_opp_one_assembly (@bxce_base E) a
+           (bxuq_lim_uniq E)).
+  apply (bxoo_nearone_blim (@bxce_base E)).
+  exact (bxcd_prod_near_one (@bxce_base E) a
+           (@bxce_coef_plus E) (@bxce_coef_wd E)).
+Qed.

@@ -133,12 +133,18 @@ Qed.
 
 (* S3 加分范数面：‖exp(0) 的部分和 n‖ == 1（Id 面） *)
 Lemma bxdef_esp_zero_bnorm : forall (B : BanachAlg) (n : nat),
-  Id (@bnorm B (exp_series_partial B (@bzero B) n)) 1%Q.
+  QeqT (@bnorm B (exp_series_partial B (@bzero B) n)) 1%Q.
 Proof.
   intros B n.
-  rewrite (@bnorm_wd B (exp_series_partial B (@bzero B) n) (@bone B)
-             (bxdef_esp_zero_series B n)).
-  exact (@bnorm_one B).
+  pose proof (@bnorm_wd B (exp_series_partial B (@bzero B) n) (@bone B)
+             (bxdef_esp_zero_series B n)) as HW.
+  pose proof (@bnorm_one B) as H1.
+  assert (HQ1 : QeqT (@bnorm B (@bone B)) 1%Q)
+    by (destruct H1; apply qeq_imp_qeqT; apply Qeq_refl).
+  apply qeq_imp_qeqT.
+  apply (Qeq_trans _ (@bnorm B (@bone B))).
+  - apply qeqT_imp_qeq. exact HW.
+  - apply qeqT_imp_qeq. exact HQ1.
 Qed.
 
 (* S3 加分极限邻域面：one 与 bxdef_exp bzero 范数任意贴近        *)
@@ -152,7 +158,7 @@ Proof.
   intros B eps Heps.
   destruct (bxdef_exp_spec B (@bzero B) eps Heps) as [N HN].
   specialize (HN N (NatLe_lift N N (Nat.le_refl N))).
-  rewrite (@bnorm_wd B
+  pose proof (@bnorm_wd B
       (@bplus B (exp_series_partial B (@bzero B) N)
                 (@bopp B (bxdef_exp B (@bzero B))))
       (@bplus B (@bone B) (@bopp B (bxdef_exp B (@bzero B))))
@@ -160,9 +166,8 @@ Proof.
                   (@bopp B (bxdef_exp B (@bzero B)))
                   (@bone B) (@bopp B (bxdef_exp B (@bzero B)))
                   (bxdef_esp_zero_series B N)
-                  (@bae_refl B (@bopp B (bxdef_exp B (@bzero B))))))
-    in HN.
-  exact HN.
+                  (@bae_refl B (@bopp B (bxdef_exp B (@bzero B)))))) as HWn.
+  exact (QeqT_Qlt_bool_cong _ _ eps HWn HN).
 Qed.
 
 (* ============================================================ *)

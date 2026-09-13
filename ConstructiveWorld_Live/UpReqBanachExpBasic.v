@@ -117,14 +117,18 @@ Proof.
     exact (@bplus_zero B (@bone B)).
 Qed.
 
-(* 范数面：‖esp B bzero m‖ = 1（Id 面，T42 Real 层单位元腿同构） *)
+(* 范数面：‖esp B bzero m‖ ≈ 1（QeqT 面；wd 弱化后 Id 面不可达，
+   语句面同步弱化——CLS-R2 沙箱偏差⑤处置） *)
 Lemma bxb_norm_series_zero : forall (B : BanachAlg) (m : nat),
-  Id (@bnorm B (exp_series_partial B (@bzero B) m)) 1%Q.
+  QeqT (@bnorm B (exp_series_partial B (@bzero B) m)) 1%Q.
 Proof.
   intros B m.
-  rewrite (@bnorm_wd B (exp_series_partial B (@bzero B) m) (@bone B)
+  apply qeq_imp_qeqT.
+  apply (Qeq_trans _ (@bnorm B (@bone B))).
+  - apply qeqT_imp_qeq.
+    exact (@bnorm_wd B (exp_series_partial B (@bzero B) m) (@bone B)
              (bxb_series_zero B m)).
-  exact (@bnorm_one B).
+  - rewrite (@bnorm_one B). apply Qeq_refl.
 Qed.
 
 (* 平凡柯西证书：零元级数列两两差恒零，模量 N=0 显式闭式         *)
@@ -140,7 +144,8 @@ Lemma bxb_series_zero_bcauchy : forall (B : BanachAlg) (eps : Q),
 Proof.
   intros B eps Heps.
   exists 0%nat. intros m n Hm Hn.
-  rewrite (@bnorm_wd B
+  eapply (QeqT_Qlt_bool_cong _ _ eps
+    (qeqT_sym_hw _ _ (@bnorm_wd B
       (@bplus B (exp_series_partial B (@bzero B) m)
                 (@bopp B (exp_series_partial B (@bzero B) n)))
       (@bplus B (@bone B) (@bopp B (@bone B)))
@@ -149,9 +154,10 @@ Proof.
                   (@bone B) (@bopp B (@bone B))
                   (bxb_series_zero B m)
                   (@bopp_wd B (exp_series_partial B (@bzero B) n)
-                              (@bone B) (bxb_series_zero B n)))).
-  rewrite (@bnorm_wd B (@bplus B (@bone B) (@bopp B (@bone B))) (@bzero B)
-             (@bplus_opp B (@bone B))).
+                              (@bone B) (bxb_series_zero B n)))))).
+  eapply (QeqT_Qlt_bool_cong _ _ eps
+    (qeqT_sym_hw _ _ (@bnorm_wd B (@bplus B (@bone B) (@bopp B (@bone B))) (@bzero B)
+               (@bplus_opp B (@bone B))))).
   rewrite (@bnorm_zero B).
   exact Heps.
 Qed.
@@ -217,7 +223,7 @@ Proof.
   intros B eps Heps.
   destruct (bxdef_exp_spec_eps B (@bzero B) eps Heps) as [N HN].
   specialize (HN N (NatLe_lift _ _ (Nat.le_refl N))).
-  rewrite (@bnorm_wd B
+  pose proof (QeqT_Qlt_bool_cong _ _ eps (@bnorm_wd B
       (@bplus B (exp_series_partial B (@bzero B) N)
                 (@bopp B (bxdef_exp B (@bzero B))))
       (@bplus B (@bone B) (@bopp B (bxdef_exp B (@bzero B))))
@@ -225,11 +231,12 @@ Proof.
                   (@bopp B (bxdef_exp B (@bzero B)))
                   (@bone B) (@bopp B (bxdef_exp B (@bzero B)))
                   (bxb_series_zero B N)
-                  (@bae_refl B (@bopp B (bxdef_exp B (@bzero B))))))
-    in HN.
+                  (@bae_refl B (@bopp B (bxdef_exp B (@bzero B)))))) HN) as HN2.
+  clear HN. rename HN2 into HN.
   (* 规格位是 bone+(−E)；目标位 E+(−bone)——换序经 comm +        *)
   (* bplus_opp_swap（E+(−bone) ≡ −(bone+(−E))）+ bnorm_opp 收口。 *)
-  rewrite (@bnorm_wd B
+  eapply (QeqT_Qlt_bool_cong _ _ eps
+    (qeqT_sym_hw _ _ (@bnorm_wd B
       (@bplus B (bxdef_exp B (@bzero B)) (@bopp B (@bone B)))
       (@bopp B (@bplus B (@bone B) (@bopp B (bxdef_exp B (@bzero B)))))
       (@bae_trans B
@@ -237,7 +244,7 @@ Proof.
          (@bplus B (@bopp B (@bone B)) (bxdef_exp B (@bzero B)))
          (@bopp B (@bplus B (@bone B) (@bopp B (bxdef_exp B (@bzero B)))))
          (@bplus_comm B (bxdef_exp B (@bzero B)) (@bopp B (@bone B)))
-         (@bplus_opp_swap B (@bone B) (bxdef_exp B (@bzero B))))).
+         (@bplus_opp_swap B (@bone B) (bxdef_exp B (@bzero B))))))).
   rewrite (@bnorm_opp B (@bplus B (@bone B) (@bopp B (bxdef_exp B (@bzero B))))).
   exact HN.
 Qed.

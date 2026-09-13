@@ -154,6 +154,7 @@ UpReqBanachInvPre.v
 UpReqBanachAdd.v
 UpReqNormConv.v
 UpReqBanachProd2.v
+UpReqBanachCauchyD.v
 UpReqPadeDenPos.v
 UpReqBanachExpAdd.v
 UpReqBanachClassExt.v

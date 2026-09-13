@@ -247,9 +247,10 @@ Proof.
   specialize (HNy n (NatLe_lift Ny n Hn2)).
   (* ‖y_n‖ < eb/(‖lx‖+1) + ‖ly‖ *)
   assert (Hyn : QltT (@bnorm B (y n)) (eb / (nlx + 1) + nly)%Q).
-  { rewrite (@bnorm_wd B (y n)
+  { eapply (QeqT_Qlt_bool_cong _ _ _
+      (qeqT_sym_hw _ _ (@bnorm_wd B (y n)
               (@bplus B (@bplus B (y n) (@bopp B ly)) ly)
-              (bxadd_esp_join B (y n) ly)).
+              (bxadd_esp_join B (y n) ly)))).
     apply (qleT'_ltT_ltT _ (@bnorm B (@bplus B (y n) (@bopp B ly))
                               + @bnorm B ly)%Q _).
     - exact (@bnorm_plus B (@bplus B (y n) (@bopp B ly)) ly).
@@ -261,10 +262,11 @@ Proof.
   assert (Hd1 : QltT (@bnorm B (@bplus B (@bmult B (x n) (y n))
                                 (@bopp B (@bmult B lx (y n)))))
                      (2 * eb)%Q).
-  { rewrite (@bnorm_wd B
+  { eapply (QeqT_Qlt_bool_cong _ _ _
+      (qeqT_sym_hw _ _ (@bnorm_wd B
         (@bplus B (@bmult B (x n) (y n)) (@bopp B (@bmult B lx (y n))))
         (@bmult B (@bplus B (x n) (@bopp B lx)) (y n))
-        (bxadd_bminus_mult_l B (x n) lx (y n))).
+        (bxadd_bminus_mult_l B (x n) lx (y n))))).
     (* ‖(x_n−lx)·y_n‖ ≤ e1·‖y_n‖ ≤ (eb/(‖ly‖+1))·‖y_n‖ < (eb/(‖ly‖+1))·(eb/(‖lx‖+1)+‖ly‖) ≤ 2eb *)
     assert (Hstep1 : QleT' (@bnorm B (@bmult B (@bplus B (x n) (@bopp B lx)) (y n)))
                            ((Qmin (eb / (nly + 1)) 1%Q) * @bnorm B (y n))%Q).
@@ -337,10 +339,11 @@ Proof.
   assert (Hd2 : QltT (@bnorm B (@bplus B (@bmult B lx (y n))
                                 (@bopp B (@bmult B lx ly))))
                      eb%Q).
-  { rewrite (@bnorm_wd B
+  { eapply (QeqT_Qlt_bool_cong _ _ _
+      (qeqT_sym_hw _ _ (@bnorm_wd B
         (@bplus B (@bmult B lx (y n)) (@bopp B (@bmult B lx ly)))
         (@bmult B lx (@bplus B (y n) (@bopp B ly)))
-        (bxadd_bminus_mult_r B (y n) ly lx)).
+        (bxadd_bminus_mult_r B (y n) ly lx)))).
     (* ‖lx·(y_n−ly)‖ ≤ ‖lx‖·‖y_n−ly‖ ≤ (‖lx‖+1)·‖y_n−ly‖ < (‖lx‖+1)·(eb/(‖lx‖+1)) == eb *)
     assert (Hstep1 : QleT' (@bnorm B (@bmult B lx (@bplus B (y n) (@bopp B ly))))
                            (nlx * @bnorm B (@bplus B (y n) (@bopp B ly)))%Q).
@@ -388,11 +391,12 @@ Proof.
                                      (@bopp B (@bmult B lx (y n)))))
                             + @bnorm B (@bplus B (@bmult B lx (y n))
                                           (@bopp B (@bmult B lx ly)))))%Q).
-  { rewrite (@bnorm_wd B
+  { eapply (QeqT_Qle_bool_cong _ _ _
+      (qeqT_sym_hw _ _ (@bnorm_wd B
       (@bplus B (@bmult B (x n) (y n)) (@bopp B (@bmult B lx ly)))
       (@bplus B (@bplus B (@bmult B (x n) (y n)) (@bopp B (@bmult B lx (y n))))
                (@bplus B (@bmult B lx (y n)) (@bopp B (@bmult B lx ly))))
-      (bxadd_prod_diff_join B (x n) (y n) lx ly)).
+      (bxadd_prod_diff_join B (x n) (y n) lx ly)))).
     exact (@bnorm_plus B
              (@bplus B (@bmult B (x n) (y n)) (@bopp B (@bmult B lx (y n))))
              (@bplus B (@bmult B lx (y n)) (@bopp B (@bmult B lx ly)))). }

@@ -77,7 +77,7 @@ Class BanachAlg := {
   bmult_wd : forall a b c d : BA,
     bae a c -> bae b d -> bae (bmult a b) (bmult c d);
   bopp_wd  : forall a b : BA, bae a b -> bae (bopp a) (bopp b);
-  bnorm_wd : forall a b : BA, bae a b -> Id (bnorm a) (bnorm b);
+  bnorm_wd : forall a b : BA, bae a b -> QeqT (bnorm a) (bnorm b);
 
   (* ---- Q 标量嵌入律 ---- *)
   bcoef_zero : bae (bcoef 0%Q) bzero;
@@ -85,7 +85,12 @@ Class BanachAlg := {
   bcoef_mult : forall q r : Q, bae (bcoef (q * r)%Q) (bmult (bcoef q) (bcoef r));
   bcoef_comm : forall (q : Q) (a : BA), bae (bmult a (bcoef q)) (bmult (bcoef q) a);
 
+  (* ---- Q 标量嵌入加法/同调律（BCE 二字段 20260913 迁入原类，形状=BA 件 hplus/hwd 逐字对齐）---- *)
+  bcoef_plus : forall q r : Q, bae (bplus (bcoef q) (bcoef r)) (bcoef (q + r)%Q);
+  bcoef_wd   : forall q r : Q, q == r -> bae (bcoef q) (bcoef r);
+
   (* ---- 范数律（QleT' 比较面）---- *)
+  (* 20260913 类手术（INS ②6-2 处方）：bnorm_wd/coef 余域 Id→QeqT；公理面零新增。 *)
   bnorm_zero : Id (bnorm bzero) 0%Q;
   bnorm_one  : Id (bnorm bone) 1%Q;
   bnorm_opp  : forall a : BA, Id (bnorm (bopp a)) (bnorm a);
@@ -94,7 +99,7 @@ Class BanachAlg := {
     QleT' (bnorm (bplus a b)) (bnorm a + bnorm b)%Q;             (* 次可加 *)
   bnorm_mult : forall a b : BA,
     QleT' (bnorm (bmult a b)) (bnorm a * bnorm b)%Q;             (* 次可乘 *)
-  bnorm_coef : forall q : Q, Id (bnorm (bcoef q)) (Qabs q);
+  bnorm_coef : forall q : Q, QeqT (bnorm (bcoef q)) (Qabs q);
 
   (* ---- 完备性字段（显式柯西/极限接口位，S02 cauchy 同构内联）---- *)
   bcauchy_complete :
@@ -107,6 +112,50 @@ Class BanachAlg := {
         sigT (fun N : nat => forall n : nat,
           NatLe N n -> QltT (bnorm (bplus (u n) (bopp l))) eps));
 }.
+
+(* ---- 20260913 类手术垫片（CLS-R 沙箱演练；公理面自审：零新增承认件，仅签名弱化+同余桥） ---- *)
+(* 下游 Id 改写位点改走布尔观察者同余三件（迁移包 §2.4 配方）。 *)
+
+Lemma qeqT_sym_hw : forall x y : Q, QeqT x y -> QeqT y x.
+Proof. intros x y H. apply qeq_imp_qeqT. apply Qeq_sym. apply qeqT_imp_qeq. exact H. Qed.
+
+Lemma QeqT_Qlt_bool_cong : forall x y k : Q, QeqT x y -> QltT x k -> QltT y k.
+Proof.
+  intros x y k Hxy Hx.
+  apply Qlt_to_QltT.
+  apply (Qle_lt_trans y x k).
+  - apply qeq_le. apply Qeq_sym. apply qeqT_imp_qeq. exact Hxy.
+  - apply QltT_to_Qlt. exact Hx.
+Qed.
+
+Lemma QeqT_Qle_bool_cong : forall x y k : Q, QeqT x y -> QleT' x k -> QleT' y k.
+Proof.
+  intros x y k Hxy Hx.
+  apply Qle_to_QleT'.
+  apply (Qle_trans y x k).
+  - apply qeq_le. apply Qeq_sym. apply qeqT_imp_qeq. exact Hxy.
+  - apply QleT'_to_Qle. exact Hx.
+Qed.
+
+(* 运移形反写伴 ride：QeqT 对称侧（NormConv 反写位点用） *)
+Lemma QeqT_Qle_bool_cong_r : forall x y k : Q, QeqT x y -> QleT' k x -> QleT' k y.
+Proof.
+  intros x y k Hxy Hx.
+  apply Qle_to_QleT'.
+  apply (Qle_trans k x y).
+  - apply QleT'_to_Qle. exact Hx.
+  - apply qeq_le. apply qeqT_imp_qeq. exact Hxy.
+Qed.
+
+(* Qeq 改写桥（Qle/Qeq 面位点：stdlib Qle 已注册 Qeq 同伦实例，一线换装） *)
+Lemma bnorm_wd_qeq : forall (B : BanachAlg) (a b : (@BA B)),
+  bae a b -> @bnorm B a == @bnorm B b.
+Proof. intros B a b H. apply qeqT_imp_qeq. apply (@bnorm_wd B a b H). Qed.
+
+(* Qeq 目标面位点专用桥（Qle/Qeq 改写族同关系面直改，免同余件；垫片配方具象件） *)
+Lemma bnorm_coef_qeq : forall (B : BanachAlg) (q : Q),
+  @bnorm B (@bcoef B q) == Qabs q.
+Proof. intros B q. apply qeqT_imp_qeq. apply (@bnorm_coef B q). Qed.
 
 (* 柯西 / 极限的具名形态（与 bcauchy_complete 内联体逐字同构） *)
 Definition bcauchy (B : BanachAlg) (u : nat -> (@BA B)) : Set :=
@@ -291,7 +340,7 @@ Proof.
     + apply QleT'_to_Qle. apply (bnorm_bpow B a (Datatypes.S k)).
     + apply QleT'_to_Qle. apply (@bnorm_pos B (@bcoef B (/ q_fact (Datatypes.S k)))).
   - apply qeq_le.
-    rewrite (@bnorm_coef B (/ q_fact (Datatypes.S k))).
+    rewrite (@bnorm_coef_qeq B (/ q_fact (Datatypes.S k))).
     assert (Hq : 0 <= / q_fact (Datatypes.S k))
       by (apply Qlt_le_weak; apply Qinv_lt_0_compat; apply q_fact_pos).
     rewrite (Qabs_pos (/ q_fact (Datatypes.S k)) Hq).
@@ -309,15 +358,18 @@ Proof.
   induction n as [| n' IH]; intros m Hm.
   - (* n = 0：m = 0，差为零 *)
     assert (Hm0 : m = 0%nat) by lia. subst m.
+    pose proof (@bnorm_wd B _ _ (@bplus_opp B (exp_series_partial B a 0))) as Hwd0.
+    eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ Hwd0)).
     apply Qle_to_QleT'.
-    rewrite (@bnorm_wd B _ _ (@bplus_opp B (exp_series_partial B a 0))).
     rewrite (@bnorm_zero B).
     apply Qle_refl.
   - destruct (Nat.eq_dec m (Datatypes.S n')) as [Heq | Hne].
     + (* m = S n'：差为零，尾和 exp_tail_abs m m == 0 *)
-      subst m. apply Qle_to_QleT'.
-      rewrite (@bnorm_wd B _ _
-        (@bplus_opp B (exp_series_partial B a (Datatypes.S n')))).
+      subst m.
+      pose proof (@bnorm_wd B _ _
+        (@bplus_opp B (exp_series_partial B a (Datatypes.S n')))) as HwdS.
+      eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ HwdS)).
+      apply Qle_to_QleT'.
       rewrite (@bnorm_zero B).
       rewrite (exp_tail_abs_le_m (Datatypes.S n') (Datatypes.S n')
                  (@bnorm B a) (Nat.le_refl _)).
@@ -329,11 +381,12 @@ Proof.
         with (@bplus B (exp_series_partial B a n')
                 (@bmult B (bpow B a (Datatypes.S n'))
                           (@bcoef B (/ q_fact (Datatypes.S n'))))).
-      rewrite (@bnorm_wd B _ _
+      pose proof (@bnorm_wd B _ _
         (bplus_middle_swap B (exp_series_partial B a n')
             (@bmult B (bpow B a (Datatypes.S n'))
                       (@bcoef B (/ q_fact (Datatypes.S n'))))
-            (@bopp B (exp_series_partial B a m)))).
+            (@bopp B (exp_series_partial B a m)))) as HwdM.
+      eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ HwdM)).
       eapply qleT'_trans.
       * (* 三角：‖(esp n' − esp m) + term‖ ≤ ‖esp n' − esp m‖ + ‖term‖ *)
         exact (@bnorm_plus B
@@ -376,12 +429,14 @@ Proof.
   - (* m ≤ n：对称化 ‖esp m − esp n‖ = ‖esp n − esp m‖
        （bplus_comm + bplus_opp_swap + bnorm_opp，全 Id/bae 面） *)
     apply Nat.leb_le in Emn.
-    rewrite (@bnorm_wd B _ _
+    pose proof (@bnorm_wd B _ _
       (@bplus_comm B (exp_series_partial B a m)
-                    (@bopp B (exp_series_partial B a n)))).
-    rewrite (@bnorm_wd B _ _
+                    (@bopp B (exp_series_partial B a n)))) as HwdC1.
+    eapply (QeqT_Qlt_bool_cong _ _ eps (qeqT_sym_hw _ _ HwdC1)).
+    pose proof (@bnorm_wd B _ _
       (bplus_opp_swap B (exp_series_partial B a n)
-                       (exp_series_partial B a m))).
+                       (exp_series_partial B a m))) as HwdC2.
+    eapply (QeqT_Qlt_bool_cong _ _ eps (qeqT_sym_hw _ _ HwdC2)).
     rewrite (@bnorm_opp B (@bplus B (exp_series_partial B a n)
                                     (@bopp B (exp_series_partial B a m)))).
     apply Qlt_to_QltT.
