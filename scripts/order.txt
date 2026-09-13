@@ -166,3 +166,8 @@ UpReqBanachExpAddEq.v
 UpReqBanachInstPre.v
 UpReqBanachInstEMult.v
 UpReqBanachStrong.v
+UpReqPadeBetaPos.v
+UpReqPadeTailPos.v
+UpReqPadeLower.v
+UpReqPadeDenPos12.v
+UpReqPadeFinale.v

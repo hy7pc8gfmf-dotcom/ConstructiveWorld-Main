@@ -1604,3 +1604,67 @@ Proof. reflexivity. Qed.
 (*    55，v2.9 后实测 58（本席 +3 条核对引理，只记不改，对账权留下一席）。                     *)
 (* 4) 三树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，UpReqIndex.v 三处 md5 一致         *)
 (*    （数值见本席报告回填）。                                                                *)
+
+(* ================= v3.0 增册（席R73：Index v3.0 登记席，20260914） ================= *)
+(* ng_ 第三轨续写：承 v2.9 后 44 件基面，C 波 Padé 正尾路线五件逐件实测登记          *)
+(* （append-only；v2.1–v2.9 既有 44 条目/清单/字面值/版记零触碰，本节全部新名，EOF 追加）。 *)
+(* 口径同 v2.1–v2.9：ng_lines = wc -l 实测；ng_qed = 剥块注释 token 级 \bQed\. 实测；   *)
+(* 五件均已 vo 树预验证双段绿（coqc 单件 EXIT=0 + coqchk -o 闭包抽查 EXIT=0）。          *)
+
+(* ng_UpReqPadeBetaPos —— UpReqPadeBetaPos.v：β_m 正性链（②号件，插入位 169） *)
+Definition ng_UpReqPadeBetaPos : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeBetaPos.v" 284 15 20260914 "beta_m positivity pbp_beta_pos via factorial lower bound pbp_beta_lb".
+
+(* ng_UpReqPadeTailPos —— UpReqPadeTailPos.v：Padé 尾项 n=1/2 定值（①号件，插入位 170） *)
+Definition ng_UpReqPadeTailPos : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeTailPos.v" 179 19 20260914 "Pade tail term identity at n=1/2 fixed-point evaluation ptp_beta_pos".
+
+(* ng_UpReqPadeLower —— UpReqPadeLower.v：下界误差估计（③号件，插入位 171） *)
+Definition ng_UpReqPadeLower : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeLower.v" 385 24 20260914 "lower error bound cpl_lower_even for the even convergent partial fraction".
+
+(* ng_UpReqPadeDenPos12 —— UpReqPadeDenPos12.v：(1,2) 分母正性（④号件，插入位 172） *)
+Definition ng_UpReqPadeDenPos12 : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeDenPos12.v" 275 8 20260914 "(1,2) Pade denominator positivity pdq_den_pos_12 with strict variant".
+
+(* ng_UpReqPadeFinale —— UpReqPadeFinale.v：n=2 总装旗舰（⑤号件，插入位 173） *)
+Definition ng_UpReqPadeFinale : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeFinale.v" 421 28 20260914 "flagship assembly cpf_exp_pos_final_n2: 0 < exp x via n=2 Pade chain".
+
+Definition NewGreenListV30 : list NewGreenFace :=
+  cons ng_UpReqPadeBetaPos
+  (cons ng_UpReqPadeTailPos
+  (cons ng_UpReqPadeLower
+  (cons ng_UpReqPadeDenPos12
+  (cons ng_UpReqPadeFinale nil)))).
+
+(* v3.0 续写统计：5 件 / 行数和 1544 / 封口和 94（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV30Pieces  : nat := 5.
+Definition NewGreenV30LineSum : nat := 1544.
+Definition NewGreenV30QedSum  : nat := 94.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV30Pieces_matches : NewGreenV30Pieces = cnt_ng NewGreenListV30.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV30LineSum_matches : NewGreenV30LineSum = sum_ng_lines NewGreenListV30.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV30QedSum_matches : NewGreenV30QedSum = sum_ng_qed NewGreenListV30.
+Proof. reflexivity. Qed.
+
+(* ---------- v3.0 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 插入位：五件 vo 树 order.txt 表尾整块追加（L169–L173，块内 Kahn 序 BetaPos→TailPos→   *)
+(*    Lower→DenPos12→Finale；①②③④ 终版 Require 面零跨件边（③现档仍未 Require ①②，       *)
+(*    与派单语义序差异留痕照预备单 §一），⑤终版新增 Require ③Lower 同块前位兼容）；         *)
+(*    双树 order.txt cmp 字节一致，双树 topo 复验器 173 行 BAD_COUNT=0，_CoqProject 双树    *)
+(*    168→173 同步，scripts/order.txt 三处 wc=173。                                         *)
+(* 2) 预验证：五件 cp 自权威源 Live_X（md5 留痕 b7bdda96/9e98ddea/a6fe32a3/44fc811a/        *)
+(*    b62cf9bd），cpu_guard CoreN 2 串行 coqc 五件全 EXIT=0；coqchk -o 闭包抽查              *)
+(*    TailPos/BetaPos/DenPos12/Finale 四件全 EXIT=0，零 Inconsistent assumptions 零 Anomaly。 *)
+(* 3) af_ 冻结纪律：af_UpReqIndex 27 为 v2.0 冻结快照（L541 恒值），本席未触碰；v2.9 后实测   *)
+(*    58，v3.0 后实测 61（本席 +3 条核对引理，只记不改，对账权留下一席）。                    *)
+(* 4) 三树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，UpReqIndex.v 三处 md5 一致        *)
+(*    （数值见本席报告回填）。                                                               *)
