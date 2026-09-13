@@ -166,3 +166,4 @@ UpReqBanachInstB.v
 UpReqBanachExpAddEq.v
 UpReqBanachInstPre.v
 UpReqBanachInstEMult.v
+UpReqBanachStrong.v
