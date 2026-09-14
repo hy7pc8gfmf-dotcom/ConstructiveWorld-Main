@@ -1668,3 +1668,91 @@ Proof. reflexivity. Qed.
 (*    58，v3.0 后实测 61（本席 +3 条核对引理，只记不改，对账权留下一席）。                    *)
 (* 4) 三树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，UpReqIndex.v 三处 md5 一致        *)
 (*    （数值见本席报告回填）。                                                               *)
+
+(* ========================================================================= *)
+(* v3.1（席P1b：DTPT 离散对偶轴 18 模块注册席，20260914）                                      *)
+(*                                                                           *)
+(* 承 v3.0 全部既有登记面零缩水（append-only；既有 idx_/af_/lg_/ng_ 各轨零触碰）。            *)
+(* 新增轨 idx_DTPT*：DTPT 工作区 18 模块（Q 层独立宇宙）包壳态注册，rm_in_uni=false           *)
+(* ——不占 734 迁移宇宙名额，与 idx_ 主轨（true）物理隔离，纯数据条目零机器核对耦合。          *)
+(*                                                                           *)
+(* 插入位：ConstructiveWorld_Live/_CoqProject 表尾整块追加（L175–L192，拓扑序：               *)
+(* DTPT→Entropy/LLM/Measure/Phases/Truth→Entropy2/DigTheory→CoZero/ME2/ZeroLocus/           *)
+(* Audit/Extract/EntFam2/ROTC→Lam/Cyc→RotSpec；coqdep 35 边全部「依赖索引<消费索引」，        *)
+(* 逐边核验在案）；Live 树 173→191 .v；双树 order.txt 三面与 vo 树播种面归 P2/P4 同步波。      *)
+(*                                                                           *)
+(* 18 件源指纹：包壳席 P1a 交付态 md5 逐件留痕（注册席拷入前后双 md5 对账 18/18 一致；        *)
+(* 拷入面 = ConstructiveWorld_Live/ 表尾，零改名零内容改）。                                  *)
+(* G1 三连零（家规禁词 grep 计数 18 件逐件=0，禁词字面按字面规避纪律不入本注）；壳对账：      *)
+(* 每件 Module/End 各=1，壳名=文件语义名，互引 35 边全限定 Import 垫片在案（P1a 报告 §二表）。 *)
+(* rm_decl_cnt = grep -cE "^(Definition|Theorem|Lemma|Inductive|Record|Fixpoint|Corollary|   *)
+(* Ltac)[[:space:]]" 逐件实测（合计 819）；rm_head_kw = 各件旗舰（grep 验证在件）。            *)
+(* rm_gate_day = 20260914（注册席主库编译验证日）。                                           *)
+(*                                                                           *)
+(* 撞面对账：五撞名 q_fact/qeq_le/qstep/rot/diag_closed 全数壳内消解（Locate 全名形           *)
+(* 库名.壳名.名，P1a 探针 _p1a_probe_ns.log 在案）；叶子融入成立：Live 树既有件零该向依赖边。   *)
+(* ========================================================================= *)
+
+(* idx_DTPT —— DTPT.v：数字全域—熵相三元论根模块（Dig 塔+CGen+N9Opt+D8Ext 归并宿主） *)
+Definition idx_DTPT : ReqModule :=
+  MkReqModule "DTPT.v" 272 20260915 "C_sorted_min_adj" false.
+
+(* idx_DTPT_Entropy —— DTPT_Entropy.v：最小偏差和熵面（xq_ 工具箱+H_adj 下界） *)
+Definition idx_DTPT_Entropy : ReqModule :=
+  MkReqModule "DTPT_Entropy.v" 218 20260915 "H_adj_P0_min" false.
+
+(* idx_DTPT_Truth —— DTPT_Truth.v：真值序面（level 三律+Tarski 归并宿主，双副本桥在案） *)
+Definition idx_DTPT_Truth : ReqModule :=
+  MkReqModule "DTPT_Truth.v" 79 20260915 "level_le_refl" false.
+
+(* idx_DTPT_DigTheory —— DTPT_DigTheory.v：数字化理论面（dig 单射塔+HAlg 归并宿主） *)
+Definition idx_DTPT_DigTheory : ReqModule :=
+  MkReqModule "DTPT_DigTheory.v" 88 20260915 "dig_inj_dCode" false.
+
+(* idx_DTPT_Extract —— DTPT_Extract.v：提取面（u12 门控六探针+9 条 Extraction 套件宿主） *)
+Definition idx_DTPT_Extract : ReqModule :=
+  MkReqModule "DTPT_Extract.v" 30 20260915 "u12_gate_pass_t1_h0" false.
+
+(* idx_DTPT_Rotation —— DTPT_Rotation.v：旋转论面（rotc 底座/精确闭式/锐化/λ 插值/偏差判别/周期律簇，RotSpec+Lam 归并宿主） *)
+Definition idx_DTPT_Rotation : ReqModule :=
+  MkReqModule "DTPT_Rotation.v" 129 20260915 "rotc_class_sharp_ub" false.
+Definition idx_DTPT_Bridge : ReqModule :=
+  MkReqModule "DTPT_Bridge.v" 37 20260915 "H_chain_set" false.
+Definition idx_DTPT_Bridge_Dig : ReqModule :=
+  MkReqModule "DTPT_Bridge_Dig.v" 19 20260915 "dig_size_le_dec" false.
+Definition idx_DTPT_Bridge_Rot : ReqModule :=
+  MkReqModule "DTPT_Bridge_Rot.v" 10 20260915 "rotc_class_sharp_ub_set" false.
+
+(* ========================================================================= *)
+(* v3.1c（席P1c：DTPT 融入 P1 收官预备——6 模块终态收缩，20260915）                             *)
+(*                                                                           *)
+(* 承 v3.1：棒 1–5 归并完成后 DTPT 面 18 模块收缩为 6 模块终态。本节整条删除 12 条退役       *)
+(* idx_DTPT* 条目（各 3 行；受触模块主库 Live 树 .v 与构建产物同日删除，工作区退役档         *)
+(* 12/12 逐字节留痕，对账表见 DTPT_P1c_同步报告.md）：                                       *)
+(* LLM/Measure（棒1）与 Phases/CoZero（棒2）并入 DTPT；Entropy2/EntFam2（棒3）与             *)
+(* ME2/ZeroLocus（棒4）并入 DTPT_Entropy；Audit 与 ROTC（棒5）并入 DTPT_Truth/DTPT_Cyc；     *)
+(* Lam/RotSpec 由棒 6a 并入 DTPT_Cyc（件名待改 DTPT_Rotation）在飞。                          *)
+(* 存留 6 条：idx_DTPT / idx_DTPT_Entropy / idx_DTPT_Truth / idx_DTPT_DigTheory /            *)
+(* idx_DTPT_Extract / idx_DTPT_Cyc。存留条目 rm_decl_cnt / rm_head_kw 为 v3.1 注册时         *)
+(* （18 模块态）实测值，合并终态数字待棒 6b 或下一注册波刷新，本席只记不改。                 *)
+(* 同日 _CoqProject 同步收缩 18 行→6 行（与 r74 波 HEAD 188 行对账合并为 194 行，            *)
+(* 占表尾 L189–L194）；DTPT_Cyc.v 行尾注记待棒 6b 改名 DTPT_Rotation。                        *)
+(* ========================================================================= *)
+
+(* ========================================================================= *)
+(* v3.1d（席6b主库尾：第 6 件落库与 idx_DTPT* 终态刷新，20260915）                              *)
+(*                                                                           *)
+(* 承 v3.1c：棒 6b 交付 DTPT_Rotation（2,018 行；原 DTPT_Cyc 改名，RotSpec/Lam/ROTC/          *)
+(* Entropy2 四源归并收口）后，本席完成注册面终态联动：                                        *)
+(* ①Live 树 _CoqProject 表尾行改名并撤行尾注记（194 行不变，纯增 +6−0 对 HEAD）；             *)
+(* ②idx_DTPT_Cyc 整条改名 idx_DTPT_Rotation，路径 "DTPT_Cyc.v"→"DTPT_Rotation.v"；           *)
+(* ③存留 6 条 rm_decl_cnt 按 v3.1 同款 grep 口径逐件重测刷终态：DTPT 272 / Entropy 218 /     *)
+(* Truth 79 / DigTheory 88 / Extract 30 / Rotation 129（合计 826）；rm_gate_day 统一刷        *)
+(* 20260915（本席主库 9.0 链编译验证日）；旗舰名除 Rotation 改 rotc_class_sharp_ub 外，       *)
+(* 余 5 旗舰在件复验未变。                                                                   *)
+(* ④Live 树退役残件同日出清：DTPT_Cyc .v+构建产物全套、ROTC/Entropy2 残留 .aux（工作区       *)
+(* .retired_S6b 档留痕，主库零副本）；order.txt 三面各 +6 行（187→193，三面同 md5）。         *)
+(* 主库终态实证：六件单编零错零警；全树内核认证 193 模块（187 基线+6）批次 EXIT=0 成功收尾；  *)
+(* 六件闭包 -o 枚举四项汇总全 <none>。vo 树播种 6 件×5 文件为全树认证前置，.v 镜像 md5       *)
+(* 六件与工作区终版逐字节一致（五冻结件=P1c 留痕值）。                                       *)
+(* ========================================================================= *)

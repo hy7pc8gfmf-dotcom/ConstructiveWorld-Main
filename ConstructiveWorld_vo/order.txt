@@ -185,3 +185,12 @@ UpReqPadeSignXfer.v
 UpReqBanachInstReal.v
 UpReqBanachNormOpp.v
 UpReqBanachSepThm.v
+DTPT.v
+DTPT_Entropy.v
+DTPT_Truth.v
+DTPT_DigTheory.v
+DTPT_Extract.v
+DTPT_Rotation.v
+DTPT_Bridge.v
+DTPT_Bridge_Dig.v
+DTPT_Bridge_Rot.v
