@@ -177,3 +177,494 @@ Print Assumptions ptp_n2_poly.
 From Stdlib Require Import Extraction.
 Separate Extraction ptp_beta_pos ptp_beta ptp_beta_prefix
   ptp_n1_poly ptp_n2_poly.
+
+(* ============================================================ *)
+(* 席C-T1c 增量（append-only，2026-09-14）：全称 N 形收口           *)
+(*   ptp_tail_series——按 T1a 报告④配方：归纳不变式                  *)
+(*     Φ_k : exp_partial (3+k) y·Q₁(y) − P₁(y)                    *)
+(*       == −((1#2)·prefix_1 k y) − ((1#2)·y^{S(3+k)}/(3+k)!)     *)
+(*   两处 (−1#2) 即 (−1)^1 符号面显式（奇 n 负尾）；偶 n 对偶形由    *)
+(*   ptp_n2_poly 正号实例承贴。N=3/N=4 闭式与 ptp_n1_poly 逐系数    *)
+(*   对表（ptp_series_n1_N3/N4 + recheck + y=1/2 数值对账）。       *)
+(*   绕损伤路线（E-STAGING-CT1A 教义）：全程不触原子分母 field——     *)
+(*   merge 乘法形（纯变元 field）→ ptp_div_clear_r 交叉乘消去       *)
+(*   （Qmult_inj_r + q_fact_pos 正性）→ 清分母后 field 收口。       *)
+(* ============================================================ *)
+
+(* —— 0. 纯变元小引擎（ring/field 只见自由变元与字面常量）—— *)
+
+Lemma ptp_AC_swap_m : forall a b c : Q, a + b - c == a - c + b.
+Proof. intros a b c. unfold Qminus. ring. Qed.
+
+Lemma ptp_opp_plus : forall a b : Q, - (a + b) == - a + - b.
+Proof. intros a b. unfold Qminus. ring. Qed.
+
+Lemma ptp_opp_mul_move : forall a b : Q, (- a) * b == - (a * b).
+Proof. intros a b. ring. Qed.
+
+Lemma ptp_G_alg : forall a b c p : Q, (a + b) + c == (a + (- p)) + ((b + p) + c).
+Proof. intros a b c p. ring. Qed.
+
+Lemma ptp_Qmake_plus : forall a b : Z, (a + b) # 1 == (a # 1) + (b # 1).
+Proof. intros a b. unfold Qeq. simpl. lia. Qed.
+
+(* —— 1. 分母消去（Qmult_inj_r 型交叉乘，正性在场）—— *)
+
+Lemma ptp_div_clear_r : forall x d D E : Q,
+  ~ (d == 0) -> D == E * d -> x / d * D == x * E.
+Proof.
+  intros x d D E Hd HDE. unfold Qdiv. rewrite HDE.
+  rewrite (Qmult_comm E d).
+  rewrite <- (Qmult_assoc x (Qinv d) (d * E)).
+  rewrite (Qmult_assoc (Qinv d) d E).
+  rewrite (Qmult_comm (Qinv d) d). rewrite (Qmult_inv_r d Hd).
+  rewrite Qmult_1_l. reflexivity.
+Qed.
+
+(* —— 2. merge 乘法形（T1a 报告④骨架照抄；q_fact 链 lia 归一）—— *)
+
+Lemma ptp_n1_merge : forall m : nat,
+  q_fact 1 * q_fact (Datatypes.S m) * q_fact (Datatypes.S (Datatypes.S m))
+  == (q_fact (Datatypes.S (Datatypes.S (Datatypes.S m)))
+      - (1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S m))) * q_fact m.
+Proof.
+  intro m.
+  rewrite (q_fact_succ (Datatypes.S (Datatypes.S m))).
+  rewrite (q_fact_succ (Datatypes.S m)).
+  rewrite (q_fact_succ m).
+  rewrite (q_fact_succ 0%nat).
+  cbn [q_fact].
+  replace (Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S m))))
+    with (Z.of_nat m + 3)%Z by lia.
+  replace (Z.of_nat (Datatypes.S (Datatypes.S m)))
+    with (Z.of_nat m + 2)%Z by lia.
+  replace (Z.of_nat (Datatypes.S m)) with (Z.of_nat m + 1)%Z by lia.
+  replace (Z.of_nat 1) with 1%Z by lia.
+  rewrite (ptp_Qmake_plus (Z.of_nat m) 3%Z).
+  rewrite (ptp_Qmake_plus (Z.of_nat m) 2%Z).
+  rewrite (ptp_Qmake_plus (Z.of_nat m) 1%Z).
+  field.
+Qed.
+
+(* —— 3. 双侧步进展开（rewrite-only，不触原子分母收口）—— *)
+
+Definition ptp_F (k : nat) (y : Q) : Q :=
+  exp_partial (3 + k) y * pade_den 1 y - pade_num 1 y.
+
+Definition ptp_G (k : nat) (y : Q) : Q :=
+  - ((1#2) * ptp_beta_prefix 1 k y)
+    - (1#2) * (q_pow y (4 + k) / q_fact (3 + k)).
+
+Lemma ptp_exp_S : forall (n : nat) (y : Q),
+  exp_partial (Datatypes.S n) y
+  == exp_partial n y + q_pow y (Datatypes.S n) / q_fact (Datatypes.S n).
+Proof. intros n y. reflexivity. Qed.
+
+Lemma ptp_G_eq : forall k y,
+  ptp_G k y
+  == - ((1#2) * ptp_beta_prefix 1 k y)
+     + - ((1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k))).
+Proof.
+  intros k y. unfold ptp_G, Qminus.
+  replace (4%nat + k)%nat with (Datatypes.S (3 + k)%nat) by lia.
+  reflexivity.
+Qed.
+
+Lemma ptp_F_step : forall k y,
+  ptp_F (Datatypes.S k) y
+  == ptp_F k y
+     + ((q_pow y (Datatypes.S (3 + k)) / q_fact (Datatypes.S (3 + k)))
+        * (1 + - (1#2) * y)).
+Proof.
+  intros k y. unfold ptp_F.
+  replace (3%nat + Datatypes.S k)%nat with (Datatypes.S (3 + k)%nat) by lia.
+  rewrite ptp_exp_S. rewrite ptp_den1. rewrite ptp_num1.
+  rewrite (Qmult_plus_distr_l (exp_partial (3 + k) y)
+             (q_pow y (Datatypes.S (3 + k)) / q_fact (Datatypes.S (3 + k)))
+             (1 + - (1#2) * y)).
+  rewrite (ptp_AC_swap_m
+             (exp_partial (3 + k) y * (1 + - (1#2) * y))
+             ((q_pow y (Datatypes.S (3 + k)) / q_fact (Datatypes.S (3 + k)))
+              * (1 + - (1#2) * y))
+             (1 + (1#2) * y)).
+  reflexivity.
+Qed.
+
+Lemma ptp_G_step : forall k y,
+  ptp_G (Datatypes.S k) y
+  == - ((1#2) * ptp_beta_prefix 1 k y)
+     + - ((1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k)))
+     + (- ((1#2) * (ptp_beta 1 (Datatypes.S k) / q_fact (Datatypes.S k)
+                    * q_pow y (Datatypes.S (3 + k))))
+        + (1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k))
+        + - ((1#2) * (y * q_pow y (Datatypes.S (3 + k))
+                      / q_fact (Datatypes.S (3 + k))))).
+Proof.
+  intros k y. unfold ptp_G.
+  replace (4%nat + Datatypes.S k)%nat
+    with (Datatypes.S (Datatypes.S (3%nat + k)%nat)) by lia.
+  replace (3%nat + Datatypes.S k)%nat with (Datatypes.S (3 + k)%nat) by lia.
+  rewrite ptp_prefix_S.
+  replace (2%nat * 1%nat + 1%nat + Datatypes.S k)%nat with (Datatypes.S (3%nat + k)%nat) by lia.
+  rewrite (q_pow_succ y (Datatypes.S (3 + k))).
+  rewrite (Qmult_plus_distr_r (1#2) (ptp_beta_prefix 1 k y)
+             (ptp_beta 1 (Datatypes.S k) / q_fact (Datatypes.S k)
+              * q_pow y (Datatypes.S (3 + k)))).
+  rewrite (ptp_opp_plus ((1#2) * ptp_beta_prefix 1 k y)
+             ((1#2) * (ptp_beta 1 (Datatypes.S k) / q_fact (Datatypes.S k)
+                       * q_pow y (Datatypes.S (3 + k))))).
+  rewrite (ptp_G_alg (- ((1#2) * ptp_beta_prefix 1 k y))
+             (- ((1#2) * (ptp_beta 1 (Datatypes.S k) / q_fact (Datatypes.S k)
+                          * q_pow y (Datatypes.S (3 + k)))))
+             (- ((1#2) * (y * q_pow y (Datatypes.S (3 + k))
+                          / q_fact (Datatypes.S (3 + k)))))
+             ((1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k)))).
+  reflexivity.
+Qed.
+
+(* —— 4. 清分母核心：归纳步差恒等式（ΔL == ΔR）——
+   路线：Qmult_inj_r 两侧同乘 D = 2·u3·v4·w（正性 q_fact_pos 在场）
+   → ptp_div_clear_r 逐商消去 → merge 乘法形回代 → field 收口。 *)
+
+Lemma ptp_step_core : forall k y,
+  (q_pow y (Datatypes.S (3 + k)) / q_fact (Datatypes.S (3 + k)))
+    * (1 + - (1#2) * y)
+  == - ((1#2) * (ptp_beta 1 (Datatypes.S k) / q_fact (Datatypes.S k)
+                 * q_pow y (Datatypes.S (3 + k))))
+     + (1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k))
+     + - ((1#2) * (y * q_pow y (Datatypes.S (3 + k))
+                   / q_fact (Datatypes.S (3 + k)))).
+Proof.
+  intros k y.
+  unfold ptp_beta. cbn [Nat.add Nat.mul].
+  replace (k%nat + 1%nat)%nat with (Datatypes.S k) by lia.
+  remember (q_pow y (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S k)))))
+    as Aeq eqn:HA.
+  assert (Hw0 : ~ (q_fact (Datatypes.S k) == 0))
+    by (apply q_neq_of_lt; apply q_fact_pos).
+  assert (Hu0 : ~ (q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))) == 0))
+    by (apply q_neq_of_lt; apply q_fact_pos).
+  assert (Hv0 : ~ (q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))) == 0))
+    by (apply q_neq_of_lt; apply q_fact_pos).
+  assert (HD : ~ (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))
+                   * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                       (Datatypes.S k)))))
+                  * q_fact (Datatypes.S k) == 0)).
+  { apply q_neq_of_lt. apply Qmult_lt_0_compat.
+    - apply Qmult_lt_0_compat.
+      + apply Qmult_lt_0_compat; [exact Q2_pos | apply q_fact_pos].
+      + apply q_fact_pos.
+    - apply q_fact_pos. }
+  apply (proj1 (Qmult_inj_r _ _ _ HD)).
+  (* LHS 消去 *)
+  rewrite <- (Qmult_assoc (Aeq / q_fact (Datatypes.S (Datatypes.S
+              (Datatypes.S (Datatypes.S k)))))
+              (1 + - (1#2) * y)
+              (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+                * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))))
+               * q_fact (Datatypes.S k))).
+  assert (HcL : (Aeq / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                  (Datatypes.S k)))))
+                * ((1 + - (1#2) * y)
+                   * (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                        (Datatypes.S k)))
+                       * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                           (Datatypes.S k)))))
+                      * q_fact (Datatypes.S k)))
+                == Aeq * ((1 + - (1#2) * y)
+                          * ((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                              (Datatypes.S k)))
+                             * q_fact (Datatypes.S k)))).
+  { apply (ptp_div_clear_r Aeq
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S k)))))
+             ((1 + - (1#2) * y)
+              * (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))
+                  * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                      (Datatypes.S k)))))
+                 * q_fact (Datatypes.S k)))
+             ((1 + - (1#2) * y)
+              * ((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))
+                 * q_fact (Datatypes.S k))));
+    [ exact Hv0 | ring ]. }
+  rewrite HcL.
+  (* RHS：D 逐块分摊 + 消去（显式实例，防 LHS 误分摊） *)
+  rewrite (Qmult_plus_distr_l
+             (- ((1#2) * (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+                          / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                              (Datatypes.S k))))
+                          / q_fact (Datatypes.S k) * Aeq))
+              + (1#2) * (Aeq / q_fact (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))))
+             (- ((1#2) * (y * Aeq
+                          / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                              (Datatypes.S k))))))
+              )
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  rewrite (Qmult_plus_distr_l
+             (- ((1#2) * (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+                          / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                              (Datatypes.S k))))
+                          / q_fact (Datatypes.S k) * Aeq)))
+             ((1#2) * (Aeq / q_fact (Datatypes.S (Datatypes.S
+                    (Datatypes.S k)))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  (* 块 B：β/w·A·D *)
+  rewrite (ptp_opp_mul_move ((1#2) * (q_fact 1 * q_fact (Datatypes.S
+             (Datatypes.S k))
+             / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                 (Datatypes.S k))))
+             / q_fact (Datatypes.S k) * Aeq))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  rewrite <- (Qmult_assoc (1#2)
+             (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+              / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                  (Datatypes.S k))))
+              / q_fact (Datatypes.S k) * Aeq)
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  rewrite <- (Qmult_assoc (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+              / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                  (Datatypes.S k))))
+              / q_fact (Datatypes.S k))
+             Aeq
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  assert (HcB1 : (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+                  / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                      (Datatypes.S k))))
+                  / q_fact (Datatypes.S k))
+                 * (Aeq * (((1 + 1)%Q
+                            * q_fact (Datatypes.S (Datatypes.S
+                                (Datatypes.S k)))
+                            * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                                (Datatypes.S k)))))
+                           * q_fact (Datatypes.S k)))
+                 == (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+                     / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                         (Datatypes.S k)))))
+                    * (Aeq * ((1 + 1)%Q
+                              * q_fact (Datatypes.S (Datatypes.S
+                                  (Datatypes.S k)))
+                              * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                                  (Datatypes.S k))))))).
+  { apply (ptp_div_clear_r
+             (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+              / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                  (Datatypes.S k)))))
+             (q_fact (Datatypes.S k))
+             (Aeq * (((1 + 1)%Q
+                      * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+                      * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                          (Datatypes.S k)))))
+                     * q_fact (Datatypes.S k)))
+             (Aeq * ((1 + 1)%Q
+                     * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+                     * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                         (Datatypes.S k)))))));
+    [ exact Hw0 | ring ]. }
+  rewrite HcB1.
+  assert (HcB2 : (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k))
+                  / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                      (Datatypes.S k)))))
+                 * (Aeq * ((1 + 1)%Q
+                           * q_fact (Datatypes.S (Datatypes.S
+                               (Datatypes.S k)))
+                           * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                               (Datatypes.S k))))))
+                 == (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k)))
+                    * (Aeq * ((1 + 1)%Q
+                              * q_fact (Datatypes.S (Datatypes.S
+                                  (Datatypes.S k)))))).
+  { apply (ptp_div_clear_r
+             (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k)))
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                 (Datatypes.S k)))))
+             (Aeq * ((1 + 1)%Q
+                     * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+                     * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                         (Datatypes.S k))))))
+             (Aeq * ((1 + 1)%Q
+                     * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))));
+    [ exact Hv0 | ring ]. }
+  rewrite HcB2.
+  (* 块 C：A/u3·D *)
+  rewrite <- (Qmult_assoc (1#2)
+             (Aeq / q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  assert (HcC : (Aeq / q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))
+                * (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                      (Datatypes.S k)))
+                    * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                        (Datatypes.S k)))))
+                   * q_fact (Datatypes.S k))
+                == Aeq * ((1 + 1)%Q
+                          * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                              (Datatypes.S k))))
+                          * q_fact (Datatypes.S k))).
+  { apply (ptp_div_clear_r Aeq
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))
+             (((1 + 1)%Q
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k))))
+               * q_fact (Datatypes.S k))));
+    [ exact Hu0 | ring ]. }
+  rewrite HcC.
+  (* 块 D：y·A/v4·D *)
+  rewrite (ptp_opp_mul_move ((1#2) * (y * Aeq
+             / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                 (Datatypes.S k))))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  rewrite <- (Qmult_assoc (1#2)
+             (y * Aeq / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                 (Datatypes.S k)))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))).
+  assert (HcD : ((y * Aeq) / q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                  (Datatypes.S k)))))
+                * (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S
+                      (Datatypes.S k)))
+                    * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                        (Datatypes.S k)))))
+                   * q_fact (Datatypes.S k))
+                == (y * Aeq) * ((1 + 1)%Q
+                                * q_fact (Datatypes.S (Datatypes.S
+                                    (Datatypes.S k)))
+                                * q_fact (Datatypes.S k))).
+  { apply (ptp_div_clear_r (y * Aeq)
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S (Datatypes.S k)))))
+             (((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k)))
+               * q_fact (Datatypes.S (Datatypes.S (Datatypes.S
+                   (Datatypes.S k)))))
+              * q_fact (Datatypes.S k))
+             ((1 + 1)%Q
+              * q_fact (Datatypes.S (Datatypes.S
+                  (Datatypes.S k)))
+               * q_fact (Datatypes.S k)));
+    [ exact Hv0 | ring ]. }
+  rewrite HcD.
+  (* merge 回代（乘法形，括号对齐） *)
+  rewrite (Qmult_comm Aeq
+             ((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))).
+  rewrite (Qmult_assoc (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k)))
+             ((1 + 1)%Q * q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))
+             Aeq).
+  rewrite (Qmult_comm (1 + 1)%Q
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))).
+  rewrite (Qmult_assoc (q_fact 1 * q_fact (Datatypes.S (Datatypes.S k)))
+             (q_fact (Datatypes.S (Datatypes.S (Datatypes.S k))))
+             (1 + 1)%Q).
+  rewrite (ptp_n1_merge (Datatypes.S k)).
+  field.
+Qed.
+
+(* —— 5. 主件：全称 N 形恒等式（归纳收口）—— *)
+
+Lemma ptp_main_fg : forall k : nat, forall y : Q, ptp_F k y == ptp_G k y.
+Proof.
+  induction k as [| k IH].
+  - intro y. unfold ptp_F, ptp_G.
+    unfold ptp_beta_prefix, ptp_beta, pade_den, pade_num, pade_coeff.
+    cbn. field.
+  - intro y. rewrite ptp_F_step. rewrite ptp_G_step.
+    rewrite <- ptp_G_eq. rewrite IH. rewrite (ptp_step_core k y).
+    reflexivity.
+Qed.
+
+Theorem ptp_tail_series_k : forall (k : nat) (y : Q),
+  exp_partial (3 + k) y * pade_den 1 y - pade_num 1 y
+  == - ((1#2) * ptp_beta_prefix 1 k y)
+     - (1#2) * (q_pow y (Datatypes.S (3 + k)) / q_fact (3 + k)).
+Proof.
+  intros k y. change (ptp_F k y == ptp_G k y). apply ptp_main_fg.
+Qed.
+
+Theorem ptp_tail_series : forall (N : nat) (y : Q), (3 <= N)%nat ->
+  exp_partial N y * pade_den 1 y - pade_num 1 y
+  == - ((1#2) * ptp_beta_prefix 1 (N - 3) y)
+     - (1#2) * (q_pow y (Datatypes.S N) / q_fact N).
+Proof.
+  intros N y HN.
+  replace N with (3%nat + (N - 3)%nat)%nat by lia.
+  replace (3%nat + (N - 3)%nat - 3%nat)%nat with (N - 3)%nat by lia.
+  apply (ptp_tail_series_k (N - 3) y).
+Qed.
+
+(* —— 6. 对账哨兵：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
+   y=1/2 数值两侧同值（reflexively 一致）。 —— *)
+
+Lemma ptp_series_n1_N3 : forall y : Q,
+  - ((1#2) * ptp_beta_prefix 1 0 y)
+    + - ((1#2) * (q_pow y (4 + 0) / q_fact (3 + 0)))
+  == - ((1#12) * q_pow y 3 + (1#12) * q_pow y 4).
+Proof. intro y. unfold ptp_beta_prefix, ptp_beta. cbn. field. Qed.
+
+Lemma ptp_series_n1_N4 : forall y : Q,
+  - ((1#2) * ptp_beta_prefix 1 1 y)
+    + - ((1#2) * (q_pow y (4 + 1) / q_fact (3 + 1)))
+  == - ((1#12) * q_pow y 3 + (1#24) * q_pow y 4 + (1#48) * q_pow y 5).
+Proof. intro y. unfold ptp_beta_prefix, ptp_beta. cbn. field. Qed.
+
+(* N=4 特例与 T1a 定值件 ptp_n1_poly 的语句面逐字一致 *)
+Lemma ptp_n1_poly_recheck : forall y : Q,
+  exp_partial 4 y * pade_den 1 y - pade_num 1 y
+  == - ((1#12) * q_pow y 3 + (1#24) * q_pow y 4 + (1#48) * q_pow y 5).
+Proof.
+  intro y.
+  change (ptp_F 1 y
+          == - ((1#12) * q_pow y 3 + (1#24) * q_pow y 4
+                + (1#48) * q_pow y 5)).
+  transitivity (ptp_G 1 y).
+  - apply ptp_main_fg.
+  - unfold ptp_G. apply ptp_series_n1_N4.
+Qed.
+
+(* 全称件实例与定值件数值对账：同一 y=1/2 两侧同值 −(7#512) *)
+Lemma ptp_tail_sentinel_F_half : ptp_F 1 (1#2) == -(7#512).
+Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
+
+Lemma ptp_tail_sentinel_G_half : ptp_G 1 (1#2) == -(7#512).
+Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
+
+Lemma ptp_tail_FG_agree_half : ptp_F 1 (1#2) == ptp_G 1 (1#2).
+Proof. apply ptp_main_fg. Qed.
+
+(* —— 审计与提取（T1c 增量）—— *)
+
+Print Assumptions ptp_tail_series.
+Print Assumptions ptp_tail_series_k.
+Print Assumptions ptp_main_fg.
+Print Assumptions ptp_step_core.
+Print Assumptions ptp_n1_merge.
+Print Assumptions ptp_n1_poly_recheck.
+
+Separate Extraction ptp_tail_series ptp_step_core ptp_n1_merge.

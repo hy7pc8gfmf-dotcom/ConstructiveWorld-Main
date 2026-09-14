@@ -172,3 +172,17 @@ UpReqPadeTailPos.v
 UpReqPadeLower.v
 UpReqPadeDenPos12.v
 UpReqPadeFinale.v
+UpReqPadeQLeg.v
+QTailBridge.v
+PadeDenPosB12.v
+BanachNoHyp.v
+BanachNoHypNorm.v
+RealEnergyTempMono.v
+PowRealCompat.v
+AlignIdUnclosed.v
+UpReqLpoEquiv.v
+UpReqB4TwoStage.v
+UpReqPadeSignXfer.v
+UpReqBanachInstReal.v
+UpReqBanachNormOpp.v
+UpReqBanachSepThm.v

@@ -11808,11 +11808,11 @@ Qed.
 (* B5A_Item1B：Variable real_arctan_deriv，End 泛化为参数；24 件，  *)
 (* 16 整行 Qed，含 b5a_sin_atan_diff；BAD 0）。来源：                *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1b.v；        *)
-(* 注：根未导入 Psatz 而本块用 nra，块首补 From Stdlib Require      *)
-(* Import Psatz.（中段 Require 先例见根 L3069）。                   *)
+(* 注：本块用 Q 域 nra——由 Lqa 供给（AA6 断根换装 Psatz→Lqa）。    *)
+(* 中段 Require 先例见根 L3069。                                    *)
 (* ============================================================ *)
 
-From Stdlib Require Import Psatz.
+From Stdlib Require Import Lqa.
 (* ============================================================ *)
 (* U2 镜像 Section：arctan' 条件件（B3 交付形态；根同款规格）    *)
 (* ============================================================ *)
