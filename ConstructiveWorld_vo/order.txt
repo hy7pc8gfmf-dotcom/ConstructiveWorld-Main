@@ -194,3 +194,8 @@ DTPT_Rotation.v
 DTPT_Bridge.v
 DTPT_Bridge_Dig.v
 DTPT_Bridge_Rot.v
+ExpNegPos.v
+UpReqSpec2x2.v
+EnergyTempMonoB.v
+PadeDenPosA.v
+RealKLDecomp.v

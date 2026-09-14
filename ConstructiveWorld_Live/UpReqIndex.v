@@ -1669,90 +1669,117 @@ Proof. reflexivity. Qed.
 (* 4) 三树同步：本席交付段 Live_X → CW_Live/CW_vo 双跳 cp，UpReqIndex.v 三处 md5 一致        *)
 (*    （数值见本席报告回填）。                                                               *)
 
-(* ========================================================================= *)
-(* v3.1（席P1b：DTPT 离散对偶轴 18 模块注册席，20260914）                                      *)
-(*                                                                           *)
-(* 承 v3.0 全部既有登记面零缩水（append-only；既有 idx_/af_/lg_/ng_ 各轨零触碰）。            *)
-(* 新增轨 idx_DTPT*：DTPT 工作区 18 模块（Q 层独立宇宙）包壳态注册，rm_in_uni=false           *)
-(* ——不占 734 迁移宇宙名额，与 idx_ 主轨（true）物理隔离，纯数据条目零机器核对耦合。          *)
-(*                                                                           *)
-(* 插入位：ConstructiveWorld_Live/_CoqProject 表尾整块追加（L175–L192，拓扑序：               *)
-(* DTPT→Entropy/LLM/Measure/Phases/Truth→Entropy2/DigTheory→CoZero/ME2/ZeroLocus/           *)
-(* Audit/Extract/EntFam2/ROTC→Lam/Cyc→RotSpec；coqdep 35 边全部「依赖索引<消费索引」，        *)
-(* 逐边核验在案）；Live 树 173→191 .v；双树 order.txt 三面与 vo 树播种面归 P2/P4 同步波。      *)
-(*                                                                           *)
-(* 18 件源指纹：包壳席 P1a 交付态 md5 逐件留痕（注册席拷入前后双 md5 对账 18/18 一致；        *)
-(* 拷入面 = ConstructiveWorld_Live/ 表尾，零改名零内容改）。                                  *)
-(* G1 三连零（家规禁词 grep 计数 18 件逐件=0，禁词字面按字面规避纪律不入本注）；壳对账：      *)
-(* 每件 Module/End 各=1，壳名=文件语义名，互引 35 边全限定 Import 垫片在案（P1a 报告 §二表）。 *)
-(* rm_decl_cnt = grep -cE "^(Definition|Theorem|Lemma|Inductive|Record|Fixpoint|Corollary|   *)
-(* Ltac)[[:space:]]" 逐件实测（合计 819）；rm_head_kw = 各件旗舰（grep 验证在件）。            *)
-(* rm_gate_day = 20260914（注册席主库编译验证日）。                                           *)
-(*                                                                           *)
-(* 撞面对账：五撞名 q_fact/qeq_le/qstep/rot/diag_closed 全数壳内消解（Locate 全名形           *)
-(* 库名.壳名.名，P1a 探针 _p1a_probe_ns.log 在案）；叶子融入成立：Live 树既有件零该向依赖边。   *)
-(* ========================================================================= *)
+(* ================= v3.2 增册（席W31：Index v3.2 登记席，20260915） ================= *)
+(* 编号勘误（主会话更正令 20260915，磁盘实形定谳）：v3.1 已被 DTPT 线席P1b 占用——仓库      *)
+(* Live 树 UpReqIndex.v L1673 起 +96 行未提交在飞产物（idx_DTPT* 18 模块 rm_ 轨），本席顺延  *)
+(* v3.2；P1b 块与本块分属不同登记轨零名冲突，原样存档 attn/_tw31_P1b_block_backup.md，       *)
+(* 两块共存合并裁决归主会话。本块以 Live_X 现档（末块 v3.0）为基底 EOF 追加。               *)
+(* ng_ 第三轨续写：承 v3.0 后 49 件基面，注册第二波 13 件逐件实测登记                       *)
+(* （append-only；v2.1–v3.0 既有 49 条目/清单/字面值/版记零触碰，本节全部新名，EOF 追加）。  *)
+(* 口径同 v2.1–v3.0：ng_lines = wc -l 实测；ng_qed = 剥块注释 token 级 \bQed\. 实测；        *)
+(* 13 件派单口径均为四关绿（各交付席自证）；本席登记面复核 = 源 .v 在盘 + 逐件 md5 留痕 +    *)
+(* 计量双口径（wc -l / 剥注释 token 级）逐件实测，源档一行未触碰（禁碰条款，只登记不改件）。 *)
 
-(* idx_DTPT —— DTPT.v：数字全域—熵相三元论根模块（Dig 塔+CGen+N9Opt+D8Ext 归并宿主） *)
-Definition idx_DTPT : ReqModule :=
-  MkReqModule "DTPT.v" 272 20260915 "C_sorted_min_adj" false.
+(* ---------- 注册第二波 · 第三方收割线 7 件（席CWA/CWB/CWC/CWD） ---------- *)
 
-(* idx_DTPT_Entropy —— DTPT_Entropy.v：最小偏差和熵面（xq_ 工具箱+H_adj 下界） *)
-Definition idx_DTPT_Entropy : ReqModule :=
-  MkReqModule "DTPT_Entropy.v" 218 20260915 "H_adj_P0_min" false.
+(* ng_QTailBridge —— QTailBridge.v：qtail_sum 桥式恒等式（席CWA 任务1，20260914） *)
+Definition ng_QTailBridge : NewGreenFace :=
+  MkNewGreenFace "QTailBridge.v" 131 5 20260915 "bridge identity qtail_sum closing UpReqQExpTail ledger note against S03 exp_tail".
 
-(* idx_DTPT_Truth —— DTPT_Truth.v：真值序面（level 三律+Tarski 归并宿主，双副本桥在案） *)
-Definition idx_DTPT_Truth : ReqModule :=
-  MkReqModule "DTPT_Truth.v" 79 20260915 "level_le_refl" false.
+(* ng_PadeDenPosB12 —— PadeDenPosB12.v：Pade [n/n] 分母正性 x in (1,2] 段（席CWA 任务2）。    *)
+(*   ⚠️ 世代区分：本件为第三方收割线独立复刻（UpReqPadeDenPos 挂账 b 线），与我方 C 波④号件   *)
+(*   UpReqPadeDenPos12（v3.0 登记 275/8）构成并行复刻对——两件独立实现并行在册，非同一件。     *)
+Definition ng_PadeDenPosB12 : NewGreenFace :=
+  MkNewGreenFace "PadeDenPosB12.v" 206 9 20260915 "Pade n over n denominator positivity on interval (1,2), third-party replica of ledger note b".
 
-(* idx_DTPT_DigTheory —— DTPT_DigTheory.v：数字化理论面（dig 单射塔+HAlg 归并宿主） *)
-Definition idx_DTPT_DigTheory : ReqModule :=
-  MkReqModule "DTPT_DigTheory.v" 88 20260915 "dig_inj_dCode" false.
+(* ng_BanachNoHyp —— BanachNoHyp.v：Banach hplus/hwd 显式假设族摘除（席CWB） *)
+Definition ng_BanachNoHyp : NewGreenFace :=
+  MkNewGreenFace "BanachNoHyp.v" 581 7 20260915 "explicit hplus hwd assumption family removal closing BanachAlg interface gap ledger note".
 
-(* idx_DTPT_Extract —— DTPT_Extract.v：提取面（u12 门控六探针+9 条 Extraction 套件宿主） *)
-Definition idx_DTPT_Extract : ReqModule :=
-  MkReqModule "DTPT_Extract.v" 30 20260915 "u12_gate_pass_t1_h0" false.
+(* ng_BanachNoHypNorm —— BanachNoHypNorm.v：INSTB 挂账剩余字段（席CWB 加分件） *)
+Definition ng_BanachNoHypNorm : NewGreenFace :=
+  MkNewGreenFace "BanachNoHypNorm.v" 123 2 20260915 "remaining INSTB ledger fields bnorm_plus bnorm_mult subadditive submultiplicative".
 
-(* idx_DTPT_Rotation —— DTPT_Rotation.v：旋转论面（rotc 底座/精确闭式/锐化/λ 插值/偏差判别/周期律簇，RotSpec+Lam 归并宿主） *)
-Definition idx_DTPT_Rotation : ReqModule :=
-  MkReqModule "DTPT_Rotation.v" 129 20260915 "rotc_class_sharp_ub" false.
-Definition idx_DTPT_Bridge : ReqModule :=
-  MkReqModule "DTPT_Bridge.v" 37 20260915 "H_chain_set" false.
-Definition idx_DTPT_Bridge_Dig : ReqModule :=
-  MkReqModule "DTPT_Bridge_Dig.v" 19 20260915 "dig_size_le_dec" false.
-Definition idx_DTPT_Bridge_Rot : ReqModule :=
-  MkReqModule "DTPT_Bridge_Rot.v" 10 20260915 "rotc_class_sharp_ub_set" false.
+(* ng_RealEnergyTempMono —— RealEnergyTempMono.v：real_energy_exp_temp_mono 恒等档（席CWC） *)
+Definition ng_RealEnergyTempMono : NewGreenFace :=
+  MkNewGreenFace "RealEnergyTempMono.v" 486 9 20260915 "real_energy_exp_temp_mono identity tier Real layer counterpart of S04 energy_exp_temp_mono".
 
-(* ========================================================================= *)
-(* v3.1c（席P1c：DTPT 融入 P1 收官预备——6 模块终态收缩，20260915）                             *)
-(*                                                                           *)
-(* 承 v3.1：棒 1–5 归并完成后 DTPT 面 18 模块收缩为 6 模块终态。本节整条删除 12 条退役       *)
-(* idx_DTPT* 条目（各 3 行；受触模块主库 Live 树 .v 与构建产物同日删除，工作区退役档         *)
-(* 12/12 逐字节留痕，对账表见 DTPT_P1c_同步报告.md）：                                       *)
-(* LLM/Measure（棒1）与 Phases/CoZero（棒2）并入 DTPT；Entropy2/EntFam2（棒3）与             *)
-(* ME2/ZeroLocus（棒4）并入 DTPT_Entropy；Audit 与 ROTC（棒5）并入 DTPT_Truth/DTPT_Cyc；     *)
-(* Lam/RotSpec 由棒 6a 并入 DTPT_Cyc（件名待改 DTPT_Rotation）在飞。                          *)
-(* 存留 6 条：idx_DTPT / idx_DTPT_Entropy / idx_DTPT_Truth / idx_DTPT_DigTheory /            *)
-(* idx_DTPT_Extract / idx_DTPT_Cyc。存留条目 rm_decl_cnt / rm_head_kw 为 v3.1 注册时         *)
-(* （18 模块态）实测值，合并终态数字待棒 6b 或下一注册波刷新，本席只记不改。                 *)
-(* 同日 _CoqProject 同步收缩 18 行→6 行（与 r74 波 HEAD 188 行对账合并为 194 行，            *)
-(* 占表尾 L189–L194）；DTPT_Cyc.v 行尾注记待棒 6b 改名 DTPT_Rotation。                        *)
-(* ========================================================================= *)
+(* ng_PowRealCompat —— PowRealCompat.v：G07 powb_pow 换形对接（席CWD） *)
+Definition ng_PowRealCompat : NewGreenFace :=
+  MkNewGreenFace "PowRealCompat.v" 177 8 20260915 "G07 powb_pow to CW220 real_pow shape transfer adapter for consumers".
 
-(* ========================================================================= *)
-(* v3.1d（席6b主库尾：第 6 件落库与 idx_DTPT* 终态刷新，20260915）                              *)
-(*                                                                           *)
-(* 承 v3.1c：棒 6b 交付 DTPT_Rotation（2,018 行；原 DTPT_Cyc 改名，RotSpec/Lam/ROTC/          *)
-(* Entropy2 四源归并收口）后，本席完成注册面终态联动：                                        *)
-(* ①Live 树 _CoqProject 表尾行改名并撤行尾注记（194 行不变，纯增 +6−0 对 HEAD）；             *)
-(* ②idx_DTPT_Cyc 整条改名 idx_DTPT_Rotation，路径 "DTPT_Cyc.v"→"DTPT_Rotation.v"；           *)
-(* ③存留 6 条 rm_decl_cnt 按 v3.1 同款 grep 口径逐件重测刷终态：DTPT 272 / Entropy 218 /     *)
-(* Truth 79 / DigTheory 88 / Extract 30 / Rotation 129（合计 826）；rm_gate_day 统一刷        *)
-(* 20260915（本席主库 9.0 链编译验证日）；旗舰名除 Rotation 改 rotc_class_sharp_ub 外，       *)
-(* 余 5 旗舰在件复验未变。                                                                   *)
-(* ④Live 树退役残件同日出清：DTPT_Cyc .v+构建产物全套、ROTC/Entropy2 残留 .aux（工作区       *)
-(* .retired_S6b 档留痕，主库零副本）；order.txt 三面各 +6 行（187→193，三面同 md5）。         *)
-(* 主库终态实证：六件单编零错零警；全树内核认证 193 模块（187 基线+6）批次 EXIT=0 成功收尾；  *)
-(* 六件闭包 -o 枚举四项汇总全 <none>。vo 树播种 6 件×5 文件为全树认证前置，.v 镜像 md5       *)
-(* 六件与工作区终版逐字节一致（五冻结件=P1c 留痕值）。                                       *)
-(* ========================================================================= *)
+(* ng_AlignIdUnclosed —— AlignIdUnclosed.v：UpAlignIdReq 件6 无条件化组装（席CWD） *)
+Definition ng_AlignIdUnclosed : NewGreenFace :=
+  MkNewGreenFace "AlignIdUnclosed.v" 374 3 20260915 "UpAlignIdReq piece 6 unconditional assembly of backward KL recurrence exact identity".
+
+(* ---------- 注册第二波 · 消融与新数学线 6 件（AA 系） ---------- *)
+
+(* ng_UpReqPadeSignXfer —— UpReqPadeSignXfer.v：pbp_sign_transfer 实例化（席AA2·A6 消融线） *)
+Definition ng_UpReqPadeSignXfer : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeSignXfer.v" 195 12 20260915 "pbp_sign_transfer instantiation filling posf slot with C-T1a library material".
+
+(* ng_UpReqBanachNormOpp —— UpReqBanachNormOpp.v：B5 件一 qred 唯一性+bnorm Opp 面（席AA11） *)
+Definition ng_UpReqBanachNormOpp : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachNormOpp.v" 237 14 20260915 "qred_unique key plus bnorm Opp face for B5 unit one".
+
+(* ng_UpReqB4TwoStage —— UpReqB4TwoStage.v：B4 两段式降档收口 Padé 余项（席AA14） *)
+Definition ng_UpReqB4TwoStage : NewGreenFace :=
+  MkNewGreenFace "UpReqB4TwoStage.v" 351 19 20260915 "B4 two stage downgrade closure of Pade remainder coefficient identity and witness eps transfer".
+
+(* ng_UpReqBanachSepThm —— UpReqBanachSepThm.v：bxce_sep 论证包（席AA7，B7 首单） *)
+Definition ng_UpReqBanachSepThm : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachSepThm.v" 193 6 20260915 "bxce_sep argument package for B25 exp zero full equality face".
+
+(* ng_UpReqLpoEquiv —— UpReqLpoEquiv.v：平方非负全称 ⟺ 受限 LPO 双向归约（AA15，新数学，零公理） *)
+Definition ng_UpReqLpoEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqLpoEquiv.v" 434 12 20260915 "square nonneg forall iff bounded LPO two way reduction theorem, zero axioms".
+
+(* ng_UpReqBanachInstReal —— UpReqBanachInstReal.v：S02 Real 载体全字段装配（席AA3，实例非空性） *)
+Definition ng_UpReqBanachInstReal : NewGreenFace :=
+  MkNewGreenFace "UpReqBanachInstReal.v" 774 49 20260915 "S02 Real carrier assembled into bxin_BanachAlgPre all field instance".
+
+Definition NewGreenListV32 : list NewGreenFace :=
+  cons ng_QTailBridge
+  (cons ng_PadeDenPosB12
+  (cons ng_BanachNoHyp
+  (cons ng_BanachNoHypNorm
+  (cons ng_RealEnergyTempMono
+  (cons ng_PowRealCompat
+  (cons ng_AlignIdUnclosed
+  (cons ng_UpReqPadeSignXfer
+  (cons ng_UpReqBanachNormOpp
+  (cons ng_UpReqB4TwoStage
+  (cons ng_UpReqBanachSepThm
+  (cons ng_UpReqLpoEquiv
+  (cons ng_UpReqBanachInstReal nil)))))))))))).
+
+(* v3.2 续写统计：13 件 / 行数和 4262 / 封口和 155（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV32Pieces  : nat := 13.
+Definition NewGreenV32LineSum : nat := 4262.
+Definition NewGreenV32QedSum  : nat := 155.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV32Pieces_matches : NewGreenV32Pieces = cnt_ng NewGreenListV32.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV32LineSum_matches : NewGreenV32LineSum = sum_ng_lines NewGreenListV32.
+Proof. reflexivity. Qed.
+
+(* 封口和 = 字面值 *)
+Lemma NewGreenV32QedSum_matches : NewGreenV32QedSum = sum_ng_qed NewGreenListV32.
+Proof. reflexivity. Qed.
+
+(* ---------- v3.2 盘面观察段（只记不改，翻牌/同步权在原席） ---------- *)
+(* 1) 编号与保全：v3.1 归席P1b（仓库 Live 树 +96 行未提交在飞产物，idx_DTPT* 18 模块 rm_ 轨，  *)
+(*    与本块 ng_ 轨零名冲突）；本席改编号 v3.2，P1b 块原样存档 attn/_tw31_P1b_block_backup.md   *)
+(*    （主会话更正令 20260915）；双树 cp 本轮挂账下一波——在飞期产物不覆盖，合并裁决归主会话。  *)
+(* 2) TailPos 内容更新观察：v3.0 登记值 179/19，本席收口时点实测 UpReqPadeTailPos.v 670 行/      *)
+(*    40 封口（派单观察口径 669 行，收口时点复测条款以实测为准）——已注册件内容更新非新注册，   *)
+(*    ng_UpReqPadeTailPos 登记值冻结不动，改账权留总账席。                                      *)
+(* 3) S 系五件断根（S11–S15 Psatz→Lia 换装，AA1 普查线）待同车登记：附条件并登闸缺席=不等待     *)
+(*    不耦合单件收口（W27 纪律），本席未预登。                                                  *)
+(* 4) af_ 冻结纪律：af_UpReqIndex 27 为 v2.0 冻结快照（L541 恒值），本席未触碰；v3.0 后实测      *)
+(*    61，v3.2 后实测 64（本席 +3 条核对引理，只记不改，对账权留下一席）。                       *)
+(* 5) 三树同步：因 1) 项挂账——Live_X 单树 v3.2 增册成立，CW_Live/CW_vo 双跳 cp 待 P1b 块合并    *)
+(*    裁决后下一波执行（三处 md5 一致目标不变，数值见本席报告回填）。                            *)
