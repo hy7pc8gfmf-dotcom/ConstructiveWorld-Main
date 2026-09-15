@@ -74,7 +74,8 @@ Definition sfcy_half : Real :=
   real_inv_pos sfcy_two (@req_two_pos Real RealEnhancedReal).
 
 Lemma sfcy_half_pos : real_lt real_zero sfcy_half.
-Proof. exact (@inv_pos_pos Real RealEnhancedReal sfcy_two sfcy_two_pos). Qed.
+Proof. exact (real_inv_pos_pos sfcy_two
+  (@req_two_pos Real RealEnhancedReal)). Qed.
 
 Lemma sfcy_pow_half_pos : forall k : nat,
   real_lt real_zero (sfc_pow_half k).
@@ -95,7 +96,8 @@ Qed.
 Lemma sfcy_const_two : real_eq (real_const (2 # 1)) sfcy_two.
 Proof.
   apply real_eq_of_zero_diff. intro n.
-  rewrite real_const_proj. rewrite real_plus_proj.
+  rewrite real_const_proj. unfold sfcy_two.
+  rewrite real_plus_proj.
   unfold real_one. cbn [projT1]. ring.
 Qed.
 
@@ -144,7 +146,8 @@ Proof.
     assert (HT : real_eq (real_mult sfcy_half sfcy_two) real_one).
     { exact (real_eq_trans _ _ _
                (@mult_comm Real RealEnhancedReal sfcy_half sfcy_two)
-               (@inv_pos_correct Real RealEnhancedReal sfcy_two sfcy_two_pos)). }
+               (real_inv_pos_correct sfcy_two
+                  (@req_two_pos Real RealEnhancedReal))). }
     assert (H1 : real_eq
               (real_mult (real_mult (sfc_pow_half k) sfcy_half)
                          (real_mult (sfcy_pow2 k) sfcy_two))
@@ -189,7 +192,11 @@ Proof.
                 (sfc_pow_half k)
                 (real_mult (real_mult sfcy_half sfcy_two) (sfcy_pow2 k))
                 (real_mult real_one (sfcy_pow2 k))
-                (real_eq_refl (sfc_pow_half k)) HT). }
+                (real_eq_refl (sfc_pow_half k))
+                (@req_mult_compat Real RealEnhancedReal
+                   (real_mult sfcy_half sfcy_two) real_one
+                   (sfcy_pow2 k) (sfcy_pow2 k)
+                   HT (real_eq_refl (sfcy_pow2 k)))). }
     assert (H5 : real_eq
               (real_mult (sfc_pow_half k)
                          (real_mult real_one (sfcy_pow2 k)))
@@ -226,12 +233,17 @@ Proof.
                 (real_const (2 # 1))).
       * exact IH.
       * exact (real_eq_sym _ _ sfcy_const_two).
-    + exact (sfcy_const_mult (Z.of_nat (sfcy_npow2 k) # 1) (2 # 1)).
-    + (* const 内 Qeq 换头：(z # 1) * (2 # 1) == (Z.of_nat (2 * npow2 k) # 1) *)
+    + (* B→C：const 乘法同态 + const 内 Qeq 换头（二段 trans 复合腿） *)
       assert (Hq : Qeq ((Z.of_nat (sfcy_npow2 k) # 1) * (2 # 1))
                        (Z.of_nat (2 * sfcy_npow2 k) # 1)).
-      { rewrite Nat2Z.inj_mul. ring. }
-      exact (sfcy_const_wd _ _ Hq).
+      { unfold Qeq. cbn [Qnum Qden Qmult].
+        rewrite Nat2Z.inj_mul.
+        change (Z.of_nat 2) with 2%Z.
+        change (Z.pos (1 * 1)) with 1%Z.
+        ring. }
+      exact (real_eq_trans _ _ _
+               (sfcy_const_mult (Z.of_nat (sfcy_npow2 k) # 1) (2 # 1))
+               (sfcy_const_wd _ _ Hq)).
 Qed.
 
 (* const n < 2^n（real_const_lt 严格 + Qlt nat→Z→Q 桥 + req 换头） *)
@@ -278,7 +290,7 @@ Proof.
               (real_mult (sfcy_pow2 n) (sfc_pow_half n))).
     { exact (@lt_mult_compat Real RealEnhancedReal
                 (real_mult c (real_inv_pos eps Heps)) (sfcy_pow2 n)
-                (sfc_pow_half n) Harch (sfcy_pow_half_pos n)). }
+                (sfc_pow_half n) (sfcy_pow_half_pos n) Harch). }
     assert (HB : real_eq (real_mult (sfcy_pow2 n) (sfc_pow_half n)) real_one).
     { exact (real_eq_trans _ _ _
               (@mult_comm Real RealEnhancedReal (sfcy_pow2 n)
@@ -302,7 +314,7 @@ Proof.
               (real_mult real_one eps)).
     { exact (@lt_mult_compat Real RealEnhancedReal
                 (real_mult (real_mult c (real_inv_pos eps Heps))
-                           (sfc_pow_half n)) real_one eps HC Heps). }
+                           (sfc_pow_half n)) real_one eps Heps HC). }
     (* req 换头：((c·E)·B)·eps ≡ (c·E)·(B·eps) ≡ c·(E·(B·eps))
        ≡ c·(E·(eps·B)) ≡ c·((E·eps)·B) ≡ c·(B·(E·eps)) ≡ (c·B)·(E·eps) *)
     assert (Hswap : real_eq
@@ -336,7 +348,13 @@ Proof.
                                       (real_mult eps (sfc_pow_half n))))).
       { apply (@req_mult_compat Real RealEnhancedReal c c _ _
                   (real_eq_refl c)).
-        exact (@mult_comm Real RealEnhancedReal (sfc_pow_half n) eps). }
+        exact (@req_mult_compat Real RealEnhancedReal
+                   (real_inv_pos eps Heps) (real_inv_pos eps Heps)
+                   (real_mult (sfc_pow_half n) eps)
+                   (real_mult eps (sfc_pow_half n))
+                   (real_eq_refl (real_inv_pos eps Heps))
+                   (@mult_comm Real RealEnhancedReal
+                      (sfc_pow_half n) eps)). }
       assert (Hs4 : real_eq
                 (real_mult c
                            (real_mult (real_inv_pos eps Heps)
@@ -367,8 +385,7 @@ Proof.
                                                  eps)))
                 (real_mult (real_mult c (sfc_pow_half n))
                            (real_mult (real_inv_pos eps Heps) eps))).
-      { apply (@req_sym Real RealEnhancedReal _).
-        exact (@mult_assoc Real RealEnhancedReal c (sfc_pow_half n)
+      { exact (@mult_assoc Real RealEnhancedReal c (sfc_pow_half n)
                  (real_mult (real_inv_pos eps Heps) eps)). }
       exact (real_eq_trans _ _ _ Hs1
                (real_eq_trans _ _ _ Hs2
@@ -384,15 +401,30 @@ Proof.
               (real_mult (real_mult (real_mult c (real_inv_pos eps Heps))
                                     (sfc_pow_half n)) eps)
               (real_mult c (sfc_pow_half n))
-              (real_mult real_one eps) eps Hswap Hrhs HD).
+              (real_mult real_one eps) eps
+              (real_eq_trans _ _ _ Hswap
+                 (real_eq_trans _ _ _
+                    (@req_mult_compat Real RealEnhancedReal
+                       (real_mult c (sfc_pow_half n))
+                       (real_mult c (sfc_pow_half n))
+                       (real_mult (real_inv_pos eps Heps) eps) real_one
+                       (real_eq_refl (real_mult c (sfc_pow_half n)))
+                       (real_eq_trans _ _ _
+                          (@mult_comm Real RealEnhancedReal
+                             (real_inv_pos eps Heps) eps)
+                          (@inv_pos_correct Real RealEnhancedReal eps Heps)))
+                    (@mult_one Real RealEnhancedReal
+                       (real_mult c (sfc_pow_half n)))))
+              Hrhs HD).
   - (* eq 支：c == 0，k := 0。mult_one + Heq 得 req zero (c·one)，
        lt zero eps 经 req_lt_compat 传输收 lt (c·one) eps *)
     exists Datatypes.O.
     exact (@req_lt_compat Real RealEnhancedReal
               real_zero (real_mult c real_one) eps eps
-              (real_eq_sym _ _
-                 (real_eq_trans _ _ _
-                    (@mult_one Real RealEnhancedReal c) Heq))
+          (real_eq_sym _ _
+             (real_eq_trans _ _ _
+                (@mult_one Real RealEnhancedReal c)
+                (real_eq_sym _ _ Heq)))
               (real_eq_refl eps) Heps).
 Qed.
 
