@@ -1,12 +1,11 @@
 (* ============================================================ *)
-(* SqrtfCauchyArch.v —— 席位 CWA4（批次 E-STAGING-CWA4）              *)
-(* SqrtfCauchy 四节参槽放电 · §B：槽3 阿基米德幂族实例化（最重）        *)
-(* 蓝图：任务/T21-四槽放电路线.md §③（CWU3 成稿）；宿主                 *)
-(*   Live/build/SqrtfCauchy.v:80-81 槽语句逐字（本体零改动）；           *)
-(*   他席文件零触碰（SqrtfCauchyDischarge/sfcx_ 归 CWZ3）。             *)
+(* SqrtfCauchyArch.v              *)
+(* SqrtfCauchy 四节参假设位证明 · §B：假设位3 阿基米德幂族实例化        *)
+(* 宿主                 *)
+(*   Live/build/SqrtfCauchy.v:80-81 假设位语句逐字（本体零改动）；           *)
 (*                                                              *)
-(* [语句对账]（宿主槽 × real_arch 种子，20260915 实扫）                 *)
-(*   槽3 sfc_arch_decay（宿主 :80-81）：                                 *)
+(* [语句核对]（宿主假设位 × real_arch 种子）                 *)
+(*   假设位3 sfc_arch_decay（宿主 :80-81）：                                 *)
 (*     forall c eps, le zero c -> lt zero eps ->                        *)
 (*       sigT (fun k : nat => lt (mult c (sfc_pow_half k)) eps)        *)
 (*   sfc_pow_half（宿主 :68-72 Fixpoint）：0 ↦ one，S k ↦ k ↦ k·half，  *)
@@ -14,20 +13,20 @@
 (*   种子 real_arch（S07:2762）：forall B, sigT (fun n => And (2<=n)%nat *)
 (*     (real_lt B (real_const (Z.of_nat n # 1))))。                      *)
 (*                                                              *)
-(* [数学路线]（蓝图五步）① le zero c = Or(lt,eq)（S02:460，实例透明）    *)
+(* [数学路线]（五步构造）① le zero c = Or(lt,eq)（S02:460，实例透明）    *)
 (*   前提位 destruct：eq 支 k:=0（mult_one + lt 传输）；② lt 支施        *)
 (*   real_arch 于 B := c·inv(eps) 得 B < const n（n≥2）；③ nat 面       *)
 (*   n < 2^n（自建 sfcy_npow2 归纳）；④ pow_half 归拢：req 逆恒等        *)
 (*   pow_half k · 2^k == one（归纳 + inv_pos_correct + 乘法代数），      *)
 (*   把 real_arch 输出经 const n < 2^n（real_const_lt + Qlt nat→Q 桥）  *)
-(*   传导到 2^n 面；⑤ 两次 lt_mult_compat 乘正收口：                    *)
+(*   传导到 2^n 面；⑤ 两次 lt_mult_compat 乘正完成：                    *)
 (*   (c·inv(eps)) < 2^n ⟹ ·half^n ⟹ ·eps ⟹ req 重排 c·half^n < eps。   *)
 (*                                                              *)
 (* [命名] 前缀 sfcy_（全库实扫零命中防撞，20260915）。                    *)
 (* [纪律] 纯构造性零承认；语句全 Set 层（real_le/real_lt/real_eq/sigT）；  *)
-(*   零 Prop 泄露（nat 分支 lia，无 bool 消去需求）；全 Qed 收口；        *)
+(*   零 Prop 泄露（nat 分支 lia，无 bool 消去需求）；全 Qed 完成；        *)
 (*   引理消费走接口投影形（@lt_mult_compat 等，实例透明 δ 可归约，        *)
-(*   类型权威免疫参数序记忆错；CWZ3 卡 1/2 口径）；非字段独立引理         *)
+(*   类型权威免疫参数序记忆错）；非字段独立引理         *)
 (*   （real_arch/real_const_lt/real_const_proj/real_plus_proj/          *)
 (*   real_mult_proj/real_eq_of_zero_diff）走 S02/S07 顶层裸名。          *)
 (*   宿主 sfc_pow_half 裸调（R:=Real 由语句类型 unify，RIS 由实例        *)
@@ -120,7 +119,7 @@ Proof.
   intros z w H. unfold Qlt. cbn [Qnum Qden]. lia.
 Qed.
 
-(* ============ §3 接口 two 幂族与归拢件（蓝图④） ============ *)
+(* ============ §3 接口 two 幂族与归拢件（构造④） ============ *)
 
 Fixpoint sfcy_pow2 (k : nat) : Real :=
   match k with
@@ -250,7 +249,7 @@ Proof.
   - exact (real_const_lt _ _ (sfcy_qlt_z1 _ _ Hlt)).
 Qed.
 
-(* ============ §4 槽3 主件（素颜面）+ 改喂桥（蓝图①②⑤） ============ *)
+(* ============ §4 假设位3 主件（素颜面）+ 显式应用桥（构造①②⑤） ============ *)
 
 Theorem sfcy_arch_decay_real : forall c eps : Real,
   real_le real_zero c -> real_lt real_zero eps ->
@@ -260,19 +259,19 @@ Proof.
   intros c eps Hle Heps.
   unfold real_le in Hle.
   destruct Hle as [Hclt | Heq].
-  - (* lt 支：real_arch 施于 B := c·inv(eps)（蓝图②） *)
+  - (* lt 支：real_arch 施于 B := c·inv(eps)（构造②） *)
     destruct (real_arch (real_mult c (real_inv_pos eps Heps)))
       as [n [Hn2 Hn]].
     assert (Hn1 : (1 <= n)%nat) by lia.
     exists n.
-    (* ① const n < 2^n，与 real_arch 输出传输到 2^n 面（蓝图③④） *)
+    (* ① const n < 2^n，与 real_arch 输出传输到 2^n 面（构造③④） *)
     assert (Harch : real_lt (real_mult c (real_inv_pos eps Heps))
                             (sfcy_pow2 n)).
     { exact (@lt_trans Real RealEnhancedReal
               (real_mult c (real_inv_pos eps Heps))
               (real_const (Z.of_nat n # 1)) (sfcy_pow2 n)
               Hn (sfcy_const_lt_pow2 n Hn1)). }
-    (* ② 乘正 half^n：lt_mult_compat 收口（蓝图⑤） *)
+    (* ② 乘正 half^n：lt_mult_compat 完成（构造⑤） *)
     assert (HA : real_lt
               (real_mult (real_mult c (real_inv_pos eps Heps))
                          (sfc_pow_half n))
@@ -397,9 +396,9 @@ Proof.
               (real_eq_refl eps) Heps).
 Qed.
 
-(* 槽3 改喂桥（宿主槽语句逐字，接口投影面；消费位 SqrtfCauchy.v:1070）
-   ——素颜面到接口面只走实例 delta/iota，exact 一行（CWZ3 sfcx_*_slot 同式）。
-   改喂：sfc_arch_decay 参位 ← 本件。 *)
+(* 假设位3 显式应用桥（宿主假设位语句逐字，接口投影面；消费位 SqrtfCauchy.v:1070）
+   ——素颜面到接口面只走实例 delta/iota，exact 一行（与 sfcx_*_slot 同式）。
+   接入：sfc_arch_decay 参位 ← 本件。 *)
 Theorem sfcy_arch_decay_slot :
   forall c eps : Real,
   @le Real RealEnhancedReal (@zero Real RealEnhancedReal) c ->
@@ -411,7 +410,7 @@ Proof. exact sfcy_arch_decay_real. Qed.
 
 (* ============ 四关自证面：G3 提取探针 + G4 假设审计口 ============ *)
 (* 两主件证明体全走 real_* 素颜顶层函数链与接口投影 δ 面预判            *)
-(* Obj.magic = 0（CWZ3 sfcx_G3 同判据）。                              *)
+(* Obj.magic = 0（与 sfcx_G3 同判据）。                              *)
 
 Extraction "sfcy_G3.ml" sfcy_arch_decay_real.
 

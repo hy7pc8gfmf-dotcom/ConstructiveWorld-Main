@@ -91,7 +91,7 @@ Proof.
                   (RealSetoid.real_eq_abs_compat t real_zero Hsym)
                   real_abs_zero_req).
     assert (Hpt : real_eq (real_plus t eps) (real_plus real_zero eps))
-      by exact (RealSetoid.real_eq_plus_compat t real_zero eps eps Hsym
+      by exact (RealSetoid.real_eq_plus_compat t eps real_zero eps Hsym
                   (real_eq_refl eps)).
     assert (Hpt2 : real_eq (real_plus t eps) eps)
       by exact (real_eq_trans (real_plus t eps)
