@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqGibbsWallEquiv.v *)
+(* *)
+(* 目的： gibbs plain-le 结构墙与受限 LPO 的双向归约。 *)
+(* 主件： gwe_plain_le_lpo / gwe_lpo_plain 双向腿与 GibbsWall 等价器 gwe_equivalence。 *)
+(* 依赖： S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv。 *)
+(* 备注： 零公理、零假设负载；不证墙命题为假，证其与受限 LPO 等价（构造性边界）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqGibbsWallEquiv.v —— AA22：gibbs plain-le 结构墙 ⟺ 受限     *)
 (*                             LPO 双向归约定理（第二面墙定理化）    *)
 (*                                                              *)

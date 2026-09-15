@@ -2,7 +2,7 @@
 (* PolyIntegral.v                                                *)
 (*                                                               *)
 (* 目的：建立 [0,1] 上多项式（Q 系数列表）的构造性定积分基建        *)
-(*       （一期，Q 载体层、纯 Set）——解锁 UpReqPadeExp.v:184-193    *)
+(*       （一期，Q 载体层、纯 Set）——解锁 UpReqPadeExp    *)
 (*       所需的「[0,1] 上多项式型被积函数的构造性积分」。           *)
 (* 主件：pint_integral（定积分主定义）；正确性锚                    *)
 (*       pint_integral_pow_poly : QeqT (pint_integral               *)
@@ -14,10 +14,10 @@
 (* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；                *)
 (*       Stdlib QArith.QArith、QArith.Qabs、Lists.List、Arith.Arith、 *)
 (*       ZArith.ZArith、Lia、Extraction。                            *)
-(* 备注：库内实扫（20260915，全部 .v）无现成积分基建——grep          *)
+(* 备注：库内无现成积分基建——grep          *)
 (*       integral/定积分 命中仅三类：Qmult_integral（Q 代数引理，     *)
 (*       与积分无关）、S12_B5RecycleSF.v:13465 SFPathIntegral（路径   *)
-(*       作用量注记，非定积分）、UpReqPadeExp.v:184-193 注记本体      *)
+(*       作用量注记，非定积分）、UpReqPadeExp 注记本体      *)
 (*       （即本件要解锁的对象）。数学内容：多项式以系数列表表示       *)
 (*       （头 = 常数项），pint_eval 为 Horner 求值；定积分按幂函数    *)
 (*       逐项定义 pint_integral p = Σ_k a_k/(k+1)（Q 除法全定义，     *)
@@ -26,9 +26,8 @@
 (*       版本（0 ≤ p(x) ≤ 1 ⟹ 0 ≤ ∫p ≤ ∫1 == 1）需连续性/黎曼和      *)
 (*       极限机器，与柯西极限同留二期，本件不虚报强度。语句面纪律：   *)
 (*       全部主定理 QeqT/QleT' Set 面（S02_CauchyComplete），Qle/Qeq  *)
-(*       仅证内与内部支撑引理；pint_ 前缀防撞；只读树零改（S03 的     *)
-(*       9.1 魔数副本由私有目录 Live/build/_pintbase/ 供给，源逐字    *)
-(*       拷贝自只读树）。                                           *)
+(*       仅证内与内部支撑引理；pint_ 前缀避免命名冲突（S03 的 9.1 副本 *)
+(*       由私有构建目录供给，源与只读树一致）。                        *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
@@ -121,11 +120,11 @@ Proof.
   intros k.
   assert (Hnn : (0 <= Z.of_nat (Datatypes.S k))%Z) by apply Nat2Z.is_nonneg.
   assert (Hz : Z.of_nat (Datatypes.S k) <> 0%Z).
-  { intros Hc. apply Nat2Z.inj in Hc. discriminate Hc. }
+  { intros Hc. discriminate Hc. }
   destruct (Z.of_nat (Datatypes.S k)) as [| z | z] eqn:E.
-  - exfalso. apply Hz. exact E.
+  - exfalso. apply Hz. reflexivity.
   - unfold Qinv, Qlt. cbn [Qnum Qden Qmult]. lia.
-  - exfalso. rewrite E in Hnn. lia.
+  - exfalso. simpl in Hnn. lia.
 Qed.
 
 (* 单项式积分非负：0 ≤ a ⟹ 0 ≤ a/(k+1)（QleT' 进出，Qle 仅证内） *)
@@ -134,9 +133,12 @@ Lemma pint_monomial_int_nonneg : forall (a : Q) (k : nat),
 Proof.
   intros a k Ha. apply Qle_to_QleT'.
   unfold pint_monomial_int, Qdiv.
-  apply (Qmult_le_compat_r 0 a).
-  - apply Qle_refl.
-  - apply Qlt_le_weak. apply pint_invS_pos.
+  apply (Qle_trans 0 (0 * (1 / (Z.of_nat (Datatypes.S k) # 1)))
+                    (a * (1 / (Z.of_nat (Datatypes.S k) # 1)))).
+  - apply qeq_le. apply Qeq_sym. apply Qmult_0_l.
+  - apply (Qmult_le_compat_r 0 a).
+    + exact (QleT'_to_Qle 0 a Ha).
+    + apply Qlt_le_weak. apply pint_invS_pos.
 Qed.
 
 (* ============================================================ *)
@@ -150,8 +152,9 @@ Proof.
   - cbn [pint_eval pint_pow_poly q_pow].
     apply qeq_imp_qeqT. ring.
   - cbn [pint_eval pint_pow_poly q_pow].
-    rewrite (IH x).
-    apply qeq_imp_qeqT. ring.
+    apply qeq_imp_qeqT.
+    rewrite (qeqT_imp_qeq _ _ (IH x)).
+    apply Qplus_0_l.
 Qed.
 
 (* ============================================================ *)
@@ -167,9 +170,10 @@ Proof.
   - cbn [pint_integral_from pint_monomial_int pint_pow_poly].
     rewrite Nat.add_0_r. apply Qplus_0_r.
   - cbn [pint_integral_from pint_monomial_int pint_pow_poly].
-    rewrite pint_zero_div.
+    unfold pint_monomial_int. rewrite pint_zero_div.
     rewrite (IH (Datatypes.S k)).
-    assert (Hnat : S (k + S m') = S (Datatypes.S k + m')) by lia.
+    assert (Hnat : Datatypes.S (k + Datatypes.S m')
+                   = Datatypes.S (Datatypes.S k + m')) by lia.
     rewrite Hnat.
     apply Qplus_0_l.
 Qed.
@@ -204,7 +208,7 @@ Proof.
   - cbn [pint_integral_from pint_monomial_int pint_scale].
     rewrite (pint_div_mult_assoc a c (Z.of_nat (Datatypes.S k) # 1)).
     rewrite (IH (Datatypes.S k)).
-    apply qeq_refl.
+    unfold pint_monomial_int. ring.
 Qed.
 
 (* 加法（等长前提）：∫（偏移 k）(p+q) == ∫p + ∫q *)
@@ -215,7 +219,7 @@ Lemma pint_integral_from_add : forall (p q : list Q) (k : nat),
 Proof.
   intros p. induction p as [| a p' IH]; intros q k Hlen.
   - destruct q as [| b q'].
-    + cbn [pint_integral_from pint_add]. apply qeq_refl.
+    + cbn [pint_integral_from pint_add]. ring.
     + discriminate Hlen.
   - destruct q as [| b q'].
     + discriminate Hlen.
@@ -223,7 +227,7 @@ Proof.
       injection Hlen as Hlen'.
       rewrite (IH q' (Datatypes.S k) Hlen').
       rewrite (pint_div_add_distr a b (Z.of_nat (Datatypes.S k) # 1)).
-      apply qeq_refl.
+      unfold pint_monomial_int. ring.
 Qed.
 
 (* 组装（0 偏移，QeqT 面） *)
@@ -256,9 +260,10 @@ Proof.
   - reflexivity.
   - cbn [pint_integral_from].
     apply Qle_to_QleT'.
-    apply Qplus_le_compat.
+    apply (Qplus_le_compat 0 (pint_monomial_int a k)
+                           0 (pint_integral_from p' (Datatypes.S k))).
     + apply QleT'_to_Qle. apply pint_monomial_int_nonneg.
-      specialize (Hcoeff 0). cbn [pint_coeff] in Hcoeff. exact Hcoeff.
+      specialize (Hcoeff 0%nat). cbn [pint_coeff] in Hcoeff. exact Hcoeff.
     + apply QleT'_to_Qle. apply IH.
       intros i. specialize (Hcoeff (Datatypes.S i)).
       cbn [pint_coeff] in Hcoeff. exact Hcoeff.
@@ -281,11 +286,10 @@ Proof.
       injection Hlen as Hlen'.
       apply Qle_to_QleT'.
       apply Qplus_le_compat.
-      * apply QleT'_to_Qle.
-        unfold pint_monomial_int, Qdiv.
+      * unfold pint_monomial_int, Qdiv.
         apply (Qmult_le_compat_r a b).
         -- apply QleT'_to_Qle.
-           specialize (Hcoeff 0). cbn [pint_coeff] in Hcoeff. exact Hcoeff.
+           specialize (Hcoeff 0%nat). cbn [pint_coeff] in Hcoeff. exact Hcoeff.
         -- apply Qlt_le_weak. apply pint_invS_pos.
       * apply QleT'_to_Qle. apply IH.
         -- exact Hlen'.

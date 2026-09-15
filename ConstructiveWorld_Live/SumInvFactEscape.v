@@ -1,12 +1,12 @@
 (* ============================================================ *)
 (* SumInvFactEscape.v                                            *)
 (*                                                              *)
-(* 目的：闭合 UpReqBanachNormOpp.v 件二的显式假设缺口——Σ1/k! 逃逸    *)
+(* 目的：闭合 UpReqBanachNormOpp 的 Σ1/k! 逃逸目标的显式假设缺口——Σ1/k! 逃逸    *)
 (*       主件：对任意 q : Q，存在 n 使 1 < |n!·(q − s_n)|。          *)
 (* 主件：sif_escape : forall q : Q,                                 *)
 (*       sigT (fun n : nat =>                                       *)
 (*         Qlt 1%Q (Qabs (q_fact n * (q - exp_series n 1)%Q)))；      *)
-(*       目标形即 UpReqBanachNormOpp.v L153-155 原文语句面；          *)
+(*       目标形即 UpReqBanachNormOpp 原文语句面；          *)
 (*       伴件 sif_escape_closed : sif_sum_inv_fact_escape。           *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、                 *)
 (*       UpReqBanachNormOpp；Stdlib QArith.QArith、QArith.Qabs、      *)
@@ -24,13 +24,13 @@
 (*       零点引理（sif_zero_escape）：d_k = 0 ⟹ |d_{k+2}| = (k+3)·b     *)
 (*       > b。                                                        *)
 (*       witness 由 Type 层有界枚举 sif_enum（Qlt_bool 逐点判定，上界  *)
-(*       2b+3 覆盖零点两步逃逸）给出：枚举灭器支逐点 Qcompare 三分      *)
+(*       2b+3 覆盖零点两步逃逸）给出：枚举失败支（Empty_set）逐点 Qcompare 三分      *)
 (*       （Lt 支定义性矛盾 / Eq 支 |d|=b 界内 / Gt 支 |d|<b 界内，零点  *)
 (*       情形经零点引理在 k+2 ≤ 2b+3 处消解），回填窗口引理前提。       *)
 (*       全件语句面 Type 层 sigT，witness 全由 Set 层枚举产出，         *)
 (*       无 Prop 泄露位；提取面预期干净，公理面零假设。                 *)
-(*       命名：sif_ 前缀防撞；只读树零改；不消费                       *)
-(*       SqrtfCauchy / KLWallClosed / ExpNegPos。                      *)
+(*       命名：sif_ 前缀避免命名冲突；不依赖                           *)
+(*       SqrtfCauchyDischarge / KLWallClosed / ExpNegPos 系模块。       *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -72,7 +72,7 @@ Proof.
   unfold Qeq in H. unfold Qminus, Qeq.
   cbn [Qnum Qden Qplus Qopp Qmult] in *.
   rewrite (sif_Zpos_mul b f), (sif_Zpos_mul d f).
-  (* 9.1 全量适配：目标含 Z 原子乘积（Q 分母正性消去），线性 lia 无见证——升 nia *)
+  (* 兼容性：目标含 Z 原子乘积（Q 分母正性消去），线性 lia 无见证——升 nia *)
   nia.
 Qed.
 
@@ -82,8 +82,15 @@ Proof.
   unfold Qeq in H. unfold Qeq.
   cbn [Qnum Qden Qmult] in *.
   rewrite (sif_Zpos_mul b f), (sif_Zpos_mul d f).
-  (* 9.1 全量适配：目标含 Z 原子乘积（Q 分母正性消去），线性 lia 无见证——升 nia *)
-  nia.
+  (* 兼容性：目标为三度 Z 单项式恒等（H: a·Z.pos d = c·Z.pos b 乘 Zpos f·e 消去）
+     ——nia 乘深不足，改 ring 恒等式归零 + 线性 lia 完成（Qden 为 positive，须 Zpos 提升） *)
+  assert (Hd : ((a*e)*(Zpos d * Zpos f) = (c*e)*(Zpos b * Zpos f))%Z).
+  { assert (Hd1 : ((a*e)*(Zpos d * Zpos f))%Z
+                  = ((a * Zpos d) * (e * Zpos f))%Z) by ring.
+    assert (Hd2 : ((c*e)*(Zpos b * Zpos f))%Z
+                  = ((c * Zpos b) * (e * Zpos f))%Z) by ring.
+    rewrite Hd1, Hd2, H. reflexivity. }
+  lia.
 Qed.
 
 Lemma sif_mult_comp_r : forall x y z : Q, x == y -> z * x == z * y.
@@ -92,6 +99,14 @@ Proof.
   unfold Qeq in H. unfold Qeq.
   cbn [Qnum Qden Qmult] in *.
   rewrite (sif_Zpos_mul f b), (sif_Zpos_mul f d).
+  (* 兼容性：目标为三度 Z 单项式恒等，nia 乘深不足——ring 恒等式归零 +
+     线性 lia 完成（与 sif_mult_comp_l 同法） *)
+  assert (Hd : ((e*a)*(Zpos f * Zpos d) = (e*c)*(Zpos f * Zpos b))%Z).
+  { assert (Hd1 : ((e*a)*(Zpos f * Zpos d))%Z
+                  = ((e * Zpos f) * (a * Zpos d))%Z) by ring.
+    assert (Hd2 : ((e*c)*(Zpos f * Zpos b))%Z
+                  = ((e * Zpos f) * (c * Zpos b))%Z) by ring.
+    rewrite Hd1, Hd2, H. reflexivity. }
   lia.
 Qed.
 
@@ -104,7 +119,18 @@ Proof.
   unfold Qeq in H1, H2. unfold Qeq.
   cbn [Qnum Qden Qplus Qmult] in *.
   rewrite (sif_Zpos_mul a2 b2), (sif_Zpos_mul c2 d2).
-  lia.
+  (* 兼容性：目标为双积 Z 恒等（Q 加法展开），线性 lia 无见证——
+     ring 重排归位 H1/H2 形后代换完成（与 sif_mult_comp_l 同法） *)
+  assert (Hd : ((a1*Zpos b2 + b1*Zpos a2) * (Zpos c2 * Zpos d2)
+                = (c1*Zpos d2 + d1*Zpos c2) * (Zpos a2 * Zpos b2))%Z).
+  { assert (Hd1 : ((a1*Zpos b2 + b1*Zpos a2) * (Zpos c2 * Zpos d2))%Z
+                  = ((a1 * Zpos c2) * (Zpos b2 * Zpos d2)
+                     + (b1 * Zpos d2) * (Zpos a2 * Zpos c2))%Z) by ring.
+    assert (Hd2 : ((c1*Zpos d2 + d1*Zpos c2) * (Zpos a2 * Zpos b2))%Z
+                  = ((c1 * Zpos a2) * (Zpos b2 * Zpos d2)
+                     + (d1 * Zpos b2) * (Zpos a2 * Zpos c2))%Z) by ring.
+    rewrite Hd1, Hd2, H1, H2. reflexivity. }
+  exact Hd.
 Qed.
 
 Lemma sif_mult_opp_r : forall x y : Q, (x * (- y))%Q == (- (x * y))%Q.
@@ -114,11 +140,29 @@ Proof.
   ring.
 Qed.
 
+Lemma sif_opp_comp : forall x y : Q, x == y -> (- x)%Q == (- y)%Q.
+Proof.
+  intros x y H. destruct x as [a b]. destruct y as [c d].
+  unfold Qeq in H. unfold Qopp, Qeq.
+  cbn [Qnum Qden Qmult Pos.mul] in *.
+  nia.
+Qed.
+
+Lemma sif_eq_id : forall (b1 b2 : bool), b1 = b2 -> Id b1 b2.
+Proof. intros b1 b2 H. rewrite H. apply id_refl. Qed.
+
+Lemma sif_qltt : forall x y : Q, Qlt x y -> QltT x y.
+Proof.
+  intros x y H. unfold QltT. unfold Qlt_bool.
+  pose proof (proj1 (Qlt_alt x y) H) as Hc.
+  rewrite Hc. apply id_refl.
+Qed.
+
 Lemma sif_qlt_one_comp_r : forall x y : Q, x == y -> Qlt 1%Q x -> Qlt 1%Q y.
 Proof.
   intros x y H Hlt. destruct x as [a b]. destruct y as [c d].
   unfold Qlt, Qeq in *. cbn [Qnum Qden] in *.
-  lia.
+  nia.
 Qed.
 
 (* ============================================================ *)
@@ -138,7 +182,7 @@ Proof.
   - cbn [q_fact fact]. first [reflexivity | lia | ring].
   - cbn [q_fact fact]. rewrite IH.
     rewrite (Nat2Z.inj_mul (Datatypes.S m) (fact m)).
-    unfold Qeq. cbn [Qnum Qden Qmult Pos.mul Zpos].
+    unfold Qeq. cbn [Qnum Qden Qmult Pos.mul].
     first [lia | ring | nia | reflexivity].
 Qed.
 
@@ -149,12 +193,18 @@ Lemma sif_Zc_bridge : forall n : nat,
     == ((sif_Zc n) # 1)%Q.
 Proof.
   induction n as [| m IH].
-  - cbn [exp_series q_pow fact]. cbn [Qmult Pos.mul Zpos].
+  - cbn [exp_series q_pow fact]. cbn [Qmult Pos.mul].
     first [reflexivity | lia | ring].
   - cbn [exp_series q_pow]. rewrite bno_q_pow_one.
     cbn [fact].
     rewrite Qmult_plus_distr_r.
-    rewrite (sif_mult_opp_r _ _).
+    (* 兼容性：受限 cbn 下第二加数为 (N # 1) * (1 * 1 / q_fact) 形，无 Qopp 可供
+       sif_mult_opp_r；交换两积并归一 1 * 1 == 1 后接入 H2/H1 链 *)
+    rewrite (Qmult_comm (Z.of_nat (Datatypes.S m * fact m) # 1)
+                        (exp_series m 1)).
+    rewrite (Qmult_comm (Z.of_nat (Datatypes.S m * fact m) # 1)
+                        (1 * 1 / q_fact (Datatypes.S m))).
+    cbn [Qmult sif_Zc].
     assert (H2 : (1%Q / q_fact (Datatypes.S m))%Q
                  * ((Z.of_nat (Datatypes.S m * fact m)) # 1)%Q
                  == 1%Q).
@@ -171,13 +221,13 @@ Proof.
                   * (((Z.of_nat (Datatypes.S m)) # 1)
                      * ((Z.of_nat (fact m)) # 1))%Q)%Q).
       - apply sif_mult_comp_r.
-        unfold Qeq. cbn [Qnum Qden Qmult Pos.mul Zpos].
+        unfold Qeq. cbn [Qnum Qden Qmult Pos.mul].
         rewrite (Nat2Z.inj_mul (Datatypes.S m) (fact m)).
         first [lia | ring | nia | reflexivity].
       - apply (Qeq_trans _ (((Z.of_nat (Datatypes.S m)) # 1)
                             * (exp_series m 1%Q
                                * ((Z.of_nat (fact m)) # 1))%Q)%Q).
-        + apply sif_mult_comp_r. apply Qmult_comm.
+        + ring.
         + apply (Qeq_trans _ (((Z.of_nat (Datatypes.S m)) # 1)
                               * ((sif_Zc m) # 1))%Q).
           * apply sif_mult_comp_r.
@@ -185,10 +235,10 @@ Proof.
                                 * exp_series m 1%Q)%Q).
             -- apply Qmult_comm.
             -- exact IH.
-          * unfold Qeq. cbn [Qnum Qden Qmult Pos.mul Zpos].
+          * unfold Qeq. cbn [Qnum Qden Qmult Pos.mul].
             first [lia | ring | nia | reflexivity]. }
     rewrite H2. rewrite H1.
-    unfold Qeq. cbn [Qnum Qden Qmult Pos.mul Zpos].
+    unfold Qeq. cbn [Qnum Qden Qplus Qmult Pos.mul].
     first [lia | ring | nia | reflexivity].
 Qed.
 
@@ -225,12 +275,11 @@ Proof.
         -- apply (Qeq_trans _
                     ((Qmake (Z.of_nat (fact n) * Qnum q) (Qden q))%Q)).
            ++ apply sif_mult_comp_r. symmetry. apply sif_Qmake_eta.
-           ++ unfold Qeq. cbn [Qnum Qden Qmult Pos.mul Zpos].
-              rewrite (sif_Zpos_mul 1 (Qden q)).
-              first [lia | ring | nia | reflexivity].
-        -- exact (sif_Zc_bridge n).
+        ++ unfold Qeq. cbn [Qnum Qden Qmult Pos.mul].
+           first [lia | ring | nia | reflexivity].
+        -- apply sif_opp_comp. exact (sif_Zc_bridge n).
       * destruct q as [a b]. unfold sif_d in *. unfold Qminus, Qeq.
-        cbn [Qnum Qden Qplus Qopp Qmult Pos.mul Zpos] in *.
+        cbn [Qnum Qden Qplus Qopp Qmult Pos.mul] in *.
         rewrite (sif_Zpos_mul b 1).
         first [lia | ring | nia | reflexivity].
 Qed.
@@ -251,7 +300,7 @@ Proof.
           ((Z.abs (sif_d q n)) # (Qden q))%Q
           (Qabs ((q_fact n * (q - exp_series n 1)%Q)%Q))).
   - apply Qeq_sym. apply sif_abs_frac.
-  - unfold Qlt. cbn [Qnum Qden Qmult Zpos]. lia.
+  - unfold Qlt. cbn [Qnum Qden Qmult]. lia.
 Qed.
 
 (* 零点两步逃逸：d_k = 0 ⟹ |d_{k+2}| = (k+3)·b > b *)
@@ -265,8 +314,10 @@ Proof.
     by (rewrite sif_d_succ, H0; lia).
   assert (H2 : sif_d q (Datatypes.S (Datatypes.S k))
                = (- (Z.of_nat k + 3) * Z.pos (Qden q))%Z)
-    by (rewrite sif_d_succ, H1; lia).
-  rewrite (Z.abs_neq _ ltac:(lia)).
+    by (rewrite sif_d_succ, H1; nia).
+  assert (Hssk : (sif_d q (Datatypes.S (Datatypes.S k)) <= 0)%Z)
+    by (rewrite H2; nia).
+  rewrite (Z.abs_neq _ Hssk).
   nia.
 Qed.
 
@@ -274,40 +325,41 @@ Qed.
 (* S2：窗口主引理 + 有界枚举                                          *)
 (* ============================================================ *)
 
-Lemma sif_window : forall (q : Q) (b : Z), (0%Z < b)%Z ->
-  (forall k : nat, (k <= Z.to_nat (2 * b + 1))%nat ->
-     sif_d q k <> 0%Z /\ (sif_d q k <= b /\ - b <= sif_d q k))%Z -> False.
+Lemma sif_window : forall (q : Q), (0%Z < Z.pos (Qden q))%Z ->
+  (forall k : nat, (k <= Z.to_nat (2 * Z.pos (Qden q) + 1))%nat ->
+     sif_d q k <> 0%Z /\ (sif_d q k <= Z.pos (Qden q) /\ - Z.pos (Qden q) <= sif_d q k))%Z -> False.
 Proof.
-  intros q b Hb Hall.
+  intros q Hb Hall.
   assert (Hsucc : forall n : nat,
     sif_d q (Datatypes.S n) =
-    (Z.of_nat (Datatypes.S n) * sif_d q n - b)%Z)
+    (Z.of_nat (Datatypes.S n) * sif_d q n - Z.pos (Qden q))%Z)
     by (intro n; rewrite (sif_d_succ q n); reflexivity).
-  assert (Hpos : forall k : nat, (k < Z.to_nat (2 * b + 1))%nat ->
+  assert (Hpos : forall k : nat, (k < Z.to_nat (2 * Z.pos (Qden q) + 1))%nat ->
                  (0 < sif_d q k)%Z).
   { intros k HkN.
-    destruct (Z_lt_trichotomy 0 (sif_d q k)) as [Hlt | [Heq | Hlt0]].
-    - exact Hlt.
-    - exfalso. destruct (Hall k (Nat.lt_le_incl _ _ HkN)) as [Hne _].
-      congruence.
+    destruct (Z_le_gt_dec 0 (sif_d q k)) as [Hle | Hgt].
+    - destruct (Z.eq_dec (sif_d q k) 0) as [Heq | Hne].
+      + exfalso. destruct (Hall k (Nat.lt_le_incl _ _ HkN)) as [Hne2 _].
+        congruence.
+      + lia.
     - exfalso.
       assert (Hge1 : (1 <= Z.of_nat (Datatypes.S k))%Z) by lia.
       assert (Hprod : (Z.of_nat (Datatypes.S k) * sif_d q k <= -1)%Z) by nia.
-      assert (Hdn : (sif_d q (Datatypes.S k) < - b)%Z)
+      assert (Hdn : (sif_d q (Datatypes.S k) < - Z.pos (Qden q))%Z)
         by (rewrite Hsucc; lia).
-      destruct (Hall (Datatypes.S k) ltac:(lia)) as [_ [Hub _]].
+      destruct (Hall (Datatypes.S k) ltac:(lia)) as [_ [Hub Hlow]].
       lia. }
-  assert (HN1 : (1 <= Z.to_nat (2 * b + 1))%nat) by lia.
-  assert (HzN : (Z.of_nat (Z.to_nat (2 * b + 1)) = 2 * b + 1)%Z) by lia.
-  assert (Hwin : (Z.of_nat (Z.to_nat (2 * b + 1))
-                  * sif_d q (Nat.pred (Z.to_nat (2 * b + 1))) <= 2 * b)%Z).
-  { assert (HSN : (Datatypes.S (Nat.pred (Z.to_nat (2 * b + 1)))
-                   = Z.to_nat (2 * b + 1))%nat) by lia.
-    pose proof (Hsucc (Nat.pred (Z.to_nat (2 * b + 1)))) as HH.
+  assert (HN1 : (1 <= Z.to_nat (2 * Z.pos (Qden q) + 1))%nat) by lia.
+  assert (HzN : (Z.of_nat (Z.to_nat (2 * Z.pos (Qden q) + 1)) = 2 * Z.pos (Qden q) + 1)%Z) by lia.
+  assert (Hwin : (Z.of_nat (Z.to_nat (2 * Z.pos (Qden q) + 1))
+                  * sif_d q (Nat.pred (Z.to_nat (2 * Z.pos (Qden q) + 1))) <= 2 * Z.pos (Qden q))%Z).
+  { assert (HSN : (Datatypes.S (Nat.pred (Z.to_nat (2 * Z.pos (Qden q) + 1)))
+                   = Z.to_nat (2 * Z.pos (Qden q) + 1))%nat) by lia.
+    pose proof (Hsucc (Nat.pred (Z.to_nat (2 * Z.pos (Qden q) + 1)))) as HH.
     rewrite HSN in HH.
-    destruct (Hall (Z.to_nat (2 * b + 1)) (Nat.le_refl _)) as [_ [Hub _]].
+    destruct (Hall (Z.to_nat (2 * Z.pos (Qden q) + 1)) (Nat.le_refl _)) as [_ [Hub _]].
     lia. }
-  assert (Hpd : (0 < sif_d q (Nat.pred (Z.to_nat (2 * b + 1))))%Z)
+  assert (Hpd : (0 < sif_d q (Nat.pred (Z.to_nat (2 * Z.pos (Qden q) + 1))))%Z)
     by (apply Hpos; lia).
   nia.
 Qed.
@@ -319,8 +371,8 @@ Lemma sif_dec_pt : forall (q : Q) (n : nat),
 Proof.
   intros q n. unfold QltT.
   destruct (Qlt_bool 1%Q (Qabs ((q_fact n * (q - exp_series n 1)%Q)%Q))) eqn:E.
-  - left. rewrite E. apply id_refl.
-  - right. intros Hc. rewrite E in Hc. inversion Hc.
+  - left. apply id_refl.
+  - right. intros Hc. inversion Hc.
 Qed.
 
 Fixpoint sif_enum (q : Q) (k : nat) :
@@ -391,63 +443,35 @@ Proof.
   destruct (sif_enum q (Z.to_nat (2 * Z.pos (Qden q) + 3)))
     as [[n [Hn Hc]] | Hno].
   - exists n. apply QltT_to_Qlt. exact Hc.
-  - exfalso. apply (sif_window q (Z.pos (Qden q)) Hbq).
+  - exfalso. apply (sif_window q Hbq).
     intros k HkN.
+    assert (HkN3 : (k <= Z.to_nat (2 * Z.pos (Qden q) + 3))%nat) by lia.
     destruct (Qlt_bool 1%Q (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q)))
       eqn:EQ.
-    + exfalso. exact (Hno k ltac:(lia)
-        (eq_ind_r true (fun b0 : bool => Id b0 true) (id_refl true)
-           (Qlt_bool 1%Q (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))) EQ)).
-    + unfold Qlt_bool in EQ.
-      destruct (Qcompare 1%Q (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q)))
-        eqn:E2.
-      * exfalso. rewrite E2 in EQ. discriminate.
-      * (* Eq：Qabs == 1 ⟹ |d_k| = b ⟹ 非零且界内 *)
-        assert (Hab : (1%Q == Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))%Q)
-          by (apply (proj2 (Qeq_alt 1%Q _)); exact E2).
-        pose proof (sif_abs_frac q k) as HF.
-        assert (H2 : ((Z.abs (sif_d q k)) # (Qden q))%Q == 1%Q).
-        { apply (Qeq_trans _ (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))).
-          - symmetry. exact HF.
-          - symmetry. exact Hab. }
-        unfold Qeq in H2. cbn [Qnum Qden Qmult Pos.mul Zpos] in H2.
-        assert (Habsb : (Z.abs (sif_d q k) = Z.pos (Qden q))%Z) by lia.
-        assert (Habs0 : (0 < Z.abs (sif_d q k))%Z) by lia.
-        split.
-        { intro Hz. rewrite Hz in Habs0. cbn [Z.abs] in Habs0. lia. }
-        split.
-        - lia.
-        - lia.
-      * (* Gt：1 > Qabs ⟹ |d_k| < b ⟹ 界内；d_k = 0 时经零点引理消解 *)
-        destruct (Z.eq_dec (sif_d q k) 0) as [Hz | Hnz].
-        { exfalso. exact (Hno (Datatypes.S (Datatypes.S k)) ltac:(lia)
-            (eq_ind_r true (fun b0 : bool => Id b0 true) (id_refl true)
-               (Qlt_bool 1%Q
-                  (Qabs ((q_fact (Datatypes.S (Datatypes.S k))
-                               * (q - exp_series (Datatypes.S (Datatypes.S k)) 1)%Q)%Q)))
-               ltac:(unfold Qlt_bool;
-                     apply (proj2 (Qlt_alt 1%Q
-                       (Qabs ((q_fact (Datatypes.S (Datatypes.S k))
-                                    * (q - exp_series (Datatypes.S (Datatypes.S k)) 1)%Q)%Q))));
-                     apply sif_hit_of_dd;
+    + exfalso. destruct (Hno k HkN3 (sif_eq_id _ _ EQ)).
+    + (* EQ : Qlt_bool 1 (Qabs ...) = false ⟹ 无逃逸 ⟹ |d_k| ≤ b *)
+      assert (Hnb : ~ (1%Q < Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))).
+      { intro Hlt.
+        destruct (Hno k HkN3 (sif_qltt _ _ Hlt)). }
+      pose proof (sif_abs_frac q k) as HF.
+      assert (Habsb : (Z.abs (sif_d q k) <= Z.pos (Qden q))%Z).
+      { destruct (Z_le_gt_dec (Z.abs (sif_d q k)) (Z.pos (Qden q)))
+          as [Hle | Hgt].
+        - exact Hle.
+        - exfalso. apply Hnb.
+          apply (sif_qlt_one_comp_r
+                   ((Z.abs (sif_d q k)) # (Qden q))%Q
+                   (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))).
+          ++ apply Qeq_sym. exact HF.
+          ++ unfold Qlt. cbn [Qnum Qden Qmult]. lia. }
+      assert (Hssk3 : (Datatypes.S (Datatypes.S k)
+                       <= Z.to_nat (2 * Z.pos (Qden q) + 3))%nat) by lia.
+      destruct (Z.eq_dec (sif_d q k) 0) as [Hz | Hnz].
+      { destruct (Hno (Datatypes.S (Datatypes.S k)) Hssk3
+            (sif_qltt _ _
+               ltac:(apply sif_hit_of_dd;
                      apply (sif_zero_escape q k Hz)))). }
-        assert (Habsb : (Z.abs (sif_d q k) < Z.pos (Qden q))%Z).
-        { unfold Qcompare in E2.
-          cbn [Qnum Qden Zpos] in E2.
-          apply (proj2 (Z.compare_gt_iff _ _)) in E2.
-          pose proof (sif_abs_frac q k) as HF.
-          unfold Qeq in HF. cbn [Qnum Qden Zpos] in HF.
-          assert (HWpos : (0 < Zpos (Qden (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))))%Z)
-            by apply sif_posZ.
-          destruct (Z_le_gt_dec 0 (Qnum (Qabs ((q_fact k * (q - exp_series k 1)%Q)%Q))))
-            as [HQX | HQX].
-          - nia.
-          - exfalso.
-            assert (Hge0 : (0 <= Z.abs (sif_d q k))%Z) by apply Z.abs_nonneg.
-            nia. }
-        split.
-        - exact Hnz.
-        - apply (proj1 (Z.abs_le (sif_d q k) (Z.pos (Qden q)))). lia.
+      split; [ exact Hnz | split; lia ].
 Qed.
 
 Corollary sif_escape_closed : sif_sum_inv_fact_escape.
