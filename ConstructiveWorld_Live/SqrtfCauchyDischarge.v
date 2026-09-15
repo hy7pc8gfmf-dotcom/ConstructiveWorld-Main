@@ -154,6 +154,33 @@ Instance ReqMetricAbsReal : @ReqMetricAbs Real RealEnhancedReal := {
 }.
 
 (* ============================================================ *)
+(* §A3 假设位5 消解（1 < 2 严格档）：宿主假设位5 Hlt_one_two        *)
+(*   （lt one sfc_two，sfc_two δ 展开 = real_plus real_one            *)
+(*   real_one）实例面逐字。0 < 1（one_pos）经 real_lt_plus_translate  *)
+(*   单侧平移 +one，plus_zero 换形收 1 < 1+1（SCFIX 20260916）。      *)
+(* ============================================================ *)
+Theorem sfcx_lt_one_two_slot :
+  @lt Real RealEnhancedReal (@one Real RealEnhancedReal)
+      (@plus Real RealEnhancedReal (@one Real RealEnhancedReal)
+             (@one Real RealEnhancedReal)).
+Proof.
+  apply (RealSetoid.real_lt_id_l
+           (@one Real RealEnhancedReal)
+           (@plus Real RealEnhancedReal (@one Real RealEnhancedReal)
+                  (@zero Real RealEnhancedReal))
+           (@plus Real RealEnhancedReal (@one Real RealEnhancedReal)
+                  (@one Real RealEnhancedReal))
+           (real_eq_sym (@plus Real RealEnhancedReal
+                                (@one Real RealEnhancedReal)
+                                (@zero Real RealEnhancedReal))
+                        (@one Real RealEnhancedReal)
+                        (real_plus_zero (@one Real RealEnhancedReal)))).
+  exact (real_lt_plus_translate (@one Real RealEnhancedReal)
+           (@zero Real RealEnhancedReal) (@one Real RealEnhancedReal)
+           (@one_pos Real RealEnhancedReal)).
+Qed.
+
+(* ============================================================ *)
 (* 自证面：提取探针（KLWallClosed.v:447 / SqWallCorrMark.v:210        *)
 (* 同式，Obj.magic 计数应为 0）+ 假设闭包审计。两主件证明体全走        *)
 (* real_* 素颜顶层函数链，不触 RealEnhancedReal 类实例打包常量，       *)
@@ -165,6 +192,7 @@ Print Assumptions sfcx_abs_le_plus_eps_real.
 Print Assumptions sfcx_abs_le_plus_eps_slot.
 Print Assumptions sfcx_metric_abs_real.
 Print Assumptions sfcx_metric_abs_slot.
+Print Assumptions sfcx_lt_one_two_slot.
 
 (* ============================================================ *)
 (* §C 假设位1 永久判定标注段（非证题，注释形式）                         *)
@@ -199,4 +227,5 @@ Print Assumptions sfcx_metric_abs_slot.
 (*   接口补装 ReqMetricAbs mixin Class + ReqMetricAbsReal 实例           *)
 (*   假设位3 未动（独立后续件，S07:2762 real_arch 种子已登记）           *)
 (*   假设位1 未动（本 §C 判定标注段）                                    *)
+(*   假设位5 sfcx_lt_one_two_slot（1 < 2 严格档，§A3，SCFIX 20260916）   *)
 (* ============================================================ *)

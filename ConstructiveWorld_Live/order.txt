@@ -1,4 +1,4 @@
-S01_BaseRing.v
+﻿S01_BaseRing.v
 S02_CauchyComplete.v
 S03_QExp.v
 S04_RealExpLogConv.v
@@ -98,6 +98,9 @@ G12_ZPosFam.v
 UpReqLogCompD.v
 UpReqRealFEP.v
 UpReqLogCompD2.v
+UpReqRealLtShiftBridge.v
+UpReqStrictStepGen.v
+UpReqStrictBridgeD.v
 UpReqAlign4.v
 UpReqPPOB.v
 UpReqSumB.v

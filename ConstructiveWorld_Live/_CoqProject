@@ -220,3 +220,6 @@ TempMonoW2Mark.v
 UpReqPropLiftShim.v
 DTPT_Bridge_Dep.v
 DTPT_Bridge_All.v
+UpReqRealLtShiftBridge.v
+UpReqStrictStepGen.v
+UpReqStrictBridgeD.v

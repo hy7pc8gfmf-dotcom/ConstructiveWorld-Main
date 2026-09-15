@@ -396,8 +396,8 @@ Proof.
     - apply real_distrib.
     - apply (RealSetoid.real_eq_plus_compat
                (real_mult (real_plus b eta) c)
-               (real_plus (real_mult b c) (real_mult eta c))
                (real_mult (real_plus b eta) eta)
+               (real_plus (real_mult b c) (real_mult eta c))
                (real_plus (real_mult b eta) (real_mult eta eta))).
       + exact (real_eq_trans (real_mult (real_plus b eta) c)
                    (real_plus (real_mult c b) (real_mult c eta))
@@ -406,9 +406,9 @@ Proof.
                       (real_mult c (real_plus b eta))
                       (real_plus (real_mult c b) (real_mult c eta))
                       (real_mult_comm (real_plus b eta) c)
-                      (real_distrib c (real_plus b eta) b))
+                      (real_distrib c b eta))
                    (RealSetoid.real_eq_plus_compat (real_mult c b)
-                      (real_mult b c) (real_mult c eta) (real_mult eta c)
+                      (real_mult c eta) (real_mult b c) (real_mult eta c)
                       (real_eq_trans (real_mult c b) (real_mult b c)
                          (real_mult b c)
                          (real_mult_comm c b) (real_eq_refl (real_mult b c)))
@@ -423,9 +423,9 @@ Proof.
                       (real_mult eta (real_plus b eta))
                       (real_plus (real_mult eta b) (real_mult eta eta))
                       (real_mult_comm (real_plus b eta) eta)
-                      (real_distrib eta (real_plus b eta) b))
+                      (real_distrib eta b eta))
                    (RealSetoid.real_eq_plus_compat (real_mult eta b)
-                      (real_mult b eta) (real_mult eta eta)
+                      (real_mult eta eta) (real_mult b eta)
                       (real_mult eta eta)
                       (real_eq_trans (real_mult eta b) (real_mult b eta)
                          (real_mult b eta)
@@ -436,9 +436,11 @@ Proof.
   { apply (RealSetoid.real_lt_id_r (real_mult a c)
              (real_plus (real_mult a c) (real_mult a eta))
              (real_mult a (real_plus c eta))).
-    - apply real_distrib.
+    - exact (real_eq_sym (real_mult a (real_plus c eta))
+               (real_plus (real_mult a c) (real_mult a eta))
+               (real_distrib a c eta)).
     - exact (real_lt_plus_r_zero (real_mult a c) (real_mult a eta)
-                Hetapos). }
+                (real_mult_pos_compat a eta Ha Hetapos)). }
   assert (Hstep4 : real_lt (real_mult a (real_plus c eta))
     (real_mult (real_plus b eta) (real_plus c eta))).
   { exact (real_mult_lt_compat a (real_plus b eta) (real_plus c eta)
@@ -459,13 +461,46 @@ Proof.
               (real_plus (real_mult b eta) (real_mult eta eta)))
            (real_plus (real_mult b c) eps)).
   - exact Hmain.
-  - exact (real_lt_plus_translate (real_mult b c)
-               (real_plus (real_plus (real_mult eta c)
-                  (real_mult b eta)) (real_mult eta eta)) eps
-               (real_lt_le_trans
+  - exact (real_eq_lt_lt
+               (real_plus (real_plus (real_mult b c) (real_mult eta c))
+                  (real_plus (real_mult b eta) (real_mult eta eta)))
+               (real_plus (real_mult b c)
                   (real_plus (real_plus (real_mult eta c)
-                     (real_mult b eta)) (real_mult eta eta))
-                  (real_plus (real_plus X X) X) eps Hsum H3X)).
+                     (real_mult b eta)) (real_mult eta eta)))
+               (real_plus (real_mult b c) eps)
+               (real_eq_trans
+                  (real_plus (real_plus (real_mult b c) (real_mult eta c))
+                     (real_plus (real_mult b eta) (real_mult eta eta)))
+                  (real_plus (real_mult b c)
+                     (real_plus (real_mult eta c)
+                        (real_plus (real_mult b eta) (real_mult eta eta))))
+                  (real_plus (real_mult b c)
+                     (real_plus (real_plus (real_mult eta c)
+                        (real_mult b eta)) (real_mult eta eta)))
+                  (real_eq_sym
+                     (real_plus (real_mult b c)
+                        (real_plus (real_mult eta c)
+                           (real_plus (real_mult b eta) (real_mult eta eta))))
+                     (real_plus (real_plus (real_mult b c) (real_mult eta c))
+                        (real_plus (real_mult b eta) (real_mult eta eta)))
+                     (real_plus_assoc (real_mult b c) (real_mult eta c)
+                        (real_plus (real_mult b eta) (real_mult eta eta))))
+                  (RealSetoid.real_eq_plus_compat (real_mult b c)
+                     (real_plus (real_mult eta c)
+                        (real_plus (real_mult b eta) (real_mult eta eta)))
+                     (real_mult b c)
+                     (real_plus (real_plus (real_mult eta c)
+                        (real_mult b eta)) (real_mult eta eta))
+                     (real_eq_refl (real_mult b c))
+                     (real_plus_assoc (real_mult eta c) (real_mult b eta)
+                        (real_mult eta eta))))
+                  (real_lt_plus_translate (real_mult b c)
+                     (real_plus (real_plus (real_mult eta c)
+                        (real_mult b eta)) (real_mult eta eta)) eps
+                     (real_le_lt_trans
+                        (real_plus (real_plus (real_mult eta c)
+                           (real_mult b eta)) (real_mult eta eta))
+                        (real_plus (real_plus X X) X) eps Hsum H3X))).
 Qed.
 
 (* ============================================================ *)
@@ -496,6 +531,7 @@ Lemma skm_pow_kl_mono_le_b_bfree :
                (geod_lsum n
                   (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i)))).
 Proof.
+  intros.
   exact (skm_le_b_mult_r_nonneg_bfree
            (powb_pow (real_plus real_one (real_opp eta)) t1)
            (powb_pow (real_plus real_one (real_opp eta)) t)
@@ -544,6 +580,7 @@ Lemma skm_policy_iter_kl_pow_mono_B_bfree :
                (geod_lsum n
                   (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i)))).
 Proof.
+  intros.
   apply (real_le_b_trans
            (geod_lsum n
               (fun i : nat => real_kl_term (r i)

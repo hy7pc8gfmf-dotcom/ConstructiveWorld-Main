@@ -9,12 +9,16 @@
 (* 依赖：CW_ConstructiveWorld_219（RealInterfaceEnhancedSetoid  *)
 (*       接口）、UpReqAlgebra、UpReqSqrtF（Newton 迭代 sqrtf_    *)
 (*       newton / sqrtf_step / sqrtf_slack 与常数 half、two）。  *)
-(* 备注：四枚显式假设位——平方非负 sfc_square_nonneg、          *)
+(* 备注：六枚显式假设位——平方非负 sfc_square_nonneg、          *)
 (*       metric_abs 桥接 sfc_metric_abs（上游 UpReqCauchy 同位； *)
 (*       接口层 metric 与 abs 为无桥接公理的独立原语）、阿基米德 *)
-(*       sfc_arch_decay（上游 S03_QExp arch_decay 同形）、abs    *)
+(*       sfc_arch_decay（上游 S03 arch_decay 同形）、abs         *)
 (*       锐化 sfc_abs_le_plus_eps（Real 实例经 Or 分解：lt 支    *)
-(*       abs_pos / eq 支 abs_zero）。                            *)
+(*       abs_pos / eq 支 abs_zero）、1 < 2 严格档 Hlt_one_two    *)
+(*       （假设位5：抽象接口不可内证，Real 层经                  *)
+(*       sfcx_lt_one_two_slot 消解）、严格加法混合保序           *)
+(*       sfc_lt_plus_compat_lt_le（假设位6，UpReqCauchy:123      *)
+(*       同位，Real 层 Or 分解可消解）。                         *)
 (*       sfc_sumf_nonneg_le_two 含显式前提 Hnn（f 逐点非负），  *)
 (*       调用点同步提供实参。                                    *)
 (*       数学路线：残差满足恒等式 t_{n+1} + t_n == z_n 且        *)
@@ -45,7 +49,7 @@ Fixpoint sfc_pow_half (k : nat) : R :=
   | Datatypes.S k' => mult (sfc_pow_half k') sfc_half
   end.
 
-(* ============ 显式假设位（四枚，全部同位先例登记） ============ *)
+(* ============ 显式假设位（五枚，全部同位先例登记） ============ *)
 (* 假设位1（§8 路线 (a) 永久假设位，M2 墙；为 §8 链提供前提 + 半衰减乘子步） *)
 Hypothesis sfc_square_nonneg : forall t : R, le zero (mult t t).
 (* 假设位2（metric_abs 桥接假设位，对照表 :703 缺位登记；UpReqCauchy:108 同位） *)
@@ -56,6 +60,18 @@ Variable sfc_arch_decay : forall (c eps : R), le zero c -> lt zero eps ->
 (* 假设位4（abs 锐化 eps 形假设位；Real 证明 = Or 分解：lt 支 abs_pos / eq 支 abs_zero） *)
 Variable sfc_abs_le_plus_eps : forall (t : R), le zero t -> forall (eps : R),
   lt zero eps -> le (abs t) (plus t eps).
+(* 假设位5（1 < 2 严格档假设位。抽象接口无 le 分解/三分律字段，one_pos+
+   lt_plus_compat 双严格形只达 0 < 2，混合平移不可导出（ReqStrictOrderBridge
+   闭节后假设位不独立导出：沙箱探针 not found + UpReqAlgebra:1466 注释双证）；
+   Firewall-TempEntMono / E347 区 Variable 诚实前置先例同位。Real 层经
+   real_lt_plus_translate 消解，见 SqrtfCauchyDischarge §A3 sfcx_lt_one_two_slot。） *)
+Hypothesis Hlt_one_two : lt one sfc_two.
+(* 假设位6（严格加法混合保序 lt_le 形。接口仅双严格 lt_plus_compat，混合形
+   不可内证（UpReqAlgebra:1466 注释 + 沙箱探针双证）；UpReqCauchy:123
+   lt_plus_compat_lt_le 同位 Variable 先例，语句逐字。Real 层经
+   real_lt_plus_translate + real_le Or 分解可消解。） *)
+Variable sfc_lt_plus_compat_lt_le :
+  forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 
 (* ============ §0b 常量与基础 ============ *)
 
@@ -98,11 +114,7 @@ Proof.
 Qed.
 
 Lemma sfc_lt_one_two : lt one sfc_two.
-Proof.
-  exact (lt_id_l one (plus one zero) sfc_two
-           (req_sym (plus one zero) one (plus_zero one))
-           (req_lt_plus_compat_le_lt one one zero one (le_refl one) one_pos)).
-Qed.
+Proof. exact Hlt_one_two. Qed.
 
 Lemma sfc_inv_one : req (inv_pos one one_pos) one.
 Proof.
@@ -110,7 +122,7 @@ Proof.
                    (mult one (inv_pos one one_pos))
                    one).
   - exact (req_sym (mult one (inv_pos one one_pos))
-                   (inv_pos one one_pos) (mult_one (inv_pos one one_pos))).
+                   (inv_pos one one_pos) (req_mult_one_l (inv_pos one one_pos))).
   - exact (inv_pos_correct one one_pos).
 Qed.
 
@@ -125,13 +137,19 @@ Qed.
 Definition sfc_qrt : R := mult sfc_half sfc_half.
 
 Lemma sfc_qrt_pos : lt zero sfc_qrt.
-Proof. exact (mult_positive sfc_half_pos sfc_half_pos). Qed.
+Proof. exact (mult_positive sfc_half sfc_half sfc_half_pos sfc_half_pos). Qed.
 
 Lemma sfc_qrt_lt_half : lt sfc_qrt sfc_half.
 Proof.
   apply (req_lt_compat sfc_qrt sfc_qrt (mult one sfc_half) sfc_half
            (req_refl sfc_qrt) (req_mult_one_l sfc_half)).
-  exact (lt_mult_compat sfc_half_pos sfc_half_le_one).
+  exact (lt_mult_compat sfc_half one sfc_half sfc_half_pos
+           (req_lt_compat (mult one sfc_half) sfc_half
+                          (mult sfc_two sfc_half) one
+                          (req_mult_one_l sfc_half)
+                          (inv_pos_correct sfc_two req_two_pos)
+                          (lt_mult_compat one sfc_two sfc_half sfc_half_pos
+                             sfc_lt_one_two))).
 Qed.
 
 (* 2·(half·X) == X *)
@@ -148,9 +166,27 @@ Proof.
     + exact (req_mult_compat (mult sfc_two sfc_half) one X X
                (req_trans (mult sfc_two sfc_half) (mult sfc_half sfc_two) one
                           (mult_comm sfc_two sfc_half)
-                          nsq_half_two_correct)
+                          (req_trans (mult sfc_half sfc_two)
+                                     (mult sfc_two sfc_half) one
+                                     (mult_comm sfc_half sfc_two)
+                                     (inv_pos_correct sfc_two req_two_pos)))
                (req_refl X)).
     + exact (req_mult_one_l X).
+Qed.
+
+(* 节内 half 面尾件：nsq_tail（UpReqSqrtF nsq_half 面）经 inv_pos_ext 桥
+   运输到本节 sfc_half 面（nsq_two_pos 为 Qed 不透明件，与 req_two_pos
+   不可 conv——F3 卡跨节 half 墙，桥配方同 E-STAGING-F3 L408 实证）。 *)
+Lemma sfc_half_tail : forall X : R, req (mult sfc_half (plus X X)) X.
+Proof.
+  intro X.
+  exact (req_trans (mult sfc_half (plus X X))
+                   (mult nsq_half (plus X X)) X
+                   (req_mult_compat sfc_half nsq_half (plus X X) (plus X X)
+                      (inv_pos_ext sfc_two nsq_two req_two_pos nsq_two_pos
+                         (req_refl (plus one one)))
+                      (req_refl (plus X X)))
+                   (nsq_tail X)).
 Qed.
 
 (* ============ §0c Set 层有限和 + 几何尾和机器 ============ *)
@@ -170,7 +206,7 @@ Proof.
   - exact (req_le_compat (plus zero zero) zero
                          (sfc_sumf f (Datatypes.S n)) (sfc_sumf f (Datatypes.S n))
                          (plus_zero zero) (req_refl (sfc_sumf f (Datatypes.S n)))
-                         (le_plus_compat zero zero (sfc_sumf f n) (f n)
+                         (le_plus_compat zero (sfc_sumf f n) zero (f n)
                             IH (Hf n))).
 Qed.
 
@@ -248,21 +284,32 @@ Proof.
                       (plus (sfc_sumf f (Datatypes.S J))
                             (plus (f (Datatypes.S J)) (f (Datatypes.S J))))
                       (mult sfc_two (f Datatypes.O))).
-      * apply (req_trans (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
-                               (mult sfc_two (mult sfc_half (f (Datatypes.S J)))))
-                         (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
-                               (f (Datatypes.S J)))
-                         (plus (sfc_sumf f (Datatypes.S J))
-                               (plus (f (Datatypes.S J)) (f (Datatypes.S J))))).
-        -- exact (req_plus_compat (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
-                                  (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
-                                  (mult sfc_two (mult sfc_half (f (Datatypes.S J))))
-                                  (f (Datatypes.S J))
-                                  (req_refl (plus (sfc_sumf f (Datatypes.S J))
-                                                  (f (Datatypes.S J))))
-                                  (sfc_two_half_mult (f (Datatypes.S J)))).
-        -- exact (plus_assoc (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J))
-                                (f (Datatypes.S J))).
+      * exact (le_id_l
+                  (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                        (mult sfc_two (mult sfc_half (f (Datatypes.S J)))))
+                  (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                        (f (Datatypes.S J)))
+                  (plus (sfc_sumf f (Datatypes.S J))
+                        (plus (f (Datatypes.S J)) (f (Datatypes.S J))))
+                  (req_plus_compat (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                                   (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                                   (mult sfc_two (mult sfc_half (f (Datatypes.S J))))
+                                   (f (Datatypes.S J))
+                                   (req_refl (plus (sfc_sumf f (Datatypes.S J))
+                                                   (f (Datatypes.S J))))
+                                   (sfc_two_half_mult (f (Datatypes.S J))))
+                  (sfc_le_of_req
+                     (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                           (f (Datatypes.S J)))
+                     (plus (sfc_sumf f (Datatypes.S J))
+                           (plus (f (Datatypes.S J)) (f (Datatypes.S J))))
+                     (req_sym (plus (sfc_sumf f (Datatypes.S J))
+                                    (plus (f (Datatypes.S J)) (f (Datatypes.S J))))
+                              (plus (plus (sfc_sumf f (Datatypes.S J)) (f (Datatypes.S J)))
+                                    (f (Datatypes.S J)))
+                              (plus_assoc (sfc_sumf f (Datatypes.S J))
+                                          (f (Datatypes.S J))
+                                          (f (Datatypes.S J)))))).
       * apply (le_trans (plus (sfc_sumf f (Datatypes.S J))
                               (plus (f (Datatypes.S J)) (f (Datatypes.S J))))
                         (plus (sfc_sumf f (Datatypes.S J))
@@ -278,7 +325,9 @@ Proof.
                                       (plus (f (Datatypes.S J)) (f (Datatypes.S J)))
                                       (mult sfc_two (f (Datatypes.S J)))
                                       (req_refl (sfc_sumf f (Datatypes.S J)))
-                                      (req_two_mult (f (Datatypes.S J))))).
+                                      (req_sym (mult (plus one one) (f (Datatypes.S J)))
+                                               (plus (f (Datatypes.S J)) (f (Datatypes.S J)))
+                                               (req_two_mult (f (Datatypes.S J)))))).
         -- exact IH.
 Qed.
 
@@ -317,13 +366,15 @@ Proof.
     + exact (req_plus_compat u u (plus zero (opp w))
                              (plus (plus (opp v) v) (opp w))
                              (req_refl u)
-                             (req_plus_compat (plus (opp v) v) zero (opp w) (opp w)
-                                              (req_trans (plus (opp v) v)
-                                                         (plus v (opp v))
-                                                         zero
-                                                         (plus_comm (opp v) v)
-                                                         (plus_opp v))
-                                              (req_refl (opp w)))).
+                             (req_sym (plus (plus (opp v) v) (opp w))
+                                      (plus zero (opp w))
+                                      (req_plus_compat (plus (opp v) v) zero (opp w) (opp w)
+                                                       (req_trans (plus (opp v) v)
+                                                                  (plus v (opp v))
+                                                                  zero
+                                                                  (plus_comm (opp v) v)
+                                                                  (plus_opp v))
+                                                       (req_refl (opp w))))).
     + apply (req_trans (plus u (plus (plus (opp v) v) (opp w)))
                        (plus u (plus (opp v) (plus v (opp w))))
                        (plus (plus u (opp v)) (plus v (opp w)))).
@@ -349,7 +400,7 @@ Lemma sfc_le_minus_compat : forall w u v : R, le u v ->
   le (req_minus w v) (req_minus w u).
 Proof.
   intros w u v H.
-  exact (le_plus_compat w w (opp v) (opp u) (le_refl w) (opp_le_compat H)).
+  exact (le_plus_compat w w (opp v) (opp u) (le_refl w) (opp_le_compat u v H)).
 Qed.
 
 Lemma sfc_req_minus_half : forall u : R,
@@ -361,7 +412,7 @@ Proof.
                    (mult sfc_half u)).
   - exact (req_plus_compat u (mult sfc_half (plus u u))
                            (opp (mult sfc_half u)) (opp (mult sfc_half u))
-                           (req_sym (mult sfc_half (plus u u)) u (nsq_tail u))
+                           (req_sym (mult sfc_half (plus u u)) u (sfc_half_tail u))
                            (req_refl (opp (mult sfc_half u)))).
   - apply (req_trans (plus (mult sfc_half (plus u u)) (opp (mult sfc_half u)))
                      (plus (plus (mult sfc_half u) (mult sfc_half u))
@@ -370,9 +421,7 @@ Proof.
     + exact (req_plus_compat (mult sfc_half (plus u u))
                              (plus (mult sfc_half u) (mult sfc_half u))
                              (opp (mult sfc_half u)) (opp (mult sfc_half u))
-                             (req_sym (plus (mult sfc_half u) (mult sfc_half u))
-                                      (mult sfc_half (plus u u))
-                                      (distrib sfc_half u u))
+                             (distrib sfc_half u u)
                              (req_refl (opp (mult sfc_half u)))).
     + apply (req_trans (plus (plus (mult sfc_half u) (mult sfc_half u))
                              (opp (mult sfc_half u)))
@@ -426,10 +475,7 @@ Proof.
                            (sfc_t n)
                            (sqrtf_slack a (sqrtf_newton a Ha x Hx n) Ha
                               (sqrtf_newton_pos a Ha x Hx n))
-                           (req_sym (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                    (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                                       (sqrtf_newton_pos a Ha x Hx n))
-                                    (sqrtf_newton_succ a Ha x Hx n))
+                           (sqrtf_newton_succ a Ha x Hx n)
                            (req_refl (sfc_t n))).
   - exact (nsq_step_plus_slack a (sqrtf_newton a Ha x Hx n) Ha
              (sqrtf_newton_pos a Ha x Hx n)).
@@ -461,35 +507,46 @@ Proof.
                            (plus (sfc_t n)
                                  (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
                      (sfc_t n)).
+    + exact (req_sym (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                           (plus (sfc_t n) (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
+                     (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sfc_t n))
+                           (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                     (plus_assoc (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sfc_t n)
+                                 (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))).
     + apply (req_trans (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                             (plus (sfc_t n)
-                                   (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
-                       (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sfc_t n))
-                             (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                             (plus (sfc_t n) (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
                        (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                    (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                             (sfc_t n))).
-      * exact (req_sym (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                             (plus (sfc_t n)
-                                   (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
-                       (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sfc_t n))
-                             (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                       (plus_assoc (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sfc_t n)
-                                   (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))).
-      * exact (plus_assoc (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                          (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))) (sfc_t n)).
-    + apply (req_trans (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                   (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                              (sfc_t n))
-                       (plus zero (sfc_t n))
                        (sfc_t n)).
-      * exact (req_plus_compat (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+      * exact (req_trans (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                               (plus (sfc_t n) (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
+                         (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                               (plus (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))) (sfc_t n)))
+                         (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                      (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                               zero
-                               (sfc_t n) (sfc_t n)
-                               (plus_opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                               (req_refl (sfc_t n))).
-      * exact (req_plus_zero_l (sfc_t n)).
+                               (sfc_t n))
+                         (req_plus_compat (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                          (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                          (plus (sfc_t n) (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                                          (plus (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))) (sfc_t n))
+                                          (req_refl (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                          (plus_comm (sfc_t n) (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))))
+                         (plus_assoc (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                     (opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                     (sfc_t n))).
+      * exact (req_trans (plus (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                     (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                               (sfc_t n))
+                         (plus zero (sfc_t n))
+                         (sfc_t n)
+                         (req_plus_compat (plus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                (opp (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                                          zero
+                                          (sfc_t n) (sfc_t n)
+                                          (plus_opp (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                          (req_refl (sfc_t n)))
+                         (req_plus_zero_l (sfc_t n))).
 Qed.
 
 Lemma sfc_z_ge_half : forall n : nat,
@@ -507,19 +564,50 @@ Proof.
                                 (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
                                    (sqrtf_newton_pos a Ha x Hx n))
                                 (sqrtf_newton_succ a Ha x Hx n))).
-  exact (sfc_le_mult_l sfc_half (sqrtf_newton a Ha x Hx n)
-           (plus (sqrtf_newton a Ha x Hx n)
-              (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
-                 (sqrtf_newton_pos a Ha x Hx n))))
-           sfc_half_pos
-           (sfc_le_plus_r (sqrtf_newton a Ha x Hx n)
-              (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
-                 (sqrtf_newton_pos a Ha x Hx n)))
-              (sfc_lt_le zero (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
-                                          (sqrtf_newton_pos a Ha x Hx n)))
-                 (mult_positive Ha
-                    (inv_pos_pos (sqrtf_newton a Ha x Hx n)
-                       (sqrtf_newton_pos a Ha x Hx n)))))).
+  exact (req_le_compat (mult sfc_half (sqrtf_newton a Ha x Hx n))
+                       (mult sfc_half (sqrtf_newton a Ha x Hx n))
+                       (mult sfc_half (plus (sqrtf_newton a Ha x Hx n)
+                                            (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                             (sqrtf_newton_pos a Ha x Hx n)))))
+                       (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                          (sqrtf_newton_pos a Ha x Hx n))
+                       (req_refl (mult sfc_half (sqrtf_newton a Ha x Hx n)))
+                       (req_trans (mult sfc_half (plus (sqrtf_newton a Ha x Hx n)
+                                                       (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                                        (sqrtf_newton_pos a Ha x Hx n)))))
+                                  (mult nsq_half (plus (sqrtf_newton a Ha x Hx n)
+                                                       (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                                        (sqrtf_newton_pos a Ha x Hx n)))))
+                                  (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                     (sqrtf_newton_pos a Ha x Hx n))
+                                  (req_mult_compat sfc_half nsq_half
+                                     (plus (sqrtf_newton a Ha x Hx n)
+                                           (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                            (sqrtf_newton_pos a Ha x Hx n))))
+                                     (plus (sqrtf_newton a Ha x Hx n)
+                                           (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                            (sqrtf_newton_pos a Ha x Hx n))))
+                                     (inv_pos_ext sfc_two nsq_two req_two_pos nsq_two_pos
+                                        (req_refl (plus one one)))
+                                     (req_refl (plus (sqrtf_newton a Ha x Hx n)
+                                                     (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                                      (sqrtf_newton_pos a Ha x Hx n))))))
+                                  (req_refl (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                               (sqrtf_newton_pos a Ha x Hx n))))
+                       (sfc_le_mult_l sfc_half (sqrtf_newton a Ha x Hx n)
+                          (plus (sqrtf_newton a Ha x Hx n)
+                             (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                (sqrtf_newton_pos a Ha x Hx n))))
+                          sfc_half_pos
+                          (sfc_le_plus_r (sqrtf_newton a Ha x Hx n)
+                             (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                (sqrtf_newton_pos a Ha x Hx n)))
+                             (sfc_lt_le zero (mult a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                         (sqrtf_newton_pos a Ha x Hx n)))
+                                (mult_positive a (inv_pos (sqrtf_newton a Ha x Hx n)
+                                                          (sqrtf_newton_pos a Ha x Hx n))
+                                   Ha (inv_pos_pos (sqrtf_newton a Ha x Hx n)
+                                                   (sqrtf_newton_pos a Ha x Hx n))))))).
 Qed.
 
 Lemma sfc_two_z_ge : forall n : nat,
@@ -559,7 +647,8 @@ Proof.
                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
                  sfc_half)
            (sfc_t (Datatypes.S n))
-           (mult_zero sfc_half)
+           (req_trans (mult zero sfc_half) (mult sfc_half zero) zero
+                      (mult_comm zero sfc_half) (mult_zero sfc_half))
            (req_trans (mult (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                        (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                                   (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
@@ -572,8 +661,32 @@ Proof.
                                             (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
                                  sfc_half)
-                      (req_refl (sfc_t (Datatypes.S n))))
-           (le_mult_compat sfc_half_pos
+                      (req_trans (mult sfc_half (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                           (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))))
+                                 (mult nsq_half (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                           (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))))
+                                 (sfc_t (Datatypes.S n))
+                                 (req_mult_compat sfc_half nsq_half
+                                                  (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                             (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
+                                                  (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                             (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
+                                                  (inv_pos_ext sfc_two nsq_two req_two_pos nsq_two_pos
+                                                               (req_refl (plus one one)))
+                                                  (req_refl (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                       (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                                  (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))))
+                                 (req_refl (sfc_t (Datatypes.S n)))))
+           (le_mult_compat zero
+              (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                         (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                    (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
+              sfc_half
+              sfc_half_pos
               (sfc_le_zero_minus
                  (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
@@ -596,177 +709,222 @@ Proof.
                     (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))).
     + exact (req_le_compat (sfc_t (Datatypes.S n))
+                           (sfc_t (Datatypes.S n))
+                           (sfc_t (Datatypes.S n))
                            (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                       (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                           (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                      (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                           (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                      (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                           (sfc_step_minus (Datatypes.S n))
-                           (req_refl (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                           (le_refl (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                               (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n)))))).
+                           (req_refl (sfc_t (Datatypes.S n)))
+                           (req_sym (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                               (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
+                                    (sfc_t (Datatypes.S n))
+                                    (sfc_step_minus (Datatypes.S n)))
+                           (le_refl (sfc_t (Datatypes.S n)))).
     + exact (sfc_le_minus_compat (sqrtf_newton a Ha x Hx (Datatypes.S n))
                 (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                 (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n)))
                 (sfc_z_ge_half (Datatypes.S n))).
-  - exact (req_le_compat (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
+  - exact (sfc_le_of_req (req_minus (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                     (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                          (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (sfc_req_minus_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (req_refl (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                         (le_refl (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))).
+                         (sfc_req_minus_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))).
 Qed.
 
 Lemma sfc_slack_ext : forall (u v : R) (Hu : lt zero u) (Hv : lt zero v),
   req u v -> req (sqrtf_slack a u Ha Hu) (sqrtf_slack a v Ha Hv).
 Proof.
   intros u v Hu Hv H.
-  exact (req_mult_compat sfc_half sfc_half
-           (plus u (opp (mult a (inv_pos u Hu))))
-           (plus v (opp (mult a (inv_pos v Hv))))
-           (req_refl sfc_half)
-           (req_plus_compat u v (opp (mult a (inv_pos u Hu)))
-                               (opp (mult a (inv_pos v Hv)))
-                               H
-                               (req_opp_compat (mult a (inv_pos u Hu))
-                                               (mult a (inv_pos v Hv))
-                                               (req_mult_compat a a (inv_pos u Hu)
-                                                  (inv_pos v Hv) (req_refl a)
-                                                  (inv_pos_ext u v Hu Hv H))))).
+  apply (req_trans (sqrtf_slack a u Ha Hu)
+                   (mult nsq_half (plus u (opp (mult a (inv_pos u Hu)))))
+                   (sqrtf_slack a v Ha Hv)).
+  - exact (req_refl (sqrtf_slack a u Ha Hu)).
+  - apply (req_trans (mult nsq_half (plus u (opp (mult a (inv_pos u Hu)))))
+                     (mult sfc_half (plus u (opp (mult a (inv_pos u Hu)))))
+                     (sqrtf_slack a v Ha Hv)).
+    + exact (req_mult_compat nsq_half sfc_half
+               (plus u (opp (mult a (inv_pos u Hu))))
+               (plus u (opp (mult a (inv_pos u Hu))))
+               (inv_pos_ext nsq_two sfc_two nsq_two_pos req_two_pos
+                  (req_refl (plus one one)))
+               (req_refl (plus u (opp (mult a (inv_pos u Hu)))))).
+    + apply (req_trans (mult sfc_half (plus u (opp (mult a (inv_pos u Hu)))))
+                       (mult sfc_half (plus v (opp (mult a (inv_pos v Hv)))))
+                       (sqrtf_slack a v Ha Hv)).
+      * exact (req_mult_compat sfc_half sfc_half
+                 (plus u (opp (mult a (inv_pos u Hu))))
+                 (plus v (opp (mult a (inv_pos v Hv))))
+                 (req_refl sfc_half)
+                 (req_plus_compat u v (opp (mult a (inv_pos u Hu)))
+                                    (opp (mult a (inv_pos v Hv)))
+                                    H
+                                    (req_opp_compat (mult a (inv_pos u Hu))
+                                                    (mult a (inv_pos v Hv))
+                                                    (req_mult_compat a a (inv_pos u Hu)
+                                                       (inv_pos v Hv) (req_refl a)
+                                                       (inv_pos_ext u v Hu Hv H))))).
+      * apply (req_trans (mult sfc_half (plus v (opp (mult a (inv_pos v Hv)))))
+                         (mult nsq_half (plus v (opp (mult a (inv_pos v Hv)))))
+                         (sqrtf_slack a v Ha Hv)).
+        -- exact (req_mult_compat sfc_half nsq_half
+                    (plus v (opp (mult a (inv_pos v Hv))))
+                    (plus v (opp (mult a (inv_pos v Hv))))
+                    (inv_pos_ext sfc_two nsq_two req_two_pos nsq_two_pos
+                       (req_refl (plus one one)))
+                    (req_refl (plus v (opp (mult a (inv_pos v Hv)))))).
+        -- exact (req_refl (sqrtf_slack a v Ha Hv)).
 Qed.
-
-(* 压缩比率恒等式（nsq_slack_contraction 的迭代形）：
-   2·z_{S n}·t_{S n} == t_n·t_n *)
 Lemma sfc_t_rec : forall n : nat,
   req (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
             (sfc_t (Datatypes.S n)))
       (mult (sfc_t n) (sfc_t n)).
 Proof.
   intro n.
-  exact (req_mult_compat
-           (mult sfc_two (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                    (sqrtf_newton_pos a Ha x Hx n)))
-           (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-           (sqrtf_slack a (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                            (sqrtf_newton_pos a Ha x Hx n))
-                    Ha (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
-                          (sqrtf_newton_pos a Ha x Hx n)))
-           (sfc_t (Datatypes.S n))
-           (req_mult_compat sfc_two sfc_two
-              (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                 (sqrtf_newton_pos a Ha x Hx n))
-              (sqrtf_newton a Ha x Hx (Datatypes.S n))
-              (req_refl sfc_two)
-              (req_sym (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                       (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                          (sqrtf_newton_pos a Ha x Hx n))
-                       (sqrtf_newton_succ a Ha x Hx n)))
-           (sfc_slack_ext (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                             (sqrtf_newton_pos a Ha x Hx n))
-                          (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                          (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
-                             (sqrtf_newton_pos a Ha x Hx n))
-                          (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))
-                          (req_sym (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                   (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
-                                      (sqrtf_newton_pos a Ha x Hx n))
-                                   (sqrtf_newton_succ a Ha x Hx n)))
-           (nsq_slack_contraction a (sqrtf_newton a Ha x Hx n) Ha
-              (sqrtf_newton_pos a Ha x Hx n))).
+  apply (req_trans (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                         (sfc_t (Datatypes.S n)))
+                   (mult (mult sfc_two (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                            (sqrtf_newton_pos a Ha x Hx n)))
+                         (sqrtf_slack a (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                            (sqrtf_newton_pos a Ha x Hx n))
+                                    Ha (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
+                                           (sqrtf_newton_pos a Ha x Hx n))))
+                   (mult (sfc_t n) (sfc_t n))).
+  - exact (req_sym (mult (mult sfc_two (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                            (sqrtf_newton_pos a Ha x Hx n)))
+                         (sqrtf_slack a (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                            (sqrtf_newton_pos a Ha x Hx n))
+                                    Ha (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
+                                           (sqrtf_newton_pos a Ha x Hx n))))
+                   (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                         (sfc_t (Datatypes.S n)))
+                   (req_mult_compat (mult sfc_two (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                                      (sqrtf_newton_pos a Ha x Hx n)))
+                                    (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                    (sqrtf_slack a (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                                       (sqrtf_newton_pos a Ha x Hx n))
+                                              Ha (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
+                                                     (sqrtf_newton_pos a Ha x Hx n)))
+                                    (sfc_t (Datatypes.S n))
+                                    (req_mult_compat sfc_two sfc_two
+                                       (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                          (sqrtf_newton_pos a Ha x Hx n))
+                                       (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                       (req_refl sfc_two)
+                                       (req_sym (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                                   (sqrtf_newton_pos a Ha x Hx n))
+                                                (sqrtf_newton_succ a Ha x Hx n)))
+                                    (sfc_slack_ext (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                                      (sqrtf_newton_pos a Ha x Hx n))
+                                                   (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                   (sqrtf_step_pos a (sqrtf_newton a Ha x Hx n) Ha
+                                                      (sqrtf_newton_pos a Ha x Hx n))
+                                                   (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))
+                                                   (req_sym (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                            (sqrtf_step a (sqrtf_newton a Ha x Hx n) Ha
+                                                               (sqrtf_newton_pos a Ha x Hx n))
+                                                            (sqrtf_newton_succ a Ha x Hx n))))).
+  - exact (nsq_slack_contraction a (sqrtf_newton a Ha x Hx n) Ha
+              (sqrtf_newton_pos a Ha x Hx n)).
 Qed.
 
 (* 残差闭式：t_{S n} == inv(2·z_{S n})·(t_n·t_n) *)
 Lemma sfc_t_eq : forall n : nat,
   req (sfc_t (Datatypes.S n))
       (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                     (mult_positive req_two_pos
+                     (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                         (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
             (mult (sfc_t n) (sfc_t n))).
 Proof.
   intro n.
   apply (req_trans (sfc_t (Datatypes.S n))
                    (mult (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                       (mult_positive req_two_pos
+                                       (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                          (sfc_t (Datatypes.S n)))
                    (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                  (mult_positive req_two_pos
+                                  (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                          (mult (sfc_t n) (sfc_t n)))).
   - apply (req_trans (sfc_t (Datatypes.S n))
                      (mult one (sfc_t (Datatypes.S n)))
                      (mult (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                         (mult_positive req_two_pos
+                                         (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                  (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                            (sfc_t (Datatypes.S n)))).
     + exact (req_sym (mult one (sfc_t (Datatypes.S n))) (sfc_t (Datatypes.S n))
                      (req_mult_one_l (sfc_t (Datatypes.S n)))).
     + exact (req_sym (mult (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                        (mult_positive req_two_pos
+                                        (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                          (sfc_t (Datatypes.S n)))
                      (mult one (sfc_t (Datatypes.S n)))
                      (req_mult_compat
                         (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                      (mult_positive req_two_pos
+                                      (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                          (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                               (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                         one
                         (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))
                         (req_trans (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                                  (mult_positive req_two_pos
+                                                  (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                          (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                                    (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                                          (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                                  (mult_positive req_two_pos
+                                                  (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
                                    one
                                    (mult_comm (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                                       (mult_positive req_two_pos
+                                                       (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                               (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                                    (inv_pos_correct (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                                    (mult_positive req_two_pos
+                                                    (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
                         (req_refl (sfc_t (Datatypes.S n))))).
   - apply (req_trans (mult (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                        (mult_positive req_two_pos
+                                        (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                               (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
                         (sfc_t (Datatypes.S n)))
                      (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                   (mult_positive req_two_pos
+                                   (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                            (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                                  (sfc_t (Datatypes.S n))))
                      (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                   (mult_positive req_two_pos
+                                   (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                            (mult (sfc_t n) (sfc_t n)))).
-    + exact (req_sym (mult_assoc (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                          (mult_positive req_two_pos
-                                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
+    + exact (req_sym (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                    (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
+                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
+                           (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                 (sfc_t (Datatypes.S n))))
+                     (mult (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                       (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
+                                          (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
+                               (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                          (sfc_t (Datatypes.S n)))
+                     (mult_assoc (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                            (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
+                                               (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                  (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                                  (sfc_t (Datatypes.S n)))).
     + exact (req_mult_compat
                 (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (mult_positive req_two_pos
+                         (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                 (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                         (mult_positive req_two_pos
+                         (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
-                (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                (sfc_t (Datatypes.S n))
+                (mult (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                      (sfc_t (Datatypes.S n)))
+                (mult (sfc_t n) (sfc_t n))
                 (req_refl (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                   (mult_positive req_two_pos
+                                   (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S n)) req_two_pos
                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
                 (sfc_t_rec n)).
 Qed.
@@ -778,56 +936,41 @@ Proof.
   intro n.
   apply (le_trans (sfc_t (Datatypes.S (Datatypes.S n)))
                   (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                 (mult_positive req_two_pos
+                                 (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))) req_two_pos
                                     (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
                         (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
                   (mult sfc_half (sfc_t (Datatypes.S n)))).
-  - exact (req_le_compat (sfc_t (Datatypes.S (Datatypes.S n)))
-                         (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                        (mult_positive req_two_pos
-                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                               (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
-                         (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                        (mult_positive req_two_pos
-                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                               (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
-                         (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                        (mult_positive req_two_pos
-                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                               (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
-                         (sfc_t_eq (Datatypes.S n))
-                         (req_refl (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                                  (mult_positive req_two_pos
-                                                     (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                                         (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n)))))
-                         (le_refl (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                                  (mult_positive req_two_pos
-                                                     (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                                        (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n)))))).
+  - exact (sfc_le_of_req _ _ (sfc_t_eq (Datatypes.S n))).
   - apply (le_trans (mult (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
-                                  (mult_positive req_two_pos
+                                  (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))) req_two_pos
                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
-                          (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
+                         (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
                     (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                    (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
                           (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
                     (mult sfc_half (sfc_t (Datatypes.S n)))).
     + exact (le_mult_compat_weak
+                (inv_pos (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
+                         (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))) req_two_pos
+                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n)))))
+                (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                         (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n)))
                 (sfc_square_nonneg (sfc_t (Datatypes.S n)))
                 (inv_pos_le_compat (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                    (mult sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))))
                                    (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))
-                                   (mult_positive req_two_pos
+                                   (mult_positive sfc_two (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n))) req_two_pos
                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S (Datatypes.S n))))
                                    (sfc_two_z_ge (Datatypes.S n)))).
     + apply (le_trans (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                    (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                            (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
-                      (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                     (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                            (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                  (sfc_t (Datatypes.S n))))
-                      (mult sfc_half (sfc_t (Datatypes.S n)))).
+                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                               (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))))
+                       (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                      (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                             (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                   (sfc_t (Datatypes.S n))))
+                       (mult sfc_half (sfc_t (Datatypes.S n)))).
       * exact (sfc_le_mult_l (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
                 (mult (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n)))
@@ -835,94 +978,76 @@ Proof.
                       (sfc_t (Datatypes.S n)))
                 (inv_pos_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                    (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                (le_mult_compat_weak (sfc_t_nonneg n) (sfc_t_le_half_z n))).
-      * (* inv(z')·((half·z')·t') == half·t' *)
-        apply (req_trans (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                               (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                     (sfc_t (Datatypes.S n))))
-                         (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                     (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                              (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
-                               (sfc_t (Datatypes.S n)))
-                         (mult sfc_half (sfc_t (Datatypes.S n)))).
-        -- exact (req_trans (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                          (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                                  (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                        (sfc_t (Datatypes.S n))))
-                            (mult (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                 (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                                        (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                                  (sfc_t (Datatypes.S n)))
+                (le_mult_compat_weak (sfc_t (Datatypes.S n))
+                                     (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                     (sfc_t (Datatypes.S n))
+                                     (sfc_t_nonneg n)
+                                     (sfc_t_le_half_z n))).
+      * apply (sfc_le_of_req (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                              (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                   (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                         (sfc_t (Datatypes.S n))))
+                             (mult sfc_half (sfc_t (Datatypes.S n)))).
+        -- apply (req_trans (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                              (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                   (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                         (sfc_t (Datatypes.S n))))
                             (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                                         (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                                  (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                   (sfc_t (Datatypes.S n)))
-                            (mult_assoc (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                 (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                                        (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                        (sfc_t (Datatypes.S n)))
-                            (req_mult_compat
-                               (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                              (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                                     (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                               (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                     (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                              (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
-                               (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))
-                               (mult_comm (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                   (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
-                                          (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
-                               (req_refl (sfc_t (Datatypes.S n))))).
-        -- exact (req_trans (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
-                                        (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                 (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
-                                  (sfc_t (Datatypes.S n)))
-                            (mult (mult sfc_half one) (sfc_t (Datatypes.S n)))
-                            (mult sfc_half (sfc_t (Datatypes.S n)))
-                            (req_trans (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                            (mult sfc_half (sfc_t (Datatypes.S n)))).
+           ++ exact (req_trans (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                        (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                             (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                                   (sfc_t (Datatypes.S n))))
+                                       (mult (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                                       (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                                              (sfc_t (Datatypes.S n)))
+                                       (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
                                                    (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
                                                             (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
                                              (sfc_t (Datatypes.S n)))
-                                       (mult (mult sfc_half
-                                                 (mult (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                       (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                                (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
-                                             (sfc_t (Datatypes.S n)))
-                                       (mult (mult sfc_half one) (sfc_t (Datatypes.S n)))
-                                       (req_sym (mult_assoc sfc_half
-                                                            (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                            (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                                     (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
-                                       (req_mult_compat sfc_half sfc_half
-                                          (mult (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                         (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
-                                          one
-                                          (req_refl sfc_half)
-                                          (inv_pos_correct (sqrtf_newton a Ha x Hx (Datatypes.S n))
-                                                           (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
-                            (req_mult_compat (mult sfc_half one) sfc_half
-                               (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))
-                               (mult_one sfc_half) (req_refl (sfc_t (Datatypes.S n))))).
+                                       (mult_assoc (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                                   (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                                   (sfc_t (Datatypes.S n)))
+                                       (req_mult_compat (mult (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                          (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                                         (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                                                        (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                                                              (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))
+                                                        (sfc_t (Datatypes.S n)) (sfc_t (Datatypes.S n))
+                                                        (mult_comm (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                                                                            (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))
+                                                                   (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))))
+                                        (req_refl (sfc_t (Datatypes.S n))))).
+           ++ exact (req_trans (mult (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))) (inv_pos
+                       (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))) (sfc_t
+                       (Datatypes.S n))) (mult (mult sfc_half one) (sfc_t (Datatypes.S n))) (mult sfc_half (sfc_t
+                       (Datatypes.S n))) (req_mult_compat (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S
+                       n))) (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S
+                       n)))) (mult sfc_half one) (sfc_t (Datatypes.S n)) (sfc_t
+                       (Datatypes.S n)) (req_trans (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n)))
+                       (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S
+                       n)))) (mult sfc_half (mult (sqrtf_newton a Ha x Hx (Datatypes.S n)) (inv_pos (sqrtf_newton a Ha
+                       x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))) (mult sfc_half one)
+                       (req_sym (mult sfc_half (mult (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                       (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S
+                       n))))) (mult (mult sfc_half (sqrtf_newton a Ha x Hx (Datatypes.S n))) (inv_pos (sqrtf_newton a
+                       Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))) (mult_assoc sfc_half
+                       (sqrtf_newton a Ha x Hx (Datatypes.S n)) (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))))) (req_mult_compat sfc_half sfc_half (mult
+                       (sqrtf_newton a Ha x Hx (Datatypes.S n)) (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S n))
+                       (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))) one (req_refl sfc_half) (inv_pos_correct
+                       (sqrtf_newton a Ha x Hx (Datatypes.S n)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S n)))))
+                       (req_refl (sfc_t (Datatypes.S n)))) (req_mult_compat (mult sfc_half one) sfc_half (sfc_t
+                       (Datatypes.S n)) (sfc_t (Datatypes.S n)) (mult_one sfc_half) (req_refl (sfc_t (Datatypes.S
+                       n))))).
 Qed.
 
-Lemma sfc_t_mono : forall n : nat,
-  le (sfc_t (Datatypes.S (Datatypes.S n))) (sfc_t (Datatypes.S n)).
-Proof.
-  intro n.
-  apply (le_trans (sfc_t (Datatypes.S (Datatypes.S n)))
-                  (mult sfc_half (sfc_t (Datatypes.S n)))
-                  (sfc_t (Datatypes.S n))).
-  - exact (sfc_t_decay n).
-  - exact (req_le_compat (mult sfc_half (sfc_t (Datatypes.S n)))
-                         (mult sfc_half (sfc_t (Datatypes.S n)))
-                         (mult one (sfc_t (Datatypes.S n)))
-                         (sfc_t (Datatypes.S n))
-                         (req_refl (mult sfc_half (sfc_t (Datatypes.S n))))
-                         (req_mult_one_l (sfc_t (Datatypes.S n)))
-                         (le_mult_compat_weak (sfc_t_nonneg n) sfc_half_le_one)).
-Qed.
 
 Lemma sfc_t_pow_decay : forall k : nat,
   le (sfc_t (Datatypes.S k))
@@ -931,10 +1056,12 @@ Proof.
   induction k as [| k IH].
   - exact (req_le_compat (sfc_t (Datatypes.S Datatypes.O))
                          (sfc_t (Datatypes.S Datatypes.O))
-                         (mult one (sfc_t (Datatypes.S Datatypes.O)))
                          (sfc_t (Datatypes.S Datatypes.O))
+                         (mult one (sfc_t (Datatypes.S Datatypes.O)))
                          (req_refl (sfc_t (Datatypes.S Datatypes.O)))
-                         (req_mult_one_l (sfc_t (Datatypes.S Datatypes.O)))
+                         (req_sym (mult one (sfc_t (Datatypes.S Datatypes.O)))
+                                  (sfc_t (Datatypes.S Datatypes.O))
+                                  (req_mult_one_l (sfc_t (Datatypes.S Datatypes.O))))
                          (le_refl (sfc_t (Datatypes.S Datatypes.O)))).
   - apply (le_trans (sfc_t (Datatypes.S (Datatypes.S k)))
                     (mult sfc_half (sfc_t (Datatypes.S k)))
@@ -942,8 +1069,7 @@ Proof.
                           (sfc_t (Datatypes.S Datatypes.O)))).
     + exact (sfc_t_decay k).
     + apply (req_le_compat (mult sfc_half (sfc_t (Datatypes.S k)))
-                           (mult sfc_half (mult (sfc_pow_half k)
-                                                (sfc_t (Datatypes.S Datatypes.O))))
+                           (mult sfc_half (sfc_t (Datatypes.S k)))
                            (mult sfc_half (mult (sfc_pow_half k)
                                                 (sfc_t (Datatypes.S Datatypes.O))))
                            (mult (sfc_pow_half (Datatypes.S k))
@@ -968,6 +1094,26 @@ Proof.
                  sfc_half_pos IH).
 Qed.
 
+(* ===== 单调下降：t_{n+2} ≤ t_{n+1}（前席引用未定义，本席补装；
+   指标同移一位——t 非负仅 n ≥ 1 有保证，sfc_t_nonneg 同界） ===== *)
+Lemma sfc_t_mono : forall n : nat,
+  le (sfc_t (Datatypes.S (Datatypes.S n))) (sfc_t (Datatypes.S n)).
+Proof.
+  intros n.
+  apply (le_trans (sfc_t (Datatypes.S (Datatypes.S n)))
+                  (mult sfc_half (sfc_t (Datatypes.S n)))
+                  (sfc_t (Datatypes.S n))).
+  + exact (sfc_t_decay n).
+  + apply (le_trans (mult sfc_half (sfc_t (Datatypes.S n)))
+                    (mult one (sfc_t (Datatypes.S n)))
+                    (sfc_t (Datatypes.S n))).
+    * exact (le_mult_compat_weak sfc_half one (sfc_t (Datatypes.S n))
+                                (sfc_t_nonneg n) (sfc_half_le_one)).
+    * exact (sfc_le_of_req (mult one (sfc_t (Datatypes.S n)))
+                           (sfc_t (Datatypes.S n))
+                           (req_mult_one_l (sfc_t (Datatypes.S n)))).
+Qed.
+
 Lemma sfc_t_mono_from : forall (k n : nat),
   le (sfc_t (Datatypes.S (n + k))) (sfc_t (Datatypes.S n)).
 Proof.
@@ -986,14 +1132,20 @@ Qed.
 Lemma sfc_geom_tail_t : forall (m J : nat), (1 <= m)%nat ->
   le (sfc_sumf (fun j => sfc_t (m + j)) J) (mult sfc_two (sfc_t m)).
 Proof.
-  intros m J Hm. apply (sfc_geom_tail (fun j => sfc_t (m + j))).
-  - intros j.
-    replace (m + j) with (Datatypes.S ((m - 1) + j)) by lia.
-    exact (sfc_t_nonneg ((m - 1) + j)).
-  - intros j.
-    replace (m + Datatypes.S j) with (Datatypes.S (Datatypes.S ((m - 1) + j))) by lia.
-    replace (m + j) with (Datatypes.S ((m - 1) + j)) by lia.
-    exact (sfc_t_decay ((m - 1) + j)).
+  intros m J Hm.
+  replace (sfc_t m) with (sfc_t (m + Datatypes.O)) by (f_equal; lia).
+  destruct J as [| J'].
+  - destruct m as [| m'']; [ lia | ].
+    exact (sfc_sumf_nonneg_le_two (fun j => sfc_t (Datatypes.S m'' + j))
+             (fun j => sfc_t_nonneg (m'' + j)) Datatypes.O).
+  - apply (sfc_geom_tail (fun j => sfc_t (m + j))).
+    + intros j.
+      replace (m + j) with (Datatypes.S ((m - 1) + j)) by lia.
+      exact (sfc_t_nonneg ((m - 1) + j)).
+    + intros j.
+      replace (m + Datatypes.S j) with (Datatypes.S (Datatypes.S ((m - 1) + j))) by lia.
+      replace (m + j) with (Datatypes.S ((m - 1) + j)) by lia.
+      exact (sfc_t_decay ((m - 1) + j)).
 Qed.
 
 (* ===== 望远镜：z_m − z_{m+J} == Σ_{j<J} t_{m+j} ===== *)
@@ -1032,10 +1184,7 @@ Proof.
                                           (sqrtf_newton a Ha x Hx (Datatypes.S (m + J))))
                                (sfc_t (m + J))
                                IH
-                               (req_sym (sfc_t (m + J))
-                                        (req_minus (sqrtf_newton a Ha x Hx (m + J))
-                                                   (sqrtf_newton a Ha x Hx (Datatypes.S (m + J))))
-                                        (sfc_step_minus (m + J)))).
+                               (sfc_step_minus (m + J))).
       * exact (req_refl (plus (sfc_sumf (fun j => sfc_t (m + j)) J) (sfc_t (m + J)))).
 Qed.
 
@@ -1050,7 +1199,7 @@ Proof.
               (mult a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S Datatypes.O))
                                (sqrtf_newton_pos a Ha x Hx (Datatypes.S Datatypes.O))))
               (sfc_t_nonneg Datatypes.O)
-              (mult_positive Ha
+              (mult_positive a (inv_pos (sqrtf_newton a Ha x Hx (Datatypes.S Datatypes.O)) (sqrtf_newton_pos a Ha x Hx (Datatypes.S Datatypes.O))) Ha
                  (inv_pos_pos (sqrtf_newton a Ha x Hx (Datatypes.S Datatypes.O))
                               (sqrtf_newton_pos a Ha x Hx (Datatypes.S Datatypes.O)))))
     as [k Hk].
@@ -1093,7 +1242,7 @@ Proof.
                      (mult sfc_two (sfc_t m))) by exact (sfc_geom_tail_t m (n - m) Hm1).
   assert (Htm : le (sfc_t m) (sfc_t (Datatypes.S K))).
   { replace m with (Datatypes.S (K + (m - 1 - K))) by lia.
-    exact (sfc_t_mono_from K (m - 1 - K)). }
+    exact (sfc_t_mono_from (m - 1 - K) K). }
   assert (Htmq : le (sfc_t m) (mult sfc_qrt eps))
     by exact (le_trans (sfc_t m) (sfc_t (Datatypes.S K)) (mult sfc_qrt eps)
            Htm (sfc_lt_le (sfc_t (Datatypes.S K)) (mult sfc_qrt eps) HtN)).
@@ -1104,9 +1253,9 @@ Proof.
   { apply (req_trans (mult sfc_two (mult sfc_qrt eps))
                      (mult (mult sfc_two sfc_qrt) eps)
                      (mult sfc_half eps)).
-    - exact (req_sym (mult_assoc sfc_two sfc_qrt eps)).
+    - exact (mult_assoc sfc_two sfc_qrt eps).
     - exact (req_mult_compat (mult sfc_two sfc_qrt) sfc_half eps eps
-                (req_sym (sfc_two_half_mult sfc_half)) (req_refl eps)). }
+                (sfc_two_half_mult sfc_half) (req_refl eps)). }
   assert (Htel : req (req_minus (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
                      (sfc_sumf (fun j => sfc_t (m + j)) (n - m))).
   { pose proof (sfc_telescope m (n - m)) as Ht0. rewrite HJ in Ht0. exact Ht0. }
@@ -1119,19 +1268,24 @@ Proof.
                       (abs (sfc_sumf (fun j => sfc_t (m + j)) (n - m)))
                       (plus (sfc_sumf (fun j => sfc_t (m + j)) (n - m)) (mult sfc_qrt eps))).
       + apply (req_le_compat
+                  (abs (req_minus (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n)))
                   (metric (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
                   (abs (req_minus (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n)))
-                  (abs (req_minus (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n)))
-                  (abs (sfc_sumf (fun j => sfc_t (m + j)) (n - m)))
-                  (sfc_metric_abs (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
-                  (req_abs_compat (req_minus (sqrtf_newton a Ha x Hx m)
-                                             (sqrtf_newton a Ha x Hx n))
-                                  (sfc_sumf (fun j => sfc_t (m + j)) (n - m)) Htel)
-                  (le_refl (abs (req_minus (sqrtf_newton a Ha x Hx m)
-                                           (sqrtf_newton a Ha x Hx n))))).
+                  (abs (sfc_sumf (fun j => sfc_t (m + j)) (n - m)))).
+        * exact (req_sym (metric (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
+                         (abs (req_minus (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n)))
+                         (sfc_metric_abs (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))).
+        * exact (req_abs_compat (req_minus (sqrtf_newton a Ha x Hx m)
+                                           (sqrtf_newton a Ha x Hx n))
+                                (sfc_sumf (fun j => sfc_t (m + j)) (n - m)) Htel).
+        * exact (le_refl (abs (req_minus (sqrtf_newton a Ha x Hx m)
+                                         (sqrtf_newton a Ha x Hx n)))).
       + exact (sfc_abs_le_plus_eps (sfc_sumf (fun j => sfc_t (m + j)) (n - m))
-                  Hsumnn (mult sfc_qrt eps) (mult_positive sfc_qrt_pos Heps)).
-    - exact (le_plus_compat
+                  Hsumnn (mult sfc_qrt eps) (mult_positive sfc_qrt eps sfc_qrt_pos Heps)).
+    - exact (le_plus_compat (sfc_sumf (fun j => sfc_t (m + j)) (n - m))
+                            (mult sfc_half eps)
+                            (mult sfc_qrt eps)
+                            (mult sfc_qrt eps)
                 (le_trans (sfc_sumf (fun j => sfc_t (m + j)) (n - m))
                           (mult sfc_two (sfc_t m))
                           (mult sfc_half eps)
@@ -1140,13 +1294,7 @@ Proof.
                                     (mult sfc_two (mult sfc_qrt eps))
                                     (mult sfc_half eps)
                                     Htwo
-                                    (req_le_compat (mult sfc_two (mult sfc_qrt eps))
-                                                   (mult sfc_half eps)
-                                                   (mult sfc_two (mult sfc_qrt eps))
-                                                   (mult sfc_half eps)
-                                                   (req_refl (mult sfc_two (mult sfc_qrt eps)))
-                                                   Eh
-                                                   (le_refl (mult sfc_half eps)))))
+(sfc_le_of_req (mult sfc_two (mult sfc_qrt eps)) (mult sfc_half eps) Eh)))
                 (le_refl (mult sfc_qrt eps))). }
   (* 严格收尾：half·eps + qrt·eps < eps *)
   apply (le_lt_trans _ _ _ Hbound).
@@ -1161,11 +1309,11 @@ Proof.
                                   (req_sym (mult sfc_half (plus eps eps))
                                            (plus (mult sfc_half eps) (mult sfc_half eps))
                                            (distrib sfc_half eps eps))
-                                  (nsq_tail eps))).
-  apply (lt_le_trans (lt_mult_compat Heps sfc_qrt_lt_half)
-                     (sfc_le_plus_r (mult sfc_half eps) (mult sfc_half eps)
-                        (sfc_lt_le zero (mult sfc_half eps)
-                           (mult_positive sfc_half_pos Heps)))).
+                                  (sfc_half_tail eps))).
+  apply (sfc_lt_plus_compat_lt_le (mult sfc_qrt eps) (mult sfc_half eps)
+           (mult sfc_half eps) (mult sfc_half eps)
+           (lt_mult_compat sfc_qrt sfc_half eps Heps sfc_qrt_lt_half)
+           (le_refl (mult sfc_half eps))).
 Qed.
 
 (* ===== 组装③：逐 eps Cauchy 证书（对照表 :644-648 同形） ===== *)
@@ -1175,26 +1323,28 @@ Lemma sfc_newton_cauchy : forall eps : R, lt zero eps ->
 Proof.
   intros eps Heps.
   destruct (sfc_arch_decay (sfc_t (Datatypes.S Datatypes.O)) (mult sfc_qrt eps)
-              (sfc_t_nonneg Datatypes.O) (mult_positive sfc_qrt_pos Heps)) as [k1 Hk1].
+              (sfc_t_nonneg Datatypes.O) (mult_positive sfc_qrt eps sfc_qrt_pos Heps)) as [k1 Hk1].
   assert (HtN : lt (sfc_t (Datatypes.S k1)) (mult sfc_qrt eps)).
-  { apply (req_lt_compat (mult (sfc_t (Datatypes.S Datatypes.O)) (sfc_pow_half k1))
-                         (mult (sfc_pow_half k1) (sfc_t (Datatypes.S Datatypes.O)))
-                         (mult sfc_qrt eps) (mult sfc_qrt eps)
-                         (mult_comm (sfc_t (Datatypes.S Datatypes.O)) (sfc_pow_half k1))
-                         (req_refl (mult sfc_qrt eps))).
-    apply (le_lt_trans (sfc_t (Datatypes.S k1))
+  { apply (le_lt_trans (sfc_t (Datatypes.S k1))
                        (mult (sfc_pow_half k1) (sfc_t (Datatypes.S Datatypes.O)))
                        (mult sfc_qrt eps)
-                       (sfc_t_pow_decay k1) (sfc_lt_le _ _ Hk1)). }
+                       (sfc_t_pow_decay k1)
+                       (req_lt_compat (mult (sfc_t (Datatypes.S Datatypes.O)) (sfc_pow_half k1))
+                                      (mult (sfc_pow_half k1) (sfc_t (Datatypes.S Datatypes.O)))
+                                      (mult sfc_qrt eps) (mult sfc_qrt eps)
+                                      (mult_comm (sfc_t (Datatypes.S Datatypes.O)) (sfc_pow_half k1))
+                                      (req_refl (mult sfc_qrt eps))
+                                      Hk1)). }
   exists (Datatypes.S k1).
   intros m n Hm Hn.
   destruct (Nat.leb m n) eqn:Eb.
   - exact (sfc_cauchy_pair k1 eps Heps HtN m n
              (NatLe_drop (Datatypes.S k1) m Hm) (proj1 (Nat.leb_le m n) Eb)).
-  - apply (req_lt_compat (metric (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
-                         (metric (sqrtf_newton a Ha x Hx n) (sqrtf_newton a Ha x Hx m))
-                         eps eps
-                         (metric_sym (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
+  - apply (req_lt_compat (metric (sqrtf_newton a Ha x Hx n) (sqrtf_newton a Ha x Hx m))
+                         (metric (sqrtf_newton a Ha x Hx m) (sqrtf_newton a Ha x Hx n))
+                         eps
+                         eps
+                         (metric_sym (sqrtf_newton a Ha x Hx n) (sqrtf_newton a Ha x Hx m))
                          (req_refl eps)).
     exact (sfc_cauchy_pair k1 eps Heps HtN n m
              (NatLe_drop (Datatypes.S k1) n Hn)
@@ -1210,7 +1360,7 @@ End SqrtfCauchyCore.
 End SqrtfCauchy.
 
 (* ============================================================ *)
-(* G3 提取（补记）：                                     *
-(* 参照 KLWallClosed.v 同式，Obj.magic 计数=0 为通过，产物 sfc_G3.ml。）*)
+(* G3 提取（补记）：                                            *)
+(* 参照 KLWallClosed.v 同式，Obj.magic 计数=0 为通过，产物 sfc_G3.ml。 *)
 (* ============================================================ *)
 Extraction "sfc_G3.ml" sfc_newton_cauchy sfc_pick_K sfc_geom_tail_t.
