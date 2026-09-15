@@ -36,6 +36,37 @@
           语义指向逐一核对不变；DTPT.DTPT. 限名保持原样）。撞名预检：
           Audit 顶层 38 名对本件既有名 grep 零撞。源件退役
           DTPT_Audit.v.retired_S5（全工作区 grep 零下游）。
+          TRUTH-1 席（2026-09-14，AUDIT-2 审计 P2 梯队·Truth 集群）：
+          尾部追加真化段 T1——Tex 纤维带证据见证族与非平凡面
+          （审计 C1）/ RefNode·Tneg 定理化三件（审计 C3）/
+          ev_append 精确加性 Set 见证面（审计 C4·加分）六 Qed 四
+          Definition；layer_self_refutation 死参 lv 复核**真死**，
+          裁决仅注记不改陈述（A8 对账件，注记随行于该件后）。
+          既有语句零改动；认证件数随段增（56 → 62 件全 Qed，另
+          T1 新 Definition 四件：tex_with / tneg_tex_dual /
+          ev_append_size_set / ev_append_size_mono_set）；
+          文尾假设闭包打印块追加 T1 新件六条。下游 DTPT_Bridge.v
+          随棒重编不改正文（B3 消费 Truth，独占权延伸面）。
+          TRUTH-2 席（2026-09-14，AUDIT-2 审计 C 类最后深水件·
+          Evidence 内容面）：尾部追加真化段 T2（审计 C4/B7 深水区
+          「evSeq list Q 内容盲」判定面回填）四块——内容相等判定器
+          （ev_eqb 叶判 Qeq_bool + ev_cong 内容同余 + ev_eqb_true_iff
+          双向 iff；S7 边界诚实声明：Leibniz 可靠面在 Qeq_bool 叶判
+          下为假，ev_eqb_leibniz_gap 反例定理（1#2 vs 2#4）封死该向，
+          Leibniz 面由 ev_eqb_raw（Qnum/Qden 结构叶判）补全 iff）/
+          内容归纳原理（ev_rect' 显式三构造子消去 + beta 三方程 +
+          ev_size_pos 第三方法重证 ev_size_pos_third + 叶刻画
+          ev_size_1_leaf_iff 消费面）/ 深度有界面（ev_case_set 三叉
+          sigT 分解 + ev_size_ge_2_pair 尺寸门槛分解 +
+          ev_pair_decomp_exact 精确加性回收）/ 有界枚举器（ev_enum +
+          ev_enum_size_bound 有界面 + 形状级生成规则
+          ev_enum_pair_member；Q 叶截断至 0%Q 单见证的诚实边界
+          随段注记）。既有语句零改动；认证件数随段增（62 → 90 件
+          全 Qed，另 T2 新 Definition/Fixpoint/Inductive 十件）；
+          文尾假设闭包打印块追加 T2 新件八条 + 提取探针三件
+          （_t2_ext_eqb / _t2_ext_decomp / _t2_ext_enum）。下游
+          DTPT_Bridge.v（P3-B11 在飞）只读消费不受影响（纯追加、
+          既有名零改动）。
    ④认证：56 件全 Qed（补强段 12 + 塔斯基段 15 + 审查器段 29）；
           塔斯基段 5 件 + 审查器段 6 件 Print Assumptions 公理闭包
           审计（应全 Closed）。
@@ -362,6 +393,20 @@ Proof.
   intros lv Code diag truth Hclosed.
   exact (tarski Code diag truth Hclosed).
 Qed.
+
+(* 【死参裁决 2026-09-14 TRUTH-1｜审计 A8 对账件】上件 layer_self_refutation
+   的全称参 lv : Level 经本席复核**真死**：lv 不出现于其余 binder（Code/
+   diag/truth）的类型、前提 diag_closed Code diag truth 或结论 exists 中，
+   证明体 exact (tarski Code diag truth Hclosed) 亦零消费——定理对 lv
+   全称惰性，实质即 tarski 的换名包装。裁决：**仅注记、不改陈述**
+   （删参将改动既有定理型，破坏本件尾注 Print Assumptions 面与下游
+   只读消费契约；对照 ADJ-2 phase_classify 删参先例的「保留名位」
+   格式，本件取纯注释形）。分层实质的真消费面为其后继
+   layered_network_liar_each_layer（truth/diag 经 lv 逐层索引，lv 在
+   diag_lv lv / truth lv 中真出现）——「Tr_α 只适用于 L_α」的类型级
+   载荷由该件与 level_confusion_revives_liar 承担，与本件无涉。
+   下游核查：DTPT_Bridge.v §7 grep 实测零引用本件（其层网件为
+   layered_network_liar_set，内联 existT 直构，只消费 diag_closed 形）。 *)
 
 (* 3.3 分层网络逐层说谎者：若真值网络对每层均匀取同层对角封闭，
        则每层都产出说谎句 —— 分层本身不豁免，豁免只来自不封闭 *)
@@ -814,6 +859,578 @@ Proof.
   - exact (DTPT.DTPT.llm_gate_pass_mono_thr H thr1 thr2 Hthr Hg).
 Qed.
 
+(* ============================================================
+   真化段 T1（TRUTH-1 席，AUDIT-2 审计 P2 梯队·Truth 集群，
+   2026-09-14，追加式；上方既有语句零改动）
+   ①Tex 纤维真化（审计 C1）：既有面仅 eta 三件 + 铸造一件
+     （llm_Tex_fiber / llm_Tex_fiber_inv / default_Tex_phi /
+     Tex_fiber_cast，投影往返形）；本段新增带证据约束的信息性
+     见证族与非平凡性面。
+   ②RefNode/Tneg 定理化三件（审计 C3）：D10 反例节点载体
+     （DTPT.v §缺项13：mkRef/refPhi/refModel/refCounter 与
+     Tneg 纤维）定义后零理论——本段补结构面/对偶面/尺寸面。
+   ③Evidence 深水区（审计 C4/B7 加分件）：ev_append 精确加性
+     （k=1）的 Set 见证形（Truth 本土版，以盘面实形核验：
+     DTPT_Bridge.v §7 桥件清单未消费 audit_ev_append_size_exact，
+     与桥零重复；P3B3 报告 §1 表与 Bridge.v grep 双证）。
+   纪律：零公理零承认零中途放弃，全程 Qed；nat 层显式
+     Datatypes.S / O / Nat.add（防 Q_scope 劫持）；Q 字面 %Q。
+   ============================================================ *)
+
+(* ---------- T1.1 Tex 纤维带证据约束的见证族（审计 C1 真化） ---------- *)
+
+(* 带证据约束的信息性见证族：对任意 phi 与任意证据值 e，纤维中
+   存在携带该证据值的节点（sigT 首分量承载节点、第二分量合取
+   方程 trPhi t = phi /\ trValue t = e——不止投影往返，证据值
+   信息性存活）。诚实注记：本族对 e 全称无前提（比任务书草图
+   ev_size e >= 1 更强）；且依 ev_size_pos（本件 §2），任意证据
+   的尺寸恒 >= 1，该约束对全体 Evidence 可满足，非平凡性面见下。 *)
+Definition tex_with (phi : Dig) (e : Evidence) :
+  {t : TrNode & trPhi t = phi /\ trValue t = e} :=
+  existT _ (mkTrNode Lv0 phi phi e) (conj eq_refl eq_refl).
+
+(* 纤维非平凡性面：存在尺寸 >= 1 的证据见证。evNum 0 直构可满足
+   （核实 ev_size 定义如实：ev_size (evNum _) = Datatypes.S O，
+   恰为 1，le (S O) (S O) 以 le_n 收口）。 *)
+Theorem tex_nontrivial : forall phi : Dig,
+  exists t : TrNode,
+    trPhi t = phi /\ le (Datatypes.S Datatypes.O) (ev_size (trValue t)).
+Proof.
+  intros phi.
+  exists (mkTrNode Lv1 phi phi (evNum 0%Q)).
+  split; [ reflexivity | simpl; apply le_n ].
+Qed.
+
+(* 纤维 × 审查器组合面：Lv2 层携带证据的纤维见证必过审
+   （消费 audit_node_lv2，纤维族与审查器段首条组合边） *)
+Theorem tex_nontrivial_audited : forall phi : Dig,
+  exists t : TrNode, trPhi t = phi /\ audit_node t = true.
+Proof.
+  intros phi.
+  exists (mkTrNode Lv2 phi phi (evNum 0%Q)).
+  split; [ reflexivity | apply audit_node_lv2 ].
+Qed.
+
+(* ---------- T1.2 RefNode/Tneg 定理化三件（审计 C3 真化） ---------- *)
+
+(* 件一·结构面：RefNode 投影往返（三字段方程一体封死于记录 eta
+   往返中——mkRef ∘ (refPhi,refModel,refCounter) = id） *)
+Theorem ref_node_round : forall r : RefNode,
+  mkRef (refPhi r) (refModel r) (refCounter r) = r.
+Proof.
+  intros [ p m v ]. reflexivity.
+Qed.
+
+(* 件二·对偶面：Tneg 与 Tex 同为「载体 × 首投影 = phi」纤维
+   （以盘面定义实形为准：DTPT.v Tneg phi = {r : RefNode & refPhi r
+   = phi}，本件 Tex phi = {t : TrNode & trPhi t = phi}）。同一 phi
+   的反例载体与肯定载体镜像同居：模型槽 m 逐字对齐，反证数据 v
+   经 cv_ev 桥映为肯定侧证据——「反例节点非空 iff 存在反例节点」
+   的盘面实形即双纤维无条件同居，本件给其信息性 Set 面（镜像
+   三元组全量方程存活，非单纯非空断言）。 *)
+Definition tneg_tex_dual : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
+  {w : {r : RefNode & refPhi r = phi /\ refModel r = m /\ refCounter r = v}
+     & {t : TrNode & trPhi t = phi /\ trModel t = m /\ trValue t = cv_ev v}} :=
+  fun phi m v =>
+    existT _
+      (existT _ (mkRef phi m v) (conj eq_refl (conj eq_refl eq_refl)))
+      (existT _ (mkTrNode Lv0 phi m (cv_ev v))
+                (conj eq_refl (conj eq_refl eq_refl))).
+
+(* 件三·尺寸面：反例数据的桥测度与直测逐点重合（dt_ev_size =
+   ev_size ∘ cv_ev 的定义方程在 Tneg 载体上实例化）+ 非退化支
+   （消费 ev_size_pos：任意反证数据过桥后尺寸 >= 1——反例门
+   ev_size 恒开，与 audit_node_eq_trLevel 的审查器退化档互证） *)
+Theorem tneg_counter_size : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
+  ev_size (cv_ev (refCounter (mkRef phi m v))) = dt_ev_size v
+  /\ le (Datatypes.S Datatypes.O)
+           (ev_size (cv_ev (refCounter (mkRef phi m v)))).
+Proof.
+  intros phi m v. split; [ reflexivity | apply ev_size_pos ].
+Qed.
+
+(* ---------- T1.3 Evidence 深水区：ev_append 精确加性 Set 面 ---------- *)
+
+(* 精确加性（k=1）的后继形方程：ev_size (ev_append a b) =
+   S (ev_size a + ev_size b)（消费底座件 audit_ev_append_size_exact
+   重述为 Datatypes.S 形，供 Set 面与下游改写） *)
+Theorem ev_append_size_succ : forall a b : Evidence,
+  ev_size (ev_append a b) = Datatypes.S (Nat.add (ev_size a) (ev_size b)).
+Proof.
+  intros a b. rewrite audit_ev_append_size_exact. lia.
+Qed.
+
+(* Truth 本土 Set 面：精确加性的见证携带形——sigT 首分量给出
+   可提取的数值见证 s := ev_size a + ev_size b，第二分量为后继形
+   精确方程（Prop 参随提取擦除、数值见证存活，Obj.magic=0 面） *)
+Definition ev_append_size_set (a b : Evidence) :
+  {s : nat & ev_size (ev_append a b) = Datatypes.S s} :=
+  existT _ (Nat.add (ev_size a) (ev_size b)) (ev_append_size_succ a b).
+
+(* 对偶面（右参单调的后继形）：拼接后尺寸 = 右参尺寸 + S(左参尺寸)
+   ——「右参证据在拼接下不减」的精确 witness 形，d := ev_size a *)
+Theorem ev_append_size_mono_succ : forall a b : Evidence,
+  ev_size (ev_append a b) = Nat.add (ev_size b) (Datatypes.S (ev_size a)).
+Proof.
+  intros a b. rewrite audit_ev_append_size_exact. lia.
+Qed.
+
+Definition ev_append_size_mono_set (a b : Evidence) :
+  {d : nat & ev_size (ev_append a b) = Nat.add (ev_size b) (Datatypes.S d)} :=
+  existT _ (ev_size a) (ev_append_size_mono_succ a b).
+
+(* ============================================================
+   真化段 T2（TRUTH-2 席，AUDIT-2 审计 C 类最后深水件·Evidence
+   内容面，2026-09-14，追加式；上方既有语句零改动）
+   审计 C4/B7 深水区定位：evSeq 携带的 list Q 内容全理论盲、
+   Evidence 代数有尺寸/拼接而无内容相等/分解/枚举面——本段四块：
+   ① 内容相等判定器（保底）：ev_eqb（叶判 Qeq_bool，list Q 逐点
+     Qeq_bool）+ ev_cong 内容同余关系 + ev_eqb_true_iff 双向 iff。
+     S7 边界诚实声明（对齐 negS_not_involutive 反例范式）：任务书
+     草图 ev_eqb_eq : ev_eqb a b = true -> a = b（Leibniz）在此
+     **不可证且为假**——Q 非正规化（1#2 与 2#4 异记录同值），
+     Qeq_bool 只刻画 Qeq（有理等值）而非 Leibniz。本段以
+     ev_eqb_leibniz_gap 显式反例定理封死该方向（对照 S7 边界声明
+     范式照录），正方向可靠面改交 ev_eqb_true_iff（对 ev_cong 的
+     完整双向）+ Leibniz 叶判变体 ev_eqb_raw（Z.eqb × Pos.eqb，
+     叶级 Leibniz）补全 iff——两种可判定等价各归其位，禁硬凑。
+   ② 内容归纳原理（主件）：ev_rect' 显式三构造子消去（自由代数
+     归纳原理显式化；与自动生成 Evidence_rect 同型，自建零依赖）
+     + beta 三方程 + 消费样板两件（ev_size_pos_third 第三方法
+     重证 / ev_size_1_leaf_iff 叶刻画）。
+   ③ 深度有界面（主件）：ev_case_set 三叉 sigT 信息性分解 +
+     ev_size_ge_2_pair 尺寸门槛分解（size ≥ 2 必为 evPair 形）+
+     ev_pair_decomp_exact 精确加性回收（消费 ev_size_pair）。
+   ④ 有界枚举器（加分）：ev_enum 深度预算枚举 Fixpoint +
+     ev_enum_size_bound 有界面（枚举出 ⇒ 尺寸 ≤ 预算）。
+     诚实边界：Q 无穷 ⇒ 叶内容完备枚举不可能，枚举叶截断至
+     0%Q 单见证；完备性只交付形状级生成规则 ev_enum_pair_member
+     （CoZero fiber 离散化同源思想的形状层落地，如实声明）。
+   纪律：零公理零承认零中途放弃，全程 Qed；nat 层显式
+     Datatypes.S / O / Nat.add（防 Q_scope 劫持）；Q 字面 %Q；
+     零新增 Require（Z/Pos 命名经 QArith_base Require Export
+     BinInt/BinPos 传导，逐名在册可解析）。
+   ============================================================ *)
+
+(* ---------- T2.1 内容相等判定器（审计 C4/B7 保底件） ---------- *)
+
+(* 叶判：Qeq_bool 自反（Qeq_bool 经 Qeq_bool_iff 刻画 Qeq；
+   自反式自证，不押注 stdlib 命名） *)
+Lemma qeqb_refl : forall q : Q, Qeq_bool q q = true.
+Proof.
+  intros q. unfold Qeq_bool. apply Z.eqb_refl.
+Qed.
+
+(* list Q 逐点 Qeq_bool 判定器（自建，防 stdlib list_eqb 版本差） *)
+Fixpoint qlist_eqb (l1 l2 : list Q) : bool :=
+  match l1, l2 with
+  | [], [] => true
+  | q1 :: r1, q2 :: r2 => andb (Qeq_bool q1 q2) (qlist_eqb r1 r2)
+  | _, _ => false
+  end.
+
+Lemma qlist_eqb_refl : forall l : list Q, qlist_eqb l l = true.
+Proof.
+  induction l as [| q r IH]; simpl.
+  - reflexivity.
+  - apply andb_true_intro. split; [ apply qeqb_refl | exact IH ].
+Qed.
+
+(* 内容同余关系：叶层取 Qeq（有理等值），evSeq 层取 Forall2 Qeq
+   （逐点等值），evPair 层逐构造同余——内容相等的关系式封装 *)
+Inductive ev_cong : Evidence -> Evidence -> Prop :=
+| ev_cong_num : forall q1 q2 : Q, q1 == q2 -> ev_cong (evNum q1) (evNum q2)
+| ev_cong_seq : forall l1 l2 : list Q,
+    Forall2 Qeq l1 l2 -> ev_cong (evSeq l1) (evSeq l2)
+| ev_cong_pair : forall a1 b1 a2 b2 : Evidence,
+    ev_cong a1 a2 -> ev_cong b1 b2 -> ev_cong (evPair a1 b1) (evPair a2 b2).
+
+(* 内容相等判定器：叶 Qeq_bool / list Q 逐点 / Pair 双支合取；
+   非同构造对恒 false（自由代数构造子可分立）。双参 Fixpoint
+   {struct a}：Pair 支双递归 ev_eqb a1 a2 / ev_eqb b1 b2 的结构参
+   分别为 a1 / b1，皆为 a = evPair a1 b1 的真子项——守卫检查单参
+   合法，且对平衡对语义正确（对照：嵌套 fix 单脊递归对平衡对
+   恒 false，首轮编译被 ev_eqb_refl 拦下，如实记档） *)
+Fixpoint ev_eqb (a b : Evidence) {struct a} : bool :=
+  match a, b with
+  | evNum q1, evNum q2 => Qeq_bool q1 q2
+  | evSeq l1, evSeq l2 => qlist_eqb l1 l2
+  | evPair a1 b1, evPair a2 b2 => andb (ev_eqb a1 a2) (ev_eqb b1 b2)
+  | _, _ => false
+  end.
+
+(* 自反：判定器在自身上恒真 *)
+Lemma ev_eqb_refl : forall a : Evidence, ev_eqb a a = true.
+Proof.
+  induction a as [q | l | a1 IH1 a2 IH2]; simpl.
+  - apply qeqb_refl.
+  - apply qlist_eqb_refl.
+  - apply andb_true_intro. split; assumption.
+Qed.
+
+(* list Q 层：判定真 ⇒ 逐点 Qeq（可靠面） *)
+Lemma qlist_eqb_sound : forall l1 l2 : list Q,
+  qlist_eqb l1 l2 = true -> Forall2 Qeq l1 l2.
+Proof.
+  induction l1 as [| q1 r1 IH]; intros [| q2 r2] H;
+    simpl in H; try discriminate H.
+  - destruct H. constructor.
+  - apply andb_prop in H. destruct H as [H1 H2].
+    constructor.
+    + apply Qeq_bool_iff in H1. exact H1.
+    + apply IH. exact H2.
+Qed.
+
+(* list Q 层：逐点 Qeq ⇒ 判定真（完备面） *)
+Lemma qlist_Qeq_complete : forall l1 l2 : list Q,
+  Forall2 Qeq l1 l2 -> qlist_eqb l1 l2 = true.
+Proof.
+  intros l1 l2 H. induction H as [| q1 q2 r1 r2 Hq Hr IH].
+  - reflexivity.
+  - simpl. apply andb_true_intro. split.
+    + apply Qeq_bool_iff. exact Hq.
+    + exact IH.
+Qed.
+
+(* 可靠面：ev_eqb 真 ⇒ 内容同余 *)
+Lemma ev_eqb_cong_sound : forall a b : Evidence,
+  ev_eqb a b = true -> ev_cong a b.
+Proof.
+  intros a. induction a as [q1 | l1 | a1 IH1 a2 IH2];
+    intros [q2 | l2 | b1 b2] H; simpl in H; try discriminate H.
+  - apply Qeq_bool_iff in H. exact (ev_cong_num q1 q2 H).
+  - exact (ev_cong_seq l1 l2 (qlist_eqb_sound l1 l2 H)).
+  - apply andb_prop in H. destruct H as [H1 H2].
+    exact (ev_cong_pair a1 a2 b1 b2 (IH1 b1 H1) (IH2 b2 H2)).
+Qed.
+
+(* 完备面：内容同余 ⇒ ev_eqb 真 *)
+Lemma ev_cong_eqb_complete : forall a b : Evidence,
+  ev_cong a b -> ev_eqb a b = true.
+Proof.
+  intros a b H. induction H as [q1 q2 Hq | l1 l2 Hl | a1 b1 a2 b2 Ha Hb IHa IHb].
+  - apply Qeq_bool_iff. exact Hq.
+  - exact (qlist_Qeq_complete l1 l2 Hl).
+  - simpl. apply andb_true_intro. split; assumption.
+Qed.
+
+(* 主定理：ev_eqb 是内容同余 ev_cong 的可判定刻画（完整双向 iff）
+   ——「内容相等可判定」的构造性交付面 *)
+Theorem ev_eqb_true_iff : forall a b : Evidence,
+  ev_eqb a b = true <-> ev_cong a b.
+Proof.
+  intros a b. split.
+  - apply ev_eqb_cong_sound.
+  - apply ev_cong_eqb_complete.
+Qed.
+
+(* 【S7 边界诚实声明 2026-09-14 TRUTH-2｜任务书草图 ev_eqb_eq 的
+   裁决件】Leibniz 可靠面 ev_eqb a b = true -> a = b 在 Qeq_bool
+   叶判下**为假**，反例显式定理化：1#2 与 2#4 有理等值（Qeq_bool
+   = true）但 Q 记录 Leibniz 相异（Qnum 1 ≠ 2）。裁决：以反例定理
+   封死该方向（对照本件 negS_not_involutive 反例范式），内容相等
+   的正确可靠面由 ev_eqb_true_iff（对 ev_cong）承担，Leibniz 面由
+   下述 ev_eqb_raw 变体承担——三面各归其位，非补丁非硬凑。 *)
+Theorem ev_eqb_leibniz_gap :
+  ev_eqb (evNum (1#2)%Q) (evNum (2#4)%Q) = true
+  /\ (evNum (1#2)%Q : Evidence) <> evNum (2#4)%Q.
+Proof.
+  split.
+  - reflexivity.
+  - intros H. injection H as Hq. discriminate Hq.
+Qed.
+
+(* Leibniz 叶判变体：叶层取 Z.eqb（Qnum）× Pos.eqb（QDen）结构
+   相等——叶级 Leibniz，向下完整 iff（a = b 双向可判定） *)
+Definition Qraw_eqb (q1 q2 : Q) : bool :=
+  andb (Z.eqb (Qnum q1) (Qnum q2)) (Pos.eqb (Qden q1) (Qden q2)).
+
+Fixpoint qlist_eqb_raw (l1 l2 : list Q) : bool :=
+  match l1, l2 with
+  | [], [] => true
+  | q1 :: r1, q2 :: r2 => andb (Qraw_eqb q1 q2) (qlist_eqb_raw r1 r2)
+  | _, _ => false
+  end.
+
+Fixpoint ev_eqb_raw (a b : Evidence) {struct a} : bool :=
+  match a, b with
+  | evNum q1, evNum q2 => Qraw_eqb q1 q2
+  | evSeq l1, evSeq l2 => qlist_eqb_raw l1 l2
+  | evPair a1 b1, evPair a2 b2 => andb (ev_eqb_raw a1 a2) (ev_eqb_raw b1 b2)
+  | _, _ => false
+  end.
+
+Lemma Qraw_eqb_refl : forall q : Q, Qraw_eqb q q = true.
+Proof.
+  intros q. unfold Qraw_eqb. apply andb_true_intro.
+  split; [ apply Z.eqb_refl | apply Pos.eqb_refl ].
+Qed.
+
+Lemma Qraw_eqb_true_iff : forall q1 q2 : Q,
+  Qraw_eqb q1 q2 = true <-> q1 = q2.
+Proof.
+  intros [n1 d1] [n2 d2]. unfold Qraw_eqb. simpl.
+  split.
+  - intros H. apply andb_prop in H. destruct H as [H1 H2].
+    apply Z.eqb_eq in H1. apply Pos.eqb_eq in H2.
+    subst. reflexivity.
+  - intros H.
+    assert (Hn : n1 = n2) by (exact (f_equal Qnum H)).
+    assert (Hd : d1 = d2) by (exact (f_equal Qden H)).
+    subst. apply andb_true_intro.
+    split; [ apply Z.eqb_refl | apply Pos.eqb_refl ].
+Qed.
+
+Lemma qlist_eqb_raw_refl : forall l : list Q, qlist_eqb_raw l l = true.
+Proof.
+  induction l as [| q r IH]; simpl.
+  - reflexivity.
+  - apply andb_true_intro. split; [ apply Qraw_eqb_refl | exact IH ].
+Qed.
+
+Lemma qlist_eqb_raw_true_iff : forall l1 l2 : list Q,
+  qlist_eqb_raw l1 l2 = true <-> l1 = l2.
+Proof.
+  induction l1 as [| q1 r1 IH]; intros [| q2 r2]; simpl.
+  - split; reflexivity.
+  - split; intros H; discriminate H.
+  - split; intros H; discriminate H.
+  - split.
+    + intros H. apply andb_prop in H. destruct H as [H1 H2].
+      apply Qraw_eqb_true_iff in H1.
+      rewrite H1. rewrite (proj1 (IH r2) H2). reflexivity.
+    + intros H. injection H as H1 H2. subst.
+      simpl. apply andb_true_intro. split.
+      * apply Qraw_eqb_refl.
+      * apply qlist_eqb_raw_refl.
+Qed.
+
+Lemma ev_eqb_raw_refl : forall a : Evidence, ev_eqb_raw a a = true.
+Proof.
+  induction a as [q | l | a1 IH1 a2 IH2]; simpl.
+  - apply Qraw_eqb_refl.
+  - apply qlist_eqb_raw_refl.
+  - apply andb_true_intro. split; assumption.
+Qed.
+
+(* Leibniz 可靠面（任务书 ev_eqb_eq 之名在此兑现）：raw 判定真 ⇒
+   Leibniz 相等 *)
+Theorem ev_eqb_raw_eq : forall a b : Evidence,
+  ev_eqb_raw a b = true -> a = b.
+Proof.
+  intros a. induction a as [q1 | l1 | a1 IH1 a2 IH2];
+    intros [q2 | l2 | b1 b2] H; simpl in H; try discriminate H.
+  - apply Qraw_eqb_true_iff in H. rewrite H. reflexivity.
+  - apply qlist_eqb_raw_true_iff in H. rewrite H. reflexivity.
+  - apply andb_prop in H. destruct H as [H1 H2].
+    rewrite (IH1 _ H1). rewrite (IH2 _ H2). reflexivity.
+Qed.
+
+(* 完整双向 iff：Leibniz 相等的可判定性 *)
+Theorem ev_eqb_raw_true_iff : forall a b : Evidence,
+  ev_eqb_raw a b = true <-> a = b.
+Proof.
+  intros a b. split.
+  - apply ev_eqb_raw_eq.
+  - intros H. subst. apply ev_eqb_raw_refl.
+Qed.
+
+(* ---------- T2.2 内容归纳原理（审计 C4 主件） ---------- *)
+
+(* 自由代数归纳原理显式化：三构造子消去， motives 可取 Type
+   （与自动生成 Evidence_rect 同型，自建零依赖；beta 方程三件
+   随行——对 evNum/evSeq/evPair 的计算律逐条 reflexivity） *)
+Fixpoint ev_rect' (P : Evidence -> Type)
+  (f_num : forall q : Q, P (evNum q))
+  (f_seq : forall l : list Q, P (evSeq l))
+  (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b))
+  (e : Evidence) {struct e} : P e :=
+  match e with
+  | evNum q => f_num q
+  | evSeq l => f_seq l
+  | evPair a b =>
+      f_pair a b (ev_rect' P f_num f_seq f_pair a)
+                 (ev_rect' P f_num f_seq f_pair b)
+  end.
+
+Lemma ev_rect'_num : forall (P : Evidence -> Type)
+  (f_num : forall q : Q, P (evNum q))
+  (f_seq : forall l : list Q, P (evSeq l))
+  (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b)) (q : Q),
+  ev_rect' P f_num f_seq f_pair (evNum q) = f_num q.
+Proof. reflexivity. Qed.
+
+Lemma ev_rect'_seq : forall (P : Evidence -> Type)
+  (f_num : forall q : Q, P (evNum q))
+  (f_seq : forall l : list Q, P (evSeq l))
+  (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b)) (l : list Q),
+  ev_rect' P f_num f_seq f_pair (evSeq l) = f_seq l.
+Proof. reflexivity. Qed.
+
+Lemma ev_rect'_pair : forall (P : Evidence -> Type)
+  (f_num : forall q : Q, P (evNum q))
+  (f_seq : forall l : list Q, P (evSeq l))
+  (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b)) (a b : Evidence),
+  ev_rect' P f_num f_seq f_pair (evPair a b)
+  = f_pair a b (ev_rect' P f_num f_seq f_pair a)
+               (ev_rect' P f_num f_seq f_pair b).
+Proof. reflexivity. Qed.
+
+(* 消费样板一：ev_size 正性的第三方法重证（对照 §2 ev_size_pos 的
+   induction 原证与 §审查器段消费面，本件经 ev_rect' 显式消去） *)
+Definition ev_size_pos_rect (e : Evidence) :
+  le (Datatypes.S O) (ev_size e) :=
+  ev_rect' (fun e' => le (Datatypes.S O) (ev_size e'))
+    (fun _ => le_n (Datatypes.S O))
+    (fun _ => le_n (Datatypes.S O))
+    (fun a b _ _ =>
+      nat_succ_le_mono O (Nat.add (ev_size a) (ev_size b))
+        (nat_le_0 (Nat.add (ev_size a) (ev_size b))))
+    e.
+
+Theorem ev_size_pos_third : forall e : Evidence,
+  le (Datatypes.S O) (ev_size e).
+Proof. exact ev_size_pos_rect. Qed.
+
+(* 消费样板二：尺寸恰 1 ⟺ 叶（evNum/evSeq 二形）——内容归纳原理
+   的非平凡消费（Pair 支由尺寸方程封死），叶刻画定理 *)
+Theorem ev_size_1_leaf_iff : forall e : Evidence,
+  ev_size e = Datatypes.S O <->
+  ((exists q : Q, e = evNum q) \/ (exists l : list Q, e = evSeq l)).
+Proof.
+  intros e. split.
+  - intros H. revert H. induction e using ev_rect'.
+    + intros H. left. exists q. reflexivity.
+    + intros H. right. exists l. reflexivity.
+    + intros H. exfalso.
+      assert (Hpa : le (Datatypes.S O) (ev_size e1)) by apply ev_size_pos.
+      assert (Hpb : le (Datatypes.S O) (ev_size e2)) by apply ev_size_pos.
+      simpl in H. lia.
+  - intros [ [q Hq] | [l Hl] ].
+    + rewrite Hq. reflexivity.
+    + rewrite Hl. reflexivity.
+Qed.
+
+(* ---------- T2.3 深度有界面：信息性分解（审计 C4 主件） ---------- *)
+
+(* 三叉 sigT 信息性分解器：任意证据逐构造给等式见证（叶/序列/
+   对三分支各携 Leibniz 方程）——Evidence 内容层的 case 分析
+   Set 面，下游 sigT 消费的基座 *)
+Definition ev_case_set (e : Evidence) :
+  {q : Q & e = evNum q}
+  + ({l : list Q & e = evSeq l}
+     + {a : Evidence & {b : Evidence & e = evPair a b}}) :=
+  match e as e0 return
+    {q : Q & e0 = evNum q}
+    + ({l : list Q & e0 = evSeq l}
+       + {a : Evidence & {b : Evidence & e0 = evPair a b}})
+  with
+  | evNum q    => inl (existT _ q eq_refl)
+  | evSeq l    => inr (inl (existT _ l eq_refl))
+  | evPair a b => inr (inr (existT _ a (existT _ b eq_refl)))
+  end.
+
+(* 尺寸门槛分解：size ≥ 2 ⇒ 必为 evPair 形（叶尺寸恰 1 封死叶支；
+   sigT 信息性——分解件 a/b 可提取） *)
+Theorem ev_size_ge_2_pair : forall e : Evidence,
+  le (Datatypes.S (Datatypes.S O)) (ev_size e) ->
+  {a : Evidence & {b : Evidence & e = evPair a b}}.
+Proof.
+  intros e Hge.
+  destruct (ev_case_set e) as [[q Hq] | [[l Hl] | [a [b Hpair]]]].
+  - exfalso. rewrite Hq in Hge. simpl in Hge. lia.
+  - exfalso. rewrite Hl in Hge. simpl in Hge. lia.
+  - exact (existT _ a (existT _ b Hpair)).
+Qed.
+
+(* 精确加性回收：分解 + ev_size_pair（§2）合流——尺寸 ≥ 2 的证据
+   尺寸恰为其二分件的后继和（存在式 Prop 包装，信息性核心在上件） *)
+Theorem ev_pair_decomp_exact : forall e : Evidence,
+  le (Datatypes.S (Datatypes.S O)) (ev_size e) ->
+  exists a b : Evidence,
+    e = evPair a b /\
+    ev_size e = Datatypes.S (Nat.add (ev_size a) (ev_size b)).
+Proof.
+  intros e Hge.
+  destruct (ev_size_ge_2_pair e Hge) as [a [b Hpair]].
+  exists a, b. split.
+  - exact Hpair.
+  - rewrite Hpair. apply ev_size_pair.
+Qed.
+
+(* ---------- T2.4 有界枚举器（审计 C4 加分件） ---------- *)
+
+(* 深度预算枚举器：ev_enum n = 预算 n 的证据有限截断。诚实边界：
+   Q 无穷 ⇒ 叶内容完备枚举不可能，叶只放单见证 0%Q（fiber 离散化
+   截断点如实声明）；Pair 支按预算分裂生成（左件取自 ev_enum n'，
+   右件预算 n' - size a，保障有界面） *)
+Fixpoint ev_enum (n : nat) : list Evidence :=
+  match n with
+  | O => []
+  | Datatypes.S n' =>
+      evNum 0%Q :: evSeq [] ::
+      flat_map
+        (fun a : Evidence =>
+          map (fun b : Evidence => evPair a b)
+              (ev_enum (Nat.sub n' (ev_size a))))
+        (ev_enum n')
+  end.
+
+(* 有界面（归纳加强形：对一切 ≤ n 的预算层齐备 IH） *)
+Lemma ev_enum_bound_aux : forall n m : nat,
+  le m n ->
+  forall e : Evidence, In e (ev_enum m) -> le (ev_size e) m.
+Proof.
+  induction n as [| n' IH]; intros m Hmn e Hin.
+  - assert (Hm : m = O) by lia. subst m. simpl in Hin. destruct Hin.
+  - destruct m as [| m'].
+    + simpl in Hin. destruct Hin.
+    + simpl in Hin. destruct Hin as [He | [He | Hin]].
+      * subst e. simpl. lia.
+      * subst e. simpl. lia.
+      * apply in_flat_map in Hin as [a [Ha Hinb]].
+        apply in_map_iff in Hinb as [b [Hb Hbin]].
+        subst e.
+        assert (Hba : le (ev_size b) (Nat.sub m' (ev_size a))).
+        { apply (IH (Nat.sub m' (ev_size a))); [ lia | exact Hbin ]. }
+        assert (Haa : le (ev_size a) m').
+        { apply (IH m'); [ lia | exact Ha ]. }
+        simpl. lia.
+Qed.
+
+(* 有界面（任务书型）：枚举出 ⇒ 尺寸 ≤ 预算 *)
+Theorem ev_enum_size_bound : forall (n : nat) (e : Evidence),
+  In e (ev_enum n) -> le (ev_size e) n.
+Proof.
+  intros n e H. exact (ev_enum_bound_aux n n (le_n n) e H).
+Qed.
+
+(* 枚举成员见证：叶单 witness 在一切正预算层在册 *)
+Lemma ev_enum_num_0 : forall n : nat,
+  In (evNum 0%Q) (ev_enum (Datatypes.S n)).
+Proof.
+  intros n. simpl. left. reflexivity.
+Qed.
+
+Lemma ev_enum_seq_nil : forall n : nat,
+  In (evSeq []) (ev_enum (Datatypes.S n)).
+Proof.
+  intros n. simpl. right. left. reflexivity.
+Qed.
+
+(* 形状级完备生成规则：合格预算的两分件 ⇒ 拼接件在同一预算上层
+   在册（完备性在「形状层」的构造性交付；叶内容截断边界见上） *)
+Lemma ev_enum_pair_member : forall (n : nat) (a b : Evidence),
+  In a (ev_enum n) ->
+  In b (ev_enum (Nat.sub n (ev_size a))) ->
+  In (evPair a b) (ev_enum (Datatypes.S n)).
+Proof.
+  intros n a b Ha Hb. simpl. right. right.
+  apply in_flat_map. exists a. split.
+  - exact Ha.
+  - apply in_map. exact Hb.
+Qed.
+
 End DTPT_Truth.
 Import DTPT_Truth.
 
@@ -833,3 +1450,39 @@ Print Assumptions cv_ev_round_trip_fwd.
 Print Assumptions cv_lv_antisym_transport.
 Print Assumptions audit_gate_level_combo.
 Print Assumptions audit_bridge_iff.
+
+(* —— T1 真化段新增件假设闭包打印（TRUTH-1 席追加，四关 G4 附件） —— *)
+Print Assumptions tex_with.
+Print Assumptions tex_nontrivial.
+Print Assumptions tex_nontrivial_audited.
+Print Assumptions ref_node_round.
+Print Assumptions tneg_tex_dual.
+Print Assumptions tneg_counter_size.
+Print Assumptions ev_append_size_succ.
+
+(* —— T1 新增件提取探针（TRUTH-1 席；Obj.magic=0 取证用。B3 先例：
+   探针命令随宿主文件在册，产物 *_t1_ext_*.ml/.mli 验收后清场，
+   下次重编再生、再清——同 Bridge.v §8 惯例） —— *)
+From Stdlib Require Import Extraction.
+Set Extraction Output Directory ".".
+Extraction "_t1_ext_tex_with" tex_with.
+Extraction "_t1_ext_evset" ev_append_size_set.
+Extraction "_t1_ext_evmono" ev_append_size_mono_set.
+Extraction "_t1_ext_dual" tneg_tex_dual.
+
+(* —— T2 真化段新增件假设闭包打印（TRUTH-2 席追加，四关 G4 附件） —— *)
+Print Assumptions ev_eqb_true_iff.
+Print Assumptions ev_eqb_leibniz_gap.
+Print Assumptions ev_eqb_raw_true_iff.
+Print Assumptions ev_size_pos_third.
+Print Assumptions ev_size_1_leaf_iff.
+Print Assumptions ev_size_ge_2_pair.
+Print Assumptions ev_pair_decomp_exact.
+Print Assumptions ev_enum_size_bound.
+
+(* —— T2 新增件提取探针（TRUTH-2 席；Obj.magic=0 取证用。B3/T1
+   先例：探针命令随宿主文件在册，产物 *_t2_ext_*.ml/.mli 验收后
+   清场，下次重编再生、再清——同 Bridge.v §8 惯例） —— *)
+Extraction "_t2_ext_eqb" ev_eqb.
+Extraction "_t2_ext_decomp" ev_case_set.
+Extraction "_t2_ext_enum" ev_enum.

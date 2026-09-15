@@ -10,8 +10,16 @@
          2026-09-14 棒1（S1）并入 DTPT_LLM（§11）/DTPT_Measure（§12），
          两源件退役（.retired_S1 快照留存）；
          2026-09-14 棒2（S2）并入 DTPT_CoZero（§13）/DTPT_Phases（§14），
-         两源件退役（.retired_S2 快照留存）
-   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）
+         两源件退役（.retired_S2 快照留存）；
+         2026-09-15 果实席 F2 追加 §15：F5 余零理想↔经验测度桥
+         （§13 CoZero fiber × §12 Measure freq/mu 现役构造组合面，
+         纯追加零退役、零消费点改写）；
+         2026-09-15 果实席 F4 追加 §16：AUDIT-2 审计 C 类深水区真化
+         （C5/F8 OrgDiff s 惰性参无关定理 + s-无关非负运输推论 /
+         C2 LLMPhaseView 投影方程·相判定器一致·构造往返三面 /
+         Tex_of_Tabs 前提恒真定理化；纯追加零退役、零既有件改动）
+   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14；
+         2026-09-15 F2 受触链复验）
    纪律：纯构造性；四关收割；温控协议
    ============================================================ *)
 
@@ -3333,6 +3341,438 @@ Print Assumptions OrgDiff_nonneg.
 Print Assumptions OrgDiff_nonneg_dec.
 Print Assumptions OrgDiff_Pmid_len_zero.
 Print Assumptions OrgDiff_Pmid_general_nonzero.
+
+(* ============================================================
+   §15 果实席 F2（2026-09-15）：F5 余零理想 ℐ ↔ 经验测度桥
+   盘面现役件组合（零生造）：§12 Measure（freq/mu/sumf/dedup/qsum
+   面）× §13 CoZero（fiber = filter 判零子表）。
+   桥定理：
+   · mu_fiber_pos（保底①·判零会员的测度正性）：零点纤维成员在世界
+     测度下质量恒正——fiber_in 的 In x w 分量 × 成员频数 ≥ 1 直推；
+   · mu_fiber_mass_lb（保底②·主桥·fiber 质量的经验频率下界）：
+     纤维支撑上的 w-测度质量 ≥ 零点经验频率 |fiber|/|w|——filter
+     子表逐点频数不增 + sum_freq_dedup 质量守恒，Q 侧同分母乘法
+     保序收口；
+   · mu_fiber_mass_eq（加分·质量守恒显式形）：φ 沿支撑 Qeq-外延
+     时取等——P_φ(0) 的经验频率恰为纤维的 w-测度质量
+     （mu_total_mass 的零点加权推广；f := 常零时退化为原件）。
+   诚实注记：一般 φ 非外延（§13 §2 头注反例：φ 读 Qnum 低位），
+   主桥只保 ≥ 不保 =；等式面须外延卫哨，非硬凑。
+   依赖：全走 §12/§13 现役件 + stdlib Q 序引理（Qmult_le_compat_r/
+   Qmult_lt_0_compat/Qinv_lt_0_compat 等在册名）。
+   ============================================================ *)
+
+(* ---------- §15.0 承重件：成员频数正性 ---------- *)
+
+(* 世界表成员 ⟹ 至少一票（freq_zero_of_notQmem 的正向对偶） *)
+Lemma freq_pos_of_in : forall (l : list Q) (x : Q),
+  In x l -> (1 <= freq l x)%nat.
+Proof.
+  intros l x. induction l as [| a t IH]; intros Hin.
+  - destruct Hin.
+  - simpl. destruct (Qeq_bool a x) eqn:Eax.
+    + lia.
+    + destruct Hin as [Ha | Hin].
+      * exfalso.
+        assert (Ht : Qeq_bool a x = true).
+        { rewrite Ha. apply (proj2 (Qeq_bool_iff x x)). apply Qeq_refl. }
+        rewrite Ht in Eax. discriminate.
+      * specialize (IH Hin). lia.
+Qed.
+
+(* ---------- §15.1 承重件：filter 子表逐点频数不增 ---------- *)
+
+Lemma freq_filter_le : forall (g : Q -> bool) (l : list Q) (x : Q),
+  (freq (filter g l) x <= freq l x)%nat.
+Proof.
+  intros g l x. induction l as [| a t IH].
+  - simpl. lia.
+  - simpl. destruct (g a); simpl.
+    + destruct (Qeq_bool a x); lia.
+    + destruct (Qeq_bool a x); lia.
+Qed.
+
+(* ---------- §15.2 承重件：sumf 右侧逐点单调 ---------- *)
+
+Lemma sumf_mono_r : forall (m l1 l2 : list Q),
+  (forall y : Q, (freq l1 y <= freq l2 y)%nat) ->
+  (sumf m l1 <= sumf m l2)%nat.
+Proof.
+  intros m l1 l2 H. induction m as [| a t IH]; simpl.
+  - lia.
+  - specialize (H a). lia.
+Qed.
+
+(* ---------- §15.3 承重件：纤维支撑上的 w-测度和（Q 侧搬账） ---------- *)
+
+(* mu_total_mass 骨架的去质一化：任意指标表 m 上的 w-测度和
+   = sumf 商（无 Qnodup 卫哨，主桥两件共用） *)
+Lemma qsum_map_mu_w : forall (w m : list Q),
+  qsum (map (mu w) m)
+  == (Z.of_nat (sumf m w) # 1)%Q / (Z.of_nat (length w) # 1)%Q.
+Proof.
+  intros w m.
+  assert (Hfun : forall y : Q,
+           mu w y = ((Z.of_nat (freq w y) # 1) / (Z.of_nat (length w) # 1))%Q)
+    by (intros y; reflexivity).
+  rewrite (map_ext (mu w)
+             (fun y => ((Z.of_nat (freq w y) # 1) / (Z.of_nat (length w) # 1))%Q)
+             Hfun).
+  rewrite (qsum_map_div (Z.of_nat (length w) # 1)%Q
+                        (fun y => (Z.of_nat (freq w y) # 1)%Q)).
+  rewrite (qsum_freq_map w m).
+  reflexivity.
+Qed.
+
+(* ---------- §15.4 保底①：判零会员的测度正性 ---------- *)
+
+(* x 落零点纤维 ⟹ x 落世界 ⟹ 至少一票 ⟹ 均匀测度恒正
+   ——「fiber 是 filter、mu 是 freq/长度」的最短组合面 *)
+Theorem mu_fiber_pos : forall (f : Q -> Q) (w : list Q) (x : Q),
+  In x (fiber f w) -> 0 < mu w x.
+Proof.
+  intros f w x Hin.
+  apply fiber_in in Hin. destruct Hin as [Hin _].
+  assert (Hf : (1 <= freq w x)%nat) by (apply freq_pos_of_in; exact Hin).
+  assert (Hn : (1 <= length w)%nat).
+  { destruct w as [| a t].
+    - destruct Hin.
+    - simpl. lia. }
+  assert (Hnum : 0 < (Z.of_nat (freq w x) # 1)%Q).
+  { unfold Qlt. simpl. rewrite Z.mul_1_r.
+    apply (proj1 (Znat.Nat2Z.inj_lt 0 (freq w x))). lia. }
+  assert (Hden : 0 < (Z.of_nat (length w) # 1)%Q).
+  { unfold Qlt. simpl. rewrite Z.mul_1_r.
+    apply (proj1 (Znat.Nat2Z.inj_lt 0 (length w))). lia. }
+  unfold Qdiv. apply Qmult_lt_0_compat.
+  - exact Hnum.
+  - apply (Qinv_lt_0_compat (Z.of_nat (length w) # 1)%Q). exact Hden.
+Qed.
+
+(* ---------- §15.5 保底②（主桥）：fiber 质量的经验频率下界 ---------- *)
+
+(* 纤维支撑上每一点的世界测度质量之和 ≥ |fiber|/|w| = P_φ(0) 的
+   经验频率：每张零点票在 w-测度下至少记一次账（非外延 φ 只多不漏） *)
+Theorem mu_fiber_mass_lb : forall (f : Q -> Q) (w : list Q),
+  w <> [] ->
+  ((Z.of_nat (length (fiber f w)) # 1) / (Z.of_nat (length w) # 1))%Q
+  <= qsum (map (mu w) (dedup (fiber f w))).
+Proof.
+  intros f w Hne.
+  assert (Hpos : (1 <= Z.of_nat (length w))%Z).
+  { apply (proj1 (Znat.Nat2Z.inj_le 1 (length w))).
+    destruct w as [| a t]; [exfalso; apply Hne; reflexivity | simpl; lia]. }
+  assert (HDne : ~ ((Z.of_nat (length w) # 1)%Q == 0%Q)).
+  { intros Hc. unfold Qeq in Hc. simpl in Hc. lia. }
+  assert (HDpos : 0 < (Z.of_nat (length w) # 1)%Q).
+  { unfold Qlt. simpl. rewrite Z.mul_1_r. lia. }
+  assert (Hnat : (length (fiber f w)
+                  <= sumf (dedup (fiber f w)) w)%nat).
+  { assert (H1 : (sumf (dedup (fiber f w)) (fiber f w)
+                  <= sumf (dedup (fiber f w)) w)%nat).
+    { apply sumf_mono_r. intros y. unfold fiber. apply freq_filter_le. }
+    pose proof (sum_freq_dedup (fiber f w)) as H2.
+    unfold Sigma_freq in H2. lia. }
+  assert (HQ : ((Z.of_nat (length (fiber f w)) # 1)
+                <= (Z.of_nat (sumf (dedup (fiber f w)) w) # 1))%Q).
+  { unfold Qle. rewrite !Z.mul_1_r.
+    apply (proj1 (Znat.Nat2Z.inj_le (length (fiber f w))
+                                    (sumf (dedup (fiber f w)) w))).
+    exact Hnat. }
+  rewrite (qsum_map_mu_w w (dedup (fiber f w))).
+  unfold Qdiv. apply Qmult_le_compat_r.
+  - exact HQ.
+  - apply (Qlt_le_weak 0 (/ (Z.of_nat (length w) # 1)%Q)).
+    apply (Qinv_lt_0_compat (Z.of_nat (length w) # 1)%Q). exact HDpos.
+Qed.
+
+(* ---------- §15.6 承重件：dedup 的记录级成员保持 ---------- *)
+
+Lemma dedup_aux_In_l : forall (x : Q) (l : list Q) (y : Q),
+  In y (dedup_aux x l) -> In y l.
+Proof.
+  intros x l y. induction l as [| a t IH]; simpl; intros Hc.
+  - destruct Hc.
+  - destruct (Qeq_bool x a).
+    + right. apply IH. exact Hc.
+    + destruct Hc as [Heq | Hc].
+      * left. exact Heq.
+      * right. apply IH. exact Hc.
+Qed.
+
+Lemma dedup_In_l : forall (l : list Q) (y : Q),
+  In y (dedup l) -> In y l.
+Proof.
+  intros l y. induction l as [| a t IH]; simpl; intros Hc.
+  - destruct Hc.
+  - destruct Hc as [Heq | Hc].
+    + left. exact Heq.
+    + right. apply dedup_aux_In_l in Hc. apply IH. exact Hc.
+Qed.
+
+(* ---------- §15.7 承重件：外延 φ 下 filter 保频 ---------- *)
+
+(* 泛形：判零器对 y 的全部 Qeq-同票开真 ⟹ filter 前后 y 票数不变 *)
+Lemma freq_filter_eq_all : forall (g : Q -> bool) (l : list Q) (y : Q),
+  (forall a : Q, In a l -> a == y -> g a = true) ->
+  freq (filter g l) y = freq l y.
+Proof.
+  intros g l y. induction l as [| a t IH]; intros Hall.
+  - reflexivity.
+  - simpl. destruct (g a) eqn:Ega.
+    + simpl. rewrite (IH (fun a0 Ha0 => Hall a0 (or_intror Ha0))).
+      destruct (Qeq_bool a y); reflexivity.
+    + destruct (Qeq_bool a y) eqn:Eay2.
+      * exfalso.
+        assert (Ht : g a = true).
+        { apply (Hall a (or_introl eq_refl)).
+          exact (proj1 (Qeq_bool_iff a y) Eay2). }
+        rewrite Ht in Ega. discriminate.
+      * rewrite (IH (fun a0 Ha0 => Hall a0 (or_intror Ha0))). reflexivity.
+Qed.
+
+(* 外延 φ 实例：零点纤维对每个零点 y 全票保留 *)
+Lemma freq_w_fiber_eq : forall (f : Q -> Q),
+  (forall x y : Q, x == y -> f x == f y) ->
+  forall (w : list Q) (y : Q), Qeq_bool (f y) 0 = true ->
+  freq (fiber f w) y = freq w y.
+Proof.
+  intros f Hf w y Hy. unfold fiber.
+  apply (freq_filter_eq_all (fun x => Qeq_bool (f x) 0) w y).
+  intros a _ Ha. apply Qeqb_true_of.
+  apply (Qeq_trans (f a) (f y) 0).
+  - apply Hf. exact Ha.
+  - apply (proj1 (Qeq_bool_iff (f y) 0)). exact Hy.
+Qed.
+
+(* sumf 右侧逐点相等搬运 *)
+Lemma sumf_ext : forall (m l1 l2 : list Q),
+  (forall y : Q, In y m -> freq l1 y = freq l2 y) ->
+  sumf m l1 = sumf m l2.
+Proof.
+  intros m l1 l2. induction m as [| a t IH]; intros H; simpl.
+  - reflexivity.
+  - rewrite (H a (or_introl eq_refl)).
+    rewrite (IH (fun x Hx => H x (or_intror Hx))). reflexivity.
+Qed.
+
+(* ---------- §15.8 加分件：fiber 质量守恒显式形 ---------- *)
+
+(* φ 沿支撑外延时取等：P_φ(0) 的经验频率 |fiber φ w|/|w|
+   恰为纤维支撑上的 w-测度质量——零点票一张不漏全记在纤维名下。
+   f := 常零时 fiber = w，退化为 §12 mu_total_mass（相容性核对）。 *)
+Theorem mu_fiber_mass_eq : forall (f : Q -> Q) (w : list Q),
+  w <> [] ->
+  (forall x y : Q, x == y -> f x == f y) ->
+  qsum (map (mu w) (dedup (fiber f w)))
+  == ((Z.of_nat (length (fiber f w)) # 1) / (Z.of_nat (length w) # 1))%Q.
+Proof.
+  intros f w Hne Hf.
+  assert (Hsum : sumf (dedup (fiber f w)) w = length (fiber f w)).
+  { rewrite (sumf_ext (dedup (fiber f w)) w (fiber f w)).
+    - rewrite <- (sum_freq_dedup (fiber f w)). reflexivity.
+    - intros y Hy. apply eq_sym.
+      apply freq_w_fiber_eq; [exact Hf |].
+      destruct (proj1 (fiber_in f w y) (dedup_In_l (fiber f w) y Hy))
+        as [_ Hb].
+      exact Hb. }
+  rewrite (qsum_map_mu_w w (dedup (fiber f w))).
+  rewrite Hsum. reflexivity.
+Qed.
+
+(* ---------- §15.9 终验：Print Assumptions（G4 关） ---------- *)
+
+Print Assumptions mu_fiber_pos.
+Print Assumptions mu_fiber_mass_lb.
+Print Assumptions mu_fiber_mass_eq.
+
+(* ============================================================
+   §16 果实席 F4（2026-09-15）：AUDIT-2 审计 C 类深水区真化（追加式）
+   靶子（DTPT_平凡占位审计与新果实清单.md §三 C 系 + §四 F8）：
+     · C5/F8 保底：OrgDiff 的 s 参零消费——把「未用参数」升格为
+       「显式无关性定理」（占位变性质证明），非删参路线（删参
+       需改 §B 定义体与全部消费点，ADJ-2 先例属改源动作，本席
+       走追加式供证：为后续删参备好供证件，phase_classify_lam_const
+       保留名位格式同源）；
+     · C2 主件：LLMPhaseView（§7 记录）零定理面真化三件——
+       投影方程面 / 视图↔相判定器一致面（phase_classify 本土
+       消费，与桥件 P3-B10/P3-B11 零交集）/ 构造往返面；
+     · 加分：Tex_of_Tabs 前提恒真定理化——审计在案的「前提恒真」
+       升格为显式定理（前提由在册 llm_Tabs_const 放电）。
+   纪律：纯追加零退役零既有件改动；全部 Qed；消费件全为 §A–§J
+   与 §7/§14 现役名（phase_classify_P0_spec / llm_view_gate_iff /
+   llm_Tabs_const / Tex_of_Tabs / P0_idempotent / Qle_refl）。
+   ============================================================ *)
+
+(* ---------- §16.1 保底（C5/F8）：OrgDiff s 惰性参无关定理 ---------- *)
+
+(* 审计 C5 逐字：s 参数惰性已被定理化（OrgDiff_eq 对 s 全称），
+   但「s 惰性」本身未升格为定理。本件即升格：OrgDiff 对 s 全称
+   常值——s 是本质惰性参而非缺陷（Pinf 槽恒等旋转 firstn_skipn
+   的直接语义后果，消费 §I.2 封闭式 OrgDiff_eq）。 *)
+Theorem OrgDiff_s_irrelevant : forall (l : list Q) (s t : nat),
+  OrgDiff l s == OrgDiff l t.
+Proof.
+  intros l s t.
+  rewrite (OrgDiff_eq l s). rewrite (OrgDiff_eq l t).
+  reflexivity.
+Qed.
+
+(* 消费面（任务书指定）：与 §I.3 非负面组合出 s-无关的非负运输
+   推论——任一 s 槽的非负性沿惰性参免费搬运到任意 t 槽。 *)
+Corollary OrgDiff_nonneg_transport : forall (l : list Q) (s t : nat),
+  (0 <= OrgDiff l s)%Q -> (0 <= OrgDiff l t)%Q.
+Proof.
+  intros l s t H.
+  rewrite <- (OrgDiff_s_irrelevant l s t).
+  exact H.
+Qed.
+
+(* ---------- §16.2 主件（C2）：LLMPhaseView 定理化三件 ----------
+   审计 C2 逐字：LLMPhaseView 唯一定理＝llm_view_gate_iff（§11，
+   纯包装）；lam_param/phase_marker 两字段零定理零消费。本节把
+   记录层升格为定理层三面。规范构造器 llm_view_of 为新增定义
+   （零既有件改动），其三字段取 P0 相现役构造：λ 槽＝门限槽＝
+   H_adj (P0 l)，标记槽＝P0 l——三字段全部现役语义、零生造。 *)
+
+(* ---------- 16.2a 投影方程面：构造子字段方程 + 记录 eta ---------- *)
+
+(* 构造子三字段投影方程：mkLLMView 对三投影的左逆性 *)
+Theorem llm_view_mk_proj : forall (lam : Q) (mk : list Q) (gt : Q),
+  lam_param (mkLLMView lam mk gt) = lam /\
+  phase_marker (mkLLMView lam mk gt) = mk /\
+  gate_threshold (mkLLMView lam mk gt) = gt.
+Proof.
+  intros lam mk gt. split; [reflexivity |]. split; reflexivity.
+Qed.
+
+(* 记录 eta：视图由三投影唯一决定（记录无隐藏状态） *)
+Theorem llm_view_eta : forall v : LLMPhaseView,
+  mkLLMView (lam_param v) (phase_marker v) (gate_threshold v) = v.
+Proof.
+  intros v. destruct v as [lam mk gt]. reflexivity.
+Qed.
+
+(* ---------- 16.2b 视图↔相判定器一致面（phase_classify 本土消费） ---------- *)
+
+(* 规范视图：从（表，种子）铸造。三字段全部落在 §A/§B 现役面上。 *)
+Definition llm_view_of (l : list Q) (s : nat) : LLMPhaseView :=
+  mkLLMView (H_adj (P0 l)) (P0 l) (H_adj (P0 l)).
+
+Lemma llm_view_of_marker : forall (l : list Q) (s : nat),
+  phase_marker (llm_view_of l s) = P0 l.
+Proof. reflexivity. Qed.
+
+Lemma llm_view_of_gate : forall (l : list Q) (s : nat),
+  gate_threshold (llm_view_of l s) == H_adj (P0 l).
+Proof. reflexivity. Qed.
+
+(* 自洽面（无条件）：λ 槽＝门限槽＝标记熵——规范视图三字段
+   语义同源，门限恰在标记熵处（Qle_refl 边界）。 *)
+Theorem llm_view_self_consistent : forall (l : list Q) (s : nat),
+  lam_param (llm_view_of l s) == gate_threshold (llm_view_of l s) /\
+  H_adj (phase_marker (llm_view_of l s)) == gate_threshold (llm_view_of l s) /\
+  (gate_threshold (llm_view_of l s) <= gate_threshold (llm_view_of l s))%Q.
+Proof.
+  intros l s. split; [reflexivity |]. split.
+  - rewrite llm_view_of_marker, llm_view_of_gate. reflexivity.
+  - apply Qle_refl.
+Qed.
+
+(* 一致面①（P0 支）：判定器判 P0 ⟹ 规范视图两字段与 Pmid-0 槽熵
+   数值重合——消费 §G.6 phase_classify_P0_spec（本土件，桥件零交集）。 *)
+Theorem llm_view_PhP0_consistent : forall (l : list Q) (s : nat),
+  phase_classify l s = PhP0 ->
+  gate_threshold (llm_view_of l s) == H_adj (Pmid l s 0) /\
+  H_adj (phase_marker (llm_view_of l s)) == H_adj (Pmid l s 0).
+Proof.
+  intros l s H.
+  assert (Hs := phase_classify_P0_spec l s H).
+  split.
+  - rewrite llm_view_of_gate. exact Hs.
+  - rewrite llm_view_of_marker. exact Hs.
+Qed.
+
+(* 一致面②（P0 支·门行为）：判定器判 P0 ⟹ 规范视图的门对 Pmid-0
+   槽熵放行——门判据经在册 llm_view_gate_iff 走数值面，非负运输
+   由 Qeq 自反收口。诚实口径：Qeq_bool/Qle_bool 均为记录层比较，
+   故一致面以数值 ==/<= 陈述（§G.6 同口径）。 *)
+Theorem llm_view_PhP0_gate_exact : forall (l : list Q) (s : nat),
+  phase_classify l s = PhP0 ->
+  gate_pass (gate_threshold (llm_view_of l s)) (H_adj (Pmid l s 0)) = true.
+Proof.
+  intros l s H.
+  assert (Hs := phase_classify_P0_spec l s H).
+  apply (proj2 (llm_view_gate_iff (llm_view_of l s) (H_adj (Pmid l s 0)))).
+  rewrite llm_view_of_gate. rewrite Hs. apply Qle_refl.
+Qed.
+
+(* ---------- 16.2c 视图构造往返面 ---------- *)
+
+(* 往返①（泛形）：构造 → 投影 → 重构 = 恒等（eta 的构造子实例） *)
+Theorem llm_view_roundtrip : forall (lam : Q) (mk : list Q) (gt : Q),
+  mkLLMView (lam_param (mkLLMView lam mk gt))
+            (phase_marker (mkLLMView lam mk gt))
+            (gate_threshold (mkLLMView lam mk gt)) = mkLLMView lam mk gt.
+Proof.
+  reflexivity.
+Qed.
+
+(* 往返②（规范视图标记不动点）：规范视图的标记再入铸造器 ⟹ 同一
+   视图——P0 幂等律（§14 §A P0_idempotent）的视图层载荷：
+   组织规范形是视图铸造的不动点。 *)
+Theorem llm_view_of_roundtrip : forall (l : list Q) (s : nat),
+  llm_view_of (phase_marker (llm_view_of l s)) s = llm_view_of l s.
+Proof.
+  intros l s.
+  rewrite llm_view_of_marker. unfold llm_view_of.
+  rewrite P0_idempotent. reflexivity.
+Qed.
+
+(* ---------- §16.3 加分：Tex_of_Tabs 前提恒真定理化 ----------
+   审计在案：Tex_of_Tabs（§E）的前提 (forall m', Evidence) 恒真——
+   在册 llm_Tabs_const（§11）已给常量证据族实现。真化＝把「恒真」
+   从审计注记升格为显式定理：前提由在册件放电，得无条件形；
+   并给构造性见证（铸节点逐字可读）与 inhabitance 推论。 *)
+
+(* 前提恒真的定理化：Tex_of_Tabs 的前提经 llm_Tabs_const 放电后
+   的无条件简化面——Tex phi 对任意 phi 恒可构造，无需任何前提。 *)
+Theorem Tex_of_Tabs_premise_trivial : forall (phi m : Dig), Tex phi.
+Proof.
+  intros phi m. exact (Tex_of_Tabs phi m (llm_Tabs_const phi)).
+Qed.
+
+(* 构造性见证：无条件形的 witness 节点逐字入册（Lv0 层、
+   常量证据 evNum 0），「恒真」从注记变为可检查的构造对象。 *)
+Theorem Tex_of_Tabs_premise_trivial_witness : forall (phi m : Dig),
+  exists T : Tex phi, projT1 T = mkTrNode Lv0 phi m (evNum 0%Q).
+Proof.
+  intros phi m.
+  exists (existT _ (mkTrNode Lv0 phi m (evNum 0%Q)) (eq_refl phi)).
+  reflexivity.
+Qed.
+
+(* inhabitance 推论：Tex 纤维全域非空（模型的选取无关性——
+   任意 Dig 皆可充当见证节点 的 model 槽）。 *)
+Corollary Tex_inhabited : forall phi : Dig, Tex phi.
+Proof.
+  intros phi. exact (Tex_of_Tabs_premise_trivial phi (dQ 0%Q)).
+Qed.
+
+(* ---------- §16.4 终验：Print Assumptions（G4 关） ---------- *)
+
+Print Assumptions OrgDiff_s_irrelevant.
+Print Assumptions OrgDiff_nonneg_transport.
+Print Assumptions llm_view_mk_proj.
+Print Assumptions llm_view_eta.
+Print Assumptions llm_view_self_consistent.
+Print Assumptions llm_view_PhP0_consistent.
+Print Assumptions llm_view_PhP0_gate_exact.
+Print Assumptions llm_view_roundtrip.
+Print Assumptions llm_view_of_roundtrip.
+Print Assumptions Tex_of_Tabs_premise_trivial.
+Print Assumptions Tex_of_Tabs_premise_trivial_witness.
+Print Assumptions Tex_inhabited.
 
 End DTPT.
 

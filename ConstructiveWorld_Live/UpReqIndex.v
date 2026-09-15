@@ -1783,3 +1783,50 @@ Proof. reflexivity. Qed.
 (*    61，v3.2 后实测 64（本席 +3 条核对引理，只记不改，对账权留下一席）。                       *)
 (* 5) 三树同步：因 1) 项挂账——Live_X 单树 v3.2 增册成立，CW_Live/CW_vo 双跳 cp 待 P1b 块合并    *)
 (*    裁决后下一波执行（三处 md5 一致目标不变，数值见本席报告回填）。                            *)
+(* ========================================================================= *)
+(* v3.3（席P1g：DTPT 九条目尾部重注册席，20260915）                                            *)
+(*                                                                           *)
+(* 承 v3.2 全部既有登记面零缩水（append-only；v3.2 W31 块零触碰，纯文件尾追加）。             *)
+(* 头注声明：P1b 波 idx_DTPT* 九条目曾随 8711998 提交落库；24431dc（C 波收官）以 v3.2        *)
+(* 覆盖提交时九条目合法让位离面（v3.2 编号勘误注记自述前提「+96 行系未提交在飞产物」         *)
+(* 与 8711998 已提交事实错位，定谳见 DTPT_P1e_收尾报告.md §一）；本波经主会话 P1e 三问       *)
+(* 裁决（Q1：不在 v3.2 W31 块内恢复避编号冲突，改文件尾 v3.3 块重注册）原轨复注册，          *)
+(* 条目名/行格式严格镜像 8711998 版（v3.1d 终态）。                                          *)
+(* rm_decl_cnt 按当盘现值（v3.1 同款 grep 口径）逐件重测，随 FRUIT/TRUTH 波后刷新：          *)
+(* DTPT 272 / Entropy 218 / Truth 89（TRUTH-1 同步后现值）/ DigTheory 88 / Extract 30 /      *)
+(* Rotation 143（FRUIT-1 §S8 后；Qed 口径 135 不入本字段，字段语义依 P1b 公式）/             *)
+(* Bridge 37 / Bridge_Dig 19 / Bridge_Rot 24（P3B7 §8 终态 412 行版入车后现值；已提交版      *)
+(* 31130c5b 被工作区终态 90869682 覆盖属预期新资产入车，P2 提交信息声明）。                  *)
+(* 旗舰名逐件 grep 验证在件；rm_gate_day = 20260915（本席主库 9.0 链编译验证日）。           *)
+(* 纯数据条目零机器核对耦合（v3.1 同款）。                                                   *)
+(* ========================================================================= *)
+
+(* idx_DTPT —— DTPT.v：数字全域—熵相三元论根模块（Dig 塔+CGen+N9Opt+D8Ext 归并宿主） *)
+Definition idx_DTPT : ReqModule :=
+  MkReqModule "DTPT.v" 272 20260915 "C_sorted_min_adj" false.
+
+(* idx_DTPT_Entropy —— DTPT_Entropy.v：最小偏差和熵面（xq_ 工具箱+H_adj 下界） *)
+Definition idx_DTPT_Entropy : ReqModule :=
+  MkReqModule "DTPT_Entropy.v" 218 20260915 "H_adj_P0_min" false.
+
+(* idx_DTPT_Truth —— DTPT_Truth.v：真值序面（level 三律+Tarski 归并宿主，双副本桥在案） *)
+Definition idx_DTPT_Truth : ReqModule :=
+  MkReqModule "DTPT_Truth.v" 89 20260915 "level_le_refl" false.
+
+(* idx_DTPT_DigTheory —— DTPT_DigTheory.v：数字化理论面（dig 单射塔+HAlg 归并宿主） *)
+Definition idx_DTPT_DigTheory : ReqModule :=
+  MkReqModule "DTPT_DigTheory.v" 88 20260915 "dig_inj_dCode" false.
+
+(* idx_DTPT_Extract —— DTPT_Extract.v：提取面（u12 门控六探针+9 条 Extraction 套件宿主） *)
+Definition idx_DTPT_Extract : ReqModule :=
+  MkReqModule "DTPT_Extract.v" 30 20260915 "u12_gate_pass_t1_h0" false.
+
+(* idx_DTPT_Rotation —— DTPT_Rotation.v：旋转论面（rotc 底座/精确闭式/锐化/λ 插值/偏差判别/周期律簇，RotSpec+Lam 归并宿主） *)
+Definition idx_DTPT_Rotation : ReqModule :=
+  MkReqModule "DTPT_Rotation.v" 143 20260915 "rotc_class_sharp_ub" false.
+Definition idx_DTPT_Bridge : ReqModule :=
+  MkReqModule "DTPT_Bridge.v" 37 20260915 "H_chain_set" false.
+Definition idx_DTPT_Bridge_Dig : ReqModule :=
+  MkReqModule "DTPT_Bridge_Dig.v" 19 20260915 "dig_size_le_dec" false.
+Definition idx_DTPT_Bridge_Rot : ReqModule :=
+  MkReqModule "DTPT_Bridge_Rot.v" 24 20260915 "rotc_class_sharp_ub_set" false.
