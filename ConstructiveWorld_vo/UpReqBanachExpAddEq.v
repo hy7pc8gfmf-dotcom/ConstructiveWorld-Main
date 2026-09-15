@@ -4,9 +4,9 @@
 (* ============================================================ *)
 (* 使命主件：bxae_exp_add                                         *)
 (*   bae (bxdef_emul (bxdef_exp a) (bxdef_exp b))                *)
-(*       (bxdef_exp (a+b))    （hab 交换面 + hplus/hwd 显式假设）   *)
+(*       (bxdef_exp (a+b))    （hab 交换面；零假设形见尾注）        *)
 (* 六环接线：                                                     *)
-(*   ① bpa_esp_term_binom（UpReqBanachAdd，(a+b)^k 项二项式形）     *)
+(*   ① bnh_esp_term_binom（BanachNoHyp，(a+b)^k 项二项式形零假设）  *)
 (*   ② esp_as_bsum/bpa_bsum_mult_r（方块行形，UpReqBanachProd/Add） *)
 (*   ③ bxcb_term_split_binom（UpReqBanachBinomBridge 系数桥）      *)
 (*   ④ esp_diff_le_tail（UpReqBanachExp 尾界）+ 块和→0（本席新建）  *)
@@ -31,6 +31,7 @@ Require Import UpReqBanachClassExt.
 Require Import UpReqBanachLimUniq.
 Require Import UpReqBanachBinomBridge.
 Require Import UpReqNormConv.
+Require Import BanachNoHyp.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Setoid Lia.
 
@@ -598,12 +599,11 @@ Qed.
 Lemma bxae_term_reassoc : forall (B : BanachAlg) (a b : (@BA B)) (j i : nat)
                                  (x y c : Q),
   c == (x * y)%Q ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   @bae B (@bmult B (@bcoef B c) (@bmult B (bpow B a j) (bpow B b i)))
          (@bmult B (@bmult B (bpow B a j) (@bcoef B x))
                    (@bmult B (bpow B b i) (@bcoef B y))).
 Proof.
-  intros B a b j i x y c Hc hwd.
+  intros B a b j i x y c Hc.
   assert (Hswap : @bae B (@bmult B (@bmult B (bpow B b i) (@bcoef B x))
                                     (@bcoef B y))
                          (@bmult B (@bcoef B x)
@@ -624,7 +624,7 @@ Proof.
       exact (@bcoef_comm B c (@bmult B (bpow B a j) (bpow B b i))).
     + apply (@bmult_wd B).
       * apply (@bae_refl B).
-      * apply hwd. exact Hc.
+        * apply (@bcoef_wd B). exact Hc.
   - eapply bae_trans with
       (b := @bmult B (bpow B a j)
                       (@bmult B (bpow B b i) (@bcoef B (x * y)%Q))).
@@ -662,9 +662,6 @@ Qed.
 (* ①③ 对接：(a+b)^k/k! == Σ_{j≤k} A j·B (k−j)（行形，CBR 桥供系数） *)
 Lemma bxae_binom_row : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                           (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall k : nat,
     @bae B (@bmult B (bpow B (@bplus B a b) k) (@bcoef B (/ q_fact k)))
            (bsum B (Datatypes.S k)
@@ -673,9 +670,9 @@ Lemma bxae_binom_row : forall (B : BanachAlg) (a b : (@BA B)),
                           (@bmult B (bpow B b (Nat.sub k j))
                                    (@bcoef B (/ q_fact (Nat.sub k j)))))).
 Proof.
-  intros B a b hab hplus hwd k.
+  intros B a b hab k.
   eapply bae_trans.
-  - exact (bpa_esp_term_binom B a b hab hplus hwd k).
+  - exact (bnh_esp_term_binom B a b hab k).
   - apply (bsum_ext B (Datatypes.S k)
              (fun j : nat =>
                 @bmult B (@bcoef B (bpa_binom k j * / q_fact k)%Q)
@@ -690,7 +687,6 @@ Proof.
                (/ q_fact j) (/ q_fact (Nat.sub k j))
                (bpa_binom k j * / q_fact k)%Q).
     + exact (bxcb_term_split_binom k j ltac:(lia)).
-    + exact hwd.
 Qed.
 
 (* ② 方块行形：esp a n·esp b n == Σ_{i≤n} A i·esp b n *)
@@ -716,9 +712,6 @@ Qed.
    esp (a+b) n == Σ_{i≤n} A i·esp b (n−i) *)
 Lemma bxae_tri_row : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                           (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall n : nat,
     @bae B (exp_series_partial B (@bplus B a b) n)
            (bsum B (Datatypes.S n)
@@ -726,7 +719,7 @@ Lemma bxae_tri_row : forall (B : BanachAlg) (a b : (@BA B)),
                  @bmult B (@bmult B (bpow B a i) (@bcoef B (/ q_fact i)))
                           (exp_series_partial B b (Nat.sub n i)))).
 Proof.
-  intros B a b hab hplus hwd n.
+  intros B a b hab n.
   induction n as [| n' IH].
   - (* 基例：bone == bzero + A 0·esp b 0 *)
     assert (Hq0 : (/ q_fact 0%nat)%Q = 1%Q) by reflexivity.
@@ -780,7 +773,7 @@ Proof.
     assert (HC : @bae B (@bmult B (bpow B (@bplus B a b) (Datatypes.S n'))
                                   (@bcoef B (/ q_fact (Datatypes.S n'))))
                          (bsum B (Datatypes.S (Datatypes.S n')) Fj)).
-    { unfold Fj. exact (bxae_binom_row B a b hab hplus hwd (Datatypes.S n')). }
+    { unfold Fj. exact (bxae_binom_row B a b hab (Datatypes.S n')). }
     (* 剥末项：bsum (S (S n')) Fj == bsum (S n') Fj + Tl *)
     assert (Hpeel : @bae B (bsum B (Datatypes.S (Datatypes.S n')) Fj)
                            (@bplus B (bsum B (Datatypes.S n') Fj) Tl)).
@@ -850,9 +843,6 @@ Qed.
 (* 差=块和：esp a n·esp b n − esp (a+b) n == Σ_{i≤n} A i·(esp b n − esp b (n−i)) *)
 Lemma bxae_diff_block : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                           (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall (n : nat),
   @bae B (@bplus B (@bmult B (exp_series_partial B a n)
                              (exp_series_partial B b n))
@@ -864,7 +854,7 @@ Lemma bxae_diff_block : forall (B : BanachAlg) (a b : (@BA B)),
                                  (@bopp B (exp_series_partial B b
                                               (Nat.sub n i)))))).
 Proof.
-  intros B a b hab hplus hwd n.
+  intros B a b hab n.
   set (Ai := fun i : nat => @bmult B (bpow B a i) (@bcoef B (/ q_fact i))).
   set (Hrow := fun i : nat =>
                  @bmult B (Ai i) (exp_series_partial B b (Nat.sub n i))).
@@ -925,8 +915,8 @@ Proof.
     - exact (bxae_prod_row B a b n).
     - apply (@bopp_wd B).
       destruct n as [| n'].
-      + exact (bxae_tri_row B a b hab hplus hwd 0%nat).
-      + exact (bxae_tri_row B a b hab hplus hwd (Datatypes.S n')). }
+      + exact (bxae_tri_row B a b hab 0%nat).
+      + exact (bxae_tri_row B a b hab (Datatypes.S n')). }
   assert (H2 : @bae B (bsum B (Datatypes.S n)
                          (fun i : nat =>
                             @bmult B (Ai i) (exp_series_partial B b n)))
@@ -981,9 +971,6 @@ Qed.
 (* ④ 块和范数界：‖块 n‖ ≤T Σ_{i≤n} ‖a‖^i/i!·tail(‖b‖; n−i..n) *)
 Lemma bxae_block_norm_le : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                           (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall n : nat,
     QleT' (@bnorm B (@bplus B (@bmult B (exp_series_partial B a n)
                                             (exp_series_partial B b n))
@@ -994,10 +981,10 @@ Lemma bxae_block_norm_le : forall (B : BanachAlg) (a b : (@BA B)),
                  * exp_tail_abs (Nat.sub n i) n (@bnorm B b))
                (Datatypes.S n)).
 Proof.
-  intros B a b hab hplus hwd n.
+  intros B a b hab n.
   eapply (QeqT_Qle_bool_cong _ _ _
             (qeqT_sym_hw _ _ (@bnorm_wd B _ _
-               (bxae_diff_block B a b hab hplus hwd n)))).
+               (bxae_diff_block B a b hab n)))).
   eapply qleT'_trans.
   - eapply (QeqT_Qle_bool_cong _ _ _ (qeqT_sym_hw _ _ (@bnorm_wd B _ _
                (bxae_bsum_ncvsum B
@@ -1065,9 +1052,6 @@ Qed.
 (* ④ 差小：∀eps>0 ∃N，n≥N ⟹ ‖esp a n·esp b n − esp (a+b) n‖ < eps *)
 Lemma bxae_diff_small : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                           (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall eps : Q, QltT 0 eps ->
   sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
     QltT (@bnorm B (@bplus B (@bmult B (exp_series_partial B a n)
@@ -1075,7 +1059,7 @@ Lemma bxae_diff_small : forall (B : BanachAlg) (a b : (@BA B)),
                               (@bopp B (exp_series_partial B
                                           (@bplus B a b) n)))) eps).
 Proof.
-  intros B a b hab hplus hwd eps Heps.
+  intros B a b hab eps Heps.
   destruct (bxae_qblock_small (@bnorm B a) (@bnorm B b) eps
               (QleT'_to_Qle 0 (@bnorm B a) (@bnorm_pos B a))
               (QleT'_to_Qle 0 (@bnorm B b) (@bnorm_pos B b))
@@ -1088,7 +1072,7 @@ Proof.
                  * exp_tail_abs (Nat.sub n i) n (@bnorm B b))
                (Datatypes.S n)) eps).
   - exact (QleT'_to_Qle _ _
-             (bxae_block_norm_le B a b hab hplus hwd n)).
+             (bxae_block_norm_le B a b hab n)).
   - exact (HN n Hn).
 Qed.
 
@@ -1131,24 +1115,21 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件：e^a·e^b == e^(a+b)（hab 交换面 + hplus/hwd 显式假设）      *)
+(* 主件：e^a·e^b == e^(a+b)（hab 交换面；20260915 席AA18 起零假设）  *)
 (* 六环总装：⑤ 左极限 + ④ 差小移位 + ⑥ 唯一性                      *)
+(* 迁移史注：bxae_ 族七件（term_reassoc/binom_row/tri_row/           *)
+(* diff_block/block_norm_le/diff_small/exp_add）签名收窄至零假设，   *)
+(* bnh_esp_term_binom 同位供给，hplus/hwd 形参全摘。                 *)
 (* ============================================================ *)
 
 Theorem bxae_exp_add : forall (E : BanachAlgExt) (a b : (@BA (@bxce_base E))),
   @bae (@bxce_base E) (@bmult (@bxce_base E) a b) (@bmult (@bxce_base E) b a) ->
-  (forall q r : Q,
-     @bae (@bxce_base E) (@bplus (@bxce_base E) (@bcoef (@bxce_base E) q)
-                                  (@bcoef (@bxce_base E) r))
-            (@bcoef (@bxce_base E) (q + r)%Q)) ->
-  (forall q r : Q,
-     q == r -> @bae (@bxce_base E) (@bcoef (@bxce_base E) q) (@bcoef (@bxce_base E) r)) ->
   @bae (@bxce_base E)
        (@bxdef_emul (@bxce_base E) (bxdef_exp (@bxce_base E) a)
                     (bxdef_exp (@bxce_base E) b))
        (bxdef_exp (@bxce_base E) (@bplus (@bxce_base E) a b)).
 Proof.
-  intros E a b hab hplus hwd.
+  intros E a b hab.
   unfold bxdef_emul.
   apply (bxuq_lim_uniq E
            (fun n : nat =>
@@ -1164,7 +1145,7 @@ Proof.
     + exact (bxdef_exp_spec (@bxce_base E)
                 (@bplus (@bxce_base E) a b)).
     + intros eps Heps.
-      destruct (bxae_diff_small (@bxce_base E) a b hab hplus hwd eps Heps)
+      destruct (bxae_diff_small (@bxce_base E) a b hab eps Heps)
         as [N HN].
       exists N. intros n Hn.
       apply HN. exact (NatLe_drop _ _ Hn).

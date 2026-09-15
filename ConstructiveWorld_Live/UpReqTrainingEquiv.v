@@ -1,25 +1,34 @@
 (* ============================================================ *)
+(* UpReqTrainingEquiv.v *)
+(* *)
+(* 目的： 定理 4.10 training_equivalence 的 Real 层构造。 *)
+(* 主件： real_training_equivalence 与 real_cross_entropy_decomp 交叉熵分解。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： KL 项展开为构造核；训练等价性取显式恒等式形。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTrainingEquiv.v —— 席T11：定理 4.10 training_equivalence        *)
-(*   Real 层组装 + 强度定稿席（后台独立席位，独占 CoreN 1，             *)
+
 (*   预算 60 分钟单席闭合）                                             *)
 (* ------------------------------------------------------------------ *)
 (* 【强度定稿注记（席N1 判定 C10 之 Real 层兑现）】                     *)
 (*   ① Id 层为序档：training_equivalence @ S04_RealExpLogConv.v L4869   *)
-(*     （任务书所记 S04_CauchyComplete.v 即本分片，L4869 实测在盘）。   *)
+(*     （任务书所记 S04_CauchyComplete.v 即本模块，L4869 实测在盘）。   *)
 (*   ② 库内实义 = 「交叉熵下降 ⟹ KL 下降（固定目标 p）」——            *)
 (*     交叉熵↔KL 单调对偶；**非**字面「ELBO=自由能」。                  *)
 (*     【措辞差登记】论文叙述若作「ELBO=自由能」措辞，与库内声明        *)
 (*     （交叉熵-相对熵-熵恒等式 cross_entropy_decomp @S04 L4306 +       *)
 (*     共同被加项消去的差分单调）存在措辞差，本件头注登记供论文席       *)
 (*     修正；req 对位 req_training_equivalence @UpReqDist.v L2578       *)
-(*     「req 无条件形态」已由前任席交付，本件为其 Real 层同构镜像。     *)
+(*     「req 无条件形态」已由前任席结果，本件为其 Real 层同构镜像。     *)
 (*   ③ Real 层形态 = real_le 版同一陈述（零缩水）：                     *)
 (*     real_cross_entropy(p,q2) ≤ real_cross_entropy(p,q1) ⟹           *)
 (*     Σ kl_term(p,q2) ≤ Σ kl_term(p,q1)。                              *)
 (* ------------------------------------------------------------------ *)
 (* 【组装链结构图（各步引用件名）】                                     *)
 (*   第 0 件 定义件：real_cross_entropy（p·(−log q) 逐点和，            *)
-(*     Id cross_entropy @S04 L4301 的 real 载体镜像；real_log 正性      *)
+
 (*     证人 Hq 前移——UpReqTempDefs real_entropy_dist 同位先例）。       *)
 (*   第 1 件 局部序代数四小件（全 S02/S07/S08 基元拼装，零新数学）：    *)
 (*     a. real_plus_opp_cancel_mid：(−x)+(x+y) ≡ y                      *)
@@ -33,9 +42,9 @@
 (*        = real_opp_plus + S08 real_plus_swap_mid + real_plus_opp      *)
 (*          + zero 群                                                   *)
 (*   第 2 件 kl 项逐点展开桥：real_kl_term_expand                      *)
-(*     kl_term(p,q) ≡ p·(log p − log q)                                 *)
+
 (*     = real_log_mult（S07 L7845）+ real_log_inv_pos_opp（本件：       *)
-(*       log(p⁻¹) ≡ −log p，经 real_inv_pos_correct + real_log_wd +     *)
+
 (*       real_log_one + real_one_pos_local（S13）+ a 件）+              *)
 (*       real_opp_plus + real_opp_opp（S08 L95）+ 交换群。              *)
 (*   第 3 件 分解件：real_cross_entropy_decomp（real_eq 恒等式）        *)
@@ -43,18 +52,18 @@
 (*     按 S08 real_kl_sum_decomp（L2526）同族组装：逐点（a 件抵消链    *)
 (*     + real_distrib）→ real_list_sum_ext（S08 L284，X 显式首参）      *)
 (*     → real_list_sum_add（S08 L329）→ ext 换 kl 桥。                  *)
-(*   第 4 件 主件收口：real_training_equivalence（real_le 四步法）      *)
+(*   第 4 件 主件完成：real_training_equivalence（real_le 四步法）      *)
 (*     ① 差分非负：0 ≤ CE1−CE2 = S13 real_le_minus_nonneg_aux          *)
 (*       （L3293，Or 两支均构造性消去，无排中 leakage——N1 实证）        *)
 (*     ② 差分恒等：real_minus_r_compat + d 件（第 3 件喂槽）            *)
 (*     ③ 运输：RealSetoid.real_le_id_r（S07 L461）                      *)
-(*     ④ 收口：S13 real_le_plus_nonneg_r_aux（L3283）+ b 件。           *)
+(*     ④ 完成：S13 real_le_plus_nonneg_r_aux（L3283）+ b 件。           *)
 (*   同源参照：rfep_rlhf_free_energy_kl @UpReqRealFEP L1079（任意 π*    *)
 (*   版分解，定理 4.7 同源；本件固定目标 p 即其 q 位特化读法）。        *)
 (* ------------------------------------------------------------------ *)
 (* 【诚实申报】本件为序档组装件（非新数学）：分解恒等式的数学内容 =    *)
 (*   Id cross_entropy_decomp（S04 L4306）与 S08 real_kl_sum_decomp     *)
-(*   同族；序收口四步全为 S02/S07/S13 在盘序件拼装；本件增量 =          *)
+(*   同族；序完成四步全为 S02/S07/S13 在盘序件拼装；本件增量 =          *)
 (*   list 载体实例化（T7 UpReqMinFreeEps 同款）+ real_minus_r 载体上   *)
 (*   的差分单调骨架首次成件。前提全显式：p、q1、q2 逐点正（real_log    *)
 (*   正性证人位，UpReqTempDefs 同位先例）。                             *)
@@ -62,10 +71,10 @@
 (* 【红线】Set 层零 Prop（real_le/real_lt/real_eq 全 Set 值）；全 Qed   *)
 (*   闭合；禁词条目零命中（头注以中文转述）；real_eq 非 Id 禁改写，     *)
 (*   全链 real_eq_trans/RealSetoid 运输（E393 纪律）。                  *)
-(*   禁改红线：S04/S07/S12/S13 分片、UpReqRealFEP.v、UpReqDist.v、      *)
+(*   禁改红线：S04/S07/S12/S13 模块、UpReqRealFEP.v、UpReqDist.v、      *)
 (*   UpReqMinFreeEps.v 全程只读。                                       *)
 (* 编译配方：_t11_run.ps1 单一入口（T7 先例）+ cpu_guard CoreN 1        *)
-(*   预审：coqc -vos（秒审）；全量：coqc -Q vo树 "" -Q 本目录 ""        *)
+
 (*   前置 .vo 全在 D:/ComplexAnalysis/ConstructiveWorld-Main/           *)
 (*   ConstructiveWorld_vo/（vo 树编译，上游件零重编）。                 *)
 (* ============================================================ *)
@@ -74,10 +83,10 @@ Require Import CW_ConstructiveWorld_219.
 
 (* ---------------------------------------------------------- *)
 (* 第 0 件：定义件 real_cross_entropy                                  *)
-(*   交叉熵 H(p,q) := Σ_s p(s)·(−log q(s))。                           *)
+
 (*   Id 形态对照：cross_entropy @S04 L4301                              *)
 (*     Definition cross_entropy (p q : S -> R) : R :=                  *)
-(*       sum_over_S (fun s => mult (p s) (opp (log (q s)))).           *)
+
 (*   real 载体镜像（T7 list 载体同款）：sumf := real_list_sum X _ l；  *)
 (*   唯一前提位差：real_log 带正性证人（S07 L7842 定义位），Hq 前移    *)
 (*   （UpReqTempDefs real_entropy_dist 同位先例）。                     *)
@@ -109,7 +118,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 第 1b 件：a + (b + (−a)) ≡ b（Id minus_plus_cancel 的 real 镜像；   *)
-(*   主件第 ④ 步收口右元换形位）。                                     *)
+(*   主件第 ④ 步完成右元换形位）。                                     *)
 (* ---------------------------------------------------------- *)
 Lemma real_plus_minus_r_cancel :
   forall a b : Real,
@@ -172,9 +181,9 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 第 2a 件：log(p⁻¹) ≡ −(log p)。                                     *)
-(*   配方（UpReqRealFEP Part 2 Hinv 块同款）：log p + log p⁻¹ ≡        *)
-(*   log(p·p⁻¹) ≡ log 1 ≡ 0，再经 1a 件引出负号。                       *)
+
+
+
 (* ---------------------------------------------------------- *)
 Lemma real_log_inv_pos_opp :
   forall (x : Real) (Hx : real_lt real_zero x),
@@ -219,8 +228,8 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 第 2b 件：kl 项逐点展开桥                                           *)
-(*   real_kl_term(p,q) ≡ p·(log p − log q)。                           *)
-(*   配方：log(q·p⁻¹) ≡ log q + log p⁻¹（real_log_mult S07 L7845）     *)
+
+
 (*   → 负号内搬（real_opp_plus S07 L7786 + real_opp_opp S08 L95 +      *)
 (*   交换群）→ mult 换形（RealSetoid.real_eq_mult_compat）。           *)
 (* ---------------------------------------------------------- *)
@@ -373,12 +382,12 @@ Qed.
 (* ---------------------------------------------------------- *)
 (* 第 4 件：主件 real_training_equivalence（定理 4.10 Real 层）         *)
 (*   real_le 版同一陈述（零缩水）：固定目标 p，交叉熵下降 ⟹ KL 下降。  *)
-(*   组装链（序收口四步法）：                                           *)
+(*   组装链（序完成四步法）：                                           *)
 (*   ① 差分非负：0 ≤ CE1 − CE2（S13 real_le_minus_nonneg_aux L3293，   *)
 (*     Or 两支均构造性消去，无排中 leakage）                            *)
 (*   ② 差分恒等：CE1 − CE2 ≡ K1 − K2（第 3 件喂槽 → 1c 件 → 1d 件）    *)
 (*   ③ 运输：RealSetoid.real_le_id_r（S07 L461）                        *)
-(*   ④ 收口：K2 ≤ K2 + (K1 − K2) ≡ K1                                   *)
+(*   ④ 完成：K2 ≤ K2 + (K1 − K2) ≡ K1                                   *)
 (*     （S13 real_le_plus_nonneg_r_aux L3283 + 1b 件）                  *)
 (* ---------------------------------------------------------- *)
 Theorem real_training_equivalence :
@@ -461,7 +470,7 @@ Proof.
                    (real_list_sum X
                       (fun s => real_kl_term (p s) (q2 s) (Hp s) (Hq2 s)) l))
                 Hdiff Hd0).
-  (* ④ 收口：K2 ≤ K2 + (K1 − K2) ≡ K1 *)
+  (* ④ 完成：K2 ≤ K2 + (K1 − K2) ≡ K1 *)
   apply (RealSetoid.real_le_id_r
            (real_list_sum X (fun s => real_kl_term (p s) (q2 s) (Hp s) (Hq2 s)) l)
            (real_plus

@@ -7,8 +7,18 @@
    归并记录：S3（2026-09-14）并入 DTPT_Entropy2.v（§A2）与
              DTPT_EntFam2.v（§A3）；S4（2026-09-14）并入
              DTPT_ME2.v（§A4）与 DTPT_ZeroLocus.v（§A5）；此前无
-             （原生成模块）；与 DTPT.v 的 xq_ 工具箱簇为双副本
-             维持不归并，头注互指（融入执行方案 §1.4 簇②）。
+             （原生成模块）；F2（2026-09-15）追加 §A6 频数拼接
+             单调族（sqsum_app 保底两件 + 交叉项精确分解 +
+             maxcount 极值面随行 + H_freq/collide 拼接无定向
+             构造反例钉界）；ADJ-4（2026-09-15）追加 §A7
+             align_lambda 真定义升级（双件共存：恒等占位
+             align_lambda 原名原义保留 + align_lambda_opt 最优
+             λ 选择器四件）；F5（2026-09-15）追加 §A8 拼接精确
+             卷积式（sqsum 交叉项对账 + 对称双和 + collide/H_freq
+             加权卷积旗舰 collide_app_eq / H_freq_app_eq + 三段
+             结合律值面 + vm_compute 数值锚）；与 DTPT.v 的 xq_
+             工具箱簇为双副本维持不归并，头注互指（融入执行方案
+             §1.4 簇②）。
    认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
    纪律：纯构造性；四关收割；温控协议；全部 Q 载体；
          H_Shannon 对齐库内熵模块族离散计数路线。
@@ -80,6 +90,11 @@ Definition gate_low_entropy (H : Q) (threshold : Q) : bool :=
   Qle_bool H threshold.
 
 (* 启发4：对齐策略——λ 偏向 P0 的可验证知识 *)
+(* ADJ-4（2026-09-15）F4 注记：本件为恒等占位，保留原名原义零改动
+   （DTPT_Rotation.v §S7 救活块四件 align_lambda_id/H_lam/
+   lam_opt_min_align/range 现役消费，签名不可变，双件共存裁决）；
+   真定义见文尾 §A7 align_lambda_opt（h0/h1 双熵输入的最优 λ
+   选择器，与 Rotation §S7 lam_opt/lam_opt_cyc 同构语义）。 *)
 Definition align_lambda (lam : Q) : Q := lam.
 
 (* ========== 关键定理（临时承认搭架） ========== *)
@@ -2640,6 +2655,515 @@ Proof.
       * exists a. exact Hfa.
 Qed.
 
+(* ============================================================
+   §A6 果实席 F2（2026-09-15）：F6 频数拼接单调族
+   盘面现役件组合（零生造）：§3 freq_q_app（拼接频数可加）×
+   §4 nsum / §5 sqsum / nmax 面。
+   保底件两件：
+   · sqsum_app_ge_l / sqsum_app_ge_r：sqsum (l1++l2) >= sqsum l1
+     （及右）——拼接后逐点频数增大 + 支撑并集，碰撞和质量只增不减。
+   加分件：
+   · sqsum_app_eq：精确交叉项分解
+       sqsum (l1++l2) = sqsum l1 + sqsum l2
+                        + Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1。
+   随行面：
+   · sqsum_app_ge_sum：质量面 sqsum l1 + sqsum l2 <= sqsum (l1++l2)；
+   · maxcount_app_ge_l / _r：频数极值面（collide/maxfreq 共享分子）。
+   诚实障碍（构造反例钉界，禁硬凑）：H_freq/collide 的拼接单调
+   「不成立」：H_freq ([0]++[1]) = 1/2 > 0 = H_freq [0]；collide [0]
+   = 1 > 1/2 = collide ([0]++[1])。根因：sqsum 单调（分子增）的同时
+   分母 n² 同步增大，归一化商无定向——任务卡条件句「H_freq
+   (l1++l2) <= H_freq l1 型若 sqsum 单调成立即随行」之前件不蕴含
+   后件，如实以 H_freq_app_mono_false / collide_app_mono_false 收口。
+   ============================================================ *)
+
+(* ---------- §A6.0 承重件：nsum 拼接可加 / 逐点可加 ---------- *)
+
+Lemma nsum_app : forall (f : Q -> nat) (l p : list Q),
+  nsum f (l ++ p) = (nsum f l + nsum f p)%nat.
+Proof.
+  intros f l p. induction l as [| a l IH].
+  - reflexivity.
+  - simpl. rewrite IH. lia.
+Qed.
+
+Lemma nsum_add : forall (f g : Q -> nat) (l : list Q),
+  nsum (fun x => (f x + g x)%nat) l = (nsum f l + nsum g l)%nat.
+Proof.
+  intros f g l. induction l as [| a l IH].
+  - reflexivity.
+  - simpl. rewrite IH. lia.
+Qed.
+
+(* ---------- §A6.1 保底件：sqsum 拼接单调两件 ---------- *)
+
+Theorem sqsum_app_ge_l : forall l1 l2 : list Q,
+  (sqsum l1 <= sqsum (l1 ++ l2))%nat.
+Proof.
+  intros l1 l2. unfold sqsum. rewrite nsum_app.
+  assert (H1 : (nsum (fun x => freq_q x l1) l1
+                <= nsum (fun x => freq_q x (l1 ++ l2)) l1)%nat).
+  { apply nsum_le. intros x _. rewrite freq_q_app. lia. }
+  lia.
+Qed.
+
+Theorem sqsum_app_ge_r : forall l1 l2 : list Q,
+  (sqsum l2 <= sqsum (l1 ++ l2))%nat.
+Proof.
+  intros l1 l2. unfold sqsum. rewrite nsum_app.
+  assert (H2 : (nsum (fun x => freq_q x l2) l2
+                <= nsum (fun x => freq_q x (l1 ++ l2)) l2)%nat).
+  { apply nsum_le. intros x _. rewrite freq_q_app. lia. }
+  lia.
+Qed.
+
+(* ---------- §A6.2 加分件：sqsum 拼接精确交叉项分解 ---------- *)
+
+Theorem sqsum_app_eq : forall l1 l2 : list Q,
+  sqsum (l1 ++ l2) =
+  (sqsum l1 + sqsum l2
+   + nsum (fun x => freq_q x l2) l1
+   + nsum (fun x => freq_q x l1) l2)%nat.
+Proof.
+  intros l1 l2. unfold sqsum. rewrite nsum_app.
+  rewrite (nsum_ext_in (fun x => freq_q x (l1 ++ l2))
+                       (fun x => (freq_q x l1 + freq_q x l2)%nat) l1
+             (fun x _ => freq_q_app x l1 l2)).
+  rewrite (nsum_ext_in (fun x => freq_q x (l1 ++ l2))
+                       (fun x => (freq_q x l1 + freq_q x l2)%nat) l2
+             (fun x _ => freq_q_app x l1 l2)).
+  pose proof (nsum_add (fun x => freq_q x l1) (fun x => freq_q x l2) l1) as HA.
+  pose proof (nsum_add (fun x => freq_q x l1) (fun x => freq_q x l2) l2) as HB.
+  lia.
+Qed.
+
+(* 质量面随行：两段碰撞质量之和不超拼接碰撞质量（交叉项非负） *)
+Corollary sqsum_app_ge_sum : forall l1 l2 : list Q,
+  (sqsum l1 + sqsum l2 <= sqsum (l1 ++ l2))%nat.
+Proof.
+  intros l1 l2. rewrite (sqsum_app_eq l1 l2). lia.
+Qed.
+
+(* ---------- §A6.3 随行面：maxcount 极值拼接单调（分子面） ---------- *)
+
+Lemma nmax_app : forall (f : Q -> nat) (l p : list Q),
+  nmax f (l ++ p) = Nat.max (nmax f l) (nmax f p).
+Proof.
+  intros f l p. induction l as [| a l IH].
+  - reflexivity.
+  - simpl. rewrite IH. lia.
+Qed.
+
+Lemma nmax_le_app_l : forall (f : Q -> nat) (l p : list Q),
+  (nmax f l <= nmax f (l ++ p))%nat.
+Proof.
+  intros f l p. rewrite nmax_app. apply Nat.le_max_l.
+Qed.
+
+Lemma nmax_le_app_r : forall (f : Q -> nat) (l p : list Q),
+  (nmax f l <= nmax f (p ++ l))%nat.
+Proof.
+  intros f l p. rewrite nmax_app. apply Nat.le_max_r.
+Qed.
+
+Lemma nmax_mono : forall (f g : Q -> nat) (l : list Q),
+  (forall x, In x l -> (f x <= g x)%nat) -> (nmax f l <= nmax g l)%nat.
+Proof.
+  intros f g l. induction l as [| a t IH]; simpl; intros H.
+  - lia.
+  - assert (H1 : (f a <= g a)%nat) by (apply H; left; reflexivity).
+    assert (H2 : (nmax f t <= nmax g t)%nat)
+      by (apply IH; intros x Hx; apply H; right; exact Hx).
+    lia.
+Qed.
+
+Theorem maxcount_app_ge_l : forall l1 l2 : list Q,
+  (maxcount l1 <= maxcount (l1 ++ l2))%nat.
+Proof.
+  intros l1 l2. unfold maxcount.
+  apply (Nat.le_trans (nmax (fun x => freq_q x l1) l1)
+                      (nmax (fun x => freq_q x (l1 ++ l2)) l1)
+                      (nmax (fun x => freq_q x (l1 ++ l2)) (l1 ++ l2))).
+  - apply (nmax_mono (fun x => freq_q x l1)
+                     (fun x => freq_q x (l1 ++ l2)) l1).
+    intros x _. rewrite freq_q_app. lia.
+  - apply nmax_le_app_l.
+Qed.
+
+Theorem maxcount_app_ge_r : forall l1 l2 : list Q,
+  (maxcount l2 <= maxcount (l1 ++ l2))%nat.
+Proof.
+  intros l1 l2. unfold maxcount.
+  apply (Nat.le_trans (nmax (fun x => freq_q x l2) l2)
+                      (nmax (fun x => freq_q x (l1 ++ l2)) l2)
+                      (nmax (fun x => freq_q x (l1 ++ l2)) (l1 ++ l2))).
+  - apply (nmax_mono (fun x => freq_q x l2)
+                     (fun x => freq_q x (l1 ++ l2)) l2).
+    intros x _. rewrite freq_q_app. lia.
+  - apply nmax_le_app_r.
+Qed.
+
+(* ---------- §A6.4 诚实障碍：归一化商面拼接无定向（反例钉界） ---------- *)
+
+(* 具体值面（vm_compute 收口，供反例改写消费） *)
+Lemma H_freq_01_val : H_freq [0;1] == (1#2)%Q.
+Proof. unfold H_freq. vm_compute. reflexivity. Qed.
+
+Lemma H_freq_0_val : H_freq [0] == 0%Q.
+Proof. unfold H_freq. vm_compute. reflexivity. Qed.
+
+Lemma collide_01_val : collide [0;1] == (1#2)%Q.
+Proof. unfold collide. vm_compute. reflexivity. Qed.
+
+Lemma collide_0_val : collide [0] == 1%Q.
+Proof. unfold collide. vm_compute. reflexivity. Qed.
+
+(* H_freq 拼接单调不成立：加一异值元素使熵增
+   （0 < H_freq [0;1] = 1/2 与 H : 1/2 <= 0 相撞） *)
+Lemma H_freq_app_mono_false :
+  ~ (forall l1 l2 : list Q, H_freq (l1 ++ l2) <= H_freq l1).
+Proof.
+  intro H. specialize (H [0] [1]).
+  assert (Hn : H_freq ([0] ++ [1]) == H_freq [0;1]) by reflexivity.
+  rewrite Hn in H. rewrite (H_freq_01_val) in H. rewrite (H_freq_0_val) in H.
+  assert (Hgt : 0%Q < (1#2)%Q) by (unfold Qlt; simpl; lia).
+  exact (Qlt_irrefl 0%Q (Qlt_le_trans 0%Q (1#2)%Q 0%Q Hgt H)).
+Qed.
+
+(* collide 拼接下有向单调不成立：全同值表加异值元素使碰撞熵减
+   （H : 1 <= 1/2 与 1/2 < 1 相撞） *)
+Lemma collide_app_mono_false :
+  ~ (forall l1 l2 : list Q, collide l1 <= collide (l1 ++ l2)).
+Proof.
+  intro H. specialize (H [0] [1]).
+  assert (Hn : collide ([0] ++ [1]) == collide [0;1]) by reflexivity.
+  rewrite Hn in H. rewrite (collide_01_val) in H. rewrite (collide_0_val) in H.
+  assert (Hlt : (1#2)%Q < 1%Q) by (unfold Qlt; simpl; lia).
+  exact (Qlt_irrefl 1%Q (Qle_lt_trans 1%Q (1#2)%Q 1%Q H Hlt)).
+Qed.
+
+(* ========== §A7 ADJ-4（2026-09-15）：align_lambda 真定义升级（双件共存） ========== *)
+(* AUDIT-2 审计 A1/A2（F4）收口：恒等占位 align_lambda（本文件 L86 区）
+   保留原名原义零改动（Rotation §S7 救活块四件现役消费，签名零波及，
+   调度席路径-steering 裁决＝双件共存）；本区新增真定义 align_lambda_opt
+   —— h0/h1 双熵输入的最优 λ 选择器（if Qle_bool h0 h1 then 1 else 0）。
+   跨文件对账注记（加分面）：与 DTPT_Rotation.v §S7 的 lam_opt（定义
+   逐字同构）/§M3 归并段 lam_opt_cyc（lam_opt 的周期族别名，L1929：
+   lam_opt_cyc h0 hk := lam_opt h0 hk）同构语义。Entropy 先于 Rotation
+   编译（Rotation Require 本文件），不可反向 Require 复用 lam_opt，
+   故本区独立给出同语义本体；定理面与 Rotation 侧 lam_opt_values /
+   lam_opt_range / lam_opt_min（H_lam 消费形＝H_lam_lam_opt_min）逐条
+   同型，陈述以盘面现役形为准。 *)
+
+Definition align_lambda_opt (h0 h1 : Q) : Q := if Qle_bool h0 h1 then 1 else 0.
+
+(* 两分支取值面：端点选择器恒取 λ 值 1 或 0（两分支各一构造）。 *)
+Theorem align_lambda_opt_values : forall h0 h1 : Q,
+  align_lambda_opt h0 h1 = 1%Q \/ align_lambda_opt h0 h1 = 0%Q.
+Proof.
+  intros h0 h1. unfold align_lambda_opt.
+  destruct (Qle_bool h0 h1).
+  - left. reflexivity.
+  - right. reflexivity.
+Qed.
+
+(* 值域 {0,1} 面：选择器像含于 [0,1]（经 values 面 + 字面 Qle 装配）。 *)
+Theorem align_lambda_opt_range : forall h0 h1 : Q,
+  (0 <= align_lambda_opt h0 h1 <= 1)%Q.
+Proof.
+  intros h0 h1. destruct (align_lambda_opt_values h0 h1) as [E | E].
+  - rewrite E. split.
+    + exact (xq_Qle_bool_le 0 1 eq_refl).
+    + apply Qle_refl.
+  - rewrite E. split.
+    + apply Qle_refl.
+    + exact (xq_Qle_bool_le 0 1 eq_refl).
+Qed.
+
+(* 最优性（H_lam 消费形·主件）：端点选择器的混合熵不超过 [0,1] 内
+   任意 λ 的混合熵。两分支各化归一次乘法非负装配（仿射差分路线，
+   与 Rotation §S7 lam_opt_min 同型）：
+   h0 <= h1 分支取 λ* = 1，差 = (1-lam)·(h1-h0)；
+   否则取 λ* = 0，差 = lam·(h0-h1)。 *)
+Theorem align_lambda_opt_min : forall (l : list Q) (s : nat) (lam : Q),
+  (0 <= lam <= 1)%Q ->
+  (H_lam l s (align_lambda_opt (H_adj (P0 l)) (H_adj (Pinf l s)))
+   <= H_lam l s lam)%Q.
+Proof.
+  intros l s lam H01. destruct H01 as [Hlam0 Hlam1].
+  unfold H_lam, align_lambda_opt.
+  destruct (Qle_bool (H_adj (P0 l)) (H_adj (Pinf l s))) eqn:E.
+  - (* h0 <= h1：λ* = 1，最优值 = h0 *)
+    assert (Hd : (0 <= lam * H_adj (P0 l) + (1 - lam) * H_adj (Pinf l s)
+                       - (1 * H_adj (P0 l) + (1 - 1) * H_adj (Pinf l s)))%Q).
+    { assert (Er : lam * H_adj (P0 l) + (1 - lam) * H_adj (Pinf l s)
+                 - (1 * H_adj (P0 l) + (1 - 1) * H_adj (Pinf l s))
+                 == (1 - lam) * (H_adj (Pinf l s) - H_adj (P0 l))) by ring.
+      rewrite Er. apply xq_mul_nonneg.
+      + apply (proj1 (Qle_0_sub' lam 1)). exact Hlam1.
+      + apply (proj1 (Qle_0_sub' _ _)). apply xq_Qle_bool_le. exact E. }
+    apply (proj2 (Qle_0_sub' _ _)). exact Hd.
+  - (* h0 > h1：λ* = 0，最优值 = h1 *)
+    assert (Hge : (H_adj (Pinf l s) <= H_adj (P0 l))%Q)
+      by (apply Qle_bool_false_le; exact E).
+    assert (Hd : (0 <= lam * H_adj (P0 l) + (1 - lam) * H_adj (Pinf l s)
+                       - (0 * H_adj (P0 l) + (1 - 0) * H_adj (Pinf l s)))%Q).
+    { assert (Er : lam * H_adj (P0 l) + (1 - lam) * H_adj (Pinf l s)
+                 - (0 * H_adj (P0 l) + (1 - 0) * H_adj (Pinf l s))
+                 == lam * (H_adj (P0 l) - H_adj (Pinf l s))) by ring.
+      rewrite Er. apply xq_mul_nonneg.
+      + exact Hlam0.
+      + apply (proj1 (Qle_0_sub' _ _)). exact Hge. }
+    apply (proj2 (Qle_0_sub' _ _)). exact Hd.
+Qed.
+
+(* 端点求值桥（随行加分）：选择器的混合熵取值恒为某一端的相熵
+   （消费「端点 3」H_lam_lam1 / H_lam_lam0）。 *)
+Theorem align_lambda_opt_endpoint : forall (l : list Q) (s : nat),
+  H_lam l s (align_lambda_opt (H_adj (P0 l)) (H_adj (Pinf l s))) == H_adj (P0 l)
+  \/ H_lam l s (align_lambda_opt (H_adj (P0 l)) (H_adj (Pinf l s)))
+     == H_adj (Pinf l s).
+Proof.
+  intros l s.
+  destruct (align_lambda_opt_values (H_adj (P0 l)) (H_adj (Pinf l s)))
+    as [E | E].
+  - left. rewrite E. apply H_lam_lam1.
+  - right. rewrite E. apply H_lam_lam0.
+Qed.
+
+(* ============================================================
+   §A8 果实席 F5（2026-09-15）：F6 深化——拼接精确卷积式
+   熵族拼接卷积的完整恒等式（论文 α §4 熵族节收口定理位）。
+   消费（零生造）：§3 freq_q_app / §4 nsum 面 / §A6 sqsum_app_eq
+   （交叉项精确分解，对账消费）× §6 collide / H_freq 定义 +
+   H_freq_eq_bridge（H_freq == 1 − collide 桥面，field 路线先例）。
+   全件先 vm_compute 数值探针验真值再落笔（FRUIT-2 假命题教训），
+   探针以 *_val 件永久在册（§A8.4）。
+   诚实边界：collide/H_freq 卷积式取 n1、n2 双非空卫哨——field
+   路线需全部商分母非零；n1=0/n2=0 退化面中 w=0 商恒零使恒等式
+   仍真，但归一化拼接无定向已由 §A6 H_freq_app_mono_false /
+   collide_app_mono_false 反例钉界，本席不扩张卫哨外陈述。
+   ============================================================ *)
+
+(* ---------- §A8.0 卷积代数小件 ---------- *)
+
+(* Q 无零因子面（field 侧条件供件）：非零 × 非零 ≠ 0 *)
+Lemma qmul_neq0 : forall x y : Q,
+  ~ (x == 0) -> ~ (y == 0) -> ~ (x * y == 0).
+Proof.
+  intros [xn xd] [yn yd] Hx Hy Hxy.
+  assert (Hxn : (xn <> 0)%Z).
+  { intros Hz. apply Hx. unfold Qeq. simpl. rewrite Hz. reflexivity. }
+  assert (Hyn : (yn <> 0)%Z).
+  { intros Hz. apply Hy. unfold Qeq. simpl. rewrite Hz. reflexivity. }
+  unfold Qeq, Qmult in Hxy. simpl in Hxy.
+  rewrite ? Z.mul_1_r in Hxy.
+  apply Z.mul_eq_0 in Hxy.
+  destruct Hxy as [E | E]; [exact (Hxn E) | exact (Hyn E)].
+Qed.
+
+(* 指示器求和 = 频数（nsum 与 freq_q 的换基桥） *)
+Lemma nsum_freq_q_ind : forall (a : Q) (l : list Q),
+  nsum (fun x => if Qeq_bool x a then 1%nat else 0%nat) l = freq_q a l.
+Proof.
+  intros a l. induction l as [| y ys IH].
+  - reflexivity.
+  - simpl. rewrite IH.
+    destruct (Qeq_bool y a) eqn:E1; destruct (Qeq_bool a y) eqn:E2; try lia.
+    + exfalso.
+      assert (C : Qeq_bool a y = true).
+      { apply (proj2 (Qeq_bool_iff a y)). apply Qeq_sym.
+        apply (proj1 (Qeq_bool_iff y a)). exact E1. }
+      rewrite C in E2. discriminate.
+    + exfalso.
+      assert (C : Qeq_bool y a = true).
+      { apply (proj2 (Qeq_bool_iff y a)). apply Qeq_sym.
+        apply (proj1 (Qeq_bool_iff a y)). exact E2. }
+      rewrite C in E1. discriminate.
+Qed.
+
+(* ---------- §A8.1 保底件：交叉项显式形 + 对称双和 ---------- *)
+
+(* 对账件：与 §A6 sqsum_app_eq 同形（freq_q_app 双侧展开 + nsum
+   分配的精确交叉项分解），依调度令以 sqsum_app_cross 之名在册
+   （保底名位），本体消费 §A6 旗舰零重证。 *)
+Theorem sqsum_app_cross : forall l1 l2 : list Q,
+  sqsum (l1 ++ l2) =
+  (sqsum l1 + sqsum l2
+   + nsum (fun x => freq_q x l2) l1
+   + nsum (fun x => freq_q x l1) l2)%nat.
+Proof. intros l1 l2. exact (sqsum_app_eq l1 l2). Qed.
+
+(* 对称双和：两交叉项相等（同计配对集 {(p,q)∈l1×l2 : p==q}）——
+   审计 F6 预告件，卷积式标准化 2X 形的承重面。 *)
+Theorem sqsum_cross_sym : forall l1 l2 : list Q,
+  nsum (fun x => freq_q x l2) l1 = (nsum (fun x => freq_q x l1) l2)%nat.
+Proof.
+  induction l1 as [| a t IH]; intros l2.
+  - cbn [nsum]. symmetry.
+    rewrite (nsum_ext_in (fun x : Q => freq_q x []) (fun _ : Q => 0%nat) l2
+               (fun x _ => eq_refl)).
+    pose proof (nsum_const 0%nat l2) as HC. rewrite HC. lia.
+  - cbn [nsum].
+    assert (Eext : forall x : Q,
+      freq_q x (a :: t) = (freq_q x t + (if Qeq_bool x a then 1%nat else 0%nat))%nat).
+    { intros x. simpl. destruct (Qeq_bool x a); lia. }
+    rewrite (nsum_ext_in (fun x : Q => freq_q x (a :: t))
+              (fun x : Q => (freq_q x t + (if Qeq_bool x a then 1%nat else 0%nat))%nat)
+              l2 (fun x _ => Eext x)).
+    rewrite nsum_add.
+    rewrite (nsum_freq_q_ind a l2).
+    rewrite IH. lia.
+Qed.
+
+(* 标准化 2X 形：交叉项以对称双和归并（sqsum_app_cross + cross_sym） *)
+Theorem sqsum_app_eq2 : forall l1 l2 : list Q,
+  sqsum (l1 ++ l2) =
+  (sqsum l1 + sqsum l2 + 2 * nsum (fun x => freq_q x l2) l1)%nat.
+Proof.
+  intros l1 l2. rewrite (sqsum_app_cross l1 l2).
+  rewrite (sqsum_cross_sym l1 l2). lia.
+Qed.
+
+(* ---------- §A8.2 旗舰件：collide 拼接卷积（加权精确式） ---------- *)
+
+(* collide (l1++l2) = (n1/(n1+n2))²·collide l1 + (n2/(n1+n2))²·collide l2
+   + (Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1)/(n1+n2)²。
+   权重平方型加权组合 + 交叉修正项；非空卫哨 n1,n2（field 路线）。 *)
+Theorem collide_app_eq : forall l1 l2 : list Q,
+  (0 < length l1)%nat -> (0 < length l2)%nat ->
+  collide (l1 ++ l2) ==
+    (qn (length l1) / qn (length l1 + length l2)%nat)
+      * (qn (length l1) / qn (length l1 + length l2)%nat) * collide l1
+    + (qn (length l2) / qn (length l1 + length l2)%nat)
+      * (qn (length l2) / qn (length l1 + length l2)%nat) * collide l2
+    + (qn (nsum (fun x => freq_q x l2) l1)
+       + qn (nsum (fun x => freq_q x l1) l2))
+      / (qn (length l1 + length l2)%nat * qn (length l1 + length l2)%nat).
+Proof.
+  intros l1 l2 H1 H2.
+  assert (Hnn : (0 < length l1 + length l2)%nat) by lia.
+  assert (HN : ~ (qn (length l1 + length l2)%nat == 0))
+    by (apply qpos_neq0; apply qn_pos; exact Hnn).
+  assert (Ha : ~ (qn (length l1) == 0)) by (apply qpos_neq0; apply qn_pos; exact H1).
+  assert (Hb : ~ (qn (length l2) == 0)) by (apply qpos_neq0; apply qn_pos; exact H2).
+  assert (HPP1 : ~ (qn (length l1) * qn (length l1) == 0))
+    by (apply qmul_neq0; assumption).
+  assert (HPP2 : ~ (qn (length l2) * qn (length l2) == 0))
+    by (apply qmul_neq0; assumption).
+  assert (HN2 : ~ (qn (length l1) + qn (length l2) == 0)).
+  { intros Zc. apply HN. rewrite qn_add. exact Zc. }
+  assert (HNN2 : ~ ((qn (length l1) + qn (length l2))
+                    * (qn (length l1) + qn (length l2)) == 0))
+    by (apply qmul_neq0; exact HN2).
+  unfold collide.
+  rewrite length_app.
+  rewrite (sqsum_app_eq l1 l2).
+  rewrite ! qn_add.
+  field; repeat split; assumption.
+Qed.
+
+(* ---------- §A8.3 主件：H_freq 拼接卷积（加权 + 2w1w2 交叉修正） ---------- *)
+
+(* H_freq (l1++l2) = w1²·H_freq l1 + w2²·H_freq l2 + 2·w1·w2
+                     − (Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1)/(n1+n2)²。
+   消费 collide_app_eq + H_freq_eq_bridge（== 1 − collide）；
+   交叉修正项 2·w1·w2 − X/(n1+n2)² 非负有界（2(n1n2−X)/(n1+n2)² ≥ 0，
+   X ≤ n1·n2 经 freq_q_le_length 逐点），熵族拼接卷积完整恒等式。 *)
+Theorem H_freq_app_eq : forall l1 l2 : list Q,
+  (0 < length l1)%nat -> (0 < length l2)%nat ->
+  H_freq (l1 ++ l2) ==
+    (qn (length l1) / qn (length l1 + length l2)%nat)
+      * (qn (length l1) / qn (length l1 + length l2)%nat) * H_freq l1
+    + (qn (length l2) / qn (length l1 + length l2)%nat)
+      * (qn (length l2) / qn (length l1 + length l2)%nat) * H_freq l2
+    + 2 * (qn (length l1) / qn (length l1 + length l2)%nat)
+        * (qn (length l2) / qn (length l1 + length l2)%nat)
+    - (qn (nsum (fun x => freq_q x l2) l1)
+       + qn (nsum (fun x => freq_q x l1) l2))
+      / (qn (length l1 + length l2)%nat * qn (length l1 + length l2)%nat).
+Proof.
+  intros l1 l2 H1 H2.
+  assert (Hnn : (0 < length (l1 ++ l2))%nat) by (rewrite length_app; lia).
+  rewrite (H_freq_eq_bridge (l1 ++ l2) Hnn). unfold H_min_q.
+  rewrite (collide_app_eq l1 l2 H1 H2).
+  assert (B1 : collide l1 == 1 - H_freq l1).
+  { pose proof (H_freq_eq_bridge l1 H1) as T. unfold H_min_q in T.
+    rewrite T. ring. }
+  assert (B2 : collide l2 == 1 - H_freq l2).
+  { pose proof (H_freq_eq_bridge l2 H2) as T. unfold H_min_q in T.
+    rewrite T. ring. }
+  rewrite B1, B2.
+  rewrite (qn_add (length l1) (length l2)).
+  assert (HN2 : ~ (qn (length l1) + qn (length l2) == 0))
+    by (apply qpos_neq0; rewrite <- qn_add; apply qn_pos; lia).
+  assert (HNN2 : ~ ((qn (length l1) + qn (length l2))
+                    * (qn (length l1) + qn (length l2)) == 0))
+    by (apply qmul_neq0; exact HN2).
+  field; repeat split; assumption.
+Qed.
+
+(* ---------- §A8.4 加分件：三段拼接结合律卷积一致性（值面） ---------- *)
+
+(* (l1++l2)++l3 与 l1++(l2++l3) 同表（app_assoc 定义性），故三个
+   卷积量在两种分组下逐点重合——卷积式对三段拼接的一致性收口面。 *)
+Theorem sqsum_app_assoc : forall (l1 l2 l3 : list Q),
+  sqsum ((l1 ++ l2) ++ l3) = sqsum (l1 ++ (l2 ++ l3)).
+Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
+
+Theorem collide_app_assoc : forall (l1 l2 l3 : list Q),
+  collide ((l1 ++ l2) ++ l3) == collide (l1 ++ (l2 ++ l3)).
+Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
+
+Theorem H_freq_app_assoc : forall (l1 l2 l3 : list Q),
+  H_freq ((l1 ++ l2) ++ l3) == H_freq (l1 ++ (l2 ++ l3)).
+Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
+
+(* ---------- §A8.5 数值锚（vm_compute 探针件；G3 对账表用） ---------- *)
+
+(* 探针实例：l1 = [0;1]，l2 = [1;1]（含非平凡交叉项 X1 = X2 = 2）。
+   实测：sqsum (l1++l2) = 10，collide = 5/8，H_freq = 3/8；
+   两旗舰 RHS 加权式逐一求值同值——陈述形先验为真再落笔的记录件。 *)
+Lemma sqsum_app_cross_val : sqsum ([0;1] ++ [1;1]) = 10%nat.
+Proof. reflexivity. Qed.
+
+Lemma sqsum_cross_sym_val :
+  nsum (fun x => freq_q x [1;1]) [0;1]
+  = nsum (fun x => freq_q x [0;1]) [1;1].
+Proof. reflexivity. Qed.
+
+Lemma collide_app_eq_val : collide ([0;1] ++ [1;1]) == (5#8)%Q.
+Proof. unfold collide. vm_compute. reflexivity. Qed.
+
+Lemma collide_app_eq_rhs_val :
+  (qn (length [0;1]) / qn (length [0;1] + length [1;1])%nat)
+    * (qn (length [0;1]) / qn (length [0;1] + length [1;1])%nat) * collide [0;1]
+  + (qn (length [1;1]) / qn (length [0;1] + length [1;1])%nat)
+    * (qn (length [1;1]) / qn (length [0;1] + length [1;1])%nat) * collide [1;1]
+  + (qn (nsum (fun x => freq_q x [1;1]) [0;1])
+     + qn (nsum (fun x => freq_q x [0;1]) [1;1]))
+    / (qn (length [0;1] + length [1;1])%nat
+       * qn (length [0;1] + length [1;1])%nat)
+  == (5#8)%Q.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma H_freq_app_eq_val : H_freq ([0;1] ++ [1;1]) == (3#8)%Q.
+Proof. unfold H_freq. vm_compute. reflexivity. Qed.
+
+Lemma H_freq_app_eq_rhs_val :
+  (qn (length [0;1]) / qn (length [0;1] + length [1;1])%nat)
+    * (qn (length [0;1]) / qn (length [0;1] + length [1;1])%nat) * H_freq [0;1]
+  + (qn (length [1;1]) / qn (length [0;1] + length [1;1])%nat)
+    * (qn (length [1;1]) / qn (length [0;1] + length [1;1])%nat) * H_freq [1;1]
+  + 2 * (qn (length [0;1]) / qn (length [0;1] + length [1;1])%nat)
+      * (qn (length [1;1]) / qn (length [0;1] + length [1;1])%nat)
+  - (qn (nsum (fun x => freq_q x [1;1]) [0;1])
+     + qn (nsum (fun x => freq_q x [0;1]) [1;1]))
+    / (qn (length [0;1] + length [1;1])%nat
+       * qn (length [0;1] + length [1;1])%nat)
+  == (3#8)%Q.
+Proof. vm_compute. reflexivity. Qed.
+
 End DTPT_Entropy.
 
 Import DTPT_Entropy.
@@ -2687,6 +3211,43 @@ Print Assumptions H_shannon_q_zero_iff_sorted.
 Print Assumptions H_ms1_iff_const.
 Print Assumptions H_cond_abs_bound.
 Print Assumptions zero_locus_joint.
+
+(* ========== 审计：F2 席 §A6 并入件零公理实证（F6 面 8 件） ========== *)
+
+Print Assumptions sqsum_app_ge_l.
+Print Assumptions sqsum_app_ge_r.
+Print Assumptions sqsum_app_eq.
+Print Assumptions sqsum_app_ge_sum.
+Print Assumptions maxcount_app_ge_l.
+Print Assumptions maxcount_app_ge_r.
+Print Assumptions H_freq_app_mono_false.
+Print Assumptions collide_app_mono_false.
+
+(* ========== 审计：ADJ-4 席 §A7 新增件零公理实证（F4 面 4 件） ========== *)
+
+Print Assumptions align_lambda_opt_values.
+Print Assumptions align_lambda_opt_range.
+Print Assumptions align_lambda_opt_min.
+Print Assumptions align_lambda_opt_endpoint.
+
+(* ========== 审计：F5 席 §A8 新增件零公理实证（拼接卷积面 16 件） ========== *)
+
+Print Assumptions qmul_neq0.
+Print Assumptions nsum_freq_q_ind.
+Print Assumptions sqsum_app_cross.
+Print Assumptions sqsum_cross_sym.
+Print Assumptions sqsum_app_eq2.
+Print Assumptions collide_app_eq.
+Print Assumptions H_freq_app_eq.
+Print Assumptions sqsum_app_assoc.
+Print Assumptions collide_app_assoc.
+Print Assumptions H_freq_app_assoc.
+Print Assumptions sqsum_app_cross_val.
+Print Assumptions sqsum_cross_sym_val.
+Print Assumptions collide_app_eq_val.
+Print Assumptions collide_app_eq_rhs_val.
+Print Assumptions H_freq_app_eq_val.
+Print Assumptions H_freq_app_eq_rhs_val.
 
 (* ============================================================
    归并棒 S3（2026-09-14）退役记录：DTPT_EntFam2.v

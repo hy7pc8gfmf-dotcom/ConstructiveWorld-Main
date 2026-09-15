@@ -1,6 +1,15 @@
 (* ============================================================ *)
+(* UpReqELBOTight.v *)
+(* *)
+(* 目的： 定理 4.8 elbo_tight 的 Real 层可达形组装。 *)
+(* 主件： t12_elbo_tight 前后向双腿与 t12_tight_kl_zero 紧致核。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP、UpReqELBOEps、UpReqKLSTangent、G08_Gibbs。 *)
+(* 备注： 等号条件承定理 4.3 的构造性边界；紧致假设沿等值核传递。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOTight.v —— 席T12：定理 4.8 elbo_tight Real 层可达形组装      *)
-(*   2026-09-11（后台独立席位，CoreN 2，预算 60 分钟单席闭合）          *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】席N1 判定（C8）：定理 4.8（论文正式版 L374-376：ELBO=证据      *)
 (*   当且仅当 q(z) 等于真实后验；〔构造强度〕标签「序档＋等号条件档——   *)
@@ -10,9 +19,9 @@
 (*     逆向半边：逐点 q s ≡ p_b s ⟹ ELBO(q) ≡ evidence。                *)
 (*   双向组装为 prod 双函数记录（Set 层 And 形，零 Prop）。              *)
 (* ------------------------------------------------------------------ *)
-(* 【术语映射表（承 T10 交付件，逐字沿用）】                             *)
+(* 【术语映射表（承 T10 结果件，逐字沿用）】                             *)
 (*   ELBO(q) := −F[q]        ↔ real_elbo（UpReqELBOEps 件 0）           *)
-(*   evidence := log p(x)    ↔ real_evidence（同上）                     *)
+
 (*   真实后验/输出分布       ↔ real_boltzmann_dist_r（π* 锚闭式解实例）  *)
 (*   KL(q‖p_b) 逐项和        ↔ Σ real_kl_term(q s, p_b s)                *)
 (*   紧致点（ELBO=证据）     ↔ real_eq（RealSetoid 等值载体）            *)
@@ -27,16 +36,16 @@
 (*   件 2 正向半边 t12_elbo_tight_forward（抽象载体，显式前提形）：      *)
 (*     件 1 + 显式接口前提「KL ≡ 0 ⟹ 逐点切点式」（gibbe2 主件注入位    *)
 (*     的载体级抬升）+ 席T1 t1_log_eq_linear_inject（「切点⟹一」，       *)
-(*     无条件放电）+ gibbe2 主件尾链同款比值一消去                       *)
+(*     无条件消解）+ gibbe2 主件尾链同款比值一消去                       *)
 (*     （G08 gibbsd_p_mult_ratio）⟹ 逐点 q s ≡ p_b s。                  *)
 (*   件 3 逆向半边 t12_elbo_tight_backward（抽象载体，零接口前提）：     *)
 (*     逐点等 ⟹ 自由能等（UpReqRealFEP rfep_free_energy_ext_r）⟹       *)
 (*     real_opp 兼容（RealSetoid.real_eq_opp_compat）⟹ 紧致。           *)
 (*   件 4 组装件 t12_elbo_tight：prod 双函数记录（Set 层 And 形：        *)
 (*     (紧致 ⟹ 逐点等) × (逐点等 ⟹ 紧致)）。                            *)
-(*   件 5 bool 载体收口 t12_elbo_tight_forward_bool：显式接口前提由      *)
-(*     席T1 t1_gibbe2_gibbs_equality_bool 整链放电（KL≡0 ⟹ 逐点等       *)
-(*     直达，接口位零残留）——N1 C3(a)「样板」载体上的全放电形。         *)
+(*   件 5 bool 载体完成 t12_elbo_tight_forward_bool：显式接口前提由      *)
+(*     席T1 t1_gibbe2_gibbs_equality_bool 整链消解（KL≡0 ⟹ 逐点等       *)
+(*     直达，接口位零残留）——N1 C3(a)「样板」载体上的全消解形。         *)
 (*   件 6 bool 组装件 t12_elbo_tight_bool：件 5 + 件 3 的 prod 双函数   *)
 (*     记录，零接口前提（除 q 正 + 双归一化的显式物理前提）。            *)
 (* ------------------------------------------------------------------ *)
@@ -44,20 +53,20 @@
 (*   ① 双向半边的结论面均为 real_eq 等值载体（Set 层），前提面为        *)
 (*     「q 逐点正 + Σq≡1 + Σp_b≡1」的显式物理前提（件 5/6）或再加       *)
 (*     「KL≡0 ⟹ 逐点切点式」的抽象载体诚实接口前提（件 2/4）。          *)
-(*   ② 等号半边的机理位：无条件「log 等式线性化注入」（对任意 u>0，      *)
-(*     log u ≡ u−1 ⟹ u≡1 的反向用）承 4.3 边界不可达（9.3.3(a) 判词     *)
+
+
 (*     在案：需强三分/LPO）；本件用其弱形——「切点⟹一」                  *)
 (*     （席T1 t1_log_eq_linear_inject，弱三分 + 双支切线构造）——         *)
 (*     该弱形在盘无条件闭合，本件正向半边即弱形闭合实例。                *)
 (*   ③ 抽象载体上「KL≡0 ⟹ 逐点」步的非负提取接口（件 2 的显式前提位）   *)
-(*     在 bool 载体由 T1 整链件完全放电（件 5），零残留。                *)
+(*     在 bool 载体由 T1 整链件完全消解（件 5），零残留。                *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】Set 层零 Prop（real_eq/real_lt 全 Set 值，组装载体 prod）；   *)
 (*   全 Qed 闭合；禁词条目零命中（头注以中文转述，不引英文原词）；       *)
 (*   real_eq 非 Id 禁改写，全链 real_eq_trans / RealSetoid 运输；        *)
 (*   D 因子逐字保留。禁改红线：UpReqELBOEps.v / UpReqKLSTangent.v /     *)
-(*   UpReqRealFEP.v / G08_Gibbs.v / S 分片全程只读（只消费 .vo）。       *)
-(* 编译配方：_t12_run.ps1 单一入口 + cpu_guard CoreN 2；预审 coqc -vos； *)
+(*   UpReqRealFEP.v / G08_Gibbs.v / S 模块全程只读（只消费 .vo）。       *)
+
 (*   全量 -Q vo 树；前置 .vo 全在 ConstructiveWorld_vo/。               *)
 (* ============================================================ *)
 
@@ -72,7 +81,7 @@ Import ListNotations.
 (* ---------------------------------------------------------- *)
 (* 件 0：切点式谓词（显式前提形的逐点结论面，Set 层）                    *)
 (*   对位 G08 gibbe2_kl_zero_tangent_eq 的逐点结论：                    *)
-(*   log(p_b s · q s⁻¹) ≡ (p_b s · q s⁻¹) − 1。                         *)
+
 (* ---------------------------------------------------------- *)
 
 Definition t12_tangent_eq
@@ -204,7 +213,7 @@ Theorem t12_elbo_tight_forward :
              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
           real_one ->
   (* 显式接口前提位（载体诚实接口）：KL ≡ 0 ⟹ 逐点切点式；
-     bool 载体上由件 5 整链放电（席T1 件直达），零残留。 *)
+     bool 载体上由件 5 整链消解（席T1 件直达），零残留。 *)
   (real_eq (real_sum_over_S
               (fun s : S => real_kl_term (q s)
                  (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
@@ -230,7 +239,7 @@ Proof.
                          real_zero).
   { exact (t12_tight_kl_zero S real_sum_over_S sumf_ext sumf_add sumf_linear
              real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight). }
-  (* 第 2 步：切点式 + 「切点⟹一」（席T1 无条件放电）⟹ 比值一 *)
+  (* 第 2 步：切点式 + 「切点⟹一」（席T1 无条件消解）⟹ 比值一 *)
   assert (Hu1 : real_eq (real_mult (pb s) (real_inv_pos (q s) (Hq s))) real_one).
   { apply (t1_log_eq_linear_inject (real_mult (pb s) (real_inv_pos (q s) (Hq s)))
              (real_mult_positive (pb s) (real_inv_pos (q s) (Hq s))
@@ -338,8 +347,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 件 5：bool 载体收口——显式接口前提整链放电的正向形                     *)
-(*   显式前提位由席T1 t1_gibbe2_gibbs_equality_bool 整链放电             *)
+(* 件 5：bool 载体完成——显式接口前提整链消解的正向形                     *)
+(*   显式前提位由席T1 t1_gibbe2_gibbs_equality_bool 整链消解             *)
 (*   （KL≡0 ⟹ 逐点 q≡p_b 直达，注入位由 t1_log_eq_linear_inject          *)
 (*   无条件供给）：bool 载体上正向半边零接口前提（除物理前提）。         *)
 (* ---------------------------------------------------------- *)
@@ -379,7 +388,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 件 6：bool 组装件（prod 双函数记录，零接口前提版）                    *)
-(*   定理 4.8 在 gibbe2 样板载体上的全放电形：前提面仅剩                 *)
+(*   定理 4.8 在 gibbe2 样板载体上的全消解形：前提面仅剩                 *)
 (*   「q 逐点正 + 双归一化」的显式物理前提。                              *)
 (* ---------------------------------------------------------- *)
 

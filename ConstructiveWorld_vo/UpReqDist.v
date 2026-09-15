@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqDist.v *)
+(* *)
+(* 目的： req 层分布与 GRPO 优势面基础定义。 *)
+(* 主件： req_group_mean / req_grpo_advantage / req_group_variance 族与 reqd_* 序定律。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra。 *)
+(* 备注： 求和接口三定律与群枚举为显式 Variable 前提；优势/方差为显式定义。 *)
+(* ============================================================ *)
+
 (* UpReqDist.v — 签名迁移批 2：分布 / 自由能 / GRPO 簇的 req 系重述与实例化
    母本：签名迁移规划书-20260908.md（批 2 清单，§5）；
    模板：UpSigMigrate.v（13 Qed 试点件）+ UpReqAlgebra.v（批 1 地基，直接消费）。
@@ -5,14 +14,12 @@
    纯 term-mode（req_trans 链 + compat 桥，零 Morphisms 依赖）；
    消费批 1 地基 UpReqAlgebra（57 件）与基内对接面 exp_neg_req_compat_setoid。
    ----------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4）：
+   诚实签名变化登记表（规划书 §7.4）：
    1. log 前提化：setoid log 带 lt zero 前提，free_energy/relative_entropy/
      entropy_dist/cross_entropy 定义逐件加 positive_dist 参数（δ 记账）。
    2. minus 非接口字段：以批 1 req_minus 同形重建（δ 透明）。
    3. T2① 接口缺口桥（ReqFEPBridge 节，保留假设位；Real 实例可满足，
-     实例化留待接口扩展批——批 1 ReqLogBridge 同判词）：
-     - dist_log_inv_one_inv：log(inv x) = -log x（Id 系 log_inv_one_inv）；
-     - dist_log_exp_neg：log(e^{-u}) = -u（Id 系 log_exp_neg）；
+     实例化留待接口扩展批——批 1 ReqLogBridge 同结论）：
      - dist_log_le_linear：log x ≤ x-1 精确切线（Id 接口字段 L299；
        setoid 接口仅备逐 eps 形式 log_le_linear_eps——「深水区」注）；
      - dist_log_eq_linear：切点唯一 x=1（Id 接口字段 L304；setoid 缺）。
@@ -20,12 +27,12 @@
      SumOver 字段 sum_over_S_le / sum_over_S_zero_nonneg（L1415/L1426）
      的 req 镜像（sum_le / sum_zero_nonneg），同为 Section Hypothesis。
    5. SecondLaw：Not (Id (dynamics x) x) → Not (req (dynamics x) x)（签名变化）。
-   6. square_nonneg（GRPO T1.5）：保持 Id 出口假设位（显式 forall 参数，
+   6. square_nonneg（GRPO ）：保持 Id 出口假设位（显式 forall 参数，
      T2 形态①；Id 系 L24301 同为诚实 Variable）。
    7. (a) 类消费：req_free_energy_kl_decomp @ UpSigMigrate 同构重述于本文件
-     （消费形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在对账表标注）。
+     （消费形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在核对表标注）。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号；批 2 清单逐条核销见文件尾）：
+   覆盖核对（req 件名 -> Id 原件 @ 行号；批 2 清单逐条已证明见文件尾）：
    【SumLayer（FEP 前 2 件）】reqd_sum_opp<-15801 reqd_sum_minus<-15830
    【FEP】req_boltzmann_normalized<-15846 req_boltzmann_mix_normalized<-15863
      req_boltzmann_log_decomp<-15912 req_free_energy_boltzmann<-15945
@@ -102,7 +109,6 @@ Proof.
 Qed.
 
 (* log 单射（批 1 §3.2 (c.2) 引擎第二件；路线：req_exp_neg_opp_log
-   （批 1：e^{log x}=x）+ req_opp_compat + exp_neg_req_compat_setoid（基内
    L66223）——不需要 exp 单射（其逆不可由接口导出，批 1 ReqLogBridge 实测），
    绕行成功，故本件为无条件导出引理而非桥） *)
 Lemma reqd_log_cancel : forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
@@ -959,7 +965,7 @@ Proof.
       * apply (opp_le_compat zero b). exact Hb.
 Qed.
 
-(* Id group_variance_le_raw_second_moment @24324（T1.5）：
+(* Id group_variance_le_raw_second_moment @24324：
    Var ≤ (1/G)·Σr²。square_nonneg 保持 Id 出口假设位（T2 形态①，
    Id 系 L24301 同为诚实 Variable；构造性有序域无三分律）。 *)
 Theorem req_group_variance_le_raw_second_moment :
@@ -989,7 +995,7 @@ End ReqGRPO.
 (*   （Id 原件 §15759-18721）。对接口 = sum_req_over_S 三性质    *)
 (*   + SumOver 字段 sum_le/sum_zero_nonneg 的 req 镜像；         *)
 (*   T2① 桥 4 件见节内 Hypothesis（均为 Id 接口字段/已证件，     *)
-(*   Real 实例可满足，实例化留待接口扩展批——批 1 同判词）。      *)
+(*   Real 实例可满足，实例化留待接口扩展批——批 1 同结论）。      *)
 (* ============================================================ *)
 Section ReqFEP.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -1020,7 +1026,7 @@ Variable Z_pos : lt zero Z.
 Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
-(* ---- T2① 接口缺口桥（台账 3） ---- *)
+(* ---- T2① 接口缺口桥（登记表 3） ---- *)
 Hypothesis dist_log_inv_one_inv :
   forall (x : R) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
     req (log (inv_pos x Hx) Hi) (opp (log x Hx)).
@@ -1032,7 +1038,7 @@ Hypothesis dist_log_eq_linear :
   forall (x : R) (Hx : lt zero x),
     req (log x Hx) (req_minus x one) -> req x one.
 
-(* ---- 节内定义（setoid 惯例形态；log 前提化见台账 1） ---- *)
+(* ---- 节内定义（setoid 惯例形态；log 前提化见登记表 1） ---- *)
 Definition reqd_positive_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
 Definition reqd_normalized (p : S -> R) : Set := req (sumf p) one.
 Definition reqd_boltzmann_dist : S -> R :=
@@ -1174,7 +1180,7 @@ Proof.
                                   (plus_zero one) (req_refl one)).
 Qed.
 
-(* Id boltzmann_log_decomp @15912：log p_b == -log Z - E/D *)
+
 Theorem req_boltzmann_log_decomp :
   forall s : S,
     req (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))
@@ -1200,7 +1206,7 @@ Proof.
                                               (dist_log_exp_neg (mult (inv_pos D D_pos) (base_loss s))))).
 Qed.
 
-(* req 化 log_div（log(a/b) == log a - log b；由 log_mult + 桥组装） *)
+
 Lemma reqd_log_div :
   forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
     req (log (mult a (inv_pos b Hb))
@@ -1219,7 +1225,7 @@ Proof.
                            (dist_log_inv_one_inv b Hb (inv_pos_pos b Hb))).
 Qed.
 
-(* Id energy_in_log_boltzmann @16116：E == -D·(log p_b + log Z) *)
+
 Lemma req_energy_in_log_boltzmann :
   forall s : S,
     req (base_loss s)
@@ -1304,7 +1310,7 @@ Proof.
                           (req_sym _ _ H3)).
 Qed.
 
-(* Σ p_b·log Z == log Z（归一化折叠；Σ p_b·X == X·Σ p_b == X） *)
+
 Lemma fsum_pb_logZ :
   req (sumf (fun s => mult (reqd_boltzmann_dist s) (log Z Z_pos))) (log Z Z_pos).
 Proof.
@@ -1372,7 +1378,7 @@ Proof.
   set (Eavg := sumf (fun s => mult (reqd_boltzmann_dist s) (base_loss s))).
   set (A := sumf (fun s => mult (reqd_boltzmann_dist s)
                                 (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))).
-  (* 步骤 1：逐点 p_b·log p_b == p_b·(-log Z) + opp((1/D)·p_b·E) *)
+  
   assert (Hpoint :
     forall s : S,
       req (mult (reqd_boltzmann_dist s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
@@ -1441,7 +1447,7 @@ Proof.
                                                (mult_assoc (inv_pos D D_pos)
                                                            (reqd_boltzmann_dist s) (base_loss s))))).
   }
-  (* 步骤 2：求和 Σ p_b·log p_b == -log Z - (1/D)·⟨E⟩ *)
+  
   assert (Hsum :
     req A (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) Eavg)))).
   {
@@ -1465,7 +1471,7 @@ Proof.
                        (plus (opp (log Z Z_pos)) (opp (mult (inv_pos D D_pos) Eavg)))).
       + apply fsum_add.
       + apply req_plus_compat.
-        * (* Σ p_b·(-log Z) == -log Z：交换 → 线性 → 归一化 → 单位元 *)
+        * 
           apply (req_trans (sumf (fun s => mult (reqd_boltzmann_dist s) (opp (log Z Z_pos))))
                            (sumf (fun s => mult (opp (log Z Z_pos)) (reqd_boltzmann_dist s)))
                            (opp (log Z Z_pos))).
@@ -1501,7 +1507,7 @@ Proof.
                                    (fsum_linear (inv_pos D D_pos)
                                                 (fun s => mult (reqd_boltzmann_dist s) (base_loss s)))).
   }
-  (* 步骤 3：D·(-log Z - (1/D)⟨E⟩) == -D·log Z - ⟨E⟩ *)
+  
   assert (Hmd : req (mult D (plus (opp (log Z Z_pos))
                                   (opp (mult (inv_pos D D_pos) Eavg))))
                     (plus (opp (mult D (log Z Z_pos))) (opp Eavg))).
@@ -1530,7 +1536,7 @@ Proof.
                                       (req_trans (mult one Eavg) (mult Eavg one) Eavg
                                                  (mult_comm one Eavg) (mult_one Eavg)))).
   }
-  (* 步骤 4：⟨E⟩ + (-D·log Z - ⟨E⟩) == -D·log Z（环坍缩） *)
+  
   assert (Hfin : req (plus Eavg (plus (opp (mult D (log Z Z_pos))) (opp Eavg)))
                     (opp (mult D (log Z Z_pos)))).
   {
@@ -1671,7 +1677,7 @@ Proof.
                                  (req_minus (log (p s) (Hp s))
                                             (log (reqd_boltzmann_dist s)
                                                    (req_boltzmann_positive s))))).
-  (* 步骤 1：Σ p·E == -D·B - D·log Z（p_times_energy_decomp 逐点 + 求和机器） *)
+  
   assert (Hse : req Eavg (plus (opp (mult D B)) (opp (mult D (log Z Z_pos))))).
   {
     apply (req_trans Eavg
@@ -1943,7 +1949,7 @@ Proof.
   - exact fsum_zero.
 Qed.
 
-(* Id entropy_neg_sum @16946：Σ p·log p == opp S[p]（熵的负和形式；无条件件） *)
+
 Lemma req_entropy_neg_sum :
   forall (p : S -> R) (Hp : reqd_positive_dist p),
     req (sumf (fun s => mult (p s) (log (p s) (Hp s))))
@@ -2075,7 +2081,7 @@ Proof.
     by exact (dist_log_le_linear Rqp Hr).
   assert (Hopp : le (opp (req_minus Rqp one)) (opp (log Rqp Hr)))
     by exact (opp_le_compat (log Rqp Hr) (req_minus Rqp one) Hlin).
-  (* Hjoin : log p - log q == opp(log(q/p))（log(p/q) == -log(q/p)） *)
+  
   assert (Hjoin : req (req_minus (log (p s) Hps) (log (q s) Hqs))
                       (opp (log Rqp Hr))).
   { apply (req_trans (req_minus (log (p s) Hps) (log (q s) Hqs))
@@ -2184,12 +2190,12 @@ Proof.
             req (req_minus (mult (p s) (req_minus (log (p s) (Hp s)) (log (q s) (Hq s))))
                            (req_minus (p s) (q s))) zero)
     by exact (fsum_zero_nonneg _ Hd_nonneg Hd_sum).
-  (* 4) minus_eq_cancel：p·(log p - log q) == p - q *)
+  
   assert (Hceq : forall s : S,
             req (mult (p s) (req_minus (log (p s) (Hp s)) (log (q s) (Hq s))))
                 (req_minus (p s) (q s)))
     by (intro s; exact (req_minus_eq_cancel _ _ (Hd0 s))).
-  (* 5) p·(log p - log q) == p·(1 - q/p) ⟹ log p - log q == 1 - q/p（p > 0 消去） *)
+  
   set (Hr := mult_positive (q s0) (inv_pos (p s0) (Hp s0)) (Hq s0)
                            (inv_pos_pos (p s0) (Hp s0))).
   assert (Hcancel_p : req (mult (p s0) (req_minus (log (p s0) (Hp s0)) (log (q s0) (Hq s0))))
@@ -2206,7 +2212,7 @@ Proof.
                         (opp (req_minus (mult (q s0) (inv_pos (p s0) (Hp s0))) one)))
     by exact (req_trans _ _ _ Hlm
                         (reqd_minus_one_flip (mult (q s0) (inv_pos (p s0) (Hp s0))))).
-  (* 6) log(q/p) == opp(log p - log q)（reqd_log_div 双向） *)
+  
   assert (Hlog_opplm : req (log (mult (q s0) (inv_pos (p s0) (Hp s0))) Hr)
                            (opp (req_minus (log (p s0) (Hp s0)) (log (q s0) (Hq s0))))).
   { apply (req_trans (log (mult (q s0) (inv_pos (p s0) (Hp s0))) Hr)
@@ -2221,7 +2227,7 @@ Proof.
                          (plus_comm (log (q s0) (Hq s0)) (opp (log (p s0) (Hp s0))))
                          (req_sym _ _ (req_opp_minus (log (p s0) (Hp s0))
                                                      (log (q s0) (Hq s0))))). }
-  (* 7) log(q/p) == q/p - 1 ⟹ q/p == 1（dist_log_eq_linear 桥） *)
+  
   assert (Hlog_eq : req (log (mult (q s0) (inv_pos (p s0) (Hp s0))) Hr)
                         (req_minus (mult (q s0) (inv_pos (p s0) (Hp s0))) one)).
   { apply (req_trans (log (mult (q s0) (inv_pos (p s0) (Hp s0))) Hr)
@@ -2245,12 +2251,12 @@ Proof.
                                          (req_sym _ _ (inv_pos_correct (p s0) (Hp s0)))))).
 Qed.
 
-(* Id boltzmann_dist_pos @16824（与节内 req_boltzmann_positive 同件；命名对齐台账） *)
+(* Id boltzmann_dist_pos @16824（与节内 req_boltzmann_positive 同件；命名对齐登记表） *)
 Lemma req_boltzmann_dist_pos : forall s : S, lt zero (reqd_boltzmann_dist s).
 Proof. exact req_boltzmann_positive. Qed.
 
 (* ============================================================ *)
-(* 自由能最小化 / 唯一性 / 熵-温度层收口（批 2 续建件）        *)
+(* 自由能最小化 / 唯一性 / 熵-温度层完成（批 2 续建件）        *)
 (*   Id 原件：min_free_energy_is_boltzmann@16838               *)
 (*            free_energy_min_unique@16888                    *)
 (*            entropy_deficit_kl@16993 max_entropy@17069      *)
@@ -2316,7 +2322,7 @@ Proof.
   assert (Hkl0 : req K zero).
   { apply (req_mult_cancel_l D K zero D_pos).
     exact (req_trans _ _ _ Hdkl0 (req_sym _ _ (req_mult_zero_r D))). }
-  (* 4. gibbs_equality 收口 *)
+  (* 4. gibbs_equality 完成 *)
   exact (req_gibbs_equality p reqd_boltzmann_dist Hp req_boltzmann_positive
                             Hnp req_boltzmann_normalized Hkl0 s).
 Qed.
@@ -2426,8 +2432,7 @@ Proof.
 Qed.
 
 (* Id cross_entropy_decomp @18094：H(p,q) == S[p] + KL(p‖q)。
-   逐点 p·(−log q) == p·(−log p) + p·(log p − log q)（distrib+assoc+opp 抵消），
-   fsum_ext + fsum_add 收口。 *)
+   fsum_ext + fsum_add 完成。 *)
 Theorem req_cross_entropy_decomp :
   forall (p q : S -> R) (Hp : reqd_positive_dist p) (Hq : reqd_positive_dist q),
     req (reqd_cross_entropy p q Hq)
@@ -2790,10 +2795,10 @@ Qed.
 End ReqKLDiv.
 
 (* ============================================================ *)
-(* 温度层（Id T2.2 温度参数化 @17197-17810）：                  *)
-(*   Z_temp 接口 + Boltzmann_temp 族 + log 分解 +               *)
+(* 温度层（Id 温度参数化 @17197-17810）：                  *)
+
 (*   entropy_temp_explicit / relative_entropy_temp_decomp +     *)
-(*   熵亏/最大熵/唯一性温度版（论文 2 最大熵对偶的构造收口）    *)
+(*   熵亏/最大熵/唯一性温度版（论文 2 最大熵对偶的构造完成）    *)
 (* ============================================================ *)
 Section ReqTemp.
 Variable Z_temp : R -> R.
@@ -2890,11 +2895,11 @@ Qed.
 End ReqTemp.
 
 (* ============================================================ *)
-(* 能量-交叉熵恒等式（Id energy_cross_entropy @CW219 L18162；    *)
+(* 能量-交叉熵恒等式（Id energy_cross_entropy @L18162；    *)
 (*   FEM 清单件，接管席 2026-09-08 夜续建）                       *)
-(*   p 归一化 ⟹ E(p) == D·CE(p‖p_b) − D·log Z。                  *)
+
 (*   逐点 req_energy_in_log_boltzmann 换形 + fsum 组装；          *)
-(*   CE 侧 Σ p·log p_b == opp CE（opp_mult_l 换形 + fsum_opp）；   *)
+
 (*   logZ 侧常数提取（fsum_linear + 归一化 + mult_one）。          *)
 (* ============================================================ *)
 Theorem req_energy_cross_entropy :
@@ -2906,7 +2911,7 @@ Theorem req_energy_cross_entropy :
 Proof.
   intros p Hnp.
   unfold reqd_energy_expectation, reqd_cross_entropy.
-  (* 逐点：p·e == opp (D·(p·log p_b + p·logZ)) *)
+  
   assert (Hpt : forall s : S,
     req (mult (p s) (base_loss s))
         (opp (mult D (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
@@ -2943,7 +2948,7 @@ Proof.
                               (mult (p s) (plus (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))
                               (plus (mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))) (mult (p s) (log Z Z_pos)))
                               (req_refl D) (distrib (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)) (log Z Z_pos)))). }
-  (* Σ 层：Σ p·e == opp (D·(Σ p·log p_b + Σ p·logZ)) *)
+  
   assert (Hsum : req (sumf (fun s : S => mult (p s) (base_loss s)))
                      (opp (mult D (plus (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
                                         (sumf (fun s : S => mult (p s) (log Z Z_pos))))))).
@@ -2969,7 +2974,7 @@ Proof.
                                                      (req_refl D)
                                                      (fsum_add (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s)))
                                                               (fun s : S => mult (p s) (log Z Z_pos))))))). }
-  (* 预平衡 A：Σ p·log p_b == opp CE（opp_mult_l 换形 + fsum_opp + δ） *)
+  
   assert (HA : req (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
                    (opp (sumf (fun s : S => mult (p s) (opp (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))))).
   { apply (req_trans (sumf (fun s : S => mult (p s) (log (reqd_boltzmann_dist s) (req_boltzmann_positive s))))
@@ -3315,7 +3320,7 @@ End ReqSqrtWitness.
 (* ============================================================ *)
 (* Section ReqAlgBridge2：批 2 余件续建（接管席 2026-09-08 夜）   *)
 (*   (a) FEM 节内通用代数引理 4 件的 req 版（le 消去族/乘减右分配；*)
-(*       Id 原件 @CW219 L17126/L17146/L17162/L17178——批 1 地基    *)
+(*       Id 原件 @L17126/L17146/L17162/L17178——批 1 地基    *)
 (*       无对应件（仅有 _l 版与正向 le_minus_nonneg），真证补齐）  *)
 (*   (b) softmax 缩放-温度对偶 req 形（SqrtWitnessGeneral 余 2    *)
 (*       件落位：req softmax 族定义 + 对偶 + 两实例；             *)
@@ -3498,7 +3503,7 @@ End ReqAlgBridge2.
 
 
 (* ============================================================ *)
-(* 批 2 清单逐条核销（接管席续建 2026-09-08 晚；接续前任席 52Qed） *)
+(* 批 2 清单逐条已证明（接管席续建 2026-09-08 晚；接续前任席 52Qed） *)
 (* -------------------------------------------------------------- *)
 (* 【SumLayer+公共机器】reqd_le_of_req reqd_minus_compat reqd_inv_pos_cancel *)
 (*   reqd_log_cancel reqd_le_mult_nonneg_t12 reqd_lt_mult_pos_cancel       *)
@@ -3540,7 +3545,7 @@ End ReqAlgBridge2.
 (*   reqd_sqrt_witness_sq reqd_sqrt_witness_nat_sq                    [5]  *)
 (* -------------------------------------------------------------- *)
 (* 【接管席三批续建 2026-09-08 夜（温度熵 5 件由并行席                     *)
-(*   UpReqTempEntropy.v 承载并四关核销，本文件不重复建设）】                *)
+
 (* 【ReqFEP 能量-交叉熵 1】req_energy_cross_entropy<-Id @18162        [1]  *)
 (* 【ReqAlgBridge2 代数补件 4】req_le_plus_cancel_l<-Id @17126             *)
 (*   req_le_minus_nonneg_rev<-Id @17146 req_le_mult_pos_cancel<-Id @17162  *)
@@ -3554,8 +3559,8 @@ End ReqAlgBridge2.
 (*   sq_k 见证记账 / nat_sq 见证经 reqd_sqrt_witness_nat_sq 真证）    [3]  *)
 (* -------------------------------------------------------------- *)
 (* 本文件合计：89 Qed + 2 Defined = 91 证明件（全部纯构造性）。            *)
-(* 加上 UpReqTempEntropy.v（并行席 5 件）：批 2 簇 req 交付总量 96 件。     *)
-(* 余件（精确缺口，交接批 3/批 4；对照 CW219 批 2 各节逐条 grep 实证）：    *)
+(* 加上 UpReqTempEntropy.v（并行席 5 件）：批 2 簇 req 结果总量 96 件。     *)
+(* 余件（精确缺口，交接批 3/批 4；对照 批 2 各节逐条 grep 实证）：    *)
 (*  a) 温度严格层 5+1：variational_temp_bound(@17468) energy_exp_temp_mono *)
 (*     (@17521) temp_strict_A_chain2(@17825) temp_strict_ident2(@17879)    *)
 (*     energy_exp_temp_strict_mono(@18019) temp_energy_dual_closed(@17788  *)
@@ -3564,8 +3569,8 @@ End ReqAlgBridge2.
 (*     UpReqDist 是其上游（循环依赖禁止），落位=UpReqTempEntropy 增量节    *)
 (*     或批 3 文件。energy_exp_temp_mono/strict_mono 另需 inv_pos_lt_      *)
 (*     compat 的 req 桥（基座 Id 件在，req 形待批 3 ReqLogBridge 扩展）。   *)
-(*  b) req_u2_kl_arg2_ext：需 setoid log 兼容场（log_req_compat），基座     *)
-(*     接口未提供，随批 3 ReqLogBridge 扩展落位（批 2 判词维持）。          *)
+
+(*     接口未提供，随批 3 ReqLogBridge 扩展落位（批 2 结论维持）。          *)
 (*  c) U2 主体 7 件：依赖批 3 RLHF req 机器（pi_next/align_objective/      *)
-(*     free_energy_ext），维持批 3 挂账。                                   *)
+(*     free_energy_ext），维持批 3 显式假设。                                   *)
 (* -------------------------------------------------------------- *)

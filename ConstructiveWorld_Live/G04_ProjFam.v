@@ -184,7 +184,7 @@ Variable P_witness : sigT (fun i : I => And (Id (P i) true) (InT i idx)).
 Definition Z_P : Real :=
   real_list_sum I (fun i : I => if P i then f i else real_zero) idx.
 
-(* ---------- 件 0a：Z_P > 0（由 P 有点 + f_pos + single_le_sum 放电） ---------- *)
+(* ---------- 件 0a：Z_P > 0（由 P 有点 + f_pos + single_le_sum 证明） ---------- *)
 (* UpKVEv Z_keep_pos 同款——ZP_pos 由 Variable 升级为定理。           *)
 Lemma Z_P_entry_nonneg : forall (y : I),
   real_le real_zero (if P y then f y else real_zero).
@@ -738,7 +738,7 @@ End InstAudit.
    接缝：根 RealMinPMain 的保留谓词是 Set 层命题+Or 判定器（非 bool）。
    本实例经 minp_bool（判定器的 bool 载体，构造性合法）接入母定理，
    再以 ext + inv_ext 双桥回收 match 形核的归一化；root Token:Type 与
-   本席 Set 载体的差异为纯载体泛化（内容逐字同构）。                     *)
+   本文件 Set 载体的差异为纯载体泛化（内容逐字同构）。                     *)
 Section InstMinP.
 
 Variables (W : Set) (vocab : list W).
@@ -814,17 +814,17 @@ End InstMinP.
 (* UpPLA.v — PLA v2 Coq 落地：p-adic 分层商 + 残基契约 + VCA 估值账户机      *)
 (*                                                                       *)
 (* 二轮圆桌头部候选（3 票）正式立项。理论来源：                              *)
-(*   ROUNDTABLE2.md 席 6 段落末尾【PLA v2 终稿】四击正面收口 + VCA 杂交；      *)
-(*   排队席位方案-二轮成果Coq化-20260907.md Q1 条目。                        *)
+(*   ROUNDTABLE2.md 上游会话 段落末尾【PLA v2 终稿】四击正面闭合 + VCA 杂交；      *)
+(*   排队模块位方案-二轮成果Coq化.md Q1 条目。                        *)
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层；零 eps、零序比较、零见证借贷。                 *)
-(* 纪律：纯构造性（无 Axiom/Admitted/Parameter/Abort）；语句零 Prop           *)
+(* 纪律：纯构造性（无 公理/承认件/Parameter/中断）；语句零 Prop           *)
 (* （Set 层 tid 恒等型 + nle 序型 + sumbool 判定分支）；stdlib only。         *)
 (*                                                                       *)
 (* 四件：                                                                 *)
 (*   件 1  p-adic 估值机器 vp（乘法可加 + 整除表征）                          *)
 (*   件 2  分层商主件（layer_closed / layer_decide / pla_stratified_quotient  *)
-(*         + 席 5 分岔反例收编对照定理）                                     *)
+(*         + 上游会话 分岔反例收编对照定理）                                     *)
 (*   件 3  残基契约显式化（contract 双档，调度器输入参数非隐藏前提）            *)
 (*   件 4  VCA 估值账户机（入场费可判定 / 耗散单调 / 进位清偿调度）             *)
 (* ===================================================================== *)
@@ -1128,7 +1128,7 @@ Close Scope Z_scope.
 (* ======== G04_ProjFam 成员件：UpPredRelax（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpPredRelax.v —— B8 升级：预测区弛豫单调（假设→定性推论最小件） *)
-(* 日期：2026-09-07。源：热点扫描 B8（分析-219平凡定理热点扫描）    *)
+(* 日期：。源：热点扫描 B8（分析-219平凡定理热点扫描）    *)
 (* 件 4 heat_relaxation_decreasing（预测 1 热弛豫单调衰减）        *)
 (* 件 5a fluctuation_scale_decreasing（预测 4，镜像 L1671 模板）   *)
 (* 件 5b landauer_bound_pos（预测 3，三正相乘）                    *)
@@ -1139,7 +1139,7 @@ Close Scope Z_scope.
 (*   完全定理化不可行；本文件为"假设→定性推论"最小件，全部额外      *)
 (*   前提（正性/单调/log 正性）显式声明为 Section Variable，零隐藏。 *)
 (*   预测 5（cross_domain_scaling，sigT 前提）无定量杠杆，不做。    *)
-(* 纪律：纯构造性 / Set 层 / 零 Axiom / 零 Admitted / 零经典。      *)
+(* 纪律：纯构造性 / Set 层 / 零 公理 / 零 承认件 / 零经典。      *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -1390,9 +1390,9 @@ End PredRelaxLM.
 
 (* ======== G04_ProjFam 成员件：UpProjBPC（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpProjBPC.v — BPC：KL 区间乘法复合链（席 6 杂交增量）           *)
+(* UpProjBPC.v — BPC：KL 区间乘法复合链（上游会话 杂交增量）           *)
 (*                                                              *)
-(* 上游：UpProj.v（抽象投影核母定理，807 行 32 引理，四关全绿）。   *)
+(* 上游：UpProj.v（抽象投影核母定理，807 行 32 引理，四项关卡全部通过）。   *)
 (* 本文件在母定理件 1/4 直推半径内，给出封口链经复合掩码的          *)
 (* 代价区间端点精确乘法复合：                                     *)
 (*   Z_{P1∩P2} == Z1·(Z2|kept1)，其中 Z2|kept1 为 P1 保留集内     *)
@@ -1407,7 +1407,7 @@ End PredRelaxLM.
 (*   · Doob 塔性质：L2 收敛定理，无可计算证书与代价记账。           *)
 (*   本件新度 = 封口点的代数：复合掩码上端点恒等式 + 链式可加。     *)
 (*                                                              *)
-(* 世界：Real 层 list 世界（UpProj 同款，CW219 根）。              *)
+(* 世界：Real 层 list 世界（UpProj 同款，CW_ConstructiveWorld_219 根）。              *)
 (* 全部 Set 层（Id/And/Or/sigT）；语句零 Prop 泄露；              *)
 (* 纯构造性：仅依赖 CW_ConstructiveWorld_219 与 UpProj，           *)
 (* 零外部假设；log 正性证书随身（透明 Definition 纪律）。          *)
@@ -1535,7 +1535,7 @@ Definition Zc_proj1 : Real :=
 
 (* ---------- 件 1 核 A：点级四支掩码桥 -------------------------- *)
 (* P12 支的 Proj1 == P12 支的 f·inv Z1（P1∧P2 保留 ⟹ 一级保留支）； *)
-(* P12 逐出支两侧归零。destruct 逐支独立放电，无空 match。          *)
+(* P12 逐出支两侧归零。destruct 逐支独立证明，无空 match。          *)
 Lemma bpc_pt_bridge : forall y : I,
   real_eq (if P12 y then Proj1 y else real_zero)
           (real_mult (if P12 y then f y else real_zero)

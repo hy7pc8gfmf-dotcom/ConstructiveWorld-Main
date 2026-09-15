@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqPadeDenPos12.v *)
+(* *)
+(* 目的： 路径 C 分母正性的 (1,2) 段。 *)
+(* 主件： pdq_den_pos_12_strict：(1,2) 段分母严格正。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeQLeg。 *)
+(* 备注： 项衰减 pdq_term_decay_2 为构造核；g1 < g0 递减为显式腿。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeDenPos12.v —— 席CS2④：路径 C 分母正性 (1,2) 段          *)
 (*                         （pdq_：x∈(1,2) ⟹ Q_n(x) ≥ 0 且 > 0）     *)
 (* 日期：2026-09-14                                                *)
@@ -20,7 +29,7 @@
 (*   比率下界 pdq_R_ge_2：c_k/c_{k+1} = pdp_R n k ≥ 2（k<n），       *)
 (*   由 x < 2 ≤ pdp_R n k 得逐项递减，一跳消费引擎。                 *)
 (*   核心代数：(k+1)(2n−k) ≥ 2(n−k) ⟺ k(2n−k+2) ≥ 0，k=0 取等        *)
-(*   （此时 pdp_R n 0 = 2 恰为端点），nia 收口。                     *)
+(*   （此时 pdp_R n 0 = 2 恰为端点），AA12 腿 pql_nat_ratio_mono2。   *)
 (*                                                                 *)
 (* 消费面（全部已绿件 Require，零改写）：                            *)
 (*   UpReqPadeExp：pade_coeff_0_one；                                *)
@@ -31,12 +40,13 @@
 (*   UpReqAltSumPos：altsum_nonneg_leT/altsum_pos_strict/            *)
 (*     altsum_QleT_to_QleT'/altsum_acc_T/altsum_acc_F/               *)
 (*     altsum_acc_0_eq/qeq_ltT；                                    *)
-(*   S02（经 CW219）：QltT/QltT_to_Qlt/Qlt_to_QltT/Qle_to_QleT'/     *)
+(*   S02（经 ）：QltT/QltT_to_Qlt/Qlt_to_QltT/Qle_to_QleT'/     *)
 (*     QleT'_to_Qle/qleT'_trans/qeq_leT'/qltT_leT'；                 *)
-(*   S03（经 CW219）：q_pow_nonneg/q_fact_succ/q_fact_pos/q_neq_of_lt; *)
+(*   S03（经 ）：q_pow_nonneg/q_fact_succ/q_fact_pos/q_neq_of_lt; *)
 (*   stdlib：Qmult_le_compat_l/Qmult_le_compat_r/Qmult_lt_compat_r/  *)
 (*     Qlt_trans/Qlt_le_trans/Qmult_1_r/Qmult_comm/Qeq_sym/          *)
-(*     Qmult_inv_r/Qinv_lt_0_compat/Qlt_not_eq/ring/lia/nia。        *)
+(*     Qmult_inv_r/Qinv_lt_0_compat/Qlt_not_eq/ring/lia（AA12 腿化后   *)
+(*     零 nia，Psatz 面断根）。                                     *)
 (*                                                                 *)
 (* 红线自查：语句面全 Set 层（QltT=Id-of-bool、QleT'=Id-of-bool、     *)
 (*   QleT=Or 形均 S02 Set 值）；Prop 序 Qlt/Qle 仅在证明体内作桥      *)
@@ -46,14 +56,15 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqPadeDenPos UpReqPadeSign UpReqAltSumPos.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+Require Import UpReqPadeQLeg.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
 (* 件 1：比率下界 pdp_R n k ≥ 2（k < n）——本件核心新数学。           *)
 (*   镜像 pdp_R_ge_1 骨架：2 = inv(a)·(2·a) ≤ inv(a)·(b·c) = pdp_R，  *)
-(*   其中 2·a ≤ b·c 由 Z 层 nia（k(2n−k+2) ≥ 0）。                   *)
+(*   其中 2·a ≤ b·c 由 Z 层腿件（pql_nat_ratio_mono2，k(2n−k+2) ≥ 0）。*)
 (* ============================================================ *)
 Lemma pdq_R_ge_2 : forall n k : nat, (k < n)%nat -> QleT' 2%Q (pdp_R n k).
 Proof.
@@ -62,7 +73,8 @@ Proof.
                           (Z.of_nat (Datatypes.S (n - Datatypes.S k)) # 1))%Q
                        (((Z.of_nat (Datatypes.S (2 * n - Datatypes.S k)) # 1) *
                          (Z.of_nat (Datatypes.S k) # 1))%Q)).
-  { apply Qle_to_QleT'. unfold Qle. cbn [Qnum Qden Qmult Pos.mul]. nia. }
+  { apply Qle_to_QleT'. unfold Qle. cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (pql_nat_ratio_mono2 n k Hk). lia. }
   assert (Hinvpos : QleT' 0%Q
     (Qinv ((Z.of_nat (Datatypes.S (n - Datatypes.S k)) # 1)%Q))).
   { apply qltT_leT'. apply Qlt_to_QltT. apply Qinv_lt_0_compat.
@@ -140,7 +152,7 @@ Qed.
 (* ============================================================ *)
 (* 件 3（S2 主件·非严格）：1 < x < 2 ⟹ 0 ≤ Q_n(x)。                  *)
 (*   语句面照 pdp_den_pos 实形档（结论 QleT'）；骨架同 pdp_den_pos，  *)
-(*   仅递减槽位换 pdq_term_decay_2。                                 *)
+(*   仅递减假设位换 pdq_term_decay_2。                                 *)
 (* ============================================================ *)
 Theorem pdq_den_pos_12 : forall (n : nat) (x : Q),
   QltT 1%Q x -> QltT x 2%Q -> QleT' 0%Q (pade_den n x).
@@ -204,7 +216,7 @@ Proof.
   exact Hc.
 Qed.
 
-(* 件 4c：n=1 闭形 den_1(x) == 1 − x/2（pds_c11 哨兵系数直喂） *)
+(* 件 4c：n=1 闭形 den_1(x) == 1 − x/2（pds_c11 哨兵系数显式应用） *)
 Lemma pdq_den1_form : forall x : Q,
   pade_den 1%nat x == 1%Q + Qopp ((1#2)%Q * x).
 Proof.

@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqPadeExp.v *)
+(* *)
+(* 目的： 路径 C：指数函数的 Padé [n/n] 带符号逼近定义面。 *)
+(* 主件： pade_coeff / pade_num / pade_den 定义族与 pade_coeff_pos、pade_den_sym。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 消费引理带 (k <= n) 前提守卫（诚实注记见正文）；对称显式假设申报，登记于文末。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeExp.v —— 席PC：路径 C，eˣ 的 Padé [n/n] 带符号逼近      *)
 (*                  （Q 层定义面 + 系数正性 + 分母对称性）           *)
 (* 日期：2026-09-12                                                *)
@@ -11,7 +20,7 @@
 (*   S3 对称性：pade_den_sym（分母 = 分母在 −x 处的分子）；          *)
 (*   S4 加分件：pade_num_0_one / pade_den_0_one + n=1 具体例全展开。 *)
 (*   余项积分表示（误差符号/误差界的最终形态）依赖构造性积分基建，    *)
-(*   本轮禁攻、对称挂账（升级路径见文末登记段）。                     *)
+(*   本轮禁攻、对称显式假设（升级路径见文末登记段）。                     *)
 (*                                                                 *)
 (* 依赖复用（全部 Require 消费，零改写库件）：                       *)
 (*   CW_ConstructiveWorld_219（薄壳 Export S01..S15）：              *)
@@ -29,9 +38,9 @@
 (*     正性服务，而为「值 = 真系数」的语义服务；后续误差符号/误差界   *)
 (*     引理消费 pade_coeff 时必须携带并使用该守卫。                   *)
 (*                                                                 *)
-(* 编译配方（温控，经 cpu_guard CoreN 1；_t22/_tkl 同款 VOTREE）：    *)
-(*   coqc -q -vos -Q "<VOTREE>" "" -Q . "" UpReqPadeExp.v   （秒审）  *)
-(*   coqc -q       -Q "<VOTREE>" "" -Q . "" UpReqPadeExp.v   （G2）   *)
+
+
+
 (*   VOTREE = D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo *)
 (*   （任务书草方 -Q ../001 无 S01..S03 编译产物，实测不可用，        *)
 (*   改用仓库既有 VOTREE 依赖树，见 attn/_tpc_build.cmd。）          *)
@@ -180,18 +189,17 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma pade_den_1_half : pade_den 1 (1#2) == (3#4).
 Proof. vm_compute. reflexivity. Qed.
 
-(* ===== 挂账登记（对称，禁硬凑） =====
-   挂账四件：pade_error_integral / pade_integral_pos / pade_error_sign /
+(* ===== 显式假设登记（对称，禁硬凑） =====
+   显式假设四件：pade_error_integral / pade_integral_pos / pade_error_sign /
    pade_error_bound——Padé [n/n] 余项积分表示：
      eˣ − P_n(x)/Q_n(x) = (−1)^n · x^{2n+1} / ((2n)!·Q_n(x))
                           · ∫₀¹ tⁿ(1−t)ⁿ e^{tx} dt，
    x>=0 时被积函数逐点正 ⟹ 误差符号 = (−1)^n、误差界显式可计算。
-   禁攻原因：积分表示需构造性积分基建（本库缺位），本轮对称挂账。
+   禁攻原因：积分表示需构造性积分基建（本库缺位），本轮对称显式假设。
    升级路径（下一轮梯队）：
    ① 建 [0,1] 上多项式型被积函数的构造性积分（Q 层分段和 + 柯西极限，
       复用 S02 柯西完备面）；
    ② pade_integral_pos：被积函数逐点正 ⟹ 积分正（积分单调性基建）；
-   ③ pade_error_sign：符号 = q_pow (-1) n——本席已备好 Q 层代数面
       （pade_q_pow_opp_sign + pade_den_sym + pade_coeff_pos，
       Q_n(x)>0 于 x>=0 由系数正 + 交错和下界估计接力）；
    ④ pade_error_bound：|x|<=B 时 |余项| <= e^B·B^{2n+1}/((2n)!·(2n+1))

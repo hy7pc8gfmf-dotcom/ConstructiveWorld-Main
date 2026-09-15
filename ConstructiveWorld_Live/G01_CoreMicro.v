@@ -2,7 +2,7 @@
    成员：UpHlogZ + UpExtras + UpFEP + UpLogMono + UpPPO（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G01_CoreMicro 成员件：UpHlogZ（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpHlogZ.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总放电   *)
+(* UpHlogZ.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总证明   *)
 (*                                                              *)
 (* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
 (* 的显式前件 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
@@ -11,8 +11,8 @@
 (*     （log 单调 le 版 = UpLogMono.real_log_le_mono；              *)
 (*       log 1 == 0 = real_log_one，根内已证）。                    *)
 (*                                                              *)
-(* 交付清单：                                                      *)
-(*   hlogz_discharge       —— 主放电：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
+(* 结果清单：                                                      *)
+(*   hlogz_discharge       —— 主证明：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
 (*   hlogz_discharge_full  —— 同型对齐版（走 UpLogMono 直用形态）    *)
 (*   hlogz_strict          —— 严格版：0 < Z < 1 ⟹ log Z < 0         *)
 (*                            （过滤器确实拦截了质量）               *)
@@ -26,7 +26,7 @@
 Require Import CW_ConstructiveWorld_219.
 
 (* ================================================================ *)
-(* 主交付 1：HlogZ 放电（log 单调 le 版直推）                          *)
+(* 主结果 1：HlogZ 证明（log 单调 le 版直推）                          *)
 (*   论证：0 < Za、Za ≤ 1 ⟹ real_log Za ≤ real_log 1 == 0。           *)
 (*   real_log_le_mono : real_le a b -> real_le (log a) (log b)       *)
 (*   （a b 皆正前提由 HZa 与 real_lt_zero_one 供给）。                 *)
@@ -47,7 +47,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 主交付 2：HlogZ 放电完整版（与 KLProjection 前件对齐）               *)
+(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前件对齐）               *)
 (*   同型语句，走 UpLogMono 直用形态 real_log_le_zero_of_le_one，      *)
 (*   双路互证（单调链合成 / 直用形态殊途同归）。                        *)
 (* ================================================================ *)
@@ -60,7 +60,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 附加交付 1：严格版——过滤器确实拦截了质量                            *)
+(* 附加结果 1：严格版——过滤器确实拦截了质量                            *)
 (*   0 < Za < 1 ⟹ log Za < log 1 = 0（lt 严格链）。                   *)
 (*   real_log_lt_mono 论 cw_log；real_log 定义性展开（:= cw_log）后    *)
 (*   逐项对接，尾端经 real_lt_eq_lt 把 log 1 换成 0。                  *)
@@ -80,7 +80,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 附加交付 2：KL 尾项形态——0 ≤ opp (log Z)                           *)
+(* 附加结果 2：KL 尾项形态——0 ≤ opp (log Z)                           *)
 (*   主定理证明里「尾项 T == opp (log Z_aud) ≥ 0」的直接 Real 层供给：  *)
 (*   log Z ≤ 0 经 opp 反变（real_opp_le_compat）→ opp 0 ≤ opp (log Z)，*)
 (*   再用 opp 0 == 0 的 eq → le 桥（inl 支？否，inr 支）合成。          *)
@@ -94,7 +94,7 @@ Proof.
   - (* 0 ≤ opp 0：eq 对称后升 le *)
     exact (real_eq_le_bridge real_zero (real_opp real_zero)
              (real_eq_sym (real_opp real_zero) real_zero real_opp_zero)).
-  - (* opp 0 ≤ opp (log Z)：反变 + 主交付 1 *)
+  - (* opp 0 ≤ opp (log Z)：反变 + 主结果 1 *)
     exact (real_opp_le_compat (real_log Za HZa) real_zero
              (hlogz_discharge Za HZa HZa1)).
 Qed.
@@ -200,7 +200,7 @@ Qed.
 (* ========== P5b 旗舰：log-sum-exp = 负自由能 ==========
    F_attn[softmax_temp(z)] == −T · log Z_T(z)：
    softmax 逐点 = boltzmann（uex_fep_align）→ F 外延 →
-   根内 free_energy_boltzmann（base_loss := −z, D := T）放电。 *)
+   根内 free_energy_boltzmann（base_loss := −z, D := T）证明。 *)
 Theorem free_energy_softmax_eq_neg_T_logZ :
   Id (F_attn (softmax_temp spp T T_pos z))
      (mult (opp T) (log Zf)).
@@ -318,8 +318,8 @@ Qed.
 (* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧镜像） ==========
    逐项平方非负是接口假设（构造性有序域无三分律，通用平方非负需
    接口字段——与根内 GRPO §7.3 的 Variable square_nonneg 同款诚实
-   接口纪律）；此处交付其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
-   保序纯构造性放电。GRPO σ 定理的 Var 前提供即此形态。 *)
+   接口纪律）；此处给出其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
+   保序纯构造性证明。GRPO σ 定理的 Var 前提供即此形态。 *)
 Theorem real_var_nonneg_cond :
   (forall i : Grp2, real_le real_zero (real_mult (A2 i) (A2 i))) ->
   real_le real_zero
@@ -356,7 +356,7 @@ Extraction "upextras.ml" softmax_temp partition_function_temp free_energy
 (* 行视图：AttnDoeblin 的行 softmax 核 bs_kernel 的每一行与论文      *)
 (*   §5.2 的单查询 softmax_temp 是同一对象（经 expf 与 exp_pos_fn    *)
 (*   的一致性前提）——论文 2 §10.2 点名的对接件。                     *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed。                    *)
+(* 红线：零 公理/承认件；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219 AttnDoeblin.
@@ -478,7 +478,7 @@ Variable expf_agree : forall x : R, Id (expf x) (exp_pos_fn x).
 
 (* ========== 行视图：bs_kernel 的每一行 = 单查询 softmax_temp ========== *)
 (* 消费前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
-(* 实例化通道——real_expf_realizable 放电后取 expf := exp_pos_fn 即    *)
+(* 实例化通道——real_expf_realizable 证明后取 expf := exp_pos_fn 即    *)
 (* 满足，一致性前提退化为 id_refl）。                                 *)
 Theorem ufep_bs_kernel_row_is_softmax_temp : forall s s' : S,
   Id (bs_kernel enum enum_nonempty temp temp_pos Delta z2 z_lb
@@ -516,10 +516,10 @@ Extraction "upfep.ml" softmax_temp partition_function_temp free_energy.
 (* 论文 1 KLProjection（审计=KL投影）主定理的 HlogZ 前提            *)
 (* （le (log Z_aud) zero）discharge 的最后一块：Z_aud ≤ 1 ⟹         *)
 (* log Z_aud ≤ 0 需要「log 单调 le 版」——交接文档蓝图展望 4 点名项。  *)
-(* Real 层（cw_log/real_log）上 Or 编码的 le 逐支放电：              *)
+(* Real 层（cw_log/real_log）上 Or 编码的 le 逐支证明：              *)
 (*   lt 支走 real_log_lt_mono（严格单调，根内已证）；                 *)
 (*   eq 支走 real_log_wd（等式替换，根内已证）。                      *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed；可提取。             *)
+(* 红线：零 公理/承认件；Set 层语句；全 Qed；可提取。             *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -532,7 +532,7 @@ Proof. intros a b H. exact (inl H). Qed.
 Lemma real_eq_le_bridge : forall a b : Real, real_eq a b -> real_le a b.
 Proof. intros a b H. exact (inr H). Qed.
 
-(* ========== 主引理：real_log 单调 le 版（Or 编码逐支放电） ========== *)
+(* ========== 主引理：real_log 单调 le 版（Or 编码逐支证明） ========== *)
 Lemma real_log_le_mono : forall (a b : Real) (Ha : real_lt real_zero a)
     (Hb : real_lt real_zero b),
   real_le a b -> real_le (real_log a Ha) (real_log b Hb).
@@ -577,7 +577,7 @@ Extraction "uplogmono.ml" real_log cw_log.
 (*   E3 改进条件：裁剪代理非负 ⟹ 价值改进（三件齐备的单侧闭合）。     *)
 (* 诚实边界：反向界（V(π)−V(p_old) ≤ std_ppo + C·eps 型）在无界比率   *)
 (* 下为假（反例：比率 ρ → ∞ 时误差 A·(ρ−1−ε) 无界），维持不宣称。    *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed。                    *)
+(* 红线：零 公理/承认件；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

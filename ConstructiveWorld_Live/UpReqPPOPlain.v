@@ -1,21 +1,27 @@
+(* ============================================================ *)
+(* UpReqPPOPlain.v *)
+(* *)
+(* 目的： PPO plain-le 面：裁剪目标与保守性（ReqDiffPlain 载体）。 *)
+(* 主件： rpl_ppo_conservative / rpl_std_ppo_conservative / rpl_ppo_gap_nonneg。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqRDF。 *)
+(* 备注： 序谓词取 plain 形；裁剪误差非负为构造核。 *)
+(* ============================================================ *)
+
 (* UpReqPPOPlain.v — min plain-le 建设席：ReqDiffPlain 槽实例版 PPO 保守簇 6 件
    工单：批5裁决书-dpoTotalLoss解冻与min-plainle8件-20260909.md 第二部分
-     （8 件中 6 件可建，本席全建；clip_lower 冻结维持——其 r_max_ge_plain 槽已随
      本批在 UpReqRDF.v Part 0 增量登记，T2① 零证明槽，为后续解锁铺路）。
-   门控：C2 UpReqRDF.v ReqDiffPlain 槽组 .vo 已落盘（本席开工前增槽重编 EXIT=0 +
-     coqchk 通过，消费以 .vo 态为准——E-STAGING-U2Machine 坑 1/2 纪律）。
    ---------------------------------------------------------------------
    槽实例前提位设计（本批核心）：
    - 各节 Context {RDP : ReqDiffPlain R}（UpReqRDF.v Part 0 槽组）——槽实例前提
-     = T2① 显式参：随节放电进入各件出口签名，非公理（C1 reqDecidableOrder 先例；
+     = T2① 显式参：随节消解进入各件出口签名，非公理（C1 reqDecidableOrder 先例；
      Print Assumptions 不受影响，全件 Closed）。
    - min 消费位逐件换槽：Id min_le_l/min_le_r（Id 接口 plain 字段）->
      min_le_l_plain/min_le_r_plain（req 槽；req 接口 min_le_l 逐 eps 形
      le (min a b) (plus a eps)，plain 形不可导——冻结根因，本批由槽承接）。
    - 求和槽 rpl_sum_le/rpl_sum_nonneg：节内 Hypothesis 位（UpReqDist L206/
-     UpReqAlign L65 sum_le 同位；nonneg 镜像见下方对账注记）。
+     UpReqAlign L65 sum_le 同位；nonneg 镜像见下方核对注记）。
    ---------------------------------------------------------------------
-   逐件对账表（Id 原件 @ CW_ConstructiveWorld_219.v 行号 -> 本文件 req 件）：
+   逐件核对表（Id 原件 @ CW_ConstructiveWorld_219.v 行号 -> 本文件 req 件）：
      件1 ppo_conservative          L19526 -> rpl_ppo_conservative（min_le_l_plain
           + le_mult_compat_weak 接口字段 + req_le_mult_compat_r@UpReqAlgebra
           L465 + rpl_sum_le 槽；advantage_nonneg 前提位与 Id 同位）
@@ -31,55 +37,50 @@
      件6 clip_error_nonneg         L112408 -> rpl_clip_error_nonneg
           （min_le_l_plain + req_le_minus_nonneg + 伴件1 + 伴件2）
      件7 clip_lower                L19518 -> rpl_clip_lower（r_max_le_r_plain
-          自持右参槽直引——路线(a)，见台账第 6 条）
+          自持右参槽直引——路线(a)，见登记表第 6 条）
      件8 ppo_clipped_improvement   L112439 -> rpl_ppo_clipped_improvement（节3，
-          2026-09-09 扫尾席挂随簇解锁件：ppo_surrogate req 簇（件4 等）交付后
+          2026-09-09 扫尾席挂随簇解锁件：ppo_surrogate req 簇（件4 等）结果后
           解锁。Id E1+E2 路线（ppo_is_decomp + clip_error_nonneg + le_plus_
           nonneg_r 装配）由件4 保守件一步替代（le_trans Hsurr + rpl_ppo_
           surrogate_conservative 直得 is_objective_of ≥ 0）；深链伴件 B =
           rpli_is_objective_value_id（Id ppo_surrogate_raw_is_value_improvement
           L20720 同形）本节自持——UpReqPPO.v rppo_ppo_surrogate_raw_is_value_
-          improvement 真证在案但其 .vo 未落盘且在飞（E-STAGING-U2Machine 坑1/2
           消费以 .vo 态为准），按其证明机（比率消去 6 步 + 求和线性 + 归一化
-          坍缩）抽象 R + 本节槽面自持镜像，见台账第 7 条）
+          坍缩）抽象 R + 本节槽面自持镜像，见登记表第 7 条）
    伴件（Id 系有对应、req 侧自足导出）：
      伴件1 rpl_le_mult_nonneg_t12 <- Id le_mult_nonneg_t12 L21825（3 步 req 化：
           le_mult_compat_weak + mult_comm/req_mult_zero_r 换形 + le_id_l）
      伴件2 rpl_sum_nonneg <- Id sum_over_S_nonneg 字段 L1420 的 req 镜像槽。
-          对账注记：裁决书原文引「sum_zero_nonneg 槽 UpReqDist L208」——字段面
+          核对注记：裁决书原文引「sum_zero_nonneg 槽 UpReqDist L208」——字段面
           实测该槽方向为「Σ=0 且逐点非负 ⟹ 逐点=0」，不供给本件「逐点非负 ⟹
-          和非负」缺口；本席改挂同族 nonneg 镜像槽（Hypothesis 位），先例 =
           UpReqMisc5.v reqSumOver rsum_over_S_nonneg L194（Id SumOver 八字段
           req 全镜像已含该字段）。
    ---------------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4）：
+   诚实签名变化登记表（规划书 §7.4）：
    1. minus -> req_minus（δ 透明 plus a (opp b)，UpReqAlgebra 同形；rpl_clip/
      rpl_ppo_surrogate/rpl_ppo_gap_nonneg/rpl_clip_error 语句面随之）。
    2. Id 节内六件零消费参数不进前提面：pi_old_norm/epsilon_pos（Alignment 节）+
-     Hpi:normalized pi（PPOClipDecomp 节，件6 语句与证明零消费——裁决书可建判词
+     Hpi:normalized pi（PPOClipDecomp 节，件6 语句与证明零消费——裁决书可建结论
      未列，字段面实测后诚实削减）。
    3. 求和载体：Id sum_over_S（SumOver 类字段）-> 节参 sumf + 槽（UpReqPPO
      Section ReqPPOAdvantage 同位约定）；出口签名以 Check 探针为准（E359）。
    4. rpl_importance_ratio 携带 pi_star 链（reward/beta/pi_ref/Zap 前提位，Id
      L19502 同形；件4 用 policy_ratio 独立参数，与 Id 分工同位）。
    5. 近邻对位注：UpReqAlign L1216-1230 已有定义面近邻 ppo_clip_req/clip_error_req
-     （PPO 簇 15 件批交付的 req 定义），但其引理面无本批 6 件保守件（原冻结）；
-     本席定义级自持（rpl_ 前缀独立转写），与 UpReqPPO/UpReqAlign 双向互证先例同构。
+     （PPO 簇 15 件批结果的 req 定义），但其引理面无本批 6 件保守件（原冻结）；
    6. 件7 增建（2026-09-09 件16终验席，路线(a)）：clip_lower 冻结解除——Id 原件
      消费 r_max_le_r（右参形 le b (r_max a b)）；UpReqRDF.v ReqDiffPlain 已登记
      r_max_ge_plain 为左参形（le a (r_max a b)，Id r_max_le_l 镜像），方向不覆盖
      右参需求且 r_max 无对称交换桥——故 Id r_max_le_r 的 plain 镜像以本文件节1
      自持槽 r_max_le_r_plain 承接（T2① 零证明槽，与 RDP 槽组同款显式参非公理
-     手法）；UpReqRDF.v 只读未触碰（非本席领地）。
    7. 件8 增建（2026-09-09 扫尾席，挂随簇解锁）：Id PPOClipDecomp 节参
      Hpi:normalized pi 本件消费不削减——req 接口无 normalized 字段，同语义面 =
      req (sumf pi) one 节参 Hnorm 承接（rppo 系 Hnorm 位同形，归一化坍缩消费位）；
-     深链伴件 B 不消费 UpReqPPO.v 在飞件（其 .vo 未落盘），本节自持镜像
      （rpli_ratio_cancel 六步逐点消去 + rpli_sum_opp/rpli_sum_minus 内机 +
      rpli_sum_linear 槽坍缩），槽组 rpli_sum_le/ext/add/linear 全 T2① 假设位。
    ---------------------------------------------------------------------
    纪律：纯构造性；Set 层语句零 Prop 泄露（req/lt/le/Or 均 Set 值）；纯项模式
-     （req/le 组合器逐段直引，零Ltac重写层）；槽位 = T2① 显式参非公理；全链可提取。 *)
+     （req/le 组合器逐段直引，零Ltac重写层）；假设位 = T2① 显式参非公理；全链可提取。 *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -102,8 +103,7 @@ Hypothesis rpl_sum_le :
   forall f g : S -> R, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g).
 
 (* T2① 右参槽（Id r_max_le_r plain 镜像：le b (r_max a b)）——ReqDiffPlain 类体
-   已登记 r_max_ge_plain 为左参形，方向不覆盖本件需求；UpReqRDF.v 非本席领地
-   只读不碰，故节1自持承接，路线(a)解锁 clip_lower（台账第 6 条） *)
+   只读不碰，故节1自持承接，路线(a)解锁 clip_lower（登记表第 6 条） *)
 Hypothesis r_max_le_r_plain :
   forall a b : R, le b (r_max a b).
 
@@ -290,7 +290,7 @@ End ReqPPOPlainObj.
 (* ===================================================================== *)
 (* 节2 ReqPPOPlainClipErr：Id PPOClipDecomp 节同位（件6 + 伴件2）              *)
 (*   节参数 = Id L112330-112347（Hpi:normalized pi 位不进本件——件6 语句与      *)
-(*   证明零消费，字段面实测后诚实削减，签名台账第 2 条）                        *)
+(*   证明零消费，字段面实测后诚实削减，签名登记表第 2 条）                        *)
 (* ===================================================================== *)
 Section ReqPPOPlainClipErr.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -307,7 +307,7 @@ Variable pi p_old : S -> R.
 Variable eps : R.
 Variable Hpos : forall s : S, lt zero (p_old s).
 
-(* Id ratio L112347 同形（节1 rpl_policy_ratio 实例化；跨节消费 S 显式参——放电序） *)
+(* Id ratio L112347 同形（节1 rpl_policy_ratio 实例化；跨节消费 S 显式参——消解序） *)
 Definition rpl_ratio (s : S) : R :=
   rpl_policy_ratio S pi p_old s (Hpos s).
 
@@ -373,12 +373,12 @@ End ReqPPOPlainClipErr.
 (*   槽随件4 内部消费）；深链伴件 B = rpli_is_objective_value_id（Id          *)
 (*   ppo_surrogate_raw_is_value_improvement L20720 同形）本节自持：           *)
 (*   UpReqPPO.v rppo_ppo_surrogate_raw_is_value_improvement 真证在案但其     *)
-(*   .vo 未落盘且在飞（E-STAGING-U2Machine 坑1/2：消费以 .vo 态为准），按其   *)
+
 (*   证明机（逐点比率消去 6 步 + 求和线性 + 归一化坍缩）抽象 R + 本节槽面     *)
 (*   镜像，与 UpReqPPO/UpReqAlign 双向互证先例同构。                          *)
 (*   节参数 = Id PPOClipDecomp L112330-112347 同位（pi p_old Hpos；eps 进     *)
 (*   件8 语句 forall 位）；Id Hpi:normalized pi 位以 req (sumf pi) one 节参   *)
-(*   Hnorm 承接（本件消费不削减——台账第 7 条）。                              *)
+(*   Hnorm 承接（本件消费不削减——登记表第 7 条）。                              *)
 (*   槽组：rpli_sum_le（件4 消费面，节1 同款 T2①）+ rpli_sum_ext/rpli_sum_   *)
 (*   add/rpli_sum_linear（UpReqPPO ReqPPOAdvantage 诚实桥假设位同位）。       *)
 (* ===================================================================== *)
@@ -404,7 +404,7 @@ Hypothesis rpli_sum_linear :
 Variable pi p_old : S -> R.
 Variable Hpos : forall s : S, lt zero (p_old s).
 (* Id Hpi : normalized pi 的 req 同语义面（req 接口无 normalized 字段；
-   rppo 系 Hnorm 位同形；归一化坍缩消费位，台账第 7 条） *)
+   rppo 系 Hnorm 位同形；归一化坍缩消费位，登记表第 7 条） *)
 Variable Hnorm : req (sumf pi) one.
 
 (* Id state_value L19172 / advantage L19176 同形（minus 位 req_minus；
@@ -595,7 +595,7 @@ Proof.
                                  (sumf pi) one
                                  (req_refl (rpli_state_value reward p_old)) Hnorm).
         * exact (mult_one (rpli_state_value reward p_old)). }
-  (* 步5：req_minus 第二分量沿 H4 运输（opp 位 req_opp_compat），δ 透明收口 *)
+  (* 步5：req_minus 第二分量沿 H4 运输（opp 位 req_opp_compat），δ 透明完成 *)
   assert (H5 : req (req_minus (sumf (fun s : S => mult (pi s) (reward s)))
                               (sumf (fun s : S =>
                                 mult (pi s) (rpli_state_value reward p_old))))
@@ -637,9 +637,9 @@ Qed.
 
 (* ===================================================================== *)
 (* 件8 rpl_ppo_clipped_improvement（Id L112439）：裁剪代理非负 ⟹ 价值改进      *)
-(*   （单侧三件齐备的 req 收口；E1+E2 路线由件4 保守件替代——surrogate ≤       *)
+(*   （单侧三件齐备的 req 完成；E1+E2 路线由件4 保守件替代——surrogate ≤       *)
 (*   is_objective_of 一步 le_trans；深链伴件 B 换形 + req_le_of_minus_nonneg  *)
-(*   @UpReqAlign L1332 收口）                                                 *)
+(*   @UpReqAlign L1332 完成）                                                 *)
 (* ===================================================================== *)
 Theorem rpl_ppo_clipped_improvement :
   forall (reward : S -> R) (eps : R),

@@ -1,21 +1,30 @@
 (* ============================================================ *)
-(* UpReqPPOB.v —— 定理 6.6 对应物判词 5 升格席：ppo 保守性 Bishop 完整形 *)
+(* UpReqPPOB.v *)
+(* *)
+(* 目的： 定理 6.6 对应物（PPO 保守性）的 Bishop 完整形升格。 *)
+(* 主件： real_ppo_conservative_B_full 与 rplb_res_weight_pos_unconditional 无条件形。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB。 *)
+(* 备注： 显式参随节进入出口签名（非公理、零未闭合）；槽系为接口前提而非结论削弱，见正文诚实边界。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqPPOB.v —— 定理 6.6 对应物结论 5 升格席：ppo 保守性 Bishop 完整形 *)
 (*   （B 形扩展建造队列 T2 席 · 侦察规格单目标 2 · 20260910）        *)
 (* 主件 real_ppo_conservative_B_full：Σ π_old·min(r,clip r)·adv ≤_B    *)
 (*   Σ π_old·r·adv——UpRealLeB.v 有条件件 real_ppo_conservative_B 的     *)
 (*   唯一缺口前提「E>0 显式证书」由本节内机导出，语句面零新增前提：      *)
 (*   ① T2① 求和正性槽 rplb_sum_pos（逐点正 ⟹ 和正）：Hypothesis 位     *)
-(*     显式参随节放电入出口签名——非公理零未闭合（UpReqPPOPlain         *)
+(*     显式参随节消解入出口签名——非公理零未闭合（UpReqPPOPlain         *)
 (*     rpl_sum_le/rpl_sum_nonneg 槽实例同款）；                        *)
 (*   ② 内机 lebR_res_weight_pos：逐点 π_old·adv 双正（两喂）经槽升 E>0； *)
-(*   ③ 主件证明体与 Part C 同构：closure_b 收口器 + res_fold 出节件     *)
+(*   ③ 主件证明体与 Part C 同构：closure_b 完成器 + res_fold 出节件     *)
 (*     （Require 消费，探针打表后全参显喂）+ eps 形源件直连（13 参全显）。*)
-(* 判词诚实边界：槽系接口前提（T2① 显式参放电），非推翻判词 5「无内在   *)
+(* 结论诚实边界：槽系接口前提（T2① 显式参消解），非推翻结论 5「无内在   *)
 (*   供给链」论证——总账回写口径=「完整升格（sum_pos 槽接口前提在案）」。*)
 (* 红线自审：real_le_b Set 值 forall 型、real_lt sigT Set 层零 Prop 泄露； *)
 (*   前提位 pi_old_pos/advantage_pos 照抄源件零新增；纯项模式（real_eq 非  *)
-(*   Id 禁改写全链显式组装）；三件全封口，证据=尾注三连打（日志在案）。     *)
-(* 编译配方：cpu_guard.ps1 包装，coqc -Q . "" -Q "..\001" "" UpReqPPOB.v *)
+
+
 (* ============================================================ *)
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
@@ -91,27 +100,27 @@ Proof.
 Qed.
 End RealPPOLeBFull.
 
-(* 尾注：出口签名放电序探针打表在案（_wb17_sig_probe）；残差折叠
+(* 尾注：出口签名消解序探针打表在案（_wb17_sig_probe）；残差折叠
    real_ppo_res_fold 7 参、eps 形源件 13 参，均全参显喂。 *)
 Print Assumptions lebR_res_weight_pos.
 Print Assumptions real_ppo_conservative_B_full.
 Print Assumptions lebR_res_weight.
 
 (* ============================================================ *)
-(* 放电节（槽放电战役 #7 · 20260910）：rplb_sum_pos 槽构造性放电件     *)
-(*   载体勘定：CW219 RealListSumMain 节 real_list_sum（list Fixpoint， *)
+(* 消解节（槽消解战役 #7 · 20260910）：rplb_sum_pos 槽构造性消解件     *)
+(*   载体勘定：RealListSumMain 节 real_list_sum（list Fixpoint， *)
 (*   X 泛型，nil 支 real_zero）。语句形态按空支路裁决：空表支 sum 实为  *)
-(*   real_zero，严格正不真——放电语句必带非空前提 Not (Id l nil)        *)
-(*   （CW219 sum_temp_positive 同款；E385 收口器空支路判据同源）。      *)
+(*   real_zero，严格正不真——消解语句必带非空前提 Not (Id l nil)        *)
+(*   （sum_temp_positive 同款；E385 完成器空支路判据同源）。      *)
 (*   先件=槽语句的 list 载体实例（归纳真理两支：nil 矛盾直击、cons      *)
 (*   real_plus_positive 两喂）；伴件以固定非空 vocab 无条件实例化内机    *)
 (*   lebR_res_weight_pos（π_old/adv 取常 real_one，证书 real_lt_zero_one, *)
-(*   CW219 L39486）——槽变量随节全参显喂，出口零残留。                 *)
+(*   L39486）——槽变量随节全参显喂，出口零残留。                 *)
 (* ============================================================ *)
 Section RplbSumPosDischarged.
 Variable X : Set.
 
-(* 放电件：有限和逐项正 ⟹ 和正（非空表前提；rplb_sum_pos 槽的载体实例） *)
+(* 消解件：有限和逐项正 ⟹ 和正（非空表前提；rplb_sum_pos 槽的载体实例） *)
 Lemma rplb_sum_pos_discharged :
   forall (f : X -> Real) (l : list X),
     Not (Id l nil) ->

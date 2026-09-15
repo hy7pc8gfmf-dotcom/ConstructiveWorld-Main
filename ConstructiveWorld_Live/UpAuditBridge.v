@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpAuditBridge.v *)
+(* *)
+(* 目的： 审计温度配分 Z 的对数桥与审计质量构造（Real 层 list 离散世界）。 *)
+(* 主件： uab_Z_aud_log_bridge：Z 的对数分解桥；配 uab_minp_pos_cert / uab_full_pos_cert 正性证书链。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 不主张 KL(full 与 minp) 方向：通过集外 minp 取零点，正性前提不成立，为显式排除的语义边界；词表可判定性与温度和正性以 Variable 前提声明。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAuditBridge：Min-P 截断采样 = 到通过集的 KL 投影（P8 全量）   *)
 (* 桥引理 + list-KL 分解恒等式 + 精确代价 + eps 最优性 + hlogz     *)
 (* ============================================================ *)
@@ -9,7 +18,7 @@
 (*   2) Z_aud 语义：= 保留集上【完整核】的质量                    *)
 (*      Z_aud = Σ_keep markov_kernel = temp_sum · inv(Z_full)。   *)
 (*      这是 KL 投影语义的正确定标（投影基 = 归一化完整核），      *)
-(*      故截断代价 KL(minp‖full) = −log Z_aud = log(1/dropped')   *)
+
 (*      即「通过集质量亏损的对数」（kept'=Z_aud, dropped'=1−Z_aud, *)
 (*      均以完整核为参照；root 无 real_minp_dropped_mass，故以     *)
 (*      kept-mass 形态陈述，见 real_Z_aud_is_kept_mass）。         *)
@@ -24,8 +33,8 @@
 (*      （幻数 90001；旧 9.1 盘留档 .vo.bak-90100），本机 9.0 编译器 *)
 (*      直读通过，回退条款解除：Require CW_ConstructiveWorld_219。   *)
 (*      消费名 48 项探针核对逐位在位（含 RealSetoid 七字段与        *)
-(*      MinP 三机器），声明与定理陈述零数学改动。CW214 回退版备份   *)
-(*      于 UpAuditBridge-CW214基线备份-20260909.v。                  *)
+(*      MinP 三机器），声明与定理陈述零数学改动。回退版备份   *)
+(*      于 UpAuditBridge-基线备份-20260909.v。                  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -72,7 +81,7 @@ Definition real_markov_kernel (prefix : list Token) (w : Token) : Real :=
 Definition uab_Z_aud (prefix : list Token) : Real :=
   real_mult (uab_temp_sum prefix) (real_inv_pos Z_full uab_Z_full_pos).
 
-(* ---------- 透明证书（携带进 real_log 的正性证明项；           *)
+
 (*   必须透明以保 delta/iota 转换一致，禁 Qed 封死） ---------- *)
 Definition uab_minp_pos_cert (prefix : list Token) (w : Token) :
   real_lt real_zero (real_mult (real_temp_factor w)
@@ -107,7 +116,7 @@ Proof.
   - destruct (Hd Hk).
 Defined.
 
-(* min-p 核 drop 支恒零（Hq_fail 形态；不进 log 证书，可 Qed） *)
+
 Lemma uab_minp_fail_zero : forall (prefix : list Token) (w : Token),
   Not (real_minp_keep prefix w) -> real_eq (uab_minp_kernel prefix w) real_zero.
 Proof.
@@ -223,9 +232,9 @@ Proof.
            ++ apply (real_inv_pos_correct a Ha).
 Qed.
 
-(* ---------- log 代数 ---------- *)
 
-(* log(inv x) == −log x（由 log(x·inv x) == log 1 == 0 + 加法整理） *)
+
+
 Lemma uab_log_inv_neg : forall (x : Real) (Hx : real_lt real_zero x),
   real_eq (real_log (real_inv_pos x Hx) (real_inv_pos_pos x Hx))
           (real_opp (real_log x Hx)).
@@ -757,7 +766,7 @@ Definition uab_kl_q_minp (prefix : list Token) (q : Token -> Real)
   | inr _ => real_zero
   end.
 
-(* 尾项求和项（q·(log minp − log full)） *)
+
 Definition uab_kl_tail (prefix : list Token) (q : Token -> Real)
   (Hq : forall w : Token, real_minp_keep prefix w -> real_lt real_zero (q w))
   (w : Token) : Real :=
@@ -801,7 +810,7 @@ Proof.
   - apply (real_plus_assoc a (real_opp b) (real_plus b (real_opp c))).
 Qed.
 
-(* 逐点分解：q·(log q − log full) == q·(log q − log minp) + q·(log minp − log full) *)
+
 Lemma uab_kl_pointwise_split : forall (prefix : list Token) (q : Token -> Real)
   (Hq : forall w : Token, real_minp_keep prefix w -> real_lt real_zero (q w)) (w : Token),
   real_eq (uab_kl_q_full prefix q Hq w)
@@ -892,7 +901,7 @@ Proof.
               (uab_kl_tail prefix q Hq_pos) vocab).
 Qed.
 
-(* 尾项求值：Σ q·(log minp − log full) == −log uab_Z_aud（root kl_tail_eval 骨架） *)
+
 Lemma uab_kl_tail_eval : forall (prefix : list Token) (q : Token -> Real)
   (Hq_norm : real_eq (real_list_sum Token q vocab) real_one)
   (Hq_pos : forall w : Token, real_minp_keep prefix w -> real_lt real_zero (q w))
@@ -982,7 +991,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件 3（精确代价）：KL_list(minp ‖ full) == −log uab_Z_aud           *)
+
 (*   即截断代价 = 通过集质量亏损的对数（kept'==uab_Z_aud，参照完整核） *)
 (* ============================================================ *)
 

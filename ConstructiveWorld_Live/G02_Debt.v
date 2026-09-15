@@ -2,12 +2,12 @@
    成员：UpDebtSqrtAbs + UpDebtDual + UpDebtGibbsT（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G02_Debt 成员件：UpDebtSqrtAbs（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtSqrtAbs.v —— 债务清理打包席（件 3，方案三 b+）          *)
+(* UpDebtSqrtAbs.v —— 债务清理打包模块（件 3，方案三 b+）          *)
 (*   抽象 Id 系增强接口下任意非负 d 的构造性平方根见证：          *)
 (*   把 Real 层 real_sqrt_exists（根 L96475）的 Or 分支证书      *)
 (*   结构逐字镜像回 RealInterfaceEnhanced 接口泛型。             *)
 (*                                                              *)
-(*   语句（任务书模板）：                                        *)
+(*   语句（原始任务表述模板）：                                        *)
 (*     forall d, Or (lt zero d) (Id zero d) ->                  *)
 (*       sigT (fun r => And (le zero r) (Id (mult r r) d))      *)
 (*   证明核：                                                    *)
@@ -24,7 +24,7 @@
 (*   内无法分解（无 le→Or 字段），不硬凑。                       *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（lt/le/Id/sigT/And）；*)
-(*   全部 Qed 收口。                                             *)
+(*   全部 Qed 完成。                                             *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -138,7 +138,7 @@ End SqrtAbstract.
 
 (* ======== G02_Debt 成员件：UpDebtDual（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtDual.v —— 债务清理打包席（件 2，方案三 b）              *)
+(* UpDebtDual.v —— 债务清理打包模块（件 2，方案三 b）              *)
 (*   缩放-温度对偶族 Real 层：抽象层 scale_temp_duality           *)
 (*   （CW_ConstructiveWorld_219 L28515–28529）与配套缩放族（L28440–28543）   *)
 (*   的 Real 层镜像。                                            *)
@@ -154,7 +154,7 @@ End SqrtAbstract.
 (*   real_inv_pos_ext——纯恒等链）。                              *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（real_lt/real_eq/     *)
-(*   sigT/And）；全部 Qed 收口。                                  *)
+(*   sigT/And）；全部 Qed 完成。                                  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -440,7 +440,7 @@ End RealScaleDual.
 
 (* ======== G02_Debt 成员件：UpDebtGibbsT（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtGibbsT.v —— 债务清理打包席（件 1，方案三 c）            *)
+(* UpDebtGibbsT.v —— 债务清理打包模块（件 1，方案三 c）            *)
 (*   attention_is_gibbs_temp 的 Real 层复刻：任意温度下          *)
 (*   softmax == Boltzmann。                                      *)
 (*                                                              *)
@@ -459,10 +459,10 @@ End RealScaleDual.
 (*                                                              *)
 (*   世界选择跟随根内 real_attention_is_gibbs（CW_ConstructiveWorld_219；    *)
 (*   CW_ConstructiveWorld_219.vo 与本地 9.0/9.1 平台 vo 版本号   *)
-(*   不兼容，见交付报告）。                                      *)
+(*   不兼容，见技术报告）。                                      *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（real_lt/real_eq/     *)
-(*   sigT/库内 And）；全部 Qed 收口。                            *)
+(*   sigT/库内 And）；全部 Qed 完成。                            *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

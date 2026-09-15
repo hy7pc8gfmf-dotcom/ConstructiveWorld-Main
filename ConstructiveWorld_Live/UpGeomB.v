@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpGeomB.v *)
+(* *)
+(* 目的： 策略迭代几何收缩的 Bishop 形无条件版（定理 4.8 对应物）。 *)
+(* 主件： geod_b_iterate 迭代族与 geod_b_kappa_lt_one；geod_b_interp_Z_pos 插值正性。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpReqGeomD。 *)
+(* 备注： real_le 的 Or 形前提仅被构造性消耗（两支皆有见证）；无条件指无额外 eps 假设位。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpGeomB.v —— 定理 4.8 策略迭代几何收缩的 Bishop 形无条件版建造席    *)
 (*   （广义旗舰链·评审 07 点名「最能提升的单一改动」落盘件）           *)
 (* ---------------------------------------------------------------- *)
@@ -7,11 +16,11 @@
 (*   KL(π*‖π_t)   ≤_B (1−η)^t·KL(π*‖π_0)       （主件2·迭代·旗舰）    *)
 (* 关键：Or-序编码下 step_kl_eta_bound 的「log Z ≤ 0 精确形」不可证    *)
 (*   （等号分支提取需排中）——Bishop 形绕开：逐 eps 余量替代精确       *)
-(*   不等式，严格 lt 见证替代 eq 分支。全文件零 Or 形精确收口目标，     *)
+(*   不等式，严格 lt 见证替代 eq 分支。全文件零 Or 形精确完成目标，     *)
 (*   前提位 Or 假设（real_le）仅被构造性消耗（destruct 两支皆有 witness   *)
 (*   路线），与 UpRealLeB.real_le_to_le_b 单向桥同纪律。              *)
 (* ---------------------------------------------------------------- *)
-(* 本文件交付（前缀 geod_b_，grep 全库零撞名实测）：                   *)
+(* 本文件结果（前缀 geod_b_，grep 全库零撞名实测）：                   *)
 (*   [P-A 序/环辅件] geod_b_le_lt_trans（le+lt 拼接）/                 *)
 (*     geod_b_kappa_lt_one（η>0 ⟹ 1−η<1 严格）/ geod_b_ring_mlcr /    *)
 (*     geod_b_scale_reshape（零名依赖 ring 换形）/                     *)
@@ -28,21 +37,21 @@
 (*     real_step_kl_eta_bound_B 一次喂定（核验后 Require 消费）。      *)
 (*   [P-E 主件1] geod_b_policy_iter_step_margin（逐 eps 严格余量       *)
 (*     工作马：三 KL 恒等式的逐点镜像 kl(r,q)==(1−η)·kl(r,p)+r·log Z   *)
-(*     + 归一化吸收 + log Z<eps（M1+严格种子+log 单调））+             *)
-(*     geod_b_policy_iter_step（Bishop 收口：KL(π*‖π_{t+1}) ≤_B        *)
+
+(*     geod_b_policy_iter_step（Bishop 完成：KL(π*‖π_{t+1}) ≤_B        *)
 (*     (1−η)·KL(π*‖π_t)，real_le_closure_b_one 一步）。                *)
 (*   [P-F 主件2·旗舰] geod_b_policy_iter_iter——t 步几何收缩 Bishop 形： *)
 (*     KL(π*‖π_t) ≤_B (1−η)^t·KL(π*‖π_0)（le_b 归纳；eps 累积=         *)
 (*     逐 eps 半量分配 h+（1−η)h < 2h == eps，免 1/n 拆分——SumD        *)
 (*     先例同款）。                                                    *)
 (* ---------------------------------------------------------------- *)
-(* 勘误登记：_geod_UpReqGeomD.v.compile.log 尾为中间版报错（L328       *)
+
 (*   real_eq_mult_compat 未前缀），当前盘上 UpReqGeomD.v 已是前缀修     *)
 (*   正版且 .vo/.glob 同刻新——非阻塞，仅日志未刷新。                   *)
 (* 红线：Set 层语句（real_le_b/real_lt 均 Set 值；nat 层 0<n 前提为    *)
 (*   Prop——real_list_sum_pos 先例同格）；全 Qed 闭合；既有文件零改；   *)
 (*   纯 term-mode 组装（real_eq 非 Id，禁 rewrite 主链）。             *)
-(* 编译配方：coqc -Q . "" -Q "..\001" "" UpGeomB.v（cpu_guard 错峰）。 *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -89,7 +98,7 @@ Proof.
                (geod_eta_plus_kappa eta)).
 Qed.
 
-(* 环辅件：CW219 kl_ring_neg4 的换向镜像（m := 1−η 内嵌）：
+(* 环辅件：kl_ring_neg4 的换向镜像（m := 1−η 内嵌）：
    −((m·lp + η·lr) + (−LZ + −lr)) == m·(lr − lp) + LZ *)
 Lemma geod_b_ring_neg4_b : forall eta lp lr LZ : Real,
   real_eq (real_opp (real_plus
@@ -209,7 +218,7 @@ Qed.
 
 (* 单调递减（Bishop 序版）：0 < x ≤ 1 ⟹ x^{t+1} ≤_B x^t。
    路线：x·x^t ≤ 1·x^t（正因子右乘保序，Or 形——前提位本为 Or 假设，        *)
-(*   构造性消耗合法）+ 1·x^t == x^t 换形，real_le_to_le_b 单向桥收口。       *)
+(*   构造性消耗合法）+ 1·x^t == x^t 换形，real_le_to_le_b 单向桥完成。       *)
 Lemma geod_b_pow_mono_decr : forall (x : Real) (t : nat),
   real_lt real_zero x -> real_le x real_one ->
   real_le_b (geod_b_pow x (Datatypes.S t)) (geod_b_pow x t).
@@ -352,7 +361,7 @@ Fixpoint geod_b_iterate (n : nat) (Hn : (0 < n)%nat) (r : nat -> Real)
 (* ============================================================ *)
 
 (* KL(π_t‖π_{t+1}) ≤_B η·KL(π_t‖π★)：
-   real_step_kl_eta_bound_B（UpRealLeB D.5，四关绿在盘）一次喂定。 *)
+   real_step_kl_eta_bound_B（UpRealLeB D.5，合规验证绿在盘）一次喂定。 *)
 Theorem geod_b_step_kl_eps :
   forall (n : nat) (p r : nat -> Real) (eta : Real)
     (Hp : forall i : nat, real_lt real_zero (p i))
@@ -375,7 +384,7 @@ Qed.
 (* P-E 主件1：单步真几何收缩 Bishop 形（三 KL 恒等式的 le_b 形）        *)
 (*   工作马：逐 eps 严格余量 KL(r‖q) < (1−η)·KL(r‖p) + eps——           *)
 (*   逐点恒等 kl(r_i,q_i) == (1−η)·kl(r_i,p_i) + r_i·log Z（M2 镜像）   *)
-(*   + 归一化吸收 + log Z < eps（M1 + 严格种子 1+eps<e^eps + log 单调）。 *)
+
 (* ============================================================ *)
 
 Theorem geod_b_policy_iter_step_margin :
@@ -425,7 +434,7 @@ Proof.
                      (real_inv_pos_pos (r i) (Hr i))).
     set (Hprlog := real_mult_positive (p i) (real_inv_pos (r i) (Hr i)) (Hp i)
                      (real_inv_pos_pos (r i) (Hr i))).
-    (* log 值事实 *)
+    
     assert (HlA : real_eq (cw_log pA HpA) (real_mult m lp))
       by exact (log_inv_exp_neg_thm (real_mult m (cw_log (p i) (Hp i))) HpA).
     assert (HlB : real_eq (cw_log pB HpB) (real_mult eta lr))
@@ -434,7 +443,7 @@ Proof.
       by exact (kl_log_inv Z HZ HIZ).
     assert (HlR : real_eq (cw_log irr HIR) (real_opp lr))
       by exact (kl_log_inv (r i) (Hr i) HIR).
-    (* log(p·inv r) == lp − lr *)
+    
     assert (Hlogpr : real_eq (cw_log (real_mult (p i) irr) Hprlog)
                              (real_plus lp (real_opp lr))).
     { exact (real_eq_trans (cw_log (real_mult (p i) irr) Hprlog)
@@ -454,7 +463,7 @@ Proof.
       by exact (real_mult_positive pB (real_mult izz irr) HpB Hpos3).
     assert (HAB4 : real_lt real_zero (real_mult pA (real_mult pB (real_mult izz irr))))
       by exact (real_mult_positive pA (real_mult pB (real_mult izz irr)) HpA Hpos2).
-    (* log(q·inv r) 拆四项 *)
+    
     assert (Hlog4 : real_eq (cw_log (real_mult (q i) irr) Hrqlog)
                        (real_plus (cw_log pA HpA)
                           (real_plus (cw_log pB HpB)
@@ -492,7 +501,7 @@ Proof.
                            (real_plus (cw_log izz HIZ) (cw_log irr HIR))
                            (real_eq_refl (cw_log pB HpB))
                            (log_inv_mult_thm izz irr HIZ HIR Hpos3))))). }
-    (* 代入 log 值 + 关联重排 *)
+    
     assert (Hlog4' : real_eq (cw_log (real_mult (q i) irr) Hrqlog)
                        (real_plus (real_plus (real_mult m lp) (real_mult eta lr))
                                   (real_plus (real_opp LZ) (real_opp lr)))).
@@ -528,7 +537,7 @@ Proof.
                            (cw_log irr HIR) (real_opp LZ) (real_opp lr)
                            HlZ HlR)))
                   (geod_b_ring_log4_b m eta lp lr LZ)). }
-    (* 负化 + 环归拢：−log(q·inv r) == m·(lr − lp) + LZ *)
+    
     assert (Hneg : real_eq (real_opp (cw_log (real_mult (q i) irr) Hrqlog))
                        (real_plus (real_mult m (real_plus lr (real_opp lp))) LZ)).
     { exact (real_eq_trans
@@ -542,7 +551,7 @@ Proof.
                              (real_plus (real_opp LZ) (real_opp lr)))
                   Hlog4')
                (geod_b_ring_neg4_b eta lp lr LZ)). }
-    (* p 侧：lr − lp == −log(p·inv r) *)
+    
     assert (HnegP : real_eq (real_plus lr (real_opp lp))
                             (real_opp (cw_log (real_mult (p i) irr) Hprlog))).
     { exact (real_eq_trans (real_plus lr (real_opp lp))
@@ -665,7 +674,7 @@ Proof.
                            (real_list_sum nat r (List.seq 0 n)) LZ real_one
                            (real_eq_refl LZ) Hnormr)
                         (real_mult_one LZ)))). }
-  (* ---- log Z < eps：M1 + 严格种子 + log 单调（严格版，M2 的 le 收紧） ---- *)
+  
   assert (HLZ : real_lt LZ eps).
   { assert (HZle : real_le Z (real_plus real_one eps))
       by exact (real_interp_Z_le_one_eps n p r eta Hp Hr Hnormp Hnormr
@@ -708,9 +717,9 @@ Proof.
               (real_plus_comm eps (real_mult m Rsum)))).
 Qed.
 
-(* 主件1（Bishop 收口）：KL(π*‖π_{t+1}) ≤_B (1−η)·KL(π*‖π_t)。
+(* 主件1（Bishop 完成）：KL(π*‖π_{t+1}) ≤_B (1−η)·KL(π*‖π_t)。
    证书链：geod_b_policy_iter_step_margin（任意 eps 严格余量）
-   + real_le_closure_b_one 一步收口（证书 real_lt_zero_one 既有）。 *)
+   + real_le_closure_b_one 一步完成（证书 real_lt_zero_one 既有）。 *)
 Theorem geod_b_policy_iter_step :
   forall (n : nat) (p r : nat -> Real) (eta : Real)
     (Hp : forall i : nat, real_lt real_zero (p i))
@@ -903,7 +912,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Print Assumptions（四关 G3/G4 消费面）                              *)
+
 (* ============================================================ *)
 
 Print Assumptions geod_b_le_lt_trans.

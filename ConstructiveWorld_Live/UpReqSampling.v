@@ -1,22 +1,29 @@
+(* ============================================================ *)
+(* UpReqSampling.v *)
+(* *)
+(* 目的： 采样核的 req 层镜像：Doeblin 收缩与迭代预算面。 *)
+(* 主件： rsq_u_titer / rsq_bs_kernel 迭代核与 rsq_u_tr_decomp 分解。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
+(* 备注： 参考分布归一化与正性为 Variable 前提；一步分解为构造核。 *)
+(* ============================================================ *)
+
 (* UpReqSampling.v — 签名迁移批 4 保底件：UContraction + BoundedSoftmax 的 req 系重述
    母本：签名迁移规划书-20260908.md 批 4 清单（BoundedSoftmax 23 + UContraction 11 = 保底 34 件）；
    Id 原件：CW_ConstructiveWorld_219.v
      Section UContraction     L95737-96039（11 件：Lemma/Theorem 计数，定义件另计）；
      Section BoundedSoftmax   L96043-96356（23 件：21 Lemma + 2 Theorem，定义件另计）。
-   上游依赖（动工前 .vo 在库实证，probe_batch4.v 全签名探针 EXIT=0）：
      UpReqAlgebra（批 1 地基）：req_minus / req_minus_plus_congr_l / req_minus_factor /
        req_minus_factor_pt / req_le_minus_nonneg / req_mult_cancel_l /
        req_lt_id_r_loc / req_two_pos / req_le_mult_compat_r；
      UpReqDist（批 2）：reqd_sum_minus / reqd_nat_to_R / reqd_nat_to_R_pos /
        reqd_minus_compat / reqd_opp_zero / reqd_softmax_scaled / reqd_softmax_temp_param
        （ReqSoftmaxDual 节 = 本文件 BoundedSoftmax 前置锚，规划书明示直接消费）；
-     基座：exp_neg_req_compat_setoid（CW219 L66223，规划书明示直接消费不再自建桥）。
+     基座：exp_neg_req_compat_setoid（L66223，规划书明示直接消费不再自建桥）。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值）；纯 term-mode
    （req_trans 链 + compat 桥，零 Morphisms / 零 rewrite）；诚实接口假设位
-   逐位保留不放大主张。所有 coqc/coqchk 经 cpu_guard（LoadLimit 60 / CoreN 6）。
    ----------------------------------------------------------------
-   诚实签名变化台账（Id -> req，逐件差异真证非抄写）：
+   诚实签名变化登记表（Id -> req，逐件差异真证非抄写）：
    1. minus：接口无字段，全文件用 UpReqAlgebra req_minus（δ 透明，req_minus a b
      定义性 = plus a (opp b)）——Id 语句中 minus 一处不落。
    2. u_norm / transition_row / 行归一：Id (sum ...) one -> req (sumf ...) one。
@@ -31,14 +38,14 @@
    7. sum_eq_list（req 化）+ enum_nonempty：Not (Id enum nil) -> Not (enum = nil)
      ——req 仅定义在 R 上，list 层恒等走 Stdlib eq（构造性，Prop 位与 Id 原件
      同阶）。
-   8. expf 迷你接口（Id 5 假设：pos/zero/plus/mono_lt/mono_le，Part C 放电其
+   8. expf 迷你接口（Id 5 假设：pos/zero/plus/mono_lt/mono_le，Part C 消解其
      可满足性）-> 本文件以 setoid exp_neg 具体化 exp_pos_fn := exp_neg (opp x)，
      5 性质全部由接口字段 + exp_neg_req_compat_setoid 真证导出（epp_* 辅件）——
      抽象假设位闭合为接口实例，零新假设（与基内 softmax_setoid 同锚）。
    9. u_titer / u_r_kernel / Zrow / bs_kernel / Unif / delta_star / factor：
      定义件 δ 同构迁移（minus -> req_minus，attn_nat_to_R -> reqd_nat_to_R）。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号）：
+   覆盖核对（req 件名 -> Id 原件 @ 行号）：
    【ReqUContraction 11】u_omd_pos_next<-95773 u_r_nonneg<-95787
      u_r_norm<-95796 u_tr_decomp<-95813 delta_absorb_u<-95833
      u_step_decomp<-95852 u_step_norm<-95991 u_abs_row<-96018
@@ -63,7 +70,7 @@
      对位验证（旗舰消费）：bounded_softmax_tv_contraction / bounded_softmax_tv_iter
      （req_u_tv_contraction / req_u_tv_iter 全参对位投喂）。
    【冻结清单】本两节 34 件零冻结（Id 原件全部可 req 重述，无深链缺口）。
-     判词留档：Id expf 抽象接口不迁移（由 8 项具体化替代，Part C 放电位
+     结论留档：Id expf 抽象接口不迁移（由 8 项具体化替代，Part C 消解位
      随之退役，非冻结）。
    ---------------------------------------------------------------- *)
 
@@ -74,7 +81,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
-(* req_r_pow：Id r_pow（CW219 L14071）的 setoid 重绑（签名变化 6） *)
+(* req_r_pow：Id r_pow（L14071）的 setoid 重绑（签名变化 6） *)
 Fixpoint req_r_pow {R : Set} {RIS : RealInterfaceEnhancedSetoid R}
          (x : R) (n : nat) : R :=
   match n with
@@ -86,7 +93,7 @@ Fixpoint req_r_pow {R : Set} {RIS : RealInterfaceEnhancedSetoid R}
 (* Section ReqUContraction：UContraction 节 req 迁移（11 件）      *)
 (*   Id 原件 L95737-96039。求和诚实接口 = Id SumOver 类字段      *)
 (*   （L1400-1441）req 镜像，节内自持（跨席 Hypothesis 不可消费  *)
-(*   纪律，E-STAGING-ReqAlignRestA 坑 1）。                       *)
+
 (* ============================================================ *)
 Section ReqUContraction.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -687,7 +694,7 @@ End ReqUContraction.
 (* ============================================================ *)
 (* Section ReqBoundedSoftmax：BoundedSoftmax 节 req 迁移（23 件）  *)
 (*   Id 原件 L96043-96356。expf 迷你接口具体化为 exp_pos_fn       *)
-(*   （= exp_neg (opp x)，接口实例即放电）；list 求和机器换轨      *)
+(*   （= exp_neg (opp x)，接口实例即消解）；list 求和机器换轨      *)
 (*   reqd_nat_to_R；前置锚 = UpReqDist ReqSoftmaxDual reqd_softmax_*。 *)
 (* ============================================================ *)
 Section ReqBoundedSoftmax.

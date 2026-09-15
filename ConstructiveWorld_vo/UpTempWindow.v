@@ -1,5 +1,14 @@
 (* ============================================================ *)
-(* UpTempWindow.v —— 温度窗口 T→∞ 半边：有界 logits softmax 核   *)
+(* UpTempWindow.v *)
+(* *)
+(* 目的： 温度窗口面：硬注意力极限的窗口载体重建。 *)
+(* 主件： tw_wT / tv_unif 窗口核与 tw_ZT_pos、tw_states_len_pos 前提族。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 纯构造性、零公理面/承认件/弃证/经典逻辑；词表非空与温度直径正为显式前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+
 (*   高温趋近均匀分布（量词翻转的真极限定理，sigT 见证）。       *)
 (*                                                              *)
 (*   主定理 temp_window_T_infty：                                *)
@@ -14,10 +23,10 @@
 (*     e^{−2Δ/T}/N ≤ w_T(x) ≤ e^{+2Δ/T}/N                       *)
 (*   ⟹ 逐点 |w_T(x) − 1/N| ≤ (e^{2Δ/T} − 1)/N                   *)
 (*   ⟹ TV ≤ e^{2Δ/T} − 1。                                      *)
-(*   量词翻转：T₂ := 2Δ/cw_log(1+eps) + 1，                     *)
+
 (*     T > T₂ ⟹ 2Δ/T ≤ cw_log(1+eps) ⟹ e^{2Δ/T} ≤ 1+eps。      *)
 (*                                                              *)
-(*   纪律：纯构造性、零 Axiom/Admitted/Abort/Classical；         *)
+(*   纪律：纯构造性、零 公理/承认件/弃证/Classical；         *)
 (*         语句全 Set 层（sigT/And/Or）；全部 Qed。              *)
 (* ============================================================ *)
 
@@ -660,7 +669,7 @@ Proof.
                      (real_eq_trans c x real_zero (real_eq_sym x c Heq1) Hx0)))).
 Qed.
 (* ============================================================ *)
-(* 5. T→∞ 半边追加席位（2026-09-06）：通用代数件与倒数唯一性     *)
+
 (* ============================================================ *)
 
 (* (a·b)·(c·d) == (a·c)·(b·d)（四因子重排） *)
@@ -1398,7 +1407,7 @@ Proof.
 Qed.
 
 (* 逐点绝对值界：|w_T(x) − 1/N| ≤ (e^{2Δ/T} − 1)/N
-   tw_abs_le 收口：上支 w−1/N ≤ (E2−1)/N（tw_ring_sub_mult 换形）；
+   tw_abs_le 完成：上支 w−1/N ≤ (E2−1)/N（tw_ring_sub_mult 换形）；
    下支 1/N−w ≤ (1−e^{−2Δ/T})/N ≤ (E2−1)/N
    （tw_ring_sub_mult_l + tw_one_minus_exp_le） *)
 Lemma tw_h_le : forall (T : Real) (Ht : real_lt real_zero T) (x : Tok),
@@ -1465,7 +1474,7 @@ Proof.
         -- apply real_plus_comm.
 Qed.
 
-(* ---------- 7.6 求和收口：tv_unif ≤ e^{2Δ/T} − 1 ---------- *)
+(* ---------- 7.6 求和完成：tv_unif ≤ e^{2Δ/T} − 1 ---------- *)
 
 Lemma tv_unif_le : forall T Ht,
   real_le (tv_unif T Ht) (real_plus (tw_E2 T Ht) (real_opp real_one)).
@@ -1558,7 +1567,6 @@ Qed.
 (* ---------- 7.7 主定理：量词翻转 ---------- *)
 
 (*   T₂ := 2Δ·inv(cw_log(1+eps)) + 1 > 0；
-     T > T₂ ⟹ 2Δ/T < cw_log(1+eps) ⟹ e^{2Δ/T} < 1+eps
      ⟹ tv_unif ≤ e^{2Δ/T} − 1 ≤ (1+eps) − 1 = eps。 *)
 Theorem temp_window_T_infty :
   forall eps : Real, real_lt real_zero eps ->
@@ -1568,7 +1576,7 @@ Theorem temp_window_T_infty :
 Proof.
   intros eps Heps.
   pose (U := real_plus real_one eps).
-  (* 1 < U ⟹ 0 < U ⟹ L := cw_log U > 0 *)
+  
   assert (HU1 : real_lt real_one U).
   { apply (real_eq_lt_lt real_one (real_plus real_zero real_one) U).
     - apply (real_eq_trans real_one (real_plus real_one real_zero)
@@ -1689,7 +1697,7 @@ Proof.
       by exact (real_lt_eq_lt (tw_E2 T Ht) (cauchy_real_exp L) U
                   (cauchy_real_exp_mono (tw_u2 T Ht) L Hi)
                   (cw_log_exp_right U HUpos)).
-    (* 收口：tv ≤ E2 − 1 ≤ U − 1 == eps *)
+    (* 完成：tv ≤ E2 − 1 ≤ U − 1 == eps *)
     apply (real_le_trans (tv_unif T Ht)
              (real_plus (tw_E2 T Ht) (real_opp real_one)) eps).
     + exact (tv_unif_le T Ht).

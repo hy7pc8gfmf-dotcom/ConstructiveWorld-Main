@@ -1,13 +1,22 @@
 (* ============================================================ *)
+(* UpReqELBOStrict.v *)
+(* *)
+(* 目的： 定理 4.8 ELBO 紧性的严格逆否腿补齐。 *)
+(* 主件： t33_elbo_strict_of_fe_strict / t33_elbo_strict_of_kl_pos 严格腿族与 bool 编码形。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP、UpReqELBOEps、G07_KLWall、UpReqFEPCanon。 *)
+(* 备注： 逆否腿经 KL 墙件承接；bool 形与 Or 形双编码并存。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOStrict.v —— 席T33：定理 4.8 ELBO 紧性补齐严格逆否腿        *)
-(*   2026-09-11（后台独立席位，独占 CoreN 4，预算 60 分钟单席闭合）      *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】席A3 候选 A-2：4.8 的 (b) 严格逆否腿 Real 层可达形——          *)
 (*   显式分歧见证（q 与 p_b 在某 s₀ 处 Set 层 Or (real_lt) 双向见证）    *)
 (*   ⟹ KL(q‖p_b)>0 ⟹ ELBO(q) < evidence（严格）。                      *)
 (*   三步组装链（全部在盘复用，零新数学）：                              *)
 (*     第 1 步 分歧见证 ⟹ KL 严格：G07 klst_kl_sum_strict（单向可比版）  *)
-(*       / klst_kl_energy_nonconst（双向 Or 见证版），p := q 同向直喂；  *)
+(*       / klst_kl_energy_nonconst（双向 Or 见证版），p := q 同向显式应用；  *)
 (*     第 2 步 KL 严格 ⟹ F 严格差：正典分解 real_kl_decomp_full_canon    *)
 (*       （UpReqFEPCanon）给 F[q] − F[p_b] = D·KL 账目 +                 *)
 (*       real_mult_pos_compat（D>0 × KL>0）+ real_lt_plus_translate +    *)
@@ -15,18 +24,18 @@
 (*     第 3 步 F 严格差 ⟹ ELBO 严格：ELBO = −F 一跳取负换向              *)
 (*       （S07 real_opp_lt_compat）。                                    *)
 (* ------------------------------------------------------------------ *)
-(* 【降层重组说明（如实申报）】席T15 成品 t15_fe_strict_of_kl_pos 与     *)
+
 (*   席T12 成品 t12_elbo_tight_backward 的 .vo 产物因今日 03:20 双树     *)
-(*   同步窗口产生摘要漂移（voTree 内 MinUnique/ELBOTight 两件对其上游    *)
-(*   FEPCanon/ELBOEps 现行版报装载失配，本席探针实测在案），本席不触碰   *)
+
+
 (*   他席源件与共享 vo 树，改在其上游全数可装载件面（CW/RealFEP/         *)
 (*   ELBOEps/G07/FEPCanon）上按 T15 件 4 / T12 件 3 的同链同件逐字重组   *)
 (*   这两跳——引用件名不变、账目不变（D 因子逐字保留），数学零新增。      *)
-(*   漂移对账权留原席/索引席（E-STAGING-T33 卡已记盘面观察）。           *)
+
 (* ------------------------------------------------------------------ *)
-(* 【术语映射表（承 T12/T15 交付件，逐字沿用）】                         *)
+(* 【术语映射表（承 T12/T15 结果件，逐字沿用）】                         *)
 (*   ELBO(q) := −F[q]        ↔ real_elbo（UpReqELBOEps 件 0）           *)
-(*   evidence := log p(x)    ↔ real_evidence（同上）                     *)
+
 (*   真实后验/输出分布       ↔ real_boltzmann_dist_r                     *)
 (*   KL(q‖p_b) 逐项和        ↔ Σ real_kl_term(q s, p_b s)                *)
 (*   严格                    ↔ real_lt（Set 层）                         *)
@@ -46,17 +55,17 @@
 (*   件 5 主件（双向 Or 见证版）t33_elbo_strict_divergence：逐项双向     *)
 (*     可比（诚实接口位）+ s₀ 处 Or 见证 ⟹ G07 klst_kl_energy_nonconst  *)
 (*     ⟹ 件 3。                                                          *)
-(*   件 6 bool 载体收口 t33_elbo_strict_divergence_bool                  *)
+(*   件 6 bool 载体完成 t33_elbo_strict_divergence_bool                  *)
 (*     （[true; false]，s₀ := true，l₁ := []，l₂ := [false]）。          *)
 (*   件 7 边界组装件 t33_elbo_boundary_bool（prod 双函数记录，Set 层     *)
 (*     合取形，零 Prop 载体）：(a) 腿 = 逐点等 ⟹ 紧致（T12 件 3 同链：  *)
 (*     rfep_free_energy_ext_r + real_eq_opp_compat 一跳）× (b) 腿 =      *)
-(*     分歧见证 ⟹ 严格（本席件 6）——定理 4.8 构造性边界两腿。           *)
+(*     分歧见证 ⟹ 严格（本件件 6）——定理 4.8 构造性边界两腿。           *)
 (* ------------------------------------------------------------------ *)
 (* 【可达强度如实标注】                                                 *)
 (*   ① 逐项双向可比前提为诚实接口位：去除逐项 Or (real_le) 等价于对     *)
-(*     任意实对给三分判定见证（LLPO 形），非直觉主义可证（席T1 卡判词；  *)
-(*     席T15/T22b 同款申报）；s₀ 处分歧见证以 Set 层 Or (real_lt) 显式   *)
+(*     任意实对给三分判定见证（LLPO 形），非直觉主义可证（席T1 卡结论；  *)
+
 (*     承载（实序不可判定，显式见证输入）。                              *)
 (*   ② F[q] − F[p_b] = D·KL 账目由正典分解逐字保留（D 因子不吸收、不     *)
 (*     缩水），严格腿 = D>0 × KL>0；物理前提零缩水。                     *)
@@ -68,8 +77,8 @@
 (*   全链 real_eq_trans / RealSetoid 运输；D 因子逐字保留。禁改红线：    *)
 (*   UpReqELBOTight.v / UpReqMinUniqueTight.v / UpReqEntropyUniqueNeg.v  *)
 (*   / G07 组 / UpReqFEPCanon.v / UpReqRealFEP.v / UpReqELBOEps.v /      *)
-(*   S 分片全程只读（只消费 .vo）。                                      *)
-(* 编译配方：_t33_run.ps1 单一入口 + cpu_guard CoreN 4；预审 coqc -vos； *)
+(*   S 模块全程只读（只消费 .vo）。                                      *)
+
 (*   全量 -Q vo 树；前置 .vo 在 ConstructiveWorld_vo/ 与 Live_X。        *)
 (* ============================================================ *)
 
@@ -212,7 +221,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 件 4：单向可比版——逐项 q ≤ p_b（Set 层两支弱序）+ s₀ 严格分离         *)
-(*   ⟹ G07 klst_kl_sum_strict（p := q 同向直喂，不得 swap）⟹ 件 3。      *)
+(*   ⟹ G07 klst_kl_sum_strict（p := q 同向显式应用，不得 swap）⟹ 件 3。      *)
 (* ---------------------------------------------------------- *)
 
 Theorem t33_elbo_strict_divergence_le :
@@ -288,7 +297,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 件 6：bool 载体收口——件 5 在 [true; false] 载体的实例                 *)
+(* 件 6：bool 载体完成——件 5 在 [true; false] 载体的实例                 *)
 (*   （s₀ := true，l₁ := []，l₂ := [false]）。                           *)
 (* ---------------------------------------------------------- *)
 
@@ -324,7 +333,7 @@ Qed.
 (*   定理 4.8 构造性边界两腿：                                           *)
 (*   (a) 腿 = 逐点 q ≡ p_b ⟹ 紧致（T12 件 3 同链同件重组：自由能外延 +  *)
 (*       real_opp 兼容一跳）；                                            *)
-(*   (b) 腿 = 逐项双向可比 + s₀ 分歧见证 ⟹ ELBO 严格（本席件 6）。       *)
+
 (*   两腿以 prod 双函数记录承载（Set 层合取形，零 Prop 泄露）。          *)
 (* ---------------------------------------------------------- *)
 
@@ -387,7 +396,7 @@ Proof.
              (real_boltzmann_dist_r_pos bool real_base_loss D D_pos Z_align_r
                 Z_align_r_pos)
              Hpoint).
-  - (* (b) 腿：分歧见证 ⟹ 严格（本席件 6） *)
+  - 
     exact (t33_elbo_strict_divergence_bool real_base_loss D D_pos
              Z_align_r Z_align_r_pos q Hq Hnormq Hnormb).
 Qed.

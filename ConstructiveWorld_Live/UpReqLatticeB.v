@@ -1,12 +1,21 @@
 (* ============================================================ *)
+(* UpReqLatticeB.v *)
+(* *)
+(* 目的： B 形格组合面前段：strict-lt 新基元与 max/min 侧定律。 *)
+(* 主件： latb_lt_b 基元与 latb_max_le_b / latb_min_glb 格定律族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、UpRealLeB3。 *)
+(* 备注： 逐点 Qmax 上界严格形无需全量见证（对侦察草图的勘误见正文）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLatticeB.v —— B 形格组合面前段（T4a）：strict-lt 新基元 + max 侧 *)
 (*   （B 形扩展建造队列 T4 拆分前段席 · §9.4 格特征强扩展）           *)
 (*                                                                *)
 (* 立项：侦察席「B形扩展建造队列-20260910」目标 4 前段。min 侧与格      *)
 (* 组合律留 T4b 后席；本库只做 strict-lt 基元、两连接件、max 侧三件。   *)
-(* 上游消费：UpRealLeB3（运输三件 eq_r/plus_nonneg_r/refl，T1 交付，   *)
-(* .v/.vo 双证新鲜）+ UpRealLeB（收口器 D 置 one 特化 + 单向桥）+      *)
-(* CW219 锚点（real_max_proj@L39803 Q 层点态投影通道、real_max         *)
+(* 上游消费：UpRealLeB3（运输三件 eq_r/plus_nonneg_r/refl，T1 结果，   *)
+(* .v/.vo 双证新鲜）+ UpRealLeB（完成器 D 置 one 特化 + 单向桥）+      *)
+(* 锚点（real_max_proj@L39803 Q 层点态投影通道、real_max         *)
 (* 逐点 Qmax 编码@L39763、real_lt sigT 见证型@L3517、stdlib 泛型格     *)
 (* 严格形 Q.max_lub_lt 与 Q.min_dec、Qopp_le_compat、Qlt_minus_iff）。 *)
 (*                                                                *)
@@ -18,22 +27,22 @@
 (* 六件清单：1 latb_lt_b 严格序基元（∃δ>0，x ≤_B y−δ；sigT+And 形       *)
 (*     沿 real_lt 同构，Set 层零 Prop 出面）/ 2 latb_lt_b_to_le_b      *)
 (*     严格形 ⟹ ≤_B 连接件（边界右加成对消去）/ 3 latb_real_lt_to_le_b *)
-(*     CW219 严格序 ⟹ ≤_B（Or 左支单步）/ 4 latb_lt_max_intro 严格     *)
+(*     严格序 ⟹ ≤_B（Or 左支单步）/ 4 latb_lt_max_intro 严格     *)
 (*     上界引入基元（Q 层通道：min 见证 + max_lub_lt 逐点直连）/        *)
 (*   5 latb_max_le_b max 上界格主件（a≤_B c ∧ b≤_B c ⟹ max≤_B c；      *)
-(*     同一 d 取 c+eps，左支入 Or 后 one 收口器单步）/ 6 latb_max_le_r  *)
+(*     同一 d 取 c+eps，左支入 Or 后 one 完成器单步）/ 6 latb_max_le_r  *)
 (*     吸收律实例（a≤_B b ⟹ max a b ≤_B b）。                          *)
 (*                                                                *)
 (* 红线自检口径：                                                      *)
 (*   —— 语句面全 Set 层：latb_lt_b 为 sigT 见证型（And 分量系           *)
 (*      real_lt 既有同构用法），结论全 real_le_b / real_lt；            *)
 (*   —— 零 Or 形不可证面越界：不主张 real_le (real_max a b) c 精确形    *)
-(*      （判词 2 同源分支选择面），严格面只走 real_lt 见证；             *)
+(*      （结论 2 同源分支选择面），严格面只走 real_lt 见证；             *)
 (*   —— 前提位零新增（正性证书全既有件）；全件真证闭合无降级；           *)
 (*   —— 提取探针 Obj.magic=0（独立小探针，验后删）；                    *)
 (*   —— Print Assumptions 全件 Closed（文末六连打，证据在编译日志）。   *)
 (* 编译配方：cpu_guard 包装零裸调（9.0 同轨）：                         *)
-(*   coqc -Q . "" -Q "..\001" "" UpReqLatticeB.v                       *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qring QArith.Qminmax.
@@ -50,7 +59,7 @@ Local Open Scope Q_scope.
 (* ============================================================ *)
 
 (* 件 1：Bishop 严格序基元：x <ᴮ y := ∃δ>0，x ≤_B y+(−δ)。
-   sigT+And 形沿 real_lt 同构（CW219 L3517 同款 Set 层封装）；
+   sigT+And 形沿 real_lt 同构（L3517 同款 Set 层封装）；
    边距子句经 real_le_b 表出（零 Prop 出面）。 *)
 Definition latb_lt_b (x y : Real) : Set :=
   sigT (fun d : Real => And (real_lt real_zero d)
@@ -82,7 +91,7 @@ Proof.
       * apply real_plus_zero.
 Qed.
 
-(* 件 3：连接件（CW219 严格序 ⟹ ≤_B）：real_lt 即 Or 形左支，
+(* 件 3：连接件（严格序 ⟹ ≤_B）：real_lt 即 Or 形左支，
    单向桥单步。 *)
 Lemma latb_real_lt_to_le_b : forall x y : Real,
   real_lt x y -> real_le_b x y.
@@ -170,8 +179,8 @@ Qed.
 
 (* 件 5（主件）：max 上界格特征：a ≤_B c 且 b ≤_B c ⟹ max a b ≤_B c。
    给 eps>0：两前提同取 d:=c+eps，件 4 一步得 max a b<c+eps（严格），
-   Or 左支单步入精确面，one 收口器单步收口——构造性分支选择难题
-   （判词 2 同源）在严格见证面不存在，故无需 eps/2 拆分。 *)
+   Or 左支单步入精确面，one 完成器单步完成——构造性分支选择难题
+   （结论 2 同源）在严格见证面不存在，故无需 eps/2 拆分。 *)
 Lemma latb_max_le_b : forall a b c : Real,
   real_le_b a c -> real_le_b b c -> real_le_b (real_max a b) c.
 Proof.
@@ -210,9 +219,9 @@ Print Assumptions latb_max_le_r.
 (*     Qplus_le_compat；回程余量对翻沿 Qlt_minus_iff 定式）/          *)
 (*   8 latb_min_le_b min 下界格主件（c ≤_B a ∧ c ≤_B b ⟹ c ≤_B        *)
 (*     min a b；与 max 侧主件不对称——eps 余量挂在 min 外侧，one       *)
-(*     收口器单步不可达（max 侧 eps 恰在 latb_lt_max_intro 结论槽     *)
+(*     完成器单步不可达（max 侧 eps 恰在 latb_lt_max_intro 结论槽     *)
 (*     内），走完整逐点证：real_plus_proj 换形 + Qmin 下界平移 +      *)
-(*     Q.min_dec 分支收口）/ 9 latb_min_le_l 下界格律左（免费件实    *)
+(*     Q.min_dec 分支完成）/ 9 latb_min_le_l 下界格律左（免费件实    *)
 (*     证：real_min_le_l_B @UpRealLeB L396 直连）/ 10 latb_min_le_r  *)
 (*     下界格律右（real_min_le_r_B @UpRealLeB L403 直连）/            *)
 (*   11 latb_min_le_le trans 组装件（real_le_b_trans @UpRealLeB2     *)
@@ -272,7 +281,7 @@ Proof.
       apply (proj1 (Qlt_minus_iff eb (projT1 b n - projT1 p n))).
       exact Q2. }
     (* 下界平移：e+pₙ ≤ ea+pₙ < aₙ 与 e+pₙ ≤ eb+pₙ < bₙ
-       （Qle_lt_trans 中项全显式喂参 + Qplus_le_compat 双前提形） *)
+       （Qle_lt_trans 中项全显式提供实参 + Qplus_le_compat 双前提形） *)
     assert (Qa : Qmin ea eb + projT1 p n < projT1 a n).
     { apply (Qle_lt_trans (Qmin ea eb + projT1 p n)
                (ea + projT1 p n) (projT1 a n)).
@@ -306,9 +315,9 @@ Qed.
 
 (* 件 8（主件）：min 下界格特征：c ≤_B a 且 c ≤_B b ⟹ c ≤_B min a b。
    与件 5 不对称处：eps 余量挂在 min 外侧（目标 c<min a b+eps），
-   件 7 结论槽无 eps 位，one 收口器单步不可达——走完整逐点证：
+   件 7 结论槽无 eps 位，one 完成器单步不可达——走完整逐点证：
    两前提各取同一 eps，real_plus_proj 换形至 aₙ+epsₙ 侧，Qmin 下界
-   平移（Qopp_le_compat）后 Q.min_dec 分支收口（分支后目标恰为
+   平移（Qopp_le_compat）后 Q.min_dec 分支完成（分支后目标恰为
    左/右支现成严格界）。 *)
 Lemma latb_min_le_b : forall c a b : Real,
   real_le_b c a -> real_le_b c b -> real_le_b c (real_min a b).
@@ -420,22 +429,22 @@ Print Assumptions latb_min_le_r.
 Print Assumptions latb_min_le_le.
 
 (* ============================================================ *)
-(* 六、与基座严格序的互连（槽放电战役波1 #8：T4 决策项复活）          *)
+(* 六、与基座严格序的互连（槽消解战役波1 #8：T4 决策项复活）          *)
 (*     （T4b 交接注记「节五：latb_lt_b ⟵ real_lt 互连」实装）        *)
 (*                                                                *)
 (* 目标语句（T4b 交接注记原文）：real_lt x y ⟹ latb_lt_b x y——        *)
-(* 把 CW219 基座严格序（real_lt@L3517，Cauchy 追赶型：∃eps>0，∃N，    *)
+(* 把 基座严格序（real_lt@L3517，Cauchy 追赶型：∃eps>0，∃N，    *)
 (* ∀n≥N，eps<yₙ−xₙ）接入 latb_lt_b（∃δ>0，x ≤_B y+(−δ)）。方向单研：  *)
 (* 反向（latb_lt_b ⟹ real_lt）不在范围。                            *)
 (*                                                                *)
 (* 证法（T4b 卡 §七+勘误③路线）：real_lt 见证 (eps,N) 即"最终分离"    *)
-(* 窗口；正性 Real δ 置 real_const eps（正性见证 eps·(1/2)，常值序列  *)
-(* 窗口 N:=0；正性半量恒等式 eps−eps·(1/2)==eps·(1−1/2) 走 ring      *)
-(* 多项式形+闭式 1−1/2==1/2 计算收口——Q 的「/」系 Qdiv 独立算子，    *)
+
+(*  N:=0；正性半量恒等式 eps−eps·(1/2)==eps·(1−1/2) 走 ring      *)
+(* 多项式形+闭式 1−1/2==1/2 计算完成——Q 的「/」系 Qdiv 独立算子，    *)
 (* ring 视为不可抽象函数符，含变量的除法式须先化乘法形）；主部对任意  *)
-(* 正性 e 取其 sigT 首分量 e0 为余量（正性免新造），窗口相交          *)
-(* N:=max N N0：分离窗口经 Qlt_minus_iff 对翻 0<yₙ−xₙ+(−eps)，        *)
-(* 追赶窗口给 e0<eₙ（real_zero 逐点化简），Qplus_lt_compat 合流       *)
+
+
+
 (* 0+e0<(yₙ−xₙ+(−eps))+eₙ，ring 恒等换形回 real_lt 见证槽            *)
 (* （real_plus_proj/real_opp_proj/real_const_proj 逐点展开）。       *)
 (* ============================================================ *)
@@ -453,7 +462,7 @@ Proof.
     rewrite <- Hz2.
     exact (proj2 (Qmult_lt_r 0 eps (1 / 2) Hhalf) HepsQ). }
   exists (real_const eps). split.
-  - (* δ 正性：见证 eps·(1/2)，常值序列窗口 N:=0 *)
+  - 
     exists (eps * (1 / 2)). split.
     + apply Qlt_to_QltT. exact Hhalf_eps.
     + exists O. intros n Hn.
@@ -470,7 +479,7 @@ Proof.
       assert (Hc : (1 - (1 / 2) == 1 / 2)%Q) by (vm_compute; reflexivity).
       rewrite Hc.
       exact Hhalf_eps.
-  - (* 主部：x ≤_B y+(−δ) 逐 eps 收口 *)
+  - (* 主部：x ≤_B y+(−δ) 逐 eps 完成 *)
     unfold real_le_b. intros e He.
     destruct He as [e0 [He0pos [N0 HN0]]].
     exists e0. split.

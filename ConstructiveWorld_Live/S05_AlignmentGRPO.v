@@ -1,6 +1,15 @@
-(* ===== CW219 拆分分片 S05_AlignmentGRPO（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L18734-L24767；头部 14 行（含尾空行）；
-   依赖：S01 S02 S03 S04；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S05_AlignmentGRPO.v                                         *)
+(*                                                             *)
+(* 目的：GRPO/PPO 对齐的策略迭代：KL 几何收缩、代理目标保守性    *)
+(*       与 DPO 奖励恢复（构造性 Set 层）。                      *)
+(* 主件：policy_iter_kl_geom_iter（迭代几何上界                  *)
+(*       KL(pi*‖pi_t) ≤ (1−η)^t·KL(pi*‖pi_0)）；U2 不动点刻画。   *)
+(* 依赖：S01–S04；Stdlib（QArith、Qabs、Qround、List、Bool、     *)
+(*       Arith、Setoid、Morphisms、Lia、Qminmax）。              *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L18734-L24767，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -824,7 +833,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T1.1：标准 PPO 代理目标与无前提保守性（2026-09-02 合入）    *)
+(* T1.1：标准 PPO 代理目标与无前提保守性（2026-09-02 并入）    *)
 (*   标准形式 min(r·A, clip(r)·A) ≤ r·A 是纯定义性的           *)
 (*   （min_le_l，无需 advantage_nonneg）——把 §6 使用限制 2     *)
 (*   的"形式非标准"改写为等价性引理 + 无前提保守性            *)
@@ -4152,7 +4161,7 @@ Qed.
 (*      Hölder 可证）；旧 step_kl_ratio_bound 对任意常数 c 非定理  *)
 (*      已退役）+ policy_iter_kl_geom_step：单步真几何收缩 c := 0 *)
 (*      KL(pi*‖pi_{t+1}) ≤ (1−η)·KL(pi*‖pi_t)                    *)
-(*   8) policy_iter_kl_geom_iter：迭代几何上界（T1.3 核心交付）  *)
+(*   8) policy_iter_kl_geom_iter：迭代几何上界（核心结论）       *)
 (*      KL(pi*‖pi_t) ≤ (1−η)^t·KL(pi*‖pi_0)                     *)
 (* ============================================================ *)
 
@@ -4512,7 +4521,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* DPO 损失沿策略改进轨道单调不增（2026-09-02 合入）            *)
+(* DPO 损失沿策略改进轨道单调不增（2026-09-02 并入）            *)
 (*   dpo_loss(pi) := opp (align_objective pi)（L18360）          *)
 (*   单步：dpo_loss(pi_{t+1}) ≤ dpo_loss(pi_t)                   *)
 (*     （policy_improvement_mono + opp_le_compat 组装）           *)
@@ -4553,10 +4562,10 @@ Qed.
 End Alignment.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：U2 改进算子不动点与等值刻画  *)
+(* U2 改进算子不动点与等值刻画                                  *)
 (* （镜像 Section U2FixedPoint，整节后置于 End Alignment.）；     *)
 (* 来源：演变/.ablation/sc2_u2_fixed/u2_fixedpoint.v；10 Qed；    *)
-(* 零 Axiom / Admitted / Classical。                            *)
+(* 零公理面、零承认件、零经典逻辑。                              *)
 (* ============================================================ *)
 
 Section U2FixedPoint.

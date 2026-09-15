@@ -1,12 +1,21 @@
 (* ============================================================ *)
-(* UpReqPadeFinale.v —— 席C-F：C 路总装预备（n=2 旗舰收口）          *)
+(* UpReqPadeFinale.v *)
+(* *)
+(* 目的： 路径 C 总装预备段（n=2 旗舰完成）。 *)
+(* 主件： cpf_witness_n2 与 cpf_exp_pos_pade2 旗舰；免除法传送 cpf_transport_no_div。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeLower、UpReqPadeQLeg。 *)
+(* 备注： 免除法纪律：库内 Real 层无除法面，全部以乘积面构造；显式假设随登记段申报。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqPadeFinale.v —— 席C-F：C 路总装预备（n=2 旗舰完成）          *)
 (*   保底件一 cpf_den2_pos_all / 保底件二 cpf_num2_pos /            *)
 (*   免除法传送 cpf_transport_no_div / 主件 cpf_exp_pos_pade2       *)
 (*   + 链件 cpf_exp_pos_chain_n2（组合出 0<eˣ）                     *)
 (* 日期：2026-09-14                                                *)
 (*                                                                 *)
 (* 闸门裁决（候③）：UpReqPadeLower.vo 开工时不在盘（ls 双证：       *)
-(*   UpReqPadeTailPos 无踪、UpReqPadeBetaPos 仅 .vos 无 .vo 在飞）， *)
+
 (*   按闸门协议主件以下界件为【显式接口参数】（语句形与工单 §1.3     *)
 (*   cpl_lower_even 同面，落盘后可直接 exact 实例化消费），显式假设  *)
 (*   是先例非承认件（出口 Print Assumptions 全 Closed）。            *)
@@ -16,20 +25,18 @@
 (*   对一切 x（q²≥0 构造见证：destruct Q 全构造子 + Z 层 lia，       *)
 (*   无经典 case、无三分律实例化）。此件使段切割在 n=2 层面整体      *)
 (*   消失——(1,2) 归约、全域分段均不再需要；与 S2 席切片④不冲突：     *)
-(*   ④服务符号化 n 升级，本件是 n=2 配方实例（分工见交付报告）。      *)
+(*   ④服务符号化 n 升级，本件是 n=2 配方实例（分工见合规自查报告）。      *)
 (*                                                                 *)
 (* 免除法纪律（E395/DTPT2 卡）：库内 Real 层无除法面（S02 普查       *)
 (*   real_div/real_inv 0 命中），一切「P/Q 比较」以纯乘法形承载：    *)
 (*   「e ≥ P/Q、误差 ≥ w/Q」⟺「e·Q ≥ P + w」（Q>0 传送）。          *)
 (*   Q 层见证也用乘法形（w := x⁵·(1#720)，Qdiv 不进 ring）。         *)
 (*                                                                 *)
-(* 公理面声明：本件 Require Psatz（nia 桥件所需，CS/CT1B 先例）。    *)
-(*   coqchk 闭包或示 Require 环境自带公理三件（泛型延拓一件 + 经典    *)
-(*   实数二件）——CT1B 卡（E-STAGING-CT1B，20260914）定谳：源自       *)
-(*   Psatz 环境闭包，非本件使用；本件出口 Print Assumptions 全       *)
-(*   Closed。语句面 Prop 泄露 0：结论面全 QltT/real_lt(sigT,Set)，   *)
-(*   唯 Prop 语句面是 Q 层桥件 cpf_qeq_qlt 等（S02 QltT_to_Qlt       *)
-(*   同款桥件定位）。                                                *)
+(* 公理面声明：AA12 腿化后本件零 Require Psatz（原 nia 桥件五处      *)
+(*   一跳 UpReqPadeQLeg 自建 Q 单调腿，Psatz 环境闭包公理三件随之     *)
+(*   断根）；本件出口 Print Assumptions 预期全 Closed。语句面 Prop    *)
+(*   泄露 0：结论面全 QltT/real_lt(sigT,Set)，唯 Prop 语句面是       *)
+(*   Q 层桥件 cpf_qeq_qlt 等（S02 QltT_to_Qlt 同款桥件定位）。        *)
 (*                                                                 *)
 (* 数值哨兵（TCS1 侦察报告 §②）：E₆·Q₂−P₂ == y⁵/720+y⁶/1440+        *)
 (*   y⁸/8640（系数全非负）；主件见证 w := x⁵/720 即正尾首项          *)
@@ -41,28 +48,26 @@
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp.
 Require Import UpReqPadeLower.
+Require Import UpReqPadeQLeg.
 From Stdlib Require Import QArith.QArith Arith.Arith Lia.
-From Stdlib Require Import Psatz.
 
 Section CpfFinale.
 
-(* ===== §0 Q 层桥件（CS 卡生路：destruct 全构造子 + nia） ===== *)
+(* ===== §0 Q 层桥件（AA12 腿化：一跳 UpReqPadeQLeg 自建单调腿） ===== *)
 
 (* Qeq 穿透墙桥：== 不可 rewrite 进 Qlt/QltT 目标（CS 卡），
    以桥件承载换形。桥件语句面 Prop——S02 QltT_to_Qlt 同款定位。
-   实测：二元/三元 nia 一步绿，四元合证 nia 拒（非单调）——拆两步组合。 *)
+   AA12 实测：四元合证曾 nia 拒拆两步组合；现双腿直达，零 nia。 *)
 Lemma cpf_qlt_eq_l : forall a b c : Q, a == b -> Qlt a c -> Qlt b c.
 Proof.
   intros a b c Hab Hlt.
-  destruct a as [na da]; destruct b as [nb db]; destruct c as [nc dc].
-  unfold Qeq, Qlt in *; simpl in *; nia.
+  exact (pql_qlt_eq_l a b c Hab Hlt).
 Qed.
 
 Lemma cpf_qlt_eq_r : forall a b c : Q, a == b -> Qlt c a -> Qlt c b.
 Proof.
   intros a b c Hab Hlt.
-  destruct a as [na da]; destruct b as [nb db]; destruct c as [nc dc].
-  unfold Qeq, Qlt in *; simpl in *; nia.
+  exact (pql_qlt_eq_r a b c Hab Hlt).
 Qed.
 
 Lemma cpf_qeq_qlt : forall a b c d : Q,
@@ -72,26 +77,23 @@ Proof.
   apply (cpf_qlt_eq_r c d _ Hcd). apply (cpf_qlt_eq_l a b c Hab Hlt).
 Qed.
 
-(* 三元算术小桥（destruct + nia 一步绿） *)
+(* 三元算术小桥（AA12 腿化：一跳族 B 加法腿） *)
 Lemma cpf_qlt_add_r : forall a b : Q, Qlt 0 b -> Qlt a (a + b)%Q.
 Proof.
-  intros a b Hb. destruct a as [na da]; destruct b as [nb db].
-  unfold Qlt, Qplus in *; simpl in *; nia.
+  intros a b Hb. exact (pql_qlt_add_r a b Hb).
 Qed.
 
 Lemma cpf_qle_lt_add : forall a b : Q, Qle 0 a -> Qlt 0 b -> Qlt 0 (a + b)%Q.
 Proof.
-  intros a b Ha Hb. destruct a as [na da]; destruct b as [nb db].
-  unfold Qle, Qlt, Qplus in *; simpl in *; nia.
+  intros a b Ha Hb. exact (pql_qle_lt_add a b Ha Hb).
 Qed.
 
 Lemma cpf_qlt_le_add : forall a b : Q, Qlt 0 a -> Qle 0 b -> Qlt 0 (a + b)%Q.
 Proof.
-  intros a b Ha Hb. destruct a as [na da]; destruct b as [nb db].
-  unfold Qle, Qlt, Qplus in *; simpl in *; nia.
+  intros a b Ha Hb. exact (pql_qlt_le_add a b Ha Hb).
 Qed.
 
-(* 减法形状桥（Qminus 展开形 ring 收口，DTPT-U17 卡同款） *)
+(* 减法形状桥（Qminus 展开形 ring 完成，DTPT-U17 卡同款） *)
 Lemma cpf_pmix : forall A B : Q, (A - B + B)%Q == A.
 Proof. intros A B. unfold Qminus. ring. Qed.
 
@@ -395,9 +397,9 @@ Qed.
 (* ===== §6 最终组装（③落盘开闸 20260914 06:03）：直消费 cpl_lower_even ===== *)
 
 (* S1 实际语句面 = 本文件 §5 主件的结论面（P₂ < eˣ·Q₂ 直达，非 M 面
-   接口形）——故最终组装零中转：cpl_lower_even 直喂免除法传送。
+   接口形）——故最终组装零中转：cpl_lower_even 显式应用免除法传送。
    §5 cpf_exp_pos_pade2 保留为接口参数形（M 面下界接口的独立推导路径，
-   与直组装共存不合并，见交付报告分工段）。 *)
+   与直组装共存不合并，）分工段）。 *)
 Theorem cpf_exp_pos_final_n2 : forall x : Q,
   QltT 0 x ->
   real_lt real_zero (cauchy_real_exp (real_const x)).

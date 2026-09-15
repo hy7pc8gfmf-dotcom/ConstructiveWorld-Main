@@ -1,22 +1,20 @@
-(* 英文标题：Constructive World: A Set-Theoretic Formalization of Reality *)
-(* 英文标题：Constructive World: A Set-Theoretic Formalization of Reality *)
-(* 中文标题：构造世界：基于集合论的形式化现实构建 *)
-
 (* ============================================================ *)
-(* 整理后的完整 Coq 形式化文件（构造性 Set 层版本）           *)
-(* 说明：                                                       *)
-(* 1. 逻辑连接词与等同类型在 Set 层定义；少数索引运算          *)
-(*    （nat 序、Leibniz 相等）使用标准库 Prop 层设施。         *)
-(* 2. 实数、状态空间、可微性等均以 Class/Record 接口呈现。     *)
-(* 3. 可实现的非平凡定理均给出完整证明，不可从接口推得的      *)
-(*    定理改为明确的 Variable/Hypothesis（非临时 Admitted）。  *)
-(* 4. 使用 Set 宇宙，存在量词使用 sig（Set 层）。              *)
-(* 5. 禁止临时公理与经典公理（序三分律 le_lt_dec 已移除）；    *)
-(*    核心建模以 Set 层为主。                                  *)
-(* 6. 分层风格约定（v62 起）：R 层（自定义 Id 等价关系）证明用 *)
-(*    显式 id_trans/id_cong 链（Id 非 setoid，ring 不可用）；  *)
-(*    Q 层（QArith 可判定相等）可用 setoid_replace/setoid_rewrite *)
-(*    + ring/field（E143-57 条记录此分野）。                    *)
+(* S01_BaseRing.v                                              *)
+(*                                                             *)
+(* 目的：奠定构造性 Set 层基础环结构：实数接口、三类索引、      *)
+(*       分层证明约定与基础代数序引理。                         *)
+(* 主件：RealInterface / RealInterfaceEnhanced 类接口及其假设   *)
+(*       体系；构造世界（基于集合论的形式化现实构建）之基础环。 *)
+(* 依赖：Stdlib（QArith、List、Bool、Arith、Setoid、Morphisms、 *)
+(*       Lia、Qminmax）。                                       *)
+(* 备注：逻辑连接词与等同类型在 Set 层定义，nat 序与 Leibniz    *)
+(*       相等采用标准库 Prop 层设施；使用 Set 宇宙，存在量词    *)
+(*       使用 sig；不可由接口推得的性质以显式                   *)
+(*       Variable/Hypothesis 假设呈现（非承认件）；序三分律     *)
+(*       le_lt_dec 已移除，禁临时公理面与经典公理面；R 层       *)
+(*       （自定义 Id 等价关系）证明用显式 id_trans/id_cong 链   *)
+(*       （Id 非 setoid，ring 不可用），Q 层（QArith 可判定     *)
+(*       相等）可用 setoid_replace/setoid_rewrite 与 ring/field。 *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 三类索引（已证定理 / 接口字段（假设）/ Section Variables）   *)
@@ -55,7 +53,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
 Import ListNotations.
 From Stdlib Require Import Setoid Morphisms.
-From Stdlib Require Import Lia QArith.Qminmax.   (* 2026-08-31 entropy Real 层合入所需 *)
+From Stdlib Require Import Lia QArith.Qminmax.   (* 2026-08-31 entropy Real 层并入所需 *)
 (* ============================================================ *)
 (* 基础：构造性逻辑连接词与等同类型（Set 层）                 *)
 (* ============================================================ *)
@@ -109,7 +107,7 @@ Definition not_InT {A : Set} (x : A) (l : list A) : Set :=
 
 Definition NatLe (n m : nat) : Set := Id (Nat.leb n m) true.
 
-(* ---- 完全构造战役 kernel 桥：NatLe ↔ (<=)%nat（Set 序界 ↔ Prop 序界）---- *)
+(* ---- 完全构造论证 kernel 桥：NatLe ↔ (<=)%nat（Set 序界 ↔ Prop 序界）---- *)
 Lemma NatLe_drop : forall n m : nat, NatLe n m -> (n <= m)%nat.
 Proof.
   intros n m H.
@@ -1552,7 +1550,7 @@ Variable free_energy : (S -> R) -> R.
 Variable entropy     : (S -> R) -> R.
 Variable free_energy_argmin : (S -> R) -> S -> R.
 
-(* 以下抽象性质作为假设变量，非临时 Admitted *)
+(* 以下抽象性质作为假设变量引入，非承认件 *)
 Variable free_energy_minimization :
   ExistsT (fun p_min : S -> R =>
     forall p : S -> R, le (free_energy p_min) (free_energy p)).
@@ -1955,7 +1953,7 @@ Qed.
 
 Variable grammar_error : Sequence -> R.
 
-(* 以下性质作为假设变量，非临时 Admitted *)
+(* 以下性质作为假设变量引入，非承认件 *)
 Variable prediction_loss_monotone :
   forall s, le (total_loss (dynamics s)) (total_loss s).
 

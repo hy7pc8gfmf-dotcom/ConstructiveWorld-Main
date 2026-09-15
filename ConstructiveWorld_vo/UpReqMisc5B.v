@@ -1,16 +1,24 @@
+(* ============================================================ *)
+(* UpReqMisc5B.v *)
+(* *)
+(* 目的： 希尔伯特空间正交分解的 req 层构造（杂件第五束 B 段）。 *)
+(* 主件： req_orthogonal_decomposition_exists / req_orthogonal_decomposition_unique 与 Gram-Schmidt 步。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqMisc5。 *)
+(* 备注： 状态空间与希尔伯特结构为显式 Variable 前提；投影幂等性为显式申报。 *)
+(* ============================================================ *)
+
 (* UpReqMisc5B.v — 签名迁移批 5 波 3 席：向量世界消费簇（Hilbert/GramSchmidt/Multivar）
    工作单：attn\批5基建层处置清单-20260909.md §7.2/§7.11/§5（(b|桥) 20 件；
    类转写层（reqStateSpace/reqStateSpaceExt/reqHilbertSpace/reqSumOver）已随
-   UpReqMisc5.v Part 0 交付，本件 Require 消费——清单 §9.2 波3「类转写随本波交付」。
-   母本：CW_ConstructiveWorld_219（行号逐件见覆盖对账）；上游：UpReqAlgebra（批1 引擎）
-   + UpReqMisc5（req_minus/compose 核 + 类）；在飞 5 件零 Require（工作单红线）。
+   UpReqMisc5.v Part 0 结果，本件 Require 消费——清单 §9.2 波3「类转写随本波结果」。
+   母本：CW_ConstructiveWorld_219（行号逐件见覆盖核对）；上游：UpReqAlgebra（批1 引擎）
    ----------------------------------------------------------------
-   等号位分派（台账 7 同口径）：R 值位等号 req；向量载体位等号 Id（req 接口
+   等号位分派（登记表 7 同口径）：R 值位等号 req；向量载体位等号 Id（req 接口
    req 字段仅定义在 R 上——载体无 setoid 等位可迁，Id 即归纳族构造性等号）。
    Id 级 list/nat 事实在 req 目标内的运送用 match-in-return 组合器（零改写战术；
    whole : P b（index 侧）、分支 pf : P a（参数侧）——方向纪律见经验卡）。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号）：
+   覆盖核对（req 件名 -> Id 原件 @ 行号）：
    Hilbert：req_orthogonal_decomposition_exists<-1306
         req_orthogonal_decomposition_unique<-1344
    GramSchmidt：req_inner_sopp_l<-24791 req_inner_szero_l<-24812
@@ -24,9 +32,9 @@
         req_mv_adjoint_unique<-27383 req_op_lipschitz_compose<-27409
         req_mv_vec_diff_decomp<-27450
         （rmv_adjoint<-27376 rop_lipschitz<-27384 诚实假设位同构，T2①；
-          清单 §5 判词「op_lipschitz_compose 加 reqNonnegPlain 位」经读证收敛：
+          清单 §5 结论「op_lipschitz_compose 加 reqNonnegPlain 位」经读证收敛：
           Id 证明实际只消费 le_mult_compat_weak/mult_zero 接口字段 + le zero N
-          假设位（op_lipschitz 假设位自带），零新增假设位——判词收敛注记）
+          假设位（op_lipschitz 假设位自带），零新增假设位——结论收敛注记）
    ---------------------------------------------------------------- *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -481,7 +489,7 @@ Proof.
 Qed.
 
 (* Id op_lipschitz_compose L27409：|L∘M h| ≤ (N_L·N_M)·|h|
-   （le_mult_compat_weak/mult_zero 接口字段链；清单判词「加位」经读证收敛：
+   （le_mult_compat_weak/mult_zero 接口字段链；清单结论「加位」经读证收敛：
    Id 证明零 plain 乘积非负消费，零新增假设位） *)
 Lemma req_op_lipschitz_compose : forall (L M : @rSS R RIS SSx -> @rSS R RIS SSx),
   sigT (fun N : R => And (le zero N) (forall h : @rSS R RIS SSx,

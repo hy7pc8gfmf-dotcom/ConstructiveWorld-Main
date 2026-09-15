@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqPadeDenPos.v *)
+(* *)
+(* 目的： 路径 C 通用 n 的 Padé 分母正性。 *)
+(* 主件： pdp_den_pos 通用段与 pdp_sign_term 符号项定律。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeQLeg。 *)
+(* 备注： 显式假设对称申报（禁硬凑），见正文；符号交替经 q 的负一幂奇偶定律承接。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeDenPos.v —— 席C2G：路径 C 通用 n 分母正性               *)
 (*                  （den_pos 通项化：0 <= x <= 1 ⟹ 分母非负）       *)
 (* 日期：2026-09-12                                                *)
@@ -8,7 +17,7 @@
 (*     pdp_den_pos : forall n x, QleT 0 x -> QleT x 1 ->            *)
 (*                              QleT' 0 (pade_den n x)              *)
 (*   结论面取 QleT'——PC2 表示墙裁决：bool 反映形才可一般构造，        *)
-(*   Or 形右支受 Q 表示正规化墙（E-STAGING-PC2 卡③）。               *)
+
 (*                                                                 *)
 (* 数学路线：pade_den n x = sum_upto (S n)((-1)^k · c_k x^k)。       *)
 (*   记 t_k = c_k x^k。于 0 <= x <= 1：                              *)
@@ -21,23 +30,25 @@
 (*   ① nat 字面量全带 %nat；后继写 Datatypes.S（S01.S 遮蔽坑）。      *)
 (*   ② Qeq 方程不 rewrite 进 Id-of-bool 语句面目标——Qeq 桥经        *)
 (*      qeq_imp_qle / qeq_leT' / qleT'_trans 组装（PC2 卡⑤生路）。   *)
-(*   ③ 系数比恒等式用 field 收口：分母非零副目标 q_neq_of_lt +       *)
-(*      q_fact_pos / Z 层 lia；Z 不等式 nia（Psatz）。               *)
+(*   ③ 系数比恒等式用 field 完成：分母非零副目标 q_neq_of_lt +       *)
+(*      q_fact_pos / Z 层 lia；Z 不等式 AA12 腿化（pql_nat_ratio_mono， *)
+(*      乘法单调显式装配，零 Psatz）。                                *)
 (*   ④ 语句面全 Set 层（QltT/QleT/QleT'）；Prop 序仅证内转译。        *)
 (*                                                                 *)
-(* 挂账（对称，禁硬凑）：                                            *)
+(* 显式假设（对称，禁硬凑）：                                            *)
 (*   a. 严格正版 QltT 0：引擎出口 altsum_pos_strict 需首对严格       *)
 (*      t_1 < t_0，即 x < 1/c_1 = 2/(2n-1)，n >= 2 时比 x < 1 细，   *)
 (*      需逐对配比细化（或尾段补偿估计），本轮不攻。                  *)
 (*   b. x ∈ (1,2) 段：系数比极小值实为 2（k=0 处），衰减对 x <= 2     *)
 (*      成立（分母真零点在 x = 2），但 x ∈ (1,2] 段递减装配需比式     *)
 (*      消元（乘 Qinv 正因子），待下轮。                              *)
-(*   c. 误差积分表示：构造性积分基建缺位（PC 件已登记，同题挂账）。    *)
+(*   c. 误差积分表示：构造性积分基建缺位（PC 件已登记，同题显式假设）。    *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqAltSumPos.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+Require Import UpReqPadeQLeg.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 Section PadeDenPosQ.
 
@@ -317,7 +328,8 @@ Qed.
 (* ===== 件 5：系数比与相邻递减（S1 引擎） =====
 
    核心代数：c_k / c_{k+1} = (2n-k)(k+1)/(n-k) >= 1（k < n）
-   （Z 层：(n-k) <= (2n-k)(k+1)，nia）。系数比恒等式 field 收口。 *)
+   （Z 层：(n-k) <= (2n-k)(k+1)，AA12 腿 pql_nat_ratio_mono）。
+   系数比恒等式 field 完成。 *)
 
 Definition pdp_R (n k : nat) : Q :=
   (Z.of_nat (Datatypes.S (2 * n - Datatypes.S k)) # 1) *
@@ -339,7 +351,8 @@ Proof.
     (((Z.of_nat (Datatypes.S (2 * n - Datatypes.S k)) # 1) *
       (Z.of_nat (Datatypes.S k) # 1))%Q)).
   { apply Qle_to_QleT'. unfold Qle.
-    cbn [Qnum Qden Qmult Pos.mul]. nia. }
+    cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (pql_nat_ratio_mono n k Hk). lia. }
   assert (Hinvpos : QleT' 0
     (Qinv ((Z.of_nat (Datatypes.S (n - Datatypes.S k)) # 1)%Q))).
   { apply qltT_leT'. apply Qlt_to_QltT. apply Qinv_lt_0_compat.
@@ -508,7 +521,7 @@ Proof.
   - left. exact H1.
 Qed.
 
-(* ===== S3 加分：n=2/n=3 实例 vm_compute 端到端对账 ===== *)
+(* ===== S3 加分：n=2/n=3 实例 vm_compute 端到端核对 ===== *)
 (* den_2(x) = 1 - x/2 + x^2/12；den_3(x) = 1 - x/2 + x^2/10 - x^3/120 *)
 
 Lemma pdp_den2_three_fifths : QltT 0 (pade_den 2 (3#5)).

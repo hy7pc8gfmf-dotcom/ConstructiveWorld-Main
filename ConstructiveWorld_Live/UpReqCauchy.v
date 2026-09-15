@@ -1,13 +1,21 @@
+(* ============================================================ *)
+(* UpReqCauchy.v *)
+(* *)
+(* 目的： 梯度下降收敛链的 req 层镜像（熵梯度幂衰减）。 *)
+(* 主件： req_grad_decay_iter / req_r_pow_dec 幂衰减族与 req_sum_R_le 尾和界。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSLM。 *)
+(* 备注： 熵函数、梯度、动力学与步长前提以 Section 变量给出；幂衰减为显式迭代构造。 *)
+(* ============================================================ *)
+
 (* UpReqCauchy.v — 签名迁移批 5 · 波 2：Section ConvergenceCauchy 机械平移（43 件 (b)）
    权威工单：attn\批5基建层处置清单-20260909.md（§0 判据 + §2 逐件表 + §9.2 波2）
    母本：CW_ConstructiveWorld_219.v Section ConvergenceCauchy（L14016-15235）
-   上游：CW219 基座 + UpReqAlgebra + UpReqSLM（波0 共享桥，波1 席已交付稳定——
+   上游：基座 + UpReqAlgebra + UpReqSLM（波0 共享桥，波1 席已结果稳定——
    §0.5 ReqNonnegPlain 双槽 Require 换轨消费，节参挂实例、语句零变化；
-   metric_triangle_plain SLM 无对应槽，仍本席自持）。
    纯 term-mode（req_trans 链 + compat 字段桥），零 setoid 改写器依赖；
-   Set 层语句（req/lt/le 全 Set 值，零 Prop 泄露；And/Not/Or/ExistsT 用 CW219 L66-73 Set 版）。
+   Set 层语句（req/lt/le 全 Set 值，零 Prop 泄露；And/Not/Or/ExistsT 用 L66-73 Set 版）。
    ----------------------------------------------------------------
-   诚实签名变化台账（判据 §0.2-3/-4/-5 逐件登记）：
+   诚实签名变化登记表（判据 §0.2-3/-4/-5 逐件登记）：
    1. B 类 Variable 全部假设位逐位保留（T2①）：entropy/entropy_gradient/dynamics/eta/
       dynamics_gradient_step/strict_concavity/L/L_pos/gradient_lipschitz/S_max/
       entropy_upper_bound/metric_abs/kappa/kappa_pos/kappa_lt_one/gradient_abs_decay/
@@ -21,32 +29,28 @@
         波2 原节内自持 Variable 副本，波1 UpReqSLM ReqNonnegPlain 落地后换轨
         Require 消费其 Class 字段（节参挂实例），语句零变化）
       - metric_pos_plain : forall a b, le zero (metric a b)
-        （setoid metric_pos eps 形 @L40585；消费件：req_grad_squeeze_zero 收口位——同上换轨）
+        （setoid metric_pos eps 形 @L40585；消费件：req_grad_squeeze_zero 完成位——同上换轨）
       - metric_triangle_plain : forall a b c, le (metric a c) (plus (metric a b) (metric b c))
         （setoid metric_triangle eps 形 @L40584；消费件：req_metric_tail_le_sum/
-        req_grad_squeeze_zero——SLM ReqNonnegPlain 无此槽，本席自持保留）
    3. 判据 0.2-4 log 前提化（setoid log 带 lt zero x 前提 @L40570 区）：
       - log_lt_mono_cc Variable 前提位升格：forall a b, lt zero a -> lt zero b ->
-        lt a b -> lt (log a Ha) (log b Hb)
-      - req_log_pow_cc：log (r_pow x n) 见证取节内规范 Fixpoint 见证 req_pow_pos_c
         （log_mult 字段见证位逐字匹配要求：字段结论固定 mult_positive 形见证，
         opaque 引理见证不可 conversion——规范形 Fixpoint 见证 delta+iota 可导）。
-      - req_r_arch_pow_log_budget / req_iterate_cauchy_explicit_N：log 应用位正性见证
         以 sigT 打包为结论第一分量（Hp : lt zero (...)），零 witness-in-statement 摩擦。
    4. (d) 冻结 2 件（natle_to_le @L14643 / natle_of_le @L14747，纯 nat Id 机器）：
-      跨接口 Require 复用 CW219 原件（裸名），零重证——规划书 §3.4 路线；
+      跨接口 Require 复用 原件（裸名），零重证——规划书 §3.4 路线；
       req_iterate_cauchy 结论位改 NatLe 形（cauchy_complete 字段 L40591 对接形），
       Id 的 (N <= m)%nat 前提由 natle_to_le 复用件在证内桥接。
    5. §7.7 ConvergenceTheorem 3 助件节内自持（波3 对位件，消费前置）：
       req_iterate_step_diff / req_iterate_step_abs_diff / req_gradient_abs_mono
-      （Id @L13880/L13929/L13982）——仅消费本节 Variables，波3 席可凭本文件核销对位。
+      （Id @L13880/L13929/L13982）——仅消费本节 Variables，波3 席可凭本文件已证明对位。
    6. minus 非接口字段：全节语句以 req_minus（UpReqAlgebra）书写，证内 unfold；
       Id 接口字段 minus_plus_cancel/minus_plus_cancel_r/le_plus_nonneg_r/le_mult_compat_r/
       half_pos/half_twice/abs_minus_sym 消费位 → UpReqAlgebra req_minus_plus_cancel/
       req_minus_plus_cancel_r/req_le_plus_nonneg_r/req_le_mult_compat_r/
       req_half_pos_loc（本节自持，req_two_pos 见证形）/req_half_twice/req_abs_minus_sym。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号；§2 逐件表 43 件 (b)）：
+   覆盖核对（req 件名 -> Id 原件 @ 行号；§2 逐件表 43 件 (b)）：
    载体：req_r_pow<-14071 req_sum_R<-14191 req_nat_to_R<-14559（iterate 顶层复用 @1394）
    幂族：req_r_pow_pos<-14085 req_r_pow_nonneg<-14093 req_r_pow_dec<-14100
      req_r_pow_dec_iter<-14438 req_pow_pos_c（规范见证，req_log_pow_cc 配套）
@@ -119,19 +123,18 @@ Variable gradient_abs_decay : forall (E_A : R) (n : nat),
 Variable lt_plus_compat_lt_le : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Variable lt_plus_compat_le_lt : forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 
-(* ============ A+. 判据 0.2-5 假设位（reqNonnegPlain 双槽 Require 换轨 + triangle 槽自持，台账 2） ============ *)
+(* ============ A+. 判据 0.2-5 假设位（reqNonnegPlain 双槽 Require 换轨 + triangle 槽自持，登记表 2） ============ *)
 (* Id 证明消费 plain 形 abs_nonneg/metric_pos/metric_triangle，setoid 接口对应字段
    已 Bishop eps 化（L40553/L40584/L40585），plain 形不可由 eps 形导出（序无消去）。
    abs_nonneg_plain/metric_pos_plain：与波1 UpReqSLM Class ReqNonnegPlain 字段逐字对齐
    （波2 原节内自持 Variable 副本已删）→ 节参挂 ReqNonnegPlain 实例消费其字段：
    投影 R/RIS/实例三位全隐式，裸名消费走类型类推断（本地实例 RN），证明体逐位零改动，
    实例位 discharged 为隐式参数（Print Assumptions 仍 Closed，零新增公理面）。
-   metric_triangle_plain：SLM 无对应槽 → 本席自持保留（T2①；RestB Part4 metric_nonneg
    Variable 先例同构）。 *)
 Context {RN : ReqNonnegPlain R}.
 Variable metric_triangle_plain : forall a b c : R, le (metric a c) (plus (metric a b) (metric b c)).
 
-(* req_half_pos_loc：req_two_pos 见证形（req_half_pos 的见证规范形版本，台账 6） *)
+(* req_half_pos_loc：req_two_pos 见证形（req_half_pos 的见证规范形版本，登记表 6） *)
 Lemma req_half_pos_loc : forall a : R, lt zero a ->
   lt zero (mult (inv_pos (plus one one) req_two_pos) a).
 Proof.
@@ -229,7 +232,7 @@ Proof.
   - apply (mult_positive x (req_r_pow x m) Hx IH).
 Qed.
 
-(* 规范 Fixpoint 正性见证（req_log_pow_cc 的 log_mult 字段见证位配套，台账 3） *)
+(* 规范 Fixpoint 正性见证（req_log_pow_cc 的 log_mult 字段见证位配套，登记表 3） *)
 Fixpoint req_pow_pos_c (x : R) (Hx : lt zero x) (n : nat) : lt zero (req_r_pow x n) :=
   match n with
   | 0%nat => one_pos
@@ -540,7 +543,7 @@ Qed.
 (* ============ I. metric 尾界（Id L14319-14436；+1 假设位 metric_triangle_plain） ============ *)
 
 (* Id metric_tail_le_sum L14319：metric 三角迭代到和。
-   签名差异登记（台账 2）：setoid metric_triangle 为 eps 形（L40584），Id 证明消费 plain 形
+   签名差异登记（登记表 2）：setoid metric_triangle 为 eps 形（L40584），Id 证明消费 plain 形
    不可导出（序无消去）→ 新增假设位 metric_triangle_plain，语句与 Id 原件逐字同形。 *)
 Lemma req_metric_tail_le_sum : forall (E_A : R) (n m : nat),
   le (metric (iterate dynamics (n + m) E_A) (iterate dynamics n E_A))
@@ -610,7 +613,7 @@ Proof.
                      (req_sym _ _ (req_mult_plus_distr_r (req_sum_R f m) (f m) b))).
 Qed.
 
-(* Id iterate_metric_tail_bound L14376：尾部收缩（plain abs_nonneg 消费位 ×2，台账 2） *)
+(* Id iterate_metric_tail_bound L14376：尾部收缩（plain abs_nonneg 消费位 ×2，登记表 2） *)
 Lemma req_iterate_metric_tail_bound : forall (E_A : R) (n m : nat),
   le (metric (iterate dynamics (n + m) E_A) (iterate dynamics n E_A))
      (mult (abs eta)
@@ -723,7 +726,7 @@ Proof.
                    (req_mult_swap_mid (mult a c) b d)).
 Qed.
 
-(* Id grad_bound_aux L14473（plain abs_nonneg 消费位，台账 2） *)
+(* Id grad_bound_aux L14473（plain abs_nonneg 消费位，登记表 2） *)
 Lemma req_grad_bound_aux : forall E_A n,
   lt zero (abs (entropy_gradient (iterate dynamics 0 E_A))) ->
   le (mult (abs eta) (mult (abs (entropy_gradient (iterate dynamics n E_A))) S))
@@ -784,7 +787,7 @@ Proof.
     + apply (req_grad_bound_aux E_A n Hg0pos).
 Qed.
 
-(* ============ K. 柯西性（Id L14528-14564；结论位 NatLe 形对接 cauchy_complete，台账 4） ============ *)
+(* ============ K. 柯西性（Id L14528-14564；结论位 NatLe 形对接 cauchy_complete，登记表 4） ============ *)
 
 Lemma req_iterate_cauchy : forall (E_A : R),
   lt zero (abs (entropy_gradient (iterate dynamics 0 E_A))) ->
@@ -814,7 +817,7 @@ Proof.
     + exact HN0.
 Qed.
 
-(* ============ L. log 族（Id L14565-14641；log 前提化，台账 3） ============ *)
+(* ============ L. log 族（Id L14565-14641；log 前提化，登记表 3） ============ *)
 
 Variable log_lt_mono_cc : forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
   lt a b -> lt (log a Ha) (log b Hb).
@@ -826,7 +829,7 @@ Fixpoint req_nat_to_R (n : nat) : R :=
   | Datatypes.S n' => plus one (req_nat_to_R n')
   end.
 
-(* Id log_pow_cc L14567：log (x^n) == of_nat n · log x（见证取规范形 req_pow_pos_c） *)
+
 Lemma req_log_pow_cc : forall (x : R) (n : nat) (Hx : lt zero x),
   req (log (req_r_pow x n) (req_pow_pos_c x Hx n)) (mult (req_nat_to_R n) (log x Hx)).
 Proof.
@@ -866,7 +869,7 @@ Proof.
                                                                          (mult_comm (log x Hx) (req_nat_to_R n)))))))).
 Qed.
 
-(* Id r_arch_pow_log_budget L14592：存在性 N 升级（log 应用位见证 sigT 打包，台账 3） *)
+
 Lemma req_r_arch_pow_log_budget : forall a : R, lt zero a -> forall (eps : R) (Hep : lt zero eps),
   sigT (fun N : nat =>
     sigT (fun Hp : lt zero (mult a (req_r_pow kappa N)) =>
@@ -885,7 +888,7 @@ Proof.
   - exact HN0.
 Qed.
 
-(* Id iterate_cauchy_explicit_N L14610：显式可计算收敛率主定理（Hp 见证 sigT 打包，台账 3） *)
+(* Id iterate_cauchy_explicit_N L14610：显式可计算收敛率主定理（Hp 见证 sigT 打包，登记表 3） *)
 Theorem req_iterate_cauchy_explicit_N : forall (E_A : R),
   lt zero (abs (entropy_gradient (iterate dynamics 0 E_A))) ->
   forall (eps : R) (Hep : lt zero eps),
@@ -989,7 +992,7 @@ Variable le_all_eps_zero : forall x : R,
 
 (* ============ P. 辅件（Id L14732-14762） ============ *)
 
-(* req_opp_zero 辅件（reqd_opp_zero @UpReqDist L171 同语句；本席节内自持避免新依赖） *)
+
 Lemma req_opp_zero : req (opp zero) zero.
 Proof.
   exact (req_trans (opp zero) (plus zero (opp zero)) zero
@@ -1010,7 +1013,7 @@ Proof.
                    (plus_zero a)).
 Qed.
 
-(* ============ Q. lim 夹逼核心（Id L14763-14844；+2 假设位，台账 2） ============ *)
+(* ============ Q. lim 夹逼核心（Id L14763-14844；+2 假设位，登记表 2） ============ *)
 
 Lemma req_grad_squeeze_zero : forall (E_A E_star : R),
   lim (fun n => iterate dynamics n E_A) E_star ->
@@ -1491,15 +1494,15 @@ End UpReqConvergenceCauchy.
 (* ============================================================ *)
 (* ---- (d) 冻结清单（本节 2 件；§1.1 边界2；零证明行） ----      *)
 (*                                                              *)
-(* 1. natle_to_le（Id @CW219 L14643）：纯 nat Id 机器（NatLe/leb/  *)
-(*    ≤，零 R）；req 侧消费 = 跨接口 Require 复用 CW219 原件裸名    *)
+(* 1. natle_to_le（Id @L14643）：纯 nat Id 机器（NatLe/leb/  *)
+(*    ≤，零 R）；req 侧消费 = 跨接口 Require 复用 原件裸名    *)
 (*    （规划书 §3.4；GRPO grpo_count_one 预定路线同款），零重证。  *)
 (*    消费位：req_iterate_cauchy / req_iterate_cauchy_explicit_N / *)
 (*    req_grad_squeeze_zero（证内 (N <= n)%nat 桥接）。            *)
-(* 2. natle_of_le（Id @CW219 L14747）：同上；req 侧消费 = 跨接口    *)
-(*    Require 复用 CW219 原件裸名。消费位：req_grad_squeeze_zero    *)
+(* 2. natle_of_le（Id @L14747）：同上；req 侧消费 = 跨接口    *)
+(*    Require 复用 原件裸名。消费位：req_grad_squeeze_zero    *)
 (*    （Nat.max 两翼 NatLe 构造）。                                *)
 (* 另：req_iterate_cauchy 结论位由 Id 的 (N <= m)%nat 前提改为      *)
 (* NatLe 前提（cauchy_complete 字段 L40591 对接形）——语义同构，     *)
-(* 消费 iterate_lim_exists 零摩擦，登记头注台账 4。                *)
+(* 消费 iterate_lim_exists 零摩擦，登记头注登记表 4。                *)
 (* ============================================================ *)

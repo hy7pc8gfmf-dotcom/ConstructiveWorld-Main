@@ -21,8 +21,9 @@
 # 红线（执行时强制）：
 #   - 零 git 操作；不触碰 releases/；不修改任何 .v 源；probe 全部落在
 #     scripts/_pa_work/（只 Require + Print Assumptions）；
-#   - Windows 编译一律走 9.0 完整路径（C:\Rocq-Platform~9.0~2025.08\bin\），
-#     禁裸 PATH——本机 9.1 的 coqchk 对 9.0 产物报 bad version 90001；
+#   - Windows 编译一律走 9.1 完整路径（C:\Rocq-Platform~9.1~2026.01\bin\），
+#     禁裸 PATH——2026-09-15 全库换装 9.1（PROBE91 实证 201 面全绿）；
+#     原「9.0 路径 + 防混装 bad version 90001」预警随之作废（见 attn/_thv3sw2_交付报告-20260915.md）；
 #   - 一切 coqc/coqchk 调用经 cpu_guard 包装（PA_GUARD=0 可关，仅建议 CI 用）；
 #   - 避让清单：UpIDL / UpMinP 两模块跳编跳查（合并轨收口席修复中），
 #     修复入库后补审计（见报告覆盖边界节）。
@@ -31,7 +32,7 @@
 #   ./pa_audit.sh [--root ConstructiveWorld_vo] [--coqchk] [--no-build]
 #                 [--theorems pa_theorems.txt]
 #   环境变量：PA_LOADLIMIT(60) PA_CORE(3) PA_MAXWAIT(1800) PA_GUARD(1)
-#             PA_GUARD_PS1(root 外既定路径) PA_COQ_BIN(9.0 完整路径)
+#             PA_GUARD_PS1(root 外既定路径) PA_COQ_BIN(9.1 完整路径)
 # 产物：scripts/pa_audit_report.md（旁证 log 在 scripts/_pa_work/）
 #
 # ── 漂移清单（论文-库命名漂移，逐条在案、不跳过；报告有同名节）──
@@ -48,7 +49,8 @@
 #      → 库内无声明（未并入模块化树）；双点 TV 收缩以基座 tv 族 + UpReqSampling 承载。
 #
 # ── 2026-09-11 续席（PA 审计席续）改动登记（仅本脚本两处，机制不变）──
-#   a. coqchk 判定补 -silent 形态：9.0 实测 -silent 抑制成功行，rc=0 + "* Axioms:" 段在场即双条件成立；
+#   a. coqchk 判定补 -silent 形态：9.0 实测 -silent 抑制成功行（9.1 SW2 换装复验同：
+#      rc=0 仅见 "* Axioms:" 段），rc=0 + "* Axioms:" 段在场即双条件成立；
 #   b. 漂移清单表补 tv_doeblin 两件（论文2 定理 5.10 存档件未并入树）与
 #      real_kl_sum_decomp 注释幻影一件（.v 有字样、.vo 零导出，非真实声明）。
 #   清单 pa_theorems.txt 全量重建至 193 条（probe_full 81 基 + 头条族补全 + req 27）；
@@ -63,7 +65,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 usage() {
   echo "用法: pa_audit.sh [--root ConstructiveWorld_vo] [--coqchk] [--no-build] [--theorems <file>]"
-  echo "  环境变量: PA_LOADLIMIT(60) PA_CORE(3) PA_MAXWAIT(1800) PA_GUARD(1) PA_COQ_BIN(9.0路径)"
+  echo "  环境变量: PA_LOADLIMIT(60) PA_CORE(3) PA_MAXWAIT(1800) PA_GUARD(1) PA_COQ_BIN(9.1路径)"
 }
 
 # ---------------------------------------------------------------- 参数 ----
@@ -98,14 +100,20 @@ mkdir -p "$WORK"
 T_START=$(date +%s)
 TS_NOW="$(date '+%Y-%m-%d %H:%M:%S %z')"
 
-# ------------------------------------------------------- 工具链（9.0）----
+# ------------------------------------------------------- 工具链（9.1）----
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*|Windows*)
     HOST_OS=windows
-    COQ_BIN="${PA_COQ_BIN:-C:/Rocq-Platform~9.0~2025.08/bin}"
+    COQ_BIN="${PA_COQ_BIN:-C:/Rocq-Platform~9.1~2026.01/bin}"
+    # SW2 换装（2026-09-15）：机器级【用户环境变量】COQLIB/ROCQLIB 钉 9.0 lib，会压过 9.1 版
+    # coq_environment.txt → 9.1 coqc 暗载 9.0 stdlib、产物魔数 90001 被 9.1 coqchk 拒。
+    # 故随 COQ_BIN 推导导出，保证 bin/lib 同源（E-STAGING-SW2 实证 90100 roundtrip EXIT=0）。
+    case "$COQ_BIN" in
+      */bin) export COQLIB ROCQLIB; COQLIB="${COQ_BIN%/bin}/lib/coq"; ROCQLIB="$COQLIB" ;;
+    esac
     COQC="$COQ_BIN/coqc.exe"
     COQCHK="$COQ_BIN/coqchk.exe"
-    [ -f "$COQC" ]   || { echo "[pa_audit] FATAL: 9.0 coqc 不在 $COQC（禁裸 PATH 调用）"; exit 2; }
+    [ -f "$COQC" ]   || { echo "[pa_audit] FATAL: 9.1 coqc 不在 $COQC（禁裸 PATH 调用）"; exit 2; }
     [ -f "$COQCHK" ] || COQCHK=""
     ;;
   *)
@@ -118,8 +126,8 @@ case "$(uname -s)" in
 esac
 COQ_VERSION="$("$COQC" --version 2>&1 | head -1)"
 case "$COQ_VERSION" in
-  *9.0.*) : ;;
-  *) echo "[pa_audit] WARN: 非 9.0 工具链: $COQ_VERSION" ;;
+  *9.1.*) : ;;
+  *) echo "[pa_audit] WARN: 非 9.1 工具链: $COQ_VERSION" ;;
 esac
 
 # ------------------------------------------------------------- 闸包装 ----
@@ -333,8 +341,9 @@ if [ "$DO_COQCHK" = 1 ]; then
     ck_ok=0
     if run_cmd "$WORK/coqchk_combined.log" "$COQCHK" -silent -o $OWNERS; then
       strip_log "$WORK/coqchk_combined.log" | grep -q "Modules were successfully checked" && ck_ok=1
-      # 9.0 实测：-silent 会抑制 "Modules were successfully checked" 行（docs/coqchk认证总表 判定式
-      # 系对无 -silent 形态）。rc=0 且 -o 假设清单段（"* Axioms:"）在场 = 双条件成立（2026-09-11 续席修）。
+      # 9.0 实测：-silent 会抑制 "Modules were successfully checked" 行（9.1 复验同，SW2 换装实证；
+      # docs/coqchk认证总表 判定式系对无 -silent 形态）。rc=0 且 -o 假设清单段（"* Axioms:"）在场 =
+      # 双条件成立（2026-09-11 续席修；2026-09-15 SW2 换装 9.1 复验维持）。
       # 注：CONTEXT SUMMARY 段居中缩进，勿用行首锚（2026-09-11 二修）。
       strip_log "$WORK/coqchk_combined.log" | grep -q "\* Axioms:" && ck_ok=1
     fi
@@ -381,7 +390,7 @@ echo "# Print Assumptions 全量批审计报告（pa_audit）"
 echo
 echo "- 生成时间：$TS_NOW；总耗时：${ELAPSED}s（含 guard 热等待 $HOTWAIT）"
 echo "- 脚本：scripts/pa_audit.sh（SHA1 \`$SCRIPT_SHA1\`）；清单：scripts/pa_theorems.txt（$N_TOTAL 条）"
-echo "- 工具链：$COQ_VERSION（Windows 走 9.0 完整路径 \`$COQ_BIN\`，禁裸 PATH——9.1 coqchk 对 9.0 产物报 bad version 90001；CI ubuntu 走 setup 的 9.0）"
+echo "- 工具链：$COQ_VERSION（Windows 走 9.1 完整路径 \`$COQ_BIN\`，禁裸 PATH——2026-09-15 全库换装 9.1，原 9.0/9.1 混装 bad version 90001 预警作废；CI 自托管经 runner 侧 cw_build.cmd/cw_chk.cmd 注入 COQC/COQCHK，须同步指向 9.1）"
 echo "- root：$ROOT_NAME（$VO_DIR）；guard：LoadLimit=$LOADLIMIT / CoreN=$COREN（cpu_guard.ps1，root 外既定件）"
 echo
 echo "## 总判定"
@@ -389,7 +398,7 @@ echo
 echo "- **Closed $N_CLOSED / Fail $N_FAIL / EXEMPT(避让) $N_EXEMPT，共 $N_TOTAL 条**；覆盖模块 $N_COVERED 个（基座 $BASE_MOD ＋ scripts/order.txt 全部 ＋ 清单所涉在树模块；避让剔除：$EXCL_LIST）"
 echo "- 零承认 grep（行首口径 \`Axiom|Admitted|Parameter|Conjecture|Abort\`）：**$N_FILES_Z 个源文件扫描，命中 $N_ZEROADM**"
 echo
-echo "## 编译动作（.vo 缺失或旧于 .v 方编译；一律 guard 包装 + 9.0 显式路径）"
+echo "## 编译动作（.vo 缺失或旧于 .v 方编译；一律 guard 包装 + 9.1 显式路径）"
 echo
 echo "- 新编译 $N_BUILT：${BUILT_LIST:-无}"
 echo "- 编译失败 $N_BFAIL：${BUILDFAIL_LIST:-无}"

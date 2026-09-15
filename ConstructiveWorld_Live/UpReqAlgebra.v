@@ -1,30 +1,37 @@
+(* ============================================================ *)
+(* UpReqAlgebra.v *)
+(* *)
+(* 目的： req 实数接口的代数定律库（加/乘/逆/序兼容）。 *)
+(* 主件： req_plus_zero_r / req_mult_one_l / req_add_cancel_l / req_plus_inv_unique 等域定律族。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 抽象 R 载体配 RealInterfaceEnhancedSetoid；lt/le 接口兼容性逐条以接口字段承接。 *)
+(* ============================================================ *)
+
 (* UpReqAlgebra.v — 签名迁移批 1：req 系代数地基（服务规划书 §5 全部后续批）
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md（批 1 清单）
    模板：UpSigMigrate.v（13 Qed 试点件，逐件平移放大）；纯 term-mode（req_trans 链 +
    compat 桥），零 Morphisms 依赖；Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
-   直接消费基座对接面：exp_neg_req_compat_setoid（CW219 L66223）。
+   直接消费基座对接面：exp_neg_req_compat_setoid（L66223）。
    ----------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4，逐件以「Id 原件 @ 行号」注明）：
-   1. minus 非接口字段：Id 系 minus（CW219 L211 Definition）在 setoid 接口缺失，
+   诚实签名变化登记表（规划书 §7.4，逐件以「Id 原件 @ 行号」注明）：
+   1. minus 非接口字段：Id 系 minus（L211 Definition）在 setoid 接口缺失，
      本件以模块级 Definition req_minus := plus a (opp b) 同形重建（δ 透明，零摩擦）；
      减法簇各件语句以 req_minus 书写，证明内 unfold。
    2. log 前提化：setoid log 带 lt zero 前提（接口 L40570），log 簇语句逐件补正性参数。
    3. 接口缺口桥（ReqLogBridge 节，T2 落位① 保留假设位）：
-      - log_req_compat：req x y -> req (log x Hx) (log y Hy)。Id 系经 destruct/eq_ind
         免费；setoid 接口无该字段（exp_neg 注入性不可由接口字段导出——le_antisym
-        只能正向，逆用需序反射，接口未备）。Real 实例可满足（柯西 log 连续），
         实例化留待接口扩展批。
-      - log_inv_exp_neg_req：req 化的 Id 接口字段 log_inv_exp_neg（CW219 L187）——
+      - log_inv_exp_neg_req：req 化的 Id 接口字段 log_inv_exp_neg（L187）——
         setoid 接口缺对应字段。
    4. 严格序加法混合保序（ReqStrictOrderBridge 节）：Id 系本就是诚实 Variable
-     （CW219 L21018/L21020），req 化保持假设位同构（T2 ①）；le_lt 形式由 lt_le
+     （L21018/L21020），req 化保持假设位同构（T2 ①）；le_lt 形式由 lt_le
      形式 + 交换律 + req_lt_compat 运输零新假设导出。
    5. 命名对齐注记：试点件 UpSigMigrate 的 req_mult_opp_l/req_opp_mult_l 与 Id 系
      opp_mult_l/r 互换；本件按 Id 系命名对齐（req_opp_mult_l := mult a (opp b)）。
    6. (d) 冻结：attn_nat_to_R_pos（nat 归纳件，双层并行）+ id_ring_demo_* 3 件
      （Ltac 演示件，与字段同语句），见文件尾冻结清单。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号）：
+   覆盖核对（req 件名 -> Id 原件 @ 行号）：
    SimpleAlgebra：req_plus_zero_r<-27894 req_plus_opp_r<-27898 req_mult_one_r<-27902
      req_mult_zero_r<-27906 req_mult_comm_rewrite<-27910（另附左形式 3 件辅件）
    RingLemmas：req_plus_inv_unique<-353 req_opp_plus<-369 req_mult_plus_distr_r<-389
@@ -32,7 +39,6 @@
      req_one_neq_zero<-475 req_two_pos<-489 req_half_pos<-495 req_half_twice<-505
      req_plus_swap_mid<-520 req_minus_plus_distr<-534 req_abs_plus_one_pos<-549
      req_le_plus_nonneg_r<-562 req_abs_le_abs_plus_one<-573 req_plus_le_lt_pos<-581
-     req_log_exp_neg<-592 req_log_inv_one_inv<-603 req_exp_neg_opp_log<-625
      req_exp_neg_opp_plus<-638 req_log_div<-652 req_minus_plus_cancel<-668
      req_minus_plus_cancel_r<-681 req_minus_plus_r<-695 req_opp_minus<-706
      req_abs_minus_sym<-717 req_log_div_neg<-735 req_minus_split<-760
@@ -45,7 +51,7 @@
      req_minus_plus_congr_l<-95663 req_minus_factor<-95675 req_minus_factor_pt<-95684
      req_inv_pos_mult_distr<-95695
    (c) 新机器：req_inv_pos_cancel / req_log_cancel / req_lt_plus_compat_{lt_le,le_lt}
-     （<-CW219 L21013/21018/21020 同位桥）
+     （<-L21013/21018/21020 同位桥）
    自建辅件（Id 系无对应，req 链需求生）：req_plus_zero_l req_plus_opp_l
      req_mult_one_l req_add_cancel_l req_plus_cancel req_minus_plus_congr
      req_mult_diff_decomp 的 H 系中间件（节内 assert）。
@@ -54,7 +60,7 @@
 Require Import CW_ConstructiveWorld_219.
 Import RealInterfaceEnhancedMod.
 
-(* req 系减法（δ 透明同形于 Id 系 minus，CW219 L211） *)
+(* req 系减法（δ 透明同形于 Id 系 minus，L211） *)
 Definition req_minus {R : Set} {RIS : RealInterfaceEnhancedSetoid R} (a b : R) : R :=
   plus a (opp b).
 
@@ -361,7 +367,7 @@ Proof.
         -- apply plus_assoc.
 Qed.
 
-(* 自建辅件：(A + X) + (-A) == X（乘积增量分解/误差分解的收口引擎） *)
+(* 自建辅件：(A + X) + (-A) == X（乘积增量分解/误差分解的完成引擎） *)
 Lemma req_plus_cancel : forall a x : R, req (plus (plus a x) (opp a)) x.
 Proof.
   intros a x.
@@ -533,7 +539,7 @@ Proof.
                            (req_refl (mult a b)) (req_opp_mult_l a c)).
 Qed.
 
-(* 自建辅件：(A + X) - (A + Y) == X - Y（误差分解收口引擎） *)
+(* 自建辅件：(A + X) - (A + Y) == X - Y（误差分解完成引擎） *)
 Lemma req_minus_plus_congr : forall a x y : R,
   req (req_minus (plus a x) (plus a y)) (req_minus x y).
 Proof.
@@ -1158,7 +1164,7 @@ Qed.
 
 (* Id mult_diff_decomp L849：乘积误差分解（f1:=f x, f2:=f(x+h), g1:=g x, g2:=g(x+h),
    u := f2-f1, v := g2-g1；req 版经 Hcf/Hcg 还原因子 + Hfg 展开 + HP 位移 +
-   req_minus_plus_quad 四项重组收口——req 化非平凡件） *)
+   req_minus_plus_quad 四项重组完成——req 化非平凡件） *)
 Lemma req_mult_diff_decomp :
   forall (f g : R -> R) (df dg : R -> R) (x h : R),
   req (req_minus (mult (f (plus x h)) (g (plus x h)))
@@ -1456,7 +1462,7 @@ End ReqCancelMachines.
 
 (* ============================================================ *)
 (* ReqStrictOrderBridge：(c) 新机器 3 —— 严格序加法混合保序       *)
-(*   Id 系本就是诚实 Variable（CW219 L21018/L21020）；req 化保持  *)
+(*   Id 系本就是诚实 Variable（L21018/L21020）；req 化保持  *)
 (*   假设位同构（T2 落位①）。接口字段仅双严格 lt_plus_compat /    *)
 (*   双非严格 le_plus_compat，混合形式不可由现有字段导出（构造性  *)
 (*   序无两侧消去，与 Id 系同因）。le_lt 形式由 lt_le 形式零新     *)
@@ -1481,7 +1487,7 @@ Qed.
 End ReqStrictOrderBridge.
 
 (* ============================================================ *)
-(* ReqLogBridge：log 簇接口缺口桥（T2 落位①，诚实签名变化台账 3） *)
+
 (*   两条桥 = Id 系免费事实的 req 化（destruct/eq_ind + 接口字段   *)
 (*   log_inv_exp_neg L187）；setoid 接口缺失（exp_neg 注入性不可   *)
 (*   由接口字段导出）。Real 实例可满足；实例化留待接口扩展批。     *)
@@ -1496,7 +1502,7 @@ Hypothesis log_req_compat :
 Hypothesis log_inv_exp_neg_req :
   forall x : R, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
 
-(* Id log_exp_neg L592：log(e^{-x}) == -x（消费 log_inv_exp_neg_req） *)
+
 Lemma req_log_exp_neg : forall x : R,
   req (log (exp_neg x) (exp_neg_pos x)) (opp x).
 Proof.
@@ -1515,7 +1521,7 @@ Proof.
       apply log_inv_exp_neg_req.
 Qed.
 
-(* Id log_inv_one_inv L603：log(1/x) == -log x（消费 log_req_compat） *)
+
 Lemma req_log_inv_one_inv : forall (x : R) (Hx : lt zero x),
   req (log (inv_pos x Hx) (inv_pos_pos x Hx)) (opp (log x Hx)).
 Proof.
@@ -1552,7 +1558,7 @@ Proof.
     + apply plus_opp.
 Qed.
 
-(* Id log_div L652：log(a/b) == log a - log b *)
+
 Lemma req_log_div : forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
   req (log (mult a (inv_pos b Hb))
            (mult_positive a (inv_pos b Hb) Ha (inv_pos_pos b Hb)))
@@ -1569,7 +1575,7 @@ Proof.
                            (req_refl (log a Ha)) (req_log_inv_one_inv b Hb)).
 Qed.
 
-(* Id log_div_neg L735：log(a/b) == -log(b/a) *)
+
 Lemma req_log_div_neg : forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
   req (log (mult a (inv_pos b Hb))
            (mult_positive a (inv_pos b Hb) Ha (inv_pos_pos b Hb)))
@@ -1627,16 +1633,16 @@ End ReqLogBridge.
 (* ============================================================ *)
 (* ---- (d) 冻结清单（规划书 §3.4：双层并行，逐件冻结理由） ----   *)
 (*                                                                *)
-(* 1. attn_nat_to_R_pos（Id @CW219 L95724，随 Fixpoint attn_nat_to_R *)
+(* 1. attn_nat_to_R_pos（Id @L95724，随 Fixpoint attn_nat_to_R *)
 (*    L95718）：nat 归纳件，载体为 nat->R 嵌入函数；req 世界如需    *)
 (*    使用须以 setoid 运算重定义 Fixpoint（跨接口不可复用——R 为不   *)
 (*    同类型族）。本批不迁，双层并行，批 4 注意力采样消费时再裁。   *)
 (* 2. id_ring_demo_double_neg / id_ring_demo_plus_opp /            *)
-(*    id_ring_demo_mult_one（Id @CW219 L1142/1146/1150）：Ltac      *)
+(*    id_ring_demo_mult_one（Id @L1142/1146/1150）：Ltac      *)
 (*    id_ring 演示件，语句与接口字段逐一相同（Id 系亦为平凡件）；   *)
 (*    req 系对应字段 req_double_neg / req_plus_opp_r / req_mult_one_r *)
-(*    已在本件交付，演示件无迁移语义。                              *)
-(* 3. abs_plus_one_pos（Id @CW219 L549，|a|+1 > 0）：签名差异冻结—— *)
+(*    已在本件结果，演示件无迁移语义。                              *)
+(* 3. abs_plus_one_pos（Id @L549，|a|+1 > 0）：签名差异冻结—— *)
 (*    Id 证明消费 plain 形 abs_nonneg : le zero (abs a)，setoid 接口 *)
 (*    已 eps 化（forall eps, lt zero eps -> le zero (plus (abs a)   *)
 (*    eps)），plain 形不可由 eps 形导出（序无消去）。其消费方        *)

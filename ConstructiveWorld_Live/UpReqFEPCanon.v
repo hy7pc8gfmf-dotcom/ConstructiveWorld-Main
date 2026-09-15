@@ -1,27 +1,36 @@
 (* ============================================================ *)
+(* UpReqFEPCanon.v *)
+(* *)
+(* 目的： 定理 4.1 Real 复刻的正典化对接件。 *)
+(* 主件： real_kl_decomp_full_canon 及其配分形：KL 完整分解的正典形式。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP。 *)
+(* 备注： 对接件：把诚实接口槽位接到正典分解；零新假设位。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqFEPCanon.v —— 席X2：定理 4.1 Real 复刻「正典化对接」件        *)
-(*   2026-09-11（后台独立席位，CoreN 5，预算 60 分钟单席闭合）        *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】把 S08_RealMainlineDPO Section RealRLHFMain 内的诚实接口槽  *)
 (*   real_kl_decomp_full（L2516；论文附录 B L1379 据此标「完整分解为  *)
 (*   接口」）与已证件 UpReqRealFEP.rfep_real_kl_decomp_full（L805）   *)
-(*   正典化对接：同语句、前提形态转换——下游不改 S08 分片，即可引用    *)
+(*   正典化对接：同语句、前提形态转换——下游不改 S08 模块，即可引用    *)
 (*   到已证的完整分解 F[p] ≡ F[p_b] + D·Σ kl_term（real_eq 载体）。   *)
-(*   席N1 判词承按：LogLinD 头注所判「现成件缺失」由本件补齐（正典化）。 *)
+(*   席N1 结论承按：LogLinD 头注所判「现成件缺失」由本件补齐（正典化）。 *)
 (* ------------------------------------------------------------------ *)
 (* 【对接裁决（E403③：节泛化跨节消费全参显式）】探针实测（_x2_probe）  *)
 (*   两语句结论面逐字同构（real_eq (F p) (F p_b + D·Σkl)，Σ 内        *)
 (*   real_kl_term 具名形）；前提面两处错位，对位如下：                 *)
 (*   ① rfep 版节接口多 real_sum_over_S_linear 一字段（UpReqRealFEP    *)
-(*      头注已申报的诚实增量，S08 原节无此字段）→ 本件显式升参；       *)
+
 (*   ② rfep 版残留前提 Hnormb（Σ p_b ≡ 1）→ 主件照单显式升参（同面    *)
-(*      直喂）；                                                      *)
+(*      显式应用）；                                                      *)
 (*   ③ 分件 canon_partition 把 Hnormb 换为更原始的 partition 条件     *)
 (*      Hpart（Σ exp(−e/D) ≡ Z），经 rfep_boltzmann_normalized_real   *)
-(*      （L331）一步放电——即任务书「前提放电小链」的兑现形。          *)
+(*      （L331）一步消解——即任务书「前提消解小链」的兑现形。          *)
 (* ------------------------------------------------------------------ *)
-(* 【诚实申报】本件为对接件（非新数学）：结论面与 S08 槽、rfep 已证件  *)
-(*   逐字同构；证明 = rfep 主件部分应用直喂 + 一条归一化放电链。零新   *)
+
+(*   逐字同构；证明 = rfep 主件部分应用显式应用 + 一条归一化消解链。零新   *)
 (*   环境前提；linear/Hnormb（或 Hpart）为 rfep 版自带前提的如实升参。 *)
 (*   禁改红线：S08_RealMainlineDPO.v / UpReqRealFEP.v 全程只读零触碰。 *)
 (* ------------------------------------------------------------------ *)
@@ -29,7 +38,7 @@
 (*   G1 禁词条目零命中（头注以中文转述，不引英文原词）；real_eq 非 Id  *)
 (*   禁 rewrite，全链 real_eq_trans/RealSetoid compat（E393 纪律）。  *)
 (* 编译配方：_x2_run.ps1 单一入口（E355 先例）+ cpu_guard CoreN 5      *)
-(*   预审：coqc -vos（秒审）；全量：coqc -Q vo树 "" -Q 本目录 ""       *)
+
 (*   前置 .vo 全在 D:/ComplexAnalysis/ConstructiveWorld-Main/         *)
 (*   ConstructiveWorld_vo/（vo 树编译，S08/rfep 零重编）。            *)
 (* ============================================================ *)
@@ -39,10 +48,10 @@ Require Import UpReqRealFEP.
 
 (* ---------------------------------------------------------- *)
 (* 主件：real_kl_decomp_full_canon                                   *)
-(*   S08 槽 real_kl_decomp_full 的正典化放电形：结论面与 S08 槽逐字    *)
-(*   同构（real_eq (F p) (F p_b + D·Σ kl_term)）；节接口按放电后全参   *)
+(*   S08 槽 real_kl_decomp_full 的正典化消解形：结论面与 S08 槽逐字    *)
+(*   同构（real_eq (F p) (F p_b + D·Σ kl_term)）；节接口按消解后全参   *)
 (*   显式升参（含 rfep 版诚实增量 linear），残留前提 Hnormb 照单升参。 *)
-(*   证明 = rfep_real_kl_decomp_full 部分应用直喂（一步 exact）。     *)
+(*   证明 = rfep_real_kl_decomp_full 部分应用显式应用（一步 exact）。     *)
 (* ---------------------------------------------------------- *)
 
 Lemma real_kl_decomp_full_canon :
@@ -85,10 +94,10 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 分件：real_kl_decomp_full_canon_partition（前提放电小链版）        *)
+(* 分件：real_kl_decomp_full_canon_partition（前提消解小链版）        *)
 (*   与主件同结论面；Hnormb 换为 partition 条件 Hpart                  *)
 (*   （Σ exp(−e/D) ≡ Z，物理配分函数账目），经 rfep_boltzmann_        *)
-(*   normalized_real 一步放电补齐 Hnormb，再直喂 rfep 主件。           *)
+(*   normalized_real 一步消解补齐 Hnormb，再显式应用 rfep 主件。           *)
 (* ---------------------------------------------------------- *)
 
 Lemma real_kl_decomp_full_canon_partition :

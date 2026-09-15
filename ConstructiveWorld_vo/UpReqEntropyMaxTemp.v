@@ -1,13 +1,22 @@
 (* ============================================================ *)
+(* UpReqEntropyMaxTemp.v *)
+(* *)
+(* 目的： 定理 4.6b max_entropy_is_boltzmann_temp 的 Real 层（eps 档）。 *)
+(* 主件： real_max_entropy_is_boltzmann_temp_eps：最大熵分布的 Boltzmann 刻画（逐 eps）。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp。 *)
+(* 备注： Id 层对应件为逐 eps 档（诚实标注）；求和上界接口为显式前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyMaxTemp.v —— 席T14：定理 4.6b max_entropy_is_boltzmann_temp *)
-(*   Real 层序档组装席 ｜ 2026-09-11 ｜ 后台独立席位（独占 CoreN 7）        *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】同约束能量 E(p) == E_T 下 S[p] ≤ S[p_T]（论文正式版 L321-323；  *)
 (*   Id 原件 S04 L3935 max_entropy_is_boltzmann_temp）。档位：逐 eps 形。  *)
 (* ------------------------------------------------------------------ *)
 (* 【档位诚实标注】Id 层 gibbs_inequality 的 Real 层对应件为逐 eps 档：    *)
-(*   CW219 real_gibbs_core_eps / real_gibbs_inequality_eps 全系 eps 形     *)
-(*   （S08 L199/L493），故本席 4.6b 交付逐 eps 形：                        *)
+(*   real_gibbs_core_eps / real_gibbs_inequality_eps 全系 eps 形     *)
+
 (*     E(p) == E_T ⟹ real_le (S[p]) (real_plus S[p_T] eps)（eps > 0）     *)
 (*   与库内 Gibbs 家族档位严格对齐，非缩水。                               *)
 (* ------------------------------------------------------------------ *)
@@ -16,7 +25,7 @@
 (*   推不出单调提升，故按 G06_BForm L35 / UpRealLeB L268 同形先例以       *)
 (*   Section Variable 扩容（引理前提不动——归一化/逐点正/同能量三口照 Id， *)
 (*   仅求和面扩容，非加码）。具体载体实例已在库且非空：real_list_sum_le   *)
-(*   （S08 L421，CW219 薄壳 Require Export S08 直达），本席位 0 件显式    *)
+
 (*   给出载体满足证。逐点核 real_gibbs_core_eps（S08 L199）零载体依赖     *)
 (*   直用（T6b 指认，Check 探针实证无 Section 残参）。                     *)
 (* ------------------------------------------------------------------ *)
@@ -24,24 +33,24 @@
 (*   Id intros t Ht p Hnp Hpp Henergy    ↦ 同口（T 正性证人在 T_pos 位；  *)
 (*     Hp 前移为 real_entropy_dist 证人位，T6 real_entropy_dist 同位）    *)
 (*   Id Hdef := entropy_deficit_kl_temp  ↦ Hdef :=                        *)
-(*     real_entropy_deficit_kl_temp（T6b 主件全 arity 13 参直喂；         *)
+(*     real_entropy_deficit_kl_temp（T6b 主件全 arity 13 参显式应用；         *)
 (*     real_minus_r Spt Sp 定义性展开 real_plus Spt (real_opp Sp)）       *)
 (*   Id Hkl := gibbs_inequality p p_T    ↦ real_KL_temp_ge_zero_eps       *)
-(*     （本席件 2；Id gibbs 四前提 Real 对应：Hnp 前提位 + Hp 证人位 +    *)
+(*     （本件件 2；Id gibbs 四前提 Real 对应：Hnp 前提位 + Hp 证人位 +    *)
 (*     real_boltzmann_dist_temp_normalized 库件 + real_boltzmann_dist_    *)
 (*     _temp_pos 库件；内部走 real_gibbs_core_eps + real_sum_over_S_le）  *)
 (*   Id Hnonneg := le_id_r Hdef Hkl      ↦ real_le_id_r + eq 兼容腿      *)
 (*     （real_eq_plus_compat_adapt Hdef换向 (refl eps)）                  *)
 (*   Id Hplus := minus_plus_cancel      ↦ real_plus_neg_cancel_shift_eps  *)
-(*     （本席工作马 B：Sp + ((Spt+(−Sp))+eps) ≡ Spt+eps，eps 形镜像）     *)
+
 (*   Id Hle := le_plus_nonneg_r         ↦ real_le_plus_nonneg_r           *)
-(*     （本席工作马 A：0 ≤ b ⟹ a ≤ a+b；le_plus_compat + plus_zero）     *)
-(*   Id le_id_r 收口                    ↦ real_le_id_r + 工作马 B eq 腿   *)
+(*     （本件工作马 A：0 ≤ b ⟹ a ≤ a+b；le_plus_compat + plus_zero）     *)
+(*   Id le_id_r 完成                    ↦ real_le_id_r + 工作马 B eq 腿   *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt/real_le）；*)
-(*   前提位照 Id 层对位（eps > 0 为 CW219 Gibbs eps 档既有证人位），       *)
-(*   全 Qed 收口；零新承认件。                                            *)
-(* 编译配方（同 T6b）：coqc -vos -Q . "" -Q "../001" ""                    *)
+(*   前提位照 Id 层对位（eps > 0 为 Gibbs eps 档既有证人位），       *)
+(*   全 Qed 完成；零新承认件。                                            *)
+
 (*   -Q "../attn/_build_219" "" UpReqEntropyMaxTemp.v（秒审后全量）       *)
 (* ============================================================ *)
 
@@ -200,14 +209,14 @@ Proof.
                T T_pos energy).
   set (HpT := real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved
                 T T_pos energy).
-  (* 0. 桥：KL ≡ Σ real_kl_term（T6b 件 5，全 arity 9 参直喂） *)
+  (* 0. 桥：KL ≡ Σ real_kl_term（T6b 件 5，全 arity 9 参显式应用） *)
   assert (Hbridge : real_eq
            (real_KL_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy p Hp)
            (real_sum_over_S (fun s : S =>
               real_kl_term (p s) (pT s) (Hp s) (HpT s)))).
   { exact (real_KL_temp_kl_term_bridge S real_sum_over_S real_sum_pos_preserved
              real_sum_over_S_ext T T_pos energy p Hp). }
-  (* 1. 逐点核：p − p_T ≤ real_kl_term + p·eps（CW219 直喂；real_kl_term  *)
+  (* 1. 逐点核：p − p_T ≤ real_kl_term + p·eps（显式应用；real_kl_term  *)
   (*    与 real_gibbs_core_eps RHS 首和项定义性一致，S08 L508 同款消费）  *)
   assert (Hpt : forall s : S,
            real_le (real_plus (p s) (real_opp (pT s)))
@@ -347,7 +356,7 @@ Qed.
 (* ---------------------------------------------------------- *)
 (* 件 2（主件）：定理 4.6b 逐 eps 形（Id max_entropy_is_boltzmann_temp   *)
 (*   S04 L3935 逐槽对位）：同约束能量 E(p) == E_T ⟹ S[p] ≤ S[p_T] + eps。 *)
-(*   链：熵亏温度版（T6b）→ KL 逐 eps 非负（件 1）→ le 链收口。          *)
+(*   链：熵亏温度版（T6b）→ KL 逐 eps 非负（件 1）→ le 链完成。          *)
 (* ---------------------------------------------------------- *)
 Theorem real_max_entropy_is_boltzmann_temp_eps :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
@@ -374,7 +383,7 @@ Proof.
                 (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved
                    T T_pos energy)).
   set (KL := real_KL_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy p Hp).
-  (* 步 1：熵亏温度版（T6b 主件全 arity 13 参直喂；Id Hdef 对位；          *)
+  (* 步 1：熵亏温度版（T6b 主件全 arity 13 参显式应用；Id Hdef 对位；          *)
   (*   real_minus_r 定义性展开 real_plus Spt (real_opp Sp)） *)
   assert (Hdef : real_eq (real_plus Spt (real_opp Sp)) KL).
   { exact (real_entropy_deficit_kl_temp S real_sum_over_S real_sum_pos_preserved
@@ -396,7 +405,7 @@ Proof.
   assert (H1 : real_le Sp (real_plus Sp (real_plus (real_plus Spt (real_opp Sp)) eps))).
   { exact (real_le_plus_nonneg_r Sp (real_plus (real_plus Spt (real_opp Sp)) eps)
              Hstep). }
-  (* 步 5：收口（工作马 B eq 腿 + real_le_id_r；Id Hplus + 末步对位） *)
+  (* 步 5：完成（工作马 B eq 腿 + real_le_id_r；Id Hplus + 末步对位） *)
   exact (RealSetoid.real_le_id_r Sp
            (real_plus Sp (real_plus (real_plus Spt (real_opp Sp)) eps))
            (real_plus Spt eps)

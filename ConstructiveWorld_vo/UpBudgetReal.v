@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpBudgetReal.v *)
+(* *)
+(* 目的： 几何击穿的迭代预算定理在具体柯西实数上的 Real 层构造。 *)
+(* 主件： bud_real_pow_pos / bud_real_le_one_plus：实数幂正性与预算界；real_pow_eq_compat 幂等式兼容族。 *)
+(* 依赖： CW_ConstructiveWorld_219、G01_CoreMicro。 *)
+(* 备注： 幂运算此前仅有接口假设形态；本件在具体柯西实数上以纯 Real 层路线构造，无需 Q 层绕行。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpBudgetReal.v —— 几何击穿的 Real 层显式迭代预算定理            *)
 (*                                                              *)
 (* 论文 4（梯度动力学收敛）主贡献「显式迭代预算」的 Real 层载体：    *)
@@ -7,7 +16,7 @@
 (* 至今只有接口假设形态；本文件在具体柯西实数（CW_ConstructiveWorld_219 的     *)
 (* Real := sigT (fun u : Qseq => cauchy u)）上闭合该缺口：        *)
 (*                                                              *)
-(* 主交付 r_arch_pow_real：                                      *)
+(* 主结果 r_arch_pow_real：                                      *)
 (*   ∀κ a eps（0<κ<1、0<a、0<eps），存在显式 nat 见证 N 使          *)
 (*   a·κ^N < eps。                                               *)
 (* 构造路线（路线 A，纯 Real 层，无需 Q 层绕行）：                  *)
@@ -17,10 +26,10 @@
 (*   再经倒数反变（real_inv_pos_lt_contra）与 pow·inv 恒等式        *)
 (*   回接 a·κ^N < eps。N 的显式形态：real_arch 给出的 nat。        *)
 (*                                                              *)
-(* 件 1：预算条件充分性（log 闭式条件）                            *)
-(*   r_pow_log_form      log(κ^N) == (N#1)·log κ（归纳）           *)
-(*   log_kappa_neg       0<κ<1 ⟹ −log κ > 0（hlogz_strict 放电）   *)
-(*   budget_cond_sufficient  N·|log κ| > log a − log eps ⟹ a·κ^N<eps *)
+
+
+
+
 (*   （经 cauchy_real_exp_mono 严格单调 + cw_log_exp_right 反演回接）*)
 (*                                                              *)
 (* 件 3：论文 4 定理 4.10 尾界形态（纯序代数）                      *)
@@ -28,7 +37,7 @@
 (*   geo_tail_budget     N ≤ min m n ∧ a·κ^N < eps ⟹ a·κ^{min} < eps *)
 (*   budget_min_tail     预算 N 的存在性 + min 尾界组合              *)
 (*                                                              *)
-(* 纪律：纯构造性（禁词零出现，见交付报告 G1）；                    *)
+(* 纪律：纯构造性（禁词零出现，见合规自查报告 G1）；                    *)
 (*       Set 层语句（real_lt/real_le/real_eq/sigT/And）；           *)
 (*       全部 Qed 闭合；消费根内已证机器不重证。                    *)
 (* ============================================================ *)
@@ -424,9 +433,9 @@ Proof.
   - exact (real_mult_div a eps Ha).
 Qed.
 
-(* ============ 6. 件 1：log 形态闭式条件（Real 层） ============ *)
 
-(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（G01_CoreMicro.hlogz_strict 放电）⟹ opp 反变 *)
+
+
 Lemma log_kappa_neg : forall (kappa : Real)
                          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one),
   real_lt real_zero (real_opp (real_log kappa Hk1)).
@@ -482,7 +491,6 @@ Proof.
 Qed.
 
 (* 件 1 主件：预算条件充分性
-   N·|log κ| > log a − log eps ⟹ a·κ^N < eps
    （经 log 多项式恒等 + cauchy_real_exp_mono 严格单调 + cw_log_exp_right 反演） *)
 Theorem budget_cond_sufficient :
   forall (kappa a eps : Real)
@@ -494,7 +502,7 @@ Theorem budget_cond_sufficient :
 Proof.
   intros kappa a eps Hk1 Hk2 Ha Heps N Hcond.
 
-  (* log(a·κ^N) == log a + N#1·logκ *)
+  
   assert (Hlogpow : real_eq (real_log (real_mult a (real_pow kappa N))
                                       (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)))
                             (real_plus (real_log a Ha)
@@ -575,7 +583,7 @@ Proof.
                           (real_plus_opp W0)
                           (real_eq_refl Le0))
                        (sf_real_plus_zero_l Le0)))). }
-  (* 组装：log(a·κ^N) == La + −(N#1·(−logκ))、La < W + Le ⟹ log(a·κ^N) < Le *)
+  
   assert (Hlt : real_lt (real_log (real_mult a (real_pow kappa N))
                                   (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1)))
                         (real_log eps Heps)).
@@ -586,7 +594,7 @@ Proof.
       + exact Hlogpow.
       + apply (RealSetoid.real_eq_plus_compat _ _ _ _ (real_eq_refl _) Hnegm).
     - exact Hmid. }
-  (* exp 严格单调 + e^{log y} == y 反演闭合 *)
+  
   apply (real_eq_lt_lt (real_mult a (real_pow kappa N))
            (cauchy_real_exp (real_log (real_mult a (real_pow kappa N))
               (real_mult_positive a (real_pow kappa N) Ha (bud_real_pow_pos kappa N Hk1))))
@@ -668,7 +676,7 @@ Proof.
 Qed.
 
 (* 预算下降：N ≤ min m n 且 a·κ^N < eps ⟹ a·κ^{min m n} < eps
-   （论文 4 定理 4.10 尾界 a·κ^{min m n} 的预算放电，纯序代数） *)
+   （论文 4 定理 4.10 尾界 a·κ^{min m n} 的预算消解，纯序代数） *)
 Theorem geo_tail_budget :
   forall (kappa a eps : Real)
          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
@@ -693,7 +701,7 @@ Proof.
   - exact Hbudget.
 Qed.
 
-(* 组合形态：给出显式预算 N，min 尾界随之放电（定理 4.10 Real 层组装） *)
+(* 组合形态：给出显式预算 N，min 尾界随之消解（定理 4.10 Real 层组装） *)
 Theorem budget_min_tail :
   forall (kappa a eps : Real)
          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)

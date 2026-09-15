@@ -1,11 +1,20 @@
 (* ============================================================ *)
+(* UpReqPadeLower.v *)
+(* *)
+(* 目的： Padé [2/2] 免除法正尾下界（误差界总装切片）。 *)
+(* 主件： cpl_qpow_pos / cpl_sq_nonneg 与正尾下界构造（数值实证 n=2）。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqQExpTail、UpReqPadeQLeg。 *)
+(* 备注： 语句面取 real_lt sigT 见证形，免除法（乘积面）；免积分第三形态。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeLower.v —— 席C-S1：Padé [2/2] 免除法正尾下界（误差界总装切片③） *)
 (* 日期：2026-09-14                                                *)
 (*                                                                 *)
-(* 任务定位：侦察报告 attn/_tcs1_侦察报告-20260914.md 判词【直通】的   *)
+(* 任务定位：侦察报告 attn/_tcs1_侦察报告-20260914.md 结论【直通】的   *)
 (*   执行件。工单 attn/_tcs4_误差界工单.md 依赖闸门实测：             *)
 (*   UpReqPadeTailPos / UpReqPadeBetaPos 未落盘（闸门0不过）——        *)
-(*   按主会话指令走 n=2 直路（本件不依赖两在飞件，禁等待禁堵）。       *)
+
 (*                                                                 *)
 (* 数学内核（免积分第三形态，数值实证 n=2）：                         *)
 (*   e^y·Q₂(y) − P₂(y) = (e^y − E₆)·Q₂ + (E₆·Q₂ − P₂)，其中          *)
@@ -18,17 +27,17 @@
 (*                                                                 *)
 (* 语句面：real_lt sigT 见证形（S02:455），免除法（乘积面），          *)
 (*   正性全走 QltT/Qlt 见证形——LPO 墙规避（E225 逐点可判定口径），     *)
-(*   零经典极限/积分性质。奇 n 镜像（上界）对称挂账，禁硬凑。          *)
+(*   零经典极限/积分性质。奇 n 镜像（上界）对称显式假设，禁硬凑。          *)
 (*                                                                 *)
 (* 消费面：CW_ConstructiveWorld_219（S01 NatLe_drop/S02 real_lt       *)
 (*   real_mult_proj real_const_proj QltT_to_Qlt Qlt_to_QltT /        *)
 (*   S03 exp_partial q_pow q_fact q_fact_pos）；UpReqPadeExp          *)
 (*   （pade_num/pade_den/pade_coeff）；UpReqQExpTail（qtail_le_plus_r）。*)
-(* 编译：coqc -Q "<VOTREE=ConstructiveWorld-Main/ConstructiveWorld_vo>" "" *)
+
 (*   -Q . "" UpReqPadeLower.v（PC 卡实测配方；工单草方 ../001 无       *)
-(*   CW219 产物不可用——沿用 PC 勘误）。CoreN 4（本席绑核）。           *)
+
 (* 公理面：主件 Print Assumptions 预期 Closed（无公理依赖）。          *)
-(* 哨兵值（对账工单 §1.4，S1 探针实测）：                            *)
+(* 哨兵值（核对工单 §1.4，S1 探针实测）：                            *)
 (*   S-b: pade_num 1 (1#2)==5#4、pade_den 1 (1#2)==3#4（直引 PC 哨兵）； *)
 (*   G6 恒等式 y=1/2: 121/2211840、y=1: 19/8640（fractions 精确）；    *)
 (*   见证 y=1/2: (1#2)^5/720 == 1#23040；n=0 退化: exp_partial 0 == 1， *)
@@ -38,30 +47,26 @@
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp.
 Require Import UpReqQExpTail.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+Require Import UpReqPadeQLeg.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 Section PadeLower.
 
-(* ===== B0 桥件（Qeq→Qlt 传桥；CS 卡：Qeq 禁 rewrite 进 Qlt 目标，destruct+nia 生路） ===== *)
+(* ===== B0 桥件（Qeq→Qlt 传桥；AA12 腿化：自建 Q 单调腿一跳，
+   断根 Psatz/micromega 环境闭包；语句面全不变） ===== *)
 
 (* 等值右传桥：a==b 时 0<a 传给 0<b（pds_qlt0_eq_r 同款证法，自持零依赖）。 *)
 Lemma cpl_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
   intros a b Hab Ha.
-  destruct a as [na da]. destruct b as [nb db].
-  unfold Qlt in Ha |- *. unfold Qeq in Hab.
-  simpl in Hab, Ha |- *.
-  nia.
+  exact (pql_qlt0_eq_r a b Hab Ha).
 Qed.
 
 (* 等值左传桥：x==a 时 x<b 传给 a<b（主件严格项重写用）。 *)
 Lemma cpl_qlt_eq_l : forall x a b : Q, x == a -> Qlt x b -> Qlt a b.
 Proof.
   intros x a b Hxa Hlt.
-  destruct x as [nx dx]. destruct a as [na da]. destruct b as [nb db].
-  unfold Qeq in Hxa. unfold Qlt in Hlt |- *.
-  simpl in Hxa, Hlt |- *.
-  nia.
+  exact (pql_qlt_eq_l x a b Hxa Hlt).
 Qed.
 
 (* Qeq 加/减/乘组合件：stdlib QArith_base 的 Proper Instance 直接当函数用 *)
@@ -75,15 +80,12 @@ Proof. intros w x y z H1 H2. apply Qminus_comp; assumption. Qed.
 Lemma cpl_qmult_comp : forall w x y z : Q, w == x -> y == z -> w * y == x * z.
 Proof. intros w x y z H1 H2. apply Qmult_comp; assumption. Qed.
 
-(* 严格右传桥（x 起点）：a==b ⟹ Qlt x a -> Qlt x b。 *)
-(* 经 Qlt_le_dec 可判定 + Qle_lt_trans + 左传桥组装，零 nia。 *)
+(* 严格右传桥（x 起点）：a==b ⟹ Qlt x a -> Qlt x b。
+   AA12 腿化：一跳 pql_qlt_eq_r（原注记「零 nia」目标至此真兑现）。 *)
 Lemma cpl_qlt_eq_sr : forall (x a b : Q), a == b -> Qlt x a -> Qlt x b.
 Proof.
   intros x a b Hab Ha.
-  destruct x as [nx dx]. destruct a as [na da]. destruct b as [nb db].
-  unfold Qeq in Hab. unfold Qlt in Ha |- *.
-  simpl in Hab, Ha |- *.
-  nia.
+  exact (pql_qlt_eq_r a b x Hab Ha).
 Qed.
 
 (* 幂非负：0<=y ⟹ 0<=y^k（逐项非负的单调性链底座）。 *)
@@ -128,7 +130,7 @@ Proof.
     + apply qeq_le. ring.
 Qed.
 
-(* ===== B1 哨兵件（工单 §1.4 对账；字面量点 vm_compute——CS 卡哨兵纪律） ===== *)
+(* ===== B1 哨兵件（工单 §1.4 核对；字面量点 vm_compute——CS 卡哨兵纪律） ===== *)
 
 (* S-b：PC 哨兵直引（系数公式+有界和+交错符号端到端）。 *)
 Lemma cpl_sent_s_b1 : pade_num 1%nat (1#2) == (5#4).
@@ -330,7 +332,7 @@ Proof.
         + apply (real_const_proj (pade_num 2%nat y) m). }
     assert (Hchain : Qlt (q_pow y 5%nat / 720)
                        (exp_partial m y * pade_den 2%nat y - pade_num 2%nat y)).
-    { (* Q 层收口链（Prop 证内） *)
+    { (* Q 层完成链（Prop 证内） *)
     assert (Hident : exp_partial 6%nat y * pade_den 2%nat y - pade_num 2%nat y ==
                      q_pow y 5%nat / 720 + q_pow y 6%nat / 1440 + q_pow y 8%nat / 8640)
       by (apply cpl_g6_identity).

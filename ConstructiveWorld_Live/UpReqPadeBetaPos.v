@@ -1,6 +1,15 @@
 (* ============================================================ *)
+(* UpReqPadeBetaPos.v *)
+(* *)
+(* 目的： Padé 系数 β_m 的闭式正性与符号传送。 *)
+(* 主件： pbp_beta_pos / pbp_beta_closed 闭式与 pbp_den_posT 分母正性。 *)
+(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqPadeQLeg。 *)
+(* 备注： 阶乘单调与下界 pbp_beta_lb_pos 为构造核；符号传送随行。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeBetaPos.v —— 席C-T1b：β_m 闭式正性 + 符号传送件          *)
-(*   （C 路闭合主轨第二切片；独立于正尾恒等式主件，可独立交付）        *)
+(*   （C 路闭合主轨第二切片；独立于正尾恒等式主件，可独立结果）        *)
 (* 日期：2026-09-14                                                *)
 (*                                                                 *)
 (* 数学对象（席C-S3 侦察报告探针 4 实锤，fractions 精确验证）：         *)
@@ -22,8 +31,9 @@
 (* 方法注记：                                                       *)
 (*   ① 语句面全 Set 层（QltT/QleT'，S02:26/77）；Prop 仅作证内桥       *)
 (*      （QltT_to_Qlt + Qlt_to_QltT 换桥），结论面不触 Q 表示墙。      *)
-(*   ② Qeq 穿透墙（PC2 卡⑦）：pbp_qlt0_eq_r 走 CS 卡生路——destruct    *)
-(*      双 Q 全构造子 + nia 双正消元（Psatz 已载）。                   *)
+(*   ② Qeq 穿透墙（PC2 卡⑦）：pbp_qlt0_eq_r 已 AA12 腿化——一跳        *)
+(*      UpReqPadeQLeg 自建 Q 单调腿（Z 乘法单调显式装配 + lia），       *)
+(*      语句面不变，零 Psatz。                                        *)
 (*   ③ 除法正性面：Qinv_lt_0_compat（stdlib QArith_base:1408 实名）+   *)
 (*      S03 q_le_div_le（同分母比较）；阶乘后继展开 q_fact_succ 的      *)
 (*      消费用 exact 转换面（fixpoint iota 折叠），零 setoid 依赖。     *)
@@ -37,7 +47,8 @@
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+Require Import UpReqPadeQLeg.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 From Stdlib Require Import Setoid Morphisms.
 
 (* ===== S1 阶乘面 ===== *)
@@ -189,15 +200,13 @@ Proof. intros n m. apply q_neq_of_lt. apply q_fact_pos. Qed.
 
 (* ===== S3 副件二：符号传送预备面（接口显式留白，不硬连 C-T1a） ===== *)
 
-(* Qeq 右换桥（本席最小传桥件）：a == b 时 0<a 传 0<b。
-   CS 卡生路：destruct 双 Q 全构造子 + nia 双正消元一步收口。 *)
+(* Qeq 右换桥（本件最小传桥件）：a == b 时 0<a 传 0<b。
+   AA12 腿化：一跳 UpReqPadeQLeg.pql_qlt0_eq_r（语句面不变，
+   原件 Require Psatz 的环境闭包公理三件随之断根）。 *)
 Lemma pbp_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
   intros a b Hab Ha.
-  destruct a as [na da]. destruct b as [nb db].
-  unfold Qlt in Ha |- *. unfold Qeq in Hab.
-  simpl in Hab, Ha |- *.
-  nia.
+  exact (pql_qlt0_eq_r a b Hab Ha).
 Qed.
 
 (* 符号传送：余项首项系数 lead == β_m·posf ⟹ 0 < lead。
@@ -251,7 +260,7 @@ Proof.
   - apply qeq_le. apply (Qdiv_mult_l (q_fact n) (q_fact (n + m)) Hneq).
 Qed.
 
-(* ===== 数值哨兵（探针对账：n=1 时 β_0..β_4 = 1/6,1/12,1/20,1/30,1/42） ===== *)
+(* ===== 数值哨兵（探针核对：n=1 时 β_0..β_4 = 1/6,1/12,1/20,1/30,1/42） ===== *)
 Lemma pbp_beta_1_0 : pbp_beta 1%nat 0%nat == (1#6)%Q.
 Proof. vm_compute. reflexivity. Qed.
 
@@ -261,7 +270,7 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma pbp_beta_1_2 : pbp_beta 1%nat 2%nat == (1#20)%Q.
 Proof. vm_compute. reflexivity. Qed.
 
-(* ===== G3 提取探针（全量 coqc 时生效；vos 秒审跳过副作用） ===== *)
+
 From Stdlib Require Import Extraction.
 Separate Extraction pbp_beta pbp_beta_lb pbp_qfact_ge1 pbp_qfact_mono
   pbp_beta_lb_pos pbp_beta_ge_lb pbp_beta_pos pbp_beta_pos_sigT

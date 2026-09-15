@@ -1,15 +1,24 @@
 (* ============================================================ *)
+(* UpDPOLip.v *)
+(* *)
+(* 目的： DPO softplus 的 Lipschitz 敏感性界。 *)
+(* 主件： real_softplus_lipschitz：softplus 的 1-Lipschitz 界；real_softplus_mono / real_softplus_diff_le 单调与差分界。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： β > 0 与参考策略逐点正以显式 Variable 前提给出；序谓词为 Or(lt, eq) 强编码，abs 形态边界见正文。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpDPOLip.v —— A4/B5 升级：DPO softplus-Lipschitz 敏感性界     *)
 (* 日期：2026-09-07。源：热点扫描 A4/B5（分析-219平凡定理热点扫描） *)
 (* 件 1 real_softplus 定义 + 恒等桥 + 单调性                     *)
 (* 件 2 real_softplus_diff_le（序前提单侧核，Lipschitz 数学核）   *)
 (*      + real_softplus_lipschitz（Or 序前提 abs/metric 推论）   *)
 (* 件 3 real_dpo_pair_loss_sensitivity（DPO 损失敏感性装配）      *)
-(* 纪律：纯构造性 / Set 层 / 零 Axiom / 零 Admitted / 零经典。    *)
+(* 纪律：纯构造性 / Set 层 / 零 公理 / 零 承认件 / 零经典。    *)
 (* 诚实边界：库内 real_le := Or real_lt real_eq（强编码），abs 形  *)
 (*   态无条件全称版需序二分（LPO 等价，构造性不可达）；故 abs 版  *)
 (*   以 Or (real_le x y) (real_le y x) 为显式 Set 层前提          *)
-(*   （E-STAGING-EntGain-5 先例工艺，语句不降级）。              *)
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -29,7 +38,7 @@ Lemma real_softplus_eq_dpo_logit : forall x : Real,
 Proof. intro x. apply real_eq_sym. exact (real_softplus_sigmoid_eq x). Qed.
 
 (* 单调性（递减）：x ≤ y ⟹ softplus y ≤ softplus x
-   （exp_neg 递减给 1+e^{−y} ≤ 1+e^{−x}；log 保序收口）。 *)
+   （exp_neg 递减给 1+e^{−y} ≤ 1+e^{−x}；log 保序完成）。 *)
 Lemma real_softplus_mono : forall x y : Real, real_le x y ->
   real_le (real_softplus y) (real_softplus x).
 Proof.
@@ -107,7 +116,7 @@ Qed.
 (* 件 2：序前提单侧核（Lipschitz 数学核）                        *)
 (*   b ≤ a ⟹ softplus b − softplus a ≤ a − b                     *)
 (* 数学核：1+e^{−b} ≤ e^{a−b} + e^{−b} == (1+e^{−a})·e^{a−b}     *)
-(*   （e^{a−b} ≥ 1 由 b ≤ a），两侧取 log + log 加法性收口。      *)
+(*   （e^{a−b} ≥ 1 由 b ≤ a），两侧取 log + log 加法性完成。      *)
 (* ============================================================ *)
 Lemma real_softplus_diff_le : forall a b : Real, real_le b a ->
   real_le (real_plus (real_softplus b) (real_opp (real_softplus a)))
@@ -147,7 +156,7 @@ Proof.
                                   HE1 (real_le_refl (real_exp_neg b))).
     - apply real_eq_le_bridge. apply real_eq_sym. exact HQ.
   }
-  (* 步 4：log 收口：softplus b ≤ softplus a + (a − b) *)
+  (* 步 4：log 完成：softplus b ≤ softplus a + (a − b) *)
   assert (Hlog : real_le (real_softplus b)
                          (real_plus (real_softplus a) (real_plus a (real_opp b)))).
   { apply (real_le_trans (real_softplus b)
@@ -169,7 +178,7 @@ Proof.
                  (real_log E (real_exp_neg_pos u))
                  (real_softplus a) (real_plus a (real_opp b))).
         * apply real_eq_refl.
-        * (* log E == −(b−a) == a − b：log 左逆 + opp 代数 *)
+        * 
           apply (real_eq_trans (real_log E (real_exp_neg_pos u))
                                (real_opp u) _).
           -- exact (log_inv_exp_neg_thm (real_opp u) (real_exp_neg_pos u)).
@@ -237,7 +246,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件 2 收口：abs 消解工具 + Or 序前提 Lipschitz 主推论          *)
+(* 件 2 完成：abs 消解工具 + Or 序前提 Lipschitz 主推论          *)
 (* ============================================================ *)
 
 (* 0 ≤ d ⟹ |d| == d（real_abs_pos_req 的 le 版：Or 两支）。 *)

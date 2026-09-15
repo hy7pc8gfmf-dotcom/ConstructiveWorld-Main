@@ -1,6 +1,15 @@
-(* ===== CW219 拆分分片 S11_TP3B5（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L66415-L79152；头部 21 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08 S09 S10；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S11_TP3B5.v                                                 *)
+(*                                                             *)
+(* 目的：论文3 B5 模块：arctan 级数与 sin/cos 在单位域的逐点     *)
+(*       连续性链（Q 层 + Real 层，构造性 Set 层）。             *)
+(* 主件：arctan 在单位域内逐点连续；sin/cos 连续；               *)
+(*       4·arctan(1) == π_L 值桥。                               *)
+(* 依赖：S01–S10；Stdlib（QArith、Qabs、Qround、List、Bool、     *)
+(*       Arith、Setoid、Morphisms、Lia、Qminmax、Lqa）。          *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L66415-L79152，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -21,7 +30,7 @@ Opaque Qred.
 
 
 (* ============================================================ *)
-(* SC-2 批（合入 203）：N9a arctan 级数（T-pi3 A1/B3-1）      *)
+(* SC-2 批（并入 203）：N9a arctan 级数（T-pi3 A1/B3-1）      *)
 (* arctan_term/partial + 模量 + cauchy_real_arctan + x=1 桥   *)
 (* ============================================================ *)
 
@@ -877,14 +886,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批（合入 204）：T-pi3 A2/B3-2 tan-arctan 收官链（sT2）  *)
+(* SC-2 批（并入 204）：T-pi3 A2/B3-2 tan-arctan 完结链（sT2）  *)
 (* real_tan + arctan(1) 域正性 + tan==1<->sin==cos 桥 + 倍角    *)
-(* + N10->F1 收官装配（H4/Hsc 两解析输入 Section 化）            *)
+(* + N10->F1 完结装配（H4/Hsc 两解析输入 Section 化）            *)
 (* ============================================================ *)
 
 (* ================================================================== *)
 (*  sT2_tan / p_tan_def.v   N9b 核心一：Real 层 tan 定义 + 代数桥     *)
-(*  依赖：CW.ConstructiveWorld（迭代 203：N9a 已合入，rs_add_cos 在） *)
+(*  依赖：CW.ConstructiveWorld（迭代 203：N9a 已并入，rs_add_cos 在） *)
 (*  内容：                                                             *)
 (*    - real_tan w Hw := sin w · inv_pos(cos w) Hw（cos w > 0 域）     *)
 (*    - tan w · cos w == sin w                                        *)
@@ -1229,10 +1238,10 @@ Proof.
   unfold arctan_one_tan, real_tan. apply real_eq_refl.
 Qed.
 (* ================================================================== *)
-(*  sT2_tan / p_n10_channel.v   N9b 收官通道：B4（N10）装配骨架        *)
+(*  sT2_tan / p_n10_channel.v   N9b 完结通道：B4（N10）装配骨架        *)
 (*  依赖：p_tan_def.v + p_atan1_bounds.v + CW.ConstructiveWorld        *)
 (*  内容：证明 B4/N10（cos(w_leibniz)==0 ⟹ F1）的每一步 glue 都是真证， *)
-(*  仅保留两个解析输入为 Section 变量（合法：零 Axiom）：              *)
+(*  仅保留两个解析输入为 Section 变量（合法：零公理面）：              *)
 (*    - H4 : 4·arctan(1) == π_L（B3-3 值桥；A3 批纯级数可证）          *)
 (*    - Hsc : sin(arctan(1)) == cos(arctan(1))                        *)
 (*        （= tan(arctan(1)) == 1 经 real_tan B1/B2 桥；               *)
@@ -1283,7 +1292,7 @@ Qed.
 (* ============ B. N5：由 H4（B3-3 值桥）+ Hsc ⟹ cos(w_leibniz) == 0 ============ *)
 Section N10Channel.
 
-(* 输入 1（B3-3 值桥，A3 批交付）：4·arctan(1) == π_L *)
+(* 输入 1（B3-3 值桥）：4·arctan(1) == π_L *)
 Hypothesis H4 : real_eq (real_mult (real_const 4) theta1) cauchy_real_pi_leibniz.
 
 (* 输入 2（N9b 核心，本批精确定义为唯一解析输入）：
@@ -1408,7 +1417,7 @@ Proof.
   exact (real_sin_eq_cos_tan_eq_one theta1 real_cos_arctan_one_pos Hsc).
 Qed.
 
-(* 复合收官引理（供 B4 直接引用）：tan(arctan(1)) == 1 + B3-3 ⟹ F1 *)
+(* 复合完结引理（供 B4 直接引用）：tan(arctan(1)) == 1 + B3-3 ⟹ F1 *)
 Lemma n10_closure_f1_tan :
   (real_eq (real_mult (real_const 4) theta1) cauchy_real_pi_leibniz) ->
   (real_eq arctan_one_tan real_one) ->
@@ -1600,7 +1609,7 @@ Section A3HscToF1.
 
 End A3HscToF1.
 
-(* 闭包形态（H4 已闭证 ⟹ 只剩 Hsc 一个输入；N9b 批实例化即收官） *)
+(* 闭包形态（H4 已闭证 ⟹ 只剩 Hsc 一个输入；N9b 批实例化即完结） *)
 Lemma a3_closure_f1 :
   (real_eq (cauchy_real_sin arctan_one_real) (cauchy_real_cos arctan_one_real)) ->
   real_eq real_pi_geom cauchy_real_pi_leibniz.
@@ -1616,8 +1625,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T-π3 Hsc Phase A 合入（迭代 207）：B1+B2 sin/cos 可微          *)
-(* 来源：sc2_f1_sincos 批（19+15 Qed）；零 Axiom；206 基态之上      *)
+(* T-π3 Hsc Phase A 并入（迭代 207）：B1+B2 sin/cos 可微          *)
+(* 来源：sc2_f1_sincos（19+15 Qed）；零公理面。                    *)
 (* ============================================================ *)
 
 Open Scope Q_scope.
@@ -2290,7 +2299,7 @@ Qed.
 
 Open Scope Q_scope.
 
-(* Qeq 形态实例随 CW2.sc2_f1_sincos_b1 的 Require 导入（#[global]）。 *)
+(* Qeq 形态实例随上游 sc2_f1_sincos_b1 的 Require 导入（#[global]）。 *)
 
 (* ---- sin_partial / cos_partial 的 Qeq 全等（重写进参数所需） ---- *)
 Lemma sc_sin_term_wd : forall (j : nat) (x y : Q), x == y -> sin_term j x == sin_term j y.
@@ -3249,8 +3258,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T-pi3 B3a 阶段合入（迭代 208）：arctan 导数 Q 层引擎        *)
-(* 来源：sc2_b3_arctanp checkpoint（20 Qed）；零 Axiom；207 基态  *)
+(* T-pi3 B3a 阶段并入（迭代 208）：arctan 导数 Q 层引擎        *)
+(* 来源：sc2_b3_arctanp（20 Qed）；零公理面。                     *)
 (* ============================================================ *)
 
 Open Scope Q_scope.
@@ -3626,7 +3635,7 @@ Qed.
 
 
 (* ============================================================ *)
-(* Q 层第 5 部分：(a) 余项上界（|x| ≤ r < 1 的闭式收口）          *)
+(* Q 层第 5 部分：(a) 余项上界（|x| ≤ r < 1 的闭式估计）          *)
 (* |b3_dsum n x − Qinv(1+x²)| ≤ |x|^{2S n}·1 ≤ r^{2S n}          *)
 (* 以及 r=1/2 常数版 ≤ 4^{-(S n)}                                 *)
 (* ============================================================ *)
@@ -3670,10 +3679,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：B3a Real 层 arctan 导数      *)
+(* B3a Real 层 arctan 导数      *)
 (* （|x| ≤ 1/2 逐 eps 可微，主定理 real_arctan_deriv_linear）；   *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b3_arctanp/sc2_b3_real.v *)
-(* 30 Qed；零 Axiom/Admitted/admit/Abort；基态 210（71,223 行）。 *)
+(* 30 Qed；零公理面、零承认件。                                   *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -4836,10 +4845,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：B3a Real 层 r 参数化主定理    *)
+(* B3a Real 层 r 参数化主定理    *)
 (* （|x| ≤ r < 1；b3rr_real_arctan_deriv_linear 收尾）；          *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b3_arctanp/sc2_b3_real_r.v *)
-(* 20 Qed；零 Axiom/Admitted/admit/Abort。                      *)
+(* 20 Qed；零公理面、零承认件。                                 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -5462,7 +5471,7 @@ Qed.
 (* 域 |x| ≤ r（0 ≤ r < 1，逐点 QleT' 前提）；δ := min((1−r)/2,  *)
 (*   eps·k)（k := Qinv(4(Cr+1))，Cr := b3rr_C2((1+r)/2)）。       *)
 (* 镜像蓝图 sc2_b3_real.v Part 8 real_arctan_deriv_linear 的     *)
-(* 点值链（CW2 只读参考；(1/2)-底换 r，Cb 换 Cr）。              *)
+(* 点值链（上游只读参考；(1/2)-底换 r，Cb 换 Cr）。              *)
 (* ============================================================ *)
 Lemma b3rr_real_arctan_deriv_linear :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -5788,8 +5797,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 209 批量回收：B4 链式 infra（p2 完整 + p3 前件）+ B5-B E/Hsc 桥 *)
-(* b4_chain_lipschitz 未完成排除（B4 续修中）；零 Axiom；208 基态      *)
+(* B4 链式 infra（p2 完整 + p3 前件）+ B5-B E/Hsc 桥 *)
+(* b4_chain_lipschitz 未纳入（排除项）；零公理面。                    *)
 (* ============================================================ *)
 
 
@@ -6617,7 +6626,7 @@ Qed.
 
 (* ============================================================ *)
 (* 迭代 210：B4 Tier1 链式主引理 b4_chain_lipschitz                *)
-(* 来源：sc2_b4_chain p3；209 前件已在根；零 Axiom                  *)
+(* 来源：sc2_b4_chain p3；前置件已在上游根模块；零公理面            *)
 (* ============================================================ *)
 
 Lemma b4_chain_lipschitz :
@@ -7082,7 +7091,7 @@ Proof.
       ring. } }
 Qed.
 
-(* ---- 主引理：arctan 在单位域内逐点连续（task 1 交付） ---- *)
+(* ---- 主引理：arctan 在单位域内逐点连续 ---- *)
 Lemma b5b_arctan_cont_unit : forall (x : Real) (Hx : cw_unit x) (epsQ : Q),
   QltT 0 epsQ ->
   sigT (fun delta : Real => And (real_lt real_zero delta)
@@ -7155,7 +7164,7 @@ Proof.
           rewrite (real_plus_proj x h n).
           ring. }
         { exact Hhn. } }
-      (* ④ 收口：epsQ/2 < epsQ − Dn ⟺ Dn < epsQ/2（q_lt_minus_shift） *)
+      (* ④ 结论：epsQ/2 < epsQ − Dn ⟺ Dn < epsQ/2（q_lt_minus_shift） *)
       apply Qlt_to_QltT.
       apply (q_lt_minus_shift (Qabs (arctan_partial n (projT1 (real_plus x h) n) -
                                   arctan_partial n (projT1 x n))) epsQ (epsQ / 2)).
@@ -7451,7 +7460,7 @@ Proof.
       + apply Qplus_le_compat.
         * exact HcAb.
         * apply Qle_refl. }
-  (* 收口：cU + (cU + gW) ≤ Tgt *)
+  (* 结论：cU + (cU + gW) ≤ Tgt *)
   apply (Qle_trans _ (Qplus cU (Qplus cU (Qmult g W))) _).
   - exact HS2.
   - apply qeq_le.
@@ -7460,7 +7469,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：B5-A 微分代数基座            *)
+(* B5-A 微分代数基座            *)
 (* （E/S 构造、Q 层基础、sin/cos 复合误差分解代数；11 Qed）；     *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_ode.v；  *)
 (* 注：沙箱内 Qeq setoid Instance 重复块（ode.v L20-33）与根     *)
@@ -7529,7 +7538,7 @@ Qed.
 (* ============================================================ *)
 Section B5A_Ode.
 
-(* ---- arctan'（B3 批交付形态；扰动点证书由调用方提供 ——
+(* ---- arctan'（B3 形态；扰动点证书由调用方提供 ——
         exp/log 模板：|x|<1 前提以逐点 |x_n| ≤ 1 见证承载；
         域 [0,1) 覆盖由 B3 保证。导数项 = h·inv_pos(1+x²)。） ---- *)
 Variable real_arctan_deriv :
@@ -7604,7 +7613,7 @@ End B5A_Ode.
 (* sin v−v ≈ v³/6、v−dh（arctan' 误差）各 ≤ eps 份额。            *)
 (* ============================================================ *)
 
-(* ---- Q 层 sin/cos 部分和参数 Qeq 全等（B2 沙箱件未合入根，自建） ---- *)
+(* ---- Q 层 sin/cos 部分和参数 Qeq 全等（B2 沙箱件未并入根，自建） ---- *)
 Lemma b5a_sin_term_wd : forall (j : nat) (x y : Q), x == y -> sin_term j x == sin_term j y.
 Proof.
   intros j x y Hxy.
@@ -7786,7 +7795,7 @@ Proof.
                                     (real_mult (cauchy_real_cos A) (real_mult (b5a_atan_d x) h))))).
       * apply (rs_add_sin A v).
       * apply real_eq_refl.
-    + (* ring 收口：逐点 Q-ring（sinA/cosA/cosv/sinv/v/d·h 为原子） *)
+    + (* ring 证毕：逐点 Q-ring（sinA/cosA/cosv/sinv/v/d·h 为原子） *)
       apply real_eq_of_zero_diff. intro n.
       repeat (first [ rewrite real_plus_proj | rewrite real_opp_proj
                     | rewrite real_mult_proj | rewrite real_const_proj ]).
@@ -7917,7 +7926,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：B5-A 续做                    *)
+(* B5-A 续做                    *)
 (* （单位域证书/提升件/S 正性/E(0)==0/item-2 代数核心；26 Qed）； *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_cont.v  *)
 (* ============================================================ *)
@@ -8536,7 +8545,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 211 批量回收（2026-09-04）：B5-A item-1 逐点 Q 层全证    *)
+(* B5-A item-1 逐点 Q 层全证    *)
 (* （I1-I6 + J1-J3 装配套，40 Qed；主引理 b5a_sin/cos_atan_diff  *)
 (* 未入文件，外层装配留后续批）；来源：                          *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1.v       *)
@@ -8558,7 +8567,7 @@ Qed.
 
 Section B5A_Item1.
 
-(* ---- arctan'（B3 交付形态；sc2_b5a_ode.v §B5A_Ode 同款规格）---- *)
+(* ---- arctan'（B3 形态；sc2_b5a_ode.v §B5A_Ode 同款规格）---- *)
 Variable real_arctan_deriv :
   forall (x : Real) (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1),
   forall (eps : Real), real_lt real_zero eps ->
@@ -10437,10 +10446,10 @@ Qed.
 End B5A_Item1.
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B4 Tier2 收官                  *)
+(* B4 Tier2 完结                  *)
 (* （导数界 ⟹ 函数界：eps 桥 + eps0 端点界 + 区间常值；10 Qed）；  *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b4_chain/p5_tier2_fin.v； *)
-(* 零 Axiom/Admitted/admit/Abort/Parameter；基态 211（76,830 行）。*)
+(* 零公理面、零承认件、零参数声明。                              *)
 (* ============================================================ *)
 
 (* ================= ① 逐点换形件 =================
@@ -10531,7 +10540,7 @@ Qed.
 
 (* ================= ④ eps0-对角端点界 =================
    逐 e（Real）界：由 Tier1（M:=eps0、ε:=e/2）+ d ≤ 1+|d| 缩放 +
-   eps0·C == e/2 收口 ⟹ real_le (|f b − f a|) e。
+   eps0·C == e/2 代入 ⟹ real_le (|f b − f a|) e。
    （p4_tier2.v ② 同款移植；依赖根内 b4_chain_lipschitz/b4_inv_cancel/
     b4_pos_diff/b4_qring/real_abs_plus_one_pos，按名引用。零 setoid_rewrite。） *)
 Lemma b4_chain_bound_eps0 :
@@ -10639,10 +10648,10 @@ Qed.
    real_le = Or real_lt real_eq（根 3521）：对每 Q eps0 > 0 用
    e := real_const (eps0/3) 实例化前提：
     - inl（real_lt X (eps0/3)）：同 ② unpack（sep 见证），链
-      Xn < eps0/3 − sep < eps0/3 < eps0（b4_q_lt_half 收口）；
+      Xn < eps0/3 − sep < eps0/3 < eps0（经 b4_q_lt_half）；
     - inr（real_eq X (real_const (eps0/3))）：X ≈ eps0/3，取 δ := eps0/3：
       |X_n − eps0/3| < eps0/3 ⟹ X_n < 2·(eps0/3) < eps0（q_abs_lt_lower
-      上支 + b4_q_lt_two_thirds 收口）。
+      上支 + b4_q_lt_two_thirds 证毕）。
    零 setoid_rewrite：全程 Qlt_minus_iff + qeq_le + q_abs_lt_lower。 *)
 Lemma b4_abs_le_forall_eps_eq : forall (x y : Real),
   (forall (e : Real), real_lt real_zero e ->
@@ -10799,7 +10808,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B5-B task3 Q 层端点闭合件        *)
+(* B5-B task3 Q 层端点闭合件        *)
 (* （b5b_E_close_q 主件 + 10 个 b5b_ecl_* 纯 Q 辅助；11 Qed）；      *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5b_endpoint/              *)
 (*   sc2_b5b_05_eclose.v；依赖根 b5b_En/b5b_E_gap/b5b_arch2。       *)
@@ -11008,14 +11017,14 @@ Proof.
     assert (Hsum2 : Qlt ((4 * c) * T + g * K) eps).
     { apply (Qlt_le_trans ((4 * c) * T + g * K) (eps / 3 + 2 * (eps / 3)) eps);
         [exact Hsum | apply qeq_le; apply (b5b_ecl_third_sum eps Heps)]. }
-    (* 收口：|Δ| ≤ 4cT + gK < eps *)
+    (* 结论：|Δ| ≤ 4cT + gK < eps *)
     apply (Qle_lt_trans (Qabs (b5b_En n (1 - g) - b5b_En n 1))
                          ((4 * c) * T + g * K) eps);
       [exact Hgap | exact Hsum2].
 Qed.
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B5-B task2 + task5 收尾          *)
+(* B5-B task2 + task5 收尾          *)
 (* （b5b_sin_cont / b5b_cos_cont 全域逐 eps 连续；b6_f1_template 与 *)
 (* Section B5bEndpointBridge 桥件 b5b_f1_closure；6 Qed）；来源：    *)
 (*   演变/.ablation/sc2_parallel/sc2_b5b_endpoint/sc2_b5b_07_cont.v *)
@@ -11041,9 +11050,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* task 5：B6 模板与闭包（零 Axiom；b5b_hsc_theorem 未在根     *)
+(* B6 模板与闭包（零公理面；b5b_hsc_theorem 未在上游根件        *)
 (*  Qed——A 线（05_eclose/06_endpoint）产出——本文件以 Section    *)
-(*  Hypothesis 声明其语句证明 b5b_f1_closure，父代理在 A 线合入 *)
+(*  Hypothesis 声明其语句证明 b5b_f1_closure，A 线并入 *)
 (*  后再组装（b5b_f1_closure hsc 消去第一参数）。）               *)
 (* ============================================================ *)
 
@@ -11084,10 +11093,10 @@ End B5bEndpointBridge.
 (*  |cos x·h| ≤ Mc·|h|（real_norm_bounded 逐点）；               *)
 (*  δ := real_min δ' (const c)，c := epsQ/(2·(epsQ/4+Mc))：     *)
 (*  |h| < c−e1 ⟹ 总 ≤ epsQ/4 + eps1 + (epsQ/4+Mc)|h| < 7epsQ/8， *)
-(*  再 q_lt_minus_shift 收口（仿 03 逐点样式）。                 *)
+(*  再经 q_lt_minus_shift 证毕（仿 03 逐点样式）。                 *)
 (* ============================================================ *)
 
-(* ---- sin 连续（task 2 交付 1/2） ---- *)
+(* ---- sin 连续（1/2） ---- *)
 Lemma b5b_sin_cont : forall (x : Real) (epsQ : Q), QltT 0 epsQ ->
   sigT (fun delta : Real => And (real_lt real_zero delta)
     (forall h : Real, real_lt (real_abs h) delta ->
@@ -11307,7 +11316,7 @@ Proof.
           + exact Htot2.
           + exact Hmid_lt.
         - exact Hmid_lt2. }
-      (* ⑩ 收口：An < epsQ − epsQ/8（(epsQ/4+Mc)·c == epsQ/2） *)
+      (* ⑩ 结论：An < epsQ − epsQ/8（(epsQ/4+Mc)·c == epsQ/2） *)
       apply (qltT_eq_compat_r
                (projT1 (real_const epsQ) n
                 - projT1 (real_abs (real_plus (cauchy_real_sin (real_plus x h))
@@ -11341,7 +11350,7 @@ Proof.
                  [ apply Qlt_le_weak; exact HMc0 | unfold Qle; simpl; lia ] ]. } }
 Qed.
 
-(* ---- cos 连续（task 2 交付 2/2） ---- *)
+(* ---- cos 连续（2/2） ---- *)
 Lemma b5b_cos_cont : forall (x : Real) (epsQ : Q), QltT 0 epsQ ->
   sigT (fun delta : Real => And (real_lt real_zero delta)
     (forall h : Real, real_lt (real_abs h) delta ->
@@ -11561,7 +11570,7 @@ Proof.
           + exact Htot2.
           + exact Hmid_lt.
         - exact Hmid_lt2. }
-      (* ⑩ 收口 *)
+      (* ⑩ 证毕 *)
       apply (qltT_eq_compat_r
                (projT1 (real_const epsQ) n
                 - projT1 (real_abs (real_plus (cauchy_real_cos (real_plus x h))
@@ -11595,11 +11604,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B5-B task3 端点装配件            *)
+(* B5-B task3 端点装配件            *)
 (* （Section B5B_Endpoint：b5b_endpoint / b5b_hsc_theorem，End 泛化 *)
 (* 为参数；闭式装配套 b5b_f1_closure（依赖 05/07 块）；9 Qed）；     *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5b_endpoint/              *)
-(*   sc2_b5b_06_endpoint.v（CW2 双 Require 按规格剥除，块内联）。   *)
+(*   sc2_b5b_06_endpoint.v（上游双 Require 按规格剥除，块内联）。   *)
 (* ============================================================ *)
 
 (* ============ 顶层 Q / Real 辅助（field/ring 安全） ============ *)
@@ -11656,7 +11665,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Section B5B_Endpoint：b5a_E_zero_on_unit（b5a 型）内收口      *)
+(* Section B5B_Endpoint：b5a_E_zero_on_unit（b5a 型）内证毕      *)
 (* End 后导出：b5b_endpoint : b5a 型 → E(1)==0；                *)
 (*             b5b_hsc_theorem : b5a 型 → Hsc。                 *)
 (* ============================================================ *)
@@ -11804,7 +11813,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B5-A item1b 主装配（镜像 Section *)
+(* B5-A item1b 主装配（镜像 Section *)
 (* B5A_Item1B：Variable real_arctan_deriv，End 泛化为参数；24 件，  *)
 (* 16 整行 Qed，含 b5a_sin_atan_diff；BAD 0）。来源：                *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1b.v；        *)
@@ -11814,7 +11823,7 @@ Qed.
 
 From Stdlib Require Import Lqa.
 (* ============================================================ *)
-(* U2 镜像 Section：arctan' 条件件（B3 交付形态；根同款规格）    *)
+(* U2 镜像 Section：arctan' 条件件（B3 形态；上游根件同款规格）  *)
 (* ============================================================ *)
 Section B5A_Item1B.
 
@@ -11833,7 +11842,7 @@ Variable real_arctan_deriv :
                   (real_plus (real_mult eps (real_abs h)) eps'))).
 
 (* ============================================================ *)
-(* Part A：Q 预算件（纯 Q；nra 关闭跨乘；q_le_div_le 收口）      *)
+(* Part A：Q 预算件（纯 Q；nra 禁跨乘；q_le_div_le 证毕）        *)
 (* 约定：S > 0、Mc ≥ 0、K1 ≥ 0；                               *)
 (*   kδ := Qinv(512(S+1))                                      *)
 (*   k2 := Qinv(512(S+1)(3S+Mc+1))                             *)
@@ -12474,7 +12483,7 @@ Qed.
 (* ============================================================ *)
 (* Part E：b5a_sin_atan_diff 主装配（W）                         *)
 (*   δ := min(min(min δa (1/2)) (eps·kδ)) (1/4 · inv(1+eps·k2)) *)
-(*   预算：colQ = eta = (1#8)·e1'；en/en' 逐点非负；收口 margin  *)
+(*   预算：colQ = eta = (1#8)·e1'；en/en' 逐点非负；margin 证毕  *)
 (* ============================================================ *)
 
 (* eps 见证的逐点提取：0 < e 且 ∀ n ≥ N：e < projT1 eps n *)

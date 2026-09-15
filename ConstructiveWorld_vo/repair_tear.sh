@@ -19,7 +19,7 @@
 # 坑位遵守（LC/HC2 卡）：依赖名提取用字面 grep（本环境 awk 字符类静默零输出）；
 #   _CoqProject 与比对一律 tr -d '\r'（本树实测混合行尾，CRLF 行 v1 静默跳过）。
 # 接口（兼容 CI workflow coq.yml build 步）：build 前调用、输出 TEAR 清单、零交互、
-#   恒 exit 0。coqchk 取 PATH，缺席兜底 9.0 全路径（run #53 教训）；可 COQCHK=覆盖。
+#   恒 exit 0。coqchk 取 PATH，缺席兜底 9.1 全路径（run #53 教训；2026-09-15 全库换装 9.1）；可 COQCHK=覆盖。
 # 环境开关（默认全关，CI 默认行为=删；不设即与 v1 语义兼容）：
 #   TRT2_DRYRUN=1    只报告不删（诊断/验收用）
 #   TRT2_SUSPECT=RE  覆盖高嫌疑集正则（对 .v 基名整体匹配，-i）
@@ -31,7 +31,13 @@ DRYRUN="${TRT2_DRYRUN:-0}"
 #   判据③ digest 冒烟在默认 CI 环境沦为死代码（沙箱 TTempFam 实证：纯 digest 撕裂 0 感知）。
 SUSPECT="${TRT2_SUSPECT:-.*Temp.*|.*Bridge.*|.*Gibbs.*|.*Align.*|.*TVAbs.*|.*Entropy.*}"
 # run #53 教训：自托管 runner 的 bash 无 coqchk 于 PATH——裸 `coqchk` 得 EXIT=127。
-COQCHK_BIN="${COQCHK:-$(command -v coqchk 2>/dev/null || echo "C:/Rocq-Platform~9.0~2025.08/bin/coqchk.exe")}"
+# SW2 换装（2026-09-15）：用户级 COQLIB/ROCQLIB 钉 9.0 lib 会压过 9.1 coq_environment.txt，
+# 故随解析出的 coqchk 路径推导导出，保证 bin/lib 同源（E-STAGING-SW2）。
+COQCHK_BIN="${COQCHK:-$(command -v coqchk 2>/dev/null || echo "C:/Rocq-Platform~9.1~2026.01/bin/coqchk.exe")}"
+case "$COQCHK_BIN" in
+  */bin/coqchk.exe) export COQLIB ROCQLIB; COQLIB="${COQCHK_BIN%/coqchk.exe}"; COQLIB="${COQLIB%/bin}/lib/coq"; ROCQLIB="$COQLIB" ;;
+  */bin/coqchk)     export COQLIB ROCQLIB; COQLIB="${COQCHK_BIN%/coqchk}";     COQLIB="${COQLIB%/bin}/lib/coq"; ROCQLIB="$COQLIB" ;;
+esac
 n=0
 declare -A REMOVED
 note() { echo "repair_tear: $*"; }

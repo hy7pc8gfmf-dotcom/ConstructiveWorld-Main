@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* AttnHardLimit218.v *)
+(* *)
+(* 目的： 硬注意力极限的逐固定温度 T 显式不等式刻划。 *)
+(* 主件： hard_dist / decay_T：注意力分布到硬分布的距离随 T 递减的显式衰减界（ZT_pos、w_T、factor_T）。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 仅给出逐固定 T 的不等式，不做 T→0 收敛语句主张；词表非空与 Token 可判定相等以显式 Variable 前提给出。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AttnHardLimit.v —— P4 升级包：硬注意力极限定理               *)
 (*                                                              *)
 (*   主定理 hard_attention_limit：T→0 的总变差收敛（量词翻转）  *)
@@ -20,7 +29,7 @@
 (*     一致 real_le 常数间隙在构造性框架内不可行（无实数序的     *)
 (*     可判定比较），故以单一显式 γ 为前提变量（可实例化）。    *)
 (*                                                              *)
-(*   纪律：纯构造性、零 Axiom/Admitted/Abort/Classical；         *)
+(*   纪律：纯构造性、零 公理/承认件/弃证/Classical；         *)
 (*         语句全 Set 层（sigT/库内 And/Or/Id）；全部 Qed。      *)
 (* ============================================================ *)
 
@@ -243,7 +252,7 @@ Variable gap_le : forall x : Token, Not (Id x m) ->
 
 (* ---------- 3. 计数/删除组合学 ---------- *)
 (*   惯例：先 cbn 暴露 match 层，再 destruct token_eq_dec；     *)
-(*   嵌套层逐层处理；矛盾分支用 Empty_set 匹配收口。            *)
+(*   嵌套层逐层处理；矛盾分支用 Empty_set 匹配完成。            *)
 
 Lemma count_zero_notin : forall (t : Token) (l : list Token),
   @Id nat (count_token t l) O -> not_InT t l.
@@ -1205,7 +1214,7 @@ Proof.
                  (cauchy_real_exp (real_opp a))).
         + apply cauchy_real_exp_pos.
         + exact Hs4. }
-    (* 收口：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
+    (* 完成：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
     apply (real_le_trans _
              (real_mult (real_of_nat (length vocab))
                         (decay_T T Ht)) _).

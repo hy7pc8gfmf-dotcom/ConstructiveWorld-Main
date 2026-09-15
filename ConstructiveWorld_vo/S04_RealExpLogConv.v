@@ -1,6 +1,16 @@
-(* ===== CW219 拆分分片 S04_RealExpLogConv（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L13801-L18733；头部 12 行（含尾空行）；
-   依赖：S01 S02 S03；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S04_RealExpLogConv.v                                        *)
+(*                                                             *)
+(* 目的：实数指数/对数接口与其收敛性：exp/log 基本式、卷积与     *)
+(*       温度参数化 Boltzmann 族的最大熵对偶（构造性 Set 层）。  *)
+(* 主件：max_entropy_is_boltzmann_temp（同能量 ⟹ 熵最大，温度    *)
+(*       版）与 entropy_max_unique_temp（唯一性，温度版）。      *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib      *)
+(*       （QArith、Qabs、Qround、List、Bool、Arith、Setoid、     *)
+(*       Morphisms、Lia、Qminmax）。                             *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
+(*       L13801-L18733，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -1069,7 +1079,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   论文4 收敛缺口补强（κ 定理化方向，2026-09-01 合入）：
+   论文4 收敛缺口补强（κ 定理化方向，2026-09-01 并入）：
    从 μ-强凹 + Lipschitz + 步长约束推正分支梯度收缩
    核心：gradient_step_contraction（单步收缩）、
          gradient_step_abs_contraction（绝对值收缩 κ := 1−ημ）、
@@ -3887,7 +3897,7 @@ Qed.
 
 (* ============================================================ *)
 (* A-3：T2.2 对偶合拢——温度参数化 Boltzmann 族的约束熵最大     *)
-(*   闭环（论文2 最大熵 Lagrange 对偶的构造性收口）             *)
+(*   闭环（论文2 最大熵 Lagrange 对偶的构造性证明）             *)
 (*   组装：entropy_temp_explicit（熵显式公式）+                 *)
 (*   relative_entropy_temp_decomp（KL 温度分解）+               *)
 (*   entropy_deficit_kl_temp（熵亏 = KL，温度版）⟹              *)

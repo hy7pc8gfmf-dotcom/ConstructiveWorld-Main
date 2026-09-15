@@ -1,6 +1,15 @@
 (* ============================================================ *)
-(* UpReqGibbsD.v —— 槽放电战役 #1：gibbs_inequality（UpReqDist.v）      *)
-(*   Real 实例化放电件（皇冠执行席，2026-09-10）                        *)
+(* UpReqGibbsD.v *)
+(* *)
+(* 目的： gibbs_inequality 槽的显式供给（UpReqDist 载体）。 *)
+(* 主件： gibbsd_le_b_mult_pos_r / gibbsd_p_mult_ratio 等 ≤_B 引理族，供 gibbs_inequality 消费。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB。 *)
+(* 备注： 消费链假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用（非公理面）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqGibbsD.v —— 槽消解战役 #1：gibbs_inequality（UpReqDist.v）      *)
+(*   Real 实例化消解件（皇冠执行席，2026-09-10）                        *)
 (* ------------------------------------------------------------------ *)
 (* 引擎形状核对结论（普查 §380 落点纪律执行记录）：                      *)
 (*   引擎 real_log_le_linear_B @UpRealLeB:535 输出 Bishop 形序          *)
@@ -10,34 +19,34 @@
 (*   桥核对：real_le_to_le_b@UpRealLeB:78 / latb_real_lt_to_le_b@       *)
 (*   UpReqLatticeB:87 / real_lt_le_bridge@UpLogMono:16 均单向           *)
 (*   （real_le / real_lt → real_le_b）；逆向 real_le_b → real_le 即     *)
-(*   Or 形精确收口，构造性不可证（UpRealLeB 尾注台账明示）。            *)
-(*   判词：req 层槽不可由 B 形引擎无条件放电（序异向，缺逆向桥件）；    *)
+(*   Or 形精确完成，构造性不可证（UpRealLeB 尾注登记表明示）。            *)
+(*   结论：req 层槽不可由 B 形引擎无条件消解（序异向，缺逆向桥件）；    *)
 (*   按普查 §380 纪律落点升格为「Real 实例化定理」——本文件以            *)
 (*   real_le_b 为序复演 req_gibbs_pointwise → req_gibbs_inequality      *)
-(*   消费链，槽位 dist_log_le_linear 由 real_log_le_linear_B 直喂。     *)
-(*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例直喂）。     *)
+(*   消费链，假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用。     *)
+(*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例显式应用）。     *)
 (* ------------------------------------------------------------------ *)
-(* 交付：                                                              *)
-(*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽放电位：与                *)
+(* 结果：                                                              *)
+(*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽消解位：与                *)
 (*     req_gibbs_pointwise 消费 dist_log_le_linear 逻辑同位，           *)
 (*     real_log_le_linear_B 一次喂定；                                  *)
 (*     gibbsd_gibbs_inequality —— KL ≥ 0 Bishop 形（与 E.13             *)
 (*     real_gibbs_inequality_B 语句同形；E.13 走 real_gibbs_inequality_ *)
-(*     eps 收口路，本件走 log 切线槽放电复演路——双路互证）。            *)
+
 (*   [主件·级联首层] gibbsd_cross_entropy_decomp ——                    *)
 (*     H(p,q) == S[p] + KL(p‖q) Real 实例化（req_cross_entropy_decomp   *)
 (*     @UpReqDist:2431 对位），逐点恒等经 log 乘法分解向闭合，          *)
 (*     同法消费本文件 Bishop 序机。                                     *)
-(* 规范形注：全件采 real_kl_term 规范形 p·(−log(q/p))（CW219            *)
-(*   real_kl_term 同形）；req_relative_entropy 的 p·(log p−log q) 形    *)
-(*   与之恒等需 log 逆消去（log(inv p) == −log p），CW219 未备该消去件、 *)
+
+
+(*   与之恒等需 log 逆消去（log(inv p) == −log p），未备该消去件、 *)
 (*   real_eq_of_zero_diff 逐 n ring 形不适用——诚实边界，req 面同构记    *)
-(*   δ 透明（UpReqDist 台账 2「minus 非接口字段」同判词）。             *)
+(*   δ 透明（UpReqDist 登记表 2「minus 非接口字段」同结论）。             *)
 (* 红线：Set 层零 Prop（real_le_b / real_eq / real_lt 全 Set 值，      *)
 (*   语句与证明零 Prop 泄露）；全 Qed 闭合；零公理；既有文件零改；      *)
 (*   gibbsd_ 前缀全库防撞（建前 grep 实测零命中）。                     *)
-(* 编译配方：_sqp_guard.ps1 温控包装                                     *)
-(*   coqc -Q . "" UpReqGibbsD.v（CoreN 选空闲核，零裸调）。             *)
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -182,7 +191,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B：逐点槽放电前置（eq 层恒等）                                  *)
+(* Part B：逐点槽消解前置（eq 层恒等）                                  *)
 (* ============================================================ *)
 
 (* B0：p·(q/p) == q（分式约分；结合 / 交换 / inv_correct 链） *)
@@ -384,15 +393,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D：保底放电主体                                                 *)
+(* Part D：保底消解主体                                                 *)
 (* ============================================================ *)
 
-(* D0【槽放电位】：逐点 Gibbs 切线 p−q ≤_B p·(−log(q/p))。
+(* D0【槽消解位】：逐点 Gibbs 切线 p−q ≤_B p·(−log(q/p))。
    与 req_gibbs_pointwise（UpReqDist:2066）逻辑同位——该处消费
-   Hypothesis dist_log_le_linear（槽，10 下游）；此处直喂
+   Hypothesis dist_log_le_linear（槽，10 下游）；此处显式应用
    real_log_le_linear_B（UpRealLeB:535）一次闭合，无条件。
    链：槽 log(q/p) ≤_B q/p−1 → opp 反向 → 1−q/p 换形 →
-   p 左乘保序 → p·(1−q/p)==p−q 换形收口。 *)
+   p 左乘保序 → p·(1−q/p)==p−q 换形完成。 *)
 Lemma gibbsd_gibbs_pointwise_B : forall (X : Type) (p q : X -> Real) (s : X)
   (Hps : real_lt real_zero (p s)) (Hqs : real_lt real_zero (q s)),
   real_le_b (real_plus (p s) (real_opp (q s)))
@@ -403,7 +412,7 @@ Proof.
   set (Rqp := real_mult (q s) (real_inv_pos (p s) Hps)).
   set (Hr := real_mult_positive (q s) (real_inv_pos (p s) Hps) Hqs
                (real_inv_pos_pos (p s) Hps)).
-  (* —— 槽放电位：req 层 dist_log_le_linear 消费位，B 形引擎直喂 —— *)
+  (* —— 槽消解位：req 层 dist_log_le_linear 消费位，B 形引擎显式应用 —— *)
   assert (Hlin : real_le_b (real_log Rqp Hr)
                            (real_plus Rqp (real_opp real_one))).
   { exact (real_log_le_linear_B Rqp Hr). }
@@ -424,10 +433,10 @@ Qed.
 
 (* D1【保底主件】：Gibbs 不等式 Real 实例化——0 ≤_B Σ_s KL(p s‖q s)。
    req_gibbs_inequality（UpReqDist:2122，dist_log_le_linear 10 下游）
-   的 Real 实例化放电：归一化前提位照抄 req 层（real_eq 形），求和层
-   real_list_sum 机，序 real_le_b，槽位由 D0 逐点件填充。
+   的 Real 实例化消解：归一化前提位照抄 req 层（real_eq 形），求和层
+   real_list_sum 机，序 real_le_b，假设位由 D0 逐点件填充。
    语句与 E.13 real_gibbs_inequality_B 同形：E.13 走
-   real_gibbs_inequality_eps 收口路，本件走 log 切线槽放电复演路——双路互证。 *)
+   real_gibbs_inequality_eps 完成路，本件走 log 切线槽消解复演路——双路互证。 *)
 Theorem gibbsd_gibbs_inequality :
   forall (X : Type) (l : list X) (p q : X -> Real)
     (Hp : forall s : X, real_lt real_zero (p s))
@@ -475,7 +484,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：主件——级联首层 cross_entropy_decomp 同法放电                 *)
+(* Part E：主件——级联首层 cross_entropy_decomp 同法消解                 *)
 (*   （req_cross_entropy_decomp @UpReqDist:2431 的 Real 实例化对位；    *)
 (*     逐点恒等经 log 乘法分解向 q == p·(q/p) 闭合，零 log 逆消去）     *)
 (* ============================================================ *)
@@ -554,24 +563,24 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 对账（槽放电战役 #1 交付清单）：                                     *)
+(* 核对（槽消解战役 #1 结果清单）：                                     *)
 (*   gibbsd_lt_add_opp_r / gibbsd_le_b_opp / gibbsd_le_b_id_l /         *)
 (*   gibbsd_minus_flip / gibbsd_le_b_mult_pos_r —— Bishop 序代数 5 件    *)
 (*   （req 层 opp_le_compat / le_id_l / req_le_mult_compat_r 的          *)
-(*   real_le_b 对位，req 层无此形——B 形引擎直喂的缺口件）。             *)
+(*   real_le_b 对位，req 层无此形——B 形引擎显式应用的缺口件）。             *)
 (*   gibbsd_p_mult_ratio / gibbsd_p_minus_ratio —— eq 恒等 2 件。       *)
 (*   gibbsd_two_pos / gibbsd_half / gibbsd_half_pos / gibbsd_half_sum    *)
 (*   + gibbsd_list_sum_le_b / gibbsd_list_sum_minus —— 和层机 6 件      *)
 (*   （fsum_le / fsum_minus 的 Bishop 对位；预算对半归纳免除法）。      *)
-(*   gibbsd_gibbs_pointwise_B —— 槽放电位（dist_log_le_linear 直喂）。  *)
-(*   gibbsd_gibbs_inequality —— 保底主件（四关目标）。                  *)
+(*   gibbsd_gibbs_pointwise_B —— 槽消解位（dist_log_le_linear 显式应用）。  *)
+
 (*   gibbsd_cross_entropy_decomp —— 级联首层主件。                      *)
-(* 沉淀卡（索引回填行见交付报告）：                                     *)
-(*   E-GIBBSD-1：B 形引擎放电 req 层 Hypothesis 槽，序异向不可直喂——    *)
+(* 沉淀卡（索引回填行见合规自查报告）：                                     *)
+(*   E-GIBBSD-1：B 形引擎消解 req 层 Hypothesis 槽，序异向不可显式应用——    *)
 (*   落点纪律 §380 fallback（Real 实例化定理）首次全链执行；缺口件=      *)
 (*   Bishop 序代数基元 5 件 + Bishop 和单调 1 件（本文件 Part A/C      *)
-(*   可跨战役复用：log_le_linear/log_lt_mono 族槽放电同构缺口）。       *)
-(*   E-GIBBSD-2：log 逆消去（log(inv p)==−log p）CW219 未备——          *)
-(*   kl_term 规范形绕行成立（log 乘法分解向 q == p·(q/p) 无需消去）；   *)
-(*   req_relative_entropy 的 p·(log p−log q) 字面形桥接留待该消去件。   *)
+(*   可跨战役复用：log_le_linear/log_lt_mono 族槽消解同构缺口）。       *)
+
+
+
 (* ============================================================ *)

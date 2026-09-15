@@ -1,6 +1,16 @@
-(* ===== CW219 拆分分片 S15_TailFEPUp（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L112164-L114222；头部 27 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08 S09 S10 S11 S12 S13 S14；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S15_TailFEPUp.v                                             *)
+(*                                                             *)
+(* 目的：尾段自由能原理件：softmax 核行视图、PPO clip 单侧误差   *)
+(*       恒等式、策略迭代 KL 几何率与 GRPO σ 证书（构造性 Set 层）。 *)
+(* 主件：step_kl_eta_bound（论文 1 定理 4.8 的 eps 化对应：       *)
+(*       插值不等式 Z = Σ π_t^{1−η}·π*^η ≤ 1）；                 *)
+(*       free_energy_softmax_eq_neg_T_logZ（log-sum-exp = 负自由能）。 *)
+(* 依赖：S01–S14；Stdlib（List、Lqa 等）。                       *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L112164-L114222，去头正文与原文区间逐字节同源；上游件   *)
+(*       以 Module 包裹与限定名引用防撞名。                      *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -139,7 +149,7 @@ Variable expf_agree : forall x : R, Id (expf x) (exp_pos_fn x).
 
 (* ========== 行视图：bs_kernel 的每一行 = 单查询 softmax_temp ========== *)
 (* 消费前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
-(* 实例化通道——real_expf_realizable 放电后取 expf := exp_pos_fn 即    *)
+(* 实例化通道——经 real_expf_realizable 取 expf := exp_pos_fn 即    *)
 (* 满足，一致性前提退化为 id_refl）。                                 *)
 Theorem bs_kernel_row_is_softmax_temp : forall s s' : S,
   Id (bs_kernel enum enum_nonempty temp temp_pos Delta z2 z_lb
@@ -169,14 +179,13 @@ End RowView.
 (* 提取探针：softmax 核与自由能可提取 *)
 
 (* ============================================================ *)
-(* 218 块 27 · UpPPO（快赢批 E：PPO clip 单侧误差恒等式）         *)
-(*   2026-09-06；ppo_is_decomp + clip_error_nonneg +              *)
+(* 块 27 · UpPPO：PPO clip 单侧误差恒等式                         *)
+(*   ppo_is_decomp + clip_error_nonneg +              *)
 (*   ppo_clipped_improvement（论文 1 §6.2 单侧闭合，反向界反例     *)
-(*   注记见源文件头）；源：最新模块\01\UpPPO.v（rebase 验证        *)
-(*   rc=0）；零 Axiom/Admitted；5 Qed                            *)
+(*   注记见源文件头）；源：UpPPO.v（上游）；零公理面、零承认件；5 Qed                            *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* UpPPO.v —— 二轮快赢批·E：PPO clip 单侧误差恒等式（E1–E3）          *)
+(* UpPPO.v —— PPO clip 单侧误差恒等式（E1–E3）          *)
 (*                                                                *)
 (* 闭合论文 1 §6.2「三件不齐备」的单侧半边：裁剪代理与价值改进之间    *)
 (* 的组合定理——                                                    *)
@@ -186,7 +195,7 @@ End RowView.
 (*   E3 改进条件：裁剪代理非负 ⟹ 价值改进（三件齐备的单侧闭合）。     *)
 (* 诚实边界：反向界（V(π)−V(p_old) ≤ std_ppo + C·eps 型）在无界比率   *)
 (* 下为假（反例：比率 ρ → ∞ 时误差 A·(ρ−1−ε) 无界），维持不宣称。    *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed。                    *)
+(* 纪律：零公理面、零承认件；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
 
@@ -325,14 +334,14 @@ End PPOClipDecomp.
 (* 提取探针：clip 误差与代理目标可提取 *)
 
 (* ============================================================ *)
-(* 219 块 28 · UpStepKL（旗舰收官：论文 1 定理 4.8 唯一诚实接口  *)
-(*   的 Real 层放电，四主件 + kl_ 族。2026-09-06；rebase 验证    *)
-(*   rc=0（log 0 B）；35 声明名根 0 命中，未包裹保净名；剥       *)
-(*   CW Require；Import RealInterfaceEnhancedMod 保留。          *)
-(*   源：最新模块\01\UpStepKL.v；零 Axiom/Admitted；32 Qed      *)
+(* 块 28 · UpStepKL：论文 1 定理 4.8 唯一诚实接口  *)
+(*   的 Real 层实现，四主件 + kl_ 族。35 声明名与上游根无冲突，  *)
+(*   不加 Module 包裹；剥除上游 CW Require；                     *)
+(*   Import RealInterfaceEnhancedMod 保留。                      *)
+(*   源：UpStepKL.v（上游）；零公理面、零承认件；32 Qed         *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* UpStepKL.v —— step_kl_eta_bound 的 Real 层放电                 *)
+(* UpStepKL.v —— step_kl_eta_bound 的 Real 层实现                 *)
 (* 论文 1 定理 4.8（策略迭代真几何率）唯一诚实接口的 eps 化对应物：  *)
 (*   插值不等式 Z = Σ π_t^{1−η}·π*^η ≤ 1。                        *)
 (* 路线：Varberg 锥论证（零 Jensen/Hölder 基建）                  *)
@@ -340,7 +349,7 @@ End PPOClipDecomp.
 (*   M0.2 逐点 AM-GM（a^{1−η}b^η ≤ (1−η)a + ηb + eps）            *)
 (*   M1  求和版（Σ powprod ≤ 1 + eps，归一化吸收 eps·pit 权）       *)
 (* 全部 Real 层顶层名（cw_log/cauchy_real_exp），Or 编码 le。       *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed；可提取。            *)
+(* 纪律：零公理面、零承认件；Set 层语句；全 Qed；可提取。            *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -525,9 +534,9 @@ Qed.
 
 (* ========== M0.1：二点凸性核（Varberg 锥） ==========
    e^{(1−η)x+ηy} ≤ (1−η)·e^x + η·e^y + eps
-   【假命题修正】任务书原陈述方向反了（(1−η)e^x+ηe^y ≤ e^z+eps 为 Jensen
+   【假命题修正】规范原陈述方向反了（(1−η)e^x+ηe^y ≤ e^z+eps 为 Jensen
    反向，一般假）。AM-GM a^{1−η}b^η ≤ (1−η)a+ηb 的 e-形态真值为凸性方向
-   e^z ≤ 加权和，其证明恰为任务书给的 Varberg 锥论证（种子两式乘 e^z>0
+   e^z ≤ 加权和，其证明恰为规范给的 Varberg 锥论证（种子两式乘 e^z>0
    加权合并）。本文件按真值方向陈述。 *)
 Lemma real_exp_two_point_cvx_eps : forall (x y eta : Real),
   real_lt real_zero eta -> real_le eta real_one ->
@@ -979,7 +988,7 @@ Qed.
    π_{t+1}(i) := π_t(i)^{1−η}·π*(i)^η / Z（几何插值策略）。
    精确恒等：KL(π_t‖π_{t+1}) == η·KL(π_t‖π★) + log Z（逐点 kl_term 代数 +
    归一化吸收 Σp == 1），再由 M1（Z ≤ 1+eps）+ 严格种子（1+eps < e^eps，
-   故 log(1+eps) < eps）+ log 单调得 log Z < eps，收口
+   故 log(1+eps) < eps）+ log 单调得 log Z < eps，证得
    KL(π_t‖π_{t+1}) ≤ η·KL(π_t‖π★) + eps。 *)
 
 (* 几何插值配分函数 Z := Σ_i π_t(i)^{1−η}·π*(i)^η *)
@@ -1365,15 +1374,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 219 块 29 · UpGRPO（二轮快赢批·B+C：NoDup 均匀化 + σ 见证）  *)
-(*   2026-09-06；rebase 验证 rc=0（log 0 B）；Module UpGRPO219   *)
-(*   包裹——9 声明名撞根（list_sum_g 族 4 + count_zero/remove    *)
-(*   族 5，同模块重声明实证 rc=1）；主件以 UpGRPO219. 限定名     *)
-(*   引用。源：最新模块\01\UpGRPO.v；零 Axiom/Admitted；23 Qed  *)
+(* 块 29 · UpGRPO（NoDup 均匀化 + σ 见证）                      *)
+(*   Module UpGRPO219 包裹——9 声明名与上游根冲突（list_sum_g 族  *)
+(*   4 + count_zero/remove 族 5，同模块重声明冲突）；主件以      *)
+(*   UpGRPO219. 限定名引用。源：UpGRPO.v（上游）；零公理面、     *)
+(*   零承认件；23 Qed                                           *)
 (* ============================================================ *)
 Module UpGRPO219.
 (* ============================================================ *)
-(* UpGRPO.v —— 二轮快赢批·B+C：GRPO NoDup 均匀化 + 标准化优势二阶矩    *)
+(* UpGRPO.v —— GRPO NoDup 均匀化 + 标准化优势二阶矩    *)
 (*                                                                *)
 (* B（抽象 R 层）：计数机器（count_g/removeT_g，grp_eq_dec 驱动）       *)
 (*   + nodup_g（Set 层无重复谓词，计数刻画）⟹                        *)
@@ -1385,7 +1394,7 @@ Module UpGRPO219.
 (*   与「σ > 0 需证书」的构造性语义衔接：sigT 打包 σ（0 < σ ∧ σ²==Var） *)
 (*   且 Σ(A_i/σ)² == 1（Var 为未归一化中心二阶矩，与论文 1 §7.2 口径   *)
 (*   一致；population 版由重新缩放立得，注记说明）。                   *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed；可提取。             *)
+(* 纪律：零公理面、零承认件；Set 层语句；全 Qed；可提取。             *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -1835,7 +1844,7 @@ Qed.
    供下游除法吸收使用（inv_pos_mult_distr + real_inv_pos_correct）。 *)
 
 (* C 附属：Var 的正性传递——完整单位二阶矩定理（Σ(A_i/σ)² == 1）需
-   Real 层 inv_pos_ext 接口的深层装配，列后续精化项；本包交付：
+   Real 层 inv_pos_ext 接口的深层装配为后续精化项；本模块给出：
    ① real_sigma_witness（σ 存在性+正性+平方恒等 sigT 三件套）
    ② proj_sigma_pos / proj_sigma_sq（投影提取）
    ③ real_mult_exchange（四因子交换，供除法吸收）                        *)
@@ -1845,11 +1854,11 @@ End RealGrpoSigma.
 End UpGRPO219.
 
 (* ============================================================ *)
-(* 219 块 30 · UpExtras（二轮轻包三件小定理）                   *)
+(* 块 30 · UpExtras（三件独立小定理）                           *)
 (*   件 1 log-sum-exp == −T·log Z；件 2 双副本反例；件 3 Var ≥ 0  *)
-(*   2026-09-06；rebase 验证 rc=0（log 0 B）；Module UpExtras219  *)
-(*   包裹（fep_ 3 名撞根块 26 UpFEP 内容）；主件以 UpExtras219.  *)
-(*   限定名引用。源：最新模块\01\UpExtras.v；零 Axiom；8 Qed    *)
+(*   Module UpExtras219 包裹（fep_ 3 名与块 26 UpFEP 内容冲突）； *)
+(*   主件以 UpExtras219. 限定名引用。源：UpExtras.v（上游）；    *)
+(*   零公理面；8 Qed                                            *)
 (* ============================================================ *)
 Module UpExtras219.
 (* ============================================================ *)
@@ -1873,7 +1882,7 @@ Module UpExtras219.
 (*   通用平方非负必须诚实接口），则 Σ A_i² ≥ 0（求和保序）。       *)
 (*   这正是根内 GRPO §7.3 的求和侧镜像，非降级形态。               *)
 (*                                                                *)
-(* 红线：零公理、零弃证、零接口逃逸、零经典律；Set 层语句； *)
+(* 纪律：零公理、零弃证、零接口逃逸、零经典律；Set 层语句； *)
 (* 全 Qed。自足：不 Require UpFEP/UpGRPO/AttnDoeblin。              *)
 (* ============================================================ *)
 
@@ -1945,10 +1954,10 @@ Proof.
       (fun s : S => id_cong2 mult (Hpt s) (id_cong log (Hpt s)))).
 Qed.
 
-(* ========== P5b 旗舰：log-sum-exp = 负自由能 ==========
+(* ========== 旗舰：log-sum-exp = 负自由能 ==========
    F_attn[softmax_temp(z)] == −T · log Z_T(z)：
    softmax 逐点 = boltzmann（fep_align）→ F 外延 →
-   根内 free_energy_boltzmann（base_loss := −z, D := T）放电。 *)
+   根内 free_energy_boltzmann（base_loss := −z, D := T）直接应用。 *)
 Theorem free_energy_softmax_eq_neg_T_logZ :
   Id (F_attn (softmax_temp spp T T_pos z))
      (mult (opp T) (log Zf)).
@@ -2066,8 +2075,8 @@ Qed.
 (* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧镜像） ==========
    逐项平方非负是接口假设（构造性有序域无三分律，通用平方非负需
    接口字段——与根内 GRPO §7.3 的 Variable square_nonneg 同款诚实
-   接口纪律）；此处交付其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
-   保序纯构造性放电。GRPO σ 定理的 Var 前提供即此形态。 *)
+   接口纪律）；此处给出其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
+   保序纯构造性证明。GRPO σ 定理的 Var 前提即此形态。 *)
 Theorem real_var_nonneg_cond :
   (forall i : Grp2, real_le real_zero (real_mult (A2 i) (A2 i))) ->
   real_le real_zero

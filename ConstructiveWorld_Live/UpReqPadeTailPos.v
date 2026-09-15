@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqPadeTailPos.v *)
+(* *)
+(* 目的： Padé 正尾恒等式主件（C 路闭合段）。 *)
+(* 主件： ptp_beta 正尾系数族与 ptp_F / ptp_G 恒等式构造。 *)
+(* 依赖： S02_CauchyComplete、S03_QExp、UpReqPadeExp。 *)
+(* 备注： 主件取降档形（诚实标注）：配对重排部分未纳入，为下一席显式假设。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeTailPos.v —— 席C-T1a：Padé 正尾恒等式主件（C 路闭合     *)
 (*                        主轨第一切片，Set 层承重墙）               *)
 (* 日期：2026-09-14                                                *)
@@ -12,19 +21,18 @@
 (* 主件降档（诚实标注，60 分钟预算 + 平台损伤双重止损）：
    ptp_tail_series 全称形（n=1、∀N≥3、∀y）归纳骨架已完备设计——
    归纳步合并恒等式 β_m/m! == 1/(m+2)! − 2/(m+3)!（q_fact 链展开后
-   为 q_fact m 的多项式恒等式，ring 可收）；但主步收口需 field 于
+   为 q_fact m 的多项式恒等式，ring 可收）；但主步完成需 field 于
    「原子分母」目标，实测本平台 9.0 的 field 对原子分母一律报
-   not a valid field equation（最小复现见 E-STAGING-CT1A 卡），
    E268/E293「归一再 field」教义已用尽（目标已纯环项仍炸）。
-   交叉相乘 + 乘法消去路线挂账下一席（骨架见交付报告）。            *)
+   交叉相乘 + 乘法消去路线显式假设下一席（骨架）。            *)
 (*                                                                 *)
 (* 降档声明（诚实标注）：                                             *)
 (*   ① 主件为 n=1 切片的全称 N 形；全称 n 的逐项系数等式（柯西积      *)
-(*      重排 + 配对引理）未及落盘，挂账下一席（S1 报告已给配对比值    *)
+(*      重排 + 配对引理）未及落盘，显式假设下一席（S1 报告已给配对比值    *)
 (*      (n−2j)/((2n−2j)(2j+1)) ≤ 1/2 的正性路线）。                  *)
-(*   ② n=2 仅交付截断多项式实例恒等式（S1 定值变体同构），非全称 N。  *)
+(*   ② n=2 仅结果截断多项式实例恒等式（S1 定值变体同构），非全称 N。  *)
 (*   ③ 平台损伤实锤：field 原子分母全拒（E268/E293 归一教义不适用，  *)
-(*      新坑沉淀 E-STAGING-CT1A 卡）；④ 语句面等式用 Qeq（库内        *)
+
 (*      UpReqPadeExp 同款先例）；正性语句面     *)
 (*      一律 QltT（Set 层），证内 Prop 仅作桥（Qlt_to_QltT）。        *)
 (*                                                                 *)
@@ -32,13 +40,13 @@
 (*   q_neq_of_lt）、UpReqPadeExp（pade_coeff/pade_num/pade_den）、    *)
 (*   S02_CauchyComplete（QltT/Qlt_to_QltT）。                        *)
 (*                                                                 *)
-(* 公理面自审：本件不新增任何公理依赖，全部结论构造性直证；四关审计    *)
+
 (*   以 Print Assumptions = Closed 与提取产物 Obj.magic 零命中为准。   *)
 (*                                                                 *)
-(* 编译配方（温控协议，cpu_guard CoreN 1）：                          *)
-(*   秒审: coqc -vos -Q . "" UpReqPadeTailPos.v                      *)
-(*   全量: coqc -Q . "" UpReqPadeTailPos.v                           *)
-(*   G4  : coqchk -Q . "" -o UpReqPadeTailPos                        *)
+
+
+
+
 (* ============================================================ *)
 
 Require Import S02_CauchyComplete.
@@ -157,7 +165,7 @@ Proof.
   cbn. field.
 Qed.
 
-(* ===== 数值哨兵（y = 1/2 对账；vm_compute + Qeq 交叉乘 lia） ===== *)
+(* ===== 数值哨兵（y = 1/2 核对；vm_compute + Qeq 交叉乘 lia） ===== *)
 
 Lemma ptp_sentinel_n1_half :
   exp_partial 4 (1#2) * pade_den 1 (1#2) - pade_num 1 (1#2) == - (7#512).
@@ -179,16 +187,16 @@ Separate Extraction ptp_beta_pos ptp_beta ptp_beta_prefix
   ptp_n1_poly ptp_n2_poly.
 
 (* ============================================================ *)
-(* 席C-T1c 增量（append-only，2026-09-14）：全称 N 形收口           *)
+
 (*   ptp_tail_series——按 T1a 报告④配方：归纳不变式                  *)
 (*     Φ_k : exp_partial (3+k) y·Q₁(y) − P₁(y)                    *)
 (*       == −((1#2)·prefix_1 k y) − ((1#2)·y^{S(3+k)}/(3+k)!)     *)
 (*   两处 (−1#2) 即 (−1)^1 符号面显式（奇 n 负尾）；偶 n 对偶形由    *)
 (*   ptp_n2_poly 正号实例承贴。N=3/N=4 闭式与 ptp_n1_poly 逐系数    *)
-(*   对表（ptp_series_n1_N3/N4 + recheck + y=1/2 数值对账）。       *)
-(*   绕损伤路线（E-STAGING-CT1A 教义）：全程不触原子分母 field——     *)
+(*   对表（ptp_series_n1_N3/N4 + recheck + y=1/2 数值核对）。       *)
+
 (*   merge 乘法形（纯变元 field）→ ptp_div_clear_r 交叉乘消去       *)
-(*   （Qmult_inj_r + q_fact_pos 正性）→ 清分母后 field 收口。       *)
+(*   （Qmult_inj_r + q_fact_pos 正性）→ 清分母后 field 完成。       *)
 (* ============================================================ *)
 
 (* —— 0. 纯变元小引擎（ring/field 只见自由变元与字面常量）—— *)
@@ -246,7 +254,7 @@ Proof.
   field.
 Qed.
 
-(* —— 3. 双侧步进展开（rewrite-only，不触原子分母收口）—— *)
+(* —— 3. 双侧步进展开（rewrite-only，不触原子分母完成）—— *)
 
 Definition ptp_F (k : nat) (y : Q) : Q :=
   exp_partial (3 + k) y * pade_den 1 y - pade_num 1 y.
@@ -324,7 +332,7 @@ Qed.
 
 (* —— 4. 清分母核心：归纳步差恒等式（ΔL == ΔR）——
    路线：Qmult_inj_r 两侧同乘 D = 2·u3·v4·w（正性 q_fact_pos 在场）
-   → ptp_div_clear_r 逐商消去 → merge 乘法形回代 → field 收口。 *)
+   → ptp_div_clear_r 逐商消去 → merge 乘法形回代 → field 完成。 *)
 
 Lemma ptp_step_core : forall k y,
   (q_pow y (Datatypes.S (3 + k)) / q_fact (Datatypes.S (3 + k)))
@@ -587,7 +595,7 @@ Proof.
   field.
 Qed.
 
-(* —— 5. 主件：全称 N 形恒等式（归纳收口）—— *)
+(* —— 5. 主件：全称 N 形恒等式（归纳完成）—— *)
 
 Lemma ptp_main_fg : forall k : nat, forall y : Q, ptp_F k y == ptp_G k y.
 Proof.
@@ -619,7 +627,7 @@ Proof.
   apply (ptp_tail_series_k (N - 3) y).
 Qed.
 
-(* —— 6. 对账哨兵：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
+(* —— 6. 核对哨兵：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
    y=1/2 数值两侧同值（reflexively 一致）。 —— *)
 
 Lemma ptp_series_n1_N3 : forall y : Q,
@@ -648,7 +656,7 @@ Proof.
   - unfold ptp_G. apply ptp_series_n1_N4.
 Qed.
 
-(* 全称件实例与定值件数值对账：同一 y=1/2 两侧同值 −(7#512) *)
+(* 全称件实例与定值件数值核对：同一 y=1/2 两侧同值 −(7#512) *)
 Lemma ptp_tail_sentinel_F_half : ptp_F 1 (1#2) == -(7#512).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
 

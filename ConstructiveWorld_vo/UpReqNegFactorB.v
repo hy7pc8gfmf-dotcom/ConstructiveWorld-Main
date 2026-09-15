@@ -1,8 +1,17 @@
 (* ============================================================ *)
+(* UpReqNegFactorB.v *)
+(* *)
+(* 目的： le_b 乘法保序的负右因子反变面补全。 *)
+(* 主件： t27_le_b_mult_r_nonpos_opp / t27_le_b_mult_r_negstrict 反变定律族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB3、UpReqPowMonoBridge。 *)
+(* 备注： 承幂单调桥件头注的诚实边界注记；非正因子情形为显式补全腿。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqNegFactorB.v —— le_b 乘法保序·负右因子反变面补全（席 T27）        *)
-(*   任务书源＝席 X3d 交付件 UpReqPowMonoBridge.v 头注诚实边界注记：      *)
+(*   任务书源＝席 X3d 结果件 UpReqPowMonoBridge.v 头注诚实边界注记：      *)
 (*   「负右因子反变面未落（邻接缺口，套路已在卡）」——即 c ≤ 0 时乘法     *)
-(*   反变：x ≤_B y 给 y·c ≤_B x·c（负因子翻转不等方向）。本席补全该面，   *)
+(*   反变：x ≤_B y 给 y·c ≤_B x·c（负因子翻转不等方向）。本件补全该面，   *)
 (*   与正面件1（x3d_le_b_mult_r_nonneg_or：0≤c 给 a·c ≤_B b·c 保序）     *)
 (*   配对成 Or 形因子证书强度下的完整乘法保序两面家族。                  *)
 (* ---------------------------------------------------------------- *)
@@ -29,12 +38,12 @@
 (* 对称面锚（完整乘法保序家族，Or 形因子证书强度，两面对合）：             *)
 (*   正面 UpReqPowMonoBridge.v 件1 x3d_le_b_mult_r_nonneg_or：           *)
 (*      a ≤_B b ∧ 0≤c 给 a·c ≤_B b·c（保序）；                           *)
-(*   负面 本席件2 t27_le_b_mult_r_nonpos_or：                            *)
+
 (*      a ≤_B b ∧ c≤0 给 b·c ≤_B a·c（反变）。                           *)
-(*   两面在 c==0 处退化一致（y·0 == x·0，mult_zero 收口由正面件1 的       *)
-(*   weak 单调零因子支承担，本席经共轭自动继承）。                        *)
-(* 诚实台账：因子仅 B 形已知（real_le_b c real_zero，无 Or 形证书）的     *)
-(*   负面版仍挂账——卡点与正面件4 尾注同款，即 B⟹Or 转换位（构造性不可   *)
+(*   两面在 c==0 处退化一致（y·0 == x·0，mult_zero 完成由正面件1 的       *)
+
+(* 诚实登记表：因子仅 B 形已知（real_le_b c real_zero，无 Or 形证书）的     *)
+(*   负面版仍显式假设——卡点与正面件4 尾注同款，即 B⟹Or 转换位（构造性不可   *)
 (*   通，c 的符号二分无证人）；禁硬凑（分层保底纪律）。                   *)
 (* ---------------------------------------------------------------- *)
 (* 红线自检：零未闭合证明（全 Qed）；零新依赖面（仅 Require 既有绿库，    *)
@@ -43,7 +52,7 @@
 (*   组装（real_eq 非 Id 禁改写，全链 real_eq_trans/运输族）；禁词全零    *)
 (*   （按全文件计含头注）。                                              *)
 (* 编译配方（消费式，vo 树前置；引号从略防注释串警告）：                  *)
-(*   coqc -Q D:\ComplexAnalysis\ConstructiveWorld-Main\                  *)
+
 (*   ConstructiveWorld_vo EMPTY -Q . EMPTY UpReqNegFactorB.v             *)
 (*   （EMPTY 处实为空串实参；cpu_guard 包装零裸调，CoreN 2；              *)
 (*     先 -vos 秒审再全量。）                                            *)
@@ -73,7 +82,7 @@ Qed.
 (* 一、共轭核：0 ≤ −c（Or 形）给 b·c ≤_B a·c                              *)
 (*   链：正面件1 于因子 −c 处（Hrev）→ le_b 取负反序（Hflip，eps 翻转     *)
 (*   步由 leb3_le_b_opp_rev 承接）→ real_opp_mult＋opp 对合 双端等式      *)
-(*   运输（HoppA/HoppB）→ eq_r／eq_l 双运输收口。                         *)
+(*   运输（HoppA/HoppB）→ eq_r／eq_l 双运输完成。                         *)
 (* ============================================================ *)
 Lemma t27_le_b_mult_r_nonpos_opp : forall a b c : Real,
   real_le_b a b -> real_le real_zero (real_opp c) ->
@@ -108,7 +117,7 @@ Proof.
                (real_opp (real_opp c)) b c).
       + apply real_eq_refl.
       + exact (real_opp_opp c). }
-  (* eq_l／eq_r 双运输收口：b·c ≤_B a·c *)
+  (* eq_l／eq_r 双运输完成：b·c ≤_B a·c *)
   exact (leb3_le_b_eq_r (real_mult b c)
            (real_opp (real_mult a (real_opp c))) (real_mult a c)
            (leb3_le_b_eq_l (real_opp (real_mult b (real_opp c)))
@@ -174,10 +183,10 @@ Print Assumptions t27_le_b_mult_l_nonpos_or.
 Print Assumptions t27_le_b_mult_r_negstrict.
 
 (* ============================================================ *)
-(* 尾注：诚实台账                                                        *)
-(* 【对称面交付】负面反变面（件2 主件）与正面保序面（x3d 件1）合成        *)
+(* 尾注：诚实登记表                                                        *)
+(* 【对称面结果】负面反变面（件2 主件）与正面保序面（x3d 件1）合成        *)
 (*   Or 形因子证书强度下的完整乘法保序两面对：符号证书在手时，乘法        *)
 (*   保序／反变方向由因子符号唯一确定，两面经取负共轭互为镜像。           *)
-(* 【挂账对位】因子仅 B 形已知（无 Or 形符号证书）的负面版＝正面件4       *)
-(*   尾注挂账的镜像，卡点同为 B⟹Or 转换位；两面挂账形状对称，禁硬凑。     *)
+(* 【显式假设对位】因子仅 B 形已知（无 Or 形符号证书）的负面版＝正面件4       *)
+(*   尾注显式假设的镜像，卡点同为 B⟹Or 转换位；两面显式假设形状对称，禁硬凑。     *)
 (* ============================================================ *)

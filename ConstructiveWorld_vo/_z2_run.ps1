@@ -5,7 +5,7 @@ param(
   [switch]$Full,
   [string]$Chk = ""
 )
-$bin = "C:/Rocq-Platform~9.0~2025.08/bin"
+$bin = "C:/Rocq-Platform~9.1~2026.01/bin"
 Set-Location "D:/ComplexAnalysis/ConstructiveWorld_vo"
 if ($Chk -ne "") {
   $a = @("-Q", ".", "", $Chk)

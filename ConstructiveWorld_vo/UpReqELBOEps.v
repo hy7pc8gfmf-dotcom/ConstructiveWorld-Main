@@ -1,16 +1,25 @@
 (* ============================================================ *)
+(* UpReqELBOEps.v *)
+(* *)
+(* 目的： 定理 4.7 elbo_lower_bound 的 Real 层序档组装（eps 档）。 *)
+(* 主件： real_elbo_lower_bound_eps 及其配分形 real_elbo_lower_bound_eps_partition。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP。 *)
+(* 备注： 证据下界取逐 eps 档；ELBO 与证据为显式定义。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOEps.v —— 席T10：定理 4.7 elbo_lower_bound Real 层序档组装   *)
-(*   2026-09-11（后台独立席位，CoreN 2，预算 60 分钟单席闭合）          *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】席N1 判定（C7）：定理 4.7（ELBO(q) ≤ evidence，Id 层序档，    *)
-(*   S04 L4570 Set 形 / req 层 UpReqDist.v L2645 已交付）的 Real 层     *)
+(*   S04 L4570 Set 形 / req 层 UpReqDist.v L2645 已结果）的 Real 层     *)
 (*   第三档逐 eps 形：                                                   *)
 (*     ∀eps>0（q 正且归一），  ELBO(q) ≤ evidence + D·eps。             *)
 (*   本件为纯组装席（FEP 序档链第四件）：零新数学内容。                  *)
 (* ------------------------------------------------------------------ *)
 (* 【术语映射表（论文/S04 Set 层 ↔ 本件 Real 层）】                     *)
 (*   ELBO(q) := −F[q]        ↔ real_elbo（= real_opp 实自由能）          *)
-(*   evidence := log p(x)    ↔ real_evidence（= real_opp 实自由能 p_b 形）*)
+
 (*   自由能 F[·]             ↔ real_free_energy（UpReqRealFEP 具名接口） *)
 (*   后验/输出分布 p_output  ↔ real_boltzmann_dist_r（π* 锚闭式解实例）  *)
 (*   KL(q‖p_output) 逐项和   ↔ real_sum_over_S (fun s => real_kl_term…) *)
@@ -29,19 +38,19 @@
 (*   件 2 非负腿（第三档逐 eps 形）：0 ≤ Σ kl_term + eps                 *)
 (*     = S08_RealMainlineDPO.real_gibbs_inequality_eps（L490；          *)
 (*       list 载体全链，Hnormq/Hnormb 双归一化前提）。                   *)
-(*   件 3 通用逐 eps 收口机 elbo_lower_bound_close_eps（第 3+4 步）：    *)
+(*   件 3 通用逐 eps 完成机 elbo_lower_bound_close_eps（第 3+4 步）：    *)
 (*     D>0 消去 = S09 real_le_mult_compat_r（弱 le 首前提，lt 先过       *)
 (*       RealSetoid.real_lt_le_iff_req 弱化桥）+ real_mult_zero          *)
 (*       / real_distrib（S02 代数基元）+ RealSetoid.real_le_id_l/id_r；  *)
-(*     序收口 = S07 real_le_plus_compat（全局形）+ real_le_refl          *)
+(*     序完成 = S07 real_le_plus_compat（全局形）+ real_le_refl          *)
 (*       + real_plus_assoc / real_plus_zero + RealSetoid 运输。          *)
 (*   （件 1+2+3 由主件一次组装；主件载体实例化 sumf := list 形，          *)
 (*   T7 同型；分件 Hnormb 经 rfep_boltzmann_normalized_real（L331）      *)
-(*   放电为 partition 条件 Σ exp(−e/D) ≡ Z，与 T7/X2 分件同型。）        *)
+(*   消解为 partition 条件 Σ exp(−e/D) ≡ Z，与 T7/X2 分件同型。）        *)
 (* ------------------------------------------------------------------ *)
-(* 【诚实申报】本件为序档组装件（非新数学）：主语句的数学内容全部来自    *)
+
 (*   ①任意 π* 版自由能-KL 分解件（UpReqRealFEP L1079 在盘，正典件复用）  *)
-(*   ②实 Gibbs 不等式逐 eps 形（S08 在盘）；③④纯序代数消去/收口        *)
+(*   ②实 Gibbs 不等式逐 eps 形（S08 在盘）；③④纯序代数消去/完成        *)
 (*   （S09/S07/S02 在盘）。本件增量 = ELBO/evidence 具名定义 + 取负      *)
 (*   术语桥（rlhf F 形 ↝ 变分下界术语）+ 逐 eps 序档拼装。               *)
 (*   前提全显式：q 逐点正 + 双归一化（或 partition 条件）+ eps 正。      *)
@@ -50,9 +59,9 @@
 (*   闭合；禁词条目零命中（头注以中文转述，不引英文原词）；real_eq 非    *)
 (*   Id 禁改写，全链 real_eq_trans/RealSetoid 运输（E393 纪律）；        *)
 (*   D 因子逐字保留（T7 同账）。                                         *)
-(*   禁改红线：UpReqRealFEP.v / S08 分片全程只读（只消费 .vo）。         *)
+(*   禁改红线：UpReqRealFEP.v / S08 模块全程只读（只消费 .vo）。         *)
 (* 编译配方：_t10_run.ps1 单一入口（E355/X2/T7 先例）+ cpu_guard CoreN 2 *)
-(*   预审：coqc -vos（秒审）；全量：coqc -Q vo树 "" -Q 本目录 ""        *)
+
 (*   前置 .vo 全在 D:/ComplexAnalysis/ConstructiveWorld-Main/           *)
 (*   ConstructiveWorld_vo/（vo 树编译，上游件零重编）。                  *)
 (* ============================================================ *)
@@ -197,7 +206,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 件 2（通用逐 eps 收口机，组装链第 3+4 步，序代数纯拼装）              *)
+(* 件 2（通用逐 eps 完成机，组装链第 3+4 步，序代数纯拼装）              *)
 (*   0 < D ∧ 0 < eps ∧ evidence ≡ ELBO + D·KL ∧ 0 ≤ KL + eps ⟹         *)
 (*   ELBO ≤ evidence + D·eps。                                          *)
 (*   证明：0 ≤ KL+eps 经 D>0 放缩得 0 ≤ D·KL + D·eps；再把              *)
@@ -231,7 +240,7 @@ Proof.
              (real_mult D (real_plus KLsum eps))
              (real_plus (real_mult D KLsum) (real_mult D eps))
              (real_distrib D KLsum eps) Hm1). }
-  (* 第 4 步：逐 eps 收口 *)
+  (* 第 4 步：逐 eps 完成 *)
   apply (RealSetoid.real_le_id_r Elbo
            (real_plus Elbo (real_plus (real_mult D KLsum) (real_mult D eps)))
            (real_plus Evidence (real_mult D eps))).
@@ -261,7 +270,7 @@ Qed.
 (*   载体 = list X 具体状态空间（T7 同型实例化）；前提全显式：           *)
 (*   Hnormq（Σq ≡ 1）+ Hnormb（Σp_b ≡ 1，由消费方或分件供给）。          *)
 (*   组装：件 1 等值核（rlhf 件实例化）+ 件 2 非负腿（S08 L490）         *)
-(*   + 件 3 收口机。                                                     *)
+(*   + 件 3 完成机。                                                     *)
 (* ---------------------------------------------------------- *)
 
 Theorem real_elbo_lower_bound_eps :
@@ -323,10 +332,10 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 分件：real_elbo_lower_bound_eps_partition（前提放电小链版）           *)
+(* 分件：real_elbo_lower_bound_eps_partition（前提消解小链版）           *)
 (*   与主件同结论面；Hnormb 换为 partition 条件 Hpart                    *)
 (*   （Σ exp(−e/D) ≡ Z，物理配分函数账目），经                           *)
-(*   rfep_boltzmann_normalized_real（UpReqRealFEP L331）一步放电补齐     *)
+(*   rfep_boltzmann_normalized_real（UpReqRealFEP L331）一步消解补齐     *)
 (*   Hnormb，与 T7/X2 分件同型。                                         *)
 (* ---------------------------------------------------------- *)
 

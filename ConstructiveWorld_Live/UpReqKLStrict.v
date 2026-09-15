@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqKLStrict.v *)
+(* *)
+(* 目的： KL>0 严格引理族（Gibbs 族严格化基座）。 *)
+(* 主件： klst_gap_shape 与 klst_exp_tangent_pos / klst_log_tangent_pos 切线正性族。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 全 Set 层、零经典逻辑表面、零新公理面。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqKLStrict.v —— KL>0 严格引理席（评审08 P1.6）：Gibbs 族严格化   *)
 (*   与 eps 形引擎 real_gibbs_inequality_B（UpRealLeB E.13）成对的      *)
 (*   「能量非常数 ⟹ KL > 0」缺口的第一批严格件。                        *)
@@ -8,22 +17,22 @@
 (*        1+x+x²/2 ≤ exp_partial n x（严格切线的间隙源）。              *)
 (*   B. klst_exp_tangent_pos：0<w ⟹ 1+w < e^w（严格指数切线正支；        *)
 (*        间隙见证 δ := eps²/2）；klst_log_tangent_pos：1<x ⟹            *)
-(*        log x < x−1（严格对数切线正支；x == e^{log x} 换形）。          *)
+
 (*   C. klst_gibbs_core_strict：p<q ⟹ 0 < kl_term(p,q)+(q−p)            *)
-(*        （严格 Gibbs 逐点核 q>p 支：g == p·((x−1)−log x)、x=q/p>1）；   *)
+
 (*        klst_gibbs_core_zero：p==q ⟹ kl_term(p,q)+(q−p)==0            *)
-(*        （退化对照件；log(1)==0 经 real_log_wd）。与 C 成对。           *)
+
 (*   D. klst_kl_sum_strict：KL 严格正主件——逐项正性 + 双归一化 +          *)
 (*        逐项 p≤q（弱序 Or 形，排除 q>p 支）+ s₀ 处严格分离见证          *)
 (*        （p s₀ < q s₀）⟹ 0 < Σ_s kl_term（表 l₁++s₀::l₂）。            *)
 (*                                                                *)
 (* 【阻塞精确裁决】逐项 g≥0 的 q<p 支需要「负 argument 严格指数切线」     *)
-(*   e^{−t} > 1−t（t>0），等价于对数下切线 log y > 1−1/y（y>1）即对数     *)
+
 (*   上切线 x<1 侧；其 Q 层间隙源需四项交错部分和下界                     *)
 (*   1−t+t²/2−t³/6 ≤ ep_n(−t)，现有 exp_partial 族仅一阶                 *)
 (*   （exp_partial_ge_plus_x）与符号分段非严格件（odd/even_ge_minus），   *)
 (*   无正间隙见证 ⟹ 主件逐项前提以弱序 p≤q 形承载（排除 q>p 支），        *)
-(*   无条件「能量非常数⟹KL>0」留待该单引理补齐（邻接件，判词见尾注）。    *)
+(*   无条件「能量非常数⟹KL>0」留待该单引理补齐（邻接件，结论见尾注）。    *)
 (*   接口对照：exp 严格单调字段已有（cauchy_real_exp_mono）；缺严格切线    *)
 (*   字段（real_exp_ge_linear_eps 为 eps 形 Or 编码，等号分支不可提取——   *)
 (*   UpRealLeB 尾注同一已知限制在严格层的显形）。                        *)
@@ -294,8 +303,8 @@ Qed.
 (* Part C：严格 Gibbs 逐点核（q>p 支）+ 退化对照                        *)
 (* ============================================================ *)
 
-(* 环形换形（实层 eq 链：分配率 + 乘 −1 + 乘 −log + p·(q·inv p) == q）：  *)
-(*   kl_term(p,q) + (q − p) == p·((x−1) − log x)，x := q·inv(p)。        *)
+
+
 Lemma klst_gap_shape : forall (p q : Real) (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
   real_eq (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
           (real_mult p (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
@@ -404,7 +413,7 @@ Proof.
       + apply real_eq_refl.
       + exact (real_inv_pos_ext p q Hp Hq Hpq).
     - exact (real_inv_pos_correct q Hq). }
-  (* 逐点环：L_n == 0 注入（log x == log 1 == 0） *)
+  
   assert (Hlog0 : real_eq (real_log x Hx) real_zero).
   { apply (real_eq_trans _ (real_log real_one real_lt_zero_one) _).
     - exact (real_log_wd x real_one Hx real_lt_zero_one Hx1).
@@ -607,12 +616,12 @@ Print Assumptions klst_list_sum_app.
 Print Assumptions klst_kl_sum_strict.
 
 (* ============================================================ *)
-(* 尾注（判词台账）                                                    *)
-(*   判词 1（正支全链绿）：严格指数/对数切线正支 + 严格 Gibbs 核 q>p 支 +   *)
+(* 尾注（结论登记表）                                                    *)
+(*   结论 1（正支全链绿）：严格指数/对数切线正支 + 严格 Gibbs 核 q>p 支 +   *)
 (*     退化对照件 + KL 严格和（弱序 p≤q 支）全 Qed，零假设位——            *)
 (*     「能量非常数 ⟹ KL>0」在 p≤q 侧已完整闭合。                        *)
-(*     勘误（续席收口）：①Part A 步进 case 以 Qle_trans 过 (B+0)           *)
-(*     （qeq_le 环换形 + Qplus_le_r 0 T B proj1）清偿 A+0 失配；           *)
+(*     勘误（续席完成）：①Part A 步进 case 以 Qle_trans 过 (B+0)           *)
+
 (*     ②gap_shape 的 real_eq_of_zero_diff 路线证伪（real_inv_pos 投影带    *)
 (*     if leb 分支，逐点 q == p·q·inv p 非恒等），改实层链               *)
 (*     （C0 五件：distr_l / mult_opp_r / mult_m1_r / pqx_eq_q /           *)
@@ -621,8 +630,8 @@ Print Assumptions klst_kl_sum_strict.
 (*     (−1)+1 / 0+x 形位以 comm+opp / comm+zero 重排；④Part D 拆和/      *)
 (*     平移各件以 real_list_sum_ext + real_opp_zero 桥 Σ(q−p)==0，        *)
 (*     s₀ 严格项直接注入 gibbs_core_strict（Hdiv 即其 Hpq 实参）。         *)
-(*   判词 2（负支阻塞精确裁决）：q<p 支的逐项 g≥0 需负 argument 严格指数    *)
-(*     切线 e^{−t} > 1−t（t>0）；等价形：对数下切线 log y > 1−1/y（y>1）   *)
+(*   结论 2（负支阻塞精确裁决）：q<p 支的逐项 g≥0 需负 argument 严格指数    *)
+
 (*     ＝ 对数上切线 x<1 侧。其 Q 层间隙源需四项交错部分和下界             *)
 (*     1−t+t²/2−t³/6 ≤ ep_n(−t)；现有 exp_partial 族仅一阶                *)
 (*     （exp_partial_ge_plus_x，L34891）与符号分段非严格件                *)
@@ -630,7 +639,7 @@ Print Assumptions klst_kl_sum_strict.
 (*     无正间隙见证字段 ⟹ 单引理缺口，补齐后与 Part D 逐项前提换全称弱序    *)
 (*     即得无条件件（温度桥：β₂<β₁、E₀<E₁ ⟹ 比率严格分离，               *)
 (*     cauchy_real_exp_mono 严格单调已备，exp_neg 反号换形一路可通）。     *)
-(*   判词 3（与 eps 形引擎关系）：本件不消费 real_le_b 收口器——严格层      *)
+(*   结论 3（与 eps 形引擎关系）：本件不消费 real_le_b 完成器——严格层      *)
 (*     real_lt 为 sigT 正陈述，无 Or 等号分支提取障碍；障碍在库侧切线      *)
 (*     字段缺失（real_exp_ge_linear_eps / real_log_le_linear_eps 均为     *)
 (*     eps 形 Or 编码），与 UpRealLeB 尾注已知限制同源不同位。             *)

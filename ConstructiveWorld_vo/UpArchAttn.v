@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpArchAttn.v *)
+(* *)
+(* 目的： r_arch_pow_attn 几何收敛假设的 Real 层镜像供给。 *)
+(* 主件： r_arch_pow_attn_real 与 attention_iterate_converges_real：N 步迭代收敛的 Real 层显式形。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpBudgetReal。 *)
+(* 备注： 接口前提对应根文件注意力收敛区；本件为该几何收敛假设的显式 N 供给口。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层镜像            *)
 (*                                                              *)
 (* 扫描件背景（分析-219平凡定理热点扫描-20260907.md 榜 A3）：        *)
@@ -35,7 +44,7 @@
 (*   Real 镜像即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
 (*   给出 sigT 预算 N 见证定理。覆盖面注记：根定理的语义对象        *)
 (*   attention_step/tv_dist/boltzmann_dist_attn 生活在抽象 Section  *)
-(*   世界，其实例化需在 Real 层整体放电 detailed_balance/           *)
+(*   世界，其实例化需在 Real 层整体消解 detailed_balance/           *)
 (*   minorization/sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等 *)
 (*   接口前提（天级工程，不属本小件）；按任务书条款以 Real 序列       *)
 (*   tv_seq := n ↦ TV(iterate n μ₀, p_b) 承载最小骨架，每步几何      *)
@@ -161,11 +170,11 @@ Qed.
 (* 根 attention_iterate_converges（L29330）的 Real 层镜像组装：
    预算 N 由件 1（r_arch_pow_attn_real）构造；尾界 n ≥ N 由
    tv 衰减链（本文件件 2 前置）+ 幂反单调（real_pow_anti_mono）
-   + 件 1 的 a·κ^N < eps 放电。
+   + 件 1 的 a·κ^N < eps 消解。
    覆盖面注记：tv_seq 即根语义对象 n ↦ TV(iterate attention_step n μ₀,
    boltzmann_dist_attn) 的 Real 承载；每步收缩 Hstep 对应根
    attention_tv_contraction 的结论形态。根抽象 Section 的完整
-   Real 层实例化需整体放电 detailed_balance/minorization/
+   Real 层实例化需整体消解 detailed_balance/minorization/
    sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等接口前提，
    天级工程，不属本小件（主件 1 不受影响）。 *)
 Theorem attention_iterate_converges_real :

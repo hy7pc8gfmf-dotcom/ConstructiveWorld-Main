@@ -1,6 +1,16 @@
-(* ===== CW219 拆分分片 S13_NLiveAudit（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L93448-L97866；头部 24 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08 S09 S10 S11 S12；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S13_NLiveAudit.v                                            *)
+(*                                                             *)
+(* 目的：LLM 工作流监督算法与科学诚信管线的 Set 层形式化；        *)
+(*       实数指数接口的可实现性证明与提取审计。                   *)
+(* 主件：real_expf_realizable——cauchy_real_exp 满足 expf 迷你     *)
+(*       接口全部字段（Part C 满足性证明）。                      *)
+(* 依赖：S01–S12；Stdlib（QArith、List、Bool、Arith、Setoid、    *)
+(*       Morphisms、Lia）。                                      *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L93448-L97866，去头正文与原文区间逐字节同源；监督调度器  *)
+(*       与诚信管线的代理/更替/焦点为被形式化算法的域语义。       *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -612,19 +622,18 @@ Definition ascend (k : nat) : nat := Datatypes.S k.
 End NBranch.
 
 
-(* ############ 合并分片边界 _p9 ############ *)
+(* ############ 合并模块边界 _p9 ############ *)
 
-Close Scope Q_scope.  (* _p9 全 nat/bool 层；解除 NCA 段的 Q_scope 劫持 *)
+Close Scope Q_scope.  (* _p9 全 nat/bool 层；解除 NCA 段引入的 Q_scope 影响 *)
 
 (* ============================================================ *)
 (* _p9：LLM 工作流监督算法 + 科学诚信管线（可核验性范式）        *)
 (*                                                                *)
-(* 来源：经验卡 E306/E307 实录的算法化——                           *)
-(*   LLM 真正短板：长单件写作失焦（b5j_v_abs_bd 连卡两代理）、    *)
+(* 动机：长任务写作失焦（b5j_v_abs_bd 连续卡滞于多个代理）、      *)
 (*   接口可达性过度自信（S_ge_one ∀x 证伪、rdf opaque）。          *)
-(*   有效对策：强制节奏 + 分解 + 交接。                             *)
+(*   有效对策：强制节奏 + 分解 + 代理更替。                         *)
 (*   A. 监督调度器：卡点检测（尾部连续失败 ≥ 阈值）→ 强制子任务    *)
-(*      分解（复杂度严格下降）；焦点节奏 → 强制交接（焦点归一）；   *)
+(*      分解（复杂度严格下降）；焦点节奏 → 强制代理更替（焦点归一）；   *)
 (*      进度单调（已闭合计数不减）。                                *)
 (*   B. 诚信管线：零公理前提下"AI 生成内容可核验"四件套——           *)
 (*      内容哈希锚（变化可检测）、三验一致（一票否决）、            *)
@@ -714,7 +723,7 @@ Fixpoint sf_focus_len (l : SFLog) : nat :=
     end
   end.
 
-(* 强制交接：换新代理（id = 头部代理 + 1，保证不同）记轮 0 非失败。 *)
+(* 强制代理更替：换新代理（id = 头部代理 + 1，保证不同）记轮 0 非失败。 *)
 Definition sf_fresh_agent (l : SFLog) : nat :=
   match l with
   | nil => 0
@@ -723,7 +732,7 @@ Definition sf_fresh_agent (l : SFLog) : nat :=
 
 Definition sf_handoff (l : SFLog) : SFLog := (sf_fresh_agent l, (0, true)) :: l.
 
-(* 交接的焦点复位：强制交接后焦点计数 = 1（失焦风险归零重启）。 *)
+(* 更替的焦点复位：强制更替后焦点计数 = 1（失焦风险归零重启）。 *)
 Theorem sf_handoff_focus_reset :
   forall l : SFLog, sf_focus_len (sf_handoff l) = 1.
 Proof.
@@ -802,8 +811,8 @@ Definition sf_cur_agent (l : SFLog) : nat :=
   match l with nil => 0 | a :: _ => sf_ag a end.
 
 (* 单步（可提取策略）：
-   卡点（连续失败 ≥ 阈值）→ 强制分解 + 交接新代理；
-   焦点超限（同代理连续 ≥ 上限）→ 强制交接（防失焦）；
+   停滞点（连续失败 ≥ 阈值）→ 强制分解 + 更替新代理；
+   焦点超限（同代理连续 ≥ 上限）→ 强制更替（防失焦）；
    正常 → 记录本轮（成功则已闭合计数 +1）。 *)
 Definition sf_step (cfg : SFConf) (res : bool) (st : SFState) : SFState :=
   match st with
@@ -1620,7 +1629,7 @@ Proof.
       rewrite Hfail in Haud. exact (id_false_true_absurd Haud).
 Qed.
 
-(* 输出审计：过滤首通过者 / 兜底安全序列 *)
+(* 输出审计：过滤首通过者 / 缺省安全序列 *)
 Definition post_stage_audited (post_aud : PostAud) (cands : Candidates) : Sequence :=
   match filter (fun s => post_aud s) cands with
   | nil => default_seq
@@ -1977,19 +1986,19 @@ Qed.
 End LiveCore.
 
 (* ============================================================ *)
-(* 提取注记：Recursive Extraction 本文件 + CW206baseline 接口，     *)
+(* 提取注记：Recursive Extraction 本文件 + 上游 baseline 接口，     *)
 (*   全部为 nat/bool/list/Q 信息性计算，无 Obj.magic。              *)
 (*   （提取验证在编译绿后由 extract 脚本执行）                      *)
 (* 蓝图保留项（不在本模块，见 Live-修正版.V §7-8）：                *)
 (*   projected_distribution_minimizes_kl / free_energy_with_audit_decomp *)
 (*   / stricter_auditor F 代价 / TV 严格分离 / beam 支配 / 长度归一化   *)
-(*   ——依赖柯西实数比较、log/KL 机器或排序机器，待接口入库另立战役。    *)
+(*   ——依赖柯西实数比较、log/KL 机器或排序机器，待接口入库另立论证。    *)
 (* ============================================================ *)
 
 End LCAudit.
 
 (* ============================================================ *)
-(* KLProjection 合并块（战役③：审计 = KL 投影）——源 KLProjection.v，去 Require 头；*)
+(* KLProjection 合并块（论证③：审计 = KL 投影）——源 KLProjection.v，去 Require 头；*)
 (* minus_split 与根 L760 冲突改名 kl_minus_split。 *)
 (* ============================================================ *)
 
@@ -2187,8 +2196,8 @@ Open Scope Q_scope.
 (* ============================================================ *)
 (* 217 块 22 · AttnDoeblin（P1：有界 logits softmax 核显式          *)
 (*   Doeblin 收缩——u_tv_contraction/bs_minorization δ*=e^{−2Δ/T}） *)
-(*   源：最新模块\01\AttnDoeblin.v（改名 attn_nat_to_R 系）；        *)
-(*   插入位 = 基底尾缝（全基底先于 Attn——依赖约束）；零 Axiom      *)
+(*   源：AttnDoeblin.v（上游；改名 attn_nat_to_R 系）；        *)
+(*   插入位 = 基底末尾（全基底先于 Attn——依赖约束）；零公理面      *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* AttnDoeblin.v —— P1 旗舰包：有界 logits softmax 核的显式 Doeblin 收缩 *)
@@ -2201,12 +2210,12 @@ Open Scope Q_scope.
 (*   ⟹ 核逐点 ≥ δ*·U，δ* := e^{−Δ/T}·e^{+Δ/T}⁻¹ 形态 exact 化为       *)
 (*   δ* := lo·lo（lo := e^{−Δ/T}），即 e^{−2Δ/T}——温度与 logit        *)
 (*   直径的显式函数；Part A 原样实例化 ⟹ 收缩率 (1 − e^{−2Δ/T})ⁿ。     *)
-(* Part C（放电证据）：cauchy_real_exp 满足 expf 迷你接口全部字段——     *)
-(*   Part B 假设类在具体柯西实数上非空（real_eq 版语义放电）。          *)
+(* Part C（满足性证明）：cauchy_real_exp 满足 expf 迷你接口全部字段——     *)
+(*   Part B 假设类在具体柯西实数上非空（real_eq 版语义实现）。          *)
 (* 诚实接口（Variable）：sum_swap_cc / abs_ge_zero_id_cc /              *)
 (*   lt_plus_compat（与库内 Doeblin 节同款）；sum_eq_list（枚举求和      *)
-(*   规范化 = 有限世界公理）；expf 迷你接口（Part C 放电）。             *)
-(* 红线：零 Axiom/Admitted/Parameter；Set 层语句；全 Qed；可提取。      *)
+(*   规范化 = 有限世界假设）；expf 迷你接口（Part C 证其可满足）。             *)
+(* 纪律：零公理面、零承认件、零参数声明；Set 层语句；全 Qed；可提取。      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -2642,7 +2651,7 @@ Variable z : S -> S -> R.
 Variable z_lb : forall s s' : S, le (opp Delta) (z s s').
 Variable z_ub : forall s s' : S, le (z s s') Delta.
 
-(* 构造性指数迷你接口（Part C 放电其可满足性） *)
+(* 构造性指数迷你接口（Part C 证其可满足性） *)
 Variable expf : R -> R.
 Variable expf_pos : forall x : R, lt zero (expf x).
 Variable expf_zero : Id (expf zero) one.
@@ -2932,11 +2941,11 @@ Qed.
 End BoundedSoftmax.
 
 
-(* ################ Part C：Real 层放电证据 ################ *)
+(* ################ Part C：Real 层满足性证明 ################ *)
 
 (* expf 迷你接口在具体柯西实数上的可满足性——Part B 假设类非空：
    五字段全部由 cauchy_real_exp 的已证定理逐一供给
-   （mono_le 经 real_le = Or (real_lt) (real_eq) 的构造性析取逐支放电）。 *)
+   （mono_le 经 real_le = Or (real_lt) (real_eq) 的构造性析取逐支证明）。 *)
 Theorem real_expf_realizable :
   sigT (fun f : Real -> Real => And (forall x : Real, real_lt real_zero (f x))
         (And (real_eq (f real_zero) real_one)
@@ -2961,7 +2970,7 @@ Qed.
 (* ============================================================ *)
 (* 217 块 23 · AttnSqrt（P3：构造性平方根 real_sqrt_exists——       *)
 (*   ∀d≥0 {r | r≥0 ∧ r·r==d}，cw_log 路线）                       *)
-(*   源：最新模块\01\AttnSqrt.v；零 Axiom/Admitted                 *)
+(*   源：AttnSqrt.v（上游）；零公理面、零承认件                    *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* AttnSqrt.v —— P3 升级包：构造性平方根一般化                  *)
@@ -2982,17 +2991,17 @@ Qed.
 (*   提供构造性情形数据：                                       *)
 (*   ① d ≡ 0（右支）：r := real_zero，r·r == 0 == d。           *)
 (*   ② d > 0（左支，带正间隙证书）：r := exp(½·log d)——        *)
-(*      库内 log 战役产物 cw_log（右逆 cw_log_exp_right）+      *)
+(*      库内 log 论证产物 cw_log（右逆 cw_log_exp_right）+      *)
 (*      cauchy_real_exp_plus（exp 加法性）+ cauchy_real_exp_wd  *)
 (*      （exp 外延）+ cauchy_real_exp_pos（exp 恒正）拼装：      *)
 (*      r·r == exp(t+t) == exp(log d) == d，且 r > 0 直接由     *)
 (*      exp 正性给出（无需二分/夹逼/诊断分支）。                *)
-(*   注：任务书原建议镜像 cos π/2 二分模板；本实现改走库内      *)
-(*   log 战役既有产物（其本身即二分模板的产物），构造更短、     *)
+(*   注：规范原建议镜像 cos π/2 二分模板；本实现改走库内      *)
+(*   log 论证既有产物（其本身即二分模板的产物），构造更短、     *)
 (*   且对弱前提 d ≥ 0 严格成立（Or 左支给出正间隙证书，         *)
 (*   右支给出 r := 0 的精确相等）——无假命题修正。               *)
 (*                                                              *)
-(* 纪律：纯构造性 Set 层、零 Axiom/Admitted/Abort/经典。        *)
+(* 纪律：纯构造性 Set 层、零公理面、零承认件、非经典。        *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -3216,10 +3225,9 @@ Qed.
 End SqrtWitnessGeneral.
 
 (* ============================================================ *)
-(* 218 块 24 · AttnHardLimit（P4：词表/计数/权重机制——         *)
-(*   218 版（2026-09-06：eq_inv2_double 根域自足化 + TV 收口    *)
-(*   链补回，39 Qed）。源：最新模块\01\AttnHardLimit218.v       *)
-(*   并入验证见 218-装配报告；零 Axiom/Admitted/Abort           *)
+(* 块 24 · AttnHardLimit：词表/计数/权重机制——                 *)
+(*   eq_inv2_double 根域自足化 + TV 界链闭式，39 Qed。           *)
+(*   源：AttnHardLimit218.v（上游）；零公理面、零承认件         *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* AttnHardLimit.v —— P4 升级包：硬注意力极限定理               *)
@@ -3243,7 +3251,7 @@ End SqrtWitnessGeneral.
 (*     一致 real_le 常数间隙在构造性框架内不可行（无实数序的     *)
 (*     可判定比较），故以单一显式 γ 为前提变量（可实例化）。    *)
 (*                                                              *)
-(*   纪律：纯构造性、零 Axiom/Admitted/Abort/Classical；         *)
+(*   纪律：纯构造性、零公理面、零承认件、非经典逻辑；         *)
 (*         语句全 Set 层（sigT/库内 And/Or/Id）；全部 Qed。      *)
 (* ============================================================ *)
 
@@ -3465,7 +3473,7 @@ Variable gap_le : forall x : Token, Not (Id x m) ->
 
 (* ---------- 3. 计数/删除组合学 ---------- *)
 (*   惯例：先 cbn 暴露 match 层，再 destruct token_eq_dec；     *)
-(*   嵌套层逐层处理；矛盾分支用 Empty_set 匹配收口。            *)
+(*   嵌套层逐层处理；矛盾分支用 Empty_set 匹配消解。            *)
 
 Lemma count_zero_notin : forall (t : Token) (l : list Token),
   @Id nat (count_token t l) O -> not_InT t l.
@@ -4427,7 +4435,7 @@ Proof.
                  (cauchy_real_exp (real_opp a))).
         + apply cauchy_real_exp_pos.
         + exact Hs4. }
-    (* 收口：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
+    (* 结论：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
     apply (real_le_trans _
              (real_mult (real_of_nat (length vocab))
                         (decay_T T Ht)) _).

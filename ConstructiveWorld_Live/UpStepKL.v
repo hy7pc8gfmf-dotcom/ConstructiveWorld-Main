@@ -1,13 +1,22 @@
 (* ============================================================ *)
-(* UpStepKL.v —— step_kl_eta_bound 的 Real 层放电                 *)
+(* UpStepKL.v *)
+(* *)
+(* 目的： step_kl_eta_bound 的 Real 层 eps 化对应物。 *)
+(* 主件： kl_distrib_r 分配律与 kl_ring_m_plus_eta 单步几何不等式。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 为策略迭代真几何率定理的唯一诚实接口的 eps 化形；零公理面、全 Qed、可提取。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpStepKL.v —— step_kl_eta_bound 的 Real 层消解                 *)
 (* 论文 1 定理 4.8（策略迭代真几何率）唯一诚实接口的 eps 化对应物：  *)
 (*   插值不等式 Z = Σ π_t^{1−η}·π*^η ≤ 1。                        *)
 (* 路线：Varberg 锥论证（零 Jensen/Hölder 基建）                  *)
 (*   M0.1 二点凸性核（e^{(1−η)x+ηy} ≤ (1−η)e^x + ηe^y + eps）      *)
 (*   M0.2 逐点 AM-GM（a^{1−η}b^η ≤ (1−η)a + ηb + eps）            *)
 (*   M1  求和版（Σ powprod ≤ 1 + eps，归一化吸收 eps·pit 权）       *)
-(* 全部 Real 层顶层名（cw_log/cauchy_real_exp），Or 编码 le。       *)
-(* 红线：零 Axiom/Admitted；Set 层语句；全 Qed；可提取。            *)
+
+(* 红线：零 公理/承认件；Set 层语句；全 Qed；可提取。            *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -570,7 +579,7 @@ Proof.
            (real_eq_sym _ _ Hstep3) (real_eq_trans _ _ _ Hstep1 Hstep2)).
 Qed.
 
-(* log(1/x) == −log x *)
+
 Lemma kl_log_inv : forall (x : Real) (Hx : real_lt real_zero x)
     (Hix : real_lt real_zero (real_inv_pos x Hx)),
   real_eq (cw_log (real_inv_pos x Hx) Hix) (real_opp (cw_log x Hx)).
@@ -634,7 +643,7 @@ Proof. intros eta W X Z. destruct eta as [e He]. destruct W as [w Hw].
   destruct X as [x Hx]. destruct Z as [z Hz]. apply real_eq_of_zero_diff.
   intro n. simpl. ring. Qed.
 
-(* log 单调 le 版（Or 编码逐支，G01_CoreMicro 同款） *)
+
 Lemma kl_log_le_mono : forall (a b : Real) (Ha : real_lt real_zero a)
     (Hb : real_lt real_zero b),
   real_le a b -> real_le (cw_log a Ha) (cw_log b Hb).
@@ -648,7 +657,6 @@ Qed.
    π_{t+1}(i) := π_t(i)^{1−η}·π*(i)^η / Z（几何插值策略）。
    精确恒等：KL(π_t‖π_{t+1}) == η·KL(π_t‖π★) + log Z（逐点 kl_term 代数 +
    归一化吸收 Σp == 1），再由 M1（Z ≤ 1+eps）+ 严格种子（1+eps < e^eps，
-   故 log(1+eps) < eps）+ log 单调得 log Z < eps，收口
    KL(π_t‖π_{t+1}) ≤ η·KL(π_t‖π★) + eps。 *)
 
 (* 几何插值配分函数 Z := Σ_i π_t(i)^{1−η}·π*(i)^η *)
@@ -709,7 +717,7 @@ Proof.
     set (izz := real_inv_pos Z HZ).
     set (pA := real_pow_pos (p i) m (Hp i)).
     set (pB := real_pow_pos (r i) eta (Hr i)).
-    (* 证明项形状与 real_kl_term 展开严格一致（cw_log 依赖其 proof 实参） *)
+    
     assert (Hip : real_lt real_zero ipp) by exact (real_inv_pos_pos (p i) (Hp i)).
     assert (Hizp : real_lt real_zero izz) by exact (real_inv_pos_pos Z HZ).
     assert (HpA : real_lt real_zero pA)
@@ -720,7 +728,7 @@ Proof.
                   (real_inv_pos_pos (p i) (Hp i))).
     set (Hrplog := real_mult_positive (r i) (real_inv_pos (p i) (Hp i)) (Hr i)
                   (real_inv_pos_pos (p i) (Hp i))).
-    (* log 值事实 *)
+    
     assert (HlA : real_eq (cw_log pA HpA) (real_mult m (cw_log (p i) (Hp i))))
       by exact (log_inv_exp_neg_thm (real_mult m (cw_log (p i) (Hp i))) HpA).
     assert (HlB : real_eq (cw_log pB HpB) (real_mult eta (cw_log (r i) (Hr i))))
@@ -729,7 +737,7 @@ Proof.
       by exact (kl_log_inv Z HZ Hizp).
     assert (HlP : real_eq (cw_log ipp Hip) (real_opp (cw_log (p i) (Hp i))))
       by exact (kl_log_inv (p i) (Hp i) Hip).
-    (* log(r·inv p) == log r + (−log p) *)
+    
     assert (Hlogrp : real_eq (cw_log (real_mult (r i) ipp) Hrplog)
                              (real_plus (cw_log (r i) (Hr i))
                                         (real_opp (cw_log (p i) (Hp i))))).
@@ -750,7 +758,7 @@ Proof.
       by exact (real_mult_positive pB (real_mult izz ipp) HpB Hpos3).
     assert (HAB4 : real_lt real_zero (real_mult pA (real_mult pB (real_mult izz ipp))))
       by exact (real_mult_positive pA (real_mult pB (real_mult izz ipp)) HpA Hpos2).
-    (* log(q·inv p) 拆四项 *)
+    
     assert (Hlog4 : real_eq (cw_log (real_mult (q i) ipp) Hqqlog)
                        (real_plus (cw_log pA HpA)
                           (real_plus (cw_log pB HpB)
@@ -788,7 +796,7 @@ Proof.
                            (real_plus (cw_log izz Hizp) (cw_log ipp Hip))
                            (real_eq_refl (cw_log pB HpB))
                            (log_inv_mult_thm izz ipp Hizp Hip Hpos3))))). }
-    (* 代入 log 值 *)
+    
     assert (Hlog4' : real_eq (cw_log (real_mult (q i) ipp) Hqqlog)
                        (real_plus (real_plus (real_mult m (cw_log (p i) (Hp i)))
                                              (real_mult eta (cw_log (r i) (Hr i))))
@@ -829,7 +837,7 @@ Proof.
                            (cw_log ipp Hip) (real_opp LZ)
                            (real_opp (cw_log (p i) (Hp i))) HlZ HlP)))
                   (kl_ring_log4 eta (cw_log (p i) (Hp i)) (cw_log (r i) (Hr i)) LZ)). }
-    (* 负化 + 环归拢：−log(q·inv p) == η·(log p − log r) + LZ *)
+    
     assert (Hneg : real_eq (real_opp (cw_log (real_mult (q i) ipp) Hqqlog))
                        (real_plus (real_mult eta
                                      (real_plus (cw_log (p i) (Hp i))
@@ -851,7 +859,7 @@ Proof.
                      (real_plus (real_opp LZ) (real_opp (cw_log (p i) (Hp i)))))
                   Hlog4')
                (kl_ring_neg4 eta (cw_log (p i) (Hp i)) (cw_log (r i) (Hr i)) LZ)). }
-    (* r 侧：log p − log r == −log(r·inv p) *)
+    
     assert (HnegR : real_eq (real_plus (cw_log (p i) (Hp i))
                                        (real_opp (cw_log (r i) (Hr i))))
                             (real_opp (cw_log (real_mult (r i) ipp) Hrplog))).

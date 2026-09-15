@@ -1,8 +1,17 @@
+(* ============================================================ *)
+(* UpKVDrift_P2.v *)
+(* *)
+(* 目的： 核漂移链第二段：显式假设的进一步承接（同载体）。 *)
+(* 主件： Z_keep_pos / N_R_pos 正性族与 tv_row、lstep 行 TV 界（第二段组织）。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 与第一段同型：eps-Bishop 形态的显式假设承接；核行随机与严格正为 Variable 前提。 *)
+(* ============================================================ *)
+
 (* ========================================================================= *)
-(* UpKVDrift.v — §6 KV 逐出 × 双点收缩：逐出漂移动力学定理（件 3/4）        *)
+(* UpKVDrift.v — §6 KV 逐出 × 双点收缩：逐出变动动力学定理（件 3/4）        *)
 (*                                                                           *)
 (* 分工（主会话钉死）：本文件承接方案四的后半——件 3（行 TV 界）与          *)
-(* 件 4（主定理·漂移）；世界定义/K_ev/Z_keep 照抄契约在文件内重建（独立     *)
+(* 件 4（主定理·变动）；世界定义/K_ev/Z_keep 照抄契约在文件内重建（独立     *)
 (* Section，与新席 UpKVEv.v 各持一份同形定义，既定分工）。                  *)
 (*                                                                           *)
 (* 世界（list 词表，Real 层，镜像 AttnHardLimit 瘦身形态）：                 *)
@@ -16,9 +25,9 @@
 (*   因 invZ ≥ 1），drop 支 == K；分部求和                                   *)
 (*   Σ_keep(K·invZ − K) == (invZ−1)·Z_keep == 1 − Z_keep == tail_row，      *)
 (*   drop 支 == tail_row，合计 == 2·tail_row == 2·(1 − Z_keep)——精确最简   *)
-(*   形态（强于任务书预案的 ≤ 形态，以等式交付；≤ 形态与 1−Z 形态并列）。  *)
+(*   形态（强于任务书预案的 ≤ 形态，以等式结果；≤ 形态与 1−Z 形态并列）。  *)
 (*                                                                           *)
-(* 件 4  kv_drift_bound（主定理·漂移）：                                    *)
+(* 件 4  kv_drift_bound（主定理·变动）：                                    *)
 (*   前提 Hrow : ∀s, tv_row(s) ≤ c（一致行误差常数，规避 sup），对任意      *)
 (*   归一化非负 μ 与任意 n、任意 eps > 0：                                   *)
 (*     D(K_ev^n μ, K^n μ) ≤ n·c + eps（D := Σ|−| 逐和形态）                 *)
@@ -32,7 +41,7 @@
 (*   例），exact le 为 Or(lt,eq) 编码，exact 三角构造性不可得。故件 3 全程  *)
 (*   exact（符号证书绕开三角），件 4 为 Bishop 逐 eps 形 ≤ n·c + eps——      *)
 (*   与根内 real_abs_nonneg_le_eps 同一诚实档位。TV(inv2·Σ|−|) 同构形态    *)
-(*   以 kv_drift_bound_tv 并列交付。                                        *)
+(*   以 kv_drift_bound_tv 并列结果。                                        *)
 (*                                                                           *)
 (* 红线自审：纯构造性（零公理/零弃证/零经典逻辑）；语句全 Set 层            *)
 (*   （real_eq/real_lt/real_le/Id/InT 均 Set 编码，keep 判定 bool）；       *)
@@ -147,7 +156,7 @@ Proof.
              (if keep s0 then K s s0 else real_zero) (Z_keep s) Hlt0 Heq).
 Qed.
 
-(* 均匀分布与 δ minorization 前提（对齐 UpKVEv.v 交付契约：delta_minor
+(* 均匀分布与 δ minorization 前提（对齐 UpKVEv.v 结果契约：delta_minor
    对裸 K 逐点，不可省——数学修正警报已吸收）。件 3/4 的语句不消费
    minorization，本块按 Coq 段规则仅在各自使用处进入语句。 *)
 Definition N_R : Real := real_of_nat (length states).
@@ -784,7 +793,7 @@ Proof.
       * apply real_eq_sym.
         exact (real_distrib (K s w)
                  (real_inv_pos (Z_keep s) (Z_keep_pos s)) (real_opp real_one)).
-  - (* drop 支：0 == 0·(invZ−1)（real_eq_sym 槽位：conclusion real_eq y x） *)
+  - (* drop 支：0 == 0·(invZ−1)（real_eq_sym 假设位：conclusion real_eq y x） *)
     apply (real_eq_sym (real_mult real_zero (real_minus_r (invZK s) real_one))
               real_zero
               (real_eq_trans
@@ -796,7 +805,7 @@ Proof.
 Qed.
 
 (* 件 1 副本：K_ev 行归一化 Σ_{s'} K_ev(s,s') == 1
-   （依 _kv_tail.txt 快照还原；漂移归纳的归一化前提所需） *)
+   （依 _kv_tail.txt 快照还原；变动归纳的归一化前提所需） *)
 Lemma kv_kev_row_one : forall s : Tok,
   real_eq (real_list_sum Tok (K_ev s) states) real_one.
 Proof.
@@ -991,7 +1000,7 @@ Proof.
   - apply real_eq_refl.
 Qed.
 
-(* ===================== 件 3 主交付：精确恒等式 =========================
+(* ===================== 件 3 主结果：精确恒等式 =========================
    tv_row(s) == tail_row(s) + tail_row(s)（== 2·tail_row == 2·(1 − Z_keep)） *)
 Theorem kev_row_tv_exact : forall s : Tok,
   real_eq (tv_row s) (real_plus (tail_row s) (tail_row s)).
@@ -1024,7 +1033,7 @@ Proof.
              (real_eq_refl _)).
 Qed.
 
-(* ≤ 2·tail 形（与 exact 并列交付；real_le Type 编码，无 Prop 泄露） *)
+(* ≤ 2·tail 形（与 exact 并列结果；real_le Type 编码，无 Prop 泄露） *)
 Corollary kev_row_tv_bound : forall s : Tok,
   real_le (tv_row s) (real_plus (tail_row s) (tail_row s)).
 Proof.
@@ -1717,7 +1726,7 @@ Proof.
                   eps))).
 Qed.
 
-(* 行误差一步漂移（件 4 的核心单步界）：
+(* 行误差一步变动（件 4 的核心单步界）：
    D(K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
 (* 加权双重和化简：Σ_s'Σ_s |μ(s)·(K_ev−K)(s,s')| == Σ_s μ(s)·tv_row(s) *)
 Lemma kv_dsum_row_err : forall mu : Tok -> Real,
@@ -1784,7 +1793,7 @@ Proof.
     + apply real_list_sum_linear.
 Qed.
 
-(* 行误差一步漂移（件 4 的核心单步界）：
+(* 行误差一步变动（件 4 的核心单步界）：
    D(K_ev μ, K μ) ≤ c + ε（行三角 + 换序 + Hrow + 归一化） *)
 Lemma kv_step_drift : forall (mu : Tok -> Real) (eps : Real),
   real_lt real_zero eps ->
@@ -1943,7 +1952,7 @@ Proof.
                  (real_eq_refl eps)).
 Qed.
 
-(* ---------- 件 4：主定理·漂移 ---------- *)
+(* ---------- 件 4：主定理·变动 ---------- *)
 
 (* 望远镜主归纳：a_n ≤ n·c + n·ε0 对任意 ε0 > 0（三分支 ε/3 精确闭合） *)
 (* 四项 AC 重排：(a+b)+(c+d) == (a+c)+(real_plus b d)（assoc/comm 纯机械链） *)
@@ -1982,7 +1991,7 @@ Proof.
     + apply (real_plus_assoc a c0 (real_plus b d)).
 Qed.
 
-(* 漂移装配算术：((cc+h)+((dd+h)+h)) == ((cc+dd)+ee)，其中 h+(h+h) == ee *)
+
 (* P2 修复路线：kv_regroup4 打头 + assoc 换位 + H3 末端吸收（4 步链）；
    原稿中点 cc+(dd+ee) 处漏一步 (dd+h)+h 的 assoc 归位，全链重排 *)
 Lemma kv_assemble_le : forall cc dd h ee : Real,
@@ -2111,7 +2120,7 @@ Proof.
                         (inr H3B))).
         -- apply inr.
            (* P2 路线：assoc → 组内换位 → 再 assoc 的四项重排 + 分配吸收；
-             原稿链残留 inv3 项且 kv_one_mult_l 槽位错配，整链重写 *)
+             原稿链残留 inv3 项且 kv_one_mult_l 假设位错配，整链重写 *)
            apply (real_eq_trans
                     (real_plus (real_plus c (real_plus (real_mult (real_of_nat n) c) (real_mult (real_of_nat n) eps0))) eps0)
                     (real_plus (real_plus c (real_mult (real_of_nat n) c)) (real_plus eps0 (real_mult (real_of_nat n) eps0)))
@@ -2156,8 +2165,8 @@ Proof.
 
 Qed.
 
-(* ===================== 件 4 主交付：漂移界（Bishop ε 形） ==================
-   前提 Hrow（一致行误差常数）下，双核迭代 n 步的 TV 漂移 ≤ n·c + ε。 *)
+(* ===================== 件 4 主结果：变动界（Bishop ε 形） ==================
+   前提 Hrow（一致行误差常数）下，双核迭代 n 步的 TV 变动 ≤ n·c + ε。 *)
 Theorem kv_drift_bound : forall (n : nat) (mu : Tok -> Real) (eps : Real),
   real_eq (real_list_sum Tok mu states) real_one ->
   (forall s : Tok, real_le real_zero (mu s)) ->
@@ -2213,7 +2222,7 @@ Proof.
       apply real_le_refl.
 Qed.
 
-(* 根内 u_tv_contraction 同构形态（inv2·Σ|−|）：漂移界的 TV 版 *)
+
 Theorem kv_drift_bound_tv : forall (n : nat) (mu : Tok -> Real) (eps : Real),
   real_eq (real_list_sum Tok mu states) real_one ->
   (forall s : Tok, real_le real_zero (mu s)) ->
@@ -2230,7 +2239,7 @@ Qed.
 
 End UpKVDrift.
 
-(* ---- 提取探针（G3 关卡对象；G4 于 9.0 平台 coqchk 复核） ---- *)
+
 From Stdlib Require Import Extraction.
 Extraction "upkvdrift_probe.ml" Z_keep K_ev tail_row tv_row kev_iter k_iter
   lstep Ddist tvL

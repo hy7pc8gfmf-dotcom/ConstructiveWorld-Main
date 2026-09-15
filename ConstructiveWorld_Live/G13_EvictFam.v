@@ -2,22 +2,22 @@
    成员：UpEvictId + UpEvictIdReq（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G13_EvictFam 成员件：UpEvictId（原样并入，自带 Require）======== *)
 (* ========================================================================= *)
-(* UpEvictId.v — §6 KV 逐出恒等式批（王中王 A1/B3 + A6/B1，2026-09-07）      *)
+(* UpEvictId.v — §6 KV 逐出恒等式批（王中王 A1/B3 + A6/B1）      *)
 (*                                                                           *)
 (* 本文件以与根 AttentionGibbsBridge 区段同款 Section（变量名/前提形态      *)
-(* 逐行对齐）重建逐出世界，交付四组恒等式升级：                              *)
+(* 逐行对齐）重建逐出世界，给出四组恒等式升级：                              *)
 (*                                                                           *)
 (* 件 1a  eviction_db_breaking_zero        ：破缺恒为零（拆冗余假设         *)
 (*         fluctuation_dissipation_bound 的核心件——本文件全程不使用该      *)
 (*         假设；所需前提仅为 Section 自带 detailed_balance）。              *)
 (* 件 1b  evicted_boltzmann_steady_exact   ：截断核稳态方程精确成立          *)
-(*         （保留因子形态 = 扫描报告 A1 草案逐字）；并列交付全保留特例      *)
+(*         （保留因子形态 = 扫描报告 A1 草案逐字）；并列给出全保留特例      *)
 (*         evicted_boltzmann_steady_full_keep（右端裸 ev_b(s) 形态，核行    *)
 (*         归一化 Σ ev_t(s,·) == 1 在全保留时成立并吸收）。                  *)
 (* 件 1c  eviction_steady_deviation_zero   ：定理 6.1 偏差恒为零（Id 形态   *)
 (*         + le 形态并列），供论文"定理 6.1 右端恒为零"直接引用。           *)
 (* 件 2   eviction_partition_increment     ：保留集扩张的精确增量恒等式     *)
-(*         （L29485 单调 ≤ 的等式升级）；并列交付全配分差恒等式             *)
+(*         （L29485 单调 ≤ 的等式升级）；并列给出全配分差恒等式             *)
 (*         eviction_partition_le_full_exact（L29526 的等式升级）。           *)
 (*                                                                           *)
 (* 分界注记（对照根 Real-KV 区）：本件零破缺严格依赖 detailed_balance      *)
@@ -366,12 +366,12 @@ Extraction "up_evict_ww_probe.ml" evicted_db_products
 
 (* ======== G13_EvictFam 成员件：UpEvictIdReq（原样并入，自带 Require）======== *)
 (* ========================================================================= *)
-(* UpEvictIdReq.v — 签名迁移批 4 第二席：UpEvictId 的 req 伴件（14 件）      *)
-(*   母件：attn\UpEvictId.v（§6 KV 逐出恒等式批，2026-09-07）                *)
-(*   规划书：docs\签名迁移规划书-20260908.md 批 4「模块伴件」                *)
+(* UpEvictIdReq.v — 签名迁移批 4 第二模块：UpEvictId 的 req 伴件（14 件）      *)
+(*   母件：attn\UpEvictId.v（§6 KV 逐出恒等式批）                *)
+(*   规划书：docs\签名迁移规划书.md 批 4「模块伴件」                *)
 (*   伴件形态：req_* 独立伴 Section，与母件同树（attn 目录）                 *)
 (* ------------------------------------------------------------------------- *)
-(* 覆盖对账（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id 或证明核    *)
+(* 覆盖核对（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id 或证明核    *)
 (* 为 Id 搬运的声明，Variable 假设位计入；grep 实测 16 声明，冻结扣除 2）：   *)
 (*   件 1  req 假设位 transition_normalization    <- 母件 L65（Id 求和归一） *)
 (*   件 2  req 假设位 detailed_balance            <- 母件 L68（Id 详细平衡） *)
@@ -388,9 +388,9 @@ Extraction "up_evict_ww_probe.ml" evicted_db_products
 (*   件 13 req_eviction_partition_increment       <- 母件 L313               *)
 (*   件 14 req_eviction_partition_le_full_exact   <- 母件 L336               *)
 (*   冻结扣除（2 件，批 4 (d) 清单理由回写）：                                *)
-(*   - 母件 opp_zero_u @L101：req 同位件批 2 已交付（UpReqDist               *)
+(*   - 母件 opp_zero_u @L101：req 同位件批 2 已给出（UpReqDist               *)
 (*     ReqDistCommon reqd_opp_zero），本件消费不重建。                        *)
-(*   - 母件 minus_zero_r_u @L107：req 同位件批 2 已交付（UpReqDist           *)
+(*   - 母件 minus_zero_r_u @L107：req 同位件批 2 已给出（UpReqDist           *)
 (*     ReqDistCommon reqd_minus_zero_r），件 12/14 直接消费。                 *)
 (* ------------------------------------------------------------------------- *)
 (* 每处 Id→req 差异真证非抄写：母件 id_trans/id_cong/id_sym 链逐处换         *)
@@ -403,7 +403,7 @@ Extraction "up_evict_ww_probe.ml" evicted_db_products
 (* 件 5/9/10 = A-（引擎件一步装配）；件 7/12 = B（分支枚举 + 矛盾消去，     *)
 (* 仅 req_refl 换形）；件 8/11 = B（字段直引）；件 1/2 = 假设位迁移。       *)
 (* 纪律：纯 term-mode（零 rewrite/零 Morphisms）；语句全 Set 层              *)
-(* （req/le/lt/Or/sigT 皆 Set 值，零 Prop 泄露）；全 Qed 收口；零禁词。      *)
+(* （req/le/lt/Or/sigT 皆 Set 值，零 Prop 泄露）；全 Qed 完成；零禁词。      *)
 (* ========================================================================= *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -427,7 +427,7 @@ Let le := @le R RIS.
 Let inv_pos := @inv_pos R RIS.
 Let exp_neg := @exp_neg R RIS.
 
-(* ---- req 求和假设位（母件 SumOver 类 CW219 L1400 本件消费字段逐位 req 化：
+(* ---- req 求和假设位（母件 SumOver 类 CW_ConstructiveWorld_219 L1400 本件消费字段逐位 req 化：
    linear / add / ext 三件；le / nonneg / zero_nonneg / abs 三角字段母件
    14 件未消费，不设槽） ---- *)
 Variable S : Set.
@@ -747,7 +747,7 @@ Proof.
   - exact (transition_normalization s).
 Qed.
 
-(* ---- 件 9：全保留特例（母件 L242；req_mult_one_r 收口） ---- *)
+(* ---- 件 9：全保留特例（母件 L242；req_mult_one_r 闭合） ---- *)
 Corollary req_evicted_boltzmann_steady_full_keep :
   (forall s, keep s) ->
   forall s : S,
@@ -842,7 +842,7 @@ Qed.
 
 (* ---- 件 13：保留集扩张的精确增量恒等式（母件 L313；req 差异真证：
    sum_over_S_minus 换批 2 reqd_sum_minus（显式假设位逐位对位），再
-   req sum_ext 重排逐点收口） ---- *)
+   req sum_ext 重排逐点闭合） ---- *)
 Theorem req_eviction_partition_increment :
   forall (k1 k2 : S -> Set) (Hsub : forall s, k1 s -> k2 s)
     (kd1 : forall s, Or (k1 s) (Not (k1 s)))

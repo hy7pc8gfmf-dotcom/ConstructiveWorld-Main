@@ -1,42 +1,43 @@
+(* ============================================================ *)
+(* UpReqMpDomain.v *)
+(* *)
+(* 目的： Min-P 域面：词表、温度配分与马尔可夫核的域构造。 *)
+(* 主件： mpd_markov_kernel / mpd_partition_temp_pos 与 mpd_pick_best_token 选取面。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqDist、UpReqAlignRestB、UpReqAlgebra、UpReqPropLiftShim。 *)
+(* 备注： 词表非空双见证（mpd_vocab_ne_witness_s1/s2）为显式构造；P 载体经垫片接口承接。 *)
+(* ============================================================ *)
+
 (* UpReqMpDomain.v — 席X3：mp 域 req 层引擎与首批实例（20260911）
    ----------------------------------------------------------------
-   冻结判词（迁移总账 mp 域 9 件 + inv_vocab 2 件 + attn_nat_to_R_pos 1 件，
    共 12 件）立论 =「mp 嵌入域跨接口不可复用（缺 nat→req-R 桥）」。
    席N2 实证该前提已消失：上游引擎 reqd_of_nat（UpReqDist.v L286，ReqGRPO
    节闭合后导出的 nat→req-R 嵌入）+ rsum/rls_* 求和桥（UpReqAlignRestB.v
    Part 0）+ 单调件（UpReqAlgebra req_mult_plus_distr_r / req_le_mult_compat_r
    等）全部在盘。本件补 nat→req-R 桥的正性/步进公共件 + 首批实例。
 
-   母本：S06_DiffSamplingGibbs.v Section MinPSampling T2.4-2 节
-   （= CW219 大库 L31545-31834；总账 L602-612 冻结名单）。
+   母本：S06_DiffSamplingGibbs.v Section MinPSampling -2 节
    ----------------------------------------------------------------
-   逐件对位台账（req 件名 <- Id 原件 @ 原件分片行号 / 总账行号）：
    [引擎段 ReqMpEngineNum]
      E1 reqd_of_nat_succ（定义性：reqd_of_nat (S n) ≡ 1 + reqd_of_nat n）
      E2 reqd_of_nat_pos（nat 归纳正性）＝ attn_nat_to_R_pos 对位
-        （S13_NLiveAudit.v L2301 / 总账 L113：attn_nat_to_R 与 reqd_of_nat
         为同一 Fixpoint 形 O↦zero, S n↦1+·；req 对位以共享嵌入 reqd_of_nat
         陈述，语句逐字同形 lt zero (· (S k))）
      E3 req_le_one_mult_le_inv_mp <- le_one_mult_le_inv_mp
-        （S06 L7061 / 总账 L618；纯代数：1 ≤ G·M ⟹ inv G ≤ M）
+        （S06 / ；纯代数：1 ≤ G·M ⟹ inv G ≤ M）
    [实例段 ReqMpNatDomain]
-     I1 reqd_mp_of_nat_pos <- mp_of_nat_pos（S06 L6893 / 总账 L602）
      I2 req_rsum_le_const_mp <- list_sum_le_const_mp
-        （S06 L7027 / 总账 L617；兼作滚动席链① minp_max_ge_inv_vocab_size
         的核心腿：Σ f l ≤ of_nat(|l|)·M）
    [实例段 ReqMpKernelWorld]
      I3 req_markov_kernel_normalized_mp <- markov_kernel_normalized_mp
-        （S06 L6913 / 总账 L603；mpd_* 定义族与基座 temp_factor/
+        （S06 / ；mpd_* 定义族与基座 temp_factor/
         partition_temp/markov_kernel 逐位同形——RestB alb_* 闭包显式参数
         先例，原证明 Hext/Hlin/Hp 三步逐位对位）
      I4 req_temp_factor_antitone_mp <- temp_factor_antitone_mp
-        （S06 L6943 / 总账 L604；exp_neg_le_decr + 正因子左乘保序）
    ----------------------------------------------------------------
-   余件清单（本席不做，滚动席续作；逐件依赖注记见文件尾）：
-     argmin_aux_token_min_mp（S06 L6976）/ argmin_aux_token_snd_correct_mp
-     （S06 L7024）/ pick_best_optimal_mp（S06 L7044）/ markov_kernel_le_max_mp
-     （S06 L7066）/ minp_max_ge_inv_vocab_size（S06 L7082）/ 
-     minp_dropped_mass_le_inv_vocab_size（S06 L7097）——argmin/list-Id 机器
+     argmin_aux_token_min_mp（S06）/ argmin_aux_token_snd_correct_mp
+     （S06）/ pick_best_optimal_mp（S06）/ markov_kernel_le_max_mp
+     （S06）/ minp_max_ge_inv_vocab_size（S06）/ 
+     minp_dropped_mass_le_inv_vocab_size（S06）——argmin/list-Id 机器
      3 件 + 组装 3 件（依赖 I2 + I3 + E3 桥件，引擎已备）。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le 接口 Set 值；Or/And/Id(list/nat)/
@@ -50,6 +51,9 @@ Require Import UpReqAlgebra.
 From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
+Require Import UpReqPropLiftShim.
+(* B6W 接线（20260915，AA13 显式假设①首批）：pls_ 升面垫片接入， *)
+(* 供三节 vocab_nonempty 老否定形前提升 sigT 见证形消费。 *)
 
 (* ============================================================ *)
 (* 引擎段 ReqMpEngineNum：nat→req-R 嵌入（reqd_of_nat）公共桥件  *)
@@ -64,7 +68,7 @@ Proof.
   intro n. apply req_refl.
 Qed.
 
-(* E2 嵌入正性＝attn_nat_to_R_pos 对位（S13 L2301）：0 < reqd_of_nat (S k)。
+(* E2 嵌入正性＝attn_nat_to_R_pos 对位（S13）：0 < reqd_of_nat (S k)。
    归纳结构对位原证：基座换形（1+0 == 1，one_pos）；步 plus_positive。 *)
 Lemma reqd_of_nat_pos : forall k : nat, lt zero (reqd_of_nat (Datatypes.S k)).
 Proof.
@@ -84,7 +88,7 @@ Proof.
       * exact IH.
 Qed.
 
-(* E3 <- le_one_mult_le_inv_mp（S06 L7061 / 总账 L618）：
+(* E3 <- le_one_mult_le_inv_mp（S06 / ）：
    0 < G、1 ≤ G·M ⟹ inv G ≤ M。
    Id 系三步（assoc / comm+inv_correct / one 消去）逐位换 req_trans 链；
    Id 中间件 Habs 换 req Habs；收尾 le_id_r/le_id_l 运输 +
@@ -127,8 +131,7 @@ Section ReqMpNatDomain.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 
-(* I1 <- mp_of_nat_pos（S06 L6893 / 总账 L602）：
-   l ≠ nil ⟹ 0 < of_nat(|l|)。嵌入统一为 reqd_of_nat（总账判词之
+(* I1 <- mp_of_nat_pos（S06 / ）：
    「缺 nat→req-R 桥」即由本件消除）；长度非空 ⟹ 形如 S k，归 E2。 *)
 Lemma reqd_mp_of_nat_pos : forall l : list Token,
   Not (Id l nil) -> lt zero (reqd_of_nat (length l)).
@@ -138,7 +141,7 @@ Proof.
   - simpl. exact (reqd_of_nat_pos (length rest)).
 Qed.
 
-(* I2 <- list_sum_le_const_mp（S06 L7027 / 总账 L617）：
+(* I2 <- list_sum_le_const_mp（S06 / ）：
    逐项 f w ≤ M ⟹ Σ f l ≤ of_nat(|l|)·M。
    求和载体 list_sum → rsum（RestB Part 0 req 机器）；
    步基 Id 换形（mult_plus_distr_r / mult_one 消去）逐位换 req 链；
@@ -188,6 +191,11 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
+(* B6W 接线位（AA13 #11，20260915）：老否定形前提经 pls_ 垫片升 sigT 见证形—— *)
+(* 深接线消费位：pls_vocab_ne_lift 把节内旧形 Variable 原地升为见证形， *)
+(* 下游新代码可直取 mpd_vocab_ne_witness_s1 走 sigT 通路。旧语句原样保留。 *)
+Definition mpd_vocab_ne_witness_s1 : pls_vocab_ne vocab
+  := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
@@ -216,7 +224,7 @@ Definition mpd_markov_kernel (prefix : list Token) (w : Token) : R :=
   mult (mpd_temp_factor prefix w)
        (inv_pos (mpd_partition_temp prefix) (mpd_partition_temp_pos prefix)).
 
-(* I3 <- markov_kernel_normalized_mp（S06 L6913 / 总账 L603）：
+(* I3 <- markov_kernel_normalized_mp（S06 / ）：
    Σ_w kernel w == 1。原证 Hext（mult_comm 逐点）/ Hlin（和线性）/
    Hp（inv_pos_correct）三步逐位对位：
    Id rewrite/id_cong → req_trans；list_sum_linear → rls_linear；
@@ -261,7 +269,7 @@ Proof.
                (inv_pos_correct (mpd_partition_temp prefix) (mpd_partition_temp_pos prefix)))).
 Qed.
 
-(* I4 <- temp_factor_antitone_mp（S06 L6943 / 总账 L604）：
+(* I4 <- temp_factor_antitone_mp（S06 / ）：
    loss a ≤ loss b ⟹ tf b ≤ tf a（exp_neg 递减 + 正因子左乘保序） *)
 Lemma req_temp_factor_antitone_mp : forall (prefix : list Token) (a b : Token),
   le (total_loss (prefix ++ [a])) (total_loss (prefix ++ [b])) ->
@@ -283,25 +291,19 @@ Qed.
 End ReqMpKernelWorld.
 
 (* ============================================================ *)
-(* 文件尾：余件清单（滚动席续作，总账 L605-612 未清部分）        *)
+
 (* ------------------------------------------------------------
-   1. argmin_aux_token_min_mp（S06 L6976 / 总账 L605）：
       argmin 遍历最小性——ord_le_dec 换 req_le_dec 桥假设（RestB
       T2① 同位），le_refl/le_trans 接口字段直换；InT 解构保持
       Id 层（list 机器不迁，§1.1 边界 2）。难度：中。
-   2. argmin_aux_token_snd_correct_mp（S06 L7024 / 总账 L606）：
       snd 恒等不变式——纯 Id 层归纳（中支判定换 req_le_dec），
       语句 Id 等式保持（best_loss = ... 为 Id）。难度：低-中。
-   3. pick_best_optimal_mp（S06 L7044 / 总账 L607）：
       pick_best 最优性——依赖 1+2 + vocab 解构；难度：中。
-   4. markov_kernel_le_max_mp（S06 L7066 / 总账 L608）：
       kernel w ≤ max——依赖 3 + I4（temp_factor_antitone）+
       le_mult_compat 弱形（接口字段在盘）；难度：低（引擎齐备）。
-   5. minp_max_ge_inv_vocab_size（S06 L7082 / 总账 L611，链①）：
       1 == Σkernel（I3）≤ |S|·max（I2 实例）⟹ inv(|S|) ≤ max
       （E3）；链式组装，Id/req 等式桥按 RestB 归一化定理同形。
       难度：中（三腿全在盘）。
-   6. minp_dropped_mass_le_inv_vocab_size（S06 L7097 / 总账 L612，
       链②）：dropped ≤ 1 − p_max（RestB req_minp_dropped_mass_le_
       one_minus_max 已在盘）+ 链① + opp_le_compat 组装；难度：中。
    附：argmin_aux_token / pick_best_token / max_markov_prob 三定义
@@ -311,42 +313,39 @@ End ReqMpKernelWorld.
 (* ============================================================ *)
 (* 席X3b2 续作（20260911）：mp 域余 6 件全清（argmin 簇 3 + 组装 3） *)
 (* ------------------------------------------------------------
-   台账（req 件名 <- Id 原件 @ S06 行号 / 总账行号）：
      1 mpd_argmin_aux_token_min_mp <- argmin_aux_token_min_mp
-        （S06 L6976 / 总账 L605；判定换 req_le_dec 桥假设位 1；
+        （S06 / ；判定换 req_le_dec 桥假设位 1；
         原件 not_le_lt 步（S01 判定序域字段，req 域无同名字段）以
         桥假设位 2 req_lt_dec 三分解替之——RestB ReqSamplingWorld
         桥假设位 2 同位；le_refl/le_trans/le_id_l 接口字段直换）
-     2 mpd_argmin_aux_token_snd_correct_mp <- S06 L7024 / 总账 L606
         （纯 Id 层归纳，中支判定换 req_le_dec；语句 Id 等式保持）
-     3 mpd_pick_best_optimal_mp <- S06 L7044 / 总账 L607
         （依赖 1+2 + vocab 解构；snd 恒等以 Id 层 rewrite 运输，
         list-Id 机器不迁边界内）
-     4 mpd_markov_kernel_le_max_mp <- S06 L7066 / 总账 L608
         （le_mult_compat_weak 接口字段直用 + I4 req_temp_factor_
         antitone_mp + 件 3）
-     5 mpd_minp_max_ge_inv_vocab_size <- S06 L7082 / 总账 L611 链①
         （I3 归一化 + I2 req_rsum_le_const_mp + E3 req_le_one_mult_
         le_inv_mp 三腿组装；mp_of_nat → reqd_of_nat 桥）
-     6 mpd_minp_dropped_mass_le_inv_vocab_size <- S06 L7097 /
-        总账 L612 链②（dropped ≤ 1−max 腿按 RestB req_minp_dropped_
+     6 mpd_minp_dropped_mass_le_inv_vocab_size <- S06 /
+         链②（dropped ≤ 1−max 腿按 RestB req_minp_dropped_
         mass_le_one_minus_max 同证形移植（alb_→mpd_ 逐位改名），+
         链① + opp_le_compat 组装）
-   定义簇（S06 L6044-6061/L6167-6171/L6174-6191/L6504 对位；
+   定义簇（S06-6061/L6167-6171/L6174-6191/L6504 对位；
    RestB alb_ 闭包显式参数先例，mpd_markov_kernel 等首批 discharged
    定义以全闭包显式消费）：
      mpd_argmin_aux_token / mpd_pick_best_token（default_token 参，
-     S06 L5946 同位）/ mpd_pick_max_token / mpd_max_markov_prob /
+     S06 同位）/ mpd_pick_max_token / mpd_max_markov_prob /
      mpd_minp_threshold / mpd_minp_keep / mpd_minp_keep_dec /
      mpd_minp_temp_sum / mpd_minp_dropped_mass
    桥假设：位 1 req_le_dec（RestB 位 1 同位）；位 2 req_lt_dec
-   （RestB 位 2 同位，本席兼作 S06 not_le_lt 步替代腿）。
    ============================================================ *)
 Section ReqMpKernelWorld2.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
+(* B6W 接线位（AA13 #12，20260915）：同 #11 深接线——旧形升 sigT 见证形消费位。 *)
+Definition mpd_vocab_ne_witness_s2 : pls_vocab_ne vocab
+  := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
@@ -387,7 +386,7 @@ Proof.
   - apply InT_next. apply InT_next. assumption.
 Qed.
 
-(* 1 <- argmin_aux_token_min_mp（S06 L6976 / 总账 L605）：
+(* 1 <- argmin_aux_token_min_mp（S06 / ）：
    And 两支遍历归纳；换 best 中支 w = a 的 not_le_lt 步以 req_lt_dec
    三分解替代（inl lt → lt_le_iff；mid req → le_id_l + le_refl；
    inr lt → 与 Hnot 相左而消空）。 *)
@@ -427,7 +426,7 @@ Proof.
       * exact IH_le.
 Qed.
 
-(* 2 <- argmin_aux_token_snd_correct_mp（S06 L7024 / 总账 L606）：
+(* 2 <- argmin_aux_token_snd_correct_mp（S06 / ）：
    snd 恒等不变式；纯 Id 层归纳，中支判定换 req_le_dec。 *)
 Lemma mpd_argmin_aux_token_snd_correct_mp : forall (prefix : list Token) (l : list Token)
          (best_token : Token) (best_loss : R),
@@ -465,7 +464,7 @@ Proof.
   - apply (mpd_argmin_aux_token_mem prefix rest w0 (total_loss (prefix ++ [w0]))).
 Qed.
 
-(* 3 <- pick_best_optimal_mp（S06 L7044 / 总账 L607）：
+(* 3 <- pick_best_optimal_mp（S06 / ）：
    依赖 1+2；vocab 解构两支；snd 恒等以 Id 层 rewrite 运输。 *)
 Theorem mpd_pick_best_optimal_mp : forall (prefix : list Token) (w : Token),
   InT w vocab ->
@@ -500,7 +499,7 @@ Definition mpd_max_markov_prob (prefix : list Token) : R :=
   mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature temperature_pos prefix
                     (mpd_pick_max_token prefix).
 
-(* 4 <- markov_kernel_le_max_mp（S06 L7066 / 总账 L608）：
+(* 4 <- markov_kernel_le_max_mp（S06 / ）：
    le_mult_compat_weak 接口字段（le zero c → le a b → le a·c ≤ b·c）
    直用；单调腿 = I4 + 件 3。 *)
 Lemma mpd_markov_kernel_le_max_mp : forall (prefix : list Token) (w : Token),
@@ -527,7 +526,7 @@ Proof.
     apply (mpd_pick_best_optimal_mp prefix w Hw).
 Qed.
 
-(* 5 <- minp_max_ge_inv_vocab_size（S06 L7082 / 总账 L611，链①）：
+(* 5 <- minp_max_ge_inv_vocab_size（S06 / ，链①）：
    inv(|S|) ≤ max。三腿：I3 归一化（Σkernel == 1）+ I2 逐项和界
    （Σkernel ≤ |S|·max，逐项 = 件 4）+ E3 除以正数。 *)
 Lemma mpd_minp_max_ge_inv_vocab_size : forall prefix : list Token,
@@ -829,7 +828,7 @@ Proof.
     exact (mpd_minp_scaled_sum_ge_max prefix).
 Qed.
 
-(* 6 <- minp_dropped_mass_le_inv_vocab_size（S06 L7097 / 总账 L612，链②）：
+(* 6 <- minp_dropped_mass_le_inv_vocab_size（S06 / ，链②）：
    dropped ≤ 1 − max ≤ 1 − inv(|S|)；后半 opp 反向 + 链①。 *)
 Theorem mpd_minp_dropped_mass_le_inv_vocab_size : forall prefix : list Token,
   le (mpd_minp_dropped_mass prefix)
@@ -858,28 +857,20 @@ End ReqMpKernelWorld2.
 (* 文件尾原余件清单（上文）由本节全数闭合，特此注记。            *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 席T33 续作（20260911）：mp 域收官 6 件（总账 MinPSampling      *)
+
 (* 批 4 余件：单项界 1 件对位裁决 + p-antitone 簇 5 件全新建）。   *)
 (* ------------------------------------------------------------
-   台账（req 件名 <- Id 原件 @ S06 行号 / 总账行号）：
-     0 temp_factor_max_le_sum（S06 L6581 / 总账 L31333）——对位裁决件：
        二批辅件 mpd_pick_max_tf_le_minp_sum（ReqMpKernelWorld2）语句
        逐位同形（le (tf pick_max) (minp_temp_sum)），对位成立、就此
-       销账；总账「未认领/对位待裁」注记由本席裁决，不重复建件。
      1 mpd_minp_keep_p_antitone <- minp_keep_p_antitone
-       （S06 L6752 / 总账 L31504；le_mult_compat_weak 接口字段直用，
        max ≥ 0 腿由 mpd_markov_pos 经 δ 展开免费取得）
      2 mpd_temp_factor_nonneg_p <- temp_factor_nonneg_p
-       （S06 L6775 / 总账 L31527）
      3 mpd_minp_term_nonneg_p <- minp_term_nonneg_p
-       （S06 L6782 / 总账 L31534）
      4 mpd_minp_temp_sum_p_antitone <- minp_temp_sum_p_antitone
-       （S06 L6795 / 总账 L31547；list_sum_le → rls_le 逐点求和桥，
        keep2 ⟹ keep1 反单调 + term_nonneg 逐点两腿同形）
      5 mpd_minp_dropped_mass_p_monotone <- minp_dropped_mass_p_monotone
-       （S06 L6823 / 总账 L31575；req_le_mult_compat_r 正因子左乘 +
        opp_le_compat 反向 + le_plus_compat 平移三腿组装）
-   定义簇（S06 L6726-6751 对位；p 簇阈值以 mp : R 显式参替代固定
+   定义簇（S06-6751 对位；p 簇阈值以 mp : R 显式参替代固定
    min_p，故本节节假设不携 min_p/min_p_lt_one——比 S06 节更省；
    二批 discharged 定义全闭包显式消费，mpd_pick_max_token 六参形 /
    mpd_max_markov_prob 十参形经 -vos 探针实证写死）：
@@ -893,6 +884,9 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
+(* B6W 接线位（AA13 #13，20260915）：同 #11 深接线——旧形升 sigT 见证形消费位。 *)
+Definition mpd_vocab_ne_witness_s3 : pls_vocab_ne vocab
+  := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
@@ -930,7 +924,7 @@ Definition mpd_minp_dropped_mass_p (mp : R) (prefix : list Token) : R :=
                            (mpd_partition_temp_pos Token vocab vocab_nonempty total_loss temperature temperature_pos prefix))
                   (mpd_minp_temp_sum_p mp prefix)).
 
-(* 2 <- temp_factor_nonneg_p（S06 L6775 / 总账 L31527）：
+(* 2 <- temp_factor_nonneg_p（S06 / ）：
    tf ≥ 0（exp_neg 恒正 + lt_le_iff 提升） *)
 Lemma mpd_temp_factor_nonneg_p : forall (prefix : list Token) (w : Token),
   le zero (mpd_temp_factor Token total_loss temperature temperature_pos prefix w).
@@ -940,7 +934,7 @@ Proof.
   left. unfold mpd_temp_factor. apply exp_neg_pos.
 Qed.
 
-(* 3 <- minp_term_nonneg_p（S06 L6782 / 总账 L31534）：
+(* 3 <- minp_term_nonneg_p（S06 / ）：
    参数化保留者项 ≥ 0（inl 分支 tf ≥ 0，inr 分支 0） *)
 Lemma mpd_minp_term_nonneg_p : forall (mp : R) (prefix : list Token) (w : Token),
   le zero (match mpd_minp_keep_dec_p mp prefix w with
@@ -953,7 +947,7 @@ Proof.
   - apply le_refl.
 Qed.
 
-(* 1 <- minp_keep_p_antitone（S06 L6752 / 总账 L31504，T4a）：
+(* 1 <- minp_keep_p_antitone（S06 / ，T4a）：
    mp1 ≤ mp2 ⟹ keep_p mp2 w ⟹ keep_p mp1 w（阈值增大保留集缩小）。
    max ≥ 0 腿：mpd_max_markov_prob δ 展开 == kernel(pick_max)，
    mpd_markov_pos 免费；单调腿 le_mult_compat_weak 接口字段直用。 *)
@@ -993,7 +987,7 @@ Proof.
   - exact Hk2.
 Qed.
 
-(* 4 <- minp_temp_sum_p_antitone（S06 L6795 / 总账 L31547，T4b）：
+(* 4 <- minp_temp_sum_p_antitone（S06 / ，T4b）：
    mp1 ≤ mp2 ⟹ 截断和反单调（sum_p mp2 ≤ sum_p mp1）。
    逐点两腿：keep2 ⟹ keep1（件 1）⟹ 项同（le_refl）；
    keep2 逐出 ⟹ 项 2 = 0 ≤ 项 1（件 3）。 *)
@@ -1023,7 +1017,7 @@ Proof.
   - exact (mpd_minp_term_nonneg_p mp1 prefix w).
 Qed.
 
-(* 5 <- minp_dropped_mass_p_monotone（S06 L6823 / 总账 L31575，T4c）：
+(* 5 <- minp_dropped_mass_p_monotone（S06 / ，T4c）：
    mp1 ≤ mp2 ⟹ 截断质量单调（mass_p mp1 ≤ mass_p mp2）。
    三腿：sum_p 反单调（件 4）→ inv_p 左乘保序（req_le_mult_compat_r）
    → 1−X 反向（opp_le_compat + le_plus_compat 平移）。 *)
@@ -1064,6 +1058,6 @@ End ReqMpKernelWorld3.
 
 (* ============================================================ *)
 (* 席T33 收尾：mp 域收官 6 件全清（对位裁决 1 + p 簇 5 件 + 定义   *)
-(* 簇 5 枚）。总账 MinPSampling 节至此批 4 余件零余留；mp 域 Real  *)
+
 (* 层对位全量在盘。                                              *)
 (* ============================================================ *)

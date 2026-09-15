@@ -195,11 +195,9 @@ Qed.
 (* ============================================================ *)
 (* S6 覆回收口（20260913 席W5c）：双闸全开，staged 换真形。          *)
 (*   ② CD12 真件 bxcd_prod_near_one（UpReqBanachCauchyD.v，          *)
-(*     CD12 四关绿；W5b 14:35 级联修复 L588 垫片重编 .vo，语句面     *)
-(*     零变）：hplus/hwd 两假设与 Ext 类字段                 *)
-(*     bxce_coef_plus/bxce_coef_wd 逐字同构——直接喂参，             *)
-(*     plain BanachAlg 喂不进 coef 相容性，终面钉 Ext 层             *)
-(*     （EQV 接口实形，非语句面弱化）。                              *)
+(*     CD12 四关绿；20260915 席AA18 消费面迁移后签名收窄为零假设，    *)
+(*     调用位随之去 bxce_coef_plus/bxce_coef_wd 两实参——             *)
+(*     hplus/hwd 摘除后无须再喂字段，终面钉 Ext 层不变。              *)
 (*   ③ bxuq_lim_uniq E 剥 E 后=bxoo_uniq_shape base 同构。          *)
 (*   主件 bxoo_exp_opp_one：无条件 bae 全等式——                     *)
 (*     bae_trans（唯一性：序列左极限 e^a·e^(−a) == 近邻极限 bone）   *)
@@ -217,6 +215,5 @@ Proof.
   apply (bxoo_exp_opp_one_assembly (@bxce_base E) a
            (bxuq_lim_uniq E)).
   apply (bxoo_nearone_blim (@bxce_base E)).
-  exact (bxcd_prod_near_one (@bxce_base E) a
-           (@bxce_coef_plus E) (@bxce_coef_wd E)).
+  exact (bxcd_prod_near_one (@bxce_base E) a).
 Qed.

@@ -1,14 +1,23 @@
 (* ============================================================ *)
+(* UpDissip.v *)
+(* *)
+(* 目的： 耗散经济模型的券/边/复合律与耗散记账（Set 层）。 *)
+(* 主件： bond_exchange（券交换守恒）与 edge_comp_slope / edge_comp_b（边复合单调）；edge_tame、edge_bi 判定面。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpConstitution。 *)
+(* 备注： 券的 eps 假设位为严格性的量化资源；记账面全部为 Set 层显式构造。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpDissip.v —— BEA 2.0 耗散本位界汇经济：券/边/复合律/耗散记账/借据 *)
 (*                                                              *)
 (* 理论来源：ROUNDTABLE.md 席 3 终稿【BEA 2.0——耗散本位界汇经济】   *)
-(*   「不算数、只换界」——券的 eps 槽位 = 严格性量化资源；           *)
+(*   「不算数、只换界」——券的 eps 假设位 = 严格性量化资源；           *)
 (*   每条边 = 带 eps-重参数化的转化定理（入参 eps 仿射映射出参：      *)
 (*   eps_out = a·eps_in + b，a > 0）；                              *)
 (*   路径合法性 = 仿射复合恒正（沿路径线性可判定）；                 *)
 (*   借据 = 未命中签发的缺口义务（可再入）。                         *)
 (*                                                              *)
-(* 交付六件：                                                    *)
+(* 结果六件：                                                    *)
 (*   件 1  bond / bond_check   券类型（Set 层 Record）+ 券面校验器    *)
 (*   件 2  edge_spec / edge_map / edge_check                       *)
 (*                             兑换边：eps 仿射映射 + 斜率正性验证器  *)
@@ -50,19 +59,19 @@ Qed.
 
 (* ============================================================ *)
 (* §2 件 1：券 bond——界券组合的 Set 层类型                           *)
-(*   币制本体：eps 槽位是严格性的量化资源（余量多少 eps）。           *)
+(*   币制本体：eps 假设位是严格性的量化资源（余量多少 eps）。           *)
 (* ============================================================ *)
 
 Record bond : Set := mk_bond {
   bd_id : nat;        (* 命题 id *)
   bd_bound : Q;       (* 界值：不超过哪个上界 *)
-  bd_eps : Q;         (* eps 槽位：严格性余量 *)
+  bd_eps : Q;         (* eps 假设位：严格性余量 *)
   bd_src : nat        (* 签发源：哪个度量/格式 *)
 }.
 
 (* 券面校验器（Defined 可执行；inr 带拒绝码，对照宪法形态） *)
 Inductive bond_reject : Set :=
-| br_eps.              (* eps 槽位为负：无严格性余量可让渡 *)
+| br_eps.              (* eps 假设位为负：无严格性余量可让渡 *)
 
 Definition bond_check (bd : bond)
   : Or (QleT' 0 (bd_eps bd)) (And (Id (Qle_bool 0 (bd_eps bd)) false) bond_reject) :=
@@ -159,7 +168,7 @@ Proof.
   - exact H4.
 Qed.
 
-(* 正则边保持 eps 槽位严格正（严格性不因兑换湮灭） *)
+(* 正则边保持 eps 假设位严格正（严格性不因兑换湮灭） *)
 Lemma edge_map_pos : forall (e : edge_spec) (x : Q),
   QltT 0 x -> Id (edge_bi e) true -> QltT 0 (edge_map e x).
 Proof.
@@ -174,7 +183,7 @@ Proof.
     + apply Qplus_le_compat; [apply Qle_refl | exact Hb].
 Qed.
 
-(* 券沿边兑换：eps 槽位按仿射映射重参数化 *)
+(* 券沿边兑换：eps 假设位按仿射映射重参数化 *)
 Definition bond_exchange (e : edge_spec) (bd : bond) : bond :=
   mk_bond (bd_id bd) (bd_bound bd) (edge_map e (bd_eps bd)) (ed_dst e).
 
@@ -190,7 +199,7 @@ Proof.
   unfold edge_diss, edge_map. ring.
 Qed.
 
-(* 兑换保严格性：正则边 ⟹ 兑换后 eps 槽位仍严格正 *)
+(* 兑换保严格性：正则边 ⟹ 兑换后 eps 假设位仍严格正 *)
 Theorem bond_exchange_pos : forall (e : edge_spec) (bd : bond),
   Id (edge_bi e) true -> QltT 0 (bd_eps bd) ->
   QltT 0 (bd_eps (bond_exchange e bd)).
@@ -342,21 +351,21 @@ Qed.
 (* §6 件 5：借据 iou——查询未命中签发缺口义务（可再入）                 *)
 (*   对照宪法 check_claim 的 inr 拒绝码形态：resolve 的 inr 载荷即借据。*)
 (*   命中 = 可执行证书链（格式接续 + 斜率正 + 耗散在预算内 + 出参正）；  *)
-(*   未命中 = 借据（缺口 from→to、耗散预算 δ、eps 槽位、回指查询 id）。  *)
+(*   未命中 = 借据（缺口 from→to、耗散预算 δ、eps 假设位、回指查询 id）。  *)
 (* ============================================================ *)
 
 Record query : Set := mk_query {
   qr_id : nat;        (* 查询 id *)
   qr_from : nat;      (* 持有格式 *)
   qr_to : nat;        (* 需求格式 *)
-  qr_eps : Q;         (* 入参 eps（持券槽位） *)
+  qr_eps : Q;         (* 入参 eps（持券假设位） *)
   qr_delta : Q        (* 耗散预算 δ *)
 }.
 
 Record iou : Set := mk_iou {
   iou_from : nat;     (* 缺口源格式 *)
   iou_to : nat;       (* 缺口目标格式 *)
-  iou_eps : Q;        (* 待重演的 eps 槽位 *)
+  iou_eps : Q;        (* 待重演的 eps 假设位 *)
   iou_delta : Q;      (* 耗散预算 δ *)
   iou_ref : nat       (* 回指查询 id：证成后新边长入图谱 *)
 }.
@@ -692,7 +701,7 @@ Definition ec123 : edge_spec := edge_comp e_h3 ec12.
 
 Definition atlas3 : list edge_spec := e_h1 :: e_h2 :: e_h3 :: ec12 :: ec123 :: nil.
 
-(* 查询 7：持 fmt0、eps 槽位 1，要 fmt3，耗散预算 δ=1 —— 命中 ec123 *)
+(* 查询 7：持 fmt0、eps 假设位 1，要 fmt3，耗散预算 δ=1 —— 命中 ec123 *)
 Definition q_chain : query := mk_query 7 0 3 1 1.
 (* 查询 8：fmt3→fmt0 无任何边 —— 未命中，签发借据 *)
 Definition q_back : query := mk_query 8 3 0 1 1.
@@ -749,7 +758,7 @@ Theorem demo_growth_closes :
   Id (resolve_report atlas4 q_tight) (rv_hit e_good (15#16)).
 Proof. vm_compute. reflexivity. Qed.
 
-(* 再入形态数值实例：坏边（负截距吞掉 eps 槽位）证不成，借据原样返回 *)
+(* 再入形态数值实例：坏边（负截距吞掉 eps 假设位）证不成，借据原样返回 *)
 Definition e_bad : edge_spec := mk_edge 5 0 3 (15#16) (-1).
 
 Theorem demo_redeem_reissue :

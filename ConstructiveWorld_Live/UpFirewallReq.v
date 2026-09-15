@@ -1,14 +1,23 @@
 (* ============================================================ *)
+(* UpFirewallReq.v *)
+(* *)
+(* 目的： 防火墙机制的 req 抽象载体镜像件。 *)
+(* 主件： req_fw_energy_eta / req_entropy_temp_mono / req_entropy_temp_strict_mono 及 req_firewall_loop。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
+(* 备注： Id 层陈述经假设位承接；温度严格层的显式假设注记见正文。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpFirewallReq.v — 签名迁移批 4 第二席：UpFirewall 的 req 伴件  *)
 (*   （10 件）                                                    *)
 (*   母件：attn\UpFirewall.v（熵防火墙：退化检测与恢复的构造性闭环, *)
 (*   2026-09-07）；规划书批 4「模块伴件」                         *)
 (*   伴件形态：req_* 独立伴 Section，与母件同树（attn 目录）       *)
 (* -------------------------------------------------------------- *)
-(* 覆盖对账（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id  *)
+(* 覆盖核对（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id  *)
 (* 或证明核为 Id 搬运的声明，Variable 假设位计入；grep 实测 10，   *)
-(* 规划书约 9，实测 10，全数交付零冻结；fw_double_pos @L130 零 Id  *)
-(* 内容，按辅件交付不计件）：                                      *)
+(* 规划书约 9，实测 10，全数结果零冻结；fw_double_pos @L130 零 Id  *)
+(* 内容，按辅件结果不计件）：                                      *)
 (*   件 1  req 假设位 req_Z_temp_spec           <- 母件 L93        *)
 (*   件 2  req_fw_energy_eta                    <- 母件 L113（δ 件）*)
 (*   件 3  req_fw_lt_double                     <- 母件 L120        *)
@@ -20,17 +29,17 @@
 (*   件 9  req_fw_detect_warm                   <- 母件 L388        *)
 (*   件 10 req_firewall_loop                    <- 母件 L412        *)
 (* -------------------------------------------------------------- *)
-(* 挂账注记（温度严格层，温度席领地——本件零重建，仅假设槽位）：    *)
+(* 显式假设注记（温度严格层，温度席领地——本件零重建，仅假设假设位）：    *)
 (*   批 2 余件清单 a) 项（variational_temp_bound/energy_exp_temp_  *)
 (*   mono/temp_strict_A_chain2/temp_strict_ident2/energy_exp_temp_ *)
 (*   strict_mono/temp_energy_dual_closed）与 UpReqTempEntropy 件 1  *)
-(*   （熵显式）/件 2（KL 温度分解）均不在本席重建；本件对五处消费    *)
+
 (*   位以 req Variable 槽承载（req_entropy_temp_explicit /          *)
 (*   req_relative_entropy_temp_decomp / req_energy_exp_temp_mono /  *)
 (*   req_energy_exp_temp_strict_mono / req_temp_strict_ident2），    *)
 (*   假设位逐位保留不放大主张。                                     *)
 (* 复用增量：Bt/归一/正性消费批 2 ReqTemp reqd_boltzmann_dist_temp  *)
-(*   族；Gibbs 消费批 2 req_gibbs_inequality（其 log 桥槽           *)
+
 (*   dist_log_inv_one_inv / dist_log_le_linear 同位声明）；减法/    *)
 (*   旋转/分配消费批 1 UpReqAlgebra 引擎件。                        *)
 (* 非平凡性分级：件 4/7 = A+（母件最重 AC 链的 req 全链真证）；     *)
@@ -40,7 +49,7 @@
 (* 诚实边界（母件同款红线）：防火墙不主张 TV-熵传递；fw_verdict 的  *)
 (*   Or 是证书和而非布尔判定器；全部接口假设有母件同位先例。        *)
 (* 纪律：纯 term-mode（零 rewrite/零 Morphisms）；语句全 Set 层；   *)
-(*   全 Qed 收口；零禁词。                                          *)
+(*   全 Qed 完成；零禁词。                                          *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -94,7 +103,7 @@ Variable lt_minus_nonneg : forall a b : R, lt a b -> lt zero (req_minus b a).
 Variable lt_plus_compat_lt_le : forall a b c d : R,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 
-(* 批 2 ReqFEP 同位 log 桥槽（req_gibbs_inequality 消费位） *)
+
 Variable dist_log_inv_one_inv :
   forall (x : R) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
     req (log (inv_pos x Hx) Hi) (opp (log x Hx)).
@@ -118,7 +127,7 @@ Definition fw_kl (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2) : R :=
   req_relative_entropy S sumf (fw_bt t1 Ht1) (fw_bt t2 Ht2)
                        (fw_bt_pos t1 Ht1) (fw_bt_pos t2 Ht2).
 
-(* ---- 温度严格层挂账槽位（五件，温度席领地；本件零重建） ---- *)
+(* ---- 温度严格层显式假设假设位（五件，温度席领地；本件零重建） ---- *)
 Variable req_entropy_temp_explicit : forall (t : R) (Ht : lt zero t),
   req (fw_h t Ht)
       (plus (mult (inv_pos t Ht) (fw_et t Ht))
@@ -182,7 +191,7 @@ Qed.
 
 (* ===== 件 4（旗舰一）：恢复增益精确恒等式 =====
    母件 L139：ΔH == β₂·(E₂ − E₁) + KL₁₂。req 全链真证：熵显式与
-   KL 温度分解为挂账槽位，余为母件 AC 重排的扁平 req 跳链
+   KL 温度分解为显式假设假设位，余为母件 AC 重排的扁平 req 跳链
    （u1/u2/v1-v3/u3/u4，每跳一个扁平项，零深嵌套）。 *)
 Theorem req_recovery_entropy_gain :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
@@ -296,8 +305,8 @@ Proof.
                                       (req_refl (opp H1))))))).
 Qed.
 
-(* ===== 件 5（主交付）：温度-熵单调 =====
-   母件 L207：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})。路径：能量单调挂账槽
+(* ===== 件 5（主结果）：温度-熵单调 =====
+   母件 L207：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})。路径：能量单调显式假设槽
    + 件 4 恒等式搬运 + 批 2 req_gibbs_inequality。 *)
 Theorem req_entropy_temp_mono :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
@@ -427,13 +436,12 @@ Proof.
 Qed.
 
 (* ===== 件 7（旗舰二，对偶形态）：对称 KL 联立 =====
-   母件 L318：ΔH == β₁·ΔE − K₁₂。批 4 (d) 冻结由二席 v2 落位清偿（20260909），
-   形态 = req_temp_strict_ident2 槽位条件形（出节成显式参，假设位零放大）。
-   记 b1/b2、E1/E2、dE、H1/H2、K_A（槽位首和项）、K_B（fw_kl）：
-     β1·dE == β2·dE + (β1−β2)·dE →[槽位之对称]→ β2·dE + (K_A + K_B)
+   形态 = req_temp_strict_ident2 假设位条件形（出节成显式参，假设位零放大）。
+   记 b1/b2、E1/E2、dE、H1/H2、K_A（假设位首和项）、K_B（fw_kl）：
+     β1·dE == β2·dE + (β1−β2)·dE →[假设位之对称]→ β2·dE + (K_A + K_B)
             == (β2·dE + K_B) + K_A == ΔH + K_A（件 4 之对称），
    故 (β1·dE) − K_A == (ΔH + K_A) − K_A == ΔH（req_minus_plus_cancel_r
-   经 plus_comm 两步收口），目标 req_sym 翻转。 *)
+   经 plus_comm 两步完成），目标 req_sym 翻转。 *)
 Theorem req_recovery_entropy_gain_alt :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
   req (req_minus (fw_h t2 Ht2) (fw_h t1 Ht1))

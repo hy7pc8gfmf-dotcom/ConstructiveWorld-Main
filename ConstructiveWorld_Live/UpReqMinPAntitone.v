@@ -1,34 +1,35 @@
+(* ============================================================ *)
+(* UpReqMinPAntitone.v *)
+(* *)
+(* 目的： Min-P 温度反单调面（质量随阈值温度单调递减）。 *)
+(* 主件： req_minp_keep_p_antitone / req_minp_temp_sum_p_antitone 反单调族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlignRestB、UpReqPropLiftShim。 *)
+(* 备注： 词表非空见证与温度正性为显式前提；反单调以 P 载体（垫片接口）承接。 *)
+(* ============================================================ *)
+
 (* UpReqMinPAntitone.v — 签名迁移批 4 余量席（WangWW）：MinP p-antitone 簇
-   5 件的 req 系（setoid 层）req 化 + temp_factor_max_le_sum 对账核销。
+   5 件的 req 系（setoid 层）req 化 + temp_factor_max_le_sum 核对已证明。
    母本：CW_ConstructiveWorld_219 Section MinPSampling L30684-31866
      （参数化 _p 定义族 L31478-31499 + T4a/T4b/T4c 三向引理 L31504-31622）。
    上游：UpReqAlgebra.v（引擎）+ UpReqAlignRestB.v（minp 系成品 δ 透明消费）。
    ----------------------------------------------------------------
-   对账表（总账批 4 未认领 6 件 → 逐件判，grep UpReqAlignRestB.v decl 实证）：
-     1. temp_factor_max_le_sum(L31333)  = RestB 已核销：req_pick_max_tf_le_minp_sum
+     1. temp_factor_max_le_sum(L31333)  = RestB 已已证明：req_pick_max_tf_le_minp_sum
         （RestB L528）语句逐字同形 `le (alb_temp_factor prefix (pick_max_token prefix))
-        (alb_minp_temp_sum prefix)`——总账「对位待裁」裁定为已核销，不重建。
         （与 req_temp_factor_max_eq 的对位：eq 件 RestB 已有，本件 le_sum 形
-        已被 req_pick_max_tf_le_minp_sum 独立收口，无需再建。）
-     2. minp_keep_p_antitone(L31504)        → 本席新建 req_minp_keep_p_antitone
-     3. temp_factor_nonneg_p(L31527)        → 本席新建 req_temp_factor_nonneg_p
-     4. minp_term_nonneg_p(L31534)          → 本席新建 req_minp_term_nonneg_p
-     5. minp_temp_sum_p_antitone(L31547)    → 本席新建 req_minp_temp_sum_p_antitone
-     6. minp_dropped_mass_p_monotone(L31575)→ 本席新建 req_minp_dropped_mass_p_
+        已被 req_pick_max_tf_le_minp_sum 独立完成，无需再建。）
         monotone（规划书代表件，旗舰 Print Assumptions Closed）
    ----------------------------------------------------------------
-   p-antitone 方向件 req 化要点（检索索引 E-STAGING-ReqAlignRestB 坑 3/7 对位）：
      Id 层 pick_max_token_correct 单点改写一处 → δ 展开 alb_max_markov_prob
-     （RestB 定义体即 alb_markov_kernel @ pick_max_token）+ req_markov_pos 放电；
+     （RestB 定义体即 alb_markov_kernel @ pick_max_token）+ req_markov_pos 消解；
      Id 层 id_cong/id_refl 桥零处需要（le 链全走 le 字段方向：le_mult_compat_weak
      固定右因子 + le_trans + req_le_mult_compat_r 固定左因子 + opp_le_compat）。
-   诚实边界台账：
+   诚实边界登记表：
      1. req_le_dec（Section Hypothesis）：基座 minp_keep_dec_p 的 ord_le_dec
         （DecidableOrder L331）req 镜像——setoid 类无序判定字段，T2① 假设位
         逐位对应（RestB req_le_dec 同款同位），判定件 req_minp_keep_dec_p
         Defined 消费之。
      2. minp_dropped_mass_p 的 minus → req_minus（= plus one (opp ·)，RestB
-        台账 3 同款签名变化）；list_sum → rsum（req 世界和机器，RestB 同构）。
+        登记表 3 同款签名变化）；list_sum → rsum（req 世界和机器，RestB 同构）。
      3. mp_max_markov_prob/alb_temp_factor 等 6 枚 δ 透明包装 = UpReqAlignRestB
         闭名显式参喂入（签名探针 _probe_minpant_sig 实证参数表），零物理重复。
    纪律：纯构造性；Set 层语句（le/lt/req/Or 按 RestB 先例）；核心件 Qed、
@@ -39,6 +40,8 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqAlignRestB.
 From Stdlib Require Import List.
+Require Import UpReqPropLiftShim.
+(* B6W 接线（20260915，AA13 显式假设①首批）：pls_ 升面垫片接入。 *)
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
@@ -54,6 +57,10 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
+(* B6W 接线位（AA13 #14，20260915）：老否定形前提经 pls_ 垫片升 sigT 见证形—— *)
+(* 深接线消费位：pls_vocab_ne_lift 原地升形，下游可直取走 sigT 通路。旧语句保留。 *)
+Definition mpa_vocab_ne_witness_s1 : pls_vocab_ne vocab
+  := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
@@ -143,7 +150,6 @@ Qed.
    mp1 ≤ mp2 ⟹ threshold1 ≤ threshold2（le_mult_compat_weak，max ≥ 0）
    ⟹ keep2 w（threshold2 ≤ kernel）⟹ threshold1 ≤ kernel（le_trans）
    ⟹ keep1 w。
-   基座 Id 层 pick_max_token_correct 单点改写一处 → 本席 δ 展开
    alb_max_markov_prob（= alb_markov_kernel @ pick_max_token）+ req_markov_pos。 *)
 Lemma req_minp_keep_p_antitone : forall mp1 mp2 : R,
   le mp1 mp2 ->

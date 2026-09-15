@@ -3,6 +3,12 @@
 # 旧版逐件循环为 O(n²)（每件重验全部依赖闭包，99 件 = 3-8h）；本版一次传入 ≈ 单次全树。
 cd "$(dirname "$0")"
 K="${COQCHK:-coqchk}"
+# SW2 换装（2026-09-15）：用户级 COQLIB/ROCQLIB 钉 9.0 lib 会压过 9.1 coq_environment.txt，
+# 故随 K 路径推导导出，保证 bin/lib 同源（E-STAGING-SW2；暗载异版 lib 时 9.1 coqchk 报 bad version）。
+case "$K" in
+  */bin/coqchk.exe) export COQLIB ROCQLIB; COQLIB="${K%/coqchk.exe}"; COQLIB="${COQLIB%/bin}/lib/coq"; ROCQLIB="$COQLIB" ;;
+  */bin/coqchk)     export COQLIB ROCQLIB; COQLIB="${K%/coqchk}";     COQLIB="${COQLIB%/bin}/lib/coq"; ROCQLIB="$COQLIB" ;;
+esac
 # 认证面=登记库件；`_` 前缀探针/暂态 .vo 不入认证闭包（CI#46 教训：
 # 杂散 _z3_g3.vo 陈旧 digest 撕裂全树认证——Inconsistent assumptions over UpReqAlign4）
 MODULES=$(for f in *.vo; do case "$f" in _*) continue;; esac; basename "$f" .vo; done | tr '\n' ' ')

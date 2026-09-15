@@ -1,13 +1,22 @@
 (* ============================================================ *)
+(* UpReqTempDefs.v *)
+(* *)
+(* 目的： FEP 温度族的 Real 层定义件。 *)
+(* 主件： real_boltzmann_factor_temp / real_Z_temp / real_boltzmann_dist_temp 定义族与正性、归一化定律。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 和泛函外延/线性/可加/保正为显式 Variable 前提；温度族为下游定理件的公共定义面。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTempDefs.v —— 席T6：FEP 温度族 Real 层定义件席                 *)
-(*   2026-09-11 ｜ 后台独立席位（CoreN 7）                             *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】席N1 实证四定义件全库零命中（real_boltzmann_dist_temp /     *)
 (*   real_Z_temp / real_entropy_dist / real_energy_exp_temp），定理    *)
 (*   4.6a entropy_deficit_kl_temp（等式档 real_eq）及其后 4.6b/c 的    *)
-(*   Real 层复刻全部卡在定义层缺失。本席新建温度族 Real 层定义件 4 件  *)
+(*   Real 层复刻全部卡在定义层缺失。本件新建温度族 Real 层定义件 4 件  *)
 (*   + 基础引理（正性件 / 归一化件），为滚动席 4.6a-c 定理组装供货。   *)
-(*   本席不做 4.6a 熵亏恒等式本体（等式档组装，留滚动席）。             *)
+(*   本件不做 4.6a 熵亏恒等式本体（等式档组装，留滚动席）。             *)
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位（逐字段对照表，全 grep 实证）】                     *)
 (*   real_Z_temp              <- Id partition_function_temp 槽形       *)
@@ -24,7 +33,7 @@
 (*   real_energy_exp_temp     <- Id energy_exp_temp (S04 L3424)：      *)
 (*      sum_over_S (fun s => mult (dist s) (base_loss s))。             *)
 (*   real_entropy_dist        <- Id entropy_dist (S04 L3150)：         *)
-(*      sum_over_S (fun s => mult (p s) (opp (log (p s))))。            *)
+
 (*      唯一前提位差：Id log 全值，Real real_log 带正性证人             *)
 (*      (S07 L7842)，故 Hp : forall s, real_lt real_zero (p s) 前移，   *)
 (*      与 req 层先例 reqd_entropy_dist S sumf p Hp 同位。              *)
@@ -36,16 +45,16 @@
 (*   载体裁决：求和载体取抽象 real_sum_over_S + ext/linear/pos 接口     *)
 (*      （G02_Debt RealScaleDual/RealAttnGibbsTemp 与 UpReqRealFEP      *)
 (*      RFEPMain 既有先例；Id sum_over_S 同轴对位），非 real_list_sum   *)
-(*      具体 list 载体——4.6a 组装席需要抽象接口喂 CW219 槽位。          *)
+(*      具体 list 载体——4.6a 组装席需要抽象接口喂 假设位。          *)
 (*   命名回避：real_softmax_temp / real_softmax_temp_param 已被         *)
-(*      G02_Debt.v 占名（Section 卸载后全库同符号），本席按 N1 缺口名   *)
+
 (*      real_boltzmann_dist_temp 供货（inv_pos 归一化即温度化 softmax）。*)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性四条红线：零承认件、经典实数公理禁；Set 层零 Prop    *)
 (*   泄露（语句全 real_eq/real_lt）；T_pos 前提位照 Id 层 Variable      *)
-(*   对位（Section Variable T/T_pos，S06 L3338 同形）；全 Qed 收口。    *)
+(*   对位（Section Variable T/T_pos，S06 L3338 同形）；全 Qed 完成。    *)
 (* 编译配方（同 _t2_build.cmd）：                                       *)
-(*   coqc -vos -Q . "" -Q "../001" "" -Q "../attn/_build_219" ""        *)
+
 (*   UpReqTempDefs.v   （秒审先行，再去 -vos 全量 G2）                  *)
 (* ============================================================ *)
 
@@ -192,9 +201,9 @@ Definition real_energy_exp_temp : Real :=
 
 (* ---------------------------------------------------------- *)
 (* 定义件 4：分布熵（信息熵分布版）                                  *)
-(*   H(p) := Σ_s p(s)·(−log p(s))                                   *)
+
 (*   对位 Id entropy_dist（S04 L3150）逐字段；唯一前提位差：          *)
-(*   Id log 全值，Real real_log 带正性证人（S07 L7842），故 Hp 前移   *)
+
 (*   （req 层先例 reqd_entropy_dist 同位）。                          *)
 (* ---------------------------------------------------------- *)
 Definition real_entropy_dist
@@ -203,15 +212,15 @@ Definition real_entropy_dist
 
 (* ============================================================ *)
 (* 加做件：real_entropy_temp_explicit（Id entropy_temp_explicit        *)
-(*   @CW219 L17271 的 Real 层镜像；req 先例 req_entropy_temp_explicit  *)
+(*   @L17271 的 Real 层镜像；req 先例 req_entropy_temp_explicit  *)
 (*   UpReqTempEntropy 件 1/5 同语句档）：                              *)
-(*   H(p_T) == (1/T)·E_T + log Z_T。                                   *)
-(*   配方（req 卡坑 6 预平衡拼接法）：log(inv Z)==−log Z 组装（rfep     *)
-(*   Part 2 Hinv 块同款）→ 逐点 −log p ≡ β·e+logZ → distrib 逐点拆和    *)
-(*   → sum_add 分和 → β 线性提取 + logZ 常数提取（归一化收口）。        *)
+
+
+
+(*   → sum_add 分和 → β 线性提取 + logZ 常数提取（归一化完成）。        *)
 (* ============================================================ *)
 
-(* 助手：log(inv Z) == −log Z（rfep Hinv 块同款：real_log_mult +      *)
+
 (* real_log_wd + real_inv_pos_correct + real_log_one + real_plus 群）  *)
 Lemma real_log_inv_Z_aux :
   real_eq (real_log (real_inv_pos real_Z_temp real_Z_temp_pos)
@@ -281,7 +290,7 @@ Proof.
            ++ exact (real_plus_zero (real_opp LZ)).
 Qed.
 
-(* 逐点工作马：−log p_T(s) == β·e(s) + log Z（β := inv(T)）            *)
+
 Lemma real_neg_log_boltzmann_point :
   forall s : S,
     real_eq (real_opp (real_log (real_boltzmann_dist_temp s)
@@ -353,7 +362,7 @@ Proof.
     + apply real_plus_comm.
 Qed.
 
-(* 主件：H(p_T) == (1/T)·E_T + log Z_T                                *)
+
 Theorem real_entropy_temp_explicit :
   real_eq (real_entropy_dist real_boltzmann_dist_temp real_boltzmann_dist_temp_pos)
           (real_plus (real_mult (real_inv_pos T T_pos) real_energy_exp_temp)
@@ -369,7 +378,7 @@ Proof.
            (real_sum_over_S (fun s : S => real_mult (p s)
                               (real_plus (real_mult bta (energy s)) LZ)))
            (real_plus (real_mult bta real_energy_exp_temp) LZ)).
-  - (* 步 1：逐点换形（点引理直喂） *)
+  - (* 步 1：逐点换形（点引理显式应用） *)
     apply real_sum_over_S_ext.
     intro s.
     apply (RealSetoid.real_eq_mult_compat_adapt (p s) (p s)

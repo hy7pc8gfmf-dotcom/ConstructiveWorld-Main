@@ -29,6 +29,54 @@
      + align_lambda 行为面 + 端点外插双警戒（[1;5;2]）+ 真旋转底座
      λ-相位插值族 H_lam_cyc/lam_opt_cyc（端点双件/差分恒等式/双方向
      单调/旧件分离双见证/λ-argmin_cyc）。
+     §S8 起（FRUIT-1 席追加；含 AUDIT-2 改道件）：F1 拼接分解恒等式
+     H_adj_app（判过时·消费 §2 H_adj_app_seam 既有件的定向包装）+
+     F2'/F2 旗舰 Pmid 中相熵分解双形 H_adj_Pmid_seam /
+     H_adj_Pmid_decomp（Pmid 第三相首个熵定理：中相 = 排序前缀 ×
+     原始尾的接缝分解）+ F2b 排序坍缩 list 级 Pmid_sorted_collapse
+     （中相零理论根因定理化）+ F3 熵坍缩精确面 H_adj_Pmid_sorted_exact
+     与 2·spread 上界 H_adj_Pmid_sorted_ub2 + 无排序诚实界
+     H_adj_Pmid_ub_gen（尾段不可吞入如实分项）+ 端点退化三件
+     （k=0＝P∞ 相、k=length＝P0 相）+ F7 三相判定死支定理化
+     phase_classify_ne_PMid（PhMid 构造子不可达）。
+     §S9 起（FRUIT-3 席追加）：H_lam_pmid 三相互补熵理论最后
+     一块——P0↔Pmid 真 λ-插值载体（λ 从排序相滑向真中相，
+     中相端 = 有序前缀×接缝×原始尾三分量熵）+ 端点双件（λ=1 取
+     P0 相、λ=0 取 Pmid 相）+ 旗舰仿射差分恒等式与标准形（消费
+     §S7 lam_affine_diff_sub 泛形）+ 主件排序坍缩一致面三件
+     （sorted 上全 λ 与 H_lam 逐点重合；λ=1/λ=0 双端精确坍缩到
+     H_adj l，消费 §S8 Pmid_sorted_collapse / H_adj_Pmid_sorted_exact）
+     + 加分 k=0 旧件重合桥（与 H_lam 逐点相等，迁移零丢旧信息）
+     + k=length 常值面（λ 失效）+ 与 H_lam 分离见证（未排序
+     [2;0;1]：中相端 1 ≠ 原始尾端 3，3/2 ≠ 5/2）+ 数值锚双件。
+     §S10 起（CLN-1 席追加；AUDIT-2 A6 恒等簇处置）：保底处置面
+     定理 rotc_supersedes_rot_id（旧 rot=firstn++skipn 恒等面的
+     定谳件，firstn_skipn 直证不消费弃用件）+ 恒等簇真化覆盖面
+     三件（llm_rot_id_superseded P 面零损失迁移 / rot_cyclic_
+     cluster_superseded 置换·长度消费面双覆盖 / rot_H_adj_face_
+     covered 熵面恒等+退化端点同值覆盖，分离面由 §4 在册）+
+     主件 deprecated_consumers_map 八件逐件映射（D5_Pinf_perm /
+     llm_Pmid_zero / P0_absorbs_Pmid / Hsup_mono / Hsup_bounded /
+     Pinf_eq_l / H_adj_cross_phase_lb / u12_phase_side_always_zero
+     ——旧名消费性质与真化替代件同成立的传递定理，旧面全绕行
+     弃用名重推；helper Hsup_oldface_const：旧 Hsup 面恒常值
+     = H_adj l）+ 加分消费面重定向示范双件（H_lam_anti_mono_
+     real / lam_opt_cross_phase_real：§S7 两消费点同陈述新证法，
+     跨相下界改经 Pinf_true_id + H_adj_P0_min 真化锚）。
+     §S11 起（FRUIT-6 席追加；深水区第二件·三相互补统一族）：
+     三族 λ-插值（H_lam 第二端 P∞ l s≡l / H_lam_cyc 第二端
+     rotc k l / H_lam_pmid 第二端 Pmid l s k）的单一仿射族
+     定理——统一载体 H_lam_gen（第一端恒 P0、第二端参数化）+
+     统一仿射差分 H_lam_gen_diff 与标准形（消费 §S7
+     lam_affine_diff_sub 泛形，三族差分件收编为单一实例点）+
+     旗舰三特化对账（恒等端消费 §4 Pinf_true_id 真化锚、旋转/
+     中相端定义展开恒等，三族逐件 = 统一族三实例）+ 主件统一
+     最优性 H_lam_gen_opt（§S7 lam_opt_min 泛形族级版，对齐
+     选择器 lam_opt 全族一致最优；双文件选择器同值面
+     lam_opt_align_lambda_opt_eq 消费 §A7 align_lambda_opt）+
+     加分端点三元对账（rotc 0 恒等端 / Pmid k=0 原始全体端 /
+     k=length P0 相常值端）+ 数值锚双件（[2;0;1] λ=1/2：恒等端
+     5/2 ≠ 中相端 3/2，第二端参数化实质生效）。
      数学锚：l=[a1<=…<=an]，1<=k<=n−1 时 H_adj (rotc k l) =
      (a_n−a_{k+1}) + (a_n−a_1) + (a_k−a_1) <= 3·spread（锐化面
      <= 2·spread），k=0 与 k=n 取最小值 spread（与 C_gen 排序最小
@@ -77,6 +125,29 @@
      留存；下游实测全工作区零 Require/Import）；本件下游实测零消费
      （改后无人 Require DTPT_Rotation）。改名前双快照
      DTPT_Cyc.v.bak_S6b_Cyc / DTPT_Cyc.v.snap_S6b_pre。
+     FRUIT-3 席（2026-09-15）：§S9 追加（H_lam_pmid 三相互补——
+     P0↔Pmid 真 λ-插值 13 件：1 Definition + 12 Qed，消费 §S7
+     lam_affine_diff_sub 泛形与 §S8 Pmid_sorted_collapse /
+     H_adj_Pmid_sorted_exact 既有件零重证），纯尾部追加（End 前插
+     段 + 文尾审计块 + 头注职责/归并/认证三行刷新），底座零重证
+     零修改。
+     CLN-1 席（2026-09-15）：§S10 追加（恒等簇处置——AUDIT-2
+     A6「llm_rot_id 恒等簇 + 8 件弃用注记件仍以现役名被引用」的
+     处置收口：15 件全 Qed，保底 4 + 主件 9（含 helper）+ 加分 2），
+     纯尾部追加（End 前插段 + 文尾审计块 + 头注三处刷新），
+     §S8/§S9 与既有行零改动零触碰；旧面性质全绕行弃用名重推
+     （Pinf_eq_l 弃用件不经手，一律改经 §4 Pinf_true_id）；
+     依赖链前置实修一次（FRUIT-4 在飞重编 DTPT.vo 后
+     DTPT_Entropy.vo 假设不一致，_cln1_dep.cmd 补编 Entropy，
+     .v 零触碰）（DTPT_CLN1_处置报告.md）。
+     FRUIT-6 席（2026-09-15）：§S11 追加（三相互补统一族——
+     H_lam/H_lam_cyc/H_lam_pmid 三族 λ-插值单一仿射族定理
+     14 件：1 Definition + 13 Qed，消费 §S7 lam_affine_diff_sub
+     / lam_opt_min 泛形、§4 Pinf_true_id、§S8 H_adj_Pmid_k0 /
+     H_adj_Pmid_klen 与 DTPT_Entropy §A7 align_lambda_opt
+     既有件零重证），纯尾部追加（End 前插段 + 文尾审计块 +
+     头注职责/归并/认证三处刷新），§S7-§S10 与既有行零改动
+     零触碰。
    【四·对账注记（周期律/锐化面逐名裁决，U18-3 表 S6a 收口）】
      U18-3 预警三对同语句（或同判反例）异名件，按任务卡裁决删 RotSpec
      侧、改引本文件 Cyc 侧：
@@ -91,12 +162,30 @@
      cyc_le_triple（3·s）配方同型倍数不同并存。
    【五·认证】
      全件 Qed（U8 32 + M5-1 18 + S5 15 + S6 并入 25 + S7 并入 31 =
-     121 件）+ 8 定义面；Print Assumptions 全 Closed under the global
+     121 件 + S8/FRUIT-1 追加 14 件 = 135 件 + S9/FRUIT-3 追加
+     12 件 = 147 件 + S11/FRUIT-6 追加 13 件 = 160 件）+ 10
+     定义面（9 + 1）；Print
+     Assumptions 全 Closed under the global
      context；M5 一窗编译全绿（DTPT_M5_归并报告.md）；S5 棒重编全绿
      （DTPT_棒5_归并报告.md）；S6a 棒重编 8/8 全绿 + coqchk EXIT=0
      （DTPT_棒6a_归并报告.md）；底座零重证零修改。S6b 棒（改名+ROTC/
      Entropy2 退役+ROTC 副本前移）重编 6/6 全绿 + coqchk 6 模块 EXIT=0
      （DTPT_棒6b_归并报告.md）。
+     FRUIT-1 席（2026-09-14）：§S8 追加 14 件（14 Qed + 0 Definition，
+     F1 判过时引 seam 件 / F2'+F2 / F2b / F3 / F7 / 加分端点 /
+     数值实测锚双件全交，含 AUDIT-2 改道三件），纯尾部追加+头部
+     职责行/认证行刷新，底座零重证零修改；单轮编译全绿 +
+     coqchk EXIT=0（DTPT_FRUIT1_果实报告.md）。
+     FRUIT-3 席（2026-09-15）：§S9 追加 12 件（12 Qed + 1
+     Definition：定义/端点双件/仿射差分+标准形/排序坍缩一致面三件/
+     k=0 旧件重合桥/k=length 常值面/分离见证/数值锚双件全交），
+     纯尾部追加+头部职责行/归并记录/认证行刷新，底座零重证零修改；
+     单轮编译全绿 + coqchk EXIT=0（DTPT_FRUIT3_果实报告.md）。
+     CLN-1 席（2026-09-15）：§S10 追加 15 件（15 Qed + 0
+     Definition，保底处置面+覆盖面四件 / 逐件映射八件+helper /
+     重定向示范双件全交），纯尾部追加+头部三处刷新；首轮编译
+     一次绿，Print Assumptions 全 Closed（新增 15/15）+ coqchk
+     EXIT=0（DTPT_CLN1_处置报告.md）。
    【六·纪律】
      零承认（头注不用禁词字面）；全程 Qed；nat 全显式 %nat（上游
      Q_scope 传导）；lia 只用于 nat/Z，Q 侧全走显式引理装配。
@@ -1948,6 +2037,807 @@ Proof.
   - right. rewrite E. apply H_lam_cyc_lam0.
 Qed.
 
+(* ========== §S8 中相熵分解（FRUIT-1 席追加；含 AUDIT-2 改道件：
+   F2' seam 定向形 / F2b 排序坍缩 list 级 / F7 三相判定死支定理化。
+   分层：F1 拼接分解（判过时·引 seam 件包装）/ F2 旗舰 Pmid 中相
+   熵分解（第三相首块）/ F3 排序上界 / 端点退化） ========== *)
+
+(* F1 保底件：拼接分解恒等式——非空 l1、l2 的相邻差总和在接缝处
+   恰好多出 |lastq l1 − hd 0 l2| 一项：
+   H_adj (l1 ++ l2) = H_adj l1 + |lastq l1 − hd 0 l2| + H_adj l2。
+   【F1 判过时（AUDIT-2 审计在案）】核心件已在本文件 §2 在盘
+   （H_adj_app_seam，L215 起，对 u 归纳 + snoc 步主件，其骨架与
+   DTPT.v U1 件 cgen_H_adj_snoc 同配方）——本件不重证不改原件，
+   仅消费既有件做 3 行任务书定向包装（Qabs 方向 xq_abs_sub_comm
+   + ring 项序归一），零新数学。 *)
+Lemma H_adj_app : forall (l1 l2 : list Q),
+  l1 <> [] -> l2 <> [] ->
+  H_adj (l1 ++ l2) == H_adj l1 + Qabs (lastq l1 - hd 0 l2) + H_adj l2.
+Proof.
+  intros l1 l2 H1 H2.
+  rewrite (H_adj_app_seam l1 l2 H1 H2).
+  rewrite (xq_abs_sub_comm (lastq l1) (hd 0 l2)).
+  ring.
+Qed.
+
+(* F2'（AUDIT-2 改道件）：中相熵分解恒等式·seam 定向两步形——
+   H_adj_app_seam + Pinf_true_id 逐步直组合，接缝项保持 seam 原始
+   定向（hd 在前）。卫哨最简形 {k <> 0, k < length l}（P0 l <> []
+   与 skipn k l <> [] 经 llm_P0_length / skipn_ne_of_lt 派生）。 *)
+Theorem H_adj_Pmid_seam : forall (l : list Q) (s : nat) (k : nat),
+  k <> 0%nat -> (k < length l)%nat ->
+  H_adj (Pmid l s k)
+  == H_adj (firstn k (P0 l)) + H_adj (skipn k l)
+     + Qabs (hd 0 (skipn k l) - lastq (firstn k (P0 l))).
+Proof.
+  intros l s k Hk Hlt.
+  unfold Pmid.
+  rewrite (Pinf_true_id l s).
+  apply H_adj_app_seam.
+  - apply (firstn_ne_of_lt k (P0 l)).
+    + lia.
+    + rewrite (llm_P0_length l). lia.
+  - exact (skipn_ne_of_lt k l Hlt).
+Qed.
+
+(* F2 旗舰：Pmid 中相熵分解恒等式——Pmid 第三相首个熵定理。
+   Pmid l s k = firstn k (P0 l) ++ skipn k l（Pinf l s = l 恒等展开，
+   消费本文件 §4 Pinf_true_id；弃用注记件 Pinf_eq_l 未消费），故
+   中相 = 排序前缀 × 原始尾的拼接，F1 一步给出接缝分解——框架名义
+   三相互补性的第一块拼图（P0 相 = sorted 全体、P∞ 相 = 原始全体、
+   中相 = 有序前缀 × 原始尾的接缝分解）。
+   卫哨取最简形 {k <> 0, k < length l}：P0 l <> [] 经 llm_P0_length
+   （length (P0 l) = length l）与 l <> [] 互推，skipn k l <> [] 经
+   skipn_ne_of_lt 由 k < length l 派生，均不再单列。 *)
+Theorem H_adj_Pmid_decomp : forall (l : list Q) (s : nat) (k : nat),
+  k <> 0%nat -> (k < length l)%nat ->
+  H_adj (Pmid l s k)
+  == H_adj (firstn k (P0 l))
+     + Qabs (lastq (firstn k (P0 l)) - hd 0 (skipn k l))
+     + H_adj (skipn k l).
+Proof.
+  intros l s k Hk Hlt.
+  unfold Pmid.
+  rewrite (Pinf_true_id l s).
+  apply H_adj_app.
+  - apply (firstn_ne_of_lt k (P0 l)).
+    + lia.
+    + rewrite (llm_P0_length l). lia.
+  - exact (skipn_ne_of_lt k l Hlt).
+Qed.
+
+(* F3 接缝收口工具：排序表内两元之差取绝对值仍不超过 spread
+   （= lastq − hd）。Qabs_case 符号二分支 + sorted_sub_le_spread
+   正反两次套用。 *)
+Lemma sorted_abs_le_spread : forall (l : list Q) (z w : Q),
+  SortedQ l -> In z l -> In w l -> (Qabs (z - w) <= lastq l - hd 0 l)%Q.
+Proof.
+  intros l z w HS Hz Hw.
+  apply (Qabs_case (z - w) (fun t => (t <= lastq l - hd 0 l)%Q)).
+  - intro Hpos.
+    exact (sorted_sub_le_spread l z w HS Hz Hw).
+  - intro Hneg.
+    assert (Hr2 : (- (z - w) == w - z)%Q) by ring.
+    rewrite Hr2.
+    exact (sorted_sub_le_spread l w z HS Hw Hz).
+Qed.
+
+(* F2b（AUDIT-2 改道件）：排序表上中相整体恒等坍缩——中相零理论
+   根因定理化（list 级）：sorted l 时 P0 l = l（xq_sortQ_P0_id）且
+   Pinf l s = l（Pinf_true_id），故 Pmid l s k = firstn k l ++ skipn k l
+   = l（firstn_skipn 两步）。 *)
+Theorem Pmid_sorted_collapse : forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l -> Pmid l s k = l.
+Proof.
+  intros l s k HS.
+  unfold Pmid.
+  rewrite (Pinf_true_id l s).
+  rewrite (xq_sortQ_P0_id l HS).
+  apply firstn_skipn.
+Qed.
+
+(* F3 主件·精确坍缩面：排序表下中相与 P0 相熵逐点相等——
+   直接消费 F2b 的 list 级坍缩（比任务书 2·spread 模板更强） *)
+Theorem H_adj_Pmid_sorted_exact : forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l -> H_adj (Pmid l s k) == H_adj l.
+Proof.
+  intros l s k HS.
+  rewrite (Pmid_sorted_collapse l s k HS).
+  reflexivity.
+Qed.
+
+(* F3 主件·上界面：排序卫哨下 H_adj (Pmid l s k) <= 2·spread
+   （P0 面 spread 口径与任务书模板逐字对齐；实由精确坍缩 +
+   xq_telescope + rs_le_double 收口——排序情形界可锐化至 1·spread） *)
+Theorem H_adj_Pmid_sorted_ub2 : forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l ->
+  (H_adj (Pmid l s k) <= 2 * (lastq (P0 l) - hd 0 (P0 l)))%Q.
+Proof.
+  intros l s k HS.
+  rewrite (H_adj_Pmid_sorted_exact l s k HS).
+  rewrite (xq_sortQ_P0_id l HS).
+  rewrite (xq_telescope l HS).
+  apply rs_le_double.
+  apply (proj1 (Qle_0_sub' (hd 0 l) (lastq l))).
+  apply xq_hd_le_lastq. exact HS.
+Qed.
+
+(* F3 副件·无排序诚实界：H_adj (Pmid l s k) <= 2·spread(P0)
+   + H_adj (skipn k l)。前段经 firstn 保排序（firstn_SortedQ）
+   望远镜 <= spread；接缝经 sorted_abs_le_spread <= spread（尾端
+   成员 hd 0 (skipn k l) 经 D5_P0_perm 置换搬运入 P0 l）；尾段非
+   排序保持原样——无排序时 H_adj (skipn k l) 可超 spread（见证
+   l = [0;1;0;1]、k = 1：中相 [0;1;0;1] 熵 3 > 2·spread = 2），
+   故尾段不可吞入 2·spread，如实分项。 *)
+Theorem H_adj_Pmid_ub_gen : forall (l : list Q) (s : nat) (k : nat),
+  k <> 0%nat -> (k < length l)%nat ->
+  (H_adj (Pmid l s k)
+   <= 2 * (lastq (P0 l) - hd 0 (P0 l)) + H_adj (skipn k l))%Q.
+Proof.
+  intros l s k Hk Hlt.
+  rewrite (H_adj_Pmid_decomp l s k Hk Hlt).
+  assert (Hnef : firstn k (P0 l) <> []).
+  { apply (firstn_ne_of_lt k (P0 l));
+      [ lia | rewrite (llm_P0_length l); lia ]. }
+  assert (Hnes : skipn k l <> []) by exact (skipn_ne_of_lt k l Hlt).
+  assert (HmemA : In (lastq (firstn k (P0 l))) (P0 l)).
+  { apply (firstn_incl (P0 l) k). apply xq_lastq_In. exact Hnef. }
+  assert (HmemB : In (hd 0 (skipn k l)) (P0 l)).
+  { apply Permutation_in with (l := l).
+    - exact (D5_P0_perm l).
+    - apply (skipn_incl l k). apply xq_hd_In_gen. exact Hnes. }
+  assert (Hpre : (H_adj (firstn k (P0 l))
+                  <= lastq (P0 l) - hd 0 (P0 l))%Q).
+  { rewrite (xq_telescope (firstn k (P0 l))
+              (firstn_SortedQ (P0 l) k (xq_P0_sorted l))).
+    exact (sorted_sub_le_spread (P0 l) (lastq (firstn k (P0 l)))
+             (hd 0 (firstn k (P0 l))) (xq_P0_sorted l) HmemA
+             (firstn_incl (P0 l) k (hd 0 (firstn k (P0 l)))
+               (xq_hd_In_gen (firstn k (P0 l)) Hnef))). }
+  assert (Hseam : (Qabs (lastq (firstn k (P0 l)) - hd 0 (skipn k l))
+                   <= lastq (P0 l) - hd 0 (P0 l))%Q)
+    by exact (sorted_abs_le_spread (P0 l) (lastq (firstn k (P0 l)))
+                (hd 0 (skipn k l)) (xq_P0_sorted l) HmemA HmemB).
+  assert (H2s : (2 * (lastq (P0 l) - hd 0 (P0 l))
+                 == (lastq (P0 l) - hd 0 (P0 l))
+                    + (lastq (P0 l) - hd 0 (P0 l)))%Q) by ring.
+  rewrite H2s.
+  apply qadd_le.
+  - apply qadd_le; [ exact Hpre | exact Hseam ].
+  - apply Qle_refl.
+Qed.
+
+(* 加分·端点退化面：k=0 端点＝P∞ 相（原始全体）、k=length 端点＝
+   P0 相（排序全体）——消费盘上 DTPT.v §D Pmid 端点定律族
+   （llm_Pmid_zero / llm_Pmid_len_endpoint，U2 件，底座纪律不重证）
+   与既有端点定理对账。 *)
+Theorem H_adj_Pmid_k0 : forall (l : list Q) (s : nat),
+  H_adj (Pmid l s 0%nat) == H_adj l.
+Proof.
+  intros l s.
+  rewrite (llm_Pmid_zero l s).
+  rewrite (Pinf_true_id l s).
+  reflexivity.
+Qed.
+
+Theorem H_adj_Pmid_klen : forall (l : list Q) (s : nat),
+  H_adj (Pmid l s (length l)) == H_adj (P0 l).
+Proof.
+  intros l s. rewrite (llm_Pmid_len_endpoint l s). reflexivity.
+Qed.
+
+(* 端点对账·sorted：两端点熵皆收敛于 spread（与 §4 H_adj_rotc_exact_0
+   的 k=0 取最小 spread 面同调——中相端点即相端点） *)
+Theorem H_adj_Pmid_endpoints_sorted : forall (l : list Q) (s : nat),
+  SortedQ l ->
+  H_adj (Pmid l s 0%nat) == lastq l - hd 0 l
+  /\ H_adj (Pmid l s (length l)) == lastq l - hd 0 l.
+Proof.
+  intros l s HS. split.
+  - rewrite H_adj_Pmid_k0. apply xq_telescope. exact HS.
+  - rewrite H_adj_Pmid_klen. rewrite (xq_sortQ_P0_id l HS).
+    apply xq_telescope. exact HS.
+Qed.
+
+(* F7（AUDIT-2 改道件）：三相判定器死支定理化——phase_classify 的
+   PhMid 构造子不可达。根因：Pmid l s 0 与 Pinf l s 定义性可转换
+   （llm_Pmid_zero / Pinf_true_id），故判定器第二个测试
+   Qeq_bool hm hi 恒真，false 支（PhMid 返回点）不可达。
+   消费 DTPT.v 的 PhaseTag/phase_classify（经本文件现有
+   Require DTPT 可达），证明面纯布尔分派 + Qeq_bool_refl 反证。 *)
+Theorem phase_classify_ne_PMid : forall (l : list Q) (s : nat),
+  phase_classify l s <> PhMid.
+Proof.
+  intros l s Hc.
+  unfold phase_classify in Hc. cbv zeta in Hc.
+  destruct (Qeq_bool (H_adj (Pmid l s 0%nat)) (H_adj (Pinf l s))) eqn:E.
+  - destruct (Qeq_bool (H_adj (P0 l)) (H_adj (Pmid l s 0%nat)));
+      simpl in Hc; discriminate Hc.
+  - assert (Hid : H_adj (Pmid l s 0%nat) == H_adj (Pinf l s))
+      by reflexivity.
+    rewrite Hid in E.
+    rewrite Qeq_bool_refl in E.
+    discriminate E.
+Qed.
+
+(* 数值实测锚（G4 实测面）：F2b 坍缩与 F2 分解恒等式在见证列
+   [0;1;2]（sorted）上 vm_compute 一步闭项判定——新件的计算面
+   可执行实测，见证中相 [0] ++ [1;2] 接缝 = 全表本身。 *)
+Theorem Pmid_sorted_collapse_wit_012 :
+  Pmid [0; 1; 2] 0%nat 1%nat = [0; 1; 2].
+Proof. vm_compute. reflexivity. Qed.
+
+Theorem H_adj_Pmid_decomp_wit_012 :
+  H_adj (Pmid [0; 1; 2] 0%nat 1%nat)
+  == H_adj [0] + Qabs (lastq [0] - hd 0 [1; 2]) + H_adj [1; 2].
+Proof. vm_compute. reflexivity. Qed.
+
+(* ============================================================
+   §S9 H_lam_pmid —— 三相互补熵理论最后一块（FRUIT-3 席追加）：
+   P0↔Pmid 真 λ-插值。H_lam（DTPT_Entropy.v，第二端 Pinf≡l）与
+   H_lam_cyc（§S7 并入段，第二端 rotc k l）之后 λ-插值族的第三块
+   载体：第二端取真中相 Pmid l s k = firstn k (P0 l) ++ skipn k l
+   （§S8 F2 分解面）——「λ 从排序相滑向真中相」，中相端的熵不再
+   是无结构的原始尾，而是有序前缀×接缝×原始尾的三分量分解。
+   分层：保底（定义 + 端点双件）/ 旗舰（仿射差分恒等式，消费
+   §S7 lam_affine_diff_sub 泛形，禁重证）/ 主件（排序坍缩一致面，
+   消费 §S8 Pmid_sorted_collapse + H_adj_Pmid_sorted_exact）/
+   加分（k=0 旧件重合桥 + k=length 常值面 + 与 H_lam 分离见证
+   + 数值锚）。
+   ============================================================ *)
+
+(* ========== 【保底】定义 + 端点 ========== *)
+
+(* 三相互补熵载体：H_lam_pmid l s k lam = lam·H_adj (P0 l)
+   + (1-lam)·H_adj (Pmid l s k)。与 H_lam / H_lam_cyc 并立为
+   三相互补熵的第三块 λ-插值。nat 字面量全显式 %nat（§S7 Open
+   Scope Q_scope 传导，FRUIT-1 坑①）。 *)
+Definition H_lam_pmid (l : list Q) (s : nat) (k : nat) (lam : Q) : Q :=
+  lam * H_adj (P0 l) + (1 - lam) * H_adj (Pmid l s k).
+
+(* 端点 λ=1：只余排序相 P0（s、k 解耦——排序端与中相参数无关）。 *)
+Theorem H_lam_pmid_lam1 : forall (l : list Q) (s : nat) (k : nat),
+  H_lam_pmid l s k 1 == H_adj (P0 l).
+Proof.
+  intros l s k. unfold H_lam_pmid.
+  replace (1 - 1)%Q with 0%Q by reflexivity.
+  ring.
+Qed.
+
+(* 端点 λ=0：只余真中相 Pmid。 *)
+Theorem H_lam_pmid_lam0 : forall (l : list Q) (s : nat) (k : nat),
+  H_lam_pmid l s k 0 == H_adj (Pmid l s k).
+Proof.
+  intros l s k. unfold H_lam_pmid.
+  replace (1 - 0)%Q with 1%Q by reflexivity.
+  ring.
+Qed.
+
+(* ========== 【旗舰】仿射差分恒等式 ========== *)
+
+(* 差分恒等式：§S7 泛形 lam_affine_diff_sub 的真中相实形——
+   H_lam_pmid l s k lam1 - H_lam_pmid l s k lam2
+   = (lam1-lam2)·(H_adj (P0 l) - H_adj (Pmid l s k))。
+   exact 实例化一步（底座纪律：禁重证，H_lam_cyc_diff 同款）。 *)
+Theorem H_lam_pmid_diff : forall (l : list Q) (s : nat) (k : nat) (lam1 lam2 : Q),
+  H_lam_pmid l s k lam1 - H_lam_pmid l s k lam2
+  == (lam1 - lam2) * (H_adj (P0 l) - H_adj (Pmid l s k)).
+Proof.
+  intros l s k lam1 lam2. unfold H_lam_pmid.
+  exact (lam_affine_diff_sub (H_adj (P0 l)) (H_adj (Pmid l s k)) lam1 lam2).
+Qed.
+
+(* 仿射标准形：H_lam_pmid l s k lam = hmid + lam·(h0 - hmid)
+   （H_lam_affine 同款模板：change 防御式收口 + ring）。 *)
+Theorem H_lam_pmid_affine : forall (l : list Q) (s : nat) (k : nat) (lam : Q),
+  H_lam_pmid l s k lam
+  == H_adj (Pmid l s k) + lam * (H_adj (P0 l) - H_adj (Pmid l s k)).
+Proof.
+  intros l s k lam. unfold H_lam_pmid.
+  change (1 - lam) with (1 + - lam)%Q.
+  change (H_adj (P0 l) - H_adj (Pmid l s k))
+    with (H_adj (P0 l) + - H_adj (Pmid l s k))%Q.
+  ring.
+Qed.
+
+(* ========== 【主件】排序坍缩一致面 ========== *)
+
+(* 一致性定理：sorted l 时 Pmid l s k = l（§S8 Pmid_sorted_collapse）
+   且 Pinf l s = l（§4 Pinf_true_id），故三相互补熵在已排序输入上
+   与经典 H_lam 逐点重合（全 λ 面）——「对已排序输入，三相互补熵
+   与经典序列熵重合」的理论相容性面。 *)
+Theorem H_lam_pmid_sorted_consistency : forall (l : list Q) (s : nat) (k : nat) (lam : Q),
+  SortedQ l -> H_lam_pmid l s k lam == H_lam l s lam.
+Proof.
+  intros l s k lam HS. unfold H_lam_pmid, H_lam.
+  rewrite (Pmid_sorted_collapse l s k HS).
+  rewrite (Pinf_true_id l s).
+  reflexivity.
+Qed.
+
+(* λ=1 端 sorted 精确面（任务书字面形）：端点件 + xq_sortQ_P0_id
+   两步收口。 *)
+Theorem H_lam_pmid_sorted_lam1 : forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l -> H_lam_pmid l s k 1 == H_adj l.
+Proof.
+  intros l s k HS.
+  rewrite (H_lam_pmid_lam1 l s k).
+  rewrite (xq_sortQ_P0_id l HS).
+  reflexivity.
+Qed.
+
+(* λ=0 端 sorted 精确面：直接消费 §S8 H_adj_Pmid_sorted_exact
+   （L2068），中相端熵零新证。 *)
+Theorem H_lam_pmid_sorted_lam0 : forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l -> H_lam_pmid l s k 0 == H_adj l.
+Proof.
+  intros l s k HS.
+  rewrite (H_lam_pmid_lam0 l s k).
+  exact (H_adj_Pmid_sorted_exact l s k HS).
+Qed.
+
+(* ========== 【加分】端点旧件桥 + 分离面 + 数值锚 ========== *)
+
+(* 旧件重合桥（k=0 端点）：中相 k=0 退化为 P∞ 相（llm_Pmid_zero），
+   与 H_lam 的第二端（Pinf l s）重合——k=0 时三相互补熵与旧件
+   逐点相等（迁移零丢旧信息，H_lam_cyc_k0_oldface 同款对账面）。 *)
+Theorem H_lam_pmid_k0_oldface : forall (l : list Q) (s : nat) (lam : Q),
+  H_lam_pmid l s 0%nat lam == H_lam l s lam.
+Proof.
+  intros l s lam. unfold H_lam_pmid, H_lam.
+  rewrite (llm_Pmid_zero l s).
+  reflexivity.
+Qed.
+
+(* k=length 端点：中相退化为 P0 相（llm_Pmid_len_endpoint），整条
+   插值坍缩为常值 H_adj (P0 l)（两端重合，λ 失效面）。 *)
+Theorem H_lam_pmid_klen_const : forall (l : list Q) (s : nat) (lam : Q),
+  H_lam_pmid l s (length l) lam == H_adj (P0 l).
+Proof.
+  intros l s lam. unfold H_lam_pmid.
+  rewrite (llm_Pmid_len_endpoint l s).
+  ring.
+Qed.
+
+(* 分离见证（与 H_lam）：未排序 l 上真中相端 ≠ 原始尾端——
+   见证列 [2;0;1]（未排序），k=1，s=0，lam=1/2：Pmid = [0]++[0;1]
+   = [0;0;1]，H_adj (Pmid) = 1 ≠ 3 = H_adj l（Pinf≡l 原始尾端），
+   左 = (1/2)·2 + (1/2)·1 = 3/2 ≠ 5/2 = (1/2)·2 + (1/2)·3 = 右。
+   vm_compute 数值面（H_lam_cyc_H_lam_separates 同款配方；Pinf
+   恒等坍缩经本文件 §4 Pinf_true_id，弃用注记件 Pinf_eq_l 绕行）。 *)
+Theorem H_lam_pmid_H_lam_separates : exists (l : list Q) (k s : nat) (lam : Q),
+  H_lam_pmid l s k lam <> H_lam l s lam.
+Proof.
+  exists [2; 0; 1], 1%nat, 0%nat, (1#2)%Q.
+  intro Hc. unfold H_lam_pmid, H_lam in Hc.
+  rewrite (Pinf_true_id [2; 0; 1] 0%nat) in Hc.
+  vm_compute in Hc. discriminate Hc.
+Qed.
+
+(* 数值实测锚（G4 实测面）：见证列 [2;0;1] 上插值值与两端熵
+   vm_compute 一步闭项判定——新件的计算面可执行实测。 *)
+Theorem H_lam_pmid_wit_201 :
+  H_lam_pmid [2; 0; 1] 0%nat 1%nat (1#2)%Q == (3#2)%Q.
+Proof. vm_compute. reflexivity. Qed.
+
+Theorem H_lam_pmid_wit_201_ends :
+  H_adj (P0 [2; 0; 1]) == 2%Q /\ H_adj (Pmid [2; 0; 1] 0%nat 1%nat) == 1%Q.
+Proof. split; vm_compute; reflexivity. Qed.
+
+(* ============================================================
+   §S10 恒等簇处置（CLN-1 席追加；AUDIT-2 A6 条目收口）：
+   「llm_rot_id 恒等簇 + 8 件弃用注记件仍以现役名被引用」的
+   处置收口——把「弃用注记」升级为「机器检查的逐件映射」。
+   纪律：纯追加；既有行零改动；全部旧面性质绕行弃用名重推
+   （Pinf_eq_l 弃用件不经手，一律改经 §4 Pinf_true_id）。
+   分层：保底（处置面定理 + 恒等簇真化覆盖面四件）/ 主件
+   （deprecated_consumers_map 八件逐件映射 + helper 一件）/
+   加分（消费面重定向示范双件）。
+   ============================================================ *)
+
+(* ========== 【保底】处置面定理 + 恒等簇真化覆盖面 ========== *)
+
+(* 处置面定理（任务书字面形；§S8 未含，grep 实测零命中）：旧
+   rot = firstn ++ skipn 恒等重构之恒等面在真化底座（§1 rotc 系
+   在册）下的处置定谳——firstn_skipn 一步直证，不消费弃用件
+   llm_rot_id（DTPT.v:1781）。此件即「恒等簇处置」的机器检查
+   定谳面：旧 rot 名下的恒等重写消费全部由本件承接。 *)
+Theorem rotc_supersedes_rot_id : forall (n : nat) (l : list Q),
+  rot n l = l.
+Proof.
+  intros n l. unfold rot. apply firstn_skipn.
+Qed.
+
+(* 真化覆盖面①·恒等重写消费（llm_rot_id/llm_rot_full/前提零消费的
+   llm_rot_cyclic_inv 的消费型）：凡对 rot n l 陈述的性质 P 皆与对
+   l 陈述零损失互迁（P 面透明）——恒等簇恒等重写消费场景的全部
+   替代面。逐字陈述弃用件所述析取形（<> \/ ==）为可判定性平凡面、
+   零内容，禁硬凑；本形为盘面可证的实质覆盖面。 *)
+Theorem llm_rot_id_superseded :
+  forall (n : nat) (l : list Q) (P : list Q -> Prop), P l <-> P (rot n l).
+Proof.
+  intros n l P. split.
+  - intro H. rewrite (rotc_supersedes_rot_id n l). exact H.
+  - intro H. rewrite (rotc_supersedes_rot_id n l) in H. exact H.
+Qed.
+
+(* 真化覆盖面②·置换/长度消费（llm_rot_cyclic_perm/llm_rot_cyclic_
+   length 的消费型）：旧面成立（恒等底座下平凡）且真化替代件
+   同形在册（§2 rotc_perm/rotc_length）——双覆盖。 *)
+Theorem rot_cyclic_cluster_superseded : forall (n : nat) (l : list Q),
+  Permutation l (rot n l) /\ length (rot n l) = length l
+  /\ Permutation l (rotc n l) /\ length (rotc n l) = length l.
+Proof.
+  intros n l. rewrite (rotc_supersedes_rot_id n l). split.
+  - apply Permutation_refl.
+  - split.
+    + reflexivity.
+    + split.
+      * apply rotc_perm.
+      * apply rotc_length.
+Qed.
+
+(* 真化覆盖面③·熵面消费（Hsup 族/H_lam 系踩恒等底座的消费型）：
+   旧熵面逐点重合（H_adj (rot n l) == H_adj l）+ 真化层退化端点
+   rotc 0 同值（§S6 rotc_0_H_adj）——恒等消费在真化层的退化端点
+   有同值锚；非退化端点 H_adj (rotc k l) <> H_adj l 的分离面由
+   §4 H_rotc_separates 在册承接（[0;1;2] 转 1 格 2 ≠ 3）。 *)
+Theorem rot_H_adj_face_covered : forall (n : nat) (l : list Q),
+  H_adj (rot n l) == H_adj l /\ H_adj (rotc 0%nat l) == H_adj l.
+Proof.
+  intros n l. split.
+  - rewrite (rotc_supersedes_rot_id n l). apply Qeq_refl.
+  - apply rotc_0_H_adj.
+Qed.
+
+(* ========== 【主件】deprecated_consumers_map：八件弃用注记件
+   逐件映射定理（旧名消费性质 P 与真化替代件 g args 同成立的
+   传递定理；旧面一律绕行弃用名重推） ========== *)
+
+(* helper：旧 Hsup 面恒常值 = H_adj l（恒等底座 Pinf≡l 的直接
+   后果；X1 判词「Hsup l n ≡ H_adj l」的定理化）。弃用件
+   Hsup_mono/Hsup_bounded 的旧面重推公共底座。归纳步经
+   Hsup_S_eq（DTPT.v 在册）+ Pinf_true_id 两步，布尔分支
+   两向同值。 *)
+Lemma Hsup_oldface_const : forall (l : list Q) (n : nat),
+  Hsup l n = H_adj l.
+Proof.
+  intros l n. induction n as [| n IH].
+  - cbn [Hsup]. rewrite (Pinf_true_id l 0%nat). reflexivity.
+  - rewrite (Hsup_S_eq l n). rewrite IH.
+    rewrite (Pinf_true_id l (S n)).
+    destruct (Qle_bool (H_adj l) (H_adj l)); reflexivity.
+Qed.
+
+(* 映射①：D5_Pinf_perm（DTPT.v，Pinf l s ~ l 恒等置换面）→
+   真化替代 Pinf_c_perm/rotc_perm。旧面经 Pinf_true_id 承接；
+   真化面为真无限相 Pinf_c 的非平凡置换。 *)
+Theorem deprecated_consumers_map_D5_Pinf_perm :
+  forall (l : list Q) (s : nat),
+  Permutation l (Pinf l s) /\ Permutation l (Pinf_c l s).
+Proof.
+  intros l s. split.
+  - rewrite (Pinf_true_id l s). apply Permutation_refl.
+  - apply Pinf_c_perm.
+Qed.
+
+(* 映射②：llm_Pmid_zero（DTPT.v，Pmid l s 0 = Pinf l s 端点恒等面）
+   → 真化替代 §S8 H_adj_Pmid_k0 同值的「k=0 端点 = 原始全体 l」
+   内容面：Pmid l s 0 定义性坍缩到 Pinf l s（reflexivity 可验），
+   Pinf 面经 §4 Pinf_true_id 收口为 l——端点消费的内容与熵两面
+   皆由真化锚承接（弃用件 llm_Pmid_zero 不经手）。 *)
+Theorem deprecated_consumers_map_llm_Pmid_zero :
+  forall (l : list Q) (s : nat),
+  Pmid l s 0%nat = l /\ H_adj (Pmid l s 0%nat) == H_adj l.
+Proof.
+  intros l s.
+  assert (H0 : Pmid l s 0%nat = l).
+  { replace (Pmid l s 0%nat) with (Pinf l s) by reflexivity.
+    apply Pinf_true_id. }
+  split.
+  - exact H0.
+  - rewrite H0. apply Qeq_refl.
+Qed.
+
+(* 映射③：P0_absorbs_Pmid（DTPT.v，P0 (Pmid l s 0) = P0 l 仅 k=0
+   端点吸收面）→ 真化替代 §S8 Pmid_sorted_collapse：排序卫哨下
+   对全部 k 的吸收 P0 (Pmid l s k) = P0 l——弃用件的平凡恒等推论
+   在真化层升格为有序化不变量（卫哨 sorted 是真中相非平凡性的
+   诚实代价，§S8 F2b 判词在案）。 *)
+Theorem deprecated_consumers_map_P0_absorbs_Pmid :
+  forall (l : list Q) (s : nat) (k : nat),
+  SortedQ l -> P0 (Pmid l s k) = P0 l.
+Proof.
+  intros l s k HS.
+  rewrite (Pmid_sorted_collapse l s k HS). reflexivity.
+Qed.
+
+(* 映射④：Hsup_mono（DTPT.v 前缀最大值单调，恒等底座下伪装）→
+   真化替代 §6 Hsup_cyc_mono（真动态上确界单调）。旧面经 helper
+   Hsup_oldface_const 承接（两端同值，Qle_refl），真化面为非平凡
+   单调——「旧面成立且真化替代同形在册」的双覆盖。 *)
+Theorem deprecated_consumers_map_Hsup_mono : forall (l : list Q) (n : nat),
+  (Hsup l n <= Hsup l (S n))%Q /\ (Hsup_cyc l n <= Hsup_cyc l (S n))%Q.
+Proof.
+  intros l n. split.
+  - rewrite (Hsup_oldface_const l n). rewrite (Hsup_oldface_const l (S n)).
+    apply Qle_refl.
+  - apply Hsup_cyc_mono.
+Qed.
+
+(* 映射⑤：Hsup_bounded（DTPT.v 有穷上界，恒等底座下伪装）→
+   真化替代 §6 Hsup_cyc_ub（SortedQ + 非空卫哨下的 3·spread 界）。
+   旧面经 helper + H_adj_bound（DTPT.v:2666 在册，弃用件证明体
+   所消费的同一底座）绕行旧名重推；真化面带诚实卫哨在册。 *)
+Theorem deprecated_consumers_map_Hsup_bounded :
+  forall (l : list Q) (n : nat) (B : Q),
+  (forall x : Q, In x l -> Qabs x <= B) -> SortedQ l -> l <> [] ->
+  (Hsup l n <= (Z.of_nat (length l) # 1)%Q * B * 2)%Q
+  /\ (Hsup_cyc l n <= 3 * (lastq l - hd 0 l))%Q.
+Proof.
+  intros l n B HB HS Hne. split.
+  - rewrite (Hsup_oldface_const l n). apply H_adj_bound. exact HB.
+  - apply Hsup_cyc_ub; assumption.
+Qed.
+
+(* 映射⑥：Pinf_eq_l（DTPT_Entropy.v:444 弃用件，Pinf l s = l）→
+   真化替代 §4 Pinf_true_id 同语句现役件（本桩曾两度绕行消费之，
+   注记在案）+ Pinf_c 定义面 + 真无限相置换面——旧名陈述由现役
+   同形件零损失承接，真无限相内容由 rotc 系承接。 *)
+Theorem deprecated_consumers_map_Pinf_eq_l :
+  forall (l : list Q) (s : nat),
+  Pinf l s = l /\ Pinf_c l s = rotc (S s) l /\ Permutation l (Pinf_c l s).
+Proof.
+  intros l s. split.
+  - apply Pinf_true_id.
+  - split.
+    + reflexivity.
+    + apply Pinf_c_perm.
+Qed.
+
+(* 映射⑦：H_adj_cross_phase_lb（DTPT_Entropy.v:462 弃用件，跨相
+   下界 H_adj (P0 l) <= H_adj (Pinf l s)）→ 真化替代 phcyc_min_perm
+   + rotc_perm（P0 是排列类上 H_adj 最小值 ⇒ 对一切真旋转 k 成立）。
+   旧面经 Pinf_true_id + H_adj_P0_min（Entropy:428 现役）重推；
+   真化面覆盖任意 k（含 Pinf_c = rotc (S s)）。本件同时是 §S7
+   两处消费点（H_lam_anti_mono L1634 / lam_opt_cross_phase L1753）
+   的重定向底座——第 3 层示范即以本件路线替置直引。 *)
+Theorem deprecated_consumers_map_H_adj_cross_phase_lb :
+  forall (l : list Q) (s : nat) (k : nat),
+  (H_adj (P0 l) <= H_adj (Pinf l s))%Q
+  /\ (H_adj (P0 l) <= H_adj (rotc k l))%Q
+  /\ (H_adj (P0 l) <= H_adj (Pinf_c l s))%Q.
+Proof.
+  intros l s k. split.
+  - rewrite (Pinf_true_id l s). apply H_adj_P0_min.
+  - split.
+    + apply phcyc_min_perm. apply rotc_perm.
+    + apply (phcyc_min_perm l (Pinf_c l s)). apply Pinf_c_perm.
+Qed.
+
+(* 映射⑧：u12_phase_side_always_zero（DTPT_Extract.v:177 弃用件，
+   旧 phase_side 判别器恒返 0）→ 真化替代 §S6 phase_side_cyc_
+   side_degenerate/zero（rotc 口径判别面同样无分辨力，但系对真
+   底座定理化——判别器退化的根因不是恒等底座而是 Qle 口径，见
+   §S6 注）。旧面经 phase_side 定义展开 + Pinf_true_id +
+   xq_Qle_bool_true + H_adj_P0_min 绕行弃用名重推；真化面在册
+   直接消费（k := s）。 *)
+Theorem deprecated_consumers_map_u12_phase_side_always_zero :
+  forall (l : list Q) (s : nat),
+  phase_side l s = 0%nat
+  /\ (if Qle_bool (H_adj (P0 l)) (H_adj (rotc s l)) then 0 else 1)%nat
+     = 0%nat.
+Proof.
+  intros l s. split.
+  - unfold phase_side. rewrite (Pinf_true_id l s).
+    rewrite (xq_Qle_bool_true _ _ (H_adj_P0_min l)). reflexivity.
+  - apply phase_side_cyc_side_zero.
+Qed.
+
+(* ========== 【加分】消费面重定向示范（同陈述新证法变体；
+   既有行零改动） ========== *)
+
+(* 示范①：§S7 旗舰 H_lam_anti_mono（L1615）的重定向变体——原证
+   在斜率非正装配处直引弃用件 H_adj_cross_phase_lb（L1634）；
+   本变体同陈述同骨架，唯一改点为该步换经 Pinf_true_id +
+   H_adj_P0_min 真化锚（弃用名零出现）。 *)
+Theorem H_lam_anti_mono_real : forall (l : list Q) (s : nat) (lam1 lam2 : Q),
+  (lam1 <= lam2)%Q -> (H_lam l s lam2 <= H_lam l s lam1)%Q.
+Proof.
+  intros l s lam1 lam2 Hlam.
+  assert (Hs : (0 <= (lam1 - lam2) * (H_adj (P0 l) - H_adj (Pinf l s)))%Q).
+  { assert (Hr : (lam1 - lam2) * (H_adj (P0 l) - H_adj (Pinf l s))
+                 == (lam2 - lam1) * (H_adj (Pinf l s) - H_adj (P0 l))).
+    { change (lam1 - lam2) with (lam1 + - lam2)%Q.
+      change (lam2 - lam1) with (lam2 + - lam1)%Q.
+      change (H_adj (P0 l) - H_adj (Pinf l s))
+        with (H_adj (P0 l) + - H_adj (Pinf l s))%Q.
+      change (H_adj (Pinf l s) - H_adj (P0 l))
+        with (H_adj (Pinf l s) + - H_adj (P0 l))%Q.
+      ring. }
+    rewrite Hr. apply xq_mul_nonneg.
+    - apply (proj1 (Qle_0_sub' lam1 lam2)). exact Hlam.
+    - apply (proj1 (Qle_0_sub' (H_adj (P0 l)) (H_adj (Pinf l s)))).
+      rewrite (Pinf_true_id l s). apply H_adj_P0_min. }
+  apply (proj2 (Qle_0_sub' _ _)).
+  rewrite (H_lam_diff_sub l s lam1 lam2). exact Hs.
+Qed.
+
+(* 示范②：§S7 诚实锚 lam_opt_cross_phase（L1749）的重定向变体——
+   原证 rewrite 处直引弃用件 H_adj_cross_phase_lb（L1753）；本
+   变体同陈述，跨相下界改经真化锚两步装配。 *)
+Theorem lam_opt_cross_phase_real : forall (l : list Q) (s : nat),
+  lam_opt (H_adj (P0 l)) (H_adj (Pinf l s)) = 1%Q.
+Proof.
+  intros l s. unfold lam_opt.
+  assert (Hlb : (H_adj (P0 l) <= H_adj (Pinf l s))%Q).
+  { rewrite (Pinf_true_id l s). apply H_adj_P0_min. }
+  rewrite (xq_Qle_bool_true _ _ Hlb). reflexivity.
+Qed.
+
+(* ============================================================
+   §S11 三相互补统一族（FRUIT-6 席追加；深水区第二件·α 论文 §5
+   收官定理位）：H_lam / H_lam_cyc / H_lam_pmid 三族 λ-插值的
+   单一仿射族定理——三相插值不是三个独立理论，而是一个第二端
+   参数化仿射族 H_lam_gen 的三个实例。
+   分层：保底（Definition H_lam_gen + 统一仿射差分
+   H_lam_gen_diff + 标准形，消费 §S7 lam_affine_diff_sub 泛形，
+   禁重证——三族差分件收编为单一实例点）/ 旗舰（三特化对账：
+   恒等端消费 §4 Pinf_true_id 真化锚、旋转/中相端定义展开
+   恒等，三族逐件 = 统一族三实例）/ 主件（统一最优性
+   H_lam_gen_opt：§S7 lam_opt_min 泛形的族级版，对齐选择器
+   lam_opt 全族一致最优；双文件选择器同值面
+   lam_opt_align_lambda_opt_eq，消费 DTPT_Entropy §A7
+   align_lambda_opt）/ 加分（端点三元对账：rotc 0 恒等端、
+   Pmid k=0 原始全体端、k=length P0 相常值端）+ 数值锚双件
+   （与 §S9 分离见证 [2;0;1] 同列）。
+   ============================================================ *)
+
+(* ========== 【保底】统一族定义 + 仿射差分 ========== *)
+
+(* 统一仿射族载体：H_lam_gen l l2 lam = lam·H_adj (P0 l)
+   + (1-lam)·H_adj l2。第一端恒取排序相 P0，第二端 l2 参数化
+   （l2 := l → H_lam 的 Pinf≡l 面；l2 := rotc k l → H_lam_cyc；
+   l2 := Pmid l s k → H_lam_pmid）。nat 字面量全显式 %nat
+   （§S7 Open Scope Q_scope 传导，FRUIT-1 坑①）。 *)
+Definition H_lam_gen (l l2 : list Q) (lam : Q) : Q :=
+  lam * H_adj (P0 l) + (1 - lam) * H_adj l2.
+
+(* 统一仿射差分定理（任务书字面形）：差 = (lam1-lam2)·(h0-hl2)。
+   exact 实例化 §S7 泛形 lam_affine_diff_sub 一步（底座纪律：
+   禁重证，H_lam_diff_sub / H_lam_cyc_diff / H_lam_pmid_diff
+   同款配方）。 *)
+Theorem H_lam_gen_diff :
+  forall (l2 : list Q) (l : list Q) (s : nat) (lam1 lam2 : Q),
+  H_lam_gen l l2 lam1 - H_lam_gen l l2 lam2
+  == (lam1 - lam2) * (H_adj (P0 l) - H_adj l2).
+Proof.
+  intros l2 l s lam1 lam2. unfold H_lam_gen.
+  exact (lam_affine_diff_sub (H_adj (P0 l)) (H_adj l2) lam1 lam2).
+Qed.
+
+(* 统一族仿射标准形：H_lam_gen l l2 lam = H_adj l2
+   + lam·(H_adj (P0 l) - H_adj l2)（H_lam_affine 三族同款，
+   防御式 change 后 ring）。 *)
+Theorem H_lam_gen_affine :
+  forall (l2 : list Q) (l : list Q) (s : nat) (lam : Q),
+  H_lam_gen l l2 lam == H_adj l2 + lam * (H_adj (P0 l) - H_adj l2).
+Proof.
+  intros l2 l s lam. unfold H_lam_gen.
+  change (1 - lam) with (1 + - lam)%Q.
+  change (H_adj (P0 l) - H_adj l2) with (H_adj (P0 l) + - H_adj l2)%Q.
+  ring.
+Qed.
+
+(* ========== 【旗舰】三特化对账（三族 = 统一族三实例） ========== *)
+
+(* 特化①（恒等端）：l2 := l 时统一族与 H_lam 全 λ 逐点重合
+   （k=0/恒等端特化——Pinf=id 的诚实面）。消费 §4
+   Pinf_true_id 真化锚，弃用注记件 Pinf_eq_l 零出现（§S10
+   同纪律）。 *)
+Theorem H_lam_gen_H_lam : forall (l : list Q) (s : nat) (lam : Q),
+  H_lam_gen l l lam == H_lam l s lam.
+Proof.
+  intros l s lam. unfold H_lam_gen, H_lam.
+  rewrite (Pinf_true_id l s). reflexivity.
+Qed.
+
+(* 特化②（旋转端）：l2 := rotc k l 时与 §S7 H_lam_cyc 定义面
+   逐点重合（定义展开恒等，§S7 现役件消费对账）。 *)
+Theorem H_lam_gen_H_lam_cyc : forall (l : list Q) (k : nat) (lam : Q),
+  H_lam_gen l (rotc k l) lam == H_lam_cyc l k lam.
+Proof.
+  intros l k lam. unfold H_lam_gen, H_lam_cyc. reflexivity.
+Qed.
+
+(* 特化③（中相端）：l2 := Pmid l s k 时与 §S9 H_lam_pmid 定义
+   面逐点重合（定义展开恒等，§S9 现役件消费对账）。 *)
+Theorem H_lam_gen_H_lam_pmid :
+  forall (l : list Q) (s : nat) (k : nat) (lam : Q),
+  H_lam_gen l (Pmid l s k) lam == H_lam_pmid l s k lam.
+Proof.
+  intros l s k lam. unfold H_lam_gen, H_lam_pmid. reflexivity.
+Qed.
+
+(* ========== 【主件】统一最优性（族级 λ-argmin） ========== *)
+
+(* 端点选择器在全族上一致最优：λ* := lam_opt (H_adj (P0 l))
+   (H_adj l2) 实现 H_lam_gen 在 [0,1] 上任意 λ 处的最小值
+   （对齐选择器最优性的族级版；任务书 align_opt 实测现役名
+   = §S7 lam_opt）。§S7 lam_opt_min 泛形一步 unfold + apply。 *)
+Theorem H_lam_gen_opt : forall (l l2 : list Q) (lam : Q),
+  (0 <= lam <= 1)%Q ->
+  (H_lam_gen l l2 (lam_opt (H_adj (P0 l)) (H_adj l2))
+   <= H_lam_gen l l2 lam)%Q.
+Proof.
+  intros l l2 lam H01. unfold H_lam_gen. apply lam_opt_min. exact H01.
+Qed.
+
+(* 族级最优值只落双端：argmin 取端点值之一（H_lam_lam_opt_
+   endpoint 的统一族面）。 *)
+Theorem H_lam_gen_opt_endpoint : forall (l l2 : list Q),
+  H_lam_gen l l2 (lam_opt (H_adj (P0 l)) (H_adj l2)) == H_adj (P0 l)
+  \/ H_lam_gen l l2 (lam_opt (H_adj (P0 l)) (H_adj l2)) == H_adj l2.
+Proof.
+  intros l l2. unfold H_lam_gen.
+  destruct (lam_opt_values (H_adj (P0 l)) (H_adj l2)) as [E | E].
+  - left. rewrite E. replace (1 - 1)%Q with 0%Q by reflexivity. ring.
+  - right. rewrite E. replace (1 - 0)%Q with 1%Q by reflexivity. ring.
+Qed.
+
+(* 双文件选择器同值面：§S7 lam_opt（本文件）与 DTPT_Entropy
+   §A7 align_lambda_opt 定义同形（Qle_bool 二分端点选择器）——
+   统一族的最优选择器在两文件口径下逐点同值（Qeq 面）。 *)
+Theorem lam_opt_align_lambda_opt_eq : forall (h0 h1 : Q),
+  lam_opt h0 h1 == align_lambda_opt h0 h1.
+Proof.
+  intros h0 h1. unfold lam_opt, align_lambda_opt. reflexivity.
+Qed.
+
+(* ========== 【加分】端点三元对账 ========== *)
+
+(* 端点①（rotc 恒等端）：k=0 旋转端与恒等端在统一族中同值
+   （消费 §S5 rotc_0）。 *)
+Theorem H_lam_gen_end_rotc0 : forall (l : list Q) (lam : Q),
+  H_lam_gen l (rotc 0%nat l) lam == H_lam_gen l l lam.
+Proof.
+  intros l lam. rewrite (rotc_0 l). reflexivity.
+Qed.
+
+(* 端点②（Pmid k=0 端）：中相 k=0 = 原始全体（P∞≡l 相），与
+   恒等端同值（消费 §S8 H_adj_Pmid_k0——底座链 llm_Pmid_zero
+   已由 §S8 桥内化，本件零直引）。 *)
+Theorem H_lam_gen_end_pmid0 : forall (l : list Q) (s : nat) (lam : Q),
+  H_lam_gen l (Pmid l s 0%nat) lam == H_lam_gen l l lam.
+Proof.
+  intros l s lam. unfold H_lam_gen.
+  rewrite (H_adj_Pmid_k0 l s). reflexivity.
+Qed.
+
+(* 端点③（Pmid k=length 常值端）：k=length 两端重合 P0 相，
+   λ 失效、统一族常值 = H_adj (P0 l)（消费 §S8 H_adj_Pmid_klen；
+   H_lam_pmid_klen_const 的统一族面）。 *)
+Theorem H_lam_gen_klen_const : forall (l : list Q) (s : nat) (lam : Q),
+  H_lam_gen l (Pmid l s (length l)) lam == H_adj (P0 l).
+Proof.
+  intros l s lam. unfold H_lam_gen.
+  rewrite (H_adj_Pmid_klen l s). ring.
+Qed.
+
+(* ========== 【加分】数值锚双件（与 §S9 分离见证 [2;0;1]
+   同列同 λ） ========== *)
+
+(* 同一 λ=1/2 下恒等端值 5/2 ≠ 中相端值 3/2——第二端参数化
+   实质生效的族级数值面（两锚与 §S9 H_lam_pmid_wit_201 /
+   分离见证逐值对账）。 *)
+Theorem H_lam_gen_wit_201_id :
+  H_lam_gen [2;0;1] [2;0;1] (1#2)%Q == (5#2)%Q.
+Proof. vm_compute. reflexivity. Qed.
+
+Theorem H_lam_gen_wit_201_pmid :
+  H_lam_gen [2;0;1] (Pmid [2;0;1] 0%nat 1%nat) (1#2)%Q == (3#2)%Q.
+Proof. vm_compute. reflexivity. Qed.
+
 End DTPT_Rotation.
 Import DTPT_Rotation.
 
@@ -2016,3 +2906,73 @@ Print Assumptions H_lam_cyc_oldface_separates.
 Print Assumptions H_lam_cyc_H_lam_separates.
 Print Assumptions H_lam_cyc_lam_opt_cyc_min.
 Print Assumptions H_lam_cyc_lam_opt_cyc_endpoint.
+
+(* —— 以下为 FRUIT-1 席 §S8 中相熵分解假设审计块（G4，期望全
+   Closed under the global context） —— *)
+
+Print Assumptions H_adj_app.
+Print Assumptions H_adj_Pmid_seam.
+Print Assumptions H_adj_Pmid_decomp.
+Print Assumptions Pmid_sorted_collapse.
+Print Assumptions sorted_abs_le_spread.
+Print Assumptions H_adj_Pmid_sorted_exact.
+Print Assumptions H_adj_Pmid_sorted_ub2.
+Print Assumptions H_adj_Pmid_ub_gen.
+Print Assumptions H_adj_Pmid_k0.
+Print Assumptions H_adj_Pmid_klen.
+Print Assumptions H_adj_Pmid_endpoints_sorted.
+Print Assumptions phase_classify_ne_PMid.
+Print Assumptions Pmid_sorted_collapse_wit_012.
+Print Assumptions H_adj_Pmid_decomp_wit_012.
+
+(* —— 以下为 FRUIT-3 席 §S9 H_lam_pmid 三相互补假设审计块（G4，
+   期望全 Closed under the global context） —— *)
+
+Print Assumptions H_lam_pmid_lam1.
+Print Assumptions H_lam_pmid_lam0.
+Print Assumptions H_lam_pmid_diff.
+Print Assumptions H_lam_pmid_affine.
+Print Assumptions H_lam_pmid_sorted_consistency.
+Print Assumptions H_lam_pmid_sorted_lam1.
+Print Assumptions H_lam_pmid_sorted_lam0.
+Print Assumptions H_lam_pmid_k0_oldface.
+Print Assumptions H_lam_pmid_klen_const.
+Print Assumptions H_lam_pmid_H_lam_separates.
+Print Assumptions H_lam_pmid_wit_201.
+Print Assumptions H_lam_pmid_wit_201_ends.
+
+(* —— 以下为 CLN-1 席 §S10 恒等簇处置假设审计块（G4，期望全
+   Closed under the global context） —— *)
+
+Print Assumptions rotc_supersedes_rot_id.
+Print Assumptions llm_rot_id_superseded.
+Print Assumptions rot_cyclic_cluster_superseded.
+Print Assumptions rot_H_adj_face_covered.
+Print Assumptions Hsup_oldface_const.
+Print Assumptions deprecated_consumers_map_D5_Pinf_perm.
+Print Assumptions deprecated_consumers_map_llm_Pmid_zero.
+Print Assumptions deprecated_consumers_map_P0_absorbs_Pmid.
+Print Assumptions deprecated_consumers_map_Hsup_mono.
+Print Assumptions deprecated_consumers_map_Hsup_bounded.
+Print Assumptions deprecated_consumers_map_Pinf_eq_l.
+Print Assumptions deprecated_consumers_map_H_adj_cross_phase_lb.
+Print Assumptions deprecated_consumers_map_u12_phase_side_always_zero.
+Print Assumptions H_lam_anti_mono_real.
+Print Assumptions lam_opt_cross_phase_real.
+
+(* —— 以下为 FRUIT-6 席 §S11 三相互补统一族假设审计块（G4，
+   期望全 Closed under the global context） —— *)
+
+Print Assumptions H_lam_gen_diff.
+Print Assumptions H_lam_gen_affine.
+Print Assumptions H_lam_gen_H_lam.
+Print Assumptions H_lam_gen_H_lam_cyc.
+Print Assumptions H_lam_gen_H_lam_pmid.
+Print Assumptions H_lam_gen_opt.
+Print Assumptions H_lam_gen_opt_endpoint.
+Print Assumptions lam_opt_align_lambda_opt_eq.
+Print Assumptions H_lam_gen_end_rotc0.
+Print Assumptions H_lam_gen_end_pmid0.
+Print Assumptions H_lam_gen_klen_const.
+Print Assumptions H_lam_gen_wit_201_id.
+Print Assumptions H_lam_gen_wit_201_pmid.

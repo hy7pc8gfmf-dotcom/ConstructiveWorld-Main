@@ -1,31 +1,40 @@
 (* ============================================================ *)
+(* UpReqPowMonoBridge.v *)
+(* *)
+(* 目的： le_b 乘法保序闭包（非负右因子版）合成器。 *)
+(* 主件： x3d_le_b_mult_r_nonneg_or / x3d_le_b_mult_l_nonneg_or 与 x3d_le_b_mult_r_pos。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、UpRealLeB3。 *)
+(* 备注： 零上界的纯 B 形因子版仍为显式假设（见尾注）；本件为有界闭包的定理化。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPowMonoBridge.v —— le_b 乘法保序闭包（非负右因子版）合成器席 X3d *)
-(*   任务书源＝UpReqGeomIter.v 尾注【判词 I4｜PowB 幂单调衔接差距】：      *)
+(*   任务书源＝UpReqGeomIter.v 尾注【结论 I4｜PowB 幂单调衔接差距】：      *)
 (*   「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」合成链 ①主件 B 伴件 ②KL_0 非负    *)
 (*   伴件 ③powb_one_minus_eta_mono_dec 皆已绿，缺④「le_b 乘法保序闭包：  *)
-(*   a ≤_B b ∧ 0 ≤_B c ⟹ a·c ≤_B b·c」——本席补④的合成器族。            *)
+(*   a ≤_B b ∧ 0 ≤_B c ⟹ a·c ≤_B b·c」——本件补④的合成器族。            *)
 (* ---------------------------------------------------------------- *)
-(* 难度定位（判词 I4 原文精确复勘）：                                      *)
+(* 难度定位（结论 I4 原文精确复勘）：                                      *)
 (*   ④的逐 eps 证卡在「把严格序乘上仅 B 形已知的因子 c」一步——             *)
 (*   B 形 0 ≤_B c 不给 Or 形 0≤c（两者构造性可分，单向桥 x3d_le_nonneg_   *)
-(*   or_to_b 仅 Or⟹B 可通），故乘法保序须借收口器绕行。本席按因子证书     *)
+
 (*   强度分三面落件，主面走 real_le_closure_b_nonneg（UpRealLeB2 F.1      *)
-(*   非负系数收口器，Or 形 0≤C 即可反用）＋ Or 形乘法单调三件套            *)
+(*   非负系数完成器，Or 形 0≤C 即可反用）＋ Or 形乘法单调三件套            *)
 (*   （S07：real_le_mult_compat_weak 非负右 / real_le_mult_compat_r       *)
 (*   非负左 / RealSetoid.real_lt_le_iff_req lt 转 Or）。                             *)
 (* 六件清单：                                                            *)
 (*   件0 x3d_e0_key_lt：逆元压缩严格界子件 (w·inv(D))·M < w                *)
 (*      （M<D、D>0、w>0；件5 的 δ 乘出压回引擎，亦独立可复用）；           *)
 (*   件1 x3d_le_b_mult_r_nonneg_or：Or 形 0≤c ⟹ a·c ≤_B b·c              *)
-(*      （主合成器：收口器 C:=c 直用，一跳 weak 单调＋分配换形收口）；     *)
+(*      （主合成器：完成器 C:=c 直用，一跳 weak 单调＋分配换形完成）；     *)
 (*   件2 x3d_le_b_mult_l_nonneg_or：左因子形 c·a ≤_B c·b（comm 双运输）； *)
 (*   件3 x3d_le_b_mult_r_pos：严格因子对照形（leb3_le_b_pos_scale 签名   *)
 (*      对齐别名，UpRealLeB3 件6 原证零重证）；                           *)
 (*   件4 x3d_le_nonneg_or_to_b：非负证书 Or⟹B 单向桥（接口面说明件）；    *)
 (*   件5 x3d_le_b_mult_r_nonneg_bnd：有界非负右因子版——a ≤_B b ∧ 0≤c ∧   *)
 (*      c≤M ⟹ a·c ≤_B b·c（逐 eps 直证：e₀:=eps·inv(M+1)，a<b+e₀ 乘出后  *)
-(*      经 e₀·c ≤ e₀·M < eps 压回——判词 I4 所指「给定上界材料则逐 eps     *)
-(*      闭合」的定理化；零上界的纯 B 形因子版仍挂账，见尾注）。            *)
+(*      经 e₀·c ≤ e₀·M < eps 压回——结论 I4 所指「给定上界材料则逐 eps     *)
+(*      闭合」的定理化；零上界的纯 B 形因子版仍显式假设，见尾注）。            *)
 (* 对接位（消费式验证件 _x3d_I4BridgeCheck.v，临时件不落正式树）：         *)
 (*   geodi_policy_iter_kl_geom_iter_B（①）＋ x3d_le_b_mult_r_nonneg_or   *)
 (*   （④，因子取 KL_0）＋ powb_one_minus_eta_mono_dec（③）经             *)
@@ -37,7 +46,7 @@
 (*   定义）；纯 term-mode 组装（real_eq 非 Id 禁改写，全链 real_eq_trans  *)
 (*   / RealSetoid 运输族）；禁词全零（按全文件计含头注）。                 *)
 (* 编译配方（消费式，vo 树前置；引号从略防注释串警告）：                  *)
-(*   coqc -Q D:\ComplexAnalysis\ConstructiveWorld-Main\                  *)
+
 (*   ConstructiveWorld_vo EMPTY -Q . EMPTY UpReqPowMonoBridge.v           *)
 (*   （EMPTY 处实为空串实参；cpu_guard 包装零裸调，CoreN 2；               *)
 (*     先 -vos 秒审再全量。）                                             *)
@@ -55,7 +64,7 @@ Require Import UpRealLeB3.
 
 (* 件0：(w·inv(D))·M < w，前提 M<D、D>0、w>0。
    链：inv(D)·M < inv(D)·D==1（严格乘法保序两跳）
-   ⟹ w·(inv(D)·M) < w·1==w（左因子 w>0 严格保序）⟹ assoc 换形收口。 *)
+   ⟹ w·(inv(D)·M) < w·1==w（左因子 w>0 严格保序）⟹ assoc 换形完成。 *)
 Lemma x3d_e0_key_lt : forall (w M : Real)
     (HMlt1 : real_lt M (real_plus M real_one))
     (HMp : real_lt real_zero (real_plus M real_one))
@@ -110,7 +119,7 @@ Proof.
     by exact (real_mult_lt_compat_l
                 (real_mult (real_inv_pos (real_plus M real_one) HMp) M)
                 real_one w Hs2 Hw).
-  (* assoc 换形 + w·1==w 归一收口 *)
+  (* assoc 换形 + w·1==w 归一完成 *)
   exact (RealSetoid.real_lt_id_l
            (real_mult (real_mult w
               (real_inv_pos (real_plus M real_one) HMp)) M)
@@ -131,9 +140,9 @@ Qed.
 (* ============================================================ *)
 
 (* 件1：a ≤_B b 且 0≤c（Or 形）给 a·c ≤_B b·c。
-   收口器反用（C:=c，Or 形非负即可）：给 e>0 只需 Or 形 a·c ≤ b·c+c·e——
+   完成器反用（C:=c，Or 形非负即可）：给 e>0 只需 Or 形 a·c ≤ b·c+c·e——
    a<b+e 经 lt 转 Or 与非负右因子弱单调 ⟹ a·c ≤ (b+e)·c，
-   再 (b+e)·c==b·c+c·e 分配换形收口。 *)
+   再 (b+e)·c==b·c+c·e 分配换形完成。 *)
 Lemma x3d_le_b_mult_r_nonneg_or : forall a b c : Real,
   real_le_b a b -> real_le real_zero c ->
   real_le_b (real_mult a c) (real_mult b c).
@@ -179,7 +188,7 @@ Qed.
 (* ============================================================ *)
 
 (* 件3：严格因子对照形（0<c 版）：UpRealLeB3 件6 leb3_le_b_pos_scale
-   签名对齐别名（原证零重证；本席三面对照的「严格面」锚）。 *)
+   签名对齐别名（原证零重证；本件三面对照的「严格面」锚）。 *)
 Lemma x3d_le_b_mult_r_pos : forall a b c : Real,
   real_le_b a b -> real_lt real_zero c ->
   real_le_b (real_mult a c) (real_mult b c).
@@ -190,7 +199,7 @@ Qed.
 
 (* 件4：非负证书单向桥：Or 形 0≤c 给 B 形 0 ≤_B c。
    反向（B⟹Or）构造性不可通——④的因子若仅 B 形已知，本桥不通，
-   即判词 I4 挂账的精确位置（件5 以有界上界 M 绕行，见下）。 *)
+   即结论 I4 显式假设的精确位置（件5 以有界上界 M 绕行，见下）。 *)
 Lemma x3d_le_nonneg_or_to_b : forall c : Real,
   real_le real_zero c -> real_le_b real_zero c.
 Proof.
@@ -198,7 +207,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 三、有界非负右因子版（判词 I4「上界材料」条件的定理化）                  *)
+(* 三、有界非负右因子版（结论 I4「上界材料」条件的定理化）                  *)
 (*   a ≤_B b ∧ 0≤c ∧ c≤M ⟹ a·c ≤_B b·c：逐 eps 直证，                     *)
 (*   见证 e₀:=eps·inv(M+1)：a<b+e₀ 乘出后 e₀·c ≤ e₀·M < eps               *)
 (*   （件0 引擎）——δ 乘出压回 eps。                                       *)
@@ -327,11 +336,11 @@ Print Assumptions x3d_le_nonneg_or_to_b.
 Print Assumptions x3d_le_b_mult_r_nonneg_bnd.
 
 (* ============================================================ *)
-(* 尾注：诚实台账                                                        *)
-(* 【判词 I4 对位】本席交付④的「Or 形非负因子面」（件1，无条件）与        *)
-(*   「B 形因子＋上界面」（件5，判词所指上界材料的定理化）；③powb 单调、  *)
+(* 尾注：诚实登记表                                                        *)
+
+(*   「B 形因子＋上界面」（件5，结论所指上界材料的定理化）；③powb 单调、  *)
 (*   ①② GeomIter 伴件的合成闭环在消费式验证件 _x3d_I4BridgeCheck.v       *)
 (*   完成：Hkl0or（Or 形 KL_0 非负证书）在位时「t ≤ t1 ⟹ KL_{t1} ≤_B     *)
-(*   κ^t·KL_0」全闭合。零上界且因子仅 B 形已知的④仍挂账——卡点即          *)
+(*   κ^t·KL_0」全闭合。零上界且因子仅 B 形已知的④仍显式假设——卡点即          *)
 (*   B⟹Or 转换位（件4 反向），禁硬凑（分层保底纪律）。                    *)
 (* ============================================================ *)

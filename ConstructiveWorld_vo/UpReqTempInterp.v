@@ -1,12 +1,21 @@
 (* ============================================================ *)
-(* UpReqTempInterp.v —— 温度全程插值件（槽放电战役 #10：温度两极  *)
+(* UpReqTempInterp.v *)
+(* *)
+(* 目的： 温度全程插值件（温度两极间的显式插值）。 *)
+(* 主件： ti_temp_interp 插值构造与 ti_tv_unif_le_err 一致误差界。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpTempWindow、AttnHardLimit218。 *)
+(* 备注： 全部 Qed、零新假设位（Print Assumptions 为 Closed）；误差单调递减为构造核。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqTempInterp.v —— 温度全程插值件（槽消解战役 #10：温度两极  *)
 (*   →全程插值）。两端点定理已在库：                              *)
 (*     高温端 temp_window_T_infty（UpTempWindow）：∀eps>0 ∃T₂>0，  *)
 (*       T>T₂ ⟹ TV(w_T,U) ≤ eps；证明内见证为显式式               *)
-(*       T₂ := 2Δ·inv(cw_log(1+eps)) + 1。                        *)
+
 (*     低温端 hard_attention_limit（AttnHardLimit218）：∀eps>0     *)
 (*       ∃T₀>0，T<T₀ ⟹ TV(w_T,δ_m) ≤ eps；见证                   *)
-(*       T₀ := γ·inv(cw_log(N·inv(eps)+1))（γ=一致间隙，N=|词表|）。*)
+
 (*   本件使命：把两端点的"存在阈值"升级为"显式函数+全程可控"——     *)
 (*     ① 误差函数件 ti_err：err_Δ(T) := e^{2Δ/T} − 1（对任意      *)
 (*        0<T 生效的显式温度-误差上界，即全程定量刻画的核心）。    *)
@@ -14,8 +23,8 @@
 (*        （温度升 ⟹ 误差降，全程插值单调骨架）。                 *)
 (*     ③ 显式阈值定义件 ti_Th / ti_T0：两端点 T₀ 的独立提取。      *)
 (*     ④ 主件 ti_temp_interp：∀Δ,eps>0，见证 = 显式函数 ti_Th，    *)
-(*        打包"阈值收口 + 全程单调上界"两支（Set 层 sigT/And）。   *)
-(*   路线：全部落 CW214 Real 层（与两端点同世界），复用             *)
+(*        打包"阈值完成 + 全程单调上界"两支（Set 层 sigT/And）。   *)
+(*   路线：全部落 Real 层（与两端点同世界），复用             *)
 (*   UpTempWindow 节外通用件（tw_ring_t2 / tw_ring_ddl /           *)
 (*   tw_exp_mono_le / tw_ring_one_eps_minus 族）与 AttnHardLimit218 *)
 (*   节外乘法保序件；基座消费 real_inv_pos_le_compat（倒数反序）、  *)
@@ -116,7 +125,7 @@ Proof.
   apply tw_lt_le. exact Heps.
 Qed.
 
-(* 0 < cw_log(1+eps)：log(1)==0 + 对数严格单调（镜像 HL0 链） *)
+
 Lemma ti_log_one_eps_pos : forall (eps : Real) (Heps : real_lt real_zero eps),
   real_lt real_zero (cw_log (real_plus real_one eps) (ti_one_eps_pos eps Heps)).
 Proof.
@@ -161,8 +170,8 @@ Qed.
 
 (* ============================================================ *)
 (* 4. 主件：温度全程插值（显式见证函数 + 双支刻画）                *)
-(*    见证 = ti_Th Δ inv(cw_log(1+eps))——非存在搜索，函数即见证。 *)
-(*    支1（阈值收口）：T > Th ⟹ err_Δ(T) ≤ eps                    *)
+
+(*    支1（阈值完成）：T > Th ⟹ err_Δ(T) ≤ eps                    *)
 (*      （镜像 temp_window_T_infty 内 Th·L == 2Δ+L 代数链）。      *)
 (*    支2（全程单调）：0<T≤T' ⟹ err(T') ≤ err(T)——中段任意点      *)
 (*      的误差被显式函数逐点钉住，两端点行为由此单调骨架插值。      *)
@@ -290,8 +299,8 @@ Qed.
 
 (* ============================================================ *)
 (* 5. 低温端显式阈值定义件（AttnHardLimit218 hard_attention_limit  *)
-(*    证明内见证 T₀ := γ·inv(cw_log(N·inv(eps)+1)) 的独立提取形态； *)
-(*    阈值收口属性的重放列为升级路径，本件先交定义+正性）。        *)
+
+(*    阈值完成属性的重放列为升级路径，本件先交定义+正性）。        *)
 (* ============================================================ *)
 
 Definition ti_T0 (gamma il : Real) : Real := real_mult gamma il.
@@ -306,7 +315,7 @@ Qed.
 
 (* ============================================================ *)
 (* 6. 端点世界桥件：UpTempWindow 均匀 TV 距离被误差函数逐点主控     *)
-(*    （tv_unif ≤ err_Δ(T)：温控全程刻画与端点件的对账线）          *)
+(*    （tv_unif ≤ err_Δ(T)：温控全程刻画与端点件的核对线）          *)
 (* ============================================================ *)
 
 Lemma ti_tv_unif_le_err :
@@ -323,10 +332,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 台账：本文件 10 证明件 + 3 定义件（ti_err / ti_Th / ti_T0）。    *)
+(* 登记表：本文件 10 证明件 + 3 定义件（ti_err / ti_Th / ti_T0）。    *)
 (* 主件 ti_temp_interp 见证位 = 显式函数（非搜索），把高温端        *)
 (* temp_window_T_infty 的 ∃T₂ 升级为命名函数件 ti_Th + 正性件       *)
-(* ti_Th_pos + 收口件（主件支1）；全程插值语义 = 支2 单调骨架。     *)
+(* ti_Th_pos + 完成件（主件支1）；全程插值语义 = 支2 单调骨架。     *)
 (* ============================================================ *)
 
 Print Assumptions ti_temp_interp.
@@ -334,8 +343,8 @@ Print Assumptions ti_err_antitone.
 Print Assumptions ti_tv_unif_le_err.
 
 (* ============================================================ *)
-(* 7. 增量节（_wb73 席10 低温端收口）：ti_T0 阈值收口属性重放      *)
-(*    清偿席69 兜底项：hard_attention_limit（AttnHardLimit218     *)
+(* 7. 增量节（_wb73 席10 低温端完成）：ti_T0 阈值完成属性重放      *)
+
 (*    Section 内 L1033）证明体的节外重放。要点：                  *)
 (*    ① 节参全部具名显式——节参消失不对称以 About 实证为准：        *)
 (*       tv_hard 6+2 参（无 gamma）/ tv_hard_le_decay_scale       *)
@@ -343,7 +352,7 @@ Print Assumptions ti_tv_unif_le_err.
 (*    ② h_abs/decay_T 内机器（hsum_split/hsum_nonm_le 等          *)
 (*       ~150 行）不重铸——直接消费节外导出件                      *)
 (*       tv_hard_le_decay_scale（基座引擎在库，席69 已定性）。    *)
-(*    ③ 见证 = ti_T0 γ inv(cw_log(N·inv(eps)+1))，显式函数形态。  *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -532,7 +541,7 @@ Proof.
                  (cauchy_real_exp (real_opp a))).
         + apply cauchy_real_exp_pos.
         + exact Hs4. }
-    (* 收口：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
+    (* 完成：tv_hard ≤ N·e^{−γ/T} ≤ e^{−γ/T}·N ≤ eps *)
     apply (real_le_trans _
              (real_mult (real_of_nat N)
                         (decay_T gamma T Ht)) _).
@@ -546,8 +555,8 @@ Qed.
 
 Print Assumptions ti_hard_threshold.
 
-(* 台账补记（_wb73）：本文件证明件 10 → 11（新增 ti_hard_threshold），
+(* 登记表补记（_wb73）：本文件证明件 10 → 11（新增 ti_hard_threshold），
    定义件 3 不变（ti_err / ti_Th / ti_T0）。低温端 hard_attention_limit
-   的 ∃T₀ 见证升级为命名函数件 ti_T0 + 正性件 ti_T0_pos + 收口件
+   的 ∃T₀ 见证升级为命名函数件 ti_T0 + 正性件 ti_T0_pos + 完成件
    ti_hard_threshold；至此温度两极（高温 ti_temp_interp / 低温
    ti_hard_threshold）均具"显式阈值 + 全程定量"形态。 *)

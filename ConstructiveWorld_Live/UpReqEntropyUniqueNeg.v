@@ -1,6 +1,15 @@
 (* ============================================================ *)
+(* UpReqEntropyUniqueNeg.v *)
+(* *)
+(* 目的： 定理 4.6c(b) 的显式分歧见证逆否形。 *)
+(* 主件： t22b_entropy_max_unique_neg：经逆否与挤压论证的唯一性负向腿。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqEntropyUniqueTemp、G07_KLWall。 *)
+(* 备注： 逆否腿以 sigT 分歧见证显式化；求和正性前提随载体声明。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyUniqueNeg.v —— 席T22b：定理 4.6c (b) 显式分歧见证逆否形   *)
-(*   Real 层可达形补装席 ｜ 2026-09-11 ｜ 后台独立席位（独占 CoreN 7）   *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】承席T22 精确余留：4.6c 的 (b) 逆否形——                       *)
 (*   显式分歧见证（某 s₀ 处 p(s₀) ≠ p_T(s₀)，Set 层 Or (real_lt) 承载）  *)
@@ -15,8 +24,8 @@
 (*     Or (real_lt a b) (real_eq a b) 两支）+ 分歧 Or 见证两支 ⟹        *)
 (*     real_lt a b（三分两支各配 real_lt 链：lt 支直达；eq+前向 lt 支    *)
 (*     直达；eq+后向 lt 支经 real_lt_compat 运输 + real_lt_irrefl       *)
-(*     反证收口——「另支 p(s₀) > p_T(s₀) 走对称」即在第三支内消化）。    *)
-(*     对位 CW219 real_weak_trich 的正向见证对偶：弱三分自双重否定收敛  *)
+(*     反证完成——「另支 p(s₀) > p_T(s₀) 走对称」即在第三支内消化）。    *)
+(*     对位 real_weak_trich 的正向见证对偶：弱三分自双重否定收敛  *)
 (*     于 eq，本机自正向 Or 见证收敛于严格向；对称辅件                  *)
 (*     t22b_lt_squeeze_le_sym 一跳同构。                                *)
 (*   件 N0b 载体和正性件 t22b_list_sum_pos_ne：list 载体 l₁++s₀::l₂    *)
@@ -38,49 +47,49 @@
 (*   件 N3 可达形 (b) 双向见证版 t22b_entropy_strict_divergence_or      *)
 (*     （list 载体）：逐项双向可比（Or 承载）+ s₀ 分歧 Or 见证 ⟹ G07    *)
 (*     klst_kl_energy_nonconst ⟹ KL>0 ⟹ 件 N1b ⟹ p 非最优。            *)
-(*   件 N4 bool 收口 t22b_entropy_strict_divergence_bool：件 N3 在      *)
+(*   件 N4 bool 完成 t22b_entropy_strict_divergence_bool：件 N3 在      *)
 (*     [true; false] 载体（s₀ := true，l₁ := []，l₂ := [false]），      *)
-(*     结构四件套直喂席T22 t22_bool_* helpers。                          *)
+(*     结构四件套显式应用席T22 t22_bool_* helpers。                          *)
 (*   件 N5 组装件 t22b_entropy_max_unique_neg（bool 载体，prod 双函数   *)
 (*     记录——Set 层 And 形零 Prop）：(a) 腿＝席T22 件 3 整链 +          *)
 (*     (b) 腿＝件 N4——定理 4.6c 两形合取（同熵 ⟹ 逐点等）×（分歧见证   *)
 (*     ⟹ 熵严格小），席T22 精确余留至此闭合。                           *)
 (* ------------------------------------------------------------------ *)
-(* 【G07 klst 两件逐步对应表（喂入槽位）】                              *)
+(* 【G07 klst 两件逐步对应表（喂入假设位）】                              *)
 (*   klst_kl_sum_strict（单向弱序形）↩ 件 N2：                          *)
 (*     Hpq  ↦ forall s, real_le (p s) (p_T s)（逐项单向弱序前提）        *)
 (*     Hdiv ↦ 件 N0 挤压输出 real_lt (p s₀) (p_T s₀)（前向严格见证）    *)
 (*     方向对位：原件 p≤q + p s₀ < q s₀ ⟹ 0 < Σ kl_term(p s, q s)；      *)
-(*     本席 p=p、q=p_T，与 T6b 熵亏恒等式 KL(p‖p_T) 同向。              *)
+(*     本件 p=p、q=p_T，与 T6b 熵亏恒等式 KL(p‖p_T) 同向。              *)
 (*   klst_kl_energy_nonconst（双向 Or 形）↩ 件 N3/N4：                   *)
 (*     Hpq  ↦ forall s, Or (real_le (p s) (p_T s)) (real_le (p_T s) (p s)) *)
 (*     Hdiv ↦ Or (real_lt (p s₀) (p_T s₀)) (real_lt (p_T s₀) (p s₀))    *)
-(*     （分歧 Or 见证直喂，免挤压；q>p 支由原件                          *)
+(*     （分歧 Or 见证显式应用，免挤压；q>p 支由原件                          *)
 (*     klst_gibbs_core_strict_neg 内部消化）——与 T15 件 6 同手法。      *)
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位表（001/ConstructiveWorld.v 4.6c (b) 逆否腿）】        *)
 (*   分歧见证 s₀ ↦ Set 层 Or (real_lt …) (real_lt …)（实序不可判定，     *)
 (*     显式见证输入；Id 层不等式的构造性承载）                           *)
-(*   Id klst 严格正槽 ↦ G07 两件直喂（对应表见上）                       *)
+(*   Id klst 严格正槽 ↦ G07 两件显式应用（对应表见上）                       *)
 (*   Id entropy_deficit_kl_temp 反解槽 ↦ T6b 主件 + real_lt_compat 运输  *)
 (*   Id 「p 非最优」结论面 ↦ real_lt S[p] S[p_T]（real_lt_zero_minus）   *)
 (* ------------------------------------------------------------------ *)
 (* 【可达强度如实标注】                                                 *)
 (*   ① (b) 形逐项可比前提（件 N2 单向/件 N3 双向）为诚实接口位：去除     *)
 (*     等价于对任意实对给序判定见证（LLPO 形），非直觉主义可证（席T15    *)
-(*     头注 ② 同款判词）；s₀ 处分歧见证以 Set 层 Or (real_lt) 承载。     *)
+(*     头注 ② 同款结论）；s₀ 处分歧见证以 Set 层 Or (real_lt) 承载。     *)
 (*   ② 挤压机（件 N0）为正向见证对偶件：前提集 {le, Or 见证} 在          *)
-(*     eq 支内由 irrefl 反证收口，全程零序判定；third 支的消去是        *)
+(*     eq 支内由 irrefl 反证完成，全程零序判定；third 支的消去是        *)
 (*     构造性的（False 消去于 Set 目标合法，S15 先例在案）。            *)
 (*   ③ list 载体（件 N2/N3）与抽象和面（件 N1）以「四结构位 discharge     *)
-(*     + 全 arity 直喂」衔接（T15 正典件接 list 载体同定式），零缩水：    *)
+(*     + 全 arity 显式应用」衔接（T15 正典件接 list 载体同定式），零缩水：    *)
 (*     熵亏恒等式的物理前提（归一化/同能量）逐字保留，不弱化不加码。     *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性；Set 层零 Prop 泄露（结论面全 real_lt/real_eq；      *)
-(*   Or 见证 sigT 形零 Prop 收口；Prop 仅现于反证消费位不外泄）；        *)
-(*   全 Qed 收口；零新承认件；G1 表禁词字面零入文（含头注）；            *)
+(*   Or 见证 sigT 形零 Prop 完成；Prop 仅现于反证消费位不外泄）；        *)
+(*   全 Qed 完成；零新承认件；G1 表禁词字面零入文（含头注）；            *)
 (*   UpReqEntropyUniqueTemp.v / UpReqEntropyDeficitTemp.v / G07 组 /     *)
-(*   S 分片全程只读（只消费 .vo）。                                     *)
+(*   S 模块全程只读（只消费 .vo）。                                     *)
 (* 编译配方（T22 同款，vo 树优先 + Live_X 兜底）：                       *)
 (*   pwsh -File _t22b_run.ps1 -Target <件> [-Full]（cpu_guard 包装，     *)
 (*   CoreN 7，LoadLimit 65）；预审 -vos 秒审后全量。                     *)
@@ -95,10 +104,10 @@ From Stdlib Require Import List.
 Import ListNotations.
 
 (* ============================================================ *)
-(* 件 N0：le→lt 严格挤压机（本席主新增机件）                             *)
+
 (*   real_le a b（Set 层 Or (real_lt a b) (real_eq a b)）+ 分歧 Or 见证  *)
 (*   ⟹ real_lt a b。三分支：lt 直达／eq+前向 lt 直达／eq+后向 lt 经      *)
-(*   real_lt_compat 运输 + real_lt_irrefl 反证收口（对称支内部消化）。   *)
+(*   real_lt_compat 运输 + real_lt_irrefl 反证完成（对称支内部消化）。   *)
 (* ============================================================ *)
 
 Lemma t22b_lt_squeeze_le :
@@ -160,7 +169,7 @@ Definition t22b_list_sum_pos_w (X : Type) (l₁ : list X) (s₀ : X) (l₂ : lis
 
 (* ============================================================ *)
 (* Section RealEntropyUniqueNeg：求和面/温度/能量参数照                  *)
-(*   UpReqTempDefs Section 同名同序（供 T6b 两件全 arity 直喂；          *)
+(*   UpReqTempDefs Section 同名同序（供 T6b 两件全 arity 显式应用；          *)
 (*   同 Section 先定义件只吃自身 forall 口——T22 卡坑 1）。               *)
 (* ============================================================ *)
 Section RealEntropyUniqueNeg.
@@ -219,7 +228,7 @@ Proof.
   set (Sp := real_entropy_dist S real_sum_over_S p Hp).
   set (Spt := real_entropy_dist S real_sum_over_S pT HpT).
   set (KL := real_KL_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy p Hp).
-  (* 步 1：KL 分布拉零规范形桥（T6b 件 5，全 arity 9 参直喂） *)
+  (* 步 1：KL 分布拉零规范形桥（T6b 件 5，全 arity 9 参显式应用） *)
   assert (Hbrid : real_eq KL
                     (real_sum_over_S (fun s : S =>
                        real_kl_term (p s) (pT s) (Hp s) (HpT s)))).
@@ -235,7 +244,7 @@ Proof.
                 (real_sum_over_S (fun s : S => real_kl_term (p s) (pT s) (Hp s) (HpT s)))
                 Hbrid)
              Hkl). }
-  (* 步 3：熵亏恒等（T6b 主件，全 arity 13 参直喂；real_minus_r 定义性    *)
+  (* 步 3：熵亏恒等（T6b 主件，全 arity 13 参显式应用；real_minus_r 定义性    *)
   (*   展开为 real_plus Spt (real_opp Sp)——T22 件 1 同槽对位） *)
   assert (Hdef : real_eq (real_plus Spt (real_opp Sp)) KL).
   { exact (real_entropy_deficit_kl_temp S real_sum_over_S real_sum_pos_preserved
@@ -290,7 +299,7 @@ End RealEntropyUniqueNeg.
 (* 件 N2：可达形 (b) 单向可比版（list 载体，klst_kl_sum_strict 喂入）     *)
 (*   逐项 p ≤ p_T（诚实接口前提）+ s₀ 处分歧 Or 见证 ⟹ 件 N0 挤压出      *)
 (*   前向严格见证 ⟹ G07 klst_kl_sum_strict ⟹ KL>0 ⟹ 件 N1b ⟹ p 非最优。 *)
-(*   方向对位：klst 原件吃 p≤q + p s₀ < q s₀；本席 p=p、q=p_T，          *)
+(*   方向对位：klst 原件吃 p≤q + p s₀ < q s₀；本件 p=p、q=p_T，          *)
 (*   与 T6b 熵亏恒等式 KL(p‖p_T) 同向（余留任务书警示槽已对位）。        *)
 (* ============================================================ *)
 Theorem t22b_entropy_strict_divergence_le :
@@ -320,7 +329,7 @@ Theorem t22b_entropy_strict_divergence_le :
           (t22b_list_sum_pos_w X l₁ s₀ l₂) T T_pos energy)).
 Proof.
   intros X l₁ s₀ l₂ T T_pos energy p Hp Hnormp Henergy Hpq Hdiv.
-  (* 步 1：p_T 归一化（list 载体实例，normalized 件 8 参直喂） *)
+  (* 步 1：p_T 归一化（list 载体实例，normalized 件 8 参显式应用） *)
   assert (Hnormq : real_eq
                      (t22b_list_sumf X l₁ s₀ l₂
                         (real_boltzmann_dist_temp X (t22b_list_sumf X l₁ s₀ l₂)
@@ -341,7 +350,7 @@ Proof.
              (real_boltzmann_dist_temp X (t22b_list_sumf X l₁ s₀ l₂)
                 (t22b_list_sum_pos_w X l₁ s₀ l₂) T T_pos energy s₀)
              (Hpq s₀) Hdiv). }
-  (* 步 3：KL > 0（G07 klst_kl_sum_strict 直喂：逐项 p≤p_T + s₀ 严格） *)
+  (* 步 3：KL > 0（G07 klst_kl_sum_strict 显式应用：逐项 p≤p_T + s₀ 严格） *)
   assert (Hkl : real_lt real_zero
                   (t22b_list_sumf X l₁ s₀ l₂
                      (fun s : X =>
@@ -372,7 +381,7 @@ Qed.
 (* ============================================================ *)
 (* 件 N3：可达形 (b) 双向见证版（list 载体，klst_kl_energy_nonconst 喂入） *)
 (*   逐项双向可比（Or 承载，诚实接口位）+ s₀ 分歧 Or 见证 ⟹ G07 双向件    *)
-(*   直喂（q>p 支原件内部消化，免挤压）⟹ KL>0 ⟹ 件 N1b ⟹ p 非最优。      *)
+(*   显式应用（q>p 支原件内部消化，免挤压）⟹ KL>0 ⟹ 件 N1b ⟹ p 非最优。      *)
 (* ============================================================ *)
 Theorem t22b_entropy_strict_divergence_or :
   forall (X : Type) (l₁ : list X) (s₀ : X) (l₂ : list X)
@@ -443,8 +452,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件 N4：可达形 (b) bool 收口——件 N3 在 [true; false] 载体的实例        *)
-(*   （s₀ := true，l₁ := []，l₂ := [false]；结构四件套直喂席T22          *)
+(* 件 N4：可达形 (b) bool 完成——件 N3 在 [true; false] 载体的实例        *)
+(*   （s₀ := true，l₁ := []，l₂ := [false]；结构四件套显式应用席T22          *)
 (*   t22_bool_* helpers；[] ++ true :: [false] 与 [true; false] 定义     *)
 (*   可转换，exact 直过——T15 卡定式）。                                  *)
 (* ============================================================ *)
@@ -507,7 +516,7 @@ Qed.
 (* ============================================================ *)
 (* 件 N5：组装件（bool 载体，prod 双函数记录——Set 层 And 形零 Prop）      *)
 (*   定理 4.6c 两形合取载体：(a) 腿＝席T22 件 3（同熵+同能量 ⟹ 逐点等，  *)
-(*   零接口前提整链放电）× (b) 腿＝件 N4（逐项可比 + s₀ 分歧见证 ⟹       *)
+(*   零接口前提整链消解）× (b) 腿＝件 N4（逐项可比 + s₀ 分歧见证 ⟹       *)
 (*   熵严格小）。席T22 精确余留（(b) 逆否形）至此与 (a) 形合流闭合。      *)
 (* ============================================================ *)
 Theorem t22b_entropy_max_unique_neg :

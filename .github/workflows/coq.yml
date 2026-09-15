@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   coq-build:
-    name: Rocq 9.0 build + coqchk (self-hosted local trust cache)
+    name: Rocq 9.1 build + coqchk (self-hosted local trust cache)
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v5
@@ -21,7 +21,9 @@ jobs:
 
       # 本地信任缓存播种：自托管 runner 的检出目录是全新的，
       # 从固定 vo 树复制 .vo 让 build.sh 吃指纹 SKIP（.vo 新于 .v 即跳）。
-      # 工具链=本机 Rocq Platform 9.0（与该 vo 树 .vo 同源，magic 90001）。
+      # 工具链=本机 Rocq Platform 9.1~2026.01（与该 vo 树 .vo 同源；PROBE91 实证 201 面 9.1 全绿。
+      # 原「magic 90001 / 9.0 防混装」预警随 2026-09-15 全库换装 9.1 作废——runner 侧
+      # cw_build.cmd / cw_chk.cmd 的 COQC/COQCHK 须同步指向 9.1，否则 coqchk 步将对 9.1 信任缓存红）。
       - name: Seed trust cache from local vo tree
         shell: bash
         run: |

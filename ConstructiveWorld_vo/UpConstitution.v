@@ -1,11 +1,20 @@
 (* ============================================================ *)
+(* UpConstitution.v *)
+(* *)
+(* 目的： 资源宪法的改进声明 Set 层类型与可判定验证器。 *)
+(* 主件： check_claim：claim_pass 连同资本、数据、预算、可达各可判定位的总验证器；uc_qeq_le 序判定族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpBudgetReal。 *)
+(* 备注： 全部判定面为 Set 层 bool/sigT 编码；阈值为显式参数位。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpConstitution.v —— ASI 资源宪法：改进声明的 Set 层类型与可判定验证器 *)
 (*                                                              *)
 (* 理论来源：成果存档/新算法.txt 推导 3「无见证的无限承诺不合法」    *)
 (*   ——自我改进系统的每一次改进声明必须输出 (κ, N, 击穿见证) 三元组；  *)
 (*   这不是软约束：本文件给出可机器检查的宪法执行器。               *)
 (*                                                              *)
-(* 五件交付：                                                    *)
+(* 五件结果：                                                    *)
 (*   件 1  claim_decl        改进声明的 Set 层 Record 类型          *)
 (*   件 2  check_claim       可判定验证器（Defined 可执行，四门六证）  *)
 (*   件 3  valid_claim_yields_breakthrough                        *)
@@ -22,7 +31,7 @@
 (*                                                              *)
 (* 层位纪律：宪法面语句全 Set 层（QleT'/QltT/NatLe/Id/sigT/And/Or）；*)
 (*   内部代数微件沿 LCAudit 先例口径（Qle/== 前提位）；  *)
-(*   纯构造性：禁词零出现（见交付报告 G1）；全部 Qed 闭合。           *)
+(*   纯构造性：禁词零出现（见合规自查报告 G1）；全部 Qed 闭合。           *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -592,7 +601,7 @@ destruct (Qle_bool x y) eqn:Eb.
   exact (Qlt_trans y x y Hyx Hxy).
 Qed.
 
-(* 宪法非空洞：真增长率必有可通过验证器的预算（q_decay_breaks 放电） *)
+(* 宪法非空洞：真增长率必有可通过验证器的预算（q_decay_breaks 消解） *)
 Theorem constitution_nonvacuous : forall (c0 eps k : Q) (i : nat),
   QltT 0 k -> QltT k 1 -> QltT 0 c0 -> QltT 0 eps ->
   sigT (fun N => sigT (fun w => Id (check_claim (mk_claim c0 eps k N i)) (inl w))).

@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpAlignIdReq.v *)
+(* *)
+(* 目的： 对齐递减恒等式的 req 抽象载体镜像件。 *)
+(* 主件： req 形 policy_gap_decrement_exact / dpo_loss_step_exact / policy_gap_backward_kl_exact，配 w_gap_base、w_subgap_base。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqAlign、UpReqAlign2、UpReqAlign3。 *)
+(* 备注： 各 Variable 前提逐位保留；对数与负数等接口前提为显式假设位。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAlignIdReq.v — 签名迁移批 4 第二席：UpAlignId 的 req 伴件     *)
 (*   （6 件：差分代数 2 + gap 恒等式 4）                          *)
 (*                                                                *)
@@ -10,7 +19,7 @@
 (*   件 3 policy_gap_next_exact：gap(pi_{t+1}) == gap(pi_t) − Δ    *)
 (*   件 4 policy_gap_decrement_exact：gap(pi_t) − gap(pi_{t+1}) == Δ *)
 (*   件 5 dpo_loss_step_exact：dpo_loss(pi_t) − dpo_loss(pi_{t+1}) == Δ *)
-(*   件 6 policy_gap_backward_kl_exact（条件恒等式，见台账 2）：   *)
+(*   件 6 policy_gap_backward_kl_exact（条件恒等式，见登记表 2）：   *)
 (*     β·KL(pi*‖pi_{t+1}) == (1−η)·β·KL(pi*‖pi_t) − η·gap(pi_t)    *)
 (*       + β·K2                                                   *)
 (*                                                                *)
@@ -24,13 +33,13 @@
 (*     / req_double_neg / reqd_minus_compat（UpReqAlgebra/UpReqDist）*)
 (*     ——本文件封装为件 1/件 2 两核。                              *)
 (*                                                                *)
-(* 诚实台账：                                                      *)
+(* 诚实登记表：                                                      *)
 (*   1. 载体：req 系减法 = UpReqAlgebra.req_minus（δ 透明同形 Id    *)
-(*      minus）；KL 载体 = req2_rel_ent（log 前提化，台账沿批 3）。 *)
+(*      minus）；KL 载体 = req2_rel_ent（log 前提化，登记表沿批 3）。 *)
 (*   2. 件 6 为条件恒等式：三 KL 精确恒等的 req 同位               *)
 (*      （Id policy_iter_backward_kl_step @L22686 根 Qed）在 req    *)
-(*      侧为批 3 深链挂账（UpReqAlign req_backward_kl_identity 假   *)
-(*      设位、UpReqAlign3 文件尾挂账清单同源）。本席不越权重证，    *)
+(*      侧为批 3 深链显式假设（UpReqAlign req_backward_kl_identity 假   *)
+
 (*      将其作为件 6 语句的显式前提位（零新公理：Print Assumptions  *)
 (*      Closed，条件性在语句层可见）。                             *)
 (*   3. 节参数与 UpReqAlign3 Req3AlignCore 逐位对齐（sumf + 六假设  *)
@@ -324,8 +333,8 @@ Qed.
 
 (* ===== 件 6（旗舰）：后向 KL 递推的换轴精确恒等式（条件形） ===== *)
 (* β·KL(pi*‖pi_{t+1}) == (1−η)·β·KL(pi*‖pi_t) − η·gap(pi_t) + β·K2
-   前提 = 三 KL 精确恒等（req 同位深链挂账，见文件头台账 2）；
-   本件交付的构造性内容 = 整体 β 缩放链（mult_assoc/comm/反结合 +
+   前提 = 三 KL 精确恒等（req 同位深链显式假设，见文件头登记表 2）；
+   本件结果的构造性内容 = 整体 β 缩放链（mult_assoc/comm/反结合 +
    req_opp_mult_l + Hgap 精确代换 + distrib 两级分配组装）。 *)
 Theorem policy_gap_backward_kl_exact :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),

@@ -1,14 +1,23 @@
 (* ============================================================ *)
+(* UpReqEntropyUniqueTemp.v *)
+(* *)
+(* 目的： 定理 4.6c entropy_max_unique_temp 的 Real 层。 *)
+(* 主件： t22_entropy_max_unique_temp_explicit 及其 bool 形；熵等式与 KL 零的等价 t22_entropy_eq_kl_zero。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqKLSTangent、G08_Gibbs。 *)
+(* 备注： 可达形同定理 4.3 边界：取显式前提形；bool 和泛函为显式前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyUniqueTemp.v —— 席T22：定理 4.6c entropy_max_unique_temp *)
-(*   Real 层可达形组装席 ｜ 2026-09-11 ｜ 后台独立席位（独占 CoreN 7）   *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】同能量 E(p) == E_T + 同熵 S[p] == S[p_T] ⟹ 逐点 p s ≡ p_T s  *)
 (*   （论文正式版 L325-327；Id 原件 001/ConstructiveWorld.v L17763       *)
 (*   entropy_max_unique_temp）。〔构造强度〕等号条件档——承 4.3/4.6a      *)
 (*   边界；席N1 判定（C6）：可达形同 C3——(a) gibbe2 式显式前提形；      *)
-(*   无条件形不可行（LPO 机理，见「不可达判词」段如实登记）。           *)
+(*   无条件形不可行（LPO 机理，见「不可达结论」段如实登记）。           *)
 (* ------------------------------------------------------------------ *)
-(* 【交付三件（可达强度如实标注）】                                      *)
+(* 【结果三件（可达强度如实标注）】                                      *)
 (*   件 1 等值核（全实，零接口前提）：同能量+同熵 ⟹                      *)
 (*     Σ_s real_kl_term (p s) (p_T s) ≡ 0（T6b 熵亏主件反解：            *)
 (*     KL ≡ S[p_T]−S[p]，同熵 ⟹ 差零，Id minus_self_zero 槽对位）；     *)
@@ -17,44 +26,44 @@
 (*     逐点切点式」（件 0 谓词 t22_tangent_eq，Set 值 real_eq 形）＋     *)
 (*     席T1 t1_log_eq_linear_inject（切点⟹一，弱三分，无条件）＋         *)
 (*     gibbsd_p_mult_ratio 尾链 ⟹ 逐点 p s ≡ p_T s。                    *)
-(*   件 3 可达形 (a)·gibbe2 样板载体（bool 两点空间）收口：接口位由      *)
-(*     席T1 整链放电（G08 逐项钳零件族：le_b 反对称逐 n 构造 +           *)
+(*   件 3 可达形 (a)·gibbe2 样板载体（bool 两点空间）完成：接口位由      *)
+(*     席T1 整链消解（G08 逐项钳零件族：le_b 反对称逐 n 构造 +           *)
 (*     KL≡0 ⟹ 逐点切点式 + 注入位无条件供给），物理前提之外零接口前提。  *)
 (* ------------------------------------------------------------------ *)
-(* 【不可达判词（9.3.3(a)/4.3 同族，如实登记）】无条件形「仅同能量+同熵  *)
+(* 【不可达结论（9.3.3(a)/4.3 同族，如实登记）】无条件形「仅同能量+同熵  *)
 (*   ⟹ 逐点等」在抽象求和面不可达：「和零⟹逐项零」提取的构造性终点是    *)
-(*   切点等式的反向使用——log u ≡ u−1 ⟹ u ≡ 1 的无条件形需强三分        *)
-(*   （LPO 形，CW219 L41224 定谳）；抽象面 eq 三接口（ext/linear/add）   *)
+
+(*   （LPO 形，L41224 判定）；抽象面 eq 三接口（ext/linear/add）   *)
 (*   亦推不出和零提取（T14 实证同界：单向 le 提升位不补提取面）。T1 弱形 *)
 (*   「切点⟹一」为直觉主义可达下界，本件即以其为核；bool 具体载体经逐项  *)
 (*   钳零（le_b 反对称）构造性闭合，为无条件形的最大可达实例。           *)
 (* ------------------------------------------------------------------ *)
-(* 【择型判词】择 (a) gibbe2 式显式前提形：本件熵亏链（件 1 全实）输出   *)
+(* 【择型结论】择 (a) gibbe2 式显式前提形：本件熵亏链（件 1 全实）输出   *)
 (*   Σ real_kl_term ≡ 0，正是 gibbs_equality 槽的输入面，顺接零间隙。   *)
 (*   (b) 显式分歧见证逆否形（klst_kl_sum_strict / klst_kl_energy_nonconst *)
 (*   ⟹ KL>0 ⟹ S[p_T]−S[p]>0 与同熵口矛盾）为备用路，需 le→lt 严格挤压   *)
-(*   机（eps 收缩），本席不展开（精确余留，见交付报告）。                *)
+
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位表（001/ConstructiveWorld.v L17763-17780 逐槽实证）】  *)
 (*   Id t Ht p Hnp Hpp Henergy Hent    ↦ 同口（T 正性证人在 T_pos 位；  *)
 (*     Hp 前移为 real_entropy_dist 证人位，T6 同位；同熵口 Hent 新位）   *)
 (*   Id Hdef := entropy_deficit_kl_temp ↦ real_entropy_deficit_kl_temp  *)
-(*     （T6b 主件全 arity 13 参直喂；real_minus_r 定义性展开）           *)
+(*     （T6b 主件全 arity 13 参显式应用；real_minus_r 定义性展开）           *)
 (*   Id Hmz := minus_self_zero Spt Sp (id_sym Hent) ↦ 件 1 步 2：        *)
 (*     Hent 换载（RealSetoid.real_eq_plus_compat_adapt）+ real_plus_opp  *)
 (*   Id Hkl0 := id_trans (id_sym Hdef) Hmz ↦ 件 1 步 3（real_eq_trans   *)
 (*     ＋ real_eq_sym 双实参形）                                         *)
 (*   Id gibbs_equality p p_t … Hkl0 s   ↦ 可达形 (a) 两级：件 2（抽象    *)
-(*     显式接口）／件 3（bool 整链放电，t1_gibbe2_gibbs_equality_bool    *)
+(*     显式接口）／件 3（bool 整链消解，t1_gibbe2_gibbs_equality_bool    *)
 (*     直达）                                                            *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt；切点式  *)
-(*   谓词为 Set 值 real_eq 形，零 Or 收口）；前提位照 Id 层对位（四口：  *)
+(*   谓词为 Set 值 real_eq 形，零 Or 完成）；前提位照 Id 层对位（四口：  *)
 (*   归一化/逐点正/同能量/同熵，不弱化不加码；接口位如实标注）；         *)
-(*   全 Qed 收口；零新承认件。                                           *)
+(*   全 Qed 完成；零新承认件。                                           *)
 (* 编译配方（T15 同款，vo 树优先）：                                     *)
-(*   coqc -q -vos -Q "<vo树>" "" -Q . "" UpReqEntropyUniqueTemp.v        *)
-(*   （秒审后去 -vos 全量）；温控经 cpu_guard 包装 _t22_build.cmd。      *)
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -112,7 +121,7 @@ Qed.
 
 (* ============================================================ *)
 (* Section RealEntropyUniqueTemp：求和面/温度/能量参数照                 *)
-(*   UpReqTempDefs Section 同名同序（供 T6/T6b 件全 arity 直喂）。       *)
+(*   UpReqTempDefs Section 同名同序（供 T6/T6b 件全 arity 显式应用）。       *)
 (* ============================================================ *)
 Section RealEntropyUniqueTemp.
 
@@ -136,7 +145,7 @@ Variable energy : S -> Real.
 (* ---------------------------------------------------------- *)
 (* 件 0：切点式谓词（显式接口形的逐点结论面，Set 值 real_eq 形）         *)
 (*   对位 G08 gibbe2 注入位的逐点结论：                                 *)
-(*   log(p_T s · (p s)⁻¹) ≡ (p_T s · (p s)⁻¹) − 1。                     *)
+
 (* ---------------------------------------------------------- *)
 Definition t22_tangent_eq
   (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)) (s : S) :=
@@ -160,7 +169,7 @@ Definition t22_tangent_eq
 
 (* ---------------------------------------------------------- *)
 (* 件 1：等值核（全实）——同能量+同熵 ⟹ Σ real_kl_term ≡ 0              *)
-(*   链：熵亏温度版（T6b 主件 13 参直喂）⟹ 同熵换载 + real_plus_opp     *)
+(*   链：熵亏温度版（T6b 主件 13 参显式应用）⟹ 同熵换载 + real_plus_opp     *)
 (*   （Id minus_self_zero 槽）⟹ KL ≡ 0 ⟹ 桥（T6b 件 5）运输到           *)
 (*   Σ real_kl_term 面（gibbs_equality 槽输入形）。                     *)
 (* ---------------------------------------------------------- *)
@@ -193,7 +202,7 @@ Proof.
   set (Sp := real_entropy_dist S real_sum_over_S p Hp).
   set (Spt := real_entropy_dist S real_sum_over_S pT HpT).
   set (KL := real_KL_temp S real_sum_over_S real_sum_pos_preserved T T_pos energy p Hp).
-  (* 步 1：熵亏温度版（T6b 主件全 arity 13 参直喂；Id Hdef 对位；          *)
+  (* 步 1：熵亏温度版（T6b 主件全 arity 13 参显式应用；Id Hdef 对位；          *)
   (*   real_minus_r 定义性展开 real_plus Spt (real_opp Sp)） *)
   assert (Hdef : real_eq (real_plus Spt (real_opp Sp)) KL).
   { exact (real_entropy_deficit_kl_temp S real_sum_over_S real_sum_pos_preserved
@@ -213,7 +222,7 @@ Proof.
   assert (Hkl : real_eq KL real_zero).
   { exact (real_eq_trans KL (real_plus Spt (real_opp Sp)) real_zero
              (real_eq_sym (real_plus Spt (real_opp Sp)) KL Hdef) Hmz). }
-  (* 步 4：桥（T6b 件 5 全 arity 9 参直喂）运输到 Σ real_kl_term 面 *)
+  (* 步 4：桥（T6b 件 5 全 arity 9 参显式应用）运输到 Σ real_kl_term 面 *)
   apply (real_eq_trans
            (real_sum_over_S (fun s : S => real_kl_term (p s) (pT s) (Hp s) (HpT s)))
            KL real_zero).
@@ -279,7 +288,7 @@ Theorem t22_entropy_max_unique_temp_explicit :
                (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved
                   T T_pos energy)) ->
     (* 显式接口前提位（载体诚实接口）：Σ real_kl_term ≡ 0 ⟹ 逐点切点式；
-       bool 样板载体上由件 3 整链放电（席T1 件直达），零残留。 *)
+       bool 样板载体上由件 3 整链消解（席T1 件直达），零残留。 *)
     (real_eq (real_sum_over_S (fun s : S =>
                 real_kl_term (p s)
                   (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved
@@ -305,7 +314,7 @@ Proof.
                                        (Hp s0) (HpT s0)))
                    real_zero).
   { exact (t22_entropy_eq_kl_zero p Hp Hnp Henergy Hent). }
-  (* 第 2 步：切点式 + 「切点⟹一」（席T1 无条件放电）⟹ 比值一 *)
+  (* 第 2 步：切点式 + 「切点⟹一」（席T1 无条件消解）⟹ 比值一 *)
   assert (Hu1 : real_eq (real_mult (pT s) (real_inv_pos (p s) (Hp s))) real_one).
   { apply (t1_log_eq_linear_inject
              (real_mult (pT s) (real_inv_pos (p s) (Hp s)))
@@ -330,8 +339,8 @@ Qed.
 End RealEntropyUniqueTemp.
 
 (* ============================================================ *)
-(* 件 3：可达形 (a) bool 收口——gibbe2 样板载体零接口前提形               *)
-(*   显式接口位由席T1 t1_gibbe2_gibbs_equality_bool 整链放电            *)
+(* 件 3：可达形 (a) bool 完成——gibbe2 样板载体零接口前提形               *)
+(*   显式接口位由席T1 t1_gibbe2_gibbs_equality_bool 整链消解            *)
 (*   （KL≡0 ⟹ 逐点 p≡p_T 直达：G08 逐项钳零件族 le_b 反对称构造闭合     *)
 (*   「和零⟹逐项零」提取，注入位由 t1_log_eq_linear_inject 无条件供给）： *)
 (*   gibbe2 样板载体上 (a) 形物理前提之外零接口前提。                    *)

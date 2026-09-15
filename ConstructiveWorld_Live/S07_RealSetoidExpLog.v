@@ -1,6 +1,16 @@
-(* ===== CW219 拆分分片 S07_RealSetoidExpLog（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L32575-L41232；头部 16 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S07_RealSetoidExpLog.v                                      *)
+(*                                                             *)
+(* 目的：柯西实数的 setoid 化指数/对数：接口实例化、exp 加法性、 *)
+(*       弱三分与 log_inv 左逆族（构造性 Set 层）。              *)
+(* 主件：real_weak_trich（弱三分：¬lt x y → ¬lt y x → eq x y）；  *)
+(*       cw_log_exp_right 与 real_lim/real_lim_unique 接口装填。 *)
+(* 依赖：S01–S06；Stdlib（QArith、Qabs、Qround、List、Bool、    *)
+(*       Arith、Setoid、Morphisms、Lia、Qminmax）。              *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
+(*       L32575-L41232，去头正文与原文区间逐字节同源；弱三分     *)
+(*       直觉主义可证，强三分（LPO）不可证。                     *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -810,7 +820,7 @@ Proof.
            setoid_rewrite HpR. setoid_rewrite HpL. reflexivity.
 Qed.
 
-(* 适配：接口 Proper 参数序（x1≈x2 且 y1≈y2）——real_eq_plus/mult_compat 原始序是 a≈c 且 b≈d *)
+(* 接口 Proper 参数序取（x1≈x2 且 y1≈y2）——real_eq_plus/mult_compat 原始序是 a≈c 且 b≈d *)
 
 (* NatLe ↔ (<=)%nat 桥（接口 cauchy_complete 用 NatLe，real 层用 nat ≤） *)
 (* Id → =（单构造子归纳）与反向 *)
@@ -924,10 +934,10 @@ Instance Real_RealInterfaceSetoidCore : RealSetoidCore.RealInterfaceSetoidCore R
   RealSetoidCore.cauchy_complete := real_cauchy_complete_metric_natle;
 }.
 End RealSetoid.
-(* 结束：本块全部为构造性定义和可证明引理，无 Axiom/Admitted  *)
+(* 结束：本块全部为构造性定义和可证明引理，无公理面与承认件   *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 阶段 2：exp 加法性 Q 层（2026-08-29 合入，来自探针 _dbg_exp_plus.v，37 引理）
+(* 阶段 2：exp 加法性 Q 层（2026-08-29 并入，来自探针 _dbg_exp_plus.v，37 引理）
    目标：cauchy_real_exp_plus（exp_neg_plus 字段材料）
    内容：q_binom 二项式定理 + exp 层 Cauchy 积引理族（exp_cauchy_double / exp_trunc_decomp 等）
    依赖：q_fact/q_pow/sum_upto/exp_partial/exp_series 族（主文件已有）
@@ -1609,7 +1619,7 @@ Qed.
 End ExpPlusStage2.
 
 (* ============================================================ *)
-(* 阶段 2 续：exp 截断误差上界（2026-08-29 合入，来自探针 _dbg_exp_plus.v 49 Qed）
+(* 阶段 2 续：exp 截断误差上界（2026-08-29 并入，来自探针 _dbg_exp_plus.v 49 Qed）
    内容：sum_upto_abs_le / sum_upto_le_ext / q_abs_pow_fact_le / exp_tail_abs_sum /
         exp_tail_abs_mono2 / exp_series_sum / exp_tail_abs_sum_inner / exp_tail_abs_inner_le /
         q_abs_prod_le / exp_trunc_abs_step / q_scale_series_le / exp_trunc_band_up
@@ -2306,14 +2316,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* log 战役第三阶段（2026-08-29 合入主文件）：构造性 log 族  *)
+(* log 论证第三阶段（2026-08-29 并入主文件）：构造性 log 族  *)
 (* exp 值域 (0,∞) 二分逼近 → log_seq 柯西 → cw_log 定义 + 右逆  *)
 (* 探针 _dbg_exp_plus.v L1408-4692 合并（158 Qed 验证通过）        *)
 (* ============================================================ *)
 
 Section LogStage3.
 
-(* Q 层：0 < e ⟹ e/2 < e（合并自探针 L1391，log 战役第三阶段依赖） *)
+(* Q 层：0 < e ⟹ e/2 < e（合并自探针 L1391，log 论证第三阶段依赖） *)
 Lemma q_half_lt_self : forall e : Q, Qlt 0 e -> Qlt (e / 2) e.
 Proof.
   intros e He.
@@ -2750,11 +2760,11 @@ Proof.
 Qed.
 
 (* ================================================================
-   log 战役第二阶段：exp 无界（∀B, ∃x, B < e^x）
+   log 论证第二阶段：exp 无界（∀B, ∃x, B < e^x）
    ================================================================ *)
 
 (* ================================================================
-   log 战役第二阶段：exp 无界（∀B, ∃x, B < e^x）
+   log 论证第二阶段：exp 无界（∀B, ∃x, B < e^x）
    ================================================================ *)
 
 (* Real 层 Archimedean：∀B, ∃n:nat, B < n#1（B 有界 + q_arch_geom）
@@ -2877,7 +2887,7 @@ Proof.
   - apply (cauchy_real_exp_gt_const n Hn1).
 Qed.
 (* ================================================================
-   log 战役第三阶段（2026-08-29 新会话）：exp 值域 (0,∞) + 构造性 log
+   log 论证第三阶段（2026-08-29 新会话）：exp 值域 (0,∞) + 构造性 log
    路线（E160-5 绕行定案）：Q 层近似测试二分（可判定）→ 近似根扫描
    （缺陷情形返回中点）→ Lipschitz 柯西族 → 极限 = log y
    ================================================================ *)
@@ -3032,7 +3042,7 @@ Proof.
     + simpl. apply Qle_refl.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 2：嵌套迭代 + 中点柯西界 ============ *)
+(* ============ log 论证第三阶段 Chunk 2：嵌套迭代 + 中点柯西界 ============ *)
 
 Lemma log_nested_step_l : forall (y : Real) (a b : Q) (Hab : Qlt a b) (j : nat),
   Qle (fst (log_interval y a b Hab j)) (fst (log_interval y a b Hab (Datatypes.S j))).
@@ -3178,7 +3188,7 @@ Proof.
     unfold Qdiv. field.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 3：决策引理 + 缺陷界 + slack 提升 ============ *)
+(* ============ log 论证第三阶段 Chunk 3：决策引理 + 缺陷界 + slack 提升 ============ *)
 
 Definition log_m (a b : Q) : Q := (a + b) / 2.
 Definition log_d4 (a b : Q) : Q := (b - a) / 32.
@@ -3452,7 +3462,7 @@ Proof.
     + apply qeq_le. unfold Qdiv. field.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 4a：inv 唯一性 + 倒数恒等 + Q 常量上 Lipschitz ============ *)
+(* ============ log 论证第三阶段 Chunk 4a：inv 唯一性 + 倒数恒等 + Q 常量上 Lipschitz ============ *)
 
 (* inv 唯一性：a·b == 1 且 a·c == 1 ⟹ b == c *)
 Lemma real_inv_unique : forall (a b c : Real),
@@ -3523,7 +3533,7 @@ Proof.
     + split; [apply (exp_series_nonneg n B HB) | exact (QleT'_to_Qle _ _ (HC n))].
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 4b：exp_diff_factor + 松弛 ≥ ============ *)
+(* ============ log 论证第三阶段 Chunk 4b：exp_diff_factor + 松弛 ≥ ============ *)
 
 (* e^u − e^s == e^s·(e^{u−s} − 1) *)
 Lemma exp_diff_factor : forall (u s : Real),
@@ -3598,7 +3608,7 @@ Proof.
   - apply QltT_to_Qlt. exact Heps.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 4c：下 Lipschitz（松弛 ≥） ============ *)
+(* ============ log 论证第三阶段 Chunk 4c：下 Lipschitz（松弛 ≥） ============ *)
 
 (* s ≤ u ⟹ 0 ≤ u − s *)
 Lemma q_le_minus : forall s u : Q, Qle s u -> Qle 0 (u - s).
@@ -3726,7 +3736,7 @@ Proof.
       * apply qeq_le. ring.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 4d：exp 值域 (0,∞) 界 ============ *)
+(* ============ log 论证第三阶段 Chunk 4d：exp 值域 (0,∞) 界 ============ *)
 
 (* 常量正性：c > 0 ⟹ real_const c > 0（见证 c/2，N=0） *)
 Lemma real_const_pos : forall (c : Q), QltT 0 c -> real_lt real_zero (real_const c).
@@ -3934,7 +3944,7 @@ Proof.
     + exact Hcy.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 5：approx_root（常数精度 eps/16 测试） ============ *)
+(* ============ log 论证第三阶段 Chunk 5：approx_root（常数精度 eps/16 测试） ============ *)
 
 (* d4 := eps/16 正性 *)
 Lemma q_eps16_pos : forall eps : Q, Qlt 0 eps -> Qlt 0 (eps / 16).
@@ -4144,7 +4154,7 @@ Proof.
     + apply qeq_le. unfold d4, log_d4_eps. ring.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 5b：log_scan 扫描 + 正确性 ============ *)
+(* ============ log 论证第三阶段 Chunk 5b：log_scan 扫描 + 正确性 ============ *)
 
 (* 1/2 的幂非增 *)
 Lemma q_pow_half_le : forall n : nat, Qle (q_pow (1 / 2) (Datatypes.S n)) (q_pow (1 / 2) n).
@@ -4317,7 +4327,7 @@ Proof.
         apply (log_test_mid_bound_eps y a b Hab eps Heps); [exact EA | exact EB | exact Hk].
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 5c：approx_root 辅助引理 ============ *)
+(* ============ log 论证第三阶段 Chunk 5c：approx_root 辅助引理 ============ *)
 
 (* 下界端点：∃N, e^{−(N#1)} < y（N ≥ 2，来自 real_arch） *)
 Lemma exp_lower_q : forall (y : Real) (Hy : real_lt real_zero y),
@@ -4918,7 +4928,7 @@ Proof.
       * apply qeq_le. unfold Qminus. field.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 5d：approx_root 主定理 ============ *)
+(* ============ log 论证第三阶段 Chunk 5d：approx_root 主定理 ============ *)
 
 (* 主定理：approx_root——y>0 ⟹ ∀eps>0, ∃x:Q, |e^{real_const x} − y| < eps
    （exp 值域 (0,∞) 的构造性满射核心：全判定 → 夹逼+跨度界；缺陷 → eps/4 界） *)
@@ -5036,7 +5046,7 @@ Proof.
         apply (approx_def_test y mN eps Heps N0). exact HptN0.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 6：log 构造（log_seq 柯西 → log_inv 族） ============ *)
+(* ============ log 论证第三阶段 Chunk 6：log 构造（log_seq 柯西 → log_inv 族） ============ *)
 
 (* eps_n := (1/2)^(S n)（→ 0） *)
 Definition log_eps (n : nat) : Q := q_pow (1 / 2) (Datatypes.S n).
@@ -5452,7 +5462,7 @@ Proof.
       * exact Hlt.
 Qed.
 
-(* ============ log 战役第三阶段 Chunk 6b：log 定义 + 右逆 ============ *)
+(* ============ log 论证第三阶段 Chunk 6b：log 定义 + 右逆 ============ *)
 
 (* log 定义：log y := 柯西序列 log_seq 的实数值（探针名 cw_log，避开 main 的 log_inv） *)
 Definition cw_log (y : Real) (Hy : real_lt real_zero y) : Real :=
@@ -5634,12 +5644,11 @@ Proof.
            ** apply qeq_le. unfold Qdiv. field.
 Qed.
 
-(* ============ 阶段 3 收官：弱三分 + log_inv 左逆族（2026-08-30 合入，来自探针 _dbg_weak_trich.v，7 引理）
-   关键突破：交接文档 E170'弱三分不可证（需 Markov）'定案错误——
+(* ============ 阶段 3 结论：弱三分 + log_inv 左逆族（7 引理）
+   要点：既有记录「弱三分不可证（需 Markov）」之判定有误——
    real_lt 是 eps-N 全局阈值序，坏点经柯西传播成全场见证，QltT 可判定，
    弱三分（¬lt u v → ¬lt v u → eq u v）直觉主义可证；不可证的是强三分/LPO。
-   左逆路线：右逆 cw_log_exp_right + cauchy_real_exp_mono + real_weak_trich。
-   验证：coqc+coqtop 双验 + BAD=0 *)
+   左逆路线：右逆 cw_log_exp_right + cauchy_real_exp_mono + real_weak_trich。 *)
 Section LogInvStage.
 
 (* 桥：real_lt a b 与 real_eq a b 不相容（序 vs 相等） *)
@@ -5704,9 +5713,9 @@ Proof.
 Qed.
 
 (* 核心：弱三分（¬lt x y → ¬lt y x → eq x y）——eps-N 柯西实数的序反对称
-   ⚠ 交接文档 E170"弱三分不可证（需 Markov）"定案错误：
+   注：既有记录「弱三分不可证（需 Markov）」之判定有误：
    坏点经柯西传播成全场见证（全局阈值），QltT 可判定使 ¬∃bad → ∀n good，
-   全程直觉主义有效；不可证的只是强三分（LPO）。这是左逆 log_inv_exp_neg 的关键解锁。 *)
+   全程直觉主义有效；不可证的只是强三分（LPO）。此为左逆 log_inv_exp_neg 的关键前提。 *)
 Lemma real_weak_trich : forall x y : Real,
   Not (real_lt x y) -> Not (real_lt y x) -> real_eq x y.
 Proof.
@@ -5959,7 +5968,7 @@ Proof.
       * apply real_eq_sym. exact HL.
 Qed.
 
-(* ============ DPO 有界三前置：Real 层闭合（2026-08-30 合入，来自探针 _dbg_dpo_pre.v，14 引理）
+(* ============ DPO 有界三前置：Real 层闭合（2026-08-30 并入，来自探针 _dbg_dpo_pre.v，14 引理）
    结构性缺失.txt L475 缺口：real_log_lt_mono（log 严格递增，锚点法 E173-1）
    + real_inv_pos_lt_contra（inv 反单调）+ real_lt_plus_compat_le_lt/lt_le（混合加法保序）
    + real_mult_lt_compat（乘法保序）。验证：coqc+coqtop 双验 + BAD=0（E173） *)
@@ -6907,7 +6916,7 @@ Instance Real_RealInterfaceSetoid : RealSetoid.RealInterfaceSetoid Real := {
 }.
 
 End FullInstance.
-(* ============ RealInterfaceEnhancedSetoid 阶段 2 合入（2026-08-30，来自探针 _dbg_riesetoid.v 39 Qed 全绿） ============
+(* ============ RealInterfaceEnhancedSetoid 阶段 2 并入（2026-08-30，来自探针 _dbg_riesetoid.v 39 Qed 全绿） ============
    req 版 RealInterfaceEnhanced（L195）独立接口 + Real 层实现 + Instance RealEnhancedReal。
    - Real 层引理（segA）名字与主文件无冲突（real_log 系列是 Section 内 Variable，End 后释放），直接追加。
    - 独立接口（39 字段全显式，不继承）：字段名与 RealInterface / RealSetoid.RealInterfaceSetoid
@@ -7902,7 +7911,7 @@ Existing Instance Real_RealInterfaceSetoid.
    - exp_neg 语义 = e^{-x}（Boltzmann，与 RealInterfaceEnhanced L275-280 一致）
    - log/log_inv 带正性前提（构造性 log 需 x>0）；log_inv := -log
    - 非严格 le 输出字段用 Bishop 逐 eps 形式（E152-5）
-   - log_le_linear/log_eq_linear：深水区，后续战役 *)
+   - log_le_linear/log_eq_linear：深水区，后续论证 *)
 Class RealInterfaceEnhancedSetoid (R : Set) := {
   (* setoid 核心 *)
   req : R -> R -> Set;
@@ -8014,7 +8023,7 @@ Class RealInterfaceEnhancedSetoid (R : Set) := {
   log_one : forall H, req (log one H) zero;
   (* log 凹性切线（Bishop 逐 eps）：log x ≤ x−1+eps（x>0, eps>0）。
      非严格 le 输出用逐 eps 形式（E152-5 先例：real_le = Or lt eq 无法表达
-     等号点 x=1 的"不趋近"；E177 战役 Real 层 real_log_le_linear_eps 已证）。 *)
+     等号点 x=1 的"不趋近"；E177 论证 Real 层 real_log_le_linear_eps 已证）。 *)
   log_le_linear_eps : forall x (Hx : lt zero x) (eps : R), lt zero eps ->
     le (log x Hx) (plus (plus x (opp one)) eps);
   log_inv : forall x, lt zero x -> R;
@@ -8096,7 +8105,7 @@ Proof.
 Qed.
 (* ============ 8. Instance RealEnhancedReal ============ *)
 Section LogLinearMain.
-(* 探针：log_le_linear / log_eq_linear 战役——e^t ≥ 1+t（构造性，全部 t）
+(* 探针：log_le_linear / log_eq_linear 论证——e^t ≥ 1+t（构造性，全部 t）
    目标（Real 层核心）：real_exp_ge_linear_eps : forall t eps, lt zero eps ->
      le (1+t) (e^t + eps)（Bishop 逐 eps 形式，real_le = Or lt eq 无法表达等号点）
    数学：
@@ -8657,18 +8666,18 @@ Instance RealEnhancedReal : RealInterfaceEnhancedSetoid Real := {
   cauchy_complete := RealSetoid.real_cauchy_complete_metric_natle;
 }.
 End RealInterfaceEnhancedMod.
-(* ============ log_le_linear 战役合入（2026-08-30，来自探针 _dbg_log_linear.v 11 Qed 全绿） ============
+(* ============ log_le_linear 论证并入（2026-08-30，来自探针 _dbg_log_linear.v 11 Qed 全绿） ============
    Real 层核心：real_exp_ge_linear_eps（e^t ≥ 1+t，Bishop 逐 eps）
    + real_log_le_linear_eps（log x ≤ x−1+eps）。
    数学：t≥0 用 exp_partial_ge_plus_x；t≤0、0≤a≤1 用奇截断配对非负；
    t≤0、a≥1 用 exp_even_neg_nonneg（偶）+ exp_partial_odd_lower（奇，正下界）。
    逐点三分（Qlt_le_dec）+ 有界性（real_norm_bounded）+ 尾项衰减（exp_partial_tail_small）。
    log_eq_linear（e^t=1+t ⟹ t=0）需强三分/LPO，构造性不可证（诚实边界）。 *)
-(* ============ Real 层 opp-mult 恒等族合入（2026-08-30，来自探针 _dbg_oppmult.v RC=0） ============
+(* ============ Real 层 opp-mult 恒等族并入（2026-08-30，来自探针 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
    逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
-   Gibbs 逐 eps 战役（E179）所需基础恒等。 *)
-(* ============ Real 层 opp-mult 恒等族合入（2026-08-30，来自探针 _dbg_oppmult.v RC=0） ============
+   Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
+(* ============ Real 层 opp-mult 恒等族并入（2026-08-30，来自探针 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
    逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
-   Gibbs 逐 eps 战役（E179）所需基础恒等。 *)
+   Gibbs 逐 eps 论证（E179）所需基础恒等。 *)

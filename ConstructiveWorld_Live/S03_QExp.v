@@ -1,6 +1,14 @@
-(* ===== CW219 拆分分片 S03_QExp（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L6983-L13800；头部 11 行（含尾空行）；
-   依赖：S01 S02；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S03_QExp.v                                                  *)
+(*                                                             *)
+(* 目的：Q 层部分指数函数：定义、正性与基本估计（构造性 Set 层）。 *)
+(* 主件：QExpPartial 系列——有理底的部分指数及其单调/有界性质。  *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete；Stdlib（QArith、     *)
+(*       Qabs、Qround、List、Bool、Arith、Setoid、Morphisms、    *)
+(*       Lia、Qminmax）。                                        *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
+(*       L6983-L13800，去头正文与原文区间逐字节同源。            *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
@@ -371,7 +379,7 @@ Proof.
            ++ apply qeq_le. apply Qeq_sym. apply Q2_mul_nat.
 Qed.
 
-(* 阿基米德（Set 层）：∃N, ∀t ≥ N, 2A ≤T (t+1)#1（Qarchimedean + positive_nat_Z；完全构造战役 NatLe/QleT' 化） *)
+(* 阿基米德（Set 层）：∃N, ∀t ≥ N, 2A ≤T (t+1)#1（Qarchimedean + positive_nat_Z；完全构造论证 NatLe/QleT' 化） *)
 Lemma q_arch_geom : forall A : Q,
   sigT (fun N : nat => forall t : nat, NatLe N t ->
     QleT' (Qmult (1 + 1)%Q A) (Z.of_nat (t + 1) # 1)).
@@ -390,7 +398,7 @@ Proof.
 Qed.
 
 (* 衰减：∀C ≥ 0, ∀eps > 0, ∃t, C·(1/2)^{S t} < eps *)
-(* 衰减（Set 层）：∀C ≥T 0, ∀eps >T 0, ∃t, C·(1/2)^{S t} <T eps（完全构造战役 QleT'/QltT 化） *)
+(* 衰减（Set 层）：∀C ≥T 0, ∀eps >T 0, ∃t, C·(1/2)^{S t} <T eps（完全构造论证 QleT'/QltT 化） *)
 Lemma arch_decay : forall (C eps : Q), QleT' 0 C -> QltT 0 eps ->
   sigT (fun t : nat => QltT (C * q_pow (1 / 2)%Q (Datatypes.S t)) eps).
 Proof.
@@ -2475,7 +2483,7 @@ Proof.
   ring.
 Qed.
 
-(* ============ corr 战役基础设施：有界和 + 行匹配（备份 83 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ corr 论证基础设施：有界和 + 行匹配（备份 83 并入，来自 _dbg_kdr.v） ============ *)
 
 (* 有界和：sum_upto n f = Σ_{i=0}^{n−1} f i（斜对角和的基础设施，E143-237 封闭和推广） *)
 Fixpoint sum_upto (n : nat) (f : nat -> Q) : Q :=
@@ -2645,7 +2653,7 @@ Proof.
       ring.
 Qed.
 
-(* ============ 有界和换元引理族（备份 84 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ 有界和换元引理族（备份 84 并入，来自 _dbg_kdr.v） ============ *)
 
 (* 线性：Σ(f+g) == Σf + Σg——归纳于 n *)
 Lemma sum_upto_plus : forall (n : nat) (f g : nat -> Q),
@@ -2749,7 +2757,7 @@ Proof.
     ring.
 Qed.
 
-(* ============ 双重和换序引理族（备份 85 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ 双重和换序引理族（备份 85 并入，来自 _dbg_kdr.v） ============ *)
 
 (* 带范围的外延：仅需 i < n 时逐点相等（S m'−i == S(m'−i) 类 lia 恒等只对 i ≤ m' 成立） *)
 Lemma sum_upto_ext_below : forall (n : nat) (f g : nat -> Q),
@@ -2765,7 +2773,7 @@ Proof.
     reflexivity.
 Qed.
 
-(* ============ ksum_diff_row 战役：corr 差分 == 行差分（备份 89 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ ksum_diff_row 论证：corr 差分 == 行差分（备份 89 并入，来自 _dbg_kdr.v） ============ *)
 
 (* ===== ksum_diff_row 直接证明（不归纳）：corr 差分 == 行差分 =====
    第一步探针：corr_succ_decomp 反向 + ksum_succ/ksum_diff_correct 链，看目标形态 *)
@@ -2923,7 +2931,7 @@ Qed.
    RHS = 行差分（row_diff_closed）
         == [esq_sum(S m)−esq_sum m] − [osq_sum(S m)−osq_sum m]
         == (E_{S m}²−O_{S m}²) − (E_m²−O_m²)（e/o_sq_expand）
-   中间桥：corr 差分 == E/O 平方差分（待配对战役；此处先证 RHS 侧闭合） *)
+   中间桥：corr 差分 == E/O 平方差分（待配对论证；此处先证 RHS 侧闭合） *)
 Lemma ksum_diff_row_rhs : forall (a : Q) (m : nat), (1 <= m)%nat ->
   2 * esq_row (Datatypes.S m) m a +
   (q_pow a (4 * m + 4) / (q_fact (2 * m + 2) * q_fact (2 * m + 2))) -
@@ -3071,7 +3079,7 @@ Proof.
     ring.
 Qed.
 
-(* ============ 有界和分段引理（备份 86 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ 有界和分段引理（备份 86 并入，来自 _dbg_kdr.v） ============ *)
 (* 一维移位+边界：Σ_{i=0}^{b−1} f (S a + i) == Σ_{i=0}^{b−1} f (a + i)%nat − f a + f (a+b)
    ——归纳于 b（sum_upto_add 的基础） *)
 Lemma sum_upto_shift1 : forall (a b : nat) (f : nat -> Q),
@@ -3120,13 +3128,13 @@ Proof.
     ring.
 Qed.
 
-(* ============ min 版三角形换序引理族（备份 87 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ min 版三角形换序引理族（备份 87 并入，来自 _dbg_kdr.v） ============ *)
 
 (* sum_upto 参数 Leibniz 重写 + 按 j 分段（N == (N−m+1)+(m−1)——f 是参数故安全） *)
 Lemma sum_upto_nat_eq : forall (n m : nat) (f : nat -> Q), n = m -> sum_upto n f == sum_upto m f.
 Proof. intros. subst. reflexivity. Qed.
 
-(* ============ 配对战役：corr 差分行展开（备份 90 合入，来自 _dbg_kdr.v） ============ *)
+(* ============ 配对论证：corr 差分行展开（备份 90 并入，来自 _dbg_kdr.v） ============ *)
 
 Lemma esq_row_sum_upto : forall (N i : nat) (a : Q),
   esq_row N i a ==
@@ -3528,7 +3536,7 @@ Proof.
   ring.
 Qed.
 
-(* ============ c1 逐列配对族（备份 88 合入，来自 _dbg_kdr.v）：c1 = ksum_diff (S m) m 展开配对 ============ *)
+(* ============ c1 逐列配对族（备份 88 并入，来自 _dbg_kdr.v）：c1 = ksum_diff (S m) m 展开配对 ============ *)
 
 (* 负/差线性：sum_upto 对 - 与 -（c1 的 LHS 拆第一第二和需要） *)
 Lemma sum_upto_neg : forall (n : nat) (f : nat -> Q),
@@ -4075,7 +4083,7 @@ Qed.
 (* 本探针当前进度：基础设施 + corr 结构 + 非负性 + altf_zero + esq_succ 全部 Qed；
    下轮：esq_eq_corr 主恒等式（路线 A 对角线系数匹配）。 *)
 
-(* ===== 配对战役 vander 系支撑引理（探针 _dbg_kdr.v 690-775 行，随 vander 块合入） ===== *)
+(* ===== 配对论证 vander 系支撑引理（探针 _dbg_kdr.v 690-775 行，随 vander 块并入） ===== *)
 (* Q 层 2·(1/x) == 2/x（Qdiv 展开 ring）——E_0/O_0 抵消用 *)
 Lemma q_div_scale2 : forall (x : Q), 2 * (1 / x) == 2 / x.
 Proof.
@@ -4164,7 +4172,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ 配对战役第三步：Vandermonde 恒等（vander_4m2 / vander_4m4，探针 _dbg_kdr.v 67 Qed 合入） ============ *)
+(* ============ 配对论证第三步：Vandermonde 恒等（vander_4m2 / vander_4m4，探针 _dbg_kdr.v 67 Qed 并入） ============ *)
 (* q_pow 1 任意幂 == 1 *)
 Lemma q_pow_one : forall n, q_pow 1 n == 1.
 Proof.
@@ -4889,9 +4897,9 @@ Proof.
 Qed.
 
 End QExpEOSplit.
-(* ============ 配对战役（备份 92 合入，来自 _dbg_kdr.v 探针全绿） ============
+(* ============ 配对论证（备份 92 并入，来自 _dbg_kdr.v 探针全绿） ============
    row_pair_main：行差分闭合（分层组装：a^{4m+6} 抵消 + vander_4m2/4m4 + 低层 refl）
-   ksum_diff_row：corr 差分 == RHS（corr_diff_expand + 换元 + row_pair_main）——配对战役收官 *)
+   ksum_diff_row：corr 差分 == RHS（corr_diff_expand + 换元 + row_pair_main）——配对论证完结 *)
 Lemma esq_row_nat_eq2 : forall (N i1 i2 : nat) (a : Q),
   i1 = i2 -> esq_row N i1 a == esq_row N i2 a.
 Proof. intros. subst. reflexivity. Qed.
@@ -5843,7 +5851,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ esq_eq_corr 战役（备份 93 合入，探针 _dbg_kdr.v 全绿） ============
+(* ============ esq_eq_corr 论证（备份 93 并入，探针 _dbg_kdr.v 全绿） ============
    corr_diff_eq_sq_diff：corr 差分 == E/O 平方差分差（corr_succ_decomp → ksum_diff_row → ksum_diff_row_rhs）
    esq_eq_corr：E_m²−O_m² == 1 + corr m（主恒等式，base 0/1 + 归纳 step）——注释目标 L10664 达成 *)
 Lemma corr_diff_eq_sq_diff : forall (a : Q) (m : nat), (1 <= m)%nat ->
@@ -5896,7 +5904,7 @@ Proof.
       unfold Qminus. ring.
 Qed.
 
-(* ============ exp_even_neg_nonneg 战役（备份 94 合入，探针 _dbg_kdr.v 全绿） ============
+(* ============ exp_even_neg_nonneg 论证（备份 94 并入，探针 _dbg_kdr.v 全绿） ============
    q_div_nonneg / e_sum_ge_one / o_sum_nonneg（辅助：E≥1、O≥0）
    exp_even_mul_eq：S_{2m}(−a)·S_{2m}(a) == 1 + corr m a（(E−O)(E+O) = E²−O²）
    exp_even_neg_nonneg：0 ≤ a ⟹ 0 ≤ exp_partial (2·m) (−a)（corr_nonneg + S(a)>0 + field 恒等） *)
@@ -5991,7 +5999,7 @@ Proof.
   setoid_rewrite <- Hfield in Hpos.
   apply (Qlt_le_weak 0 (exp_partial (2 * m) (- a))). exact Hpos.
 Qed.
-(* ============ exp_partial_tail_pos 战役（备份 95 合入，探针 _dbg_kdr.v 全绿） ============
+(* ============ exp_partial_tail_pos 论证（备份 95 并入，探针 _dbg_kdr.v 全绿） ============
    exp_even_neg_pos：0 ≤ a ⟹ 0 < exp_partial (2·m) (−a)（严格正版，S(−a)·S(a) ≥ 1 + S(a) > 0）
    exp_partial_tail_pos：0 ≤ a ⟹ 0 < exp_partial (2m+2) (−a)（尾截断正，exp_even_neg_pos 的 S m 版）
    下轮：cauchy_real_exp_pos（real_lt zero (cauchy_real_exp x)，exp_neg_pos 字段实例化材料） *)
@@ -6102,7 +6110,7 @@ Proof.
     destruct n; exact Hp.
 Qed.
 (* ============================================================
-   cauchy_real_exp_pos 战役（B3 最终步：exp_neg_pos 字段材料）
+   cauchy_real_exp_pos 论证（B3 最终步：exp_neg_pos 字段材料）
    目标：real_lt zero (cauchy_real_exp x)
    策略：偶数截断统一下界 1/C（exp_even_mul_eq + corr_nonneg +
    exp_series_arch：S_{2m}(-a)·S_{2m}(a) == 1+corr ≥ 1，且 S_{2m}(a) ≤ C，

@@ -1,51 +1,53 @@
-(* UpReqAlign2.v — 签名迁移批 3b：对齐主体收口（t13/t12 深链伴件 +
+(* ============================================================ *)
+(* UpReqAlign2.v *)
+(* *)
+(* 目的： 对齐族第二段：求和定律扩充与自由能分解准备。 *)
+(* 主件： req2_rel_ent_self_zero / req2_log_inv_one_inv / req2_log_exp_neg 与求和线性族 req2_sum_*。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign。 *)
+(* 备注： 承第一段 Section 变量；新增求和定律均为接口字段推导，零新假设位。 *)
+(* ============================================================ *)
+
+(* UpReqAlign2.v — 签名迁移批 3b：对齐主体完成（t13/t12 深链伴件 +
    dpo_pair/preference 簇 req 化 + 旗舰链闭合）
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3b 节 = 批 3 附录 D.1（三）深链挂起清单的放行批）
    上游：UpReqAlgebra.v（批 1 代数银行，直接消费）+
-     UpReqAlign.v（批 3，直接消费其交接件 rkl_log_inv_one_inv /
      req_kl_minus_split / req_le_of_minus_nonneg）；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   本批实交付（时间盒结算，全件真证零 admits；余件见文件尾挂起清单）：
-   [A] t12/t13 深链「求和-自由能机器」全组真证：sum 辅件 7 + log 辅件 2
+   本批实结果（时间盒结算，全件真证零 admits；余件见文件尾挂起清单）：
        + 批 3 支撑件姊妹重建 12 + 纯环代数辅件 8 + boltzmann 因子桥
-       A/A'/B/C（含 log 双桥消费点）+ rel_ent_minus/F_collapse/
        energy_log_pt/sum_E_beta/F_t_beta_form/F_t_simpl_next/
        F_t_rel_decomp/F_t_simpl_t/F_t_simpl_next_kl——其中
        req2_F_t_rel_decomp（F_t(π_t) == F_t(π_next) + β·KL）即 Id
        rel_free_energy_decomp(@21441) 的 req 版，为 mirror-descent
        两条深链共用的核心机器。
    [B] surrogate_diff_identity(@21744)/reward_expand(@21473) 的 req
-       版已在工作稿成形（残稿 _blk4.v 随本席日志留存），交接批采纳
        后按文件尾挂起清单平移 t12 余件与 t13 链。
    [C] dpo_pair/preference 簇与旗舰链改挂：挂起（逐件坐标与依赖见
        文件尾清单；批 3 两桥位的放行条件已由 [A] 组机器就绪）。
    ----------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4；沿批 3 形态 + 本批新增）：
+   诚实签名变化登记表（规划书 §7.4；沿批 3 形态 + 本批新增）：
    1. log 前提化：req2_rel_ent / req2_F_align / req2_free_energy /
      req2_dpo_pair_loss 全部携带逐点正性参数（批 3 同款）。
    2. minus 载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
    3. T2① 桥位（与 Id 逐位同构/或挂起依赖，全表）：
-      - log_inv_exp_neg_req：Id 接口字段 log_inv_exp_neg（CW219 L187）
+      - log_inv_exp_neg_req：Id 接口字段 log_inv_exp_neg（L187）
         的 req 同位——setoid 接口缺对应字段（exp_neg 注入性不可由
         字段导出）；UpReqAlgebra ReqLogBridge 同位桥，本节承接
         （批 3 ReqAlignCore 未承接此桥，本批深链需要：π_next 对数
         展开 log(e^x)==−x 恒等式消费之）。
-      - log_req_compat：批 3 同款接口缺口桥（log 兼容）。
-      - req2_gibbs_inequality：Id 定理 gibbs_inequality（CW219
-        L16629，批 2 FEP 清单）的 req 同位挂起依赖——其 Id 证明
-        消费 gibbs_pointwise（log 凹性切线）与 sum_over_S_le；req
+      - req2_gibbs_inequality：Id 定理 gibbs_inequality（L16629，批 2 FEP 清单）的 req 同位挂起依赖——其 Id 证明
         侧 plain-le KL≥0 不可由接口逐 eps 字段导出（序无消去，
         与批 3 min plain-le 冻结同因）；UpReqFreeEnergy（批 2）
-        交付后降为消费件（批 3 bridge_min_free_energy 同先例）。
-      - req2_step_kl_eta_bound：B 类 Variable（CW219 L23114）的 req
-        同位——诚实红线要求保留显式假设位，不放电。
+        结果后降为消费件（批 3 bridge_min_free_energy 同先例）。
+      - req2_step_kl_eta_bound：B 类 Variable（L23114）的 req
+        同位——诚实红线要求保留显式假设位，不消解。
       - req2_inv_pos_lt_contra / req2_log_lt_mono /
         req2_lt_plus_compat_{le_lt,lt_le}：Id 诚实 Variable
         （L21013/21024/21018/21020）的 req 同位（批 1
-        ReqStrictOrderBridge 已交付 lt_le/le_lt 两式的消费件形态）。
+        ReqStrictOrderBridge 已结果 lt_le/le_lt 两式的消费件形态）。
    4. (d) 冻结（沿批 3 + 本批新增）：ppo_gap_nonneg（消费
      ppo_conservative——min plain-le 冻结同因）、fold_right_ext 与
      list fold 机器（nat/list 层 Id，双层并行）。
@@ -57,7 +59,7 @@ Require Import UpReqAlign.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Req2AlignCore：对齐主体收口节                                  *)
+(* Req2AlignCore：对齐主体完成节                                  *)
 (*   （节参数与批 3 ReqAlignCore 逐位对齐 + eta 参数 + 深链桥位）  *)
 (* ============================================================ *)
 Section Req2AlignCore.
@@ -77,7 +79,7 @@ Hypothesis sum_linear :
 Hypothesis sum_pos :
   forall f : S -> R, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
 
-(* ---- 接口缺口桥（台账 3；UpReqAlgebra ReqLogBridge 同位） ---- *)
+(* ---- 接口缺口桥（登记表 3；UpReqAlgebra ReqLogBridge 同位） ---- *)
 Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -95,7 +97,7 @@ Variable eta : R.
 Variable eta_pos : lt zero eta.
 Variable eta_le_one : le eta one.
 
-(* ---- req2 系节内定义（Id 系同形；log 前提化——台账 1） ---- *)
+(* ---- req2 系节内定义（Id 系同形；log 前提化——登记表 1） ---- *)
 Definition req2_pos_dist (p : S -> R) : Set := forall s : S, lt zero (p s).
 Definition req2_norm_one (p : S -> R) : Set := req (sumf p) one.
 
@@ -124,12 +126,12 @@ Definition req2_dpo_loss (p : S -> R) (Hp : req2_pos_dist p) : R :=
   opp (req2_J p Hp).
 
 (* 自由能一般形态（Id free_energy energy D p := Σ p·E + D·Σ p·log p；
-   log 前提化：携带逐点正性——台账 1） *)
+   log 前提化：携带逐点正性——登记表 1） *)
 Definition req2_free_energy (energy : S -> R) (D : R) (p : S -> R) (Hp : req2_pos_dist p) : R :=
   plus (sumf (fun s => mult (p s) (energy s)))
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
 
-(* T1.2 定义簇（Id advantage_aug/Z_rel/energy_t/pi_next L21247-21270 同形） *)
+(* 定义簇（Id advantage_aug/Z_rel/energy_t/pi_next L21247-21270 同形） *)
 Definition req2_adv (pi_t : S -> R) (Hpi_t : req2_pos_dist pi_t) (s : S) : R :=
   req_minus (reward s)
             (mult beta (req_minus (log (pi_t s) (Hpi_t s)) (log (pi_ref s) (pi_ref_pos s)))).
@@ -328,7 +330,7 @@ Proof.
   - exact req2_sum_zero_fun.
 Qed.
 
-(* ============ L 组：log 辅件（消费批 1/批 3 交接件） ============ *)
+
 
 (* log(e^{-x}) == −x（消费批 3 交接件 rkl_log_inv_one_inv，桥 = 节内
    log_req_compat——同款交接形态） *)
@@ -871,7 +873,6 @@ Proof.
 Qed.
 
 (* 引理 C：π_next 的对数展开（Id pi_next_log_decomp L21350 req 版；
-   深链消费交接件 rkl_log_inv_one_inv（req2_log_inv_one_inv）与
    接口缺口桥 log_inv_exp_neg_req（req2_log_exp_neg）） *)
 Lemma req2_pi_next_log_decomp :
   forall (pi_t : S -> R) (Hpi_t : req2_pos_dist pi_t) (s : S),
@@ -961,7 +962,7 @@ Qed.
 
 (* ============ T12 组 II：F_t 分解与单调性链 ============ *)
 
-(* KL 的差分形式：KL(p‖q) == (Σ p·log p) − (Σ p·log q) *)
+
 Lemma req2_rel_ent_minus : forall (p q : S -> R) (Hp : req2_pos_dist p) (Hq : req2_pos_dist q),
   req (req2_rel_ent p q Hp Hq)
       (req_minus (sumf (fun s => mult (p s) (log (p s) (Hp s))))
@@ -1037,7 +1038,7 @@ Proof.
                                         (req_double_neg (plus (log Nps Npos) (log Z Zpos)))))).
 Qed.
 
-(* Σ p·E_t == β·opp(Σ p·log π_next + log Z)（p 归一化；F 坍缩原料） *)
+
 Lemma req2_sum_E_beta :
   forall (pi_t : S -> R) (Hpi_t : req2_pos_dist pi_t)
          (p : S -> R) (Hp : req2_pos_dist p) (Hpn : req (sumf p) one),
@@ -1098,7 +1099,7 @@ Proof.
                                (req2_sum_ptimes_const p lgZ Hpn)).
 Qed.
 
-(* F_t(pi) 的 β-形式：F_t(p) == β·Σp·log p + β·opp(Σ p·log π_next + log Z) *)
+
 Lemma req2_F_t_beta_form :
   forall (pi_t : S -> R) (Hpi_t : req2_pos_dist pi_t)
          (p : S -> R) (Hp : req2_pos_dist p) (Hpn : req (sumf p) one),
@@ -1132,7 +1133,7 @@ Proof.
                                 (mult beta Slogp))).
 Qed.
 
-(* F_t(π_next) == opp(β·log Z_rel)（Id F_t_simpl_next L21621 的 req 版） *)
+
 Lemma req2_F_t_simpl_next :
   forall (pi_t : S -> R) (Hpi_t : req2_pos_dist pi_t),
     req (req2_free_energy (req2_energy_t pi_t Hpi_t) beta
@@ -1392,7 +1393,7 @@ Qed.
 (* ---- 剩余挂起清单（批 3b 时间盒结算；零 admits，件件真证） ---- *)
 (*                                                                *)
 (* 以下件尚未完成 req 化（grep 实证坐标在案；语句同位；模板 = 本    *)
-(* 文件已交付同族 req2_* 件；交接批按序平移）：                    *)
+(* 文件已结果同族 req2_* 件；交接批按序平移）：                    *)
 (* [已完成关键前置] req2_boltzmann_factor_bridge / req2_bridge_Z /  *)
 (*   req2_Z_rel_boltzmann_form / req2_pi_next_log_decomp /          *)
 (*   req2_energy_log_pt / req2_sum_E_beta / req2_F_t_beta_form /    *)
@@ -1409,7 +1410,7 @@ Qed.
 (*   req_backward_kl_identity 桥位)→step_le(@22790)→iter_le(@22915)  *)
 (*   →gap_mono(@23086)。step_kl_weighted 需 sigT 打包（req2_iter     *)
 (*   模板）。surrogate_diff_identity(@21744)/reward_expand(@21473)   *)
-(*   req 版已成形于本席工作稿，交接批可直接采纳。                    *)
+
 (* [B 类桥] req2_step_kl_eta_bound(@23114 同位)、req2_gibbs_inequality*)
 (*   （gibbs_inequality@16629，批 2 FEP 依赖）、log_req_compat /      *)
 (*   log_inv_exp_neg_req（接口缺口桥，本节已承接为 Hypothesis 位）。  *)

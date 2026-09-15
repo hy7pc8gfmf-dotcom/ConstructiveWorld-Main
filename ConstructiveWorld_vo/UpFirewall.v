@@ -1,7 +1,15 @@
+(* ============================================================ *)
+(* UpFirewall.v *)
+(* *)
+(* 目的： 防火墙机制：能量-温度界、熵温度单调与防火墙循环（Real 层）。 *)
+(* 主件： fw_energy_eta / fw_lt_double 能量界；entropy_temp_mono / entropy_temp_strict_mono；firewall_loop。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 基损失非负、求和正性等以显式 Variable 前提给出；判定面 fw_verdict 为 Set 层编码。 *)
+(* ============================================================ *)
+
 (* ============================================================
    UpFirewall.v —— 熵防火墙：退化检测与恢复的构造性闭环
    （外推推导 4；上游三段：UpEntropyGain 记账 + UpBudgetReal 击穿
-     + UpTempWindow 恢复窗口；本件补齐温度-熵单调这块承重板）
 
    纸笔推导（先于动手，完整链）：
      连续对偶：H(T) = log Z(T) + E(T)/T，∂H/∂T = Var_T(E)/T² ≥ 0。
@@ -10,9 +18,7 @@
          ΔH := H(p_{t2}) − H(p_{t1})
             == β₂·(E₂ − E₁) + KL(p_{t1} ‖ p_{t2})      （β₂ := 1/t₂）
        三行证明：
-         RHS = β₂E₂ − β₂E₁ + (−H₁ + β₂E₁ + log Z₂)   [KL 温度分解
                 relative_entropy_temp_decomp（根 L17356）]
-             = β₂E₂ + log Z₂ − H₁
              = H₂ − H₁                                 [熵显式
                 entropy_temp_explicit（根 L17271）]
        KL 项承担了连续版 Var_T(E) 的角色——"离散方差"。
@@ -28,14 +34,14 @@
      （除法式 ΔH == β₂(K₁₂+K₂₁)/(β₁−β₂) + K₂₁ 需 inv_pos 链，
        无增量信息，诚实弃用。）
 
-   交付件：
+   结果件：
      件 1  entropy_temp_mono：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})
            （严格前提版；接口层 le 序不可判定，非严格版以件 2
              恒等式为精确内容——恒等式对一切正温度对成立）
      件 2  recovery_entropy_gain：恢复增益精确恒等式（主形态）
            + recovery_entropy_gain_alt：对称 KL 联立形态
            + entropy_temp_strict_mono：严格单调档
-            （诚实条件 T4.3 同款：KL(p_{t2}‖p_{t1}) > 0）
+            （诚实条件 同款：KL(p_{t2}‖p_{t1}) > 0）
      件 3  fw_verdict（Or 编码健康/退化判定）+ fw_detect_warm
            （退化 ⟹ sigT 升温目标 t' := t+t 与恢复证书）
            + firewall_loop（闭环：温度不降 + 熵不降 + 判定重装）
@@ -51,7 +57,7 @@
           base_loss / sum_over_S_pos / Z_temp / Z_temp_spec
             —— 根 FreeEnergyMinimization 区同名 Variable 复刻；
           inv_pos_lt_compat / lt_minus_nonneg
-            —— 根 T2.2 区同名 Variable（L17119-17121）复刻，
+            —— 根 区同名 Variable（L17119-17121）复刻，
                Real 层可实例化；
           lt_plus_compat_lt_le
             —— 根 ConvergenceCauchy 区同名 Variable 先例
@@ -92,7 +98,7 @@ Variable sum_over_S_pos : forall f : S -> R,
 Variable Z_temp : R -> R.
 Variable Z_temp_spec : forall (t : R) (Ht : lt zero t),
   Id (Z_temp t) (sum_over_S (fun s => exp_neg (mult (inv_pos t Ht) (base_loss s)))).
-(* 严格性接口（根 T2.2 区同名 Variable 复刻） *)
+(* 严格性接口（根 区同名 Variable 复刻） *)
 Variable inv_pos_lt_compat : forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
   lt a b -> lt (inv_pos b Hb) (inv_pos a Ha).
 Variable lt_minus_nonneg : forall a b : R, lt a b -> lt zero (minus b a).
@@ -133,7 +139,7 @@ Proof.
   intros t Ht. apply plus_positive; exact Ht.
 Qed.
 
-(* ===== 件 2（主交付）：恢复增益精确恒等式 =====
+(* ===== 件 2（主结果）：恢复增益精确恒等式 =====
    ΔH := H(p_{t2}) − H(p_{t1}) == β₂·(E₂ − E₁) + KL(p_{t1} ‖ p_{t2})
    三行证明：KL 温度分解 + 熵显式 + 纯 AC 重排。 *)
 Theorem recovery_entropy_gain : forall t1 t2 : R, forall Ht1 : lt zero t1, forall Ht2 : lt zero t2,
@@ -201,14 +207,14 @@ Proof.
   apply (id_sym (id_trans (id_cong (fun x => plus (mult b2 (minus E2 E1)) x) Hkl) Hchain)).
 Qed.
 
-(* ===== 件 1（主交付）：温度-熵单调 =====
+(* ===== 件 1（主结果）：温度-熵单调 =====
    t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})。
    路径：能量单调（根）+ 件 2 恒等式 + KL ≥ 0（根 Gibbs）。 *)
 Theorem entropy_temp_mono : forall t1 t2 : R, forall Ht1 : lt zero t1, forall Ht2 : lt zero t2,
   lt t1 t2 -> le (entropy_dist (Bt t1 Ht1)) (entropy_dist (Bt t2 Ht2)).
 Proof.
   intros t1 t2 Ht1 Ht2 Hlt.
-  (* E1 ≤ E2（根 T2.2 主定理 energy_exp_temp_mono） *)
+  (* E1 ≤ E2（根 主定理 energy_exp_temp_mono） *)
   assert (HdE : le zero (minus (Et t2 Ht2) (Et t1 Ht1))).
   { apply le_minus_nonneg.
     exact (energy_exp_temp_mono base_loss sum_over_S_pos inv_pos_lt_compat
@@ -254,7 +260,7 @@ Proof.
 Qed.
 
 (* ===== 件 2 严格档：升温 ⟹ 熵严格恢复 =====
-   诚实条件（根 T4.3 同款）：KL(p_{t2} ‖ p_{t1}) > 0
+   诚实条件（根 同款）：KL(p_{t2} ‖ p_{t1}) > 0
    （分布非平凡时满足；KL 退化为零仅当两温度分布逐点相同）。
    路径：根 energy_exp_temp_strict_mono 给 ΔE > 0 ⟹ β₂ΔE > 0，
    加 KL ≥ 0 后由件 2 恒等式搬运。 *)

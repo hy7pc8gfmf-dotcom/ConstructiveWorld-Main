@@ -1,21 +1,30 @@
+(* ============================================================ *)
+(* UpSLM.v *)
+(* *)
+(* 目的： 软语言模型序面：tid/nle 载体上的非严格序与融合器。 *)
+(* 主件： slm_nle_trans / slm_nle_10_absurd 序定律与 fuse2 / lsum_w 融合器。 *)
+(* 依赖： 无显式 Require 面（自足件）。 *)
+(* 备注： 纯构造性（禁公理面/承认件/值参声明/猜想/弃证）；bool 判定式取 Set 层恒等。 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* UpSLM.v — SLM v2 熔合不可逆演算（见证擦除演算）Coq 落地                    *)
 (*                                                                       *)
 (* 立项出处：                                                            *)
 (*   ROUNDTABLE.md 席 5 终稿（SLM 2.0 见证擦除演算）；                       *)
-(*   排队席位方案-二轮成果Coq化-20260907.md Q6 条目。                        *)
+
 (*                                                                       *)
 (* 载体：Z / nat / bool 判定层；语句零 Prop（tid / nle / bool / sigT）。      *)
-(* 纪律：纯构造性（禁 Axiom / Admitted / Parameter / Conjecture / Abort）；   *)
+(* 纪律：纯构造性（禁 公理 / 承认件 / 值参声明 / 猜想 / 弃证）；   *)
 (* stdlib only；可提取（探针验 Obj.magic = 0）。                            *)
 (*                                                                       *)
-(* 定稿决策（设计未定稿处由本席按「结构最简 + 判定层最短」定稿）：               *)
-(*  D1 严格性单元 = (权重 w : Z, pos 判词, 生产者 pid : nat)；                 *)
-(*     pos 判词取 tid bool (Z.ltb 0 w) true —— bool 判定式的 Set 层恒等，      *)
+
+(*  D1 严格性单元 = (权重 w : Z, pos 结论, 生产者 pid : nat)；                 *)
+(*     pos 结论取 tid bool (Z.ltb 0 w) true —— bool 判定式的 Set 层恒等，      *)
 (*     忠实（Z.ltb_lt 可反演 0 < w）且可提取。                              *)
 (*  D2 熔合为一等总函数：fuse2（两单元）/ fuseL_into（带种子序列）              *)
 (*     / fuse_all（整账定位带）/ fuse_ledger（两账本合并后熔断）；              *)
-(*     产物 agg 只携 (Σw, Σ判词)，无 pid 字段——擦除在类型层落实。              *)
+(*     产物 agg 只携 (Σw, Σ结论)，无 pid 字段——擦除在类型层落实。              *)
 (*  D3 空熔合 = 种子恒等：fuseL_into 以种子聚合元为单位元。                     *)
 (*     「账本不制造严格性」落实为：无定位单元则无新聚合元（fuse_all 空带恒等）。 *)
 (*  D4 不可逆的构造性刻画 = 具体碰撞见证：两组 pid 互异的前驱（3,4 权重，         *)
@@ -27,7 +36,7 @@
 (*     票据按代数焚毁（同票不可赎两次），铸造单元完成重定位。                    *)
 (*                                                                       *)
 (* 六件：                                                                *)
-(*  件 1  单元与判词机器（locu / agg / probe_pid + 判词桥 + pos_add 两判词合一） *)
+(*  件 1  单元与结论机器（locu / agg / probe_pid + 结论桥 + pos_add 两结论合一） *)
 (*  件 2  熔合一等运算（fuse2 / fuseL_into + 和守恒 + Σ>0 健全）                *)
 (*  件 3  账本熔合（union_led / fuse_all / fuse_ledger + 总量守恒 + 定位清零）   *)
 (*  件 4  不可逆碰撞见证（同产物 / 前驱可判定区分 / 熔后全探针失明 / 总量守恒）    *)
@@ -220,10 +229,10 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 件 1. 单元与判词机器                                                      *)
+(* 件 1. 单元与结论机器                                                      *)
 (* ===================================================================== *)
 
-(* slm_tid 层的 eq 桥（证明内部算术收口用） *)
+(* slm_tid 层的 eq 桥（证明内部算术完成用） *)
 Lemma tid_Z_of_eq : forall x y : Z, x = y -> slm_tid Z x y.
 Proof.
   intros x y H. rewrite H. apply slm_tid_refl.
@@ -240,36 +249,36 @@ Proof.
   intros P H. tidE H. discriminate HE.
 Qed.
 
-(* pos 判词构造桥：(0 < a)%Z → slm_tid bool (Z.ltb 0 a) true *)
+(* pos 结论构造桥：(0 < a)%Z → slm_tid bool (Z.ltb 0 a) true *)
 Lemma ltbT : forall a : Z, (0 < a)%Z -> slm_tid bool (Z.ltb 0 a) true.
 Proof.
   intros a H. rewrite (proj2 (Z.ltb_lt 0 a) H). apply slm_tid_refl.
 Qed.
 
-(* pos 判词反演桥：slm_tid bool (Z.ltb 0 a) true → (0 < a)%Z（忠实性） *)
+(* pos 结论反演桥：slm_tid bool (Z.ltb 0 a) true → (0 < a)%Z（忠实性） *)
 Lemma ltbF_inv : forall a : Z, slm_tid bool (Z.ltb 0 a) true -> (0 < a)%Z.
 Proof.
   intros a H. tidQl H HE. exact (proj1 (Z.ltb_lt 0 a) HE).
 Qed.
 
-(* 定位单元：权重 + pos 判词 + 生产者定位（不可复制的运行时资源） *)
+(* 定位单元：权重 + pos 结论 + 生产者定位（不可复制的运行时资源） *)
 Record locu : Type := mkLocu {
   lu_w : Z ;
   lu_pos : slm_tid bool (Z.ltb 0 lu_w) true ;
   lu_pid : nat
 }.
 
-(* 聚合元：只有总量与 Σ 判词，无 pid 字段——定位在类型层被擦除 *)
+(* 聚合元：只有总量与 Σ 结论，无 pid 字段——定位在类型层被擦除 *)
 Record agg : Type := mkAgg {
   ag_sum : Z ;
   ag_pos : slm_tid bool (Z.ltb 0 ag_sum) true
 }.
 
 (* ===================================================================== *)
-(* 件 2. 熔合一等运算：两判词合一 + 两单元熔为一聚合元                          *)
+(* 件 2. 熔合一等运算：两结论合一 + 两单元熔为一聚合元                          *)
 (* ===================================================================== *)
 
-(* 两判词合一：两条 pos 判词熔为一条 Σ 判词（Σ>0 健全性的构造核心） *)
+(* 两结论合一：两条 pos 结论熔为一条 Σ 结论（Σ>0 健全性的构造核心） *)
 Lemma pos_add : forall a b : Z,
   slm_tid bool (Z.ltb 0 a) true -> slm_tid bool (Z.ltb 0 b) true ->
   slm_tid bool (Z.ltb 0 (a + b)) true.
@@ -278,7 +287,7 @@ Proof.
   pose proof (ltbF_inv a Ha). pose proof (ltbF_inv b Hb). lia.
 Qed.
 
-(* 熔合（两单元 → 一聚合元）：只携和与 Σ 判词，pid 无处安放 *)
+(* 熔合（两单元 → 一聚合元）：只携和与 Σ 结论，pid 无处安放 *)
 Definition fuse2 (u v : locu) : agg :=
   mkAgg (lu_w u + lu_w v) (pos_add (lu_w u) (lu_w v) (lu_pos u) (lu_pos v)).
 
@@ -307,7 +316,7 @@ Proof.
     rewrite E1. cbn. apply tid_Z_of_eq. lia.
 Qed.
 
-(* 熔合健全（Σ>0 沿熔合链不灭）：正种子 + 正单元 ⟹ 产物判词恒真 *)
+(* 熔合健全（Σ>0 沿熔合链不灭）：正种子 + 正单元 ⟹ 产物结论恒真 *)
 Lemma fuseL_into_pos : forall (l : list locu) (a : agg),
   slm_tid bool (Z.ltb 0 (ag_sum a)) true ->
   slm_tid bool (Z.ltb 0 (ag_sum (fuseL_into a l))) true.
@@ -450,7 +459,7 @@ Qed.
 (* 件 4. 不可逆碰撞见证（熔合后信息不保的构造性刻画）                            *)
 (* ===================================================================== *)
 
-(* 具体 pos 判词 *)
+(* 具体 pos 结论 *)
 Lemma hw3 : slm_tid bool (Z.ltb 0 3) true.
 Proof. apply ltbT. lia. Qed.
 
@@ -673,7 +682,7 @@ Definition redeem (d : demand) (w budget : Z) (pid : nat)
   (mkLocu w (andb_l_extract (Z.ltb 0 w) (Z.leb w budget) Hok) pid,
    mkDem (Nat.pred (dem_short d)) (S (dem_gen d))).
 
-(* 赎回铸造的是真定位单元（pos 判词随身） *)
+(* 赎回铸造的是真定位单元（pos 结论随身） *)
 Lemma redeem_relocates : forall (d : demand) (w budget : Z) (pid : nat)
                                 (Hok : slm_tid bool (budget_ok w budget) true),
   slm_tid bool (Z.ltb 0 (lu_w (fst (redeem d w budget pid Hok)))) true.
@@ -705,7 +714,7 @@ Proof.
   intros d w budget pid Hok. exact (@slm_tid_refl nat (Nat.pred (dem_short d))).
 Qed.
 
-(* 赎回收口：单缺口票一次赎回即闭票 *)
+(* 赎回完成：单缺口票一次赎回即闭票 *)
 Lemma redeem_closes_single : forall (w budget : Z) (pid : nat)
                                     (Hok : slm_tid bool (budget_ok w budget) true)
                                     (g : nat),

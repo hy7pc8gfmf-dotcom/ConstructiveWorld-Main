@@ -1,25 +1,34 @@
 (* ============================================================ *)
-(* UpReqGeomD.v —— 槽放电波1 #3：step_kl_eta_bound 槽放电席        *)
+(* UpReqGeomD.v *)
+(* *)
+(* 目的： step_kl_eta_bound 槽的单步几何不等式消解。 *)
+(* 主件： geod_amgm_pointwise_eps / geod_lsum_le 几何-算术平均与求和界族。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 普查核对经实读裁决，错位三处如实登记于正文；sum_le 接口为显式前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqGeomD.v —— 槽消解波1 #3：step_kl_eta_bound 槽消解席        *)
 (*   旗舰：UpReqAlign.req_policy_iter_kl_geom_step（评审 4.2 点名件） *)
-(*   槽位：req_step_kl_eta_bound（T2① 单步几何不等式假设位）        *)
+(*   假设位：req_step_kl_eta_bound（T2① 单步几何不等式假设位）        *)
 (* ---------------------------------------------------------------- *)
 (* 数学核：单步不等式归约为插值配分 Z = Σ pit^{1-eta}·pis^eta ≤ 1   *)
-(*   （log-sum-exp 凸性 / 逐点加权 AM-GM + 求和塌缩）。              *)
+
 (* ---------------------------------------------------------------- *)
-(* 普查对账（席48 槽位普查 + 本席 sed 实读裁决，三处错位如实登记）：  *)
-(*   在盘引擎 real_step_kl_eta_bound_eps（CW219 根 L113142）与       *)
+(* 普查核对（席48 假设位普查 + 本件 sed 实读裁决，三处错位如实登记）：  *)
+(*   在盘引擎 real_step_kl_eta_bound_eps（根 L113142）与       *)
 (*   real_step_kl_eta_bound_B（UpRealLeB.v L437）与 req 槽语句       *)
 (*   不是同形：①载体 nat-list(seq 0 n) vs 抽象 S+sumf；②序谓词      *)
 (*   eps 形/eps-le 语言 vs 接口 Or 形 le（real_le_to_le_b 单向桥，   *)
-(*   逆向即 Or 形精确收口，构造性不可证——本席红线不越）；            *)
+
 (*   ③下一策略 real_step_next（几何插值）vs pi_next_req（softmax/    *)
-(*   advantage 形，两者在 cw_log 层经 Z_align^eta 消去逐点相等，     *)
-(*   接口字段无 log-mult 全字段故该桥不在本席 scope）。              *)
-(*   裁决：按普查 ② 指令转「实例化放电件」路线——在盘引擎为理论核，   *)
-(*   本席补齐 req 侧缺口：接口层 eps-le 序语言 + 抽象求和塌缩机       *)
-(*   （req 求和实例批的正内容）+ 引擎的接口形实例化放电。             *)
+
+
+(*   裁决：按普查 ② 指令转「实例化消解件」路线——在盘引擎为理论核，   *)
+
+(*   （req 求和实例批的正内容）+ 引擎的接口形实例化消解。             *)
 (* ---------------------------------------------------------------- *)
-(* 本文件交付（前缀 geod_，grep 全库零撞名实测）：                    *)
+(* 本文件结果（前缀 geod_，grep 全库零撞名实测）：                    *)
 (*   [保底] geod_pow_pos / geod_pow_pos_correct / geod_amgm_pointwise_eps *)
 (*     逐点凸性（a^{1-e}b^e ≤ (1-e)a+e·b+eps），接口 req 语言换形；    *)
 (*     geod_amgm_pointwise_iface 为逐字接口投影语形版。               *)
@@ -28,18 +37,18 @@
 (*     吸收，任意增强接口+sumf 机器可消费）+                          *)
 (*     geod_interp_Z_le_one_eps（插值 Z ≤ 1+eps 接口形实例——         *)
 (*     数学核的 req/eps 形落盘）。                                    *)
-(*   [旗舰] geod_step_kl_eta_bound_eps（槽语句的接口形放电件）+       *)
+(*   [旗舰] geod_step_kl_eta_bound_eps（槽语句的接口形消解件）+       *)
 (*     geod_policy_iter_kl_geom_step_eps（旗舰结论件：换向实例        *)
-(*     KL(pis‖next) ≤ (1-eta)·KL(pis‖pit)+eps，槽位被 M2 引擎         *)
-(*     一次喂定——「槽被放电件填充的具体形态」，无条件无槽位）。       *)
+(*     KL(pis‖next) ≤ (1-eta)·KL(pis‖pit)+eps，假设位被 M2 引擎         *)
+(*     一次喂定——「槽被消解件填充的具体形态」，无条件无假设位）。       *)
 (* ---------------------------------------------------------------- *)
-(* 诚实边界（阻塞裁决见交付报告）：req 槽的 plain-le（Or 形）结论     *)
-(*   不可由 eps/eps-le 引擎放电——序无消去，逆向收口需强序闭包原理，   *)
-(*   构造性不可证；故本席放电件以 eps-le 语言（geod_le_b）承载，      *)
+(* 诚实边界（阻塞裁决见合规自查报告）：req 槽的 plain-le（Or 形）结论     *)
+(*   不可由 eps/eps-le 引擎消解——序无消去，逆向完成需强序闭包原理，   *)
+
 (*   与红线「不等式走逐 eps/eps-le 语言」一致。                       *)
 (* 红线：Set 层语句（real_lt/real_le/real_eq 均 Set 值，零泄露）；    *)
 (*   零未闭合证明（全 Qed）；既有文件零改；纯 term-mode 组装。        *)
-(* 编译配方：coqc -Q . "" -Q "..\001" "" UpReqGeomD.v                *)
+
 (*   （cpu_guard 包装，错峰单发）。                                   *)
 (* ============================================================ *)
 
@@ -82,7 +91,7 @@ Qed.
 End GeodLeB.
 
 (* ============================================================ *)
-(* G-B 抽象层：求和塌缩机（主件 req 内容——本席核心新件）            *)
+
 (*   逐点 eps 配权（权 = u，归一化 sumf u == 1）⟹ 总误差恰为 eps。   *)
 (*   零除法、零折半，纯 sum_le + sum_add + sum_linear + 归一化吸收。  *)
 (* ============================================================ *)
@@ -136,7 +145,7 @@ End GeodSum.
 
 (* ============================================================ *)
 (* G-C Real 实例：幂载体与保底逐点凸性（接口 req 语言换形）          *)
-(*   载体：a^alpha := e^{alpha·log a} 的接口 ops 形（exp_neg/opp/log  *)
+
 (*   均为 RealEnhancedReal 实例投影，与 real_* 逐字段 delta 透明）。  *)
 (* ============================================================ *)
 Definition geod_pow_pos (a alpha : Real) (Ha : real_lt real_zero a) : Real :=
@@ -165,7 +174,7 @@ Qed.
 
 (* 保底：逐点凸性/加权 AM-GM（a^{1-e}·b^e ≤ (1-e)a + e·b + eps）
    证书供给链：real_le_compat 换形 + 根内 real_amgm_pointwise_eps 直连
-   （Varberg 锥引擎，CW219 L112817 在盘，零重建理论） *)
+   （Varberg 锥引擎，L112817 在盘，零重建理论） *)
 Theorem geod_amgm_pointwise_eps : forall (a b eta : Real)
     (Ha : real_lt real_zero a) (Hb : real_lt real_zero b),
   real_lt real_zero eta -> real_le eta real_one ->
@@ -218,7 +227,7 @@ Qed.
 Definition geod_lsum (n : nat) (f : nat -> Real) : Real :=
   real_list_sum nat f (List.seq 0 n).
 
-(* list 求和三槽（real_list_sum_* 直喂，X := nat 显式） *)
+(* list 求和三槽（real_list_sum_* 显式应用，X := nat 显式） *)
 Lemma geod_lsum_le : forall (n : nat) (f g : nat -> Real),
   (forall i : nat, real_le (f i) (g i)) ->
   real_le (geod_lsum n f) (geod_lsum n g).
@@ -377,9 +386,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G-E 旗舰：槽语句放电件 + 换向结论件（槽被引擎一次喂定的具体形态）  *)
+(* G-E 旗舰：槽语句消解件 + 换向结论件（槽被引擎一次喂定的具体形态）  *)
 (* ============================================================ *)
-(* eta 缩放辅件：0 < eta 则 1-eta > 0（CW220 m3_kappa_pos 同款直连，
+(* eta 缩放辅件：0 < eta 则 1-eta > 0（m3_kappa_pos 同款直连，
    本地零依赖复刻：ring 恒等 + lt 平移） *)
 Lemma geod_kappa_pos : forall eta : Real,
   real_lt eta real_one ->
@@ -415,7 +424,7 @@ Proof.
   exact (inl Hlt).
 Qed.
 
-(* 旗舰槽位放电件：单步 KL 收缩的接口形 eps 版
+(* 旗舰假设位消解件：单步 KL 收缩的接口形 eps 版
    KL(pit‖next) ≤ eta·KL(pit‖pis) + eps，next := 几何插值策略
    （req 槽语句 req_step_kl_eta_bound 的 eps-le 语言对应物；
    证书链 = 根内 M2 引擎 real_step_kl_eta_bound_eps 一次喂定） *)
@@ -446,7 +455,7 @@ Qed.
 
 (* 旗舰结论件：单步真几何收缩（policy_iter_kl_geom_step 的接口形
    eps 对应物）——M2 换向实例（p-槽 := pis、r-槽 := pit、eta-槽 :=
-   1-eta），槽位被引擎一次喂定，无条件无槽位：
+   1-eta），假设位被引擎一次喂定，无条件无假设位：
    KL(pis‖next) ≤ (1-eta)·KL(pis‖pit) + eps *)
 Theorem geod_policy_iter_kl_geom_step_eps :
   forall (n : nat) (r p : nat -> Real) (eta : Real)

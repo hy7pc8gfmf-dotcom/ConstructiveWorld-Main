@@ -1,30 +1,31 @@
+(* ============================================================ *)
+(* UpReqAttnIter.v *)
+(* *)
+(* 目的： 注意力迭代算子的 req 层镜像（核、TV、迭代步）。 *)
+(* 主件： attention_iter_i 迭代核与 q_kernel_i；agq_omd_pos / agq_p_norm 正性与范数族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。 *)
+(* 备注： 一温度族载体以 Section 变量承接；迭代正性与 TV 一步界为构造核。 *)
+(* ============================================================ *)
+
 (* UpReqAttnIter.v — 签名迁移批 4 清账席：AttentionGibbsBridge q_kernel/收缩迭代簇 req 化
-   母本：签名迁移规划书-20260908.md 批 4 清单 + 迁移总账-20260909.md 批4 表
-     （@28817-@29330 全 26 行"在飞/产物未落盘"，首席/余段双席按他席领地跳过，
-      本席 2026-09-09 清账认领）。
    Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L28817-29330
      （q_kernel 簇 + 段2 TV 收缩核心 + 段3 旗舰 + 几何迭代收敛，25 Lemma/Theorem
-      + 1 节参位；边界邻接件 one_minus_delta_pos @28793 顺带核销）。
+      + 1 节参位；边界邻接件 one_minus_delta_pos @28793 顺带已证明）。
    ----------------------------------------------------------------
-   对账三源核查结论（防重建，逐件判见头注对账表）：
-   1. 首席席 UpReqSampling.v（ReqUContraction 11 件）：领地为 CW219 L95737-96039
+   核对三源核查结论（防重建，逐件判见头注核对表）：
+   1. 首席席 UpReqSampling.v（ReqUContraction 11 件）：领地为 L95737-96039
      Section UContraction——与本簇 Id 行号不同节，但数学同构（通用 u + delta +
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
      全显投喂实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
      nu := 稳态处 δ 透明合一，旗舰 agq_tv_contraction 一行 exact 闭合即脊柱
-     全链对位见证（E-STAGING-WangWW-MinP 坑3：语句级对账非头注级）。
    2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记"q_kernel/收缩迭代簇
-     <-28817-29330：他席领地，本席未触碰"——零覆盖，无须对位。
-   3. 迁移总账批4 表：本簇 26 行全"在飞（产物未落盘）"；批5 处置清单无本簇行；
      批0 试点 UpSigMigrate.v 仅 req_attention_is_gibbs_temp（fixed-z 形），
      与本簇零交集。
    真缺件 = 单点对稳态特有件 + 独立辅件 + 收敛旗舰，共 31 件（含节内补建
-   辅件 2 件：agq_tv_compat_r / agq_le_mult_nonneg）> 20 → 按清账令落位
-   新文件 UpReqAttnIter.v（UpReqAttnGibbs.v 已交付稳定，零触碰）。
+   新文件 UpReqAttnIter.v（UpReqAttnGibbs.v 已结果稳定，零触碰）。
    ----------------------------------------------------------------
-   覆盖对账（req 件名 -> Id 原件 @ CW219 行号；判：核销=对位消费脊柱件，
-   真证=本席新建，组装=Id 链 req_trans/归纳重放）：
-   【脊柱 10 件·已核销（对位消费 UpReqSampling.ReqUContraction 出节件）】
+   覆盖核对（req 件名 -> Id 原件 @ 行号；判：已证明=对位消费脊柱件，
+   【脊柱 10 件·已已证明（对位消费 UpReqSampling.ReqUContraction 出节件）】
      agq_omd_pos<-28793邻接(对位u_omd_pos_next)
      agq_kernel_nonneg<-28817(对位u_r_nonneg) agq_kernel_row<-28829(对位u_r_norm)
      agq_tr_decomp<-28848(对位u_tr_decomp) agq_delta_absorb<-28874(对位delta_absorb_u)
@@ -34,7 +35,7 @@
        稳态目标端换轨（p_steady_i 槽 + agq_tv_compat_r：step(p) ≡ p 逐点）；
        req 形删非负前提位——同 rsq_u_tv_contraction 判，收缩主界不消费非负位)
    【单点特有 9 件·真证/组装（UpReqSampling 两点机不产出）】
-     agq_p_norm<-28802(基带 setoid 件为 Id 形另席交付；本节 sumf 自持重建)
+     agq_p_norm<-28802(基带 setoid 件为 Id 形另席结果；本节 sumf 自持重建)
      agq_p_pos<-29012 agq_p_kernel_fixed<-29040(稳态不变性 p·Q==p：
        消费 p_steady 槽 + agq_step_decomp + agq_plus_cancel +
        agq_minus_scal_opp_cc + agq_absorb_inv)
@@ -50,13 +51,13 @@
      agq_omd_lt_one<-29032
    【迭代收敛 4 件】agq_r_pow_dec<-14100接口件特例(κ:=1-δ；真证)
      agq_r_pow_dec_iter<-29251(nat 层 lia/Nat.leb 与 Id 原件同构——Prop 位
-       与 Id 原件同阶，先例 UpReqSampling 台账 7)
+       与 Id 原件同阶，先例 UpReqSampling 登记表 7)
      agq_tv_iter<-29287(旗舰2·归纳重放：底 case 数乘单位换轨 + 递归步
        req_le_mult_compat_r 对位；目标端稳态固定，两点 rsq_u_tv_iter 不直接产出)
-     agq_iterate_converges<-29330(旗舰3·真证：arch_pow 槽位放电 +
-       le_mult_compat_weak + lt_id_l 换序收口)
+     agq_iterate_converges<-29330(旗舰3·真证：arch_pow 假设位消解 +
+       le_mult_compat_weak + lt_id_l 换序完成)
    【节参位 1】arch_pow_i<-29247(Id r_arch_pow_attn 诚实接口槽逐位保留；
-     幂底换 req_r_pow omd，B 类槽位)
+     幂底换 req_r_pow omd，B 类假设位)
    【定义件 δ 同构迁移另计】boltzmann_factor_i<-28592 Z_thermo_i<-28595
      boltzmann_dist_i<-28599(约定不换号：Id boltzmann_factor = exp_neg(1/D·E)
      本节同形) q_kernel_i<-28812(minus→req_minus) attention_step_i<-28789
@@ -65,13 +66,13 @@
      （Id SumOver 类无 sum_pos 字段，诚实槽逐位）。
    【诚实接口新增（Id 字面 req 同位，先例 ReqStrictOrderBridge L1468/
      UpReqAttnGibbs sum_le 位）】abs_nonneg_h<-Id RealInterface abs_nonneg
-     @285 平形（RIS 类仅 eps 形无平形，构造性序不可导→节内槽位，Real 实例
+     @285 平形（RIS 类仅 eps 形无平形，构造性序不可导→节内假设位，Real 实例
      可满足）；sum_nonneg_h<-Id sum_over_S_nonneg 字段 req 镜像。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值；nat 层 (m<=n)%nat 与
    Id 原件同阶）；纯 term-mode（req_trans 链 + compat 桥，无集合oid等价
    实例声明、无 tactic 级改写）；诚实接口假设位逐位保留不放大主张（单点
-   化删非负前提位两处已在台账注明）；全部 coqc/coqchk 经 cpu_guard
+   化删非负前提位两处已在登记表注明）；全部 coqc/coqchk 经 cpu_guard
    （LoadLimit 60/CoreN 6）。
    ---------------------------------------------------------------- *)
 
@@ -154,7 +155,7 @@ Variable sum_swap_i : forall f : S -> S -> R,
 (* abs 见证位（Id abs_ge_zero_id_cc @28778；出口 Id 换 req，同 UpReqSampling 判） *)
 Variable abs_ge_zero_i : forall a : R, le zero a -> req (abs a) a.
 (* 稳态（Id steady_state_boltzmann_attn @28722 req 形槽：Id 件由 detailed_balance
-   真证且已交付基带 setoid 件；本节自持 B 类槽位逐位保留） *)
+   真证且已结果基带 setoid 件；本节自持 B 类假设位逐位保留） *)
 Variable p_steady_i :
   forall s' : S,
     req (sumf (fun s : S => mult (boltzmann_dist_i s) (transition s s')))
@@ -166,7 +167,7 @@ Variable arch_pow_i :
 
 Let omd := req_minus one delta.
 
-(* 1−δ > 0（@28793 边界邻接件顺带核销；对位消费 rsq_u_omd_pos_next） *)
+(* 1−δ > 0（@28793 边界邻接件顺带已证明；对位消费 rsq_u_omd_pos_next） *)
 Lemma agq_omd_pos : lt zero omd.
 Proof.
   exact (@rsq_u_omd_pos_next R RIS delta delta_lt_one lt_plus_compat_lt_le_i).
@@ -455,7 +456,7 @@ Qed.
 
 (* 双非负乘法（le·le 弱形；Id le_mult_nonneg_t12 的 req 重建：
    mult_comm + mult_zero 换轨 + le_mult_compat_weak；UpReqAlgebra/UpReqDist
-   均无 le·le 现成件，本席节内补建） *)
+   均无 le·le 现成件，本件节内补建） *)
 Lemma agq_le_mult_nonneg :
   forall a b : R, le zero a -> le zero b -> le zero (mult a b).
 Proof.
@@ -660,7 +661,7 @@ Proof.
 Qed.
 
 (* 双和归约：(1/2)·Σ_{s'}(1−δ)·Σ_s f·Q == (1−δ)·(1/2)·Σ f（@29167；
-   组装：sum_linear + sum_swap_i + 行归一逐点收口 + 结合换序） *)
+   组装：sum_linear + sum_swap_i + 行归一逐点完成 + 结合换序） *)
 Lemma agq_tv_reduce : forall f : S -> R,
   req (mult inv_two_i (sumf (fun s' : S => mult omd
          (sumf (fun s : S => mult (f s) (q_kernel_i s s'))))))
@@ -715,7 +716,7 @@ Qed.
 
 (* 幂递减步：omd^{S n} ≤ omd^n（Id r_pow_dec @14100 特例 κ:=1−δ；真证：
    底 case 单元换轨 + 递归步 le_mult_compat；UpReqSampling req_r_pow 无
-   单调件，本席补建） *)
+   单调件，本件补建） *)
 Lemma agq_r_pow_dec : forall n : nat,
   le (req_r_pow omd (Datatypes.S n)) (req_r_pow omd n).
 Proof.
@@ -785,8 +786,8 @@ Proof.
 Qed.
 
 (* ========== 旗舰 3：迭代收敛（@29330）==========
-   真证：arch_pow_i 槽位放电 + agq_tv_iter + agq_tv_nonneg +
-   agq_r_pow_dec_iter + le_mult_compat_weak + lt_id_l 换序收口；
+   真证：arch_pow_i 假设位消解 + agq_tv_iter + agq_tv_nonneg +
+   agq_r_pow_dec_iter + le_mult_compat_weak + lt_id_l 换序完成；
    req 形删初态非负前提位（agq_tv_iter 链不消费，同旗舰 1 判）。 *)
 Theorem agq_iterate_converges :
   forall mu0 : S -> R,

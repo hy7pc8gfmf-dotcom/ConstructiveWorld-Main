@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpSigMigrate.v *)
+(* *)
+(* 目的： 签名迁移试点：req 载体上的 Boltzmann 分布与自由能。 *)
+(* 主件： sigm_boltzmann_dist / sigm_free_energy / sigm_softmax_temp 定义与正性族。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： Id 系类字段带恒等谓词，本件为签名迁移试点载体；归一化与正性为显式前提。 *)
+(* ============================================================ *)
+
 (* UpSigMigrate.v — 抽象层签名对接试点：Id 系 → setoid 系（req := real_eq）
    试点 1（必做）: req_free_energy_kl_decomp —— F[p] == F[p_b] + D·KL(p‖p_b) 的
      setoid 签名版：Section Context 换 RealInterfaceEnhancedSetoid；
@@ -303,8 +312,8 @@ Qed.
 (* ============================================================ *)
 (* D. 旗舰迁移：req_free_energy_kl_decomp                        *)
 (*    F[p] == F[p_b] + D·KL(p‖p_b)（Id 原件 L16259 的 setoid 签名版） *)
-(*    记号：lgpb s := log (sigm_boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
-(*    A := D·Σ p·lgpb；B := D·Σ p·lgps；DlgZ := D·log Z；        *)
+
+
 (*    KL := fun s => p s · (lgps s − lgpb s)；Fpb := sigm_free_energy p_b *)
 (* ============================================================ *)
 Theorem req_free_energy_kl_decomp :

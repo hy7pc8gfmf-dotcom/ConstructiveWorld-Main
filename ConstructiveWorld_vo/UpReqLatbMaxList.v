@@ -1,8 +1,17 @@
 (* ============================================================ *)
+(* UpReqLatbMaxList.v *)
+(* *)
+(* 目的： max 侧列表版格组合件（B 形扩展线）。 *)
+(* 主件： latb_max_list_le_b 及其归纳形 latb_max_list_le_b_ind；latb_lt_max_list_intro。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、UpRealLeB3、G06_BForm。 *)
+(* 备注： 为逐点函数而非最小上界公理；上界参数无需稠密性或分支证书。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLatbMaxList.v —— B 形扩展线 · max 侧列表版格组合件（席T19b）  *)
 (*                                                                *)
 (* 立项：B形扩展线仪表-20260910 §⑥3「侦察单未立项面」首项——        *)
-(*   「r_max 列表面：CW219 real_r_max_le_l_eps/le_r_eps 下界件已入  *)
+(*   「r_max 列表面：real_r_max_le_l_eps/le_r_eps 下界件已入  *)
 (*   LeB Part E（L475/482），r_max 上界格组合（max 侧同构的列表版）  *)
 (*   侦察单 T4 草图未含、未立项」。本库即该面立项落盘。              *)
 (*                                                                *)
@@ -10,25 +19,25 @@
 (*   G06_BForm（T4a/T4b latb_ 十一件：二元上界格主件 latb_max_le_b、  *)
 (*     严格上界引入基元 latb_lt_max_intro——本列表版的两块格胶水）；   *)
 (*   UpRealLeB（Part E 下界件 real_r_max_le_l_B / real_r_max_le_r_B  *)
-(*     即 ≤_B r_max 双件——本库 E.1/E.2 列表化之源；收口器           *)
+(*     即 ≤_B r_max 双件——本库 E.1/E.2 列表化之源；完成器           *)
 (*     real_le_closure_b_one）；UpRealLeB2（real_le_b_trans F.2）；  *)
-(*   UpRealLeB3（leb3_le_b_refl 运输自反）；CW219（Real、real_max）。 *)
+(*   UpRealLeB3（leb3_le_b_refl 运输自反）；（Real、real_max）。 *)
 (*                                                                *)
 (* 主结果（1 Definition + 8 Lemma，全 Set 层、零 Prop 出面）：        *)
 (*   0. latb_max_list：非空列表（头 h : 尾 t）逐位 r_max 折叠——       *)
 (*      fold_right real_max h t。头驱动形：零单位元前提（无 nil 案    *)
-(*      需 0 ≤_B c 之类伪义务；r_max 在 CW219 系逐点 Qmax 编码的      *)
+(*      需 0 ≤_B c 之类伪义务；r_max 在 系逐点 Qmax 编码的      *)
 (*      点态函数，非「任意上界中的最小上界」lubs 公理——故列表上界    *)
 (*      律的上界参数 c 无需稠密性/分支证书，见主件单步证）。           *)
 (*   1. latb_lt_max_list_intro：严格上界引入基元（latb_min_glb 的     *)
 (*      lub 面列表对偶位）——凡成员严格小于 d，折叠 max 严格小于 d。   *)
 (*   2. latb_max_list_le_b：主件（上界格律列表版）——成员全 ≤_B c     *)
 (*      ⟹ 折叠 max ≤_B c。max 侧 eps 槽红利同构直达：eps 恰挂        *)
-(*      latb_lt_max_list_intro 结论槽 d = c+eps 内，one 收口器单步    *)
+(*      latb_lt_max_list_intro 结论槽 d = c+eps 内，one 完成器单步    *)
 (*      闭合（对照 min 侧主件 latb_min_le_b 须完整逐点证+Q.min_dec    *)
 (*      分支——不对称判据见 T4b 勘误卡，勿对偶砍半）。                 *)
 (*   3. latb_max_list_le_b_ind：主件另径（逐 list 归纳 + 二元律       *)
-(*      latb_max_le_b 逐位粘合）——与件 2 收口器单步径互为印证，      *)
+(*      latb_max_le_b 逐位粘合）——与件 2 完成器单步径互为印证，      *)
 (*      两径殊途同归（同一语句双证）。                                *)
 (*   4. latb_max_list_le_l：头 ≤_B 折叠 max（real_r_max_le_l_B 的    *)
 (*      列表化；归纳 + trans + r_max 右参上界件）。                    *)
@@ -41,7 +50,7 @@
 (*                                                                *)
 (* 不对称判据如实记录（仪表 L46 + T4b 勘误卡 L24 同源）：              *)
 (*   —— max 侧：eps 挂引入式结论槽内（real_lt (max l) d 的 d 位），   *)
-(*      主件可 one 收口器单步（件 2 六行）；列表版红利保持——严格      *)
+(*      主件可 one 完成器单步（件 2 六行）；列表版红利保持——严格      *)
 (*      引入件自身一次归纳封装折叠，主件不再展开列表。                  *)
 (*   —— min 侧：eps 挂 min 外侧（目标 c < min l + eps），min_glb      *)
 (*      结论槽无 eps 位，单步不可达，须完整逐点证（T4b 件 8 同量级）。  *)
@@ -57,7 +66,7 @@
 (*   —— Print Assumptions 全件 Closed（文末七连打，证据在编译日志）。  *)
 (* 编译配方（cpu_guard 包装，vo 树 = ConstructiveWorld-Main/          *)
 (* ConstructiveWorld_vo，前置 .vo 121 件全族在树）：                   *)
-(*   coqc -vos -Q <vo树> "" -Q . "" UpReqLatbMaxList.v                *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -115,7 +124,7 @@ Qed.
 (* 件 2（主件）：上界格律列表版：成员全 ≤_B c ⟹ 折叠 max ≤_B c。
    max 侧同构单步：给 eps>0，成员界同取 d := c+eps（real_le_b 展开
    即逐成员严格界），件 1 一步得折叠 max < c+eps，Or 左支入精确面，
-   one 收口器单步收口——无需 eps 拆分、无需列表展开（归纳封装在
+   one 完成器单步完成——无需 eps 拆分、无需列表展开（归纳封装在
    件 1 内），与二元主件 latb_max_le_b 同为六行形。 *)
 Lemma latb_max_list_le_b : forall (h : Real) (t : list Real) (c : Real),
   (forall x : Real, In x (h :: t) -> real_le_b x c) ->
@@ -190,7 +199,7 @@ Qed.
    E.2（b ≤_B max a b）列表化主件前半。cons 案二元律两支：
    新头 u 支经 r_max 左参上界 + 右参抬升两步；旧折叠支经 IH
    （换头 x 后同 h 路径）+ 右参同头单调抬升（二元律两次喂入）。
-   全程零 comm 依赖——r_max 交换面在 CW219 无直连件，本库
+   全程零 comm 依赖——r_max 交换面在 无直连件，本库
    以归纳轮廓（u 连同 h 一起泛化）绕开，不立交换桥。 *)
 Lemma latb_max_list_le_cons_init : forall (h x : Real) (t : list Real),
   real_le_b (latb_max_list h t) (real_max h (latb_max_list x t)).

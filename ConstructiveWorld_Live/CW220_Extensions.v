@@ -1,12 +1,12 @@
 (* ===================================================================== *)
-(* CW220_Extensions.v — 220 版扩展层 v4（瘦身精简版，只含活分区）           *)
-(*   基座：CW_ConstructiveWorld_219（薄壳 Require Export 全部 15 分片）     *)
+(* CW220_Extensions.v — 扩展层（仅保留活跃分区）                           *)
+(*   基座：CW_ConstructiveWorld_219（薄壳 Require Export 全部 15 模块）     *)
 (*                                                                    *)
-(* 瘦身依据（2026-09-11，R 席）：                                        *)
+(* 瘦身依据：                                        *)
 (*   1. 全量编译 20/99 断于本文件 L12525（Module EvictId 内投影 Let 绑定     *)
 (*      `Let R := @R RI` 构建期 dedot 后误解析到 S01_BaseRing.R : Set）——    *)
 (*      该病灶随 G13_EvictFam 分区整体剔除而消失。                            *)
-(*   2. 原 34 件合并区中 30 件与 Live_X 独立件（Up*.v，四关绿且已收录）      *)
+(*   2. 原 34 件合并区中 30 件与 Live_X 独立件（Up*.v，四项关卡通过且已收录）      *)
 (*      /G 组成员同名冗余，均为旧拷贝，全部剔除。                          *)
 (*   3. 活价值只剩两个 Module 的 12 名：                                  *)
 (*      - G07_KLWall.G07_KLWall 需要 BudgetReal 4 名：                   *)
@@ -26,7 +26,7 @@
 (*   UpSigMigrate （原 L1410–1996，Module SigMigrate）                    *)
 (*   UpBudgetReal （原 L10250–10967，Module BudgetReal）                  *)
 (*   UpArchAttn   （原 L10968–11177，根层，Import BudgetReal）             *)
-(* 剔除分区清单见交付报告 _lxR_交付报告-20260911.md（回滚用原件备份          *)
+(* 剔除分区清单见 _lxR 归档（回滚用原件备份          *)
 (*   _lxR_backup-CW220-orig-20260911.v）。                               *)
 (*                                                                    *)
 (* 下游接口零改动：G07 `Require Import CW220_Extensions.` +               *)
@@ -40,7 +40,7 @@ Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory ".".
 (* ============================================================ *)
-(* G01_CoreMicro.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总放电   *)
+(* G01_CoreMicro.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总证明   *)
 (*                                                              *)
 (* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
 (* 的显式前件 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
@@ -49,8 +49,8 @@ Set Extraction Output Directory ".".
 (*     （log 单调 le 版 = G01_CoreMicro.real_log_le_mono；              *)
 (*       log 1 == 0 = real_log_one，根内已证）。                    *)
 (*                                                              *)
-(* 交付清单：                                                      *)
-(*   hlogz_discharge       —— 主放电：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
+(* 结果清单：                                                      *)
+(*   hlogz_discharge       —— 主证明：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
 (*   hlogz_discharge_full  —— 同型对齐版（走 G01_CoreMicro 直用形态）    *)
 (*   hlogz_strict          —— 严格版：0 < Z < 1 ⟹ log Z < 0         *)
 (*                            （过滤器确实拦截了质量）               *)
@@ -63,7 +63,7 @@ Set Extraction Output Directory ".".
 
 
 (* ================================================================ *)
-(* 主交付 1：HlogZ 放电（log 单调 le 版直推）                          *)
+(* 主结果 1：HlogZ 证明（log 单调 le 版直推）                          *)
 (*   论证：0 < Za、Za ≤ 1 ⟹ real_log Za ≤ real_log 1 == 0。           *)
 (*   real_log_le_mono : real_le a b -> real_le (log a) (log b)       *)
 (*   （a b 皆正前提由 HZa 与 real_lt_zero_one 供给）。                 *)
@@ -84,7 +84,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 主交付 2：HlogZ 放电完整版（与 KLProjection 前件对齐）               *)
+(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前件对齐）               *)
 (*   同型语句，走 G01_CoreMicro 直用形态 real_log_le_zero_of_le_one，      *)
 (*   双路互证（单调链合成 / 直用形态殊途同归）。                        *)
 (* ================================================================ *)
@@ -97,7 +97,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 附加交付 1：严格版——过滤器确实拦截了质量                            *)
+(* 附加结果 1：严格版——过滤器确实拦截了质量                            *)
 (*   0 < Za < 1 ⟹ log Za < log 1 = 0（lt 严格链）。                   *)
 (*   real_log_lt_mono 论 cw_log；real_log 定义性展开（:= cw_log）后    *)
 (*   逐项对接，尾端经 real_lt_eq_lt 把 log 1 换成 0。                  *)
@@ -117,7 +117,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 附加交付 2：KL 尾项形态——0 ≤ opp (log Z)                           *)
+(* 附加结果 2：KL 尾项形态——0 ≤ opp (log Z)                           *)
 (*   主定理证明里「尾项 T == opp (log Z_aud) ≥ 0」的直接 Real 层供给：  *)
 (*   log Z ≤ 0 经 opp 反变（real_opp_le_compat）→ opp 0 ≤ opp (log Z)，*)
 (*   再用 opp 0 == 0 的 eq → le 桥（inl 支？否，inr 支）合成。          *)
@@ -131,7 +131,7 @@ Proof.
   - (* 0 ≤ opp 0：eq 对称后升 le *)
     exact (real_eq_le_bridge real_zero (real_opp real_zero)
              (real_eq_sym (real_opp real_zero) real_zero real_opp_zero)).
-  - (* opp 0 ≤ opp (log Z)：反变 + 主交付 1 *)
+  - (* opp 0 ≤ opp (log Z)：反变 + 主结果 1 *)
     exact (real_opp_le_compat (real_log Za HZa) real_zero
              (hlogz_discharge Za HZa HZa1)).
 Qed.
@@ -357,7 +357,7 @@ Proof.
   Qed.
 
 (* ============================================================ *)
-(* B. 求和层 req 引理（SumOver req 对接面之上的移植）            *)
+(* B. 求和层 req 引理（SumOver req 对接面之上的转译）            *)
 (* ============================================================ *)
 
 (* Σ opp f == opp Σ f（Id 原件 L15801 sum_opp） *)
@@ -743,7 +743,7 @@ Set Extraction Output Directory ".".
 (* 至今只有接口假设形态；本文件在具体柯西实数（CW_ConstructiveWorld_219 的     *)
 (* Real := sigT (fun u : Qseq => cauchy u)）上闭合该缺口：        *)
 (*                                                              *)
-(* 主交付 r_arch_pow_real：                                      *)
+(* 主结果 r_arch_pow_real：                                      *)
 (*   ∀κ a eps（0<κ<1、0<a、0<eps），存在显式 nat 见证 N 使          *)
 (*   a·κ^N < eps。                                               *)
 (* 构造路线（路线 A，纯 Real 层，无需 Q 层绕行）：                  *)
@@ -755,7 +755,7 @@ Set Extraction Output Directory ".".
 (*                                                              *)
 (* 件 1：预算条件充分性（log 闭式条件）                            *)
 (*   r_pow_log_form      log(κ^N) == (N#1)·log κ（归纳）           *)
-(*   log_kappa_neg       0<κ<1 ⟹ −log κ > 0（hlogz_strict 放电）   *)
+(*   log_kappa_neg       0<κ<1 ⟹ −log κ > 0（hlogz_strict 证明）   *)
 (*   budget_cond_sufficient  N·|log κ| > log a − log eps ⟹ a·κ^N<eps *)
 (*   （经 cauchy_real_exp_mono 严格单调 + cw_log_exp_right 反演回接）*)
 (*                                                              *)
@@ -764,7 +764,7 @@ Set Extraction Output Directory ".".
 (*   geo_tail_budget     N ≤ min m n ∧ a·κ^N < eps ⟹ a·κ^{min} < eps *)
 (*   budget_min_tail     预算 N 的存在性 + min 尾界组合              *)
 (*                                                              *)
-(* 纪律：纯构造性（禁词零出现，见交付报告 G1）；                    *)
+(* 纪律：纯构造性（禁词零出现，见技术报告 G1）；                    *)
 (*       Set 层语句（real_lt/real_le/real_eq/sigT/And）；           *)
 (*       全部 Qed 闭合；消费根内已证机器不重证。                    *)
 (* ============================================================ *)
@@ -780,7 +780,7 @@ Fixpoint real_pow (x : Real) (n : nat) : Real :=
   | Datatypes.S m => real_mult x (real_pow x m)
   end.
 
-(* 与任务书同名接口：r_pow kappa N 即 real_pow kappa N *)
+(* 与原始任务表述同名接口：r_pow kappa N 即 real_pow kappa N *)
 Notation r_pow := real_pow (only parsing).
 
 (* 幂对 real_eq 的相容性 *)
@@ -1157,7 +1157,7 @@ Qed.
 
 (* ============ 6. 件 1：log 形态闭式条件（Real 层） ============ *)
 
-(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（G01_CoreMicro.hlogz_strict 放电）⟹ opp 反变 *)
+(* −log κ > 0：0 < κ < 1 ⟹ log κ < 0（G01_CoreMicro.hlogz_strict 证明）⟹ opp 反变 *)
 Lemma log_kappa_neg : forall (kappa : Real)
                          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one),
   real_lt real_zero (real_opp (real_log kappa Hk1)).
@@ -1399,7 +1399,7 @@ Proof.
 Qed.
 
 (* 预算下降：N ≤ min m n 且 a·κ^N < eps ⟹ a·κ^{min m n} < eps
-   （论文 4 定理 4.10 尾界 a·κ^{min m n} 的预算放电，纯序代数） *)
+   （论文 4 定理 4.10 尾界 a·κ^{min m n} 的预算证明，纯序代数） *)
 Theorem geo_tail_budget :
   forall (kappa a eps : Real)
          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
@@ -1424,7 +1424,7 @@ Proof.
   - exact Hbudget.
 Qed.
 
-(* 组合形态：给出显式预算 N，min 尾界随之放电（定理 4.10 Real 层组装） *)
+(* 组合形态：给出显式预算 N，min 尾界随之证明（定理 4.10 Real 层组装） *)
 Theorem budget_min_tail :
   forall (kappa a eps : Real)
          (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
@@ -1453,7 +1453,7 @@ Import BudgetReal.
 (* ============================================================ *)
 (* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层镜像            *)
 (*                                                              *)
-(* 扫描件背景（分析-219平凡定理热点扫描-20260907.md 榜 A3）：        *)
+(* 扫描件背景（分析-219平凡定理热点扫描.md 榜 A3）：        *)
 (*   根文件 CW_ConstructiveWorld_219.v 注意力收敛区 L29247 的接口前提 *)
 (*     Variable r_arch_pow_attn :                                *)
 (*       forall (a : R), lt zero a -> forall eps : R, lt zero eps -> *)
@@ -1487,9 +1487,9 @@ Import BudgetReal.
 (*   Real 镜像即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
 (*   给出 sigT 预算 N 见证定理。覆盖面注记：根定理的语义对象        *)
 (*   attention_step/tv_dist/boltzmann_dist_attn 生活在抽象 Section  *)
-(*   世界，其实例化需在 Real 层整体放电 detailed_balance/           *)
+(*   世界，其实例化需在 Real 层整体证明 detailed_balance/           *)
 (*   minorization/sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等 *)
-(*   接口前提（天级工程，不属本小件）；按任务书条款以 Real 序列       *)
+(*   接口前提（天级工程，不属本小件）；按原始任务表述条款以 Real 序列       *)
 (*   tv_seq := n ↦ TV(iterate n μ₀, p_b) 承载最小骨架，每步几何      *)
 (*   收缩作为镜像前提 Hstep 显式列出。主件 1 不受影响。              *)
 (*                                                              *)
@@ -1608,11 +1608,11 @@ Qed.
 (* 根 attention_iterate_converges（L29330）的 Real 层镜像组装：
    预算 N 由件 1（r_arch_pow_attn_real）构造；尾界 n ≥ N 由
    tv 衰减链（本文件件 2 前置）+ 幂反单调（real_pow_anti_mono）
-   + 件 1 的 a·κ^N < eps 放电。
+   + 件 1 的 a·κ^N < eps 证明。
    覆盖面注记：tv_seq 即根语义对象 n ↦ TV(iterate attention_step n μ₀,
    boltzmann_dist_attn) 的 Real 承载；每步收缩 Hstep 对应根
    attention_tv_contraction 的结论形态。根抽象 Section 的完整
-   Real 层实例化需整体放电 detailed_balance/minorization/
+   Real 层实例化需整体证明 detailed_balance/minorization/
    sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等接口前提，
    天级工程，不属本小件（主件 1 不受影响）。 *)
 Theorem attention_iterate_converges_real :

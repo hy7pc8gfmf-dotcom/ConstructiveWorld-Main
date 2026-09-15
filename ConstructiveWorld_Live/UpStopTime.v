@@ -1,13 +1,22 @@
 (* ============================================================ *)
+(* UpStopTime.v *)
+(* *)
+(* 目的： 可证书化停时原语与 GuardedChain 守恒击穿链。 *)
+(* 主件： stmin 停时最小值与 gchain_budget 预算链、gbudget_at / gbottom_at。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpBudgetReal、UpConstitution。 *)
+(* 备注： 停时为可判定序上的显式构造；预算链与宪法验证器对接。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpStopTime.v —— 可证书化停时原语 + GuardedChain 守恒击穿链        *)
 (*                                                              *)
 (* 理论来源：成果存档/圆桌会议/ROUNDTABLE-六席圆桌实验-20260907.md    *)
 (*   头部候选「可证书化停时原语」——席 4 BDA 击穿反解 × 席 6 SPC      *)
-(*   封口 t* × 席 2 GATC 账本停时的三席收敛格点的 Coq 立项；          *)
+
 (*   方法论 §5：GuardedChain = 生产性非良基（CoInductive 每步        *)
 (*   携带预算见证），席 2 终稿的阈值策略双目标占优定理离散形态。       *)
 (*                                                              *)
-(* 五件交付：                                                    *)
+(* 五件结果：                                                    *)
 (*   件 1  GChain/grun      GuardedChain 守恒击穿链                 *)
 (*                         （CoInductive + CoFixpoint 生成器，       *)
 (*                          每步产出构造子 = 守恒；预算逐项递减）     *)
@@ -158,7 +167,7 @@ Definition gchain_head (ch : GChain) : Q :=
   match ch with gstop _ c => c | gstep _ c _ => c end.
 
 (* 观察者：深度 n 处的预算 / 累积值 / 触底检测 *)
-(*   预算口径（清零制）：gstop 触底后预算清零——账本清偿完毕。        *)
+
 Fixpoint gbudget_at (n : nat) (ch : GChain) : nat :=
   match n with
   | O => gchain_budget ch
@@ -387,7 +396,7 @@ Proof. vm_compute. reflexivity. Qed.
 (*   链在深度 N 触底且终值 = c0·(1−κ)^N < eps——停时携带证书。         *)
 (* ============================================================ *)
 
-(* 生产性 a：守恒链的账本在自身预算处清零（清偿完毕） *)
+
 Corollary guarded_ledger_clears : forall (k : Q) (b : nat) (c : Q),
   Id (gbudget_at b (grun k b c)) 0%nat.
 Proof.

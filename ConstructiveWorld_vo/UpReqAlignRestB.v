@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqAlignRestB.v *)
+(* *)
+(* 目的： 对齐族剩余段 B：求和接口与 Min-P/马尔可夫核域准备。 *)
+(* 主件： rls_ext / rls_linear / rls_nonneg 求和定律与 alb_markov_kernel、alb_minp_threshold 域构造。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqPropLiftShim。 *)
+(* 备注： 求和接口为显式前提；词表非空见证与温度配分正性为显式构造。 *)
+(* ============================================================ *)
+
 (* UpReqAlignRestB.v — 签名迁移批 3 余量 B 席：Top-k/Min-P/熵动力学/逐出四区
    抽象层定理的 req 系（setoid 层）req 化。
    母本：CW_ConstructiveWorld_219（行号 = 219 基座）四区：
@@ -7,7 +16,6 @@
      逐出区       Section RealKVQuantMain   L53932-54965（Real 层，interface-level 余件）
    模板：UpSigMigrate2.v（形态）+ UpReqAlgebra.v（消去引擎/req_minus 直接消费）。
    ----------------------------------------------------------------
-   余件清单（grep 实证 → 扣除已交付 → 本席交付；对账细则见文件尾清单注记）：
    [Part 0 共享机器] rls_ext/rls_linear/rls_nonneg/rls_single_le/rls_pos/rls_le
      （基座 MinPSampling list_sum 簇 L30710-30768/31104 的 req 化——Id 系
      rewrite/id_cong 链逐处换 req_trans + req_plus_compat 真证）
@@ -36,11 +44,11 @@
      req_db_breaking_kept_final(L54304 对位) req_db_breaking_bound_eps
      (L54841 定理对位)——8 件 + epos 定义组。
    ----------------------------------------------------------------
-   诚实边界台账（逐件注明，红线 3 之「非平凡真实现」对账）：
+   诚实边界登记表（逐件注明，红线 3 之「非平凡真实现」核对）：
    1. [桥假设位（T2①，假设位与基座同构）]
       - req_le_dec：基座 DecidableOrder（DO 类 L331 ord_le_dec）的 req 镜像。
         setoid 类无序判定字段——假设位逐位对应，Real 实例侧由 Q 层可判定序
-        放电（基座同源）。
+        消解（基座同源）。
       - req_lt_dec：lt_dec_field_tk（L32385 三分支构造子解构）的 req 镜像，
         中支相等判据 Id→req（签名差异：req 世界 R 上相等 = req）。
       - pick_max_in_vocab / topk_pickmax_head：argmin/list 机器 13 件冻结承接
@@ -49,14 +57,13 @@
       - boltzmann_diff_bridge（req_boltzmann_diff_bridge，ReqKVQuantWorld 节
         Variable）：real_exp_neg_diff_bound（L53901）的 req 镜像。
         其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析（LogDiffPhase4
-        域）；setoid 接口无 exp 线性 eps 字段、log∘exp 消去缺字段（同旗舰席
         UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式）。P1 以桥假设承接，
         其余 B3a/B3b/B3c/结构恒等/组装各件全部真证。
       - transition_nonneg（ReqKVQuantWorld 节 Variable，Or 分解形）：基座
         real_transition_nonneg（real_le zero T，real_le 实为 Or(real_lt,
         real_eq) 形）的逐位 req 镜像——setoid 接口 le 字段抽象不可分解，
-        假设位取 Or 分解形逐位同构；需接口 le zero T 处以 lt_le_iff 放电
-        （B4），需 |T|==T 处经 req_abs_nonneg_id_or 放电（B2c）。
+        假设位取 Or 分解形逐位同构；需接口 le zero T 处以 lt_le_iff 消解
+        （B4），需 |T|==T 处经 req_abs_nonneg_id_or 消解（B2c）。
       - 逐出区求和面：sum_over_S 仅作 req_evicted_partition 的 opaque 载体
         （Variable，基座 real_sum_over_S 同位）；全部 8 件不消费其 ext/linear
         字段，正性由 req_evicted_partition_pos 单独 Variable 承接（基座同位）。
@@ -74,7 +81,7 @@
         自注：Real 层无 0 ≤ |a|，乘积界走逐点——setoid plain 形不可导出，同
         UpReqAlgebra (d)3 冻结条款）。
    3. [签名变化] minp_dropped_mass 的 minus → req_minus（= plus a (opp b)，
-      UpReqAlgebra 台账 1 同形重建）；count_kernel_heavier 中支 Id → req；
+      UpReqAlgebra 登记表 1 同形重建）；count_kernel_heavier 中支 Id → req；
       Part 1+2 合并单节（基座 TopP 以 12 参闭包显式形式消费 MinP 机器，
       req 席同构合并避免调用噪音，定义/语句逐件对应）。
       Part 4 续：接口无 plain exp——e^{·} 全部以 req_epos（:= exp_neg∘opp，
@@ -92,7 +99,6 @@
          显式 req_sym + mult_assoc）；
       b. req_minp_scaled_sum_ge_max：assert Hk 块尾多一枚 `}`（盘故障重复写）；
       c. topp/combined/combined_topk 三枚 markov_kernel 定义体：基座节闭名
-         topp_temp_sum_pos 等误引（第一节变元 R:Set 显式化错配）→ 换本席
          req_* 名，Hpmax/HK 前提位补齐（对位基座 L32079/32354/32473 显式形）；
       d. combined_keep_dec/combined_topk_temp_sum_pos 内 conj → pair
          （Set 层 And = prod，非 Prop conj）；
@@ -112,6 +118,8 @@ Require Import UpReqAlgebra.
 From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
+Require Import UpReqPropLiftShim.
+(* B6W 接线（20260915，AA13 显式假设①首批）：pls_ 升面垫片接入。 *)
 
 (* ============================================================ *)
 (* Part 0：req list-sum 机器（基座 MinPSampling L30710-30768/    *)
@@ -428,6 +436,10 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
+(* B6W 接线位（AA13 #10，20260915）：老否定形前提经 pls_ 垫片升 sigT 见证形—— *)
+(* 深接线消费位：pls_vocab_ne_lift 原地升形，下游可直取走 sigT 通路。旧语句保留。 *)
+Definition alb_vocab_ne_witness_s1 : pls_vocab_ne vocab
+  := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
 Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
@@ -806,7 +818,7 @@ Proof.
                                 (alb_partition_temp prefix))))).
 Qed.
 
-(* ---- 5. 截断质量（L31257-31451；minus → req_minus 签名变化，台账 3） ---- *)
+(* ---- 5. 截断质量（L31257-31451；minus → req_minus 签名变化，登记表 3） ---- *)
 Definition alb_minp_dropped_mass (prefix : list Token) : R :=
   req_minus one
             (mult (inv_pos (alb_partition_temp prefix) (req_partition_temp_pos prefix))
@@ -1342,7 +1354,7 @@ End ReqSamplingWorld.
 
 (* ============================================================ *)
 (* Part 3：熵动力学区 interface-level 余件（基座 EntropyDiffReal  *)
-(*   L46821-51392 的 req 对位；RealDifferentiable 族随台账 2 冻结， *)
+(*   L46821-51392 的 req 对位；RealDifferentiable 族随登记表 2 冻结， *)
 (*   本区只迁代数/序余件与熵定义组——全部接口 Set 值）            *)
 (* ============================================================ *)
 Section ReqEntropyWorld.
@@ -1483,7 +1495,7 @@ Variable k_B : R.
 Variable E_B_pos : forall (E_A : R) (H : lt zero E_A),
   lt zero (plus E_total (opp E_A)).
 
-(* 基座 real_E_B_ent L51341（假设位逐位对应；dOmega_* / Omega_B_wd 随台账 2 冻结） *)
+(* 基座 real_E_B_ent L51341（假设位逐位对应；dOmega_* / Omega_B_wd 随登记表 2 冻结） *)
 Definition req_E_B_ent (E_A : R) (H : lt zero E_A) : R :=
   plus E_total (opp E_A).
 
@@ -1512,9 +1524,9 @@ End ReqEntropyWorld.
 (* ============================================================ *)
 (* Part 4：逐出区 interface-level req 化（基座 RealKVQuantMain    *)
 (*   L53932-54965 对位 + epos 定义组 + P1 桥假设位）              *)
-(*   签名变化（台账 3 续）：接口无 plain exp——e^{·} 全部以         *)
+(*   签名变化（登记表 3 续）：接口无 plain exp——e^{·} 全部以         *)
 (*   req_epos（:= exp_neg∘opp）重建；real_le 类假设位中接口 le     *)
-(*   字段抽象不可分解者取 Or 分解形（逐位同构，见台账 1 续）        *)
+(*   字段抽象不可分解者取 Or 分解形（逐位同构，见登记表 1 续）        *)
 (* ============================================================ *)
 Section ReqKVQuantWorld.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -1527,7 +1539,7 @@ Variable keep_dec : forall s : S, Or (keep s) (Not (keep s)).
 Variable transition : S -> S -> R.
 (* 基座 real_transition_nonneg（real_le zero T，real_le 实为 Or 形）的逐位
    req 镜像：setoid 接口 le 字段抽象不可分解——假设位取 Or 分解形逐位同构；
-   需接口 le zero T 处以 lt_le_iff 放电（本区 B4） *)
+   需接口 le zero T 处以 lt_le_iff 消解（本区 B4） *)
 Variable transition_nonneg : forall s s' : S,
   Or (lt zero (transition s s')) (req zero (transition s s')).
 Variable transition_sym : forall s s' : S,
@@ -1561,7 +1573,7 @@ Proof.
   apply (opp_le_compat x y). exact Hxy.
 Qed.
 
-(* ---- P1 桥假设位（诚实台账 1 续）：基座 real_exp_neg_diff_bound L53901
+(* ---- P1 桥假设位（诚实登记表 1 续）：基座 real_exp_neg_diff_bound L53901
    的 req 镜像；其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析
    （LogDiffPhase4 域），setoid 接口无 exp 线性 eps 字段——同旗舰席
    UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式。P1 承接为桥，
@@ -2530,8 +2542,8 @@ Qed.
 
 (* ---- B4 最终定理（基座 L54841 real_db_breaking_bound_eps 定理对位，真证）：
    db(s,s') ≤ invZ·T·[E·(U·eU) + (E·eps + eps')]
-   组装：B2c 结构恒等 → B3 定量界 → 两层乘保序（T ≥ 0 的 Or 放电 +
-   invZ > 0）→ le_trans 收口 ---- *)
+   组装：B2c 结构恒等 → B3 定量界 → 两层乘保序（T ≥ 0 的 Or 消解 +
+   invZ > 0）→ le_trans 完成 ---- *)
 Theorem req_db_breaking_bound_eps : forall (s s' : S) (eps eps' : R),
   keep s -> keep s' -> lt zero eps -> lt zero eps' ->
   le (req_db_breaking s s')
@@ -2609,10 +2621,10 @@ Qed.
 End ReqKVQuantWorld.
 
 (* ============================================================ *)
-(* 文件尾清单注记（接管席对账台账，20260909 结席）                *)
+(* 文件尾清单注记（接管席核对登记表，20260909 结席）                *)
 (* ============================================================ *)
 (*
-   1. 交付对账（原席头注四区计划 vs 实建）：
+   1. 结果核对（原席头注四区计划 vs 实建）：
       [Part 0] rls_ext/rls_linear/rls_nonneg/rls_single_le/rls_pos/rls_le/
       rls_kernel_norm_gen + req_lt_zero_le_trans/req_le_mult_le_one_r —— 全建。
       [Part 1] 14 件全建（另附 3 件辅助：req_partition_temp_pos/
@@ -2634,9 +2646,8 @@ End ReqKVQuantWorld.
       Part 4 工具族/B1/B2c/B3a/B3b/B3c/B4（req 链 + 接口字段 + UpReqAlgebra
       引擎）；组装 = B3（P1 桥 + distrib + 单调链 + req 重排）；幂等 δ 对偶 =
       alb_markov_kernel 定义族（δ 展开 + rls_kernel_norm_gen 一击）。
-   3. 冻结沿用原席台账 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
+   3. 冻结沿用原席登记表 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
       Q 逐点乘积界），续建未新增冻结件；新增诚实假设位 2 枚（bridge、
-      transition_nonneg Or 形）均已逐位对账（头注台账 1）。
-   4. 断点事故与修复：见头注台账 4（5 处正向修复，快照链
-      UpReqAlignRestB-接管快照/-绿态基线/-快照-P3绿/-P4a/-P4b/-P4c/-P4全绿）。
+      transition_nonneg Or 形）均已逐位核对（头注登记表 1）。
+   4. 断点事故与修复：见头注登记表 4（5 处正向修复，快照链
 *)

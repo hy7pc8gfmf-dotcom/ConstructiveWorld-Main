@@ -1,14 +1,22 @@
+(* ============================================================ *)
+(* UpReqAlign.v *)
+(* *)
+(* 目的： 对齐目标（RLHF/DPO）的 req 层基础定义与最优性。 *)
+(* 主件： req_rlhf_optimal / req_rlhf_optimal_unique / req_dpo_optimal 与 req_free_energy_align_ext。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra。 *)
+(* 备注： 分布、配分、相对熵、对齐能量等以 Section 变量给出；求和接口三定律为显式前提。 *)
+(* ============================================================ *)
+
 (* UpReqAlign.v — 签名迁移批 3：对齐理论主体（Alignment 簇）req 系重述与实例化
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md（批 3 清单）
    模板：UpSigMigrate.v（试点）+ UpReqAlgebra.v（批 1 地基，直接消费）；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   盘点结论（批 3 清单 ~140 件三列对账，详见交付报告）：
+   盘点结论（批 3 清单 ~140 件三列核对，详）：
    [已覆盖→不重建] GRPO 14 件→UpReqDist.v；FEPAttention 4 + RowView 1→G01_CoreMicro.v
      （Id 泛化件在案，req 化依赖批 2 FEP req 三件套）；代数/减法/消去辅件
      （minus_minus_distr/opp_eq/le_of_minus_nonneg/t12 环代数等）→UpReqAlgebra.v。
-   [本席新建] 本文件：对齐节 req 基础设施 + RLHF/DPO 核心 + 旗舰链
      （req_step_kl_eta_bound 桥 + req_policy_iter_kl_geom_step/_iter +
      req_dpo_loss_iter_mono）+ KLProjection 10 件 + NaturalGradient 1 件 +
      PPO 分解 3 件 + sigmoid 快赢。
@@ -17,16 +25,15 @@
      plain 形不可导出，与 UpReqAlgebra abs_plus_one_pos 冻结同因）；
      nat/list Id 机器（fold_right_ext 等）；深链 t12/t13 挂起件（文件尾清单）。
    ----------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4）：
+   诚实签名变化登记表（规划书 §7.4）：
    1. log 前提化：setoid log 带 lt zero 前提——relative_entropy_req /
      align_objective_req / F_align_req / dpo_loss_req 全部携带
      pos_dist（逐点正性）参数；kl_tail_eval / projected_distribution_minimizes_kl
-     以 pass 支撑族形态重述（fail 支上 log(0) 不可陈述）。
    2. minus 非接口字段：载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
    3. T2① 桥件（假设位保留，与 Id 版逐位同构；规划书 §3.2/§4.4）：
       - FEP req 三件套桥（bridge_min_free_energy / bridge_free_energy_min_unique）
-        ——批 2 UpReqFreeEnergy 交付后降为消费件；
-      - req_step_kl_eta_bound（Id Variable @CW219 L23114 的 req 同位）；
+        ——批 2 UpReqFreeEnergy 结果后降为消费件；
+      - req_step_kl_eta_bound（Id Variable @L23114 的 req 同位）；
       - req_backward_kl_identity（Id theorem @L22686 的 req 语句同位，深链挂起）；
       - req_policy_improvement_mono（Id @L22065 同位，深链挂起）；
       - log_req_compat（接口缺口桥，UpReqAlgebra ReqLogBridge 同位）；
@@ -42,13 +49,13 @@ Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
 (* ReqAlignCore：对齐节 req 基础设施 + RLHF/DPO 核心 + 旗舰链     *)
-(*   （Id 原节：CW219 Alignment L18734-23272；节参数逐位对齐）    *)
+(*   （Id 原节：Alignment L18734-23272；节参数逐位对齐）    *)
 (* ============================================================ *)
 Section ReqAlignCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- SumOver 的 req 签名对接面（= sum_req_over_S 规格面，CW219 L66177 同位；
+(* ---- SumOver 的 req 签名对接面（= sum_req_over_S 规格面，L66177 同位；
         sum_le/sum_zero_nonneg 为 Id 系 sum_over_S_le/_zero_nonneg 的 req 同位
         ——诚实接口假设，Real 层有限和可实例化，同 Z_align_pos 先例） ---- *)
 Variable sumf : (S -> R) -> R.
@@ -68,8 +75,7 @@ Hypothesis sum_zero_nonneg :
   forall f : S -> R,
     (forall s : S, le zero (f s)) -> req (sumf f) zero -> forall s : S, req (f s) zero.
 
-(* 接口缺口桥（台账 3；UpReqAlgebra ReqLogBridge 同位，T2①）：
-   setoid 接口无 log 兼容字段（exp_neg 注入性不可由接口字段导出），
+(* 接口缺口桥（登记表 3；UpReqAlgebra ReqLogBridge 同位，T2①）：
    Id 系 destruct/eq_ind 免费事实在 req 世界以桥假设承接；
    Real 实例可满足（柯西 log 连续），实例化留待接口扩展批。 *)
 Hypothesis log_req_compat :
@@ -96,7 +102,7 @@ Definition pi_star_req (s : S) : R :=
   mult (inv_pos Z_align_req Z_align_pos)
        (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))).
 (* 相对熵 req 形态（关键子项 3；Id relative_entropy L16535；
-   log 前提化：携带逐点正性——台账 1） *)
+   log 前提化：携带逐点正性——登记表 1） *)
 Definition relative_entropy_req (p q : S -> R) (Hp : pos_dist p) (Hq : pos_dist q) : R :=
   sumf (fun s => mult (p s) (req_minus (log (p s) (Hp s)) (log (q s) (Hq s)))).
 (* 对齐能量/自由能/对齐目标（Id align_energy L18849 / align_objective L18855；
@@ -187,7 +193,7 @@ Proof.
                      (mult (exp_neg (opp (mult iv (reward s)))) (exp_neg (opp lg)))).
     - apply exp_neg_req_compat_setoid. exact H3.
     - exact (req_exp_neg_opp_plus (mult iv (reward s)) lg). }
-  (* 收尾：e^{−lg} == pi_ref（批 1 req_exp_neg_opp_log）+ mult 换形 *)
+  
   apply (req_trans (exp_neg (mult iv (align_energy_req s)))
                    (mult (exp_neg (opp (mult iv (reward s)))) (exp_neg (opp lg)))
                    (mult (pi_ref s) (exp_neg (opp (mult iv (reward s)))))).
@@ -218,7 +224,7 @@ Proof.
 Qed.
 
 (* π* 归一化（Id pi_star_normalized L18790 的 req 版；试点 req_boltzmann_normalized
-   同构真证：sum_linear + inv 收口） *)
+   同构真证：sum_linear + inv 完成） *)
 Lemma req_pi_star_normalized : req (sumf pi_star_req) one.
 Proof.
   apply (req_trans (sumf (fun s => mult (inv_pos Z_align_req Z_align_pos)
@@ -247,7 +253,7 @@ Proof.
 Qed.
 
 (* 自由能外延（Id free_energy_ext L18951 的 req 版；真证：双 sum_ext +
-   req_mult_compat；log 前提随逐点正性搬运——台账 1） *)
+   req_mult_compat；log 前提随逐点正性搬运——登记表 1） *)
 Lemma req_free_energy_align_ext :
   forall (f g : S -> R) (Hf : pos_dist f) (Hg : pos_dist g),
     (forall s : S, req (f s) (g s)) ->
@@ -278,10 +284,10 @@ Qed.
 
 (* ============ B 组：RLHF/DPO 核心（T2① FEP 桥 + 真证组装） ============ *)
 (* FEP req 三件套的 req 签名桥（Id min_free_energy_is_boltzmann /
-   free_energy_min_unique 的 req 同位承接；批 2 UpReqFreeEnergy 交付后
+   free_energy_min_unique 的 req 同位承接；批 2 UpReqFreeEnergy 结果后
    降为消费件。对位简化注记：Id 侧经 align_boltzmann_is_pi_star 把
    boltzmann_dist 逐点等同 pi_star，req 侧桥直接以 pi_star_req 为极小点
-   载体，等价且免重复——台账 3。） *)
+   载体，等价且免重复——登记表 3。） *)
 Hypothesis bridge_min_free_energy :
   forall (p : S -> R) (Hn : norm_one p) (Hp : pos_dist p),
     le (F_align_req pi_star_req req_pi_star_pos) (F_align_req p Hp).
@@ -331,8 +337,8 @@ Variable eta : R.
 Variable eta_pos : lt zero eta.
 Variable eta_le_one : le eta one.
 
-(* T1.2 定义簇 req 化（Id advantage_aug/Z_rel/energy_t/pi_next 同形；
-   log 前提化：载体携带逐点正性参数——台账 1） *)
+(* 定义簇 req 化（Id advantage_aug/Z_rel/energy_t/pi_next 同形；
+   log 前提化：载体携带逐点正性参数——登记表 1） *)
 Definition advantage_aug_req (pi_t : S -> R) (Hpi_t : pos_dist pi_t) (s : S) : R :=
   req_minus (reward s)
             (mult beta (req_minus (log (pi_t s) (Hpi_t s)) (log (pi_ref s) (pi_ref_pos s)))).
@@ -377,7 +383,7 @@ Proof.
 Qed.
 
 (* pi_next 归一化（Id pi_next_normalized L21401 req 版；真证：
-   sum_linear + Z_rel 定义体 conversion 收口 + inv） *)
+   sum_linear + Z_rel 定义体 conversion 完成 + inv） *)
 Lemma req_pi_next_normalized :
   forall (pi_t : S -> R) (Hpi_t : pos_dist pi_t),
     req (sumf (pi_next_req pi_t Hpi_t)) one.
@@ -420,10 +426,10 @@ Proof.
       * apply inv_pos_correct.
 Qed.
 
-(* ---- B 类桥（T2① 假设位保留，与 Id 版逐位同构；台账 3） ----
+(* ---- B 类桥（T2① 假设位保留，与 Id 版逐位同构；登记表 3） ----
    req_step_kl_eta_bound ← Id Variable @L23114（B 类，Real 种子
    real_step_kl_eta_bound_eps@L113142 / real_interp_Z_le_one_eps@L112890
-   在根；实例放电留待 req 求和实例批）。
+   在根；实例消解留待 req 求和实例批）。
    req_backward_kl_identity ← Id theorem policy_iter_backward_kl_step @L22686
    （深链 t13 桥，req 重证挂起批 3b——见文件尾挂起清单）。
    req_policy_improvement_mono ← Id @L22065（深链 t12，同上挂起）。 *)
@@ -492,7 +498,7 @@ Proof.
 Qed.
 
 (* 迭代 Fixpoint req 化（Id policy_iterate L22879 同构：分布 + 正性
-   打包为 sigT，可提取；nat 归纳 Set 层重建——台账 4） *)
+   打包为 sigT，可提取；nat 归纳 Set 层重建——登记表 4） *)
 Fixpoint policy_iterate_req (t : nat) (pi : S -> R) (Hpi : pos_dist pi) :
   { pi' : S -> R & pos_dist pi' } :=
   match t with
@@ -502,7 +508,7 @@ Fixpoint policy_iterate_req (t : nat) (pi : S -> R) (Hpi : pos_dist pi) :
       existT _ (pi_next_req (projT1 p) (projT2 p)) (req_pi_next_pos (projT1 p) (projT2 p))
   end.
 
-(* R 层幂 req 化（Id r_pow L14071 同形 nat 归纳；台账 4） *)
+(* R 层幂 req 化（Id r_pow L14071 同形 nat 归纳；登记表 4） *)
 Fixpoint req_r_pow (x : R) (n : nat) : R :=
   match n with
   | 0%nat => one
@@ -673,12 +679,12 @@ Qed.
 End ReqAlignCore.
 
 (* ============================================================ *)
-(* ReqKLProjection：审计 = KL 投影（Id 原节 CW219 L95420-95604 req 化） *)
-(*   签名差异（台账 1）：req log 前提化使 fail 支上 log(0) 项不可   *)
+(* ReqKLProjection：审计 = KL 投影（Id 原节 L95420-95604 req 化） *)
+(*   签名差异（登记表 1）：req log 前提化使 fail 支上 log(0) 项不可   *)
 (*   陈述——projected-KL 以逐点闭式重述：pass 支上                  *)
-(*   log pd == log p + log(1/Z)（req_log_proj_pass 真证），故       *)
-(*   KL(q‖proj) := Σ q·(log q − (log p + log(1/Z)))，fail 支由      *)
-(*   Hqz(q 零) 自动归零，log 项零处不可陈述问题消解；假设形与 Id    *)
+
+
+
 (*   完全同位（positive_dist + fail 零 + 归一化 + HlogZ）。          *)
 (* ============================================================ *)
 Section ReqKLProjection.
@@ -710,7 +716,7 @@ Variable HZ : lt zero Z_aud_req.
 Definition projected_distribution_req (s : S) : R :=
   if post_aud s then mult (p s) (inv_pos Z_aud_req HZ) else zero.
 
-(* projected-KL 逐点闭式（签名差异载体；log(1/Z) 记号展开） *)
+
 Definition kl_proj_closed (q : S -> R) (Hq : forall s : S, lt zero (q s)) (s : S) : R :=
   mult (q s)
        (req_minus (log (q s) (Hq s))
@@ -745,7 +751,7 @@ Proof.
 Qed.
 
 (* 投影分布 pass 支正性（req log 前提所需；Id 系 plain 正性全域版在
-   req 世界仅 pass 支可陈述——签名差异台账 1） *)
+   req 世界仅 pass 支可陈述——签名差异登记表 1） *)
 Lemma req_projected_pass_pos :
   forall (s : S) (E : post_aud s = true), lt zero (projected_distribution_req s).
 Proof.
@@ -784,7 +790,7 @@ Proof.
                    (mult_zero (inv_pos Z_aud_req HZ))).
 Qed.
 
-(* Id projected_normalized L95476 req 版（真证：sum_ext + linear + inv 收口） *)
+(* Id projected_normalized L95476 req 版（真证：sum_ext + linear + inv 完成） *)
 Lemma req_projected_normalized : req (sumf projected_distribution_req) one.
 Proof.
   apply (req_trans (sumf projected_distribution_req)
@@ -1107,8 +1113,8 @@ Qed.
 End ReqKLProjection.
 
 (* ============================================================ *)
-(* ReqNaturalGradient：自然梯度（Id 原节 CW219 L24347-24460 req 化） *)
-(*   B 类桥 req 同位（台账 3）：req_square_nonneg ← Id Variable     *)
+(* ReqNaturalGradient：自然梯度（Id 原节 L24347-24460 req 化） *)
+(*   B 类桥 req 同位（登记表 3）：req_square_nonneg ← Id Variable     *)
 (*   square_nonneg @L24393（种子 real_square_nonneg_eps@L44842 在根）； *)
 (*   sum 零分解 ← sum_over_S_zero_nonneg 的 req 同位（节首假设）。   *)
 (* ============================================================ *)
@@ -1127,7 +1133,6 @@ Variable partial : (Theta -> R) -> Theta -> R.
 Variable p_theta_pos : forall theta : Theta, forall s : S, lt zero (p_theta theta s).
 
 (* Fisher 信息标量（Id fisher_info_scalar L24360 同形）。
-   签名差异（台账 1）：Id 系 partial 复合参数 fun th => log (p_theta th s)
    的 log 无前提；setoid log 带前提，req 版逐点补 p_theta_pos th s 供给。 *)
 Definition fisher_info_scalar_req (theta : Theta) : R :=
   sumf (fun s =>
@@ -1381,20 +1386,20 @@ End ReqSigmoidQuick.
 (* ============================================================ *)
 (* ---- (d) 冻结清单（规划书 §3.4：双层并行，逐件冻结理由） ----   *)
 (*                                                                *)
-(* 1. ppo_conservative（Id @CW219 L19526）/ std_ppo_conservative    *)
+(* 1. ppo_conservative（Id @L19526）/ std_ppo_conservative    *)
 (*    (@L19559) / clip_lower（@L19521）/ ppo_clip_upper（@L19648）： *)
 (*    消费 min_le_l / r_max_le_r 的 plain-le 形式（le (min a b) a）； *)
 (*    setoid 接口的 min/r_max le 输出已 eps 化（min_le_l :          *)
 (*    forall eps, lt zero eps -> le (min a b) (plus a eps)），plain  *)
 (*    形不可由 eps 形导出（序无消去）——与 UpReqAlgebra 冻结件        *)
-(*    abs_plus_one_pos 同因。eps 形全局重述需 Σ 常数项宿主，签名漂移 *)
+
 (*    超机械平移边界，冻结，批 5 裁决。                              *)
 (* 2. clip_error_nonneg（Id @L112408）/ ppo_clipped_improvement      *)
 (*    (@L112439)：同上因（min_le_l plain 形 + le_minus_nonneg(min)）。 *)
 (* 3. fold_right_ext 及 dpo_total_loss_at_star 的 list fold 机器     *)
 (*    （Id @L20160 一带）：nat/list 层 Id 与数系接口无关，原样复用   *)
 (*    （规划书 §1.1 边界 2）；dpo_total_loss(_monotone) 的 req 伴件   *)
-(*    待 dpo_pair_loss 簇 req 化后随批 4 交付。                       *)
+(*    待 dpo_pair_loss 簇 req 化后随批 4 结果。                       *)
 (* 4. GRPOCounterEx 反例见证件（不在批 3 清单）：双层并行（探针实证   *)
 (*    顶层不可 Check，§0.3）。                                       *)
 (*                                                                *)
@@ -1415,5 +1420,5 @@ End ReqSigmoidQuick.
 (*    镜像件 ~60 件）：req 对应件多已被 UpReqAlgebra（批 1）与        *)
 (*    UpReqDist（批 2 reqd_ 簇）覆盖，残余件随批 3b 按本文件模板      *)
 (*    平移；sigmoid_strict_inc（@L21028）需 inv_pos_lt_contra 桥     *)
-(*    （B 类假设 req 同位，§1.5），随 B 桥批交付。                    *)
+(*    （B 类假设 req 同位，§1.5），随 B 桥批结果。                    *)
 (* ============================================================ *)

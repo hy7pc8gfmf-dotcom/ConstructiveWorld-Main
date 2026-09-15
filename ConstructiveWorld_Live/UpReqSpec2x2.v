@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqSpec2x2.v *)
+(* *)
+(* 目的： 2x2 谱面：二次型的谱与 Newton 步（R2-A 首切片，挂起态）。 *)
+(* 主件： sp2_qnewton Newton 步与 sp2_qgap 谱隙；sp2_q4pow 幂面。 *)
+(* 依赖： CW_ConstructiveWorld_219、AttnSqrt。 *)
+(* 备注： 零承认件、零经典逻辑、零外部假设；依赖壳环境见正文（件处于挂起态，正文有登记）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqSpec2x2.v —— 新数学战役 R2-A 首切片【SUSPENDED 20260914 08:58】*)
 (*   席AA16：2×2 自伴判别式平方和定理 + √D 显式率（sp2_ 前缀）      *)
 (*                                                              *)
@@ -8,7 +17,7 @@
 (*   七项禁词扫描零命中（逐项记录见卡）；零承认。精确余留见                     *)
 (*   attn/_SUSPEND_AA16_20260914.md                                           *)
 (*                                                              *)
-(*   设计定谳（已完成的资产侦察）：                                *)
+(*   设计判定（已完成的资产侦察）：                                *)
 (*   - D := (a−d)² + (2b)² 平方和；非负面走逐点 Q 层平方非负，     *)
 (*     完全避开 real_le:=Or 编码符号判定墙（LPO 墙，T42 记档）；    *)
 (*   - 严格正走 real_lt 见证形（Or 左支直供）；                    *)
@@ -21,8 +30,8 @@
 (*     （S02 L640 exists (fun n => u n * v n)），real_const/zero  *)
 (*     常值形——§0 引擎的 reflexivity 直证路线成立。               *)
 (*                                                              *)
-(*   公理面：本件零承认、零经典、零外部假设。依赖壳 CW219 环境     *)
-(*   闭包残留（S11–S15 Psatz 搭车，AA1 已普查）只影响 coqchk       *)
+(*   公理面：本件零承认、零经典、零外部假设。依赖壳 环境     *)
+
 (*   闭包层，不在本件 PA 面。出口件语句位将全 Set/Type 层          *)
 (*   （real_lt/real_eq/sp2_lower0/sigT/And/Or/QltT/QleT'/QeqT）。 *)
 (* ============================================================ *)
@@ -371,7 +380,7 @@ Qed.
 (* ============================================================ *)
 (* §2B 保底件二：Q 层 Newton √D 显式率（乘法不变量，除法自由）        *)
 (*   D∈[1,4]、x₀=2、不变量 gapₙ·4ⁿ ≤ 3；出口面 QleT'。               *)
-(*   SUSPEND L6/L7（QeqT 缩放入参一般形）挂账未编码，见报告。         *)
+(*   SUSPEND L6/L7（QeqT 缩放入参一般形）显式假设未编码，见报告。         *)
 (* ============================================================ *)
 
 Definition sp2_qdisc (a d b : Q) : Q := (a - d) * (a - d) + 4 * b * b.
@@ -677,9 +686,9 @@ Proof.
 Qed.
 
 (* L5 主率（乘法不变量）：gapₙ·4ⁿ ≤ 3 —— 除法自由、无 Or 分派 *)
-(*【AA16S 收口 20260915】率出口两件绿：主链 B≤3 腿改真不等式链               *)
+(*【AA16S 完成 20260915】率出口两件绿：主链 B≤3 腿改真不等式链               *)
 (*  （Hid 环换形 → (gap·4^m)·g ≤ 3·g ≤ 3），全链 sp2_qle_eq_l/r 传输；      *)
-(*  基例等式腿改 Qeq_trans 双桥，杜绝原子 ring 伤。前席 M2 弹位已消。        *)
+
 Theorem sp2_sqrt_rate_core : forall D : Q, Qle 1 D -> Qle D 4 ->
   forall n : nat, Qle (sp2_qgap D (sp2_qnewton D 2 n) * sp2_q4pow n) 3%Q.
 Proof.
@@ -851,7 +860,7 @@ Qed.
 
 (* L5 出口件：Set 层 QleT' 面（任务书出口位）。                              *)
 (*  QleT 右支 Id 分支 destruct 消解；QleT' 入参经 QleT'_to_Qle 桥进 Q 层      *)
-(*  （前席草稿裸传 HD4 的类型伤已修）。                                       *)
+
 Theorem sp2_sqrt_rate : forall D : Q, QleT 1 D -> QleT' D 4 -> forall n : nat,
   And (QleT' 0 (sp2_qgap D (sp2_qnewton D 2 n)))
       (QleT' (sp2_qgap D (sp2_qnewton D 2 n) * sp2_q4pow n) 3%Q).
@@ -1226,7 +1235,7 @@ Print Assumptions sp2_eig_s_pos.
 (*   0≤(2b_n)²（qsq_nonneg）⟹ δ<u_n²+(2b_n)²（Qlt_le_trans +       *)
 (*   Qle_plus_nonneg_r[Qle_plus_nonneg_r]——S02 已有，直引）。       *)
 (* sp2_disc_pos_of_bsq：对称（b² 支当严格项）。                     *)
-(* sp2_disc_eq_zero_of_degen（挂账候选）：real_eq u 0 ⟹ real_eq b 0  *)
+(* sp2_disc_eq_zero_of_degen（显式假设候选）：real_eq u 0 ⟹ real_eq b 0  *)
 (*   ⟹ real_eq D 0 —— 取 η:=ε/(4+ε)，sp2_qsq_le_abs 两侧，         *)
 (*   η²+4η'²<ε 经 §2.1 epsfrac；Qabs(Qabs_pos/Qabs_neg 实名已验)。  *)
 (*                                                                *)
@@ -1272,13 +1281,13 @@ Print Assumptions sp2_eig_s_pos.
 (*   禁重写）；λ₊−λ₋==s 走逐点：|X_n−s_n|==0<N eps，N:=0，          *)
 (*   §0 pt 引擎 + ring；s 严格正（corollary，尽力）：destruct        *)
 (*   real_le Or，右支 s≡0 ⟹ real_eq D 0 ⟹ 与 real_lt 0 D 逐点       *)
-(*   矛盾（δ<D_n 且 |D_n|<δ 取 max N）。D=0 简并 ε-一致版：挂账。    *)
+(*   矛盾（δ<D_n 且 |D_n|<δ 取 max N）。D=0 简并 ε-一致版：显式假设。    *)
 (*                                                                *)
-(* 【§2.5 四关尾件】                                                *)
+
 (* Separate Extraction sp2_qdisc sp2_qnewton_step sp2_qnewton       *)
 (*   sp2_q4pow sp2_q2pow（纯标量，Obj.magic 应 0；Real 层依赖件      *)
 (*   按 INST5 纪律不进提取单，由 PA Closed 承担）。                  *)
-(* Print Assumptions 出口件全表；G4 coqchk -Q . "" -o UpReqSpec2x2。 *)
-(* 编译配方：coqc -vos -Q . "" -Q "../001" "" UpReqSpec2x2.v；      *)
+
+
 (*   全量走 cwfix_aa16.cmd（bash 中转，cpu_guard CoreN 3）。         *)
 (* ============================================================ *)

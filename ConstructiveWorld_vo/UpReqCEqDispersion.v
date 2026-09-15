@@ -1,54 +1,63 @@
 (* ============================================================ *)
-(* UpReqCEqDispersion.v —— 席T34：CDispersion S 档等号槽严格化放电席        *)
+(* UpReqCEqDispersion.v *)
+(* *)
+(* 目的： CDispersion S 档等号槽的严格化（三件）。 *)
+(* 主件： t34_log_eq_linear_weak 弱对数线性、t34_s6_w2_gibbs_eq 等号槽严格化。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqKLSTangent、G05_LogSmall、UpReqAlgebra、UpReqU2。 *)
+(* 备注： 承前件头注诚实边界：等号槽需 log_eq_linear 强形，取弱形加严格化腿的可达组合。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqCEqDispersion.v —— 席T34：CDispersion S 档等号槽严格化消解席        *)
 (*   2026-09-11；承席T26 头注诚实边界（UpReqCDispersion.v L26-28）：        *)
 (*   「s6 w2_gibbs_eq / req_u2_fixed_point_unique 等还吃 log_le_linear /  *)
-(*   log_eq_linear 等号槽（普查 S 档 G6 属）——本席不触」——该判词作成于    *)
-(*   席T1 交付之前；席A3 候选 A-3 判：T1 已建「切点⟹一」件，等号条件位      *)
-(*   可达形放电自此有供给。本席执行之。                                    *)
+
+(*   席T1 结果之前；席A3 候选 A-3 判：T1 已建「切点⟹一」件，等号条件位      *)
+
 (* ------------------------------------------------------------------ *)
-(* 盘面核实（动手前 grep/Check 裁决，探针 _t34_probe.v 打表）：             *)
+
 (*   1. eq 槽定位：UpReqU2.v Section ReqU2FixedPoint L313-316 两个出口桥槽：*)
 (*      log_le_linear : forall x Hx, le (log x Hx) (req_minus x one)      *)
 (*      log_eq_linear : forall x Hx, req (log x Hx) (req_minus x one)     *)
 (*                                    -> req x one                       *)
 (*      消费位 = w2_gibbs_eq（L477，经 UpReqDist.req_gibbs_equality 出口   *)
 (*      组装喂入）与 req_u2_fixed_point_unique（L739，经 w2_gibbs_eq 间接）.*)
-(*   2. Real 层可及性分级（本席判据，承 G5 头注与 UpRealLeB 尾注台账）：     *)
-(*      a. log_eq_linear 槽 Real 形 = real_eq (real_log u Hu)             *)
+
+
 (*         (real_plus u (real_opp real_one)) -> real_eq u real_one        *)
-(*         （RealEnhancedReal 字段 req:=real_eq、log:=real_log、          *)
+
 (*         req_minus a b:=plus a (opp b)，δ 透明）——与席T1                *)
-(*         t1_log_eq_linear_inject（UpReqKLSTangent.v L81，四关绿）逐位    *)
+
 (*         同形。T1 链：real_weak_trich（S07:5710 弱三分，直觉主义有效）    *)
 (*         + klst_log_tangent_neg/pos 双支 + real_lt_compat + 非自反收紧； *)
 (*         弱于强三分/LPO 形，不可证旧判只封强形、不封此弱形。             *)
 (*      b. log_le_linear 槽 Real 形 = real_le (Or 编码，S02:460) ——        *)
 (*         逐 eps 形（S07 real_log_le_linear_eps / UpRealLeB              *)
-(*         real_log_le_linear_B）到 Or 编码的逆向桥构造性不可证（台账      *)
-(*         定谳），本席如实保留诚实接口参数位（T26 sum 面同法）。           *)
+(*         real_log_le_linear_B）到 Or 编码的逆向桥构造性不可证（登记表      *)
+
 (*   3. 供给（全部上游在盘，vo 树今日全绿）：                              *)
 (*      B1 logd_log_compat_real      ——compat 槽 Real 闭合（T26 同喂）     *)
 (*      B4 logd_log_inv_exp_neg_real ——inv_exp_neg 槽 Real 闭合（T26 同喂）*)
-(*      T1 t1_log_eq_linear_inject   ——eq 槽 Real 闭合（本席新接）         *)
+
 (*      sum 面（sum_ext/add/linear/pos/zero_nonneg）与 le 面槽、KL>=0 面    *)
 (*      槽：接口型参数位（T26 实测 raw→接口换装在提取层生成运行型转换残留， *)
 (*      自段口径不 ship；载体与满足证上游在盘，接口形补上即全 Concrete）。  *)
-(* 放电清单（本席三件，全 Qed 零接口外假设）：                             *)
+
 (*   [桥件] t34_log_eq_linear_weak —— t1 切点⟹一件的接口形重曝：           *)
-(*          log u == u−1 (u>0) ⟹ u == 1，与 UpReqU2 eq 槽逐位同形；       *)
+
 (*   [消费位 1] t34_s6_w2_gibbs_eq —— w2_gibbs_eq Real 实例化              *)
 (*          （eq 槽喂桥件；le 槽诚实参数位；compat 槽喂 B1）；              *)
 (*   [消费位 2] t34_s6_req_u2_fixed_point_unique —— U2 唯一性件 Real       *)
 (*          实例化（w2_gibbs_eq 下游；eq 槽同喂；inv_exp_neg 槽喂 B4；      *)
 (*          sum 面/KL>=0 面/le 面槽诚实参数位）。                          *)
-(* 至此 s6 位三桥槽中 eq 槽（等号条件件）实现 Real 层无条件放电；            *)
-(* le 槽为 Or 编码逆向不可及（非本席面），账面如实分记。                    *)
+(* 至此 s6 位三桥槽中 eq 槽（等号条件件）实现 Real 层无条件消解；            *)
+
 (* 红线自查：无假设声明件（语句面全消费位假设参数）、无未闭合证明收尾、      *)
 (*   无经典回溯导入；Set 层零 Prop 泄露（结论全 req/lt/le 接口 Set 值）；    *)
 (*   全 Qed 闭合；既有文件零改；零 git；新名 t34_ 前缀（全库检索零命中）。   *)
-(* 编译配方：_t34_run.ps1 温控包装（cpu_guard CoreN 5 绑核）                *)
-(*   coqc -q [-vos] -Q voTree "" -Q . "" <件>.v                            *)
-(*   G4：coqchk -Q voTree "" -Q . "" UpReqCEqDispersion                    *)
+
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -63,8 +72,8 @@ Import RealInterfaceEnhancedMod.
 (* Part A：桥件——「切点⟹一」的 eq 槽接口形重曝                             *)
 (*   槽形（UpReqU2 L315-316 出节形）：                                     *)
 (*     forall x Hx, req (log x Hx) (req_minus x one) -> req x one          *)
-(*   Real 层与 t1_log_eq_linear_inject 逐位 δ 可逆（req/lt/log/one 字段     *)
-(*   即 real_eq/real_lt/real_log/real_one，req_minus a b δ 展 plus a       *)
+
+
 (*   (opp b)），桥件零重证、零新假设。                                     *)
 (* ============================================================ *)
 
@@ -132,7 +141,7 @@ Theorem t34_s6_req_u2_fixed_point_unique :
   (forall f : S -> Real,
     (forall s : S, le zero (f s)) -> req (sumf f) zero ->
     forall s : S, req (f s) zero) ->
-  (* eq 槽：不在参数面——桥件 t34_log_eq_linear_weak 一次喂定（本席放电位） *)
+  
   (forall x : Real,
     req (log_inv (exp_neg x) (exp_neg_pos x)) x) ->
   (forall (x : Real) (Hx : lt zero x),

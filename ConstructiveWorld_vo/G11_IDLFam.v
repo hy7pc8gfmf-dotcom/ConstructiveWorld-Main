@@ -5,8 +5,8 @@
 (* UpCLQuery.v — CL 2.0 分型拒答 Coq 落地：三类查询显式分型 + 结构性拒答      *)
 (*              + 差表封闭律语法免疫                                        *)
 (*                                                                       *)
-(* 设计出处：ROUNDTABLE2 席 3 终稿（轮次 3）CL 2.0（2 票，席 5/6 投票理由：    *)
-(*   Coq 落地路径全场最短）；排队席位方案-二轮成果Coq化-20260907.md Q4 条目。  *)
+(* 设计出处：ROUNDTABLE2 上游会话 终稿（轮次 3）CL 2.0（2 票，上游会话/6 投票理由：    *)
+(*   Coq 落地路径全场最短）；排队模块位方案-二轮成果Coq化.md Q4 条目。  *)
 (*                                                                       *)
 (* 三组件：                                                                *)
 (*   件 1  三类查询显式分型 qtype：[内]QIN 平移不变 / [值]QVAL 价值 /          *)
@@ -24,7 +24,7 @@
 (* 载体全程 Z/nat/bool 判定层；语句零 Prop：等式用 tid、序用 nle、            *)
 (* 存在用 sigT、分支用 sumbool / bool+tid、⟺ 用 iffT（Set 层双函数记录）。   *)
 (* 纪律：纯构造性、无任何公理式出口、stdlib only、全链可提取。                 *)
-(* 定稿决策（未定稿细节按「落地最短+判定天然」自定，见交付报告）：             *)
+(* 定稿决策（未定稿细节按「落地最短+判定天然」自定，见技术报告）：             *)
 (*   差量域取 Z（Q 的整数格，判定天然）；头元规范 h=0 固定（pot i = 差 i 0）；  *)
 (*   头券 = 单槽 option (nat*Z)（指标+熔合绝对量），答一次即焚；               *)
 (*   锚义务列 = acol 归纳型（锚闭合事件 acolS），准入 = aread 命中。           *)
@@ -267,7 +267,7 @@ Inductive qtype : Set :=
 (* 缺失凭证型标：拒答值携带"缺哪种凭证"的结构信息（显式枚举） *)
 Inductive misscred : Set :=
 | MC_RANGE (i : nat)   (* 缺在册凭证：指标 i 未入账（0 .. dlen 之外） *)
-| MC_VSLOT             (* 缺头券：单槽价值凭证缺席或已焚              *)
+| MC_VSLOT             (* 缺头券：单槽价值凭证缺模块或已焚              *)
 | MC_ANCH (i : nat).   (* 缺锚闭凭证：指标 i 无已闭锚义务             *)
 
 (* 答型：左支 = 答值（显式构造），右支 = 结构性拒答（携缺失凭证型标）。
@@ -612,23 +612,23 @@ Close Scope Z_scope.
 
 (* ======== G11_IDLFam 成员件：UpIDL（原样并入，自带 Require）======== *)
 (* ===================================================================== *)
-(* UpIDL.v — 判词织机 IDL 熔锭差分两段制 Coq 落地                           *)
+(* UpIDL.v — 判定织机 IDL 熔锭差分两段制 Coq 落地                           *)
 (*                                                                       *)
-(* 设计出处：ROUNDTABLE2 席 4 轮次 3 终稿「熔锭差分织机（Ingot-Differential    *)
-(*   Loom, IDL）——两段制，判词流永不逐条重放」（含席 3 异或击杀与席 2 活锁     *)
-(*   击杀的双重收编）；排队席位方案-二轮成果Coq化-20260907.md Q5 条目          *)
-(*   （依赖 Q4 语义——UpCLQuery.v 已交付，本件 Require Import 直接消费）。     *)
+(* 设计出处：ROUNDTABLE2 上游会话 轮次 3 终稿「熔锭差分织机（Ingot-Differential    *)
+(*   Loom, IDL）——两段制，判定流永不逐条重放」（含上游会话 异或击杀与上游会话 活锁     *)
+(*   击杀的双重收编）；排队模块位方案-二轮成果Coq化.md Q5 条目          *)
+(*   （依赖 Q4 语义——UpCLQuery.v 已给出，本件 Require Import 直接消费）。     *)
 (*                                                                       *)
 (* 两段制：                                                                *)
-(*   构造段（熔炼 melt）：判词流单遍右折叠为锭 ingot——六洞钉位（同值累计       *)
-(*         立钉 P1、异值即冲突 PB 恒传、缺判词即 PN）+ 拒值差条款列。          *)
+(*   构造段（熔炼 melt）：判定流单遍右折叠为锭 ingot——六洞钉位（同值累计       *)
+(*         立钉 P1、异值即冲突 PB 恒传、缺判定即 PN）+ 拒值差条款列。          *)
 (*   差分段（织 weave）：只吃锭、永不重放流——钉位差分编译为 Q4 载体 dtab       *)
 (*         （头元 k0 规范 0，dlen=5），拒值差条款在织出表上逐条 Z 判定        *)
-(*         （段间差分可判定）；见证缺席 / 钉冲突 / 差条款相抵 → 欠单 wiou      *)
+(*         （段间差分可判定）；见证缺模块 / 钉冲突 / 差条款相抵 → 欠单 wiou      *)
 (*         如实记欠，不吐件。                                                *)
 (* 主定理：melt_hom（熔炼=列表同态，两段构造的代数内容）/ pin_iffT（钉位=流    *)
-(*   中 pass 判词的一致聚合，iffT 双向守恒）/ weave_sound（织出即合法：流中   *)
-(*   每枚判词都被织出表满足——出生免疫跨洞非法）/ weave_replay_b/_d +          *)
+(*   中 pass 判定的一致聚合，iffT 双向守恒）/ weave_sound（织出即合法：流中   *)
+(*   每枚判定都被织出表满足——出生免疫跨洞非法）/ weave_replay_b/_d +          *)
 (*   replay_census（整流重放：织造判定、织出件、冲突清点全部不变——活锁       *)
 (*   失去载体）/ recheck_pass（织出件交 Q4 判定面 [内]类查询逐词复核）/        *)
 (*   xor_defused（异或流如实记欠不织——二轮击杀实验的收编回归）。              *)
@@ -637,9 +637,9 @@ Close Scope Z_scope.
 (* 语句零 Prop：等式 clq_tid、序 clq_nle、⟺ iffT、分支 bool/prod/sigT。              *)
 (* 纪律：纯构造性、零公理式出口、stdlib + UpCLQuery、全链可提取。              *)
 (* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面咬合最紧」自定）：     *)
-(*   ① 六洞型 hole=k0 k1 kb kc ke kr 具象为六槽，槽位=Q4 dtab 指标 0..5，      *)
-(*      头元 k0 恒 0（gauge 规范），全部判词语义走头相对差 dsub d (hix h) 0。  *)
-(*   ② 判词 verd=洞型×向×Z 证据：pass(h,w) 立钉「值=w」；rej(h,e) 出差条款     *)
+(*   ① 六洞型 hole=k0 k1 kb kc ke kr 具象为六槽，参数位=Q4 dtab 指标 0..5，      *)
+(*      头元 k0 恒 0（gauge 规范），全部判定语义走头相对差 dsub d (hix h) 0。  *)
+(*   ② 判定 verd=洞型×向×Z 证据：pass(h,w) 立钉「值=w」；rej(h,e) 出差条款     *)
 (*      「值≠e」（非零差分要求，即设计的见证型差条款）。                       *)
 (*   ③ 钉位三态 pinv=PN 缺 / P1 z 立钉 / PB 冲突——冲突位 PB 恒传播，故          *)
 (*      同洞异值在整流中至多记一次（=设计「同洞异值记冲突一次」）；摩擦计       *)
@@ -690,7 +690,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 1. 判词：结构化裁决值（洞型 + 向 + Z 证据）                                *)
+(* 1. 判定：结构化裁决值（洞型 + 向 + Z 证据）                                *)
 (* ===================================================================== *)
 
 Inductive hole : Set := k0 | k1 | kb | kc | ke | kr.
@@ -768,7 +768,7 @@ Fixpoint vIn (v : verd) (s : list verd) : bool :=
   | x :: t => orb (vbeq x v) (vIn v t)
   end.
 
-(* 一致性谓词：h 洞上每枚 pass 判词值皆 w *)
+(* 一致性谓词：h 洞上每枚 pass 判定值皆 w *)
 Fixpoint allpass (h : hole) (w : Z) (s : list verd) : bool :=
   match s with
   | nil => true
@@ -925,7 +925,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 3. 熔炼 melt：判词流单遍折叠为锭（构造段）                                  *)
+(* 3. 熔炼 melt：判定流单遍折叠为锭（构造段）                                  *)
 (* ===================================================================== *)
 
 Record ingot : Set := mkIng
@@ -940,7 +940,7 @@ Qed.
 
 Definition mzero : ingot := mkIng pzero nil.
 
-(* 单枚判词的锭：pass 立钉；rej 出差条款 *)
+(* 单枚判定的锭：pass 立钉；rej 出差条款 *)
 Definition m1 (v : verd) : ingot :=
   match vd v with
   | vpass => mkIng (pupd (vh v) (P1 (vz v)) pzero) nil
@@ -1005,7 +1005,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 4. 钉位守恒：钉=流中 pass 判词的一致聚合（iffT 双向）                        *)
+(* 4. 钉位守恒：钉=流中 pass 判定的一致聚合（iffT 双向）                        *)
 (* ===================================================================== *)
 
 Definition pinokp (w : Z) (x : pinv) : bool :=
@@ -1075,7 +1075,7 @@ Proof.
       -- cbn [pinokp] in IPB. tidQ IPB E. discriminate E.
 Qed.
 
-(* 钉位 = PN ⟹ 该洞无任何 pass 判词 ⟹ allpass 平凡真 *)
+(* 钉位 = PN ⟹ 该洞无任何 pass 判定 ⟹ allpass 平凡真 *)
 Lemma pinPN_allpass : forall (s : list verd) (h : hole) (w : Z),
   clq_tid pinv (pget (ipin (melt s)) h) PN -> clq_tid bool (allpass h w s) true.
 Proof.
@@ -1099,7 +1099,7 @@ Proof.
       exact (IH h w Hb).
 Qed.
 
-(* 钉位 = P1 z ⟹ 流中确有 pass(h,z) 判词 *)
+(* 钉位 = P1 z ⟹ 流中确有 pass(h,z) 判定 *)
 (* 钉位聚合键式引理：P1 z0 ⊕ P1 z1 = P1 z ⟹ z0 = z *)
 Lemma pjR_P1_head : forall (z0 z1 z : Z),
   clq_tid pinv (pjR (pj (P1 z0) (P1 z1))) (P1 z) -> z0 = z.
@@ -1112,7 +1112,7 @@ Qed.
 
 (* pin_P1_in：由 pin_P1_in_val/pin_PN_absurd 组合覆盖（见 pin_iffT 消费面） *)
 
-(* 钉位 = PN ⟹ 流中不可能有 pass(h,z) 判词（荒谬件，任意 Set 可关） *)
+(* 钉位 = PN ⟹ 流中不可能有 pass(h,z) 判定（荒谬件，任意 Set 可关） *)
 Lemma pin_PN_absurd : forall (s : list verd) (h : hole) (z : Z),
   clq_tid pinv (pget (ipin (melt s)) h) PN ->
   clq_tid bool (vIn (mkVd h vpass z) s) true ->
@@ -1211,7 +1211,7 @@ Proof.
                               (clq_tid_eq pinv _ _ (eq_sym EB)) Hp) Hin).
 Qed.
 
-(* 钉位 = P1 w ⟹ 全体 pass 判词一致于 w *)
+(* 钉位 = P1 w ⟹ 全体 pass 判定一致于 w *)
 Lemma pin_P1_allpass : forall (s : list verd) (h : hole) (w : Z),
   clq_tid pinv (pget (ipin (melt s)) h) (P1 w) ->
   clq_tid bool (allpass h w s) true.
@@ -1257,8 +1257,8 @@ Proof.
                          (clq_tid_eq pinv _ _ (eq_sym EB)) H)).
 Qed.
 
-(* 主定理 2：钉位 iffT——钉 = 流中 pass 判词的一致聚合（守恒双向：
-   不发明——钉值必来自流内判词；不歪曲——流内 pass 判词全体一致） *)
+(* 主定理 2：钉位 iffT——钉 = 流中 pass 判定的一致聚合（守恒双向：
+   不发明——钉值必来自流内判定；不歪曲——流内 pass 判定全体一致） *)
 (* pin_iffT：fwd 向由 pin_P1_in_val/pin_P1_allpass 覆盖；bwd 向由
    allpass_pinok/pin_P1_allpass 覆盖（内容等价，分装为两个定向引理） *)
 
@@ -1282,7 +1282,7 @@ Proof.
     apply (clq_tid_eq bool _ _). apply Bool.orb_assoc.
 Qed.
 
-(* 流中 rej(h,e) 判词 ⟹ 条款入锭 *)
+(* 流中 rej(h,e) 判定 ⟹ 条款入锭 *)
 Theorem rej_from_stream : forall (s : list verd) (h : hole) (e : Z),
   clq_tid bool (vIn (mkVd h vrej e) s) true ->
   clq_tid bool (cinc h e (irej (melt s))) true.
@@ -1483,7 +1483,7 @@ Proof.
   - tidQ H H2. discriminate H2.
 Qed.
 
-(* 判词满足性判定（段间差分可判定的逐词形态）：
+(* 判定满足性判定（段间差分可判定的逐词形态）：
    pass(h,w) ⟺ 织出表头相对差 = w；rej(h,e) ⟺ 头相对差 ≠ e（非零差条款成立） *)
 Definition vrespects (d : dtab) (v : verd) : bool :=
   match vd v with
@@ -1491,7 +1491,7 @@ Definition vrespects (d : dtab) (v : verd) : bool :=
   | vrej => negb (Z.eqb (dsub d (hix (vh v)) O) (vz v))
   end.
 
-(* 主定理 3：织出即合法——流中每枚判词都被织出表满足（出生免疫跨洞非法） *)
+(* 主定理 3：织出即合法——流中每枚判定都被织出表满足（出生免疫跨洞非法） *)
 Theorem weave_sound : forall (s : list verd) (d : dtab),
   clq_tid weaveout (weave (melt s)) (wok d) ->
   forall v : verd, clq_tid bool (vIn v s) true -> clq_tid bool (vrespects d v) true.
@@ -1727,7 +1727,7 @@ Proof.
   - apply clq_nle_n.
 Qed.
 
-(* 主定理 5：织出件交给 Q4 问答机复核——[内]类差值查询的答案恰为判词钉值。
+(* 主定理 5：织出件交给 Q4 问答机复核——[内]类差值查询的答案恰为判定钉值。
    织机出生即证 + Q4 判定面独立复核，两件咬合。 *)
 Theorem recheck_pass : forall (s : list verd) (d : dtab) (h : hole) (w : Z),
   clq_tid weaveout (weave (melt s)) (wok d) ->
@@ -1752,8 +1752,8 @@ Qed.
 (* 9. 计算演示：异或流收编回归 + 幸福路 + 同洞异值记冲突一次                     *)
 (* ===================================================================== *)
 
-(* 二轮击杀实验（席 3 异或流）的 IDL 回归：pass-A 后 rej-B——
-   B 无钉（无 pass 判词）→ 欠单如实记缺；B 的差条款「值≠0」对占位 0 相抵 →
+(* 二轮击杀实验（上游会话 异或流）的 IDL 回归：pass-A 后 rej-B——
+   B 无钉（无 pass 判定）→ 欠单如实记缺；B 的差条款「值≠0」对占位 0 相抵 →
    再记一条 REJ——异或流给不出非零差见证，记欠，不织。 *)
 Definition sX : list verd := mkVd k1 vpass 0 :: mkVd kb vrej 0 :: nil.
 

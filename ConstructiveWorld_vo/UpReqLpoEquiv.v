@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqLpoEquiv.v *)
+(* *)
+(* 目的： 平方非负全称命题与受限 LPO 的双向归约。 *)
+(* 主件： rLPO 与 SqWall 的 lpn_equivalence 双向腿（q_sq_nonneg 全称形为墙面）。 *)
+(* 依赖： S01_BaseRing、S02_CauchyComplete。 *)
+(* 备注： 零公理、零假设负载；不证墙命题为假，证其与受限 LPO 等价（构造性边界）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLpoEquiv.v —— AA15：平方非负全称 ⟺ 受限 LPO 双向归约定理 *)
 (*                                                              *)
 (* 公理面：本件零公理、零假设负载——S02:802 real_square_not_negative  *)
@@ -30,14 +39,14 @@
 (* 依赖：S01_BaseRing（自定义 And/Or/NatLe）+ S02_CauchyComplete  *)
 (*       （Real/real_lt/real_le/real_mult_proj）。               *)
 (* ------------------------------------------------------------ *)
-(* AA15R 断点续接收口（20260914）：                              *)
-(*   续 _SUSPEND_AA15_20260914（前席 08:58 挂起令）。已建成零改动： *)
+(* AA15R 断点续接完成（20260914）：                              *)
+
 (*   Part 1 八引理、两面语句面、lpn_forward 左支逐字续用。         *)
-(*   余留三支（正向右支/反向两支）按「内核事实+命题式桥」收口。     *)
+(*   余留三支（正向右支/反向两支）按「内核事实+命题式桥」完成。     *)
 (*   对 SUSPEND 余留清单的三处实形适配（探针 _taa15r_probe2/3      *)
-(*   全量真验定谳）：                                              *)
+(*   全量真验判定）：                                              *)
 (*   ①real_mult 对变量 x 卡 match（proof-mode destruct 定义体），  *)
-(*     change 内核转换路不可行 ⟹ 改 real_mult_proj 命题式喂参；    *)
+(*     change 内核转换路不可行 ⟹ 改 real_mult_proj 命题式提供实参；    *)
 (*   ②real_eq 实形差序为首元−尾元（S02:387），real_le real_zero    *)
 (*     (x·x) 右支逐点项 = Qabs (0 − x_n·x_n)，minus0 桥取 0−a 形； *)
 (*   ③正向右支供隙改 δ := eps·eps（原 eps·½ 与 q_sq_abs_lt 的      *)
@@ -179,8 +188,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 1.5（AA15R 续建）：顶面桥双件——Qabs 实例缺席收口           *)
-(*   Qeq 重写在 Qabs 参数位无 Proper 实例（前席 L278 实测根因），   *)
+(* Part 1.5（AA15R 续建）：顶面桥双件——Qabs 实例缺席完成           *)
+
 (*   故一切换形走「顶面 Qabs 原子」+ 自证同构引理，零实例依赖。     *)
 (* ============================================================ *)
 
@@ -201,7 +210,7 @@ Lemma q_abs_congr : forall x y : Q, x == y -> Qabs x == Qabs y.
 Proof.
   intros x y H.
   destruct (Qlt_le_dec 0 x) as [Hx | Hx].
-  - (* 0 < x：搬运 0 ≤ y 后两面 Qabs_pos 收口 *)
+  - (* 0 < x：搬运 0 ≤ y 后两面 Qabs_pos 完成 *)
     assert (Hxle : 0 <= x) by (apply Qlt_le_weak; exact Hx).
     pose proof Hxle as Hy.
     rewrite H in Hy.
@@ -306,8 +315,8 @@ Proof.
               exact Hsmall'.
   - (* 右支：x·x == 0 逐点归零 ⟹ x 逐点归零（无平方根桥）                              *)
     (* AA15R：real_eq 实形差序为首元−尾元（S02:387），逐点项 = Qabs (0 − x_n·x_n)；      *)
-    (*   real_mult 对变量卡 match（probe P1 实证），以 real_mult_proj 命题式喂参         *)
-    (*   + q_abs_congr 顶面换形收口；供隙 δ := eps·eps，经 q_sq_abs_lt（e := eps）出。    *)
+    (*   real_mult 对变量卡 match（probe P1 实证），以 real_mult_proj 命题式提供实参         *)
+    (*   + q_abs_congr 顶面换形完成；供隙 δ := eps·eps，经 q_sq_abs_lt（e := eps）出。    *)
     apply inr.
     intros eps Heps.
     pose proof (QltT_to_Qlt 0 eps Heps) as HepsQ.
@@ -423,7 +432,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5：定谳件——双向归约                                      *)
+(* Part 5：判定件——双向归约                                      *)
 (* ============================================================ *)
 
 Definition lpn_equivalence : And (SqWall -> rLPO) (rLPO -> SqWall) :=

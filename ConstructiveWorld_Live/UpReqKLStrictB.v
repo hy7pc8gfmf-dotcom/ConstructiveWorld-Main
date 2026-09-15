@@ -1,19 +1,28 @@
 (* ============================================================ *)
-(* UpReqKLStrictB.v —— KLStrict 族的 ≤_B（real_le_b 系）显式对照/收口件席  *)
-(*   （席 T23 · 20260911；判词 C 挂账件——G07_KLWall 成员 UpReqKLEnergy   *)
-(*   尾注判词 C：「逐项 Bishop 形（eps 余量）无前提路线由库侧              *)
+(* UpReqKLStrictB.v *)
+(* *)
+(* 目的： KLStrict 族的 ≤_B 显式对照与完成件。 *)
+(* 主件： klstb_kl_sum_strict_B / klstb_gibbs_core_zero_B：严格核的 B 形完成。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、UpRealLeB3、G07_KLWall。 *)
+(* 备注： 结论 C 为显式假设件（G07_KLWall 成员承接）；对照形与原 eps 形并存。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqKLStrictB.v —— KLStrict 族的 ≤_B（real_le_b 系）显式对照/完成件席  *)
+(*   （席 T23 · 20260911；结论 C 显式假设件——G07_KLWall 成员 UpReqKLEnergy   *)
+(*   尾注结论 C：「逐项 Bishop 形（eps 余量）无前提路线由库侧              *)
 (*   real_gibbs_core_eps / real_gibbs_inequality_eps 承载，其严格化        *)
-(*   收口器（real_le_b 系）留待后续席位。」本件即该后续席位交付。）        *)
+
 (*                                                                *)
-(* 盘面先查（防重复不重建，零缩水）：                                      *)
+
 (*   E.12 real_gibbs_core_B（UpRealLeB L578）与 E.13                      *)
 (*   real_gibbs_inequality_B（UpRealLeB L592）两件「eps 形源件 → ≤_B」    *)
-(*   直接收口器已在盘（real_le_closure_b D:=p 实例 / closure_b_one        *)
-(*   单步定式），本件不再复刻——本件交付其**未覆盖的余留面**：            *)
+(*   直接完成器已在盘（real_le_closure_b D:=p 实例 / closure_b_one        *)
+(*   单步定式），本件不再复刻——本件结果其**未覆盖的余留面**：            *)
 (*   A. 严格层 sigT 正陈述 → ≤_B 的显式单向桥（real_lt → real_le_b）。    *)
 (*   B. ≤_B 右平移兼容器（plus_compat + 自反一步合成）。                  *)
 (*   C. 逐项**无条件** B 面：0 ≤_B kl_term(p,q)+(q−p)——零比较前提、      *)
-(*        零归一化前提（仅 Hp/Hq 供 real_kl_term 类型位），判词 C         *)
+(*        零归一化前提（仅 Hp/Hq 供 real_kl_term 类型位），结论 C         *)
 (*        「无前提路线」在 ≤_B 面的显形（p<q 与 p==q 与 q<p 三支合一）。  *)
 (*   D. ≤_B 逐点求和保序器（族级组合器；UpRealLeB/2/3 无 list 版）。      *)
 (*   E. 无条件平移和件：0 ≤_B Σ_s (kl_term+(q−p))（零比较零归一化）。     *)
@@ -25,12 +34,12 @@
 (*   UpRealLeB2（real_le_b_plus_compat L336）、UpRealLeB3                 *)
 (*   （leb3_le_b_refl L45 / leb3_le_b_eq_l L51）、G07_KLWall              *)
 (*   （klst_kl_sum_strict / klst_kl_energy_nonconst /                     *)
-(*   klst_gibbs_core_zero / real_kl_term / real_list_sum 经 CW219）。     *)
+(*   klst_gibbs_core_zero / real_kl_term / real_list_sum 经 ）。     *)
 (*                                                                *)
 (* 红线自审：real_le_b 为 Set 值全称谓词（UpRealLeB L63），real_lt        *)
 (*   为 sigT 见证集值，语句面全 Set 零类域降级；纯构造（弱三分内消解，    *)
-(*   不引入排中形态前提）；全件 Qed 封口；前置组只读消费零写入。          *)
-(* 编译配方：cpu_guard.ps1 包装 CoreN 3，coqc -vos 秒审先行后全量，        *)
+(*   不引入排中形态前提）；全件 Qed ；前置组只读消费零写入。          *)
+
 (*   -Q ConstructiveWorld_vo "" -Q 本目录 ""。                            *)
 (* ============================================================ *)
 
@@ -97,7 +106,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part A：严格 → ≤_B 显式单向桥（判词 C 需求件之一）                    *)
+(* Part A：严格 → ≤_B 显式单向桥（结论 C 需求件之一）                    *)
 (* ============================================================ *)
 
 (* x < y（sigT 正陈述）⟹ x ≤_B y：real_lt_le_iff_req 左支入 Or 面，      *)
@@ -125,7 +134,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part C：逐项无条件 B 面——0 ≤_B kl_term + (q−p)                       *)
-(*   （判词 C「无前提路线」≤_B 显形：零比较前提、零归一化前提；          *)
+(*   （结论 C「无前提路线」≤_B 显形：零比较前提、零归一化前提；          *)
 (*    证书供给 = E.12 real_gibbs_core_B 右平移 (q−p) + Part 0 对消）     *)
 (* ============================================================ *)
 
@@ -187,7 +196,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part E：无条件平移和件——0 ≤_B Σ_s (kl_term + (q−p))                  *)
-(*   （零比较前提、零归一化前提；逐项 Part C 经 Part D 收口）            *)
+(*   （零比较前提、零归一化前提；逐项 Part C 经 Part D 完成）            *)
 (* ============================================================ *)
 
 Lemma klstb_kl_sum_shift_B : forall (X : Type) (l : list X) (p q : X -> Real)

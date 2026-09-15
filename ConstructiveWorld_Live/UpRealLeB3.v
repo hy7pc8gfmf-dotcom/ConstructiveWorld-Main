@@ -1,12 +1,21 @@
 (* ============================================================ *)
+(* UpRealLeB3.v *)
+(* *)
+(* 目的： Bishop 序代数引擎固化层（B 形扩展第一队列）。 *)
+(* 主件： leb3_le_b_refl / leb3_le_b_pos_scale 等 ≤_B 序代数定律族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2。 *)
+(* 备注： 纯序代数：零 eps 拆分底座，双右侧加成对消去直连第二段完成器。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpRealLeB3.v —— ≤_B 序代数引擎固化层（B 形扩展建造队列 T1）         *)
 (*                                                                *)
 (* 立项：侦察席「B形扩展建造队列-20260910」目标 1。运输四件原困于邻席    *)
 (* 领地中间态文件（只读参考、勿依赖），本库以 leb3_ 前缀独立真证固化，    *)
 (* 双形并存零 Require 关系；反序/正缩放/严格对照锚三件为 ≤_B 序代数      *)
 (* 第三面（负号反变 / 数乘兼容 / 恒等严格元）新构造。                   *)
-(* 基座：UpRealLeB（谓词 / 单向桥 / 收口器）+ UpRealLeB2（加法兼容       *)
-(* 组合器）+ CW219 锚点（opp 严格反序 real_opp_lt_compat、opp 分配       *)
+(* 基座：UpRealLeB（谓词 / 单向桥 / 完成器）+ UpRealLeB2（加法兼容       *)
+(* 组合器）+ 锚点（opp 严格反序 real_opp_lt_compat、opp 分配       *)
 (* real_opp_plus、乘法保序 real_mult_lt_compat、逐点投影                *)
 (* real_plus_proj / real_abs_proj、混合加法 real_lt_plus_compat_lt_le）。*)
 (* 侦察勘误两则：①opp 严格反序 / opp 分配 Real 层在案（原判「缺位」），  *)
@@ -14,9 +23,9 @@
 (*                                                                *)
 (* 七件清单：1 refl 自反 / 2 eq_l 左运输 / 3 eq_r 右运输 /                *)
 (*   4 plus_nonneg_r 非负右加 x≤_B y+c / 5 opp_rev 反序 −y≤_B−x /         *)
-(*   6 pos_scale 正缩放 x·c≤_B y·c（收口器反用 D:=c；伴生 pos_scale_l     *)
+(*   6 pos_scale 正缩放 x·c≤_B y·c（完成器反用 D:=c；伴生 pos_scale_l     *)
 (*     左因子形＝任务书 c·x≤_B c·y 方向）/ 7 abs_plus_one_pos 0<|a|+1     *)
-(*     （冻结筛余唯一 Real 层可对照行@CW219 L549 的对照锚；见证 1/2、     *)
+(*     （冻结筛余唯一 Real 层可对照行@L549 的对照锚；见证 1/2、     *)
 (*      N:=0 逐点 Q 层直构）                                             *)
 (*                                                                *)
 (* 红线自检口径：                                                      *)
@@ -29,7 +38,7 @@
 (*   —— 提取探针 Obj.magic=0（独立小探针，验后删）；                     *)
 (*   —— Print Assumptions 全件 Closed（文末八连打，证据在编译日志）。     *)
 (* 编译配方：cpu_guard 包装零裸调（9.0 同轨）：                          *)
-(*   coqc -Q . "" -Q "..\001" "" UpRealLeB3.v                           *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qring.
@@ -92,7 +101,7 @@ Qed.
 (* 件 5：反序：x ≤_B y 给 −y ≤_B −x。
    给 d>0：H 直取 x<y+d ⟹ −(y+d)<−x（opp 严格反序基元）
    ⟹ 换形 −y+−d<−x（opp 分配）⟹ 双侧右加 d（lt_le 混合加法保序）
-   ⟹ 左端 (−y+−d)+d == −y 恒等收口（结合 + −d+d==0 + +0）。
+   ⟹ 左端 (−y+−d)+d == −y 恒等完成（结合 + −d+d==0 + +0）。
    d 在两侧成对消去，免 eps/2 拆分。 *)
 Lemma leb3_le_b_opp_rev : forall x y : Real,
   real_le_b x y -> real_le_b (real_opp y) (real_opp x).
@@ -132,11 +141,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 三、正缩放件（收口器反用）                                           *)
+(* 三、正缩放件（完成器反用）                                           *)
 (* ============================================================ *)
 
 (* 件 6：正缩放：x ≤_B y 且 0<c 给 x·c ≤_B y·c。
-   收口器反用（D:=c）：给 e>0 只需 Or 形 x·c ≤ y·c+c·e——
+   完成器反用（D:=c）：给 e>0 只需 Or 形 x·c ≤ y·c+c·e——
    x<y+e 经乘法保序 ⟹ x·c<(y+e)·c，再 (y+e)·c==y·c+c·e 换形。 *)
 Lemma leb3_le_b_pos_scale : forall x y c : Real,
   real_le_b x y -> real_lt real_zero c ->

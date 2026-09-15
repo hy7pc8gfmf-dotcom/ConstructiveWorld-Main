@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqArgminEngine.v *)
+(* *)
+(* 目的： argmin 选取引擎：有限枚举上的最小值选取与最优性。 *)
+(* 主件： rae_pick_mem / rae_pick_optimal：选取的成员性与最优性；mpd_argmin_engine_transport 域搬运。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqDist、UpReqAlignRestB、UpReqAlgebra、UpReqMpDomain。 *)
+(* 备注： 序可判定（le/lt 的 Or 形判定）为显式 Variable 前提；有限枚举载体。 *)
+(* ============================================================ *)
+
 (* UpReqArgminEngine.v — 席T36：通用 req-list argmin 引擎（20260911）
    ----------------------------------------------------------------
    立论（席A4 深度分析实证，Top-5 候选 A1-3）：mp 域
@@ -11,7 +20,7 @@
    通用引擎，并在尾段以 mp 域实例回收验证（转换级 transport +
    via_engine 三件）兑现「mp 域 argmin 可由泛化引擎实例化」。
 
-   对位台账（req 引擎件 <- mp 域原件 @ UpReqMpDomain.v 行号）：
+   对位登记表（req 引擎件 <- mp 域原件 @ UpReqMpDomain.v 行号）：
      rae_InT_head_extend            <- mpd_InT_head_extend（L381；A 泛化）
      rae_argmin_aux                 <- mpd_argmin_aux_token（L358；
                                        total_loss (prefix++[w]) → key a）
@@ -25,7 +34,7 @@
      rae_pick_optimal               <- mpd_pick_best_optimal_mp（L469；
                                        等词伴件运输以 eq_rect 纯 term）
    [回收验证段 MpRecycleProbe]
-     mpd_argmin_engine_transport    （放电形定义级转换：mp 机器 = 引擎
+     mpd_argmin_engine_transport    （消解形定义级转换：mp 机器 = 引擎
                                        在 A:=Token, key:=fun w =>
                                        total_loss (prefix++[w]) 的实例）
      mpd_argmin_aux_token_min_via_engine / _snd_correct_via_engine /
@@ -35,7 +44,7 @@
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（Or/And 为 S01 Set 值 A+B / A×B；
    InT 为 stdlib Set 值遍历；等词伴件仅限 snd_correct 恒等式，mp 件
-   同位先例）；InT 空支一律 inversion 收口（OrderArgmin 卡：term 级
+   同位先例）；InT 空支一律 inversion 完成（OrderArgmin 卡：term 级
    空 match 提取面不净）；纯 term/结构化 apply，零目标换形战术；
    核心件 Qed。 *)
 
@@ -183,7 +192,7 @@ End ReqArgminEngine.
 (* ============================================================ *)
 (* 回收验证段 MpRecycleProbe：mp 域 argmin = 引擎实例            *)
 (*（位形 = UpReqMpDomain Section ReqMpKernelWorld2 中 argmin 机器  *)
-(*  实际消费的槽位：Token / total_loss / 判定位 1+2；其余节变量    *)
+(*  实际消费的假设位：Token / total_loss / 判定位 1+2；其余节变量    *)
 (*  vocab_nonempty/temperature/default_token/min_p 不入机器闭包） *)
 (* ============================================================ *)
 Section MpRecycleProbe.
@@ -199,7 +208,7 @@ Definition mp_key (prefix : list Token) : Token -> R :=
 
 (* 定义级 transport：mp 域 argmin 机器与引擎实例逐点相等（归纳 +
    转换级：mp 机器递归多穿 prefix 参、引擎打点化 key，二者在
-   A:=Token, key:=mp_key prefix 槽位下逐支同形——回收判词的转换级
+   A:=Token, key:=mp_key prefix 假设位下逐支同形——回收结论的转换级
    证据：mp 机器就是引擎的特例） *)
 Lemma mpd_argmin_engine_transport : forall (prefix l : list Token)
          (best : (Token*R)%type),
@@ -229,7 +238,7 @@ Proof.
              (w0, total_loss (prefix ++ [w0]))).
 Qed.
 
-(* mp 域件 1 由引擎直供（语句与 mpd_argmin_aux_token_min_mp 放电形同位，
+(* mp 域件 1 由引擎直供（语句与 mpd_argmin_aux_token_min_mp 消解形同位，
    核心转换级闭合：transport + mp_key δ/β） *)
 Theorem mpd_argmin_aux_token_min_via_engine : forall (prefix l : list Token)
          (best_token : Token) (best_loss : R),

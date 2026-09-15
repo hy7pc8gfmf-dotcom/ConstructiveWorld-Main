@@ -1,6 +1,14 @@
-(* ===== CW219 拆分分片 S10_KVQuantTrig（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L53932-L66414；头部 20 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08 S09；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S10_KVQuantTrig.v                                           *)
+(*                                                             *)
+(* 目的：KV 量化相关的三角函数与指数界：sin/cos 构造性级数、     *)
+(*       扫描式零点、加法定理与 setoid 化稳态方程（Set 层）。    *)
+(* 主件：steady_state_boltzmann_attn_setoid（稳态方程 setoid 版）；*)
+(*       cos²+sin²==1 的代数核心（sc_cs_sq 分解）。              *)
+(* 依赖：S01–S09；Stdlib（QArith、List、Bool、Arith 等）。       *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L53932-L66414，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -1056,7 +1064,7 @@ End RealKVQuantMain.
 
 (* ============================================================ *)
 (* 项 5：DPO 损失 log-ratio 凸性（softplus 凸）——2026-09-02     *)
-(* 合入（探针 _dbg_dpo_conv.v 平移）                             *)
+(* 并入（探针 _dbg_dpo_conv.v 平移）                             *)
 (*   real_dpo_logit：ℓ(x) := −log σ(x)（dpo 单样本 logit 损失）  *)
 (*   A1 real_softplus_sigmoid_eq：ℓ(x) == log(1+e^{−x})          *)
 (*     （损失 ↔ softplus 形态连接；inv 对合 + log_inv_one_inv）   *)
@@ -1180,7 +1188,6 @@ Qed.
 
 (* ============================================================ *)
 (* SC-1：sin/cos 构造性级数（Q 层 + Real 层）                *)
-(* 合入批次：2026-09-03 轮 2（轮 1 为 Q 层收敛机器）          *)
 (* ============================================================ *)
 
 
@@ -5202,8 +5209,8 @@ Qed.
 (*       cos²+sin² 系数按度 2m 完全对消，m=0 项 == c₀² == 1）      *)
 (*       + sc_cs_sq_err_decomp（E == band_c + band_d 精确：        *)
 (*       c_n²+s_n²−1 == cos 上带 + sin 上带，零近似误差）          *)
-(* 路线：本批为 cos²+sin²==1（Real 层）的代数核心；后续批：       *)
-(*   |band| 尾界（exp_tail_abs 收口）+ 模量引理 + Real 层          *)
+(* 路线：cos²+sin²==1（Real 层）的代数核心；配套：                *)
+(*   |band| 尾界（exp_tail_abs）+ 模量引理 + Real 层              *)
 (*   real_cos_sq_plus_sin_sq_one（real_eq_of_zero_diff 型组装）。  *)
 (* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
 (* ============================================================ *)
@@ -7327,7 +7334,7 @@ Qed.
 (* ============================================================ *)
 (* SC-1 批 19c（轮 23）：Real 层 cos 严格递减 (0,2)              *)
 (*   real_cos_strict_decr：0 < X < Y < 2 ⟹ cos Y < cos X       *)
-(* 依赖：Q 层主引理 sc_cos_partial_diff_le（批 19b-2c 已合入，  *)
+(* 依赖：Q 层主引理 sc_cos_partial_diff_le（批 19b-2c 已并入，  *)
 (*       备份 178）；本批 margin eps := eps0²/6 + 差积分解组装   *)
 (* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
 (* ============================================================ *)
@@ -7449,10 +7456,10 @@ Qed.
 
 (* ============================================================ *)
 (* SC-1 批 19d-1（轮 24）：cos 零点二分·测试机械               *)
-(*   cos 在 (3/2, 5/3) 变号 → 镜像 log 战役 Chunk 5 approx_root *)
+(*   cos 在 (3/2, 5/3) 变号 → 镜像 log 论证 Chunk 5 approx_root *)
 (*   测试（目标 real_zero 精确，r 侧恒 0 简化）：cos_testA       *)
 (*   （cos m < 0）/cos_testB（0 < cos m）/双假缺陷              *)
-(*   （|cos m| ≤ 3·d4 == 3eps/16）——cos 零点 π/2 二分战役地基   *)
+(*   （|cos m| ≤ 3·d4 == 3eps/16）——cos 零点 π/2 二分论证地基   *)
 (* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
 (* ============================================================ *)
 
@@ -7636,7 +7643,7 @@ Qed.
 (* SC-1 批 19d-2（轮 24）：cos_scan 扫描 + 正确性               *)
 (*   cos 递减（批 19c）故分支与 log_scan（exp 递增）相反：       *)
 (*   A（cos m < 0）真 → 零点在 (a, m)；B（0 < cos m）真 → (m, b) *)
-(*   双假 → 冻结（中点缺陷 |cos m| ≤ 3·d4，批 19d-1 测试直喂）  *)
+(*   双假 → 冻结分支（中点缺陷 |cos m| ≤ 3·d4 之退化情形）       *)
 (* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
 (* ============================================================ *)
 
@@ -8375,7 +8382,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-1 批 19d-5（轮 24）：cos 零点 π/2 收官                   *)
+(* SC-1 批 19d-5（轮 24）：cos 零点 π/2 完结                   *)
 (*   cos_pi_half : Real（existT cos_seq_cauchyT）               *)
 (*   real_cos_pi_half_zero：cos(cos_pi_half) == 0               *)
 (*   装配：柯西 + exp-arch Lipschitz + 根逐点界 的 eps 分割      *)
@@ -8736,7 +8743,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 基态 191 追加（2026-09-03）：T-π2b——Leibniz π 上界收紧 4 → 10/3 *)
+(* T-π2b：Leibniz π 上界收紧 4 → 10/3（191 追加） *)
 (*   目标：real_pi_leibniz_lt_ten_thirds（π_L < 10/3）           *)
 (*   意义：与几何 π 同括 (3, 10/3)，为 T-π3（π_geom == π_L）铺路；*)
 (*         充实论文 3 数值章节（3 < π_geom < 10/3 ∧ 3 < π_L < 10/3）*)
@@ -8744,7 +8751,7 @@ Qed.
 (*         sc_lp_ev_decr），故 ∀n≥2：lp_odd n ≤ E_n ≤ E_2 = S6；  *)
 (*         S6 := lp_odd 2 + lp_a 6，4·S6 = 147916/45045 < 10/3    *)
 (*         余量 2234/45045 > 1/60。                              *)
-(*   纪律：纯构造性 Set 层、NatLe/QltT、零 Axiom、非平凡实现。    *)
+(*   纪律：纯构造性 Set 层、NatLe/QltT、零公理面、非平凡实现。    *)
 (* ============================================================ *)
 
 (* E_n 的 S6 上界（n ≥ 2）：E_{2+k} ≤ E_2（E 递减链下降至 E_2） *)
@@ -8830,7 +8837,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 1（合入 192）：sin(π/2)==1 及配套（与 191 批 T-π2b 并行合入）*)
+(* SC-2 批 1（并入 192）：sin(π/2)==1 及配套（与 191 批 T-π2b 并行并入）*)
 (* ============================================================ *)
 
 (* ---- 1a Q 层：0 ≤ q ⟹ |q−1| ≤ |q²−1|（正平方根==1 桥的 Q 内核） ---- *)
@@ -8987,7 +8994,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 2（合入 193）：T-π2 real_pi_geom_between          *)
+(* SC-2 批 2（并入 193）：T-π2 real_pi_geom_between          *)
 (* ============================================================ *)
 
 (* ---------- 通用：0 < c → a < c·b → a/c < b ---------- *)
@@ -9390,8 +9397,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 3（合入 194）：cos 零点唯一桥拓宽 (3/2,5/3)→(3/2,2) *)
-(*   子代理 sB 产出（评审合入）——T-π3 前置 *)
+(* SC-2 批 3（并入 194）：cos 零点唯一桥拓宽 (3/2,5/3)→(3/2,2) *)
+(*   子代理 sB 产出（评审并入）——T-π3 前置 *)
 (* ============================================================ *)
 
 (* ---- 1. 逆界（距离形，v ≤ 2 版）----
@@ -9594,8 +9601,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 4（合入 195）：exp 可微且导数即自身（显式可引）    *)
-(*   子代理 sC 产出（评审合入）——exp_deriv 显式陈述          *)
+(* SC-2 批 4（并入 195）：exp 可微且导数即自身（显式可引）    *)
+(*   子代理 sC 产出（评审并入）——exp_deriv 显式陈述          *)
 (* ============================================================ *)
 
 (* exp 在 x>0 处可微、且导数即 exp 自身（Bishop 显式形式）。
@@ -9751,7 +9758,7 @@ Proof.
 Qed.
 
 (* 配套实例：exp ∈ RealDifferentiable，且（构造性地）导函数显式取为 exp 自身。
-   由 real_exp_deriv_eq_self 直接收口；rdf_correct 即上述 Bishop 界。 *)
+   由 real_exp_deriv_eq_self 直接证得；rdf_correct 即上述 Bishop 界。 *)
 Lemma real_exp_diff_with_deriv_self :
   RealDifferentiable (fun (x : Real) (Hx : real_lt real_zero x) => cauchy_real_exp x).
 Proof.
@@ -9761,9 +9768,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 5（合入 196）：T-π3 Phase 1 外围                  *)
+(* SC-2 批 5（并入 196）：T-π3 Phase 1 外围                  *)
 (*   π_L·(1/2) ∈ (3/2, 5/3) 严格 Real 括号 + 常数/回代工具    *)
-(*   子代理 sD 探针改名合入（零 crux 依赖；crux 版留模板）      *)
+(*   子代理 sD 探针改名并入（零 crux 依赖；crux 版留模板）      *)
 (* ============================================================ *)
 
 Definition w_leibniz : Real := real_mult cauchy_real_pi_leibniz (real_const (1 / 2)).
@@ -9864,7 +9871,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 6（合入 197）：sin/cos 加法定理 Q 层战役           *)
+(* SC-2 批 6（并入 197）：sin/cos 加法定理 Q 层论证           *)
 (*   sA 恒等地基 15 条 + sF 度向机 9 条（子代理产出）          *)
 (*   Real 层装配前置（sE 续作）                              *)
 (* ============================================================ *)
@@ -10667,9 +10674,9 @@ Qed.
 
 
 (* ============================================================ *)
-(* SC-2 批 7（合入 198）：sin 加法定理 Real 层（sE 战役）      *)
+(* SC-2 批 7（并入 198）：sin 加法定理 Real 层（sE 论证）      *)
 (*   Q 层模量链 15 条 + rs_add_sin（Real 层 sin(x+y)）        *)
-(*   子代理 sE 产出（审查合入）                              *)
+(*   子代理 sE 产出（审查并入）                              *)
 (* ============================================================ *)
 
 Lemma sc_add_sin_diag_swap : forall (x y : Q) (J : nat),
@@ -10712,7 +10719,7 @@ Qed.
 
 (* ============================================================ *)
 (* L4a：泛型族精确分解（三角 cap 2n − 方块 cap n == 上带 + 右带）*)
-(*   直接 = exp_trunc_decomp（exp 战役泛型件，原样应用）          *)
+(*   直接 = exp_trunc_decomp（exp 论证泛型件，原样应用）          *)
 (* ============================================================ *)
 Lemma sc_add_fam_decomp : forall (A B : nat -> Q) (n : nat),
   sum_upto (Datatypes.S (2 * n)) (fun i : nat => sum_upto (Datatypes.S (2 * n - i)) (fun k : nat => A i * B k)) -
@@ -11233,16 +11240,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批 8（合入 199）：cos 加法定理 Real 层（sH 战役）       *)
+(* SC-2 批 8（并入 199）：cos 加法定理 Real 层（sH 论证）       *)
 (* Q 层模量链 24 条 + rs_add_cos：                            *)
 (*   real_eq (cos(X+Y)) (cosX*cosY - sinX*sinY)               *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* sH_cos_q1.v：cos 加法定理 Q 层——部分和三角形态 + 分解骨架      *)
-(* 战役：sH_add_cos（cos 侧续作，sin 侧 sE 已端到端闭合）         *)
-(* 纪律：零 Axiom/Admitted/admit/Abort；纯构造性 Set 层。         *)
-(* 编译：coqc -Q 'D:\ComplexAnalysis\ConstructiveWorld' CW 名.v *>> 名.log *)
+(* 内容：sH_add_cos（cos 加法定理；sin 侧对应件已端到端闭合）     *)
+(* 纪律：零公理面、零承认件；纯构造性 Set 层。                    *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -12194,7 +12200,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-2 批（合入 202）：B1 setoid 签名迁移——论文 2 头条等号簇 *)
+(* SC-2 批（并入 202）：B1 setoid 签名迁移——论文 2 头条等号簇 *)
 (* 三定理迁移到 RealInterfaceEnhancedSetoid 签名（sB0/sB1，     *)
 (* 用户 P0：旗舰定理配套已完成实例 RealEnhancedReal）       *)
 (* ============================================================ *)
@@ -12204,20 +12210,20 @@ Qed.
 (* 签名迁移：Id 系签名（RealInterfaceEnhanced）→ Setoid 系签名   *)
 (* （RealInterfaceEnhancedSetoid，实例 RealEnhancedReal 可消费） *)
 (* 沙箱：演变\.ablation\sc2_parallel\sB1_migrate\（只写沙箱）    *)
-(* 契约：演变\.ablation\sc2_parallel\sB0_instance\sB0-第0项迁移-任务书.md *)
+(* 契约：sB0 第 0 项迁移规范。*)
 (* 路线 = 上提：以 Real 层 req 链证明（real_attention_is_gibbs     *)
 (*   42359 / real_steady_state_boltzmann_attn 42450）为蓝本：      *)
 (*   real_eq → req、RealSetoid.real_eq_*_compat → 接口字段          *)
 (*   req_*_compat（39639-39648）、real_inv_pos_ext → inv_pos_ext    *)
 (*   字段（39686）。                                                *)
-(* 纪律：零公理、全 Qed 收口；不用 rewrite 作用于 req（无 Proper    *)
+(* 纪律：零公理、全件 Qed；不用 rewrite 作用于 req（无 Proper    *)
 (*   注册）——证明全为显式 req 链（req_trans/req_sym + req_*_compat）。*)
 (* 命名：新增名全部 _setoid 后缀（防顶层冲突）；诚实接口 Variable   *)
-(*   用任务书 §4 名（sum_req_over_S 等）。只增不改，不触碰 Id 系。  *)
+(*   用规范 §4 名（sum_req_over_S 等）。只增不改，不触碰 Id 系。  *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* B1-1：Section 骨架（任务书 §4 模板）                          *)
+(* B1-1：Section 骨架（规范 §4 模板）                          *)
 (* 投影名/限定名先经 b1_00_check.v 实测：                         *)
 (*   类 RealInterfaceEnhancedSetoid 以 R : Set 为参数（非字段）； *)
 (*   字段投影形如 @RealInterfaceEnhancedMod.<field> R RI；         *)
@@ -12308,7 +12314,7 @@ Proof.
 Qed.
 
 (* exp_neg 的 req 外延性（接口无该字段；由 exp_neg_le_decr + le_antisym
-   + lt_le_iff + req_sym 派生——按任务书 §7 不立诚实接口 Variable） *)
+   + lt_le_iff + req_sym 派生——按规范 §7 不立诚实接口 Variable） *)
 Lemma exp_neg_req_compat_setoid : forall x y : R, req x y -> req (exp_neg x) (exp_neg y).
 Proof.
   intros x y Hxy.
@@ -12321,7 +12327,7 @@ Qed.
 
 (* softmax 归一化：Σ_s softmax(z,s) == 1（概率质量守恒）
    组装：逐点 mult 交换（ext + mult_comm）→ 常数因子提取（linear）
-   → Σ e^{z·} 折叠为配分函数 → inv_pos_correct 收口（+ comm） *)
+   → Σ e^{z·} 折叠为配分函数 → inv_pos_correct 证毕（+ comm） *)
 Lemma softmax_normalized_setoid :
   forall z : S -> R, req (sum_req_over_S (fun s : S => softmax_setoid z s)) one.
 Proof.
@@ -12456,7 +12462,7 @@ Variable transition_normalization : forall s : S,
 
 (* 稳态方程（旗舰）：Σ_s' p(s')·T(s',s) == p(s)
    组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s)
-   → 核归一化 → mult_one 收口（Real 42450-42470 上提） *)
+   → 核归一化 → mult_one 证毕（Real 层对应件上提） *)
 Theorem steady_state_boltzmann_attn_setoid : forall s : S,
   req (sum_req_over_S (fun s' : S => mult (boltzmann_dist_attn_setoid s') (transition s' s)))
       (boltzmann_dist_attn_setoid s).

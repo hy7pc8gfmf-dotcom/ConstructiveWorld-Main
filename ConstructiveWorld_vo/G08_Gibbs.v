@@ -2,8 +2,8 @@
    成员：UpReqGibbsD + UpReqHlogZD + UpReqGibbsE2（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G08_Gibbs 成员件：UpReqGibbsD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqGibbsD.v —— 槽放电战役 #1：gibbs_inequality（UpReqDist.v）      *)
-(*   Real 实例化放电件（皇冠执行席，2026-09-10）                        *)
+(* UpReqGibbsD.v —— 假设位证明系列 #1：gibbs_inequality（UpReqDist.v）      *)
+(*   Real 实例化证明件（主实现）                        *)
 (* ------------------------------------------------------------------ *)
 (* 引擎形状核对结论（普查 §380 落点纪律执行记录）：                      *)
 (*   引擎 real_log_le_linear_B @UpRealLeB:535 输出 Bishop 形序          *)
@@ -13,34 +13,32 @@
 (*   桥核对：real_le_to_le_b@UpRealLeB:78 / latb_real_lt_to_le_b@       *)
 (*   G06_BForm:87 / real_lt_le_bridge@G01_CoreMicro:16 均单向           *)
 (*   （real_le / real_lt → real_le_b）；逆向 real_le_b → real_le 即     *)
-(*   Or 形精确收口，构造性不可证（UpRealLeB 尾注台账明示）。            *)
-(*   判词：req 层槽不可由 B 形引擎无条件放电（序异向，缺逆向桥件）；    *)
+(*   Or 形精确闭合，构造性不可证（UpRealLeB 尾注登记表明示）。            *)
+(*   判定：req 层槽不可由 B 形引擎无条件证明（序异向，缺逆向桥件）；    *)
 (*   按普查 §380 纪律落点升格为「Real 实例化定理」——本文件以            *)
 (*   real_le_b 为序复演 req_gibbs_pointwise → req_gibbs_inequality      *)
-(*   消费链，槽位 dist_log_le_linear 由 real_log_le_linear_B 直喂。     *)
-(*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例直喂）。     *)
+(*   消费链，参数位 dist_log_le_linear 由 real_log_le_linear_B 直接提供。     *)
+(*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例直接提供）。     *)
 (* ------------------------------------------------------------------ *)
-(* 交付：                                                              *)
-(*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽放电位：与                *)
+(* 给出：                                                              *)
+(*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽证明位：与                *)
 (*     req_gibbs_pointwise 消费 dist_log_le_linear 逻辑同位，           *)
-(*     real_log_le_linear_B 一次喂定；                                  *)
+(*     real_log_le_linear_B 一次给定；                                  *)
 (*     gibbsd_gibbs_inequality —— KL ≥ 0 Bishop 形（与 E.13             *)
 (*     real_gibbs_inequality_B 语句同形；E.13 走 real_gibbs_inequality_ *)
-(*     eps 收口路，本件走 log 切线槽放电复演路——双路互证）。            *)
+(*     eps 闭合路，本件走 log 切线槽证明复演路——双路互证）。            *)
 (*   [主件·级联首层] gibbsd_cross_entropy_decomp ——                    *)
 (*     H(p,q) == S[p] + KL(p‖q) Real 实例化（req_cross_entropy_decomp   *)
 (*     @UpReqDist:2431 对位），逐点恒等经 log 乘法分解向闭合，          *)
 (*     同法消费本文件 Bishop 序机。                                     *)
-(* 规范形注：全件采 real_kl_term 规范形 p·(−log(q/p))（CW219            *)
+(* 规范形注：全件采 real_kl_term 规范形 p·(−log(q/p))（CW_ConstructiveWorld_219            *)
 (*   real_kl_term 同形）；req_relative_entropy 的 p·(log p−log q) 形    *)
-(*   与之恒等需 log 逆消去（log(inv p) == −log p），CW219 未备该消去件、 *)
+(*   与之恒等需 log 逆消去（log(inv p) == −log p），CW_ConstructiveWorld_219 未备该消去件、 *)
 (*   real_eq_of_zero_diff 逐 n ring 形不适用——诚实边界，req 面同构记    *)
-(*   δ 透明（UpReqDist 台账 2「minus 非接口字段」同判词）。             *)
+(*   δ 透明（UpReqDist 登记表 2「minus 非接口字段」同判定）。             *)
 (* 红线：Set 层零 Prop（real_le_b / real_eq / real_lt 全 Set 值，      *)
 (*   语句与证明零 Prop 泄露）；全 Qed 闭合；零公理；既有文件零改；      *)
 (*   gibbsd_ 前缀全库防撞（建前 grep 实测零命中）。                     *)
-(* 编译配方：_sqp_guard.ps1 温控包装                                     *)
-(*   coqc -Q . "" UpReqGibbsD.v（CoreN 选空闲核，零裸调）。             *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -185,7 +183,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B：逐点槽放电前置（eq 层恒等）                                  *)
+(* Part B：逐点槽证明前置（eq 层恒等）                                  *)
 (* ============================================================ *)
 
 (* B0：p·(q/p) == q（分式约分；结合 / 交换 / inv_correct 链） *)
@@ -387,15 +385,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D：保底放电主体                                                 *)
+(* Part D：保底证明主体                                                 *)
 (* ============================================================ *)
 
-(* D0【槽放电位】：逐点 Gibbs 切线 p−q ≤_B p·(−log(q/p))。
+(* D0【槽证明位】：逐点 Gibbs 切线 p−q ≤_B p·(−log(q/p))。
    与 req_gibbs_pointwise（UpReqDist:2066）逻辑同位——该处消费
-   Hypothesis dist_log_le_linear（槽，10 下游）；此处直喂
+   Hypothesis dist_log_le_linear（槽，10 下游）；此处直接提供
    real_log_le_linear_B（UpRealLeB:535）一次闭合，无条件。
    链：槽 log(q/p) ≤_B q/p−1 → opp 反向 → 1−q/p 换形 →
-   p 左乘保序 → p·(1−q/p)==p−q 换形收口。 *)
+   p 左乘保序 → p·(1−q/p)==p−q 换形闭合。 *)
 Lemma gibbsd_gibbs_pointwise_B : forall (X : Type) (p q : X -> Real) (s : X)
   (Hps : real_lt real_zero (p s)) (Hqs : real_lt real_zero (q s)),
   real_le_b (real_plus (p s) (real_opp (q s)))
@@ -406,7 +404,7 @@ Proof.
   set (Rqp := real_mult (q s) (real_inv_pos (p s) Hps)).
   set (Hr := real_mult_positive (q s) (real_inv_pos (p s) Hps) Hqs
                (real_inv_pos_pos (p s) Hps)).
-  (* —— 槽放电位：req 层 dist_log_le_linear 消费位，B 形引擎直喂 —— *)
+  (* —— 槽证明位：req 层 dist_log_le_linear 消费位，B 形引擎直接提供 —— *)
   assert (Hlin : real_le_b (real_log Rqp Hr)
                            (real_plus Rqp (real_opp real_one))).
   { exact (real_log_le_linear_B Rqp Hr). }
@@ -427,10 +425,10 @@ Qed.
 
 (* D1【保底主件】：Gibbs 不等式 Real 实例化——0 ≤_B Σ_s KL(p s‖q s)。
    req_gibbs_inequality（UpReqDist:2122，dist_log_le_linear 10 下游）
-   的 Real 实例化放电：归一化前提位照抄 req 层（real_eq 形），求和层
-   real_list_sum 机，序 real_le_b，槽位由 D0 逐点件填充。
+   的 Real 实例化证明：归一化前提位照抄 req 层（real_eq 形），求和层
+   real_list_sum 机，序 real_le_b，参数位由 D0 逐点件填充。
    语句与 E.13 real_gibbs_inequality_B 同形：E.13 走
-   real_gibbs_inequality_eps 收口路，本件走 log 切线槽放电复演路——双路互证。 *)
+   real_gibbs_inequality_eps 闭合路，本件走 log 切线槽证明复演路——双路互证。 *)
 Theorem gibbsd_gibbs_inequality :
   forall (X : Type) (l : list X) (p q : X -> Real)
     (Hp : forall s : X, real_lt real_zero (p s))
@@ -478,7 +476,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：主件——级联首层 cross_entropy_decomp 同法放电                 *)
+(* Part E：主件——级联首层 cross_entropy_decomp 同法证明                 *)
 (*   （req_cross_entropy_decomp @UpReqDist:2431 的 Real 实例化对位；    *)
 (*     逐点恒等经 log 乘法分解向 q == p·(q/p) 闭合，零 log 逆消去）     *)
 (* ============================================================ *)
@@ -557,31 +555,31 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 对账（槽放电战役 #1 交付清单）：                                     *)
+(* 核对（假设位证明系列 #1 结果清单）：                                     *)
 (*   gibbsd_lt_add_opp_r / gibbsd_le_b_opp / gibbsd_le_b_id_l /         *)
 (*   gibbsd_minus_flip / gibbsd_le_b_mult_pos_r —— Bishop 序代数 5 件    *)
 (*   （req 层 opp_le_compat / le_id_l / req_le_mult_compat_r 的          *)
-(*   real_le_b 对位，req 层无此形——B 形引擎直喂的缺口件）。             *)
+(*   real_le_b 对位，req 层无此形——B 形引擎直接提供的缺口件）。             *)
 (*   gibbsd_p_mult_ratio / gibbsd_p_minus_ratio —— eq 恒等 2 件。       *)
 (*   gibbsd_two_pos / gibbsd_half / gibbsd_half_pos / gibbsd_half_sum    *)
 (*   + gibbsd_list_sum_le_b / gibbsd_list_sum_minus —— 和层机 6 件      *)
 (*   （fsum_le / fsum_minus 的 Bishop 对位；预算对半归纳免除法）。      *)
-(*   gibbsd_gibbs_pointwise_B —— 槽放电位（dist_log_le_linear 直喂）。  *)
-(*   gibbsd_gibbs_inequality —— 保底主件（四关目标）。                  *)
+(*   gibbsd_gibbs_pointwise_B —— 槽证明位（dist_log_le_linear 直接提供）。  *)
+(*   gibbsd_gibbs_inequality —— 保底主件（四项关卡目标）。                  *)
 (*   gibbsd_cross_entropy_decomp —— 级联首层主件。                      *)
-(* 沉淀卡（索引回填行见交付报告）：                                     *)
-(*   E-GIBBSD-1：B 形引擎放电 req 层 Hypothesis 槽，序异向不可直喂——    *)
+(* 沉淀卡（索引回填行见技术报告）：                                     *)
+(*   E-GIBBSD-1：B 形引擎证明 req 层 Hypothesis 槽，序异向不可直接提供——    *)
 (*   落点纪律 §380 fallback（Real 实例化定理）首次全链执行；缺口件=      *)
 (*   Bishop 序代数基元 5 件 + Bishop 和单调 1 件（本文件 Part A/C      *)
-(*   可跨战役复用：log_le_linear/log_lt_mono 族槽放电同构缺口）。       *)
-(*   E-GIBBSD-2：log 逆消去（log(inv p)==−log p）CW219 未备——          *)
+(*   可跨模块复用：log_le_linear/log_lt_mono 族槽证明同构缺口）。       *)
+(*   E-GIBBSD-2：log 逆消去（log(inv p)==−log p）CW_ConstructiveWorld_219 未备——          *)
 (*   kl_term 规范形绕行成立（log 乘法分解向 q == p·(q/p) 无需消去）；   *)
 (*   req_relative_entropy 的 p·(log p−log q) 字面形桥接留待该消去件。   *)
 (* ============================================================ *)
 
 (* ======== G08_Gibbs 成员件：UpReqHlogZD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqHlogZD.v — 槽放电战役#4：HlogZ 槽构造性放电（KL 投影旗舰）    *)
+(* UpReqHlogZD.v — 假设位证明系列#4：HlogZ 槽构造性证明（KL 投影旗舰）    *)
 (*                                                              *)
 (* 目标旗舰：UpReqAlign.req_projected_distribution_minimizes_kl     *)
 (*   （KL 投影 req 版，ReqKLProjection 节已闭；节后导出签名经        *)
@@ -590,20 +588,20 @@ Qed.
 (* HlogZ 槽实测形（勘误要点）：                                     *)
 (*   le (log (@Z_aud_req R RIS S sumf post_aud p) HZ) zero          *)
 (*   ——是 log Z 的「上界形」（log Z ≤ 0），不是 lt zero (log Z)      *)
-(*   下界形，也不是逐 eps 形。故放电路线勘定为：                     *)
+(*   下界形，也不是逐 eps 形。故证明路线勘定为：                     *)
 (*   Z_aud ≤ sumf p（req_Z_aud_le_one，通过集质量 ≤ 总质量）          *)
 (*     == one（Hp_norm 归一化）⟹ log Z_aud ≤ log one == 0            *)
-(*     （log 单调 le 版直推；Id 侧总放电先例 = G01_CoreMicro.hlogz_*，      *)
-(*       Real 层种子 = CW219 real_log_le_mono/real_log_le_zero_of_le_one）。 *)
-(*   任务书草图「Z ≥ max p_i ⟹ log Z 下界」为下界槽路线，实测槽无     *)
+(*     （log 单调 le 版直推；Id 侧总证明先例 = G01_CoreMicro.hlogz_*，      *)
+(*       Real 层种子 = CW_ConstructiveWorld_219 real_log_le_mono/real_log_le_zero_of_le_one）。 *)
+(*   原始任务表述草图「Z ≥ max p_i ⟹ log Z 下界」为下界槽路线，实测槽无     *)
 (*   此形态：max 提取不入职；「逐点正性见证」在二态实例里由           *)
-(*   hzlogd_HZ_bool 承接（HZ 槽一并放电），勘误详见交付报告。         *)
+(*   hzlogd_HZ_bool 承接（HZ 槽一并证明），勘误详见技术报告。         *)
 (*                                                              *)
-(* 交付清单（前缀 hzlogd_ 独占，编前 grep 复验 0 撞名）：             *)
+(* 结果清单（前缀 hzlogd_ 独占，编前 grep 复验 0 撞名）：             *)
 (*   [保底] hzlogd_log_le_zero_of_le_one —— Z 正性+Z ≤ 1 ⟹ log Z ≤ 0  *)
-(*           抽象放电（log 单调 le 槽显式位，Set 层零 Prop）；         *)
-(*   [T2②]  hzlogd_discharge_real —— 抽象单调槽由 CW219 种子          *)
-(*           real_log_le_mono 直喂的 Real 具体放电（无条件闭合）；      *)
+(*           抽象证明（log 单调 le 槽显式位，Set 层零 Prop）；         *)
+(*   [T2②]  hzlogd_discharge_real —— 抽象单调槽由 CW_ConstructiveWorld_219 种子          *)
+(*           real_log_le_mono 直接提供的 Real 具体证明（无条件闭合）；      *)
 (*           hzlogd_discharge_real_direct —— real_log_le_zero_of_le_one *)
 (*           直用双形（双形并存，殊途同归）；                          *)
 (*   [主件1] hzlogd_proj_min_kl_hlogzfree —— 旗舰抽象 HlogZ-free      *)
@@ -611,11 +609,11 @@ Qed.
 (*           sum_le/Hp_norm（Z ≤ 1 路线的数学来源，旗舰原签名不含）；   *)
 (*   [主件2] hzlogd_proj_min_kl_bool —— 旗舰 bool/Real 具体实例        *)
 (*           （S := bool 二态审计，post_aud := id；HZ 槽由             *)
-(*           hzlogd_HZ_bool 一并放电；仅余 p/q 分布前提，全 Set 层）。  *)
+(*           hzlogd_HZ_bool 一并证明；仅余 p/q 分布前提，全 Set 层）。  *)
 (*                                                              *)
 (* 红线：零公理类禁词；全 Qed；Set 层语句（req/lt/le 全 Set 值；      *)
 (* Hqz 的 post_aud s = false 槽与旗舰同位继承）；既有文件零改；        *)
-(* 双形并存；零 git。                                                *)
+(* 双形并存。                                                *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -624,7 +622,7 @@ Require Import UpReqAlign.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 保底件：抽象放电（log 单调 le 槽显式位；四关主链第 1 环）           *)
+(* 保底件：抽象证明（log 单调 le 槽显式位；四项关卡主链第 1 环）           *)
 (*   论证：Z ≤ 1 ⟹ log Z ≤ log one（单调槽）⟹ log Z ≤ 0               *)
 (*   （log_one 是接口字段：req (log one H) zero，经 le_id_r 换右端）。 *)
 (* ============================================================ *)
@@ -641,8 +639,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T2 模板 ②：Real 具体放电（抽象单调槽由 CW219 种子直喂）             *)
-(*   real_log_le_mono（CW219 L112104 区，G01_CoreMicro 镜像）喂单参槽；    *)
+(* T2 模板 ②：Real 具体证明（抽象单调槽由 CW_ConstructiveWorld_219 种子直接提供）             *)
+(*   real_log_le_mono（CW_ConstructiveWorld_219 L112104 区，G01_CoreMicro 镜像）喂单参槽；    *)
 (*   语句层 lt/le/log 经 RealEnhancedReal 实例 delta 等同 real_*。     *)
 (* ============================================================ *)
 Lemma hzlogd_discharge_real :
@@ -654,7 +652,7 @@ Proof.
 Qed.
 
 (* 双形并存：real_log_le_zero_of_le_one（G01_CoreMicro 直用形态）直取，      *)
-(* 与上行殊途同归（同型语句双路互证，G01_CoreMicro 双交付先例）。             *)
+(* 与上行殊途同归（同型语句双路互证，G01_CoreMicro 双给出先例）。             *)
 Lemma hzlogd_discharge_real_direct :
   forall (Z : Real) (HZ : lt zero Z), le Z one -> le (log Z HZ) zero.
 Proof.
@@ -702,7 +700,7 @@ Proof.
          post_aud p Hp_norm Hp_pos HZ Hmono q Hq Hqn Hqz.
   apply (@req_projected_distribution_minimizes_kl R RIS S sumf sum_ext sum_add
            sum_linear log_req_compat post_aud p Hp_pos HZ q Hq Hqn Hqz).
-  (* HlogZ 槽放电：Z_aud ≤ one ⟹ log Z_aud ≤ 0（保底件直喂） *)
+  (* HlogZ 槽证明：Z_aud ≤ one ⟹ log Z_aud ≤ 0（保底件直接提供） *)
   apply (hzlogd_log_le_zero_of_le_one R RIS Hmono
            (@Z_aud_req R RIS S sumf post_aud p) HZ).
   (* Z_aud ≤ one：req_Z_aud_le_one（和单调）+ Hp_norm（le_id_r 换右端） *)
@@ -773,7 +771,7 @@ Proof.
            ++ apply (req_sym (plus (f false) (plus (g true) (g false)))
                              (plus (plus (f false) (g true)) (g false))
                              (plus_assoc (f false) (g true) (g false))).
-        -- (* 步5：a+(c+(b+d)) → (a+c)+(b+d)（assoc 正向收口） *)
+        -- (* 步5：a+(c+(b+d)) → (a+c)+(b+d)（assoc 正向闭合） *)
            apply plus_assoc.
 Qed.
 
@@ -807,7 +805,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* HZ 槽放电（二态「逐点见证」承接件）：通过点 true 处 p 正 ⟹           *)
+(* HZ 槽证明（二态「逐点见证」承接件）：通过点 true 处 p 正 ⟹           *)
 (* Z_aud = plus (p true) zero > 0（iota 归约 + plus_zero 运输）。        *)
 (* 二态空间里 max 项 = 通过点本身，无需 max 选择算子。                   *)
 (* ============================================================ *)
@@ -836,10 +834,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件 2：旗舰 bool/Real 具体实例（HlogZ 槽由 T2 ② 放电件填充）        *)
+(* 主件 2：旗舰 bool/Real 具体实例（HlogZ 槽由 T2 ② 证明件填充）        *)
 (*   post_aud := fun b => b（审计集 = {true}）；和四前提全实证；        *)
-(*   HZ 槽由 hzlogd_HZ_bool 放电（语句内联，免 assert 不透明墙）；       *)
-(*   HlogZ 槽由 hzlogd_discharge_real 放电（Z_aud ≤ one 走               *)
+(*   HZ 槽由 hzlogd_HZ_bool 证明（语句内联，免 assert 不透明墙）；       *)
+(*   HlogZ 槽由 hzlogd_discharge_real 证明（Z_aud ≤ one 走               *)
 (*   req_Z_aud_le_one + Hp_norm 同一路线）；                            *)
 (*   余下前提仅 p/q 分布形态（Set 层：real_eq/real_lt 载体）。           *)
 (* ============================================================ *)
@@ -864,7 +862,7 @@ Proof.
            hzlogd_aud_sum hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear
            hzlogd_log_req_compat_real (fun b : bool => b) p Hp_pos
            (hzlogd_HZ_bool p (Hp_pos true)) q Hq Hqn Hqz).
-  (* HlogZ 槽放电：T2 ② 具体件直喂 *)
+  (* HlogZ 槽证明：T2 ② 具体件直接提供 *)
   apply (hzlogd_discharge_real (@Z_aud_req Real RealEnhancedReal bool
                                   hzlogd_aud_sum (fun b : bool => b) p)
            (hzlogd_HZ_bool p (Hp_pos true))).
@@ -897,45 +895,44 @@ Print Assumptions hzlogd_proj_min_kl_bool.
 (* ============================================================ *)
 (* 终验记录（编后核对回填）：                                          *)
 (*   Qed 计数：11 = 保底1 + T2双形2 + 主件1 + 和地基4 + log兼容1 +      *)
-(*   HZ放电1 + 主件2。                                                 *)
+(*   HZ证明1 + 主件2。                                                 *)
 (*   G1 禁词 0；G2 EXIT=0；G3 提取双轨 core/real + PA 全 Closed；       *)
 (*   G4 coqchk Modules were successfully checked。                     *)
 (* ============================================================ *)
 
 (* ======== G08_Gibbs 成员件：UpReqGibbsE2（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqGibbsE2.v —— 槽放电战役 #2 重定位席：gibbs_equality 有限具体路线      *)
-(*   （前席 UpReqGibbsE.v 抽象 Or 形稿已阻塞定谳，本席零碰旧稿；              *)
+(* UpReqGibbsE2.v —— 假设位证明系列 #2 重定位模块：gibbs_equality 有限具体路线      *)
+(*   （上游版本 UpReqGibbsE.v 抽象 Or 形稿已阻塞判定，本文件零碰旧稿；              *)
 (*     gibbe2_ 前缀全库防撞，建前 grep 实测零命中。）                          *)
 (* ------------------------------------------------------------------ *)
-(* 侦察结论（实读定谳，2026-09-10）：                                          *)
-(*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（CW219:3448/3517），  *)
+(* 侦察结论（实读判定）：                                          *)
+(*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（CW_ConstructiveWorld_219:3448/3517），  *)
 (*      real_list_sum_pos（根内 L41660 区）背书「逐项正⟹和正」方向；           *)
-(*      逆向「和零⟹逐项零」经 le_b 反对称（根内缺件）本席自建闭合。            *)
+(*      逆向「和零⟹逐项零」经 le_b 反对称（根内缺件）本文件自建闭合。            *)
 (*   2. log 引擎：real_log_le_mono（G01_CoreMicro L24，lt 支 real_log_lt_mono      *)
-(*      根内已证——严格单调在库）；log 单射/eq-linear 桥缺席——CW219 L41224      *)
+(*      根内已证——严格单调在库）；log 单射/eq-linear 桥缺模块——CW_ConstructiveWorld_219 L41224      *)
 (*      诚实边界明示「log_eq_linear 需强三分/LPO，构造性不可证」。实测定：      *)
-(*      主件收口确须该桥。                                                     *)
+(*      主件闭合确须该桥。                                                     *)
 (*   3. 双切点互易推导否决：逐项钳零给出 log u_s == u_s − 1 各自成立，          *)
 (*      但 u_1·u_2 == 1 互易关系对任意分布不成立（归一化不生互易），            *)
-(*      有限具体载体亦不能绕开 eq-linear 桥——X 邻接判词升级为战役记录。         *)
+(*      有限具体载体亦不能绕开 eq-linear 桥——X 邻接判定升级为系列工作记录。         *)
 (* ------------------------------------------------------------------ *)
-(* 交付（分级）：                                                              *)
+(* 给出（分级）：                                                              *)
 (*   [保底1·逐项钳零件族] gibbe2_le_b_antisym（核心新件，逐 n 构造，            *)
-(*     零 Or 收口、零 LPO、零三分）；gibbe2_clamp_head / _r；                   *)
+(*     零 Or 闭合、零 LPO、零三分）；gibbe2_clamp_head / _r；                   *)
 (*     gibbe2_list_sum_zero_extract_bool（有限具体载体 [true;false] 提取）。    *)
 (*   [保底2·log 关系件] gibbe2_kl_eq_of_w_zero + gibbe2_tangent_eq +           *)
 (*     gibbe2_kl_zero_tangent_eq：KL==0 ⟹ 逐点切点等式                          *)
 (*     log(q_s/p_s) == q_s/p_s − 1（Real 层无条件——全库首件）。                 *)
-(*   [主件·桥注入形放电件] gibbe2_gibbs_equality_bool：KL==0 ⟹ 逐点切点等式     *)
+(*   [主件·桥注入形证明件] gibbe2_gibbs_equality_bool：KL==0 ⟹ 逐点切点等式     *)
 (*     ⟹（eq-linear 桥显式注入）⟹ 逐点 p==q。桥无条件不可证（根内 L41224        *)
-(*     定谳；前席 exp 复制机属阻塞域本席零碰），依兜底预案以显式前提放电——      *)
+(*     判定；上游版本 exp 复制机属阻塞域本文件零碰），依兜底预案以显式前提证明——      *)
 (*     req 层 dist_log_eq_linear（UpReqDist:1031 Hypothesis）的 Real 实例化     *)
 (*     缺口如实呈报。                                                          *)
 (* 红线：Set 层零 Prop（语句序/等全 Set 值 real_eq/real_lt/real_le_b；          *)
-(*   零 Or 收口、零三分、零 LPO）；全 Qed 闭合；零公理；既有文件零改；          *)
-(*   零 git；旧 UpReqGibbsE.v 零碰（无 .vo，不可 Require，未消费）。            *)
-(* 编译配方：_sqp_guard.ps1 温控包装 coqc -Q . "" UpReqGibbsE2.v。             *)
+(*   零 Or 闭合、零三分、零 LPO）；全 Qed 闭合；零公理；既有文件零改；          *)
+(*   旧 UpReqGibbsE.v 零碰（无 .vo，不可 Require，未消费）。            *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -1020,7 +1017,7 @@ Proof.
   - exact (real_lt_plus_translate (real_opp a) a (real_plus b eps) (H eps Heps)).
 Qed.
 
-(* B4【核心新件】：le_b Bishop 序反对称（逐 n 构造，零 Or 收口、零 LPO） *)
+(* B4【核心新件】：le_b Bishop 序反对称（逐 n 构造，零 Or 闭合、零 LPO） *)
 Lemma gibbe2_le_b_antisym : forall a b : Real,
   real_le_b a b -> real_le_b b a -> real_eq a b.
 Proof.
@@ -1046,7 +1043,7 @@ Proof.
   set (h := (eps * (1#2))%Q).
   assert (Hg1q : 0 < g1) by (apply QltT_to_Qlt; exact Hg1pos).
   assert (Hg2q : 0 < g2) by (apply QltT_to_Qlt; exact Hg2pos).
-  (* 上界：x < h（x := a_n − b_n，环归 + lia 收口） *)
+  (* 上界：x < h（x := a_n − b_n，环归 + lia 闭合） *)
   assert (Hstep1 : projT1 a n - projT1 b n + g1
                    < projT1 a n - projT1 b n
                      + (projT1 b n + eps * (1#2) - projT1 a n)).
@@ -1386,7 +1383,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：主件·桥注入形放电件                                                 *)
+(* Part E：主件·桥注入形证明件                                                 *)
 (* ============================================================ *)
 
 Theorem gibbe2_gibbs_equality_bool :

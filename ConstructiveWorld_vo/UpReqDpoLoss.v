@@ -1,18 +1,23 @@
-(* UpReqDpoLoss.v — 批5 收口行动清单第 2 项：dpo_total_loss 簇解冻评估（可行）+ 建设
-   母本：批5基建层处置清单-20260909.md 收口章 B 第 2 条 + 迁移总账-20260909.md L1045
-   冻结判词（UpReqAlignRestA.v 头注区3）："total_loss 簇冻结（fold_right_ext 载体，
-     批 3 台账 4 双层并行）"；总账 L297-300：fold_right_ext/dpo_total_loss_at_star/
+(* ============================================================ *)
+(* UpReqDpoLoss.v *)
+(* *)
+(* 目的： DPO 损失的 req 层折叠与最优点刻画。 *)
+(* 主件： rdl_dpo_total_loss_at_star / rdl_dpo_total_loss_star_characterization 最优点刻画。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqAlignRestA。 *)
+(* 备注： 奖励、温度与逐点正性为 Variable 前提；折叠外延性 rdl_fold_plus_ext 为构造核。 *)
+(* ============================================================ *)
+
+(* UpReqDpoLoss.v — 批5 完成行动清单第 2 项：dpo_total_loss 簇解冻评估（可行）+ 建设
+   冻结结论（UpReqAlignRestA.v 头注区3）："total_loss 簇冻结（fold_right_ext 载体，
      _monotone/_star_characterization (d) 冻结（fold 载体 + nat/list 层 Id 双层并行）。
    ----------------------------------------------------------------
    判定书（解冻依据，证据坐标）：
-   1. 冻结前提已消失：其注记「待 dpo_pair_loss 簇 req 化后随批4」——RestA 已交付
+   1. 冻结前提已消失：其注记「待 dpo_pair_loss 簇 req 化后随批4」——RestA 已结果
      ralt_dpo_pair_loss/ralt_dpo_pair_loss_star/ralt_dpo_pair_loss_at_star
      （UpReqAlignRestA.v L404-462，.vo 出口签名已探针实证）。
-   2. 载体形路径：Id 泛型 fold_right_ext（CW219 L20160，{A B : Set} 全称形）的 req
+   2. 载体形路径：Id 泛型 fold_right_ext（L20160，{A B : Set} 全称形）的 req
      伴件不可直建——req 接口无通用 id_cong 字段（函数外延性敏感件，(d) 冻结维持）。
-     但 DPO 实例形走 (b) 化逐点改述先例（u2_kl_arg2_ext，UpReqU2.v 已交付四关；
-     总账 L189："逐点 req 前提版，语义无漂移不冻结"）：fold 递归载体直接归纳，
-     逐点 req 前提 + req_plus_compat 双腿链，零函数外延性。本席交付
+     ："逐点 req 前提版，语义无变动不冻结"）：fold 递归载体直接归纳，
      rdl_fold_plus_ext_on（InT 限制形，主件）+ rdl_fold_plus_ext（全称形推论）。
    3. 结论：total_loss 簇 3 件全部解冻建成为真证（本文件）；Id 泛型 fold_right_ext
      (d) 冻结维持（泛型形需任意 g 的 compat 场，接口不可表达——诚实边界在案）。
@@ -22,14 +27,13 @@
      dpo_total_loss_at_star L20171/dpo_total_loss_monotone L20181/
      dpo_total_loss_star_characterization L20199/InT L99）+ UpReqAlgebra（req_minus/
      req 系代数）+ UpReqAlign（req_pi_star_pos 系）+ UpReqAlignRestA（ralt_* 出口）。
-   诚实签名变化台账（规划书 §7.4 沿用 RestA 决定）：
-   1. rdl_pair/rdl_pair req 化携带 Hpi 逐点正性见证位（log 前提化，RestA 台账 1）。
+   诚实签名变化登记表（规划书 §7.4 沿用 RestA 决定）：
+   1. rdl_pair/rdl_pair req 化携带 Hpi 逐点正性见证位（log 前提化，RestA 登记表 1）。
    2. monotone 逐点前提 le 形与 Id 同位；Hpi1/Hpi2 见证位为诚实新增。
    3. fold 外延件 (b) 化逐点改述（先例：u2_kl_arg2_ext）；InT 限制形为
      characterization 的诚实镜像（Id 原件 L20199 逐元素 InT 供给形）。
    4. 桥假设位自持（RestA 同形，各席自持纪律）：rdl_log_req_compat /
      rdl_log_inv_exp_neg_req；节闭后随件出参，消费以 .vo 出口签名为准
-     （E-STAGING-U2Machine 坑 1/2 纪律）。
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）；纯 term-mode（req_trans 链 +
      compat 桥），零模性等变结构依赖（禁词扫描全零面）。
    ---------------------------------------------------------------- *)
@@ -212,15 +216,14 @@ Qed.
 End ReqDpoLossCore.
 
 (* ----------------------------------------------------------------
-   尾注（总账回写）：
-   - 交付 6 件：rdl_fold_plus_ext_on（主件，(b) 化逐点 req 载体）+
+   - 结果 6 件：rdl_fold_plus_ext_on（主件，(b) 化逐点 req 载体）+
      rdl_fold_plus_ext（全称形推论）+ rdl_pair_loss_ext（前提版辅件）+
      rdl_dpo_total_loss_at_star / rdl_dpo_total_loss_monotone /
      rdl_dpo_total_loss_star_characterization（簇 3 件真证）。
      另 δ 透明薄包装 6（rdl_pair/_star/_diff/_diff_star/_pistar/_pistar_pos）
      与定义 2（rdl_dpo_total_loss/_star）不计件数。
-   - Id 泛型 fold_right_ext（CW219 L20160）(d) 冻结维持：泛型 {A B} 形需任意
+   - Id 泛型 fold_right_ext（L20160）(d) 冻结维持：泛型 {A B} 形需任意
      fold 函数的 compat 场，req 接口不可表达（函数外延性敏感边界在案）；
-     DPO 实例形已由本件 (b) 化收口。
+     DPO 实例形已由本件 (b) 化完成。
    - 消费入口：Require Import UpReqDpoLoss.
    ---------------------------------------------------------------- *)

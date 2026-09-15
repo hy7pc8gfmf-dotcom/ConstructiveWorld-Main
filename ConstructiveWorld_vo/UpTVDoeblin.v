@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpTVDoeblin.v *)
+(* *)
+(* 目的： 定理 5.10 双点 TV 收缩的 Real 复刻（树兼容重建件）。 *)
+(* 主件： tv_doeblin 双点 TV 收缩与 tv_titer 迭代、tvd_invT 温度逆。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 诚实接口仅一处（与存档件同位）；核行随机与正性为 Variable 前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpTVDoeblin.v —— 定理 5.10 双点 TV 收缩 Real 复刻·树兼容重建件   *)
 (*                                                                *)
 (* 蓝本：attn 工作区存档件 UpTVReal.v（1,518 行，只读零触碰）。      *)
@@ -31,8 +40,8 @@
 (* δ 接口（Section TVRealWorld 字段面，以存档件实际定义为准）：       *)
 (*   delta（实数）+ delta_pos（0<δ）+ delta_le_one（δ≤1）+           *)
 (*   minorization（核下界形 K i j ≥ δ·u j）。显式常数实例化          *)
-(*   δ* := e^{−2γ/T}（γ 即论文记号 Δ）的放电件见本文件 Part 2        *)
-(*  （tvd_dstar_*：双界 logits 前提下字段面放电 + 显式率            *)
+(*   δ* := e^{−2γ/T}（γ 即论文记号 Δ）的消解件见本文件 Part 2        *)
+(*  （tvd_dstar_*：双界 logits 前提下字段面消解 + 显式率            *)
 (*   (1 − e^{−2γ/T})ⁿ 旗舰推论）。                                  *)
 (*                                                                *)
 (* 红线：零公理、零弃证、零参数化声明、零中途放弃、零经典逻辑；        *)
@@ -47,7 +56,7 @@ Require Import CW_ConstructiveWorld_219.
 
 (* ################ Part 0：Real 层代数辅助 ################ *)
 
-(* 逐点环恒等桥：real_eq 目标 → 逐点 Q 恒等（ring 放电）。
+(* 逐点环恒等桥：real_eq 目标 → 逐点 Q 恒等（ring 消解）。
    real_plus/real_mult/real_opp/real_minus_r/real_one/real_zero 均透明，
    cbn [projT1 ...] 后逐点化简为 Q 表达式；real_abs/real_inv_pos 保持
    不透明（作原子参与 ring）。 *)
@@ -1339,7 +1348,7 @@ Proof.
           -- apply real_eq_refl.
           -- exact Hchain.
     }
-    (* TV 收口：half·Σ|diff| ≤ half·omd·Σ|μ−ν| == omd·TV(μ,ν) *)
+    (* TV 完成：half·Σ|diff| ≤ half·omd·Σ|μ−ν| == omd·TV(μ,ν) *)
     apply (RealSetoid.real_le_id_r
              (tv_doeblin (tv_step mu) (tv_step nu))
              (real_mult tv_half
@@ -1424,7 +1433,7 @@ Proof.
                               (real_mult delta (u j)))
                    (real_plus real_zero (real_mult delta (u j)))).
           (* 逐项换形：minus==0（Hgj）、duj==duj ⟹ 加法保 eq；
-             再 0+duj==duj（tvd_plus_zero_l）收口 *)
+             再 0+duj==duj（tvd_plus_zero_l）完成 *)
           * apply (RealSetoid.real_eq_plus_compat
                      (real_minus_r (K i j) (real_mult delta (u j)))
                      (real_mult delta (u j))
@@ -1605,9 +1614,9 @@ End TVRealWorld.
    双界 logits 前提（−γ ≤ z i j ≤ γ、γ > 0、T > 0、枚举非空 n_pos）下，
    δ 接口（Section TVRealWorld 字段面：δ 正性 / δ ≤ 1 / 核下界 δ·u ≤ K）
    被显式常数 δ* := e^{−2γ/T} 满足（lo·lo 形，零 eps 余量损耗），并以该
-   常数放电主迭代件，闭出显式率 (1 − e^{−2γ/T})ⁿ。γ 即论文/QK 管线记号 Δ。
+   常数消解主迭代件，闭出显式率 (1 − e^{−2γ/T})ⁿ。γ 即论文/QK 管线记号 Δ。
    诚实接口 abs_sum_le_list（|Σf| ≤ Σ|f|，解析二分）照存档件口径保持为
-   前提位——构造性逻辑下该形不可由基座放电，随接口显式携带。 *)
+   前提位——构造性逻辑下该形不可由基座消解，随接口显式携带。 *)
 
 Section TVDStar.
 
@@ -1920,7 +1929,7 @@ Proof.
                      (real_eq_refl tvd_lo) (real_eq_sym _ _ tvd_inv_split)).
 Qed.
 
-(* ---- 2.9 接口字段放电：δ*·u ≤ K（零 eps 余量） ---- *)
+(* ---- 2.9 接口字段消解：δ*·u ≤ K（零 eps 余量） ---- *)
 Lemma tvd_minorization : forall i j : list Real,
   real_le (real_mult tvd_dstar (tvd_u j)) (tvd_K i j).
 Proof.
@@ -1965,7 +1974,7 @@ Proof.
         -- exact tvd_u_norm.
 Qed.
 
-(* ---- 2.11 旗舰：显式率 (1 − e^{−2γ/T})ⁿ（主迭代件以 δ* 放电；
+(* ---- 2.11 旗舰：显式率 (1 − e^{−2γ/T})ⁿ（主迭代件以 δ* 消解；
         诚实接口 abs_sum_le_list 随前提位显式携带） ---- *)
 Theorem tvd_dstar_iter_contraction :
   (forall f : list Real -> Real,

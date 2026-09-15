@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* AttnDoeblin.v *)
+(* *)
+(* 目的： 有界 logits softmax 注意力核的显式 Doeblin 收缩（Real/Set 层）。 *)
+(* 主件： u_tv_contraction：双点 TV 收缩，参考分布 u 仅需归一化；迭代版 u_tv_iter 给出几何率 (1-δ)^n；有界 logits 核逐点下界 δ*·U，δ* = e^(-2Δ/T)。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 参考分布无需平稳性与详细平衡；Part C 在具体柯西实数上实例化，使假设类非空；求和交换与非负性等以显式 Variable 前提（sum_swap_cc、abs_ge_zero_id_cc 等）声明。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AttnDoeblin.v —— P1 旗舰包：有界 logits softmax 核的显式 Doeblin 收缩 *)
 (*                                                                *)
 (* Part A（抽象层）u_tv_contraction：双点 TV 收缩——相对库内           *)
@@ -9,12 +18,12 @@
 (*   ⟹ 核逐点 ≥ δ*·U，δ* := e^{−Δ/T}·e^{+Δ/T}⁻¹ 形态 exact 化为       *)
 (*   δ* := lo·lo（lo := e^{−Δ/T}），即 e^{−2Δ/T}——温度与 logit        *)
 (*   直径的显式函数；Part A 原样实例化 ⟹ 收缩率 (1 − e^{−2Δ/T})ⁿ。     *)
-(* Part C（放电证据）：cauchy_real_exp 满足 expf 迷你接口全部字段——     *)
-(*   Part B 假设类在具体柯西实数上非空（real_eq 版语义放电）。          *)
+(* Part C（消解证据）：cauchy_real_exp 满足 expf 迷你接口全部字段——     *)
+(*   Part B 假设类在具体柯西实数上非空（real_eq 版语义消解）。          *)
 (* 诚实接口（Variable）：sum_swap_cc / abs_ge_zero_id_cc /              *)
 (*   lt_plus_compat（与库内 Doeblin 节同款）；sum_eq_list（枚举求和      *)
-(*   规范化 = 有限世界公理）；expf 迷你接口（Part C 放电）。             *)
-(* 红线：零 Axiom/Admitted/Parameter；Set 层语句；全 Qed；可提取。      *)
+(*   规范化 = 有限世界公理）；expf 迷你接口（Part C 消解）。             *)
+(* 红线：零 公理/承认件/值参声明；Set 层语句；全 Qed；可提取。      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -451,7 +460,7 @@ Variable z : S -> S -> R.
 Variable z_lb : forall s s' : S, le (opp Delta) (z s s').
 Variable z_ub : forall s s' : S, le (z s s') Delta.
 
-(* 构造性指数迷你接口（Part C 放电其可满足性） *)
+(* 构造性指数迷你接口（Part C 消解其可满足性） *)
 Variable expf : R -> R.
 Variable expf_pos : forall x : R, lt zero (expf x).
 Variable expf_zero : Id (expf zero) one.
@@ -741,11 +750,11 @@ Qed.
 End BoundedSoftmax.
 
 
-(* ################ Part C：Real 层放电证据 ################ *)
+(* ################ Part C：Real 层消解证据 ################ *)
 
 (* expf 迷你接口在具体柯西实数上的可满足性——Part B 假设类非空：
    五字段全部由 cauchy_real_exp 的已证定理逐一供给
-   （mono_le 经 real_le = Or (real_lt) (real_eq) 的构造性析取逐支放电）。 *)
+   （mono_le 经 real_le = Or (real_lt) (real_eq) 的构造性析取逐支消解）。 *)
 Theorem real_expf_realizable :
   sigT (fun f : Real -> Real => And (forall x : Real, real_lt real_zero (f x))
         (And (real_eq (f real_zero) real_one)

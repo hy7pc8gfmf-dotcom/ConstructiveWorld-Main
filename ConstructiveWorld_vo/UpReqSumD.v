@@ -1,27 +1,36 @@
 (* ============================================================ *)
-(* UpReqSumD.v —— B-求和族放电席 G1：sum_eq_list 钥匙桥实例化       *)
-(*   + sum_ext/linear/add/opp/le/pos/zero_nonneg 一次性无条件放电    *)
+(* UpReqSumD.v *)
+(* *)
+(* 目的： B-求和族：sum_eq_list 钥匙桥实例化。 *)
+(* 主件： sumd_sum_eq_list 钥匙桥与 sumd_list_sum_linear / sumd_sum_linear 线性族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
+(* 备注： 原 Section 假设族在具体实例上全部收敛为无条件定理（纯接口字段推导，零新假设位）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqSumD.v —— B-求和族消解席 G1：sum_eq_list 钥匙桥实例化       *)
+(*   + sum_ext/linear/add/opp/le/pos/zero_nonneg 一次性无条件消解    *)
 (*                                                                *)
 (* 钥匙：UpReqSampling.v L740 sum_eq_list（req 化，签名变化 7，      *)
-(*   四关绿在盘）：Variable sum_eq_list : forall g, req (sumf g)     *)
-(*   (bs_list_sum g enum)——sumf 与列表和的具体桥。本席把 sumf       *)
+(*   合规验证绿在盘）：Variable sum_eq_list : forall g, req (sumf g)     *)
+
 (*   具体化为 enum 列表和（sumd_sumf，Definition），桥降为          *)
 (*   req_refl 定义件（sumd_sum_eq_list，保底 1）；原 Section 假设族  *)
 (*   sum_ext/sum_linear/sum_add/sum_pos/sum_le/sum_zero_nonneg 在    *)
 (*   具体实例上全部收敛为无条件定理（纯接口字段推导，零新假设位）。  *)
 (*                                                                *)
-(* 落点层裁决（放电落点纪律首步，普查 §四落点）：本席全部语句为       *)
+
 (*   接口层（R + RealInterfaceEnhancedSetoid）Set 值谓词 req/le/lt，  *)
 (*   纯字段推导，不触及 real_le_b；具体 Real 实例 specialize 时接口   *)
 (*   le 与 real_le_b 的同一性由 UpRealLeB real_le_to_le_b@78 单向桥   *)
-(*   保证（本席零依赖）。落点 = req 层无条件定理（全接口泛函）。      *)
+(*   保证（本件零依赖）。落点 = req 层无条件定理（全接口泛函）。      *)
 (*                                                                *)
 (* 分级（逐件）：保底件 3：sumd_sum_eq_list / sumd_sum_ext /          *)
 (*   sumd_sum_linear；主件 6：sumd_sum_add / sumd_sum_opp /           *)
 (*   sumd_sum_le / sumd_sum_pos / sumd_list_sum_zero_nonneg_in /       *)
-(*   sumd_sum_zero_nonneg_in（另附 head/tail 剥离腿两件）。诚实收口：   *)
+(*   sumd_sum_zero_nonneg_in（另附 head/tail 剥离腿两件）。诚实完成：   *)
 (*   sum_pos 以列表头 witness 形（cons 形）+ 槽形（非空前提显式参）；    *)
-(*   zero_nonneg 收口为 sumd_in s enum 诚实形（Set 层成员谓词；enum     *)
+(*   zero_nonneg 完成为 sumd_in s enum 诚实形（Set 层成员谓词；enum     *)
 (*   无满射性数据，全称形不可证，见裁决注）。                          *)
 (*                                                                *)
 (* 消费面（全 Require 已认证 .vo，零改写上游）：                     *)
@@ -64,7 +73,7 @@ Fixpoint sumd_list_sum (f : S -> R) (l : list S) : R :=
   | x :: t => plus (f x) (sumd_list_sum f t)
   end.
 
-(* 具体有限和算子：sumf 的放电实例 *)
+(* 具体有限和算子：sumf 的消解实例 *)
 Definition sumd_sumf (f : S -> R) : R := sumd_list_sum f enum.
 
 (* ============ 保底件 1：桥实例化定义件 ============ *)
@@ -73,7 +82,7 @@ Lemma sumd_sum_eq_list : forall g : S -> R,
   req (sumd_sumf g) (sumd_list_sum g enum).
 Proof. intro g. exact (req_refl (sumd_list_sum g enum)). Qed.
 
-(* ============ 辅件家（放电件公共腿） ============ *)
+(* ============ 辅件家（消解件公共腿） ============ *)
 
 (* lt 到 le 的单向提升（接口 lt_le_iff 的严格支；UpReqAlgebra L933 同款） *)
 Lemma sumd_lt_le : forall a : R, lt zero a -> le zero a.
@@ -225,10 +234,10 @@ Lemma sumd_sum_pos : forall f : S -> R,
   Not (enum = nil) -> (forall s : S, lt zero (f s)) -> lt zero (sumd_sumf f).
 Proof. intros f Hne H. exact (sumd_list_sum_pos f enum Hne H). Qed.
 
-(* ============ 主件 5：sum_zero_nonneg 类（普查 5 槽）诚实收口 ======== *)
+(* ============ 主件 5：sum_zero_nonneg 类（普查 5 槽）诚实完成 ======== *)
 (* 逐项零化：逐点非负 + 全和为零 + 成员位 ⇒ 该项为零。
-   全称收口须 enum 满射（现有各节仅携带 enum_nonempty，无满射数据），
-   故成员位诚实形为本实例可得的最大收口（阻塞裁决注见头注）。
+   全称完成须 enum 满射（现有各节仅携带 enum_nonempty，无满射数据），
+   故成员位诚实形为本实例可得的最大完成（阻塞裁决注见头注）。
    成员谓词取 Set 层自持（基座空型 + 和型），零 Prop 消去。 *)
 
 (* Set 层成员谓词：nil 位取基座空型，cons 位取严格支/余段和型 *)
@@ -295,7 +304,7 @@ Proof.
     + exact (IH (sumd_list_sum_zero_nonneg_tail f x t Hnn H0) s Ht).
 Qed.
 
-(* 具体有限和上的槽形收口（成员位诚实形） *)
+(* 具体有限和上的槽形完成（成员位诚实形） *)
 Lemma sumd_sum_zero_nonneg_in : forall f : S -> R,
   (forall s : S, le zero (f s)) -> req (sumd_sumf f) zero ->
   forall s : S, sumd_in s enum -> req (f s) zero.
@@ -305,12 +314,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* wb63 增量节：席57 族余量地图三项清偿                            *)
+
 (*                                                                *)
-(* ① 列表 Fubini（sum_swap/bs_swap/sum_swap_i 三槽同形一次放电）：  *)
+(* ① 列表 Fubini（sum_swap/bs_swap/sum_swap_i 三槽同形一次消解）：  *)
 (*   路线裁决=内层归纳，免 flatten/免配对展平——双侧展平产生同重集   *)
 (*   异序清单，置换不变性须消去 Prop 型置换证据才能造 Set 值 req    *)
-(*   项，Set 层不可行（E-探索判词 W1）；内层归纳 + add 分配两步即   *)
+(*   项，Set 层不可行（E-探索结论 W1）；内层归纳 + add 分配两步即   *)
 (*   闭合，零新增结构。                                            *)
 (*                                                                *)
 (* ② sum_const（Σc == of_nat(len)·c）：换轨实读裁决——              *)
@@ -321,8 +330,8 @@ Qed.
 (*   of_nat），且 reqd_list_sum_g 与 sumd_list_sum 定义性同构       *)
 (*   （同 fold 形），1 步 exact 换轨直连。                          *)
 (*                                                                *)
-(* ③ zero_nonneg 全称形探索收口：无满射数据时全称形不可证（反模型：  *)
-(*   enum=[a]、s∉enum、f s>0 且和为零——席57 判词维持）；本次交付    *)
+(* ③ zero_nonneg 全称形探索完成：无满射数据时全称形不可证（反模型：  *)
+(*   enum=[a]、s∉enum、f s>0 且和为零——席57 结论维持）；本次结果    *)
 (*   两件升格面：(a) 满射数据显式参形（消费方携带覆盖数据即得       *)
 (*   全称形）；(b) 成员谓词单向桥 sumd_in→In（Set 沉降 Prop 合法    *)
 (*   方向，反向 In→sumd_in 被 Prop 消去限制阻断，不主张）。         *)
@@ -371,7 +380,7 @@ Proof.
 Qed.
 
 (* ---- ①·具体有限和槽形（bs_swap@Sampling727 / sum_swap_cc@125 /      *)
-(*         sum_swap_i@AttnIter151 三槽同形一次放电） ---- *)
+(*         sum_swap_i@AttnIter151 三槽同形一次消解） ---- *)
 Lemma sumd_sum_swap : forall f : S -> S -> R,
   req (sumd_sumf (fun s : S => sumd_sumf (fun s' : S => f s s')))
       (sumd_sumf (fun s' : S => sumd_sumf (fun s : S => f s s'))).

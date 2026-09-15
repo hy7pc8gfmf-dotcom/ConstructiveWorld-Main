@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqPadeSignXfer.v *)
+(* *)
+(* 目的： pbp_sign_transfer 的实例化传送件。 *)
+(* 主件： psx_sign_instantiated 与 psx_sign_pair / psx_beta_bridge 传送链。 *)
+(* 依赖： S02_CauchyComplete、S03_QExp、UpReqPadeBetaPos、UpReqPadeTailPos。 *)
+(* 备注： 实例化件：符号对经 β 桥传送；系数积正性为构造核。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeSignXfer.v —— 席AA2·A6：pbp_sign_transfer 实例化席    *)
 (* （20260914；A 档消融战役第一批第二单，后台独立作业）           *)
 (* ============================================================ *)
@@ -19,14 +28,14 @@
 (*   主件 psx_sign_instantiated（pbp_sign_transfer 接口实例化）： *)
 (*     lead == psx_sign n · coef n ⟹ 0 < psx_sign n · lead        *)
 (*   即 (−1)^n·(带号首项) 恒正——偶支=传送件直接实例化，           *)
-(*   奇支=对偶面（去号后同一传送件喂参）。                        *)
+(*   奇支=对偶面（去号后同一传送件提供实参）。                        *)
 (*   独立正性件 psx_coef_pos：TailPos 侧 ptp_beta_pos 全称面      *)
-(*     直喂首系数（与传送面交叉印证系数幅正值）。                 *)
+(*     显式应用首系数（与传送面交叉印证系数幅正值）。                 *)
 (*                                                             *)
-(* 编译配方（温控协议）：                                          *)
-(*   秒审: coqc -vos -Q . "" -Q ../001 "" UpReqPadeSignXfer.v     *)
-(*   全量: coqc -Q . "" -Q ../001 "" UpReqPadeSignXfer.v          *)
-(*   G4  : coqchk -Q . "" -o UpReqPadeSignXfer                    *)
+
+
+
+
 (*                                                             *)
 (* 红线自审：语句面全 Set（QltT/Qeq/sigT 均既有 Set 承载面）；    *)
 (*   无新增 Prop 判断面（Qeq 前提沿 pbp_sign_transfer 既有形）；  *)
@@ -81,7 +90,7 @@ Proof. intro k. apply psx_sign_pair. Qed.
 Lemma psx_sign_odd : forall k : nat, psx_sign (2 * k + 1) == (-1)%Q.
 Proof. intro k. apply psx_sign_pair. Qed.
 
-(* 符号平方归一（主件去号收口用） *)
+(* 符号平方归一（主件去号完成用） *)
 Lemma psx_sign_sq : forall n : nat, psx_sign n * psx_sign n == 1%Q.
 Proof.
   intro n.
@@ -125,7 +134,7 @@ Theorem psx_sign_instantiated : forall (lead : Q) (n : nat),
 Proof.
   intros lead n Heq.
   apply (pbp_sign_transfer (psx_sign n * lead) (psx_posf n) n 0).
-  - (* 去号收口：(−1)^n·lead = (−1)^n·((−1)^n·coef) = coef = β·posf *)
+  - (* 去号完成：(−1)^n·lead = (−1)^n·((−1)^n·coef) = coef = β·posf *)
     rewrite Heq.
     rewrite Qmult_assoc.
     rewrite psx_sign_sq.
@@ -136,7 +145,7 @@ Proof.
   - apply psx_posf_pos.
 Qed.
 
-(* TailPos 侧独立正性件：ptp_beta_pos 全称面直喂首系数 *)
+(* TailPos 侧独立正性件：ptp_beta_pos 全称面显式应用首系数 *)
 Corollary psx_coef_pos : forall n : nat, QltT 0 (psx_coef n).
 Proof.
   intro n. apply Qlt_to_QltT. unfold psx_coef, Qdiv.
@@ -183,7 +192,7 @@ Proof.
     unfold psx_signed. reflexivity.
 Qed.
 
-(* ===== 审计与提取（G3：全量 coqc 时生效） ===== *)
+
 Print Assumptions psx_sign_instantiated.
 Print Assumptions psx_coef_pos.
 Print Assumptions psx_even_pos.

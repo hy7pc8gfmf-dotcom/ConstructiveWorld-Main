@@ -1,10 +1,19 @@
-(* UpReqTempEntropy.v — 温度熵层 5 件 req 化（批 2 余件收口，任务批 3 前置）
+(* ============================================================ *)
+(* UpReqTempEntropy.v *)
+(* *)
+(* 目的： req 温度熵族：显式熵、相对熵分解与变分界。 *)
+(* 主件： req_entropy_temp_explicit / req_relative_entropy_temp_decomp / req_variational_temp_bound。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
+(* 备注： 温度正性与配分归一化为 Section 变量；严格链 req_temp_strict_A_chain2 为构造核。 *)
+(* ============================================================ *)
+
+(* UpReqTempEntropy.v — 温度熵层 5 件 req 化（批 2 余件完成，任务批 3 前置）
    母本：签名迁移规划书-20260908.md 批 2 余件 (a)；基座 Id 原件：
-     entropy_temp_explicit        <- CW219 L17271（熵显式 H(p_β)==β·E+logZ）
-     relative_entropy_temp_decomp <- CW219 L17356（KL(q‖p_β)==−H(q)+β·E(q)+logZ）
-     entropy_deficit_kl_temp      <- CW219 L17691（同能量 ⟹ S[p_β]−S[p]==KL）
-     max_entropy_is_boltzmann_temp<- CW219 L17726（同能量 ⟹ S[p]≤S[p_β]）
-     entropy_max_unique_temp      <- CW219 L17763（同能量同熵 ⟹ p==p_β 逐点）
+     entropy_temp_explicit        <- L17271（熵显式 H(p_β)==β·E+logZ）
+     relative_entropy_temp_decomp <- L17356（KL(q‖p_β)==−H(q)+β·E(q)+logZ）
+     entropy_deficit_kl_temp      <- L17691（同能量 ⟹ S[p_β]−S[p]==KL）
+     max_entropy_is_boltzmann_temp<- L17726（同能量 ⟹ S[p]≤S[p_β]）
+     entropy_max_unique_temp      <- L17763（同能量同熵 ⟹ p==p_β 逐点）
    依赖件（全部 UpReqDist.v ReqTemp/ReqFEP 节闭合形，-Q . "" 直接消费）：
      req_Z_temp_pos / reqd_boltzmann_dist_temp / reqd_energy_exp_temp /
      reqd_boltzmann_dist_temp_normalized / reqd_boltzmann_dist_temp_pos(Defined) /
@@ -18,7 +27,7 @@
      纯 term-mode（req_trans 链 + compat 桥）；log 前提逐位携带正性证明
      （正性证明 proof-relevant，批 2 卡坑 7——一律用 Defined 正性件
      tBpos/tZpos（δ 透明别名）保证与 decomp 的前提字面一致）。
-   命名对齐注记：req_entropy_deficit_temp（本文件/任务名）＝批 2 台账
+   命名对齐注记：req_entropy_deficit_temp（本文件/任务名）＝批 2 登记表
      req_entropy_deficit_kl_temp＝Id entropy_deficit_kl_temp（L17691）。 *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -82,7 +91,7 @@ Definition tZpos (t : R) (Ht : lt zero t) : lt zero (Z_temp t) :=
 
 (* ============================================================ *)
 (* 件 1/5：温度熵显式（Id entropy_temp_explicit @17271）         *)
-(*   H(p_β) == β·E(p_β) + log Z_t。逐点 p·(−log p) == p·(βe)+p·logZ *)
+
 (*   （decomp 换形 + opp_plus/双否定 + distrib + 交换），Σ 层     *)
 (*   fsum_ext + fsum_add + β 提取（逐点交换/结合 + fsum_linear）  *)
 (*   + logZ 常数提取（交换 + fsum_linear + 归一化 + mult_one）。  *)
@@ -99,7 +108,7 @@ Proof.
   set (p := tB t Ht).
   set (Hp := tBpos t Ht).
   unfold reqd_entropy_dist.
-  (* 主链：Σ p·(−log p) == Σ (p·βe + p·logZ) == β·Σ p·e + logZ *)
+  
   apply (req_trans
     (sumf (fun s : S => mult (p s) (opp (log (p s) (Hp s)))))
     (sumf (fun s : S => plus (mult (p s) (mult bta (base_loss s)))
@@ -114,7 +123,7 @@ Proof.
       (mult (p s) (opp (log (p s) (Hp s))))
       (mult (p s) (plus LZ (mult bta (base_loss s))))
       (plus (mult (p s) (mult bta (base_loss s))) (mult (p s) LZ))).
-    + (* 步 A：−log p == logZ + βe（decomp + opp_plus + 双否定×2） *)
+    + 
       apply (req_trans
         (mult (p s) (opp (log (p s) (Hp s))))
         (mult (p s) (opp (plus (opp LZ) (opp (mult bta (base_loss s))))))
@@ -215,9 +224,9 @@ Qed.
 
 (* ============================================================ *)
 (* 件 2/5：相对熵温度分解（Id relative_entropy_temp_decomp @17356） *)
-(*   KL(q‖p_β) == −H(q) + β·E(q) + log Z_t（q 归一化）。          *)
-(*   req_minus 展开 + 逐点 distrib；Σ q·log q == −H(q)           *)
-(*   （req_entropy_neg_sum 运输）；Σ q·log p_β == −β·E(q) − logZ  *)
+
+
+
 (*   （decomp 逐点 + 交换 + distrib + opp_mult_l + β 提取 +       *)
 (*   logZ 常数提取）；组装 fsum_add/fsum_opp + opp_plus/双否定 +  *)
 (*   plus_assoc。                                                *)
@@ -274,7 +283,7 @@ Proof.
       + apply (req_trans (mult LZ (sumf q)) (mult LZ one) LZ).
         * exact (req_mult_compat LZ LZ (sumf q) one (req_refl LZ) Hnq).
         * exact (mult_one LZ). }
-  (* 预平衡原子项 HlogH：Σ q·log p_β == opp(β·E(q)) + opp(logZ) *)
+  
   assert (HlogH : req (sumf (fun s : S => mult (q s) (log (pB s) (HpB s))))
                       (plus (opp (mult bta Eq)) (opp LZ))).
   { apply (req_trans
@@ -282,7 +291,7 @@ Proof.
       (sumf (fun s : S => plus (opp (mult (q s) (mult bta (base_loss s))))
                                (opp (mult (q s) LZ))))
       (plus (opp (mult bta Eq)) (opp LZ))).
-    - (* 逐点：q·log p_β == opp(q·βe) + opp(q·logZ) *)
+    - 
       apply (fsum_ext
         (fun s : S => mult (q s) (log (pB s) (HpB s)))
         (fun s : S => plus (opp (mult (q s) (mult bta (base_loss s))))
@@ -460,7 +469,7 @@ Qed.
 
 (* ============================================================ *)
 (* 件 3/5：熵亏损温度版（Id entropy_deficit_kl_temp @17691；      *)
-(*   批 2 台账名 req_entropy_deficit_kl_temp）。                  *)
+(*   批 2 登记表名 req_entropy_deficit_kl_temp）。                  *)
 (*   同约束能量 E(p) == E(p_β) ⟹ S[p_β] − S[p] == KL(p‖p_β)。    *)
 (*   链：KL 分解（件 2）+ 熵显式（件 1）+ 结合/交换重排 +         *)
 (*   同能量替换（β·E(p) ↦ β·E(p_β)，req_mult_compat）+            *)
@@ -595,15 +604,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 温度严格层增量节（批 2 挂账 5+1 件，第三席续建 2026-09-09）    *)
-(*   基座坐标（Id 原件，CW219 ConstructiveWorld_Live 主副本）：   *)
+(* 温度严格层增量节（批 2 显式假设 5+1 件，第三席续建 2026-09-09）    *)
+(*   基座坐标（Id 原件，ConstructiveWorld_Live 主副本）：   *)
 (*     variational_temp_bound         @L17468                    *)
 (*     energy_exp_temp_mono           @L17521                    *)
 (*     temp_energy_dual_closed        @L17788（sigT 形）         *)
 (*     temp_strict_A_chain2           @L17825                    *)
 (*     temp_strict_ident2             @L17879                    *)
 (*     energy_exp_temp_strict_mono    @L18019                    *)
-(*   组装路线（照 UpReqDist.v 尾注判词）：消费件 1（熵显式）+     *)
+(*   组装路线（照 UpReqDist.v 尾注结论）：消费件 1（熵显式）+     *)
 (*   件 2（KL 温度分解）+ UpReqDist.ReqAlgBridge2 移项链           *)
 (*   （req_le_plus_cancel_l 系/req_le_mult_pos_cancel/            *)
 (*   req_le_minus_nonneg_rev/req_mult_minus_distr_r/              *)
@@ -611,16 +620,16 @@ Qed.
 (*   诚实假设位（Id 同位，逐位保留）：                            *)
 (*     a) Id L17119 inv_pos_lt_compat（Variable）——req 接口字段   *)
 (*       闭包检查通过（inv_pos_pos/inv_pos_correct/lt_mult_compat），*)
-(*       按 RestA 先例「放电」为定理 req_inv_pos_lt_contra，       *)
+(*       按 RestA 先例「消解」为定理 req_inv_pos_lt_contra，       *)
 (*       不新增公理；                                             *)
 (*     b) Id L17121 lt_minus_nonneg（Variable）——接口抽象层无     *)
-(*       lt↔minus 连接字段（Real 层逐 eps 直构），不可放电；       *)
+(*       lt↔minus 连接字段（Real 层逐 eps 直构），不可消解；       *)
 (*       在 mono/strict_mono 两件以显式前提                       *)
 (*         lt zero (req_minus (inv_pos t1 Ht1) (inv_pos t2 Ht2))   *)
 (*       逐位保留（Real 实例化下为定理，不放大主张）。            *)
 (* ============================================================ *)
 
-(* ---- 放电件：inv 反单调（Id L21013/L17119 同位 Variable 真证）---- *)
+(* ---- 消解件：inv 反单调（Id L21013/L17119 同位 Variable 真证）---- *)
 (*   链：inv b == (inv a·a)·inv b < (inv a·b)·inv b == inv a       *)
 (*   （两端 inv_pos_correct/mult_one 吸收，中段 lt_mult_compat      *)
 (*   两次 + req_lt_compat 交换运输）——RestA ralt_inv_pos_lt_contra  *)
@@ -720,7 +729,7 @@ Qed.
 
 (* ============================================================ *)
 (* 严格层件 1/6：KL 分解换形（Id temp_strict_A_chain2 @17825）    *)
-(*   −S2 + b1·E2 + log Z1 == (b1−b2)·E2 + (log Z1 − log Z2)。     *)
+
 (*   非平凡性：组装（件 1 熵显式）+ 真证代数链（opp_plus/双否定/  *)
 (*   distrib/req_mult_minus_distr_r req 链，零 rewrite）。        *)
 (* ============================================================ *)
@@ -953,11 +962,11 @@ Qed.
 
 (* ============================================================ *)
 (* 严格层件 3/6：温度-期望能量单调（Id energy_exp_temp_mono @17521）*)
-(*   t1 < t2 ⟹ E(t1) ≤ E(t2)。非平凡性：真证组装（放电件 Hb +    *)
+(*   t1 < t2 ⟹ E(t1) ≤ E(t2)。非平凡性：真证组装（消解件 Hb +    *)
 (*   变分界 ×2 + 件 1 熵显式 + Id Hm/Hshift/Hsum/Hlhs 全链 req 复刻 *)
 (*   + req_le_mult_pos_cancel/req_le_minus_nonneg_rev 移项链）。   *)
 (*   诚实前提：lt zero (b1 − b2)（Id L17121 lt_minus_nonneg 同位， *)
-(*   接口抽象层不可放电，Real 实例化下为定理）。                   *)
+(*   接口抽象层不可消解，Real 实例化下为定理）。                   *)
 (* ============================================================ *)
 Theorem req_energy_exp_temp_mono :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
@@ -972,7 +981,7 @@ Proof.
   set (S2 := reqd_entropy_dist S sumf (tB t2 Ht2) (tBpos t2 Ht2)).
   set (LZ1 := log (Z_temp t1) (tZpos t1 Ht1)).
   set (LZ2 := log (Z_temp t2) (tZpos t2 Ht2)).
-  (* β2 < β1（放电件） *)
+  (* β2 < β1（消解件） *)
   assert (Hb : lt b2 b1)
     by exact (req_inv_pos_lt_contra t1 t2 Ht1 Ht2 Ht12).
   (* 变分界 ×2（q := p_{t2} / p_{t1} 交叉） *)
@@ -1055,7 +1064,7 @@ Proof.
                             (req_minus (mult b1 E1) (mult b2 E1))
                             (req_mult_minus_distr_r b1 b2 E1))
                    (req_refl LZ1)). }
-  (* 收口变分界（Id Hv1''/Hv2''） *)
+  (* 完成变分界（Id Hv1''/Hv2''） *)
   assert (Hv1'' : le (plus (mult (req_minus b2 b1) E2) LZ2) LZ1).
   { apply (le_id_l (plus (mult (req_minus b2 b1) E2) LZ2)
                    (req_minus (plus (mult b2 E2) LZ2) (mult b1 E2)) LZ1).
@@ -1504,12 +1513,12 @@ Qed.
 End ReqTempEntropy.
 
 (* ============================================================ *)
-(* 批 2 余件 (a) 温度熵层 5 件逐条核销（对照 UpReqDist.v 文件尾）：*)
+(* 批 2 余件 (a) 温度熵层 5 件逐条已证明（对照 UpReqDist.v 文件尾）：*)
 (*   req_entropy_temp_explicit        <- Id entropy_temp_explicit *)
-(*     @CW219 L17271                                          [1] *)
+(*     @L17271                                          [1] *)
 (*   req_relative_entropy_temp_decomp <- Id @L17356           [2] *)
 (*   req_entropy_deficit_temp         <- Id entropy_deficit_    *)
-(*     kl_temp @L17691（台账名 req_entropy_deficit_kl_temp）  [3] *)
+(*     kl_temp @L17691（登记表名 req_entropy_deficit_kl_temp）  [3] *)
 (*   req_max_entropy_is_boltzmann_temp<- Id @L17726           [4] *)
 (*   req_entropy_max_unique_temp      <- Id @L17763           [5] *)
 (* -------------------------------------------------------------- *)
@@ -1524,16 +1533,16 @@ End ReqTempEntropy.
 (*   d) 接口 mult_assoc 方向反向（req (a·(b·c)) ((a·b)·c)），     *)
 (*     结合步以 req_sym 对齐；                                    *)
 (*   e) 件 3 的 Hpp（reqd_positive_dist p）与 Id 同为诚实现位（未用）。 *)
-(* 消费入口：Require Import UpReqTempEntropy.（依赖 CW219 +        *)
+(* 消费入口：Require Import UpReqTempEntropy.（依赖 +        *)
 (*   UpReqAlgebra + UpReqDist 三 .vo 已编译可载）。                *)
 (* -------------------------------------------------------------- *)
 
 (* ============================================================ *)
-(* 温度严格层增量节 6 件逐条核销（第三席 2026-09-09，批 2 挂账    *)
-(*   5+1 件收口；基座坐标 = CW219 ConstructiveWorld_Live 主副本）：*)
+(* 温度严格层增量节 6 件逐条已证明（第三席 2026-09-09，批 2 显式假设    *)
+(*   5+1 件完成；基座坐标 = ConstructiveWorld_Live 主副本）：*)
 (*   req_variational_temp_bound       <- Id variational_temp_    *)
 (*     bound @L17468（件 2 + req_gibbs_inequality + 移项链真证） [6] *)
-(*   req_energy_exp_temp_mono         <- Id @L17521（放电件 +    *)
+(*   req_energy_exp_temp_mono         <- Id @L17521（消解件 +    *)
 (*     变分界×2 + Id Hm/Hshift/Hsum/Hlhs 全链 req 复刻）       [7] *)
 (*   req_temp_energy_dual_closed      <- Id @L17788 sigT 形      *)
 (*     （纯组装：tB/tBpos/tBnorm + 能量口 req_refl + 件 4/件 5）[8] *)
@@ -1543,15 +1552,15 @@ End ReqTempEntropy.
 (*     交叉 + Hmain2 五步 + H1/H2/Hza/H3 逐步 trans 重排）    [10] *)
 (*   req_energy_exp_temp_strict_mono  <- Id @L18019（[10] +      *)
 (*     req_gibbs_inequality + reqd_lt_mult_pos_cancel 严格消去）[11] *)
-(*   助手 3：req_inv_pos_lt_contra（**放电**：Id L17119/L21013      *)
+(*   助手 3：req_inv_pos_lt_contra（**消解**：Id L17119/L21013      *)
 (*     Variable 位接口字段闭包真证关闭，RestA ralt_inv_pos_lt_     *)
 (*     contra 同款复刻——零新增公理）+ reqd_minus_pair_cancel /     *)
 (*     reqd_minus_opp_flip（纯接口代数，Hsum/Hoppm 段公用）。      *)
 (* -------------------------------------------------------------- *)
-(* 诚实签名变化台账（对照 Id 原件）：                              *)
+(* 诚实签名变化登记表（对照 Id 原件）：                              *)
 (*   1. mono / strict_mono 增显式前提 lt zero (req_minus b1 b2)：  *)
 (*     Id L17121 lt_minus_nonneg 系接口抽象层 Variable（Real 层逐  *)
-(*     eps 直构），req 接口无 lt↔minus 连接字段，不可放电——逐位    *)
+(*     eps 直构），req 接口无 lt↔minus 连接字段，不可消解——逐位    *)
 (*     保留（Real 实例化下为定理，不放大主张）。                    *)
 (*   2. dual_closed 的 reqd_positive_dist pb 合取支升入 sigT 见证位     *)
 (*     （Hpb）：req 系 reqd_entropy_dist 的正性位 proof-relevant，抽象   *)
@@ -1560,6 +1569,6 @@ End ReqTempEntropy.
 (* 本文件合计：14 Qed = 批 2 五件 [1]-[5] + 本批 3 助手 + 6 件      *)
 (*   [6]-[11]（全部纯构造性；Set 层语句零 Prop 泄露；纯 term-mode，  *)
 (*   零 Morphisms）。节参数不变（温度层只依赖 Z_temp 接口）。        *)
-(* 消费入口不变：Require Import UpReqTempEntropy.（CW219 +          *)
+(* 消费入口不变：Require Import UpReqTempEntropy.（+          *)
 (*   UpReqAlgebra + UpReqDist 三 .vo 已编译可载）。                 *)
 (* -------------------------------------------------------------- *)

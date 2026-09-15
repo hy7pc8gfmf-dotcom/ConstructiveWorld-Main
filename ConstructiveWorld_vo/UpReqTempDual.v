@@ -1,6 +1,15 @@
 (* ============================================================ *)
+(* UpReqTempDual.v *)
+(* *)
+(* 目的： 温度族 sigT 对偶闭环与定理 4.6d 组装。 *)
+(* 主件： temp_energy_dual_closed_real / temp_energy_dual_closed_bool 双载体闭环。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqKLSTangent。 *)
+(* 备注： 与第三档同源（4.3 边界）：无条件 Or 形不可达，取逐 eps 档；抽象载体为诚实接口前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTempDual.v —— 席T13：温度族 sigT 对偶闭环 + 定理 4.6d 组装      *)
-(*   2026-09-11 ｜ 后台独立席位（独占 CoreN 0，预算 60 分钟单席闭合）    *)
+
 (* ------------------------------------------------------------------ *)
 (* 【使命】席T6 交接欠件：论文正式版 L329-344 定理 4.6d                  *)
 (*   （温度化最大熵对偶闭环，构造强度：见证构造档）的 Real 层 sigT 形    *)
@@ -16,24 +25,24 @@
 (*     req_temp_energy_dual_closed（UpReqTempEntropy L1467）同构）。      *)
 (*   Id And                              ↝ Real 乘积 *（Set 层，零 Prop） *)
 (*   Id 支1a normalized pb               ↝ 支A：real_eq (Σ pb) one        *)
-(*     （T6 real_boltzmann_dist_temp_normalized 全 arity 直喂）           *)
+(*     （T6 real_boltzmann_dist_temp_normalized 全 arity 显式应用）           *)
 (*   Id 支1b positive_dist pb            ↝ sigT 第二见证 Hpb（T6 pos 件） *)
 (*   Id 支2 Id (E pb) (E_temp t)         ↝ 支B：real_eq (E pb) E_T        *)
-(*     （real_energy_exp_temp 定义性收敛，real_eq_refl 收口）             *)
+(*     （real_energy_exp_temp 定义性收敛，real_eq_refl 完成）             *)
 (*   Id 支3 le (S p) (S pb)              ↝ 支C：逐 eps 档                 *)
 (*     real_le (S p) (S pb + eps)（∀eps>0）——Or 形 real_le 的比较界      *)
 (*     与席T7 第三档同源（4.3 边界）：无条件 Or 形不可达，逐 eps 档为     *)
 (*     最强可达形。链 = 4.6a 熵亏件（S[pb]−S[p] ≡ KL）+ Gibbs 腿         *)
 (*     （抽象载体=诚实接口前提，S08 L2511 同形；bool 载体=                 *)
 (*     real_gibbs_inequality_eps 实例化）+ 差正移项（real_lt_zero_minus   *)
-(*     + Setoid 代数，本席工作马 t13_le_plus_opp_shift）。                *)
+
 (*   Id 支4 S p ≡ S pb ⟹ 逐点 p ≡ pb     ↝ 支D 两档：                    *)
 (*     D1（全载体）熵等 ⟹ KL 归零（t13_entropy_eq_kl_zero，Setoid 代数）；*)
 (*     D2（bool 载体全闭）KL≡0 ⟹ 逐点（t1_gibbe2_gibbs_equality_bool，   *)
 (*     席T1 无条件注入形——无条件版唯一支在通用载体受三分判定界，          *)
 (*     bool 为 gibbe2 样板可达档）。                                      *)
 (*   总装件两枚：temp_energy_dual_closed_real（抽象载体对位骨架，        *)
-(*   支A/B/C/D1 全闭；支C 带 Gibbs 腿接口前提、支D 交付 D1 档）+          *)
+(*   支A/B/C/D1 全闭；支C 带 Gibbs 腿接口前提、支D 结果 D1 档）+          *)
 (*   temp_energy_dual_closed_bool（bool 载体全闭总装：支A/B/C/D2 全闭，  *)
 (*   支C 逐 eps 档、支D 全点闭——见证构造档在 bool 模型的完整 sigT 闭环）。*)
 (* ------------------------------------------------------------------ *)
@@ -41,13 +50,13 @@
 (*   （S04 L3733）的 Real 对位 real_energy_exp_temp_mono 全库零命中       *)
 (*   （grep 实证，2026-09-11）：未建。可达强度预评：恒等档（β·(b1−b2)·   *)
 (*   (E2−E1) ≡ KL1+KL2 类分解）原料同 Id 层；严格档需 KL 严格正接口       *)
-(*   （与 4.3 严格界同源），本席不越界申报。余留席可承本席支C/D 链。      *)
+
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性四条红线：零承认件；Set 层零 Prop 泄露（总装语句全     *)
 (*   real_eq/real_lt/real_le 逐点 Set 值 + sigT/乘积组装）；G1 禁词条目   *)
-(*   零命中（头注以中文转述）；全 Qed 收口。前置件只读：                  *)
-(*   UpReqTempDefs/UpReqEntropyDeficitTemp/UpReqKLSTangent/S 分片。       *)
-(* 编译配方（T7 vo 树入口）：coqc -q -vos -Q vo树 "" -Q . ""（秒审）      *)
+(*   零命中（头注以中文转述）；全 Qed 完成。前置件只读：                  *)
+(*   UpReqTempDefs/UpReqEntropyDeficitTemp/UpReqKLSTangent/S 模块。       *)
+
 (*   后全量（去 -vos）；前置 .vo 全在 ConstructiveWorld_vo 树。           *)
 (* ============================================================ *)
 
@@ -251,8 +260,8 @@ End RealTempDual.
 (* ============================================================ *)
 (* Section RealTempDualBool：bool 载体（两态模型，cons 字面 t13_bstate）  *)
 (*   全闭总装。sumf := real_list_sum bool（S08 四接口实例化），Gibbs 腿   *)
-(*   由 real_gibbs_inequality_eps（S08）实例化放电，唯一支全点闭由         *)
-(*   t1_gibbe2_gibbs_equality_bool（席T1 无条件注入形）收口。              *)
+(*   由 real_gibbs_inequality_eps（S08）实例化消解，唯一支全点闭由         *)
+(*   t1_gibbe2_gibbs_equality_bool（席T1 无条件注入形）完成。              *)
 (* ============================================================ *)
 
 (* 两态表（cons 显式构造，免 scope 记法依赖；与 [true; false] 同一项） *)
@@ -307,7 +316,7 @@ Let bBridge (p : bool -> Real) (Hp : forall s : bool, real_lt real_zero (p s)) :
   real_KL_temp_kl_term_bridge bool bsumf bpos bext T0 T0_pos e0 p Hp.
 
 (* ---------------------------------------------------------- *)
-(* Gibbs 腿实例化（支C 放电）：real_gibbs_inequality_eps（S08）+          *)
+(* Gibbs 腿实例化（支C 消解）：real_gibbs_inequality_eps（S08）+          *)
 (*   桥换载 ⟹ 0 ≤ bKL p + eps（∀eps>0）。                                 *)
 (* ---------------------------------------------------------- *)
 Lemma t13_bool_gibbs_leg :
@@ -332,7 +341,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 支C 实例（抽象工作马 3 的 bool 放电）。                                 *)
+(* 支C 实例（抽象工作马 3 的 bool 消解）。                                 *)
 (* ---------------------------------------------------------- *)
 Lemma t13_bool_max_entropy_le_eps :
   forall (p : bool -> Real) (Hp : forall s : bool, real_lt real_zero (p s)),
@@ -349,7 +358,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 支D2 实例（唯一支全点闭）：熵等 ⟹ KL≡0（抽象工作马 2）⟹ 桥换载        *)
-(*   ⟹ t1_gibbe2_gibbs_equality_bool（席T1 无条件注入形）逐点收口。        *)
+(*   ⟹ t1_gibbe2_gibbs_equality_bool（席T1 无条件注入形）逐点完成。        *)
 (* ---------------------------------------------------------- *)
 Lemma t13_bool_entropy_eq_pointwise :
   forall (p : bool -> Real) (Hp : forall s : bool, real_lt real_zero (p s)),
@@ -371,7 +380,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 总装件 2：temp_energy_dual_closed_bool（bool 载体全闭 sigT 形）。       *)
-(*   支A（归一化）+ 支B（能量口）+ 支C（逐 eps 档，Gibbs 腿已放电，        *)
+(*   支A（归一化）+ 支B（能量口）+ 支C（逐 eps 档，Gibbs 腿已消解，        *)
 (*   零接口前提）+ 支D2（唯一支全点闭）——四支全闭， witnessing 档闭环。    *)
 (* ---------------------------------------------------------- *)
 Theorem temp_energy_dual_closed_bool :

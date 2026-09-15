@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqTVAbsEps.v *)
+(* *)
+(* 目的： 上游 TV 链前提位的逐 eps 绝对值链供给。 *)
+(* 主件： tvd_abs_sum_le_list_eps 与 tv9_abs_triangle_ih 三角不等式归纳。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 上游件 Or 形前提位保持原状（精确版不动）；本件供给逐 eps 链节。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTVAbsEps.v — 席T9：定理 5.10 伴随件 tvd_abs_sum_le_list_eps *)
 (*                                                               *)
 (* 使命（席T8 施工图 C2 执行版）：Or 编码下零接口 eps 余量伴随件      *)
@@ -12,9 +21,9 @@
 (* 载体：归纳变元 = list 本身（real_list_sum 三参形态与 real_plus   *)
 (* 直接咬合）。半量取 h := (1/(1+1))·eps，三角形件与归纳前提各吃 h，  *)
 (* h+h == eps 倍半归一收尾。                                        *)
-(* 环境：monolith CW219（-Q ../attn/_build_219 ""，Live_X 树零 vo）； *)
+(* 环境：monolith （-Q ../attn/_build_219 ""，Live_X 树零 vo）； *)
 (* QArith.Qring 供逐点 ring（UpTVDoeblin 头部同款）。全部名字可见性  *)
-(* 已经 _t9_probe.v 实测（含 Locate S：CW219 顶层常量 S 存在，       *)
+(* 已经 _t9_probe.v 实测（含 Locate S：顶层常量 S 存在，       *)
 (* 本文件标识符一律避用 S）。                                       *)
 (* ============================================================ *)
 
@@ -23,7 +32,7 @@ From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 
 (* ---- 0. 逐点环恒等外提（UpTVDoeblin tvd_rring 同款独立副本：
-        real_eq 目标 → 逐点 Q 恒等（ring 放电）。
+        real_eq 目标 → 逐点 Q 恒等（ring 消解）。
         real_plus/real_mult/real_opp/real_minus_r/real_one/real_zero
         均透明，cbn [projT1 ...] 后逐点化简为 Q 表达式；
         real_abs/real_inv_pos 保持不透明（作原子参与 ring）。 ---- *)
@@ -160,7 +169,7 @@ Proof.
   - (* 步例 w::rest：cbn 咬合 real_plus 后，三角形件与归纳前提
        各吃半量 h := tv9_half·eps（正性 real_mult_pos_compat），
        倍半归一 h+h==eps（tv9_double_inv + real_inv_pos_correct）
-       交 tv9_abs_triangle_ih 一步收口。 *)
+       交 tv9_abs_triangle_ih 一步完成。 *)
     cbn [real_list_sum].
     apply (tv9_abs_triangle_ih (f w)
              (real_list_sum (list Real) f rest)

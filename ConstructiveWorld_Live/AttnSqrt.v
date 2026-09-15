@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* AttnSqrt.v *)
+(* *)
+(* 目的： 构造性平方根的一般维数推广（抽象 R 层与 Real 层）。 *)
+(* 主件： real_sqrt_exists：正元的平方根存在性 sigT 见证形；sqrt_witness_sq / sqrt_witness_nat_sq 给出 k^2 维数一般化；nat_to_R 正性。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 纯构造性 Set 层；正性由指数函数给出，无需二分、夹逼或分支；零公理面。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AttnSqrt.v —— P3 升级包：构造性平方根一般化                  *)
 (*                                                              *)
 (* G1（一般平方维数见证，抽象 R 层）：                           *)
@@ -16,18 +25,18 @@
 (*   Or (real_lt zero d) (real_eq zero d)——前提本身就是 Or，    *)
 (*   提供构造性情形数据：                                       *)
 (*   ① d ≡ 0（右支）：r := real_zero，r·r == 0 == d。           *)
-(*   ② d > 0（左支，带正间隙证书）：r := exp(½·log d)——        *)
-(*      库内 log 战役产物 cw_log（右逆 cw_log_exp_right）+      *)
+
+
 (*      cauchy_real_exp_plus（exp 加法性）+ cauchy_real_exp_wd  *)
 (*      （exp 外延）+ cauchy_real_exp_pos（exp 恒正）拼装：      *)
-(*      r·r == exp(t+t) == exp(log d) == d，且 r > 0 直接由     *)
+
 (*      exp 正性给出（无需二分/夹逼/诊断分支）。                *)
 (*   注：任务书原建议镜像 cos π/2 二分模板；本实现改走库内      *)
-(*   log 战役既有产物（其本身即二分模板的产物），构造更短、     *)
+
 (*   且对弱前提 d ≥ 0 严格成立（Or 左支给出正间隙证书，         *)
 (*   右支给出 r := 0 的精确相等）——无假命题修正。               *)
 (*                                                              *)
-(* 纪律：纯构造性 Set 层、零 Axiom/Admitted/Abort/经典。        *)
+(* 纪律：纯构造性 Set 层、零 公理/承认件/弃证/经典。        *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -90,13 +99,13 @@ Theorem real_sqrt_exists : forall d : Real, real_le real_zero d ->
 Proof.
   intros d Hd.
   destruct Hd as [Hdlt | Hdeq].
-  - (* 情形①：d > 0（正间隙证书 Hdlt）。r := exp(½·log d)。 *)
+  - 
     exists (cauchy_real_exp (real_mult (real_const (1#2)) (cw_log d Hdlt))).
     split.
     + (* r > 0：exp 恒正（real_le 左支 = real_lt） *)
       exact (inl (cauchy_real_exp_pos
               (real_mult (real_const (1#2)) (cw_log d Hdlt)))).
-    + (* r·r == d：链 exp(t)·exp(t) == exp(t+t) == exp(log d) == d *)
+    + 
       apply (real_eq_trans
               (real_mult (cauchy_real_exp (real_mult (real_const (1#2)) (cw_log d Hdlt)))
                          (cauchy_real_exp (real_mult (real_const (1#2)) (cw_log d Hdlt))))
@@ -109,10 +118,10 @@ Proof.
                 (cauchy_real_exp (real_plus (real_mult (real_const (1#2)) (cw_log d Hdlt))
                                             (real_mult (real_const (1#2)) (cw_log d Hdlt))))
                 (cauchy_real_exp (cw_log d Hdlt)) d).
-        -- (* exp 外延：t + t == log d（sqrt_real_plus_half_half） *)
+        -- 
            apply cauchy_real_exp_wd.
            apply sqrt_real_plus_half_half.
-        -- (* log 右逆：exp(log d) == d *)
+        -- 
            apply cw_log_exp_right.
   - (* 情形②：d ≡ 0（real_eq 证书 Hdeq）。r := real_zero。 *)
     exists real_zero.

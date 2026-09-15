@@ -1,6 +1,15 @@
-(* ===== CW219 拆分分片 S09_EntropyReal（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L46821-L53931；头部 19 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S09_EntropyReal.v                                           *)
+(*                                                             *)
+(* 目的：熵与 Boltzmann 分布的实层构造：KL 分解、Gibbs 等式、    *)
+(*       最大熵对偶与保序结构（构造性 Set 层）。                 *)
+(* 主件：exp_order_embedding（exp 双向保序）——组合同态/单射/     *)
+(*       满射/值域构成「保序群同构」的 Set 层构造。              *)
+(* 依赖：S01–S08；Stdlib（QArith、List、Bool、Arith、Setoid、    *)
+(*       Morphisms、Lia）。                                      *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L46821-L53931，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -3490,7 +3499,7 @@ apply (Qlt_le_trans _ ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) 
 }    exact Hfinal.
 
 Qed.
-(* ============ 6c：compose 误差分解（D == T1 + T2，E198 战役） ============
+(* ============ 6c：compose 误差分解（D == T1 + T2，E198 论证） ============
    D := Fh − (Fx + (df·dg)·h)、T1 := Fh − (Fx + df·Dg)（f 在 Dg 处误差）、
    T2 := df·(Dg − dg·h)（df 缩放 g 的误差），Dg := Gh − Gx。
    纯 real_eq 环代数链（E198-1：real_eq_sym 显式第一=目标RHS；E198-2：
@@ -3635,7 +3644,7 @@ Proof.
   - apply (real_M_inv_absorb M x HM).
 Qed.
 
-(* ============ 6d：抽象 |Dg| 界（HDg1/HDg2 共用，E198 战役） ============
+(* ============ 6d：抽象 |Dg| 界（HDg1/HDg2 共用，E198 论证） ============
    Dg == Gerr + rdfg·h、|Gerr| ≤ eps_g|h|+epsq、|rdfg·h| == |rdfg||h|、
    线性项 ≤ Lp|h| ⟹ |Dg| ≤ Lp|h| + epsq + ept（三角 real_abs_triangle_le_eps
    需 0<ept 前提——E198-6：apply 漏 0<eps 前提导致 bullet "not finished" 假象）。
@@ -3808,7 +3817,7 @@ Proof.
     apply (real_plus_assoc (real_plus A A) (real_plus B F) (real_plus C (real_plus D (real_plus G H)))).
 Qed.
 
-(* ============ 6e：real_differentiable_compose（E198 战役，Set 层 L21343 模板） ============
+(* ============ 6e：real_differentiable_compose（E198 论证，Set 层 L21343 模板） ============
    rdf := rdf_f(gx)·rdf_g(x)；g 正性前提 Hgpos（f 的输入需 0<g x）、f 实值外延 Hfwd
    （f(g(x+h)) == f(gx+Dg) 换形，RealDifferentiable 无 wd 字段）。
    预算（Bishop 逐 eps，全 == 精确拼 eps'，E198-5）：
@@ -4518,7 +4527,7 @@ Proof.
     }
 Qed.
 
-(* ============ 6f：Real 层 entropy 泛型组装（E200 战役，Set 层 L21950 模板平移） ============
+(* ============ 6f：Real 层 entropy 泛型组装（E200 论证，Set 层 L21950 模板平移） ============
    real_entropy_ent E_A := k_B · log(real_Omega_total_ent E_A)
    real_Omega_total_ent E_A := Omega_A E_A · Omega_B (real_E_B_ent E_A)，real_E_B_ent E_A := E_total − E_A
    组装：const/minus/id/mult/compose + real_log_differentiable（df:=1/x，L38049）。
@@ -4674,7 +4683,7 @@ End RealGapOne.
 
 (* ================================================================
    论文4 κ 收缩 Real 层复刻（正分支），排序 5，2026-09-01
-   探针 _dbg_kappa_real.v（8 Qed / 0 admit）平移合入。
+   探针 _dbg_kappa_real.v（8 Qed / 0 admit）平移并入。
    接口：real_dynamics_gradient_step（动力学=梯度上升步进）、
          real_strong_concavity（μ-强凹，标准优化假设，非经典公理）。
    产出：real_dynamics_step_unfold（K0）、real_gradient_step_contraction
@@ -6276,7 +6285,7 @@ Qed.
 End RealKappaSignReal.
 
 (* ================================================================ *)
-(* T3.2（论文3 次旗舰，2026-09-02 合入）：exp-log 有序群同构组装      *)
+(* T3.2（论文3 次旗舰，2026-09-02 并入）：exp-log 有序群同构组装      *)
 (* 新内容：值域刻画（sigT 双向）+ 序同构像侧完备性（逆序保持）        *)
 (* 纪律：Set 层（real_lt/real_eq 均 Set 值）、sigT 信息性、           *)
 (*       零经典（无三分律）、零 admit；探针 _dbg_t32_20260902.v 全绿  *)
@@ -6342,7 +6351,7 @@ Proof.
 Qed.
 
 (* K5（结构定理组装）：exp 是序嵌入（双向保序），组合同态/单射/满射/值域
-   为论文3 的"保序群同构"叙述的 Set 层收口 *)
+   为论文3 的"保序群同构"叙述的 Set 层构造 *)
 Lemma exp_order_embedding : forall x y : Real,
   And (real_lt x y -> real_lt (cauchy_real_exp x) (cauchy_real_exp y))
       (real_lt (cauchy_real_exp x) (cauchy_real_exp y) -> real_lt x y).
@@ -6355,7 +6364,7 @@ Qed.
 
 End ExpLogGroupIso.
 (* ================================================================ *)
-(* T3.3（论文3，2026-09-02 合入）：exp 不等式族（回应 S4）            *)
+(* T3.3（论文3，2026-09-02 并入）：exp 不等式族（回应 S4）            *)
 (* ① real_exp_ge_linear：0 < t ⟹ 1 + t < e^t（非 eps，升级 eps 版）   *)
 (* ② real_exp_le_inv_one_minus：0 < x ⟹ x < 1 ⟹ e^x ≤ 1/(1−x)        *)
 (* ③ real_exp_abs_minus_one_eps：|e^x − 1| ≤ |x|·e^{|x|} + eps       *)
@@ -6541,8 +6550,8 @@ Fixpoint exp_shift_partial (m : nat) (x : Q) : Q :=
   | Datatypes.S k => exp_shift_partial k x + q_pow x (Datatypes.S k) / q_fact (Datatypes.S (Datatypes.S k))
   end.
 
-(* 纯变量环恒等式（E143-1499：ring 于含 Fixpoint 原子的证明内目标不可靠，
-   独立纯变量引理 + apply 绕过）——exp_partial_shift_factor 归纳步的收口形状 *)
+(* 纯变量环恒等式（ring 于含 Fixpoint 原子的证明内目标不可靠，
+   故取独立纯变量引理 + apply 绕过）——exp_partial_shift_factor 归纳步的证明形态 *)
 Lemma q_ring_shift_factor : forall (a s p f : Q),
   Qplus (Qmult a s) (Qmult (Qmult a p) f) == Qmult a (Qplus s (Qmult p f)).
 Proof.
@@ -6903,7 +6912,7 @@ End ExpInequalities.
 
 
 (* ============================================================ *)
-(* T2.3 KV 逐出定量界（2026-09-02 合入，探针 _dbg_t23.v +       *)
+(* T2.3 KV 逐出定量界（2026-09-02 并入，探针 _dbg_t23.v +       *)
 (* _dbg_t23b.v 平移；评审 S2 回应：db_breaking 与温度 D、能量界  *)
 (* E_max、Lipschitz L 的显式定量联系）                          *)
 (* 结构：P1 exp_neg 差界（全局，T3.3 材料 real_exp_abs_minus_   *)

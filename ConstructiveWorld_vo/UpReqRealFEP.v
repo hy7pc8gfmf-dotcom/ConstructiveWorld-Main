@@ -1,49 +1,58 @@
 (* ============================================================ *)
+(* UpReqRealFEP.v *)
+(* *)
+(* 目的： 自由能原理的 Real 层等式基座（R2-2 补强）。 *)
+(* 主件： rfep_real_kl_decomp_full KL 完整分解与 rfep_boltzmann_normalized_real 归一化族。 *)
+(* 依赖： CW_ConstructiveWorld_219、G05_LogSmall。 *)
+(* 备注： 主件唯一残留环境前提为 Hnormb（质量和等于一），逐 eps 档 Variable 位逐位申报（诚实前提申报）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqRealFEP.v —— 第二轮非平凡补强 R2-2（任务书②等式基座席）：        *)
 (*   real_free_energy_kl_decomp 等式基座——四条装配链枢纽                *)
 (*   2026-09-10                                                         *)
 (* ------------------------------------------------------------------ *)
 (* 【使命】论文2 定理 4.1 `free_energy_kl_decomp` 的 Real 层等式镜像：    *)
-(*   F[p] ≡ F[p_b] + D·KL(p‖p_b)。符号与函数形态以 CW219 L20290         *)
+(*   F[p] ≡ F[p_b] + D·KL(p‖p_b)。符号与函数形态以 L20290         *)
 (*   `rlhf_free_energy_kl`（Id 锚：F[π] ≡ F[π*] + β·relative_entropy）   *)
-(*   与论文 §4 口径为准；Real 层 KL 承载 = real_kl_term 逐项和（CW219    *)
-(*   L41696 规范形），D 因子逐字保留（CW219 L43730 槽形 real_mult D）。  *)
+(*   与论文 §4 口径为准；Real 层 KL 承载 = real_kl_term 逐项和（*)
+(*   L41696 规范形），D 因子逐字保留（L43730 槽形 real_mult D）。  *)
 (* ------------------------------------------------------------------ *)
-(* 【去重裁决（本席头注申报）】缺口 = (b)+(c) 混合形，非纯装配：         *)
+
 (*   ① UpReqLogCompD.logc_real_kl_decomp_full（L878，Real 层             *)
 (*      real_kl_term 形）为 real_list_sum 具体 list 载体（显式 l），     *)
-(*      不可直接喂抽象 sumf 载体的 CW219 槽位——载体不同轴，两步换形不可达；*)
+(*      不可直接喂抽象 sumf 载体的 假设位——载体不同轴，两步换形不可达；*)
 (*   ② UpSigMigrate2.req_free_energy_kl_decomp（L666）/ sig2_tail_      *)
 (*      stage1.a_fe_kl_decomp（req 层草案，无 .vo）为 req 载体 rminus    *)
 (*      字面形（非 real_kl_term 具名形）——层位与形态双不同；            *)
-(*   ③ CW219 Section RealRLHFMain 的 real_kl_decomp_full（L43730）与    *)
+(*   ③ Section RealRLHFMain 的 real_kl_decomp_full（L43730）与    *)
 (*      UpRealLeB Section RealRLHFLeB 的同名槽（L218，被                 *)
-(*      real_rlhf_optimal_B L235 直接消费）均为 **Variable 未证明槽位**。 *)
-(*   ⇒ 本件真缺口：抽象 sumf 载体（ext/add/linear 接口）+ CW219 RLHF     *)
+(*      real_rlhf_optimal_B L235 直接消费）均为 **Variable 未证明假设位**。 *)
+(*   ⇒ 本件真缺口：抽象 sumf 载体（ext/add/linear 接口）+ RLHF     *)
 (*   具名接口（real_boltzmann_dist_r / real_free_energy / real_kl_term   *)
-(*   全具名同符号）上的 **证明件**，即上述两 Variable 槽的放电件。       *)
+(*   全具名同符号）上的 **证明件**，即上述两 Variable 槽的消解件。       *)
 (*   伴件 rfep_rlhf_free_energy_kl（base=π* 锚签名替换）为纯装配，       *)
-(*   如实降级申报（第一轮 #2 同型）。                                    *)
+
 (* ------------------------------------------------------------------ *)
 (* 【诚实前提申报】主件唯一残留环境前提 = Hnormb（Σ p_b == 1）；          *)
 (*   附件 rfep_boltzmann_normalized_real 以单条 partition 条件（Σ exp    *)
 (*   == Z）显式前提供给之；log 分解件 rfep_boltzmann_log_decomp_real     *)
-(*   为零前提直证（Hpart-free，实读 CW219 real_log_mult/real_log_one/    *)
+(*   为零前提直证（Hpart-free，实读 real_log_mult/real_log_one/    *)
 (*   real_log_exp_neg 根基元全链闭合）。载体代数 ext/add/linear 为节     *)
-(*   Variable 显式接口——其中 linear 为本席增量申报（CW219 RealRLHFMain  *)
-(*   原节无此字段，系因该槽原为 Variable 不需证明；放电所需最小增量）。  *)
+
+(*   原节无此字段，系因该槽原为 Variable 不需证明；消解所需最小增量）。  *)
 (* ------------------------------------------------------------------ *)
 (* 【⑤⑥消费接口说明】                                                  *)
 (*   ⑤ R2-5 间隙恒等 4.3/4.4 镜像（real_rlhf_suboptimality_gap：        *)
 (*      J*−J(π) ≡ β·KL）：消费 rfep_rlhf_free_energy_kl——J := −F，      *)
 (*      移项即得 F(π)−F(π＊) ≡ D·Σ kl_term(π,π＊)；KL≥0 半边沿              *)
-(*      real_gibbs_inequality_eps（CW219 L41704）/ logd_gibbs_sum_eps_  *)
+(*      real_gibbs_inequality_eps（L41704）/ logd_gibbs_sum_eps_  *)
 (*      boltzmann_list（G05_LogSmall Part E）承重，不属本件。              *)
 (*   ⑥ R2-6 唯一性 4.2 镜像（real_rlhf_optimal_unique 前提承载形）：     *)
 (*      消费 rfep_rlhf_free_energy_kl 把「目标值相同」化到               *)
 (*      D·Σ kl_term ≡ 0，再逐项非负+和零提取逐点相等（C5 边界：等号     *)
-(*      消去无条件形不可证，交付语句必须带显式前提）。                  *)
-(*   槽位直喂：实例化 CW219 real_rlhf_optimal_eps / UpRealLeB            *)
+(*      消去无条件形不可证，结果语句必须带显式前提）。                  *)
+(*   假设位显式应用：实例化 real_rlhf_optimal_eps / UpRealLeB            *)
 (*      real_rlhf_optimal_B 时，real_kl_decomp_full 参数位以             *)
 (*      rfep_real_kl_decomp_full S sumf ext add linear e D Dp Z Zp       *)
 (*      Hnormb（部分应用）喂入；real_kl_term_equiv 槽以件1 喂入；        *)
@@ -51,23 +60,23 @@
 (*      real_boltzmann_log_decomp 槽以件5a 喂入（零前提）。             *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】Set 层零 Prop（real_eq/real_lt 全 Set 值）；全 Qed 闭合；     *)
-(*   零 Axiom/Admitted/Classical*；既有文件零触碰（CW219/UpReqLogCompD/  *)
+(*   零 公理/承认件/Classical*；既有文件零触碰（/UpReqLogCompD/  *)
 (*   UpRealLeB/G05_LogSmall 全只读，只消费 .vo）；real_eq 非 Id 禁 rewrite， *)
 (*   全链 real_eq_trans/RealSetoid compat（E393 纪律）；纯等式零 eps     *)
 (*   账目（任务书 R2-2 坑位②）。坑卡对表：E404 五桥机组装配方（本件即   *)
-(*   其配方在抽象载体的兑现）；E406#1 coqchk 全路径高危；E406#2 distrib  *)
+
 (*   只吃第二参 plus 形；E403③ 节泛化跨节消费全参显式。                 *)
 (* 编译配方：_rfep_g2.cmd + cpu_guard（CoreN 0-3，LoadLimit 60）         *)
-(*   coqc -Q . "" -Q "..\001" "" UpReqRealFEP.v                          *)
-(* G4：C:\Rocq-Platform~9.0~2025.08\bin\coqchk.exe（E406#1 全路径）      *)
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import G05_LogSmall.
 
 (* ============================================================ *)
-(* Section RFEPMain：抽象 sumf 载体（CW219 RealRLHFMain 同名同型接口     *)
-(*   + linear 增量申报）；全节零 Axiom，主件闭形见尾注 Print Assumptions *)
+(* Section RFEPMain：抽象 sumf 载体（RealRLHFMain 同名同型接口     *)
+
 (* ============================================================ *)
 
 Section RFEPMain.
@@ -79,8 +88,8 @@ Variable real_sum_over_S_ext : forall (f g : S -> Real),
 Variable real_sum_over_S_add : forall (f g : S -> Real),
   real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
           (real_plus (real_sum_over_S f) (real_sum_over_S g)).
-(* 增量接口（头注申报）：标量提出桥；放电所需，list 载体实例 =          *)
-(* real_list_sum_linear（CW219 在案），具体实例可直喂                   *)
+
+(* real_list_sum_linear（在案），具体实例可显式应用                   *)
 Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
   real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
           (real_mult a (real_sum_over_S f)).
@@ -149,7 +158,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* Part 1：件1——real_kl_term_equiv 槽的 Real 实例（字面形 → kl_term）    *)
-(*   （G05_LogSmall logd_kl_term_minus_form 的互逆双形，槽位同形喂件）      *)
+(*   （G05_LogSmall logd_kl_term_minus_form 的互逆双形，假设位同形喂件）      *)
 (* ---------------------------------------------------------- *)
 
 Lemma rfep_kl_term_equiv_real :
@@ -173,8 +182,8 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* Part 2：件5a——real_boltzmann_log_decomp 槽的 Real 填件（零前提）      *)
-(*   log p_b == −(e/D + log Z)：real_log_mult 分解 + log(inv Z)==−log Z  *)
-(*   （real_log_one + inv_pos_correct 组装）+ real_log_exp_neg 直喂      *)
+
+(*   （real_log_one + inv_pos_correct 组装）+ real_log_exp_neg 显式应用      *)
 (* ---------------------------------------------------------- *)
 
 Lemma rfep_boltzmann_log_decomp_real :
@@ -191,7 +200,7 @@ Proof.
   set (Hi := real_inv_pos_pos Z_align_r Z_align_r_pos).
   set (Hes := real_exp_neg_pos (real_mult (real_inv_pos D D_pos) (real_base_loss s))).
   set (Hcanon := real_mult_positive (real_inv_pos Z_align_r Z_align_r_pos) Es Hi Hes).
-  (* Hinv：log(inv Z) == −log Z *)
+  
   assert (Hinv : real_eq (real_log (real_inv_pos Z_align_r Z_align_r_pos) Hi)
                          (real_opp (real_log Z_align_r Z_align_r_pos))).
   { assert (Hsum : real_eq (real_plus (real_log (real_inv_pos Z_align_r Z_align_r_pos) Hi)
@@ -276,7 +285,7 @@ Proof.
                        (real_opp (real_log Z_align_r Z_align_r_pos))).
              ++ exact (real_plus_comm real_zero (real_opp (real_log Z_align_r Z_align_r_pos))).
              ++ exact (real_plus_zero (real_opp (real_log Z_align_r Z_align_r_pos))). }
-  (* 主链：换见证 → real_log_mult 分解 → Hinv + exp_neg 直喂 → 收口 *)
+  (* 主链：换见证 → real_log_mult 分解 → Hinv + exp_neg 显式应用 → 完成 *)
   apply (real_eq_trans
            (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s) Hpb)
            (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s) Hcanon)
@@ -383,7 +392,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* Part 4：能量期望工作马（E404 逐点两叉分解型，抽象载体兑现）           *)
-(*   Σ q·e == −D·Σ q·Lb − D·log Z（q 任意正分布，归一化入槽）            *)
+
 (* ---------------------------------------------------------- *)
 
 Lemma rfep_energy_expect_eq :
@@ -796,7 +805,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* Part 5：主件——real_kl_decomp_full 槽放电（CW219 L43730 / UpRealLeB    *)
+(* Part 5：主件——real_kl_decomp_full 槽消解（L43730 / UpRealLeB    *)
 (*   L218 同名同型的证明件）：F[p] ≡ F[p_b] + D·Σ kl_term（real_eq，     *)
 (*   Σ p=1 前提下零 eps 账目；残留前提仅 Hnormb 一条，件5b 可从          *)
 (*   partition 条件供给）                                                *)
@@ -841,7 +850,7 @@ Proof.
   { exact (rfep_energy_expect_eq p Hp Hnormp). }
   assert (KCb : real_eq Sbe (real_plus (real_opp (real_mult D SbLb)) (real_opp c))).
   { exact (rfep_energy_expect_eq pb pbpos Hnormb). }
-  (* Hfb：F[p_b] 定义形（Sbe + D·SbLb）== opp c（= −D·log Z，与槽2 判词同值） *)
+  (* Hfb：F[p_b] 定义形（Sbe + D·SbLb）== opp c（= −D·log Z，与槽2 结论同值） *)
   assert (Hfb : real_eq (real_plus Sbe (real_mult D SbLb)) (real_opp c)).
   { apply (real_eq_trans
              (real_plus Sbe (real_mult D SbLb))
@@ -1071,7 +1080,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* Part 7：伴件（纯装配，如实申报）——锚签名实例（CW219 L20290            *)
+
 (*   rlhf_free_energy_kl 的 Real 镜像，base=π* 替换）：                  *)
 (*   F[π] ≡ F[π*] + D·Σ kl_term(π, π＊)——⑤间隙恒等与⑥唯一性的直接基座   *)
 (* ---------------------------------------------------------- *)
@@ -1124,7 +1133,7 @@ Qed.
 End RFEPMain.
 
 (* ============================================================ *)
-(* G2 关：主件与四槽位件 Print Assumptions（全 Closed 口径）             *)
+(* G2 关：主件与四假设位件 Print Assumptions（全 Closed 口径）             *)
 (* ============================================================ *)
 Print Assumptions rfep_real_kl_decomp_full.
 Print Assumptions rfep_rlhf_free_energy_kl.

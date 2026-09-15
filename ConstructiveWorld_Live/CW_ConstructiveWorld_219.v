@@ -1,4 +1,4 @@
-(* CW_ConstructiveWorld_219 — 薄壳组合文件：Require Export 全部 15 分片（Export 传递名字空间给导入者）*)
+(* CW_ConstructiveWorld_219 — 薄壳组合文件：Require Export 全部 15 模块（Export 传递名字空间给导入者）*)
 Require Export S01_BaseRing.
 Require Export S02_CauchyComplete.
 Require Export S03_QExp.

@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpRecast.v *)
+(* *)
+(* 目的： 恒等谓词 tid 与非严格序 nle 的 Set 层再造面。 *)
+(* 主件： rc_leb_refl_tid / rc_nle_SS 再造族与 nle_S_diag、nle_add_r_any 传递/加法定律。 *)
+(* 依赖： 无显式 Require 面（自足件）。 *)
+(* 备注： tid（恒等）与 nle（非严格序）为 Set 层谓词再造；fuse2 / lsum_w 融合器为下游供给。 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* UpRecast.v — GRM 再铸链 Coq 落地：use 事件账本 + survive 幸存扫描 +       *)
 (*              recast 再铸 + 未桥尾义务（可再入）+ 摩擦计量                 *)
@@ -6,18 +15,18 @@
 (* 首尾咬合）。设计出处：                                                  *)
 (*   ROUNDTABLE2.md 席 1 段落（GRM 签名草稿 + v2 终稿）；                   *)
 (*   ROUNDTABLE2.md 席 1 实验区【抢救一：WPM → GRM 账本上的再铸链】；        *)
-(*   成果存档/圆桌会议/排队席位方案-二轮成果Coq化-20260907.md Q3 条目。       *)
+
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层；语句零 Prop（Set/Type 层 tid 恒等型 + nle 序型  *)
 (* + pick 双分支判定，Rocq 9.1 sumbool 参数为 Prop 不可载 Type 见件 2 注）；    *)
 (* stdlib only；纯构造性。                                                  *)
 (*                                                                       *)
 (* 五件：                                                                 *)
-(*   件 1  use 事件账本（append-only 账本推进 + 逐字段 use 账户单调）         *)
+
 (*   件 2  survive 幸存扫描（长度分割守恒 + 幸存者纯净 + bool 判定全覆盖）     *)
-(*   件 3  recast 再铸（普查不增 + 义务不灭 + 总账平衡 + 等级质量守恒）        *)
-(*   件 4  未桥尾义务可再入（rebridge 清账再入 + recast∘rebridge 循环咬合     *)
-(*         + 任意长再铸链 chain 总账守恒）                                  *)
+
+
+
 (*   件 5  摩擦计量（每轮精确差值 +1/+2 + 全链单调 + 循环严格推进）            *)
 (*                                                                       *)
 (* 定稿决策（原设计未定稿处，按「结构最干净 + 首尾咬合」定稿）：               *)
@@ -31,7 +40,7 @@
 (*       义务账逐条携带原等级（verbatim 转移）——等级质量守恒因此成立。         *)
 (*   D4  再入语义：rebridge c f 把义务账中 f 的全部条目移回普查尾部的，        *)
 (*       同一 keepF/hitF 判定面复用于普查与义务两账（一台机器两本账）；        *)
-(*       recast∘rebridge 循环严格增摩擦 + 总账守恒，即可无限再入的链。         *)
+
 (*   D5  v2 耦合谱系账的归并机制不在本件（属上游普查结构假设，E1 反例          *)
 (*       已证字段独立公理不可依赖）；本件在任意普查上建账，耦合谱系可作为      *)
 (*       上游换代挂入，recast 链接口不变——与 Q3 条目「未定稿细节自行定稿」    *)
@@ -203,7 +212,7 @@ Proof.
   intros x y H. rewrite H. apply rc_tid_refl.
 Qed.
 
-(* ---- 通用列表算术（自证防 stdlib 改名漂移） ---- *)
+
 
 Lemma rc_len_app : forall (A : Type) (l1 l2 : list A),
   length (l1 ++ l2) = Nat.add (length l1) (length l2).
@@ -263,7 +272,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 件 1. use 事件账本：append-only 账本 + 逐字段行使账户                      *)
+
 (* ===================================================================== *)
 
 Definition fid : Set := nat.
@@ -443,7 +452,7 @@ Definition recast (c : Cert) (e : evt) : Cert :=
   | use f ev => recast_b c f ev (passes f ev c)
   end.
 
-(* 总账：普查条目 + 义务条目（再铸链的不变量载体） *)
+
 Definition total_acc (c : Cert) : nat :=
   Nat.add (length (census c)) (length (obls c)).
 
@@ -514,7 +523,7 @@ Proof.
   - unfold recast_b. cbn [obls]. rewrite rc_len_app. apply rc_nle_add_r.
 Qed.
 
-(* 义务转移封闭性·总账平衡：任意再铸后总账守恒（账户总账平衡） *)
+
 Theorem acc_balance : forall (c : Cert) (e : evt),
   rc_tid nat (total_acc c) (total_acc (recast c e)).
 Proof.
@@ -611,14 +620,14 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 件 4. 未桥尾义务可再入：rebridge 清账再入 + 循环咬合 + 任意长再铸链        *)
+
 (* ===================================================================== *)
 
 (* 再入：把义务账中 f 的全部条目移回普查尾部（同一判定面复用于两本账） *)
 Definition rebridge (c : Cert) (f : fid) : Cert :=
   mkC (census c ++ pierced f (obls c)) (survive_scan f (obls c)) (mtr c).
 
-(* 再入守恒之一：总账平衡 *)
+
 Theorem rebridge_balance : forall (c : Cert) (f : fid),
   rc_tid nat (total_acc c) (total_acc (rebridge c f)).
 Proof.
@@ -639,7 +648,7 @@ Proof.
   lia.
 Qed.
 
-(* 再入清账：义务账中 f 的在册性清零（该字段义务全部清偿回普查） *)
+
 Theorem rebridge_clears : forall (c : Cert) (f : fid),
   rc_tid bool (occurs f (obls (rebridge c f))) false.
 Proof.
@@ -663,7 +672,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* 首尾咬合·循环总账平衡：rebridge 再入后任意再铸，总账仍守恒——           *)
+
 (* 义务账（尾）回补普查（头），循环可无限再入                              *)
 Theorem cycle_balance : forall (c : Cert) (f : fid) (e : evt),
   rc_tid nat (total_acc c) (total_acc (recast (rebridge c f) e)).
@@ -692,7 +701,7 @@ Fixpoint chain (n : nat) (c : Cert) (es : list evt) {struct n} : Cert :=
       end
   end.
 
-(* 链守恒：任意长度再铸链总账平衡 *)
+
 Theorem chain_balance : forall (n : nat) (c : Cert) (es : list evt),
   rc_tid nat (total_acc c) (total_acc (chain n c es)).
 Proof.

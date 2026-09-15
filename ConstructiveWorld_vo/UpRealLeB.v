@@ -1,14 +1,23 @@
 (* ============================================================ *)
-(* UpRealLeB.v —— Real 层 Bishop 形非严格序谓词与收口引理族        *)
-(*   （M2 收口引理席 · §9.4 例二(iv) / §10.2 第10项(g) 落地件）     *)
+(* UpRealLeB.v *)
+(* *)
+(* 目的： Real 层 Bishop 形非严格序谓词 real_le_b 与完成引理族。 *)
+(* 主件： real_le_closure_b / real_rlhf_optimal_B / real_ppo_conservative_B：序闭包与最优性、保守性 B 形。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 全部 Set 层、零经典公理面；上界参数无需稠密性假设；标量提取接口 real_sum_over_S_linear 显式随行。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpRealLeB.v —— Real 层 Bishop 形非严格序谓词与完成引理族        *)
+(*   （M2 完成引理席 · §9.4 例二(iv) / §10.2 第10项(g) 落地件）     *)
 (*                                                                *)
 (* 主结果（全部 Set 层、零 Prop 泄露、零新公理）：                  *)
 (*   1. real_le_b x y := forall eps>0, real_lt x (y + eps)         *)
-(*      （Bishop 形非严格序，CW219 Real/柯西层编码）                *)
+(*      （Bishop 形非严格序，Real/柯西层编码）                *)
 (*   2. real_le_to_le_b：单向桥 real_le x y -> real_le_b x y        *)
 (*      （lt 支平凡平移；eq 支 real_lt_compat 换形；单向——         *)
-(*        逆向即 Or 形精确收口，构造性不可证，见尾注台账）           *)
-(*   3. real_le_closure_b：收口引理——D 带显式正性证书 +            *)
+(*        逆向即 Or 形精确完成，构造性不可证，见尾注登记表）           *)
+(*   3. real_le_closure_b：完成引理——D 带显式正性证书 +            *)
 (*      (forall eps>0, real_le x (y + D·eps)) -> real_le_b x y      *)
 (*      构造：取 e₀ := eps'·inv(2D)（D>0 消 inv），换形链           *)
 (*        D·e₀ == eps'·(inv(2D)·D) < eps'·1 == eps'                 *)
@@ -17,37 +26,37 @@
 (*      全程无需稠密性。                                            *)
 (*   4. real_rlhf_optimal_B：定理 4.9 对应物 J(π) ≤_B J(π★)         *)
 (*      （D_pos 证书在 RealRLHFMain 接口既有，零新增前提——          *)
-(*        完整升格判词，见尾注台账）                                *)
+(*        完整升格结论，见尾注登记表）                                *)
 (*   5. real_ppo_conservative_B：定理 6.6 对应物（有条件升格）       *)
 (*      （须补残差权系数 E := Σ π_old·adv 的显式正性证书前提——      *)
 (*        E==0 与 E>0 构造性不可分、无内在证书供给链；               *)
 (*        另补标量提取诚实接口 real_sum_over_S_linear                *)
 (*        （RealAttnSteady 同名件逐字复刻）；无证书情形              *)
-(*        维持 eps 形 real_ppo_conservative_eps 不变——冻结判词       *)
-(*        见尾注台账）                                              *)
-(*   6. Part D（升级席增量）：逐 eps 余量族的 Bishop 形收口件族——     *)
-(*      real_le_closure_b_one（D:=real_one 特化收口；1·eps 换形经     *)
+(*        维持 eps 形 real_ppo_conservative_eps 不变——冻结结论       *)
+(*        见尾注登记表）                                              *)
+(*   6. Part D（升级席增量）：逐 eps 余量族的 Bishop 形完成件族——     *)
+(*      real_le_closure_b_one（D:=real_one 特化完成；1·eps 换形经     *)
 (*      real_le_id_r 右端运输；one 的正性证书 real_lt_zero_one 为      *)
-(*      CW219 闭合既有件）＋四件 D:=one 实例（min_l_B / min_r_B /      *)
+(*      闭合既有件）＋四件 D:=one 实例（min_l_B / min_r_B /      *)
 (*      abs_triangle_le_B / square_nonneg_B，plain-eps 余量、证书链    *)
 (*      单步直连）＋ real_step_kl_eta_bound_B（步进 KL 收缩 Bishop 形， *)
 (*      eta 缩放复合右端、plain-eps 余量、原件前提位照抄）。            *)
-(*      判词与冻结台账见尾注（判词 6 至 9）。                          *)
-(*   7. Part E（第二席续建）：盘点清单判「可升」18 件 Bishop 形收口——    *)
+(*      结论与冻结登记表见尾注（结论 6 至 9）。                          *)
+(*   7. Part E（第二席续建）：盘点清单判「可升」18 件 Bishop 形完成——    *)
 (*      17 件 plain-eps（metric_pos / metric_triangle / abs_nonneg_le /  *)
 (*      r_max 双件 / pos_part / exp_ge_linear / log_le_linear /          *)
 (*      log_one_plus 双件 / quad_div_le_two / gibbs_inequality /         *)
 (*      abs_prod_le / exp_abs_minus_one / exp_two_point_cvx /            *)
-(*      amgm_pointwise / interp_Z_le_one）走 one 特化收口单步 + 源件      *)
+(*      amgm_pointwise / interp_Z_le_one）走 one 特化完成单步 + 源件      *)
 (*      直连；1 件 D·eps 字面（gibbs_core，D:=p、证书 Hp 前提位既有）     *)
-(*      走收口引理直接实例（判词 4 同型）。全部语句前提位照抄源件，       *)
-(*      零新增前提。判词见尾注（判词 10）。                              *)
+(*      走完成引理直接实例（结论 4 同型）。全部语句前提位照抄源件，       *)
+(*      零新增前提。结论见尾注（结论 10）。                              *)
 (*                                                                *)
 (* 红线：零公理零未闭合证明（G1 禁词全零）；Set 层语句（real_le_b    *)
 (* 为 Set 值 forall 型，无 Prop 泄露）；纯 term-mode 显式组装        *)
 (* （real_eq 非 Id，禁 rewrite，全链 real_eq_trans/compat）；        *)
-(* 全 Qed. 闭合；收口引理+桥 Print Assumptions Closed。              *)
-(* 编译配方：coqc -Q . "" -Q "..\001" "" UpRealLeB.v                *)
+(* 全 Qed. 闭合；完成引理+桥 Print Assumptions Closed。              *)
+
 (* （cpu_guard.ps1 包装，零裸调）。                                  *)
 (* ============================================================ *)
 
@@ -55,7 +64,7 @@ From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 
 (* ============================================================ *)
-(* Part A：Bishop 形谓词 + 单向桥 + 收口引理（核心件）              *)
+(* Part A：Bishop 形谓词 + 单向桥 + 完成引理（核心件）              *)
 (* ============================================================ *)
 
 (* Bishop 形非严格序：x ≤_B y := ∀eps>0, x < y + eps
@@ -91,7 +100,7 @@ Proof.
     + apply (real_lt_plus_r_zero x eps). exact Heps.
 Qed.
 
-(* 收口引理（核心）：D 带显式正性证书时，逐 eps 余量族可收口为 Bishop 形
+(* 完成引理（核心）：D 带显式正性证书时，逐 eps 余量族可完成为 Bishop 形
    构造：e₀ := eps'·inv(2D)（D>0 证书消 inv），D·e₀ == eps'·(inv(2D)·D)
    < eps'·1 == eps'（inv(2D)·D < 1：D < 2D ⟹ inv(2D) < inv(D)
    ⟹ inv(2D)·D < inv(D)·D == 1），Or 编码两支分别闭合，无需稠密性 *)
@@ -189,7 +198,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part B：定理 4.9 对应物——J(π) ≤_B J(π★)（D_pos 证书接口既有）   *)
-(*   节变量逐字复刻 RealRLHFMain 收口实际消费面（9 件，签名探针     *)
+(*   节变量逐字复刻 RealRLHFMain 完成实际消费面（9 件，签名探针     *)
 (*   实测 discharge 序），零新增前提——完整升格。                    *)
 (* ============================================================ *)
 
@@ -202,7 +211,7 @@ Variable D : Real.
 Variable D_pos : real_lt real_zero D.
 Variable Z_align_r : Real.
 Variable Z_align_r_pos : real_lt real_zero Z_align_r.
-(* 诚实接口（与 RealRLHFMain 同名同型，链式真证放电） *)
+(* 诚实接口（与 RealRLHFMain 同名同型，链式真证消解） *)
 Variable real_gibbs_sum_eps : forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s))
   (Hnormp : real_eq (real_sum_over_S p) real_one) (eps : Real),
   real_lt real_zero eps ->
@@ -230,7 +239,7 @@ Variable real_kl_decomp_full : forall (p : S -> Real) (Hp : forall s : S, real_l
                       (Hp s)
                       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
 
-(* J(π) ≤_B J(π★)：RLHF 最优性的 Bishop 形收口（完整升格判词：
+(* J(π) ≤_B J(π★)：RLHF 最优性的 Bishop 形完成（完整升格结论：
    D 的正性证书 D_pos 为节内既有接口变量，零新增前提） *)
 Theorem real_rlhf_optimal_B :
   forall (pi : S -> Real) (Hpi : forall s : S, real_lt real_zero (pi s))
@@ -256,7 +265,7 @@ End RealRLHFLeB.
 (*   残差权系数 E := Σ π_old·adv 需显式正性证书前提（E==0 与 E>0    *)
 (*   构造性不可分、无内在供给链）；标量提取 real_sum_over_S_linear   *)
 (*   为诚实接口（RealAttnSteady 同名件逐字复刻）。无证书情形维持     *)
-(*   eps 形（real_ppo_conservative_eps）不变——冻结判词见尾注台账。   *)
+(*   eps 形（real_ppo_conservative_eps）不变——冻结结论见尾注登记表。   *)
 (* ============================================================ *)
 
 Section RealPPOLeB.
@@ -318,7 +327,7 @@ Proof.
     + apply real_mult_comm.
 Qed.
 
-(* PPO 保守性 Bishop 形（有条件升格判词：须补 E > 0 显式证书前提；
+(* PPO 保守性 Bishop 形（有条件升格结论：须补 E > 0 显式证书前提；
    无证书情形维持 eps 形 real_ppo_conservative_eps 不变） *)
 Theorem real_ppo_conservative_B :
   real_lt real_zero real_ppo_res_weight ->
@@ -360,14 +369,13 @@ Qed.
 End RealPPOLeB.
 
 (* ============================================================ *)
-(* Part D：升级席增量——逐 eps 余量族的 Bishop 形收口件族             *)
-(*   （全部消费 Part A 收口引理；D:=one 特化与 D·eps 原生形实例；     *)
-(*     证书供给链逐件注记见各件头注，判词见尾注台账）                 *)
+(* Part D：升级席增量——逐 eps 余量族的 Bishop 形完成件族             *)
+(*   （全部消费 Part A 完成引理；D:=one 特化与 D·eps 原生形实例；     *)
+(*     证书供给链逐件注记见各件头注，结论见尾注登记表）                 *)
 (* ============================================================ *)
 
-(* D.0 特化收口：plain-eps 余量族（∀eps>0, x ≤ y + eps）⟹ x ≤_B y。
-   证书供给链：D := real_one，正性证书 real_lt_zero_one 为 CW219
-   闭合既有件（零新增前提）；唯一换形面 1·eps ≡ eps——先经
+(* D.0 特化完成：plain-eps 余量族（∀eps>0, x ≤ y + eps）⟹ x ≤_B y。
+   证书供给链：D := real_one，正性证书 real_lt_zero_one 为 闭合既有件（零新增前提）；唯一换形面 1·eps ≡ eps——先经
    real_eq_plus_compat 逐槽换形（eps ≈ 1·eps：mult_one 右形取反
    + comm 运输），再以 RealSetoid.real_le_id_r 做右端等式换形。 *)
 Lemma real_le_closure_b_one : forall x y : Real,
@@ -389,8 +397,8 @@ Proof.
   - exact (H eps Heps).
 Qed.
 
-(* D.1 min a b ≤_B a：判词 2（Or 形精确收口不可证）论证的正配对件——
-   Or 形不可证、Bishop 形可证，两判词在此件上同框对照。
+(* D.1 min a b ≤_B a：结论 2（Or 形精确完成不可证）论证的正配对件——
+   Or 形不可证、Bishop 形可证，两结论在此件上同框对照。
    证书供给链：real_le_closure_b_one 单步 + real_min_le_l_eps 直连
    （plain-eps 余量，零新增前提）。 *)
 Lemma real_min_le_l_B : forall a b : Real, real_le_b (real_min a b) a.
@@ -461,12 +469,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：第二席续建——可升级未建 18 件 Bishop 形收口（盘点清单      *)
+(* Part E：第二席续建——可升级未建 18 件 Bishop 形完成（盘点清单      *)
 (*   「Bishop 扫描-20260909.md」判「可升」族逐件落地）。              *)
 (*   证书供给两型：①17 件 plain-eps 余量 → real_le_closure_b_one      *)
 (*   单步 + 源件直连（同 D.1 至 D.4 型）；②1 件 D·eps 字面余量        *)
 (*   （gibbs_core，D:=p、证书 Hp 前提位既有）→ real_le_closure_b      *)
-(*   直接实例（判词 4 同型，照 real_rlhf_optimal_B 供给手法）。        *)
+(*   直接实例（结论 4 同型，照 real_rlhf_optimal_B 供给手法）。        *)
 (*   源件签名面经 Check 探针实测（RealSetoid / RealInterfaceEnhanced  *)
 (*   模块前缀 4 件，其余出节平名；gibbs_inequality 节变量 X 首参显式）。 *)
 (* ============================================================ *)
@@ -573,7 +581,7 @@ Qed.
 
 (* E.12 Gibbs 核 Bishop 形（D·eps 字面余量第二件）：p−q ≤_B p·(−log(q/p))。
    证书供给：D := p（eps 无关量），正性证书 Hp 为源件前提位既有——
-   real_le_closure_b 直接实例（判词 4 同型收口，照
+   real_le_closure_b 直接实例（结论 4 同型完成，照
    real_rlhf_optimal_B 的 D_pos 供给手法），非 one 特化路线。 *)
 Theorem real_gibbs_core_B : forall (p q : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
@@ -615,7 +623,7 @@ Proof.
 Qed.
 
 (* E.15 指数差界 Bishop 形：|e^x − 1| ≤_B |x|·e^{|x|}
-   （T3.3-③ 逐 eps 形的 Bishop 对应物；plain-eps 直连）。 *)
+   （-③ 逐 eps 形的 Bishop 对应物；plain-eps 直连）。 *)
 Lemma real_exp_abs_minus_one_B : forall x : Real,
   real_le_b (real_abs (real_plus (cauchy_real_exp x) (real_opp real_one)))
             (real_mult (real_abs x) (cauchy_real_exp (real_abs x))).
@@ -678,66 +686,66 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 尾注：诚实台账（可升格/不可升格逐件判词；供论文 §9.4 例二(iv)    *)
+(* 尾注：诚实登记表（可升格/不可升格逐件结论；供论文 §9.4 例二(iv)    *)
 (* 与 §10.2 第10项(g) 回写引用）                                   *)
 (*                                                                *)
-(* 【判词 1｜谓词】real_le_b：Set 层 forall 型（∀eps>0, x<y+eps），  *)
+(* 【结论 1｜谓词】real_le_b：Set 层 forall 型（∀eps>0, x<y+eps），  *)
 (*   无 Prop 泄露；与 Or 编码 real_le 的关系仅经单向桥承载。         *)
-(* 【判词 2｜单向桥】real_le_to_le_b：可证（lt 支：x<y<y+eps 传递；  *)
+(* 【结论 2｜单向桥】real_le_to_le_b：可证（lt 支：x<y<y+eps 传递；  *)
 (*   eq 支：real_lt_compat 双侧换形）。单向——逆向                   *)
-(*   real_le_b x y -> real_le x y 即 Or 形精确收口，构造性不可证，   *)
+(*   real_le_b x y -> real_le x y 即 Or 形精确完成，构造性不可证，   *)
 (*   论证（Or 形不可证，回写 §9.4 例二(i)/(iv)）：若逆向可证，取     *)
 (*   (x, y, D) := (real_min a b, a, 1)（1 的正性证书                *)
 (*   real_lt_zero_one 既有），配 real_min_le_l_eps（eps 形逐点界）   *)
-(*   与收口引理立得精确 real_min_le_l（min(a,b) ≤ a 的单 Or 见证）—— *)
+(*   与完成引理立得精确 real_min_le_l（min(a,b) ≤ a 的单 Or 见证）—— *)
 (*   该见证需在「b < a」（左支）与「a ≤ b ⟹ min == a」（右支）间作    *)
 (*   分支选择，而该分支对构造性实数不可判定（§9.4 例一同源论证）。   *)
-(*   故本库只主张 Bishop 形收口，Or 形「精确版」不主张。             *)
-(* 【判词 3｜收口引理】real_le_closure_b：可证。eps'·inv(2D) 换形    *)
+(*   故本库只主张 Bishop 形完成，Or 形「精确版」不主张。             *)
+(* 【结论 3｜完成引理】real_le_closure_b：可证。eps'·inv(2D) 换形    *)
 (*   路线（报告口径）：e₀ := eps'·inv(2D)（D>0 证书供 inv 正性）；   *)
 (*   D·e₀ == eps'·(inv(2D)·D)（assoc/comm 链）；inv(2D)·D < 1       *)
 (*   （D < D+D ⟹ inv(2D) < inv(D) 反单调 ⟹ inv(2D)·D < inv(D)·D；  *)
 (*   inv(D)·D == D·inv(D) == 1）；故 D·e₀ < eps'·1 == eps'；        *)
 (*   Or 两支：lt 支 real_lt_plus_translate 平移 + real_lt_trans；    *)
 (*   eq 支 real_lt_id_l 换形。零稠密性消费。                        *)
-(* 【判词 4｜定理 4.9 对应物】real_rlhf_optimal_B：可升格（完整）——  *)
+(* 【结论 4｜定理 4.9 对应物】real_rlhf_optimal_B：可升格（完整）——  *)
 (*   证书供给链核查：残差权系数 D 的正性证书 D_pos 为 RealRLHFMain   *)
 (*   节内既有接口变量，零新增前提；eps 形残差恰为 mult D eps 字面    *)
 (*   对齐（签名探针实测 discharge 序 9 件直连消费）， Bishop 形       *)
-(*   J(π) ≤_B J(π★) 即收口引理单步实例。                            *)
-(* 【判词 5｜定理 6.6 对应物】real_ppo_conservative_B：有条件升格——  *)
+(*   J(π) ≤_B J(π★) 即完成引理单步实例。                            *)
+(* 【结论 5｜定理 6.6 对应物】real_ppo_conservative_B：有条件升格——  *)
 (*   证书供给链核查：残差权系数 E := Σ π_old·adv 的正性在 RealPPOMain *)
 (*   接口面（ext/le/add + 双侧逐点正性）下不可推导（adv 无上界、     *)
 (*   E==0 与 E>0 构造性不可分），无内在供给链，故 Bishop 形语句补    *)
 (*   E > 0 显式证书前提（本件语句的唯一新增前提）；另补              *)
 (*   标量提取诚实接口 real_sum_over_S_linear（残差折叠               *)
 (*   Σ π_old·(eps·adv) == E·eps 所需；RealAttnSteady 同名件先例）。   *)
-(*   冻结判词（无证书情形）：E 的正性证书缺位时 Bishop 形不可主张，    *)
+(*   冻结结论（无证书情形）：E 的正性证书缺位时 Bishop 形不可主张，    *)
 (*   定理 6.6 维持 eps 形（real_ppo_conservative_eps）陈述不变；      *)
-(*   Or 形精确收口对 4.9/6.6 同样不可达（判词 2 论证，编码侧关键，   *)
+(*   Or 形精确完成对 4.9/6.6 同样不可达（结论 2 论证，编码侧关键，   *)
 (*   与 D 是否依赖 eps 无关）。                                      *)
-(* 【判词 6｜D:=one 特化收口】real_le_closure_b_one：可证——plain-eps  *)
-(*   余量族（x ≤ y+eps 逐点）的统一 Bishop 收口器。证书供给链核查：    *)
-(*   D := real_one，正性证书 real_lt_zero_one 为 CW219 闭合既有件；    *)
+(* 【结论 6｜D:=one 特化完成】real_le_closure_b_one：可证——plain-eps  *)
+(*   余量族（x ≤ y+eps 逐点）的统一 Bishop 完成器。证书供给链核查：    *)
+(*   D := real_one，正性证书 real_lt_zero_one 为 闭合既有件；    *)
 (*   换形面仅 1·eps ≡ eps（mult_one 右形取反 + comm 运输 + le_id_r    *)
 (*   右端等式换形），零新增前提。适用判据：结论形恰为                  *)
 (*   real_le x (y + eps) 字面的全语料 eps 族皆单步直连。               *)
-(* 【判词 7｜四件 D:=one 实例】min_l_B / min_r_B / abs_triangle_le_B / *)
-(*   square_nonneg_B：可升格（完整）——证书链均「特化收口单步 + eps 形  *)
-(*   原件直连」两级。其中 min_l_B 与判词 2 同框对照：Or 形精确版       *)
+(* 【结论 7｜四件 D:=one 实例】min_l_B / min_r_B / abs_triangle_le_B / *)
+(*   square_nonneg_B：可升格（完整）——证书链均「特化完成单步 + eps 形  *)
+(*   原件直连」两级。其中 min_l_B 与结论 2 同框对照：Or 形精确版       *)
 (*   （real_min_le_l）不可证、Bishop 形（real_min_le_l_B）可证，       *)
 (*   同一语句的两个编码形态可行性相反，为 §9.4 例二(iv) 的原生示例。    *)
-(* 【判词 8｜step_kl_eta_bound_B】可升格（完整）——步进 KL 收缩的       *)
+(* 【结论 8｜step_kl_eta_bound_B】可升格（完整）——步进 KL 收缩的       *)
 (*   Bishop 形 Σ kl(p‖step) ≤_B eta·Σ kl(p‖r)：余量形为 plain-eps       *)
 (*   （eta 缩放因子在复合右端内部、非 D·eps 字面），故走 D:=one 特化    *)
-(*   收口单步 + 原件直连；原件前提位 eta>0 / eta≤1 照抄，零新增前提；   *)
-(*   原件为顶层闭合定理（全显位签名，探针实测）。盘点注：CW219 Real     *)
+(*   完成单步 + 原件直连；原件前提位 eta>0 / eta≤1 照抄，零新增前提；   *)
+(*   原件为顶层闭合定理（全显位签名，探针实测）。盘点注：Real     *)
 (*   层 33 件 eps 族中，D·eps 字面余量形仅 real_rlhf_optimal_eps 一件   *)
-(*   （判词 4 已升格），其余全为 plain-eps（D:=one 统一收口覆盖）或     *)
-(*   复合/多 eps 形（判词 9(e)/(f)）。                                  *)
-(* 【判词 9｜盘点冻结判词（本轮全语料扫描，供论文侧引用）】             *)
+(*   （结论 4 已升格），其余全为 plain-eps（D:=one 统一完成覆盖）或     *)
+(*   复合/多 eps 形（结论 9(e)/(f)）。                                  *)
+(* 【结论 9｜盘点冻结结论（本轮全语料扫描，供论文侧引用）】             *)
 (*   (a) real_dpo_loss_pi_star_bounded_eps：命名残留 eps 而语句为      *)
-(*       严格界形（real_lt ... log 2），无逐 eps 余量——real_le_b        *)
+
 (*       谓词不适用（严格界自足），冻结（形态不匹配）。                 *)
 (*   (b) real_le_eps_Kone：结论右端含被界量 e（e ≤ k·(1+e) 自涉形），   *)
 (*       非固定右端 y+D·eps 形——余量形态不匹配，冻结。                  *)
@@ -745,19 +753,19 @@ Qed.
 (*       非余量形，冻结（形态不匹配）。                                 *)
 (*   (d) real_le_pointwise_eps / real_abs_triangle_eps：Q 层逐点形      *)
 (*       （eps : Q、sigT 点态见证），非 Real 层 real_le 余量形——        *)
-(*       编码层外，冻结（引本台账判词 2 同源「编码侧」论证先例）。       *)
+(*       编码层外，冻结（引本登记表结论 2 同源「编码侧」论证先例）。       *)
 (*   (e) real_abs_le_quad_eps / real_abs_h_sq_le_eps /                  *)
 (*       real_quad_t_le_h_eps：多 eps 前提组合形（eps1/eps2/eps' 链、   *)
 (*       余量内嵌 |h| 因子），可升格但证书链长且语句须前提位改造——      *)
-(*       挂账未建（非冻结，留后续席）。                                 *)
+(*       显式假设未建（非冻结，留后续席）。                                 *)
 (*   (f) real_db_breaking_bound_eps：复合 D 形（inv(分区)·T·(exp(…)·     *)
 (*       (eps+eps'))），D 显式 eps 无关但正性证书链长（inv_pos 证书 +   *)
-(*       exp 正性 + 逐 eps 面拆分）——挂账未建（非冻结）。               *)
+(*       exp 正性 + 逐 eps 面拆分）——显式假设未建（非冻结）。               *)
 (*   (g) req 层 eps 件（req_db_breaking_bound_eps / req_le_eps_Kone /   *)
 (*       req_log_one_plus_le_eps / req_log_one_plus_ge_eps /            *)
 (*       ag_sum_le_r_max_eps / ag_sum_min_le_eps 等）：req 接口编码层    *)
-(*       与 CW219 Real 不同族，real_le_b 谓词作用域外——冻结             *)
-(*       （引判词 2 编码侧论证先例；req 层已有精确 le 形先例             *)
+(*       与 Real 不同族，real_le_b 谓词作用域外——冻结             *)
+(*       （引结论 2 编码侧论证先例；req 层已有精确 le 形先例             *)
 (*       req_rdf_abs_triangle，Bishop 升格在 req 层非必需）。           *)
 (*   (h) 可升格未建清单（同型可平移，证书链与 D.1 至 D.5 同构）：        *)
 (*       r_max_le_l / r_max_le_r、metric_triangle、metric_pos、          *)
@@ -771,9 +779,9 @@ Qed.
 (*       plain-eps）同入本清单；real_gibbs_core_eps 为第二件 D·eps      *)
 (*       字面余量形（p-q ≤ p·(-log(q/p)) + p·eps，D:=p eps 无关、       *)
 (*       正性证书 Hp 前提位既有）——升格路径=real_le_closure_b 直接     *)
-(*       实例（判词 4 同型）。【第二席对账注】本清单 16+2 件已全部       *)
-(*       于 Part E 升格落盘，逐件判词见判词 10。                        *)
-(* 【判词 10｜Part E 十八件续建】盘点清单判「可升」18 件全部升格落盘——   *)
+(*       实例（结论 4 同型）。【第二席核对注】本清单 16+2 件已全部       *)
+(*       于 Part E 升格落盘，逐件结论见结论 10。                        *)
+(* 【结论 10｜Part E 十八件续建】盘点清单判「可升」18 件全部升格落盘——   *)
 (*   (i) 17 件 plain-eps 余量形：real_metric_pos_B /                      *)
 (*       real_metric_triangle_B / real_abs_nonneg_le_B /                  *)
 (*       real_r_max_le_l_B / real_r_max_le_r_B /                          *)
@@ -783,7 +791,7 @@ Qed.
 (*       real_gibbs_inequality_B / real_abs_prod_le_B /                   *)
 (*       real_exp_abs_minus_one_B / real_exp_two_point_cvx_B /            *)
 (*       real_amgm_pointwise_B / real_interp_Z_le_one_B——证书链均          *)
-(*       「one 特化收口单步 + 源件直连」两级（判词 6 适用判据覆盖）；       *)
+(*       「one 特化完成单步 + 源件直连」两级（结论 6 适用判据覆盖）；       *)
 (*       前提位件（log_le_linear 之 Hx、log_one_plus 之 Hs/Ht、            *)
 (*       quad_div 之 Hs/Hs12、abs_prod 之 |a|≤M/|b|≤B、cvx/amgm/interp     *)
 (*       之 eta 双前提、gibbs_inequality 之归一化 ×2）逐字照抄源件，        *)
@@ -791,15 +799,15 @@ Qed.
 (*       RealInterfaceEnhancedMod 双件前缀消费，余者出节平名）。            *)
 (*   (ii) real_gibbs_core_B：D·eps 字面余量第二件（余量 p·eps 乘在         *)
 (*       显式系数 p 上、p 为量且 Hp 前提位既有）——real_le_closure_b        *)
-(*       直接实例（D:=p），判词 4 同型收口、real_rlhf_optimal_B 供给        *)
-(*       手法复用。至此 CW219 Real 层 36 件 eps 族中两件 D·eps 字面形       *)
+(*       直接实例（D:=p），结论 4 同型完成、real_rlhf_optimal_B 供给        *)
+(*       手法复用。至此 Real 层 36 件 eps 族中两件 D·eps 字面形       *)
 (*       全部升格完毕（rlhf 于 Part B、gibbs_core 于本批），余 33 件       *)
-(*       plain/复合/冻结三分如判词 8 与 9。                                *)
+(*       plain/复合/冻结三分如结论 8 与 9。                                *)
 (*   (iii) 18 件语句面均无 Or 分支（real_le_b 谓词承载），提取面同          *)
 (*       Part D：forall 型 Set 层，非平凡体全为源件真实现直连，              *)
 (*       Print Assumptions 全 Closed（见文末二十八条）。                    *)
-(* 【机器状态】四关卡：G1 禁词全零 / G2 EXIT=0 / G3 提取探针          *)
-(*   Obj.magic=0 / G4 coqchk 9.0 通过；收口引理+桥+两应用件+Part D        *)
+
+(*   Obj.magic=0 / G4 coqchk 9.0 通过；完成引理+桥+两应用件+Part D        *)
 (*   五件+Part E 十八件 Print Assumptions Closed（见文末二十八条）。    *)
 (* ============================================================ *)
 

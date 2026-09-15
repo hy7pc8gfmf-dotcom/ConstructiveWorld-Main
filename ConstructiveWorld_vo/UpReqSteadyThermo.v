@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpReqSteadyThermo.v *)
+(* *)
+(* 目的： 定理 4.9 steady_state_boltzmann 的 Real 层构造。 *)
+(* 主件： real_steady_state_boltzmann：稳态分布的 Boltzmann 形（热力学侧载体）。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 本件为换载体改道（注意力侧载体到热力学侧载体）；Id 层 Variable 位逐位对位照抄，不弱化不加码（诚实前提申报）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqSteadyThermo.v —— 席T2：定理 4.9 steady_state_boltzmann         *)
 (*   Real 层等式复刻（热力学侧稳态方程）2026-09-11                      *)
 (* ------------------------------------------------------------------ *)
@@ -15,7 +24,7 @@
 (*     步2 求和外延（real_sum_over_S_ext）                              *)
 (*     步3 线性提取 p(s)（real_sum_over_S_linear）                      *)
 (*     步4 核归一化（real_transition_normalization）                    *)
-(*     步5 real_mult_one 收口                                           *)
+(*     步5 real_mult_one 完成                                           *)
 (*   本件=换载体改道：注意力侧载体 → 热力学侧载体                        *)
 (*     real_boltzmann_prob := inv_pos Z_r · exp_neg(inv_pos D · energy s) *)
 (*   （rfep_boltzmann_normalized_real / UpReqRealFEP.v L331 同款形态，  *)
@@ -42,8 +51,8 @@
 (*   Set 载体，S02 L456/L460）；real_eq 非 Id 禁改写——全链              *)
 (*   real_eq_trans + RealSetoid compat（E393 纪律）；全件 Qed 闭合。    *)
 (* 编译配方：_t2_build.cmd + cpu_guard（CoreN 3，LoadLimit 65）          *)
-(*   coqc -vos -Q . "" -Q "../001" "" UpReqSteadyThermo.v   （秒审）    *)
-(*   coqc -Q . "" -Q "../001" "" UpReqSteadyThermo.v        （全量 G2） *)
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -95,7 +104,7 @@ Variable real_detailed_balance : forall (s s' : S),
 (* 旗舰：稳态方程（定理 4.9 Real 层等式复刻）                           *)
 (*   Σ_{s'} p(s')·T(s',s) == p(s)                                      *)
 (*   五步链：①detailed balance 逐点 → ②ext 求和外延 → ③linear 提取     *)
-(*   → ④核归一化（mult_compat）→ ⑤mult_one 收口                        *)
+(*   → ④核归一化（mult_compat）→ ⑤mult_one 完成                        *)
 (* ============================================================ *)
 Theorem real_steady_state_boltzmann : forall s : S,
   real_eq (real_sum_over_S (fun s' : S => real_mult (real_boltzmann_prob s') (real_transition s' s)))
@@ -122,7 +131,7 @@ Proof.
                  (real_sum_over_S (fun s' : S => real_transition s s'))
                  (real_boltzmann_prob s) real_one
                  (real_eq_refl _) (real_transition_normalization s)).
-      * (* 步⑤：p(s)·1 == p(s)（real_mult_one 收口） *)
+      * (* 步⑤：p(s)·1 == p(s)（real_mult_one 完成） *)
         exact (real_mult_one (real_boltzmann_prob s)).
 Qed.
 

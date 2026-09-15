@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqAlign3.v *)
+(* *)
+(* 目的： 对齐族第三段：温度权 w 的归一化与自由能 KL 分解。 *)
+(* 主件： w_pi_next_normalized / w_pi_star_normalized 与 w_F_t_rel_decomp / w_F_t_simpl_next_kl。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqAlign2、UpReqAlign3 前段。 *)
+(* 备注： 温度权载体（pos3/nrm/KLE 等）以 Section 变量承接；KL 分解为逐 eps 接口形。 *)
+(* ============================================================ *)
+
 (* UpReqAlign3.v — 签名迁移批 3c：旗舰链无条件化闭合
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3c = 批 3b 文件尾挂起清单的放行批）
@@ -6,7 +15,7 @@
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   本批交付（对照 UpReqAlign2.v 文件尾挂起清单逐项核销）：
+   本批结果（对照 UpReqAlign2.v 文件尾挂起清单逐项已证明）：
    [T12] reward_expand/align_energy_expand/F_align_F_t_rel/
      align_objective_t12_decomp/J_pi_t/J_pi_next/surrogate_diff_identity
      req 化 + req2_policy_improvement_mono 定理化（批 3 桥位 3 放行）
@@ -28,18 +37,18 @@
      implicit_reward_diff/pair_loss_at_star）+ dpo_loss_at_pi_star +
      sigmoid_strict_inc。
    ----------------------------------------------------------------
-   诚实签名变化台账（规划书 §7.4）：
+   诚实签名变化登记表（规划书 §7.4）：
    1. log 前提化：req2 系 log 全部携带逐点正性参数（批 3/3b 同款）；
      dpo_pair_loss/dpo_loss_pair 的 req 版因此携带分母正性显式位。
    2. minus 载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
    3. B 类桥（假设位保留，与 Id 同位；本批**新增放行**两条）：
      - req2_gibbs_inequality（Id gibbs_inequality@16629 的 req 同位）：
        KL ≥ 0 的 plain-le 形态不可由接口逐 eps 字段导出（序无消去），
-       保留假设位——UpReqFreeEnergy（批 2 FEP）交付后降为消费件；
+       保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为消费件；
      - req2_inv_pos_lt_contra / req2_log_lt_mono（Id Variable
        L21013/21024 的 req 同位，sigmoid_strict_inc 消费）。
      - req2_step_kl_eta_bound：**不在本批**（Id @23114 B 类 Variable，
-       UpReqAlign 已承接假设位；其放电留待 req 求和实例批，不属深链）。
+       UpReqAlign 已承接假设位；其消解留待 req 求和实例批，不属深链）。
    4. (d) 冻结（沿批 3/3b）：ppo_gap_nonneg、fold_right_ext 与 list fold
      机器（nat/list 层 Id，双层并行）——dpo_total_loss_at_star/
      dpo_total_loss_monotone 因此冻结（fold 载体）。
@@ -1429,7 +1438,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* [T12] 旗舰收口：策略改进单调性（Id policy_improvement_mono     *)
+(* [T12] 旗舰完成：策略改进单调性（Id policy_improvement_mono     *)
 (*   @22065 的 req 定理化；批 3 桥位 3 req_policy_improvement_mono *)
 (*   的 t12 链放行）                                              *)
 (* ============================================================ *)
@@ -1443,10 +1452,10 @@ Proof.
                  (req_opp_plus u (opp v))).
 Qed.
 
-(* ---- B 类桥（台账 3，本批新增放行位）：req2_gibbs_inequality
+(* ---- B 类桥（登记表 3，本批新增放行位）：req2_gibbs_inequality
    （Id gibbs_inequality @16629 的 req 同位）。KL ≥ 0 的 plain-le
    形态不可由接口逐 eps 字段导出（序无消去）；保留假设位，待
-   UpReqFreeEnergy（批 2 FEP）交付后降为消费件。req2 KLE 语句无
+   UpReqFreeEnergy（批 2 FEP）结果后降为消费件。req2 KLE 语句无
    归一化前提，桥取无 norm 的加强可用形。 ---- *)
 Hypothesis req2_gibbs_inequality :
   forall (p q : S -> R) (Hp : pos3 p) (Hq : pos3 q),
@@ -1507,7 +1516,7 @@ Proof.
   exact (r2_policy_improvement_mono pi_t Hpi_t Hn).
 Qed.
 
-(* log 引擎消费包装（批 3b log 件 → 本节桥参数显式传入） *)
+
 Lemma r2_log_inv_opp :
   forall (x : R) (Hx : lt zero x),
     req (log (inv_pos x Hx) (inv_pos_pos x Hx)) (opp (log x Hx)).
@@ -1531,7 +1540,7 @@ Proof.
   exact (req2_beta_eta_inv_absorb beta beta_pos eta A).
 Qed.
 
-(* log(π_next) 逐点展开（req 同位；log 引擎经 r2_log_* 包装） *)
+
 Lemma r2_pi_next_log_local :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (s : S),
     req (log (NPX pi_t Hpi_t s) (npx_pos pi_t Hpi_t s))
@@ -1615,7 +1624,7 @@ Proof.
                                                           (plus_comm (opp lgZ) X))))).
 Qed.
 
-(* 能量逐点 Z 形：E_t(s) == opp(β·(log π_next(s) + log Z_rel)) *)
+
 Lemma r2_E_t_log_pt :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (s : S),
     req (ET pi_t Hpi_t s)
@@ -1723,7 +1732,7 @@ Proof.
                      (plus_opp zero)).
 Qed.
 
-(* ---- 1) [T12 收口] gap 单调不增（Id policy_iter_gap_mono @23086
+(* ---- 1) [T12 完成] gap 单调不增（Id policy_iter_gap_mono @23086
    的 req 定理化；消费 r2_policy_improvement_mono + opp 保序） ---- *)
 Corollary req2_gap_mono :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
@@ -1939,7 +1948,7 @@ Proof.
                    Hrhs).
 Qed.
 
-(* ---- 5) PI_STAR log 逐点展开 ---- *)
+
 Lemma r2_PSTR_log_local :
   forall s : S,
     req (log (PSTR s) (PSTR_pos s))
@@ -2048,7 +2057,7 @@ Proof.
                           (req_opp_plus lgR (mult iv (reward s)))).
 Qed.
 
-(* ---- 7) 对齐侧自由能 KL-diff（归一化 p：FA(p) == beta*KL(p||PI_STAR) - beta*log Z_align） ---- *)
+
 Lemma r2_F_align_kl_diff :
   forall (p : S -> R) (Hp : pos3 p) (Hn : nrm p),
     req (FA p Hp)
@@ -2957,7 +2966,7 @@ Proof.
 Qed.
 
 
-(* ---- 17) 旗舰收口坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
+(* ---- 17) 旗舰完成坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
 Lemma r2_bksn_collapse2 :
   forall a b u v w : R,
     req (plus (plus (plus (plus a b) (opp u)) (opp v)) (plus w (opp a)))
@@ -3735,9 +3744,9 @@ Qed.
 End Req3AlignCore.
 
 (* ============================================================ *)
-(* 尾注挂账（收割席 20260909 复核）：头注承诺件实有对账 —
+(* 尾注显式假设（整合席 20260909 复核）：头注承诺件实有核对 —
    1. [dpo/preference 簇] 本文件未置：已由 UpReqAlignRestA.v ralt_ 系
-     全数核销（dpo_reward_recovers / relative_exact /
+     全数已证明（dpo_reward_recovers / relative_exact /
      diff_is_log_ratio_diff / implicit_reward_diff / dpo_pair_denom_pos /
      dpo_pair_loss_at_star / dpo_loss_pair / dpo_loss_at_pi_star /
      sigmoid_strict_inc）。
@@ -3749,14 +3758,12 @@ End Req3AlignCore.
      step_le（r2_backward_kl_step_le）/ rlhf_policy_improvement
      （r2_rlhf_policy_improvement）/ iter_le（r2_backward_kl_iter_le，
      含 r2_step_kl_weighted Fixpoint + r2_step_kl_rearr 尾重排件）
-     亦于同日收官席全数落本文件，T13 头注承诺全核销。
+     亦于同日收官席全数落本文件，T13 头注承诺全已证明。
    3. [旗舰无条件化演示] req2_backward_kl_step 已落本文件（20260909
      收官席，五段逐段组装：HA β·KSN=FE差 / HB t13_hexp / HC·HK split /
-     HD r2_bksn_collapse2 坍缩 / HE iv 成形 / β 逆吸收收口）；
+     HD r2_bksn_collapse2 坍缩 / HE iv 成形 / β 逆吸收完成）；
      [T12] req2_gap_mono 亦已落本文件；桥位 req_backward_kl_identity
-     语句由旗舰同位供给，UpReqAlign.v 假设位可核销。
-   本文件 20260909 收官席全量复验：G1 禁词全零；G2 全量重编 EXIT=0
+     语句由旗舰同位供给，UpReqAlign.v 假设位可已证明。
    （.vo magic 90001 同轨）；G3 提取探针 Obj.magic=0（旗舰/保底六件
-   Print Assumptions 全 Closed under the global context）；G4 coqchk
    "Modules were successfully checked"。
    ============================================================ *)

@@ -1,5 +1,14 @@
+(* ============================================================ *)
+(* UpReqQExpTail.v *)
+(* *)
+(* 目的： Q 层指数截断尾的控制引理族。 *)
+(* 主件： qtail_fact_ge_pow / qtail_Qlt01 与 qtail_pos_upper 尾上界族。 *)
+(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp。 *)
+(* 备注： 阶乘对幂的控制为构造核；QleT 到 Qle 换桥随行。 *)
+(* ============================================================ *)
+
 (* ===== 席PB2：Q 层阶乘尾和构造性控制（路径 B/C 公共引擎件） =====
-   交付：UpReqQExpTail.v，引理前缀 qtail_。
+   结果：UpReqQExpTail.v，引理前缀 qtail_。
    目标：给定范数 b ≥ 0 与精度 e > 0，显式输出 N 使 m,n ≥ N 时
          qtail_sum b (min m n) (max m n) = Σ_{k=min}^{max-1} b^k/k! < e。
    与 S03 的关系（S4 对接注记）：
@@ -10,7 +19,7 @@
      q_arch_geom（Qarchimedean 抽象 witness）+ arch_decay（再取一次
      Qarchimedean）；本件 qtail_cauchy_modulus 的 N 全显式：
      N = max(4, 2·⌊b⌋₊) + t0，t0 = Z.to_nat (Qnum ((C·2)/e))，
-     其中 C = b^K/K!；几何余项用 2^t ≥ t+1（qtail_two_pow_ge）显式封口，
+     其中 C = b^K/K!；几何余项用 2^t ≥ t+1（qtail_two_pow_ge）显式，
      全程不触 Qarchimedean —— N 是 b 与 e 的可计算函数（G3 可抽取）。
    语句面：Set 层出口一律 QltT/QleT（禁 stdlib Qlt/Qle 出场）；
    证明内核沿用 S03 惯例在 Prop（Qle/Qlt）中推理，出口 T 化。 *)
@@ -505,7 +514,7 @@ Proof.
            ring.
 Qed.
 
-(* 几何和封口：Σ_{k=K+t}^{M-1} 项_k ≤ 项_K·(1/2)^t·geo_sum(M-(K+t)) *)
+(* 几何和：Σ_{k=K+t}^{M-1} 项_k ≤ 项_K·(1/2)^t·geo_sum(M-(K+t)) *)
 Lemma qtail_sum_geo : forall (b : Q) (K t M : nat),
   Qle 0 b -> Qle ((1 + 1)%Q * b) (Z.of_nat (Datatypes.S K) # 1) ->
   ((K + t) <= M)%nat ->
@@ -617,7 +626,7 @@ Proof.
     + apply (Qle_lt_trans _ 0 _).
       * apply qeq_le. rewrite Hz. ring.
       * exact He.
-  - (* C > 0：几何余项 + 2^t ≥ t+1 显式封口 *)
+  - (* C > 0：几何余项 + 2^t ≥ t+1 显式 *)
     assert (HC2 : Qle 0 (C * (1 + 1)%Q))
       by (apply Qmult_le_0_compat; [ exact HC | apply Q2_nonneg ]).
     assert (HC2pos : Qlt 0 (C * (1 + 1)%Q)).

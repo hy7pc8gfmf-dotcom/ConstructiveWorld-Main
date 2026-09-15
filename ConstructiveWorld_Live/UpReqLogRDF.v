@@ -1,67 +1,76 @@
 (* ============================================================ *)
-(* UpReqLogRDF.v —— G5-S 复合族槽 3 缺件建设席（前席断网重启，全新执行）        *)
-(*   槽 3 = rdf_log_diff@UpReqRDF:1704 S 阻塞 → 缺件 A/B 建设 + 修正放电        *)
+(* UpReqLogRDF.v *)
+(* *)
+(* 目的： 对数与实数差分面（ReqDiffPlain 载体）的对数定律族。 *)
+(* 主件： lrdf_t_abs_eq / lrdf_xh_eq 等对数差分定律与 lrdf_cancel_l_opp。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSLM、UpReqRDF。 *)
+(* 备注： 非负/差分/对数三 plain 接口为显式 Variable 前提；对数下界前提显式申报。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+
+(*   槽 3 = rdf_log_diff@UpReqRDF:1704 S 阻塞 → 缺件 A/B 建设 + 修正消解        *)
 (*   2026-09-10                                                            *)
 (* ------------------------------------------------------------------ *)
-(* 使命对账（前席判词 UpReqLogCompD.v 头注槽 3 条目）：                       *)
-(*  缺件 A：req 层 log eps-delta 根件（log 的 reqRDF 形）。Real 根           *)
-(*    real_log_differentiable@CW219:46386 在盘但为域前提记录形              *)
+
+
+(*    real_log_differentiable@:46386 在盘但为域前提记录形              *)
 (*    （RealDifferentiable L44447：f : forall x, 0<x -> Real）+ 尾 slack     *)
 (*    （|D| ≤ eps|h|+eps'，Bishop 逐 eps）；reqRDF 形 = 纯函数 f : R -> R    *)
-(*    + 精确形 |D| ≤ eps|h|。本席换装收口 = lrdf_log_root（Part 2）。        *)
-(*  缺件 B：log 带正性见证不满足 F : R -> R，通用 req_rdf_compose 不可直喂。  *)
-(*    本席专用 log-composite 引擎 = lrdf_rdf_log_diff（Part 3）：            *)
+(*    + 精确形 |D| ≤ eps|h|。本件换装完成 = lrdf_log_root（Part 2）。        *)
+
+
 (*    forall g Hg (dg : reqRDF g), reqRDF (fun z => log (g z) (Hg z))，      *)
 (*    df z := inv(g z)·dg z（正性见证型复合求导规则/见证搬运封装）。         *)
-(*  槽 3 判词（本席，对前席「换装+收口两件均超时间盒」的继承与了结）：         *)
-(*    ①原形超定：rdf_log_diff@1704 对任意正 g 断言 log∘g 可微，缺 dg :       *)
+
+
 (*      reqRDF g 前提位（与 req_rdf_compose@UpReqRDF:1227 显式 dg 同族对照； *)
-(*      g 取无正则性正函数时结论无据，本构造性接口层不可证——判「修正放电」， *)
+(*      g 取无正则性正函数时结论无据，本构造性接口层不可证——判「修正消解」， *)
 (*      非硬凑原形）。                                                      *)
 (*    ②eps'-尾 slack 与精确形之关系：非 Or 编码固有间隙——req 层 le 为抽象    *)
 (*      非严格序（非 Or 编码），配合 ReqLogPlain.log_le_linear_plain 精确形   *)
 (*      槽（UpReqSLM L143，批5 波0 资产），log(1+t) ≤ t 精确成立（           *)
-(*      req_log_one_plus_le@UpReqSLM），尾 slack 消解；精确收口余缺仅为      *)
+(*      req_log_one_plus_le@UpReqSLM），尾 slack 消解；精确完成余缺仅为      *)
 (*      三个 Or 编码系内点引理的 req 槽形镜像（本件三 Hypothesis 申报位）。   *)
-(*    ③消费链放电：rdf_log_diff 唯一消费位 = req_entropy_differentiable      *)
-(*      （UpReqRDF:1707，Section ReqEntropyDiff）的 Hlog_d 槽；本席 Part 4   *)
+(*    ③消费链消解：rdf_log_diff 唯一消费位 = req_entropy_differentiable      *)
+
 (*      以 lrdf_entropy_differentiable 同链重建（零 rdf_log_diff 变元，      *)
-(*      dg 位由 HOmega = req_rdf_mult 产物供给——原节本就有此件，判词：       *)
+(*      dg 位由 HOmega = req_rdf_mult 产物供给——原节本就有此件，结论：       *)
 (*      槽实为「可自供的漏装位」）。                                        *)
-(* 供给槽申报（本件节 Hypothesis，头注台账；全部 Set 层零 Prop 泄露）：        *)
+
 (*  [S1] lrdf_abs_lower_pos : lt (abs a) c -> lt zero (plus c a)             *)
-(*       —— CW219 real_abs_lt_lower@44527（Or 编码系内证）req 槽形镜像；      *)
+(*       —— real_abs_lt_lower@44527（Or 编码系内证）req 槽形镜像；      *)
 (*       抽象接口无「双侧加法」lt 原语，正和形为消费可用形。                  *)
 (*  [S2] lrdf_abs_le_intro : le u w -> le (opp u) w -> le (abs u) w          *)
-(*       —— CW219 real_abs_le_quad_eps@46104 四分叉核（Or 编码 |X| 桥）      *)
+(*       —— real_abs_le_quad_eps@46104 四分叉核（Or 编码 |X| 桥）      *)
 (*       req 槽形镜像（双侧绝对值引入）。                                    *)
 (*  [S3] lrdf_sq_nonneg / lrdf_sq_le_abs_sq : le zero (t·t) /                *)
-(*       le (t·t) (|t|·|t|) —— CW219 Qsquare_nonneg/q_sq_abs@46130 逐点      *)
-(*       Q 层事实 req 槽形镜像（UpReqSLM L20-25 M2 墙判词同族：plain 形需    *)
+(*       le (t·t) (|t|·|t|) —— Qsquare_nonneg/q_sq_abs@46130 逐点      *)
+(*       Q 层事实 req 槽形镜像（UpReqSLM L20-25 M2 墙结论同族：plain 形需    *)
 (*       符号判定，抽象接口不可导）。                                       *)
-(*  类槽承接（零新申报，批5 波0 资产在盘）：ReqNonnegPlain/ReqDiffPlain       *)
+
 (*  （UpReqSLM）/ReqLogPlain（UpReqSLM L143，log_le_linear_plain 精确形 +    *)
-(*  log_req_compat_plain）。Real 放电随 Real 层战役挂账（UpReqSLM 头注同判）。*)
-(* 路线（核心估计，对标 CW219 L46386 主定理结构，req 层重排）：                *)
-(*   t := h·inv x；x+h ≡ x·(1+t)；D ≡ log(1+t) − t（lrdf_xh_eq + log_mult）。 *)
+(*  log_req_compat_plain）。Real 消解随 Real 层战役显式假设（UpReqSLM 头注同判）。*)
+(* 路线（核心估计，对标 L46386 主定理结构，req 层重排）：                *)
+
 (*   上界：log(1+t) ≤ t 精确（req_log_one_plus_le）⟹ D ≤ 0 ≤ eps|h|。        *)
 (*   下界：t − log(1+t) ≡ t + log inv(1+t) ≤ t + (inv(1+t)−1) ≡ t²·inv(1+t)  *)
 (*     （req_log_inv_one_inv + log_le_linear_plain + lrdf_t_plus_inv_minus_  *)
 (*     one 环恒等，对标 real_t_minus_log_bound@45024 无 eps 化）             *)
 (*     ≤ 2t²（inv(1+t) ≤ 2 ⟸ 1/2 ≤ 1+t）≤ eps·|h|（|t| ≤ min(1/2, eps·x/2)）*)
 (*     其中 2t² ≤ eps·|h| 走 |t| ≤ eps·x/2：t² ≤ |t|² ≤ |t|·(eps·x/2)。      *)
-(*   δ := min(x/2, (eps·x/2)·x)（对标 CW219 δ := min(x/2, eps·x²/4)）。      *)
+(*   δ := min(x/2, (eps·x/2)·x)（对标 δ := min(x/2, eps·x²/4)）。      *)
 (*   缺件 B 引擎以同核（lrdf_core_abs_bound 于 t := (g(z+h)−g z)·inv(g z)）   *)
 (*   + 误差分解 tt ≡ inv·ds·h + err·inv 组装（budget: |X|≤(eps/2)|h|、       *)
 (*   |err·inv|≤(eps/2)|h|）。                                              *)
 (* 防撞：lrdf_ 前缀 + 全部新名 21 个，attn 目录全 .v grep 零命中（建前实测    *)
 (*    2026-09-10；UpReqLogRDF 文件名零命中）。                              *)
 (* 红线：Set 层零 Prop（结论全 req/lt/le/sigT+Set-And 值；Rocq 9 排序多态    *)
-(*    Or 仅作 lt_le_iff 入参，零泄露）；全 Qed 闭合；零 Axiom/Admitted/      *)
-(*    Classical；既有文件零改；零 git；温控 guard（../live/cpu_guard.ps1）。  *)
+(*    Or 仅作 lt_le_iff 入参，零泄露）；全 Qed 闭合；零 公理/承认件/      *)
+
 (* 编译配方：_lrdf_g2.cmd + guard 包装                                       *)
-(*   coqc -Q . "" -Q "..\001" "" UpReqLogRDF.v（零裸调）                     *)
-(* G4：coqchk -Q . "" -Q "..\001" "" UpReqLogRDF（全路径 9.0 bin，E406 高危） *)
+
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -72,7 +81,7 @@ From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part 0：节槽位组（三申报槽 S1-S3 + 三类槽承接）                              *)
+(* Part 0：节假设位组（三申报槽 S1-S3 + 三类槽承接）                              *)
 (* ============================================================ *)
 
 Section LRDF.
@@ -82,18 +91,18 @@ Context {RNN : ReqNonnegPlain R}.
 Context {RDP : ReqDiffPlain R}.
 Context {RLL : ReqLogPlain R}.
 
-(* S1：|a| < c ⟹ 0 < c + a（CW219 real_abs_lt_lower req 槽形，正和形） *)
+(* S1：|a| < c ⟹ 0 < c + a（real_abs_lt_lower req 槽形，正和形） *)
 Hypothesis lrdf_abs_lower_pos :
   forall (a c : R), lt (abs a) c -> lt zero (plus c a).
 
-(* S2：u ≤ w ∧ −u ≤ w ⟹ |u| ≤ w（CW219 real_abs_le_quad_eps 核 req 槽形） *)
+(* S2：u ≤ w ∧ −u ≤ w ⟹ |u| ≤ w（real_abs_le_quad_eps 核 req 槽形） *)
 Hypothesis lrdf_abs_le_intro :
   forall (u w : R), le u w -> le (opp u) w -> le (abs u) w.
 
-(* S3a：0 ≤ t²（CW219 Qsquare_nonneg 逐点事实 req 槽形） *)
+(* S3a：0 ≤ t²（Qsquare_nonneg 逐点事实 req 槽形） *)
 Hypothesis lrdf_sq_nonneg : forall t : R, le zero (mult t t).
 
-(* S3b：t² ≤ |t|²（CW219 q_sq_abs@46130 req 槽形） *)
+(* S3b：t² ≤ |t|²（q_sq_abs@46130 req 槽形） *)
 Hypothesis lrdf_sq_le_abs_sq : forall t : R,
   le (mult t t) (mult (abs t) (abs t)).
 
@@ -374,7 +383,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 1：log(1+t) 核估计（缺件 A/B 共享核）                                    *)
+
 (* ============================================================ *)
 
 (* 1.1：环恒等 1 − inv(1+t) ≡ (t)·inv(1+t)（对标 real_succ_minus_one +       *)
@@ -423,7 +432,7 @@ Proof.
 Qed.
 
 (* 1.2：环恒等 t + (inv(1+t) − 1) ≡ t²·inv(1+t)（对标 real_t_plus_inv_      *)
-(*      minus_one@CW219:44952；链 = req_set_inv_minus_one_opp@UpReqSLM 反向   *)
+(*      minus_one@:44952；链 = req_set_inv_minus_one_opp@UpReqSLM 反向   *)
 (*      + distrib + req_ld3_minus_one_plus_t） *)
 Lemma lrdf_t_plus_inv_minus_one : forall (t : R) (Hs : lt zero (plus one t)),
   req (plus t (req_minus (inv_pos (plus one t) Hs) one))
@@ -608,7 +617,7 @@ Proof.
 Qed.
 
 (* 1.4：核定理（缺件 A/B 共享）：0 < 1+t ∧ 1/2 ≤ 1+t ∧ |t| ≤ eps/2 ⟹          *)
-(*      |log(1+t) − t| ≤ eps·|t|（CW219 主定理 X 双臂的无 eps 化）             *)
+(*      |log(1+t) − t| ≤ eps·|t|（主定理 X 双臂的无 eps 化）             *)
 Lemma lrdf_core_abs_bound :
   forall (t eps : R)
     (H1t : lt zero (plus one t))
@@ -783,7 +792,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：缺件 A——req 层 log eps-delta 根件（log 的 reqRDF 形）                 *)
+
 (*   df y := inv y；delta := min(x/2, (eps·x/2)·x)；                            *)
 (*   上界 D ≤ 0（req_log_one_plus_le 精确切线）+ 下界 |D| ≤ 2t² ≤ eps·|h|。      *)
 (* ============================================================ *)
@@ -1036,8 +1045,8 @@ Proof.
                 (mult eps (abs h)) Hscale Hcore)).
 Qed.
 (* ============================================================ *)
-(* Part 3：缺件 B——专用 log-composite 引擎（槽 3 修正放电件）                    *)
-(*   lrdf_rdf_log_diff：g 带逐点正性见证 + dg : reqRDF g ⟹ log∘g reqRDF。      *)
+
+
 (*   df z := inv(g z)·dg z；tt := (g(z+h)−g z)·inv(g z)；                      *)
 (*   误差 ≡ X + err·inv（lrdf_opp_split_eq 分裂）；budget 双 (eps/2)|h|。      *)
 (* ============================================================ *)

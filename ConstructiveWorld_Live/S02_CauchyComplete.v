@@ -1,6 +1,15 @@
-(* ===== CW219 拆分分片 S02_CauchyComplete（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L3072-L6982；头部 10 行（含尾空行）；
-   依赖：S01；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S02_CauchyComplete.v                                        *)
+(*                                                             *)
+(* 目的：柯西实数核心：柯西序列的加法、乘法、求逆与序结构       *)
+(*       （构造性 Set 层）。                                     *)
+(* 主件：CauchyRealMultiplication 系列引理；real_lt 加性平移     *)
+(*       （a<b ∧ c<d ⟹ a+c<b+d）；real_lim 收敛代数。           *)
+(* 依赖：S01_BaseRing；Stdlib（QArith、Qabs、Qround、List、     *)
+(*       Bool、Arith、Setoid、Morphisms、Lia、Qminmax）。        *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
+(*       L3072-L6982，去头正文与原文区间逐字节同源。             *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
@@ -3179,8 +3188,7 @@ Qed.
 (* ------------------------------------------------------------ *)
 (* real_lim 加法保持：u→l1、v→l2 ⟹ u+v → l1+l2。               *)
 (* 核心：real_lt 加性平移（real_lt a b → real_lt c d ⟹           *)
-(* real_lt (a+c) (b+d)，见证 e1+e2 + 逐点 ring）——交接文档       *)
-(* 候选的"real_lt 加性平移引理"落地。                            *)
+(* real_lt (a+c) (b+d)，见证 e1+e2 + 逐点 ring）。               *)
 (* ============================================================ *)
 
 (* real_lt 加性平移：a<b ∧ c<d ⟹ a+c < b+d（见证 e1+e2，逐点 Qplus_lt_compat） *)

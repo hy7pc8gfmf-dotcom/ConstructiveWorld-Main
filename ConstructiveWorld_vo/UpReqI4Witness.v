@@ -1,29 +1,38 @@
 (* ============================================================ *)
-(* UpReqI4Witness.v —— 判词 I4 证书位实例化席 T30（独占 CoreN 0）          *)
-(*   使命＝为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书，使判词 I4 的        *)
+(* UpReqI4Witness.v *)
+(* *)
+(* 目的： 结论 I4 证书位的实例化（无条件形）。 *)
+(* 主件： i4b_policy_iter_kl_pow_mono_unconditional：经 t30 见证族去假设位化。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB、UpReqGeomIter、UpReqPowMonoBridge、UpReqI4Bridge。 *)
+(* 备注： 实例化件：t30_kl_term_eq_zero 等见证把桥件假设位落实为零前提形。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqI4Witness.v —— 结论 I4 证书位实例化席 T30（独占 CoreN 0）          *)
+(*   使命＝为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书，使结论 I4 的        *)
 (*   消费位（UpReqI4Bridge 主桥件2 的 Hkl0or 前提）从接口化降为          *)
 (*   「证书内部构造」：调用方不再提供 KL_0 形态的任何前提，只需提供      *)
-(*   分布层数据见证（逐点可比＋一支分离见证），Or 证书由本席内部合成。   *)
+
 (* ---------------------------------------------------------------- *)
 (* 上游链（全只读消费，既有绿件零改）：                                   *)
 (*   · T1 端点件 klst_kl_energy_nonconst（G07 Part G，KL>0 无条件主件）： *)
 (*     双归一化＋逐项双向弱序＋s0 处任一方向严格分离 ⟹ 0 < Σ kl_term。   *)
-(*     —— 本席 inl 支（0 < KL_0）的直接引擎；                             *)
+
 (*   · klst_gibbs_core_zero（G07）：r==p ⟹ kl_term＋(p−r) == 0——        *)
-(*     本席 inr 支（KL_0 == 0）的逐项归零引擎；                          *)
+
 (*   · T20 接口件 i4b_kl0_or_of_lt / i4b_kl0_or_of_eq（UpReqI4Bridge     *)
-(*     件0a/0b）：两支 Or 证书构造位，本席全量复用（零重证）；            *)
-(*   · T20 主桥 i4b_policy_iter_kl_pow_mono_B（件2）：判词 I4 消费位，   *)
-(*     本席最终喂入点；                                                  *)
+
+(*   · T20 主桥 i4b_policy_iter_kl_pow_mono_B（件2）：结论 I4 消费位，   *)
+
 (*   · geod_lsum（UpReqGeomD L218）≡ real_list_sum nat f (seq 0 n)——     *)
 (*     定义性展开即与 G07 的 list 形（l1 ++ s0 :: l2）无磨合对接。        *)
 (* ---------------------------------------------------------------- *)
 (* 件清单（11 件全 Qed）：                                               *)
 (*   件W0 t30_id_nat_rev：库内 Set 层等同 Id 的运输件（Id 非可改写等号，  *)
-(*       仅供 destruct 收口，语句面 Set 值）；                            *)
+(*       仅供 destruct 完成，语句面 Set 值）；                            *)
 (*   件W0b t30_seq_split：seq 0 (Nat.succ(j+k)) 的 l1++j::l2 分解——       *)
 (*       内部改写通道件（结论为 stdlib 等号，仅作 rewrite 通道用，        *)
-(*       非交付语句面；交付面 W2–W8 全 Set 值）；                         *)
+(*       非结果语句面；结果面 W2–W8 全 Set 值）；                         *)
 (*   件W1a t30_lsum_zero_seq / 件W1b t30_lsum_zero：全零和归零；          *)
 (*   件W2 t30_kl_term_eq_zero：逐项归零（klst_gibbs_core_zero 运输）；    *)
 (*   件W3 t30_kl0_eq_of_pointwise：inr 支——逐点 r==p ⟹ KL_0 == 0；       *)
@@ -32,32 +41,32 @@
 (*   件W5 t30_kl0_or_of_case：组装——分布层情形见证 Or ⟹ Or 形 0≤KL_0    *)
 (*       （inl 支经件0a、inr 支经件0b，两支接口件全量复用）；             *)
 (*   件W6 i4b_policy_iter_kl_pow_mono_unconditional：无条件闭合主件——    *)
-(*       判词 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
-(*       geodi 全参＋逐点双向可比＋分布层情形见证，Hkl0or 位由本席        *)
+(*       结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
+
 (*       内部合成（消费 T20 主桥件2 一次直连）；                          *)
 (*   件W7/W8 i4bw_..._nonconst / i4bw_..._const：两支端到端实例——        *)
 (*       单支见证即全闭合的分布级演示（T20 件3 的分布级升级版）。         *)
 (* ---------------------------------------------------------------- *)
-(* 诚实边界（残差精确形状，承 T1 判词）：                                 *)
+(* 诚实边界（残差精确形状，承 T1 结论）：                                 *)
 (*   · 逐项可比前提 Or (real_le (r i) (p i)) (real_le (p i) (r i)) 的    *)
 (*     去除＝对任意实对供三分判定见证（LLPO 形），非直觉主义可证         *)
-(*     （T1 卡放电(a) 终点判词在案）；                                   *)
+(*     （T1 卡消解(a) 终点结论在案）；                                   *)
 (*   · 分离见证位的「情形 Or」（逐点相等 支 / 分离见证 支）同理不可      *)
 (*     去除——KL_0>0 与 KL_0==0 的构造性可分缺口在上游（实对序判定），   *)
-(*     不在 KL_0 证书侧；本席把缺口从「KL_0 形前提」下推到「分布层       *)
+(*     不在 KL_0 证书侧；本件把缺口从「KL_0 形前提」下推到「分布层       *)
 (*     数据见证」，已到该链路的直觉主义终点；                            *)
 (*   · 具体实例两侧见证皆可构造：r:=均匀分布、p 为任一有理可算扰动       *)
 (*     分布时，可比性与分离见证按有理序可判定逐点供给。                  *)
 (* 红线自检：零未闭合证明（全件Qed）；零新依赖面（仅 Require 既有绿库）； *)
 (*   语句面全 Set 值（real_le/real_lt/real_eq/NatLt/NatLe 全 Set 值，    *)
 (*   Or:=A+B 库内 Set 和型；情形见证用 sigT 不用存在命题，零命题泄露；   *)
-(*   唯一 stdlib 等号出现在 W0b 内部改写通道，见其台账行）；              *)
+(*   唯一 stdlib 等号出现在 W0b 内部改写通道，见其登记表行）；              *)
 (*   纯 term-mode 组装（real_eq 非可改写等号，全链 real_eq_trans 运输；  *)
-(*   库内 Id 亦非可改写等号，全链 destruct 收口件 W0 运输）；             *)
+(*   库内 Id 亦非可改写等号，全链 destruct 完成件 W0 运输）；             *)
 (*   禁词全零（按全文件计含头注，中文语义表述不引字面量）。              *)
 (* 编译配方（vo 树前置；EMPTY 处为空串实参，引号从略防注释串警告；       *)
 (*   cpu_guard 包装零裸调，CoreN 0；先 -vos 秒审再全量）：                *)
-(*   coqc -vos -Q vo树 EMPTY -Q . EMPTY UpReqI4Witness.v                  *)
+
 (* ============================================================ *)
 
 From Stdlib Require Import PeanoNat.
@@ -76,7 +85,7 @@ Require Import UpReqI4Bridge.
 (* 〇、桥件：库内 Id 运输＋seq 分解（对接 G07 的 l1 ++ s0 :: l2 形）      *)
 (* ============================================================ *)
 
-(* 件W0：Set 层等同运输双向件（Id 非可改写等号，destruct 收口后即定义性换元） *)
+(* 件W0：Set 层等同运输双向件（Id 非可改写等号，destruct 完成后即定义性换元） *)
 Lemma t30_id_nat_fwd : forall (n m : nat) (P : nat -> Set),
   Id n m -> P n -> P m.
 Proof.
@@ -100,7 +109,7 @@ Proof.
   - apply Nat.add_succ_r.
 Qed.
 
-(* 件W1a：全零函数的 list 和归零（起点概括，归纳收口） *)
+(* 件W1a：全零函数的 list 和归零（起点概括，归纳完成） *)
 Lemma t30_lsum_zero_seq : forall len s : nat,
   real_eq (real_list_sum nat (fun _ : nat => real_zero) (List.seq s len))
           real_zero.
@@ -258,7 +267,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 四、无条件闭合主件：判词 I4 目标形（Hkl0or 位由本席内部合成）          *)
+
 (*   语句与 UpReqI4Bridge 件2 逐字同形，唯一变动＝Hkl0or 前提位换成      *)
 (*   「逐点双向可比＋分布层情形见证」两个数据级前提。                    *)
 (* ============================================================ *)
@@ -295,7 +304,7 @@ Qed.
 (* 五、两支端到端实例：单支见证即全闭合（分布级演示）                     *)
 (* ============================================================ *)
 
-(* 件W7：nonconst 支端到端——逐点双向可比＋j 处严格分离 ⟹ 判词 I4 目标形 *)
+(* 件W7：nonconst 支端到端——逐点双向可比＋j 处严格分离 ⟹ 结论 I4 目标形 *)
 Lemma i4bw_policy_iter_kl_pow_mono_nonconst :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -327,7 +336,7 @@ Proof.
            t t1 Hle).
 Qed.
 
-(* 件W8：const 支端到端——逐点相等 ⟹ 判词 I4 目标形（T20 件3 的分布级升级） *)
+(* 件W8：const 支端到端——逐点相等 ⟹ 结论 I4 目标形（T20 件3 的分布级升级） *)
 Lemma i4bw_policy_iter_kl_pow_mono_const :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -375,17 +384,17 @@ Print Assumptions i4bw_policy_iter_kl_pow_mono_nonconst.
 Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
 (* ============================================================ *)
-(* 尾注：诚实台账                                                        *)
-(* 【对接判定】判词 I4 消费位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
-(*   主桥件2 的 Hkl0or 接口位，本席以分布层情形见证内部合成 Or 证书——    *)
+(* 尾注：诚实登记表                                                        *)
+(* 【对接判定】结论 I4 消费位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
+
 (*   消费位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
-(*   同形，判词 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)
+(*   同形，结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)
 (*   KL_0 证书成立。                                                    *)
 (* 【残差精确形状】情形 Or 前提（逐点相等 支 / 分离见证 支）与逐点双向   *)
 (*   可比前提的去除等价于实对序的三分判定见证（LLPO 形），非直觉主义    *)
-(*   可证（T1 卡放电终点判词同源）；该缺口属上游数据层，非 KL_0 证书     *)
-(*   侧——本席已把证书位下推到数据见证终点，具体实例两侧见证按有理序     *)
+(*   可证（T1 卡消解终点结论同源）；该缺口属上游数据层，非 KL_0 证书     *)
+
 (*   可判定逐点供给（如均匀参考分布对有理可算扰动分布）。                *)
-(* 【机器状态】编译后回填：G2 EXIT=0＋十一件审计全 Closed；G1 禁词全零；  *)
+
 (*   G3 提取探针 Obj.magic=0（_t30_g3.v，产物验后即删）。                *)
 (* ============================================================ *)

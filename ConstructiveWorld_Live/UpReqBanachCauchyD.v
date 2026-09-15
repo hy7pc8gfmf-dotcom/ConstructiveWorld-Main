@@ -7,6 +7,9 @@
 (* （UpReqBanachExpAdd.vo 未落，闸门裁决=候 BASM 连续性件）。     *)
 (* 坍缩特例自证（bxcd_ 前缀）：UpReqBanachInvPre.vo 未落（闸门）。 *)
 (* 依赖：UpReqBanachExp/Prod/Double/ExpBasic/Add/NormConv。       *)
+(* 20260915 席AA18 消费面迁移：追加 Require BanachNoHyp；bxcd_ 四件 *)
+(* （dline_binom_term/tri_bone/prod_split/prod_near_one）签名收窄至  *)
+(* 零假设（bnh_esp_term_binom 同位供给），hplus/hwd 形参全摘。       *)
 (* 红线自审：语句面全 Set（bae/QltT/sigT/NatLe），证内 Prop 内衬；*)
 (* 公理面为零、无未证收尾；bae 面无 rewrite——一律 change+bae_trans。*)
 (* ============================================================ *)
@@ -22,6 +25,7 @@ Require Import UpReqBanachAdd.
 Require Import UpReqNormConv.
 Require Import UpReqBanachProd2.
 Require Import UpReqBanachInvPre.
+Require Import BanachNoHyp.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith ZArith.ZArith.
 From Stdlib Require Import Setoid Morphisms.
 From Stdlib Require Import Lia.
@@ -439,15 +443,12 @@ Definition bxcd_T (B : BanachAlg) (a : (@BA B)) (n : nat) : (@BA B) :=
 
 (* 对角块 == 二项式行：dline→反序→逐项标量桥→二项式行 *)
 Lemma bxcd_dline_binom_term : forall (B : BanachAlg) (a : (@BA B)),
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                          (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall k : nat,
     @bae B (bd2_dline B (bxcd_F B a) (bxcd_G B a) 0%nat k)
            (@bmult B (bpow B (@bplus B a (@bopp B a)) k)
                      (@bcoef B (/ q_fact k))).
 Proof.
-  intros B a hplus hwd k.
+  intros B a k.
   apply (@bae_trans B _
     (bsum B (Datatypes.S k)
        (fun j : nat =>
@@ -482,21 +483,18 @@ Proof.
                        (@bmult B (bpow B a j)
                                 (bpow B (@bopp B a) (Nat.sub k j)))).
            ++ apply (@bpr2_bmult_wd_l B _ _ _).
-              apply hwd.
+              apply (@bcoef_wd B).
               symmetry. exact (bxcd_binom_fact k j ltac:(lia)).
   - apply (@bae_sym B).
-    exact (bpa_esp_term_binom B a (@bopp B a)
-             (binv_mult_opp_swap B a) hplus hwd k).
+    exact (bnh_esp_term_binom B a (@bopp B a)
+             (binv_mult_opp_swap B a) k).
 Qed.
 
 (* 三角和 == 单位元 *)
 Lemma bxcd_tri_bone : forall (B : BanachAlg) (a : (@BA B)),
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                          (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall n : nat, @bae B (bxcd_T B a n) (@bone B).
 Proof.
-  intros B a hplus hwd n.
+  intros B a n.
   apply (@bae_trans B _ (bd2_tri B n (bxcd_F B a) (bxcd_G B a)) _).
   - apply (@bae_sym B).
     apply (@bae_trans B _
@@ -528,7 +526,7 @@ Proof.
                     @bmult B (bpow B (@bplus B a (@bopp B a)) k)
                               (@bcoef B (/ q_fact k)))).
               intros k _.
-              exact (bxcd_dline_binom_term B a hplus hwd k).
+              exact (bxcd_dline_binom_term B a k).
            ++ apply (@bae_sym B).
               exact (esp_as_bsum B (@bplus B a (@bopp B a)) n).
       * exact (binv_esp_opp_add B a n).
@@ -536,15 +534,12 @@ Qed.
 
 (* 主分解：P == bone + U *)
 Lemma bxcd_prod_split : forall (B : BanachAlg) (a : (@BA B)),
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                          (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall n : nat,
     @bae B (@bmult B (exp_series_partial B a n)
                      (exp_series_partial B (@bopp B a) n))
            (@bplus B (@bone B) (bxcd_U B a n)).
 Proof.
-  intros B a hplus hwd n.
+  intros B a n.
   apply (@bae_trans B _
     (bsum B (Datatypes.S n)
        (fun j : nat => bsum B (Datatypes.S n)
@@ -572,7 +567,7 @@ Proof.
                                  then @bmult B (bxcd_F B a j) (bxcd_G B a i)
                                  else @bzero B))). }
   apply (@bplus_wd_l B (bxcd_T B a n) (@bone B) (bxcd_U B a n)).
-  exact (bxcd_tri_bone B a hplus hwd n).
+  exact (bxcd_tri_bone B a n).
 Qed.
 
 (* 范数桥：bae P (bone+U) ⟹ ‖P−bone‖ == ‖U‖ *)
@@ -1157,16 +1152,13 @@ Proof.
     rewrite Hdd. apply Qle_refl.
 Qed.
 Theorem bxcd_prod_near_one : forall (B : BanachAlg) (a : (@BA B)),
-  (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
-                          (@bcoef B (q + r)%Q)) ->
-  (forall q r : Q, q == r -> @bae B (@bcoef B q) (@bcoef B r)) ->
   forall q : Q, QltT 0 q ->
   sigT (fun N : nat => forall n : nat, NatLe N n ->
     QltT (@bnorm B (@bplus B (@bmult B (exp_series_partial B a n)
                                         (exp_series_partial B (@bopp B a) n))
                               (@bopp B (@bone B)))) q).
 Proof.
-  intros B a hplus hwd q Hq.
+  intros B a q Hq.
   assert (Hc0 : Qle 0 (@bnorm B a)) by (apply QleT'_to_Qle; apply (@bnorm_pos B a)).
   assert (H01 : Qlt 0 1%Q).
   { pose proof (q_fact_pos 0%nat) as H. change (q_fact 0%nat) with 1%Q in H. exact H. }
@@ -1369,7 +1361,7 @@ Proof.
                 (1 + (exp_tail_abs 0%nat K (@bnorm B a)
                       + bxcd_A (@bnorm B a) K * (1 + 1)%Q))%Q
                 Hc0 Harch HEpos HE2 HE Hk2) as HQ2.
-  pose proof (bxcd_prod_split B a hplus hwd n) as Hsplit.
+  pose proof (bxcd_prod_split B a n) as Hsplit.
   pose proof (bxcd_prod_close B a n (bxcd_U B a n) Hsplit) as Hclose.
   eapply (QeqT_Qlt_bool_cong _ _ _ (qeqT_sym_hw _ _ Hclose)).
   apply Qlt_to_QltT.

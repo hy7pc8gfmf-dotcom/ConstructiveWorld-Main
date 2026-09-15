@@ -1,6 +1,17 @@
-(* ===== CW219 拆分分片 S08_RealMainlineDPO（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L41233-L46820；头部 18 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S08_RealMainlineDPO.v                                       *)
+(*                                                             *)
+(* 目的：Real 层 DPO/RLHF 主线：奖励恢复、注意力稳态、Top-K、    *)
+(*       PPO 保守性与 eps 化最优性（构造性 Set 层）。            *)
+(* 主件：real_steady_state_boltzmann_attn（Boltzmann 注意力稳态  *)
+(*       方程）；real_rlhf_optimal_eps（J(π) := −F(π) ≤          *)
+(*       J(π⋆) + D·eps，eps 加权残差形态）。                     *)
+(* 依赖：S01–S07；Stdlib（QArith、List、Bool、Arith、Setoid、    *)
+(*       Morphisms、Lia）。                                      *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L41233-L46820，去头正文与原文区间逐字节同源；抽象求和   *)
+(*       以显式接口变量呈现（求和外延/线性，可实例化）。         *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -58,7 +69,7 @@ Proof.
   ring.
 Qed.
 End OppMultMain.
-(* ============ Gibbs 逐点核心合入（2026-08-30，来自探针 _dbg_gibbs4.v 5 Qed 全绿） ============
+(* ============ Gibbs 逐点核心并入（2026-08-30，来自探针 _dbg_gibbs4.v 5 Qed 全绿） ============
    real_mult_div（p·(q/p) == q，inv_correct 抽象链）、real_opp_opp（opp 对合）、
    real_hpq1（p−q == p·(−(q/p−1))）、real_hpq2（p·(−X) == p·(−(X+eps)) + p·eps）、
    real_gibbs_core_eps（p−q ≤ p·(−log(q/p)) + p·eps——Gibbs 逐点核心）。
@@ -448,7 +459,7 @@ Qed.
    （strict 版。Real 层有限列表和的正性真定理——L21132/L17000 注释
    「Real 层有限和可实例化」的文件内背书：一旦以具体有限状态表
    （list X + real_list_sum）实例化 Section Alignment，sum_over_S_pos /
-   Z_align_pos 的 Real 层佐证即此形态。sTB3 战役 C1，2026-09-03 合入） *)
+   Z_align_pos 的 Real 层佐证即此形态。sTB3 论证 C1，2026-09-03 并入） *)
 Lemma real_list_sum_pos : forall (f : X -> Real) (l : list X),
   (forall w : X, real_lt real_zero (f w)) ->
   l <> nil ->
@@ -1535,7 +1546,7 @@ Qed.
 (*   β·(log π*(s) − log π_ref(s)) == r(s) − β·log Z_align         *)
 (*   （π* 处 DPO 隐式奖励精确恢复真实奖励，差配分基线偏移）     *)
 (*   组装：real_log_pi_star（闭式解）+ Real 层代数链            *)
-(*   （消去 log π_ref + β 分配 + β·(1/β) 吸收 + opp 换形收口）  *)
+(*   （消去 log π_ref + β 分配 + β·(1/β) 吸收 + opp 换形证毕）  *)
 (* ============================================================ *)
 
 (* Real 层 DPO 显式奖励：β·(log π(s) − log π_ref(s)) *)
@@ -1958,10 +1969,10 @@ End RealGrpoMain.
 (*   单位温度（inv D == 1）且 energy = −logits 且配分相等 ⟹      *)
 (*   softmax(z,s) == boltzmann_dist_attn(s)（逐点）              *)
 (*   诚实接口：real_sum_over_S（抽象 S 求和，Real 层实例化时     *)
-(*   提供——S 无枚举是 E196 边界的 Real 层形态，T4.3 模式）      *)
+(*   提供——S 无枚举边界假设的 Real 层形态）                     *)
 (*   组装：mult invD·energy 归约（HD + comm + mult_one）→        *)
 (*   energy == −logits 替换 → cauchy_real_exp_wd 保 eq →         *)
-(*   real_inv_pos_ext 逆元统一 → mult_comm 收口                  *)
+(*   real_inv_pos_ext 逆元统一 → mult_comm 证毕                  *)
 (* ============================================================ *)
 
 Section RealAttnMain.
@@ -1969,7 +1980,7 @@ Section RealAttnMain.
 (* 抽象状态空间（Real 层 Section 自声明，同 DpoPairMain 先例） *)
 Variable S : Type.
 
-(* 诚实接口：抽象 S 上的求和（Real 层可实例化；零 Axiom） *)
+(* 诚实接口：抽象 S 上的求和（Real 层可实例化；零公理面） *)
 Variable real_sum_over_S : (S -> Real) -> Real.
 Variable real_sum_pos_preserved :
   forall (f : S -> Real), (forall s : S, real_lt real_zero (f s)) -> real_lt real_zero (real_sum_over_S f).
@@ -2068,7 +2079,7 @@ End RealAttnMain.
 (*   抽象层 steady_state_boltzmann_attn（L27180）的 Real 版：    *)
 (*   Σ_s' p(s')·T(s',s) == p(s)（稳态：detailed balance + 核归   *)
 (*   一化组装）                                                  *)
-(*   诚实接口（T4.3 模式，零 Axiom）：real_sum_over_S_ext/linear *)
+(*   诚实接口（零公理面）：real_sum_over_S_ext/linear *)
 (*   （求和外延/线性）+ real_detailed_balance +                   *)
 (*   real_transition_normalization（Real 层可实例化）            *)
 (* ============================================================ *)
@@ -2104,7 +2115,7 @@ Variable real_transition_normalization : forall s : S,
   real_eq (real_sum_over_S (fun s' => real_transition s s')) real_one.
 
 (* 稳态方程（B-8-4 旗舰）：Σ_s' p(s')·T(s',s) == p(s)
-   组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s) → 核归一化 → mult_one 收口 *)
+   组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s) → 核归一化 → mult_one 证毕 *)
 Theorem real_steady_state_boltzmann_attn : forall s : S,
   real_eq (real_sum_over_S (fun s' => real_mult (real_boltzmann_dist_attn_s s') (real_transition s' s)))
           (real_boltzmann_dist_attn_s s).
@@ -2135,8 +2146,8 @@ End RealAttnSteady.
 (*   Σ_w minp_kernel(prefix,w) == 1（概率守恒）                  *)
 (*   组装：逐点分支交换（keep 分支 mult_comm / drop 分支         *)
 (*   mult_zero 反向）→ 标量线性提取 inv(temp_sum) →              *)
-(*   inv(temp_sum)·temp_sum == 1（inv_pos_correct）收口          *)
-(*   诚实接口（T4.3 模式，零 Axiom）：real_minp_keep_dec（判定，*)
+(*   inv(temp_sum)·temp_sum == 1（inv_pos_correct）证毕          *)
+(*   诚实接口（零公理面）：real_minp_keep_dec（判定，*)
 (*   Set 层 Or）+ real_minp_temp_sum_pos（保留集非空 + 因子正）  *)
 (* ============================================================ *)
 
@@ -2240,9 +2251,9 @@ End RealMinPMain.
 (*   组装：real_le_dec 分叉 → 反证（not_le_lt ⟹ lt (f s1)(f s2)）*)
 (*   → 计数单调（count_heavier_succ_le）→ keep/drop 计数矛盾    *)
 (*   （NatLt 双向 + Nat.ltb 转换 + lia）                         *)
-(*   诚实接口（T4.3 模式，零 Axiom）：real_le_dec（线序判定）+  *)
-(*   real_not_le_lt（线序：Not(le) ⟹ lt 反向；real_weak_trich 是 *)
-(*   弱三分不可用，E196 边界）+ 计数接口（count/单调/keep 双向）*)
+(*   诚实接口（零公理面）：real_le_dec（线序判定）+  *)
+(*   real_not_le_lt（线序：Not(le) ⟹ lt 反向；real_weak_trich   *)
+(*   在此不可用——需强序判定）+ 计数接口（count/单调/keep 双向）*)
 (* ============================================================ *)
 
 Section RealTopKMain.
@@ -2299,12 +2310,12 @@ End RealTopKMain.
 (*   抽象层 ppo_conservative（L18795）的 Real 版：               *)
 (*   min(r, clip(r))·adv ≤ r·adv（min_le_l）⟹ ppo ≤ is + eps 残差 *)
 (*   Real 层 min 只有 eps 界（real_min_le_l_eps），主定理取       *)
-(*   eps 加权残差形态（诚实 E196 边界）：                        *)
+(*   eps 加权残差形态（诚实接口边界）：                          *)
 (*   ppo_objective ≤ is_objective + Σ π_old·(eps·adv)            *)
 (*   组装：min ≤ ρ+eps（eps 界）→ ×adv（strict 正乘）→ 右分配   *)
 (*   → ×π_old（strict 正乘 + comm 换形）→ Σ 保序（sum_le 接口） *)
-(*   → sum_add 拆项收口                                          *)
-(*   诚实接口（T4.3 模式，零 Axiom）：real_sum_over_S_le/add +  *)
+(*   → sum_add 拆项证毕                                          *)
+(*   诚实接口（零公理面）：real_sum_over_S_le/add +  *)
 (*   real_advantage_pos / real_pi_old_pos（strict 正性，          *)
 (*   real_le_mult_compat 需 lt 前提）+ 环境                       *)
 (* ============================================================ *)
@@ -2440,13 +2451,13 @@ End RealPPOMain.
 (* ============================================================ *)
 (* B-8-8：RLHF 最优性（Real 层复刻，eps 化）                   *)
 (*   抽象层 rlhf_optimal（L18318）的 Real 版：                   *)
-(*   J(pi) := −F(pi) ≤ J(pi_star) + D·eps（eps 加权残差形态，E196 边界：*)
+(*   J(pi) := −F(pi) ≤ J(pi_star) + D·eps（eps 加权残差形态——    *)
 (*   Real 层 KL ≥ 0 只有 eps 版）                                *)
 (*   核心证明：real_kl_sum_decomp（Σ p·log p == Σ p·log p_b     *)
 (*   + Σ p·kl_term：逐点 distrib + 抵消链 + kl_term_equiv 接口）*)
 (*   组装：KL 分解接口 → gibbs eps（0 ≤ Σkl + eps）→ D 正乘 →   *)
 (*   le_plus_compat（F(p_b) ≤ F(π) + D·eps）→ opp 取负 + 环恒等  *)
-(*   诚实接口（T4.3 模式，零 Axiom）：real_boltzmann_log_decomp/ *)
+(*   诚实接口（零公理面）：real_boltzmann_log_decomp/ *)
 (*   normalized（Boltzmann 对数分解/归一化）+ real_kl_term_equiv *)
 (*   （log 除法分解）+ real_pi_star_align（π* == p_b）+          *)
 (*   real_gibbs_sum_eps（Σ 版 KL ≥ 0）+ real_kl_decomp_full      *)
@@ -2583,7 +2594,7 @@ Proof.
       intro s. exact (real_kl_term_equiv p Hp s).
 Qed.
 (* RLHF 最优性（B-8-8 旗舰，eps 化）：
-   J(π) := −F(π) ≤ J(π*) + D·eps（π* == p_b 逐点由 real_pi_star_align 提供）
+   J(π) := −F(π) ≤ J(π⋆) + D·eps（π⋆ == p_b 逐点由 real_pi_star_align 提供） *)
    组装：KL 分解（kl_decomp_full）→ gibbs eps（0 ≤ Σkl + eps）→ D 正乘 →
    le_plus_compat（F(p_b) ≤ F(π) + D·eps）→ opp 取负（opp_le_compat +
    环恒等：A + X ≤ B ⟹ A ≤ B + opp(X)，X := opp(D·eps)） *)
@@ -2721,7 +2732,7 @@ End RealRLHFMain.
 
 (* ============================================================ *)
 
-(* Real 层 log 可微性战役：Bishop 逐 eps 复刻（探针 54 Qed 全绿，2026-08-30） *)
+(* Real 层 log 可微性论证：Bishop 逐 eps 复刻（探针 54 Qed 全绿，2026-08-30） *)
 Section LogDiffPhase4.
 Section LogDiffPhase2.
 
@@ -2880,7 +2891,7 @@ End LogDiffPhase2.
 
 (* ============ Phase 2b：Real 层 log 线性界（Bishop 逐 eps） ============
    Set 层（RealInterfaceEnhanced Id 版）线性界不可实例化到 Real 层（E182 判 Id 版不可实例化，
-   Real 层是 req 版 RealInterfaceEnhancedSetoid）——Real 层线性界必须重证（E187 战役延续）。
+   Real 层是 req 版 RealInterfaceEnhancedSetoid）——Real 层线性界必须重证（E187 论证延续）。
    目标：real_log_one_plus_le_eps（log(1+t) ≤ t+eps）+ real_log_one_plus_ge_eps（t−t² ≤ log(1+t)+eps）。
    数学：上界 = real_log_le_linear_eps 于 (1+t)；下界 = log(1+t)==−log(1/(1+t))（real_log_inv_one_inv
    反向）+ real_log_le_linear_eps 于 inv s + real_inv_minus_one_opp + t−t²≤t·inv s（Q 层已有 q_div）。 *)
@@ -5596,7 +5607,7 @@ End LogDiffPhase4.
 
 (* ============================================================ *)
 (* entropy Real 层：RealDifferentiable 组合引理族（E194 后续）  *)
-(* + mult 份额（real_differentiable_mult）探针合入 2026-08-31   *)
+(* + mult 份额（real_differentiable_mult）探针并入 2026-08-31   *)
 (* 依赖：上面 LogDiffPhase4 的 RealDifferentiable 记录          *)
 (* ============================================================ *)
 

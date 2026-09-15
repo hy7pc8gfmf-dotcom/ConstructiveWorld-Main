@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqSLM.v *)
+(* *)
+(* 目的： 软语言模型面：温度配分、马尔可夫核与 softmax（req 载体）。 *)
+(* 主件： slm_markov_kernel / slm_softmax / slm_markov_temperature_zero_limit 与 k_d。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqAlignRestB、G09_MiscSmall。 *)
+(* 备注： B 类 Variable 假设位逐位保留；metric 非负 plain 对为永久假设位（M2 墙边界，见正文）。 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* UpReqSLM.v — 签名迁移批 5 波 1：SLM + LogDiffPhase3 机械平移（req 系）     *)
 (*                                                                       *)
@@ -5,7 +14,7 @@
 (* 母本：CW_ConstructiveWorld_219.v                                        *)
 (*   Section StochasticLanguageModel  L2020-2932（Id 系 31 件）              *)
 (*   Section LogDiffPhase3            L26405-26685（Id 系 15 件）              *)
-(* 上游：CW219 基座 + UpReqAlgebra（req_minus 引擎/消去簇）+ UpReqDist        *)
+(* 上游：基座 + UpReqAlgebra（req_minus 引擎/消去簇）+ UpReqDist        *)
 (*   （reqd_le_of_req/reqd_opp_zero）+ UpReqAlignRestB（rls_*/rls_kernel_norm_gen *)
 (*   /req_exp_neg_ext_local——清单 (a) 消费面）。                              *)
 (* 纪律：纯构造性（G1 禁词扫描全零；零经典逻辑；纯 term-mode，零 setoid-rewrite 依赖）；*)
@@ -15,29 +24,29 @@
 (* --------------------------------------------------------------------- *)
 (* 波 0 共享资产（判据 §0.5；后续波次 Require 本文件复用）：                    *)
 (*   Class ReqNonnegPlain：abs_nonneg_plain（le zero (abs a)）+              *)
-(*     metric_pos_plain（le zero (metric a b)）——plain 非负槽位对。            *)
-(*     【波 0 实证对账】清单判词「Real 层一个 Instance 放电（T2②；种子          *)
-(*     real_abs_nonneg@CW219 L54054 一带）」经读证不成立：L54036 实为           *)
+(*     metric_pos_plain（le zero (metric a b)）——plain 非负假设位对。            *)
+(*     【波 0 实证核对】清单结论「Real 层一个 Instance 消解（T2②；种子          *)
+(*     real_abs_nonneg@L54054 一带）」经读证不成立：L54036 实为           *)
 (*     real_abs_nonneg_req（le zero x -> abs x == x，幂等形），非 plain 非负；    *)
 (*     Real 层仅 eps 形（real_abs_nonneg_le_eps@L39879 / real_metric_pos_eps@    *)
 (*     L33242，Instance 映射 L41189/L41210），plain 形需 |x|>0 / |x|=0 符号判定     *)
-(*     （M2 墙）——故为永久槽位（T2①，RestB Part4 metric_nonneg Variable 同构       *)
-(*     先例），Real 放电挂账（真实种子需 Or 分解形逐 eps 放电机，随 Real 层战役）。  *)
+(*     （M2 墙）——故为永久假设位（T2①，RestB Part4 metric_nonneg Variable 同构       *)
+(*     先例），Real 消解显式假设（真实种子需 Or 分解形逐 eps 消解机，随 Real 层战役）。  *)
 (*   req_le_zero_mult_nonneg：le zero a -> le zero b -> le zero (mult a b)——     *)
 (*     清单判「按需假设位」，实测 le_mult_compat_weak + mult_comm/mult_zero      *)
-(*     字段链 2 行真证——降为定理（槽位省一枚，op_lipschitz_compose 消费时免加位）。  *)
-(*   Class ReqLogPlain：log_le_linear_plain（log 线性界槽）+ log_req_compat_plain    *)
+(*     字段链 2 行真证——降为定理（假设位省一枚，op_lipschitz_compose 消费时免加位）。  *)
+
 (*     （log req 兼容槽）——假设位主道 T2①，批2 gibbs_inequality 同槽家族；清单名      *)
 (*     log_le_zero_slot 以 log_le_linear_plain 强槽统一；log_req_compat_plain 为       *)
 (*     UpReqAlgebra ReqLogBridge log_req_compat 槽同构（L1492，req_log_inv_one_inv     *)
-(*     消费所需），清单判词未列，实测 LogDiff3 下界件必需——逐位对账登记。两槽均         *)
-(*     永久假设位：线性界 plain 收口不可导（M2 墙）；compat 待接口扩展批（UpReqAlgebra   *)
-(*     判词：Real 实例可满足，柯西 log 一致连续）。                                 *)
+(*     消费所需），清单结论未列，实测 LogDiff3 下界件必需——逐位核对登记。两槽均         *)
+(*     永久假设位：线性界 plain 完成不可导（M2 墙）；compat 待接口扩展批（UpReqAlgebra   *)
+
 (*     副道：req_log_one_plus_le_eps（真零槽：log_le_linear_eps 字段直导）；            *)
 (*     req_log_one_plus_ge_eps（消费 log_req_compat_plain + log_le_linear_eps          *)
-(*     字段——inv-log 腿不可绕，eps 字段本身已实例放电）。                               *)
+
 (* --------------------------------------------------------------------- *)
-(* 逐件对账表（清单件 -> 本文件 req 件；行号 = CW219 基座）：                    *)
+(* 逐件核对表（清单件 -> 本文件 req 件；行号 = 基座）：                    *)
 (*  [SLM §3]  17(b)+定义块；7(a) 中 6 件 rls_* 直引消费（ReqListSumTool 全泛化），  *)
 (*    唯 markov_pos 对位 req_markov_pos@RestB L477 闭在 ReqSamplingWorld 节内、      *)
 (*    参数面含 Min-P 域专属槽（min_p/req_le_dec/req_lt_dec/pick_max*），SLM 世界      *)
@@ -65,19 +74,19 @@
 (*   10. list_sum_zero_fn            L2705 -> req_list_sum_zero_fn                  *)
 (*   11. markov_entropy_pointwise_nonneg L2715 -> req_markov_entropy_pointwise_      *)
 (*         nonneg（+1 假设位 log_le_linear_plain 槽；p·(−log p) ≥ 0 经                 *)
-(*         req_le_mult_compat_r 严格位链——清单 req_le_zero_mult_pos_l 判词由           *)
+(*         req_le_mult_compat_r 严格位链——清单 req_le_zero_mult_pos_l 结论由           *)
 (*         Id 证明体直消费覆盖）                                                   *)
 (*   12. markov_entropy_nonneg       L2791 -> req_markov_entropy_nonneg               *)
 (*   13. greedy_kernel_limit         L2819 -> req_greedy_kernel_limit                 *)
-(*         （pick_best_optimal 槽——(c) 桥C1 立项后由 reqArgmin 机放电，                *)
+(*         （pick_best_optimal 槽——(c) 桥C1 立项后由 reqArgmin 机消解，                *)
 (*         RestB L449-451 pick_max_in_vocab 冻结承接同款）                          *)
 (*   14. softmax_pos                 L2856 -> req_softmax_pos（1 行）                 *)
 (*   15. softmax_normalized          L2862 -> req_softmax_normalized（别名件）         *)
 (*   16. softmax_bounded             L2869 -> req_softmax_bounded                    *)
 (*   17. nonoptimal_probability_absolute L2887 -> req_nonoptimal_probability_       *)
 (*         absolute（重复件：Id 证明体独立复刻，非 exact 复用——清单「exact 复用」     *)
-(*         判词按 Id 实际证明体修正，两件语句前提不同）                              *)
-(*   (c) argmin_aux_token_min L2481 / pick_best_optimal L2545 -> 桥C1 挂账注记        *)
+(*         结论按 Id 实际证明体修正，两件语句前提不同）                              *)
+(*   (c) argmin_aux_token_min L2481 / pick_best_optimal L2545 -> 桥C1 显式假设注记        *)
 (*       （文件尾）；(d) InT_head_extend/argmin_aux_token_mem/argmin_aux_token_snd_  *)
 (*       correct/pick_best_in_vocab'/pick_best_in_vocab -> 冻结清单注记（零证明行）。  *)
 (*  [LogDiff3 §6] 13(b) + 2(a) 消费 + 2 eps 副道件：                                *)
@@ -101,15 +110,15 @@
 (*   15. log_one_plus_ge     L26638 -> req_log_one_plus_ge（槽道）+                  *)
 (*                                     req_log_one_plus_ge_eps（副道真证）            *)
 (* --------------------------------------------------------------------- *)
-(* 定义级签名差异台账（诚实桥逐位登记）：                                        *)
+(* 定义级签名差异登记表（诚实桥逐位登记）：                                        *)
 (*   1. minus -> req_minus（δ 透明 plus a (opp b)，UpReqAlgebra L58 同形）——          *)
 (*      LogDiff3 全区减法位。                                                     *)
 (*   2. log 前提化：setoid log 带 lt zero 前提（接口 L40570 区）；slm_markov_entropy  *)
 (*      定义级内联 markov_pos prefix w 前提位（清单「log 仅经 markov_entropy 消费——     *)
-(*      前提位 provable」判词实证成立）。                                          *)
+(*      前提位 provable」结论实证成立）。                                          *)
 (*   3. list_sum 载体 = rsum@RestB L126（逐字同构 Fixpoint，RestB MinP 区同款口径）。   *)
 (*   4. Id 环引理（plus_swap_mid/minus_plus_cancel/opp_minus/double_neg/               *)
-(*      log_inv_one_inv/mult_minus_distr_l 等在 CW219 环节属 Id 世界）不跨接口消费——      *)
+(*      log_inv_one_inv/mult_minus_distr_l 等在 环节属 Id 世界）不跨接口消费——      *)
 (*      全部换 UpReqAlgebra req 真证件（req_plus_swap_mid/req_minus_plus_cancel/         *)
 (*      req_opp_minus/req_double_neg/req_log_inv_one_inv/req_mult_minus_distr_l），      *)
 (*      Id->req 差异真证非抄写。                                                    *)
@@ -127,19 +136,19 @@ Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
 (* ===================================================================== *)
-(* Part 0：波 0 共享资产（判据 §0.5 + log 槽双车道裁定）                         *)
+
 (* ===================================================================== *)
 
-(* plain 非负槽位组（T2①；Real 放电挂账见头注波 0 对账） *)
+(* plain 非负假设位组（T2①；Real 消解显式假设见头注波 0 核对） *)
 Class ReqNonnegPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   abs_nonneg_plain : forall a : R, le zero (abs a);
   metric_pos_plain : forall a b : R, le zero (metric a b)
 }.
 
-(* log 族槽位组（T2①；批2 gibbs_inequality 同槽家族；波 0 裁定主道）：
+(* log 族假设位组（T2①；批2 gibbs_inequality 同槽家族；波 0 裁定主道）：
    log_le_linear_plain（Id log_le_linear 字段逐位镜像）+ log_req_compat_plain
    （UpReqAlgebra ReqLogBridge log_req_compat 槽同构 L1492——req_log_inv_one_inv
-   消费所需；清单判词未列此槽，实测 LogDiff3 下界件必需，逐位对账登记） *)
+   消费所需；清单结论未列此槽，实测 LogDiff3 下界件必需，逐位核对登记） *)
 Class ReqLogPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   log_le_linear_plain : forall (x : R) (Hx : lt zero x),
     le (log x Hx) (req_minus x one);
@@ -147,7 +156,7 @@ Class ReqLogPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
     req x y -> req (log x Hx) (log y Hy)
 }.
 
-(* 清单「按需假设位」实测可字段链真证——定理化（槽位省一枚） *)
+(* 清单「按需假设位」实测可字段链真证——定理化（假设位省一枚） *)
 Section ReqWaveZero.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
@@ -231,7 +240,7 @@ Proof.
 Qed.
 
 (* ---- 辅件：list_sum_le_on_list 的 InT 限制形（对位 rls_le@RestB L210 前件形  *)
-(*        差异——见头注对账；6 行归纳真证，rls_le 本体不重证） ------------------- *)
+(*        差异——见头注核对；6 行归纳真证，rls_le 本体不重证） ------------------- *)
 
 Lemma req_list_sum_le_on_list : forall (l : list Token) (f g : Token -> R),
   (forall w : Token, InT w l -> le (f w) (g w)) ->
@@ -294,7 +303,7 @@ Proof.
 Qed.
 
 (* ---- (a) 让步件：markov_pos（L2184；对位 req_markov_pos@RestB L477 闭在      *)
-(*        Min-P 域节内不可实例化——3 行同语句真证，见头注对账） ------------------ *)
+(*        Min-P 域节内不可实例化——3 行同语句真证，见头注核对） ------------------ *)
 
 Lemma req_markov_pos_slm : forall prefix w, lt zero (slm_markov_kernel prefix w).
 Proof.
@@ -493,12 +502,12 @@ Proof.
   exact (le_id_r _ _ _ (req_markov_normalized prefix) Hle).
 Qed.
 
-(* ---- log 线性界槽（T2①；仅熵点态件消费，节闭后不扩散） ---------------------- *)
+
 
 Context {RLL : ReqLogPlain R}.
 
 (* ---- 定义块续：markov_entropy（log 前提位 markov_pos 内联——定义级签名差异     *)
-(*        台账 2；清单「前提位 provable」判词实证） --------------------------- *)
+(*        登记表 2；清单「前提位 provable」结论实证） --------------------------- *)
 
 Definition slm_markov_entropy (prefix : list Token) : R :=
   rsum Token (fun w => mult (slm_markov_kernel prefix w)
@@ -590,7 +599,7 @@ Proof.
 Qed.
 
 (* ---- 贪心域（argmin/list Id 机器冻结承接；RestB L449-451 pick_max 同款）：      *)
-(*      两顶层事实以槽承接，(c) 桥C1 立项后由 reqArgmin 机放电 ------------------- *)
+(*      两顶层事实以槽承接，(c) 桥C1 立项后由 reqArgmin 机消解 ------------------- *)
 
 Section ReqSLMGreedy.
 
@@ -693,8 +702,8 @@ End ReqSLM.
 
 (* ===================================================================== *)
 (* Part 2：ReqLogDiffPhase3 尾节（清单 §6：13(b) + 2(a) 消费 + 2 eps 副道件）     *)
-(*   母本 CW219 L26405-26685。minus -> req_minus（δ 透明）；log 前提化；          *)
-(*   Id 环引理全换 UpReqAlgebra req 真证件（头注台账 4）。                        *)
+(*   母本 L26405-26685。minus -> req_minus（δ 透明）；log 前提化；          *)
+(*   Id 环引理全换 UpReqAlgebra req 真证件（头注登记表 4）。                        *)
 (* ===================================================================== *)
 Section ReqLogDiff3.
 
@@ -723,7 +732,7 @@ Proof.
 Qed.
 
 (* ---- 件 3：set_eq_le（L26435；1 行消费 reqd_le_of_req@UpReqDist——eq->le       *)
-(*        方向接口可导，清单判「非收口类」） ----------------------------------- *)
+(*        方向接口可导，清单判「非完成类」） ----------------------------------- *)
 
 Lemma req_set_eq_le : forall a b : R, req a b -> le a b.
 Proof.
@@ -953,7 +962,7 @@ Proof.
 Qed.
 
 (* ---- 件 15：log_one_plus_ge（L26638，(b)+假设位主道；链 = 件 13 + 件 14 +      *)
-(*        log 槽（inv s 位）+ req_log_inv_one_inv + double_neg） ---------------- *)
+
 
 Lemma req_log_one_plus_ge : forall (t : R), le zero t ->
   forall (Hs : lt zero (plus one t)),
@@ -986,7 +995,7 @@ Qed.
 
 (* ---- 件 15 副道：Bishop 逐 eta 形（零槽真证；Hoc 的 opp 链两腿换装 ------------ *)
 (*        （req_opp_plus/req_opp_minus/Hio 对偶），末端 req_minus_plus_cancel      *)
-(*        折叠。全链消费 log_le_linear_eps，槽位零依赖。） ---------------------- *)
+(*        折叠。全链消费 log_le_linear_eps，假设位零依赖。） ---------------------- *)
 
 Lemma req_log_one_plus_ge_eps : forall (t : R), le zero t ->
   forall (Hs : lt zero (plus one t)) (eta : R), lt zero eta ->
@@ -1024,7 +1033,7 @@ Proof.
                  (req_refl (opp eta))).
       + apply (req_plus_compat (plus one (opp invs)) (mult t invs) (opp eta) (opp eta)
                                Hone_minus (req_refl (opp eta))). }
-  (* 腿 B：opp (log invs) == log s（req_log_inv_one_inv + double_neg） *)
+  
   assert (Ho2 : req (opp (log invs (inv_pos_pos s Hs))) (log s Hs)).
   { exact (req_trans _ _ _
              (req_opp_compat (log invs (inv_pos_pos s Hs)) (opp (log s Hs))
@@ -1060,24 +1069,24 @@ Qed.
 End ReqLogDiff3.
 
 (* ===================================================================== *)
-(* Part 3：ReqSLMGreedy 两槽放电（批5扫尾席 2026-09-09；桥C1 挂账核销）       *)
-(*   消费：G09_MiscSmall（波4 已交付稳定，本席新增 Require）——           *)
+(* Part 3：ReqSLMGreedy 两槽消解（批5扫尾席 2026-09-09；桥C1 显式假设已证明）       *)
+
 (*   req_pick_best_token / req_pick_best_token_optimal 闭包参数面 =         *)
 (*   {R}{RIS}{DO} Token vocab total_loss default_token prefix w            *)
 (*   （Check 探针在案）。                                                   *)
-(*   槽面对账：ReqSLMGreedy 两槽面 =                                       *)
+(*   槽面核对：ReqSLMGreedy 两槽面 =                                       *)
 (*     optimal  : forall prefix w, InT w vocab ->                          *)
 (*                le (total_loss (prefix++[pick prefix]))                  *)
 (*                   (total_loss (prefix++[w]))                            *)
 (*     in_vocab : forall prefix, InT (pick prefix) vocab                   *)
-(*   optimal 面 = req_pick_best_token_optimal 语句 1:1 对齐——直接放电；     *)
-(*   in_vocab 面 C1 机未交付（(d) 冻结 list 机域），本节 req 侧归纳自证     *)
+(*   optimal 面 = req_pick_best_token_optimal 语句 1:1 对齐——直接消解；     *)
+(*   in_vocab 面 C1 机未结果（(d) 冻结 list 机域），本节 req 侧归纳自证     *)
 (*   （slm_discharge_aux_acc——req_list_sum_le_on_list「辅件自证非重证」    *)
-(*   先例同款，不触 (d) 禁区本体）。两槽就此全放电，消费面三件升级          *)
+(*   先例同款，不触 (d) 禁区本体）。两槽就此全消解，消费面三件升级          *)
 (*   无槽定理（_noslot）。                                                 *)
 (*   诚实签名差异：无槽件闭包签名增 DO : reqDecidableOrder R RIS 与        *)
 (*   default_token : Token 两位（C1 机同款面；DO 为永久假设类参数位——      *)
-(*   E225 LPO 判词随桥：全库零 Instance 与 Id 同构，Class 槽位非禁词面，    *)
+(*   E225 LPO 结论随桥：全库零 Instance 与 Id 同构，Class 假设位非禁词面，    *)
 (*   End 时入闭包签名，Print Assumptions Closed）。                        *)
 (* ===================================================================== *)
 Section ReqSLMGreedyDischarge.
@@ -1108,7 +1117,7 @@ Definition pos_d (prefix : list Token) (w : Token) : lt zero (k_d prefix w) :=
 Definition slm_discharge_pick_in (prefix : list Token) : Token :=
   req_pick_best_token Token vocab total_loss default_token prefix.
 
-(* ---- 槽 in_vocab 放电前置：argmin 遍历成员归纳（req 侧自证） ---------- *)
+(* ---- 槽 in_vocab 消解前置：argmin 遍历成员归纳（req 侧自证） ---------- *)
 (*   不变式：遍历 l 后 fst 结果 ∈ (btk::l 的任一超集 super)。归纳 +        *)
 (*   rord_le_dec 双支 + InT 反转（inversion as 三名显式——OrderArgmin      *)
 (*   卡「名不足绑首参被 subst 吞」坑对位）。                                *)
@@ -1138,7 +1147,7 @@ Proof.
       intros w Hw. apply Hsuper. exact (Hmem2 w Hw).
 Qed.
 
-(* ---- 槽 in_vocab 放电（pick_best_in_vocab L2575 对位） ----------------- *)
+(* ---- 槽 in_vocab 消解（pick_best_in_vocab L2575 对位） ----------------- *)
 
 Lemma slm_discharge_pick_in_vocab :
   forall prefix : list Token, InT (slm_discharge_pick_in prefix) vocab.
@@ -1152,7 +1161,7 @@ Proof.
              (fun w Hw => Hw)).
 Qed.
 
-(* ---- 槽 optimal 放电（pick_best_optimal L2545 对位；C1 机 1:1 消费） --- *)
+(* ---- 槽 optimal 消解（pick_best_optimal L2545 对位；C1 机 1:1 消费） --- *)
 
 Lemma slm_discharge_pick_optimal :
   forall (prefix : list Token) (w : Token),
@@ -1165,7 +1174,7 @@ Proof.
           prefix w Hw).
 Qed.
 
-(* ---- 无槽件 1：req_greedy_kernel_limit 升级（L2819 消费位核销） -------- *)
+(* ---- 无槽件 1：req_greedy_kernel_limit 升级（L2819 消费位已证明） -------- *)
 
 Theorem req_greedy_kernel_limit_noslot :
   forall (prefix : list Token) (w : Token),
@@ -1273,7 +1282,7 @@ Qed.
 End ReqSLMGreedyDischarge.
 
 (* ===================================================================== *)
-(* 文件尾：冻结清单与桥挂账注记（零证明行，规划书 §9.2 (d) 口径）                  *)
+(* 文件尾：冻结清单与桥显式假设注记（零证明行，规划书 §9.2 (d) 口径）                  *)
 (* --------------------------------------------------------------------- *)
 (* (d) 冻结（nat/list Id 机器域，双层并行；RestB 头注冻结承接口径）：             *)
 (*   SLM 区 5 件：InT_head_extend L2451 / argmin_aux_token_mem L2461 /            *)
@@ -1283,13 +1292,13 @@ End ReqSLMGreedyDischarge.
 (*   消费侧承接：本文件 req_temperature_zero_exponential_bound /                   *)
 (*     req_nonoptimal_probability_absolute 经 pick_best_in_vocab 槽消费其顶层事实；  *)
 (*     跨接口复用路线 = 规划书 §3.4（(d) 机器原样 Require、结论 req 组装）。         *)
-(* (c) 桥C1 挂账（reqDecidableOrder+reqArgmin，~200 行，波 4 立项）：              *)
+(* (c) 桥C1 显式假设（reqDecidableOrder+reqArgmin，~200 行，波 4 立项）：              *)
 (*   SLM 区 2 件：argmin_aux_token_min L2481 / pick_best_optimal L2545——            *)
-(*     语句纯 le 可 req 1:1；证明机 = ord_le_dec 归纳（E225 判词：DecidableOrder      *)
+(*     语句纯 le 可 req 1:1；证明机 = ord_le_dec 归纳（E225 结论：DecidableOrder      *)
 (*     = 整体三分律 = LPO 等价、全库零 Instance，req 侧永久假设类与 Id 同构）。        *)
-(*     本文件 pick_best_optimal 槽随桥放电（req_greedy_kernel_limit 消费位）。       *)
-(*     ——批5扫尾席 2026-09-09 核销：波4 G09_MiscSmall 已交付，Part 3 两槽        *)
-(*     放电（optimal = req_pick_best_token_optimal 1:1 消费；in_vocab = req 侧      *)
+(*     本文件 pick_best_optimal 槽随桥消解（req_greedy_kernel_limit 消费位）。       *)
+(*     ——批5扫尾席 2026-09-09 已证明：波4 G09_MiscSmall 已结果，Part 3 两槽        *)
+(*     消解（optimal = req_pick_best_token_optimal 1:1 消费；in_vocab = req 侧      *)
 (*     归纳自证）+ 消费面三件升级 _noslot 无槽定理，见 Part 3。原 ReqSLMGreedy      *)
-(*     槽位节保留为波 1 终版历史（终版稳定性纪律），消费面以 Part 3 无槽件为准。      *)
+(*     假设位节保留为波 1 终版历史（终版稳定性纪律），消费面以 Part 3 无槽件为准。      *)
 (* ===================================================================== *)

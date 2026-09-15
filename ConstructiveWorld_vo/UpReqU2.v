@@ -1,32 +1,39 @@
+(* ============================================================ *)
+(* UpReqU2.v *)
+(* *)
+(* 目的： U2 升级面：log_req_compat 桥与对齐族 witness 扩充。 *)
+(* 主件： log_req_compat_real / u2_rlhf_optimal_seed_discharge 与 w2_* 求和定律族。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqAlign、UpReqAlign2、UpReqAlign3、UpSigMigrate2。 *)
+(* 备注： 对数接口兼容性经具体实数实例落定；witness 外延为构造核。 *)
+(* ============================================================ *)
+
 (* UpReqU2.v — 签名迁移批 3 U2 机器席：ReqLogBridge 扩展 + req_u2_kl_arg2_ext + U2 主体 7 件 req 化
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
-     （批 2 清单 U2FixedPoint 区：CW219 Section 23281–23791 共 10 件；
-       2 件辅件 req_u2_nonneg_sum_zero / req_u2_minus_minus 已在 UpReqDist.v 交付，
-       本文件交付保底 2 件 + 主体 7 件，10 − 2 − 1 = 7 对账闭合。）
+     （批 2 清单 U2FixedPoint 区：Section 23281–23791 共 10 件；
+       2 件辅件 req_u2_nonneg_sum_zero / req_u2_minus_minus 已在 UpReqDist.v 结果，
+       本文件结果保底 2 件 + 主体 7 件，10 − 2 − 1 = 7 核对闭合。）
    上游（Require 按依赖序，全部消费不重建）：
      CW_ConstructiveWorld_219.v（基座，含 setoid 接口与 RealEnhancedReal 具体实例）
      UpReqAlgebra.v（批 1 代数银行 + ReqLogBridge 节）+ UpReqDist.v（批 2，req_gibbs_equality 等）
      + UpReqAlign.v / UpReqAlign2.v（批 3/3b，req2 定义簇）+ UpReqAlign3.v（批 3c，r2_/w_ 机器）
      + UpSigMigrate2.v（RLHF req 机器上游）。
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
-   Set 层语句（req/lt/le/Or/And 均为 CW219 自定义 Set 值连词，零 Prop 泄露）。
+   Set 层语句（req/lt/le/Or/And 均为 自定义 Set 值连词，零 Prop 泄露）。
    ----------------------------------------------------------------
-   本文件交付：
+   本文件结果：
    [保底 1] log_req_compat —— setoid log 兼容场，文件级成品引理（ReqLogBridge 扩展）。
      语句形态与 UpReqAlign3.v Section 内同名自持桥假设位逐位同形
      （forall x y Hx Hy, req x y -> req (log x Hx) (log y Hy)），
      但该假设位节闭后非常量不可跨文件消费，故以**显式单参桥**（log 单调 le 桥）
      重建为文件级引理：req 兼容场 ⟸ log 单调 le 桥（Real 层种子 real_log_le_mono
      同形；无条件版不可得——接口仅备逐 eps log_le_linear_eps，序无消去，诚实边界）。
-   [保底 1a] log_req_witness_compat —— log 见证无关性（同点双正性见证换装），
      log_req_compat 的 x ≡ x 特例；req_gibbs_equality 的 log_inv_one_inv 槽
      见证无关化即消费此件（Algebra 版 req_log_inv_one_inv 结论钉死 inv_pos_pos 见证）。
-   [保底 1b] log_req_compat_real —— 具体实例放电（T2 模板 ② 形态）：
-     以 CW219 L112104 real_log_le_mono 直喂抽象桥，Real 层无条件闭合。
+   [保底 1b] log_req_compat_real —— 具体实例消解（T2 模板 ② 形态）：
+     以 L112104 real_log_le_mono 显式应用抽象桥，Real 层无条件闭合。
    [保底 2] req_u2_kl_arg2_ext —— 函数外延性敏感件 (b) 化改述（规划书 §3-(d).3 规则）：
      逐点 req 前提版 (forall s, req (q s) (q' s)) -> req (KL p q) (KL p q')。
      诚实签名变化：log 前提化（Hp/Hq 显式携带）+ Hq' 逐点正性由 req_lt_compat
-     从 Hq 运输导出（Id 版无此需求）。语义无漂移，不冻结。
    [主体 7 件] req_u2_align_objective_ext / req_u2_pi_next_pi_star_fixed /
      req_u2_no_progress_fixed_point / req_u2_fixed_point_unique /
      req_u2_no_progress_optimal / req_u2_optimal_no_progress /
@@ -35,38 +42,35 @@
      Id pi_next/pi_star 的 req 对位 = NPX/PSTR（req2_pi_next/pi_star）；
      Id relative_entropy 的 req 对位 = KLE（req2_rel_ent，与 UpReqDist.req_relative_entropy
      δ 透明同形）。
-   [保底 3] u2_rlhf_optimal_seed_discharge —— rlhf_optimal_seed 槽 FEP 装配放电
-     （Id rlhf_optimal @19049 对位；沿 UpSigMigrate2.a_rlhf_optimal 放电手法：
+   [保底 3] u2_rlhf_optimal_seed_discharge —— rlhf_optimal_seed 槽 FEP 装配消解
+     （Id rlhf_optimal @19049 对位；沿 UpSigMigrate2.a_rlhf_optimal 消解手法：
      FEP 分解 ⟹ F(pistar) ≤ F(p) ⟹ opp 保序取负。分解机 = UpReqAlign3
-     r2_F_align_kl_diff（.vo 探针实证）：F(p) == β·KL(p‖pistar) − β·log ZAL，
      对 p := pistar 复用之 + w_rel_ent_self_zero（KL(pistar‖pistar)==0）得
-     F(p) == F(pistar) + β·KL(p‖pistar)；KL ≥ 0 = req2_gibbs_inequality 槽（台账 5）
-     + β>0 保序；收口 = le_id_l/r 换装 + opp_le_compat）。
+     F(p) == F(pistar) + β·KL(p‖pistar)；KL ≥ 0 = req2_gibbs_inequality 槽（登记表 5）
+     + β>0 保序；完成 = le_id_l/r 换装 + opp_le_compat）。
      节内 rlhf_optimal_seed 槽随之降为消费件（Hypothesis → Definition）。
    ----------------------------------------------------------------
-   诚实桥假设位台账（逐位保留，不放大主张；槽 = 节参数，非公理，
+   诚实桥假设位登记表（逐位保留，不放大主张；槽 = 节参数，非公理，
    唯一性件 Print Assumptions 因此保持 Closed under the global context）：
    1. sum_zero_nonneg —— SumOver 类 sum_zero_nonneg 字段的 req 槽
      （req_gibbs_equality 出口参数位，UpReqDist ReqFEP 同款假设位）。
    2. log_le_linear —— log x ≤ x−1 的 plain-le 桥（setoid 接口仅备逐 eps 形式，
      深水区注 = UpReqDist 文件头同款；req_gibbs_inequality/equality 出口参数位）。
-   3. log_eq_linear —— log 等号条件桥（req_gibbs_equality 出口参数位；
-     Real 层需强三分/LPO，构造性不可证，诚实边界 = CW219 L41204 注）。
+     Real 层需强三分/LPO，构造性不可证，诚实边界 = L41204 注）。
    4. log_req_compat / log_inv_exp_neg_req —— ReqLogBridge 同位桥槽
-     （本文件保底件给出单参桥归约与具体实例放电）。
+     （本文件保底件给出单参桥归约与具体实例消解）。
    5. req2_gibbs_inequality —— KL ≥ 0 桥槽（UpReqAlign3 同名假设位同位；
      KL ≥ 0 的 plain-le 形态不可由接口逐 eps 字段导出）。
-   6. req_backward_kl_step_le —— 【已放电降级，非槽】向后 KL 单步 ≤ 桥
+   6. req_backward_kl_step_le —— 【已消解降级，非槽】向后 KL 单步 ≤ 桥
      （Id policy_iter_backward_kl_step_le @22790 同位）。UpReqAlign3 增量
-     已交付（req2_backward_kl_step 旗舰三点恒等式 + r2_backward_kl_step_le
-     le 形同位件，20260909 收官席落盘；本席 .vo 探针实证在载）——成品语句
-     与槽语句逐位同形，槽位改为消费件（@ 全显节参数一次喂定，喂入本节
+     已结果（req2_backward_kl_step 旗舰三点恒等式 + r2_backward_kl_step_le
+     与槽语句逐位同形，假设位改为消费件（@ 全显节参数一次喂定，喂入本节
      req2_gibbs_inequality 槽与 ZAL_pos 证人），U2c 消费点零改动，
      Print Assumptions 保持 Closed。
-   7. rlhf_optimal_seed —— 【已放电降级，非槽】原 rlhf 最优性种子位现为消费件
+   7. rlhf_optimal_seed —— 【已消解降级，非槽】原 rlhf 最优性种子位现为消费件
      （= u2_rlhf_optimal_seed_discharge 节参数一次喂定；FEP 装配吃
-     r2_F_align_kl_diff + w_rel_ent_self_zero + req2_gibbs_inequality（台账 5），
-     沿 UpSigMigrate2.a_rlhf_optimal 放电手法；U2a/U2e 消费链
+     r2_F_align_kl_diff + w_rel_ent_self_zero + req2_gibbs_inequality（登记表 5），
+     沿 UpSigMigrate2.a_rlhf_optimal 消解手法；U2a/U2e 消费链
      Print Assumptions 保持 Closed）。
    ---------------------------------------------------------------- *)
 
@@ -84,9 +88,8 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 
 (* 单参桥版：req 兼容场 ⟸ log 单调 le 桥。
-   路线：req x y 经 lt_le_iff 右支升 le，双支 le_antisym 收口。
-   语义：把「log 兼容场」归约为「log 单调 le」单槽——与 Real 层种子
-   real_log_le_mono 同形，可被 T2 模板 ② 直喂放电（见 log_req_compat_real）。 *)
+   路线：req x y 经 lt_le_iff 右支升 le，双支 le_antisym 完成。
+   real_log_le_mono 同形，可被 T2 模板 ② 显式应用消解（见 log_req_compat_real）。 *)
 Lemma log_req_compat : forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R),
   (forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     le x y -> le (log x Hx) (log y Hy)) ->
@@ -113,8 +116,8 @@ Proof.
   exact (Hcompat x x Hx Hx' (req_refl x)).
 Qed.
 
-(* 保底 1b：具体实例放电（T2 模板 ②）——Real 层无条件闭合。
-   种子：CW219 real_log_le_mono（L112104）直喂抽象桥单参位。 *)
+(* 保底 1b：具体实例消解（T2 模板 ②）——Real 层无条件闭合。
+   种子：real_log_le_mono（L112104）显式应用抽象桥单参位。 *)
 Lemma log_req_compat_real : forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
   req x y -> req (log x Hx) (log y Hy).
 Proof.
@@ -159,16 +162,16 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 保底 3：u2_rlhf_optimal_seed_discharge —— rlhf_optimal_seed 槽 FEP 装配放电  *)
+(* 保底 3：u2_rlhf_optimal_seed_discharge —— rlhf_optimal_seed 槽 FEP 装配消解  *)
 (*（Id rlhf_optimal @19049 的 req 对位；沿 UpSigMigrate2.a_rlhf_optimal         *)
-(*  放电手法：FEP 分解 ⟹ F(pistar) ≤ F(p) ⟹ opp 保序取负。                          *)
-(*  分解机 = UpReqAlign3.r2_F_align_kl_diff（.vo 探针实证，本席只 Require）：    *)
-(*    F(u) == β·KL(u‖pistar) − β·log ZAL（D := beta、Z := ZAL）；                   *)
+(*  消解手法：FEP 分解 ⟹ F(pistar) ≤ F(p) ⟹ opp 保序取负。                          *)
+
+
 (*  对 u := pistar 复用该分解，KL(pistar‖pistar) == 0（w_rel_ent_self_zero）消去首项得      *)
-(*    F(pistar) == −β·log ZAL ⟹ F(u) == F(pistar) + β·KL(u‖pistar)；                       *)
-(*  KL ≥ 0 = req2_gibbs_inequality 槽（台账 5，本件不改其挂账）+ β>0 保序；     *)
-(*  收口 = le_id_l/r 换装 + req_minus δ 展开（plus·opp）+ opp_le_compat。       *)
-(*  槽位降级：节内 rlhf_optimal_seed 由 Hypothesis 改 Definition 消费本件       *)
+
+(*  KL ≥ 0 = req2_gibbs_inequality 槽（登记表 5，本件不改其显式假设）+ β>0 保序；     *)
+(*  完成 = le_id_l/r 换装 + req_minus δ 展开（plus·opp）+ opp_le_compat。       *)
+(*  假设位降级：节内 rlhf_optimal_seed 由 Hypothesis 改 Definition 消费本件       *)
 (*  （节参数一次喂定，零重证）；U2a/U2e 消费链 Print Assumptions 保持 Closed。   *)
 (* ============================================================ *)
 Lemma u2_rlhf_optimal_seed_discharge :
@@ -209,7 +212,7 @@ Proof.
                              PSTR PSTR_pos).
   set (KLp := @req2_rel_ent R RIS S sumf p PSTR Hp PSTR_pos).
   set (KLself := @req2_rel_ent R RIS S sumf PSTR PSTR PSTR_pos PSTR_pos).
-  (* 1. FEP 分解（r2_F_align_kl_diff）：F(p) == β·KL(p‖pistar) − β·log ZAL *)
+  
   assert (HdecP : req FAP (req_minus (mult beta KLp) LOGZ))
     by exact (r2_F_align_kl_diff S sumf Hext Hadd Hlin Hlog Hinv
                                  reward beta beta_pos pi_ref pi_ref_pos ZAL_pos
@@ -245,7 +248,7 @@ Proof.
     by exact (r2_le_mult_nonneg beta KLp
                                 (lt_le_iff zero beta (inl beta_pos))
                                 (Hgibbs p PSTR Hp PSTR_pos)).
-  (* 5. F(pistar) ≤ F(pistar) + β·KL == F(p)（le_plus_compat 保左 + 换装收口） *)
+  (* 5. F(pistar) ≤ F(pistar) + β·KL == F(p)（le_plus_compat 保左 + 换装完成） *)
   assert (Hfin : le FAPI (plus FAPI (mult beta KLp)))
     by exact (le_id_l FAPI (plus FAPI zero) (plus FAPI (mult beta KLp))
                       (req_sym (plus FAPI zero) FAPI (plus_zero FAPI))
@@ -303,7 +306,7 @@ Hypothesis sum_zero_nonneg :
   forall f : S -> R,
     (forall s : S, le zero (f s)) -> req (sumf f) zero -> forall s : S, req (f s) zero.
 
-(* ---- ReqLogBridge 同位桥槽（保底件给出归约与放电） ---- *)
+(* ---- ReqLogBridge 同位桥槽（保底件给出归约与消解） ---- *)
 Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -356,10 +359,9 @@ Definition npx_pos (pi_t : S -> R) (Hpi_t : pos3 pi_t) : pos3 (NPX pi_t Hpi_t) :
 Hypothesis req2_gibbs_inequality :
   forall (p q : S -> R) (Hp : pos3 p) (Hq : pos3 q),
     le zero (KLE p q Hp Hq).
-(* ---- req_backward_kl_step_le（原槽位 6，已放电降级为消费件——非假设位） ----
-   UpReqAlign3 增量交付核销：req2_backward_kl_step 旗舰 + r2_backward_kl_step_le
+(* ---- req_backward_kl_step_le（原假设位 6，已消解降级为消费件——非假设位） ----
+   UpReqAlign3 增量结果已证明：req2_backward_kl_step 旗舰 + r2_backward_kl_step_le
    （le 形同位件，Id policy_iter_backward_kl_step_le @22790 同位）已落
-   UpReqAlign3.vo（本席 .vo 探针实证）；成品语句与槽语句逐位同形
    （出节参面实测：pi_ref_norm / eta_le_one 未被成品消费被剪除；
    本节 req2_gibbs_inequality 槽与 ZAL_pos 证人在参面），@ 全显节参数
    一次喂定，零重证、零适配；U2c 消费点零改动。 *)
@@ -373,11 +375,11 @@ Definition req_backward_kl_step_le :
     log_req_compat log_inv_exp_neg_req
     reward beta beta_pos pi_ref pi_ref_pos eta
     eta_pos ZAL_pos req2_gibbs_inequality.
-(* ---- rlhf_optimal_seed（原槽位，已放电降级为消费件——非假设位） ----
-   FEP 装配放电 = u2_rlhf_optimal_seed_discharge（文件级保底 3）：
+(* ---- rlhf_optimal_seed（原假设位，已消解降级为消费件——非假设位） ----
+   FEP 装配消解 = u2_rlhf_optimal_seed_discharge（文件级保底 3）：
    r2_F_align_kl_diff 分解 + w_rel_ent_self_zero + req2_gibbs_inequality 槽
    + β>0 保序 + opp 保序取负（a_rlhf_optimal 手法）。节参数一次喂定，零重证；
-   台账 7 同步改写；U2a/U2e 消费链 Print Assumptions 保持 Closed。 *)
+   登记表 7 同步改写；U2a/U2e 消费链 Print Assumptions 保持 Closed。 *)
 Definition rlhf_optimal_seed :
   forall (p : S -> R) (Hn : nrm p) (Hp : pos3 p),
     le (JJ p Hp) (JJ PSTR PSTR_pos) :=
@@ -387,8 +389,8 @@ Definition rlhf_optimal_seed :
                                  req2_gibbs_inequality.
 
 (* ---- 见证换装件（正性见证是数据：log 见证进值，FA/JJ 对见证 req 外延。
-   消费场景：U2a 中 rlhf_optimal_seed 槽位钉死 PSTR_pos 见证，而夹逼另一半
-   在前提见证 ps_pos 世界——经本件换装后收口） ---- *)
+   消费场景：U2a 中 rlhf_optimal_seed 假设位钉死 PSTR_pos 见证，而夹逼另一半
+   在前提见证 ps_pos 世界——经本件换装后完成） ---- *)
 Lemma r2u_FA_witness_ext :
   forall (p : S -> R) (Hp Hq : pos3 p), req (FA p Hp) (FA p Hq).
 Proof.
@@ -471,9 +473,9 @@ Proof.
 Qed.
 
 (* req_gibbs_equality 出口组装：sum_zero_nonneg + log 桥槽一次喂定。
-   log_inv_one_inv 槽位以 req_log_inv_one_inv（Algebra ReqLogBridge 成品）
+   log_inv_one_inv 假设位以 req_log_inv_one_inv（Algebra ReqLogBridge 成品）
    + 保底 1a 见证无关化换装（Algebra 版结论钉死 inv_pos_pos 见证，
-   槽位要求任意 Hi——经 log_req_witness_compat 换装后对齐）。 *)
+   假设位要求任意 Hi——经 log_req_witness_compat 换装后对齐）。 *)
 Lemma w2_gibbs_eq :
   forall (p q : S -> R) (Hp : pos3 p) (Hq : pos3 q),
     nrm p -> nrm q -> req (KLE p q Hp Hq) zero ->
@@ -544,8 +546,8 @@ Proof.
   set (K2 := KLE PSTR Np ps_pos (npx_pos PSTR ps_pos)).
   assert (HNp_norm : nrm Np) by exact (w2_pi_next_normalized PSTR ps_pos).
   (* 1. 夹逼：J(NPX pi_star) <= J(pi_star) 且 J(pi_star) <= J(NPX pi_star)
-     （见证流：消费侧全程前提见证 ps_pos；rlhf_optimal_seed 槽位钉死
-       PSTR_pos——经 r2u_JJ_witness_ext 换装到 ps_pos 世界后收口） *)
+     （见证流：消费侧全程前提见证 ps_pos；rlhf_optimal_seed 假设位钉死
+       PSTR_pos——经 r2u_JJ_witness_ext 换装到 ps_pos 世界后完成） *)
   assert (Hopt : le (JJ Np (npx_pos PSTR ps_pos)) (JJ PSTR PSTR_pos))
     by exact (rlhf_optimal_seed Np HNp_norm (npx_pos PSTR ps_pos)).
   assert (HoptR : le (JJ Np (npx_pos PSTR ps_pos)) (JJ PSTR ps_pos))
@@ -729,7 +731,7 @@ Qed.
 (* ============================================================ *)
 (* U2c：不动点唯一 => pi_star（Id u2_fixed_point_unique @23576 同位）           *)
 (*   证明：Hfix 同余换形 KLE(pi_star‖NPX) == A、KLE(pi_t‖NPX) == 0；            *)
-(*     向后 KL 单步 <=（消费件 req_backward_kl_step_le，原槽 6 已放电）         *)
+(*     向后 KL 单步 <=（消费件 req_backward_kl_step_le，原槽 6 已消解）         *)
 (*     化简为 A <= (1−eta)·A；                                                   *)
 (*     Hma：(1−eta)·A == A − eta·A，故 A <= A − eta·A；u2_minus_minus 与        *)
 (*     req_le_minus_nonneg 得 0 <= −eta·A，opp 保序两次反号得 eta·A <= 0；      *)

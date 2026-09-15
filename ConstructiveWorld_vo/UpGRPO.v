@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpGRPO.v *)
+(* *)
+(* 目的： GRPO 的 NoDup 均匀化与标准化优势二阶矩（Real 层）。 *)
+(* 主件： list_sum_g 线性族与 InT 搬运族；proj_sigma 标准化优势二阶矩。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： NoDup 前提不可去：双副本枚举给质量 2/G（反例仅注释陈述）；纯构造性、零公理面、全 Qed。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpGRPO.v —— 二轮快赢批·B+C：GRPO NoDup 均匀化 + 标准化优势二阶矩    *)
 (*                                                                *)
 (* B（抽象 R 层）：计数机器（count_g/removeT_g，grp_eq_dec 驱动）       *)
@@ -461,7 +470,7 @@ Qed.
 (* σ² == Var：由 real_sqrt_exists 的见证直接给出（proj_sigma_sq），
    供下游除法吸收使用（inv_pos_mult_distr + real_inv_pos_correct）。 *)
 
-(* C 交付清单（完整）：
+(* C 结果清单（完整）：
    ① real_sigma_witness（σ 存在性+正性+平方恒等 sigT 三件套）
    ② proj_sigma_pos / proj_sigma_sq（投影提取）
    ③ real_mult_exchange（四因子交换）

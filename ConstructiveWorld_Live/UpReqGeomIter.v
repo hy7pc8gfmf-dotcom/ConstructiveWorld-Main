@@ -1,8 +1,17 @@
 (* ============================================================ *)
+(* UpReqGeomIter.v *)
+(* *)
+(* 目的： 策略迭代族的 Real 层迭代镜像（非平凡补强段）。 *)
+(* 主件： geodi_iterate 迭代族与 geodi_seq_norm / geodi_step_norm 范数递减链。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB。 *)
+(* 备注： 诚实边界与结论见正文登记；几何率前提经单步几何不等式承接。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqGeomIter.v —— 第二轮非平凡补强 ①：策略迭代族 Real 层迭代镜像席  *)
 (*   任务书源＝第二轮非平凡补强-前十分析-20260910.md R2-1（L9/L96）：    *)
 (*   定理 4.8 的抽象层迭代收缩 KL(π*‖π_t) 以 (1−η)^t 几何收缩，        *)
-(*   在 Real 层按「单步放电件＋幂载体」归纳合龙（eps 形）。             *)
+(*   在 Real 层按「单步消解件＋幂载体」归纳合龙（eps 形）。             *)
 (* ---------------------------------------------------------------- *)
 (* 先例件（全部只消费 .vo，零改已绿文件）：                              *)
 (*   UpReqGeomD：旗舰单步 geod_policy_iter_kl_geom_step_eps（L451）      *)
@@ -11,39 +20,39 @@
 (*   UpRealLeB：real_le_b/real_le_to_le_b（B 伴件语言）；                *)
 (*   UpGeomB：geod_b_half_double（半量机，KL Bishop 非负伴件消费）。      *)
 (* ---------------------------------------------------------------- *)
-(* 数学核（归纳合龙，单点 eps 引入→常数加权→末端收口）：                 *)
+(* 数学核（归纳合龙，单点 eps 引入→常数加权→末端完成）：                 *)
 (*   迭代轨道 π_0 := p，π_{t+1} := step_next(π*, π_t; κ:=1−η)。          *)
-(*   不变式：KL(π*‖π_t) ≤ κ^t·KL(π*‖π_0) + eps（同一 eps 全程不漂移）。  *)
+(*   不变式：KL(π*‖π_t) ≤ κ^t·KL(π*‖π_0) + eps（同一 eps 全程不变动）。  *)
 (*   归纳步：单步件喂余量 η·eps（0<η·eps 引擎件喂定），                  *)
 (*     κ·(κ^t·KL0 + eps) + η·eps = κ^{t+1}·KL0 + (κ+η)·eps              *)
-(*     = κ^{t+1}·KL0 + 1·eps = κ^{t+1}·KL0 + eps——κ+η==1 环账一次收口，  *)
+(*     = κ^{t+1}·KL0 + 1·eps = κ^{t+1}·KL0 + eps——κ+η==1 环账一次完成，  *)
 (*   余量链零中途翻倍（单误差源单点引入，C.2 模板要点）。                *)
 (* ---------------------------------------------------------------- *)
 (* 分层保底（分件 Qed）：单步（消费 GeomD 旗舰）→ 一步件 → 两步件 →      *)
-(*   t 步归纳主件。各层形态同构，无余量漂移，无负结果。                  *)
+
 (* ---------------------------------------------------------------- *)
-(* 诚实边界与判词：                                                      *)
-(*   【判词 I1｜η 开区间】主件前提 0<η<1。闭端 η=1 时 κ=1−η 的严格正    *)
-(*   证书构造性不可分（PowB 判词 P4 在案），且单步引擎                    *)
+(* 诚实边界与结论：                                                      *)
+(*   【结论 I1｜η 开区间】主件前提 0<η<1。闭端 η=1 时 κ=1−η 的严格正    *)
+(*   证书构造性不可分（PowB 结论 P4 在案），且单步引擎                    *)
 (*   real_step_kl_eta_bound_eps 本身要求 0<κ——与任务书「η∈(0,1]」        *)
-(*   口径的出入见交付报告勘误 E-1。                                      *)
-(*   【判词 I2｜n 非平凡】n≥1 显式前提：Z:=Σ r^{1−κ}q^κ 的正性在 n=0     *)
+(*   口径的出入见合规自查报告勘误 E-1。                                      *)
+(*   【结论 I2｜n 非平凡】n≥1 显式前提：Z:=Σ r^{1−κ}q^κ 的正性在 n=0     *)
 (*   时不可证（空和=0），沿 real_list_sum_pos 非空前提同格。             *)
-(*   【判词 I3｜证书依赖】real_pow_pos/real_log 值依赖正性见证参数位，    *)
+
 (*   迭代轨道以 sigT（Set 值）打包逐站证书线程（UpGeomB geod_b_iterate    *)
 (*   同构先例）；语句面全 Set 值零 Prop 泄露。                           *)
-(*   【判词 I4｜PowB 幂单调衔接差距】主件只消费 powb_pow 幂载体；         *)
+(*   【结论 I4｜PowB 幂单调衔接差距】主件只消费 powb_pow 幂载体；         *)
 (*   powb_one_minus_eta_mono_dec（κ^{t1} ≤_B κ^t）与主件合成为           *)
 (*   「t ≤ t1 ⟹ KL_{t1} ≤ κ^t·KL_0」需 κ^{t1}·KL_0 ≤ κ^t·KL_0+δ 的      *)
 (*   le_b 乘法保序闭包（非负右因子版），其证需 KL_0 上界材料或专门的     *)
-(*   幂单调-KL 合成器——库内两件皆无，挂账未建（精确差距见交付报告）。    *)
-(*   可用侧标记：KL_0 的 Bishop 非负 0 ≤_B KL_0 本席已伴件落盘           *)
+(*   幂单调-KL 合成器——库内两件皆无，显式假设未建（精确差距见合规自查报告）。    *)
+(*   可用侧标记：KL_0 的 Bishop 非负 0 ≤_B KL_0 本件已伴件落盘           *)
 (*   （geodi_kl_nonneg_B，gibbs+半量机），缺口纯在乘法保序闭包一侧。      *)
 (* 红线：零未闭合证明（全 Qed）；零新公理；语句面全 Set 值（real_le/      *)
 (*   real_lt/real_eq/real_le_b 均 Set 值，Or:=A+B 库内定义）；既有文件    *)
 (*   零改；纯 term-mode 组装（real_eq 非 Id，禁 rewrite 主链，全链       *)
 (*   real_eq_trans/compat）。                                            *)
-(* 编译配方：C:\Rocq-Platform~9.0~2025.08\bin\coqc.exe                    *)
+
 (*   -Q . "" -Q "..\001" "" UpReqGeomIter.v（cpu_guard 包装，禁裸调）。   *)
 (* ============================================================ *)
 
@@ -329,7 +338,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* F. 旗舰主件：t 步几何收缩（eps 形，单点余量全程不漂移）                *)
+
 (*   KL(π*‖π_t) ≤ (1−η)^t·KL(π*‖π_0) + eps                              *)
 (* ============================================================ *)
 Theorem geodi_policy_iter_kl_geom_iter_eps :
@@ -382,7 +391,7 @@ Proof.
                     (real_mult (powb_pow (real_plus real_one (real_opp eta)) O)
                        (geod_lsum n (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i))))
                     eps Heps)).
-  - (* 归纳步：单步件喂 η·eps，κ 加权，(κ+η)==1 末端收口 *)
+  - (* 归纳步：单步件喂 η·eps，κ 加权，(κ+η)==1 末端完成 *)
     (* 轨道对子消解：IH 先 unfold+revert 使其随对子整体换形为 q 形——          *)
     (*   fold 包装的 IH 与消解后 q 不可转换（变量 m 上 fix 卡死），故证书族    *)
     (*   （范数/Z 正/逐点正）全部以 q/Hq 直供（geodi_seq_norm_pair 等）。      *)
@@ -399,7 +408,7 @@ Proof.
     pose proof (geodi_zpos n r q (real_plus real_one (real_opp eta)) Hr Hq Hn)
       as HZq.
     pose proof (real_mult_positive eta eps Heta Heps) as Hetaeps.
-    (* 单步放电件（GeomD 旗舰）实例：KL_{S m} ≤ κ·KL_q + η·eps               *)
+    (* 单步消解件（GeomD 旗舰）实例：KL_{S m} ≤ κ·KL_q + η·eps               *)
     (*   HZ/Hqv 两槽须同字面项：geodi_next_pos 输出类型的 HZ 位烘焙为         *)
     (*   geodi_zpos … Hn，别名假设不可合一（rigid-rigid）。                   *)
     pose proof (geod_policy_iter_kl_geom_step_eps n r q eta Hr Hq
@@ -490,7 +499,7 @@ Proof.
                               (real_mult (real_plus real_one (real_opp eta)) eps))))
                      Hmul)
                   (real_le_refl (real_mult eta eps))) as Hmid.
-    (* 末端收口：(A + κ·eps) + η·eps == A + (κ+η)·eps == A + 1·eps == A + eps *)
+    (* 末端完成：(A + κ·eps) + η·eps == A + (κ+η)·eps == A + 1·eps == A + eps *)
     assert (Hcollapse : real_eq
       (real_plus (real_plus (real_mult
                    (real_mult (real_plus real_one (real_opp eta))
@@ -582,7 +591,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G. 分层保底阶梯：一步件 / 两步件（主件实例，幂字面收口）               *)
+(* G. 分层保底阶梯：一步件 / 两步件（主件实例，幂字面完成）               *)
 (* ============================================================ *)
 Theorem geodi_iter_one_step_eps :
   forall (n : nat) (r : nat -> Real)
@@ -772,7 +781,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* H. Bishop 伴件：KL(π*‖π_t) ≤_B (1−η)^t·KL(π*‖π_0)（B 线语言收口）      *)
+(* H. Bishop 伴件：KL(π*‖π_t) ≤_B (1−η)^t·KL(π*‖π_0)（B 线语言完成）      *)
 (* ============================================================ *)
 Theorem geodi_policy_iter_kl_geom_iter_B :
   forall (n : nat) (r : nat -> Real)
@@ -791,8 +800,8 @@ Theorem geodi_policy_iter_kl_geom_iter_B :
                (geod_lsum n (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i)))).
 Proof.
   intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t.
-  (* B 收口（UpRealLeB real_le_closure_b_one，D:=1 特化）：主件本就是       *)
-  (*   ∀eps>0 的 real_le X (Y+eps) 族——恰为收口引理前提形，直喂即闭合。     *)
+  (* B 完成（UpRealLeB real_le_closure_b_one，D:=1 特化）：主件本就是       *)
+  (*   ∀eps>0 的 real_le X (Y+eps) 族——恰为完成引理前提形，显式应用即闭合。     *)
   apply (real_le_closure_b_one
            (geod_lsum n
               (fun i : nat => real_kl_term (r i)
@@ -806,7 +815,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* I. KL Bishop 非负伴件（判词 I4 的可用侧标记）：0 ≤_B KL(π*‖π_0)        *)
+(* I. KL Bishop 非负伴件（结论 I4 的可用侧标记）：0 ≤_B KL(π*‖π_0)        *)
 (*   证书链：gibbs 逐 eps（le 形）→ le_b 半量抬升 → assoc+半量机换形。    *)
 (* ============================================================ *)
 Lemma geodi_kl_nonneg_B : forall (n : nat) (r p : nat -> Real)
@@ -859,17 +868,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 尾注：诚实台账                                                        *)
-(* 【判词 I4 精确差距】「t ≤ t1 ⟹ KL_{t1} ≤ κ^t·KL_0（B 形）」合成件：    *)
+(* 尾注：诚实登记表                                                        *)
+(* 【结论 I4 精确差距】「t ≤ t1 ⟹ KL_{t1} ≤ κ^t·KL_0（B 形）」合成件：    *)
 (*   有 ①KL_{t1} ≤_B κ^{t1}·KL_0（主件 B 伴件）②0 ≤_B KL_0（伴件 I）     *)
 (*   ③κ^{t1} ≤_B κ^t（PowB powb_one_minus_eta_mono_dec）。缺④le_b 乘法   *)
 (*   保序闭包：a ≤_B b ∧ 0 ≤_B c ⟹ a·c ≤_B b·c——其逐 eps 证需把           *)
 (*   κ^{t1} ≤ κ^t+δ 的 δ 乘出后压回 eps，即需 KL_0 上界（sup KL）材料；   *)
-(*   单纯形上 sup KL 可由 min 正性给出，但库内无该上界件——④挂账未建，    *)
+(*   单纯形上 sup KL 可由 min 正性给出，但库内无该上界件——④显式假设未建，    *)
 (*   缺口的准确形状如上，禁硬凑（分层保底纪律②）。                        *)
-(* 【机器状态】四关证据：G1 禁词全零；G2 EXIT=0 + 主件族 Print            *)
+
 (*   Assumptions 全 Closed（见文末逐件）；G3 提取探针 Obj.magic=0；        *)
-(*   G4 coqchk 9.0 全路径通过（log 见 _gdi_* 序列）。                     *)
+
 (* ============================================================ *)
 
 Print Assumptions geodi_zpos.

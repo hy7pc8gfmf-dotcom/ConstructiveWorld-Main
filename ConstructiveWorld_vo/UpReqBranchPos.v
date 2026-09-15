@@ -1,8 +1,17 @@
 (* ============================================================ *)
-(* UpReqBranchPos.v —— G3 放电面零腿分支和正性专席（席72 B1-B4）   *)
+(* UpReqBranchPos.v *)
+(* *)
+(* 目的： 消解面零腿分支和的正性（条件分派四腿 B1-B4）。 *)
+(* 主件： brp_sum_pos 总和正性与 brp_b1_Z_aud_pos 至 brp_b4_evicted_partition_pos 四腿实例。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD。 *)
+(* 备注： 条件值（bool/Or）不可对假设位做 destruct 消去，全部改用 match 分派；正性由接口 le_plus_compat 承担，零新假设位。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqBranchPos.v —— G3 消解面零腿分支和正性专席（席72 B1-B4）   *)
 (*   使命：sumf (fun s => if keep_dec s then f s else zero) 的正性， *)
 (*   双前提=「存在被保留项」（sigT 非空位，Set 层）+「保留项逐项正」，*)
-(*   放电后解锁 evicted_partition_pos 族无条件实例化。              *)
+(*   消解后解锁 evicted_partition_pos 族无条件实例化。              *)
 (*                                                                *)
 (* 数学核：分支和正性 = 列表归纳直证。nil 支矛盾（非空 sigT 前提的   *)
 (*   InT 位无 nil 构造子，空型消去）；cons 支两情形——见证头位：头项   *)
@@ -19,7 +28,7 @@
 (* 载体裁决（实测定路线）：四槽原载体均为抽象求和算子（三槽 sumf      *)
 (*   Variable + RestB sum_over_S 裸 Variable），无枚举数据，引擎     *)
 (*   不可直接消去——沿 E354 装法（席60 ZPosD 先例）：载体具体化为     *)
-(*   enum 列表和（sumd_sumf，UpReqSumD 具体实例），放电件语句即       *)
+(*   enum 列表和（sumd_sumf，UpReqSumD 具体实例），消解件语句即       *)
 (*   具体实例形；抽象载体回接走规范条件 + lt_id_r 换轨（B4 件 2，    *)
 (*   zposd_Z_pos_of_partition 同法）。非空位升级为 sigT 见证形       *)
 (*   （sumd_in / 等词否定位的更强构造形态，零 Prop 表出面）。        *)
@@ -35,13 +44,13 @@
 (*              / brp_or_nonneg_of / brp_or_pos_of（match-return     *)
 (*              显式项：真支取正、假支空型消去——假设位 scrutinee     *)
 (*              停滞坑的件化消解）。                                *)
-(*   放电件 5：B1 brp_b1_Z_aud_pos（UpReqAlign HZ 槽实例形）        *)
+(*   消解件 5：B1 brp_b1_Z_aud_pos（UpReqAlign HZ 槽实例形）        *)
 (*            B2 brp_b2_evicted_partition_pos（G13_EvictFam 槽）     *)
 (*            B3 brp_b3_evicted_partition_r_pos（UpReqAttnGibbs 槽） *)
 (*            B4 brp_b4_evicted_partition_pos + brp_b4_of_carrier   *)
 (*            （UpReqAlignRestB 槽：sumd 实例形 + 裸载体回接形）。    *)
 (*                                                                *)
-(* 消费面：CW219 增强接口字段（lt_le_trans / le_plus_compat /       *)
+(* 消费面：增强接口字段（lt_le_trans / le_plus_compat /       *)
 (*   le_id_l / lt_id_r / plus_zero / exp_neg_pos / inv_pos / InT，   *)
 (*   环恒等式在本世界为 req 级：le_id_l/lt_id_r 走 req 运输）；      *)
 (*   UpReqAlgebra（req_plus_zero_l）；UpReqSumD（sumd_sumf /        *)
@@ -195,7 +204,7 @@ End BrpEngineBool.
 
 (* ============================================================ *)
 (* Section BrpEngineOr：引擎 Or 条件面（B2-B4 对接；槽 keep_dec      *)
-(*   forall a, Or (kp a) (Not (kp a)) 逐位同构，CW219 Or := A+B）。  *)
+(*   forall a, Or (kp a) (Not (kp a)) 逐位同构，Or := A+B）。  *)
 (* ============================================================ *)
 Section BrpEngineOr.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -261,7 +270,7 @@ End BrpEngineOr.
 (* ============================================================ *)
 (* Section BrpDischargeB1：UpReqAlign HZ 槽实例形（bool 条件面）      *)
 (*   槽：Z_aud_req = sumf (fun s => if post_aud s then p s else zero)；*)
-(*   原位 Variable HZ : lt zero Z_aud_req。本席 E354 装法：载体       *)
+
 (*   sumf 具体化为 sumd_sumf S enum；非空位=sigT 见证（枚举内保支位）。 *)
 (*   槽前提 Hp_norm 在见证路线下不需消费（诚实强出：结论不依赖归一）。 *)
 (* ============================================================ *)
@@ -272,7 +281,7 @@ Variable enum : list S.
 Variable post_aud : S -> bool.
 Variable p : S -> R.
 
-(* 槽形分支和：Z_aud_req 的具体实例形（透明，供下游喂参直连） *)
+(* 槽形分支和：Z_aud_req 的具体实例形（透明，供下游提供实参直连） *)
 Definition brp_Z_aud_req : R :=
   sumd_sumf S enum (fun s : S => if post_aud s then p s else zero).
 
@@ -302,7 +311,7 @@ End BrpDischargeB1.
 (* Section BrpDischargeB2：G13_EvictFam evicted_partition_pos 槽      *)
 (*   槽：evicted_partition = sumf (fun s => if keep_dec s then        *)
 (*   boltzmann_factor s else zero)；原位 Variable 位。保留项逐项正    *)
-(*   = exp_neg_pos（CW219 增强接口字段）。                            *)
+(*   = exp_neg_pos（增强接口字段）。                            *)
 (* ============================================================ *)
 Section BrpDischargeB2.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -400,7 +409,7 @@ End BrpDischargeB3.
 (*   槽：req_evicted_partition = sum_over_S (fun s => match           *)
 (*   keep_dec s with inl _ => req_kv_boltzmann_factor s | inr _ =>    *)
 (*   zero end)；载体 sum_over_S 为裸 Variable（无枚举/无字段）。       *)
-(*   两形交付：件 1 = sumd 具体实例形（E354 装法）；                  *)
+(*   两形结果：件 1 = sumd 具体实例形（E354 装法）；                  *)
 (*   件 2 = 裸载体回接形（规范条件 + lt_id_r 换轨，                    *)
 (*   zposd_Z_pos_of_partition 同法；RestB 侧补规范位即直装）。        *)
 (* ============================================================ *)
@@ -426,7 +435,7 @@ Definition brp_req_evicted_partition_sumd : R :=
                   | inr _ => zero
                   end).
 
-(* 件 1：sumd 具体实例形放电 *)
+(* 件 1：sumd 具体实例形消解 *)
 Lemma brp_b4_evicted_partition_pos :
   sigT (fun s : S => prod (InT s enum)
           (match keep_dec s with

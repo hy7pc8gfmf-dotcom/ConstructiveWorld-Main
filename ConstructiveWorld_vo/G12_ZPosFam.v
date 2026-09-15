@@ -2,47 +2,47 @@
    成员：UpReqZPosD + UpReqZAuto + UpReqZPosI + UpReqZPosI2 + UpReqZPosFinal（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G12_ZPosFam 成员件：UpReqZPosD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqZPosD.v —— 配分函数正性放电席 G3：Z_pos 族无条件化          *)
+(* UpReqZPosD.v —— 配分函数正性证明模块 G3：Z_pos 族无条件化          *)
 (*   消费 G1 钥匙 UpReqSumD（sumd_sum_pos 直供）+ 根 exp 正性引擎    *)
-(*   CW219 增强接口字段 exp_neg_pos。                              *)
+(*   CW_ConstructiveWorld_219 增强接口字段 exp_neg_pos。                              *)
 (*                                                                *)
 (* 数学核：Z == sum_s exp_neg(beta·e_s) > 0 <-- 逐项 exp_neg_pos     *)
-(*   + sumd_sum_pos（G1 主件 4，enum 非空前提 datum 形）。放电后     *)
+(*   + sumd_sum_pos（G1 主件 4，enum 非空前提 datum 形）。证明后     *)
 (*   Z 不再是 Variable，而是 sumd_sumf 的 Definition；槽语句对       *)
 (*   （Z_pos : lt zero Z，partition_condition : req Z (sumf ...)）   *)
 (*   降为「enum 非空 datum + beta_pos」，严格弱前提诚实降级。        *)
 (*                                                                *)
-(* 分级（逐件）：保底 1：zposd_Z_pos（lt zero Z 放电形，本席锚）；    *)
+(* 分级（逐件）：保底 1：zposd_Z_pos（lt zero Z 证明形，本文件锚）；    *)
 (*   辅件 1：zposd_boltz_factor_pos（逐项 exp 腿）；主件 5：          *)
 (*   zposd_Z_pos_of_partition（抽象 Z + partition_condition 槽的      *)
-(*   通用放电键，lt_id_r 换轨沿 UpReqDist L2806 req_Z_temp_pos       *)
+(*   通用证明键，lt_id_r 换轨沿 UpReqDist L2806 req_Z_temp_pos       *)
 (*   同法）/ zposd_boltzmann_dist_pos（Id boltzmann_dist_pos         *)
 (*   @16824 族；UpReqDist L1059 req_boltzmann_positive 与 L2249      *)
 (*   req_boltzmann_dist_pos 的无条件形）/ zposd_Z_temp_pos（槽       *)
-(*   Z_temp_spec@2800 放电 -> UpReqDist L2803 req_Z_temp_pos 的      *)
+(*   Z_temp_spec@2800 证明 -> UpReqDist L2803 req_Z_temp_pos 的      *)
 (*   无条件形）/ zposd_boltzmann_dist_temp_pos（UpReqDist L2847      *)
 (*   reqd_boltzmann_dist_temp_pos 无条件形）/ zposd_partition        *)
 (*   （partition_condition 槽（UpReqDist L1020/UpSigMigrate L41/     *)
 (*   UpSigMigrate2 L112）的 E354 装法 Definition 件：Z 定义性即       *)
 (*   sumd_sumf 有限和，槽降 req_refl 定义件）。                      *)
 (*                                                                *)
-(* 签名变化台账（诚实降级）：上游槽 Z_pos+partition_condition 双位    *)
-(*   -> 本席单 datum 位 Not (enum = nil)（基座 Set 版 Not，与        *)
+(* 签名变化登记表（诚实降级）：上游槽 Z_pos+partition_condition 双位    *)
+(*   -> 本文件单 datum 位 Not (enum = nil)（基座 Set 版 Not，与        *)
 (*   UpReqSampling 签名变化 7 同形同阶，不放大主张）；boltzmann_dist  *)
 (*   的 Z_pos 位换为 zposd_Z_pos Hne 供给。                          *)
 (*                                                                *)
 (* 阻塞裁决（兜底，普查 §G3 余量如实报）：                          *)
 (*   1. 纯抽象 Z 无 spec 者（普查已归 N：rZ/rpartition_function_t/    *)
 (*      Z_align_r/real_temp_factor；另 UpReqDist ReqSteadyState      *)
-(*      L3079 Z 无 partition_condition）无放电路，本席不越权；        *)
+(*      L3079 Z 无 partition_condition）无证明路，本文件不越权；        *)
 (*   2. uab_* 槽（UpAuditBridge L56/L65、UpRealLeB2 L474）为 Id 系    *)
-(*      real 载体（real_lt real_zero 形），非本席 req 接口层——       *)
-(*      enum/接口载体不匹配，留 real 镜像席；                        *)
+(*      real 载体（real_lt real_zero 形），非本文件 req 接口层——       *)
+(*      enum/接口载体不匹配，留 real 镜像模块；                        *)
 (*   3. 含 log 下游族（req_boltzmann_log_decomp /                    *)
 (*      reqd_boltzmann_log_temp_decomp 等）前置 G5 log 基元，不在     *)
-(*      本席首批直接消费面；                                        *)
-(*   4. 抽象 sumf 槽形对接本席具体和须沿 E354 装法（sumf :=           *)
-(*      sumd_sumf 喂参 + sumd_sum_eq_list 桥），本席零重写战术。      *)
+(*      本文件首批直接消费面；                                        *)
+(*   4. 抽象 sumf 槽形对接本文件具体和须沿 E354 装法（sumf :=           *)
+(*      sumd_sumf 提供实参 + sumd_sum_eq_list 桥），本文件零重写战术。      *)
 (*                                                                *)
 (* 红线：Set 层语句（lt/req 均 Set 值谓词；零 Prop 泄露）；纯项式     *)
 (*   组装（exact 供给项，零 rewrite 战术）；零外部未证假设，尾部      *)
@@ -76,12 +76,12 @@ Proof.
   intro s. exact (exp_neg_pos (mult (inv_pos beta beta_pos) (base_loss s))).
 Qed.
 
-(* 具体配分函数：放电后 Z 的 Definition 形（G1 sumd_sumf 实例） *)
+(* 具体配分函数：证明后 Z 的 Definition 形（G1 sumd_sumf 实例） *)
 Definition zposd_Z : R :=
   sumd_sumf S enum
     (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))).
 
-(* ============ 保底件 1：Z 正性放电形（槽语句 lt zero Z） ============ *)
+(* ============ 保底件 1：Z 正性证明形（槽语句 lt zero Z） ============ *)
 Lemma zposd_Z_pos : Not (enum = nil) -> lt zero zposd_Z.
 Proof.
   intro Hne.
@@ -90,7 +90,7 @@ Proof.
            Hne zposd_boltz_factor_pos).
 Qed.
 
-(* ============ 主件 1：抽象 Z + partition_condition 槽通用放电键 ===== *)
+(* ============ 主件 1：抽象 Z + partition_condition 槽通用证明键 ===== *)
 (* 槽形：任给 Z 带规范条件 req Z (有限和)，Z 正性无条件直推。
    换轨腿 = lt_id_r（req 先 lt 后，UpReqDist L2806 同法）。 *)
 Lemma zposd_Z_pos_of_partition : forall Z : R,
@@ -112,7 +112,7 @@ Proof.
 Qed.
 
 (* ============ 主件 2：boltzmann_dist_pos 族（@16824）无条件形 ======= *)
-(* 上游 boltzmann_dist 的 Z_pos 位换为 zposd_Z_pos Hne（签名台账）。 *)
+(* 上游 boltzmann_dist 的 Z_pos 位换为 zposd_Z_pos Hne（签名登记表）。 *)
 Definition zposd_boltzmann_dist (Hne : Not (enum = nil)) (s : S) : R :=
   mult (inv_pos zposd_Z (zposd_Z_pos Hne))
        (exp_neg (mult (inv_pos beta beta_pos) (base_loss s))).
@@ -127,9 +127,9 @@ Proof.
            (zposd_boltz_factor_pos s)).
 Qed.
 
-(* ============ 主件 3：Z_temp 族（Z_temp_spec@2800 槽放电） ========== *)
+(* ============ 主件 3：Z_temp 族（Z_temp_spec@2800 槽证明） ========== *)
 (* 温度形：逐温 t，beta := inv_pos t Ht；Z_temp 定义性即有限和，
-   槽 Z_temp_spec 的 req 方程降为定义性（zposd_partition 同判词）。 *)
+   槽 Z_temp_spec 的 req 方程降为定义性（zposd_partition 同判定）。 *)
 Definition zposd_Z_temp (t : R) (Ht : lt zero t) : R :=
   sumd_sumf S enum
     (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))).
@@ -161,9 +161,9 @@ Proof.
            (exp_neg_pos (mult (inv_pos t Ht) (base_loss s)))).
 Qed.
 
-(* ============ 主件 5：partition_condition 槽放电 Definition 件 ====== *)
+(* ============ 主件 5：partition_condition 槽证明 Definition 件 ====== *)
 (* E354 装法：Z 定义性即 sumd_sumf 有限和，槽语句降 req_refl 定义件
-   （G1 sumd_sum_eq_list 同法；透明 Definition 供下游喂参直连）。 *)
+   （G1 sumd_sum_eq_list 同法；透明 Definition 供下游提供实参直连）。 *)
 Definition zposd_partition :
   req zposd_Z (sumd_sumf S enum
                  (fun s : S =>
@@ -185,7 +185,7 @@ Print Assumptions zposd_partition.
 
 (* ======== G12_ZPosFam 成员件：UpReqZAuto（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqZAuto.v —— Z_auto 引理席：配分相等前提「Z == partition」     *)
+(* UpReqZAuto.v —— Z_auto 引理模块：配分相等前提「Z == partition」     *)
 (*   的定义性消去（评审08 §3.3.1 点名弱点清偿）。                  *)
 (*                                                                *)
 (* 目标：把「Z_thermo == partition_function」从配分函数定理的前提    *)
@@ -193,34 +193,34 @@ Print Assumptions zposd_partition.
 (*   「energy == -z 逐点 + inv D == 1/T」下由定义性相等直接可导，    *)
 (*   无需把它单列为前提。                                          *)
 (*                                                                *)
-(* 原件定位（sed 实读）：                                          *)
-(*   · 原件 1：CW219 attention_is_gibbs_setoid（L66294），前提形：    *)
+(* 原件定位（源码实读）：                                          *)
+(*   · 原件 1：CW_ConstructiveWorld_219 attention_is_gibbs_setoid（L66294），前提形：    *)
 (*       req (inv_pos D D_pos) one ->                              *)
 (*       (forall s, req (energy s) (opp (z s))) ->                  *)
 (*       req (Z_thermo_setoid …) (partition_function_setoid z) ->   *)
 (*       forall s, req (softmax_setoid z s) (boltzmann_dist_attn … s) *)
-(*   · 原件 2：CW220 SigMigrate.req_attention_is_gibbs_temp          *)
+(*   · 原件 2：CW220_Extensions SigMigrate.req_attention_is_gibbs_temp          *)
 (*       （L1954），前提 3 = req Z_thermo cwe_partition_function_temp。  *)
 (*   两处求和载体均无 req 外延可消费（原件 1 的 sum_req_over_S_ext    *)
 (*   Variable 未被定理消费故出节即弃；原件 2 节内只有 sum_pos）——     *)
-(*   「前提可消而未消」的机制根因。本席把外延引擎显式接入，           *)
+(*   「前提可消而未消」的机制根因。本文件把外延引擎显式接入，           *)
 (*   Z_auto 即成立。                                               *)
 (*                                                                *)
 (* 外延引擎（实测签名）：                                          *)
-(*   · Id 形：CW219 SumOver 字段                                    *)
+(*   · Id 形：CW_ConstructiveWorld_219 SumOver 字段                                    *)
 (*       sum_over_S_ext : forall f g, (forall s, Id (f s) (g s)) -> *)
 (*         Id (sum_over_S f) (sum_over_S g)                         *)
 (*   · req 形：本文件各 Z_auto 件以显式参数 sum_req_ext / sumf_req_ext *)
 (*     接入（诚实接口：对任何具体求和载体构造性满足，非分布层假设）。 *)
 (*                                                                *)
 (* exp 关系（实测）：exp_pos 即 exp_neg ∘ opp——两处上游均为透明       *)
-(*   Definition（CW220 SigMigrate.cwe_exp_pos_fn / CW219 exp_pos_fn_setoid）， *)
-(*   delta 换形后逐点镜像件直接以 exp_neg 收口；exp 的 req 兼容由     *)
-(*   CW219 已证件 exp_neg_req_compat_setoid（L66223）免费供给，        *)
-(*   不再立新假设（CW220 原件 2 节内同形 Hypothesis 桥由此被证明件替代）。 *)
+(*   Definition（CW220_Extensions SigMigrate.cwe_exp_pos_fn / CW_ConstructiveWorld_219 exp_pos_fn_setoid）， *)
+(*   delta 换形后逐点镜像件直接以 exp_neg 闭合；exp 的 req 兼容由     *)
+(*   CW_ConstructiveWorld_219 已证件 exp_neg_req_compat_setoid（L66223）免费供给，        *)
+(*   不再立新假设（CW220_Extensions 原件 2 节内同形 Hypothesis 桥由此被证明件替代）。 *)
 (*                                                                *)
-(* 交付清单（8 件，双形并存）：                                     *)
-(*  形 A（req 形·CW219 AttentionGibbsBridgeSetoid 载体，S : Type）：  *)
+(* 结果清单（8 件，双形并存）：                                     *)
+(*  形 A（req 形·CW_ConstructiveWorld_219 AttentionGibbsBridgeSetoid 载体，S : Type）：  *)
 (*   A1 zauto_mirror_point_setoid      保底·逐点镜像件               *)
 (*       （inv D == one + energy == -z 逐点                          *)
 (*         ⟹ exp_neg(inv D·energy s) == exp_pos(z s) 逐点）          *)
@@ -228,12 +228,12 @@ Print Assumptions zposd_partition.
 (*       （partition_function_setoid == Z_thermo_setoid）            *)
 (*   A3 zauto_attention_is_gibbs_noZ_setoid  主件2·前提消去示范件     *)
 (*       （原件 1 同结论、少前提 3——配分相等前提由 A2 供替）          *)
-(*  形 B（req 形·CW220 SigMigrate 温度参数载体，S : Set）：           *)
+(*  形 B（req 形·CW220_Extensions SigMigrate 温度参数载体，S : Set）：           *)
 (*   B1 zauto_mirror_point_temp        保底·逐点镜像件（温度参数形）  *)
 (*   B2 zauto_Z_eq_temp                主件·Z_auto 引理（温度参数形） *)
 (*   B3 zauto_attention_is_gibbs_temp_noZ   主件2·前提消去示范件      *)
 (*       （原件 2 同结论、少前提 3——配分相等前提由 B2 供替）          *)
-(*  形 C（Id 形·Set 层零 Prop，CW219 RealInterfaceEnhanced+SumOver）： *)
+(*  形 C（Id 形·Set 层零 Prop，CW_ConstructiveWorld_219 RealInterfaceEnhanced+SumOver）： *)
 (*   C1 zauto_id_mirror                保底·逐点镜像件（Id 形）       *)
 (*   C2 zauto_id_Z_eq                  主件·Z_auto 引理（Id 形）      *)
 (*                                                                *)
@@ -244,8 +244,8 @@ Print Assumptions zposd_partition.
 (*   的定理形态。                                                   *)
 (*                                                                *)
 (* 红线：Set 层语句零 Prop（req/lt/Id 均 Set 值谓词）；全 Qed 闭合；    *)
-(*   尾部 Print Assumptions 新件全 Closed；既有文件零改；零 git。      *)
-(* 前缀台账：zauto_ 前缀全库 grep 零重名（本席首用）。                *)
+(*   尾部 Print Assumptions 新件全 Closed；既有文件零改。      *)
+(* 前缀登记表：zauto_ 前缀全库 grep 零重名（本文件首用）。                *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -253,7 +253,7 @@ Require Import CW220_Extensions.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 形 A（req 形）：CW219 AttentionGibbsBridgeSetoid 载体             *)
+(* 形 A（req 形）：CW_ConstructiveWorld_219 AttentionGibbsBridgeSetoid 载体             *)
 (*   出口签名实测：Z_thermo_setoid R RI S sum D D_pos energy；       *)
 (*   partition_function_setoid R RI S sum z；                       *)
 (*   attention_is_gibbs_setoid 前提序 = HD、Henergy、HZ。             *)
@@ -309,7 +309,7 @@ Qed.
 
 (* A3 主件2·前提消去示范件：原件 1 attention_is_gibbs_setoid 同结论，
    配分相等前提（req Z_thermo_setoid (partition_function_setoid z)）
-   不再出现——由 A2 供替（req_sym 换向后喂入）。 *)
+   不再出现——由 A2 供替（req_sym 换向后传入）。 *)
 Lemma zauto_attention_is_gibbs_noZ_setoid :
   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R) (S : Type)
          (sum_req_over_S : (S -> R) -> R)
@@ -337,7 +337,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 形 B（req 形）：CW220 SigMigrate.ReqGibbsPilot 温度参数载体        *)
+(* 形 B（req 形）：CW220_Extensions SigMigrate.ReqGibbsPilot 温度参数载体        *)
 (*   出口签名实测（@ 全参形）：                                      *)
 (*   Z_thermo R RIS S sumf D D_pos energy；                          *)
 (*   cwe_partition_function_temp R RIS S sumf T T_pos z；                *)
@@ -438,7 +438,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 形 C（Id 形·Set 层零 Prop）：CW219 RealInterfaceEnhanced + SumOver。 *)
+(* 形 C（Id 形·Set 层零 Prop）：CW_ConstructiveWorld_219 RealInterfaceEnhanced + SumOver。 *)
 (*   外延引擎 = SumOver 字段 sum_over_S_ext（Id 形，实测 L1411）。      *)
 (* ============================================================ *)
 
@@ -476,7 +476,7 @@ Definition zauto_id_partition : R :=
   sum_over_S (fun s : S => zauto_id_exp_pos (z s)).
 
 (* C1 保底·逐点镜像件（Id 形）：inv D == one + energy == -z 逐点
-   ⟹ exp_neg(inv D·energy s) == exp_pos(z s) 逐点（Id 收口，零 Prop）。 *)
+   ⟹ exp_neg(inv D·energy s) == exp_pos(z s) 逐点（Id 闭合，零 Prop）。 *)
 Lemma zauto_id_mirror :
   Id (inv_pos D D_pos) one ->
   (forall s : S, Id (energy s) (opp (z s))) ->
@@ -521,12 +521,12 @@ Print Assumptions zauto_id_Z_eq.
 
 (* ======== G12_ZPosFam 成员件：UpReqZPosI（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqZPosI.v —— G3 同形直装席：Z_pos 族无条件实例化放电件        *)
-(*   消费席60 通用键 UpReqZPosD（zposd_Z_pos / zposd_partition /     *)
+(* UpReqZPosI.v —— G3 同形直装模块：Z_pos 族无条件实例化证明件        *)
+(*   消费上游会话 通用键 UpReqZPosD（zposd_Z_pos / zposd_partition /     *)
 (*   zposd_Z_temp_pos），为三个同形面产出 T2 模板② 形态的具体实例：   *)
-(*   槽被放电键填充，非空前提 Not (enum = nil) 显式携带（诚实降级）。 *)
+(*   槽被证明键填充，非空前提 Not (enum = nil) 显式携带（诚实降级）。 *)
 (*                                                                *)
-(* 三面对表（sed 实读勘误以现值为准）：                             *)
+(* 三面对表（源码实读勘误以现值为准）：                             *)
 (*   面1 UpSigMigrate.v L40/41：Z_pos : lt zero Z +                *)
 (*     partition_condition : req Z (sumf (fun s => exp_neg          *)
 (*       (mult (inv_pos D D_pos) (base_loss s))))（sumf 抽象位，     *)
@@ -535,31 +535,31 @@ Print Assumptions zauto_id_Z_eq.
 (*     req_boltzmann_positive@L352（positive_dist_m2 形）。         *)
 (*   面3a UpReqTempEntropy.v L66：Z_temp_spec : forall t Ht,        *)
 (*     req (Z_temp t) (sumf ...)；槽消费件 tZpos@L74（fsum_pos      *)
-(*     无条件正性槽位）。                                           *)
+(*     无条件正性参数位）。                                           *)
 (*   面3b UpFirewallReq.v L87：req_Z_temp_spec 同形；槽消费件        *)
-(*     fw_bt_pos（ssum_pos 槽位，正性分布形）。                     *)
+(*     fw_bt_pos（ssum_pos 参数位，正性分布形）。                     *)
 (*                                                                *)
 (* 勘误（对表所出，以现值为准）：                                   *)
-(*   1. 面内 sumf 均为抽象 Section Variable（sumd_sumf 喂参沿 E354   *)
+(*   1. 面内 sumf 均为抽象 Section Variable（sumd_sumf 提供实参沿 E354   *)
 (*      装法），面1/2 温度参数名 D 非 beta——实例件照面现值命名；     *)
-(*   2. zposd_boltzmann_dist 喂参实为 curried 形 (S->R) -> forall    *)
+(*   2. zposd_boltzmann_dist 提供实参实为 curried 形 (S->R) -> forall    *)
 (*      beta, lt zero beta -> Not (enum = nil) -> S -> R（探针       *)
 (*      Check 实证），与 D 文件节内书写顺序无冲突；                 *)
 (*   3. 面1/2 面常数 R/RIS 为非极大隐式位（Check 显示省略不等于可省  *)
-(*      略应用），直装喂定一律 @ 全参形（平铺应用曾落 S : Set 位错）； *)
-(*   4. 面3 Z_temp 槽位为 R -> R 形（不带 Ht），与席60 zposd_Z_temp   *)
+(*      略应用），直装给定一律 @ 全参形（平铺应用曾落 S : Set 位错）； *)
+(*   4. 面3 Z_temp 参数位为 R -> R 形（不带 Ht），与上游会话 zposd_Z_temp   *)
 (*      族 forall t, lt zero t -> R 类型失配（product vs R 编译实证）， *)
 (*      直装沿面常数不可行——面3 实例件改沿 zposd_Z_temp_pos /        *)
-(*      zposd_boltzmann_dist_temp_pos 直放电，签名台账记「Z_temp 位   *)
+(*      zposd_boltzmann_dist_temp_pos 直证明，签名登记表记「Z_temp 位   *)
 (*      Ht 化」诚实降级（不放大主张）。                              *)
 (*                                                                *)
 (* 直装法（T2 模板②）：面1/2 槽消费常数（req_boltzmann_positive 族）   *)
-(*   @ 全喂定（E354 装法：Definition 槽名 : 槽语句 := @zposd_* …）；    *)
-(*   面3 因勘误 4 改结论形直放电。全文件零重写战术、纯项式组装。      *)
+(*   @ 全给定（E354 装法：Definition 槽名 : 槽语句 := @zposd_* …）；    *)
+(*   面3 因勘误 4 改结论形直证明。全文件零重写战术、纯项式组装。      *)
 (*                                                                *)
-(* 分级：保底 = 面1 + 面2（各 4 件：E354 槽装配件 2 + 实例放电件 2）； *)
-(*   主件 = + 面3 两文件（各 2 件：E354 槽装配件 1 + 实例放电件 1）。 *)
-(*   共 11 件。三面原文件零改（双形并存，本席只交付实例件）。         *)
+(* 分级：保底 = 面1 + 面2（各 4 件：E354 槽装配件 2 + 实例证明件 2）； *)
+(*   主件 = + 面3 两文件（各 2 件：E354 槽装配件 1 + 实例证明件 1）。 *)
+(*   共 11 件。三面原文件零改（双形并存，本文件只给出实例件）。         *)
 (*                                                                *)
 (* 红线：Set 层语句（零 Prop 泄露）；纯项式组装（exact 供给项，零     *)
 (*   rewrite 战术）；零外部未证假设，尾部 Print Assumptions 新件全   *)
@@ -582,8 +582,8 @@ Import RealInterfaceEnhancedMod.
 (* 面1 UpSigMigrate.v：Z_pos@L40 + partition_condition@L41 双槽实例  *)
 (* ============================================================ *)
 
-(* E354 装配件 1：partition_condition 槽放电（Z := zposd_Z，sumf :=
-   sumd_sumf 喂参；zposd_partition 直供，定义性 req_refl 同判词）。 *)
+(* E354 装配件 1：partition_condition 槽证明（Z := zposd_Z，sumf :=
+   sumd_sumf 提供实参；zposd_partition 直供，定义性 req_refl 同判定）。 *)
 Definition zpi1_partition_condition
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S) (base_loss : S -> R)
@@ -593,7 +593,7 @@ Definition zpi1_partition_condition
          (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) :=
   @zposd_partition R RIS S enum base_loss D D_pos.
 
-(* 实例放电件 1：Z_pos 槽实例形（非空前提显式携带）。 *)
+(* 实例证明件 1：Z_pos 槽实例形（非空前提显式携带）。 *)
 Lemma zpi1_Z_pos
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S) (base_loss : S -> R)
@@ -603,15 +603,15 @@ Proof.
   exact (@zposd_Z_pos R RIS S enum base_loss D D_pos Hne).
 Qed.
 
-(* E354 装配件 2：sigm_boltzmann_dist@L46 实例形（Z_pos 位由放电键供给）。 *)
+(* E354 装配件 2：sigm_boltzmann_dist@L46 实例形（Z_pos 位由证明键供给）。 *)
 Definition zpi1_boltzmann_dist
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S) (base_loss : S -> R)
            (D : R) (D_pos : lt zero D) (Hne : Not (enum = nil)) : S -> R :=
   @zposd_boltzmann_dist R RIS S enum base_loss D D_pos Hne.
 
-(* 实例放电件 2：req_boltzmann_positive@L56 直装形——面1 常数在放电
-   槽位处的实例（T2 模板②），零重证、槽位一次喂定。 *)
+(* 实例证明件 2：req_boltzmann_positive@L56 直装形——面1 常数在证明
+   参数位处的实例（T2 模板②），零重证、参数位一次给定。 *)
 Lemma zpi1_req_boltzmann_positive
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S) (base_loss : S -> R)
@@ -631,7 +631,7 @@ Qed.
 (*   （与面1 同形；m2 系名，槽消费件 req_boltzmann_positive@L352）。   *)
 (* ============================================================ *)
 
-(* E354 装配件 3：partition_condition 槽放电（面2 同形直装）。 *)
+(* E354 装配件 3：partition_condition 槽证明（面2 同形直装）。 *)
 Definition zpi2_partition_condition
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S) (base_loss : S -> R)
@@ -641,7 +641,7 @@ Definition zpi2_partition_condition
          (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) :=
   @zposd_partition R RIS S enum base_loss D D_pos.
 
-(* 实例放电件 3：Z_pos 槽实例形（非空前提显式携带）。 *)
+(* 实例证明件 3：Z_pos 槽实例形（非空前提显式携带）。 *)
 Lemma zpi2_Z_pos
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S) (base_loss : S -> R)
@@ -658,7 +658,7 @@ Definition zpi2_boltzmann_dist_m2
            (D : R) (D_pos : lt zero D) (Hne : Not (enum = nil)) : S -> R :=
   @zposd_boltzmann_dist R RIS S enum base_loss D D_pos Hne.
 
-(* 实例放电件 4：req_boltzmann_positive@L352 直装形（m2 形）。 *)
+(* 实例证明件 4：req_boltzmann_positive@L352 直装形（m2 形）。 *)
 Lemma zpi2_req_boltzmann_positive
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S) (base_loss : S -> R)
@@ -677,7 +677,7 @@ Qed.
 (* 面3a UpReqTempEntropy.v：Z_temp_spec@L66 槽实例（tZpos@L74 直装）  *)
 (* ============================================================ *)
 
-(* E354 装配件 5：Z_temp_spec 槽放电——zposd_Z_temp t Ht 定义性即
+(* E354 装配件 5：Z_temp_spec 槽证明——zposd_Z_temp t Ht 定义性即
    sumd_sumf 有限和，槽语句降 req_refl 定义件（zposd_partition 同法）。 *)
 Definition zpi3_Z_temp_spec
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
@@ -689,11 +689,11 @@ Definition zpi3_Z_temp_spec
   req_refl (@sumd_sumf R RIS S enum
               (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s)))).
 
-(* 实例放电件 5：tZpos@L74 结论实例形（Z_temp 位 Ht 化诚实降级——
-   勘误：面3 槽位 Z_temp : R -> R 与席60 zposd_Z_temp 族
+(* 实例证明件 5：tZpos@L74 结论实例形（Z_temp 位 Ht 化诚实降级——
+   勘误：面3 参数位 Z_temp : R -> R 与上游会话 zposd_Z_temp 族
    forall t, lt zero t -> R 类型失配（product vs R，编译实证），
-   直装沿面常数不可行；本件改沿席60 主件3 zposd_Z_temp_pos
-   （= UpReqDist req_Z_temp_pos 的无条件形）直放电，签名台账记
+   直装沿面常数不可行；本件改沿上游会话 主件3 zposd_Z_temp_pos
+   （= UpReqDist req_Z_temp_pos 的无条件形）直证明，签名登记表记
    「Z_temp 位 Ht 化」，非空前提显式携带。 *)
 Lemma zpi3_tZpos
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
@@ -708,7 +708,7 @@ Qed.
 (* 面3b UpFirewallReq.v：req_Z_temp_spec@L87 槽实例（fw_bt_pos 直装） *)
 (* ============================================================ *)
 
-(* E354 装配件 6：req_Z_temp_spec 槽放电（面3b 同形直装）。 *)
+(* E354 装配件 6：req_Z_temp_spec 槽证明（面3b 同形直装）。 *)
 Definition zpi_fw_req_Z_temp_spec
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S) (base_loss : S -> R)
@@ -719,9 +719,9 @@ Definition zpi_fw_req_Z_temp_spec
   req_refl (@sumd_sumf R RIS S enum
               (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s)))).
 
-(* 实例放电件 6：fw_bt_pos@L93 结论实例形（正性分布）——同面3a 勘误
-   （Z_temp 槽 R -> R 形与席60 Ht 化族失配，直装沿面常数不可行），
-   本件取其结论形在放电槽位的实例：fw_bt 的 zposd 同构 = 席60 主件4
+(* 实例证明件 6：fw_bt_pos@L93 结论实例形（正性分布）——同面3a 勘误
+   （Z_temp 槽 R -> R 形与上游会话 Ht 化族失配，直装沿面常数不可行），
+   本件取其结论形在证明参数位的实例：fw_bt 的 zposd 同构 = 上游会话 主件4
    zposd_boltzmann_dist_temp，正性沿 zposd_boltzmann_dist_temp_pos
    直供，非空前提显式携带。 *)
 Lemma zpi_fw_bt_pos
@@ -749,19 +749,19 @@ Print Assumptions zpi_fw_bt_pos.
 
 (* ======== G12_ZPosFam 成员件：UpReqZPosI2（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqZPosI2.v —— G3 Definition-Z 面直装席：Z_pos 族余量逐槽实例化  *)
-(*   消费席60 通用键 UpReqZPosD（zposd_Z_pos 主键）+ G1 钥匙          *)
-(*   UpReqSumD（sumd_sum_pos 根引擎）+ CW219 exp/mult 正性引擎，      *)
-(*   为普查 §G3 Definition-Z 余量面产出 T2 模板② 形态逐槽放电件：    *)
-(*   槽类型在 E354 填位（sumf := sumd_sumf 喂参）的实例语句，非空     *)
+(* UpReqZPosI2.v —— G3 Definition-Z 面直装模块：Z_pos 族余量逐槽实例化  *)
+(*   消费上游会话 通用键 UpReqZPosD（zposd_Z_pos 主键）+ G1 钥匙          *)
+(*   UpReqSumD（sumd_sum_pos 根引擎）+ CW_ConstructiveWorld_219 exp/mult 正性引擎，      *)
+(*   为普查 §G3 Definition-Z 余量面产出 T2 模板② 形态逐槽证明件：    *)
+(*   槽类型在 E354 填位（sumf := sumd_sumf 提供实参）的实例语句，非空     *)
 (*   前提 Not (enum = nil) 显式携带（诚实降级）。                    *)
 (*                                                                *)
-(* 前缀台账：前缀 zpi2_ 在席64 UpReqZPosI.v 面2 已有 4 名             *)
+(* 前缀登记表：前缀 zpi2_ 在上游会话 UpReqZPosI.v 面2 已有 4 名             *)
 (*   （zpi2_partition_condition / zpi2_Z_pos / zpi2_boltzmann_dist_m2 / *)
-(*   zpi2_req_boltzmann_positive）；本席逐名 grep 全库零重名，文件名    *)
+(*   zpi2_req_boltzmann_positive）；本文件逐名 grep 全库零重名，文件名    *)
 (*   UpReqZPosI2.v 与 UpReqZPosI.v 无冲突（双形并存，零既有文件改动）。 *)
 (*                                                                *)
-(* 逐槽清偿表（sed 实读行号；键填充/根引擎/阻塞三分级）：             *)
+(* 逐槽清偿表（源码实读行号；键填充/根引擎/阻塞三分级）：             *)
 (*  保底 4：                                                      *)
 (*   ① UpReqAlign.v:94   Z_align_pos : lt zero Z_align_req          *)
 (*      （Z_align_req@92 := sumf 逐项 mult (pi_ref s) 乘 exp_neg     *)
@@ -785,7 +785,7 @@ Print Assumptions zpi_fw_bt_pos.
 (*   ⑮ UpSigMigrate.v:533 partition_function_temp_pos                *)
 (*      （sigm_exp_pos_fn := exp_neg∘opp 换形，根引擎逐项 exp 正性）      *)
 (*                                                                *)
-(* 阻塞裁决（兜底，逐槽如实报；本席零越权）：                         *)
+(* 阻塞裁决（兜底，逐槽如实报；本文件零越权）：                         *)
 (*   B1 UpReqAlign.v:709 HZ : lt zero Z_aud_req——Z_aud_req :=        *)
 (*      sumf (fun s => if post_aud s then p s else zero)：零腿分支和  *)
 (*      （非 posting 态项为 zero），非全正项和；sumd_sum_pos 全正前提 *)
@@ -806,19 +806,19 @@ Print Assumptions zpi_fw_bt_pos.
 (*      mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos)   *)
 (*      (reward s))))——pi_ref 外乘 + 指数 opp 翻转，键形不可对接      *)
 (*      （ convertible 实证否），改沿 G1 根引擎 sumd_sum_pos +         *)
-(*      mult_positive/exp_neg_pos 纯项式直装（即席60 zposd_Z_pos      *)
-(*      内部同链），台账记「键形失配→根引擎直装」，不放大主张；        *)
+(*      mult_positive/exp_neg_pos 纯项式直装（即上游会话 zposd_Z_pos      *)
+(*      内部同链），登记表记「键形失配→根引擎直装」，不放大主张；        *)
 (*   2. ⑮ sigm_exp_pos_fn 为透明 Definition（exp_neg∘opp），delta 换形后    *)
 (*      根引擎逐项 exp_neg_pos 直供，同上登记；                       *)
 (*   3. ⑨ UpReqPPO 节载体绑定名 Real（语句与 R 实例同型，绑定名差异    *)
 (*      不改语句）；                                                 *)
-(*   4. 面常数 R/RIS 为非极大隐式位，直装喂定一律 @ 全参形（席64       *)
+(*   4. 面常数 R/RIS 为非极大隐式位，直装给定一律 @ 全参形（上游会话       *)
 (*      勘误3 同法）；feed 形 sumf := @sumd_sumf R RIS S enum（部分    *)
 (*      应用即 (S->R)->R 载体，E354 装法）。                          *)
 (*                                                                *)
 (* 红线：Set 层语句（lt/req 均 Set 值谓词，零泄露）；纯项式组装        *)
 (*   （exact 供给项，零重写战术）；零外部未证假设，尾部 Print          *)
-(*   Assumptions 新件全 Closed；既有文件零改；零 git。                *)
+(*   Assumptions 新件全 Closed；既有文件零改。                *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -1058,7 +1058,7 @@ Qed.
 (*   Z_thermo@539 := sumf boltzmann_factor，boltzmann_factor@536 :=   *)
 (*   exp_neg (mult (inv_pos D D_pos) (energy s))，E354 填位后与        *)
 (*   zposd_Z（base_loss := energy，β := D）定义性重合，zposd_Z_pos    *)
-(*   一次喂定。                                                      *)
+(*   一次给定。                                                      *)
 (* ============================================================ *)
 Lemma zpi2_sigmig_Z_thermo_pos
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
@@ -1178,32 +1178,32 @@ Print Assumptions zpi2_sigmig_partition_function_temp_pos.
 
 (* ======== G12_ZPosFam 成员件：UpReqZPosFinal（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqZPosFinal.v —— Z_align_pos 四站点前提消去席（终装）          *)
-(*   消费席60 通用键 UpReqZPosD（zposd_Z_pos_of_partition 主键）+    *)
-(*   G1 钥匙 UpReqSumD（sumd_sum_ext / sumd_sum_linear 喂定）+       *)
+(* UpReqZPosFinal.v —— Z_align_pos 四站点前提消去模块（终装）          *)
+(*   消费上游会话 通用键 UpReqZPosD（zposd_Z_pos_of_partition 主键）+    *)
+(*   G1 钥匙 UpReqSumD（sumd_sum_ext / sumd_sum_linear 给定）+       *)
 (*   UpReqAlign.req_align_partition_condition（配分条件桥）。        *)
 (*                                                                *)
-(* 使命（战役工卡）：T2① 普查 G3 族 Z_align_pos 槽 ×4 站点            *)
+(* 使命（系列工作工卡）：T2① 普查 G3 族 Z_align_pos 槽 ×4 站点            *)
 (*   （UpReqAlign.v:94 / UpReqAlign2.v:104 / UpReqAlignRestA.v:75 /  *)
-(*   UpReqDpoLoss.v:58）的消费定理面前提消去：槽位 Z_align_pos 被     *)
+(*   UpReqDpoLoss.v:58）的消费定理面前提消去：参数位 Z_align_pos 被     *)
 (*   zposd 键替换，其余前提原样；产出件名 = 原定理名_zpfinal_站点号。  *)
 (*                                                                *)
-(* 消去路线（本席升级，超出席72 保底件）：                            *)
-(*   席72（UpReqZPosI2.v 保底①②③④）判「键形失配→根引擎直装」：      *)
-(*   其保底件只交付槽值 lt zero Z_align（E354 sumd 喂位），且因        *)
-(*   Z_align 逐项含 pi_ref 外乘而绕开 zposd 键。本席发现站点1 的      *)
+(* 消去路线（本文件升级，超出上游会话 保底件）：                            *)
+(*   上游会话（UpReqZPosI2.v 保底①②③④）判「键形失配→根引擎直装」：      *)
+(*   其保底件只给出槽值 lt zero Z_align（E354 sumd 参数位），且因        *)
+(*   Z_align 逐项含 pi_ref 外乘而绕开 zposd 键。本文件发现站点1 的      *)
 (*   配分条件规格 req_align_partition_condition@UpReqAlign.v:210      *)
 (*     req Z_align_req (sumf (exp_neg (mult iv (align_energy_req))))  *)
 (*   经 E354（sumf := sumd_sumf）后与 zposd_Z_pos_of_partition 的      *)
 (*   槽形逐位重合（base_loss := align_energy_req），故站点1/3/4        *)
 (*   （3/4 消费的正是站点1 的 Z_align_req 常数）走真 zposd 键路线；    *)
 (*   站点2（req2_Z_align）无配分条件件，但其体与 Z_align_req δ 等价    *)
-(*   （convertible），键喂定 exact 换轨直通（本席勘误 2）。           *)
+(*   （convertible），键给定 exact 换轨直通（本文件勘误 2）。           *)
 (*                                                                *)
-(* 逐站消去台账（消去前假设集 vs 消去后假设集；载体位=sumf 装定位）：  *)
+(* 逐站消去登记表（消去前假设集 vs 消去后假设集；载体位=sumf 装定位）：  *)
 (*  站1 UpReqAlign.v:94（消费面=pi_star_req@95 / req_pi_star_pos /    *)
-(*     req_pi_star_normalized@222；普查 L518 记 2 件，本席 Check      *)
-(*     实证 req_pi_star_pos 亦携槽位=3 件，勘误 1）：                 *)
+(*     req_pi_star_normalized@222；普查 L518 记 2 件，本文件 Check      *)
+(*     实证 req_pi_star_pos 亦携参数位=3 件，勘误 1）：                 *)
 (*     · pi_star_req_zpfinal_1（定义件）                              *)
 (*       前 6 位{sumf,reward,beta,beta_pos,pi_ref,Z_align_pos}        *)
 (*       后 7 位{enum,reward,beta,beta_pos,pi_ref,pi_ref_pos,Hne}     *)
@@ -1214,23 +1214,23 @@ Print Assumptions zpi2_sigmig_partition_function_temp_pos.
 (*       前 7 位{sumf,sum_linear,reward,beta,beta_pos,pi_ref,         *)
 (*       Z_align_pos}→后 7 位{enum,reward,beta,beta_pos,pi_ref,       *)
 (*       pi_ref_pos,Hne}；Z_align_pos 消去 + sum_linear 桥定义性      *)
-(*       喂定消去（sumd_sum_linear 同型直供），未证数学/桥位净 -2。    *)
+(*       给定消去（sumd_sum_linear 同型直供），未证数学/桥位净 -2。    *)
 (*  站2 UpReqAlign2.v:104（消费面=req2_pi_star@105 /                  *)
 (*     req2_pi_star_normalized@387；普查 L551 记 2 件）：             *)
 (*     · req2_pi_star_zpfinal_2：前 6 位→后 7 位（同站1 定义件）。    *)
 (*     · req2_pi_star_normalized_zpfinal_2：前 7 位→后 7 位；         *)
-(*       Z_align_pos 消去 + sum_linear 喂定消去，净 -2。              *)
+(*       Z_align_pos 消去 + sum_linear 给定消去，净 -2。              *)
 (*  站3 UpReqAlignRestA.v:75（消费面=ralt_pistar@201 /                *)
 (*     ralt_pistar_pos@196 / ralt_log_pi_star@207 /                   *)
 (*     ralt_dpo_reward_recovers@260 / ralt_dpo_reward_relative_exact  *)
 (*     @343 / ralt_dpo_loss_at_pi_star@509；普查 L568 记 7 处）：      *)
 (*     6 件 *_zpfinal_3：每件 Z_align_pos 消去→Hne；log 双桥位        *)
 (*     （ralt_log_req_compat / ralt_log_inv_exp_neg_req）原样保留     *)
-(*     （接口缺口桥，非本席消去面）。DPO 簇 4 定理假设集全部缩减。     *)
+(*     （接口缺口桥，非本文件消去面）。DPO 簇 4 定理假设集全部缩减。     *)
 (*  站4 UpReqDpoLoss.v:58（消费面=rdl_pistar@87 / rdl_pistar_pos@90 /  *)
 (*     rdl_dpo_total_loss_at_star@164；普查 L793）：                  *)
 (*     3 件 *_zpfinal_4：同站3 法；批5 解冻主件 dpo_total_loss_at_star *)
-(*     的槽位随之消去。                                               *)
+(*     的参数位随之消去。                                               *)
 (*                                                                *)
 (* 下游影响清单（假设集因此缩减的面）：                                *)
 (*   - 旗舰链入端：req_pi_star_pos / req_pi_star_normalized（站1）     *)
@@ -1242,11 +1242,11 @@ Print Assumptions zpi2_sigmig_partition_function_temp_pos.
 (*   - 普查 L125「7/21 传递消费定理面」：上述件的一切下游消费件        *)
 (*     经换件即继承缩减后假设集（Z_pos 数学位 → datum 非空位）。       *)
 (*                                                                *)
-(* 红线：Set 层语句（lt/req 均 Set 值谓词；槽放电新增前提仅 datum 位   *)
-(*   Not (enum = nil)，沿 ZPosD 签名台账先例）；纯项式组装（exact      *)
+(* 红线：Set 层语句（lt/req 均 Set 值谓词；槽证明新增前提仅 datum 位   *)
+(*   Not (enum = nil)，沿 ZPosD 签名登记表先例）；纯项式组装（exact      *)
 (*   供给项，零 rewrite 战术）；零外部未证假设，尾部 Print Assumptions *)
 (*   新件全 Closed；既有文件零改；前缀 zpfinal_ 全库防撞 grep 零命中；  *)
-(*   零 git。                                                        *)
+(*   。                                                        *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -1262,10 +1262,10 @@ From Stdlib Require Import Extraction.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 键喂定件 1（站1/3/4 共用）：Z_align_pos 槽的 zposd 键放电形         *)
-(*   zposd_Z_pos_of_partition（席60 主件1）+ 配分条件桥               *)
+(* 键给定件 1（站1/3/4 共用）：Z_align_pos 槽的 zposd 键证明形         *)
+(*   zposd_Z_pos_of_partition（上游会话 主件1）+ 配分条件桥               *)
 (*   req_align_partition_condition（E354：sumf := sumd_sumf，        *)
-(*   sum_ext := sumd_sum_ext 定义性喂定）+ datum 非空位。             *)
+(*   sum_ext := sumd_sum_ext 定义性给定）+ datum 非空位。             *)
 (* ============================================================ *)
 Definition zpfinal1_Z_align_pos_key
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
@@ -1287,8 +1287,8 @@ Definition zpfinal1_Z_align_pos_key
     Hne.
 
 (* ============================================================ *)
-(* 键喂定件 2（站2）：req2_Z_align 体与 Z_align_req δ 等价             *)
-(*   （同体 sumf 逐项形，convertible），键喂定 exact 换轨直通。        *)
+(* 键给定件 2（站2）：req2_Z_align 体与 Z_align_req δ 等价             *)
+(*   （同体 sumf 逐项形，convertible），键给定 exact 换轨直通。        *)
 (* ============================================================ *)
 Lemma zpfinal2_req2_Z_align_pos_key
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
@@ -1307,7 +1307,7 @@ Qed.
 (* 站1 UpReqAlign.v:94 消去件（槽消费面 3 件）                        *)
 (* ============================================================ *)
 
-(* 定义件：pi_star_req@95 槽放电实例形 *)
+(* 定义件：pi_star_req@95 槽证明实例形 *)
 Definition pi_star_req_zpfinal_1
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S)
@@ -1343,7 +1343,7 @@ Qed.
 (* 消去件 1b：req_pi_star_normalized（π* 归一化）
    消去前 7 位{sumf,sum_linear,reward,beta,beta_pos,pi_ref,Z_align_pos}
    消去后 7 位{enum,reward,beta,beta_pos,pi_ref,pi_ref_pos,Hne}
-   （Z_align_pos 消去 + sum_linear 定义性喂定消去，净 -2） *)
+   （Z_align_pos 消去 + sum_linear 定义性给定消去，净 -2） *)
 Lemma req_pi_star_normalized_zpfinal_1
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S)
@@ -1370,7 +1370,7 @@ Qed.
 (* 站2 UpReqAlign2.v:104 消去件（槽消费面 2 件）                      *)
 (* ============================================================ *)
 
-(* 定义件：req2_pi_star@105 槽放电实例形 *)
+(* 定义件：req2_pi_star@105 槽证明实例形 *)
 Definition req2_pi_star_zpfinal_2
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S)
@@ -1385,7 +1385,7 @@ Definition req2_pi_star_zpfinal_2
 (* 消去件 2a：req2_pi_star_normalized
    消去前 7 位{sumf,sum_linear,reward,beta,beta_pos,pi_ref,Z_align_pos}
    消去后 7 位{enum,reward,beta,beta_pos,pi_ref,pi_ref_pos,Hne}
-   （Z_align_pos 消去 + sum_linear 定义性喂定消去，净 -2） *)
+   （Z_align_pos 消去 + sum_linear 定义性给定消去，净 -2） *)
 Lemma req2_pi_star_normalized_zpfinal_2
       (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
       (S : Set) (enum : list S)
@@ -1412,7 +1412,7 @@ Qed.
 (* 站3 UpReqAlignRestA.v:75 消去件（槽消费面 6 件；log 双桥原样）      *)
 (* ============================================================ *)
 
-(* 定义件：ralt_pistar@201 槽放电实例形 *)
+(* 定义件：ralt_pistar@201 槽证明实例形 *)
 Definition ralt_pistar_zpfinal_3
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S)
@@ -1595,7 +1595,7 @@ Qed.
 (* 站4 UpReqDpoLoss.v:58 消去件（槽消费面 3 件；log 双桥原样）         *)
 (* ============================================================ *)
 
-(* 定义件：rdl_pistar@87 槽放电实例形 *)
+(* 定义件：rdl_pistar@87 槽证明实例形 *)
 Definition rdl_pistar_zpfinal_4
            (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
            (S : Set) (enum : list S)

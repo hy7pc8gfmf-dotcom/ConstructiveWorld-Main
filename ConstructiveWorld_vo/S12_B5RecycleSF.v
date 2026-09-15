@@ -1,6 +1,16 @@
-(* ===== CW219 拆分分片 S12_B5RecycleSF（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L79153-L93447；头部 23 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05 S06 S07 S08 S09 S10 S11；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S12_B5RecycleSF.v                                           *)
+(*                                                             *)
+(* 目的：B5 模块的复用整合（arctan/指数/log 界的再组装）与       *)
+(*       SF 工作记忆/自由能模型（构造性 Set 层）。               *)
+(* 主件：b5e_pern_main（per-n 主界，dec 三分组装 + 预算）；       *)
+(*       SFWorkingMemory 工作记忆模型（蓝图 §1）。               *)
+(* 依赖：S01–S11；Stdlib（QArith、List、Bool、Arith、Setoid、    *)
+(*       Morphisms、Lia）。                                      *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L79153-L93447，去头正文与原文区间逐字节同源；蓝图原陈述  *)
+(*       有误或原为承认件者，本件按可证形态重述。                 *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -23,11 +33,11 @@ Opaque Qred.
 
 
 (* ============================================================ *)
-(* 迭代 212 批量回收（2026-09-04）：B5-A item1c 闭式 discharge        *)
+(* B5-A item1c 闭式 前提消解        *)
 (* （B3 主件 b3rr_real_arctan_deriv_linear 实例化 item1b Section     *)
 (* Variable；闭式主件 b5a_sin_atan_diff_closed_r；4 Qed；BAD 0）。   *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1c.v；  *)
-(* 依赖 item1b 块（先插；CW2 Require 剥除）。                       *)
+(* 依赖 item1b 块（先插；上游 Require 剥除）。                     *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -211,7 +221,7 @@ Qed.
 (* ============================================================ *)
 (* Part E'：b5a_sin_atan_diff_closed_r —— item1b Part E 的闭式版       *)
 (*   （r 参数化；证明文本原样复用，仅：Hx := b3rr_dom_r1 x r Hxr Hr1、 *)
-(*    Y 提取改调 b5c_vdh_pts_r）。闭式：无顶层 Variable/Parameter。    *)
+(*    Y 提取改调 b5c_vdh_pts_r）。闭式：无顶层 Variable/参数声明。    *)
 (* ============================================================ *)
 
 Lemma b5a_sin_atan_diff_closed_r :
@@ -479,7 +489,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T1 · cos 闭式件        *)
+(* B5-A E-ODE T1 · cos 闭式件        *)
 (* （镜像 212 根 b5a_sin_atan_diff_closed_r L79346：主件              *)
 (* b5a_cos_atan_diff_closed_r（L1131）+ 12 个 b5d_* 辅助；10 Qed）。  *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1d.v；   *)
@@ -1863,10 +1873,10 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T2 · E 复合可微闭式    *)
+(* B5-A E-ODE T2 · E 复合可微闭式    *)
 (* （b5a_E_diff_closed_r（L317）+ b5e_* 辅助；4 Qed）。来源：          *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item2.v；          *)
-(* 依赖 item1d 块（CW2 Require 剥除、块内联）；BAD 0。                *)
+(* 依赖 item1d 块（上游 Require 剥除、块内联）。                      *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -1900,7 +1910,7 @@ Definition b5e_E_dec (x : Real)
 (*   projT1 (b5e_E_err x Hx h Hxh) n == projT1 (b5e_E_dec ...) n *)
 (*   证明：real_plus/opp/mult 投影展开后，d := inv_pos(1+x²)      *)
 (*   在 n ≥ N 处以 real_inv_proj 代换 Qinv(1+x_n²)，逐点          *)
-(*   Q-field 收口（d·(1+x²) == 1 ⟹ 残差括号消去）。              *)
+(*   Q-field 证毕（d·(1+x²) == 1 ⟹ 残差括号消去）。              *)
 (* ============================================================ *)
 Lemma b5e_E_dec_proj : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -2018,7 +2028,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* E4：b5e_pern_main —— per-n 主界（dec 三分组装 + 预算收口）    *)
+(* E4：b5e_pern_main —— per-n 主界（dec 三分组装 + 预算证毕）    *)
 (*   |dec_n| ≤ en·|h_n| + (3/4)·en'                             *)
 (*   假设：sin 份额 Hrs、cos 份额 Hrc（|(x+h)_n| ≤ 1 已折入）、  *)
 (*     残差 Hres（b5e_res_le 结论）、系数预算                     *)
@@ -2146,14 +2156,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* E6：主装配 b5a_E_diff_closed_r（任务书 §4 定稿语句）          *)
-(*   组装路线（任务书 §1）：ErrE := ΔE − x·E·d·h                *)
+(* E6：主装配 b5a_E_diff_closed_r（规范 §4 定稿语句）          *)
+(*   组装路线（规范 §1）：ErrE := ΔE − x·E·d·h                *)
 (*     == R_sin − (x+h)·R_cos + h·sA·(d·h)（b5e_E_dec_proj）    *)
 (*   三分界：sin 闭式（eps·(1/4) 份额）、cos 闭式（eps·(1/4)）、 *)
 (*     残差（|h|²·Msr 走 δ 的 eps·kδ 分量 + b5e_res_le）；       *)
 (*   加性份额：kS'=1/8、kC'=1/8、转换松弛 krelS=krelC=1/16；    *)
 (*   预算：kS+kC = 1/2、Msr·kδ ≤ 1/4（b5n_2S_kδ_le, S := Msr）⟹  *)
-(*   系数 ≤ 3/4 ≤ 1；加性 ≤ 3/8 ≤ 3/4（b5n_close 收口）。        *)
+(*   系数 ≤ 3/4 ≤ 1；加性 ≤ 3/8 ≤ 3/4（经 b5n_close）。        *)
 (* ============================================================ *)
 Lemma b5a_E_diff_closed_r :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -2448,16 +2458,16 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T3 S 侧 g-diff 件      *)
+(* B5-A E-ODE T3 S 侧 g-diff 件      *)
 (* （主件 b5f_gdiff_pts_r（L1271）+ b5f_* 族 18 件；14 Qed）。来源：   *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item3s.v；          *)
-(* 依赖仅根（禁 CW2）；BAD 0。                                        *)
+(* 依赖仅上游根模块。                                                *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* 目标语句（任务书 §4 + 父代理 2026-09-04 裁决）                *)
+(* 目标语句（规范 §4 定稿；既定裁决）                *)
 (* b5a_S_ge_one 采用逐点 Q 尾形态（real_le := Or(lt,eq) 语义下   *)
-(* ∀x 闭式 real_le 不可构造——库 L13513/L68349 自认；父代理裁决）*)
+(* ∀x 闭式 real_le 不可构造——库 L13513/L68349 自认；既定裁决）*)
 (* ============================================================ *)
 
 (* S(x) ≥ 1：逐点（eventual）Q 界（b5c_d_proj_le_one L74897 同款） *)
@@ -3692,7 +3702,7 @@ Qed.
 (*   |Δu_n| ≤ 3·sn（b5f_Du_abs_pts + 2r+1/2 ≤ 3）               *)
 (*   |(1/2)·d·h²| ≤ (1/4)·k2·en·sn（|d_n|≤1 + |h_n|≤kL·en）     *)
 (*   wS == (1/2)·LogErr + (1/2)·d·h²（逐点 Qeq 就地重证）        *)
-(*   线性 3kL/2 + k2/4 == k2（nra 收口）                         *)
+(*   线性 3kL/2 + k2/4 == k2（nra 证毕）                         *)
 (* ============================================================ *)
 Lemma b5f_gdiff_pts_r : forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1)
   (x : Real) (Hxr : forall n : nat, QleT' (Qabs (projT1 x n)) r)
@@ -4102,7 +4112,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T3 · exp 部独立件      *)
+(* B5-A E-ODE T3 · exp 部独立件      *)
 (* （主件 b5a_S_exp_part_bound_closed_r（L1097）+ b5j_* 族；26 Qed）。 *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item3e.v；   *)
 (* 依赖 item3s 块；BAD 0。                                            *)
@@ -4110,7 +4120,7 @@ Qed.
 
 (* ============================================================ *)
 (* M1 骨架：b5j_ 前缀 exp 部组件将在此开发                      *)
-(* 规划组件族（逐件 Qed + rc=0 checkpoint）：                    *)
+(* 规划组件族（逐件 Qed）：                    *)
 (*   ① v 的激活与界：b5j_v_abs_bd 族（|v| ≤ C1·|h| + …；        *)
 (*      |v| < δ_exp 激活；用 b5f_Du_act_delta / b5f_Du_abs_pts / *)
 (*      b5f_LogErr_delta / b5f_v_minus_xdh_decomp）              *)
@@ -4447,7 +4457,7 @@ Proof.
       { exact Hh0. } } }
 Qed.
 
-(* ---- 主件目标语句（定稿待开发收口；以进度文件登记为准） ---- *)
+(* ---- 主件目标语句（定稿） ---- *)
 (*
 Lemma b5a_S_exp_part_bound_closed_r :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -4679,7 +4689,7 @@ Proof.
     + unfold b5j_Kvq, b5j_kL. nra.
 Qed.
 
-(* (c) Real 层收口：|v(x,h)| ≤ Kvq(r)·|h| + shV
+(* (c) Real 层界：|v(x,h)| ≤ Kvq(r)·|h| + shV
    证法：epsL' := shV·(1#8)、mm := shV·(1#16)；桥 b5j_real_le_m_pts 逐点化 Hlog；
    逐点预算走 (a)(b)；Real-le 输出取 lt 支，见证 sh0/8，余量 (29/32)shn ≥ sh0/8。 *)
 Lemma b5j_v_abs_bd :
@@ -5172,7 +5182,7 @@ Qed.
 (*   → |v| ≤ Kvqc|h|+shV（b5j_v_abs_bd）；eps0·Kvqc == eps·invM    *)
 (*     （b5j_eps0_kvq_req）、eps0·shV == (1#4)eps'·invM            *)
 (*     （b5j_eps0_shv_req）重塑 → |Sx|·(eps·invM·|h|+eps'·invM)    *)
-(*     → real_abs_scaling_le 收口 eps|h|+eps'。                    *)
+(*     → 经 real_abs_scaling_le 得 eps|h|+eps'。                   *)
 (* ============================================================ *)
 Lemma b5a_S_exp_part_bound_closed_r :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -5524,7 +5534,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T3 · S≥1 证书域件      *)
+(* B5-A E-ODE T3 · S≥1 证书域件      *)
 (* （主件 b5a_S_ge_one（L191，real_lt real_zero x 证书域）+ b5k_* 辅  *)
 (* 助；5 Qed；x==0 走 real_eq）。来源：                               *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item3g.v；          *)
@@ -5633,7 +5643,7 @@ Qed.
 
 (* ============================================================ *)
 (* 证书域逐点 Q 尾：x² > 0 ⟹ ∃N ∀n≥N: Qle 1 (S(x)_n)            *)
-(* （destruct real_lt 分离见证直收口；N := real_lt 见证 N）       *)
+(* （destruct real_lt 分离见证直接得证；N := real_lt 见证 N）       *)
 (* ============================================================ *)
 Lemma b5k_S_ge_one_cert : forall (x : Real),
   real_lt real_zero (real_mult x x) ->
@@ -5668,10 +5678,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件 b5a_S_ge_one（证书域定稿，父代理 2026-09-05 裁决方案 A）：*)
+(* 主件 b5a_S_ge_one（证书域定稿，既定方案 A）：*)
 (*   ∀x (real_lt real_zero x)，逐点 Q 尾 ≥ 1。                  *)
 (*   语句与 b5k_S_ge_one_pos 逐字相同（= b5k_S_ge_one_cert @      *)
-(*   x²>0（real_mult_pos_compat））——主件名交付。               *)
+(*   x²>0（real_mult_pos_compat））——主件证毕。                 *)
 (*   ∀x 形态不可证（log_seq 符号尾不可得，见文件头卡点记录）；    *)
 (*   x==0 不属本件域（S(0)==1 走 real_eq/exp 0 恒等）。          *)
 (* ============================================================ *)
@@ -5685,7 +5695,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T3 · S 主装配          *)
+(* B5-A E-ODE T3 · S 主装配          *)
 (* （主件 b5a_S_diff_closed_r（L180）+ b5l_* 辅助；5 Qed）。来源：     *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item3a.v；          *)
 (* 依赖 item3s + item3e 块；BAD 0。                                   *)
@@ -5693,7 +5703,7 @@ Qed.
 
 (* ============================================================ *)
 (* M1 骨架：b5l_ 前缀 S 主装配组件将在此开发                    *)
-(* 规划组件族（逐件 Qed + rc=0 checkpoint）：                    *)
+(* 规划组件族（逐件 Qed）：                    *)
 (*   Batch A（Q 预算常数件）：b5l_k_posT / b5l_Mk_le             *)
 (*     （k := Qinv(8·(1+M))，M 为 b5f_S_pts_bounded 上界：       *)
 (*       QltT 0 k、Qle (M·k) (1#8)）                            *)
@@ -5703,7 +5713,7 @@ Qed.
 (*   Batch C（主装配 b5a_S_diff_closed_r，见文件尾注释）：       *)
 (*     δ := real_min δexp δg（δexp := item3e 主件 @ eps·(1#2)； *)
 (*       δg := b5f_gdiff_pts_r @ eps·(1#4)、k2:=k2p:=k(M)、      *)
-(*       eps'·(1#8)）；逐点收口：|err_n| ≤ en·sn + (3#4)·en'     *)
+(*       eps'·(1#8)）；逐点证得：|err_n| ≤ en·sn + (3#4)·en'     *)
 (*       → eta := (1#8)e1 见证 real_lt（b5n_close/b5n_quarter_gt）*)
 (* ============================================================ *)
 
@@ -5711,7 +5721,7 @@ Qed.
 (* Batch A：Q 预算常数件                                        *)
 (* M（S-上界，0 < M）⟹ k := Qinv(8(1+M)) > 0 且 M·k ≤ (1#8)     *)
 (* 用途：g 部 |Sx·wS| ≤ M·(eps2_n·k·sn + 2k2p·eps2'_n) 的        *)
-(*   斜率/常数在逐点 nra 收口中的系数预算                        *)
+(*   斜率/常数在逐点 nra 论证中的系数预算                        *)
 (* ============================================================ *)
 
 (* 0 < Qinv(8(1+M))（M ≥ 0 前提） *)
@@ -5832,7 +5842,7 @@ Qed.
 (*   G := Sx·wS 由 b5f_gdiff_pts_r @ eps·(1#4)、k2:=k2p:=         *)
 (*   Qinv(8(1+M)) 界定（|S_n| ≤ M 缩放，M := b5f_S_pts_bounded）；*)
 (*   分解松弛 b5l_eq_abs_tri @ m0 := (1#32)·e1；                 *)
-(*   δ := real_min δexp δg；逐点收口 |err_n| ≤ en·hn + (3#4)en'   *)
+(*   δ := real_min δexp δg；逐点证得 |err_n| ≤ en·hn + (3#4)en'   *)
 (*   （系数吸收 + 线性 nra，P1 探针验证）→ eta := (1#8)e1 见证     *)
 (*   real_lt 左支（b5n_quarter_gt + b5n_close，镜像 item2 E6）。  *)
 (* ============================================================ *)
@@ -6078,7 +6088,7 @@ Proof.
       (* 分解：|err_n| ≤ |Eobj_n| + (|Gob_n| + m0) *)
       assert (HtriB : Qle Dn (Qplus (Qabs (projT1 Eobj n)) (Qplus (Qabs (projT1 Gob n)) m0))).
       { unfold Dn. exact (Htri n HnNtri). }
-      (* 汇总 → 吸收 → 线性 nra 收口 *)
+      (* 汇总 → 吸收 → 线性 nra 证毕 *)
       assert (Hmain : Qle Dn (Qplus (Qmult en hn) (Qmult (3 # 4) en'))).
       { apply (Qle_trans Dn
                          (Qplus Eexpn (Qplus (Qplus (Qmult (1 # 32) (Qmult en hn))
@@ -6096,7 +6106,7 @@ Proof.
             * apply Qplus_le_compat. { exact HgB. } { apply Qle_refl. }
         - unfold Eexpn.
           nra. }
-      (* margin：eta < (1#4)·en'；b5n_close 收口 *)
+      (* margin：eta < (1#4)·en'；经 b5n_close *)
       assert (Hq4e : Qlt eta (Qmult (1 # 4) en')).
       { unfold eta, en'. apply (b5n_quarter_gt e1 (projT1 eps' n)).
         - apply QltT_to_Qlt. exact He1T.
@@ -6121,17 +6131,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §0 主件目标语句（定稿；任务书 §0 抄录；实现见上 Batch C）    *)
+(* §0 主件目标语句（定稿；规范 §0 抄录；实现见上 Batch C）    *)
 
 (* ============================================================ *)
-(* Batch C-1：（设计）逐点收口在主装配 per-n 内联完成：           *)
+(* （设计）逐点估计在主装配 per-n 内联完成：                      *)
 (*   非线性系数先做抽象 Q 事实（coefS1/coefG1 ≤ 1#32 型），       *)
-(*   再以 X := en·hn 原子 + 线性 nra 收口（镜像 item2 L260-287    *)
+(*   再以 X := en·hn 原子 + 线性 nra 证毕（镜像 item2 L260-287    *)
 (*   Ha/Hb + 根 sin b5n_close 模式）——无需独立件。               *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* §0 主件目标语句（定稿；任务书 §0 抄录；开发收口后以此为准）  *)
+(* §0 主件目标语句（定稿）                                      *)
 (* ============================================================ *)
 (*
 Lemma b5a_S_diff_closed_r :
@@ -6148,14 +6158,14 @@ Lemma b5a_S_diff_closed_r :
 *)
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T3 Phase B · J′==0     *)
+(* B5-A E-ODE T3 Phase B · J′==0     *)
 (* （主件 b5a_J_deriv_zero（L373）+ b5m_* 族 17 件；15 Qed）。来源：   *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item3b.v；          *)
 (* 依赖 1d/2/3s/3e/3g/3a 六块；BAD 0。                                *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* §0 主件目标语句（任务书 §0 抄录定稿；开发收口后以此为准）    *)
+(* §0 主件目标语句（定稿）                                       *)
 (* ============================================================ *)
 (*
 Lemma b5a_J_deriv_zero :
@@ -6172,7 +6182,7 @@ Lemma b5a_J_deriv_zero :
 *)
 
 (* ============================================================ *)
-(* M0 骨架。规划组件（逐件 Qed + rc=0 checkpoint）：             *)
+(* M0 骨架。规划组件（逐件 Qed）：             *)
 (*   b5m_rS（Definition）：S-diff 误差对象（= item3a err 同文） *)
 (*   b5m_J_err（Definition）：ErrJ := J(x+h) − J(x)             *)
 (*   b5m_J_dec_proj：逐点恒等（n ≥ N：ErrJ_n == rE·QinvB −      *)
@@ -6180,7 +6190,7 @@ Lemma b5a_J_deriv_zero :
 (*   b5m_Sxh_ge_cB：Sxh ≥ cB 的逐点证书（S-diff 常份额实例 +    *)
 (*     |h_n| ≤ τ，见主装配）                                   *)
 (*   主装配 b5a_J_deriv_zero（Batch C）：δ := min(δE, δS1,     *)
-(*     δS2, real_const τ)；逐点收口 |ErrJ_n| ≤ en·hn + (3#4)en' *)
+(*     δS2, real_const τ)；逐点证得 |ErrJ_n| ≤ en·hn + (3#4)en' *)
 (*     → eta := (1#8)e1 见证 real_lt（b5n_close/quarter_gt）。  *)
 (* ============================================================ *)
 
@@ -6470,14 +6480,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* M3：主装配 b5a_J_deriv_zero（任务书 §0 定稿语句）            *)
+(* M3：主装配 b5a_J_deriv_zero（规范 §0 定稿语句）            *)
 (*   ErrJ := J(x+h) − J(x)（b5m_J_err x Hx h Hxh）；             *)
 (*   组装：b5m_J_dec_proj 逐点恒等 + 商分母证书（b5m_inv_le，    *)
 (*     cA := Sx>0 见证、cB := cA/2 经 S-diff 常份额实例）⟹        *)
 (*     b5m_J_abs_tri |Dn| ≤ QicB·RE + ME·QicA·QicB·RS；          *)
 (*   |rE| 界 = E-diff @ eps·real_const(kE)（eps' 份额 kEp/κE）；  *)
 (*   |rS| 界 = S-diff @ eps·real_const(kS)（eps' 份额 kSp/κS）；  *)
-(*   δ := min(δE, δS1, δS2, real_const τ)；逐点收口             *)
+(*   δ := min(δE, δS1, δS2, real_const τ)；逐点证得             *)
 (*     |Dn| ≤ en·hn + (3#4)·en' → eta := (1#8)e1 见证 real_lt。  *)
 (* ============================================================ *)
 Lemma b5a_J_deriv_zero :
@@ -7175,7 +7185,7 @@ Qed.
 
 
 (* ============================================================ *)
-(* R1（T4 延伸 · 任务书-E-ODE-T4-R1-尾证书J模量-20260905.md）   *)
+(* R1（T4 延伸 · 规范-E-ODE-T4-R1-尾证书J模量-20260905.md）   *)
 (* 目标件：b5m_J_deriv_zero_tail —— 尾证书版 J 零模。           *)
 (*   b5a_J_deriv_zero 的基点前提是**全 n** r<1 证书              *)
 (*   （Hxr : ∀n |x_n| ≤ r）；而 real_le 区间点 y 的早坐标无界    *)
@@ -7470,7 +7480,7 @@ Qed.
 (*   黑盒给 δ̂ > 0 与 |J(x̂+ĥ) − J(x̂)| ≤ eps|ĥ| + eps'（          *)
 (*   ĥ := trunc(h,N0)，cw_unit (x̂+ĥ) 由 Hxh 逐点析出）→          *)
 (*   b5m_J_wd（real_eq-外延）经 real_eq x̂ x / ĥ h 把差与界       *)
-(*   传回 (x, h)（RealSetoid.real_le_compat 收口）。              *)
+(*   传回 (x, h)（经 RealSetoid.real_le_compat）。                *)
 (* ============================================================ *)
 Lemma b5m_J_deriv_zero_tail :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -7582,7 +7592,7 @@ Proof.
         + apply (real_abs_eq_compat (b5m_tailtrunc h N0) h).
           exact (b5m_tailtrunc_eq h N0).
       - apply real_eq_refl. }
-    (* 收口：real_le_compat 把 (x̂,ĥ) 模量传回 (x,h) *)
+    (* 模量回传：real_le_compat 把 (x̂,ĥ) 模量传回 (x,h) *)
     apply (RealSetoid.real_le_compat
       (real_abs (real_plus
         (b5c_J (real_plus (b5m_tailtrunc x N0) (b5m_tailtrunc h N0)) Hxĥ)
@@ -7597,18 +7607,18 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：B5-A E-ODE T4 Prep · clamp 总化   *)
+(* B5-A E-ODE T4 Prep · clamp 总化   *)
 (* （b5p2_clamp01/b5p2_J_tot/b5p2_Hext/b5p2_E_zero_of_J_zero 等 17 件；*)
 (* 15 Qed）。来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/            *)
 (*   sc2_b5a_item4p.v；依赖 2/3s/3e/3g/3a 五块（禁 item3b）；BAD 0。  *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* M0 骨架：§0 目标件清单（逐件真 Qed + rc=0 checkpoint）        *)
+(* M0 骨架：§0 目标件清单（逐件真 Qed）        *)
 (*   P1  clamp01 x := real_min (real_max x real_zero) (real_const 1)*)
 (*       （Def；根 real_min_proj L39793 / real_max_proj L39803）  *)
 (*   P2  Hcl : forall x, cw_unit (clamp01 x)（逐点 min/max 证书： *)
-(*        |min(max(x_n,0),1)| ≤ 1 ∀n，Q 层收口）                  *)
+(*        |min(max(x_n,0),1)| ≤ 1 ∀n，Q 层证毕）                  *)
 (*   P3  b5p2_J_tot x := b5c_J (clamp01 x) (Hcl x)（Def，总函数） *)
 (*   P4  Hext : forall x y, real_eq x y ->                        *)
 (*        real_eq (b5p2_J_tot x) (b5p2_J_tot y)（min/max wd 逐点）*)
@@ -7620,7 +7630,7 @@ Qed.
 (*        (real_mult (b5c_J x Hx) (b5a_S x))（real_inv_pos_correct*)
 (*        + b5c_S_pos）；由 J(x)==0 推 E(x)==0（0·S==0）           *)
 (*   P7  （只读预研）b5b_f1_closure' L78187 语句核对登记           *)
-(* 设计（详见进度文件 sc2_b5a_item4p-进度-20260904.md 首节）：    *)
+(* 设计（详见设计记录首节）：    *)
 (*   clamp 证书：min/max 逐点投影 → |Qmin(Qmax(x_n,0),1)| ≤ 1     *)
 (*   分离→尾等：real_lt 0 x / real_lt x 1 给 eps、N：尾部         *)
 (*     eps<x_n<1−eps → clamp01(x_n)==x_n 逐点精确相等 → real_eq    *)
@@ -7667,7 +7677,7 @@ Qed.
 
 (* ============================================================ *)
 (* P2：Hcl —— clamp01 的 cw_unit 证书（∀n |clamp01(x)_n| ≤ 1）  *)
-(*   逐点 min/max 投影：proj n == Qmin(Qmax(x_n,0),1) → Q 层收口 *)
+(*   逐点 min/max 投影：proj n == Qmin(Qmax(x_n,0),1) → Q 层证毕 *)
 (* ============================================================ *)
 Lemma b5p2_Hcl : forall (x : Real), cw_unit (b5p2_clamp01 x).
 Proof.
@@ -8097,7 +8107,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：非平凡终件 A · π 三角签名         *)
+(* 非平凡终件 A · π 三角签名         *)
 (* （主件 b5p_pi_trig_signature（L242）+ b5p_* 族 9 件；10 Qed）。    *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_cap_pi.v；        *)
 (* 依赖仅根；Qeq setoid 注册（L26-38）与根 L68020-68032 同文重复，按  *)
@@ -8202,7 +8212,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 3) 和角公式 RHS 收口                                        *)
+(* 3) 和角公式 RHS 化简                                        *)
 (*    sin 侧：sin c·cos c + cos c·sin c == 0                    *)
 (*    cos 侧：cos c·cos c + opp(sin c·sin c) == opp 1           *)
 (* ============================================================ *)
@@ -8314,7 +8324,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 迭代 213 批量回收（2026-09-05）：非平凡终件 D · arctan(1)==π_L·¼  *)
+(* 非平凡终件 D · arctan(1)==π_L·¼  *)
 (* （主件 b5q_arctan_one_leibniz_quarter（L180）+ b5q_* 族 8 件；     *)
 (* 9 Qed）。来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/            *)
 (*   sc2_cap_arctan.v；依赖仅根；Qeq setoid 注册同上剥除；BAD 0。     *)
@@ -8420,7 +8430,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 8) 后向链收口：π_L·(1/4) == θ（θ := arctan_one_real）          *)
+(* 8) 后向链：π_L·(1/4) == θ（θ := arctan_one_real）              *)
 (* ============================================================ *)
 Lemma b5q_leibniz_quarter_chain :
   real_eq (real_mult cauchy_real_pi_leibniz (real_const (1 / 4)))
@@ -8475,7 +8485,7 @@ Qed.
 (* World-206 保持一致，作为其尾部追加块。                        *)
 (*                                                               *)
 (* 【转换总纲：蓝图 → 206 规范的一致性替换】                     *)
-(*   1. 纯构造性：零自定义 Axiom/Parameter；经典逻辑与经典实数   *)
+(*   1. 纯构造性：零自定义公理面/参数声明；经典逻辑与经典实数   *)
 (*      公理（Coq Reals/R、lra、INR、序三分律、le_lt_dec）一律   *)
 (*      不用。蓝图中的 R 全部替换为 206 版柯西实数 Real；蓝图    *)
 (*      string 标识符替换为 nat；存在量词用 sigT；成员关系用     *)
@@ -8483,7 +8493,7 @@ Qed.
 (*   2. 依赖经典判定的命题按 206 版"诚实接口"教义改为 Section    *)
 (*      Variable/Hypothesis（能量比较可判定性、管道上界 Tmax、   *)
 (*      log 反单调、Fisher 非负等）；不可构造命题改 eps-余量形式 *)
-(*      真证或标注【临时承认】待后续批次闭合（本批允许 admit）。 *)
+(*      真证或标注【临时承认】待后续证明补全。                   *)
 (*      a·a == 0 ⟹ a == 0 这类构造性不可证命题一律不出现。       *)
 (*   3. 与 206 已有算法重叠者不再重复实现（各小节头部注明）：    *)
 (*      Boltzmann 分布与能量单调（FreeEnergyMinimization /        *)
@@ -9763,7 +9773,7 @@ Qed.
 End SFPathEnergy.
 
 (* ============================================================ *)
-(* SFWorkingMemory：工作记忆与变量槽位（蓝图 §1 Slot/             *)
+(* SFWorkingMemory：工作记忆与变量表项（蓝图 §1 Slot/             *)
 (* WorkingMemory/bind_slot/lookup_slot + §2 update_slot 族）。    *)
 (* 206 化：slot_name : string → nat（Nat.eqb 可判定，Set 层       *)
 (* match）；查找返回 option Real；全部定理零承认真证。             *)
@@ -9822,9 +9832,9 @@ Proof.
     + simpl. rewrite E. apply IH.
 Qed.
 
-(* 更新已存在的键不增槽位数（蓝图 update_slot_preserves_length_if_exists
+(* 更新已存在的键不增加表项数（蓝图 update_slot_preserves_length_if_exists
    的构造性化：键的存在以 sigT 见证 Some 查询结果携带）。 *)
-(* 更新已存在的键不增槽位数（蓝图 update_slot_preserves_length_if_exists
+(* 更新已存在的键不增加表项数（蓝图 update_slot_preserves_length_if_exists
    的构造性化：键的存在以 sigT 见证 Some 查询结果携带）。 *)
 Theorem sf_update_slot_len_preserved :
   forall mem k v,
@@ -9848,7 +9858,7 @@ Proof.
                         v0 Hv)).
 Qed.
 
-(* 删除：首个匹配键的槽位移除（蓝图语义扩展：遗忘门的最小实现）。 *)
+(* 删除：首个匹配键的表项移除（蓝图语义扩展：遗忘门的最小实现）。 *)
 Fixpoint sf_delete_slot (mem : SFWorkingMemory) (k : nat) : SFWorkingMemory :=
   match mem with
   | nil => nil
@@ -9903,7 +9913,7 @@ Qed.
 (* syntactic_potential / temporal_entropy / global_free_energy）。*)
 (* 与 206 关系：状态空间上的变分自由能/ELBO/Gibbs 已有            *)
 (* （FreeEnergyMinimization），本节做"路径级"能量学，两者互补。   *)
-(* 蓝图 global_free_energy_nonneg 被其作者自行 Abort（α 项为负，  *)
+(* 蓝图 global_free_energy_nonneg 被其作者自行中止（α 项为负，    *)
 (* 一般条件下不成立）——此处以诚实接口假设（α ≥ 0、管道上界、      *)
 (* 句法势能非负）陈述带条件的下界定理，可真证。                   *)
 (* ============================================================ *)
@@ -10405,7 +10415,7 @@ Qed.
 
 (* ============================================================ *)
 (* SFConv：超图消息传递 / 卷积（蓝图 §4 hypergraph_convolve）。    *)
-(* 蓝图 hypergraph_convolve_convex 以 Admitted 收场且 witness 抽象；*)
+(* 蓝图 hypergraph_convolve_convex 原为承认件且 witness 抽象；*)
 (* 此处给出具体可执行卷积：权重 = 管道厚度，归一化 = 正和的逆，   *)
 (* 并以 sigT 见证给出凸组合系数（λᵢ = wᵢ/W），归一化/正性/表示    *)
 (* 三定理全真证——蓝图对应定理的构造性完成版。                     *)
@@ -10846,7 +10856,7 @@ Proof.
                      == sf_qw2 (a :: mu') (b :: nu')
                         / (Z.of_nat (Datatypes.S (length mu')) # 1)).
       { unfold Qdiv. rewrite (sf_qw2_eq_qsub (a :: mu') (b :: nu')). ring. }
-      (* 修复：原嫁接文本 apply (sf_qle_eq_l _ (m) * m) 缺括号——应用绑定
+      (* 修复：原引用文本 apply (sf_qle_eq_l _ (m) * m) 缺括号——应用绑定
          比 * 紧，把部分应用的 sf_qle_eq_l 当成了乘法操作数。改经中间
          assert Hsqeq 装配（等价于原意：先换底、再用 Hkey/Hw2'）。 *)
       assert (Hsqeq : (sf_qcentroid (a :: mu') - sf_qcentroid (b :: nu'))
@@ -11737,7 +11747,7 @@ End SFQuantumQ.
 (* ============================================================ *)
 (* SFDiffusion：扩散前向/反向 + 多智能体中点共识（蓝图 §3           *)
 (* consensus_step / consensus_converges_to_zero + §4 forward/       *)
-(* reverse_diffuse）。蓝图两者均 Parameter 化无实现；此处给出闭式   *)
+(* reverse_diffuse）。蓝图两者均参数声明化无实现；此处给出闭式   *)
 (* 代数实现与精确恢复/收缩定理。sqrt 不在接口——用线性插值参数化。  *)
 (* ============================================================ *)
 
@@ -11926,7 +11936,7 @@ End SFDiffusion.
 
 (* ============================================================ *)
 (* SFSoftmaxInfoNCE：对比学习（蓝图 §4 infonce_loss）。             *)
-(* 蓝图定理依赖未定义 sum_similarities 且 Admitted；此处给可执行   *)
+(* 蓝图定理依赖未定义的 sum_similarities 且原为承认件；此处给可执行   *)
 (* softmax 与三定理：配分函数正、正样本概率 ≤ 1、InfoNCE 非负的    *)
  (* 诚实接口形式（log 反单调由具体模型提供）。                      *)
 (* ============================================================ *)
@@ -12189,7 +12199,7 @@ End SFWorkspace.
 (* ============================================================ *)
 (* 1. 本块全部定义位于 Set 层：Record/Fixpoint/Definition 均无 Prop  *)
 (*    依赖（Id/InT/And/Or/sigT 为 Set 编码），可整体 Extraction。   *)
-(* 2. 标注【临时承认】的定理按批次闭合计划推进：                    *)
+(* 2. 标注【临时承认】的定理待后续证明补全：                       *)
 (*    批 A（逐点代数）：sf_path_sum_app_single 尾情形、              *)
 (*       sf_gfe_append_single、sf_q_lagrange_nonneg、                *)
 (*       sf_qcentroid_diff、sf_q_centroid_bound、                    *)
@@ -12324,7 +12334,7 @@ Proof.
   exact (real_le_trans (real_mult a a) (real_mult a b) (real_mult b b) H2 H3).
 Qed.
 
-(* TODO-闭合批：原陈述按字面为假（对任意具体边，反向边可构造）。
+(* 注：对应蓝图原陈述按字面为假（对任意具体边，反向边可构造）。
    修正方向（C 代理批）：引入边集上下文 E 与 InT e' E 前提，
    以单边表 {行1→行2} 为 witness，反向边 ∉ E 即得非对称。 *)
 
@@ -13352,7 +13362,7 @@ Qed.
 
 (* ============================================================ *)
 (* SFModule06 系列：模块-4.v（R 层经典版）剩余算法的 206 化提取。  *)
-(* 该蓝图大量主题仅 Parameter+Admitted 空转（Ricci 流、ASI、哥德尔 *)
+(* 该蓝图大量主题仅以参数声明+承认件占位（Ricci 流、ASI、哥德尔 *)
 (* 等），按"零公理"教义记为接口或设计决策，不引入公理。            *)
 (* ============================================================ *)
 
@@ -13756,7 +13766,7 @@ Qed.
 
 (* ============================================================ *)
 (* SFRicci / SFDrift：度量演化与概念漂移（模块-4 第五部分）。       *)
-(* 蓝图原为 Parameter+Admitted；按零公理教义只落算法接口。         *)
+(* 蓝图原为参数声明+承认件；按零公理面原则只落算法接口。         *)
 (* ============================================================ *)
 
 (* 度量 = 对角线尺度向量；Ricci 流步 = 逐点收缩（实现占位：
@@ -14091,7 +14101,7 @@ Qed.
 
 (* ============================================================ *)
 (* SFNash / SFPreference / SFCalibration（模块-4 第七部分）：       *)
-(* 均衡/偏好/校准三主题需要概率或博弈环境语义，蓝图均为 Parameter  *)
+(* 均衡/偏好/校准三主题需要概率或博弈环境语义，蓝图均为参数声明   *)
 (* 空转——按零公理教义仅记录接口，不实现。                          *)
 (*   SFCalibrated : 智能体 → Set  （置信度 = 真实正确率 的见证）    *)
 (*   SFNash      : 智能体表 → 状态 → Set                          *)

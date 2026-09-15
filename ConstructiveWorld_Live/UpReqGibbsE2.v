@@ -1,36 +1,45 @@
 (* ============================================================ *)
-(* UpReqGibbsE2.v —— 槽放电战役 #2 重定位席：gibbs_equality 有限具体路线      *)
-(*   （前席 UpReqGibbsE.v 抽象 Or 形稿已阻塞定谳，本席零碰旧稿；              *)
+(* UpReqGibbsE2.v *)
+(* *)
+(* 目的： gibbs_equality 的有限具体路线（重定位段）。 *)
+(* 主件： gibbe2_kl_eq_of_w_zero 与 gibbe2_list_sum_zero_extract_bool：KL 等于零的有限具体刻画。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpReqGibbsD。 *)
+(* 备注： log_eq_linear 需强三分/LPO，构造性不可证（诚实边界）；本件取有限具体路线绕开该墙。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqGibbsE2.v —— 槽消解战役 #2 重定位席：gibbs_equality 有限具体路线      *)
+
 (*     gibbe2_ 前缀全库防撞，建前 grep 实测零命中。）                          *)
 (* ------------------------------------------------------------------ *)
-(* 侦察结论（实读定谳，2026-09-10）：                                          *)
-(*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（CW219:3448/3517），  *)
+(* 侦察结论（实读判定，2026-09-10）：                                          *)
+(*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（:3448/3517），  *)
 (*      real_list_sum_pos（根内 L41660 区）背书「逐项正⟹和正」方向；           *)
-(*      逆向「和零⟹逐项零」经 le_b 反对称（根内缺件）本席自建闭合。            *)
-(*   2. log 引擎：real_log_le_mono（UpLogMono L24，lt 支 real_log_lt_mono      *)
-(*      根内已证——严格单调在库）；log 单射/eq-linear 桥缺席——CW219 L41224      *)
+
+
+
 (*      诚实边界明示「log_eq_linear 需强三分/LPO，构造性不可证」。实测定：      *)
-(*      主件收口确须该桥。                                                     *)
-(*   3. 双切点互易推导否决：逐项钳零给出 log u_s == u_s − 1 各自成立，          *)
+(*      主件完成确须该桥。                                                     *)
+
 (*      但 u_1·u_2 == 1 互易关系对任意分布不成立（归一化不生互易），            *)
-(*      有限具体载体亦不能绕开 eq-linear 桥——X 邻接判词升级为战役记录。         *)
+(*      有限具体载体亦不能绕开 eq-linear 桥——X 邻接结论升级为战役记录。         *)
 (* ------------------------------------------------------------------ *)
-(* 交付（分级）：                                                              *)
+(* 结果（分级）：                                                              *)
 (*   [保底1·逐项钳零件族] gibbe2_le_b_antisym（核心新件，逐 n 构造，            *)
-(*     零 Or 收口、零 LPO、零三分）；gibbe2_clamp_head / _r；                   *)
+(*     零 Or 完成、零 LPO、零三分）；gibbe2_clamp_head / _r；                   *)
 (*     gibbe2_list_sum_zero_extract_bool（有限具体载体 [true;false] 提取）。    *)
-(*   [保底2·log 关系件] gibbe2_kl_eq_of_w_zero + gibbe2_tangent_eq +           *)
+
 (*     gibbe2_kl_zero_tangent_eq：KL==0 ⟹ 逐点切点等式                          *)
-(*     log(q_s/p_s) == q_s/p_s − 1（Real 层无条件——全库首件）。                 *)
-(*   [主件·桥注入形放电件] gibbe2_gibbs_equality_bool：KL==0 ⟹ 逐点切点等式     *)
+
+(*   [主件·桥注入形消解件] gibbe2_gibbs_equality_bool：KL==0 ⟹ 逐点切点等式     *)
 (*     ⟹（eq-linear 桥显式注入）⟹ 逐点 p==q。桥无条件不可证（根内 L41224        *)
-(*     定谳；前席 exp 复制机属阻塞域本席零碰），依兜底预案以显式前提放电——      *)
+(*     判定；上游件 exp 复制机属阻塞域本件零碰），依兜底预案以显式前提消解——      *)
 (*     req 层 dist_log_eq_linear（UpReqDist:1031 Hypothesis）的 Real 实例化     *)
 (*     缺口如实呈报。                                                          *)
 (* 红线：Set 层零 Prop（语句序/等全 Set 值 real_eq/real_lt/real_le_b；          *)
-(*   零 Or 收口、零三分、零 LPO）；全 Qed 闭合；零公理；既有文件零改；          *)
+(*   零 Or 完成、零三分、零 LPO）；全 Qed 闭合；零公理；既有文件零改；          *)
 (*   零 git；旧 UpReqGibbsE.v 零碰（无 .vo，不可 Require，未消费）。            *)
-(* 编译配方：_sqp_guard.ps1 温控包装 coqc -Q . "" UpReqGibbsE2.v。             *)
+
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -115,7 +124,7 @@ Proof.
   - exact (real_lt_plus_translate (real_opp a) a (real_plus b eps) (H eps Heps)).
 Qed.
 
-(* B4【核心新件】：le_b Bishop 序反对称（逐 n 构造，零 Or 收口、零 LPO） *)
+(* B4【核心新件】：le_b Bishop 序反对称（逐 n 构造，零 Or 完成、零 LPO） *)
 Lemma gibbe2_le_b_antisym : forall a b : Real,
   real_le_b a b -> real_le_b b a -> real_eq a b.
 Proof.
@@ -141,7 +150,7 @@ Proof.
   set (h := (eps * (1#2))%Q).
   assert (Hg1q : 0 < g1) by (apply QltT_to_Qlt; exact Hg1pos).
   assert (Hg2q : 0 < g2) by (apply QltT_to_Qlt; exact Hg2pos).
-  (* 上界：x < h（x := a_n − b_n，环归 + lia 收口） *)
+  (* 上界：x < h（x := a_n − b_n，环归 + lia 完成） *)
   assert (Hstep1 : projT1 a n - projT1 b n + g1
                    < projT1 a n - projT1 b n
                      + (projT1 b n + eps * (1#2) - projT1 a n)).
@@ -242,7 +251,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D：保底2·log 关系件（KL==0 ⟹ 逐点切点等式）                            *)
+
 (* ============================================================ *)
 
 (* D0：和零 ⟹ 项恒等 *)
@@ -281,7 +290,7 @@ Proof.
                (real_plus_zero X)).
 Qed.
 
-(* D1：切点等式形：kl == p−q ⟹ log(q/p) == q/p − 1 *)
+
 Lemma gibbe2_tangent_eq : forall (p q : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
   real_eq (real_kl_term p q Hp Hq) (real_plus p (real_opp q)) ->
@@ -382,7 +391,7 @@ Proof.
   exact (real_eq_trans L _ _ Hs2 Hs3).
 Qed.
 
-(* D2【保底2 主件】：KL==0 ⟹ 逐点切点等式 log(q_s/p_s) == q_s/p_s − 1 *)
+
 Lemma gibbe2_kl_zero_tangent_eq :
   forall (p q : bool -> Real)
     (Hp : forall s : bool, real_lt real_zero (p s))
@@ -481,7 +490,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：主件·桥注入形放电件                                                 *)
+(* Part E：主件·桥注入形消解件                                                 *)
 (* ============================================================ *)
 
 Theorem gibbe2_gibbs_equality_bool :

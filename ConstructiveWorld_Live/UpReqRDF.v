@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpReqRDF.v *)
+(* *)
+(* 目的： ReqDiffPlain 差分接口族与熵泛函实体面。 *)
+(* 主件： req_rdf_abs_triangle / req_rdf_inv_cancel 差分定律与 req_rdf_E_B_ent 熵泛函。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSLM。 *)
+(* 备注： 墙的绕行取记录级 eta 改述与假设位双车道（复核席结论承接）；四槽 plain 接口为显式前提。 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* UpReqRDF.v — 签名迁移批 5 波 4 桥席 C2：reqRDF(+MV/MVVec) 记录桥 16 件      *)
 (*                                                                       *)
@@ -7,32 +16,32 @@
 (*   Section DifferentiableLemmas L25006-26231（标量簇 10 件 + entropy 1 件）  *)
 (*   Section EntropyDifferentiable L26346-26404（entropy_differentiable）     *)
 (*   Section MultivariableDifferentiable L26685-27775（MV 4 件 + MVVec 1 件）  *)
-(* 上游：CW219 基座 + UpReqAlgebra（req_minus 引擎/减法簇/half 簇/分解簇）      *)
+(* 上游：基座 + UpReqAlgebra（req_minus 引擎/减法簇/half 簇/分解簇）      *)
 (*   + UpReqSLM（波 0 资产：ReqNonnegPlain 双槽 + req_le_zero_mult_nonneg）。  *)
-(*   其他在飞件零 Require（工单落位纪律）。                                   *)
+
 (* --------------------------------------------------------------------- *)
-(* 桥设计（复核席判词承接：E188 墙经"记录级 +eta 改述 / 假设位"双车道绕行）：      *)
+(* 桥设计（复核席结论承接：E188 墙经"记录级 +eta 改述 / 假设位"双车道绕行）：      *)
 (*   1. 三记录 req 转写零 Id：reqRDF/reqRDFMV/reqRDFMVVec 与 Id 三记录逐字段     *)
 (*      同构，df_correct 内层保持 plain（le (abs ...) (mult eps (abs h)))——      *)
-(*      清单判词"sigT delta 内层 plain"逐位落实；minus 位换 req_minus            *)
+(*      清单结论"sigT delta 内层 plain"逐位落实；minus 位换 req_minus            *)
 (*      （δ 透明 plus a (opp b)，UpReqAlgebra L58 同形）。                      *)
 (*   2. 双车道取"假设位"道：df_correct 内层 plain 化后，Id 接口被逐 eps 化的       *)
-(*      字段以 T2① 槽位承接——Class ReqDiffPlain 四槽：abs_triangle_plain        *)
+(*      字段以 T2① 假设位承接——Class ReqDiffPlain 四槽：abs_triangle_plain        *)
 (*      （Id abs_triangle 字段镜像）/min_le_l_plain/min_le_r_plain（Id min       *)
 (*      plain-le 字段镜像；req 接口 min_le_l 逐 eps 形 le (min a b) (plus a      *)
-(*      eps)，plain 形不可导（UpReqPPO 头注 min plain-le 裁决项同因，本席登记）    *)
+
 (*      /log_inv_exp_neg_slot（Id 接口 log_inv_exp_neg 全称字段镜像；req 接口     *)
 (*      仅有反向 exp_neg_log_inv，UpReqAlgebra ReqLogBridge 同名槽同构）。        *)
 (*      plain 非负槽消费 UpReqSLM ReqNonnegPlain（abs_nonneg_plain）。           *)
-(*      +eta 改述道零消费：槽道下 Id 证明体 1:1 平移，语义零漂移。                 *)
+
 (*   3. 向量桥：reqStateSpace/reqHilbertSpace/reqStateSpaceExtended 定义级转写    *)
-(*      （清单 §5 判词"一次性、随簇首件交付"），律字段全部 req 形（Id 形律无法     *)
-(*      在 req-le 内运输——接口无 Id->req 桥，诚实差异台账登记）。                 *)
+(*      （清单 §5 结论"一次性、随簇首件结果"），律字段全部 req 形（Id 形律无法     *)
+(*      在 req-le 内运输——接口无 Id->req 桥，诚实差异登记表登记）。                 *)
 (*   4. eps 记账模板：delta 选择 = min 组（min_pos plain + min_le_*_plain）；     *)
 (*      预算 = inv2·eps 系（req_half_pos/req_half_twice/req_two_times_quarter     *)
 (*      消费）；系数有 delta-界，零 eps·|h| 余量吸收。                           *)
 (* --------------------------------------------------------------------- *)
-(* 逐件对账表（清单件 -> 本文件 req 件；行号 = CW219 基座）：                    *)
+(* 逐件核对表（清单件 -> 本文件 req 件；行号 = 基座）：                    *)
 (*  [标量簇 §4 (c) 10 + entropy 1]                                             *)
 (*    1. differentiable_const   L25035 -> req_rdf_const                         *)
 (*    2. differentiable_id      L25069 -> req_rdf_id                            *)
@@ -42,44 +51,44 @@
 (*         req 对位件，逐 eps 记账重排）                                         *)
 (*    5. differentiable_opp     L25551 -> req_rdf_opp                           *)
 (*    6. differentiable_minus   L25596 -> req_rdf_minus（req_minus δ 透明，        *)
-(*         plus∘opp 消费后目标转换闭合——清单"unfold 后直配"判词）                 *)
+(*         plus∘opp 消费后目标转换闭合——清单"unfold 后直配"结论）                 *)
 (*    7. differentiable_power_nat L25631 -> req_power_nat(Fixpoint) +            *)
 (*         req_rdf_power_nat                                                     *)
 (*    8. differentiable_compose L25762 -> req_rdf_compose（Id 版 ~250 行主件；     *)
 (*         辅件 req_rdf_compose_diff_decomp 为 Id compose_diff_decomp L25673      *)
-(*         req 对位——该件清单处置 (b)，本席以辅件承载并注记，(b|桥) 席可别名消费）  *)
+
 (*    9. cross_entropy_softmax_diff L26015 -> req_cross_entropy_softmax_diff      *)
 (*         （log_inv_exp_neg_slot 槽消费）                                       *)
 (*   10. mse_diff L26174 -> req_mse_diff（辅件 req_square_diff_expand 为 Id        *)
 (*         square_diff_expand L26092 req 对位——该件清单处置 (b)，同上注记；        *)
 (*         辅件 req_minus_plus_zero_r 为 Id minus_plus_zero_r L26076 req 对位）   *)
 (*   11. entropy_differentiable L26368 -> req_entropy_differentiable（域前提位：   *)
-(*         rdf_log_diff 槽 = "正总值可微函数的 log 链闭合"——Id log_differentiable  *)
-(*         全称槽的 req 域化同位（log 带正性前提，接口级域形，诚实台账））           *)
+
+(*         全称槽的 req 域化同位（log 带正性前提，接口级域形，诚实登记表））           *)
 (*  [MV 簇 §5 (c) 4 + MVVec 1]                                                 *)
 (*   12. differentiable_mv_const   L26786 -> req_rdf_mv_const                     *)
 (*   13. differentiable_mv_linear  L26837 -> req_rdf_mv_linear                    *)
 (*   14. differentiable_mv_plus    L26885 -> req_rdf_mv_plus                      *)
 (*   15. differentiable_mv_compose L26959 -> req_rdf_mv_compose                   *)
 (*   16. differentiable_mv_vec_compose L27495 -> req_rdf_mv_vec_compose           *)
-(*  辅件（清单 (b|桥) 件，本席先行承载，注记挂账）：inner_splus_r L26722 /          *)
+
 (*    inner_sopp_l（GramSchmidt 区）/inner_szero_l /mv_compose_diff_decomp         *)
 (*    L26739 /splus_sminus_cancel L27272 同族 /sminus_zero_cancel L27369 同族 /    *)
 (*    mv_vec_diff_decomp L27450 /half_le_one L25729 /half_le_self L25748。        *)
 (* --------------------------------------------------------------------- *)
-(* 定义级签名差异台账（诚实桥逐位登记）：                                        *)
+(* 定义级签名差异登记表（诚实桥逐位登记）：                                        *)
 (*   1. minus -> req_minus（δ 透明；differentiable_minus 目标经 unfold 直配）。    *)
 (*   2. 向量律 Id -> req：reqStateSpace/reqHilbertSpace/reqStateSpaceExtended      *)
 (*      律字段 req 形——req-le 目标内运输所需（接口零 Id->req 桥）；同构性 = 字段面   *)
 (*      逐位对应，律强度 Id>=req（req 形更弱，消费安全方向）。                     *)
 (*   3. clim_unique 结论 Id -> req（同 2 因）。                                  *)
-(*   4. 槽位面：ReqDiffPlain 五槽（四槽 + r_max_ge_plain——2026-09-09 批5裁决书     *)
+(*   4. 假设位面：ReqDiffPlain 五槽（四槽 + r_max_ge_plain——2026-09-09 批5裁决书     *)
 (*      clip_lower 行增量登记，T2① 零证明槽）+ ReqNonnegPlain（UpReqSLM 消费）+ 域   *)
 (*      前提位 rdf_log_diff + MV 区诚实位 req_inner_lipschitz/req_mv_adjoint/      *)
 (*      req_op_lipschitz（Id Variable sigT 同构） + req_sfield_wd/req_inner_sminus_r/req_smetric_sminus_zero——全部 T2① 假设位，非公理。      *)
 (* 纪律：纯构造性（G1 禁词扫描全零；零经典逻辑；纯项模式，零 setoid 依赖）；         *)
 (*   Set 层语句零 Prop 泄露（req/lt/le/And:=A*B/sigT 均 Set 值）；                 *)
-(*   记录桥字段 = T2① 槽位非公理；全链可提取。                                   *)
+(*   记录桥字段 = T2① 假设位非公理；全链可提取。                                   *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -90,14 +99,14 @@ Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
 (* ===================================================================== *)
-(* Part 0：桥槽位组（T2① 假设位道，头注台账第 4 条）                            *)
+(* Part 0：桥假设位组（T2① 假设位道，头注登记表第 4 条）                            *)
 (* ===================================================================== *)
 
 (* R 接口被逐 eps 化字段的 plain 镜像槽（三槽）+ log 全称镜像槽（一槽）
    + r_max plain 槽（一槽，2026-09-09 增量节登记：批5裁决书 clip_lower 行
    「需补 r_max_ge_plain : le a (r_max a b) 槽」——min 双槽不覆盖 r_max 侧，
    本槽为 Id RealInterfaceEnhanced r_max_le_l 字段 plain 镜像，T2① 零证明槽）。
-   逐槽对账：abs_triangle_plain <- Id RealInterfaceEnhanced abs_triangle；
+   逐槽核对：abs_triangle_plain <- Id RealInterfaceEnhanced abs_triangle；
    min_le_l_plain/min_le_r_plain <- Id min_le_l/min_le_r；
    log_inv_exp_neg_slot <- Id log_inv_exp_neg（req 接口仅反向 exp_neg_log_inv）；
    r_max_ge_plain <- Id r_max_le_l。 *)
@@ -168,7 +177,7 @@ Proof.
              (lt_le_iff zero eps (inl Heps))).
 Qed.
 
-(* E ≡ 0 ⟹ |E| ≤ eps·|h|（零误差件统一收口：const/id/power_nat 基例/ce/mse 头/      *)
+(* E ≡ 0 ⟹ |E| ≤ eps·|h|（零误差件统一完成：const/id/power_nat 基例/ce/mse 头/      *)
 (* mv_const/mv_linear 共七处消费） *)
 Lemma req_rdf_abs_zero_le : forall E eps h : R,
   lt zero eps -> req E zero -> le (abs E) (mult eps (abs h)).
@@ -240,7 +249,7 @@ Proof.
   - apply le_refl.
 Qed.
 
-(* eps/2·s + eps/2·s == eps·s（plus 收口记账） *)
+(* eps/2·s + eps/2·s == eps·s（plus 完成记账） *)
 Lemma req_rdf_half_pair_req : forall e s : R,
   req (plus (mult (mult (inv_pos (plus one one) req_two_pos) e) s)
             (mult (mult (inv_pos (plus one one) req_two_pos) e) s))
@@ -274,7 +283,7 @@ Proof.
   - apply le_refl.
 Qed.
 
-(* eps/4·s + eps/4·s == (eps/2)·s（mult/compose 收口记账第一级） *)
+(* eps/4·s + eps/4·s == (eps/2)·s（mult/compose 完成记账第一级） *)
 Lemma req_rdf_quarter_pair_req : forall e s : R,
   req (plus (mult (mult (inv_pos (plus one one) req_two_pos)
                         (mult (inv_pos (plus one one) req_two_pos) e)) s)
@@ -429,7 +438,7 @@ Qed.
 End ReqRDFBase.
 
 (* ===================================================================== *)
-(* Part 2：标量簇 §4 (c) 10 件 + entropy 1 件（逐件对账表 1-11）                 *)
+(* Part 2：标量簇 §4 (c) 10 件 + entropy 1 件（逐件核对表 1-11）                 *)
 (* ===================================================================== *)
 
 Section ReqRDFScalar.
@@ -575,7 +584,7 @@ Proof.
         -- exact (req_rdf_half_pair_le eps (abs h)).
 Qed.
 
-(* ---- 公共机器件 2：乘积份额/四项积/inv 收口（mult 主件消费） ---------------- *)
+(* ---- 公共机器件 2：乘积份额/四项积/inv 完成（mult 主件消费） ---------------- *)
 
 (* |a| ≤ m 且 m·e == E4、0 ≤ hh ⟹ |a|·(e·hh) ≤ E4·hh
    （Id Hshare+Hsh2 两段记账的压缩壳；mult 两处消费，hh 恒为 |h| 位） *)
@@ -632,7 +641,7 @@ Proof.
                              (mult_assoc (mult a1 a2) s s)).
 Qed.
 
-(* D·((inv D·e2)·hh) == e2·hh（D>0；mult Hdq 与 compose 预算收口同形消费） *)
+(* D·((inv D·e2)·hh) == e2·hh（D>0；mult Hdq 与 compose 预算完成同形消费） *)
 Lemma req_rdf_inv_pair : forall (D : R) (HD : lt zero D) (e2 hh : R),
   req (mult D (mult (mult (inv_pos D HD) e2) hh)) (mult e2 hh).
 Proof.
@@ -1152,7 +1161,7 @@ Proof.
                  (plus_assoc a b (opp c))).
 Qed.
 
-(* ---- 辅件：compose_diff_decomp L25673 req 对位（清单 (b) 件本席承载注记） ---- *)
+
 
 Lemma req_rdf_compose_diff_decomp : forall A B C D G g0 h : R,
   req (req_minus A (plus B (mult (mult C D) h)))
@@ -1223,7 +1232,7 @@ Qed.
 
 (* ---- 件 8：differentiable_compose L25762 -> req_rdf_compose ----------------- *)
 
-(* 函数 req-兼容槽（T2①；Id 靠 Leibniz 免费换形，req 侧诚实假设位——台账第 5 条） *)
+(* 函数 req-兼容槽（T2①；Id 靠 Leibniz 免费换形，req 侧诚实假设位——登记表第 5 条） *)
 Theorem req_rdf_compose : forall f g : R -> R,
   reqRDF f -> reqRDF g ->
   (forall u v : R, req u v -> req (f u) (f v)) ->
@@ -1489,7 +1498,7 @@ Proof.
 Qed.
 
 (* ---- 辅件：(x+h−t)² − ((x−t)² + 2(x−t)h) == h²（Id square_diff_expand        *)
-(*        L26092 req 对位，清单 (b) 件本席承载注记） ---------------------------- *)
+
 
 Lemma req_rdf_square_diff_expand : forall x target h : R,
   req (req_minus (mult (req_minus (plus x h) target) (req_minus (plus x h) target))
@@ -1620,7 +1629,7 @@ Qed.
 (* ---- 增量件（批5 清单动作 4 唯一实建件）：differentiable_affine L25493       *)
 (*   -> req_rdf_affine。f(x)=a·x+b，df=a，误差恒为零——req_mult_plus_distr_r      *)
 (*   换形（右分配经 mult_comm 三跳换左侧）+ plus 重组三步 + req_minus_self_zero   *)
-(*   收口；预算走 req_rdf_abs_zero_le 统一零误差道（同 req_rdf_const 形）。       *)
+(*   完成；预算走 req_rdf_abs_zero_le 统一零误差道（同 req_rdf_const 形）。       *)
 
 Theorem req_rdf_affine : forall a b : R, reqRDF (fun x => plus (mult a x) b).
 Proof.
@@ -1675,7 +1684,7 @@ Qed.
 (* ---- 件 11：entropy_differentiable L26368 -> req_entropy_differentiable ----- *)
 (*   （域前提位：rdf_log_diff 槽 = "正总值可微函数的 log 链闭合"——Id             *)
 (*    log_differentiable 全称槽的 req 域化同位；Omega_B_wd 诚实位 = req compose  *)
-(*    的函数兼容位——Id funext 免费而 req 接口无，诚实台账登记）                  *)
+(*    的函数兼容位——Id funext 免费而 req 接口无，诚实登记表登记）                  *)
 
 Section ReqEntropyDiff.
 
@@ -1725,15 +1734,15 @@ End ReqEntropyDiff.
 (* ===================================================================== *)
 (* Part 3：MV 桥（桥C2-MV/MVVec）——reqStateSpace/reqHilbertSpace/             *)
 (*   reqStateSpaceExtended 定义级转写 + reqRDFMV/reqRDFMVVec 记录桥。          *)
-(*   诚实差异台账（MV 区追加，承接头注台账）：                                 *)
-(*   5. 律字段分层修正（台账 2 的类型级落实）：R 值律（metric_sym/sminus、        *)
+(*   诚实差异登记表（MV 区追加，承接头注登记表）：                                 *)
+(*   5. 律字段分层修正（登记表 2 的类型级落实）：R 值律（metric_sym/sminus、        *)
 (*      inner_sym/splus_l/smult_l、snorm_smult/triangle、proj_orthogonal）req 形； *)
 (*      载体律（splus/smult 簇、metric_zero/clim_unique/inner_definite 结论位）    *)
 (*      Id 形——载体 req 形需载体集oid字段而 16 件消费面实证全在 R 值层（逐件       *)
 (*      核读），零消费即零假设，诚实从简。req 形更弱，消费安全方向。              *)
 (*   6. rdf_inner_zero 槽（⟨szero,h⟩ ≡ zero）：req 接口零 id_cong——szero 入     *)
 (*      inner 实参位换形无运输机（E349 M2 墙同族），T2① 假设位承接；Id 侧      *)
-(*      inner_szero_l 为可证定理，其 req 对位件接口级不可复刻，登记挂账。      *)
+(*      inner_szero_l 为可证定理，其 req 对位件接口级不可复刻，登记显式假设。      *)
 (* ===================================================================== *)
 
 Record reqStateSpace (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
@@ -1841,7 +1850,7 @@ Record reqRDFMVVec {R : Set} {RIS : RealInterfaceEnhancedSetoid R}
 }.
 
 (* ===================================================================== *)
-(* Part 4：MV 区消费件（件 12-16；清单 §5 判词逐位落实）                       *)
+(* Part 4：MV 区消费件（件 12-16；清单 §5 结论逐位落实）                       *)
 (* ===================================================================== *)
 
 Section ReqRDFMV.
@@ -1857,7 +1866,7 @@ Let spl : Sc -> Sc -> Sc := rs_plus R RIS SS.
 Let mtr : Sc -> Sc -> R := rs_metric R RIS SS.
 Let inn : Sc -> Sc -> R := rh_inner R RIS SS HS.
 
-(* 辅件（清单 (b|桥) 挂账承接）：inner_splus_r L26722 req 对位——字段直推       *)
+(* 辅件（清单 (b|桥) 显式假设承接）：inner_splus_r L26722 req 对位——字段直推       *)
 Lemma req_inner_splus_r : forall x y z : Sc,
   req (inn x (spl y z)) (plus (inn x y) (inn x z)).
 Proof.
@@ -1873,7 +1882,7 @@ Proof.
 Qed.
 
 (* ---- 件 12：differentiable_mv_const L26786 -> req_rdf_mv_const ------------- *)
-(*   （rdf_inner_zero 槽消费；台账 6） --------------------------------------- *)
+(*   （rdf_inner_zero 槽消费；登记表 6） --------------------------------------- *)
 
 Variable rdf_inner_zero : forall h : Sc, req (inn S0 h) zero.
 
@@ -2068,7 +2077,7 @@ Qed.
 
 (* ---- 件 15/16 辅件乙（R 层纯代数）：通用误差分解 --------------------------- *)
 (*   Id mv_vec_diff_decomp L27450 req 对位：A−(B+X) ≡ (A−(B+Y)) + (Y−X)。       *)
-(*   零槽位（req_minus 展开后纯 plus/opp/req_opp_plus 链）。 ------------------ *)
+(*   零假设位（req_minus 展开后纯 plus/opp/req_opp_plus 链）。 ------------------ *)
 
 Lemma req_rdf_mv_vec_decomp : forall A B X Y : R,
   req (req_minus A (plus B X)) (plus (req_minus A (plus B Y)) (req_minus Y X)).
@@ -2155,7 +2164,7 @@ Variable req_inner_lipschitz : forall a : Sc,
 (*   （req_inner_lipschitz 槽消费；外层 g 函数兼容前提位沿件 8 req_rdf_compose    *)
 (*    先例；预算 eps4=eps/4：T1 ≤ eps_g·|Dg| ≤ eps4·s（req_rdf_inv_scale_le）；   *)
 (*    T2 ≤ |dg(f x)|·eps_f·s ≤ eps4·s（inv_pos_correct 记账）；                   *)
-(*    收口 req_rdf_quarter_pair_le_final） ------------------------------------ *)
+(*    完成 req_rdf_quarter_pair_le_final） ------------------------------------ *)
 
 Theorem req_rdf_mv_compose : forall (f : Sc -> R) (g : R -> R),
   reqRDFMV SS HS f -> reqRDF g ->
@@ -2410,7 +2419,7 @@ Proof.
                                 (lt_le_iff zero one (inl one_pos))))).
             -- exact (le_mult_compat_weak (mult (mult (inv_pos M HM) eps4) M)
                           eps4 s Hspos (req_rdf_inv_scale_le M eps4 HM)). }
-    (* 收口：E ≡ T1 + T2，|T1+T2| ≤ eps4·s + eps4·s ≤ eps·s *)
+    (* 完成：E ≡ T1 + T2，|T1+T2| ≤ eps4·s + eps4·s ≤ eps·s *)
     apply (le_id_l (abs (req_minus (g (f (spl x h)))
                                    (plus (g (f x))
                                          (inn (rs_mult R RIS SS (dg (f x)) (df x))
@@ -2475,9 +2484,9 @@ Proof.
         -- exact (req_rdf_quarter_pair_le_final eps s Heps Hspos).
 Qed.
 
-(* ---- 件 16 槽位组（T2① 假设位；Id MultivariableDifferentiable vec 区三 Variable *)
+(* ---- 件 16 假设位组（T2① 假设位；Id MultivariableDifferentiable vec 区三 Variable *)
 (*   同构 + 场兼容/第二参线性/度量平移三诚实位——载体 Id 无内积运输机，接口级     *)
-(*   承接，台账登记） --------------------------------------------------------- *)
+(*   承接，登记表登记） --------------------------------------------------------- *)
 
 Variable req_mv_adjoint : forall Ld : Sc -> Sc,
   sigT (fun Lad : Sc -> Sc => forall h w : Sc,
@@ -2500,7 +2509,7 @@ Variable req_smetric_sminus_zero : forall u v : Sc,
 (*   （req_mv_adjoint/req_op_lipschitz/req_inner_lipschitz/req_sfield_wd/        *)
 (*    req_inner_sminus_r/req_smetric_sminus_zero 六槽消费；伴随拉回梯度；        *)
 (*    通用误差分解 req_rdf_mv_vec_decomp 直配；预算同件 15，T1 eps_g·|Dg| 系，     *)
-(*    T2 N_a·|⟨a,Dg⟩−⟨a,dfh⟩| 系；收口 quarter_pair_le_final） ------------------ *)
+(*    T2 N_a·|⟨a,Dg⟩−⟨a,dfh⟩| 系；完成 quarter_pair_le_final） ------------------ *)
 
 Theorem req_rdf_mv_vec_compose : forall (f : Sc -> Sc) (g : Sc -> R),
   reqRDFMVVec SS f -> reqRDFMV SS HS g ->
@@ -2760,7 +2769,7 @@ Proof.
                                (mult (mult (inv_pos M HM) eps4) M)
                                eps4 s Hspos (req_rdf_inv_scale_le M eps4 HM)). }
                  exact Hcoef. }
-    (* 收口：伴随恒等式换形 + 通用分解 + 三角 + eps/4 记账 *)
+    (* 完成：伴随恒等式换形 + 通用分解 + 三角 + eps/4 记账 *)
     apply (le_id_l (abs (req_minus (g (f (spl x h)))
                                    (plus (g (f x)) (inn adj h))))
                    (abs (plus (req_minus (g (f (spl x h)))
@@ -2835,7 +2844,7 @@ Qed.
 End ReqRDFMV.
 
 (* ===================================================================== *)
-(* End ReqRDFScalar（接管席 20260909 补闭；前席追加-失败-重写循环残骸：        *)
+
 (*   3 孤立 Qed 与追加占位标记截除，快照见 UpReqRDF-接管前快照-20260909.v）    *)
 (* ===================================================================== *)
 End ReqRDFScalar.

@@ -1,6 +1,15 @@
-(* ===== CW219 拆分分片 S06_DiffSamplingGibbs（机械生成头部，非原文） ===== *)
-(* 原文区间：CW_ConstructiveWorld_219.v L24768-L32574；头部 15 行（含尾空行）；
-   依赖：S01 S02 S03 S04 S05；去头正文 ≡ 原文区间逐字节（tools/verify_split.py） *)
+(* ============================================================ *)
+(* S06_DiffSamplingGibbs.v                                     *)
+(*                                                             *)
+(* 目的：微分采样与 Gibbs 配分：log 可微性、Top-K 截断总变差与    *)
+(*       求和分解代数（构造性 Set 层）。                         *)
+(* 主件：TV(boltzmann, topk_renorm) == tail_mass/Z_thermo（精确   *)
+(*       恒等）；log(1+t) 线性上下界族。                         *)
+(* 依赖：S01–S05；Stdlib（QArith、Qabs、Qround、List、Bool、     *)
+(*       Arith、Setoid、Morphisms、Lia、Qminmax）。              *)
+(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(*       L24768-L32574，去头正文与原文区间逐字节同源。           *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -1285,7 +1294,7 @@ Proof.
         by exact (minus_self_zero (plus x h) (plus x h) (@id_refl R (plus x h))).
       exact (id_trans H2 H3).
     }
-    (* 原误差 = 折叠后误差（id_cong2 替换两个槽位） *)
+    (* 原误差 = 折叠后误差（id_cong2 替换两个位置） *)
     assert (Herr : Id (minus (log_inv (exp_neg (plus x h)))
                              (plus (log_inv (exp_neg x)) (mult one h)))
                       (minus (plus x h) (plus x (mult one h))))
@@ -1640,13 +1649,13 @@ Qed.
 
 End EntropyDifferentiable.
 (* ============================================================ *)
-(* log 可微性 Set 层战役核心（E186/E187）：log 在 1 附近的线性界 *)
+(* log 可微性 Set 层核心：log 在 1 附近的线性界                  *)
 (* 上界 log(1+t) <= t [log_one_plus_le]；下界 log(1+t) >= t-t^2  *)
 (* [log_one_plus_ge，链：t-t^2 <= t/(1+t) [set_div_linear_ge_quad] *)
 (* == opp((1/(1+t))-1) [set_inv_minus_one_opp] <= log(1+t)]      *)
-(* 供 Real 层战役（E182 路线 c）复用；log_differentiable 关闭需  *)
+(* 供 Real 层对应构造复用；log_differentiable 之证成需           *)
 (* df_correct 全称 x（含 x<=0）而接口 log 性质仅限 lt zero x ⟹   *)
-(* 抽象接口数学上不可证（E187 判定），收口 = Real 层逐 eps 复刻。 *)
+(* 抽象接口数学上不可证，故在 Real 层逐 eps 复刻。               *)
 (* ============================================================ *)
 Section LogDiffPhase3.
 
@@ -2597,7 +2606,7 @@ Variable op_lipschitz : forall (L : S -> S),
 (* ===== P1 强化（备份 80 后）：三件套可推部分非平凡实现 ===== *)
 (* 三件套（inner_lipschitz/mv_adjoint/op_lipschitz）存在性为诚实接口
    （Cauchy-Schwarz 构造性弱化 / Riesz 表示 / 有界算子），但其结构性推论
-   可从接口公理非平凡推出——按红线"能实现的必须实现"补齐。 *)
+   可从接口公理非平凡推出——按"能实现的必须实现"原则补齐。 *)
 
 (* 内积第一参数差分：⟨a−b, c⟩ == ⟨a,c⟩ − ⟨b,c⟩（inner_splus_l + inner_sopp_l） *)
 Lemma inner_sminus_l : forall a b c : S,
@@ -5526,11 +5535,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T2.4-1（2026-09-02）：Top-K 截断总变差定量界（论文2 P2 项 9）*)
+(* Top-K 截断总变差定量界（论文2 P2 项 9）*)
 (*   TV(boltzmann, topk_renorm) == tail_mass/Z_thermo（精确恒等）*)
 (*   链：守恒（kept + tail == Z）→ kept ≤ Z（子集和）→          *)
 (*   符号分支（inv 反序，destruct le 的 Or）→ 逐点差分解（abs   *)
-(*   消去）→ 求和分解（Σ_keep + Σ_evict）→ 归一化代数收口。     *)
+(*   消去）→ 求和分解（Σ_keep + Σ_evict）→ 归一化代数证毕。     *)
 (* ============================================================ *)
 
 (* Top-K 版尾部质量（tail_mass 的 keep_top_k 实例化） *)
@@ -5836,7 +5845,7 @@ Proof.
                                  (fun s => if keep_top_k_dec s then zero else boltzmann_factor s)))).
 Qed.
 
-(* 收口代数：kept·(invKeep − invZ) + invZ·T == 2·(invZ·T) *)
+(* 关键代数恒等式：kept·(invKeep − invZ) + invZ·T == 2·(invZ·T) *)
 Lemma topk_sum_collapse :
   Id (plus (mult topk_kept_partition
                  (minus (inv_pos topk_kept_partition topk_kept_partition_pos)
@@ -7115,7 +7124,7 @@ End MinPSampling.
 
 (* ============================================================
    Section TopPSampling：top-p（nucleus）采样构造性形式化
-   （论文2 §10.2 #5，2026-09-01 合入：概率降序排序 + 保留判定）
+   （论文2 §10.2 #5，2026-09-01 并入：概率降序排序 + 保留判定）
    ============================================================ *)
 Section TopPSampling.
 
@@ -7808,7 +7817,7 @@ End TopPSampling.
 (* ============================================================ *)
 
 (* ============================================================
-   RealInterfaceSetoid 阶段 3 合入（2026-08-29，来自探针 _dbg_kdr.v）
+   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自探针 _dbg_kdr.v）
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
    metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），

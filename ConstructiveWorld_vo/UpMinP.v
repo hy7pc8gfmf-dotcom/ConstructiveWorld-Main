@@ -1,4 +1,13 @@
 (* ============================================================ *)
+(* UpMinP.v *)
+(* *)
+(* 目的： Min-P 截断质量的熵刻画（Real 层 list 离散世界）。 *)
+(* 主件： um_entropy / um_Hpmax：截断分布熵与最大概率熵的刻画；um_fmax / um_thr 阈值面。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 三分性探针以显式 Variable 随行；词表非空/逐点正/质量和为显式前提；纯构造性、无经典公理面。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpMinP.v —— Min-P 截断质量的熵刻画（Real 层 list 离散世界）    *)
 (*                                                              *)
 (* 主定理（统一根内两条已知界的熵版）：                          *)
@@ -304,10 +313,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 2. 熵项与 log 单调                                            *)
+
 (* ============================================================ *)
 
-(* 熵项：p·(−log p) *)
+
 Definition um_ent_term (p : Real) (Hp : real_lt real_zero p) : Real :=
   real_mult p (real_opp (cw_log p Hp)).
 
@@ -817,7 +826,7 @@ Lemma um_exp_neg_S_le_pmax :
 Proof.
   apply (RealSetoid.real_le_id_r (real_exp_neg um_entropy)
             (real_exp_neg (real_opp (cw_log um_pmax um_Hpmax))) um_pmax).
-  - (* e^{−(−log p_max)} == p_max *)
+  - 
     exact (real_exp_neg_log_inv um_pmax um_Hpmax).
   - apply real_exp_neg_le_decr.
     exact entropy_ge_neg_log_p_max.

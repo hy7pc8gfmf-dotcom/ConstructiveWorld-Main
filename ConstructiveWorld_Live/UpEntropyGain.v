@@ -1,3 +1,12 @@
+(* ============================================================ *)
+(* UpEntropyGain.v *)
+(* *)
+(* 目的： 熵增益的逐步下界与热二律（Real 层 list 离散世界）。 *)
+(* 主件： entropy_gain_positive 与 second_law_quant：逐步增益非负及热力学第二定律量化形。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 熵函数、梯度、动力学以 Variable 前提声明；逐步差分引理链 eg_step_diff 等为构造核。 *)
+(* ============================================================ *)
+
 (* ============================================================
    UpEntropyGain.v —— 榜 A2：second_law_irreversible（根 L27796）
    从"假设搬运型平凡"升级为带定量增量的真定理。
@@ -22,7 +31,6 @@
            无法控制步长过大时的回落——曲率修正项的常数只能是 L。
      (iii) g > 0 两侧乘 (1−Lη)g ≥ g' 得 g·g' ≥ (1−Lη)g²
            ⟹ 增量 ≥ η(1−Lη)g²。
-     数值 sanity（f = log, x = 2, η = 0.4, L = 2）：
            真增量 log(1.2) ≈ 0.182 ≥ 下界 0.4·(1−0.8)·0.25 = 0.02 ✓。
      正性条件是 ηL < 1 而非草案的 ημ < 1：μ ≤ L（Lipschitz 与强凹
            相容时）⟹ 1/L ≤ 1/μ，ημ < 1 控制不住过冲，诚实常数取 1/L。
@@ -160,7 +168,7 @@ Proof.
     - exact Ht. }
   (* 两边加 W := g'·(η·g) 移项：le e (e' − W) ⟹ le (e + W) e'
      链：le_plus_compat Ht1 (le_refl W) 得 le (e + W) ((e' − W) + W)，
-     右端 == e'（assoc + plus_opp + plus_zero），le_id_r 直接收口 *)
+     右端 == e'（assoc + plus_opp + plus_zero），le_id_r 直接完成 *)
   assert (Ht2 : le (plus (entropy x)
                          (mult (entropy_gradient (dynamics x))
                                (mult eta (entropy_gradient x))))
@@ -319,7 +327,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   件 1（交付）：entropy_step_gain_lower —— 一步熵增定量下界
+   件 1（结果）：entropy_step_gain_lower —— 一步熵增定量下界
      g(x) > 0 ⟹
      η(1 − L·η)·g(x)² ≤ entropy(dynamics x) − entropy(x)
    组装：核 B 乘 g > 0 再乘 η > 0，与核 A 级联。
@@ -371,7 +379,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   件 2（交付）：entropy_gain_positive —— 增量正性充分条件版
+   件 2（结果）：entropy_gain_positive —— 增量正性充分条件版
      0 < η、0 < L、ηL < 1、g(x) > 0 ⟹ 0 < entropy(x') − entropy(x)
    （正性条件取 ηL < 1 而非草案 ημ < 1：μ 只控制上界不控制过冲，
      见文件头推导注记；负支 g < 0 需符号三分判定，构造性降级单侧版。）
@@ -398,7 +406,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   件 3（对照注记 + 交付推论）：second_law_quant
+   件 3（对照注记 + 结果推论）：second_law_quant
    根 L27778–27803 SecondLaw 区：strict_entropy_increase 是接口假设
    （Variable），second_law_irreversible = `apply strict_entropy_increase`
    （T2 假设搬运，探针实证导出形态两处同现同一前提）。本件以具体熵梯度
