@@ -184,6 +184,10 @@ RealEnergyTempMono.v
 PowRealCompat.v
 AlignIdUnclosed.v
 UpReqLpoEquiv.v
+UpReqCStarDef.v
+UpReqTBNCBridge.v
+UpReqGibbsWallEquiv.v
+UpReqPinWallEquiv.v
 UpReqB4TwoStage.v
 UpReqPadeSignXfer.v
 UpReqBanachInstReal.v

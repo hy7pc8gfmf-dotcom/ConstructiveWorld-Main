@@ -1917,3 +1917,36 @@ Definition idx_DTPT_Bridge_Rot : ReqModule :=
 (* SqWallCorrMark / SqrtfCauchy / SqrtfCauchyArch / SqrtfCauchyDischarge / SumInvFactEscape / *)
 (* SupKLBound / SupKLMonoCompose / TempMonoW2Mark，语句级收口中；DTPT_Rotation 在飞件注记同册。 *)
 (* ========================================================================= *)
+
+(* ================= v3.4 增册（席IDX92：Index v3.4 草案预制，20260916） ================= *)
+(* A 组 DISCH 线三件 + B 组 AA 线首次上云四件；权威源=attn/_thv3idx92_Index增册.md；          *)
+(* 本块由席R80X 承 R80 主会话任务书 EOF 落册（20260916）；CStarDef 封口数经 v3.2 剥块口径     *)
+(* 复核 26→27（L141 内联 Proof…Qed. 真封口，非注释命中）。                                   *)
+
+(* ng_UpReqRealLtShiftBridge —— UpReqRealLtShiftBridge.v：Real 层严格步放电三形 *)
+Definition ng_UpReqRealLtShiftBridge : NewGreenFace :=
+  MkNewGreenFace "UpReqRealLtShiftBridge.v" 138 6 20260916 "strict-step lt discharge trio, weak-slot Or-lift".
+
+(* ng_UpReqStrictStepGen —— UpReqStrictStepGen.v：严格步生成器族 *)
+Definition ng_UpReqStrictStepGen : NewGreenFace :=
+  MkNewGreenFace "UpReqStrictStepGen.v" 212 13 20260916 "eps-split generator family, master lemma half+quarter".
+
+(* ng_UpReqStrictBridgeD —— UpReqStrictBridgeD.v：ReqStrictOrderBridge 三槽放电 *)
+Definition ng_UpReqStrictBridgeD : NewGreenFace :=
+  MkNewGreenFace "UpReqStrictBridgeD.v" 110 1 20260916 "strict-order-bridge three-slot Real discharge, family closed".
+
+(* ng_UpReqCStarDef —— UpReqCStarDef.v：C* 定义面与正元准备 *)
+Definition ng_UpReqCStarDef : NewGreenFace :=
+  MkNewGreenFace "UpReqCStarDef.v" 758 27 20260916 "C*-algebra definition face, involution laws, positive elements".
+
+(* ng_UpReqGibbsWallEquiv —— UpReqGibbsWallEquiv.v：gibbs 墙等价 LPO *)
+Definition ng_UpReqGibbsWallEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqGibbsWallEquiv.v" 340 12 20260916 "gibbs plain-le wall iff restricted LPO, wall two".
+
+(* ng_UpReqPinWallEquiv —— UpReqPinWallEquiv.v：钉定墙等价 LPO *)
+Definition ng_UpReqPinWallEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqPinWallEquiv.v" 243 9 20260916 "pin wall iff restricted LPO, wall three".
+
+(* ng_UpReqTBNCBridge —— UpReqTBNCBridge.v：TBNC 对角逐项桥 *)
+Definition ng_UpReqTBNCBridge : NewGreenFace :=
+  MkNewGreenFace "UpReqTBNCBridge.v" 250 6 20260916 "TBNC explicit-hypothesis diagonal corner-term bridge".

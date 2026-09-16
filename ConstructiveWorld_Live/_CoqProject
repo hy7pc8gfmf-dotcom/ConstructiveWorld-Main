@@ -223,3 +223,7 @@ DTPT_Bridge_All.v
 UpReqRealLtShiftBridge.v
 UpReqStrictStepGen.v
 UpReqStrictBridgeD.v
+UpReqCStarDef.v
+UpReqTBNCBridge.v
+UpReqGibbsWallEquiv.v
+UpReqPinWallEquiv.v
