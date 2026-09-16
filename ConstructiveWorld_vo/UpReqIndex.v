@@ -1950,3 +1950,80 @@ Definition ng_UpReqPinWallEquiv : NewGreenFace :=
 (* ng_UpReqTBNCBridge —— UpReqTBNCBridge.v：TBNC 对角逐项桥 *)
 Definition ng_UpReqTBNCBridge : NewGreenFace :=
   MkNewGreenFace "UpReqTBNCBridge.v" 250 6 20260916 "TBNC explicit-hypothesis diagonal corner-term bridge".
+
+(* ================= v3.5 增册（席T4FX：成果四外部稿注册组装席，20260916） ================= *)
+(* ng_ 第三轨续写：承 v3.4 后 69 件基面，成果四外部稿本批 15 件逐件实测登记                     *)
+(* （14 绿 + GibbsAttractor 修复件；append-only，既有条目/清单/字面值/版记零触碰，EOF 追加）。   *)
+(* l2e_g3 属 G3 抽取探针（Recursive Extraction 施工预备件，稿头自署），按探针语义排除注册面，    *)
+(* 只登主稿 LogTwoEnvelope；PiEnvelope/PinskerTwoPoint/SymplecticRotationSpec 三挂起稿候 T4G    *)
+(* 席修复交付复绿后按尾插增册。甄别权威源=attn/_thv4t4s_甄别报告-20260916.md（15 绿/4 红，       *)
+(* 稿因 4/库因 0/环因 0）；Gibbs 修复账=attn/_thv3t4fx_交付报告-20260916.md                     *)
+(* （L92+L165 同类缺括号两处，vos/full 双 0，vo 8822B magic 90100，PA 3 Closed 与申报吻合）。    *)
+(* 注册序=repo order.txt 尾插：T4S 提案「UpReqStrictBridgeD 尾锚」系 102 行 Live_X 子集序锚位，  *)
+(* repo 全库序 228 行中该锚位于 L103，其后续 10 基座依赖（UpReqSteadyThermo L125、               *)
+(* UpReqTempDefs L127、UpReqArgminEngine L130、UpReqEntropyDeficitTemp L134、UpReqEntropyMaxTemp *)
+(* L138、UpReqTempDual L140、ExpNegPos L205、RealEnergyTempMono L183、EnergyTempMonoB L209、     *)
+(* RealKLDecomp L211）先行 ⟹ 被依赖者先行唯一合法插位=尾插（L229–243）。三树 order.txt 同步，    *)
+(* Live_X 102 行子集序零改动（IDX92 判词）。                                                     *)
+(* 口径：ng_lines=wc -l 实测；ng_qed=剥块注释 token 级 Qed 实测（头注「全 Qed」伪命中按 E367 剥除）。 *)
+(* 沙箱复验产物判据全过：size>0、md5≠d41d8cd9、magic=436f712100015ff4（90100=9.1.0）。           *)
+
+(* ng_LogTwoEnvelope —— LogTwoEnvelope.v：log2 上界包络（柯西模量 ceil(1/eps)） *)
+Definition ng_LogTwoEnvelope : NewGreenFace :=
+  MkNewGreenFace "LogTwoEnvelope.v" 570 31 20260916 "log2 envelope, cauchy modulus ceil(1/eps) ceiling ladder".
+
+(* ng_FreeEnergyKLGap —— FreeEnergyKLGap.v：自由能 KL 缺口分解 *)
+Definition ng_FreeEnergyKLGap : NewGreenFace :=
+  MkNewGreenFace "FreeEnergyKLGap.v" 578 14 20260916 "free-energy KL gap decomposition on RealKL decomp face".
+
+(* ng_ArctanGeomTail —— ArctanGeomTail.v：arctan 几何尾界 *)
+Definition ng_ArctanGeomTail : NewGreenFace :=
+  MkNewGreenFace "ArctanGeomTail.v" 311 10 20260916 "arctan geometric tail bound, Q-layer chain".
+
+(* ng_StopTimeConservation —— StopTimeConservation.v：停时守恒（预算×宪法轴） *)
+Definition ng_StopTimeConservation : NewGreenFace :=
+  MkNewGreenFace "StopTimeConservation.v" 280 10 20260916 "stop-time conservation, budget-constitutional axis".
+
+(* ng_TempSoftmaxInstantiation —— TempSoftmaxInstantiation.v：温度 softmax 实例化 *)
+Definition ng_TempSoftmaxInstantiation : NewGreenFace :=
+  MkNewGreenFace "TempSoftmaxInstantiation.v" 411 6 20260916 "temperature softmax instantiation on attn-gibbs face".
+
+(* ng_SecondLawQuantified —— SecondLawQuantified.v：量化第二定律（熵亏不等式） *)
+Definition ng_SecondLawQuantified : NewGreenFace :=
+  MkNewGreenFace "SecondLawQuantified.v" 561 16 20260916 "second law quantified, entropy-deficit inequality, follows TempSoftmax".
+
+(* ng_EpsOptimalReach —— EpsOptimalReach.v：eps 最优可达（argmin 引擎实例） *)
+Definition ng_EpsOptimalReach : NewGreenFace :=
+  MkNewGreenFace "EpsOptimalReach.v" 213 8 20260916 "eps-optimal reachability via argmin engine".
+
+(* ng_VandermondePartial —— VandermondePartial.v：Vandermonde 部分和恒等式 *)
+Definition ng_VandermondePartial : NewGreenFace :=
+  MkNewGreenFace "VandermondePartial.v" 671 38 20260916 "Vandermonde partial-sum identity, Q combinatorics".
+
+(* ng_TempUnimodalMax —— TempUnimodalMax.v：温度单峰极大 *)
+Definition ng_TempUnimodalMax : NewGreenFace :=
+  MkNewGreenFace "TempUnimodalMax.v" 341 7 20260916 "temperature unimodal maximum on energy-temp-mono face".
+
+(* ng_ExpOneEnvelope —— ExpOneEnvelope.v：exp(±x) 单侧包络 *)
+Definition ng_ExpOneEnvelope : NewGreenFace :=
+  MkNewGreenFace "ExpOneEnvelope.v" 505 29 20260916 "exp(+/-x) one-sided envelopes, Q rounding ladder".
+
+(* ng_ExpLinearLower —— ExpLinearLower.v：exp 线性下界包络 *)
+Definition ng_ExpLinearLower : NewGreenFace :=
+  MkNewGreenFace "ExpLinearLower.v" 293 10 20260916 "exp linear lower envelope, exp-neg-pos face".
+
+(* ng_AttnLogSumExpBound —— AttnLogSumExpBound.v：注意力 log-sum-exp 界 *)
+Definition ng_AttnLogSumExpBound : NewGreenFace :=
+  MkNewGreenFace "AttnLogSumExpBound.v" 529 13 20260916 "attention log-sum-exp upper bound, S04 conv face".
+
+(* ng_QstepConvergenceBound —— QstepConvergenceBound.v：Q 步收敛界（N-live 审计） *)
+Definition ng_QstepConvergenceBound : NewGreenFace :=
+  MkNewGreenFace "QstepConvergenceBound.v" 656 27 20260916 "Q-step convergence bound, B5-recycle + N-live audit".
+
+(* ng_CurriculumOptTemp —— CurriculumOptTemp.v：课程最优温度 *)
+Definition ng_CurriculumOptTemp : NewGreenFace :=
+  MkNewGreenFace "CurriculumOptTemp.v" 184 5 20260916 "curriculum optimal temperature, thin-shell CW219 import".
+
+(* ng_GibbsAttractor —— GibbsAttractor.v：gibbs 吸引子（Boltzmann π 稳态+TV 迭代传播；本席修 L92+L165 缺括号后复绿） *)
+Definition ng_GibbsAttractor : NewGreenFace :=
+  MkNewGreenFace "GibbsAttractor.v" 285 4 20260916 "gibbs attractor: boltzmann pi stationary under TV kernel, titer propagation".
