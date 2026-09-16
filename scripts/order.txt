@@ -241,3 +241,6 @@ AttnLogSumExpBound.v
 QstepConvergenceBound.v
 CurriculumOptTemp.v
 GibbsAttractor.v
+PiEnvelope.v
+PinskerTwoPoint.v
+SymplecticRotationSpec.v

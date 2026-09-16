@@ -2027,3 +2027,27 @@ Definition ng_CurriculumOptTemp : NewGreenFace :=
 (* ng_GibbsAttractor —— GibbsAttractor.v：gibbs 吸引子（Boltzmann π 稳态+TV 迭代传播；本席修 L92+L165 缺括号后复绿） *)
 Definition ng_GibbsAttractor : NewGreenFace :=
   MkNewGreenFace "GibbsAttractor.v" 285 4 20260916 "gibbs attractor: boltzmann pi stationary under TV kernel, titer propagation".
+
+(* ================= v3.6 增册（席REG94：成果四注册收尾席，20260916） ================= *)
+(* ng_ 第三轨续写：承 v3.5 后 84 件基面，v3.5 挂起三稿 PiEnvelope/PinskerTwoPoint/             *)
+(* SymplecticRotationSpec 经属主迁移波落盘（.v×双树）+编译复绿（INT95 席与属主波双账）后       *)
+(* 注册承认：order.txt×3 L244–246、_CoqProject×2 L245–247 尾插已核，四件依赖行号全前位         *)
+(* 拓扑 PASS（Gibbs 125<243、Pi 16<244、Pinsker 69<245、Symplectic 208<246，全文件 Require     *)
+(* 提边机械核验零违序）。ng_GibbsAttractor 已在 v3.5 册内（L243 注册先成），实测 285/4 与      *)
+(* 迁后源 9e44ff44 一致，本批零触碰；append-only，既有条目/清单/字面值/版记零触碰，EOF 追加。   *)
+(* Gibbs 本席 full 复编 rc=0 逐位复现 .vo e192d235/.vos 97b27d19（magic 436f712100015ff4，      *)
+(* PA 3 Closed、Axioms 0）；三新件产物判据 size>0、md5≠d41d8cd9、magic 同上。                  *)
+(* 权威源=attn/_thv3reg94_交付报告-20260916.md；口径：ng_lines=wc -l 实测；                    *)
+(* ng_qed=剥块注释 token 级 Qed 实测。                                                          *)
+
+(* ng_PiEnvelope —— PiEnvelope.v：π 有理包络（Leibniz 级数奇偶双边夹逼+显式模量） *)
+Definition ng_PiEnvelope : NewGreenFace :=
+  MkNewGreenFace "PiEnvelope.v" 933 53 20260916 "pi rational envelope, leibniz series two-sided squeeze with explicit modulus, cauchy_real_pi_leibniz bridge".
+
+(* ng_PinskerTwoPoint —— PinskerTwoPoint.v：二点 Pinsker 型 TV-KL 下界 *)
+Definition ng_PinskerTwoPoint : NewGreenFace :=
+  MkNewGreenFace "PinskerTwoPoint.v" 443 9 20260916 "two-point pinsker-type TV-KL lower bound with explicit closed-form constant, real layer".
+
+(* ng_SymplecticRotationSpec —— SymplecticRotationSpec.v：辛旋转特征刻画+幂速率 *)
+Definition ng_SymplecticRotationSpec : NewGreenFace :=
+  MkNewGreenFace "SymplecticRotationSpec.v" 351 17 20260916 "symplectic rotation characterization and power rate, Q-layer landing core".
