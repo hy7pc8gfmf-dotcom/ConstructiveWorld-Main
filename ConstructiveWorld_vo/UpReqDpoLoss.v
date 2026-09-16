@@ -8,7 +8,7 @@
 (* ============================================================ *)
 
 (* UpReqDpoLoss.v — 批5 完成行动清单第 2 项：dpo_total_loss 簇解冻评估（可行）+ 建设
-   冻结结论（UpReqAlignRestA.v 头注区3）："total_loss 簇冻结（fold_right_ext 载体，
+   冻结结论（UpReqAlignRestA.v 头注区3）：“total_loss 簇冻结（fold_right_ext 载体，
      _monotone/_star_characterization (d) 冻结（fold 载体 + nat/list 层 Id 双层并行）。
    ----------------------------------------------------------------
    判定书（解冻依据，证据坐标）：

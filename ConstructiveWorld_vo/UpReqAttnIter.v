@@ -18,7 +18,7 @@
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
      全显投喂实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
      nu := 稳态处 δ 透明合一，旗舰 agq_tv_contraction 一行 exact 闭合即脊柱
-   2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记"q_kernel/收缩迭代簇
+   2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记“q_kernel/收缩迭代簇
      批0 试点 UpSigMigrate.v 仅 req_attention_is_gibbs_temp（fixed-z 形），
      与本簇零交集。
    真缺件 = 单点对稳态特有件 + 独立辅件 + 收敛旗舰，共 31 件（含节内补建
