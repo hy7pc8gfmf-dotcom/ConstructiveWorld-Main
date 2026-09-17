@@ -302,3 +302,6 @@ Paper7Ablation.v
 PhysPredAblation.v
 RateTheoryAblation.v
 p4a_GradSignQDec.v
+UpReqConcSoftmax.v
+UpReqConcMixSel.v
+UpReqConcB1.v

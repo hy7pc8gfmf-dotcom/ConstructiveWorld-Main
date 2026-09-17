@@ -2296,3 +2296,19 @@ Definition ng_RateTheoryAblation : NewGreenFace :=
 Definition ng_p4a_GradSignQDec : NewGreenFace :=
   MkNewGreenFace "p4a_GradSignQDec.v" 257 13 20260918 "paper4-a grad sign Q-decidable, extraction magic 0, harvest 23-03".
 
+
+(* ================= v4.0 增册（主会话 R85 注册波：无条件合龙 B1 三件链，20260918） ================= *)
+(* 3 件尾插 order L305-307（邻席 v3.9 十六件在前）；依赖链 ConcSoftmax→ConcMixSel→ConcB1；   *)
+(* csm_b1_unconditional_mixing_time=零接口零 Arch 零证书参（无条件机器判据=PA 八问 Closed）。 *)
+(* ng_UpReqConcSoftmax —— UpReqConcSoftmax.v：concrete-layer softmax supply: sumf slot eight properties unconditional (five delegated to sumd_ family + per-eps triangle abs_sum_le core), AT5 *)
+Definition ng_UpReqConcSoftmax : NewGreenFace :=
+  MkNewGreenFace "UpReqConcSoftmax.v" 264 12 20260918 "concrete-layer softmax supply: sumf slot eight properties unconditional (five delegated to sumd_ family + per-eps triangle abs_sum_le core), AT5".
+
+(* ng_UpReqConcMixSel —— UpReqConcMixSel.v：req-face mirror of mixing selector and closure: cmk_k_select (+le) bernoulli wall fully re-proved + cmk_attention_mixing_time (+le) consuming rsq rate 25-arg, AT6 *)
+Definition ng_UpReqConcMixSel : NewGreenFace :=
+  MkNewGreenFace "UpReqConcMixSel.v" 940 37 20260918 "req-face mirror of mixing selector and closure: cmk_k_select (+le) bernoulli wall fully re-proved + cmk_attention_mixing_time (+le) consuming rsq rate 25-arg, AT6".
+
+(* ng_UpReqConcB1 —— UpReqConcB1.v：B1 unconditional assembly: csm_b1_unconditional_mixing_time (+le) zero interface premises zero arch premises zero certificate params (1-element kernel bypass + Htv0 mass resolution + real_arch re-shape via cb1_scale_const), AT7 *)
+Definition ng_UpReqConcB1 : NewGreenFace :=
+  MkNewGreenFace "UpReqConcB1.v" 394 18 20260918 "B1 unconditional assembly: csm_b1_unconditional_mixing_time (+le) zero interface premises zero arch premises zero certificate params (1-element kernel bypass + Htv0 mass resolution + real_arch re-shape via cb1_scale_const), AT7".
+
