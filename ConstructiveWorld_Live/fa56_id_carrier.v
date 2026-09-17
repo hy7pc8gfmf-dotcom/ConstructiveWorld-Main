@@ -1,0 +1,266 @@
+(* ============================================================ *)
+(* fa56_id_carrier.v —— T40 消融50 战役 VF 席（批次 E-STAGING-VF） *)
+(*                                                               *)
+(* 使命：沿 VA 引擎件 fa51_sumpos_id.v（fa51_sumd list 折叠/非负/  *)
+(*       lt_le/pos 族）续做 **Id 载体槽批量实例化**——VA 对账      *)
+(*       （T40-VA-对账.md §3/§4）划为 B（A 邻接）的语言模型/温度/  *)
+(*       物理预测节中，语句面可由 fa51 引擎（或其轻量扩展）兑现    *)
+(*       者。本件不重复 VA 已放电簇（sum_over_S_pos/Z_align_pos/  *)
+(*       Z_temp 三槽链），只补 VA 未覆盖的核/预测槽。              *)
+(*                                                               *)
+(* 选槽清单（语句原文坐标，全经 grep 核对）：                      *)
+(*  槽I  S04_RealExpLogConv.v:1886-1892（BoltzmannSteadyState 节  *)
+(*       Z/Z_pos/partition_condition）与 S04:2000-2013（GRPO 损失  *)
+(*       节同构副本）——E354 装法：Z 取定义为 fa51_Z_temp（泛型     *)
+(*       t:=D 实例化），spec 槽降定义件、Z_pos 槽无条件化。        *)
+(*  槽II S04:1817-1818（transition_kernel_nonneg/normalization，  *)
+(*       GradientDescentAndAttractor 节）与 S04:1900-1902（同型    *)
+(*       transition 槽）——Boltzmann-Gibbs 平稳核实例化：逐点正、   *)
+(*       升 le、sumd 归一化（旗舰非平凡件，需线性扩展件）。        *)
+(*  槽III S05_AlignmentGRPO.v:5761-5768（FluctuationDissipation    *)
+(*       节 covariance 槽 + fluctuation_dissipation 槽）——装法     *)
+(*       定义件 + 正性伴件。                                      *)
+(*  槽IV S05:5957-5961（Prediction4 节 prob_negative_entropy/      *)
+(*       fluctuation_scale 槽）——装法定义件 + 无条件正性 +        *)
+(*       N>0 时 <1 伴件（消费 exp_neg_decr + exp_neg_zero）。     *)
+(*  槽V  S05:5917-5922（Prediction1 节 temperature_difference/     *)
+(*       heat_relaxation_exponential 槽）——装法定义件 + 正性伴件。 *)
+(*                                                               *)
+(* 对账口径：抽象 SumOver 类载体（S04 sum_over_S）无列表结构，     *)
+(* G12 头注裁决原话「Id 系载体……留 real 镜像模块」——本件即        *)
+(* 核/预测槽面之 Id 载体（S01 RealInterfaceEnhanced）镜像；语句    *)
+(* 面 Set 层（lt/le/Id/Not 均 Set 值，同 S04:1589 vocab_nonempty   *)
+(* 先例），零 Prop 泄露。                                         *)
+(*                                                               *)
+(* 消费：S01_BaseRing（vo 基座）+ fa51_sumpos_id（消融50 侧，仅    *)
+(* Require 不改）。既有文件零改。前缀 fa56_ 全库防撞已核。         *)
+(* 红线：纯构造性零承认位；尾 Print Assumptions 全 Closed。        *)
+(* ============================================================ *)
+
+Require Import S01_BaseRing.
+Require Import fa51_sumpos_id.
+From Stdlib Require Import Lists.List.
+Import ListNotations.
+
+Section Fa56IdCarrier.
+
+Context {RI : RealInterfaceEnhanced}.
+Variable S : Set.
+Variable enum : list S.
+
+Let R        := @R RI.
+Let zero     := @zero RI.
+Let one      := @one RI.
+Let plus     := @plus RI.
+Let mult     := @mult RI.
+Let inv_pos  := @inv_pos RI.
+Let le       := @le RI.
+Let lt       := @lt RI.
+Let exp_neg  := @exp_neg RI.
+
+(* ============ 引擎扩展：常数提出（sumd 线性件，Id 层列表归纳） ====== *)
+(* fa51 引擎只有正性方向；核归一化需要 Id 层线性。零新假设位，        *)
+(* 纯接口字段（mult_zero/distrib + id_cong/id_trans）归纳组装。       *)
+
+Lemma fa56_sumd_mult_const :
+  forall (c : R) (f : S -> R) (l : list S),
+    Id (fa51_sumd S (fun s => mult c (f s)) l) (mult c (fa51_sumd S f l)).
+Proof.
+  intros c f l. induction l as [| x t IH].
+  - exact (id_sym (mult_zero c)).
+  - exact (id_trans (id_cong (fun y => plus (mult c (f x)) y) IH)
+                    (id_sym (distrib c (f x) (fa51_sumd S f t)))).
+Qed.
+
+(* ============ 主件组 I：S04:1886-1892 / 2000-2013 Z 槽链双坐标 ===== *)
+(* 槽语句：Variable Z : R；Z_pos : lt zero Z；partition_condition :    *)
+(*   Id Z (sum_over_S (fun s => exp_neg (mult (inv_pos D D_pos)        *)
+(*         (base_loss s)))).                                          *)
+(* E354 装法：Z 取定义为 fa51_Z_temp（VA 泛型件，t:=D 实例化），       *)
+(* partition 槽降为定义件、Z_pos 槽无条件化（引擎④）。两节同构副本    *)
+(* 由参数化一次覆盖，零重复施工。                                     *)
+
+Theorem fa56_partition_markov :
+  forall (base_loss : S -> R) (D : R) (D_pos : lt zero D),
+    Id (fa51_Z_temp S enum base_loss D D_pos)
+       (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))
+                   enum).
+Proof.
+  intros base_loss D D_pos.
+  exact (fa51_Z_temp_spec_def S enum base_loss D D_pos).
+Qed.
+
+Theorem fa56_Z_markov_pos :
+  forall (base_loss : S -> R) (D : R) (D_pos : lt zero D),
+    Not (Id enum nil) ->
+    lt zero (fa51_Z_temp S enum base_loss D D_pos).
+Proof.
+  intros base_loss D D_pos Hne.
+  exact (fa51_Z_temp_pos S enum base_loss D D_pos Hne).
+Qed.
+
+(* ============ 主件组 II：S04:1817-1818 / 1900-1902 核槽实例化 ======= *)
+(* 槽语句：transition_nonneg : forall s s', le zero (transition s s')； *)
+(*   transition_normalization : forall s, Id (sum_over_S (fun s' =>    *)
+(*   transition s s')) one.                                            *)
+(* 兑现：Boltzmann-Gibbs 平稳核 k(s') = Z^{-1}·e^{-β·e(s')}（与首参    *)
+(* 无关，槽的 forall s 面照证）。正性槽升格为严格形，归一化槽为旗舰    *)
+(* 非平凡件（线性件 + spec 定义件 + inv_pos_correct 三段组装链，       *)
+(* S04 boltzmann_dist_temp_normalized 之 Id 载体镜像）。               *)
+
+Definition fa56_markov_kernel (base_loss : S -> R) (D : R) (D_pos : lt zero D)
+                              (HZ : lt zero (fa51_Z_temp S enum base_loss D D_pos))
+                              (s' : S) : R :=
+  mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+       (exp_neg (mult (inv_pos D D_pos) (base_loss s'))).
+
+Theorem fa56_markov_kernel_pos :
+  forall (base_loss : S -> R) (D : R) (D_pos : lt zero D)
+         (HZ : lt zero (fa51_Z_temp S enum base_loss D D_pos)) (s' : S),
+    lt zero (fa56_markov_kernel base_loss D D_pos HZ s').
+Proof.
+  intros base_loss D D_pos HZ s'. unfold fa56_markov_kernel.
+  exact (mult_positive (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                       (exp_neg (mult (inv_pos D D_pos) (base_loss s')))
+                       (inv_pos_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                       (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s')))).
+Qed.
+
+Theorem fa56_markov_kernel_nonneg :
+  forall (base_loss : S -> R) (D : R) (D_pos : lt zero D)
+         (HZ : lt zero (fa51_Z_temp S enum base_loss D D_pos)) (s' : S),
+    le zero (fa56_markov_kernel base_loss D D_pos HZ s').
+Proof.
+  intros base_loss D D_pos HZ s'.
+  exact (fa51_lt_le zero (fa56_markov_kernel base_loss D D_pos HZ s')
+           (fa56_markov_kernel_pos base_loss D D_pos HZ s')).
+Qed.
+
+Theorem fa56_markov_kernel_normalized :
+  forall (base_loss : S -> R) (D : R) (D_pos : lt zero D)
+         (HZ : lt zero (fa51_Z_temp S enum base_loss D D_pos)),
+    Id (fa51_sumd S (fun s' => fa56_markov_kernel base_loss D D_pos HZ s') enum)
+       one.
+Proof.
+  intros base_loss D D_pos HZ. unfold fa56_markov_kernel.
+  exact (id_trans
+           (fa56_sumd_mult_const
+              (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+              (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) enum)
+           (id_trans
+              (id_cong
+                 (fun y => mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ) y)
+                 (id_sym (fa51_Z_temp_spec_def S enum base_loss D D_pos)))
+              (id_trans
+                 (mult_comm (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                            (fa51_Z_temp S enum base_loss D D_pos))
+                 (inv_pos_correct (fa51_Z_temp S enum base_loss D D_pos) HZ)))).
+Qed.
+
+(* ============ 主件组 III：S05:5761-5768 涨落耗散槽 ================== *)
+(* 槽语句：Variable covariance : R；fluctuation_dissipation :          *)
+(*   Id covariance (mult D H_inv).                                     *)
+(* 兑现：covariance 装法定义件（E354：被预测量取构造）+ 正性伴件       *)
+(* （mult_positive 消费；H_inv 正性入定理签名=教义，同 fa51 模式）。   *)
+
+Definition fa56_covariance (D H_inv : R) : R := mult D H_inv.
+
+Theorem fa56_fluctuation_dissipation :
+  forall (D H_inv : R), Id (fa56_covariance D H_inv) (mult D H_inv).
+Proof.
+  intros D H_inv. reflexivity.
+Qed.
+
+Theorem fa56_covariance_pos :
+  forall (D H_inv : R),
+    lt zero D -> lt zero H_inv -> lt zero (fa56_covariance D H_inv).
+Proof.
+  intros D H_inv HD HI. unfold fa56_covariance.
+  exact (mult_positive D H_inv HD HI).
+Qed.
+
+(* ============ 主件组 IV：S05:5957-5961 涨落尺度槽 =================== *)
+(* 槽语句：fluctuation_scale : forall N : R,                           *)
+(*   Id (prob_negative_entropy N) (exp_neg (mult N (inv_pos k_B        *)
+(*   k_B_pos))).                                                       *)
+(* 兑现：prob 装法定义件 + 无条件正性 + 严格上界伴件 lt-one（消费      *)
+(* exp_neg_decr（Enhanced 字段，S01 注记点名「fluctuation 方向」）+    *)
+(* exp_neg_zero，lt_id_r 右元 Id 收口）。S01 头注原话：原接口缺        *)
+(* exp_neg_decr 时该预测方向不可判定——本件即补字段后的兑现位。        *)
+
+Definition fa56_prob_neg_entropy (k_B : R) (k_B_pos : lt zero k_B) (N : R) : R :=
+  exp_neg (mult N (inv_pos k_B k_B_pos)).
+
+Theorem fa56_fluctuation_scale :
+  forall (k_B : R) (k_B_pos : lt zero k_B) (N : R),
+    Id (fa56_prob_neg_entropy k_B k_B_pos N)
+       (exp_neg (mult N (inv_pos k_B k_B_pos))).
+Proof.
+  intros k_B k_B_pos N. reflexivity.
+Qed.
+
+Theorem fa56_prob_neg_entropy_pos :
+  forall (k_B : R) (k_B_pos : lt zero k_B) (N : R),
+    lt zero (fa56_prob_neg_entropy k_B k_B_pos N).
+Proof.
+  intros k_B k_B_pos N. unfold fa56_prob_neg_entropy.
+  exact (exp_neg_pos (mult N (inv_pos k_B k_B_pos))).
+Qed.
+
+Theorem fa56_prob_neg_entropy_lt_one :
+  forall (k_B : R) (k_B_pos : lt zero k_B) (N : R),
+    lt zero N -> lt (fa56_prob_neg_entropy k_B k_B_pos N) one.
+Proof.
+  intros k_B k_B_pos N HN. unfold fa56_prob_neg_entropy.
+  exact (lt_id_r (exp_neg (mult N (inv_pos k_B k_B_pos))) (exp_neg zero) one
+           (exp_neg_zero)
+           (exp_neg_decr zero (mult N (inv_pos k_B k_B_pos))
+              (mult_positive N (inv_pos k_B k_B_pos) HN
+                 (inv_pos_pos k_B k_B_pos)))).
+Qed.
+
+(* ============ 主件组 V：S05:5917-5922 热弛豫槽 ====================== *)
+(* 槽语句：heat_relaxation_exponential : forall t : nat,               *)
+(*   Id (temperature_difference t) (mult (exp_neg (mult gamma          *)
+(*   (of_nat t))) temperature_difference0).                            *)
+(* 兑现：temperature_difference 装法定义件（of_nat 槽保留为接口参数，  *)
+(* 诚实降级同 fa51 beta 模式）+ 正性伴件（D0 正前提 + exp_neg_pos）。  *)
+
+Definition fa56_temp_difference (gamma : R) (of_nat_R : nat -> R) (D0 : R)
+                                (t : nat) : R :=
+  mult (exp_neg (mult gamma (of_nat_R t))) D0.
+
+Theorem fa56_heat_relaxation_exponential :
+  forall (gamma : R) (of_nat_R : nat -> R) (D0 : R) (t : nat),
+    Id (fa56_temp_difference gamma of_nat_R D0 t)
+       (mult (exp_neg (mult gamma (of_nat_R t))) D0).
+Proof.
+  intros gamma of_nat_R D0 t. reflexivity.
+Qed.
+
+Theorem fa56_temp_difference_pos :
+  forall (gamma : R) (of_nat_R : nat -> R) (D0 : R) (t : nat),
+    lt zero D0 -> lt zero (fa56_temp_difference gamma of_nat_R D0 t).
+Proof.
+  intros gamma of_nat_R D0 t HD0. unfold fa56_temp_difference.
+  exact (mult_positive (exp_neg (mult gamma (of_nat_R t))) D0
+           (exp_neg_pos (mult gamma (of_nat_R t))) HD0).
+Qed.
+
+End Fa56IdCarrier.
+
+(* ============ 假设面收口申报 ============ *)
+
+Print Assumptions fa56_sumd_mult_const.
+Print Assumptions fa56_partition_markov.
+Print Assumptions fa56_Z_markov_pos.
+Print Assumptions fa56_markov_kernel_pos.
+Print Assumptions fa56_markov_kernel_nonneg.
+Print Assumptions fa56_markov_kernel_normalized.
+Print Assumptions fa56_fluctuation_dissipation.
+Print Assumptions fa56_covariance_pos.
+Print Assumptions fa56_fluctuation_scale.
+Print Assumptions fa56_prob_neg_entropy_pos.
+Print Assumptions fa56_prob_neg_entropy_lt_one.
+Print Assumptions fa56_heat_relaxation_exponential.
+Print Assumptions fa56_temp_difference_pos.

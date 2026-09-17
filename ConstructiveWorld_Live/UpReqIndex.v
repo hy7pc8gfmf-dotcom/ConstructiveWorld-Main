@@ -2051,3 +2051,167 @@ Definition ng_PinskerTwoPoint : NewGreenFace :=
 (* ng_SymplecticRotationSpec —— SymplecticRotationSpec.v：辛旋转特征刻画+幂速率 *)
 Definition ng_SymplecticRotationSpec : NewGreenFace :=
   MkNewGreenFace "SymplecticRotationSpec.v" 351 17 20260916 "symplectic rotation characterization and power rate, Q-layer landing core".
+
+(* ================= v3.7 增册（主会话 R83 注册波：本会话认证 28+隔壁消融收编 12，20260917） ================= *)
+(* 40 件尾插 order.txt×3 L247-286/_CoqProject×2 L248-287；PinskerCore/EnvelopeDual 摘除本波     *)
+(* （R8 手稿伤 L2374 归 R9 续修）；fa56b_ext contra 提取豁免在案（PA 面为准）；append-only。   *)
+(* ng_fa53_compat_abs —— fa53_compat_abs.v：compat abs lemma, ablation harvest wave1 *)
+Definition ng_fa53_compat_abs : NewGreenFace :=
+  MkNewGreenFace "fa53_compat_abs.v" 173 8 20260917 "compat abs lemma, ablation harvest wave1".
+
+(* ng_AbsLeId —— AbsLeId.v：abs le id small-face *)
+Definition ng_AbsLeId : NewGreenFace :=
+  MkNewGreenFace "AbsLeId.v" 114 5 20260917 "abs le id small-face".
+
+(* ng_fa51_sumpos_id —— fa51_sumpos_id.v：sum position identity, ablation harvest wave1 *)
+Definition ng_fa51_sumpos_id : NewGreenFace :=
+  MkNewGreenFace "fa51_sumpos_id.v" 234 10 20260917 "sum position identity, ablation harvest wave1".
+
+(* ng_fa56_id_carrier —— fa56_id_carrier.v：id carrier, ablation harvest wave1 *)
+Definition ng_fa56_id_carrier : NewGreenFace :=
+  MkNewGreenFace "fa56_id_carrier.v" 266 13 20260917 "id carrier, ablation harvest wave1".
+
+(* ng_fa56b_ext —— fa56b_ext.v：fa56 extension b, ablation harvest wave1 (contra extraction exemption documented) *)
+Definition ng_fa56b_ext : NewGreenFace :=
+  MkNewGreenFace "fa56b_ext.v" 271 12 20260917 "fa56 extension b, ablation harvest wave1 (contra extraction exemption documented)".
+
+(* ng_fa56c_ext —— fa56c_ext.v：fa56 extension c, ablation harvest wave1 *)
+Definition ng_fa56c_ext : NewGreenFace :=
+  MkNewGreenFace "fa56c_ext.v" 291 13 20260917 "fa56 extension c, ablation harvest wave1".
+
+(* ng_fa52_dpo_witness —— fa52_dpo_witness.v：dpo witness, ablation harvest wave1 *)
+Definition ng_fa52_dpo_witness : NewGreenFace :=
+  MkNewGreenFace "fa52_dpo_witness.v" 94 4 20260917 "dpo witness, ablation harvest wave1".
+
+(* ng_fa52_entropy_diff_unsat —— fa52_entropy_diff_unsat.v：entropy diff unsat, ablation harvest wave1 *)
+Definition ng_fa52_entropy_diff_unsat : NewGreenFace :=
+  MkNewGreenFace "fa52_entropy_diff_unsat.v" 89 2 20260917 "entropy diff unsat, ablation harvest wave1".
+
+(* ng_EntropyUnsatMark —— EntropyUnsatMark.v：entropy unsat mark, ablation harvest wave1 *)
+Definition ng_EntropyUnsatMark : NewGreenFace :=
+  MkNewGreenFace "EntropyUnsatMark.v" 131 3 20260917 "entropy unsat mark, ablation harvest wave1".
+
+(* ng_IdSlotTranslate —— IdSlotTranslate.v：id slot translate, ablation harvest wave1 *)
+Definition ng_IdSlotTranslate : NewGreenFace :=
+  MkNewGreenFace "IdSlotTranslate.v" 174 7 20260917 "id slot translate, ablation harvest wave1".
+
+(* ng_SumEqListFeed —— SumEqListFeed.v：list sum eq feed, ablation harvest wave1 *)
+Definition ng_SumEqListFeed : NewGreenFace :=
+  MkNewGreenFace "SumEqListFeed.v" 172 8 20260917 "list sum eq feed, ablation harvest wave1".
+
+(* ng_SumEqListMark —— SumEqListMark.v：list sum eq mark, ablation harvest wave1 *)
+Definition ng_SumEqListMark : NewGreenFace :=
+  MkNewGreenFace "SumEqListMark.v" 93 4 20260917 "list sum eq mark, ablation harvest wave1".
+
+(* ng_RMaxSwap —— RMaxSwap.v：rmax swap small-face *)
+Definition ng_RMaxSwap : NewGreenFace :=
+  MkNewGreenFace "RMaxSwap.v" 95 4 20260917 "rmax swap small-face".
+
+(* ng_NatLenPos —— NatLenPos.v：nat len pos small-face *)
+Definition ng_NatLenPos : NewGreenFace :=
+  MkNewGreenFace "NatLenPos.v" 111 4 20260917 "nat len pos small-face".
+
+(* ng_InvPosLtCompat —— InvPosLtCompat.v：inv pos lt compat small-face *)
+Definition ng_InvPosLtCompat : NewGreenFace :=
+  MkNewGreenFace "InvPosLtCompat.v" 138 5 20260917 "inv pos lt compat small-face".
+
+(* ng_GibbsAssembly —— GibbsAssembly.v：gibbs assembly *)
+Definition ng_GibbsAssembly : NewGreenFace :=
+  MkNewGreenFace "GibbsAssembly.v" 454 4 20260917 "gibbs assembly".
+
+(* ng_BanachS3Chain —— BanachS3Chain.v：banach S3 chain composition *)
+Definition ng_BanachS3Chain : NewGreenFace :=
+  MkNewGreenFace "BanachS3Chain.v" 176 6 20260917 "banach S3 chain composition".
+
+(* ng_UpReqIrrationalCriterion —— UpReqIrrationalCriterion.v：liouville irrationality criterion via master theorem, e-instance, C2R2 line *)
+Definition ng_UpReqIrrationalCriterion : NewGreenFace :=
+  MkNewGreenFace "UpReqIrrationalCriterion.v" 769 28 20260917 "liouville irrationality criterion via master theorem, e-instance, C2R2 line".
+
+(* ng_UpReqKLCocycle —— UpReqKLCocycle.v：KL cocycle identity face *)
+Definition ng_UpReqKLCocycle : NewGreenFace :=
+  MkNewGreenFace "UpReqKLCocycle.v" 367 6 20260917 "KL cocycle identity face".
+
+(* ng_UpReqScTrigEps —— UpReqScTrigEps.v：sc trig eps family *)
+Definition ng_UpReqScTrigEps : NewGreenFace :=
+  MkNewGreenFace "UpReqScTrigEps.v" 537 21 20260917 "sc trig eps family".
+
+(* ng_UpReqSqrtOptimal —— UpReqSqrtOptimal.v：sqrt d-optimality face *)
+Definition ng_UpReqSqrtOptimal : NewGreenFace :=
+  MkNewGreenFace "UpReqSqrtOptimal.v" 414 22 20260917 "sqrt d-optimality face".
+
+(* ng_UpReqG05WallClass —— UpReqG05WallClass.v：G05 full-base bridge wall class, rLPO spectrum *)
+Definition ng_UpReqG05WallClass : NewGreenFace :=
+  MkNewGreenFace "UpReqG05WallClass.v" 392 13 20260917 "G05 full-base bridge wall class, rLPO spectrum".
+
+(* ng_UpReqSquareWallEquiv —— UpReqSquareWallEquiv.v：square wall b_lift iff rLPO, wall family *)
+Definition ng_UpReqSquareWallEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqSquareWallEquiv.v" 201 7 20260917 "square wall b_lift iff rLPO, wall family".
+
+(* ng_UpReqResidWallEquiv —— UpReqResidWallEquiv.v：residual wall three-segment taxonomy, wall family *)
+Definition ng_UpReqResidWallEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqResidWallEquiv.v" 452 7 20260917 "residual wall three-segment taxonomy, wall family".
+
+(* ng_UpReqLogZWallEquiv —— UpReqLogZWallEquiv.v：logZ wall equivalence, wall family *)
+Definition ng_UpReqLogZWallEquiv : NewGreenFace :=
+  MkNewGreenFace "UpReqLogZWallEquiv.v" 883 28 20260917 "logZ wall equivalence, wall family".
+
+(* ng_UpReqStepKLEtaInst —— UpReqStepKLEtaInst.v：step_kl_eta_bound interface instance resolution, GEOM-A *)
+Definition ng_UpReqStepKLEtaInst : NewGreenFace :=
+  MkNewGreenFace "UpReqStepKLEtaInst.v" 1071 36 20260917 "step_kl_eta_bound interface instance resolution, GEOM-A".
+
+(* ng_UpReqIterGeomRate —— UpReqIterGeomRate.v：iteration geometric rate with sigT witness, GEOM-B *)
+Definition ng_UpReqIterGeomRate : NewGreenFace :=
+  MkNewGreenFace "UpReqIterGeomRate.v" 1632 29 20260917 "iteration geometric rate with sigT witness, GEOM-B".
+
+(* ng_UpReqMixingTime —— UpReqMixingTime.v：mixing time explicit face *)
+Definition ng_UpReqMixingTime : NewGreenFace :=
+  MkNewGreenFace "UpReqMixingTime.v" 666 19 20260917 "mixing time explicit face".
+
+(* ng_UpReqDoeblinEntropy —— UpReqDoeblinEntropy.v：doeblin entropy production face *)
+Definition ng_UpReqDoeblinEntropy : NewGreenFace :=
+  MkNewGreenFace "UpReqDoeblinEntropy.v" 1064 26 20260917 "doeblin entropy production face".
+
+(* ng_UpReqEngineCeiling —— UpReqEngineCeiling.v：engine family constant ceiling c*(k)=min(H_k-1/(k+1),2), first-order infeasibility fingerprint, EXP-D2B *)
+Definition ng_UpReqEngineCeiling : NewGreenFace :=
+  MkNewGreenFace "UpReqEngineCeiling.v" 448 33 20260917 "engine family constant ceiling c*(k)=min(H_k-1/(k+1),2), first-order infeasibility fingerprint, EXP-D2B".
+
+(* ng_UpReqPinskerTransport —— UpReqPinskerTransport.v：two-point pinsker transport dp_two_point, full-distribution *)
+Definition ng_UpReqPinskerTransport : NewGreenFace :=
+  MkNewGreenFace "UpReqPinskerTransport.v" 1385 39 20260917 "two-point pinsker transport dp_two_point, full-distribution".
+
+(* ng_UpReqForwardKLFamily —— UpReqForwardKLFamily.v：forward KL family *)
+Definition ng_UpReqForwardKLFamily : NewGreenFace :=
+  MkNewGreenFace "UpReqForwardKLFamily.v" 371 10 20260917 "forward KL family".
+
+(* ng_UpReqWeakTriangle —— UpReqWeakTriangle.v：constructive weak triangle with certificate c=min(r/q), EXP-D3B *)
+Definition ng_UpReqWeakTriangle : NewGreenFace :=
+  MkNewGreenFace "UpReqWeakTriangle.v" 537 6 20260917 "constructive weak triangle with certificate c=min(r/q), EXP-D3B".
+
+(* ng_UpReqPadeConstUnify —— UpReqPadeConstUnify.v：pade constant unify *)
+Definition ng_UpReqPadeConstUnify : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeConstUnify.v" 271 21 20260917 "pade constant unify".
+
+(* ng_UpReqPadeTransport —— UpReqPadeTransport.v：pade transport *)
+Definition ng_UpReqPadeTransport : NewGreenFace :=
+  MkNewGreenFace "UpReqPadeTransport.v" 409 13 20260917 "pade transport".
+
+(* ng_UpReqConstEnvelope —— UpReqConstEnvelope.v：constant envelope *)
+Definition ng_UpReqConstEnvelope : NewGreenFace :=
+  MkNewGreenFace "UpReqConstEnvelope.v" 678 21 20260917 "constant envelope".
+
+(* ng_UpReqEntropyMonoSplit —— UpReqEntropyMonoSplit.v：entropy monotonicity split *)
+Definition ng_UpReqEntropyMonoSplit : NewGreenFace :=
+  MkNewGreenFace "UpReqEntropyMonoSplit.v" 687 5 20260917 "entropy monotonicity split".
+
+(* ng_UpReqSymplecticBridge —— UpReqSymplecticBridge.v：symplectic bridge *)
+Definition ng_UpReqSymplecticBridge : NewGreenFace :=
+  MkNewGreenFace "UpReqSymplecticBridge.v" 413 18 20260917 "symplectic bridge".
+
+(* ng_UpReqAlignClose —— UpReqAlignClose.v：align close *)
+Definition ng_UpReqAlignClose : NewGreenFace :=
+  MkNewGreenFace "UpReqAlignClose.v" 588 6 20260917 "align close".
+
+(* ng_DenPosGeneralClose —— DenPosGeneralClose.v：den pos general close, VER52 gap-closer *)
+Definition ng_DenPosGeneralClose : NewGreenFace :=
+  MkNewGreenFace "DenPosGeneralClose.v" 122 3 20260917 "den pos general close, VER52 gap-closer".
+
