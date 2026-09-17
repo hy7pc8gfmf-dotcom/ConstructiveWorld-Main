@@ -284,3 +284,5 @@ UpReqEntropyMonoSplit.v
 UpReqSymplecticBridge.v
 UpReqAlignClose.v
 DenPosGeneralClose.v
+UpReqUMixSelect.v
+UpReqAttnMixTime.v

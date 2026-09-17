@@ -2215,3 +2215,16 @@ Definition ng_UpReqAlignClose : NewGreenFace :=
 Definition ng_DenPosGeneralClose : NewGreenFace :=
   MkNewGreenFace "DenPosGeneralClose.v" 122 3 20260917 "den pos general close, VER52 gap-closer".
 
+
+(* ================= v3.8 增册（主会话 R84 注册波：论文7 合龙双件，20260918） ================= *)
+(* 2 件尾插 order.txt×3 L287-288/_CoqProject×2 L289-290；UpReqUMixSelect=接口层选择器（具体层退化为实例），   *)
+(* UpReqAttnMixTime=合龙定理真消费形（AT2 待命形→AT3 终 swap，语句前件已对齐 ums 实形=le 形 Arch+首显参       *)
+(* lt_plus_compat_lt_le 槽）；append-only，EOF 追加。 *)
+(* ng_UpReqUMixSelect —— UpReqUMixSelect.v：interface-layer mixing-time selector: bernoulli upper wall fully ported + archimedean le-form k-selection (ums_scale (S N) one witness), RealInterface generalization of UpReqMixingTime, AT1 *)
+Definition ng_UpReqUMixSelect : NewGreenFace :=
+  MkNewGreenFace "UpReqUMixSelect.v" 615 24 20260918 "interface-layer mixing-time selector: bernoulli upper wall fully ported + archimedean le-form k-selection (ums_scale (S N) one witness), RealInterface generalization of UpReqMixingTime, AT1".
+
+(* ng_UpReqAttnMixTime —— UpReqAttnMixTime.v：attention mixing time closure theorem: amt_attention_mixing_time (+le) consumes ums_k_select with kappa=minus one delta_star, two-side TV stitching via le_lt_trans, degenerate-end delta*<1 strict; paper7 sec6.3 open item 1 closed, AT2 standby + AT3 final swap *)
+Definition ng_UpReqAttnMixTime : NewGreenFace :=
+  MkNewGreenFace "UpReqAttnMixTime.v" 223 7 20260918 "attention mixing time closure theorem: amt_attention_mixing_time (+le) consumes ums_k_select with kappa=minus one delta_star, two-side TV stitching via le_lt_trans, degenerate-end delta*<1 strict; paper7 sec6.3 open item 1 closed, AT2 standby + AT3 final swap".
+
