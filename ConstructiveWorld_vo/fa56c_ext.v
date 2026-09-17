@@ -113,6 +113,8 @@ Theorem fa56c_default_token_singleton :
 Proof. intros Token t0. reflexivity. Qed.
 
 (* 伴件：default_token 头插回词表保非空（fa56b 判别核消费位）。       *)
+(* 提取面：本件消费 fa56b contra（Id 数据假设 J 消去类），留证面不   *)
+(* 进提取名单（见 fa56b_ext.v 头注提取面定谳）；PA 面原状。          *)
 Theorem fa56c_default_token_cons_preserves_nonempty :
   forall (Token : Set) (vocab : list Token)
          (Hne : Not (Id vocab (@nil Token))),

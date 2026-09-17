@@ -2228,3 +2228,71 @@ Definition ng_UpReqUMixSelect : NewGreenFace :=
 Definition ng_UpReqAttnMixTime : NewGreenFace :=
   MkNewGreenFace "UpReqAttnMixTime.v" 223 7 20260918 "attention mixing time closure theorem: amt_attention_mixing_time (+le) consumes ums_k_select with kappa=minus one delta_star, two-side TV stitching via le_lt_trans, degenerate-end delta*<1 strict; paper7 sec6.3 open item 1 closed, AT2 standby + AT3 final swap".
 
+
+(* ================= v3.9 增册（主会话 R85 注册波：下波修复六件+Q18 家族两件+23-03 消融交接八件，20260918） ================= *)
+(* 16 件尾插 order×3 L289-304/_CoqProject×2 L290-305；PadeErrorIntegral/Paper12345Sample/                    *)
+(* p2a_AttnClimClose/p3a_TempDualBoolSlots 四件伤单摘除候 R86；fa56b/fa56c 手术版随车（已注册件内容修改）。   *)
+(* ng_UpReqPinskerCore —— UpReqPinskerCore.v：pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK *)
+Definition ng_UpReqPinskerCore : NewGreenFace :=
+  MkNewGreenFace "UpReqPinskerCore.v" 3015 40 20260918 "pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK".
+
+(* ng_UpReqEnvelopeDual —— UpReqEnvelopeDual.v：constant envelope dual, cascade rebuild on repaired core, R9 *)
+Definition ng_UpReqEnvelopeDual : NewGreenFace :=
+  MkNewGreenFace "UpReqEnvelopeDual.v" 811 17 20260918 "constant envelope dual, cascade rebuild on repaired core, R9".
+
+(* ng_UpReqDyadicLog —— UpReqDyadicLog.v：dyadic log envelopes, axis rate via c3e engine, W1B/W1C line *)
+Definition ng_UpReqDyadicLog : NewGreenFace :=
+  MkNewGreenFace "UpReqDyadicLog.v" 589 24 20260918 "dyadic log envelopes, axis rate via c3e engine, W1B/W1C line".
+
+(* ng_fa57_ext —— fa57_ext.v：fa57 extension direct compile, VER52 wave-3 handover *)
+Definition ng_fa57_ext : NewGreenFace :=
+  MkNewGreenFace "fa57_ext.v" 239 11 20260918 "fa57 extension direct compile, VER52 wave-3 handover".
+
+(* ng_UpReqRatioTail —— UpReqRatioTail.v：ratio tail Q/Real faces, R9/R9B *)
+Definition ng_UpReqRatioTail : NewGreenFace :=
+  MkNewGreenFace "UpReqRatioTail.v" 919 42 20260918 "ratio tail Q/Real faces, R9/R9B".
+
+(* ng_UpReqAttnUniformLimit —— UpReqAttnUniformLimit.v：attn uniform limit + switch_gen family, R9B/SWG *)
+Definition ng_UpReqAttnUniformLimit : NewGreenFace :=
+  MkNewGreenFace "UpReqAttnUniformLimit.v" 618 15 20260918 "attn uniform limit + switch_gen family, R9B/SWG".
+
+(* ng_UpReqAttnMassSplit —— UpReqAttnMassSplit.v：Q18 mass-split chain ams_, Q18C *)
+Definition ng_UpReqAttnMassSplit : NewGreenFace :=
+  MkNewGreenFace "UpReqAttnMassSplit.v" 891 12 20260918 "Q18 mass-split chain ams_, Q18C".
+
+(* ng_UpReqAttnQ18Tail —— UpReqAttnQ18Tail.v：Q18 tail: T0 rationalized 299#1000 + cross-token congruence, Q18D *)
+Definition ng_UpReqAttnQ18Tail : NewGreenFace :=
+  MkNewGreenFace "UpReqAttnQ18Tail.v" 519 17 20260918 "Q18 tail: T0 rationalized 299#1000 + cross-token congruence, Q18D".
+
+(* ng_FepIdentClass —— FepIdentClass.v：FEP identification class, ablation harvest 23-03 *)
+Definition ng_FepIdentClass : NewGreenFace :=
+  MkNewGreenFace "FepIdentClass.v" 578 5 20260918 "FEP identification class, ablation harvest 23-03".
+
+(* ng_G04ProjHook —— G04ProjHook.v：G04 proj hook, ablation harvest 23-03 *)
+Definition ng_G04ProjHook : NewGreenFace :=
+  MkNewGreenFace "G04ProjHook.v" 222 12 20260918 "G04 proj hook, ablation harvest 23-03".
+
+(* ng_LMCarrierExt —— LMCarrierExt.v：LM carrier extension, ablation harvest 23-03 *)
+Definition ng_LMCarrierExt : NewGreenFace :=
+  MkNewGreenFace "LMCarrierExt.v" 306 15 20260918 "LM carrier extension, ablation harvest 23-03".
+
+(* ng_Paper1Ablation —— Paper1Ablation.v：paper1 ablation sample, harvest 23-03 *)
+Definition ng_Paper1Ablation : NewGreenFace :=
+  MkNewGreenFace "Paper1Ablation.v" 521 5 20260918 "paper1 ablation sample, harvest 23-03".
+
+(* ng_Paper7Ablation —— Paper7Ablation.v：paper7 ablation, harvest 23-03 *)
+Definition ng_Paper7Ablation : NewGreenFace :=
+  MkNewGreenFace "Paper7Ablation.v" 191 7 20260918 "paper7 ablation, harvest 23-03".
+
+(* ng_PhysPredAblation —— PhysPredAblation.v：physics prediction ablation, harvest 23-03 *)
+Definition ng_PhysPredAblation : NewGreenFace :=
+  MkNewGreenFace "PhysPredAblation.v" 279 13 20260918 "physics prediction ablation, harvest 23-03".
+
+(* ng_RateTheoryAblation —— RateTheoryAblation.v：rate theory ablation, harvest 23-03 *)
+Definition ng_RateTheoryAblation : NewGreenFace :=
+  MkNewGreenFace "RateTheoryAblation.v" 215 5 20260918 "rate theory ablation, harvest 23-03".
+
+(* ng_p4a_GradSignQDec —— p4a_GradSignQDec.v：paper4-a grad sign Q-decidable, extraction magic 0, harvest 23-03 *)
+Definition ng_p4a_GradSignQDec : NewGreenFace :=
+  MkNewGreenFace "p4a_GradSignQDec.v" 257 13 20260918 "paper4-a grad sign Q-decidable, extraction magic 0, harvest 23-03".
+

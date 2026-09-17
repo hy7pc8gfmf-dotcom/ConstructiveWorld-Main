@@ -40,6 +40,14 @@
 (* 防撞已核。                                                     *)
 (* 红线：纯构造性零承认位；语句面 Set 层；尾 Print Assumptions 全   *)
 (* Closed。                                                       *)
+(* 提取面定谳（FB 席 20260918）：contra 及非空四件（singleton/      *)
+(* cons/append_l/append_r）语句以 Id 数据假设为前提，任何证明项必    *)
+(* 含 J 消去，标准 Empty_set 提取语义下 Obj.magic 不可消灭（对照    *)
+(* fa56c_default_token:97 惯用法仅适用 Not 函数型假设面）。本件 G3  *)
+(* 提取名单=其余九件精确名单（id_transport/lt/le_transport/sumd_    *)
+(* cong/sumd_swap/detailed_balance/boltzmann_stationary/cross_      *)
+(* domain_scaling/cross_domain_linear），全零 magic；PA 面 14/14    *)
+(* 与语句面零改动，contra 证明地位原状。                            *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -82,6 +90,8 @@ Definition fa56b_list_case (T : Set) (l : list T) : Set :=
   end.
 
 (* 判别核引理：Id (t::l) nil 无居民（cons ≠ nil）。                 *)
+(* 提取面：本件属 Id 数据假设 J 消去类，留证面不进提取名单（见头注  *)
+(* 提取面定谳）；PA 面原状。                                       *)
 Definition fa56b_cons_nil_id_contra (T : Set) (t : T) (l : list T)
                                     (H : Id (t :: l) nil) : Empty_set :=
   match id_sym H in Id _ a return fa56b_list_case T a with
