@@ -2372,3 +2372,12 @@ Definition ng_UpReqMixLogA : NewGreenFace :=
 (* ng_UpReqMixLogB —— UpReqMixLogB.v：galloping (exponential) search + terminal bisection log-scale k selector (mixb_ family: qbernoulli / gallop / sel_scale compare count 2*log2 K+5), four-gate green, race B *)
 Definition ng_UpReqMixLogB : NewGreenFace :=
   MkNewGreenFace "UpReqMixLogB.v" 1311 65 20260919 "galloping search + terminal bisection log-scale k selector (mixb_ family), compare count bounded 2*log2 K+5, zero new axioms Print Assumptions closed, race B".
+
+(* ================= v4.4 增册（R88 注册波预备席：D 路平方阶梯选择器 + Fin2 并发仲裁实例双件铺设，20260919） ================= *)
+(* 2 件尾插 order L376-377（两件互不依赖零内边，按字母序落位：Fin2 L376、D L377）；vo 树内 9.1 原地重编（跨树 digest 防御：Live_X 产物未直种），.vo/.vos 头 436f712100015ff4，双件单件 coqchk RC=0；D 依赖 CW_219/UpTVDoeblin/UpReqIterGeomRate/UpReqMixingTime/KLWallClosed 全在提交面 L16-L274，Fin2 依赖 CW_219/AttnDoeblin/UpReqAlgebra/UpReqDist/UpReqSampling/UpReqSumD/UpReqConcSoftmax/UpReqConcMixSel/UpReqConcB1/UpReqConcB2 全在提交面 L16-L315。 *)
+(* ng_UpReqConcFin2 —— UpReqConcFin2.v：Fin-2 non-degeneracy concrete instance (cf2_ family: bool world data T2 + TV strict positivity T3 + T4b abs_row bridges + T5b cf2_tv_iter_eps closure; lineage F21 3091e0d0 -> F22 green base a3833710 via concurrent-collision arbitration -> F23 harvest), four-gate green, 5 Qed + 42 Defined extractable, 36 PA Closed *)
+Definition ng_UpReqConcFin2 : NewGreenFace :=
+  MkNewGreenFace "UpReqConcFin2.v" 1038 5 20260919 "Fin-2 non-degeneracy concrete instance (cf2_ family), TV non-triviality demo + T5b iteration closure on arbitration base a3833710, zero new axioms Print Assumptions closed".
+(* ng_UpReqMixLogD —— UpReqMixLogD.v：Path D squared-ladder kappa0 powers + binary-composition log-scale k selector (mixd_ family: ladder/scan_up/desc with QleT' certificate direct-return, cost c <= 5*d+2, Q-core Defined selector + Real rationalization shell), four-gate green, race D, 66 Qed / 10 PA Closed *)
+Definition ng_UpReqMixLogD : NewGreenFace :=
+  MkNewGreenFace "UpReqMixLogD.v" 1725 66 20260919 "squared-ladder + binary-composition log-scale k selector (mixd_ family), certificate direct-return with cost bound 5*d+2, zero new axioms Print Assumptions closed, race D".
