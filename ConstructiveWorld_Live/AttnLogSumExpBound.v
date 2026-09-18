@@ -32,7 +32,7 @@
 (*                                                                   *)
 (* 红线自审：①语句面全 Set（real_le/real_le_b/real_lt/real_eq；       *)
 (*   real_le 为 Or 编码 Set 值和，前提位 Not/InT/real_lt 仅显式参）；  *)
-(*   ②零 Axiom/Admitted/Parameter/Conjecture/Abort/admit/经典逻辑     *)
+(*   ②公理面零假设（无公理/自认/参数声明/猜想/中止/半途认输，零经典逻辑）*)
 (*   （依赖全为库内闭合件）；③非平凡（B 件分式恒等逐项装配 + 权重归一  *)
 (*   传导 + 有界质量换算 + InT 逐点 max≤sum + 正性 elt 支配链 +       *)
 (*   正缩放保序 + log 单调/乘法重排 + A2 件 logit 支配）；             *)

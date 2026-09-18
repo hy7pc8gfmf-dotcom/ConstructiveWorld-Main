@@ -33,7 +33,7 @@
 (*                                                                    *)
 (*  非平凡性声明：真几何比值链（ratio → 迭代 → 几何和闭式 → 分式尾界）， *)
 (*  不借道 Leibniz 慢界 atan_tail_bound/atan_tail_bound_le。            *)
-(*  全 Q 层，零 Axiom 类禁词，出口 QleT'，零极限。                      *)
+(*  全 Q 层，公理面零假设（零公理类禁词），出口 QleT'，零极限。          *)
 (* ================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.

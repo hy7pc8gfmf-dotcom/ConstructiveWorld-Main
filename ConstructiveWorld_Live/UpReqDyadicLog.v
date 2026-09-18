@@ -1,21 +1,28 @@
 (* ============================================================ *)
-(* UpReqDyadicLog.v — 席 W1-B：DyadicLog 构造性 ln 包络层          *)
-(* 日期 2026-09-17。四关验收件（G1/G2/G3）。                        *)
-(*                                                                *)
-(* 公理面：本件零新公理。全链 Require CW_ConstructiveWorld_219     *)
-(* （S01–S15 全导出）+ UpRealLeB / UpReqEnvelopeDual /            *)
-(* UpReqConstEnvelope 三供体（均 .vo/.vok 双证在库）；文末         *)
-(* Print Assumptions 留痕核验 Closed。诚实账：                     *)
-(*  (1) dyadic 轴 = real_mult (real_const j) c3e_ln2_real，        *)
-(*      语义腿全部经 evd_le_b_mult_pos_l 缩放导出——绕开           *)
-(*      log_seq 桥（c3e 头注同源挂账，本席承袭记档）。              *)
-(*  (2) general-m（dyd_ln_env）：ln-m 腿为单发界，tail(k,n) =      *)
-(*      (b−a) + k·2/(2n+2)——纯 2^(−k) 收敛仅在纯 2^j 轴成立，      *)
-(*      头注如实记档。                                             *)
-(*  (3) family（dyd_ln_env_family）：t·t 段为定点宽，n→∞ 不缩；    *)
-(*      轴段 2·j/(2n+2) 经 dyd_axis_rate 构造性速率件（q_arch_inv  *)
-(*      引擎，N≈⌈c/eps⌉ 形）收敛。                                 *)
-(* 领地：本文件为新建，零既有件改动；前缀 dyd_ 全库零撞名。          *)
+(* UpReqDyadicLog.v —— DyadicLog 构造性 ln 包络层                   *)
+(*                                                              *)
+(* 目的：在 dyadic 网格（2^j · 轴）上构造 ln 的构造性包络层，        *)
+(*   给出逐点与成族两档 ln 界。                                     *)
+(*                                                              *)
+(* 主件：dyadic 轴 = real_mult (real_const j) c3e_ln2_real，        *)
+(*   语义腿全部经 evd_le_b_mult_pos_l 缩放导出——绕开 log_seq 桥。    *)
+(*   ① general-m（dyd_ln_env）：ln-m 腿为单发界，                    *)
+(*      tail(k,n) = (b−a) + k·2/(2n+2)——纯 2^(−k) 收敛仅在           *)
+(*      纯 2^j 轴成立，此处如实记档。                                 *)
+(*   ② family（dyd_ln_env_family）：t·t 段为定点宽，n→∞ 不缩；        *)
+(*      轴段 2·j/(2n+2) 经 dyd_axis_rate 构造性速率件收敛             *)
+(*      （q_arch_inv 引擎，N≈⌈c/eps⌉ 形）。                           *)
+(*                                                              *)
+(* 已知边界：① 的轴限制与 ② 的定点宽段为上游同源待续事项，            *)
+(*   本件承袭记档；除此两处外全部闭合。                               *)
+(*                                                              *)
+(* 依赖（全部只读消费）：CW_ConstructiveWorld_219（S01–S15 全导出）、  *)
+(*   UpRealLeB / UpReqEnvelopeDual / UpReqConstEnvelope              *)
+(*   （均 .vo/.vok 双证在库）。                                       *)
+(*                                                              *)
+(* 备注：本文件为新建，零既有件改动；前缀 dyd_ 避免与库内既有名冲突。  *)
+(*   公理面：本件零新公理；文末 Print Assumptions 留痕核验 Closed；    *)
+(*   本件已完成机器验证。                                             *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -162,7 +169,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1 轴件（G1 核）：ln(2^j) 双边包络，正负两向                     *)
+(* §1 轴件（核）：ln(2^j) 双边包络，正负两向                     *)
 (* ============================================================ *)
 
 Definition t2 (n : nat) : Q := 1 / (Z.of_nat (2 * n + 2) # 1).
@@ -289,7 +296,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 率件（G2 速率）：轴段 2·j·t2 n 构造性收敛（q_arch_inv 引擎，   *)
+(* §2 率件（速率）：轴段 2·j·t2 n 构造性收敛（q_arch_inv 引擎，   *)
 (*     N ≈ ⌈c/eps⌉ 形，零平行抄写真走 c3e_env_rate）                *)
 (* ============================================================ *)
 
@@ -327,7 +334,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 分解式（G1 general-m）：ln(m/2^k) = ln m − k·ln2            *)
+(* §3 分解式（general-m）：ln(m/2^k) = ln m − k·ln2            *)
 (* ============================================================ *)
 
 (* 3.1 常数正性证书（透明体，供 real_inv_pos/real_log 前提位） *)
@@ -441,7 +448,7 @@ Proof.
       apply Qeq_refl.
 Qed.
 
-(* 3.4 G1 主件：dyadic 格点 x = m·2^(−k) 的构造性 ln 包络
+(* 3.4 主件：dyadic 格点 x = m·2^(−k) 的构造性 ln 包络
       （ln m 腿：evd_log_ge_inv_one_B 下界 × real_log_le_linear_B 上界对夹；
       诚实账：ln-m 段宽 (b−a) 固定，k·ln2 段收敛，见头注 (2)） *)
 Theorem dyd_ln_env : forall (m : Q) (Hm : Qlt 0 m) (k n : nat),
@@ -482,7 +489,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 族件（G2 主件）：任意正 annulus 点 ln(2^j·(1+t)) 包络          *)
+(* §4 族件（主件）：任意正 annulus 点 ln(2^j·(1+t)) 包络          *)
 (* ============================================================ *)
 
 (* 4.1 1+t 正性（点态构造：见证 t/2） *)
@@ -516,7 +523,7 @@ Definition dyd_annulus (j : nat) (t : Q) (Ht : Qlt 0 t) : Real :=
             (real_log (real_plus real_one (real_const t))
                       (dyd_one_plus_const_pos t Ht)).
 
-(* 4.3 G2 主件：ln(2^j·(1+t)) 双边包络
+(* 4.3 主件：ln(2^j·(1+t)) 双边包络
       宽 = 2·j·t2 n（轴段，收敛）+ t·t（定点，诚实账见头注 (3)） *)
 Theorem dyd_ln_env_family : forall (j : nat) (t : Q) (Ht : Qlt 0 t) (n : nat),
   sigT (fun lo : Q => sigT (fun hi : Q =>
@@ -564,7 +571,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 G3 见证位：ln(3/2) ∈ [1/4, 1/2]（j=0, t=1/2 实例；           *)
+(* §5 数值见证位：ln(3/2) ∈ [1/4, 1/2]（j=0, t=1/2 实例；           *)
 (*     python sanity：math.log(1.5)=0.405465 ∈ [0.25,0.5] ✓）      *)
 (* ============================================================ *)
 

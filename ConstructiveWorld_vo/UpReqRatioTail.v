@@ -1,49 +1,49 @@
 (* ============================================================ *)
-(* UpReqRatioTail.v —— 席 Q11：比值型几何尾界母定理（EXPL1 粗粒化）  *)
-(*                                                                 *)
-(* 使命：把 exp/arctan 等级数证明里反复内联的「比值受控 ⟹ 尾和      *)
-(*       被首项封顶」论证粗粒化为母定理，一母多子实例化。            *)
-(*                                                                 *)
-(* 本件承载（前缀 rtb_，开工 grep 全树零撞名，2026-09-17）：         *)
-(*   Part 1  Q 层工具：rtb_qleT_refl/_trans/_mult_l/_mult_r、       *)
-(*           rtb_qle_0_minus、rtb_zpos_S、rtb_qleT_div_r、           *)
-(*           rtb_qlt_0_minus、rtb_neq_of_ltT、rtb_one_minus_neq、    *)
-(*           rtb_pow_le_one。                                       *)
-(*   Part 2  G1 母引理（Q 层）：rtb_tsum（有限和定义）+              *)
-(*           rtb_ratio_tail_Q_mult（乘形式，telescoping+Q 环账）     *)
-(*           + rtb_ratio_tail_Q（除形式 ≤ u_n·(1-ρ^N)/(1-ρ)，承      *)
-(*           Qmult_le_r）。                                         *)
-(*   Part 3  G2 母定理（Real 层）：rtb_rsum + 逐点/序工具            *)
-(*           （rtb_rc_* 环账、rtb_rlt_eq_l/r、rtb_rlt_plus_l/r、     *)
-(*           rtb_rplus_le_compat、rtb_rmult_le_compat_l/r、          *)
-(*           rtb_step_le、rtb_c_nonneg）+                            *)
-(*           rtb_ratio_tail_real（Bishop/eps 形）。                  *)
-(*   Part 4  两实例（真走母定理，非平行抄写）：                      *)
-(*           exp 位点：rtb_exp_ratio → rtb_exp_inst（Q）+            *)
+(* UpReqRatioTail.v —— 比值型几何尾界母定理（一母多子实例化）         *)
+(*                                                              *)
+(* 目的：把 exp/arctan 等级数证明里反复内联的「比值受控 ⟹ 尾和        *)
+(*   被首项封顶」论证粗粒化为母定理，一处证成、多点实例化。            *)
+(*                                                              *)
+(* 主件（前缀 rtb_，避免与库内既有名冲突）：                         *)
+(*   Part 1  Q 层工具：rtb_qleT_refl/_trans/_mult_l/_mult_r、        *)
+(*           rtb_qle_0_minus、rtb_zpos_S、rtb_qleT_div_r、            *)
+(*           rtb_qlt_0_minus、rtb_neq_of_ltT、rtb_one_minus_neq、      *)
+(*           rtb_pow_le_one。                                        *)
+(*   Part 2  Q 层母引理：rtb_tsum（有限和定义）＋                     *)
+(*           rtb_ratio_tail_Q_mult（乘形式，telescoping＋Q 环账）      *)
+(*           ＋ rtb_ratio_tail_Q（除形式 ≤ u_n·(1−ρ^N)/(1−ρ)，          *)
+(*           承 Qmult_le_r）。                                        *)
+(*   Part 3  Real 层母定理：rtb_rsum ＋ 逐点/序工具                    *)
+(*           （rtb_rc_* 环账、rtb_rlt_eq_l/r、rtb_rlt_plus_l/r、       *)
+(*           rtb_rplus_le_compat、rtb_rmult_le_compat_l/r、            *)
+(*           rtb_step_le、rtb_c_nonneg）＋                             *)
+(*           rtb_ratio_tail_real（Bishop/eps 形）。                    *)
+(*   Part 4  两实例（真走母定理，非平行抄写）：                        *)
+(*           exp 位点：rtb_exp_ratio → rtb_exp_inst（Q）＋              *)
 (*                     rtb_exp_real_inst（Real 消费 rtb_ratio_tail_real）； *)
-(*           arctan 位点：rtb_atan_ratio → rtb_atan_cert（指标平移）  *)
-(*                     → rtb_atan_inst（Q，真走母定理）。             *)
-(*  （R2 注：前棒拟设的 rtb_atan_abs_tsum 垫片因截断事故头体俱失，     *)
-(*   R2 重建时 rtb_atan_inst 改以 rtb_tsum 直陈式收口，垫片免除。）   *)
-(* 供体位点（未改任何既有文件，只消费）：                            *)
-(*   S03_QExp.v:622 exp_tail_abs_geom2 系（q_pow/q_fact/q_pow_nonneg/ *)
-(*   q_fact_pos/q_fact_succ/q_neq_of_lt 供 Q 环账）；                *)
-(*   S11_TP3B5.v:137 atan_mag_succ_geom 系（atan_q_pow_odd3/         *)
-(*   atan_odd_pos/atan_sq_abs/arctan_term_abs 供 arctan 位点）。     *)
-(* 稿池参照（未 Require 未改）：成果四/待入库稿/ArctanGeomTail.v     *)
-(*   atg_tail_geom:278（其 Leibniz 成对收紧 c_{m+1} 强于本件纯比值   *)
-(*   形 c_{m+1}/(1-r)，两路线关系记入交付报告）。                    *)
-(* 公理面：本件零新增公理；全部前提为 Set 层显式证书                 *)
-(*   （QleT'/QltT = Id 判定器值、real_lt = eps 见证 sigT、real_le =  *)
-(*   Or 编码）；Print Assumptions 预期全 Closed。                    *)
-(* 红线自审：语句面全 Set 层（量词 nat/Q/nat->Q/nat->Real/Real；     *)
-(*   比较全 QleT'/QltT/real_lt/real_le/real_eq）；零 Prop 泄露于     *)
-(*   签名；零经典逻辑（Qeq_dec/Qle_lt_or_eq 均为可计算判定器）；     *)
-(*   证明内 Prop 分支仅证明性 case-bash，产物全 Set。                *)
-(* 数值 sanity 前置：母引理常数经 python fractions 12 组 (ρ,n,N)     *)
-(*   采样验算全过（几何恒等式精确成立 + 递推 c_{SN'}=1+ρ·c_{N'}）。  *)
+(*           arctan 位点：rtb_atan_ratio → rtb_atan_cert（指标平移）    *)
+(*                     → rtb_atan_inst（Q，真走母定理，以 rtb_tsum      *)
+(*                     直陈式收口，无垫片）。                           *)
+(*                                                              *)
+(* 供体位点（全部只读消费，未改任何既有文件）：                        *)
+(*   S03_QExp.v:622 exp_tail_abs_geom2 系（q_pow/q_fact/               *)
+(*   q_pow_nonneg/q_fact_pos/q_fact_succ/q_neq_of_lt 供 Q 环账）；      *)
+(*   S11_TP3B5.v:137 atan_mag_succ_geom 系（atan_q_pow_odd3/            *)
+(*   atan_odd_pos/atan_sq_abs/arctan_term_abs 供 arctan 位点）。        *)
+(*   参照（未 Require 未改）：待入库稿 ArctanGeomTail.v                 *)
+(*   atg_tail_geom:278——其 Leibniz 成对收紧 c_{m+1} 强于本件纯比值      *)
+(*   形 c_{m+1}/(1−r)，两路线强弱关系如上记档。                         *)
+(*                                                              *)
+(* 备注：公理面零新增公理；全部前提为 Set 层显式证书                    *)
+(*   （QleT'/QltT = Id 判定器值、real_lt = eps 见证 sigT、real_le =     *)
+(*   Or 编码）；文末 Print Assumptions 预期全 Closed。                  *)
+(*   语句面全 Set 层（量词 nat/Q/nat->Q/nat->Real/Real；比较全          *)
+(*   QleT'/QltT/real_lt/real_le/real_eq）；签名零 Prop 泄露；           *)
+(*   零经典逻辑（Qeq_dec/Qle_lt_or_eq 均为可计算判定器）；              *)
+(*   证明内 Prop 分支仅证明性分情况消解，产物全 Set。                   *)
+(*   数值前置校核：母引理常数经精确有理数算术对 12 组 (ρ,n,N) 采样      *)
+(*   验算全过（几何恒等式精确成立＋递推 c_{SN'}=1+ρ·c_{N'}）。           *)
 (* ============================================================ *)
-
 From Stdlib Require Import QArith.Qring.
 From Stdlib Require Import QArith.Qabs.
 From Stdlib Require Import ZArith.
@@ -101,7 +101,7 @@ Proof.
     + apply qeq_le. ring.
 Qed.
 
-(* S n 型正整数分母正性（承 S03 q_fact_pos 同配方） *)
+(* S n 型正整数分母正性（承 S03 q_fact_pos 同款） *)
 Lemma rtb_zpos_S : forall n : nat, QltT 0 (Z.of_nat (Datatypes.S n) # 1).
 Proof. intro n. apply Qlt_to_QltT. unfold Qlt. simpl. lia. Qed.
 
@@ -160,7 +160,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：G1 母引理（Q 层）——比值证书 ⟹ 有限和被首项几何封顶        *)
+(* Part 2：母引理（Q 层）——比值证书 ⟹ 有限和被首项几何封顶        *)
 (* ============================================================ *)
 
 (* 有限和：Σ_{k=0}^{N-1} u (n+k) *)
@@ -188,7 +188,7 @@ Proof.
     ring.
 Qed.
 
-(* G1 核心：乘形式（telescoping + Q 环账，对任意变号 u 成立） *)
+(* 母引理核心：乘形式（telescoping + Q 环账，对任意变号 u 成立） *)
 Lemma rtb_ratio_tail_Q_mult : forall (u : nat -> Q) (rho : Q) (N n : nat),
   QleT' 0 rho -> QltT rho 1 ->
   (forall j : nat, QleT' (u (Datatypes.S j)) (rho * u j)) ->
@@ -224,7 +224,7 @@ Proof.
         -- apply qeq_le. ring.
 Qed.
 
-(* G1 母引理（除形式）：Σ_{k<N} u_{n+k} ≤ u_n·(1-ρ^N)/(1-ρ) *)
+(* 母引理（除形式）：Σ_{k<N} u_{n+k} ≤ u_n·(1-ρ^N)/(1-ρ) *)
 Lemma rtb_ratio_tail_Q : forall (u : nat -> Q) (rho : Q) (N n : nat),
   QleT' 0 rho -> QltT rho 1 ->
   (forall j : nat, QleT' (u (Datatypes.S j)) (rho * u j)) ->
@@ -249,7 +249,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：G2 母定理（Real 层，Bishop/eps 形）                       *)
+(* Part 3：母定理（Real 层，Bishop/eps 形）                       *)
 (* ============================================================ *)
 
 (* Real 有限和：Σ_{k<N} u (n+k) *)
@@ -465,7 +465,7 @@ Proof.
   - apply real_le_refl.
 Qed.
 
-(* G2 母定理：比值证书 ⟹ 尾和 < u_n·(1-ρ^N)/(1-ρ) + eps（Bishop/eps 形） *)
+(* 母定理：比值证书 ⟹ 尾和 < u_n·(1-ρ^N)/(1-ρ) + eps（Bishop/eps 形） *)
 Lemma rtb_ratio_tail_real : forall (u : nat -> Real) (rho : Q) (N n : nat),
   QleT' 0 rho -> QltT rho 1 ->
   (forall j : nat, real_le (u (Datatypes.S j)) (real_mult (real_const rho) (u j))) ->
@@ -908,7 +908,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 审计口（G4）：Print Assumptions                                   *)
+(* 审计口：Print Assumptions                                   *)
 (* ============================================================ *)
 
 Print Assumptions rtb_ratio_tail_Q_mult.

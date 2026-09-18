@@ -2323,3 +2323,33 @@ Definition ng_UpReqConcB2 : NewGreenFace :=
 Definition ng_UpReqConcB2Time : NewGreenFace :=
   MkNewGreenFace "UpReqConcB2Time.v" 339 17 20260918 "B2 unconditional closure: cbt_unconditional_mixing_time (+le) on the concrete logit kernel — zero interface premises zero arch premises zero certificate params (Htv0 mass resolution + arch re-shape via cb1_scale_const), honest notes: +1 slack conservatism and 1-element TV0 tier, multi-element recipe'd, AT9".
 
+
+(* ================= v4.1 增册（主会话 R86 注册波：七件新注 20260918） ================= *)
+(* ng_UpReqTailResidual —— UpReqTailResidual.v：tail residual engine: Q kernel uniform bound + log two-branch pair + trunc5 bridge, W2/W2B/W2C line *)
+Definition ng_UpReqTailResidual : NewGreenFace :=
+  MkNewGreenFace "UpReqTailResidual.v" 1527 44 20260918 "tail residual engine: Q kernel uniform bound + log two-branch pair + trunc5 bridge, W2/W2B/W2C line".
+
+(* ng_UpReqVajdaBound —— UpReqVajdaBound.v：two-point Vajda pieces: kl2 closed form + ln engine + piecewise lower bound, WB/WC/WC2/W2D line *)
+Definition ng_UpReqVajdaBound : NewGreenFace :=
+  MkNewGreenFace "UpReqVajdaBound.v" 843 33 20260918 "two-point Vajda pieces: kl2 closed form + ln engine + piecewise lower bound, WB/WC/WC2/W2D line".
+
+(* ng_UpReqIrrationalInstances —— UpReqIrrationalInstances.v：sqrt2 irrational instance via lic mother criterion exact assembly, IR2/IR3 line *)
+Definition ng_UpReqIrrationalInstances : NewGreenFace :=
+  MkNewGreenFace "UpReqIrrationalInstances.v" 1303 50 20260918 "sqrt2 irrational instance via lic mother criterion exact assembly, IR2/IR3 line".
+
+(* ng_UpReqEqbComplete —— UpReqEqbComplete.v：eqb judicator completeness direction generic mother + dual instance forwarding, Q19S *)
+Definition ng_UpReqEqbComplete : NewGreenFace :=
+  MkNewGreenFace "UpReqEqbComplete.v" 277 13 20260918 "eqb judicator completeness direction generic mother + dual instance forwarding, Q19S".
+
+(* ng_UpReqSentinelMother —— UpReqSentinelMother.v：unreachable sentinel mother pair: domination + domain-bound, with G10 dmin bridge, Q24S *)
+Definition ng_UpReqSentinelMother : NewGreenFace :=
+  MkNewGreenFace "UpReqSentinelMother.v" 320 16 20260918 "unreachable sentinel mother pair: domination + domain-bound, with G10 dmin bridge, Q24S".
+
+(* ng_UpReqLn2Irrational —— UpReqLn2Irrational.v：ln2 irrational conditional-form assembly truly via mother criterion, escape window honestly open, IR4 *)
+Definition ng_UpReqLn2Irrational : NewGreenFace :=
+  MkNewGreenFace "UpReqLn2Irrational.v" 370 21 20260918 "ln2 irrational conditional-form assembly truly via mother criterion, escape window honestly open, IR4".
+
+(* ng_UpReqSqrt3Irrational —— UpReqSqrt3Irrational.v：sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5 *)
+Definition ng_UpReqSqrt3Irrational : NewGreenFace :=
+  MkNewGreenFace "UpReqSqrt3Irrational.v" 1141 27 20260918 "sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5".
+

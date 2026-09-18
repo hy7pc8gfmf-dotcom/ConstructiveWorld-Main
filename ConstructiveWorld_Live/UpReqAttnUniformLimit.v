@@ -1,41 +1,37 @@
 (* ============================================================ *)
-(* UpReqAttnUniformLimit.v —— 席 Q18：并列最大值注意力极限定理       *)
-(* EXPL1 候选 C6 深探：闭合 AttnHardLimit218 自注「若 m 有并列副本， *)
-(* w_T 的 T→0 极限是副本上的均匀分布」（:23-30 诚实接口①）的缺口。  *)
-(*                                                                *)
-(* 公理面：零公理/承认件/弃证；非经典逻辑零采。Print Assumptions 见尾部。 *)
-(*                                                                *)
-(* 本件在盘内容（四关绿口径）：                                     *)
-(*   G1 alm_gap_witness —— Q 层并列间隙证书：非空 Q 表上极大值       *)
-(*      （可判定枚举 alm_max_ne）+ 多重数 k≥1 + 逐点上界 + 两分支：  *)
-(*      (i) 全表同值（均匀退化档）或 (ii) 并列间隙 g>0 且逐点        *)
-(*      q==qmax ∨ q+g≤qmax（镜像现件 gap_le 形）。全构造性。         *)
-(*   G2 定义面 —— 副本多重数 alm_k:=count_token m vocab（不要求      *)
-(*      唯一！）、副本均匀目标 alm_uniform、m-开关 alm_switch：      *)
-(*      并列副本→均匀的计算核，Defined 可提取。                     *)
-(*                                                                *)
-(* G2 极限定理 alm_uniform_limit（陈述已冻结，本窗编译未及，         *)
-(* 蓝图+数值验证见交付报告 D:/ComplexAnalysis/新算法实践/attn/       *)
-(* _tq18_交付报告-20260917.md）：                                   *)
-(*   陈述：∀eps>0, sigT T₀(>0) ∧ ∀T<T₀, L1(w_T,u) ≤ eps；           *)
-(*   率形：L1 ≤ 2n·e^{−γ/T}（数值 sanity 已验证）；                 *)
-(*   阈值：T₀:=γ/ln(1+2n/eps)（cw_log 形，现件同款绿盘在案）；       *)
-(*   核心恒等式：k·(1/k−w_T(m)) = 非 m 质量 M，L1 = 2M               *)
-(*    （数值验证：四温度点 L1==2M 逐位成立）。                        *)
-(*   引理链：switch_gen（m-开关求和恒等式）→ mass_split →            *)
-(*   deficit_eq → mass_rest_le（core_decay_bound 复用，免           *)
-(*   m_count_one——已 Check 验证其 post-End 签名）→ l1_le。          *)
-(*                                                                *)
-(* 诚实范围（L8 异样前提=更强干净陈述信号）：                        *)
-(*   · 副本 = 同一 token m 在 vocab 的多次出现（count_token 口径，   *)
-(*     即现件诚实接口①注记的原生语义）。跨 token 同值不在本件：      *)
-(*     此时 L1→1≠0（数值验证）；覆盖它需 argmax 集合在 Real 层的     *)
-(*     可判定证书（现件注记②之墙），留档后续席位。                  *)
-(*   · T₀:Q 有理化替代须 cw_log 有理上界包装，本窗未做（诚实障碍）。 *)
-(*                                                                *)
-(* 依赖：CW_ConstructiveWorld_219（伞壳）；AttnHardLimit218（现件    *)
-(* 四关绿在盘，只读）。纪律：纯构造性、零改既有文件、前缀 alm_       *)
-(* （全树 grep 零撞名 20260917）。                                  *)
+(* UpReqAttnUniformLimit.v —— 并列最大值注意力极限定理                *)
+(*                                                              *)
+(* 目的：闭合 AttnHardLimit218 自注的待补缺口（其头注接口①注记，      *)
+(*   :23-30）：「若 m 有并列副本，w_T 的 T→0 极限是副本上的均匀分布」。 *)
+(*                                                              *)
+(* 主件（前缀 alm_，避免与库内既有名冲突）：                          *)
+(*   ① alm_gap_witness——Q 层并列间隙证书：非空 Q 表上极大值           *)
+(*      （可判定枚举 alm_max_ne）＋多重数 k≥1＋逐点上界＋两分支：      *)
+(*      (i) 全表同值（均匀退化档）或 (ii) 并列间隙 g>0 且逐点          *)
+(*      q==qmax ∨ q+g≤qmax（镜像现件 gap_le 形）。全构造性。           *)
+(*   ② 定义面——副本多重数 alm_k := count_token m vocab（不要求        *)
+(*      唯一）、副本均匀目标 alm_uniform、m-开关 alm_switch：          *)
+(*      并列副本→均匀的计算核，Defined 可提取。                        *)
+(*   ③ m-开关求和恒等式 swg_switch_sum_gen / swg_switch_sum。          *)
+(*                                                              *)
+(* 已知边界（待续工作）：极限定理 alm_uniform_limit 陈述已冻结，        *)
+(*   尚未落盘。蓝图：                                                 *)
+(*   陈述：∀eps>0, sigT T₀(>0) ∧ ∀T<T₀, L1(w_T,u) ≤ eps；             *)
+(*   率形：L1 ≤ 2n·e^{−γ/T}（数值核验已过）；                          *)
+(*   阈值：T₀ := γ/ln(1+2n/eps)（cw_log 形）；                         *)
+(*   核心恒等式：k·(1/k−w_T(m)) = 非 m 质量 M，L1 = 2M                  *)
+(*    （数值验证：四温度点 L1==2M 逐位成立）。                          *)
+(*   引理链：switch_gen → mass_split → deficit_eq → mass_rest_le       *)
+(*   （复用 core_decay_bound，免 m_count_one，其签名已核）→ l1_le。     *)
+(*   另两处诚实障碍：跨 token 同值情形 L1→1≠0（数值验证），覆盖它       *)
+(*   需 argmax 集合在 Real 层的可判定证书，待续；T₀ 的 Q 有理化替代     *)
+(*   须 cw_log 有理上界包装，待续。                                    *)
+(*                                                              *)
+(* 依赖（全部只读消费）：CW_ConstructiveWorld_219（伞壳）；              *)
+(*   AttnHardLimit218（已完成机器验证，只读）。                         *)
+(*                                                              *)
+(* 备注：纯构造性、零改既有文件。公理面：零公理、零承认件、零弃证；      *)
+(*   零经典逻辑。文末 Print Assumptions 核验 Closed。                   *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -46,7 +42,7 @@ From Stdlib Require Import QArith.QArith QArith.Qring.
 Import ListNotations.
 
 (* ============================================================ *)
-(* Part 1（G1）：Q 层并列间隙证书（可判定枚举，全构造性）            *)
+(* Part 1：Q 层并列间隙证书（可判定枚举，全构造性）            *)
 (* ============================================================ *)
 
 (* 非空表极大值：以首元为累加基，避免 0-基在负值表上的假极大 *)
@@ -63,7 +59,7 @@ Proof.
   apply Hb in Hle. rewrite H in Hle. discriminate Hle.
 Qed.
 
-(* R3 探针定谳：本安装 Qorder 缺席——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
+(* 实测核对：本安装 Qorder 缺席——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
    全无；以 Qplus_le_l（iff 形右消去）+Qlt_irrefl+Qlt_le_trans 自建
    单侧严格单调桥，兼作 Qeq_lt 替代面（ witness 严格支用）。 *)
 Lemma alm_qlt_compat_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
@@ -220,7 +216,7 @@ Proof.
 Qed.
 
 
-(* G1 主件：并列间隙证书（Q 层可判定枚举，全构造性） *)
+(* 主件：并列间隙证书（Q 层可判定枚举，全构造性） *)
 Theorem alm_gap_witness : forall (q0 : Q) (rest : list Q),
   sigT (fun qmax => sigT (fun k => sigT (fun g =>
     And (In qmax (q0 :: rest))
@@ -271,7 +267,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2（G2）：Real 层并列副本均匀极限——定义面与计算核             *)
+(* Part 2：Real 层并列副本均匀极限——定义面与计算核             *)
 (* ============================================================ *)
 
 Section AlmUniform.
@@ -346,15 +342,15 @@ Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
   | inr _ => c2
   end.
 
-(* m-开关求和恒等式（G2 极限定理的核心组合学，蓝图见头注）：
+(* m-开关求和恒等式（极限定理的核心组合学，蓝图见头注）：
    Σ_vocab switch(c,g) = k·c + Σ_vocab switch(0,g)。
    证明：对 vocab 归纳，副本支用 real_distrib + of_nat(S)定义折叠，
-   非副本支用 plus 交换/结合。——本窗编译未及，蓝图冻结。 *)
+   非副本支用 plus 交换/结合。——蓝图已由下列 swg_ 两件落成。 *)
 
-(* —— SWG 席补编（2026-09-18）：switch_gen 蓝图落成（R9B §3 续席配方）—— *)
-(* 上注「本窗编译未及」为 R9B 时点历史记档，自本节起以下列 swg_ 两件为准。 *)
+(* —— 补编：m-开关求和恒等式蓝图落成（下两件 swg_）—— *)
+(* 头注所述待续部分自本节起由下列 swg_ 两件承接。 *)
 (* 对显式表 vl 归纳（不归纳 Section Variable：vocab 被 m_in_vocab 等钉死）。 *)
-(* 基座盘面实证（Live_X 树，R9B §3 全数对上零漂移）：real_list_sum/
+(* 基座核对（全数对上零漂移）：real_list_sum/
    real_of_nat（S08，O↦0、S n↦1+of_nat n 定义折叠）、real_eq_refl/sym/trans、
    real_plus_comm/assoc/zero、real_mult_zero/one、real_distrib（S02）、
    real_distrib_r（S09）、RealSetoid.real_eq_plus_compat（S07）。 *)
@@ -601,10 +597,10 @@ Qed.
 End AlmUniform.
 
 (* ============================================================ *)
-(* Part 3（G3）：提取口与公理面审计                                 *)
+(* Part 3：提取口与公理面审计                                 *)
 (* ============================================================ *)
 
-(* 计算核提取探针（对齐现件 attn_hardlimit218.ml 出口形态） *)
+(* 计算核提取出口（对齐现件 attn_hardlimit218.ml 出口形态） *)
 From Stdlib Require Import Extraction.
 Extraction "attn_uniformlimit_q18.ml"
   alm_max_ne alm_count_ge_one_aux alm_k alm_uniform alm_switch count_token.
@@ -613,6 +609,6 @@ Print Assumptions alm_gap_witness.
 Print Assumptions alm_k_pos.
 Print Assumptions alm_uniform.
 
-(* SWG 席新增主件审计口（2026-09-18）：switch_gen 两件 *)
+(* 新增主件审计口：m-开关求和恒等式两件（swg_switch_sum_gen/swg_switch_sum） *)
 Print Assumptions swg_switch_sum_gen.
 Print Assumptions swg_switch_sum.

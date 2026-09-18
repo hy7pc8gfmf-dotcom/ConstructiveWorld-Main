@@ -1,7 +1,7 @@
 (* ===================================================================== *)
-(* FepIdentClass.v —— E-STAGING-P6A 席位（论文6 §10 开放项「识别条件的库内化」） *)
+(* FepIdentClass.v —— 自由能三条建模识别条件的库内化（具名接口类）          *)
 (*                                                                       *)
-(* 论文坐标：论文6-自由能变分原理的构造性同一性-正式版.md                 *)
+(* 论文坐标：论文6-自由能变分原理的构造性同一性-正式版.md                  *)
 (*   §6.5 三条建模识别（Id 语句面原文）：                                  *)
 (*     ① 温度匹配      Id (inv_pos T T_pos) (inv_pos D D_pos)             *)
 (*     ② 能量为负logits forall s, Id (energy s) (opp (z s))               *)
@@ -9,7 +9,7 @@
 (*   §10.2 开放项 2：「把 §6 的三条识别组织为该库内的具名接口字段，        *)
 (*   使"识别"本身成为可复用的对象，而非每次重新陈述。」                   *)
 (*                                                                       *)
-(* 本件实现（fic_ 前缀全库防撞）：                                        *)
+(* 主件（fic_ 前缀，避免与库内既有名冲突）：                               *)
 (*   A. Class FepIdentification —— 三条识别条件 = 三个具名字段             *)
 (*      fic_temp_match / fic_energy_neg / fic_partition_match，           *)
 (*      伴随前提（正性）同样具名：fic_T_pos/fic_D_pos/fic_Z_thermo_pos/   *)
@@ -31,16 +31,21 @@
 (*      （接口桥 req:=Id 取 tsi_rie_setoid@TempSoftmaxInstantiation）；   *)
 (*      fic_attention_is_gibbs_temp_via_id —— 类字段出发重回 Id 等式     *)
 (*      （库内化闭环：识别数据 → 类对象 → 同一性）。                     *)
-(* 墙面诚实声明：受体老层 RealInterfaceEnhanced 全库无具体实例（Id 形字段 *)
-(*   在具体 Real 上不可满足——TempSoftmaxInstantiation 席已定谳），故      *)
+(*                                                              *)
+(* 已知边界：受体老层 RealInterfaceEnhanced 全库无具体实例（Id 形字段      *)
+(*   在具体 Real 上不可满足——已由 TempSoftmaxInstantiation 查明），故      *)
 (*   「Real 层实例」取接口拓扑下唯一真消费路径：S07 RealEnhancedReal      *)
 (*   （req := real_eq）载体面；Id 形语句面经 req:=Id 桥（D 段）保持原样。 *)
-(* 纪律：纯构造性；语句面零 Prop（req/lt/le 均 Set 值）；零               *)
-(*   公理面五类禁驻（原词略）；非平凡（三识别为真字段， *)
-(*   消费定理为 exp 兼容 + opp-mult 七步群律桥 + inv 统一 + 交换律真证）； *)
-(*   假设位 = 显式定理参非公理（T2① 形：exp 兼容提升位）。               *)
+(*                                                                       *)
+(* 依赖（全部只读消费）：CW_ConstructiveWorld_219、                       *)
+(*   TempSoftmaxInstantiation、RealInterfaceEnhancedMod、                 *)
+(*   S06.AttentionGibbsBridge、S07 RealEnhancedReal。                     *)
+(*                                                                       *)
+(* 备注：纯构造性；语句面零 Prop（req/lt/le 均 Set 值）；公理面零新增；    *)
+(*   非平凡（三识别为真字段，消费定理为 exp 兼容 + opp-mult 七步群律桥    *)
+(*   + inv 统一 + 交换律真证）；假设位 = 显式定理参非公理                  *)
+(*   （exp 兼容提升位）。                                                 *)
 (* ===================================================================== *)
-
 Require Import CW_ConstructiveWorld_219.
 Require Import TempSoftmaxInstantiation.
 Import RealInterfaceEnhancedMod.
@@ -115,7 +120,7 @@ Notation ficopp a := (@RealInterfaceEnhancedMod.opp R RIS a).
 Notation ficinv x Hx := (@RealInterfaceEnhancedMod.inv_pos R RIS x Hx).
 Notation ficexpn a := (@RealInterfaceEnhancedMod.exp_neg R RIS a).
 
-(* 组合器别名（全显式参，CYD8 全显式参缺位坑防御） *)
+(* 组合器别名（全显式参，防接口隐参缺位坑） *)
 Let ficreqrefl := @RealInterfaceEnhancedMod.req_refl R RIS.
 Let ficreqsym := @RealInterfaceEnhancedMod.req_sym R RIS.
 Let ficreqtrans := @RealInterfaceEnhancedMod.req_trans R RIS.
@@ -571,7 +576,7 @@ Proof.
            s).
 Qed.
 
-(* ---- 审计：主件假设面收束（PA≥1；出节 G3 探针另件） ---- *)
+(* ---- 审计：主件假设面收束（文末 Print Assumptions 逐件核验） ---- *)
 Print Assumptions fic_attention_is_gibbs_temp.
 Print Assumptions fic_attention_is_gibbs_temp_id.
 Print Assumptions fic_attention_is_gibbs_temp_via_id.

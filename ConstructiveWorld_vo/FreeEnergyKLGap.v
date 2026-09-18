@@ -28,7 +28,7 @@
 (* 红线自审：①语句面全 Set（real_eq/real_lt/real_le_b/real_le；       *)
 (*   real_le 为 S01:69 Set 值和 Or 编码、其 Or 前提仅以显式参/证内     *)
 (*   destruct 消费，零裸 Prop 连词、零 ex、出口无 QltT/QleT 直书）；   *)
-(*   ②零 Axiom/Admitted/Parameter/Conjecture/Abort/admit/经典逻辑     *)
+(*   ②公理面零假设（无公理/自认/参数声明/猜想/中止/半途认输，零经典逻辑）*)
 (*   （依赖全为库内闭合件）；③非平凡（差形换算链 + Or 形正乘保序 +    *)
 (*   正缩放复用收口 + D·eps 位移换形 + 分解装配 + 归一化放电 + SF     *)
 (*   升形）；④文末 Print Assumptions 审计口 11 处。                  *)

@@ -1,29 +1,32 @@
 (* ============================================================ *)
-(* fa57_ext.v —— T40 消融50 战役 CYB7 席（批次 E-STAGING-CYB7）    *)
+(* fa57_ext.v —— 载体求和/序平移/正性链/投影族四簇槽位兑现件         *)
 (*                                                              *)
-(* 使命：VD 辖区（G01/G02/G04/G11+UpAlignId…UpGRPO）夜间静默死亡    *)
-(*       补席施工件。对账=T40-CYB7-对账.md；本件四簇 C 类：         *)
+(* 目的：为库内若干待兑现槽位（G02_Debt / UpFirewall / UpGRPO /      *)
+(*   G04_ProjFam 中标注待补的抽象性质）集中提供构造性兑现，           *)
+(*   全件四簇。                                                    *)
 (*                                                              *)
-(* 簇一 G02_Debt.v:165-175 抽象载体三性质槽＋非空位一次兑现包      *)
-(*      （sigT 见证＝list 折叠 fa51_sumd；pos/ext/linear 三组件    *)
-(*      分别由 fa51_sumd_nonnil_pos/fa56b_sumd_cong/              *)
-(*      fa56_sumd_mult_const 直配）＋右因子线性新件（三步链）。     *)
-(* 簇二 UpFirewall.v:104 lt_minus_nonneg 槽双向放电                *)
-(*      （fa53_lt_plus_translate_r＋plus_opp＋lt_id_l/r＋          *)
-(*      plus_assoc 恒等运河；正向 1 段，逆向 assoc/opp/zero 四段）。*)
-(* 簇三 UpGRPO.v:66 G_pos 兑现链：group_cover（InT 见证）⟹        *)
-(*      enum 非空（InT 零构造子灭支）⟹ length 定义性 S k ⟹ 正性。   *)
-(*      nat_to_R_g/nat_to_R_g_pos 按 E346「节参不导出，消费席本节    *)
-(*      重声明同位」先例本地复刻（UpGRPO.v:51-65 证明体同构：        *)
-(*      plus_positive＋one_pos 两字段归纳），零公理面 PA 仍 Closed。  *)
-(* 簇四 G04_ProjFam.v:175-181/394-400 W2' 簇两点均匀投影族槽面     *)
-(*      兑现：f_norm（sumd 归一）＋f_pos（inv 正性）＋P_witness    *)
-(*      （sigT 装配 InT_here）三件全构造，And 包交付。              *)
+(* 主件：                                                        *)
+(*   簇一 G02_Debt.v:165-175 抽象载体三性质槽＋非空位一次兑现包：    *)
+(*      sigT 见证 = list 折叠 fa51_sumd；pos/ext/linear 三组件        *)
+(*      分别由 fa51_sumd_nonnil_pos / fa56b_sumd_cong /               *)
+(*      fa56_sumd_mult_const 直配；另附右因子线性新件（三步链）。      *)
+(*   簇二 UpFirewall.v:104 lt_minus_nonneg 槽双向放电：                *)
+(*      fa53_lt_plus_translate_r ＋ plus_opp ＋ lt_id_l/r ＋           *)
+(*      plus_assoc 恒等链；正向 1 段，逆向 assoc/opp/zero 四段。       *)
+(*   簇三 UpGRPO.v:66 G_pos 兑现链：group_cover（InT 见证）⟹           *)
+(*      enum 非空（InT 零构造子灭支）⟹ length 定义性 S k ⟹ 正性。      *)
+(*      nat_to_R_g / nat_to_R_g_pos 按「节参数不导出、消费方本节       *)
+(*      同位重声明」先例本地复刻（UpGRPO.v:51-65 证明体同构：           *)
+(*      plus_positive ＋ one_pos 两字段归纳）。                         *)
+(*   簇四 G04_ProjFam.v:175-181/394-400 两点均匀投影族槽面兑现：       *)
+(*      f_norm（sumd 归一）＋ f_pos（inv 正性）＋ P_witness             *)
+(*      （sigT 装配 InT_here）三件全构造，And 包交付。                 *)
 (*                                                              *)
-(* 消费：S01 基座＋fa51/fa53/fa56/fa56b（消融50 在盘 .v 侧编复刻）。
-       既有文件零改。前缀 fa57_ 全库防撞已核。                          *)
-(* 纪律：语句面全 Set 层（Id/lt/le/Or/And/sigT，And=S01:66 积）；   *)
-(*       纯构造性零承认位；尾 Print Assumptions 全 Closed。         *)
+(* 依赖（全部只读消费）：S01_BaseRing 基座＋fa51/fa53/fa56/fa56b。     *)
+(*                                                              *)
+(* 备注：既有文件零改；前缀 fa57_ 避免与库内既有名冲突。               *)
+(*   语句面全 Set 层（Id/lt/le/Or/And/sigT，And=S01:66 积）；           *)
+(*   纯构造性零承认位；公理面：文末 Print Assumptions 全 Closed。       *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -125,7 +128,7 @@ Qed.
 (* ==================== 簇三：UpGRPO:66 G_pos 兑现链 ==================== *)
 (* 槽：G := nat_to_R_g (length group_enum)；G_pos : lt zero G 原为 Variable。
    兑现＝cover（全称 InT 见证）＋任点 g0 ⟹ enum 非空（nil 支由 InT 零
-   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按 E346 先例本地
+   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按既有先例本地
    重声明（UpGRPO.v:51-65 同构：S 位 plus one 递归＋plus_positive/
    one_pos 归纳，证体逐字同构）。 *)
 
@@ -208,7 +211,7 @@ Qed.
 
 (* ==================== 簇五：UpDPOLip:372-373 Z_align 槽装载 ==================== *)
 (* 槽：Z_align : Real（裸槽）＋Z_align_pos : lt zero Z_align（诚实槽）。
-   装载＝fa51_Z_align 真实器一次喂定两槽（CYC6 槽装载先例；
+   装载＝fa51_Z_align 真实器一次喂定两槽（既有槽装载先例；
    UpDPOLip 节内以该真实器实例化即销两槽）。 *)
 
 Definition fa57_dpolip_Z_realizer :
@@ -228,7 +231,7 @@ Qed.
 
 End Fa57Ext.
 
-(* ============ 假设面收口申报（G4 前置） ============ *)
+(* ============ 假设面收口申报 ============ *)
 
 Print Assumptions fa57_sum_carrier_realizes.
 Print Assumptions fa57_sumd_mult_const_r.

@@ -34,7 +34,7 @@
 (*     出口须经本桥 req 端，此为接口拓扑下的唯一真消费路径，如实注明）。  *)
 (*   · 求和机器 sumf/sum_ext/sum_linear/sum_add/sum_pos = 诚实接口槽     *)
 (*     （供体节同款假设位，BoltzmannBridgeDischarge 供给槽先例）。        *)
-(*   · 禁五件套+经典逻辑：零 Axiom/Admitted/Parameter/Conjecture/Abort；  *)
+(*   · 禁五件套+经典逻辑：公理面零假设（无公理/自认/参数声明/猜想/中止）；  *)
 (*     非 trivial：主件语句面逐字含受体定义，禁恒真壳；文末 Print        *)
 (*     Assumptions 5 处。                                                *)
 (* 防撞：tsi_ 前缀全库 grep 零命中（建前实测 2026-09-16）。               *)
