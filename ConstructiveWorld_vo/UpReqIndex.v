@@ -2312,3 +2312,14 @@ Definition ng_UpReqConcMixSel : NewGreenFace :=
 Definition ng_UpReqConcB1 : NewGreenFace :=
   MkNewGreenFace "UpReqConcB1.v" 394 18 20260918 "B1 unconditional assembly: csm_b1_unconditional_mixing_time (+le) zero interface premises zero arch premises zero certificate params (1-element kernel bypass + Htv0 mass resolution + real_arch re-shape via cb1_scale_const), AT7".
 
+
+(* ================= v4.1 增册（主会话 R86 注册波：B2 终装双件，20260918） ================= *)
+(* 2 件尾插 order L308-309；依赖链 ConcB2→ConcB2Time（消费 B1 链四母本）。append-only。 *)
+(* ng_UpReqConcB2 —— UpReqConcB2.v：B2 substantial-kernel machine: cb2_dot finite dot product + cb2_list_max_abs cap + cb2_z logit kernel with cb2_Delta (=core+1 unit slack, constructive gap certificate) double bounds, AT8 *)
+Definition ng_UpReqConcB2 : NewGreenFace :=
+  MkNewGreenFace "UpReqConcB2.v" 627 31 20260918 "B2 substantial-kernel machine: cb2_dot finite dot product + cb2_list_max_abs cap + cb2_z logit kernel with cb2_Delta (=core+1 unit slack, constructive gap certificate) double bounds, AT8".
+
+(* ng_UpReqConcB2Time —— UpReqConcB2Time.v：B2 unconditional closure: cbt_unconditional_mixing_time (+le) on the concrete logit kernel — zero interface premises zero arch premises zero certificate params (Htv0 mass resolution + arch re-shape via cb1_scale_const), honest notes: +1 slack conservatism and 1-element TV0 tier, multi-element recipe'd, AT9 *)
+Definition ng_UpReqConcB2Time : NewGreenFace :=
+  MkNewGreenFace "UpReqConcB2Time.v" 339 17 20260918 "B2 unconditional closure: cbt_unconditional_mixing_time (+le) on the concrete logit kernel — zero interface premises zero arch premises zero certificate params (Htv0 mass resolution + arch re-shape via cb1_scale_const), honest notes: +1 slack conservatism and 1-element TV0 tier, multi-element recipe'd, AT9".
+

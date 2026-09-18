@@ -306,3 +306,5 @@ p4a_GradSignQDec.v
 UpReqConcSoftmax.v
 UpReqConcMixSel.v
 UpReqConcB1.v
+UpReqConcB2.v
+UpReqConcB2Time.v
