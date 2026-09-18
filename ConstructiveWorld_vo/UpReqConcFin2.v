@@ -1037,3 +1037,533 @@ Print Assumptions cf2_tv_contraction_eps.
 Print Assumptions cf2_tv_contraction_eps.
 
 Print Assumptions cf2_tv_iter_eps.
+
+(* ============================================================ *)
+(* 席 F67 续作（20260919）：T6 混合链 + T7 显式混合时间定理（旗舰）        *)
+(*                                                              *)
+(* 消费面：T4 常数族（cf2_omd=1−δ*、cf2_ds_pos、cf2_omd_le_one）+        *)
+(*   T5 逐 eps 收缩/迭代件（cf2_tv_contraction_eps/cf2_tv_iter_eps）。   *)
+(* T6：点质量对（cf2_mu0/cf2_nu0）n 步 TV 界——TV_k ≤ （1−δ*）^n·TV₀ +      *)
+(*   n·eps（照 T5 iter 形）；δ* > 0 证书链 = cf2_kernel_pos/nonneg →       *)
+(*   rsq_bs_minorization → δ*=lo²>0（cf2_ds_pos）→ omd∈[0,1)。          *)
+(* T7：forall budget>0, sigT k, TV(cf2 迭代 k) < budget——非退化实例的    *)
+(*   实质混合界（对照 B2 单点平凡性 §6.4；§10.2 第 9 项兑现件）。         *)
+(*   前件诚实申报（逐条列，禁藏）：                                      *)
+(*   ① lt zero budget——预算为正；                                       *)
+(*   ② 几何衰减前提（显式参）：omd^{k0}·TV₀ ≤ B/2（_le 形）/ < B/2        *)
+(*      （plain 形）——本件不进 real_arch And-Prop 支（红线①），故        *)
+(*      「衰减达半预算」不作隐藏断言而作显式前提逐条申报；               *)
+(*   ③ 归一化前提由已绿件 cf2_mu0_mass/cf2_nu0_mass 消解，零隐藏。       *)
+(*   见证：k := S k0；eps := (1/nR_{S k0})·(B/2)（plain）/(B/4)（_le 形），*)
+(*   nR·eps =req= B/2 / B/4 精确找零（inv_pos_correct + mult_one）。     *)
+(* ============================================================ *)
+
+(* ---- F67·帮件一：lt/le 混合加法桥（real_lt_plus_compat_lt_le 字段面桥） ---- *)
+
+Lemma cf2_lt_plus_compat_lt_le : forall a b c d : Real,
+  lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof. exact real_lt_plus_compat_lt_le. Defined.
+
+(* ---- F67·帮件二：1/2 < 1（常数严格序；2·(1/2)=1 反用 lt_mult_compat） ---- *)
+
+Lemma cf2_inv2_lt_one : lt cf2_inv_two one.
+Proof.
+  assert (H21 : lt one (plus one one)).
+  { exact (lt_id_l one (plus zero one) (plus one one)
+             (req_sym _ _ (req_trans _ _ _ (plus_comm zero one) (plus_zero one)))
+             (cf2_lt_plus_compat_lt_le zero one one one one_pos (le_refl one))). }
+  exact (lt_id_r cf2_inv_two (mult (plus one one) cf2_inv_two) one
+           (inv_pos_correct (plus one one) req_two_pos)
+           (lt_id_l cf2_inv_two (mult one cf2_inv_two)
+              (mult (plus one one) cf2_inv_two)
+              (req_sym _ _ (cf2_mult_one_l cf2_inv_two))
+              (lt_mult_compat one (plus one one) cf2_inv_two
+                 (inv_pos_pos (plus one one) req_two_pos) H21))).
+Defined.
+
+(* ---- F67·帮件三：1/2 + 1/2 = 1 与 B/2 + B/2 = B（终局找零） ---- *)
+
+Lemma cf2_inv2_sum : req (plus cf2_inv_two cf2_inv_two) one.
+Proof.
+  exact (req_trans _ _ _
+           (req_plus_compat cf2_inv_two (mult cf2_inv_two one)
+                            cf2_inv_two (mult cf2_inv_two one)
+              (req_sym _ _ (mult_one cf2_inv_two))
+              (req_sym _ _ (mult_one cf2_inv_two)))
+           (req_trans _ _ _
+              (req_sym _ _ (distrib cf2_inv_two one one))
+              (req_trans _ _ _
+                 (mult_comm cf2_inv_two (plus one one))
+                 (inv_pos_correct (plus one one) req_two_pos)))).
+Defined.
+
+Lemma cf2_two_inv_budget : forall b : Real,
+  req (plus (mult cf2_inv_two b) (mult cf2_inv_two b)) b.
+Proof.
+  intro b.
+  exact (req_trans _ _ _
+           (req_plus_compat (mult cf2_inv_two b) (mult b cf2_inv_two)
+                            (mult cf2_inv_two b) (mult b cf2_inv_two)
+              (mult_comm cf2_inv_two b) (mult_comm cf2_inv_two b))
+           (req_trans _ _ _
+              (req_sym _ _ (distrib b cf2_inv_two cf2_inv_two))
+              (req_trans _ _ _
+                 (mult_comm b (plus cf2_inv_two cf2_inv_two))
+                 (req_trans _ _ _
+                    (req_mult_compat (plus cf2_inv_two cf2_inv_two) one b b
+                       cf2_inv2_sum (req_refl b))
+                    (cf2_mult_one_l b))))).
+Defined.
+
+(* ---- F67·帮件四：nR_{S k}·((1/nR_{S k})·c) = c（eps 预算精确找零） ---- *)
+
+Lemma cf2_inv_cancel : forall (c : Real) (k0 : nat),
+  req (mult (reqd_nat_to_R (Datatypes.S k0))
+            (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0)) c))
+      c.
+Proof.
+  intros c k0.
+  exact (req_trans _ _ _
+           (mult_assoc (reqd_nat_to_R (Datatypes.S k0))
+              (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0)) c)
+           (req_trans _ _ _
+              (req_mult_compat (mult (reqd_nat_to_R (Datatypes.S k0))
+                                   (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                                           (reqd_nat_to_R_pos k0)))
+                              one c c
+                              (inv_pos_correct (reqd_nat_to_R (Datatypes.S k0))
+                                 (reqd_nat_to_R_pos k0))
+                              (req_refl c))
+              (cf2_mult_one_l c))).
+Defined.
+
+(* ---- F67·帮件五：omd^n·TV₀ ≥ 0（非负幂；req_le_mult_compat_r 逐级） ---- *)
+
+Lemma cf2_pow_tv_nonneg : forall n : nat,
+  le zero (mult (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0)).
+Proof.
+  intro n. induction n as [| n IH].
+  - exact (le_id_r zero (cf2_tv cf2_mu0 cf2_nu0)
+             (mult (req_r_pow cf2_omd 0%nat) (cf2_tv cf2_mu0 cf2_nu0))
+             (req_sym _ _ (cf2_mult_one_l (cf2_tv cf2_mu0 cf2_nu0)))
+             cf2_tv_nonneg).
+  - exact (le_id_r zero
+             (mult cf2_omd (mult (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0)))
+             (mult (req_r_pow cf2_omd (Datatypes.S n)) (cf2_tv cf2_mu0 cf2_nu0))
+             (req_trans _ _ _
+                (mult_assoc cf2_omd (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0))
+                (req_refl (mult (req_r_pow cf2_omd (Datatypes.S n))
+                                (cf2_tv cf2_mu0 cf2_nu0))))
+             (le_id_l zero (mult cf2_omd zero)
+                (mult cf2_omd (mult (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0)))
+                (req_sym _ _ (mult_zero cf2_omd))
+                (req_le_mult_compat_r cf2_omd zero
+                   (mult (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0))
+                   cf2_omd_nonneg IH))).
+Defined.
+
+(* ---- F67·T6 证书件：omd + δ* = 1（（1−δ*） 读法显式化；δ* > 0 = cf2_ds_pos） ---- *)
+
+Lemma cf2_omd_form : req (plus cf2_omd cf2_delta_star) one.
+Proof.
+  exact (req_trans _ _ _ (plus_comm cf2_omd cf2_delta_star) cf2_aux_ds_omd).
+Defined.
+
+(* ---- F67·T6 主件：点质量对 n 步 TV 界（T5 iter 件的归一化对实例化） ----
+   TV(titer n mu0, titer n nu0) ≤ （1−δ*）^n·TV₀ + n·eps；
+   δ* > 0 由 cf2_ds_pos 供给（其上游 = cf2_kernel_pos/nonneg 证书链）。 *)
+
+Theorem cf2_tv_iter_mu0 : forall (n : nat) (eps : Real),
+  lt zero eps ->
+  le (cf2_tv (cf2_titer n cf2_mu0) (cf2_titer n cf2_nu0))
+     (plus (mult (req_r_pow cf2_omd n) (cf2_tv cf2_mu0 cf2_nu0))
+           (mult (reqd_nat_to_R n) eps)).
+Proof.
+  intros n eps Heps.
+  exact (cf2_tv_iter_eps n cf2_mu0 cf2_nu0 eps cf2_mu0_mass cf2_nu0_mass Heps).
+Defined.
+
+(* ---- F67·T7 旗舰（_le 形）：显式混合时间定理 ----
+   前件（诚实申报）：①lt zero budget；②几何衰减前提（显式参）
+   omd^{k0}·TV₀ ≤ B/2。见证 k := S k0，eps := (1/nR_{S k0})·(B/4)：
+   TV_k ≤ omd^{S k0}·TV₀ + B/4 ≤ B/2 + B/4 < B/2 + B/2 = B。 *)
+
+Theorem cf2_mixing_time_le : forall (budget : Real) (k0 : nat),
+  lt zero budget ->
+  le (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+     (mult cf2_inv_two budget) ->
+  sigT (fun k : nat =>
+        lt (cf2_tv (cf2_titer k cf2_mu0) (cf2_titer k cf2_nu0)) budget).
+Proof.
+  intros budget k0 HB Hgeo.
+  assert (HX0 : lt zero (mult cf2_inv_two budget)).
+  { exact (mult_positive cf2_inv_two budget
+             (inv_pos_pos (plus one one) req_two_pos) HB). }
+  assert (HY0 : lt zero (mult cf2_inv_two (mult cf2_inv_two budget))).
+  { exact (mult_positive cf2_inv_two (mult cf2_inv_two budget)
+             (inv_pos_pos (plus one one) req_two_pos) HX0). }
+  assert (HYX : lt (mult cf2_inv_two (mult cf2_inv_two budget))
+                   (mult cf2_inv_two budget)).
+  { exact (lt_id_r (mult cf2_inv_two (mult cf2_inv_two budget))
+             (mult one (mult cf2_inv_two budget))
+             (mult cf2_inv_two budget)
+             (cf2_mult_one_l (mult cf2_inv_two budget))
+             (lt_mult_compat cf2_inv_two one (mult cf2_inv_two budget)
+                HX0 cf2_inv2_lt_one)). }
+  assert (HepsQ : lt zero
+             (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))).
+  { exact (mult_positive
+             (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+             (mult cf2_inv_two (mult cf2_inv_two budget))
+             (inv_pos_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+             HY0). }
+  assert (Hiter : le
+             (cf2_tv (cf2_titer (Datatypes.S k0) cf2_mu0)
+                     (cf2_titer (Datatypes.S k0) cf2_nu0))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))).
+  { exact (le_id_r
+             (cf2_tv (cf2_titer (Datatypes.S k0) cf2_mu0)
+                     (cf2_titer (Datatypes.S k0) cf2_nu0))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult (reqd_nat_to_R (Datatypes.S k0))
+                      (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                                     (reqd_nat_to_R_pos k0))
+                            (mult cf2_inv_two (mult cf2_inv_two budget)))))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             (req_plus_compat
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv cf2_mu0 cf2_nu0))
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv cf2_mu0 cf2_nu0))
+                (mult (reqd_nat_to_R (Datatypes.S k0))
+                   (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                                  (reqd_nat_to_R_pos k0))
+                         (mult cf2_inv_two (mult cf2_inv_two budget))))
+                (mult cf2_inv_two (mult cf2_inv_two budget))
+                (req_refl (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                                (cf2_tv cf2_mu0 cf2_nu0)))
+                (cf2_inv_cancel (mult cf2_inv_two (mult cf2_inv_two budget)) k0))
+             (cf2_tv_iter_eps (Datatypes.S k0) cf2_mu0 cf2_nu0
+                (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                               (reqd_nat_to_R_pos k0))
+                      (mult cf2_inv_two (mult cf2_inv_two budget)))
+                cf2_mu0_mass cf2_nu0_mass HepsQ)). }
+  assert (Hshrink : le (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                             (cf2_tv cf2_mu0 cf2_nu0))
+                      (mult cf2_inv_two budget)).
+  { exact (le_trans
+             (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv cf2_mu0 cf2_nu0))
+             (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+             (mult cf2_inv_two budget)
+             (le_id_l
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv cf2_mu0 cf2_nu0))
+                (mult cf2_omd (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0)))
+                (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+                (req_sym _ _
+                   (mult_assoc cf2_omd (req_r_pow cf2_omd k0)
+                      (cf2_tv cf2_mu0 cf2_nu0)))
+                (cf2_le_mult_one cf2_omd
+                   (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+                   (cf2_pow_tv_nonneg k0) cf2_omd_le_one))
+             Hgeo). }
+  assert (Hcomb : lt
+             (plus (mult cf2_inv_two (mult cf2_inv_two budget))
+                   (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0)))
+             (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))).
+  { exact (cf2_lt_plus_compat_lt_le
+             (mult cf2_inv_two (mult cf2_inv_two budget))
+             (mult cf2_inv_two budget)
+             (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv cf2_mu0 cf2_nu0))
+             (mult cf2_inv_two budget)
+             HYX Hshrink). }
+  assert (Hfinal : lt
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             budget).
+  { exact (lt_id_r
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))
+             budget
+             (cf2_two_inv_budget budget)
+             (lt_id_l
+                (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                            (cf2_tv cf2_mu0 cf2_nu0))
+                      (mult cf2_inv_two (mult cf2_inv_two budget)))
+                (plus (mult cf2_inv_two (mult cf2_inv_two budget))
+                      (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                            (cf2_tv cf2_mu0 cf2_nu0)))
+                (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))
+                (plus_comm
+                   (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+                Hcomb)). }
+  exact (existT (fun k : nat =>
+            lt (cf2_tv (cf2_titer k cf2_mu0) (cf2_titer k cf2_nu0)) budget)
+           (Datatypes.S k0)
+           (le_lt_trans
+              (cf2_tv (cf2_titer (Datatypes.S k0) cf2_mu0)
+                      (cf2_titer (Datatypes.S k0) cf2_nu0))
+              (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                          (cf2_tv cf2_mu0 cf2_nu0))
+                    (mult cf2_inv_two (mult cf2_inv_two budget)))
+              budget
+              Hiter Hfinal)).
+Defined.
+
+(* ---- F67·T7 旗舰（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
+
+Theorem cf2_mixing_time : forall (budget : Real) (k0 : nat),
+  lt zero budget ->
+  lt (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+     (mult cf2_inv_two budget) ->
+  sigT (fun k : nat =>
+        lt (cf2_tv (cf2_titer k cf2_mu0) (cf2_titer k cf2_nu0)) budget).
+Proof.
+  intros budget k0 HB Hgeo.
+  exact (cf2_mixing_time_le budget k0 HB (lt_le_iff _ _ (inl Hgeo))).
+Defined.
+
+(* ============ F67·G4 证据：新件全 Closed（前提=显式证书参） ============ *)
+
+Print Assumptions cf2_lt_plus_compat_lt_le.
+Print Assumptions cf2_inv2_lt_one.
+Print Assumptions cf2_inv2_sum.
+Print Assumptions cf2_two_inv_budget.
+Print Assumptions cf2_inv_cancel.
+Print Assumptions cf2_pow_tv_nonneg.
+Print Assumptions cf2_omd_form.
+Print Assumptions cf2_tv_iter_mu0.
+Print Assumptions cf2_mixing_time_le.
+Print Assumptions cf2_mixing_time.
+(* ============================================================ *)
+(* 席 T67b 续作（20260919）：T7 general——任意归一化分布对的混合时间           *)
+(*                                                              *)
+(* 消费面：T5 iter 件（cf2_tv_iter_eps 本就 general 于 mu/nu，归一化双槽显式）  *)
+(*   + T67 旗舰 cf2_mixing_time_le 的装配配方（常数族/找零链全 generic）。     *)
+(* 泛化口径（照 T67 诚实申报，逐条列、禁藏）：                                *)
+(*   ① 归一化前提：req (cf2_sumf mu) one 与 req (cf2_sumf nu) one 显式双槽，   *)
+(*      点质量对实例位由 cf2_mu0_mass/cf2_nu0_mass 供给；                     *)
+(*   ② TV₀ 非负槽：le zero (cf2_tv mu nu) 显式前件——setoid 接口 abs_nonneg    *)
+(*      已 eps 化（UpReqAlgebra L920 注记：plain 形不设），不可凭空构造，      *)
+(*      照实携带；点质量对实例位由已绿 cf2_tv_nonneg 供给。2 元世界非退化性    *)
+(*      由 cf2_tv_pos（点质量对）分列陈述，本 general 件不重复申报；           *)
+(*   ③ 预算为正 + 几何衰减前提（显式参 k0）：照 T67 同口径。                   *)
+(* 见证：k := S k0；eps := （1/nR_{S k0}）·（B/4）；链：                        *)
+(*   TV_{S k0} ≤ omd^{S k0}·TV₀ + B/4 ≤ B/2 + B/4 < B/2 + B/2 = B。          *)
+(* ============================================================ *)
+
+(* ---- T67b·帮件：omd 幂·TV₀ ≥ 0 泛化形（TV₀ 非负槽显式前件，逐级归纳同 T67） ---- *)
+
+Lemma cf2_pow_tv_nonneg_gen : forall (n : nat) (mu nu : bool -> Real),
+  le zero (cf2_tv mu nu) ->
+  le zero (mult (req_r_pow cf2_omd n) (cf2_tv mu nu)).
+Proof.
+  intros n mu nu Hnn.
+  induction n as [| n IH].
+  - exact (le_id_r zero (cf2_tv mu nu)
+             (mult (req_r_pow cf2_omd 0%nat) (cf2_tv mu nu))
+             (req_sym _ _ (cf2_mult_one_l (cf2_tv mu nu)))
+             Hnn).
+  - exact (le_id_r zero
+             (mult cf2_omd (mult (req_r_pow cf2_omd n) (cf2_tv mu nu)))
+             (mult (req_r_pow cf2_omd (Datatypes.S n)) (cf2_tv mu nu))
+             (req_trans _ _ _
+                (mult_assoc cf2_omd (req_r_pow cf2_omd n) (cf2_tv mu nu))
+                (req_refl (mult (req_r_pow cf2_omd (Datatypes.S n))
+                                (cf2_tv mu nu))))
+             (le_id_l zero (mult cf2_omd zero)
+                (mult cf2_omd (mult (req_r_pow cf2_omd n) (cf2_tv mu nu)))
+                (req_sym _ _ (mult_zero cf2_omd))
+                (req_le_mult_compat_r cf2_omd zero
+                   (mult (req_r_pow cf2_omd n) (cf2_tv mu nu))
+                   cf2_omd_nonneg IH))).
+Defined.
+
+(* ---- T67b·T7 general（_le 形）：任意归一化对的显式混合时间定理 ----
+   前件（诚实申报）：归一化双槽 + TV₀ 非负槽 + ①lt zero budget；
+   ②几何衰减前提（显式参）omd^{k0}·TV₀ ≤ B/2。见证 k := S k0，
+   eps := （1/nR_{S k0}）·（B/4）：
+   TV_k ≤ omd^{S k0}·TV₀ + B/4 ≤ B/2 + B/4 < B/2 + B/2 = B。 *)
+
+Theorem cf2_mixing_time_le_gen : forall (mu nu : bool -> Real) (budget : Real) (k0 : nat),
+  req (cf2_sumf mu) one ->
+  req (cf2_sumf nu) one ->
+  le zero (cf2_tv mu nu) ->
+  lt zero budget ->
+  le (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu))
+     (mult cf2_inv_two budget) ->
+  sigT (fun k : nat =>
+        lt (cf2_tv (cf2_titer k mu) (cf2_titer k nu)) budget).
+Proof.
+  intros mu nu budget k0 Hmu Hnu Hnn HB Hgeo.
+  assert (HX0 : lt zero (mult cf2_inv_two budget)).
+  { exact (mult_positive cf2_inv_two budget
+             (inv_pos_pos (plus one one) req_two_pos) HB). }
+  assert (HY0 : lt zero (mult cf2_inv_two (mult cf2_inv_two budget))).
+  { exact (mult_positive cf2_inv_two (mult cf2_inv_two budget)
+             (inv_pos_pos (plus one one) req_two_pos) HX0). }
+  assert (HYX : lt (mult cf2_inv_two (mult cf2_inv_two budget))
+                   (mult cf2_inv_two budget)).
+  { exact (lt_id_r (mult cf2_inv_two (mult cf2_inv_two budget))
+             (mult one (mult cf2_inv_two budget))
+             (mult cf2_inv_two budget)
+             (cf2_mult_one_l (mult cf2_inv_two budget))
+             (lt_mult_compat cf2_inv_two one (mult cf2_inv_two budget)
+                HX0 cf2_inv2_lt_one)). }
+  assert (HepsQ : lt zero
+             (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))).
+  { exact (mult_positive
+             (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+             (mult cf2_inv_two (mult cf2_inv_two budget))
+             (inv_pos_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0))
+             HY0). }
+  assert (Hiter : le
+             (cf2_tv (cf2_titer (Datatypes.S k0) mu)
+                     (cf2_titer (Datatypes.S k0) nu))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))).
+  { exact (le_id_r
+             (cf2_tv (cf2_titer (Datatypes.S k0) mu)
+                     (cf2_titer (Datatypes.S k0) nu))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult (reqd_nat_to_R (Datatypes.S k0))
+                      (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                                     (reqd_nat_to_R_pos k0))
+                            (mult cf2_inv_two (mult cf2_inv_two budget)))))
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             (req_plus_compat
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv mu nu))
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv mu nu))
+                (mult (reqd_nat_to_R (Datatypes.S k0))
+                   (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                                  (reqd_nat_to_R_pos k0))
+                         (mult cf2_inv_two (mult cf2_inv_two budget))))
+                (mult cf2_inv_two (mult cf2_inv_two budget))
+                (req_refl (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                                (cf2_tv mu nu)))
+                (cf2_inv_cancel (mult cf2_inv_two (mult cf2_inv_two budget)) k0))
+             (cf2_tv_iter_eps (Datatypes.S k0) mu nu
+                (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0))
+                               (reqd_nat_to_R_pos k0))
+                      (mult cf2_inv_two (mult cf2_inv_two budget)))
+                Hmu Hnu HepsQ)). }
+  assert (Hshrink : le (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                             (cf2_tv mu nu))
+                      (mult cf2_inv_two budget)).
+  { exact (le_trans
+             (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv mu nu))
+             (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu))
+             (mult cf2_inv_two budget)
+             (le_id_l
+                (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv mu nu))
+                (mult cf2_omd (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu)))
+                (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu))
+                (req_sym _ _
+                   (mult_assoc cf2_omd (req_r_pow cf2_omd k0)
+                      (cf2_tv mu nu)))
+                (cf2_le_mult_one cf2_omd
+                   (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu))
+                   (cf2_pow_tv_nonneg_gen k0 mu nu Hnn) cf2_omd_le_one))
+             Hgeo). }
+  assert (Hcomb : lt
+             (plus (mult cf2_inv_two (mult cf2_inv_two budget))
+                   (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu)))
+             (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))).
+  { exact (cf2_lt_plus_compat_lt_le
+             (mult cf2_inv_two (mult cf2_inv_two budget))
+             (mult cf2_inv_two budget)
+             (mult (req_r_pow cf2_omd (Datatypes.S k0)) (cf2_tv mu nu))
+             (mult cf2_inv_two budget)
+             HYX Hshrink). }
+  assert (Hfinal : lt
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             budget).
+  { exact (lt_id_r
+             (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+             (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))
+             budget
+             (cf2_two_inv_budget budget)
+             (lt_id_l
+                (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                            (cf2_tv mu nu))
+                      (mult cf2_inv_two (mult cf2_inv_two budget)))
+                (plus (mult cf2_inv_two (mult cf2_inv_two budget))
+                      (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                            (cf2_tv mu nu)))
+                (plus (mult cf2_inv_two budget) (mult cf2_inv_two budget))
+                (plus_comm
+                   (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                         (cf2_tv mu nu))
+                   (mult cf2_inv_two (mult cf2_inv_two budget)))
+                Hcomb)). }
+  exact (existT (fun k : nat =>
+            lt (cf2_tv (cf2_titer k mu) (cf2_titer k nu)) budget)
+           (Datatypes.S k0)
+           (le_lt_trans
+              (cf2_tv (cf2_titer (Datatypes.S k0) mu)
+                      (cf2_titer (Datatypes.S k0) nu))
+              (plus (mult (req_r_pow cf2_omd (Datatypes.S k0))
+                          (cf2_tv mu nu))
+                    (mult cf2_inv_two (mult cf2_inv_two budget)))
+              budget
+              Hiter Hfinal)).
+Defined.
+
+(* ---- T67b·T7 general（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
+
+Theorem cf2_mixing_time_gen : forall (mu nu : bool -> Real) (budget : Real) (k0 : nat),
+  req (cf2_sumf mu) one ->
+  req (cf2_sumf nu) one ->
+  le zero (cf2_tv mu nu) ->
+  lt zero budget ->
+  lt (mult (req_r_pow cf2_omd k0) (cf2_tv mu nu))
+     (mult cf2_inv_two budget) ->
+  sigT (fun k : nat =>
+        lt (cf2_tv (cf2_titer k mu) (cf2_titer k nu)) budget).
+Proof.
+  intros mu nu budget k0 Hmu Hnu Hnn HB Hgeo.
+  exact (cf2_mixing_time_le_gen mu nu budget k0 Hmu Hnu Hnn HB
+           (lt_le_iff _ _ (inl Hgeo))).
+Defined.
+
+(* ---- T67b·收口件：点质量对旗舰 = general 件实例（泛化装配自证封闭） ----
+   cf2_tv_pos 非退化判据分列在案：本件仅证 general 装配在点质量对位退化回
+   T67 旗舰 cf2_mixing_time_le 同结论。 *)
+
+Theorem cf2_mixing_time_le_ptmass : forall (budget : Real) (k0 : nat),
+  lt zero budget ->
+  le (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+     (mult cf2_inv_two budget) ->
+  sigT (fun k : nat =>
+        lt (cf2_tv (cf2_titer k cf2_mu0) (cf2_titer k cf2_nu0)) budget).
+Proof.
+  intros budget k0 HB Hgeo.
+  exact (cf2_mixing_time_le_gen cf2_mu0 cf2_nu0 budget k0
+           cf2_mu0_mass cf2_nu0_mass cf2_tv_nonneg HB Hgeo).
+Defined.
+
+(* ============ T67b·G4 证据：新件全 Closed（前提=显式证书参） ============ *)
+
+Print Assumptions cf2_pow_tv_nonneg_gen.
+Print Assumptions cf2_mixing_time_le_gen.
+Print Assumptions cf2_mixing_time_gen.
+Print Assumptions cf2_mixing_time_le_ptmass.
