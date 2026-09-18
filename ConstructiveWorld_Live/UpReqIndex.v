@@ -2353,3 +2353,22 @@ Definition ng_UpReqLn2Irrational : NewGreenFace :=
 Definition ng_UpReqSqrt3Irrational : NewGreenFace :=
   MkNewGreenFace "UpReqSqrt3Irrational.v" 1141 27 20260918 "sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5".
 
+
+(* ================= v4.2 增册（主会话 R87 注册波：对数级赛马 E 席封顶定理件，20260918） ================= *)
+(* 1 件尾插 order L317；零 CW 基座依赖纯 Q 层；封顶定理=闭式族量级封顶（affine 可反解族，诚实限定）。 *)
+(* ================= v4.1 后邻席未增册，v4.2 本席占用。 ================= *)
+(* ng_UpReqMixLogE —— UpReqMixLogE.v：closed-form cap theorems for bernoulli-family selectors (sharpened F1/F2/F3 + mixe_cf_cap/_gen/_div/_select_cap), pure Q-layer zero CW-base dependency, race E *)
+Definition ng_UpReqMixLogE : NewGreenFace :=
+  MkNewGreenFace "UpReqMixLogE.v" 792 48 20260918 "closed-form cap theorems for bernoulli-family selectors, sharpened F1/F2/F3, pure Q-layer zero CW-base dependency, race E first finisher".
+
+
+(* ================= v4.3 增册（主会话 R87 注册波：对数级赛马 A/B 双席合龙，20260919） ================= *)
+(* 2 件尾插 order L374-375；E 件 L373 已于 v4.2 先册（792 48 20260918），本波 md5 复核三面全等免重册；  *)
+(* A/B 与 E 间零内边，A 外依赖 CW_219/UpTVDoeblin/KLWallClosed/UpReqIterGeomRate 全在提交面 L16-L273。   *)
+(* ng_UpReqMixLogA —— UpReqMixLogA.v：rational-reduction + Q-layer decidable bisection log-scale k selector (mixa_ family: qbern window / fuel bsearch / k0+b0 bridges / pow_budget_log cert+min), four-gate green, race A *)
+Definition ng_UpReqMixLogA : NewGreenFace :=
+  MkNewGreenFace "UpReqMixLogA.v" 1304 57 20260919 "rational-reduction + Q-decidable bisection log-scale k selector (mixa_ family), zero new axioms Print Assumptions closed, race A".
+
+(* ng_UpReqMixLogB —— UpReqMixLogB.v：galloping (exponential) search + terminal bisection log-scale k selector (mixb_ family: qbernoulli / gallop / sel_scale compare count 2*log2 K+5), four-gate green, race B *)
+Definition ng_UpReqMixLogB : NewGreenFace :=
+  MkNewGreenFace "UpReqMixLogB.v" 1311 65 20260919 "galloping search + terminal bisection log-scale k selector (mixb_ family), compare count bounded 2*log2 K+5, zero new axioms Print Assumptions closed, race B".
