@@ -25,7 +25,7 @@ jobs:
       # 原「magic 90001 / 9.0 防混装」预警随 2026-09-15 全库换装 9.1 作废——runner 侧
       # cw_build.cmd / cw_chk.cmd 的 COQC/COQCHK 须同步指向 9.1，否则 coqchk 步将对 9.1 信任缓存红）。
       - name: Seed trust cache from local vo tree
-        shell: bash
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
           # 治本（E-STAGING-P9）：runner 侧 _work 检出目录持久非易失，
           # 旧版纯 cp 只增不改，陈旧 .vo 跨轮幸存 → coqchk digest 撕裂单件红。
@@ -35,14 +35,14 @@ jobs:
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
-        shell: bash
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
           # 温控协议已入库（仓库根 cpu_guard.ps1）：CPU 负载>LoadLimit(60%) 自动错峰冷却，绑核 CoreN 2 避免热集中。
           bash ConstructiveWorld_vo/repair_tear.sh
           pwsh -File cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_build.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
 
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
-        shell: bash
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
           # 温控协议（仓库根 cpu_guard.ps1）同样包裹 coqchk：负载过高时错峰，不叠加高负载任务。
           pwsh -File cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_chk.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
