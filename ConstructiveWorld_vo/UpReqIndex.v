@@ -2782,3 +2782,7 @@ Definition ng_RealIdentity : NewGreenFace :=
 (* ng_SupplyAssembly —— SupplyAssembly.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
 Definition ng_SupplyAssembly : NewGreenFace :=
   MkNewGreenFace "SupplyAssembly.v" 325 21 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ================= v4.8 增册（R94REG 补插波席：BetaLower 红件修复版补插，20260919） ================= *)
+(* ng_BetaLower —— BetaLower.v：R94 red-file repaired (AUD β1 bracket + 7 latent, R93FIX), four-gate green, zero statement-face change *)
+Definition ng_BetaLower : NewGreenFace :=
+  MkNewGreenFace "BetaLower.v" 498 31 20260919 "R94 red-file repaired (AUD β1 bracket + 7 latent, R93FIX), four-gate green, zero statement-face change; born-in-place verified in vo tree".

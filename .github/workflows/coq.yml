@@ -38,7 +38,12 @@ jobs:
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
           # 温控协议已入库（仓库根 cpu_guard.ps1）：CPU 负载>LoadLimit(60%) 自动错峰冷却，绑核 CoreN 2 避免热集中。
-          bash ConstructiveWorld_vo/repair_tear.sh
+          # repair_tear 已摘除（2026-09-19 run#85 红 run 根因，fail-loud 存档）：镜像播种语义下
+          # （上一步 rm+cp 即本地信任缓存真镜像），repair_tear 的 mtime 启发式对字母序 cp 落盘
+          # 时差（G→U 跨分钟，远超 v2.2 的 5s 容差）误撕 → dep-missing 级联删除 → build 按检出
+          # HEAD 源重编，与本地按 M 态工作树源编译的种子 .vo 撞 digest
+          # （Inconsistent assumptions over PhysPredAblation）。播种即真镜像，无需自愈；
+          # 真撕裂由 coqchk 步 fail-loud 暴露、按「本地先全绿」教义本地治愈后重推。
           pwsh -File cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_build.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
 
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
