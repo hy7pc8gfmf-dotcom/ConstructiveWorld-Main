@@ -1,0 +1,158 @@
+(* ============================================================ *)
+(* p3a_TempDualBoolSlots.v —— 席 CZC10（E-STAGING-CZC10）           *)
+(*   论文3《构造性柯西实数指数正性》假设消融施工：T56 普查档条 3-5      *)
+(*   （B 可消融，坐标 L828 定理 10.13 四求和槽；= 开放池 S05 三槽）。   *)
+(*                                                                *)
+(*   槽语句：第二定律受体升级件四求和槽 sumpos/sumext/sumlinear/        *)
+(*   sumadd——list 载体面已全闭（SecondLawQuantified.slq_second_law_     *)
+(*   eps_list 喂 real_list_sum），余槽 = 任意 StateSpace 实例化。       *)
+(*                                                                *)
+(*   施工：最小有限枚举 StateSpace 实例化——二点空间 S := bool，          *)
+(*   求和泛函 bsum f := f true + f false（二元 real_plus 直接折叠），    *)
+(*   四槽逐一真证装载，并消费基座件：                                   *)
+(*     ① real_entropy_deficit_kl_temp（UpReqEntropyDeficitTemp.v:518，  *)
+(*        13 参全 arity 显式应用——KL 熵亏分解 T6b 主件）；              *)
+(*     ② real_boltzmann_dist_temp / _pos / real_energy_exp_temp /        *)
+(*        real_entropy_dist / real_KL_temp（UpReqTempDefs 温度族，       *)
+(*        Section 按需消散 6/8 参形）；                                  *)
+(*     ③ real_list_sum（S08_RealMainlineDPO.v:288）——bsum↔list 换装      *)
+(*        桥（SumEqListFeed 换装 shim 的求和面镜像），把本实例接回        *)
+(*        list 载体已闭面。                                             *)
+(*                                                                *)
+(*   纪律：纯构造性；Set 层语句（real_lt/real_eq）；零经典逻辑；          *)
+(*   全部 Qed 闭合；G1-G4 四关候跑。                                    *)
+(* ============================================================ *)
+
+From Stdlib Require Import QArith.QArith.
+Require Import CW_ConstructiveWorld_219.
+Require Import UpReqTempDefs.
+Require Import UpReqEntropyDeficitTemp.
+
+(* ---- 二点有限枚举状态空间与求和泛函 ---- *)
+
+Definition p3a_bsum (f : bool -> Real) : Real :=
+  real_plus (f true) (f false).
+
+(* ---- 槽 1 sumpos：保正性 ---- *)
+
+Lemma p3a_bsum_pos : forall f : bool -> Real,
+  (forall s : bool, real_lt real_zero (f s)) ->
+  real_lt real_zero (p3a_bsum f).
+Proof.
+  intros f Hf. unfold p3a_bsum.
+  apply (real_eq_lt_lt real_zero (real_plus real_zero real_zero)).
+  - apply real_eq_sym. apply real_plus_zero.
+  - exact (real_lt_plus_compat real_zero (f true) real_zero (f false)
+             (Hf true) (Hf false)).
+Qed.
+
+(* ---- 槽 2 sumext：外延性 ---- *)
+
+Lemma p3a_bsum_ext : forall f g : bool -> Real,
+  (forall s : bool, real_eq (f s) (g s)) ->
+  real_eq (p3a_bsum f) (p3a_bsum g).
+Proof.
+  intros f g Hfg. unfold p3a_bsum.
+  exact (RealSetoid.real_eq_plus_compat (f true) (f false) (g true) (g false)
+           (Hfg true) (Hfg false)).
+Qed.
+
+(* ---- 槽 3 sumlinear：线性性（分配律 + 因子序换装） ---- *)
+
+Lemma p3a_bsum_lin : forall (a : Real) (f : bool -> Real),
+  real_eq (p3a_bsum (fun s : bool => real_mult a (f s)))
+          (real_mult a (p3a_bsum f)).
+Proof.
+  intros a f. unfold p3a_bsum.
+  apply (real_eq_trans
+           (real_plus (real_mult a (f true)) (real_mult a (f false)))
+           (real_plus (real_mult (f true) a) (real_mult (f false) a))).
+  - apply RealSetoid.real_eq_plus_compat.
+    + apply real_mult_comm.
+    + apply real_mult_comm.
+  - apply (real_eq_trans
+             (real_plus (real_mult (f true) a) (real_mult (f false) a))
+             (real_mult (real_plus (f true) (f false)) a)).
+    + exact (real_distrib_r_local (f true) (f false) a).
+    + exact (real_mult_comm (real_plus (f true) (f false)) a).
+Qed.
+
+(* ---- 槽 4 sumadd：可加性（assoc/comm 四项重排） ---- *)
+
+Lemma p3a_bsum_add : forall f g : bool -> Real,
+  real_eq (p3a_bsum (fun s : bool => real_plus (f s) (g s)))
+          (real_plus (p3a_bsum f) (p3a_bsum g)).
+Proof.
+  intros f g. unfold p3a_bsum.
+  apply (real_eq_trans
+           (real_plus (real_plus (f true) (g true))
+                      (real_plus (f false) (g false)))
+           (real_plus (f true)
+                      (real_plus (g true) (real_plus (f false) (g false))))).
+  - apply real_eq_sym. apply real_plus_assoc.
+  - apply (real_eq_trans
+             (real_plus (f true)
+                        (real_plus (g true) (real_plus (f false) (g false))))
+             (real_plus (f true)
+                        (real_plus (f false) (real_plus (g true) (g false))))).
+    + apply RealSetoid.real_eq_plus_compat.
+      * apply real_eq_refl.
+      * (* g true + (f false + g false) == f false + (g true + g false) *)
+        apply (real_eq_trans
+                 (real_plus (g true) (real_plus (f false) (g false)))
+                 (real_plus (real_plus (g true) (f false)) (g false))).
+        -- apply real_plus_assoc.
+        -- apply (real_eq_trans
+                    (real_plus (real_plus (g true) (f false)) (g false))
+                    (real_plus (real_plus (f false) (g true)) (g false))).
+           ++ apply RealSetoid.real_eq_plus_compat.
+              ** apply real_plus_comm.
+              ** apply real_eq_refl.
+           ++ apply real_eq_sym. apply real_plus_assoc.
+    + apply real_plus_assoc.
+Qed.
+
+(* ---- 换装桥：bsum ↔ list 求和（二点枚举 [true; false] 喂入） ---- *)
+
+Lemma p3a_bsum_list_feed : forall f : bool -> Real,
+  real_eq (p3a_bsum f) (real_list_sum bool f (true :: false :: nil)).
+Proof.
+  intros f. unfold p3a_bsum. cbn [real_list_sum].
+  apply (real_eq_trans (real_plus (f true) (f false))
+           (real_plus (real_plus (f true) (f false)) real_zero)).
+  - apply real_eq_sym. apply real_plus_zero.
+  - apply real_eq_sym. apply real_plus_assoc.
+Qed.
+
+(* ---- 主件：二点空间熵亏 KL 分解槽装载（real_entropy_deficit_kl_temp    *)
+(*      13 参全 arity 实例化——第二定律四求和槽在有限枚举载体的兑现） ---- *)
+
+Theorem p3a_two_state_entropy_deficit_kl_zero :
+  forall (T : Real) (Ht : real_lt real_zero T)
+         (energy p : bool -> Real)
+         (Hp : forall s : bool, real_lt real_zero (p s)),
+    real_eq (p3a_bsum p) real_one ->
+    real_eq (p3a_bsum (fun s : bool => real_mult (p s) (energy s)))
+            (real_energy_exp_temp bool p3a_bsum p3a_bsum_pos T Ht energy) ->
+    real_eq (real_minus_r
+               (real_entropy_dist bool p3a_bsum
+                  (real_boltzmann_dist_temp bool p3a_bsum p3a_bsum_pos T Ht energy)
+                  (real_boltzmann_dist_temp_pos bool p3a_bsum p3a_bsum_pos T Ht energy))
+               (real_entropy_dist bool p3a_bsum p Hp))
+            (real_KL_temp bool p3a_bsum p3a_bsum_pos T Ht energy p Hp).
+Proof.
+  intros T Ht energy p Hp Hnormp Henergy.
+  exact (real_entropy_deficit_kl_temp bool p3a_bsum p3a_bsum_pos
+           p3a_bsum_ext p3a_bsum_lin p3a_bsum_add
+           T Ht energy p Hp Hnormp Henergy).
+Qed.
+
+(* ---- 四关备件：PA 口径 + G3 提取探针 ---- *)
+
+Print Assumptions p3a_bsum_add.
+Print Assumptions p3a_two_state_entropy_deficit_kl_zero.
+Print Assumptions p3a_bsum_list_feed.
+
+From Stdlib Require Import Extraction.
+Set Extraction Output Directory ".".
+Extraction "p3a_tempdualboolslots.ml" p3a_two_state_entropy_deficit_kl_zero p3a_bsum_list_feed.

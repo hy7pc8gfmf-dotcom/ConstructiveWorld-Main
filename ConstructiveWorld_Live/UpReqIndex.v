@@ -2381,3 +2381,152 @@ Definition ng_UpReqConcFin2 : NewGreenFace :=
 (* ng_UpReqMixLogD —— UpReqMixLogD.v：Path D squared-ladder kappa0 powers + binary-composition log-scale k selector (mixd_ family: ladder/scan_up/desc with QleT' certificate direct-return, cost c <= 5*d+2, Q-core Defined selector + Real rationalization shell), four-gate green, race D, 66 Qed / 10 PA Closed *)
 Definition ng_UpReqMixLogD : NewGreenFace :=
   MkNewGreenFace "UpReqMixLogD.v" 1725 66 20260919 "squared-ladder + binary-composition log-scale k selector (mixd_ family), certificate direct-return with cost bound 5*d+2, zero new axioms Print Assumptions closed, race D".
+(* ================= v4.5 proposed increment block (R90 merge prep seat: handover batch of 26 new sources merged in + 12 updates rewritten, 20260919) ================= *)
+(* Scope notes: the 26 new lines = HEAD 321 tail-insert L322-L347 (topological-safe order); of these, czd12_g3/mtc_g3 are extraction probe files, per the g3 convention no ng_ entry is made; the Ln2Bridge source file has been quarantined back to the author due to paren imbalance + ring equation flaw (see report, box ⑤). *)
+(* Fields = (line count, Qed count, Defined count); PA closed counts to be re-stamped at main-session wave time per G4 fact records. Qed/Defined are comments for each entry, actual figures per mechanical count of this block. *)
+
+(* ng_AbsSqClose —— AbsSqClose.v：abs/square cluster closure feed (T65 P2/P3 AbsSqClose) *)
+Definition ng_AbsSqClose : NewGreenFace :=
+  MkNewGreenFace "AbsSqClose.v" 350 15 20260919 "abs/square cluster closure feed (T65 P2/P3 AbsSqClose) (Qed=15/Defined=0)".
+
+(* ng_BeukersLists —— BeukersLists.v：Beukers-type list evaluation lemma set *)
+Definition ng_BeukersLists : NewGreenFace :=
+  MkNewGreenFace "BeukersLists.v" 554 29 20260919 "Beukers-type list evaluation lemma set (Qed=29/Defined=0)".
+
+(* ng_ConcMixSelFeed —— ConcMixSelFeed.v：ConcMixSel concrete slot feed (11 Defined extractable) *)
+Definition ng_ConcMixSelFeed : NewGreenFace :=
+  MkNewGreenFace "ConcMixSelFeed.v" 216 11 20260919 "ConcMixSel concrete slot feed (11 Defined extractable) (Qed=0/Defined=11)".
+
+(* ng_DecBridge6 —— DecBridge6.v：DO decision bridge six slots (T65 P2 DecBridge6) *)
+Definition ng_DecBridge6 : NewGreenFace :=
+  MkNewGreenFace "DecBridge6.v" 153 7 20260919 "DO decision bridge six slots (T65 P2 DecBridge6) (Qed=7/Defined=0)".
+
+(* ng_EngelWeighted —— EngelWeighted.v：weighted Engel line (C7/CZG13) *)
+Definition ng_EngelWeighted : NewGreenFace :=
+  MkNewGreenFace "EngelWeighted.v" 621 28 20260919 "weighted Engel line (C7/CZG13) (Qed=28/Defined=0)".
+
+(* ng_EngineCeilingK —— EngineCeilingK.v：general-k parameterized engine ceiling (eck_ family, T68 C4) *)
+Definition ng_EngineCeilingK : NewGreenFace :=
+  MkNewGreenFace "EngineCeilingK.v" 231 10 20260919 "general-k parameterized engine ceiling (eck_ family, T68 C4) (Qed=10/Defined=0)".
+
+(* ng_EntropyMonoSplitInst —— EntropyMonoSplitInst.v：entropy line three-certificate-slot loading (emsi 8, T67 C3) *)
+Definition ng_EntropyMonoSplitInst : NewGreenFace :=
+  MkNewGreenFace "EntropyMonoSplitInst.v" 302 8 20260919 "entropy line three-certificate-slot loading (emsi 8, T67 C3) (Qed=8/Defined=0)".
+
+(* ng_EpsTrichotomy —— EpsTrichotomy.v：eps trichotomy pre-infrastructure (etc_ family, T74 C9) *)
+Definition ng_EpsTrichotomy : NewGreenFace :=
+  MkNewGreenFace "EpsTrichotomy.v" 307 11 20260919 "eps trichotomy pre-infrastructure (etc_ family, T74 C9) (Qed=6/Defined=5)".
+
+(* ng_ForwardKLAdjudication —— ForwardKLAdjudication.v：forward KL three-account adjudication registration file (T75 C8) *)
+Definition ng_ForwardKLAdjudication : NewGreenFace :=
+  MkNewGreenFace "ForwardKLAdjudication.v" 124 0 20260919 "forward KL three-account adjudication registration file (T75 C8) (Qed=0/Defined=0)".
+
+(* ng_HansonLcm —— HansonLcm.v：Hanson lcm lemma (T106) *)
+Definition ng_HansonLcm : NewGreenFace :=
+  MkNewGreenFace "HansonLcm.v" 238 14 20260919 "Hanson lcm lemma (T106) (Qed=14/Defined=0)".
+
+(* ng_Ln2Escape —— Ln2Escape.v：ln2 escape window (T97/T87 line) *)
+Definition ng_Ln2Escape : NewGreenFace :=
+  MkNewGreenFace "Ln2Escape.v" 580 28 20260919 "ln2 escape window (T97/T87 line) (Qed=28/Defined=0)".
+
+(* ng_LogTwoBridge —— LogTwoBridge.v：log 2 dyadic bridge (T63 C2) *)
+Definition ng_LogTwoBridge : NewGreenFace :=
+  MkNewGreenFace "LogTwoBridge.v" 188 5 20260919 "log 2 dyadic bridge (T63 C2) (Qed=5/Defined=0)".
+
+(* ng_LowRefFeed4 —— LowRefFeed4.v：low-reference four-slot feed *)
+Definition ng_LowRefFeed4 : NewGreenFace :=
+  MkNewGreenFace "LowRefFeed4.v" 119 3 20260919 "low-reference four-slot feed (Qed=3/Defined=0)".
+
+(* ng_MixTimeChain —— MixTimeChain.v：mixing time chain (REV16 trio) *)
+Definition ng_MixTimeChain : NewGreenFace :=
+  MkNewGreenFace "MixTimeChain.v" 263 15 20260919 "mixing time chain (REV16 trio) (Qed=13/Defined=2)".
+
+(* ng_MixTimeChainIface —— MixTimeChainIface.v：mixing time interface layer (REV16 trio) *)
+Definition ng_MixTimeChainIface : NewGreenFace :=
+  MkNewGreenFace "MixTimeChainIface.v" 161 7 20260919 "mixing time interface layer (REV16 trio) (Qed=5/Defined=2)".
+
+(* ng_MixingTimeG2 —— MixingTimeG2.v：MixingTime revival mtg_ family (T71 C5, REV16 trio) *)
+Definition ng_MixingTimeG2 : NewGreenFace :=
+  MkNewGreenFace "MixingTimeG2.v" 269 7 20260919 "MixingTime revival mtg_ family (T71 C5, REV16 trio) (Qed=3/Defined=4)".
+
+(* ng_PinskerCoreClose —— PinskerCoreClose.v：Pinsker core close (C9 body, four IOU pending main attack seat) *)
+Definition ng_PinskerCoreClose : NewGreenFace :=
+  MkNewGreenFace "PinskerCoreClose.v" 345 10 20260919 "Pinsker core close (C9 body, four IOU pending main attack seat) (Qed=5/Defined=5)".
+
+(* ng_PintMono —— PintMono.v：P-integral monotonicity (T107 P1 integration phase two) *)
+Definition ng_PintMono : NewGreenFace :=
+  MkNewGreenFace "PintMono.v" 452 22 20260919 "P-integral monotonicity (T107 P1 integration phase two) (Qed=22/Defined=0)".
+
+(* ng_QuickDischargeA —— QuickDischargeA.v：T62 A#1/A#17/A#18 one-shot discharge (T66) *)
+Definition ng_QuickDischargeA : NewGreenFace :=
+  MkNewGreenFace "QuickDischargeA.v" 138 3 20260919 "T62 A#1/A#17/A#18 one-shot discharge (T66) (Qed=3/Defined=0)".
+
+(* ng_S5SlotWire —— S5SlotWire.v：S5 slot wiring件 *)
+Definition ng_S5SlotWire : NewGreenFace :=
+  MkNewGreenFace "S5SlotWire.v" 230 7 20260919 "S5 slot wiring件 (Qed=7/Defined=0)".
+
+(* ng_SumDCarrierFeed —— SumDCarrierFeed.v：SumD carrier feed main file (T64 P1) *)
+Definition ng_SumDCarrierFeed : NewGreenFace :=
+  MkNewGreenFace "SumDCarrierFeed.v" 185 0 20260919 "SumD carrier feed main file (T64 P1) (Qed=0/Defined=0)".
+
+(* ng_VajdaClose2 —— VajdaClose2.v：Vajda dual-target close (T86) *)
+Definition ng_VajdaClose2 : NewGreenFace :=
+  MkNewGreenFace "VajdaClose2.v" 131 4 20260919 "Vajda dual-target close (T86) (Qed=4/Defined=0)".
+
+(* ng_WeakTriangleClose —— WeakTriangleClose.v：weak triangle CS weight transfer (wtc_ family, T73 C6) *)
+Definition ng_WeakTriangleClose : NewGreenFace :=
+  MkNewGreenFace "WeakTriangleClose.v" 530 15 20260919 "weak triangle CS weight transfer (wtc_ family, T73 C6) (Qed=15/Defined=0)".
+
+(* ng_ZPosSlotFeed —— ZPosSlotFeed.v：ZPos slot feed *)
+Definition ng_ZPosSlotFeed : NewGreenFace :=
+  MkNewGreenFace "ZPosSlotFeed.v" 156 5 20260919 "ZPos slot feed (Qed=5/Defined=0)".
+
+(* ---- 12 update rewrites (existing ng_ entries refreshed in place: 11 comment-only rewrites, SumEqListMark is a semantic +4 append; zero registered-face dependents tested in the field, coqchk arbitration) ---- *)
+(* ng_FepIdentClass refresh —— comment-only rewrite *)
+Definition ng_FepIdentClass : NewGreenFace :=
+  MkNewGreenFace "FepIdentClass.v" 578 7 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=2)".
+
+(* ng_G04ProjHook refresh —— comment-only rewrite *)
+Definition ng_G04ProjHook : NewGreenFace :=
+  MkNewGreenFace "G04ProjHook.v" 222 12 20260919 "R90 refresh: comment-only rewrite (Qed=12/Defined=0)".
+
+(* ng_LMCarrierExt refresh —— comment-only rewrite *)
+Definition ng_LMCarrierExt : NewGreenFace :=
+  MkNewGreenFace "LMCarrierExt.v" 306 15 20260919 "R90 refresh: comment-only rewrite (Qed=15/Defined=0)".
+
+(* ng_Paper1Ablation refresh —— comment-only rewrite *)
+Definition ng_Paper1Ablation : NewGreenFace :=
+  MkNewGreenFace "Paper1Ablation.v" 521 5 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=0)".
+
+(* ng_Paper7Ablation refresh —— comment-only rewrite *)
+Definition ng_Paper7Ablation : NewGreenFace :=
+  MkNewGreenFace "Paper7Ablation.v" 191 7 20260919 "R90 refresh: comment-only rewrite (Qed=7/Defined=0)".
+
+(* ng_PhysPredAblation refresh —— comment-only rewrite *)
+Definition ng_PhysPredAblation : NewGreenFace :=
+  MkNewGreenFace "PhysPredAblation.v" 279 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
+
+(* ng_RateTheoryAblation refresh —— comment-only rewrite *)
+Definition ng_RateTheoryAblation : NewGreenFace :=
+  MkNewGreenFace "RateTheoryAblation.v" 215 5 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=0)".
+
+(* ng_SumEqListMark refresh —— +4 writeoff theorems (T61b C1 sem_czb12_ quadruple) *)
+Definition ng_SumEqListMark : NewGreenFace :=
+  MkNewGreenFace "SumEqListMark.v" 172 8 20260919 "R90 refresh: +4 writeoff theorems (T61b C1 sem_czb12_ quadruple) (Qed=8/Defined=0)".
+
+(* ng_fa56b_ext refresh —— comment-only rewrite *)
+Definition ng_fa56b_ext : NewGreenFace :=
+  MkNewGreenFace "fa56b_ext.v" 271 12 20260919 "R90 refresh: comment-only rewrite (Qed=12/Defined=0)".
+
+(* ng_fa56c_ext refresh —— comment-only rewrite *)
+Definition ng_fa56c_ext : NewGreenFace :=
+  MkNewGreenFace "fa56c_ext.v" 291 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
+
+(* ng_fa57_ext refresh —— comment-only rewrite *)
+Definition ng_fa57_ext : NewGreenFace :=
+  MkNewGreenFace "fa57_ext.v" 239 11 20260919 "R90 refresh: comment-only rewrite (Qed=11/Defined=0)".
+
+(* ng_p4a_GradSignQDec refresh —— comment-only rewrite *)
+Definition ng_p4a_GradSignQDec : NewGreenFace :=
+  MkNewGreenFace "p4a_GradSignQDec.v" 257 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
+

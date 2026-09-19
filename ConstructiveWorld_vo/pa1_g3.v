@@ -1,0 +1,3 @@
+From Stdlib Require Import Extraction.
+Require Import Paper1Ablation.
+Extraction "pa1_g3_out.v" pa1_grpo_unit_moment_pop pa1_raw_second_moment_decomp pa1_dpo_reward_relative_exact pa1_opp_eq_compat.
