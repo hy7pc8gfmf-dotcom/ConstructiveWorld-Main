@@ -2786,3 +2786,59 @@ Definition ng_SupplyAssembly : NewGreenFace :=
 (* ng_BetaLower —— BetaLower.v：R94 red-file repaired (AUD β1 bracket + 7 latent, R93FIX), four-gate green, zero statement-face change *)
 Definition ng_BetaLower : NewGreenFace :=
   MkNewGreenFace "BetaLower.v" 498 31 20260919 "R94 red-file repaired (AUD β1 bracket + 7 latent, R93FIX), four-gate green, zero statement-face change; born-in-place verified in vo tree".
+(* ================= v4.9 增册（R95 注册波：论文1 假设消融战役 14 件，20260920） ================= *)
+(* ng_UpAblZpos —— UpAblZpos.v：R95 paper-1 ablation (AB1): Z_align_pos abstract-layer packing-form discharge + unconditional nonneg companion, four-gate green; born-in-place verified in vo tree *)
+Definition ng_UpAblZpos : NewGreenFace :=
+  MkNewGreenFace "UpAblZpos.v" 107 3 20260920 "R95 paper-1 ablation (AB1): Z_align_pos abstract-layer packing-form discharge + unconditional nonneg companion, four-gate green; born-in-place verified in vo tree".
+
+(* ng_UpAblZposReal —— UpAblZposReal.v：R95 paper-1 ablation (AB2): Z_align_pos Real-layer unconditional discharge + finite-sum positivity carrier, three theorems all N-grade, four-gate green *)
+Definition ng_UpAblZposReal : NewGreenFace :=
+  MkNewGreenFace "UpAblZposReal.v" 138 3 20260920 "R95 paper-1 ablation (AB2): Z_align_pos Real-layer unconditional discharge + finite-sum positivity carrier, three theorems all N-grade, four-gate green".
+
+(* ng_UpAblZposDirect —— UpAblZposDirect.v：R95 paper-1 ablation (AB7): B4 slot direct-config on RealEnhancedReal, Id-line slot original form structurally unreachable verdict per sec 9.5, four-gate green *)
+Definition ng_UpAblZposDirect : NewGreenFace :=
+  MkNewGreenFace "UpAblZposDirect.v" 162 4 20260920 "R95 paper-1 ablation (AB7): B4 slot direct-config on RealEnhancedReal, Id-line slot original form structurally unreachable verdict per sec 9.5, four-gate green".
+
+(* ng_UpAblSposDirect —— UpAblSposDirect.v：R95 paper-1 ablation (AB8): B8 sum_over_S_pos slot direct-config, original-form unconditional discharge on minimal component world, four-gate green *)
+Definition ng_UpAblSposDirect : NewGreenFace :=
+  MkNewGreenFace "UpAblSposDirect.v" 254 12 20260920 "R95 paper-1 ablation (AB8): B8 sum_over_S_pos slot direct-config, original-form unconditional discharge on minimal component world, four-gate green".
+
+(* ng_UpAblEps49RKDBase —— UpAblEps49RKDBase.v：R95 paper-1 ablation (AB3 companion): RKD private-byte-snapshot base for 4.9 slot alignment, content-identical to RealKLDecomp body, four-gate green; parallel replica coexists per merge-replica discipline *)
+Definition ng_UpAblEps49RKDBase : NewGreenFace :=
+  MkNewGreenFace "UpAblEps49RKDBase.v" 912 11 20260920 "R95 paper-1 ablation (AB3 companion): RKD private-byte-snapshot base for 4.9 slot alignment, content-identical to RealKLDecomp body, four-gate green; parallel replica coexists per merge-replica discipline".
+
+(* ng_UpAblEps49Main —— UpAblEps49Main.v：R95 paper-1 ablation (AB3): 4.9 load-bearing slot real_kl_decomp_full discharge (bool two-point instance), four-gate green *)
+Definition ng_UpAblEps49Main : NewGreenFace :=
+  MkNewGreenFace "UpAblEps49Main.v" 205 8 20260920 "R95 paper-1 ablation (AB3): 4.9 load-bearing slot real_kl_decomp_full discharge (bool two-point instance), four-gate green".
+
+(* ng_UpAblEps49List —— UpAblEps49List.v：R95 paper-1 ablation (e49l): 4.9 slot list-carrier true-premise-shape complete discharge, zero gap with S08 global form, four-gate green *)
+Definition ng_UpAblEps49List : NewGreenFace :=
+  MkNewGreenFace "UpAblEps49List.v" 237 7 20260920 "R95 paper-1 ablation (e49l): 4.9 slot list-carrier true-premise-shape complete discharge, zero gap with S08 global form, four-gate green".
+
+(* ng_UpAblEps49Fam —— UpAblEps49Fam.v：R95 paper-1 ablation (AB4): 4.9 family face five slot instances, independently re-verified four-gate green (AB4T) *)
+Definition ng_UpAblEps49Fam : NewGreenFace :=
+  MkNewGreenFace "UpAblEps49Fam.v" 445 7 20260920 "R95 paper-1 ablation (AB4): 4.9 family face five slot instances, independently re-verified four-gate green (AB4T)".
+
+(* ng_UpAblEps49Body —— UpAblEps49Body.v：R95 paper-1 ablation (X1): theorem 4.9 body list-carrier downstream direct-config, both honest slots swapped, zero residual premises, four-gate green *)
+Definition ng_UpAblEps49Body : NewGreenFace :=
+  MkNewGreenFace "UpAblEps49Body.v" 264 1 20260920 "R95 paper-1 ablation (X1): theorem 4.9 body list-carrier downstream direct-config, both honest slots swapped, zero residual premises, four-gate green".
+
+(* ng_UpAblEps66Sum —— UpAblEps66Sum.v：R95 paper-1 ablation (AB5): 6.6 sum-interface family three slots discharge (enum + bool flagship closed forms), four-gate green *)
+Definition ng_UpAblEps66Sum : NewGreenFace :=
+  MkNewGreenFace "UpAblEps66Sum.v" 141 6 20260920 "R95 paper-1 ablation (AB5): 6.6 sum-interface family three slots discharge (enum + bool flagship closed forms), four-gate green".
+
+(* ng_UpAblEps66Pos —— UpAblEps66Pos.v：R95 paper-1 ablation (AB6): 6.6 positivity face, pi_old_pos unconditional + advantage_pos conditional strongest-reachable form, four-gate green *)
+Definition ng_UpAblEps66Pos : NewGreenFace :=
+  MkNewGreenFace "UpAblEps66Pos.v" 233 9 20260920 "R95 paper-1 ablation (AB6): 6.6 positivity face, pi_old_pos unconditional + advantage_pos conditional strongest-reachable form, four-gate green".
+
+(* ng_UpAblEps66Body —— UpAblEps66Body.v：R95 paper-1 ablation (X2): theorem 6.6 body 11-slot swap, flag_closed zero-honest-interface version, four-gate green *)
+Definition ng_UpAblEps66Body : NewGreenFace :=
+  MkNewGreenFace "UpAblEps66Body.v" 213 3 20260920 "R95 paper-1 ablation (X2): theorem 6.6 body 11-slot swap, flag_closed zero-honest-interface version, four-gate green".
+
+(* ng_UpAblP1T1_AlignCert —— UpAblP1T1_AlignCert.v：R95 paper-1 ablation (T1R2): alignment certificate cluster 6 bundles supply theorems, all T-grade honest declaration, four-gate green *)
+Definition ng_UpAblP1T1_AlignCert : NewGreenFace :=
+  MkNewGreenFace "UpAblP1T1_AlignCert.v" 168 8 20260920 "R95 paper-1 ablation (T1R2): alignment certificate cluster 6 bundles supply theorems, all T-grade honest declaration, four-gate green".
+
+(* ng_UpAblP1T2_GrpoAuditCert —— UpAblP1T2_GrpoAuditCert.v：R95 paper-1 ablation (T2R2): GRPO/audit/FE-constant cluster 9 bundles supply theorems, predecessor pieces re-verified four-gate green *)
+Definition ng_UpAblP1T2_GrpoAuditCert : NewGreenFace :=
+  MkNewGreenFace "UpAblP1T2_GrpoAuditCert.v" 259 9 20260920 "R95 paper-1 ablation (T2R2): GRPO/audit/FE-constant cluster 9 bundles supply theorems, predecessor pieces re-verified four-gate green".
