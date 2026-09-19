@@ -2036,7 +2036,7 @@ Definition ng_GibbsAttractor : NewGreenFace :=
 (* 提边机械核验零违序）。ng_GibbsAttractor 已在 v3.5 册内（L243 注册先成），实测 285/4 与      *)
 (* 迁后源 9e44ff44 一致，本批零触碰；append-only，既有条目/清单/字面值/版记零触碰，EOF 追加。   *)
 (* Gibbs 本席 full 复编 rc=0 逐位复现 .vo e192d235/.vos 97b27d19（magic 436f712100015ff4，      *)
-(* PA 3 Closed、Axioms 0）；三新件产物判据 size>0、md5≠d41d8cd9、magic 同上。                  *)
+(* PA 3 Closed、公理清单 0）；三新件产物判据 size>0、md5≠d41d8cd9、magic 同上。                  *)
 (* 权威源=attn/_thv3reg94_交付报告-20260916.md；口径：ng_lines=wc -l 实测；                    *)
 (* ng_qed=剥块注释 token 级 Qed 实测。                                                          *)
 
@@ -2232,9 +2232,9 @@ Definition ng_UpReqAttnMixTime : NewGreenFace :=
 (* ================= v3.9 增册（主会话 R85 注册波：下波修复六件+Q18 家族两件+23-03 消融交接八件，20260918） ================= *)
 (* 16 件尾插 order×3 L289-304/_CoqProject×2 L290-305；PadeErrorIntegral/Paper12345Sample/                    *)
 (* p2a_AttnClimClose/p3a_TempDualBoolSlots 四件伤单摘除候 R86；fa56b/fa56c 手术版随车（已注册件内容修改）。   *)
-(* ng_UpReqPinskerCore —— UpReqPinskerCore.v：pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK *)
+(* ng_UpReqPinskerCore —— UpReqPinskerCore.v：pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK；R10-PNK2B 桥件收割（纯追加 591 行，pnk2_pinsker_trunc5/_mirror 两块支内砖，20260919） *)
 Definition ng_UpReqPinskerCore : NewGreenFace :=
-  MkNewGreenFace "UpReqPinskerCore.v" 3015 40 20260918 "pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK".
+  MkNewGreenFace "UpReqPinskerCore.v" 3606 57 20260919 "pinsker constant ladder core, rung-one pnk2_pinsker_one (1*TV^2<=KL) + R8 wound repair, R9/PNSK; R10-PNK2B bridge harvest, pure-append 591 on 3015, pnk2_pinsker_trunc5/_mirror".
 
 (* ng_UpReqEnvelopeDual —— UpReqEnvelopeDual.v：constant envelope dual, cascade rebuild on repaired core, R9 *)
 Definition ng_UpReqEnvelopeDual : NewGreenFace :=
@@ -2349,7 +2349,7 @@ Definition ng_UpReqSentinelMother : NewGreenFace :=
 Definition ng_UpReqLn2Irrational : NewGreenFace :=
   MkNewGreenFace "UpReqLn2Irrational.v" 370 21 20260918 "ln2 irrational conditional-form assembly truly via mother criterion, escape window honestly open, IR4".
 
-(* ng_UpReqSqrt3Irrational —— UpReqSqrt3Irrational.v：sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5 *)
+(* ng_UpReqSqrt3Irrational —— UpReqSqrt3Irrational.v：sqrt3 无理性第三实例、mod-3 下降 + 4/11 逃逸窗再参数化，IR5 *)
 Definition ng_UpReqSqrt3Irrational : NewGreenFace :=
   MkNewGreenFace "UpReqSqrt3Irrational.v" 1141 27 20260918 "sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5".
 
@@ -2381,152 +2381,376 @@ Definition ng_UpReqConcFin2 : NewGreenFace :=
 (* ng_UpReqMixLogD —— UpReqMixLogD.v：Path D squared-ladder kappa0 powers + binary-composition log-scale k selector (mixd_ family: ladder/scan_up/desc with QleT' certificate direct-return, cost c <= 5*d+2, Q-core Defined selector + Real rationalization shell), four-gate green, race D, 66 Qed / 10 PA Closed *)
 Definition ng_UpReqMixLogD : NewGreenFace :=
   MkNewGreenFace "UpReqMixLogD.v" 1725 66 20260919 "squared-ladder + binary-composition log-scale k selector (mixd_ family), certificate direct-return with cost bound 5*d+2, zero new axioms Print Assumptions closed, race D".
-(* ================= v4.5 proposed increment block (R90 merge prep seat: handover batch of 26 new sources merged in + 12 updates rewritten, 20260919) ================= *)
-(* Scope notes: the 26 new lines = HEAD 321 tail-insert L322-L347 (topological-safe order); of these, czd12_g3/mtc_g3 are extraction probe files, per the g3 convention no ng_ entry is made; the Ln2Bridge source file has been quarantined back to the author due to paren imbalance + ring equation flaw (see report, box ⑤). *)
-(* Fields = (line count, Qed count, Defined count); PA closed counts to be re-stamped at main-session wave time per G4 fact records. Qed/Defined are comments for each entry, actual figures per mechanical count of this block. *)
 
-(* ng_AbsSqClose —— AbsSqClose.v：abs/square cluster closure feed (T65 P2/P3 AbsSqClose) *)
-Definition ng_AbsSqClose : NewGreenFace :=
-  MkNewGreenFace "AbsSqClose.v" 350 15 20260919 "abs/square cluster closure feed (T65 P2/P3 AbsSqClose) (Qed=15/Defined=0)".
 
-(* ng_BeukersLists —— BeukersLists.v：Beukers-type list evaluation lemma set *)
-Definition ng_BeukersLists : NewGreenFace :=
-  MkNewGreenFace "BeukersLists.v" 554 29 20260919 "Beukers-type list evaluation lemma set (Qed=29/Defined=0)".
 
-(* ng_ConcMixSelFeed —— ConcMixSelFeed.v：ConcMixSel concrete slot feed (11 Defined extractable) *)
-Definition ng_ConcMixSelFeed : NewGreenFace :=
-  MkNewGreenFace "ConcMixSelFeed.v" 216 11 20260919 "ConcMixSel concrete slot feed (11 Defined extractable) (Qed=0/Defined=11)".
 
-(* ng_DecBridge6 —— DecBridge6.v：DO decision bridge six slots (T65 P2 DecBridge6) *)
-Definition ng_DecBridge6 : NewGreenFace :=
-  MkNewGreenFace "DecBridge6.v" 153 7 20260919 "DO decision bridge six slots (T65 P2 DecBridge6) (Qed=7/Defined=0)".
-
-(* ng_EngelWeighted —— EngelWeighted.v：weighted Engel line (C7/CZG13) *)
-Definition ng_EngelWeighted : NewGreenFace :=
-  MkNewGreenFace "EngelWeighted.v" 621 28 20260919 "weighted Engel line (C7/CZG13) (Qed=28/Defined=0)".
-
-(* ng_EngineCeilingK —— EngineCeilingK.v：general-k parameterized engine ceiling (eck_ family, T68 C4) *)
-Definition ng_EngineCeilingK : NewGreenFace :=
-  MkNewGreenFace "EngineCeilingK.v" 231 10 20260919 "general-k parameterized engine ceiling (eck_ family, T68 C4) (Qed=10/Defined=0)".
-
-(* ng_EntropyMonoSplitInst —— EntropyMonoSplitInst.v：entropy line three-certificate-slot loading (emsi 8, T67 C3) *)
-Definition ng_EntropyMonoSplitInst : NewGreenFace :=
-  MkNewGreenFace "EntropyMonoSplitInst.v" 302 8 20260919 "entropy line three-certificate-slot loading (emsi 8, T67 C3) (Qed=8/Defined=0)".
-
-(* ng_EpsTrichotomy —— EpsTrichotomy.v：eps trichotomy pre-infrastructure (etc_ family, T74 C9) *)
-Definition ng_EpsTrichotomy : NewGreenFace :=
-  MkNewGreenFace "EpsTrichotomy.v" 307 11 20260919 "eps trichotomy pre-infrastructure (etc_ family, T74 C9) (Qed=6/Defined=5)".
-
-(* ng_ForwardKLAdjudication —— ForwardKLAdjudication.v：forward KL three-account adjudication registration file (T75 C8) *)
-Definition ng_ForwardKLAdjudication : NewGreenFace :=
-  MkNewGreenFace "ForwardKLAdjudication.v" 124 0 20260919 "forward KL three-account adjudication registration file (T75 C8) (Qed=0/Defined=0)".
-
-(* ng_HansonLcm —— HansonLcm.v：Hanson lcm lemma (T106) *)
-Definition ng_HansonLcm : NewGreenFace :=
-  MkNewGreenFace "HansonLcm.v" 238 14 20260919 "Hanson lcm lemma (T106) (Qed=14/Defined=0)".
-
-(* ng_Ln2Escape —— Ln2Escape.v：ln2 escape window (T97/T87 line) *)
-Definition ng_Ln2Escape : NewGreenFace :=
-  MkNewGreenFace "Ln2Escape.v" 580 28 20260919 "ln2 escape window (T97/T87 line) (Qed=28/Defined=0)".
-
-(* ng_LogTwoBridge —— LogTwoBridge.v：log 2 dyadic bridge (T63 C2) *)
-Definition ng_LogTwoBridge : NewGreenFace :=
-  MkNewGreenFace "LogTwoBridge.v" 188 5 20260919 "log 2 dyadic bridge (T63 C2) (Qed=5/Defined=0)".
-
-(* ng_LowRefFeed4 —— LowRefFeed4.v：low-reference four-slot feed *)
-Definition ng_LowRefFeed4 : NewGreenFace :=
-  MkNewGreenFace "LowRefFeed4.v" 119 3 20260919 "low-reference four-slot feed (Qed=3/Defined=0)".
-
-(* ng_MixTimeChain —— MixTimeChain.v：mixing time chain (REV16 trio) *)
-Definition ng_MixTimeChain : NewGreenFace :=
-  MkNewGreenFace "MixTimeChain.v" 263 15 20260919 "mixing time chain (REV16 trio) (Qed=13/Defined=2)".
-
-(* ng_MixTimeChainIface —— MixTimeChainIface.v：mixing time interface layer (REV16 trio) *)
-Definition ng_MixTimeChainIface : NewGreenFace :=
-  MkNewGreenFace "MixTimeChainIface.v" 161 7 20260919 "mixing time interface layer (REV16 trio) (Qed=5/Defined=2)".
-
-(* ng_MixingTimeG2 —— MixingTimeG2.v：MixingTime revival mtg_ family (T71 C5, REV16 trio) *)
-Definition ng_MixingTimeG2 : NewGreenFace :=
-  MkNewGreenFace "MixingTimeG2.v" 269 7 20260919 "MixingTime revival mtg_ family (T71 C5, REV16 trio) (Qed=3/Defined=4)".
-
-(* ng_PinskerCoreClose —— PinskerCoreClose.v：Pinsker core close (C9 body, four IOU pending main attack seat) *)
-Definition ng_PinskerCoreClose : NewGreenFace :=
-  MkNewGreenFace "PinskerCoreClose.v" 345 10 20260919 "Pinsker core close (C9 body, four IOU pending main attack seat) (Qed=5/Defined=5)".
-
-(* ng_PintMono —— PintMono.v：P-integral monotonicity (T107 P1 integration phase two) *)
-Definition ng_PintMono : NewGreenFace :=
-  MkNewGreenFace "PintMono.v" 452 22 20260919 "P-integral monotonicity (T107 P1 integration phase two) (Qed=22/Defined=0)".
-
-(* ng_QuickDischargeA —— QuickDischargeA.v：T62 A#1/A#17/A#18 one-shot discharge (T66) *)
-Definition ng_QuickDischargeA : NewGreenFace :=
-  MkNewGreenFace "QuickDischargeA.v" 138 3 20260919 "T62 A#1/A#17/A#18 one-shot discharge (T66) (Qed=3/Defined=0)".
-
-(* ng_S5SlotWire —— S5SlotWire.v：S5 slot wiring件 *)
-Definition ng_S5SlotWire : NewGreenFace :=
-  MkNewGreenFace "S5SlotWire.v" 230 7 20260919 "S5 slot wiring件 (Qed=7/Defined=0)".
-
-(* ng_SumDCarrierFeed —— SumDCarrierFeed.v：SumD carrier feed main file (T64 P1) *)
-Definition ng_SumDCarrierFeed : NewGreenFace :=
-  MkNewGreenFace "SumDCarrierFeed.v" 185 0 20260919 "SumD carrier feed main file (T64 P1) (Qed=0/Defined=0)".
-
-(* ng_VajdaClose2 —— VajdaClose2.v：Vajda dual-target close (T86) *)
-Definition ng_VajdaClose2 : NewGreenFace :=
-  MkNewGreenFace "VajdaClose2.v" 131 4 20260919 "Vajda dual-target close (T86) (Qed=4/Defined=0)".
-
-(* ng_WeakTriangleClose —— WeakTriangleClose.v：weak triangle CS weight transfer (wtc_ family, T73 C6) *)
-Definition ng_WeakTriangleClose : NewGreenFace :=
-  MkNewGreenFace "WeakTriangleClose.v" 530 15 20260919 "weak triangle CS weight transfer (wtc_ family, T73 C6) (Qed=15/Defined=0)".
-
-(* ng_ZPosSlotFeed —— ZPosSlotFeed.v：ZPos slot feed *)
-Definition ng_ZPosSlotFeed : NewGreenFace :=
-  MkNewGreenFace "ZPosSlotFeed.v" 156 5 20260919 "ZPos slot feed (Qed=5/Defined=0)".
-
-(* ---- 12 update rewrites (existing ng_ entries refreshed in place: 11 comment-only rewrites, SumEqListMark is a semantic +4 append; zero registered-face dependents tested in the field, coqchk arbitration) ---- *)
-(* ng_FepIdentClass refresh —— comment-only rewrite *)
-Definition ng_FepIdentClass : NewGreenFace :=
-  MkNewGreenFace "FepIdentClass.v" 578 7 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=2)".
-
-(* ng_G04ProjHook refresh —— comment-only rewrite *)
-Definition ng_G04ProjHook : NewGreenFace :=
-  MkNewGreenFace "G04ProjHook.v" 222 12 20260919 "R90 refresh: comment-only rewrite (Qed=12/Defined=0)".
-
-(* ng_LMCarrierExt refresh —— comment-only rewrite *)
-Definition ng_LMCarrierExt : NewGreenFace :=
-  MkNewGreenFace "LMCarrierExt.v" 306 15 20260919 "R90 refresh: comment-only rewrite (Qed=15/Defined=0)".
-
-(* ng_Paper1Ablation refresh —— comment-only rewrite *)
-Definition ng_Paper1Ablation : NewGreenFace :=
-  MkNewGreenFace "Paper1Ablation.v" 521 5 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=0)".
-
-(* ng_Paper7Ablation refresh —— comment-only rewrite *)
-Definition ng_Paper7Ablation : NewGreenFace :=
-  MkNewGreenFace "Paper7Ablation.v" 191 7 20260919 "R90 refresh: comment-only rewrite (Qed=7/Defined=0)".
-
-(* ng_PhysPredAblation refresh —— comment-only rewrite *)
-Definition ng_PhysPredAblation : NewGreenFace :=
-  MkNewGreenFace "PhysPredAblation.v" 279 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
-
-(* ng_RateTheoryAblation refresh —— comment-only rewrite *)
-Definition ng_RateTheoryAblation : NewGreenFace :=
-  MkNewGreenFace "RateTheoryAblation.v" 215 5 20260919 "R90 refresh: comment-only rewrite (Qed=5/Defined=0)".
-
-(* ng_SumEqListMark refresh —— +4 writeoff theorems (T61b C1 sem_czb12_ quadruple) *)
-Definition ng_SumEqListMark : NewGreenFace :=
-  MkNewGreenFace "SumEqListMark.v" 172 8 20260919 "R90 refresh: +4 writeoff theorems (T61b C1 sem_czb12_ quadruple) (Qed=8/Defined=0)".
-
-(* ng_fa56b_ext refresh —— comment-only rewrite *)
-Definition ng_fa56b_ext : NewGreenFace :=
-  MkNewGreenFace "fa56b_ext.v" 271 12 20260919 "R90 refresh: comment-only rewrite (Qed=12/Defined=0)".
-
-(* ng_fa56c_ext refresh —— comment-only rewrite *)
-Definition ng_fa56c_ext : NewGreenFace :=
-  MkNewGreenFace "fa56c_ext.v" 291 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
-
-(* ng_fa57_ext refresh —— comment-only rewrite *)
-Definition ng_fa57_ext : NewGreenFace :=
-  MkNewGreenFace "fa57_ext.v" 239 11 20260919 "R90 refresh: comment-only rewrite (Qed=11/Defined=0)".
-
-(* ng_p4a_GradSignQDec refresh —— comment-only rewrite *)
-Definition ng_p4a_GradSignQDec : NewGreenFace :=
-  MkNewGreenFace "p4a_GradSignQDec.v" 257 13 20260919 "R90 refresh: comment-only rewrite (Qed=13/Defined=0)".
-
+(* ================= v4.6 增册（R91ENROLL 消融件整波入册席：UpAbl 系全量入册·乙案，20260919） ================= *)
+(* 121 件尾插 order（HEAD 347 后按字母序；全集实测=LEDGERv3 104 + S5/S8/S9/S10/S11/PPO 后续批落盘；S12 三件/S13 二件本波窗口内新落盘未及入册候其席自波；
+   零内部边（121 件互不 Require，工程依赖全部已注册在册面）；红线行首批扫 0 违例；G1 禁词全文件口径 0 命中；
+   源三面 md5 全等（Live_X=Live 树=vo 树）；vo 树内 9.1 净环境重编（Live_X 产物未直种，跨树 digest 防御铁律），121/121 full EXIT=0+头字节 5ff4。
+   分级注记照各施工报告申报：T1-T13c 照 v1/v2 总账批行，P1S1/P2S1/P3S1/D1S1-S9/D2S1 照 _tfa*_施工报告，S10/S11/PPO 报告未落盘如实标注在飞。
+   UpAblD1S11_UpReqCauchy 源件未终结注释编译败已隔离候修证重入；UpAblT1_TEMPLATE.v 含承认件为形示模板，四重防呆永不入册（FA3 计划 §五.4）。 *)
+(* ng_UpAblD1PPO_UpReqPPOPlain —— UpAblD1PPO_UpReqPPOPlain.v：FA-D1PPO in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised) *)
+Definition ng_UpAblD1PPO_UpReqPPOPlain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1PPO_UpReqPPOPlain.v" 117 2 20260919 "FA-D1PPO in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S10_UpReqConcMixSel —— UpAblD1S10_UpReqConcMixSel.v：FA-D1S10 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised) *)
+Definition ng_UpAblD1S10_UpReqConcMixSel : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S10_UpReqConcMixSel.v" 124 1 20260919 "FA-D1S10 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S10_UpReqPPOPlain —— UpAblD1S10_UpReqPPOPlain.v：FA-D1S10 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised) *)
+Definition ng_UpAblD1S10_UpReqPPOPlain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S10_UpReqPPOPlain.v" 120 2 20260919 "FA-D1S10 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S11_UpReqPPOPlain —— UpAblD1S11_UpReqPPOPlain.v：FA-D1S11 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised; note: sibling UpAblD1S11_UpReqCauchy quarantined, unterminated comment) *)
+Definition ng_UpAblD1S11_UpReqPPOPlain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S11_UpReqPPOPlain.v" 126 2 20260919 "FA-D1S11 in-flight batch (source landed Live_X, batch report pending at enrollment time; enrolled from current bytes, re-sync at wave if revised; note: sibling UpAblD1S11_UpReqCauchy quarantined, unterminated comment); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_e752_UpReqAttnIter —— UpAblD1S2_e752_UpReqAttnIter.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_e752_UpReqAttnIter : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_e752_UpReqAttnIter.v" 92 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_AlignIdUnclosed —— UpAblD1S2_reqlog_AlignIdUnclosed.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_AlignIdUnclosed : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_AlignIdUnclosed.v" 52 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_GibbsAssembly —— UpAblD1S2_reqlog_GibbsAssembly.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_GibbsAssembly : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_GibbsAssembly.v" 82 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_UpReqAlign3 —— UpAblD1S2_reqlog_UpReqAlign3.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_UpReqAlign3 : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_UpReqAlign3.v" 57 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_UpReqAlignClose —— UpAblD1S2_reqlog_UpReqAlignClose.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_UpReqAlignClose : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_UpReqAlignClose.v" 55 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_UpReqCauchy —— UpAblD1S2_reqlog_UpReqCauchy.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_UpReqCauchy : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_UpReqCauchy.v" 48 1 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S2_reqlog_UpReqDpoLoss —— UpAblD1S2_reqlog_UpReqDpoLoss.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_) *)
+Definition ng_UpAblD1S2_reqlog_UpReqDpoLoss : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S2_reqlog_UpReqDpoLoss.v" 54 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_fep_UpReqAttnGibbs —— UpAblD1S3_fep_UpReqAttnGibbs.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_fep_UpReqAttnGibbs : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_fep_UpReqAttnGibbs.v" 69 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_fep_UpReqSteadyThermo —— UpAblD1S3_fep_UpReqSteadyThermo.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_fep_UpReqSteadyThermo : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_fep_UpReqSteadyThermo.v" 155 5 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_AlignIdUnclosed —— UpAblD1S3_sum_pos_AlignIdUnclosed.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_AlignIdUnclosed : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_AlignIdUnclosed.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_SecondLawQuantified —— UpAblD1S3_sum_pos_SecondLawQuantified.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_SecondLawQuantified : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_SecondLawQuantified.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_TempSoftmaxInstantiation —— UpAblD1S3_sum_pos_TempSoftmaxInstantiation.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_TempSoftmaxInstantiation : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_TempSoftmaxInstantiation.v" 47 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqAlign3 —— UpAblD1S3_sum_pos_UpReqAlign3.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqAlign3 : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAlign3.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqAlignClose —— UpAblD1S3_sum_pos_UpReqAlignClose.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqAlignClose : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAlignClose.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqAttnGibbs —— UpAblD1S3_sum_pos_UpReqAttnGibbs.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqAttnGibbs : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAttnGibbs.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp —— UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqEntropyMaxTemp —— UpAblD1S3_sum_pos_UpReqEntropyMaxTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqEntropyMaxTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyMaxTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqEntropyMonoSplit —— UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqEntropyMonoSplit : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg —— UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp —— UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S3_sum_pos_UpReqTempDefs —— UpAblD1S3_sum_pos_UpReqTempDefs.v：FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_) *)
+Definition ng_UpAblD1S3_sum_pos_UpReqTempDefs : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqTempDefs.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S4_UpReqStepKLEtaInst —— UpAblD1S4_UpReqStepKLEtaInst.v：FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green (_tfad1s4_) *)
+Definition ng_UpAblD1S4_UpReqStepKLEtaInst : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S4_UpReqStepKLEtaInst.v" 137 5 20260919 "FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green (_tfad1s4_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S4_UpReqTopKTVChain —— UpAblD1S4_UpReqTopKTVChain.v：FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green (_tfad1s4_) *)
+Definition ng_UpAblD1S4_UpReqTopKTVChain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S4_UpReqTopKTVChain.v" 128 2 20260919 "FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green (_tfad1s4_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S5_UpReqDoeblinEntropy —— UpAblD1S5_UpReqDoeblinEntropy.v：FA-D1S5, N-supply 18 + 12, +4 T-prune declared, four-gate green (_tfad1s5_) *)
+Definition ng_UpAblD1S5_UpReqDoeblinEntropy : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S5_UpReqDoeblinEntropy.v" 624 13 20260919 "FA-D1S5, N-supply 18 + 12, +4 T-prune declared, four-gate green (_tfad1s5_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S5_UpReqEntropyMonoSplit —— UpAblD1S5_UpReqEntropyMonoSplit.v：FA-D1S5, N-supply 18 + 12, +4 T-prune declared, four-gate green (_tfad1s5_) *)
+Definition ng_UpAblD1S5_UpReqEntropyMonoSplit : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S5_UpReqEntropyMonoSplit.v" 596 8 20260919 "FA-D1S5, N-supply 18 + 12, +4 T-prune declared, four-gate green (_tfad1s5_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S6_SecondLawQuantified —— UpAblD1S6_SecondLawQuantified.v：FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_) *)
+Definition ng_UpAblD1S6_SecondLawQuantified : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S6_SecondLawQuantified.v" 69 1 20260919 "FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S6_UpReqMinPKLChain —— UpAblD1S6_UpReqMinPKLChain.v：FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_) *)
+Definition ng_UpAblD1S6_UpReqMinPKLChain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S6_UpReqMinPKLChain.v" 99 3 20260919 "FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S6_UpReqRealFEP —— UpAblD1S6_UpReqRealFEP.v：FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_) *)
+Definition ng_UpAblD1S6_UpReqRealFEP : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S6_UpReqRealFEP.v" 71 1 20260919 "FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S6_UpReqSteadyThermo —— UpAblD1S6_UpReqSteadyThermo.v：FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_) *)
+Definition ng_UpAblD1S6_UpReqSteadyThermo : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S6_UpReqSteadyThermo.v" 74 1 20260919 "FA-D1S6, T-supply (34 batch) + MPK:52 N empty-type certificate + MPK:49 W register, four-gate green (_tfad1s6_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S7_UpReqEntropyDeficitTemp —— UpAblD1S7_UpReqEntropyDeficitTemp.v：FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_) *)
+Definition ng_UpAblD1S7_UpReqEntropyDeficitTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S7_UpReqEntropyDeficitTemp.v" 75 1 20260919 "FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S7_UpReqEntropyMaxTemp —— UpAblD1S7_UpReqEntropyMaxTemp.v：FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_) *)
+Definition ng_UpAblD1S7_UpReqEntropyMaxTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S7_UpReqEntropyMaxTemp.v" 81 1 20260919 "FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S7_UpReqEntropyUniqueNeg —— UpAblD1S7_UpReqEntropyUniqueNeg.v：FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_) *)
+Definition ng_UpAblD1S7_UpReqEntropyUniqueNeg : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S7_UpReqEntropyUniqueNeg.v" 75 1 20260919 "FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S7_UpReqEntropyUniqueTemp —— UpAblD1S7_UpReqEntropyUniqueTemp.v：FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_) *)
+Definition ng_UpAblD1S7_UpReqEntropyUniqueTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S7_UpReqEntropyUniqueTemp.v" 75 1 20260919 "FA-D1S7, T-supply x37 batch (S3 duplicate 4 disclosed), four-gate green (_tfad1s7_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S8_TempSoftmaxInstantiation —— UpAblD1S8_TempSoftmaxInstantiation.v：FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_) *)
+Definition ng_UpAblD1S8_TempSoftmaxInstantiation : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S8_TempSoftmaxInstantiation.v" 90 1 20260919 "FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S8_UpReqPPOPlain —— UpAblD1S8_UpReqPPOPlain.v：FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_) *)
+Definition ng_UpAblD1S8_UpReqPPOPlain : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S8_UpReqPPOPlain.v" 173 3 20260919 "FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S8_UpReqTempDefs —— UpAblD1S8_UpReqTempDefs.v：FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_) *)
+Definition ng_UpAblD1S8_UpReqTempDefs : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S8_UpReqTempDefs.v" 79 1 20260919 "FA-D1S8, T-supply x39 batch all merged, four-gate green (_tfad1s8_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1S9_UpReqAttnIter —— UpAblD1S9_UpReqAttnIter.v：FA-D1S9, T x21 + W x1, four-gate green (_tfad1s9_) *)
+Definition ng_UpAblD1S9_UpReqAttnIter : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S9_UpReqAttnIter.v" 233 4 20260919 "FA-D1S9, T x21 + W x1, four-gate green (_tfad1s9_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1_expf_pack —— UpAblD1_expf_pack.v：FA-D1S1, expf bundle N1 (C13 three-way grade conflict counted N per ledger), four-gate green (_tfad1s1_) *)
+Definition ng_UpAblD1_expf_pack : NewGreenFace :=
+  MkNewGreenFace "UpAblD1_expf_pack.v" 98 1 20260919 "FA-D1S1, expf bundle N1 (C13 three-way grade conflict counted N per ledger), four-gate green (_tfad1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD1_fa53_lpc_broadcast —— UpAblD1_fa53_lpc_broadcast.v：FA-D1S1, fa53 lpc broadcast N1, four-gate green (_tfad1s1_) *)
+Definition ng_UpAblD1_fa53_lpc_broadcast : NewGreenFace :=
+  MkNewGreenFace "UpAblD1_fa53_lpc_broadcast.v" 201 9 20260919 "FA-D1S1, fa53 lpc broadcast N1, four-gate green (_tfad1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblD2_AbsLeId_RI_DO —— UpAblD2_AbsLeId_RI_DO.v：FA-D2S1, N3 x2 supply-pair + N1 x2 RI-face + T x1 (W register DO carrier noted), four-gate green (_tfad2s1_) *)
+Definition ng_UpAblD2_AbsLeId_RI_DO : NewGreenFace :=
+  MkNewGreenFace "UpAblD2_AbsLeId_RI_DO.v" 136 5 20260919 "FA-D2S1, N3 x2 supply-pair + N1 x2 RI-face + T x1 (W register DO carrier noted), four-gate green (_tfad2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP1_SecondLawQuantified_sumd —— UpAblP1_SecondLawQuantified_sumd.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_) *)
+Definition ng_UpAblP1_SecondLawQuantified_sumd : NewGreenFace :=
+  MkNewGreenFace "UpAblP1_SecondLawQuantified_sumd.v" 101 4 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP1_SqrtfCauchyArch_arch —— UpAblP1_SqrtfCauchyArch_arch.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_) *)
+Definition ng_UpAblP1_SqrtfCauchyArch_arch : NewGreenFace :=
+  MkNewGreenFace "UpAblP1_SqrtfCauchyArch_arch.v" 54 0 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP1_SqrtfCauchy_four_slots —— UpAblP1_SqrtfCauchy_four_slots.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_) *)
+Definition ng_UpAblP1_SqrtfCauchy_four_slots : NewGreenFace :=
+  MkNewGreenFace "UpAblP1_SqrtfCauchy_four_slots.v" 89 0 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP2_FepIdentClass_inst_bundle —— UpAblP2_FepIdentClass_inst_bundle.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_) *)
+Definition ng_UpAblP2_FepIdentClass_inst_bundle : NewGreenFace :=
+  MkNewGreenFace "UpAblP2_FepIdentClass_inst_bundle.v" 214 9 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP2_SecondLawConsume_sumdis —— UpAblP2_SecondLawConsume_sumdis.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_) *)
+Definition ng_UpAblP2_SecondLawConsume_sumdis : NewGreenFace :=
+  MkNewGreenFace "UpAblP2_SecondLawConsume_sumdis.v" 179 6 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP2_UpMinP_tokens_pack —— UpAblP2_UpMinP_tokens_pack.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_) *)
+Definition ng_UpAblP2_UpMinP_tokens_pack : NewGreenFace :=
+  MkNewGreenFace "UpAblP2_UpMinP_tokens_pack.v" 90 3 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP3_UpReqAttnMixTime —— UpAblP3_UpReqAttnMixTime.v：FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_) *)
+Definition ng_UpAblP3_UpReqAttnMixTime : NewGreenFace :=
+  MkNewGreenFace "UpAblP3_UpReqAttnMixTime.v" 247 9 20260919 "FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblP3_UpReqConcMixSel —— UpAblP3_UpReqConcMixSel.v：FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_) *)
+Definition ng_UpAblP3_UpReqConcMixSel : NewGreenFace :=
+  MkNewGreenFace "UpAblP3_UpReqConcMixSel.v" 229 8 20260919 "FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT10_S04RealExpLogConv —— UpAblT10_S04RealExpLogConv.v：v1 T10 batch (T10a), N1 x1 + N2 x3, four-gate green (_tt10a_) *)
+Definition ng_UpAblT10_S04RealExpLogConv : NewGreenFace :=
+  MkNewGreenFace "UpAblT10_S04RealExpLogConv.v" 85 4 20260919 "v1 T10 batch (T10a), N1 x1 + N2 x3, four-gate green (_tt10a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT11_S11_TP3B5 —— UpAblT11_S11_TP3B5.v：v1 T11 batch (T11a), N1 x2 + N2 x6, four-gate green (_tt11a_) *)
+Definition ng_UpAblT11_S11_TP3B5 : NewGreenFace :=
+  MkNewGreenFace "UpAblT11_S11_TP3B5.v" 139 8 20260919 "v1 T11 batch (T11a), N1 x2 + N2 x6, four-gate green (_tt11a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT12_G13 —— UpAblT12_G13.v：v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_) *)
+Definition ng_UpAblT12_G13 : NewGreenFace :=
+  MkNewGreenFace "UpAblT12_G13.v" 78 3 20260919 "v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT12_UpRealLeB2 —— UpAblT12_UpRealLeB2.v：v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_) *)
+Definition ng_UpAblT12_UpRealLeB2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT12_UpRealLeB2.v" 159 3 20260919 "v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT12_UpReqAlignRestA —— UpAblT12_UpReqAlignRestA.v：v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_) *)
+Definition ng_UpAblT12_UpReqAlignRestA : NewGreenFace :=
+  MkNewGreenFace "UpAblT12_UpReqAlignRestA.v" 49 1 20260919 "v1 T12 batch (T12a), N1 x4 + N2 x1, four-gate green (_tt12a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13_UpEntropyGainReq —— UpAblT13_UpEntropyGainReq.v：v1 T13a batch, N x8, four-gate green (_tt13a_) *)
+Definition ng_UpAblT13_UpEntropyGainReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT13_UpEntropyGainReq.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13_UpFirewallReq —— UpAblT13_UpFirewallReq.v：v1 T13a batch, N x8, four-gate green (_tt13a_) *)
+Definition ng_UpAblT13_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT13_UpFirewallReq.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13_UpReqAlignRestA —— UpAblT13_UpReqAlignRestA.v：v1 T13a batch, N x8, four-gate green (_tt13a_) *)
+Definition ng_UpAblT13_UpReqAlignRestA : NewGreenFace :=
+  MkNewGreenFace "UpAblT13_UpReqAlignRestA.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13_UpReqSampling —— UpAblT13_UpReqSampling.v：v1 T13a batch, N x8, four-gate green (_tt13a_) *)
+Definition ng_UpAblT13_UpReqSampling : NewGreenFace :=
+  MkNewGreenFace "UpAblT13_UpReqSampling.v" 76 4 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13_UpSigMigrate2 —— UpAblT13_UpSigMigrate2.v：v1 T13a batch, N x8, four-gate green (_tt13a_) *)
+Definition ng_UpAblT13_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13_UpSigMigrate2.v" 45 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_G06_BForm —— UpAblT13b_G06_BForm.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_G06_BForm : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_G06_BForm.v" 113 7 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_G13 —— UpAblT13b_G13.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_G13 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_G13.v" 69 2 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpReqAlign —— UpAblT13b_UpReqAlign.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpReqAlign : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpReqAlign.v" 49 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpReqAlign2 —— UpAblT13b_UpReqAlign2.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpReqAlign2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpReqAlign2.v" 48 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpReqAlignRestA —— UpAblT13b_UpReqAlignRestA.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpReqAlignRestA : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpReqAlignRestA.v" 48 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpReqDist —— UpAblT13b_UpReqDist.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpReqDist : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpReqDist.v" 34 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpSigMigrate —— UpAblT13b_UpSigMigrate.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpSigMigrate : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpSigMigrate.v" 84 3 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpSigMigrate2 —— UpAblT13b_UpSigMigrate2.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpSigMigrate2.v" 71 2 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13b_UpTVDoeblin —— UpAblT13b_UpTVDoeblin.v：v1 T13b batch, N x19, four-gate green (_tt13b_) *)
+Definition ng_UpAblT13b_UpTVDoeblin : NewGreenFace :=
+  MkNewGreenFace "UpAblT13b_UpTVDoeblin.v" 39 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13c_G13 —— UpAblT13c_G13.v：T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_) *)
+Definition ng_UpAblT13c_G13 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13c_G13.v" 271 11 20260919 "T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13c_UpReqDist —— UpAblT13c_UpReqDist.v：T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_) *)
+Definition ng_UpAblT13c_UpReqDist : NewGreenFace :=
+  MkNewGreenFace "UpAblT13c_UpReqDist.v" 119 4 20260919 "T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT13c_UpSigMigrate2 —— UpAblT13c_UpSigMigrate2.v：T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_) *)
+Definition ng_UpAblT13c_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT13c_UpSigMigrate2.v" 122 3 20260919 "T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1_UpFirewallReq —— UpAblT1_UpFirewallReq.v：v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT1_UpFirewallReq.v" 97 5 20260919 "v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1_UpReqDist —— UpAblT1_UpReqDist.v：v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1_UpReqDist : NewGreenFace :=
+  MkNewGreenFace "UpAblT1_UpReqDist.v" 237 14 20260919 "v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1_UpReqTempEntropy —— UpAblT1_UpReqTempEntropy.v：v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1_UpReqTempEntropy : NewGreenFace :=
+  MkNewGreenFace "UpAblT1_UpReqTempEntropy.v" 112 6 20260919 "v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1b_AttnDoeblin —— UpAblT1b_AttnDoeblin.v：v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1b_AttnDoeblin : NewGreenFace :=
+  MkNewGreenFace "UpAblT1b_AttnDoeblin.v" 172 8 20260919 "v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1b_S06_DiffSamplingGibbs —— UpAblT1b_S06_DiffSamplingGibbs.v：v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1b_S06_DiffSamplingGibbs : NewGreenFace :=
+  MkNewGreenFace "UpAblT1b_S06_DiffSamplingGibbs.v" 148 6 20260919 "v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1b_S13_NLiveAudit —— UpAblT1b_S13_NLiveAudit.v：v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1b_S13_NLiveAudit : NewGreenFace :=
+  MkNewGreenFace "UpAblT1b_S13_NLiveAudit.v" 166 8 20260919 "v1 T1b batch, N1x7+N2x3 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT1c_UpFirewallReq —— UpAblT1c_UpFirewallReq.v：v1 T1c batch, N x5 firewall five-bridge, four-gate green (_tt1a_) *)
+Definition ng_UpAblT1c_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT1c_UpFirewallReq.v" 236 6 20260919 "v1 T1c batch, N x5 firewall five-bridge, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpFirewallReq —— UpAblT2a_UpFirewallReq.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpFirewallReq.v" 32 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqAlign —— UpAblT2a_UpReqAlign.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqAlign : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqAlign.v" 39 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqAlign2 —— UpAblT2a_UpReqAlign2.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqAlign2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqAlign2.v" 29 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqAlignRestA —— UpAblT2a_UpReqAlignRestA.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqAlignRestA : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqAlignRestA.v" 30 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqDist —— UpAblT2a_UpReqDist.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqDist : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqDist.v" 39 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqFEPAttn —— UpAblT2a_UpReqFEPAttn.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqFEPAttn : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqFEPAttn.v" 87 6 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqMisc5 —— UpAblT2a_UpReqMisc5.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqMisc5 : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqMisc5.v" 27 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqPPO —— UpAblT2a_UpReqPPO.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqPPO : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqPPO.v" 29 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpReqTempEntropy —— UpAblT2a_UpReqTempEntropy.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpReqTempEntropy : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpReqTempEntropy.v" 41 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2a_UpSigMigrate2 —— UpAblT2a_UpSigMigrate2.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER) *)
+Definition ng_UpAblT2a_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT2a_UpSigMigrate2.v" 64 4 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2b_PredRelax5 —— UpAblT2b_PredRelax5.v：v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green (_tt2b_) *)
+Definition ng_UpAblT2b_PredRelax5 : NewGreenFace :=
+  MkNewGreenFace "UpAblT2b_PredRelax5.v" 440 17 20260919 "v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green (_tt2b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT2b_fa53_lpc_broadcast —— UpAblT2b_fa53_lpc_broadcast.v：v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green (_tt2b_) *)
+Definition ng_UpAblT2b_fa53_lpc_broadcast : NewGreenFace :=
+  MkNewGreenFace "UpAblT2b_fa53_lpc_broadcast.v" 165 11 20260919 "v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green (_tt2b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT3_UpReqAlign —— UpAblT3_UpReqAlign.v：v1 T3 batch (T3a), N1 x25, four-gate green (_tt3a_ per v1 LEDGER) *)
+Definition ng_UpAblT3_UpReqAlign : NewGreenFace :=
+  MkNewGreenFace "UpAblT3_UpReqAlign.v" 228 13 20260919 "v1 T3 batch (T3a), N1 x25, four-gate green (_tt3a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT3_UpReqFEPAttn —— UpAblT3_UpReqFEPAttn.v：v1 T3 batch (T3a), N1 x25, four-gate green (_tt3a_ per v1 LEDGER) *)
+Definition ng_UpAblT3_UpReqFEPAttn : NewGreenFace :=
+  MkNewGreenFace "UpAblT3_UpReqFEPAttn.v" 210 12 20260919 "v1 T3 batch (T3a), N1 x25, four-gate green (_tt3a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT4_RLHFkl —— UpAblT4_RLHFkl.v：v1 T4 batch (T4a), N3 x1 pack + N2 x5 + T bridge x3 merged, four-gate green (_tt4a_) *)
+Definition ng_UpAblT4_RLHFkl : NewGreenFace :=
+  MkNewGreenFace "UpAblT4_RLHFkl.v" 123 2 20260919 "v1 T4 batch (T4a), N3 x1 pack + N2 x5 + T bridge x3 merged, four-gate green (_tt4a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT4_SumCarrier —— UpAblT4_SumCarrier.v：v1 T4 batch (T4a), N3 x1 pack + N2 x5 + T bridge x3 merged, four-gate green (_tt4a_) *)
+Definition ng_UpAblT4_SumCarrier : NewGreenFace :=
+  MkNewGreenFace "UpAblT4_SumCarrier.v" 156 4 20260919 "v1 T4 batch (T4a), N3 x1 pack + N2 x5 + T bridge x3 merged, four-gate green (_tt4a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_S04_RealExpLogConv —— UpAblT5_S04_RealExpLogConv.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_S04_RealExpLogConv : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_S04_RealExpLogConv.v" 86 3 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_S05_AlignmentGRPO —— UpAblT5_S05_AlignmentGRPO.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_S05_AlignmentGRPO : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_S05_AlignmentGRPO.v" 60 2 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_S06_DiffSamplingGibbs —— UpAblT5_S06_DiffSamplingGibbs.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_S06_DiffSamplingGibbs : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_S06_DiffSamplingGibbs.v" 43 1 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_S12_B5RecycleSF —— UpAblT5_S12_B5RecycleSF.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_S12_B5RecycleSF : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_S12_B5RecycleSF.v" 29 1 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_UpFirewall —— UpAblT5_UpFirewall.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_UpFirewall : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_UpFirewall.v" 44 1 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT5_UpReqAlgebra —— UpAblT5_UpReqAlgebra.v：v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_) *)
+Definition ng_UpAblT5_UpReqAlgebra : NewGreenFace :=
+  MkNewGreenFace "UpAblT5_UpReqAlgebra.v" 45 2 20260919 "v1 T5 batch (T5a), N1 x4 + N3 x6, four-gate green (_tt5a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT6_UpReqAlign2 —— UpAblT6_UpReqAlign2.v：v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_) *)
+Definition ng_UpAblT6_UpReqAlign2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT6_UpReqAlign2.v" 89 4 20260919 "v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT6_UpReqPPO —— UpAblT6_UpReqPPO.v：v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_) *)
+Definition ng_UpAblT6_UpReqPPO : NewGreenFace :=
+  MkNewGreenFace "UpAblT6_UpReqPPO.v" 77 3 20260919 "v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT6_UpReqSampling —— UpAblT6_UpReqSampling.v：v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_) *)
+Definition ng_UpAblT6_UpReqSampling : NewGreenFace :=
+  MkNewGreenFace "UpAblT6_UpReqSampling.v" 194 11 20260919 "v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT6_UpSigMigrate —— UpAblT6_UpSigMigrate.v：v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_) *)
+Definition ng_UpAblT6_UpSigMigrate : NewGreenFace :=
+  MkNewGreenFace "UpAblT6_UpSigMigrate.v" 73 3 20260919 "v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT6_UpSigMigrate2 —— UpAblT6_UpSigMigrate2.v：v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_) *)
+Definition ng_UpAblT6_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT6_UpSigMigrate2.v" 73 3 20260919 "v1 T6 batch (T6a), N1 x24, four-gate green (_tt6a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT7_two_point_pack —— UpAblT7_two_point_pack.v：v1 T7 batch (T7a) coverage-pack, N1 x23 + N2 x101 + N3 x13 + T x394 (7a coverage basis 531), four-gate green (_tt7a_) *)
+Definition ng_UpAblT7_two_point_pack : NewGreenFace :=
+  MkNewGreenFace "UpAblT7_two_point_pack.v" 217 13 20260919 "v1 T7 batch (T7a) coverage-pack, N1 x23 + N2 x101 + N3 x13 + T x394 (7a coverage basis 531), four-gate green (_tt7a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT7b_real_two_point_pack —— UpAblT7b_real_two_point_pack.v：v1 T7b batch, N x61, four-gate green (_tt7b_) *)
+Definition ng_UpAblT7b_real_two_point_pack : NewGreenFace :=
+  MkNewGreenFace "UpAblT7b_real_two_point_pack.v" 347 21 20260919 "v1 T7b batch, N x61, four-gate green (_tt7b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_G09_MiscSmall —— UpAblT9_G09_MiscSmall.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_G09_MiscSmall : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_G09_MiscSmall.v" 42 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpDebtSqrtAbsReq —— UpAblT9_UpDebtSqrtAbsReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpDebtSqrtAbsReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpDebtSqrtAbsReq.v" 38 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpEntropyGainReq —— UpAblT9_UpEntropyGainReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpEntropyGainReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpEntropyGainReq.v" 36 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpFirewallReq —— UpAblT9_UpFirewallReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpFirewallReq.v" 39 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpReqDist —— UpAblT9_UpReqDist.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpReqDist : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpReqDist.v" 64 3 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpReqFEPAttn —— UpAblT9_UpReqFEPAttn.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpReqFEPAttn : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpReqFEPAttn.v" 61 3 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpReqSampling —— UpAblT9_UpReqSampling.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpReqSampling : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpReqSampling.v" 77 4 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpReqSumD —— UpAblT9_UpReqSumD.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpReqSumD : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpReqSumD.v" 29 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpSigMigrate —— UpAblT9_UpSigMigrate.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpSigMigrate : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpSigMigrate.v" 34 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpSigMigrate2 —— UpAblT9_UpSigMigrate2.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpSigMigrate2 : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpSigMigrate2.v" 26 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ng_UpAblT9_UpTVDoeblin —— UpAblT9_UpTVDoeblin.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
+Definition ng_UpAblT9_UpTVDoeblin : NewGreenFace :=
+  MkNewGreenFace "UpAblT9_UpTVDoeblin.v" 49 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".

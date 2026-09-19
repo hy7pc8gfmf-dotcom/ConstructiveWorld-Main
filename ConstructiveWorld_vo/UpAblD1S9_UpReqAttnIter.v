@@ -1,0 +1,233 @@
+(* ============================================================ *)
+(* UpAblD1S9_UpReqAttnIter.v —— FA-D1S9 数据供给大打包六梯 件①      *)
+(* 席位：FA-D1S9（普查批 D1-⑦ 六梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改  *)
+(*                                                              *)
+(* 领地认领（防撞协议快照 20260919）：D1-⑦ 池 S4＝UpReqStepKLEtaInst＋        *)
+(*   UpReqTopKTVChain；S5＝UpReqDoeblinEntropy＋UpReqEntropyMonoSplit；        *)
+(*   S6＝SecondLawQuantified/UpReqMinPKLChain/UpReqRealFEP/UpReqSteadyThermo； *)
+(*   S7＝UpReqEntropy{MaxTemp,UniqueTemp,DeficitTemp,UniqueNeg}；             *)
+(*   S8＝UpReqPPOPlain＋UpReqTempDefs＋TempSoftmaxInstantiation（施工中落件，   *)
+(*   任务书建议目标 UpReqPPOPlain 撞 S8 在先认领——按「撞即弃」处置，本席未触碰）。*)
+(*   本席认领＝⑦池未认领的 UpReqAttnIter 余量：普查 26 位减 D1-① 已切 2 位       *)
+(*   （L147/L149 lt_plus_compat_{lt,le}_i，T2b 广播件扩槽）与 D1-③ 已切 2 位     *)
+(*   （L152 sum_swap_i／L156 abs_ge_zero_i，E752 批），余 22 位按模块整体认领。    *)
+(*                                                              *)
+(* 辖区：UpReqAttnIter.v Section ReqAttnIter（L93 起）22 槽：                    *)
+(*   R,RIS:94｜S:96｜sumf:97｜sum_ext:100｜sum_linear:102｜sum_add:105｜        *)
+(*   sum_le:108｜sum_nonneg_h:111｜abs_sum_le_h:114｜abs_nonneg_h:118（W 墙）｜  *)
+(*   D:121｜D_pos:122｜energy:123｜Z_thermo_i_pos:130｜transition:136｜         *)
+(*   transition_row_i:138｜delta:140｜delta_pos:141｜delta_lt_one:142｜          *)
+(*   minorization:144｜p_steady_i:159｜arch_pow_i:164                           *)
+(*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代核验，零代际漂移）        *)
+(* 墙登记（1 位，勘误候选）：abs_nonneg_h（L118）＝plain 形 le zero (abs a)——      *)
+(*   real_le 为判别式 Or(real_lt,real_eq)（S02_CauchyComplete.v:469），real_abs    *)
+(*   为逐点 Qabs 构造（S03_QExp.v:6510），全量供给需判定「a≡0 或 |a| 有界远离零」   *)
+(*   ＝LPO/判定墙族；库方同判：UpReqAlgebra.v:911-916「plain 形不可由 eps 形导出    *)
+(*   （无序消去），归入冻结清单」；全库 grep plain 形引理 RC=1（仅 S09:1994 特例    *)
+(*   real_abs_exp_pos 于 |exp x|）。母亲头注 L116-117 自述「Real 实例可满足」与     *)
+(*   实测不符——勘误候选登记。本件按 T2① 显式参形承接（供给件唯一残留参，非公理，     *)
+(*   Print Assumptions 不受影响）。                                              *)
+(* δ 内联登记（P1S1 sfc_two／S4 件② 同款）：Z_thermo_i（L128）与 boltzmann_dist_i    *)
+(*   （L132-133）为母亲节内定义，pack 语句按其定义体 δ 内联同体（L128/L132 逐字）。    *)
+(* 零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷）。                                *)
+(*                                                              *)
+(* 形态：P2S1/S4/S7 打包记录型先例（槽语句逐字入包）＋实例供给申报形。               *)
+(* 实例供给：S:=unit（单点态空间）｜sumf:=fun f => f tt（单点求和）｜               *)
+(*   D:=real_one｜energy:=零函数｜transition:=恒一函数｜delta:=半（inv two，         *)
+(*   inv_pos_pos 两腿）｜Z_thermo_i_pos:=exp_neg_pos 一行直配（S4 件②               *)
+(*   rtk_Z_thermo_pos 先例）｜arch_pow_i:=r_arch_pow_attn_real@CW220_Extensions:   *)
+(*   1537 直接喂（req_r_pow 在 Real 实例 δ≡real_pow、req_minus δ≡plus a (opp b)，   *)
+(*   CW220:777 转换喂定）｜transition_row_i/p_steady_i＝单点归一坍缩 mult_one 一行｜  *)
+(*   minorization＝比率归一链（inv_pos_correct+mult_comm+req_mult_compat+mult_one    *)
+(*   +lt_le_iff）机械 6 步。机械位平凡性实测兑现。                                  *)
+(*                                                              *)
+(* 分级（禁注水如实申报）：22 位＝21 喂（全部 T·数据/接口/一行直配供给级，合并申报      *)
+(*   不逐槽计战果）＋1 墙（W·abs_nonneg_h 判定墙族，墙登记不立）。普查 N/N2/N3/N1      *)
+(*   降标 T·供给级口径与 S4/S7 先例同判。                                          *)
+(*                                                              *)
+(* 依赖：CW_ConstructiveWorld_219（S02 序与环律／S07 接口与 inv 反单调:6040／       *)
+(*   S08 real_two_pos:603+real_inv_one_local:1474／CW220_Extensions:777,1537）；    *)
+(*   UpReqAlgebra（req_plus_zero_l:81）；UpReqAlign（req_r_pow:512）；UpReqRDF 零涉。 *)
+(*   零 git、零注册面增量。                                                       *)
+(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S9_*.{log,exit}                     *)
+(* ============================================================ *)
+
+From Stdlib Require Import List.
+From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround.
+Require Import CW_ConstructiveWorld_219.
+Require Import UpReqAlgebra.
+Require Import UpReqAlign.
+Require Import CW220_Extensions.
+Import RealInterfaceEnhancedMod.
+
+(* ============ helper 0：1 < 1+1（delta_lt_one 供给腿前置） ============ *)
+
+Lemma uabd1s9_ait_one_lt_two : real_lt real_one (real_plus real_one real_one).
+Proof.
+  exists (Qmake 1 2).
+  split.
+  - apply Qlt_to_QltT. vm_compute. first [exact I | exact eq_refl].
+  - exists 0%nat. intros n _.
+    apply Qlt_to_QltT.
+    unfold real_plus, real_one; cbn [projT1]; simpl.
+    vm_compute. first [exact I | exact eq_refl].
+Qed.
+
+(* ============ helper 1：半 < 1（delta_lt_one 槽供给件） ============ *)
+(*   腿：real_inv_pos_lt_contra@S07:6040（inv 反单调）+ real_inv_one_local@       *)
+(*   S08:1474（inv 1==1 运输）——CW220_Extensions:1044 同构链。                   *)
+
+Lemma uabd1s9_ait_delta_lt_one_feed :
+  real_lt (real_inv_pos (real_plus real_one real_one) real_two_pos) real_one.
+Proof.
+  apply (real_lt_eq_lt (real_inv_pos (real_plus real_one real_one) real_two_pos)
+                       (real_inv_pos real_one real_lt_zero_one) real_one).
+  - exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one)
+             real_lt_zero_one real_two_pos uabd1s9_ait_one_lt_two).
+  - exact real_inv_one_local.
+Qed.
+
+(* ============ helper 2：比率归一链（minorization 槽供给件） ============ *)
+(*   δ·(1/E·E) ≤ 1：inv_pos_correct 归一 + req_mult_compat 提升 + mult_one        *)
+(*   坍缩 + lt_le_iff（inl 位）——机械 6 步。                                    *)
+
+Lemma uabd1s9_ait_minor_feed :
+  forall (delta E : Real)
+         (Hd1 : real_lt delta real_one) (HE : real_lt real_zero E),
+    real_le (real_mult delta (real_mult (real_inv_pos E HE) E)) real_one.
+Proof.
+  intros delta E Hd1 HE.
+  assert (h_inner : real_eq (real_mult (real_inv_pos E HE) E) real_one).
+  { apply (real_eq_trans _ (real_mult E (real_inv_pos E HE))).
+    - apply real_mult_comm.
+    - exact (real_inv_pos_correct E HE). }
+  assert (he1 : real_eq (real_mult delta (real_mult (real_inv_pos E HE) E)) delta).
+  { apply (real_eq_trans _ (real_mult delta real_one)).
+    - exact (RealSetoid.real_eq_mult_compat delta
+               (real_mult (real_inv_pos E HE) E) delta real_one
+               (real_eq_refl delta) h_inner).
+    - apply real_mult_one. }
+  exact (RealSetoid.real_le_compat delta
+           (real_mult delta (real_mult (real_inv_pos E HE) E))
+           real_one real_one (real_eq_sym _ _ he1) (real_eq_refl real_one)
+           (inl Hd1)).
+Qed.
+
+(* ============ 打包记录型：22 槽语句逐字入包（对照母本 L94-164） ============ *)
+(*   槽序＝母本声明序；Z_thermo_i/boltzmann_dist_i 按母亲 L128/L132-133 δ 内联。     *)
+
+Inductive uabd1s9_ait_pack22 : Type :=
+| uabd1s9_ait_pack22_intro :
+    forall S : Set,
+      forall sumf : (S -> Real) -> Real,
+        (* L100 sum_ext *)
+        (forall f g : S -> Real,
+            (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g)) ->
+        (* L102 sum_linear *)
+        (forall (a : Real) (f : S -> Real),
+            req (sumf (fun s : S => mult a (f s))) (mult a (sumf f))) ->
+        (* L105 sum_add *)
+        (forall f g : S -> Real,
+            req (sumf (fun s : S => plus (f s) (g s)))
+                (plus (sumf f) (sumf g))) ->
+        (* L108 sum_le *)
+        (forall f g : S -> Real,
+            (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g)) ->
+        (* L111 sum_nonneg_h *)
+        (forall f : S -> Real,
+            (forall s : S, le zero (f s)) -> le zero (sumf f)) ->
+        (* L114 abs_sum_le_h *)
+        (forall f : S -> Real,
+            le (abs (sumf f)) (sumf (fun s : S => abs (f s)))) ->
+        (* L118 abs_nonneg_h（W 墙位·原语句保留） *)
+        (forall a : Real, le zero (abs a)) ->
+        (* L121 D *)
+        forall D : Real,
+          (* L122 D_pos *)
+          forall D_pos : lt zero D,
+          (* L123 energy *)
+          forall energy : S -> Real,
+          (* L130 Z_thermo_i_pos（Z_thermo_i＝sumf boltzmann_factor_i，L128 δ 内联） *)
+          forall Z_thermo_i_pos : lt zero (sumf (fun s : S =>
+                    exp_neg (mult (inv_pos D D_pos) (energy s)))),
+          (* L136 transition *)
+          forall transition : S -> S -> Real,
+          (* L138 transition_row_i *)
+          (forall s : S, req (sumf (fun s' : S => transition s s')) one) ->
+          (* L140 delta *)
+          forall delta : Real,
+            (* L141 delta_pos *)
+            lt zero delta ->
+            (* L142 delta_lt_one *)
+            lt delta one ->
+            (* L144 minorization（boltzmann_dist_i＝inv Z·boltz，L132-133 δ 内联） *)
+            (forall s s' : S,
+                le (mult delta
+                       (mult (inv_pos (sumf (fun s0 : S =>
+                                 exp_neg (mult (inv_pos D D_pos) (energy s0)))) Z_thermo_i_pos)
+                             (exp_neg (mult (inv_pos D D_pos) (energy s')))))
+                   (transition s s')) ->
+            (* L159 p_steady_i（同上 δ 内联双位） *)
+            (forall s' : S,
+                req (sumf (fun s : S =>
+                        mult (mult (inv_pos (sumf (fun s0 : S =>
+                                  exp_neg (mult (inv_pos D D_pos) (energy s0)))) Z_thermo_i_pos)
+                                (exp_neg (mult (inv_pos D D_pos) (energy s))))
+                             (transition s s')))
+                    (mult (inv_pos (sumf (fun s0 : S =>
+                              exp_neg (mult (inv_pos D D_pos) (energy s0)))) Z_thermo_i_pos)
+                          (exp_neg (mult (inv_pos D D_pos) (energy s'))))) ->
+            (* L164 arch_pow_i（req_r_pow/req_minus 为模块级定义，逐字同体） *)
+            (forall (a : Real), lt zero a ->
+                forall eps : Real, lt zero eps ->
+                  sigT (fun N : nat =>
+                    lt (mult a (req_r_pow (req_minus one delta) N)) eps)) ->
+            uabd1s9_ait_pack22.
+
+(* ============ 供给件：单点实例一次喂定 21 槽＋1 墙显式参承接 ============ *)
+
+Theorem uabd1s9_ait_pack22_supplied :
+  forall (Habnn : forall a : Real, le zero (abs a)),
+    uabd1s9_ait_pack22.
+Proof.
+  intro Habnn.
+  exact (uabd1s9_ait_pack22_intro unit
+           (fun (f : unit -> Real) => f tt)
+           (fun (f g : unit -> Real)
+              (H : forall s : unit, req (f s) (g s)) => H tt)
+           (fun (a : Real) (f : unit -> Real) =>
+              req_refl (mult a (f tt)))
+           (fun (f g : unit -> Real) =>
+              req_refl (plus (f tt) (g tt)))
+           (fun (f g : unit -> Real)
+              (H : forall s : unit, le (f s) (g s)) => H tt)
+           (fun (f : unit -> Real)
+              (H : forall s : unit, le zero (f s)) => H tt)
+           (fun (f : unit -> Real) => le_refl (abs (f tt)))
+           Habnn
+           real_one real_lt_zero_one
+           (fun _ : unit => real_zero)
+           (exp_neg_pos (mult (inv_pos real_one real_lt_zero_one) real_zero))
+           (fun _ _ : unit => real_one)
+           (fun _ : unit => req_refl real_one)
+           (inv_pos (plus one one) real_two_pos)
+           (inv_pos_pos (plus one one) real_two_pos)
+           uabd1s9_ait_delta_lt_one_feed
+           (fun _ _ : unit =>
+              uabd1s9_ait_minor_feed
+                (inv_pos (plus one one) real_two_pos)
+                (exp_neg (mult (inv_pos real_one real_lt_zero_one) real_zero))
+                uabd1s9_ait_delta_lt_one_feed
+                (exp_neg_pos
+                   (mult (inv_pos real_one real_lt_zero_one) real_zero)))
+           (fun _ : unit => mult_one _)
+           (fun (a : Real) (Ha : lt zero a) (eps : Real) (Heps : lt zero eps) =>
+              r_arch_pow_attn_real
+                (inv_pos (plus one one) real_two_pos)
+                (inv_pos_pos (plus one one) real_two_pos)
+                uabd1s9_ait_delta_lt_one_feed a Ha eps Heps)).
+Qed.
+
+(* ============ 假设面收口申报 ============ *)
+
+Print Assumptions uabd1s9_ait_pack22_supplied.

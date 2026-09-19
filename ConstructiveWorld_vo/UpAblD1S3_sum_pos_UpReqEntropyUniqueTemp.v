@@ -1,0 +1,43 @@
+(* ============================================================ *)
+(* UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp.v —— FA-D1S3 批 D1-⑤ sum_pos 收官批      *)
+(*   槽位：UpReqEntropyUniqueTemp.v L130（real_sum_pos_preserved，Real 面，语句逐字）        *)
+(*     forall f : S -> Real, (forall s : S, real_lt real_zero (f s)) ->  *)
+(*     real_lt real_zero (real_sum_over_S f)                             *)
+(*   母本偏差诚实登记：普查表钦定母本 fa57_sum_carrier_realizes@         *)
+(*     fa57_ext.v:63 为 RI 面（RealInterfaceEnhanced 打包件），全树       *)
+(*     复核无 Real 载体上的 RealInterfaceEnhanced 具体实例（FA-D1S1      *)
+(*     偏差 4 同款 grep 复核成立），RI 面母本不可达 Real 载体——          *)
+(*     本件改用同族在库 Real 面已证件直喂：                              *)
+(*     sumd_sum_pos@UpReqSumD.v:233（enum 列表和引擎，P1S1 先例件        *)
+(*     UpAblP1_SecondLawQuantified_sumd 同款直喂形），E751-A 同阶。      *)
+(*   消融形态：聚合引用形（扩槽不重立）——real_sum_over_S 槽取            *)
+(*     sumd_sumf 消解实例（定义件，delta 透明），非空前提显式承载。       *)
+(*   防重认领（20260919 实测）：Live_X 无 UpAblD1S1_*/UpAblD1S2_*/       *)
+(*     UpAblP3S1_* 认领件；本槽 Live_X 无既有同槽放电件。               *)
+(*   纪律：零 git、原树零改、前缀 uabd1s3_ 全树零撞名；                  *)
+(*     文尾 Print Assumptions 收尾；G3 提取探针内嵌一人一目录            *)
+(*     _tuabd1s3_g3out（验后判读）。四关留痕 attn/logs/g1..4-UpAblD1S3_* *)
+(* ============================================================ *)
+
+Require Import CW_ConstructiveWorld_219.
+Require Import UpReqSumD.
+From Stdlib Require Import List.
+From Stdlib Require Import Extraction.
+Import RealInterfaceEnhancedMod.
+
+Definition uabd1s3_upreqentropyuniquetemp_sumf (S0 : Set) (enum0 : list S0) (f : S0 -> Real) : Real :=
+  sumd_sumf S0 enum0 f.
+
+Theorem uabd1s3_upreqentropyuniquetemp_real_sum_pos_preserved :
+  forall (S0 : Set) (enum0 : list S0) (Hne : Not (enum0 = nil)) (f : S0 -> Real),
+    (forall s : S0, real_lt real_zero (f s)) ->
+    real_lt real_zero (uabd1s3_upreqentropyuniquetemp_sumf S0 enum0 f).
+Proof.
+  intros S0 enum0 Hne f Hf.
+  exact (sumd_sum_pos S0 enum0 f Hne Hf).
+Qed.
+
+Set Extraction Output Directory "_tuabd1s3_g3out".
+Extraction "tuabd1s3_G3_upreqentropyuniquetemp_sumf.ml" uabd1s3_upreqentropyuniquetemp_sumf.
+
+Print Assumptions uabd1s3_upreqentropyuniquetemp_real_sum_pos_preserved.

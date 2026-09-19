@@ -3013,3 +3013,594 @@ Qed.
 (* ---- R9-PNSK 假设审计 ---- *)
 Print Assumptions pnk2_sprod_le_one.
 Print Assumptions pnk2_pinsker_one.
+
+(* ============================================================ *)
+(* R10-PNK2B 块（席 PNK2B·20260918·纯追加）—— Pinsker 常数 2 桥件层      *)
+(*                                                              *)
+(* 使命：头注「已知边界」测绘的常数 2 装配路径之支内二阶砖。            *)
+(*   数值定谳（400² 网格，_tpnk2b_交付报告 §哨兵）：                    *)
+(*   ① 近支砖 q<p：d² ≤ 2p·KL₂ 全域零违反——pnk2_pinsker_trunc5；        *)
+(*   ② 镜像砖 p<q：d² ≤ 2(1−p)·KL₂ 全域零违反——mirror（经二点 KL       *)
+(*      原子反射恒等式 p2_kl2(1−p,1−q)==p2_kl2(p,q) 归约到①）；          *)
+(*   ③ 测绘路径的远支砖 2(1−p)·gap₂ ≥ d² 网格 79,401 处违反             *)
+(*      （(0.7,0.2) 处 0.2058<0.4167）——字面合流式算术不成立；          *)
+(*   ④ 即便配齐理想 harmonic 远支引擎，合流系数 (1/2)(1/p+1/(1−q))      *)
+(*      全域 inf≈1.0025（角点）——逐点 log 不等式装配的一致天花板=1：     *)
+(*      常数 2 需 Bregman/插值层（D″(s)=1/s+1/(1−s)≥4 即 (1−2s)²≥0，     *)
+(*      积分式 KL₂=∫(p−s)D″(s)ds≥2d²——头注「逐点近似三分基建」缺位）。  *)
+(*   故 2·TV² 完整形终装按红线③申报受阻（精确伤单见交付报告）；本块     *)
+(*   交付装配路径中真实可达的两块支内砖（终装合流的直接前件）。         *)
+(*                                                              *)
+(* 装配（①）：w2t_trunc5_bridge（y+y²/2 ≤_B −log(1−y)，y:=d·inv p）      *)
+(*   + klst_gap_shape（kl₁+(q−p) == p·(x−1−log x)，x:=q·inv p）          *)
+(*   + 换形 x−1−log x == −y−log(1−y)（pnk2_one_minus_scale+real_log_wd） *)
+(*   ⟹ p·(y²/2) ≤_B gap₁；                                              *)
+(*   + klst_gibbs_core_strict 于 (1−p,1−q)（(1−p)<(1−q) 支）⟹ gap₂>0     *)
+(*   ⟹ gap₁ ≤_B kl₂ ⟹ p·(y²/2) ≤_B kl₂；                                *)
+(*   + 尺度闭合 eq d·d == 2p·(p·(y²/2))（real_inv_pos_correct 焊接）     *)
+(*   ⟹ d² ≤_B 2p·KL₂。                                                  *)
+(* 红线自审：结论全 real_le_b 全称 Bishop 形（对全体正性证书点成立）；   *)
+(*   前提全显式证书（real_lt/real_le Set 面，零 Prop 泄露）；公理面      *)
+(*   预期全 Closed；纯追加不改既有行。                                   *)
+(* ============================================================ *)
+
+Require Import UpReqTailResidual.
+
+(* ---- R10-PNK2B.1 点级环放电与代数小件 ---- *)
+
+Ltac pnk2_ring_eq :=
+  apply real_eq_of_zero_diff; intro n0;
+  unfold p2_kl2, p2_tvsq, p2_diff, p2_one_minus;
+  repeat (setoid_rewrite real_plus_proj || setoid_rewrite real_mult_proj
+          || setoid_rewrite real_opp_proj);
+  rewrite ?pnk_one_proj, ?pnk_zero_proj, ?pnk_two_proj;
+  ring.
+
+(* (p−q)+q == p 与 q+(p−q) == p（点级环） *)
+Lemma pnk2_diff_plus_r : forall p q : Real,
+  real_eq (real_plus (p2_diff p q) q) p.
+Proof. intros p q. pnk2_ring_eq. Qed.
+
+Lemma pnk2_diff_plus_l : forall p q : Real,
+  real_eq (real_plus q (p2_diff p q)) p.
+Proof. intros p q. pnk2_ring_eq. Qed.
+
+(* 1·z == z（点级环） *)
+Lemma pnk2_mult_one_l : forall z : Real, real_eq (real_mult real_one z) z.
+Proof. intros z. pnk2_ring_eq. Qed.
+
+(* inv·y 消去：(inv y)·(y·z) == z *)
+Lemma pnk2_cancel_mul : forall (y z : Real) (Hy : real_lt real_zero y),
+  real_eq (real_mult (real_inv_pos y Hy) (real_mult y z)) z.
+Proof.
+  intros y z Hy.
+  apply (real_eq_trans
+           (real_mult (real_inv_pos y Hy) (real_mult y z))
+           (real_mult (real_mult y (real_inv_pos y Hy)) z)
+           z).
+  - apply (real_eq_trans
+             (real_mult (real_inv_pos y Hy) (real_mult y z))
+             (real_mult (real_mult (real_inv_pos y Hy) y) z)
+             (real_mult (real_mult y (real_inv_pos y Hy)) z)).
+    + apply real_mult_assoc.
+    + apply (RealSetoid.real_eq_mult_compat (real_mult (real_inv_pos y Hy) y) z
+               (real_mult y (real_inv_pos y Hy)) z
+               (real_mult_comm (real_inv_pos y Hy) y) (real_eq_refl z)).
+  - apply (real_eq_trans
+             (real_mult (real_mult y (real_inv_pos y Hy)) z)
+             (real_mult real_one z)
+             z).
+    + apply (RealSetoid.real_eq_mult_compat (real_mult y (real_inv_pos y Hy)) z
+               real_one z (real_inv_pos_correct y Hy) (real_eq_refl z)).
+    + apply pnk2_mult_one_l.
+Qed.
+
+(* inv 对 real_eq 的兼容 *)
+Lemma pnk2_inv_wd : forall (x y : Real) (Hx : real_lt real_zero x) (Hy : real_lt real_zero y),
+  real_eq x y -> real_eq (real_inv_pos x Hx) (real_inv_pos y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  assert (H1 : real_eq (real_mult y (real_inv_pos x Hx))
+                       (real_mult x (real_inv_pos x Hx)))
+    by exact (RealSetoid.real_eq_mult_compat y (real_inv_pos x Hx) x (real_inv_pos x Hx)
+          (real_eq_sym x y Hxy) (real_eq_refl (real_inv_pos x Hx))).
+  assert (H2 : real_eq (real_mult y (real_inv_pos x Hx)) real_one)
+    by exact (real_eq_trans _ _ _ H1 (real_inv_pos_correct x Hx)).
+  apply (real_eq_trans (real_inv_pos x Hx)
+           (real_mult (real_inv_pos y Hy) (real_mult y (real_inv_pos x Hx)))
+           (real_inv_pos y Hy)).
+  - exact (real_eq_sym _ _ (pnk2_cancel_mul y (real_inv_pos x Hx) Hy)).
+  - apply (real_eq_trans
+             (real_mult (real_inv_pos y Hy) (real_mult y (real_inv_pos x Hx)))
+             (real_mult (real_inv_pos y Hy) real_one)
+             (real_inv_pos y Hy)).
+    + apply (RealSetoid.real_eq_mult_compat (real_inv_pos y Hy)
+               (real_mult y (real_inv_pos x Hx))
+               (real_inv_pos y Hy) real_one
+               (real_eq_refl (real_inv_pos y Hy)) H2).
+    + apply real_mult_one.
+Qed.
+
+(* −(a·b) == (−a)·b（点级环；库内 real_opp_mult 参序未测绘，自建） *)
+Lemma pnk2_opp_mult : forall a b : Real,
+  real_eq (real_opp (real_mult a b)) (real_mult (real_opp a) b).
+Proof.
+  intros a b. pnk2_ring_eq.
+Qed.
+
+
+(* 同因子分配归并：(u·w)+(v·w) == (u+v)·w *)
+Lemma pnk2_distrib_join : forall u v w : Real,
+  real_eq (real_plus (real_mult u w) (real_mult v w))
+          (real_mult (real_plus u v) w).
+Proof.
+  intros u v w.
+  apply (real_eq_trans
+           (real_plus (real_mult u w) (real_mult v w))
+           (real_plus (real_mult w u) (real_mult w v))
+           (real_mult (real_plus u v) w)).
+  - apply (RealSetoid.real_eq_plus_compat (real_mult u w) (real_mult v w)
+             (real_mult w u) (real_mult w v)
+             (real_mult_comm u w) (real_mult_comm v w)).
+  - apply (real_eq_trans
+             (real_plus (real_mult w u) (real_mult w v))
+             (real_mult w (real_plus u v))
+             (real_mult (real_plus u v) w)).
+    + apply real_eq_sym. apply real_distrib.
+    + apply real_mult_comm.
+Qed.
+
+
+(* 2·(1/2) == 1（w2t_c_half 常数面，供尺度闭合） *)
+Lemma pnk2_c2_one : real_eq (real_mult pnk_two w2t_c_half) real_one.
+Proof.
+  apply real_eq_of_zero_diff. intro n0.
+  repeat (setoid_rewrite real_mult_proj).
+  rewrite (pnk_two_proj n0), (pnk_one_proj n0).
+  assert (Hc : projT1 w2t_c_half n0 == (1#2)%Q) by (apply real_const_proj).
+  rewrite Hc. ring.
+Qed.
+
+
+(* projT1 环恒等：(2·p)·s == 2·(p·s)（s 为任意 Real 原子） *)
+Lemma pnk2_ring_eq_lscale : forall (p s : Real),
+  real_eq (real_mult (real_mult pnk_two p) s)
+          (real_mult pnk_two (real_mult p s)).
+Proof.
+  intros p s. pnk2_ring_eq.
+Qed.
+
+
+(* inv 焊接内腿：p·(d·inv p) == d *)
+Lemma pnk2_mult_inv_scale : forall (p d : Real) (Hp : real_lt real_zero p),
+  real_eq (real_mult p (real_mult d (real_inv_pos p Hp))) d.
+Proof.
+  intros p d Hp.
+  apply (real_eq_trans
+           (real_mult p (real_mult d (real_inv_pos p Hp)))
+           (real_mult d (real_mult p (real_inv_pos p Hp)))
+           d).
+  - apply (real_eq_trans
+             (real_mult p (real_mult d (real_inv_pos p Hp)))
+             (real_mult (real_mult p d) (real_inv_pos p Hp))
+             (real_mult d (real_mult p (real_inv_pos p Hp)))).
+    + apply real_mult_assoc.
+    + apply (real_eq_trans
+               (real_mult (real_mult p d) (real_inv_pos p Hp))
+               (real_mult (real_mult d p) (real_inv_pos p Hp))
+               (real_mult d (real_mult p (real_inv_pos p Hp)))).
+      * apply (RealSetoid.real_eq_mult_compat (real_mult p d) (real_inv_pos p Hp)
+                 (real_mult d p) (real_inv_pos p Hp)
+                 (real_mult_comm p d) (real_eq_refl (real_inv_pos p Hp))).
+      * apply real_eq_sym. apply real_mult_assoc.
+  - apply (real_eq_trans
+             (real_mult d (real_mult p (real_inv_pos p Hp)))
+             (real_mult d real_one)
+             d).
+    + apply (RealSetoid.real_eq_mult_compat d (real_mult p (real_inv_pos p Hp))
+               d real_one
+               (real_eq_refl d) (real_inv_pos_correct p Hp)).
+    + apply real_mult_one.
+Qed.
+
+
+(* 一减尺度件：p·w == 1 且 u+v == p ⟹ 1−(u·w) == v·w *)
+Lemma pnk2_one_minus_scale : forall (p u v w : Real)
+  (Hw : real_eq (real_mult p w) real_one)
+  (Huv : real_eq (real_plus u v) p),
+  real_eq (real_plus real_one (real_opp (real_mult u w))) (real_mult v w).
+Proof.
+  intros p u v w Hw Huv.
+  assert (Hshift : real_eq (real_plus p (real_opp u)) v).
+  { apply (real_eq_trans
+             (real_plus p (real_opp u))
+             (real_plus (real_plus u v) (real_opp u))
+             v).
+    - apply (RealSetoid.real_eq_plus_compat p (real_opp u)
+               (real_plus u v) (real_opp u)
+               (real_eq_sym (real_plus u v) p Huv)
+               (real_eq_refl (real_opp u))).
+    - apply (real_eq_trans
+               (real_plus (real_plus u v) (real_opp u))
+               (real_plus v (real_plus u (real_opp u)))
+               v).
+      + apply (real_eq_trans
+                 (real_plus (real_plus u v) (real_opp u))
+                 (real_plus (real_plus v u) (real_opp u))
+                 (real_plus v (real_plus u (real_opp u)))).
+        * apply (RealSetoid.real_eq_plus_compat (real_plus u v) (real_opp u)
+                   (real_plus v u) (real_opp u)
+                   (real_plus_comm u v) (real_eq_refl (real_opp u))).
+        * apply real_eq_sym. apply real_plus_assoc.
+      + apply (real_eq_trans
+                 (real_plus v (real_plus u (real_opp u)))
+                 (real_plus v real_zero)
+                 v).
+        * apply (RealSetoid.real_eq_plus_compat v (real_plus u (real_opp u))
+                   v real_zero (real_eq_refl v) (real_plus_opp u)).
+        * apply real_plus_zero. }
+  apply (real_eq_trans
+           (real_plus real_one (real_opp (real_mult u w)))
+           (real_plus (real_mult p w) (real_mult (real_opp u) w))
+           (real_mult v w)).
+  - apply (RealSetoid.real_eq_plus_compat real_one
+             (real_opp (real_mult u w))
+             (real_mult p w) (real_mult (real_opp u) w)
+             (real_eq_sym (real_mult p w) real_one Hw) (pnk2_opp_mult u w)).
+  - apply (real_eq_trans
+             (real_plus (real_mult p w) (real_mult (real_opp u) w))
+             (real_mult (real_plus p (real_opp u)) w)
+             (real_mult v w)).
+    + apply pnk2_distrib_join.
+    + apply (RealSetoid.real_eq_mult_compat (real_plus p (real_opp u)) w v w
+               Hshift (real_eq_refl w)).
+Qed.
+
+
+(* real_kl_term 对 real_eq 的四参兼容（real_log_wd 吸收证书项差） *)
+Lemma pnk2_kl_term_refl_eq : forall (a b c d : Real)
+  (Ha : real_lt real_zero a) (Hb : real_lt real_zero b)
+  (Hc : real_lt real_zero c) (Hd : real_lt real_zero d),
+  real_eq a c -> real_eq b d ->
+  real_eq (real_kl_term a b Ha Hb) (real_kl_term c d Hc Hd).
+Proof.
+  intros a b c d Ha Hb Hc Hd Hac Hbd.
+  unfold real_kl_term.
+  apply (RealSetoid.real_eq_mult_compat a
+           (real_opp (real_log (real_mult b (real_inv_pos a Ha))
+                                (real_mult_positive b (real_inv_pos a Ha) Hb
+                                   (real_inv_pos_pos a Ha))))
+           c
+           (real_opp (real_log (real_mult d (real_inv_pos c Hc))
+                                (real_mult_positive d (real_inv_pos c Hc) Hd
+                                   (real_inv_pos_pos c Hc))))
+           Hac
+           (pnk_eq_opp_compat _ _
+              (real_log_wd _ _ _ _
+                 (RealSetoid.real_eq_mult_compat b (real_inv_pos a Ha)
+                    d (real_inv_pos c Hc)
+                    Hbd (pnk2_inv_wd a c Ha Hc Hac))))).
+Qed.
+
+(* 1−p 的对合：p2_one_minus(p2_one_minus p) == p（镜像前提运输用） *)
+Lemma pnk2_one_minus_inv : forall p : Real,
+  real_eq (p2_one_minus (p2_one_minus p)) p.
+Proof. intros p. pnk2_ring_eq. Qed.
+
+(* 二点 KL 原子反射恒等式：p2_kl2(1−p,1−q) == p2_kl2(p,q)（eq 运输版） *)
+Lemma pnk2_kl2_reflect : forall (p q : Real)
+  (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
+  (Hp1 : real_lt real_zero (p2_one_minus p))
+  (Hq1 : real_lt real_zero (p2_one_minus q))
+  (Hpp : real_lt real_zero (p2_one_minus (p2_one_minus p)))
+  (Hqq : real_lt real_zero (p2_one_minus (p2_one_minus q))),
+  real_eq (p2_kl2 (p2_one_minus p) (p2_one_minus q) Hp1 Hq1 Hpp Hqq)
+          (p2_kl2 p q Hp Hq Hp1 Hq1).
+Proof.
+  intros p q Hp Hq Hp1 Hq1 Hpp Hqq.
+  unfold p2_kl2.
+  apply (real_eq_trans
+           (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                      (real_kl_term (p2_one_minus (p2_one_minus p))
+                         (p2_one_minus (p2_one_minus q)) Hpp Hqq))
+           (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                      (real_kl_term p q Hp Hq))
+           (real_plus (real_kl_term p q Hp Hq)
+                      (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1))).
+  - apply (RealSetoid.real_eq_plus_compat
+             (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+             (real_kl_term (p2_one_minus (p2_one_minus p))
+                (p2_one_minus (p2_one_minus q)) Hpp Hqq)
+             (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+             (real_kl_term p q Hp Hq)
+             (real_eq_refl (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1))
+             (pnk2_kl_term_refl_eq (p2_one_minus (p2_one_minus p))
+                (p2_one_minus (p2_one_minus q)) p q Hpp Hqq Hp Hq
+                (pnk2_one_minus_inv p) (pnk2_one_minus_inv q))).
+  - apply real_plus_comm.
+Qed.
+
+(* 尺度闭合：d·d == 2p·(p·(y²/2))，y := d·inv(p) *)
+Lemma pnk2_close_scale : forall (p d : Real) (Hp : real_lt real_zero p),
+  real_eq (real_mult d d)
+          (real_mult pnk_two (real_mult p
+             (real_mult p (real_mult w2t_c_half
+                (real_mult (real_mult d (real_inv_pos p Hp))
+                           (real_mult d (real_inv_pos p Hp))))))).
+Proof.
+  intros p d Hp.
+  assert (Epy : real_eq (real_mult p (real_mult d (real_inv_pos p Hp))) d)
+    by exact (pnk2_mult_inv_scale p d Hp).
+  apply (real_eq_trans
+           (real_mult d d)
+           (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp))))
+           (real_mult pnk_two (real_mult p
+              (real_mult p (real_mult w2t_c_half (real_mult (real_mult d (real_inv_pos p Hp))
+                            (real_mult d (real_inv_pos p Hp)))))))).
+  - apply (RealSetoid.real_eq_mult_compat d d (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))
+             (real_eq_sym _ _ Epy) (real_eq_sym _ _ Epy)).
+  - apply (real_eq_trans
+             (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp))))
+             (real_mult (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))) (real_mult pnk_two w2t_c_half))
+             (real_mult pnk_two (real_mult p
+                (real_mult p (real_mult w2t_c_half (real_mult (real_mult d (real_inv_pos p Hp))
+                            (real_mult d (real_inv_pos p Hp)))))))).
+    + apply (real_eq_trans
+               (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp))))
+               (real_mult (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))) real_one)
+               (real_mult (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))) (real_mult pnk_two w2t_c_half))).
+      * apply real_eq_sym. apply real_mult_one.
+      * apply (RealSetoid.real_eq_mult_compat
+                 (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))) real_one
+                 (real_mult (real_mult p (real_mult d (real_inv_pos p Hp))) (real_mult p (real_mult d (real_inv_pos p Hp)))) (real_mult pnk_two w2t_c_half)
+                 (real_eq_refl _)
+                 (real_eq_sym (real_mult pnk_two w2t_c_half) real_one pnk2_c2_one)).
+    + pnk2_ring_eq.
+Qed.
+
+(* ---- R10-PNK2B.2 桥件（近支砖）：q<p ⟹ d² ≤ 2p·KL₂ ---- *)
+
+Theorem pnk2_pinsker_trunc5 : forall (p q : Real)
+  (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
+  (Hp1 : real_lt real_zero (p2_one_minus p))
+  (Hq1 : real_lt real_zero (p2_one_minus q))
+  (Hqp : real_lt q p),
+  real_le_b (p2_tvsq p q)
+            (real_mult pnk_two (real_mult p (p2_kl2 p q Hp Hq Hp1 Hq1))).
+Proof.
+  intros p q Hp Hq Hp1 Hq1 Hqp.
+  pose proof (p2_diff_pos_of_lt q p Hqp) as HD.
+  assert (HX1 : real_lt real_zero (real_mult q (real_inv_pos p Hp)))
+    by exact (real_mult_positive q (real_inv_pos p Hp) Hq
+                (real_inv_pos_pos p Hp)).
+  assert (Hy : real_lt real_zero (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+    by exact (real_mult_positive (p2_diff p q) (real_inv_pos p Hp) HD
+                (real_inv_pos_pos p Hp)).
+  (* E1m : 1−y == X₁ *)
+  assert (E1m : real_eq (real_plus real_one
+                          (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp))))
+                        (real_mult q (real_inv_pos p Hp)))
+    by exact (pnk2_one_minus_scale p (p2_diff p q) q (real_inv_pos p Hp)
+          (real_inv_pos_correct p Hp) (pnk2_diff_plus_r p q)).
+  assert (Hm : real_lt real_zero
+                 (real_plus real_one
+                    (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))))
+    by exact (RealSetoid.real_lt_compat real_zero real_zero
+          (real_mult q (real_inv_pos p Hp))
+          (real_plus real_one (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp))))
+          (real_eq_refl real_zero) (real_eq_sym _ _ E1m) HX1).
+  assert (Hy1 : real_lt (real_mult (p2_diff p q) (real_inv_pos p Hp)) real_one)
+    by exact (real_lt_zero_minus _ _ Hm).
+  assert (Hy0 : real_le real_zero (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+    by exact (inl Hy).
+  (* E2 : log(1−y) == log X₁ *)
+  assert (E2 : real_eq
+                 (real_log (real_plus real_one
+                              (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))) Hm)
+                 (real_log (real_mult q (real_inv_pos p Hp)) HX1))
+    by exact (real_log_wd _ _ _ _ E1m).
+  (* HT' : y + y²/2 ≤_B −log X₁ *)
+  assert (HT' : real_le_b
+                  (real_plus (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                             (real_mult w2t_c_half
+                                (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                           (real_mult (p2_diff p q) (real_inv_pos p Hp)))))
+                  (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))
+    by exact (leb3_le_b_eq_r _ _ _
+          (w2t_trunc5_bridge (real_mult (p2_diff p q) (real_inv_pos p Hp)) Hy0 Hy1 Hm)
+          (pnk_eq_opp_compat _ _ E2)).
+  (* E4 : X₁−1 == −y *)
+  assert (E4 : real_eq (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                       (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))).
+  { apply (real_eq_trans
+             (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+             (real_opp (real_plus real_one (real_opp (real_mult q (real_inv_pos p Hp)))))
+             (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))).
+    - pnk2_ring_eq.
+    - apply pnk_eq_opp_compat.
+      exact (pnk2_one_minus_scale p q (p2_diff p q) (real_inv_pos p Hp)
+               (real_inv_pos_correct p Hp) (pnk2_diff_plus_l p q)). }
+  (* H9a : y²/2 ≤_B φ₁ := (X₁−1) − log X₁ *)
+  assert (H9a : real_le_b
+                  (real_mult w2t_c_half
+                     (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                (real_mult (p2_diff p q) (real_inv_pos p Hp))))
+                  (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                             (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))).
+  { apply (leb3_le_b_eq_l
+             (real_plus (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+                        (real_plus (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                   (real_mult w2t_c_half
+                                      (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                                 (real_mult (p2_diff p q) (real_inv_pos p Hp))))))
+             (real_mult w2t_c_half
+                (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                           (real_mult (p2_diff p q) (real_inv_pos p Hp))))
+             (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                        (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))).
+    - pnk2_ring_eq.
+    - apply (leb3_le_b_eq_r
+               (real_plus (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+                          (real_plus (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                     (real_mult w2t_c_half
+                                        (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                                   (real_mult (p2_diff p q) (real_inv_pos p Hp))))))
+               (real_plus (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+                          (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))
+               (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                          (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))).
+      + exact (real_le_b_plus_compat _ _ _ _ (leb3_le_b_refl _) HT').
+      + apply (real_eq_sym _ _
+                 (RealSetoid.real_eq_plus_compat
+                    (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                    (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1))
+                    (real_opp (real_mult (p2_diff p q) (real_inv_pos p Hp)))
+                    (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1))
+                    E4 (real_eq_refl _))). }
+  (* H10 : p·(y²/2) ≤_B gap₁ *)
+  assert (H10 : real_le_b
+                  (real_mult p (real_mult w2t_c_half
+                     (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                (real_mult (p2_diff p q) (real_inv_pos p Hp)))))
+                  (real_mult p (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                     (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))))
+    by exact (leb3_le_b_pos_scale_l _ _ p H9a Hp).
+  (* gap₂ > 0（G07 严格 Gibbs 核于 (1−p,1−q) 支） *)
+  assert (Hhpos : real_lt real_zero
+                    (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                               (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))))
+    by exact (klst_gibbs_core_strict (p2_one_minus p) (p2_one_minus q) Hp1 Hq1
+          (p2_one_minus_antitone q p Hqp)).
+  assert (Hh_leb : real_le_b real_zero
+                     (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                                (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))))
+    by exact (pnk_lt_le_b _ _ Hhpos).
+  (* Hstep : kl₁+(q−p) ≤_B kl₂ *)
+  assert (Hstep : real_le_b (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
+                            (p2_kl2 p q Hp Hq Hp1 Hq1)).
+  { apply (leb3_le_b_eq_r
+             (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
+             (real_plus (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
+                        (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                                   (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))))
+             (p2_kl2 p q Hp Hq Hp1 Hq1)).
+    - apply (leb3_le_b_eq_l
+               (real_plus (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p))) real_zero)
+               (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
+               (real_plus (real_plus (real_kl_term p q Hp Hq) (real_plus q (real_opp p)))
+                          (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
+                                     (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))))).
+      + apply real_plus_zero.
+      + apply (real_le_b_plus_compat _ _ _ _ (leb3_le_b_refl _) Hh_leb).
+    - pnk2_ring_eq. }
+  (* HGL : gap₁ ≤_B kl₂ *)
+  assert (HGL : real_le_b
+                  (real_mult p (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                     (real_opp (real_log (real_mult q (real_inv_pos p Hp))
+                                (real_mult_positive q (real_inv_pos p Hp) Hq
+                                   (real_inv_pos_pos p Hp))))))
+                  (p2_kl2 p q Hp Hq Hp1 Hq1))
+    by exact (leb3_le_b_eq_l _ _ _ (klst_gap_shape p q Hp Hq) Hstep).
+  (* HM2 : p·(y²/2) ≤_B kl₂（EW 焊接见证项差） *)
+  assert (EW : real_eq (real_log (real_mult q (real_inv_pos p Hp)) HX1) (real_log (real_mult q (real_inv_pos p Hp)) (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp))))
+    by exact (real_log_wd _ _ _ _ (real_eq_refl (real_mult q (real_inv_pos p Hp)))).
+  assert (HGL' : real_le_b
+                  (real_mult p (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                     (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1))))
+                  (p2_kl2 p q Hp Hq Hp1 Hq1))
+    by exact (leb3_le_b_eq_l _ _ _
+                (RealSetoid.real_eq_mult_compat p
+                   (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                      (real_opp (real_log (real_mult q (real_inv_pos p Hp)) (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp)))))
+                   p (real_plus (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                      (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1)))
+                   (real_eq_refl p)
+                   (RealSetoid.real_eq_plus_compat
+                      (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                      (real_opp (real_log (real_mult q (real_inv_pos p Hp)) (real_mult_positive q (real_inv_pos p Hp) Hq (real_inv_pos_pos p Hp))))
+                      (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one))
+                      (real_opp (real_log (real_mult q (real_inv_pos p Hp)) HX1))
+                      (real_eq_refl (real_plus (real_mult q (real_inv_pos p Hp)) (real_opp real_one)))
+                      (real_eq_sym _ _ (pnk_eq_opp_compat _ _ EW))))
+                HGL).
+  assert (HM2 : real_le_b
+                  (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp))
+                                (real_mult (p2_diff p q) (real_inv_pos p Hp)))))
+                  (p2_kl2 p q Hp Hq Hp1 Hq1))
+    by exact (real_le_b_trans _ _ _ H10 HGL').
+  (* 收口：d² ≤_B 2p·kl₂ *)
+  assert (H2p : real_lt real_zero (real_mult pnk_two p))
+    by exact (real_mult_positive pnk_two p pnk_two_pos Hp).
+  apply (leb3_le_b_eq_l
+           (real_mult pnk_two (real_mult p
+              (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp)) (real_mult (p2_diff p q) (real_inv_pos p Hp)))))))
+           (p2_tvsq p q)
+           (real_mult pnk_two (real_mult p (p2_kl2 p q Hp Hq Hp1 Hq1)))).
+  - exact (real_eq_sym _ _ (pnk2_close_scale p (p2_diff p q) Hp)).
+  - apply (leb3_le_b_eq_r
+             (real_mult pnk_two (real_mult p
+                (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp)) (real_mult (p2_diff p q) (real_inv_pos p Hp)))))))
+             (real_mult (real_mult pnk_two p) (p2_kl2 p q Hp Hq Hp1 Hq1))
+             (real_mult pnk_two (real_mult p (p2_kl2 p q Hp Hq Hp1 Hq1)))).
+    + apply (leb3_le_b_eq_l
+               (real_mult (real_mult pnk_two p) (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp)) (real_mult (p2_diff p q) (real_inv_pos p Hp))))))
+               (real_mult pnk_two (real_mult p
+                  (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp)) (real_mult (p2_diff p q) (real_inv_pos p Hp)))))))
+               (real_mult (real_mult pnk_two p) (p2_kl2 p q Hp Hq Hp1 Hq1))).
+      * exact (pnk2_ring_eq_lscale p (real_mult p (real_mult w2t_c_half (real_mult (real_mult (p2_diff p q) (real_inv_pos p Hp)) (real_mult (p2_diff p q) (real_inv_pos p Hp)))))).
+      * exact (leb3_le_b_pos_scale_l _ _ (real_mult pnk_two p) HM2 H2p).
+    + exact (pnk2_ring_eq_lscale p (p2_kl2 p q Hp Hq Hp1 Hq1)).
+Qed.
+
+(* ---- R10-PNK2B.3 镜像砖：p<q ⟹ d² ≤ 2(1−p)·KL₂ ---- *)
+(*   经二点 KL 原子反射恒等式 p2_kl2(1−p,1−q) == p2_kl2(p,q) 与        *)
+(*   TV² 反射 ((1−p)−(1−q))² == (p−q)² 归约到近支砖。                   *)
+
+Theorem pnk2_pinsker_trunc5_mirror : forall (p q : Real)
+  (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
+  (Hp1 : real_lt real_zero (p2_one_minus p))
+  (Hq1 : real_lt real_zero (p2_one_minus q))
+  (Hpq : real_lt p q),
+  real_le_b (p2_tvsq p q)
+            (real_mult pnk_two (real_mult (p2_one_minus p) (p2_kl2 p q Hp Hq Hp1 Hq1))).
+Proof.
+  intros p q Hp Hq Hp1 Hq1 Hpq.
+  assert (Hpp : real_lt real_zero (p2_one_minus (p2_one_minus p))).
+  { exact (RealSetoid.real_lt_compat real_zero real_zero p
+             (p2_one_minus (p2_one_minus p))
+             (real_eq_refl real_zero) (real_eq_sym _ _ (pnk2_one_minus_inv p)) Hp). }
+  assert (Hqq : real_lt real_zero (p2_one_minus (p2_one_minus q))).
+  { exact (RealSetoid.real_lt_compat real_zero real_zero q
+             (p2_one_minus (p2_one_minus q))
+             (real_eq_refl real_zero) (real_eq_sym _ _ (pnk2_one_minus_inv q)) Hq). }
+  pose proof (pnk2_pinsker_trunc5 (p2_one_minus p) (p2_one_minus q) Hp1 Hq1 Hpp Hqq
+                (p2_one_minus_antitone p q Hpq)) as H.
+  apply (leb3_le_b_eq_l
+           (p2_tvsq (p2_one_minus p) (p2_one_minus q))
+           (p2_tvsq p q)
+           (real_mult pnk_two (real_mult (p2_one_minus p) (p2_kl2 p q Hp Hq Hp1 Hq1)))).
+  - pnk2_ring_eq.
+  - apply (leb3_le_b_eq_r
+             (p2_tvsq (p2_one_minus p) (p2_one_minus q))
+             (real_mult pnk_two
+                        (real_mult (p2_one_minus p)
+                                   (p2_kl2 (p2_one_minus p) (p2_one_minus q) Hp1 Hq1 Hpp Hqq)))
+             (real_mult pnk_two
+                        (real_mult (p2_one_minus p) (p2_kl2 p q Hp Hq Hp1 Hq1)))).
+    + exact H.
+    + apply (RealSetoid.real_eq_mult_compat pnk_two
+               (real_mult (p2_one_minus p)
+                          (p2_kl2 (p2_one_minus p) (p2_one_minus q) Hp1 Hq1 Hpp Hqq))
+               pnk_two
+               (real_mult (p2_one_minus p) (p2_kl2 p q Hp Hq Hp1 Hq1))
+               (real_eq_refl pnk_two)
+               (RealSetoid.real_eq_mult_compat (p2_one_minus p)
+                  (p2_kl2 (p2_one_minus p) (p2_one_minus q) Hp1 Hq1 Hpp Hqq)
+                  (p2_one_minus p) (p2_kl2 p q Hp Hq Hp1 Hq1)
+                  (real_eq_refl (p2_one_minus p))
+                  (pnk2_kl2_reflect p q Hp Hq Hp1 Hq1 Hpp Hqq))).
+Qed.
+
+(* ---- R10-PNK2B 假设审计 ---- *)
+Print Assumptions pnk2_pinsker_trunc5.
+Print Assumptions pnk2_pinsker_trunc5_mirror.
