@@ -2944,3 +2944,74 @@ Definition ng_UpAblP2T1_Cert : NewGreenFace :=
 (* ng_UpAblP2WByPass —— UpAblP2WByPass.v：A2 席（S06 双墙绕行）：S06 双墙绕行演示件，20 位 PA 全 Closed（_tg2_ 终审实测），四关绿（_ta2_）；vo 树 born-in-place 复证 *)
 Definition ng_UpAblP2WByPass : NewGreenFace :=
   MkNewGreenFace "UpAblP2WByPass.v" 428 12 20260920 "A2 seat (S06 dual-wall bypass): S06 dual-wall bypass demonstrator piece, 20 PA positions all Closed (_tg2_ final audit), four-gate green (_ta2_); born-in-place verified in vo tree".
+
+(* ===== Index v4.12 —— R98 论文2 尾款+R92 备料+abs 族注册波（17 件，主会话 R98 席装配，依赖序尾插，born-in-place 全量复证）===== *)
+
+(* ng_UpAblA2_LoInflation —— UpAblA2_LoInflation.v：A2 席（k∝lo⁻² 膨胀律）：loi_ub2_quad 精确四倍律 Id 形＋loi_lo_inflation 四倍支配旗舰＋反单调律（_ta2_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblA2_LoInflation : NewGreenFace :=
+  MkNewGreenFace "UpAblA2_LoInflation.v" 528 12 20260920 "A2 seat (k vs lo^-2 inflation law): loi_ub2_quad exact quadruple law Id-form + loi_lo_inflation flagship + antitone, four-gate (_ta2_)".
+
+(* ng_UpAblAbsSumLeB —— UpAblAbsSumLeB.v：H1 席（abs 抽象槽 B 形）：uabS4_abs_sum_le_B 两点对＋list 折叠闭包链，bool/list 双载体（_th1_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsSumLeB : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsSumLeB.v" 341 11 20260920 "H1 seat (abs abstract-slot B-form): uabS4 pair + list-folding closure chain, bool/list dual carriers, four-gate (_th1_)".
+
+(* ng_UpAblAbsSumLeB2 —— UpAblAbsSumLeB2.v：abs 族 B2（加权 cons 黏合三角＋双余量反证收口）（_tm2_ PA 终审）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsSumLeB2 : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsSumLeB2.v" 443 20 20260920 "abs-family B2: weighted cons-glue triangle + double-margin contrapositive closure, PA final-audited (_tm2_)".
+
+(* ng_UpAblAbsSumLeB3 —— UpAblAbsSumLeB3.v：abs 族 B3 深链（abs list-sum B/eps 全族＋槽位形，J4 席复验）（_tj4_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsSumLeB3 : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsSumLeB3.v" 594 19 20260920 "abs-family B3 deep chain: abs list-sum B/eps full family + slot forms, J4 re-verified (_tj4_)".
+
+(* ng_UpAblAbsSumLeEps —— UpAblAbsSumLeEps.v：abs 族 eps 形（六件收口）（_tm2_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsSumLeEps : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsSumLeEps.v" 190 6 20260920 "abs-family eps form (six-piece closure), PA final-audited (_tm2_)".
+
+(* ng_UpAblAbsTwoPtAbs —— UpAblAbsTwoPtAbs.v：abs 族两点槽形（_tm4r_ 四关补全）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsTwoPtAbs : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsTwoPtAbs.v" 161 4 20260920 "abs-family two-point slot form, four-gate completion (_tm4r_)".
+
+(* ng_UpAblAbsFeed —— UpAblAbsFeed.v：abs 族馈线件（消费 B/B2/Eps 三件合流）（_tm4r_/_tm3_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsFeed.v" 107 3 20260920 "abs-family feed piece consuming B/B2/Eps, four-gate (_tm4r_/_tm3_)".
+
+(* ng_UpAblB1_MonoSplit —— UpAblB1_MonoSplit.v：B1 席（MonoSplit 三证书位真实算链 N 升格，替 S5 零能量捷径腿）（_tb1_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblB1_MonoSplit : NewGreenFace :=
+  MkNewGreenFace "UpAblB1_MonoSplit.v" 516 12 20260920 "B1 seat: MonoSplit three-certificate real-computation chain (N-upgrade replacing S5 zero-energy shortcut legs), four-gate (_tb1_)".
+
+(* ng_UpAblB2_G13 —— UpAblB2_G13.v：B2 席（b_gibbs 障碍通道件＋W4 载体分层定谳：log-eq 具体载体可实例化 t34 喂入）（_tb2_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblB2_G13 : NewGreenFace :=
+  MkNewGreenFace "UpAblB2_G13.v" 321 11 20260920 "B2 seat: b_gibbs obstacle-channel pieces + W4 carrier stratification verdict (log-eq concrete carrier instantiable via t34), four-gate (_tb2_)".
+
+(* ng_UpAblD1S14_UpReqCauchy —— UpAblD1S14_UpReqCauchy.v：FA-D1S14 席（Cauchy 余量 8：含 lim_metric_approx N 级语义链）（_tfad1s14_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S14_UpReqCauchy : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S14_UpReqCauchy.v" 266 8 20260920 "FA-D1S14 seat: Cauchy residual 8 incl. lim_metric_approx N-level semantic chain, four-gate (_tfad1s14_)".
+
+(* ng_UpAblD1S15_GibbsAssembly —— UpAblD1S15_GibbsAssembly.v：FA-D1S15 席（GibbsAssembly 18 槽打包＋log_req_compat 并账）（_tfad1s15_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S15_GibbsAssembly : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S15_GibbsAssembly.v" 535 5 20260920 "FA-D1S15 seat: GibbsAssembly 18-slot pack + log_req_compat joint accounting, four-gate (_tfad1s15_)".
+
+(* ng_UpAblD1S15_UpReqAlign3 —— UpAblD1S15_UpReqAlign3.v：FA-D1S15 席（Align3 余量 16 T 供给级）（_tfad1s15_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S15_UpReqAlign3 : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S15_UpReqAlign3.v" 144 2 20260920 "FA-D1S15 seat: Align3 residual 16 T-supply, four-gate (_tfad1s15_)".
+
+(* ng_UpAblD1S16_UpReqMixTime —— UpAblD1S16_UpReqMixTime.v：FA-D1S16 席（AttnMixTime 余量 12 T 打包：9 数据+3 接口条件供给形）（_tfad1s16_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S16_UpReqMixTime : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S16_UpReqMixTime.v" 148 3 20260920 "FA-D1S16 seat: AttnMixTime residual 12 T-pack (9 data + 3 interface-conditional supply forms), four-gate (_tfad1s16_)".
+
+(* ng_UpAblD1S17_UpReqAttnGibbs —— UpAblD1S17_UpReqAttnGibbs.v：FA-D1S17 席（Gibbs pack18＋exp_neg_geo_break T·N1 直喂降标申报）（_tfad1s17_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S17_UpReqAttnGibbs : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S17_UpReqAttnGibbs.v" 162 2 20260920 "FA-D1S17 seat: Gibbs pack18 + exp_neg_geo_break T-N1 direct-feed downgraded declaration, four-gate (_tfad1s17_)".
+
+(* ng_UpAblD1S17_UpReqDpoLoss —— UpAblD1S17_UpReqDpoLoss.v：FA-D1S17 席（DpoLoss pack13 供给）（_tfad1s17_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblD1S17_UpReqDpoLoss : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S17_UpReqDpoLoss.v" 110 2 20260920 "FA-D1S17 seat: DpoLoss pack13 supply, four-gate (_tfad1s17_)".
+
+(* ng_UpAblP2T1_CertB —— UpAblP2T1_CertB.v：G 席批二（T 簇证书 B 变体）（_tg1_/_tg2_ 终审）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP2T1_CertB : NewGreenFace :=
+  MkNewGreenFace "UpAblP2T1_CertB.v" 160 4 20260920 "G-seat batch-2: T-cluster certificate B-variant, final-audited (_tg1_/_tg2_)".
+
+(* ng_UpAblP2T1_CertC —— UpAblP2T1_CertC.v：G 席批二（T 簇证书 C 变体，消费 CertB）（_tg1_/_tg2_ 终审）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP2T1_CertC : NewGreenFace :=
+  MkNewGreenFace "UpAblP2T1_CertC.v" 227 3 20260920 "G-seat batch-2: T-cluster certificate C-variant consuming CertB, final-audited (_tg1_/_tg2_)".
+
