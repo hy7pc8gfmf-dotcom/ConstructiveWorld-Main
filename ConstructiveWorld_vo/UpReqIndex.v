@@ -2754,3 +2754,31 @@ Definition ng_UpAblT9_UpSigMigrate2 : NewGreenFace :=
 (* ng_UpAblT9_UpTVDoeblin —— UpAblT9_UpTVDoeblin.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_) *)
 Definition ng_UpAblT9_UpTVDoeblin : NewGreenFace :=
   MkNewGreenFace "UpAblT9_UpTVDoeblin.v" 49 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed".
+(* ================= v4.7 增册（R93REG 汇入注册推送席：同事午后增量 ln2 链核心族绿件子集，20260919） ================= *)
+(* ng_Ln2Bridge —— Ln2Bridge.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_Ln2Bridge : NewGreenFace :=
+  MkNewGreenFace "Ln2Bridge.v" 719 23 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_PintPosGrid —— PintPosGrid.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_PintPosGrid : NewGreenFace :=
+  MkNewGreenFace "PintPosGrid.v" 179 8 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_BeukersIdentity —— BeukersIdentity.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_BeukersIdentity : NewGreenFace :=
+  MkNewGreenFace "BeukersIdentity.v" 265 15 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_BeukersVariant —— BeukersVariant.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_BeukersVariant : NewGreenFace :=
+  MkNewGreenFace "BeukersVariant.v" 522 30 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_Hanson3Pow —— Hanson3Pow.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_Hanson3Pow : NewGreenFace :=
+  MkNewGreenFace "Hanson3Pow.v" 292 16 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_Ln2Integrality —— Ln2Integrality.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_Ln2Integrality : NewGreenFace :=
+  MkNewGreenFace "Ln2Integrality.v" 484 27 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_TrueNumerator —— TrueNumerator.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_TrueNumerator : NewGreenFace :=
+  MkNewGreenFace "TrueNumerator.v" 274 29 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_RealIdentity —— RealIdentity.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_RealIdentity : NewGreenFace :=
+  MkNewGreenFace "RealIdentity.v" 359 22 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
+(* ng_SupplyAssembly —— SupplyAssembly.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
+Definition ng_SupplyAssembly : NewGreenFace :=
+  MkNewGreenFace "SupplyAssembly.v" 325 21 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions".
