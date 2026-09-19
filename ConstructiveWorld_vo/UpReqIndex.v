@@ -2898,3 +2898,49 @@ Definition ng_UpAblP7_WallEps_CB2 : NewGreenFace :=
 (* ng_UpAblP7_WallEps_CSM —— UpAblP7_WallEps_CSM.v：colleague PA7: CSM eps consumption face, four-gate green *)
 Definition ng_UpAblP7_WallEps_CSM : NewGreenFace :=
   MkNewGreenFace "UpAblP7_WallEps_CSM.v" 227 6 20260920 "colleague PA7: CSM eps consumption face, four-gate green".
+
+(* ================= v4.11 增册（R95 注册波预备席 S3：族E/族A 具体载体 + 论文2 供体直配 6 件，20260920；v4.10 已被 R96 P7 波占用，本席顺延） ================= *)
+(* ng_UpAblDistLogLe —— UpAblDistLogLe.v：Y1 seat (W4 family-E log-le): dist_log_le_linear slot (UpReqDist.v:1035, Section ReqFEP) concrete Regular-Real carrier instance supply + residual closure, four-gate green (_ty1_); born-in-place verified in vo tree *)
+Definition ng_UpAblDistLogLe : NewGreenFace :=
+  MkNewGreenFace "UpAblDistLogLe.v" 239 4 20260920 "Y1 seat (W4 family-E log-le): dist_log_le_linear slot (UpReqDist.v:1035, Section ReqFEP) concrete Regular-Real carrier instance supply + residual closure, four-gate green (_ty1_); born-in-place verified in vo tree".
+
+(* ng_UpAblDistLogEq —— UpAblDistLogEq.v：Y2 seat (W4 family-E log-eq): dist_log_eq_linear slot (UpReqDist.v:1037) concrete Regular-Real carrier instance supply (T13c-2 verdict redemption), four-gate green (_ty2_); born-in-place verified in vo tree *)
+Definition ng_UpAblDistLogEq : NewGreenFace :=
+  MkNewGreenFace "UpAblDistLogEq.v" 177 5 20260920 "Y2 seat (W4 family-E log-eq): dist_log_eq_linear slot (UpReqDist.v:1037) concrete Regular-Real carrier instance supply (T13c-2 verdict redemption), four-gate green (_ty2_); born-in-place verified in vo tree".
+
+(* ng_UpAblGrpEqDecWorld —— UpAblGrpEqDecWorld.v：Y5 seat (family-A decision wall B28): grp_eq_dec slot (S15_TailFEPUp.v:1419) carrier-world assembly on bool two-element enumeration world, four-gate green (_ty5_); born-in-place verified in vo tree *)
+Definition ng_UpAblGrpEqDecWorld : NewGreenFace :=
+  MkNewGreenFace "UpAblGrpEqDecWorld.v" 164 10 20260920 "Y5 seat (family-A decision wall B28): grp_eq_dec slot (S15_TailFEPUp.v:1419) carrier-world assembly on bool two-element enumeration world, four-gate green (_ty5_); born-in-place verified in vo tree".
+
+(* ng_UpAblGrpEqDischarge —— UpAblGrpEqDischarge.v：Y5 seat (family-A): grp_eq_dec slot concrete-carrier discharge pathway demonstrator, Group:=bool / R:=nat minimal Set-level carrier, zero-admit all-Qed extractable, four-gate green (_ty5_); born-in-place verified in vo tree *)
+Definition ng_UpAblGrpEqDischarge : NewGreenFace :=
+  MkNewGreenFace "UpAblGrpEqDischarge.v" 442 19 20260920 "Y5 seat (family-A): grp_eq_dec slot concrete-carrier discharge pathway demonstrator, Group:=bool / R:=nat minimal Set-level carrier, zero-admit all-Qed extractable, four-gate green (_ty5_); born-in-place verified in vo tree".
+
+(* ng_UpAblP2FeedSum —— UpAblP2FeedSum.v：Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (_tz2a_); born-in-place verified in vo tree *)
+Definition ng_UpAblP2FeedSum : NewGreenFace :=
+  MkNewGreenFace "UpAblP2FeedSum.v" 314 16 20260920 "Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (_tz2a_); born-in-place verified in vo tree".
+
+(* ng_UpAblP2FeedMix —— UpAblP2FeedMix.v：Z2b seat (paper-2 mix-face donor direct-config): steady/minp Real chain + partition positivity face interfaced with e66s (AB5) and e49l_partition_pos donors, four-gate green (_tz2b_); born-in-place verified in vo tree *)
+Definition ng_UpAblP2FeedMix : NewGreenFace :=
+  MkNewGreenFace "UpAblP2FeedMix.v" 322 12 20260920 "Z2b seat (paper-2 mix-face donor direct-config): steady/minp Real chain + partition positivity face interfaced with e66s (AB5) and e49l_partition_pos donors, four-gate green (_tz2b_); born-in-place verified in vo tree".
+
+(* ng_UpAblAlmConsumption —— UpAblAlmConsumption.v：Z1b seat (alm-chain remaining-antecedent-form consumption demonstrator): minimal parallel-replica dual-max world (binary vocabulary [true; false], constant logit), consumes only registered chain pieces, zero-admit purely constructive, four-gate green (_tz1b_); born-in-place verified in vo tree *)
+Definition ng_UpAblAlmConsumption : NewGreenFace :=
+  MkNewGreenFace "UpAblAlmConsumption.v" 294 10 20260920 "Z1b seat (alm-chain remaining-antecedent-form consumption demonstrator): minimal parallel-replica dual-max world (binary vocabulary [true; false], constant logit), consumes only registered chain pieces, zero-admit purely constructive, four-gate green (_tz1b_); born-in-place verified in vo tree".
+
+(* ================= v4.12 增册（G3 注册批二预备席：论文2 线新落盘伴生 4 件组装，20260920；v4.11 已被 S3 R95 预备波占用，本席顺延） ================= *)
+(* ng_UpAblLeEqCompat —— UpAblLeEqCompat.v：S2 席（le-eq 双侧兼容件席）：lec_le_eq_eq 双侧兼容桥，打通 6.6 求和族（e66s_）le 面原生折叠传输通道（F1 件承重源），四关绿（_ts2_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblLeEqCompat : NewGreenFace :=
+  MkNewGreenFace "UpAblLeEqCompat.v" 261 13 20260920 "S2 seat (le-eq dual-side compatibility piece): lec_le_eq_eq bridge opening the e66s sum-family le-face native-folding transport channel (load-bearing source of F1 piece), four-gate green (_ts2_); born-in-place verified in vo tree".
+
+(* ng_UpAblP2FeedSumLe —— UpAblP2FeedSumLe.v：F1 席（论文2 le 面原生折叠传输）：p2fl_lsum_app 拼接可加性新证＋p2fl_le_transport sumd→原生折叠 le 两世界运输＋p2fl_abs_split_eps 单余量三角合拢，四关绿（_tf1_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP2FeedSumLe : NewGreenFace :=
+  MkNewGreenFace "UpAblP2FeedSumLe.v" 283 8 20260920 "F1 seat (paper-2 le-face native folding transport): p2fl_lsum_app append additivity + p2fl_le_transport sumd-to-native le two-world transport + p2fl_abs_split_eps single-residual triangle closure, four-gate green (_tf1_); born-in-place verified in vo tree".
+
+(* ng_UpAblP2T1_Cert —— UpAblP2T1_Cert.v：A1 席（T 簇证书供给）：论文2 T 簇消融证书簇供给件，33 位 PA 全 Closed（_tg2_ 终审实测），四关绿（_ta1_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP2T1_Cert : NewGreenFace :=
+  MkNewGreenFace "UpAblP2T1_Cert.v" 596 12 20260920 "A1 seat (T-cluster certificate supply): paper-2 T-cluster ablation certificate supply piece, 33 PA positions all Closed (_tg2_ final audit), four-gate green (_ta1_); born-in-place verified in vo tree".
+
+(* ng_UpAblP2WByPass —— UpAblP2WByPass.v：A2 席（S06 双墙绕行）：S06 双墙绕行演示件，20 位 PA 全 Closed（_tg2_ 终审实测），四关绿（_ta2_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP2WByPass : NewGreenFace :=
+  MkNewGreenFace "UpAblP2WByPass.v" 428 12 20260920 "A2 seat (S06 dual-wall bypass): S06 dual-wall bypass demonstrator piece, 20 PA positions all Closed (_tg2_ final audit), four-gate green (_ta2_); born-in-place verified in vo tree".

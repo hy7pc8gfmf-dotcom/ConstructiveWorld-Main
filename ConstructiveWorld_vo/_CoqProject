@@ -505,3 +505,14 @@ UpAblP7_LoHiCross.v
 UpAblP7_P7KappaFlagship.v
 UpAblP7_WallEpsChain_A.v
 UpAblP7_Package.v
+UpAblAlmConsumption.v
+UpAblDistLogEq.v
+UpAblDistLogLe.v
+UpAblGrpEqDecWorld.v
+UpAblGrpEqDischarge.v
+UpAblP2FeedMix.v
+UpAblP2FeedSum.v
+UpAblLeEqCompat.v
+UpAblP2FeedSumLe.v
+UpAblP2T1_Cert.v
+UpAblP2WByPass.v
