@@ -4,7 +4,7 @@
 (* 席位：S4（TW1ATK 冻结现态续攻席）· 20260920                       *)
 (* 零承认件：无承认词面、无假设槽位声明、无经典逻辑、全件 Qed 闭合。 *)
 (*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b 均 Set），  *)
-(*   语句面无裸 Prop；证明全构造（Or 逐支、sigT 见证直构）。           *)
+(*   语句面无裸「命题层」；证明全构造（Or 逐支、sigT 见证直构）。       *)
 (*                                                                *)
 (* 定谳（本件头注即定谳正文）：                                      *)
 (*   族I 墙（abs_sum_le plain Or 形，UpReqSampling:116/:719 槽）     *)

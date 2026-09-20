@@ -533,3 +533,16 @@ UpAblD1S17_UpReqAttnGibbs.v
 UpAblD1S17_UpReqDpoLoss.v
 UpAblP2T1_CertB.v
 UpAblP2T1_CertC.v
+UpAblAbsQFeed.v
+UpAblTwLeFeed.v
+UpAblSlotB0Merge.v
+UpAblCauchyMod.v
+UpAblKVEpsHalf.v
+UpAblHalfPow.v
+UpAblAbsQFeed.v
+UpAblAbsQFeedB2.v
+UpAblQeqBridge.v
+UpAblQfloorDepth.v
+UpAblS06AbsFeed.v
+UpAblTwLeFeed.v
+UpAblArchGeomBatch.v

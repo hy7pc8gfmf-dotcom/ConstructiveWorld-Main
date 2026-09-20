@@ -3015,3 +3015,53 @@ Definition ng_UpAblP2T1_CertB : NewGreenFace :=
 Definition ng_UpAblP2T1_CertC : NewGreenFace :=
   MkNewGreenFace "UpAblP2T1_CertC.v" 227 3 20260920 "G-seat batch-2: T-cluster certificate C-variant consuming CertB, final-audited (_tg1_/_tg2_)".
 
+
+(* ================= v4.14 增册（N15 铺设席照 O2 注册预备二批席草案 #350/#351 逐字入册：TwLe/Qabs 直配 2 件，20260920；承 v4.13 波 ng_ 共 349 条（v4.12 后 17 条现以无横幅态在册），本批 2 条后共 351 条） ================= *)
+(* ng_UpAblAbsQFeed —— UpAblAbsQFeed.v：N4R 席（Q 世界 Qabs 槽×9 直配席）：S10_KVQuantTrig 六槽＋S08 Qabs 三槽（实消费 8 点＋1 谱系注行，N4R 定谳表）Q 层自足直配供给件——uaq_ 七件（三角加/减/反演 A.1/A.2/A.3＋非负 C.2 适配消费级如实标注，双层差 Qabs 收束 B.1 与严格版 B.2、Qfloor 阿基米德证书过 Qabs 门 C.1 三件真实现），供体 S4B Qfloor 谱系 UpAblAbsSumLeB2 真消费；四关绿（_tn4r_）；vo 树 born-in-place 候铺 *)
+Definition ng_UpAblAbsQFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsQFeed.v" 158 7 20260920 "N4R seat (Q-world Qabs slot x9 direct-fit): self-sufficient Q-layer supply for six S10_KVQuantTrig slots + three S08 Qabs slots (8 real consumption points + 1 lineage note per the N4R verdict table) - seven uaq_ pieces (triangle plus/minus/reverse A.1/A.2/A.3 and nonneg C.2 at adaptation-consumption level, honestly marked; double-layer Qabs closure B.1, its strict variant B.2, and the Qfloor Archimedean certificate through the Qabs gate C.1 as real implementations), genuinely consuming the S4B Qfloor lineage donor UpAblAbsSumLeB2; four-gate green (_tn4r_); born-in-place pending in vo tree".
+
+(* ng_UpAblTwLeFeed —— UpAblTwLeFeed.v：N3R 席（UpTempWindow tw_h_le 槽两点核差 B 形直配席）：tw_h_le 槽（|w_T(x)−1/N| ≤ (e^{2Δ/T}−1)·(1/N)，Section TempWindow 卸载 8 参世界接口）B 形直配主件 ntl_tw_h_le_b_feed（语句逐字对齐、外层谓词升 real_le_b）＋plain 回收件 ntl_tw_h_le_feed（与槽实形逐字同形、臂式重组零调槽本体）＋单向桥/臂基×2/转换层×2 共 7 件全 Closed；eps 两臂经 S4 供体 uabS4_le_add_r 正余量右吸收真消费；形态差三条显式申报（三角增薄差 2·(1−E2L)·u≥0、B/plain 形态差、前提消费同位，_tn3r_ §4）；四关绿（_tn3r_）；vo 树 born-in-place 候铺 *)
+Definition ng_UpAblTwLeFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblTwLeFeed.v" 368 7 20260920 "N3R seat (UpTempWindow tw_h_le slot two-point kernel-difference Bishop-form direct-fit): main piece ntl_tw_h_le_b_feed (statement verbatim-aligned to the Section-unloaded 8-parameter world interface, outer predicate lifted to real_le_b) + plain recovery piece ntl_tw_h_le_feed (verbatim-same-shape as the slot, arm-based independent reconstruction, zero calls into the slot body) + one-way bridge / two arm bases / two conversion pieces, 7 pieces all Closed; eps arms genuinely consume the S4 donor uabS4_le_add_r positive-margin right-absorption; three shape differences explicitly declared (triangle thinning gap 2*(1-E2L)*u >= 0, B/plain form gap, premise-consumption parity, _tn3r_ section 4); four-gate green (_tn3r_); born-in-place pending in vo tree".
+
+(* ===== Index v4.15 —— R99 论文2 残席+abs 族深化注册波（11 新行/9 新 ng_，主会话 R99 席装配，born-in-place+下游愈合闭包背书）===== *)
+
+(* v4.15 刷新注记：UpAblAbsSumLeB（341/11）与 UpAblAbsTwoPtAbs（161/4）为 R98 已注册件内容刷新版（Live_X 权威版同步，born-in-place 重编+下游愈合闭包 build.sh 全量重编背书），ng_ v4.12 计数沿用，愈合重编经 cpu_guard 包裹 build.sh 拓扑序执行。 *)
+
+(* ng_UpAblSlotB0Merge —— UpAblSlotB0Merge.v：TP5 席（B0 并轨）：SlotB0 双世界并轨供给件（_tp5_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblSlotB0Merge : NewGreenFace :=
+  MkNewGreenFace "UpAblSlotB0Merge.v" 104 2 20260920 "TP5 seat: SlotB0 dual-world merge supply piece, four-gate (_tp5_)".
+
+(* ng_UpAblCauchyMod —— UpAblCauchyMod.v：TP6 席（Cauchy 模位）：CauchyMod 模位供给件（_tp6_ 侦察线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblCauchyMod : NewGreenFace :=
+  MkNewGreenFace "UpAblCauchyMod.v" 132 4 20260920 "TP6 seat: CauchyMod modulus-position supply piece (recon line _tp6_), four-gate".
+
+(* ng_UpAblKVEpsHalf —— UpAblKVEpsHalf.v：KV eps 半量族供给件（H 系残席线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblKVEpsHalf : NewGreenFace :=
+  MkNewGreenFace "UpAblKVEpsHalf.v" 266 13 20260920 "KV eps-half family supply piece (H-seat residual line), four-gate".
+
+(* ng_UpAblHalfPow —— UpAblHalfPow.v：HalfPow 幂半量族供给件（TP3 线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblHalfPow : NewGreenFace :=
+  MkNewGreenFace "UpAblHalfPow.v" 183 4 20260920 "HalfPow power-half family supply piece (TP3 line), four-gate".
+
+(* ng_UpAblAbsQFeedB2 —— UpAblAbsQFeedB2.v：QFeed B2 变体（消费 AbsQFeed）（abs 族线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblAbsQFeedB2 : NewGreenFace :=
+  MkNewGreenFace "UpAblAbsQFeedB2.v" 140 15 20260920 "QFeed B2 variant consuming AbsQFeed (abs-family line), four-gate".
+
+(* ng_UpAblQeqBridge —— UpAblQeqBridge.v：TP3 席（Qeq 桥件）：Qeq 传输桥供给（_tp3_）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblQeqBridge : NewGreenFace :=
+  MkNewGreenFace "UpAblQeqBridge.v" 168 6 20260920 "TP3 seat: Qeq transport bridge supply, four-gate (_tp3_)".
+
+(* ng_UpAblQfloorDepth —— UpAblQfloorDepth.v：Qfloor 深度件（消费 AbsSumLeB2+AbsQFeed）（abs 族线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblQfloorDepth : NewGreenFace :=
+  MkNewGreenFace "UpAblQfloorDepth.v" 178 4 20260920 "Qfloor depth piece consuming AbsSumLeB2+AbsQFeed (abs-family line), four-gate".
+
+(* ng_UpAblS06AbsFeed —— UpAblS06AbsFeed.v：S06 abs 馈线（消费 AbsSumLeB3）（abs 族线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblS06AbsFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblS06AbsFeed.v" 265 6 20260920 "S06 abs feed piece consuming AbsSumLeB3 (abs-family line), four-gate".
+
+(* ng_UpAblArchGeomBatch —— UpAblArchGeomBatch.v：Arch 几何批件（消费 QeqBridge）（_tq1_ 线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblArchGeomBatch : NewGreenFace :=
+  MkNewGreenFace "UpAblArchGeomBatch.v" 111 4 20260920 "Arch geometry batch piece consuming QeqBridge (_tq1_ line), four-gate".
+

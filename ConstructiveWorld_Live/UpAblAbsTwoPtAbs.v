@@ -5,7 +5,7 @@
 (* 零承认件：无承认词面、无经典逻辑、无假设槽位声明、全件 Qed 闭合。      *)
 (*   语句面全 Set 层：lt/le 为接口 Set 值关系（R -> R -> Set），          *)
 (*   Id 为 S01 Set 层等同类型，Or 为 S01 Set 层别名（sum 型），           *)
-(*   uap_le_b 返回型显式 Set——语句面无裸 Prop 泄露。                     *)
+(*   uap_le_b 返回型显式 Set——语句面无裸「命题层」泄露。                *)
 (*   证明全构造：id_trans/id_cong/id_cong2 逐槽运输，Or 仅 inl 单支。     *)
 (*                                                                *)
 (* 任务切分令（主件）：把 S4 席两点核差形（UpAblAbsSumLeB A.1/A.2，      *)
