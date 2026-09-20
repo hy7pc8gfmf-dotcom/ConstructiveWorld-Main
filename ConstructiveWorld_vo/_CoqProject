@@ -344,8 +344,6 @@ WeakTriangleClose.v
 ZPosSlotFeed.v
 PinskerCoreClose.v
 ForwardKLAdjudication.v
-czd12_g3.v
-mtc_g3.v
 UpAblD1PPO_UpReqPPOPlain.v
 UpAblD1S10_UpReqConcMixSel.v
 UpAblD1S10_UpReqPPOPlain.v
@@ -539,12 +537,10 @@ UpAblSlotB0Merge.v
 UpAblCauchyMod.v
 UpAblKVEpsHalf.v
 UpAblHalfPow.v
-UpAblAbsQFeed.v
 UpAblAbsQFeedB2.v
 UpAblQeqBridge.v
 UpAblQfloorDepth.v
 UpAblS06AbsFeed.v
-UpAblTwLeFeed.v
 UpAblArchGeomBatch.v
 UpAblCauchyLim.v
 UpAblHalfPowFeed.v
