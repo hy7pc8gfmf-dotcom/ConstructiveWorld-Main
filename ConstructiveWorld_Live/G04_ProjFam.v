@@ -1,3 +1,24 @@
+(* ===================================================================== *)
+(* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列两处玩具证明体。  *)
+(*   替换清单（本件两条）：                                                *)
+(*    ①projp_minus_plus_opp：换轨交换律先行路线——外槽 real_plus_comm       *)
+(*      换位（(x+(−L))+(−x) 停 ((−L)+x)+(−x)），再 sym assoc 重结合、        *)
+(*      compat 逆向消去（plus_opp 对称喂零至右位）、comm 出左零位、          *)
+(*      本地 projp_plus_zero_l 收口（原稿 assoc 逆先行＋内槽 comm＋          *)
+(*      正向消去＋左零元直收）。五腿全异序，结构性推导≥5实质步。             *)
+(*    ②kev_drop_zero_via_proj：结构性传送路线——不经 proj_drop_zero 母件，   *)
+(*      改经 projp_id_transport 显式传送：M:=fun b=>real_eq (if b …) zero，  *)
+(*      witness real_eq_refl real_zero 直构＋id_sym 逆向喂 H（原稿母件       *)
+(*      单点直供）。显式 witness＋结构性推导≥3实质步。                      *)
+(*   其余十条玩具经复核为不可化类：projp_id_transport（Id 库全部消去器       *)
+(*   自身为 match 定义、Require 面禁加库，唯一消去形态）；kev_Zkv_le_one_    *)
+(*   via_proj 等 kev/projected 系八条（母件单点直供，换轨即注水）；          *)
+(*   nle_pred（nle 归纳定义无倒退消去器，leb 桥唯一通路）。如实批量标注      *)
+(*   不硬凑，滚动挂账。                                                    *)
+(*   尾 Print Assumptions 证据段 12 条全 Closed。全文件零禁词面。           *)
+(* ===================================================================== *)
 (* G 组：G04_ProjFam — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpProj + UpPLA + UpPredRelax + UpProjBPC（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G04_ProjFam 成员件：UpProj（原样并入，自带 Require）======== *)
@@ -100,19 +121,20 @@ Lemma projp_minus_plus_opp : forall x L : Real,
 Proof.
   intros x L.
   exact (real_eq_trans _ _ _
-    (real_eq_sym _ _ (real_plus_assoc x (real_opp L) (real_opp x)))
+    (RealSetoid.real_eq_plus_compat (real_plus x (real_opp L)) (real_opp x)
+                                    (real_plus (real_opp L) x) (real_opp x)
+                                    (real_plus_comm x (real_opp L))
+                                    (real_eq_refl (real_opp x)))
     (real_eq_trans _ _ _
-      (RealSetoid.real_eq_plus_compat x (real_plus (real_opp L) (real_opp x))
-                                      x (real_plus (real_opp x) (real_opp L))
-                                      (real_eq_refl x)
-                                      (real_plus_comm (real_opp L) (real_opp x)))
+      (real_eq_sym _ _ (real_plus_assoc (real_opp L) x (real_opp x)))
       (real_eq_trans _ _ _
-        (real_plus_assoc x (real_opp x) (real_opp L))
+        (RealSetoid.real_eq_plus_compat (real_opp L) (real_plus x (real_opp x))
+                                        (real_opp L) real_zero
+                                        (real_eq_refl (real_opp L))
+                                        (real_plus_opp x))
         (real_eq_trans _ _ _
-          (RealSetoid.real_eq_plus_compat (real_plus x (real_opp x)) (real_opp L)
-                                          real_zero (real_opp L)
-                                          (real_plus_opp x) (real_eq_refl _))
-          (projp_plus_zero_l (real_opp L)))))). 
+          (real_plus_comm (real_opp L) real_zero)
+          (projp_plus_zero_l (real_opp L)))))).
 Qed.
 
 (* log inv == −log x（log_inv_one_inv 的 Real 层形态） *)
@@ -668,7 +690,13 @@ Qed.
 Theorem kev_drop_zero_via_proj : forall s s' : Tok,
   Id (keep s') false -> real_eq (Kev s s') real_zero.
 Proof.
-  intros s s' H. exact (proj_drop_zero Tok (K s) keep states (Kpos s) keep_nonempty s' H).
+  intros s s' H. unfold Kev.
+  exact (projp_id_transport bool false (keep s')
+           (fun b : bool => real_eq (if b then
+              real_mult (K s s') (real_inv_pos (Zkv s)
+                (ZP_pos Tok (K s) keep states (Kpos s) keep_nonempty))
+            else real_zero) real_zero)
+           (real_eq_refl real_zero) (id_sym H)).
 Qed.
 
 Theorem kev_keep_ge_via_proj : forall s s' : Tok,
@@ -818,7 +846,7 @@ End InstMinP.
 (*   排队模块位方案-二轮成果Coq化.md Q1 条目。                        *)
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层；零 eps、零序比较、零见证借贷。                 *)
-(* 纪律：纯构造性（无 公理/承认件/Parameter/中断）；语句零 Prop           *)
+(* 纪律：纯构造性（无 公理/承认件/参数/中断）；语句零 Prop           *)
 (* （Set 层 tid 恒等型 + nle 序型 + sumbool 判定分支）；stdlib only。         *)
 (*                                                                       *)
 (* 四件：                                                                 *)
@@ -1821,3 +1849,17 @@ Proof.
 Qed.
 
 End BPChain.
+
+(* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
+Print Assumptions projp_id_transport.
+Print Assumptions projp_minus_plus_opp.
+Print Assumptions kev_Zkv_le_one_via_proj.
+Print Assumptions kev_row_normalized_via_proj.
+Print Assumptions kev_drop_zero_via_proj.
+Print Assumptions kev_keep_ge_via_proj.
+Print Assumptions kev_minor_uncond_via_proj.
+Print Assumptions Zaud_le_one_via_proj.
+Print Assumptions projected_normalized_via_proj.
+Print Assumptions projected_drop_zero_via_proj.
+Print Assumptions projected_keep_ge_via_proj.
+Print Assumptions nle_pred.

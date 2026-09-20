@@ -71,8 +71,8 @@ Theorem uabt2b_g04_heat_discharge :
        (mult (exp_neg (mult gamma (of_nat_R t))) temperature_difference0).
 Proof.
   intro t.
-  exact (@fa56_heat_relaxation_exponential RI gamma of_nat_R
-             temperature_difference0 t).
+  exact (@id_refl _
+           (mult (exp_neg (mult gamma (of_nat_R t))) temperature_difference0)).
 Qed.
 
 (* 导出形 ←G04:1181 heat_relaxation_decreasing（假设位剪除后重证） *)
@@ -140,7 +140,7 @@ Theorem uabt2b_g04_fluctuation_discharge :
        (exp_neg (mult N (inv_pos k_B k_B_pos))).
 Proof.
   intro N.
-  exact (@fa56_fluctuation_scale RI k_B k_B_pos N).
+  exact (@id_refl _ (exp_neg (mult N (inv_pos k_B k_B_pos)))).
 Qed.
 
 (* 导出形 ←G04:1237 fluctuation_scale_decreasing（假设位剪除后重证） *)
@@ -194,7 +194,7 @@ Theorem uabt2b_g04_landauer_discharge :
   Id (fa56c_E_min k_B T_landauer)
      (mult k_B (mult T_landauer (log (plus one one)))).
 Proof.
-  exact (@fa56c_prediction_landauer RI k_B T_landauer).
+  exact (@id_refl _ (mult k_B (mult T_landauer (log (plus one one))))).
 Qed.
 
 (* 导出形 ←G04:1287 landauer_bound_pos（假设位剪除后重证） *)
@@ -228,7 +228,7 @@ Theorem uabt2b_cross_domain_sigT :
                (mult (power (of_nat_R N) alpha) (f_N N))).
 Proof.
   intros power of_nat_R f_N.
-  exact (@fa56b_cross_domain_scaling RI power of_nat_R f_N one).
+  exact (existT _ one (fun N : nat => @id_refl R _)).
 Qed.
 
 End UabT2bCrossDomain.
@@ -257,8 +257,16 @@ Theorem uabt2b_g04_lm_discharge :
        (fa56c_total_loss Token grammar_error c (model (Nat.succ epoch))).
 Proof.
   intros epoch H.
-  exact (@fa56c_loss_structure_correlation RI Token model grammar_error c
-             c_pos epoch H).
+  exact (le_id_l (mult c (grammar_error (model epoch)))
+                 (mult (grammar_error (model epoch)) c)
+                 (mult c (grammar_error (model (Nat.succ epoch))))
+           (mult_comm c (grammar_error (model epoch)))
+           (le_id_r (mult (grammar_error (model epoch)) c)
+                    (mult (grammar_error (model (Nat.succ epoch))) c)
+                    (mult c (grammar_error (model (Nat.succ epoch))))
+              (mult_comm (grammar_error (model (Nat.succ epoch))) c)
+              (le_mult_compat (grammar_error (model epoch))
+                 (grammar_error (model (Nat.succ epoch))) c c_pos H))).
 Qed.
 
 (* 导出形 ←G04:1375 total_loss_multi_epoch_decreasing（假设位剪除后重证） *)
@@ -340,8 +348,8 @@ Theorem uabt2b_req_heat_discharge :
          (smult (sexp_neg (smult gamma (of_nat_R t))) temperature_difference0).
 Proof.
   intro t.
-  exact (@fa56_heat_relaxation_exponential RI gamma of_nat_R
-             temperature_difference0 t).
+  exact (@id_refl _
+           (smult (sexp_neg (smult gamma (of_nat_R t))) temperature_difference0)).
 Qed.
 
 (* —— 区1 导出形（←UpPredRelaxReq:89-137 同链，假设位剪除后重证；     *)
@@ -363,7 +371,7 @@ Theorem uabt2b_req_fluctuation_discharge :
          (sexp_neg (smult N (sinv_pos k_B k_B_pos))).
 Proof.
   intro N.
-  exact (@fa56_fluctuation_scale RI k_B k_B_pos N).
+  exact (@id_refl _ (sexp_neg (smult N (sinv_pos k_B k_B_pos)))).
 Qed.
 
 (* —— 区2 导出形（←UpPredRelaxReq:169-202 同链剪除重证） —— *)
@@ -384,7 +392,7 @@ Theorem uabt2b_req_landauer_discharge :
                 (@RealInterfaceEnhancedMod.one_pos rq ris)
                 (@RealInterfaceEnhancedMod.one_pos rq ris))))).
 Proof.
-  exact (@fa56c_prediction_landauer RI k_B T_landauer).
+  exact (@id_refl _ (smult k_B (smult T_landauer (slog (splus sone sone) (splus_pos sone sone (@RealInterfaceEnhancedMod.one_pos rq ris) (@RealInterfaceEnhancedMod.one_pos rq ris)))))).
 Qed.
 
 (* —— 区4 导出形（←UpPredRelaxReq:240-266 landauer_bound_pos 剪除重证） —— *)
@@ -402,8 +410,16 @@ Theorem uabt2b_req_lm_discharge :
         (fa56c_total_loss Token grammar_error c (model (Nat.succ epoch))).
 Proof.
   intros epoch H.
-  exact (@fa56c_loss_structure_correlation RI Token model grammar_error c
-             c_pos epoch H).
+  exact (le_id_l (mult c (grammar_error (model epoch)))
+                 (mult (grammar_error (model epoch)) c)
+                 (mult c (grammar_error (model (Nat.succ epoch))))
+           (mult_comm c (grammar_error (model epoch)))
+           (le_id_r (mult (grammar_error (model epoch)) c)
+                    (mult (grammar_error (model (Nat.succ epoch))) c)
+                    (mult c (grammar_error (model (Nat.succ epoch))))
+              (mult_comm (grammar_error (model (Nat.succ epoch))) c)
+              (le_mult_compat (grammar_error (model epoch))
+                 (grammar_error (model (Nat.succ epoch))) c c_pos H))).
 Qed.
 
 (* —— 区5 导出形（←UpPredRelaxReq:355-376 多历元链剪除重证） —— *)

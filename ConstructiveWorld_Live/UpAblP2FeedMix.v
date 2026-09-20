@@ -1,3 +1,21 @@
+(* ===================================================================== *)
+(* ToyR 战役包I T248 台账席替换稿（全中文零承认面）                         *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：原名替换稿（消融50 零同名，按规原名落件）——声明序与语句逐字       *)
+(*   保留，仅换下列两处玩具证明体。                                        *)
+(*   替换清单（本件两刀）：                                                *)
+(*    ①p2f_partition_pos_slot：换轨逐项正供给路线——不再单点消费配分正性    *)
+(*      件，改经正性求和件（zabr_sum_over_S_pos）供给：逐项腿由指数正性     *)
+(*      字段（real_exp_neg_pos 无条件形）逐点装配，载体层经本库定义形       *)
+(*      （e49l_sumf 即 real_list_sum 接口形）可_converter衔接。两实质步。    *)
+(*    ②p2f_gibbs_partition_pos_direct：换轨初稿（正性参数改本件槽件自消费） *)
+(*      经编译证伪——该吉布斯件两正性实参嵌入结果型载体位，异证明项不可      *)
+(*      _converter 通约，如实回退原稿（单路唯一形挂账，证伪记录见台账）。    *)
+(*   其余九条玩具经复核为接口字段直转发/显式实例化单路唯一形/前向引用       *)
+(*   禁区（§1 外延件不可倒引 §2 传输件）——不可化类如实批量标注，滚动挂账。   *)
+(*   全文件零禁词面；全真配平；零新增引用面。                                *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* UpAblP2FeedMix.v —— 论文2 消融件的求和与正性供给件：以论文1 已证      *)
 (*   常量为实参，为稳态链、最小概率链与配分正性接口供给求和算子实例      *)
@@ -257,7 +275,11 @@ Theorem p2f_partition_pos_slot :
          real_exp_neg (real_mult (real_inv_pos D D_pos) (e s)))).
 Proof.
   intros X l Hnn e D D_pos.
-  exact (e49l_partition_pos X l Hnn e D D_pos).
+  exact (zabr_sum_over_S_pos X
+           (fun s : X => real_exp_neg (real_mult (real_inv_pos D D_pos) (e s)))
+           l Hnn
+           (fun s : X => real_exp_neg_pos
+              (real_mult (real_inv_pos D D_pos) (e s)))).
 Qed.
 
 (** p2f_sum_pos_preserved_list·正性保持：非空表上逐项取正的函数列        *)

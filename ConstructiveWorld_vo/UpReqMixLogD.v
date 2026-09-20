@@ -102,9 +102,9 @@ Qed.
 Lemma mixd_leT_transport : forall a b c : Q, QeqT a b -> QleT' a c -> QleT' b c.
 Proof.
   intros a b c Hab Hac.
-  apply Qle_to_QleT'.
-  exact (proj1 (@Qle_comp a b (mixd_qeqT_to_Qeq a b Hab) c c (Qeq_refl c))
-           (QleT'_to_Qle a c Hac)).
+  exact (Qle_to_QleT' b c
+           (proj1 (@Qle_comp a b (mixd_qeqT_to_Qeq a b Hab) c c (Qeq_refl c))
+              (QleT'_to_Qle a c Hac))).
 Qed.
 
 Lemma mixd_qlt_eq_l : forall a b c : Q, a == b -> Qlt a c -> Qlt b c.
@@ -527,7 +527,7 @@ Definition mixd_ans_cert (k0 v b0 : Q) (k : nat) : Set :=
   QleT' (Qmult (igr_qpow k0 k) v) b0.
 
 Lemma mixd_qeqT_one_mul : forall v : Q, QeqT (1 * v) v.
-Proof. intro v. apply qeq_imp_qeqT. apply Qmult_1_l. Qed.
+Proof. intro v. exact (qeq_imp_qeqT (1 * v) v (Qmult_1_l v)). Qed.
 
 Lemma mixd_qeqT_sym : forall a b : Q, QeqT a b -> QeqT b a.
 Proof.
@@ -1313,13 +1313,13 @@ Qed.
 (* real_const 逐点脱壳（库内无 real_const_proj 专名——CW real_const        *)
 (*   定义面直读：常值序列 projT1 恒 c） *)
 Lemma mixd_const_proj : forall (v : Q) (n : nat), projT1 (real_const v) n == v.
-Proof. intros v n. unfold real_const. reflexivity. Qed.
+Proof. intros v n. unfold real_const. exact (Qeq_refl v). Qed.
 
 Lemma mixd_zero_proj : forall n : nat, projT1 real_zero n == 0.
-Proof. intro n. reflexivity. Qed.
+Proof. intro n. exact (Qeq_refl 0). Qed.
 
 Lemma mixd_one_proj : forall n : nat, projT1 real_one n == 1.
-Proof. intro n. reflexivity. Qed.
+Proof. intro n. exact (Qeq_refl 1). Qed.
 
 (* real_lt ⟹ real_le（Or 左支直入——real_le := Or real_lt real_eq 换形） *)
 Definition mixd_lt_to_le : forall x y : Real, real_lt x y -> real_le x y :=
@@ -1723,3 +1723,8 @@ Print Assumptions mixd_k_select_log_le.
 Print Assumptions mixd_k_select_log_mulcost.
 Print Assumptions mixd_k_select_log_cert_none.
 Print Assumptions mixd_qbern.
+Print Assumptions mixd_leT_transport.
+Print Assumptions mixd_qeqT_one_mul.
+Print Assumptions mixd_const_proj.
+Print Assumptions mixd_zero_proj.
+Print Assumptions mixd_one_proj.

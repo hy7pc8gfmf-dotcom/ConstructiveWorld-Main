@@ -1,3 +1,28 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包E·切片六 同名替换件：UpReqBanachInstB（台账 T243 续作，切片六）     *
+ * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、         *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                       *
+ * 替换清单（9 件）：bxib_coef_half_canon／bxib_half_quarter_canon_id／      *
+ *   bxib_zero_canon_lit／bxib_zero_canon_all／bxib_bnorm_zero／             *
+ *   bxib_bnorm_one／bxib_bnorm_coef_canon／bxib_bnorm_half_quarter_smoke／  *
+ *   bxib_bnorm_pos                                                         *
+ * 三口径：①定义层受控展开（qnorm/bcnorm/bnorm/ev 定义面 unfold＋cbv iota    *
+ *   zeta 构造子分支派发至通配腿／Z0 腿；系数件 cbn [bxib_ev] 构造子腿回收——  *
+ *   InstReal 首项投影同族范式）＋②显式见证（墙位保底件以 replace-by-        *
+ *   reflexivity 数值见证链逐步给出 gcd/div/Z.abs/Z.to_pos 各步计算值；      *
+ *   bnorm_pos 以 bxib_qabs_nonneg 全应用闭项消费，消除单点转发跳）＋        *
+ *   ③结构性推导（Qmake 字面中间形 change＋ring 零见证：Qplus/Qopp 定义面    *
+ *   抬升至分子显式归零后 iota 派发 Z0 腿）。                                *
+ * 不可化标注（批量，如实不改）：shape 双件（pos/neg_shape：语句面为         *
+ *   stdlib eq＝Prop 位，处于替换件 Set 面纪律边界，如实不改）；qeqT 小工具族  *
+ *   （refl/sym/trans/cong_plus/of_id/qnorm_qeqT_of_qeqT/qeq_make：Qeq/QeqT  *
+ *   引擎单点消费，改写即同项转述）；bae 恒等三律与 bnorm_wd（id 族单跳，    *
+ *   bae 定义包装即内容）；bplus_comm/zero/opp 与 bcoef_mult（stdlib        *
+ *   Qplus/Qmult 引擎单点消费＋破墙机中转，内联即复制）；已显式链面件        *
+ *   （id_of_qeqT_canon/canon_pin_wall/qabs_opp_raw/gcd_nz：原链已最简，    *
+ *   换序即注水）。                                                         *
+ * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。           *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
 (* UpReqBanachInstB.v —— 席INSTB：ConstructiveWorld 路径 B       *)
 (*   非弱化路径实例席（规范形破墙，20260913）                     *)
@@ -73,11 +98,25 @@ Proof. intros p d. reflexivity. Qed.
 Definition bxib_bcnorm (q : Q) : Q := Qabs (bxib_qnorm q).
 
 Lemma bxib_coef_half_canon : Id (bxib_bcnorm (2#4)%Q) (Qabs (1#2)%Q).
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_bcnorm, bxib_qnorm. cbv iota zeta.
+  replace (Z.gcd (Zpos 2) (Zpos 4)) with (Zpos 2) by reflexivity.
+  replace (Z.div (Zpos 2) (Zpos 2)) with 1%Z by reflexivity.
+  replace (Z.div (Z.pos 4) (Zpos 2)) with (Zpos 2) by reflexivity.
+  change (Z.to_pos (Zpos 2)) with 2%positive.
+  apply id_refl.
+Qed.
 
 (* 对照：墙一原始形态 Id (2#4) (1#2) 的规范形可证版 *)
 Lemma bxib_half_quarter_canon_id : Id (bxib_qnorm (2#4)%Q) (1#2)%Q.
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_qnorm. cbv iota zeta.
+  replace (Z.gcd (Zpos 2) (Zpos 4)) with (Zpos 2) by reflexivity.
+  replace (Z.div (Zpos 2) (Zpos 2)) with 1%Z by reflexivity.
+  replace (Z.div (Z.pos 4) (Zpos 2)) with (Zpos 2) by reflexivity.
+  change (Z.to_pos (Zpos 2)) with 2%positive.
+  apply id_refl.
+Qed.
 
 (* ============================================================ *)
 (* 保底件②：零规范一致件（INS 墙二的 0#16/0#1 位）               *)
@@ -85,11 +124,22 @@ Proof. apply id_refl. Qed.
 
 (* 字面位：Qplus 不约分产生的 0#16 归约到 0#1（墙二直击位） *)
 Lemma bxib_zero_canon_lit : Id (bxib_qnorm (Qplus (2#4)%Q (Qopp (2#4)%Q))) (0#1)%Q.
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_qnorm.
+  change (Qplus (2#4)%Q (Qopp (2#4)%Q))
+    with (Qmake (2 * Z.pos 4 + Z.opp 2 * Z.pos 4)%Z
+                (4 * 4)%positive).
+  replace (2 * Z.pos 4 + Z.opp 2 * Z.pos 4)%Z with 0%Z by ring.
+  cbv iota zeta.
+  apply id_refl.
+Qed.
 
 (* 一般位 1：任意分母的零都规范到 0#1（iota 即闭） *)
 Lemma bxib_zero_canon_all : forall d : positive, Id (bxib_qnorm (0#d)%Q) (0#1)%Q.
-Proof. intros d. apply id_refl. Qed.
+Proof.
+  intros d. unfold bxib_qnorm. cbv iota zeta.
+  apply id_refl.
+Qed.
 
 (* 一般位 2：任意 Q 值自加逆后规范到 0#1（墙二一般形态的规范形解） *)
 Lemma bxib_zero_canon_opp : forall q : Q, Id (bxib_qnorm (Qplus q (Qopp q))) (0#1)%Q.
@@ -549,23 +599,50 @@ Qed.
 (* ---- 范数钉定族（语句面按 S2 处方取 Qabs ∘ qnorm 形） ---- *)
 
 Lemma bxib_bnorm_zero : Id (bxib_bnorm bxib_ez) 0%Q.
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_bnorm, bxib_ev, bxib_qnorm, Qabs. cbv iota zeta.
+  replace (Z.abs 0)%Z with 0%Z by reflexivity.
+  apply id_refl.
+Qed.
 
 Lemma bxib_bnorm_one : Id (bxib_bnorm (bxib_esc 1%Q)) 1%Q.
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_bnorm, bxib_ev, bxib_qnorm, Qabs. cbv iota zeta.
+  replace (Z.gcd (Zpos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.div (Zpos 1) (Zpos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.abs (Zpos 1))%Z with (Zpos 1) by reflexivity.
+  change (Z.to_pos (Zpos 1)) with 1%positive.
+  apply id_refl.
+Qed.
 
 Lemma bxib_bnorm_pos : forall a : bxib_E, QleT' 0 (bxib_bnorm a).
-Proof. intro a. apply bxib_qabs_nonneg. Qed.
+Proof.
+  intro a. unfold bxib_bnorm.
+  exact (bxib_qabs_nonneg (bxib_qnorm (bxib_ev a))).
+Qed.
 
 (* 钉定字段的规范形版本（1/2 位 = bxib_coef_half_canon 的载体形态） *)
 Lemma bxib_bnorm_coef_canon : forall q : Q,
   Id (bxib_bnorm (bxib_esc q)) (Qabs (bxib_qnorm q)).
-Proof. intro q. apply id_refl. Qed.
+Proof.
+  intro q. unfold bxib_bnorm. cbn [bxib_ev].
+  apply id_refl.
+Qed.
 
 (* 钉定面冒烟：esc (2#4) 与 esc (1#2) 的范数同为 1#2（墙一同位闭合） *)
 Lemma bxib_bnorm_half_quarter_smoke :
   Id (bxib_bnorm (bxib_esc (2#4)%Q)) (bxib_bnorm (bxib_esc (1#2)%Q)).
-Proof. apply id_refl. Qed.
+Proof.
+  unfold bxib_bnorm, bxib_ev, bxib_qnorm. cbv iota zeta.
+  replace (Z.gcd (Zpos 2) (Zpos 4)) with (Zpos 2) by reflexivity.
+  replace (Z.gcd (Zpos 1) (Z.pos 2)) with (Zpos 1) by reflexivity.
+  replace (Z.div (Zpos 2) (Zpos 2)) with 1%Z by reflexivity.
+  replace (Z.div (Z.pos 4) (Zpos 2)) with (Zpos 2) by reflexivity.
+  replace (Z.div (Zpos 1) (Zpos 1)) with 1%Z by reflexivity.
+  replace (Z.div (Z.pos 2) (Zpos 1)) with (Zpos 2) by reflexivity.
+  change (Z.to_pos (Zpos 2)) with 2%positive.
+  apply id_refl.
+Qed.
 
 (* ============================================================ *)
 (* 挂账声明（诚实标注，无承认件）                                 *)
@@ -597,3 +674,14 @@ Print Assumptions bxib_zero_canon_opp.
 Print Assumptions bxib_canon_pin_wall.
 
 (* 规范形不动点：QeqT (qnorm t) t（字段链换心引理） *)
+
+(* —— 替换件假设面自审（切片六，全部应 Closed under the global context） —— *)
+Print Assumptions bxib_coef_half_canon.
+Print Assumptions bxib_half_quarter_canon_id.
+Print Assumptions bxib_zero_canon_lit.
+Print Assumptions bxib_zero_canon_all.
+Print Assumptions bxib_bnorm_zero.
+Print Assumptions bxib_bnorm_one.
+Print Assumptions bxib_bnorm_coef_canon.
+Print Assumptions bxib_bnorm_half_quarter_smoke.
+Print Assumptions bxib_bnorm_pos.

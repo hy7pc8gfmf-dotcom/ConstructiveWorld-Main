@@ -1,3 +1,9 @@
+(* ===================================================================== *)
+(* 【ToyR 战役包H·tier1 第三批·切片三补位席】本件为基准原件（Main 只读）的     *)
+(*   玩具证明体换轨稿：语句面/声明序/依赖面零改动，仅按玩具清单以异构构造性     *)
+(*   证明体替换标注定理。头注全中文；零承认件；纯构造性；Set 层零泄露；        *)
+(*   真收口守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
+(* ===================================================================== *)
 (* ============================================================ *)
 (* P7BoundedSoftmaxDeep.v —— 席位P7C（E-STAGING-P7C）           *)
 (* 论文7《率即算法》BoundedSoftmax Section 接口假设深层消融：      *)
@@ -24,7 +30,7 @@
 (*   bs_kernel/Zrow/nat_to_R/plus_exchange/两旗舰定理）＋           *)
 (*   S01_BaseRing（lt_irrefl/mult_positive/inv_pos_le_compat/       *)
 (*   le_mult_compat_r/lt_le_iff/distrib/plus_* /id_*）。            *)
-(* 红线：零 Axiom/Admitted/Parameter/Conjecture/Abort；Set 层语句；  *)
+(* 红线：零 公理/承认件/参数/猜想/弃证；Set 层语句；  *)
 (*   全 Qed；文尾 Print Assumptions 全 Closed。                     *)
 (* ============================================================ *)
 
@@ -68,8 +74,8 @@ Theorem p7d_lsum_zero : forall l : list S,
   Id zero (AttnDoeblin.bs_list_sum (fun _ : S => zero) l).
 Proof.
   intro l.
-  exact (id_trans (id_sym (mult_zero (AttnDoeblin.nat_to_R (length l))))
-          (id_sym (AttnDoeblin.bs_list_const_sum zero l))).
+  exact (id_sym (id_trans (AttnDoeblin.bs_list_const_sum zero l)
+                  (mult_zero (AttnDoeblin.nat_to_R (length l))))).
 Qed.
 
 (* 双重列表和交换（一般形：内外列表分立；Fubini 组合学核心） *)
@@ -252,11 +258,15 @@ Theorem p7d_hi_gt_one :
   lt one (expf (mult (inv_pos temp temp_pos) Delta)).
 Proof.
   intros temp temp_pos Delta Delta_pos expf expf_pos expf_zero expf_mono_lt.
-  exact (lt_id_l one (expf zero) (expf (mult (inv_pos temp temp_pos) Delta))
-           (id_sym expf_zero)
-           (expf_mono_lt zero (mult (inv_pos temp temp_pos) Delta)
-              (mult_positive (inv_pos temp temp_pos) Delta
-                 (inv_pos_pos temp temp_pos) Delta_pos))).
+  exact (lt_id_r one (expf (mult Delta (inv_pos temp temp_pos)))
+           (expf (mult (inv_pos temp temp_pos) Delta))
+           (id_cong expf (mult_comm Delta (inv_pos temp temp_pos)))
+           (lt_id_l one (expf zero)
+              (expf (mult Delta (inv_pos temp temp_pos)))
+              (id_sym expf_zero)
+              (expf_mono_lt zero (mult Delta (inv_pos temp temp_pos))
+                 (mult_positive Delta (inv_pos temp temp_pos) Delta_pos
+                    (inv_pos_pos temp temp_pos))))).
 Qed.
 
 (* 展幅定理：1 ≤ hi² = e^{2Δ/T}（hi≥lo>0 与 hi·lo=1 的双重消费） *)

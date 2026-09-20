@@ -1,9 +1,15 @@
 (* ===================================================================== *)
+(* 【ToyR 战役包H·tier1 第三批·切片三补位席】本件为基准原件（Main 只读）的     *)
+(*   玩具证明体换轨稿：语句面/声明序/依赖面零改动，仅按玩具清单以异构构造性     *)
+(*   证明体替换标注定理。头注全中文；零承认件；纯构造性；Set 层零泄露；        *)
+(*   真收口守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
+(* ===================================================================== *)
+(* ===================================================================== *)
 (* UpAblP6_SecondLaw_two_state.v —— SecondLawQuantified SlqSecondLaw       *)
 (*   节的 two_state 整节实例化供给件（纯构造性；语句面全 Set 层）。          *)
 (*                                                                        *)
 (* --------------------------------------------------------------------- *)
-(* 【使命】源模块 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数  *)
+(* 【使命】母件 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数    *)
 (*   S/sumf/sumpos/sumext/sumlinear/sumadd/T/T_pos/energy）在 two_state     *)
 (*   具体载体上整节实例化：载体与求和机器全具体（二元直接和，非 list        *)
 (*   机器），节前导件与双向定量锚逐一全参数实例化，另闭合零前提实例。        *)
@@ -120,12 +126,14 @@ Lemma uab23_ts_sumpos :
     real_lt real_zero (ts_sumf f).
 Proof.
   intros f H.
-  exact (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
-           (real_plus (f ts_a) (f ts_b))
-           (real_eq_sym (real_plus real_zero real_zero) real_zero
-                        (real_plus_zero real_zero))
-           (real_lt_plus_compat real_zero (f ts_a) real_zero (f ts_b)
-                                (H ts_a) (H ts_b))).
+  apply (real_lt_trans real_zero (real_plus (f ts_a) real_zero)
+           (real_plus (f ts_a) (f ts_b))).
+  - exact (RealSetoid.real_lt_id_r real_zero (f ts_a)
+             (real_plus (f ts_a) real_zero)
+             (real_eq_sym (real_plus (f ts_a) real_zero) (f ts_a)
+                          (real_plus_zero (f ts_a)))
+             (H ts_a)).
+  - exact (real_lt_plus_translate (f ts_a) real_zero (f ts_b) (H ts_b)).
 Qed.
 
 (* 接口参数 2：sumext——逐点 req ⟹ 和 req（real_eq_plus_compat 两分量直接给出） *)
@@ -135,8 +143,12 @@ Lemma uab23_ts_sumext :
     real_eq (ts_sumf f) (ts_sumf g).
 Proof.
   intros f g H.
-  exact (RealSetoid.real_eq_plus_compat (f ts_a) (f ts_b) (g ts_a) (g ts_b)
-           (H ts_a) (H ts_b)).
+  apply (real_eq_trans (real_plus (f ts_a) (f ts_b))
+           (real_plus (g ts_a) (f ts_b)) (real_plus (g ts_a) (g ts_b))).
+  - exact (RealSetoid.real_eq_plus_compat (f ts_a) (f ts_b) (g ts_a) (f ts_b)
+             (H ts_a) (real_eq_refl (f ts_b))).
+  - exact (RealSetoid.real_eq_plus_compat (g ts_a) (f ts_b) (g ts_a) (g ts_b)
+             (real_eq_refl (g ts_a)) (H ts_b)).
 Qed.
 
 (* 接口参数 3：sumlinear——齐次（左分配 real_distrib 反向） *)
@@ -146,10 +158,19 @@ Lemma uab23_ts_sumlinear :
             (real_mult a (ts_sumf f)).
 Proof.
   intros a f.
-  exact (real_eq_sym (real_mult a (real_plus (f ts_a) (f ts_b)))
-                     (real_plus (real_mult a (f ts_a))
-                                (real_mult a (f ts_b)))
-                     (real_distrib a (f ts_a) (f ts_b))).
+  apply (real_eq_trans (real_plus (real_mult a (f ts_a)) (real_mult a (f ts_b)))
+           (real_plus (real_mult (f ts_a) a) (real_mult (f ts_b) a))
+           (real_mult a (real_plus (f ts_a) (f ts_b)))).
+  - exact (RealSetoid.real_eq_plus_compat (real_mult a (f ts_a))
+             (real_mult a (f ts_b)) (real_mult (f ts_a) a)
+             (real_mult (f ts_b) a)
+             (real_mult_comm a (f ts_a)) (real_mult_comm a (f ts_b))).
+  - exact (real_eq_trans (real_plus (real_mult (f ts_a) a)
+                                    (real_mult (f ts_b) a))
+             (real_mult (real_plus (f ts_a) (f ts_b)) a)
+             (real_mult a (real_plus (f ts_a) (f ts_b)))
+             (real_distrib_r (f ts_a) (f ts_b) a)
+             (real_mult_comm (real_plus (f ts_a) (f ts_b)) a)).
 Qed.
 
 (* 接口参数 4：sumadd——可加（四项重组引理实例） *)
@@ -159,7 +180,26 @@ Lemma uab23_ts_sumadd :
             (real_plus (ts_sumf f) (ts_sumf g)).
 Proof.
   intros f g.
-  exact (uab23_ts_plus_swap (f ts_a) (g ts_a) (f ts_b) (g ts_b)).
+  apply (real_eq_trans (real_plus (real_plus (f ts_a) (g ts_a))
+                                  (real_plus (f ts_b) (g ts_b)))
+           (real_plus (real_plus (g ts_a) (f ts_a))
+                      (real_plus (g ts_b) (f ts_b)))
+           (real_plus (real_plus (f ts_a) (f ts_b))
+                      (real_plus (g ts_a) (g ts_b)))).
+  - exact (RealSetoid.real_eq_plus_compat (real_plus (f ts_a) (g ts_a))
+             (real_plus (f ts_b) (g ts_b)) (real_plus (g ts_a) (f ts_a))
+             (real_plus (g ts_b) (f ts_b))
+             (real_plus_comm (f ts_a) (g ts_a))
+             (real_plus_comm (f ts_b) (g ts_b))).
+  - exact (real_eq_trans (real_plus (real_plus (g ts_a) (f ts_a))
+                                    (real_plus (g ts_b) (f ts_b)))
+             (real_plus (real_plus (g ts_a) (g ts_b))
+                        (real_plus (f ts_a) (f ts_b)))
+             (real_plus (real_plus (f ts_a) (f ts_b))
+                        (real_plus (g ts_a) (g ts_b)))
+             (uab23_ts_plus_swap (g ts_a) (f ts_a) (g ts_b) (f ts_b))
+             (real_plus_comm (real_plus (g ts_a) (g ts_b))
+                             (real_plus (f ts_a) (f ts_b)))).
 Qed.
 
 (* ============================================================ *)
@@ -329,8 +369,7 @@ Theorem uab23_ts_anchor_closed_lower :
             eps.
 Proof.
   intros eps Heps.
-  exact (slq_entropy_gain_kl_lower ts_state ts_sumf uab23_ts_sumpos uab23_ts_sumext
-           uab23_ts_sumlinear uab23_ts_sumadd real_one real_lt_zero_one ts_energy
+  exact (uab23_ts_gain_kl_lower real_one real_lt_zero_one ts_energy
            uab23_ts_boltz_one uab23_ts_boltz_one_pos
            (real_boltzmann_dist_temp_normalized ts_state ts_sumf uab23_ts_sumpos
               uab23_ts_sumext uab23_ts_sumlinear real_one real_lt_zero_one ts_energy)
@@ -353,8 +392,7 @@ Theorem uab23_ts_anchor_closed_upper :
             eps.
 Proof.
   intros eps Heps.
-  exact (slq_entropy_gain_kl_upper ts_state ts_sumf uab23_ts_sumpos uab23_ts_sumext
-           uab23_ts_sumlinear uab23_ts_sumadd real_one real_lt_zero_one ts_energy
+  exact (uab23_ts_gain_kl_upper real_one real_lt_zero_one ts_energy
            uab23_ts_boltz_one uab23_ts_boltz_one_pos
            (real_boltzmann_dist_temp_normalized ts_state ts_sumf uab23_ts_sumpos
               uab23_ts_sumext uab23_ts_sumlinear real_one real_lt_zero_one ts_energy)

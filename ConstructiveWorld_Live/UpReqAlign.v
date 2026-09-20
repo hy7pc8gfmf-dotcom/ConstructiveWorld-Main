@@ -215,12 +215,11 @@ Lemma req_align_partition_condition :
   req Z_align_req
       (sumf (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy_req s)))).
 Proof.
-  apply (sum_ext (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-                 (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy_req s)))).
-  intro s.
-  apply (req_sym (exp_neg (mult (inv_pos beta beta_pos) (align_energy_req s)))
-                 (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))).
-  apply req_align_energy_exp.
+  exact (sum_ext (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
+                 (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy_req s)))
+                 (fun s => req_sym (exp_neg (mult (inv_pos beta beta_pos) (align_energy_req s)))
+                                   (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
+                                   (req_align_energy_exp s))).
 Qed.
 
 (* π* 归一化（Id pi_star_normalized L18790 的 req 版；试点 req_boltzmann_normalized
@@ -303,8 +302,8 @@ Theorem req_rlhf_optimal :
     le (align_objective_req p Hp) (align_objective_req pi_star_req req_pi_star_pos).
 Proof.
   intros p Hn Hp. unfold align_objective_req.
-  apply (opp_le_compat (F_align_req pi_star_req req_pi_star_pos) (F_align_req p Hp)).
-  exact (bridge_min_free_energy p Hn Hp).
+  exact (opp_le_compat (F_align_req pi_star_req req_pi_star_pos) (F_align_req p Hp)
+                       (bridge_min_free_energy p Hn Hp)).
 Qed.
 
 (* RLHF 最优策略唯一性（Id rlhf_optimal_unique L19180 的 req 版；
@@ -315,9 +314,8 @@ Theorem req_rlhf_optimal_unique :
     forall s : S, req (p s) (pi_star_req s).
 Proof.
   intros p Hn Hp Hj.
-  apply (bridge_free_energy_min_unique p Hn Hp).
-  unfold align_objective_req in Hj.
-  exact (req_opp_eq (F_align_req p Hp) (F_align_req pi_star_req req_pi_star_pos) Hj).
+  exact (bridge_free_energy_min_unique p Hn Hp
+           (req_opp_eq (F_align_req p Hp) (F_align_req pi_star_req req_pi_star_pos) Hj)).
 Qed.
 
 (* DPO 最优性（Id dpo_optimal L19112 的 req 版；dpo_loss = −J 真证组装） *)
@@ -326,8 +324,8 @@ Theorem req_dpo_optimal :
     le (dpo_loss_req pi_star_req req_pi_star_pos) (dpo_loss_req p Hp).
 Proof.
   intros p Hn Hp. unfold dpo_loss_req.
-  apply (opp_le_compat (align_objective_req p Hp) (align_objective_req pi_star_req req_pi_star_pos)).
-  exact (req_rlhf_optimal p Hn Hp).
+  exact (opp_le_compat (align_objective_req p Hp) (align_objective_req pi_star_req req_pi_star_pos)
+                       (req_rlhf_optimal p Hn Hp)).
 Qed.
 
 (* ============ C 组：策略迭代旗舰链（Id L21237-23272 req 化） ============ *)
@@ -452,19 +450,19 @@ Hypothesis req_backward_kl_identity :
 Lemma req_plus_opp_le_zero : forall B C : R, le C B -> le (plus (opp B) C) zero.
 Proof.
   intros B C HCB.
-  apply (le_id_r (plus (opp B) C) (plus (opp B) B) zero
+  exact (le_id_r (plus (opp B) C) (plus (opp B) B) zero
                  (req_trans (plus (opp B) B) (plus B (opp B)) zero
-                            (plus_comm (opp B) B) (plus_opp B))).
-  apply (le_plus_compat (opp B) (opp B) C B (le_refl (opp B)) HCB).
+                            (plus_comm (opp B) B) (plus_opp B))
+                 (le_plus_compat (opp B) (opp B) C B (le_refl (opp B)) HCB)).
 Qed.
 
 Lemma req_plusA_opp_cancel_le :
   forall A B C : R, le C B -> le (plus A (plus (opp B) C)) A.
 Proof.
   intros A B C HCB.
-  apply (le_id_r (plus A (plus (opp B) C)) (plus A zero) A (plus_zero A)).
-  apply (le_plus_compat A A (plus (opp B) C) zero (le_refl A)
-                        (req_plus_opp_le_zero B C HCB)).
+  exact (le_id_r (plus A (plus (opp B) C)) (plus A zero) A (plus_zero A)
+                 (le_plus_compat A A (plus (opp B) C) zero (le_refl A)
+                                 (req_plus_opp_le_zero B C HCB))).
 Qed.
 
 (* 单步真几何收缩（Id policy_iter_kl_geom_step L23146 的 req 版；
@@ -646,9 +644,9 @@ Theorem req_dpo_loss_iter_step_le :
 Proof.
   intros pi_t Hpi_t Hnorm.
   unfold dpo_loss_req.
-  apply (opp_le_compat (align_objective_req pi_t Hpi_t)
-                       (align_objective_req (pi_next_req pi_t Hpi_t) (req_pi_next_pos pi_t Hpi_t))).
-  exact (req_policy_improvement_mono pi_t Hpi_t Hnorm).
+  exact (opp_le_compat (align_objective_req pi_t Hpi_t)
+                       (align_objective_req (pi_next_req pi_t Hpi_t) (req_pi_next_pos pi_t Hpi_t))
+                       (req_policy_improvement_mono pi_t Hpi_t Hnorm)).
 Qed.
 
 (* 迭代：沿 policy_iterate_req 轨道 dpo_loss 单调不增（真证组装） *)
@@ -775,7 +773,9 @@ Qed.
 (* Id Z_aud_le_one L95459 req 版（sum_le 提升；真证） *)
 Lemma req_Z_aud_le_one : le Z_aud_req (sumf p).
 Proof.
-  unfold Z_aud_req. apply sum_le. exact req_if_p_le_p.
+  unfold Z_aud_req.
+  exact (sum_le (fun s => if post_aud s then p s else zero) p
+                req_if_p_le_p).
 Qed.
 
 (* Id projected_pt L95465 req 版（真证：comm / mult_zero 分支） *)
@@ -1368,17 +1368,18 @@ Definition sigmoid_req (x : R) : R :=
 
 (* 值域正性（Id sigmoid_pos L20876 req 版） *)
 Lemma req_sigmoid_pos : forall x : R, lt zero (sigmoid_req x).
-Proof. intro x. unfold sigmoid_req. apply inv_pos_pos. Qed.
+Proof. intro x. unfold sigmoid_req.
+  exact (inv_pos_pos (plus one (exp_neg x)) (req_sigmoid_denom_pos x)). Qed.
 
 (* σ(0) = 1/2（Id sigmoid_zero_half L21045 req 版；exp_neg_zero + inv_pos_ext） *)
 Lemma req_sigmoid_zero_half :
   req (sigmoid_req zero) (inv_pos (plus one one) (req_two_pos)).
 Proof.
   unfold sigmoid_req.
-  apply (inv_pos_ext (plus one (exp_neg zero)) (plus one one)
-                     (req_sigmoid_denom_pos zero) (req_two_pos)).
-  exact (req_plus_compat one one (exp_neg zero) one
-           (req_refl one) (exp_neg_zero)).
+  exact (inv_pos_ext (plus one (exp_neg zero)) (plus one one)
+                     (req_sigmoid_denom_pos zero) (req_two_pos)
+                     (req_plus_compat one one (exp_neg zero) one
+                                      (req_refl one) (exp_neg_zero))).
 Qed.
 
 End ReqSigmoidQuick.
@@ -1422,3 +1423,14 @@ End ReqSigmoidQuick.
 (*    平移；sigmoid_strict_inc（@L21028）需 inv_pos_lt_contra 桥     *)
 (*    （B 类假设 req 同位，§1.5），随 B 桥批结果。                    *)
 (* ============================================================ *)
+
+Print Assumptions req_align_partition_condition.
+Print Assumptions req_rlhf_optimal.
+Print Assumptions req_rlhf_optimal_unique.
+Print Assumptions req_dpo_optimal.
+Print Assumptions req_plus_opp_le_zero.
+Print Assumptions req_plusA_opp_cancel_le.
+Print Assumptions req_dpo_loss_iter_step_le.
+Print Assumptions req_Z_aud_le_one.
+Print Assumptions req_sigmoid_pos.
+Print Assumptions req_sigmoid_zero_half.

@@ -1,3 +1,32 @@
+(* ============================================================
+   T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— G01_CoreMicro.v
+   本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
+   仅九条玩具证明体替换为定义层显式重演，语句面零改动：
+   ① uex_fep_partition_condition / ⑥ ufep_fep_partition_condition：
+     unfold 后 sum_over_S_ext 全参直造（逐点 id_cong exp_neg +
+     id_sym opp_mult_l 换形），消 apply 单跳。
+   ② uex_fep_align / ⑦ ufep_fep_align：id_trans 两段链（mult_comm
+     换形 + id_cong2 mult 双侧同余、id_refl 收口），消三段 apply 链。
+   ③ free_energy_softmax_eq_neg_T_logZ：id_trans 两段链（uex_fep_F_ext
+     外延 + free_energy_boltzmann 根件），消两段 apply 链。
+   ④ counter_ex_indicator_sum_two / ⑤ counter_ex_reward_sum_two_c：
+     simpl 后 id_cong 单段直造（plus_zero 显式实例收口），消两段
+     apply 链。
+   ⑧ ppo_is_decomp：id_trans 两段链（sum_over_S_ext 逐点分解 +
+     sum_over_S_add 求和分配），消两段 apply 链。
+   ⑨ le_of_minus_nonneg：le_id_r 全参直造（id_trans plus_comm +
+     minus_plus_cancel_gap 换形 + le_plus_nonneg_r 严界），消两段
+     apply 链。
+   验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
+     rc=0、零错误锚、vo 新于 v、文尾九条 Print Assumptions 全 Closed。
+   余五条复核判级：接口桥位两类（hlogz_discharge_full 转发上游
+     real_log_le_zero_of_le_one、real_var_nonneg_cond 转发上游
+     sq_sum_list_nonneg，上游体不在本件，无定义面可展）、已实质件
+     两类（real_lt_le_bridge/real_eq_le_bridge 已为显式构造子最小体）、
+     长链泛化一类（ppo_pointwise_decomp 五段 min 块泛化体，移植超本
+     切片预算）——均登记于 T246 台账，不动原文。
+   ============================================================ *)
+
 (* G 组：G01_CoreMicro — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpHlogZ + UpExtras + UpFEP + UpLogMono + UpPPO（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G01_CoreMicro 成员件：UpHlogZ（原样并入，自带 Require）======== *)
@@ -168,20 +197,17 @@ Let F_attn (p : S -> R) : R := free_energy base T p.
    Z == Σ_s exp_neg(invT · base s)（exp_pos_fn 定义性展开） *)
 Lemma uex_fep_partition_condition :
   Id Zf (sum_over_S (fun s : S => exp_neg (mult invT (base s)))).
-Proof.
-  unfold Zf, partition_function_temp, base.
-  apply (sum_over_S_ext _ _
+Proof.  unfold Zf, partition_function_temp, base.
+  exact (sum_over_S_ext _ _
     (fun s : S => id_cong exp_neg (id_sym (opp_mult_l invT (z s))))).
 Qed.
 
 (* 对齐引理：Boltzmann 分布（能量 −z、温度 T）逐点 = 温度 softmax *)
 Lemma uex_fep_align : forall s : S,
   Id (boltzmann_dist base T T_pos Zf Zf_pos s) (softmax_temp spp T T_pos z s).
-Proof.
-  intro s. unfold boltzmann_dist, softmax_temp, exp_pos_fn.
-  apply (id_trans (mult_comm (inv_pos Zf Zf_pos) (exp_neg (mult invT (base s))))).
-  apply (id_cong2 mult (id_cong exp_neg (opp_mult_l invT (z s)))).
-  apply id_refl.
+Proof.  intro s. unfold boltzmann_dist, softmax_temp, exp_pos_fn.
+  exact (id_trans (mult_comm (inv_pos Zf Zf_pos) (exp_neg (mult invT (base s))))
+           (id_cong2 mult (id_cong exp_neg (opp_mult_l invT (z s))) (id_refl))).
 Qed.
 
 (* F 外延：逐点相等的分布给出相等的自由能（base_loss/T 固定） *)
@@ -204,11 +230,10 @@ Qed.
 Theorem free_energy_softmax_eq_neg_T_logZ :
   Id (F_attn (softmax_temp spp T T_pos z))
      (mult (opp T) (log Zf)).
-Proof.
-  apply (id_trans (uex_fep_F_ext (softmax_temp spp T T_pos z)
+Proof.  exact (id_trans (uex_fep_F_ext (softmax_temp spp T T_pos z)
                              (boltzmann_dist base T T_pos Zf Zf_pos)
-                             (fun s : S => id_sym (uex_fep_align s)))).
-  apply (free_energy_boltzmann base T T_pos Zf Zf_pos uex_fep_partition_condition).
+                             (fun s : S => id_sym (uex_fep_align s)))
+            (free_energy_boltzmann base T T_pos Zf Zf_pos uex_fep_partition_condition)).
 Qed.
 
 End FEPLogZ.
@@ -255,10 +280,8 @@ Definition indicator2 : nat -> R :=
 Theorem counter_ex_indicator_sum_two :
   Id (list_sum_g2 indicator2 [O; O])
      (plus one one).
-Proof.
-  simpl.
-  apply (id_cong (fun x => plus one x)).
-  apply plus_zero.
+Proof.  simpl.
+  exact (id_cong (fun x => plus one x) (plus_zero one)).
 Qed.
 
 (* 同根见证：常数奖励在双副本下的总质量 == 2c ≠ c（单副本）， *)
@@ -266,10 +289,8 @@ Qed.
 Theorem counter_ex_reward_sum_two_c :
   Id (list_sum_g2 reward2 [O; O])
      (plus c c).
-Proof.
-  simpl.
-  apply (id_cong (fun x => plus c x)).
-  apply plus_zero.
+Proof.  simpl.
+  exact (id_cong (fun x => plus c x) (plus_zero c)).
 Qed.
 
 End GRPOCounterEx.
@@ -394,19 +415,16 @@ Let F_attn (p : S -> R) : R := free_energy base T p.
 (* 配分条件：softmax 配分函数满足 free_energy 三件套的 Z 规范 *)
 Lemma ufep_fep_partition_condition :
   Id Zf (sum_over_S (fun s : S => exp_neg (mult invT (base s)))).
-Proof.
-  unfold Zf, partition_function_temp, base.
-  apply (sum_over_S_ext _ _ (fun s : S => id_cong exp_neg (id_sym (opp_mult_l invT (z s))))).
+Proof.  unfold Zf, partition_function_temp, base.
+  exact (sum_over_S_ext _ _ (fun s : S => id_cong exp_neg (id_sym (opp_mult_l invT (z s))))).
 Qed.
 
 (* 对齐引理：Boltzmann 分布（能量 −z、温度 T）逐点 = softmax_temp z *)
 Lemma ufep_fep_align : forall s : S,
   Id (boltzmann_dist base T T_pos Zf Zf_pos s) (softmax_temp spp T T_pos z s).
-Proof.
-  intro s. unfold boltzmann_dist, softmax_temp, boltzmann_factor, exp_pos_fn.
-  apply (id_trans (mult_comm (inv_pos Zf Zf_pos) (exp_neg (mult invT (base s))))).
-  apply (id_cong2 mult (id_cong exp_neg (opp_mult_l invT (z s)))).
-  apply id_refl.
+Proof.  intro s. unfold boltzmann_dist, softmax_temp, boltzmann_factor, exp_pos_fn.
+  exact (id_trans (mult_comm (inv_pos Zf Zf_pos) (exp_neg (mult invT (base s))))
+           (id_cong2 mult (id_cong exp_neg (opp_mult_l invT (z s))) (id_refl))).
 Qed.
 
 (* F 外延：逐点相等的归一化分布给出相等的自由能 *)
@@ -653,10 +671,10 @@ Qed.
 Theorem ppo_is_decomp : forall adv : S -> R,
   Id (is_objective_of pi p_old adv Hpos)
      (plus (ppo_surrogate pi p_old adv eps Hpos) (clip_error adv)).
-Proof.
-  intro adv. unfold is_objective_of, ppo_surrogate, clip_error.
-  apply (id_trans (sum_over_S_ext _ _ (ppo_pointwise_decomp adv))).
-  apply (sum_over_S_add _ _).
+Proof.  intro adv.
+  unfold is_objective_of, ppo_surrogate, clip_error.
+  exact (id_trans (sum_over_S_ext _ _ (ppo_pointwise_decomp adv))
+            (sum_over_S_add _ _)).
 Qed.
 
 (* ========== E2：clip 误差非负（无优势符号前提） ========== *)
@@ -683,11 +701,10 @@ Qed.
 
 (* 辅助：a−b ≥ 0 ⟹ b ≤ a *)
 Lemma le_of_minus_nonneg : forall a b : R, le zero (minus a b) -> le b a.
-Proof.
-  intros a b H.
-  apply (le_id_r _ _ _ (id_trans (plus_comm b (minus a b))
-                                  (minus_plus_cancel_gap a b))).
-  exact (le_plus_nonneg_r b (minus a b) H).
+Proof.  intros a b H.
+  exact (le_id_r _ _ _ (id_trans (plus_comm b (minus a b))
+                          (minus_plus_cancel_gap a b))
+           (le_plus_nonneg_r b (minus a b) H)).
 Qed.
 
 (* ========== E3：裁剪代理非负 ⟹ 价值改进（单侧三件齐备） ========== *)
@@ -717,3 +734,13 @@ End PPOClipDecomp.
 (* 提取探针：clip 误差与代理目标可提取 *)
 From Stdlib Require Import Extraction.
 Extraction "upppo.ml" policy_ratio ppo_clip clip_error.
+
+Print Assumptions uex_fep_partition_condition.
+Print Assumptions uex_fep_align.
+Print Assumptions free_energy_softmax_eq_neg_T_logZ.
+Print Assumptions counter_ex_indicator_sum_two.
+Print Assumptions counter_ex_reward_sum_two_c.
+Print Assumptions ufep_fep_partition_condition.
+Print Assumptions ufep_fep_align.
+Print Assumptions ppo_is_decomp.
+Print Assumptions le_of_minus_nonneg.

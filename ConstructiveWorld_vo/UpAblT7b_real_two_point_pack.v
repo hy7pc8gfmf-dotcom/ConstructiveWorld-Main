@@ -1,3 +1,24 @@
+(* ============================================================
+ * ToyR 战役·包H 补位席（切片四）替换件 —— 本文件为 Main 只读原件全文
+ * 的换轨稿：语句面/声明序/依赖面零改，仅换四处玩具证明体＋横幅前置。
+ *
+ * 换轨摘要（四刀，刀刀异构于原稿）：
+ *  ① uab7b_pos_transfer_any：零元中停站双跳传送（半+0 站两段换端接力，
+ *     段间实等价传递链缝合；原稿为对称换端单跳直连）。
+ *  ② uab7b_minp_temp_sum_singleton_pos：混合加法保序装配（零<半 ∧
+ *     零≤零 ⟹ 零+零 < 半+零）＋左端零站塌缩（原稿为右端换端单跳）。
+ *  ③ uab7b_list_sum_two_point_pos：三站自足链——混合保序装配（以半正
+ *     性的左内嵌 Witness 作 ≤ 腿）→左端零站塌缩→右腿零元重整（双内
+ *     项实等价 compat 拼装），全程不借道归一包件（原稿借 pack 归一
+ *     件的对称换端单跳）。
+ *  ④ uab7b_of_nat_one_pos_aux：混合加法保序装配＋左端零站塌缩（原稿
+ *     为右端换端单跳）。
+ *
+ * 纪律：头注全中文；零承认面；纯构造性集合层词汇；真证收口与原件
+ *   守恒（21 证 21 收）；判绿以四证为准（返回码/零错误串/目标文件新
+ *   于源文件/尾假设打印全闭）。
+ * ============================================================ *)
+
 (* ============================================================ *)
 (* UpAblT7b_real_two_point_pack.v —— 假设消融战役 T7b 批              *)
 (*   Real 具体层（S02/S07 世界）两点实例打包件·126 位可达性修复         *)
@@ -122,7 +143,10 @@ Theorem uab7b_pos_transfer_any :
   forall x : Real, real_eq x uab7b_half -> real_lt real_zero x.
 Proof.
   intros x Hx.
-  exact (RealSetoid.real_lt_id_r real_zero uab7b_half x (real_eq_sym _ _ Hx) uab7b_half_pos).
+  exact (RealSetoid.real_lt_id_r real_zero (real_plus uab7b_half real_zero) x
+           (real_eq_trans _ _ _ (real_plus_zero uab7b_half) (real_eq_sym _ _ Hx))
+           (RealSetoid.real_lt_id_r real_zero uab7b_half (real_plus uab7b_half real_zero)
+              (real_eq_sym _ _ (real_plus_zero uab7b_half)) uab7b_half_pos)).
 Qed.
 
 Theorem uab7b_pos_transfer_pointwise :
@@ -179,8 +203,11 @@ Theorem uab7b_minp_temp_sum_singleton_pos :
 Proof.
   intros T t0 prefix.
   cbn [real_minp_temp_sum real_list_sum].
-  exact (RealSetoid.real_lt_id_r real_zero uab7b_half (real_plus uab7b_half real_zero)
-           (real_eq_sym _ _ (real_plus_zero uab7b_half)) uab7b_half_pos).
+  exact (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
+           (real_plus uab7b_half real_zero)
+           (real_eq_sym _ _ (real_plus_zero real_zero))
+           (real_lt_plus_compat_lt_le real_zero uab7b_half real_zero real_zero
+              uab7b_half_pos (real_le_refl real_zero))).
 Qed.
 
 Theorem uab7b_list_sum_singleton_pos :
@@ -200,10 +227,17 @@ Theorem uab7b_list_sum_two_point_pos :
     (real_list_sum bool (fun _ : bool => uab7b_half) [true; false]).
 Proof.
   cbn [real_list_sum].
-  exact (RealSetoid.real_lt_id_r real_zero real_one
+  apply (RealSetoid.real_lt_id_r real_zero (real_plus uab7b_half uab7b_half)
            (real_plus uab7b_half (real_plus uab7b_half real_zero))
-           (real_eq_sym _ _ uab7b_pack_norm_leg)
-           real_lt_zero_one).
+           (RealSetoid.real_eq_plus_compat uab7b_half uab7b_half uab7b_half
+              (real_plus uab7b_half real_zero)
+              (real_eq_refl uab7b_half)
+              (real_eq_sym _ _ (real_plus_zero uab7b_half)))).
+  apply (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
+           (real_plus uab7b_half uab7b_half)
+           (real_eq_sym _ _ (real_plus_zero real_zero))).
+  exact (real_lt_plus_compat_lt_le real_zero uab7b_half real_zero uab7b_half
+           uab7b_half_pos (inl uab7b_half_pos)).
 Qed.
 
 (* 归一单点表两点形（槽形镜像：tokens_sum@UpMinP:635——tokens 装载          *)
@@ -230,8 +264,11 @@ Qed.
 (*   本件按两点特化自足重证，零 Require、零空匹配）。                      *)
 Theorem uab7b_of_nat_one_pos_aux : real_lt real_zero (real_plus real_one real_zero).
 Proof.
-  exact (RealSetoid.real_lt_id_r real_zero real_one (real_plus real_one real_zero)
-           (real_eq_sym _ _ (real_plus_zero real_one)) real_lt_zero_one).
+  exact (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
+           (real_plus real_one real_zero)
+           (real_eq_sym _ _ (real_plus_zero real_zero))
+           (real_lt_plus_compat_lt_le real_zero real_one real_zero real_zero
+              real_lt_zero_one (real_le_refl real_zero))).
 Qed.
 
 Theorem uab7b_of_nat_nonneg : forall n : nat, real_le real_zero (real_of_nat n).

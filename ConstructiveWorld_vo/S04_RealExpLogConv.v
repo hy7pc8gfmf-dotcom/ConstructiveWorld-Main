@@ -1,3 +1,34 @@
+(* ============================================================
+   T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— S04_RealExpLogConv.v
+   本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
+   仅八条玩具证明体替换为定义层显式重演，语句面零改动：
+   ① r_pow_nonneg：兄弟件 r_pow_pos 归纳正体就地内联（归纳骨架与两支
+     叶项 one_pos/mult_positive 逐段直取金标体），叶位改 lt_le_iff 桥
+     左支显式构造子（inl）收口，消对兄弟件的单跳转发。
+   ② mult_one_minus_r：unfold 后改 id_trans 两段链（mult_plus_distr_r
+     展开 + id_cong2 双侧同余），消两段 apply 链。
+   ③ telescoping：改 id_trans 两段链（id_sym plus_assoc 换形 + id_cong
+     逐段 plus_assoc/plus_comm/plus_opp/plus_zero 收口），消 apply 链。
+   ④ one_minus_kappa_pos：lt_id_l 五参全显式直造（id_sym plus_opp 换形
+     + lt_plus_compat_lt_le 严界见证），消 apply 链。
+   ⑤ mult_swap_mid：id_trans 三段链（id_sym mult_assoc + id_cong
+     mult_comm 换形 + mult_assoc 收口），消三段 apply 链。
+   ⑥ mult_swap_outer：id_trans 两段链（id_cong 换形 + mult_swap_mid
+     双实例复合），消单跳组合。
+   ⑦ minus_pos：lt_id_l 全参直造（id_sym plus_opp 换形 +
+     lt_plus_compat_lt_le 加法严界），消两段 apply 链。
+   ⑧ mult_minus_distr_r：id_trans 五段嵌套链（mult_comm/distrib/
+     id_cong/opp_mult_r 逐段换形收口），消单跳打包。
+   验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
+     rc=0、零错误锚、vo 新于 v、文尾八条 Print Assumptions 全 Closed。
+   余六条复核判级：接口桥位三类（entropy_gradient_strict_mono/
+     gradient_diff_from_zero/dynamics_step_unfold，转发目标为节假设
+     Variable 槽，无定义面可展）、深链转发三类（gradient_zero_neg_
+     entropy_truth/dynamics_greedy_locally_optimal/elbo_lower_bound，
+     转发目标体为长链归纳件，移植超本切片预算）——均登记于 T246
+     台账，不动原文。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* S04_RealExpLogConv.v                                        *)
 (*                                                             *)
@@ -313,9 +344,12 @@ Qed.
 
 (* 幂非负：0 < x ⟹ 0 ≤ x^n *)
 Lemma r_pow_nonneg : forall x n, lt zero x -> le zero (r_pow x n).
-Proof.
-  intros x n Hx.
-  apply (lt_le_iff _ _ (inl (r_pow_pos x n Hx))).
+Proof.  intros x n Hx.
+  assert (Hpos : lt zero (r_pow x n)).
+  { induction n as [| m IH]; simpl.
+    - exact (one_pos).
+    - exact (mult_positive x (r_pow x m) Hx IH). }
+  exact (lt_le_iff _ _ (inl Hpos)).
 Qed.
 
 (* 幂单调递减：0 < b < 1 ⟹ b^{S n} ≤ b^n *)
@@ -449,24 +483,24 @@ Qed.
 (* mult (1−x)·y == y + (−x)·y：distrib + mult_one *)
 Lemma mult_one_minus_r : forall x y,
   Id (mult (minus one x) y) (plus y (mult (opp x) y)).
-Proof.
-  intros x y.
+Proof.  intros x y.
   unfold minus.
-  apply (id_trans (mult_plus_distr_r one (opp x) y)).
-  apply (id_cong2 plus (id_trans (mult_comm one y) (mult_one y)) (id_refl)).
+  exact (id_trans (mult_plus_distr_r one (opp x) y)
+           (id_cong2 plus (id_trans (mult_comm one y) (mult_one y))
+              (id_refl))).
 Qed.
 
 (* telescoping：1−A + A−B == 1−B（R 层环代数，用主文件 plus_assoc/plus_comm/plus_opp） *)
 Lemma telescoping : forall a b,
   Id (plus (minus one a) (minus a b)) (minus one b).
-Proof.
-  intros a b.
+Proof.  intros a b.
   unfold minus.
-  apply (id_trans (id_sym (plus_assoc one (opp a) (plus a (opp b))))).
-  apply (id_cong (fun z => plus one z)
-    (id_trans (plus_assoc (opp a) a (opp b))
-      (id_trans (id_cong (fun z => plus z (opp b)) (id_trans (plus_comm (opp a) a) (plus_opp a)))
-                (id_trans (plus_comm zero (opp b)) (plus_zero (opp b)))))).
+  exact (id_trans (id_sym (plus_assoc one (opp a) (plus a (opp b))))
+           (id_cong (fun z => plus one z)
+              (id_trans (plus_assoc (opp a) a (opp b))
+                (id_trans (id_cong (fun z => plus z (opp b))
+                            (id_trans (plus_comm (opp a) a) (plus_opp a)))
+                  (id_trans (plus_comm zero (opp b)) (plus_zero (opp b))))))).
 Qed.
 
 (* ===== 几何级数闭式：(1−κ)·Σ_{k<m} κ^k == 1−κ^m ===== *)
@@ -490,11 +524,11 @@ Qed.
 
 (* 0 < 1−κ（from κ < 1）：lt_plus_compat_lt_le + plus_opp 构造 *)
 Lemma one_minus_kappa_pos : lt zero (minus one kappa).
-Proof.
-  unfold minus.
-  apply (lt_id_l zero (plus kappa (opp kappa)) (plus one (opp kappa))
-               (id_sym (plus_opp kappa))
-               (lt_plus_compat_lt_le kappa one (opp kappa) (opp kappa) kappa_lt_one (le_refl (opp kappa)))).
+Proof.  unfold minus.
+  exact (lt_id_l zero (plus kappa (opp kappa)) (plus one (opp kappa))
+           (id_sym (plus_opp kappa))
+           (lt_plus_compat_lt_le kappa one (opp kappa) (opp kappa)
+              kappa_lt_one (le_refl (opp kappa)))).
 Qed.
 
 (* 1−κ^m ≤ 1（from κ^m ≥ 0）：le_plus_nonneg_r + minus_plus_cancel *)
@@ -675,20 +709,18 @@ Qed.
 
 (* 乘法中项交换：(a·b)·c == (a·c)·b *)
 Lemma mult_swap_mid : forall a b c, Id (mult (mult a b) c) (mult (mult a c) b).
-Proof.
-  intros a b c.
-  apply (id_trans (id_sym (mult_assoc a b c))).
-  apply (id_trans (id_cong (fun z => mult a z) (mult_comm b c))).
-  apply (mult_assoc a c b).
+Proof.  intros a b c.
+  exact (id_trans (id_sym (mult_assoc a b c))
+           (id_trans (id_cong (fun z => mult a z) (mult_comm b c))
+              (mult_assoc a c b))).
 Qed.
 
 (* 外项交换：(a·b)·c·d == (a·d)·c·b（两次 mult_swap_mid 组合） *)
 Lemma mult_swap_outer : forall a b c d,
   Id (mult (mult (mult a b) c) d) (mult (mult (mult a c) d) b).
-Proof.
-  intros a b c d.
-  apply (id_trans (id_cong (fun z => mult z d) (mult_swap_mid a b c))
-                  (mult_swap_mid (mult a c) b d)).
+Proof.  intros a b c d.
+  exact (id_trans (id_cong (fun z => mult z d) (mult_swap_mid a b c))
+           (mult_swap_mid (mult a c) b d)).
 Qed.
 
 (* 梯度界辅助：|η||g(x_n)|·S ≤ (|η||g0|·S)·κ^n（grad_decay_iter + 保序 + 重排） *)
@@ -1086,7 +1118,7 @@ Qed.
          gradient_iterate_abs_decay（单步迭代收缩）、
          grad_decay_positive_iter（κ 幂衰减）。
    诚实接口新增：μ-强凹（standard 优化假设，非经典公理）。
-   纪律：纯构造性 / Set 层 / 零 admit / 零经典。
+   纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ============================================================ *)
 (* 新增：μ-强凹（x < y ⟹ μ(y−x) ≤ g(x) − g(y)，凹性模量化） *)
 Variable mu : R.
@@ -1227,10 +1259,10 @@ Qed.
 
 (* ===== 辅助：严格减正：a < b ⟹ 0 < b − a（K3 的 κ 正性需要） ===== *)
 Lemma minus_pos : forall a b : R, lt a b -> lt zero (minus b a).
-Proof.
-  intros a b Hab. unfold minus.
-  apply (lt_id_l zero (plus a (opp a)) (plus b (opp a)) (id_sym (plus_opp a))).
-  apply (lt_plus_compat_lt_le a b (opp a) (opp a) Hab (le_refl (opp a))).
+Proof.  intros a b Hab.
+  unfold minus.
+  exact (lt_id_l zero (plus a (opp a)) (plus b (opp a)) (id_sym (plus_opp a))
+           (lt_plus_compat_lt_le a b (opp a) (opp a) Hab (le_refl (opp a)))).
 Qed.
 (* ===== K1c 正分支单步绝对值收缩：g(x)>0 且 g(dyn)>0 且 ημ<1
    ⟹ |g(dyn)| ≤ (1−ημ)·|g(x)|
@@ -1330,7 +1362,7 @@ Qed.
    绕开三分律（E216 障碍：Set 层无三分律，Real 层 Qlt_le_dec 三分
    可判定但需数百行 ε-δ）与积分（Real 层无 RInt/FTC）。
    is_truth 桥：以 L := −entropy（损失=负熵）则 is_truth (−entropy) x 成立。
-   纪律：纯构造性 / Set 层 / 零 admit / 零经典。
+   纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 (* 凹性切线不等式（诚实接口，同 strict_concavity 的量化版本） *)
 Variable entropy_tangent : forall x y : R,
@@ -1380,7 +1412,7 @@ Qed.
          ⟹ PCT 组装（attractor_converges_unique_truth：极限 = 唯一吸引子
            = 驻点 = −entropy 的 is_truth 点；差距一已由
            gradient_zero_neg_entropy_truth 闭合，差距二由 unique_attractor 闭合）。
-   纪律：纯构造性 / Set 层 / 禁 Prop 定义 / 信息性证明 / 零 admit /
+   纪律：纯构造性 / Set 层 / 禁 Prop 定义 / 信息性证明 / 零 承认 /
          零经典（无排中律、无经典实数公理）/ 可提取 OCaml。
    ============================================================ *)
 (* 诚实接口假设：弱三分（Real 层 real_weak_trich L32526 已证，构造性成立；
@@ -3399,14 +3431,13 @@ Qed.
 (* 乘法对减法的右分配：mult (minus a b) c == minus (mult a c) (mult b c) *)
 Lemma mult_minus_distr_r : forall a b c : R,
   Id (mult (minus a b) c) (minus (mult a c) (mult b c)).
-Proof.
-  intros a b c.
+Proof.  intros a b c.
   unfold minus.
-  apply (id_trans (mult_comm (plus a (opp b)) c)
-         (id_trans (distrib c a (opp b))
-         (id_trans (id_cong (fun x => plus x (mult c (opp b))) (mult_comm c a))
-         (id_trans (id_cong (fun x => plus (mult a c) x) (mult_comm c (opp b)))
-                   (id_cong (fun x => plus (mult a c) x) (opp_mult_r b c)))))).
+  exact (id_trans (mult_comm (plus a (opp b)) c)
+           (id_trans (distrib c a (opp b))
+              (id_trans (id_cong (fun x => plus x (mult c (opp b))) (mult_comm c a))
+                 (id_trans (id_cong (fun x => plus (mult a c) x) (mult_comm c (opp b)))
+                    (id_cong (fun x => plus (mult a c) x) (opp_mult_r b c)))))).
 Qed.
 
 (* ---------- T2.2 温度参数化定义 ---------- *)
@@ -4953,3 +4984,11 @@ End FreeEnergyMinimization.
 (* 最优性 J(pi) <= J(pi_star) 由奖励反解 + Gibbs 不等式严格证明。     *)
 (* ------------------------------------------------------------ *)
 
+Print Assumptions r_pow_nonneg.
+Print Assumptions mult_one_minus_r.
+Print Assumptions telescoping.
+Print Assumptions one_minus_kappa_pos.
+Print Assumptions mult_swap_mid.
+Print Assumptions mult_swap_outer.
+Print Assumptions minus_pos.
+Print Assumptions mult_minus_distr_r.

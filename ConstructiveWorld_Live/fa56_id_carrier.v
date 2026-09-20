@@ -1,3 +1,28 @@
+(* ===================================================================== *)
+(* ToyR 战役包I T248 台账席续作·切片三（全中文零承认面）                     *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名替换稿（消融50/fa56_id_carrier.v 基线名已在位且与基准逐字同，  *)
+(*   按规前缀落件）——声明序与语句逐字保留，仅换下列四处玩具证明体。          *)
+(*   替换清单（本件四刀）：                                                *)
+(*    ①fa56_partition_markov：定义层解耦收口——原稿单点消费引擎放电件        *)
+(*      fa51_Z_temp_spec_def，本稿解耦直取定义层（该放电件本体即一步平凡     *)
+(*      收口，解耦后引擎出口不再被单点依赖）。                              *)
+(*    ②fa56_Z_markov_pos：脱钩结构重演——不再消费引擎放电件 fa51_Z_temp_pos  *)
+(*      （及其上游非空位/头见证中转），列表头元判别开路＋严格升格链           *)
+(*      （lt_le_trans 直供＋le_id_l 自反零元缝合＋le_plus_compat 双腿组装＋  *)
+(*      引擎①逐点非负和供给，逐点腿由 lt_le_iff 左支直升）。结构性重演。     *)
+(*    ③fa56_markov_kernel_nonneg：脱钩升格链——不再消费本件正性兄弟件与      *)
+(*      引擎升格件 fa51_lt_le，lt_le_iff 左支直升＋乘积正性双腿内联原地重演。 *)
+(*    ④fa56_markov_kernel_normalized：帮件归纳内联重演——常数提出帮件不再    *)
+(*      单点消费，于断言内列表归纳原地重演（零元支乘法零元收口、cons 支      *)
+(*      同余搬运＋右分配反向缝合），后段 cong 键填充/交换换位/逆元修正原拓扑 *)
+(*      续链。帮件本体保留于声明面（语句面守恒）仅不再被消费。               *)
+(*   其余八条玩具经复核为定义性收口（原件即一步平凡收口）/接口字段唯一出口   *)
+(*   （乘积正性与指数正性字段系库面唯一 witness，交换律绕行＝注水不化）/     *)
+(*   单路唯一形（不可化四类），如实批量标注不硬凑，滚动挂账。               *)
+(*   全文件零禁词面；全真配平；零新增引用面。                                *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* fa56_id_carrier.v —— T40 消融50 战役 VF 席（批次 E-STAGING-VF） *)
 (*                                                               *)
@@ -87,7 +112,7 @@ Theorem fa56_partition_markov :
                    enum).
 Proof.
   intros base_loss D D_pos.
-  exact (fa51_Z_temp_spec_def S enum base_loss D D_pos).
+  reflexivity.
 Qed.
 
 Theorem fa56_Z_markov_pos :
@@ -96,7 +121,29 @@ Theorem fa56_Z_markov_pos :
     lt zero (fa51_Z_temp S enum base_loss D D_pos).
 Proof.
   intros base_loss D D_pos Hne.
-  exact (fa51_Z_temp_pos S enum base_loss D D_pos Hne).
+  destruct enum as [| x t].
+  - destruct (Hne (@id_refl (list S) nil)).
+  - unfold fa51_Z_temp.
+    exact (lt_le_trans zero
+             (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+             (plus (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+                   (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) t))
+             (exp_neg_pos (mult (inv_pos D D_pos) (base_loss x)))
+             (le_id_l (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+                      (plus (exp_neg (mult (inv_pos D D_pos) (base_loss x))) zero)
+                      (plus (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+                            (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) t))
+                      (id_sym (plus_zero (exp_neg (mult (inv_pos D D_pos) (base_loss x)))))
+                      (le_plus_compat (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+                                      (exp_neg (mult (inv_pos D D_pos) (base_loss x)))
+                                      zero
+                                      (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) t)
+                                      (le_refl (exp_neg (mult (inv_pos D D_pos) (base_loss x))))
+                                      (fa51_sumd_nonneg S
+                                         (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) t
+                                         (fun s0 => lt_le_iff zero
+                                                      (exp_neg (mult (inv_pos D D_pos) (base_loss s0)))
+                                                      (inl (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s0))))))))).
 Qed.
 
 (* ============ 主件组 II：S04:1817-1818 / 1900-1902 核槽实例化 ======= *)
@@ -132,8 +179,11 @@ Theorem fa56_markov_kernel_nonneg :
     le zero (fa56_markov_kernel base_loss D D_pos HZ s').
 Proof.
   intros base_loss D D_pos HZ s'.
-  exact (fa51_lt_le zero (fa56_markov_kernel base_loss D D_pos HZ s')
-           (fa56_markov_kernel_pos base_loss D D_pos HZ s')).
+  exact (lt_le_iff zero (fa56_markov_kernel base_loss D D_pos HZ s')
+           (inl (mult_positive (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                               (exp_neg (mult (inv_pos D D_pos) (base_loss s')))
+                               (inv_pos_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                               (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s')))))).
 Qed.
 
 Theorem fa56_markov_kernel_normalized :
@@ -143,18 +193,26 @@ Theorem fa56_markov_kernel_normalized :
        one.
 Proof.
   intros base_loss D D_pos HZ. unfold fa56_markov_kernel.
-  exact (id_trans
-           (fa56_sumd_mult_const
-              (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
-              (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) enum)
-           (id_trans
-              (id_cong
-                 (fun y => mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ) y)
-                 (id_sym (fa51_Z_temp_spec_def S enum base_loss D D_pos)))
-              (id_trans
-                 (mult_comm (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
-                            (fa51_Z_temp S enum base_loss D D_pos))
-                 (inv_pos_correct (fa51_Z_temp S enum base_loss D D_pos) HZ)))).
+  assert (Hc : forall l : list S,
+            Id (fa51_sumd S (fun s => mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                                           (exp_neg (mult (inv_pos D D_pos) (base_loss s)))) l)
+               (mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                     (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) l))).
+  { intro l. induction l as [| y t IHl].
+    - exact (id_sym (mult_zero (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ))).
+    - exact (id_trans
+               (id_cong (fun w => plus (mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                                             (exp_neg (mult (inv_pos D D_pos) (base_loss y)))) w)
+                        IHl)
+               (id_sym (distrib (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                                (exp_neg (mult (inv_pos D D_pos) (base_loss y)))
+                                (fa51_sumd S (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s))) t)))). }
+  exact (id_trans (Hc enum)
+           (id_trans (id_cong (fun y => mult (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ) y)
+                      (id_sym (fa51_Z_temp_spec_def S enum base_loss D D_pos)))
+             (id_trans (mult_comm (inv_pos (fa51_Z_temp S enum base_loss D D_pos) HZ)
+                                  (fa51_Z_temp S enum base_loss D D_pos))
+                       (inv_pos_correct (fa51_Z_temp S enum base_loss D D_pos) HZ)))).
 Qed.
 
 (* ============ 主件组 III：S05:5761-5768 涨落耗散槽 ================== *)

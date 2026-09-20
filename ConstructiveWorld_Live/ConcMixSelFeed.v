@@ -1,4 +1,26 @@
 (* ===================================================================== *)
+(* ToyR 切片二横幅（T248 台账席续作，20260921）——本件为 ConcMixSelFeed 的    *)
+(* ToyR 玩具证明体替换稿：消融50 同名件与基准树逐字同，按落件查重规走        *)
+(* ToyR_ 前缀；定理名/语句面/Require 面/自检段与原件逐字一致，仅换九处      *)
+(* 玩具单点转发证明体为实质重演体，尾 Print Assumptions 面原样保留。        *)
+(* 九刀换轨路线（程序直取下层引擎，不消费各槽原金标准转发件）：              *)
+(*   ①cms_lt_plus_compat_lt_le_sel ②cms_lt_plus_compat_lt_le_time          *)
+(*     ⑩cms_bs_lpc（同体三槽）：real_le Or 拆支两路——lt 支直取双严格加法    *)
+(*     引擎 real_lt_plus_compat；eq 支七步链（eq_plus_compat 键填充→        *)
+(*     eq_lt_lt 桥→plus_comm 换位→lt_plus_translate 平移→comm 收口）        *)
+(*   ③cms_sum_ext ④cms_sum_linear ⑤cms_sum_add ⑥cms_sum_le                 *)
+(*     ⑧cms_sum_eq_list：csm_sumf 定义性展开（=sumd_list_sum 处方）后列表   *)
+(*     归纳结构性重演——nil 支 zero 收口，cons 支 plus_compat 缝合腿；        *)
+(*     linear 刀经 distrib 右分配引擎三段中项链；add 刀经交换律中项缝       *)
+(*     合（req_plus_exchange）+归纳腿翻面；le 刀 le_plus_compat 直缝。       *)
+(*   ⑨cms_bs_abs：real_le Or 拆支——lt 支 abs_pos 件；eq 支三段 eq_trans     *)
+(*     链（abs_eq_compat 键填充→abs_zero 收口→原 eq 收口）。                 *)
+(* 挂账（如实登记不硬凑）：⑦cms_bs_swap 双折和换序需外层归纳内外双重        *)
+(*     重排（多中项交换/结合链复合），本切片未落刀，原转发体原样保留。       *)
+(* 纪律：零新增 Require；Proof./Qed. 与原件 11/11 守恒；全中文零承认。      *)
+(* ===================================================================== *)
+
+(* ===================================================================== *)
 (* ConcMixSelFeed.v — E-STAGING-CZX13 席位 / T84 缺口段候补4 施工件          *)
 (* cms_ 前缀（全库 grep 零撞名，20260918 实测）。                          *)
 (* 使命：UpReqConcMixSel 的 A 类槽放电总件——lt_plus×2 + sum 四槽 +         *)
@@ -109,13 +131,39 @@ Import RealInterfaceEnhancedMod.
 Theorem cms_lt_plus_compat_lt_le_sel :
   forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
-  exact real_lt_plus_compat_lt_le.
+  intros a b c d Hab Hcd.
+  assert (Hcd' : real_le c d) by exact Hcd.
+  unfold real_le in Hcd'.
+  destruct Hcd' as [Hlt | Heq].
+  - exact (real_lt_plus_compat a b c d Hab Hlt).
+  - apply (real_eq_lt_lt (plus a c) (plus a d) (plus b d)).
+    + apply (RealSetoid.real_eq_plus_compat a c a d).
+      * apply real_eq_refl.
+      * exact Heq.
+    + apply (real_eq_lt_lt (plus a d) (plus d a) (plus b d)).
+      * apply real_plus_comm.
+      * apply (real_lt_eq_lt (plus d a) (plus d b) (plus b d)).
+        -- apply (real_lt_plus_translate d a b Hab).
+        -- apply real_plus_comm.
 Defined.
 
 Theorem cms_lt_plus_compat_lt_le_time :
   forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
-  exact real_lt_plus_compat_lt_le.
+  intros a b c d Hab Hcd.
+  assert (Hcd' : real_le c d) by exact Hcd.
+  unfold real_le in Hcd'.
+  destruct Hcd' as [Hlt | Heq].
+  - exact (real_lt_plus_compat a b c d Hab Hlt).
+  - apply (real_eq_lt_lt (plus a c) (plus a d) (plus b d)).
+    + apply (RealSetoid.real_eq_plus_compat a c a d).
+      * apply real_eq_refl.
+      * exact Heq.
+    + apply (real_eq_lt_lt (plus a d) (plus d a) (plus b d)).
+      * apply real_plus_comm.
+      * apply (real_lt_eq_lt (plus d a) (plus d b) (plus b d)).
+        -- apply (real_lt_plus_translate d a b Hab).
+        -- apply real_plus_comm.
 Defined.
 
 (* ============ 槽③-⑥：sum 四槽（csm_sumf 折叠键，任意 S/en 泛型） ======== *)
@@ -124,7 +172,11 @@ Theorem cms_sum_ext : forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
   (forall s : S0, req (f s) (g s)) -> req (csm_sumf S0 en f) (csm_sumf S0 en g).
 Proof.
   intros S0 en f g H.
-  exact (csm_sum_ext S0 en f g H).
+  unfold csm_sumf.
+  induction en as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_list_sum S0 f t)
+             (sumd_list_sum S0 g t) (H x) IH).
 Defined.
 
 Theorem cms_sum_linear :
@@ -133,7 +185,27 @@ Theorem cms_sum_linear :
         (mult a (csm_sumf S0 en f)).
 Proof.
   intros S0 en a f.
-  exact (csm_sum_linear S0 en a f).
+  unfold csm_sumf.
+  induction en as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - simpl.
+    exact (req_sym
+             (mult a (plus (f x) (sumd_list_sum S0 f t)))
+             (plus (mult a (f x))
+                     (sumd_list_sum S0 (fun s : S0 => mult a (f s)) t))
+             (req_trans
+                (mult a (plus (f x) (sumd_list_sum S0 f t)))
+                (plus (mult a (f x)) (mult a (sumd_list_sum S0 f t)))
+                (plus (mult a (f x))
+                        (sumd_list_sum S0 (fun s : S0 => mult a (f s)) t))
+                (distrib a (f x) (sumd_list_sum S0 f t))
+                (req_plus_compat (mult a (f x)) (mult a (f x))
+                   (mult a (sumd_list_sum S0 f t))
+                   (sumd_list_sum S0 (fun s : S0 => mult a (f s)) t)
+                   (req_refl (mult a (f x)))
+                   (req_sym
+                      (sumd_list_sum S0 (fun s : S0 => mult a (f s)) t)
+                      (mult a (sumd_list_sum S0 f t)) IH)))).
 Defined.
 
 Theorem cms_sum_add :
@@ -142,7 +214,29 @@ Theorem cms_sum_add :
         (plus (csm_sumf S0 en f) (csm_sumf S0 en g)).
 Proof.
   intros S0 en f g.
-  exact (csm_sum_add S0 en f g).
+  unfold csm_sumf.
+  induction en as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - simpl.
+    exact (req_trans
+             (plus (plus (f x) (g x))
+                     (sumd_list_sum S0 (fun s : S0 => plus (f s) (g s)) t))
+             (plus (plus (f x) (g x))
+                     (plus (sumd_list_sum S0 f t) (sumd_list_sum S0 g t)))
+             (plus (plus (f x) (sumd_list_sum S0 f t))
+                     (plus (g x) (sumd_list_sum S0 g t)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_list_sum S0 (fun s : S0 => plus (f s) (g s)) t)
+                (plus (sumd_list_sum S0 f t) (sumd_list_sum S0 g t))
+                (req_refl (plus (f x) (g x))) IH)
+             (req_sym
+                (plus (plus (f x) (sumd_list_sum S0 f t))
+                        (plus (g x) (sumd_list_sum S0 g t)))
+                (plus (plus (f x) (g x))
+                        (plus (sumd_list_sum S0 f t)
+                                (sumd_list_sum S0 g t)))
+                (req_plus_exchange (f x) (g x)
+                   (sumd_list_sum S0 f t) (sumd_list_sum S0 g t)))).
 Defined.
 
 Theorem cms_sum_le :
@@ -150,7 +244,12 @@ Theorem cms_sum_le :
     (forall s : S0, le (f s) (g s)) -> le (csm_sumf S0 en f) (csm_sumf S0 en g).
 Proof.
   intros S0 en f g H.
-  exact (csm_sum_le S0 en f g H).
+  unfold csm_sumf.
+  induction en as [| x t IH].
+  - exact (le_refl zero).
+  - simpl.
+    exact (le_plus_compat (f x) (g x) (sumd_list_sum S0 f t)
+             (sumd_list_sum S0 g t) (H x) IH).
 Defined.
 
 (* ============ 槽⑧：sum_eq_list（折叠缝合 shim + 定义性展开） ============ *)
@@ -174,7 +273,12 @@ Theorem cms_sum_eq_list : forall (S0 : Set) (en : list S0) (g : S0 -> Real),
   req (csm_sumf S0 en g) (rsq_bs_list_sum S0 g en).
 Proof.
   intros S0 en g.
-  exact (cms_fold_req_list_sum S0 g en).
+  unfold csm_sumf.
+  induction en as [| x t IH].
+  - exact (req_refl zero).
+  - simpl.
+    exact (req_plus_compat (g x) (g x) (sumd_list_sum S0 g t)
+             (rsq_bs_list_sum S0 g t) (req_refl (g x)) IH).
 Defined.
 
 (* ============ 槽⑦：bs_swap（cb1 双折归纳泛型件实例化） ================== *)
@@ -192,13 +296,35 @@ Defined.
 
 Theorem cms_bs_abs : forall a : Real, le zero a -> req (abs a) a.
 Proof.
-  exact cb1_bs_abs.
+  intros a H.
+  assert (H' : real_le zero a) by exact H.
+  unfold real_le in H'.
+  destruct H' as [Hlt | Heq].
+  - exact (real_abs_pos_req a Hlt).
+  - exact (real_eq_trans (real_abs a) zero a
+             (real_eq_trans (real_abs a) (real_abs zero) zero
+                (real_abs_eq_compat a zero (real_eq_sym zero a Heq))
+                real_abs_zero_req)
+             Heq).
 Defined.
 
 Theorem cms_bs_lpc :
   forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
-  exact real_lt_plus_compat_lt_le.
+  intros a b c d Hab Hcd.
+  assert (Hcd' : real_le c d) by exact Hcd.
+  unfold real_le in Hcd'.
+  destruct Hcd' as [Hlt | Heq].
+  - exact (real_lt_plus_compat a b c d Hab Hlt).
+  - apply (real_eq_lt_lt (plus a c) (plus a d) (plus b d)).
+    + apply (RealSetoid.real_eq_plus_compat a c a d).
+      * apply real_eq_refl.
+      * exact Heq.
+    + apply (real_eq_lt_lt (plus a d) (plus d a) (plus b d)).
+      * apply real_plus_comm.
+      * apply (real_lt_eq_lt (plus d a) (plus d b) (plus b d)).
+        -- apply (real_lt_plus_translate d a b Hab).
+        -- apply real_plus_comm.
 Defined.
 
 (* ============ 自检段（G4 口径：逐件 Closed 实证） ===================== *)

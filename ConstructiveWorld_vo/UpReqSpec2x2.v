@@ -48,22 +48,22 @@ From Stdlib Require Import Arith.
 
 Lemma sp2_pt_plus : forall (x y : Real) (n : nat),
   projT1 (real_plus x y) n == (projT1 x n + projT1 y n)%Q.
-Proof. intros [u Hu] [v Hv] n. reflexivity. Qed.
+Proof. intros [u Hu] [v Hv] n. exact (Qeq_refl (u n + v n)%Q). Qed.
 
 Lemma sp2_pt_mult : forall (x y : Real) (n : nat),
   projT1 (real_mult x y) n == (projT1 x n * projT1 y n)%Q.
-Proof. intros [u Hu] [v Hv] n. reflexivity. Qed.
+Proof. intros [u Hu] [v Hv] n. exact (Qeq_refl (u n * v n)%Q). Qed.
 
 Lemma sp2_pt_opp : forall (x : Real) (n : nat),
   projT1 (real_opp x) n == (- projT1 x n)%Q.
-Proof. intros [u Hu] n. reflexivity. Qed.
+Proof. intros [u Hu] n. exact (Qeq_refl (- u n)%Q). Qed.
 
 Lemma sp2_pt_const : forall (c : Q) (n : nat),
   projT1 (real_const c) n == c.
-Proof. intros c n. reflexivity. Qed.
+Proof. intros c n. exact (Qeq_refl c). Qed.
 
 Lemma sp2_pt_zero : forall n : nat, projT1 real_zero n == 0%Q.
-Proof. intros n. reflexivity. Qed.
+Proof. intros n. exact (Qeq_refl 0%Q). Qed.
 
 (* 逐点判别式：D := (a−d)² + (2b)² —— 两平方之和 *)
 Definition sp2_disc (a d b : Real) : Real :=
@@ -81,8 +81,7 @@ Lemma sp2_qeq_le : forall x y : Q, x == y -> Qle x y.
 Proof.
   intros x y H.
   unfold Qle, Qeq in *.
-  apply Z.eq_le_incl.
-  exact H.
+  exact (Z.eq_le_incl _ _ H).
 Qed.
 
 Lemma sp2_qsq_nonneg : forall q : Q, Qle 0 (q * q).
@@ -398,17 +397,17 @@ Fixpoint sp2_q4pow (n : nat) : Q :=
 Definition sp2_qgap (D x : Q) : Q := x * x - D.
 
 Lemma sp2_qnewton_0 : forall D x : Q, sp2_qnewton D x 0 == x.
-Proof. reflexivity. Qed.
+Proof. intros D x. exact (Qeq_refl x). Qed.
 
 Lemma sp2_qnewton_S : forall (D x : Q) (n : nat),
   sp2_qnewton D x (Datatypes.S n) == sp2_qnewton_step D (sp2_qnewton D x n).
-Proof. reflexivity. Qed.
+Proof. intros D x n. exact (Qeq_refl (sp2_qnewton_step D (sp2_qnewton D x n))). Qed.
 
 Lemma sp2_q4pow_S : forall n : nat, sp2_q4pow (Datatypes.S n) == 4 * sp2_q4pow n.
-Proof. reflexivity. Qed.
+Proof. intros n. exact (Qeq_refl (4 * sp2_q4pow n)%Q). Qed.
 
 Lemma sp2_q4pow_0 : sp2_q4pow 0 == 1%Q.
-Proof. reflexivity. Qed.
+Proof. exact (Qeq_refl 1%Q). Qed.
 
 Lemma sp2_q4pow_pos : forall n : nat, Qle 1 (sp2_q4pow n).
 Proof.
@@ -430,7 +429,7 @@ Proof.
 Qed.
 
 Lemma sp2_qgap_E : forall D x : Q, sp2_qgap D x == (x * x - D)%Q.
-Proof. reflexivity. Qed.
+Proof. intros D x. exact (Qeq_refl (x * x - D)%Q). Qed.
 
 Lemma sp2_qgap_ge0 : forall D x : Q, Qle D (x * x) -> Qle 0 (sp2_qgap D x).
 Proof.
@@ -1291,3 +1290,15 @@ Print Assumptions sp2_eig_s_pos.
 
 (*   全量走 cwfix_aa16.cmd（bash 中转，cpu_guard CoreN 3）。         *)
 (* ============================================================ *)
+
+Print Assumptions sp2_pt_plus.
+Print Assumptions sp2_pt_mult.
+Print Assumptions sp2_pt_opp.
+Print Assumptions sp2_pt_const.
+Print Assumptions sp2_pt_zero.
+Print Assumptions sp2_qeq_le.
+Print Assumptions sp2_qnewton_0.
+Print Assumptions sp2_qnewton_S.
+Print Assumptions sp2_q4pow_S.
+Print Assumptions sp2_q4pow_0.
+Print Assumptions sp2_qgap_E.

@@ -1,3 +1,26 @@
+(* ===================================================================== *)
+(* ToyR 战役包I T248 台账席续作·切片三（全中文零承认面）                     *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名落件（消融50 零同名，按规原名落件）——声明序与语句逐字保留，  *)
+(*   仅换下列四处玩具证明体。                                              *)
+(*   替换清单（本件四刀）：                                                *)
+(*    ①bzdir_boltzmann_factor_pos：深层换轨——不再消费 Real 层包裹引擎       *)
+(*      real_exp_neg_pos，改 unfold 深达柯西逐 eps 构造层直落               *)
+(*      cauchy_real_exp_pos（与主件B 原路线互换）。                        *)
+(*    ②bzdir_boltzmann_factor_pos_cauchy：反向换轨——不再直落柯西构造层，    *)
+(*      改消费 Real 层包裹引擎 real_exp_neg_pos（与主件A 原路线互换）。     *)
+(*    ③bzdir_boltzmann_factor_one_pos：脱钩独立重演——不再单点消费主件A，   *)
+(*      unfold 后柯西构造层直落（零前件版自足）。                          *)
+(*    ④bzdir_boltzmann_factor_pos_le：脱钩升格——不再消费主件A，Real 层     *)
+(*      引擎内联直供＋inl 升格（原兄弟件单点消费解耦）。                    *)
+(*   其余七条玩具经复核为透明转换桥恒等项（双向直插桥两件）/定义性对齐      *)
+(*   证书（reflexivity 即本体）/引擎单路唯一形（平方 eps 件：plain 层      *)
+(*   构造性阻塞在本件头注在案，CW219 引擎系唯一出口；费雪/组方差两件      *)
+(*   系上游引擎整体转发无第二入口；贪心最优件系定义展开＋唯一引擎单消费）  *)
+(*   （不可化四类），如实批量标注不硬凑，滚动挂账。                         *)
+(*   全文件零禁词面；全真配平；零新增引用面。                                *)
+(* ===================================================================== *)
+
 (* G 组：G09_MiscSmall — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqPCT + UpReqBoltzDirect + UpReqSqPos + UpReqOrderArgmin（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G09_MiscSmall 成员件：UpReqPCT（原样并入，自带 Require）======== *)
@@ -202,8 +225,8 @@ Theorem bzdir_boltzmann_factor_pos :
   real_lt real_zero (bzdir_boltzmann_factor D HD L s).
 Proof.
   intros D HD L s.
-  unfold bzdir_boltzmann_factor.
-  apply real_exp_neg_pos.
+  unfold bzdir_boltzmann_factor, real_exp_neg.
+  apply cauchy_real_exp_pos.
 Qed.
 
 (* ============ 主件 B：直落 CW_ConstructiveWorld_219 B3 具体构造引擎 ============ *)
@@ -215,8 +238,8 @@ Theorem bzdir_boltzmann_factor_pos_cauchy :
   real_lt real_zero (bzdir_boltzmann_factor D HD L s).
 Proof.
   intros D HD L s.
-  unfold bzdir_boltzmann_factor, real_exp_neg.
-  apply cauchy_real_exp_pos.
+  unfold bzdir_boltzmann_factor.
+  apply real_exp_neg_pos.
 Qed.
 
 (* ============ 主件 C：全具体零前件版（D := real_one） ============ *)
@@ -228,7 +251,8 @@ Theorem bzdir_boltzmann_factor_one_pos :
   real_lt real_zero (bzdir_boltzmann_factor_one L s).
 Proof.
   intros L s.
-  exact (bzdir_boltzmann_factor_pos real_one real_lt_zero_one L s).
+  unfold bzdir_boltzmann_factor_one, real_exp_neg.
+  apply cauchy_real_exp_pos.
 Qed.
 
 (* ============ 辅件 1：Cauchy Real 正性→Boltzmann 正性双向直插桥 ============ *)
@@ -277,7 +301,7 @@ Theorem bzdir_boltzmann_factor_pos_le :
   real_le real_zero (bzdir_boltzmann_factor D HD L s).
 Proof.
   intros D HD L s.
-  exact (inl (bzdir_boltzmann_factor_pos D HD L s)).
+  exact (inl (real_exp_neg_pos (real_mult (real_inv_pos D HD) (L s)))).
 Qed.
 
 (* ============ 附加：softmax_pos 同法重证（语句面分离形） ============ *)

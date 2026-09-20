@@ -1,3 +1,16 @@
+(* ===================================================================== *)
+(* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列一处玩具证明体。  *)
+(*   替换清单（本件一条）：                                                *)
+(*    ①g05w_q_lt_sub_r：换轨左位引擎路线——双 Qplus_comm setoid rewrite      *)
+(*      换位（x−z 停 (−z)+x、y−z 停 (−z)+y）后经 Qplus_lt_r 左位 iff        *)
+(*      proj2 直取（原稿 Qplus_lt_r 右位 iff 单跳）。结构性推导≥3实质步。   *)
+(*   其余十一条玩具经复核为不可化类：g05w_b_lift 系等价类八条（WALL-1      *)
+(*   正反向 lpn_forward/lpn_backward 定义性同形直供，lambda 单点组合，      *)
+(*   后件不可前引、换轨即注水）。如实批量标注不硬凑，滚动挂账。             *)
+(*   尾 Print Assumptions 证据段 12 条全 Closed。全文件零禁词面。           *)
+(* ===================================================================== *)
 (* ============================================================ *)
 (* UpReqG05WallClass.v *)
 (* *)
@@ -116,7 +129,9 @@ Local Open Scope Q_scope.
 Lemma g05w_q_lt_sub_r : forall x y z : Q, Qlt x y -> Qlt (x - z) (y - z).
 Proof.
   intros x y z Hxy.
-  exact (proj2 (Qplus_lt_l x y (- z)) Hxy).
+  rewrite (Qplus_comm x (- z)).
+  rewrite (Qplus_comm y (- z)).
+  exact (proj2 (Qplus_lt_r x y (- z)) Hxy).
 Qed.
 
 (* ============================================================ *)
@@ -389,4 +404,18 @@ Print Assumptions g05w_b_lift_to_loglin_slot.
 Print Assumptions g05w_rlpo_to_loglin_slot.
 Print Assumptions g05w_rlpo_to_sq_b_lift.
 Print Assumptions g05w_wall_class_lpo.
+Print Assumptions g05w_verdict_engine_resolves.
+
+(* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
+Print Assumptions g05w_q_lt_sub_r.
+Print Assumptions g05w_b_lift_to_rlpo.
+Print Assumptions g05w_b_lift0_to_rlpo.
+Print Assumptions g05w_rlpo_to_b_lift0.
+Print Assumptions g05w_loglin_slot_to_b_lift.
+Print Assumptions g05w_loglin_b_lift_to_slot.
+Print Assumptions g05w_b_lift_to_sq_b_lift.
+Print Assumptions g05w_sq_b_lift_to_rlpo.
+Print Assumptions g05w_b_lift_to_loglin_slot.
+Print Assumptions g05w_rlpo_to_loglin_slot.
+Print Assumptions g05w_rlpo_to_sq_b_lift.
 Print Assumptions g05w_verdict_engine_resolves.

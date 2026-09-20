@@ -1,3 +1,20 @@
+(* ===================================================================== *)
+(* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列一处玩具证明体。  *)
+(*   替换清单（本件一条）：                                                *)
+(*    ①cb2_qmul_nonneg_r：结构性分叉路线——Qle_lt_or_eq 将 0≤a 拆两支：      *)
+(*      Qlt 支走 Qmult_le_r 双向 iff 投影（proj2 正向提取，双 Qmult_comm     *)
+(*      换位中转）；Qeq 支走 setoid rewrite<- Haeq 全称代换（a≡0 消解）      *)
+(*      后双侧 Qmult_0_l 经 Qeq_trans 链收口（原稿 Qmult_le_compat_r        *)
+(*      单调件直连＋双 comm 中转，无分叉无 iff 投影）。结构性推导≥6实质步。 *)
+(*   其余十一条玩具经复核为不可化类：cb2_qhalf_lt_one/cb2_smoke 系五条      *)
+(*   （定义性收口 reflexivity/in_eq）；cb2_qhalf_pos（Qlt_to_QltT 单点）；   *)
+(*   cb2_qlt_eq_r（Qlt_le_trans+qeq_le 单路直供，无 iff 换轨件）；           *)
+(*   cb2_z_lb_all/cb2_z_ub_all（lmax_complete 唯一引擎）。如实批量标注      *)
+(*   不硬凑，滚动挂账。                                                    *)
+(*   尾 Print Assumptions 证据段 12 条全 Closed。全文件零禁词面。           *)
+(* ===================================================================== *)
 (* ============================================================ *)
 (* UpReqConcB2.v —— 席 AT8：B2 实质核第一棒（dot/max 封顶 + 具体 logit 核） *)
 (* 论文7 §10.2 第 7 项 · 无条件合龙路线①（AT4 侦察切片工单 S7 前半，         *)
@@ -132,11 +149,17 @@ Qed.
 Lemma cb2_qmul_nonneg_r : forall a u v : Q, Qle 0 a -> Qle u v -> Qle (a * u) (a * v).
 Proof.
   intros a u v Ha Huv.
-  exact (Qle_trans (a * u) (u * a) (a * v)
-           (qeq_le (a * u) (u * a) (Qmult_comm a u))
-           (Qle_trans (u * a) (v * a) (a * v)
-              (Qmult_le_compat_r u v a Huv Ha)
-              (qeq_le (v * a) (a * v) (Qmult_comm v a)))).
+  destruct (Qle_lt_or_eq 0 a Ha) as [Hapos | Haeq].
+  - exact (Qle_trans (a * u) (u * a) (a * v)
+             (qeq_le (a * u) (u * a) (Qmult_comm a u))
+             (Qle_trans (u * a) (v * a) (a * v)
+                (proj2 (Qmult_le_r u v a Hapos) Huv)
+                (qeq_le (v * a) (a * v) (Qmult_comm v a)))).
+
+  - rewrite <- Haeq.
+    apply (qeq_le (0 * u) (0 * v)).
+    exact (Qeq_trans (0 * u) 0 (0 * v) (Qmult_0_l u)
+                      (Qeq_sym (0 * v) 0 (Qmult_0_l v))).
 Qed.
 
 (* x ≤ y 给出 0 ≤ y−x（Qplus_le_r iff 拆支 + ring 归一） *)
@@ -625,3 +648,17 @@ Print Assumptions cb2_z_ub.
 Print Assumptions cb2_z_lb_all.
 Print Assumptions cb2_z_ub_all.
 Print Assumptions cb2_smoke_ub_cert.
+
+(* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
+Print Assumptions cb2_qmul_nonneg_r.
+Print Assumptions cb2_qhalf_lt_one.
+Print Assumptions cb2_qhalf_pos.
+Print Assumptions cb2_qlt_eq_r.
+Print Assumptions cb2_z_lb_all.
+Print Assumptions cb2_z_ub_all.
+Print Assumptions cb2_smoke_dot.
+Print Assumptions cb2_smoke_z.
+Print Assumptions cb2_smoke_max.
+Print Assumptions cb2_smoke_Delta.
+Print Assumptions cb2_smoke_gap.
+Print Assumptions cb2_smoke_complete.

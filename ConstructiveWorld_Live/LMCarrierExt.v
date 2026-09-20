@@ -1,45 +1,64 @@
+(* ===================================================================== *)
+(* ToyR 战役包H T247 台账席替换稿（全中文零承认面）                         *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列四处玩具证明体。  *)
+(*   替换清单（本件四条）：                                                *)
+(*    ①lmc_total_loss_ext_mono：换轨交换律路线——零元左停（tok_loss w + 0   *)
+(*      换到和式左槽），经 plus_comm 外槽换位＋lmc_sumd_app 分解对称收口，   *)
+(*      正性腿 le_plus_compat 槽位对调重排（原稿零元停右槽、原 le 链        *)
+(*      le_id_l 直连）。结构性推导≥5实质步。                              *)
+(*    ②lmc_sgd_zero_noise：换轨交换律路线——mult_zero 换形经两次 plus_comm  *)
+(*      绕行（原稿 cong 直消单步），四步结构性重演。                       *)
+(*    ③lmc_sgd_one_sigma：双腿分步同余路线——两条 id_cong 串行各携          *)
+(*      mult_comm→mult_one 换形链（原稿 id_cong2 双联跳两次），四步重演。   *)
+(*    ④lmc_seq_loss_single：结构性两步——经 lmc_seq_loss_nil 尾元折零件     *)
+(*      id_cong 换形后再 plus_zero 消零（原稿单点直取消零）。               *)
+(*   其余八条玩具经复核为单点序事实/定义性收口/单路引擎直供（不可化四类），  *)
+(*   如实批量标注不硬凑，滚动挂账。                                        *)
+(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
-(* LMCarrierExt.v —— S04 语言模型/热力学节 Id 载体槽的列表载体兑现     *)
-(*                                                              *)
-(* 目的：S04_RealExpLogConv.v 语言模型/热力学节中「Id 载体可实例化」    *)
-(*   槽位沿既有引擎批量兑现的续做。fa51_sumd 族/fa56_markov_kernel/     *)
-(*   fa56b_nonempty 族/fa56c_default_token 族已铺（均只 Require 零改）， *)
-(*   本件补四引擎均未覆盖的槽。                                       *)
-(*                                                              *)
-(* 主件（前缀 lmc_，避免与库内既有名冲突；语句原文坐标全经核对）：       *)
-(*  槽A  S04:1470/1472/1478（SumExpPositive 节 neg_log_prob 槽＋        *)
-(*       sum_exp softmax 配分折叠；S04 本体在抽象接口层已证             *)
-(*       sum_exp_positive，本件做 fa51_sumd 列表载体镜像＋softmax       *)
-(*       分母=温度配分桥＋vocab 归一化特化（fa56_markov_kernel_         *)
-(*       normalized 的 Token/vocab 坐标消费位）。                      *)
-(*  槽B  S04:1512（ArgminCorrectness 节 total_loss 槽）——装法：         *)
-(*       逐 token 损失有限和；旗舰件为前缀延长单调（sumd_app 分解       *)
-(*       ＋le_plus_compat 链）。新引擎件 lmc_sumd_app（Id 列表          *)
-(*       载体的和-加法分解，对应抽象 SumOver 面的 sum_over_S_add；      *)
-(*       fa51/fa56/fa56b/fa56c 均无此件，槽C/D 共用钥匙）。             *)
-(*  槽C  S04:1799-1800（GradientDescentAndAttractor 节 noise/sigma      *)
-(*       随机采样槽）——R 载体镜像（StateSpace 字段的 R 实例：           *)
-(*       splus/smult/sopp 在 R 载体即 plus/mult/opp，如实注记）；       *)
-(*       零噪声居民件＋sigT 槽装配旗舰（噪声槽可实例化主证）＋           *)
-(*       单位步长特化件。                                              *)
-(*  槽D  S04:1639/1641（SequenceLossPrefixApp 节 neg_log_prob 槽＋      *)
-(*       sequence_loss_prefix 自回归折叠）——镜像 Fixpoint＋nil/         *)
-(*       single 定义件＋unigram 坍缩旗舰（前缀无关 nll 时序列损失       *)
-(*       = fa51_sumd 有限和；归纳换前缀＋引擎消费，非平凡）。           *)
-(*                                                              *)
-(* 已知边界（如实登记，不硬凑）：S04 余下 Variable 中                    *)
-(*   entropy/entropy_gradient/dynamics/eta/L/S_max 族属动力系统收敛节    *)
-(*   （非 LM/热力学节辖域）；grad 为梯度 oracle 谓词面；                 *)
-(*   pick_best/argmin 机制依赖 DecidableOrder 判定器（ord_le_dec），      *)
-(*   非本件 Id 载体可兑现形。                                           *)
-(*                                                              *)
-(* 依赖（全部只读消费）：S01_BaseRing 基座＋fa51/fa56/fa56b/fa56c 族。   *)
-(*                                                              *)
-(* 备注：语句面 Set 层（lt/le/Id/Not/sigT 均 S01 Set 值定义，零 Prop     *)
-(*   泄露）；抽象 SumOver 载体无列表结构，本件即 fa51_sumd 列表载体      *)
-(*   镜像（承接库内「Id 系载体留 real 镜像模块」的既定方针）。            *)
-(*   既有文件零改。纯构造性零承认位；文末 Print Assumptions 全 Closed。  *)
+(* LMCarrierExt.v —— T40 消融50 战役 CYD11 席（批次 E-STAGING-CYD11） *)
+(*                                                                 *)
+(* 使命：LM 载体槽续做第三波——S04_RealExpLogConv.v 语言模型/热力学  *)
+(*       节中「Id 载体可实例化」的 C 类槽沿引擎批量兑现。fa51_sumd  *)
+(*       族/fa56_markov_kernel/fa56b_nonempty 族/fa56c_default_token *)
+(*       族已铺（均只 Require 零改），本件补四引擎均未覆盖的槽：    *)
+(*                                                                 *)
+(* 选槽清单（语句原文坐标，全经 grep 核对，Live/vorebuild 版）：    *)
+(*  槽A  S04:1470/1472/1478（SumExpPositive 节 neg_log_prob 槽 +    *)
+(*       sum_exp softmax 配分折叠；S04 本体在抽象接口层已证         *)
+(*       sum_exp_positive，本件做 fa51_sumd 列表载体镜像 + softmax  *)
+(*       分母=温度配分桥 + vocab 归一化特化（fa56_markov_kernel_    *)
+(*       normalized 的 Token/vocab 坐标消费位）。                   *)
+(*  槽B  S04:1512（ArgminCorrectness 节 total_loss 槽）——装法：     *)
+(*       逐 token 损失有限和；旗舰件为前缀延长单调（sumd_app 分解   *)
+(*       + le_plus_compat 链）。新引擎件 lmc_sumd_app（Id 列表      *)
+(*       载体的和-加法分解，对应抽象 SumOver 面的 sum_over_S_add；  *)
+(*       fa51/fa56/fa56b/fa56c 均无此件，槽C/D 共用钥匙）。         *)
+(*  槽C  S04:1799-1800（GradientDescentAndAttractor 节 noise/sigma  *)
+(*       随机采样槽）——R 载体镜像（StateSpace 字段的 R 实例：       *)
+(*       splus/smult/sopp 在 R 载体即 plus/mult/opp，诚实注记）；   *)
+(*       零噪声居民件 + sigT 槽装配旗舰（噪声槽可实例化主证）+      *)
+(*       单位步长特化件。                                           *)
+(*  槽D  S04:1639/1641（SequenceLossPrefixApp 节 neg_log_prob 槽 +  *)
+(*       sequence_loss_prefix 自回归折叠）——镜像 Fixpoint + nil/    *)
+(*       single 定义件 + unigram 坍缩旗舰（前缀无关 nll 时序列损失  *)
+(*       = fa51_sumd 有限和；归纳换前缀 + 引擎消费，非平凡）。      *)
+(*                                                                 *)
+(* 如实登记不硬凑：S04 余下 Variable 中 entropy/entropy_gradient/   *)
+(* dynamics/eta/L/S_max 族属动力系统收敛节（非 LM/热力学节本波辖    *)
+(* 区）；grad 为梯度 oracle 谓词面；pick_best/argmin 机制依赖       *)
+(* DecidableOrder 判定器（ord_le_dec），非本波 Id 载体可兑现形。    *)
+(*                                                                 *)
+(* 对账口径：同 fa51/fa56 族——语句面 Set 层（lt/le/Id/Not/sigT     *)
+(* 均 S01 Set 值定义，零 Prop 泄露）；抽象 SumOver 载体无列表结构，  *)
+(* 本件即 fa51_sumd 列表载体镜像（G12 头注「Id 系载体留 real 镜像    *)
+(* 模块」续做）。既有文件零改；前缀 lmc_ 全库防撞已 grep 核。        *)
+(* 红线：纯构造性零承认位；尾 Print Assumptions 全 Closed。          *)
 (* ============================================================ *)
+
 Require Import S01_BaseRing.
 Require Import fa51_sumpos_id.
 Require Import fa56_id_carrier.
@@ -185,20 +204,28 @@ Proof.
   intros Token tok_loss l w Hf.
   exact (le_id_r
            (fa51_sumd Token tok_loss l)
-           (plus (fa51_sumd Token tok_loss l) (plus (tok_loss w) zero))
+           (plus (plus (tok_loss w) zero) (fa51_sumd Token tok_loss l))
            (fa51_sumd Token tok_loss (l ++ w :: nil))
-           (id_sym (lmc_sumd_app Token tok_loss l (w :: nil)))
-           (le_id_l
+           (id_trans (plus_comm (plus (tok_loss w) zero)
+                                (fa51_sumd Token tok_loss l))
+                     (id_sym (lmc_sumd_app Token tok_loss l (w :: nil))))
+           (le_id_r
               (fa51_sumd Token tok_loss l)
-              (plus (fa51_sumd Token tok_loss l) zero)
               (plus (fa51_sumd Token tok_loss l) (plus (tok_loss w) zero))
-              (id_sym (plus_zero (fa51_sumd Token tok_loss l)))
-              (le_plus_compat
-                 (fa51_sumd Token tok_loss l) (fa51_sumd Token tok_loss l)
-                 zero (plus (tok_loss w) zero)
-                 (le_refl (fa51_sumd Token tok_loss l))
-                 (le_id_r zero (tok_loss w) (plus (tok_loss w) zero)
-                    (id_sym (plus_zero (tok_loss w))) (Hf w))))).
+              (plus (plus (tok_loss w) zero) (fa51_sumd Token tok_loss l))
+              (plus_comm (fa51_sumd Token tok_loss l)
+                         (plus (tok_loss w) zero))
+              (le_id_l
+                 (fa51_sumd Token tok_loss l)
+                 (plus (fa51_sumd Token tok_loss l) zero)
+                 (plus (fa51_sumd Token tok_loss l) (plus (tok_loss w) zero))
+                 (id_sym (plus_zero (fa51_sumd Token tok_loss l)))
+                 (le_plus_compat
+                    (fa51_sumd Token tok_loss l) (fa51_sumd Token tok_loss l)
+                    zero (plus (tok_loss w) zero)
+                    (le_refl (fa51_sumd Token tok_loss l))
+                    (le_id_r zero (tok_loss w) (plus (tok_loss w) zero)
+                       (id_sym (plus_zero (tok_loss w))) (Hf w)))))).
 Qed.
 
 (* ============ 槽C：S04:1799-1800 noise/sigma 随机采样槽 ============ *)
@@ -220,8 +247,11 @@ Theorem lmc_sgd_zero_noise :
     Id (lmc_sgd_step gradv zero sigma) (mult sigma (opp gradv)).
 Proof.
   intros gradv sigma.
-  exact (id_trans (id_cong (fun y => plus (mult sigma (opp gradv)) y) (mult_zero sigma))
-                  (plus_zero (mult sigma (opp gradv)))).
+  exact (id_trans (plus_comm (mult sigma (opp gradv)) (mult sigma zero))
+           (id_trans (id_cong (fun y => plus y (mult sigma (opp gradv)))
+                              (mult_zero sigma))
+                     (id_trans (plus_comm zero (mult sigma (opp gradv)))
+                               (plus_zero (mult sigma (opp gradv)))))).
 Qed.
 
 (* 槽装配旗舰：噪声槽可实例化——零噪声居民给出 sigT 见证（一步装配）。 *)
@@ -241,10 +271,11 @@ Theorem lmc_sgd_one_sigma :
 Proof.
   intros gradv noisev.
   exact (id_trans
-           (id_cong2 (fun a b => plus a b) (mult_comm one (opp gradv))
-                     (mult_comm one noisev))
-           (id_cong2 (fun a b => plus a b) (mult_one (opp gradv))
-                     (mult_one noisev))).
+           (id_cong (fun y => plus y (mult one noisev))
+                    (id_trans (mult_comm one (opp gradv))
+                              (mult_one (opp gradv))))
+           (id_cong (fun y => plus (opp gradv) y)
+                    (id_trans (mult_comm one noisev) (mult_one noisev)))).
 Qed.
 
 (* ============ 槽D：S04:1639/1641 AR-LM 序列损失槽 ================== *)
@@ -268,7 +299,12 @@ Theorem lmc_seq_loss_single :
   forall (Token : Set) (nll : list Token -> Token -> R) (prefix : list Token)
          (w : Token),
     Id (lmc_seq_loss Token nll prefix (w :: nil)) (nll prefix w).
-Proof. intros Token nll prefix w. exact (plus_zero (nll prefix w)). Qed.
+Proof.
+  intros Token nll prefix w.
+  exact (id_trans (id_cong (fun y => plus (nll prefix w) y)
+                           (lmc_seq_loss_nil Token nll (prefix ++ w :: nil)))
+                  (plus_zero (nll prefix w))).
+Qed.
 
 (* 旗舰件：nll 与前缀无关（unigram）时，自回归序列损失坍缩为有限和。   *)
 Theorem lmc_seq_loss_unigram_sumd :

@@ -1,3 +1,16 @@
+(* ============================================================
+   T245 包F 台账席 切片四 · UpAblAbsQFeedB2 六刀落刀（同名替换，全中文零承认）
+   本件为基线原件（md5 c979bdcf…，与 Main 基线逐字）的同名替换件：语句面、
+   声明序、其余定理与既有版记头注逐字保留；六条 Corollary 证明体在替换点
+   将跨件单跳 uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v
+   :59-61：转换桥 Qle_to_QleT'＋stdlib Qabs_triangle 两步，逐字重演）：
+   一、uaq2_s10_6282_band（xs/ys 实例化）；二、uaq2_s10_8224_inv_pt（a/b/c）；
+   三、uaq2_s10_8485_root_cauchy（p/m/z）；四、uaq2_s10_10642_h4（b1..b4）；
+   五、uaq2_s10_11938_outer（dc/ds/an）；六、uaq2_s10_11944_inner（dc/ds）。
+   余 9 条同形单跳直引批量登记（见 §A 批注，本件版记原注「证明增量零」
+   供给体例不变）。依赖面零新增：Require 面与原件逐字一致（引擎体两步
+   所需 Qle_to_QleT'／Qabs_triangle 均在原件既有可见域内）。
+   ============================================================ *)
 (* ============================================================ *)
 (* UpAblAbsQFeedB2.v —— S10 内 Qabs 同族绝对值三角第二批供给件（15 处）    *)
 (*                                                                *)
@@ -46,7 +59,17 @@ Check uaq_abs_triangle_plus.
 (* uaq2_s10_6282_band（sc_cs_sq_err_le 三角步骤｜实参 xs:=cos 双重和, ys:=sin 双重和） *)
 Corollary uaq2_s10_6282_band : forall xs ys : Q,
   QleT' (Qabs (xs + ys)) (Qabs xs + Qabs ys).
-Proof. exact uaq_abs_triangle_plus. Qed.
+Proof.
+  intros xs ys.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），xs/ys 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
+
+(* 不可化批量登记（9 条跨件单跳直引）：uaq2_s10_7633_mid_err／10643_h3／
+   10644_h2／10852_bands／11009_d1d2／11195_seq_plus／11220_split／
+   12138_seq_plus／12168_split——均为 uaq_abs_triangle_plus 逐字同形实例
+   （本件版记「证明增量零」供给体例之单跳最短形），批量登记不凑数。 *)
 
 (* uaq2_s10_7633_mid_err（cos 中点缺陷和分解｜实参 x:=cauchy_real_cos 投影项, q:=cos_partial K1 m） *)
 Corollary uaq2_s10_7633_mid_err : forall x q : Q,
@@ -56,18 +79,33 @@ Proof. intros x q. apply uaq_abs_triangle_plus. Qed.
 (* uaq2_s10_8224_inv_pt（cos_inv_pt 差和链｜实参 a:=cos_partial k u, b:=cos_partial k v, c:=projT1 real_zero k） *)
 Corollary uaq2_s10_8224_inv_pt : forall a b c : Q,
   QleT' (Qabs ((a - c) + (c - b))) (Qabs (a - c) + Qabs (c - b)).
-Proof. intros a b c. apply uaq_abs_triangle_plus. Qed.
+Proof.
+  intros a b c.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），a/b/c 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
 
 (* uaq2_s10_8485_root_cauchy（根收敛柯西链｜实参 p:=cos_partial n (cos_zero_seq n),
    m:=cos_partial n (cos_zero_seq N0), z:=projT1 real_zero n） *)
 Corollary uaq2_s10_8485_root_cauchy : forall p m z : Q,
   QleT' (Qabs ((p - m) + (m - z))) (Qabs (p - m) + Qabs (m - z)).
-Proof. intros p m z. apply uaq_abs_triangle_plus. Qed.
+Proof.
+  intros p m z.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），p/m/z 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
 
 (* uaq2_s10_10642_h4（sc_add_sin_err 四带 Ht1｜实参 b1..b4：四条带和） *)
 Corollary uaq2_s10_10642_h4 : forall b1 b2 b3 b4 : Q,
   QleT' (Qabs (((b1 + b2) + b3) + b4)) (Qabs ((b1 + b2) + b3) + Qabs b4).
-Proof. intros b1 b2 b3 b4. apply uaq_abs_triangle_plus. Qed.
+Proof.
+  intros b1 b2 b3 b4.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），b1..b4 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
 
 (* uaq2_s10_10643_h3（同引理 Ht2） *)
 Corollary uaq2_s10_10643_h3 : forall b1 b2 b3 : Q,
@@ -102,12 +140,22 @@ Proof. exact uaq_abs_triangle_plus. Qed.
 (* uaq2_s10_11938_outer（sc_add_cos_err_abs 双三角外层｜实参 dc:=Dc 带, ds:=Ds 带, an:=An 反对称带） *)
 Corollary uaq2_s10_11938_outer : forall dc ds an : Q,
   QleT' (Qabs ((dc - ds) + an)) (Qabs (dc - ds) + Qabs an).
-Proof. intros dc ds an. apply uaq_abs_triangle_plus. Qed.
+Proof.
+  intros dc ds an.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），dc/ds/an 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
 
 (* uaq2_s10_11944_inner（同引理内嵌负带三角｜实参 dc:=Dc, ds:=Ds；b 实例化为 Qopp ds） *)
 Corollary uaq2_s10_11944_inner : forall dc ds : Q,
   QleT' (Qabs (dc + Qopp ds)) (Qabs dc + Qabs (Qopp ds)).
-Proof. intros dc ds. apply uaq_abs_triangle_plus. Qed.
+Proof.
+  intros dc ds.
+  (* 刀：uaq_abs_triangle_plus 引擎体整体内联（模板＝UpAblAbsQFeed.v:59-61：
+     转换桥 Qle_to_QleT'＋stdlib Qabs_triangle），dc/ds（ys:=Qopp ds 位） 实例化。 *)
+  apply Qle_to_QleT'. apply Qabs_triangle.
+Qed.
 
 (* uaq2_s10_12138_seq_plus（rs_add_cos HsumMT 步｜逐字同形，实参 un:=u n, vn:=v n 序列项） *)
 Corollary uaq2_s10_12138_seq_plus : forall un vn : Q,

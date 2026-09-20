@@ -1,3 +1,22 @@
+(* ============================================================
+   T245 包F 台账席 切片三 · G07_KLWall 三刀落刀（同名替换，全中文零承认）
+   本件为基线原件（md5 b87b3006…，与 Main 基线逐字）的同名替换件：语句面、
+   声明序、其余定理与既有版记头注逐字保留；仅三条玩具级证明体在替换点重演：
+   一、klcx_epos_correct：同件单跳 klcx_opp_opp 体整体内联——destruct 解构
+       ＋real_eq_of_zero_diff＋ring 逐字重演（消除同件单跳，klcx_opp_opp
+       本体及其余消费位不动）。
+   二、jens_exp_tangent：real_le_closure_b_one 组合器体整体内联（模板＝
+       UpRealLeB.v:381-400，D:=one 特化＋1·eps≈eps 换形桥两步：eps≈eps·1
+       （mult_one 对称）经 mult_comm 运输至 1·eps，RealSetoid.real_le_id_r
+       右端等式换形；real_eq_plus_compat 逐槽换形），A:=1−x、B:=exp(−x)
+       显式实例化，eps 形委托 jens_exp_tangent_eps 收口不变。
+   三、jens_two_point：同刀二组合器体整体内联，A:=exp((1−η)x+ηy)、
+       B:=(1−η)exp x＋η exp y 显式实例化，eps 形委托 jens_two_point_eps
+       收口不变（全序 eta/x/y/前提位照旧）。
+   依赖面零新增：Require 面与原件逐字一致；本件 PowB 段自带
+   UpRealLeB／UpRealLeB2、KLCvx 段自带 CW220_Extensions Require（原件即有，
+   非本切片新增）。
+   ============================================================ *)
 (* G 组：G07_KLWall — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqKLStrict + UpReqKLCvx + UpReqPowB + UpReqJensen + UpReqKLEnergy（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G07_KLWall 成员件：UpReqKLStrict（原样并入，自带 Require）======== *)
@@ -728,7 +747,10 @@ Lemma klcx_epos_correct : forall t : Real,
   real_eq (klcx_epos t) (cauchy_real_exp t).
 Proof.
   intro t. unfold klcx_epos, real_exp_neg.
-  apply cauchy_real_exp_wd. apply klcx_opp_opp.
+  apply cauchy_real_exp_wd.
+  (* 刀①：klcx_opp_opp 体整体内联（destruct＋zero-diff＋ring） *)
+  destruct t as [u Hu]. apply real_eq_of_zero_diff.
+  intro n. simpl. ring.
 Qed.
 
 Theorem klcx_boltzmann_diff_bridge : forall (u v eps : Real),
@@ -1444,9 +1466,22 @@ Lemma jens_exp_tangent : forall x : Real,
             (cauchy_real_exp (real_opp x)).
 Proof.
   intro x.
-  apply real_le_closure_b_one.
+  (* 刀②：real_le_closure_b_one 组合器体整体内联（模板 UpRealLeB.v:381-400，
+     D:=one 特化＋1·eps≈eps 换形桥两步），A/B 显式实例化 *)
+  apply (real_le_closure_b (real_plus real_one (real_opp x))
+           (cauchy_real_exp (real_opp x)) real_one real_lt_zero_one).
   intros eps Heps.
-  exact (jens_exp_tangent_eps x eps Heps).
+  apply (RealSetoid.real_le_id_r (real_plus real_one (real_opp x))
+           (real_plus (cauchy_real_exp (real_opp x)) eps)
+           (real_plus (cauchy_real_exp (real_opp x)) (real_mult real_one eps))).
+  - apply (RealSetoid.real_eq_plus_compat (cauchy_real_exp (real_opp x)) eps
+             (cauchy_real_exp (real_opp x)) (real_mult real_one eps)).
+    + apply real_eq_refl.
+    + apply (real_eq_trans eps (real_mult eps real_one)
+               (real_mult real_one eps)).
+      * apply real_eq_sym. apply real_mult_one.
+      * apply real_mult_comm.
+  - exact (jens_exp_tangent_eps x eps Heps).
 Qed.
 
 (* ============================================================ *)
@@ -1480,9 +1515,42 @@ Lemma jens_two_point : forall (eta x y : Real),
                        (real_mult eta (cauchy_real_exp y))).
 Proof.
   intros eta x y Heta_pos Heta_le.
-  apply real_le_closure_b_one.
+  (* 刀③：real_le_closure_b_one 组合器体整体内联（同刀二模板），
+     A:=exp((1−η)x+ηy)、B:=(1−η)exp x＋η exp y 显式实例化 *)
+  apply (real_le_closure_b
+           (cauchy_real_exp (real_plus (real_mult (real_plus real_one (real_opp eta)) x)
+                                        (real_mult eta y)))
+           (real_plus (real_mult (real_plus real_one (real_opp eta))
+                                 (cauchy_real_exp x))
+                      (real_mult eta (cauchy_real_exp y)))
+           real_one real_lt_zero_one).
   intros eps Heps.
-  exact (jens_two_point_eps eta x y eps Heta_pos Heta_le Heps).
+  apply (RealSetoid.real_le_id_r
+           (cauchy_real_exp (real_plus (real_mult (real_plus real_one (real_opp eta)) x)
+                                        (real_mult eta y)))
+           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta))
+                                             (cauchy_real_exp x))
+                                 (real_mult eta (cauchy_real_exp y)))
+                      eps)
+           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta))
+                                             (cauchy_real_exp x))
+                                 (real_mult eta (cauchy_real_exp y)))
+                      (real_mult real_one eps))).
+  - apply (RealSetoid.real_eq_plus_compat
+             (real_plus (real_mult (real_plus real_one (real_opp eta))
+                                    (cauchy_real_exp x))
+                        (real_mult eta (cauchy_real_exp y)))
+             eps
+             (real_plus (real_mult (real_plus real_one (real_opp eta))
+                                    (cauchy_real_exp x))
+                        (real_mult eta (cauchy_real_exp y)))
+             (real_mult real_one eps)).
+    + apply real_eq_refl.
+    + apply (real_eq_trans eps (real_mult eps real_one)
+               (real_mult real_one eps)).
+      * apply real_eq_sym. apply real_mult_one.
+      * apply real_mult_comm.
+  - exact (jens_two_point_eps eta x y eps Heta_pos Heta_le Heps).
 Qed.
 
 (* C.3 w 形逐 eps（0 ≤ w、0 < 1−w） *)

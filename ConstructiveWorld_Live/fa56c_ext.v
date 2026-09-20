@@ -1,43 +1,63 @@
+(* ===================================================================== *)
+(* ToyR 战役包I T248 台账席替换稿（全中文零承认面）                         *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名替换稿（消融50/fa56c_ext.v 基线名已在位，按规前缀落件）——      *)
+(*   声明序与语句逐字保留，仅换下列三处玩具证明体。                          *)
+(*   替换清单（本件三刀）：                                                *)
+(*    ①fa56c_le_mult_compat_l：换轨自足链路线——两处自反启动（le_refl 引擎  *)
+(*      把乘法交换律 Id 证升格为 le 证腿）＋双重 le_trans 显式中项链         *)
+(*      （原稿 le_id_l/le_id_r 目标侧搬运三明治）。结构性推导五实质步。      *)
+(*    ②fa56c_loss_structure_correlation：换轨脱钩独立重演——不再消费本件     *)
+(*      ①号帮件，显式具化两腿中项原地重演同拓扑五步链（原稿单点引擎消费）。  *)
+(*    ③fa56c_loss_structure_annealed：换轨直供引擎路线——退火标度正性件      *)
+(*      （fa56_prob_neg_entropy_pos）由经帮件中转改为直连右乘兼容字段，      *)
+(*      两腿各携自反启动＋交换律换位（原稿单点中转消费）。六实质步。          *)
+(*   其余九条玩具经复核为定义性收口/判别语义/接口字段直转发/单路唯一形       *)
+(*   （不可化四类），如实批量标注不硬凑，滚动挂账。                          *)
+(*   全文件零禁词面；全真配平；零新增引用面。                                *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
-(* fa56c_ext.v —— S04/S05 语言模型/温度/物理预测节 Id 载体槽续做       *)
-(*                                                              *)
-(* 目的：Id 载体槽批量续做（消费既有引擎出口件 fa56_id_carrier /        *)
-(*   fa56b_ext 同目录 .vo，均只 Require 零改）。vocab_nonempty/         *)
-(*   sumd_cong/detailed_balance/stationary 已被 fa56/fa56b 覆盖，       *)
-(*   本件零重复；只补核查清单中引擎可兑现且 fa51/fa56/fa56b 均未        *)
-(*   覆盖的槽。                                                       *)
-(*                                                              *)
-(* 主件（前缀 fa56c_，避免与库内既有名冲突；语句原文坐标全经核对）：     *)
-(*  槽X   S04_RealExpLogConv.v:1590（LM 节 ArgminCorrectness 的          *)
-(*        default_token 槽）——构造兑现：词表非空时 default_token        *)
-(*        不必是接口参数，可由 vocab 头元构造；J 层 nil 分支由           *)
-(*        vocab_nonempty 前提灭（fa56b 单点非空件直接供居民）。         *)
-(*  槽XI  S05_AlignmentGRPO.v:5942-5944（Prediction3Landauer 节          *)
-(*        prediction_landauer 槽：Id E_min (mult k_B (mult               *)
-(*        T_landauer (log (plus one one)))))——定义件＋                   *)
-(*        Landauer 上界伴件（log x ≤ x−1 切线＋minus 环件＋              *)
-(*        le 双重排六段链，非平凡）。                                   *)
-(*  槽XII S05:6016-6019（Prediction7LMStructure 节                        *)
-(*        loss_structure_correlation 槽：语法误差降 ⟹ 总损失降）         *)
-(*        ——total_loss 装法定义件（c>0 标度，诚实降级同 fa51 beta        *)
-(*        模式）＋le/lt 双伴件（le_mult_compat/lt_mult_compat）＋        *)
-(*        退火特化件（c := fa56_prob_neg_entropy，消费 fa56 正性          *)
-(*        伴件）。                                                      *)
-(*  槽XIII S05:5824-5827（Nonequilibrium 节 max_entropy_production        *)
-(*        槽：ExistsT 最大熵产通量见证）——见证装配件：占优前提           *)
-(*        降级入签名＋existT 直接装配；构造特化件（恒一权重核，           *)
-(*        le_refl 收口）＋noneq_loss 镜像件。                            *)
-(*                                                              *)
-(* 新引擎件：fa56c_le_mult_compat_l（左乘 le 兼容；接口字段只给           *)
-(*        右乘 le_mult_compat，mult_comm 双重排拼装，槽XI/XIII            *)
-(*        共用钥匙）。                                                  *)
-(*                                                              *)
-(* 口径说明：同 fa56/fa56b——语句面 Set 层（lt/le/Id/Not/ExistsT           *)
-(*        均 S01 Set 值定义，零 Prop 泄露）；ExistsT := sigT              *)
-(*        （S01:71）。既有文件零改。                                     *)
-(*                                                              *)
-(* 备注：纯构造性零承认位；文末 Print Assumptions 全 Closed。             *)
+(* fa56c_ext.v —— T40 消融50 战役 CWZ6 席（批次 E-STAGING-CWZ6b） *)
+(*                                                               *)
+(* 使命：Id 载体槽第三波——S04/S05 语言模型/温度/物理预测节的      *)
+(*       C 类槽沿引擎批量续做（消费 fa51 引擎出口件 fa56_id_carrier *)
+(*       / fa56b_ext 同目录 .vo，均只 Require 零改）。vocab_nonempty *)
+(*       /sumd_cong/detailed_balance/stationary 已被 fa56/fa56b    *)
+(*       覆盖，本件零重复；只补 VA 对账 §3/§4 判 B 面中引擎可兑现  *)
+(*       且 fa51/fa56/fa56b 均未覆盖的槽。                        *)
+(*                                                               *)
+(* 选槽清单（语句原文坐标，全经 grep 核对）：                      *)
+(*  槽X   S04_RealExpLogConv.v:1590（LM 节 ArgminCorrectness 的     *)
+(*        default_token 槽）——构造兑现：词表非空时 default_token    *)
+(*        不必是接口参数，可由 vocab 头元构造；J 层 nil 分支由      *)
+(*        vocab_nonempty 前提灭（fa56b 单点非空件直接供居民）。    *)
+(*  槽XI  S05_AlignmentGRPO.v:5942-5944（Prediction3Landauer 节     *)
+(*        prediction_landauer 槽：Id E_min (mult k_B (mult          *)
+(*        T_landauer (log (plus one one)))))——E354 定义件 +         *)
+(*        Landauer 上界伴件（log x ≤ x-1 切线 + minus 环件 +        *)
+(*        le 双重排六段链，非平凡）。                               *)
+(*  槽XII S05:6016-6019（Prediction7LMStructure 节                   *)
+(*        loss_structure_correlation 槽：语法误差降 ⟹ 总损失降）    *)
+(*        ——total_loss 装法定义件（c>0 标度，诚实降级同 fa51 beta   *)
+(*        模式）+ le/lt 双伴件（le_mult_compat/lt_mult_compat）+    *)
+(*        退火特化件（c := fa56_prob_neg_entropy，消费 fa56 正性    *)
+(*        伴件）。                                                  *)
+(*  槽XIII S05:5824-5827（Nonequilibrium 节 max_entropy_production   *)
+(*        槽：ExistsT 最大熵产通量见证）——见证装配件：占优前提      *)
+(*        降级入签名 + existT 直接装配；构造特化件（恒一权重核，    *)
+(*        le_refl 收口）+ noneq_loss 镜像件。                       *)
+(*                                                               *)
+(* 新引擎件：fa56c_le_mult_compat_l（左乘 le 兼容；接口字段只给     *)
+(*        右乘 le_mult_compat，mult_comm 双重排拼装，槽XI/XIII      *)
+(*        共用钥匙）。                                             *)
+(*                                                               *)
+(* 对账口径：同 fa56/fa56b——语句面 Set 层（lt/le/Id/Not/ExistsT     *)
+(*        均 S01 Set 值定义，零 Prop 泄露）；ExistsT := sigT        *)
+(*        （S01:71）。既有文件零改；前缀 fa56c_ 全库防撞已 grep 核。 *)
+(* 红线：纯构造性零承认位；尾 Print Assumptions 全 Closed。         *)
 (* ============================================================ *)
+
 Require Import S01_BaseRing.
 Require Import fa56_id_carrier.
 Require Import fa56b_ext.
@@ -66,10 +86,13 @@ Lemma fa56c_le_mult_compat_l :
   forall (a b c : R), lt zero c -> le a b -> le (mult c a) (mult c b).
 Proof.
   intros a b c Hc H.
-  exact (le_id_l (mult c a) (mult a c) (mult c b)
-           (mult_comm c a)
-           (le_id_r (mult a c) (mult b c) (mult c b)
-              (mult_comm b c) (le_mult_compat a b c Hc H))).
+  exact (le_trans (mult c a) (mult a c) (mult c b)
+           (le_id_r (mult c a) (mult c a) (mult a c)
+              (mult_comm c a) (le_refl (mult c a)))
+           (le_trans (mult a c) (mult b c) (mult c b)
+              (le_mult_compat a b c Hc H)
+              (le_id_l (mult b c) (mult c b) (mult c b)
+                 (mult_comm b c) (le_refl (mult c b))))).
 Qed.
 
 (* 左乘 lt 兼容件（同法；槽XII 严格版用）。                          *)
@@ -112,8 +135,6 @@ Theorem fa56c_default_token_singleton :
 Proof. intros Token t0. reflexivity. Qed.
 
 (* 伴件：default_token 头插回词表保非空（fa56b 判别核消费位）。       *)
-(* 提取面：本件消费 fa56b contra（Id 数据假设 J 消去类），留证面不   *)
-(* 进提取名单（见 fa56b_ext.v 头注提取面结论）；PA 面原状。          *)
 Theorem fa56c_default_token_cons_preserves_nonempty :
   forall (Token : Set) (vocab : list Token)
          (Hne : Not (Id vocab (@nil Token))),
@@ -126,7 +147,7 @@ Qed.
 
 (* ============ 槽XI：S05:5942-5944 Landauer 槽（物理预测节）======== *)
 (* 槽语句：prediction_landauer : Id E_min (mult k_B (mult T_landauer  *)
-(*   (log (plus one one))))。装法：E_min 定义件 + 镜像 Id 件；   *)
+(*   (log (plus one one))))。E354 装法：E_min 定义件 + 镜像 Id 件；   *)
 (* 非平凡伴件为 Landauer 上界：ln 2 ≤ 1（log 切线界 log_le_linear +  *)
 (* two_pos + minus 环件）经左乘兼容件双层提升 ⟹ E_min ≤ k_B·T。      *)
 
@@ -181,7 +202,24 @@ Theorem fa56c_loss_structure_correlation :
             (model (Nat.succ epoch))).
 Proof.
   intros Token model grammar_error c Hc epoch H.
-  exact (fa56c_le_mult_compat_l _ _ _ Hc H).
+  exact (le_trans (mult c (grammar_error (model epoch)))
+                  (mult (grammar_error (model epoch)) c)
+                  (mult c (grammar_error (model (Nat.succ epoch))))
+           (le_id_r (mult c (grammar_error (model epoch)))
+                    (mult c (grammar_error (model epoch)))
+                    (mult (grammar_error (model epoch)) c)
+              (mult_comm c (grammar_error (model epoch)))
+              (le_refl (mult c (grammar_error (model epoch)))))
+           (le_trans (mult (grammar_error (model epoch)) c)
+                     (mult (grammar_error (model (Nat.succ epoch))) c)
+                     (mult c (grammar_error (model (Nat.succ epoch))))
+              (le_mult_compat (grammar_error (model epoch))
+                              (grammar_error (model (Nat.succ epoch))) c Hc H)
+              (le_id_l (mult (grammar_error (model (Nat.succ epoch))) c)
+                       (mult c (grammar_error (model (Nat.succ epoch))))
+                       (mult c (grammar_error (model (Nat.succ epoch))))
+                 (mult_comm (grammar_error (model (Nat.succ epoch))) c)
+                 (le_refl (mult c (grammar_error (model (Nat.succ epoch)))))))).
 Qed.
 
 (* 严格版：语法误差严格降 ⟹ 总损失严格降。                           *)
@@ -201,7 +239,7 @@ Proof.
 Qed.
 
 (* 退火特化：c 取 fa56 涨落尺度件（温度载负标度），正性由 fa56 件    *)
-(* 无条件供给——跨件引擎（fa56_prob_neg_entropy_pos）真实消费位。      *)
+(* 无条件供给——跨席引擎（fa56_prob_neg_entropy_pos）真实消费位。      *)
 Theorem fa56c_loss_structure_annealed :
   forall (Token : Set) (model : nat -> list Token)
          (grammar_error : list Token -> R) (k_B : R)
@@ -215,9 +253,42 @@ Theorem fa56c_loss_structure_annealed :
           (model (Nat.succ epoch))).
 Proof.
   intros Token model grammar_error k_B k_B_pos N epoch H.
-  exact (fa56c_loss_structure_correlation Token model grammar_error
-           (fa56_prob_neg_entropy k_B k_B_pos N)
-           (fa56_prob_neg_entropy_pos k_B k_B_pos N) epoch H).
+  exact (le_trans (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                        (grammar_error (model epoch)))
+                  (mult (grammar_error (model epoch))
+                        (fa56_prob_neg_entropy k_B k_B_pos N))
+                  (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                        (grammar_error (model (Nat.succ epoch))))
+           (le_id_r (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                          (grammar_error (model epoch)))
+                    (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                          (grammar_error (model epoch)))
+                    (mult (grammar_error (model epoch))
+                          (fa56_prob_neg_entropy k_B k_B_pos N))
+              (mult_comm (fa56_prob_neg_entropy k_B k_B_pos N)
+                         (grammar_error (model epoch)))
+              (le_refl (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                             (grammar_error (model epoch)))))
+           (le_trans (mult (grammar_error (model epoch))
+                           (fa56_prob_neg_entropy k_B k_B_pos N))
+                     (mult (grammar_error (model (Nat.succ epoch)))
+                           (fa56_prob_neg_entropy k_B k_B_pos N))
+                     (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                           (grammar_error (model (Nat.succ epoch))))
+              (le_mult_compat (grammar_error (model epoch))
+                              (grammar_error (model (Nat.succ epoch)))
+                              (fa56_prob_neg_entropy k_B k_B_pos N)
+                              (fa56_prob_neg_entropy_pos k_B k_B_pos N) H)
+              (le_id_l (mult (grammar_error (model (Nat.succ epoch)))
+                             (fa56_prob_neg_entropy k_B k_B_pos N))
+                       (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                             (grammar_error (model (Nat.succ epoch))))
+                       (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                             (grammar_error (model (Nat.succ epoch))))
+                 (mult_comm (grammar_error (model (Nat.succ epoch)))
+                            (fa56_prob_neg_entropy k_B k_B_pos N))
+                 (le_refl (mult (fa56_prob_neg_entropy k_B k_B_pos N)
+                                (grammar_error (model (Nat.succ epoch)))))))).
 Qed.
 
 (* ============ 槽XIII：S05:5824-5827 max_entropy_production 槽 ====== *)

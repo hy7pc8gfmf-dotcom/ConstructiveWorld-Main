@@ -1,3 +1,27 @@
+(* ============================================================
+   T245 包F 台账席 切片四 · UpAblMetaWorld3 三刀落刀（同名替换，全中文零承认）
+   本件为基线原件（md5 599051c9…，与 Main 基线逐字）的同名替换件：语句面、
+   声明序、其余定理与既有版记头注逐字保留；仅三条玩具级证明体在替换点重演，
+   另附 13 条不可化批量中文注记（不动证明体）：
+   一、mtw_row_t（刀一·双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地
+       重演——锚一 Hdef＝核行和 3/4＋1/4 换形至定义形 (1−1/4)＋1/4（mtw_threeq
+       经 req_minus 载体透明，req_refl 最短形）；锚二 Hasso＝结合换轨腿
+       （plus_assoc 对称）；收口两段＝内项零消（plus_comm 换轨＋plus_opp 零消
+       经 req_plus_compat 提级）＋外层 plus_zero；三段 req_trans 复合。
+   二、mtw_df_iter（刀二·中间项显式命名）：原单点 exact 复合式拆锚重演——
+       镜像腿 Hmir（mtw_df_opp_dv n，补元镜像）与取负腿 Hneg（req_opp_compat
+       运载 mtw_dv_iter n 幂律）两条中间 req 命名锚定，req_trans 复合收口。
+   三、mtw_ds_pos（刀三·引擎体整体内联）：mult_positive 投影位就地重演——
+       模板＝S07_RealSetoidExpLog.v:6969 real_mult_positive（本件 lt/mult/
+       zero 与柯西层 real_lt/real_mult/real_zero eq_refl 直通，探针在案）：
+       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两腿）＋
+       real_mult_lt_compat (0,h,h) 收口，实例化 a:=mtw_half、b:=mtw_half。
+   不可化批量注记 13 条：定义性收口 4（mtw_K_tt/tf/ft/ff）；接口字段直引与
+   同件单跳 7（mtw_half_pos／mtw_qq_half／mtw_oo_one_zero／mtw_mu0_mass／
+   mtw_nu0_mass／mtw_tv0_pos／mtw_omd_pos）；复合一跳链 2（mtw_no_mixing_below／
+   mtw_tv_lower）。
+   依赖面零新增：Require 面与原件逐字一致。
+   ============================================================ *)
 (* ============================================================ *)
 (* UpAblMetaWorld3.v —— N4 席：非退化 2 元核世界（核行互异）+ TV 精确几何衰减      *)
 (*   + 混合时间下界（AID 在 cf2 上反驳的下界件在此世界为真）· 2026-09-20          *)
@@ -37,9 +61,11 @@ Definition mtw_half : Real := inv_pos (plus one one) req_two_pos.
 Definition mtw_quarter : Real := mult mtw_half mtw_half.
 Definition mtw_threeq : Real := req_minus one mtw_quarter.
 
+(* 不可化批注（接口字段直引）：inv_pos_pos 正性字段一跳直引（req_two_pos 证书位），定义层最短形。 *)
 Lemma mtw_half_pos : lt zero mtw_half.
 Proof. exact (inv_pos_pos (plus one one) req_two_pos). Defined.
 
+(* 不可化批注（接口字段直引）：req_half_twice 二参特化一跳直引。 *)
 (* quarter + quarter == half（1/4 + 1/4 = 1/2） *)
 Lemma mtw_qq_half : req (plus mtw_quarter mtw_quarter) mtw_half.
 Proof. exact (req_half_twice mtw_half req_two_pos). Defined.
@@ -57,6 +83,7 @@ Proof.
   - exact (req_half_twice one req_two_pos).
 Defined.
 
+(* 不可化批注（上游两跳换轨直连）：plus_comm 换轨腿＋plus_opp 零消腿经 req_trans 复合，最短形。 *)
 Lemma mtw_oo_one_zero : req (plus (opp one) one) zero.
 Proof.
   exact (req_trans (plus (opp one) one) (plus one (opp one)) zero
@@ -132,6 +159,7 @@ Definition mtw_K (s s' : bool) : Real :=
   if s then (if s' then mtw_threeq else mtw_quarter)
        else (if s' then mtw_quarter else mtw_threeq).
 
+(* 不可化批注（定义性收口×4）：mtw_K 载体 if 定义级求值后 req_refl 自反收口，四件同形透明最短。 *)
 (* 核四参显式账：K(t,t)=3/4、K(t,f)=1/4、K(f,t)=1/4、K(f,f)=3/4 *)
 Lemma mtw_K_tt : req (mtw_K true true) mtw_threeq.
 Proof. exact (req_refl mtw_threeq). Defined.
@@ -165,9 +193,11 @@ Definition mtw_tv (mu nu : bool -> Real) : Real :=
 Definition mtw_dv (mu nu : bool -> Real) : Real := req_minus (mu true) (nu true).
 Definition mtw_df (mu nu : bool -> Real) : Real := req_minus (mu false) (nu false).
 
+(* 不可化批注（接口字段直引）：plus_zero 一跳直引（mtw_mu0 true＝one 定义透明）。 *)
 Lemma mtw_mu0_mass : req (mtw_sumf mtw_mu0) one.
 Proof. exact (plus_zero one). Defined.
 
+(* 不可化批注（接口字段直引）：req_plus_zero_l 一跳直引（mtw_nu0 true 前项＝zero 定义透明）。 *)
 Lemma mtw_nu0_mass : req (mtw_sumf mtw_nu0) one.
 Proof. exact (req_plus_zero_l one). Defined.
 
@@ -175,8 +205,35 @@ Proof. exact (req_plus_zero_l one). Defined.
 (* §2 Part 1a：行随机账（每行和 = one）+ 行互异账（非退化判据）                    *)
 (* ============================================================ *)
 
+(* 刀一（双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地重演。
+   锚一 Hdef：3/4＋1/4 换形至定义形 (1−1/4)＋1/4；锚二 Hasso：结合换轨腿。 *)
 Lemma mtw_row_t : req (mtw_sumf (mtw_K true)) one.
-Proof. exact (mtw_minus_plus_r one mtw_quarter). Defined.
+Proof.
+  unfold mtw_sumf, mtw_K.
+  assert (Hdef : req (plus mtw_threeq mtw_quarter)
+                     (plus (plus one (opp mtw_quarter)) mtw_quarter)).
+  { exact (req_refl (plus (plus one (opp mtw_quarter)) mtw_quarter)). }
+  assert (Hasso : req (plus (plus one (opp mtw_quarter)) mtw_quarter)
+                      (plus one (plus (opp mtw_quarter) mtw_quarter))).
+  { exact (req_sym (plus one (plus (opp mtw_quarter) mtw_quarter))
+                   (plus (plus one (opp mtw_quarter)) mtw_quarter)
+                   (plus_assoc one (opp mtw_quarter) mtw_quarter)). }
+  exact (req_trans (plus mtw_threeq mtw_quarter)
+                   (plus (plus one (opp mtw_quarter)) mtw_quarter) one
+          Hdef
+          (req_trans (plus (plus one (opp mtw_quarter)) mtw_quarter)
+                     (plus one (plus (opp mtw_quarter) mtw_quarter)) one
+          Hasso
+          (req_trans (plus one (plus (opp mtw_quarter) mtw_quarter))
+                     (plus one zero) one
+          (req_plus_compat one one (plus (opp mtw_quarter) mtw_quarter) zero
+             (req_refl one)
+             (req_trans (plus (opp mtw_quarter) mtw_quarter)
+                        (plus mtw_quarter (opp mtw_quarter)) zero
+                (plus_comm (opp mtw_quarter) mtw_quarter)
+                (plus_opp mtw_quarter)))
+          (plus_zero one)))).
+Defined.
 
 Lemma mtw_row_f : req (mtw_sumf (mtw_K false)) one.
 Proof.
@@ -496,12 +553,20 @@ Lemma mtw_df_iter : forall n : nat,
       (opp (req_r_pow mtw_half n)).
 Proof.
   intro n.
+  (* 刀二（中间项显式命名）：镜像腿 Hmir＝mtw_df_opp_dv n（补元镜像）、
+     取负腿 Hneg＝req_opp_compat 运载 mtw_dv_iter n（幂律），两腿命名锚定，
+     req_trans 复合收口重演。 *)
+  assert (Hmir : req (mtw_df (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
+                     (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)))).
+  { exact (mtw_df_opp_dv n). }
+  assert (Hneg : req (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)))
+                     (opp (req_r_pow mtw_half n))).
+  { exact (req_opp_compat (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
+                          (req_r_pow mtw_half n) (mtw_dv_iter n)). }
   exact (req_trans (mtw_df (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
                    (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)))
                    (opp (req_r_pow mtw_half n))
-          (mtw_df_opp_dv n)
-          (req_opp_compat (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
-                          (req_r_pow mtw_half n) (mtw_dv_iter n))).
+          Hmir Hneg).
 Defined.
 
 (* ============================================================ *)
@@ -541,6 +606,7 @@ Proof.
              (inv_pos_correct (plus one one) req_two_pos)).
 Defined.
 
+(* 不可化批注（接口字段一跳链）：lt_id_r 右端换值＋同件 mtw_tv0_one 换形＋one_pos 证书收口。 *)
 (* Part 1c：TV₀ 严格正（非退化判据之电视面） *)
 Lemma mtw_tv0_pos : lt zero (mtw_tv mtw_mu0 mtw_nu0).
 Proof.
@@ -673,6 +739,7 @@ Defined.
 
 (* Part 3 乙：混合时间下界（AID 的 mtl_no_mixing_refuted 同形语句在此世界为真）：
    预算 B 严格小于 (1/2)^n·TV₀ 则 B 严格小于 TV(n)——未混合窗下界成立。 *)
+(* 不可化批注（接口字段一跳链）：lt_id_r＋同件 mtw_tv_exact_iter 换形，前提 H 直配收口。 *)
 Theorem mtw_no_mixing_below : forall (n : nat) (B : Real),
   lt B (mult (req_r_pow mtw_half n) (mtw_tv mtw_mu0 mtw_nu0)) ->
   lt B (mtw_tv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)).
@@ -687,6 +754,7 @@ Defined.
 
 (* 跨世界对照正件：le ((1/2)^n·TV₀) (TV(n))（AID 的 mtl_refute_lower 同形语句
    在此世界为真——精确等值经 le 的 req 支直供，零 Or 分裂） *)
+(* 不可化批注（接口字段一跳链）：lt_le_iff inr 支＋同件 mtw_tv_exact_iter 换形，零 Or 分裂。 *)
 Theorem mtw_tv_lower : forall n : nat,
   le (mult (req_r_pow mtw_half n) (mtw_tv mtw_mu0 mtw_nu0))
      (mtw_tv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)).
@@ -708,11 +776,23 @@ Defined.
 Definition mtw_omd : Real := mtw_half.
 Definition mtw_ds : Real := mtw_quarter.
 
+(* 不可化批注（同件已证件单跳直引）：mtw_omd:=mtw_half 定义透明，mtw_half_pos 直配。 *)
 Lemma mtw_omd_pos : lt zero mtw_omd.
 Proof. exact mtw_half_pos. Defined.
 
+(* 刀三（引擎体整体内联）：mult_positive 投影位就地重演（模板
+   S07_RealSetoidExpLog.v:6969 real_mult_positive；本件 lt/mult/zero 与柯西层
+   字段 eq_refl 直通）：0·h ≡ 0 换序桥＋real_mult_lt_compat 收口。 *)
 Lemma mtw_ds_pos : lt zero mtw_ds.
-Proof. exact (mult_positive mtw_half mtw_half mtw_half_pos mtw_half_pos). Defined.
+Proof.
+  unfold mtw_ds, mtw_quarter.
+  apply (real_eq_lt_lt zero (mult zero mtw_half) (mult mtw_half mtw_half)).
+  - apply real_eq_sym.
+    apply (real_eq_trans _ (mult mtw_half zero) _).
+    + apply real_mult_comm.
+    + exact (real_mult_zero mtw_half).
+  - exact (real_mult_lt_compat zero mtw_half mtw_half mtw_half_pos mtw_half_pos).
+Defined.
 
 (* ============================================================ *)
 (* 四关自检：全件 Closed（零新假设）                                             *)

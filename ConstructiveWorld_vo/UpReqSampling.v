@@ -1,3 +1,17 @@
+(* ============================================================
+   T245 包F 台账席 切片二 · 包A 尾巴清偿件二（UpReqSampling 同名替换，全中文零承认）
+   本件为基线原件的同名替换件：语句面、声明序、其余定理与版记头注逐字
+   保留；仅一条玩具级证明体在替换点重演：
+   rsq_bs_inv_hi_lo：req_mult_cancel_l 单跳引擎调用整体内联——取消引擎
+   在替换点具体化（首参 hi，被消左元为 inv_pos hi rsq_bs_hi_pos，右元
+   lo）：双锚断言（Hlb＝inv 与 hi·inv 之积回 inv、Hrc＝inv 与 hi·lo 之
+   积回 lo，各经 mult_assoc、req_mult_compat（inv_pos_correct 桥）与
+   req_mult_one_l 两步）＋取消假设 Hcancel（inv_pos_correct 与
+   rsq_bs_lo_hi_eq 的交换/对称桥）前置，三段收口 req_trans 复合（中段
+   req_mult_compat 直配取消假设，无交换桥——本方向输入形与乘积形同向）。
+   模板＝消融50 UpReqAlgebra.v req_mult_cancel_r 已验绿体（T239 切片四
+   点名候选）；消费位语句面不变，依赖面零新增，Require 面与原件逐字一致。
+   ============================================================ *)
 (* ============================================================ *)
 (* UpReqSampling.v *)
 (* *)
@@ -941,11 +955,51 @@ Qed.
 
 Lemma rsq_bs_inv_hi_lo : req (inv_pos hi rsq_bs_hi_pos) lo.
 Proof.
-  apply (req_mult_cancel_l hi _ _ rsq_bs_hi_pos).
-  exact (req_trans (mult hi (inv_pos hi rsq_bs_hi_pos)) one (mult hi lo)
-                   (inv_pos_correct hi rsq_bs_hi_pos)
-                   (req_sym _ _ (req_trans (mult hi lo) (mult lo hi) one
-                              (mult_comm hi lo) rsq_bs_lo_hi_eq))).
+  assert (Hcancel : req (mult hi (inv_pos hi rsq_bs_hi_pos)) (mult hi lo)).
+  { exact (req_trans (mult hi (inv_pos hi rsq_bs_hi_pos)) one (mult hi lo)
+                     (inv_pos_correct hi rsq_bs_hi_pos)
+                     (req_sym _ _ (req_trans (mult hi lo) (mult lo hi) one
+                                (mult_comm hi lo) rsq_bs_lo_hi_eq))). }
+  assert (Hlb : req (mult (inv_pos hi rsq_bs_hi_pos) (mult hi (inv_pos hi rsq_bs_hi_pos)))
+                    (inv_pos hi rsq_bs_hi_pos)).
+  { apply (req_trans (mult (inv_pos hi rsq_bs_hi_pos) (mult hi (inv_pos hi rsq_bs_hi_pos)))
+                     (mult (mult (inv_pos hi rsq_bs_hi_pos) hi) (inv_pos hi rsq_bs_hi_pos))
+                     (inv_pos hi rsq_bs_hi_pos)).
+    - apply mult_assoc.
+    - apply (req_trans (mult (mult (inv_pos hi rsq_bs_hi_pos) hi) (inv_pos hi rsq_bs_hi_pos))
+                       (mult one (inv_pos hi rsq_bs_hi_pos))
+                       (inv_pos hi rsq_bs_hi_pos)).
+      + apply (req_mult_compat (mult (inv_pos hi rsq_bs_hi_pos) hi) one
+                               (inv_pos hi rsq_bs_hi_pos) (inv_pos hi rsq_bs_hi_pos)
+                               (req_trans (mult (inv_pos hi rsq_bs_hi_pos) hi)
+                                          (mult hi (inv_pos hi rsq_bs_hi_pos)) one
+                                          (mult_comm (inv_pos hi rsq_bs_hi_pos) hi)
+                                          (inv_pos_correct hi rsq_bs_hi_pos))
+                               (req_refl (inv_pos hi rsq_bs_hi_pos))).
+      + apply req_mult_one_l. }
+  assert (Hrc : req (mult (inv_pos hi rsq_bs_hi_pos) (mult hi lo)) lo).
+  { apply (req_trans (mult (inv_pos hi rsq_bs_hi_pos) (mult hi lo))
+                     (mult (mult (inv_pos hi rsq_bs_hi_pos) hi) lo) lo).
+    - apply mult_assoc.
+    - apply (req_trans (mult (mult (inv_pos hi rsq_bs_hi_pos) hi) lo)
+                       (mult one lo) lo).
+      + apply (req_mult_compat (mult (inv_pos hi rsq_bs_hi_pos) hi) one lo lo
+                               (req_trans (mult (inv_pos hi rsq_bs_hi_pos) hi)
+                                          (mult hi (inv_pos hi rsq_bs_hi_pos)) one
+                                          (mult_comm (inv_pos hi rsq_bs_hi_pos) hi)
+                                          (inv_pos_correct hi rsq_bs_hi_pos))
+                               (req_refl lo)).
+      + apply req_mult_one_l. }
+  apply (req_trans (inv_pos hi rsq_bs_hi_pos)
+                   (mult (inv_pos hi rsq_bs_hi_pos) (mult hi (inv_pos hi rsq_bs_hi_pos))) lo).
+  - apply (req_sym (mult (inv_pos hi rsq_bs_hi_pos) (mult hi (inv_pos hi rsq_bs_hi_pos)))
+                   (inv_pos hi rsq_bs_hi_pos)). exact Hlb.
+  - apply (req_trans (mult (inv_pos hi rsq_bs_hi_pos) (mult hi (inv_pos hi rsq_bs_hi_pos)))
+                     (mult (inv_pos hi rsq_bs_hi_pos) (mult hi lo)) lo).
+    + apply (req_mult_compat (inv_pos hi rsq_bs_hi_pos) (inv_pos hi rsq_bs_hi_pos)
+                             (mult hi (inv_pos hi rsq_bs_hi_pos)) (mult hi lo)
+                             (req_refl (inv_pos hi rsq_bs_hi_pos)) Hcancel).
+    + exact Hrc.
 Qed.
 
 (* 因子上下界（Id @96202/96211） *)

@@ -1,3 +1,17 @@
+(* ============================================================
+   T245 包F 台账席 切片二 · 包A 尾巴清偿件一（UpReqMisc5 同名替换，全中文零承认）
+   本件为基线原件的同名替换件：语句面、声明序、其余定理与既有版记头注
+   逐字保留；仅两条玩具级证明体在替换点重演：
+   一、req_core_claim5_holds：exists 见证位定义层展开重演——见证由不透明
+       件名 rboltzmann_prob L 改为定义体逐层显式 λ（inv_pos rZ rZ_pos 与
+       exp_neg（inv_pos rD rD_pos 与 L s）两层全展开），目标位双定义
+       unfold 后自反收口（E379 卡 L455 显式参坑前置，见证同形不变）。
+   二、req_core_claim3_lm_holds：换轨中间项显式命名——负号分配腿与
+       双重负号腿两条中间 req 以命名断言锚定（Hopp／Hneg），三段收口
+       req_trans 复合重演（引擎模板同款形：双锚断言＋收口，见消融50
+       UpReqAlgebra req_mult_cancel_r 已验绿体）。
+   依赖面零新增：Require 面与原件逐字一致。
+   ============================================================ *)
 (* ============================================================ *)
 (* UpReqMisc5.v *)
 (* *)
@@ -246,7 +260,10 @@ Definition rCoreClaim5 : Set :=
 Theorem req_core_claim5_holds : rCoreClaim5.
 Proof.
   unfold rCoreClaim5. intros L _.
-  exists (rboltzmann_prob L). intro s. apply req_refl.
+  exists (fun s => mult (inv_pos rZ rZ_pos)
+                        (exp_neg (mult (inv_pos rD rD_pos) (L s)))).
+  intro s. unfold rboltzmann_prob, rboltzmann_factor.
+  apply req_refl.
 Qed.
 
 (* Id boltzmann_factor_pos L1628（exp_neg_pos 字段直引） *)
@@ -543,13 +560,17 @@ Theorem req_core_claim3_lm_holds : forall (s : list rToken) (w : rToken),
   req (rforce s w) (req_minus (rtotal_loss s) (rtotal_loss (s ++ [w]))).
 Proof.
   intros s w. unfold rforce, req_minus.
-  exact (req_trans _ _ _
-    (req_opp_plus (rtotal_loss (s ++ [w])) (opp (rtotal_loss s)))
-    (req_trans _ _ _
-      (req_plus_compat (opp (rtotal_loss (s ++ [w]))) (opp (rtotal_loss (s ++ [w])))
-                       (opp (opp (rtotal_loss s))) (rtotal_loss s)
-                       (req_refl (opp (rtotal_loss (s ++ [w]))))
-                       (req_double_neg (rtotal_loss s)))
+  assert (Hopp : req (opp (plus (rtotal_loss (s ++ [w])) (opp (rtotal_loss s))))
+                     (plus (opp (rtotal_loss (s ++ [w]))) (opp (opp (rtotal_loss s))))).
+  { exact (req_opp_plus (rtotal_loss (s ++ [w])) (opp (rtotal_loss s))). }
+  assert (Hneg : req (plus (opp (rtotal_loss (s ++ [w]))) (opp (opp (rtotal_loss s))))
+                     (plus (opp (rtotal_loss (s ++ [w]))) (rtotal_loss s))).
+  { exact (req_plus_compat (opp (rtotal_loss (s ++ [w]))) (opp (rtotal_loss (s ++ [w])))
+                           (opp (opp (rtotal_loss s))) (rtotal_loss s)
+                           (req_refl (opp (rtotal_loss (s ++ [w]))))
+                           (req_double_neg (rtotal_loss s))). }
+  exact (req_trans _ _ _ Hopp
+    (req_trans _ _ _ Hneg
       (plus_comm (opp (rtotal_loss (s ++ [w]))) (rtotal_loss s)))).
 Qed.
 

@@ -1,3 +1,20 @@
+(* ===================================================================== *)
+(* ToyR 战役包H T247 台账席替换稿（全中文零承认面）                         *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列两条玩具证明体，  *)
+(*   并按战役判绿口径补尾 Print Assumptions 证据段（语句面零改）。          *)
+(*   替换清单（本件两条）：                                                *)
+(*    ①ums_mult_opp_r：换轨三步路线——先乘法交换律出左负因子位，经          *)
+(*      opp_mult_r（左因子负形）换形，再 opp 同余内交换律回位（原稿为      *)
+(*      opp_mult_l 右因子负形单点直连），结构性重演三实质步。               *)
+(*    ②ums_minus_plus_cancel：换轨长路消去路线——外槽交换出 b 首位，        *)
+(*      结伴右结合换形、内交换回位、对称结合拆出（a+b)+(−b)、plus_opp      *)
+(*      消伴、零元收口，六步结构性重演（原稿为 assoc 直拆＋伴元就地消）。   *)
+(*   其余十条玩具经复核为单点序事实/定义性收口/单路引擎直供（不可化四类），  *)
+(*   如实批量标注不硬凑，滚动挂账。                                        *)
+(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* UpReqUMixSelect.v —— 席 AT1：混合时间选择器的接口层移植            *)
 (*（把具体柯西实数层 UpReqMixingTime.v 的显式 k 选取机器移植到         *)
@@ -124,7 +141,10 @@ Defined.
 (* x·(−y) == −(x·y)（S01 opp_mult_l 原生右因子形直连） *)
 Lemma ums_mult_opp_r : forall x y : R, Id (mult x (opp y)) (opp (mult x y)).
 Proof.
-  intros x y. exact (opp_mult_l x y).
+  intros x y.
+  exact (id_trans (mult_comm x (opp y))
+           (id_trans (opp_mult_r y x)
+                     (id_cong (fun z => opp z) (mult_comm y x)))).
 Defined.
 
 (* 乘法换位：(a·b)·c == b·(a·c) *)
@@ -160,9 +180,11 @@ Defined.
 Lemma ums_minus_plus_cancel : forall a b : R, Id (plus (minus a b) b) a.
 Proof.
   intros a b. unfold minus.
-  apply (id_trans (id_sym (plus_assoc a (opp b) b))).
-  apply (id_trans (id_cong (fun z => plus a z)
-                     (id_trans (plus_comm (opp b) b) (plus_opp b)))).
+  apply (id_trans (plus_comm (plus a (opp b)) b)).
+  apply (id_trans (plus_assoc b a (opp b))).
+  apply (id_trans (id_cong (fun z => plus z (opp b)) (plus_comm b a))).
+  apply (id_trans (id_sym (plus_assoc a b (opp b)))).
+  apply (id_trans (id_cong (fun z => plus a z) (plus_opp b))).
   exact (plus_zero a).
 Defined.
 
@@ -613,3 +635,17 @@ Proof.
 Defined.
 
 End UMixSelect.
+
+(* ToyR 台账席补：判绿证据段（尾 Print Assumptions，全 Closed 预期） *)
+Print Assumptions UpReqUMixSelect.ums_scale_S_pos.
+Print Assumptions UpReqUMixSelect.ums_boost_pos.
+Print Assumptions UpReqUMixSelect.ums_mult_one_l.
+Print Assumptions UpReqUMixSelect.ums_mult_opp_r.
+Print Assumptions UpReqUMixSelect.ums_mult_swap.
+Print Assumptions UpReqUMixSelect.ums_le_plus_r.
+Print Assumptions UpReqUMixSelect.ums_minus_plus_cancel.
+Print Assumptions UpReqUMixSelect.ums_minus_le.
+Print Assumptions UpReqUMixSelect.ums_omd_lt_one.
+Print Assumptions UpReqUMixSelect.ums_omd_id.
+Print Assumptions UpReqUMixSelect.ums_cancel_to_minus.
+Print Assumptions UpReqUMixSelect.ums_ring_sc.
