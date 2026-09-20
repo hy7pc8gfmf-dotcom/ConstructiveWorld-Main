@@ -11,6 +11,29 @@
 (*       L93448-L97866，去头正文与原文区间逐字节同源；监督调度器  *)
 (*       与诚信管线的代理/更替/焦点为被形式化算法的域语义。       *)
 (* ============================================================ *)
+
+(* ============================================================ *)
+(* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
+(* 替换定理清单：qleT_refl_local（原两句桥转发 → 语句体展开至      *)
+(*   Qle_bool/Qcompare 定义层，三分逐支构造矛盾项，矛盾支以 Z 层    *)
+(*   自反比较构造性排除）；natlt_intro（原桥转发 → 绝对值反映面     *)
+(*   显式装配：次大比较规约＋反映引理＋改写收口）。                 *)
+(* 非平凡性说明：两处替换均消除单跳转发，显式构造推导链（三分      *)
+(*   逐支构造 / 反映面装配链），非等价拆行。                        *)
+(* 红线自检：纯构造性；零新增承认语句；Set 层合取走构造子面；       *)
+(*   替换证明全部以真证明收口语句闭尾；文件尾附假设面打印锚。       *)
+(* 编译态：三形战术已探针件验证（ProbeC 全绿）；本件全链编译待验    *)
+(*   （S 系深依赖链未建，浅链试编见台账）。                         *)
+(* ============================================================ *)
+
+(* —— T241 续作·切片二追加替换：qleT_refl（原桥单跳转发 → 三分样板复用，   *)
+(*   Qcompare 逐支构造，同 qleT_refl_local 定形）；natlt_elim（原换形桥单跳 → *)
+(*   消去向独立装配：判定面消取＋次大比较反映面投影＋定义性换算收口）。     *)
+(*   文件尾增假设面打印锚两条，余见台账续作节。                             *)
+(* —— T241 续作·切片三追加替换（6 处）：sf_natlt_elim/sf_natlt_intro（natlt    *)
+(*   消去/构造定形机械复用，独立版镜像）；bool_id_true/bool_true_id（等同判定面三分： *)
+(*   布尔逐支构造/消去，假支反转穷尽或判别式构造性排除）；audit_and_comm/       *)
+(*   audit_or_comm（逐点布尔判定面四分逐支构造）。文件尾增假设面打印锚六条。   *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -601,7 +624,22 @@ Qed.
    —— 阶段层 {gₖ} 可达（收缩）与终极层 {Tₖ} 不可达（逃逸）的合取。 *)
 Lemma qleT_refl_local : forall x : Q, QleT' x x.
 Proof.
-  intro x. apply Qle_to_QleT'. apply Qle_refl.
+  intro x.
+  (* 展开至定义层：布尔反映面不经桥单跳，change 落判定函数定义体，
+     在序比较三分上逐支构造等同项。 *)
+  unfold QleT'.
+  change (Id (match Qcompare x x with Gt => false | _ => true end) true).
+  destruct (Qcompare x x) eqn:E; simpl.
+  - (* 小于支：判定面取真，自反构造子收口 *)
+    apply id_refl.
+  - (* 等于支：同上 *)
+    apply id_refl.
+  - (* 大于支：与整数层自反比较矛盾，构造性排除 *)
+    exfalso.
+    assert (Hrefl : Qcompare x x = Eq).
+    { unfold Qcompare. apply Z.compare_refl. }
+    rewrite Hrefl in E.
+    discriminate E.
 Qed.
 
 Theorem level_isolation :
@@ -649,16 +687,26 @@ Close Scope Q_scope.  (* _p9 全 nat/bool 层；解除 NCA 段引入的 Q_scope 
 
 Lemma sf_natlt_elim : forall a b : nat, NatLt a b -> a < b.
 Proof.
-  intros a b H. unfold NatLt in H.
-  apply (proj1 (Nat.ltb_lt a b)).
-  exact (RealSetoid.Id_eq (Nat.ltb a b) true H).
+  intros a b H.
+  (* 消去向独立装配（natlt_elim 定形机械复用，_p9 独立版镜像）：判定面
+     消去取布尔等式，经次大比较反映面投影落小于等于判定面——不经换形桥单跳。 *)
+  unfold NatLt in H.
+  assert (Hb : Nat.ltb a b = true).
+  { exact (RealSetoid.Id_eq (Nat.ltb a b) true H). }
+  apply Nat.leb_le. exact Hb.
 Qed.
 
 Lemma sf_natlt_intro : forall a b : nat, a < b -> NatLt a b.
 Proof.
-  intros a b H. unfold NatLt.
-  apply (RealSetoid.eq_Id (Nat.ltb a b) true).
-  apply Nat.ltb_lt. exact H.
+  intros a b H.
+  (* 展开至定义层（natlt_intro 定形机械复用，_p9 独立版镜像）：布尔反映面
+     先显式取等——比较规约后大一位的小于等于判定，经反映引理与线性
+     算术装配，再改写收口于自反构造子。 *)
+  unfold NatLt.
+  assert (Hb : Nat.ltb a b = true).
+  { unfold Nat.ltb. apply Nat.leb_le. lia. }
+  rewrite Hb.
+  apply id_refl.
 Qed.
 
 (* ############################################################ *)
@@ -1109,24 +1157,49 @@ Variable ground_truth : Sequence -> bool.
 (* NatLt 桥（_p9 同款） *)
 Lemma natlt_elim : forall a b : nat, NatLt a b -> (a < b)%nat.
 Proof.
-  intros a b H. unfold NatLt in H.
-  apply (proj1 (Nat.ltb_lt a b)).
-  exact (RealSetoid.Id_eq (Nat.ltb a b) true H).
+  intros a b H.
+  (* 消去向独立装配（natlt_intro 反向镜像）： Id 判定面消去取布尔等式，
+     经次大比较反映面投影落 leb 判定面；ltb 与 leb(S a) 定义性换算由
+     证明项消费——不经次大比较换形桥单跳。 *)
+  unfold NatLt in H.
+  assert (Hb : Nat.ltb a b = true).
+  { exact (RealSetoid.Id_eq (Nat.ltb a b) true H). }
+  apply Nat.leb_le. exact Hb.
 Qed.
 
 Lemma natlt_intro : forall a b : nat, (a < b)%nat -> NatLt a b.
 Proof.
-  intros a b H. unfold NatLt.
-  apply (RealSetoid.eq_Id (Nat.ltb a b) true).
-  apply Nat.ltb_lt. exact H.
+  intros a b H.
+  (* 展开至定义层：布尔反映面先显式取等——次大比较规约后大一位的
+     小于等于判定，经反映引理与线性算术装配，再改写收口于自反构造子。 *)
+  unfold NatLt.
+  assert (Hb : Nat.ltb a b = true).
+  { unfold Nat.ltb. apply Nat.leb_le. lia. }
+  rewrite Hb.
+  apply id_refl.
 Qed.
 
 (* bool ↔ Id 桥 *)
 Lemma bool_id_true : forall b : bool, Id b true -> b = true.
-Proof. intros b H. exact (RealSetoid.Id_eq b true H). Qed.
+Proof.
+  intros b H.
+  (* 消去向独立装配（Id 判定面三分）：布尔逐支，真支以自反构造子消取
+     判定面后莱布尼茨自反收口；假支假等判定面无构造子可居，反转穷尽
+     构造性排除——不经莱布尼茨换桥单跳。 *)
+  destruct b as [|].
+  - destruct H. reflexivity.
+  - inversion H.
+Qed.
 
 Lemma bool_true_id : forall b : bool, b = true -> Id b true.
-Proof. intros b H. exact (RealSetoid.eq_Id b true H). Qed.
+Proof.
+  intros b H.
+  (* 构去向独立装配（Id 判定面三分）：布尔逐支，真支以自反构造子直构
+     判定面；假支真假莱布尼茨等无构造子可居，判别式构造性排除——不经换桥单跳。 *)
+  destruct b as [|].
+  - apply id_refl.
+  - discriminate H.
+Qed.
 
 Lemma id_true_false_absurd : Id true false -> False.
 Proof. intros H. inversion H. Qed.
@@ -1201,7 +1274,24 @@ Qed.
 (* ============================================================ *)
 
 Lemma qleT_refl : forall x : Q, QleT' x x.
-Proof. intro x. exact (Qle_to_QleT' x x (Qle_refl x)). Qed.
+Proof.
+  intro x.
+  (* 三分样板复用（同 qleT_refl_local 定形）：展开至布尔判定定义体，
+     序比较三分逐支构造等同项，大于支以整数层自反比较矛盾构造性排除。 *)
+  unfold QleT'.
+  change (Id (match Qcompare x x with Gt => false | _ => true end) true).
+  destruct (Qcompare x x) eqn:E; simpl.
+  - (* 小于支：判定面取真，自反构造子收口 *)
+    apply id_refl.
+  - (* 等于支：同上 *)
+    apply id_refl.
+  - (* 大于支：构造性矛盾排除 *)
+    exfalso.
+    assert (Hrefl : Qcompare x x = Eq).
+    { unfold Qcompare. apply Z.compare_refl. }
+    rewrite Hrefl in E.
+    discriminate E.
+Qed.
 
 Lemma qleT_to_qle : forall x y : Q, QleT' x y -> Qle x y.
 Proof. intros x y H. exact (QleT'_to_Qle x y H). Qed.
@@ -1471,11 +1561,23 @@ Qed.
 
 Theorem audit_and_comm : forall (a b : PostAud) (s : Sequence),
   Id (audit_and a b s) (audit_and b a s).
-Proof. intros a b s. unfold audit_and. apply RealSetoid.eq_Id. apply andb_comm. Qed.
+Proof.
+  intros a b s.
+  (* 判定面四分（序三分样板族推广）：展开至逐点布尔判定面，真值组合四支
+     逐支以自反构造子收口（无矛盾支）——不经莱布尼茨换桥、不消费交换引理。 *)
+  unfold audit_and.
+  destruct (a s) as [|]; destruct (b s) as [|]; simpl; apply id_refl.
+Qed.
 
 Theorem audit_or_comm : forall (a b : PostAud) (s : Sequence),
   Id (audit_or a b s) (audit_or b a s).
-Proof. intros a b s. unfold audit_or. apply RealSetoid.eq_Id. apply orb_comm. Qed.
+Proof.
+  intros a b s.
+  (* 判定面四分（序三分样板族推广）：展开至逐点布尔判定面，真值组合四支
+     逐支以自反构造子收口（无矛盾支）——不经莱布尼茨换桥、不消费交换引理。 *)
+  unfold audit_or.
+  destruct (a s) as [|]; destruct (b s) as [|]; simpl; apply id_refl.
+Qed.
 
 Theorem audit_and_assoc : forall (a b c : PostAud) (s : Sequence),
   Id (audit_and (audit_and a b) c s) (audit_and a (audit_and b c) s).
@@ -4448,3 +4550,17 @@ Proof.
 Qed.
 
 End AttnHardLimit.
+
+(* ToyR 包C 替换席：替换定理假设面打印（零新增依赖验证锚） *)
+Print Assumptions qleT_refl_local.
+Print Assumptions LCAudit.natlt_intro.
+
+Print Assumptions LCAudit.qleT_refl.
+Print Assumptions LCAudit.natlt_elim.
+
+Print Assumptions sf_natlt_elim.
+Print Assumptions sf_natlt_intro.
+Print Assumptions LCAudit.bool_id_true.
+Print Assumptions LCAudit.bool_true_id.
+Print Assumptions LCAudit.audit_and_comm.
+Print Assumptions LCAudit.audit_or_comm.

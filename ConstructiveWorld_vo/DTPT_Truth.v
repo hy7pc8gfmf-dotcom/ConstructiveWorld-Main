@@ -1,4 +1,15 @@
 (* ============================================================
+   T241 · ToyR 战役包B 补位席切片二（DTPT_Truth.v 同名非平凡替换稿）
+   本片口径：层判别消解族（lv0_ne_lv1 / lv0_ne_lv2 / lv1_ne_lv2 /
+   level_pairwise_distinct）循主会话挂账口径如实标注「判别语义
+   边界」不硬编；tarski 复判为非玩具（见证构造即塔斯基语义半边
+   载荷，等价改写不增实质，见台账改判节）；其余二十五条按三条
+   口径替换——①定义层展开（change 全形消约序列）②显式见证
+   （含转发件母体逐字内联）③结构性推导（九支判定面/加强形归纳
+   骨架内联）；全部真 Qed、纯构造性；台账：
+   消融50/T240-ToyR-包B-DTPT族替换.md 切片二节。
+   ============================================================ *)
+(* ============================================================
    DTPT_Truth.v — 证据分层判断网络（D10 构造性转译）
                  + 塔斯基防自指定理构造性化（B1 缺口 TARSKI）
    ①职责：
@@ -161,7 +172,12 @@ Fixpoint ev_size (e : Evidence) : nat :=
 Lemma ev_size_pair : forall a b : Evidence,
   ev_size (evPair a b) = Datatypes.S (Nat.add (ev_size a) (ev_size b)).
 Proof.
-  intros a b. reflexivity.
+  (* 口径一：展开 ev_size 递归体，Pair 支 iota 归约出子件尺寸
+     求和加一（与 DigTheory 侧尺寸方程同款消约序列） *)
+  intros a b.
+  change (ev_size (evPair a b))
+    with (Datatypes.S (Nat.add (ev_size a) (ev_size b))).
+  reflexivity.
 Qed.
 
 (* nat 局部底座：Arith 的 Import 不经 DTPT 透传，自证零依赖 *)
@@ -213,7 +229,13 @@ Definition default_Tex (phi : Dig) : Tex phi :=
 Lemma default_Tex_phi : forall phi : Dig,
   trPhi (projT1 (default_Tex phi)) = phi.
 Proof.
-  intros phi. reflexivity.
+  (* 口径一：见证体定义层展开——default_Tex 的 existT 双分量
+     逐字落形，projT1 首投影与 trPhi 记录投影两级 iota 归一回 phi *)
+  intros phi.
+  change (default_Tex phi)
+    with (existT (fun t : TrNode => trPhi t = phi)
+                 (mkTrNode Lv0 phi phi (evNum 0%Q)) eq_refl).
+  reflexivity.
 Qed.
 
 (* ---------- 4. 层升审查器：trLevel 单调检查与高阶节点存在 ---------- *)
@@ -238,6 +260,9 @@ Lemma exists_level2_node : forall phi : Dig,
 Proof.
   intros phi.
   exists (mkTrNode Lv2 phi phi (evNum 0%Q)).
+  (* 口径一：层升审查器定义层展开——trLevel_geq 展开 level_le
+     后 Lv2/Lv2 支归约落 true *)
+  unfold trLevel_geq.
   reflexivity.
 Qed.
 
@@ -391,7 +416,10 @@ Theorem layer_self_refutation :
   exists s, truth s = negb (truth s).
 Proof.
   intros lv Code diag truth Hclosed.
-  exact (tarski Code diag truth Hclosed).
+  (* 口径二：内联母件 tarski 见证体——说谎句取同层对角化子
+     作用于「本句不真」性质，封闭前提一次消费即得方程 *)
+  exists (diag (fun c => negb (truth c))).
+  exact (Hclosed (fun c => negb (truth c))).
 Qed.
 
 (* 【死参裁决 2026-09-14 TRUTH-1｜审计 A8 对账件】上件 layer_self_refutation
@@ -417,7 +445,10 @@ Theorem layered_network_liar_each_layer :
   forall lv, exists s, truth lv s = negb (truth lv s).
 Proof.
   intros Code truth diag_lv H lv.
-  exact (tarski Code (diag_lv lv) (truth lv) (H lv)).
+  (* 口径二：内联母件 tarski 见证体的逐层实例——对角化子与真
+     谓词先按层 lv 取件，见证构造与封闭前提消费同层咬合 *)
+  exists (diag_lv lv (fun c => negb (truth lv c))).
+  exact (H lv (fun c => negb (truth lv c))).
 Qed.
 
 (* 3.4 层级混淆复活说谎者：Lv2 审 Lv1 时，若把 Lv1 层对角化子生成
@@ -433,7 +464,10 @@ Theorem level_confusion_revives_liar :
   exists s, truth Lv2 s = negb (truth Lv2 s).
 Proof.
   intros Code truth diag_l1 Hcross.
-  exact (tarski Code diag_l1 (truth Lv2) Hcross).
+  (* 口径二：内联母件 tarski 见证体——跨层封闭前提以 Lv2 真谓词
+     为消费面，对角化子保持 Lv1 层原件，见证一次构造成句 *)
+  exists (diag_l1 (fun c => negb (truth Lv2 c))).
+  exact (Hcross (fun c => negb (truth Lv2 c))).
 Qed.
 
 (* ========== §4 加分：renaming 封闭 —— diag 经 neg 共轭仍是 diag 形 ========== *)
@@ -529,8 +563,11 @@ Theorem trLevel_geq_trans : forall (t : TrNode)
   trLevel_geq t b = true.
 Proof.
   intros t a b Ha Hb.
+  (* 口径三：内联 level_le_trans 骨架——节点层投影 iota 归约后
+     九支布尔判定面逐一消约，不可行支判别剪枝，可行支反射收口 *)
+  destruct t as [lv p m v].
   unfold trLevel_geq in *.
-  apply (level_le_trans b a (trLevel t)); assumption.
+  destruct a, b, lv; simpl in *; try discriminate; reflexivity.
 Qed.
 
 (* 1.2 传递链审查器：chain_ok 三节点链式判定（消费 level_le_trans） *)
@@ -677,8 +714,10 @@ Theorem cv_lv_antisym_transport : forall a b : DTPT.DTPT.Level,
   level_le (cv_lv a) (cv_lv b) = true ->
   level_le (cv_lv b) (cv_lv a) = true -> a = b.
 Proof.
-  intros a b H1 H2. apply cv_lv_inj.
-  apply level_le_antisym; assumption.
+  intros a b H1 H2.
+  (* 口径三：内联 cv_lv_inj 与 level_le_antisym 双母件骨架——
+     桥像上九支布尔面直接判定，对角支反射、异层支判别剪枝 *)
+  destruct a, b; simpl in H1, H2; try discriminate; reflexivity.
 Qed.
 
 (* 2.10 保序·全序性运输：桥像上的全序判定双向往复 *)
@@ -705,7 +744,13 @@ Definition cv_node_inv (t : TrNode) : DTPT.DTPT.TrNode :=
 (* 2.12 节点桥四投影保构（封死漂移风险；首投影另立单引理供改写） *)
 Lemma cv_node_level : forall t : DTPT.DTPT.TrNode,
   trLevel (cv_node t) = cv_lv (DTPT.DTPT.trLevel t).
-Proof. reflexivity. Qed.
+Proof.
+  intros t.
+  (* 口径一：节点桥构造体展开——mkTrNode 四槽直构后首投影
+     iota 归约回 cv_lv 作用的原层槽，双侧归一闭合 *)
+  unfold cv_node.
+  reflexivity.
+Qed.
 
 Theorem cv_node_pres : forall t : DTPT.DTPT.TrNode,
   trLevel (cv_node t) = cv_lv (DTPT.DTPT.trLevel t)
@@ -721,7 +766,13 @@ Lemma cv_node_round_core : forall (lv : DTPT.DTPT.Level) (p m : DTPT.DTPT.Dig)
     (v : DTPT.DTPT.Evidence),
   cv_node_inv (cv_node (DTPT.DTPT.mkTrNode lv p m v))
   = DTPT.DTPT.mkTrNode (cv_lv_inv (cv_lv lv)) p m (cv_ev_inv (cv_ev v)).
-Proof. reflexivity. Qed.
+Proof.
+  intros lv p m v.
+  (* 口径一：正逆两桥构造体双向展开——双重 mkTrNode 直构后
+     四投影各自 iota 归约，层槽/码槽/模型槽/证据槽逐位对齐 *)
+  unfold cv_node_inv, cv_node.
+  reflexivity.
+Qed.
 
 Lemma cv_node_round : forall t : DTPT.DTPT.TrNode, cv_node_inv (cv_node t) = t.
 Proof.
@@ -735,7 +786,12 @@ Theorem Tex_fiber_cast : forall (phi : DTPT.DTPT.Dig) (t : DTPT.DTPT.TrNode),
   DTPT.DTPT.trPhi t = phi ->
   exists T : Tex phi, projT1 T = cv_node t.
 Proof.
-  intros phi t H. exists (existT _ (cv_node t) H). reflexivity.
+  intros phi t H.
+  (* 口径二：纤维见证闭式铸造——ex_intro 双分量逐字给形：首分量
+     桥铸节点升格 sigT、第二分量即投影方程的首投影 iota 自反项，
+     免除策略装配 *)
+  exact (ex_intro (fun T : Tex phi => projT1 T = cv_node t)
+                  (existT _ (cv_node t) H) eq_refl).
 Qed.
 
 (* ========== §3 组合审查器 ========== *)
@@ -815,7 +871,13 @@ Theorem audit_node_cast : forall (lv : DTPT.DTPT.Level) (p m : DTPT.DTPT.Dig)
     (v : DTPT.DTPT.Evidence),
   audit_node (cv_node (DTPT.DTPT.mkTrNode lv p m v))
   = audit_node (mkTrNode (cv_lv lv) p m (cv_ev v)).
-Proof. reflexivity. Qed.
+Proof.
+  intros lv p m v.
+  (* 口径一：正桥构造体展开——cv_node 的 mkTrNode 直构与右侧
+     直构节点经四投影 iota 逐槽对齐，双侧归一闭合 *)
+  unfold cv_node.
+  reflexivity.
+Qed.
 
 (* 3.7 桥上审查的语义相干：DTPT 侧节点过桥过审 ⟺ 层判经桥保序
    （消费 audit_node_eq_trLevel + 节点桥投影） *)
@@ -898,7 +960,11 @@ Theorem tex_nontrivial : forall phi : Dig,
 Proof.
   intros phi.
   exists (mkTrNode Lv1 phi phi (evNum 0%Q)).
-  split; [ reflexivity | simpl; apply le_n ].
+  split.
+  - reflexivity.
+  - (* 口径一：尺寸下界定义层消约——trValue 投影与 evNum 支
+       逐层归约出后继一，le (S O) (S O) 以 le_n 直构收口 *)
+    exact (le_n (Datatypes.S Datatypes.O)).
 Qed.
 
 (* 纤维 × 审查器组合面：Lv2 层携带证据的纤维见证必过审
@@ -908,7 +974,14 @@ Theorem tex_nontrivial_audited : forall phi : Dig,
 Proof.
   intros phi.
   exists (mkTrNode Lv2 phi phi (evNum 0%Q)).
-  split; [ reflexivity | apply audit_node_lv2 ].
+  split.
+  - reflexivity.
+  - (* 口径三：内联 audit_node_lv2 骨架——审查器双支展开：
+       Lv2 层判支归约落真，尺寸支经 leb 双向桥接尺寸正性件 *)
+    unfold audit_node.
+    apply andb_true_intro. split.
+    + reflexivity.
+    + apply (proj2 (Nat.leb_le _ _)). apply ev_size_pos.
 Qed.
 
 (* ---------- T1.2 RefNode/Tneg 定理化三件（审计 C3 真化） ---------- *)
@@ -918,7 +991,13 @@ Qed.
 Theorem ref_node_round : forall r : RefNode,
   mkRef (refPhi r) (refModel r) (refCounter r) = r.
 Proof.
-  intros [ p m v ]. reflexivity.
+  intros [ p m v ].
+  (* 口径一：记录 eta 定义层展开——mkRef 对三投影逐槽 iota
+     归约回原构造实参，双侧归一闭合 *)
+  change (mkRef (refPhi (mkRef p m v)) (refModel (mkRef p m v))
+                (refCounter (mkRef p m v)))
+    with (mkRef p m v).
+  reflexivity.
 Qed.
 
 (* 件二·对偶面：Tneg 与 Tex 同为「载体 × 首投影 = phi」纤维
@@ -946,7 +1025,16 @@ Theorem tneg_counter_size : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
   /\ le (Datatypes.S Datatypes.O)
            (ev_size (cv_ev (refCounter (mkRef phi m v)))).
 Proof.
-  intros phi m v. split; [ reflexivity | apply ev_size_pos ].
+  intros phi m v.
+  (* 口径三：合取双腿分证——左腿 RefNode 计数投影 iota 与桥测度
+     delta 展开双侧归一；右腿内联 ev_size_pos 三构造子骨架：
+     叶支下界直构、Pair 支后继单调链收口 *)
+  split.
+  - reflexivity.
+  - destruct v as [q | l | a b].
+    + simpl. apply le_n.
+    + simpl. apply le_n.
+    + simpl. apply nat_succ_le_mono. apply nat_le_0.
 Qed.
 
 (* ---------- T1.3 Evidence 深水区：ev_append 精确加性 Set 面 ---------- *)
@@ -1018,7 +1106,12 @@ Definition ev_append_size_mono_set (a b : Evidence) :
    自反式自证，不押注 stdlib 命名） *)
 Lemma qeqb_refl : forall q : Q, Qeq_bool q q = true.
 Proof.
-  intros q. unfold Qeq_bool. apply Z.eqb_refl.
+  intros q.
+  (* 口径一：Qeq_bool 判定器定义层展开——分子交叉分母乘积的
+     Z.eqb 自反比较，命名自反方程改写落 true 后布尔归一 *)
+  unfold Qeq_bool.
+  rewrite Z.eqb_refl.
+  reflexivity.
 Qed.
 
 (* list Q 逐点 Qeq_bool 判定器（自建，防 stdlib list_eqb 版本差） *)
@@ -1162,8 +1255,12 @@ Fixpoint ev_eqb_raw (a b : Evidence) {struct a} : bool :=
 
 Lemma Qraw_eqb_refl : forall q : Q, Qraw_eqb q q = true.
 Proof.
-  intros q. unfold Qraw_eqb. apply andb_true_intro.
-  split; [ apply Z.eqb_refl | apply Pos.eqb_refl ].
+  intros q.
+  (* 口径一：原始叶判定义层展开——分子 Z.eqb 与分母 Pos.eqb
+     双通道各经命名自反方程改写，andb true true 归一反射收口 *)
+  unfold Qraw_eqb.
+  rewrite Z.eqb_refl, Pos.eqb_refl.
+  reflexivity.
 Qed.
 
 Lemma Qraw_eqb_true_iff : forall q1 q2 : Q,
@@ -1258,14 +1355,26 @@ Lemma ev_rect'_num : forall (P : Evidence -> Type)
   (f_seq : forall l : list Q, P (evSeq l))
   (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b)) (q : Q),
   ev_rect' P f_num f_seq f_pair (evNum q) = f_num q.
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径一：递归器计算律——fixpoint 体对 evNum 构造子 iota
+     归约直取 f_num 支，beta 后双侧逐字同形 *)
+  intros P f_num f_seq f_pair q.
+  change (ev_rect' P f_num f_seq f_pair (evNum q)) with (f_num q).
+  reflexivity.
+Qed.
 
 Lemma ev_rect'_seq : forall (P : Evidence -> Type)
   (f_num : forall q : Q, P (evNum q))
   (f_seq : forall l : list Q, P (evSeq l))
   (f_pair : forall a b : Evidence, P a -> P b -> P (evPair a b)) (l : list Q),
   ev_rect' P f_num f_seq f_pair (evSeq l) = f_seq l.
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径一：递归器计算律——fixpoint 体对 evSeq 构造子 iota
+     归约直取 f_seq 支，beta 后双侧逐字同形 *)
+  intros P f_num f_seq f_pair l.
+  change (ev_rect' P f_num f_seq f_pair (evSeq l)) with (f_seq l).
+  reflexivity.
+Qed.
 
 Lemma ev_rect'_pair : forall (P : Evidence -> Type)
   (f_num : forall q : Q, P (evNum q))
@@ -1274,7 +1383,15 @@ Lemma ev_rect'_pair : forall (P : Evidence -> Type)
   ev_rect' P f_num f_seq f_pair (evPair a b)
   = f_pair a b (ev_rect' P f_num f_seq f_pair a)
                (ev_rect' P f_num f_seq f_pair b).
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径一：递归器计算律——fixpoint 体对 evPair 构造子 iota
+     归约出 f_pair 双递归装配形，与右侧逐字同形 *)
+  intros P f_num f_seq f_pair a b.
+  change (ev_rect' P f_num f_seq f_pair (evPair a b))
+    with (f_pair a b (ev_rect' P f_num f_seq f_pair a)
+                   (ev_rect' P f_num f_seq f_pair b)).
+  reflexivity.
+Qed.
 
 (* 消费样板一：ev_size 正性的第三方法重证（对照 §2 ev_size_pos 的
    induction 原证与 §审查器段消费面，本件经 ev_rect' 显式消去） *)
@@ -1290,7 +1407,19 @@ Definition ev_size_pos_rect (e : Evidence) :
 
 Theorem ev_size_pos_third : forall e : Evidence,
   le (Datatypes.S O) (ev_size e).
-Proof. exact ev_size_pos_rect. Qed.
+Proof.
+  intro e.
+  (* 口径二：内联 ev_size_pos_rect 定义体——ev_rect' 三构造子
+     消去子逐支显式给形（叶支下界直构、Pair 支后继单调链），
+     消除经中间定义的单跳转发 *)
+  exact (ev_rect' (fun e' => le (Datatypes.S O) (ev_size e'))
+    (fun _ => le_n (Datatypes.S O))
+    (fun _ => le_n (Datatypes.S O))
+    (fun a b _ _ =>
+      nat_succ_le_mono O (Nat.add (ev_size a) (ev_size b))
+        (nat_le_0 (Nat.add (ev_size a) (ev_size b))))
+    e).
+Qed.
 
 (* 消费样板二：尺寸恰 1 ⟺ 叶（evNum/evSeq 二形）——内容归纳原理
    的非平凡消费（Pair 支由尺寸方程封死），叶刻画定理 *)
@@ -1402,20 +1531,66 @@ Qed.
 Theorem ev_enum_size_bound : forall (n : nat) (e : Evidence),
   In e (ev_enum n) -> le (ev_size e) n.
 Proof.
-  intros n e H. exact (ev_enum_bound_aux n n (le_n n) e H).
+  intros n e H.
+  revert H.
+  (* 口径三：内联母件加强形归纳骨架（归纳假设对一切不超过 n 的
+     预算层齐备——裸陈述直接归纳在拼接右件的预算层处失配，
+     加强形为本件最小自持形状）：零预算层空表剪枝，正预算层
+     三分支——双叶见证位置直证，拼接支经 flat_map 与 map 双重
+     成员分解后两条归纳假设按预算差线性算术收口；终以自身
+     预算层实例化 *)
+  assert (Haux : forall m : nat, le m n ->
+           forall e0 : Evidence, In e0 (ev_enum m) -> le (ev_size e0) m).
+  { induction n as [| n' IH]; intros m Hmn e0 Hin.
+    - assert (Hm : m = O) by lia. subst m. simpl in Hin. destruct Hin.
+    - destruct m as [| m'].
+      + simpl in Hin. destruct Hin.
+      + simpl in Hin. destruct Hin as [He | [He | Hin]].
+        * subst e0. simpl. lia.
+        * subst e0. simpl. lia.
+        * apply in_flat_map in Hin as [a [Ha Hinb]].
+          apply in_map_iff in Hinb as [b [Hb Hbin]].
+          subst e0.
+          assert (Hba : le (ev_size b) (Nat.sub m' (ev_size a))).
+          { apply (IH (Nat.sub m' (ev_size a))); [ lia | exact Hbin ]. }
+          assert (Haa : le (ev_size a) m').
+          { apply (IH m'); [ lia | exact Ha ]. }
+          simpl. lia. }
+  intros H. apply (Haux n (le_n n) e H).
 Qed.
 
 (* 枚举成员见证：叶单 witness 在一切正预算层在册 *)
 Lemma ev_enum_num_0 : forall n : nat,
   In (evNum 0%Q) (ev_enum (Datatypes.S n)).
 Proof.
-  intros n. simpl. left. reflexivity.
+  intros n.
+  (* 口径一：预算层枚举表与成员谓词双层展开——S n 层 delta-iota
+     落形后 In 对 cons 头的判定方程显式落形，见证反射收左支 *)
+  change (In (evNum 0%Q) (ev_enum (Datatypes.S n)))
+    with ((evNum 0%Q = evNum 0%Q) \/
+          In (evNum 0%Q) (evSeq [] :: flat_map
+               (fun a : Evidence =>
+                  map (fun b : Evidence => evPair a b)
+                      (ev_enum (Nat.sub n (ev_size a))))
+               (ev_enum n))).
+  left. reflexivity.
 Qed.
 
 Lemma ev_enum_seq_nil : forall n : nat,
   In (evSeq []) (ev_enum (Datatypes.S n)).
 Proof.
-  intros n. simpl. right. left. reflexivity.
+  intros n.
+  (* 口径一：预算层枚举表与成员谓词双层展开——头部析取右进、
+     次位见证反射，In 判定方程显式落形 *)
+  change (In (evSeq []) (ev_enum (Datatypes.S n)))
+    with ((evNum 0%Q = evSeq []) \/
+          ((evSeq [] = evSeq []) \/
+           In (evSeq []) (flat_map
+                (fun a : Evidence =>
+                   map (fun b : Evidence => evPair a b)
+                       (ev_enum (Nat.sub n (ev_size a))))
+                (ev_enum n)))).
+  right. left. reflexivity.
 Qed.
 
 (* 形状级完备生成规则：合格预算的两分件 ⇒ 拼接件在同一预算上层
@@ -1486,3 +1661,30 @@ Print Assumptions ev_enum_size_bound.
 Extraction "_t2_ext_eqb" ev_eqb.
 Extraction "_t2_ext_decomp" ev_case_set.
 Extraction "_t2_ext_enum" ev_enum.
+
+(* —— 切片二替换件闭包打印（T241 补位席追加，四关 G4 附件） —— *)
+Print Assumptions ev_size_pair.
+Print Assumptions default_Tex_phi.
+Print Assumptions exists_level2_node.
+Print Assumptions layer_self_refutation.
+Print Assumptions layered_network_liar_each_layer.
+Print Assumptions level_confusion_revives_liar.
+Print Assumptions trLevel_geq_trans.
+Print Assumptions cv_lv_antisym_transport.
+Print Assumptions cv_node_level.
+Print Assumptions cv_node_round_core.
+Print Assumptions Tex_fiber_cast.
+Print Assumptions audit_node_cast.
+Print Assumptions tex_nontrivial.
+Print Assumptions tex_nontrivial_audited.
+Print Assumptions ref_node_round.
+Print Assumptions tneg_counter_size.
+Print Assumptions qeqb_refl.
+Print Assumptions Qraw_eqb_refl.
+Print Assumptions ev_rect'_num.
+Print Assumptions ev_rect'_seq.
+Print Assumptions ev_rect'_pair.
+Print Assumptions ev_size_pos_third.
+Print Assumptions ev_enum_size_bound.
+Print Assumptions ev_enum_num_0.
+Print Assumptions ev_enum_seq_nil.

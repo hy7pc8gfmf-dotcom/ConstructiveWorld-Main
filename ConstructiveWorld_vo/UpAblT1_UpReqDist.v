@@ -1,3 +1,20 @@
+(* ============================================================
+   T246 包G 台账席（tier1 次批）同名替换注记 —— UpAblT1_UpReqDist.v
+   本件为同名替换稿：原件全文保留（声明序/原头注/其余注记逐字未动），
+   仅十三条放电定理解证体替换，语句面零改动：
+   十三条全部由对上游放电件的单跳转发，替换为列表层结构归纳就地重演
+   （枚举清单 nil/cons 分判 + 逐环 req_plus_compat/le_plus_compat 实例化；
+   加法/线性件内联 req_trans 三段链与 distrib 换形；严界件内联头项见证
+   lt_le_trans 链与逐点非负归纳库消费）。金标准文本程序直取自
+   UpReqSumD.v 既有归纳体（sumd_list_sum_ext/_add/_linear/_pos_cons/_le），
+   断言同文后作参数化换实例（l→enum、sumd_list_sum→sumd_sumf S）。
+   B6 uabT1_reqfep_fsum_zero_nonneg 维持原放电形（其满射数据槽内容件
+   为上游成员谓词归纳机械，本切片不移植，登记台账滚动）。
+   验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
+     rc=0、零错误锚、vo 新于 v、文尾十四条 Print Assumptions 全 Closed。
+   坑记：req_plus_exchange 系上游代数库顶层件非接口面，须模块全限定。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* UpAblT1_UpReqDist.v —— 假设消融战役 T1 批·席 a（FA2 第 1 批前 25 位之 14 位） *)
 (* 辖区：UpReqDist.v sumf 接口面（求和假设位五节），放电母本 sumd_*@UpReqSumD *)
@@ -69,9 +86,11 @@ Theorem uabT1_reqsumlayer_sum_ext :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f g : S -> R),
     (forall s : S, req (f s) (g s)) -> req (sumd_sumf S enum f) (sumd_sumf S enum g).
-Proof.
-  intros R RIS S enum f g H.
-  exact (sumd_sum_ext S enum f g H).
+Proof.  intros R RIS S enum f g H.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_sumf S t f) (sumd_sumf S t g)
+             (H x) IH).
 Qed.
 
 (* A2 ←L204 sum_add（逐字：req (sumf (fun s => plus (f s) (g s))) (plus (sumf f) (sumf g))） *)
@@ -80,9 +99,22 @@ Theorem uabT1_reqsumlayer_sum_add :
     (f g : S -> R),
     req (sumd_sumf S enum (fun s : S => plus (f s) (g s)))
         (plus (sumd_sumf S enum f) (sumd_sumf S enum g)).
-Proof.
-  intros R RIS S enum f g.
-  exact (sumd_sum_add S enum f g).
+Proof.  intros R RIS S enum f g.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - exact (req_trans
+             (plus (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s))))
+             (plus (plus (f x) (g x))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g)))
+             (plus (plus (f x) (sumd_sumf S t f))
+                (plus (g x) (sumd_sumf S t g)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s)))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g))
+                (req_refl (plus (f x) (g x))) IH)
+             (UpReqAlgebra.req_plus_exchange (f x) (sumd_sumf S t f)
+                (g x) (sumd_sumf S t g))).
 Qed.
 
 (* A3 ←L207 sum_linear（逐字：forall (a : R) (f : S -> R), req (sumf (fun s => mult a (f s))) (mult a (sumf f))） *)
@@ -90,9 +122,21 @@ Theorem uabT1_reqsumlayer_sum_linear :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (a : R) (f : S -> R),
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
-Proof.
-  intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+Proof.  intros R RIS S enum a f.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s))))
+             (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+             (mult a (plus (f x) (sumd_sumf S t f)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s)))
+                (mult a (sumd_sumf S t f))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_sumf S t f)))
+                (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+                (distrib a (f x) (sumd_sumf S t f)))).
 Qed.
 
 (* ============ §B ReqFEP（UpReqDist.v L1001-1016） ============ *)
@@ -102,9 +146,11 @@ Theorem uabT1_reqfep_fsum_ext :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f g : S -> R),
     (forall s : S, req (f s) (g s)) -> req (sumd_sumf S enum f) (sumd_sumf S enum g).
-Proof.
-  intros R RIS S enum f g H.
-  exact (sumd_sum_ext S enum f g H).
+Proof.  intros R RIS S enum f g H.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_sumf S t f) (sumd_sumf S t g)
+             (H x) IH).
 Qed.
 
 (* B2 ←L1006 fsum_add *)
@@ -113,9 +159,22 @@ Theorem uabT1_reqfep_fsum_add :
     (f g : S -> R),
     req (sumd_sumf S enum (fun s : S => plus (f s) (g s)))
         (plus (sumd_sumf S enum f) (sumd_sumf S enum g)).
-Proof.
-  intros R RIS S enum f g.
-  exact (sumd_sum_add S enum f g).
+Proof.  intros R RIS S enum f g.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - exact (req_trans
+             (plus (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s))))
+             (plus (plus (f x) (g x))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g)))
+             (plus (plus (f x) (sumd_sumf S t f))
+                (plus (g x) (sumd_sumf S t g)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s)))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g))
+                (req_refl (plus (f x) (g x))) IH)
+             (UpReqAlgebra.req_plus_exchange (f x) (sumd_sumf S t f)
+                (g x) (sumd_sumf S t g))).
 Qed.
 
 (* B3 ←L1009 fsum_linear *)
@@ -123,9 +182,21 @@ Theorem uabT1_reqfep_fsum_linear :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (a : R) (f : S -> R),
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
-Proof.
-  intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+Proof.  intros R RIS S enum a f.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s))))
+             (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+             (mult a (plus (f x) (sumd_sumf S t f)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s)))
+                (mult a (sumd_sumf S t f))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_sumf S t f)))
+                (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+                (distrib a (f x) (sumd_sumf S t f)))).
 Qed.
 
 (* B4 ←L1012 fsum_pos（非空数据槽显式参，sumd_sum_pos@233 同形） *)
@@ -134,9 +205,16 @@ Theorem uabT1_reqfep_fsum_pos :
     Not (enum = nil) ->
     forall f : S -> R,
       (forall s : S, lt zero (f s)) -> lt zero (sumd_sumf S enum f).
-Proof.
-  intros R RIS S enum Hne f H.
-  exact (sumd_sum_pos S enum f Hne H).
+Proof.  intros R RIS S enum Hne f H.
+  destruct enum as [| x t].
+  - destruct (Hne eq_refl).
+  - exact (lt_le_trans zero (f x) (plus (f x) (sumd_sumf S t f)) (H x)
+             (le_id_l (f x) (plus (f x) zero) (plus (f x) (sumd_sumf S t f))
+                (req_sym (plus (f x) zero) (f x) (plus_zero (f x)))
+                (le_plus_compat (f x) (f x) zero (sumd_sumf S t f)
+                   (le_refl (f x))
+                   (sumd_list_sum_nonneg S f t
+                      (fun s : S => sumd_lt_le (f s) (H s)))))).
 Qed.
 
 (* B5 ←L1014 fsum_le *)
@@ -144,9 +222,11 @@ Theorem uabT1_reqfep_fsum_le :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f g : S -> R),
     (forall s : S, le (f s) (g s)) -> le (sumd_sumf S enum f) (sumd_sumf S enum g).
-Proof.
-  intros R RIS S enum f g H.
-  exact (sumd_sum_le S enum f g H).
+Proof.  intros R RIS S enum f g H.
+  induction enum as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_plus_compat (f x) (g x) (sumd_sumf S t f) (sumd_sumf S t g)
+             (H x) IH).
 Qed.
 
 (* B6 ←L1016 fsum_zero_nonneg（满射数据槽显式参，sumd_sum_zero_nonneg_surj@400 同形；FA2 依据即 ：400） *)
@@ -168,9 +248,11 @@ Theorem uabT1_reqsteady_ssum_ext :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f g : S -> R),
     (forall s : S, req (f s) (g s)) -> req (sumd_sumf S enum f) (sumd_sumf S enum g).
-Proof.
-  intros R RIS S enum f g H.
-  exact (sumd_sum_ext S enum f g H).
+Proof.  intros R RIS S enum f g H.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_sumf S t f) (sumd_sumf S t g)
+             (H x) IH).
 Qed.
 
 (* C2 ←L3084 ssum_linear（逐字单行形） *)
@@ -178,9 +260,21 @@ Theorem uabT1_reqsteady_ssum_linear :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (a : R) (f : S -> R),
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
-Proof.
-  intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+Proof.  intros R RIS S enum a f.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s))))
+             (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+             (mult a (plus (f x) (sumd_sumf S t f)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s)))
+                (mult a (sumd_sumf S t f))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_sumf S t f)))
+                (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+                (distrib a (f x) (sumd_sumf S t f)))).
 Qed.
 
 (* ============ §D ReqProbDist（UpReqDist.v L3130-3134） ============ *)
@@ -190,9 +284,21 @@ Theorem uabT1_reqprobdist_psum_linear :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (a : R) (f : S -> R),
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
-Proof.
-  intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+Proof.  intros R RIS S enum a f.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s))))
+             (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+             (mult a (plus (f x) (sumd_sumf S t f)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_sumf S t (fun s : S => mult a (f s)))
+                (mult a (sumd_sumf S t f))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_sumf S t f)))
+                (plus (mult a (f x)) (mult a (sumd_sumf S t f)))
+                (distrib a (f x) (sumd_sumf S t f)))).
 Qed.
 
 (* D2 ←L3134 psum_add（逐字单行形） *)
@@ -201,9 +307,22 @@ Theorem uabT1_reqprobdist_psum_add :
     (f g : S -> R),
     req (sumd_sumf S enum (fun s : S => plus (f s) (g s)))
         (plus (sumd_sumf S enum f) (sumd_sumf S enum g)).
-Proof.
-  intros R RIS S enum f g.
-  exact (sumd_sum_add S enum f g).
+Proof.  intros R RIS S enum f g.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - exact (req_trans
+             (plus (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s))))
+             (plus (plus (f x) (g x))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g)))
+             (plus (plus (f x) (sumd_sumf S t f))
+                (plus (g x) (sumd_sumf S t g)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_sumf S t (fun s : S => plus (f s) (g s)))
+                (plus (sumd_sumf S t f) (sumd_sumf S t g))
+                (req_refl (plus (f x) (g x))) IH)
+             (UpReqAlgebra.req_plus_exchange (f x) (sumd_sumf S t f)
+                (g x) (sumd_sumf S t g))).
 Qed.
 
 (* ============ §E ReqSoftmaxDual（UpReqDist.v L3433-3438；            *)
@@ -215,9 +334,16 @@ Theorem uabT1_reqsoftmaxdual_sumf_pos :
     Not (enum = nil) ->
     forall f : S -> R,
       (forall s : S, lt zero (f s)) -> lt zero (sumd_sumf S enum f).
-Proof.
-  intros R RIS S enum Hne f H.
-  exact (sumd_sum_pos S enum f Hne H).
+Proof.  intros R RIS S enum Hne f H.
+  destruct enum as [| x t].
+  - destruct (Hne eq_refl).
+  - exact (lt_le_trans zero (f x) (plus (f x) (sumd_sumf S t f)) (H x)
+             (le_id_l (f x) (plus (f x) zero) (plus (f x) (sumd_sumf S t f))
+                (req_sym (plus (f x) zero) (f x) (plus_zero (f x)))
+                (le_plus_compat (f x) (f x) zero (sumd_sumf S t f)
+                   (le_refl (f x))
+                   (sumd_list_sum_nonneg S f t
+                      (fun s : S => sumd_lt_le (f s) (H s)))))).
 Qed.
 
 (* ============ PA 收尾段（逐件 Closed 判读） ============ *)

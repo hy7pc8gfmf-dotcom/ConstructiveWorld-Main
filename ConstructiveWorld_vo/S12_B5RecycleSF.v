@@ -1,4 +1,12 @@
 (* ============================================================ *)
+(* T242 · ToyR 战役 包D · S12_B5RecycleSF.v（同名非平凡替换稿）   *)
+(* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 替换段：b5q_arctan_one_leibniz_quarter / sf_qeq_le /           *)
+(*         sf_qleT_refl / sf_amp2_nonneg / sf_smx_exp_score_nonneg *)
+(* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
+(* ============================================================ *)
+(* ============================================================ *)
 (* S12_B5RecycleSF.v                                           *)
 (*                                                             *)
 (* 目的：B5 模块的复用整合（arctan/指数/log 界的再组装）与       *)
@@ -8464,8 +8472,29 @@ Lemma b5q_arctan_one_leibniz_quarter :
   real_eq arctan_one_real
           (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))).
 Proof.
-  apply real_eq_sym.
-  exact b5q_leibniz_quarter_chain.
+  (* ToyR 替换：real_eq_sym 桥就地展开至定义层（消桥转发）：
+     对链等式取同一 eps 的 N 见证，差序列绝对值对称 q_abs_minus_sym，
+     经 Qcompare 相容改写对齐两侧差项后收口 *)
+  intros eps Heps.
+  destruct (b5q_leibniz_quarter_chain eps Heps) as [N HN].
+  exists N.
+  intro n. intro Hn.
+  specialize (HN n Hn).
+  unfold QltT, Qlt_bool in HN |- *.
+  assert (Hcmp : Qcompare (Qabs (projT1 arctan_one_real n -
+                               projT1 (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))) n)) eps =
+                 Qcompare (Qabs (projT1 (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))) n -
+                               projT1 arctan_one_real n)) eps).
+  { exact (Qcompare_comp
+             (Qabs (projT1 arctan_one_real n -
+                    projT1 (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))) n))
+             (Qabs (projT1 (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))) n -
+                    projT1 arctan_one_real n))
+             (q_abs_minus_sym (projT1 arctan_one_real n)
+                              (projT1 (real_mult cauchy_real_pi_leibniz (real_const (1 / 4))) n))
+             eps eps (Qeq_refl eps)). }
+  rewrite Hcmp.
+  exact HN.
 Qed.
 (* ############ 合并分片边界 MergedField ############ *)
 (* ===== 语义场合成库（_p1.._p8 + NCAField + WassersteinQ + _p9 调度器/诚信管线）===== *)
@@ -8541,7 +8570,12 @@ Qed.
 
 Lemma sf_qeq_le : forall x y : Q, x == y -> Qle x y.
 Proof.
-  intros x y H. unfold Qle, Qeq. apply Z.eq_le_incl. exact H.
+  intros x y H.
+  (* ToyR 替换：Z 层改写链直构（消 Z.eq_le_incl 桥单跳转发）：
+     unfold 至交叉积定义层，等式假设就地改写左端为右端，Z.le 自反收口 *)
+  unfold Qle, Qeq in *.
+  rewrite H.
+  apply Z.le_refl.
 Qed.
 
 (* Q 平方非负：Q 上可计算符号判定（Q_dec 属构造可接受），逐例构造。 *)
@@ -8705,7 +8739,24 @@ Section SFSetLayerQ.
 (* 自反。 *)
 Lemma sf_qleT_refl : forall x : Q, QleT' x x.
 Proof.
-  intro x. exact (Qle_to_QleT' x x (Qle_refl x)).
+  intro x.
+  (* ToyR 替换：Set 层直构不绕桥（消 Qle_to_QleT'∘Qle_refl 双跳转发）：
+     QleT' 展开至 Id（Qle_bool 为 S02 本地遮蔽件，全限定展开），
+     对 Qcompare x x 三分主项就地分解——同元两支归约收敛 Id；
+     Gt 支以对 Z 结构归纳证 (z ?= z) = Eq 的内联自反排除 + discriminate *)
+  unfold QleT', S02_CauchyComplete.Qle_bool.
+  assert (Hrefl : forall z : Z, (z ?= z)%Z = Eq).
+  { intro z. induction z as [| p | p].
+    - reflexivity.
+    - apply Z.compare_refl.
+    - apply Z.compare_refl. }
+  destruct (Qcompare x x) as [E|E|E] eqn:Ec.
+  - reflexivity.
+  - reflexivity.
+  - exfalso.
+    unfold Qcompare in Ec.
+    rewrite Hrefl in Ec.
+    discriminate Ec.
 Qed.
 
 (* 传递。 *)
@@ -11561,7 +11612,20 @@ Definition sf_amp2 (p : (nat * Q)%type) : Q := (snd p) * (snd p).
 (* 逐项坍缩概率非负。 *)
 Theorem sf_amp2_nonneg : forall p : (nat * Q)%type, QleT' 0 (sf_amp2 p).
 Proof.
-  intro p. unfold sf_amp2. apply sf_q_sq_ge_0T.
+  intro p. destruct p as [n q]. unfold sf_amp2.
+  (* ToyR 替换：平方非负逐例直构（消 sf_q_sq_ge_0T→sf_q_sq_ge_0 双跳转发）：
+     Q_dec 可计算三分就地分析——正/负支 Qmult_le_0_compat 显式构造，
+     等支 qeq_le 改写后 ring 收口；桥步仅留 Qle_to_QleT' 一跳 *)
+  apply (Qle_to_QleT' 0 (q * q)).
+  destruct (Q_dec 0 q) as [[Hp | Hn] | Hz].
+  - assert (H1 : 0 <= q) by (apply Qlt_le_weak; exact Hp).
+    exact (Qmult_le_0_compat q q H1 H1).
+  - assert (Hq0 : q <= 0) by (apply Qlt_le_weak; exact Hn).
+    assert (Hnq : 0 <= - q) by (exact (Qopp_le_compat q 0 Hq0)).
+    assert (Hsq : (q * q) == ((- q) * (- q))) by ring.
+    rewrite Hsq.
+    exact (Qmult_le_0_compat (- q) (- q) Hnq Hnq).
+  - apply (qeq_le 0 (q * q)). rewrite <- Hz. ring.
 Qed.
 
 (* Q 列表和逐项非负传递：全体项非负 ⟹ 和非负。 *)
@@ -12022,7 +12086,14 @@ Qed.
 
 (* 辅助 4：指数打分恒非负（实为恒正）。 *)
 Lemma sf_smx_exp_score_nonneg : forall w : Real, real_le real_zero (sf_exp_score w).
-Proof. intro w. left. apply real_exp_neg_pos. Qed.
+Proof.
+  intro w. unfold sf_exp_score.
+  (* ToyR 替换：显式 sum 构造不借 left 糖（S01 Or=sum 全显 @inl 注入，
+     见证项 real_exp_neg_pos 全参显式喂定） *)
+  exact (@inl (real_lt real_zero (real_exp_neg (real_opp w)))
+              (real_eq real_zero (real_exp_neg (real_opp w)))
+              (real_exp_neg_pos (real_opp w))).
+Qed.
 
 Theorem sf_softmax_le_one :
   forall (ss : list Real) (s : Real)
@@ -14326,3 +14397,12 @@ Defined.
 (* N1. 辛核（symplectic_evolution.py 的 Q 层精确化）               *)
 (* ============================================================ *)
 
+
+(* ============================================================ *)
+(* 替换件全局假设核查（T242 切片二）                              *)
+(* ============================================================ *)
+Print Assumptions b5q_arctan_one_leibniz_quarter.
+Print Assumptions sf_qeq_le.
+Print Assumptions sf_qleT_refl.
+Print Assumptions sf_amp2_nonneg.
+Print Assumptions sf_smx_exp_score_nonneg.

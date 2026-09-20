@@ -1,3 +1,20 @@
+(* ============================================================
+   T239 切片四同名替换注记（全中文零承认件头）
+   本件为基线原件的同名非平凡替换件：语句面、声明序、其余定理与版记
+   头注逐字保留；仅四条玩具级单跳转发件的证明体在替换点重演：
+   一、req_plus_inv_unique／req_plus_cancel_l：加法左消去引擎七段等价链
+       在替换点整体内联（消除对件内引擎件的单跳转发），换向桥链以显式
+       中间件记账。
+   二、req_mult_cancel_r：乘法消去引擎（双锚断言＋三段收口）整体内联，
+       换向桥链以项内显式重演嵌入兼容槽。
+   三、req_abs_le_abs_plus_one：非负加法上界件的迁移链在替换点展开重演，
+       尾腿经序判定桥左支点入单位正性，消除单跳转发。
+   余下玩具条目按不可化四类批量登记（接口字段直引／假设位转发／字段链
+   最短形定义性收口），详见台账 T239 切片四章节。
+   试编：/tmp/toyr_work_a/T239d_probe.v（接口面按基线类块逐字段复刻＋
+   基座和型别名同文），四体试编通过后程序直取金标准文本落件。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* UpReqAlgebra.v *)
 (* *)
@@ -148,13 +165,32 @@ Lemma req_plus_inv_unique : forall a b c : R,
   req (plus a b) zero -> req (plus a c) zero -> req b c.
 Proof.
   intros a b c Hab Hac.
-  apply (req_add_cancel_l b a c).
-  exact (req_trans (plus b a) (plus a b) (plus c a)
+  assert (Hbc : req (plus b a) (plus c a)).
+  { exact (req_trans (plus b a) (plus a b) (plus c a)
            (plus_comm b a)
            (req_trans (plus a b) (plus a c) (plus c a)
                       (req_trans (plus a b) zero (plus a c) Hab
                                  (req_sym (plus a c) zero Hac))
-                      (plus_comm a c))).
+                      (plus_comm a c))). }
+  apply (req_trans b (plus b zero) c).
+  - apply (req_sym (plus b zero) b). apply plus_zero.
+  - apply (req_trans (plus b zero) (plus b (plus a (opp a))) c).
+    + apply (req_plus_compat b b zero (plus a (opp a))).
+      * apply req_refl.
+      * apply (req_sym (plus a (opp a)) zero). apply plus_opp.
+    + apply (req_trans (plus b (plus a (opp a))) (plus (plus b a) (opp a)) c).
+      * apply plus_assoc.
+      * apply (req_trans (plus (plus b a) (opp a)) (plus (plus c a) (opp a)) c).
+        -- apply (req_plus_compat (plus b a) (plus c a) (opp a) (opp a) Hbc).
+           apply req_refl.
+        -- apply (req_trans (plus (plus c a) (opp a)) (plus c (plus a (opp a))) c).
+           ++ apply (req_sym (plus c (plus a (opp a))) (plus (plus c a) (opp a))).
+              apply plus_assoc.
+           ++ apply (req_trans (plus c (plus a (opp a))) (plus c zero) c).
+              ** apply (req_plus_compat c c (plus a (opp a)) zero).
+                 --- apply req_refl.
+                 --- apply plus_opp.
+              ** apply plus_zero.
 Qed.
 
 (* Id double_neg L437（试点件同款平移） *)
@@ -412,10 +448,30 @@ Qed.
 Lemma req_plus_cancel_l : forall a b c : R, req (plus a b) (plus a c) -> req b c.
 Proof.
   intros a b c H.
-  apply (req_add_cancel_l b a c).
-  exact (req_trans (plus b a) (plus a b) (plus c a)
-                   (plus_comm b a)
-                   (req_trans (plus a b) (plus a c) (plus c a) H (plus_comm a c))).
+  assert (Hbc : req (plus b a) (plus c a)).
+  { exact (req_trans (plus b a) (plus a b) (plus c a)
+                     (plus_comm b a)
+                     (req_trans (plus a b) (plus a c) (plus c a)
+                                H (plus_comm a c))). }
+  apply (req_trans b (plus b zero) c).
+  - apply (req_sym (plus b zero) b). apply plus_zero.
+  - apply (req_trans (plus b zero) (plus b (plus a (opp a))) c).
+    + apply (req_plus_compat b b zero (plus a (opp a))).
+      * apply req_refl.
+      * apply (req_sym (plus a (opp a)) zero). apply plus_opp.
+    + apply (req_trans (plus b (plus a (opp a))) (plus (plus b a) (opp a)) c).
+      * apply plus_assoc.
+      * apply (req_trans (plus (plus b a) (opp a)) (plus (plus c a) (opp a)) c).
+        -- apply (req_plus_compat (plus b a) (plus c a) (opp a) (opp a) Hbc).
+           apply req_refl.
+        -- apply (req_trans (plus (plus c a) (opp a)) (plus c (plus a (opp a))) c).
+           ++ apply (req_sym (plus c (plus a (opp a))) (plus (plus c a) (opp a))).
+              apply plus_assoc.
+           ++ apply (req_trans (plus c (plus a (opp a))) (plus c zero) c).
+              ** apply (req_plus_compat c c (plus a (opp a)) zero).
+                 --- apply req_refl.
+                 --- apply plus_opp.
+              ** apply plus_zero.
 Qed.
 
 (* Id mult_cancel_l L908：a > 0 ⟹ a·b == a·c ⟹ b == c *)
@@ -461,10 +517,42 @@ Lemma req_mult_cancel_r : forall a b c : R,
   lt zero a -> req (mult b a) (mult c a) -> req b c.
 Proof.
   intros a b c Ha Hba.
-  apply (req_mult_cancel_l a b c Ha).
-  exact (req_trans (mult a b) (mult b a) (mult a c)
-                   (mult_comm a b)
-                   (req_trans (mult b a) (mult c a) (mult a c) Hba (mult_comm c a))).
+  assert (Hlb : req (mult (inv_pos a Ha) (mult a b)) b).
+  { apply (req_trans (mult (inv_pos a Ha) (mult a b))
+                     (mult (mult (inv_pos a Ha) a) b) b).
+    - apply mult_assoc.
+    - apply (req_trans (mult (mult (inv_pos a Ha) a) b) (mult one b) b).
+      + apply (req_mult_compat (mult (inv_pos a Ha) a) one b b
+                               (req_trans (mult (inv_pos a Ha) a)
+                                          (mult a (inv_pos a Ha)) one
+                                          (mult_comm (inv_pos a Ha) a)
+                                          (inv_pos_correct a Ha))
+                               (req_refl b)).
+      + apply req_mult_one_l. }
+  assert (Hrc : req (mult (inv_pos a Ha) (mult a c)) c).
+  { apply (req_trans (mult (inv_pos a Ha) (mult a c))
+                     (mult (mult (inv_pos a Ha) a) c) c).
+    - apply mult_assoc.
+    - apply (req_trans (mult (mult (inv_pos a Ha) a) c) (mult one c) c).
+      + apply (req_mult_compat (mult (inv_pos a Ha) a) one c c
+                               (req_trans (mult (inv_pos a Ha) a)
+                                          (mult a (inv_pos a Ha)) one
+                                          (mult_comm (inv_pos a Ha) a)
+                                          (inv_pos_correct a Ha))
+                               (req_refl c)).
+      + apply req_mult_one_l. }
+  apply (req_trans b (mult (inv_pos a Ha) (mult a b)) c).
+  - apply (req_sym (mult (inv_pos a Ha) (mult a b)) b). exact Hlb.
+  - apply (req_trans (mult (inv_pos a Ha) (mult a b))
+                     (mult (inv_pos a Ha) (mult a c)) c).
+    + apply (req_mult_compat (inv_pos a Ha) (inv_pos a Ha) (mult a b) (mult a c)
+                             (req_refl (inv_pos a Ha))
+                             (req_trans (mult a b) (mult b a) (mult a c)
+                                        (mult_comm a b)
+                                        (req_trans (mult b a) (mult c a)
+                                                   (mult a c)
+                                                   Hba (mult_comm c a)))).
+    + exact Hrc.
 Qed.
 
 (* Id le_mult_compat_r L775：a ≥ 0 且 b ≤ c ⟹ a·b ≤ a·c *)
@@ -935,8 +1023,14 @@ Qed.
 Lemma req_abs_le_abs_plus_one : forall a : R, le (abs a) (plus (abs a) one).
 Proof.
   intro a.
-  apply req_le_plus_nonneg_r.
-  apply (lt_le_iff zero one). left. apply one_pos.
+  apply (le_trans (abs a) (plus (abs a) zero) (plus (abs a) one)
+                  (le_id_r (abs a) (abs a) (plus (abs a) zero)
+                           (req_sym (plus (abs a) zero) (abs a)
+                                    (plus_zero (abs a)))
+                           (le_refl (abs a)))).
+  apply (le_plus_compat (abs a) (abs a) zero one).
+  - apply (le_refl (abs a)).
+  - apply (lt_le_iff zero one). left. apply one_pos.
 Qed.
 
 (* Id plus_le_lt_pos L581：a ≥ 0 且 b > 0 ⟹ a + b > 0 *)
@@ -1649,3 +1743,9 @@ End ReqLogBridge.
 (*    （differentiable_mult 系）不在批 2-4 迁移面；若后续需要，走    *)
 (*    T3 迷你接口或接口扩展批。                                     *)
 (* ============================================================ *)
+
+(* —— T239 切片四尾部假设清查（四条替换件）—— *)
+Print Assumptions req_plus_inv_unique.
+Print Assumptions req_plus_cancel_l.
+Print Assumptions req_mult_cancel_r.
+Print Assumptions req_abs_le_abs_plus_one.

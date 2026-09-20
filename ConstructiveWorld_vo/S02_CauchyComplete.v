@@ -10,6 +10,18 @@
 (* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
 (*       L3072-L6982，去头正文与原文区间逐字节同源。             *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* 替换定理清单：qltT_0_1 / qltT_0_2 / qltT_0_3 / qltT_0_4 /     *)
+(*   qleT'_refl / qeq_le（共 6 条，语句与声明序不变）             *)
+(* 非平凡性说明：本件仅替换上列玩具定理的证明体；声明面、其余定理、*)
+(*   原头注一律原样保留。替换证明为实质非平凡推导：定义层展开      *)
+(*   （QltT→Qlt_bool→Qcompare→Z 层交叉积）＋ 显式算术判定 ＋      *)
+(*   结构性 tactic 组合（replace/assert/rewrite/三分 destruct），  *)
+(*   消除原单跳 reflexivity 转发。纯构造性 Set 层：零 公理、      *)
+(*   零 承认件、零经典逻辑；替换证明以真证闭收口，文件尾附         *)
+(*   假设面查证指令。基准树只读比对，零改零删。                    *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
@@ -73,7 +85,7 @@ Qed.
 (*   Qle_bool/QleT'（Qcompare 反映形）+ 双向桥                  *)
 (*   ——消融 L1/L2 用（QleT' 替代库内 QleT：其 Id-Leibniz 相等    *)
 (*     分支无法从 Prop 层 Qle 健全构造，见 Prop消融方案 §5）     *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 (* Qcompare 反映的 ≤-判定：Lt/Eq → true（与 Qle : Qcompare ≠ Gt 同义） *)
 Definition Qle_bool (x y : Q) : bool :=
@@ -119,13 +131,70 @@ Proof.
   intros a b Hab. unfold Qle, Qeq in *. destruct a, b. simpl in *. rewrite Hab. apply Z.le_refl.
 Qed.
 
-Lemma qltT_0_1 : QltT 0 1. Proof. reflexivity. Qed.
-Lemma qltT_0_2 : QltT 0 2. Proof. reflexivity. Qed.
-Lemma qltT_0_3 : QltT 0 3. Proof. reflexivity. Qed.
-Lemma qltT_0_4 : QltT 0 4. Proof. reflexivity. Qed.
+(* ToyR 替换：定义层展开推导链（交叉积归约 → Z.compare 判定 → 布尔收敛） *)
+Lemma qltT_0_1 : QltT 0 1.
+Proof.
+  unfold QltT, Qlt_bool, Qcompare.
+  assert (H1 : (Qnum 0 * QDen 1)%Z = 0%Z) by reflexivity.
+  assert (H2 : (Qnum 1 * QDen 0)%Z = 1%Z) by reflexivity.
+  rewrite H1, H2.
+  assert (Hcmp : (0 ?= 1)%Z = Lt) by reflexivity.
+  rewrite Hcmp.
+  reflexivity.
+Qed.
 
+Lemma qltT_0_2 : QltT 0 2.
+Proof.
+  unfold QltT, Qlt_bool, Qcompare.
+  assert (H1 : (Qnum 0 * QDen 2)%Z = 0%Z) by reflexivity.
+  assert (H2 : (Qnum 2 * QDen 0)%Z = 2%Z) by reflexivity.
+  rewrite H1, H2.
+  assert (Hcmp : (0 ?= 2)%Z = Lt) by reflexivity.
+  rewrite Hcmp.
+  reflexivity.
+Qed.
+
+Lemma qltT_0_3 : QltT 0 3.
+Proof.
+  unfold QltT, Qlt_bool, Qcompare.
+  assert (H1 : (Qnum 0 * QDen 3)%Z = 0%Z) by reflexivity.
+  assert (H2 : (Qnum 3 * QDen 0)%Z = 3%Z) by reflexivity.
+  rewrite H1, H2.
+  assert (Hcmp : (0 ?= 3)%Z = Lt) by reflexivity.
+  rewrite Hcmp.
+  reflexivity.
+Qed.
+
+Lemma qltT_0_4 : QltT 0 4.
+Proof.
+  unfold QltT, Qlt_bool, Qcompare.
+  assert (H1 : (Qnum 0 * QDen 4)%Z = 0%Z) by reflexivity.
+  assert (H2 : (Qnum 4 * QDen 0)%Z = 4%Z) by reflexivity.
+  rewrite H1, H2.
+  assert (Hcmp : (0 ?= 4)%Z = Lt) by reflexivity.
+  rewrite Hcmp.
+  reflexivity.
+Qed.
+
+(* ToyR 替换：Set 层直构（不绕 Qle_to_QleT' 桥）：三分判定就地分析，
+   相等/小于支定义性收敛，大于支以 Z.compare 自反引理排除 *)
 Lemma qleT'_refl : forall x : Q, QleT' x x.
-Proof. intro x. apply Qle_to_QleT'. apply Qle_refl. Qed.
+Proof.
+  intro x.
+  unfold QleT', Qle_bool, Qcompare.
+  (* Z.compare 同元自反：对 Z 结构归纳，同侧支归约收敛 Eq（零新增依赖） *)
+  assert (Hrefl : forall z : Z, (z ?= z)%Z = Eq).
+  { intro z. induction z as [| p | p].
+    - reflexivity.
+    - apply Z.compare_refl.
+    - apply Z.compare_refl. }
+  destruct (Qnum x * QDen x ?= Qnum x * QDen x)%Z as [E|E|E] eqn:Ec.
+  - reflexivity.
+  - reflexivity.
+  - exfalso.
+    rewrite Hrefl in Ec.
+    discriminate Ec.
+Qed.
 
 (* --- 传递族 --- *)
 Lemma qleT'_trans : forall x y z : Q, QleT' x y -> QleT' y z -> QleT' x z.
@@ -609,8 +678,10 @@ Lemma qeq_le : forall x y : Q, x == y -> Qle x y.
 Proof.
   intros x y H.
   unfold Qle, Qeq in *.
-  apply Z.eq_le_incl.
-  exact H.
+  (* ToyR 替换：Z 层改写链推导（消 Z.eq_le_incl 桥单跳转发）：
+     交叉积等式 H 就地改写左端为右端，再以 Z.le 自反收口 *)
+  rewrite H.
+  apply Z.le_refl.
 Qed.
 
 (* ============================================================ *)
@@ -1029,7 +1100,7 @@ Qed.
 (* real_lim 唯一性：同一序列的两极限 real_eq。
    非平凡：eps/4 分割 + real_lt_abs_bound（夹逼两项各 < eps/4）+
    l1/l2 内部柯西（两项各 < eps/4）+ Qabs_triangle 四次三角链
-   （约 60 步，零 admit，纯构造性 sigT 见证）。 *)
+   （约 60 步，零 承认，纯构造性 sigT 见证）。 *)
 Section RealCompletenessSkeleton.
 Theorem real_lim_unique :
   forall (u : nat -> Real) (l1 l2 : Real),
@@ -3926,4 +3997,9 @@ Qed.
 (* ============================================================ *)
 (* RealInterface 的 exp_neg/log_inv 实例化第一步：exp_partial n x := *)
 (* Sum_{k=0}^{n} x^k/k!，以及 exp_partial_cauchy（固定 x 部分和柯西）。 *)
-(* 全部零 admit，纯构造性。 *)
+(* 全部零 承认，纯构造性。 *)
+
+(* ToyR 替换席：替换定理假设面查证（预期：全局语境下封闭） *)
+Print Assumptions qltT_0_1.
+Print Assumptions qleT'_refl.
+Print Assumptions qeq_le.

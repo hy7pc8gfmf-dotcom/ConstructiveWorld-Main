@@ -1,3 +1,26 @@
+(* ============================================================
+   T246 包G 台账席（tier1 次批）同名替换注记 —— UpReqDist.v
+   本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
+   仅四条玩具证明体替换为定义层显式重演，语句面零改动：
+   ① reqd_le_of_req：lt_le_iff 桥的右支改显式构造子见证（Set 层和型
+     inr 直造，本件 L2112 inl 先例同款），消 apply/right 战术链。
+   ② reqd_minus_compat：unfold 双侧后改 req_trans 两段链（req_plus_compat
+     先槽后证全显式参，逐段实例化），消单跳打包转发。
+   ③ reqd_opp_zero：改 req_trans 两段链（req_plus_zero_l 对称换形 +
+     plus_opp 收口），消 req_plus_inv_unique 打包转发。
+   ④ req_boltzmann_dist_pos：同族复制件正体直取（req_boltzmann_positive
+     的 Defined 正件体逐字内联：unfold + mult_positive 两支严界），消同名转发。
+   验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
+     rc=0、零错误锚、vo 新于 v、文尾四条 Print Assumptions 全 Closed。
+   余十一条复核判级：定义性收口三类（req_elbo_tight/reqd_sqrt_witness_sq/
+     reqd_scale_temp_duality，unfold 后同形收口，不可化）、接口桥位四类
+     （req_kl_nonneg/req_kl_zero_iff_eq/req_Z_temp_pos/req_second_law_
+     irreversible，转发目标为节假设桥，无定义面可展）、同文件深链转发
+     三类（req_elbo_lower_bound/req_kl 同族见上/reqd_scale_dual_sq_k）、
+     轻量维持一类（req_free_energy_entropy 已为定义层双层 compat 链）——
+     均登记于 T246 台账，不动原文。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* UpReqDist.v *)
 (* *)
@@ -73,16 +96,17 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
 (* req 蕴含 le（lt_le_iff 右支；exp_neg_req_compat_setoid 同款反射形） *)
 Lemma reqd_le_of_req : forall a b : R, req a b -> le a b.
-Proof.
-  intros a b H. apply (lt_le_iff a b). right. exact H.
+Proof.  intros a b H. exact (lt_le_iff a b (inr H)).
 Qed.
 
 (* req_minus 的双参数兼容（Id 系 minus 同余；批 1 只有 plus a 同形式） *)
 Lemma reqd_minus_compat : forall a b c d : R,
   req a b -> req c d -> req (req_minus a c) (req_minus b d).
-Proof.
-  intros a b c d Hab Hcd. unfold req_minus.
-  exact (req_plus_compat a b (opp c) (opp d) Hab (req_opp_compat c d Hcd)).
+Proof.  intros a b c d Hab Hcd. unfold req_minus.
+  exact (req_trans (plus a (opp c)) (plus b (opp c)) (plus b (opp d))
+           (req_plus_compat a b (opp c) (opp c) Hab (req_refl (opp c)))
+           (req_plus_compat b b (opp c) (opp d) (req_refl b)
+              (req_opp_compat c d Hcd))).
 Qed.
 
 (* inv_pos 单射（Id 系经 destruct/eq_ind 免费；req 系经 inv_pos_correct
@@ -175,8 +199,10 @@ Qed.
 
 (* opp zero == zero（Id 系 GRPO 节内 grpo_opp_zero @24012 同型） *)
 Lemma reqd_opp_zero : req (opp zero) zero.
-Proof.
-  exact (req_plus_inv_unique zero (opp zero) zero (plus_opp zero) (plus_zero zero)).
+Proof.  exact (req_trans (opp zero) (plus zero (opp zero)) zero
+           (req_sym (plus zero (opp zero)) (opp zero)
+              (UpReqAlgebra.req_plus_zero_l (opp zero)))
+           (plus_opp zero)).
 Qed.
 
 (* a - 0 == a（req_minus 右零） *)
@@ -2253,7 +2279,12 @@ Qed.
 
 (* Id boltzmann_dist_pos @16824（与节内 req_boltzmann_positive 同件；命名对齐登记表） *)
 Lemma req_boltzmann_dist_pos : forall s : S, lt zero (reqd_boltzmann_dist s).
-Proof. exact req_boltzmann_positive. Qed.
+Proof.
+  intro s. unfold reqd_boltzmann_dist.
+  apply mult_positive.
+  - apply inv_pos_pos.
+  - apply exp_neg_pos.
+Qed.
 
 (* ============================================================ *)
 (* 自由能最小化 / 唯一性 / 熵-温度层完成（批 2 续建件）        *)
@@ -3574,3 +3605,9 @@ End ReqAlgBridge2.
 (*  c) U2 主体 7 件：依赖批 3 RLHF req 机器（pi_next/align_objective/      *)
 (*     free_energy_ext），维持批 3 显式假设。                                   *)
 (* -------------------------------------------------------------- *)
+
+(* ---- T246 包G 台账席：替换件收尾假设清查（逐件 Closed 判读） ---- *)
+Print Assumptions reqd_le_of_req.
+Print Assumptions reqd_minus_compat.
+Print Assumptions reqd_opp_zero.
+Print Assumptions req_boltzmann_dist_pos.

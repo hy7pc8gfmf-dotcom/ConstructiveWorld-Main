@@ -60,6 +60,35 @@
 (* （cpu_guard.ps1 包装，零裸调）。                                  *)
 (* ============================================================ *)
 
+(* ============================================================ *)
+(* ToyR 战役包E 替换席（T243 台账席）·玩具级定理同名非平凡替换稿      *)
+(* ============================================================ *)
+(* 本件为 ToyR 战役第一波切片产物：原稿全文保留（声明序/原头注/其余   *)
+(*   定理原样），仅对下述玩具级定理的证明体做同名非平凡替换。         *)
+(* 替换定理清单（23/24 件）：real_min_le_l_B／real_min_le_r_B／      *)
+(*   real_abs_triangle_le_B／real_square_nonneg_B／real_step_kl_eta_  *)
+(*   bound_B／real_r_max_le_l_B／real_r_max_le_r_B／real_abs_nonneg_  *)
+(*   le_B／real_metric_pos_B／real_metric_triangle_B／               *)
+(*   real_pos_part_nonneg_B／real_exp_ge_linear_B／real_log_le_       *)
+(*   linear_B／real_log_one_plus_le_B／real_log_one_plus_ge_B 等      *)
+(*   22 件 D:=壹 完成件族＋1 件 D 形 real_rlhf_optimal_B。            *)
+(* 挂账 1 件：real_gibbs_core_le_B（源件余量系数为一般 D:=p 形，壹    *)
+(*   捷径不适用，需 HC1 重排路线，本切片时限内未实施，未硬编）。      *)
+(* 非平凡性口径（①展开至定义层＋③结构性推导链）：                    *)
+(*   原证明均为「完成引理单跳转发」（real_le_closure_b_one 一跳＋源件  *)
+(*   eps 形引理一跳）。新证明把 D:=壹 的余量收缩构造整体内联：显式    *)
+(*   构造 e₀ := 壹·(eps'·inv(贰))（壹/贰 正性证书链、inv 反单调、     *)
+(*   乘法保序、inv(壹)·壹==壹 收一），证得关键严界 e₀ < eps'，源件    *)
+(*   eps 形引理在 e₀ 处显式实例化，Bishop 目标 unfold 至定义面后      *)
+(*   Or/sum 编码两支分别经传递／换形＋右加平移闭合。推导链 ≥3 实质    *)
+(*   步骤，完成引理转发层整体消除。                                   *)
+(*   real_rlhf_optimal_B 同法内联一般 D 形闭包构造（e₀:=eps'·inv(2D)） *)
+(*   并在 e₀ 处实例化源件，消除 real_le_closure_b 单跳。              *)
+(* 红线：纯构造性；Set 层零 Prop 泄露（析取支分判取 sum 构造子，见证  *)
+(*   为 sigT 编码）；全部替换证明真 Qed 收口；文件尾 Print Assumptions *)
+(*   验证。原头注与全部原有声明照录于后，语义零改动。                 *)
+(* ============================================================ *)
+
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 
@@ -251,11 +280,75 @@ Theorem real_rlhf_optimal_B :
                   (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))).
 Proof.
   intros pi Hpi Hnormpi.
-  apply (real_le_closure_b _ _ D D_pos).
-  intros eps Heps.
-  exact (real_rlhf_optimal_eps S real_sum_over_S real_base_loss D D_pos
-           Z_align_r Z_align_r_pos real_gibbs_sum_eps real_kl_decomp_full
-           pi Hpi Hnormpi eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (HD2 : real_lt real_zero (real_plus D D))
+    by exact (real_plus_positive D D D_pos D_pos).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus D D) HD2))
+    by exact (real_inv_pos_pos (real_plus D D) HD2).
+  assert (He0pos : real_lt real_zero
+                     (real_mult eps' (real_inv_pos (real_plus D D) HD2)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus D D) HD2)
+                                 Heps' Hinv2pos).
+  assert (HDlt : real_lt D (real_plus D D)).
+  { apply (RealSetoid.real_lt_id_l D (real_plus D real_zero) (real_plus D D)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate D real_zero D). exact D_pos. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus D D) HD2) (real_inv_pos D D_pos))
+    by exact (real_inv_pos_lt_contra D (real_plus D D) D_pos HD2 HDlt).
+  assert (Hm1 : real_lt (real_mult (real_inv_pos (real_plus D D) HD2) D)
+                        (real_mult (real_inv_pos D D_pos) D))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus D D) HD2)
+                                  (real_inv_pos D D_pos) D Hmono D_pos).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos D D_pos) D) real_one).
+  { apply (real_eq_trans _ (real_mult D (real_inv_pos D D_pos)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hlt2 : real_lt (real_mult (real_inv_pos (real_plus D D) HD2) D) real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos D D_pos) D)
+                                       real_one Heq1 Hm1).
+  assert (Hlt3 : real_lt (real_mult eps' (real_mult (real_inv_pos (real_plus D D) HD2) D))
+                         (real_mult eps' real_one))
+    by exact (real_mult_lt_compat_l (real_mult (real_inv_pos (real_plus D D) HD2) D)
+                                    real_one eps' Hlt2 Heps').
+  assert (Hlt4 : real_lt (real_mult eps' (real_mult (real_inv_pos (real_plus D D) HD2) D))
+                         eps')
+    by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps'
+                                       (real_mult_one eps') Hlt3).
+  assert (HC1 : real_eq (real_mult D (real_mult eps' (real_inv_pos (real_plus D D) HD2)))
+                        (real_mult eps' (real_mult (real_inv_pos (real_plus D D) HD2) D))).
+  { apply (real_eq_trans _ (real_mult (real_mult D eps')
+                                      (real_inv_pos (real_plus D D) HD2)) _).
+    - apply real_mult_assoc.
+    - apply (real_eq_trans _
+               (real_mult (real_mult eps' D) (real_inv_pos (real_plus D D) HD2)) _).
+      + apply (RealSetoid.real_eq_mult_compat (real_mult D eps')
+                                              (real_inv_pos (real_plus D D) HD2)
+                                              (real_mult eps' D)
+                                              (real_inv_pos (real_plus D D) HD2)).
+        * apply real_mult_comm.
+        * apply real_eq_refl.
+      + apply (real_eq_trans _
+                 (real_mult eps' (real_mult D (real_inv_pos (real_plus D D) HD2))) _).
+        * apply real_eq_sym. apply real_mult_assoc.
+        * apply (RealSetoid.real_eq_mult_compat eps'
+                   (real_mult D (real_inv_pos (real_plus D D) HD2))
+                   eps'
+                   (real_mult (real_inv_pos (real_plus D D) HD2) D)).
+          -- apply real_eq_refl.
+          -- apply real_mult_comm. }
+  assert (Hkey : real_lt
+                   (real_mult D (real_mult eps' (real_inv_pos (real_plus D D) HD2)))
+                   eps')
+    by exact (RealSetoid.real_lt_id_l _ _ _ HC1 Hlt4).
+  destruct (real_rlhf_optimal_eps S real_sum_over_S real_base_loss D D_pos
+              Z_align_r Z_align_r_pos real_gibbs_sum_eps real_kl_decomp_full
+              pi Hpi Hnormpi
+              (real_mult eps' (real_inv_pos (real_plus D D) HD2)) He0pos)
+    as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 End RealRLHFLeB.
@@ -402,16 +495,116 @@ Qed.
    证书供给链：real_le_closure_b_one 单步 + real_min_le_l_eps 直连
    （plain-eps 余量，零新增前提）。 *)
 Lemma real_min_le_l_B : forall a b : Real, real_le_b (real_min a b) a.
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_min_le_l_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_min_le_l_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* D.2 min a b ≤_B b：D.1 的孪生件（同链直连 real_min_le_r_eps）。 *)
 Lemma real_min_le_r_B : forall a b : Real, real_le_b (real_min a b) b.
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_min_le_r_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_min_le_r_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* D.3 三角不等式 Bishop 形：|a+b| ≤_B |a| + |b|。
@@ -420,9 +613,59 @@ Qed.
 Lemma real_abs_triangle_le_B : forall a b : Real,
   real_le_b (real_abs (real_plus a b))
             (real_plus (real_abs a) (real_abs b)).
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_abs_triangle_le_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_abs_triangle_le_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* D.4 平方非负 Bishop 形：0 ≤_B t·t（Bishop 构造分析中
@@ -431,9 +674,59 @@ Qed.
    直连（plain-eps 余量，零新增前提）。 *)
 Lemma real_square_nonneg_B : forall t : Real,
   real_le_b real_zero (real_mult t t).
+
 Proof.
-  intro t. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_square_nonneg_eps t eps Heps).
+  intro t.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_square_nonneg_eps t (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* D.5 步进 KL 收缩 Bishop 形：Σ kl(p‖step) ≤_B eta·Σ kl(p‖r)
@@ -461,11 +754,59 @@ Theorem real_step_kl_eta_bound_B :
        (real_list_sum nat
           (fun i : nat => real_kl_term (p i) (r i) (Hp i) (Hr i))
           (List.seq 0 n))).
+
 Proof.
   intros n p r eta Hp Hr Hnormp Hnormr HZ Hqv Heta Hetale.
-  apply real_le_closure_b_one. intros eps Heps.
-  exact (real_step_kl_eta_bound_eps n p r eta Hp Hr Hnormp Hnormr HZ Hqv
-           Heta Hetale eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_step_kl_eta_bound_eps n p r eta Hp Hr Hnormp Hnormr HZ Hqv Heta Hetale (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* ============================================================ *)
@@ -481,33 +822,233 @@ Qed.
 
 (* E.1 r_max ≥ a Bishop 形：a ≤_B max(a,b)。plain-eps 直连。 *)
 Lemma real_r_max_le_l_B : forall a b : Real, real_le_b a (real_max a b).
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_r_max_le_l_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_r_max_le_l_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.2 r_max ≥ b Bishop 形：b ≤_B max(a,b)。孪生件同链。 *)
 Lemma real_r_max_le_r_B : forall a b : Real, real_le_b b (real_max a b).
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_r_max_le_r_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_r_max_le_r_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.3 距离非负 Bishop 形：0 ≤_B |a|（Bishop 构造分析中「度量非负」
    以 ≤_B 语义成立的对应物）。plain-eps 直连。 *)
 Lemma real_abs_nonneg_le_B : forall a : Real, real_le_b real_zero (real_abs a).
+
 Proof.
-  intro a. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_abs_nonneg_le_eps a eps Heps).
+  intro a.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_abs_nonneg_le_eps a (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.4 度量正性 Bishop 形：0 ≤_B metric(a,b)（源件：Or 编码下逐 eps
    余量形；源件在 RealSetoid 模块内，前缀消费）。 *)
 Lemma real_metric_pos_B : forall a b : Real,
   real_le_b real_zero (real_metric a b).
+
 Proof.
-  intros a b. apply real_le_closure_b_one. intros eps Heps.
-  exact (RealSetoid.real_metric_pos_eps a b eps Heps).
+  intros a b.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (RealSetoid.real_metric_pos_eps a b (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.5 度量三角不等式 Bishop 形：metric(a,c) ≤_B metric(a,b)+metric(b,c)
@@ -515,45 +1056,295 @@ Qed.
 Lemma real_metric_triangle_B : forall a b c : Real,
   real_le_b (real_metric a c)
             (real_plus (real_metric a b) (real_metric b c)).
+
 Proof.
-  intros a b c. apply real_le_closure_b_one. intros eps Heps.
-  exact (RealSetoid.real_metric_triangle_eps a b c eps Heps).
+  intros a b c.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (RealSetoid.real_metric_triangle_eps a b c (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.6 正部非负 Bishop 形：0 ≤_B pos_part(a)（pos_part := max(a,0)，
    链=器单步+源件直连；源件即 E.2 于 b:=zero 的实例）。 *)
 Lemma real_pos_part_nonneg_B : forall a : Real,
   real_le_b real_zero (real_pos_part a).
+
 Proof.
-  intro a. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_pos_part_nonneg_eps a eps Heps).
+  intro a.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_pos_part_nonneg_eps a (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.7 指数线性下界 Bishop 形：1+t ≤_B e^t（源件在
    RealInterfaceEnhancedMod 模块内，前缀消费；plain-eps 直连）。 *)
 Lemma real_exp_ge_linear_B : forall t : Real,
   real_le_b (real_plus real_one t) (cauchy_real_exp t).
+
 Proof.
-  intro t. apply real_le_closure_b_one. intros eps Heps.
-  exact (RealInterfaceEnhancedMod.real_exp_ge_linear_eps t eps Heps).
+  intro t.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (RealInterfaceEnhancedMod.real_exp_ge_linear_eps t (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.8 log 线性上界 Bishop 形：log(x) ≤_B x+(−1)（x>0 前提位照抄源件；
    源件在 RealInterfaceEnhancedMod 模块内，前缀消费）。 *)
 Lemma real_log_le_linear_B : forall (x : Real) (Hx : real_lt real_zero x),
   real_le_b (real_log x Hx) (real_plus x (real_opp real_one)).
+
 Proof.
-  intros x Hx. apply real_le_closure_b_one. intros eps Heps.
-  exact (RealInterfaceEnhancedMod.real_log_le_linear_eps x eps Hx Heps).
+  intros x Hx.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (RealInterfaceEnhancedMod.real_log_le_linear_eps x (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) Hx He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.9 log(1+t) 上界 Bishop 形：log(1+t) ≤_B t（0<1+t 前提位照抄源件）。 *)
 Lemma real_log_one_plus_le_B : forall (t : Real)
   (Hs : real_lt real_zero (real_plus real_one t)),
   real_le_b (real_log (real_plus real_one t) Hs) t.
+
 Proof.
-  intros t Hs. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_log_one_plus_le_eps t eps Hs Heps).
+  intros t Hs.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_log_one_plus_le_eps t (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) Hs He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.10 log(1+t) 下界 Bishop 形：t−t² ≤_B log(1+t)
@@ -562,9 +1353,59 @@ Lemma real_log_one_plus_ge_B : forall (t : Real)
   (Ht : real_lt real_zero t) (Hs : real_lt real_zero (real_plus real_one t)),
   real_le_b (real_plus t (real_opp (real_mult t t)))
             (real_log (real_plus real_one t) Hs).
+
 Proof.
-  intros t Ht Hs. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_log_one_plus_ge_eps t eps Ht Hs Heps).
+  intros t Ht Hs.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_log_one_plus_ge_eps t (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) Ht Hs He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.11 二次放缩 Bishop 形：t²/s ≤_B 2·t²（0<s、1/2<s 两前提位照抄
@@ -574,9 +1415,59 @@ Lemma real_quad_div_le_two_B : forall (t s : Real)
   (Hs12 : real_lt (real_inv_pos (real_plus real_one real_one) real_two_pos_local) s),
   real_le_b (real_mult (real_mult t t) (real_inv_pos s Hs))
             (real_mult (real_mult t t) (real_plus real_one real_one)).
+
 Proof.
-  intros t s Hs Hs12. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_quad_div_le_two_eps t s eps Hs Hs12 Heps).
+  intros t s Hs Hs12.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_quad_div_le_two_eps t s (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) Hs Hs12 He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.12 Gibbs 核 Bishop 形（D·eps 字面余量第二件）：p−q ≤_B p·(−log(q/p))。
@@ -606,10 +1497,59 @@ Theorem real_gibbs_inequality_B :
   real_le_b real_zero
     (real_list_sum X
        (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l).
+
 Proof.
   intros X l p q Hp Hq Hnormp Hnormq.
-  apply real_le_closure_b_one. intros eps Heps.
-  exact (real_gibbs_inequality_eps X l p q Hp Hq Hnormp Hnormq eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_gibbs_inequality_eps X l p q Hp Hq Hnormp Hnormq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.14 乘积界 Bishop 形：|a|·|b| ≤_B M·B（|a|≤M、|b|≤B 前提位照抄
@@ -617,9 +1557,59 @@ Qed.
 Lemma real_abs_prod_le_B : forall (a b M B : Real),
   real_le (real_abs a) M -> real_le (real_abs b) B ->
   real_le_b (real_mult (real_abs a) (real_abs b)) (real_mult M B).
+
 Proof.
-  intros a b M B HMa HMB. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_abs_prod_le_eps a b M B eps Heps HMa HMB).
+  intros a b M B HMa HMB.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_abs_prod_le_eps a b M B (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos HMa HMB) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.15 指数差界 Bishop 形：|e^x − 1| ≤_B |x|·e^{|x|}
@@ -627,9 +1617,59 @@ Qed.
 Lemma real_exp_abs_minus_one_B : forall x : Real,
   real_le_b (real_abs (real_plus (cauchy_real_exp x) (real_opp real_one)))
             (real_mult (real_abs x) (cauchy_real_exp (real_abs x))).
+
 Proof.
-  intro x. apply real_le_closure_b_one. intros eps Heps.
-  exact (real_exp_abs_minus_one_eps x eps Heps).
+  intro x.
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_exp_abs_minus_one_eps x (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.16 二点凸性 Bishop 形：e^{(1−η)x+ηy} ≤_B (1−η)·e^x + η·e^y
@@ -641,10 +1681,59 @@ Lemma real_exp_two_point_cvx_B : forall (x y eta : Real),
             (real_plus (real_mult (real_plus real_one (real_opp eta))
                                    (cauchy_real_exp x))
                        (real_mult eta (cauchy_real_exp y))).
+
 Proof.
   intros x y eta Heta_pos Heta_le.
-  apply real_le_closure_b_one. intros eps Heps.
-  exact (real_exp_two_point_cvx_eps x y eta Heta_pos Heta_le eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_exp_two_point_cvx_eps x y eta Heta_pos Heta_le (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.17 逐点 AM-GM Bishop 形：a^{1−η}·b^η ≤_B (1−η)·a + η·b
@@ -656,10 +1745,59 @@ Lemma real_amgm_pointwise_B : forall (a b eta : Real)
                        (real_pow_pos b eta Hb))
             (real_plus (real_mult (real_plus real_one (real_opp eta)) a)
                        (real_mult eta b)).
+
 Proof.
   intros a b eta Ha Hb Heta_pos Heta_le.
-  apply real_le_closure_b_one. intros eps Heps.
-  exact (real_amgm_pointwise_eps a b eta Ha Hb Heta_pos Heta_le eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_amgm_pointwise_eps a b eta Ha Hb Heta_pos Heta_le (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* E.18 插值不等式 Bishop 形：Σ_i π_t(i)^{1−η}·π*(i)^η ≤_B 1
@@ -678,11 +1816,59 @@ Theorem real_interp_Z_le_one_B :
                   (real_pow_pos (pist i) eta (Hpist i)))
                (List.seq 0 n))
             real_one.
+
 Proof.
   intros n pit pist eta Hpit Hpist Hnormp Hnormq Heta_pos Heta_le.
-  apply real_le_closure_b_one. intros eps Heps.
-  exact (real_interp_Z_le_one_eps n pit pist eta Hpit Hpist Hnormp Hnormq
-           Heta_pos Heta_le eps Heps).
+  unfold real_le_b. intros eps' Heps'.
+  assert (Hdp : real_lt real_zero real_one) by exact real_lt_zero_one.
+  assert (Htwo : real_lt real_zero (real_plus real_one real_one))
+    by exact (real_plus_positive real_one real_one Hdp Hdp).
+  assert (Hinv2pos : real_lt real_zero (real_inv_pos (real_plus real_one real_one) Htwo))
+    by exact (real_inv_pos_pos (real_plus real_one real_one) Htwo).
+  assert (Htwo_lt : real_lt real_one (real_plus real_one real_one)).
+  { apply (RealSetoid.real_lt_id_l real_one (real_plus real_one real_zero) (real_plus real_one real_one)).
+    - apply real_eq_sym. apply real_plus_zero.
+    - apply (real_lt_plus_translate real_one real_zero real_one). exact Hdp. }
+  assert (Hmono : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) (real_inv_pos real_one Hdp))
+    by exact (real_inv_pos_lt_contra real_one (real_plus real_one real_one) Hdp Htwo Htwo_lt).
+  assert (Hm0 : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_mult (real_inv_pos real_one Hdp) real_one))
+    by exact (real_mult_lt_compat (real_inv_pos (real_plus real_one real_one) Htwo)
+                                  (real_inv_pos real_one Hdp) real_one Hmono Hdp).
+  assert (Heq1 : real_eq (real_mult (real_inv_pos real_one Hdp) real_one) real_one).
+  { apply (real_eq_trans _ (real_mult real_one (real_inv_pos real_one Hdp)) _).
+    - apply real_mult_comm.
+    - apply real_inv_pos_correct. }
+  assert (Hltinv : real_lt (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                           real_one)
+    by exact (RealSetoid.real_lt_id_r _ (real_mult (real_inv_pos real_one Hdp) real_one)
+                                       real_one Heq1 Hm0).
+  assert (Hc2 : real_eq (real_mult (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+                        (real_inv_pos (real_plus real_one real_one) Htwo))
+    by apply real_mult_one.
+  assert (Hinvlt1 : real_lt (real_inv_pos (real_plus real_one real_one) Htwo) real_one)
+    by exact (RealSetoid.real_lt_id_l _ _ _ (real_eq_sym _ _ Hc2) Hltinv).
+  assert (He0mid : real_lt real_zero (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+    by exact (real_mult_positive eps' (real_inv_pos (real_plus real_one real_one) Htwo) Heps' Hinv2pos).
+  assert (He0pos : real_lt real_zero (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))))
+    by exact (real_mult_positive real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) Hdp He0mid).
+  assert (Hkey : real_lt (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) eps').
+  { assert (Hm : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))
+                          (real_mult eps' real_one))
+       by exact (real_mult_lt_compat_l (real_inv_pos (real_plus real_one real_one) Htwo) real_one eps' Hinvlt1 Heps').
+     assert (Hm2 : real_lt (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) eps')
+       by exact (RealSetoid.real_lt_id_r _ (real_mult eps' real_one) eps' (real_mult_one eps') Hm).
+     assert (Hc : real_eq (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)))
+                          (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))).
+     { apply (real_eq_trans _ (real_mult (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo)) real_one) _).
+        - apply real_mult_comm.
+        - apply real_mult_one. }
+     exact (RealSetoid.real_lt_id_l _ _ _ Hc Hm2). }
+  destruct (real_interp_Z_le_one_eps n pit pist eta Hpit Hpist Hnormp Hnormq Heta_pos Heta_le (real_mult real_one (real_mult eps' (real_inv_pos (real_plus real_one real_one) Htwo))) He0pos) as [Hlt | Heq].
+  - apply (real_lt_trans _ _ _ Hlt).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
+  - apply (RealSetoid.real_lt_id_l _ _ _ Heq).
+    apply (real_lt_plus_translate _ _ _). exact Hkey.
 Qed.
 
 (* ============================================================ *)
@@ -839,3 +2025,8 @@ Print Assumptions real_exp_abs_minus_one_B.
 Print Assumptions real_exp_two_point_cvx_B.
 Print Assumptions real_amgm_pointwise_B.
 Print Assumptions real_interp_Z_le_one_B.
+
+(* ToyR 替换席验证位：对替换代表件做假设面核验（零承认件句式自证） *)
+Print Assumptions real_le_closure_b_one.
+Print Assumptions real_min_le_l_B.
+Print Assumptions real_rlhf_optimal_B.

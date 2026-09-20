@@ -179,13 +179,17 @@ Qed.
 Lemma xq_Qle_bool_true : forall x y : Q, (x <= y)%Q -> Qle_bool x y = true.
 Proof.
   intros [nx dx] [ny dy]. unfold Qle, Qle_bool; simpl. intros H.
-  apply Z.leb_le. exact H.
+  destruct (Z.leb (nx * Z.pos dy) (ny * Z.pos dx)) eqn:E.
+  - reflexivity.
+  - apply Z.leb_gt in E. lia.
 Qed.
 
 Lemma xq_Qle_bool_le : forall x y : Q, Qle_bool x y = true -> (x <= y)%Q.
 Proof.
-  intros [nx dx] [ny dy]. unfold Qle, Qle_bool; simpl. intros H.
-  apply Z.leb_le. exact H.
+  intros [nx dx] [ny dy]. unfold Qle, Qle_bool; simpl.
+  change ((nx * Z.pos dy <=? ny * Z.pos dx)%Z = true
+          -> (nx * Z.pos dy <= ny * Z.pos dx)%Z).
+  intros H. apply Z.leb_le. exact H.
 Qed.
 
 Lemma xq_Qle_antisym : forall x y : Q, (x <= y)%Q -> (y <= x)%Q -> x == y.
@@ -459,7 +463,14 @@ Qed.
 (* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Corollary Pinf_eq_l : forall (l : list Q) (s : nat), Pinf l s = l.
 Proof.
-  intros l s. unfold Pinf, rot. apply firstn_skipn.
+  intros l. unfold Pinf, rot.
+  induction l as [| a rest IH]; intros s.
+  - reflexivity.
+  - destruct s as [| s'].
+    + reflexivity.
+    + change (firstn (S (S s')) (a :: rest) ++ skipn (S (S s')) (a :: rest) = a :: rest)
+        with (a :: (firstn (S s') rest ++ skipn (S s') rest) = a :: rest).
+      rewrite IH. reflexivity.
 Qed.
 
 (* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
@@ -1608,7 +1619,9 @@ Qed.
    会把 Qlt 展成 Qnum/Qden 编码形致 apply 失配） *)
 Lemma qlen_pos : forall (x : Q) (l : list Q), (0 < length (x :: l))%nat.
 Proof.
-  intros x l. simpl. apply Nat.lt_0_succ.
+  intros x l.
+  change (length (x :: l)) with (S (length l)).
+  apply Nat.lt_0_succ.
 Qed.
 
 (* 非空表长度嵌入的乘积正性（序链 Q 侧统一入口） *)
@@ -1751,7 +1764,11 @@ Definition collide (l : list Q) : Q :=
 
 Lemma collide_zero : collide [] == 0.
 Proof.
-  unfold collide. apply qdiv_zero_num. reflexivity.
+  assert (Hz : (qn (sqsum []) == 0)%Q).
+  { change (qn (nsum (fun x => freq_q x []) []) == 0%Q).
+    change (qn 0 == 0%Q).
+    reflexivity. }
+  unfold collide. unfold Qdiv. rewrite Hz. apply Qmult_0_l.
 Qed.
 
 (* 上界：collide <= 1（全表；sqsum <= n² 经 S6 sqsum_le） *)
@@ -2101,7 +2118,10 @@ Qed.
 
 (* 聚合权 1/4 非负（字面 Qle_bool 计算） *)
 Lemma me2_weight_nonneg : (0 <= (1 # 4)%Q)%Q.
-Proof. apply xq_Qle_bool_le. reflexivity. Qed.
+Proof.
+  change (Z.le (0 * 4) (1 * 1))%Z.
+  lia.
+Qed.
 
 (* 非空表的 dedup 计数 >= 1（nat 全显式） *)
 Lemma me2_dedup_len_ge1 : forall l : list Q,
@@ -2281,7 +2301,17 @@ Definition me_total (m : MultiEntropyEval) : Q :=
 Theorem me_total_eq : forall (l ctx : list Q),
   me_total (mkMEval l ctx)
   == (1 # 4)%Q * (H_adj l + H_ms l + H_devsum l + H_cond l ctx)%Q.
-Proof. intros l ctx. reflexivity. Qed.
+Proof.
+  intros l ctx.
+  change (me_total (mkMEval l ctx))
+    with ((1 # 4)%Q * (me_Hadj (mkMEval l ctx) + me_Hms (mkMEval l ctx)
+          + me_Hsh (mkMEval l ctx) + me_Hcond (mkMEval l ctx))%Q).
+  change (me_Hadj (mkMEval l ctx)) with (H_adj l).
+  change (me_Hms (mkMEval l ctx)) with (H_ms l).
+  change (me_Hsh (mkMEval l ctx)) with (H_devsum l).
+  change (me_Hcond (mkMEval l ctx)) with (H_cond l ctx).
+  reflexivity.
+Qed.
 
 (* 守卫非负界：H_sh ctx <= H_sh l -> 0 <= me_total
    （四熵在守卫下全非负，qadd_nonneg 链 + qmul_le_r） *)
@@ -3125,12 +3155,26 @@ Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
    实测：sqsum (l1++l2) = 10，collide = 5/8，H_freq = 3/8；
    两旗舰 RHS 加权式逐一求值同值——陈述形先验为真再落笔的记录件。 *)
 Lemma sqsum_app_cross_val : sqsum ([0;1] ++ [1;1]) = 10%nat.
-Proof. reflexivity. Qed.
+Proof.
+  change (sqsum [0; 1; 1; 1] = 10%nat).
+  change (nsum (fun x => freq_q x [0; 1; 1; 1]) [0; 1; 1; 1] = 10%nat).
+  change (Nat.add (freq_q 0 [0; 1; 1; 1])
+            (Nat.add (freq_q 1 [0; 1; 1; 1])
+               (Nat.add (freq_q 1 [0; 1; 1; 1])
+                  (Nat.add (freq_q 1 [0; 1; 1; 1]) 0%nat))) = 10%nat).
+  change ((1 + (3 + (3 + (3 + 0))))%nat = 10%nat).
+  reflexivity.
+Qed.
 
 Lemma sqsum_cross_sym_val :
   nsum (fun x => freq_q x [1;1]) [0;1]
   = nsum (fun x => freq_q x [0;1]) [1;1].
-Proof. reflexivity. Qed.
+Proof.
+  change (Nat.add (freq_q 0 [1; 1]) (freq_q 1 [1; 1])
+          = Nat.add (freq_q 1 [0; 1]) (freq_q 1 [0; 1])).
+  change ((0 + 2)%nat = (1 + 1)%nat).
+  reflexivity.
+Qed.
 
 Lemma collide_app_eq_val : collide ([0;1] ++ [1;1]) == (5#8)%Q.
 Proof. unfold collide. vm_compute. reflexivity. Qed.
@@ -3267,3 +3311,14 @@ Print Assumptions H_freq_app_eq_rhs_val.
    ZeroLocus 处依赖叶），两源五件产物以 .retired_S4 前缀快照
    留存。
    ============================================================ *)
+
+(* ========== 切片三替换件闭包审计（T240·2026-09-21） ========== *)
+Print Assumptions DTPT_Entropy.DTPT_Entropy.xq_Qle_bool_true.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.xq_Qle_bool_le.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.Pinf_eq_l.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.qlen_pos.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.collide_zero.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.me2_weight_nonneg.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.me_total_eq.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.sqsum_app_cross_val.
+Print Assumptions DTPT_Entropy.DTPT_Entropy.sqsum_cross_sym_val.

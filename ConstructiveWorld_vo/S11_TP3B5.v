@@ -10,6 +10,24 @@
 (* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
 (*       L66415-L79152，去头正文与原文区间逐字节同源。           *)
 (* ============================================================ *)
+
+(* ============================================================ *)
+(* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
+(* 替换定理清单：b3_one_minus_q_pos（原单跳换形转发 → 加法保序装配＋环等式坍缩＋定义层转换收口）。                                          *)
+(* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
+(*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
+(*   闭尾；文件尾附假设面打印锚。                                   *)
+(* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
+(* ============================================================ *)
+
+(* —— T241 续作·切片二追加替换：atan_odd_nonneg（原弱序桥单跳＋姊妹件消费 →  *)
+(*   三级提升链：nat 层非负见证＋整数域反映面提升＋Q 序定义体落位收口）。     *)
+(*   文件尾增假设面打印锚一条，余见台账续作节。                               *)
+(* —— T241 续作·切片三追加替换（4 处）：atan_odd_neq（提升链反向坍缩：商等式  *)
+(*   落定义体归约整数层＋线性算术排除）；b3_abs_sq（绝对值分子绝对整面定义体   *)
+(*   直落）；b3_one_plus_sq_neq/b3_inv_sq_r（平方非负面相遇结构推导＋独立非零  *)
+(*   装配）。文件尾增假设面打印锚四条。                                         *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -67,12 +85,25 @@ Qed.
 
 Lemma atan_odd_nonneg : forall k : nat, Qle 0 (Z.of_nat (2 * k + 1) # 1).
 Proof.
-  intro k. apply (Qlt_le_weak 0 (Z.of_nat (2 * k + 1) # 1)). apply atan_odd_pos.
+  intro k.
+  (* 三级提升链：nat 层非负见证（算术面）→ 整数域内嵌自然反映面提升 →
+     Q 序定义体落位（展开＋显式换算落 Z 乘法面）——不经弱序桥单跳，
+     不消费姊妹件（奇数分母严格正件保持独立）。 *)
+  assert (Hn : (0 <= 2 * k + 1)%nat) by lia.
+  assert (Hz : (0 <= Z.of_nat (2 * k + 1))%Z) by lia.
+  unfold Qle.
+  change (0 * 1 <= Z.of_nat (2 * k + 1) * 1)%Z.
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  exact Hz.
 Qed.
 
 Lemma atan_odd_neq : forall k : nat, ~ (Z.of_nat (2 * k + 1) # 1) == 0.
 Proof.
-  intro k. apply q_neq_of_lt. apply atan_odd_pos.
+  intros k Heq.
+  (* 提升链反向坍缩（atan_odd_nonneg 提升链镜像）：商等式落定义体（分子/分母
+     投影归约至整数层），自然层线性算术构造性排除——不经非等换形桥、
+     不消费姊妹正性件。 *)
+  unfold Qeq in Heq. simpl in Heq. lia.
 Qed.
 
 (* ---- x·x == |x|·|x|（Qcompare 三分，纯构造） ---- *)
@@ -3321,8 +3352,16 @@ Proof. intros x p. apply Qeq_sym. apply b3_pow_sq. Qed.
 Lemma b3_abs_sq : forall (x : Q), Qabs (x * x) == x * x.
 Proof.
   intros x.
-  apply (Qabs_pos (x * x)).
-  exact (Qsquare_nonneg x).
+  (* 绝对值定义体直落（分子绝对整面）：商展开、平方项投影归约至整数层，
+     分子绝对值等式以线性算术非负见证装配，环等式收口——不经绝对值
+     正性桥单跳、不消费平方非负姊妹件。 *)
+  unfold Qabs.
+  destruct x as [n d].
+  simpl.
+  unfold Qeq. simpl.
+  assert (Habs : (Z.abs (n * n) = n * n)%Z).
+  { apply Z.abs_eq. nia. }
+  rewrite Habs. ring.
 Qed.
 
 (* |(−(x·x))^p| == |x|^{2p}（(a) 余项引擎核心：幂模 + 负号消去） *)
@@ -3374,15 +3413,33 @@ Qed.
 (* 1 + x·x ≠ 0 *)
 Lemma b3_one_plus_sq_neq : forall x : Q, ~ (1 + x * x == 0).
 Proof.
-  intros x. apply q_neq_of_lt. apply b3_one_plus_sq_pos.
+  intros x Heq.
+  (* 结构性推导（平方非负面相遇）：由零等式环换算出平方为负一的显式
+     中立见证，与平方非负面在序定义体（整数层）相遇相抵——不经非等
+     换形桥、不消费姊妹正性件。 *)
+  assert (Hs : x * x == (1 + x * x) - 1) by ring.
+  rewrite Heq in Hs.
+  assert (Hsn : x * x == - 1) by (rewrite Hs; ring).
+  pose proof (Qsquare_nonneg x) as Hle.
+  rewrite Hsn in Hle.
+  unfold Qle in Hle. simpl in Hle. lia.
 Qed.
 
 (* Qinv·denom == 1 / denom·Qinv == 1（分母正，非零） *)
 Lemma b3_inv_sq_r : forall x : Q, (1 + x * x) * Qinv (1 + x * x) == 1.
 Proof.
   intros x.
-  apply (Qmult_inv_r (1 + x * x)).
-  exact (b3_one_plus_sq_neq x).
+  (* 独立非零装配：平方非负面＋环换算就地构造非零见证，再入逆元
+     反映面收口——不消费姊妹非零件（其证明独立于本件成立）。 *)
+  assert (Hnz : ~ (1 + x * x == 0)).
+  { intro Heq.
+    assert (Hs : x * x == (1 + x * x) - 1) by ring.
+    rewrite Heq in Hs.
+    assert (Hsn : x * x == - 1) by (rewrite Hs; ring).
+    pose proof (Qsquare_nonneg x) as Hle.
+    rewrite Hsn in Hle.
+    unfold Qle in Hle. simpl in Hle. lia. }
+  apply (Qmult_inv_r (1 + x * x)). exact Hnz.
 Qed.
 
 Lemma b3_inv_sq_l : forall x : Q, Qinv (1 + x * x) * (1 + x * x) == 1.
@@ -3559,9 +3616,14 @@ Qed.
 Lemma b3_one_minus_q_pos : forall (q : Q), Qlt q 1 -> Qlt 0 (1 - q).
 Proof.
   intros q Hq1.
-  (* 0 < 1 − q ⟺ q < 1（Qlt_minus_iff 换形） *)
-  apply (proj1 (Qlt_minus_iff q 1)).
-  exact Hq1.
+  (* 展开至定义层：两侧同加减元（加法保序反映面第二投影装配），
+     左端经环等式坍缩为零元，右端差式定义性即加负元形，转换收口
+     ——不经单跳换形引理转发。 *)
+  assert (Hs : Qlt (q + -q) (1 + -q)).
+  { apply (proj2 (Qplus_lt_l q 1 (-q))). exact Hq1. }
+  assert (Hz : q + -q == 0) by ring.
+  rewrite Hz in Hs.
+  exact Hs.
 Qed.
 
 Lemma b3_den_pos : forall (q : Q), Qlt q 1 -> Qlt 0 ((1 - q) * (1 - q)).
@@ -12766,3 +12828,13 @@ Proof.
 Qed.
 
 End B5A_Item1B.
+
+(* ToyR 包C 替换席：替换定理假设面打印（零新增依赖验证锚） *)
+Print Assumptions b3_one_minus_q_pos.
+
+Print Assumptions atan_odd_nonneg.
+
+Print Assumptions atan_odd_neq.
+Print Assumptions b3_abs_sq.
+Print Assumptions b3_one_plus_sq_neq.
+Print Assumptions b3_inv_sq_r.

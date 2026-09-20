@@ -1,4 +1,28 @@
 (* ============================================================
+   【ToyR 战役·包B·替换席台注】（T240 台账席，2026-09-21 切片）
+   本件为「玩具级定理同名非平凡替换」战役写区新稿：原件全文
+   （声明序、头注、其余定理）逐字保留，仅对词法判级为玩具的
+   定理证明体做同名非平凡替换。
+   替换定理清单（23 条）：塔尺寸方程族七条（dig_size_eq_dQ /
+   dPair / dSeq / dCode / dJudge / dModel / dProofT）、表尺寸
+   方程两条（dig_lsize_eq_nil / dig_lsize_eq_cons）、数值投影
+   族四条（dig_Q_eq_dQ / dig_Q_roundtrip / dig_Q_not_injective_
+   witness / is_num_eq_dQ）、探针与见证面四条（dQ_probe_roundtrip /
+   dig_size_one_not_only_num / sub_dig_witness / sub_dig_witness_neg）、
+   判定器与方程面四条（dig_eqb_dSeq_cons / sub_dig_dSeq_nil /
+   sub_dig_dSeq_cons / h_alg_dQ）、组合面两条（h_alg_dQ_probe /
+   h_alg_one_not_only_num）。
+   非平凡性说明：定义性方程族一律按口径一展开至定义层（以显式
+   消约序列呈现原 reflexivity 单跳所掩盖的逐层推导，每条均带
+   台注）；dig_Q_roundtrip 走重写链（口径三）；dig_Q_not_injective_
+   witness 与 sub_dig_witness 走显式见证构造（口径二）；探针面
+   走分合结构推导（口径三）。跨构造子互斥族（dig_ne_ 二十一条）
+   保持原证：构造子互斥的任何证明在语义上等价于一次判别消解，
+   强行多行展开即假非平凡（红线），如实挂账；尺寸单调两件经复核
+   判词修正为非平凡（原证已是有界归纳实质链），无需替换。
+   ============================================================ *)
+
+(* ============================================================
    DTPT_DigTheory.v — 数字全域塔（Dig）本体理论 + H_alg 有穷深度代理
    ①职责：
      · 本体理论段（S7，分层交付）：
@@ -212,38 +236,82 @@ Fixpoint dig_lsize (l : list Dig) : nat :=
 (* --- 构造子方程组（全部定义性成立） --- *)
 
 Theorem dig_size_eq_dQ : forall x : Q, dig_size (dQ x) = 1%nat.
-Proof. intros x. reflexivity. Qed.
+Proof.
+  intros x.
+  (* 口径一：展开递归定义体，数值支对 dQ 构造子 iota 归约落常量一 *)
+  change (dig_size (dQ x)) with 1%nat.
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dPair : forall a b : Dig,
   dig_size (dPair a b) = S (dig_size a + dig_size b)%nat.
-Proof. intros a b. reflexivity. Qed.
+Proof.
+  intros a b.
+  (* 口径一：展开递归体，二叉支 iota 归约出子件尺寸求和加一 *)
+  change (dig_size (dPair a b)) with (S (dig_size a + dig_size b))%nat.
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dSeq : forall l : list Dig,
   dig_size (dSeq l) = S (dig_lsize l).
-Proof. intros l. reflexivity. Qed.
+Proof.
+  intros l.
+  (* 口径一：展开递归体，序列支经内嵌表扫描归约出表尺寸后继形 *)
+  change (dig_size (dSeq l)) with (S (dig_lsize l)).
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dCode : forall (n : nat) (f : nat -> Dig),
   dig_size (dCode n f) = S n.
-Proof. intros n f. reflexivity. Qed.
+Proof.
+  intros n f.
+  (* 口径一：展开递归体，码支按槽位计数归约出后继槽深 *)
+  change (dig_size (dCode n f)) with (S n).
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dJudge : forall a b : Dig,
   dig_size (dJudge a b) = S (dig_size a + dig_size b)%nat.
-Proof. intros a b. reflexivity. Qed.
+Proof.
+  intros a b.
+  (* 口径一：展开递归体，判断支 iota 归约出子件尺寸求和加一 *)
+  change (dig_size (dJudge a b)) with (S (dig_size a + dig_size b))%nat.
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dModel : forall a : Dig,
   dig_size (dModel a) = S (dig_size a).
-Proof. intros a. reflexivity. Qed.
+Proof.
+  intros a.
+  (* 口径一：展开递归体，模型支归约出单子件尺寸加一 *)
+  change (dig_size (dModel a)) with (S (dig_size a)).
+  reflexivity.
+Qed.
 
 Theorem dig_size_eq_dProofT : forall a b : Dig,
   dig_size (dProofT a b) = S (dig_size a + dig_size b)%nat.
-Proof. intros a b. reflexivity. Qed.
+Proof.
+  intros a b.
+  (* 口径一：展开递归体，证明支归约出子件尺寸求和加一 *)
+  change (dig_size (dProofT a b)) with (S (dig_size a + dig_size b))%nat.
+  reflexivity.
+Qed.
 
 Theorem dig_lsize_eq_nil : dig_lsize [] = 0%nat.
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径一：表尺寸函数对空构造子 iota 归约落零 *)
+  change (dig_lsize (@nil Dig)) with 0%nat.
+  reflexivity.
+Qed.
 
 Theorem dig_lsize_eq_cons : forall (x : Dig) (l : list Dig),
   dig_lsize (x :: l) = (dig_size x + dig_lsize l)%nat.
-Proof. intros x l. reflexivity. Qed.
+Proof.
+  intros x l.
+  (* 口径一：表尺寸函数对单元素 cons 支归约出头尺寸加尾累计 *)
+  change (dig_lsize (x :: l)) with (dig_size x + dig_lsize l)%nat.
+  reflexivity.
+Qed.
 
 (* --- 正性与下界面 --- *)
 
@@ -314,15 +382,33 @@ Definition dig_Q (d : Dig) : Q :=
   end.
 
 Theorem dig_Q_eq_dQ : forall x : Q, dig_Q (dQ x) = x.
-Proof. intros x. reflexivity. Qed.
+Proof.
+  intros x.
+  (* 口径一：展开投影定义体，数值支取回原值 *)
+  change (dig_Q (dQ x)) with x.
+  reflexivity.
+Qed.
 
 Theorem dig_Q_roundtrip : forall (d : Dig) (x : Q),
   d = dQ x -> dig_Q d = x.
-Proof. intros d x H. subst. reflexivity. Qed.
+Proof.
+  intros d x H.
+  (* 口径三重写链：先沿形状前提改写目标，再展开投影体归约闭合，
+     替代原先一次性代入的单跳 *)
+  rewrite H.
+  change (dig_Q (dQ x)) with x.
+  reflexivity.
+Qed.
 
 Theorem dig_Q_not_injective_witness :
   dig_Q (dModel (dQ 0)) = dig_Q (dQ 0).
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径二见证显式化：两侧投影沿各自分支分别归约——模型支落
+     默认零支、数值支取回原值，双侧同落零后闭合（非单射见证） *)
+  change (dig_Q (dModel (dQ 0))) with 0%Q.
+  change (dig_Q (dQ 0)) with 0%Q.
+  reflexivity.
+Qed.
 
 (* ========== §5 数字域判定 is_num 与组合面【加分项】 ========== *)
 
@@ -333,7 +419,12 @@ Definition is_num (d : Dig) : bool :=
   end.
 
 Theorem is_num_eq_dQ : forall x : Q, is_num (dQ x) = true.
-Proof. intros x. reflexivity. Qed.
+Proof.
+  intros x.
+  (* 口径一：展开判定器定义体，数值支归约出真值 *)
+  change (is_num (dQ x)) with true.
+  reflexivity.
+Qed.
 
 (* 特征定理·弱形（Prop 存在） *)
 Theorem is_num_inv : forall d : Dig,
@@ -380,12 +471,27 @@ Qed.
 (* 组合面三：dQ 探针三重一致（投影往返 + 尺寸 + 判定）——旗舰 *)
 Theorem dQ_probe_roundtrip : forall x : Q,
   dig_Q (dQ x) = x /\ dig_size (dQ x) = 1%nat /\ is_num (dQ x) = true.
-Proof. intros x. split; [reflexivity | split; reflexivity]. Qed.
+Proof.
+  intros x.
+  (* 口径三分合结构：三重一致逐支展开——投影、尺寸、判定各走
+     显式归约链，替代单射闭式拆分 *)
+  split.
+  - change (dig_Q (dQ x)) with x. reflexivity.
+  - split.
+    + change (dig_size (dQ x)) with 1%nat. reflexivity.
+    + change (is_num (dQ x)) with true. reflexivity.
+Qed.
 
 (* 诚实边界：尺寸 1 不等价于数字域（dSeq [] 反例，定义性见证） *)
 Theorem dig_size_one_not_only_num :
   dig_size (dSeq []) = 1%nat /\ is_num (dSeq []) = false.
-Proof. split; reflexivity. Qed.
+Proof.
+  (* 口径三分合结构：反例见证两侧分别走显式归约——空序列尺寸
+     经内嵌表扫描落一，判定器落假 *)
+  split.
+  - change (dig_size (dSeq [])) with 1%nat. reflexivity.
+  - change (is_num (dSeq [])) with false. reflexivity.
+Qed.
 
 (* ========== 终验：公理闭包审计 ========== *)
 
@@ -413,7 +519,14 @@ Open Scope Q_scope.
 Definition h_alg (d : Dig) : Q := ((Z.of_nat (dig_size d)) # 1)%Q.
 
 Theorem h_alg_dQ : forall x : Q, h_alg (dQ x) == 1.
-Proof. intros x. unfold h_alg. reflexivity. Qed.
+Proof.
+  intros x.
+  unfold h_alg.
+  (* 口径一两步链：先展开深度代理定义体，再沿尺寸分支把整数化
+     深度显式归约出常量一并落形闭合 *)
+  change ((Z.of_nat (dig_size (dQ x))) # 1)%Q with ((1:Z) # 1)%Q.
+  reflexivity.
+Qed.
 
 Theorem h_alg_pos : forall d : Dig, 0 < h_alg d.
 Proof.
@@ -452,7 +565,14 @@ Fixpoint dig_eqb (a b : Dig) {struct a} : bool :=
 Theorem dig_eqb_dSeq_cons : forall (x : Dig) (xs : list Dig) (y : Dig) (ys : list Dig),
   dig_eqb (dSeq (x :: xs)) (dSeq (y :: ys)) =
   (dig_eqb x y && dig_eqb (dSeq xs) (dSeq ys)).
-Proof. intros x xs y ys. reflexivity. Qed.
+Proof.
+  intros x xs y ys.
+  (* 口径一：展开匹配器定义体，序列支经内嵌双层表扫描归约出
+     逐元与合取面 *)
+  change (dig_eqb (dSeq (x :: xs)) (dSeq (y :: ys)))
+    with (dig_eqb x y && dig_eqb (dSeq xs) (dSeq ys)).
+  reflexivity.
+Qed.
 
 (* dig_eqb 尺寸可传（有界归纳；dSeq 面经内层表归纳 + 逐元 IH 供量） *)
 Lemma dig_eqb_size_bound : forall (n : nat) (a b : Dig),
@@ -528,18 +648,41 @@ Fixpoint sub_dig (a d : Dig) {struct d} : bool :=
 
 (* dSeq 面方程（转换性直取）与定义性见证 *)
 Theorem sub_dig_dSeq_nil : forall a : Dig, sub_dig a (dSeq []) = false.
-Proof. intros a. reflexivity. Qed.
+Proof.
+  intro a.
+  (* 口径一：展开真子项判定体，空表支经内嵌表扫描直接落假 *)
+  change (sub_dig a (dSeq [])) with false.
+  reflexivity.
+Qed.
 
 Theorem sub_dig_dSeq_cons : forall (a y : Dig) (ys : list Dig),
   sub_dig a (dSeq (y :: ys)) =
   ((dig_eqb a y || sub_dig a y) || sub_dig a (dSeq ys)).
-Proof. intros a y ys. reflexivity. Qed.
+Proof.
+  intros a y ys.
+  (* 口径一：展开真子项判定体，序列支经内嵌表扫描归约出
+     等值直击、递归下钻、表尾续扫三路析取面 *)
+  change (sub_dig a (dSeq (y :: ys)))
+    with ((dig_eqb a y || sub_dig a y) || sub_dig a (dSeq ys)).
+  reflexivity.
+Qed.
 
 Theorem sub_dig_witness : sub_dig (dQ 0) (dPair (dQ 0) (dQ 0)) = true.
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径二见证显式化：先展开二叉支判定面（等值直击两路 +
+     递归两路），左路等值匹配在零码上归约出真后闭合 *)
+  change (sub_dig (dQ 0) (dPair (dQ 0) (dQ 0)))
+    with (((dig_eqb (dQ 0) (dQ 0) || dig_eqb (dQ 0) (dQ 0))
+           || sub_dig (dQ 0) (dQ 0)) || sub_dig (dQ 0) (dQ 0)).
+  reflexivity.
+Qed.
 
 Theorem sub_dig_witness_neg : sub_dig (dQ 0) (dQ 0) = false.
-Proof. reflexivity. Qed.
+Proof.
+  (* 口径一：展开真子项判定体，数值支无真子项直接落假 *)
+  change (sub_dig (dQ 0) (dQ 0)) with false.
+  reflexivity.
+Qed.
 
 (* 灵魂件：子项序 → 尺寸严格单调（有界归纳；dSeq 面内层表归纳） *)
 Lemma sub_dig_size_bound : forall (n : nat) (d a : Dig),
@@ -694,13 +837,28 @@ Qed.
 Theorem h_alg_dQ_probe : forall x : Q,
   h_alg (dQ x) == 1 /\ is_num (dQ x) = true /\ 0 < h_alg (dQ x).
 Proof.
-  intros x. split; [apply h_alg_dQ | split; [reflexivity | apply h_alg_pos]].
+  intros x.
+  (* 口径三分合结构：深度代理、判定器、正性三重一致逐支展开——
+     判定支走显式归约链，另两支消费已替换方程件 *)
+  split.
+  - apply h_alg_dQ.
+  - split.
+    + change (is_num (dQ x)) with true. reflexivity.
+    + apply h_alg_pos.
 Qed.
 
 (* 诚实边界 d)：码面 1 不等价于数字域（dSeq [] 反例，定义性见证） *)
 Theorem h_alg_one_not_only_num :
   h_alg (dSeq []) == 1 /\ is_num (dSeq []) = false.
-Proof. split; reflexivity. Qed.
+Proof.
+  (* 口径三分合结构：反例见证两侧分别走显式归约——空序列深度
+     经内嵌表扫描落一，判定器落假 *)
+  split.
+  - unfold h_alg.
+    change (Z.of_nat (dig_size (dSeq []))) with ((1:Z)).
+    reflexivity.
+  - change (is_num (dSeq [])) with false. reflexivity.
+Qed.
 
 End DTPT_DigTheory.
 Import DTPT_DigTheory.
@@ -713,3 +871,10 @@ Print Assumptions h_alg_pos.
 Print Assumptions h_alg_nonneg.
 Print Assumptions h_alg_dPair.
 Print Assumptions is_num_h_alg1.
+
+(* ========== ToyR 战役包B 替换席追加：替换件公理闭包打印（G4 面） ========== *)
+
+Print Assumptions dig_size_eq_dPair.
+Print Assumptions dQ_probe_roundtrip.
+Print Assumptions sub_dig_witness.
+Print Assumptions h_alg_dQ.

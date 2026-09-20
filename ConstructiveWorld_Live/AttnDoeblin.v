@@ -1,3 +1,17 @@
+(* ===================================================================== *)
+(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
+(*   替换清单（本件）：四项交换件（改道三枢纽右嵌新链：外和中枢＋分量交换同余枢纽＋尾中枢，原七跳链整链重排）＋指数和一件（断言拆题命名 logits 和桥，三枢纽装配）＋增量星一件（命名桥断言双件：和一闭链＋乘法保序闭项）。                                            *)
+(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
+(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
+(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
+(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
+(*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
+(*   挂账（本件不可化批量标注）：界面字段单跳族（指数位正性两件等为节变量位单点转发）、传输收缩两旗舰（引擎件单点消费即全部内容）、增量星下界三件（原链已最简，换序即注水），如实挂账。                                  *)
+(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* AttnDoeblin.v *)
 (* *)
@@ -46,11 +60,12 @@ Lemma plus_exchange : forall a b c d : R,
   Id (plus (plus a c) (plus b d)) (plus (plus a b) (plus c d)).
 Proof.
   intros a b c d.
-  apply (id_sym (id_trans (id_sym (plus_assoc a b (plus c d)))
-  (id_trans (id_cong (fun x => plus a x) (plus_assoc b c d))
-  (id_trans (id_cong (fun x => plus a (plus x d)) (plus_comm b c))
-  (id_trans (id_cong (fun x => plus a x) (id_sym (plus_assoc c b d)))
-            (plus_assoc a c (plus b d))))))).
+  apply (id_trans (plus_assoc (plus a c) b d)).
+  apply (id_trans (id_cong (fun t => plus t d)
+         (id_trans (id_sym (plus_assoc a c b))
+         (id_trans (id_cong (fun u => plus a u) (plus_comm c b))
+                   (plus_assoc a b c))))).
+  apply (id_sym (plus_assoc (plus a b) c d)).
 Qed.
 
 (* 左公因子相减：(a+b) − (a+c) == b − c *)
@@ -574,18 +589,24 @@ Qed.
 (* lo·hi == one（exp 同态性，logits 有界的代数核心） *)
 Lemma bs_lo_hi_eq : Id (mult lo hi) one.
 Proof.
+  assert (Hs : Id (plus (mult invT (opp Delta)) (mult invT Delta)) zero).
+  { apply (id_trans (id_sym (distrib invT (opp Delta) Delta))).
+    apply (id_trans (id_cong (fun w => mult invT w)
+           (id_trans (plus_comm (opp Delta) Delta) (plus_opp Delta)))).
+    exact (mult_zero invT). }
   apply (id_trans (id_sym (expf_plus (mult invT (opp Delta)) (mult invT Delta)))).
-  apply (id_trans (id_cong expf (id_sym (distrib invT (opp Delta) Delta)))).
-  apply (id_trans (id_cong expf (id_cong (fun w => mult invT w)
-                 (id_trans (plus_comm (opp Delta) Delta) (plus_opp Delta))))).
-  exact (id_trans (id_cong expf (mult_zero invT)) expf_zero).
+  apply (id_trans (id_cong expf Hs)).
+  exact expf_zero.
 Qed.
 
 Lemma bs_delta_star_lt_one : lt delta_star one.
 Proof.
-  apply (lt_id_r_loc _ _ _ (bs_lo_hi_eq)).
-  apply (lt_id_r_loc _ _ _ (mult_comm hi lo)).
-  exact (lt_mult_compat lo hi lo bs_lo_pos bs_lo_lt_hi).
+  assert (Hone : Id (mult hi lo) one).
+  { apply (id_trans (mult_comm hi lo)). exact bs_lo_hi_eq. }
+  assert (Hx : lt (mult lo lo) (mult hi lo)).
+  { exact (lt_mult_compat lo hi lo bs_lo_pos bs_lo_lt_hi). }
+  apply (lt_id_r_loc _ _ _ Hone).
+  exact Hx.
 Qed.
 
 Lemma bs_inv_hi_lo : Id (inv_pos hi bs_hi_pos) lo.
@@ -777,3 +798,8 @@ Qed.
 (* 提取探针：实层指数构造可提取为 OCaml（零 Obj.magic） *)
 From Stdlib Require Import Extraction.
 Extraction "attn_doeblin.ml" cauchy_real_exp cauchy_real_exp_plus.
+
+(* ---- 替换件承认面自查（文件尾） ---- *)
+Print Assumptions plus_exchange.
+Print Assumptions bs_lo_hi_eq.
+Print Assumptions bs_delta_star_lt_one.

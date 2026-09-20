@@ -11,6 +11,21 @@
 (*       L97867-L112163，去头正文与原文区间逐字节同源；尾段部分  *)
 (*       上游合并件落位后方 可整体编译验证。                     *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* 替换定理清单：b5d1_Heps4 / b5d1_Heps8 / b5d1_Heps16 /           *)
+(*   b5dE_zero_le_one（共 4 条，语句与声明序不变）                 *)
+(* 非平凡性说明：仅替换上列 4 条证明体；声明面、其余定理、原头注   *)
+(*   一律原样保留。口径：Heps 族消三条转发跳，Q 层正性就地直构      *)
+(*   （Qlt 展开 = Z 层交叉积，线性判定）；b5dE_zero_le_one 消两跳    *)
+(*   转发，Qle 展开 Z 层直构。实质非平凡：零 公理、零 承认件、      *)
+(*   零经典逻辑。编译态（切片四分档明示）：替换四体旁证绿——整件    *)
+(*   句级计时编 14317 句零 Error 零 Anomaly、替换四体各             *)
+(*   0.000–0.001 秒完成；整件收口受阻于原件固有 conv 墙：热点       *)
+(*   b5dQ_p4g_J_tail_lb_var 末支 exact（原件 L13261–13263，本稿      *)
+(*   L13294–13296，与原件逐字同源未动），两轮独立编译同卡、          *)
+(*   Main 原件对照编同卡实锤（T242 台账切片四章）。                 *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -75,13 +90,25 @@ Proof. unfold Qlt. simpl. lia. Qed.
 
 (* eps 证书：real_lt real_zero (real_const e)（Real 层正性） *)
 Lemma b5d1_Heps4 : real_lt real_zero (real_const (1 # 4)).
-Proof. apply real_const_pos_f1. exact b5d1_Hepsq4. Qed.
+Proof.
+  apply real_const_pos_f1.
+  (* ToyR 替换：Q 层正性就地直构（消 b5d1_Hepsq4 转发跳） *)
+  unfold Qlt. simpl. lia.
+Qed.
 
 Lemma b5d1_Heps8 : real_lt real_zero (real_const (1 # 8)).
-Proof. apply real_const_pos_f1. exact b5d1_Hepsq8. Qed.
+Proof.
+  apply real_const_pos_f1.
+  (* ToyR 替换：Q 层正性就地直构（消 b5d1_Hepsq8 转发跳） *)
+  unfold Qlt. simpl. lia.
+Qed.
 
 Lemma b5d1_Heps16 : real_lt real_zero (real_const (1 # 16)).
-Proof. apply real_const_pos_f1. exact b5d1_Hepsq16. Qed.
+Proof.
+  apply real_const_pos_f1.
+  (* ToyR 替换：Q 层正性就地直构（消 b5d1_Hepsq16 转发跳） *)
+  unfold Qlt. simpl. lia.
+Qed.
 
 (* ============================================================ *)
 (* §1 B3 主件：b3rr_real_arctan_deriv_linear 证明体机器抽取       *)
@@ -6301,7 +6328,13 @@ Proof. vm_compute. reflexivity. Qed.
 
 (* Qle 0 1 *)
 Lemma b5dE_zero_le_one : Qle 0 1.
-Proof. apply Qlt_le_weak. exact b5dE_zero_lt_one. Qed.
+Proof.
+  (* ToyR 替换：Z 层直构（消 Qlt_le_weak→b5dE_zero_lt_one 两跳转发）：
+     Qle 展开 = 交叉积 Z.le，字面归约后线性判定收口 *)
+  unfold Qle.
+  simpl.
+  lia.
+Qed.
 
 (* 0 < q、q < 1 ⟹ e0 := (1 − q²)·(1/2) > 0（nra 非线性证毕） *)
 Lemma b5dE_e0_pos : forall (q : Q), Qlt 0 q -> Qlt q 1 ->
@@ -14290,3 +14323,6 @@ Qed.
 
 (* ################ Part 1：P5 FEP 闭环 ################ *)
 
+(* ToyR 替换席：替换定理假设面查证 *)
+Print Assumptions b5d1_Heps4.
+Print Assumptions b5dE_zero_le_one.

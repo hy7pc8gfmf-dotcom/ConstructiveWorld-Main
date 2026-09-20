@@ -1,4 +1,18 @@
 (* ===================================================================== *)
+(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
+(*   替换清单（本件）：积对五律件（结合／交换／零元／相反数／右分配）：构造子三分判＋积对运算定义面展开至分量基（构造子逐层归约）＋组装子两腿同余枢纽直供，消 pair_id 组装跳。                                            *)
+(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
+(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
+(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
+(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
+(*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
+(*   挂账（本件不可化批量标注）：其余积对律件与度量/收敛件（同模板可批量，本切片时限内未实施），如实挂账滚动。                                  *)
+(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(* ===================================================================== *)
+
+(* ===================================================================== *)
 (* UpAblP6_StateSpace_inst.v —— StateSpace 类第二个满律非平凡实例：      *)
 (*   R×R 乘积载体（「任意 StateSpace 非平凡实例」命题的构造）。           *)
 (* --------------------------------------------------------------------- *)
@@ -8,7 +22,7 @@
 (*   （R 自状态空间）；ListStateSpace 节仅散定义不满律。                  *)
 (*   本件给出第二个满律非平凡实例：R×R 乘积载体（L1 度量、逐点线性结构、   *)
 (*   双分量 lim 收敛），≥3 态（(0,0)/(1,0)/(0,1) 两两非 Id 真证），       *)
-(*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 使用件）。   *)
+(*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 消费件）。   *)
 (* 【有限载体不可能性（如实注记）】bool×bool/三态枚举等有穷载体满律在      *)
 (*   数学上关闭：inv_pos 对正整数标量 fourR=1+1+1+1 给逆（fourR>0 由      *)
 (*   one_pos+lt_plus_compat 真证），任意标量 a=fourR·(a·inv fourR)        *)
@@ -114,31 +128,45 @@ Definition uab34_metric_le_r (x y : RR) :
 Lemma uab34_pplus_assoc : forall a b c : RR,
   Id (uab34_psplus a (uab34_psplus b c)) (uab34_psplus (uab34_psplus a b) c).
 Proof.
-  intros a b c.
-  exact (uab34_pair_id (@plus_assoc Rb (fst a) (fst b) (fst c))
-                       (@plus_assoc Rb (snd a) (snd b) (snd c))).
+  intros [axx axy] [bxx bxy] [cxx cxy].
+  unfold uab34_psplus. cbn [fst snd].
+  apply (id_trans (id_cong
+    (fun t : @R Rb => (t, @plus Rb axy (@plus Rb bxy cxy)))
+    (@plus_assoc Rb axx bxx cxx))).
+  apply (id_cong
+    (fun t : @R Rb => (@plus Rb (@plus Rb axx bxx) cxx, t))
+    (@plus_assoc Rb axy bxy cxy)).
 Qed.
 
 Lemma uab34_pplus_comm : forall a b : RR,
   Id (uab34_psplus a b) (uab34_psplus b a).
 Proof.
-  intros a b.
-  exact (uab34_pair_id (@plus_comm Rb (fst a) (fst b))
-                       (@plus_comm Rb (snd a) (snd b))).
+  intros [axx axy] [bxx bxy].
+  unfold uab34_psplus. cbn [fst snd].
+  apply (id_trans (id_cong
+    (fun t : @R Rb => (t, @plus Rb axy bxy)) (@plus_comm Rb axx bxx))).
+  apply (id_cong
+    (fun t : @R Rb => (@plus Rb bxx axx, t)) (@plus_comm Rb axy bxy)).
 Qed.
 
 Lemma uab34_pplus_zero : forall a : RR,
   Id (uab34_psplus a uab34_pzero) a.
 Proof.
-  intros [ax ay].
-  exact (uab34_pair_id (@plus_zero Rb ax) (@plus_zero Rb ay)).
+  intros [axx axy].
+  unfold uab34_psplus, uab34_pzero. cbn [fst snd].
+  apply (id_trans (id_cong
+    (fun t : @R Rb => (t, @plus Rb axy zero)) (@plus_zero Rb axx))).
+  apply (id_cong (fun t : @R Rb => (axx, t)) (@plus_zero Rb axy)).
 Qed.
 
 Lemma uab34_pplus_opp : forall a : RR,
   Id (uab34_psplus a (uab34_psopp a)) uab34_pzero.
 Proof.
-  intros [ax ay].
-  exact (uab34_pair_id (@plus_opp Rb ax) (@plus_opp Rb ay)).
+  intros [axx axy].
+  unfold uab34_psplus, uab34_psopp, uab34_pzero. cbn [fst snd].
+  apply (id_trans (id_cong
+    (fun t : @R Rb => (t, @plus Rb axy (opp axy))) (@plus_opp Rb axx))).
+  apply (id_cong (fun t : @R Rb => (@zero Rb, t)) (@plus_opp Rb axy)).
 Qed.
 
 Lemma uab34_psmult_one : forall a : RR,
@@ -161,8 +189,14 @@ Lemma uab34_psmult_distrib_r : forall a : @R Rb, forall x y : RR,
   Id (uab34_psmult a (uab34_psplus x y))
      (uab34_psplus (uab34_psmult a x) (uab34_psmult a y)).
 Proof.
-  intros a [ax ay]. intros [bx byy].
-  exact (uab34_pair_id (@distrib Rb a ax bx) (@distrib Rb a ay byy)).
+  intros a [axx axy]. intros [bxx bxy].
+  unfold uab34_psmult, uab34_psplus. cbn [fst snd].
+  apply (id_trans (id_cong
+    (fun t : @R Rb => (t, @mult Rb a (@plus Rb axy bxy)))
+    (@distrib Rb a axx bxx))).
+  apply (id_cong
+    (fun t : @R Rb => (@plus Rb (@mult Rb a axx) (@mult Rb a bxx), t))
+    (@distrib Rb a axy bxy)).
 Qed.
 
 Lemma uab34_psmult_distrib_l : forall a b : @R Rb, forall x : RR,
@@ -464,9 +498,9 @@ Qed.
 End FiniteCollapse.
 
 (* ============================================================ *)
-(* §4 一锚定理实例面：上游 StateSpace 使用件在本载体上的构造      *)
+(* §4 一锚定理实例面：上游 StateSpace 消费件在本载体上的构造      *)
 (* ============================================================ *)
-(*   IdSlotTranslate 节（Context {RI}{SS} 以 StateSpace 为参，无 *)
+(*   IdSlotTranslate 节（Context {RI}{SS} 消费 StateSpace，无     *)
 (*   SumOver 前提）之求和翻译引理与宿主求和定理在 R×R 载体上实例化。*)
 
 Section Anchor.
@@ -486,7 +520,7 @@ Proof.
 Qed.
 
 (* 一锚定理：idt_slot_g01（宿主 AttnDoeblin.bs_list_sum 求和）
-   在本实例上的实例面——上游以 StateSpace 为参的定理在本载体上实例化消解 *)
+   在本实例上的实例面——上游 StateSpace 消费定理在本载体上实例化消解 *)
 Theorem uab34_idt_slot_g01_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))
          (g : @S (@RI_base RIE) uab34_prodRR -> @R (@RI_base RIE)),
@@ -507,3 +541,10 @@ Print Assumptions uab34_pclim_unique.
 Print Assumptions uab34_finite_collapse.
 Print Assumptions uab34_idt_sum_eq_list_prodRR.
 Print Assumptions uab34_idt_slot_g01_prodRR.
+
+(* ---- 替换件承认面自查（文件尾） ---- *)
+Print Assumptions uab34_pplus_assoc.
+Print Assumptions uab34_pplus_comm.
+Print Assumptions uab34_pplus_zero.
+Print Assumptions uab34_pplus_opp.
+Print Assumptions uab34_psmult_distrib_r.

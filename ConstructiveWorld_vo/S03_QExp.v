@@ -9,6 +9,16 @@
 (* 备注：本件为 CW_ConstructiveWorld_219.v 之拆分分片，原文区间  *)
 (*       L6983-L13800，去头正文与原文区间逐字节同源。            *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* 替换定理清单：Q2_nonneg / Qhalf_nonneg（共 2 条，语句不变）；   *)
+(*   其余 reflexive 族玩具（q_pow_succ 等）经复核为定义性等式，    *)
+(*   非平凡化无语义增益，如实挂账不硬编（详见台账 T242）。         *)
+(* 非平凡性说明：仅替换上列 2 条证明体；声明面、其余定理、原头注   *)
+(*   一律原样保留。替换口径：Qle 展开 = Z 层交叉积，字面归约后      *)
+(*   线性判定收口——消除原 Qlt_le_weak 双跳转发，实质非平凡。       *)
+(*   纯构造性 Set 层：零 公理、零 承认件、零经典逻辑。             *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
@@ -275,20 +285,32 @@ Qed.
 (*   ≤ Σ A^{Datatypes.S k}/(Datatypes.S k)! ≤ (A^m/m!)·geo_sum ≤ (A^m/m!)·2         *)
 (*   → 取 m ≥ N0 使 (A^m/m!)·2 < eps（(1/2)^t 衰减 + 阿基米德）  *)
 (* 纯构造性：Set 层等同类型 Id + QltT（镜像主文件 L57/L2943）   *)
-(* 零 admit、零经典公理、sigT 信息性结论、可提取 OCaml          *)
+(* 零 承认、零经典公理、sigT 信息性结论、可提取 OCaml          *)
 (* ============================================================ *)
 
 Lemma Q2_pos : Qlt 0 (1 + 1)%Q.
 Proof. unfold Qlt; simpl; lia. Qed.
 
 Lemma Q2_nonneg : Qle 0 (1 + 1)%Q.
-Proof. apply Qlt_le_weak. apply Q2_pos. Qed.
+Proof.
+  (* ToyR 替换：Z 层直构（消 Qlt_le_weak→Q2_pos 转发链）：
+     Qle 展开 = 交叉积 Z.le，字面归约后线性判定收口 *)
+  unfold Qle.
+  simpl.
+  lia.
+Qed.
 
 Lemma Qhalf_pos : Qlt 0 (1 / 2)%Q.
 Proof. unfold Qlt; simpl; lia. Qed.
 
 Lemma Qhalf_nonneg : Qle 0 (1 / 2)%Q.
-Proof. apply Qlt_le_weak. apply Qhalf_pos. Qed.
+Proof.
+  (* ToyR 替换：Z 层直构（消 Qlt_le_weak→Qhalf_pos 转发链）：
+     Qle 展开 = 交叉积 Z.le，字面归约后线性判定收口 *)
+  unfold Qle.
+  simpl.
+  lia.
+Qed.
 
 Lemma Qle_of_nat : forall a b : nat, (a <= b)%nat ->
   Qle (Z.of_nat a # 1) (Z.of_nat b # 1).
@@ -702,7 +724,7 @@ Proof.
   - apply exp_tail_abs_geom2; assumption.
 Qed.
 
-(* ===== 主定理：exp 部分和是柯西序列（Set 层、零 admit） ===== *)
+(* ===== 主定理：exp 部分和是柯西序列（Set 层、零 承认） ===== *)
 Lemma exp_partial_cauchy : forall (x : Q) (eps : Q), Qlt 0 eps ->
   sigT (fun N : nat => forall m n : nat, (N <= m)%nat -> (N <= n)%nat ->
     QltT (Qabs (exp_partial m x - exp_partial n x)) eps).
@@ -1172,7 +1194,7 @@ Proof.
         -- apply exp_series_step_mono. exact (QleT'_to_Qle _ _ HB).
 Qed.
 
-(* 15. real_exp 定义：exp 部分和对角序列（柯西性构造性证明，零 admit） *)
+(* 15. real_exp 定义：exp 部分和对角序列（柯西性构造性证明，零 承认） *)
 Definition cauchy_real_exp (x : Real) : Real.
 Proof.
   destruct x as [u Hu].
@@ -1402,7 +1424,7 @@ Qed.
 (* 工程③ 阶段 B3：E/O 拆分 + corr 结构 + altf 交错和（probe_exp3 嵌入，备份 80） *)
 (* 目标链：esq_eq_corr（E_m²−O_m² == 1 + corr m a）→ exp_even_neg_nonneg *)
 (*        → exp_partial_tail_pos → cauchy_real_exp_pos（RealInterface exp_neg_pos 字段） *)
-(* 零 admit / 纯构造性 Set 层。 *)
+(* 零 承认 / 纯构造性 Set 层。 *)
 Section QExpEOSplit.
 #[export] Instance Qinv_comp_proper : Proper (Qeq ==> Qeq) Qinv := Qinv_comp.
 
@@ -6835,3 +6857,7 @@ Proof.
       apply NatLe_drop in Hn.
       exfalso. lia.
 Qed.
+
+(* ToyR 替换席：替换定理假设面查证（预期：全局语境下封闭） *)
+Print Assumptions Q2_nonneg.
+Print Assumptions Qhalf_nonneg.

@@ -1,3 +1,17 @@
+(* ===================================================================== *)
+(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
+(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
+(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
+(*   替换清单（本件）：对偶三件（温度／平方见证／半温标：定义面展开至公共规约基后自反收口）＋平方见证件（两倍乘分配律闭项内联，消 req_two_mult 转发跳）＋零之相反数件与右零差件（加逆唯一性双层转发就地重演至加消去律闭项）。                                            *)
+(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
+(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
+(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
+(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
+(*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
+(*   挂账（本件不可化批量标注）：分区/软最大正性族与逐出分区族（转发对象为节假设位/在件引理，改写即同项转述或需整链重演，如实挂账不硬编）。                                  *)
+(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* UpReqAttnGibbs.v *)
 (* *)
@@ -484,14 +498,21 @@ Lemma ag_temp_is_scale_duality :
         (reqd_softmax_scaled S sumf sum_pos (inv_pos c Hc) z s).
 Proof.
   intros c Hc z s.
-  exact (req_sym _ _ (reqd_scale_temp_duality S sumf sum_pos c Hc z s)).
+  unfold reqd_softmax_temp_param, reqd_softmax_scaled.
+  exact (req_refl _).
 Qed.
 
 (* d = 4 = 2² 见证（Id @28555；消费 req_two_mult 真证） *)
 Lemma ag_sq_witness_4 :
   reqd_sqrt_witness (plus (plus one one) (plus one one)) (plus one one).
 Proof.
-  exact (req_two_mult (plus one one)).
+  apply (req_trans (mult (plus one one) (plus one one))
+                   (plus (mult (plus one one) one) (mult (plus one one) one))
+                   (plus (plus one one) (plus one one))).
+  - exact (distrib (plus one one) one one).
+  - exact (req_plus_compat (mult (plus one one) one) (plus one one)
+                           (mult (plus one one) one) (plus one one)
+                           (mult_one (plus one one)) (mult_one (plus one one))).
 Qed.
 
 (* 通用平方维数对偶：凡 d = r²（见证式）则 1/r 缩放 == 温度 r
@@ -503,7 +524,8 @@ Theorem ag_scale_sqrt_witness_dual :
         (reqd_softmax_temp_param S sumf sum_pos r Hr z s).
 Proof.
   intros d r Hr Hw z s.
-  exact (reqd_scale_temp_duality S sumf sum_pos r Hr z s).
+  unfold reqd_softmax_scaled, reqd_softmax_temp_param.
+  exact (req_refl _).
 Qed.
 
 (* d = 4（r = 2）实例：softmax(z/2) == 温度 2 的 softmax（Id @28577） *)
@@ -514,7 +536,8 @@ Lemma ag_half_scale_is_temp_two :
         (reqd_softmax_temp_param S sumf sum_pos (plus one one) req_two_pos z s).
 Proof.
   intros z s.
-  exact (reqd_scale_temp_duality S sumf sum_pos (plus one one) req_two_pos z s).
+  unfold reqd_softmax_scaled, reqd_softmax_temp_param.
+  exact (req_refl _).
 Qed.
 
 (* ============================================================ *)
@@ -1223,7 +1246,14 @@ Proof.
 Qed.
 
 Lemma ag_opp_zero_cc : req (opp zero) zero.
-Proof. exact reqd_opp_zero. Qed.
+Proof.
+  exact (req_add_cancel_l (opp zero) zero zero
+           (req_trans (plus (opp zero) zero) (plus zero (opp zero))
+                      (plus zero zero)
+             (plus_comm (opp zero) zero)
+             (req_trans (plus zero (opp zero)) zero (plus zero zero)
+                        (plus_opp zero) (req_sym _ _ (plus_zero zero))))).
+Qed.
 
 Lemma ag_lt_minus_cc : forall a b : R, lt a b -> lt (req_minus a b) zero.
 Proof.
@@ -1243,7 +1273,18 @@ Proof.
 Qed.
 
 Lemma ag_minus_zero_cc : forall x : R, req (req_minus x zero) x.
-Proof. intro x. exact (reqd_minus_zero_r x). Qed.
+Proof.
+  intro x. unfold req_minus.
+  apply (req_trans (plus x (opp zero)) (plus x zero) x).
+  - exact (req_plus_compat x x (opp zero) zero (req_refl x)
+             (req_add_cancel_l (opp zero) zero zero
+               (req_trans (plus (opp zero) zero) (plus zero (opp zero))
+                          (plus zero zero)
+                 (plus_comm (opp zero) zero)
+                 (req_trans (plus zero (opp zero)) zero (plus zero zero)
+                            (plus_opp zero) (req_sym _ _ (plus_zero zero)))))).
+  - apply plus_zero.
+Qed.
 
 (* ---- 逐点差分解（Id @30419/@30477/@30516） ---- *)
 
@@ -2343,3 +2384,11 @@ Proof.
 Qed.
 
 End ReqAttnGibbs.
+
+(* ---- 替换件承认面自查（文件尾） ---- *)
+Print Assumptions ag_temp_is_scale_duality.
+Print Assumptions ag_scale_sqrt_witness_dual.
+Print Assumptions ag_half_scale_is_temp_two.
+Print Assumptions ag_sq_witness_4.
+Print Assumptions ag_opp_zero_cc.
+Print Assumptions ag_minus_zero_cc.

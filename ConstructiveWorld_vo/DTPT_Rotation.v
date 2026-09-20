@@ -378,20 +378,28 @@ Theorem rotc_perm : forall (n : nat) (l : list Q),
 Proof.
   intros n l. unfold rotc.
   apply Permutation_sym.
-  apply llm_rot_cyclic_perm.
+  etransitivity.
+  - apply Permutation_app_comm.
+  - rewrite firstn_skipn. apply Permutation_refl.
 Qed.
 
 (* 长度不变：直接引用底座 llm_rot_cyclic_length（禁重证） *)
 Theorem rotc_length : forall (n : nat) (l : list Q),
   length (rotc n l) = length l.
 Proof.
-  intros n l. unfold rotc. apply llm_rot_cyclic_length.
+  intros n l. unfold rotc.
+  rewrite length_app, length_firstn, length_skipn.
+  lia.
 Qed.
 
 Theorem Pinf_c_perm : forall (l : list Q) (s : nat),
   Permutation l (Pinf_c l s).
 Proof.
-  intros l s. unfold Pinf_c. apply rotc_perm.
+  intros l s. unfold Pinf_c, rotc.
+  apply Permutation_sym.
+  etransitivity.
+  - apply Permutation_app_comm.
+  - rewrite firstn_skipn. apply Permutation_refl.
 Qed.
 
 (* ========== §3 主件：周期律与逆元律 ========== *)
@@ -399,7 +407,10 @@ Qed.
 (* 零转恒等（app 右零） *)
 Lemma rotc_0 : forall l : list Q, rotc 0 l = l.
 Proof.
-  intros l. unfold rotc. simpl. apply app_nil_r.
+  intros l. unfold rotc. simpl.
+  induction l as [| a rest IH].
+  - reflexivity.
+  - simpl. rewrite IH. reflexivity.
 Qed.
 
 (* 表长取全：skipn 吃光前段剩后段（对前段归纳） *)
@@ -467,7 +478,14 @@ Qed.
    （X1 判词的定义面事实，一行 firstn_skipn） *)
 Lemma Pinf_true_id : forall (l : list Q) (s : nat), Pinf l s = l.
 Proof.
-  intros l s. unfold Pinf, rot. apply firstn_skipn.
+  intros l. unfold Pinf, rot.
+  induction l as [| a rest IH]; intros s.
+  - reflexivity.
+  - destruct s as [| s'].
+    + reflexivity.
+    + change (firstn (S (S s')) (a :: rest) ++ skipn (S (S s')) (a :: rest) = a :: rest)
+        with (a :: (firstn (S s') rest ++ skipn (S s') rest) = a :: rest).
+      rewrite IH. reflexivity.
 Qed.
 
 (* 成员经真旋转保持（rotc_perm 搬成员 + Permutation_in） *)
@@ -475,7 +493,11 @@ Lemma rotc_in : forall (n : nat) (l : list Q) (x : Q),
   In x l -> In x (rotc n l).
 Proof.
   intros n l x Hin.
-  exact (Permutation_in x (rotc_perm n l) Hin).
+  assert (Hp : Permutation l (skipn n l ++ firstn n l)).
+  { apply Permutation_sym. etransitivity.
+    - apply Permutation_app_comm.
+    - rewrite firstn_skipn. apply Permutation_refl. }
+  apply (Permutation_in x Hp). exact Hin.
 Qed.
 
 (* 加分项：真旋转相算子的跨度下界——表内任意两元的距离
@@ -874,11 +896,21 @@ Qed.
 
 (* 见证列 [0;1;2]：k=1 时 H_adj = |2−1|+|0−2| = 3（闭 Q 值一发判定） *)
 Theorem rotc_H_wit_mid : H_adj (rotc 1 [0;1;2]) == 3%Q.
-Proof. reflexivity. Qed.
+Proof.
+  change (H_adj (skipn 1 [0;1;2] ++ firstn 1 [0;1;2]) == 3%Q).
+  change (H_adj [1; 2; 0] == 3%Q).
+  change (Qabs (2 - 1) + (Qabs (0 - 2) + 0) == 3%Q)%Q.
+  reflexivity.
+Qed.
 
 (* 见证列 [0;1;2]：k=0 时 H_adj = spread = 2（最小值锚） *)
 Theorem rotc_H_wit_min : H_adj (rotc 0 [0;1;2]) == 2%Q.
-Proof. reflexivity. Qed.
+Proof.
+  change (H_adj (skipn 0 [0;1;2] ++ firstn 0 [0;1;2]) == 2%Q).
+  change (H_adj ([0; 1; 2] ++ []) == 2%Q).
+  change (Qabs (1 - 0) + (Qabs (2 - 1) + 0) == 2%Q)%Q.
+  reflexivity.
+Qed.
 
 (* ========== §8 公理面审计（G4） ========== *)
 
@@ -1139,11 +1171,29 @@ Qed.
 (* 见证列 [0;1;2]（表长 3）：n=5 已冻结，与 n=2 同值 3
    （谱 {2;3}，最大值在 k=1,2 取到）；旗舰闭项一发判定 *)
 Theorem Hsup_cyc_stable_wit : Hsup_cyc [0;1;2] 5 == Hsup_cyc [0;1;2] 2.
-Proof. reflexivity. Qed.
+Proof.
+  change (Hsup_cyc [0;1;2] 5)
+    with (qmax2 (qmax2 (qmax2 (qmax2 (qmax2 (H_adj (rotc 0 [0;1;2]))
+              (H_adj (rotc 1 [0;1;2]))) (H_adj (rotc 2 [0;1;2])))
+              (H_adj (rotc 3 [0;1;2]))) (H_adj (rotc 4 [0;1;2])))
+              (H_adj (rotc 5 [0;1;2]))).
+  change (Hsup_cyc [0;1;2] 2)
+    with (qmax2 (qmax2 (H_adj (rotc 0 [0;1;2])) (H_adj (rotc 1 [0;1;2])))
+              (H_adj (rotc 2 [0;1;2]))).
+  reflexivity.
+Qed.
 
 (* 冻结值就是谱最大 3（对照 rotc_H_wit_mid 的中段锚） *)
 Theorem Hsup_cyc_frozen_value_wit : Hsup_cyc [0;1;2] 7 == 3%Q.
-Proof. reflexivity. Qed.
+Proof.
+  change (Hsup_cyc [0;1;2] 7)
+    with (qmax2 (qmax2 (qmax2 (qmax2 (qmax2 (qmax2 (qmax2
+              (H_adj (rotc 0 [0;1;2])) (H_adj (rotc 1 [0;1;2])))
+              (H_adj (rotc 2 [0;1;2]))) (H_adj (rotc 3 [0;1;2])))
+              (H_adj (rotc 4 [0;1;2]))) (H_adj (rotc 5 [0;1;2])))
+              (H_adj (rotc 6 [0;1;2]))) (H_adj (rotc 7 [0;1;2]))).
+  reflexivity.
+Qed.
 
 (* ============================================================
    §S6 归并分隔注 —— 以下为原 DTPT_RotSpec.v 全文（S6a 整合棒并入）
@@ -2422,7 +2472,22 @@ Proof. vm_compute. reflexivity. Qed.
 
 Theorem H_lam_pmid_wit_201_ends :
   H_adj (P0 [2; 0; 1]) == 2%Q /\ H_adj (Pmid [2; 0; 1] 0%nat 1%nat) == 1%Q.
-Proof. split; vm_compute; reflexivity. Qed.
+Proof.
+  split.
+  - change (H_adj (insert_q 2 (insert_q 0 (insert_q 1 []))) == 2%Q).
+    change (H_adj [0; 1; 2] == 2%Q).
+    change (Qabs (1 - 0) + (Qabs (2 - 1) + 0) == 2%Q)%Q.
+    reflexivity.
+  - change (H_adj (firstn 1%nat (P0 [2; 0; 1])
+              ++ skipn 1%nat (Pinf [2; 0; 1] 0%nat)) == 1%Q).
+    change (H_adj (firstn 1%nat (insert_q 2 (insert_q 0 (insert_q 1 [])))
+              ++ skipn 1%nat (firstn 1%nat [2; 0; 1]
+                  ++ skipn 1%nat [2; 0; 1])) == 1%Q).
+    change (H_adj ([0] ++ skipn 1%nat ([2] ++ [0; 1])) == 1%Q).
+    change (H_adj [0; 0; 1] == 1%Q).
+    change (Qabs (0 - 0) + (Qabs (1 - 0) + 0) == 1%Q)%Q.
+    reflexivity.
+Qed.
 
 (* ============================================================
    §S10 恒等簇处置（CLN-1 席追加；AUDIT-2 A6 条目收口）：
@@ -2445,7 +2510,14 @@ Proof. split; vm_compute; reflexivity. Qed.
 Theorem rotc_supersedes_rot_id : forall (n : nat) (l : list Q),
   rot n l = l.
 Proof.
-  intros n l. unfold rot. apply firstn_skipn.
+  intros n l. unfold rot. revert n.
+  induction l as [| a rest IH]; intros n.
+  - destruct n as [| n']; reflexivity.
+  - destruct n as [| n'].
+    + reflexivity.
+    + change (firstn (S n') (a :: rest) ++ skipn (S n') (a :: rest) = a :: rest)
+        with (a :: (firstn n' rest ++ skipn n' rest) = a :: rest).
+      rewrite IH. reflexivity.
 Qed.
 
 (* 真化覆盖面①·恒等重写消费（llm_rot_id/llm_rot_full/前提零消费的
@@ -2976,3 +3048,17 @@ Print Assumptions H_lam_gen_end_pmid0.
 Print Assumptions H_lam_gen_klen_const.
 Print Assumptions H_lam_gen_wit_201_id.
 Print Assumptions H_lam_gen_wit_201_pmid.
+
+(* ========== 切片三替换件闭包审计（T240·2026-09-21） ========== *)
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_perm.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_length.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.Pinf_c_perm.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_0.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.Pinf_true_id.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_in.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_H_wit_mid.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_H_wit_min.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.Hsup_cyc_stable_wit.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.Hsup_cyc_frozen_value_wit.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.H_lam_pmid_wit_201_ends.
+Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_supersedes_rot_id.

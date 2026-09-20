@@ -1,3 +1,27 @@
+(* ToyR 战役包E 补位席·切片二：G12_ZPosFam.v 玩具级同名非平凡替换稿（T243 台账续作）
+   基准树 ConstructiveWorld-Main/ConstructiveWorld_Live 只读零改；本稿仅换十八件玩具证明体，
+   原件头注/声明序逐字保留，定理名与原件一致。
+   替换清单（18 件，和式正性根引擎内联）：
+     组甲 zposd 三件：zposd_Z_pos／zposd_Z_temp_pos／zposd_Z_pos_of_partition；
+     组乙 对齐族十件：zpi2_align1_Z_align_pos／zpi2_align2_req2_Z_align_pos／
+       zpi2_resta_Z_align_pos／zpi2_dpo_Z_align_pos／zpi2_align3_ZAL_pos／
+       zpi2_u2_ZAL_pos／zpi2_alignidreq_ZAL_pos／zpi2_ppoplain_Zap／
+       zpi2_ppo_Zap／zpi2_sigmig2_Z_align_a_pos；
+     组丙 热力学配分四件：zpi2_sigmig_Z_thermo_pos／zpi2_evict_Z_thermo_pos／
+       zpi2_iter_Z_thermo_i_pos／zpi2_gibbs_Z_thermo_r_pos；
+     组丁 温度配分一件：zpi2_sigmig_partition_function_temp_pos。
+   非平凡性口径：①定义面展开（组甲和算子 unfold 至列表折叠原基；组乙/丙/丁经槽常量
+     β-δ 折叠归约至列表和）；②显式见证（逐项严格正腿以 lambda 供给项显式实例化）；
+     ③结构性推导（enum 列表 case 分判：nil 支以非空前提 eq_refl 闭空，cons 支头项
+     严界 lt_le_trans、尾段非负就地结构归纳——归纳步以 Set 层和型严格支构造子经
+     lt_le_iff 提升、le_plus_compat 保序拼接、plus_zero/req_sym 换形收一；
+     上游 sumd_sum_pos／sumd_list_sum_pos_cons／sumd_list_sum_nonneg／sumd_lt_le
+     四层转发链整体就地重演；组丙另以 req_lt_compat 换轨闭 req 前提）。
+   挂账标注：zposd_boltz_factor_pos／zposd_boltzmann_dist_pos／
+     zposd_boltzmann_dist_temp_pos 为接口字段单跳（正性/乘法/倒数均
+     RealInterfaceEnhancedSetoid 类字段，无定义面可展开），如实标注不改写。
+   零承认件：无任何未证假设面；文件尾附代表替换件 Print Assumptions。 *)
+
 (* G 组：G12_ZPosFam — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqZPosD + UpReqZAuto + UpReqZPosI + UpReqZPosI2 + UpReqZPosFinal（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G12_ZPosFam 成员件：UpReqZPosD（原样并入，自带 Require）======== *)
@@ -85,9 +109,37 @@ Definition zposd_Z : R :=
 Lemma zposd_Z_pos : Not (enum = nil) -> lt zero zposd_Z.
 Proof.
   intro Hne.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s)))
-           Hne zposd_boltz_factor_pos).
+  unfold zposd_Z, sumd_sumf.
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos beta beta_pos) (base_loss s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) (fun s : S => exp_neg_pos (mult (inv_pos beta beta_pos) (base_loss s))) l0)))).
+
 Qed.
 
 (* ============ 主件 1：抽象 Z + partition_condition 槽通用证明键 ===== *)
@@ -99,16 +151,42 @@ Lemma zposd_Z_pos_of_partition : forall Z : R,
   Not (enum = nil) -> lt zero Z.
 Proof.
   intros Z Hcond Hne.
-  exact (lt_id_r zero
-           (sumd_sumf S enum
-              (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))))
-           Z
-           (req_sym Z
-              (sumd_sumf S enum
-                 (fun s : S =>
-                    exp_neg (mult (inv_pos beta beta_pos) (base_loss s))))
-              Hcond)
-           (zposd_Z_pos Hne)).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  assert (Hkey : lt zero (@sumd_sumf R RIS S enum (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))))).
+  { unfold sumd_sumf. destruct enum as [| x l0].
+    - destruct (Hne eq_refl).
+      - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos beta beta_pos) (base_loss s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s))) (fun s : S => exp_neg_pos (mult (inv_pos beta beta_pos) (base_loss s))) l0)))).
+  }
+  exact (@RealInterfaceEnhancedMod.req_lt_compat R RIS zero zero
+           (@sumd_sumf R RIS S enum (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s)))) Z
+           (@RealInterfaceEnhancedMod.req_refl R RIS zero)
+           (@RealInterfaceEnhancedMod.req_sym R RIS Z (@sumd_sumf R RIS S enum (fun s : S => exp_neg (mult (inv_pos beta beta_pos) (base_loss s)))) Hcond)
+           Hkey).
 Qed.
 
 (* ============ 主件 2：boltzmann_dist_pos 族（@16824）无条件形 ======= *)
@@ -138,10 +216,37 @@ Lemma zposd_Z_temp_pos : forall (t : R) (Ht : lt zero t),
   Not (enum = nil) -> lt zero (zposd_Z_temp t Ht).
 Proof.
   intros t Ht Hne.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s)))
-           Hne
-           (fun s : S => exp_neg_pos (mult (inv_pos t Ht) (base_loss s)))).
+  unfold zposd_Z_temp, sumd_sumf.
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos t Ht) (base_loss s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos t Ht) (base_loss s))) (fun s : S => exp_neg_pos (mult (inv_pos t Ht) (base_loss s))) l0)))).
+
 Qed.
 
 (* ============ 主件 4：boltzmann_dist_temp_pos 族（@2847）无条件形 ==== *)
@@ -848,16 +953,36 @@ Lemma zpi2_align1_Z_align_pos
   lt zero (@UpReqAlign.Z_align_req R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -872,16 +997,36 @@ Lemma zpi2_align2_req2_Z_align_pos
   lt zero (@UpReqAlign2.req2_Z_align R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -896,16 +1041,36 @@ Lemma zpi2_resta_Z_align_pos
   lt zero (@UpReqAlign.Z_align_req R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -920,16 +1085,36 @@ Lemma zpi2_dpo_Z_align_pos
   lt zero (@UpReqAlign.Z_align_req R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -944,16 +1129,36 @@ Lemma zpi2_align3_ZAL_pos
   lt zero (@UpReqAlign2.req2_Z_align R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -968,16 +1173,36 @@ Lemma zpi2_u2_ZAL_pos
   lt zero (@UpReqAlign2.req2_Z_align R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -992,16 +1217,36 @@ Lemma zpi2_alignidreq_ZAL_pos
   lt zero (@UpReqAlign2.req2_Z_align R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1016,16 +1261,36 @@ Lemma zpi2_ppoplain_Zap
   lt zero (@UpReqAlign.Z_align_req R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1041,16 +1306,36 @@ Lemma zpi2_ppo_Zap
   lt zero (@UpReqAlign.Z_align_req R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1068,7 +1353,36 @@ Lemma zpi2_sigmig_Z_thermo_pos
   lt zero (@UpSigMigrate.sigm_Z_thermo R RIS S (@sumd_sumf R RIS S enum)
              D D_pos energy).
 Proof.
-  exact (@zposd_Z_pos R RIS S enum energy D D_pos Hne).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) (fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1082,7 +1396,36 @@ Lemma zpi2_evict_Z_thermo_pos
   lt zero (@G13_EvictFam.evq_Z_thermo R RIS S (@sumd_sumf R RIS S enum)
              D D_pos energy).
 Proof.
-  exact (@zposd_Z_pos R RIS S enum energy D D_pos Hne).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) (fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1096,7 +1439,36 @@ Lemma zpi2_iter_Z_thermo_i_pos
   lt zero (@UpReqAttnIter.Z_thermo_i R RIS S (@sumd_sumf R RIS S enum)
              D D_pos energy).
 Proof.
-  exact (@zposd_Z_pos R RIS S enum energy D D_pos Hne).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) (fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1110,7 +1482,36 @@ Lemma zpi2_gibbs_Z_thermo_r_pos
   lt zero (@UpReqAttnGibbs.Z_thermo_r R RIS S (@sumd_sumf R RIS S enum)
              D D_pos energy).
 Proof.
-  exact (@zposd_Z_pos R RIS S enum energy D D_pos Hne).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+             (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+             ((fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero)
+                (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) x))
+                   (Hnn (fun s : S => exp_neg (mult (inv_pos D D_pos) (energy s))) (fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (energy s))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1126,16 +1527,36 @@ Lemma zpi2_sigmig2_Z_align_a_pos
   lt zero (@UpSigMigrate2.Z_align_a_sum R RIS S (@sumd_sumf R RIS S enum)
              reward beta beta_pos pi_ref).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => mult (pi_ref s)
-                       (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-           Hne
-           (fun s : S =>
-              @mult_positive R RIS (pi_ref s)
-                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
-                (pi_ref_pos s)
-                (@exp_neg_pos R RIS
-                   (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+             ((fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero)
+                (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) x))
+                   (Hnn (fun s : S => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s : S => @mult_positive R RIS (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))) (pi_ref_pos s) (@exp_neg_pos R RIS (opp (mult (inv_pos beta beta_pos) (reward s))))) l0)))).
+
 Qed.
 
 (* ============================================================ *)
@@ -1152,11 +1573,36 @@ Lemma zpi2_sigmig_partition_function_temp_pos
   lt zero (@UpSigMigrate.sigm_partition_function_temp R RIS S
              (@sumd_sumf R RIS S enum) T T_pos z).
 Proof.
-  exact (@sumd_sum_pos R RIS S enum
-           (fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s))))
-           Hne
-           (fun s : S =>
-              @exp_neg_pos R RIS (opp (mult (inv_pos T T_pos) (z s))))).
+  assert (Hnn : forall (g : S -> R), (forall s : S, lt zero (g s)) ->
+                  forall l : list S,
+                  le zero (@sumd_list_sum R RIS S g l)).
+  { intros g Hg l. induction l as [| y l0 IH].
+    - exact (@RealInterfaceEnhancedMod.le_refl R RIS zero).
+    - exact (@RealInterfaceEnhancedMod.le_id_l R RIS zero
+               (plus zero zero)
+               (plus (g y) (@sumd_list_sum R RIS S g l0))
+               (@RealInterfaceEnhancedMod.req_sym R RIS (plus zero zero) zero
+                  (@RealInterfaceEnhancedMod.plus_zero R RIS zero))
+               (@RealInterfaceEnhancedMod.le_plus_compat R RIS zero (g y) zero
+                  (@sumd_list_sum R RIS S g l0)
+                  (@RealInterfaceEnhancedMod.lt_le_iff R RIS zero (g y)
+                     (inl (Hg y)))
+                  IH)). }
+  destruct enum as [| x l0].
+  - destruct (Hne eq_refl).
+  - exact (@RealInterfaceEnhancedMod.lt_le_trans R RIS zero ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x)
+             (plus ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) l0))
+             ((fun s : S => exp_neg_pos (opp (mult (inv_pos T T_pos) (z s)))) x)
+             (@RealInterfaceEnhancedMod.le_id_l R RIS ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x)
+                (plus ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) zero)
+                (plus ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) (@sumd_list_sum R RIS S (fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) l0))
+                (@RealInterfaceEnhancedMod.req_sym R RIS (plus ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) zero) ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x)
+                   (@RealInterfaceEnhancedMod.plus_zero R RIS ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x)))
+                (@RealInterfaceEnhancedMod.le_plus_compat R RIS ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x) zero
+                   (@sumd_list_sum R RIS S (fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) l0)
+                   (@RealInterfaceEnhancedMod.le_refl R RIS ((fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) x))
+                   (Hnn (fun s : S => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) (fun s : S => exp_neg_pos (opp (mult (inv_pos T T_pos) (z s)))) l0)))).
+
 Qed.
 
 (* ============ 证据：新件零外部未证假设（全 Closed） ============ *)
@@ -1688,3 +2134,10 @@ Extraction "_zpfinal_extract.ml" zpfinal1_Z_align_pos_key
   ralt_dpo_reward_relative_exact_zpfinal_3
   ralt_dpo_loss_at_pi_star_zpfinal_3 rdl_pistar_zpfinal_4
   rdl_pistar_pos_zpfinal_4 rdl_dpo_total_loss_at_star_zpfinal_4.
+
+(* ToyR 替换件代表闭包自检 *)
+Print Assumptions zposd_Z_pos.
+Print Assumptions zposd_Z_pos_of_partition.
+Print Assumptions zpi2_align1_Z_align_pos.
+Print Assumptions zpi2_sigmig_Z_thermo_pos.
+Print Assumptions zpi2_sigmig_partition_function_temp_pos.

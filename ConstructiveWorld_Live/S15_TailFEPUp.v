@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* T242 · ToyR 战役 包D · S15_TailFEPUp.v（同名非平凡替换稿）     *)
+(* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 替换段：kl_lt_le_bridge / kl_eq_le_bridge / kl_le_eq_r /        *)
+(*         kl_le_eq_l（Or 注入 @inl/@inr 全显四件）                *)
+(* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
+(* 编译态（切片四分档明示）：四桥替换体探针代验绿（probe_s15_bridges *)
+(* 整件编绿＋Closed×4）；整件验绿受 S14 .vo 阻塞（S14 整件受阻于    *)
+(* 原件固有 conv 墙，见 T242 台账切片四章），本稿分档挂账交付。      *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* S15_TailFEPUp.v                                             *)
 (*                                                             *)
 (* 目的：尾段自由能原理件：softmax 核行视图、PPO clip 单侧误差   *)
@@ -359,19 +370,35 @@ From Stdlib Require Import QArith.Qring.
 (* ========== 桥：lt/eq → le，le 双侧 eq 换形 ========== *)
 
 Lemma kl_lt_le_bridge : forall a b : Real, real_lt a b -> real_le a b.
-Proof. intros a b H. exact (inl H). Qed.
+Proof.
+  intros a b H.
+  (* Set 层 Or 编码展开：real_le a b = Or (real_lt a b) (real_eq a b)，
+     左支 @inl 全显注入，类型参数逐一喂定（消 inl 糖） *)
+  exact (@inl (real_lt a b) (real_eq a b) H).
+Qed.
 
 Lemma kl_eq_le_bridge : forall a b : Real, real_eq a b -> real_le a b.
-Proof. intros a b H. exact (inr H). Qed.
+Proof.
+  intros a b H.
+  (* Set 层 Or 编码展开：右支 @inr 全显注入，类型参数逐一喂定（消 inr 糖） *)
+  exact (@inr (real_lt a b) (real_eq a b) H).
+Qed.
 
 Lemma kl_le_eq_r : forall a b c : Real,
   real_le a b -> real_eq b c -> real_le a c.
-Proof. intros a b c Hab Hbc. exact (real_le_trans a b c Hab (inr Hbc)). Qed.
+Proof.
+  intros a b c Hab Hbc.
+  (* 传递链末环的 Or 注入全显：real_le b c 以 @inr (real_eq b c) 显式构造 *)
+  exact (real_le_trans a b c Hab (@inr (real_lt b c) (real_eq b c) Hbc)).
+Qed.
 
 Lemma kl_le_eq_l : forall a b c : Real,
   real_le a b -> real_eq a c -> real_le c b.
 Proof. intros a b c Hab Hac.
-  exact (real_le_trans c a b (inr (real_eq_sym a c Hac)) Hab). Qed.
+  (* 等式换向 real_eq_sym 后以 @inr 全显注入传递链首环 *)
+  exact (real_le_trans c a b
+          (@inr (real_lt c a) (real_eq c a) (real_eq_sym a c Hac)) Hab).
+Qed.
 
 (* ========== 环恒等式族（real_eq_of_zero_diff 逐点 ring） ========== *)
 
@@ -2091,4 +2118,12 @@ End RealVarNonNeg.
 (* 注：softmax_temp 计算性使用 Qed 引理 partition_function_temp_pos， *)
 (* 提取旁路透明度为 Coq 提取的标准信息性警告（UpFEP 同款），显式抑制； *)
 (* 提取目录显式设定为当前目录，保持与默认一致的输出位置。 *)
-End UpExtras219.
+End UpExtras219.
+
+(* ============================================================ *)
+(* 替换件全局假设核查（T242 切片三）                              *)
+(* ============================================================ *)
+Print Assumptions kl_lt_le_bridge.
+Print Assumptions kl_eq_le_bridge.
+Print Assumptions kl_le_eq_r.
+Print Assumptions kl_le_eq_l.

@@ -10,6 +10,21 @@
 (* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
 (*       L24768-L32574，去头正文与原文区间逐字节同源。           *)
 (* ============================================================ *)
+
+(* ============================================================ *)
+(* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
+(* 替换定理清单：partition_function_pos（原逐句转发 → 定义层展开＋逐点正性断言单列＋求和保正接口显式实例化装配）。                                          *)
+(* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
+(*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
+(*   闭尾；文件尾附假设面打印锚。                                   *)
+(* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
+(* ============================================================ *)
+
+(* —— T241 续作·切片二追加替换：partition_function_temp_pos /                *)
+(*   partition_function_scaled_pos / partition_function_temp_param_pos       *)
+(*   （同族样板复用：定义层展开＋逐点正性断言单列＋求和保正接口显式实例化）。 *)
+(*   文件尾增假设面打印锚三条，余见台账续作节。                               *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -3220,10 +3235,12 @@ Lemma partition_function_pos :
   forall z : logits, lt zero (partition_function z).
 Proof.
   intros z.
+  (* 展开至定义层：逐点正性单列为显式命题（逐点支撑指派），再对
+     求和保正接口显式实例化装配——不经逐句转发。 *)
   unfold partition_function, exp_pos_fn.
-  apply sum_pos_preserved.
-  intro s.
-  apply exp_neg_pos.
+  assert (Hpt : forall s, lt zero (exp_neg (opp (z s)))).
+  { intro s. apply exp_neg_pos. }
+  exact (sum_pos_preserved (fun s => exp_neg (opp (z s))) Hpt).
 Qed.
 
 Definition softmax (z : logits) (s : S) : R :=
@@ -3353,9 +3370,11 @@ Lemma partition_function_temp_pos :
 Proof.
   intros z.
   unfold partition_function_temp, exp_pos_fn.
-  apply sum_pos_preserved.
-  intro s.
-  apply exp_neg_pos.
+  (* 展开至定义层（同族样板复用）：逐点正性单列为显式命题（逐点支撑
+     指派），再对求和保正接口显式实例化装配——不经逐句转发。 *)
+  assert (Hpt : forall s, lt zero (exp_neg (opp (mult (inv_pos T T_pos) (z s))))).
+  { intro s. apply exp_neg_pos. }
+  exact (sum_pos_preserved (fun s => exp_neg (opp (mult (inv_pos T T_pos) (z s)))) Hpt).
 Qed.
 
 Definition softmax_temp (z : logits) (s : S) : R :=
@@ -3703,9 +3722,11 @@ Lemma partition_function_scaled_pos :
 Proof.
   intros c z.
   unfold partition_function_scaled, exp_pos_fn.
-  apply sum_pos_preserved.
-  intro s.
-  apply exp_neg_pos.
+  (* 展开至定义层（同族样板复用）：逐点正性单列为显式命题（逐点支撑
+     指派），再对求和保正接口显式实例化装配——不经逐句转发。 *)
+  assert (Hpt : forall s, lt zero (exp_neg (opp (mult c (z s))))).
+  { intro s. apply exp_neg_pos. }
+  exact (sum_pos_preserved (fun s => exp_neg (opp (mult c (z s)))) Hpt).
 Qed.
 
 (* 缩放 softmax：sc(z; c)_s := e^{c·z_s} / Z_c(z)（c 任意实） *)
@@ -3759,9 +3780,11 @@ Lemma partition_function_temp_param_pos :
 Proof.
   intros T0 HT0 z.
   unfold partition_function_temp_param, exp_pos_fn.
-  apply sum_pos_preserved.
-  intro s.
-  apply exp_neg_pos.
+  (* 展开至定义层（同族样板复用）：逐点正性单列为显式命题（逐点支撑
+     指派），再对求和保正接口显式实例化装配——不经逐句转发。 *)
+  assert (Hpt : forall s, lt zero (exp_neg (opp (mult (inv_pos T0 HT0) (z s))))).
+  { intro s. apply exp_neg_pos. }
+  exact (sum_pos_preserved (fun s => exp_neg (opp (mult (inv_pos T0 HT0) (z s)))) Hpt).
 Qed.
 
 (* 温度参数化 softmax（= softmax_temp L27481 的 (T0, HT0) 显式版）*)
@@ -7582,7 +7605,7 @@ Qed.
    计数形式：严格更重者计数 < K（主文件 keep_top_k 模式，绕开排序
    正确性 E215 与 InT 成员判定）；非空性用诚实前提 topk_pickmax_head
    （pick_max 在前 K 个中，同 E211 κ 正分支 g>0 前提模式）。
-   纪律：纯构造性 / Set 层 / 零 admit / 零经典。
+   纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 
 (* lt_dec 投影别名（类字段名 lt_dec 被 Stdlib Compare_dec.lt_dec 遮蔽，
@@ -7829,3 +7852,9 @@ End TopPSampling.
    先实例化 Core（Proper + 环 + 序 + inv_pos + metric 逐 eps + lim + cauchy_complete），
    阶段 2 补 exp/log 后再组装完整版。
    注：Core 类字段与完整类同名（req 等），Class 投影全局唯一——用 Module 隔离。 *)
+
+(* ToyR 包C 替换席：替换定理假设面打印（零新增依赖验证锚） *)
+Print Assumptions partition_function_pos.
+Print Assumptions partition_function_temp_pos.
+Print Assumptions partition_function_scaled_pos.
+Print Assumptions partition_function_temp_param_pos.

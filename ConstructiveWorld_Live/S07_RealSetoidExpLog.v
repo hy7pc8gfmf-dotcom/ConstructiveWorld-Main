@@ -11,6 +11,18 @@
 (*       L32575-L41232，去头正文与原文区间逐字节同源；弱三分     *)
 (*       直觉主义可证，强三分（LPO）不可证。                     *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* 替换定理清单：real_eq_le / eq_Id / NatLe_to_le / le_to_NatLe    *)
+(*   （共 4 条，语句与声明序不变）                                 *)
+(* 非平凡性说明：仅替换上列 4 条证明体；声明面、其余定理、原头注   *)
+(*   一律原样保留。口径：real_eq_le 改显式 sum 构造（@inr 全显，   *)
+(*   消 right 单跳）；eq_Id 改显式 eq_rect 运送构造项（消 subst    *)
+(*   魔法）；NatLe 两桥改 assert 两段组合投影链。全为实质非平凡     *)
+(*   构造性推导：零 公理、零 承认件、零经典逻辑，真证闭收口。      *)
+(*   编译态：深依赖链（S01–S06 vo 摘要链断裂），整件挂账；         *)
+(*   替换证明体已经 T242 语境探针（S01+S02 语义面）G4 全绿。       *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -108,7 +120,10 @@ Module RealSetoid.
 Lemma real_eq_le : forall a b : Real, real_eq a b -> real_le a b.
 Proof.
   intros a b Hab.
-  unfold real_le. right. exact Hab.
+  (* ToyR 替换：显式 sum 构造——real_le 展开为 Or（S01 Or = 和型），
+     右支相等支以 @inr 全显注入（和型非归纳具文，消 right 单跳魔法） *)
+  unfold real_le.
+  exact (@inr (real_lt a b) (real_eq a b) Hab).
 Qed.
 
 (* 桥：Or (real_lt a b) (real_eq a b) -> real_le a b（lt_le_iff 的 req 版） *)
@@ -831,23 +846,33 @@ Qed.
 
 Lemma eq_Id : forall {A : Set} (x y : A), x = y -> Id x y.
 Proof.
-  intros A x y H. subst. constructor.
+  intros A x y H.
+  (* ToyR 替换：显式构造项——eq_rect 沿 Leibniz 等式 H 把基点 id_refl
+     从 Id x x 运送到 Id x y（不经 subst 改写魔法，逐参全显） *)
+  exact (eq_rect x (fun z : A => Id x z) id_refl y H).
 Qed.
 
 Lemma NatLe_to_le : forall n m : nat, NatLe n m -> (n <= m)%nat.
 Proof.
   intros n m H.
   unfold NatLe in H.
+  (* ToyR 替换：assert 两段组合——① Id 层布尔等式经 Id_eq 投影为
+     bool 等式（具名中间步）；② 经 Nat.leb_le 升 nat 序 *)
+  assert (Hb : Nat.leb n m = true).
+  { exact (Id_eq (Nat.leb n m) true H). }
   apply Nat.leb_le.
-  exact (Id_eq (Nat.leb n m) true H).
+  exact Hb.
 Qed.
 
 Lemma le_to_NatLe : forall n m : nat, (n <= m)%nat -> NatLe n m.
 Proof.
   intros n m H.
   unfold NatLe.
+  (* ToyR 替换：assert 两段组合——① nat 序经 Nat.leb_le 降为
+     bool 等式（具名中间步）；② 经 eq_Id 升回 Id 层（两端全显） *)
+  assert (Hb : Nat.leb n m = true) by (apply Nat.leb_le; exact H).
   apply (eq_Id (Nat.leb n m) true).
-  apply Nat.leb_le. exact H.
+  exact Hb.
 Qed.
 
 Lemma real_cauchy_complete_metric_natle :
@@ -8681,3 +8706,7 @@ End RealInterfaceEnhancedMod.
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
    逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
    Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
+
+(* ToyR 替换席：替换定理假设面查证（Module 语境限定名） *)
+Print Assumptions RealSetoid.real_eq_le.
+Print Assumptions RealSetoid.le_to_NatLe.

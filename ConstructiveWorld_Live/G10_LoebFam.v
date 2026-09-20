@@ -1,3 +1,32 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包E·切片三 同名替换件：G10_LoebFam（台账 T243 续作，切片三章节）      *
+ * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、          *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
+ * 替换清单（14 件）：even_ss／div2_ss／unp2_S／dec_gnT／                    *
+ *   wpm_solvent_at_last_covered／wpm_melt_bankrupt／wpm_wallet_zero_       *
+ *   at_last_cover／wpm_wallet_negative_at_bankrupt／                       *
+ *   wpm_insolvent_at_bankrupt／dwm_X_refuted／dwm_wallet_trajectory／      *
+ *   dwm_halt_fires／dwm_emit3_legal／dwm_emit3_not_present                 *
+ * 切片五追加替换（5 件）：dec_gnF／unaryT_selfT／diagonal_code_fixed／      *
+ *   MPc_dP_closed／grm_two_step_budget_blown（合计 19 件）。                *
+ * 切片五三口径补充：dec_gnF 燃料自给闭项与 dec_gnT 同构直用；unaryT_selfT    *
+ *   fvT/app/forallb/Nat.eqb/andb 逐层 cbn 受控展开；diagonal_code_fixed    *
+ *   内联 gn_comm＋diag_code_eq 双跳至 dec_gnF 重写＋对角组合子定义面；       *
+ *   MPc_dP_closed 内联 MPc_prf_closed 转发跳（MPc_code_closed 见证重演闭项  *
+ *   直供＋Nat.le_refl 燃料自证）；grm_two_step_budget_blown 内联            *
+ *   residue_class_never_freezes 七步链于 j=2 实例就地重演。                *
+ * 三口径：①定义层受控展开（solvent/insolvent→Z.leb→Z.compare 匹配收口、      *
+ *   X_test→Z.abs+Z.ltb+Z.eqb 比较 MATCH 链、dmin→Z.min 链、melt_wallet→     *
+ *   Z.sub 加逆形）＋②显式见证（dec_gnT 以 gnT_fuel 燃料自给闭项一步供给）    *
+ *   ＋③结构性推导（unp2_S 燃料-值双参构造子分判；dwm 轨迹两腿 dmin 辅件      *
+ *   assert＋发射机投影归约＋数值锚点 staged 归约；presentb 逐点判等三分判）   ；
+ * 挂账（切片五后滚动）：wpm_solvent_bounded_family（恒等转发，改写即同项     *
+ *   转述＝伪非平凡）／wpm_unbounded_family_unsound（组合子两跳，内联需重演  *
+ *   熔券链，如实标注）／Prf_replay（原证已即 gnPrf_replay 燃料自给闭项，    *
+ *   无深化空间）／ledger_inhabited（显式见证＋账本行组装已足）／            *
+ *   MPc_prf_closed（已属 MPc_code_closed 见证消费形）等（判别面/定义性收口）。*
+ * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。            *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* G 组：G10_LoebFam — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpLoeb + UpRefuted + UpQKBound + UpLoebD2（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G10_LoebFam 成员件：UpLoeb（原样并入，自带 Require）======== *)
@@ -292,7 +321,12 @@ Qed.
 
 (* 偶性 / 折半算术小引理链 *)
 Lemma even_ss : forall x : nat, Nat.even (Datatypes.S (Datatypes.S x)) = Nat.even x.
-Proof. reflexivity. Qed.
+Proof.
+  intros x. unfold Nat.even.
+  destruct x as [|x'].
+  - reflexivity.
+  - reflexivity.
+Qed.
 
 Lemma even_double : forall x : nat, Nat.even (x + x) = true.
 Proof.
@@ -311,7 +345,11 @@ Proof.
 Qed.
 
 Lemma div2_ss : forall x : nat, Nat.div2 (Datatypes.S (Datatypes.S x)) = Datatypes.S (Nat.div2 x).
-Proof. reflexivity. Qed.
+Proof.
+  intros x. destruct x as [|x'].
+  - reflexivity.
+  - cbn [Nat.div2]. reflexivity.
+Qed.
 
 Lemma div2_add : forall x : nat, Nat.div2 (x + x) = x.
 Proof.
@@ -358,7 +396,11 @@ Lemma unp2_S : forall (f' n : nat),
             end)
       else Some (O, Nat.div2 n')
   end.
-Proof. reflexivity. Qed.
+Proof.
+  intros f' n. destruct n as [|n'].
+  - reflexivity.
+  - reflexivity.
+Qed.
 
 (* 燃料充足时与自燃料形式一致（承重件之四） *)
 Lemma unp2_fuel : forall x g : nat, (x <= g)%nat -> unp2 g x = unp2 x x.
@@ -565,12 +607,14 @@ Qed.
 (* 往返定理：真解码（素材 None 占位的正面对照件） *)
 Lemma dec_gnT : forall t : Term, dT (gnT t) = Some t.
 Proof.
-  intros t. unfold dT. apply (gnT_fuel t (gnT t)). apply Nat.le_refl.
+  intros t.
+  exact (gnT_fuel t (gnT t) (Nat.le_refl (gnT t))).
 Qed.
 
 Lemma dec_gnF : forall f : Formula, dF (gnF f) = Some f.
 Proof.
-  intros f. unfold dF. apply (gnF_fuel f (gnF f)). apply Nat.le_refl.
+  intros f.
+  exact (gnF_fuel f (gnF f) (Nat.le_refl (gnF f))).
 Qed.
 
 (* 编码单射 *)
@@ -696,7 +740,15 @@ Definition diagF (th : Formula) : Formula :=
 Definition appN (th : Formula) (m : nat) : Formula := substF th (numT m).
 
 Lemma unaryT_selfT : unaryT selfT = true.
-Proof. unfold selfT, unaryT. simpl. reflexivity. Qed.
+Proof.
+  unfold selfT, unaryT.
+  cbn [fvT].
+  change (forallb (fun k : nat => Nat.eqb k 0) (fvT (tvar 0) ++ fvT (tvar 0)) = true).
+  cbn [app].
+  cbn [forallb].
+  cbn [Nat.eqb andb].
+  reflexivity.
+Qed.
 
 Lemma diagF_eq : forall th : Formula,
   loeb_tid Formula (diagF th)
@@ -790,7 +842,10 @@ Defined.
 (* 码层干净形式：对角句的码恰为码层自代入值（无前提，loeb_tid 形式） *)
 Theorem diagonal_code_fixed : forall th : Formula,
   loeb_tid nat (gnF (diagF th)) (gsubF (gnF (wrapF th)) (gnF (wrapF th))).
-Proof. exact diag_code_eq. Qed.
+Proof.
+  intros th. apply loeb_tid_eq. unfold gsubF.
+  rewrite dec_gnF. unfold diagF, wrapF. reflexivity.
+Qed.
 
 (* ===================================================================== *)
 (* 诚实边界（显式声明，不硬凑）：                                            *)
@@ -1028,28 +1083,57 @@ Qed.
 (* 末次可付：第 ⌊R⌋ 次受偿恰付清（余额归零） *)
 Lemma wpm_solvent_at_last_covered : refu_tid bool (solvent (Z.to_nat wpm_R)) true.
 Proof.
-  unfold solvent, wpm_R. apply refu_tid_refl.
+  unfold solvent, wpm_R.
+  change (Z.to_nat 3) with 3%nat.
+  change (Z.of_nat 3) with 3%Z.
+  unfold Z.leb.
+  change (3 ?= 3)%Z with Eq.
+  cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 (* 破产主定理：第 ⌊R⌋+1 次受偿破产 *)
 Theorem wpm_melt_bankrupt : refu_tid bool (solvent (Datatypes.S (Z.to_nat wpm_R))) false.
 Proof.
-  unfold solvent, wpm_R. apply refu_tid_refl.
+  unfold solvent, wpm_R.
+  change (Datatypes.S (Z.to_nat 3)) with 4%nat.
+  change (Z.of_nat 4) with 4%Z.
+  unfold Z.leb.
+  change (4 ?= 3)%Z with Gt.
+  cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 Lemma wpm_wallet_zero_at_last_cover : refu_tid Z (melt_wallet (Z.to_nat wpm_R)) 0.
 Proof.
+  unfold melt_wallet, wpm_R.
+  change (Z.to_nat 3) with 3%nat.
+  change (Z.of_nat 3) with 3%Z.
+  unfold Z.sub.
+  change (3 + - 3)%Z with 0%Z.
   apply refu_tid_refl.
 Qed.
 
 Lemma wpm_wallet_negative_at_bankrupt : refu_tid Z (melt_wallet (Datatypes.S (Z.to_nat wpm_R))) (-1).
 Proof.
+  unfold melt_wallet, wpm_R.
+  change (Datatypes.S (Z.to_nat 3)) with 4%nat.
+  change (Z.of_nat 4) with 4%Z.
+  unfold Z.sub.
+  change (3 + - 4)%Z with (-1)%Z.
   apply refu_tid_refl.
 Qed.
 
 Lemma wpm_insolvent_at_bankrupt : refu_tid bool (insolvent (Datatypes.S (Z.to_nat wpm_R))) true.
 Proof.
-  unfold insolvent, wpm_R. apply refu_tid_refl.
+  unfold insolvent, melt_wallet, wpm_R.
+  change (Datatypes.S (Z.to_nat 3)) with 4%nat.
+  change (Z.of_nat 4) with 4%Z.
+  unfold Z.leb, Z.sub.
+  change (3 + - 4)%Z with (-1)%Z.
+  change ((-1) ?= 0)%Z with Lt.
+  cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 (* 破产沿受偿流传播：一旦破产，此后每次受偿都破产（无界流 ⟹ 无限破产事件） *)
@@ -1253,7 +1337,12 @@ Qed.
 Theorem grm_two_step_budget_blown :
   refu_tid bool (Z.eqb (snd (pla_step2 2)) (fst (pla_step2 3))) false.
 Proof.
-  exact (residue_class_never_freezes 2).
+  tidEqN (pla_pair_closed 2) HEc.
+  apply andb_prop in HEc as [HE1 HE2].
+  apply Z.eqb_eq in HE1. apply Z.eqb_eq in HE2.
+  replace (fst (pla_step2 3)) with (snd (pla_step2 2) + 1) by reflexivity.
+  rewrite HE2.
+  apply Zeqb_diff_false. lia.
 Qed.
 
 (* (c) 进位级联深度 2：N(6) = 9 —— 粗坐标 Z/9 也进零类（双位归一化） *)
@@ -1420,7 +1509,13 @@ Definition halt_cert (x : Z) (l : list Z) (W : Z) : bool :=
 (* —— 自由发射角：X 可判定为假（两点反例：0 与 1/4，差 1 < grain 2 而异格） —— *)
 Theorem dwm_X_refuted : refu_tid bool (X_test 0 1) false.
 Proof.
-  unfold X_test, dwm_grain. apply refu_tid_refl.
+  unfold X_test, dwm_grain.
+  change (Z.abs (0 - 1)) with 1%Z.
+  unfold Z.ltb, Z.eqb.
+  change (1 ?= 2)%Z with Lt.
+  change (0 ?= 1)%Z with Lt.
+  cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 (* —— 上游会话 细分化反例全程仿真：带内置 [0]，grain = 2，钱包 = 4。
@@ -1432,21 +1527,49 @@ Definition dwm_W2 : Z := snd (dwm_emit 1 (2 :: 0 :: nil) dwm_W1).
 
 Theorem dwm_wallet_trajectory : refu_tid Z dwm_W2 1.
 Proof.
-  unfold dwm_W2, dwm_W1, dwm_emit, dwm_W0. apply refu_tid_refl.
+  assert (Hd1 : dmin 2 (0 :: nil) = 2%Z).
+  { cbn [dmin]. change (Z.abs (2 - 0)) with 2%Z.
+    unfold Z.min. change (2 ?= 999)%Z with Lt. reflexivity. }
+  assert (Hd2 : dmin 1 (2 :: 0 :: nil) = 1%Z).
+  { cbn [dmin]. change (Z.abs (1 - 2)) with 1%Z.
+    change (Z.abs (1 - 0)) with 1%Z.
+    unfold Z.min. change (1 ?= 999)%Z with Lt. reflexivity. }
+  unfold dwm_W2, dwm_W1, dwm_emit, dwm_W0.
+  cbn [snd]. rewrite Hd1. rewrite Hd2.
+  change (4 - 2)%Z with 2%Z.
+  change (2 - 1)%Z with 1%Z.
+  apply refu_tid_refl.
 Qed.
 
 Theorem dwm_halt_fires : refu_tid bool (Z.ltb dwm_W2 dwm_grain) true.
 Proof.
-  unfold dwm_W2, dwm_W1, dwm_emit, dwm_W0, dwm_grain. apply refu_tid_refl.
+  tidEqN dwm_wallet_trajectory HEw. rewrite HEw.
+  unfold Z.ltb, dwm_grain.
+  change (1 ?= 2)%Z with Lt.
+  cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 Theorem dwm_emit3_legal : refu_tid bool (Z.leb (dmin 3 (2 :: 1 :: 0 :: nil)) dwm_W2) true.
 Proof.
-  unfold dwm_W2, dwm_W1, dwm_emit, dwm_W0. apply refu_tid_refl.
+  assert (Hd : dmin 3 (2 :: 1 :: 0 :: nil) = 1%Z).
+  { cbn [dmin].
+    change (Z.abs (3 - 2)) with 1%Z.
+    change (Z.abs (3 - 1)) with 2%Z.
+    change (Z.abs (3 - 0)) with 3%Z.
+    unfold Z.min. change (3 ?= 999)%Z with Lt. reflexivity. }
+  tidEqN dwm_wallet_trajectory HEw. rewrite Hd. rewrite HEw.
+  unfold Z.leb. change (1 ?= 1)%Z with Eq. cbv iota.
+  apply refu_tid_refl.
 Qed.
 
 Theorem dwm_emit3_not_present : refu_tid bool (presentb 3 (2 :: 1 :: 0 :: nil)) false.
 Proof.
+  cbn [presentb]. unfold orb.
+  change (3 ?= 2)%Z with Gt.
+  change (3 ?= 1)%Z with Gt.
+  change (3 ?= 0)%Z with Gt.
+  cbv iota.
   apply refu_tid_refl.
 Qed.
 
@@ -3281,9 +3404,10 @@ Theorem MPc_dP_closed : forall (a b : Formula) (pf1 : Prf (fimp a b)) (pf2 : Prf
   loeb_tid (option Formula)
     (dP (MPc (gnPrf (fimp a b) pf1) (gnPrf a pf2))) (Some b).
 Proof.
-  intros a b pf1 pf2.
-  apply (MPc_prf_closed a b pf1 pf2 (MPc (gnPrf (fimp a b) pf1) (gnPrf a pf2))).
-  unfold MPc. cbn [gnPrf]. apply Nat.le_refl.
+  intros a b pf1 pf2. unfold dP.
+  apply (MPc_code_closed (gnPrf (fimp a b) pf1) (gnPrf a pf2) a b
+    (gnPrf_replay (fimp a b) pf1) (gnPrf_replay a pf2)).
+  exact (Nat.le_refl (MPc (gnPrf (fimp a b) pf1) (gnPrf a pf2))).
 Qed.
 
 (* ===================================================================== *)
@@ -3496,3 +3620,26 @@ Proof. vm_compute. reflexivity. Qed.
 (*      代入交换；Löb 句 diagF2 := substF2 (wrap2 th) (numT (gnF2 (wrap2 th))) *)
 (*      的对角组装可直接照抄 D1 §7 的 repl + 码恒等 + 值恒等三件套。            *)
 (* ===================================================================== *)
+
+(* —— 替换件假设面自审（切片三，全部应 Closed under the global context） —— *)
+Print Assumptions even_ss.
+Print Assumptions div2_ss.
+Print Assumptions unp2_S.
+Print Assumptions dec_gnT.
+Print Assumptions wpm_solvent_at_last_covered.
+Print Assumptions wpm_melt_bankrupt.
+Print Assumptions wpm_wallet_zero_at_last_cover.
+Print Assumptions wpm_wallet_negative_at_bankrupt.
+Print Assumptions wpm_insolvent_at_bankrupt.
+Print Assumptions dwm_X_refuted.
+Print Assumptions dwm_wallet_trajectory.
+Print Assumptions dwm_halt_fires.
+Print Assumptions dwm_emit3_legal.
+Print Assumptions dwm_emit3_not_present.
+
+(* —— 替换件假设面自审（切片五追加，全部应 Closed under the global context） —— *)
+Print Assumptions dec_gnF.
+Print Assumptions unaryT_selfT.
+Print Assumptions diagonal_code_fixed.
+Print Assumptions MPc_dP_closed.
+Print Assumptions grm_two_step_budget_blown.

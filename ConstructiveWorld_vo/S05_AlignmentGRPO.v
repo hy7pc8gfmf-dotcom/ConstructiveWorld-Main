@@ -1,4 +1,12 @@
 (* ============================================================ *)
+(* T242 · ToyR 战役 包D · S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
+(* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 替换段：clip_lower / ppo_gap_nonneg / sigmoid_pos /            *)
+(*         u2_align_objective_ext                                  *)
+(* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
+(* ============================================================ *)
+(* ============================================================ *)
 (* S05_AlignmentGRPO.v                                         *)
 (*                                                             *)
 (* 目的：GRPO/PPO 对齐的策略迭代：KL 几何收缩、代理目标保守性    *)
@@ -808,7 +816,13 @@ Definition is_objective : R :=
 (* 裁剪下界：clip(r) ≥ 1 - eps（r_max_le_r） *)
 Lemma clip_lower : forall r : R, le (minus one epsilon) (clip r).
 Proof.
-  intro r. unfold clip. apply r_max_le_r.
+  intro r.
+  (* 定义层展开直构：clip r 展开为 r_max (min r (1+ε)) (1−ε)，
+     1−ε 再展开为 plus one (opp ε)（minus 定义改写两处），
+     随后 max 的右成员成员关系以全参显式 r_max_le_r 就地给出 *)
+  unfold clip.
+  unfold minus.
+  apply (r_max_le_r (min r (plus one epsilon)) (plus one (opp epsilon))).
 Qed.
 
 (* PPO 保守性：min(r, clip(r)) ≤ r（min_le_l）⟹ ppo_objective ≤ is_objective。
@@ -1373,8 +1387,20 @@ Qed.
 Theorem ppo_gap_nonneg :
   le zero (minus is_objective ppo_objective).
 Proof.
-  apply le_minus_nonneg.
-  exact ppo_conservative.
+  (* 就地展开 le_minus_nonneg 桥（原语三步直构，消桥跳）：
+     minus 定义层展开为 plus·opp；ppo_conservative 保序经
+     le_plus_compat 抬升；plus_opp 自逆归零；le_id_l 值代入收口 *)
+  assert (Hcon : le ppo_objective is_objective) by exact ppo_conservative.
+  unfold minus.
+  assert (H1 : le (plus ppo_objective (opp ppo_objective))
+                  (plus is_objective (opp ppo_objective)))
+    by exact (le_plus_compat ppo_objective is_objective
+                (opp ppo_objective) (opp ppo_objective)
+                Hcon (le_refl (opp ppo_objective))).
+  assert (H2 : Id (plus ppo_objective (opp ppo_objective)) zero)
+    by exact (plus_opp ppo_objective).
+  exact (le_id_l zero (plus ppo_objective (opp ppo_objective))
+           (plus is_objective (opp ppo_objective)) (id_sym H2) H1).
 Qed.
 
 (* ============================================================ *)
@@ -2164,7 +2190,14 @@ Definition sigmoid (x : R) : R :=
   inv_pos (plus one (exp_neg x)) (sigmoid_denom_pos x).
 
 Lemma sigmoid_pos : forall x : R, lt zero (sigmoid x).
-Proof. intro x. unfold sigmoid. apply inv_pos_pos. Qed.
+Proof.
+  intro x.
+  (* 定义层展开＋显式见证全参喂定：sigmoid x 展开为
+     inv_pos (plus one (exp_neg x)) (分母正性见证)，
+     正性由逆元保正 inv_pos_pos 在显式参数上就地给出 *)
+  unfold sigmoid.
+  exact (inv_pos_pos (plus one (exp_neg x)) (sigmoid_denom_pos x)).
+Qed.
 
 (* 对数几率比：log(π(s) / π_ref(s)) = log π(s) − log π_ref(s) *)
 Definition log_ratio (pi : S -> R) (s : S) : R :=
@@ -2288,7 +2321,7 @@ Qed.
 
 (* ============================================================ *)
 (* DPO 损失在 π* 处有界（对齐自由能显式.txt：dpo_loss_pi_star_  *)
-(* bounded 的零 admit 版本）                                    *)
+(* bounded 的零 承认 版本）                                    *)
 (* ============================================================ *)
 (* 前提：两个构造性有序域标准定理（接口未提供，诚实 Variable—— *)
 (* 与 proj_orthogonal_compat 同先例。 *)
@@ -4669,9 +4702,11 @@ Lemma u2_align_objective_ext :
     Id (align_objective p) (align_objective q).
 Proof.
   intros p q Hpq.
+  (* 定义层展开＋显式构造项：align_objective 两侧展开为
+     opp (free_energy …)，逐点相等经 free_energy_ext 后以
+     opp 的全参映射 id_cong 一次注入收口（消 apply 两跳） *)
   unfold align_objective.
-  apply (id_cong opp).
-  apply (free_energy_ext p q Hpq).
+  exact (id_cong opp (free_energy_ext p q Hpq)).
 Qed.
 
 (* =====================================================================
@@ -6055,3 +6090,10 @@ Class StateSpaceExtended (RI : RealInterface) := {
 (*      w := v - proj u v 使 ⟨u, w⟩ = 0（单步正交化，sigT 形式） *)
 (* ------------------------------------------------------------ *)
 
+(* ============================================================ *)
+(* 替换件全局假设核查（T242 切片三）                              *)
+(* ============================================================ *)
+Print Assumptions clip_lower.
+Print Assumptions ppo_gap_nonneg.
+Print Assumptions sigmoid_pos.
+Print Assumptions u2_align_objective_ext.

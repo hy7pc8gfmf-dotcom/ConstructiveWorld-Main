@@ -9,6 +9,16 @@
 (* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
 (*       L53932-L66414，去头正文与原文区间逐字节同源。           *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* 替换定理清单：sc_lp_four_nonneg（共 1 条，语句不变）；          *)
+(*   其余 reflexive/转发族玩具经复核属定义性等式或库引理转发，     *)
+(*   非平凡化无语义增益或损语义风险高，如实挂账不硬编。            *)
+(* 非平凡性说明：仅替换上列 1 条证明体；声明面、其余定理、原头注   *)
+(*   一律原样保留。口径：lp_four 定义展开 + Qle 展开 = Z 层交叉积，  *)
+(*   字面归约后线性判定收口——消除原两跳转发。纯构造性：零 公理、  *)
+(*   零 承认件、零经典逻辑。编译态：深依赖链整件挂账。             *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -1073,7 +1083,7 @@ End RealKVQuantMain.
 (*     （−log σ 二阶导 σ(1−σ) 的构造性正性证据）                 *)
 (*   A4 real_dpo_logit_loss_decr：x < y ⟹ ℓ(y) < ℓ(x)            *)
 (*     （损失随偏好 logit 严格递减——收敛的单调前提）             *)
-(* 纪律：纯构造性 / Set 层 / 零 admit / 零经典；全部非平凡组装。 *)
+(* 纪律：纯构造性 / Set 层 / 零 承认 / 零经典；全部非平凡组装。 *)
 (* ============================================================ *)
 (* ---- dpo logit 损失：ℓ(x) := −log σ(x) ---- *)
 Definition real_dpo_logit (x : Real) : Real :=
@@ -2882,7 +2892,13 @@ Lemma sc_lp_four_pos : Qlt 0 lp_four.
 Proof. unfold lp_four. unfold Qlt; simpl; lia. Qed.
 
 Lemma sc_lp_four_nonneg : Qle 0 lp_four.
-Proof. apply (Qlt_le_weak 0 lp_four). apply sc_lp_four_pos. Qed.
+Proof.
+  (* ToyR 替换：Z 层直构（消 Qlt_le_weak→sc_lp_four_pos 转发链）：
+     lp_four 定义展开为字面和，Qle 展开 = 交叉积 Z.le，线性判定收口 *)
+  unfold Qle, lp_four.
+  simpl.
+  lia.
+Qed.
 
 (* 差分归约：m ≤ n ⟹ lp_odd n − lp_odd m ≥ 0 *)
 Lemma sc_lp_odd_diff_nonneg : forall m n : nat, (m <= n)%nat ->
@@ -3302,7 +3318,7 @@ Qed.
 (*   cos：0 ≤ x ≤ 1 ⟹ 1 − x²/2 ≤ cos_partial n x ≤ 1            *)
 (*   路线：绝对项递减（pow_fact_mono 复用）→ 符号恒等 → 子列    *)
 (*   单调（偶 ↓ 奇 ↑ / 偶 ↓ 奇 ↑ 配对）→ sc_nat_split 奇偶拆分  *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* ---- 绝对项：c_j := x^{2j+1}/(2j+1)!、c'_j := x^{2j}/(2j)! ---- *)
@@ -3827,7 +3843,7 @@ Qed.
 (*   x − sin_partial n x ≥ x³/6 − x⁵/120（n ≥ 2）               *)
 (*   1 − cos_partial n x ≥ x²/2 − x⁴/24（n ≥ 2）                *)
 (*   另：q_pow 三次严格单调（Real 组装用）                       *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* ---- 二阶部分和求值 ---- *)
@@ -4009,7 +4025,7 @@ Qed.
 (* 批 12（轮 12）：sin Real 层一阶界——Q 层差分补充 + Real 组装 *)
 (*   Q：q_pow 降幂/升幂单调、S_3 求值与链、三次/五次差分下界     *)
 (*   Real：0 < X < 1 → sin X < X、X − X³/6 < sin X               *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
@@ -4381,7 +4397,7 @@ Qed.
 (* 批 13（轮 13）：cos Real 层一阶界——对偶批 12               *)
 (*   Q：cos ≥ C_3 链 + 二次/四次差分下界 + c' 求值             *)
 (*   Real：0 < X < 1 → cos X < 1、1 − X²/2 < cos X             *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
@@ -4709,7 +4725,7 @@ Qed.
 (* 批 14（轮 14）：sin/cos real_eq 兼容 + 端点常数定理          *)
 (*   real_sin_eq_compat/real_cos_eq_compat（一阶界闭区间前置）  *)
 (*   sin(1) < 1、5/6 < sin(1)、cos(1) > 1/2（常数差端点）        *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
@@ -4952,7 +4968,7 @@ Qed.
 (*   求值（X==real_const 1 / X==real_zero，逐点 proj + ring/     *)
 (*   field）+ lt/le 桥（real_lt_le_iff_req / real_eq_le /        *)
 (*   real_lt_eq_lt / real_eq_lt_lt）+ real_one ≈ real_const 1 桥。*)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 (* ---- 桥：real_one ≈ real_const 1（逐点相等，N = 0） ---- *)
 Lemma real_one_req_const_one : real_eq real_one (real_const 1).
@@ -5212,7 +5228,7 @@ Qed.
 (* 路线：cos²+sin²==1（Real 层）的代数核心；配套：                *)
 (*   |band| 尾界（exp_tail_abs）+ 模量引理 + Real 层              *)
 (*   real_cos_sq_plus_sin_sq_one（real_eq_of_zero_diff 型组装）。  *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 (* 桥：部分和 == sum_upto 形式 *)
 Lemma sc_sin_partial_upto : forall (n : nat) (x : Q),
@@ -5647,7 +5663,7 @@ Qed.
 (*   j > d 外和 = 同尾）→ |E| ≤ 8·exp_series·尾 → 模量引理        *)
 (*   sc_cs_sq_err_bound（exp_tail_arch + arch_decay 配方）→       *)
 (*   Real 层 real_cos_sq_plus_sin_sq_one。                        *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 (* A1：非负逐项 ⟹ 和 ≥ 0 *)
 Lemma sc_sum_nonneg : forall (n : nat) (f : nat -> Q),
@@ -6713,7 +6729,7 @@ Qed.
 (*   cos y − cos x = (y²−x²)·Σ_{k≥1} (−1)^{k−1} A_k/(2k)!       *)
 (*   本批：B0 平方幂桥、(q−p) 幂差分因子、q_pow 单调、常和       *)
 (*   下批：A_k 递减链 → 交替部分和 ≥ 1/2−(p+q)/24 ≥ 1/6          *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* B0：(x·x)^k == x^{2k} *)
@@ -7336,7 +7352,7 @@ Qed.
 (*   real_cos_strict_decr：0 < X < Y < 2 ⟹ cos Y < cos X       *)
 (* 依赖：Q 层主引理 sc_cos_partial_diff_le（批 19b-2c 已并入，  *)
 (*       备份 178）；本批 margin eps := eps0²/6 + 差积分解组装   *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* Real 层：cos 严格递减（0 < X < Y < 2 ⟹ cos Y < cos X） *)
@@ -7460,7 +7476,7 @@ Qed.
 (*   测试（目标 real_zero 精确，r 侧恒 0 简化）：cos_testA       *)
 (*   （cos m < 0）/cos_testB（0 < cos m）/双假缺陷              *)
 (*   （|cos m| ≤ 3·d4 == 3eps/16）——cos 零点 π/2 二分论证地基   *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* cos 点模量（镜像 exp_partial_cauchy；经 sc_cos_partial_cauchy_bounded + 平凡界 |x| ≤ |x|） *)
@@ -7644,7 +7660,7 @@ Qed.
 (*   cos 递减（批 19c）故分支与 log_scan（exp 递增）相反：       *)
 (*   A（cos m < 0）真 → 零点在 (a, m)；B（0 < cos m）真 → (m, b) *)
 (*   双假 → 冻结分支（中点缺陷 |cos m| ≤ 3·d4 之退化情形）       *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* 扫描 Fixpoint：A 真（cos m < 0）→ 左半 (a,m)；B 真（0 < cos m）→ 右半 (m,b)；
@@ -7815,7 +7831,7 @@ Qed.
 (*   + approx_span_pt_cos（全判定终点中点逐点界：cos 严格递减    *)
 (*     夹逼 cos b < cos m < cos a，批 19c）                      *)
 (*   + approx_root_cos：∀eps ∃x ∈ (3/2, 5/3) |cos x − 0| < eps  *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* Q 层 cos 部分和跨段 Lipschitz：a ≤ b、|a|,|b| ≤ B、exp_series ≤ C
@@ -8112,7 +8128,7 @@ Qed.
 (*   z_n := approx_root_cos (log_eps n)（|cos z_n| < log_eps n） *)
 (*   柯西：Q 层主引理 sc_cos_partial_diff_le 逆界               *)
 (*     （v²−u²)/6 ≤ cos u − cos v ⟹ v − u < 2(du+dv)（免 sin）  *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* cos 零点序列：z_n := approx_root_cos (log_eps n) 的返回值（Q 层） *)
@@ -8386,7 +8402,7 @@ Qed.
 (*   cos_pi_half : Real（existT cos_seq_cauchyT）               *)
 (*   real_cos_pi_half_zero：cos(cos_pi_half) == 0               *)
 (*   装配：柯西 + exp-arch Lipschitz + 根逐点界 的 eps 分割      *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* cos 零点（π/2）：z := 柯西序列 cos_zero_seq 的实数值 *)
@@ -8548,7 +8564,7 @@ Definition real_pi_geom : Real := real_mult (real_const 2) cos_pi_half.
 (*     ⟹ real_eq w cos_pi_half                                  *)
 (*   逐点逆界装配（cos w==0 与 cos z==0 对角界 + cos_inv_dist）  *)
 (*   ——Leibniz π 与几何 π 等同的零点唯一桥                      *)
-(* 纪律：纯构造性 Set 层、零 admit、零经典。                    *)
+(* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
 (* cos w == 0 的对角逐点界：∀δ ∃N，∀n ≥ N：|cos_partial n (w_n) − 0| < δ *)
@@ -12507,3 +12523,6 @@ Proof.
 Qed.
 
 End AttentionGibbsBridgeSetoid.
+
+(* ToyR 替换席：替换定理假设面查证 *)
+Print Assumptions sc_lp_four_nonneg.

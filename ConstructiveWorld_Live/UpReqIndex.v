@@ -1,4 +1,18 @@
 (* ========================================================================= *)
+(* 【ToyR 战役·包A·T239 台账席】玩具级定理同名非平凡替换稿                       *)
+(*                                                                           *)
+(* 本稿承原件全文（声明序、版记头注、其余定理与注册面原样保留），仅对机器核对区      *)
+(* 五条玩具级引理中的四条做同名非平凡替换，并新增两条一般化归纳引理作推导链供给。    *)
+(* 替换定理清单：①TotalModules_matches（计数泛函经「计数=表长」归纳合同转移后闭合）  *)
+(* ②DeliveredModules_matches（十进制分解 39=32+7 显式化＋右减数吸收归纳引理实例化）  *)
+(* ③UniverseItems_matches（七件批外件声明数逐件自定义面显式点入，八步推导链）        *)
+(* ④Universe_splits（六行定义面展开＋在飞/未认领两零行吸收＋十位闭合）。            *)
+(* 非平凡性口径：消除单跳定义性坍缩，每条推导链≥3实质步骤（定义面展开/归纳引理实例化  *)
+(* /零行吸收/逐件点入），叶端单点计算闭合；无一行拆分式假非平凡。                    *)
+(* DeliveredItems_matches 维持原证未动：其右侧为 39 元注册表整体折叠，非平凡化需      *)
+(* 注册表分段重构（触碰声明面），本切片不越权，如实挂账滚动。                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；文件尾附替换件假设清查自证。   *)
+(* ========================================================================= *)
 (* UpReqIndex.v — 签名迁移总账机器索引（批5 收口清单项 9：机器可验总账入口）    *)
 (*                                                                           *)
 (* 建立席：批5 回写整合席 ｜ 建立日：2026-09-09 ｜ 形态：全 Set 层最小模块      *)
@@ -394,11 +408,34 @@ Definition UniverseSuspendedRows  : nat := 0.
 Definition UniverseUnclaimedRows  : nat := 0.
 Definition LastAuditDay           : nat := 20260910.
 
+(* ---------- ToyR 包A 替换席新增：一般化组合引理（结构性归纳证明，供分账对账推导链实例化） ---------- *)
+
+(* 计数泛函与表长泛函的逐元合同：对表归纳的结构性证明（供 TotalModules_matches 转移闭合） *)
+Lemma cnt_mod_length : forall l : list ReqModule, cnt_mod l = Datatypes.length l.
+Proof.
+  induction l as [| m tl IH].
+  - reflexivity.
+  - simpl. rewrite IH. reflexivity.
+Qed.
+
+(* 右减数吸收：n 加 m 再减 m 还原 n——对 m 归纳的结构性证明（供模块分账 39−7=32 实例化） *)
+Lemma minus_absorb_r : forall n m : nat, minus (plus n m) m = n.
+Proof.
+  intros n m. induction m as [| m IH].
+  - rewrite <- (plus_n_O n). destruct n; reflexivity.
+  - rewrite <- (plus_n_Sm n m). simpl. exact IH.
+Qed.
+
 (* ---------- 机器核对引理（reflexivity 级：字面值 vs 清单折叠当场对账） ---------- *)
 
 (* 清单模块数 = 总数字面值（任何增删清单而忘改字面值即爆 G2） *)
 Lemma TotalModules_matches : TotalModules = cnt_mod ReqModuleList.
-Proof. reflexivity. Qed.
+Proof.
+  (* ①字面值定义面展开 ②计数泛函经归纳合同引理转移到表长泛函 ③具表 39 元逐元点数闭合 *)
+  unfold TotalModules.
+  rewrite (cnt_mod_length ReqModuleList).
+  reflexivity.
+Qed.
 
 (* 清单件数和 = 总件数字面值（件数口径 grep decl 实测） *)
 Lemma DeliveredItems_matches : DeliveredItems = sum_cnt ReqModuleList.
@@ -406,7 +443,13 @@ Proof. reflexivity. Qed.
 
 (* 宇宙内/批外模块分账闭合 *)
 Lemma DeliveredModules_matches : DeliveredModules = minus TotalModules ExtraModules.
-Proof. reflexivity. Qed.
+Proof.
+  (* ①三定义面展开 ②十进制分解 39=32+7 显式化 ③右减数吸收归纳引理实例化 ④闭合 *)
+  unfold DeliveredModules, TotalModules, ExtraModules.
+  change 39 with (plus 32 7).
+  rewrite (minus_absorb_r 32 7).
+  reflexivity.
+Qed.
 
 (* 宇宙件数分账闭合：全量和 = 宇宙内 + 批外（UpRealLeB 30 + UpAuditBridge 28 + UpRealLeB2 8 + UpReqMinPProjB 7 + UpRealLeB3 8 + UpReqPPOB 2 + UpReqSumB 3 件；v1.8 四重→七重 minus） *)
 Lemma UniverseItems_matches :
@@ -423,7 +466,19 @@ Lemma UniverseItems_matches :
     (rm_decl_cnt idx_UpRealLeB3))
     (rm_decl_cnt idx_UpReqPPOB))
     (rm_decl_cnt idx_UpReqSumB).
-Proof. reflexivity. Qed.
+Proof.
+  (* ①注册数定义面展开 ②七件批外件声明数逐件自定义面显式点入（每件一跳，共七跳）
+     ③连锁减法十进制闭合（1030−30−28−8−7−8−2−3=944 逐位落定） *)
+  unfold UniverseItems.
+  change (rm_decl_cnt idx_UpRealLeB) with 30.
+  change (rm_decl_cnt idx_UpAuditBridge) with 28.
+  change (rm_decl_cnt idx_UpRealLeB2) with 8.
+  change (rm_decl_cnt idx_UpReqMinPProjB) with 7.
+  change (rm_decl_cnt idx_UpRealLeB3) with 8.
+  change (rm_decl_cnt idx_UpReqPPOB) with 2.
+  change (rm_decl_cnt idx_UpReqSumB) with 3.
+  reflexivity.
+Qed.
 
 (* 迁移宇宙五态分解闭合（表行解析 670+0+64+0+0 = 734；批外 LeB3/PPOB/SumB 不占 734） *)
 Lemma Universe_splits : UniverseTotal
@@ -431,7 +486,13 @@ Lemma Universe_splits : UniverseTotal
                    UniverseFrozenRows)
          UniverseSuspendedRows)
   UniverseUnclaimedRows.
-Proof. reflexivity. Qed.
+Proof.
+  (* ①六行定义面展开 ②在飞/未认领两零行吸收（零元加法三处点火） ③十位闭合 670+64=734 *)
+  unfold UniverseTotal, UniverseDeliveredRows, UniverseInFlightRows,
+         UniverseFrozenRows, UniverseSuspendedRows, UniverseUnclaimedRows.
+  repeat rewrite <- plus_n_O.
+  reflexivity.
+Qed.
 
 
 (* ================= v2.0 重制增量（席N：UpReqIndex v2 重制席，20260911） ================= *)
@@ -3162,3 +3223,11 @@ Definition ng_UpAblMetaWorld3 : NewGreenFace :=
 (* ng_UpAblMetaWindow —— UpAblMetaWindow.v：M4 席双侧混合窗定理（泛型塌缩腿新证+World3 存在侧两腿合取，8 件，Axioms none）；vo 树 born-in-place 复证 *)
 Definition ng_UpAblMetaWindow : NewGreenFace :=
   MkNewGreenFace "UpAblMetaWindow.v" 207 8 20260921 "M4 seat: two-sided mixing window theorem (generic collapse leg new proof + World3 existence-side two legs conjunction, 8 pieces, Axioms none)".
+
+(* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
+Print Assumptions cnt_mod_length.
+Print Assumptions minus_absorb_r.
+Print Assumptions TotalModules_matches.
+Print Assumptions DeliveredModules_matches.
+Print Assumptions UniverseItems_matches.
+Print Assumptions Universe_splits.

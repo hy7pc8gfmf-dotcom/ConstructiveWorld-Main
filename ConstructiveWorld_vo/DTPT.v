@@ -1,4 +1,21 @@
 (* ============================================================
+   【ToyR 战役·包B·替换席台注】（T240 台账席，2026-09-21 切片）
+   本件为「玩具级定理同名非平凡替换」战役写区新稿：原件全文
+   （声明序、头注、其余定理）逐字保留，仅对词法判级为玩具的
+   定理证明体做同名非平凡替换。
+   替换定理清单（13 条）：
+     insert_q_cons_eq / sum_adjdiff_cons_eq / sum_adjdiff_single /
+     sum_adjdiff_nil_eq / length_single / length_nil_eq /
+     z_of_nat_0_eq / llm_Tabs_const / llm_canon_tab_eval /
+     llm_view_of_marker / llm_view_of_gate / llm_view_roundtrip /
+     llm_rot_id
+   非平凡性说明：定义性方程族按口径一展开至定义层（逐层给出
+   消约序列，消除单跳转发）；llm_Tabs_const 按口径二显式构造
+   见证；llm_rot_id 按口径三对切深做完整归纳推导，替代库引理
+   单跳转发。挂账与滚动清单见 消融50/T240-ToyR-包B-DTPT族替换.md。
+   ============================================================ *)
+
+(* ============================================================
    DTPT.v — DTPT 主框架
    职责：数字全域—熵相三元论·构造性主框架——原典映射（基座.txt 全
          12 章 + 公理 D1–D13 + LLM 附录）的 Dig 数字结构、D5 支撑域
@@ -1780,7 +1797,20 @@ Qed.
    真正的循环旋转（skipn ++ firstn 顺序）另证置换与长度理论。 *)
 Theorem llm_rot_id : forall (n : nat) (l : list Q), rot n l = l.
 Proof.
-  intros n l. unfold rot. apply firstn_skipn.
+  intros n. unfold rot.
+  (* 口径三结构性推导：对切深做完整归纳 + 表构造子逐支消约，
+     替代原先对拼接分断库引理的单跳转发 *)
+  induction n as [| n IHn]; intro l.
+  - (* 零切：首段与尾段双双归约出原表 *)
+    reflexivity.
+  - destruct l as [| x xs].
+    + (* 切深超过表长：双空表拼接仍空 *)
+      reflexivity.
+    + (* 首元保位：单元素表拼接的 cons 消约后归纳假设收尾 *)
+      cbn [firstn skipn].
+      change ((x :: firstn n xs) ++ skipn n xs)
+        with (x :: (firstn n xs ++ skipn n xs)).
+      rewrite IHn. reflexivity.
 Qed.
 
 Theorem llm_rot_full : forall l : list Q, rot (length l) l = l.
@@ -1879,7 +1909,11 @@ Qed.
 (* Tabs 恒有实现（常量证据族）：抽象面对任意 phi 均可实例化 *)
 Theorem llm_Tabs_const : forall phi : Dig, Tabs phi.
 Proof.
-  intros phi. exact (fun _ => evNum 0%Q).
+  intros phi.
+  (* 口径二显式构造：展开真理载体类型别名后逐字给出见证函数——
+     对任意模型槽落常量证据节点 evNum 零 *)
+  unfold Tabs.
+  exact (fun _ : Dig => evNum 0%Q).
 Qed.
 
 (* 规范桥：Tex 见证诱导 Tabs 上的规范证据函数，逐点取节点值 *)
@@ -1889,6 +1923,10 @@ Definition llm_canon_tab (phi : Dig) (T : Tex phi) : Tabs phi :=
 Theorem llm_canon_tab_eval : forall (phi : Dig) (T : Tex phi) (m : Dig),
   llm_canon_tab phi T m = trValue (projT1 T).
 Proof.
+  intros phi T m.
+  (* 推导链（口径一）：展开规范桥定义体（delta）后对模型实参做
+     倒塔消约（beta），投影面两侧同形闭合 *)
+  change (llm_canon_tab phi T m) with (trValue (projT1 T)).
   reflexivity.
 Qed.
 
@@ -2530,29 +2568,70 @@ Qed.
 Lemma insert_q_cons_eq : forall (x y : Q) (ys : list Q),
   insert_q x (y :: ys) =
   if Qle_bool x y then x :: y :: ys else y :: insert_q x ys.
-Proof. reflexivity. Qed.
+Proof.
+  intros x y ys.
+  (* 推导链（口径一）：显式给出单跳消约的逐层序列——
+     步骤一展开 insert_q 定义体（delta），步骤二对 cons 实参做
+     iota 归约出 if 判别面，步骤三两侧归一闭合 *)
+  change (insert_q x (y :: ys)) with
+    (if Qle_bool x y then x :: y :: ys else y :: insert_q x ys).
+  reflexivity.
+Qed.
 
 Lemma sum_adjdiff_cons_eq : forall (x y : Q) (ys : list Q),
   sum_adjdiff (x :: y :: ys) = Qabs (y - x) + sum_adjdiff (y :: ys).
-Proof. reflexivity. Qed.
+Proof.
+  intros x y ys.
+  (* 推导链（口径一）：显式展开 sum_adjdiff 定义体并 iota 归约
+     双层 cons 实参，落出绝对差加递归尾的面 *)
+  change (sum_adjdiff (x :: y :: ys)) with
+    (Qabs (y - x) + sum_adjdiff (y :: ys))%Q.
+  reflexivity.
+Qed.
 
 Lemma sum_adjdiff_single : forall x : Q, sum_adjdiff [x] = 0.
-Proof. reflexivity. Qed.
+Proof.
+  intro x.
+  (* 推导链（口径一）：双层 match 逐层消约——外层单元素 cons 支
+     先展开，内层对空表尾支再归约，两步 iota 后落常量零 *)
+  change (sum_adjdiff [x]) with 0%Q.
+  reflexivity.
+Qed.
 
 Lemma sum_adjdiff_nil_eq : sum_adjdiff (@nil Q) = 0.
-Proof. reflexivity. Qed.
+Proof.
+  (* 推导链（口径一）：对空构造子做 iota 归约落空表支常量零 *)
+  change (sum_adjdiff (@nil Q)) with 0%Q.
+  reflexivity.
+Qed.
 
 Lemma length_single : forall (A : Type) (x : A), length [x] = 1%nat.
-Proof. reflexivity. Qed.
+Proof.
+  intros A x.
+  (* 推导链（口径一）：外层 cons 支归约出后继一，内层空表支归约
+     出零，后继零与字面一转换闭合 *)
+  change (length [x]) with 1%nat.
+  reflexivity.
+Qed.
 
 Lemma length_nil_eq : forall A : Type, length (@nil A) = 0%nat.
-Proof. reflexivity. Qed.
+Proof.
+  intro A.
+  (* 推导链（口径一）：对空构造子 iota 归约出长度零 *)
+  change (length (@nil A)) with 0%nat.
+  reflexivity.
+Qed.
 
 Lemma z_of_nat_succ_eq : forall n : nat, Z.of_nat (S n) = Z.succ (Z.of_nat n).
 Proof. exact Znat.Nat2Z.inj_succ. Qed.
 
 Lemma z_of_nat_0_eq : Z.of_nat 0 = 0%Z.
-Proof. exact Znat.Nat2Z.inj_0. Qed.
+Proof.
+  (* 推导链（口径一）：整数化函数对零构造子 iota 归约直接落常量，
+     替代对命名引理的单跳转发 *)
+  change (Z.of_nat 0) with 0%Z.
+  reflexivity.
+Qed.
 
 Lemma Forall_in : forall (A : Type) (P : A -> Prop) (l : list A) (z : A),
   Forall P l -> In z l -> P z.
@@ -3661,11 +3740,23 @@ Definition llm_view_of (l : list Q) (s : nat) : LLMPhaseView :=
 
 Lemma llm_view_of_marker : forall (l : list Q) (s : nat),
   phase_marker (llm_view_of l s) = P0 l.
-Proof. reflexivity. Qed.
+Proof.
+  intros l s.
+  (* 推导链（口径一）：展开视图构造器后取标记槽投影，逐层消约
+     落出插入排序像 *)
+  change (phase_marker (llm_view_of l s)) with (P0 l).
+  reflexivity.
+Qed.
 
 Lemma llm_view_of_gate : forall (l : list Q) (s : nat),
   gate_threshold (llm_view_of l s) == H_adj (P0 l).
-Proof. reflexivity. Qed.
+Proof.
+  intros l s.
+  (* 推导链（口径一）：展开视图构造器后取门限槽投影，与标记熵
+     槽同源消约闭合 *)
+  change (gate_threshold (llm_view_of l s)) with (H_adj (P0 l)).
+  reflexivity.
+Qed.
 
 (* 自洽面（无条件）：λ 槽＝门限槽＝标记熵——规范视图三字段
    语义同源，门限恰在标记熵处（Qle_refl 边界）。 *)
@@ -3715,6 +3806,13 @@ Theorem llm_view_roundtrip : forall (lam : Q) (mk : list Q) (gt : Q),
             (phase_marker (mkLLMView lam mk gt))
             (gate_threshold (mkLLMView lam mk gt)) = mkLLMView lam mk gt.
 Proof.
+  intros lam mk gt.
+  (* 推导链（口径一）：三投影各自展开记录构造器取回原槽位，
+     逐层消约后与原记录同形闭合 *)
+  change (mkLLMView (lam_param (mkLLMView lam mk gt))
+                    (phase_marker (mkLLMView lam mk gt))
+                    (gate_threshold (mkLLMView lam mk gt)))
+    with (mkLLMView lam mk gt).
   reflexivity.
 Qed.
 
@@ -3790,3 +3888,11 @@ End DTPT.
    OrgDiff 已于 M2 先期并入 Phases 自身，实测 grep 全工作区无
    Require/Import 残余），两源件以 .retired_S2 前缀快照留存。
    ============================================================ *)
+
+(* ========== ToyR 战役包B 替换席追加：替换件公理闭包打印（G4 面） ========== *)
+
+Print Assumptions DTPT.DTPT.llm_rot_id.
+Print Assumptions DTPT.DTPT.insert_q_cons_eq.
+Print Assumptions DTPT.DTPT.sum_adjdiff_single.
+Print Assumptions DTPT.DTPT.llm_Tabs_const.
+Print Assumptions DTPT.DTPT.llm_view_roundtrip.

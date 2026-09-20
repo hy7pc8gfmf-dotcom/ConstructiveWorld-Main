@@ -1,3 +1,19 @@
+(* ============================================================
+   T239 切片三同名替换注记（ToyR 包A · UpReq 浅链族续作）
+   本件为 UpReqAlign3.v 同名替换稿：原件全文保留（声明序/版记头注/
+   其余定理逐字未动），仅五条玩具 w_sum_ptimes_const / w_sum_minus /
+   w_sum_opp / w_sum_ptimes_scal / w_sum_ptimes_opp_scal 的证明体由
+   @req2_* 单跳转发替换为替换点显式重演（req_trans 链＋sum_ext/sum_add/
+   sum_linear 逐环展开＋代数银行兼容桥显式实例化；w_sum_minus 与
+   w_sum_ptimes_opp_scal 内联 opp-sum 子链消除对上游 req2_sum_opp 的
+   槽参依赖）。语句面零改动。
+   验绿方式：Require 面语义语境探针（T239c_probe.v，池内）——按
+   S07_RealSetoidExpLog.v:7915 类块与 UpReqAlgebra.v:104/230/255 真名
+   真签名复刻接口面，五条替换体逐字粘贴试编，rocq c EXIT=0。
+   整件连带编译挂账：本件 Require CW_ConstructiveWorld_219（16 行薄壳
+   =S01-S15 巨基），池内连带重编超 cpu_guard 时帽，留待底座预算批。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* UpReqAlign3.v *)
 (* *)
@@ -211,15 +227,52 @@ Lemma w_sum_ptimes_const :
     req (sumf p) one -> req (sumf (fun s => mult (p s) c)) c.
 Proof.
   intros p c Hn.
-  exact (@req2_sum_ptimes_const R RIS S sumf sum_ext sum_linear p c Hn).
+  apply (req_trans (sumf (fun s => mult (p s) c))
+                   (mult c (sumf p)) c).
+  - apply (req_trans (sumf (fun s => mult (p s) c))
+                     (sumf (fun s => mult c (p s)))
+                     (mult c (sumf p))).
+    + apply (sum_ext (fun s => mult (p s) c) (fun s => mult c (p s))
+                     (fun s => mult_comm (p s) c)).
+    + exact (sum_linear c p).
+  - apply (req_trans (mult c (sumf p)) (mult c one) c
+                     (req_mult_compat c c (sumf p) one (req_refl c) Hn)
+                     (mult_one c)).
 Qed.
 
 Lemma w_sum_minus :
   forall f g : S -> R,
     req (sumf (fun s => req_minus (f s) (g s))) (req_minus (sumf f) (sumf g)).
 Proof.
-  intros f g.
-  exact (@req2_sum_minus R RIS S sumf sum_ext sum_add sum_linear f g).
+  intros f g. unfold req_minus.
+  apply (req_trans (sumf (fun s => plus (f s) (opp (g s))))
+                   (plus (sumf f) (sumf (fun s => opp (g s))))
+                   (plus (sumf f) (opp (sumf g)))).
+  - exact (sum_add f (fun s => opp (g s))).
+  - apply (req_plus_compat (sumf f) (sumf f)
+                           (sumf (fun s => opp (g s))) (opp (sumf g))
+                           (req_refl (sumf f))).
+    apply (req_trans (sumf (fun s => opp (g s)))
+                     (sumf (fun s => mult (opp one) (g s)))
+                     (opp (sumf g))).
+    + apply (sum_ext (fun s => opp (g s)) (fun s => mult (opp one) (g s))).
+      intro s.
+      apply (req_sym (mult (opp one) (g s)) (opp (g s))).
+      apply (req_trans (mult (opp one) (g s)) (opp (mult one (g s)))
+                       (opp (g s))
+                       (req_opp_mult_r one (g s))
+                       (req_opp_compat (mult one (g s)) (g s)
+                                       (req_mult_one_l (g s)))).
+    + apply (req_trans (sumf (fun s => mult (opp one) (g s)))
+                       (mult (opp one) (sumf g))
+                       (opp (sumf g))).
+      * exact (sum_linear (opp one) g).
+      * apply (req_trans (mult (opp one) (sumf g))
+                         (opp (mult one (sumf g)))
+                         (opp (sumf g))
+                         (req_opp_mult_r one (sumf g))
+                         (req_opp_compat (mult one (sumf g)) (sumf g)
+                                         (req_mult_one_l (sumf g)))).
 Qed.
 
 Lemma w_sum_opp :
@@ -227,7 +280,26 @@ Lemma w_sum_opp :
     req (sumf (fun s => opp (f s))) (opp (sumf f)).
 Proof.
   intros f.
-  exact (@req2_sum_opp R RIS S sumf sum_ext sum_linear f).
+  apply (req_trans (sumf (fun s => opp (f s)))
+                   (sumf (fun s => mult (opp one) (f s)))
+                   (opp (sumf f))).
+  - apply (sum_ext (fun s => opp (f s)) (fun s => mult (opp one) (f s))).
+    intro s.
+    apply (req_sym (mult (opp one) (f s)) (opp (f s))).
+    apply (req_trans (mult (opp one) (f s)) (opp (mult one (f s))) (opp (f s))
+                     (req_opp_mult_r one (f s))
+                     (req_opp_compat (mult one (f s)) (f s)
+                                     (req_mult_one_l (f s)))).
+  - apply (req_trans (sumf (fun s => mult (opp one) (f s)))
+                     (mult (opp one) (sumf f))
+                     (opp (sumf f))).
+    + exact (sum_linear (opp one) f).
+    + apply (req_trans (mult (opp one) (sumf f))
+                       (opp (mult one (sumf f)))
+                       (opp (sumf f))
+                       (req_opp_mult_r one (sumf f))
+                       (req_opp_compat (mult one (sumf f)) (sumf f)
+                                       (req_mult_one_l (sumf f)))).
 Qed.
 
 Lemma w_sum_ptimes_scal :
@@ -236,7 +308,23 @@ Lemma w_sum_ptimes_scal :
         (mult a (sumf (fun s => mult (p s) (f s)))).
 Proof.
   intros p a f.
-  exact (@req2_sum_ptimes_scal R RIS S sumf sum_ext sum_linear p a f).
+  apply (req_trans (sumf (fun s => mult (p s) (mult a (f s))))
+                   (sumf (fun s => mult a (mult (p s) (f s))))
+                   (mult a (sumf (fun s => mult (p s) (f s))))).
+  - apply (sum_ext (fun s => mult (p s) (mult a (f s)))
+                   (fun s => mult a (mult (p s) (f s)))).
+    intro s.
+    apply (req_trans (mult (p s) (mult a (f s))) (mult (mult (p s) a) (f s))
+                     (mult a (mult (p s) (f s)))).
+    + apply mult_assoc.
+    + apply (req_trans (mult (mult (p s) a) (f s)) (mult (mult a (p s)) (f s))
+                       (mult a (mult (p s) (f s)))
+                       (req_mult_compat (mult (p s) a) (mult a (p s)) (f s) (f s)
+                                        (mult_comm (p s) a) (req_refl (f s)))
+                       (req_sym (mult a (mult (p s) (f s)))
+                                (mult (mult a (p s)) (f s))
+                                (mult_assoc a (p s) (f s)))).
+  - exact (sum_linear a (fun s => mult (p s) (f s))).
 Qed.
 
 Lemma w_sum_ptimes_opp_scal :
@@ -245,7 +333,70 @@ Lemma w_sum_ptimes_opp_scal :
         (opp (mult a (sumf (fun s => mult (p s) (f s))))).
 Proof.
   intros p a f.
-  exact (@req2_sum_ptimes_opp_scal R RIS S sumf sum_ext sum_linear p a f).
+  apply (req_trans (sumf (fun s => mult (p s) (opp (mult a (f s)))))
+                   (sumf (fun s => opp (mult a (mult (p s) (f s)))))
+                   (opp (mult a (sumf (fun s => mult (p s) (f s)))))).
+  - apply (sum_ext (fun s => mult (p s) (opp (mult a (f s))))
+                   (fun s => opp (mult a (mult (p s) (f s))))).
+    intro s.
+    apply (req_trans (mult (p s) (opp (mult a (f s))))
+                     (opp (mult (p s) (mult a (f s))))
+                     (opp (mult a (mult (p s) (f s))))).
+    + apply req_opp_mult_l.
+    + apply (req_opp_compat (mult (p s) (mult a (f s)))
+                            (mult a (mult (p s) (f s)))).
+      apply (req_trans (mult (p s) (mult a (f s))) (mult (mult (p s) a) (f s))
+                       (mult a (mult (p s) (f s)))).
+      * apply mult_assoc.
+      * apply (req_trans (mult (mult (p s) a) (f s)) (mult (mult a (p s)) (f s))
+                         (mult a (mult (p s) (f s)))
+                         (req_mult_compat (mult (p s) a) (mult a (p s)) (f s) (f s)
+                                          (mult_comm (p s) a) (req_refl (f s)))
+                         (req_sym (mult a (mult (p s) (f s)))
+                                  (mult (mult a (p s)) (f s))
+                                  (mult_assoc a (p s) (f s)))).
+  - apply (req_trans (sumf (fun s => opp (mult a (mult (p s) (f s)))))
+                     (opp (sumf (fun s => mult a (mult (p s) (f s)))))
+                     (opp (mult a (sumf (fun s => mult (p s) (f s)))))).
+    + apply (req_trans (sumf (fun s => opp (mult a (mult (p s) (f s)))))
+                       (sumf (fun s => mult (opp one)
+                                            (mult a (mult (p s) (f s)))))
+                       (opp (sumf (fun s => mult a (mult (p s) (f s)))))).
+      * apply (sum_ext
+                 (fun s => opp (mult a (mult (p s) (f s))))
+                 (fun s => mult (opp one) (mult a (mult (p s) (f s))))).
+        intro s.
+        apply (req_sym (mult (opp one) (mult a (mult (p s) (f s))))
+                       (opp (mult a (mult (p s) (f s))))).
+        apply (req_trans
+                 (mult (opp one) (mult a (mult (p s) (f s))))
+                 (opp (mult one (mult a (mult (p s) (f s)))))
+                 (opp (mult a (mult (p s) (f s))))
+                 (req_opp_mult_r one (mult a (mult (p s) (f s))))
+                 (req_opp_compat (mult one (mult a (mult (p s) (f s))))
+                                 (mult a (mult (p s) (f s)))
+                                 (req_mult_one_l
+                                    (mult a (mult (p s) (f s)))))).
+      * apply (req_trans (sumf (fun s => mult (opp one)
+                                           (mult a (mult (p s) (f s)))))
+                         (mult (opp one)
+                               (sumf (fun s => mult a (mult (p s) (f s)))))
+                         (opp (sumf (fun s => mult a (mult (p s) (f s)))))).
+        -- exact (sum_linear (opp one)
+                             (fun s => mult a (mult (p s) (f s)))).
+        -- apply (req_trans (mult (opp one)
+                                  (sumf (fun s => mult a (mult (p s) (f s)))))
+                            (opp (mult one
+                                        (sumf (fun s => mult a (mult (p s) (f s))))))
+                            (opp (sumf (fun s => mult a (mult (p s) (f s)))))).
+           ** apply req_opp_mult_r.
+           ** exact (req_opp_compat
+                       (mult one (sumf (fun s => mult a (mult (p s) (f s)))))
+                       (sumf (fun s => mult a (mult (p s) (f s))))
+                       (req_mult_one_l (sumf (fun s => mult a (mult (p s) (f s)))))).
+    + apply (req_opp_compat (sumf (fun s => mult a (mult (p s) (f s))))
+                            (mult a (sumf (fun s => mult (p s) (f s))))
+                            (sum_linear a (fun s => mult (p s) (f s)))).
 Qed.
 
 Definition w_iter (t : nat) (pi : S -> R) (Hpi : pos3 pi) :
@@ -3767,3 +3918,12 @@ End Req3AlignCore.
    （.vo magic 90001 同轨）；G3 提取探针 Obj.magic=0（旗舰/保底六件
    "Modules were successfully checked"。
    ============================================================ *)
+
+(* ============================================================
+   T239 切片三 · 替换件尾部假设清查（整件连带编译挂账，五条一并清查）
+   ============================================================ *)
+Print Assumptions w_sum_ptimes_const.
+Print Assumptions w_sum_minus.
+Print Assumptions w_sum_opp.
+Print Assumptions w_sum_ptimes_scal.
+Print Assumptions w_sum_ptimes_opp_scal.

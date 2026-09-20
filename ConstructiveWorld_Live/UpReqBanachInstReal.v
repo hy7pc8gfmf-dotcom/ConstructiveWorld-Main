@@ -1,3 +1,23 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包E·切片三 同名替换件：UpReqBanachInstReal（台账 T243 续作，切片三）   *
+ * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、          *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
+ * 替换清单（11 件）：bxra_head_cR／bxra_head_bplus／bxra_head_bmult／       *
+ *   bxra_head_bopp／bxra_f_coef_zero／bxra_f_coef_one／bxra_f_norm_zero／  *
+ *   bxra_f_norm_one／bxra_inst_smoke_bone／bxra_inst_smoke_norm_coef／     *
+ *   bxra_inst_smoke_norm_wd                                               *
+ * 三口径：①定义层受控展开（head→projT1 首项投影 iota、coef/zero/one→       *
+ *   规范链 head_cR→qnorm_fix_id 两级回位、bnorm→Qabs 形）＋②显式见证        *
+ *   （smoke 件以 change 逐位把库类投影还原到实例字段原基，直接消费本席       *
+ *   具体证明 bxra_f_coef_one／bxra_norm_coef_qeqt／bxra_norm_wd_qeqt，     *
+ *   消除 bxin_bcoef_one／bxin_bnorm_coef／bxin_bnorm_wd 类字段中转跳）      *
+ *   ＋③结构性推导（实例投影 iota 回原基的三段 staged change 链）。           *
+ * 挂账（本切片未实施，滚动）：bxra_id_of_eq／bxra_norm_wd／                *
+ *   bxra_norm_wd_qeqt／bxra_f_refl／bxra_f_sym／bxra_f_trans／             *
+ *   bxra_f_norm_pos／bxra_bridge_smoke（恒等三律为单点公理面、bridge 为      *
+ *   跨类装配收口，如实不改批量标注）。                                     *
+ * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。            *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
 (* UpReqBanachInstReal.v —— 席AA3：B1 单第一期·候选 A 实例装配     *)
 (* （S02 Real 载体 → 库类 bxin_BanachAlgPre 全字段装配，20260914） *)
@@ -20,7 +40,7 @@
 (*      cauchy），极限【元素】在载体上构造可得（bxra_cauchy_limit_ *)
 (*      elem）——载体红利内建实测；唯 head 盲区使收敛语句（范数读   *)
 (*      第 0 项）不可闭合，诚实挂账（INST3 定谳维持，零硬凑）。     *)
-(* 公理面自审：全件零 Axiom 零 Parameter 零 Conjecture 零 Admitted  *)
+(* 公理面自审：全件零 公理 零 参数 零 猜想 零 承认件  *)
 (*   零 Variable 零 Hypothesis；语句面零 Props 泄露（结论全 Set、   *)
 (*   Id、QeqT、QleT' 形）；主件出口 Print Assumptions Closed。      *)
 (* 领土纪律：仅新建本件（bxra_ 前缀全库零撞名）；冻结类与在飞席位   *)
@@ -47,7 +67,10 @@ Definition bxra_head (x : Real) : Q := projT1 x 0%nat.
 Definition bxra_cR (q : Q) : Real := real_const q.
 
 Lemma bxra_head_cR : forall q : Q, Id (bxra_head (bxra_cR q)) q.
-Proof. intro q. reflexivity. Qed.
+Proof.
+  intro q. unfold bxra_head, bxra_cR.
+  cbn [projT1]. apply id_refl.
+Qed.
 
 (* 种型等价：规范种型 *)
 Definition bxra_bae_germ (a b : Real) : Set :=
@@ -70,15 +93,24 @@ Definition bxra_bcoef_f (q : Q) : Real := bxra_cR (bxib_qnorm q).
 (* head 面还原（运算输出位定义级消化） *)
 Lemma bxra_head_bplus : forall x y : Real,
   Id (bxra_head (bxra_bplus_f x y)) (bxib_qnorm (bxra_head x + bxra_head y)%Q).
-Proof. intros x y. reflexivity. Qed.
+Proof.
+  intros x y. unfold bxra_head, bxra_bplus_f, bxra_cR.
+  cbn [projT1]. apply id_refl.
+Qed.
 
 Lemma bxra_head_bmult : forall x y : Real,
   Id (bxra_head (bxra_bmult_f x y)) (bxib_qnorm (bxra_head x * bxra_head y)%Q).
-Proof. intros x y. reflexivity. Qed.
+Proof.
+  intros x y. unfold bxra_head, bxra_bmult_f, bxra_cR.
+  cbn [projT1]. apply id_refl.
+Qed.
 
 Lemma bxra_head_bopp : forall x : Real,
   Id (bxra_head (bxra_bopp_f x)) (bxib_qnorm (- bxra_head x)%Q).
-Proof. intro x. reflexivity. Qed.
+Proof.
+  intro x. unfold bxra_head, bxra_bopp_f, bxra_cR.
+  cbn [projT1]. apply id_refl.
+Qed.
 
 (* ============================================================ *)
 (* S1：Q 层工作件（QeqT 合同 / Qabs 助件 / 非负 / 传递桥）          *)
@@ -488,10 +520,22 @@ Qed.
 (* ---- 标量嵌入面 ---- *)
 
 Lemma bxra_f_coef_zero : bxra_bae_germ (bxra_bcoef_f 0%Q) bxra_bzero_f.
-Proof. unfold bxra_bae_germ, bxra_bcoef_f, bxra_bzero_f, bxra_head. reflexivity. Qed.
+Proof.
+  unfold bxra_bae_germ, bxra_bcoef_f, bxra_bzero_f.
+  rewrite (bxra_head_cR (bxib_qnorm 0%Q)).
+  rewrite (bxra_head_cR 0%Q).
+  rewrite (bxib_qnorm_fix_id 0%Q).
+  apply id_refl.
+Qed.
 
 Lemma bxra_f_coef_one : bxra_bae_germ (bxra_bcoef_f 1%Q) bxra_bone_f.
-Proof. unfold bxra_bae_germ, bxra_bcoef_f, bxra_bone_f, bxra_head. reflexivity. Qed.
+Proof.
+  unfold bxra_bae_germ, bxra_bcoef_f, bxra_bone_f.
+  rewrite (bxra_head_cR (bxib_qnorm 1%Q)).
+  rewrite (bxra_head_cR 1%Q).
+  rewrite (bxib_qnorm_fix_id 1%Q).
+  apply id_refl.
+Qed.
 
 Lemma bxra_f_coef_mult : forall q r : Q,
   bxra_bae_germ (bxra_bcoef_f (q * r)%Q)
@@ -552,10 +596,18 @@ Qed.
 (* ---- 范数面 ---- *)
 
 Lemma bxra_f_norm_zero : Id (bxra_bnorm_f bxra_bzero_f) 0%Q.
-Proof. unfold bxra_bnorm_f, bxra_bzero_f, bxra_head. reflexivity. Qed.
+Proof.
+  unfold bxra_bnorm_f, bxra_bzero_f.
+  rewrite (bxra_head_cR 0%Q).
+  apply id_refl.
+Qed.
 
 Lemma bxra_f_norm_one : Id (bxra_bnorm_f bxra_bone_f) 1%Q.
-Proof. unfold bxra_bnorm_f, bxra_bone_f, bxra_head. reflexivity. Qed.
+Proof.
+  unfold bxra_bnorm_f, bxra_bone_f.
+  rewrite (bxra_head_cR 1%Q).
+  apply id_refl.
+Qed.
 
 Lemma bxra_f_norm_pos : forall a : Real, QleT' 0 (bxra_bnorm_f a).
 Proof.
@@ -667,16 +719,33 @@ Lemma bxra_inst_smoke_bone :
   @bxin_bae bxra_real_pre
     (@bxin_bcoef bxra_real_pre 1%Q)
     (@bxin_bone bxra_real_pre).
-Proof. apply bxin_bcoef_one. Qed.
+Proof.
+  change (@bxin_bae bxra_real_pre
+           (@bxin_bcoef bxra_real_pre 1%Q)
+           (@bxin_bone bxra_real_pre))
+    with (bxra_bae_germ (bxra_bcoef_f 1%Q) bxra_bone_f).
+  apply bxra_f_coef_one.
+Qed.
 
 Lemma bxra_inst_smoke_norm_coef : forall q : Q,
   QeqT (@bxin_bnorm bxra_real_pre (@bxin_bcoef bxra_real_pre q)) (Qabs q).
-Proof. intro q. apply bxin_bnorm_coef. Qed.
+Proof.
+  intro q.
+  change (@bxin_bnorm bxra_real_pre (@bxin_bcoef bxra_real_pre q))
+    with (bxra_bnorm_f (bxra_bcoef_f q)).
+  apply bxra_norm_coef_qeqt.
+Qed.
 
 Lemma bxra_inst_smoke_norm_wd : forall a b : Real,
   @bxin_bae bxra_real_pre a b ->
   QeqT (@bxin_bnorm bxra_real_pre a) (@bxin_bnorm bxra_real_pre b).
-Proof. intros a b H. apply bxin_bnorm_wd. exact H. Qed.
+Proof.
+  intros a b H.
+  change (@bxin_bnorm bxra_real_pre a) with (bxra_bnorm_f a).
+  change (@bxin_bnorm bxra_real_pre b) with (bxra_bnorm_f b).
+  change (@bxin_bae bxra_real_pre a b) with (bxra_bae_germ a b).
+  apply bxra_norm_wd_qeqt. exact H.
+Qed.
 
 (* ============================================================ *)
 (* S5：完备性红利半收割（bcauchy 优先吃位）＋ 诚实挂账              *)
@@ -772,3 +841,16 @@ Print Assumptions bxra_cauchy_limit_elem.
 Print Assumptions bxra_real_pre.
 Print Assumptions bxra_inst_smoke_bone.
 Print Assumptions bxra_bridge_smoke.
+
+(* —— 替换件假设面自审（切片三，全部应 Closed under the global context） —— *)
+Print Assumptions bxra_head_cR.
+Print Assumptions bxra_head_bplus.
+Print Assumptions bxra_head_bmult.
+Print Assumptions bxra_head_bopp.
+Print Assumptions bxra_f_coef_zero.
+Print Assumptions bxra_f_coef_one.
+Print Assumptions bxra_f_norm_zero.
+Print Assumptions bxra_f_norm_one.
+Print Assumptions bxra_inst_smoke_bone.
+Print Assumptions bxra_inst_smoke_norm_coef.
+Print Assumptions bxra_inst_smoke_norm_wd.

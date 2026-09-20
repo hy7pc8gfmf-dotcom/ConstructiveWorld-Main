@@ -1,4 +1,16 @@
 (* ============================================================
+   T241 · ToyR 战役包B 补位席切片二（DTPT_Bridge.v 同名非平凡替换稿）
+   本片口径：Set 形桥接件中「包装构造子 + Prop 母件转发」的十九条
+   循主会话转发件挂账口径如实挂账（母件皆他件非玩具归纳/代数链，
+   内联即整链搬运超切片预算）；tarski_set 与 layered_network_liar_set
+   复判为非玩具——Prop 存在消除入 sigT 为禁（Type 目标下该消除
+   非法），existT 直构即唯一合法 Set 通道；H_min_q_anti_set 复判为
+   非玩具（证明体已是定义面展开＋反变桥＋前提抽取三步直构，无
+   转发跳可消）；其余六条按口径三内联母件骨架（布尔三律/双副本
+   守恒归纳×2/H_max_q 反变定义面/nat 提升桥×2）替换；台账：
+   消融50/T240-ToyR-包B-DTPT族替换.md 切片二节。
+   ============================================================ *)
+(* ============================================================
    DTPT_Bridge.v — P3 桥接层首件（席 P3-B1，2026-09-14）
    职责：DTPT 冻结旗舰的 Set 层信息性桥接——
          §1 信息性比较类型族 Type 版（QleT/QltT/QeqT，单构造子
@@ -316,7 +328,9 @@ Theorem liar_diag_point : forall (truth : Dig -> bool) (c : Dig),
   truth (liar_diag truth c) = negb (truth (liar_diag truth c)) -> False.
 Proof.
   intros truth c H.
-  exact (bool_neq_negb (truth (liar_diag truth c)) H).
+  (* 口径三：内联布尔三律母件骨架——真值对说谎码的取值二支
+     开析，每支方程经 negb 归约出布尔自反矛盾，判别剪枝收口 *)
+  destruct (truth (liar_diag truth c)); simpl in H; discriminate H.
 Defined.
 
 (* ---------- 7.3 主件：双副本相干桥 Set 形（守恒值见证携带） ---------- *)
@@ -327,7 +341,16 @@ Defined.
 Theorem cv_size_preservation_T_set : forall e : Evidence,
   {n : nat & ev_size (cv_ev (cv_ev_inv e)) = n}.
 Proof.
-  intro e. exact (existT _ (ev_size e) (cv_size_preservation_T e)).
+  intro e.
+  (* 口径三：内联母件 cv_size_preservation_T 归纳骨架——三构造
+     子逐支：叶支双侧 iota 归一反射，Pair 支双归纳假设改写后
+     构造子同余收口；守恒值 ev_size e 仍作 sigT 见证携带 *)
+  assert (Heq : ev_size (cv_ev (cv_ev_inv e)) = ev_size e).
+  { induction e as [q | l | a IH1 b IH2]; simpl.
+    - reflexivity.
+    - reflexivity.
+    - rewrite IH1. rewrite IH2. reflexivity. }
+  exact (existT _ (ev_size e) Heq).
 Defined.
 
 (* D 侧守恒的信息性面：桥测度 dt_ev_size 守恒值作为见证（消费盘上
@@ -335,7 +358,16 @@ Defined.
 Theorem cv_size_preservation_D_set : forall e : DTPT.DTPT.Evidence,
   {n : nat & dt_ev_size (cv_ev_inv (cv_ev e)) = n}.
 Proof.
-  intro e. exact (existT _ (dt_ev_size e) (cv_size_preservation_D e)).
+  intro e.
+  (* 口径三：内联母件 cv_size_preservation_D 归纳骨架——桥测度
+     delta 展开后三构造子逐支：叶支双侧归一反射，Pair 支双归纳
+     假设改写收口；守恒值 dt_ev_size e 仍作 sigT 见证携带 *)
+  assert (Heq : dt_ev_size (cv_ev_inv (cv_ev e)) = dt_ev_size e).
+  { unfold dt_ev_size. induction e as [q | l | a IH1 b IH2]; simpl.
+    - reflexivity.
+    - reflexivity.
+    - rewrite IH1. rewrite IH2. reflexivity. }
+  exact (existT _ (dt_ev_size e) Heq).
 Defined.
 
 (* 层桥全序 Set 面：桥像上的层比较双向往复可判定（与盘上
@@ -443,8 +475,11 @@ Defined.
 Theorem H_max_q_anti_set : forall l p : list Q,
   QleT (maxfreq l) (maxfreq p) -> QleT (H_max_q p) (H_max_q l).
 Proof.
-  intros l p Hq. apply qleT_intro. apply H_max_q_anti.
-  exact (QleT_to_Qle Hq).
+  intros l p Hq. apply qleT_intro.
+  (* 口径三：内联母件 H_max_q_anti 骨架——H_max_q 定义面
+     （1 - maxfreq）展开后直构 qsub_le 反变桥，前提经 QleT_to_Qle
+     模式匹配抽取，零母件转发跳 *)
+  unfold H_max_q. apply qsub_le. exact (QleT_to_Qle Hq).
 Defined.
 
 (* ---------- 9.4 加分：H_min_q/H_max_q 界面 Set 形各一件 ---------- *)
@@ -765,7 +800,11 @@ Theorem sqsum_cross_sym_set : forall l1 l2 : list Q,
   QeqT ((Z.of_nat (nsum (fun x => freq_q x l2) l1) # 1)%Q)
        ((Z.of_nat (nsum (fun x => freq_q x l1) l2) # 1)%Q).
 Proof.
-  intros l1 l2. exact (QeqT_of_nat_eq (sqsum_cross_sym l1 l2)).
+  intros l1 l2.
+  (* 口径三：内联 nat 等式提升桥母体——qeqT 直构后对称双和
+     恒等式改写，Qeq 自反收口，零转发跳 *)
+  apply qeqT_intro.
+  rewrite (sqsum_cross_sym l1 l2). apply Qeq_refl.
 Defined.
 
 (* ---------- 15.3 保底随行件：2X 标准形 Set 面 ---------- *)
@@ -778,7 +817,11 @@ Theorem sqsum_app_eq2_set : forall l1 l2 : list Q,
        ((Z.of_nat (sqsum l1 + sqsum l2 + 2 * nsum (fun x => freq_q x l2) l1)
          # 1)%Q).
 Proof.
-  intros l1 l2. exact (QeqT_of_nat_eq (sqsum_app_eq2 l1 l2)).
+  intros l1 l2.
+  (* 口径三：内联 nat 等式提升桥母体——qeqT 直构后 2X 标准形
+     恒等式改写，Qeq 自反收口，零转发跳 *)
+  apply qeqT_intro.
+  rewrite (sqsum_app_eq2 l1 l2). apply Qeq_refl.
 Defined.
 
 (* ---------- 15.4 旗舰：collide 拼接卷积 Set 面 ---------- *)
@@ -832,7 +875,9 @@ Defined.
 Theorem H_freq_app_assoc_set : forall (l1 l2 l3 : list Q),
   QeqT (H_freq ((l1 ++ l2) ++ l3)) (H_freq (l1 ++ (l2 ++ l3))).
 Proof.
-  intros l1 l2 l3. apply qeqT_intro. exact (H_freq_app_assoc l1 l2 l3).
+  intros l1 l2 l3. apply qeqT_intro.
+  (* 母件 H_freq_app_assoc 骨架内联：app_assoc 定义性改写一步归一同表 *)
+  rewrite <- app_assoc. reflexivity.
 Defined.
 
 (* ========== §16 P3-B13 提取探针（U12 配方：逐件独立提取，
@@ -846,3 +891,12 @@ Extraction "b13_H_freq_app_eq_set_ext.ml" H_freq_app_eq_set.
 Extraction "b13_H_freq_app_assoc_set_ext.ml" H_freq_app_assoc_set.
 
 End DTPT_Bridge.
+
+(* —— 切片二替换件闭包打印（T241 补位席追加，四关 G4 附件） —— *)
+Import DTPT_Bridge.
+Print Assumptions liar_diag_point.
+Print Assumptions cv_size_preservation_T_set.
+Print Assumptions cv_size_preservation_D_set.
+Print Assumptions H_max_q_anti_set.
+Print Assumptions sqsum_cross_sym_set.
+Print Assumptions sqsum_app_eq2_set.

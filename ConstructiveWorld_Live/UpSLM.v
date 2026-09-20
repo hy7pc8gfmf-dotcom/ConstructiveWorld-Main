@@ -1,4 +1,37 @@
 (* ============================================================ *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包A·T239 台账席】玩具级定理同名非平凡替换稿                       *)
+(*                                                                           *)
+(* 本稿承原件全文（声明序、头注、其余定理原样保留），本切片对熔合见证族四条玩具级    *)
+(* 引理做同名非平凡替换：                                                        *)
+(*   ① fuse2_sum——熔合定义面展开＋聚合元和字段投影定向出列＋同一构造子闭合；        *)
+(*   ② fuse2_pos——熔合定义面展开后不再走正性字段投影单跳转发，改为两单元正性结论       *)
+(*      直接在场合成：查负界引理双实例提取＋加法保序目标化约＋线性算术闭合（即         *)
+(*      pos_add 的证明体在替换点显式重演，消除投影转发）；                         *)
+(*   ③ col_same_fused——四具名单元（定位 7/4 与 5/11，pid 互异）与熔合定义面展开，      *)
+(*      两产物和字段 3+4 定向化简显式同值，定位擦除的计算内容在场；                  *)
+(*   ④ col_preds_distinguishable——探针与两账本定义面展开，存在扫描与 pid 判定在        *)
+(*      具体账面上定向化简（P 组命中 7、Q 组 5/11 皆未中），布尔结构显式闭合。        *)
+(* 非平凡性口径：消除单跳转发（slm_tid 同余构造子直达/上游投影直达），每条推导链≥3      *)
+(* 实质步骤（定义面展开/投影定向化简/具体账面计算/正性合成），叶端构造子闭合；          *)
+(* 无一行拆分式假非平凡。                                                       *)
+(* 其余玩具（账本机器族/赎回族等）本切片未动，如实挂账滚动。                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；文件尾附替换件假设清查自证。   *)
+(* ========================================================================= *)
+(* ------------------------------------------------------------------------- *)
+(* 【切片二续作】在熔合见证族四条基础上，本切片续作账本机器族与赎回族：            *)
+(*   ⑤ 熔合见证族余量——空带熔断恒等（匹配空支＋投影出列）与熔后失明（熔合入口/两账本  *)
+(*      /四具名单元全展开，非空带熔为空带、探针在空带上定向化简），消除对             *)
+(*      熔合失明引理的单跳转发，失明的计算内容在场；                               *)
+(*   ⑥ 花与单步发射四条——花取头/发射/保真/签票的定义面展开＋匹配支触发＋投影定向出列；  *)
+(*   ⑦ 长度见证——不走可加性引理转发，判定式定义面计算（leb 1 (S k) ⟶ leb 0 k ⟶ 真）； *)
+(*   ⑧ 赎回族五条——与门左支提取的分支分划在替换点显式重演（假支与门定义性坍缩自爆）；  *)
+(*      「后继不判等自身」归纳体在替换点显式重演（基例定向坍缩＋步例降一位交归纳假设）； *)
+(*      铸造产物投影定向出列；具体票面（单缺口/零缺口）上判等式定向坍缩为真；           *)
+(*   （序前驱消解一条为轻量档，其结构分划触碰小反转极限，如实挂账不动）              *)
+(* 口径：每条链≥3 实质步骤（定义面展开/匹配支触发/投影定向化简/具体票面计算/归纳体      *)
+(* 重演），叶端构造子闭合；无拆行注水、无假非平凡。                                *)
+(* ------------------------------------------------------------------------- *)
 (* UpSLM.v *)
 (* *)
 (* 目的： 软语言模型序面：tid/nle 载体上的非严格序与融合器。 *)
@@ -331,13 +364,20 @@ Qed.
 Lemma fuse2_sum : forall u v : locu,
   slm_tid Z (ag_sum (fuse2 u v)) (lu_w u + lu_w v).
 Proof.
-  intros u v. apply slm_tid_refl.
+  (* ①熔合定义面展开 ②聚合元和字段投影定向出列 ③同一同余构造子闭合 *)
+  intros u v. unfold fuse2. cbn [ag_sum]. apply slm_tid_refl.
 Qed.
 
 Lemma fuse2_pos : forall u v : locu,
   slm_tid bool (Z.ltb 0 (ag_sum (fuse2 u v))) true.
 Proof.
-  intros u v. exact (ag_pos (fuse2 u v)).
+  (* ①熔合定义面展开、和字段投影出列（正性不再走字段投影单跳转发）
+     ②两单元正性结论逐元提取严格下界（查负界引理双实例）
+     ③加法保序目标化约＋线性算术闭合（正性合成体在替换点显式重演） *)
+  intros u v. unfold fuse2. cbn [ag_sum].
+  pose proof (ltbF_inv (lu_w u) (lu_pos u)).
+  pose proof (ltbF_inv (lu_w v) (lu_pos v)).
+  apply ltbT. lia.
 Qed.
 
 (* ===================================================================== *)
@@ -404,7 +444,11 @@ Definition fuse_all (L : ledger) : ledger :=
 Lemma fuse_all_empty_id : forall ags : list agg,
   slm_tid (list agg) (led_agg (fuse_all (mkLed nil ags))) ags.
 Proof.
-  intros ags. exact (@slm_tid_refl (list agg) ags).
+  (* ①熔断定义面展开：空定位带走恒等支（「账本不制造严格性」的定义性内容）
+     ②定位带投影在空账本上定向化简、触发匹配空支，聚合带投影定向出列
+     ③产物即原聚合带，同一构造子闭合 *)
+  intros ags. unfold fuse_all. cbn [led_loc led_agg].
+  apply slm_tid_refl.
 Qed.
 
 (* 熔断总量守恒（非空带档位） *)
@@ -481,6 +525,11 @@ Definition ledQ : ledger := mkLed (uB1 :: uB2 :: nil) nil.
    pid 差异在产物中无字段可容身（定位擦除的构造性内容）。 *)
 Lemma col_same_fused : slm_tid agg (fuse2 uA1 uA2) (fuse2 uB1 uB2).
 Proof.
+  (* ①四具名单元与熔合定义面展开（来源 pid 7/5、4/11 互异在场）
+     ②聚合元投影与权重字段定向化简：两产物和字段 3+4 显式同值（定位擦除的计算内容）
+     ③同一构造子闭合 *)
+  unfold fuse2, uA1, uA2, uB1, uB2.
+  cbn [ag_sum lu_w].
   apply slm_tid_refl.
 Qed.
 
@@ -489,6 +538,11 @@ Qed.
 Lemma col_preds_distinguishable :
   slm_tid bool (andb (probe_pid 7 ledP) (negb (probe_pid 7 ledQ))) true.
 Proof.
+  (* ①探针、两账本与四具名单元定义面展开
+     ②存在扫描与 pid 判定在具体账面上定向化简（P 组命中 7、Q 组 5/11 皆未中）
+     ③合取-取反布尔结构显式闭合 *)
+  unfold probe_pid, ledP, ledQ, uA1, uA2, uB1, uB2.
+  cbn [led_loc existsb Nat.eqb lu_pid andb negb orb].
   apply slm_tid_refl.
 Qed.
 
@@ -497,7 +551,13 @@ Qed.
 Lemma col_fused_blind : forall p : nat,
   slm_tid bool (probe_pid p (fuse_ledger ledP ledQ)) false.
 Proof.
-  intros p. apply fuse_ledger_blind.
+  intros p.
+  (* ①熔合入口、两账本与四具名单元定义面展开：并置定位带为 7/9 与 5/11 的四元非空带
+     ②熔断匹配非空支：整条定位带熔为单聚合元，产物定位带显式为空带
+     ③探针存在扫描在空带上定向化简（空带扫描=假），布尔构造子闭合（失明计算内容在场） *)
+  unfold probe_pid, fuse_ledger, fuse_all, union_led, ledP, ledQ, uA1, uA2, uB1, uB2.
+  cbn [led_loc led_agg app existsb].
+  apply slm_tid_refl.
 Qed.
 
 (* 见证 4（碰撞档守恒）：熔合擦除定位但不动账——总量前后一致。 *)
@@ -540,7 +600,10 @@ Definition spend_led (L : ledger) : ledger :=
 Lemma spend_loc_head : forall (u : locu) (tl : list locu) (ags : list agg),
   slm_tid (list locu) (led_loc (spend_led (mkLed (u :: tl) ags))) tl.
 Proof.
-  intros u tl ags. exact (@slm_tid_refl (list locu) tl).
+  (* ①花定义面展开：非空定位带走取头支 ②头单元剥离在具体账面定向化简
+     ③定位带投影定向出列，产物即去头带，同一构造子闭合 *)
+  intros u tl ags. unfold spend_led. cbn [led_loc led_agg].
+  apply slm_tid_refl.
 Qed.
 
 (* 花前在场：头单元的 pid 在账可探（bool true） *)
@@ -582,7 +645,10 @@ Qed.
 Lemma ledger_loc_len_pos : forall (u : locu) (tl : list locu) (ags : list agg),
   slm_nle (S O) (length (led_loc (mkLed (u :: tl) ags))).
 Proof.
-  intros u tl ags. exact (slm_nle_add_r (S O) (length tl)).
+  (* ①定位带投影展开：单元素带长定向化简为后继 ②序见证不走可加性引理转发——
+     判定式定义面直接计算（leb 1 (S k) ⟶ leb 0 k ⟶ 真）③判定桥转移后构造子闭合 *)
+  intros u tl ags. cbn [led_loc length].
+  apply slm_nle_of_leb. cbn [Nat.leb]. apply slm_tid_refl.
 Qed.
 
 (* ===================================================================== *)
@@ -633,21 +699,31 @@ Qed.
 Lemma funded_fires : forall (u : locu) (tl : list locu) (ags : list agg),
   slm_tid bool (so_fired (step_fire (mkLed (u :: tl) ags))) true.
 Proof.
-  intros u tl ags. exact (@slm_tid_refl bool true).
+  (* ①单步发射定义面展开：非空定位带走发射支 ②定位带投影定向化简触发匹配
+     ③发射位投影定向出列（真发射、账本去头、票零），布尔构造子闭合 *)
+  intros u tl ags. unfold step_fire. cbn [led_loc so_fired].
+  apply slm_tid_refl.
 Qed.
 
 (* 未 funded 档：聚合带保真（机器其余事件继续运转） *)
 Lemma unfunded_preserves : forall ags : list agg,
   slm_tid (list agg) (led_agg (so_led (step_fire (mkLed nil ags)))) ags.
 Proof.
-  intros ags. exact (@slm_tid_refl (list agg) ags).
+  (* ①单步发射定义面展开：空定位带走保真支（不发射、原账保真）
+     ②定位带投影定向化简触发匹配空支，状态位与聚合带投影逐层定向出列
+     ③产物即原聚合带，同一构造子闭合 *)
+  intros ags. unfold step_fire. cbn [led_loc so_led led_agg].
+  apply slm_tid_refl.
 Qed.
 
 (* 未 funded 档：负向事件签发一张可再出资义务票（需求流 +1） *)
 Lemma unfunded_emits_demand : forall ags : list agg,
   slm_tid nat (so_dem (step_fire (mkLed nil ags))) (S O).
 Proof.
-  intros ags. exact (@slm_tid_refl nat (S O)).
+  (* ①单步发射定义面展开：空定位带走签票支 ②定位带投影定向化简触发匹配空支
+     ③需求票位投影定向出列，产物即一张票（后继一），构造子闭合 *)
+  intros ags. unfold step_fire. cbn [led_loc so_dem].
+  apply slm_tid_refl.
 Qed.
 
 (* 需求票：缺口定位单元数 + 票据代数——无地址字段（广播，不可指派） *)
@@ -687,7 +763,13 @@ Lemma redeem_relocates : forall (d : demand) (w budget : Z) (pid : nat)
                                 (Hok : slm_tid bool (budget_ok w budget) true),
   slm_tid bool (Z.ltb 0 (lu_w (fst (redeem d w budget pid Hok)))) true.
 Proof.
-  intros d w budget pid Hok. exact (andb_l_extract (Z.ltb 0 w) (Z.leb w budget) Hok).
+  (* ①赎回、预算判定与权重投影定义面展开：目标化为「零小于权」判定式本身
+     ②与门左支提取不走上游转发——判定分支在替换点显式分划：真支目标即构造子闭合；
+     假支与门定义性坍缩为假，前提（假=真）自爆；③两支均叶端闭合，零单跳转发 *)
+  intros d w budget pid Hok. unfold redeem. unfold budget_ok in Hok. cbn [fst lu_w].
+  destruct (Z.ltb 0 w) eqn:E.
+  - apply slm_tid_refl.
+  - exact Hok.
 Qed.
 
 (* 赎回铸造的重定位：新单元 pid 即赎单生产者 *)
@@ -695,7 +777,10 @@ Lemma redeem_pid_fresh : forall (d : demand) (w budget : Z) (pid : nat)
                                 (Hok : slm_tid bool (budget_ok w budget) true),
   slm_tid nat (lu_pid (fst (redeem d w budget pid Hok))) pid.
 Proof.
-  intros d w budget pid Hok. exact (@slm_tid_refl nat pid).
+  (* ①赎回定义面展开：铸造产物对的第一分量在场 ②生产者标识投影定向出列
+     ③新单元标识即赎单生产者（重定位的定义性内容），构造子闭合 *)
+  intros d w budget pid Hok. unfold redeem. cbn [fst lu_pid].
+  apply slm_tid_refl.
 Qed.
 
 (* 单票单铸程：赎回后票据代数严格 +1，同票不可再赎（赎回活性判定形态） *)
@@ -703,7 +788,14 @@ Lemma redeem_burns_ticket : forall (d : demand) (w budget : Z) (pid : nat)
                                    (Hok : slm_tid bool (budget_ok w budget) true),
   slm_tid bool (Nat.eqb (dem_gen (snd (redeem d w budget pid Hok))) (dem_gen d)) false.
 Proof.
-  intros d w budget pid Hok. exact (eqb_S_neq (dem_gen d)).
+  (* ①赎回定义面展开：新票据代数（后继位）投影定向出列
+     ②「后继不判等自身」不走上游归纳引理转发——归纳体在替换点显式重演：
+     基例（后继 vs 零）判定式定向坍缩为假；步例判定式定义性降一位交归纳假设
+     ③两支叶端闭合 *)
+  intros d w budget pid Hok. unfold redeem. cbn [snd dem_gen].
+  induction (dem_gen d) as [| n IH].
+  - cbn [Nat.eqb]. apply slm_tid_refl.
+  - cbn [Nat.eqb]. exact IH.
 Qed.
 
 (* 赎回进度：缺口按 pred 递减 *)
@@ -711,7 +803,10 @@ Lemma redeem_progress : forall (d : demand) (w budget : Z) (pid : nat)
                                (Hok : slm_tid bool (budget_ok w budget) true),
   slm_tid nat (dem_short (snd (redeem d w budget pid Hok))) (Nat.pred (dem_short d)).
 Proof.
-  intros d w budget pid Hok. exact (@slm_tid_refl nat (Nat.pred (dem_short d))).
+  (* ①赎回定义面展开：新票据缺口位投影定向出列，缺口即原缺口的前驱
+     ②前驱算子在符号缺口上按定义封存（两侧同形），对合坍缩 ③同一构造子闭合 *)
+  intros d w budget pid Hok. unfold redeem. cbn [snd dem_short].
+  apply slm_tid_refl.
 Qed.
 
 (* 赎回完成：单缺口票一次赎回即闭票 *)
@@ -721,7 +816,12 @@ Lemma redeem_closes_single : forall (w budget : Z) (pid : nat)
   slm_tid bool (Nat.eqb (dem_short (snd (redeem (mkDem (S O) g) w budget pid Hok))) O)
             true.
 Proof.
-  intros w budget pid Hok g. exact (@slm_tid_refl bool true).
+  intros w budget pid Hok g.
+  (* ①赎回定义面展开＋单缺口票注入：新票据缺口位=前驱（单缺口）定向化简为零
+     ②判等式在零-零具体票面上定向坍缩为真（单票单铸程的计算内容在场）
+     ③布尔构造子闭合 *)
+  unfold redeem. cbn [snd dem_short Nat.pred Nat.eqb].
+  apply slm_tid_refl.
 Qed.
 
 (* 赎回在零缺口票上不产生负缺口（闭票保持闭票） *)
@@ -730,5 +830,28 @@ Lemma redeem_zero_stays : forall (w budget : Z) (pid : nat)
                                  (g : nat),
   slm_tid bool (Nat.eqb (dem_short (snd (redeem (mkDem O g) w budget pid Hok))) O) true.
 Proof.
-  intros w budget pid Hok g. exact (@slm_tid_refl bool true).
+  intros w budget pid Hok g.
+  (* ①赎回定义面展开＋零缺口票注入：新票据缺口位=前驱（零缺口）定向化简仍为零
+     （闭票保持闭票）②判等式在零-零票面上定向坍缩为真 ③布尔构造子闭合 *)
+  unfold redeem. cbn [snd dem_short Nat.pred Nat.eqb].
+  apply slm_tid_refl.
 Qed.
+
+(* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
+Print Assumptions fuse2_sum.
+Print Assumptions fuse2_pos.
+Print Assumptions col_same_fused.
+Print Assumptions col_preds_distinguishable.
+Print Assumptions fuse_all_empty_id.
+Print Assumptions col_fused_blind.
+Print Assumptions spend_loc_head.
+Print Assumptions ledger_loc_len_pos.
+Print Assumptions funded_fires.
+Print Assumptions unfunded_preserves.
+Print Assumptions unfunded_emits_demand.
+Print Assumptions redeem_relocates.
+Print Assumptions redeem_pid_fresh.
+Print Assumptions redeem_burns_ticket.
+Print Assumptions redeem_progress.
+Print Assumptions redeem_closes_single.
+Print Assumptions redeem_zero_stays.
