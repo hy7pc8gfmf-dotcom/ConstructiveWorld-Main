@@ -545,3 +545,5 @@ UpAblQfloorDepth.v
 UpAblS06AbsFeed.v
 UpAblTwLeFeed.v
 UpAblArchGeomBatch.v
+UpAblCauchyLim.v
+UpAblHalfPowFeed.v

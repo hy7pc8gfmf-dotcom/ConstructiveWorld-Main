@@ -3065,3 +3065,14 @@ Definition ng_UpAblS06AbsFeed : NewGreenFace :=
 Definition ng_UpAblArchGeomBatch : NewGreenFace :=
   MkNewGreenFace "UpAblArchGeomBatch.v" 111 4 20260920 "Arch geometry batch piece consuming QeqBridge (_tq1_ line), four-gate".
 
+
+(* ===== Index v4.16 —— R100 小波注册（2 件，主会话 R100 席装配，born-in-place 复证）===== *)
+
+(* ng_UpAblCauchyLim —— UpAblCauchyLim.v：TP6 席（CauchyLim 收口）：CauchyLim 模位收口件（_tp6_ 侦察线转正）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblCauchyLim : NewGreenFace :=
+  MkNewGreenFace "UpAblCauchyLim.v" 250 8 20260920 "TP6 seat: CauchyLim closure piece (recon line _tp6_ promoted), four-gate".
+
+(* ng_UpAblHalfPowFeed —— UpAblHalfPowFeed.v：HalfPow 馈线件（消费 HalfPow）（TP3 线）；四关绿；vo 树 born-in-place 复证 *)
+Definition ng_UpAblHalfPowFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblHalfPowFeed.v" 229 5 20260920 "HalfPow feed piece consuming HalfPow (TP3 line), four-gate".
+
