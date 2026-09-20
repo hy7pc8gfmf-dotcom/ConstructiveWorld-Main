@@ -3151,3 +3151,14 @@ Definition ng_UpAblRateAlgPkg : NewGreenFace :=
 Definition ng_UpAblSlackMix : NewGreenFace :=
   MkNewGreenFace "UpAblSlackMix.v" 291 0 20260920 "paper-7 update line: N1 seat slack-form algorithmization definition face slm_ three pieces (_tn1_)".
 
+
+
+(* ================= v4.18 增册（R103 注册波：M4 席 World3 双侧混合窗 2 件同车=供体+消费件，20260921；承前 ng_ 共 380 条，本批 2 条后共 382 条） ================= *)
+
+(* ng_UpAblMetaWorld3 —— UpAblMetaWorld3.v：N4 席非退化核世界机器面（TV 算子/点质量对/精确幂律+预算下界两腿，34 件）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaWorld3 : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaWorld3.v" 753 34 20260921 "N4 seat: non-degenerate kernel world machine face (TV operator, point-mass pair, exact power law + budget lower bound legs, 34 pieces)".
+
+(* ng_UpAblMetaWindow —— UpAblMetaWindow.v：M4 席双侧混合窗定理（泛型塌缩腿新证+World3 存在侧两腿合取，8 件，Axioms none）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaWindow : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaWindow.v" 207 8 20260921 "M4 seat: two-sided mixing window theorem (generic collapse leg new proof + World3 existence-side two legs conjunction, 8 pieces, Axioms none)".
