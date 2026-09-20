@@ -31,7 +31,7 @@
 (* 编译：vorebuild_901 单根（PolyIntegral 同库直接可见）。               *)
 (* ============================================================ *)
 
-From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia Psatz.
+From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 From Stdlib Require Import Setoid.
 Import ListNotations.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
@@ -125,6 +125,13 @@ Proof.
   intros a b c Hab Hca. apply (Qlt_le_trans c a b).
   - exact Hca.
   - apply qeq_le. exact Hab.
+Qed.
+
+(* REV-R1 20260918 新增：除法-乘法换位（Qdiv 为 ring 原子，跨原子恒等
+   须显式归位——pei_eb_eval 步项两侧 /-原子形不同时所需）。 *)
+Lemma pei_div_mul_shift : forall X Y Z : Q, X * Z / Y == (X / Y) * Z.
+Proof.
+  intros X Y Z. unfold Qdiv. ring.
 Qed.
 
 Lemma pei_lt_le_plus : forall a b : Q, Qlt 0 a -> Qle 0 b -> Qlt 0 (a + b).
@@ -370,6 +377,10 @@ Proof.
            ++ apply Qmult_lt_0_compat.
               ** unfold Qlt. cbn [Qnum Qden Qplus]. lia.
               ** apply q_fact_pos.
+        (* REV-R1 20260918：原块系块 1 复制，但 s 因子次序相反
+           （(S a#1 + S b'#1) 在前、q_fact 在后），apply q_fact_pos
+           打在加和项上失配（TRI-V1 L374 首错，实测环境 b'/IH 即此处）。
+           REV-R1 定点手术：加和项 lia 支、q_fact 支换序。 *)
         -- apply Qmult_lt_0_compat.
            ++ unfold Qlt. cbn [Qnum Qden Qplus]. lia.
            ++ apply q_fact_pos.
@@ -406,6 +417,10 @@ Proof.
   intros n k. induction n as [| m IH].
   - replace (0 + k)%nat with k%nat by lia.
     rewrite (q_fact_succ k). cbn [q_fact].
+    (* REV-R1 20260918：原 apply (Qmult_le_compat_l 1 (Z.of_nat (S k) # 1)
+       (q_fact k)) 死名（9.1 stdlib 无 _l/Qmult_le_compat）。实测目标
+       （q_fact 0 cbn 后）= 1*q_fact k <= (S k#1)*q_fact k，恰为
+       Qmult_le_compat_r 1 (S k#1) (q_fact k) 结论形，单步直合。 *)
     apply (Qmult_le_compat_r 1%Q (Z.of_nat (Datatypes.S k) # 1)%Q (q_fact k)).
     + unfold Qle. cbn [Qnum Qden Qmult Pos.mul]. lia.
     + apply Qlt_le_weak. apply q_fact_pos.
@@ -418,75 +433,70 @@ Proof.
     assert (Ej1 : q_fact (Datatypes.S (2 * m + k))
                   == (Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
       by apply q_fact_succ.
-    replace (Datatypes.S (2 * Datatypes.S m + k))%nat
-      with (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k))))%nat by lia.
+    (* REV-R1 20260918：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
+       2*S m+k=2m+k+2，lia "Cannot find witness"）；下方 q_fact_succ
+       重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形定谳改回
+       两层 S。 *)
+    replace (2 * Datatypes.S m + k)%nat
+      with (Datatypes.S (Datatypes.S (2 * m + k)))%nat by lia.
     rewrite (q_fact_succ (Datatypes.S (Datatypes.S (2 * m + k)))).
     rewrite (q_fact_succ (Datatypes.S (2 * m + k))).
     rewrite Esm, Esmk, Ej1.
+    (* REV-R1 20260918 重写归纳步链（原链三重真伤：①replace 多一层 S；
+       ②A # 1 * B # 1 同级左结合被 Qmake 吞参——positive 型错；
+       ③qeq_le+ring 误用于真不等式 P*A ≤ q_fact(S(2m+k))*A——非恒等式）。
+       本构四步右嵌套：
+       h1 恒等归位（ring）；h2 IH 右乘 A（_r，IH+0≤A）；
+       h3 旋转后 _r：A ≤ (2m+k+3)(2m+k+2)（nia）右乘 q_fact(S(2m+k))；
+       h4 Ej1 恒等归位（ring）。 *)
     apply (Qle_trans
       ((Z.of_nat (Datatypes.S m) # 1) * q_fact m
          * ((Z.of_nat (Datatypes.S (m + k)) # 1) * q_fact (m + k)))
-      (((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
-         * (q_fact m * q_fact (m + k)))
+      ((q_fact m * q_fact (m + k))
+         * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
       ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
          * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
               * ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))))).
     + apply qeq_le. ring.
     + apply (Qle_trans
-        (((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
-            * (q_fact m * q_fact (m + k)))
-        ((((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
-             * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
-                  * (Z.of_nat (Datatypes.S (2 * m + k)) # 1)))
-              * q_fact (2 * m + k)))
+        ((q_fact m * q_fact (m + k))
+           * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
+        (q_fact (Datatypes.S (2 * m + k))
+           * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
         ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
-            * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
-                 * ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))))).
+           * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
+                * ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))))).
+      * apply (Qmult_le_compat_r (q_fact m * q_fact (m + k))
+                  (q_fact (Datatypes.S (2 * m + k)))
+                  ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))).
+        -- exact IH.
+        -- apply Qmult_le_0_compat; unfold Qle; cbn [Qnum Qden Qplus Qmult Qinv q_fact]; lia.
       * apply (Qle_trans
+          (q_fact (Datatypes.S (2 * m + k))
+             * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
           (((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
-              * (q_fact m * q_fact (m + k)))
-          ((((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
-              * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))))
-          ((((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
-                * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
-                     * (Z.of_nat (Datatypes.S (2 * m + k)) # 1)))
-              * q_fact (2 * m + k)))).
+             * q_fact (Datatypes.S (2 * m + k)))
+          ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
+             * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
+                  * ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))))).
+        -- apply qeq_le. ring.
         -- apply (Qle_trans
-             (((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
-                 * (q_fact m * q_fact (m + k)))
-             ((q_fact m * q_fact (m + k))
-                 * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
-             ((((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
-                 * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))))).
-           ++ apply qeq_le. ring.
-           ++ apply (Qmult_le_compat_r (q_fact m * q_fact (m + k))
-                       ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
-                       ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))).
-              ** exact IH.
-              ** apply Qmult_le_0_compat; unfold Qle;
-                 cbn [Qnum Qden Qplus Qmult Qinv q_fact]; lia.
-        -- apply (Qle_trans
-             ((((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
-                 * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))))
-             ((((Z.of_nat (Datatypes.S (2 * m + k)) # 1)
-                  * ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1)))
-                 * q_fact (2 * m + k)))
-             ((((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
-                  * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
-                       * (Z.of_nat (Datatypes.S (2 * m + k)) # 1)))
-                * q_fact (2 * m + k)))).
-           ++ apply qeq_le. ring.
+              (((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
+                 * q_fact (Datatypes.S (2 * m + k)))
+              (((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
+                  * (Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1))
+                 * q_fact (Datatypes.S (2 * m + k)))
+              ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
+                 * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
+                      * ((Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))))).
            ++ apply (Qmult_le_compat_r
-                       ((Z.of_nat (Datatypes.S (2 * m + k)) # 1)
-                          * ((Z.of_nat (Datatypes.S m) # 1)
-                               * (Z.of_nat (Datatypes.S (m + k)) # 1)))
-                       ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
-                          * ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1)
-                               * (Z.of_nat (Datatypes.S (2 * m + k)) # 1)))
-                       (q_fact (2 * m + k))).
+                  ((Z.of_nat (Datatypes.S m) # 1) * (Z.of_nat (Datatypes.S (m + k)) # 1))
+                  ((Z.of_nat (Datatypes.S (Datatypes.S (Datatypes.S (2 * m + k)))) # 1)
+                     * (Z.of_nat (Datatypes.S (Datatypes.S (2 * m + k))) # 1))
+                  (q_fact (Datatypes.S (2 * m + k)))).
               ** unfold Qle. cbn [Qnum Qden Qmult Pos.mul]. nia.
               ** apply Qlt_le_weak. apply q_fact_pos.
-      * apply qeq_le. ring.
+           ++ apply qeq_le. rewrite Ej1. ring.
 Qed.
 
 (* ============================================================ *)
@@ -511,7 +521,7 @@ Proof.
   - cbn [pei_eb_list]. rewrite pei_list_length. lia.
   - cbn [pei_eb_list].
     rewrite pei_add_length.
-    + rewrite pei_scale_length, pei_list_length. lia.
+    + rewrite pei_scale_length, pei_list_length. simpl. lia.
     + unfold pei_ztail. rewrite app_length, IH, pei_scale_length,
         pei_list_length. simpl. lia.
 Qed.
@@ -586,8 +596,9 @@ Proof.
     rewrite IH. rewrite pei_beta_eval.
     cbn [exp_partial].
     rewrite (pei_q_pow_mul x t (Datatypes.S m)).
+    rewrite pei_div_mul_shift.
     rewrite (q_pow_add t n (Datatypes.S m)).
-    unfold Qdiv. ring.
+    ring.
 Qed.
 
 (* 项非负：x ≥ 0 时每个泰勒项非负（幂非负 × 1/k! 正 × Beta 正） *)
@@ -618,6 +629,7 @@ Proof.
   assert (Hshift := pei_sum_shift M (fun k : nat =>
     q_pow x k / q_fact k
       * (q_fact (n + k) * q_fact n / q_fact (Datatypes.S (2 * n + k))))).
+  rewrite Hshift in Hval.
   assert (Hrest : Qle 0 (sum_upto M (fun k : nat =>
     q_pow x (Datatypes.S k) / q_fact (Datatypes.S k)
       * (q_fact (n + Datatypes.S k) * q_fact n
@@ -626,7 +638,7 @@ Proof.
       q_pow x (Datatypes.S k) / q_fact (Datatypes.S k)
         * (q_fact (n + Datatypes.S k) * q_fact n
              / q_fact (Datatypes.S (2 * n + Datatypes.S k))))).
-    intro k. intro Hlt. apply pei_term_nonneg. exact Hx. }
+    intro k. intro Hbnd. apply pei_term_nonneg. exact Hx. }
   assert (Hf0 : Qlt 0 (q_pow x 0%nat / q_fact 0%nat
     * (q_fact (n + 0)%nat * q_fact n
          / q_fact (Datatypes.S (2 * n + 0)%nat)))).
@@ -638,21 +650,20 @@ Proof.
     { unfold Qdiv. apply Qmult_inv_r.
       intro E. unfold Qeq in E. cbn [Qnum Qden Qmult Pos.mul] in E. lia. }
     rewrite Hone, Qmult_1_l.
-    unfold Qdiv. apply Qmult_lt_0_compat.
-    - apply Qmult_lt_0_compat; apply q_fact_pos.
-    - apply Qinv_lt_0_compat. apply q_fact_pos. }
+    unfold Qdiv.
+    apply Qmult_lt_0_compat.
+    + apply Qmult_lt_0_compat; apply q_fact_pos.
+    + apply Qinv_lt_0_compat. apply q_fact_pos. }
   assert (Hsum : Qlt 0 (sum_upto (Datatypes.S M) (fun k : nat =>
     q_pow x k / q_fact k
       * (q_fact (n + k) * q_fact n / q_fact (Datatypes.S (2 * n + k)))))).
-  { rewrite Hshift. apply pei_lt_le_plus.
-    - exact Hf0.
-    - exact Hrest. }
+  { rewrite Hshift. apply pei_lt_le_plus; assumption. }
   apply Qlt_to_QltT.
   apply (pei_qeq_lt (sum_upto (Datatypes.S M) (fun k : nat =>
     q_pow x k / q_fact k
       * (q_fact (n + k) * q_fact n / q_fact (Datatypes.S (2 * n + k)))))
     (pint_integral (pei_eb_list n x M)) 0%Q).
-  - apply Qeq_sym. exact Hval.
+  - rewrite Hshift. apply Qeq_sym. exact Hval.
   - exact Hsum.
 Qed.
 
@@ -683,18 +694,21 @@ Proof.
     { apply (Qle_trans _ (q_fact n * q_fact (n + Datatypes.S m)) _).
       - apply qeq_le. ring.
       - exact Hf2. }
-    rewrite Hstep.
+    (* REV-R1 20260918：原步项链三处错序——①外链中间点误写 exp_partial m x
+       （应为 Hstep 右侧的 pint_integral (pei_eb_list n x m) 项）；
+       ②两条 + bullet 顺序颠倒（Hstep 传输须先于 Qplus_le_compat 拆分）；
+       ③内层中点 c*1 应为 1*c（Qmult_le_compat_r 结论形 x*z ≤ y*z）。
+       本构：pint(Sm) ≤(Hstep) c*Beta+pint m ≤(Qplus_le_compat) c*1+exp m
+       ==(cbn+ring) exp(S m)。 *)
     apply (Qle_trans _
       (q_pow x (Datatypes.S m) / q_fact (Datatypes.S m)
          * (q_fact (n + Datatypes.S m) * q_fact n
               / q_fact (Datatypes.S (n + Datatypes.S m + n)))
-       + exp_partial m x) _).
-    + apply Qplus_le_compat.
-      * apply Qle_refl.
-      * apply QleT'_to_Qle. apply IH.
+       + pint_integral (pei_eb_list n x m)) _).
+    + apply qeq_le. exact Hstep.
     + apply (Qle_trans _
-          (1%Q * (q_pow x (Datatypes.S m) / q_fact (Datatypes.S m))
-             + exp_partial m x) _).
+        (q_pow x (Datatypes.S m) / q_fact (Datatypes.S m) * 1%Q
+           + exp_partial m x) _).
       * apply Qplus_le_compat.
         -- apply (Qle_trans _
               ((q_fact (n + Datatypes.S m) * q_fact n
@@ -711,11 +725,11 @@ Proof.
                      +++ apply q_fact_pos.
                      +++ exact Hf3.
                  --- unfold Qdiv. apply Qmult_le_0_compat.
-                     ++++ apply q_pow_nonneg. apply QleT'_to_Qle. exact Hx.
-                     ++++ apply Qlt_le_weak. apply Qinv_lt_0_compat.
-                          apply q_fact_pos.
+                     *** apply q_pow_nonneg. apply QleT'_to_Qle. exact Hx.
+                     *** apply Qlt_le_weak. apply Qinv_lt_0_compat.
+                         apply q_fact_pos.
               ** apply qeq_le. ring.
-        -- apply Qle_refl.
+        -- apply QleT'_to_Qle. apply IH.
       * apply qeq_le. cbn [exp_partial]. ring.
 Qed.
 

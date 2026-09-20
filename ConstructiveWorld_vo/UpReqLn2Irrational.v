@@ -37,7 +37,7 @@ Require Import UpReqBanachNormOpp.
 Require Import UpReqIrrationalCriterion.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* S0：Q 层通用小件                                                *)

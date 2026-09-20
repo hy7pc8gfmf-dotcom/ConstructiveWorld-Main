@@ -50,7 +50,7 @@ Require Import UpReqLn2Irrational.
 From Stdlib Require Import QArith.QArith QArith.Qabs Lists.List Arith.Arith
   ZArith.ZArith.
 From Stdlib Require Import Arith.Factorial.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* §A 有理域引擎（PadeErrorIntegral §A 同构移植，lne_ 换名）           *)

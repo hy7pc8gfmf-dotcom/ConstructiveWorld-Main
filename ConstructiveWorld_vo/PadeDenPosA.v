@@ -55,7 +55,7 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqAltSumPos UpReqPadeDenPos.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 
 (* ============================================================ *)
 (* Part 0：系数特殊值（c_0 == 1、首对比值 R n 0 == 2、c_1·2 == c_0）     *)

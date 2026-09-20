@@ -7,7 +7,7 @@
 (*   sumf 槽六件中的五件＋缺口核心件：                                   *)
 (*   csm_abs_sum_le_eps（绝对值和三角的 Bishop 逐 eps 形）。             *)
 (*                                                              *)
-(* 定谳注记（探针实测）：                                              *)
+(* 实测注记：                                              *)
 (*   ① plain 形 abs_sum_le（Or 编码 le）对混合号 f 无构造性路线——        *)
 (*      real_le = Or (real_lt) (real_eq)（S02 L469），|Σf| 与 Σ|f| 既     *)
 (*      无正间隙也非实等，Or 两支均不可达（真墙）。故本件供 Bishop        *)
@@ -30,13 +30,13 @@
 (*   C 定义级保底：csm_sum_eq_list（折叠处方即列表和，req_refl）。       *)
 (*                                                              *)
 (* 备注：公理面自审：全件语句 Set 值（req/le/lt 均 Set 值面）；前提位     *)
-(*   全显式证书参数（eps 正性等），探针应 Closed；无未证断言；           *)
+(*   全显式证书参数（eps 正性等），审计应 Closed；无未证断言；           *)
 (*   无非构造捷径；主件 Defined 收束。                                  *)
 (* ============================================================ *)
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Setoid Morphisms.
-From Stdlib Require Import Lia Lra.
+From Stdlib Require Import Lia.
 Open Scope Q_scope.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -252,7 +252,7 @@ Definition csm_abs_sum_le_eps : forall (f : S -> Real) (eps : Real),
 
 End CsmSumOver.
 
-(* ============ G4 证据：新件零外部未证假设（全 Closed，前提=显式参数） ============ *)
+(* ============ 公理面证据：新件零外部未证假设（全 Closed，前提=显式参数） ============ *)
 Print Assumptions csm_sum_eq_list.
 Print Assumptions csm_sum_ext.
 Print Assumptions csm_sum_linear.

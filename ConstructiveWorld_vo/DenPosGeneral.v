@@ -29,7 +29,7 @@
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqPadeDenPos UpReqAltSumPos.
 Require Import PadeDenPosB12.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 From Stdlib Require Import Setoid.
 
 (* ===== 件 1：首对严格——x < 2 ≤ R_{n,0} ⟹ g(1) < g(0)（全 n≥1） ===== *)

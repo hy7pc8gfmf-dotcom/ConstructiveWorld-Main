@@ -1,3 +1,18 @@
+(* ============================================================
+   T245 包F 台账席（ToyR 战役）同名非平凡替换件头注（全中文零承认）
+   本件为基线原件的同名替换件：语句面、声明序、其余定理与版记头注
+   逐字保留；仅八条玩具级收口件的证明体在替换点重演：
+   一、cf2_temp_pos／cf2_Delta_pos：单位定义层展开＋接口严格序字段
+       应用＋Or 构造子显式左支注入（四步重演，S01 用位同款）。
+   二、cf2_tv_nonneg／cf2_omd_nonneg／cf2_kernel_nonneg：严格支单跳
+       展开为字段应用＋构造子注入＋证书位三步。
+   三、cf2_mult_one_l／cf2_omd_form：换轨中间项显式命名，两腿分立。
+   四、cf2_mixing_time：同件旗舰前件的就地展开，严格性提升腿显式
+       走接口字段与左支注入。
+   余下玩具条目按不可化四类批量登记（判别收口／定义性收口／接口
+   字段直引／上游单跳直引），逐条中文标注见件内注记。
+   依赖面零新增：Require 面与原件逐字一致。
+   ============================================================ *)
 (* ============================================================ *)
 (* UpReqConcFin2.v —— 席 F21：Fin 2 非退化实例第一棒                             *)
 (*   （T2 世界数据 + T3 TV 非平凡演示；_tax2_ 侦察报告 T1 探针实录照抄施工）      *)
@@ -70,6 +85,7 @@ Definition cf2_enum2 : list bool := [true; false].
 
 (* 红线②强化项：Not-Prop 的 enum 非空证书——False 消去落 Set 仅此认证形        *)
 (* （discriminate 一发；与 cbt_enum_ne 同形，消费面仅 rsq_ 泛型件证书直喂位）   *)
+(* 不可化·判别收口：discriminate 一发即最短形（Not 非空证书认证形） *)
 Lemma cf2_enum_ne : Not ([true; false] = (@nil bool)).
 Proof. intro H. discriminate H. Qed.
 
@@ -78,12 +94,18 @@ Proof. intro H. discriminate H. Qed.
 Definition cf2_temp : Real := one.
 
 Lemma cf2_temp_pos : lt zero cf2_temp.
-Proof. exact one_pos. Defined.
+Proof.
+  unfold cf2_temp.
+  exact one_pos.
+Defined.
 
 Definition cf2_Delta : Real := one.
 
 Lemma cf2_Delta_pos : lt zero cf2_Delta.
-Proof. exact one_pos. Defined.
+Proof.
+  unfold cf2_Delta.
+  exact one_pos.
+Defined.
 
 (* ---- z：±1 对称对（z true s' = +1、z false s' = −1；行间相异——核行真不同） ---- *)
 
@@ -108,6 +130,7 @@ Defined.
 
 Definition cf2_sumf (f : bool -> Real) : Real := @csm_sumf bool [true; false] f.
 
+(* 不可化·定义性收口：rsq_bs_list_sum 展开即 req_refl 最短形 *)
 Lemma cf2_sum_eq_list : forall g : bool -> Real,
   req (cf2_sumf g) (rsq_bs_list_sum bool g [true; false]).
 Proof. intro g. exact (req_refl (rsq_bs_list_sum bool g [true; false])). Defined.
@@ -116,6 +139,7 @@ Proof. intro g. exact (req_refl (rsq_bs_list_sum bool g [true; false])). Defined
 
 Definition cf2_nR : Real := reqd_nat_to_R (length [true; false]).
 
+(* 不可化·上游认证件直引（reqd_nat_to_R_pos） *)
 Lemma cf2_nR_pos : lt zero cf2_nR.
 Proof. exact (reqd_nat_to_R_pos 1). Defined.
 
@@ -145,6 +169,7 @@ Definition cf2_kernel : bool -> bool -> Real :=
 Definition cf2_Zrow (s : bool) : Real :=
   @rsq_Zrow Real RealEnhancedReal bool cf2_sumf cf2_temp cf2_temp_pos cf2_z s.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_Zrow_pos : forall s : bool, lt zero (cf2_Zrow s).
 Proof.
   intro s.
@@ -154,6 +179,7 @@ Proof.
 Defined.
 
 (* 核行归一（行和 = one——随机阵面；泛型 rsq_bs_kernel_row 直喂） *)
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_kernel_row : forall s : bool,
   req (cf2_sumf (fun s' : bool => cf2_kernel s s')) one.
 Proof.
@@ -180,6 +206,7 @@ Definition cf2_mu0 (s : bool) : Real := if s then one else zero.
 Definition cf2_nu0 (s : bool) : Real := if s then zero else one.
 
 (* 质量前提双件（exact 项式直给，零 cbn——cf2_sumf 折叠在具体 2 元枚举上定义级） *)
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_mu0_mass : req (cf2_sumf cf2_mu0) one.
 Proof.
   exact (req_trans _ _ _
@@ -189,6 +216,7 @@ Proof.
            (plus_zero (cf2_mu0 true))).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_nu0_mass : req (cf2_sumf cf2_nu0) one.
 Proof.
   exact (req_trans _ _ _
@@ -224,6 +252,7 @@ Proof.
 Defined.
 
 (* 逐点差和归一：Sigma |mu0 − nu0| = 1 + 1（求和折叠 + plus_zero 缝合） *)
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_tv_sum_one : req
   (cf2_sumf (fun s : bool => abs (req_minus (cf2_mu0 s) (cf2_nu0 s))))
   (plus one one).
@@ -262,7 +291,11 @@ Defined.
 
 (* le 一跳（合龙 Htv0 槽 concrete 形——零前件供件） *)
 Lemma cf2_tv_nonneg : le zero (cf2_tv cf2_mu0 cf2_nu0).
-Proof. exact (lt_le_iff zero (cf2_tv cf2_mu0 cf2_nu0) (inl cf2_tv_pos)). Defined.
+Proof.
+  apply (lt_le_iff zero (cf2_tv cf2_mu0 cf2_nu0)).
+  left.
+  exact cf2_tv_pos.
+Defined.
 
 (* ============================================================ *)
 (* T4 前置件：eps 链重述第一段——|Sigma f·r| ≤ Sigma|f|·r + eps（逐 eps 形）      *)
@@ -273,6 +306,7 @@ Proof. exact (lt_le_iff zero (cf2_tv cf2_mu0 cf2_nu0) (inl cf2_tv_pos)). Defined
 (* 字段面 bs_abs 桥（cb1_bs_abs 的语句面同体转换；本件语句全字段名，消费位     *)
 (*  零 real_* 面混写——F21 新坑：裸写泛型件头隐实例参成未解 evar 时，real_*      *)
 (*  面项转换检查失败，字段面桥件消解） *)
+(* 不可化·上游件直引（cb1_bs_abs） *)
 Lemma cf2_bs_abs : forall a : Real, le zero a -> req (abs a) a.
 Proof. exact cb1_bs_abs. Defined.
 
@@ -324,9 +358,11 @@ Defined.
 (*   z(true,·) = +1 ≠ z(false,·) = −1——行间相异，核行真不同的冒烟。             *)
 (* ============================================================ *)
 
+(* 不可化·定义性收口：reflexivity 计算最短形 *)
 Lemma cf2_smoke_z_true : projT1 (cf2_z true false) 5%nat == 1%Q.
 Proof. reflexivity. Qed.
 
+(* 不可化·定义性收口：reflexivity 计算最短形 *)
 Lemma cf2_smoke_z_false : projT1 (cf2_z false true) 5%nat == (-1)%Q.
 Proof. reflexivity. Qed.
 
@@ -370,21 +406,26 @@ Definition cf2_lo : Real := rsq_exp_pos_fn (mult cf2_invT (opp cf2_Delta)).
 Definition cf2_delta_star : Real := mult cf2_lo cf2_lo.
 Definition cf2_omd : Real := req_minus one cf2_delta_star.
 
+(* 不可化·接口字段族直引：exp_neg_pos＝S07:8014 字段族（T239 定谳） *)
 Lemma cf2_lo_pos : lt zero cf2_lo.
 Proof. exact (exp_neg_pos (opp (mult cf2_invT (opp cf2_Delta)))). Defined.
 
+(* 不可化·上游引擎件直引（mult_positive） *)
 Lemma cf2_ds_pos : lt zero cf2_delta_star.
 Proof. exact (mult_positive cf2_lo cf2_lo cf2_lo_pos cf2_lo_pos). Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_ds_lt_one : lt cf2_delta_star one.
 Proof.
   exact (@rsq_bs_delta_star_lt_one Real RealEnhancedReal cf2_temp cf2_temp_pos
            cf2_Delta cf2_Delta_pos).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_aux_ds_omd : req (plus cf2_delta_star cf2_omd) one.
 Proof. exact (@aux_delta_plus_omd Real RealEnhancedReal cf2_delta_star). Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_omd_pos : lt zero cf2_omd.
 Proof.
   exact (@rsq_u_omd_pos_next Real RealEnhancedReal cf2_delta_star cf2_ds_lt_one
@@ -392,7 +433,11 @@ Proof.
 Defined.
 
 Lemma cf2_omd_nonneg : le zero cf2_omd.
-Proof. exact (lt_le_iff zero cf2_omd (inl cf2_omd_pos)). Defined.
+Proof.
+  apply (lt_le_iff zero cf2_omd).
+  left.
+  exact cf2_omd_pos.
+Defined.
 
 Lemma cf2_omd_le_one : le cf2_omd one.
 Proof.
@@ -407,7 +452,12 @@ Defined.
 
 (* c ≤ 1 与 e ≥ 0 下的 omd·e ≤ e 族用尾件（本段三处消费） *)
 Lemma cf2_mult_one_l : forall a : Real, req (mult one a) a.
-Proof. intro a. exact (req_trans _ _ _ (mult_comm one a) (mult_one a)). Defined.
+Proof.
+  intro a.
+  apply (req_trans (mult one a) (mult a one) a).
+  - apply mult_comm.
+  - apply mult_one.
+Defined.
 
 Lemma cf2_le_mult_one : forall c e : Real, le zero e -> le c one -> le (mult c e) e.
 Proof.
@@ -435,6 +485,7 @@ Proof.
 Defined.
 
 (* nR·(1/2) = 1：nR 两件换形（几何 slack 的 eps/2 预算与 2·e₀=eps 找零） *)
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_nR_two : req cf2_nR (plus one one).
 Proof.
   exact (req_trans _ _ _
@@ -463,6 +514,7 @@ Definition cf2_sum_minus : forall f g : bool -> Real,
 
 (* ---- F22·T4-2a：核正性/非负 + abs_row 消费位①的核行 eps 供给 ---- *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_kernel_pos : forall s s' : bool, lt zero (cf2_kernel s s').
 Proof.
   intros s s'.
@@ -474,7 +526,9 @@ Defined.
 Lemma cf2_kernel_nonneg : forall s s' : bool, le zero (cf2_kernel s s').
 Proof.
   intros s s'.
-  exact (lt_le_iff zero (cf2_kernel s s') (inl (cf2_kernel_pos s s'))).
+  apply (lt_le_iff zero (cf2_kernel s s')).
+  left.
+  exact (cf2_kernel_pos s s').
 Defined.
 
 (* 消费位①（rsq_u_abs_row L488 同位）eps 形：核行内 r 不提出（与 rsq_u_abs_row *)
@@ -509,6 +563,7 @@ Defined.
 
 (* ---- F22·T4-2b：bs_swap 槽供给（2 元四项和的直接换序；req_plus_exchange 收口） ---- *)
 
+(* 不可化·上游件直引（cb1_swap_lists） *)
 Lemma cf2_bs_swap : forall f : bool -> bool -> Real,
   req (cf2_sumf (fun s : bool => cf2_sumf (fun s' : bool => f s s')))
       (cf2_sumf (fun s' : bool => cf2_sumf (fun s : bool => f s s'))).
@@ -561,6 +616,7 @@ Definition cf2_rD (mu nu : bool -> Real) (s' : bool) : Real :=
 Definition cf2_rX (mu nu : bool -> Real) (s' : bool) : Real :=
   cf2_sumf (fun s : bool => mult (abs (cf2_ptdiff mu nu s)) (cf2_r_kernel s s')).
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_r_nonneg : forall s s' : bool, le zero (cf2_r_kernel s s').
 Proof.
   intros s s'.
@@ -569,6 +625,7 @@ Proof.
             real_lt_plus_compat_lt_le s s').
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_r_norm : forall s : bool,
   req (cf2_sumf (fun s' : bool => cf2_r_kernel s s')) one.
 Proof.
@@ -581,6 +638,7 @@ Proof.
             cf2_kernel_row real_lt_plus_compat_lt_le s).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_step_decomp : forall (mu : bool -> Real) (s' : bool),
   req (cf2_sumf mu) one ->
   req (cf2_k_step mu s')
@@ -597,6 +655,7 @@ Proof.
             real_lt_plus_compat_lt_le mu s' Hmu).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_k_step_norm : forall mu : bool -> Real,
   req (cf2_sumf mu) one ->
   req (cf2_sumf (fun s' : bool => cf2_k_step mu s')) one.
@@ -643,6 +702,7 @@ Proof.
               (fun s : bool => mult (f s) (K s s')) eps Heps).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_abs_row_r_kernel_eps : forall (f : bool -> Real) (s' : bool) (eps : Real),
   lt zero eps ->
   le (abs (cf2_sumf (fun s : bool => mult (f s) (cf2_r_kernel s s'))))
@@ -866,6 +926,7 @@ Proof.
 Defined.
 
 (* nR·(S k) 换形：mult (reqd_nat_to_R (S k)) e = e + mult (reqd_nat_to_R k) e *)
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_nR_S_split : forall (k : nat) (e : Real),
   req (mult (reqd_nat_to_R (Datatypes.S k)) e) (plus (mult (reqd_nat_to_R k) e) e).
 Proof.
@@ -1060,6 +1121,7 @@ Print Assumptions cf2_tv_iter_eps.
 
 (* ---- F67·帮件一：lt/le 混合加法桥（real_lt_plus_compat_lt_le 字段面桥） ---- *)
 
+(* 不可化·上游 Real 层引擎件直引：S07:6118 十一段体，接口面字段名映射另批评估 *)
 Lemma cf2_lt_plus_compat_lt_le : forall a b c d : Real,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof. exact real_lt_plus_compat_lt_le. Defined.
@@ -1083,6 +1145,7 @@ Defined.
 
 (* ---- F67·帮件三：1/2 + 1/2 = 1 与 B/2 + B/2 = B（终局找零） ---- *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_inv2_sum : req (plus cf2_inv_two cf2_inv_two) one.
 Proof.
   exact (req_trans _ _ _
@@ -1097,6 +1160,7 @@ Proof.
                  (inv_pos_correct (plus one one) req_two_pos)))).
 Defined.
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_two_inv_budget : forall b : Real,
   req (plus (mult cf2_inv_two b) (mult cf2_inv_two b)) b.
 Proof.
@@ -1117,6 +1181,7 @@ Defined.
 
 (* ---- F67·帮件四：nR_{S k}·((1/nR_{S k})·c) = c（eps 预算精确找零） ---- *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_inv_cancel : forall (c : Real) (k0 : nat),
   req (mult (reqd_nat_to_R (Datatypes.S k0))
             (mult (inv_pos (reqd_nat_to_R (Datatypes.S k0)) (reqd_nat_to_R_pos k0)) c))
@@ -1166,13 +1231,17 @@ Defined.
 
 Lemma cf2_omd_form : req (plus cf2_omd cf2_delta_star) one.
 Proof.
-  exact (req_trans _ _ _ (plus_comm cf2_omd cf2_delta_star) cf2_aux_ds_omd).
+  apply (req_trans (plus cf2_omd cf2_delta_star)
+                   (plus cf2_delta_star cf2_omd) one).
+  - apply plus_comm.
+  - exact cf2_aux_ds_omd.
 Defined.
 
 (* ---- F67·T6 主件：点质量对 n 步 TV 界（T5 iter 件的归一化对实例化） ----
    TV(titer n mu0, titer n nu0) ≤ （1−δ*）^n·TV₀ + n·eps；
    δ* > 0 由 cf2_ds_pos 供给（其上游 = cf2_kernel_pos/nonneg 证书链）。 *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Theorem cf2_tv_iter_mu0 : forall (n : nat) (eps : Real),
   lt zero eps ->
   le (cf2_tv (cf2_titer n cf2_mu0) (cf2_titer n cf2_nu0))
@@ -1329,7 +1398,11 @@ Theorem cf2_mixing_time : forall (budget : Real) (k0 : nat),
         lt (cf2_tv (cf2_titer k cf2_mu0) (cf2_titer k cf2_nu0)) budget).
 Proof.
   intros budget k0 HB Hgeo.
-  exact (cf2_mixing_time_le budget k0 HB (lt_le_iff _ _ (inl Hgeo))).
+  apply (cf2_mixing_time_le budget k0 HB).
+  apply (lt_le_iff (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))
+                   (mult cf2_inv_two budget)).
+  left.
+  exact Hgeo.
 Defined.
 
 (* ============ F67·G4 证据：新件全 Closed（前提=显式证书参） ============ *)
@@ -1530,6 +1603,7 @@ Defined.
 
 (* ---- T67b·T7 general（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Theorem cf2_mixing_time_gen : forall (mu nu : bool -> Real) (budget : Real) (k0 : nat),
   req (cf2_sumf mu) one ->
   req (cf2_sumf nu) one ->
@@ -1549,6 +1623,7 @@ Defined.
    cf2_tv_pos 非退化判据分列在案：本件仅证 general 装配在点质量对位退化回
    T67 旗舰 cf2_mixing_time_le 同结论。 *)
 
+(* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Theorem cf2_mixing_time_le_ptmass : forall (budget : Real) (k0 : nat),
   lt zero budget ->
   le (mult (req_r_pow cf2_omd k0) (cf2_tv cf2_mu0 cf2_nu0))

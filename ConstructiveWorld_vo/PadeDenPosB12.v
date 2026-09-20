@@ -40,7 +40,7 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqAltSumPos UpReqPadeDenPos.
-From Stdlib Require Import QArith.QArith Arith.Arith Lia Psatz.
+From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 From Stdlib Require Import Setoid.
 
 (* ===== 件 1：系数比下界强化 2 ≤ R(n,k)（挂账 b 的代数核） =====

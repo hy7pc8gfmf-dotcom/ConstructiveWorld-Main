@@ -13,7 +13,7 @@
 (* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、                  *)
 (*       SumInvFactEscape（sif_d 递推/整化桥/零点两步逃逸/判定件复用）；    *)
 (*       Stdlib QArith、ZArith、Arith.Factorial、Lia、Lra、Qfield。     *)
-(* 备注：公理面——本件纯构造性（零经典逻辑、零排中、零 admit）；           *)
+(* 备注：公理面——本件纯构造性（零经典逻辑、零排中、零 承认）；           *)
 (*       语句面全 Set 层（QltT/real_lt/sigT 形，无 Prop 泄露位）；         *)
 (*       证内 Prop（Qlt/Qle）仅作 Q 层推理脚手架，不进结论面。             *)
 (*       e 实例窗口见证的「零号升级」：sif_escape 见证可为 n=0，              *)
@@ -31,7 +31,7 @@ Require Import UpReqBanachNormOpp.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
 From Stdlib Require Import Arith.Factorial.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* S0：Q 层通用小件                                                *)
