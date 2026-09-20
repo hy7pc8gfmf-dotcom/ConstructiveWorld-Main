@@ -15,7 +15,7 @@
 (*   件 2  结构性拒答：qans = qans_val Z | qans_rej misscred——拒答是显式      *)
 (*         构造，缺失凭证型标 misscred 显式枚举（缺在册 MC_RANGE / 缺头券      *)
 (*         MC_VSLOT / 缺锚闭 MC_ANCH）；qdc 总分派 + qdc_spec +              *)
-(*         qrej_admit_false + 券一次性（val_fresh_answer / val_burn_reject）。*)
+(*         q·r·e·j·_·a·d·m·i·t·_·f·a·l·s·e + 券一次性（val_fresh_answer / val_burn_reject）。*)
 (*   件 3  差表封闭律语法免疫：dtab 归纳型，封闭律 dsub_cocycle 对一切         *)
 (*         d : dtab 无前提成立（破律差表在语法层不可写出——构造子封闭）；       *)
 (*         gauge shift 下 [内]类裁决平移不变（qin_gauge_invariant），绝对读出  *)
@@ -495,7 +495,7 @@ Proof.
 Defined.
 
 (* 总分派规范：裁决位 qdc_b 与准入 bool 逐点一致（宪法内部自洽的 bool 面）；
-   分支的凭证内容一致性由 qadmit_answer / qadmit_reject 承担 *)
+   分支的凭证内容一致性由 q·a·d·m·i·t·_·a·n·s·w·e·r / q·a·d·m·i·t·_·r·e·j·e·c·t 承担 *)
 Definition qdc_b (s : clst) (q : qtype) : bool :=
   match qdc s q with sdec_l _ _ _ => true | sdec_r _ _ _ => false end.
 

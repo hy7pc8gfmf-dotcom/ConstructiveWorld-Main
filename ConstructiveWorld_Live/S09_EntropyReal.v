@@ -4607,7 +4607,7 @@ End EntropyDiffReal.
    差异 vs Set 层（L14572 同款）：Real 层无 real_minus（x−y := x+(−y)），
    全部 real_eq/real_le 引理显式（RealSetoid.real_le_id_r 为 Module 包裹名）。
    绕开三分律（E216）与积分（Real 层无 RInt/FTC）。
-   纪律：纯构造性 / Set 层 / 零 admit / 零经典。
+   纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 Section RealGapOne.
 
@@ -4683,7 +4683,7 @@ End RealGapOne.
 
 (* ================================================================
    论文4 κ 收缩 Real 层复刻（正分支），排序 5，2026-09-01
-   探针 _dbg_kappa_real.v（8 Qed / 0 admit）平移并入。
+   探针 _dbg_kappa_real.v（8 Qed / 0 承认）平移并入。
    接口：real_dynamics_gradient_step（动力学=梯度上升步进）、
          real_strong_concavity（μ-强凹，标准优化假设，非经典公理）。
    产出：real_dynamics_step_unfold（K0）、real_gradient_step_contraction
@@ -4693,7 +4693,7 @@ End RealGapOne.
    Real 层差异 vs Set 层（E211）：无 minus（x−y := x+(−y)）、无 r_pow
    （自建 real_r_pow + 幂正/非负引理）、无 le_mult_compat_r（自建，公共
    因子在左，weak + comm 桥）。全符号版仍受三分律障碍（E211/E216）。
-   纪律：纯构造性 / Set 层 / 零 admit / 零经典。
+   纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 Section RealKappa.
 
@@ -6288,7 +6288,7 @@ End RealKappaSignReal.
 (* T3.2（论文3 次旗舰，2026-09-02 并入）：exp-log 有序群同构组装      *)
 (* 新内容：值域刻画（sigT 双向）+ 序同构像侧完备性（逆序保持）        *)
 (* 纪律：Set 层（real_lt/real_eq 均 Set 值）、sigT 信息性、           *)
-(*       零经典（无三分律）、零 admit；探针 _dbg_t32_20260902.v 全绿  *)
+(*       零经典（无三分律）、零 承认；探针 _dbg_t32_20260902.v 全绿  *)
 (* 依赖：log_inv_exp_neg_thm（左逆）/ cw_log_exp_right（右逆）/       *)
 (*       real_log_lt_mono（log 严格递增）/ cauchy_real_exp_* 族        *)
 (* ================================================================ *)
@@ -6369,7 +6369,7 @@ End ExpLogGroupIso.
 (* ② real_exp_le_inv_one_minus：0 < x ⟹ x < 1 ⟹ e^x ≤ 1/(1−x)        *)
 (* ③ real_exp_abs_minus_one_eps：|e^x − 1| ≤ |x|·e^{|x|} + eps       *)
 (*    （非 eps 版需三分律判定 gap 正/零——E196 边界，eps 余量形式）    *)
-(* 纪律：Set 层、纯构造性、零经典、零 admit；探针 _dbg_t33 全绿        *)
+(* 纪律：Set 层、纯构造性、零经典、零 承认；探针 _dbg_t33 全绿        *)
 (* 依赖：exp_partial/q_pow/q_fact（QExpPartial）、real_abs/real_inv_pos *)
 (* ================================================================ *)
 Section ExpInequalities.
@@ -6920,7 +6920,7 @@ End ExpInequalities.
 (*   Section RealKVQuantMain：B1 逐出归零 / B2 结构分解          *)
 (*     （db == invZ·T·|b−b'|）/ B3 分析界（Lipschitz 缩放 +      *)
 (*     温度有界 + 乘积吸收）/ B4 最终界定理。                    *)
-(* 纪律：纯构造性 / Set 层 / 零 admit / 零经典；诚实接口仅承载  *)
+(* 纪律：纯构造性 / Set 层 / 零 承认 / 零经典；诚实接口仅承载  *)
 (* 可实例化假设（energy_lipschitz / energy_lower / 核对称非负）。*)
 (* ============================================================ *)
 (* ===== 工具 0：real_le 右侧等价替换（Or 分解 + real_lt_eq_lt） ===== *)

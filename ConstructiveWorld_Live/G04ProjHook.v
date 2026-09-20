@@ -1,40 +1,33 @@
 (* ============================================================ *)
-(* G04ProjHook.v —— 两点均匀族向 G04 投影母定理的回接实例化           *)
+(* G04ProjHook.v —— 消融50 战役 CYC11 席（批次 E-STAGING-CYC11）    *)
 (*                                                              *)
-(* 目的：回接 fa57_ext.v 簇四的后续事项。fa57_ext.v 簇四              *)
-(*   （fa57_W2p_uniform_two_realized）已在 S01 接口R 世界兑现         *)
-(*   两点均匀族；本件把该族换装到 CW219 柯西 Real 世界，喂定           *)
-(*   G04_ProjFam.v 投影母定理（ZP/proj 闭名），产出「母定理在具体      *)
-(*   族上成立」的实例化定理九件。                                    *)
+(* 使命：CYB7 未决事项——G04 W2' 簇母定理回接实例化。fa57_ext.v      *)
+(*       簇四（fa57_W2p_uniform_two_realized）已在 S01 接口R 世界  *)
+(*       兑现两点均匀族；本席把该族换装到 CW219 柯西 Real 世界，    *)
+(*       喂定 G04_ProjFam.v 投影母定理（ZP/proj 闭名），产出        *)
+(*       「母定理在具体族上成立」的实例化定理九件。                 *)
 (*                                                              *)
-(* 参数对照结论（母定理参数面 vs 两点族供给面，差什么补什么）：             *)
-(*   面 1 载体差：fa57 供件走 RealInterfaceEnhanced 的 @R RI 抽象      *)
-(*      世界（Id／fa51_sumd）；母定理闭名走 S02 柯西 Real 具体层       *)
-(*      （real_eq／real_list_sum）。两载体不同构，全库亦无             *)
-(*      RealInterface 在 Real 上的实例可作接口桥——故相容桥取           *)
-(*      「Real 层同构换装」：two := 1+1、half := inv(two)、             *)
-(*      half+half==one 归一链逐段镜像 fa57 簇四蓝图                     *)
-(*      （mult_one×2 → distrib → mult_comm → inv_pos_correct）。        *)
-(*   面 2 参序差（「用了谁泛化谁」原则，g4p_probe_sig 打表实证）：       *)
-(*      ZP_pos 六参无 f_norm；ZP_le_one 六参无 P_witness；              *)
-(*      proj_keep_ge／proj_minor_uncond 七参带 f_norm；                 *)
-(*      proj_kl_cost 六节参无 f_norm；KLqf 连 P／P_witness 都不收       *)
-(*      （I f idx f_pos q Hq 五节参）；其余六参。                       *)
-(*   面 3 逐出支差：本族 P 恒真（无假支），逐出槽语句按前提转发形        *)
-(*      保持母形——荒谬前提 Id true false 只入签名不消去（零空匹配，      *)
-(*      提取零魔力位），与 proj_kl_cost 的 Hq_fail 槽同法自喂。          *)
+(* 对账结论（母定理参数面 vs 两点族供给面，差什么补什么）：          *)
+(*   面 1 载体差：fa57 供件走 RealInterfaceEnhanced 的 @R RI 抽象  *)
+(*      世界（Id／fa51_sumd）；母定理闭名走 S02 柯西 Real 具体层    *)
+(*      （real_eq／real_list_sum）。两载体不同构，全库亦无         *)
+(*      RealInterface 在 Real 上的实例可作接口桥——故相容桥取       *)
+(*      「Real 层同构换装」：two := 1+1、half := inv(two)、         *)
+(*      half+half==one 归一链逐段镜像 fa57 簇四蓝图                 *)
+(*      （mult_one×2 → distrib → mult_comm → inv_pos_correct）。    *)
+(*   面 2 参序差（E346「用了谁泛化谁」，g4p_probe_sig 探针打表      *)
+(*      实证）：ZP_pos 六参无 f_norm；ZP_le_one 六参无 P_witness；  *)
+(*      proj_keep_ge／proj_minor_uncond 七参带 f_norm；             *)
+(*      proj_kl_cost 六节参无 f_norm；KLqf 连 P／P_witness 都不收   *)
+(*      （I f idx f_pos q Hq 五节参）；其余六参。                   *)
+(*   面 3 逐出支差：本族 P 恒真（无假支），逐出槽语句按前提转发形    *)
+(*      保持母形——荒谬前提 Id true false 只入签名不消去（零空匹配，  *)
+(*      提取零魔力位），与 proj_kl_cost 的 Hq_fail 槽同法自喂。      *)
 (*                                                              *)
-(* 主件：九件实例化定理（g4p_W2p_two_uniform_bridge、g4p_ZP_pos_two、   *)
-(*   g4p_ZP_le_one_two、g4p_proj_normalized_two、g4p_proj_drop_zero_two、*)
-(*   g4p_proj_keep_ge_two、g4p_proj_uniform_full_two、                   *)
-(*   g4p_proj_minor_uncond_two、g4p_kl_cost_two）＋Real 层两点族补给件    *)
-(*   （g4p_two/g4p_half/g4p_half_norm 等）。                             *)
-(*                                                              *)
-(* 依赖（全部只读消费）：CW_ConstructiveWorld_219 基座＋G04_ProjFam。    *)
-(*                                                              *)
-(* 备注：宿主零改动（零改既有文件）；前缀 g4p_ 避免与库内既有名冲突。    *)
-(*   语句全 Set 层；纯构造性零承认位。                                   *)
+(* 宿主零改动：只读消费 vorebuild_901 基座＋G04_ProjFam，           *)
+(*   前缀 g4p_ 全库防撞；语句全 Set 层；纯构造性零承认位。          *)
 (* ============================================================ *)
+
 Require Import CW_ConstructiveWorld_219.
 Require Import G04_ProjFam.
 From Stdlib Require Import Lists.List.
@@ -83,7 +76,7 @@ Proof.
       * apply real_inv_pos_correct.
 Qed.
 
-(* 保留见证：P 恒真、idx 两点、true 在列（@InT_here 显式喂，既有件同款口径）。 *)
+(* 保留见证：P 恒真、idx 两点、true 在列（@InT_here 显式喂，CYB7 卡口径）。 *)
 Definition g4p_witness :
   sigT (fun i : bool => And (Id ((fun _ : bool => true) i) true) (InT i [true; false]))
   := existT (fun i : bool => And (Id ((fun _ : bool => true) i) true) (InT i [true; false]))
@@ -213,7 +206,7 @@ Proof.
                       g4p_kl_q_pos g4p_proj_drop_zero_two).
 Qed.
 
-(* ============ 假设面收口申报（九件全查） ============ *)
+(* ============ 假设面收口申报（G4 前置，九件全查） ============ *)
 
 Print Assumptions g4p_two_pos.
 Print Assumptions g4p_half_pos.

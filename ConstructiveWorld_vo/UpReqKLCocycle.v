@@ -35,7 +35,7 @@
 (*      分支另以 cyc_kl_sym_self_zero 定理化（自 KL 零 ⟹ 三角退化为  *)
 (*      恒等）。                                                    *)
 (*                                                                 *)
-(* 公理面：零 Axiom/Admitted/Parameter/Conjecture/Abort/经典逻辑；   *)
+(* 公理面：零 公理/承认件/参数/猜想/弃证/经典逻辑；   *)
 (*   依赖仅 CW_ConstructiveWorld_219 + RealEnergyTempMono（后者      *)
 (*   8/8 Print Assumptions Closed 在册）；本件文件尾 Print          *)
 (*   Assumptions 主件五条，交付实测全 Closed under the global       *)

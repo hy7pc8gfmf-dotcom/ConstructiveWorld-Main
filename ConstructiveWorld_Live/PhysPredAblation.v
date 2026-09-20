@@ -1,37 +1,36 @@
 (* ============================================================ *)
-(* PhysPredAblation.v —— S05 剩余物理预测槽消融三件                   *)
-(*                                                              *)
-(* 目的：S05 中留档待兑现的三个物理预测槽，判定可沿 fa56 系引擎          *)
-(*   兑现，全数落成（前缀 ppa_，避免与库内既有名冲突）。                *)
-(*                                                              *)
-(* 主件：                                                        *)
-(*   槽1 S05:5794 physical_force_is_gradient（PhysicalMechanics        *)
-(*       节）——恒力场线性势装法兑现。                                 *)
-(*   槽2 S05:5845 differentiation_attractor（DevelopmentalBiology      *)
-(*       节）——零点吸引子装法兑现；clim 收敛面按 fa56c                  *)
-(*       max_entropy_production（S05:5824）先例「前提入签名」           *)
-(*       纪律处理。                                                   *)
-(*   槽3 S05:5893 macro_loss_monotone（TimeArrow 节）——宏熵步进         *)
-(*       装法＋iterate 归纳＋opp 反变链兑现。                          *)
-(*                                                              *)
-(* 判定依据（现树实测核对）：                                          *)
-(*   StateSpace 类与 Real 自状态空间实例 RealSelfSS（clim := lim）      *)
-(*   在 S01_BaseRing:1160/:1230 基座在册；Enhanced 上下文经             *)
-(*   RI_base 投影提升（S01 PCTRealBridge :1744 先例逐字）。             *)
-(*                                                              *)
-(* 已知边界：库内 Id 形 RealInterfaceEnhanced 零具体实例                *)
-(*   （已由 TempSoftmaxInstantiation 一线查明），故 clim/lim 收敛面     *)
-(*   无具体载体可证——槽2 收敛前提逐槽如实列出，离散一步入零见            *)
-(*   证明 ppa_dev_iterate_step_zero（lim 黑箱的构造性补充见证）。        *)
-(*                                                              *)
-(* 依赖（全部只读消费）：S01_BaseRing 基座＋fa51_sumpos_id /            *)
-(*   fa56_id_carrier / fa56b_ext / fa56c_ext（Require 零改）；          *)
-(*   直接消费位 = fa51_lt_le（§A/§C）、fa56c_lt_mult_compat_l（§A）、    *)
-(*   fa56b_id_transport（§B）。                                        *)
-(*                                                              *)
-(* 备注：纯构造性零承认位；语句面全 Set 层；纯项式组装（exact/apply     *)
-(*   链）。                                                            *)
+(* PhysPredAblation.v —— 席位 CYD12（批次 E-STAGING-CYD12）        *)
+(*                                                               *)
+(* 使命：S05 剩余物理预测槽消融——CWZ6 留档三件（本席判定可沿      *)
+(*       fa56 系引擎兑现，全数施工）：                             *)
+(*                                                               *)
+(*  槽1  S05:5794 physical_force_is_gradient（PhysicalMechanics   *)
+(*        节，任务书 :5803 系漂移前坐标）——恒力场线性势装法兑现。  *)
+(*  槽2  S05:5845 differentiation_attractor（DevelopmentalBiology *)
+(*        节，任务书 :5854 漂移前坐标）——零点吸引子装法兑现；      *)
+(*        clim 收敛面按 fa56c max_entropy_production（S05:5824）  *)
+(*        先例「前提入签名」纪律处理。                             *)
+(*  槽3  S05:5893 macro_loss_monotone（TimeArrow 节，任务书        *)
+(*        :5902 漂移前坐标）——宏熵步进装法 + iterate 归纳 +        *)
+(*        opp 反变链兑现。                                        *)
+(*                                                               *)
+(* 判定依据（侦查 20260917 实测）：                                *)
+(*  - StateSpace 类与 Real 自状态空间实例 RealSelfSS（clim := lim）*)
+(*    在 S01_BaseRing:1160/:1230 基座在册；Enhanced 上下文经      *)
+(*    RI_base 投影提升（S01 PCTRealBridge :1744 先例逐字）。       *)
+(*  - 库内 Id 形 RealInterfaceEnhanced 零具体实例（P6A/CYD7 卡     *)
+(*    「tsi 席墙」定谳），故 clim/lim 收敛面无具体载体可证——      *)
+(*    槽2 收敛前提逐槽诚实列出，离散一步入零见证明 ppa_dev_iterate_ *)
+(*    step_zero（lim 黑箱的构造性补充见证）。                      *)
+(*                                                               *)
+(* 消费：S01_BaseRing（官方 vo_901 基座）+ fa51_sumpos_id /        *)
+(*       fa56_id_carrier / fa56b_ext / fa56c_ext（vo_901 官编在册， *)
+(*       Require 零改）；直接消费位 = fa51_lt_le（§A/§C）、        *)
+(*       fa56c_lt_mult_compat_l（§A）、fa56b_id_transport（§B）。  *)
+(* 红线：纯构造性零承认位；语句面全 Set 层；纯项式组装（exact/apply *)
+(*       链）；前缀 ppa_ 全库防撞已核（20260917 grep 零命中）。     *)
 (* ============================================================ *)
+
 Require Import S01_BaseRing.
 Require Import fa51_sumpos_id.
 Require Import fa56_id_carrier.
@@ -117,7 +116,7 @@ Qed.
    plus_opp 两段链）：开发景观轨道一步落入零点。
    吸引子 x_star := zero：dev_is_truth zero = le zero zero（le_refl）。
    clim 收敛面 = 接口 lim 字段黑箱：库内 Id 形零具体实例
-   （已由上游件查明），按 fa56c 先例前提入签名——收敛前提
+   （P6A/CYD7 卡定谳），按 fa56c 先例前提入签名——收敛前提
    Hclim 为主定理显式参，逐槽诚实列出。 *)
 
 Definition ppa_waddington (x : R) : R := zero.
@@ -263,7 +262,7 @@ Qed.
 
 End PpaPhysPred.
 
-(* ============ 假设面收口申报（出节） ============ *)
+(* ============ 假设面收口申报（出节，G4 面） ============ *)
 
 Print Assumptions ppa_physical_force_is_gradient.
 Print Assumptions ppa_hamiltonian_dominates_potential.

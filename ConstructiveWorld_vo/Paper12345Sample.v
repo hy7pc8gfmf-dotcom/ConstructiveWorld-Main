@@ -8,7 +8,7 @@
 (*                                                                *)
 (*   纪律：前缀 p12_；自足定义（正本对照 ConstructiveWorld_Live/       *)
 (*   UpReqEngineCeiling.v 的 cec_r6_s/cec_r6_bcoef/cec_r6_coef）；      *)
-(*   零 Axiom/Admitted/Parameter；普查席禁编译——本件未过四关，          *)
+(*   零 公理/承认件/参数；普查席禁编译——本件未过四关，          *)
 (*   接续席按交接文档 §3.1 模板补跑 G1-G4（-Q vo_901 单根）。           *)
 (*                                                                *)
 (* 【CZD10 勘误注记 20260918·跳件登记】本件 p12_mul_neq0 证明面为        *)

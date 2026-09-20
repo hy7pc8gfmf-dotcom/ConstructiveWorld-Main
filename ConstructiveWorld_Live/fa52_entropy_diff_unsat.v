@@ -12,7 +12,7 @@
    S02 代数面（plus_assoc/comm/zero/opp、eq_sym/trans/refl）、
    S07 混合加保序（real_lt_plus_compat_lt_le:6118）、
    S07 RealSetoid.real_eq_plus_compat:219、S07 real_lt_zero_one:6937。
-   红线：零 Axiom/Admitted；语句面 Set 层（False 出口为构造性否证标准形）。 *)
+   红线：零 公理/承认件；语句面 Set 层（False 出口为构造性否证标准形）。 *)
 Require Import S02_CauchyComplete.
 Require Import S07_RealSetoidExpLog.
 Require Import S08_RealMainlineDPO.

@@ -29,7 +29,7 @@
 (*   qiter_dist_recur（迭代距离递推件，QId 面，逐例消费受体）          *)
 (*   qbern_kt（Bernoulli 型幂界：(1+kt)·r^k ≤ 1，可计算步数引擎）     *)
 (* ------------------------------------------------------------ *)
-(* 红线自审：出口 QltT'/QleT'/sigT；零 admit 族、零经典逻辑；          *)
+(* 红线自审：出口 QltT'/QleT'/sigT；零 承认 族、零经典逻辑；          *)
 (*   文末 Print Assumptions ≥2；nat 加法全限定 PeanoNat.Nat.add；     *)
 (*   Q_scope 内 change 项带 %nat/%Z 标注；apply 显式喂项序；           *)
 (*   本版 stdlib 无 Qabs_eq——Qabs_pos/Qabs_neg + Q_dec 三分替代。    *)

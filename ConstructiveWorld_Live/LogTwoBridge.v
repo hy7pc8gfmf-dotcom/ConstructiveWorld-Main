@@ -33,7 +33,7 @@
 (*                                                               *)
 (* 红线：纯构造性（全 exact/实例化/点态 ring，零归纳零经典公理）；       *)
 (*   语句面全 Set 层（real_le_b / sigT / And := A*B / QeqT / Qlt）；     *)
-(*   零 Admitted 零 Axiom；前缀 ltb_ 全库防撞已核（grep 零命中）；       *)
+(*   零 承认件 零 公理；前缀 ltb_ 全库防撞已核（grep 零命中）；       *)
 (*   既有文件零改；自建 .vo 只留 /tmp 不入共享树。                       *)
 (*                                                               *)
 (* CZJ14 战术-环境漂移适配登记（T98，20260919）：ltb_log_two_eq_ln2      *)

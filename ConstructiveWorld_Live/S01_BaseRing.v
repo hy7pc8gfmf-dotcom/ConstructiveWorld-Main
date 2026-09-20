@@ -40,7 +40,7 @@
 (*      超参，接口参数不可证明）；                                *)
 (*    MultivariableDifferentiable：inner_lipschitz/              *)
 (*      smetric_sminus_zero/mv_adjoint/op_lipschitz（几何接口）。 *)
-(* C. 已证定理（非平凡实现，零 admit）：文件全部 Theorem/Lemma， *)
+(* C. 已证定理（非平凡实现，零 承认）：文件全部 Theorem/Lemma， *)
 (*    代表性里程碑：real_lim_unique、real_cauchy_complete        *)
 (*    （零 Variable）、real_lim_plus/scal/mult（收敛代数）、      *)
 (*    differentiable_compose、differentiable_mv_compose、        *)

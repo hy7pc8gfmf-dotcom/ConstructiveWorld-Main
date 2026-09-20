@@ -91,3 +91,82 @@ Print Assumptions sem_sum_eq_list_req_slot.
 Print Assumptions sem_sum_eq_list_collapse.
 Print Assumptions sem_slot1_witness_upreqsampling.
 Print Assumptions sem_slot1_witness_collapse.
+
+(* ============================================================ *)
+(* ============ 批次 E-STAGING-CZB12 核销宣言段（T61b 尾工 C1） ============ *)
+(* 槽2-5「机器口径转换墙」挂账回写核销。本段为纯转发宣言件（全 exact       *)
+(* 转发 IdSlotTranslate 已证桥，零新机器零新数学），既有四定理零改动，      *)
+(* 槽1 实证面不变。对照先例：DenPosGeneralClose.v / EntropyUnsatMark.v。    *)
+(*                                                                        *)
+(* 一、挂账原文（本文件 :31-:37 逐字）：                                     *)
+(*   「判词（转换墙实测，勿虚报）：四槽宿主机器 bs_list_sum 跑在             *)
+(*   RealInterfaceEnhanced 接口（Context {RI}{SS}{SO} 载体），其             *)
+(*   zero/plus 投影常量与 sumd 之 RealInterfaceEnhancedSetoid 投影           *)
+(*   不同头，桥对真宿主直喂需接口翻译件（RI→Setoid），超出零新               *)
+(*   机器口径——挂账未决，不在本件虚报核销。」                                *)
+(*                                                                        *)
+(* 二、核销路径（挂账所索「接口翻译件」已建成，CYD7/CZB8 两棒接力）：        *)
+(*   ① 翻译件本体 = 消融50/IdSlotTranslate.v：RI 载体列表折叠镜像           *)
+(*   idt_list_sum:75（@plus RI 头，与宿主真机同接口，转换墙免疫设计）+       *)
+(*   宿主真机一致桥 idt_bs_list_sum_attn_agree:103 /                        *)
+(*   idt_bs_list_sum_s13_agree:112（id_cong2 逐步同余，不押 conversion）+    *)
+(*   四宿主核销定理 idt_slot_attdoeblin:130 / idt_slot_g01:139 /             *)
+(*   idt_slot_s13:148 / idt_slot_s15:157。                                  *)
+(*   ② 消费位覆盖 = 消融50/SumEqListFeed.v 四宿主八消费位换装 shim：         *)
+(*   Form A（槽证明项直喂）六件 sef_attn_zrow_ge:69（AttnDoeblin:622         *)
+(*   le_id_r+id_sym 形）/ sef_attn_zrow_le:79（:629 le_id_l 形）/            *)
+(*   sef_attn_unif_norm:89（:673 id_trans 链头形）/ sef_s13_zrow_ge:103      *)
+(*   （S13:2813）/ sef_s13_zrow_le:112（:2820）/ sef_s13_unif_norm:121       *)
+(*   （:2864）；Form B（槽作显式实参）填充件两件 sef_g01_slot_arg:138        *)
+(*   （G01:485/:500 bs_kernel/bs_Zrow_pos 槽参位）/ sef_s15_slot_arg:143     *)
+(*   （S15:156/:171）。八消费位语义逐位对上槽2-5 的 sum_eq_list 消费形       *)
+(*   （实形核对 20260918：AttnDoeblin:622/:629/:673、S13:2813/:2820/:2864    *)
+(*   骨架逐字在盘，G01:491/:501 与 S15:163/:174 实参位 bs_kernel/bs_Zrow_pos *)
+(*   槽参链在盘），覆盖判定成立。                                            *)
+(*                                                                        *)
+(* 三、判定：槽2-5 挂账核销（覆盖）。以下四转发件 = 四槽核销的可提取出口，    *)
+(*   语句 = idt 四宿主核销定理之逐字镜像（槽语句 sum_over_S := idt_sumf      *)
+(*   放电读法）。宿主文件零改动（AttnDoeblin/S13/G01/S15 皆未触碰）。         *)
+(* ============================================================ *)
+
+Require Import AttnDoeblin.
+Require Import S13_NLiveAudit.
+Require Import IdSlotTranslate.
+
+Section SumEqListMarkWriteoff.
+
+Context {RI : RealInterfaceEnhanced}.
+Context {SS : StateSpace RI}.
+Local Existing Instance RI_base.
+
+(* 槽 AttnDoeblin:485 核销转发（消费位 :622/:629/:673 由 SumEqListFeed §1 承接） *)
+Theorem sem_czb12_slot_attdoeblin_writeoff :
+  forall (en : list S) (g : S -> R),
+    Id (idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
+Proof. intros en g. exact (idt_slot_attdoeblin en g). Qed.
+
+(* 槽 G01_CoreMicro:476 核销转发（消费位 :485/:500 由 SumEqListFeed §3 承接） *)
+Theorem sem_czb12_slot_g01_writeoff :
+  forall (en : list S) (g : S -> R),
+    Id (idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
+Proof. intros en g. exact (idt_slot_g01 en g). Qed.
+
+(* 槽 S13_NLiveAudit:2676 核销转发（消费位 :2813/:2820/:2864 由 SumEqListFeed §2 承接） *)
+Theorem sem_czb12_slot_s13_writeoff :
+  forall (en : list S) (g : S -> R),
+    Id (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en).
+Proof. intros en g. exact (idt_slot_s13 en g). Qed.
+
+(* 槽 S15_TailFEPUp:147 核销转发（消费位 :156/:171 由 SumEqListFeed §3 承接） *)
+Theorem sem_czb12_slot_s15_writeoff :
+  forall (en : list S) (g : S -> R),
+    Id (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en).
+Proof. intros en g. exact (idt_slot_s15 en g). Qed.
+
+End SumEqListMarkWriteoff.
+
+(* ============ G4 证据：核销转发四件全 Closed ============ *)
+Print Assumptions sem_czb12_slot_attdoeblin_writeoff.
+Print Assumptions sem_czb12_slot_g01_writeoff.
+Print Assumptions sem_czb12_slot_s13_writeoff.
+Print Assumptions sem_czb12_slot_s15_writeoff.

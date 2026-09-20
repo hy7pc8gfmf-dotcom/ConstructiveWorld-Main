@@ -37,7 +37,7 @@
 (*   contraction 的 TV 收缩 ≤ (1−δstar)^k·TV₀ 控制；k 的显式选取由            *)
 (*   UpReqMixingTime mix_pow_budget 的 κ^k 预算放电——三件完整拼装桥待      *)
 (*   专席（本席零臆造，仅注记）。                                           *)
-(* 【公理面】零公理/零 Axiom/零 Admitted；文末 Print Assumptions 审计。    *)
+(* 【公理面】零公理/零 公理/零 承认件；文末 Print Assumptions 审计。    *)
 (* 【红线自审】语句面全 Set 层：比较全 real_lt/le/eq（Set 编码 Or），      *)
 (*   witness 形 sigT 嵌套（值位 real_le/real_lt，零 And 于签名）；         *)
 (*   Hypothesis 位全 real_lt/le/eq 值（slq Section 先例同款）；            *)

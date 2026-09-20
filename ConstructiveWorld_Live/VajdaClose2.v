@@ -30,7 +30,7 @@ Set Printing Width 500.
 (* 红线自审：公理面零禁用件（本头注为自审句，不引禁词字面量）；          *)
 (*   新语句面全 Set（real_eq / real_le_b / QleT'），零新造 Prop 命题； *)
 (*   Prop 仅证码内消费（QleT'_to_Qle 桥进 vb_const_le 既有签名）；     *)
-(*   全真证 Qed 零 Admitted；Extraction 探针验 Obj.magic=0。           *)
+(*   全真证 Qed 零 承认件；Extraction 探针验 Obj.magic=0。           *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

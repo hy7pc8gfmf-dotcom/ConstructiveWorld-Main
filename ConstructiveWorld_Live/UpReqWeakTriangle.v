@@ -3,7 +3,7 @@ Set Printing Width 500.
 (* UpReqWeakTriangle.v —— 席 EXP-D3B：前向 KL 弱三角真形·实施席（相位=编译重） *)
 (*   2026-09-17 · 前棒 EXP-D3 高质量交接件落盘编译（报告 attn/_texpd3_交付报告-20260917.md §2/§3） *)
 (*                                                                *)
-(* 【公理面】零 Axiom / 零 Admitted / 零 Abort / 零 Hypothesis 位；       *)
+(* 【公理面】零 公理 / 零 承认件 / 零 弃证 / 零 Hypothesis 位；       *)
 (*   语句面全 Set（real_le_b UpRealLeB:72 / real_eq / real_lt / sigT）；  *)
 (*   文尾 Print Assumptions 审计（零 magic=零公理）。红线四条自审通过。   *)
 (*                                                                *)

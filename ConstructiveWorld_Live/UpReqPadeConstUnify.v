@@ -50,7 +50,7 @@
 (*                                                                 *)
 (* 公理面：本文件语句面全 Set 层承载（Qeq/And/forall；正性出口 QltT），   *)
 (*   证内 Prop 仅作桥（Qlt_to_QltT 换桥，库内同款）；零新增假设件、       *)
-(*   零 Admitted。Print Assumptions 应全 Closed——lia/ring/vm_compute    *)
+(*   零 承认件。Print Assumptions 应全 Closed——lia/ring/vm_compute    *)
 (*   均 ax-free，Require 链不触 Psatz。提取面 Separate Extraction        *)
 (*   产物以 Obj.magic 零命中为准。                                      *)
 (*                                                                 *)

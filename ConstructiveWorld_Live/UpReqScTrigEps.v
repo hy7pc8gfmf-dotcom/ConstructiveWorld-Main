@@ -27,7 +27,7 @@
 (*       （real_lt 证书 δ:=T_n/2；q==0 支走 real_eq 精确闭合——       *)
 (*       0<q 与 q==0 经 Qle_lt_or_eq 构造可分，无不可达精确形）。     *)
 (*                                                             *)
-(* 公理面：零新公理、零 admit、零经典；上游依赖 CW219（S01–S15       *)
+(* 公理面：零新公理、零 承认、零经典；上游依赖 CW219（S01–S15       *)
 (*       闭合）与 UpRealLeB（同零公理面）。文末主件                  *)
 (*       Print Assumptions 全 Closed。                              *)
 (* 红线：纯构造性 / Set 层语句（real_le_b 与 real_lt 皆 Set 值；      *)

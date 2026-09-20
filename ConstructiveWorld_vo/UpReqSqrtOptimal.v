@@ -66,7 +66,7 @@
 (* 公理面：本文件语句面全 Set 层承载（Qeq/forall + 一个 sumbool 出口）； *)
 (*   合取账用 Stdlib and（/\）承载——本件组件全 Prop（蕴涵/Qle/Qeq），    *)
 (*   CW 世界的 And: Set->Set->Set 不适用；信息性出口由 threshold_dec 的  *)
-(*   sumbool 承担；证内 Prop 仅作桥；零新增假设件、零 Admitted、零       *)
+(*   sumbool 承担；证内 Prop 仅作桥；零新增假设件、零 承认件、零       *)
 (*   Hypothesis/Variable 位、零经典逻辑（分支全走 Qlt_le_dec/Qeq_dec    *)
 (*   可判定二分）。Print Assumptions 应全 Closed——lia/lra/ring/       *)
 (*   vm_compute 均 ax-free，Require 链（QArith/Qring/Lia/Lqa/Setoid）   *)

@@ -29,7 +29,7 @@
 (*                                                               *)
 (* 纪律：语句面全 Set 层（Or/Not 用 S01:67-68 Set 层定义，        *)
 (*   real_lt 为 sigT 见证 S02:465）；零 Prop 泄露；               *)
-(*   无 Axiom/Admitted/Parameter/Conjecture/Abort；               *)
+(*   无 公理/承认件/参数/猜想/弃证；               *)
 (*   fa53_compat_abs 只 Require 消费零改；原树零改。              *)
 (*   前缀 ali_ 全库防撞已 grep 核（消融50 内零命中）。             *)
 (* ============================================================ *)

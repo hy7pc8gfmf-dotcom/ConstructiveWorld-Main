@@ -3,7 +3,7 @@ Set Printing Width 500.
 (* UpReqForwardKLFamily.v —— 席 Q6：GEO1 轨道缺 #1 前向 KL 族补缺席      *)
 (*   （前向链式/分解族，库内诚实形态）· 2026-09-17                      *)
 (*                                                                *)
-(* 【公理面】零 Axiom / 零 Admitted / 零 Abort / 零 Hypothesis 位；       *)
+(* 【公理面】零 公理 / 零 承认件 / 零 弃证 / 零 Hypothesis 位；       *)
 (*   语句面全 Set（real_eq S02:396 / real_le_b UpRealLeB:72 均 Set 层）； *)
 (*   文尾 Print Assumptions 审计；红线四条自审通过。                    *)
 (*                                                                *)

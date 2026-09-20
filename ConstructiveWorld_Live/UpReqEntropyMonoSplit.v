@@ -66,7 +66,7 @@
 (*      KL_u 取 real_opp——「KL 随温增」读向，禁倒置。                  *)
 (*   Hkl_left  结论 real_le real_zero (KL_u − KL_v + eps)：镜像，        *)
 (*      「KL 向峰衰减」读向，禁倒置。                                  *)
-(* 【红线】纯构造性零 Axiom/Classical；Set 层零 Prop 泄露（比较全        *)
+(* 【红线】纯构造性零 公理/经典逻辑；Set 层零 Prop 泄露（比较全        *)
 (*   real_le/real_lt sigT-Or 形）；分离账用 prod（A*B）Set 形；          *)
 (*   公理面：零新承认件，依赖四件自身 Closed（文末 Print Assumptions    *)
 (*   审计）。                                                           *)

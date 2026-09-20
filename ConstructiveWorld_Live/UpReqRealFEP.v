@@ -60,7 +60,7 @@
 (*      real_boltzmann_log_decomp 槽以件5a 喂入（零前提）。             *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】Set 层零 Prop（real_eq/real_lt 全 Set 值）；全 Qed 闭合；     *)
-(*   零 公理/承认件/Classical*；既有文件零触碰（/UpReqLogCompD/  *)
+(*   零 公理/承认件/经典逻辑族；既有文件零触碰（/UpReqLogCompD/  *)
 (*   UpRealLeB/G05_LogSmall 全只读，只消费 .vo）；real_eq 非 Id 禁 rewrite， *)
 (*   全链 real_eq_trans/RealSetoid compat（E393 纪律）；纯等式零 eps     *)
 (*   账目（任务书 R2-2 坑位②）。坑卡对表：E404 五桥机组装配方（本件即   *)

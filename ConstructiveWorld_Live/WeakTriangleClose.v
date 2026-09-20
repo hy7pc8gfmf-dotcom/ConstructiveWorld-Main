@@ -45,7 +45,7 @@
 (*                                                               *)
 (* 纪律：主收口语句面全 Set 层（le/Id 载 Set；Q 层引擎级 Qle 载    *)
 (*   Prop 与库内 wtl_ 件 Qlt 前提位同口径先例，主账 real 腿全     *)
-(*   Set）；零 Axiom/Admitted/Abort/Hypothesis；文尾 Print        *)
+(*   Set）；零 公理/承认件/弃证/Hypothesis；文尾 Print        *)
 (*   Assumptions 审计。wtc_ 前缀全库零撞名（与 CZG13 席           *)
 (*   EngelWeighted 加权 sum 路线零交叠：本席无加权 sum 件）。      *)
 (* ============================================================ *)

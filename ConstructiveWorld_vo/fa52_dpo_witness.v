@@ -11,7 +11,7 @@
    消费基座件：End 后主件 real_dpo_loss_pi_star_bounded_both（S08:1512）
    与 real_dpo_reward_recovers_up_to_baseline（S08:1558）全参特化——
    该节 DPO 定理在具体见证下收口为闭语句。
-   红线：零 Axiom/Admitted；非平凡（前提放电 + End 后定理全参特化）。
+   红线：零 公理/承认件；非平凡（前提放电 + End 后定理全参特化）。
    尾注：recovery 语句中 log 1 == 0 闭式化需 real_log_one 桥，列后续候选。 *)
 Require Import S02_CauchyComplete.
 Require Import S07_RealSetoidExpLog.

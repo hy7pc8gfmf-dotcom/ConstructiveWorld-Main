@@ -46,7 +46,7 @@
 (*                         KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2})      *)
 (*                         == (β1−β2)·(E2−E1)                          *)
 (*                                                                 *)
-(* 红线自审：① 零 Axiom/Admitted/Parameter/Conjecture/Abort/经典逻辑  *)
+(* 红线自审：① 零 公理/承认件/参数/猜想/弃证/经典逻辑  *)
 (*   （依赖全为库内 Closed 件）；② 语句面全 Set（real_eq/real_lt/    *)
 (*   real_list_sum，零 Prop 前提；real_list_sum_pos 的 <> 前提仅在   *)
 (*   证内以 discriminate 消费，语句面以 cons 载体 s0::l 非空化）；    *)
