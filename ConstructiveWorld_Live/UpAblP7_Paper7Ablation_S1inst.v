@@ -1,54 +1,54 @@
 (* ============================================================ *)
-(* UpAblP7_Paper7Ablation_S1inst.v — PA7-03（论文7消融战役腿一）  *)
-(*                                                               *)
-(* 使命：Paper7Ablation §1 五槽（expf/expf_pos/expf_zero/        *)
-(*   expf_plus/expf_mono_lt）全显实例件：以柯西实数具体件喂入    *)
-(*   五槽，对 p7a_expf_wd 的实例化句给出装配与直证双覆盖真证，   *)
-(*   并兑现 p7a_expf_mono_le_do 的实例形。零承认件写法。         *)
-(*                                                               *)
-(* 用途：消融论实例级验证——wd 无须独立假设、由三字段            *)
-(*   {expf_plus, expf_zero, expf_pos} 消去链兑现的 T145 定谳，   *)
-(*   在本库柯西实数模型上做实例级复核；mono_le 由 mono_lt +      *)
-(*   序分解 + wd 路径兑现（字段面 6→5 的模型级复核）。           *)
-(*                                                               *)
-(* 坐标台账（复核行号）：                                        *)
-(*   Paper7Ablation.v:61  p7a_expf_wd（Id 层消融定理，对照消费）  *)
-(*   Paper7Ablation.v:80  p7a_expf_mono_le_do（DO 三分路线）      *)
-(*   S03_QExp.v:1176      cauchy_real_exp（槽1 expf）            *)
-(*   S03_QExp.v:6420      cauchy_real_exp_pos（槽2 expf_pos）    *)
-(*   S03_QExp.v:1385      cauchy_real_exp_zero（槽3 expf_zero）   *)
-(*   S07_RealSetoidExpLog.v:2234 cauchy_real_exp_plus（槽4）     *)
-(*   S07_RealSetoidExpLog.v:2679 cauchy_real_exp_mono（槽5）     *)
-(*   S07_RealSetoidExpLog.v:2569 cauchy_real_exp_wd（直证形对手）*)
-(*   S02_CauchyComplete.v:469 real_le := Or(real_lt, real_eq)    *)
-(*   S01_BaseRing.v:906   mult_cancel_l（Id 层，消去链母本）      *)
-(*   AttnDoeblin.v:550    bs_lo_pos（旁证锚：一跳 expf_pos 已证） *)
-(*                                                               *)
-(* 双覆盖互证说明：                                              *)
-(*   装配形 s1inst_p7a_expf_wd——按 p7a_expf_wd 的乘逆消去链在   *)
-(*   柯西实例上复演：三字段具体件喂入；链中自由同余步（Id 层     *)
-(*   id_cong expf）在 real_eq 层不可免费，由独立子引理            *)
-(*   s1inst_exp_cong_zero（e 在零点连续，自 S03 原语自证，零引   *)
-(*   直证形）与实层乘消去 s1inst_real_mult_cancel_l（S01:906     *)
-(*   链复演）诚实填补；                                          *)
-(*   直证形 s1inst_p7a_expf_wd_direct——S07:2569 逐字消费；      *)
-(*   互证 s1inst_dual_cover——抽象消融句（p7a_expf_wd 全参形，   *)
-(*   Paper7Ablation 真消费）与柯西实例句（装配形与直证形两路     *)
-(*   各自闭合同一语句）对照合取，两覆盖路线相互独立。            *)
-(*                                                               *)
-(* 拓扑注记（如实）：S01 RealInterfaceEnhanced 全库无具体实例    *)
-(*   （Id 形字段在柯西 Real 上不可满足——TempSoftmaxInstantiation *)
-(*   头注定谳），故实例喂入走 S07 柯西实数层唯一真消费路径；     *)
-(*   DecidableOrder 在柯西实例不可满足（强三分 LPO 不可证，      *)
-(*   S07 头注定谳；reqDecidableOrder 全库零实例），故 mono_le     *)
-(*   实例形走 real_le 的 Or 编码分解（lt 支=槽5 严格单调，       *)
-(*   eq 支=装配形 wd）——DO 三分的模型级替身，非降级。           *)
-(*                                                               *)
-(* 红线自审：语句面全 Set 层（real_eq/real_lt/real_le/Or，       *)
-(*   Q 层 Prop 只在证明内部）；非平凡真证（零点连续子引理+实层   *)
-(*   乘消去+三字段消去链+Or 分解）；零新开口、零经典逻辑；       *)
-(*   Print Assumptions 六处全录 T147。前缀 s1inst_ 全库防撞      *)
-(*   已 grep 核零命中。原树零改（本件新建于 消融50/）。          *)
+(* UpAblP7_Paper7Ablation_S1inst.v —— p7a_expf_wd / p7a_expf_mono_le_do *)
+(*   的柯西实数实例件（S1inst）。                                       *)
+(*                                                                *)
+(* 使命：Paper7Ablation §1 五参数位（expf/expf_pos/expf_zero/           *)
+(*   expf_plus/expf_mono_lt）全显实例件：以柯西实数具体件喂入五参数位，  *)
+(*   对 p7a_expf_wd 的实例化语句给出装配与直证双覆盖证明，并兑现         *)
+(*   p7a_expf_mono_le_do 的实例形。                                     *)
+(* 用途：消融论实例级验证——wd 无须独立假设、由三字段                    *)
+(*   {expf_plus, expf_zero, expf_pos} 消去链兑现的判定，                 *)
+(*   在本库柯西实数模型上做实例级复核；mono_le 由 mono_lt +              *)
+(*   序分解 + wd 路径兑现（字段面 6→5 的模型级复核）。                   *)
+(*                                                                *)
+(* 使用面（上游出口真名）：                                             *)
+(*   p7a_expf_wd（Id 层消融定理，对照使用）；                           *)
+(*   p7a_expf_mono_le_do（DO 三分路线）；                               *)
+(*   cauchy_real_exp / cauchy_real_exp_pos / cauchy_real_exp_zero       *)
+(*   （S03_QExp，参数1-3）；cauchy_real_exp_plus / cauchy_real_exp_mono /  *)
+(*   cauchy_real_exp_wd（S07_RealSetoidExpLog，参数4/参数5/直证形）；      *)
+(*   real_le := Or(real_lt, real_eq)（S02_CauchyComplete）；             *)
+(*   mult_cancel_l（S01_BaseRing，消去链母本）；                        *)
+(*   bs_lo_pos（AttnDoeblin，旁证：一跳 expf_pos 已证）。                *)
+(*                                                                *)
+(* 双覆盖互证说明：                                                     *)
+(*   装配形 s1inst_p7a_expf_wd——按 p7a_expf_wd 的乘逆消去链在           *)
+(*   柯西实例上重演：三字段具体件喂入；链中同余步（Id 层                 *)
+(*   id_cong expf）在 real_eq 层须另证，由独立子引理                     *)
+(*   s1inst_exp_cong_zero（e 在零点连续，自 S03 原语自证）与实层         *)
+(*   乘消去 s1inst_real_mult_cancel_l（仿 S01 mult_cancel_l）补足；      *)
+(*   直证形 s1inst_p7a_expf_wd_direct——直接使用 cauchy_real_exp_wd；     *)
+(*   互证 s1inst_dual_cover——抽象消融语句（p7a_expf_wd 全参形，          *)
+(*   Paper7Ablation 实际使用）与柯西实例语句（装配形与直证形两路           *)
+(*   各自证得同一语句）对照合取，两覆盖路线相互独立。                    *)
+(*                                                                *)
+(* 拓扑注记（如实）：S01 RealInterfaceEnhanced 全库无具体实例            *)
+(*   （Id 形字段在柯西 Real 上不可满足），故实例喂入走 S07 柯西实数层    *)
+(*   唯一实际使用路径；DecidableOrder 在柯西实例不可满足（强三分           *)
+(*   LPO 不可证，reqDecidableOrder 全库零实例），故 mono_le 实例形       *)
+(*   走 real_le 的 Or 编码分解（lt 支=参数5 严格单调，eq 支=装配形 wd）     *)
+(*   ——DO 三分的模型级对应形。                                          *)
+(*                                                                *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、                    *)
+(*   S07_RealSetoidExpLog、Paper7Ablation；Stdlib QArith/List/Bool/      *)
+(*   Arith/Setoid/Morphisms/Lia。                                       *)
+(*                                                                *)
+(* 对标：mathlib Real.exp 的同余性与单调性之实例级对应；stdlib Q 段      *)
+(*   仅作算术演算。                                                     *)
+(* 构造性注记：语句面全 Set 层（real_eq/real_lt/real_le/Or）；           *)
+(*   非平凡真证（零点连续子引理＋实层乘消去＋三字段消去链＋Or 分解）；   *)
+(*   零新开口、无经典逻辑。                                             *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。           *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -63,8 +63,8 @@ Import ListNotations.
 From Stdlib Require Import Setoid Morphisms.
 From Stdlib Require Import Lia QArith.Qminmax.
 
-(* ############ 子件一：e 在零点连续（装配链同余缺口填补） ######## *)
-(* x == 0 ⟹ e^x == 1。自 S03 原语自证，零引 cauchy_real_exp_wd。 *)
+(* ############ 子件一：e 在零点连续（装配链同余步补足） ########### *)
+(* x == 0 ⟹ e^x == 1。自 S03 原语自证，不使用 cauchy_real_exp_wd。 *)
 Lemma s1inst_exp_cong_zero : forall x : Real,
   real_eq x real_zero -> real_eq (cauchy_real_exp x) real_one.
 Proof.
@@ -121,7 +121,7 @@ Proof.
       * apply (q_half_lt_self eps). apply QltT_to_Qlt. exact Heps.
 Qed.
 
-(* ############ 子件二：实层乘法左消去（S01:906 链复演） ########### *)
+(* ############ 子件二：实层乘法左消去（仿 S01 mult_cancel_l） ##### *)
 Lemma s1inst_real_mult_cancel_l : forall a b c : Real,
   real_lt real_zero a ->
   real_eq (real_mult a b) (real_mult a c) -> real_eq b c.
@@ -168,10 +168,10 @@ Proof.
   - exact (real_eq_trans _ _ _ H1 Hrc).
 Qed.
 
-(* ############ 装配形：三字段 {plus, zero, pos} 消去链喂槽 ######## *)
-(* p7a_expf_wd 的实例化句：柯西实数 e 的 real_eq 同余性，由        *)
+(* ############ 装配形：三字段 {plus, zero, pos} 消去链喂入参数位 ######## *)
+(* p7a_expf_wd 的实例化语句：柯西实数 e 的 real_eq 同余性，由      *)
 (* cauchy_real_exp_plus / cauchy_real_exp_zero / cauchy_real_exp_pos *)
-(* 三字段件 + 子件一/二复演 p7a_expf_wd 的乘逆消去链，零引直证形。 *)
+(* 三字段件与子件一/二重演 p7a_expf_wd 的乘逆消去链，不使用直证形。 *)
 Theorem s1inst_p7a_expf_wd : forall a b : Real,
   real_eq a b -> real_eq (cauchy_real_exp a) (cauchy_real_exp b).
 Proof.
@@ -210,17 +210,17 @@ Proof.
     + exact Hb1.
 Qed.
 
-(* ############ 直证形：S07:2569 逐字消费（双覆盖对手） ############ *)
+(* ############ 直证形：直接使用 cauchy_real_exp_wd（双覆盖之一） ### *)
 Theorem s1inst_p7a_expf_wd_direct : forall a b : Real,
   real_eq a b -> real_eq (cauchy_real_exp a) (cauchy_real_exp b).
 Proof.
   exact cauchy_real_exp_wd.
 Qed.
 
-(* ############ 互证：抽象消融句与柯西实例句对照合取 ############### *)
-(* 包装注记：抽象支为 Type 层 forall（接口量化），And 为 Set×Set      *)
-(* 装不下，故以 sigT 打包——首支=抽象消融句的证携（p7a_expf_wd       *)
-(* 全参形，Paper7Ablation 真消费），尾支=柯西实例句的装配∧直证双覆盖。*)
+(* ############ 互证：抽象消融语句与柯西实例语句对照合取 ############ *)
+(* 类型注记：抽象支为 Type 层 forall（接口量化），And 为 Set×Set      *)
+(* 装不下，故以 sigT 封装——首支=抽象消融语句的证明（p7a_expf_wd      *)
+(* 全参形，Paper7Ablation 实际使用），尾支=柯西实例语句的装配∧直证双覆盖。*)
 Corollary s1inst_dual_cover :
   sigT
     (fun _ : forall {RI : S01_BaseRing.RealInterfaceEnhanced}
@@ -241,7 +241,7 @@ Corollary s1inst_dual_cover :
           real_eq a b -> real_eq (cauchy_real_exp a) (cauchy_real_exp b))).
 Proof.
   (* 抽象消融支：裸引 p7a_expf_wd 会触发 ?RI 急切实例化而与带 RI
-     首量化的期望型失配，故 λ 全参显式喂（@ 全参形）。 *)
+     首量化的期望型失配，故以 λ 全参显式应用（@ 全参形）。 *)
   exists (fun (RI : S01_BaseRing.RealInterfaceEnhanced)
              (expf : @S01_BaseRing.R RI -> @S01_BaseRing.R RI)
              (expf_pos : forall x : @S01_BaseRing.R RI,
@@ -258,22 +258,22 @@ Proof.
 Qed.
 
 (* ############ mono_le 实例形：mono_lt + Or 分解 + wd 路径 ######## *)
-(* real_le := Or (real_lt) (real_eq)（S02:469）：lt 支走槽5 严格单调 *)
+(* real_le := Or (real_lt) (real_eq)（S02_CauchyComplete）：lt 支走参数5 严格单调 *)
 (* cauchy_real_exp_mono，eq 支走装配形 wd——DO 三分在柯西实例不可   *)
-(* 满足（强三分 LPO 不可证），Or 编码即其模型级替身。               *)
+(* 满足（强三分 LPO 不可证），Or 编码即其模型级对应形。             *)
 Theorem s1inst_p7a_expf_mono_le : forall a b : Real,
   real_le a b -> real_le (cauchy_real_exp a) (cauchy_real_exp b).
 Proof.
   intros a b Hab.
   unfold real_le in Hab |- *.
   destruct Hab as [Hlt | Heq].
-  - (* lt 支：槽5 严格单调直给 *)
+  - (* lt 支：参数5 严格单调直给 *)
     left. exact (cauchy_real_exp_mono a b Hlt).
   - (* eq 支：装配形 wd 路径（三字段消去链） *)
     right. exact (s1inst_p7a_expf_wd a b Heq).
 Qed.
 
-(* ---- PA 自检段（G1 min-pa 与 G4 审查留痕面；全出节全局名） ---- *)
+(* ---- 收尾段：逐件 Print Assumptions 核验零承认 ---- *)
 Print Assumptions s1inst_exp_cong_zero.
 Print Assumptions s1inst_real_mult_cancel_l.
 Print Assumptions s1inst_p7a_expf_wd.

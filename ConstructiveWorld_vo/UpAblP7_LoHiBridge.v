@@ -1,48 +1,48 @@
 (* ============================================================ *)
-(* UpAblP7_LoHiBridge.v —— 论文7 专项消融战役 PA7-14 席（LoHi 次波·乙腿）      *)
-(*   供给桥 + δ* 全前件包姊妹镜像（与 PA7-13 姊妹席 T156 cross 合璧互补；       *)
-(*   本席辖 bridge 面，cross-节合璧零碰）。                                   *)
-(* 使命：LoHiSqueeze.v 两节温度对 temp/temp_pos 仅经 invT:=inv_pos 别名消费、  *)
-(*   利差对 Delta/Delta_pos 直连 lo/hi——本件在 lo:=inv_pos (plus one one)     *)
-(*   two_pos（二分之一抽象形）位供给两件：                                    *)
-(*   件甲 le+neq⟹lt 供给桥（Or 编码逐支：lt 支直取、eq 支与 Neq 前提矛盾      *)
-(*       消去；T84/FA3 口径，UpTVDoeblin tvd_abs_le_id:73 路线注记同源）；     *)
-(*   件乙 δ*<1 姊妹镜像（件七同款加倍还原链 + eq_dec + 桥组，与 PA7-05 件七    *)
-(*       互补成对——件七是单侧 0<1−δ*（κ∈(0,1) 前件包），本件做 δ*∈(0,1)      *)
-(*       全前件包）。                                                        *)
-(* 实读台账（2026-09-19 探针定谳）：                                          *)
-(*   LoHiSqueeze.v:78 lo:=expf(invT·oppΔ) 别名面、:108-120 δ*:=lo² 定义位；    *)
-(*   UpAblP7_LoHiSqueeze.v:213-258 件七左支链（half_twice S01:503 加倍还原     *)
-(*   ＋plus_positive＋恒等洗牌五步 Gup/Gtotal）；                             *)
-(*   S01:160 lt_le_iff（Or 编码→le）、S01:560 le_plus_nonneg_r（le 泵）、      *)
-(*   S01:473 one_neq_zero（neq 归谬定式：正性项 transport 至对角 lt_irrefl）、  *)
-(*   S01:329-335 DecidableOrder 五字段（ord_le_dec/lt_dec/eq_dec/not_le_lt/    *)
-(*   lt_le_iff_dec；lt_dec 被 Stdlib Compare_dec 遮蔽——WeakTriangleClose:120  *)
-(*   fa53 投影别名定式 match Build_DecidableOrder 逐字段取用）。               *)
-(* 定理面（五件，全 Qed，前缀 uahlb_ 本件内防撞）：                           *)
-(*   件甲 uahlb_le_neq_lt —— Or 编码 le＋neq⟹lt 供给桥（任务件 a）；           *)
-(*   件乙 uahlb_le_abs_neq_lt —— 抽象 le＋neq⟹lt（ord_le_dec 逐支＋           *)
-(*       le_antisym 反证＋not_le_lt 放电，构造性零经典）；                     *)
-(*   件丙 uahlb_half2_le_one —— le 泵链（le_plus_nonneg_r×2＋half_twice       *)
-(*       等形降位＋le_trans 合龙：half2≤half≤one）；                          *)
-(*   件丁 uahlb_half2_neq_one —— δ*≠1 供给件（件七 Hone2 加倍还原链镜像＋     *)
-(*       四−一=三洗牌＋plus_positive 归谬：三=零 与 0<三 对角撞 lt_irrefl）；   *)
-(*   件戊 uahlb_delta_star_bounded_half —— δ*∈(0,1) 全前件包（eq_dec 逐支     *)
-(*       重打包 Or 编码 le：Id 支直取、neq 支经件乙升 lt；再由件甲合龙 δ*<1；  *)
-(*       左支 mult_positive 直放电 0<δ*）。                                   *)
-(* 红线自审：语句面全 Set 层（合取用 S01 And=prod、析取用 S01 Or=sum、否定用   *)
-(*   S01 Not=→Empty_set，零 Prop 泄露）；公理面零新增；Require 面仅            *)
-(*   S01_BaseRing（不装设 Paper7Ablation/P7BoundedSoftmaxDeep/母件本身——      *)
-(*   T149 摘要漂移墙防避，比母件消费更强的不依赖位）；原 vo_9.1/Live 正本     *)
-(*   零改；既有 UpAblP7* 全零改（只读复用件七链形）；全中文零承认件写法。      *)
+(* UpAblP7_LoHiBridge.v —— lo/hi 桥接引理组：二分之一抽象形        *)
+(*   half:=inv_pos (plus one one) two_pos 的有界性与序关系事实。   *)
+(* 使命：本件形式化三条事实：① Or 编码 le＋neq⟹lt；② 抽象 le＋neq   *)
+(*   ⟹lt；③ half2:=half·half 满足 0<half2 且 half2<1。用位：        *)
+(*   LoHiSqueeze.v 中 lo:=expf(invT·oppΔ) 经 invT:=inv_pos 别名使用、 *)
+(*   利差 Delta/Delta_pos 直连 lo/hi；本件在 lo:=half 的抽象形位给出  *)
+(*   完整前提形 δ*∈(0,1)。                                         *)
+(*                                                                *)
+(* 定理面（五件，全 Qed，前缀 uahlb_）：                            *)
+(*   uahlb_le_neq_lt —— Or 编码 le＋neq⟹lt：Or 逐支分情形（lt 支     *)
+(*       直取；eq 支与 neq 前提矛盾消去，Empty_set 归谬）；           *)
+(*   uahlb_le_abs_neq_lt —— 抽象 le＋neq⟹lt：经 ord_le_dec 在        *)
+(*       (b,a) 位分情形，le b a 支由 le_antisym 反设，非 le 支经       *)
+(*       not_le_lt 直接推得；构造性，无经典逻辑；                     *)
+(*   uahlb_half2_le_one —— le 传递链：le_plus_nonneg_r 与 half_twice  *)
+(*       恒等形经 le_trans 合成 half2≤half≤one；                      *)
+(*   uahlb_half2_neq_one —— half2≠1：加倍恒等式（half_twice、         *)
+(*       mult_one、plus_assoc/plus_opp/plus_zero）归约至               *)
+(*       (1+1+1)=0，与 0<(1+1+1)（plus_positive）对角矛盾 lt_irrefl；  *)
+(*   uahlb_delta_star_bounded_half —— 合取 0<half2 且 half2<1：       *)
+(*       eq_dec 分情形重建 Or 编码 le（Id 支直取、neq 支经             *)
+(*       uahlb_le_abs_neq_lt 升为 lt），再由 uahlb_le_neq_lt 推得      *)
+(*       half2<1；0<half2 支由 mult_positive 直接推得。                *)
+(* 辅助定义：uahlb_ord_dec/uahlb_not_le_lt/uahlb_eq_dec —— 经 match   *)
+(*   Build_DecidableOrder 逐字段投影 DecidableOrder 记录（字段         *)
+(*   ord_le_dec/not_le_lt/eq_dec；lt_dec 与 Stdlib Compare_dec 同名    *)
+(*   遮蔽，故以投影别名取用）。                                       *)
+(*                                                                *)
+(* 依赖：Require Import S01_BaseRing；不装设 Paper7Ablation/          *)
+(*   P7BoundedSoftmaxDeep/被使用各件本身——依赖面最小。                *)
+(* 对标：stdlib Compare_dec（可判定序分情形）；mathlib                *)
+(*   lt_of_le_of_ne（le＋neq⟹lt）的构造性 Set 层对应。                 *)
+(*                                                                *)
+(* 构造性注记：语句面全 Set 层（合取 S01 And=prod、析取 Or=sum、       *)
+(*   否定 Not=→Empty_set）；零承认；可提取。                          *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。         *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
 
-(* ############ 段一：件甲——Or 编码 le＋neq⟹lt 供给桥 #################### *)
-(* 口径：real_le=Or(lt,eq)（cauchy 实数层 real_le 编码；UpTVDoeblin           *)
-(* tvd_abs_le_id:73 路线注记同源）。Or 编码 le 逐支施工：lt 支直取；eq 支与   *)
-(* Neq 前提矛盾消去（Empty_set 归谬，构造性零经典）。                         *)
+(* ############ 段一：uahlb_le_neq_lt —— Or 编码 le＋neq⟹lt ############### *)
+(* 约定：本库序 le 取 Or(lt,Id) 编码（S01_BaseRing 实数层；UpTVDoeblin 中     *)
+(* tvd_abs_le_id 同此编码）。Or 编码 le 逐支分情形：lt 支直取；eq 支与 neq    *)
+(* 前提矛盾消去（Empty_set 归谬，构造性，无经典逻辑）。                       *)
 
 Section UahlbBridgeOr.
 
@@ -60,10 +60,10 @@ Qed.
 
 End UahlbBridgeOr.
 
-(* ############ 段二：件乙——抽象 le＋neq⟹lt（可判定序供给） ############### *)
-(* 抽象 le 无逐支分解字段，经 DecidableOrder 的 ord_le_dec 在 (b,a) 位逐支：  *)
-(* le b a 支与 le a b 合流 le_antisym 放电 Id，与 Neq 前提矛盾消去；非 le 支  *)
-(* 经 not_le_lt 直放电 lt a b。构造性逐支施工，零经典逻辑。                   *)
+(* ############ 段二：uahlb_le_abs_neq_lt —— 抽象 le＋neq⟹lt ############## *)
+(* 抽象 le 无逐支分解字段，经 DecidableOrder 的 ord_le_dec 在 (b,a) 位分情形：*)
+(* le b a 支与 le a b 由 le_antisym 得 Id a b，与 neq 前提矛盾消去；非 le 支  *)
+(* 经 not_le_lt 直接推得 lt a b。构造性分情形，无经典逻辑。                   *)
 
 Section UahlbBridgeLe.
 
@@ -71,7 +71,7 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
 
-(* fa53 投影别名定式（WeakTriangleClose:120 同款 match 投影，防字段名遮蔽） *)
+(* 投影别名定式：match Build_DecidableOrder 逐字段取用，防字段名遮蔽        *)
 Definition uahlb_ord_dec : forall a b : R, Or (le a b) (Not (le a b)) :=
   match DO with
   | Build_DecidableOrder _ old _ _ _ _ => old
@@ -93,10 +93,10 @@ Qed.
 
 End UahlbBridgeLe.
 
-(* ############ 段三：δ* 全前件包姊妹镜像（lo:=二分之一抽象形） ############ *)
-(* half:=inv_pos (plus one one) two_pos（two_pos/inv_pos_pos 供给，件七同位）； *)
-(* half2:=mult half half（δ*=lo² 定义位镜像）。件丙 le 泵链、件丁 neq 链、     *)
-(* 件戊合龙全件 eq_dec＋件乙＋件甲。                                          *)
+(* ############ 段三：uahlb_delta_star_bounded_half —— δ*∈(0,1) 全前提形 ### *)
+(* half:=inv_pos (plus one one) two_pos（two_pos/inv_pos_pos 提供正性）；      *)
+(* half2:=mult half half（δ*=lo² 定义位的抽象形）。先证 uahlb_half2_le_one     *)
+(* 与 uahlb_half2_neq_one，再经 uahlb_eq_dec 等辅助件合成全件。               *)
 
 Section UahlbHalfStar.
 
@@ -104,7 +104,7 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
 
-(* eq_dec 投影别名（同 fa53 定式） *)
+(* eq_dec 投影别名（同 uahlb_ord_dec 的 match 投影定式） *)
 Definition uahlb_eq_dec : forall a b : R, Or (Id a b) (Not (Id a b)) :=
   match DO with
   | Build_DecidableOrder _ _ _ ed _ _ => ed
@@ -113,11 +113,11 @@ Definition uahlb_eq_dec : forall a b : R, Or (Id a b) (Not (Id a b)) :=
 Let half := inv_pos (plus one one) two_pos.
 Let half2 := mult half half.
 
-(* 件七同款加倍还原链（UpAblP7_LoHiSqueeze.v:216-228 逐字镜像）： *)
-(*   Hhp: 0<half（inv_pos_pos@two_pos）；Hh2p: 0<δ*（mult_positive）；        *)
-(*   Hq: δ*+δ*=half（half_twice 加倍还原）；Hone: half+half=1（mult_one       *)
-(*   降形＋half_twice one）；Hone2: 1=δ*+δ*+δ*+δ*（恒等洗牌）。               *)
-(*   上列四件在件丁/件戊证明体内联复用（件七同款，本件零转发零母件装设）。 *)
+(* 证明素材（半的加倍恒等式组）：                                             *)
+(*   0<half（inv_pos_pos 于 two_pos）；0<half2（mult_positive）；              *)
+(*   half2+half2=half（half_twice half）；half+half=1（mult_one 与            *)
+(*   half_twice one）；1=(half2+half2)+(half2+half2)（恒等重排）。             *)
+(*   下列 uahlb_half2_le_one 与 uahlb_half2_neq_one 直接使用这组恒等式。       *)
 
 Lemma uahlb_half2_le_one : le half2 one.
 Proof.
@@ -176,10 +176,10 @@ Proof.
               (plus_positive (plus one one) one two_pos one_pos))).
 Qed.
 
-(* 件戊：δ*∈(0,1) 全前件包（与件七 κ∈(0,1) 前件包互补成对）。 *)
-(* δ*<1 支：eq_dec 逐支重打包 Or 编码 le——Id 支直取（inr）；neq 支经件乙     *)
-(* （抽象 le＋neq⟹lt）升 lt 直取（inl）；再由件甲（Or 编码 le＋neq⟹lt）     *)
-(* 合龙：lt 支直取、Id 支与件丁 neq 前提矛盾消去。0<δ* 支：mult_positive。   *)
+(* uahlb_delta_star_bounded_half：合取 0<half2 且 half2<1 的完整前提形。      *)
+(* half2<1 支：eq_dec 分情形重建 Or 编码 le——Id 支直取（inr）；neq 支经       *)
+(* uahlb_le_abs_neq_lt 升为 lt 直取（inl）；再由 uahlb_le_neq_lt 推得：lt 支   *)
+(* 直取、Id 支与 uahlb_half2_neq_one 前提矛盾消去。0<half2 支：mult_positive。 *)
 Theorem uahlb_delta_star_bounded_half :
   And (lt zero half2) (lt half2 one).
 Proof.
@@ -201,7 +201,7 @@ Qed.
 
 End UahlbHalfStar.
 
-(* ---- PA 收尾段（逐件 Closed 判读；G1/G4 审查留痕面） ---- *)
+(* ---- 收尾段：逐件 Print Assumptions 核验零承认 ---- *)
 Print Assumptions uahlb_le_neq_lt.
 Print Assumptions uahlb_le_abs_neq_lt.
 Print Assumptions uahlb_half2_le_one.

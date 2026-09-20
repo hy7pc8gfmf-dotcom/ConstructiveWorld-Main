@@ -1,36 +1,36 @@
 (* ============================================================ *)
-(* UpAblHalfPowFeed.v —— S10 五槽位 hpw_arch_decay_instT 平替直配件        *)
-(* （P4b 席·20260920，P4 席谱系件后续①：五槽位平替直配·零前置件）          *)
+(* UpAblHalfPowFeed.v —— hpw_arch_decay_instT 于 S10 五位的实例化供给      *)
 (*                                                                *)
-(* 零承认件：无承认词面、无经典逻辑、全件 Qed 闭合；                        *)
-(*   五语句面全 Set 层值（sigT／QltT／QleT'／NatLe 皆 S01/S02 Id 形），     *)
-(*   语句面无裸命题（槽内 Qle 非负证书全为 assert 内部位，与 S10 原位一致）。 *)
+(* 使命：UpAblHalfPow 的 hpw_arch_decay_instT（与 arch_decay 语句同形：    *)
+(*   sigT(t, QltT (C·(1/2)^{S t}) eps)）在 S10_KVQuantTrig 的五个使用位    *)
+(*   （sc_sin_partial_cauchy_bounded、sc_cos_partial_cauchy_bounded、      *)
+(*   sc_cs_sq_err_bound、sc_add_sin_err_bound、sc_add_cos_err_bound 的     *)
+(*   destruct 上下文）中的逐位实例化，以五个 Corollary 交付。              *)
 (*                                                                *)
-(* 任务：消费 UpAblHalfPow.v 的 hpw_arch_decay_instT（与 S03:402 arch_decay *)
-(*   语句逐字同形），对 S10_KVQuantTrig.v 五坐标（:1682/:1728/:6436/       *)
-(*   :11100/:12022）逐位做 destruct 契约平替直配，新独立件交付。            *)
-(*   禁碰 S10/UpAblHalfPow/任何既有文件；未入 order.txt/_CoqProject。       *)
+(* 五位对应（每件复原该位 destruct 前的局部上下文——q_arch_geom／          *)
+(*   exp_series_arch 展形、set C/P、非负性证明链——再以 hpw_arch_decay_instT  *)
+(*   按原式实例化并 destruct，最后以 sigT 封装见证 (N0, t)）：             *)
+(*   hpwf_slot1_sin_cauchy——对应 sc_sin_partial_cauchy_bounded 位；        *)
+(*   hpwf_slot2_cos_cauchy——对应 sc_cos_partial_cauchy_bounded 位（同件1 形）； *)
+(*   hpwf_slot3_cs_sq——对应 sc_cs_sq_err_bound 位；                        *)
+(*   hpwf_slot4_add_sin——对应 sc_add_sin_err_bound 位（同件3 形）；        *)
+(*   hpwf_slot5_add_cos——对应 sc_add_cos_err_bound 位（P 换 13 系数式：    *)
+(*   13 = (1+1)·(1+1+1+1+1+1)+1，非负性经 q_pow_fact_nonneg 推得）。        *)
 (*                                                                *)
-(* 五槽 destruct 契约对表（逐处实录）：                                    *)
-(*   槽1 :1682 sc_sin_partial_cauchy_bounded                               *)
-(*         destruct (arch_decay C eps HC Hep) as [t Hdec]，HC 直供；       *)
-(*   槽2 :1728 sc_cos_partial_cauchy_bounded——同槽1 形；                   *)
-(*   槽3 :6436 sc_cs_sq_err_bound                                         *)
-(*         destruct (arch_decay P eps (Qle_to_QleT' _ _ HP0) Hep) as [t Ht]；*)
-(*   槽4 :11100 sc_add_sin_err_bound——同槽3 形（P 同式）；                 *)
-(*   槽5 :12022 sc_add_cos_err_bound——同槽3 形（P 换 13 系数式）。          *)
-(*   实形核验：五处消费面与供体语句形逐字同构（HC/HP0 非负证书五处          *)
-(*   原位已在，Qle_to_QleT' 换形位同在），**无一坐标异构**，零 shim 成立。  *)
+(* 非平凡增量：各位的非负性证明链为新建——C 的 QleT' 0 C 与 P 的 Qle 0 P    *)
+(*   分别经 q_pow_fact2_nonneg／q_pow_fact_nonneg 与 Qmult_le_0_compat     *)
+(*   链推得；几何衰减见证 (N0, t) 本身由 hpw_arch_decay_instT 给出。        *)
 (*                                                                *)
-(* 直配形态（逐位）：复原该槽 destruct 前的精确局部上下文                   *)
-(*   （q_arch_geom／exp_series_arch 展形＋set C/P＋HC/HP0 证书链），        *)
-(*   以 hpw_arch_decay_instT 按该槽原式实例化并 destruct，再按该槽消费方式  *)
-(*   打包 sigT 见证。尾部 exact 为直配消费步（适配消费级，如实定性）；       *)
-(*   非平凡增量＝各槽上下文证书链的真实现（q_pow_fact2_nonneg／             *)
-(*   Qmult_le_0_compat 链）＋sigT 打包。                                  *)
+(* 构造性注记：全件 Qed 闭合、零承认词面、无经典逻辑；五语句面全 Set 层    *)
+(*   值（sigT/QltT/QleT'/NatLe）；语句面无裸命题（Qle 非负前提均为证明内   *)
+(*   assert，与 arch_decay 原位一致）；五件 Print Assumptions 全 Closed。   *)
+(* 依赖：UpAblHalfPow（hpw_arch_decay_instT）＋CW_ConstructiveWorld_219    *)
+(*   ＋stdlib QArith/ZArith/Arith/Setoid/Morphisms/Lia。                   *)
+(* 对标：几何衰减级数的阿基米德尾界（stdlib 无直接对应物）。               *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard -LoadLimit 85 -CoreN 2 包裹，   *)
+(*   输出经 -o 临时目录，树内 .vo 不重写。                                 *)
+(* 范围注记：本件为独立新增件，只供上述五位语句形一致的实例化。            *)
 (*                                                                *)
-(* 定性申报（红线③）：本件为「适配消费级」直配件——供体 D 件已全款交付       *)
-(*   可计算见证谱系，本件只证平替在各槽位可落地（五 Corollary 全 Closed）。  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -43,7 +43,7 @@ From Stdlib Require Import Lia QArith.Qminmax.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part 0 · 体检（缺位即刻响亮失败）                                       *)
+(* §0 · 依赖签名核验（标识符漂移即编译期暴露） *)
 (* ============================================================ *)
 
 Check q_pow.
@@ -62,20 +62,20 @@ Check NatLe_lift.
 Check arch_decay.
 Check hpw_arch_decay_instT.
 
-(* 契约对表核内验证：供体可处于 arch_decay 的语句型位置（转换性同形） *)
+(* 同形核验：hpw_arch_decay_instT 可置于 arch_decay 的语句型位置（类型注记） *)
 Check (hpw_arch_decay_instT
   : forall (C eps : Q), QleT' 0 C -> QltT 0 eps ->
       sigT (fun t : nat => QltT (C * q_pow (1 / 2)%Q (Datatypes.S t)) eps)).
 
-(* 上游谱系闭合探针：非 Closed 则本席响亮失败 *)
+(* 上游假设核验：hpw_arch_decay_instT 的 Print Assumptions 应为 Closed *)
 Print Assumptions hpw_arch_decay_instT.
 
 (* ============================================================ *)
-(* Part 1 · 槽1 直配（S10:1682，sc_sin_partial_cauchy_bounded）            *)
-(*   槽内上下文复原：q_arch_geom 展形→set N0'→set C→HC 证书（原位同式），   *)
-(*   直配 destruct（原式 arch_decay C eps HC Hep 换供体），                *)
-(*   打包 sigT(N0, sigT(t, QltT (C·(1/2)^{S t}) eps))。                   *)
-(*   （槽内 HN0' 界为 destruct 后下游推进件，与直配无关，零影响。）          *)
+(* §1 · 件1（对应 sc_sin_partial_cauchy_bounded 位）                        *)
+(*   上下文复原：q_arch_geom 展形→set N0'→set C→非负前提 HC（原位同式），   *)
+(*   以 hpw_arch_decay_instT 按原式实例化并 destruct，                     *)
+(*   封装 sigT(N0, sigT(t, QltT (C·(1/2)^{S t}) eps))。                    *)
+(*   （HN0' 界为 destruct 后的下游推进所设，与本件交付无关。）              *)
 (* ============================================================ *)
 
 Corollary hpwf_slot1_sin_cauchy : forall (B eps : Q),
@@ -98,8 +98,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2 · 槽2 直配（S10:1728，sc_cos_partial_cauchy_bounded）            *)
-(*   槽内上下文与槽1 逐字同形（cos 位），直配同式。                          *)
+(* §2 · 件2（对应 sc_cos_partial_cauchy_bounded 位）                        *)
+(*   上下文与件1 同形（cos 位），实例化同式。                               *)
 (* ============================================================ *)
 
 Corollary hpwf_slot2_cos_cauchy : forall (B eps : Q),
@@ -122,9 +122,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3 · 槽3 直配（S10:6436，sc_cs_sq_err_bound）                       *)
-(*   槽内上下文复原：q_arch_geom＋exp_series_arch 展形→HC0/Htwo0/Hfour0→    *)
-(*   set P→HP0 证书（七行原位同式），直配 destruct（Qle_to_QleT' 换形位同在）。 *)
+(* §3 · 件3（对应 sc_cs_sq_err_bound 位）                                   *)
+(*   上下文复原：q_arch_geom＋exp_series_arch 展形→HC0/Htwo0/Hfour0→       *)
+(*   set P→HP0 非负性证明链（原位同式），经 Qle_to_QleT' 实例化。           *)
 (* ============================================================ *)
 
 Corollary hpwf_slot3_cs_sq : forall (B eps C : Q),
@@ -155,8 +155,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4 · 槽4 直配（S10:11100，sc_add_sin_err_bound）                    *)
-(*   槽内上下文与槽3 逐字同形（P 同式），直配同式。                          *)
+(* §4 · 件4（对应 sc_add_sin_err_bound 位）                                 *)
+(*   上下文与件3 同形（P 同式），实例化同式。                               *)
 (* ============================================================ *)
 
 Corollary hpwf_slot4_add_sin : forall (B eps C : Q),
@@ -187,9 +187,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5 · 槽5 直配（S10:12022，sc_add_cos_err_bound）                    *)
-(*   槽内上下文复原：P 换 13 系数式（13 = (1+1)(1+…+1)+1），HP0 原位同式，   *)
-(*   直配 destruct 同槽3 形。                                             *)
+(* §5 · 件5（对应 sc_add_cos_err_bound 位）                                 *)
+(*   P 换 13 系数式（13 = (1+1)·(1+1+1+1+1+1)+1），HP0 链原位同式，         *)
+(*   实例化同件3 形。                                                      *)
 (* ============================================================ *)
 
 Corollary hpwf_slot5_add_cos : forall (B eps C : Q),
@@ -219,7 +219,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 公理面自审：全件 Closed（零外部未证假设）                                *)
+(* 假设审计：五件 Print Assumptions 全 Closed（零外部未证假设）              *)
 (* ============================================================ *)
 
 Print Assumptions hpwf_slot1_sin_cauchy.

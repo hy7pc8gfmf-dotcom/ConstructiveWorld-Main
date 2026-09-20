@@ -1,38 +1,38 @@
 (* ============================================================ *)
-(* UpAblP7_WallEps_CSM.v —— 论文7 专项消融战役 席 PA7-11（墙件 eps 甲腿 W1） *)
+(* UpAblP7_WallEps_CSM.v —— 逐 eps 三角不等式的实例化与行加权和形式重建 *)
 (*                                                              *)
-(* 假设任务：目标⑤ 墙件 eps/B 形消费件战役——abs_sum_le 墙槽侧。        *)
-(*   墙：abs_sum_le plain 形（|Σf|≤Σ|f|，Or 编码 le）对混合号 f 等价    *)
-(*   真墙（UpReqConcSoftmax.v L11-16 定谳注记；real_le = Or real_lt     *)
-(*   real_eq，S02 L469，混合号下两支均不可达）。本席不施工墙本体，       *)
-(*   供墙槽的 Bishop 逐 eps 形消费件。                                  *)
+(* 数学使命：本件形式化 Bishop 逐 eps 三角不等式 |Σ f(s)| ≤ Σ|f(s)| + eps       *)
+(*   （对一切 eps>0；csm_abs_sum_le_eps 为其库内直供形）的两类实例化：          *)
+(*   其一，二元变号载体（uabp7we_mixed_f：true ↦ a、false ↦ −b）上的           *)
+(*   uabp7we_csm_eps_twopt 与符号合取 uabp7we_twopt_mixed_sign；其二，          *)
+(*   逐点非负核 K 的加权和行不等式 uabp7we_abs_row_eps（|Σ f(s)·K s s'| ≤       *)
+(*   Σ|f s|·K s s' + eps），先以抽象核 uabp7we_abs_row_eps_absK 证明，          *)
+(*   再以 rsq 核（rsq_u_r_kernel）全参实例化。                                  *)
 (*                                                              *)
-(* 母本坐标（文件:行号）→ 放电件 → 消费位：                            *)
-(*   UpReqConcSoftmax.v:248 csm_abs_sum_le_eps（逐 eps 三角直供）       *)
-(*     → uabp7we_csm_eps_twopt（二元混合号载体实例消费）                *)
-(*   UpReqSampling.v:116/488 abs_sum_le_h 槽与唯一深消费位 rsq_u_abs_row *)
-(*     → uabp7we_abs_row_eps_absK / uabp7we_abs_row_eps（eps 形重建）   *)
-(*   UpReqSampling.v:1166 经 rsq_bounded_softmax_tv_iter 向上；         *)
-(*   UpReqConcMixSel.v:880/911 cmk_attention_mixing_time/_le 为墙槽     *)
-(*   消费末端（经 rsq 链继承，本件在链根重建 eps 形）。                 *)
+(* 数学背景：不带余量三角不等式 |Σf| ≤ Σ|f| 在变号系数下不可由接口字段导出       *)
+(*   （UpReqConcSoftmax 对此有注记）；本件不给该形本身，只供其逐 eps 形的        *)
+(*   重建件——rsq_u_abs_row 等下游结论的逐 eps 对应物由本件在链根补齐。          *)
 (*                                                              *)
-(* 分级申报：                                                          *)
-(*   N1 库内放电件直连：csm_abs_sum_le_eps（指定消费路线）、            *)
-(*     rsq_u_r_kernel / rsq_u_r_nonneg（出节签名实测不含 plain 墙槽——  *)
-(*     墙槽未被其证明消费、未泛化，消费诚实）、abs_mult、le_id_r、      *)
-(*     req_plus_compat、req_mult_compat、opp_lt_compat、reqd_opp_zero、 *)
-(*     req_lt_id_r_loc、plus_zero。                                    *)
-(*   N2 已证导出：uabp7we_abs_row_eps 由抽象核 uabp7we_abs_row_eps_absK *)
-(*     全参实例化（K:=rsq 核），链路零 plain 形冒充。                   *)
-(*   N3 实例供给：二元 bool 载体（enum:=true::false::nil 清单供给），   *)
-(*     系数 a、−b 带正性证书（有界系数面），混合号锚逐点定谳。         *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、                 *)
+(*   UpReqConcSoftmax（提供 csm_abs_sum_le_eps：逐 eps 三角不等式）、             *)
+(*   UpReqSampling（提供 rsq_u_r_kernel/rsq_u_r_nonneg/rsq_u_abs_row 同形参照）； *)
+(*   实例面 = RealEnhancedReal 具体层实例（导入后类型类解析，与源模块同源同解析）。*)
 (*                                                              *)
-(* 依赖清单（只读消费，原树零改）：CW_ConstructiveWorld_219、           *)
-(*   UpReqAlgebra、UpReqSumD、UpReqConcSoftmax、UpReqSampling；         *)
-(*   实例面 = S07 具体实例（模块导入后类型类解析，与母件同源同解析）。  *)
+(* 证明要点：二元约简 uabp7we_sumd_twopt 由 sumd_list_sum 的折叠定义经           *)
+(*   plus_zero 归约；抽象核 uabp7we_abs_row_eps_absK 由 abs_mult、非负定位       *)
+(*   前提 abs_ge_zero_req 与逐 eps 三角前提 abs_sum_le_eps_h 经 sum_ext 与        *)
+(*   req_plus_compat、le_id_r 装配；rsq 核逐点非负由 rsq_u_r_nonneg 出节形直连。 *)
 (*                                                              *)
-(* 红线自审：全件语句集合值面；全件真证收口；无承认件、无未证断言、     *)
-(*   无经典逻辑捷径、无选择公理、无排中律；文尾逐件假设审计全封闭。     *)
+(* Section 前提的地位：sum_ext、abs_sum_le_eps_h、abs_ge_zero_req、K_nonneg      *)
+(*   均为 Section 内假设（出节后量化为定理前提），非全局公理；其中                *)
+(*   abs_sum_le_eps_h 即逐 eps 三角不等式本身，作为本件重建的目标前提引入。       *)
+(*                                                              *)
+(* 构造性注记：全件语句集合值面；零承认、零经典逻辑捷径、零排中律；              *)
+(*   见证以依存对承载；文尾对逐件 Print Assumptions 审计封闭。                   *)
+(*                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流、-o 临时目录输出（树内零写入）。      *)
+(*                                                              *)
+(* 标识符约定：本件实例层命名以前缀 uabp7we_ 区分于库内 rsq_/csm_ 系列。         *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -43,15 +43,15 @@ Require Import UpReqConcSoftmax.
 Require Import UpReqSampling.
 Import RealInterfaceEnhancedMod.
 
-(* ============ 甲件：二元混合号载体的逐 eps 实例面 ============ *)
+(* ============ 二元变号载体上的逐 eps 实例面 ============ *)
 
-(* 混合号载体族：两点 bool 载体，系数 a 与 −b（a,b>0 证书另附），
-   正负两支各占一点——plain 墙的典型混合号形状。 *)
+(* 变号载体族：两点 bool 载体，系数 a 与 −b（a,b>0 的证明另附），
+   正负两支各占一点——使三角不等式在变号系数下取实质形。 *)
 Definition uabp7we_mixed_f (a b : Real) : bool -> Real :=
   fun s : bool => if s then a else opp b.
 
-(* 二元约简：折叠处方在二点清单上定义性归约为逐点加法（req 链两段：
-   折叠自归约中段 + 右零消去） *)
+(* 二元约简：折叠在二点清单上定义性归约为逐点加法（req 链两段：
+   折叠的内部自归约 + 右端零消去） *)
 Lemma uabp7we_sumd_twopt : forall g : bool -> Real,
   req (sumd_list_sum bool g (true :: false :: nil))
       (plus (g true) (g false)).
@@ -68,9 +68,9 @@ Proof.
               (plus_zero (g false)))).
 Qed.
 
-(* 甲件主例：二元混合号载体上 |Σf| ≤ Σ|f| + eps（逐 eps 形）。
-   消费路线申报：直接消费 csm_abs_sum_le_eps（UpReqConcSoftmax.v:248，
-   指定免费档），二元载体为其实例化。 *)
+(* 主例：二元变号载体上 |Σf| ≤ Σ|f| + eps（逐 eps 形）。
+   由库件 csm_abs_sum_le_eps（UpReqConcSoftmax）直接实例化，
+   二元载体为其具体实例。 *)
 Lemma uabp7we_csm_eps_twopt : forall a b eps : Real,
   lt zero a -> lt zero b -> lt zero eps ->
   le (abs (csm_sumf bool (true :: false :: nil) (uabp7we_mixed_f a b)))
@@ -83,10 +83,10 @@ Proof.
            (uabp7we_mixed_f a b) eps Heps).
 Qed.
 
-(* 混合号锚：正支在 true 点定义性等于 a（正），负支在 false 点定义性
-   等于 −b，由 b>0 经反号保序得负——plain 墙注记中的混合号形状在此
-   载体上逐点定谳（req 反号右定位换形）。语句集合值，两证以 sigT 打包
-   （宇宙坑先例：合取连接子仅 Prop 层，Set 值证配对走依存对） *)
+(* 符号合取：正支在 true 点定义性等于 a（正），负支在 false 点定义性
+   等于 −b，由 b>0 经 opp_lt_compat 反号保序得负——变号载体上
+   两支符号在此逐点确定。两个见证以 sigT 依存对承载
+   （Set 值面的合取不走 Prop 连接子，配对走依存对） *)
 Lemma uabp7we_twopt_mixed_sign : forall a b : Real,
   lt zero a -> lt zero b ->
   sigT (fun _ : lt zero (uabp7we_mixed_f a b true) =>
@@ -103,11 +103,11 @@ Proof.
               (opp_lt_compat zero b Hb))).
 Qed.
 
-(* ============ 乙件：墙槽消费定理的逐 eps 形重建 ============ *)
+(* ============ 行加权和不等式的逐 eps 形重建 ============ *)
 
-(* 抽象核：任意逐点非负核 K 上，墙槽消费定理（rsq_u_abs_row 同形）
-   的逐 eps 形——求和三角槽取逐 eps 形（替代 plain 墙槽 abs_sum_le_h，
-   零 plain 形冒充），结论右端加 eps 余量。 *)
+(* 抽象核：任意逐点非负核 K 上，行不等式（与 rsq_u_abs_row 同形）
+   的逐 eps 形——求和三角前提取逐 eps 形（以 abs_sum_le_eps_h
+   替代不带余量形 abs_sum_le_h），结论右端加 eps 余量。 *)
 Section WallEpsRowAbs.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -115,25 +115,25 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 
-(* 求和外延槽（rsq 同位） *)
+(* 求和外延前提（与 rsq 同位） *)
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
 
-(* 逐 eps 三角槽：plain 墙槽 abs_sum_le_h 的 Bishop 逐 eps 形同位替换 *)
+(* 逐 eps 三角前提：abs_sum_le_h 的 Bishop 逐 eps 形同位替换 *)
 Hypothesis abs_sum_le_eps_h :
   forall (f : S -> R) (eps : R), lt zero eps ->
     le (abs (sumf f)) (plus (sumf (fun s : S => abs (f s))) eps).
 
-(* 逐点非负核（rsq 核非负位同形） *)
+(* 逐点非负核 K（与 rsq 核非负前提同形） *)
 Variable K : S -> S -> R.
 Hypothesis K_nonneg : forall s s' : S, le zero (K s s').
 
-(* 绝对值非负定位证书（rsq 同位诚实假设面） *)
+(* 绝对值非负定位前提（le zero a ⟹ abs a = a，与 rsq 同位） *)
 Hypothesis abs_ge_zero_req : forall a : R, le zero a -> req (abs a) a.
 
-(* 墙槽消费定理逐 eps 重建（rsq_u_abs_row 同形，UpReqSampling.v:483-489）：
-   右端多 eps 余量；证明链 = 乘积绝对值分解链（abs_mult+非负定位）经
-   加法同余抬升 + 逐 eps 三角槽直喂。 *)
+(* 行不等式的逐 eps 重建（与 rsq_u_abs_row 同形）：
+   右端多 eps 余量；证明链 = 乘积绝对值分解（abs_mult 与非负定位）经
+   sum_ext 加法外延换元与 req_plus_compat，末端由逐 eps 三角前提给出。 *)
 Theorem uabp7we_abs_row_eps_absK : forall (f : S -> R) (s' : S) (eps : R),
   lt zero eps ->
   le (abs (sumf (fun s : S => mult (f s) (K s s'))))
@@ -167,8 +167,8 @@ Qed.
 
 End WallEpsRowAbs.
 
-(* rsq 核证书面：镜像 ReqUContraction 核最小证书集（出节签名实测——
-   rsq_u_r_nonneg 出口不含 plain 墙槽，消费诚实） *)
+(* rsq 核实例节：以库件 rsq_u_r_kernel 的最小前提集实例化抽象核
+   （rsq_u_r_nonneg 的出节签名即所需全部前提） *)
 Section WallEpsRowRsq.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -190,12 +190,12 @@ Hypothesis abs_sum_le_eps_h :
     le (abs (sumf f)) (plus (sumf (fun s : S => abs (f s))) eps).
 Hypothesis abs_ge_zero_req : forall a : R, le zero a -> req (abs a) a.
 
-(* rsq 核同形定义（库件直连，零重证） *)
+(* rsq 核同形定义（库件直连，无需重证） *)
 Definition uabp7we_rkern (s s' : S) : R :=
   rsq_u_r_kernel S u delta delta_lt_one transition lpc s s'.
 
-(* 核逐点非负：消费库件出节形（签名探针实测：R RIS S u delta
-   delta_lt_one transition minorization lpc s s' 十一位全显） *)
+(* 核逐点非负：直接应用库件出节形（实参 R RIS S u delta
+   delta_lt_one transition minorization lpc s s' 全显给出） *)
 Lemma uabp7we_rkern_nonneg : forall s s' : S, le zero (uabp7we_rkern s s').
 Proof.
   intros s s'.
@@ -203,9 +203,9 @@ Proof.
            minorization lpc s s').
 Qed.
 
-(* 乙件主定理：墙槽消费定理（rsq_u_abs_row）的逐 eps 形重建——
-   消费抽象核全参实例化（K:=rsq 核），链根即 cmk_attention_mixing_time
-   链的墙槽唯一深消费位（UpReqConcMixSel.v:880/911 经 rsq 链继承） *)
+(* 主定理：行不等式（rsq_u_abs_row）的逐 eps 形重建——
+   抽象核以 K:=rsq 核全参实例化；rsq_u_abs_row 正是
+   cmk_attention_mixing_time 链中该行不等式的库内原型（经 rsq 链继承） *)
 Theorem uabp7we_abs_row_eps : forall (f : S -> R) (s' : S) (eps : R),
   lt zero eps ->
   le (abs (sumf (fun s : S => mult (f s) (uabp7we_rkern s s'))))
@@ -218,7 +218,7 @@ Qed.
 
 End WallEpsRowRsq.
 
-(* ============ 审计收尾段（逐件封闭判读，节外全显） ============ *)
+(* ============ 假设审计（对逐件 Print Assumptions） ============ *)
 Print Assumptions uabp7we_sumd_twopt.
 Print Assumptions uabp7we_csm_eps_twopt.
 Print Assumptions uabp7we_twopt_mixed_sign.

@@ -1,38 +1,38 @@
 (* ============================================================ *)
-(* UpAblAbsSumLeB3.v —— abstract sumf 槽位本位 B 形供给件（H1 席）        *)
+(* UpAblAbsSumLeB3.v —— abstract sumf 接口本位 B 形供给件                 *)
 (*                                                                *)
-(* 席位：H1（abs_sum_le 余项②专责席）· 20260920                        *)
-(* 零承认件：无承认词面、无假设槽位声明、无经典逻辑、全件 Qed 闭合。        *)
+(* 零承认件：无承认词面、无假设参数声明、无经典逻辑、全件 Qed 闭合。        *)
 (*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b/Qle/Qlt 均集合层， *)
-(*   语句面无裸命题；证明全构造（Or 逐支、sigT 见证直构、Q 侧可判定符号）。   *)
+(*   语句面无裸命题；证明全构造（Or 逐支、sigT 见证直接构造、Q 侧可判定符号）。*)
 (*                                                                *)
-(* 槽位定谳（本件头注即定谳正文）：                                    *)
-(*   SumOver 类（S01:1398）的 abs_sum_le 字段即墙假设本体；UpReqSampling   *)
-(*   （:106-116/:705-720）的求和诚实接口实形＝sum_ext/sum_linear/sum_add/  *)
-(*   sum_le/abs_sum_le_h 五槽位。本件在该槽位形上（R:=Real 特化面，         *)
-(*   RealInterfaceEnhancedSetoid 的 Real 实例在场）以显式 Set 层前件        *)
-(*   供给 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)——槽位本位 B 形：          *)
-(*   单调槽位取 Bishop 升级形（逐点 real_le_b；库形 Or 槽位经               *)
-(*   real_le_to_le_b 单步升格即得，故本前件严格弱于库 Or 槽位＝结论更强）。  *)
-(*   与 S4B 折叠接口相对形（UpAblAbsSumLeB2.v，sumL 为 list 索引、          *)
-(*   nil/cons 两条方程、归纳机理）不同构：彼为有限折叠位，本件为求和槽位      *)
-(*   本位（任意 S:Set、无 list 结构、接口代数+双侧夹逼机理）——              *)
-(*   并列共存，互证申报（T2R2）。                                        *)
+(* 结论（本件头注即结论正文）：                                          *)
+(*   SumOver 类的 abs_sum_le 字段即该类假设本体；UpReqSampling 的        *)
+(*   求和诚实接口实形＝sum_ext/sum_linear/sum_add/sum_le/abs_sum_le_h    *)
+(*   五个接口字段。本件在该接口形上（R:=Real 特化面，                    *)
+(*   RealInterfaceEnhancedSetoid 的 Real 实例在场）以显式 Set 层前提     *)
+(*   供给 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)——接口本位 B 形：        *)
+(*   单调字段取 Bishop 升级形（逐点 real_le_b；库形 Or 字段经             *)
+(*   real_le_to_le_b 单步升格即得，故本前提严格弱于库 Or 字段＝结论更强）。*)
+(*   与 UpAblAbsSumLeB2.v 的折叠接口相对形（sumL 为 list 索引、          *)
+(*   nil/cons 两条方程、归纳机理）不同构：彼为有限折叠，本件为求和接口    *)
+(*   本位（任意 S:Set、无 list 结构、接口代数+双侧夹逼机理）——            *)
+(*   并列共存，互为对照。                                                *)
 (*                                                                *)
-(* Closed＝零公理非零前提口径：全件 Print Assumptions 闭合（节变量 End 时    *)
-(*   全称化收纳，零外部承认）；非零前提＝三接口字段（外延/加法/单调           *)
-(*   Bishop 形）+无其它，逐条显式量词化在案。                              *)
+(* Closed 约定＝零公理而非零前提：全件 Print Assumptions 闭合（节变量在  *)
+(*   End 时全称化收纳，零外部承认）；非零前提＝三接口字段（外延/加法/单调  *)
+(*   Bishop 形）+无其它，逐条显式量词化在案。                             *)
 (*                                                                *)
-(* 三面供给：                                                           *)
-(*   A 实级基件：点态 B 吸收×2（x ≤_B |x|、−x ≤_B |x|）＋双侧夹逼⟹abs B 形  *)
+(* 三面供给：                                                            *)
+(*   A 实数层基础引理：点态 B 吸收×2（x ≤_B |x|、−x ≤_B |x|）＋双侧夹逼⟹abs B 形 *)
 (*      （q_abs_lt_two_sided 同核机理：两点核三角的双侧承载，Q 层符号二分）    *)
-(*      ＋B 形右相等运输＋半分基建（real_const (1#2) 逐点环账——             *)
-(*      S4 §6.4 半分增量点收口）＋B 形 plus 兼容/opp 反序兼容；              *)
-(*   B 槽位主件：接口代数（sum_zero、sum_opp 由 ext/add 消去链自证）＋        *)
-(*      主定理 uabS4c_abs_sum_le_B_slot（B 形本位）＋逐 eps 形回收（inl）    *)
-(*      ＋槽位双杀件；                                              *)
-(*   C 实例与供体消费：bool 两点和形实例经槽位重导（与供体 A.3 同语句——      *)
-(*      零增量对照申报）＋槽位双杀（消费供体 C.1 倍率 2 杀＋本件逐 eps 形）。  *)
+(*      ＋B 形右相等运输＋半分构造（half e ＋ half e ≡ e 的逐点环恒等式）      *)
+(*      ＋B 形 plus 兼容/opp 反序兼容；                                    *)
+(*   B 接口主件：接口代数（sum_zero、sum_opp 由 ext/add 消去链自证）＋        *)
+(*      主定理 uabS4c_abs_sum_le_B_slot（B 形本位）＋逐 eps 形推论（inl 注入） *)
+(*      ＋双倍余量矛盾引理；                                               *)
+(*   C 实例与供体对照：bool 两点和形实例经接口重导（与供体 A.3 同语句——      *)
+(*      零增量对照）＋双倍余量矛盾（应用 uabS4_lt_double_margin_le_half_contr *)
+(*      ＋本件逐 eps 形）。                                                 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -45,21 +45,21 @@ Require Import S08_RealMainlineDPO.
 Require Import UpAblAbsSumLeB.
 
 (* ============================================================ *)
-(* Part 0 · 冻结现态复刻：武器在库打表（签名漂移即 fail-loud）              *)
+(* §0 库内接口核对（Check 逐项对照真实签名）                              *)
 (* ============================================================ *)
 
-Check real_le_b.              (* UpRealLeB:72 Bishop 形 ≤（可达最强形谓词） *)
-Check real_le_to_le_b.        (* Or ⟹ B 单向桥 *)
-Check real_abs.               (* S03:6510 逐点 Qabs *)
+Check real_le_b.              (* Bishop 形 ≤（可达最强形谓词） *)
+Check real_le_to_le_b.        (* Or ⟹ B 单向桥接 *)
+Check real_abs.               (* 逐点 Qabs *)
 Check real_abs_proj.          (* 逐点投影 *)
-Check real_eps_witness.       (* S07:7447 正性有理见证（eps0/2 内建） *)
-Check q_abs_lt_two_sided.     (* S02:905 Q 层双侧夹逼（同核机理） *)
+Check real_eps_witness.       (* 正性有理见证（内建半量） *)
+Check q_abs_lt_two_sided.     (* Q 层双侧夹逼（同核机理） *)
 Check Qlt_le_dec.             (* Q 可判定符号/序（非经典） *)
 Check real_plus_proj.
 Check real_opp_proj.
 Check real_mult_proj.
 Check real_const_proj.
-Check real_eq_of_zero_diff.   (* S02:2317 逐点零差分 ⟹ real_eq *)
+Check real_eq_of_zero_diff.   (* 逐点零差分 ⟹ real_eq *)
 Check RealSetoid.real_eq_plus_compat.
 Check real_plus_assoc.
 Check real_plus_comm.
@@ -69,16 +69,16 @@ Check real_mult_comm.
 Check real_mult_one.
 Check RealSetoid.real_lt_le_iff_req.
 Check real_le_plus_compat.
-Check uabS4_le_add_r.               (* 供体 S4 A.0（只读消费 .vo） *)
-Check uabS4_abs_diff_triangle_le_eps. (* 供体 S4 A.1 两点核差形逐 eps *)
-Check uabS4_abs_diff_triangle_le_B.   (* 供体 S4 A.2 两点核差形 B 形 *)
-Check uabS4_abs_sum_le_B_pair.        (* 供体 S4 A.3 两点实例 B 形 *)
-Check uabS4_cons_glue.                (* 供体 S4 缝合引理 *)
-Check uabS4_lt_double_margin_le_half_contr. (* 供体 S4 C.1 倍率 2 杀 *)
-Check real_list_sum.                  (* S08:288 折叠机器 *)
+Check uabS4_le_add_r.               (* 供体（UpAblAbsSumLeB）正余量右吸收 *)
+Check uabS4_abs_diff_triangle_le_eps. (* 供体 A.1 两点核差形逐 eps *)
+Check uabS4_abs_diff_triangle_le_B.   (* 供体 A.2 两点核差形 B 形 *)
+Check uabS4_abs_sum_le_B_pair.        (* 供体 A.3 两点实例 B 形 *)
+Check uabS4_cons_glue.                (* 供体归纳步引理（uabS4_cons_glue） *)
+Check uabS4_lt_double_margin_le_half_contr. (* 供体 C.1 倍率 2 不可共存 *)
+Check real_list_sum.                  (* list 折叠（X 全称） *)
 
 (* ============================================================ *)
-(* Part A · 实级基件（新供给面：点态 B 吸收/双侧夹逼/半分基建/兼容对）       *)
+(* §1 实数层基础引理（点态 B 吸收/双侧夹逼/半分构造/兼容对）               *)
 (* ============================================================ *)
 
 (* A.0 Q 层：u ≤ |u|（Qlt_le_dec 符号判定，Q 侧可判定非经典） *)
@@ -137,10 +137,10 @@ Proof.
     lra.
 Qed.
 
-(* A.4 主件机理核：双侧夹逼 ⟹ abs B 形——
+(* A.4 核心引理：双侧夹逼 ⟹ abs B 形——
    x ≤_B Y 且 −x ≤_B Y ⟹ |x| ≤_B Y。
    构造：逐 eps 取 δ＝min(d1,d2)（Qlt_le_dec 二分），逐点 Qabs 二分符号：
-   u_n ≥ 0 支吃正向见证 d1，u_n < 0 支吃负向见证 d2——双侧信息各承一翼，
+   u_n ≥ 0 支取正向见证 d1，u_n < 0 支取负向见证 d2——双侧信息各承一肢，
    逐点符号二分在 Q 层可判定处完成（构造性保持，无整体符号判定）。 *)
 Lemma uabS4c_abs_le_b_two_sided : forall x Y : Real,
   real_le_b x Y -> real_le_b (real_opp x) Y -> real_le_b (real_abs x) Y.
@@ -236,8 +236,8 @@ Proof.
       lra.
 Qed.
 
-(* A.6 半分基建（S4 §6.4 半分增量点）：half e ＋ half e ≡ e
-   （real_const (1#2) 逐点环账，零 inv2 需求）＋half 正性 *)
+(* A.6 半分构造：half e ＋ half e ≡ e
+   （real_const (1#2) 逐点环恒等式，零 inv2 需求）＋half 正性 *)
 Definition uabS4c_half (e : Real) : Real := real_mult e (real_const (1#2)).
 
 Lemma uabS4c_half_eq : forall e : Real,
@@ -271,7 +271,7 @@ Proof.
 Qed.
 
 (* A.7 B 形 plus 兼容：a ≤_B c 且 b ≤_B d ⟹ a+b ≤_B c+d。
-   半分基建消费位：两侧各吃半量 margin，Q 层 h_n+h_n ≡ eps_n 逐点缝合。 *)
+   半分构造应用处：两侧各取半量余量，Q 层 h_n+h_n ≡ eps_n 逐点重合。 *)
 Lemma uabS4c_leb_plus_compat : forall a b c d : Real,
   real_le_b a c -> real_le_b b d -> real_le_b (real_plus a b) (real_plus c d).
 Proof.
@@ -342,8 +342,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B · SumOver 抽象槽位接口主件（照 UpReqSampling:106-116 诚实接口形，   *)
-(*   R:=Real 特化；三字段＝显式 Set 层前件；abs_sum_le 槽位不设——本件证之）   *)
+(* §2 SumOver 抽象接口主件（同 UpReqSampling 的诚实接口形，                 *)
+(*   R:=Real 特化；三字段＝显式 Set 层前提；abs_sum_le 字段不设——本件证之）  *)
 (* ============================================================ *)
 
 Section uabS4c_SumOverSlot.
@@ -351,18 +351,18 @@ Section uabS4c_SumOverSlot.
 Variable S : Set.
 Variable sumf : (S -> Real) -> Real.
 
-(* 前件槽位一：外延（逐点 real_eq ⟹ 和 real_eq；库形 sum_ext 逐位镜像） *)
+(* 前提字段一：外延（逐点 real_eq ⟹ 和 real_eq；对应库形 sum_ext） *)
 Variable uabS4c_sum_ext : forall f g : S -> Real,
   (forall s : S, real_eq (f s) (g s)) -> real_eq (sumf f) (sumf g).
-(* 前件槽位二：加法（逐点和 ≡ 和和；库形 sum_add 逐位镜像） *)
+(* 前提字段二：加法（逐点和 ≡ 和的和；对应库形 sum_add） *)
 Variable uabS4c_sum_add : forall f g : S -> Real,
   real_eq (sumf (fun s : S => real_plus (f s) (g s))) (real_plus (sumf f) (sumf g)).
-(* 前件槽位三：单调 Bishop 升级形（逐点 real_le_b ⟹ 和 real_le_b；
-   库形 Or 槽位经 real_le_to_le_b 单步可得，本形严格更弱＝结论更强） *)
+(* 前提字段三：单调 Bishop 升级形（逐点 real_le_b ⟹ 和 real_le_b；
+   库形 Or 字段经 real_le_to_le_b 单步可得，本形严格更弱＝结论更强） *)
 Variable uabS4c_sum_le_B : forall f g : S -> Real,
   (forall s : S, real_le_b (f s) (g s)) -> real_le_b (sumf f) (sumf g).
 
-(* B.0 零函数槽代数：Σ 0 ≡ 0（ext＋add＋消去链自证，零新前件） *)
+(* B.0 零函数代数：Σ 0 ≡ 0（ext＋add＋消去链自证，零新前提） *)
 Lemma uabS4c_sum_zero_eq : real_eq (sumf (fun _ : S => real_zero)) real_zero.
 Proof.
   assert (Hid : real_eq (sumf (fun _ : S => real_zero))
@@ -392,7 +392,7 @@ Proof.
   - apply real_plus_opp.
 Qed.
 
-(* B.1 负函数槽代数：Σ(−f) ≡ −(Σf)（ext＋add＋B.0 消去链自证，零新前件） *)
+(* B.1 负函数代数：Σ(−f) ≡ −(Σf)（ext＋add＋B.0 消去链自证，零新前提） *)
 Lemma uabS4c_sum_opp_eq : forall f : S -> Real,
   real_eq (sumf (fun s : S => real_opp (f s))) (real_opp (sumf f)).
 Proof.
@@ -462,9 +462,9 @@ Proof.
                     (real_eq_trans _ _ _ Hs5 (real_eq_trans _ _ _ Hs6 Hs7)))))).
 Qed.
 
-(* B.2 主定理（槽位本位 B 形）：|Σ sumf f| ≤_B Σ sumf (fun s => |f s|)。
-   构造：点态 B 吸收×2（A.2/A.3）喂单调槽位得双向和界，负向经 B.1 运输
-   （A.5），双侧夹逼核（A.4）收束——三前件各司其职，零归纳。 *)
+(* B.2 主定理（接口本位 B 形）：|Σ sumf f| ≤_B Σ sumf (fun s => |f s|)。
+   构造：点态 B 吸收×2（A.2/A.3）应用单调字段得双向和界，负向经 B.1 运输
+   （A.5），双侧夹逼核（A.4）收束——三前提各司其职，零归纳。 *)
 Theorem uabS4c_abs_sum_le_B_slot : forall f : S -> Real,
   real_le_b (real_abs (sumf f)) (sumf (fun s : S => real_abs (f s))).
 Proof.
@@ -484,7 +484,7 @@ Proof.
            (sumf (fun s : S => real_abs (f s))) H1 H3).
 Qed.
 
-(* B.3 逐 eps 形回收（B ⟹ 逐 eps，inl 注入——供体 B.3 对照位） *)
+(* B.3 逐 eps 形推论（B ⟹ 逐 eps，inl 注入——供体 B.3 对照位） *)
 Theorem uabS4c_abs_sum_le_eps_slot : forall (f : S -> Real) (e : Real),
   real_lt real_zero e ->
   real_le (real_abs (sumf f))
@@ -495,8 +495,8 @@ Proof.
   exact (uabS4c_abs_sum_le_B_slot f e He).
 Qed.
 
-(* B.4 槽位双杀件：B 形界不可被双倍 margin 越过（构造性不许行见证）。
-   消费供体 S4 C.1 倍率 2 杀＋本件 B.3 逐 eps 形——槽位级一致性证书。 *)
+(* B.4 双倍余量矛盾引理：B 形界不可被双倍 margin 越过（构造性：不存在
+   这样的见证）。应用供体 C.1（uabS4_lt_double_margin_le_half_contr）＋本件 B.3 逐 eps 形——接口级一致性证书。 *)
 Theorem uabS4c_slot_double_kill : forall (f : S -> Real) (e : Real),
   real_lt real_zero e ->
   real_lt (real_plus (sumf (fun s : S => real_abs (f s))) (real_plus e e))
@@ -512,10 +512,10 @@ Qed.
 End uabS4c_SumOverSlot.
 
 (* ============================================================ *)
-(* Part C · 接口可满足性实例（bool 两点和形）＋供体对照                       *)
+(* §3 接口可满足性实例（bool 两点和形）＋供体对照                            *)
 (* ============================================================ *)
 
-(* C.0 bool 两点槽位三字段（外延/加法/单调 Bishop 形） *)
+(* C.0 bool 两点接口三字段（外延/加法/单调 Bishop 形） *)
 Lemma uabS4c_pair_ext : forall (f g : bool -> Real),
   (forall s : bool, real_eq (f s) (g s)) ->
   real_eq (real_plus (f true) (f false)) (real_plus (g true) (g false)).
@@ -563,9 +563,9 @@ Qed.
 
 Check uabS4c_abs_sum_le_B_slot.
 
-(* C.1 两点和形经抽象槽位重导：与供体 S4 A.3（uabS4_abs_sum_le_B_pair）
-   同语句——槽位通路独立复验（零增量对照申报，两读并列）。
-   附带语义点：A.7 的半分基建在本实例单调字段处真实承重。 *)
+(* C.1 两点和形经抽象接口重导：与供体 A.3（uabS4_abs_sum_le_B_pair）
+   同语句——接口通路独立复验（零增量对照，两读并列）。
+   附带语义点：A.7 的半分构造在本实例单调字段处被真实使用。 *)
 Theorem uabS4c_slot_pair_B : forall f : bool -> Real,
   real_le_b (real_abs (real_plus (f true) (f false)))
             (real_plus (real_abs (f true)) (real_abs (f false))).
@@ -577,7 +577,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 公理面自审：全件 Closed（零外部未证假设；节变量 End 全称化收纳）           *)
+(* 审计注记：Print Assumptions 预期全 Closed（零外部未证假设；节变量 End 全称化收纳） *)
 (* ============================================================ *)
 
 Print Assumptions uabS4c_abs_ge_l_b.

@@ -1,43 +1,43 @@
 (* ============================================================ *)
-(* UpAblCauchyLim.v —— real_lim 非平凡具体输入面纵深件                  *)
-(*   （P7 席·20260920，P6 后续槽②）                                    *)
+(* UpAblCauchyLim.v —— 调和序列 ucl_harm_seq 的完备性与极限＝0        *)
+(*   （real_lim 面非平凡具体输入实例）                                 *)
 (*                                                                *)
-(* 零承认件：无承认词面、无经典逻辑、全件 Qed 闭合；                        *)
-(*   交付语句面全 Set 层值（real_lt/real_eq/real_lim＝S02 Set 形；        *)
-(*   And/Or＝S01:66-67 Set 层 A*B/A+B；sigT 见证面）；                  *)
-(*   Prop 面换形（Qlt/Qeq/Qle）全内联于证明内部。                         *)
+(* 使命：为实数极限谓词 real_lim 提供非平凡具体输入的完整实例——调和型 *)
+(*   序列 ucl_harm_seq（第 n 项＝1/(n+2)）：其双柯西条件经阿基米德性质 *)
+(*   q_arch_inv 逐 eps 构造阈值（N 依赖 eps，非 O），由完备性           *)
+(*   real_cauchy_complete 得抽象极限，再证极限＝real_const 0 并经       *)
+(*   real_lim_unique 等同。                                             *)
 (*                                                                *)
-(* 槽位来源（P6 席后续槽②原文）：real_lim 系输入面纵深——非 real_zero/     *)
-(*   real_const 具体输入走 S02 完备性骨架路线；前置＝S02 完备性全款        *)
-(*   Bishop 正则化（S02:2776+，现盘实核：real_cauchy_complete@S02:3082    *)
-(*   已是零自由变元全款定理，前置满足）。ucm_ 契约位模式平移至 real_lim 面。 *)
+(* 非平凡性：ucm_ 系各件的见证全为 N := O（零序列输入面）；本件阈值     *)
+(*   N 依赖 eps（经 q_arch_inv 逐 eps 构造）——这是完备性定理在非平凡   *)
+(*   具体输入面上的实际应用。                                           *)
 (*                                                                *)
-(* 非平凡性（与 ucm_ 的本质差）：ucm_ 四件见证全 N:=O（零序列输入面）；     *)
-(*   本件输入＝调和型具体序列 ucl_harm_seq（第 n 项＝1/(n+2)），其收敛     *)
-(*   阈值必须经阿基米德性质 q_arch_inv 逐 eps 构造（N 依赖 eps，非 O）——   *)
-(*   这是 S02 完备性全款在非平凡具体输入面的首次真消费。                   *)
+(* 供给结构（八件，ucl_ 前缀）： *)
+(*   基件四：ucl_harm_pos / ucl_harm_mono / ucl_harm_tail_lt /          *)
+(*      ucl_harm_diff_abs_lt——1/(n+2) 的正性（由 q_arch_inv_pos）＋     *)
+(*      单调（循 q_arch_inv_mono 的 Qinv_lt_contravar 链）＋尾界＋      *)
+(*      双侧尾差界（q_abs_lt_two_sided 链）；                            *)
+(*   A ucl_harm_cauchy——real_cauchy_complete 前提所要求的实值双柯西    *)
+(*      条件（同形）在 ucl_harm_seq 面的实例，见证 N := q_arch_inv(eps/2)；*)
+(*   B ucl_harm_complete——sigT(l, real_lim ucl_harm_seq l)，由          *)
+(*      real_cauchy_complete 直接给出（抽象正则化对角线极限）；          *)
+(*   C ucl_harm_lim_zero——real_lim ucl_harm_seq (real_const 0)；        *)
+(*   D ucl_harm_limit_eq_zero——real_lim_unique 将 B 的抽象极限与        *)
+(*      real_const 0 等同（real_eq 为 Set 层逐 eps 相等）。               *)
 (*                                                                *)
-(* 供给结构（八件，ucl_ 前缀）：                                         *)
-(*   基件四：ucl_harm_pos / ucl_harm_mono / ucl_harm_tail_lt /           *)
-(*      ucl_harm_diff_abs_lt ——1/(n+2) 正性（转换直取 q_arch_inv_pos）    *)
-(*      ＋单调（严格臂逐字镜像 q_arch_inv_mono 之 Qinv_lt_contravar 链）    *)
-(*      ＋尾界＋双侧尾差界（q_abs_lt_two_sided 链）；                     *)
-(*   A 契约位直配：ucl_harm_cauchy ——real_cauchy_complete 前置的实值      *)
-(*      双柯西契约（逐字同形）在 ucl_harm_seq 面的实例化，见证 N:=        *)
-(*      q_arch_inv(eps/2) 实例（阿基米德阈值）；                          *)
-(*   B 完备性全款消费：ucl_harm_complete ——sigT(l, real_lim ucl_harm_seq l)*)
-(*      ＝real_cauchy_complete 真消费（抽象正则化对角线极限）；             *)
-(*   C 具体极限证书：ucl_harm_lim_zero ——real_lim ucl_harm_seq            *)
-(*      (real_const 0)，见证 N:=q_arch_inv(eps/2) 实例；                  *)
-(*   D 唯一性闭环：ucl_harm_limit_eq_zero ——real_lim_unique 把 B 的抽象    *)
-(*      极限钉到 real_const 0（完备性×唯一性闭环，real_eq Set 面）。       *)
+(* Q 层注记：eps/2 这类除法目标上 lra 失效，相关改写一律经              *)
+(*   setoid_replace（ring/field 收束）＋ Qle_lt_trans/Qplus_le_compat    *)
+(*   ＋ q_bound_eps_half/q_abs_lt_two_sided 完成。                        *)
 (*                                                                *)
-(* Q 层算法注记：除法 eps/2 换形为乘法时 1/2 为不透明原子（非线性面），      *)
-(*   故全件不走 lia/lra，一律 S02 体例——setoid_replace（ring/field 收口）  *)
-(*   ＋ Qle_lt_trans/Qplus_le_compat 链 ＋ q_bound_eps_half/q_abs_lt_     *)
-(*   two_sided 承接。                                                    *)
+(* 构造性注记：全件 Qed 闭合、零承认词面、无经典逻辑；交付语句面全       *)
+(*   Set 层值（real_lt/real_eq/real_lim、And/Or、sigT 见证）；Prop 面改写 *)
+(*   （Qlt/Qeq/Qle）全内联于证明内部；八件 Print Assumptions 全 Closed。  *)
+(* 依赖：CW_ConstructiveWorld_219（q_arch_inv 系与完备性/唯一性定理所在）。*)
+(* 对标：Bishop 完备性（正则化对角线构造）与调和型序列的构造性实例化。   *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard -LoadLimit 85 -CoreN 2 包裹，  *)
+(*   输出经 -o 临时目录，树内 .vo 不重写。                                *)
 (*                                                                *)
-(* 红线：S02/UpAblCauchyMod/任何既有文件零改动；未入 order.txt/_CoqProject。 *)
+(*                                                                *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -47,20 +47,20 @@ From Stdlib Require Import Setoid.
 From Stdlib Require Import Arith.PeanoNat.
 Require Import CW_ConstructiveWorld_219.
 
-(* 调和型尾项：ucl_harm n := 1/(n+2)（与 S02 q_arch_inv 形逐字对齐，
-   q_arch_inv/q_arch_inv_mono/q_arch_inv_pos 三件经转换直取零桥接成本） *)
+(* 调和型尾项：ucl_harm n := 1/(n+2)（与 q_arch_inv 的单位分数形同形，
+   q_arch_inv/q_arch_inv_mono/q_arch_inv_pos 经定义展开直接应用）。 *)
 Definition ucl_harm (n : nat) : Q := (1 / (Z.of_nat (n + 2) # 1))%Q.
 
 (* 具体序列：第 n 项＝常值实数 1/(n+2)——每一项各自具体、整体非平凡
-   （非常值序列，非 real_zero/real_const 单件输入） *)
+   （非常值序列，非 real_zero/real_const 退化输入） *)
 Definition ucl_harm_seq : nat -> Real := fun n => real_const (ucl_harm n).
 
-(* 基件一：正性（q_arch_inv_pos 经 ucl_harm 定义转换直取） *)
+(* 基件一：正性——由 q_arch_inv_pos 经 ucl_harm 定义展开直接推得 *)
 Lemma ucl_harm_pos : forall n : nat, Qlt 0 (ucl_harm n).
 Proof. intro n. exact (q_arch_inv_pos n). Qed.
 
-(* 基件二：单调（n ≤ m ⟹ 1/(m+2) ≤ 1/(n+2)，分母增大值减小；
-   严格臂逐字镜像 S02 q_arch_inv_mono 之 Qinv_lt_contravar 链） *)
+(* 基件二：单调（n ≤ m ⟹ 1/(m+2) ≤ 1/(n+2)，分母增大则值减小；
+   n < m 情形循 q_arch_inv_mono 的 Qinv_lt_contravar 链得严格不等） *)
 Lemma ucl_harm_mono : forall n m : nat, (n <= m)%nat -> Qle (ucl_harm m) (ucl_harm n).
 Proof.
   intros n m Hle.
@@ -79,7 +79,7 @@ Proof.
     unfold Qlt. simpl. lia.
 Qed.
 
-(* 基件三：尾界（n ≥ N 且第 N 项 < eps ⟹ 第 n 项 < eps） *)
+(* 基件三：尾界（N ≤ n 且 ucl_harm N < eps ⟹ ucl_harm n < eps，由单调性） *)
 Lemma ucl_harm_tail_lt : forall (eps : Q) (N n : nat),
   (N <= n)%nat -> Qlt (ucl_harm N) eps -> Qlt (ucl_harm n) eps.
 Proof.
@@ -89,8 +89,8 @@ Proof.
   - exact Hlt.
 Qed.
 
-(* 基件四：双侧尾差界（0 ≤ a,b < e ⟹ |a − b| < e；
-   q_abs_lt_two_sided 两侧各经 Qplus_le_compat 单调链） *)
+(* 基件四：双侧尾差界（0 ≤ a,b < e ⟹ |a − b| < e；应用 q_abs_lt_two_sided，
+   两侧各以 Qopp_lt_compat 与 Qplus_le_compat 的单调链推得） *)
 Lemma ucl_harm_diff_abs_lt : forall (a b e : Q),
   Qlt 0 e -> Qle 0 a -> Qle 0 b -> Qlt a e -> Qlt b e -> Qlt (Qabs (a - b)) e.
 Proof.
@@ -121,9 +121,9 @@ Proof.
     exact (Qle_lt_trans (a - b) a e H4 Hae).
 Qed.
 
-(* A. 契约位直配：real_cauchy_complete 前置的实值双柯西契约（逐字同形）
-   在 ucl_harm_seq 面的实例化。见证 N := q_arch_inv(eps/2) 之实例——
-   阿基米德阈值（对比 ucm_ 的 N:=O，此处为非平凡见证位）。 *)
+(* A. 双柯西条件的实例化：real_cauchy_complete 前提所要求的实值双柯西条件
+   （同形）在 ucl_harm_seq 面的实例。见证 N := q_arch_inv(eps/2) 的实例——
+   阿基米德阈值（对比 ucm_ 系的 N := O，此处为非平凡见证）。 *)
 Corollary ucl_harm_cauchy :
   forall eps : Q, QltT 0 eps ->
     sigT (fun N : nat => forall m n : nat,
@@ -154,7 +154,7 @@ Proof.
     by (apply (ucl_harm_diff_abs_lt (ucl_harm n) (ucl_harm m) (eps / 2)%Q
                Heps2q Hnpos Hmpos Hnb Hmb)).
   split.
-  - (* 方向甲：eps − (a − b) == (b − a) + eps（ring）⟹ q_bound_eps_half *)
+  - (* 前向：eps − (a − b) == (b − a) + eps（ring）⟹ q_bound_eps_half *)
     exists (eps / 2)%Q. split.
     + exact Heps2.
     + exists O. intros k Hk.
@@ -165,7 +165,7 @@ Proof.
       setoid_replace (eps - (ucl_harm m - ucl_harm n))
         with ((ucl_harm n - ucl_harm m) + eps) by ring.
       exact (q_bound_eps_half (ucl_harm n - ucl_harm m) eps Hepsq Habs2).
-  - (* 方向乙：对称 *)
+  - (* 反向：对称（m、n 互换）⟹ q_bound_eps_half *)
     exists (eps / 2)%Q. split.
     + exact Heps2.
     + exists O. intros k Hk.
@@ -178,14 +178,14 @@ Proof.
       exact (q_bound_eps_half (ucl_harm m - ucl_harm n) eps Hepsq Habs).
 Qed.
 
-(* B. 完备性全款消费：S02 real_cauchy_complete（Bishop 正则化、零自由变元）
-   在具体调和序列面的一次真消费——产出抽象正则化对角线极限。 *)
+(* B. 完备性的实际使用：real_cauchy_complete（Bishop 正则化、零自由变元）
+   应用于具体调和序列面——产出抽象正则化对角线极限。 *)
 Corollary ucl_harm_complete :
   sigT (fun l : Real => real_lim ucl_harm_seq l).
 Proof. exact (real_cauchy_complete ucl_harm_seq ucl_harm_cauchy). Qed.
 
-(* C. 具体极限证书：ucl_harm_seq 收敛到 real_const 0，
-   见证 N := q_arch_inv(eps/2) 之实例（阿基米德阈值）。 *)
+(* C. 具体极限：ucl_harm_seq 收敛到 real_const 0，
+   见证 N := q_arch_inv(eps/2) 的实例（阿基米德阈值）。 *)
 Corollary ucl_harm_lim_zero : real_lim ucl_harm_seq (real_const 0).
 Proof.
   intros eps Heps.
@@ -208,7 +208,7 @@ Proof.
     by (apply (ucl_harm_diff_abs_lt 0 (ucl_harm n) (eps / 2)%Q
                Heps2q (Qle_refl 0) Hnpos Heps2q Hnb)).
   split.
-  - (* 方向甲：(0 + eps) − x == (0 − x) + eps（ring，真等式）⟹ q_bound_eps_half *)
+  - (* 前向：(0 + eps) − x == (0 − x) + eps（ring，真等式）⟹ q_bound_eps_half *)
     exists (eps / 2)%Q. split.
     + exact Heps2.
     + exists O. intros k Hk.
@@ -217,7 +217,7 @@ Proof.
       apply Qlt_to_QltT.
       setoid_replace ((0 + eps) - ucl_harm n) with ((0 - ucl_harm n) + eps) by ring.
       exact (q_bound_eps_half (0 - ucl_harm n) eps Hepsq HabsC2).
-  - (* 方向乙：x − (0 + −eps) == (x − 0) + eps（ring）⟹ q_bound_eps_half *)
+  - (* 反向：x − (0 + −eps) == (x − 0) + eps（ring）⟹ q_bound_eps_half *)
     exists (eps / 2)%Q. split.
     + exact Heps2.
     + exists O. intros k Hk.
@@ -230,8 +230,8 @@ Proof.
       exact (q_bound_eps_half (ucl_harm n - 0) eps Hepsq HabsC).
 Qed.
 
-(* D. 唯一性闭环：real_lim_unique 把 B 的抽象正则化对角线极限
-   钉到 real_const 0（完备性×唯一性闭环，real_eq＝S02 Set 面）。 *)
+(* D. 唯一性：real_lim_unique 将 ucl_harm_complete 的抽象正则化对角线极限
+   与 real_const 0 等同（完备性与唯一性联用，real_eq 为 Set 层逐 eps 相等）。 *)
 Corollary ucl_harm_limit_eq_zero :
   real_eq (projT1 ucl_harm_complete) (real_const 0).
 Proof.
@@ -239,7 +239,7 @@ Proof.
          (projT2 ucl_harm_complete) ucl_harm_lim_zero).
 Qed.
 
-(* 假设面自检：八件全闭合（编译日志留痕） *)
+(* 假设审计：八件 Print Assumptions 全 Closed *)
 Print Assumptions ucl_harm_pos.
 Print Assumptions ucl_harm_mono.
 Print Assumptions ucl_harm_tail_lt.

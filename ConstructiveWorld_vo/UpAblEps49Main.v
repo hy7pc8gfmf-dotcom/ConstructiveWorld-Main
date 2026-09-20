@@ -1,30 +1,30 @@
 (* ============================================================ *)
-(* UpAblEps49Main.v —— AB3 席：定理 4.9 诚实接口族承重件消融·实例供给 *)
-(*   （N-3 承重主件 real_kl_decomp_full 解锁件），2026-09-19         *)
-(* ============================================================ *)
-(* 【对象语句实形定性（盘面复核）】                                   *)
-(*   S08_RealMainlineDPO.v Section RealRLHFMain（2467–2731）内       *)
-(*   Variable real_kl_decomp_full（2527 行）：真开放槽。区变量        *)
-(*   S / real_sum_over_S(+ext/add) / real_base_loss / D / D_pos /    *)
-(*   Z_align_r / Z_align_r_pos 全抽象。槽语句：                      *)
-(*     forall p Hp Hnormp,                                           *)
-(*       real_eq (real_free_energy p Hp)                             *)
-(*         (real_plus (real_free_energy p_b p_b_pos)                   *)
-(*                    (real_mult D (sumf (fun s => real_kl_term …))))) *)
-(*   消费点实锤：real_rlhf_optimal_eps（2601）证明体 2613 行           *)
-(*     by exact (real_kl_decomp_full pi Hpi Hnormpi)。                *)
-(* 【数学定性（承 CWF 席 E458 定谳，本席逐字复核同判）】               *)
-(*   F(p)−F(p_b)−D·Σkl = D·logZ·(Σp_b−1)，故 Z 抽象时槽语句为假，      *)
-(*   诚实闭合仅两形：一般 Z 携 Hnormb（Σp_b==1）；或 Z 取配分函数      *)
-(*   定义形内证归一化。本文件两形并交付。                              *)
-(* 【本席增量（相对 CWF 席 RealKLDecomp.v 的真空白）】                  *)
-(*   rkd_kl_decomp_full_partition 仍带四结构前提（求和 ext/add/linear  *)
-(*   + 配分正性 Zp）。本席在具体载体（bool 二点状态空间 + 二点求和）    *)
-(*   上把四前提全部内证，交付槽真前件形（仅 Hp Hnormp）的完全放电       *)
-(*   实例——接口族「Real 层可实例化」自评的首个逐字达标实例。            *)
-(* 【红线自检】纯构造性零承认件；Set 层零泄露（语句面全 forall 型，     *)
-(*   序谓词全沿家族标准 Set 值位形）；提取零魔术常量；未触碰任何        *)
-(*   既有文件。                                                        *)
+(* UpAblEps49Main.v —— KL 分解（定理 4.9）假设的两形闭合在具体载体上的               *)
+(* 完全实例。                                                         *)
+(*                                                               *)
+(* 对象：S08_RealMainlineDPO.v Section RealRLHFMain 内以节 Variable    *)
+(*   引入的假设 real_kl_decomp_full：区变量 S / real_sum_over_S(+ext/add) *)
+(*   / real_base_loss / D / D_pos / Z_align_r / Z_align_r_pos 全抽象， *)
+(*   语句 forall p Hp Hnormp, real_eq (real_free_energy p Hp)      *)
+(*   (real_plus (real_free_energy p_b p_b_pos) (real_mult D (sumf …)))； *)
+(*   使用处 real_rlhf_optimal_eps（exact (real_kl_decomp_full pi Hpi Hnormpi)）。 *)
+(*                                                               *)
+(* 数学事实：F(p)−F(p_b)−D·Σ kl = D·logZ·(Σ p_b − 1)，故 Z 抽象时          *)
+(*   该语句为假；诚实闭合仅两形——一般 Z 携数学前提 Hnormb（Σ p_b == 1），               *)
+(*   或 Z 取配分函数定义形内证归一化。本件两形并举。                                   *)
+(*                                                               *)
+(* 相对 UpAblEps49RKDBase 的增量：rkd_kl_decomp_full_partition 仍带四结构   *)
+(*   前提（求和 ext/add/linear + 配分正性 Zp）；本件在具体载体（bool 二点             *)
+(*   状态空间与二点求和 e49m_esum2）上把四前提全部内证，给出仅余假设                       *)
+(*   (Hp, Hnormp) 的完全实例化——接口族在 Real 层可实例化的首个逐字实例。                *)
+(*                                                               *)
+(* 构造性注记：零承认；Set 层承载（语句面全 forall 型，序谓词沿家族标准                      *)
+(*   Set 值位形）；提取零魔术常量；未触碰任何既有文件。                                 *)
+(*                                                               *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219、UpAblEps49RKDBase、Stdlib QArith.Qring。 *)
+(* 对标：mathlib 有限和上的 KL 分解恒等式实例。                                  *)
+(* 编译配方：Rocq 9.1 直调 + cpu_guard；编译输出 -o 临时目录，树内不动。               *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -32,7 +32,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpAblEps49RKDBase.
 
 (* ============================================================ *)
-(* 第 1 部分：具体载体——bool 二点状态空间与二点求和                     *)
+(* §1 具体载体：bool 二点状态空间与二点求和                                      *)
 (* ============================================================ *)
 
 Definition e49m_esum2 (f : bool -> Real) : Real :=
@@ -59,7 +59,7 @@ Lemma e49m_esum2_linear : forall (a : Real) (f : bool -> Real),
           (real_mult a (e49m_esum2 f)).
 Proof. intros a f. unfold e49m_esum2. rkd_alg. Qed.
 
-(* 二正相加仍正（S08 求和正性同款两步：零自等换形 + 双正相容） *)
+(* 二正相加仍正（由 real_plus_zero 与 real_lt_plus_compat 两步）             *)
 Lemma e49m_esum2_pos2 : forall (x y : Real),
   real_lt real_zero x -> real_lt real_zero y ->
   real_lt real_zero (real_plus x y).
@@ -74,7 +74,7 @@ Proof.
     + exact Hy.
 Qed.
 
-(* 配分正性（第四建设内证：exp 恒正两支 + 二正相加） *)
+(* 配分正性（结构前提四的内证：real_exp_neg_pos 两支 + 二正相加）                     *)
 Lemma e49m_partition2_pos : forall (e : bool -> Real) (D : Real)
   (D_pos : real_lt real_zero D),
   real_lt real_zero
@@ -87,9 +87,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第 2 部分：alpha 桥——一般 Z 形（结论面与 S08 槽全局形零间隙）        *)
-(*   诚实前提 Hnormb：任意 Z 下不可免（E458 定谳），槽形缺位申报。      *)
-(*   本件即「签名对齐」实证：exact 直喂成功本身即对齐证书。             *)
+(* §2 一般 Z 形：结论与 S08 假设全局形逐字同构                                   *)
+(*   数学前提 Hnormb：任意 Z 下不可免，为原假设所缺，如实标示。                          *)
+(*   签名对齐的直接证据：证明体 exact 直引 rkd_kl_decomp_full。                  *)
 (* ============================================================ *)
 
 Theorem e49m_real_kl_decomp_full :
@@ -124,8 +124,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第 3 部分：伴件——具体载体上 Boltzmann 归一化（家族第 2 槽伴锁）      *)
-(*   Z 取配分定义形，Hpart 逐字自反，归一化 Σp_b == 1 内证。            *)
+(* §3 伴生命题：具体载体上的 Boltzmann 归一化                                  *)
+(*   Z 取配分定义形，Hpart 为 real_eq_refl，归一化 Σ p_b == 1 内证。            *)
 (* ============================================================ *)
 
 Theorem e49m_boltzmann_normalized_bool :
@@ -147,9 +147,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第 4 部分：主件——S08 槽真前件形（仅 Hp Hnormp）的完全放电实例       *)
-(*   载体全 concrete：S := bool，sumf := e49m_esum2（三结构内证），      *)
-(*   Z := 配分定义形（正性内证）。前提面与 S08:2527 槽逐字同形。        *)
+(* §4 主定理：S08 假设形（仅 Hp Hnormp）的完全实例化                             *)
+(*   载体全具体：S := bool，sumf := e49m_esum2（三结构前提内证），                *)
+(*   Z := 配分定义形（正性内证）。前提与 S08 原假设逐字同形。                           *)
 (* ============================================================ *)
 
 Theorem e49m_real_kl_decomp_full_bool :
@@ -187,7 +187,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 证据区：零外部未证假设 + 独立目录提取                                *)
+(* 依赖审计：零外部未证假设；独立目录提取                                           *)
 (* ============================================================ *)
 
 Print Assumptions e49m_esum2_ext.

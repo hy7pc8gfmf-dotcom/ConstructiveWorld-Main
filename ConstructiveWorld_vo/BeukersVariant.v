@@ -1,64 +1,64 @@
 (* ============================================================ *)
-(* BeukersVariant.v —— 切片代理I（批次 E-STAGING-D021，20260918）      *)
-(* P2 第二攻切片：(1+t)^{n+1} 变体恒等式构造（bv_ 前缀）。              *)
-(*                                                                 *)
-(* 【定形数值锚（本席手算 n=0,1,2,3，先锚后施工——D016 教训）】          *)
-(* 变体积分 I'_n := ∫₀¹ tⁿ(1−t)ⁿ/(1+t)^{n+1} dt。换元 u = 1+t 后        *)
-(* 被积函数为 Laurent 型，逐点：                                       *)
-(*   n=0: I'_0 = ∫₀¹ dt/(1+t) = ln2；q̃_0 = 1，p_0 = 0；                 *)
-(*         ln2 − 0/1 == ln2 == I'_0/1。 ✓                              *)
-(*   n=1: (u−1)(2−u)/u² = −1 + 3/u − 2/u² ⟹ I'_1 = 3ln2 − 2；           *)
-(*         q̃_1 = 3，p_1 = 2；ln2 − 2/3 == (3ln2−2)/3 == I'_1/3。 ✓      *)
-(* 【定形主结论：真归一形为 ln2 − p_n/q̃_n == I'_n/q̃_n（无 2 幂）】       *)
-(* 任务书草案 x''_n := p_n/(2^n·q̃_n) 与差式 I'_n/(2^n·q̃_n) 联立强迫      *)
-(* (2^n − 1)·ln2 == 0（n≥1 假）——2 幂归一死亡；Q 层正分离见证           *)
-(* bv_x2pow_sep1（x''_1 = 2/(2·3) = 1/3 < 2/3 = x_1）。                  *)
-(* 【p_n 序列勘定：谐和形不配，Laurent 反推闭式】                        *)
-(*   p_n = −Σ_{j=0, j≠n}^{2n} c_j·(2^{j−n} − 1)/(j−n)，                 *)
-(*   c_j = [u^j](u−1)ⁿ(2−u)ⁿ = (−1)^{n+j}·Σ_a C(n,a)C(n,j−a)2^{n−(j−a)}；*)
-(* ln2 系数 c_n == Σ_a C(n,a)²·2^a == D_n（Delannoy）== q̃_n（离散核）。  *)
-(* p 序列：0, 2, 9, 131/3（n=3 起非整——有理分子族，与 D016               *)
-(* "P*_2(1/2)=4.5 非整"同族印证）；谐和 P_n(1) = 0, 1, 11/2 不配。       *)
-(* 跨变体核对：r_n == 2^{n+1}·p_n（D016 r: 0, 8, 72 全吻合）。           *)
-(* 【级数定形（全正项）】1/(1+t)^{n+1} = (1−t)^{n+1}/(1−t²)^{n+1}        *)
-(*   = Σ_{m≥0} C(n+m,n)·t^{2m}·(1−t)^{n+1}，故                          *)
-(*   I'_n = Σ_{m≥0} C(n+m,n)·B(n+2m+1, 2n+1)（Beta 全正）。截断承载      *)
-(*   bv_carrier n M 逐点 == tⁿ(1−t)^{2n+1}·Σ_{m≤M}C(n+m,n)t^{2m}，       *)
-(*   积分 == 级数部分和（bv_carrier_value，精确 QeqT）。                 *)
-(*                                                                 *)
-(* 【本席交付面（七主件，全 Qed 零承认）】                               *)
-(*  ① bv_delannoy_eq_qtilde：升幂 Delannoy 和 Σ_{a≤n}C(n,a)²2^a == q̃_n   *)
-(*     （ln2 系数离散核；bk_psd_ext + bk_Qn_sym 镜像归位）。             *)
-(*  ② bv_term_pos：级数项 C(n+m,n)·B(n+2m+1,2n+1) 严格正（QltT 面）。    *)
-(*  ③ bv_carrier_eval：截断承载逐点语义（pei_list 配方，tⁿ(1−t)^{2n+1}   *)
-(*     × 负二项截断）。                                                 *)
-(*  ④ bv_carrier_value：截断积分 == 级数部分和（精确 QeqT——本切片       *)
-(*     最重件）。                                                       *)
-(*  ⑤ bv_sum_mono：截断积分单调链（QleT'——消费 PintMono 的               *)
-(*     pm_scale_mono/pm_add_mono/pm_qle_wd_l/pm_qle_wd_r 线性单调面）。  *)
-(*  ⑥ bv_sum_pos：部分和严格正（QltT——I'_n ≥ 部分和 > 0 的 Q 层承载）。  *)
-(*  ⑦ bv_p 闭式定义 + 数值锚组（p: 0, 2, 9, 131/3；x: 0, 2/3, 9/13；     *)
-(*     c_n: 3, 13, 63；2 幂死亡分离 bv_x2pow_sep1）。                   *)
-(*                                                                 *)
-(* 剩余路径卡点定位（P2 下席续接）：                                     *)
-(*  (a) 恒等式本体 ln2 − p_n/q̃_n == I'_n/q̃_n 的语句化需实数层 ln2        *)
-(*      （ln2 ∉ Q，Q 层不可语句化）——real 层装配另案（同 D016 (c)）；    *)
-(*  (b) 部分和 → I'_n 的收敛桥需极限/逐点正机（P1b 残面）；              *)
-(*  (c) 一般 n 的 bv_c n n == q̃_n：bk_psQ 升幂和 ↔ bk_psd 降幂和的       *)
-(*      reindex 桥缺（bk_half_psd 只覆盖 (1/2)^k 降幂换基形）；          *)
-(*  (d) 上界 I'_n ≤ B(n+1,n+1)：被积函数 monomial 基系数交错，            *)
-(*      pm_pointwise_le 系数级面不适用（诚实登记）；逐点机另案。          *)
-(*                                                                 *)
-(* 红线自审：① 零承认面（全件 Qed，零承认词，依赖全在册）；             *)
-(*   ② 语句面 Set（主件 QeqT/QltT/QleT'；Qeq/Qle/Qlt 支撑引理 Prop 面    *)
-(*      仅作推理脚手架，D016/PadeErrorIntegral 先例同构）；              *)
-(*   ③ 非平凡（Beta 级数定形 + 截断承载精确值 + 线性单调链消费 +         *)
-(*      Laurent 符号和分子闭式）；                                       *)
-(*   ④ 可提取（G3 探针独立文件实测，Obj.magic 计数=0）。                 *)
-(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp PolyIntegral           *)
-(*   （alignb_base 信任缓存在册）+ UpReqB4TwoStage（alignb_base）        *)
-(*   + PadeErrorIntegral BeukersLists PintMono（/tmp/e121_side 现编）。   *)
-(* 零云端零 git。                                                       *)
+(* BeukersVariant.v —— 本件形式化 (1+t)^{n+1} 变体 Beukers 逼近的 Q 层级数定形：*)
+(* 变体积分 I'_n := ∫₀¹ tⁿ(1−t)ⁿ/(1+t)^{n+1} dt，全正项级数展开                  *)
+(*   I'_n = Σ_{m≥0} C(n+m,n)·B(n+2m+1, 2n+1)（Beta 积分全正），截断多项式        *)
+(*   bv_carrier n M 的积分 == 级数部分和（精确 QeqT），且随 M 单调、恒正。        *)
+(* 定形主结论（真归一形）：ln2 − p_n/q̃_n == I'_n/q̃_n，无 2 幂因子；              *)
+(*   2 幂归一形 bv_x2pow 与之不相容（n≥1 时迫使 (2^n−1)·ln2 == 0），             *)
+(*   分离见证 bv_x2pow_sep1：bv_x2pow 1 == 1/3 < 2/3 == bv_x 1。                 *)
+(* 数值锚：p: 0, 2, 9, 131/3（n=3 起非整，有理分子族）；x: 0, 2/3, 9/13；         *)
+(*   c_j(j=n): 3, 13, 63；q̃_n（Delannoy）: 1, 3, 13, 63。                        *)
+(* 主要结果：bv_delannoy_eq_qtilde、bv_term_pos、bv_carrier_eval、               *)
+(*   bv_carrier_value、bv_sum_mono、bv_sum_pos、bv_p 闭式与数值锚组。             *)
+(* 尚待完成（另案）：(a) 恒等式 ln2 − p_n/q̃_n == I'_n/q̃_n 的实数层语句化          *)
+(*   （ln2 ∉ Q，需 real 层装配）；(b) 部分和到 I'_n 的收敛桥；                   *)
+(*   (c) 一般 n 的 bv_c n n == q̃_n 需 bk_psQ 升幂和与 bk_psd 降幂和的换序引理；   *)
+(*   (d) 上界 I'_n ≤ B(n+1,n+1) 的逐点比较（pm_pointwise_le 不适用）。            *)
+(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp PolyIntegral                   *)
+(*   PadeErrorIntegral BeukersLists PintMono UpReqB4TwoStage。                   *)
+(* 构造性注记：主定理全 Qed、零承认（文末 Print Assumptions 复核）；主结论         *)
+(*   取 Q 层 Set 面（QeqT/QltT/QleT'）；Qeq/Qle/Qlt 支撑引理为 Prop 面，          *)
+(*   仅服务推理；可提取。                                                        *)
+(* 编译配方：coqc 9.1 直调（无 -Q），cpu_guard 包裹，-o 输出临时目录，             *)
+(*   树内 .vo 不重写。                                                           *)
+(*                                                                              *)
+(* 其余定形依据（Laurent 系数与离散核）：                                        *)
+(*   c_j = [u^j](u−1)ⁿ(2−u)ⁿ = (−1)^{n+j}·Σ_a C(n,a)C(n,j−a)2^{n−(j−a)}；        *)
+(*   ln2 系数 c_n == Σ_a C(n,a)²·2^a == D_n（Delannoy）== q̃_n（离散核）。         *)
+(*   谐和形 P_n(1) = 0, 1, 11/2 与锚值不合，弃用。                                *)
+(* 级数定形恒等式：                                                              *)
+(*   1/(1+t)^{n+1} = (1−t)^{n+1}/(1−t²)^{n+1} = Σ_{m≥0} C(n+m,n)·t^{2m}·(1−t)^{n+1}，*)
+(*   故 I'_n = Σ_{m≥0} C(n+m,n)·B(n+2m+1, 2n+1)。                                *)
+(* 截断承载逐点式：                                                              *)
+(*   bv_carrier n M 逐点 == tⁿ(1−t)^{2n+1}·Σ_{m≤M} C(n+m,n)·t^{2m}，              *)
+(*   积分 == 级数部分和（bv_carrier_value）。                                     *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
+(*                                                                              *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -69,14 +69,14 @@ Require Import PadeErrorIntegral BeukersLists PintMono.
 Open Scope nat_scope.
 
 (* ============================================================ *)
-(* §A 级数定形件：C(n+m,n)·B(n+2m+1, 2n+1)（全正项）                     *)
+(* §A 级数定形：级数项 bv_term = C(n+m,n)·B(n+2m+1, 2n+1) 与其正性        *)
 (* ============================================================ *)
 
 Definition bv_term (n m : nat) : Q :=
   ((Z.of_nat (bkC (n + m) n) # 1) *
      (q_fact (n + 2 * m) * q_fact (2 * n + 1) / q_fact (3 * n + 2 * m + 2)))%Q.
 
-(* 级数项 == C(n+m,n) × Beta 积分（pei 机的精确对接件） *)
+(* bv_term n m == C(n+m,n)·∫₀¹ t^{n+2m}(1−t)^{2n+1} dt（由 pei_beta_value 归到 pint_integral） *)
 Lemma bv_term_value : forall n m : nat,
   bv_term n m ==
   ((Z.of_nat (bkC (n + m) n) # 1) * pint_integral (pei_list (n + 2 * m) (2 * n + 1)))%Q.
@@ -87,7 +87,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* 主件②：级数项严格正（bkC ≥ 1 × Beta 正） *)
+(** bv_term_pos：级数项严格正——bkC ≥ 1 与 q_fact 正性相乘。 *)
 Theorem bv_term_pos : forall n m : nat, QltT 0 (bv_term n m).
 Proof.
   intros n m. apply Qlt_to_QltT. unfold bv_term. unfold Qdiv.
@@ -101,7 +101,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §B 截断承载（pei_list/pei_eb_list 配方；步进垫双零）                   *)
+(* §B 截断承载：bv_pad（补两个零系数）与 bv_carrier（pei_eb_list 同型）   *)
 (* ============================================================ *)
 
 Definition bv_pad (p : list Q) : list Q := pei_ztail (pei_ztail p).
@@ -126,7 +126,7 @@ Proof.
   rewrite app_length, app_length. cbn [length]. lia.
 Qed.
 
-(* 承载：Σ_{m≤M} C(n+m,n)·list(t^{n+2m}(1−t)^{2n+1})（pei_eb_list 同构） *)
+(* bv_carrier n M：部分和 Σ_{m≤M} C(n+m,n)·t^{n+2m}(1−t)^{2n+1} 的系数表（pei_eb_list 同型） *)
 Fixpoint bv_carrier (n M : nat) : list Q :=
   match M with
   | 0 => pint_scale ((Z.of_nat (bkC (n + 0) n) # 1)%Q)
@@ -157,7 +157,7 @@ Proof.
     rewrite pei_scale_length, pei_list_length. lia.
 Qed.
 
-(* 主件③：逐点语义 == tⁿ(1−t)^{2n+1} × 负二项截断 Σ_{m≤M}C(n+m,n)(t²)^m *)
+(** bv_carrier_eval：逐点值 == tⁿ(1−t)^{2n+1}·Σ_{m≤M} C(n+m,n)(t²)^m（负二项型截断）。 *)
 Theorem bv_carrier_eval : forall (n M : nat) (t : Q),
   pint_eval (bv_carrier n M) t ==
   q_pow t n * q_pow (1 - t)%Q (2 * n + 1) *
@@ -195,7 +195,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C 主件④⑤⑥：截断积分精确值 + 单调链（pm_ 面）+ 正性                   *)
+(* §C 截断积分：bv_carrier_value 精确值、bv_sum_mono 单调、bv_sum_pos 正性  *)
 (* ============================================================ *)
 
 Fixpoint bv_zeros (L : nat) : list Q :=
@@ -236,7 +236,7 @@ Proof.
   intros n m. apply Qle_to_QleT'. apply Qlt_le_weak. apply pei_beta_pos.
 Qed.
 
-(* 主件④：截断积分 == 级数部分和（精确 QeqT） *)
+(** bv_carrier_value：截断积分 == 级数部分和 Σ_{m≤M} bv_term n m（精确 QeqT）。 *)
 Theorem bv_carrier_value : forall n M : nat,
   pint_integral (bv_carrier n M) == sum_upto (Datatypes.S M) (fun m : nat => bv_term n m).
 Proof.
@@ -275,8 +275,8 @@ Proof.
     ring.
 Qed.
 
-(* 主件⑤：截断积分单调链（消费 PintMono：pm_scale_mono/pm_add_mono/
-   pm_qle_wd_l/pm_qle_wd_r——线性/单调面承载） *)
+(** bv_sum_mono：截断积分对 M 单调（QleT'）；由 PintMono 的 pm_scale_mono、
+   pm_add_mono 与同值替换 pm_qle_wd_l、pm_qle_wd_r 合成。 *)
 Theorem bv_sum_mono : forall n M : nat,
   QleT' (pint_integral (bv_carrier n M))
         (pint_integral (bv_carrier n (Datatypes.S M))).
@@ -298,7 +298,7 @@ Proof.
                                         (pei_list (n + 2 * Datatypes.S M) (2 * n + 1))))
                     (length (bv_pad (bv_carrier n M)))).
   { rewrite <- Hlen. reflexivity. }
-  (* 0 ≤ ∫X（pm_scale_mono + Beta 正 + 零表换形） *)
+  (* 中间断言 HleX：0 ≤ C(n+M,n)·∫t^{n+2M}(1−t)^{2n+1}，经 bv_c_pos_le、bv_pos_cint 与 pm_scale_mono。 *)
   assert (HleX : QleT' 0 (pint_integral
                     (pint_scale ((Z.of_nat (bkC (n + Datatypes.S M) n) # 1)%Q)
                                 (pei_list (n + 2 * Datatypes.S M) (2 * n + 1))))).
@@ -340,7 +340,7 @@ Proof.
           -- apply (pm_qle_wd_l 0%Q _ _).
              ++ apply Qeq_sym. apply bv_zeros_int0.
              ++ apply bv_pos_cint. }
-  (* 载体 M 与 (零表 ⊕ 垫尾载体) 积分等形 *)
+  (* 中间断言 Hmove：bv_zeros 与 bv_pad (bv_carrier n M) 之和的积分 == pint_integral (bv_carrier n M)。 *)
   assert (Hmove : pint_integral (pint_add (bv_zeros (3 * n + 2 * M + 2 + 2))
                                           (bv_pad (bv_carrier n M)))
                  == pint_integral (bv_carrier n M)).
@@ -370,7 +370,7 @@ Proof.
     + apply qleT'_refl.
 Qed.
 
-(* 部分和严格正（Q 层归纳） *)
+(* bv_sum_upto_pos：部分和严格正（对 M 归纳；由 bv_term_pos 与 pei_lt_le_plus） *)
 Lemma bv_sum_upto_pos : forall n M : nat,
   QltT 0 (sum_upto (Datatypes.S M) (fun m : nat => bv_term n m)).
 Proof.
@@ -389,7 +389,7 @@ Proof.
     + apply Qlt_le_weak. apply QltT_to_Qlt. apply bv_term_pos.
 Qed.
 
-(* 主件⑥：截断积分严格正（I'_n ≥ 部分和 > 0 的 Q 层承载） *)
+(** bv_sum_pos：截断积分严格正——由 bv_carrier_value 换为部分和，再用 bv_sum_upto_pos。 *)
 Theorem bv_sum_pos : forall n M : nat,
   QltT 0 (pint_integral (bv_carrier n M)).
 Proof.
@@ -401,10 +401,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §D 主件①：ln2 系数离散核（升幂 Delannoy == q̃_n）                      *)
-(*   bv_D_asc n == Σ_{a≤n} C(n,a)²·2^a（bk_psd 镜像承载）；              *)
-(*   手算链：[u^n](u−1)ⁿ(2−u)ⁿ = Σ_{a+b=n} C(n,a)C(n,b)2^{n−b}(−1)^{n+j} *)
-(*   （j=n 时符号 (−1)^{2n−2a}=1）= Σ_a C(n,a)²2^a = D_n = q̃_n。         *)
+(* §D ln2 系数离散核：bv_delannoy_eq_qtilde（升幂 Delannoy 和 == q̃_n）    *)
+(*   bv_D_asc n == Σ_{a≤n} C(n,a)²·2^a（经 bk_psd_ext、bk_Qn_sym 调整次序）；*)
+(*   系数恒等式：[u^n](u−1)ⁿ(2−u)ⁿ = Σ_{a+b=n} C(n,a)C(n,b)2^{n−b}(−1)^{n−a+b}；*)
+(*   取 b=n−a 时符号 (−1)^{2n−2a}=1，故 = Σ_a C(n,a)²2^a = D_n = q̃_n。   *)
 (* ============================================================ *)
 
 Definition bv_D_asc (n : nat) : nat :=
@@ -422,8 +422,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §E 主件⑦：分子闭式（Laurent 符号和）与定形锚组                          *)
-(*   p_n = −Σ_{j≠n} c_j·(2^{j−n}−1)/(j−n)（手算 p: 0, 2, 9, 131/3）。     *)
+(* §E 分子闭式 bv_p（Laurent 系数符号和）与数值锚组                        *)
+(*   p_n = −Σ_{j≠n, j≤2n} c_j·(2^{j−n}−1)/(j−n)（锚值 p: 0, 2, 9, 131/3）。*)
 (* ============================================================ *)
 
 Fixpoint bv_negpow (k : nat) : Q :=
@@ -449,7 +449,7 @@ Definition bv_c (n j : nat) : Q :=
             else 0%Q)
          (Datatypes.S j) 1%Q.
 
-(* 分子闭式 *)
+(* bv_p：分子闭式（闭式见 §E 横幅；Laurent 系数符号和） *)
 Definition bv_p (n : nat) : Q :=
   (- bk_psQ (fun j : nat =>
                if Nat.eqb j n then 0%Q
@@ -461,11 +461,11 @@ Definition bv_p (n : nat) : Q :=
 (* 真归一近似子 x_n := p_n/q̃_n（定形：无 2 幂） *)
 Definition bv_x (n : nat) : Q := bv_p n / (Z.of_nat (bk_Qn_qtilde n) # 1)%Q.
 
-(* 2 幂归一形 x''_n := p_n/(2^n·q̃_n)（死亡对照形） *)
+(* bv_x2pow：2 幂归一形 x''_n := p_n/(2^n·q̃_n)，与真归一形不相容（见 bv_x2pow_sep1） *)
 Definition bv_x2pow (n : nat) : Q :=
   bv_p n / (q_pow (2 # 1)%Q n * (Z.of_nat (bk_Qn_qtilde n) # 1))%Q.
 
-(* ---- 数值锚组（vm_compute 档）---- *)
+(* ---- 数值锚组（各锚由 vm_compute 精确判定）---- *)
 
 Theorem bv_q1_anchor : QeqT ((Z.of_nat (bk_Qn_qtilde 1) # 1)%Q) (3 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
@@ -500,16 +500,16 @@ Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 Theorem bv_x2_anchor : QeqT (bv_x 2) (9 # 13)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 跨变体核对：r_2 == 2^{3}·p_2（D016 r: 0, 8, 72） *)
+(* 跨变体核对：bv_p 2 == 9，与原变体关系 r_2 == 2^{3}·p_2 == 72 一致。 *)
 Theorem bv_cross2_anchor : QeqT ((bv_p 2 * (Z.of_nat 8 # 1))%Q) (72 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 2 幂归一死亡分离见证：x''_1 = 1/3 < 2/3 = x_1（QltT Set 面） *)
+(** bv_x2pow_sep1：分离见证——bv_x2pow 1 == 1/3 < 2/3 == bv_x 1（QltT，Set 层）。 *)
 Theorem bv_x2pow_sep1 : QltT (bv_x2pow 1) (bv_x 1).
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* 假设审计留痕：Print Assumptions（G4 复核位）                          *)
+(* 假设审计：以下 Print Assumptions 输出应为零依赖（零承认复核）。        *)
 (* ============================================================ *)
 
 Print Assumptions bv_delannoy_eq_qtilde.

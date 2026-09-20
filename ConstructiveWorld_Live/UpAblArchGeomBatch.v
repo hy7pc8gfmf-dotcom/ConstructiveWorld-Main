@@ -1,34 +1,34 @@
 (* ============================================================ *)
-(* UpAblArchGeomBatch.v —— S10 尾界链五同形 q_arch_geom 位批量直配件       *)
-(*   （Q1 席·20260920）                                            *)
+(* UpAblArchGeomBatch.v —— S10 q_arch_geom 调和界语句形的批量供给件       *)
+(*   （四个使用位共用同一语句形与同一证明）                                *)
 (*                                                                *)
-(* 席位：Q1（S10 尾界链五同形位批量直配席；P3 桥件报告后续槽②收尾）        *)
-(* 零承认件：无承认词面、无经典逻辑、全件 Qed 闭合；                        *)
-(*   四条交付语句面全 Set 层（sigT/NatLe/QleT'，与 S03:383 q_arch_geom    *)
-(*   逐字同形）；本件无任何序面辅助语句，头注外零裸命题面。                *)
+(* 使命：S10 尾界链中五个同形指标位——destruct (q_arch_geom B) 后供给       *)
+(*   sigT(N, forall t ≥ N, 2·B ≤ (t+1)#1)——中四位（对应                   *)
+(*   sc_cos_partial_cauchy_bounded、sc_cs_sq_err_bound、                   *)
+(*   sc_add_sin_err_bound、sc_add_cos_err_bound）由本件四引理覆盖；        *)
+(*   指标 N 经 qbg_arch_geom_direct 具体化（取                             *)
+(*   N := uabS4b_arch_N (Qinv 2B)，调和反演在其中完成）。                  *)
 (*                                                                *)
-(* 直配位定谳（N10 定谳表槽②·五同形；本席逐处 sed 实读五区段消费行）：     *)
-(*   样板位 S10:1675 sc_sin_partial_cauchy_bounded —— 由 P3 桥件本体      *)
-(*     qbg_arch_geom_direct 直接供给（本件不重复立件）；                  *)
-(*   本件四坐标（消费行逐字同为 destruct (q_arch_geom B) as [N0 HN0].）： *)
-(*     A1 qag_arch_geom_cos_cauchy ← S10:1722 sc_cos_partial_cauchy_bounded *)
-(*     A2 qag_arch_geom_cs_sq     ← S10:6424 sc_cs_sq_err_bound          *)
-(*     A3 qag_arch_geom_add_sin   ← S10:11088 sc_add_sin_err_bound       *)
-(*     A4 qag_arch_geom_add_cos   ← S10:12009 sc_add_cos_err_bound       *)
-(*   五处槽形逐字同形（五区段实读定谳），无个别异构位，零硬凑。            *)
+(* 范围注记：样板位 sc_sin_partial_cauchy_bounded 已由 qbg_arch_geom_direct *)
+(*   直接覆盖，本件不重复立件。                                            *)
 (*                                                                *)
-(* 消费真相（如实定性）：四件均为**适配消费级**——逐件 destruct 消费 P3     *)
-(*   桥件 qbg_arch_geom_direct 后以同指标 N 重打包（exists N ＋ HN 全量   *)
-(*   承接），证明步为真消费直装；数学内容（Qarchimedean 不透明指标 →      *)
-(*   Qfloor 具体指标 uabS4b_arch_N (Qinv 2B)、调和反演、退化支并轨）全   *)
-(*   部由桥件承担，本件零重复实现、零虚报。                                *)
+(* 四件同形同证（语句与证明逐件相同）：                                    *)
+(*   qag_arch_geom_cos_cauchy（对应 sc_cos_partial_cauchy_bounded 使用位） *)
+(*   qag_arch_geom_cs_sq（对应 sc_cs_sq_err_bound 使用位）                 *)
+(*   qag_arch_geom_add_sin（对应 sc_add_sin_err_bound 使用位）             *)
+(*   qag_arch_geom_add_cos（对应 sc_add_cos_err_bound 使用位）             *)
 (*                                                                *)
-(* 后续槽用法：对应 S10 消费位改 Require Import UpAblArchGeomBatch ＋      *)
-(*   destruct (qag_arch_geom_cos_cauchy B) as [N0 HN0].（一行替换；      *)
-(*   语句面与原槽形逐字同形，下游 HN0 舞步零改动）。                      *)
+(* 用法：对应 S10 使用位处改用本件引理，如                                 *)
+(*   destruct (qag_arch_geom_cos_cauchy B) as [N0 HN0].；与原              *)
+(*   destruct (q_arch_geom B) as [N0 HN0]. 语句面同形，下游对              *)
+(*   HN0 的使用零改动。                                                    *)
 (*                                                                *)
-(* 依赖：CW_ConstructiveWorld_219 ＋ UpAblAbsSumLeB2 ＋ UpAblQeqBridge。   *)
-(*   全部只读零改动；未入 order.txt/_CoqProject（新独立件）。              *)
+(* 构造性注记：全件 Qed 闭合、零承认词面、无经典逻辑；四条交付语句面全     *)
+(*   Set 层（sigT/NatLe/QleT'）；四件 Print Assumptions 全 Closed。         *)
+(*                                                                *)
+(* 依赖：CW_ConstructiveWorld_219 ＋ UpAblAbsSumLeB2 ＋ UpAblQeqBridge。    *)
+(* 对标：阿基米德性质的具体指标化（stdlib QArith 无直接对应物）。           *)
+(* 编译配方：Rocq 9.1 coqc 直调＋cpu_guard 包裹，输出经 -o 临时目录，树内 .vo 不重写。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -40,7 +40,7 @@ Require Import UpAblAbsSumLeB2.
 Require Import UpAblQeqBridge.
 
 (* ============================================================ *)
-(* Part 0 · 冻结现态打表（签名漂移即响亮失败）                              *)
+(* §0 · 依赖签名核验（标识符漂移即编译期暴露） *)
 (* ============================================================ *)
 
 Check qbg_arch_geom_direct.
@@ -50,7 +50,7 @@ Check NatLe. Check NatLe_lift. Check NatLe_drop.
 Check QleT'. Check Qle_to_QleT'.
 
 (* ============================================================ *)
-(* A1 · 槽 S10:1722（sc_cos_partial_cauchy_bounded 消费位直配）            *)
+(* §A1 · 对应 sc_cos_partial_cauchy_bounded 使用位                          *)
 (* ============================================================ *)
 
 Corollary qag_arch_geom_cos_cauchy : forall B : Q,
@@ -63,7 +63,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* A2 · 槽 S10:6424（sc_cs_sq_err_bound 消费位直配）                       *)
+(* §A2 · 对应 sc_cs_sq_err_bound 使用位                                     *)
 (* ============================================================ *)
 
 Corollary qag_arch_geom_cs_sq : forall B : Q,
@@ -76,7 +76,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* A3 · 槽 S10:11088（sc_add_sin_err_bound 消费位直配）                    *)
+(* §A3 · 对应 sc_add_sin_err_bound 使用位                                   *)
 (* ============================================================ *)
 
 Corollary qag_arch_geom_add_sin : forall B : Q,
@@ -89,7 +89,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* A4 · 槽 S10:12009（sc_add_cos_err_bound 消费位直配）                    *)
+(* §A4 · 对应 sc_add_cos_err_bound 使用位                                   *)
 (* ============================================================ *)
 
 Corollary qag_arch_geom_add_cos : forall B : Q,
@@ -102,7 +102,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 证据采集（G2 打印面）                                                   *)
+(* 假设审计：四件 Print Assumptions 全 Closed                               *)
 (* ============================================================ *)
 
 Print Assumptions qag_arch_geom_cos_cauchy.

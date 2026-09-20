@@ -1,48 +1,48 @@
 (* ============================================================ *)
-(* Ln2Bridge.v — 席位 CZP14（批次 E-STAGING-CZP14，20260918）      *)
-(*               ＋ 续装席 T120（批次 E-STAGING-D018，20260919）：      *)
-(*               L3/L4/哨兵三件补装毕，四件+哨兵全交付。               *)
-(*                                                               *)
-(* 使命：T97 候选三【桥面步】施工——ln2 无理数 supply 桥面四件+哨兵：  *)
-(*   L1 ln2i_pade_supply 供给型定义（sigT 五层：A/B: nat→Z +        *)
-(*      clo: nat→Q + θ + 五条腿；real 腿仅限 supply 面 line 界，      *)
-(*      结论面全 Q 层 QltT/QleT' 形，零 Prop 泄露位）；               *)
-(*   L2 ln2b_delta_of_supply：δ_q 提取——整判定                      *)
-(*      u·A_{n₀} = v·B_{n₀}（Z.eq_dec 可判定分叉，零 LPO）两支显式    *)
-(*      正 δ：否支 ((1/v − θ^{n₀})/2)/|A_{n₀}|、中支                *)
-(*      (clo_{n₀}/2)/|A_{n₀}|（中支正性由载体腿 clo>0 杀 X=q 环路）；  *)
-(*   L3 ln2b_escape_of_supply：supply -> ln2i_escape_spec           *)
-(*      （δ 逐点腿 + ln2i_vanish 尾控合成显式指标 m，零反三角：        *)
-(*      与 T97 §1.2 L3 草案的偏差=m 不再走 2v+4/ln2i_pow_ge/反三角，   *)
-(*      直接 vanish+δ 点式收口，更短更强，偏差已登记报告）；           *)
-(*   L4 ln2b_irrational_from_supply：直接走 lic_irrational_criterion *)
-(*      结论面（真走母定理，零旁路）。                               *)
-(*   哨兵 ln2b_supply_trivial_hit：平凡三元组 A:=1,B:=0,clo:=0 在     *)
-(*      q:=0 处命中中支（A·q==B 成立）但中支 δ:=clo/|A| ≤ 0——        *)
-(*      验证 L2 中支正性必须由 clo>0 载体腿供给，防假 supply。         *)
-(* 插槽关系（候选一 supply 预留位，如实登记 supply 未供）：            *)
-(*   ln2i_pade_supply 即 T97 §4 P1–P5 战役件的输出接口：候选一        *)
-(*   （Hermite–Beukers 主线）的 (A_n,B_n,clo_n,θ) 一旦组装，只需       *)
-(*   满足本件五腿即可插槽 L2–L4。消融50/Ln2Escape.v 的 lne_B 三件套    *)
-(*   （lne_B_posT / lne_B_le_p4 / lne_B_int，CZW13 交付）是候选一      *)
-(*   supply 的第一批候选实例：lne_B n=(n!)²/(2n+1)! 可充当载体 clo_n   *)
-(*   与整性腿的原料，本件不 Require 之（配方级引用，避免多根拼接）。    *)
-(* 残面诚实登记（T120 复核维持）：supply 本体未供（P1–P5 战役量），     *)
-(*   ln2i_escape_spec 无条件形保持挂账；本件交付「四件+哨兵全架毕、      *)
-(*   待供给」——L1–L4+哨兵全为条件形真证（Qed 全闭零认授），候选一         *)
-(*   supply 一旦到货即可全链插槽放电。                                 *)
-(* 验证（本地信任缓存策略，T120 实测配方）：G1 官方禁词 0；G2 side-      *)
-(*   compile /tmp/t120g_side（异地 cwd + czn14_union 并集根单 -Q，      *)
-(*   波前重试，单次 ≤15 分钟）；G3 Separate Extraction Obj.magic=0；     *)
-(*   G4 rocq check -o + PA 全 Closed 候 detached 链 /tmp/t120g_chain.sh  *)
-(*   （台账 Live/logs/t120-g4-ledger.log）。本地绿=放行信号，终验归隔壁 CI。 *)
-(* 依赖（czn14_union 信任根在册）：S01_BaseRing、S02_CauchyComplete、   *)
-(*   S03_QExp、SumInvFactEscape、UpReqBanachNormOpp、                   *)
-(*   UpReqIrrationalCriterion（lic_enum/dec_pt 判定分叉模式参照）、      *)
-(*   UpReqLn2Irrational（ln2i_x/e/tail/vanish/p2 全套+残面本体）；       *)
+(* Ln2Bridge.v —— ln2 无理数 supply 接口件：供给型 ln2i_pade_supply 与    *)
+(*   由其导出的 δ 提取、逃逸规格、无理性推论三件，另附平凡三元组反例      *)
+(*   ln2b_supply_trivial_hit。                                          *)
+(*                                                                     *)
+(* 基准对象：ln2b_X = ln2i_x 的柯西极限（存在性由源模块 UpReqLn2Irrational *)
+(*   的尾控制 ln2i_tail 与消失条件 ln2i_vanish 供给）；整系数线性形式    *)
+(*   ln2b_line A B n = |A_n·X − B_n|，第 k 投影为 Q 层 |A_n·x_k − B_n|。 *)
+(*                                                                     *)
+(* ln2i_pade_supply（供给型，sigT 五层）：对整系数 A B : nat→Z、载体      *)
+(*   clo : nat→Q、底 θ : Q，合取五个组成条件：① QltT θ 1；              *)
+(*   ② ∀n, QltT 0 |A_n|（A_n ≠ 0 的 Q 层编码）；③ ∀n, QltT 0 (clo n)；   *)
+(*   ④⑤ 下/上界肢 ln2b_line_lower / ln2b_line_upper：                  *)
+(*   clo_n ≤ |A_n·X − B_n| ≤ θ^n（real_le 面承载）。                    *)
+(*                                                                     *)
+(* ln2b_delta_of_supply：由 supply 与有理数 q = u/v 提取显式正 δ 与阈值  *)
+(*   K，使 δ ≤ |q − x_k|（∀k ≥ K）。以 Z.eq_dec 对 u·A_{n₀} = v·B_{n₀}    *)
+(*   作可判定分叉（零 LPO），分两支各给显式 δ：                          *)
+(*   · 否支（u·A_{n₀} ≠ v·B_{n₀}）：δ := ((1/v − θ^{n₀})/2)·|A_{n₀}|⁻¹； *)
+(*   · 中支（u·A_{n₀} = v·B_{n₀}）：δ := (clo_{n₀}/2)·|A_{n₀}|⁻¹，正性   *)
+(*     由条件 ③ 供给。若 X = q，下界肢给出 clo_{n₀} ≤ |A_{n₀}·X − B_{n₀}| *)
+(*     = 0，与 ③ 矛盾——伪 supply 于中支自相矛盾                        *)
+(*     （反例 ln2b_supply_trivial_hit 实证其 δ ≤ 0）。                   *)
+(*                                                                     *)
+(* ln2b_escape_of_supply：supply ⟹ ln2i_escape_spec。取指标              *)
+(*   m := S(max K N)：ln2i_vanish 于 δ 给显式 N，与终归点式肢在 m 处      *)
+(*   合取：ln2i_e m < δ ≤ |q − x_m|。                                    *)
+(*                                                                     *)
+(* ln2b_irrational_from_supply：结论面直接应用母定理 lic_irrational_criterion。 *)
+(*                                                                     *)
+(* ln2b_supply_trivial_hit（反例见证）：平凡三元组 A:=1、B:=0、clo:=0    *)
+(*   于 q:=0 命中中支判据（0·A₀ = 1·B₀）而中支 δ ≤ 0——组成条件 ③ 对     *)
+(*   中支正性不可省。                                                   *)
+(*                                                                     *)
+(* 接口地位：ln2i_pade_supply 是 Hermite–Beukers 候选一构造的输出接口：   *)
+(*   其 (A_n, B_n, clo_n, θ) 一旦满足上述五个组成条件，δ 提取与逃逸      *)
+(*   两件即可应用。Ln2Escape.v 的 lne_B n = (n!)²/(2n+1)! 是 clo_n 与    *)
+(*   整性条件的候选实例（本件不 Require 之，仅记述）。                   *)
+(*                                                                     *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、SumInvFactEscape、  *)
+(*   UpReqBanachNormOpp、UpReqIrrationalCriterion、UpReqLn2Irrational；  *)
 (*   Stdlib QArith、ZArith、Arith、Lia、Setoid、Morphisms、Lra、Qfield。 *)
-(* 语句面纪律：全 Set（QltT/QleT'/QeqT/real_lt/real_le/sigT/           *)
-(*   S01.And:=A*B）；证内 Prop（Qlt/Qle）仅作 Q 层推理脚手架。          *)
+(* 构造性注记：语句面全 Set（QltT/QleT'/QeqT/real_lt/real_le/sigT/       *)
+(*   S01.And）；证明内 Prop（Qlt/Qle）仅作 Q 层推理辅助；零承认；可提取。 *)
+(* 编译配方：coqc 9.1 直调无 -Q，cpu_guard 包裹，-o 临时目录（树内 .vo 不动）。 *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -54,13 +54,13 @@ Require Import UpReqIrrationalCriterion.
 Require Import UpReqLn2Irrational.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* §0 基准实数 X = lim ln2i_x 与 line 投影面                           *)
 (* ============================================================ *)
 
-(* 基准实数：ln2i_x 的柯西极限（尾控+消失双腿由母件供给） *)
+(* 基准实数：ln2i_x 的柯西极限（极限存在性由 ln2i_tail 尾控制与 ln2i_vanish 两条件供给） *)
 Definition ln2b_X : Real :=
   existT (fun u : Qseq => cauchy u) ln2i_x
     (lic_seq_cauchy ln2i_x ln2i_e ln2i_tail ln2i_vanish).
@@ -68,8 +68,8 @@ Definition ln2b_X : Real :=
 Lemma ln2b_X_proj : forall k : nat, projT1 ln2b_X k == ln2i_x k.
 Proof. intro k. reflexivity. Qed.
 
-(* 整系数有理线性形式在基准实数上的绝对值（supply real 腿的承载对象）：
-   line A B n = |A_n·X − B_n|，其第 k 投影 = |A_n·x_k − B_n|（Q 层）。 *)
+(* 整系数有理线性形式在基准实数上的绝对值（supply 的 real 面界所约束的对象）：
+   ln2b_line A B n = |A_n·X − B_n|，其第 k 投影 = |A_n·x_k − B_n|（Q 层）。 *)
 Definition ln2b_line (A B : nat -> Z) (n : nat) : Real :=
   real_abs (real_plus (real_mult (real_const ((A n) # 1)%Q) ln2b_X)
                       (real_opp (real_const ((B n) # 1)%Q))).
@@ -84,20 +84,20 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1 L1：ln2i_pade_supply 供给型（sigT 五层 + 五条 Set 腿）            *)
+(* §1 ln2i_pade_supply：供给型（sigT 五层，五个 Set 面组成条件） *)
 (* ============================================================ *)
 
-(* 下界腿：载体 clo_n ≤ |A_n·X − B_n|（real_le Or-编码） *)
+(* 下界肢：载体条件 clo_n ≤ |A_n·X − B_n|（real_le Or-编码） *)
 Definition ln2b_line_lower (A B : nat -> Z) (clo : nat -> Q) : Set :=
   forall n : nat, real_le (real_const (clo n)) (ln2b_line A B n).
 
-(* 上界腿：|A_n·X − B_n| ≤ θ^n（Q 层幂承载 q_pow θ n） *)
+(* 上界肢：|A_n·X − B_n| ≤ θ^n（Q 层幂 q_pow θ n 承载） *)
 Definition ln2b_line_upper (A B : nat -> Z) (th : Q) : Set :=
   forall n : nat, real_le (ln2b_line A B n) (real_const (q_pow th n)).
 
-(* 供给型：候选一（Hermite–Beukers 主线）输出接口的焊死形。
-   五腿：① θ<1；② 0<|A_n|（A_n≠0 的 Set 面 Q 编码）；③ 0<clo_n；
-   ④⑤ 下/上界 real 腿。 *)
+(* 供给型：Hermite–Beukers 候选一构造的输出接口。
+   五个组成条件：① θ<1；② 0<|A_n|（A_n≠0 的 Set 面 Q 编码）；③ 0<clo_n；
+   ④⑤ 下/上界 real 肢。 *)
 Definition ln2i_pade_supply : Set :=
   sigT (fun A : nat -> Z =>
     sigT (fun B : nat -> Z =>
@@ -110,26 +110,26 @@ Definition ln2i_pade_supply : Set :=
                      (ln2b_line_upper A B th)))))))).
 
 (* ============================================================ *)
-(* §2 供给面逐点读取器：real_le 的终归 slack 形                          *)
+(* §2 供给面的逐点形式：real_le 的终归 slack 形 *)
 (* ============================================================ *)
 
-(* Q 层小件：a ≤ |a| *)
+(* Q 层引理：a ≤ |a| *)
 Lemma ln2b_abs_ge : forall a : Q, Qle a (Qabs a).
 Proof.
   intros [an ad]. unfold Qle, Qabs. cbn [Qnum Qden].
   destruct an; cbn; lia.
 Qed.
 
-(* Q 层小件：|a| < b ⟹ a < b *)
+(* Q 层引理：|a| < b ⟹ a < b *)
 Lemma ln2b_abs_lt : forall a b : Q, Qlt (Qabs a) b -> Qlt a b.
 Proof.
   intros [an ad] [bn bd]. unfold Qlt, Qabs in *. cbn [Qnum Qden] in *.
   destruct an; cbn in *; lia.
 Qed.
 
-(* real_le 终归 slack 读取器：x ≤ y（real_le Or-编码两支统一）⟹
+(* real_le 的终归 slack 形：x ≤ y（real_le Or-编码两支统一）⟹
    ∀eps>0 ∃K ∀k≥K，x_k < y_k + eps。
-   lt 支：x_k < y_k（严格分离，加 eps 更松）；eq 支：|x_k−y_k| < eps
+   情形 lt：x_k < y_k（严格分离，加 eps 更松）；情形 eq：|x_k−y_k| < eps
    且 x_k ≤ (x_k−y_k)+y_k ≤ |x_k−y_k|+y_k < y_k+eps。零 LPO。 *)
 Lemma ln2b_le_pt_slack : forall (x y : Real), real_le x y ->
   forall eps : Q, QltT 0 eps ->
@@ -138,7 +138,7 @@ Lemma ln2b_le_pt_slack : forall (x y : Real), real_le x y ->
 Proof.
   intros x y H eps Heps.
   destruct H as [Hlt | Heq].
-  - (* lt 支 *)
+  - (* 情形 lt：x < y 的严格分离支 *)
     destruct Hlt as [e [He0 [N HN]]].
     exists N. intros k Hk.
     pose proof (HN k (NatLe_lift _ _ Hk)) as HNk.
@@ -163,7 +163,7 @@ Proof.
                ((projT1 y k + eps)%Q)).
       * apply qeq_le. symmetry. apply Qplus_0_r.
       * exact Hle.
-  - (* eq 支：|x_k−y_k| < eps ⟹ x_k ≤ |x_k−y_k|+y_k < y_k+eps *)
+  - (* 情形 eq：|x_k−y_k| < eps ⟹ x_k ≤ |x_k−y_k|+y_k < y_k+eps *)
     destruct (Heq eps Heps) as [N HN].
     exists N. intros k Hk.
     pose proof (HN k (NatLe_lift _ _ Hk)) as HNk.
@@ -197,11 +197,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 衰减核：0 < θ < 1 ⟹ 显式 n₀ 使 θ^{n₀} < 1/v（零 LPO，全显式）     *)
+(* §3 衰减引理：0 < θ < 1 ⟹ 显式 n₀ 使 θ^{n₀} < 1/v（零 LPO，全显式） *)
 (* ============================================================ *)
 
-(* q_pow 分母 1 桥：q_pow ((c#1)) n == (c^n)#1)（分母恒 1，全 cbn 可归约，
-   零 stuck Qinv——Q 正分母槽只收 positive，Z 幂不可入，故不走 div 形桥） *)
+(* q_pow 分母 1 形：q_pow ((c#1)) n == (c^n)#1)（分母恒 1，cbn 可归约，
+   归约无残留 Qinv——Q 构造子正分母只收 positive，Z 幂不可入，不经除法形） *)
 Lemma ln2b_qpow_num : forall (c : Z) (n : nat),
   q_pow ((c # 1)%Q) n == ((c ^ (Z.of_nat n)) # 1)%Q.
 Proof.
@@ -212,8 +212,8 @@ Proof.
     unfold Qmult, Qeq. cbn [Qnum Qden Pos.mul]. lia.
 Qed.
 
-(* 跨分母乘法桥：q_pow (a#b) n · q_pow (b#1) n == q_pow (a#1) n
-   （(a/b)^n·b^n = a^n；纯 Q 环重排 + IH，零 stuck 形） *)
+(* 跨分母乘法引理：q_pow (a#b) n · q_pow (b#1) n == q_pow (a#1) n
+   （(a/b)^n·b^n = a^n；Q 环重排与归纳假设，无残留形） *)
 Lemma ln2b_ab_b : forall (a : Z) (b : positive),
   ((a # b)%Q * ((Z.pos b # 1)%Q))%Q == ((a # 1)%Q).
 Proof.
@@ -232,7 +232,7 @@ Proof.
     + rewrite ln2b_ab_b. rewrite IH. ring.
 Qed.
 
-(* q_pow (c#1) n 的正性（供 Qmult_lt_r 的正乘子腿） *)
+(* q_pow (c#1) n 的正性（作 Qmult_lt_r 的正乘子） *)
 Lemma ln2b_qpow_pos1 : forall (c : Z) (n : nat), (0 < c)%Z ->
   Qlt 0 (q_pow ((c # 1)%Q) n).
 Proof.
@@ -257,7 +257,7 @@ Proof.
   - rewrite Nat.pow_succ_r'. lia.
 Qed.
 
-(* nat Bernoulli 幂核：A^n + n·A^{n−1} ≤ (A+1)^n（n ≥ 1） *)
+(* nat 层 Bernoulli 幂不等式：A^n + n·A^{n−1} ≤ (A+1)^n（n ≥ 1） *)
 Lemma ln2b_pow_bern : forall A n : nat,
   (1 <= A)%nat -> (1 <= n)%nat -> (A ^ n + n * A ^ (n - 1) <= (A + 1) ^ n)%nat.
 Proof.
@@ -285,7 +285,7 @@ Proof.
       lia.
 Qed.
 
-(* 显式指标核：V·A^{V·A} < (A+1)^{V·A}（V,A ≥ 1） *)
+(* 显式指标不等式：V·A^{V·A} < (A+1)^{V·A}（V,A ≥ 1） *)
 Lemma ln2b_pow_core : forall V A : nat,
   (1 <= V)%nat -> (1 <= A)%nat -> (V * A ^ (V * A) < (A + 1) ^ (V * A))%nat.
 Proof.
@@ -301,7 +301,7 @@ Proof.
   lia.
 Qed.
 
-(* 幂不等式 Z 升载（nat 层核 → Z 层，指数/底全 Nat2Z/Z2Nat 桥） *)
+(* 幂不等式 nat → Z 提升（指数/底经 Nat2Z 单射逐一转移） *)
 Lemma ln2b_pow_lift : forall V' A' B' : nat,
   (1 <= V')%nat -> (1 <= A')%nat ->
   (V' * A' ^ (V' * A') < B' ^ (V' * A'))%nat ->
@@ -318,7 +318,7 @@ Proof.
 Qed.
 
 (* 衰减引理：0 < θ < 1、分母 v（positive）⟹ 显式 n₀ = v·num(θ) 使
-   θ^{n₀} < 1/v。机制：θ = a/b（a ≥ 1、b ≥ a+1），取 n₀ := v·a，
+   证明：θ = a/b（a ≥ 1、b ≥ a+1），取 n₀ := v·a，
    Bernoulli 给 (a+1)^{n₀} ≥ a^{n₀} + n₀·a^{n₀−1} = (v+1)·a^{n₀}
    > v·a^{n₀}，又 b^{n₀} ≥ (a+1)^{n₀}。零 LPO（全显式指标）。 *)
 Lemma ln2b_decay : forall th : Q, QltT 0 th -> QltT th (1 # 1) ->
@@ -366,7 +366,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 L2：δ_q 提取——整判定两支显式正 δ（零 LPO）                        *)
+(* §4 δ 提取 ln2b_delta_of_supply：整判定两支显式正 δ（零 LPO） *)
 (* ============================================================ *)
 
 (* q_pow 的一次幂 *)
@@ -383,7 +383,7 @@ Proof.
   nia.
 Qed.
 
-(* 除正乘子反向桥：0 < A、c < A·M ⟹ c·A⁻¹ < M *)
+(* 除法反向形式：0 < A、c < A·M ⟹ c·A⁻¹ < M *)
 Lemma ln2b_div_lt_of : forall c A M : Q, QltT 0 A -> Qlt c (A * M)%Q ->
   Qlt (c * Qinv A) M.
 Proof.
@@ -400,7 +400,7 @@ Proof.
   exact (lic_qlt_comp_r ((A * M)%Q * Qinv A) M (c * Qinv A) Hprod Hlt2).
 Qed.
 
-(* 整系数 Q 线性式的分式簿记：(a#1)·(u#v) − (b#1) == (u·a − v·b)#v *)
+(* 整系数 Q 线性式的通分：(a#1)·(u#v) − (b#1) == (u·a − v·b)#v *)
 Lemma ln2b_line_q : forall (a b u : Z) (v : positive),
   (((a # 1)%Q * ((u # v)%Q) - ((b # 1)%Q))%Q) == (((u * a - Z.pos v * b) # v)%Q).
 Proof.
@@ -427,12 +427,12 @@ Proof.
   rewrite Hfac. rewrite Qabs_Qmult. reflexivity.
 Qed.
 
-(* L2 主件：供给型 + 有理数 q ⟹ 显式正 δ 与终归点式腿
-   δ ≤ |q − x_k|（k ≥ K）。两支：
+(* δ 提取主件：供给型 + 有理数 q ⟹ 显式正 δ 与终归点式肢
+   δ ≤ |q − x_k|（k ≥ K）。分情形（Z.eq_dec 可判定）：
    - 否支（u·A_{n₀} ≠ v·B_{n₀}）：δ := ((1/v − θ^{n₀})/2)·|A_{n₀}|⁻¹；
    - 中支（u·A_{n₀} = v·B_{n₀}）：δ := (clo_{n₀}/2)·|A_{n₀}|⁻¹
-     （载体正性腿 clo>0 直接供正性——若 X = q 则下腿与 clo>0 矛盾，
-      假 supply 自动被杀，见哨兵件）。 *)
+     （正性由载体条件 clo>0 供给——若 X = q 则下界肢与 clo>0 矛盾，
+      伪 supply 被排除，见反例 ln2b_supply_trivial_hit）。 *)
 Theorem ln2b_delta_of_supply : forall (Hs : ln2i_pade_supply) (q : Q),
   sigT (fun d : Q => And (QltT 0 d)
     (sigT (fun K : nat => forall k : nat, (K <= k)%nat ->
@@ -442,7 +442,7 @@ Proof.
   destruct Hs as [A [B [clo [th [Hth1 [HA [Hclo [Hlow Hup]]]]]]]].
   destruct q as [u v].
   assert (Hv0 : (0 < Z.pos v)%Z) by lia.
-  (* —— θ > 0：下腿/上腿 slack 于公共 k₀ 夹取 —— *)
+  (* —— θ > 0：下界肢/上界肢的 slack 形在公共指标 k₀ 夹出 —— *)
   assert (Heps1 : QltT 0 (((clo 1)%nat) * (1 # 2))%Q).
   { apply Qlt_to_QltT. apply Qmult_lt_0_compat.
     - apply QltT_to_Qlt. apply (Hclo 1%nat).
@@ -486,7 +486,7 @@ Proof.
   assert (Hthpos : QltT 0 th) by (apply Qlt_to_QltT; exact Hth0q).
   destruct (ln2b_decay th Hthpos Hth1 v) as [n0 Hdec].
   pose proof (QltT_to_Qlt _ _ Hdec) as Hdecq.
-  (* —— 上腿在 n₀ 的 slack：line_k < 1/v − Δ（Δ := (1/v − θ^{n₀})/2） —— *)
+  (* —— 上界肢在 n₀ 的 slack：line_k < 1/v − Δ（Δ := (1/v − θ^{n₀})/2） —— *)
   assert (Hdelta0 : QltT 0 (((1 # v)%Q - q_pow th n0) * (1 # 2))%Q).
   { apply Qlt_to_QltT. apply Qmult_lt_0_compat.
     - apply lic_qlt_0_minus. exact Hdecq.
@@ -603,10 +603,10 @@ Proof.
                               * Qabs (((u # v)%Q - ln2i_x k)%Q)
                               + ((1 # v)%Q - ((1 # v)%Q - q_pow th n0) * (1 # 2)))%Q)
                      Hpre) as Hm.
-        (* Hm : 0 < (P + W) − 1/v，W := 1/v − Δ ⟹ 0 < P − Δ
-           （Hring：P + W − 1/v == P − Δ，Δ := ((1/v) − θ^{n₀})·(1/2)）
-           [T120 勘误：原席 RHS 误写 P − (1/v − Δ) 非恒等式，ring 拒绝正确；
-            原席停席真因即此——修正为恒等式后裸 ring 闭合] *)
+        (* 中间断言 Hm : 0 < (P + W) − 1/v，其中 W := 1/v − Δ ⟹ 0 < P − Δ
+           （恒等式 Hring：P + W − 1/v == P − Δ，Δ := ((1/v) − θ^{n₀})·(1/2)）
+           注记：右端必须写成 P − Δ 方为恒等式；写成 P − (1/v − Δ) 则
+            不成立，ring 判拒绝是正确行为。 *)
         assert (Hring : ((Qabs ((A n0) # 1)%Q * Qabs (((u # v)%Q - ln2i_x k)%Q)
                            + ((1 # v)%Q - ((1 # v)%Q - q_pow th n0) * (1 # 2)))
                           - (1 # v)%Q)%Q
@@ -635,14 +635,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 L3：逃逸装配——supply -> ln2i_escape_spec（挂账面条件收口）          *)
+(* §5 ln2b_escape_of_supply：supply -> ln2i_escape_spec（条件形闭合） *)
 (* ============================================================ *)
 
-(* L3 主件（T120 补装，照头注焊死形；T104 §1 已登记的 T97 §1.2 草案偏差）：
-   m 不走 2v+4/ln2i_pow_ge/反三角，直接 vanish + δ 点式收口——
-   ln2i_vanish 于 eps:=δ 给显式 N（n≥N ⟹ ln2i_e n < δ），与 L2 的
-   终归点式腿（δ ≤ |q−x_k|，k≥K）在 m := S(max K N) 处夹合：
-   ln2i_e m < δ ≤ |q−x_m|。指标 m 全显式，零 LPO，零反三角。 *)
+(* 逃逸主件（与 T97 §1.2 草案的构造差异：指标不取 2v+4，不用
+   ln2i_pow_ge 与反三角路径）：以 vanish 与 δ 点式两条件直接闭合——
+   ln2i_vanish 于 eps:=δ 给显式 N（n≥N ⟹ ln2i_e n < δ），与 δ 提取件的
+   终归点式肢（δ ≤ |q−x_k|，k≥K）在 m := S(max K N) 处合取：
+   ln2i_e m < δ ≤ |q−x_m|。指标 m 全显式，零 LPO。 *)
 Theorem ln2b_escape_of_supply : forall (Hs : ln2i_pade_supply),
   ln2i_escape_spec.
 Proof.
@@ -662,12 +662,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 L4：条件形升级——supply 直接走 lic_irrational_criterion 结论面       *)
+(* §6 ln2b_irrational_from_supply：supply 条件下应用 lic_irrational_criterion *)
 (* ============================================================ *)
 
-(* L4 主件（T120 补装）：语句面 = ln2i_irrational_criterion_cond 的
-   结论面（X 即 ln2b_X 的焊开形），逃逸窗槽由 L3 供给——真走母定理
-   lic_irrational_criterion，零旁路。 *)
+(* 主件：语句面为 ln2i_irrational_criterion_cond 的结论面（X 取
+   ln2b_X 的展开形式），逃逸规格由 ln2b_escape_of_supply 供给，
+   直接应用母定理 lic_irrational_criterion。 *)
 Theorem ln2b_irrational_from_supply : forall (Hs : ln2i_pade_supply) (q : Q),
   sigT (fun c : Q => And (QltT 0 c)
     (real_lt (real_const c)
@@ -681,15 +681,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §7 哨兵：平凡三元组反例（防假 supply）                                *)
+(* §7 反例见证：平凡三元组（排除伪 supply） *)
 (* ============================================================ *)
 
-(* 平凡三元组 A:=1, B:=0, clo:=0（T120 补装）：供给型五腿之 ③(0<clo)
-   即告缺席，故绝非合法 supply。哨兵以全 Set 面实证两点：
-   ① q:=0（即 u:=0,v:=1，0·A₀ == 1·B₀）处中支判据照命中——Z.eq_dec
-      分叉取左支，L2 会走中支；
-   ② 中支 δ 公式 (clo/2)·|A|⁻¹ 照输出 0（QleT' 面 ≤0）——中支正性
-      无处可得，验证其必须由载体腿 clo>0 供给，假 supply 自动被杀。 *)
+(* 平凡三元组 A:=1, B:=0, clo:=0：供给型五个组成条件之 ③(0<clo)
+   缺席，故非合法 supply。反例以全 Set 面实证两点：
+   ① q:=0（即 u:=0,v:=1，0·A₀ == 1·B₀）处中支判据成立——Z.eq_dec
+      分叉取左支，δ 提取件取中支；
+   ② 中支 δ 公式 (clo/2)·|A|⁻¹ 输出 0（QleT' 面 ≤0）——中支正性
+      无处可得：其必须由载体条件 clo>0 供给，伪 supply 由此排除。 *)
 Definition ln2b_tri_A : nat -> Z := fun _ => 1%Z.
 Definition ln2b_tri_B : nat -> Z := fun _ => 0%Z.
 Definition ln2b_tri_clo : nat -> Q := fun _ => 0%Q.
@@ -706,7 +706,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §8 提取探针与 PA 自审（G3/G4 本地段，T120 补装）                       *)
+(* §8 提取与假设审计 *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

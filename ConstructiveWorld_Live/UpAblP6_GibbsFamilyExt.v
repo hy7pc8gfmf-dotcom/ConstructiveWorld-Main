@@ -1,39 +1,39 @@
 (* ============================================================ *)
-(* UpAblP6_GibbsFamilyExt.v —— T211 / PA6-01（论文6 消融战役）          *)
-(* 消融对象：卡 E748（GibbsFamilyExt-温度形与对称Jeffreys形施工-20260918） *)
-(* 对象盘面：ConstructiveWorld_Live/GibbsFamilyExt.v（gfe_ 前缀 13 枚，    *)
-(*   0 伴生：无变量槽/参数声明/公理/定义件，全引理/定理）                  *)
+(* UpAblP6_GibbsFamilyExt.v —— Gibbs 族温度化扩展的对照供给件           *)
+(* 使命：形式化 KL 散度与对称 Jeffreys 散度的温度化（乘正系数 β）在       *)
+(*   Bishop 构造性实数上的五条逐点/有限和上界性质（uagfe_ 前缀五结论）。  *)
+(* 对标：无直接对应物（KL/Jeffreys 型不等式的 Bishop 构造性版本）。       *)
 (* ------------------------------------------------------------------ *)
-(* 本件五面（每面注明证明路径，禁转发冒充）：                            *)
-(*   P1 uagfe_gibbs_temp_one_B       单位温度 β=1 逐点 Bishop 实例形    *)
-(*      路径=实例装配（gfe_gibbs_core_temp_B 于 β:=real_one 装配，        *)
-(*      温度前提由 real_lt_zero_one 供给）                              *)
-(*   P2 uagfe_gibbs_temp_two_eps     双倍温度 β=2 逐点 eps 实例形        *)
-(*      路径=实例装配（gfe_gibbs_core_temp_eps 于 β:=1+1 装配；温度证书   *)
-(*      real_plus_positive×real_lt_zero_one 两枚单位证书合成，再经族内    *)
-(*      gfe_le_of_lt 桥降级为弱前提）                                   *)
-(*   P3 uagfe_le_b_mult_pos_two_temp_flat                            *)
-(*      le_b_mult_pos 补位（A5）的消费面重述：两级温度复合平形——          *)
-(*      (b1·b2)·x ≤_B (b1·b2)·y（x ≤_B y、0<b1、0<b2）                   *)
-(*      路径=上游直击×2 + assoc 换形链（gfe_le_b_mult_pos 两级复合，      *)
-(*      gfe_le_b_eq_r / leb3_le_b_eq_l 左右元换形，real_mult_assoc 定向）*)
-(*   P4 uagfe_jeffreys_sym_temp_B    对称 Jeffreys 温度面（点态）：       *)
-(*      0 ≤_B β·(kl(p‖q)+kl(q‖p))——上游缺席面（上游温度面只有            *)
-(*      单 kl gap 形，Jeffreys 和形升温面为本件新组）                    *)
-(*      路径=独立链（gfe_jeffreys_sym_B 供 x ≤_B y，gfe_le_b_mult_pos    *)
-(*      升温，real_mult_zero+leb3_le_b_eq_l 收零换形）                   *)
-(*   P5 uagfe_jeffreys_sym_list_temp_B 对称 Jeffreys 温度面（有限和）：   *)
-(*      0 ≤_B β·Σ_s (kl(p s‖q s)+kl(q s‖p s))                           *)
-(*      路径=独立链（gfe_jeffreys_sym_list_B 供和形，同 P4 升温链）       *)
+(* 五条结论（证明路径注真实标识符）：                                    *)
+(*   ① uagfe_gibbs_temp_one_B 单位温度 β=1 逐点 Bishop 实例：            *)
+(*      由 gfe_gibbs_core_temp_B 于 β:=real_one 实例化，温度前提由        *)
+(*      real_lt_zero_one 直接供给。                                      *)
+(*   ② uagfe_gibbs_temp_two_eps 双倍温度 β=2 逐点 eps 实例：             *)
+(*      由 gfe_gibbs_core_temp_eps 于 β:=1+1 实例化；其温度前提由         *)
+(*      real_plus_positive 与 real_lt_zero_one 合成，再经 gfe_le_of_lt    *)
+(*      由严格不等式降为非严格前提。                                      *)
+(*   ③ uagfe_le_b_mult_pos_two_temp_flat 两级温度复合平形式：             *)
+(*      (b1·b2)·x ≤_B (b1·b2)·y（x ≤_B y、0<b1、0<b2）；由                *)
+(*      gfe_le_b_mult_pos 两级复合，经 gfe_le_b_eq_r 与                   *)
+(*      leb3_le_b_eq_l 作左右元替换，real_mult_assoc 调整结合顺序。       *)
+(*   ④ uagfe_jeffreys_sym_temp_B 对称 Jeffreys 温度面（点态）：           *)
+(*      0 ≤_B β·(kl(p‖q)+kl(q‖p))。上游温度面仅有单 KL 间隙形式，        *)
+(*      Jeffreys 和形的温度化为本件新增；由 gfe_jeffreys_sym_B 供         *)
+(*      x ≤_B y，gfe_le_b_mult_pos 乘正温度，real_mult_zero 与            *)
+(*      leb3_le_b_eq_l 将左侧化为零。                                     *)
+(*   ⑤ uagfe_jeffreys_sym_list_temp_B 对称 Jeffreys 温度面（有限和）：    *)
+(*      0 ≤_B β·Σ_s (kl(p s‖q s)+kl(q s‖p s))；由                         *)
+(*      gfe_jeffreys_sym_list_B 供和形，乘正温度论证同④。                 *)
 (* ------------------------------------------------------------------ *)
-(* 红线自审：全 Qed 闭合；real_le/real_lt/real_le_b/real_eq 全 Set 值     *)
-(*   （CW219 S01 自建 Or 编码）；零公理零假设位；文尾 Print Assumptions   *)
-(*   五面全 Closed。                                                    *)
-(* 编译配方：/tmp/pa7_work 内 cpu_guard 温控                             *)
-(*   rocq c -Q /tmp/pa7_work "" -Q /tmp/pa6_side "" -Q /tmp/czn14_union_full "" *)
-(* 依赖面（全在盘只读，零改上游）：CW_ConstructiveWorld_219（含 S07       *)
-(*   real_lt_zero_one/real_plus_positive 出口）、UpRealLeB、UpRealLeB2、  *)
-(*   UpRealLeB3、UpReqKLStrictB、GibbsFamilyExt（消融对象本体）。          *)
+(* 上游件 GibbsFamilyExt 无节内声明与定义件，全部为引理与定理；本件同     *)
+(*   为纯引理/定理供给件。                                                *)
+(* 构造性注记：全部结论 Set 层承载（CW_ConstructiveWorld_219 自建 Or      *)
+(*   编码，real_le/real_lt/real_le_b/real_eq 皆 Set 值）；零公理零承认；   *)
+(*   文尾 Print Assumptions 五定理全 Closed；可提取。                     *)
+(* 依赖：CW_ConstructiveWorld_219（real_lt_zero_one、real_plus_positive   *)
+(*   出口）、UpRealLeB、UpRealLeB2、UpRealLeB3、UpReqKLStrictB、          *)
+(*   GibbsFamilyExt。                                                    *)
+(* 编译配方：coqc 9.1 直调，cpu_guard 温控，-o 临时目录，树内零写入。      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -46,7 +46,7 @@ Require Import UpReqKLStrictB.
 Require Import GibbsFamilyExt.
 
 (* ============================================================ *)
-(* P1 单位温度 β=1 逐点 Bishop 实例形（实例装配）                         *)
+(* §1 uagfe_gibbs_temp_one_B：单位温度 β=1 的逐点 Bishop 上界实例       *)
 (* ============================================================ *)
 
 Lemma uagfe_gibbs_temp_one_B : forall (p q : Real)
@@ -59,7 +59,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P2 双倍温度 β=2 逐点 eps 实例形（实例装配＋温度证书合成）               *)
+(* §2 uagfe_gibbs_temp_two_eps：双倍温度 β=2 的逐点 eps 实例形          *)
 (* ============================================================ *)
 
 Lemma uagfe_gibbs_temp_two_eps : forall (p q : Real)
@@ -80,7 +80,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P3 le_b_mult_pos 补位消费面重述：两级温度复合平形                       *)
+(* §3 uagfe_le_b_mult_pos_two_temp_flat：两级温度复合平形式               *)
 (* ============================================================ *)
 
 Lemma uagfe_le_b_mult_pos_two_temp_flat :
@@ -104,7 +104,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P4 对称 Jeffreys 温度面（点态）：0 ≤_B β·(kl(p‖q)+kl(q‖p))             *)
+(* §4 uagfe_jeffreys_sym_temp_B：0 ≤_B β·(kl(p‖q)+kl(q‖p))（点态）        *)
 (* ============================================================ *)
 
 Theorem uagfe_jeffreys_sym_temp_B : forall (p q b : Real)
@@ -126,7 +126,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P5 对称 Jeffreys 温度面（有限和）：                                    *)
+(* §5 uagfe_jeffreys_sym_list_temp_B（对称 Jeffreys 温度面·有限和）：     *)
 (*   0 ≤_B β·Σ_s (kl(p s‖q s)+kl(q s‖p s))                              *)
 (* ============================================================ *)
 
@@ -156,7 +156,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 闭合审计（G4：Print Assumptions 五面全 Closed）                        *)
+(* 收尾核验：Print Assumptions 五定理全 Closed（零公理零承认）            *)
 (* ============================================================ *)
 
 Print Assumptions uagfe_gibbs_temp_one_B.

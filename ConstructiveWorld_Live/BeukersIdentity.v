@@ -1,9 +1,8 @@
 (* ============================================================ *)
-(* BeukersIdentity.v —— 切片代理E（批次 E-STAGING-D016，20260918）     *)
-(* P2 恒等式主体首攻切片：Beukers 恒等式的可证最强切片（bi_ 前缀）。    *)
-(*                                                                 *)
-(* 【勘误定谳（本席手算 n=0,1,2 验证，机器见证见 §D/§E）】              *)
-(* T97 §1.1 所引恒等式                                                *)
+(* BeukersIdentity.v —— Beukers 恒等式的可证最强切片（bi_ 前缀）与对     *)
+(*   T97 §1.1 所引恒等式的数学勘误。                                    *)
+(*                                                                     *)
+(* 【数学勘误（形式化见证见 §D/§E）】T97 §1.1 所引恒等式                 *)
 (*     ln2 − x'_n == 2^{−(2n+1)}·I_n/Q_n(1/2)²                        *)
 (* 有两处缺陷：                                                       *)
 (*  ① 分母 Q_n(1/2)² 应为 Q_n(1/2)。真恒等式（数值验证）为：            *)
@@ -13,42 +12,43 @@
 (*    其中 q̃_n = 2^n·Q_n(1/2) = Σ_k C(n,k)²2^{n−k}（BeukersLists        *)
 (*    bk_Qn_qtilde 在册）。比较两侧 ln2 系数：LHS 系数 = 1，若原形      *)
 (*    成立则强迫 Q_n(1/2) == 1；而 n≥1 时 Q_n(1/2) ≥ (3/2)^n > 1       *)
-(*    （本件 bi_Qn_half_gt1 定谳），平方分离见证 bi_square_disc。       *)
+(*    （本件 bi_Qn_half_gt1 证得），平方分离见证 bi_square_disc。       *)
 (*  ② x'_n 的谐和分子 P_n（BeukersLists bk_Pn_list，H_k 系数）与本积分  *)
 (*    不配：谐和 x'_1 = P_1(1/2)/(2Q_1(1/2)) = (1/2)/3 = 1/6，而真      *)
 (*    近似 x'_1 = r_1/(2²·q̃_1) = 8/12 = 2/3（真配分子 P*_n(1/2) =      *)
-(*    r_n/2^n: 0, 2, 4.5——P*_n 闭式待 P2 后续席确定）。                 *)
+(*    r_n/2^n: 0, 2, 4.5——P*_n 闭式待定，见后续工作 (b)）。             *)
 (* 数值锚（n=1）：I_1 = 12·ln2 − 8，q̃_1 = 3，2^{2·1+1}·Q_1(1/2) = 12，  *)
 (* 误差 = I_1/12 = ln2 − 2/3；T97 形 RHS = (12ln2−8)/18，其 ln2 系数    *)
-(* = 2/3 ≠ 1，反例固化。x' 序列（真）：0, 2/3, 9/13。                   *)
-(*                                                                 *)
-(* 【本席交付面（降档判定：恒等式本体需积分/部分分式引擎，窗内不可达；   *)
-(*   交付任务书认可的「2^{−(2n+1)} 归一因子件」+ 平方归一死亡证书】）：   *)
-(*  ① bi_D / bi_D_eq_qtilde / bi_core_qtilde：Delannoy 核心            *)
+(* = 2/3 ≠ 1，原形在 n=1 即不成立。x' 序列（真）：0, 2/3, 9/13。        *)
+(*                                                                     *)
+(* 本件交付面：① bi_D / bi_D_eq_qtilde / bi_core_qtilde：Delannoy 核心  *)
 (*     D_n := Σ_{j≤n} C(n,j)²·2^j == q̃_n（[w^n](2+w)^n(1+w)^n 的        *)
 (*     w^n 系数即 D_n——(2+w)^n 以 2^{n−a} 展开时恰为降幂形，与          *)
-(*     q̃_n 逐项重合，无需反转；升幂像经镜像函数 bk_psd 承载）。          *)
-(*  ② bi_norm_factor：2^{n+1}·q̃_n == 2^{2n+1}·Q_n(1/2)（QeqT）——       *)
-(*     真归一因子的闭式（分部积分离散同构的归一档）。                   *)
-(*  ③ bi_Qn_half_gt1 / bi_square_disc：Q_n(1/2) > 1（n≥1）与           *)
-(*     x < x² 正分离（QeqT/QltT Set 面）——T97 平方归一的死亡证书。      *)
-(*  ④ bi_n1_anchor / bi_Qn_half_n1：n=1 数值哨兵（vm_compute 档）。     *)
-(*                                                                 *)
-(* 剩余路径卡点定位（P2 下席续接）：                                    *)
-(*  (a) 积分侧：部分分式/极点分解引擎（c₁ = 2^n·q̃_n，其中               *)
+(*     q̃_n 逐项重合，无需反转；升幂像经指标反转的 bk_psd 承载）。        *)
+(*   ② bi_norm_factor：2^{n+1}·q̃_n == 2^{2n+1}·Q_n(1/2)（QeqT）——       *)
+(*     真归一因子的闭式。                                               *)
+(*   ③ bi_Qn_half_gt1 / bi_square_disc：Q_n(1/2) > 1（n≥1）与           *)
+(*     x < x² 正分离（QeqT/QltT Set 面）——T97 平方归一形式不成立的       *)
+(*     否定性见证。                                                     *)
+(*   ④ bi_n1_anchor / bi_Qn_half_n1：n=1 数值锚（vm_compute）。         *)
+(*                                                                     *)
+(* 后续工作：                                                           *)
+(*  (a) 积分侧：部分分式/极点分解（c₁ = 2^n·q̃_n，其中                   *)
 (*      [w^n]p(2+w) = q̃_n 即 bi_D 核心；∫₀¹(1−t/2)^{−k} 闭式：          *)
-(*      k≥2 有理、k=1 = 2ln2），或改走 (1+t)^{n+1} 变体                  *)
-(*      （I'_n = q̃_n·ln2 − p_n，p: 0,2,9 免 2 幂）+ P1 积分二期机；      *)
+(*      k≥2 有理、k=1 = 2ln2），或改用 (1+t)^{n+1} 变体                  *)
+(*      （I'_n = q̃_n·ln2 − p_n，p: 0,2,9 免 2 幂）；                    *)
 (*  (b) 分子侧：P*_n 闭式待定（谐和形不配，P*_2(1/2) = 4.5 非整）；      *)
-(*  (c) real 层装配（ln2i_x 消费）另案（正性面不碰）。                   *)
-(*                                                                 *)
-(* 红线自审：① 零承认面（全件 Qed，零承认词，依赖全在册）；             *)
-(*   ② 语句面 Set（主件 QeqT/QltT；nat/Z/Q 支撑引理 Prop 面仅作推理      *)
-(*      脚手架，BeukersLists bk_Qn_ge_3pow_nat / Ln2Escape 先例同构）；  *)
+(*  (c) real 层装配（使用 ln2i_x）另立（正性面不碰）。                   *)
+(*                                                                     *)
+(* 构造性注记：① 零承认（全件 Qed，依赖全在册）；② 语句面 Set           *)
+(*   （主件 QeqT/QltT；nat/Z/Q 支撑引理 Prop 面仅作推理辅助，            *)
+(*   不入语句面）；                                                     *)
 (*   ③ 非平凡（归一因子闭式换算 + 正分离见证链 + 反转归位）；            *)
-(*   ④ 可提取（G3 探针独立文件实测，Obj.magic 计数=0）。                 *)
-(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（vo_901 信任根在册）  *)
-(*   + BeukersLists（/tmp/e118_side 侧编在册）。零云端零 git。           *)
+(*   ④ 可提取（文末 Print Assumptions 审计）。                          *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、BeukersLists；      *)
+(*   Stdlib QArith、List、Arith、ZArith、Lia、Psatz、Setoid。           *)
+(* 编译配方：coqc 9.1 直调无 -Q，cpu_guard 包裹，-o 临时目录             *)
+(*   （树内 .vo 不动）。                                                *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia Psatz.
@@ -61,13 +61,13 @@ Open Scope nat_scope.
 (* ============================================================ *)
 (* §A Delannoy 核心（升幂和承载）与反转归位                              *)
 (*   bi_D n = Σ_{k≤n} C(n,n−k)²·2^{n−k}，换元 j = n−k 即升幂和          *)
-(*   Σ_{j≤n} C(n,j)²·2^j（镜像函数承载，bk_psd 递归字母复用）。          *)
+(*   Σ_{j≤n} C(n,j)²·2^j（反转和经 bk_psd 的递归结构承载）。            *)
 (* ============================================================ *)
 
 Definition bi_D (n : nat) : nat :=
   bk_psd (fun k => bkC n (n - k) * bkC n (n - k)) (Datatypes.S n).
 
-(* 反转归位：C(n,k)² 对称（bk_Qn_sym）⟹ 镜像和 == q̃_n 逐项归位
+(* 反转归位：C(n,k)² 对称（bk_Qn_sym）⟹ 反转和 == q̃_n 逐项归位
    （bk_psd_ext 逐点窗口 k < S n ⟺ k ≤ n 恰在对称域内） *)
 Lemma bi_D_eq_qtilde : forall n : nat, bi_D n = bk_Qn_qtilde n.
 Proof.
@@ -86,7 +86,7 @@ Proof.
   rewrite bi_D_eq_qtilde. reflexivity.
 Qed.
 
-(* Q 层 2 幂像：q_pow (2#1) n == Q#2^n（换算脚手架） *)
+(* Q 层 2 幂：q_pow (2#1) n == Q#2^n（换算辅助引理） *)
 Lemma bi_q_pow_2 : forall n : nat, q_pow (2 # 1)%Q n == (Z.of_nat (2 ^ n) # 1)%Q.
 Proof.
   induction n as [| n IH].
@@ -117,7 +117,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C Q 层支撑件（Prop 面推理脚手架）                                    *)
+(* §C Q 层支撑引理（Prop 面，仅作推理辅助）                              *)
 (* ============================================================ *)
 
 (* 同分母 Qlt（Z 面直译） *)
@@ -159,7 +159,7 @@ Proof.
     + apply Qlt_le_weak. exact Hq0.
 Qed.
 
-(* 3^k > 0（幂正性，供 nia/lia 消费） *)
+(* 3^k > 0（幂正性，供 nia/lia 使用） *)
 Lemma bi_pow3_pos : forall k : nat, (0 < 3 ^ k)%nat.
 Proof.
   intro k. induction k as [| k IH].
@@ -181,7 +181,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §D 主件③：Q_n(1/2) > 1（n≥1）——T97 平方归一不可救的核                *)
+(* §D 主件③：Q_n(1/2) > 1（n≥1）——T97 平方归一形式的关键否定            *)
 (* ============================================================ *)
 
 Theorem bi_Qn_half_gt1 : forall n : nat, 1 <= n ->
@@ -244,7 +244,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §F 数值锚（n=1 哨兵：q̃_1 = 3，2^{2·1+1}·Q_1(1/2) = 12，Q_1(1/2)=3/2） *)
+(* §F 数值锚（n=1：q̃_1 = 3，2^{2·1+1}·Q_1(1/2) = 12，Q_1(1/2)=3/2）      *)
 (* ============================================================ *)
 
 Theorem bi_n1_anchor : QeqT ((Z.of_nat (2 ^ 2 * bk_Qn_qtilde 1) # 1)%Q) (12 # 1)%Q.
@@ -254,7 +254,7 @@ Theorem bi_Qn_half_n1 : QeqT (bkQ (bk_Qn_list 1) (1 # 2)%Q) (3 # 2)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* 假设审计留痕：Print Assumptions（G4 复核位）                          *)
+(* 假设审计：Print Assumptions                                          *)
 (* ============================================================ *)
 
 Print Assumptions bi_core_qtilde.

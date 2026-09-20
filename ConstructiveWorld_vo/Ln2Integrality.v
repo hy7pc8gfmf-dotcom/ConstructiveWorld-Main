@@ -1,46 +1,46 @@
 (* ============================================================ *)
-(* Ln2Integrality.v — 切片代理 D（批次 E-STAGING-D015，20260918）     *)
-(* P3 整性封口（T114 任务书施工件，报告落 T117）：                     *)
-(*   Beukers/Hermite Padé [n/n] 的 p̃_n 整化 + x'_n 分母封口。         *)
-(*                                                                 *)
-(* 八件交付面（pi_ 前缀，验收 grep 用 pi_[a-z]）：                     *)
-(*   ① pi_bkC_hl       ：bkC↔hl_binom 双二项式桥（缺口②补件）；        *)
-(*   ② pi_div_Qeq      ：j|D ⟹ Q#D·(1/Q#j) == Q#(D/j)（整化换商核）；  *)
-(*   ③ pi_hsum_spec    ：D_n·H_k == Q#(Σ_{j≤k} D_n/j)（H_k 整化主桥）； *)
-(*   ④ pi_psQ_ext      ：bk_psQ 逐点外延（缺口①补件）；                 *)
-(*   ⑤ pi_Pn_int 主件  ：p̃_n := bk_psd (C²·S_k) (S n)，                *)
-(*                        2^n·D_n·P_n(1/2) == Q#p̃_n（sigT+QeqT Set 面）；*)
-(*   ⑥ pi_Qn_le_8pow   ：q̃_n ≤ (n+1)·8^n（QleT' Set 面）；              *)
-(*   ⑦ pi_x_n_frac 主件：x'_n == p̃_n /(2·D_n·q̃_n)（den 封口，         *)
-(*                        分母以 Pos.of_succ_nat (Nat.pred M) 显式构造）；*)
-(*   ⑧ pi_den_divide   ：den 封口 sigT-positive 弱面（R2 预案）。        *)
-(*                                                                 *)
-(* 消费登记（不重建）：q̃_n∈Z（bk_Qn_int）与 q̃_n≥3^n（bk_Qn_ge_3pow）  *)
-(*   已由 CZU14 于 BeukersLists.v 交付，本稿只消费。D_n 整除面         *)
-(*   （hl_lcm_divide_all）与 C(n,k)≤2^n（hl_binom_le_pow2）由 CZR14    *)
-(*   HansonLcm.v 交付，本稿只消费。                                    *)
-(*                                                                 *)
-(* 勘误登记（施工中发现，照抄设计稿即成假命题）：                        *)
-(*   ① T114 §2 件④ pi_coeff_Zeq 简写为 (Z#C²)·H_k == Z#(C²·S_k)，     *)
-(*      数学上两缘差 D_n 倍（S_k = D_n·H_k），等式仅 D_n=1 时成立；      *)
-(*      本稿以 (Z#(C²·D_n))·H_k == Z#(C²·S_k) 修正交付，主件链自洽。    *)
-(*   ② T114 §2 件⑧ 陈述分母 Z.pos (Pos.of_nat M)：Pos.of_nat 无零偏移   *)
-(*      （Pos.of_nat 0 = xH），Z.pos (Pos.of_nat M) 数值为 M+1，        *)
-(*      x'_n == p̃_n/(M+1) 为假命题；本稿以 Pos.of_succ_nat (Nat.pred M) *)
-(*      修正（数值恰为 M，且 Z.of_nat (S k) = Z.pos (Pos.of_succ_nat k) *)
-(*      为定义性等换），R2 预案 sigT-positive 弱面另交件⑧。             *)
-(*                                                                 *)
-(* 红线四要素宣言（逐件）：                                            *)
-(*   - 纯构造性：全件 Qed/Defined，零公理声明词、零承认、零经典逻辑；     *)
-(*   - Set 层：主件语句面 sigT/QeqT/QleT'，零 Prop 前提进语句面；        *)
-(*     nat/Z/Q 层支撑引理 Prop 面仅作推理脚手架（CZU14 先例同构）；      *)
-(*   - 非平凡：整化换商归纳（pi_hsum_spec）、换基收口（pi_Pn_int 链）、  *)
-(*     Q 域交叉消去（pi_x_n_frac 管道）皆真构造，非占位；               *)
-(*   - 可提取：pi_hsum/pi_ptilde 皆 Fixpoint/Definition 可执行；        *)
-(*     G3 探针独立文件实测 Obj.magic 计数为零。                         *)
-(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（vo_901 信任根）      *)
-(*   + BeukersLists + HansonLcm（消融50 源 side 现编）。零云端零 git；   *)
-(*   自建 .vo 全留 /tmp（信任缓存纪律）。G4 候 detached 链。            *)
+(* Ln2Integrality.v —— 本件形式化 Beukers/Hermite Padé [n/n] 的整性收束：    *)
+(*   p̃_n 整化（2^n·D_n·P_n(1/2) ∈ Z 的见证构造）与 x'_n 分母显式化。         *)
+(*                                                                          *)
+(* 八件交付面（pi_ 前缀）：                                                  *)
+(*   pi_bkC_hl      ：bkC ↔ hl_binom 双二项式桥；                            *)
+(*   pi_div_Qeq     ：j ∣ D ⟹ Q#D·(1/Q#j) == Q#(D/j)（整除换商）；           *)
+(*   pi_hsum_spec   ：D_n·H_k == Q#(Σ_{j≤k} D_n/j)（H_k 整化主桥）；          *)
+(*   pi_psQ_ext     ：bk_psQ 逐点外延；                                      *)
+(*   pi_Pn_int      ：p̃_n := bk_psd (C²·S_k) (S n)，                          *)
+(*                      2^n·D_n·P_n(1/2) == Q#p̃_n（sigT+QeqT Set 面）；      *)
+(*   pi_Qn_le_8pow  ：q̃_n ≤ (n+1)·8^n（QleT' Set 面）；                      *)
+(*   pi_x_n_frac    ：x'_n == p̃_n /(2·D_n·q̃_n)（分母以                       *)
+(*                      Pos.of_succ_nat (Nat.pred M) 显式构造）；            *)
+(*   pi_den_divide  ：正分母存在的 sigT 弱面。                               *)
+(*                                                                          *)
+(* 防错注记：① 系数若取 C²·H_k，则与另一缘差 D_n 倍（S_k = D_n·H_k），        *)
+(*   等式仅 D_n = 1 时成立；故系数取 C²·D_n，主件链自洽。                     *)
+(*   ② Pos.of_nat M 数值为 M+1（无零偏移），x'_n == p̃_n/(M+1) 为假命题；      *)
+(*   分母以 Pos.of_succ_nat (Nat.pred M) 表数值 M（与                         *)
+(*   Z.of_nat (S k) = Z.pos (Pos.of_succ_nat k) 为定义性等换）。              *)
+(*                                                                          *)
+(* 依赖事实（不在本件重建）：q̃_n ∈ Z（bk_Qn_int）与 q̃_n ≥ 3^n                *)
+(*   （bk_Qn_ge_3pow）见 BeukersLists.v；D_n 整除面（hl_lcm_divide_all）      *)
+(*   与 C(n,k) ≤ 2^n（hl_binom_le_pow2）见 HansonLcm.v。                      *)
+(*                                                                          *)
+(* 构造性注记：全件 Qed/Defined、零承认；主件语句面 sigT/QeqT/QleT'，         *)
+(*   零 Prop 前提进语句面；nat/Z/Q 层支撑引理为 Prop 面、仅服务推理；          *)
+(*   pi_hsum/pi_ptilde 皆可执行；文末 Print Assumptions 复核。                *)
+(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp + BeukersLists + HansonLcm。*)
+(*                                                                          *)
+(* 编译配方：coqc 9.1 直调（无 -Q），cpu_guard 包裹，-o 输出临时目录，         *)
+(*   树内 .vo 不重写。                                                       *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith ZArith.ZArith Arith.Arith Lia Lists.List.
@@ -50,7 +50,7 @@ Require Import BeukersLists HansonLcm.
 Open Scope nat_scope.
 
 (* ============================================================ *)
-(* §A 幂与正性微引理（nat 脚手架面）                                    *)
+(* §A 幂与正性引理（nat 层）                                            *)
 (* ============================================================ *)
 
 Lemma pi_pow3_ge1 : forall n : nat, 1 <= 3 ^ n.
@@ -85,7 +85,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §B 件①：bkC ↔ hl_binom 双 Pascal 桥（缺口②补件）                     *)
+(* §B bkC ↔ hl_binom 双 Pascal 桥：pi_bkC_hl                             *)
 (* ============================================================ *)
 
 Lemma pi_bkC_hl : forall n k : nat, bkC n k = hl_binom n k.
@@ -121,7 +121,7 @@ Proof.
   intros m Hm Hc. unfold Qeq in Hc. cbn [Qnum Qden] in Hc. lia.
 Qed.
 
-(* 右消去（Q 域，Qmult_inv_r 为 stdlib 9.1 真名） *)
+(* pi_Qmul_cancel_r_to：Q 域右消去（由 stdlib Qmult_inv_r） *)
 Lemma pi_Qmul_cancel_r_to : forall a b c : Q,
   ~ (c == 0)%Q -> a * c == b * c -> a == b.
 Proof.
@@ -141,7 +141,7 @@ Proof.
   rewrite <- Qmult_assoc, Hy1. apply Qmult_1_r.
 Qed.
 
-(* 除法交叉等价（Q 域机械域律） *)
+(* pi_Qmul_inv_r_eq：除法交叉等价（Q 域域律） *)
 Lemma pi_Qmul_inv_r_eq : forall x y z : Q,
   ~ (y == 0)%Q -> ((x * (/ y)) == z <-> x == z * y).
 Proof.
@@ -156,10 +156,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §D 件②③：整除换商与 H_k 整化主桥                                     *)
+(* §D 整除换商与 H_k 整化主桥：pi_div_Qeq、pi_hsum_spec                   *)
 (* ============================================================ *)
 
-(* 件②：j | D ⟹ Q#D·(1/Q#j) == Q#(D/j)（Nat.div_mul 精确性） *)
+(* pi_div_Qeq：j ∣ D ⟹ Q#D·(1/Q#j) == Q#(D/j)（由 Nat.div_mul） *)
 Lemma pi_div_Qeq : forall (D j : nat), 1 <= j -> Nat.divide j D ->
   ((Z.of_nat D # 1) * ((1 # 1) / (Z.of_nat j # 1)))%Q
   == (Z.of_nat (D / j) # 1)%Q.
@@ -184,7 +184,7 @@ Fixpoint pi_hsum (D k : nat) : nat :=
   | Datatypes.S m => pi_hsum D m + D / Datatypes.S m
   end.
 
-(* 件③主桥：D_n·H_k == Q#(Σ_{j≤k} D_n/j)——k 归纳，逐点喂 j | D_n *)
+(* pi_hsum_spec：D_n·H_k == Q#(Σ_{j≤k} D_n/j)；对 k 归纳，逐项由 hl_lcm_divide_all 与 pi_div_Qeq。 *)
 Lemma pi_hsum_spec : forall (n k : nat), k <= n ->
   ((Z.of_nat (hl_lcm_upto n) # 1) * bk_H k)%Q
   == (Z.of_nat (pi_hsum (hl_lcm_upto n) k) # 1)%Q.
@@ -204,7 +204,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §E 件④：bk_psQ 逐点外延 + 常数提出（缺口①补件）                       *)
+(* §E bk_psQ 逐点外延与常数提出：pi_psQ_ext、pi_psQ_mul                   *)
 (* ============================================================ *)
 
 Lemma pi_psQ_ext : forall (N : nat) (f g : nat -> Q) (z : Q),
@@ -227,7 +227,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §F 件⑤：p̃_n 整化主件（勘误①修正形：系数 C²·D_n）                     *)
+(* §F p̃_n 整化主件：pi_Pn_int（系数取 C²·D_n，见头部防错注记①）          *)
 (* ============================================================ *)
 
 (* 系数整化（逐点）：(Z#(C²·D_n))·H_k == Z#(C²·S_k)，S_k := pi_hsum D_n k *)
@@ -243,12 +243,12 @@ Proof.
   - rewrite (pi_hsum_spec n k Hk). apply bk_Qmul_nat.
 Qed.
 
-(* 件⑤主件承载：p̃_n := Σ_{k≤n} C(n,k)²·S_k，S_k := pi_hsum D_n k *)
+(* pi_ptilde：p̃_n := Σ_{k≤n} C(n,k)²·S_k，S_k := pi_hsum D_n k *)
 Definition pi_ptilde (n : nat) : nat :=
   bk_psd (fun k => bkC n k * bkC n k * pi_hsum (hl_lcm_upto n) k)
          (Datatypes.S n).
 
-(* bk_Pn_eval 的 Qeq 形（消费 S02 qeqT_imp_qeq，供 == 目标 rewrite） *)
+(* pi_Pn_eval_eq：bk_Pn_eval 的 Qeq 形（经 S02 qeqT_imp_qeq 转换，供 == 目标改写） *)
 Lemma pi_Pn_eval_eq : forall (n : nat) (z : Q),
   bkQ (bk_Pn_list n) z
   == bk_psQ (fun k : nat => ((Z.of_nat (bkC n k * bkC n k) # 1) * bk_H k)%Q)
@@ -288,7 +288,7 @@ Proof.
     apply bk_half_psd.
 Qed.
 
-(* 件⑤主件：p̃_n ∈ Z 的 sigT 整性见证（Set 面） *)
+(* pi_Pn_int：p̃_n ∈ Z 的 sigT 整性见证（Set 面） *)
 
 Theorem pi_Pn_int : forall n : nat,
   sigT (fun z : Z =>
@@ -304,7 +304,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §G 件⑥：q̃_n ≤ (n+1)·8^n（QleT' Set 面）                              *)
+(* §G q̃_n ≤ (n+1)·8^n：pi_Qn_le_8pow（QleT' Set 面）                     *)
 (* ============================================================ *)
 
 Theorem pi_Qn_le_8pow : forall n : nat,
@@ -346,7 +346,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §H 件⑦⑧：x'_n 分母封口主件与 sigT-positive 弱面                        *)
+(* §H x'_n 的显式分母：pi_x_n_frac 与 sigT 弱面 pi_den_divide             *)
 (* ============================================================ *)
 
 Lemma pi_lcm_pos : forall a b : nat, 1 <= a -> 1 <= b -> 1 <= Nat.lcm a b.
@@ -384,7 +384,7 @@ Proof.
   intro n. pose proof (bk_Qn_ge_3pow_nat n). pose proof (pi_pow3_ge1 n). lia.
 Qed.
 
-(* 2·Q_n(1/2) 非零（q̃_n ≥ 3^n > 0 推入） *)
+(* pi_Qn_nz：2·Q_n(1/2) 非零（由 bk_Qn_half_closed 与 q̃_n ≥ 3^n > 0） *)
 Lemma pi_Qn_nz : forall n : nat,
   ~ (((2 # 1)%Q * bkQ (bk_Qn_list n) (1 # 2)%Q) == 0)%Q.
 Proof.
@@ -421,9 +421,9 @@ Proof.
   ring.
 Qed.
 
-(* 件⑦主件（den 封口）：x'_n == p̃_n /(2·D_n·q̃_n)，分母显式构造。
-   勘误②：设计稿 Z.pos (Pos.of_nat M) 有无零偏移（数值 M+1）为假命题；
-   本稿 Pos.of_succ_nat (Nat.pred M) 数值恰为 M（定义性换算）。 *)
+(* pi_x_n_frac：x'_n == p̃_n /(2·D_n·q̃_n)，分母显式构造。
+   防错注记：Z.pos (Pos.of_nat M) 数值为 M+1（无零偏移），用它陈述为假命题；
+   Pos.of_succ_nat (Nat.pred M) 数值恰为 M（定义性换算）。 *)
 Theorem pi_x_n_frac : forall n : nat,
   QeqT (bkQ (bk_Pn_list n) (1 # 2)%Q
           / ((2 # 1)%Q * bkQ (bk_Qn_list n) (1 # 2)%Q))%Q
@@ -458,7 +458,7 @@ Proof.
         ring.
 Qed.
 
-(* 件⑧弱面（R2 预案）：存在正分母 p 使 x'_n == p̃_n/p（信息性 sigT） *)
+(* pi_den_divide：存在正分母 p 使 x'_n == p̃_n/p（sigT 弱面） *)
 Theorem pi_den_divide : forall n : nat,
   sigT (fun p : positive =>
     QeqT (bkQ (bk_Pn_list n) (1 # 2)%Q
@@ -471,7 +471,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 假设审计留痕：Print Assumptions（G4 复核位，候 detached 链）           *)
+(* 假设审计：以下 Print Assumptions 输出应为零依赖（零承认复核）。         *)
 (* ============================================================ *)
 
 Print Assumptions pi_bkC_hl.

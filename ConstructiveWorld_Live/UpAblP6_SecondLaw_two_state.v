@@ -1,53 +1,53 @@
 (* ===================================================================== *)
-(* UpAblP6_SecondLaw_two_state.v —— PA6-23 席：SlqSecondLaw two_state      *)
-(*   整节实例化（P1 件头「two_state 整节实例化另账」首刀，T178 精勘 §四     *)
-(*   非平凡实例面首刀建议兑现）。                                          *)
+(* UpAblP6_SecondLaw_two_state.v —— SecondLawQuantified SlqSecondLaw       *)
+(*   节的 two_state 整节实例化供给件（纯构造性；语句面全 Set 层）。          *)
+(*                                                                        *)
 (* --------------------------------------------------------------------- *)
-(* 【使命】母件 SecondLawQuantified.v Section SlqSecondLaw（L73-330，九槽   *)
+(* 【使命】源模块 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数  *)
 (*   S/sumf/sumpos/sumext/sumlinear/sumadd/T/T_pos/energy）在 two_state     *)
-(*   具体载体上整节实例化：载体与求和机器全具体（二元直接和，非 list       *)
-(*   机器），节前导件与双向定量锚逐一全槽装配，另闭零前提实例钉。           *)
-(* 【防撞（三放电件在案不重复）】                                          *)
+(*   具体载体上整节实例化：载体与求和机器全具体（二元直接和，非 list        *)
+(*   机器），节前导件与双向定量锚逐一全参数实例化，另闭合零前提实例。        *)
+(* 【范围区分（与三件既有供给不重复）】                                    *)
 (*   · UpReqTempDual RealTempDualBool 节（t13_bstate=[true;false]）：bool   *)
-(*     载体 + real_list_sum 机器直喂四槽，出口=能量-熵对偶 sigT 形——本件   *)
-(*     载体为 Inductive ts_state、求和机器为二元直接和（四槽件须从实数     *)
-(*     代数面真证，list 供体不覆盖），出口=SlqSecondLaw 节内定理装配面，    *)
-(*     两面不相交。                                                        *)
-(*   · SecondLawConsume.v 四出口（slc_gain_kl_two_sided_eps:235 等）：     *)
-(*     任意槽形 list 消费件，无载体具体化——本件为具体两态载体整节装配。   *)
-(*   · UpAblP1_SecondLawQuantified_sumd.v：sum 四面假设位换装（enum 列表   *)
-(*     和机械），其件头明记「two_state 整节实例化另账，本件不涉及」——      *)
-(*     本件即该另账，非 sum 槽重放电。                                     *)
-(* 【供体（/tmp/czn14_union_full 探针 Check 实测签名，全参 @ 调用）】       *)
+(*     载体 + real_list_sum 机器直接实例化四接口参数，结论=能量-熵对偶      *)
+(*     sigT 形——本件载体为 Inductive ts_state、求和机器为二元直接和         *)
+(*     （四接口参数引理须从实数代数面真证，list 供体不覆盖），              *)
+(*     结论=SlqSecondLaw 节内定理的实例化面，两面不相交。                   *)
+(*   · SecondLawConsume.v 四出口（slc_gain_kl_two_sided_eps 等）：          *)
+(*     任意前提形的 list 应用件，无载体具体化——本件为具体两态载体整节实例化。 *)
+(*   · UpAblP1_SecondLawQuantified_sumd.v：sum 四面以 enum 列表和为        *)
+(*     假设位的抽象形，其件头明记 two_state 整节实例化不在该件范围——        *)
+(*     本件即该实例化，非 sum 接口参数的重复实例化。                        *)
+(* 【供体引理（全参显式调用）】                                            *)
 (*   · slq_gibbs_step_fixed：S sumf sumpos sumext sumlinear T T_pos        *)
 (*     energy p Hnp s'（不动点件）                                         *)
-(*   · slq_step_pos：同槽序（一步核逐点正）                                *)
-(*   · slq_step_entropy_eq_boltz：同槽序 p Hnp（实现熵≡均衡熵）            *)
+(*   · slq_step_pos：同参数序（一步核逐点正）                              *)
+(*   · slq_step_entropy_eq_boltz：同参数序 p Hnp（实现熵≡均衡熵）          *)
 (*   · slq_entropy_gain_kl_lower / slq_entropy_gain_kl_upper：S sumf       *)
 (*     sumpos sumext sumlinear sumadd T T_pos energy p Hp Hnp Henergy      *)
 (*     eps Heps（双向定量锚）                                              *)
 (*   · slq_second_law_eps_list：X l Hnil T Ht energy p Hp Hnp Henergy      *)
 (*     eps Heps（list 形全闭锚）                                           *)
-(*   · real_lt_plus_compat S02:3195（0<x,0<y→0<x+y 正性加法闭）；          *)
-(*     real_plus_zero S02:2348（x+0==0 右幺）；real_distrib S08:2384       *)
-(*     （x·(y+z)==x·y+x·z 左分配）；real_plus_assoc/comm；                 *)
-(*     real_lt_zero_one S07:6937；RealSetoid.real_eq_plus_compat S07:219   *)
-(*     （交叉序 a~c→b~d→a+b~c+d）；real_lt_id_l/r；real_boltzmann_dist_   *)
-(*     temp_normalized/pos（闭节 S sumf sumpos sumext sumlinear T T_pos    *)
-(*     energy 形）；real_energy_exp_temp（定义=Σ p_T·energy，故 p:=p_T     *)
-(*     时能量期望前提 real_eq_refl 直闭，UpReqTempDual bool 先例同式）。   *)
+(*   · real_lt_plus_compat（0<x,0<y→0<x+y 正性加法闭）；real_plus_zero      *)
+(*     （x+0==0 右幺）；real_distrib（x·(y+z)==x·y+x·z 左分配）；           *)
+(*     real_plus_assoc/comm；real_lt_zero_one；                            *)
+(*     RealSetoid.real_eq_plus_compat（交叉序 a~c→b~d→a+b~c+d）；           *)
+(*     real_lt_id_l/r；real_boltzmann_dist_temp_normalized/pos（闭节        *)
+(*     S sumf sumpos sumext sumlinear T T_pos energy 形）；                 *)
+(*     real_energy_exp_temp（定义=Σ p_T·energy，故 p:=p_T 时能量期望前提    *)
+(*     real_eq_refl 直接闭合，UpReqTempDual bool 先例同式）。               *)
 (* 【装配】(一) 载体 ts_state（Inductive Set 两态）+ ts_sumf 二元直接和，   *)
-(*   四槽件真证（sumpos 走正性加法闭+右幺换左；sumlinear 走左分配反向；    *)
-(*   sumadd 走四项重组引理 uab23_ts_plus_swap 五步链；sumext 走交叉序       *)
-(*   compat）；(二) Section Uab23TsSlq 开 T/T_pos/energy 三槽（S/sumf/     *)
-(*   四槽已具体闭钉），节前导三件与双向定量锚两件全槽装配；(三) 节外        *)
-(*   slq_second_law_eps_list 的 two_state 实例面（X:=ts_state，            *)
-(*   l:=ts_list=[ts_a;ts_b]，求和机器换装 ts_lsumf 束）；(四) 零前提实例   *)
-(*   钉：T:=real_one（real_lt_zero_one）、energy:=ts_energy（ts_a↦0,       *)
-(*   ts_b↦1）、p:=Boltzmann 自身，Hnp 走供体、Henergy 走定义性 refl。      *)
-(* 【红线自审】出口面全 Set 层 real_eq/real_lt/real_le；零假设声明语句；   *)
-(*   全部定理类枚 Proof 配 Qed 收口（无一例外）；Print Assumptions 5 处    *)
-(*   留痕；uab23_/ts_ 前缀全库 grep 零撞（2026-09-20 实测）。              *)
+(*   四接口参数引理真证（sumpos 由正性加法闭+右幺换左；sumlinear 由左分配   *)
+(*   反向；sumadd 由四项重组引理 uab23_ts_plus_swap 五步链；sumext 由       *)
+(*   交叉序 compat）；(二) Section Uab23TsSlq 开 T/T_pos/energy 三接口      *)
+(*   参数（S/sumf/四参数已具体闭合），节前导三件与双向定量锚两件全参数      *)
+(*   实例化；(三) 节外 slq_second_law_eps_list 的 two_state 实例面          *)
+(*   （X:=ts_state，l:=ts_list=[ts_a;ts_b]，求和机器改用列表和 ts_lsumf）； *)
+(*   (四) 零前提实例闭合：T:=real_one（real_lt_zero_one）、energy:=ts_energy *)
+(*   （ts_a↦0, ts_b↦1）、p:=Boltzmann 自身，Hnp 由供体给出、Henergy 走定义性 refl。 *)
+(* 【构造性注记】出口面全 Set 层 real_eq/real_lt/real_le；零公理零承认；    *)
+(*   节内前提出节即消解；全部定理以 Qed 闭合（无一例外）；Print Assumptions  *)
+(*   6 处核验；uab23_/ts_ 前缀全库唯一。                                    *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -58,20 +58,20 @@ From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 第一部分：two_state 载体与二元直接和求和机器（定义面+四槽件真证） *)
+(* §1 two_state 载体与二元直接和求和机器（定义面与四接口参数引理） *)
 (* ============================================================ *)
 
-(* 载体：两态系统（Set 层具体载体，替代 bool/t13_bstate 的另一坐标） *)
+(* 载体：两态系统（Set 层具体载体，替代 bool/t13_bstate 的另一选择） *)
 Inductive ts_state : Set :=
 | ts_a : ts_state
 | ts_b : ts_state.
 
-(* 求和机器：二元直接和（非 real_list_sum——四槽件须自证，list 供体不覆盖） *)
+(* 求和机器：二元直接和（非 real_list_sum——四接口参数引理须自证，list 供体不覆盖） *)
 Definition ts_sumf (f : ts_state -> Real) : Real :=
   real_plus (f ts_a) (f ts_b).
 
 (* 四项重组引理：(x+y)+(z+w) == (x+z)+(y+w)（sumadd 的核心代数内容；     *)
-(*   五步链：两次 assoc 拆装 + 中项 comm + compat 组合）                  *)
+(*   五步链：两次 assoc 重排 + 中项 comm + compat 组合）                  *)
 Lemma uab23_ts_plus_swap :
   forall x y z w : Real,
     real_eq (real_plus (real_plus x y) (real_plus z w))
@@ -112,8 +112,8 @@ Proof.
     + exact (real_plus_assoc x z (real_plus y w)).
 Qed.
 
-(* 槽 1：sumpos——逐点正 ⟹ 和正（正性加法闭 real_lt_plus_compat +        *)
-(*   右幺 real_plus_zero 把 0+0 换回 0）                                  *)
+(* 接口参数 1：sumpos——逐点正 ⟹ 和正（由 real_lt_plus_compat 与          *)
+(*   real_plus_zero 给出：0+0 换回 0）                                    *)
 Lemma uab23_ts_sumpos :
   forall f : ts_state -> Real,
     (forall s : ts_state, real_lt real_zero (f s)) ->
@@ -128,7 +128,7 @@ Proof.
                                 (H ts_a) (H ts_b))).
 Qed.
 
-(* 槽 2：sumext——逐点 req ⟹ 和 req（交叉序 compat 双腿直喂） *)
+(* 接口参数 2：sumext——逐点 req ⟹ 和 req（real_eq_plus_compat 两分量直接给出） *)
 Lemma uab23_ts_sumext :
   forall f g : ts_state -> Real,
     (forall s : ts_state, real_eq (f s) (g s)) ->
@@ -139,7 +139,7 @@ Proof.
            (H ts_a) (H ts_b)).
 Qed.
 
-(* 槽 3：sumlinear——齐次（左分配 real_distrib 反向） *)
+(* 接口参数 3：sumlinear——齐次（左分配 real_distrib 反向） *)
 Lemma uab23_ts_sumlinear :
   forall (a : Real) (f : ts_state -> Real),
     real_eq (ts_sumf (fun s : ts_state => real_mult a (f s)))
@@ -152,7 +152,7 @@ Proof.
                      (real_distrib a (f ts_a) (f ts_b))).
 Qed.
 
-(* 槽 4：sumadd——可加（四项重组引理实例） *)
+(* 接口参数 4：sumadd——可加（四项重组引理实例） *)
 Lemma uab23_ts_sumadd :
   forall f g : ts_state -> Real,
     real_eq (ts_sumf (fun s : ts_state => real_plus (f s) (g s)))
@@ -163,8 +163,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第二部分：SlqSecondLaw 整节实例化前导装配（T/T_pos/energy 三槽位，    *)
-(*   载体/机器/四槽已具体闭钉；节内定理全参调用逐一装配）                 *)
+(* §2 SlqSecondLaw 整节实例化前导件（T/T_pos/energy 三接口参数，         *)
+(*   载体/机器/四参数已具体闭合；节内定理全参调用逐一实例化）             *)
 (* ============================================================ *)
 
 Section Uab23TsSlq.
@@ -214,7 +214,7 @@ Proof.
 Qed.
 
 (* 锚定理（lower）实例面：KL(当前‖p_T) − 熵亏 ≤ eps，                    *)
-(*   语义：一步 Gibbs 演化熵增 ≥ 熵亏 − eps（two_state 全槽装配）。       *)
+(*   语义：一步 Gibbs 演化熵增 ≥ 熵亏 − eps（two_state 全参数实例化）。   *)
 Theorem uab23_ts_gain_kl_lower :
   forall (p : ts_state -> Real) (Hp : forall s : ts_state, real_lt real_zero (p s))
          (Hnp : real_eq (ts_sumf p) real_one)
@@ -232,7 +232,7 @@ Proof.
            uab23_ts_sumlinear uab23_ts_sumadd T T_pos energy p Hp Hnp Henergy eps Heps).
 Qed.
 
-(* 锚定理（upper）实例面：熵亏 − KL ≤ eps（互补向，two_state 全槽装配）。 *)
+(* 锚定理（upper）实例面：熵亏 − KL ≤ eps（互补向，two_state 全参数实例化）。 *)
 Theorem uab23_ts_gain_kl_upper :
   forall (p : ts_state -> Real) (Hp : forall s : ts_state, real_lt real_zero (p s))
          (Hnp : real_eq (ts_sumf p) real_one)
@@ -253,8 +253,8 @@ Qed.
 End Uab23TsSlq.
 
 (* ============================================================ *)
-(* 第三部分：slq_second_law_eps_list 的 two_state 实例面                  *)
-(*   （X:=ts_state，l:=ts_list=[ts_a;ts_b]，机器换装 ts_lsumf 束）        *)
+(* §3 slq_second_law_eps_list 的 two_state 实例面                        *)
+(*   （X:=ts_state，l:=ts_list=[ts_a;ts_b]，求和机器改用列表和 ts_lsumf） *)
 (* ============================================================ *)
 
 Definition ts_list : list ts_state :=
@@ -297,9 +297,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第四部分：零前提实例钉（T:=real_one，energy 具体，p:=Boltzmann 自身）   *)
+(* §4 零前提实例闭合（T:=real_one，energy 具体，p:=Boltzmann 自身）        *)
 (*   real_energy_exp_temp 定义=Σ p_T·energy，故能量期望前提定义性 refl；  *)
-(*   Hnp 走 real_boltzmann_dist_temp_normalized 供体。                    *)
+(*   Hnp 由 real_boltzmann_dist_temp_normalized 供体给出。                *)
 (* ============================================================ *)
 
 Definition ts_energy : ts_state -> Real :=
@@ -366,7 +366,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 审查留痕：Print Assumptions（G4）                                       *)
+(* 收尾核验：Print Assumptions 六件全 Closed                              *)
 (* ===================================================================== *)
 Print Assumptions uab23_ts_step_entropy_eq_boltz.
 Print Assumptions uab23_ts_gain_kl_lower.

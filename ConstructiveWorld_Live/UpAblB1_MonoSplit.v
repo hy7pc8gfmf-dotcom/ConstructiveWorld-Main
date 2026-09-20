@@ -1,67 +1,67 @@
 (* ============================================================ *)
-(* UpAblB1_MonoSplit.v —— 席 B1·深施工席（MonoSplit 三证书位真重施工） *)
-(*                                                              *)
-(* 席位：B1（MonoSplit 三证书位真重施工·S6 移交"禁机械供给注水"件）      *)
-(* 包装协议 v2 内嵌执行｜独立伴生件·原树零改｜落盘即完成。               *)
-(*                                                              *)
-(* 辖区（S6 移交偏差 6＋§六第四梯表）：UpReqEntropyMonoSplit.v            *)
-(*   Section EmsEntropyMonoSplit 三证书位——                              *)
-(*     Hpinned:137（约束片能量钉）｜Hkl_right:146（KL 增长 eps 形）｜     *)
-(*     Hkl_left:153（KL 衰减 eps 形）——真内容重施工（KL 谱系实算，       *)
-(*     非机械供给）。                                                    *)
-(*                                                              *)
-(* 【与 S5 已立件槽位零重叠 diff（开工实测）】                            *)
-(*   Live_X/UpAblD1S5_UpReqEntropyMonoSplit.v（FA-D1S5 数据供给打包件）   *)
-(*   以打包记录型 uabd1s5_ems_pack13 镜像认领 12 净新槽＋1 载体完备位：    *)
-(*     S:90/sum:91/ext:95/le:97/linear:99/add:102/T_star:105/            *)
-(*     T_star_pos:106/energy:107（9 接口/数据位）＋Hpinned:137-140/       *)
-(*     Hkl_right:146-152/Hkl_left:153-159（三证书位·单点零能量 mult_zero  *)
-(*     捷径腿，件头自述"机械供给级"）。                                  *)
-(*   本席零重复立件：不立打包记录、不动 12 槽坐标认领；9 接口/数据位仅作    *)
-(*   discharge 全参形的具体供给参数（uab1_sum 等 Definition，消费不认领）；  *)
-(*   三证书位按 S6 移交做**实算链升级 discharge**（非 S5 形的打包供给）：    *)
-(*     对比 S5 腿——本席 energy:=fun _ => real_one（非零任意能量形成立），  *)
-(*     Hpinned 走 Gibbs 族归一化谱系实算（real_Z_temp/real_inv_pos_      *)
-(*     correct，非 mult_zero 捷径），Hkl 双腿走 real_KL_temp 定义展开     *)
-(*     实算（求和面 ι 收敛→log_wd/log_one→群律→lt_compat 序迁移）。       *)
-(*   命名前缀 uab1_* 与 S5 uabd1s5_ems_* 零碰撞；S5 文件零触碰。          *)
-(*                                                              *)
-(* 【真 discharge 全参形】消费母本 Section 出节定理（先经 G0 母本代际      *)
-(*   锁合重编译：母本 .v 09-19 10:38 同步代 6f31f420 新于陈 .vo 09-17，    *)
-(*   全量重编译 EXIT=0 后方 Require——防混代际）：五件母本定理全参应用     *)
-(*   落地为具体无假设实例——ems_pinned_kl_entropy_eq（件 0）/              *)
-(*   ems_entropy_temp_antitone_above（件 1·全库首件降支）/                *)
-(*   ems_entropy_temp_mono_below（件 2）/ems_entropy_peak_bound_above     *)
-(*   （件 3）/ems_entropy_split_at_peak（主件）。签名经探针 Check 实测     *)
-(*   （g0-probe2-tuab1.log），Let 速记全内联，参数序逐位照应。             *)
-(*                                                              *)
-(* 【实例供给（全参）】S:=unit｜sum:=fun f => f tt｜sumpos/ext/le:=消费位  *)
-(*   直取｜linear/add:=ι 重合 real_eq_refl｜T_star:=real_one｜            *)
-(*   T_star_pos:=real_lt_zero_one｜energy:=fun _ => real_one（非零）。    *)
-(*                                                              *)
-(* 【三证书位实算链（真内容）】                                           *)
-(*   链 A（Gibbs 族归一化·温度参数化形）：单点载体温 t 处                  *)
-(*     p_t(tt) = inv(Z_t)·bf(tt) == 1——Z_t 定义性收敛到因子自身          *)
-(*     （sum ι + energy ι），real_inv_pos_correct 一步归一。              *)
-(*   链 B（Hpinned 实算）：E(p_u) ≡ Σ p_u·e ≡ p_u(tt)·1 == p_u(tt) ==1    *)
-(*     == E(p_{t*})（链 A 双温实例）——能量钉对任意能量形成立（本例 e≡1）。 *)
-(*   链 C（KL 谱系实算）：real_KL_temp 定义展开→求和面单点 ι 收敛→        *)
-(*     双腿 log(p_u(tt))/log(p_{t*}(tt)) 经链 A＋real_log_wd→real_log_one *)
-(*     归零→内层 plus/opp 群律→外层 mult_one→KL(p_u‖p_{t*})==0。          *)
-(*   链 D/E（Hkl 双腿）：KL(v)==KL(u)==0（链 C）→(KL_v−KL_u)+eps == eps    *)
-(*     →0<eps 序迁移（real_lt_compat）→real_le Or 左支 inl。              *)
-(*   非圆性账：三链只消费温度族定义件（UpReqTempDefs）/KL 定义件           *)
-(*   （UpReqEntropyDeficitTemp）与环律/log 器（CW_219），不消费母本三      *)
-(*   Hypothesis 以外的母本内容证明三腿；母本四件定理经全参应用消费三腿      *)
-(*   落地——分离定理内容＝母本已证的"KL-V 形⟹熵单峰"蕴涵在本实例的闭合。   *)
-(*                                                              *)
-(* 【红线】纯构造性零 公理/承认件/收尾弃证/参数假设/猜想命题/中止证         *)
-(*   （G1 双轨禁词字面量零命中档，母本 6f31f420 代同规范）。               *)
-(*   Set 层比较全 real_le/real_lt sigT-Or 形；零 git、零注册面、原树零改。 *)
-(* 编译配方：unset COQLIB ROCQLIB→钉 9.1 双变量→coqc -q -native-compiler  *)
-(*   no -Q . ""（cpu_guard 前置 tasklist 探针）；G3 提取一人一目录树外     *)
-(*   ASCII cwd；G4 coqchk 后台长窗。                                      *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblB1_*.{log,exit}                *)
+(* UpAblB1_MonoSplit.v —— 温度参数化 Gibbs 熵族在单点载体上的实例化     *)
+(*   数学使命：母本熵单峰分裂定理的具体无假设实例构造。                  *)
+(* ============================================================ *)
+(* 【使命】源模块 UpReqEntropyMonoSplit 之 Section EmsEntropyMonoSplit   *)
+(*   以九项接口/数据参数（sum/sumpos/ext/le/linear/add/T_star/           *)
+(*   T_star_pos/energy）与三条节级前提（Hpinned/Hkl_right/Hkl_left）      *)
+(*   抽象陈述了温度参数化熵族的单峰性。本件取单点载体 unit：给出全部      *)
+(*   参数的具体值，实算三条前提成立，并将母本出节五定理全参应用，得到    *)
+(*   具体无假设的熵单峰实例（升支/降支两 eps 形、峰界与分裂主件）。       *)
+(* 【依赖】CW_ConstructiveWorld_219 / UpReqTempDefs /                    *)
+(*   UpReqEntropyDeficitTemp / UpReqEntropyMonoSplit。                   *)
+(* 【对标】数学原型：温度参数化 Gibbs 族的熵单峰性（在峰温处分裂为       *)
+(*   升支与降支两 eps 形）；mathlib/stdlib 无直接对应物。                 *)
+(* 【实例供给】uab1_sum := fun f => f tt（单点求和）；uab1_T_star :=      *)
+(*   real_one；uab1_T_star_pos := real_lt_zero_one；uab1_energy :=       *)
+(*   fun _ => real_one（非零常值能量）；uab1_linear 与 uab1_add 因单点    *)
+(*   上求和与逐点运算重合而由 real_eq_refl 定义性成立；uab1_sumpos/      *)
+(*   uab1_ext/uab1_le 为逐点前提在单点上的直接应用。                     *)
+(* 【三条前提的实算链】                                                  *)
+(*   链 A（Gibbs 族归一化，引理 uab1_bt_pt_one）：单点载体温 t 处         *)
+(*   p_t(tt) = real_boltzmann_factor_temp(t,tt) · inv(Z_t)，配分函数      *)
+(*   Z_t = real_Z_temp(t) 定义性收敛到能量因子自身，乘积经               *)
+(*   real_mult_comm 换序后由 real_inv_pos_correct 一步归一为 1。          *)
+(*   链 B（能量钉前提 uab1_Hpinned）：E(p_u) ≡ Σ p_u·e 在单点上等于      *)
+(*   p_u(tt)·1；两侧经 real_mult_one 与链 A（温 u 与温 T_star=1 两       *)
+(*   实例）各归一为 1，故 E(p_u) == E(p_{t*})。                           *)
+(*   链 C（KL 归零，引理 uab1_kl_zero）：real_KL_temp 定义展开后单点     *)
+(*   求和收敛为 p_u(tt)·(log p_u(tt) − log p_{t*}(tt))；两对数经链 A、   *)
+(*   real_log_wd 与 real_log_one 各归零，再经加/乘兼容引理与             *)
+(*   uab1_mult_one_l 收拢为 0。                                          *)
+(* 【母本定理落地】五件出节定理全参应用为具体无假设实例：                *)
+(*   uab1_discharge_pinned_kl_entropy_eq ← ems_pinned_kl_entropy_eq      *)
+(*   （约束片熵亏恒等式：KL + S == 峰熵 S_star）；                        *)
+(*   uab1_discharge_antitone_above ← ems_entropy_temp_antitone_above     *)
+(*   （降支：T_star ≤ u ≤ v ⟹ S(p_v) ≤ S(p_u) + eps）；                   *)
+(*   uab1_discharge_mono_below ← ems_entropy_temp_mono_below             *)
+(*   （升支：u ≤ v ≤ T_star ⟹ S(p_u) ≤ S(p_v) + eps）；                   *)
+(*   uab1_discharge_peak_bound ← ems_entropy_peak_bound_above            *)
+(*   （峰界：一切正温的熵 ≤ 峰熵 + eps）；                                *)
+(*   uab1_discharge_split ← ems_entropy_split_at_peak                    *)
+(*   （分裂主件：升支与降支两全称语句的乘积合取形）。                    *)
+(* 【构造性注记】全件 Qed 闭合、零承认词面、无经典逻辑；序比较均为序 Or  *)
+(*   的构造见证形（inl/inr 给出支见证）；能量前提取非零常值即成立，       *)
+(*   归一化不依赖零能量退化情形。                                        *)
+(*   文末对十条主要结论逐一 Print Assumptions，以全部 Closed 为零外部    *)
+(*   未证假设的判据。                                                    *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
+(*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
+(* 【结构总览】§1 实例供给（九项接口/数据参数的具体值）；                *)
+(*   §2 母本速记件显式参形（uab1_bd/uab1_bd_pos/uab1_ent/uab1_kl）；     *)
+(*   §3 工具引理（uab1_mult_one_l/uab1_plus_zero_l，环律两行自证）；     *)
+(*   §4 链 A：Gibbs 族归一化（uab1_bt_pt_one）；                         *)
+(*   §5 链 B：能量钉前提（uab1_Hpinned）；§6 链 C：KL 归零               *)
+(*   （uab1_kl_zero）；§7/§8 KL 增长与衰减前提（uab1_Hkl_right/          *)
+(*   uab1_Hkl_left）：两前提中 KL 双双归零，(0−0)+eps == eps，经         *)
+(*   RealSetoid.real_lt_compat 序迁移得序 Or 之 inl 支；                 *)
+(*   §9 母本出节五定理全参落地（uab1_discharge_* 五件）；                *)
+(*   §10 假设审计区。                                                    *)
+(*   【KL 方向注记】uab1_kl u = KL(p_u ‖ p_{t*})：p_u 居第一分布位，     *)
+(*   p_{t*} 居参考位（uab1_T_star 取 real_one）。                        *)
+(*   【非圆性注记】三条前提的实算只使用温度族定义件（UpReqTempDefs）、   *)
+(*   KL 定义件（UpReqEntropyDeficitTemp）与环律/对数器（CW_219）；母本   *)
+(*   五定理经全参应用取用这三条前提落地，无循环。                        *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -69,7 +69,7 @@ Require Import UpReqTempDefs.
 Require Import UpReqEntropyDeficitTemp.
 Require Import UpReqEntropyMonoSplit.
 
-(* ============ 实例供给（全参，9 接口/数据位消费形——不认领 S5 已立槽） ============ *)
+(* ============ §1 · 实例供给：九项接口/数据参数的具体值 ============ *)
 
 Definition uab1_sum : (unit -> Real) -> Real :=
   fun f : unit -> Real => f tt.
@@ -107,7 +107,7 @@ Definition uab1_T_star : Real := real_one.
 Definition uab1_T_star_pos : real_lt real_zero uab1_T_star := real_lt_zero_one.
 Definition uab1_energy : unit -> Real := fun _ : unit => real_one.
 
-(* ============ 母本速记件显式参形实名镜像（δ 展开同体；对照母本 L112-131） ============ *)
+(* ============ §2 · 母本速记件的显式参形（与母本 Let 速记同体展开） ============ *)
 
 Definition uab1_bd (u : Real) (Hu : real_lt real_zero u) : unit -> Real :=
   real_boltzmann_dist_temp unit uab1_sum uab1_sumpos u Hu uab1_energy.
@@ -119,13 +119,13 @@ Definition uab1_bd_pos (u : Real) (Hu : real_lt real_zero u)
 Definition uab1_ent (u : Real) (Hu : real_lt real_zero u) : Real :=
   real_entropy_dist unit uab1_sum (uab1_bd u Hu) (uab1_bd_pos u Hu).
 
-(* KL 方向红线（照母本 L128-131 审计表）：KL(p_u ‖ p_{t*})——p_u 第一分布位， *)
-(* p_{t*}=p_1 参考位；T_star 已全参钉为 real_one。 *)
+(* KL 方向注记：uab1_kl u = KL(p_u ‖ p_{t*})——p_u 居第一分布位， *)
+(* p_{t*} 居参考位；uab1_T_star 全参取 real_one。 *)
 Definition uab1_kl (u : Real) (Hu : real_lt real_zero u) : Real :=
   real_KL_temp unit uab1_sum uab1_sumpos uab1_T_star uab1_T_star_pos uab1_energy
                (uab1_bd u Hu) (uab1_bd_pos u Hu).
 
-(* ============ 工具腿（环律两行，S5 同形自证——不 Require S5 件） ============ *)
+(* ============ §3 · 工具引理（单位元/零元的左恒等，环律两行自证） ============ *)
 
 Lemma uab1_mult_one_l : forall x : Real,
   real_eq (real_mult real_one x) x.
@@ -139,9 +139,9 @@ Proof.
   intro x. exact (real_eq_trans _ _ _ (real_plus_comm real_zero x) (real_plus_zero x)).
 Qed.
 
-(* ============ 链 A：Gibbs 族归一化实算（温度参数化形） ============ *)
-(* 单点载体温 t 处 p_t(tt) == 1：Z_t δ/ι 收敛到因子自身，inv_pos_correct    *)
-(* 一步归一（real_Z_temp/real_Z_temp_pos/real_inv_pos_correct 谱系全消费）。 *)
+(* ============ §4 · 链 A：Gibbs 族归一化（uab1_bt_pt_one） ============ *)
+(* 单点载体温 t 处 p_t(tt) == 1：配分函数 Z_t 定义性收敛到能量因子自身，    *)
+(* 乘积经 real_mult_comm 换序后由 real_inv_pos_correct 一步归一。           *)
 
 Lemma uab1_bt_pt_one : forall (t : Real) (Ht : real_lt real_zero t),
   real_eq (uab1_bd t Ht tt) real_one.
@@ -168,12 +168,12 @@ Proof.
                  t Ht uab1_energy))).
 Qed.
 
-(* ============ 证书位 1：Hpinned 实算链（链 A 双温实例） ============ *)
-(* 语句形＝母本 Hpinned:137 出节形全参具体化（签名探针实测）：               *)
+(* ============ §5 · 链 B：能量钉前提（uab1_Hpinned） ============ *)
+(* 语句形＝母本节级前提 Hpinned 的全参具体化：                              *)
 (*   sum (fun s => p_u(s)·e(s)) == E(p_{t*})。                              *)
-(* 实算：两侧各自 mult_one 归到 p(·)(tt)，再链 A 双温归一于 1。              *)
-(* 对 S5 腿升级：能量任意非零成立（S5 用零函数 mult_zero 捷径），            *)
-(* Gibbs 族归一化谱系全链消费（非单步捷径）。                               *)
+(* 实算：两侧各自经 real_mult_one 归到 p(·)(tt)，再由链 A 在温 u 与          *)
+(* 温 T_star=1 两实例下各归一为 1。                                         *)
+(* 能量取任意非零函数即成立（本件取常值 1）——归一化谱系全链给出。          *)
 
 Lemma uab1_Hpinned :
   forall (u : Real) (Hu : real_lt real_zero u),
@@ -212,10 +212,10 @@ Proof.
                    (uab1_bt_pt_one uab1_T_star uab1_T_star_pos)))).
 Qed.
 
-(* ============ 链 C：KL 谱系实算（real_KL_temp 定义展开） ============ *)
-(* KL(p_u‖p_{t*}) ≡ Σ p_u·(log p_u − log p_{t*}) 单点 ι 收敛为              *)
-(* p_u(tt)·(log p_u(tt) − log p_{t*}(tt))；双 log 经链 A＋real_log_wd→      *)
-(* real_log_one 归零；群律收口。                                            *)
+(* ============ §6 · 链 C：KL 归零（uab1_kl_zero） ============ *)
+(* KL(p_u‖p_{t*}) ≡ Σ p_u·(log p_u − log p_{t*}) 单点求和收敛为             *)
+(* p_u(tt)·(log p_u(tt) − log p_{t*}(tt))；两对数经链 A、real_log_wd 与     *)
+(* real_log_one 各归零，再经加/乘兼容引理收拢为零。                         *)
 
 Lemma uab1_kl_zero : forall (u : Real) (Hu : real_lt real_zero u),
   real_eq (uab1_kl u Hu) real_zero.
@@ -317,9 +317,9 @@ Proof.
                 (uab1_mult_one_l real_zero))).
 Qed.
 
-(* ============ 证书位 2：Hkl_right 实算链（KL 增长腿，eps 松弛形） ============ *)
-(* 语句形＝母本 Hkl_right:146 出节形全参具体化（T_star:=real_one）。          *)
-(* 实算：KL(v)==KL(u)==0（链 C）→(KL_v−KL_u)+eps==eps→0<eps 序迁移。         *)
+(* ============ §7 · KL 增长前提（uab1_Hkl_right，eps 松弛形） ============ *)
+(* 语句形＝母本节级前提 Hkl_right 的全参具体化（uab1_T_star 取 real_one）。   *)
+(* 实算：KL(v)==KL(u)==0（链 C）⟹(KL_v−KL_u)+eps==eps，再经 0<eps 序迁移。   *)
 
 Lemma uab1_Hkl_right :
   forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -367,7 +367,7 @@ Proof.
               Heps)).
 Qed.
 
-(* ============ 证书位 3：Hkl_left 实算链（KL 衰减腿，镜像） ============ *)
+(* ============ §8 · KL 衰减前提（uab1_Hkl_left，与增长前提对偶） ============ *)
 
 Lemma uab1_Hkl_left :
   forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -415,9 +415,9 @@ Proof.
               Heps)).
 Qed.
 
-(* ============ 真 discharge：母本出节五件全参落地（具体无假设实例） ============ *)
+(* ============ §9 · 母本出节五定理的全参落地（具体无假设实例） ============ *)
 
-(* 件 0（约束片熵亏恒等式落地）：KL + S == S_star。 *)
+(* uab1_discharge_pinned_kl_entropy_eq（约束片熵亏恒等式）：KL + S == S_star。 *)
 Theorem uab1_discharge_pinned_kl_entropy_eq :
   forall (u : Real) (Hu : real_lt real_zero u),
     real_eq (real_plus (uab1_kl u Hu) (uab1_ent u Hu))
@@ -431,7 +431,7 @@ Proof.
            uab1_Hpinned u Hu).
 Qed.
 
-(* 件 1（降支·全库首件的落地实例）：t* ≤ u ≤ v ⟹ S(p_v) ≤ S(p_u) + eps。 *)
+(* uab1_discharge_antitone_above（降支）：t* ≤ u ≤ v ⟹ S(p_v) ≤ S(p_u) + eps。 *)
 Theorem uab1_discharge_antitone_above :
   forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
     real_le uab1_T_star u -> real_le u v ->
@@ -448,7 +448,7 @@ Proof.
            u v Hu Hv Htu Huv eps Heps).
 Qed.
 
-(* 件 2（升支重组落地实例）：u ≤ v ≤ t* ⟹ S(p_u) ≤ S(p_v) + eps。 *)
+(* uab1_discharge_mono_below（升支）：u ≤ v ≤ t* ⟹ S(p_u) ≤ S(p_v) + eps。 *)
 Theorem uab1_discharge_mono_below :
   forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
     real_le u v -> real_le v uab1_T_star ->
@@ -465,7 +465,7 @@ Proof.
            u v Hu Hv Huv Hvt eps Heps).
 Qed.
 
-(* 件 3（峰界落地实例；母本出节形含 le 接口位——签名探针实测序）：          *)
+(* uab1_discharge_peak_bound（峰界；母本出节形另含 le 接口参数）：          *)
 (* 一切正温的熵 ≤ 峰熵 + eps。 *)
 Theorem uab1_discharge_peak_bound :
   forall (u : Real) (Hu : real_lt real_zero u),
@@ -483,7 +483,7 @@ Proof.
            u Hu eps Heps).
 Qed.
 
-(* 主件（分离定理落地实例）：prod 账 Set 形——左支×右支。 *)
+(* uab1_discharge_split（分裂主件）：升支与降支两全称语句的乘积合取形。 *)
 Theorem uab1_discharge_split :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
      real_le u v -> real_le v uab1_T_star ->
@@ -503,7 +503,7 @@ Proof.
            uab1_Hpinned uab1_Hkl_right uab1_Hkl_left).
 Qed.
 
-(* ============ 假设审计（公理面：全零缺口方绿） ============ *)
+(* ============ §10 · 假设审计（Print Assumptions 全 Closed 为判据） ============ *)
 Print Assumptions uab1_bt_pt_one.
 Print Assumptions uab1_Hpinned.
 Print Assumptions uab1_kl_zero.

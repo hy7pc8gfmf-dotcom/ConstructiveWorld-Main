@@ -1,37 +1,37 @@
 (* ============================================================ *)
-(* UpAblP6_EntropyMonoSplit_C.v —— 战役席 PA6-08R2（T218·EMS 合龙审计）C 件        *)
+(* UpAblP6_EntropyMonoSplit_C.v —— EntropyMonoSplitInst 消融覆盖核验件（C 件）     *)
 (*                                                              *)
-(* 【使命】EntropyMonoSplitInst 消融合龙审计与缺口处理。三维交叉对账结论           *)
-(*   （本席独立实勘母件 Live 树 + A/B 两件本体逐行实测，非转抄）：                *)
-(*   母件 11 声明 = 3 Let（#1 emsi_bt :81 / #2 emsi_bt_pos :83 /               *)
-(*   #3 emsi_kl :86，速记无证明体）+ 3 Lemma（#4 :97 / #5 :117 / #6 :136）      *)
-(*   + 1 Corollary（#7 :161）+ 4 Theorem（#8 :193 / #9 :222 / #10 :244 /        *)
-(*   #11 :273）。A 件认领 #4/#5/#6（6 Qed）；B 件认领 #7–#11（5 枚 + 辅助 2      *)
-(*   = 7 Qed）；#1–#3 形式面由 B 件节内 uab_bt/uab_bt_pos/uab_kl 重建。         *)
-(*   【判词：11/11 全覆盖，缺口枚清单=空】→ 按任务书条款，C 件=合龙验证件：       *)
-(*   同时 Require A+B，对 11 枚逐格核销（语句面=母本逐字形，证项=消融导出全显    *)
-(*   应用，核销成立即覆盖 completeness 的机器验证）+ 一揽子已消融总装。          *)
+(* 【使命】EntropyMonoSplitInst 消融覆盖审计与缺口处理。三维交叉核验结论           *)
+(*   （对源模块与 A/B 两件本体逐行独立核查，非转抄）：                            *)
+(*   源模块 11 声明 = 3 Let（#1 emsi_bt / #2 emsi_bt_pos /                        *)
+(*   #3 emsi_kl，速记无证明体）+ 3 Lemma（#4/#5/#6）                              *)
+(*   + 1 Corollary（#7）+ 4 Theorem（#8/#9/#10/                                   *)
+(*   #11）。A 件覆盖 #4/#5/#6（6 Qed）；B 件覆盖 #7–#11（5 枚 + 辅助 2            *)
+(*   = 7 Qed）；#1–#3 形式面由 B 件节内 uab_bt/uab_bt_pos/uab_kl 重建。          *)
+(*   【结论：11/11 全覆盖，缺口枚清单=空】→ 本件为覆盖验证件：                    *)
+(*   同时 Require A+B，对 11 枚逐项核验（语句面=母本逐字形，证明项=消融导出全显    *)
+(*   应用，核验成立即覆盖 completeness 的机器验证）+ 五分量装配总成。             *)
 (*                                                              *)
-(* 【非平凡性宣言】本件非转发冒充：                                              *)
-(*   (a) 逐格核销是类型级全覆盖检验——每格 Corollary 语句取母本逐字形             *)
-(*       （c_ 速记即母本 emsi_ 速记同文换名），证项槽位=消融导出件，              *)
+(* 【非平凡性注记】本件各核验项均为独立构证：                                    *)
+(*   (a) 逐项核验是类型级全覆盖检验——每项 Corollary 语句取母本逐字形             *)
+(*       （c_ 速记即母本 emsi_ 速记同文换名），证明项=消融导出件，                *)
 (*       exact 通过即机器证明「消融导出语句面 ⊇ 母本语句面」；                   *)
-(*   (b) 双源交叉：#5/#6 两格给 A 源/B 源双证（e5/e5b、e6/e6b），两腿重叠面       *)
+(*   (b) 双源交叉：#5/#6 两项给 A 源/B 源双证（e5/e5b、e6/e6b），两路重叠面       *)
 (*       语句一致性入机器检验；                                                  *)
-(*   (c) 一揽子总装 uac_e11_full_muster：五分量嵌套 sigT（Set 层，零 Prop 泄露），*)
-(*       前提只收三证书槽供位（片运输/增长/衰减），分量一=pinned 全族（B 源 #8）、*)
+(*   (c) 五分量装配 uac_e11_full_muster：五分量嵌套 sigT（Set 层，零 Prop 泄露），*)
+(*       前提只收三证书位（片运输/增长/衰减），分量一=pinned 全族（B 源 #8）、    *)
 (*       分量二=右支（B 源 #10）、分量三=左支（B 源 #11）、分量四=峰温 sym 对偶    *)
-(*       （A 源 #9 对偶腿，母本未证方向）、分量五=KL 差分+1 装配（A 源 #5 组合#6）， *)
-(*       五分量证项齐指 A/B 两件，合龙面单点收口。                               *)
+(*       （A 源 #9 对偶，母本未证方向）、分量五=KL 差分+1 装配（A 源 #5 组合#6）， *)
+(*       五分量证明项齐指 A/B 两件，覆盖面单点闭合。                             *)
 (*                                                              *)
-(* 【纪律】纯构造性零承认件；Set 层语句零 Prop 泄露（real_eq/real_lt/real_le     *)
-(*   sigT-Or 形）；全件真 Qed 收口（零悬置、零假设位）；A/B 件本体零改；          *)
-(*   Live 树与 vo_9.1 只读；.vo 只落 /tmp/pa7_work；尾嵌 Print Assumptions       *)
-(*   十五连自检段。                                                              *)
-(* 编译配方：source Live/toolchain/env.sh 后                                      *)
-(*   cd /tmp/pa7_work && bash cpu_guard.sh -- rocq c -Q /tmp/pa7_work ""          *)
-(*     -Q /tmp/pa6_side "" -Q /tmp/czn14_union_full ""                            *)
-(*     UpAblP6_EntropyMonoSplit_C.v（9.1 live 轨）                                 *)
+(* 【构造性注记】纯构造性零承认件；Set 层语句零 Prop 泄露（real_eq/real_lt/real_le*)
+(*   sigT-Or 形）；全件真 Qed 闭合（零悬置、零假设位）；A/B 件本体零改；          *)
+(*   尾嵌 Print Assumptions 十五连假设审计（11 源模块对应项 + 2 双源交叉项          *)
+(*   + 1 峰温对偶项 + 1 五分量装配总成）。                                       *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。    *)
+(*   依赖 Require：CW_ConstructiveWorld_219、UpReqTempDefs、                     *)
+(*   UpReqEntropyDeficitTemp、UpAblP6_EntropyMonoSplit_A、                       *)
+(*   UpAblP6_EntropyMonoSplit_B。                                                *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -67,7 +67,7 @@ Variable T_star_pos : real_lt real_zero T_star.
 Variable energy : S -> Real.
 
 (* ---- 速记重建（#1/#2/#3 形式面在场合法性载体：c_bt/c_bt_pos/c_kl 与母本          *)
-(*   emsi_bt/emsi_bt_pos/emsi_kl 同文换名；KL 方向红线照抄：p_u 占第一分布位，      *)
+(*   emsi_bt/emsi_bt_pos/emsi_kl 同文换名；KL 方向与母本一致：p_u 占第一分布位，    *)
 (*   禁倒置。） ---- *)
 Let c_bt (u : Real) (Hu : real_lt real_zero u) : S -> Real :=
   real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved u Hu energy.
@@ -79,9 +79,9 @@ Let c_kl (u : Real) (Hu : real_lt real_zero u) : Real :=
                (c_bt u Hu) (c_bt_pos u Hu).
 
 (* ---------------------------------------------------------- *)
-(* 核销 #1（母本 Let emsi_bt :81）：速记形式面证人——c_bt 与上游注册面               *)
+(* 核销 #1（母本 Let emsi_bt）：速记形式面见证——c_bt 与上游定义件                  *)
 (*   real_boltzmann_dist_temp 出节形点态定义性同面（real_eq 依 Real 载体，          *)
-(*   故取 s 点态；real_eq_refl 换名层真装）。                                       *)
+(*   故取 s 点态；real_eq_refl 换名层直接给出）。                                   *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e1_bt_face :
   forall (u : Real) (Hu : real_lt real_zero u) (s : S),
@@ -94,7 +94,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #2（母本 Let emsi_bt_pos :83）：逐点正性形式面证人（上游直击同项）。        *)
+(* 核销 #2（母本 Let emsi_bt_pos）：逐点正性形式面见证（上游同项直接给出）。        *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e2_bt_pos_face :
   forall (u : Real) (Hu : real_lt real_zero u) (s : S),
@@ -106,7 +106,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #3（母本 Let emsi_kl :86）：KL 换名层同面证人——c_kl 与「上游 KL 作用        *)
+(* 核销 #3（母本 Let emsi_kl）：KL 换名层同面见证——c_kl 与「上游 KL 作用           *)
 (*   于 c_bt/c_bt_pos」定义性同面（母本速记体的展开式逐字对位）。                   *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e3_kl_face :
@@ -120,8 +120,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #4（母本 Lemma emsi_energy_pin_self :97，A 件认领）：母本逐字形语句，        *)
-(*   证项=A 源 uap63_pin_self_updirect 全显应用（S/求和/正性/能量/温/正温六位）。   *)
+(* 核销 #4（母本 Lemma emsi_energy_pin_self，A 件覆盖）：母本逐字形语句，            *)
+(*   证明项=A 源 uap63_pin_self_updirect 全显应用（S/求和/正性/能量/温/正温六位）。 *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e4_energy_pin_self :
   forall (u : Real) (Hu : real_lt real_zero u),
@@ -136,8 +136,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #5（母本 Lemma emsi_le_diff_ge_zero :117）A 源格：证项=A 源                  *)
-(*   uap63_diff_ge_zero_indep（eq 升格独立链）。                                    *)
+(* 核销 #5（母本 Lemma emsi_le_diff_ge_zero）A 源项：证明项=A 源                     *)
+(*   uap63_diff_ge_zero_indep（eq 化 le 独立链）。                                  *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e5_diff_ge_zero :
   forall a b : Real,
@@ -148,8 +148,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #5 B 源交叉格：同语句，证项=B 源辅助件 uab_le_diff_ge_zero（compat+id_l     *)
-(*   链）——两腿重叠面语句一致性入机器检验。                                         *)
+(* 核销 #5 B 源交叉项：同语句，证明项=B 源辅助件 uab_le_diff_ge_zero（compat+id_l   *)
+(*   链）——两路重叠面语句一致性入机器检验。                                         *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e5b_diff_ge_zero_b :
   forall a b : Real,
@@ -160,8 +160,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #6（母本 Lemma emsi_le_plus_eps :136）A 源格：证项=A 源                      *)
-(*   uap63_plus_eps_updirect（compat+id_l 同构复装）。                              *)
+(* 核销 #6（母本 Lemma emsi_le_plus_eps）A 源项：证明项=A 源                         *)
+(*   uap63_plus_eps_updirect（compat+id_l 同构重立）。                              *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e6_plus_eps :
   forall X eps : Real,
@@ -173,7 +173,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #6 B 源交叉格：同语句，证项=B 源辅助件 uab_le_plus_eps（nonneg_r 换道链）。  *)
+(* 核销 #6 B 源交叉项：同语句，证明项=B 源辅助件 uab_le_plus_eps（nonneg_r 换道链）。 *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e6b_plus_eps_b :
   forall X eps : Real,
@@ -185,8 +185,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #7（母本 Corollary emsi_kl_ge_zero_eps_mirror :161，B 件认领）：母本逐字     *)
-(*   形语句，证项=B 源 uab_kl_ge_zero_eps_mirror 全显应用（S/求和/正性/ext/le/       *)
+(* 核销 #7（母本 Corollary emsi_kl_ge_zero_eps_mirror，B 件覆盖）：母本逐字          *)
+(*   形语句，证明项=B 源 uab_kl_ge_zero_eps_mirror 全显应用（S/求和/正性/ext/le/     *)
 (*   linear/add 七接口位 + 峰温对 + 能量 + 分布对 + 归一 + eps，16 参链全显）。      *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e7_kl_ge_zero_eps_mirror :
@@ -207,8 +207,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #8（母本 Theorem inst_pinned :193，B 件认领）：槽位1 Hpinned 逐字装载形，    *)
-(*   证项=B 源 uab_inst_pinned（出节 discharge：S/求和/正性/峰温对/能量 + 片运输）。 *)
+(* 核销 #8（母本 Theorem inst_pinned，B 件覆盖）：证书位一 Hpinned 逐字装载形，      *)
+(*   证明项=B 源 uab_inst_pinned（出节消解：S/求和/正性/峰温对/能量 + 片运输）。     *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e8_inst_pinned :
   (forall (u : Real) (Hu : real_lt real_zero u),
@@ -229,8 +229,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #9（母本 Theorem inst_pinned_at_peak :222，B 件认领）：峰温点零前提封闭      *)
-(*   装载逐字形，证项=B 源 uab_inst_pinned_at_peak（六参 discharge 直喂）。          *)
+(* 核销 #9（母本 Theorem inst_pinned_at_peak，B 件覆盖）：峰温点零前提闭合           *)
+(*   装载逐字形，证明项=B 源 uab_inst_pinned_at_peak（六参出节消解直接给出）。        *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e9_inst_pinned_at_peak :
   real_eq
@@ -244,8 +244,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #9 A 源交叉格（sym 对偶方向，母本全件未证方向，A 件甲2 腿）：E_{t*}==Σ        *)
-(*   证项=A 源 uap63_pin_at_peak_sym_assembly。峰温点双向闭合合龙取证。             *)
+(* 核销 #9 A 源交叉项（sym 对偶方向，母本全件未证方向，A 件消融一之二）：E_{t*}==Σ    *)
+(*   证明项=A 源 uap63_pin_at_peak_sym_assembly。峰温点双向闭合取证。               *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e9b_peak_sym :
   real_eq
@@ -259,9 +259,9 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #10（母本 Theorem inst_kl_right :244，B 件认领）：槽位2 Hkl_right 逐字       *)
-(*   装载形（KL_v 在前 KL_u 取 real_opp，禁倒置红线照抄），证项=B 源                 *)
-(*   uab_inst_kl_right（出节 discharge 直喂，增长供位类型级同一对位）。              *)
+(* 核销 #10（母本 Theorem inst_kl_right，B 件覆盖）：证书位二 Hkl_right 逐字         *)
+(*   装载形（KL_v 在前 KL_u 取 real_opp，禁倒置、序向与母本一致），证明项=B 源       *)
+(*   uab_inst_kl_right（出节消解直接给出，增长前提类型级同一对位）。                 *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e10_inst_kl_right :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -280,8 +280,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 核销 #11（母本 Theorem inst_kl_left :273，B 件认领）：槽位3 Hkl_left 逐字装载形   *)
-(*   （KL_u 在前镜像右支），证项=B 源 uab_inst_kl_left。                             *)
+(* 核销 #11（母本 Theorem inst_kl_left，B 件覆盖）：证书位三 Hkl_left 逐字装载形     *)
+(*   （KL_u 在前对偶右支），证明项=B 源 uab_inst_kl_left。                           *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e11_inst_kl_left :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -300,12 +300,12 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 一揽子已消融总装（覆盖 completeness 收口）：前提只收三证书槽供位                   *)
-(*   （片运输 Hpinned 供位 / 增长供位 / 衰减供位），结论=五分量嵌套 sigT——           *)
-(*   分量一 pinned 全族（B 源 #8 核销格）、分量二 右支（B 源 #10 核销格）、           *)
-(*   分量三 左支（B 源 #11 核销格）、分量四 峰温 sym 对偶（A 源 #9 交叉格）、          *)
-(*   分量五 KL 差分+1 具体装配（A 源 #5 组合 #6 组合桥，eps:=real_one）。            *)
-(*   五分量证项齐指 A/B 两件导出——合龙面单点收口，任一分量语句面错位即本件拒编。     *)
+(* 五分量装配总成（覆盖 completeness 闭合）：前提只收三证书位                         *)
+(*   （片运输 Hpinned / 增长前提 / 衰减前提），结论=五分量嵌套 sigT——                *)
+(*   分量一 pinned 全族（B 源 #8 核验项）、分量二 右支（B 源 #10 核验项）、           *)
+(*   分量三 左支（B 源 #11 核验项）、分量四 峰温 sym 对偶（A 源 #9 交叉项）、          *)
+(*   分量五 KL 差分+1 具体装配（A 源 #5 组合 #6 组合引理，eps:=real_one）。          *)
+(*   五分量证明项齐指 A/B 两件导出——覆盖面单点闭合，任一分量语句面错位即无法通过类型检查。 *)
 (* ---------------------------------------------------------- *)
 Corollary uac_e11_full_muster :
   (forall (u : Real) (Hu : real_lt real_zero u),
@@ -376,7 +376,7 @@ Qed.
 
 End UpAblP6EmsC.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明十五连） ---- *)
+(* ---- 假设面审计（十五连 Print Assumptions） ---- *)
 Print Assumptions uac_e1_bt_face.
 Print Assumptions uac_e2_bt_pos_face.
 Print Assumptions uac_e3_kl_face.

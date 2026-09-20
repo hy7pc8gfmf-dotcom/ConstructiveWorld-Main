@@ -1,15 +1,15 @@
 (* ============================================================ *)
-(* UpAblT9_UpSigMigrate.v —— T9 批配分正性族·UpSigMigrate 辖区              *)
-(* 被消融位（普查表 §2 UpSigMigrate 行）：                                 *)
-(*   位1 UpSigMigrate.v:542  partition_function_temp_pos                   *)
-(*       （ReqGibbsPilot 数据证书位；配分函数温度版正性）                   *)
-(* 母本（零施工直喂，出节签名实测自 _tt9a_sig2 探针）：                     *)
-(*   sumd_sum_pos@UpReqSumD:233（正和族；非空数据槽显式参）；               *)
-(*   sumf 换实例位 sumd_sumf S enum；sigm_partition_function_temp@:539      *)
-(*   出节签名 {R}{RIS} S sumf T T_pos z。                                  *)
-(* 分级：N1（证书供给=具体配分实例上无条件正）。                            *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqSumD、        *)
-(*   UpSigMigrate。                                                        *)
+(* UpAblT9_UpSigMigrate.v —— T9 批配分正性族·UpSigMigrate 辖区。       *)
+(* 使命：ReqGibbsPilot 数据证书位（配分函数温度版正性）供给件；分级    *)
+(*   N1；T9 批零施工、直接代入；战役：头部规范化 T1 席 20260921。       *)
+(* 供体：sumd_sum_pos@UpReqSumD（正和族，非空参数位显式参），sumf 取实例   *)
+(*   sumd_sumf S enum；使用 sigm_partition_function_temp@:539；        *)
+(*   被消融位 UpSigMigrate.v:542 partition_function_temp_pos。         *)
+(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD、    *)
+(*   UpSigMigrate。                                                    *)
+(* 红线自审：零承认（Qed 闭合，文末 Print Assumptions 审计）；Set 层    *)
+(*   （Not/lt 仅显式参）；可提取。                                     *)
+(* 编译配方：coqc 无 -Q 直编，-o 临时目录（树内 .vo 不动）。            *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqSumD.
@@ -17,7 +17,7 @@ Require Import UpSigMigrate.
 From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
-(* 位1 ←:542（sumf:=sumd_sumf 具体实例；正和族放电） *)
+(* 位1 ←:542（sumf:=sumd_sumf 具体实例；正和族实例化消解） *)
 Theorem uabT9_sigm_pft_pos :
   forall (S : Set) (enum : list S) (Hne : Not (enum = nil))
          (z : S -> Real) (T : Real) (T_pos : lt zero T),

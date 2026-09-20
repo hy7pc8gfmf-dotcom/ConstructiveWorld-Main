@@ -1,50 +1,50 @@
 (* ============================================================ *)
-(* UpAblD1S17_UpReqDpoLoss.v —— FA-D1S17 数据供给续梯 件②          *)
-(* 席位：FA-D1S17（论文域消融施工席·D1-⑦ 续梯 ≤40 位·按模块聚合）    *)
-(* ｜独立伴生件·原树零改                                          *)
-(*                                                              *)
-(* 领地认领：与本席件① 同批（认领快照见件① 头注全录）。本件辖区：     *)
-(*   UpReqDpoLoss.v（229 行，Section ReqDpoLossCore L52-216）余量    *)
-(*   13 槽：L54(R,RIS)｜L55(S)｜L56(sumf)｜L57(reward)｜L58(beta)｜  *)
-(*   L59(beta_pos)｜L60(pi_ref)｜L61(pi_ref_pos)｜L62(Z_align_pos)｜  *)
-(*   L69(Preference)｜L70(pref_win)｜L71(pref_lose)｜L72(pref_dataset)。 *)
-(* 排除登记（扩槽不重立，零触碰）：L64-66 rdl_log_req_compat 与       *)
-(*   L67-68 rdl_log_inv_exp_neg_req＝S2 已收（UpAblD1S2_reqlog_       *)
-(*   UpReqDpoLoss.v，D1-④ log 桥批）。普查行计 15 位−S2 两槽＝本席 13。 *)
-(* 母本代际核验：Live_X 副本 md5 开工实测（收工复核，见施工报告 §五）。 *)
-(*                                                              *)
-(* 形态：S13 打包记录型先例逐字同构（槽语句逐字入包）＋单点实例供给。    *)
-(*   零 Require 槽位母本 UpReqDpoLoss（防 P3S1 坑1 混代际 .vo 地雷）。 *)
-(* 实例供给（S13 UacClose 同一单点骨架）：R:=Real｜RIS:=               *)
-(*   RealEnhancedReal（S07:8566，限定名引用——S4 坑卡②）｜S:=unit｜     *)
-(*   sumf:=fun f => f tt｜reward:=零函数｜beta:=one｜beta_pos:=        *)
-(*   one_pos 字段直配｜pi_ref:=常函数 one｜pi_ref_pos:=one_pos forall   *)
-(*   直配｜Z_align_pos＝uabd1s17_dpo_zap_pos 证书（unfold Z_align_req   *)
-(*   后 mult_positive×one_pos×exp_neg_pos 三字段直配——S13/S15 zap      *)
-(*   证书同款机械重述，实例恒等）｜Preference:=unit｜pref_win/          *)
-(*   pref_lose:=fun _ => tt｜pref_dataset:=cons tt nil（单元素数据集）。 *)
-(* 分级（禁注水如实申报）：13 位全 T·数据/接口供给级（12 机械供给＋     *)
-(*   1 三字段证书链），按模块合并申报，不逐槽计战果。零 W 墙新立、      *)
-(*   零显式参承接位（本模块余量无 B 类桥槽）。                         *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219／UpReqAlign    *)
-(*   （Z_align_req 定义件）。                                         *)
-(* 纪律：零 git、零注册面增量、attn 论文域源档/论文目录零触碰；fail-loud。 *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S17_*.{log,exit}          *)
+(* UpAblD1S17_UpReqDpoLoss.v —— 母本 UpReqDpoLoss.v 的单点实例供给件 *)
+(*   数学使命：直接偏好优化损失接口的典范载体实例与对齐正性证书。   *)
 (* ============================================================ *)
+(* 【使命】母本 UpReqDpoLoss 的 Section ReqDpoLossCore 以全体接口语句为 *)
+(*   节内前提；本件将这些前提在单点态空间上逐一给出见证，并装配为记录    *)
+(*   uabd1s17_dpo_pack13，共十三项字段：                                *)
+(*   R/RIS 实数载体、S 态空间载体、sumf 求和算子、reward（奖励函数）、    *)
+(*   beta/beta_pos（逆温度及其正性）、                                   *)
+(*   pi_ref/pi_ref_pos（参考策略及其逐点正性）、Z_align_pos（对齐配分    *)
+(*   和正性）、Preference（偏好类型）、pref_win/pref_lose（胜负偏好      *)
+(*   映射）、pref_dataset（偏好数据集）。                                *)
+(* 【实例选择】R:=Real；RIS:=RealEnhancedReal（具名 uabd1s17_ren，        *)
+(*   限定名引用 RealInterfaceEnhancedMod.RealEnhancedReal）；             *)
+(*   S:=unit（单点态空间）；sumf:=fun f => f tt；reward:=零函数；         *)
+(*   beta:=one，正性由 one_pos 给出；pi_ref:=常函数 one，逐点正性由       *)
+(*   one_pos 全称实例给出；Z_align_pos:=uabd1s17_dpo_zap_pos；            *)
+(*   Preference:=unit；pref_win/pref_lose:=fun _ => tt；                  *)
+(*   pref_dataset:=cons tt nil（单元素数据集）。                          *)
+(* 【依赖】CW_ConstructiveWorld_219／UpReqAlign（Z_align_req 定义件）；    *)
+(*   不 Require 母本 UpReqDpoLoss.v 本体。mathlib/stdlib 无直接对应物。   *)
+(* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑；  *)
+(*   文末两条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证判据。 *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
+(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
+(* 【结构总览】§1 典范载体实例：uabd1s17_ren 的具名定义。§2 对齐正性证书  *)
+(*   uabd1s17_dpo_zap_pos：Z_align_req 展开后为逐点和                      *)
+(*   Σ_s pi_ref(s)·exp_neg(−inv_pos(beta)·reward(s))，单点实例上化为一项， *)
+(*   正性由 mult_positive 连同 one_pos 与 exp_neg_pos 直接给出。§3 接口    *)
+(*   封装记录 uabd1s17_dpo_pack13：十三项字段对应母本 Section ReqDpoLossCore *)
+(*   的节内声明（逐字相同）；rdl_log_req_compat 与 rdl_log_inv_exp_neg_req *)
+(*   两项不在本记录中（供给见 UpAblD1S2_reqlog_UpReqDpoLoss）。§4 供给定理 *)
+(*   uabd1s17_dpo_pack13_supplied 一次性给出全部字段；§5 假设审计区。      *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlign.
 Import RealInterfaceEnhancedMod.
 
-(* ============ 典范载体实例具名（S10/S13 同款申报形） ============ *)
+(* ============ 典范载体实例具名 ============ *)
 
 Definition uabd1s17_ren : RealInterfaceEnhancedSetoid Real :=
   RealInterfaceEnhancedMod.RealEnhancedReal.
 
-(* ============ Z_align_pos 供给证书（S13/S15 zap 证书同款：三字段直配） ============ *)
-(* 实例恒等账：S:=unit｜sumf:=单点｜reward:=零函数｜beta:=one｜          *)
-(*   pi_ref:=常函数 one——与 S13 uabd1s13_uac_zap_pos 供给腿逐字同体，   *)
-(*   机械重述（零新数学），坐标挂 S13 件 L65-86。                       *)
+(* ============ Z_align_pos 供给证书 ============ *)
+(* 实例代入：S:=unit、sumf:=单点求和、reward:=零函数、beta:=one、         *)
+(*   pi_ref:=常函数 one；Z_align_req 在此实例下经 δ/ι 归约为乘积          *)
+(*   one·exp_neg(−inv_pos(one)·零)，两端正性各由 one_pos 与 exp_neg_pos 给出。 *)
 
 Lemma uabd1s17_dpo_zap_pos :
   lt zero (@Z_align_req Real uabd1s17_ren unit
@@ -69,8 +69,8 @@ Proof.
                     zero)))).
 Qed.
 
-(* ============ 打包记录型：对照母本 L54-L72（槽语句逐字入包） ============ *)
-(* 槽序＝母本声明序；log 双槽(L64-68) S2 已收不入包（件头排除登记）。     *)
+(* ============ 接口封装记录：对应母本 Section ReqDpoLossCore 的节内声明 ============ *)
+(* 字段序＝母本声明序；两个 log 相容性语句不在本记录中（件头已注明）。    *)
 
 Inductive uabd1s17_dpo_pack13 : Type :=
 | uabd1s17_dpo_pack13_intro :
@@ -85,7 +85,7 @@ Inductive uabd1s17_dpo_pack13 : Type :=
            (pref_dataset : list Preference),
       uabd1s17_dpo_pack13.
 
-(* ============ 供给件：单点实例一次喂定 13 位（全无条件供给） ============ *)
+(* ============ 供给定理：以单点实例给出记录的全部字段 ============ *)
 
 Theorem uabd1s17_dpo_pack13_supplied : uabd1s17_dpo_pack13.
 Proof.
@@ -104,7 +104,7 @@ Proof.
            (cons tt nil)).
 Qed.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设审计 ============ *)
 
 Print Assumptions uabd1s17_dpo_zap_pos.
 Print Assumptions uabd1s17_dpo_pack13_supplied.

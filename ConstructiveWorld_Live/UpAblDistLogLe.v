@@ -1,25 +1,25 @@
 (* ============================================================ *)
 (* UpAblDistLogLe.v *)
 (* *)
-(* 目的： Y1 席（W4 族E log-le 具体载体残差闭合席）。兑现 B2 定谳明示的    *)
-(*        未竟通道——dist_log_le_linear 槽（UpReqDist.v:1035，Section       *)
+(* 目的： 族E log-le 具体载体剩余部分的闭合——兑现已证结论明示的未竟      *)
+(*        通道：dist_log_le_linear 前提（UpReqDist，Section        *)
 (*        ReqFEP 内）的 Regular-Real 具体载体实例供给。                    *)
-(* 主件： ydll_lpo_barrier——槽实例 ⟹ 实数零等判定 Or (¬(u==0)) (u==0)     *)
+(* 主件： ydll_lpo_barrier——前提实例 ⟹ 实数零等判定 Or (¬(u==0)) (u==0)   *)
 (*        （real-LPO 族，S07 头注同级不可证参照类）的定理级归约。          *)
-(*        W4 载体分层判词再精化：B2 估的「30-60 行代数链通道」经实测降格—— *)
+(*        载体分层结论再精化：此前估计的「30-60 行代数链通道」经核验降格—— *)
 (*        反向严格支（eps 间隙矛盾）确可达并已于本件闭合                   *)
-(*        （ydll_le_b_not_gt + ydll_log_tangent_not_gt，均库缺席新件）；   *)
-(*        正向分支判定（log x 与 x−1 的 Or 分支产出）不可达，本席归约定谳。 *)
-(* 槽位对齐：:1035 语句在实例面 RealEnhancedReal（S07:8566，le:=real_le、 *)
+(*        （ydll_le_b_not_gt + ydll_log_tangent_not_gt，两者此前库内缺失）； *)
+(*        正向分支判定（log x 与 x−1 的 Or 分支产出）不可达，本件以归约定形此结论。 *)
+(* 前提对齐：该语句在实例面 RealEnhancedReal（S07，le:=real_le、 *)
 (*        log:=real_log、lt:=real_lt、plus:=real_plus、opp:=real_opp；     *)
-(*        req_minus x one δ= real_plus x (real_opp real_one)）下与本件     *)
-(*        语句面逐字 δ 等同（Check 桥双向实测，报告 §2）。语句面取 plain    *)
-(*        real_* 口径：与 UpRealLeB 三十六件 plain 族、t34 Part B 消费位   *)
-(*        同参——接口投影名零出现，提取层零换装残留。                       *)
+(*        req_minus x one 形态等同于 real_plus x (real_opp real_one)）下与本件语句面 *)
+(*        逐字等同（双向形态互验）。语句面取 plain real_* 口径：与 UpRealLeB 三十六件 plain 族、t34 Part B 使用处同参——      *)
+(*        接口投影名零出现，提取层零转换残留。                             *)
 (* 依赖： CW_ConstructiveWorld_219、G07_KLWall、UpReqKLSTangent、          *)
 (*        UpRealLeB。                                                      *)
 (* 备注： 零承认件：纯构造性，语句面全 Set 值（Or/Not 为 S01 Set 层别名）； *)
 (*        无 公理/承认/参数位/中止；四件逐条 Print Assumptions 全闭合。    *)
+(* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。     *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith.
@@ -30,12 +30,12 @@ Require Import UpReqKLSTangent.
 Require Import UpRealLeB.
 
 (* ============================================================ *)
-(* Part A：Bishop 形（real_le_b）反向严格排除——eps 间隙矛盾。            *)
-(*   B2 判词中「eps 间隙矛盾」腿的首次形式化：x ≤_B y 时 y < x 不可能。  *)
+(* §1 Bishop 形（real_le_b）反向严格排除——eps 间隙矛盾。                 *)
+(*   此前结论中「eps 间隙矛盾」肢的首次形式化：x ≤_B y 时 y < x 不可能。 *)
 (*   论证：设 y < x 有 Q 见证 e0（尾段 a_n − b_n > e0）。取 B 形余量      *)
 (*   eps := real_const e0（逐点恰为 e0），得 e1 > 0 使尾段                *)
 (*   b_n + e0 − a_n > e1。两尾段相加得 e1 + e0 < e0，即 e1 < 0，与        *)
-(*   0 < e1 对撞（Qlt_irrefl 收紧）。                                     *)
+(*   0 < e1 矛盾（Qlt_irrefl 收紧）。                                     *)
 (* ============================================================ *)
 
 Lemma ydll_le_b_not_gt :
@@ -78,10 +78,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B：log 切线反向严格排除（槽的可达残差半支闭合件）。               *)
+(* §2 log 切线反向严格排除（该前提的可达剩余半支闭合件）。               *)
 (*   对一切 x > 0：¬(x−1 < log x)。材料：UpRealLeB real_log_le_linear_B  *)
-(*   （B 形，eps 形源件 S07 real_log_le_linear_eps）+ Part A。            *)
-(*   此前全树 grep 无 plain 形实例件（B2 普查），本件为首个。             *)
+(*   （B 形，eps 形源件 S07 real_log_le_linear_eps）+ §1。                *)
+(*   此前库内无 plain 形实例件，本件为首个。                             *)
 (* ============================================================ *)
 
 Lemma ydll_log_tangent_not_gt :
@@ -95,9 +95,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part C：槽实例的条件消解件（¬¬ 闭包面）。                              *)
-(*   假设位即 :1035 槽位的实例面 δ 等同形（见头注对齐节）；在此假设下，   *)
-(*   凡知 x ≠ 1 者得严格切线支。eq 支经 T1 切点⟹一件（t34 同喂）零新增。 *)
+(* §3 前提实例的条件消解件（¬¬ 闭包面）。                                *)
+(*   假设位即 :1035 前提的实例面等同形（见文件头对齐节）；在此假设下，   *)
+(*   凡知 x ≠ 1 者得严格切线支。eq 支经 t1_log_eq_linear_inject 零新增。 *)
 (* ============================================================ *)
 
 Lemma ydll_cond_strict_of_ne_one :
@@ -114,17 +114,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D（主件/定谳件）：槽实例 ⟹ 实数零等判定（real-LPO 族）。         *)
-(*   论证：任取 u，对 x := e^{−u}（正性 total：real_exp_neg_pos）用槽。   *)
-(*   左支（log x < x−1）：若 u == 0 则 x == 1、log x == 0、x−1 == 0，     *)
-(*   严格支自撞（real_lt_irrefl）——故 u ≠ 0。                            *)
+(* §4（主件/结论件）：前提实例 ⟹ 实数零等判定（real-LPO 族）。           *)
+(*   论证：任取 u，对 x := e^{−u}（对一切 u 成立：real_exp_neg_pos）用    *)
+(*   该前提。左支（log x < x−1）：若 u == 0 则 x == 1、log x == 0、       *)
+(*   x−1 == 0，严格支自相矛盾（real_lt_irrefl）——故 u ≠ 0。               *)
 (*   右支（log x == x−1）：经 log_inv_exp_neg_thm 得 log x == −u，        *)
 (*   即 e^{−u} == 1 − u。u < 0 ⟹ x > 1 ⟹ klst_log_tangent_pos 严格切线    *)
-(*   与相等支对撞；0 < u ⟹ x < 1 ⟹ klst_log_tangent_neg 同理对撞。        *)
-(*   弱三分（real_weak_trich，S07:5719，直觉主义有效）收 u == 0。          *)
-(*   判词：槽实例至少与实数零等判定等强——该判定属 S07 头注自认不可证      *)
-(*   的强三分/LPO 参照类。B2「具体载体 30-60 行代数链可达」判词据此降格：  *)
-(*   反向半支可达（Part A/B 已闭合），正向分支判定不可达（本件定理级）。  *)
+(*   与相等支矛盾；0 < u ⟹ x < 1 ⟹ klst_log_tangent_neg 同理矛盾。        *)
+(*   弱三分（real_weak_trich，S07:5719，直觉主义有效）推得 u == 0。        *)
+(*   结论：前提实例至少与实数零等判定等强——该判定属 S07 头注自认不可证  *)
+(*   的强三分/LPO 参照类。此前「具体载体 30-60 行代数链可达」的估计据此   *)
+(*   降格：反向半支可达（§1/§2 已闭合），正向分支判定不可达（本件定理级）。*)
 (* ============================================================ *)
 
 Theorem ydll_lpo_barrier :
@@ -169,7 +169,7 @@ Proof.
                                            (real_opp real_one))
                                         real_zero
                                         Hlog0 Hrhs0 Hlt)).
-  - (* 右支 ⟹ 双侧切线排除 ⟹ 弱三分收 u == 0 *)
+  - (* 右支 ⟹ 双侧切线排除 ⟹ 弱三分推得 u == 0 *)
     assert (Hequ : real_eq (real_log (real_exp_neg u) Hxe) (real_opp u)).
     { exact (log_inv_exp_neg_thm (real_opp u) Hxe). }
     assert (Hreq : real_eq (real_opp u)
@@ -230,7 +230,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G2 闭合核验：四件逐条（全须 Closed under the global context）          *)
+(* 收尾核验：四件逐条（全须 Closed under the global context）             *)
 (* ============================================================ *)
 
 Print Assumptions ydll_le_b_not_gt.

@@ -1,53 +1,53 @@
 (* ============================================================ *)
-(* TrueNumerator.v —— 切片代理N（批次 E-STAGING-D026r，20260919）       *)
-(* P2 主线：真分子族闭式反推定谳（tn_ 前缀）。                          *)
-(*                                                                 *)
-(* 【定谳判词（对照 D021 bv_p 面加速收口）】                              *)
-(* D016 卡点 (b)「真配 P*_n 闭式待反推」由本席定谳：                    *)
-(*   P*_n(1/2) = r_n / 2^{2n}，其中 r_n == 2^{n+1}·p_n（D021 Laurent    *)
-(*   闭式 bv_p n），即 P*_n(1/2) == p_n·2^{1−n} == tn_Ps_half n。       *)
-(*   【T118 行文勘误】T118 §2「P*_n(1/2) = r_n/2^n」系笔误：其自引       *)
-(*   x'_1 = 8/12 与 P*_2(1/2) = 4.5 两值仅与 r_n/2^{2n} 形自洽           *)
-(*   （8/4 = 2、72/16 = 9/2），本席按 2^{2n} 形定谳。                   *)
-(* 【约束式闭环】x'_n = P*_n(1/2)/(2·Q_n(1/2))（Q_n 在库 bk_Qn_list）：  *)
-(*   代入 2^n·Q_n(1/2) == q̃_n（bk_Qn_half_closed）得                    *)
-(*   tn_x n == p_n/q̃_n == bv_x n（一般恒等 tn_x_eq_bv_x，非仅数值）。   *)
-(* 【x' 序列 n=0..5 数值反推（先锚后施工，D016 教训）】                  *)
-(*   p:  0, 2, 9, 131/3, 445/2, 34997/30                                *)
-(*   q̃: 1, 3, 13, 63, 321, 1683                                         *)
-(*   x': 0, 2/3, 9/13, 131/189, 445/642, 34997/50490                    *)
-(*   r:  0, 8, 72, 2096/3, 7120, 1119904/15（D016 r: 0,8,72 对账 ✓）    *)
-(*   P*_n(1/2): 0, 2, 9/2, 131/12, 445/16, 34997/480（D016「4.5」对账✓）*)
-(* 【候选判否记录（诚实登记）】谐和型三候选 n=0..5 精确有理数对账全否：    *)
-(*   (A) (1/2)·ΣC(n,k)²(H_k+H_{n−k})(1/2)^k：仅 n=0 配（n=1 起全否）；   *)
-(*   (B) ΣC(n,k)²(H_{n+k}−H_k)(1/2)^k：仅 n=0 配；                       *)
-(*   (C) ΣC(n,k)²·H_k·(1/2)^k（= 库 bk_Pn_list 谐和分子在 1/2 求值）：   *)
-(*       n=1 得 1/2 ≠ 2、n=2 得 19/8 ≠ 9/2——D016「谐和分子不配」机器     *)
-(*       锚坐实。根因：真分子含 2 幂尾项（Laurent 2^{j−n}−1 结构），      *)
-(*       非纯谐和和；真闭式即 D021 Laurent 形（本席换算归一）。           *)
-(* 【整性预判（接口注释级登记，不抢 D015/pi_ 面）】                       *)
-(*   P*_n(1/2)·2^n = r_n = 2^{n+1}·p_n：r_0=0, r_1=8, r_2=72 整；        *)
-(*   r_3 = 2096/3 非整（分母 3 与 2 互素，n=3 首破）、r_5 = 1119904/15    *)
-(*   再破（15 含奇素 3·5）；r_4 = 7120 属偶合整。真分子族自 n=3 起       *)
-(*   本质有理——q̃_n 含奇素因子，任何 2 幂归一救不回。                     *)
-(*                                                                 *)
-(* 【交付面（全 Qed 零承认）】                                           *)
-(*  ① tn_r / tn_Ps_half / tn_x / tn_Qhalf：真分子族定义面（换算归一）；   *)
-(*  ② tn_Pn_list（Fixpoint 家族列表）+ length + nth 求值面；              *)
-(*  ③ tn_x_eq_bv_x：一般定谳桥 QeqT (tn_x n) (bv_x n)（主件，纯 Set）；   *)
-(*  ④ x' 序列 n=0..5 数值锚组（vm_compute 档）+ r/P*_n(1/2) 对账锚组 +    *)
-(*     谐和不配对照锚（tn_harm1/tn_harm2）；                             *)
-(*  ⑤ Q 层脚手架：tn_qpow2_ne / tn_qpow2_inv / tn_Qinv_cong /            *)
-(*     tn_sh_one / tn_core_eq（stdlib Qinv_mult_distr 零前提分配律承载）。*)
-(*                                                                 *)
-(* 红线自审：① 零承认面（全件 Qed，零承认词，依赖全在册）；              *)
-(*   ② 语句面 Set（主件 tn_x_eq_bv_x 与锚组全 QeqT 零前提；nth 求值面    *)
-(*      带 k ≤ N nat 前提，bk_Qn_list_nth 先例同构）；                   *)
-(*   ③ 非平凡（一般定谳桥 + 家族列表求值面 + Laurent 换算归一闭环）；      *)
-(*   ④ 可提取（G3 探针独立文件实测，Obj.magic 计数=0）。                 *)
-(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（alignb_base 信任根）  *)
-(*   + BeukersLists BeukersVariant（e121_side 现编在册，传递依赖         *)
-(*   PolyIntegral PadeErrorIntegral PintMono）。零云端零 git。           *)
+(* TrueNumerator.v —— 本件形式化 Beukers 逼近真分子族的闭式与恒等性：        *)
+(*   P*_n(1/2) = r_n/2^{2n}，r_n == 2^{n+1}·p_n（p_n 为 bv_p 的 Laurent       *)
+(*   闭式），即 P*_n(1/2) == p_n·2^{1−n} == tn_Ps_half n；一般恒等            *)
+(*   tn_x_eq_bv_x：x'_n == tn_x n == p_n/q̃_n == bv_x n。                     *)
+(*                                                                          *)
+(* 防错注记：P*_n(1/2) 若写成 r_n/2^n，则与 x'_1 = 2/3、P*_2(1/2) = 9/2      *)
+(*   不符；自洽形为 r_n/2^{2n}（8/4 = 2、72/16 = 9/2）。                     *)
+(*                                                                          *)
+(* 数值锚（n=0..5）：                                                        *)
+(*   p:  0, 2, 9, 131/3, 445/2, 34997/30                                     *)
+(*   q̃:  1, 3, 13, 63, 321, 1683                                             *)
+(*   x': 0, 2/3, 9/13, 131/189, 445/642, 34997/50490                         *)
+(*   r:  0, 8, 72, 2096/3, 7120, 1119904/15                                  *)
+(*   P*_n(1/2): 0, 2, 9/2, 131/12, 445/16, 34997/480                         *)
+(*                                                                          *)
+(* 整性事实：r_n = P*_n(1/2)·2^n：r_0 = 0、r_1 = 8、r_2 = 72、r_4 = 7120      *)
+(*   为整；r_3 = 2096/3 与 r_5 = 1119904/15 非整（分母含奇素因子）；          *)
+(*   真分子族自 n=3 起本质有理——q̃_n 含奇素因子，任何 2 幂归一不能挽回。       *)
+(*                                                                          *)
+(* 谐和型候选的否定对照：三候选（(1/2)·ΣC(n,k)²(H_k+H_{n−k})(1/2)^k、          *)
+(*   ΣC(n,k)²(H_{n+k}−H_k)(1/2)^k、ΣC(n,k)²·H_k·(1/2)^k）自 n=1 起全不配      *)
+(*   （见证 tn_harm1_anchor、tn_harm2_anchor）；根因：真分子含 2 幂尾项        *)
+(*   （Laurent 2^{j−n}−1 结构），非纯谐和和。                                 *)
+(*                                                                          *)
+(* 主要结果：tn_r/tn_Ps_half/tn_x/tn_Qhalf（定义面）；tn_Pn_list（家族列表）   *)
+(*   与 length/nth 求值面；tn_x_eq_bv_x（一般恒等桥，纯 Set）；x' 序列         *)
+(*   n=0..5 数值锚组与跨变体对照锚（tn_x3_bv_anchor 等）；Q 层支撑引理         *)
+(*   tn_qpow2_ne/tn_qpow2_inv/tn_Qinv_cong/tn_sh_one/tn_core_eq。             *)
+(*                                                                          *)
+(* 构造性注记：全件 Qed、零承认；主件 tn_x_eq_bv_x 与锚组取 QeqT 零前提       *)
+(*   （纯 Set），nth 求值面带 k ≤ N 的 nat 前提；支撑引理仅服务推理；         *)
+(*   可提取；文末 Print Assumptions 复核。                                    *)
+(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp + BeukersLists              *)
+(*   BeukersVariant（传递依赖 PolyIntegral PadeErrorIntegral PintMono）。     *)
+(*                                                                          *)
+(* 编译配方：coqc 9.1 直调（无 -Q），cpu_guard 包裹，-o 输出临时目录，         *)
+(*   树内 .vo 不重写。                                                       *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
+(*                                                                          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -57,20 +57,20 @@ Require Import BeukersLists BeukersVariant.
 Open Scope nat_scope.
 
 (* ============================================================ *)
-(* §A 真分子族定义面（换算归一：r_n == 2^{n+1}·p_n 定谳换算）              *)
+(* §A 真分子族定义面（r_n == 2^{n+1}·p_n 换算）                          *)
 (* ============================================================ *)
 
 (* Q_n(1/2)（库面：BeukersLists 系数列表 Horner 求值） *)
 Definition tn_Qhalf (n : nat) : Q := bkQ (bk_Qn_list n) (1 # 2)%Q.
 
-(* D016 r 家族：r_n == 2^{n+1}·p_n（跨变体换算，定义即换算） *)
+(* tn_r：r 家族 r_n == 2^{n+1}·p_n（跨变体换算） *)
 Definition tn_r (n : nat) : Q := (q_pow (2 # 1)%Q (Datatypes.S n) * bv_p n)%Q.
 
 (* 真分子在 1/2 的值：P*_n(1/2) = r_n/2^{2n} = p_n·2^{1−n}
    （写成 ·(1/2)^{n+n} 免 Qinv，定义面全乘法） *)
 Definition tn_Ps_half (n : nat) : Q := (tn_r n * q_pow (1 # 2)%Q (n + n))%Q.
 
-(* 约束形：x'_n = P*_n(1/2)/(2·Q_n(1/2))（任务书原形） *)
+(* tn_x：约束形 x'_n = P*_n(1/2)/(2·Q_n(1/2)) *)
 Definition tn_x (n : nat) : Q := (tn_Ps_half n / (2 * tn_Qhalf n))%Q.
 
 (* 真分子族列表：[P*_0(1/2); ...; P*_N(1/2)]（列表 Fixpoint） *)
@@ -81,7 +81,7 @@ Fixpoint tn_Pn_list (N : nat) : list Q :=
   end.
 
 (* ============================================================ *)
-(* §B Q 层脚手架（Prop 面仅推理支撑，D016/BeukersLists 先例同构）          *)
+(* §B Q 层支撑引理（Prop 面，仅服务推理）                                 *)
 (* ============================================================ *)
 
 (* 2 的 nat 幂非零（Qmult_inv_r 前提件） *)
@@ -94,7 +94,7 @@ Proof.
     + exact (IH H1).
 Qed.
 
-(* 2^{1}·(1/2)^{1} 交互逆和：q_pow 2 k · q_pow (1/2) k == 1 *)
+(* tn_sh_one：q_pow 2 k · q_pow (1/2) k == 1（2 与 1/2 互逆） *)
 Lemma tn_sh_one : forall k : nat, q_pow (2 # 1)%Q k * q_pow (1 # 2)%Q k == 1%Q.
 Proof.
   intro k. rewrite <- (bk_q_pow_mul (2 # 1) (1 # 2) k).
@@ -102,7 +102,7 @@ Proof.
   rewrite H21. apply bk_q_pow_one.
 Qed.
 
-(* Qinv 换形：/2^k == (1/2)^k（零前提，Qinv_mult_distr 承载） *)
+(* tn_qpow2_inv：/2^k == (1/2)^k（零前提，由 Qinv_mult_distr） *)
 Lemma tn_qpow2_inv : forall k : nat, Qinv (q_pow (2 # 1)%Q k) == q_pow (1 # 2)%Q k.
 Proof.
   intro k.
@@ -115,7 +115,7 @@ Proof.
   apply Qmult_1_l.
 Qed.
 
-(* /2 == 1/2（构造可反性） *)
+(* tn_half_inv：/2 == 1/2 *)
 Lemma tn_half_inv : Qinv (2 # 1)%Q == (1 # 2)%Q.
 Proof. reflexivity. Qed.
 
@@ -124,8 +124,8 @@ Proof. reflexivity. Qed.
 Lemma tn_Qinv_cong : forall x y : Q, x == y -> Qinv y == Qinv x.
 Proof. intros x y H. rewrite H. reflexivity. Qed.
 
-(* 核心代数件：s·h == 1 下 (2sh·p·h²)·((1/2)·/E) == p·(h·/E)
-   —— 主件③一般桥的全部剩余代数（环重排 + 两次注入重写） *)
+(* tn_core_eq：s·h == 1 下 (2sh·p·h²)·((1/2)·/E) == p·(h·/E)
+   —— tn_x_eq_bv_x 的剩余代数（环重排 + 两次注入改写） *)
 Lemma tn_core_eq : forall p E s h : Q,
   s * h == 1 ->
   ((2 * s * p * (h * h)) * ((1 # 2)%Q * Qinv E))%Q == p * (h * Qinv E).
@@ -135,7 +135,7 @@ Proof.
   transitivity ((2 * (s * h) * p * h) * ((1 # 2)%Q * Qinv E))%Q.
   - ring.
   - rewrite Hsh.
-    (* 2·(1/2) 字面融合前置 *)
+    (* 先融 2·(1/2) == 1 *)
     transitivity (2 * (1 # 2)%Q * p * h * Qinv E)%Q.
     + ring.
     + assert (H21 : ((2 # 1) * (1 # 2))%Q == (1 # 1)%Q) by reflexivity.
@@ -143,7 +143,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C 主件③：一般定谳桥（纯 Set 语句，零前提）                            *)
+(* §C 一般恒等桥：tn_x_eq_bv_x（纯 Set 语句，零前提）                     *)
 (*   tn_x n == bv_x n，即 x'_n = P*_n(1/2)/(2Q_n(1/2)) == p_n/q̃_n        *)
 (* ============================================================ *)
 
@@ -154,7 +154,7 @@ Proof.
   (* 指数归一：2^{S n} ⟶ 2·2^n；(1/2)^{n+n} ⟶ (1/2)^n·(1/2)^n *)
   rewrite (q_pow_succ (2 # 1)%Q n).
   rewrite (q_pow_add (1 # 2)%Q n n).
-  (* Qinv 原子拆解（stdlib 零前提分配律 + 定形换形） *)
+  (* Qinv 分配拆解（stdlib 零前提分配律 Qinv_mult_distr + tn 换形） *)
   rewrite (Qinv_mult_distr (2 # 1)%Q (bkQ (bk_Qn_list n) (1 # 2)%Q)).
   rewrite tn_half_inv.
   rewrite (tn_Qinv_cong ((q_pow (2 # 1)%Q n * bkQ (bk_Qn_list n) (1 # 2)%Q)%Q)
@@ -167,7 +167,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §D 主件②：tn_Pn_list 求值面                                           *)
+(* §D tn_Pn_list 求值面：length 与 nth                                   *)
 (* ============================================================ *)
 
 Lemma tn_Pn_list_length : forall N : nat, length (tn_Pn_list N) = Datatypes.S N.
@@ -195,7 +195,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §E 主件④：x' 序列 n=0..5 数值锚组（vm_compute 档）                     *)
+(* §E x' 序列 n=0..5 数值锚组（各锚由 vm_compute 精确判定）               *)
 (* ============================================================ *)
 
 Theorem tn_x0_anchor : QeqT (tn_x 0) 0%Q.
@@ -216,7 +216,7 @@ Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 Theorem tn_x5_anchor : QeqT (tn_x 5) (34997 # 50490)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 跨变体对照锚（D021 仅锚至 n=2，本席补 n=3..5） *)
+(* 跨变体对照锚：tn_x n == bv_x n 的数值验证（n=3..5） *)
 Theorem tn_x3_bv_anchor : QeqT (tn_x 3) (bv_x 3).
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
@@ -226,7 +226,7 @@ Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 Theorem tn_x5_bv_anchor : QeqT (tn_x 5) (bv_x 5).
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* r 家族对账锚（D016 r: 0, 8, 72）+ 破整见证锚（r_3, r_5）+ 偶合整锚 r_4 *)
+(* r 家族数值锚：r_0=0、r_1=8、r_2=72；破整见证 r_3、r_5；r_4=7120 为整 *)
 Theorem tn_r0_anchor : QeqT (tn_r 0) 0%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
@@ -245,7 +245,7 @@ Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 Theorem tn_r5_anchor : QeqT (tn_r 5) (1119904 # 15)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* P*_n(1/2) 对账锚（D016「P*_2(1/2) = 4.5 非整」机器坐实） *)
+(* P*_n(1/2) 数值锚（P*_2(1/2) = 9/2 非整之数值验证） *)
 Theorem tn_Ps1_anchor : QeqT (tn_Ps_half 1) (2 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
@@ -255,8 +255,8 @@ Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 Theorem tn_Ps3_anchor : QeqT (tn_Ps_half 3) (131 # 12)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 谐和不配对照锚（D016 判否机器坐实：库 bk_Pn_list 谐和分子在 1/2 求值）
-   对照：真值 tn_Ps_half 1 == 2、tn_Ps_half 2 == 9/2 —— 双双不配 *)
+(* 谐和不配对照锚：库 bk_Pn_list 谐和分子在 1/2 求值
+   （真值 tn_Ps_half 1 == 2、tn_Ps_half 2 == 9/2，均不配） *)
 Theorem tn_harm1_anchor : QeqT (bkQ (bk_Pn_list 1) (1 # 2)%Q) (1 # 2)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
@@ -264,7 +264,7 @@ Theorem tn_harm2_anchor : QeqT (bkQ (bk_Pn_list 2) (1 # 2)%Q) (19 # 8)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* 假设审计留痕：Print Assumptions（G4 复核位）                          *)
+(* 假设审计：以下 Print Assumptions 输出应为零依赖（零承认复核）。        *)
 (* ============================================================ *)
 
 Print Assumptions tn_x_eq_bv_x.

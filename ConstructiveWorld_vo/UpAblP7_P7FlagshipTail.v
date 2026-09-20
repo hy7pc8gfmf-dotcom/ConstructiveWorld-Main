@@ -1,48 +1,48 @@
 (* ============================================================ *)
-(* UpAblP7_P7FlagshipTail.v —— 论文7 专项消融战役 PA7-10 席乙腿件           *)
-(*   （P7BoundedSoftmaxDeep 旗舰五件合龙实例化·乙腿：②③④⑤四件）            *)
-(* 母本：P7BoundedSoftmaxDeep.v（席位P7C 深层消融件；本件只读消费其        *)
-(*   上游出节面，原树零改）。甲腿席 PA7-09 件（UpAblP7_P7KappaFlagship     *)
-(*   与其台账）本件不依赖、不装设、不触碰——乙腿独立成件，旗舰件①与其      *)
-(*   供给桥归甲腿，合龙面留给主会话。                                      *)
-(* 母本坐标（文件:行号 → 本件消费位）：                                    *)
-(*   P7BoundedSoftmaxDeep.v:263 p7d_one_le_hi_sq      → 乙腿②（展幅）     *)
-(*   P7BoundedSoftmaxDeep.v:107 p7d_swap_of_sum_eq_list → 乙腿③（交换）   *)
-(*   P7BoundedSoftmaxDeep.v:224 p7d_nR_pos_gives_enum_nonempty →         *)
-(*   P7BoundedSoftmaxDeep.v:213 p7d_enum_nonempty_gives_nR_pos →          *)
-(*       乙腿④（双向件较易侧＝反向者：出节无求和实例位，单例互证）         *)
-(*   P7BoundedSoftmaxDeep.v:312 p7d_factor_over_hi    → 乙腿⑤（因子-倒数） *)
-(*   P7BoundedSoftmaxDeep.v:76  p7d_lsum_fubini_gen   → ③ 载体恒等面直击   *)
-(*   AttnDoeblin.v:478 bs_list_sum／:545 bs_hi_pos／:118 nat_to_R_pos     *)
-(* 分级申报：N1 库内放电件直连（母本出节件＋S01 类字段＋基座 nat_to_R_pos）； *)
-(* N2 已证导出（②乙独立链：lo·hi==one 六步恒等链＋严格单调三步洗牌链，     *)
-(*   不消费 bs_lo_hi_eq／bs_lo_lt_hi 两母件承重位）；N3 实例供给           *)
-(*   （温度:=1、利差:=1 具体装配，one_pos＋inv_pos_pos 供给；单例载体      *)
-(*   (szero::nil) 具体数据位）。                                           *)
-(* 依赖清单：S01_BaseRing＋AttnDoeblin＋P7BoundedSoftmaxDeep＋Stdlib List  *)
-(*   ——只读消费，原树零改；不装设甲腿件（避免在飞依赖）。                  *)
-(* κ∈(0,1) 前件包口径：温度/利差数据对＋两正性证书＋指数字段四件           *)
-(*   （正性/零点/加法/严格单调）＝乙腿②⑤共用九参包；②乙即该包的消费形    *)
-(*   （hi:=expf(invT·Δ) 面，expf_plus／mono 链供给），展幅 1≤hi² 为        *)
-(*   κ:=1−lo²∈(0,1) 下界的展幅对偶补件。                                   *)
-(* sum_eq_list 数据位裁定（承 CYD7 IdSlotTranslate 头注定谳）：SumOver     *)
-(*   八字段实例构造不可行（zero_nonneg 全称位须 enum 满射数据）；故③之    *)
-(*   实例形走「载体恒等供给」双面：恒等载体面（bs_list_sum 折叠为载体，    *)
-(*   恒等级）＋显式全称升格面（求和实例与规范化证书升格为全称位——更强     *)
-(*   诚实形），不冒充实例构造。                                            *)
-(* 定理面（九件，全 Qed，前缀 uaft_）：                                    *)
-(*   ②甲 uaft_one_le_hi_sq_one ——实例装配 @ 温度:=1、利差:=1               *)
-(*   ②乙 uaft_one_le_hi_sq_indep ——独立链复刻（恒等六步＋单调三步）        *)
-(*   ③甲 uaft_swap_of_sum_eq_list_explicit ——显式全称升格（实例装配）      *)
-(*   ③乙 uaft_swap_list_carrier_id ——恒等载体面（上游直击 fubini）         *)
-(*   ③丙 uaft_swap_singleton_carrier ——单例载体具体位（定义性坍缩）        *)
-(*   ④甲 uaft_singleton_nR_pos ——单例 nR>0 计算位（nat_to_R_pos 直击）     *)
-(*   ④乙 uaft_singleton_nonempty_hand ——独立链（长度同余＋one_pos 链）     *)
-(*   ④丙 uaft_singleton_nonempty_via_mother ——母件反向消费（双向互证）     *)
-(*   ⑤甲 uaft_factor_over_hi_one ——实例装配 @ 温度:=1、利差:=1             *)
-(* 红线自审：零 公理/承认件/参数/猜想/弃证；Set 层语句；全 Qed；文尾       *)
-(*   逐件全 Closed；独立伴生件不并入原模块；前缀 uaft_ 本件内防撞；        *)
-(*   全中文零承认件写法（头注与注释同口径）。                              *)
+(* UpAblP7_P7FlagshipTail.v —— P7BoundedSoftmaxDeep 出节定理的实例化、        *)
+(*   独立重证与求和交换恒等三形。                                            *)
+(* 使命：使用源模块 P7BoundedSoftmaxDeep.v 出节面（只读）：将 p7d_one_le_hi_sq   *)
+(*   （1≤hi²）与 p7d_factor_over_hi（因子-倒数恒等式）实例化于温度:=1、        *)
+(*   利差:=1；给出单例非空两向互证与求和交换恒等的显式全称/载体/单例三形。     *)
+(* 本件不依赖、不装设同题异向件 UpAblP7_P7KappaFlagship。                     *)
+(*                                                                *)
+(* 使用面（上游出口真名）：p7d_one_le_hi_sq、p7d_swap_of_sum_eq_list、        *)
+(*   p7d_nR_pos_gives_enum_nonempty、p7d_enum_nonempty_gives_nR_pos、         *)
+(*   p7d_factor_over_hi、p7d_lsum_fubini_gen（P7BoundedSoftmaxDeep）；        *)
+(*   bs_list_sum、bs_hi_pos、nat_to_R_pos（AttnDoeblin）。                    *)
+(*                                                                *)
+(* 证明来源分层：①上游直接应用——uaft_one_le_hi_sq_one 经                     *)
+(*   p7d_one_le_hi_sq、uaft_factor_over_hi_one 经 p7d_factor_over_hi；        *)
+(*   ②独立重证——uaft_one_le_hi_sq_indep 以 lo·hi=one 恒等链（expf_plus、      *)
+(*   distrib、plus_comm、plus_opp、mult_zero、expf_zero）与 lo<hi 单调链      *)
+(*   （lt_mult_compat、mult_comm、lt_id_l/lt_id_r）自证，不使用源模块           *)
+(*   bs_lo_hi_eq／bs_lo_lt_hi 两件；③实例供给——温度:=1、利差:=1               *)
+(*   （one_pos＋inv_pos_pos），单例载体 (szero::nil)。                        *)
+(* sum_eq_list 数据位说明：SumOver 八字段实例构造不可行（zero_nonneg 全称位    *)
+(*   须 enum 满射数据）；故交换恒等取三形：显式全称形（求和实例与规范化        *)
+(*   证书升为显式全称前提）、载体恒等形（以 bs_list_sum 折叠为求和载体）、     *)
+(*   单例计算形（szero::nil 上定义性归约）。                                  *)
+(*                                                                *)
+(* κ∈(0,1) 前提形：温度/利差数据对＋两正性证书＋指数字段四件（正性/零点/       *)
+(*   加法/严格单调），为 uaft_one_le_hi_sq_one 与                             *)
+(*   uaft_factor_over_hi_one 共用的九参前提。                                 *)
+(*                                                                *)
+(* 依赖清单：S01_BaseRing＋CW_ConstructiveWorld_219＋AttnDoeblin＋            *)
+(*   P7BoundedSoftmaxDeep＋Stdlib List——只读使用，原树零改。                  *)
+(*                                                                *)
+(* 定理面（九件，全 Qed，前缀 uaft_）：                                       *)
+(*   uaft_one_le_hi_sq_one —— 1≤hi² 于温度:=1、利差:=1 的实例形；             *)
+(*   uaft_one_le_hi_sq_indep —— 同结论独立重证（恒等链＋单调链）；             *)
+(*   uaft_factor_over_hi_one —— 因子-倒数恒等式实例形；                       *)
+(*   uaft_singleton_nR_pos —— 单例载体 nat_to_R>0 计算形；                    *)
+(*   uaft_singleton_nonempty_hand —— 单例非空独立重证；                       *)
+(*   uaft_singleton_nonempty_via_mother —— 同命题经 p7d_nR_pos_gives_enum_nonempty 的第二证明（两向互证）； *)
+(*   uaft_swap_of_sum_eq_list_explicit／uaft_swap_list_carrier_id／           *)
+(*   uaft_swap_singleton_carrier —— 交换恒等三形（显式全称/载体/单例）。       *)
+(*                                                                *)
+(* 对标：mathlib 有限和交换（Fubini 型）与列表求和的构造性 Set 层对应。        *)
+(* 构造性注记：语句面全 Set 层；零承认；全 Qed；可提取。                       *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。                 *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -51,16 +51,16 @@ Require Import AttnDoeblin.
 Require Import P7BoundedSoftmaxDeep.
 From Stdlib Require Import List.
 
-(* ################ 段一：乙腿②⑤——展幅与因子-倒数（九参前件包节） ######## *)
+(* ################ 段一：展幅 1≤hi² 与因子-倒数（九参前提节） ################ *)
 
 Section UaftScale.
 
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-(* ②甲 ←p7d_one_le_hi_sq @ 温度:=1、利差:=1（实例装配路：数据双槽取 one，  *)
-(*   one_pos 供两处正性位，invT:=inv_pos one one_pos 具体形；指数族保持     *)
-(*   抽象——全库无具体实数实例，T146 工法档口径） *)
+(* uaft_one_le_hi_sq_one：p7d_one_le_hi_sq @ 温度:=1、利差:=1 的实例形       *)
+(*   （温度与利差均取 one，one_pos 供两处正性位，invT:=inv_pos one one_pos；  *)
+(*   指数族保持抽象——全库无具体实数实例） *)
 Theorem uaft_one_le_hi_sq_one :
   forall (expf : R -> R) (expf_pos : forall x : R, lt zero (expf x))
          (expf_zero : Id (expf zero) one)
@@ -74,10 +74,10 @@ Proof.
            expf_zero expf_plus expf_mono_lt).
 Qed.
 
-(* ②乙 ←p7d_one_le_hi_sq 同句独立链复刻：lo·hi==one 六步恒等链             *)
-(*   （expf_plus→distrib 反向→加法交换→加逆→乘零→指数零点）＋lo<hi          *)
-(*   严格单调三步洗牌（lt_mult_compat＋mult_comm 两次 lt_id_l 搭桥），      *)
-(*   不消费母件承重位 bs_lo_hi_eq／bs_lo_lt_hi。 *)
+(* uaft_one_le_hi_sq_indep：与 p7d_one_le_hi_sq 同结论的独立重证——先由      *)
+(*   恒等链得 lo·hi=one（expf_plus、distrib、plus_comm、plus_opp、mult_zero、 *)
+(*   expf_zero），再经 lo<hi 单调链（lt_mult_compat、mult_comm、lt_id_l）     *)
+(*   与 le_mult_compat_r 推出 1≤hi·hi；不使用源模块 bs_lo_hi_eq／bs_lo_lt_hi。 *)
 Theorem uaft_one_le_hi_sq_indep :
   forall (temp : R) (temp_pos : lt zero temp) (Delta : R) (Delta_pos : lt zero Delta)
          (expf : R -> R) (expf_pos : forall x : R, lt zero (expf x))
@@ -141,9 +141,9 @@ Proof.
                           (inl Hlohi))).
 Qed.
 
-(* ⑤甲 ←p7d_factor_over_hi @ 温度:=1、利差:=1（实例装配路：因子-倒数       *)
-(*   恒等式 e^{a/T}·(e^{Δ/T})⁻¹ == e^{(a−Δ)/T} 之具体温度形；hi 正性位由   *)
-(*   bs_hi_pos @ one/one 装配供给） *)
+(* uaft_factor_over_hi_one：p7d_factor_over_hi @ 温度:=1 的实例形——         *)
+(*   因子-倒数恒等式 e^{a/T}·(e^{Δ/T})⁻¹ = e^{(a−Δ)/T} 的具体温度形；        *)
+(*   hi 正性前提由 bs_hi_pos @ one/one 供给。 *)
 Theorem uaft_factor_over_hi_one :
   forall (a b : R) (expf : R -> R)
          (expf_pos : forall x : R, lt zero (expf x))
@@ -160,9 +160,9 @@ Qed.
 
 End UaftScale.
 
-(* ################ 段二：乙腿④——双向件较易侧（反向）与单例互证 ########## *)
-(* 节前导复刻母本段四（实读裁定：反向件出节无求和实例位——较易侧；正向件   *)
-(*   须 sel 全称位，本件以单例计算位补其具体形）。                          *)
+(* ################ 段二：单例非空两向互证（nR>0 与 enum 非空） ############## *)
+(* 源模块出节面中反向件 p7d_nR_pos_gives_enum_nonempty 不需求和实例，正向件     *)
+(*   p7d_enum_nonempty_gives_nR_pos 须 sel 全称位；本件以单例计算位补具体形。  *)
 
 Section UaftTail.
 
@@ -170,8 +170,8 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {SS : StateSpace RI}.
 
-(* ④甲（单例 nR>0 计算位）：nat_to_R_pos 直击——length (s::nil) 归约面     *)
-(*   S (length nil) 与 nat_to_R_pos 全称位定义性合一（计算供给）。 *)
+(* uaft_singleton_nR_pos：单例载体 nat_to_R>0——length (s::nil) 定义性归约    *)
+(*   为 S (length nil)，与 AttnDoeblin.nat_to_R_pos 全称形直接合一。 *)
 Theorem uaft_singleton_nR_pos : forall s : S,
   lt zero (AttnDoeblin.nat_to_R (length (s :: nil))).
 Proof.
@@ -179,8 +179,8 @@ Proof.
   exact (AttnDoeblin.nat_to_R_pos (length (nil : list S))).
 Qed.
 
-(* ④乙（独立链）：Id (s::nil) nil 沿长度同余洗成 Id one zero，与 one_pos   *)
-(*   冲突放电（lt_id_l 搭桥＋lt_irrefl 收口）——零母件消费。 *)
+(* uaft_singleton_nonempty_hand：独立重证——由 Id (s::nil) nil 经长度映射     *)
+(*   得 Id one zero，与 one_pos 矛盾（经 lt_id_l，收于 lt_irrefl）。 *)
 Theorem uaft_singleton_nonempty_hand : forall s : S, Not (Id (s :: nil) nil).
 Proof.
   intros s H.
@@ -190,8 +190,8 @@ Proof.
   exact (lt_irrefl one (lt_id_l one zero one Hone0 one_pos)).
 Qed.
 
-(* ④丙（母件反向消费）：p7d_nR_pos_gives_enum_nonempty @ 单例载体——       *)
-(*   与④乙双向互证（同一命题两独立来路）。 *)
+(* uaft_singleton_nonempty_via_mother：同命题经                              *)
+(*   p7d_nR_pos_gives_enum_nonempty @ 单例载体——与 uaft_singleton_nonempty_hand 互为独立证明。 *)
 Theorem uaft_singleton_nonempty_via_mother : forall s : S, Not (Id (s :: nil) nil).
 Proof.
   intro s.
@@ -201,9 +201,9 @@ Qed.
 
 End UaftTail.
 
-(* ################ 段三：乙腿③——sum_eq_list 数据位之载体恒等供给 ######## *)
-(* 节前导复刻母本段二前导（CYD7 裁定：SumOver 八字段实例构造不可行；故      *)
-(*   三面施工：显式全称升格／恒等载体／单例具体位）。                       *)
+(* ################ 段三：求和交换恒等三形（显式全称/载体恒等/单例） ######### *)
+(* 背景：SumOver 八字段实例构造不可行（zero_nonneg 全称位须 enum 满射数据）；  *)
+(*   故对本件交换恒等分三形论证：显式全称／载体恒等／单例计算。               *)
 
 Section UaftCarrier.
 
@@ -211,9 +211,9 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {SS : StateSpace RI}.
 
-(* ③甲（显式全称升格·实例装配）：母件 p7d_swap_of_sum_eq_list 出节形之    *)
-(*   全称升格——求和实例与规范化证书由节 Variable 位升格为显式全称位        *)
-(*   （更强诚实形），f 全称收尾。 *)
+(* uaft_swap_of_sum_eq_list_explicit：源模块 p7d_swap_of_sum_eq_list 的全称形  *)
+(*   ——求和实例 SO、enum 与 sum_eq_list 证书由节内 Variable 升为 forall      *)
+(*   显式前提，对任意 f 成立。 *)
 Theorem uaft_swap_of_sum_eq_list_explicit :
   forall (SO : SumOver RI SS) (enum : list S)
          (sum_eq_list : forall g : S -> R,
@@ -226,8 +226,8 @@ Proof.
   exact (p7d_swap_of_sum_eq_list enum sum_eq_list f).
 Qed.
 
-(* ③乙（恒等载体面·上游直击）：取 bs_list_sum 折叠为求和载体——交换恒等    *)
-(*   即双重列表和 fubini（p7d_lsum_fubini_gen 直击），零求和实例位。 *)
+(* uaft_swap_list_carrier_id：以 bs_list_sum 折叠为求和载体——交换恒等即     *)
+(*   双重列表和的 Fubini 恒等式（经 p7d_lsum_fubini_gen），无需 SumOver 实例。 *)
 Theorem uaft_swap_list_carrier_id :
   forall (enum : list S) (f : S -> S -> R),
   Id (AttnDoeblin.bs_list_sum
@@ -239,8 +239,8 @@ Proof.
   exact (p7d_lsum_fubini_gen f enum enum).
 Qed.
 
-(* ③丙（单例载体具体位）：enum:=(szero::nil) 具体数据位——内外两折叠在     *)
-(*   单例载体上定义性坍缩为同一正规形（恒等级，零引理消费）。 *)
+(* uaft_swap_singleton_carrier：enum:=(szero::nil)——内外两折叠在单例载体上   *)
+(*   定义性归约为同一形（id_refl，不经引理）。 *)
 Theorem uaft_swap_singleton_carrier :
   forall f : S -> S -> R,
   Id (AttnDoeblin.bs_list_sum
@@ -256,7 +256,7 @@ Qed.
 
 End UaftCarrier.
 
-(* ---- PA 收尾段（逐件 Closed 判读；G4 审查留痕面） ---- *)
+(* ---- 收尾段：逐件 Print Assumptions 核验零承认 ---- *)
 Print Assumptions uaft_one_le_hi_sq_one.
 Print Assumptions uaft_one_le_hi_sq_indep.
 Print Assumptions uaft_factor_over_hi_one.

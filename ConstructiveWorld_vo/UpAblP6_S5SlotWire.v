@@ -1,14 +1,14 @@
 (* ===================================================================== *)
-(* UpAblP6_S5SlotWire.v — PA6-05 喂件面消融件（T215 台账）                *)
-(* 对象：S5SlotWire.v（T201 脸表：230 行 20 声明 0 伴生，全 Defined        *)
-(*       提取面向＝可执行喂件）。消融形态＝N3 代表性喂件实例供给：         *)
-(*       四组具体数据构造喂入，使转发件沿喂点真实求值出结论，非转发冒充——  *)
-(*       喂件构造即消融实质（对照 FA3 消融三分类之实例供给类）。           *)
-(* 覆盖：槽4/5/6（fa56 双槽位点喂：单位点正性消费＋恒等求值）＋            *)
-(*       槽8（fa56c 单位权重喂）＋槽3（of_nat 三前提具体实现喂＋轨道点）＋  *)
-(*       槽9a（Q 半半数值喂＋闭式有理数求值伴件）。                       *)
-(* 纪律：零新数学；语句面全本库 Set 面位；全件 Qed 收束；原树零改；        *)
-(*       .vo 只落临时工作根；零云端零 git；姊妹席辖区零碰。                *)
+(* UpAblP6_S5SlotWire.v —— S5SlotWire 接口参数的具体实例供给件           *)
+(* 使命：为上游 S5SlotWire 的已证定理供给具体数据（实例供给，零新数学），  *)
+(*       使抽象结论在具体数据上真实求值：协方差单位点正性与恒等式、产率    *)
+(*       单位权重、宏观损耗单调的 of_nat 三前提实现与两步轨道点、Q 层      *)
+(*       η=μ=x₀=1/2 数值衰减的闭式求值。                                 *)
+(* 依赖：S01_BaseRing、fa56_id_carrier、fa56c_ext、PhysPredAblation、      *)
+(*       p4a_GradSignQDec、S5SlotWire；stdlib QArith_base/Qring/Qabs/      *)
+(*       Lists.List。构造性注记：语句面全在本库 Set 层；上游声明全         *)
+(*       Defined（可执行求值面）；全件 Qed 收束；零公理零承认。编译配方：   *)
+(*       coqc 9.1 直调，cpu_guard 温控，-o 临时目录，树内零写入。           *)
 (* ===================================================================== *)
 
 Require Import S01_BaseRing.
@@ -20,7 +20,7 @@ Require Import S5SlotWire.
 From Stdlib Require Import QArith_base Qring Qabs.
 From Stdlib Require Import Lists.List.
 
-(* ============ §一 接口槽四组喂件（槽4/5/6/8/3） ======================== *)
+(* ============ §1 节内四组具体实例（协方差/恒等/产率/宏观损耗） ========== *)
 
 Section UasswFeed.
 
@@ -36,31 +36,31 @@ Let opp  := @opp RI.
 Let le   := @le RI.
 Let lt   := @lt RI.
 
-(* ---- 喂件一（槽4/5：协方差位单位点正性消费） ------------------------
-   喂入数据：D := one、H_inv := one（接口单位点），正性证书
-   one_pos × one_pos 双喂——被喂件 ssw_covariance_pos 在该具体点放电，
-   结论 lt zero (fa56_covariance one one) 为单位点协方差正性实例。
-   非平凡性：消费链经 fa56_covariance_pos（mult_positive）在喂点闭合，
-   证书合成（单位点双正）为本席构造。 ---- *)
+(* ---- 实例一（协方差单位点正性：uassw_covariance_unit_pos） -----------
+   给出数据 D := one、H_inv := one（接口单位点），正性前提由
+   one_pos 与 one_pos 提供——上游引理 ssw_covariance_pos 在该具体数据上
+   实例化消解，结论 lt zero (fa56_covariance one one) 即单位点协方差
+   正性实例。证明链经 fa56_covariance_pos（mult_positive）在本点闭合；
+   单位点双正的具体选取为本文供给。 ---- *)
 Theorem uassw_covariance_unit_pos : lt zero (fa56_covariance one one).
 Proof.
   exact (ssw_covariance_pos one one one_pos one_pos).
 Qed.
 
-(* ---- 喂件二（槽6：恒等位单位点求值；易档 T 级申报） ------------------
-   喂入数据：D := one、H_inv := one。fa56_covariance 装法在喂点
-   定义性展开＝mult one one，恒等以 id_refl 构造子收口——
-   装法体沿喂点真实求值，恒等两臂逐位同型（透明展开级，如实申报）。 ---- *)
+(* ---- 实例二（恒等式单位点求值：uassw_fluctuation_unit_id） -----------
+   给出数据 D := one、H_inv := one。fa56_covariance 在该点定义性展开为
+   mult one one，恒等由构造子 id_refl 直接给出——
+   恒等两臂逐位同型（定义性展开级，如实注记）。 ---- *)
 Theorem uassw_fluctuation_unit_id : Id (fa56_covariance one one) (mult one one).
 Proof.
   exact id_refl.
 Qed.
 
-(* ---- 喂件三（槽8：产率位单位权重喂） --------------------------------
-   喂入数据：Flx := unit、TD := unit、w := 常一权重、theta := 常一势、
-   J := tt、X := tt。fa56c 产率装法（权重×势）在喂点求值：
-   常一×常一＝mult one one，恒等经被喂件 ssw_entropy_production_rate
-   放电后按 β 规约收口。 ---- *)
+(* ---- 实例三（产率单位权重：uassw_entropy_production_unit） -----------
+   给出数据 Flx := unit、TD := unit、w := 常一权重、theta := 常一势、
+   J := tt、X := tt。fa56c 产率定义（权重×势）在该点求值：
+   常一×常一＝mult one one，恒等经上游引理 ssw_entropy_production_rate
+   实例化后按 β 规约闭合。 ---- *)
 Theorem uassw_entropy_production_unit :
   Id (fa56c_entropy_production_rate unit unit (fun _ => one) (fun _ => one) tt tt)
      (mult one one).
@@ -68,12 +68,12 @@ Proof.
   exact (ssw_entropy_production_rate unit unit (fun _ => one) (fun _ => one) tt tt).
 Qed.
 
-(* ---- 喂件四（槽3：of_nat 三前提具体实现喂） --------------------------
-   喂入数据：nat_to_R 具体实现（零元 zero、步进 plus·one 的
-   nat 递归构造，泛型于接口），三前提件逐件构造为独立 Qed 件：
-   零元恒等（iota 求值）、步进恒等（iota 求值）、非负（归纳＋
-   plus_le_lt_pos 在喂点合成），再喂入 ssw_macro_loss_monotone
-   于 m0 := zero、t := 2 双步轨道点消费。 ---- *)
+(* ---- 实例四（of_nat 三前提具体实现：uassw_macro_loss_zero_step2） -----
+   给出数据：nat_to_R 具体实现（零元 zero、步进 plus·one 的
+   nat 递归构造，泛型于接口），三个前提逐一构造为独立 Qed 引理：
+   零元恒等（iota 求值）、步进恒等（iota 求值）、非负性（归纳＋
+   plus_le_lt_pos 在具体点合成），再应用于 ssw_macro_loss_monotone
+   于 m0 := zero、t := 2 的两步轨道点。 ---- *)
 Fixpoint nat_to_R (n : nat) : R :=
   match n with
   | O => zero
@@ -114,14 +114,14 @@ Qed.
 
 End UasswFeed.
 
-(* ============ §二 槽9a Q 数值喂件（半半实例＋闭式求值伴件） ============= *)
+(* ============ §2 Q 层数值实例（η=μ=x₀=1/2 与闭式求值伴随引理） ========== *)
 
 Open Scope Q_scope.
 
-(* ---- 喂件五（槽9a：eta := 1/2、mu := 1/2、x0 := 1/2、n := 0、k := 1） --
-   喂入数据：ημ ＝ 1/4 ＜ 1（收缩系数 κ ＝ 3/4 落 (0,1)），三前提
-   逐件由 Q 层有序比较计算收口；被喂件 ssw_full_sign_decay_instance_ref
-   在该闭式点放电出数值衰减不等式。 ---- *)
+(* ---- 实例五（Q 数值：eta := 1/2、mu := 1/2、x0 := 1/2、n := 0、k := 1） -
+   给出数据：ημ ＝ 1/4 ＜ 1（收缩系数 κ ＝ 3/4 落于 (0,1)），三个前提
+   逐件由 Q 层有序比较计算闭合；上游引理 ssw_full_sign_decay_instance_ref
+   在该闭式点实例化出数值衰减不等式。 ---- *)
 Theorem uassw_full_sign_decay_half :
   Qle (Qabs (gsq_grad (1#2) (gsq_iter (1#2) (1#2) (O + Datatypes.S O) (1#2))))
       (gsq_pow (gsq_kappa (1#2) (1#2)) (Datatypes.S O)
@@ -133,10 +133,10 @@ Proof.
   - vm_compute. reflexivity.
 Qed.
 
-(* ---- 真求值伴件三件：喂点数据经 Defined 体计算至闭式有理数 -----------
+(* ---- 闭式求值伴随引理三件：具体数据经 Defined 定义体算至有理数 -------
    κ(1/2,1/2) ＝ 3/4、g(1/2) ＝ 1/4、轨道一步 x₁ ＝ 3/8——
-   gsq_step 三分支判定（stdlib 构造性三分，Defined 透明）沿喂点
-   真实求值，结论逐位为字面有理数（Qeq 交叉积比较收口）。 ---- *)
+   gsq_step 三分支判定（stdlib 构造性三分，Defined 透明）在该点
+   真实求值，结论逐位为字面有理数（经 Qeq 交叉积比较闭合）。 ---- *)
 Theorem uassw_kappa_half_eval : gsq_kappa (1#2) (1#2) == (3#4).
 Proof.
   vm_compute. reflexivity.
@@ -154,7 +154,7 @@ Qed.
 
 Close Scope Q_scope.
 
-(* ============ 自检段（G4 口径：逐件 Closed 实证） ===================== *)
+(* ============ 收尾核验（Print Assumptions 逐件 Closed） ================ *)
 
 Print Assumptions uassw_covariance_unit_pos.
 Print Assumptions uassw_fluctuation_unit_id.

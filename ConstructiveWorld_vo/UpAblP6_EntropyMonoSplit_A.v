@@ -1,43 +1,43 @@
 (* ============================================================ *)
-(* UpAblP6_EntropyMonoSplit_A.v —— 战役 PA6-03 甲腿（T213）           *)
-(*   EntropyMonoSplitInst 前三枚证明件逐枚消融（按依赖序 #4/#5/#6）     *)
+(* UpAblP6_EntropyMonoSplit_A.v —— 消融件甲：EntropyMonoSplitInst       *)
+(*   前三枚证明件的独立重证（按依赖序 #4/#5/#6）。                      *)
 (*                                                              *)
-(* 母本：消融50/EntropyMonoSplitInst.v（论文6:644 引用件；权威消费态   *)
-(*   /tmp/czn14_union_full/EntropyMonoSplitInst.vo，出节常量 8 枚）。  *)
-(*   11 声明勘表：3 Let（emsi_bt/emsi_bt_pos/emsi_kl，速记无封口）      *)
-(*   + 3 Lemma（三桥件）+ 1 Corollary（镜像孪生）+ 4 Theorem（装载）。  *)
-(*   本件消融前三枚含 Qed 封口的证明件：                                *)
-(*     #4 emsi_energy_pin_self（:97 能量钉自钉小桥）                    *)
-(*     #5 emsi_le_diff_ge_zero（:117 差分非负序桥）                     *)
-(*     #6 emsi_le_plus_eps（:136 eps 松弛提升桥）                       *)
-(*   Let 三枚无独立证明体不设消融（出节内联消失）；#7–#11 留乙腿。      *)
+(* 母本：EntropyMonoSplitInst.v（上游定义件，出节常量 8 枚）。          *)
 (*                                                              *)
-(* 消融纪律（禁转发冒充）：全部五枚定理证项零引用母本件名                 *)
-(*   （emsi_* / inst_* 六枚全不出现），逐枚注明消融形态：                *)
-(*     消融一（对 #4）上游直击 + 峰温装配对偶：剥母本 emsi_bt 换名层，    *)
-(*       直接对上游注册面 UpReqTempDefs.real_boltzmann_dist_temp /       *)
-(*       real_energy_exp_temp 定义面 real_eq_refl 重立；腿二给母本       *)
-(*       inst_pinned_at_peak 的 sym 对偶新形（母本未证方向）。           *)
-(*     消融二（对 #5）独立链：改走 RealSetoid.real_eq_le（eq 升格桥）    *)
-(*       造 0 ≤ a+(−a) 再 real_le_trans 复合——与母本「compat 双边       *)
-(*       同加 + id_l 换左」结构异链。                                   *)
-(*     消融三（对 #6）实例装配：泛形直击重立 + eps:=real_one 具体装配    *)
-(*       新形（real_one_pos 供位）+ #5∘#6 组合桥（消费本件消融件，       *)
-(*       验证桥链撤母本后仍自洽复合）。                                  *)
+(*   11 声明勘表：3 Let（emsi_bt/emsi_bt_pos/emsi_kl，无独立证明体）      *)
+(*   + 3 Lemma（三枚桥接引理）+ 1 Corollary（对称孪生形）+ 4 Theorem。  *)
+(*   本件消融前三枚含 Qed 的证明件：                                    *)
+(*     #4 emsi_energy_pin_self（能量自等桥接引理）                      *)
+(*     #5 emsi_le_diff_ge_zero（差分非负序引理）                        *)
+(*     #6 emsi_le_plus_eps（eps 松弛提升引理）                          *)
+(*   Let 三枚无独立证明体不设消融（出节内联消失）；#7–#11 属后续消融件。 *)
 (*                                                              *)
-(* 纪律：全件真证收口零悬置；raw Real 层零 req2 混引；原树只读；        *)
-(*   编译产物只落 /tmp/pa7_work；尾嵌 Print Assumptions 五连自检。       *)
+(* 独立性注记：全部六枚定理证明项零引用母本件名                           *)
+(*   （emsi_* / inst_* 六枚全不出现），逐枚注明重证形态：                *)
+(*   消融一（对 #4）上游定义面直接重证 + 峰温对偶：剥母本 emsi_bt 换名层， *)
+(*     直接对上游 UpReqTempDefs.real_boltzmann_dist_temp /               *)
+(*     real_energy_exp_temp 定义面以 real_eq_refl 重立；第二定理给母本    *)
+(*     inst_pinned_at_peak 的 sym 对偶新形（母本未证方向）。             *)
+(*   消融二（对 #5）独立链：改走 RealSetoid.real_eq_le（eq 化 le 引理）   *)
+(*     造 0 ≤ a+(−a) 再 real_le_trans 复合——与母本「compat 双边         *)
+(*     同加 + id_l 换左」结构异链。                                     *)
+(*   消融三（对 #6）实例装配：泛形直接重立 + eps:=real_one 具体装配      *)
+(*     新形（real_one_pos 供给）+ #5∘#6 组合引理（使用本件消融件，       *)
+(*     验证引理链撤母本后仍自洽复合）。                                  *)
+(*                                                              *)
+(* 全部证明以 Qed 闭合零悬置；语句面全在 raw Real 层，无 req2 形混引。   *)
+(*   尾嵌 Print Assumptions 六连假设审计。                              *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.
 
 (* ============================================================ *)
-(* 消融一（对母本 #4 emsi_energy_pin_self）——上游直击腿：               *)
-(*   母本语句经 emsi_bt 换名包裹；本枚剥掉换名层，对上游注册面             *)
-(*   real_boltzmann_dist_temp / real_energy_exp_temp 出节形直击。        *)
-(*   证项零母本：左端 lambda 与 real_energy_exp_temp 定义面定义性        *)
-(*   合一，real_eq_refl 一发真装（母本同理但本件独立复立）。             *)
+(* 消融一（对母本 #4 emsi_energy_pin_self）——上游定义面直接重证：       *)
+(*   母本语句经 emsi_bt 换名包裹；本枚剥掉换名层，对上游定义件            *)
+(*   real_boltzmann_dist_temp / real_energy_exp_temp 出节形直接重述。    *)
+(*   证明项零母本：左端 lambda 与 real_energy_exp_temp 定义面定义性      *)
+(*   合一，real_eq_refl 直接给出（母本同理但本件独立复立）。             *)
 (* ============================================================ *)
 Theorem uap63_pin_self_updirect :
   forall (S : Type) (rsu : (S -> Real) -> Real)
@@ -61,9 +61,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 消融一腿二（峰温装配对偶）：母本 inst_pinned_at_peak 证               *)
+(* 消融一之二（峰温对偶）：母本 inst_pinned_at_peak 证                   *)
 (*   Σ(p_{t*}·e) == E_{t*}；本枚给 sym 对偶新形 E_{t*} == Σ(p_{t*}·e)    *)
-(*   （母本全件未证方向），零供位零母本，上游定义面直击。                 *)
+(*   （母本全件未证方向），零母本引用，对上游定义面直接重证。             *)
 (* ============================================================ *)
 Theorem uap63_pin_at_peak_sym_assembly :
   forall (S : Type) (rsu : (S -> Real) -> Real)
@@ -86,7 +86,7 @@ Qed.
 (* ============================================================ *)
 (* 消融二（对母本 #5 emsi_le_diff_ge_zero）——独立链：                   *)
 (*   母本链 = real_le_plus_compat 双边同加 −a + id_l 换左端；            *)
-(*   本枚异链 = real_eq_le（eq 升格 le 桥）先立 0 ≤ a+(−a)（换向         *)
+(*   本枚异链 = real_eq_le（eq 化 le 引理）先立 0 ≤ a+(−a)（换向         *)
 (*   real_plus_opp），再 real_le_trans 复合 compat 形——链根不同。        *)
 (* ============================================================ *)
 Theorem uap63_diff_ge_zero_indep :
@@ -106,9 +106,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 消融三（对母本 #6 emsi_le_plus_eps）泛形直击腿：同构重立              *)
-(*   （compat + id_l，与母本同构——泛形即母本全部门面，声明为同构复装，    *)
-(*   非独立链；独立性与装配性由下两腿补足）。                            *)
+(* 消融三（对母本 #6 emsi_le_plus_eps）泛形直接重证：同构重立            *)
+(*   （compat + id_l，与母本同构——泛形即母本语句本形，声明为同构重立，    *)
+(*   非独立链；独立链与装配实例由下两枚补足）。                          *)
 (* ============================================================ *)
 Theorem uap63_plus_eps_updirect :
   forall X eps : Real,
@@ -126,8 +126,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 消融三腿二（实例装配）：eps := real_one 具体装配新形                  *)
-(*   （母本全件无 any 具体eps 装配实例；real_one_pos 供位真装）。         *)
+(* 消融三之二（实例装配）：eps := real_one 具体装配新形                  *)
+(*   （母本全件无任何具体 eps 装配实例；real_one_pos 供给）。             *)
 (* ============================================================ *)
 Theorem uap63_eps_one_assembly :
   forall X : Real,
@@ -144,9 +144,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 消融三腿三（#5∘#6 组合桥独立链）：撤母本两桥后链仍自洽复合——          *)
-(*   消费本件消融二/消融三泛形两枚，real_le_trans 一跳复合，              *)
-(*   证项零母本件名。                                                   *)
+(* 消融三之三（#5∘#6 组合引理独立链）：撤母本两引理后链仍自洽复合——      *)
+(*   使用本件消融二/消融三泛形两枚，real_le_trans 一步复合，              *)
+(*   证明项零母本件名。                                                 *)
 (* ============================================================ *)
 Theorem uap63_diff_eps_combo_indep :
   forall a b eps : Real,
@@ -166,7 +166,7 @@ Proof.
               (real_le_refl eps))).
 Qed.
 
-(* ---- G1 内嵌自检段（五枚闭合判词） ---- *)
+(* ---- 假设面审计（六枚闭合结论） ---- *)
 Print Assumptions uap63_pin_self_updirect.
 Print Assumptions uap63_pin_at_peak_sym_assembly.
 Print Assumptions uap63_diff_ge_zero_indep.

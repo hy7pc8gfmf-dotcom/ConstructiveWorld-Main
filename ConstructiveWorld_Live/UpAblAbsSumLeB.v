@@ -1,32 +1,32 @@
 (* ============================================================ *)
-(* UpAblAbsSumLeB.v —— abs_sum_le 族（族I 墙）可达最强形供给件        *)
+(* UpAblAbsSumLeB.v —— abs_sum_le 族（族 I plain Or 形）可达最强形供给件 *)
 (*                                                                *)
-(* 席位：S4（TW1ATK 冻结现态续攻席）· 20260920                       *)
-(* 零承认件：无承认词面、无假设槽位声明、无经典逻辑、全件 Qed 闭合。 *)
+(* 零承认件：无承认词面、无假设参数声明、无经典逻辑、全件 Qed 闭合。 *)
 (*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b 均 Set），  *)
-(*   语句面无裸「命题层」；证明全构造（Or 逐支、sigT 见证直构）。       *)
+(*   语句面无裸「命题层」；证明全构造（Or 逐支、sigT 见证直接构造）。 *)
 (*                                                                *)
-(* 定谳（本件头注即定谳正文）：                                      *)
-(*   族I 墙（abs_sum_le plain Or 形，UpReqSampling:116/:719 槽）     *)
-(*   的可达最强形 = Bishop B 形（real_le_b，UpRealLeB:72）：          *)
+(* 结论（本件头注即结论正文）：                                      *)
+(*   abs_sum_le 族 I（plain Or 形，UpReqSampling 的族 I 接口）        *)
+(*   的可达最强形 = Bishop B 形（real_le_b，见 UpRealLeB）：          *)
 (*   ① B 形严格强于逐 eps 形（real_le_closure_b_one 单步闭包）；      *)
-(*   ② 逐 eps 形经 Or-inl 支直供（real_lt_le_iff_req 左注入）；       *)
-(*   ③ plain Or 形不可达（E751 判词维持，本件不触碰）。               *)
+(*   ② 逐 eps 形经 Or-inl 支直接给出（real_lt_le_iff_req 左注入）；   *)
+(*   ③ plain Or 形不可达（本件不触及该方向的构造）。                 *)
 (*                                                                *)
-(* 三件供给（全部新独立件，非平凡构造）：                              *)
+(* 三件供给（全为独立构造）：                                        *)
 (*   A 两点核差形：|a−c| ≤ (|a−b|+|b−c|)+eps 逐 eps（Or-inl）        *)
-(*      ＋ B 形——差缝合 eq 链（assoc/opp/zero 五步）＋三角实例；      *)
-(*   B list 折叠形：real_list_sum 折叠三角——归纳承载两点核＋          *)
-(*      误差账目（§9.3 口径：单点引入=每步一整单位 e；常数加权=       *)
-(*      权函数 W(l)（W(nil)=1，W(cons)=W(rest)+1）线性记账；          *)
-(*      末端完成=real_le_closure_b 以 W(l) 显式正性证书升 B 形），    *)
-(*      ＋ B 形⟹逐 eps 形回收（inl 注入）；                          *)
-(*   C eps₀/2 双杀引理（TW1ATK 发现②定理化）：余量倍率 2 杀——        *)
+(*      ＋ B 形——差恒等式 eq 链（assoc/opp/zero 五步）＋三角实例；    *)
+(*   B list 折叠形：real_list_sum 折叠三角——归纳承载两点核＋         *)
+(*      误差分配（约定：单点引入=每步恰一整单位 e；常数加权=          *)
+(*      权函数 W(l)（W(nil)=1，W(cons)=W(rest)+1）线性加权）；        *)
+(*      末端=以 W(l) 显式正性证书经 real_le_closure_b 得 B 形），     *)
+(*      ＋B 形⟹逐 eps 形（Or-inl 注入）；                            *)
+(*   C 余量倍率 2 不可共存引理：余量倍率 2 时——                      *)
 (*      real_lt (Y+2e) X 与 real_le X (Y+e) 不可能共存（lt 支        *)
-(*      传递自撞＋eq 支运输自撞，共用 irrefl 引爆）。                 *)
+(*      传递与 eq 支运输同归于 real_lt (Y+2e) (Y+e)，与 e < 2e        *)
+(*      的平移合取后撞 real_lt_irrefl）。                             *)
 (*                                                                *)
-(* 依赖：CW_ConstructiveWorld_219＋UpRealLeB（同代）＋               *)
-(*   S08_RealMainlineDPO（real_list_sum，0916 代在档）。             *)
+(* 依赖：CW_ConstructiveWorld_219＋UpRealLeB＋                       *)
+(*   S08_RealMainlineDPO（real_list_sum）。                           *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -36,26 +36,26 @@ Require Import UpRealLeB.
 Require Import S08_RealMainlineDPO.
 
 (* ============================================================ *)
-(* Part 0 · 冻结现态复刻：武器在库打表（签名漂移即 fail-loud）          *)
+(* §0 库内接口核对（Check 逐项对照真实签名）                            *)
 (* ============================================================ *)
 
-Check real_le_b.              (* UpRealLeB:72  Bishop 形 ≤（可达最强形谓词） *)
+Check real_le_b.              (* Bishop 形 ≤（可达最强形谓词，见 UpRealLeB） *)
 Check real_le_closure_b_one.  (* 逐 eps 完成为 B 形（单步闭包） *)
-Check real_le_closure_b.      (* D 带证书加权完成（末端完成机） *)
-Check real_abs_triangle_le_B. (* |a+b| ≤_B |a|+|b|（TW1ATK 发现一实锚） *)
-Check real_abs_triangle_le_eps. (* |a+b| ≤ (|a|+|b|)+eps 逐 eps（两点核实锚） *)
+Check real_le_closure_b.      (* 带加权正性证书 D 的 B 形闭合 *)
+Check real_abs_triangle_le_B. (* |a+b| ≤_B |a|+|b|（B 形三角不等式） *)
+Check real_abs_triangle_le_eps. (* |a+b| ≤ (|a|+|b|)+eps 逐 eps（两点核三角不等式） *)
 Check real_lt_zero_one.       (* 0 < 1（W(nil) 正性证书） *)
-Check real_lt_plus_r_zero.    (* y < y+eps（UpRealLeB:81） *)
-Check real_list_sum.          (* S08:288 折叠机器（X 全称） *)
+Check real_lt_plus_r_zero.    (* y < y+eps（见 UpRealLeB） *)
+Check real_list_sum.          (* list 折叠（X 全称，见 S08_RealMainlineDPO） *)
 Check RealSetoid.real_eq_abs_compat. (* abs 尊重 real_eq *)
 Check real_abs_zero_req.      (* |0| ≡ 0 *)
-Check real_lt_irrefl.         (* 反自反（双杀引爆器） *)
+Check real_lt_irrefl.         (* 实数 < 的反自反（归谬的共同落点） *)
 
 (* ============================================================ *)
-(* Part A · 缝合基件：正余量右吸收 ＋ 差形两点核                       *)
+(* §1 基础引理：正余量右吸收 ＋ 差形两点三角不等式                     *)
 (* ============================================================ *)
 
-(* 基件：le a b ＋ 0 < c ⟹ le a (b+c)（正余量右吸收）。
+(* 基础引理：le a b ＋ 0 < c ⟹ le a (b+c)（正余量右吸收）。
    构造：Or 两支分别 lt 传递（b < b+c 经 (b+0) 换形平移）
    ／eq 支运输后同链；统一经 real_lt_le_iff_req 左注入收束。 *)
 Lemma uabS4_le_add_r : forall a b c : Real,
@@ -77,8 +77,8 @@ Proof.
 Qed.
 
 (* A.1 两点核差形（逐 eps，Or-inl）：|a−c| ≤ (|a−b|+|b−c|)+eps。
-   构造：差缝合 eq 链 (a−b)+(b−c) ≡ a−c（assoc×2＋opp＋zero 五步，
-   逐槽 real_eq_plus_compat 运输），abs 尊重 eq 后两点核三角实例直喂。 *)
+   构造：差恒等式 eq 链 (a−b)+(b−c) ≡ a−c（assoc×2＋opp＋zero 五步，
+   逐项经 real_eq_plus_compat 运输），abs 尊重 eq 后两点核三角直接应用。 *)
 Lemma uabS4_abs_diff_triangle_le_eps : forall a b c e : Real,
   real_lt real_zero e ->
   real_le (real_abs (real_plus a (real_opp c)))
@@ -124,8 +124,8 @@ Proof.
   exact (uabS4_abs_diff_triangle_le_eps a b c e He).
 Qed.
 
-(* A.3 族I 墙最小非平凡实例（S:=bool 两点世界）B 形直供
-   （TW1ATK 试钉3 收编定谳：两点=族I 墙的最小非平凡世界）。 *)
+(* A.3 两点世界（S := bool）B 形实例：两点为 abs_sum_le 问题的最小
+   非平凡世界，此处直接应用 real_abs_triangle_le_B。 *)
 Theorem uabS4_abs_sum_le_B_pair : forall f : bool -> Real,
   real_le_b (real_abs (real_plus (f true) (f false)))
             (real_plus (real_abs (f true)) (real_abs (f false))).
@@ -134,12 +134,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B · list 折叠形：加权归纳（§9.3 误差账目）＋末端完成            *)
+(* §2 list 折叠形：权函数加权归纳 ＋ B 形闭合                          *)
 (* ============================================================ *)
 
 (* 权函数：W(nil)=1，W(w::rest)=W(rest)+1（定义性尾权 +1）。
-   误差账目：单点引入每步耗一整单位 e，尾权 W(rest)·e 承接，
-   合计 (W(rest)+1)·e ≡ W(cons)·e——账目逐级严格守恒。 *)
+   误差分配：单点引入每步恰一整单位 e，尾段余量由 W(rest)·e 承担，
+   合计 (W(rest)+1)·e ≡ W(cons)·e——该分配逐级精确成立。 *)
 Fixpoint uabS4_wlen (X : Type) (l : list X) : Real :=
   match l with
   | nil => real_one
@@ -158,11 +158,11 @@ Proof.
     + apply real_lt_plus_r_zero. exact real_lt_zero_one.
 Qed.
 
-(* 缝合引理（折叠归纳的 cons 一步）：
-   两点核（单点引入，余量 e 整单位）＋尾余量（w·e 加权承接）
+(* 归纳步引理（折叠归纳的 cons 一步）：
+   两点核三角（单点引入，余量恰一整单位 e）＋尾段余量（w·e 加权承担）
    ⟹ 折叠目标余量 (w+1)·e。
-   构造：real_le_plus_compat 桥接＋assoc×3＋distrib/mult_one
-   终运输 eq 链（(w+1)·e ≡ w·e + e ≡ w·e + e 逐槽缝合）。 *)
+   构造：经 real_le_plus_compat 合成，再以 assoc×3＋distrib/mult_one
+   的 eq 链终运输（(w+1)·e ≡ w·e + e，经 comm/distrib 逐步重排）。 *)
 Lemma uabS4_cons_glue : forall a s t w e : Real,
   real_lt real_zero e ->
   real_le (real_abs (real_plus a s))
@@ -219,9 +219,9 @@ Proof.
   - exact Hchain.
 Qed.
 
-(* B.1 加权归纳主体（逐 eps 形·权函数记账）：|Σ_l f| ≤ Σ_l|f| + W(l)·e。
-   nil：|0| ≡ 0 ≤ 0 + 1·e（正余量右吸收）；cons：两点核整单位喂入
-   ＋尾 IH 同权承接＋缝合引理收束。 *)
+(* B.1 加权归纳主体（逐 eps 形，权函数 W）：|Σ_l f| ≤ Σ_l|f| + W(l)·e。
+   情形 l=[]：|0| ≡ 0 ≤ 0 + 1·e（正余量右吸收）；
+   归纳步 l 到 w::rest：两点核三角以整单位 e 引入，尾段由归纳假设同权承担，经 uabS4_cons_glue 合成。 *)
 Lemma uabS4_abs_list_sum_le_wt : forall (X : Type) (f : X -> Real) (l : list X)
                                         (e : Real),
   real_lt real_zero e ->
@@ -247,7 +247,7 @@ Proof.
     + exact (IH e He).
 Qed.
 
-(* B.2 末端完成（可达最强形）：|Σ_l f| ≤_B Σ_l|f|。
+(* B.2 B 形闭合（可达最强形）：|Σ_l f| ≤_B Σ_l|f|。
    real_le_closure_b 以 D := W(l) 显式正性证书闭合加权族。 *)
 Theorem uabS4_abs_list_sum_le_B : forall (X : Type) (f : X -> Real) (l : list X),
   real_le_b (real_abs (real_list_sum X f l))
@@ -258,8 +258,8 @@ Proof.
   intros e He. exact (uabS4_abs_list_sum_le_wt X f l e He).
 Qed.
 
-(* B.3 逐 eps 形回收：B 形 ⟹ |Σ_l f| ≤ Σ_l|f| + eps（Or-inl 注入）。
-   定谳对照：B 形严格强于逐 eps 形——本件即单步反演。 *)
+(* B.3 逐 eps 形推论：B 形 ⟹ |Σ_l f| ≤ Σ_l|f| + eps（Or-inl 注入）。
+   对照结论：B 形严格强于逐 eps 形——real_le_closure_b_one 即单步反演。 *)
 Theorem uabS4_abs_list_sum_le_eps : forall (X : Type) (f : X -> Real) (l : list X)
                                            (e : Real),
   real_lt real_zero e ->
@@ -272,15 +272,15 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part C · eps₀/2 双杀引理（TW1ATK 发现②定理化）                     *)
+(* §3 余量倍率 2 的不可共存引理                                        *)
 (* ============================================================ *)
 
-(* C.1 余量倍率 2 杀：0 < e ＋ real_lt (Y+2e) X ＋ real_le X (Y+e)
-   不可能共存。构造：Or 两支分别收敛到 real_lt (Y+2e) (Y+e)——
-   lt 支传递（Y+2e < X < Y+e）；eq 支 RHS 运输（X ≡ Y+e）；
-   共用引爆器：e < 2e 平移给出 Y+e < Y+2e，与上式传递自撞 irrefl。
-   机理注记：eq 支非自反填充——全余量（倍率 1）时 eq 支与反向
-   strict 可共存（TW1ATK 发现②的 xₙ−yₙ＝e+1/n 例），倍率 2 才双杀。 *)
+(* C.1 余量倍率 2 不可共存：0 < e ＋ real_lt (Y+2e) X ＋ real_le X (Y+e)
+   不可能共存。构造：Or 两支都导出 real_lt (Y+2e) (Y+e)——
+   lt 支经传递（Y+2e < X < Y+e）；eq 支经 RHS 运输（X ≡ Y+e）；
+   另一侧 e < 2e 经平移给出 Y+e < Y+2e，与上式合取即与 real_lt_irrefl 矛盾。
+   边界注记：余量恰为 e（倍率 1）时 eq 支与反向
+   strict 可共存（xₙ−yₙ = e+1/n 型逼近例），倍率 2 方不可共存。 *)
 Theorem uabS4_lt_double_margin_le_half_contr : forall X Y e : Real,
   real_lt real_zero e ->
   real_lt (real_plus Y (real_plus e e)) X ->
@@ -304,10 +304,10 @@ Proof.
              (real_plus Y e) Heq Hfar).
 Qed.
 
-(* C.2 倍率 2 杀的差形实例（族I 两点核对角 consumes）：以差形两点核
-   A.2 为 le 供给源：real_lt (b + 2e) a ＋ |a−c| ≤_B |a−b|+|b−c| 型
-   余量约束下的双杀实例——B 形在 eps := e 处给出 le a (|a−b|+|b−c|+e)，
-   与 C.1 同构消耗。 *)
+(* C.2 倍率 2 矛盾的差形实例（两点核差形与 C.1 的对角组合）：以逐 eps
+   差形两点核（uabS4_abs_diff_triangle_le_eps）为 le 来源：real_lt (b + 2e) a ＋ |a−c| ≤_B |a−b|+|b−c| 型
+   余量约束下的矛盾实例——B 形在 eps := e 处给出 le a (|a−b|+|b−c|+e)，
+   代入 C.1 即得。 *)
 Theorem uabS4_diff_double_kill : forall a b c e : Real,
   real_lt real_zero e ->
   real_lt (real_plus (real_plus (real_abs (real_plus a (real_opp b)))
@@ -325,7 +325,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 公理面自审：全件 Closed（零外部未证假设）                           *)
+(* 审计注记：Print Assumptions 预期全 Closed（零外部未证假设）         *)
 (* ============================================================ *)
 
 Print Assumptions uabS4_le_add_r.

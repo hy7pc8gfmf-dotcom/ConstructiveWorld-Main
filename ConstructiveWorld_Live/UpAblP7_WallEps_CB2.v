@@ -1,31 +1,31 @@
 (* ============================================================ *)
-(* UpAblP7_WallEps_CB2.v —— 论文7 专项消融战役席（墙件 eps/B 形消费件战役）   *)
-(*   乙腿 W2：ConcB2 +1 松弛护墙侧（与姊妹席甲腿 W1/CSM 侧分工，互不碰件）      *)
+(* UpAblP7_WallEps_CB2.v —— ConcB2 的 +1 松弛常数 Δ 与中心 z 的实例双侧界与严格形否定 *)
 (*                                                              *)
-(* 母本坐标（UpReqConcB2.v，四树 MD5 同一 fce35de3fccb04ea6436a00329ca0dbf）     *)
-(*   → 本件消费位对照表：                                                      *)
-(*   UpReqConcB2.v:26  头注诚实挂账（字面 Delta:=temp·M 全零退化下 uniform      *)
-(*                     eventual gap 形严格证书不存在）→ 乙腿 b 死亡证书定理化对象 *)
-(*   UpReqConcB2.v:385 cb2_Delta_core := temp·max|dot|（字面形）→ a 组消费重建    *)
-(*                     与 b 组死亡证书双重对象                                  *)
-(*   UpReqConcB2.v:389 cb2_Delta := core+1（装配形）→ a 组实例证书对象            *)
-(*   UpReqConcB2.v:394 cb2_Delta_pos（inl 严格支，eps:=1#2，N 取正性证书之 N0）   *)
-(*                     → a-2 实例级逐行镜像重建母型                             *)
-(*   UpReqConcB2.v:436 cb2_z_lb（In 形下界）→ a-4 实例级严格形重建母型            *)
-(*   UpReqConcB2.v:514 cb2_z_ub（In 形上界）→ a-3 实例级严格形重建母型            *)
-(*   UpReqConcB2.v:562 cb2_z_lb_all / :565 cb2_z_ub_all（槽位直喂形）→ a-5       *)
-(*                     全参闭项打包（temp_pos/lmax_complete 参面实名消费）        *)
-(*   UpReqConcB2.v:574 Cb2Smoke 全零退化实例面 → b 组退化对象实名复用              *)
-(* 分级申报：N1 库内放电件直连（cb2_z_lb_all/cb2_z_ub_all 全参闭项打包）；N2 已证    *)
-(*   导出（cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap/     *)
-(*   cb2_qhalf_lt_one/cb2_qhalf_pos/cb2_qlt_eq_r/cb2_qabs_ge/cb2_qopp_abs_le/     *)
-(*   cb2_qle_minus/cb2_qmul_nonneg/cb2_qmul_nonneg_r）；N3 实例供给（非退化实例：   *)
-(*   temp:=real_one、q/k 单位一维、lmax 含该 pair 且完备；全零退化实例复用母本      *)
-(*   Cb2Smoke 面）。                                                           *)
-(* 依赖清单：CW_ConstructiveWorld_219（real_lt/real_le/QltT/real_one 面）+        *)
-(*   UpReqConcB2（母本全件）——只读消费，原树零改，姊妹席与在飞件零接触。            *)
-(* 红线自审：全中文表述；零 公理/承认件/参数/猜想/弃证字面；全件真证收口；文尾        *)
-(*   Print Assumptions 逐件全闭合；编译产物只落 /tmp（vo_9.1/Live 只读）。         *)
+(* 数学使命：本件形式化库件 cb2_Delta = temp·max|dot| + 1 与 cb2_z 在两类实例上的 *)
+(*   行为：a 组非退化实例（cb2w_q/cb2w_k/cb2w_lmax，z ≡ 1、Δ ≡ 2）上给出          *)
+(*   cb2w_Delta_pos_half（Δ 严格正）、cb2w_z_ub_lt 与 cb2w_z_lb_lt（|z| < Δ 的    *)
+(*   两个严格肢）与 cb2w_export_pack（z 的非严格双侧界合取）；b 组全零退化实例     *)
+(*   （cb2_smoke_lmax 面）上证明两个严格见证均不存在（cb2w_death_certificate）。   *)
+(*                                                              *)
+(* 对照意义：+1 松弛在非退化实例上给出严格间隙，在全零退化实例上严格化失效——      *)
+(*   两侧合起来刻画 +1 松弛的严格性边界。                                        *)
+(*                                                              *)
+(* 依赖清单：CW_ConstructiveWorld_219（实数接口面）、UpReqAlgebra、UpReqSumD、     *)
+(*   UpReqConcB2（母本全件：cb2_Delta/cb2_Delta_core/cb2_z、逐点不等式引理族      *)
+(*   cb2_q* 系列、全参一般引理 cb2_z_lb_all/cb2_z_ub_all、退化面 cb2_smoke_*）。   *)
+(*                                                              *)
+(* 证明要点：§2 三个严格形沿用母本证明链的逐点结构：由 one_pos 取正性见证         *)
+(*   N0，以 eps:=1#2 把 strict 拆为 Qlt (1#2) 1 与 1 ≤ … 两段，配合               *)
+(*   cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap/           *)
+(*   cb2_qopp_abs_le/cb2_qle_minus/cb2_qmul_nonneg/cb2_qmul_nonneg_r/             *)
+(*   cb2_qlt_eq_r 完成；§3 由 Qlt 传递性与 Qlt_irrefl 导出矛盾。                   *)
+(*                                                              *)
+(* 构造性注记：全件语句集合值面；零承认、零经典逻辑；见证不存在以 False 值面      *)
+(*   表达（构造性否定）；文尾 Print Assumptions 逐件全闭合。                      *)
+(*                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流、-o 临时目录输出（树内零写入）。       *)
+(*                                                              *)
+(* 标识符约定：本件实例层命名以前缀 cb2w_ 区分于母本 cb2_ 系列。                  *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -39,7 +39,7 @@ Import ListNotations.
 Require Import UpReqConcB2.
 
 (* ============================================================ *)
-(* §1 实例数据面（乙腿 a 组：非退化实例；乙腿 b 组复用母本 Cb2Smoke 全零面）       *)
+(* §1 实例数据面（a 组：非退化实例；b 组复用母本 cb2_smoke_* 全零面）       *)
 (* ============================================================ *)
 
 Definition cb2w_q : unit -> list Real := fun _ => real_one :: nil.
@@ -47,11 +47,11 @@ Definition cb2w_k : unit -> list Real := fun _ => real_one :: nil.
 Definition cb2w_lmax : list (list Real * list Real) :=
   (real_one :: nil, real_one :: nil) :: nil.
 
-(* 完备性证书（lmax 含唯一 pair，in_eq 一步） *)
+(* 完备性证明（lmax 含唯一 pair，由 in_eq 一步给出） *)
 Lemma cb2w_complete : forall s s' : unit, In (cb2w_q s, cb2w_k s') cb2w_lmax.
 Proof. intros s s'. apply in_eq. Qed.
 
-(* 非退化数值锚：z≡1、Delta≡2（与全零退化 z≡0/core≡0 形成对照计数面） *)
+(* 非退化数值锚：z ≡ 1、Delta ≡ 2（与全零退化实例 z ≡ 0、core ≡ 0 形成对照） *)
 Lemma cb2w_z_pw_one : forall n : nat,
   projT1 (cb2_z unit cb2w_q cb2w_k real_one tt tt) n == 1%Q.
 Proof. intro n. reflexivity. Qed.
@@ -61,14 +61,14 @@ Lemma cb2w_Delta_pw_two : forall n : nat,
 Proof. intro n. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §2 乙腿 a：+1 松弛实例件（inl 严格支装配，eps:=1#2 具体值，真证收口）            *)
-(*   证明形逐行镜像母本 §四 证书链（cb2_Delta_pos/cb2_z_lb/cb2_z_ub），              *)
-(*   实例化 temp:=real_one、lmax:=cb2w_lmax，证书链全走母本已证点态机器              *)
-(*   （cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap），        *)
-(*   即 cb2_Delta_core 消费重建本体。                                            *)
+(* §2 非退化实例上的严格形（eps:=1#2 具体值）                                     *)
+(*   证明结构与母本 UpReqConcB2 的证明链（cb2_Delta_pos/cb2_z_lb/cb2_z_ub）        *)
+(*   逐行同构，实例化 temp:=real_one、lmax:=cb2w_lmax，逐点不等式全用母本          *)
+(*   已证引理（cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap）， *)
+(*   即 cb2_Delta_core 的实例化重建本体。                                        *)
 (* ============================================================ *)
 
-(* a-2：Delta 正性实例重建（镜像母本 :394 cb2_Delta_pos） *)
+(* a-2：Delta 正性的实例化重建（同构于母本 cb2_Delta_pos 的严格支） *)
 Theorem cb2w_Delta_pos_half : real_lt real_zero (cb2_Delta real_one cb2w_lmax).
 Proof.
   destruct one_pos as [e0 [He0 [N0 HN0]]].
@@ -112,7 +112,7 @@ Proof.
              Hzg).
 Qed.
 
-(* a-3：z 上界严格形实例重建（镜像母本 :514 cb2_z_ub 的 inl 支，语句强化为 real_lt 本体） *)
+(* a-3：z 上界严格形的实例化重建（同构于母本 cb2_z_ub 的 inl 支，语句强化为 real_lt 本体） *)
 Theorem cb2w_z_ub_lt :
   real_lt (cb2_z unit cb2w_q cb2w_k real_one tt tt)
           (cb2_Delta real_one cb2w_lmax).
@@ -162,7 +162,7 @@ Proof.
                 Huv1)).
 Qed.
 
-(* a-4：z 下界严格形实例重建（镜像母本 :436 cb2_z_lb 的 inl 支，语句强化为 real_lt 本体） *)
+(* a-4：z 下界严格形的实例化重建（同构于母本 cb2_z_lb 的 inl 支，语句强化为 real_lt 本体） *)
 Theorem cb2w_z_lb_lt :
   real_lt (real_opp (cb2_Delta real_one cb2w_lmax))
           (cb2_z unit cb2w_q cb2w_k real_one tt tt).
@@ -247,7 +247,7 @@ Proof.
              Hzg).
 Qed.
 
-(* a-5：槽位直喂形全参闭项打包（temp_pos:=one_pos、lmax_complete:=cb2w_complete 实名消费） *)
+(* a-5：库内全参一般引理的直接应用（cb2_z_lb_all / cb2_z_ub_all，实参 temp_pos:=one_pos、lmax_complete:=cb2w_complete） *)
 Theorem cb2w_export_pack :
   real_le (real_opp (cb2_Delta real_one cb2w_lmax))
           (cb2_z unit cb2w_q cb2w_k real_one tt tt)
@@ -262,12 +262,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 乙腿 b：全零退化对照件（母本 :26 挂账的死亡证书定理化——先例 PintPosGrid 范式）   *)
-(*   机器内核：uniform eventual gap 形严格证书遇上点态恒零 gap 即自毁                  *)
-(*   （0<eps 且 eps<0 矛盾，Qlt 传递 + 非自反收口，零经典逻辑）。                      *)
+(* §3 全零退化对照件（母本 UpReqConcB2 头注如实记载的局限的定理化）：              *)
+(*   uniform eventual gap 形的严格见证遇上点态恒零 gap 即自相矛盾                  *)
+(*   （0<eps 且 eps<0，由 Qlt 传递性与非自反性导出矛盾，零经典逻辑）。             *)
 (* ============================================================ *)
 
-(* b-1 通用退化机器：点态 gap 恒零的二元组上，real_lt 证书不存在（构造性否定） *)
+(* b-1 一般否定引理：点态 gap 恒零的二元组上 real_lt 见证不存在（构造性否定） *)
 Lemma cb2w_gap_zero_no_lt : forall x y : Real,
   (forall n : nat, projT1 y n - projT1 x n == 0%Q) -> real_lt x y -> False.
 Proof.
@@ -281,12 +281,12 @@ Proof.
   exact (Qlt_irrefl 0%Q Hbad).
 Qed.
 
-(* b-2 字面形全零退化点态面：temp·max|dot| ≡ 0（母本 Cb2Smoke 面上逐点计算归零） *)
+(* b-2 全零退化实例的逐点面：cb2_Delta_core ≡ 0（cb2_smoke_lmax 面上逐点计算归零） *)
 Lemma cb2w_core_zero_pw : forall n : nat,
   projT1 (cb2_Delta_core real_one cb2_smoke_lmax) n == 0%Q.
 Proof. intro n. reflexivity. Qed.
 
-(* b-3 字面形 Delta 正性死亡证书：全零退化下 strict 正性证书不存在 *)
+(* b-3 否定性见证：全零退化下 cb2_Delta_core 的严格正性见证不存在 *)
 Theorem cb2w_core_pos_death :
   real_lt real_zero (cb2_Delta_core real_one cb2_smoke_lmax) -> False.
 Proof.
@@ -294,7 +294,7 @@ Proof.
            (fun n => cb2w_core_zero_pw n)).
 Qed.
 
-(* b-4 字面形 z 上界 strict 证书死亡：gap ≡ 0 同机自毁（Or 两支双堵的 inl 支定谳） *)
+(* b-4 z 上界严格见证的否定：gap ≡ 0，由 cb2w_gap_zero_no_lt 直接导出矛盾 *)
 Lemma cb2w_core_gap_zero : forall n : nat,
   projT1 (cb2_Delta_core real_one cb2_smoke_lmax) n
   - projT1 (cb2_z unit cb2_smoke_q cb2_smoke_k real_one tt tt) n == 0%Q.
@@ -310,7 +310,7 @@ Proof.
            cb2w_core_gap_zero).
 Qed.
 
-(* b-5 死亡证书打包（点态零面 × 双 strict 证书不存在——挂账的定理化固化件） *)
+(* b-5 否定性见证的合取封装：逐点恒零面 × 两个严格见证不存在 *)
 Theorem cb2w_death_certificate :
   (forall n : nat, projT1 (cb2_Delta_core real_one cb2_smoke_lmax) n == 0%Q)
   * ((real_lt real_zero (cb2_Delta_core real_one cb2_smoke_lmax) -> False)
@@ -325,7 +325,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* PA 收尾段（逐件闭合判读留痕）                                            *)
+(* 假设审计（对逐件 Print Assumptions） *)
 (* ============================================================ *)
 
 Print Assumptions cb2w_complete.

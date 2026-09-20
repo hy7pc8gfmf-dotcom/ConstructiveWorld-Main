@@ -1,41 +1,41 @@
 (* ============================================================ *)
-(* UpAblB2_G13.v —— 深施工席 B2：b_gibbs×3 等号面真重施工（T13c 移交件）   *)
-(* 辖区（现档坐标·与 T13c 已立件槽位不重叠——本件独立新名 uabB2_*）：        *)
-(*   位1 UpSigMigrate2.v:913 b_gibbs_pos     （ReqAlignCore 诚实桥）        *)
-(*   位2 UpSigMigrate2.v:916 b_gibbs_sum_eps （ReqAlignCore 诚实桥）        *)
-(*   位3 UpSigMigrate2.v:921 b_gibbs_eq      （ReqAlignCore 诚实桥·等号面）  *)
-(* 真重施工三步（逐位裁决落件）：                                           *)
-(*   一、抽象载体全参出节形独立复验：位1 六槽／位2 六槽+eps／位3 七槽        *)
-(*      （ext/add/linear/〔le〕/znn/log-inv/log-le/〔log-eq〕逐槽显式在列，  *)
-(*       req_gibbs_inequality@UpReqDist:2128 / req_gibbs_equality@:2154     *)
-(*       全参直喂一步收口——kl_a≡req_relative_entropy 定义展开同一）。        *)
-(*   二、两点 Real 世界（S:=bool，sumf:=hzlogd_aud_sum@G08:717）供给件真重： *)
-(*      T13c 未立之 znn 槽（零和非负消去）与 log-inv 槽（kl_log_inv@        *)
-(*      UpStepKL:583 δ 桥）两个具体面本席新建——等号面七槽中五槽由此在       *)
-(*      具体载体落成（ext/add/linear 消费 hzlogd_sum2_*@G08，znn/log-inv    *)
-(*      本席新建），残差收窄到 {log-le, log-eq} 恰为 W4 墙本体。             *)
-(*   三、残差隔离定理（真重施工主件）：位1/位2 在两点 Real 世界仅剩 log-le   *)
-(*      单槽、位3 仅剩 {log-le, log-eq} 双槽即可放电——b_gibbs×3 真欠账      *)
-(*      被定理级收窄为 W4 墙对，零隐藏槽。                                  *)
-(* W4 墙邻接裁决（如实登记，接 T13c O2 维持）：                             *)
-(*   RealEnhancedReal 实例 le 字段 := real_le（Or 编码）；B 形引擎          *)
-(*   real_log_le_linear_B@UpRealLeB:543 输出 Bishop 序 real_le_b，逆向桥    *)
-(*   real_le_b→real_le 为 Or 形精确闭合=等号点 x=1 分支判定（LPO 族），     *)
-(*   构造性不可证（G08 头注+UpRealLeB 尾注在案）——log-le 槽在具体载体       *)
-(*   plain-le 形不可实例化，逐 eps 形（log_le_linear_eps 接口字段）与 B 形   *)
-(*   在库为墙邻接在证；log-eq 槽需严格凹性定量机（x≠1 间隙），全库无此件，   *)
-(*   等号面真欠账=W4 邻接挂账维持，不降档不隐藏。                           *)
-(* 分级（fail-loud 如实）：                                                 *)
-(*   位1/位2 抽象全参形+两点残差形 = 条件 discharge（W4 单槽残差随件显式）； *)
-(*   位3 抽象全参形 = 条件 discharge；两点残差形双层申报：七槽形（log-eq     *)
-(*   槽显式携带）与定谳形（log-eq 槽由 t34 具体实例喂入，残差仅 log-le       *)
-(*   单槽——载体分层精化：抽象载体墙维持，Regular-Real 载体 log-eq 非墙）；  *)
-(*   znn/log-inv 两供给件 = N3（实例供给）；B 形无槽面（gibbsd 双路在库）    *)
-(*   为 pos 面独立可达路线 witness，eq 面无此面（如实缺席）。               *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、      *)
-(*   UpReqDist、UpSigMigrate2、UpStepKL、UpRealLeB、S08_RealMainlineDPO、    *)
-(*   G08_Gibbs。                                                           *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblB2_*                            *)
+(* UpAblB2_G13.v —— Gibbs 不等式与等号面的抽象复验及剩余前提收窄         *)
+(*   数学使命：b_gibbs_pos/b_gibbs_sum_eps/b_gibbs_eq 三语句的全参复验、  *)
+(*   两点 Real 载体实例化与未决前提的定理级定位。                        *)
+(* ============================================================ *)
+(* 【使命】对 UpSigMigrate2 之 b_gibbs_pos（KL 非负）、b_gibbs_sum_eps    *)
+(*   （逐 eps 形）、b_gibbs_eq（等号面：KL==0 ⟹ 逐点相等）三语句：       *)
+(*   其一在抽象接口载体（RealInterfaceEnhancedSetoid）上以显式前提全参    *)
+(*   复验；其二在两点 Real 载体（S:=bool，求和 uabB2_t2sum/hzlogd_aud_sum）*)
+(*   上实例化，并将剩余前提收窄为显式携带的定理（零隐藏前提）。           *)
+(* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / UpReqDist /          *)
+(*   UpSigMigrate2 / UpStepKL / UpRealLeB / S08_RealMainlineDPO /         *)
+(*   G08_Gibbs / UpReqCEqDispersion（只读使用）。                         *)
+(* 【对标】数学原型：Gibbs 不等式（相对熵非负性）及其等号情形            *)
+(*   （分布相等当且仅当相对熵为零）；mathlib 无此构造对应物。             *)
+(* 【剩余前提的构造性边界注记】le 前提面：B 形引擎 real_log_le_linear_B   *)
+(*   （UpRealLeB）输出 Bishop 序 real_le_b；逆向 real_le_b ⟹ real_le      *)
+(*   等价于等号点 x=1 处的分支判定（LPO 族），构造性不可证——故 log-le    *)
+(*   前提在 Or 编码序上不可无条件实例化，逐 eps 形与 B 形为在库替代。     *)
+(*   log-eq 前提需严格凹性的定量命题（x ≠ 1 的间隙）：抽象接口无此字段    *)
+(*   故维持为前提；具体 Real 载体由 t34_log_eq_linear_weak                *)
+(*   （UpReqCEqDispersion，实三分的双否定形，直觉主义有效）给出实例。     *)
+(* 【构造性注记】全件 Qed 闭合、零承认词面、无经典逻辑；接口面为 Set 层   *)
+(*   序谓词；文末对十条结论逐一 Print Assumptions，以全部 Closed 为零     *)
+(*   外部未证假设的判据。                                                *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
+(*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
+(* 【结构总览】§1 抽象载体全参复验（uabB2_bgibbs_pos_full/                *)
+(*   uabB2_bgibbs_sum_eps_full/uabB2_bgibbs_eq_full——ext/add/linear/     *)
+(*   〔le/znn〕/log-inv/log-le/log-eq 逐前提显式，直推 req_gibbs_inequality *)
+(*   与 req_gibbs_equality（UpReqDist））；§2 uabB2_t2sum 与 znn 前提的   *)
+(*   新构造 uabB2_znn_abs（逐点非负、和为零 ⟹ 逐点为零）；§3 log-inv    *)
+(*   前提的具体实例 uabB2_loginv_real（← kl_log_inv，UpStepKL）；§4      *)
+(*   两点 Real 载体的剩余前提定理：uabB2_bgibbs_pos_resW4 与              *)
+(*   uabB2_bgibbs_sumeps_resW4 剩 log-le 单前提，uabB2_bgibbs_eq_resW4   *)
+(*   剩 {log-le, log-eq}，uabB2_bgibbs_eq_res_logle_only 经              *)
+(*   t34_log_eq_linear_weak 实例化后剩 {log-le}；§5 pos 面 B 形替代       *)
+(*   uabB2_gibbs_pos_Bform_list ← gibbsd_gibbs_inequality）；§6 假设审计区。 *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -48,12 +48,12 @@ Require Import G08_Gibbs.
 Require Import UpReqCEqDispersion.
 Import RealInterfaceEnhancedMod.
 
-(* ======== 一、抽象载体全参出节形（位1/位2/位3 独立复验+槽位对账定谳） ====== *)
+(* ======== §1 · 抽象载体全参出节形复验（三语句逐一显式前提） ====== *)
 Section UabB2Abs.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
-(* ---- 位1 ←:913（全参六槽：ext/add/linear/le/log-inv/log-le 逐槽显式） ---- *)
+(* ---- b_gibbs_pos 复验：全参六前提 ext/add/linear/le/log-inv/log-le ---- *)
 Theorem uabB2_bgibbs_pos_full :
   forall (S : Set) (sumf : (S -> R) -> R)
          (Hext : forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -74,7 +74,7 @@ Proof.
                                p q Hp Hq Hnp Hnq).
 Qed.
 
-(* ---- 位2 ←:916（位1+le_plus_compat 链，零新增槽） ---------------------- *)
+(* ---- b_gibbs_sum_eps 复验：前者加 le_plus_compat 链，零新增前提 ------ *)
 Theorem uabB2_bgibbs_sum_eps_full :
   forall (S : Set) (sumf : (S -> R) -> R)
          (Hext : forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -108,8 +108,8 @@ Proof.
                                                (le_refl eps)))).
 Qed.
 
-(* ---- 位3 ←:921（等号面本体：全参七槽，znn/log-eq 两槽显式在列；         *)
-(*        log-le/log-eq = W4 墙本体残差，随件显式携带不隐藏） -------------- *)
+(* ---- b_gibbs_eq 复验（等号面本体：全参七前提，znn/log-eq 显式在列；     *)
+(*        log-le/log-eq 为构造性未决前提，随件显式携带不隐藏） -------------- *)
 Theorem uabB2_bgibbs_eq_full :
   forall (S : Set) (sumf : (S -> R) -> R)
          (Hext : forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -135,8 +135,8 @@ Proof.
                              p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
-(* ======== 二、两点世界抽象供给件（B2 新建：znn 槽任意载体构造） ========== *)
-(* 两点和：与 G08 hzlogd_aud_sum 同形（δ 展开同一 plus (f true) (f false)） *)
+(* ======== §2 · 抽象载体上的两点供给件（znn 前提的构造） ========== *)
+(* 两点和 uabB2_t2sum：与 hzlogd_aud_sum（G08_Gibbs）同形，展开均为 plus (f true) (f false) *)
 Definition uabB2_t2sum (f : bool -> R) : R := plus (f true) (f false).
 
 Lemma uabB2_opp_zero : req (opp zero) zero.
@@ -149,8 +149,8 @@ Proof.
   - apply plus_opp.
 Qed.
 
-(* znn 槽（零和非负消去）任意载体两点构造——T13c 未立之槽，本席新建：        *)
-(*   逐点非负 + 两点和为零 ⟹ 逐点为零（le_antisym+左消去纯代数链）。        *)
+(* znn 前提（零和非负消去）的两点构造（新建供给件）：                      *)
+(*   逐点非负 + 两点和为零 ⟹ 逐点为零（le_antisym 与左消去的纯代数链）。   *)
 Lemma uabB2_znn_abs :
   forall f : bool -> R,
     (forall s : bool, le zero (f s)) ->
@@ -204,9 +204,9 @@ Qed.
 
 End UabB2Abs.
 
-(* ======== 三、两点 Real 世界具体供给件（log-inv 槽 δ 桥） ================ *)
-(* log-inv 槽具体落成：kl_log_inv@UpStepKL:583 经接口投影 δ 桥一次收口      *)
-(*   （req:=real_eq、log→real_log→cw_log、inv_pos→real_inv_pos 全展开）。   *)
+(* ======== §3 · Real 载体上的 log-inv 前提实例 ================ *)
+(* 前提实例：kl_log_inv（UpStepKL）经接口投影转换一步落成                   *)
+(*   （req:=real_eq、log 经 real_log 到 cw_log、inv_pos 到 real_inv_pos 全展开）。   *)
 Lemma uabB2_loginv_real :
   forall (x : Real) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
     req (log (inv_pos x Hx) Hi) (opp (log x Hx)).
@@ -215,11 +215,11 @@ Proof.
   exact (kl_log_inv x Hx Hi).
 Qed.
 
-(* ======== 四、残差隔离定理（真重施工主件：真欠账=W4 墙对的定理级收窄） === *)
-(* 两点 Real 世界：S:=bool、sumf:=hzlogd_aud_sum@G08:717；                  *)
-(*   五槽供给位：ext/add/linear/le = hzlogd_sum2_*@G08（消费），             *)
-(*               znn = uabB2_znn_abs（δ 同形喂入），log-inv = 本席桥件。     *)
-(* 位1 残差 = {log-le} 单槽 ------------------------------------------------ *)
+(* ======== §4 · 两点 Real 载体的剩余前提定理（未决前提的定理级定位） ====== *)
+(* 载体：S:=bool、sumf:=hzlogd_aud_sum（G08_Gibbs）；                       *)
+(*   前提供给：ext/add/linear/le = hzlogd_sum2_*（G08_Gibbs），             *)
+(*               znn = uabB2_znn_abs（同形转换），log-inv = uabB2_loginv_real。     *)
+(* uabB2_bgibbs_pos_resW4：剩余前提 = {log-le} ------------------------- *)
 Theorem uabB2_bgibbs_pos_resW4 :
   forall (Hlogle : forall (x : Real) (Hx : lt zero x), le (log x Hx) (req_minus x one))
          (p q : bool -> Real) (Hp : pdist_a bool p) (Hq : pdist_a bool q),
@@ -232,7 +232,7 @@ Proof.
              uabB2_loginv_real Hlogle p q Hp Hq Hnp Hnq).
 Qed.
 
-(* 位2 残差 = {log-le} 单槽 ------------------------------------------------ *)
+(* uabB2_bgibbs_sumeps_resW4：剩余前提 = {log-le} --------------------- *)
 Theorem uabB2_bgibbs_sumeps_resW4 :
   forall (Hlogle : forall (x : Real) (Hx : lt zero x), le (log x Hx) (req_minus x one))
          (p q : bool -> Real) (Hp : pdist_a bool p) (Hq : pdist_a bool q)
@@ -258,7 +258,7 @@ Proof.
                                  (le_refl eps)))).
 Qed.
 
-(* 位3 残差 = {log-le, log-eq} 双槽（等号面真欠账恰为 W4 墙对） ------------- *)
+(* uabB2_bgibbs_eq_resW4：剩余前提 = {log-le, log-eq}（等号面未决对） ------ *)
 Theorem uabB2_bgibbs_eq_resW4 :
   forall (Hlogle : forall (x : Real) (Hx : lt zero x), le (log x Hx) (req_minus x one))
          (Hlogeq : forall (x : Real) (Hx : lt zero x),
@@ -275,12 +275,12 @@ Proof.
              p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
-(* ======== 四·b、等号面残差再收窄（深施工定谳件）：log-eq 槽在具体载体       *)
-(*   可实例化——t34_log_eq_linear_weak@UpReqCEqDispersion:80（real_weak_     *)
-(*   trich 双否形驱动，直觉主义有效、PA 全 Closed）恰为本槽 Real 实例，      *)
-(*   喂入后等号面两点残差自 {log-le, log-eq} 收窄至 {log-le} 单槽——         *)
-(*   T13c O2「W4 墙对」判词按载体分层精化：抽象载体（接口无三分/比较字段）   *)
-(*   维持墙；具体 Regular-Real 载体 log-eq 非墙（本件定理级实证）。--------- *)
+(* ======== §4·b、等号面剩余前提再收窄：log-eq 前提在具体 Real 载体          *)
+(*   可实例化——t34_log_eq_linear_weak（UpReqCEqDispersion；实三分           *)
+(*   real_weak_trich 的双否定形，直觉主义有效、无外部未证假设）恰为该前提   *)
+(*   的 Real 实例；代入后等号面两点剩余前提自 {log-le, log-eq} 收窄至       *)
+(*   {log-le}——载体分层：抽象接口载体（无三分/比较字段）维持为前提，        *)
+(*   具体 Regular-Real 载体上 log-eq 可实例化（本件定理级实证）。---------- *)
 Theorem uabB2_bgibbs_eq_res_logle_only :
   forall (Hlogle : forall (x : Real) (Hx : lt zero x), le (log x Hx) (req_minus x one))
          (p q : bool -> Real) (Hp : pdist_a bool p) (Hq : pdist_a bool q),
@@ -292,10 +292,10 @@ Proof.
   exact (uabB2_bgibbs_eq_resW4 Hlogle t34_log_eq_linear_weak p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
-(* ======== 五、pos 面无槽替代 witness（B 形双路在库，逐 eps/切线双证） ===== *)
-(* gibbsd_gibbs_inequality@G08:432：0 ≤_B 有限和 KL（Bishop 序），零槽——    *)
-(*   pos 面在 B 形序上的无条件替代为独立可达路线（序异向=墙邻接机理在案）。   *)
-(*   eq 面无此替代面（全库无 B 形/任意形 gibbs_eq 放电件，如实缺席）。 ------ *)
+(* ======== §5 · pos 面的 B 形替代路线（Bishop 序，零额外前提） ===== *)
+(* gibbsd_gibbs_inequality（G08_Gibbs）：0 ≤_B 有限和 KL（Bishop 序），零额外 *)
+(*   前提——pos 面在 B 形序上无条件成立，为独立可达的替代路线。               *)
+(*   eq 面无此替代（库内无 B 形或任意形的 gibbs_eq 对应件，如实注明）。 ---- *)
 Theorem uabB2_gibbs_pos_Bform_list :
   forall (l : list bool) (p q : bool -> Real)
          (Hp : forall s : bool, lt zero (p s)) (Hq : forall s : bool, lt zero (q s))
@@ -308,7 +308,7 @@ Proof.
   exact (gibbsd_gibbs_inequality bool l p q Hp Hq Hnormp Hnormq).
 Qed.
 
-(* ======== 文尾 PA（全数 Closed 判读） ==================================== *)
+(* ======== §6 · 假设审计（Print Assumptions 全 Closed 为判据） ============ *)
 Print Assumptions uabB2_bgibbs_pos_full.
 Print Assumptions uabB2_bgibbs_sum_eps_full.
 Print Assumptions uabB2_bgibbs_eq_full.

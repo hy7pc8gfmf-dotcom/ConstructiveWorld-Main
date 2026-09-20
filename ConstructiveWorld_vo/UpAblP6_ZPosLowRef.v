@@ -1,13 +1,13 @@
 (* ===================================================================== *)
-(* UpAblP6_ZPosLowRef.v — PA6-06 席 / T216 论文6 喂件族双件消融（ZPosSlotFeed *)
-(* + LowRefFeed4）。主题：喂件面具体数据装配——把两喂件的正性槽（⑤⑥⑦⑳㉑）  *)
-(* 与低引用件（②③④）在具体载体 Real/RealEnhancedReal（S07 具体实例）与     *)
-(* 具体 Set 数据（unit / bool 双点枚举表、Set 层 Or 判定 keep_dec、sigT+InT  *)
-(* 非空见证）上真装配出全具体语句，另以 RI 面两低引用件（②④）组装库内缺席  *)
-(* 的复合传递面。非平凡性 = 具体证书（real_lt_zero_one）+ 具体枚举/判定/见证 *)
-(* 数据的真构造 + 复合面新语句；喂件核全 exact 直供零改写。                 *)
-(* 红线自审：零 axiom 后门 / 零未证收口 / 零经典逻辑；语句面全 Set 层零泄露； *)
-(* .vo 只落 /tmp/pa7_work；原树零改。                                      *)
+(* UpAblP6_ZPosLowRef.v —— ZPosSlotFeed 与 LowRefFeed4 的具体实例供给件    *)
+(* 使命：把 ZPosSlotFeed 的五个正性结论（UpSigMigrate2.Z_align_a_sum、      *)
+(*   UpReqAttnIter.Z_thermo_i、UpReqAttnGibbs.Z_thermo_r、                  *)
+(*   UpReqBranchPos.brp_evicted_partition_r 及裸载体回接形）与 LowRefFeed4  *)
+(*   的三结论（双层和交换、倒数交换、加法保序）在载体 Real/RealEnhancedReal *)
+(*   与具体 Set 数据（unit/bool 双点枚举、Or 判定、sigT+InT 非空见证）上    *)
+(*   实例化为全具体语句；倒数交换×加法保序的复合传递为本件新增。            *)
+(* 构造性注记：零公理零承认；无未证闭合；不使用经典逻辑；语句面全 Set 层。   *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、UpReqBranchPos、G12_ZPosFam、ZPosSlotFeed、S01_BaseRing、LowRefFeed4；配方：coqc 9.1 直调 + cpu_guard + -o 临时目录。 *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -20,7 +20,7 @@ Require Import S01_BaseRing.
 Require Import LowRefFeed4.
 Import RealInterfaceEnhancedMod.
 
-(* ============ 一、具体数据基座（Set 层 witness 小件） ================= *)
+(* ============ §1 具体数据基座（Set 层见证引理） ======================= *)
 
 (* 双点枚举非空：Not ((true::false::nil) = nil)，纯项守卫（长度/构造子分裂） *)
 Lemma uazlr_ne_bool_two :
@@ -81,7 +81,7 @@ Proof.
            end))).
 Qed.
 
-(* 规范载体自反：sumd_sumf 键上 req 自反（槽㉑ sov 规范条件位的具体填法） *)
+(* 规范载体自反：sumd_sumf 键上 req 自反（复合实例中规范条件前提的具体填法） *)
 Lemma uazlr_sumd_req_refl :
   forall g : bool -> Real,
     req (@sumd_sumf Real RealEnhancedReal bool
@@ -92,12 +92,12 @@ Proof.
   intro g. apply req_refl.
 Qed.
 
-(* ============ 二、ZPos 主题：正性槽五件具体装配 ======================= *)
-(* 每件 = 对应 zsf_ 喂件在 Real/RealEnhancedReal 具体载体 + 具体枚举/温度   *)
-(* 证书（D:=real_one，D_pos:=real_lt_zero_one）+ 常值能量/参考函数上的      *)
-(* 逐槽实例，结论为全具体正性语句。                                       *)
+(* ============ §2 ZPos 主题：五个正性结论的具体实例化 ================== *)
+(* 每件 = 对应 zsf_ 供给引理在 Real/RealEnhancedReal 具体载体上、以具体     *)
+(* 枚举与温度前提（D:=real_one，D_pos:=real_lt_zero_one）+ 常值能量/参考    *)
+(* 函数的实例化，结论为全具体正性语句。                                   *)
 
-(* 槽⑤ UpSigMigrate2:891 Z_align_a_pos（bool 双点，β:=1，reward/π_ref 恒一） *)
+(* UpSigMigrate2.Z_align_a_sum 的正性实例（bool 双点，β:=1，reward/π_ref 恒一） *)
 Theorem uazlr_zsf_sigmig_align_bool :
   lt zero (@UpSigMigrate2.Z_align_a_sum Real RealEnhancedReal bool
             (@sumd_sumf Real RealEnhancedReal bool
@@ -112,7 +112,7 @@ Proof.
            (fun _ : bool => real_lt_zero_one) uazlr_ne_bool_two).
 Qed.
 
-(* 槽⑥ UpReqAttnIter:130 Z_thermo_i_pos（bool 双点，D:=1，能量恒一） *)
+(* UpReqAttnIter.Z_thermo_i 的正性实例（bool 双点，D:=1，能量恒一） *)
 Theorem uazlr_zsf_iter_thermo_i_bool :
   lt zero (@UpReqAttnIter.Z_thermo_i Real RealEnhancedReal bool
             (@sumd_sumf Real RealEnhancedReal bool
@@ -125,7 +125,7 @@ Proof.
            uazlr_ne_bool_two).
 Qed.
 
-(* 槽⑦ UpReqAttnGibbs:547 Z_thermo_r_pos（unit 单点，D:=1，能量恒一） *)
+(* UpReqAttnGibbs.Z_thermo_r 的正性实例（unit 单点，D:=1，能量恒一） *)
 Theorem uazlr_zsf_gibbs_thermo_r_unit :
   lt zero (@UpReqAttnGibbs.Z_thermo_r Real RealEnhancedReal unit
             (@sumd_sumf Real RealEnhancedReal unit
@@ -138,7 +138,7 @@ Proof.
            uazlr_ne_unit).
 Qed.
 
-(* 槽⑳ UpReqAttnGibbs:701 evicted_partition_r_pos（bool 双点 + 具体判定 +   *)
+(* UpReqBranchPos.brp_evicted_partition_r 的正性实例（bool 双点 + 具体判定 + *)
 (* 非空见证：被剔除配分函数在 keep=true 点恒一的正性） *)
 Theorem uazlr_zsf_gibbs_evicted_bool :
   lt zero (@UpReqBranchPos.brp_evicted_partition_r
@@ -153,8 +153,8 @@ Proof.
            uazlr_keep uazlr_kd_bool uazlr_hw_bool).
 Qed.
 
-(* 槽㉑ UpReqAlignRestB:1767 裸载体回接（sov 取规范键 sumd_sumf 自身：        *)
-(* 规范条件位 = req_refl 自反，配分和取 brp_kv_boltzmann 因子分支） *)
+(* UpReqAlignRestB 裸载体回接之实例（规范键取 sumd_sumf 自身：              *)
+(* 规范条件前提由 req_refl 自反给出，配分和取 brp_kv_boltzmann 因子分支） *)
 Theorem uazlr_zsf_restb_canonical_sov :
   lt zero (@sumd_sumf Real RealEnhancedReal bool
              (true :: false :: Datatypes.nil)%list
@@ -177,9 +177,9 @@ Proof.
            uazlr_sumd_req_refl uazlr_hw_bool).
 Qed.
 
-(* ============ 三、LowRef 主题：低引用件具体装配与复合 ================= *)
+(* ============ §3 LowRef 主题：上游引理的具体实例与复合 ================= *)
 
-(* 槽③ UpReqAttnIter:152 sum_swap_i（bool 2×2 非退化真值表 f 的双层和交换，  *)
+(* 双层和交换引理 lf4_sum_swap_i 的实例（bool 2×2 非退化真值表 f，          *)
 (* 具体数据：f a b := if a then (if b then 1 else 0) else 0，               *)
 (* 四格 {(1,1),(1,0),(0,1),(0,0)}，行与列均非常值） *)
 Theorem uazlr_lf4_sum_swap_bool_table :
@@ -202,9 +202,9 @@ Proof.
               if a then (if b then real_one else real_zero) else real_zero)).
 Qed.
 
-(* 槽②④ RI 面复合：S01 RealInterface 世界（与 AttnDoeblin/S05_AlignmentGRPO  *)
-(* 宿主同面），把低引用件 lf4_inv_pos_lt_contra（槽④）与 lf4_lt_plus_      *)
-(* compat_lt_le_h（槽②）串成库内缺席的复合传递面：倒数交换 × 加法保序。     *)
+(* RI 面复合：S01_BaseRing RealInterface 环境（与 AttnDoeblin、             *)
+(* S05_AlignmentGRPO 的接口环境相同），将 lf4_inv_pos_lt_contra 与          *)
+(* lf4_lt_plus_compat_lt_le_h 复合为库内缺席的复合传递面：倒数交换 × 加法保序。 *)
 Section UAZLRRIFace.
 
 Context {RI : RealInterfaceEnhanced}.
@@ -230,7 +230,7 @@ Qed.
 
 End UAZLRRIFace.
 
-(* ============ 自检段（G4 口径：逐件 Closed 实证） ===================== *)
+(* ============ 收尾核验（Print Assumptions 逐件 Closed） ================ *)
 
 Print Assumptions uazlr_ne_bool_two.
 Print Assumptions uazlr_ne_unit.

@@ -1,83 +1,83 @@
 (* ============================================================
-   AB3 席私有快照（2026-09-19）：RealKLDecomp.v 原样字节副本。
-   共享树代差：RealKLDecomp.vo（Sep16）落后 RealEnergyTempMono.vo
-   （Sep17），且 RETM.v 今日在修，按禁碰条款不可重编既有件，
-   故出本私有副本；正文与 CWF 席原件逐字相同，功归原件。
+   UpAblEps49RKDBase.v —— 相对熵（KL）分解定理：自由能恒等式
+   F(p) == F(p_b) + D·Σ kl_term(p, p_b)（Boltzmann 分布 p_b、
+   温度 D、配分函数 Z、抽象求和泛函 Σ），
+   及其定义 Z 形的无条件版本。
    ============================================================ *)
-(* ============================================================ *)
-(* RealKLDecomp.v —— UpRealLeB RealRLHFLeB real_kl_decomp_full 槽   *)
-(*   闭合席（席位CWF，批次 E-STAGING-CWF，2026-09-14）               *)
-(* ============================================================ *)
-(* 【使命】把 UpRealLeB.v Section RealRLHFLeB L218 的 Variable 槽     *)
-(*   real_kl_decomp_full（被 real_rlhf_optimal_B L235 经             *)
-(*   real_rlhf_optimal_eps L247 直接消费）闭合为非平凡定理。          *)
-(*   S08_RealMainlineDPO.v Section RealRLHFMain L2516 同名槽同判      *)
-(*   （被 real_rlhf_optimal_eps L2602 消费），本件一并覆盖。          *)
-(* ------------------------------------------------------------------ *)
-(* 【侦查定谳（槽语句形状）】槽结论面（UpRealLeB L220-231 原文）：     *)
-(*   real_eq (F p) (F p_b + D·Σ kl_term(p s, p_b s))，前提面仅        *)
-(*   (Hp, Hnormp)。数学核查：F(p)−F(p_b)−D·Σkl = D·logZ·(Σp_b−1)，   *)
-(*   故 Z_align_r 为任意正 Variable 时槽语句实质为假（反例：单点态   *)
-(*   空间、e=0、D=1、Z=2 ⟹ LHS=0 而 RHS=(1/2)·log 2）。无条件闭合    *)
-(*   的唯一诚实形 = 配分函数取定义形（Z := Σ exp(−e/D)），归一化     *)
-(*   Σ p_b == 1 内证消去；一般 Z 形须携带残留数学前提 Hnormb          *)
-(*   （Σ p_b == 1，UpReqRealFEP.v 头注「诚实前提申报」同判）。        *)
-(*   本件双交付：                                                     *)
-(*   主件1 rkd_kl_decomp_full（一般 Z + Hnormb 条件件，结论面与槽    *)
-(*   逐字同构，为槽参数位的直接放电件）；                             *)
-(*   主件2 rkd_kl_decomp_full_partition（定义 Z 形：Z := Σ exp(−e/D)，*)
-(*   前提面 = 求和代数接口 ext/add/linear + 定义 Z 正性证书，零残留   *)
-(*   数学前提——归一化内证，即「无条件定理」交付形）。                 *)
-(* ------------------------------------------------------------------ *)
-(* 【喂入链选型】retm_KL_decomp（RealEnergyTempMono）为 list 载体 +   *)
-(*   温度参量形，与抽象 sumf 槽载体不同轴（UpReqRealFEP.v 头注①同    *)
-(*   判）；req 层 req_relative_entropy_temp_decomp /                  *)
-(*   req_recovery_entropy_gain 层位不同。本件消费：retm_log_inv_pos_gen*)
-(*   （log(1/x)==−log x 一般件）+ CW219 real_log_mult/real_log_exp_neg/*)
-(*   real_log_wd/real_inv_pos_correct 根基元 + rfep 五桥机蓝图模式，  *)
-(*   全链自证。UpReqRealFEP.v 在本机 Live/build 有源无 .vo（其依赖    *)
-(*   G04/G05 .vo 亦缺），不补编他席文件，本件自包含。                 *)
-(* ------------------------------------------------------------------ *)
-(* 【同位对账表（槽位参数对齐，消费位逐参核对）】                      *)
-(*   槽 discharge 序（S08 RealRLHFMain / UpRealLeB RealRLHFLeB）：     *)
-(*     S sumf ext add [linear] base D Dp Z Zp ｜ p Hp Hnormp          *)
-(*   主件1 全参序：                                                    *)
-(*     S sumf ext add linear base D Dp Z Zp ｜ p Hp Hnormp Hnormb     *)
-(*   差异两处（诚实增量申报，与 UpReqRealFEP.v 头注同款）：            *)
-(*   ① linear（标量提取桥）为放电所需最小增量——原槽为 Variable 不需   *)
-(*      证明，故节内无此字段；                                        *)
-(*   ② Hnormb（Σ p_b == 1）为槽语句缺失的归一化前提（任意 Z 下不可    *)
-(*      免，见上数学核查）；主件2 在定义 Z 形下将其内证消去。          *)
-(*   消费位喂入法（UpReqRealFEP.v 头注同款）：real_rlhf_optimal_eps /  *)
-(*   real_rlhf_optimal_B 的 real_kl_decomp_full 参数位以主件1前九参   *)
-(*   部分应用喂入（p Hp Hnormp Hnormb 留槽）；主件2 适用于下游把 Z    *)
-(*   取真配分函数的实例化。                                           *)
-(* ------------------------------------------------------------------ *)
-(* 【红线】Set 层零 Prop 泄露（real_eq/real_lt 全 Set 值，语句面纯    *)
-(*   forall 型）；纯构造性（零未闭合证明、零经典逻辑）；real_eq 非    *)
-(*   Id 禁改写，全链 real_eq_trans 与 RealSetoid compat/adapt 成对形  *)
-(*   （1配2、3配4）；原子级代数收口走 rkd_alg（real_eq_of_zero_diff  *)
-(*   加 proj 剥离加 ring；含 log/inv Bishop 桥段与 one/zero 字面位    *)
-(*   不走 rkd_alg，改具名引理，CWC 卡限制）；全 Qed 闭合。            *)
-(* 编译配方：source Live/toolchain/env.sh 后 cd Live/build 执行        *)
-(*   rocq c -Q . '' RealKLDecomp.v（cpu_guard 包裹，双核上限）。       *)
-(* 依赖：CW_ConstructiveWorld_219（.vo 在）、RealEnergyTempMono（.vo  *)
-(*   在，消费 retm_log_inv_pos_gen）、Stdlib QArith.Qring。           *)
-(* ============================================================ *)
+(* 使命：把 UpRealLeB.v Section RealRLHFLeB 与 S08_RealMainlineDPO.v  *)
+(*   Section RealRLHFMain 中以节 Variable 引入的假设 real_kl_decomp_full *)
+(*   证为定理（下游使用处 real_rlhf_optimal_B / real_rlhf_optimal_eps）。    *)
+(*                                                               *)
+(* 记号：F = real_free_energy（自由能）；p_b = real_boltzmann_dist_r      *)
+(*   （Boltzmann 分布）；kl_term = real_kl_term（逐点 KL）；Σ = sumf       *)
+(*   （抽象求和泛函）；D 为温度参量（正）；Z 为配分函数。                                *)
+(*   ext/add/linear 为 sumf 的结构前提：逐点相等外延、和的加法分配、                  *)
+(*   数乘分配。                                                       *)
+(*                                                               *)
+(* 命题形状：结论 real_eq (F p) (F p_b + D·Σ kl_term(p s, p_b s))，      *)
+(*   前提 (Hp, Hnormp)。数学事实：F(p)−F(p_b)−D·Σ kl =                   *)
+(*   D·logZ·(Σ p_b − 1)；当 Z 为任意正 Variable 时该语句为假                 *)
+(*   （反例：单点态空间、e=0、D=1、Z=2 ⟹ 左端 0 而右端                            *)
+(*   (1/2)·log 2）。故无条件形必须取定义 Z := Σ exp(−e/D)                    *)
+(*   （归一化 Σ p_b == 1 内证）；一般 Z 形携带数学前提                            *)
+(*   Hnormb（Σ p_b == 1）。                                         *)
+(*                                                               *)
+(* 两个主定理：rkd_kl_decomp_full（一般 Z + Hnormb 条件形，结论与假设              *)
+(*   逐字同构）；rkd_kl_decomp_full_partition（定义 Z 形，前提 =              *)
+(*   求和代数接口 ext/add/linear + 定义 Z 的正性证书，零残留数学前提）。                *)
+(*                                                               *)
+(* 参数对照（与假设参数序逐参核对）：                                             *)
+(*   假设序：S sumf ext add [linear] base D Dp Z Zp ｜ p Hp Hnormp    *)
+(*   主件1序：S sumf ext add linear base D Dp Z Zp ｜ p Hp Hnormp Hnormb *)
+(*   ① linear 为证明所需最小增补（原假设为 Variable，无需证明）；                     *)
+(*   ② Hnormb 为归一化前提（任意 Z 下不可免，见上反例）。                            *)
+(*   应用方式：以主件1前九参部分应用替换 real_kl_decomp_full 参数位                  *)
+(*   （留 p Hp Hnormp Hnormb 为剩余参数）；主件2 适用于 Z 取真                   *)
+(*   配分函数的实例化。                                                   *)
+(*                                                               *)
+(* 内容：§1 代数基元（rkd_mult_opp_r、rkd_inv_absorb、                     *)
+(*   rkd_eq_cancel_r）；§2 逐点 log 恒等式（rkd_log_pB）与 KL 项            *)
+(*   展开（rkd_kl_point）；§3 求和层负元（rkd_sum_opp）；                     *)
+(*   §4 能量期望恒等式（rkd_energy_horse）；§5 求和层 KL 分解                   *)
+(*   （rkd_kl_sum_bridge）与 Boltzmann 归一化                          *)
+(*   （rkd_boltzmann_normalized）；§6 主定理（rkd_kl_decomp_full、       *)
+(*   rkd_kl_decomp_full_partition）。文末 Print Assumptions 依赖审计。    *)
+(*                                                               *)
+(* 证明资源：retm_log_inv_pos_gen（log(1/x) == −log x 一般形）+            *)
+(*   CW219 的 real_log_mult / real_log_exp_neg / real_log_wd /    *)
+(*   real_inv_pos_correct；其余步骤的证明在本件内完成。                         *)
+(*                                                               *)
+(* 证明纪律：Set 层零 Prop 泄露（real_eq/real_lt 全 Set 值，语句面               *)
+(*   纯 forall 型）；纯构造性；real_eq 非 Id 禁改写，转换经                       *)
+(*   real_eq_trans 与 RealSetoid compat/adapt 成对使用；原子代数走          *)
+(*   rkd_alg（real_eq_of_zero_diff + proj 剥离 + ring），含            *)
+(*   one/zero 字面与 log/inv 处改走具名引理；全 Qed 闭合。                      *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219、RealEnergyTempMono                *)
+(*   （使用 retm_log_inv_pos_gen）、Stdlib QArith.Qring。              *)
+(*                                                               *)
+(* 对标：mathlib KL 散度与 Gibbs 分解恒等式（测度论版本）；                         *)
+(*   本件为抽象求和泛函版本。                                                *)
+(*                                                               *)
+(* 构造性注记：零承认；全件 Set 层承载；可提取。                                     *)
+(*                                                               *)
+(* 编译配方：Rocq 9.1 直调 + cpu_guard（双核上限）；编译输出 -o                    *)
+(*   临时目录，树内 .vo/.glob 不动。                                       *)
+(* (* ============================================================ *) *)
 
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 Require Import RealEnergyTempMono.
 
-(* 原子级代数收口：加/乘/负/原子项上的 real_eq 一步 ring（retm_alg 同款； *)
-(*   限纯原子代数——含 one/zero 字面与 log/inv 桥位改走具名引理链）       *)
+(* 原子项代数：加/乘/负/原子项上的 real_eq 一步 ring（同 retm_alg；                 *)
+(*   限纯原子代数——含 one/zero 字面与 log/inv 处改走具名引理链）                    *)
 Ltac rkd_alg :=
   apply real_eq_of_zero_diff; intro n;
   repeat first [ rewrite real_plus_proj | rewrite real_mult_proj | rewrite real_opp_proj ];
   ring.
 
 (* ============================================================ *)
-(* Part 0：代数基元                                                  *)
+(* §1 代数基元：乘法负元、inv 吸收与右消去                                       *)
 (* ============================================================ *)
 
 (* (−1)·x == −x（comm + mult_opp_l + mult_one 三步具名链） *)
@@ -98,7 +98,7 @@ Proof.
     + exact (RealSetoid.real_eq_opp_compat (real_mult x real_one) x (real_mult_one x)).
 Qed.
 
-(* inv 吸收核：x·(inv x · y) == y（inv_pos_correct 桥，Bishop 类不走 rkd_alg） *)
+(* inv 吸收：x·(inv x · y) == y（由 real_inv_pos_correct；Bishop 构造位不走 rkd_alg） *)
 Lemma rkd_inv_absorb : forall (x y : Real) (Hx : real_lt real_zero x),
   real_eq (real_mult x (real_mult (real_inv_pos x Hx) y)) y.
 Proof.
@@ -149,11 +149,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 1：逐点 log / kl 桥（零求和前提）                             *)
+(* §2 逐点 log 恒等式与 KL 项展开（无求和前提）                                  *)
 (* ============================================================ *)
 
-(* log p_b(s) == −(e(s)/D + log Z)（零前提直证；rfep 件5a 同位重证，    *)
-(*   log(inv Z) 腿消费 retm_log_inv_pos_gen 引擎）                      *)
+(* log p_b(s) == −(e(s)/D + log Z)（无前提直接证明；log(inv Z) 一步         *)
+(*   使用 retm_log_inv_pos_gen）                                    *)
 Lemma rkd_log_pB : forall (S : Type) (real_base_loss : S -> Real)
   (D : Real) (D_pos : real_lt real_zero D) (Z : Real) (Z_pos : real_lt real_zero Z) (s : S)
   (Hpb : real_lt real_zero (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)),
@@ -274,10 +274,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：求和层基元                                                 *)
+(* §3 求和层基元：和的负元                                                 *)
 (* ============================================================ *)
 
-(* Σ (−f) == −(Σ f)（ext 点态 + linear 两步组装，rfep P0 同位） *)
+(* Σ (−f) == −(Σ f)（sumf_ext 点态 + sumf_linear 两步）                *)
 Lemma rkd_sum_opp : forall (S : Type) (sumf : (S -> Real) -> Real)
   (sumf_ext : forall (f g : S -> Real),
     (forall s : S, real_eq (f s) (g s)) -> real_eq (sumf f) (sumf g))
@@ -302,8 +302,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：能量期望工作马（plus 形，任意正分布 q）                     *)
-(*   Σ q·e + D·Σ q·log p_b == −D·log Z（归一化 Σ q == 1 入槽）         *)
+(* §4 能量期望恒等式（plus 形，任意正分布 q）                                    *)
+(*   Σ q·e + D·Σ q·log p_b == −D·log Z（归一化 Σ q == 1 为前提）         *)
 (* ============================================================ *)
 Lemma rkd_energy_horse :
   forall (S : Type) (sumf : (S -> Real) -> Real)
@@ -386,7 +386,7 @@ Proof.
                       (rkd_inv_absorb D (real_base_loss s) D_pos)
                       (real_eq_refl (real_mult D LZ)))).
     }
-    (* opp(D·log p_b) == e s + D·log Z，再右消去 *)
+    (* opp(D·log p_b) == e s + D·log Z，再由 rkd_eq_cancel_r 右消去        *)
     assert (H4 : real_eq
                (real_opp (real_mult D
                   (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)
@@ -411,7 +411,7 @@ Proof.
                           (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s))))
              (real_base_loss s) (real_mult D LZ) H4).
   }
-  (* ext：Σ q·e == Σ q·(−D·log p_b + −D·log Z) *)
+  (* sumf_ext：Σ q·e == Σ q·(−D·log p_b + −D·log Z)                 *)
   assert (Hext : real_eq Spe
              (sumf (fun s : S => real_mult (q s)
                       (real_plus
@@ -422,7 +422,7 @@ Proof.
   { apply sumf_ext. intro w.
     exact (RealSetoid.real_eq_mult_compat_adapt (q w) (q w) _ _
              (real_eq_refl (q w)) (Hpt w)). }
-  (* distrib 点态 + add：拆两腿 *)
+  (* real_distrib 点态 + sumf_add：拆为两个子和                             *)
   assert (Hsplit : real_eq
              (sumf (fun s : S => real_mult (q s)
                       (real_plus
@@ -467,7 +467,7 @@ Proof.
                      (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)
                                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s)))))
                (fun s : S => real_mult (q s) (real_opp (real_mult D LZ)))). }
-  (* 腿1：Σ q·(−D·Lb) == −(D·SLB) *)
+  (* 第一项：Σ q·(−D·Lb) == −(D·SLB)                                   *)
   assert (HT1 : real_eq
              (sumf (fun s : S => real_mult (q s)
                       (real_opp (real_mult D
@@ -513,7 +513,7 @@ Proof.
                   (fun s : S => real_mult (q s)
                      (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)
                                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s))))). }
-  (* 腿2：Σ q·(−D·log Z) == (−D)·log Z·Σ q，归一化收口 *)
+  (* 第二项：Σ q·(−D·log Z) == (−D)·log Z·Σ q，以 Hnormq 归一化消去 Σ q       *)
   assert (HT2 : real_eq
              (sumf (fun s : S => real_mult (q s) (real_opp (real_mult D LZ))))
              (real_mult (real_opp D) LZ)).
@@ -536,7 +536,7 @@ Proof.
                     (sumf q) real_one
                     (real_eq_refl (real_mult (real_opp D) LZ)) Hnormq)
                  (real_mult_one (real_mult (real_opp D) LZ))). }
-  (* 组装：Spe == −D·SLB + (−D)·log Z *)
+  (* 合成：Spe == −D·SLB + (−D)·log Z（Hext、Hsplit、HT1、HT2）            *)
   assert (Hmain : real_eq Spe (real_plus (real_opp (real_mult D SLB)) (real_mult (real_opp D) LZ))).
   { exact (real_eq_trans Spe
              (real_plus
@@ -572,11 +572,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4：Σ 层 kl 桥 + Boltzmann 归一化                              *)
+(* §5 求和层 KL 分解与 Boltzmann 归一化                                   *)
 (* ============================================================ *)
 
-(* Σ kl_term(p, p_b) == Σ p·log p − Σ p·log p_b（逐点 rkd_kl_point    *)
-(*   + distrib + add + sum_opp 四步机组）                             *)
+(* Σ kl_term(p, p_b) == Σ p·log p − Σ p·log p_b（逐点 rkd_kl_point、 *)
+(*   real_distrib、sumf_add、rkd_sum_opp 四步合成）                     *)
 Lemma rkd_kl_sum_bridge :
   forall (S : Type) (sumf : (S -> Real) -> Real)
     (sumf_ext : forall (f g : S -> Real),
@@ -710,8 +710,8 @@ Proof.
                              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s))))).
 Qed.
 
-(* 归一化：partition 条件 Σ exp(−e/D) == Z ⟹ Σ p_b == 1                *)
-(*   （linear + inv_pos_correct 两步归一化，rfep 件5b 同位）            *)
+(* 归一化：配分函数条件 Σ exp(−e/D) == Z ⟹ Σ p_b == 1                      *)
+(*   （sumf_linear + real_inv_pos_correct 两步归一化）                  *)
 Lemma rkd_boltzmann_normalized :
   forall (S : Type) (sumf : (S -> Real) -> Real)
     (sumf_ext : forall (f g : S -> Real),
@@ -762,12 +762,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5：主件——real_kl_decomp_full 槽放电件                          *)
+(* §6 主定理：real_kl_decomp_full（一般 Z 条件形与定义 Z 无条件形）                *)
 (* ============================================================ *)
 
-(* 主件1（一般 Z 条件件）：结论面与 UpRealLeB L218 / S08 L2516 槽      *)
-(*   逐字同构；前提面 = 槽 (Hp, Hnormp) + 结构增量 ext/add/linear +    *)
-(*   残留数学前提 Hnormb（Σ p_b == 1，诚实申报）。                     *)
+(* 主件1（一般 Z 条件形）：结论与 UpRealLeB / S08 中 real_kl_decomp_           *)
+(*   full 假设逐字同构；前提 = 假设 (Hp, Hnormp) + 结构前提                     *)
+(*   ext/add/linear + 数学前提 Hnormb（Σ p_b == 1）。                   *)
 Theorem rkd_kl_decomp_full :
   forall (S : Type) (sumf : (S -> Real) -> Real)
     (sumf_ext : forall (f g : S -> Real),
@@ -843,10 +843,10 @@ Proof.
                 (real_eq_refl D) (real_eq_sym _ _ H3))).
 Qed.
 
-(* 主件2（定义 Z 无条件形）：Z := Σ exp(−e/D) 内联定义，正性证书为     *)
-(*   唯一额外前提（与槽节内 Z_align_r_pos 同类），Hnormb 由             *)
-(*   rkd_boltzmann_normalized + partition 定义等式（real_eq_refl）内证  *)
-(*   消去——零残留数学前提的「无条件定理」交付形。                       *)
+(* 主件2（定义 Z 无条件形）：Z := Σ exp(−e/D) 内联定义，正性证书 Zp                  *)
+(*   为唯一额外前提（与 UpRealLeB 节内 Z_align_r_pos 同类）；Hnormb             *)
+(*   由 rkd_boltzmann_normalized 与 partition 定义等式（real_eq_refl）   *)
+(*   内证消去——零残留数学前提的无条件定理形。                                       *)
 Theorem rkd_kl_decomp_full_partition :
   forall (S : Type) (sumf : (S -> Real) -> Real)
     (sumf_ext : forall (f g : S -> Real),
@@ -897,7 +897,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G4 证据：全件零外部未证假设                                         *)
+(* 依赖审计：全件零外部未证假设                                                *)
 (* ============================================================ *)
 Print Assumptions rkd_mult_opp_r.
 Print Assumptions rkd_inv_absorb.

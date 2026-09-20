@@ -1,48 +1,48 @@
 (* ============================================================ *)
-(* UpAblLeEqCompat.v                                             *)
-(*                                                               *)
-(* 席位：S2（le-eq 双侧兼容件席）｜日期：20260920                  *)
-(* 工单：X2 报告（attn/_tx2_66本体直配报告-20260920.md）升级方向      *)
-(*       ＋ Z2b 报告（attn/_tz2b_混合面供体直配报告-20260920.md）     *)
-(*       形态差申报第 4 条明示升级方向：le 面原生折叠传输缺            *)
-(*       「双侧 le-eq 兼容件」。                                    *)
-(* 目的：把 le 形与 eq 形的双侧互转兼容引理族建成独立件，并接到        *)
-(*   e66s_ 求和族（UpAblEps66Sum）的 le/add 面，兑现 le 面原生        *)
-(*   折叠传输通路（逐点 real_le ⟹ real_list_sum real_le）。          *)
-(*                                                               *)
-(* 缺口定谳（动笔前全库检索实测）：                                  *)
-(*   在册基座＝三件散件：real_eq_le（S07:108，eq⟹同对 le，仅单向）、  *)
-(*   real_le_antisym（S02:3168，Or 形反对称，四支分解）、              *)
-(*   gibbe2_le_b_antisym（G08:1021，Bishop 形反对称，逐 n 构造）；     *)
-(*   UpRealLeB 单向桥 real_le_to_le_b（Or le⟹le_b，逆向即精确完成     *)
-(*   构造性不可证——尾注结论 2 墙论证在册）。                           *)
-(*   真缺口＝家族未成件：①eq⟹le 反侧（real_eq x y ⟹ real_le y x）    *)
-(*   全库无成品；②沿 eq 双侧的 le 运输（le x y ＋ x==x' ＋ y==y'       *)
-(*   ⟹ le x' y'）无单件；③家族未接到 e66s_ le/add 面、无 le 面原生    *)
-(*   折叠传输链。本件逐项补建。                                       *)
-(*                                                               *)
-(* 主件结构：                                                      *)
-(*   A 面·兼容家族四件（本件自建，非转口）：                           *)
-(*     lec_eq_le（eq⟹le 同对，Or 编码右支直供）、                     *)
-(*     lec_eq_le_rev（eq⟹le 反侧，对称换向——缺口①）、                *)
-(*     lec_le_le_eq（双侧 le⟹eq，四支构造性分解自建）、                *)
-(*     lec_le_eq_eq（沿 eq 双侧 le 运输——缺口②）；                    *)
-(*   B 面·Bishop 侧家族补全一件：                                    *)
-(*     lec_le_b_pair_eq（le_b 双侧⟹eq，消费 G08 核心件直供）；         *)
-(*   C 面·e66s_ 面接线五件（缺口③）：                                *)
-(*     add 面 le 双侧形一对（lec_e66s_add_le_lr/_rl，eq⟹le 双向直供）  *)
-(*     ＋往返闭合（lec_e66s_add_of_le_pair，家族反向运用）＋            *)
-(*     逐点双侧 le⟹和等式（lec_e66s_sum_eq_of_pw_le_pair，sum 级      *)
-(*     le 面两次＋反对称）＋le 面原生折叠传输（lec_lsum_le_trans，     *)
-(*     经 e66s le 面＋折叠桥＋家族运输三步）；                         *)
-(*   D 面·bool 旗舰闭式实例一件（lec_flag_lsum_le，具体柯西实数层）。   *)
-(*                                                               *)
-(* 纪律：全 Set 层语句（real_eq/real_le/real_le_b 均 Set 值谓词，      *)
-(*   语句面零裸命题层泄露）；零承认件（无承认声明形、无搁置、           *)
-(*   无经典逻辑）；全 Qed；前缀 lec_（全库实扫零撞名）；                *)
-(*   宿主与只读树零改；禁改 S02/S07/S08/G08/UpReqSumD/                 *)
-(*   UpAblEps66Sum/UpAblP2FeedMix 及任何既有文件；                    *)
-(*   禁入 order.txt/_CoqProject。                                    *)
+(* UpAblLeEqCompat.v —— 序与等词的双侧兼容引理族：序形与等词形互转、        *)
+(*   沿等词双侧的序运输，及其在求和族上的原生折叠传输。                      *)
+(*                                                                        *)
+(* 背景：e66s 求和族（UpAblEps66Sum）已备等词面外延件与序面保序件，          *)
+(*   而沿等词双侧的序运输与序面折叠传输此前无单件承载，本件补建此家族。       *)
+(*                                                                        *)
+(* 在库基座（只读引用）：real_eq_le（S07，等词⟹同向序，仅单向）、            *)
+(*   real_le_antisym（S02，Or 形反对称）、gibbe2_le_b_antisym（G08，          *)
+(*   Bishop 形反对称，逐 n 构造）、real_le_to_le_b（UpRealLeB 单向桥；        *)
+(*   其逆向（le_b 的精确 Or 分解）构造性不可证——UpRealLeB 尾注载有           *)
+(*   该否定性论证）。                                                        *)
+(*                                                                        *)
+(* 内容四组：                                                                *)
+(* §A 兼容家族四件（本件自证）：lec_eq_le（等词⟹同向序，取 Or 编码右支）、    *)
+(*   lec_eq_le_rev（等词⟹反向序，经 real_eq_sym）、                          *)
+(*   lec_le_le_eq（双侧序⟹等词，四支构造性分解）、                           *)
+(*   lec_le_eq_eq（沿等词双侧的序运输）；                                     *)
+(* §B Bishop 侧家族两件：lec_le_b_pair_eq（le_b 双侧⟹等词，经                *)
+(*   gibbe2_le_b_antisym）、lec_le_pair_le_b（双侧序⟹le_b 双侧，              *)
+(*   经单向桥 real_le_to_le_b）；                                             *)
+(* §C 求和族兼容通路五件（Section LecE66）：加法面序双侧形一对                *)
+(*   （lec_e66s_add_le_lr／lec_e66s_add_le_rl，由 e66s_real_sum_over_S_add    *)
+(*   经家族降至序面）、往返闭合 lec_e66s_add_of_le_pair、逐点双侧序⟹和等词    *)
+(*   lec_e66s_sum_eq_of_pw_le_pair（经 e66s_real_sum_over_S_le 两次＋反对称）、*)
+(*   序面原生折叠传输 lec_lsum_le_trans（经 e66s 序面＋p2f_lsum_bridge＋       *)
+(*   lec_le_eq_eq 三步）；                                                    *)
+(* §D bool 具体层实例三件：lec_flag_sumf／lec_flag_lsum_le／                  *)
+(*   lec_flag_add_le_lr（枚举 e66s_flag_enum，零残留抽象参数）。               *)
+(*                                                                        *)
+(* 【依赖】CW_ConstructiveWorld_219；UpReqSumD；UpAblEps66Sum；               *)
+(*   UpAblP2FeedMix（p2f_lsum_bridge）；UpRealLeB；G08_Gibbs。                *)
+(*                                                                        *)
+(* 【对标】mathlib 的 le_antisym／eq_of_le 类兼容引理；stdlib 有序域事实。     *)
+(*                                                                        *)
+(* 【构造性注记】零承认、纯构造性（零经典逻辑）；全件 Set 层语句              *)
+(*   （real_eq／real_le／real_le_b 均 Set 值谓词），语句面无命题层泄露；       *)
+(*   全 Qed 闭合；末段 Print Assumptions 审计应全部 Closed。                  *)
+(*                                                                        *)
+(* 【编译配方】coqc 9.1 直调，cpu_guard 包裹（-LoadLimit 85 -CoreN 2），       *)
+(*   编译输出经 -o 写临时目录，树内 .vo 一律不动。                            *)
+(*                                                                        *)
+(*   提取说明：证明内容为序/等词谓词面上的构造性见证变换，无独立数值体；       *)
+(*   提取面取求和载体 lec_flag_sumf 作计算内容代表，桥面引理以审计替代。       *)
+(*                                                                        *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
@@ -54,11 +54,11 @@ Require Import UpRealLeB.
 Require Import G08_Gibbs.
 
 (* ============================================================ *)
-(* A 面·兼容家族（双侧 le-eq 互转，本件自建）                          *)
+(* §A 兼容家族四件：双侧序-等词互转（本件自证）                        *)
 (* ============================================================ *)
 
-(* A.1 eq⟹le 同对：Or 编码右支直供（real_le x y := Or (real_lt x y)     *)
-(*   (real_eq x y)，S02:469；右支即 eq 见证位）                        *)
+(** lec_eq_le·等词⟹同向序：由序谓词的 Or 编码（real_le x y :=           *)
+(*   Or (real_lt x y) (real_eq x y)）取右支（等词见证位）即得。          *)
 Lemma lec_eq_le : forall x y : Real, real_eq x y -> real_le x y.
 Proof.
   intros x y H.
@@ -67,7 +67,7 @@ Proof.
   exact H.
 Qed.
 
-(* A.2 eq⟹le 反侧（缺口①）：对称换向后右支直供——双侧之「反侧」半边    *)
+(** lec_eq_le_rev·等词⟹反向序：先经 real_eq_sym 换向，再用 lec_eq_le 取右支。 *)
 Lemma lec_eq_le_rev : forall x y : Real, real_eq x y -> real_le y x.
 Proof.
   intros x y H.
@@ -76,10 +76,10 @@ Proof.
   exact H.
 Qed.
 
-(* A.3 双侧 le⟹eq（反对称桥，四支构造性分解自建）：                      *)
-(*   (lt,lt) 支：lt 传递自撞（real_lt_irrefl，S02:2400）空型收口；        *)
-(*   (lt,eq)/(eq,lt) 支：对称换向落 eq 支；                              *)
-(*   (eq,eq) 支：左见证实测。                                           *)
+(** lec_le_le_eq·双侧序⟹等词（反对称）：对两序前提的 Or 编码分四支：      *)
+(*   （序，序）支：两严格序前提经传递性自撞 real_lt_irrefl，空型消除；    *)
+(*   （序，等词）与（等词，序）支：经 real_eq_sym 落到等词支；            *)
+(*   （等词，等词）支：取左侧见证。                                      *)
 Lemma lec_le_le_eq : forall x y : Real,
   real_le x y -> real_le y x -> real_eq x y.
 Proof.
@@ -91,8 +91,8 @@ Proof.
   - exact Heq.
 Qed.
 
-(* A.4 沿 eq 双侧的 le 运输（缺口②）：家族自举——                       *)
-(*   le x y ＋ x==x' ＋ y==y' ⟹ le x' y'（反侧直供两次＋传递两次）       *)
+(** lec_le_eq_eq·沿等词双侧的序运输：若 x 序不降于 y 且 x 与 x′、y 与 y′  *)
+(*   分别等词，则 x′ 序不降于 y′；经序的传递性与家族件接续两次。          *)
 Lemma lec_le_eq_eq : forall x y x' y' : Real,
   real_le x y -> real_eq x x' -> real_eq y y' -> real_le x' y'.
 Proof.
@@ -105,12 +105,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B 面·Bishop 侧家族补全                                              *)
+(* §B Bishop 侧家族两件：le_b 形反对称与单向桥的家族接入               *)
 (* ============================================================ *)
 
-(* B.1 le_b 双侧⟹eq（Bishop 形反对称入族）：消费 G08 逐 n 构造核心件      *)
-(*   gibbe2_le_b_antisym（零 Or 闭合、零 LPO）直供——家族在 Bishop        *)
-(*   形上同样双侧闭合。                                                *)
+(** lec_le_b_pair_eq·le_b 双侧⟹等词（Bishop 形反对称入族）：由 G08 的    *)
+(*   gibbe2_le_b_antisym 逐 n 构造件直接给出（无 Or 分解、无 LPO）——     *)
+(*   家族在 Bishop 形序上同样双侧闭合。                                  *)
 Lemma lec_le_b_pair_eq : forall x y : Real,
   real_le_b x y -> real_le_b y x -> real_eq x y.
 Proof.
@@ -118,8 +118,8 @@ Proof.
   exact (gibbe2_le_b_antisym x y H1 H2).
 Qed.
 
-(* B.2 Or 形双侧⟹Bishop 形双侧（单向桥两次）：双侧 le 各自升格 le_b——     *)
-(*   与 UpRealLeB 尾注结论 2 墙相容（逆向 Or 精确完成不在主张面）。        *)
+(** lec_le_pair_le_b·Or 形双侧⟹le_b 双侧：双侧各自经单向桥               *)
+(*   real_le_to_le_b 转换；逆向精确分解构造性不可证，本件不作此主张。     *)
 Lemma lec_le_pair_le_b : forall x y : Real,
   real_le x y -> real_le y x -> real_le_b x y.
 Proof.
@@ -129,7 +129,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* C 面·e66s_ 面接线（求和族 le/add 面的兼容通路）                       *)
+(* §C 求和族序/等词兼容通路（e66s 加法/保序面的序面接续）               *)
 (* ============================================================ *)
 
 Section LecE66.
@@ -137,7 +137,7 @@ Section LecE66.
 Context (S0 : Set).
 Context (enum0 : list S0).
 
-(* C.1 add 面 le 双侧形·正向：求和加法等式经 A.1 降至 le 面               *)
+(** lec_e66s_add_le_lr·加法序上界：逐点相加后求和 序不降于 分别求和后相加；由 e66s_real_sum_over_S_add 经 lec_eq_le 降至序面。 *)
 Lemma lec_e66s_add_le_lr : forall (f g : S0 -> Real),
   real_le (e66s_sumf S0 enum0 (fun s : S0 => real_plus (f s) (g s)))
           (real_plus (e66s_sumf S0 enum0 f) (e66s_sumf S0 enum0 g)).
@@ -147,7 +147,7 @@ Proof.
   exact (e66s_real_sum_over_S_add S0 enum0 f g).
 Qed.
 
-(* C.2 add 面 le 双侧形·反向：经 A.2 反侧直供（双侧之另半边）             *)
+(** lec_e66s_add_le_rl·加法序下界：反向序不等式；由 e66s_real_sum_over_S_add 经 lec_eq_le_rev 给出。 *)
 Lemma lec_e66s_add_le_rl : forall (f g : S0 -> Real),
   real_le (real_plus (e66s_sumf S0 enum0 f) (e66s_sumf S0 enum0 g))
           (e66s_sumf S0 enum0 (fun s : S0 => real_plus (f s) (g s))).
@@ -157,8 +157,8 @@ Proof.
   exact (e66s_real_sum_over_S_add S0 enum0 f g).
 Qed.
 
-(* C.3 往返闭合：add 面 le 双侧⟹add 面等式（A.3 家族反向运用——            *)
-(*   eq⟹le 双向拆出、双侧 le 收回 eq，兼容往返在 sum 级闭合）             *)
+(** lec_e66s_add_of_le_pair·往返闭合：加法面双侧序不等式⟹加法等词，      *)
+(*   即 lec_le_le_eq 的直接应用（双侧序收回等词）。                       *)
 Lemma lec_e66s_add_of_le_pair : forall (f g : S0 -> Real),
   real_le (e66s_sumf S0 enum0 (fun s : S0 => real_plus (f s) (g s)))
           (real_plus (e66s_sumf S0 enum0 f) (e66s_sumf S0 enum0 g)) ->
@@ -171,9 +171,9 @@ Proof.
   apply (lec_le_le_eq _ _ Hlr Hrl).
 Qed.
 
-(* C.4 逐点双侧 le⟹和等式（sum 级双侧路线）：逐点双侧 le 升到 sum 级      *)
-(*   （e66s le 面两次）＋A.3 反对称——和等式的一条纯 le 面通路             *)
-(*   （e66s 面此前仅有点位 eq 面外延件，本件为 le 面等价新通路）。         *)
+(** lec_e66s_sum_eq_of_pw_le_pair·逐点双侧序⟹和等词：逐点双侧序经        *)
+(*   e66s_real_sum_over_S_le 两次提升到和级，再由 lec_le_le_eq 反对称     *)
+(*   收尾——e66s 求和族等词面的一条纯序面通路。                           *)
 Lemma lec_e66s_sum_eq_of_pw_le_pair : forall (f g : S0 -> Real),
   (forall s : S0, real_le (f s) (g s)) ->
   (forall s : S0, real_le (g s) (f s)) ->
@@ -185,9 +185,9 @@ Proof.
   - exact (e66s_real_sum_over_S_le S0 enum0 g f Hgf).
 Qed.
 
-(* C.5 le 面原生折叠传输（缺口③主链）：逐点 real_le ⟹ real_list_sum       *)
-(*   上的 real_le——三步传输链：e66s le 面（sumd 折叠级）→ 折叠桥          *)
-(*   p2f_lsum_bridge（逐点 eq）→ A.4 沿 eq 双侧运输（家族承载）。          *)
+(** lec_lsum_le_trans·原生折叠序传输：逐点序不降⟹real_list_sum 上        *)
+(*   序不降——三步：e66s 序面（sumd 折叠级）、折叠桥 p2f_lsum_bridge       *)
+(*   （逐点等词）、lec_le_eq_eq（沿等词双侧运输）。                       *)
 Lemma lec_lsum_le_trans : forall (f g : S0 -> Real),
   (forall s : S0, real_le (f s) (g s)) ->
   real_le (real_list_sum S0 f enum0) (real_list_sum S0 g enum0).
@@ -203,15 +203,15 @@ Qed.
 End LecE66.
 
 (* ============================================================ *)
-(* D 面·bool 旗舰闭式实例（具体柯西实数层 fully concrete 住民，          *)
-(*   AB5 旗舰载体同式：枚举 true::false::nil，零残留抽象参数）           *)
+(* §D bool 具体层实例（柯西实数层 fully concrete：枚举                    *)
+(*   e66s_flag_enum＝true::false::nil，零残留抽象参数）                   *)
 (* ============================================================ *)
 
-(* 旗舰求和载体（透明包装，供 G3 提取演示折叠核心体）                     *)
+(* 求和载体实例 lec_flag_sumf：e66s_sumf 特化到 bool 载体，供提取         *)
 Definition lec_flag_sumf (f : bool -> Real) : Real :=
   e66s_sumf bool e66s_flag_enum f.
 
-(* 旗舰 le 面原生折叠传输：bool 二元载体上的逐点 le ⟹ 原生折叠 le          *)
+(** lec_flag_lsum_le：bool 载体上的 lec_lsum_le_trans 实例（逐点序不降⟹折叠序不降）。 *)
 Theorem lec_flag_lsum_le :
   forall (f g : bool -> Real),
     (forall s : bool, real_le (f s) (g s)) ->
@@ -222,7 +222,7 @@ Proof.
   exact (lec_lsum_le_trans bool e66s_flag_enum f g H).
 Qed.
 
-(* 旗舰 add 面 le 双侧（具体层实例） *)
+(** lec_flag_add_le_lr：加法序上界的 bool 具体层实例。 *)
 Theorem lec_flag_add_le_lr :
   forall (f g : bool -> Real),
     real_le (lec_flag_sumf (fun s : bool => real_plus (f s) (g s)))
@@ -233,18 +233,18 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G3 提取探针（一人一目录 _ts2_g3out；单命令单常量——AB7 卡               *)
-(*   「多条 Separate Extraction 互相冲写」坑规避）。                       *)
-(*   本件证明内容全为序谓词桥面（等词/序兼容引理，Set 值谓词上的            *)
-(*   构造性见证变换），无独立数值计算体；提取面取旗舰求和载体              *)
-(*   （折叠核心体）作计算内容代表，桥面引理以说明替代提取——              *)
-(*   AB5 先例同口径。                                                   *)
+(* 提取区：提取命令单条单常量（多条提取命令的输出会相互覆盖）。           *)
+(*   本件证明内容全为序/等词兼容引理（Set 值谓词上的构造性见证变换），    *)
+(*   无独立数值计算体；提取面取求和载体 lec_flag_sumf（折叠核心体）       *)
+(*   作计算内容代表，桥面引理以假设审计替代提取。                         *)
+(*                                                                        *)
+(*                                                                        *)
 (* ============================================================ *)
 Set Extraction Output Directory "_ts2_g3out".
 Extraction "ts2_lec_fold" lec_flag_sumf.
 
 (* ============================================================ *)
-(* G4 假设闭包审计（全 Closed 为过关判据）                              *)
+(* 假设审计：以下 Print Assumptions 应全部 Closed（零外部未证假设）       *)
 (* ============================================================ *)
 Print Assumptions lec_eq_le.
 Print Assumptions lec_eq_le_rev.

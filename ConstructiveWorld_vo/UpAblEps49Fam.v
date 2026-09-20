@@ -1,41 +1,41 @@
 (* ============================================================ *)
-(* UpAblEps49Fam.v — AB4 席：论文1 定理 4.9 诚实接口族·族面五件消融件 *)
-(*                                                              *)
-(* 目的：S08_RealMainlineDPO.v 节 RealRLHFMain（L2467-2731）内五个 *)
-(*       开放接口槽逐件供给 Real 层构造性实例（实例供给型消融）。 *)
-(*       承重主件 real_kl_decomp_full（:2527）归 AB3 席，本席零接触。 *)
-(*                                                              *)
-(* 五件清单（S08 行号 / 本件定理）：                              *)
-(*   1. real_boltzmann_log_decomp :2501 -> e49f_boltzmann_log_decomp *)
-(*      路线：witness 桥（real_log_wd 对同点异证 log 兼容，规避    *)
-(*      cw_log 依赖 Hy 构造 log_seq 的 proof-relevant 陷阱）        *)
-(*      + real_log_mult + log e^{-u}==−u（log_inv_exp_neg_thm）    *)
-(*      + log inv==−log（自建：x·inv x==1 锚点 + log_mult +        *)
-(*      real_log_one + real_eq_plus_cancel_l）+ opp_plus 换形。    *)
-(*   2. real_boltzmann_normalized :2505 -> e49f_boltzmann_normalized *)
-(*      路线：list 求和槽实例；ext 换序（乘法交换）+ linear_r 拉出  *)
-(*      + real_eq_mult_compat（HZ 前提入位）+ real_inv_pos_correct。 *)
-(*   3. real_kl_term_equiv        :2508 -> e49f_kl_term_equiv     *)
-(*      路线：real_kl_term 定义展开 + real_log_mult（witness 逐字   *)
-(*      同 S08 体内）+ log inv==−log + opp_plus/opp_opp/comm 代数。 *)
-(*   4. real_pi_star_align        :2519 -> e49f_pi_star_align     *)
-(*      路线：real_pi_star_r 槽实例取换序 softmin 形（e49f_pi_star_r）， *)
-(*      对齐一步 real_mult_comm。槽为无约束自由变元，实例供给即     *)
-(*      闭；变分推导（π* 为自由能极小）接口不表达，列升级方向。     *)
-(*   5. real_gibbs_sum_eps        :2522 -> e49f_gibbs_sum_eps     *)
-(*      路线：S08 已证 real_gibbs_inequality_eps（出节形 q 任意）   *)
-(*      直连，q := Boltzmann 分布，Σq==1 由件2 实例供给；正性词项   *)
-(*      全程用 S08 出节 real_boltzmann_dist_r_pos 同一词项。        *)
-(*                                                              *)
-(* 实例环境（逐字对齐 S08 接口实形，求和槽取具体 list 求和）：      *)
+(* UpAblEps49Fam.v —— 论文 1 定理 4.9 诚实接口族的族面五件实例供给。                *)
+(*                                                               *)
+(* 目的：S08_RealMainlineDPO.v 节 RealRLHFMain 内五个接口假设逐件供给           *)
+(*   Real 层构造性实例；关键主件 real_kl_decomp_full 由配套件承担，                *)
+(*   本件不涉及。                                                      *)
+(*                                                               *)
+(* 五件清单（S08 接口假设 → 本件定理）：                                        *)
+(*   1. real_boltzmann_log_decomp → e49f_boltzmann_log_decomp；路线： *)
+(*      real_log_wd 同点异证兼容 + real_log_mult + log e^{-u} == −u    *)
+(*      （log_inv_exp_neg_thm）+ log inv == −log（自建：x·inv x == 1 锚点 *)
+(*      + real_log_mult + real_log_one + real_eq_plus_cancel_l）+ real_opp_plus。 *)
+(*   2. real_boltzmann_normalized → e49f_boltzmann_normalized；路线： *)
+(*      list 求和实例；real_list_sum_ext 换序（乘法交换）+                    *)
+(*      real_list_sum_linear_r 提出公因子 + real_eq_mult_compat       *)
+(*      （HZ 前提入位）+ real_inv_pos_correct。                         *)
+(*   3. real_kl_term_equiv → e49f_kl_term_equiv；路线：real_kl_term  *)
+(*      定义展开 + real_log_mult + log inv == −log（e49f_log_inv_pos）+ *)
+(*      real_opp_plus / real_opp_opp / real_plus_comm 代数。        *)
+(*   4. real_pi_star_align → e49f_pi_star_align；路线：实例取换序         *)
+(*      softmin 形（e49f_pi_star_r），对齐一步 real_mult_comm；该假设        *)
+(*      为无约束自由变元，实例供给即闭合；变分刻画（π* 为自由能极小）                         *)
+(*      接口不表达，列为升级方向。                                            *)
+(*   5. real_gibbs_sum_eps → e49f_gibbs_sum_eps；路线：直连 S08 已证     *)
+(*      real_gibbs_inequality_eps（出节形 q 任意），q := Boltzmann 分布，   *)
+(*      Σ q == 1 由件 2 实例供给；正性词项全程用 real_boltzmann_dist_r_pos。    *)
+(*                                                               *)
+(* 实例环境（逐字对齐 S08 接口实形，求和取具体 list 求和）：                            *)
 (*   S := X（任意类型）、real_sum_over_S := fun f => real_list_sum X f l、 *)
-(*   real_base_loss := e、D/D_pos、Z_align_r/Z_align_r_pos 同名透传、 *)
-(*   real_pi_star_r := e49f_pi_star_r。                            *)
-(* 显式前提（接口无 Z 定义式，故逐位保留，TempStrict 先例）：        *)
-(*   HZ : real_eq (real_list_sum X (fun s => e^{-e(s)/D}) l) Z       *)
-(*         （件2、件5 依赖；件1/件3/件4 无需）。                    *)
-(* 依赖（只读消费）：S01-S08 全链；不改任何既有件。                *)
-(* 备注：零承认件；语句面全 Set 层；文尾逐定理 Print Assumptions。   *)
+(*   real_base_loss := e、D/D_pos、Z_align_r/Z_align_r_pos 同名对应、   *)
+(*   real_pi_star_r := e49f_pi_star_r。                           *)
+(*                                                               *)
+(* 显式前提（接口无 Z 定义式，故逐位保留）：HZ : real_eq (real_list_sum X           *)
+(*   (fun s => e^{-e(s)/D}) l) Z（件 2、件 5 依赖；件 1/件 3/件 4 无需）。     *)
+(* 依赖：S01–S08 全链（只读使用）；不改任何既有件。                                  *)
+(* 对标：mathlib Boltzmann 分布与 Gibbs 不等式的有限实例。                      *)
+(* 构造性注记：零承认；语句面全 Set 层；文末逐定理 Print Assumptions。                 *)
+(* 编译配方：Rocq 9.1 直调 + cpu_guard；编译输出 -o 临时目录，树内不动。               *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -47,7 +47,7 @@ Require Import S07_RealSetoidExpLog.
 Require Import S08_RealMainlineDPO.
 From Stdlib Require Import Lists.List.
 
-(* ============ 辅助件 1：log e^{−u} == −u（witness 为 Defined 正件） ============ *)
+(* ============ 辅助引理 1：log e^{−u} == −u（对数证明项为 Defined 构造） ============ *)
 Lemma e49f_log_exp_neg : forall u : Real,
   real_eq (real_log (real_exp_neg u) (real_exp_neg_pos u)) (real_opp u).
 Proof.
@@ -63,9 +63,9 @@ Proof.
     exact (log_inv_exp_neg_thm (real_opp u) (cauchy_real_exp_pos (real_opp u))).
 Qed.
 
-(* ============ 辅助件 2：log inv x == −log x（锚点法） ============ *)
-(* 锚点：x·inv x == 1（real_inv_pos_correct）经 real_log_mult 收两侧   *)
-(* log，得 log x + log(inv x) == log 1 == 0，加法消去收口。            *)
+(* ============ 辅助引理 2：log inv x == −log x（锚点法） ============     *)
+(* 锚点：x·inv x == 1（real_inv_pos_correct）经 real_log_mult 收两侧      *)
+(* log，得 log x + log(inv x) == log 1 == 0，加法消去收尾。                *)
 Lemma e49f_log_inv_pos : forall (x : Real) (Hx : real_lt real_zero x),
   real_eq (real_log (real_inv_pos x Hx) (real_inv_pos_pos x Hx))
           (real_opp (real_log x Hx)).
@@ -108,14 +108,14 @@ Proof.
     apply (real_plus_opp A).
 Qed.
 
-(* ============ 实例槽：real_pi_star_r 的换序 softmin 形 ============ *)
+(* ============ 实例定义：real_pi_star_r 的换序 softmin 形 ============   *)
 Definition e49f_pi_star_r (X : Type) (e : X -> Real) (D : Real)
            (Dpos : real_lt real_zero D) (Z : Real) (Zpos : real_lt real_zero Z)
   : X -> Real :=
   fun s => real_mult (real_exp_neg (real_mult (real_inv_pos D Dpos) (e s)))
                      (real_inv_pos Z Zpos).
 
-(* ============ 件 1：Boltzmann 对数分解（S08:2501 逐字实例） ============ *)
+(* ============ 件 1：Boltzmann 对数分解（real_boltzmann_log_decomp 逐字实例） ============ *)
 Theorem e49f_boltzmann_log_decomp :
   forall (X : Type) (e : X -> Real) (D : Real) (Dpos : real_lt real_zero D)
          (Z : Real) (Zpos : real_lt real_zero Z)
@@ -134,7 +134,7 @@ Proof.
                       (real_log (real_exp_neg (real_mult (real_inv_pos D Dpos) (e s))) Hexp))
            (real_opp (real_plus (real_mult (real_inv_pos D Dpos) (e s))
                                 (real_log Z Zpos)))).
-  - (* witness 桥 + log_mult + log exp_neg / log inv 两桥 *)
+  - (* witness 桥 + real_log_mult + log exp_neg / log inv             *)
     apply (real_eq_trans
              (real_log (real_boltzmann_dist_r X e D Dpos Z Zpos s) Hpb)
              (real_log (real_boltzmann_dist_r X e D Dpos Z Zpos s)
@@ -190,7 +190,7 @@ Proof.
                               (real_mult (real_inv_pos D Dpos) (e s))).
 Qed.
 
-(* ============ 件 2：Boltzmann 归一化（S08:2505 实例，HZ 前提显式保留） ============ *)
+(* ============ 件 2：Boltzmann 归一化（real_boltzmann_normalized 实例，HZ 前提显式保留） ============ *)
 Theorem e49f_boltzmann_normalized :
   forall (X : Type) (l : list X) (e : X -> Real) (D : Real)
          (Dpos : real_lt real_zero D) (Z : Real) (Zpos : real_lt real_zero Z)
@@ -207,7 +207,7 @@ Proof.
                          (fun s => real_exp_neg
                                     (real_mult (real_inv_pos D Dpos) (e s))) l))
            real_one).
-  - (* Σ (invZ·exp) == invZ · Σ exp：ext 换序 + linear_r 拉出 *)
+  - (* Σ (invZ·exp) == invZ · Σ exp：real_list_sum_ext 换序 + real_list_sum_linear_r 提出公因子 *)
     apply (real_eq_trans
              (real_list_sum X (real_boltzmann_dist_r X e D Dpos Z Zpos) l)
              (real_list_sum X
@@ -249,7 +249,7 @@ Proof.
       * exact (real_inv_pos_correct Z Zpos).
 Qed.
 
-(* ============ 件 3：KL 项等价（S08:2508 逐字实例） ============ *)
+(* ============ 件 3：KL 项等价（real_kl_term_equiv 逐字实例） ============ *)
 Theorem e49f_kl_term_equiv :
   forall (X : Type) (e : X -> Real) (D : Real) (Dpos : real_lt real_zero D)
          (Z : Real) (Zpos : real_lt real_zero Z)
@@ -319,7 +319,7 @@ Proof.
                (real_eq_refl (real_log (real_boltzmann_dist_r X e D Dpos Z Zpos s)
                             (real_boltzmann_dist_r_pos X e D Dpos Z Zpos s)))
                (e49f_log_inv_pos (p s) (Hp s))). }
-  (* 目标内层 A + (−B) == −(log(B·inv p))：L0 换符号 + L123 代数链 *)
+  (* 目标内层 A + (−B) == −(log(B·inv p))：Hsub4 换符号 + HL123 代数链        *)
   assert (HL123 : real_eq
             (real_opp (real_plus (real_log (real_boltzmann_dist_r X e D Dpos Z Zpos s)
                             (real_boltzmann_dist_r_pos X e D Dpos Z Zpos s))
@@ -400,7 +400,7 @@ Proof.
   - exact HL123.
 Qed.
 
-(* ============ 件 4：π* 对齐（S08:2519 实例，槽取 e49f_pi_star_r） ============ *)
+(* ============ 件 4：π* 对齐（real_pi_star_align 实例，取 e49f_pi_star_r） ============ *)
 Theorem e49f_pi_star_align :
   forall (X : Type) (e : X -> Real) (D : Real) (Dpos : real_lt real_zero D)
          (Z : Real) (Zpos : real_lt real_zero Z) (s : X),
@@ -412,7 +412,7 @@ Proof.
   apply real_mult_comm.
 Qed.
 
-(* ============ 件 5：Σ 版 KL ≥ 0 + eps（S08:2522 实例，直连已证引擎） ============ *)
+(* ============ 件 5：Σ 版 KL ≥ 0 + eps（real_gibbs_sum_eps 实例，直连已证引理） ============ *)
 Theorem e49f_gibbs_sum_eps :
   forall (X : Type) (l : list X) (e : X -> Real) (D : Real)
          (Dpos : real_lt real_zero D) (Z : Real) (Zpos : real_lt real_zero Z)
@@ -435,7 +435,7 @@ Proof.
            eps Heps).
 Qed.
 
-(* ============ 审计口：逐定理 Print Assumptions ============ *)
+(* ============ 依赖审计：逐定理 Print Assumptions ============          *)
 Print Assumptions e49f_log_exp_neg.
 Print Assumptions e49f_log_inv_pos.
 Print Assumptions e49f_boltzmann_log_decomp.

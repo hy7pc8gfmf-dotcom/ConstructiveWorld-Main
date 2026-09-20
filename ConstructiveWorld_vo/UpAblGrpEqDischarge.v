@@ -1,20 +1,20 @@
 (* ============================================================ *)
-(* UpAblGrpEqDischarge.v —— 族A grp_eq_dec 槽具体载体放电通路示范件    *)
-(* 坐标：S15_TailFEPUp.v:1419 槽（Variable grp_eq_dec : forall      *)
-(*   i j : Group, Or (Id i j) (Not (Id i j))，族A 判定墙·可判等）。    *)
+(* UpAblGrpEqDischarge.v —— 族A grp_eq_dec 前提的具体载体实例化通路示范件 *)
+(* 前提：S15_TailFEPUp.v 的 grp_eq_dec（Variable grp_eq_dec : forall      *)
+(*   i j : Group, Or (Id i j) (Not (Id i j))，族A·可判等）。          *)
 (* 世界：Group := bool 二元枚举型；R := nat 极小 Set 层载体。          *)
 (* 零承认件：本件纯构造，无任何承认式底层，全部 Qed，可提取。          *)
-(* 墙账申明：抽象 Group 上 grp_eq_dec 判定墙维持墙文集 v2 族A 登记     *)
-(*   （非摘牌）；本件 = 载体相对性实证，照 S17 keep_dec 绕行计功口径   *)
-(*   单列，不计摘牌战果。                                             *)
-(* 消费面参照（冻结件只读）：S15_TailFEPUp.v Module UpExtras219        *)
+(* 范围注记：抽象 Group 上的 grp_eq_dec 一般构造仍属未竟（本件不改变   *)
+(*   此状况）；本件为载体相对性实证——可判等实例依托 bool 载体的        *)
+(*   构造性区分，仿 S17 keep_dec 实例先例单列。                        *)
+(* 参照出口（只读）：S15_TailFEPUp.v Module UpExtras219 之             *)
 (*   counter_ex_indicator_sum_two / counter_ex_reward_sum_two_c 双副本 *)
-(*   枚举世界为反例面；本件为单副本 bool 枚举的正向放电面。            *)
-(* Y6 席 2026-09-20；与 Y5 席世界装配件（UpAblGrpEqDecWorld.v）各自    *)
-(* 独立，并行先例，最小重复。                                         *)
+(*   枚举世界为反例构造；本件为单副本 bool 枚举的正向实例化构造。      *)
+(* 与世界装配件（UpAblGrpEqDecWorld.v）各自独立、互不依赖。            *)
+(* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。 *)
 (* ============================================================ *)
 
-(* ################ 第 0 部：S01 同型极小基座（自建零依赖） ################ *)
+(* ================= §0 S01 同型极小基座（自建零依赖） ================= *)
 
 Inductive Id {A : Set} (x : A) : A -> Set :=
 | id_refl : Id x x.
@@ -73,7 +73,7 @@ Proof.
      end).
 Qed.
 
-(* ################ 第 1 部：nat 载体 R 侧极小算术（S01 同型名） ################ *)
+(* ================= §1 nat 载体 R 侧极小算术（S01 同型名） ================= *)
 
 Definition zero : nat := O.
 Definition one : nat := Datatypes.S O.
@@ -140,10 +140,10 @@ Proof.
   intro k. exact tt.
 Qed.
 
-(* ################ 第 2 部：bool 二元枚举世界（槽位逐项供给） ################ *)
+(* ================= §2 bool 二元枚举世界（前提逐项供给） ================= *)
 
 (* 世界承载体：Group := bool *)
-(* 槽位 grp_eq_dec 的放电核心：bool 判定到 @inl/@inr 依赖消去 *)
+(* 前提 grp_eq_dec 的实例化核心：bool 判定到 @inl/@inr 依赖消去 *)
 Lemma btt_ne_bff : Not (Id true false).
 Proof.
   intro h. exact (match h with end).
@@ -171,7 +171,7 @@ Definition bg_grp_eq_dec : forall i j : bool, Or (Id i j) (Not (Id i j)) :=
           end
     end j.
 
-(* 伴生前件照 S15:1408-1419 实形逐项供给 *)
+(* 伴生前提照 S15:1408-1419 实形逐项供给 *)
 Definition bg_enum : list bool := true :: false :: nil.
 
 Definition bg_cover : forall i : bool, InT i bg_enum :=
@@ -181,10 +181,10 @@ Definition bg_cover : forall i : bool, InT i bg_enum :=
     | false => InT_next false true (false :: nil) (InT_here false nil)
     end.
 
-(* 数据位（机械供给，S17 零函数先例口径）：reward_group := 常零 *)
+(* 数据位（直接给出，照 S17 常零函数先例）：reward_group := 常零 *)
 Definition bg_reward : bool -> nat := fun _ : bool => zero.
 
-(* 组大小正性伴生（G := nat_to_R_g (length enum)，G_pos 槽） *)
+(* 组大小正性伴生（G := nat_to_R_g (length enum)，G_pos 前提） *)
 Definition bg_G : nat := nat_to_R_g (length bg_enum).
 Definition bg_G_pos : ltT zero bg_G := tt.
 
@@ -204,7 +204,7 @@ Definition bg_nodup_enum : nodup_g bg_enum :=
     (@pair (not_InT false nil) unit
        (fun Hin : InT false nil => match Hin with end) tt).
 
-(* ################ 第 3 部：GRPO 枚举节计数机器（grp_eq_dec 放电实例驱动） ################ *)
+(* ================= §3 GRPO 枚举节计数器（grp_eq_dec 实例驱动） ================= *)
 
 (* 组求和（列表 fold，载体 Id 层；S15:1448 同型，载体泛型） *)
 Fixpoint list_sum_g {A : Set} (f : A -> nat) (l : list A) : nat :=
@@ -226,7 +226,7 @@ Proof.
     exact (IH (fun i : A => fun Hin : InT i rest => H i (InT_next i x rest Hin))).
 Qed.
 
-(* 计数机器（放电实例 bg_grp_eq_dec 驱动；S15:1462 同型） *)
+(* 计数器（实例 bg_grp_eq_dec 驱动；S15:1462 同型） *)
 Fixpoint count_g (j : bool) (l : list bool) : nat :=
   match l with
   | nil => O
@@ -324,7 +324,7 @@ Proof.
       apply (id_sym (plus_assoc (f j) (f x) (list_sum_g f (removeT_g j rest)))).
 Qed.
 
-(* B1：覆盖 + 无重复 ⟹ 每元素恰计一次（S15:1672 同型） *)
+(* 恰计一次（B1，S15:1672 同型）：覆盖 + 无重复 ⟹ 每元素恰计一次 *)
 Theorem grpo_count_one : forall (l : list bool) (Hnd : nodup_g l)
     (j : bool), InT j l -> @Id nat (count_g j l) (Datatypes.S O).
 Proof.
@@ -339,19 +339,19 @@ Proof.
     + exact (IH Hndrest j (InT_tail_of_neq j a rest Hanj Hin)).
 Qed.
 
-(* ################ 第 4 部：主件——判定墙位具体载体放电通路证书 ################ *)
+(* ================= §4 主件——可判等前提的具体载体实例化通路证书 ================= *)
 
-(* S17 keep_dec 绕行证书同体例：槽语句逐字入证 + 放电实例申报 + 消费位放电。 *)
+(* 照 S17 keep_dec 实例证书体例：前提语句逐字入证 + 实例供给 + 使用位实例化。 *)
 
-(* ① 槽语句逐字（S15:1419 形，载体 bool）：Set 层语句 *)
+(* ① 前提语句逐字（S15:1419 形，载体 bool）：Set 层语句 *)
 Definition gqd_slot_statement : Set :=
   forall i j : bool, Or (Id i j) (Not (Id i j)).
 
-(* ② 放电实例（bool 判定到 @inl/@inr 依赖消去，本件第 2 部已证）：
+(* ② 实例（bool 判定到 @inl/@inr 依赖消去，见 §2）：
       gqd_slot_statement 的供给项 = bg_grp_eq_dec *)
 
-(* ③ 主件证书：判定墙位具体载体放电通路
-      S15:1419 槽经 bg_grp_eq_dec 消去 ⟹ GRPO 枚举节 B1（每元素恰计一次）
+(* ③ 主件证书：可判等前提的具体载体实例化通路
+      S15:1419 前提经 bg_grp_eq_dec 实例化 ⟹ GRPO 枚举节 B1（每元素恰计一次）
       在世界枚举 bg_enum 上成立。 *)
 Theorem gqd_discharge_certificate :
   forall (j : bool), InT j bg_enum ->
@@ -360,8 +360,8 @@ Proof.
   exact (fun j Hin => grpo_count_one bg_enum bg_nodup_enum j Hin).
 Qed.
 
-(* ④ 消费位放电示范：GRPO 枚举节 B2 indicator 求和恒等式（S15:1690 同型）
-      —— Σ_{i∈enum} indicator(i) == 1，indicator 由放电实例逐位分派。 *)
+(* ④ 使用位实例化示范：GRPO 枚举节 B2 indicator 求和恒等式（S15:1690 同型）
+      —— Σ_{i∈enum} indicator(i) == 1，indicator 由实例 bg_grp_eq_dec 逐位分派。 *)
 Theorem gqd_grpo_indicator_sum_one : forall (j : bool),
   InT j bg_enum ->
   Id (list_sum_g (fun i : bool => match bg_grp_eq_dec i j with
@@ -401,7 +401,7 @@ Proof.
 Qed.
 
 (* ⑤ 提取面对照：判定核（bg_grp_eq_dec 的计算内容投影，纯 bool 构造）
-      与核↔槽放电正确性证书（提取面 Obj.magic=0 的依据位）。 *)
+      与核↔前提实例化正确性证书（提取面 Obj.magic=0 的依据）。 *)
 Definition bg_dec_core (i j : bool) : bool :=
   match i with
   | true =>
@@ -426,7 +426,7 @@ Proof.
   destruct i; destruct j; cbn [bg_grp_eq_dec bg_dec_core]; apply id_refl.
 Qed.
 
-(* 该位 Closed 展示（编译日志核收） *)
+(* 该位公理依赖核验（应全为 Closed） *)
 Print Assumptions bg_grp_eq_dec.
 Print Assumptions grpo_count_one.
 Print Assumptions gqd_discharge_certificate.
@@ -434,9 +434,9 @@ Print Assumptions gqd_grpo_indicator_sum_one.
 Print Assumptions bg_grp_eq_dec_core_correct.
 
 (* 提取面：判定核可执行性（Separate Extraction 单命令；
-   提取闭包=纯 bool 构造，Obj.magic=0 对账。放电实例全式与计数机器
-   属 Set 层证书面：其 Not 支反证消去为证明内容，提取必擦除为
-   Obj.magic，区位已逐处点名于报告，不参与本提取件。） *)
+   提取闭包=纯 bool 构造，Obj.magic=0 核验。实例 bg_grp_eq_dec 全式与
+   计数器属 Set 层证书面：其 Not 支反证消去为证明内容，提取必擦除为
+   Obj.magic，故不参与本提取件。） *)
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory "_y6_grpdis_ex".
 Separate Extraction bg_dec_core.

@@ -1,44 +1,44 @@
 (* ============================================================ *)
-(* UpAblHalfPow.v —— arch_decay 几何衰减谱系供体件（P4 席·20260920）      *)
+(* UpAblHalfPow.v —— arch_decay 几何衰减谱系供给件                       *)
 (*                                                                *)
-(* 席位：P4（arch_decay 几何衰减谱系供体席，N10 报告后续槽③实办）。       *)
-(* 零承认件：无承认词面、无经典逻辑、全件 Qed 闭合；                        *)
-(*   交付语句面全 Set 层值（QltT/QleT'＝S02 Id 形＋sigT 见证），           *)
-(*   语句面无裸命题；Qeq/Z 换形全部内联于证明内部（不上语句面）。           *)
+(* 使命：为 arch_decay 衰减语句提供可计算见证的几何衰减谱系。             *)
 (*                                                                *)
-(* 谱系定位：S03_QExp.v arch_decay（:402）给出衰减契约                     *)
-(*   sigT(t, QltT (C*(1/2)^{S t}) eps)，但其见证走 Qarchimedean(C/eps)      *)
-(*   不透明位（阿基米德实例化，指标不可计算）；S10 五个消费位               *)
-(*   （:1682/1728/6436/11100/12022，sc_sin/sc_cos 柯西模位与               *)
-(*   exp_tail 链三处）inherit 同一不透明见证。本件供给几何衰减形的          *)
-(*   具体指标谱系：见证 t := Z.to_nat(Z.max 0 (c·f)+1)（c、f 为 C、eps      *)
-(*   的 Qnum/QDen 展形），全链零 Qarchimedean 位、零除法位。               *)
+(* 谱系定位：S03_QExp 的 arch_decay 给出衰减语句                          *)
+(*   sigT(t, QltT (C*(1/2)^{S t}) eps)，但其见证走 Qarchimedean(C/eps)    *)
+(*   不透明定义（阿基米德实例化，指标不可计算）；S10 的五处使用点          *)
+(*   （sc_sin/sc_cos 柯西模与 exp_tail 链三处）继承同一不透明见证。        *)
+(*   本件供给几何衰减形的可计算指标谱系：见证 t :=                        *)
+(*   Z.to_nat(Z.max 0 (c·f)+1)（c、f 为 C、eps 的 Qnum/QDen 展形），      *)
+(*   全链零 Qarchimedean 位、零除法位。                                   *)
 (*                                                                *)
 (* 谱系结构（四件，hpw_ 前缀）：                                           *)
-(*   A 递归形登记：hpw_half_step——q_pow 半步 ι-定义性恒等（QleT' 面登记）， *)
-(*      (1/2)^{S n} ≡ (1/2)·(1/2)^n（几何减半递归，q_pow S 支 iota 直出）； *)
-(*   B 单位分数桥：hpw_half_pow_inv_le——(1/2)^{S t} ≤ 1/((t+2)#1)，        *)
-(*      消费 S03 q_half_pow_le_inv 既有 (1/2)^n 谱系（S t 实例）；          *)
-(*   C Qfloor 形接口：hpw_half_pow_inv_pos——右端换形为                     *)
-(*      1#(Pos.of_succ_nat (S t))，与 S4B Qfloor 谱系件                    *)
-(*      uabS4b_null_lt 的 1#(Pos.of_succ_nat k) 同形对接（后续席可自由      *)
-(*      组合两谱系）；换形走 Zpos 头 iota（Qinv 在 Zpos 头上定义性归约，    *)
-(*      绕开 N10 墙卡「Zneg 三支 match 阻断定义性换形」——本件只取正头）。   *)
-(*   D 槽契约直配：hpw_arch_decay_instT——arch_decay 语句逐字同形          *)
-(*      （sigT(t, QltT (C*q_pow (1/2)%Q (Datatypes.S t)) eps)，前件        *)
-(*      QleT' 0 C/QltT 0 eps 一字不差），见证全具体（Z 指标构造，           *)
-(*      c·f 与 e·d 的线性推理用 Z.mul 单调件配对供给，非线性步不赖 lia）。  *)
+(*   A 递归形：hpw_half_step——q_pow 半步的定义性恒等式（QleT' 形）：      *)
+(*      (1/2)^{S n} ≡ (1/2)·(1/2)^n（几何减半递归，q_pow 的 S 支由        *)
+(*      iota 直接化简）；                                                 *)
+(*   B 单位分数桥接引理：hpw_half_pow_inv_le——(1/2)^{S t} ≤ 1/((t+2)#1)， *)
+(*      使用 S03 q_half_pow_le_inv 既有 (1/2)^n 谱系（S t 实例）；         *)
+(*   C Qfloor 形接口：hpw_half_pow_inv_pos——右端换形为                    *)
+(*      1#(Pos.of_succ_nat (S t))，与 S4B 谱系件 uabS4b_null_lt 的        *)
+(*      1#(Pos.of_succ_nat k) 同形对接（两谱系可自由组合）；换形走        *)
+(*      Zpos 头 iota（Qinv 在 Zpos 头上定义性归约；Zneg 分支的三支        *)
+(*      match 会阻断定义性换形，本件只取正头）。                          *)
+(*   D 目标语句供给：hpw_arch_decay_instT——arch_decay 语句逐字同形       *)
+(*      （sigT(t, QltT (C*q_pow (1/2)%Q (Datatypes.S t)) eps)，前提      *)
+(*      QleT' 0 C/QltT 0 eps 一字不差），见证全具体（Z 指标构造，         *)
+(*      c·f 与 e·d 的线性推理用 Z.mul 单调件配对供给，非线性步不赖 lia）。 *)
 (*                                                                *)
-(* 形态差申报（对 N10 定谳表 3 号位档案）：                                 *)
-(*   语句面形态差＝0（D 件与五槽位 destruct 契约逐字同形）；                *)
-(*   见证形态差＝Qarchimedean(C/eps) 的 Pos.to_nat p（不透明）              *)
-(*     换为 Z.to_nat(Z.max 0 (c·f)+1)（可计算具体指标）；后续席在五槽位     *)
-(*     以 destruct (hpw_arch_decay_instT C eps HC Hep) 平替                *)
-(*     destruct (arch_decay C eps HC Hep)，其后推进零改动。                *)
+(* 形态差注记：语句面形态差＝0（D 件与五处调用点 destruct 接口逐字        *)
+(*   同形）；见证形态差＝Qarchimedean(C/eps) 的 Pos.to_nat p（不透明）    *)
+(*   换为 Z.to_nat(Z.max 0 (c·f)+1)（可计算具体指标）；下游以             *)
+(*   destruct (hpw_arch_decay_instT C eps HC Hep) 替换                    *)
+(*   destruct (arch_decay C eps HC Hep)，其后推进零改动。                 *)
 (*                                                                *)
-(* 依赖：CW_ConstructiveWorld_219（S01–S15 全 Export 薄壳；                 *)
-(*   q_pow/q_half_pow_le_inv/Qlt 桥件皆在）＋Stdlib Z 单调件。             *)
-(*   本件未入 order.txt/_CoqProject；禁触 S10/任何既有文件。               *)
+(* 依赖：CW_ConstructiveWorld_219（S01–S15 全部 Export；                  *)
+(*   q_pow/q_half_pow_le_inv/Qlt 桥接引理皆在）＋Stdlib Z 单调件。        *)
+(*                                                                *)
+(* 对标：mathlib 置顶使命与声明注释惯例；stdlib 文档注释惯例。            *)
+(* 构造性注记：语句面全 Set 层值（QltT/QleT'＝S02 Id 形＋sigT 见证）；    *)
+(*   语句面无裸命题；Qeq/Z 换形全部内联于证明内部；零承认；Qed 闭合。     *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -50,7 +50,7 @@ From Stdlib Require Import Lia QArith.Qminmax.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part 0 · 体检（缺位即刻响亮失败；上游谱系闭合探针）                     *)
+(* §0 · 库内符号核验（签名不符即编译失败）                                 *)
 (* ============================================================ *)
 
 Check q_pow.
@@ -66,11 +66,11 @@ Check Z.mul_le_mono_nonneg_r.
 Check Z.mul_le_mono_nonneg_l.
 Check Pos.of_succ_nat.
 
-(* 上游谱系闭合探针：非 Closed 则本席改道自证（响亮失败制） *)
+(* 上游谱系闭合核验：q_half_pow_le_inv 非 Closed 则需另行自证 *)
 Print Assumptions q_half_pow_le_inv.
 
 (* ============================================================ *)
-(* Part A · 递归形登记（几何减半的 ι-定义性内容，QleT' 面登记）            *)
+(* §A · 递归形（几何减半的定义性恒等式，QleT' 形）                        *)
 (* ============================================================ *)
 
 Lemma hpw_half_step : forall n : nat,
@@ -82,7 +82,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part B · 单位分数桥（消费 S03 (1/2)^n 谱系，S t 实例）                  *)
+(* §B · 单位分数桥接引理（使用 S03 (1/2)^n 谱系，S t 实例）                *)
 (* ============================================================ *)
 
 Corollary hpw_half_pow_inv_le : forall t : nat,
@@ -95,7 +95,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part C · Qfloor 形接口（1#Pos.of_succ_nat 形，S4B 谱系同形对接）        *)
+(* §C · Qfloor 形接口（1#Pos.of_succ_nat 形，S4B 谱系同形对接）            *)
 (* ============================================================ *)
 
 Corollary hpw_half_pow_inv_pos : forall t : nat,
@@ -113,11 +113,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D · 槽契约直配（arch_decay 语句逐字同形，见证全具体）              *)
+(* §D · 目标语句供给（arch_decay 语句逐字同形，见证全具体）                *)
 (*   见证：t0 := Z.to_nat(Z.max 0 (c·f) + 1)，c/f 为 C/eps 展形分量；      *)
-(*   链：(1/2)^{S t0} ≤ 1/((S t0+1)#1)（B 桥）⟹ C·(1/2)^{S t0} < eps，     *)
+(*   链：(1/2)^{S t0} ≤ 1/((S t0+1)#1)（经 §B 引理）⟹ C·(1/2)^{S t0} < eps， *)
 (*   其中 c·f < e·d·q 的非线性步以 Z.mul 单调件显式供给（Hed1/Hmul），      *)
-(*   线性壳 lia 收口。                                                    *)
+(*   线性部分由 lia 收尾。                                                *)
 (* ============================================================ *)
 
 Corollary hpw_arch_decay_instT : forall (C eps : Q), QleT' 0 C -> QltT 0 eps ->
@@ -174,7 +174,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 公理面自审：全件 Closed（零外部未证假设）                                *)
+(* 假设审计：以下各件 Print Assumptions 均为 Closed（零外部未证假设）      *)
 (* ============================================================ *)
 
 Print Assumptions hpw_half_step.

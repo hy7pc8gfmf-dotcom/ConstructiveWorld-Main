@@ -1,41 +1,41 @@
 (* ============================================================ *)
-(* UpAblP2WByPass.v —— A2 席：论文2 自有域 S06 本地双墙位具体载体绕行件 *)
-(*   族A：S06_DiffSamplingGibbs.v:5951（MinPSampling 节 5941-7123）      *)
-(*        与 :7139（TopPSampling 节 7129-7799）token_eq_dec             *)
-(*        语句形：forall a b : Token, Or (Id a b) (Not (Id a b))        *)
-(*   族B：S06_DiffSamplingGibbs.v:4615（AttentionGibbsBridge 节         *)
-(*        3186-5926）keep_dec，逐字伴随 :4614 keep : S -> Set            *)
-(*        语句形：forall s, Or (keep s) (Not (keep s))                  *)
-(* 本件使命：照 Y5/Y6 范式（UpAblGrpEqDecWorld.v/UpAblGrpEqDischarge.v  *)
-(*   先例）装配 bool 二元具体 Token/State 世界，供给两墙位判定实例与     *)
-(*   伴生前件组，收束泛打包证书，并在自建世界上把两槽所在节代表性结论    *)
-(*   以「槽经实例消去」形态实例化（守恒恒等式镜像＋保留见证生成）。      *)
+(* UpAblP2WByPass.v —— 论文2 自有域 S06 两处判定接口的 bool 具体载体实例件     *)
+(*   族A：token_eq_dec 语句形 forall a b : Token, Or (Id a b) (Not (Id a b))，  *)
+(*   MinPSampling 节与 TopPSampling 节同形两位；                                *)
+(*   族B：keep_dec 语句形 forall s, Or (keep s) (Not (keep s))，逐字伴随        *)
+(*   keep : S -> Set 声明（AttentionGibbsBridge 节）。                          *)
+(* 使命：装配 bool 二元具体 Token/State 世界，供给两判定接口实例与伴生前件组，  *)
+(*   汇总为泛用封装证书 p2wb_pack，并在自建世界上把两接口所在节的代表性结论     *)
+(*   实例化消去（守恒恒等式复现＋保留见证生成）。                               *)
 (*                                                                      *)
-(* 路线定谳（开工实测，诚实申报）：S06 母本 .vo 头字节虽为 9.1 形，但     *)
-(*   .v 改时新于 .vo（出节陈旧）——照止损纪律禁消费陈旧出节形，本件走     *)
-(*   Y6 零依赖镜像路线（仅 Stdlib Extraction 一项Require），母本零触碰。 *)
-(*   墙位消费位实测：族B 代表结论＝tail_plus_kept_full（S06:4989，质量   *)
-(*   守恒 Id (plus tail_mass evicted_partition) Z_thermo，tail_mass     *)
-(*   定义 S06:4972 经 keep_dec 消费）；族A 消费位＝top_p_member         *)
-(*   （S06:7229，:7234 处 token_eq_dec 逐位分派）→ top_p_keep           *)
-(*   （S06:7244）；MinPSampling 节内 token_eq_dec 槽（S06:5951）经穷举   *)
-(*   实测零消费（同构接口重述面），如实并记。S06:4967-4969 的           *)
-(*   K/S_enum/S_finite_cover 伴生槽在本世界以具体枚举加覆盖见证同步供给。*)
+(* 路线依据（诚实边界）：抽象 Token/抽象 keep 上的两判定接口在构造性语境        *)
+(*   不可通构造——抽象不可判定性结论维持不变；本件为载体相对性实例，仅证         *)
+(*   具体 bool 载体上的可构造性；采用零依赖路线（仅 Stdlib Extraction 一项      *)
+(*   Require），自建 S01 同型极小基座，母本件零触碰。                           *)
 (*                                                                      *)
-(* 墙账申明：抽象 Token/抽象 keep 上的两判定墙位维持墙文集登记（非摘牌）；*)
-(*   本件＝载体相对性实证，照 S17 keep_dec 绕行计功口径单列，不计摘牌    *)
-(*   战果。S06 本地两位与论文1 W 位（S13:3440/S08:2164）同族不同位，     *)
-(*   拆清声明延续 P2B 基准报告口径。                                    *)
+(* 母本对应面（复现对象）：族B 代表结论 tail_plus_kept_full——质量守恒          *)
+(*   Id (plus tail_mass evicted_partition) Z_thermo，tail_mass 经 keep_dec      *)
+(*   逐点分派；族A 代表结论 top_p_member→top_p_keep——头位保留见证仅经          *)
+(*   token_eq_dec 实例消去生成；阈值判定轴（抽象序可判位）以 W/W_dec 参量       *)
+(*   全称化维持抽象；MinPSampling 节内 token_eq_dec 位经核查无结论引用，        *)
+(*   属同构接口重述面，如实并记；K/S_enum/S_finite_cover 伴生位在本世界         *)
+(*   以具体枚举与覆盖见证同步供给。                                             *)
 (*                                                                      *)
-(* 本件为零承认件：纯构造性；零公理、零承认、零新设槽、零经典逻辑；      *)
-(*   语句面全 Set 层（Id/Or/Not/InT/prod 均为 S01 同型 Set 层形）；      *)
-(*   全 Qed/Defined 收口；Print Assumptions 全 Closed 申报于件尾。       *)
-(* 四关留痕：attn/_a2_g2_compile.log、_a2_g4_coqchk.log、探针            *)
-(*   _a2_probe.log/_a2_probe_chk.log；G3 提取闭包独占目录 _a2_p2w_ex     *)
-(*   （一人一目录）。                                                    *)
+(* 诚实边界申明：抽象载体上的两判定不可构造性结论不因本件改变——本件不摘除      *)
+(*   任何抽象结论，仅补具体层实例；S06 本地两位与论文1 W 位同族不同位，         *)
+(*   拆清声明。                                                                 *)
+(* 【构造性注记】零承认、纯构造性（零经典逻辑）；语句面全 Set 层                *)
+(*   （Id/Or/Not/InT/prod 均为 S01 同型 Set 层形）；全 Qed/Defined 闭合；       *)
+(*   假设审计件尾全 Closed。                                                    *)
+(* 【依赖】零本库依赖（自建极小基座）；仅 Stdlib List、Extraction。             *)
+(* 【对标】stdlib 的 bool_eq_dec 类具体判定实例。                               *)
+(* 【编译配方】coqc 9.1 直调，cpu_guard 包裹（-LoadLimit 85 -CoreN 2）；        *)
+(*   编译输出经 -o 写临时目录，树内 .vo 一律不动；提取面取判定核。              *)
+(*                                                                      *)
+(*                                                                      *)
 (* ============================================================ *)
 
-(* ################ 第 0 部：S01 同型极小基座（自建零依赖，Y6 体例） ################ *)
+(* ################ 第 0 部：S01 同型极小基座（自建零依赖） #################### *)
 
 Inductive Id {A : Set} (x : A) : A -> Set :=
 | id_refl : Id x x.
@@ -74,7 +74,7 @@ Inductive InT {A : Set} (x : A) : list A -> Set :=
 Arguments InT_here {A} x l.
 Arguments InT_next {A} x y l H.
 
-(* ################ 第 1 部：nat 载体极小算术（Y6 体例） ################ *)
+(* ################ 第 1 部：nat 载体极小算术 ################################# *)
 
 Definition zero : nat := O.
 Definition one : nat := Datatypes.S O.
@@ -108,7 +108,7 @@ Proof.
     apply (id_sym (plus_S_swap b a)).
 Qed.
 
-(* 右结合先行形（S15 消费链锁定方向，Y6 坑4 同款） *)
+(* 右结合先行形（下游使用链锁定方向） *)
 Lemma plus_assoc : forall a b c : nat,
   Id (rplus a (rplus b c)) (rplus (rplus a b) c).
 Proof.
@@ -126,9 +126,9 @@ Proof.
                             (id_sym (plus_assoc b a c)))).
 Qed.
 
-(* ################ 第 2 部：bool 二元世界与两墙位判定实例 ################ *)
+(* ################ 第 2 部：bool 二元世界与两判定接口实例 #################### *)
 
-(* ---- 族A 判定核支件：bool 构造子冲突依赖消去（机判形，Y5/Y6 同款） ---- *)
+(* ---- 族A 判定核支件：bool 构造子冲突的空匹配消解 ---- *)
 
 Lemma p2wb_true_ne_false : Not (Id true false).
 Proof. intro h. exact (match h with end). Qed.
@@ -136,7 +136,7 @@ Proof. intro h. exact (match h with end). Qed.
 Lemma p2wb_false_ne_true : Not (Id false true).
 Proof. intro h. exact (match h with end). Qed.
 
-(* 族A 墙位实例：S06:5951/:7139 语句形逐字（载体 bool），bool 判定到
+(* 族A 判定接口实例：S06 同款语句形（载体 bool），bool 判定经
    @inl/@inr 依赖消去，四支逐支构造性见证（非经典排除律）。 *)
 Definition p2wb_token_eq_dec : forall a b : bool, Or (Id a b) (Not (Id a b)) :=
   fun a b =>
@@ -153,14 +153,14 @@ Definition p2wb_token_eq_dec : forall a b : bool, Or (Id a b) (Not (Id a b)) :=
         end
     end.
 
-(* ---- 族B 墙位实例其一：S17 钦定形（keep:=常 unit，判定支恒真） ---- *)
+(* ---- 族B 判定接口实例其一：常值形（keep 取常 unit，左支恒真） ---- *)
 
 Definition p2wb_keep : bool -> Set := fun _ : bool => unit.
 
 Definition p2wb_keep_dec : forall s : bool, Or (p2wb_keep s) (Not (p2wb_keep s)) :=
   fun _ : bool => @inl unit (Not unit) tt.
 
-(* ---- 族B 墙位实例其二：择留形（真留假逐，两支俱活，非平凡承载） ---- *)
+(* ---- 族B 判定接口实例其二：择留形（true 留 false 逐，两支俱非平凡） ---- *)
 
 Definition p2wb_keep_sel : bool -> Set :=
   fun s => match s with
@@ -176,16 +176,16 @@ Definition p2wb_keep_dec_sel : forall s : bool,
     | false => @inr (Empty_set) (Not (Empty_set)) (fun h => match h with end)
     end.
 
-(* ---- 伴生前件组（对应 S06:5949-4951 组与 S06:4967-4969 组） ---- *)
+(* ---- 伴生前件组（对应 S06 vocab 组与 K/S_enum 组） ---- *)
 
 Definition p2wb_vocab : list bool := cons true (cons false nil).
 
-(* vocab_nonempty 槽（S06:5950 形）：表构造子冲突机判消解（索引取字面
-   构造子形，空匹配可判；入包时与 p2wb_vocab delta 可转换） *)
+(* vocab_nonempty 位：表构造子冲突的空匹配消解（索引取字面
+   构造子形；与 p2wb_vocab 可转换） *)
 Definition p2wb_vocab_nonempty : Not (Id (cons true (cons false nil)) nil) :=
   fun h => match h with end.
 
-(* S_finite_cover 槽（S06:4969 形）：覆盖见证 *)
+(* S_finite_cover 位：覆盖见证 *)
 Definition p2wb_S_enum : list bool := cons true (cons false nil).
 
 Definition p2wb_S_finite_cover : forall s : bool, InT s p2wb_S_enum :=
@@ -195,7 +195,7 @@ Definition p2wb_S_finite_cover : forall s : bool, InT s p2wb_S_enum :=
     | false => InT_next false true (cons false nil) (InT_here false nil)
     end.
 
-(* ################ 第 3 部：枚举求和机器（SumOver 的有限世界实现面） ################ *)
+(* ################ 第 3 部：枚举求和（SumOver 的有限世界实现面） ############# *)
 
 Fixpoint p2wb_sum (f : bool -> nat) (l : list bool) : nat :=
   match l with
@@ -229,10 +229,10 @@ Proof.
                                                     (rplus (g x) (p2wb_sum g rest)))))).
 Qed.
 
-(* ################ 第 4 部：族B 消费放电——KV 守恒结论逐式镜像 ################ *)
-(* 母本：S06:4972 tail_mass／evicted_partition／Z_thermo 与               *)
-(*   S06:4989 tail_plus_kept_full（Id (plus tail_mass evicted_partition) *)
-(*   Z_thermo）；R 轴取 nat 极小载体（实层墙位非本席辖区，Y5 泛量化口径）。*)
+(* ################ 第 4 部：族B 实例化——KV 守恒结论逐式复现 ################# *)
+(* 母本：S06 tail_mass／evicted_partition／Z_thermo 与                    *)
+(*   tail_plus_kept_full（Id (plus tail_mass evicted_partition)           *)
+(*   Z_thermo）；实数轴取 nat 极小载体（实层判定面不在本件范围）。         *)
 
 Definition p2wb_bfactor : bool -> nat :=
   fun s => match s with
@@ -254,7 +254,7 @@ Definition p2wb_evicted_partition (kd : forall s : bool, Or (p2wb_keep_sel s) (N
 
 Definition p2wb_Z_thermo : nat := p2wb_sum p2wb_bfactor p2wb_S_enum.
 
-(* 守恒恒等式镜像（S06:4989 证明链逐式：逐态配对＋sum_add＋sum_ext） *)
+(* 守恒恒等式复现（逐态配对＋p2wb_sum_add＋p2wb_sum_ext） *)
 Theorem p2wb_tail_plus_kept_full :
   forall kd : forall s : bool, Or (p2wb_keep_sel s) (Not (p2wb_keep_sel s)),
     Id (rplus (p2wb_tail_mass kd) (p2wb_evicted_partition kd)) p2wb_Z_thermo.
@@ -295,7 +295,7 @@ Proof.
            p2wb_bfactor p2wb_S_enum (fun s => fun _ => Hpt s)).
 Qed.
 
-(* 槽经择留实例消去：守恒结论以 p2wb_keep_dec_sel 实例化 *)
+(* 判定接口经择留实例消去：守恒结论以 p2wb_keep_dec_sel 实例化 *)
 Theorem p2wb_tail_plus_kept_full_sel :
   Id (rplus (p2wb_tail_mass p2wb_keep_dec_sel) (p2wb_evicted_partition p2wb_keep_dec_sel))
      p2wb_Z_thermo.
@@ -308,11 +308,11 @@ Proof. exact id_refl. Qed.
 Theorem p2wb_sel_partition_two : Id (p2wb_evicted_partition p2wb_keep_dec_sel) (rplus one one).
 Proof. exact id_refl. Qed.
 
-(* ################ 第 5 部：族A 消费放电——TopP 保留判定逐式镜像 ################ *)
-(* 母本：S06:7229 top_p_member（:7234 处 token_eq_dec x w 逐位分派，      *)
-(*   inl 支出 unit 住民）→ S06:7244 top_p_keep。阈值判定轴（抽象序可判   *)
-(*   位，族A LPO 邻接墙，非本席辖区）以 W/W_dec 泛量化维持抽象（Y5 实层   *)
-(*   轴泛量化口径）；头位见证仅经 token_eq_dec 实例消去生成。            *)
+(* ################ 第 5 部：族A 实例化——TopP 保留判定逐式复现 ############### *)
+(* 母本：S06 top_p_member（token_eq_dec x w 逐位分派，inl 支出 unit       *)
+(*   元素）→ top_p_keep。阈值判定轴（抽象序可判位，族A 与 LPO 邻接，      *)
+(*   不在本件范围）以 W/W_dec 参量全称化维持抽象；                       *)
+(*   头位见证仅经 token_eq_dec 实例消去生成。                             *)
 
 Section TopPMirror.
 
@@ -333,12 +333,12 @@ Fixpoint p2wb_top_member (p : nat) (l : list bool) : bool -> Set :=
       end
   end.
 
-(* 镜像 top_p_keep（S06:7244）：单元素枚举已序，排序轴平凡 *)
+(* top_p_keep 复现：单元素枚举已序，排序轴平凡 *)
 Definition p2wb_top_keep (p : nat) (l : list bool) : bool -> Set :=
   p2wb_top_member p l.
 
-(* 槽经实例消去的头位保留见证：仅经 p2wb_token_eq_dec 消去，
-   不触 W_dec（阈值抽象轴零消费） *)
+(* 经实例消去的头位保留见证：仅经 p2wb_token_eq_dec 消去，
+   不使用 W_dec（阈值抽象轴零引用） *)
 Theorem p2wb_top_keep_head_witness : forall (p : nat) (l : list bool),
   p2wb_top_keep p (cons true l) true.
 Proof.
@@ -351,10 +351,10 @@ Qed.
 
 End TopPMirror.
 
-(* ################ 第 6 部：泛打包证书（Y5 gqc_supplied 体例） ################ *)
-(* 槽序＝S06 槽群声明序（族A：Token/vocab/vocab_nonempty/token_eq_dec，  *)
-(*   S06:5948-5951 形；族B：S_enum/S_finite_cover/keep/keep_dec，        *)
-(*   S06:4968-4969 与 4614-4615 形）。                                   *)
+(* ################ 第 6 部：泛用封装证书 p2wb_pack ########################### *)
+(* 参数序＝S06 接口群声明序（族A：Token/vocab/vocab_nonempty/token_eq_dec；*)
+(*   族B：S_enum/S_finite_cover/keep/keep_dec）。                         *)
+(*                                                                      *)
 
 Inductive p2wb_pack : Type :=
 | p2wb_pack_intro :
@@ -367,7 +367,7 @@ Inductive p2wb_pack : Type :=
            (keep_dec : forall s : St, Or (keep s) (Not (keep s))),
       p2wb_pack.
 
-(* 供给其一：S17 钦定形（keep:=常 unit，keep_dec:=@inl unit tt） *)
+(* 供给其一：常值形（keep 取常 unit，keep_dec 取 @inl unit tt） *)
 Theorem p2wb_supplied : p2wb_pack.
 Proof.
   exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec
@@ -375,7 +375,7 @@ Proof.
                          p2wb_keep p2wb_keep_dec).
 Qed.
 
-(* 供给其二：择留形（两支俱活，非平凡居员） *)
+(* 供给其二：择留形（两支俱非平凡） *)
 Theorem p2wb_supplied_sel : p2wb_pack.
 Proof.
   exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec
@@ -383,7 +383,7 @@ Proof.
                          p2wb_keep_sel p2wb_keep_dec_sel).
 Qed.
 
-(* ################ 第 7 部：提取面判定核与核↔槽正确性证书（Y6 坑5 体例） ################ *)
+(* ################ 第 7 部：提取面判定核与核↔接口正确性证书 ################# *)
 
 Definition p2wb_tok_dec_core (i j : bool) : bool :=
   match i with
@@ -409,7 +409,7 @@ Proof.
   destruct i; destruct j; cbn [p2wb_token_eq_dec p2wb_tok_dec_core]; apply id_refl.
 Qed.
 
-(* ################ 假设面收口申报（PA 全 Closed 展示） ################ *)
+(* ################ 假设审计（Print Assumptions 全 Closed） ################### *)
 
 Print Assumptions p2wb_token_eq_dec.
 Print Assumptions p2wb_keep_dec.
@@ -421,8 +421,8 @@ Print Assumptions p2wb_supplied.
 Print Assumptions p2wb_supplied_sel.
 Print Assumptions p2wb_tok_dec_core_correct.
 
-(* 提取面：判定核单列（纯 bool 构造），核↔槽正确性证书为证明内容不入
-   提取集（Y6 提取面纪律）；提取闭包圈定本席私有目录（一人一目录）。 *)
+(* 提取面：判定核单列（纯 bool 构造）；核↔接口正确性证书为证明内容，
+   不入提取集，以假设审计替代。 *)
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory "_a2_p2w_ex".
 Separate Extraction p2wb_tok_dec_core.

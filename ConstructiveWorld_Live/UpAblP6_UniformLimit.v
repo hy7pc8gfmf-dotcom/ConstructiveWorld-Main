@@ -1,40 +1,40 @@
 (* ============================================================ *)
-(* UpAblP6_UniformLimit.v —— PA6-18 席：UniformLimit 家族严格档首刀   *)
-(* （ConstructiveWorld 消融战役论文6，20260920；纯构造性；            *)
-(*  全中文头注；语句面全 Set 层）                                    *)
-(*                                                              *)
-(* 使命（T223 判定的 B3 悬置放电位首刀）：上游 UpReqAttnUniformLimit  *)
-(*   严格档主槽 alm_uniform_limit 的两枚前提件（gamma_pos/gap_le）   *)
-(*   在并列世界（UpAblAlmConsumption）只能以 γ=0 档真实现，严格档      *)
-(*   γ>0 被并列证书驳回，链件只能以余前件形承载——本席以非并列        *)
-(*   具体世界完成首刀供给，三件全 Qed：                             *)
-(*     ① pa6ul_gap_le_supply：带真间隙具体 z 的 gap_le 严格档供给     *)
-(*        （上游槽形 Live 树 :286-287 逐字；z 两点分段定义形：        *)
-(*         z true=real_one、z false=real_zero，非恒值平凡件；        *)
-(*         γ:=real_one；z false+γ=0+1=1=z true 取等紧界——            *)
-(*         gap_le 的 ≤ 面取等是最紧供给，间隙真值非 z:=任意平凡值）；  *)
-(*     ② pa6ul_gamma_pos_supply：γ>0 直配供给（上游槽形 :285 逐字；   *)
-(*         real_lt_zero_one 直配）；                                *)
-(*     ③ pa6ul_strict_first_cut：①②合成前件包 Corollary——           *)
-(*         alm_uniform_limit 全实参直配，严格档主槽在本世界闭合。      *)
-(*         对照 UpAblAlmConsumption 头注「余前件位                    *)
-(*         (n·decay+n·decay)≤k·eps」的 γ=0 档显式保留位：本件为        *)
-(*         该保留位的严格档首刀放电（以具体世界实例为限，非本体        *)
-(*         全域闭合声明）。                                         *)
-(*                                                              *)
-(* 载体：bool 直配（照 UpAblAlmConsumption 范式①）；词表             *)
-(*   [true; false]；m:=true；z 分段两点；γ:=real_one。               *)
-(*   非平凡性三证：非 m 副本 false 在表（pa6ul_m_in 真构造）；        *)
-(*   false≠true 构造性证书（J-式指标失配驳回，pa6ul_eq_dec 异支）；    *)
-(*   gap_le 在真异点 x=false 实例化（非空泛支），且 γ>0 严格。        *)
-(*                                                              *)
-(* 检索对账（令十一检索记录详见 T226 台账）：E346 minus→req_minus     *)
-(*   反省桥经语句级对账不适用（gap_le 槽形无 minus 面，本席直配       *)
-(*   comm→右形加零→eq-trans 桥→eq-le，比 minus 展开路少一段）；       *)
-(*   E021/E025 分段函数先例与 bool 两点分段 z 同族参照。              *)
-(*                                                              *)
-(* 纪律：全 Qed；前缀 pa6ul_（全库实扫零撞名）；上游零改；             *)
-(*   未入 order.txt/_CoqProject；Print Assumptions 三件留痕。         *)
+(* UpAblP6_UniformLimit.v —— alm_uniform_limit 严格档前提的具体实例供给 *)
+(* （纯构造性；语句面全 Set 层）。                                     *)
+(*                                                                    *)
+(* 使命：上游 UpReqAttnUniformLimit 严格档主定理 alm_uniform_limit 的    *)
+(*   两枚前提（gamma_pos/gap_le）在并列世界（UpAblAlmConsumption）只能   *)
+(*   以 γ=0 形实现，严格档 γ>0 在彼处被反例见证否定，链件只能以剩余      *)
+(*   前提形承载——本件以非并列具体世界完成严格档实例供给，三件全 Qed：    *)
+(*     ① pa6ul_gap_le_supply：带真间隙具体 z 的 gap_le 严格档供给        *)
+(*        （上游前提形逐字；z 两点分段定义形：                           *)
+(*         z true=real_one、z false=real_zero，非恒值平凡件；            *)
+(*         γ:=real_one；z false+γ=0+1=1=z true 取等紧界——               *)
+(*         gap_le 的 ≤ 面取等是最紧供给，间隙真值非 z:=任意平凡值）；     *)
+(*     ② pa6ul_gamma_pos_supply：γ>0 直接供给（上游前提形逐字；          *)
+(*         real_lt_zero_one 直接给出）；                                *)
+(*     ③ pa6ul_strict_first_cut：①②合成的前提包 Corollary——            *)
+(*         alm_uniform_limit 全实参直接实例化，严格档主定理在本世界闭合。 *)
+(*         对照 UpAblAlmConsumption 头注「剩余前提位                     *)
+(*         (n·decay+n·decay)≤k·eps」的 γ=0 档显式保留位：本件为         *)
+(*         该保留位的严格档首个实例（以具体世界实例为限，非本体          *)
+(*         全域闭合声明）。                                             *)
+(*                                                                    *)
+(* 载体：bool 双点实例（与 UpAblAlmConsumption 同形）；词表              *)
+(*   [true; false]；m:=true；z 分段两点；γ:=real_one。                  *)
+(*   非平凡性三点：非 m 副本 false 在表（pa6ul_m_in 真构造）；            *)
+(*   false≠true 构造性证书（构造子失配空匹配消解，pa6ul_eq_dec 异支）；   *)
+(*   gap_le 在真异点 x=false 实例化（非空泛支），且 γ>0 严格。           *)
+(*                                                                    *)
+(* 证明路线注记：gap_le 实例不用 minus 展开路（该路经语句级核验在        *)
+(*   gap_le 前提形上无适用面），取 real_plus_comm→real_plus_zero 右形→   *)
+(*   real_eq_trans→real_eq_le 的换形链，比 minus 展开路少一段；          *)
+(*   分段函数构造与库内 bool 两点分段先例同族。                          *)
+(* 纪律：全 Qed；前缀 pa6ul_（全库零撞名）；上游零改；                   *)
+(*   Print Assumptions 三件核验。                                       *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、 *)
+(*   S07_RealSetoidExpLog、CW_ConstructiveWorld_219、AttnHardLimit218、   *)
+(*   UpReqAttnUniformLimit。编译配方：coqc 9.1 直调 + cpu_guard。         *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -47,13 +47,13 @@ Require Import AttnHardLimit218.
 Require Import UpReqAttnUniformLimit.
 From Stdlib Require Import List Arith.
 
-(* ############ 非并列双值最小世界（二元词表 flag 载体） ############ *)
+(* ############ 非并列双值最小世界（bool 双点载体） ############ *)
 
-(* 词表：二元词表（与 UpAblAlmConsumption 范式①同形直配）。 *)
+(* 词表：[true; false] 双点表（与 UpAblAlmConsumption 同形）。 *)
 Definition pa6ul_vocab : list bool := true :: false :: nil.
 
 (* logit 两点分段定义形：副本支 real_one、非副本支 real_zero—— *)
-(* 真间隙载体（非恒值平凡件；E021/E025 分段先例同族）。 *)
+(* 真间隙载体（非恒值平凡件；库内 bool 两点分段先例同族）。 *)
 Definition pa6ul_z (x : bool) : Real :=
   match x with
   | true => real_one
@@ -63,8 +63,8 @@ Definition pa6ul_z (x : bool) : Real :=
 (* 严格档间隙常量：γ := real_one。 *)
 Definition pa6ul_gamma : Real := real_one.
 
-(* 表可判定等词（J-式指标失配范式，照 AlmConsumption almc_eq_dec； *)
-(*   Defined 数据面）。 *)
+(* 表可判定等词（构造子失配空匹配消解，与 UpAblAlmConsumption 的        *)
+(*   almc_eq_dec 同构；Defined 数据面）。 *)
 Definition pa6ul_eq_dec (a b : bool) : Or (Id a b) (Not (Id a b)).
 Proof.
   destruct a as [ | ]; destruct b as [ | ].
@@ -84,7 +84,7 @@ Proof.
   - exact (@inl _ _ (@id_refl bool false)).
 Defined.
 
-(* 表非空证书：[true; false] 异于空表（J-式范式）。 *)
+(* 表非空证书：[true; false] 异于空表（构造子失配空匹配消解）。 *)
 Definition pa6ul_vocab_ne : Not (Id pa6ul_vocab nil) :=
   fun H : Id pa6ul_vocab nil =>
     match H in Id _ y
@@ -98,19 +98,19 @@ Definition pa6ul_m_in : InT true pa6ul_vocab :=
 
 (* ############ ①严格档 gap_le 供给：带真间隙具体 z ############ *)
 
-(* 上游槽形逐字（Live 树 UpReqAttnUniformLimit :286-287）：
+(* 上游前提形逐字（UpReqAttnUniformLimit）：
    gap_le : forall x : Token, Not (Id x m) ->
      real_le (real_plus (z x) gamma) (z m) ——
-   本席 Token:=bool、z:=pa6ul_z、m:=true、γ:=pa6ul_gamma 直配。 *)
+   此处 Token:=bool、z:=pa6ul_z、m:=true、γ:=pa6ul_gamma 直接给出。 *)
 Lemma pa6ul_gap_le_supply : forall x : bool, Not (Id x true) ->
   real_le (real_plus (pa6ul_z x) pa6ul_gamma) (pa6ul_z true).
 Proof.
   intros x Hx. destruct x as [ | ].
-  - (* x = true：与 Not (Id true true) 相斥（AlmConsumption 支一习语） *)
+  - (* 情形 x=true：与前提 Not (Id true true) 相斥，空匹配消解。 *)
     exact (match Hx (@id_refl bool true) with end).
-  - (* x = false：0+1 = 1 取等紧界。
-       桥序：real_plus_comm（0+1=1+0）→ real_plus_zero 右形（1+0=1）
-       → real_eq_trans → real_eq_le 可解码面。 *)
+  - (* 情形 x=false：0+1 = 1 取等紧界。
+       换形链：real_plus_comm（0+1=1+0）→ real_plus_zero 右形（1+0=1）
+       → real_eq_trans → real_eq_le 由等式得序。 *)
     exact (RealSetoid.real_eq_le
              (real_plus (pa6ul_z false) pa6ul_gamma) (pa6ul_z true)
              (real_eq_trans (real_plus (pa6ul_z false) pa6ul_gamma)
@@ -119,19 +119,19 @@ Proof.
                 (real_plus_zero real_one))).
 Qed.
 
-(* ############ ②γ>0 直配供给 ############ *)
+(* ############ ②γ>0 直接供给 ############ *)
 
-(* 上游槽形逐字（Live 树 :285）：gamma_pos : real_lt real_zero gamma。 *)
+(* 上游前提形逐字：gamma_pos : real_lt real_zero gamma。 *)
 Lemma pa6ul_gamma_pos_supply : real_lt real_zero pa6ul_gamma.
 Proof.
   exact real_lt_zero_one.
 Qed.
 
-(* ############ ③前件包 Corollary：严格档主槽首刀放电 ############ *)
+(* ############ ③前提包 Corollary：严格档主定理实例闭合 ############ *)
 
-(* 上游主槽逐字（Pa6UniLimT226=Live 树 :1428-1457 alm_uniform_limit）：
-   gamma_pos/gap_le 两枚前提在本世界由 ①②直配闭合——对照
-   UpAblAlmConsumption 头注余前件位（γ=0 档显式保留位）的严格档首刀。 *)
+(* 上游主定理 alm_uniform_limit 逐字：
+   gamma_pos/gap_le 两枚前提在本世界由 ①②直接给出闭合——对照
+   UpAblAlmConsumption 头注剩余前提位（γ=0 档显式保留位）的严格档实例。 *)
 Corollary pa6ul_strict_first_cut :
   forall eps : Real,
     real_lt real_zero eps ->
@@ -155,7 +155,7 @@ Proof.
            pa6ul_gap_le_supply eps Heps).
 Qed.
 
-(* ############ PA 留痕 ############ *)
+(* ############ 收尾核验（Print Assumptions 三件 Closed） ############ *)
 
 Print Assumptions pa6ul_gap_le_supply.
 Print Assumptions pa6ul_gamma_pos_supply.

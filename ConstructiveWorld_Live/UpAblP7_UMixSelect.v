@@ -1,37 +1,37 @@
 (* ============================================================ *)
-(* UpAblP7_UMixSelect.v —— 论文7 专项消融战役席 PA7-15（目标④            *)
-(*   UpReqUMixSelect.v 清盘：墙位 lt_plus_compat_lt_le 的消费面重建件）    *)
-(*                                                              *)
-(* 母本坐标（ConstructiveWorld_Live/UpReqUMixSelect.v，四树零差）：         *)
-(*   :67   墙槽 Variable lt_plus_compat_lt_le（唯一声明假设）              *)
-(*         → 定谳 W（接口层不可内证；E-STAGING-Firewall-TempEntMono；      *)
-(*           本席四消费点复核：omd/κ<1 两腿 le_refl 槽构造性不可升级）      *)
-(*         → 本件不做 Id 面内证（诚实 W），走 W7 族出口先例（T143:57）：    *)
-(*           实例化可放电替身=req 面（RealEnhancedReal@S07:8566）消费面重建 *)
-(*   :559 ums_pow_budget（lt 前件+lt 形 Arch 旗舰）                        *)
-(*         → 件六 Id 面墙槽具名冻结消费形（出节首参喂槽直击装配）           *)
-(*   req 面镜像坐标：UpReqConcMixSel.v CmkMixSelect 节（ums_ 系逐件镜像，   *)
-(*   :79 墙同位 Variable）——cmk_pow_budget 为 ums_pow_budget 同构镜像      *)
-(*   ：墙放电供体=real_lt_plus_compat_lt_le@S07:6118（ConcMixSelFeed:198   *)
-(*   cms_bs_lpc 同件同喂先例）。                                           *)
-(* 节序注记：§A（Id 面）须前置于 Import RealInterfaceEnhancedMod——该模块    *)
-(*   裸名遮蔽 Id 面访问器（S01_BaseRing.R 实测 : RealInterface -> Set，    *)
-(*   Arguments {RealInterface}；遮蔽下裸 @R RI 误解析，_probe_pa715c 实证   *)
-(*   无遮蔽作用域母件同款前导完好），故 Id 面节先落、req 面裸名后启用。      *)
-(* 分级申报：N1 库内放电件直连（real_lt_plus_compat_lt_le / real_arch /     *)
-(*   mix_scale_eq_const@UpReqMixingTime:140 / real_mult_one@S02:2372 /     *)
-(*   RealSetoid.real_lt_id_r@S07:456 / cmk_pow_budget）；N3 实例供给        *)
-(*   （κ:=real_const(1/2)，eps:=1/4 逐点 Q 计算正性/上界；TV0:=budget:=one）。*)
-(* 新构造（非平凡本体）：uabm_arch_scale——nat-尺度 Arch 放电桥，            *)
-(*   real_arch 的 const 形（S07:2772）经 mix_scale_eq_const 双向桥换装为    *)
-(*   cmk_scale (S N) one 形，树内无同形独立件（UpReqConcMixSel 头注自报      *)
-(*   「本件不消费 real_arch，Arch 前件保持 nat-尺度形」=本桥即其放电缺口）。 *)
-(* 依赖清单：CW_ConstructiveWorld_219（伞壳）+ UpReqConcMixSel（req 镜像）   *)
-(*   + UpReqMixingTime（scale 桥）+ S01/S04 + UpReqUMixSelect（Id 面旗舰）  *)
-(*   ——只读消费，原树零改，在飞席件零接触。                                 *)
-(* 红线自审：全中文表述；零 公理/承认件/参数/猜想/弃证字面；全件真证收口；    *)
-(*   文尾 Print Assumptions 逐件闭合判读；编译产物只落 /tmp（vo_9.1/Live     *)
-(*   只读）；零 git。                                                      *)
+(* UpAblP7_UMixSelect.v —— UpReqUMixSelect.v 的使用面重建件：                *)
+(*   ums_pow_budget 的具名使用形与 κ:=1/2 具体实例。                         *)
+(* 使命：源模块 UpReqUMixSelect.v 以 lt_plus_compat_lt_le（lt＋le 相加保序）    *)
+(*   为唯一声明假设（接口层不可内证；omd 与 κ<1 两处使用点的 le_refl 参数       *)
+(*   构造性不可升级消去）；本件把其出节主定理 ums_pow_budget 的              *)
+(*   「喂入该前提即得结论」形固定为具名定理                                  *)
+(*   uabm_ums_pow_budget_slot_freeze，并在 req 面（RealEnhancedReal，S07）    *)
+(*   给 κ:=real_const(1/2)、TV0:=budget:=one 的具体实例 uabm_k_select_half：  *)
+(*   见证存在 k 使 (1/2)^k·1 < 1。                                           *)
+(*                                                                *)
+(* 使用面（上游出口真名）：ums_pow_budget（UpReqUMixSelect，Arch 前件为       *)
+(*   lt 形）；cmk_pow_budget／cmk_scale／cmk_r_pow（UpReqConcMixSel 的        *)
+(*   CmkMixSelect 节，ums_ 系的 req 面对应形）；real_lt_plus_compat_lt_le       *)
+(*   （S07，声明前提的 req 面实例形）；real_arch（nat-尺度 Arch 上界）、       *)
+(*   mix_scale_eq_const（UpReqMixingTime）、real_mult_one（S02）、             *)
+(*   RealSetoid.real_lt_id_r（S07）。                                        *)
+(*                                                                *)
+(* 新构造：uabm_arch_scale —— nat-尺度 Arch 桥接引理（树内此前缺失）：        *)
+(*   real_arch 的 const 形上界（forall B，存在 n≥2，B < const(n#1)）经        *)
+(*   mix_scale_eq_const（mix_scale k w == const(k#1)·w）与 real_mult_one      *)
+(*   （x·1 == x）转换为 cmk_scale (S N) one 形。                              *)
+(*                                                                *)
+(* 节序注记（技术性）：§A（Id 面）须前置于 Import RealInterfaceEnhancedMod    *)
+(*   ——该模块裸名遮蔽 Id 面访问器（S01_BaseRing.R：Arguments                  *)
+(*   {RealInterface}；遮蔽下裸 @R RI 误解析），故 Id 面节先落、               *)
+(*   req 面裸名后启用。                                                     *)
+(* 依赖清单：CW_ConstructiveWorld_219＋UpReqConcMixSel＋UpReqMixingTime＋     *)
+(*   S01_BaseRing＋S04_RealExpLogConv＋UpReqUMixSelect——只读使用。            *)
+(*                                                                *)
+(* 对标：mathlib pow_lt_one 的倒数衰减步数见证之构造性对应。                  *)
+(* 构造性注记：全件真证、零承认（声明前提仅经源模块出节形引入）；               *)
+(*   语句面全 Set 层。                                                      *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。                *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -46,11 +46,11 @@ Require Import S04_RealExpLogConv.
 Require Import UpReqUMixSelect.
 
 (* ============================================================ *)
-(* §A Id 面：目标件旗舰墙槽具名冻结消费形（节前导逐字镜像母件；               *)
-(*   本节必须先于 RealInterfaceEnhancedMod 裸名导入，见头注节序注记）        *)
-(*   ums_pow_budget 出节首参=墙槽（CZE13 出节实形勘误同源），本件把          *)
-(*   「喂槽即得旗舰」的 discharged 形冻结为具名可消费件（T155 槽位直喂       *)
-(*   打包先例），UMixSelect 出节签名由此具名定格。                          *)
+(* §A Id 面：主定理声明前提的具名使用形（节前导与源模块一致；                    *)
+(*   本节必须先于 RealInterfaceEnhancedMod 裸名导入，见头部节序注记）        *)
+(*   ums_pow_budget 出节首参即声明前提 lt_plus_compat_lt_le；本件把          *)
+(*   「代入该前提即得主定理结论」的出节形固定为具名可使用定理                  *)
+(*   uabm_ums_pow_budget_slot_freeze，供直接使用。                          *)
 (* ============================================================ *)
 
 Section UabmIface.
@@ -84,12 +84,12 @@ End UabmIface.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* §1 半件实例面（κ:=1/2 逐点构造，eps:=1/4 Q 计算收口）                    *)
+(* §1 κ:=1/2 实例面（逐点构造，eps:=1/4 Q 计算闭合）                        *)
 (* ============================================================ *)
 
 Definition uabm_half : Real := real_const (1#2)%Q.
 
-(* 0 < 1/2：real_lt 证书形拆装（eps:=1/4，const 列逐点常值） *)
+(* 0 < 1/2：real_lt 见证构造（eps:=1/4，const 列逐点常值） *)
 Theorem uabm_half_pos : real_lt real_zero uabm_half.
 Proof.
   unfold real_lt. exists (1#4)%Q. split.
@@ -126,20 +126,20 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 墙放电直连（N1）与 nat-尺度 Arch 放电桥（新构造本体）                  *)
+(* §2 声明前提的 req 面实例与 nat-尺度 Arch 桥接引理（新构造）               *)
 (* ============================================================ *)
 
-(* 墙槽 req 面放电件：同 ConcMixSelFeed cms_bs_lpc 面（S07:6118 直连） *)
+(* 声明前提 lt_plus_compat_lt_le 的 req 面实例：real_lt_plus_compat_lt_le（与 ConcMixSelFeed 的 cms_bs_lpc 同件） *)
 Definition uabm_wall :
   forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d) :=
   real_lt_plus_compat_lt_le.
 
-(* nat-尺度 Arch 放电桥（树内缺口件）：
-   real_arch 出 const 形上界（forall B, 存 n≥2，B < const(n#1)），
+(* uabm_arch_scale（树内此前缺失的桥接引理）：
+   real_arch 给出 const 形上界（forall B，存在 n≥2，B < const(n#1)），
    经 mix_scale_eq_const（mix_scale k w == const(k#1)·w）与
-   real_mult_one（x·1 == x）换装为 cmk_scale (S N) one 形。
-   换形三腿：cmk_scale 与 mix_scale 同折（实例字段零差，转换性同件）、
-   const·one 消去、real_lt_id_r 右端等式换形（S07:456）。 *)
+   real_mult_one（x·1 == x）转换为 cmk_scale (S N) one 形。
+   三步：cmk_scale 与 mix_scale 同一折叠（实例字段相同，转换性等价）、
+   const·one 消去、RealSetoid.real_lt_id_r 右端等式改写。 *)
 Lemma uabm_arch_scale : forall x : Real,
   lt zero x ->
   sigT (fun N : nat => lt x (cmk_scale (Datatypes.S N) real_one)).
@@ -163,9 +163,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 主件：旗舰消费定理的具体实例装配（墙喂放电件 + κ:=1/2）                *)
-(*   @cmk_pow_budget Real RealEnhancedReal —— ums_pow_budget req 镜像     *)
-(*   旗舰的墙槽喂 uabm_wall（S07:6118 放电），Arch 槽喂 uabm_arch_scale，   *)
+(* §3 主件：主定理使用形的具体实例装配（声明前提取 uabm_wall + κ:=1/2）      *)
+(*   @cmk_pow_budget Real RealEnhancedReal —— ums_pow_budget 的 req 面对应形，  *)
+(*   声明前提位置喂 uabm_wall，Arch 前提位置喂 uabm_arch_scale，                 *)
 (*   得 κ=1/2 的具体步数见证：sigT k, (1/2)^k·1 < 1。全件闭合。             *)
 (* ============================================================ *)
 
@@ -179,7 +179,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* PA 收尾段（逐件闭合判读留痕）                                            *)
+(* 收尾段：逐件 Print Assumptions 核验零承认                                *)
 (* ============================================================ *)
 
 Print Assumptions uabm_ums_pow_budget_slot_freeze.

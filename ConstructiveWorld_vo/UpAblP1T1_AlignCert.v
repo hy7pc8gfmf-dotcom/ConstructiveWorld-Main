@@ -1,42 +1,42 @@
 (* ============================================================ *)
-(* UpAblP1T1_AlignCert.v —— 假设消融战役 T1R 席（T1 前席并发墙击坠重发）        *)
-(*   论文1 T 批·S05 对齐证书簇 6 束·T 级合并申报件（新独立批件）                  *)
-(* 母本：S05_AlignmentGRPO.v（原树零改，只读消费；行号 20260919 现档实测）        *)
-(*                                                              *)
-(* 辖区六束（普查 _tp1a_ B1/B2/B3/B5/B6/B7 行＋合并单 _tp1m_ T 批节）：          *)
-(*   B3 beta_pos       S05:45   lt zero beta        （迭代节 :4595 同形）        *)
-(*   B2 positive_dist  S05:47   forall s, lt zero (pi_ref s)（:4597 同形）       *)
-(*   B1 normalized     S05:48   Id (sum_over_S pi_ref) one                          *)
-(*                     （pi_old_norm :785 同形位，本件供给形同槽覆盖）               *)
-(*   B5 eta            S05:2530 数据位               （:4599 同形）               *)
-(*   B6 eta_pos        S05:2531 lt zero eta          （:4600 同形）               *)
-(*   B7 eta_le_one     S05:2532 le eta one           （:4601 同形）               *)
-(*                                                              *)
-(* 供给形态（AB1 Hsum_pos 打包形先例＋既有 T 批件体例；T 级＝仅平凡供给，          *)
-(* 合并申报不充非平凡战果；显式 forall 前件供给件）：                              *)
-(*   B3：p1t1_beta_pos_supply——任意正有理常数 q 给 beta := real_const q 的       *)
-(*       Real 载体正性证书（real_lt 逐点展开，eps := q/2，照 S07                  *)
-(*       real_lt_zero_one 先例；Q 层乘法保序走全参显式项，防隐元乱配）；           *)
-(*   B1/B2：T13c 单点 SumOver 实例世界（uab_ssUnit+uab_soUnit，全库唯一具体       *)
-(*       SumOver 实例，UpAblT13c_G13.v:41/:71）上常值一核 supply——                *)
-(*       B2 由 one_pos 接口字段直喂（apply 形，基类投影面），                      *)
-(*       B1 由单点和退化 f 核元素＋one 本身、exp_neg_zero 通路 id_refl 闭；        *)
-(*       两件对抽象载体全参（forall RI0），零具体实例依赖；                        *)
-(*   B5/B6/B7：eta 取 (0,1) 内有理见证族 p1t1_eta_family q := real_const q——      *)
-(*       正性与 B3 共享（束间 Shared Context 减重复）；≤一 走 real_lt 展开        *)
-(*       ＋Qmult_lt_compat_r 全参项；改写面出现位定向（at 2）绕 Qminus 与          *)
-(*       Qplus 的增量展开同形穿透坑；端点 eta := one 由 real_lt_zero_one          *)
-(*       （B6 端点）与 real_le_refl（B7 端点）双供；                              *)
-(*       B5 本体＝见证族＋sigT 打包供给 p1t1_eta_supply（AB1 sigT 打包形）。       *)
-(* 防重认领（20260919 实测）：UpAblT5_S05_AlignmentGRPO.v 辖区＝                  *)
-(*   inv_pos_lt_contra/log_lt_mono，与本六束零重叠（grep 实测）；N-1/N-2           *)
-(*   （Z_align_pos/sum_over_S_pos，S05:54/4598/2535/4602）禁区未碰；               *)
-(*   B10-B18 各槽另席另批，本件不越界。                                            *)
-(* 纪律：纯构造性零承认件／语句面全 Set 层（Id/sigT/And/Or 别名面，裸命题         *)
-(*   零入语句与前提位）／公理面零新增／原树零改／前缀 p1t1_ 防撞；                 *)
-(*   不入 order.txt/_CoqProject；禁触 9.0 任何产物。                               *)
-(* 四关留痕：attn/logs/g{1..4}-UpAblP1T1_AlignCert.log；G3 提取一人一目录          *)
-(*   _tp1t1_g3out（验后判读）。                                                    *)
+(* UpAblP1T1_AlignCert.v                                         *)
+(*                                                               *)
+(* 使命：本件形式化 S05_AlignmentGRPO 对齐假设簇六束的供给实例——      *)
+(*   beta 正性、参考分布逐点正性、分布归一性，以及 eta 参数的         *)
+(*   数据位、正性与不超过一。                                      *)
+(*                                                               *)
+(*   各束与假设位对应（母本 S05_AlignmentGRPO）：                     *)
+(*   beta_pos（S05 假设形 lt zero beta）：对任意正有理 q，                 *)
+(*     beta := real_const q 给出 Real 载体上的正性实例                *)
+(*     （p1t1_beta_pos_supply）；                                  *)
+(*   positive_dist（S05 假设形 forall s, lt zero (pi_ref s)）：于单点       *)
+(*     SumOver 实例世界（UpAblT13c_G13 的 uab_ssUnit 与 uab_soUnit）    *)
+(*     取常值一核，由接口字段 one_pos 直接推得                         *)
+(*     （p1t1_pi_ref_pos_supply）；                                  *)
+(*   normalized（S05 假设形 Id (sum_over_S pi_ref) one）：同一实例世界      *)
+(*     上和退化为核元素取值，故常值一核的求和即 one                     *)
+(*     （p1t1_pi_ref_norm_supply）；                                *)
+(*   eta 数据位、eta_pos、eta_le_one（S05 三条对应假设）：取           *)
+(*     (0,1) 内有理见证族 p1t1_eta_family q := real_const q，            *)
+(*     正性与 beta_pos 束共享证明，不超过一由 real_lt 的逐点展开          *)
+(*     与 Qmult_lt_compat_r 推得（p1t1_eta_pos_supply、                  *)
+(*     p1t1_eta_le_one_supply、p1t1_eta_supply）；                       *)
+(*   端点补全：eta := one 的正性与自反的不超过一                         *)
+(*     （p1t1_eta_one_pos、p1t1_eta_one_le_one）。                       *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219、UpAblT13c_G13（单点 SumOver 实例    *)
+(*   世界）、stdlib QArith。                                        *)
+(*                                                               *)
+(* 对标：mathlib mul_lt_mul_of_pos_right（正数乘法保序；本件以          *)
+(*   stdlib QArith 的 Qmult_lt_compat_r 表达）。                      *)
+(*                                                               *)
+(* 构造性：纯构造性、零承认、全 Qed；语句面全 Set 层（Id/sigT/And/Or    *)
+(*   别名形，裸命题不进入语句与前提位置）；标识符前缀 p1t1_。             *)
+(*                                                               *)
+(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律         *)
+(*   -o 临时目录，树内 .vo 不重写。                                  *)
+(*                                                               *)
+(*                                                               *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -44,9 +44,9 @@ Require Import UpAblT13c_G13.
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Extraction.
 
-(* ################ B3：beta_pos 供给（任意正有理常数构造） ################ *)
-(* 槽形：S05:45 lt zero beta（beta 为数据位）。供给引理给出 Real 载体证书：      *)
-(* 任取正有理 q，beta := real_const q 满足正性槽形。                             *)
+(* ################ beta_pos 的供给：正有理常数的构造 ######################## *)
+(* 假设位形：S05:45 lt zero beta（beta 为数据位）。供给定理给出 Real 载体实例：    *)
+(* 任取正有理 q，beta := real_const q 满足该正性位形。                           *)
 Theorem p1t1_beta_pos_supply : forall q : Q, QltT (0#1)%Q q ->
   real_lt real_zero (real_const q).
 Proof.
@@ -72,31 +72,31 @@ Proof.
     exact (Qmult_lt_compat_r (1#2)%Q (1#1)%Q q Hq' Hhalf).
 Qed.
 
-(* ################ B1：normalized 供给（单点世界常值一核） ################ *)
-(* 槽形：S05:48 Id (sum_over_S pi_ref) one（:785 pi_old_norm 同形）。            *)
-(* T13c 单点 SumOver 实例世界：和退化为核元素取值，常值一核求和即 one。          *)
+(* ################ normalized 的供给：单点实例世界上的常值一核 ################ *)
+(* 假设位形：S05:48 Id (sum_over_S pi_ref) one（S05:785 pi_old_norm 同形）。      *)
+(* 单点 SumOver 实例世界：和退化为核元素取值，故常值一核的求和即 one。            *)
 Theorem p1t1_pi_ref_norm_supply : forall RI0 : RealInterfaceEnhanced,
   Id (@sum_over_S RI0 (@uab_ssUnit (@RI_base RI0)) (@uab_soUnit (@RI_base RI0))
         (fun _ : @S RI0 (@uab_ssUnit (@RI_base RI0)) => @one RI0)) (@one RI0).
 Proof. intros RI0. exact id_refl. Qed.
 
-(* ################ B2：positive_dist 供给（常值一核逐点正） ################ *)
-(* 槽形：S05:47 forall s, lt zero (pi_ref s)。one_pos 接口字段直喂。             *)
+(* ################ positive_dist 的供给：常值一核逐点正 ###################### *)
+(* 假设位形：S05:47 forall s, lt zero (pi_ref s)；由接口字段 one_pos 直接推得。   *)
 Theorem p1t1_pi_ref_pos_supply : forall (RI0 : RealInterfaceEnhanced)
     (s : @S RI0 (@uab_ssUnit (@RI_base RI0))),
   @lt RI0 (@zero RI0)
     ((fun _ : @S RI0 (@uab_ssUnit (@RI_base RI0)) => @one RI0) s).
 Proof. intros RI0 s. apply (@one_pos RI0). Qed.
 
-(* ################ B5/B6/B7 共享面：eta 见证族（(0,1) 内有理族） ############ *)
+(* ################ eta 数据位、eta_pos、eta_le_one 共享：eta 见证族（(0,1) 内有理族） ## *)
 Definition p1t1_eta_family (q : Q) : Real := real_const q.
 
-(* ################ B6：eta_pos 供给（见证族正性，与 B3 共享） ################ *)
+(* ################ eta_pos 的供给：见证族正性（证明与 beta_pos 共享） ########## *)
 Theorem p1t1_eta_pos_supply : forall q : Q, QltT (0#1)%Q q ->
   real_lt real_zero (p1t1_eta_family q).
 Proof. intros q Hq. exact (p1t1_beta_pos_supply q Hq). Qed.
 
-(* ################ B7：eta_le_one 供给（见证族 ≤ 一） ###################### *)
+(* ################ eta_le_one 的供给：见证族不超过一 ######################## *)
 Theorem p1t1_eta_le_one_supply : forall q : Q, QltT q (1#1)%Q ->
   real_le (p1t1_eta_family q) real_one.
 Proof.
@@ -133,8 +133,8 @@ Proof.
               (real_eq (real_const q) real_one) Hlt).
 Qed.
 
-(* ################ B5：eta 数据位供给（sigT 打包：见证族给付） ############## *)
-(* 槽形：S05:2530 eta : 数据位。打包形给 (0,1) 内任取 q 的具证 eta 见证。        *)
+(* ################ eta 数据位的供给：sigT 封装（见证与性质合取封装） ########## *)
+(* 假设位形：S05:2530 eta : 数据位。对 (0,1) 内任取 q 给出带证的 eta 见证。       *)
 Theorem p1t1_eta_supply : forall q : Q, QltT (0#1)%Q q -> QltT q (1#1)%Q ->
   sigT (fun e : Real => And (real_lt real_zero e) (real_le e real_one)).
 Proof.
@@ -144,20 +144,20 @@ Proof.
                 ((p1t1_eta_pos_supply q Hq0), (p1t1_eta_le_one_supply q Hq1))).
 Qed.
 
-(* #### 端点补全：eta := one（(0,1] 的右端点，B6/B7 端点各一直喂） ########## *)
+(* #### 端点补全：eta := one（区间 (0,1] 的右端点） ########################## *)
 Theorem p1t1_eta_one_pos : real_lt real_zero real_one.
 Proof. exact real_lt_zero_one. Qed.
 
 Theorem p1t1_eta_one_le_one : real_le real_one real_one.
 Proof. exact (real_le_refl real_one). Qed.
 
-(* ---- G3 提取探针（一人一目录 _tp1t1_g3out；验后判读 Obj.magic 计数） ----- *)
+(* ---- 提取核验：p1t1_eta_pick 的计算内容提取 ----------------------------- *)
 Definition p1t1_eta_pick (n : nat) : Q := (1 # (Pos.succ (Pos.succ (Pos.of_succ_nat n))))%Q.
 
 Set Extraction Output Directory "_tp1t1_g3out".
 Extraction "p1t1_G3_AlignCert.ml" p1t1_eta_pick.
 
-(* ---- PA 自检段（文尾逐件留痕） ---- *)
+(* ---- 假设闭包核验：以下各定理的假设闭包应为空（Closed） ---- *)
 Print Assumptions p1t1_beta_pos_supply.
 Print Assumptions p1t1_pi_ref_norm_supply.
 Print Assumptions p1t1_pi_ref_pos_supply.

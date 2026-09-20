@@ -1,33 +1,33 @@
 (* ===================================================================== *)
-(* UpAblP6_TempDefs.v —— PA6-02 席位（论文6 独占件 UpReqTempDefs 消融施工件） *)
+(* UpAblP6_TempDefs.v —— 温度分布族（Boltzmann/配分/熵）的单点载体实例化    *)
 (*                                                                       *)
-(* 盘面：UpReqTempDefs.v（468 行，Section RealTempDefs，12 声明＝5 定义件   *)
-(*   ＋7 全证件；文件级零承认、节参 9 位）。伴生件实勘：全树三面           *)
-(*   （ConstructiveWorld_vo／ConstructiveWorld_Live／ConstructiveWorld-Main） *)
-(*   ls UpAbl*UpReqTempDefs* 仅 2 件——UpAblD1S3_sum_pos（节参 sum_pos 扩槽）  *)
-(*   与 UpAblD1S8（9 节参槽打包供给）：伴生覆盖落在节参面，12 声明槽零覆盖，  *)
-(*   即本席余量（任务书「9 槽余量」口径按实勘扩为 12 声明槽全勘，多勘不降级）。*)
+(* 使命：论文 6 源模块 UpReqTempDefs 温度节参族的独立链实例化——零 Require *)
+(*   源模块，以单点空间 S := unit 加点态求和载体为实例，自证求和接口四引理 *)
+(*   （uap6t_sum1_pos/ext/linear/add），逐枚给出源模块 12 声明的对应实例。 *)
 (*                                                                       *)
-(* 本件消融形态：独立链实例装配——零 Require 母本 UpReqTempDefs，            *)
-(*   单点态空间（S:=unit）＋点态求和载体一次喂定节参面（求和接口 4 槽      *)
-(*   本件自证，非打包记录型），12 声明槽逐枚对位：                        *)
-(*   D 槽 5 枚（定义件）＝实例供给：uap6t_bf／uap6t_Z／uap6t_dist／        *)
-(*     uap6t_energy_exp／uap6t_entropy_dist。                            *)
-(*   A 槽 7 枚（全证件）＝逐枚放电（全 Qed）：                            *)
-(*     ②因子正性＝上游直击（real_exp_neg_pos 一击）；                     *)
-(*     ④配分正性＝载体 pos＋②两步；⑥分布正性＝乘正兼容两腿；             *)
-(*     ⑦归一化＝线性提取＋inv_pos_correct 交换收口（独立链两步）；         *)
-(*     ⑩log invZ 辅助＝log 乘法拆解＋群律收口（独立链真证）；             *)
-(*     ⑪点态负 log 恒等＝⑩＋exp log 桥（独立链真证）；                    *)
-(*     ⑫熵显式旗舰＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
-(*       母本 E404 配方在自持载体上复验）。                               *)
-(*   纪律：零 Require UpReqTempDefs（防混代际）；纯构造性；语句面零 Prop    *)
-(*     泄露（全 real_eq/real_lt 值面）；全 Qed；尾 7 Print Assumptions。   *)
+(* 载体：Section Uap6TInst，节参数 T : Real（前提 T_pos : real_lt real_zero T） *)
+(*   与 energy : unit -> Real；uap6t_bf(s) := e^{−e(s)/T}，uap6t_Z := Σ bf， *)
+(*   uap6t_dist(s) := inv(Z)·bf(s)，uap6t_energy_exp := Σ p·e，           *)
+(*   uap6t_entropy_dist := Σ p·(−log p)。                                 *)
+(*                                                                       *)
+(* 七证件证明路径：uap6t_bf_pos＝real_exp_neg_pos 直接推得；uap6t_Z_pos＝ *)
+(*   uap6t_sum1_pos 加 uap6t_bf_pos 两步；uap6t_dist_pos＝                *)
+(*   real_mult_pos_compat（inv 正 × 因子正）；uap6t_dist_normalized＝     *)
+(*   线性提取加 real_mult_comm 与 real_inv_pos_correct；                  *)
+(*   uap6t_log_inv_Z_aux＝real_log_mult 拆解加加法群律；                  *)
+(*   uap6t_neg_log_boltzmann_point＝此件加 real_log_exp_neg 两步换形；     *)
+(*   uap6t_entropy_temp_explicit＝点态换形→分配律→求和可加→β/logZ         *)
+(*   两项分别提取（β 经线性提取，logZ 经 uap6t_dist_normalized 归一化）。 *)
+(* 构造性注记：全件 Qed 闭合、零承认词面、纯构造性；语句面零 Prop 泄露    *)
+(*   （全 real_eq/real_lt 值面）；11 项 Print Assumptions 全 Closed。      *)
+(* 依赖：CW_ConstructiveWorld_219（Real/real_exp_neg/real_log 族所在）。  *)
+(* 对标：统计力学 Boltzmann 分布与 Gibbs 熵公式（构造性离散单点实例）。   *)
+(* 编译配方：Rocq 9.1 coqc 直调＋cpu_guard 包裹，输出经 -o 临时目录。     *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 载体供给：单点求和引擎（节参面 4 槽自证） ============ *)
+(* ============ 载体供给：单点求和（接口四引理自证） ============ *)
 
 Definition uap6t_sum1 (f : unit -> Real) : Real := f tt.
 
@@ -63,7 +63,7 @@ Proof.
   intros f g. apply real_eq_refl.
 Qed.
 
-(* ============ 实例装配：温度节参（T 任意正，能量任意） ============ *)
+(* ============ 实例化：温度节参（T 任意正，能量任意） ============ *)
 
 Section Uap6TInst.
 
@@ -71,31 +71,31 @@ Variables T : Real.
 Variable T_pos : real_lt real_zero T.
 Variable energy : unit -> Real.
 
-(* 槽①（D）：Boltzmann 因子实例 bf(s) := e^{−e(s)/T} *)
+(* 件①（定义）：Boltzmann 因子实例 bf(s) := e^{−e(s)/T} *)
 Definition uap6t_bf (s : unit) : Real :=
   real_exp_neg (real_mult (real_inv_pos T T_pos) (energy s)).
 
-(* 槽②（A）：因子正性——上游直击（exp 恒正一击） *)
+(* 件②（证明）：因子正性——由 real_exp_neg_pos 直接推得 *)
 Lemma uap6t_bf_pos : forall s : unit, real_lt real_zero (uap6t_bf s).
 Proof.
   intro s. unfold uap6t_bf. apply real_exp_neg_pos.
 Qed.
 
-(* 槽③（D）：温度化配分函数实例 Z := Σ bf（单点载体下即 bf(tt)） *)
+(* 件③（定义）：配分函数实例 Z := Σ bf（单点载体下即 bf(tt)） *)
 Definition uap6t_Z : Real := uap6t_sum1 uap6t_bf.
 
-(* 槽④（A）：配分正性——载体 pos＋②两步 *)
+(* 件④（证明）：配分正性——uap6t_sum1_pos 加件②两步 *)
 Theorem uap6t_Z_pos : real_lt real_zero uap6t_Z.
 Proof.
   unfold uap6t_Z. apply uap6t_sum1_pos.
   intro s. apply uap6t_bf_pos.
 Qed.
 
-(* 槽⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同母本） *)
+(* 件⑤（定义）：分布实例 p(s) := inv(Z)·bf(s)（逐字段同源模块） *)
 Definition uap6t_dist (s : unit) : Real :=
   real_mult (real_inv_pos uap6t_Z uap6t_Z_pos) (uap6t_bf s).
 
-(* 槽⑥（A）：分布逐点正性——乘正兼容两腿（inv 正 × 因子正） *)
+(* 件⑥（证明）：分布逐点正性——real_mult_pos_compat（inv 正 × 因子正） *)
 Lemma uap6t_dist_pos : forall s : unit, real_lt real_zero (uap6t_dist s).
 Proof.
   intro s. unfold uap6t_dist.
@@ -106,8 +106,8 @@ Proof.
   - apply uap6t_bf_pos.
 Qed.
 
-(* 槽⑦（A）：归一化——Σ p ≡ inv(Z)·Z ≡ 1（线性提取一步＋交换收口；      *)
-(*   单点载体下 Z 定义性收敛 bf(tt)，独立链真证） *)
+(* 件⑦（证明）：归一化——Σ p ≡ inv(Z)·Z ≡ 1（uap6t_sum1_linear 一步加   *)
+(*   real_mult_comm 与 real_inv_pos_correct；单点载体下 Z 定义性等于 bf(tt)） *)
 Theorem uap6t_dist_normalized : real_eq (uap6t_sum1 uap6t_dist) real_one.
 Proof.
   apply (real_eq_trans
@@ -123,7 +123,7 @@ Proof.
     + exact (real_inv_pos_correct (uap6t_sum1 uap6t_bf) uap6t_Z_pos).
 Qed.
 
-(* 槽⑩（A）：log invZ 辅助恒等——log 乘法拆解＋群律收口（独立链真证） *)
+(* 件⑩（证明）：log invZ 辅助恒等——real_log_mult 拆解加加法群律 *)
 Lemma uap6t_log_inv_Z_aux :
   real_eq (real_log (real_inv_pos uap6t_Z uap6t_Z_pos)
                     (real_inv_pos_pos uap6t_Z uap6t_Z_pos))
@@ -192,7 +192,7 @@ Proof.
            ++ exact (real_plus_zero (real_opp LZ)).
 Qed.
 
-(* 槽⑪（A）：点态负 log 恒等——⑩＋exp log 桥两步换形（独立链真证） *)
+(* 件⑪（证明）：点态负 log 恒等——件⑩加 real_log_exp_neg 两步换形 *)
 Lemma uap6t_neg_log_boltzmann_point :
   forall s : unit,
     real_eq (real_opp (real_log (uap6t_dist s) (uap6t_dist_pos s)))
@@ -262,17 +262,16 @@ Proof.
     + apply real_plus_comm.
 Qed.
 
-(* 槽⑧（D）：温度化能量期望实例 E := Σ p·e *)
+(* 件⑧（定义）：能量期望实例 E := Σ p·e *)
 Definition uap6t_energy_exp : Real :=
   uap6t_sum1 (fun s : unit => real_mult (uap6t_dist s) (energy s)).
 
-(* 槽⑨（D）：分布熵实例（正性证人居前的母本同位形） *)
+(* 件⑨（定义）：分布熵实例（参数序同源模块：正性前提居前） *)
 Definition uap6t_entropy_dist
   (p : unit -> Real) (Hp : forall s : unit, real_lt real_zero (p s)) : Real :=
   uap6t_sum1 (fun s : unit => real_mult (p s) (real_opp (real_log (p s) (Hp s)))).
-
-(* 槽⑫（A）：熵显式旗舰——点态换形→distrib→分和→β/logZ 双提取
-   （母本 E404 配方在自持载体上复验，独立链真证） *)
+(* 件⑫（证明）：熵显式公式——点态换形→分配律→求和可加→β/logZ 双提取      *)
+(*   （源模块配方在自持载体上复验） *)
 Theorem uap6t_entropy_temp_explicit :
   real_eq (uap6t_entropy_dist uap6t_dist uap6t_dist_pos)
           (real_plus (real_mult (real_inv_pos T T_pos) uap6t_energy_exp)
@@ -288,7 +287,7 @@ Proof.
            (uap6t_sum1 (fun s : unit => real_mult (p s)
                               (real_plus (real_mult bta (energy s)) LZ)))
            (real_plus (real_mult bta uap6t_energy_exp) LZ)).
-  - (* 步 1：逐点换形（⑪点态恒等进场） *)
+  - (* 步 1：逐点换形（应用件⑪） *)
     apply uap6t_sum1_ext.
     intro s.
     apply (RealSetoid.real_eq_mult_compat_adapt (p s) (p s)
@@ -296,7 +295,7 @@ Proof.
              (real_plus (real_mult bta (energy s)) LZ)
              (real_eq_refl (p s))
              (uap6t_neg_log_boltzmann_point s)).
-  - (* 步 2-4：distrib 逐点拆和 → add 分和 → β/logZ 双提取 *)
+  - (* 步 2-4：real_distrib 逐点拆积和 → uap6t_sum1_add 分和 → β/logZ 双提取 *)
     apply (real_eq_trans
              (uap6t_sum1 (fun s : unit => real_mult (p s)
                                 (real_plus (real_mult bta (energy s)) LZ)))
@@ -323,7 +322,7 @@ Proof.
                (real_mult bta uap6t_energy_exp)
                (uap6t_sum1 (fun s : unit => real_mult (p s) LZ))
                LZ).
-      * (* β 支：Σ p·(β·e) ≡ β·E（逐点重排 → 线性提取 → 定义性收敛） *)
+      * (* β 项：Σ p·(β·e) ≡ β·E（逐点重排 → 线性提取 → 定义性相等） *)
         apply (real_eq_trans
                  (uap6t_sum1 (fun s : unit => real_mult (p s) (real_mult bta (energy s))))
                  (real_mult bta (uap6t_sum1 (fun s : unit => real_mult (p s) (energy s))))
@@ -352,7 +351,7 @@ Proof.
            ++ apply (uap6t_sum1_linear bta
                        (fun s : unit => real_mult (p s) (energy s))).
         -- exact (real_eq_refl (real_mult bta uap6t_energy_exp)).
-      * (* logZ 支：Σ p·LZ ≡ LZ·Σ p ≡ LZ·1 ≡ LZ（⑦归一化进场） *)
+      * (* logZ 项：Σ p·LZ ≡ LZ·Σ p ≡ LZ·1 ≡ LZ（应用件⑦归一化） *)
         apply (real_eq_trans
                  (uap6t_sum1 (fun s : unit => real_mult (p s) LZ))
                  (real_mult LZ (uap6t_sum1 p))
@@ -376,7 +375,7 @@ Qed.
 
 End Uap6TInst.
 
-(* ============ 假设面收口（G4：全 Closed） ============ *)
+(* ============ 假设审计（全 Closed） ============ *)
 
 Print Assumptions uap6t_sum1_pos.
 Print Assumptions uap6t_sum1_ext.

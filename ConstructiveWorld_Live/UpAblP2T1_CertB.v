@@ -1,38 +1,38 @@
 (* ============================================================ *)
-(* UpAblP2T1_CertB.v —— G1 席（论文2 T 簇第二批供给席·尾簇收账＋T2 补齐）    *)
-(*   论文2 T 簇合并单 28 行之尾簇领地收账件＋增配 T2 补齐申报件（新独立批件）  *)
-(* 工单：attn\_ts1_论文2登记收割报告-20260920.md §四＋协调增配令（T2 并入本件）*)
-(* 模板体例：UpAblP1T1_AlignCert.v／UpAblP1T2_GrpoAuditCert.v；姊妹件：      *)
-(*   UpAblP2T1_Cert.v（A1 席，27/28 行，本席零触其文件）。                    *)
-(* 原树零改：UpRealLeB／UpRealLeB2／S08／S09／S10 全部只读消费；              *)
-(*   不入 order.txt/_CoqProject；禁触 9.0 任何产物。                          *)
-(*                                                              *)
-(* 【尾簇领地收账（N1 零施工登记即收）】本席领地＝合并单中不属于前三簇        *)
-(*   （S06 簇/AttnDoeblin 簇/S08 簇）的 13 行：1/2/3/4/7/17/21/22/23/24/     *)
-(*   T1/27(T2)/28(T3)。实测 A1 席 UpAblP2T1_Cert.v 已逐行具名覆盖（12 行：   *)
-(*   p2t1_T_pos_supply…p2t1_x3d_le_b_mult_r，其四关全绿、件在盘且件新于文），*)
-(*   按纪律「已证/已被既有件覆盖＝登记即收」，本席零重施工、零重复认领；      *)
-(*   唯 T2（行 27）为其挂账行，增配本席。                                    *)
-(*                                                              *)
-(* 【T2 定谳（本席实测新获，fail-loud 勘误）】A1 挂账之「结论 9(e)/(f) 四件  *)
-(*   （盘点 #24/25/28/32）可升格未建」实为漏检——续建层 UpRealLeB2.v 已全部   *)
-(*   升格落盘：F.4 real_abs_le_quad_B(:403)／F.5 real_quad_t_le_h_B(:423)／  *)
-(*   F.6 real_abs_h_sq_le_B(:442)／F.7 real_db_breaking_bound_B(:477，节内   *)
-(*   出节 16 参)；其文件尾注自书「盘点清单显式假设四件全部升格落盘本文件」。  *)
-(*   故 T2 之 S1 路线「同一闭包器族批量 Corollary 申报」按直引形兑现：本件    *)
-(*   四具名供给定理逐一绑定槽坐标至在库件，非本席新证、如实申报；            *)
-(*   本席增量＝①漏检勘误与四件独立复验（G4 模块核验全链假设面零）            *)
-(*   ②具名证书入账③领地 13 行收账落册。                                     *)
-(*                                                              *)
-(* 红线自审：                                                               *)
-(*  [x] 纯构造性零承认件（头注全中文，无任何英文禁词字面）                    *)
-(*  [x] 语句面全 Set 层（Id/Not/Or 别名、real_lt/real_le/real_le_b/real_eq   *)
-(*      Set 层谓词面；零裸命题入语句与前件位）                                *)
-(*  [x] 原树零改；本件独立批件（一人一文件一人一提取目录）                     *)
-(*  [x] 编译收口＋文尾逐件假设面打印全闭（G2）                                *)
-(*  [x] 提取见证面取 Q 层纯函数（A1 卡机理：接口形件入提取集即交界魔数）       *)
-(*  [x] 模块核验EXIT=0（G4；全链含 UpRealLeB2 四件＝T2 在库面独立复验）        *)
+(* UpAblP2T1_CertB.v —— 结论 9(e)/(f) 无余量供给证书件（CertB）          *)
+(*   数学使命：实数不等式四条的具名供给与 Q 层提取见证。                 *)
 (* ============================================================ *)
+(* 【使命】将 UpRealLeB2 已建的四条实数不等式引理以具名供给定理形式接入    *)
+(*   供给面，对应结论 9(e)/(f) 的余量显式入前提形式；≤_b 记 Set 层序谓词   *)
+(*   real_le_b。四条定理均为转引：前提逐一显式承接，证明由 UpRealLeB2      *)
+(*   相应引理直接给出，本件不引入新证明。                                  *)
+(*   p2t1b_T2_abs_le_quad_supply：|X| ≤ 2t²+eps 的双余量形式；             *)
+(*   p2t1b_T2_quad_t_le_h_supply：(h/x)² 的内嵌 |h| 余量形式；             *)
+(*   p2t1b_T2_abs_h_sq_supply：A·|h|² 的倍率余量形式；                    *)
+(*   p2t1b_T2_db_breaking_bound_supply：db 破界上界的复合系数形式。        *)
+(* 【依赖】Stdlib（List／QArith.QArith／Extraction）／CW_ConstructiveWorld_219 *)
+(*   ／UpRealLeB／UpRealLeB2（real_abs_le_quad_B、real_quad_t_le_h_B、     *)
+(*   real_abs_h_sq_le_B、real_db_breaking_bound_B 供给源）。               *)
+(* 【对标】数学原型：分析学中 abs-平方与破界估计的显式余量形式；           *)
+(*   mathlib/stdlib 无直接构造对应物。                                     *)
+(* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑。  *)
+(*   四条供给定理的前提（含 keep_dec 的排除律前提）逐一显式承接；文末对    *)
+(*   四条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证假设判据。 *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
+(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
+(* 【结构总览】§1 p2t1b_T2_abs_le_quad_supply——若 X ≤ eps1 且             *)
+(*   −X ≤ 2t²+eps2 且 0<eps1、0<eps2，则 |X| ≤_b 2t²+(eps1+eps2)；         *)
+(*   由 real_abs_le_quad_B 直接推得。                                      *)
+(*   §2 p2t1b_T2_quad_t_le_h_supply——若 0<x 且 |h| < eps·x²/4 且 0<eps，   *)
+(*   则 2·(h/x)² ≤_b eps·|h|/2；由 real_quad_t_le_h_B 直接推得。           *)
+(*   §3 p2t1b_T2_abs_h_sq_supply——若 0<A 且 |h|<eps3，则 A·|h|² ≤_b       *)
+(*   (A·eps3)·|h|；由 real_abs_h_sq_le_B 直接推得。                       *)
+(*   §4 p2t1b_T2_db_breaking_bound_supply——db 破界上界的复合系数形式：    *)
+(*   转移核非负与对称、能量 Lipschitz 与下界、逐出分区正性等 16 个节参数   *)
+(*   逐一显式承接；复合系数 C:=invZ·T·(exp+1) 仅具非负性；由               *)
+(*   real_db_breaking_bound_B 直接推得。                                   *)
+(*   §5 提取核验：供给定理均为实数层接口语句不入提取集，见证面另立 Q 层    *)
+(*   纯函数 p2t1b_g3_pick；§6 假设审计区。                                 *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith.
@@ -41,11 +41,11 @@ Require Import UpRealLeB.
 Require Import UpRealLeB2.
 From Stdlib Require Import Extraction.
 
-(* ################ T2 补齐：结论 9(e)/(f) 四具名供给（批量 Corollary 直引形） ## *)
+(* ################ 结论 9(e)/(f) 四条具名供给定理（转引 UpRealLeB2） ########## *)
 
-(* T2-e-1（盘点 #24）：结论 9(e) real_abs_le_quad_eps@S08:4901 之 Bishop 升格面。
-   槽形：五前件多 eps 组合（X≤eps1、−X≤2t²+eps2、三正性）；升格＝尾自由 eps
-   消去、前提位原样保留（前提位改造已由在库件完成）；直引 F.4。 *)
+(* p2t1b_T2_abs_le_quad_supply：前提 X ≤ eps1、−X ≤ 2t²+eps2、0<eps1、
+   0<eps2；结论 |X| ≤_b 2t²+(eps1+eps2)。证明转引 UpRealLeB2 的
+   real_abs_le_quad_B。 *)
 Theorem p2t1b_T2_abs_le_quad_supply : forall (X t eps1 eps2 : Real),
   real_le X eps1 ->
   real_le (real_opp X)
@@ -59,8 +59,8 @@ Proof.
   exact (real_abs_le_quad_B X t eps1 eps2 HXA HXB HA Htwo).
 Qed.
 
-(* T2-e-2（盘点 #25）：结论 9(e) real_quad_t_le_h_eps@S08 之 Bishop 升格面。
-   余量内嵌 |h| 因子随固定端并入右端；eps' 全称余量消去；直引 F.5。 *)
+(* p2t1b_T2_quad_t_le_h_supply：前提 0<x、|h| < eps·x²/4、0<eps；结论
+   2·(h/x)² ≤_b eps·|h|/2；证明转引 UpRealLeB2 的 real_quad_t_le_h_B。 *)
 Theorem p2t1b_T2_quad_t_le_h_supply : forall (x h eps : Real)
     (Hx : real_lt real_zero x),
   real_lt (real_abs h)
@@ -81,8 +81,8 @@ Proof.
   exact (real_quad_t_le_h_B x h eps Hx Hh Heps).
 Qed.
 
-(* T2-e-3（盘点 #28）：结论 9(e) real_abs_h_sq_le_eps@S09:1087 之 Bishop 升格面。
-   双余量 A·eps3·|h| + eps'，eps' 消去；直引 F.6。 *)
+(* p2t1b_T2_abs_h_sq_supply：前提 0<A、|h|<eps3；结论 A·|h|² ≤_b
+   (A·eps3)·|h|；证明转引 UpRealLeB2 的 real_abs_h_sq_le_B。 *)
 Theorem p2t1b_T2_abs_h_sq_supply : forall A h eps3 : Real,
   real_lt real_zero A -> real_lt (real_abs h) eps3 ->
   real_le_b (real_mult A (real_mult (real_abs h) (real_abs h)))
@@ -92,10 +92,10 @@ Proof.
   exact (real_abs_h_sq_le_B A h eps3 HA Hh3).
 Qed.
 
-(* T2-f-1（盘点 #32）：结论 9(f) real_db_breaking_bound_eps@S10:979 之 Bishop
-   升格面。复合系数 D 形：完成器取非负系数版（F.1 器；C:=invZ·T·(exp+1) 仅
-   非负），eps 与 eps' 同时消去；出节 16 参逐字镜像（Check 探针实测签名）；
-   直引 F.7。 *)
+(* p2t1b_T2_db_breaking_bound_supply：db 破界上界的复合系数形式——16 个
+   节参数逐一显式承接（转移核非负与对称、能量 Lipschitz 与下界、
+   逐出分区正性等），eps 与 eps′ 并入显式前提；复合系数
+   C:=invZ·T·(exp+1) 仅具非负性；转引 UpRealLeB2 的 real_db_breaking_bound_B。 *)
 Theorem p2t1b_T2_db_breaking_bound_supply :
   forall (S0 : Type) (keep : S0 -> Set)
          (keep_dec : forall s : S0, Or (keep s) (Not (keep s)))
@@ -144,16 +144,16 @@ Proof.
            real_sum_over_S real_evicted_partition_pos s s' Hs Hs').
 Qed.
 
-(* ################ G3 提取探针（一人一目录 _tp2t1b_g3out；Q 层纯函数见证） #### *)
-(* 机理（A1 卡＋Y2 卡）：接口形件入提取集即 Caml 交界魔数——本件供给定理全为   *)
-(* 实数层接口语句，不入提取集；见证面另立 Q 层纯函数。 *)
+(* ################ 提取核验：见证面取 Q 层纯函数 #################### *)
+(* 本件四条供给定理均为实数层接口语句，不入提取集；提取见证面另立 Q 层      *)
+(* 纯函数 p2t1b_g3_pick。 *)
 Definition p2t1b_g3_pick (n : nat) : Q :=
   (1 # (Pos.succ (Pos.succ (Pos.of_succ_nat n))))%Q.
 
 Set Extraction Output Directory "_tp2t1b_g3out".
 Extraction "p2t1b_G3_Cert.ml" p2t1b_g3_pick.
 
-(* ################ 收尾：文尾逐件假设面打印（G2 留痕） ################ *)
+(* ################ 假设审计：对四条供给定理逐一 Print Assumptions ############## *)
 Print Assumptions p2t1b_T2_abs_le_quad_supply.
 Print Assumptions p2t1b_T2_quad_t_le_h_supply.
 Print Assumptions p2t1b_T2_abs_h_sq_supply.

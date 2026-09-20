@@ -1,27 +1,27 @@
 (* ===================================================================== *)
-(* UpAblP6_Package.v —— T221b / PA6-13 席（论文6 消融战役合龙旗舰件）      *)
+(* UpAblP6_Package.v —— 论文6 消融件族装配总成件（v1 七件装配）           *)
 (*                                                                       *)
-(* 使命：七件战役件（GibbsFamilyExt 5 / TempDefs 11 / EntropyMonoSplit_A 6 *)
+(* 使命：七件消融件（GibbsFamilyExt 5 / TempDefs 11 / EntropyMonoSplit_A 6 *)
 (*   / _B 7 / S5SlotWire 11 / ZPosLowRef 12 / ConcMixSelFeed 16，合计      *)
-(*   68 Qed）Require 合龙，四面总装 14 枚真 Qed（前缀 uapkg6_）：           *)
-(*   a 温度族×槽位面整合：Gibbs 温度实例（β=1/β=2）＋TempDefs 槽供给        *)
-(*      →「温度参数化全供给」总装句（uapkg6_temp_param_full_supply）。      *)
-(*   b EntropyMonoSplit 覆盖总装：A+B 两件对母件 EntropyMonoSplitInst       *)
-(*      11 枚的覆盖——速记位 3 枚（#1 bt/#2 bt_pos/#3 kl 重建位，其证书面    *)
-(*      经 #7–#11 出节形消费，此处以速记位正性件作覆盖证人）＋定理面        *)
-(*      8 枚逐枚一行 Corollary，另以打包 completeness 句收口。              *)
-(*   c 喂件族整合：S5SlotWire＋ZPosLowRef＋ConcMixSelFeed 三喂件面的        *)
-(*      代表性实例总装句（抽象接口面 + 具体实例面两件）。                   *)
-(*   d 战役总装 Corollary：论文6 五独占模块（GibbsFamilyExt / TempDefs /     *)
-(*      FepIdConsume 零槽 / EntropyMonoSplitInst / 喂件族）假设供给闭合     *)
+(*   68 Qed）Require 联合，四面装配 14 枚真 Qed（前缀 uapkg6_）：           *)
+(*   a 温度族×接口面整合：Gibbs 温度实例（β=1/β=2）＋TempDefs 字段供给     *)
+(*      →「温度参数化全供给」总成句（uapkg6_temp_param_full_supply）。      *)
+(*   b EntropyMonoSplit 覆盖总成：A+B 两件对源模块 EntropyMonoSplitInst    *)
+(*      11 枚的覆盖——速记位 3 枚（#1 bt/#2 bt_pos/#3 kl 重建位，其前提面    *)
+(*      经 #7–#11 出节形使用，此处以速记位正性件作覆盖见证）＋定理面        *)
+(*      8 枚逐枚一行 Corollary，另以封装 completeness 句闭合。              *)
+(*   c 供给件族整合：S5SlotWire＋ZPosLowRef＋ConcMixSelFeed 三供给件面的    *)
+(*      代表性实例总成句（抽象接口面 + 具体实例面两件）。                   *)
+(*   d 战役面总成 Corollary：论文6 五独占模块（GibbsFamilyExt / TempDefs /  *)
+(*      FepIdConsume 零参数位 / EntropyMonoSplitInst / 供给件族）假设供给闭合   *)
 (*      的一揽子陈述，每支引对应件真证（uapkg6_campaign_supply_closed）。   *)
 (*                                                                       *)
-(* 纪律：七件本体零改（只 Require）；传递 Require 不 Import 不透传，依赖    *)
-(*   面逐一显式点名；双根 -Q /tmp/pa7_work "" 挂首防同名歧义；14 枚全真 Qed *)
-(*   非转发（每枚自带语句与证明，消费上游件出节形经转换收口）；全件语句面   *)
-(*   为 CW219 Set 值层（real_lt/real_eq/real_le_b 等 Set 值），Set 层合取   *)
-(*   一律 sigT 打包（P7 坑卡⑤），禁 Prop conj 混装；纯构造性、零公理零承   *)
-(*   认；.vo 只落 /tmp/pa7_work；尾嵌 Print Assumptions 十四连自检。        *)
+(* 构造性注记：七件本体零改（只 Require）；传递 Require 不 Import 不透传，  *)
+(*   依赖面逐一显式点名；14 枚全真 Qed（每枚自带语句与证明，使用上游件出节  *)
+(*   形经转换闭合）；全件语句面为 CW219 Set 值层（real_lt/real_eq/real_le_b *)
+(*   等 Set 值），Set 层合取一律 sigT 封装，禁 Prop conj 混装；             *)
+(*   纯构造性、零公理零承认；                                              *)
+(*   尾嵌 Print Assumptions 十四连假设审计。                                *)
 (* ===================================================================== *)
 
 (* ---------- 依赖面（显式点名；⑨：Import 载荷不透传） ---------- *)
@@ -42,7 +42,7 @@ Require Import S07_RealSetoidExpLog.
 From Stdlib Require Import QArith_base Qring Qabs.
 Import RealInterfaceEnhancedMod.
 
-(* ---------- 七件战役件（显式 Require；本席辖区 T221b） ---------- *)
+(* ---------- 七件消融件（显式 Require） ---------- *)
 Require Import UpAblP6_GibbsFamilyExt.
 Require Import UpAblP6_TempDefs.
 Require Import UpAblP6_EntropyMonoSplit_A.
@@ -51,14 +51,14 @@ Require Import UpAblP6_S5SlotWire.
 Require Import UpAblP6_ZPosLowRef.
 Require Import UpAblP6_ConcMixSelFeed.
 
-(* 论文6 母件：FepIdConsume（零槽面，d 支引用） *)
+(* 论文6 源模块：FepIdConsume（零参数位面，d 支引用） *)
 Require Import FepIdConsume.
 
 (* ===================================================================== *)
-(* a 面：温度族×槽位面整合——「温度参数化全供给」总装句                     *)
-(*   TempDefs 出节形：uap6t_* 于任意正温 T、任意能量 energy 上全槽供给；    *)
+(* a 面：温度族×接口面整合——「温度参数化全供给」总成句                     *)
+(*   TempDefs 出节形：uap6t_* 于任意正温 T、任意能量 energy 上全字段供给；  *)
 (*   GibbsFamilyExt 温度实例两枚（β=1 单位温度 le_b 形 / β=2 双倍温度       *)
-(*   eps 弱前提形）挂接同一温度参数轴——七支 sigT 打包，逐支引对应件真证。  *)
+(*   eps 弱前提形）同置一温度参数轴——七支 sigT 封装，逐支引对应件真证。    *)
 (* ===================================================================== *)
 Theorem uapkg6_temp_param_full_supply :
   forall (T : Real) (T_pos : real_lt real_zero T) (energy : unit -> Real),
@@ -110,17 +110,17 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* b 面：EntropyMonoSplit 覆盖总装（A+B 两件对母件 11 枚）                  *)
-(*   母件 11 枚编号（照母件头注序）：#1 emsi_bt / #2 emsi_bt_pos /          *)
+(* b 面：EntropyMonoSplit 覆盖总成（A+B 两件对源模块 11 枚）                *)
+(*   源模块 11 枚编号（照源模块头注序）：#1 emsi_bt / #2 emsi_bt_pos /      *)
 (*   #3 emsi_kl（速记 Let 三枚——B 件以 uab_bt/uab_bt_pos/uab_kl 同形重建，  *)
-(*   证书面经 #7–#11 出节形消费，此处以 C1 速记位正性件作覆盖证人）；       *)
+(*   前提面经 #7–#11 出节形使用，此处以 C1 速记位正性件作覆盖见证）；       *)
 (*   #4–#11 定理面八枚逐枚一行 Corollary。A 件出节形零换名（无节），        *)
 (*   B 件出节形经 beta 转换对接（裸写 real_boltzmann_dist_temp /           *)
 (*   real_KL_temp 洁净形，与 B 件 Let 换名形可转换）。                      *)
 (* ===================================================================== *)
 
-(* C1（覆盖 #1/#2 速记位）：重建 bt 位逐点正——上游直击（与 B 件            *)
-(*   uab_bt_pos 同路：real_boltzmann_dist_temp_pos 一击）。                 *)
+(* C1（覆盖 #1/#2 速记位）：重建 bt 位逐点正——上游同项直接给出（与 B 件    *)
+(*   uab_bt_pos 同路：real_boltzmann_dist_temp_pos 一步到位）。             *)
 Corollary uapkg6_ems_cov_bt_pos :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -134,7 +134,7 @@ Proof.
   exact (real_boltzmann_dist_temp_pos S rsu rsp u Hu energy s).
 Qed.
 
-(* C4（覆盖 #4 emsi_energy_pin_self）：A 件上游直击腿（uap63 零节直引）。 *)
+(* C4（覆盖 #4 emsi_energy_pin_self）：A 件上游直接重证（uap63 零节直引）。 *)
 Corollary uapkg6_ems_cov_pin_self :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -151,7 +151,7 @@ Proof.
   exact uap63_pin_self_updirect.
 Qed.
 
-(* C5（覆盖 #5 emsi_le_diff_ge_zero）：A 件独立链（eq 升 le 换向链）。    *)
+(* C5（覆盖 #5 emsi_le_diff_ge_zero）：A 件独立链（eq 化 le 换向链）。    *)
 Corollary uapkg6_ems_cov_diff_ge_zero :
   forall a b : Real,
     real_le a b -> real_le real_zero (real_plus b (real_opp a)).
@@ -159,7 +159,7 @@ Proof.
   exact uap63_diff_ge_zero_indep.
 Qed.
 
-(* C6（覆盖 #6 emsi_le_plus_eps）：A 件泛形直击腿。                       *)
+(* C6（覆盖 #6 emsi_le_plus_eps）：A 件泛形直接重证。                     *)
 Corollary uapkg6_ems_cov_plus_eps :
   forall X eps : Real,
     real_le real_zero X -> real_lt real_zero eps ->
@@ -168,7 +168,7 @@ Proof.
   exact uap63_plus_eps_updirect.
 Qed.
 
-(* C7（覆盖 #7 emsi_kl_ge_zero_eps_mirror）：B 件镜像换装（16 参全显，     *)
+(* C7（覆盖 #7 emsi_kl_ge_zero_eps_mirror）：B 件对偶代入（16 参全显，     *)
 (*   温度位 T*；洁净形与 B 件出节形转换对接）。                            *)
 Corollary uapkg6_ems_cov_kl_ge_zero_eps_mirror :
   forall (S : Type) (rsu : (S -> Real) -> Real)
@@ -216,7 +216,7 @@ Proof.
   exact uab_inst_pinned_at_peak.
 Qed.
 
-(* C8（覆盖 #8 inst_pinned）：B 件槽位1 Hpinned 装载（片运输供位显式）。  *)
+(* C8（覆盖 #8 inst_pinned）：B 件证书位一 Hpinned 装载（片运输供给显式）。 *)
 Corollary uapkg6_ems_cov_inst_pinned :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -238,8 +238,8 @@ Proof.
   exact uab_inst_pinned.
 Qed.
 
-(* C10（覆盖 #10 inst_kl_right）：B 件槽位2 Hkl_right 装载（KL_v 前位，   *)
-(*   禁倒置红线照抄）。                                                    *)
+(* C10（覆盖 #10 inst_kl_right）：B 件证书位二 Hkl_right 装载（KL_v 前位， *)
+(*   禁倒置、序向与母本一致）。                                            *)
 Corollary uapkg6_ems_cov_inst_kl_right :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -274,7 +274,7 @@ Proof.
   exact uab_inst_kl_right.
 Qed.
 
-(* C11（覆盖 #11 inst_kl_left）：B 件槽位3 Hkl_left 装载（KL_u 前位镜像）。 *)
+(* C11（覆盖 #11 inst_kl_left）：B 件证书位三 Hkl_left 装载（KL_u 前位对偶）。 *)
 Corollary uapkg6_ems_cov_inst_kl_left :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -309,8 +309,8 @@ Proof.
   exact uab_inst_kl_left.
 Qed.
 
-(* b 面收口：打包 completeness 句（sigT 五层）——差分桥/eps 桥 A 独立链     *)
-(*   与 B 重建链双链同语句并列（#5/#6 双覆盖）＋A 件 #5∘#6 组合桥。        *)
+(* b 面闭合：封装 completeness 句（sigT 五层）——差分引理/eps 引理 A 独立链 *)
+(*   与 B 重建链双链同语句并列（#5/#6 双覆盖）＋A 件 #5∘#6 组合引理。      *)
 Corollary uapkg6_ems_coverage_complete :
   {_ : (forall a b : Real,
           real_le a b -> real_le real_zero (real_plus b (real_opp a))) &
@@ -336,10 +336,10 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* c 面：喂件族整合（S5SlotWire＋ZPosLowRef＋ConcMixSelFeed）               *)
-(*   抽象接口面：任意 RealInterfaceEnhanced 载体上三喂件代表位（协方差正、  *)
+(* c 面：供给件族整合（S5SlotWire＋ZPosLowRef＋ConcMixSelFeed）             *)
+(*   抽象接口面：任意 RealInterfaceEnhanced 载体上三供给件代表位（协方差正、*)
 (*   产率恒等、逆元加法链）；Section 面照 S5SlotWire/ZPosLowRef 源 preamble *)
-(*   镜像，出节 {RI}{DO} 换名 Lets 与两件源节同构。                         *)
+(*   对应而立，出节 {RI}{DO} 换名 Lets 与两件源节同构。                     *)
 (* ===================================================================== *)
 Section Uapkg6FeedRI.
 
@@ -376,8 +376,8 @@ Qed.
 
 End Uapkg6FeedRI.
 
-(* 具体实例面：Q 数值衰减喂件（S5SlotWire 槽9a）＋ConcMixSelFeed 两喂点     *)
-(* ＋ZPosLowRef 配分正性喂点（RealEnhancedReal 具体实例，零接口槽）。       *)
+(* 具体实例面：Q 数值衰减供给位（S5SlotWire 位9a）＋ConcMixSelFeed 两供给点  *)
+(* ＋ZPosLowRef 配分正性供给位（RealEnhancedReal 具体实例，零接口参数位）。     *)
 Open Scope Q_scope.
 Theorem uapkg6_feeder_concrete_faces :
   {_ : Qle (Qabs (gsq_grad (1#2)
@@ -407,13 +407,13 @@ Qed.
 Close Scope Q_scope.
 
 (* ===================================================================== *)
-(* d 面：战役总装 Corollary——论文6 五独占模块假设供给闭合一揽子            *)
-(*   支1 GibbsFamilyExt：对称 Jeffreys 温度面（点态旗舰）。                 *)
-(*   支2 TempDefs：温度节参全槽供给核心两枚（配分正＋归一化）。             *)
-(*   支3 FepIdConsume 零槽：具体柯西实例识别面 Gibbs==Boltzmann（该支零     *)
-(*      接口槽——识别类实例 FepIdentificationReal 构造性在场，无供位欠账）。 *)
-(*   支4 EntropyMonoSplitInst：A+B 覆盖链组合旗舰（#5∘#6 独立复合）。       *)
-(*   支5 喂件族：具体实例面代表位（序证书）。                               *)
+(* d 面：战役面总成 Corollary——论文6 五独占模块假设供给闭合一揽子          *)
+(*   支1 GibbsFamilyExt：对称 Jeffreys 温度面（点态代表）。                 *)
+(*   支2 TempDefs：温度节参全字段供给核心两枚（配分正＋归一化）。           *)
+(*   支3 FepIdConsume 零参数位：具体柯西实例识别面 Gibbs==Boltzmann（该支零     *)
+(*      接口参数位——识别类实例 FepIdentificationReal 构造性在场，无供给缺口）。 *)
+(*   支4 EntropyMonoSplitInst：A+B 覆盖链组合主支（#5∘#6 独立复合）。       *)
+(*   支5 供给件族：具体实例面代表位（序前提）。                             *)
 (* ===================================================================== *)
 Corollary uapkg6_campaign_supply_closed :
   {_ : (forall (p q b : Real) (Hp : real_lt real_zero p)
@@ -453,7 +453,7 @@ Proof.
                           uacms_zero_le_one)))).
 Qed.
 
-(* ---------- 自检段（G4 口径：逐件 Closed 实证，十四连） ---------- *)
+(* ---------- 假设面审计（逐件 Closed 实证，十四连） ---------- *)
 Print Assumptions uapkg6_temp_param_full_supply.
 Print Assumptions uapkg6_ems_cov_bt_pos.
 Print Assumptions uapkg6_ems_cov_pin_self.
@@ -470,26 +470,26 @@ Print Assumptions uapkg6_feeder_concrete_faces.
 Print Assumptions uapkg6_campaign_supply_closed.
 
 (* ===================================================================== *)
-(* v2 收官合龙段 —— T238 / PA6-36 席（20260920；v1 段 L1-471 零改动纯追加） *)
+(* v2 收官装配段（v1 段零改动纯追加）                                      *)
 (*                                                                       *)
-(* 使命：v1（T221b 七件合龙）建于 EMS_C/UniformLimit/two_state/fka 四新绿  *)
-(*   件之前——本段补齐四面，收官合龙：                                     *)
-(*   ① EMS_C（合龙验证 15 Qed）覆盖 completeness 引用面：uac_e11_full_    *)
-(*      muster 出节形全实参总装引证（语句面=五分量洁净展开形，             *)
-(*      c_bt/c_bt_pos/c_kl 内联还原上游注册面）。                          *)
-(*   ② UniformLimit（严格档首刀 3 Qed）供给引用：pa6ul_gamma_pos_supply/   *)
-(*      pa6ul_gap_le_supply/pa6ul_strict_first_cut 三位一揽子（真名        *)
-(*      UpReqAttnUniformLimit 1777 版装载——其依赖件隔离根消歧见台账）。    *)
+(* 使命：v1（七件装配）建于 EMS_C/UniformLimit/two_state/fka 四件完成      *)
+(*   之前——本段补齐四面，收官装配：                                       *)
+(*   ① EMS_C（覆盖验证 15 Qed）覆盖 completeness 引用面：uac_e11_full_    *)
+(*      muster 出节形全实参总成引证（语句面=五分量洁净展开形，             *)
+(*      c_bt/c_bt_pos/c_kl 内联还原上游定义面）。                          *)
+(*   ② UniformLimit（严格档首批 3 Qed）供给引用：pa6ul_gamma_pos_supply/   *)
+(*      pa6ul_gap_le_supply/pa6ul_strict_first_cut 三位一揽子（装载根      *)
+(*      为真名 UpReqAttnUniformLimit，同名旧版隔离在依赖链外）。           *)
 (*   ③ two_state（12 Qed）整节实例引用：uab23_ts_second_law_eps 全实参     *)
-(*      引证＋零前提锚闭形双向打包（anchor_closed_lower/upper）。          *)
-(*   ④ fka（转发收编 1 Qed）装载腿引证＋战役总装 v2：九支供给闭合一揽子    *)
+(*      引证＋零前提锚闭形双向封装（anchor_closed_lower/upper）。          *)
+(*   ④ fka（1 Qed）装载引证＋战役面总成 v2：九支供给闭合一揽子             *)
 (*      升级句（v1 五支→v2 九支，每支引对应件真证）。                      *)
 (*                                                                       *)
-(* 纪律：v1 段与四件本体零改（只 Require）；真名件（UpReqAttnUniformLimit） *)
-(*   装载根=本席消歧根（真名 1777 版 md5 55a448，旧 614 版 3c62ac 隔离在   *)
-(*   链外）；出节签名经 pa636_probe 探针打表（禁声明面猜）；Set 层合取     *)
-(*   sigT 打包；新增 6 枚真 Qed（前缀 uapkg6v2_）非转发冒充（每枚自带语    *)
-(*   句面与证明，全实参消费上游出节形）；尾嵌 Print Assumptions 六连自检。 *)
+(* 构造性注记：v1 段与四件本体零改（只 Require）；真名件装载根             *)
+(*   为 UpReqAttnUniformLimit（同名异版中取定其一，余者隔离在链外）；      *)
+(*   Set 层合取一律 sigT 封装；新增 6 枚真 Qed（前缀 uapkg6v2_）；         *)
+(*   每枚自带语句面与证明，全实参使用上游出节形；纯构造性、零公理零承认；    *)
+(*   尾嵌 Print Assumptions 六连假设审计。                                 *)
 (* ===================================================================== *)
 
 (* ---------- v2 依赖面追加（显式点名；⑨：Import 载荷不透传） ---------- *)
@@ -502,11 +502,11 @@ Require Import UpReqAttnUniformLimit.
 Require Import SecondLawQuantified.
 
 (* ===================================================================== *)
-(* ① EMS_C 覆盖 completeness 引用面：uac_e11_full_muster 总装引证          *)
-(*   EMS_C 出节形（Section UpAblP6EmsC 卸出）：S/求和/正性/峰温对/能量     *)
-(*   五参后接三证书槽（片运输/增长/衰减），结论=五分量嵌套 sigT。本席语句  *)
+(* ① EMS_C 覆盖 completeness 引用面：uac_e11_full_muster 总成引证          *)
+(*   EMS_C 出节形（Section UpAblP6EmsC 出节）：S/求和/正性/峰温对/能量     *)
+(*   五参后接三证书位（片运输/增长/衰减），结论=五分量嵌套 sigT。本件语句  *)
 (*   面取洁净展开形（c_bt/c_bt_pos/c_kl 内联还原 real_boltzmann_dist_temp/ *)
-(*   _pos/real_KL_temp 注册面），证项=全实参直配。                        *)
+(*   _pos/real_KL_temp 定义面），证明项=全实参直接给出。                   *)
 (* ===================================================================== *)
 Corollary uapkg6v2_emsc_muster_total :
   forall (S : Type) (rsu : (S -> Real) -> Real)
@@ -583,9 +583,9 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ② UniformLimit 严格档供给引用：三件一揽子（γ>0 直配＋真间隙 gap_le＋    *)
-(*   严格档主槽首刀放电）。语句面照上游槽形逐字（P7-50：真异点 x=false、   *)
-(*   γ:=real_one 取等紧界、非空泛实例化——引用面全实参防转发冒充）。       *)
+(* ② UniformLimit 严格档供给引用：三件一揽子（γ>0 直接给出＋真间隙 gap_le＋ *)
+(*   严格档主语句首批构造）。语句面照上游语句形逐字（真异点 x=false、       *)
+(*   γ:=real_one 取等紧界、非空泛实例化——引用面全实参）。                  *)
 (* ===================================================================== *)
 Corollary uapkg6v2_unilim_strict_supply :
   {_ : real_lt real_zero pa6ul_gamma &
@@ -613,7 +613,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ③ two_state 整节实例引用：SlqSecondLaw 列表和机器 two_state 实例面      *)
+(* ③ two_state 整节实例引用：SlqSecondLaw 列表和求和的 two_state 实例面    *)
 (*   （uab23_ts_second_law_eps 全实参引证）。                              *)
 (* ===================================================================== *)
 Corollary uapkg6v2_ts_second_law_face :
@@ -636,7 +636,7 @@ Proof.
   exact uab23_ts_second_law_eps.
 Qed.
 
-(* ③ 锚闭形：零前提实例钉（T:=real_one、p:=Boltzmann 自身）双向打包——     *)
+(* ③ 锚闭形：零前提实例定取（T:=real_one、p:=Boltzmann 自身）双向封装——    *)
 (*   KL−增益 ≤ eps 与 增益−KL ≤ eps 两向同收（uab23_ts_anchor_closed_*）。 *)
 Corollary uapkg6v2_ts_anchor_two_side :
   forall eps : Real, real_lt real_zero eps ->
@@ -665,8 +665,8 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ④ fka 转发收编引证＋战役总装 v2（本节上下文照 S01/fa53/WTC/fka 同款     *)
-(*   Section 定式：Context {RI}{DO}＋RI_base 实例桥＋裸名 Let 桥）。       *)
+(* ④ fka 引述件引证＋战役面总成 v2（本节上下文照 S01/fa53/WTC/fka 同款     *)
+(*   Section 定式：Context {RI}{DO}＋RI_base 实例前提＋裸名 Let 前提）。   *)
 (* ===================================================================== *)
 Section Uapkg6V2Fka.
 
@@ -679,8 +679,8 @@ Let le := @S01_BaseRing.le RI.
 Let mult := @S01_BaseRing.mult RI.
 Let plus := @S01_BaseRing.plus RI.
 
-(* ④ 引证位：二元 Gram 核装载腿（fka 转发收编件）洁净面直引——             *)
-(*   语句面=fka 出节形同面，证项=@ 全显直给（T230 唯一校验点授权形）。     *)
+(* ④ 引证位：二元 Gram 核装载面（fka 引述件）洁净面直引——                 *)
+(*   语句面=fka 出节形同面，证明项=@ 全显直接给出。                        *)
 Corollary uapkg6v2_fka_gram_face :
   forall a b c d : R,
     le (mult (plus (mult a c) (mult b d)) (plus (mult a c) (mult b d)))
@@ -691,13 +691,13 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ④ 战役总装 v2：九支供给闭合一揽子升级句（v1 五支→v2 九支）——           *)
+(* ④ 战役面总成 v2：九支供给闭合一揽子升级句（v1 五支→v2 九支）——         *)
 (*   支1 GibbsFamilyExt 对称 Jeffreys 温度面；支2 TempDefs 温度节参两枚；  *)
-(*   支3 FepIdConsume 零槽 Gibbs==Boltzmann；支4 EMS A+B 覆盖链组合桥；    *)
-(*   支5 喂件族具体实例面；支6 EMS_C 合龙验证零前提峰温对偶面；            *)
+(*   支3 FepIdConsume 零参数位 Gibbs==Boltzmann；支4 EMS A+B 覆盖链组合引理；  *)
+(*   支5 供给件族具体实例面；支6 EMS_C 覆盖验证零前提峰温对偶面；          *)
 (*   支7 UniformLimit 严格档供给对（γ>0＋真间隙 gap_le）；                 *)
-(*   支8 two_state 零前提锚闭双向；支9 fka 装载腿（本节载体面）。          *)
-(*   九支证项齐指九件真证——任一支语句面错位即本件拒编。                    *)
+(*   支8 two_state 零前提锚闭双向；支9 fka 装载面（本节载体面）。          *)
+(*   九支证明项齐指九件真证——任一支语句面错位即无法通过类型检查。          *)
 (* ===================================================================== *)
 Corollary uapkg6v2_campaign_supply_closed_v2 :
   {_ : (forall (p q b : Real) (Hp : real_lt real_zero p)
@@ -795,7 +795,7 @@ Qed.
 
 End Uapkg6V2Fka.
 
-(* ---------- v2 自检段（G4 口径：逐件 Closed 实证，六连） ---------- *)
+(* ---------- v2 假设面审计（逐件 Closed 实证，六连） ---------- *)
 Print Assumptions uapkg6v2_emsc_muster_total.
 Print Assumptions uapkg6v2_unilim_strict_supply.
 Print Assumptions uapkg6v2_ts_second_law_face.

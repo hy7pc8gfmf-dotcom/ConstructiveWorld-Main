@@ -1,31 +1,31 @@
 (* ============================================================ *)
-(* UpAblP2T1_CertC.v —— H2 席（T2 复合/多 eps 升格专责席·复验模式）          *)
-(*   论文2 T 簇行 27（T2＝UpRealLeB 结论 9(e)/(f)）独立复验＋独立面重建并存件  *)
-(* 工单：任务切分令（H2 主攻 T2）＋协调中继令（G1 已收账，转复验模式）          *)
-(* 对账基准：G1 席 UpAblP2T1_CertB.v 四具名件 p2t1b_T2_*_supply（直引          *)
-(*   UpRealLeB2 F.4-F.7）；本件与其并存互证，零触其文件、零重认领。            *)
-(*                                                              *)
-(* 【复验模式定谳（协调令 20260920）】T2 已由 G1 直引收账。本件按两可处置之     *)
-(*   「独立面」路径施工：                                                      *)
-(*   ① 9(e) 三件自源件独立重建——证明链只消费源件                              *)
-(*     （real_abs_le_quad_eps@S08:4901 五前件＋四分支内件链、                  *)
-(*       real_quad_t_le_h_eps@S08:4965、real_abs_h_sq_le_eps@S09:1087）        *)
-(*     ＋UpRealLeB plain-eps 完成器 real_le_closure_b_one（Part D.0 特化完成），*)
-(*     不经 UpRealLeB2 F.4-F.6、不经 CertB——多 eps 组合闭包单跳                *)
-(*     （尾自由 eps 经完成器消去，eps1/eps2/内嵌 |h| 因子随固定端并入右端），    *)
-(*     与 A1 席路线注「非真墙、组合闭包单跳」逐字对齐。                         *)
-(*   ② 9(f) 一件（real_db_breaking_bound_eps@S10:979，复合系数形）按           *)
-(*     「直引收账」路径零施工登记：语句面逐字重述，类型装配机检对照 CertB       *)
-(*     具名件（类型不合即编译炸＝复验带响）；其源件签名面与复合系数完成链       *)
-(*     （F.1 非负系数完成器）承 G1 席探针与四关账，本件不重跑、如实注记边界。   *)
-(*   ③ 交叉核验面：四具名 p2t1b 件逐一以本件独立重述语句做类型装配 Check        *)
-(*     ＋文尾假设面打印重跑（CertB 四件＋本件三件＋登记件），G4 全链核验覆盖    *)
-(*     CertB 与 UpRealLeB2 整链。                                              *)
-(*                                                              *)
-(* 零承认件：纯构造性，语句面全 Set 层（Id/Not/Or 别名、real_lt/real_le/       *)
-(* real_le_b/real_eq 面），零裸命题入语句与前件位；Qed 全闭合。                *)
-(* 原树零改；不入 order.txt/_CoqProject；禁触 9.0 任何产物。                   *)
+(* UpAblP2T1_CertC.v —— 结论 9(e)/(f) 无余量供给证书件（CertC·独立核验）  *)
+(*   数学使命：结论 9(e) 三条的自源件独立重建与 9(f) 一条的并存类型互证。  *)
 (* ============================================================ *)
+(* 【使命】本件为 UpAblP2T1_CertB.v 的并存互证件：结论 9(e) 三条不等式自   *)
+(*   上游源件（real_abs_le_quad_eps、real_quad_t_le_h_eps、                *)
+(*   real_abs_h_sq_le_eps）与 plain-eps 闭包引理 real_le_closure_b_one     *)
+(*   独立重建（不经 UpRealLeB2 的 B 系引理、不经 CertB 路线）；结论 9(f)   *)
+(*   之 db 破界上界以 p2t1c_T2_db_breaking_bound_reg 作语句面逐字重述，并  *)
+(*   赋值 p2t1b_T2_db_breaking_bound_supply——类型装配即逐字互证。         *)
+(* 【依赖】Stdlib（List／QArith.QArith／Extraction）／CW_ConstructiveWorld_219 *)
+(*   ／UpRealLeB（real_abs_le_quad_eps、real_quad_t_le_h_eps、             *)
+(*   real_abs_h_sq_le_eps、real_le_closure_b_one）／UpAblP2T1_CertB        *)
+(*   （p2t1b_T2_*_supply 四具名件，类型互证对象）。                        *)
+(* 【对标】数学原型：分析学中 abs-平方与破界估计的显式余量形式；           *)
+(*   mathlib/stdlib 无直接构造对应物。                                     *)
+(* 【构造性注记】语句面全 Set 层（Id/Not/Or 别名、real_lt/real_le/         *)
+(*   real_le_b/real_eq 面）；全件 Qed 闭合、零承认词面、无经典逻辑。       *)
+(*   文尾对八条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证    *)
+(*   假设的判据。                                                          *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
+(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
+(* 【结构总览】§1 结论 9(e) 三条独立重建——证明链为源件 eps 形结论         *)
+(*   ＋real_le_closure_b_one 单步收拢全称 eps（多 eps 组合闭包单步：       *)
+(*   尾自由 eps 收拢，eps1/eps2/内嵌 |h| 因子随固定端并入右端）。          *)
+(*   §2 结论 9(f) 语句的独立重述，赋值 CertB 具名件完成类型装配。          *)
+(*   §3 交叉核验：四条 Check 以重述语句为型检 CertB 具名件；§4 提取核验    *)
+(*   （Q 层纯函数 p2t1c_g3_pick）与假设审计区。                            *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith.
@@ -34,11 +34,11 @@ Require Import UpRealLeB.
 Require Import UpAblP2T1_CertB.
 From Stdlib Require Import Extraction.
 
-(* ################ 一、9(e) 独立面：自源件完成器单跳重建 ##################### *)
+(* ################ 一、结论 9(e) 三条的独立重建 ############################ *)
 
-(* e-1（盘点 #24）：|X| ≤_B 2t²＋(eps1＋eps2)。
-   源件结论尾带全称 eps 余量（plain-eps 字面），故组合闭包单跳即达：
-   real_le_closure_b_one 收拢全称 eps，五前件中四件保留前提位、Heps 入完成器。 *)
+(* p2t1c_T2_abs_le_quad_supply：|X| ≤_b 2t²＋(eps1＋eps2)。
+   前提 X ≤ eps1、−X ≤ 2t²＋eps2、0<eps1、0<eps2。证明：由源件结论
+   real_abs_le_quad_eps 经 real_le_closure_b_one 收拢全称 eps 直接推得。 *)
 Theorem p2t1c_T2_abs_le_quad_supply : forall (X t eps1 eps2 : Real),
   real_le X eps1 ->
   real_le (real_opp X)
@@ -53,8 +53,8 @@ Proof.
   exact (real_abs_le_quad_eps X t eps1 eps2 eps HXA HXB Heps1 Heps2 Heps).
 Qed.
 
-(* e-2（盘点 #25）：2(h/x)² ≤_B (1/2)·eps·|h|。
-   余量内嵌 |h| 因子随固定端并入右端；源件 eps' 为全称求和余量，单跳消去。 *)
+(* p2t1c_T2_quad_t_le_h_supply：2(h/x)² ≤_b (1/2)·eps·|h|；前提 0<x、
+   |h| < eps·x²/4、0<eps；由 real_quad_t_le_h_eps 经 real_le_closure_b_one 推得。 *)
 Theorem p2t1c_T2_quad_t_le_h_supply : forall (x h eps : Real)
     (Hx : real_lt real_zero x),
   real_lt (real_abs h)
@@ -76,8 +76,8 @@ Proof.
   exact (real_quad_t_le_h_eps x h eps eps' Hx Hh Heps Heps').
 Qed.
 
-(* e-3（盘点 #28）：A|h|² ≤_B (A·eps3)·|h|。
-   双余量 A·eps3·|h|＋eps' 中 eps' 全称消去，A·eps3·|h| 并右端；单跳。 *)
+(* p2t1c_T2_abs_h_sq_supply：A|h|² ≤_b (A·eps3)·|h|；前提 0<A、|h|<eps3；
+   由 real_abs_h_sq_le_eps 经 real_le_closure_b_one 单步推得。 *)
 Theorem p2t1c_T2_abs_h_sq_supply : forall A h eps3 : Real,
   real_lt real_zero A -> real_lt (real_abs h) eps3 ->
   real_le_b (real_mult A (real_mult (real_abs h) (real_abs h)))
@@ -88,12 +88,12 @@ Proof.
   exact (real_abs_h_sq_le_eps A h eps3 eps' HA Hh3 Heps').
 Qed.
 
-(* ################ 二、9(f) 登记：直引收账＋语句面重述类型装配机检 ########### *)
+(* ################ 二、结论 9(f) 语句面重述与类型互证         ################ *)
 
-(* f-1（盘点 #32）：real_db_breaking_bound_eps@S10:979 之 Bishop 升格面登记件。
-   复合系数 D 形（inv(分区)·T·(exp·…)）：零施工登记＝CertB 具名件直引收账，
-   语句面由本席逐字重述并做类型装配（下 Definition 之类型即本席重述面，
-   与 p2t1b_T2_db_breaking_bound_supply 逐字不合即编译炸＝复验带响）。 *)
+(* p2t1c_T2_db_breaking_bound_reg：db 破界上界（复合系数形）重述定义。
+   复合系数为 inv(分区)·T·(exp·…) 形。本 Definition 的类型为语句面的
+   独立重述；赋值项取 p2t1b_T2_db_breaking_bound_supply——两者逐字
+   一致则类型装配通过，不一致则编译报错（互证由类型检查完成）。 *)
 Definition p2t1c_T2_db_breaking_bound_reg :
   forall (S0 : Type) (keep : S0 -> Set)
          (keep_dec : forall s : S0, Or (keep s) (Not (keep s)))
@@ -133,9 +133,9 @@ Definition p2t1c_T2_db_breaking_bound_reg :
                                         (real_metric s s'))))))) :=
   p2t1b_T2_db_breaking_bound_supply.
 
-(* ################ 三、交叉核验面：p2t1b 四具名件 × 本席重述语句 ############ *)
-(* 类型装配 Check：右型＝本席独立重述语句，左项＝CertB 具名件。
-   四发全过＝两席语句面逐字机检一致（G2 留痕）。 *)
+(* ################ 三、交叉核验：CertB 四具名件对重述语句的类型装配 ########## *)
+(* 每条 Check 以本件独立重述语句为型、以 CertB 具名件为项：类型装配
+   通过即两者语句面逐字一致（互证由类型检查完成）。 *)
 
 Check (p2t1b_T2_abs_le_quad_supply :
   forall (X t eps1 eps2 : Real),
@@ -207,16 +207,16 @@ Check (p2t1b_T2_db_breaking_bound_supply :
                              (real_mult (real_mult (real_inv_pos D D_pos) L)
                                         (real_metric s s')))))))).
 
-(* ################ G3 提取探针（一人一目录 _tp2t1c_g3out；Q 层见证） ######### *)
-(* 机理（A1 卡＋G1 卡）：实数层接口语句件不入提取集；见证面另立 Q 层纯函数——
-   主题对位：多 eps 组合的逐点正 eps 供给族 1/(n+2)。 *)
+(* ################ 提取核验：见证面取 Q 层纯函数 #################### *)
+(* 实数层接口语句件不入提取集；提取见证面另立 Q 层纯函数，
+   主题对位为多 eps 组合的逐点正 eps 供给族 1/(n+2)。 *)
 Definition p2t1c_g3_pick (n : nat) : Q :=
   (1 # (Pos.succ (Pos.succ (Pos.of_succ_nat n))))%Q.
 
 Set Extraction Output Directory "_tp2t1c_g3out".
 Extraction "p2t1c_G3_Cert.ml" p2t1c_g3_pick.
 
-(* ################ 收尾：文尾逐件假设面打印（G2/G3 留痕） ################### *)
+(* ################ 假设审计：文尾对八条结论逐一 Print Assumptions ############ *)
 Print Assumptions p2t1c_T2_abs_le_quad_supply.
 Print Assumptions p2t1c_T2_quad_t_le_h_supply.
 Print Assumptions p2t1c_T2_abs_h_sq_supply.

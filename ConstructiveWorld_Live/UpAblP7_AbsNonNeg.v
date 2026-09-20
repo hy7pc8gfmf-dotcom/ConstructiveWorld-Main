@@ -1,34 +1,34 @@
 (* ============================================================ *)
-(* UpAblP7_AbsNonNeg.v —— 论文7 专项消融战役席 PA7-22                            *)
-(*   abs_nonneg 具体层无条件化（T154/PA7-11 余切片申报件）                          *)
-(*                                                              *)
-(* 母本坐标（union 根现行版实测）                                                 *)
-(*   UpReqAlgebra.v:919-922 定谳注记：setoid 接口 abs_nonneg 仅 Bishop 逐 eps 形     *)
-(*     （Class RealInterfaceEnhancedSetoid @S07:8004），plain 形不可由 eps 形导出      *)
-(*     （无序消去）；接口同位字段 abs_pos @S07:8010 仅严格正前提 lt zero a。           *)
-(*   本件目标（申报原文）：无条件「le zero a -> req (abs a) a」——弱非负前提版，          *)
-(*     全库无件，本席在具体柯西层（Real，S02/S03 编码）建成。                          *)
-(*   S03_QExp.v:6510 real_abs：逐点 Qabs 抬升（Q 层 max/If 面，非 Or 分歧面）          *)
-(*   S02_CauchyComplete.v:469 real_le := Or real_lt real_eq（Or 仅在假设侧）          *)
-(*                                                              *)
-(* 定性结论（T165 台账）：非墙。abs 走 Q 层逐点面，real_le 的 Or 分歧在假设侧可              *)
-(*   构造消去（Q 层可判定 Qlt_le_dec，零经典逻辑），两支均有构造路线：                     *)
-(*     inl real_lt 支：e 见证逐点定位 Qabs_pos（|a_n|==a_n），差归零；                    *)
-(*     inr real_eq 支：对半 eps + Qabs_triangle 双倍放行。                              *)
-(*   抽象接口层（forall R RIS）确属墙（接口无 le 消去面），故主件落具体层，                *)
-(*   语句面经 Instance RealEnhancedReal @S07:8566 与 UpReqAlgebra 同源（裸名直连，         *)
-(*   探针 _probe_pa722.v 实测 exact 双向直连）。                                     *)
-(*                                                              *)
-(* 工具链实况（实测入坑卡）：本环境 lia 不支持 Q 序目标（最小测件 Cannot find witness）；    *)
-(*   Q 上 replace-by-ring/field 侧目标不被 ring/field 认领（同报错）——Q 层代数              *)
-(*   变形一律走「assert Qeq by ring/field + rewrite (in)」范式，序链手推。                *)
-(*                                                              *)
-(* 分级申报：N2 已证导出（Q 层辅件七件，库件 Qabs_pos/Qabs_neg/Qabs_triangle/Qabs_opp     *)
-(*   + S02 QltT 桥直连）；N3 实例供给（具体层 Real 载体全构造，零退化）。                  *)
-(* 依赖清单：CW_ConstructiveWorld_219（real_lt/real_le/QltT 面）+ UpReqAlgebra           *)
-(*   （req_plus_le_lt_pos/lt_le_iff 桥件）——只读消费，原树零改，在飞席零接触。              *)
-(* 红线自审：全中文表述；全件真证收口；零假设位（主件除语句前提 le zero a 外零证书）；         *)
-(*   文尾 Print Assumptions 逐件全闭合；编译产物只落 /tmp（vo_9.1/Live 只读）。            *)
+(* UpAblP7_AbsNonNeg.v                                           *)
+(*                                                               *)
+(* 使命：本件形式化具体柯西实数层（Real，S02/S03 编码）上的无条件绝对值    *)
+(*   非负件：「le zero a -> req (abs a) a」。它是接口字段 abs_pos          *)
+(*   （S07，仅覆盖严格正前提 lt zero a）的弱前提强化版；              *)
+(*   setoid 接口的 abs_nonneg 字段（S07）仅有 Bishop 逐 eps 形，      *)
+(*   plain 形不能由 eps 形导出（缺序消去面），故本件主结论落具体层；        *)
+(*   语句面经 Instance RealEnhancedReal（S07）与 UpReqAlgebra 对齐。   *)
+(*                                                               *)
+(*   结构：Q 层辅件九件（半量与四分量的序关系、Qabs 下界翻转、逐点收尾）    *)
+(*   + 主件 uabp7an_core + 接口字段形 uabp7an_abs_nonneg_uncond            *)
+(*   + 双向桥：无条件件 ⟹ 接口 eps 形（uabp7an_uncond_to_eps，任意抽象      *)
+(*   载体），Bishop 逐 eps 形 ⟹ 无条件件（uabp7an_eps_to_uncond，具体层）。 *)
+(*                                                               *)
+(*   证明策略：real_le（S02 Or real_lt real_eq）的 Or 分歧在假设侧      *)
+(*   可构造消去——Q 层序可判定（Qlt_le_dec），零经典逻辑：                   *)
+(*   严格正支以见证 e 逐点定位 Qabs_pos（|a_n|==a_n），差归零；             *)
+(*   相等支取对半 eps，由 Qabs_triangle 双倍放行。                          *)
+(*   real_abs（S03）为逐点 Qabs 抬升。                               *)
+(*   抽象接口层（forall R RIS）无 le 消去面，无条件件在该层不可达，          *)
+(*   故主件落具体层。                                                    *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219（real_lt/real_le/QltT）、UpReqAlgebra     *)
+(*   （req_plus_le_lt_pos/lt_le_iff）、stdlib QArith。                    *)
+(*                                                               *)
+(* 构造性：纯构造性、零承认、全 Qed；除语句前提 le zero a 外无假设位；       *)
+(*   文尾 Print Assumptions 逐件核验假设闭包为空。                        *)
+(*                                                               *)
+(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律              *)
+(*   -o 临时目录，树内 .vo 不重写。                                       *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -38,14 +38,14 @@ Require Import UpReqAlgebra.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 一、Q 层辅件（除法正性走可判定反证，序链手推，零经典逻辑）                        *)
+(* §1 Q 层辅件（半量与四分量的序关系、Qabs 下界引理；零经典逻辑）         *)
 (* ============================================================ *)
 
-(* 负零恒等（多次复用的变形种子） *)
+(* 负零恒等：(- 0)%Q == 0%Q（多处复用） *)
 Lemma uabp7an_qneg0 : (- 0)%Q == 0%Q.
 Proof. ring. Qed.
 
-(* e/2 严格正（Qlt_le_dec 可判定反证 + field 换形） *)
+(* e/2 严格正（0 < e）（由 Qlt_le_dec 的可判定二分与 Qplus_le_compat） *)
 Lemma uabp7an_qlt_half : forall e : Q, 0 < e -> 0 < e / 2.
 Proof.
   intros e He.
@@ -61,7 +61,7 @@ Proof.
     exact (Qlt_not_le 0 e He Hle).
 Qed.
 
-(* 半加恒等 *)
+(* 半加恒等：e/2 + e/2 == e *)
 Lemma uabp7an_half_add : forall e : Q, e / 2 + e / 2 == e.
 Proof. intro e. field. Qed.
 
@@ -79,7 +79,7 @@ Proof.
   exact H1.
 Qed.
 
-(* 半小于负零形：e/2 < e - 0（0 < e）——供 projT1 投影目标的 conversion 直连 *)
+(* 半小于负零形：e/2 < e - 0（0 < e）——配合柯西表示的投影目标形 *)
 Lemma uabp7an_half_lt_m0 : forall e : Q, 0 < e -> e / 2 < e - 0.
 Proof.
   intros e He.
@@ -136,8 +136,8 @@ Proof.
 Qed.
 
 (* 逐点收尾辅件：-x < eps/2（0 < eps）⟹ QltT (Qabs (Qabs x - x)) eps。
-   非平凡：Qlt_le_dec 符号分段 + Qabs_pos/Qabs_neg 定位 + 严格放行。
-   这是「弱非负（逐 eps 下界）到 |a|==a」的 Q 层核心机。 *)
+   证明：Qlt_le_dec 符号分段，以 Qabs_pos/Qabs_neg 定位绝对值后
+   归结为「弱非负（逐 eps 下界）到 |a|==a」的 Q 层核心步骤。 *)
 Lemma uabp7an_pt_tail : forall x eps : Q,
   0 < eps -> - x < eps / 2 -> QltT (Qabs (Qabs x - x)) eps.
 Proof.
@@ -178,7 +178,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 二、主件：具体层无条件 abs 非负件（真 Qed，除语句前提外零假设位）                  *)
+(* §2 主件：具体层无条件 abs 非负件（除语句前提外零假设位）               *)
 (* ============================================================ *)
 
 Lemma uabp7an_core : forall a : Real,
@@ -229,16 +229,16 @@ Proof.
                              (Qabs (u n)) (eps / 2) HNQ HNQ).
 Qed.
 
-(* 任务点名语句面（Instance 裸名直连，探针实测 exact 双向）：                       *)
-(* 无条件「le zero a -> req (abs a) a」全称件——abs_pos（接口字段，仅 lt zero a）        *)
-(* 的弱前提强化版，库内首件。                                                      *)
+(* 接口字段语句形（le/abs/req 取 Instance RealEnhancedReal 字段）：                 *)
+(* 无条件「le zero a -> req (abs a) a」全称件——接口字段 abs_pos 仅覆盖              *)
+(* 严格正前提 lt zero a，本件将其前提减弱为 le zero a。                            *)
 Lemma uabp7an_abs_nonneg_uncond : forall a : Real,
   le zero a -> req (abs a) a.
 Proof. intros a H. exact (uabp7an_core a H). Qed.
 
 (* ============================================================ *)
-(* 三、桥①（抽象接口层）：无条件件 ⟹ 接口 eps 形 abs_nonneg（带 le zero a 前提位）     *)
-(*   任意载体 R 通用；消费 UpReqAlgebra.req_plus_le_lt_pos + 接口 lt_le_iff/le_id_r。   *)
+(* §3 桥①（抽象接口层）：无条件件 ⟹ 接口 eps 形 abs_nonneg（带 le zero a 前提）      *)
+(*   任意载体 R 通用；由 req_plus_le_lt_pos 与接口 lt_le_iff/le_id_r 推得。           *)
 (* ============================================================ *)
 
 Section Uabp7anUncondToEps.
@@ -258,10 +258,10 @@ Qed.
 End Uabp7anUncondToEps.
 
 (* ============================================================ *)
-(* 四、桥②（具体层）：Bishop 逐 eps 非负形 ⟹ 无条件件（逆向，构造性非墙）              *)
-(*   前提形状=接口 abs_nonneg 字段用在 a 本身（forall eps>0, le zero (a+eps)）。        *)
-(*   路线：取四分之一常值见证经 Or 两支提取逐点下界（-a_n < eps/2），                       *)
-(*   再由 uabp7an_pt_tail 符号分段收口——Q 层可判定，零经典逻辑。                         *)
+(* §4 桥②（具体层）：Bishop 逐 eps 非负形 ⟹ 无条件件（逆向桥）                       *)
+(*   前提形状=接口 abs_nonneg 字段用于 a 本身（forall eps>0, le zero (a+eps)）。        *)
+(*   路线：取四分之一常值见证，经 real_le 的 Or 两支分别提取逐点下界                     *)
+(*   （-a_n < eps/2），再由 uabp7an_pt_tail 符号分段收束；Q 层序可判定，零经典逻辑。     *)
 (* ============================================================ *)
 
 Lemma uabp7an_eps_to_uncond : forall a : Real,
@@ -346,7 +346,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 五、文尾逐件闭合审（Print Assumptions）                                       *)
+(* §5 假设闭包核验（Print Assumptions，各件应为空）                      *)
 (* ============================================================ *)
 
 Print Assumptions uabp7an_qneg0.

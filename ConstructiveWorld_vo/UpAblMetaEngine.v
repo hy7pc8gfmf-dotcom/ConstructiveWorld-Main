@@ -1,21 +1,21 @@
 (* ============================================================ *)
-(* UpAblMetaEngine.v                                            *)
+(* UpAblMetaEngine.v —— 发散性下界与 exp 幂迭代两定理                        *)
 (*                                                              *)
-(* 目的：M1 席（亚稳标度·发散/低界引擎席）引擎件两件：           *)
-(*   件① mte_inv_divergence：1/T 发散见证——任意正 delta、任意    *)
-(*        nat 界 M，可取正 T0 = delta·inv(M+1)，一切 0<T<T0      *)
-(*        满足 M·T < delta。                                     *)
-(*   件② mte_exp_pow_iter（exp 的 nat 倍迭代：                  *)
-(*        exp(x·n) == (exp x)^n）与 mte_exp_divergence（正向发散  *)
-(*        低界：x>0 时幂列 (e^x)^n 最终超过任意 nat 界）。        *)
-(* 依赖：S01/S02/S03 具体柯西实数层；S07 顶层序引理、阿基米德件、 *)
-(*       exp 种子（gt_one / minus_one_pos / 加法性 / 换形）。      *)
-(* 语句纪律：全 Set 层（存在性 sigT、合取 S01.And:=A*B），前件    *)
-(*       显式（delta/x 正性证书），无 Prop 泄露。                 *)
-(* 注记：本件为中文头注之零承认件（无公理面），独立新件，mte_ 前缀。 *)
-(*       具体柯西实数层内 S02/S03 无 nat 嵌入实名，故本件自备     *)
-(*       mte_nat_to_R（形状同 S04 接口层同名件：零 ↦ 零、         *)
-(*       后继 ↦ 壹 + 递降），并在交付报告中如实申报。             *)
+(* 使命：本件提供两件发散性定理——                                           *)
+(*   件① mte_inv_divergence：1/T 发散见证——任意正 delta、任意               *)
+(*        nat 界 M，可取正 T0 = delta·inv(M+1)，一切 0<T<T0                 *)
+(*        满足 M·T < delta。                                                *)
+(*   件② mte_exp_pow_iter（exp 的 nat 倍迭代：                              *)
+(*        exp(x·n) == (exp x)^n）与 mte_exp_divergence（正向发散            *)
+(*        下界：x>0 时幂列 (e^x)^n 最终超过任意 nat 界）。                   *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog    *)
+(*       （顶层序引理、阿基米德引理 real_arch、exp 种子                     *)
+(*       cauchy_real_exp_gt_one / cauchy_real_exp_minus_one_pos /           *)
+(*       cauchy_real_exp_plus）。                                           *)
+(* 构造性注记：全 Set 层（存在性 sigT、合取 S01.And:=A*B），前提             *)
+(*       显式（delta/x 正性证书），无 Prop 泄露；零承认、无公理面。          *)
+(* 注记：具体柯西实数层内 S02/S03 无 nat 嵌入实名，故本件自备               *)
+(*       mte_nat_to_R（形状同 S04 接口层同名件：零 ↦ 零、后继 ↦ 壹 + 递降）。*)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -41,7 +41,7 @@ Fixpoint mte_rpow (b : Real) (n : nat) : Real :=
   | Datatypes.S m => real_mult b (mte_rpow b m)
   end.
 
-(* ---------- 逐点 Q 级加法平移（eps 见证直构） ---------- *)
+(* ---------- 逐点 Q 级加法平移（eps 见证的直接构造） ---------- *)
 
 (* a < b ⟹ a+c < b+c *)
 Lemma mte_lt_plus_r : forall a b c : Real,
@@ -178,7 +178,7 @@ Qed.
 
 (* ---------- nat 嵌入的正性 ---------- *)
 
-(* n·z ≥ 零（z > 零 严格前件） *)
+(* n·z ≥ 零（z > 零 严格前提） *)
 Lemma mte_nat_mult_pos : forall (n : nat) (z : Real),
   real_lt real_zero z -> real_le real_zero (real_mult (mte_nat_to_R n) z).
 Proof.
@@ -295,7 +295,7 @@ Proof.
   rewrite H2, H3, H4. field.
 Qed.
 
-(* nat 嵌入 == 常量嵌入（real_arch 消费之桥） *)
+(* nat 嵌入 == 常量嵌入（供 real_arch 调用） *)
 Lemma mte_nat_const_eq : forall n : nat,
   real_eq (mte_nat_to_R n) (real_const (Z.of_nat n # 1)%Q).
 Proof.
@@ -701,7 +701,7 @@ Proof.
                delta H1 Edelta).
 Qed.
 
-(* ---------- 件②b：expf 正向发散低界 ---------- *)
+(* ---------- 件②b：exp 正向发散下界 ---------- *)
 
 Theorem mte_exp_divergence : forall x : Real,
   real_lt real_zero x ->
@@ -807,7 +807,7 @@ Proof.
                       (n - Datatypes.S n0) Hb)).
 Qed.
 
-(* ---------- 验证打印：全件零公理面（G2 关卡证据） ---------- *)
+(* ---------- 假设审计：全件零公理 ---------- *)
 Print Assumptions mte_lt_plus_r.
 Print Assumptions mte_lt_plus_one.
 Print Assumptions mte_le_congr.
