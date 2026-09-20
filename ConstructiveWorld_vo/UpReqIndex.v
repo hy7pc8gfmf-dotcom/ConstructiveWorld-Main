@@ -3076,3 +3076,78 @@ Definition ng_UpAblCauchyLim : NewGreenFace :=
 Definition ng_UpAblHalfPowFeed : NewGreenFace :=
   MkNewGreenFace "UpAblHalfPowFeed.v" 229 5 20260920 "HalfPow feed piece consuming HalfPow (TP3 line), four-gate".
 
+
+(* ===== Index v4.17 —— R101 论文6 消融战役收编 13 件 + 论文7 更新线 5 件（主会话 R101 席装配，依赖序尾插，born-in-place 复证；UpAblMetaLow 编译红挂账排除 L308 req 方向翻转候 AID 席）===== *)
+
+(* ng_UpAblP6_TempDefs —— UpAblP6_TempDefs.v：PA6-02（TempDefs 消融 11 件）（T212）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_TempDefs : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_TempDefs.v" 391 11 20260920 "PA6-02: TempDefs ablation 11 pieces (T212)".
+
+(* ng_UpAblP6_GibbsFamilyExt —— UpAblP6_GibbsFamilyExt.v：PA6-01（Gibbs 族扩展 5 件）（T211）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_GibbsFamilyExt : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_GibbsFamilyExt.v" 166 5 20260920 "PA6-01: Gibbs family extension 5 pieces (T211)".
+
+(* ng_UpAblP6_S5SlotWire —— UpAblP6_S5SlotWire.v：PA6-05（S5 槽喂件面 11 位）（T215）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_S5SlotWire : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_S5SlotWire.v" 169 11 20260920 "PA6-05: S5 slot wire-feed face 11 positions (T215)".
+
+(* ng_UpAblP6_ZPosLowRef —— UpAblP6_ZPosLowRef.v：PA6-06（ZPos/LowRef 喂件面 12 位；注释 G1 直修 axiom→公理）（T216）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_ZPosLowRef : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_ZPosLowRef.v" 246 12 20260920 "PA6-06: ZPos/LowRef wire-feed face 12 positions (T216; comment G1 direct-fix)".
+
+(* ng_UpAblP6_ConcMixSelFeed —— UpAblP6_ConcMixSelFeed.v：PA6-07（ConcMixSel 喂件 16 位）（T217）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_ConcMixSelFeed : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_ConcMixSelFeed.v" 221 16 20260920 "PA6-07: ConcMixSel feed 16 positions (T217)".
+
+(* ng_UpAblP6_UniformLimit —— UpAblP6_UniformLimit.v：PA6-15（UniformLimit 真名改喂版 3 件）（T223）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_UniformLimit : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_UniformLimit.v" 162 3 20260920 "PA6-15: UniformLimit true-name re-feed 3 pieces (T223)".
+
+(* ng_UpAblP6_SecondLaw_two_state —— UpAblP6_SecondLaw_two_state.v：PA6-23（SecondLaw 整节 two_state 实例化 14 件）（T231）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_SecondLaw_two_state : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_SecondLaw_two_state.v" 376 14 20260920 "PA6-23: SecondLaw whole-section two_state instantiation 14 pieces (T231)".
+
+(* ng_UpAblP6_StateSpace_inst —— UpAblP6_StateSpace_inst.v：PA6-08 线（StateSpace 非平凡实例首件 23 件）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_StateSpace_inst : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_StateSpace_inst.v" 509 23 20260920 "StateSpace non-trivial instantiation first piece 23 theorems".
+
+(* ng_UpAblP6_EntropyMonoSplit_A —— UpAblP6_EntropyMonoSplit_A.v：PA6-03（EntropyMonoSplit 甲腿 6 件）（T213）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_EntropyMonoSplit_A : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_EntropyMonoSplit_A.v" 175 6 20260920 "PA6-03: EntropyMonoSplit leg-A 6 pieces (T213)".
+
+(* ng_UpAblP6_EntropyMonoSplit_B —— UpAblP6_EntropyMonoSplit_B.v：PA6-04（EntropyMonoSplit 乙腿 7 件）（T214）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_EntropyMonoSplit_B : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_EntropyMonoSplit_B.v" 264 7 20260920 "PA6-04: EntropyMonoSplit leg-B 7 pieces (T214)".
+
+(* ng_fka_weak_triangle_ref —— fka_weak_triangle_ref.v：PA6-24（fka 尾巴转发收编闭合 1 件）（T230/T232）；vo 树 born-in-place 复证 *)
+Definition ng_fka_weak_triangle_ref : NewGreenFace :=
+  MkNewGreenFace "fka_weak_triangle_ref.v" 32 1 20260920 "PA6-24: fka tail forward-include closure 1 piece (T230/T232)".
+
+(* ng_UpAblP6_EntropyMonoSplit_C —— UpAblP6_EntropyMonoSplit_C.v：PA6-08（EMS 合龙验证 11/11 零缺口 15 件，消费 A/B）（T218）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_EntropyMonoSplit_C : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_EntropyMonoSplit_C.v" 394 15 20260920 "PA6-08: EMS consolidation verification 11/11 zero-gap 15 pieces consuming A/B (T218)".
+
+(* ng_UpAblP6_Package —— UpAblP6_Package.v：PA6-13（v2 收官合龙九支供给闭合 20 件，消费 10 件）（T221b）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblP6_Package : NewGreenFace :=
+  MkNewGreenFace "UpAblP6_Package.v" 804 20 20260920 "PA6-13: v2 closing consolidation nine-branch supply closure 20 pieces consuming 10 (T221b)".
+
+(* ng_UpAblLogWall —— UpAblLogWall.v：论文7 更新线（LogWall 墙定理化 11 件）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblLogWall : NewGreenFace :=
+  MkNewGreenFace "UpAblLogWall.v" 298 11 20260920 "paper-7 update line: LogWall wall-theoremization 11 pieces".
+
+(* ng_UpAblLogWallEq —— UpAblLogWallEq.v：论文7 更新线（LogWallEq 双向等价 12 件，消费 LogWall）（_tl3_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblLogWallEq : NewGreenFace :=
+  MkNewGreenFace "UpAblLogWallEq.v" 382 12 20260920 "paper-7 update line: LogWallEq bidirectional equivalence 12 pieces consuming LogWall (_tl3_)".
+
+(* ng_UpAblMetaEngine —— UpAblMetaEngine.v：论文7 更新线（MetaEngine 引擎 22 件）（_tn 系）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaEngine : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaEngine.v" 830 22 20260920 "paper-7 update line: MetaEngine engine 22 pieces (_tn series)".
+
+(* ng_UpAblRateAlgPkg —— UpAblRateAlgPkg.v：论文7 更新线（率代数打包 4 件）（_taid3_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblRateAlgPkg : NewGreenFace :=
+  MkNewGreenFace "UpAblRateAlgPkg.v" 326 4 20260920 "paper-7 update line: rate-algebra package 4 pieces (_taid3_)".
+
+(* ng_UpAblSlackMix —— UpAblSlackMix.v：论文7 更新线（N1 席松弛形算法化定义面 slm_ 三件）（_tn1_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblSlackMix : NewGreenFace :=
+  MkNewGreenFace "UpAblSlackMix.v" 291 0 20260920 "paper-7 update line: N1 seat slack-form algorithmization definition face slm_ three pieces (_tn1_)".
+
