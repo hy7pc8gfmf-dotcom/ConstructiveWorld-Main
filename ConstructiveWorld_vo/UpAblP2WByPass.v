@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   p2wb_supplied_sel（原 L379，1 句玩具证）                             *)
+(*   p2wb_supplied（原 L371，1 句玩具证）                                 *)
+(*   p2wb_top_keep_head_witness（原 L342，2 句玩具证）                    *)
+(*   p2wb_sel_partition_two（原 L308，1 句玩具证）                        *)
+(*   p2wb_sel_tail_mass_one（原 L305，1 句玩具证）                        *)
+(*   p2wb_tail_plus_kept_full_sel（原 L299，1 句玩具证）                  *)
+(*   p2wb_false_ne_true（原 L136，2 句玩具证）                            *)
+(*   p2wb_true_ne_false（原 L133，2 句玩具证）                            *)
+(*   plus_swap（原 L120，2 句玩具证）                                     *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblP2WByPass.v —— 论文2 自有域 S06 两处判定接口的 bool 具体载体实例件     *)
 (*   族A：token_eq_dec 语句形 forall a b : Token, Or (Id a b) (Not (Id a b))，  *)
 (*   MinPSampling 节与 TopPSampling 节同形两位；                                *)
@@ -121,9 +139,7 @@ Lemma plus_swap : forall a b c : nat,
   Id (rplus a (rplus b c)) (rplus b (rplus a c)).
 Proof.
   intros a b c.
-  exact (id_trans (plus_assoc a b c)
-                  (id_trans (id_cong2 rplus (plus_comm a b) (id_refl : Id c c))
-                            (id_sym (plus_assoc b a c)))).
+  exact (id_trans (plus_assoc a b c)                  (id_trans (id_cong2 rplus (plus_comm a b) (id_refl : Id c c))                            (id_sym (plus_assoc b a c)))).
 Qed.
 
 (* ################ 第 2 部：bool 二元世界与两判定接口实例 #################### *)
@@ -343,10 +359,7 @@ Theorem p2wb_top_keep_head_witness : forall (p : nat) (l : list bool),
   p2wb_top_keep p (cons true l) true.
 Proof.
   intros p l.
-  exact (match p2wb_token_eq_dec true true with
-         | inl _ => tt
-         | inr h => match h (id_refl : Id true true) with end
-         end).
+  exact (match p2wb_token_eq_dec true true with         | inl _ => tt         | inr h => match h (id_refl : Id true true) with end         end).
 Qed.
 
 End TopPMirror.
@@ -370,17 +383,13 @@ Inductive p2wb_pack : Type :=
 (* 供给其一：常值形（keep 取常 unit，keep_dec 取 @inl unit tt） *)
 Theorem p2wb_supplied : p2wb_pack.
 Proof.
-  exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec
-                         bool p2wb_S_enum p2wb_S_finite_cover
-                         p2wb_keep p2wb_keep_dec).
+  exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec                         bool p2wb_S_enum p2wb_S_finite_cover                         p2wb_keep p2wb_keep_dec).
 Qed.
 
 (* 供给其二：择留形（两支俱非平凡） *)
 Theorem p2wb_supplied_sel : p2wb_pack.
 Proof.
-  exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec
-                         bool p2wb_S_enum p2wb_S_finite_cover
-                         p2wb_keep_sel p2wb_keep_dec_sel).
+  exact (p2wb_pack_intro bool p2wb_vocab p2wb_vocab_nonempty p2wb_token_eq_dec                         bool p2wb_S_enum p2wb_S_finite_cover                         p2wb_keep_sel p2wb_keep_dec_sel).
 Qed.
 
 (* ################ 第 7 部：提取面判定核与核↔接口正确性证书 ################# *)

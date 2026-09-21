@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   zsf_restb_req_evicted_partition_pos_of_carrier（原 L127，2 句玩具证）*)
+(*   zsf_gibbs_evicted_partition_r_pos（原 L107，2 句玩具证）             *)
+(*   zsf_gibbs_Z_thermo_r_pos（原 L94，1 句玩具证）                       *)
+(*   zsf_iter_Z_thermo_i_pos（原 L83，1 句玩具证）                        *)
+(*   zsf_sigmig2_Z_align_a_pos（原 L71，1 句玩具证）                      *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* ZPosSlotFeed.v — E-STAGING-CZU13 席位 / T81 低引用扇区接线债 P1 施工件   *)
 (* zsf_ 前缀（全库防撞）。使命：六槽（⑤⑥⑦纯接线 + ⑰⑳㉑ spec 核收/登记），  *)
@@ -117,8 +131,7 @@ Theorem zsf_gibbs_evicted_partition_r_pos :
                R RIS S enum D D_pos energy keep keep_dec).
 Proof.
   intros R RIS S enum D D_pos energy keep keep_dec Hw.
-  exact (@brp_b3_evicted_partition_r_pos
-           R RIS S enum D D_pos energy keep keep_dec Hw).
+  exact (@brp_b3_evicted_partition_r_pos           R RIS S enum D D_pos energy keep keep_dec Hw).
 Qed.
 
 (* ---- 槽㉑ UpReqAlignRestB.v:1767 req_evicted_partition_pos 条件形收编 ----
@@ -143,8 +156,7 @@ Theorem zsf_restb_req_evicted_partition_pos_of_carrier :
             end)).
 Proof.
   intros R RIS S enum D D_pos energy keep keep_dec sov Hspec Hw.
-  exact (@brp_b4_of_carrier R RIS S enum D D_pos energy keep keep_dec
-           sov Hspec Hw).
+  exact (@brp_b4_of_carrier R RIS S enum D D_pos energy keep keep_dec           sov Hspec Hw).
 Qed.
 
 (* ============ 自检段（G4 口径：逐件 Closed 实证） ===================== *)

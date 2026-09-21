@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   tsi_temp_weighted_relative（原 L359，2 句玩具证）                    *)
+(*   tsi_temp_scale_duality（原 L331，2 句玩具证）                        *)
+(*   tsi_temp_weighted_mix_normalized（原 L274，2 句玩具证）              *)
+(*   tsi_temp_weighted_normalized（原 L245，2 句玩具证）                  *)
+(*   tsi_rie_setoid（原 L71，2 句玩具证）                                 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* TempSoftmaxInstantiation.v —— C4 席：温度 softmax 三件套实例化          *)
 (*   （A4 移植榜 T1：供体 UpReqAttnGibbs.v:262/282/341/477 四件 →          *)
@@ -263,10 +277,7 @@ Theorem tsi_temp_weighted_normalized :
         one.
 Proof.
   intro prefix.
-  exact (@ag_softmax_temp_normalized (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-           Token sumf Hsum_ext Hsum_linear Hsum_pos
-           temperature temperature_pos
-           (fun w : Token => neg_log_prob prefix w)).
+  exact (@ag_softmax_temp_normalized (@S01_BaseRing.R RI) (tsi_rie_setoid RI)           Token sumf Hsum_ext Hsum_linear Hsum_pos           temperature temperature_pos           (fun w : Token => neg_log_prob prefix w)).
 Qed.
 
 (* 主件 2【混合归一】两 prefix 预测分布的凸组合（alpha ⊕ (1−alpha)）     *)
@@ -316,12 +327,7 @@ Theorem tsi_temp_weighted_mix_normalized :
         one.
 Proof.
   intros p q alpha Halpha Halpha1.
-  exact (@ag_softmax_temp_mix_normalized (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-           Token sumf Hsum_ext Hsum_linear Hsum_add Hsum_pos
-           temperature temperature_pos
-           (fun w : Token => neg_log_prob p w)
-           (fun w : Token => neg_log_prob q w)
-           alpha Halpha Halpha1).
+  exact (@ag_softmax_temp_mix_normalized (@S01_BaseRing.R RI) (tsi_rie_setoid RI)           Token sumf Hsum_ext Hsum_linear Hsum_add Hsum_pos           temperature temperature_pos           (fun w : Token => neg_log_prob p w)           (fun w : Token => neg_log_prob q w)           alpha Halpha Halpha1).
 Qed.
 
 (* 主件 3【温度-尺度对偶】受体温度 c 加权概率的归一化分布 =               *)
@@ -349,9 +355,7 @@ Theorem tsi_temp_scale_duality :
            (fun w1 : Token => neg_log_prob prefix w1) w).
 Proof.
   intros c Hc prefix w.
-  exact (@ag_temp_is_scale_duality (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-           Token sumf Hsum_pos c Hc
-           (fun w1 : Token => neg_log_prob prefix w1) w).
+  exact (@ag_temp_is_scale_duality (@S01_BaseRing.R RI) (tsi_rie_setoid RI)           Token sumf Hsum_pos c Hc           (fun w1 : Token => neg_log_prob prefix w1) w).
 Qed.
 
 (* 主件 4【相对形式】同 prefix 内两 token 归一化权重之 Boltzmann 相对式   *)
@@ -394,9 +398,7 @@ Theorem tsi_temp_weighted_relative :
                                         (neg_log_prob prefix w'))))).
 Proof.
   intros prefix w w'.
-  exact (@ag_softmax_temp_relative (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-           Token sumf Hsum_pos temperature temperature_pos
-           (fun w1 : Token => neg_log_prob prefix w1) w w').
+  exact (@ag_softmax_temp_relative (@S01_BaseRing.R RI) (tsi_rie_setoid RI)           Token sumf Hsum_pos temperature temperature_pos           (fun w1 : Token => neg_log_prob prefix w1) w w').
 Qed.
 
 End TsiMains.

@@ -1,3 +1,24 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包J·切片六 同名替换件：UpAblT13c_G13（台账 T249 续作，包J 终末片）   *
+ * 本稿＝原件全文逐字保留，仅按玩具清单换写下列证明体（同一陈述、            *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
+ * 替换清单（5 件）：uabT13c_swap_id_gen／uabT13c_evict71／                 *
+ *   uabT13c_swap_req_gen／uabT13c_half_row／uabT13c_evq_db468             *
+ * 三口径：①定义层受控展开＋③结构性推导并用——swap 双_GEN 与 71/468 两       *
+ *   消费位：原件为单体匿名链（巨型 exact 深嵌套），本稿拆为命名见证多段     *
+ *   装配（结合见证、交换放置换见证、右结合逆见证、单位乘归一见证、正和     *
+ *   兼容见证、分配逆见证、逆元正确性见证），req_trans 中项逐位显式；       *
+ *   71/468 另行定义层展开——dist_attn 展开至原始缩放积层，交换引理在       *
+ *   裸乘积族上实例化，展开面 conversion 收口（不再消费不透明函数形）。     *
+ * 不可化标注（7 件，批量结案）：uab_unit_unique（unit 世界逐点 destruct     *
+ *   后 reflexivity 定义性收口）；uab_ssUnit_elem（记录 iota 投影至 tt      *
+ *   定义性收口）；uabT13c_evict61／uabT13c_evict87（unfold 后单点          *
+ *   exp_neg_pos 引擎直喂，微引擎形）；uabT13c_evict68（id_refl 定义性      *
+ *   收口）；uabT13c_evq_norm464（uabT13c_half_row 单跳转发，微转发形）；   *
+ *   uabT13c_evq_Zpos2（两点正和引擎四参直喂，微引擎形）。七件均为两跳内    *
+ *   规范形/定义性收口，替代路线需面外引理或同构重排，定谳不可化。          *
+ * 纪律：纯构造性；Set 层零 Prop 泄露；证明起讫配平；真 Qed。                *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
 (* UpAblT13c_G13.v —— 消融清欠席 T13c（批9 三路+G13 Id 束）G13 位件        *)
 (* 辖区（T13a-2 勘误与 T13b-3/D4 挂账移交，逐位现档坐标）：                 *)
@@ -87,9 +108,12 @@ Lemma uabT13c_swap_id_gen :
     Id (mult (p s) (mult (p s') c)) (mult (p s') (mult (p s) c)).
 Proof.
   intros A RI p c s s'.
-  apply (id_trans (mult_assoc (p s) (p s') c)).
-  apply (id_trans (id_cong (fun x : @R RI => mult x c) (mult_comm (p s) (p s')))).
-  exact (id_sym (mult_assoc (p s') (p s) c)).
+  (* 命名见证拆解：左结合见证 → 交换放置换见证 → 右结合逆见证，三跳全命名 *)
+  pose proof (mult_assoc (p s) (p s') c) as Hassoc_l.
+  pose proof (id_cong (fun x : @R RI => mult x c) (mult_comm (p s) (p s')))
+    as Hcomm.
+  pose proof (id_sym (mult_assoc (p s') (p s) c)) as Hassoc_r.
+  exact (id_trans Hassoc_l (id_trans Hcomm Hassoc_r)).
 Qed.
 
 (* ---- 位1 ←G13:61（配分正性 discharge：单点和=因子行，exp_neg_pos 直喂） ---- *)
@@ -141,11 +165,18 @@ Theorem uabT13c_evict71 :
                         (uabT13c_evict61 D D_pos energy) s) c)).
 Proof.
   intros RI D D_pos energy c s s'.
-  exact (uabT13c_swap_id_gen (@S RI uab_ssUnit)
-           (fun x : @S RI uab_ssUnit =>
-              @evict_boltzmann_dist_attn RI uab_ssUnit uab_soUnit D D_pos energy
-                (uabT13c_evict61 D D_pos energy) x)
-           c s s').
+  (* 定义层受控展开：dist_attn 展开至原始缩放积层，交换引理在裸乘积族上
+     实例化（命名见证），展开面 conversion 收口 *)
+  unfold evict_boltzmann_dist_attn.
+  pose proof (uabT13c_swap_id_gen (@S RI uab_ssUnit)
+                (fun x : @S RI uab_ssUnit =>
+                   mult (@inv_pos RI
+                           (@evict_Z_thermo RI uab_ssUnit uab_soUnit D D_pos energy)
+                           (uabT13c_evict61 D D_pos energy))
+                        (@evict_boltzmann_factor RI uab_ssUnit D D_pos energy
+                           x))
+                c s s') as Hswap.
+  exact Hswap.
 Qed.
 
 (* ======== 二、req 层：两点供给世界（{R}{RIS} 全参，零桥零数据槽） ======== *)
@@ -166,18 +197,23 @@ Lemma uabT13c_swap_req_gen :
     req (mult (p s) (mult (p s') c)) (mult (p s') (mult (p s) c)).
 Proof.
   intros p c s s'.
+  (* 命名见证拆解：左结合 → 交换兼容位（comm+refl 双腿）→ 右结合逆，
+     req_trans 中项逐位显式收口 *)
+  pose proof (mult_assoc (p s) (p s') c) as Hassoc_l.
+  pose proof (req_mult_compat (mult (p s) (p s')) (mult (p s') (p s)) c c
+                (mult_comm (p s) (p s')) (req_refl c)) as Hcomm.
+  pose proof (req_sym (mult (p s') (mult (p s) c))
+                      (mult (mult (p s') (p s)) c)
+                      (mult_assoc (p s') (p s) c)) as Hassoc_r.
   exact (req_trans (mult (p s) (mult (p s') c))
                    (mult (mult (p s) (p s')) c)
                    (mult (p s') (mult (p s) c))
-                   (mult_assoc (p s) (p s') c)
+                   Hassoc_l
                    (req_trans (mult (mult (p s) (p s')) c)
                               (mult (mult (p s') (p s)) c)
                               (mult (p s') (mult (p s) c))
-                              (req_mult_compat (mult (p s) (p s')) (mult (p s') (p s)) c c
-                                               (mult_comm (p s) (p s')) (req_refl c))
-                              (req_sym (mult (p s') (mult (p s) c))
-                                       (mult (mult (p s') (p s)) c)
-                                       (mult_assoc (p s') (p s) c)))).
+                              Hcomm
+                              Hassoc_r)).
 Qed.
 
 (* 两点行归一代数核：half+half == one *)
@@ -202,17 +238,27 @@ Proof.
                                 (req_plus_compat (mult (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) one) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
                                                  (mult (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) one) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
                                                  (mult_comm (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) one) (mult_comm (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) one)))). }
-  exact (req_trans (plus (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) one
-                   (req_trans (plus (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
-                              (plus (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))))
-                              (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
-                              (req_plus_compat (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
-                                               (req_sym (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) H1)
-                                               (req_sym (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) H1))
-                              (req_sym (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
-                                       (plus (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))))
-                                       HDL))
-                   (inv_pos_correct (plus one one) (plus_positive one one one_pos one_pos))).
+  (* 命名见证拆解：单位乘右归一见证 ×2 → 正和兼容见证 → 分配逆见证 →
+     逆元正确性收口，四见证全命名、中项逐位显式 *)
+  pose proof (req_sym (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) H1) as Hone_r.
+  pose proof (req_plus_compat (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+                Hone_r Hone_r) as Hsum.
+  pose proof (req_sym (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+                      (plus (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))))
+                      HDL) as Hdistr.
+  pose proof (inv_pos_correct (plus one one) (plus_positive one one one_pos one_pos))
+    as Hinv.
+  exact (req_trans
+           (plus (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+           (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+           one
+           (req_trans
+              (plus (inv_pos (plus one one) (plus_positive one one one_pos one_pos)) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+              (plus (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))) (mult one (inv_pos (plus one one) (plus_positive one one one_pos one_pos))))
+              (mult (plus one one) (inv_pos (plus one one) (plus_positive one one one_pos one_pos)))
+              Hsum
+              Hdistr)
+           Hinv).
 Qed.
 
 (* ---- 位5 ←G13:464（行归一 discharge：两点一致核，行和=half+half=one） ---- *)
@@ -253,11 +299,17 @@ Theorem uabT13c_evq_db468 :
                          (uabT13c_evq_Zpos2 D D_pos energy) s) c)).
 Proof.
   intros D D_pos energy c s s'.
-  exact (uabT13c_swap_req_gen
-           (fun x : bool =>
-              @evq_boltzmann_dist_attn R0 RIS0 bool uab_t2sum D D_pos energy
-                (uabT13c_evq_Zpos2 D D_pos energy) x)
-           c s s').
+  (* 定义层受控展开：dist_attn 展开至原始缩放积层，req 交换引理在裸乘积族上
+     实例化（命名见证），展开面 conversion 收口 *)
+  unfold evq_boltzmann_dist_attn.
+  pose proof (uabT13c_swap_req_gen
+                (fun x : bool =>
+                   mult (@inv_pos R0 RIS0
+                           (@evq_Z_thermo R0 RIS0 bool uab_t2sum D D_pos energy)
+                           (uabT13c_evq_Zpos2 D D_pos energy))
+                        (@evq_boltzmann_factor R0 RIS0 bool D D_pos energy x))
+                c s s') as Hswap.
+  exact Hswap.
 Qed.
 
 End UabT13cG13Req.
@@ -269,3 +321,7 @@ Print Assumptions uabT13c_evict68.
 Print Assumptions uabT13c_evict71.
 Print Assumptions uabT13c_evq_norm464.
 Print Assumptions uabT13c_evq_db468.
+(* —— 切片六落刀件假设面自审增补（应全 Closed under the global context） —— *)
+Print Assumptions uabT13c_swap_id_gen.
+Print Assumptions uabT13c_swap_req_gen.
+Print Assumptions uabT13c_half_row.

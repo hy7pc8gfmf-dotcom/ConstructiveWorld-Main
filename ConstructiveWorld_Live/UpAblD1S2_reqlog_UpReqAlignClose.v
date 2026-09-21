@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T262 台账席 战役包W（tier2 十三批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s2_aclose_log_inv_exp_neg_req（原 L46，结构性重演／显式见证直取）       *)
+(*   uabd1s2_aclose_log_req_compat（原 L37，结构性重演／显式见证直取）            *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S2_reqlog_UpReqAlignClose.v —— FA-D1 批 D1-④ E403 log 桥批    *)
 (*   req 载体层 log 相容／log_inv 复原双槽·引用性消融件                  *)
 (*                                                              *)
@@ -39,7 +50,11 @@ Theorem uabd1s2_aclose_log_req_compat :
     req x y -> req (log x Hx) (log y Hy).
 Proof.
   intros x y Hx Hy Hxy.
-  exact (logd_log_compat_real x y Hx Hy Hxy).
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
 Qed.
 
 (* ---- 槽2 ←UpReqAlignClose.v L51 log_inv_exp_neg_req（逐字，R:=Real） ---- *)

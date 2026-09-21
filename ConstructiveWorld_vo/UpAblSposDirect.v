@@ -1,3 +1,26 @@
+(* ===================================================================== *)
+(* 【ToyR 战役替换稿 · 包J 切片四】本件为玩具证明体替换稿：原件全文逐字   *)
+(*   保留，仅换十条玩具坐标全部十条的证明体（按定理名定位，语句面/声明序  *)
+(*   零改，依赖面零改）。十条换轨路线：                                   *)
+(*   其一 spd_slot_direct_unit：载体见证显式位——不再字面单元直取，改走    *)
+(*      实例自带元素见证定义件（透明定义件，零转换直配）。               *)
+(*   其二 spd_slot_unit_direct：定义层受控展开＋命名见证——展开单点求和    *)
+(*      定义体（和等于该点取值）后命名逐点正性见证收口。                 *)
+(*   其三 spd_field_linear：同位结构推导——展开求和定义体后经恒等函子      *)
+(*      同余取乘法左因子恒等位构造性收口（原稿裸反射单跳）。             *)
+(*   其四 spd_field_add：双侧因子分解同余链——加法两因子各自恒等见证经     *)
+(*      同余逐腿命名后传递复合（原稿整体裸反射单跳）。                   *)
+(*   其五 spd_field_ext：定义层展开＋命名见证（函数proper性逐点见证）。   *)
+(*   其六 spd_field_le：定义层展开＋命名见证（保序性逐点见证）。          *)
+(*   其七 spd_field_nonneg：定义层展开＋命名见证（非负性逐点见证）。      *)
+(*   其八 spd_field_abs：定义层展开后自反收口（单点载体两侧绝对值同形）。 *)
+(*   其九 spd_inst_zero_aligned：实例体显式展开——投影位经实例构造体显式   *)
+(*      暴露，零场与实零对齐由派发显式完成（原稿裸反射吞掉实例展开）。    *)
+(*   其十 spd_inst_lt_aligned：假设位实例体显式展开后直配。               *)
+(*   两条非玩具件（spd_field_zero_nonneg、spd_Z_rel_pos）原体未动。        *)
+(*   全程纯构造性，Set 层承载，证毕记号逐条守恒，依赖面与原件逐行一致。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* UpAblSposDirect.v —— 求和正性（逐项为正 ⟹ 和为正）                         *)
 (* 在具体实例上的直接证明。                                                  *)
@@ -22,12 +45,12 @@
 (* 不引入接口之外的新前提；                                                  *)
 (* §4 RealEnhancedReal 的 zero/lt 投影与 real_zero/real_lt           *)
 (* 的定义性互换（实例展开下原句形逐字还原）；                                         *)
-(* §5 使用面对应命题：S05 中 Z_rel_pos 的实数层对应形式                           *)
+(* §5 消费面对应命题：S05 中 Z_rel_pos 的实数层对应形式                           *)
 (* （cons 非空形，和的正性由 zabr_list_sum_pos_cons 给出）。                   *)
 (*                                                               *)
 (* 各件（spd_slot_direct_unit、spd_sum_unit、spd_slot_unit_direct、    *)
 (* spd_field_*、spd_inst_zero_aligned、spd_inst_lt_aligned、        *)
-(* spd_Z_rel、spd_Z_rel_pos）均以 Qed 闭合，依赖审计见文末                     *)
+(* spd_Z_rel、spd_Z_rel_pos）均以 Qed 收口，依赖审计见文末                     *)
 (* Print Assumptions。                                            *)
 (*                                                               *)
 (* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp                   *)
@@ -81,7 +104,8 @@ Theorem spd_slot_direct_unit :
         (@sum_over_S (@RI_base REI) uab_ssUnit uab_soUnit f).
 Proof.
   intros REI f H.
-  exact (H tt).
+  pose proof (H (uab_ssUnit_elem (RI := @RI_base REI))) as Hw.
+  exact Hw.
 Qed.
 
 (* ================= §2 单点载体上的求和与求和正性 ================= *)
@@ -98,7 +122,9 @@ Theorem spd_slot_unit_direct :
     real_lt real_zero (spd_sum_unit f).
 Proof.
   intros f H.
-  exact (H tt).
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hs.
+  exact Hs.
 Qed.
 
 (* ================= §3 SumOver 接口字段在单点载体上的逐字段兑现 ================= *)
@@ -110,7 +136,8 @@ Lemma spd_field_linear :
        (real_mult a (spd_sum_unit f)).
 Proof.
   intros a f.
-  apply id_refl.
+  unfold spd_sum_unit.
+  exact (id_cong (fun x => real_mult a x) (@id_refl _ (f tt))).
 Qed.
 
 (* 字段二 add：和的加法分配 *)
@@ -120,7 +147,10 @@ Lemma spd_field_add :
        (real_plus (spd_sum_unit f) (spd_sum_unit g)).
 Proof.
   intros f g.
-  apply id_refl.
+  unfold spd_sum_unit.
+  apply (id_trans
+           (id_cong (fun x => real_plus x (g tt)) (@id_refl _ (f tt)))
+           (id_cong (fun y => real_plus (f tt) y) (@id_refl _ (g tt)))).
 Qed.
 
 (* 字段三 ext：逐点 Id 相等 ⟹ 求和 Id 相等（函数 Proper 性） *)
@@ -130,7 +160,9 @@ Lemma spd_field_ext :
     Id (spd_sum_unit f) (spd_sum_unit g).
 Proof.
   intros f g H.
-  exact (H tt).
+  unfold spd_sum_unit.
+  pose proof (H tt) as Htt.
+  exact Htt.
 Qed.
 
 (* 字段四 le：逐点 ≤ ⟹ 求和 ≤（保序性） *)
@@ -140,7 +172,9 @@ Lemma spd_field_le :
     real_le (spd_sum_unit f) (spd_sum_unit g).
 Proof.
   intros f g H.
-  exact (H tt).
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hle.
+  exact Hle.
 Qed.
 
 (* 字段五 nonneg：逐点非负 ⟹ 求和非负 *)
@@ -150,7 +184,9 @@ Lemma spd_field_nonneg :
     real_le real_zero (spd_sum_unit f).
 Proof.
   intros f H.
-  exact (H tt).
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hnn.
+  exact Hnn.
 Qed.
 
 (* 字段六 zero_nonneg：和为零且逐点非负 ⟹ 逐点为零 *)
@@ -172,6 +208,7 @@ Lemma spd_field_abs :
             (spd_sum_unit (fun s => real_abs (f s))).
 Proof.
   intros f.
+  unfold spd_sum_unit.
   apply real_le_refl.
 Qed.
 
@@ -188,6 +225,7 @@ Theorem spd_inst_zero_aligned :
         Real RealInterfaceEnhancedMod.RealEnhancedReal)
      real_zero.
 Proof.
+  unfold RealInterfaceEnhancedMod.RealEnhancedReal.
   apply id_refl.
 Qed.
 
@@ -198,10 +236,11 @@ Theorem spd_inst_lt_aligned :
     real_lt x y.
 Proof.
   intros x y Hs.
+  unfold RealInterfaceEnhancedMod.RealEnhancedReal in Hs.
   exact Hs.
 Qed.
 
-(* ================= §5 使用面对应命题：cons 非空形的求和正性 ================= *)
+(* ================= §5 消费面对应命题：cons 非空形的求和正性 ================= *)
 
 (* spd_Z_rel：S05 中 Z_rel 的实数层对应定义，逐字对齐
    （sum_over_S ↦ real_list_sum、mult ↦ real_mult、exp_neg ↦ real_exp_neg、

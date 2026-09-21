@@ -1,3 +1,14 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rkc_slotA_kl_decomp_full_mend（原 L129，2 句玩具证）                 *)
+(*   rkc_real_kl_decomp_full_mend（原 L51，2 句玩具证）                   *)
+(* ============================================================ *)
+
 (* RealKLCorrMark.v
    目的：登记 real_kl_decomp_full 两个上游假设位按字面为假的勘误结论，
    并给出补入 p_b 侧归一化前提后的修正重述件（mend）。
@@ -79,13 +90,8 @@ Theorem rkc_real_kl_decomp_full_mend :
                       (Hp s)
                       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
 Proof.
-  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-         p Hp Hnormp Hnormb.
-  exact (rfep_real_kl_decomp_full
-           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-           p Hp Hnormp Hnormb).
+  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos         p Hp Hnormp Hnormb.
+  exact (rfep_real_kl_decomp_full           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos           p Hp Hnormp Hnormb).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -143,11 +149,7 @@ Theorem rkc_slotA_kl_decomp_full_mend :
                       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
 Proof.
   intros p Hp Hnormp.
-  exact (rkc_real_kl_decomp_full_mend
-           S real_sum_over_S
-           real_sum_over_S_ext real_sum_over_S_add real_sum_over_S_linear
-           real_base_loss D D_pos Z_align_r Z_align_r_pos
-           p Hp Hnormp real_boltzmann_normalized_rkc).
+  exact (rkc_real_kl_decomp_full_mend           S real_sum_over_S           real_sum_over_S_ext real_sum_over_S_add real_sum_over_S_linear           real_base_loss D D_pos Z_align_r Z_align_r_pos           p Hp Hnormp real_boltzmann_normalized_rkc).
 Qed.
 
 End RkcSlotAMendInSitu.

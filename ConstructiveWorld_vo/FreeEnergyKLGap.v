@@ -236,7 +236,16 @@ Lemma fekl_sumf_ext : forall (X : Type) (s0 : X) (l : list X)
   real_eq (fekl_sumf X s0 l f) (fekl_sumf X s0 l g).
 Proof.
   intros X s0 l f g Hfg.
-  exact (real_list_sum_ext X f g (s0 :: l) Hfg).
+  unfold fekl_sumf.
+  revert s0.
+  induction l as [| w rest IH]; intros s0; simpl.
+  - exact (RealSetoid.real_eq_plus_compat (f s0) real_zero (g s0) real_zero
+             (Hfg s0) (real_eq_refl real_zero)).
+  - exact (RealSetoid.real_eq_plus_compat (f s0)
+             (real_plus (f w) (real_list_sum X f rest))
+             (g s0)
+             (real_plus (g w) (real_list_sum X g rest))
+             (Hfg s0) (IH w)).
 Qed.
 
 Lemma fekl_sumf_add : forall (X : Type) (s0 : X) (l : list X)
@@ -245,7 +254,46 @@ Lemma fekl_sumf_add : forall (X : Type) (s0 : X) (l : list X)
           (real_plus (fekl_sumf X s0 l f) (fekl_sumf X s0 l g)).
 Proof.
   intros X s0 l f g.
-  exact (real_list_sum_add X f g (s0 :: l)).
+  unfold fekl_sumf.
+  revert s0.
+  induction l as [| w rest IH]; intros s0; simpl.
+  - exact (real_eq_trans
+             (real_plus (real_plus (f s0) (g s0)) real_zero)
+             (real_plus (f s0) (g s0))
+             (real_plus (real_plus (f s0) real_zero)
+                        (real_plus (g s0) real_zero))
+             (real_plus_zero (real_plus (f s0) (g s0)))
+             (RealSetoid.real_eq_plus_compat (f s0) (g s0)
+                (real_plus (f s0) real_zero) (real_plus (g s0) real_zero)
+                (real_eq_sym (real_plus (f s0) real_zero) (f s0)
+                   (real_plus_zero (f s0)))
+                (real_eq_sym (real_plus (g s0) real_zero) (g s0)
+                   (real_plus_zero (g s0))))).
+  - exact (real_eq_trans
+             (real_plus (real_plus (f s0) (g s0))
+                        (real_plus (real_plus (f w) (g w))
+                                   (real_list_sum X
+                                      (fun s : X => real_plus (f s) (g s))
+                                      rest)))
+             (real_plus (real_plus (f s0) (g s0))
+                        (real_plus (real_plus (f w) (real_list_sum X f rest))
+                                   (real_plus (g w) (real_list_sum X g rest))))
+             (real_plus
+                (real_plus (f s0) (real_plus (f w) (real_list_sum X f rest)))
+                (real_plus (g s0) (real_plus (g w) (real_list_sum X g rest))))
+             (RealSetoid.real_eq_plus_compat
+                (real_plus (f s0) (g s0))
+                (real_plus (real_plus (f w) (g w))
+                           (real_list_sum X
+                              (fun s : X => real_plus (f s) (g s)) rest))
+                (real_plus (f s0) (g s0))
+                (real_plus (real_plus (f w) (real_list_sum X f rest))
+                           (real_plus (g w) (real_list_sum X g rest)))
+                (real_eq_refl (real_plus (f s0) (g s0)))
+                (IH w))
+             (real_plus_swap_mid (f s0) (g s0)
+                (real_plus (f w) (real_list_sum X f rest))
+                (real_plus (g w) (real_list_sum X g rest)))).
 Qed.
 
 Lemma fekl_sumf_linear : forall (X : Type) (s0 : X) (l : list X)
@@ -254,7 +302,63 @@ Lemma fekl_sumf_linear : forall (X : Type) (s0 : X) (l : list X)
           (real_mult a (fekl_sumf X s0 l f)).
 Proof.
   intros X s0 l a f.
-  exact (real_list_sum_linear X a f (s0 :: l)).
+  unfold fekl_sumf.
+  revert s0.
+  induction l as [| w rest IH]; intros s0; simpl.
+  - exact (real_eq_trans
+             (real_plus (real_mult a (f s0)) real_zero)
+             (real_mult a (f s0))
+             (real_mult a (real_plus (f s0) real_zero))
+             (real_plus_zero (real_mult a (f s0)))
+             (real_eq_sym (real_mult a (real_plus (f s0) real_zero))
+                (real_mult a (f s0))
+                (real_eq_trans
+                   (real_mult a (real_plus (f s0) real_zero))
+                   (real_plus (real_mult a (f s0)) (real_mult a real_zero))
+                   (real_mult a (f s0))
+                   (real_distrib a (f s0) real_zero)
+                   (real_eq_trans
+                      (real_plus (real_mult a (f s0)) (real_mult a real_zero))
+                      (real_plus (real_mult a (f s0)) real_zero)
+                      (real_mult a (f s0))
+                      (RealSetoid.real_eq_plus_compat (real_mult a (f s0))
+                         (real_mult a real_zero) (real_mult a (f s0))
+                         real_zero
+                         (real_eq_refl (real_mult a (f s0)))
+                         (real_mult_zero a))
+                      (real_plus_zero (real_mult a (f s0))))))).
+  - exact (real_eq_sym
+             (real_mult a
+                (real_plus (f s0) (real_plus (f w) (real_list_sum X f rest))))
+             (real_plus (real_mult a (f s0))
+                        (real_plus (real_mult a (f w))
+                                   (real_list_sum X
+                                      (fun s : X => real_mult a (f s)) rest)))
+             (real_eq_trans
+                (real_mult a
+                   (real_plus (f s0)
+                      (real_plus (f w) (real_list_sum X f rest))))
+                (real_plus (real_mult a (f s0))
+                           (real_mult a
+                              (real_plus (f w) (real_list_sum X f rest))))
+                (real_plus (real_mult a (f s0))
+                           (real_plus (real_mult a (f w))
+                                      (real_list_sum X
+                                         (fun s : X => real_mult a (f s))
+                                         rest)))
+                (real_distrib a (f s0)
+                   (real_plus (f w) (real_list_sum X f rest)))
+                (RealSetoid.real_eq_plus_compat (real_mult a (f s0))
+                   (real_mult a (real_plus (f w) (real_list_sum X f rest)))
+                   (real_mult a (f s0))
+                   (real_list_sum X (fun s : X => real_mult a (f s))
+                      (w :: rest))
+                   (real_eq_refl (real_mult a (f s0)))
+                   (real_eq_sym
+                      (real_list_sum X (fun s : X => real_mult a (f s))
+                         (w :: rest))
+                      (real_mult a (real_plus (f w) (real_list_sum X f rest)))
+                      (IH w))))).
 Qed.
 
 (* 配分函数：Z := Σ_{s∈s0::l} e^{−e(s)/D}（正性：逐点 exp 正 + cons 非空） *)

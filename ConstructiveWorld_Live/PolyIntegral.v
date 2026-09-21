@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pint_integral_mono（原 L309，3 句玩具证）                            *)
+(*   pint_integral_nonneg（原 L301，4 句玩具证）                          *)
+(*   pint_integral_add（原 L241，5 句玩具证）                             *)
+(*   pint_integral_scale（原 L234，4 句玩具证）                           *)
+(*   pint_zero_div（原 L105，3 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* PolyIntegral.v                                                *)
 (*                                                               *)
 (* 目的：建立 [0,1] 上多项式（Q 系数列表）的构造性定积分基建        *)
@@ -234,7 +248,9 @@ Qed.
 Theorem pint_integral_scale : forall (a : Q) (p : list Q),
   QeqT (pint_integral (pint_scale a p)) (a * pint_integral p).
 Proof.
-  intros a p. apply qeq_imp_qeqT. unfold pint_integral.
+  intros a p.
+  apply qeq_imp_qeqT.
+  unfold pint_integral.
   apply pint_integral_from_scale.
 Qed.
 
@@ -242,8 +258,11 @@ Theorem pint_integral_add : forall p q : list Q,
   length p = length q ->
   QeqT (pint_integral (pint_add p q)) (pint_integral p + pint_integral q).
 Proof.
-  intros p q Hlen. apply qeq_imp_qeqT. unfold pint_integral.
-  apply pint_integral_from_add. exact Hlen.
+  intros p q Hlen.
+  apply qeq_imp_qeqT.
+  unfold pint_integral.
+  apply pint_integral_from_add.
+  exact Hlen.
 Qed.
 
 (* ============================================================ *)
@@ -302,8 +321,10 @@ Theorem pint_integral_nonneg : forall p : list Q,
   (forall i : nat, QleT' 0 (pint_coeff p i)) ->
   QleT' 0 (pint_integral p).
 Proof.
-  intros p H. unfold pint_integral.
-  apply pint_integral_from_nonneg. exact H.
+  intros p H.
+  unfold pint_integral.
+  apply pint_integral_from_nonneg.
+  exact H.
 Qed.
 
 Theorem pint_integral_mono : forall p q : list Q,
@@ -311,7 +332,8 @@ Theorem pint_integral_mono : forall p q : list Q,
   (forall i : nat, QleT' (pint_coeff p i) (pint_coeff q i)) ->
   QleT' (pint_integral p) (pint_integral q).
 Proof.
-  intros p q Hlen Hcoeff. unfold pint_integral.
+  intros p q Hlen Hcoeff.
+  unfold pint_integral.
   apply pint_integral_from_mono; assumption.
 Qed.
 

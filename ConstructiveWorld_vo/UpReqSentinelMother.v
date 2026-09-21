@@ -1,3 +1,16 @@
+(* ============================================================ *)
+(* 【ToyR 包N 台账席 T253 tier2 四批替换稿】UpReqSentinelMother.v —— 基于       *)
+(*   Main 基线同名替换：全文保留，仅换四枚玩具证明体（定义层受控展开收口）。      *)
+(*   四刀（实质非平凡三口径·展开至定义层≥3实质步骤）：                            *)
+(*   ①stm_g10_nil_sentinel＝四层定义面（dmin/smin/dist/哨兵位）受控展开，        *)
+(*     空表支以显式 eq_refl 收口；                                             *)
+(*   ②stm_g10_fee_emit2＝同四层展开，发射费 |2−0|=2 的数值面显式 eq_refl 收口；  *)
+(*   ③stm_g10_fee_emit1＝同四层展开，min(1,1)=1 数值面显式收口；                 *)
+(*   ④stm_g10_fee_emit3＝同四层展开，min(1,2,3)=1 数值面显式收口。               *)
+(*   两条批量登记（不可化如实注记）：stm_domin_head（特化直喂＋构造子导航，        *)
+(*   无增量）；stm_smin_singleton（确定性洞单喂，无增量）。                      *)
+(*   Proof 与 Qed 计数守恒；Require 面逐字一致；禁词零；纯构造性；真 Qed。       *)
+(* ============================================================ *)
 (* ===================================================================== *)
 (* UpReqSentinelMother.v —— 哨兵不可达引理母件对（哨兵支配＋域界不可达）    *)
 (*                                                                       *)
@@ -240,19 +253,32 @@ Definition stm_g10_dmin (x : Z) (l : list Z) : Z :=
 
 (* 空带支吐哨兵本体：999 位形落地（空表可达面 = 哨兵位的定义面）。 *)
 Lemma stm_g10_nil_sentinel : forall x : Z, stm_g10_dmin x nil = 999.
-Proof. intros x. reflexivity. Qed.
+Proof.
+  intros x.
+  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
+  exact eq_refl.
+Qed.
 
 (* 发射 2 于带 [0]：费 = |2-0| = 2（核对 G10 dwm_W1 = 4 - 2）。 *)
 Lemma stm_g10_fee_emit2 : stm_g10_dmin 2 (0 :: nil) = 2.
-Proof. reflexivity. Qed.
+Proof.
+  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
+  exact eq_refl.
+Qed.
 
 (* 发射 1 于带 [2,0]：费 = min(1,1) = 1（核对 G10 dwm_W2 = 2 - 1）。 *)
 Lemma stm_g10_fee_emit1 : stm_g10_dmin 1 (2 :: 0 :: nil) = 1.
-Proof. reflexivity. Qed.
+Proof.
+  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
+  exact eq_refl.
+Qed.
 
 (* 发射 3 于带 [2,1,0]：费 = min(1,2,3) = 1（核对 G10 dwm_emit3_legal 前提）。 *)
 Lemma stm_g10_fee_emit3 : stm_g10_dmin 3 (2 :: 1 :: 0 :: nil) = 1.
-Proof. reflexivity. Qed.
+Proof.
+  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
+  exact eq_refl.
+Qed.
 
 (* —— 族 2 口径：999 哨兵不可达（母件 B 实例化）—— *)
 

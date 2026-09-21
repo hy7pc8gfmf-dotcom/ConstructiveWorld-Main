@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
+(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
+(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
+(* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
+(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性收口，文尾  *)
+(* 保留原件假设面追印。清单：                                      *)
+(*   kv_N_R_pos（kv_N_R 定义性展开后 kv_N_pos 母本体就地重演：       *)
+(*       states 归纳＋空表矛盾支＋尾表 kv_ofnat_S_pos 收口）         *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpKVDrift.v *)
 (* *)
 (* 目的： 核漂移链：行 TV 界与显式迭代预算（Real 层，eps-Bishop 形态）。 *)
@@ -162,7 +173,12 @@ Qed.
 Definition kv_N_R : Real := real_of_nat (length states).
 Theorem kv_N_R_pos : real_lt real_zero kv_N_R.
 Proof.
-  exact kv_N_pos.
+  unfold kv_N_R.
+  revert states_ne.
+  induction states as [| x rest IH]; intro Hne.
+  - exact (match Hne (@id_refl _ (@nil Tok)) with end).
+  - cbn [length].
+    exact (kv_ofnat_S_pos (length rest)).
 Qed.
 Definition kv_U (s' : Tok) : Real := real_inv_pos kv_N_R kv_N_R_pos.
 

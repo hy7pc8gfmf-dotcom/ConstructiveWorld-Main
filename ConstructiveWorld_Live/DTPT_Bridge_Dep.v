@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   H_lam_anti_mono_real_set（原 L230，3 句玩具证）                      *)
+(*   deprecated_Hsup_mono_set（原 L106，3 句玩具证）                      *)
+(*   llm_rot_id_superseded_set（原 L87，4 句玩具证）                      *)
+(*   rotc_supersedes_rot_wit_set（原 L76，3 句玩具证）                    *)
+(*   rotc_supersedes_rot_id_set（原 L67，3 句玩具证）                     *)
+(* ============================================================ *)
+
 (* ============================================================
    DTPT_Bridge_Dep.v — P3 桥接层第十四棒（席 P3-B14，2026-09-15）
    【独立新建件】与 Bridge/Bridge_Dig/Bridge_Rot 分离——处置面
@@ -67,7 +81,9 @@ Arguments qeqT_intro {x y} _.
 Theorem rotc_supersedes_rot_id_set : forall (n : nat) (l : list Q),
   {rot n l = l} + {rot n l <> l}.
 Proof.
-  intros n l. left. apply rotc_supersedes_rot_id.
+  intros n l.
+  left.
+  apply rotc_supersedes_rot_id.
 Defined.
 
 (* ② 消费 L2445：list 级直等的 sigT 见证面——重构列表信息性入证书
@@ -76,7 +92,9 @@ Defined.
 Theorem rotc_supersedes_rot_wit_set : forall (n : nat) (l : list Q),
   {w : list Q & rot n l = w}.
 Proof.
-  intros n l. exists l. apply rotc_supersedes_rot_id.
+  intros n l.
+  exists l.
+  apply rotc_supersedes_rot_id.
 Defined.
 
 (* ③ 消费 L2456 llm_rot_id_superseded（P 面 P↔P∘rot 迁移零损失）
@@ -87,9 +105,9 @@ Defined.
 Theorem llm_rot_id_superseded_set : forall (n : nat) (l : list Q),
   QeqT (H_adj (rot n l)) (H_adj l).
 Proof.
-  intros n l. apply qeqT_intro.
-  apply (proj1 (llm_rot_id_superseded n l
-                  (fun m : list Q => (H_adj m == H_adj l)%Q))).
+  intros n l.
+  apply qeqT_intro.
+  apply (proj1 (llm_rot_id_superseded n l                  (fun m : list Q => (H_adj m == H_adj l)%Q))).
   apply Qeq_refl.
 Defined.
 
@@ -106,7 +124,8 @@ Defined.
 Theorem deprecated_Hsup_mono_set : forall (l : list Q) (n : nat),
   QleT (Hsup l n) (Hsup l (S n)).
 Proof.
-  intros l n. apply qleT_intro.
+  intros l n.
+  apply qleT_intro.
   exact (proj1 (deprecated_consumers_map_Hsup_mono l n)).
 Defined.
 
@@ -231,7 +250,8 @@ Theorem H_lam_anti_mono_real_set :
   forall (l : list Q) (s : nat) (lam1 lam2 : Q),
   (lam1 <= lam2)%Q -> QleT (H_lam l s lam2) (H_lam l s lam1).
 Proof.
-  intros l s lam1 lam2 Hlam. apply qleT_intro.
+  intros l s lam1 lam2 Hlam.
+  apply qleT_intro.
   exact (H_lam_anti_mono_real l s lam1 lam2 Hlam).
 Defined.
 

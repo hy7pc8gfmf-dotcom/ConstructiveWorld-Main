@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   scale_dual_nat_sq_k（原 L243，2 句玩具证）                           *)
+(*   scale_dual_sq_k（原 L224，2 句玩具证）                               *)
+(*   sqrt_witness_nat_sq（原 L217，2 句玩具证）                           *)
+(*   sqrt_witness_sq（原 L211，2 句玩具证）                               *)
+(*   real_sqrt_one（原 L148，1 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AttnSqrt.v *)
 (* *)
 (* 目的： 构造性平方根的一般维数推广（抽象 R 层与 Real 层）。 *)
@@ -233,10 +247,7 @@ Lemma scale_dual_sq_k :
           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k) z s).
 Proof.
   intros SS SO spp k z s.
-  exact (scale_sqrt_witness_dual spp
-           (mult (nat_to_R (Datatypes.S k)) (nat_to_R (Datatypes.S k)))
-           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k)
-           (sqrt_witness_sq (Datatypes.S k)) z s).
+  exact (scale_sqrt_witness_dual spp           (mult (nat_to_R (Datatypes.S k)) (nat_to_R (Datatypes.S k)))           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k)           (sqrt_witness_sq (Datatypes.S k)) z s).
 Qed.
 
 (* 对偶实例（nat 平方形式，d := nat_to_R ((S k)·(S k))）         *)
@@ -252,10 +263,7 @@ Lemma scale_dual_nat_sq_k :
           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k) z s).
 Proof.
   intros SS SO spp k z s.
-  exact (scale_sqrt_witness_dual spp
-           (nat_to_R ((Datatypes.S k) * (Datatypes.S k))%nat)
-           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k)
-           (sqrt_witness_nat_sq (Datatypes.S k)) z s).
+  exact (scale_sqrt_witness_dual spp           (nat_to_R ((Datatypes.S k) * (Datatypes.S k))%nat)           (nat_to_R (Datatypes.S k)) (nat_to_R_pos k)           (sqrt_witness_nat_sq (Datatypes.S k)) z s).
 Qed.
 
 End SqrtWitnessGeneral.

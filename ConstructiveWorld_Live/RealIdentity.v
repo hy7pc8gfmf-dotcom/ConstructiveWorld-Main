@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ri_x_eq_pn_qn（原 L83，4 句玩具证）                                  *)
+(*   ri_real_proj（原 L76，2 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* RealIdentity.v —— 本件形式化 ln2 逼近恒等式的实数层语句化与装配：          *)
 (*   I_n := ∫₀¹ tⁿ(1−t)ⁿ/(1−t/2)^{n+1} dt = 2^{n+1}·q̃_n·ln2 − r_n，          *)
 (*   ln2 − x'_n = I_n/(2^{n+1}·q̃_n)，x'_n == p_n/q̃_n == tn_x n == bv_x n；   *)
@@ -17,7 +28,7 @@
 (*     核心代数 c_n·|X_k − x'_n| == |c_n·X_k − r_n|（逐点精确，纯 Q 层）；     *)
 (*   ri_identity_leg / ri_identity_spec / ri_identity_assembly：目标恒等式    *)
 (*     的条件形语句与装配——ri_identity_leg（Ireal_n == |c_n·X − r_n|）       *)
-(*     一经供给，|X − x'_n| == Ireal_n/c_n 随 eps 判据即实例化消解；       *)
+(*     一经供给，|X − x'_n| == Ireal_n/c_n 随 eps 判据即放电；                *)
 (*   ri_upper_transfer：上界面转移——Ireal_n/c_n ≤ θ^n ⟹ |X − x'_n| ≤ θ^n；   *)
 (*   ri_lineabs / ri_metric_line_scale：lineabs_n == c_n·metric_n 逐点成立，  *)
 (*     即 supply 面（clo/θ 判据）的逐点输入形（接口登记）。                   *)
@@ -67,7 +78,7 @@ Open Scope nat_scope.
 (* §A real 承载与 x'_n 语句化（Q 常数实嵌入）                             *)
 (* ============================================================ *)
 
-(* ln2 实数承载：ln2i_x 的柯西极限（尾控与消失两肢由源模块供给；
+(* ln2 实数承载：ln2i_x 的柯西极限（尾控与消失两肢由母件供给；
    与 Ln2Bridge.ln2b_X 同一定义面，独立命名以免跨文件重名） *)
 Definition ri_real : Real :=
   existT (fun u : Qseq => cauchy u) ln2i_x
@@ -83,7 +94,10 @@ Definition ri_x (n : nat) : Q := bv_x n.
 Lemma ri_x_eq_pn_qn : forall n : nat,
   QeqT (ri_x n) (bv_p n / (Z.of_nat (bk_Qn_qtilde n) # 1)%Q).
 Proof.
-  intro n. unfold ri_x, bv_x. apply qeq_imp_qeqT. reflexivity.
+  intro n.
+  unfold ri_x, bv_x.
+  apply qeq_imp_qeqT.
+  reflexivity.
 Qed.
 
 (* ri_x_eq_tn：ri_x n == tn_x n（由 tn_x_eq_bv_x 经 Qeq 桥反接） *)
@@ -268,7 +282,7 @@ Proof.
   exact Hlt.
 Qed.
 
-(* ri_identity_assembly：Ireal 输入面一经供给，目标恒等式实数层实例化消解。
+(* ri_identity_assembly：Ireal 输入面一经供给，目标恒等式实数层放电。
    路径：逐点核（ri_core_pt 精确）+ 输入面 eps 读数除以 c_n。
    （QltT 目标先降为 Qlt 推理面再改写，lic_tail_e 同款写法） *)
 Theorem ri_identity_assembly : forall Ireal : ri_Iface,

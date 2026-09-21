@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rppo_align_free_energy_pi_star（原 L1085，5 句玩具证）               *)
+(*   rppo_pi_star_objective_value（原 L992，1 句玩具证）                  *)
+(*   rppo_rlhf_optimal_value（原 L982，1 句玩具证）                       *)
+(*   rppo_importance_ratio_self_one（原 L853，3 句玩具证）                *)
+(*   rppo_dpo_reward_is_implicit（原 L277，3 句玩具证）                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPPO.v *)
 (* *)
 (* 目的： PPO 的 req 层基础面：优势、策略比与目标分解。 *)
@@ -1088,16 +1102,9 @@ Lemma rppo_align_free_energy_pi_star :
       (F_gen_req (align_energy_req S reward beta pi_ref pi_ref_pos) beta
                  rppo_boltzmann rppo_boltzmann_pos).
 Proof.
-  apply (rppo_free_energy_ext_gen (align_energy_req S reward beta pi_ref pi_ref_pos) beta
-                                  rppo_pistar rppo_boltzmann
-                                  rppo_pistar_pos rppo_boltzmann_pos).
+  apply (rppo_free_energy_ext_gen (align_energy_req S reward beta pi_ref pi_ref_pos) beta                                  rppo_pistar rppo_boltzmann                                  rppo_pistar_pos rppo_boltzmann_pos).
   intro s.
-  apply (req_mult_compat (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)
-                         (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)
-                         (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-                         (exp_neg (mult (inv_pos beta beta_pos)
-                                        (align_energy_req S reward beta pi_ref pi_ref_pos s)))
-                         (req_refl (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap))).
+  apply (req_mult_compat (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))                         (exp_neg (mult (inv_pos beta beta_pos)                                        (align_energy_req S reward beta pi_ref pi_ref_pos s)))                         (req_refl (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap))).
   apply (req_sym _ _).
   exact (req_align_energy_exp S reward beta beta_pos pi_ref pi_ref_pos s).
 Qed.

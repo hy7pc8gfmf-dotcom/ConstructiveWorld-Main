@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1ppo_ppo3_pack11_supplied（原 L95，2 句玩具证）                  *)
+(*   uabd1ppo_ppo2b_pack3_supplied（原 L84，2 句玩具证）                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1PPO_UpReqPPOPlain.v —— FA-D1PPO 数据供给大打包六梯 件①                 *)
 (* 席位：FA-D1PPO（S8 移交孤儿位认领·UpReqPPOPlain 余量 15 槽中 14 槽施工）        *)
 (*       ｜独立伴生件·原树零改                                                  *)
@@ -86,10 +97,7 @@ Theorem uabd1ppo_ppo2b_pack3_supplied :
     uabd1ppo_ppo2b_pack3.
 Proof.
   intros R RIS.
-  exact (uabd1ppo_ppo2b_pack3_intro R RIS unit
-           (fun _ : unit => one) (fun _ : unit => one)
-           one
-           (fun _ : unit => one_pos)).
+  exact (uabd1ppo_ppo2b_pack3_intro R RIS unit           (fun _ : unit => one) (fun _ : unit => one)           one           (fun _ : unit => one_pos)).
 Qed.
 
 Theorem uabd1ppo_ppo3_pack11_supplied :
@@ -98,17 +106,7 @@ Theorem uabd1ppo_ppo3_pack11_supplied :
     uabd1ppo_ppo3_pack11.
 Proof.
   intros R RIS RDP.
-  exact (uabd1ppo_ppo3_pack11_intro R RIS RDP unit
-           (fun f : unit -> R => f tt)
-           (fun (f g : unit -> R)
-              (H : forall s : unit, le (f s) (g s)) => H tt)
-           (fun (f g : unit -> R)
-              (H : forall s : unit, req (f s) (g s)) => H tt)
-           (fun (f g : unit -> R) => req_refl (plus (f tt) (g tt)))
-           (fun (a : R) (f : unit -> R) => req_refl (mult a (f tt)))
-           (fun _ : unit => one) (fun _ : unit => one)
-           (fun _ : unit => one_pos)
-           (req_refl one)).
+  exact (uabd1ppo_ppo3_pack11_intro R RIS RDP unit           (fun f : unit -> R => f tt)           (fun (f g : unit -> R)              (H : forall s : unit, le (f s) (g s)) => H tt)           (fun (f g : unit -> R)              (H : forall s : unit, req (f s) (g s)) => H tt)           (fun (f g : unit -> R) => req_refl (plus (f tt) (g tt)))           (fun (a : R) (f : unit -> R) => req_refl (mult a (f tt)))           (fun _ : unit => one) (fun _ : unit => one)           (fun _ : unit => one_pos)           (req_refl one)).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

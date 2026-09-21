@@ -1,4 +1,19 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fa57_half_plus_half（原 L180，1 句玩具证）                           *)
+(*   fa57_half_pos（原 L175，1 句玩具证）                                 *)
+(*   fa57_two_pos（原 L168，1 句玩具证）                                  *)
+(*   fa57_lt_minus_nonneg（原 L99，2 句玩具证）                           *)
+(*   fa57_sumd_mult_const_r（原 L82，2 句玩具证）                         *)
+(*   fa57_sum_carrier_realizes（原 L60，2 句玩具证）                      *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* fa57_ext.v —— T40 消融50 战役 CYB7 席（批次 E-STAGING-CYB7）    *)
 (*                                                              *)
 (* 使命：VD 辖区（G01/G02/G04/G11+UpAlignId…UpGRPO）夜间静默死亡    *)
@@ -70,11 +85,7 @@ Theorem fa57_sum_carrier_realizes :
                            (mult a (sumf f))))).
 Proof.
   intros X enum Hne.
-  exact (existT _
-                (fun f => fa51_sumd X f enum)
-                ((fun f Hf => fa51_sumd_nonnil_pos X f enum Hne Hf),
-                 ((fun f g Hpt => fa56b_sumd_cong X f g enum Hpt),
-                  (fun a f => fa56_sumd_mult_const X a f enum)))).
+  exact (existT _                (fun f => fa51_sumd X f enum)                ((fun f Hf => fa51_sumd_nonnil_pos X f enum Hne Hf),                 ((fun f g Hpt => fa56b_sumd_cong X f g enum Hpt),                  (fun a f => fa56_sumd_mult_const X a f enum)))).
 Qed.
 
 (* ---- 右因子线性（G02:174 之 (fun x => mult (f x) a) 变体）：
@@ -85,11 +96,7 @@ Lemma fa57_sumd_mult_const_r :
        (mult (fa51_sumd X f l) a).
 Proof.
   intros X a f l.
-  exact (id_trans (fa56b_sumd_cong X (fun x => mult (f x) a)
-                                    (fun x => mult a (f x)) l
-                                    (fun x => mult_comm (f x) a))
-                  (id_trans (fa56_sumd_mult_const X a f l)
-                            (mult_comm a (fa51_sumd X f l)))).
+  exact (id_trans (fa56b_sumd_cong X (fun x => mult (f x) a)                                    (fun x => mult a (f x)) l                                    (fun x => mult_comm (f x) a))                  (id_trans (fa56_sumd_mult_const X a f l)                            (mult_comm a (fa51_sumd X f l)))).
 Qed.
 
 (* ==================== 簇二：UpFirewall:104 lt_minus_nonneg ==================== *)
@@ -100,9 +107,7 @@ Lemma fa57_lt_minus_nonneg :
   forall a b : R, lt a b -> lt zero (minus b a).
 Proof.
   intros a b Hab.
-  exact (lt_id_l zero (plus a (opp a)) (plus b (opp a))
-           (id_sym (plus_opp a))
-           (@fa53_lt_plus_translate_r RI DO a b (opp a) Hab)).
+  exact (lt_id_l zero (plus a (opp a)) (plus b (opp a))           (id_sym (plus_opp a))           (@fa53_lt_plus_translate_r RI DO a b (opp a) Hab)).
 Qed.
 
 (* 逆向（与 G01:685 le_of_minus_nonneg 严格档对偶）：
@@ -179,11 +184,7 @@ Qed.
 
 Lemma fa57_half_plus_half : Id (plus fa57_half fa57_half) one.
 Proof.
-  exact (id_trans (id_cong2 plus (id_sym (mult_one fa57_half))
-                                (id_sym (mult_one fa57_half)))
-                  (id_trans (id_sym (distrib fa57_half one one))
-                            (id_trans (mult_comm fa57_half fa57_two)
-                                      (inv_pos_correct fa57_two fa57_two_pos)))).
+  exact (id_trans (id_cong2 plus (id_sym (mult_one fa57_half))                                (id_sym (mult_one fa57_half)))                  (id_trans (id_sym (distrib fa57_half one one))                            (id_trans (mult_comm fa57_half fa57_two)                                      (inv_pos_correct fa57_two fa57_two_pos)))).
 Qed.
 
 (* ---- W2' 七槽面兑现包（norm/pos/witness 三槽 + 结构槽由类型面自证）---- *)

@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   kl_le_mult_weak_swap（原 L157，2 句玩具证）                          *)
+(*   kl_le_eq_l（原 L40，2 句玩具证）                                     *)
+(*   kl_le_eq_r（原 L36，2 句玩具证）                                     *)
+(*   kl_eq_le_bridge（原 L33，2 句玩具证）                                *)
+(*   kl_lt_le_bridge（原 L30，2 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpStepKL.v *)
 (* *)
 (* 目的： step_kl_eta_bound 的 Real 层 eps 化对应物。 *)
@@ -39,8 +53,10 @@ Proof. intros a b c Hab Hbc. exact (real_le_trans a b c Hab (inr Hbc)). Qed.
 
 Lemma kl_le_eq_l : forall a b c : Real,
   real_le a b -> real_eq a c -> real_le c b.
-Proof. intros a b c Hab Hac.
-  exact (real_le_trans c a b (inr (real_eq_sym a c Hac)) Hab). Qed.
+Proof.
+  intros a b c Hab Hac.
+  exact (real_le_trans c a b (inr (real_eq_sym a c Hac)) Hab).
+  Qed.
 
 (* ========== 环恒等式族（real_eq_of_zero_diff 逐点 ring） ========== *)
 
@@ -158,11 +174,7 @@ Lemma kl_le_mult_weak_swap : forall m E : Real,
   real_le real_zero m -> real_lt real_zero E -> real_le real_zero (real_mult E m).
 Proof.
   intros m E Hm HE.
-  exact (kl_le_eq_r real_zero (real_mult m E) (real_mult E m)
-           (kl_le_eq_l (real_mult real_zero E) (real_mult m E) real_zero
-              (real_le_mult_compat_weak real_zero m E (inl HE) Hm)
-              (kl_mult_zero_l E))
-           (real_mult_comm m E)).
+  exact (kl_le_eq_r real_zero (real_mult m E) (real_mult E m)           (kl_le_eq_l (real_mult real_zero E) (real_mult m E) real_zero              (real_le_mult_compat_weak real_zero m E (inl HE) Hm)              (kl_mult_zero_l E))           (real_mult_comm m E)).
 Qed.
 
 (* 种子乘正元/非负元：c·(1+t) ≤ c·e^t + c·δ *)

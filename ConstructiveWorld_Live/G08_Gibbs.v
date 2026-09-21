@@ -1,3 +1,24 @@
+(* ToyR 玩具化战役·包H·切片五：G08_Gibbs 五刀替换稿（T247 台账席补位，2026-09-21）
+   本稿为基准树 G08_Gibbs.v 同文替换：语句面/声明序/Require 面/其余正文逐字不动，
+   仅换五处玩具证明体——① gibbsd_two_pos ② hzlogd_discharge_real
+   ③ hzlogd_proj_min_kl_hlogzfree ④ hzlogd_proj_min_kl_bool ⑤ gibbe2_le_b_id_r。
+   五刀均结构性换轨，本席逐条独立勘验、未照抄包E 判词（假设位正性族判词不适用于
+   G08 其余条目；12 条中 7 条经勘验维持不可化标注，见台账切片五节）。
+   刀① gibbsd_two_pos：原 real_plus_positive 一步直供；换轨 real_lt_plus_compat_
+   lt_le（0<1 ∧ 0≤1 ⟹ 0+0<1+1，le 腿 inl 装载 real_lt_zero_one 严证人）＋
+   real_eq_lt_lt 左端转移沿 sym(real_plus_zero 0) 塌缩零站（0=0+0），原引擎全退役。
+   刀② hzlogd_discharge_real：原消费在file 保底件 hzlogd_log_le_zero_of_le_one；
+   换轨抽象骨架 Real 层就地直拼：@le_id_r 中停站 log one ＋ log_one 换右端 ＋
+   real_log_le_mono 单调腿，零借道保底件。
+   刀③ hzlogd_proj_min_kl_hlogzfree：原 HlogZ 槽消费保底件；换轨槽内就地直拼
+   同一站形，Z_aud≤one 尾腿内联进单调腿第 5 参，零借道保底件。
+   刀④ hzlogd_proj_min_kl_bool：原 HlogZ 槽消费 hzlogd_discharge_real；换轨槽内
+   Real 层就地直拼同 ③ 站形，单调腿 real_log_le_mono 直喂，零借道 discharge 件。
+   刀⑤ gibbe2_le_b_id_r：原 RealSetoid.real_lt_compat 四元等式兼容拼装；换轨
+   real_lt_eq_lt 右端转移（中停站 b+eps，eq 腿 RealSetoid.real_eq_plus_compat 原样），
+   等式转移引擎换轨且原 6 参拼装全退役。
+   纪律：纯构造性；Set 层零 Prop 泄露；真 Qed；零新增 Require；零承认件；
+   原件尾 11 处 Print Assumptions 逐字保留（编译证据 11/11 全 Closed）。 *)
 (* G 组：G08_Gibbs — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqGibbsD + UpReqHlogZD + UpReqGibbsE2（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G08_Gibbs 成员件：UpReqGibbsD（原样并入，自带 Require）======== *)
@@ -253,7 +274,11 @@ Qed.
 
 Lemma gibbsd_two_pos : real_lt real_zero (real_plus real_one real_one).
 Proof.
-  exact (real_plus_positive real_one real_one real_lt_zero_one real_lt_zero_one).
+  exact (real_eq_lt_lt real_zero (real_plus real_zero real_zero)
+           (real_plus real_one real_one)
+           (real_eq_sym _ _ (real_plus_zero real_zero))
+           (real_lt_plus_compat_lt_le real_zero real_one real_zero real_one
+              real_lt_zero_one (inl real_lt_zero_one))).
 Qed.
 
 Definition gibbsd_half : Real :=
@@ -647,8 +672,9 @@ Lemma hzlogd_discharge_real :
   forall (Z : Real) (HZ : lt zero Z), le Z one -> le (log Z HZ) zero.
 Proof.
   intros Z HZ HZ1.
-  exact (hzlogd_log_le_zero_of_le_one Real RealEnhancedReal
-           real_log_le_mono Z HZ HZ1).
+  exact (@le_id_r Real RealEnhancedReal (log Z HZ) (log one one_pos) zero
+           (log_one one_pos)
+           (real_log_le_mono Z one HZ one_pos HZ1)).
 Qed.
 
 (* 双形并存：real_log_le_zero_of_le_one（G01_CoreMicro 直用形态）直取，      *)
@@ -700,13 +726,15 @@ Proof.
          post_aud p Hp_norm Hp_pos HZ Hmono q Hq Hqn Hqz.
   apply (@req_projected_distribution_minimizes_kl R RIS S sumf sum_ext sum_add
            sum_linear log_req_compat post_aud p Hp_pos HZ q Hq Hqn Hqz).
-  (* HlogZ 槽证明：Z_aud ≤ one ⟹ log Z_aud ≤ 0（保底件直接提供） *)
-  apply (hzlogd_log_le_zero_of_le_one R RIS Hmono
-           (@Z_aud_req R RIS S sumf post_aud p) HZ).
-  (* Z_aud ≤ one：req_Z_aud_le_one（和单调）+ Hp_norm（le_id_r 换右端） *)
-  exact (@le_id_r R RIS (@Z_aud_req R RIS S sumf post_aud p) (sumf p) one
-           Hp_norm
-           (@req_Z_aud_le_one R RIS S sumf sum_le post_aud p Hp_pos)).
+  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one 换右端 ＋ Hmono 单调腿，
+     Z_aud≤one 尾腿内联进单调腿第 5 参（零借道保底件） *)
+  apply (@le_id_r R RIS (log (@Z_aud_req R RIS S sumf post_aud p) HZ)
+           (log one one_pos) zero).
+  - exact (log_one one_pos).
+  - exact (Hmono (@Z_aud_req R RIS S sumf post_aud p) one HZ one_pos
+             (@le_id_r R RIS (@Z_aud_req R RIS S sumf post_aud p) (sumf p) one
+                Hp_norm
+                (@req_Z_aud_le_one R RIS S sumf sum_le post_aud p Hp_pos))).
 Qed.
 
 (* ============================================================ *)
@@ -862,16 +890,24 @@ Proof.
            hzlogd_aud_sum hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear
            hzlogd_log_req_compat_real (fun b : bool => b) p Hp_pos
            (hzlogd_HZ_bool p (Hp_pos true)) q Hq Hqn Hqz).
-  (* HlogZ 槽证明：T2 ② 具体件直接提供 *)
-  apply (hzlogd_discharge_real (@Z_aud_req Real RealEnhancedReal bool
-                                  hzlogd_aud_sum (fun b : bool => b) p)
-           (hzlogd_HZ_bool p (Hp_pos true))).
-  exact (@le_id_r Real RealEnhancedReal
-           (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum
-              (fun b : bool => b) p)
-           (hzlogd_aud_sum p) one Hp_norm
-           (@req_Z_aud_le_one Real RealEnhancedReal bool hzlogd_aud_sum
-              hzlogd_sum2_le (fun b : bool => b) p Hp_pos)).
+  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one ＋ real_log_le_mono 单调腿，
+     Z_aud≤one 尾腿内联进单调腿第 5 参（零借道 discharge 件） *)
+  apply (@le_id_r Real RealEnhancedReal
+           (log (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum
+                  (fun b : bool => b) p)
+               (hzlogd_HZ_bool p (Hp_pos true)))
+           (log one one_pos) zero).
+  - exact (log_one one_pos).
+  - exact (real_log_le_mono
+             (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum
+                (fun b : bool => b) p)
+             one (hzlogd_HZ_bool p (Hp_pos true)) one_pos
+             (@le_id_r Real RealEnhancedReal
+                 (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum
+                    (fun b : bool => b) p)
+                 (hzlogd_aud_sum p) one Hp_norm
+                 (@req_Z_aud_le_one Real RealEnhancedReal bool hzlogd_aud_sum
+                    hzlogd_sum2_le (fun b : bool => b) p Hp_pos))).
 Qed.
 
 (* ============================================================ *)
@@ -975,10 +1011,8 @@ Lemma gibbe2_le_b_id_r : forall a b c : Real,
   real_le_b a b -> real_eq b c -> real_le_b a c.
 Proof.
   intros a b c H Hbc eps Heps. unfold real_le_b in H.
-  exact (RealSetoid.real_lt_compat a a (real_plus b eps) (real_plus c eps)
-           (real_eq_refl a)
-           (RealSetoid.real_eq_plus_compat b eps c eps Hbc (real_eq_refl eps))
-           (H eps Heps)).
+  exact (real_lt_eq_lt a (real_plus b eps) (real_plus c eps) (H eps Heps)
+           (RealSetoid.real_eq_plus_compat b eps c eps Hbc (real_eq_refl eps))).
 Qed.
 
 (* B2：le_b 右加平移 *)

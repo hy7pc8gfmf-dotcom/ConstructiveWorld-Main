@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabB2_gibbs_pos_Bform_list（原 L299，2 句玩具证）                    *)
+(*   uabB2_bgibbs_eq_res_logle_only（原 L284，2 句玩具证）                *)
+(*   uabB2_bgibbs_eq_resW4（原 L262，2 句玩具证）                         *)
+(*   uabB2_bgibbs_sumeps_resW4（原 L236，2 句玩具证）                     *)
+(*   uabB2_bgibbs_pos_resW4（原 L223，2 句玩具证）                        *)
+(*   uabB2_loginv_real（原 L210，2 句玩具证）                             *)
+(*   uabB2_bgibbs_eq_full（原 L113，2 句玩具证）                          *)
+(*   uabB2_bgibbs_sum_eps_full（原 L78，2 句玩具证）                      *)
+(*   uabB2_bgibbs_pos_full（原 L57，2 句玩具证）                          *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblB2_G13.v —— Gibbs 不等式与等号面的抽象复验及剩余前提收窄         *)
 (*   数学使命：b_gibbs_pos/b_gibbs_sum_eps/b_gibbs_eq 三语句的全参复验、  *)
 (*   两点 Real 载体实例化与未决前提的定理级定位。                        *)
@@ -10,7 +28,7 @@
 (*   上实例化，并将剩余前提收窄为显式携带的定理（零隐藏前提）。           *)
 (* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / UpReqDist /          *)
 (*   UpSigMigrate2 / UpStepKL / UpRealLeB / S08_RealMainlineDPO /         *)
-(*   G08_Gibbs / UpReqCEqDispersion（只读使用）。                         *)
+(*   G08_Gibbs / UpReqCEqDispersion（只读消费）。                         *)
 (* 【对标】数学原型：Gibbs 不等式（相对熵非负性）及其等号情形            *)
 (*   （分布相等当且仅当相对熵为零）；mathlib 无此构造对应物。             *)
 (* 【剩余前提的构造性边界注记】le 前提面：B 形引擎 real_log_le_linear_B   *)
@@ -70,8 +88,7 @@ Theorem uabB2_bgibbs_pos_full :
     le zero (kl_a S sumf p q Hp Hq).
 Proof.
   intros S sumf Hext Hadd Hlin Hle Hloginv Hlogle p q Hp Hq Hnp Hnq.
-  exact (@req_gibbs_inequality R RIS S sumf Hext Hadd Hlin Hle Hloginv Hlogle
-                               p q Hp Hq Hnp Hnq).
+  exact (@req_gibbs_inequality R RIS S sumf Hext Hadd Hlin Hle Hloginv Hlogle                               p q Hp Hq Hnp Hnq).
 Qed.
 
 (* ---- b_gibbs_sum_eps 复验：前者加 le_plus_compat 链，零新增前提 ------ *)
@@ -92,20 +109,7 @@ Theorem uabB2_bgibbs_sum_eps_full :
     le zero (plus (kl_a S sumf p q Hp Hq) eps).
 Proof.
   intros S sumf Hext Hadd Hlin Hle Hloginv Hlogle p q Hp Hq eps Heps Hnp Hnq.
-  exact (le_trans zero eps (plus (kl_a S sumf p q Hp Hq) eps)
-                    (lt_le_iff zero eps (inl Heps))
-                    (le_id_l eps (plus zero eps)
-                               (plus (kl_a S sumf p q Hp Hq) eps)
-                               (req_sym (plus zero eps) eps
-                                          (req_trans (plus zero eps) (plus eps zero) eps
-                                                     (plus_comm zero eps)
-                                                     (plus_zero eps)))
-                               (le_plus_compat zero (kl_a S sumf p q Hp Hq)
-                                               eps eps
-                                               (uabB2_bgibbs_pos_full S sumf Hext Hadd
-                                                                      Hlin Hle Hloginv Hlogle
-                                                                      p q Hp Hq Hnp Hnq)
-                                               (le_refl eps)))).
+  exact (le_trans zero eps (plus (kl_a S sumf p q Hp Hq) eps)                    (lt_le_iff zero eps (inl Heps))                    (le_id_l eps (plus zero eps)                               (plus (kl_a S sumf p q Hp Hq) eps)                               (req_sym (plus zero eps) eps                                          (req_trans (plus zero eps) (plus eps zero) eps                                                     (plus_comm zero eps)                                                     (plus_zero eps)))                               (le_plus_compat zero (kl_a S sumf p q Hp Hq)                                               eps eps                                               (uabB2_bgibbs_pos_full S sumf Hext Hadd                                                                      Hlin Hle Hloginv Hlogle                                                                      p q Hp Hq Hnp Hnq)                                               (le_refl eps)))).
 Qed.
 
 (* ---- b_gibbs_eq 复验（等号面本体：全参七前提，znn/log-eq 显式在列；     *)
@@ -131,8 +135,7 @@ Theorem uabB2_bgibbs_eq_full :
     forall s : S, req (p s) (q s).
 Proof.
   intros S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq p q Hp Hq Hnp Hnq Hkl0.
-  exact (@req_gibbs_equality R RIS S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq
-                             p q Hp Hq Hnp Hnq Hkl0).
+  exact (@req_gibbs_equality R RIS S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq                             p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
 (* ======== §2 · 抽象载体上的两点供给件（znn 前提的构造） ========== *)
@@ -227,9 +230,7 @@ Theorem uabB2_bgibbs_pos_resW4 :
     le zero (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq).
 Proof.
   intros Hlogle p q Hp Hq Hnp Hnq.
-  exact (@req_gibbs_inequality Real RealEnhancedReal bool hzlogd_aud_sum
-             hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear hzlogd_sum2_le
-             uabB2_loginv_real Hlogle p q Hp Hq Hnp Hnq).
+  exact (@req_gibbs_inequality Real RealEnhancedReal bool hzlogd_aud_sum             hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear hzlogd_sum2_le             uabB2_loginv_real Hlogle p q Hp Hq Hnp Hnq).
 Qed.
 
 (* uabB2_bgibbs_sumeps_resW4：剩余前提 = {log-le} --------------------- *)
@@ -241,21 +242,7 @@ Theorem uabB2_bgibbs_sumeps_resW4 :
     le zero (plus (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq) eps).
 Proof.
   intros Hlogle p q Hp Hq eps Heps Hnp Hnq.
-  exact (le_trans zero eps
-                    (plus (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq) eps)
-                    (lt_le_iff zero eps (inl Heps))
-                    (le_id_l eps (plus zero eps)
-                               (plus (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq)
-                                     eps)
-                               (req_sym (plus zero eps) eps
-                                          (req_trans (plus zero eps) (plus eps zero) eps
-                                                     (plus_comm zero eps)
-                                                     (plus_zero eps)))
-                               (le_plus_compat zero
-                                 (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq)
-                                 eps eps
-                                 (uabB2_bgibbs_pos_resW4 Hlogle p q Hp Hq Hnp Hnq)
-                                 (le_refl eps)))).
+  exact (le_trans zero eps                    (plus (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq) eps)                    (lt_le_iff zero eps (inl Heps))                    (le_id_l eps (plus zero eps)                               (plus (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq)                                     eps)                               (req_sym (plus zero eps) eps                                          (req_trans (plus zero eps) (plus eps zero) eps                                                     (plus_comm zero eps)                                                     (plus_zero eps)))                               (le_plus_compat zero                                 (@kl_a Real RealEnhancedReal bool hzlogd_aud_sum p q Hp Hq)                                 eps eps                                 (uabB2_bgibbs_pos_resW4 Hlogle p q Hp Hq Hnp Hnq)                                 (le_refl eps)))).
 Qed.
 
 (* uabB2_bgibbs_eq_resW4：剩余前提 = {log-le, log-eq}（等号面未决对） ------ *)
@@ -269,10 +256,7 @@ Theorem uabB2_bgibbs_eq_resW4 :
     forall s : bool, req (p s) (q s).
 Proof.
   intros Hlogle Hlogeq p q Hp Hq Hnp Hnq Hkl0.
-  exact (@req_gibbs_equality Real RealEnhancedReal bool hzlogd_aud_sum
-             hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear
-             uabB2_znn_abs uabB2_loginv_real Hlogle Hlogeq
-             p q Hp Hq Hnp Hnq Hkl0).
+  exact (@req_gibbs_equality Real RealEnhancedReal bool hzlogd_aud_sum             hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear             uabB2_znn_abs uabB2_loginv_real Hlogle Hlogeq             p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
 (* ======== §4·b、等号面剩余前提再收窄：log-eq 前提在具体 Real 载体          *)

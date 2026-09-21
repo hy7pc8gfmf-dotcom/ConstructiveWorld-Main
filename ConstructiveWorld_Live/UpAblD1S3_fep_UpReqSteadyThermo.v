@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s3_fep_st_real_detailed_balance（原 L134，2 句玩具证）          *)
+(*   uabd1s3_fep_st_real_transition_normalization（原 L116，2 句玩具证）  *)
+(*   uabd1s3_fep_st_real_transition_nonneg（原 L101，4 句玩具证）         *)
+(*   uabd1s3_fep_st_real_partition_condition（原 L84，2 句玩具证）        *)
+(*   uabd1s3_fep_st_Z_pos（原 L56，2 句玩具证）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S3_fep_UpReqSteadyThermo.v —— FA-D1S3 批 D1-⑥ fa56-FEP 批    *)
 (*   槽位（UpReqSteadyThermo.v，Real 面，语句逐字）：                    *)
 (*     槽1 L82  real_partition_condition：real_eq Z_r (real_sum_over_S   *)
@@ -59,10 +73,7 @@ Lemma uabd1s3_fep_st_Z_pos :
     real_lt real_zero (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos).
 Proof.
   intros S0 enum0 Hne base_loss D D_pos.
-  exact (sumd_sum_pos S0 enum0
-          (fun s : S0 => real_exp_neg (real_mult (real_inv_pos D D_pos) (base_loss s)))
-          Hne
-          (fun s : S0 => real_exp_neg_pos (real_mult (real_inv_pos D D_pos) (base_loss s)))).
+  exact (sumd_sum_pos S0 enum0          (fun s : S0 => real_exp_neg (real_mult (real_inv_pos D D_pos) (base_loss s)))          Hne          (fun s : S0 => real_exp_neg_pos (real_mult (real_inv_pos D D_pos) (base_loss s)))).
 Qed.
 
 (* ---- 载体件：Boltzmann 分布 π 实例（real_boltzmann_dist_r 装配） ---- *)
@@ -92,8 +103,7 @@ Theorem uabd1s3_fep_st_real_partition_condition :
                               (real_mult (real_inv_pos T0 HT0) (real_opp (z0 s))))).
 Proof.
   intros S0 enum0 Hne z0 T0 HT0.
-  exact (req_fep_partition_condition S0 (sumd_sumf S0 enum0)
-          (sumd_sum_ext S0 enum0) z0 T0 HT0).
+  exact (req_fep_partition_condition S0 (sumd_sumf S0 enum0)          (sumd_sum_ext S0 enum0) z0 T0 HT0).
 Qed.
 
 (* ---- 槽2 L95 real_transition_nonneg（real_boltzmann_dist_r_pos 严格形   *)
@@ -105,10 +115,9 @@ Theorem uabd1s3_fep_st_real_transition_nonneg :
     real_le real_zero (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s s').
 Proof.
   intros S0 enum0 Hne base_loss D D_pos s s'.
-  apply real_lt_le_iff. left.
-  exact (real_boltzmann_dist_r_pos S0 base_loss D D_pos
-          (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)
-          (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos) s').
+  apply real_lt_le_iff.
+  left.
+  exact (real_boltzmann_dist_r_pos S0 base_loss D D_pos          (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)          (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos) s').
 Qed.
 
 (* ---- 槽3 L97 real_transition_normalization（rfep_boltzmann_normalized_real *)
@@ -122,12 +131,7 @@ Theorem uabd1s3_fep_st_real_transition_normalization :
             real_one.
 Proof.
   intros S0 enum0 Hne base_loss D D_pos s.
-  exact (rfep_boltzmann_normalized_real S0 (sumd_sumf S0 enum0)
-          (sumd_sum_ext S0 enum0) (sumd_sum_linear S0 enum0)
-          base_loss D D_pos
-          (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)
-          (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos)
-          (real_eq_refl _)).
+  exact (rfep_boltzmann_normalized_real S0 (sumd_sumf S0 enum0)          (sumd_sum_ext S0 enum0) (sumd_sum_linear S0 enum0)          base_loss D D_pos          (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)          (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos)          (real_eq_refl _)).
 Qed.
 
 (* ---- 槽4 L99 real_detailed_balance（fa56b 独立提议核镜像，mult_comm 收口） ---- *)
@@ -141,8 +145,7 @@ Theorem uabd1s3_fep_st_real_detailed_balance :
                        (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s' s)).
 Proof.
   intros S0 enum0 Hne base_loss D D_pos s s'.
-  exact (real_mult_comm (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s)
-                        (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s')).
+  exact (real_mult_comm (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s)                        (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s')).
 Qed.
 
 Set Extraction Output Directory "_tuabd1s3_g3out".

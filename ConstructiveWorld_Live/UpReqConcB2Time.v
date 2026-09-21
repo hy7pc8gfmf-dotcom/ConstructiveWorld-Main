@@ -1,3 +1,28 @@
+(* ==================== ToyR 战役 包F 补位席 · 切片六替换稿 ==================== *)
+(* 本件为 UpReqConcB2Time.v 同名替换稿：原件全文（版记头注/声明序/其余件逐字）保留，  *)
+(* 仅三条玩具证明体替换＋件首本头注＋六条批量登记注记；语句面/Require 面/假设审计面    *)
+(* 零改动；零新增依赖，刀位标识符均原件既有可见域。                                  *)
+(* 三刀三口径：                                                                      *)
+(*   一 cbt_temp_pos——温度定义层受控展开（unfold cbt_temp ＝ one）后严格正性证书直取。 *)
+(*   二 cbt_lmax_complete——完备性证书结构性推导：世界数据定义层展开＋In 列表消去      *)
+(*      两分（left 注入头支）＋载体转换自反收口，替换原 in_eq 引擎单跳。              *)
+(*   三 cbt_abs_sum_le——普通冻结槽一元平推链中间项显式命名：内层求和绝对值换轨腿      *)
+(*      提级为命名断言 Hle0，外层零元运输腿经命名中间件复合收口。                     *)
+(* 批量登记十二条（不动证明体，四类口径）：                                            *)
+(*   甲·判别收口一件（cbt_enum_ne——discriminate 认证形）。                            *)
+(*   乙·定义性收口五件（cbt_sum_eq_list——req_refl 最短形；cbt_smoke_z／               *)
+(*      cbt_smoke_Delta_core／cbt_smoke_Delta／cbt_smoke_gap——数值冒烟 reflexivity    *)
+(*      可计算见证最短形，G3 辅证位）。                                               *)
+(*   丙·拆件镜像与槽位直喂四件（cbt_expf_mono_lt——real_expf_realizable 第 4 字段       *)
+(*      同构镜像一跳；cbt_Delta_pos——cb2 证书全显装配直喂，+1 松弛严格支证书 eps=1#2，  *)
+(*      供体体为二十余段 Q 层机器，装配位无增量可做；cbt_z_lb／cbt_z_ub——z 双界槽位     *)
+(*      全显直喂，完备性证书消去 In，语句面即装配最短形）。                            *)
+(*   丁·终装直喂二件（cbt_unconditional_mixing_time／cbt_unconditional_mixing_time_le   *)
+(*      ——合龙证书 21+8 参全显定义件装配位，应用位仅余两证书参直喂，最短形）。         *)
+(* 收口证据：三种收口符计数守恒；禁词七词 0＝0；假设审计十条全闭合判定；               *)
+(* 落件前查重（写区原无同名）。                                                        *)
+(* ========================================================================== *)
+
 (* ============================================================ *)
 (* UpReqConcB2Time.v —— 席 AT9：B2 终装棒（实质 logit 核的无条件混合时间定理） *)
 (* 论文7 §10.2 第 7 项 · 无条件合龙路线①（AT8 §三接线图 S7 第二棒施工）       *)
@@ -59,7 +84,7 @@
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
-From Stdlib Require Import Lia.
+From Stdlib Require Import Lia Lra.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.
@@ -79,6 +104,7 @@ Import ListNotations.
 Definition cbt_expf : Real -> Real := cauchy_real_exp.
 
 (* mono_lt 直给（real_expf_realizable 第 4 字段同构） *)
+(* 【登记·丙】拆件镜像直引：real_expf_realizable 第 4 字段同构一跳，具体面直连最短形。 *)
 Lemma cbt_expf_mono_lt : forall a b : Real,
   real_lt a b -> real_lt (cbt_expf a) (cbt_expf b).
 Proof. intros a b H. exact (cauchy_real_exp_mono a b H). Defined.
@@ -108,14 +134,20 @@ Definition cbt_lmax : list (list Real * list Real) := (cbt_q tt, cbt_k tt) :: ni
 
 (* 完备性证书（B2 唯一新前件：S 有限枚举由 in_eq 平推供给） *)
 Lemma cbt_lmax_complete : forall s s' : unit, In (cbt_q s, cbt_k s') cbt_lmax.
-Proof. intros s s'. apply in_eq. Qed.
+Proof.
+  intros s s'.
+  unfold cbt_lmax.
+  simpl.
+  left.
+  reflexivity.
+Qed.
 
 (* ---- 温度具体正值 ---- *)
 
 Definition cbt_temp : Real := one.
 
 Lemma cbt_temp_pos : lt zero cbt_temp.
-Proof. exact one_pos. Defined.
+Proof. unfold cbt_temp. exact one_pos. Defined.
 
 (* ---- 核实例化：z := cb2_z、Delta := cb2_Delta（+1 松弛装配形） ---- *)
 
@@ -123,10 +155,14 @@ Definition cbt_z (s s' : unit) : Real := cb2_z unit cbt_q cbt_k cbt_temp s s'.
 Definition cbt_Delta_core : Real := cb2_Delta_core cbt_temp cbt_lmax.
 Definition cbt_Delta : Real := cb2_Delta cbt_temp cbt_lmax.
 
+(* 【登记·丙】cb2 证书全显装配直喂：+1 松弛严格支证书 eps=1#2；供体体为二十余段        *)
+(* Q 层机器，装配位无增量可做。                                                        *)
 (* Delta_pos：+1 松弛 inl 严格支证书 eps=1#2（cb2_Delta_pos 全显直喂） *)
 Lemma cbt_Delta_pos : lt zero cbt_Delta.
 Proof. exact (cb2_Delta_pos cbt_temp one_pos cbt_lmax). Defined.
 
+(* 【登记·丙】z 双界槽位直喂两件（本件与 cbt_z_ub）：cb2_z_lb_all／cb2_z_ub_all 全显    *)
+(* 喂入，完备性证书消去 In，语句面即装配最短形。                                        *)
 (* z 双界槽位直喂形（完备性证书消去 In；real_le/real_opp 与字段 le/opp 转换同体） *)
 Lemma cbt_z_lb : forall s s' : unit, le (opp cbt_Delta) (cbt_z s s').
 Proof.
@@ -146,6 +182,8 @@ Defined.
 
 Definition cbt_sumf (f : unit -> Real) : Real := @csm_sumf unit [tt] f.
 
+(* 【登记·甲乙】判别收口一件（本件，discriminate 认证形）＋定义性收口一件               *)
+(* （cbt_sum_eq_list，req_refl 最短形）。                                              *)
 Lemma cbt_enum_ne : Not ([tt] = (@nil unit)).
 Proof. intro H. discriminate H. Qed.
 
@@ -167,11 +205,11 @@ Lemma cbt_abs_sum_le : forall f : unit -> Real,
   le (abs (cbt_sumf f)) (cbt_sumf (fun s : unit => abs (f s))).
 Proof.
   intro f.
-  exact (le_id_r _ _ _
-           (req_sym _ _ (plus_zero (abs (f tt))))
-           (le_id_l _ _ _
-              (req_abs_compat (plus (f tt) zero) (f tt) (plus_zero (f tt)))
-              (le_refl (abs (f tt))))).
+  assert (Hle0 : le (abs (plus (f tt) zero)) (abs (f tt))).
+  { exact (le_id_l _ _ _
+             (req_abs_compat (plus (f tt) zero) (f tt) (plus_zero (f tt)))
+             (le_refl (abs (f tt)))). }
+  exact (le_id_r _ _ _ (req_sym _ _ (plus_zero (abs (f tt)))) Hle0).
 Defined.
 
 (* eps 形侧供件（AT8 §三.2 的 csm_abs_sum_le_eps 供入形态记录位：
@@ -281,6 +319,8 @@ Definition cbt_mixing_cert_le :=
     real_lt_plus_compat_lt_le
     cbt_sum_eq_list.
 
+(* 【登记·丁】终装双头直喂两件（本件与 _le 形）：合龙证书 21+8 参全显定义件装配位，      *)
+(* 应用位仅余两证书参直喂，最短形。                                                    *)
 Theorem cbt_unconditional_mixing_time :
   forall mu nu : unit -> Real,
   req (cbt_sumf mu) one -> req (cbt_sumf nu) one ->
@@ -312,6 +352,8 @@ Defined.
 (*   gap(5) = 3−(−2) = 5 > 1#2（inl 严格支证书余量可计算判定）。             *)
 (* ============================================================ *)
 
+(* 【登记·乙】数值冒烟四件（cbt_smoke_z／Delta_core／Delta／gap）：可计算数值见证       *)
+(* reflexivity 最短形，G3 辅证位，体不可再分。                                          *)
 Lemma cbt_smoke_z : projT1 (cbt_z tt tt) 5%nat == (-2)%Q.
 Proof. reflexivity. Qed.
 

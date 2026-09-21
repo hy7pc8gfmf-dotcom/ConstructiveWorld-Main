@@ -1,4 +1,21 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   sef_s15_slot_arg_pt（原 L154，2 句玩具证）                           *)
+(*   sef_g01_slot_arg_pt（原 L148，2 句玩具证）                           *)
+(*   sef_s13_unif_norm（原 L121，2 句玩具证）                             *)
+(*   sef_s13_zrow_le（原 L112，2 句玩具证）                               *)
+(*   sef_s13_zrow_ge（原 L103，2 句玩具证）                               *)
+(*   sef_attn_unif_norm（原 L89，2 句玩具证）                             *)
+(*   sef_attn_zrow_le（原 L79，2 句玩具证）                               *)
+(*   sef_attn_zrow_ge（原 L69，2 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* SumEqListFeed.v —— 席位 CZB8（批次 E-STAGING-CZB8）              *)
 (* sum_eq_list 四槽消费位「槽假设 → idt 核销件」换装 shim 补装件     *)
 (* 接 CYD7 交付（消融50/IdSlotTranslate.v：idt_sum_eq_list 定义性    *)
@@ -70,8 +87,7 @@ Lemma sef_attn_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (AttnDoeblin.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
   intros en g a Hle.
-  exact (le_id_r a (AttnDoeblin.bs_list_sum g en) (idt_sumf en g)
-                   (id_sym (idt_slot_attdoeblin en g)) Hle).
+  exact (le_id_r a (AttnDoeblin.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_attdoeblin en g)) Hle).
 Qed.
 
 (* —— 消费位 AttnDoeblin:629（bs_Zrow_le 骨架）——
@@ -80,8 +96,7 @@ Lemma sef_attn_zrow_le : forall (en : list S) (g : S -> R) (b : R),
   le (AttnDoeblin.bs_list_sum g en) b -> le (idt_sumf en g) b.
 Proof.
   intros en g b Hle.
-  exact (le_id_l (idt_sumf en g) (AttnDoeblin.bs_list_sum g en) b
-                 (idt_slot_attdoeblin en g) Hle).
+  exact (le_id_l (idt_sumf en g) (AttnDoeblin.bs_list_sum g en) b                 (idt_slot_attdoeblin en g) Hle).
 Qed.
 
 (* —— 消费位 AttnDoeblin:673（bs_Unif_norm 骨架）——
@@ -104,8 +119,7 @@ Lemma sef_s13_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (S13_NLiveAudit.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
   intros en g a Hle.
-  exact (le_id_r a (S13_NLiveAudit.bs_list_sum g en) (idt_sumf en g)
-                   (id_sym (idt_slot_s13 en g)) Hle).
+  exact (le_id_r a (S13_NLiveAudit.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_s13 en g)) Hle).
 Qed.
 
 (* —— 消费位 S13:2820（bs_Zrow_le 骨架，le_id_l 槽直喂）—— *)
@@ -113,8 +127,7 @@ Lemma sef_s13_zrow_le : forall (en : list S) (g : S -> R) (b : R),
   le (S13_NLiveAudit.bs_list_sum g en) b -> le (idt_sumf en g) b.
 Proof.
   intros en g b Hle.
-  exact (le_id_l (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en) b
-                 (idt_slot_s13 en g) Hle).
+  exact (le_id_l (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en) b                 (idt_slot_s13 en g) Hle).
 Qed.
 
 (* —— 消费位 S13:2864（bs_Unif_norm 骨架，id_trans 链头槽腿）—— *)
@@ -148,13 +161,15 @@ Definition sef_s15_slot_arg (en : list S)
 Lemma sef_g01_slot_arg_pt : forall (en : list S) (g : S -> R),
   Id (idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
 Proof.
-  intros en g. exact (sef_g01_slot_arg en g).
+  intros en g.
+  exact (sef_g01_slot_arg en g).
 Qed.
 
 Lemma sef_s15_slot_arg_pt : forall (en : list S) (g : S -> R),
   Id (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en).
 Proof.
-  intros en g. exact (sef_s15_slot_arg en g).
+  intros en g.
+  exact (sef_s15_slot_arg en g).
 Qed.
 
 (* ============================================================ *)

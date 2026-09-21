@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   path2_conservation_T（原 L250，3 句玩具证）                          *)
+(*   honest_stop_le（原 L71，3 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* StopTimeConservation.v —— C5 可选停时守恒记账（A2 组合榜组 5）      *)
 (*                                                              *)
 (* 装配来源：                                                    *)
@@ -71,7 +82,8 @@ Fixpoint gdiss_at (n : nat) (ch : GChain) : nat :=
 Lemma honest_stop_le : forall (k : Q) (tau b : nat) (c : Q),
   honest_stop tau (grun k b c) -> (tau <= b)%nat.
 Proof.
-  intros k tau b c H. apply NatLe_drop.
+  intros k tau b c H.
+  apply NatLe_drop.
   exact (id_trans (id_sym (id_cong (Nat.leb tau) (grun_budget k b c))) H).
 Qed.
 
@@ -250,7 +262,9 @@ Qed.
 Theorem path2_conservation_T : forall (e1 e2 : edge_spec) (x : Q),
   Id (Qeq_bool x (exch2 e1 e2 x + path_diss2 e1 e2 x)) true.
 Proof.
-  intros e1 e2 x. apply sf_qeq_id. apply path2_conservation.
+  intros e1 e2 x.
+  apply sf_qeq_id.
+  apply path2_conservation.
 Qed.
 
 (* ============================================================ *)

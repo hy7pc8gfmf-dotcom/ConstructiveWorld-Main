@@ -1,3 +1,27 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包F·tier1 头批 同名替换件：DTPT_Bridge_Rot（台账 T245 切片五）       *
+ * 本稿＝原件全文逐字保留，仅换写下列证明体（同一陈述、同一符号、            *
+ * 零新增 Require、零承认件、全中文头注）。                                 *
+ * 替换清单（6 条，引擎体整体内联——族级盘件 DTPT_Rotation 证明体在           *
+ * qeqT_intro 包装位就地重演，消除跨件单跳委托）：                           *
+ *   ① phase_dev_stable_set＝盘件二分布尔判别链内联（unfold phase_dev＋      *
+ *     Qeq_bool destruct eqn 命名＋真支 Qeq_sym/Qeq_bool_eq 换向＋          *
+ *     假支 simpl/discriminate 矛盾排除）；                                 *
+ *   ②③ H_lam_cyc_lam1_set／lam0_set＝端点定义层展开内联（unfold            *
+ *     H_lam_cyc＋字面数值 replace 见证＋ring 重排收口）；                   *
+ *   ④ H_adj_Pmid_seam_set＝接缝公式内联（unfold Pmid＋Pinf_true_id 改写＋   *
+ *     H_adj_app_seam 拼接＋firstn/skipn 非空双证 lia 链）；                 *
+ *   ⑤⑥ H_adj_Pmid_k0_set／klen_set＝端点坍缩改写链内联（llm_Pmid_zero／    *
+ *     llm_Pmid_len_endpoint 端点改写＋Pinf_true_id／reflexivity 收口）。    *
+ * 批量登记（10 条，不动证明体）：rotc_class_sharp_ub_set／                  *
+ *   H_adj_Pmid_sorted_exact_set／H_adj_Pmid_sorted_ub2_set／               *
+ *   H_adj_Pmid_ub_gen_set／H_lam_pmid_lam1_set／H_lam_pmid_lam0_set／      *
+ *   H_lam_pmid_diff_set／H_lam_pmid_sorted_consistency_set／               *
+ *   H_lam_pmid_k0_oldface_set／H_lam_pmid_klen_const_set——族级旗舰         *
+ *   长体（多支分情况／三相互补熵族）不内联不凑数，保持一跳包装原样。         *
+ * 纪律：纯构造性；Set/Type 层零 Prop 泄露（QeqT/QleT 构造子携 Prop 证明参    *
+ *   为本件既有惯例）；证明口逐条配平；全部真收口。                          *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================
    DTPT_Bridge_Rot.v — P3 桥接层第六棒（席 P3-B6，2026-09-15）
    续棒：P3-B7（2026-09-15）尾部追加 §8——Rotation §S8 新定理
@@ -153,7 +177,11 @@ Defined.
 Theorem phase_dev_stable_set : forall (l : list Q) (k : nat),
   phase_dev l k = false -> QeqT (H_adj (rotc k l)) (H_adj (P0 l)).
 Proof.
-  intros l k H. apply qeqT_intro. apply phase_dev_stable. exact H.
+  intros l k H. apply qeqT_intro.
+  unfold phase_dev in H.
+  destruct (Qeq_bool (H_adj (P0 l)) (H_adj (rotc k l))) eqn:E.
+  - apply Qeq_sym. apply Qeq_bool_eq. exact E.
+  - simpl in H. discriminate H.
 Defined.
 
 (* ③ 偏差见证 sigT 信息性形：Prop exists（盘上 phase_dev_witness）
@@ -170,13 +198,19 @@ Defined.
 Theorem H_lam_cyc_lam1_set : forall (l : list Q) (k : nat),
   QeqT (H_lam_cyc l k 1) (H_adj (P0 l)).
 Proof.
-  intros l k. apply qeqT_intro. apply H_lam_cyc_lam1.
+  intros l k. apply qeqT_intro.
+  unfold H_lam_cyc.
+  replace (1 - 1)%Q with 0%Q by reflexivity.
+  ring.
 Defined.
 
 Theorem H_lam_cyc_lam0_set : forall (l : list Q) (k : nat),
   QeqT (H_lam_cyc l k 0) (H_adj (rotc k l)).
 Proof.
-  intros l k. apply qeqT_intro. apply H_lam_cyc_lam0.
+  intros l k. apply qeqT_intro.
+  unfold H_lam_cyc.
+  replace (1 - 0)%Q with 1%Q by reflexivity.
+  ring.
 Defined.
 
 (* ========== §7 提取探针（U12 配方：逐件独立提取，
@@ -226,7 +260,13 @@ Theorem H_adj_Pmid_seam_set : forall (l : list Q) (s : nat) (k : nat),
         + Qabs (hd 0 (skipn k l) - lastq (firstn k (P0 l)))).
 Proof.
   intros l s k Hk Hlt. apply qeqT_intro.
-  apply H_adj_Pmid_seam; [ exact Hk | exact Hlt ].
+  unfold Pmid.
+  rewrite (Pinf_true_id l s).
+  apply H_adj_app_seam.
+  - apply (firstn_ne_of_lt k (P0 l)).
+    + lia.
+    + rewrite (llm_P0_length l). lia.
+  - exact (skipn_ne_of_lt k l Hlt).
 Defined.
 
 (* ② 消费 L2056 Pmid_sorted_collapse（list 级 Leibniz 直等面）：
@@ -337,7 +377,10 @@ Defined.
 Theorem H_adj_Pmid_k0_set : forall (l : list Q) (s : nat),
   QeqT (H_adj (Pmid l s 0%nat)) (H_adj l).
 Proof.
-  intros l s. apply qeqT_intro. apply H_adj_Pmid_k0.
+  intros l s. apply qeqT_intro.
+  rewrite (llm_Pmid_zero l s).
+  rewrite (Pinf_true_id l s).
+  reflexivity.
 Defined.
 
 (* ⑨ 消费 L2150 H_adj_Pmid_klen（k=length 端点＝P0 相，排序全体）：
@@ -345,7 +388,8 @@ Defined.
 Theorem H_adj_Pmid_klen_set : forall (l : list Q) (s : nat),
   QeqT (H_adj (Pmid l s (length l))) (H_adj (P0 l)).
 Proof.
-  intros l s. apply qeqT_intro. apply H_adj_Pmid_klen.
+  intros l s. apply qeqT_intro.
+  rewrite (llm_Pmid_len_endpoint l s). reflexivity.
 Defined.
 
 (* ⑩ 消费 L2158 H_adj_Pmid_endpoints_sorted（sorted 下两端点熵皆

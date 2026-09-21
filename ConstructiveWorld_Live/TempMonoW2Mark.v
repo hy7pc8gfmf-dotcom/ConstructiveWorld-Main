@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   tmw_le_minus_nonneg_fw_et（原 L260，2 句玩具证）                     *)
+(*   tmw_req_energy_exp_temp_strict_mono_full（原 L224，2 句玩具证）      *)
+(*   tmw_req_energy_exp_temp_mono_full（原 L199，2 句玩具证）             *)
+(*   tmw_req_energy_exp_temp_strict_mono_cond（原 L163，2 句玩具证）      *)
+(*   tmw_req_energy_exp_temp_mono_cond（原 L140，2 句玩具证）             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* TempMonoW2Mark.v                                              *)
 (*                                                               *)
 (* 目的：消解宿主 UpFirewallReq.v Section FirewallReq 的温度单调双  *)
@@ -147,13 +161,7 @@ Theorem tmw_req_energy_exp_temp_mono_cond :
                             Z_temp tmw_Z_temp_spec t2 Ht2).
 Proof.
   intros t1 t2 Ht1 Ht2 Hlt Hbd.
-  exact (UpReqTempEntropy.req_energy_exp_temp_mono
-           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos
-           tmw_sum_le
-           base_loss
-           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg
-           tmw_dist_log_le_linear
-           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hbd).
+  exact (UpReqTempEntropy.req_energy_exp_temp_mono           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos           tmw_sum_le           base_loss           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg           tmw_dist_log_le_linear           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hbd).
 Qed.
 
 (* ============================================================ *)
@@ -181,13 +189,7 @@ Theorem tmw_req_energy_exp_temp_strict_mono_cond :
                                               tmw_Z_temp_spec t1 Ht1)).
 Proof.
   intros t1 t2 Ht1 Ht2 Hlt Hkl Hbd.
-  exact (UpReqTempEntropy.req_energy_exp_temp_strict_mono
-           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos
-           tmw_sum_le
-           base_loss
-           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg
-           tmw_dist_log_le_linear
-           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hkl Hbd).
+  exact (UpReqTempEntropy.req_energy_exp_temp_strict_mono           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos           tmw_sum_le           base_loss           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg           tmw_dist_log_le_linear           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hkl Hbd).
 Qed.
 
 (* ============================================================ *)
@@ -206,15 +208,7 @@ Theorem tmw_req_energy_exp_temp_mono_full :
                             Z_temp tmw_Z_temp_spec t2 Ht2).
 Proof.
   intros Hlmn t1 t2 Ht1 Ht2 Hlt.
-  exact (UpReqTempEntropy.req_energy_exp_temp_mono
-           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos
-           tmw_sum_le
-           base_loss
-           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg
-           tmw_dist_log_le_linear
-           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt
-           (Hlmn (inv_pos t2 Ht2) (inv_pos t1 Ht1)
-                 (UpReqTempEntropy.req_inv_pos_lt_contra t1 t2 Ht1 Ht2 Hlt))).
+  exact (UpReqTempEntropy.req_energy_exp_temp_mono           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos           tmw_sum_le           base_loss           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg           tmw_dist_log_le_linear           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt           (Hlmn (inv_pos t2 Ht2) (inv_pos t1 Ht1)                 (UpReqTempEntropy.req_inv_pos_lt_contra t1 t2 Ht1 Ht2 Hlt))).
 Qed.
 
 (* ============================================================ *)
@@ -242,15 +236,7 @@ Theorem tmw_req_energy_exp_temp_strict_mono_full :
                                               tmw_Z_temp_spec t1 Ht1)).
 Proof.
   intros Hlmn t1 t2 Ht1 Ht2 Hlt Hkl.
-  exact (UpReqTempEntropy.req_energy_exp_temp_strict_mono
-           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos
-           tmw_sum_le
-           base_loss
-           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg
-           tmw_dist_log_le_linear
-           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hkl
-           (Hlmn (inv_pos t2 Ht2) (inv_pos t1 Ht1)
-                 (UpReqTempEntropy.req_inv_pos_lt_contra t1 t2 Ht1 Ht2 Hlt))).
+  exact (UpReqTempEntropy.req_energy_exp_temp_strict_mono           S sumf tmw_sum_ext tmw_sum_add tmw_sum_linear tmw_sum_pos           tmw_sum_le           base_loss           tmw_dist_log_inv_one_inv tmw_dist_log_exp_neg           tmw_dist_log_le_linear           Z_temp tmw_Z_temp_spec t1 t2 Ht1 Ht2 Hlt Hkl           (Hlmn (inv_pos t2 Ht2) (inv_pos t1 Ht1)                 (UpReqTempEntropy.req_inv_pos_lt_contra t1 t2 Ht1 Ht2 Hlt))).
 Qed.
 
 (* ============================================================ *)
@@ -269,12 +255,7 @@ Theorem tmw_le_minus_nonneg_fw_et :
                                               tmw_Z_temp_spec t1 Ht1)).
 Proof.
   intros Hlmn t1 t2 Ht1 Ht2 Hlt.
-  exact (req_le_minus_nonneg
-           (@UpFirewallReq.fw_et R RIS S sumf tmw_sum_pos base_loss
-                                 Z_temp tmw_Z_temp_spec t1 Ht1)
-           (@UpFirewallReq.fw_et R RIS S sumf tmw_sum_pos base_loss
-                                 Z_temp tmw_Z_temp_spec t2 Ht2)
-           (tmw_req_energy_exp_temp_mono_full Hlmn t1 t2 Ht1 Ht2 Hlt)).
+  exact (req_le_minus_nonneg           (@UpFirewallReq.fw_et R RIS S sumf tmw_sum_pos base_loss                                 Z_temp tmw_Z_temp_spec t1 Ht1)           (@UpFirewallReq.fw_et R RIS S sumf tmw_sum_pos base_loss                                 Z_temp tmw_Z_temp_spec t2 Ht2)           (tmw_req_energy_exp_temp_mono_full Hlmn t1 t2 Ht1 Ht2 Hlt)).
 Qed.
 
 End TmwMonoW2.

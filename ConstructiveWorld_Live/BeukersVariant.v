@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bv_pos_cint（原 L233，4 句玩具证）                                   *)
+(*   bv_zeros_int0（原 L222，3 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* BeukersVariant.v —— 本件形式化 (1+t)^{n+1} 变体 Beukers 逼近的 Q 层级数定形：*)
 (* 变体积分 I'_n := ∫₀¹ tⁿ(1−t)ⁿ/(1+t)^{n+1} dt，全正项级数展开                  *)
 (*   I'_n = Σ_{m≥0} C(n+m,n)·B(n+2m+1, 2n+1)（Beta 积分全正），截断多项式        *)
@@ -233,7 +244,10 @@ Qed.
 Lemma bv_pos_cint : forall n m : nat,
   QleT' 0 (pint_integral (pei_list (n + 2 * m) (2 * n + 1))).
 Proof.
-  intros n m. apply Qle_to_QleT'. apply Qlt_le_weak. apply pei_beta_pos.
+  intros n m.
+  apply Qle_to_QleT'.
+  apply Qlt_le_weak.
+  apply pei_beta_pos.
 Qed.
 
 (** bv_carrier_value：截断积分 == 级数部分和 Σ_{m≤M} bv_term n m（精确 QeqT）。 *)

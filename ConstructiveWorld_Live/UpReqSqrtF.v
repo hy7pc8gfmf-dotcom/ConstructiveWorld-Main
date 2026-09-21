@@ -1,4 +1,27 @@
 (* ============================================================ *)
+(* ToyR 战役 · 包I · 切片六（T248 台账席 · 20260921）· 本件为替换稿        *)
+(*   正文系 Main/Live 基准件全文，仅换下列证明体；定理名/语句面/Require 面/  *)
+(*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
+(*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
+(*   一、nsq_two_pos：解耦直装——弃 req_two_pos 引擎单点，直取接口字段 *)
+(*       plus_positive 与 one_pos 双腿装配（引擎本体即此双腿，依赖面收窄）。 *)
+(*   二、sqrtf_sqrt_self_init：旗舰脱钩——弃 sqrtf_sqrt 定义中转，existT 三槽 *)
+(*       （值/正性见证/统一证书）显式装配，精度档全参显式具化。 *)
+(*   三、sqrtf_inv_le_self：骨干重排——弃 req_le_compat 前置骨架，改 le_trans *)
+(*       主干：le_mult_compat 升格腿前置，assoc 三段传输链后置收口。 *)
+(*   四、sqrtf_step_contract：骨干重排——le_trans 双段主干：delta 自反腿收口 *)
+(*       首段，单步差 le_mult_compat 直乘（comm 双腿一次运输），尾段经 *)
+(*       nsq_tail 供给之 req_le_compat 收口，弃原三层嵌套 trans/refl 对。 *)
+(*   挂账（如实登记不硬凑）： *)
+(*   nsq_half_pos/nsq_half_two_correct：inv_pos_pos/inv_pos_correct 系逆元 *)
+(*       面唯一见证，单路唯一形，不化。 *)
+(*   sqrtf_newton_zero：定义性收口（迭代零步 delta/ι 归约自反），不化。 *)
+(*   nsq_step_minus_slack/nsq_step_plus_slack：脱钩重演必经帮件 nsq_h_minus/ *)
+(*       nsq_h_plus 全体内联＝体复制注水（头尾引擎面唯一），挂账。 *)
+(*   sqrtf_iterate_sq_ge：中转件 sqrtf_sq_ge_a 解耦重演＝八步链体复制， *)
+(*       超本切片边界，挂账。 *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* UpReqSqrtF.v *)
 (* *)
 (* 目的： sqrt_witness 的函数式升级（不动点迭代平方根）。 *)
@@ -72,7 +95,9 @@ Let inv_pos := @inv_pos R RIS.
 Definition nsq_two : R := plus one one.
 
 Lemma nsq_two_pos : lt zero nsq_two.
-Proof. exact req_two_pos. Qed.
+Proof.
+  exact (plus_positive one one one_pos one_pos).
+Qed.
 
 Definition nsq_half : R := inv_pos nsq_two nsq_two_pos.
 
@@ -563,7 +588,10 @@ Lemma sqrtf_sqrt_self_init : forall (a : R) (Ha : lt zero a) (n : nat),
               sigT (fun t : R =>
                     req (mult r r) (plus (mult t t) a)))).
 Proof.
-  intros a Ha n. exact (sqrtf_sqrt a Ha a Ha n).
+  intros a Ha n.
+  exact (existT _ (sqrtf_newton a Ha a Ha (Datatypes.S n))
+           (existT _ (sqrtf_newton_pos a Ha a Ha (Datatypes.S n))
+                     (sqrtf_newton_cert a Ha a Ha n))).
 Qed.
 
 (* ============================================================ *)
@@ -767,9 +795,15 @@ Lemma sqrtf_inv_le_self : forall (a z : R) (Ha : lt zero a) (Hz : lt zero z),
   le a (mult z z) -> le (mult a (inv_pos z Hz)) z.
 Proof.
   intros a z Ha Hz H.
-  apply (req_le_compat (mult a (inv_pos z Hz)) (mult a (inv_pos z Hz))
-                       (mult (mult z z) (inv_pos z Hz)) z
-           (req_refl (mult a (inv_pos z Hz)))
+  apply (le_trans (mult a (inv_pos z Hz))
+                  (mult (mult z z) (inv_pos z Hz))
+                  z).
+  - exact (le_mult_compat a (mult z z) (inv_pos z Hz) (inv_pos_pos z Hz) H).
+  - exact (req_le_compat (mult (mult z z) (inv_pos z Hz))
+                         (mult (mult z z) (inv_pos z Hz))
+                         (mult (mult z z) (inv_pos z Hz))
+                         z
+           (req_refl (mult (mult z z) (inv_pos z Hz)))
            (req_trans (mult (mult z z) (inv_pos z Hz))
                       (mult z (mult z (inv_pos z Hz)))
                       z
@@ -782,8 +816,8 @@ Proof.
                                  (req_mult_compat z z (mult z (inv_pos z Hz)) one
                                     (req_refl z)
                                     (inv_pos_correct z Hz))
-                                 (mult_one z)))).
-  exact (le_mult_compat a (mult z z) (inv_pos z Hz) (inv_pos_pos z Hz) H).
+                                 (mult_one z)))
+           (le_refl (mult (mult z z) (inv_pos z Hz)))).
 Qed.
 
 (* 单步 le 压缩：a ≤ y·y ⟹ g(y) ≤ y
@@ -792,29 +826,30 @@ Lemma sqrtf_step_contract : forall (a y : R) (Ha : lt zero a) (Hy : lt zero y),
   le a (mult y y) -> le (sqrtf_step a y Ha Hy) y.
 Proof.
   intros a y Ha Hy H.
-  apply (req_le_compat (sqrtf_step a y Ha Hy) (sqrtf_step a y Ha Hy)
-                       (mult nsq_half (plus y y)) y
-           (req_refl (sqrtf_step a y Ha Hy))
-           (nsq_tail y)).
-  exact (req_le_compat
-           (mult (plus y (mult a (inv_pos y Hy))) nsq_half)
-           (sqrtf_step a y Ha Hy)
-           (mult (plus y y) nsq_half)
-           (mult nsq_half (plus y y))
-           (req_trans (mult (plus y (mult a (inv_pos y Hy))) nsq_half)
-                      (mult nsq_half (plus y (mult a (inv_pos y Hy))))
-                      (sqrtf_step a y Ha Hy)
-                      (mult_comm (plus y (mult a (inv_pos y Hy))) nsq_half)
-                      (req_refl (sqrtf_step a y Ha Hy)))
-           (req_trans (mult (plus y y) nsq_half)
-                      (mult nsq_half (plus y y))
-                      (mult nsq_half (plus y y))
-                      (mult_comm (plus y y) nsq_half)
-                      (req_refl (mult nsq_half (plus y y))))
-           (le_mult_compat (plus y (mult a (inv_pos y Hy))) (plus y y) nsq_half
-              nsq_half_pos
-              (le_plus_compat y y (mult a (inv_pos y Hy)) y
-                 (le_refl y) (sqrtf_inv_le_self a y Ha Hy H)))).
+  apply (le_trans (sqrtf_step a y Ha Hy)
+                  (mult nsq_half (plus y (mult a (inv_pos y Hy))))
+                  y).
+  - exact (le_refl (sqrtf_step a y Ha Hy)).
+  - apply (le_trans (mult nsq_half (plus y (mult a (inv_pos y Hy))))
+                    (mult nsq_half (plus y y))
+                    y).
+    + exact (req_le_compat (mult (plus y (mult a (inv_pos y Hy))) nsq_half)
+                           (mult nsq_half (plus y (mult a (inv_pos y Hy))))
+                           (mult (plus y y) nsq_half)
+                           (mult nsq_half (plus y y))
+             (mult_comm (plus y (mult a (inv_pos y Hy))) nsq_half)
+             (mult_comm (plus y y) nsq_half)
+             (le_mult_compat (plus y (mult a (inv_pos y Hy))) (plus y y) nsq_half
+                nsq_half_pos
+                (le_plus_compat y y (mult a (inv_pos y Hy)) y
+                   (le_refl y) (sqrtf_inv_le_self a y Ha Hy H)))).
+    + exact (req_le_compat (mult nsq_half (plus y y))
+                           (mult nsq_half (plus y y))
+                           (mult nsq_half (plus y y))
+                           y
+               (req_refl (mult nsq_half (plus y y)))
+               (nsq_tail y)
+               (le_refl (mult nsq_half (plus y y)))).
 Qed.
 
 (* 迭代单调（单步）：z_{S (S n)} ≤ z_{S n}（消费 z_{S n}^2 ≥ a） *)
@@ -1116,3 +1151,17 @@ Proof.
 Qed.
 
 End SqrtF.
+
+(* （ToyR 增补·非原件改动）假设面收口申报节：玩具面逐件申报，
+    全 Closed 为定谳标识；基准对照件以同文申报节同法试编比对。 *)
+Print Assumptions nsq_two_pos.
+Print Assumptions nsq_half_pos.
+Print Assumptions nsq_half_two_correct.
+Print Assumptions sqrtf_newton_zero.
+Print Assumptions nsq_step_minus_slack.
+Print Assumptions nsq_step_plus_slack.
+Print Assumptions sqrtf_sqrt_self_init.
+Print Assumptions sqrtf_iterate_sq_ge.
+Print Assumptions sqrtf_inv_le_self.
+Print Assumptions sqrtf_step_contract.
+Print Assumptions sqrtf_iterate_mono_step.

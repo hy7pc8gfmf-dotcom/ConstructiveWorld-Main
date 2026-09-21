@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   gfe_gibbs_inequality_temp_B（原 L277，4 句玩具证）                   *)
+(*   gfe_le_of_lt（原 L56，2 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* GibbsFamilyExt.v —— 席位 P6C（批次 E-STAGING-P6C）                   *)
 (* 论文6 §4.3 Gibbs 不等式族扩展消融：两个真缺变体面的施工件              *)
 (* ------------------------------------------------------------------ *)
@@ -56,7 +67,8 @@ Require Import UpReqKLStrictB.
 Lemma gfe_le_of_lt : forall b : Real,
   real_lt real_zero b -> real_le real_zero b.
 Proof.
-  intros b Hb. exact (inl Hb).
+  intros b Hb.
+  exact (inl Hb).
 Qed.
 
 (* 0.2 (q−p)+(p−q) == 0：非对称对消核（assoc 三跳链，零 opp 分配依赖；
@@ -286,13 +298,9 @@ Theorem gfe_gibbs_inequality_temp_B : forall (X : Type) (l : list X)
         (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l)).
 Proof.
   intros X l p q Hp Hq Hnormp Hnormq b Hb.
-  apply (real_le_closure_b real_zero
-           (real_mult b (real_list_sum X
-               (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l))
-           b Hb).
+  apply (real_le_closure_b real_zero           (real_mult b (real_list_sum X               (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l))           b Hb).
   intros eps Heps.
-  exact (gfe_gibbs_inequality_temp_eps X l p q Hp Hq Hnormp Hnormq b
-           (gfe_le_of_lt b Hb) eps Heps).
+  exact (gfe_gibbs_inequality_temp_eps X l p q Hp Hq Hnormp Hnormq b           (gfe_le_of_lt b Hb) eps Heps).
 Qed.
 
 (* A5 族级组合器：Bishop 形正数乘保序器（全库无 ≤_B 乘法出口，本件补位）：

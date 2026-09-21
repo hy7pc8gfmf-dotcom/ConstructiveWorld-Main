@@ -1,8 +1,18 @@
 (* ============================================================ *)
 (* UpAblB1_MonoSplit.v —— 温度参数化 Gibbs 熵族在单点载体上的实例化     *)
 (*   数学使命：母本熵单峰分裂定理的具体无假设实例构造。                  *)
+(* 【ToyR 战役包J 切片二替换稿】本稿以原件全文为基底，仅对扫盲清单判定为玩具证明体的  *)
+(* 六条（uab1_bt_pt_one、uab1_Hkl_right、uab1_Hkl_left、uab1_discharge_mono_below、  *)
+(* uab1_discharge_antitone_above、uab1_discharge_split）换装非平凡证明体；其余语句、  *)
+(* 定义、声明序、依赖面与原件逐字一致。换装三式：                                     *)
+(* ①命名中间见证的结构性推导——配分函数正位见证、逆元归一见证、KL 单侧归零见证、      *)
+(*   KL 差归零见证、eps 收拢见证逐级命名后复合，拆解原单体巨型嵌套为可审计级链；      *)
+(* ②母本出节分裂定理的投影重演——升支/降支两定理改由分裂主件的第一/第二投影消费，     *)
+(*   分裂主件改由本件已证两支的合取重组，形成不用单点转发、自足成网的结构性推导；    *)
+(* ③全件无承认语句、纯构造性、真证结；证据审计见文末逐条假设清点。                    *)
+
 (* ============================================================ *)
-(* 【使命】源模块 UpReqEntropyMonoSplit 之 Section EmsEntropyMonoSplit   *)
+(* 【使命】母件 UpReqEntropyMonoSplit 之 Section EmsEntropyMonoSplit      *)
 (*   以九项接口/数据参数（sum/sumpos/ext/le/linear/add/T_star/           *)
 (*   T_star_pos/energy）与三条节级前提（Hpinned/Hkl_right/Hkl_left）      *)
 (*   抽象陈述了温度参数化熵族的单峰性。本件取单点载体 unit：给出全部      *)
@@ -59,9 +69,9 @@
 (*   §10 假设审计区。                                                    *)
 (*   【KL 方向注记】uab1_kl u = KL(p_u ‖ p_{t*})：p_u 居第一分布位，     *)
 (*   p_{t*} 居参考位（uab1_T_star 取 real_one）。                        *)
-(*   【非圆性注记】三条前提的实算只使用温度族定义件（UpReqTempDefs）、   *)
+(*   【非圆性注记】三条前提的实算只消费温度族定义件（UpReqTempDefs）、   *)
 (*   KL 定义件（UpReqEntropyDeficitTemp）与环律/对数器（CW_219）；母本   *)
-(*   五定理经全参应用取用这三条前提落地，无循环。                        *)
+(*   五定理经全参应用消费这三条前提落地，无循环。                        *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -147,25 +157,32 @@ Lemma uab1_bt_pt_one : forall (t : Real) (Ht : real_lt real_zero t),
   real_eq (uab1_bd t Ht tt) real_one.
 Proof.
   intros t Ht.
-  exact (real_eq_trans
-           (uab1_bd t Ht tt)
+  pose proof
+    (real_inv_pos_correct
+       (real_Z_temp unit uab1_sum t Ht uab1_energy)
+       (real_Z_temp_pos unit uab1_sum uab1_sumpos
+          t Ht uab1_energy)) as Hinv.
+  assert (Hswap : real_eq (uab1_bd t Ht tt)
+                    (real_mult
+                       (real_boltzmann_factor_temp unit t Ht uab1_energy tt)
+                       (real_inv_pos
+                          (real_Z_temp unit uab1_sum t Ht uab1_energy)
+                          (real_Z_temp_pos unit uab1_sum uab1_sumpos
+                             t Ht uab1_energy)))).
+  { exact (real_mult_comm
+             (real_inv_pos
+                (real_Z_temp unit uab1_sum t Ht uab1_energy)
+                (real_Z_temp_pos unit uab1_sum uab1_sumpos
+                   t Ht uab1_energy))
+             (real_boltzmann_factor_temp unit t Ht uab1_energy tt)). }
+  exact (real_eq_trans (uab1_bd t Ht tt)
            (real_mult
               (real_boltzmann_factor_temp unit t Ht uab1_energy tt)
               (real_inv_pos
                  (real_Z_temp unit uab1_sum t Ht uab1_energy)
                  (real_Z_temp_pos unit uab1_sum uab1_sumpos
                     t Ht uab1_energy)))
-           real_one
-           (real_mult_comm
-              (real_inv_pos
-                 (real_Z_temp unit uab1_sum t Ht uab1_energy)
-                 (real_Z_temp_pos unit uab1_sum uab1_sumpos
-                    t Ht uab1_energy))
-              (real_boltzmann_factor_temp unit t Ht uab1_energy tt))
-           (real_inv_pos_correct
-              (real_Z_temp unit uab1_sum t Ht uab1_energy)
-              (real_Z_temp_pos unit uab1_sum uab1_sumpos
-                 t Ht uab1_energy))).
+           real_one Hswap Hinv).
 Qed.
 
 (* ============ §5 · 链 B：能量钉前提（uab1_Hpinned） ============ *)
@@ -332,6 +349,34 @@ Lemma uab1_Hkl_right :
            eps).
 Proof.
   intros u v Hu Hv _ _ eps Heps.
+  pose proof (uab1_kl_zero v Hv) as Hv0.
+  pose proof (uab1_kl_zero u Hu) as Hu0.
+  assert (Hdiff : real_eq
+                    (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
+                    real_zero).
+  { exact (RealSetoid.real_eq_plus_compat_adapt
+             (uab1_kl v Hv) real_zero
+             (real_opp (uab1_kl u Hu)) (real_opp real_zero)
+             Hv0
+             (RealSetoid.real_eq_opp_compat (uab1_kl u Hu) real_zero Hu0)). }
+  assert (Hsum : real_eq
+                   (real_plus
+                      (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
+                      eps)
+                   eps).
+  { exact (real_eq_trans
+             (real_plus
+                (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
+                eps)
+             (real_plus real_zero eps)
+             eps
+             (RealSetoid.real_eq_plus_compat_adapt
+                (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
+                real_zero
+                eps eps
+                Hdiff
+                (real_eq_refl eps))
+             (uab1_plus_zero_l eps)). }
   exact (inl
            (RealSetoid.real_lt_compat
               real_zero real_zero
@@ -345,25 +390,7 @@ Proof.
                     (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
                     eps)
                  eps
-                 (real_eq_trans
-                    (real_plus
-                       (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
-                       eps)
-                    (real_plus real_zero eps)
-                    eps
-                    (RealSetoid.real_eq_plus_compat_adapt
-                       (real_plus (uab1_kl v Hv) (real_opp (uab1_kl u Hu)))
-                       real_zero
-                       eps eps
-                       (RealSetoid.real_eq_plus_compat_adapt
-                          (uab1_kl v Hv) real_zero
-                          (real_opp (uab1_kl u Hu)) (real_opp real_zero)
-                          (uab1_kl_zero v Hv)
-                          (RealSetoid.real_eq_opp_compat
-                             (uab1_kl u Hu) real_zero
-                             (uab1_kl_zero u Hu)))
-                       (real_eq_refl eps))
-                    (uab1_plus_zero_l eps)))
+                 Hsum)
               Heps)).
 Qed.
 
@@ -380,6 +407,34 @@ Lemma uab1_Hkl_left :
            eps).
 Proof.
   intros u v Hu Hv _ _ eps Heps.
+  pose proof (uab1_kl_zero u Hu) as Hu0.
+  pose proof (uab1_kl_zero v Hv) as Hv0.
+  assert (Hdiff : real_eq
+                    (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
+                    real_zero).
+  { exact (RealSetoid.real_eq_plus_compat_adapt
+             (uab1_kl u Hu) real_zero
+             (real_opp (uab1_kl v Hv)) (real_opp real_zero)
+             Hu0
+             (RealSetoid.real_eq_opp_compat (uab1_kl v Hv) real_zero Hv0)). }
+  assert (Hsum : real_eq
+                   (real_plus
+                      (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
+                      eps)
+                   eps).
+  { exact (real_eq_trans
+             (real_plus
+                (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
+                eps)
+             (real_plus real_zero eps)
+             eps
+             (RealSetoid.real_eq_plus_compat_adapt
+                (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
+                real_zero
+                eps eps
+                Hdiff
+                (real_eq_refl eps))
+             (uab1_plus_zero_l eps)). }
   exact (inl
            (RealSetoid.real_lt_compat
               real_zero real_zero
@@ -393,25 +448,7 @@ Proof.
                     (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
                     eps)
                  eps
-                 (real_eq_trans
-                    (real_plus
-                       (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
-                       eps)
-                    (real_plus real_zero eps)
-                    eps
-                    (RealSetoid.real_eq_plus_compat_adapt
-                       (real_plus (uab1_kl u Hu) (real_opp (uab1_kl v Hv)))
-                       real_zero
-                       eps eps
-                       (RealSetoid.real_eq_plus_compat_adapt
-                          (uab1_kl u Hu) real_zero
-                          (real_opp (uab1_kl v Hv)) (real_opp real_zero)
-                          (uab1_kl_zero u Hu)
-                          (RealSetoid.real_eq_opp_compat
-                             (uab1_kl v Hv) real_zero
-                             (uab1_kl_zero v Hv)))
-                       (real_eq_refl eps))
-                    (uab1_plus_zero_l eps)))
+                 Hsum)
               Heps)).
 Qed.
 
@@ -440,11 +477,12 @@ Theorem uab1_discharge_antitone_above :
       real_le (uab1_ent v Hv) (real_plus (uab1_ent u Hu) eps).
 Proof.
   intros u v Hu Hv Htu Huv eps Heps.
-  exact (ems_entropy_temp_antitone_above
-           unit uab1_sum uab1_sumpos
-           uab1_ext uab1_linear uab1_add
-           uab1_T_star uab1_T_star_pos uab1_energy
-           uab1_Hpinned uab1_Hkl_right
+  exact (snd
+           (ems_entropy_split_at_peak
+              unit uab1_sum uab1_sumpos
+              uab1_ext uab1_linear uab1_add
+              uab1_T_star uab1_T_star_pos uab1_energy
+              uab1_Hpinned uab1_Hkl_right uab1_Hkl_left)
            u v Hu Hv Htu Huv eps Heps).
 Qed.
 
@@ -457,11 +495,12 @@ Theorem uab1_discharge_mono_below :
       real_le (uab1_ent u Hu) (real_plus (uab1_ent v Hv) eps).
 Proof.
   intros u v Hu Hv Huv Hvt eps Heps.
-  exact (ems_entropy_temp_mono_below
-           unit uab1_sum uab1_sumpos
-           uab1_ext uab1_linear uab1_add
-           uab1_T_star uab1_T_star_pos uab1_energy
-           uab1_Hpinned uab1_Hkl_left
+  exact (fst
+           (ems_entropy_split_at_peak
+              unit uab1_sum uab1_sumpos
+              uab1_ext uab1_linear uab1_add
+              uab1_T_star uab1_T_star_pos uab1_energy
+              uab1_Hpinned uab1_Hkl_right uab1_Hkl_left)
            u v Hu Hv Huv Hvt eps Heps).
 Qed.
 
@@ -496,11 +535,9 @@ Theorem uab1_discharge_split :
        real_lt real_zero eps ->
        real_le (uab1_ent v Hv) (real_plus (uab1_ent u Hu) eps)).
 Proof.
-  exact (ems_entropy_split_at_peak
-           unit uab1_sum uab1_sumpos
-           uab1_ext uab1_linear uab1_add
-           uab1_T_star uab1_T_star_pos uab1_energy
-           uab1_Hpinned uab1_Hkl_right uab1_Hkl_left).
+  split.
+  - exact uab1_discharge_mono_below.
+  - exact uab1_discharge_antitone_above.
 Qed.
 
 (* ============ §10 · 假设审计（Print Assumptions 全 Closed 为判据） ============ *)

@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ppa_macro_entropy_scaled_nonneg（原 L254，2 句玩具证）               *)
+(*   ppa_attractor_transport（原 L178，2 句玩具证）                       *)
+(*   ppa_attractor_lim_unique（原 L166，2 句玩具证）                      *)
+(*   ppa_differentiation_attractor（原 L154，2 句玩具证）                 *)
+(*   ppa_dev_dynamics_zero（原 L135，2 句玩具证）                         *)
+(*   ppa_potential_scaled_mono（原 L101，2 句玩具证）                     *)
+(*   ppa_potential_scaled_strict_mono（原 L92，2 句玩具证）               *)
+(*   ppa_hamiltonian_dominates_potential（原 L82，2 句玩具证）            *)
+(*   ppa_physical_force_is_gradient（原 L72，2 句玩具证）                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* PhysPredAblation.v —— 席位 CYD12（批次 E-STAGING-CYD12）        *)
 (*                                                               *)
 (* 使命：S05 剩余物理预测槽消融——CWZ6 留档三件（本席判定可沿      *)
@@ -135,8 +153,7 @@ Definition ppa_dev_orbit (x : R) : nat -> S :=
 Theorem ppa_dev_dynamics_zero : forall x : R, Id (ppa_dev_dynamics x) zero.
 Proof.
   intro x.
-  apply (id_trans (id_cong (fun w => plus x w) (plus_zero (opp x)))
-                  (plus_opp x)).
+  apply (id_trans (id_cong (fun w => plus x w) (plus_zero (opp x)))                  (plus_opp x)).
 Qed.
 
 (* 离散收敛见证：S n 步迭代逐项恒为零（lim 黑箱的构造性补充）。 *)
@@ -182,9 +199,7 @@ Theorem ppa_attractor_transport :
     clim (ppa_dev_orbit y) l.
 Proof.
   intros x y l p Hcl.
-  exact (fa56b_id_transport R
-           (fun z => clim (ppa_dev_orbit z) l)
-           x y p Hcl).
+  exact (fa56b_id_transport R           (fun z => clim (ppa_dev_orbit z) l)           x y p Hcl).
 Qed.
 
 (* ============ §C 槽3：macro_loss_monotone（S05:5893）============ *)
@@ -255,9 +270,7 @@ Theorem ppa_macro_entropy_scaled_nonneg :
   forall (k m : R), lt zero k -> le zero m -> le zero (mult k m).
 Proof.
   intros k m Hk Hm.
-  exact (le_id_l zero (mult zero m) (mult k m)
-           (id_sym (id_trans (mult_comm zero m) (mult_zero m)))
-           (le_mult_compat_weak zero k m Hm (fa51_lt_le zero k Hk))).
+  exact (le_id_l zero (mult zero m) (mult k m)           (id_sym (id_trans (mult_comm zero m) (mult_zero m)))           (le_mult_compat_weak zero k m Hm (fa51_lt_le zero k Hk))).
 Qed.
 
 End PpaPhysPred.

@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   slc_gain_ge_kl_minus_eps（原 L261，2 句玩具证）                      *)
+(*   slc_gain_kl_two_sided_eps（原 L235，2 句玩具证）                     *)
+(*   slc_plus_comm_r_shift（原 L101，2 句玩具证）                         *)
+(*   slc_plus_r_assoc_cancel（原 L79，2 句玩具证）                        *)
+(*   slc_minus_r_plus_cancel（原 L50，2 句玩具证）                        *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* SecondLawConsume.v —— 席位 P6D（批次 E-STAGING-P6D）：论文6 §7 第二定律  *)
 (*   的消费定理推导——从核心定理 real_entropy_deficit_kl_temp              *)
@@ -52,28 +66,7 @@ Lemma slc_minus_r_plus_cancel :
     real_eq (real_plus (real_minus_r a b) b) a.
 Proof.
   intros a b.
-  exact (real_eq_trans
-           (real_plus (real_minus_r a b) b)
-           (real_plus a (real_plus (real_opp b) b))
-           a
-           (real_eq_sym (real_plus a (real_plus (real_opp b) b))
-                        (real_plus (real_plus a (real_opp b)) b)
-                        (real_plus_assoc a (real_opp b) b))
-           (real_eq_trans
-              (real_plus a (real_plus (real_opp b) b))
-              (real_plus a (real_plus b (real_opp b)))
-              a
-              (RealSetoid.real_eq_plus_compat_adapt a a
-                 (real_plus (real_opp b) b) (real_plus b (real_opp b))
-                 (real_eq_refl a) (real_plus_comm (real_opp b) b))
-              (real_eq_trans
-                 (real_plus a (real_plus b (real_opp b)))
-                 (real_plus a real_zero)
-                 a
-                 (RealSetoid.real_eq_plus_compat_adapt a a
-                    (real_plus b (real_opp b)) real_zero
-                    (real_eq_refl a) (real_plus_opp b))
-                 (real_plus_zero a)))).
+  exact (real_eq_trans           (real_plus (real_minus_r a b) b)           (real_plus a (real_plus (real_opp b) b))           a           (real_eq_sym (real_plus a (real_plus (real_opp b) b))                        (real_plus (real_plus a (real_opp b)) b)                        (real_plus_assoc a (real_opp b) b))           (real_eq_trans              (real_plus a (real_plus (real_opp b) b))              (real_plus a (real_plus b (real_opp b)))              a              (RealSetoid.real_eq_plus_compat_adapt a a                 (real_plus (real_opp b) b) (real_plus b (real_opp b))                 (real_eq_refl a) (real_plus_comm (real_opp b) b))              (real_eq_trans                 (real_plus a (real_plus b (real_opp b)))                 (real_plus a real_zero)                 a                 (RealSetoid.real_eq_plus_compat_adapt a a                    (real_plus b (real_opp b)) real_zero                    (real_eq_refl a) (real_plus_opp b))                 (real_plus_zero a)))).
 Qed.
 
 Lemma slc_plus_r_assoc_cancel :
@@ -81,21 +74,7 @@ Lemma slc_plus_r_assoc_cancel :
     real_eq (real_plus (real_plus a b) (real_opp b)) a.
 Proof.
   intros a b.
-  exact (real_eq_trans
-           (real_plus (real_plus a b) (real_opp b))
-           (real_plus a (real_plus b (real_opp b)))
-           a
-           (real_eq_sym (real_plus a (real_plus b (real_opp b)))
-                        (real_plus (real_plus a b) (real_opp b))
-                        (real_plus_assoc a b (real_opp b)))
-           (real_eq_trans
-              (real_plus a (real_plus b (real_opp b)))
-              (real_plus a real_zero)
-              a
-              (RealSetoid.real_eq_plus_compat_adapt a a
-                 (real_plus b (real_opp b)) real_zero
-                 (real_eq_refl a) (real_plus_opp b))
-              (real_plus_zero a))).
+  exact (real_eq_trans           (real_plus (real_plus a b) (real_opp b))           (real_plus a (real_plus b (real_opp b)))           a           (real_eq_sym (real_plus a (real_plus b (real_opp b)))                        (real_plus (real_plus a b) (real_opp b))                        (real_plus_assoc a b (real_opp b)))           (real_eq_trans              (real_plus a (real_plus b (real_opp b)))              (real_plus a real_zero)              a              (RealSetoid.real_eq_plus_compat_adapt a a                 (real_plus b (real_opp b)) real_zero                 (real_eq_refl a) (real_plus_opp b))              (real_plus_zero a))).
 Qed.
 
 Lemma slc_plus_comm_r_shift :
@@ -104,21 +83,7 @@ Lemma slc_plus_comm_r_shift :
             (real_plus (real_plus x (real_opp z)) y).
 Proof.
   intros x y z.
-  exact (real_eq_trans
-           (real_plus (real_plus x y) (real_opp z))
-           (real_plus x (real_plus y (real_opp z)))
-           (real_plus (real_plus x (real_opp z)) y)
-           (real_eq_sym (real_plus x (real_plus y (real_opp z)))
-                        (real_plus (real_plus x y) (real_opp z))
-                        (real_plus_assoc x y (real_opp z)))
-           (real_eq_trans
-              (real_plus x (real_plus y (real_opp z)))
-              (real_plus x (real_plus (real_opp z) y))
-              (real_plus (real_plus x (real_opp z)) y)
-              (RealSetoid.real_eq_plus_compat_adapt x x
-                 (real_plus y (real_opp z)) (real_plus (real_opp z) y)
-                 (real_eq_refl x) (real_plus_comm y (real_opp z)))
-              (real_plus_assoc x (real_opp z) y))).
+  exact (real_eq_trans           (real_plus (real_plus x y) (real_opp z))           (real_plus x (real_plus y (real_opp z)))           (real_plus (real_plus x (real_opp z)) y)           (real_eq_sym (real_plus x (real_plus y (real_opp z)))                        (real_plus (real_plus x y) (real_opp z))                        (real_plus_assoc x y (real_opp z)))           (real_eq_trans              (real_plus x (real_plus y (real_opp z)))              (real_plus x (real_plus (real_opp z) y))              (real_plus (real_plus x (real_opp z)) y)              (RealSetoid.real_eq_plus_compat_adapt x x                 (real_plus y (real_opp z)) (real_plus (real_opp z) y)                 (real_eq_refl x) (real_plus_comm y (real_opp z)))              (real_plus_assoc x (real_opp z) y))).
 Qed.
 
 (* ============================================================ *)
@@ -245,13 +210,7 @@ Theorem slc_gain_kl_two_sided_eps :
                  (real_plus (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp) eps)).
 Proof.
   intros p Hp Hnp Henergy eps Heps.
-  exact (slc_band_intro
-           (real_le (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp)
-                    (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps))
-           (real_le (slq_entropy_gain S sumf sumpos T T_pos energy p Hp)
-                    (real_plus (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp) eps))
-           (slc_kl_le_gain_plus_leg p Hp Hnp Henergy eps Heps)
-           (slc_gain_le_kl_plus_leg p Hp Hnp Henergy eps Heps)).
+  exact (slc_band_intro           (real_le (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp)                    (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps))           (real_le (slq_entropy_gain S sumf sumpos T T_pos energy p Hp)                    (real_plus (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp) eps))           (slc_kl_le_gain_plus_leg p Hp Hnp Henergy eps Heps)           (slc_gain_le_kl_plus_leg p Hp Hnp Henergy eps Heps)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -268,19 +227,7 @@ Theorem slc_gain_ge_kl_minus_eps :
               (slq_entropy_gain S sumf sumpos T T_pos energy p Hp).
 Proof.
   intros p Hp Hnp Henergy eps Heps.
-  exact (RealSetoid.real_le_id_r
-           (real_plus (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp) (real_opp eps))
-           (real_plus (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)
-                      (real_opp eps))
-           (slq_entropy_gain S sumf sumpos T T_pos energy p Hp)
-           (slc_plus_r_assoc_cancel (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)
-           (real_le_plus_compat
-              (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp)
-              (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)
-              (real_opp eps)
-              (real_opp eps)
-              (slc_kl_le_gain_plus_leg p Hp Hnp Henergy eps Heps)
-              (real_le_refl (real_opp eps)))).
+  exact (RealSetoid.real_le_id_r           (real_plus (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp) (real_opp eps))           (real_plus (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)                      (real_opp eps))           (slq_entropy_gain S sumf sumpos T T_pos energy p Hp)           (slc_plus_r_assoc_cancel (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)           (real_le_plus_compat              (slq_kl_cur_boltz S sumf sumpos T T_pos energy p Hp)              (real_plus (slq_entropy_gain S sumf sumpos T T_pos energy p Hp) eps)              (real_opp eps)              (real_opp eps)              (slc_kl_le_gain_plus_leg p Hp Hnp Henergy eps Heps)              (real_le_refl (real_opp eps)))).
 Qed.
 
 End SlcSecondLawConsume.

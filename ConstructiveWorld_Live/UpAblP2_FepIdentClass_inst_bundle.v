@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabp2_fic_gibbs_real（原 L195，2 句玩具证）                          *)
+(*   uabp2_fic_fld_Z_thermo_pos（原 L155，1 句玩具证）                    *)
+(*   uabp2_fic_fld_D_pos（原 L147，1 句玩具证）                           *)
+(*   uabp2_fic_fld_T_pos（原 L140，1 句玩具证）                           *)
+(*   uabp2_fic_fld_sum_pos（原 L124，2 句玩具证）                         *)
+(*   uabp2_fic_fld_partition_match（原 L104，1 句玩具证）                 *)
+(*   uabp2_fic_fld_energy_neg（原 L95，2 句玩具证）                       *)
+(*   uabp2_fic_fld_temp_match（原 L88，1 句玩具证）                       *)
+(*   uabp2_fic_ctx_core（原 L80，1 句玩具证）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblP2_FepIdentClass_inst_bundle.v —— 假设消融战役 FA-P2 批2施工席 S1        *)
 (* 辖区：FepIdentClass.v 16 位（2 Context＋14 类字段，现档坐标如下）               *)
 (*   L59  Context (R){RIS}（FepIdentCore 节）                                    *)
@@ -104,19 +122,7 @@ Qed.
 Theorem uabp2_fic_fld_partition_match :
   ubreq uabp2_fic_Z uabp2_fic_Z_alt.
 Proof.
-  exact (@RealInterfaceEnhancedMod.req_plus_compat Real RealEnhancedReal
-           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))
-           (ubexp (ubopp (ubmult uabp2_fic_invT ubone)))
-           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))
-           (ubexp (ubopp (ubmult uabp2_fic_invT ubone)))
-           (fic_real_exp_neg_compat
-              (ubmult uabp2_fic_invT (ubopp ubone))
-              (ubopp (ubmult uabp2_fic_invT ubone))
-              (@fic_opp_mult_r Real RealEnhancedReal uabp2_fic_invT ubone))
-           (fic_real_exp_neg_compat
-              (ubmult uabp2_fic_invT (ubopp ubone))
-              (ubopp (ubmult uabp2_fic_invT ubone))
-              (@fic_opp_mult_r Real RealEnhancedReal uabp2_fic_invT ubone))).
+  exact (@RealInterfaceEnhancedMod.req_plus_compat Real RealEnhancedReal           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))           (ubexp (ubopp (ubmult uabp2_fic_invT ubone)))           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))           (ubexp (ubopp (ubmult uabp2_fic_invT ubone)))           (fic_real_exp_neg_compat              (ubmult uabp2_fic_invT (ubopp ubone))              (ubopp (ubmult uabp2_fic_invT ubone))              (@fic_opp_mult_r Real RealEnhancedReal uabp2_fic_invT ubone))           (fic_real_exp_neg_compat              (ubmult uabp2_fic_invT (ubopp ubone))              (ubopp (ubmult uabp2_fic_invT ubone))              (@fic_opp_mult_r Real RealEnhancedReal uabp2_fic_invT ubone))).
 Qed.
 
 (* ============ P1-P4 ←性质件（件内真证；P1/P4 镜像库锚实例体构造） ============ *)
@@ -127,13 +133,7 @@ Theorem uabp2_fic_fld_sum_pos :
     ublt ubzero (ubplus (f true) (f false)).
 Proof.
   intros f Hf.
-  exact (@RealInterfaceEnhancedMod.lt_id_l Real RealEnhancedReal
-           ubzero (ubplus ubzero ubzero) (ubplus (f true) (f false))
-           (@RealInterfaceEnhancedMod.req_sym Real RealEnhancedReal
-              (ubplus ubzero ubzero) ubzero
-              (@RealInterfaceEnhancedMod.plus_zero Real RealEnhancedReal ubzero))
-           (@RealInterfaceEnhancedMod.lt_plus_compat Real RealEnhancedReal
-              ubzero (f true) ubzero (f false) (Hf true) (Hf false))).
+  exact (@RealInterfaceEnhancedMod.lt_id_l Real RealEnhancedReal           ubzero (ubplus ubzero ubzero) (ubplus (f true) (f false))           (@RealInterfaceEnhancedMod.req_sym Real RealEnhancedReal              (ubplus ubzero ubzero) ubzero              (@RealInterfaceEnhancedMod.plus_zero Real RealEnhancedReal ubzero))           (@RealInterfaceEnhancedMod.lt_plus_compat Real RealEnhancedReal              ubzero (f true) ubzero (f false) (Hf true) (Hf false))).
 Qed.
 
 (* P2 ←fic_T_pos:86（证书；one_pos 直配） *)
@@ -155,13 +155,7 @@ Qed.
 Theorem uabp2_fic_fld_Z_thermo_pos :
   ublt ubzero uabp2_fic_Z.
 Proof.
-  exact (@RealInterfaceEnhancedMod.plus_positive Real RealEnhancedReal
-           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))
-           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))
-           (@RealInterfaceEnhancedMod.exp_neg_pos Real RealEnhancedReal
-              (ubmult uabp2_fic_invT (ubopp ubone)))
-           (@RealInterfaceEnhancedMod.exp_neg_pos Real RealEnhancedReal
-              (ubmult uabp2_fic_invT (ubopp ubone)))).
+  exact (@RealInterfaceEnhancedMod.plus_positive Real RealEnhancedReal           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))           (ubexp (ubmult uabp2_fic_invT (ubopp ubone)))           (@RealInterfaceEnhancedMod.exp_neg_pos Real RealEnhancedReal              (ubmult uabp2_fic_invT (ubopp ubone)))           (@RealInterfaceEnhancedMod.exp_neg_pos Real RealEnhancedReal              (ubmult uabp2_fic_invT (ubopp ubone)))).
 Qed.
 
 (* ============ INST ←自建透明实例（数据 7 位字面承位＝T 合并申报） ============ *)
@@ -198,8 +192,7 @@ Theorem uabp2_fic_gibbs_real :
           (@fic_boltzmann_dist Real RealEnhancedReal uabp2_fic_inst s).
 Proof.
   intros s.
-  exact (@fic_attention_is_gibbs_temp Real RealEnhancedReal
-           uabp2_fic_inst fic_real_exp_neg_compat s).
+  exact (@fic_attention_is_gibbs_temp Real RealEnhancedReal           uabp2_fic_inst fic_real_exp_neg_compat s).
 Qed.
 
 (* ============ PA 收尾段（逐件 Closed 判读） ============ *)

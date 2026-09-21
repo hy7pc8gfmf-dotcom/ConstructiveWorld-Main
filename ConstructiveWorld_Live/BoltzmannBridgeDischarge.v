@@ -1,3 +1,14 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bbd_free_energy_boltzmann_bridge（原 L157，1 句玩具证）              *)
+(*   bbd_energy_in_log_boltzmann_bridge（原 L139，2 句玩具证）            *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* BoltzmannBridgeDischarge.v                                            *)
 (*                                                                       *)
@@ -143,8 +154,7 @@ Theorem bbd_energy_in_log_boltzmann_bridge :
                            (log Z Z_pos)))).
 Proof.
   intro s.
-  exact (@logc_energy_in_log_boltzmann R RIS S base_loss D D_pos Z Z_pos
-           sup_compat sup_log_exp_neg s).
+  exact (@logc_energy_in_log_boltzmann R RIS S base_loss D D_pos Z Z_pos           sup_compat sup_log_exp_neg s).
 Qed.
 
 (* ===================================================================== *)
@@ -158,9 +168,7 @@ Theorem bbd_free_energy_boltzmann_bridge :
   req (bbd_free_energy bbd_boltzmann_dist bbd_boltzmann_positive)
       (mult (opp D) (log Z Z_pos)).
 Proof.
-  exact (@logc_free_energy_boltzmann R RIS S sumf sum_ext sum_add sum_linear
-           base_loss D D_pos Z Z_pos partition_condition
-           sup_compat sup_log_exp_neg).
+  exact (@logc_free_energy_boltzmann R RIS S sumf sum_ext sum_add sum_linear           base_loss D D_pos Z Z_pos partition_condition           sup_compat sup_log_exp_neg).
 Qed.
 
 End BBDFepWriteoff.

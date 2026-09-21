@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   aiu_bridge_backward_kl_step（原 L138，2 句玩具证）                   *)
+(*   aiu_subgap_base（原 L126，2 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AlignIdUnclosed.v —— UpAlignIdReq 件 6 无条件化组装席                *)
 (*   （席位CWD，批次 E-STAGING-CWD，2026-09-14）                       *)
 (*                                                              *)
@@ -128,9 +139,7 @@ Lemma aiu_subgap_base : forall (p : S -> R) (Hp : pos3 p) (Hn : nrm p),
       (mult beta (KLE p PSTR Hp PSTR_pos)).
 Proof.
   intros p Hp Hn.
-  exact (@UpAlignIdReq.w_subgap_base R RIS S sumf sum_ext sum_add sum_linear
-           log_req_compat log_inv_exp_neg_req
-           reward beta beta_pos pi_ref pi_ref_pos ZAL_pos p Hp Hn).
+  exact (@UpAlignIdReq.w_subgap_base R RIS S sumf sum_ext sum_add sum_linear           log_req_compat log_inv_exp_neg_req           reward beta beta_pos pi_ref pi_ref_pos ZAL_pos p Hp Hn).
 Qed.
 
 (* ---- 喂入件 2：三 KL 精确恒等桥位（UpReqAlign3.req2_backward_kl_step  *)
@@ -145,10 +154,7 @@ Lemma aiu_bridge_backward_kl_step :
                                 (npx_pos pi_t Hpi_t)))).
 Proof.
   intros pi_t Hpi_t Hn.
-  exact (@req2_backward_kl_step R RIS S sumf sum_ext sum_add sum_linear
-           sum_pos log_req_compat log_inv_exp_neg_req
-           reward beta beta_pos pi_ref pi_ref_pos eta ZAL_pos
-           pi_t Hpi_t Hn).
+  exact (@req2_backward_kl_step R RIS S sumf sum_ext sum_add sum_linear           sum_pos log_req_compat log_inv_exp_neg_req           reward beta beta_pos pi_ref pi_ref_pos eta ZAL_pos           pi_t Hpi_t Hn).
 Qed.
 
 (* ---- 主件：件 6 组装链无条件化（已证桥喂入版；PSTR-先序）             *)

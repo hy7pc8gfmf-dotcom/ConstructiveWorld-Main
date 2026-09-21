@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ske_step_kl_eta_bound_inst_B（原 L1051，3 句玩具证）                 *)
+(*   ske_geom_step_discharged_B（原 L998，3 句玩具证）                    *)
+(*   ske_log_pow（原 L316，3 句玩具证）                                   *)
+(*   ske_pow_pos（原 L272，3 句玩具证）                                   *)
+(*   ske_nonnil（原 L163，3 句玩具证）                                    *)
+(* ============================================================ *)
+
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
@@ -162,7 +176,9 @@ Qed.
 (* 状态表非空（real_list_sum_pos 的非空前提的 Set 值供给，节外泛参） *)
 Lemma ske_nonnil : forall k : nat, (List.seq 0 (Datatypes.S k)) <> (@nil nat).
 Proof.
-  intros k Hc. simpl in Hc. discriminate Hc.
+  intros k Hc.
+  simpl in Hc.
+  discriminate Hc.
 Qed.
 
 (* ============================================================ *)
@@ -272,7 +288,9 @@ Qed.
 Lemma ske_pow_pos : forall (a al : Real) (Ha : real_lt real_zero a),
   real_lt real_zero (real_pow_pos a al Ha).
 Proof.
-  intros a al Ha. unfold real_pow_pos. apply cauchy_real_exp_pos.
+  intros a al Ha.
+  unfold real_pow_pos.
+  apply cauchy_real_exp_pos.
 Qed.
 
 Lemma ske_HZ : real_lt real_zero
@@ -318,9 +336,9 @@ Lemma ske_log_pow : forall (a al : Real) (Ha : real_lt real_zero a),
                   (cauchy_real_exp_pos (real_mult al (cw_log a Ha))))
           (real_mult al (cw_log a Ha)).
 Proof.
-  intros a al Ha. unfold real_pow_pos.
-  exact (log_inv_exp_neg_thm (real_mult al (cw_log a Ha))
-           (cauchy_real_exp_pos (real_mult al (cw_log a Ha)))).
+  intros a al Ha.
+  unfold real_pow_pos.
+  exact (log_inv_exp_neg_thm (real_mult al (cw_log a Ha))           (cauchy_real_exp_pos (real_mult al (cw_log a Ha)))).
 Qed.
 
 (* pi_star 的 log 展开: log pist == -log Za + (log piref + beta^-1*r) *)
@@ -1004,7 +1022,8 @@ Theorem ske_geom_step_discharged_B :
                           (fun i => real_kl_term (ske_pist i) (pit i) (ske_Hpist i) (Hpit i))
                           (List.seq 0 n))).
 Proof.
-  apply real_le_closure_b_one. intros eps Heps.
+  apply real_le_closure_b_one.
+  intros eps Heps.
   exact (ske_geom_step_discharged eps Heps).
 Qed.
 
@@ -1057,7 +1076,8 @@ Theorem ske_step_kl_eta_bound_inst_B :
                           (fun i => real_kl_term (pit i) (ske_pist i) (Hpit i) (ske_Hpist i))
                           (List.seq 0 n))).
 Proof.
-  apply real_le_closure_b_one. intros eps Heps.
+  apply real_le_closure_b_one.
+  intros eps Heps.
   exact (ske_step_kl_eta_bound_inst eps Heps).
 Qed.
 

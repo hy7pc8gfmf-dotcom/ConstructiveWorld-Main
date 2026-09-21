@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pi_den_divide（原 L462，3 句玩具证）                                 *)
+(*   pi_Pn_eval_eq（原 L252，3 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* Ln2Integrality.v —— 本件形式化 Beukers/Hermite Padé [n/n] 的整性收束：    *)
 (*   p̃_n 整化（2^n·D_n·P_n(1/2) ∈ Z 的见证构造）与 x'_n 分母显式化。         *)
 (*                                                                          *)
@@ -254,7 +265,9 @@ Lemma pi_Pn_eval_eq : forall (n : nat) (z : Q),
   == bk_psQ (fun k : nat => ((Z.of_nat (bkC n k * bkC n k) # 1) * bk_H k)%Q)
           (Datatypes.S n) z.
 Proof.
-  intros n z. apply qeqT_imp_qeq. apply bk_Pn_eval.
+  intros n z.
+  apply qeqT_imp_qeq.
+  apply bk_Pn_eval.
 Qed.
 
 (* 半整数点闭式：D_n·2^n·P_n(1/2) == Q#p̃_n（p̃_n ∈ nat 承载） *)

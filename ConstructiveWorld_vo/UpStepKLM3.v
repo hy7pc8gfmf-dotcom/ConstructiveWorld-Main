@@ -1,4 +1,19 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_iter_step_geom_eps（原 L432，2 句玩具证）                       *)
+(*   m3_step_next_norm（原 L279，2 句玩具证）                             *)
+(*   m3_interp_Z_pos3（原 L249，2 句玩具证）                              *)
+(*   m3_kappa_pos（原 L135，3 句玩具证）                                  *)
+(*   m3_half_pos（原 L84，3 句玩具证）                                    *)
+(*   m3_two_pos（原 L70，1 句玩具证）                                     *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpStepKLM3.v *)
 (* *)
 (* 目的： step_kl 的 M3 迭代版 Real 层镜像。 *)
@@ -69,12 +84,7 @@ Fixpoint m3_nmul (k : nat) (x : Real) : Real :=
 (* 1+1 > 0（对半预算的分母） *)
 Lemma m3_two_pos : real_lt real_zero (real_plus real_one real_one).
 Proof.
-  exact (real_eq_lt_lt real_zero (real_plus real_zero real_zero)
-           (real_plus real_one real_one)
-           (real_eq_sym (real_plus real_zero real_zero) real_zero
-              kl_zero_plus_zero)
-           (real_lt_plus_compat real_zero real_one real_zero real_one
-              real_lt_zero_one real_lt_zero_one)).
+  exact (real_eq_lt_lt real_zero (real_plus real_zero real_zero)           (real_plus real_one real_one)           (real_eq_sym (real_plus real_zero real_zero) real_zero              kl_zero_plus_zero)           (real_lt_plus_compat real_zero real_one real_zero real_one              real_lt_zero_one real_lt_zero_one)).
 Qed.
 
 (* eps 对半：d := eps·inv(1+1)（M3.1 的双 eps 预算合一） *)
@@ -84,11 +94,9 @@ Definition m3_half (eps : Real) : Real :=
 Lemma m3_half_pos : forall eps : Real,
   real_lt real_zero eps -> real_lt real_zero (m3_half eps).
 Proof.
-  intros eps Heps. unfold m3_half.
-  exact (real_mult_positive eps
-           (real_inv_pos (real_plus real_one real_one) m3_two_pos)
-           Heps
-           (real_inv_pos_pos (real_plus real_one real_one) m3_two_pos)).
+  intros eps Heps.
+  unfold m3_half.
+  exact (real_mult_positive eps           (real_inv_pos (real_plus real_one real_one) m3_two_pos)           Heps           (real_inv_pos_pos (real_plus real_one real_one) m3_two_pos)).
 Qed.
 
 Lemma m3_half_double_eq : forall eps : Real,
@@ -135,13 +143,9 @@ Qed.
 Lemma m3_kappa_pos : forall eta : Real,
   real_lt eta real_one -> real_lt real_zero (m3_kappa eta).
 Proof.
-  intros eta Hlt. unfold m3_kappa.
-  exact (real_eq_lt_lt real_zero (real_plus eta (real_opp eta))
-           (real_plus real_one (real_opp eta))
-           (real_eq_sym (real_plus eta (real_opp eta)) real_zero
-              (real_plus_opp eta))
-           (real_lt_plus_compat_lt_le eta real_one (real_opp eta)
-              (real_opp eta) Hlt (real_le_refl (real_opp eta)))).
+  intros eta Hlt.
+  unfold m3_kappa.
+  exact (real_eq_lt_lt real_zero (real_plus eta (real_opp eta))           (real_plus real_one (real_opp eta))           (real_eq_sym (real_plus eta (real_opp eta)) real_zero              (real_plus_opp eta))           (real_lt_plus_compat_lt_le eta real_one (real_opp eta)              (real_opp eta) Hlt (real_le_refl (real_opp eta)))).
 Qed.
 
 (* 0 < η ⟹ 1−η ≤ 1 *)
@@ -285,51 +289,7 @@ Lemma m3_step_next_norm : forall (n : nat) (r p : nat -> Real) (k : Real)
     real_one.
 Proof.
   intros n r p k Hr Hp HZ.
-  exact (real_eq_trans
-           (real_list_sum nat (real_step_next n r p k Hr Hp HZ) (m3_states n))
-           (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                      (real_list_sum nat
-                         (fun i : nat => real_mult
-                            (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))
-                            (real_pow_pos (p i) k (Hp i)))
-                         (m3_states n)))
-           real_one
-           (real_list_sum_linear_r nat
-              (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-              (fun i : nat => real_mult
-                 (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))
-                 (real_pow_pos (p i) k (Hp i)))
-              (m3_states n))
-           (real_eq_trans
-              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                         (real_list_sum nat
-                            (fun i : nat => real_mult
-                               (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))
-                               (real_pow_pos (p i) k (Hp i)))
-                            (m3_states n)))
-              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                         (real_interp_Z n r p k Hr Hp))
-              real_one
-              (RealSetoid.real_eq_mult_compat
-                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                 (real_list_sum nat
-                    (fun i : nat => real_mult
-                       (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))
-                       (real_pow_pos (p i) k (Hp i)))
-                    (m3_states n))
-                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                 (real_interp_Z n r p k Hr Hp)
-                 (real_eq_refl (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))
-                 (real_eq_refl (real_interp_Z n r p k Hr Hp)))
-              (real_eq_trans
-                 (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                            (real_interp_Z n r p k Hr Hp))
-                 (real_mult (real_interp_Z n r p k Hr Hp)
-                            (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))
-                 real_one
-                 (real_mult_comm (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)
-                                 (real_interp_Z n r p k Hr Hp))
-                 (real_inv_pos_correct (real_interp_Z n r p k Hr Hp) HZ)))).
+  exact (real_eq_trans           (real_list_sum nat (real_step_next n r p k Hr Hp HZ) (m3_states n))           (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                      (real_list_sum nat                         (fun i : nat => real_mult                            (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                            (real_pow_pos (p i) k (Hp i)))                         (m3_states n)))           real_one           (real_list_sum_linear_r nat              (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)              (fun i : nat => real_mult                 (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                 (real_pow_pos (p i) k (Hp i)))              (m3_states n))           (real_eq_trans              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                         (real_list_sum nat                            (fun i : nat => real_mult                               (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                               (real_pow_pos (p i) k (Hp i)))                            (m3_states n)))              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                         (real_interp_Z n r p k Hr Hp))              real_one              (RealSetoid.real_eq_mult_compat                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                 (real_list_sum nat                    (fun i : nat => real_mult                       (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                       (real_pow_pos (p i) k (Hp i)))                    (m3_states n))                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                 (real_interp_Z n r p k Hr Hp)                 (real_eq_refl (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))                 (real_eq_refl (real_interp_Z n r p k Hr Hp)))              (real_eq_trans                 (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                            (real_interp_Z n r p k Hr Hp))                 (real_mult (real_interp_Z n r p k Hr Hp)                            (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))                 real_one                 (real_mult_comm (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                                 (real_interp_Z n r p k Hr Hp))                 (real_inv_pos_correct (real_interp_Z n r p k Hr Hp) HZ)))).
 Qed.
 
 (* ========== 策略迭代序列（sigT 打包：策略+正性+配分函数正性+归一化） ========== *)
@@ -449,15 +409,7 @@ Corollary real_iter_step_geom_eps :
        eps).
 Proof.
   intros n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 Hnormr Heta_pos Heta_lt1 t eps Heps.
-  exact (real_step_kl_eta_bound_eps n r
-           (m3_pi_seq n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)
-           (m3_kappa eta) Hr
-           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)
-           Hnormr (m3_pi_seq_norm n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)
-           (m3_pi_seq_Zpos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)
-           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 (Datatypes.S t))
-           (m3_kappa_pos eta Heta_lt1) (m3_kappa_le_one eta Heta_pos)
-           eps Heps).
+  exact (real_step_kl_eta_bound_eps n r           (m3_pi_seq n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_kappa eta) Hr           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           Hnormr (m3_pi_seq_norm n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_pi_seq_Zpos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 (Datatypes.S t))           (m3_kappa_pos eta Heta_lt1) (m3_kappa_le_one eta Heta_pos)           eps Heps).
 Qed.
 
 (* ========== M3.1：单步向后 KL 递推（backward_kl_step_le 的 eps 化镜像） ========== *)

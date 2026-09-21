@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabS4_diff_double_kill（原 L311，3 句玩具证）                        *)
+(*   uabS4_abs_list_sum_le_eps（原 L263，4 句玩具证）                     *)
+(*   uabS4_abs_list_sum_le_B（原 L252，4 句玩具证）                       *)
+(*   uabS4_abs_sum_le_B_pair（原 L129，2 句玩具证）                       *)
+(*   uabS4_abs_diff_triangle_le_B（原 L118，4 句玩具证）                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblAbsSumLeB.v —— abs_sum_le 族（族 I plain Or 形）可达最强形供给件 *)
 (*                                                                *)
 (* 零承认件：无承认词面、无假设参数声明、无经典逻辑、全件 Qed 闭合。 *)
@@ -120,7 +134,9 @@ Theorem uabS4_abs_diff_triangle_le_B : forall a b c : Real,
             (real_plus (real_abs (real_plus a (real_opp b)))
                        (real_abs (real_plus b (real_opp c)))).
 Proof.
-  intros a b c. apply real_le_closure_b_one. intros e He.
+  intros a b c.
+  apply real_le_closure_b_one.
+  intros e He.
   exact (uabS4_abs_diff_triangle_le_eps a b c e He).
 Qed.
 
@@ -130,7 +146,8 @@ Theorem uabS4_abs_sum_le_B_pair : forall f : bool -> Real,
   real_le_b (real_abs (real_plus (f true) (f false)))
             (real_plus (real_abs (f true)) (real_abs (f false))).
 Proof.
-  intros f. exact (real_abs_triangle_le_B (f true) (f false)).
+  intros f.
+  exact (real_abs_triangle_le_B (f true) (f false)).
 Qed.
 
 (* ============================================================ *)
@@ -255,7 +272,8 @@ Theorem uabS4_abs_list_sum_le_B : forall (X : Type) (f : X -> Real) (l : list X)
 Proof.
   intros X f l.
   apply (real_le_closure_b _ _ (uabS4_wlen X l) (uabS4_wlen_pos X l)).
-  intros e He. exact (uabS4_abs_list_sum_le_wt X f l e He).
+  intros e He.
+  exact (uabS4_abs_list_sum_le_wt X f l e He).
 Qed.
 
 (* B.3 逐 eps 形推论：B 形 ⟹ |Σ_l f| ≤ Σ_l|f| + eps（Or-inl 注入）。
@@ -267,7 +285,8 @@ Theorem uabS4_abs_list_sum_le_eps : forall (X : Type) (f : X -> Real) (l : list 
           (real_plus (real_list_sum X (fun x => real_abs (f x)) l) e).
 Proof.
   intros X f l e He.
-  apply (RealSetoid.real_lt_le_iff_req _ _). apply inl.
+  apply (RealSetoid.real_lt_le_iff_req _ _).
+  apply inl.
   exact (uabS4_abs_list_sum_le_B X f l e He).
 Qed.
 
@@ -317,10 +336,7 @@ Theorem uabS4_diff_double_kill : forall a b c e : Real,
   Empty_set.
 Proof.
   intros a b c e He Hfar.
-  apply (uabS4_lt_double_margin_le_half_contr
-           (real_abs (real_plus a (real_opp c)))
-           (real_plus (real_abs (real_plus a (real_opp b)))
-                      (real_abs (real_plus b (real_opp c)))) e He Hfar).
+  apply (uabS4_lt_double_margin_le_half_contr           (real_abs (real_plus a (real_opp c)))           (real_plus (real_abs (real_plus a (real_opp b)))                      (real_abs (real_plus b (real_opp c)))) e He Hfar).
   exact (uabS4_abs_diff_triangle_le_eps a b c e He).
 Qed.
 

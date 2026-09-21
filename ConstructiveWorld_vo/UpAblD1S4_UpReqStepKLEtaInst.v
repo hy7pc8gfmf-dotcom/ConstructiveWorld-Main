@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s4_ske_pack12_supplied（原 L118，1 句玩具证）                   *)
+(*   uabd1s4_half_sum_two（原 L84，1 句玩具证）                           *)
+(*   uabd1s4_half_plus_half（原 L54，1 句玩具证）                         *)
+(*   uabd1s4_half_pos（原 L48，1 句玩具证）                               *)
+(*   uabd1s4_two_pos（原 L41，1 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S4_UpReqStepKLEtaInst.v —— FA-D1S4 数据供给大打包首梯 件①              *)
 (* 席位：FA-D1S4（普查批 D1-⑦ 首梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改        *)
 (*                                                              *)
@@ -53,46 +67,14 @@ Qed.
 (* 归一链核心腿：半+半 == 壹（fa57_half_plus_half 的 Real 载体镜像） *)
 Lemma uabd1s4_half_plus_half : real_eq (real_plus uabd1s4_half uabd1s4_half) real_one.
 Proof.
-  exact (real_eq_trans
-           (real_plus uabd1s4_half uabd1s4_half)
-           (real_mult uabd1s4_half uabd1s4_two)
-           real_one
-           (real_eq_trans
-              (real_plus uabd1s4_half uabd1s4_half)
-              (real_plus (real_mult uabd1s4_half real_one)
-                         (real_mult uabd1s4_half real_one))
-              (real_mult uabd1s4_half uabd1s4_two)
-              (RealSetoid.real_eq_plus_compat uabd1s4_half uabd1s4_half
-                                   (real_mult uabd1s4_half real_one)
-                                   (real_mult uabd1s4_half real_one)
-                                   (real_eq_sym (real_mult uabd1s4_half real_one) uabd1s4_half (real_mult_one uabd1s4_half))
-                                   (real_eq_sym (real_mult uabd1s4_half real_one) uabd1s4_half (real_mult_one uabd1s4_half)))
-              (real_eq_sym
-                 (real_mult uabd1s4_half uabd1s4_two)
-                 (real_plus (real_mult uabd1s4_half real_one)
-                            (real_mult uabd1s4_half real_one))
-                 (real_distrib uabd1s4_half real_one real_one)))
-           (real_eq_trans
-              (real_mult uabd1s4_half uabd1s4_two)
-              (real_mult uabd1s4_two uabd1s4_half)
-              real_one
-              (real_mult_comm uabd1s4_half uabd1s4_two)
-              (real_inv_pos_correct uabd1s4_two uabd1s4_two_pos))).
+  exact (real_eq_trans           (real_plus uabd1s4_half uabd1s4_half)           (real_mult uabd1s4_half uabd1s4_two)           real_one           (real_eq_trans              (real_plus uabd1s4_half uabd1s4_half)              (real_plus (real_mult uabd1s4_half real_one)                         (real_mult uabd1s4_half real_one))              (real_mult uabd1s4_half uabd1s4_two)              (RealSetoid.real_eq_plus_compat uabd1s4_half uabd1s4_half                                   (real_mult uabd1s4_half real_one)                                   (real_mult uabd1s4_half real_one)                                   (real_eq_sym (real_mult uabd1s4_half real_one) uabd1s4_half (real_mult_one uabd1s4_half))                                   (real_eq_sym (real_mult uabd1s4_half real_one) uabd1s4_half (real_mult_one uabd1s4_half)))              (real_eq_sym                 (real_mult uabd1s4_half uabd1s4_two)                 (real_plus (real_mult uabd1s4_half real_one)                            (real_mult uabd1s4_half real_one))                 (real_distrib uabd1s4_half real_one real_one)))           (real_eq_trans              (real_mult uabd1s4_half uabd1s4_two)              (real_mult uabd1s4_two uabd1s4_half)              real_one              (real_mult_comm uabd1s4_half uabd1s4_two)              (real_inv_pos_correct uabd1s4_two uabd1s4_two_pos))).
 Qed.
 
 (* Hpitn 供给腿：k:=1、pit:=半函数 时的两态归一（列表和按 cons 折叠 δ/iota 展开） *)
 Lemma uabd1s4_half_sum_two :
   real_eq (real_list_sum nat (fun _ : nat => uabd1s4_half) (List.seq 0 2)) real_one.
 Proof.
-  exact (real_eq_trans
-           (real_list_sum nat (fun _ : nat => uabd1s4_half) (List.seq 0 2))
-           (real_plus uabd1s4_half uabd1s4_half)
-           real_one
-           (RealSetoid.real_eq_plus_compat uabd1s4_half (real_plus uabd1s4_half real_zero)
-                                uabd1s4_half uabd1s4_half
-                                (real_eq_refl uabd1s4_half)
-                                (real_plus_zero uabd1s4_half))
-           uabd1s4_half_plus_half).
+  exact (real_eq_trans           (real_list_sum nat (fun _ : nat => uabd1s4_half) (List.seq 0 2))           (real_plus uabd1s4_half uabd1s4_half)           real_one           (RealSetoid.real_eq_plus_compat uabd1s4_half (real_plus uabd1s4_half real_zero)                                uabd1s4_half uabd1s4_half                                (real_eq_refl uabd1s4_half)                                (real_plus_zero uabd1s4_half))           uabd1s4_half_plus_half).
 Qed.
 
 (* ============ 打包记录型：12 槽语句逐字入包（对照母本 L176-189） ============ *)
@@ -117,15 +99,7 @@ Inductive uabd1s4_ske_pack12 : Set :=
 
 Theorem uabd1s4_ske_pack12_supplied : uabd1s4_ske_pack12.
 Proof.
-  exact (uabd1s4_ske_pack12_intro 1%nat
-           real_one real_lt_zero_one
-           (fun _ : nat => real_zero)
-           real_one real_lt_zero_one (real_le_refl real_one)
-           (fun _ : nat => uabd1s4_half)
-           (fun _ : nat => uabd1s4_half_pos)
-           uabd1s4_half_sum_two
-           (fun _ : nat => uabd1s4_half)
-           (fun _ : nat => uabd1s4_half_pos)).
+  exact (uabd1s4_ske_pack12_intro 1%nat           real_one real_lt_zero_one           (fun _ : nat => real_zero)           real_one real_lt_zero_one (real_le_refl real_one)           (fun _ : nat => uabd1s4_half)           (fun _ : nat => uabd1s4_half_pos)           uabd1s4_half_sum_two           (fun _ : nat => uabd1s4_half)           (fun _ : nat => uabd1s4_half_pos)).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

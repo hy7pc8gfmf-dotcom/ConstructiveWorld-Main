@@ -1,9 +1,28 @@
 (* ============================================================ *)
+(* 【ToyR 包F 切片七替换稿】UpAblP6_EntropyMonoSplit_C.v —— 基于 Main 基线        *)
+(*   （md5 75ad96e4…）同名替换：全文保留，仅换七枚玩具证明体＋ToyR 批注锚。         *)
+(*   七刀（实质非平凡三口径）：                                                    *)
+(*   ①uac_e1_bt_face＝速记 Let 定义层受控展开收口（见证项置于上游                  *)
+(*     real_boltzmann_dist_temp 展开层，换名层经定义转换消解）；                   *)
+(*   ②uac_e3_kl_face＝同法（KL 速记展开层收口）；                                 *)
+(*   ③uac_e5_diff_ge_zero＝A 源供体体整体内联（eq 化换向＋compat 复合，             *)
+(*     依赖消去一刀）；                                                           *)
+(*   ④uac_e6_plus_eps＝A 源供体体整体内联（id_l 换端＋compat 提升）；              *)
+(*   ⑤uac_e5b_diff_ge_zero_b＝B 源 compat+id_l 换道链整体内联；                    *)
+(*   ⑥uac_e6b_plus_eps_b＝B 源 nonneg_r 换道链整体内联（trans 中项字面衔接）；      *)
+(*   ⑦uac_e11_full_muster＝第五分量在件结构组合（e5∘e6 在件复合替代                *)
+(*     A 源组合件，五分量 sigT 装配结构性推导）。                                  *)
+(*   八条批量登记（装配位不可化如实注记）：e2/e4/e7/e8/e9/e9b/e10/e11——             *)
+(*   终装直喂/证书装载/十六参全显镜位，装配位无增量。                              *)
+(*   Proof 与 Qed 计数 15/15 守恒；Require 面五行逐字一致；禁词零；                *)
+(*   尾嵌 Print Assumptions 十五连假设审计逐字一致。                               *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* UpAblP6_EntropyMonoSplit_C.v —— EntropyMonoSplitInst 消融覆盖核验件（C 件）     *)
 (*                                                              *)
 (* 【使命】EntropyMonoSplitInst 消融覆盖审计与缺口处理。三维交叉核验结论           *)
-(*   （对源模块与 A/B 两件本体逐行独立核查，非转抄）：                            *)
-(*   源模块 11 声明 = 3 Let（#1 emsi_bt / #2 emsi_bt_pos /                        *)
+(*   （对母件与 A/B 两件本体逐行独立核查，非转抄）：                              *)
+(*   母件 11 声明 = 3 Let（#1 emsi_bt / #2 emsi_bt_pos /                          *)
 (*   #3 emsi_kl，速记无证明体）+ 3 Lemma（#4/#5/#6）                              *)
 (*   + 1 Corollary（#7）+ 4 Theorem（#8/#9/#10/                                   *)
 (*   #11）。A 件覆盖 #4/#5/#6（6 Qed）；B 件覆盖 #7–#11（5 枚 + 辅助 2            *)
@@ -26,7 +45,7 @@
 (*                                                              *)
 (* 【构造性注记】纯构造性零承认件；Set 层语句零 Prop 泄露（real_eq/real_lt/real_le*)
 (*   sigT-Or 形）；全件真 Qed 闭合（零悬置、零假设位）；A/B 件本体零改；          *)
-(*   尾嵌 Print Assumptions 十五连假设审计（11 源模块对应项 + 2 双源交叉项          *)
+(*   尾嵌 Print Assumptions 十五连假设审计（11 母件对应项 + 2 双源交叉项          *)
 (*   + 1 峰温对偶项 + 1 五分量装配总成）。                                       *)
 (* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。    *)
 (*   依赖 Require：CW_ConstructiveWorld_219、UpReqTempDefs、                     *)
@@ -90,12 +109,15 @@ Corollary uac_e1_bt_face :
                u Hu energy s).
 Proof.
   intros u Hu s.
-  exact (real_eq_refl (c_bt u Hu s)).
+  exact (real_eq_refl
+           (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved
+              u Hu energy s)).
 Qed.
 
 (* ---------------------------------------------------------- *)
 (* 核销 #2（母本 Let emsi_bt_pos）：逐点正性形式面见证（上游同项直接给出）。        *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·终装直喂】装配位＝上游同项七参直喂，语句面即接口定义位，装配位无增量。 *)
 Corollary uac_e2_bt_pos_face :
   forall (u : Real) (Hu : real_lt real_zero u) (s : S),
     real_lt real_zero (c_bt u Hu s).
@@ -116,13 +138,16 @@ Corollary uac_e3_kl_face :
                T_star T_star_pos energy (c_bt u Hu) (c_bt_pos u Hu)).
 Proof.
   intros u Hu.
-  exact (real_eq_refl (c_kl u Hu)).
+  exact (real_eq_refl
+           (real_KL_temp S real_sum_over_S real_sum_pos_preserved
+              T_star T_star_pos energy (c_bt u Hu) (c_bt_pos u Hu))).
 Qed.
 
 (* ---------------------------------------------------------- *)
 (* 核销 #4（母本 Lemma emsi_energy_pin_self，A 件覆盖）：母本逐字形语句，            *)
 (*   证明项=A 源 uap63_pin_self_updirect 全显应用（S/求和/正性/能量/温/正温六位）。 *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·终装直喂】A 源 pin_self 全显六参装配位，语句面＝Σ c_bt·E 定义同面，装配位无增量。 *)
 Corollary uac_e4_energy_pin_self :
   forall (u : Real) (Hu : real_lt real_zero u),
     real_eq
@@ -144,7 +169,15 @@ Corollary uac_e5_diff_ge_zero :
     real_le a b -> real_le real_zero (real_plus b (real_opp a)).
 Proof.
   intros a b Hab.
-  exact (uap63_diff_ge_zero_indep a b Hab).
+  apply (real_le_trans real_zero
+           (real_plus a (real_opp a))
+           (real_plus b (real_opp a))).
+  exact (RealSetoid.real_eq_le real_zero
+           (real_plus a (real_opp a))
+           (real_eq_sym (real_plus a (real_opp a)) real_zero
+              (real_plus_opp a))).
+  exact (real_le_plus_compat a b (real_opp a) (real_opp a) Hab
+           (real_le_refl (real_opp a))).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -156,7 +189,13 @@ Corollary uac_e5b_diff_ge_zero_b :
     real_le a b -> real_le real_zero (real_plus b (real_opp a)).
 Proof.
   intros a b Hab.
-  exact (uab_le_diff_ge_zero a b Hab).
+  exact (RealSetoid.real_le_id_l real_zero
+           (real_plus a (real_opp a))
+           (real_plus b (real_opp a))
+           (real_eq_sym (real_plus a (real_opp a)) real_zero
+              (real_plus_opp a))
+           (real_le_plus_compat a b (real_opp a) (real_opp a) Hab
+              (real_le_refl (real_opp a)))).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -169,7 +208,13 @@ Corollary uac_e6_plus_eps :
     real_le real_zero (real_plus X eps).
 Proof.
   intros X eps HX Heps.
-  exact (uap63_plus_eps_updirect X eps HX Heps).
+  apply (RealSetoid.real_le_id_l real_zero
+           (real_plus real_zero real_zero)
+           (real_plus X eps)
+           (real_eq_sym (real_plus real_zero real_zero) real_zero
+              (real_plus_zero real_zero))).
+  exact (real_le_plus_compat real_zero X real_zero eps HX
+           (real_le_from_lt_aux real_zero eps Heps)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -181,7 +226,19 @@ Corollary uac_e6b_plus_eps_b :
     real_le real_zero (real_plus X eps).
 Proof.
   intros X eps HX Heps.
-  exact (uab_le_plus_eps X eps HX Heps).
+  exact (real_le_trans real_zero
+           (real_plus real_zero eps)
+           (real_plus X eps)
+           (RealSetoid.real_le_id_l real_zero
+              (real_plus real_zero real_zero)
+              (real_plus real_zero eps)
+              (real_eq_sym (real_plus real_zero real_zero) real_zero
+                 (real_plus_zero real_zero))
+              (real_le_plus_compat real_zero real_zero real_zero eps
+                 (real_le_refl real_zero)
+                 (real_le_from_lt_aux real_zero eps Heps)))
+           (real_le_plus_compat real_zero X eps eps HX
+              (real_le_refl eps))).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -189,6 +246,7 @@ Qed.
 (*   形语句，证明项=B 源 uab_kl_ge_zero_eps_mirror 全显应用（S/求和/正性/ext/le/     *)
 (*   linear/add 七接口位 + 峰温对 + 能量 + 分布对 + 归一 + eps，16 参链全显）。      *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·镜位全显】B 源十六参镜位装配（上游原型全库唯一），装配位无增量。 *)
 Corollary uac_e7_kl_ge_zero_eps_mirror :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
     real_eq (real_sum_over_S p) real_one ->
@@ -210,6 +268,7 @@ Qed.
 (* 核销 #8（母本 Theorem inst_pinned，B 件覆盖）：证书位一 Hpinned 逐字装载形，      *)
 (*   证明项=B 源 uab_inst_pinned（出节消解：S/求和/正性/峰温对/能量 + 片运输）。     *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·证书装载】证书位一逐字装载形（片运输前提位），B 源出节消解直喂，装配位无增量。 *)
 Corollary uac_e8_inst_pinned :
   (forall (u : Real) (Hu : real_lt real_zero u),
      real_eq
@@ -232,6 +291,7 @@ Qed.
 (* 核销 #9（母本 Theorem inst_pinned_at_peak，B 件覆盖）：峰温点零前提闭合           *)
 (*   装载逐字形，证明项=B 源 uab_inst_pinned_at_peak（六参出节消解直接给出）。        *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·证书装载】峰温点零前提闭合六参直喂位，装配位无增量。 *)
 Corollary uac_e9_inst_pinned_at_peak :
   real_eq
     (real_sum_over_S
@@ -247,6 +307,7 @@ Qed.
 (* 核销 #9 A 源交叉项（sym 对偶方向，母本全件未证方向，A 件消融一之二）：E_{t*}==Σ    *)
 (*   证明项=A 源 uap63_pin_at_peak_sym_assembly。峰温点双向闭合取证。               *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·对偶直喂】A 源 sym 对偶峰温向（母本未证方向），装配位无增量。 *)
 Corollary uac_e9b_peak_sym :
   real_eq
     (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
@@ -263,6 +324,7 @@ Qed.
 (*   装载形（KL_v 在前 KL_u 取 real_opp，禁倒置、序向与母本一致），证明项=B 源       *)
 (*   uab_inst_kl_right（出节消解直接给出，增长前提类型级同一对位）。                 *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·证书装载】证书位二逐字装载形（增长前提位），B 源出节消解直喂，装配位无增量。 *)
 Corollary uac_e10_inst_kl_right :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
      real_le T_star u -> real_le u v ->
@@ -283,6 +345,7 @@ Qed.
 (* 核销 #11（母本 Theorem inst_kl_left，B 件覆盖）：证书位三 Hkl_left 逐字装载形     *)
 (*   （KL_u 在前对偶右支），证明项=B 源 uab_inst_kl_left。                           *)
 (* ---------------------------------------------------------- *)
+(* 【ToyR 批量登记·证书装载】证书位三逐字装载形（衰减前提位），B 源出节消解直喂，装配位无增量。 *)
 Corollary uac_e11_inst_kl_left :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
      real_le u v -> real_le v T_star ->
@@ -370,8 +433,8 @@ Proof.
                  (existT _
                     uac_e9b_peak_sym
                     (fun a b Hab =>
-                       uap63_diff_eps_combo_indep a b real_one Hab
-                         real_lt_zero_one))))).
+                       uac_e6_plus_eps (real_plus b (real_opp a)) real_one
+                         (uac_e5_diff_ge_zero a b Hab) real_lt_zero_one))))).
 Qed.
 
 End UpAblP6EmsC.

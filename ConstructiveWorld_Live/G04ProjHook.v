@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR_G04ProjHook.v —— 玩具复检替换稿（ToyR 战役包I tier1 第四批切片四） *)
+(* 基准：Main/Live/G04ProjHook.v（565 注册面最新基线，只读零写）。      *)
+(* 语句面/声明名序/依赖面/自检面与基准逐字一致。勘面定谳：本件系闭名    *)
+(* 喂定钩（CYC11 使命），Proj/Z_P 语句含 inv Z 因子阻断转换层重演，      *)
+(* 独立重演须内联母定理 Z≡1 归一链＝引擎体重演，故仅换一处可独立收口的   *)
+(* 证明体：逐出支归零件不再把荒谬前提转发进 proj_drop_zero 引擎槽，      *)
+(* 改在定义层直灭——g4p_P 恒真（beta/delta 透明），Id (g4p_P i) false     *)
+(* 前提为构造子不相等式，判别引擎当场消解任意目标，零引擎消费。          *)
+(* 其余十件如实标注不硬凑（见台账切片四节）。                            *)
+(* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；   *)
+(* Main 整目录只读；本稿落消融50 写区。                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* G04ProjHook.v —— 消融50 战役 CYC11 席（批次 E-STAGING-CYC11）    *)
 (*                                                              *)
 (* 使命：CYB7 未决事项——G04 W2' 簇母定理回接实例化。fa57_ext.v      *)
@@ -133,9 +147,14 @@ Qed.
 Theorem g4p_proj_drop_zero_two :
   forall i : bool, Id (g4p_P i) false -> real_eq (g4p_Proj i) real_zero.
 Proof.
-  exact (fun (i : bool) (Hb : Id (g4p_P i) false) =>
-           proj_drop_zero bool g4p_f g4p_P g4p_idx
-                          (fun _ : bool => g4p_half_pos) g4p_witness i Hb).
+  intro i. intro Hb.
+  exact (match Hb in Id _ b return
+           (match b with
+            | true => unit
+            | false => real_eq (g4p_Proj i) real_zero
+            end) with
+         | id_refl => tt
+         end).
 Qed.
 
 (* 件 2：保留者放大 f ≤ Proj。 *)

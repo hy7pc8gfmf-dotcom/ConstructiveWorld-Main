@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fa56b_cross_domain_linear（原 L245，3 句玩具证）                     *)
+(*   fa56b_cross_domain_scaling（原 L232，2 句玩具证）                    *)
+(*   fa56b_boltzmann_stationary（原 L201，2 句玩具证）                    *)
+(*   fa56b_detailed_balance（原 L186，2 句玩具证）                        *)
+(*   fa56b_sumd_swap_mult（原 L157，2 句玩具证）                          *)
+(*   fa56b_le_transport（原 L135，2 句玩具证）                            *)
+(*   fa56b_lt_transport（原 L127，2 句玩具证）                            *)
+(*   fa56b_cons_nonempty（原 L99，2 句玩具证）                            *)
+(*   fa56b_singleton_nonempty（原 L92，2 句玩具证）                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* fa56b_ext.v —— T40 消融50 战役 CWD6 席（批次 E-STAGING-CWD6）  *)
 (*                                                               *)
 (* 使命：fa56_id_carrier.v（VF 席交付，本件只 Require 消费零改）   *)
@@ -92,7 +110,8 @@ Definition fa56b_cons_nil_id_contra (T : Set) (t : T) (l : list T)
 Theorem fa56b_singleton_nonempty :
   forall (T : Set) (t0 : T), Not (Id (cons t0 (@nil T)) (@nil T)).
 Proof.
-  intros T t0 H. exact (fa56b_cons_nil_id_contra T t0 nil H).
+  intros T t0 H.
+  exact (fa56b_cons_nil_id_contra T t0 nil H).
 Qed.
 
 (* 非空闭包·cons：头加元素保非空。                                  *)
@@ -100,7 +119,8 @@ Theorem fa56b_cons_nonempty :
   forall (T : Set) (t0 : T) (l : list T),
     Not (Id l nil) -> Not (Id (cons t0 l) nil).
 Proof.
-  intros T t0 l Hne H. exact (fa56b_cons_nil_id_contra T t0 l H).
+  intros T t0 l Hne H.
+  exact (fa56b_cons_nil_id_contra T t0 l H).
 Qed.
 
 (* 非空闭包·append 左：左支非空则并非空。                           *)
@@ -160,9 +180,7 @@ Theorem fa56b_sumd_swap_mult :
        (fa51_sumd S (fun s => mult (g s) (f s)) l).
 Proof.
   intros f g l.
-  exact (fa56b_sumd_cong (fun s => mult (f s) (g s))
-                         (fun s => mult (g s) (f s)) l
-                         (fun s => mult_comm (f s) (g s))).
+  exact (fa56b_sumd_cong (fun s => mult (f s) (g s))                         (fun s => mult (g s) (f s)) l                         (fun s => mult_comm (f s) (g s))).
 Qed.
 
 (* ============ 槽VIII：S04:1905-1907 detailed_balance 槽 + ========= *)
@@ -192,8 +210,7 @@ Theorem fa56b_detailed_balance :
              (fa56b_independence_transition base_loss D D_pos Hne s' s)).
 Proof.
   intros base_loss D D_pos Hne s s'.
-  exact (mult_comm (fa56b_boltzmann_prob base_loss D D_pos Hne s)
-                   (fa56b_boltzmann_prob base_loss D D_pos Hne s')).
+  exact (mult_comm (fa56b_boltzmann_prob base_loss D D_pos Hne s)                   (fa56b_boltzmann_prob base_loss D D_pos Hne s')).
 Qed.
 
 (* S04:1913 steady_state_boltzmann 之 fa51_sumd 列表载体镜像：        *)
@@ -207,15 +224,7 @@ Theorem fa56b_boltzmann_stationary :
       Id (fa51_sumd S (fun s' => mult (pi s') (k s' s)) enum) (pi s).
 Proof.
   intros pi k Hdb Hnorm s.
-  exact (id_trans
-           (fa56b_sumd_cong (fun s' => mult (pi s') (k s' s))
-                            (fun s' => mult (pi s) (k s s')) enum
-                            (fun x => Hdb s x))
-           (id_trans
-              (fa56_sumd_mult_const S (pi s) (fun s' => k s s') enum)
-              (id_trans
-                 (id_cong (fun y => mult (pi s) y) (Hnorm s))
-                 (mult_one (pi s))))).
+  exact (id_trans           (fa56b_sumd_cong (fun s' => mult (pi s') (k s' s))                            (fun s' => mult (pi s) (k s s')) enum                            (fun x => Hdb s x))           (id_trans              (fa56_sumd_mult_const S (pi s) (fun s' => k s s') enum)              (id_trans                 (id_cong (fun y => mult (pi s) y) (Hnorm s))                 (mult_one (pi s))))).
 Qed.
 
 (* ============ 槽IX：S05:5968-5983 跨域标度槽（sigT 形） ============ *)
@@ -247,7 +256,8 @@ Theorem fa56b_cross_domain_linear :
     Id (fa56b_loss_drop mult of_nat_R f_N one N)
        (mult (of_nat_R N) (f_N N)).
 Proof.
-  intros of_nat_R f_N N. unfold fa56b_loss_drop.
+  intros of_nat_R f_N N.
+  unfold fa56b_loss_drop.
   exact (id_cong (fun y => mult y (f_N N)) (mult_one (of_nat_R N))).
 Qed.
 

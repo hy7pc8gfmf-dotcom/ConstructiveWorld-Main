@@ -1,4 +1,21 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   inst_kl_left（原 L273，2 句玩具证）                                  *)
+(*   inst_kl_right（原 L244，2 句玩具证）                                 *)
+(*   inst_pinned_at_peak（原 L222，1 句玩具证）                           *)
+(*   inst_pinned（原 L193，2 句玩具证）                                   *)
+(*   emsi_kl_ge_zero_eps_mirror（原 L161，2 句玩具证）                    *)
+(*   emsi_le_plus_eps（原 L136，3 句玩具证）                              *)
+(*   emsi_le_diff_ge_zero（原 L117，3 句玩具证）                          *)
+(*   emsi_energy_pin_self（原 L97，2 句玩具证）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* EntropyMonoSplitInst.v —— 席位CZB13（批次 E-STAGING-CZB13）       *)
 (* T61b C3：UpReqEntropyMonoSplit 三证书槽装载件                     *)
 (*                                                              *)
@@ -102,9 +119,7 @@ Lemma emsi_energy_pin_self :
          u Hu energy).
 Proof.
   intros u Hu.
-  exact (real_eq_refl
-           (real_sum_over_S
-              (fun s : S => real_mult (emsi_bt u Hu s) (energy s)))).
+  exact (real_eq_refl           (real_sum_over_S              (fun s : S => real_mult (emsi_bt u Hu s) (energy s)))).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -119,13 +134,8 @@ Lemma emsi_le_diff_ge_zero :
     real_le a b -> real_le real_zero (real_plus b (real_opp a)).
 Proof.
   intros a b Hab.
-  apply (RealSetoid.real_le_id_l real_zero
-           (real_plus a (real_opp a))
-           (real_plus b (real_opp a))
-           (real_eq_sym (real_plus a (real_opp a)) real_zero
-              (real_plus_opp a))).
-  exact (real_le_plus_compat a b (real_opp a) (real_opp a) Hab
-           (real_le_refl (real_opp a))).
+  apply (RealSetoid.real_le_id_l real_zero           (real_plus a (real_opp a))           (real_plus b (real_opp a))           (real_eq_sym (real_plus a (real_opp a)) real_zero              (real_plus_opp a))).
+  exact (real_le_plus_compat a b (real_opp a) (real_opp a) Hab           (real_le_refl (real_opp a))).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -139,13 +149,8 @@ Lemma emsi_le_plus_eps :
     real_le real_zero (real_plus X eps).
 Proof.
   intros X eps HX Heps.
-  apply (RealSetoid.real_le_id_l real_zero
-           (real_plus real_zero real_zero)
-           (real_plus X eps)
-           (real_eq_sym (real_plus real_zero real_zero) real_zero
-              (real_plus_zero real_zero))).
-  exact (real_le_plus_compat real_zero X real_zero eps HX
-           (real_le_from_lt_aux real_zero eps Heps)).
+  apply (RealSetoid.real_le_id_l real_zero           (real_plus real_zero real_zero)           (real_plus X eps)           (real_eq_sym (real_plus real_zero real_zero) real_zero              (real_plus_zero real_zero))).
+  exact (real_le_plus_compat real_zero X real_zero eps HX           (real_le_from_lt_aux real_zero eps Heps)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -170,11 +175,7 @@ Corollary emsi_kl_ge_zero_eps_mirror :
            eps).
 Proof.
   intros p Hp Hnp eps Heps.
-  exact (real_KL_temp_ge_zero_eps
-           S real_sum_over_S real_sum_pos_preserved
-           real_sum_over_S_ext real_sum_over_S_le real_sum_over_S_linear
-           real_sum_over_S_add
-           T_star T_star_pos energy p Hp Hnp eps Heps).
+  exact (real_KL_temp_ge_zero_eps           S real_sum_over_S real_sum_pos_preserved           real_sum_over_S_ext real_sum_over_S_le real_sum_over_S_linear           real_sum_over_S_add           T_star T_star_pos energy p Hp Hnp eps Heps).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -204,15 +205,7 @@ Theorem inst_pinned :
          T_star T_star_pos energy).
 Proof.
   intros Hslice u Hu.
-  exact (real_eq_trans
-           (real_sum_over_S
-              (fun s : S => real_mult (emsi_bt u Hu s) (energy s)))
-           (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
-              u Hu energy)
-           (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
-              T_star T_star_pos energy)
-           (emsi_energy_pin_self u Hu)
-           (Hslice u Hu)).
+  exact (real_eq_trans           (real_sum_over_S              (fun s : S => real_mult (emsi_bt u Hu s) (energy s)))           (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved              u Hu energy)           (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved              T_star T_star_pos energy)           (emsi_energy_pin_self u Hu)           (Hslice u Hu)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -253,11 +246,7 @@ Theorem inst_kl_right :
         (real_plus (real_plus (emsi_kl v Hv) (real_opp (emsi_kl u Hu))) eps).
 Proof.
   intros Hgrowth u v Hu Hv Htu Huv eps Heps.
-  exact (emsi_le_plus_eps
-           (real_plus (emsi_kl v Hv) (real_opp (emsi_kl u Hu))) eps
-           (emsi_le_diff_ge_zero (emsi_kl u Hu) (emsi_kl v Hv)
-              (Hgrowth u v Hu Hv Htu Huv))
-           Heps).
+  exact (emsi_le_plus_eps           (real_plus (emsi_kl v Hv) (real_opp (emsi_kl u Hu))) eps           (emsi_le_diff_ge_zero (emsi_kl u Hu) (emsi_kl v Hv)              (Hgrowth u v Hu Hv Htu Huv))           Heps).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -282,11 +271,7 @@ Theorem inst_kl_left :
         (real_plus (real_plus (emsi_kl u Hu) (real_opp (emsi_kl v Hv))) eps).
 Proof.
   intros Hdecay u v Hu Hv Huv Hvt eps Heps.
-  exact (emsi_le_plus_eps
-           (real_plus (emsi_kl u Hu) (real_opp (emsi_kl v Hv))) eps
-           (emsi_le_diff_ge_zero (emsi_kl v Hv) (emsi_kl u Hu)
-              (Hdecay u v Hu Hv Huv Hvt))
-           Heps).
+  exact (emsi_le_plus_eps           (real_plus (emsi_kl u Hu) (real_opp (emsi_kl v Hv))) eps           (emsi_le_diff_ge_zero (emsi_kl v Hv) (emsi_kl u Hu)              (Hdecay u v Hu Hv Huv Hvt))           Heps).
 Qed.
 
 End EntropyMonoSplitInst.

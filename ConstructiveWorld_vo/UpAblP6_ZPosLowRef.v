@@ -1,4 +1,19 @@
 (* ===================================================================== *)
+(* ToyR_UpAblP6_ZPosLowRef.v —— 玩具复检替换稿（ToyR 战役包I tier1 第四批切片四） *)
+(* 基准：Main/Live/UpAblP6_ZPosLowRef.v（565 注册面最新基线，只读零写）。  *)
+(* 语句面/声明名序/依赖面/自检面与基准逐字一致；正文仅换九处玩具证明体：    *)
+(* 其一，双点/单点枚举非空两件改构造子判别引擎路线（弃手写型卫 match 项）； *)
+(* 其二，正性槽五件全部脱钩 ZPosSlotFeed 中转层——四件直取根引擎           *)
+(* （zposd_Z_pos 温度配分正性×2、sumd_sum_pos 逐项正性双腿内联×1、         *)
+(* brp_b3／brp_b4 剔除配分×2），一件直取次层 zpi2_ 槽实例；                *)
+(* 其三，双层和交换件改具体 2×2 真值表定义层收口（零引擎消费独立重演）；    *)
+(* 其四，复合传递件经勘面其根引擎在 fa53_compat_abs／InvPosLtCompat 模内，  *)
+(* 非本件依赖面（零新增依赖铁律）不可达，原 lf4 复合装配序如实保留不硬凑。 *)
+(* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；     *)
+(* Main 整目录只读；本稿落消融50 写区。                                   *)
+(* ===================================================================== *)
+
+(* ===================================================================== *)
 (* UpAblP6_ZPosLowRef.v —— ZPosSlotFeed 与 LowRefFeed4 的具体实例供给件    *)
 (* 使命：把 ZPosSlotFeed 的五个正性结论（UpSigMigrate2.Z_align_a_sum、      *)
 (*   UpReqAttnIter.Z_thermo_i、UpReqAttnGibbs.Z_thermo_r、                  *)
@@ -26,28 +41,14 @@ Import RealInterfaceEnhancedMod.
 Lemma uazlr_ne_bool_two :
   Not ((true :: false :: Datatypes.nil)%list = Datatypes.nil).
 Proof.
-  exact (fun H : (true :: false :: Datatypes.nil)%list = Datatypes.nil =>
-           match H in (_ = l) return
-             (match l with
-              | Datatypes.nil => Empty_set
-              | Datatypes.cons _ _ => unit
-              end) with
-           | eq_refl => tt
-           end).
+  intro H. discriminate H.
 Qed.
 
 (* 单点枚举非空 *)
 Lemma uazlr_ne_unit :
   Not ((tt :: Datatypes.nil)%list = Datatypes.nil).
 Proof.
-  exact (fun H : (tt :: Datatypes.nil)%list = Datatypes.nil =>
-           match H in (_ = l) return
-             (match l with
-              | Datatypes.nil => Empty_set
-              | Datatypes.cons _ _ => unit
-              end) with
-           | eq_refl => tt
-           end).
+  intro H. discriminate H.
 Qed.
 
 (* bool 逐点可判定 keep：keep b := if b then unit else Empty_set 的 Or 判定件 *)
@@ -105,11 +106,21 @@ Theorem uazlr_zsf_sigmig_align_bool :
             (fun _ : bool => real_one) real_one real_lt_zero_one
             (fun _ : bool => real_one)).
 Proof.
-  exact (@zsf_sigmig2_Z_align_a_pos Real RealEnhancedReal bool
+  exact (@sumd_sum_pos Real RealEnhancedReal bool
            (true :: false :: Datatypes.nil)%list
-           (fun _ : bool => real_one) real_one real_lt_zero_one
-           (fun _ : bool => real_one)
-           (fun _ : bool => real_lt_zero_one) uazlr_ne_bool_two).
+           (fun _ : bool =>
+              mult real_one
+                (exp_neg (opp (mult (inv_pos real_one real_lt_zero_one)
+                            real_one))))
+           uazlr_ne_bool_two
+           (fun _ : bool =>
+              @mult_positive Real RealEnhancedReal real_one
+                (exp_neg (opp (mult (inv_pos real_one real_lt_zero_one)
+                            real_one)))
+                real_lt_zero_one
+                (@exp_neg_pos Real RealEnhancedReal
+                   (opp (mult (inv_pos real_one real_lt_zero_one)
+                            real_one))))).
 Qed.
 
 (* UpReqAttnIter.Z_thermo_i 的正性实例（bool 双点，D:=1，能量恒一） *)
@@ -119,9 +130,9 @@ Theorem uazlr_zsf_iter_thermo_i_bool :
                (true :: false :: Datatypes.nil)%list)
             real_one real_lt_zero_one (fun _ : bool => real_one)).
 Proof.
-  exact (@zsf_iter_Z_thermo_i_pos Real RealEnhancedReal bool
+  exact (@zposd_Z_pos Real RealEnhancedReal bool
            (true :: false :: Datatypes.nil)%list
-           real_one real_lt_zero_one (fun _ : bool => real_one)
+           (fun _ : bool => real_one) real_one real_lt_zero_one
            uazlr_ne_bool_two).
 Qed.
 
@@ -132,9 +143,9 @@ Theorem uazlr_zsf_gibbs_thermo_r_unit :
                (tt :: Datatypes.nil)%list)
             real_one real_lt_zero_one (fun _ : unit => real_one)).
 Proof.
-  exact (@zsf_gibbs_Z_thermo_r_pos Real RealEnhancedReal unit
+  exact (@zposd_Z_pos Real RealEnhancedReal unit
            (tt :: Datatypes.nil)%list
-           real_one real_lt_zero_one (fun _ : unit => real_one)
+           (fun _ : unit => real_one) real_one real_lt_zero_one
            uazlr_ne_unit).
 Qed.
 
@@ -147,7 +158,8 @@ Theorem uazlr_zsf_gibbs_evicted_bool :
              real_one real_lt_zero_one (fun _ : bool => real_one)
              uazlr_keep uazlr_kd_bool).
 Proof.
-  exact (@zsf_gibbs_evicted_partition_r_pos Real RealEnhancedReal bool
+  exact (@brp_b3_evicted_partition_r_pos
+           Real RealEnhancedReal bool
            (true :: false :: Datatypes.nil)%list
            real_one real_lt_zero_one (fun _ : bool => real_one)
            uazlr_keep uazlr_kd_bool uazlr_hw_bool).
@@ -167,7 +179,7 @@ Theorem uazlr_zsf_restb_canonical_sov :
               | inr _ => zero
               end)).
 Proof.
-  exact (@zsf_restb_req_evicted_partition_pos_of_carrier
+  exact (@brp_b4_of_carrier
            Real RealEnhancedReal bool
            (true :: false :: Datatypes.nil)%list
            real_one real_lt_zero_one (fun _ : bool => real_one)
@@ -196,10 +208,7 @@ Theorem uazlr_lf4_sum_swap_bool_table :
             (fun s : bool =>
                if s then (if s' then real_one else real_zero) else real_zero))).
 Proof.
-  exact (@lf4_sum_swap_i Real RealEnhancedReal bool
-           (true :: false :: Datatypes.nil)%list
-           (fun a b : bool =>
-              if a then (if b then real_one else real_zero) else real_zero)).
+  exact (req_refl _).
 Qed.
 
 (* RI 面复合：S01_BaseRing RealInterface 环境（与 AttnDoeblin、             *)

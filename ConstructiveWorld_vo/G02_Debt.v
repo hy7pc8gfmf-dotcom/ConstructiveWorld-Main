@@ -64,7 +64,7 @@ Qed.
 (* Or 前件即 le 的构造性内容（接口单向 lt_le_iff 的记录） *)
 Lemma sqrt_premise_le_intro : forall d : R, Or (lt zero d) (Id zero d) -> le zero d.
 Proof.
-  intros d H. apply lt_le_iff. exact H.
+  intros d H. exact (lt_le_iff zero d H).
 Qed.
 
 (* ---- 旗舰（件 3）：抽象 Id 层任意非负 d 的平方根见证 ----
@@ -185,9 +185,9 @@ Lemma real_partition_function_scaled_pos :
   forall (c : Real) (z : S -> Real), real_lt real_zero (real_partition_function_scaled c z).
 Proof.
   intros c z.
-  unfold real_partition_function_scaled, real_exp_pos_fn.
-  apply real_sum_pos_preserved.
-  intro s. apply real_exp_neg_pos.
+  exact (real_sum_pos_preserved
+           (fun s : S => real_exp_neg (real_opp (real_mult c (z s))))
+           (fun s : S => real_exp_neg_pos (real_opp (real_mult c (z s))))).
 Qed.
 
 (* 缩放 softmax：sc(z; c)_s := e^{c·z_s}·inv(Z_c(z))（c 任意实） *)
@@ -274,9 +274,10 @@ Lemma real_partition_function_temp_param_pos :
     real_lt real_zero (real_partition_function_temp_param T0 HT0 z).
 Proof.
   intros T0 HT0 z.
-  unfold real_partition_function_temp_param, real_exp_pos_fn.
-  apply real_sum_pos_preserved.
-  intro s. apply real_exp_neg_pos.
+  exact (real_sum_pos_preserved
+           (fun s : S => real_exp_neg (real_opp (real_mult (real_inv_pos T0 HT0) (z s))))
+           (fun s : S =>
+              real_exp_neg_pos (real_opp (real_mult (real_inv_pos T0 HT0) (z s))))).
 Qed.
 
 (* 温度参数化 softmax：e^{z_s/T0}·inv(Z_T0(z)) *)
@@ -385,8 +386,9 @@ Lemma real_temp_is_scale_duality :
             (real_softmax_scaled (real_inv_pos c Hc) z s).
 Proof.
   intros c Hc z s.
-  apply real_eq_sym.
-  apply real_scale_temp_duality.
+  exact (real_eq_sym (real_softmax_scaled (real_inv_pos c Hc) z s)
+                     (real_softmax_temp_param c Hc z s)
+                     (real_scale_temp_duality c Hc z s)).
 Qed.
 
 (* ---- Section 温度版桥：1/T 缩放族 == 库式温度化 softmax ----
@@ -403,9 +405,10 @@ Definition real_partition_function_temp : Real :=
 
 Lemma real_partition_function_temp_pos : real_lt real_zero real_partition_function_temp.
 Proof.
-  unfold real_partition_function_temp, real_exp_pos_fn.
-  apply real_sum_pos_preserved.
-  intro s. apply real_exp_neg_pos.
+  exact (real_sum_pos_preserved
+           (fun s : S => real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
+           (fun s : S =>
+              real_exp_neg_pos (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))).
 Qed.
 
 (* 库式温度化 softmax（Section 温度形态） *)
@@ -496,9 +499,9 @@ Variable z_logits : S -> Real.
 Lemma real_exp_neg_wd : forall a b : Real,
   real_eq a b -> real_eq (real_exp_neg a) (real_exp_neg b).
 Proof.
-  intros a b H. unfold real_exp_neg.
-  apply cauchy_real_exp_wd.
-  apply (RealSetoid.real_eq_opp_compat a b H).
+  intros a b H.
+  exact (cauchy_real_exp_wd (real_opp a) (real_opp b)
+           (RealSetoid.real_eq_opp_compat a b H)).
 Qed.
 
 (* ---- 温度化配分函数（Real 层）：Z_T := Σ_s e^{z_s/T} ---- *)
@@ -507,9 +510,10 @@ Definition gibbst_real_partition_function_temp : Real :=
 
 Lemma gibbst_real_partition_function_temp_pos : real_lt real_zero gibbst_real_partition_function_temp.
 Proof.
-  unfold gibbst_real_partition_function_temp, real_exp_pos_fn.
-  apply real_sum_pos_preserved.
-  intro s. apply real_exp_neg_pos.
+  exact (real_sum_pos_preserved
+           (fun s : S => real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
+           (fun s : S =>
+              real_exp_neg_pos (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))).
 Qed.
 
 (* ---- 温度化 softmax（Real 层）：e^{z_s/T}·inv(Z_T) ---- *)
@@ -658,3 +662,10 @@ Proof.
 Qed.
 
 End RealAttnGibbsTemp.
+Print Assumptions sqrt_premise_le_intro.
+Print Assumptions real_partition_function_scaled_pos.
+Print Assumptions real_partition_function_temp_param_pos.
+Print Assumptions real_partition_function_temp_pos.
+Print Assumptions gibbst_real_partition_function_temp_pos.
+Print Assumptions real_temp_is_scale_duality.
+Print Assumptions real_exp_neg_wd.

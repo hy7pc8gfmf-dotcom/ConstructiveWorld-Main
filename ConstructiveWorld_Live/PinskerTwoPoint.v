@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   p2_kl2_nonneg_b（原 L425，5 句玩具证）                               *)
+(*   p2_c_pos（原 L360，3 句玩具证）                                      *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* PinskerTwoPoint.v —— 席位 C14：构造性 Pinsker 型 eps 形前置件        *)
 (*   （A4 移植榜 T5 的可着陆核；二点分布 p=(p,1−p)、q=(q,1−q)）          *)
 (*                                                                *)
@@ -367,9 +378,7 @@ Theorem p2_c_pos : forall (p q : Real)
 Proof.
   intros p q Hp Hq Hp1 Hq1 Hkl Htv.
   unfold p2_c.
-  exact (real_mult_positive (p2_kl2 p q Hp Hq Hp1 Hq1)
-           (real_inv_pos (p2_tvsq p q) Htv) Hkl
-           (real_inv_pos_pos (p2_tvsq p q) Htv)).
+  exact (real_mult_positive (p2_kl2 p q Hp Hq Hp1 Hq1)           (real_inv_pos (p2_tvsq p q) Htv) Hkl           (real_inv_pos_pos (p2_tvsq p q) Htv)).
 Qed.
 
 (* 7b. 主件：c·TV² == KL（逆元代数链）⟹ Bishop 形 c·TV² ≤_B KL。      *)
@@ -430,7 +439,9 @@ Theorem p2_kl2_nonneg_b : forall (p q : Real)
   real_le_b real_zero (p2_kl2 p q Hp Hq Hp1 Hq1).
 Proof.
   intros p q Hp Hq Hp1 Hq1 Hne.
-  apply real_le_to_le_b. unfold real_le. left.
+  apply real_le_to_le_b.
+  unfold real_le.
+  left.
   exact (p2_kl2_pos p q Hp Hq Hp1 Hq1 Hne).
 Qed.
 

@@ -212,9 +212,9 @@ Qed.
 (* 1−δ < 1（@29032；真证：omd δ 展开 + 混合 plus 兼容槽） *)
 Lemma agq_omd_lt_one : lt omd one.
 Proof.
-  apply (lt_id_r _ (plus one zero) one (plus_zero one)).
-  exact (lt_plus_compat_le_lt_i one one (opp delta) zero
-           (le_refl one) (lt_zero_opp delta delta_pos)).
+  exact (lt_id_r omd (plus one zero) one (plus_zero one)
+           (lt_plus_compat_le_lt_i one one (opp delta) zero
+              (le_refl one) (lt_zero_opp delta delta_pos))).
 Qed.
 
 (* ---- 稳态目标两件（@28802/@29012 真证） ---- *)
@@ -814,3 +814,4 @@ Proof.
 Qed.
 
 End ReqAttnIter.
+Print Assumptions agq_omd_lt_one.

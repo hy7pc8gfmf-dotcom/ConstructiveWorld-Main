@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
+(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
+(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
+(* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
+(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性收口，文尾  *)
+(* 保留原件假设面追印。清单：                                      *)
+(*   csm_sum_ext/csm_sum_linear/csm_sum_add/csm_sum_le/             *)
+(*       csm_sum_zero_nonneg（五槽委派改列表归纳就地重演，金标直取   *)
+(*       UpReqSumD sumd_list_sum 族体；csm_sumf 定义性展开入折叠形） *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqConcSoftmax.v —— SO 具体实例首切片（req 镜像系·柯西 Real 面）   *)
 (*                                                              *)
 (* 目的：论文7 §10.2 第 7 项的无条件合龙路线①切片：在柯西 Real 上        *)
@@ -7,7 +19,7 @@
 (*   sumf 槽六件中的五件＋缺口核心件：                                   *)
 (*   csm_abs_sum_le_eps（绝对值和三角的 Bishop 逐 eps 形）。             *)
 (*                                                              *)
-(* 实测注记：                                              *)
+(* 定谳注记（探针实测）：                                              *)
 (*   ① plain 形 abs_sum_le（Or 编码 le）对混合号 f 无构造性路线——        *)
 (*      real_le = Or (real_lt) (real_eq)（S02 L469），|Σf| 与 Σ|f| 既     *)
 (*      无正间隙也非实等，Or 两支均不可达（真墙）。故本件供 Bishop        *)
@@ -30,13 +42,13 @@
 (*   C 定义级保底：csm_sum_eq_list（折叠处方即列表和，req_refl）。       *)
 (*                                                              *)
 (* 备注：公理面自审：全件语句 Set 值（req/le/lt 均 Set 值面）；前提位     *)
-(*   全显式证书参数（eps 正性等），审计应 Closed；无未证断言；           *)
+(*   全显式证书参数（eps 正性等），探针应 Closed；无未证断言；           *)
 (*   无非构造捷径；主件 Defined 收束。                                  *)
 (* ============================================================ *)
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Setoid Morphisms.
-From Stdlib Require Import Lia.
+From Stdlib Require Import Lia Lra.
 Open Scope Q_scope.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -61,28 +73,87 @@ Proof. intro g. exact (req_refl (sumd_list_sum S g enum)). Qed.
 (* B 档：外延槽（sumd_sum_ext 委派；csm_sumf 折叠处方可转换） *)
 Lemma csm_sum_ext : forall f g : S -> Real,
   (forall s : S, req (f s) (g s)) -> req (csm_sumf f) (csm_sumf g).
-Proof. intros f g H. exact (sumd_sum_ext S enum f g H). Qed.
+Proof.
+  intros f g H.
+  unfold csm_sumf.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
+Qed.
 
 (* B 档：数乘线性槽（sumd_sum_linear 委派） *)
 Lemma csm_sum_linear : forall (a : Real) (f : S -> Real),
   req (csm_sumf (fun s : S => mult a (f s))) (mult a (csm_sumf f)).
-Proof. intros a f. exact (sumd_sum_linear S enum a f). Qed.
+Proof.
+  intros a f.
+  unfold csm_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                   (sumd_list_sum S (fun s : S => mult a (f s)) t))
+             (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+             (mult a (plus (f x) (sumd_list_sum S f t)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_list_sum S (fun s : S => mult a (f s)) t)
+                (mult a (sumd_list_sum S f t))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_list_sum S f t)))
+                (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+                (distrib a (f x) (sumd_list_sum S f t)))).
+Qed.
 
 (* B 档：可加槽（sumd_sum_add 委派） *)
 Lemma csm_sum_add : forall f g : S -> Real,
   req (csm_sumf (fun s : S => plus (f s) (g s)))
       (plus (csm_sumf f) (csm_sumf g)).
-Proof. intros f g. exact (sumd_sum_add S enum f g). Qed.
+Proof.
+  intros f g.
+  unfold csm_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - exact (req_trans
+             (plus (plus (f x) (g x))
+                   (sumd_list_sum S (fun s : S => plus (f s) (g s)) t))
+             (plus (plus (f x) (g x))
+                   (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))
+             (plus (plus (f x) (sumd_list_sum S f t))
+                   (plus (g x) (sumd_list_sum S g t)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_list_sum S (fun s : S => plus (f s) (g s)) t)
+                (plus (sumd_list_sum S f t) (sumd_list_sum S g t))
+                (req_refl (plus (f x) (g x))) IH)
+             (req_plus_exchange (f x) (sumd_list_sum S f t)
+                (g x) (sumd_list_sum S g t))).
+Qed.
 
 (* B 档：单调槽（sumd_sum_le 委派） *)
 Lemma csm_sum_le : forall f g : S -> Real,
   (forall s : S, le (f s) (g s)) -> le (csm_sumf f) (csm_sumf g).
-Proof. intros f g H. exact (sumd_sum_le S enum f g H). Qed.
+Proof.
+  intros f g H.
+  unfold csm_sumf.
+  induction enum as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
+Qed.
 
 (* B 档：非负槽（sumd_list_sum_nonneg 直供折叠形） *)
 Lemma csm_sum_zero_nonneg : forall f : S -> Real,
   (forall s : S, le zero (f s)) -> le zero (csm_sumf f).
-Proof. intros f H. exact (sumd_list_sum_nonneg S f enum H). Qed.
+Proof.
+  intros f H.
+  unfold csm_sumf.
+  induction enum as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_id_l zero (plus zero zero)
+             (plus (f x) (sumd_list_sum S f t))
+             (req_sym (plus zero zero) zero (plus_zero zero))
+             (le_plus_compat zero (f x) zero (sumd_list_sum S f t)
+                (H x) IH)).
+Qed.
 
 (* ============ A 档：三角核心件（本件增量） ============ *)
 
@@ -252,7 +323,7 @@ Definition csm_abs_sum_le_eps : forall (f : S -> Real) (eps : Real),
 
 End CsmSumOver.
 
-(* ============ 公理面证据：新件零外部未证假设（全 Closed，前提=显式参数） ============ *)
+(* ============ G4 证据：新件零外部未证假设（全 Closed，前提=显式参数） ============ *)
 Print Assumptions csm_sum_eq_list.
 Print Assumptions csm_sum_ext.
 Print Assumptions csm_sum_linear.

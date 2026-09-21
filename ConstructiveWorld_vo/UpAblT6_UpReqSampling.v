@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 战役包I · 切片七扫尾 —— UpAblT6_UpReqSampling 玩具替换稿        *)
+(*   基准：Main/Live 同名件（全程只读零改）；语句面/定理名/依赖面/      *)
+(*   声明序与基准逐字守恒，仅换标注刀位的证明体。                      *)
+(*   刀路（九槽落，两槽如实挂账）：弃 sumd_sum_* 出节转发件单点直喂，    *)
+(*   unfold sumd_sumf（透明处方）后 enum 列表归纳原地重演——nil 支       *)
+(*   定义性收口，cons 支双腿缝合（ext/le＝逐点腿＋归纳腿；linear＝      *)
+(*   distrib 右分配中项链；add＝assoc-comm 换位内项链，弃不可达之       *)
+(*   UpReqAlgebra req_plus_exchange 改纯字段链）；pos＝中转层脱钩        *)
+(*   直取 sumd_list_sum_pos。挂账（原体保留）：A5 swap_cc（双层和       *)
+(*   换序，内外双重重排超切片边界）；B6 eq_list（sumd_sum_eq_list        *)
+(*   本体即定义性恒等 req_refl，任何替换体与之逐字同＝唯一形不化）。     *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT6_UpReqSampling.v —— 假设消融战役 T6 批·席 a（T3a 移交同根余量前 ≤25 位之 11 位） *)
 (* 辖区：UpReqSampling.v sumf 接口面（ReqUContraction/ReqBoundedSoftmax 两节）   *)
 (* 放电母本：sumd_*@UpReqSumD                                                   *)
@@ -71,7 +85,11 @@ Theorem uabT6_usamp_sum_ext :
     (forall s : S, req (f s) (g s)) -> req (sumd_sumf S enum f) (sumd_sumf S enum g).
 Proof.
   intros R RIS S enum f g H.
-  exact (sumd_sum_ext S enum f g H).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
 Qed.
 
 (* A2 ←L107 sum_linear（逐字：forall (a : R) (f : S -> R), req (sumf (fun s : S => mult a (f s))) (mult a (sumf f))） *)
@@ -81,7 +99,21 @@ Theorem uabT6_usamp_sum_linear :
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
 Proof.
   intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_list_sum S (fun s : S => mult a (f s)) t))
+             (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+             (mult a (plus (f x) (sumd_list_sum S f t)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_list_sum S (fun s : S => mult a (f s)) t)
+                (mult a (sumd_list_sum S f t))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_list_sum S f t)))
+                (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+                (distrib a (f x) (sumd_list_sum S f t)))).
 Qed.
 
 (* A3 ←L110 sum_add（逐字：forall f g : S -> R, req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g))） *)
@@ -92,7 +124,10 @@ Theorem uabT6_usamp_sum_add :
         (plus (sumd_sumf S enum f) (sumd_sumf S enum g)).
 Proof.
   intros R RIS S enum f g.
-  exact (sumd_sum_add S enum f g).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - (exact (req_trans (plus (plus (f x) (g x)) (sumd_list_sum S (fun s : S => plus (f s) (g s)) t)) (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (plus (f x) (sumd_list_sum S f t)) (plus (g x) (sumd_list_sum S g t))) (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x)) (sumd_list_sum S (fun s : S => plus (f s) (g s)) t) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)) (req_refl (plus (f x) (g x))) IH) (req_trans (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (f x) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))) (plus (plus (f x) (sumd_list_sum S f t)) (plus (g x) (sumd_list_sum S g t))) (req_trans (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (plus (f x) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))) (req_sym (plus (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus_assoc (f x) (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (req_plus_compat (f x) (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (req_refl (f x)) (req_trans (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (plus (g x) (sumd_list_sum S f t)) (sumd_list_sum S g t)) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (plus_assoc (g x) (sumd_list_sum S f t) (sumd_list_sum S g t)) (req_trans (plus (plus (g x) (sumd_list_sum S f t)) (sumd_list_sum S g t)) (plus (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t)) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (req_plus_compat (plus (g x) (sumd_list_sum S f t)) (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t) (sumd_list_sum S g t) (plus_comm (g x) (sumd_list_sum S f t)) (req_refl (sumd_list_sum S g t))) (req_sym (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (plus (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t)) (plus_assoc (sumd_list_sum S f t) (g x) (sumd_list_sum S g t))))))) (plus_assoc (f x) (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))))).
 Qed.
 
 (* A4 ←L113 sum_le（逐字：forall f g : S -> R, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g)） *)
@@ -102,7 +137,11 @@ Theorem uabT6_usamp_sum_le :
     (forall s : S, le (f s) (g s)) -> le (sumd_sumf S enum f) (sumd_sumf S enum g).
 Proof.
   intros R RIS S enum f g H.
-  exact (sumd_sum_le S enum f g H).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
 Qed.
 
 (* A5 ←L132 sum_swap_cc（swap 特形：双标函数参，内外两层 sumf 实例位全换；放电 sumd_sum_swap@384） *)
@@ -125,7 +164,11 @@ Theorem uabT6_bsoft_sum_ext :
     (forall s : S, req (f s) (g s)) -> req (sumd_sumf S enum f) (sumd_sumf S enum g).
 Proof.
   intros R RIS S enum f g H.
-  exact (sumd_sum_ext S enum f g H).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
 Qed.
 
 (* B2 ←L709 sum_linear *)
@@ -135,7 +178,21 @@ Theorem uabT6_bsoft_sum_linear :
     req (sumd_sumf S enum (fun s : S => mult a (f s))) (mult a (sumd_sumf S enum f)).
 Proof.
   intros R RIS S enum a f.
-  exact (sumd_sum_linear S enum a f).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (mult a zero) zero (mult_zero a)).
+  - exact (req_trans
+             (plus (mult a (f x))
+                (sumd_list_sum S (fun s : S => mult a (f s)) t))
+             (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+             (mult a (plus (f x) (sumd_list_sum S f t)))
+             (req_plus_compat (mult a (f x)) (mult a (f x))
+                (sumd_list_sum S (fun s : S => mult a (f s)) t)
+                (mult a (sumd_list_sum S f t))
+                (req_refl (mult a (f x))) IH)
+             (req_sym (mult a (plus (f x) (sumd_list_sum S f t)))
+                (plus (mult a (f x)) (mult a (sumd_list_sum S f t)))
+                (distrib a (f x) (sumd_list_sum S f t)))).
 Qed.
 
 (* B3 ←L712 sum_pos（非空数据槽显式参，sumd_sum_pos@233 同形） *)
@@ -146,7 +203,8 @@ Theorem uabT6_bsoft_sum_pos :
       (forall s : S, lt zero (f s)) -> lt zero (sumd_sumf S enum f).
 Proof.
   intros R RIS S enum Hne f H.
-  exact (sumd_sum_pos S enum f Hne H).
+  unfold sumd_sumf.
+  exact (sumd_list_sum_pos S f enum Hne H).
 Qed.
 
 (* B4 ←L714 sum_add *)
@@ -157,7 +215,10 @@ Theorem uabT6_bsoft_sum_add :
         (plus (sumd_sumf S enum f) (sumd_sumf S enum g)).
 Proof.
   intros R RIS S enum f g.
-  exact (sumd_sum_add S enum f g).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - (exact (req_trans (plus (plus (f x) (g x)) (sumd_list_sum S (fun s : S => plus (f s) (g s)) t)) (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (plus (f x) (sumd_list_sum S f t)) (plus (g x) (sumd_list_sum S g t))) (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x)) (sumd_list_sum S (fun s : S => plus (f s) (g s)) t) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)) (req_refl (plus (f x) (g x))) IH) (req_trans (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (f x) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))) (plus (plus (f x) (sumd_list_sum S f t)) (plus (g x) (sumd_list_sum S g t))) (req_trans (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (plus (f x) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))) (req_sym (plus (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (plus (plus (f x) (g x)) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus_assoc (f x) (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t)))) (req_plus_compat (f x) (f x) (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (req_refl (f x)) (req_trans (plus (g x) (plus (sumd_list_sum S f t) (sumd_list_sum S g t))) (plus (plus (g x) (sumd_list_sum S f t)) (sumd_list_sum S g t)) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (plus_assoc (g x) (sumd_list_sum S f t) (sumd_list_sum S g t)) (req_trans (plus (plus (g x) (sumd_list_sum S f t)) (sumd_list_sum S g t)) (plus (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t)) (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (req_plus_compat (plus (g x) (sumd_list_sum S f t)) (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t) (sumd_list_sum S g t) (plus_comm (g x) (sumd_list_sum S f t)) (req_refl (sumd_list_sum S g t))) (req_sym (plus (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t))) (plus (plus (sumd_list_sum S f t) (g x)) (sumd_list_sum S g t)) (plus_assoc (sumd_list_sum S f t) (g x) (sumd_list_sum S g t))))))) (plus_assoc (f x) (sumd_list_sum S f t) (plus (g x) (sumd_list_sum S g t)))))).
 Qed.
 
 (* B5 ←L717 sum_le *)
@@ -167,7 +228,11 @@ Theorem uabT6_bsoft_sum_le :
     (forall s : S, le (f s) (g s)) -> le (sumd_sumf S enum f) (sumd_sumf S enum g).
 Proof.
   intros R RIS S enum f g H.
-  exact (sumd_sum_le S enum f g H).
+  unfold sumd_sumf.
+  induction enum as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_plus_compat (f x) (g x) (sumd_list_sum S f t)
+             (sumd_list_sum S g t) (H x) IH).
 Qed.
 
 (* B6 ←L747 sum_eq_list（eq_list 特形：列表和桥，UpReqSumD 同形自持机械 sumd_list_sum 兑现；放电 sumd_sum_eq_list@81） *)

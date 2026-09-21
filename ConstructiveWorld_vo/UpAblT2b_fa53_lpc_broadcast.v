@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* ToyR 战役包I · 切片七扫尾 —— UpAblT2b_fa53_lpc_broadcast 玩具替换稿  *)
+(*   基准：Main/Live 同名件（全程只读零改）；语句面/定理名/依赖面/      *)
+(*   声明序与基准逐字守恒，仅换标注刀位的证明体。                      *)
+(*   刀路（十一槽全落）：弃聚合放电件 fa53_lt_plus_compat_(lt_le|le_lt)_dec *)
+(*   单点直喂，改「薄-严三明治」链——薄腿 le_plus_compat(自反零元,原槽)   *)
+(*   ＋严腿 fa53_lt_plus_translate_r（母本件③出口，兄弟件非聚合本体）    *)
+(*   ＋le_lt_trans/lt_le_trans 中项定向收口；三分裂解拓扑整体弃用，      *)
+(*   无需 fa53_lt_dec 可判定数据槽（依赖面收窄）。节7 桥世界全参显式     *)
+(*   同构刀。挂账：无。                                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT2b_fa53_lpc_broadcast.v —— 假设消融战役 T2b 批·第③组        *)
 (*   lt 混合加法保序族·聚合形消融件（一件放八节·每槽一条引用性消融定理） *)
 (*                                                              *)
@@ -50,7 +62,9 @@ Theorem uabt2b_s04_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节1：S04_RealExpLogConv.v L286 —— *)
@@ -58,7 +72,9 @@ Theorem uabt2b_s04_lt_plus_compat_le_lt :
   forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_le_lt_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus b c) (plus b d)
+           (le_plus_compat a b c c Hab (le_refl c))
+           (fa53_lt_plus_translate_l c d b Hcd)).
 Qed.
 
 (* —— 节2：S06_DiffSamplingGibbs.v L4018 —— *)
@@ -66,7 +82,9 @@ Theorem uabt2b_s06_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节2：S06_DiffSamplingGibbs.v L4019 —— *)
@@ -74,7 +92,9 @@ Theorem uabt2b_s06_lt_plus_compat_le_lt :
   forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_le_lt_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus b c) (plus b d)
+           (le_plus_compat a b c c Hab (le_refl c))
+           (fa53_lt_plus_translate_l c d b Hcd)).
 Qed.
 
 (* —— 节3：S05_AlignmentGRPO.v L2308（le_lt 在前） —— *)
@@ -82,7 +102,9 @@ Theorem uabt2b_s05_lt_plus_compat_le_lt :
   forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_le_lt_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus b c) (plus b d)
+           (le_plus_compat a b c c Hab (le_refl c))
+           (fa53_lt_plus_translate_l c d b Hcd)).
 Qed.
 
 (* —— 节3：S05_AlignmentGRPO.v L2310（lt_le 在后） —— *)
@@ -90,7 +112,9 @@ Theorem uabt2b_s05_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节4：S13_NLiveAudit.v L2349-2350（名 lt_plus_compat_lt_le_h，双行语句逐字） —— *)
@@ -99,7 +123,9 @@ Theorem uabt2b_s13_lt_plus_compat_lt_le_h :
     lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节5：UpEntropyGain.v L86-87（双行语句逐字） —— *)
@@ -108,7 +134,9 @@ Theorem uabt2b_upentropygain_lt_plus_compat_lt_le :
     lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节6：UpFirewall.v L107-108（双行语句逐字） —— *)
@@ -117,7 +145,9 @@ Theorem uabt2b_upfirewall_lt_plus_compat_lt_le :
     lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 (* —— 节8：AttnDoeblin.v L158-159（名 lt_plus_compat_lt_le_h，双行语句逐字） —— *)
@@ -126,7 +156,9 @@ Theorem uabt2b_attndoeblin_lt_plus_compat_lt_le_h :
     lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
   intros a b c d Hab Hcd.
-  exact (fa53_lt_plus_compat_lt_le_dec a b c d Hab Hcd).
+  exact (le_lt_trans (plus a c) (plus a d) (plus b d)
+           (le_plus_compat a a c d (le_refl a) Hcd)
+           (fa53_lt_plus_translate_r a b d Hab)).
 Qed.
 
 End UabT2bLpcBroadcast.
@@ -148,7 +180,18 @@ Theorem uabt2b_upreqalgebra_req_lt_plus_compat_lt_le :
         (@RealInterfaceEnhancedMod.plus (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0) b d).
 Proof.
   intros RI0 DO0 a b c d Hab Hcd.
-  exact (@fa53_lt_plus_compat_lt_le_dec RI0 DO0 a b c d Hab Hcd).
+  exact (@RealInterfaceEnhancedMod.le_lt_trans
+           (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0)
+           (@RealInterfaceEnhancedMod.plus (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0) a c)
+           (@RealInterfaceEnhancedMod.plus (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0) a d)
+           (@RealInterfaceEnhancedMod.plus (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0) b d)
+           (@RealInterfaceEnhancedMod.le_plus_compat
+              (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0)
+              a a c d
+              (@RealInterfaceEnhancedMod.le_refl
+                 (@S01_BaseRing.R RI0) (TempSoftmaxInstantiation.tsi_rie_setoid RI0) a)
+              Hcd)
+           (@fa53_lt_plus_translate_r RI0 DO0 a b d Hab)).
 Qed.
 
 (* ============ PA 收尾段（逐件 Closed 判读） ============ *)

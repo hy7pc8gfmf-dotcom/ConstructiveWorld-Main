@@ -1,4 +1,34 @@
 (* ===================================================================== *)
+(* 【ToyR 战役替换稿 · 包J 切片三】本件为玩具证明体替换稿：原件全文逐字   *)
+(*   保留，仅换十条玩具坐标中八条的证明体（按定理名定位，语句面/声明序    *)
+(*   零改，依赖面零改）。八条换轨路线：                                   *)
+(*   其一 slq_le_resp_req_l：转发跳消除——不再单点转发实数集oid单调整理件， *)
+(*      定义级同位直出（集oid内基引擎 real_le_compat 取 y 腿恒等位）。    *)
+(*   其二 slq_le_resp_req_r：同上对偶（x 腿恒等位）。                     *)
+(*   其三 slq_step_pos：双侧同位运输——不动点见证与反向桥见证逐级命名，    *)
+(*      经 real_lt_compat 两腿同运收口（原稿单腿 sym 绕行单跳）。         *)
+(*   其四 slq_step_entropy_eq_boltz：自足重演——不再消费熵外延整理件，     *)
+(*      展开熵定义面后逐点不动点+乘法同余+对合同余+对数外延四级直出。     *)
+(*   其五 slq_entropy_ent_unfold：定义层受控展开——受体熵定义与其内层      *)
+(*      总微观数定义双层展开后定义性收口（原稿单跳转换）。                *)
+(*   其六 slq_receiver_second_law_quant：命名见证结构推导——严格增见证     *)
+(*      与逐 eps 伸张见证逐级命名后复合收口（原稿单体巨型嵌套一次到位）。 *)
+(*   其七 slq_lt_to_le_eps：同上传递链命名拆解（三段可审计级链）。        *)
+(*   其八 slq_second_law_setoid_frame：自足直出——不再消费 Prop 自由孪件， *)
+(*      展开桥出口定义面后左腿直取+传递复合独立闭合。                     *)
+(*   【切片五追记】其九 slq_entropy_deficit_nonneg_eps：去转发结构重演——  *)
+(*      不再单点转发最大熵逐 eps 档大引擎（t13），改机械移植其算术移位链   *)
+(*      自足重演：移位引理 t13_le_plus_opp_shift（依赖面内 UpReqTempDual） *)
+(*      起手，右单位序件收拢，熵亏恒等式引擎 real_entropy_deficit_kl_temp  *)
+(*      （依赖面内 UpReqEntropyDeficitTemp）直供加法分解，结合/交换/同位   *)
+(*      适配多段命名复合收尾（Gibbs 腿按原位直配）。                       *)
+(*   其十 slq_second_law_eps_list：不可化标注结案——同一移位链的列表求和    *)
+(*      束实例，自足重演需整链复制且巨型束五参全内联，收益/风险比低；      *)
+(*      引擎消费位去转发示范已由其九承担，不再重复落刀。                   *)
+(*   全程纯构造性，Set 层承载，证毕记号逐条守恒，依赖面与原件逐行一致。   *)
+(* ===================================================================== *)
+
+(* ===================================================================== *)
 (* SecondLawQuantified.v —— C10 席：Second Law 定量化（A4 移植榜 T3）      *)
 (*   受体 = S06_DiffSamplingGibbs.v SecondLaw 区块（经 CW219 薄壳导出）：  *)
 (*   second_law_irreversible（原 S06:3044）是假设 strict_entropy_        *)
@@ -59,11 +89,11 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 Lemma slq_le_resp_req_l : forall (a b c : Real),
   real_eq a b -> real_le b c -> real_le a c.
-Proof. intros a b c Hab Hbc. exact (RealSetoid.real_le_id_l a b c Hab Hbc). Qed.
+Proof. intros a b c Hab Hbc. exact (RealSetoid.real_le_compat b a c c (real_eq_sym a b Hab) (real_eq_refl c) Hbc). Qed.
 
 Lemma slq_le_resp_req_r : forall (a b c : Real),
   real_eq b c -> real_le a b -> real_le a c.
-Proof. intros a b c Hbc Hab. exact (RealSetoid.real_le_id_r a b c Hbc Hab). Qed.
+Proof. intros a b c Hbc Hab. exact (RealSetoid.real_le_compat a a b c (real_eq_refl a) Hbc Hab). Qed.
 
 (* ============================================================ *)
 (* 第一部分：主件——受体 SecondLaw 区块的实例化定量升级（Real 层） *)
@@ -153,9 +183,11 @@ Lemma slq_step_pos :
     real_lt real_zero (slq_gibbs_step p s').
 Proof.
   intros p Hnp s'.
-  exact (RealSetoid.real_lt_id_r real_zero (slq_boltz s') (slq_gibbs_step p s')
-           (real_eq_sym (slq_gibbs_step p s') (slq_boltz s')
-                        (slq_gibbs_step_fixed p Hnp s'))
+  pose proof (slq_gibbs_step_fixed p Hnp s') as Hfix.
+  pose proof (real_eq_sym (slq_gibbs_step p s') (slq_boltz s') Hfix) as Hsym.
+  exact (RealSetoid.real_lt_compat real_zero real_zero
+           (slq_boltz s') (slq_gibbs_step p s')
+           (real_eq_refl real_zero) Hsym
            (slq_boltz_pos s')).
 Qed.
 
@@ -186,10 +218,20 @@ Theorem slq_step_entropy_eq_boltz :
             (slq_entropy slq_boltz slq_boltz_pos).
 Proof.
   intros p Hnp.
-  apply (slq_entropy_dist_ext
-           (slq_gibbs_step p) slq_boltz
-           (slq_step_pos p Hnp) slq_boltz_pos).
-  intro s. exact (slq_gibbs_step_fixed p Hnp s).
+  unfold slq_entropy, real_entropy_dist.
+  apply sumext. intro s.
+  apply (RealSetoid.real_eq_mult_compat
+           (slq_gibbs_step p s)
+           (real_opp (real_log (slq_gibbs_step p s) (slq_step_pos p Hnp s)))
+           (slq_boltz s)
+           (real_opp (real_log (slq_boltz s) (slq_boltz_pos s)))
+           (slq_gibbs_step_fixed p Hnp s)).
+  apply (RealSetoid.real_eq_opp_compat
+           (real_log (slq_gibbs_step p s) (slq_step_pos p Hnp s))
+           (real_log (slq_boltz s) (slq_boltz_pos s))).
+  exact (real_log_wd (slq_gibbs_step p s) (slq_boltz s)
+           (slq_step_pos p Hnp s) (slq_boltz_pos s)
+           (slq_gibbs_step_fixed p Hnp s)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -323,8 +365,37 @@ Theorem slq_entropy_deficit_nonneg_eps :
               (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps).
 Proof.
   intros p Hp Hnp Henergy Hgibbs eps Heps.
-  exact (t13_max_entropy_le_eps S sumf sumpos sumext sumlinear sumadd
-           T T_pos energy p Hp Hnp Henergy Hgibbs eps Heps).
+  apply (t13_le_plus_opp_shift (slq_entropy p Hp) (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps)).
+  apply (RealSetoid.real_le_id_r real_zero
+           (real_plus (slq_kl_cur_boltz p Hp) eps)
+           (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps) (real_opp (slq_entropy p Hp)))).
+  - apply (real_eq_trans
+             (real_plus (slq_kl_cur_boltz p Hp) eps)
+             (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_opp (slq_entropy p Hp))) eps)
+             (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps) (real_opp (slq_entropy p Hp)))).
+    + apply (RealSetoid.real_eq_plus_compat_adapt (slq_kl_cur_boltz p Hp)
+               (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_opp (slq_entropy p Hp))) eps eps).
+      * apply real_eq_sym.
+        exact (real_entropy_deficit_kl_temp S sumf sumpos sumext sumlinear sumadd
+                 T T_pos energy p Hp Hnp Henergy).
+      * apply real_eq_refl.
+    + apply (real_eq_trans
+               (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_opp (slq_entropy p Hp))) eps)
+               (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_plus (real_opp (slq_entropy p Hp)) eps))
+               (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps) (real_opp (slq_entropy p Hp)))).
+      * apply real_eq_sym.
+        exact (real_plus_assoc (slq_entropy slq_boltz slq_boltz_pos) (real_opp (slq_entropy p Hp)) eps).
+      * apply (real_eq_trans
+                 (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_plus (real_opp (slq_entropy p Hp)) eps))
+                 (real_plus (slq_entropy slq_boltz slq_boltz_pos) (real_plus eps (real_opp (slq_entropy p Hp))))
+                 (real_plus (real_plus (slq_entropy slq_boltz slq_boltz_pos) eps) (real_opp (slq_entropy p Hp)))).
+        -- apply (RealSetoid.real_eq_plus_compat_adapt (slq_entropy slq_boltz slq_boltz_pos) (slq_entropy slq_boltz slq_boltz_pos)
+                    (real_plus (real_opp (slq_entropy p Hp)) eps)
+                    (real_plus eps (real_opp (slq_entropy p Hp)))
+                    (real_eq_refl (slq_entropy slq_boltz slq_boltz_pos))
+                    (real_plus_comm (real_opp (slq_entropy p Hp)) eps)).
+        -- exact (real_plus_assoc (slq_entropy slq_boltz slq_boltz_pos) eps (real_opp (slq_entropy p Hp))).
+  - exact (Hgibbs eps Heps).
 Qed.
 
 End SlqSecondLaw.
@@ -483,6 +554,7 @@ Theorem slq_entropy_ent_unfold :
                 (Omega_B (@S01_BaseRing.minus RI E_total E_A))))).
 Proof.
   intros RI Omega_A Omega_B E_total k_B E_A.
+  unfold entropy_ent, Omega_total_ent.
   exact (@id_refl _ _).
 Qed.
 
@@ -503,6 +575,9 @@ Theorem slq_receiver_second_law_quant :
       (@S01_BaseRing.plus RI (entropy (dynamics x)) eps).
 Proof.
   intros RI entropy dynamics Hstrict x Hx eps Heps.
+  pose proof (@S06_DiffSamplingGibbs.second_law_irreversible
+                RI entropy dynamics Hstrict x Hx) as Hs.
+  pose proof (tsi_le_plus_eps_r RI (entropy (dynamics x)) eps Heps) as Hp.
   exact (@RealInterfaceEnhancedMod.lt_le_iff (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
            (entropy x)
            (@S01_BaseRing.plus RI (entropy (dynamics x)) eps)
@@ -510,8 +585,7 @@ Proof.
                    (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
                    (entropy x) (entropy (dynamics x))
                    (@S01_BaseRing.plus RI (entropy (dynamics x)) eps)
-                   (@S06_DiffSamplingGibbs.second_law_irreversible RI entropy dynamics Hstrict x Hx)
-                   (tsi_le_plus_eps_r RI (entropy (dynamics x)) eps Heps)))).
+                   Hs Hp))).
 Qed.
 
 (* 桥 2'（Prop 自由孪件）：lt 前提直接形（零 Prop 语句面纪律位） *)
@@ -523,12 +597,12 @@ Theorem slq_lt_to_le_eps :
     @S01_BaseRing.le RI a (@S01_BaseRing.plus RI b eps).
 Proof.
   intros RI a b eps Heps Hlt.
+  pose proof (@RealInterfaceEnhancedMod.lt_le_trans
+                (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
+                a b (@S01_BaseRing.plus RI b eps) Hlt
+                (tsi_le_plus_eps_r RI b eps Heps)) as Hchain.
   exact (@RealInterfaceEnhancedMod.lt_le_iff (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-           a (@S01_BaseRing.plus RI b eps)
-           (inl (@RealInterfaceEnhancedMod.lt_le_trans
-                   (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
-                   a b (@S01_BaseRing.plus RI b eps)
-                   Hlt (tsi_le_plus_eps_r RI b eps Heps)))).
+           a (@S01_BaseRing.plus RI b eps) (inl Hchain)).
 Qed.
 
 (* 桥 3：tsi_rie_setoid 承重出口面——同一定量结论经桥实例 le/plus        *)
@@ -548,7 +622,15 @@ Theorem slq_second_law_setoid_frame :
       (@S01_BaseRing.plus RI (entropy (dynamics x)) eps).
 Proof.
   intros RI entropy dynamics x eps Heps Hlt.
-  exact (slq_lt_to_le_eps RI (entropy x) (entropy (dynamics x)) eps Heps Hlt).
+  unfold slq_bridge_le.
+  apply (@RealInterfaceEnhancedMod.lt_le_iff (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
+           (entropy x) (@S01_BaseRing.plus RI (entropy (dynamics x)) eps)).
+  left.
+  exact (@RealInterfaceEnhancedMod.lt_le_trans
+           (@S01_BaseRing.R RI) (tsi_rie_setoid RI)
+           (entropy x) (entropy (dynamics x))
+           (@S01_BaseRing.plus RI (entropy (dynamics x)) eps)
+           Hlt (tsi_le_plus_eps_r RI (entropy (dynamics x)) eps Heps)).
 Qed.
 
 (* ===================================================================== *)

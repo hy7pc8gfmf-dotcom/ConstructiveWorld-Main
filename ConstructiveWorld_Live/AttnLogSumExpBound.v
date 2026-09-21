@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   attn_log_partition_bound_B（原 L505，3 句玩具证）                    *)
+(*   attn_log_partition_bound_full（原 L388，2 句玩具证）                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* AttnLogSumExpBound.v — 施工席位 C12：注意力聚合 log-partition 上界  *)
 (* （A2 组合榜组 6；S 链薄壳内 A×B 装配，零新公理）                   *)
 (* ============================================================ *)
@@ -399,9 +410,7 @@ Theorem attn_log_partition_bound_full :
             (real_plus (real_log (sf_partition ss) Wp) (real_log B HB)).
 Proof.
   intros ss f Wp B HB Hnil Hb Hub.
-  apply (attn_log_partition_bound ss f Wp B HB
-           (attn_aggregate_pos ss f Wp Hnil Hb)
-           (attn_aggregate_le_bound ss f Wp B Hnil Hub)).
+  apply (attn_log_partition_bound ss f Wp B HB           (attn_aggregate_pos ss f Wp Hnil Hb)           (attn_aggregate_le_bound ss f Wp B Hnil Hub)).
 Qed.
 
 (* ============================================================ *)

@@ -243,7 +243,11 @@ Fixpoint req_pow_pos_c (x : R) (Hx : lt zero x) (n : nat) : lt zero (req_r_pow x
 Lemma req_r_pow_nonneg : forall x n, lt zero x -> le zero (req_r_pow x n).
 Proof.
   intros x n Hx.
-  apply (lt_le_iff _ _ (inl (req_r_pow_pos x n Hx))).
+  assert (Hpos : lt zero (req_r_pow x n)).
+  { induction n as [| m IH]; simpl.
+    - exact one_pos.
+    - exact (mult_positive x (req_r_pow x m) Hx IH). }
+  exact (lt_le_iff zero (req_r_pow x n) (inl Hpos)).
 Qed.
 
 (* Id r_pow_dec L14100：0 < b < 1 ⟹ b^{S n} ≤ b^n *)
@@ -482,9 +486,10 @@ Qed.
 Lemma req_one_minus_kappa_pos : lt zero (req_minus one kappa).
 Proof.
   unfold req_minus.
-  apply (lt_id_l zero (plus kappa (opp kappa)) (plus one (opp kappa))
-                 (req_sym _ _ (plus_opp kappa))
-                 (lt_plus_compat_lt_le kappa one (opp kappa) (opp kappa) kappa_lt_one (le_refl (opp kappa)))).
+  exact (lt_id_l zero (plus kappa (opp kappa)) (plus one (opp kappa))
+           (req_sym (plus kappa (opp kappa)) zero (plus_opp kappa))
+           (lt_plus_compat_lt_le kappa one (opp kappa) (opp kappa) kappa_lt_one
+              (le_refl (opp kappa)))).
 Qed.
 
 (* Id one_minus_pow_le_one L14279：1−κ^m ≤ 1 *)
@@ -1007,10 +1012,10 @@ Qed.
 Lemma req_abs_minus_zero : forall a : R, req (abs (req_minus a zero)) (abs a).
 Proof.
   intro a.
-  apply (req_abs_compat (req_minus a zero) a).
-  exact (req_trans (plus a (opp zero)) (plus a zero) a
-                   (req_plus_compat a a (opp zero) zero (req_refl a) req_opp_zero)
-                   (plus_zero a)).
+  exact (req_abs_compat (req_minus a zero) a
+           (req_trans (plus a (opp zero)) (plus a zero) a
+              (req_plus_compat a a (opp zero) zero (req_refl a) req_opp_zero)
+              (plus_zero a))).
 Qed.
 
 (* ============ Q. lim 夹逼核心（Id L14763-14844；+2 假设位，登记表 2） ============ *)
@@ -1297,8 +1302,9 @@ Qed.
 Lemma req_minus_pos : forall a b : R, lt a b -> lt zero (req_minus b a).
 Proof.
   intros a b Hab. unfold req_minus.
-  apply (lt_id_l zero (plus a (opp a)) (plus b (opp a)) (req_sym _ _ (plus_opp a))).
-  apply (lt_plus_compat_lt_le a b (opp a) (opp a) Hab (le_refl (opp a))).
+  exact (lt_id_l zero (plus a (opp a)) (plus b (opp a))
+           (req_sym _ _ (plus_opp a))
+           (lt_plus_compat_lt_le a b (opp a) (opp a) Hab (le_refl (opp a)))).
 Qed.
 
 (* Id gradient_step_abs_contraction L15016：K1c 正分支单步绝对值收缩 *)
@@ -1424,8 +1430,8 @@ Theorem req_gradient_zero_neg_entropy_truth : forall x : R,
   forall y : R, le (opp (entropy x)) (opp (entropy y)).
 Proof.
   intros x Hg y.
-  apply (opp_le_compat (entropy y) (entropy x)).
-  exact (req_gradient_zero_entropy_max x Hg y).
+  exact (opp_le_compat (entropy y) (entropy x)
+           (req_gradient_zero_entropy_max x Hg y)).
 Qed.
 
 (* 弱三分（Id L15169 同位；Real 层 real_weak_trich L32526 已证可满足） *)
@@ -1506,3 +1512,8 @@ End UpReqConvergenceCauchy.
 (* NatLe 前提（cauchy_complete 字段 L40591 对接形）——语义同构，     *)
 (* 消费 iterate_lim_exists 零摩擦，登记头注登记表 4。                *)
 (* ============================================================ *)
+Print Assumptions req_r_pow_nonneg.
+Print Assumptions req_minus_pos.
+Print Assumptions req_one_minus_kappa_pos.
+Print Assumptions req_abs_minus_zero.
+Print Assumptions req_gradient_zero_neg_entropy_truth.

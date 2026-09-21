@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t33_elbo_strict_divergence_bool（原 L304，2 句玩具证）               *)
+(*   t33_elbo_strict_divergence（原 L263，3 句玩具证）                    *)
+(*   t33_elbo_strict_divergence_le（原 L227，3 句玩具证）                 *)
+(*   t33_elbo_strict_of_kl_pos（原 L194，3 句玩具证）                     *)
+(*   t33_elbo_strict_of_fe_strict（原 L99，3 句玩具证）                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOStrict.v *)
 (* *)
 (* 目的： 定理 4.8 ELBO 紧性的严格逆否腿补齐。 *)
@@ -110,12 +124,7 @@ Lemma t33_elbo_strict_of_fe_strict :
 Proof.
   intros S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hfs.
   unfold real_elbo, real_evidence.
-  exact (real_opp_lt_compat
-           (real_free_energy S real_sum_over_S real_base_loss D
-              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
-              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))
-           (real_free_energy S real_sum_over_S real_base_loss D q Hq)
-           Hfs).
+  exact (real_opp_lt_compat           (real_free_energy S real_sum_over_S real_base_loss D              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))           (real_free_energy S real_sum_over_S real_base_loss D q Hq)           Hfs).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -212,11 +221,8 @@ Lemma t33_elbo_strict_of_kl_pos :
              D_pos Z_align_r Z_align_r_pos).
 Proof.
   intros X L real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Hkl.
-  apply (t33_elbo_strict_of_fe_strict X
-           (fun f : X -> Real => real_list_sum X f L) real_base_loss D D_pos
-           Z_align_r Z_align_r_pos q Hq).
-  exact (t33_fe_strict_of_kl_pos X L real_base_loss D D_pos Z_align_r Z_align_r_pos
-           q Hq Hnormq Hnormb Hkl).
+  apply (t33_elbo_strict_of_fe_strict X           (fun f : X -> Real => real_list_sum X f L) real_base_loss D D_pos           Z_align_r Z_align_r_pos q Hq).
+  exact (t33_fe_strict_of_kl_pos X L real_base_loss D D_pos Z_align_r Z_align_r_pos           q Hq Hnormq Hnormb Hkl).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -242,15 +248,9 @@ Theorem t33_elbo_strict_divergence_le :
           (real_evidence X (fun f : X -> Real => real_list_sum X f (l₁ ++ s₀ :: l₂))
              real_base_loss D D_pos Z_align_r Z_align_r_pos).
 Proof.
-  intros X l₁ s₀ l₂ real_base_loss D D_pos Z_align_r Z_align_r_pos
-         q Hq Hnormq Hnormb Hpq Hdiv.
-  apply (t33_elbo_strict_of_kl_pos X (l₁ ++ s₀ :: l₂) real_base_loss D D_pos
-           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb).
-  exact (klst_kl_sum_strict X l₁ s₀ l₂ q
-           (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hq
-           (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hpq Hnormq Hnormb Hdiv).
+  intros X l₁ s₀ l₂ real_base_loss D D_pos Z_align_r Z_align_r_pos         q Hq Hnormq Hnormb Hpq Hdiv.
+  apply (t33_elbo_strict_of_kl_pos X (l₁ ++ s₀ :: l₂) real_base_loss D D_pos           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb).
+  exact (klst_kl_sum_strict X l₁ s₀ l₂ q           (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq           (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hpq Hnormq Hnormb Hdiv).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -285,15 +285,9 @@ Theorem t33_elbo_strict_divergence :
           (real_evidence X (fun f : X -> Real => real_list_sum X f (l₁ ++ s₀ :: l₂))
              real_base_loss D D_pos Z_align_r Z_align_r_pos).
 Proof.
-  intros X l₁ s₀ l₂ real_base_loss D D_pos Z_align_r Z_align_r_pos
-         q Hq Hnormq Hnormb Hpq Hdiv.
-  apply (t33_elbo_strict_of_kl_pos X (l₁ ++ s₀ :: l₂) real_base_loss D D_pos
-           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb).
-  exact (klst_kl_energy_nonconst X l₁ s₀ l₂ q
-           (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hq
-           (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hpq Hnormq Hnormb Hdiv).
+  intros X l₁ s₀ l₂ real_base_loss D D_pos Z_align_r Z_align_r_pos         q Hq Hnormq Hnormb Hpq Hdiv.
+  apply (t33_elbo_strict_of_kl_pos X (l₁ ++ s₀ :: l₂) real_base_loss D D_pos           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb).
+  exact (klst_kl_energy_nonconst X l₁ s₀ l₂ q           (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq           (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hpq Hnormq Hnormb Hdiv).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -324,8 +318,7 @@ Theorem t33_elbo_strict_divergence_bool :
              real_base_loss D D_pos Z_align_r Z_align_r_pos).
 Proof.
   intros real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Hpq Hdiv.
-  exact (t33_elbo_strict_divergence bool [] true [false] real_base_loss D D_pos
-           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Hpq Hdiv).
+  exact (t33_elbo_strict_divergence bool [] true [false] real_base_loss D D_pos           Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Hpq Hdiv).
 Qed.
 
 (* ---------------------------------------------------------- *)

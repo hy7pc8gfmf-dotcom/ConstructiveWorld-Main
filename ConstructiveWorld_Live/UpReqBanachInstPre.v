@@ -1,3 +1,23 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包F·tier1 头批 同名替换件：UpReqBanachInstPre（台账 T245 切片五）    *
+ * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、         *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                       *
+ * 替换清单（17 条）：bxip_head_cR／bxip_head_bplus／bxip_norm_wd／          *
+ *   bxip_norm_wd_qeqt／bxip_head_bmult／bxip_head_bopp／bxip_f_refl／       *
+ *   bxip_f_sym／bxip_f_trans／bxip_f_coef_zero／bxip_f_coef_one／           *
+ *   bxip_f_norm_zero／bxip_f_norm_one／bxip_f_norm_pos／bxip_inst_smoke／   *
+ *   bxip_inst_smoke_plus／bxip_inst_smoke_wd                              *
+ * 三口径（BanachInstReal·InstB·Strong 同族范式直套）：①定义层受控展开       *
+ *   （head 评估与 real_const 透明 delta 消化 projT1 iota；qnorm match 腿    *
+ *   派发：Z0 腿 cbv 一跳收口，Zpos 腿 gcd/div 逐位 replace-by-reflexivity   *
+ *   数值见证链——head 四件／coef 两件／norm 两件）                          *
+ *   ＋②换轨桥接（germ 定义层 unfold 后 id_cong／id_sym／@id_trans 中间项   *
+ *   显式命名收口——norm_wd／f_refl／f_sym／f_trans；qeqT 形改走             *
+ *   bxib_qeqT_of_id 桥直连——norm_wd_qeqt）                                 *
+ *   ＋③结构性推导（QleT' 叶引擎体在 head 投影位整体内联——norm_pos；         *
+ *   实例投影 delta 展开＋同族引擎体重演——inst_smoke 三件，消除跨层单跳）。  *
+ * 纪律：纯构造性；Set 层零 Prop 泄露；证明口逐条配平；全部真收口。         *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
 (* UpReqBanachInstPre.v —— 席INST3：路径 B 弱化类具体实例席        *)
 (* （弱化轨首例，20260913）                                       *)
@@ -43,7 +63,12 @@ Definition bxip_head (x : Real) : Q := projT1 x 0%nat.
 Definition bxip_cR (q : Q) : Real := real_const q.
 
 Lemma bxip_head_cR : forall q : Q, Id (bxip_head (bxip_cR q)) q.
-Proof. intro q. reflexivity. Qed.
+Proof.
+  intro q.
+  unfold bxip_head, bxip_cR, real_const.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 (* 种型等价：规范种型（Set 层，全库唯一实例位） *)
 Definition bxip_bae_germ (a b : Real) : Set :=
@@ -66,7 +91,12 @@ Definition bxip_bcoef_f (q : Q) : Real := bxip_cR (bxib_qnorm q).
 (* head 面还原（运算输出位定义级消化） *)
 Lemma bxip_head_bplus : forall x y : Real,
   Id (bxip_head (bxip_bplus_f x y)) (bxib_qnorm (bxip_head x + bxip_head y)%Q).
-Proof. intros x y. reflexivity. Qed.
+Proof.
+  intros x y.
+  unfold bxip_head, bxip_bplus_f, bxip_cR, real_const.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 (* ============================================================ *)
 (* S1：Q 层工作件（==-合同 / Qabs 助件 / 规范不动点）               *)
@@ -122,13 +152,22 @@ Qed.
 (* 墙一弱化形（实为 Id 形直证）：种型等价的范数 Id-良定 *)
 Lemma bxip_norm_wd : forall a b : Real,
   bxip_bae_germ a b -> Id (bxip_bnorm_f a) (bxip_bnorm_f b).
-Proof. intros a b H. unfold bxip_bnorm_f. apply (id_cong Qabs). exact H. Qed.
+Proof.
+  intros a b H.
+  unfold bxip_bae_germ in H.
+  unfold bxip_bnorm_f.
+  exact (id_cong Qabs H).
+Qed.
 
 (* 墙一 QeqT 形 *)
 Lemma bxip_norm_wd_qeqt : forall a b : Real,
   bxip_bae_germ a b -> QeqT (bxip_bnorm_f a) (bxip_bnorm_f b).
 Proof.
-  intros a b H. apply bxib_qeqT_of_id. apply bxip_norm_wd. exact H.
+  intros a b H.
+  unfold bxip_bnorm_f.
+  apply bxib_qeqT_of_id.
+  unfold bxip_bae_germ in H.
+  exact (id_cong Qabs H).
 Qed.
 
 (* 墙二弱化形：钉定面的 QeqT 形（原始 Qabs 右端，代表元级成立） *)
@@ -272,23 +311,47 @@ Qed.
 
 Lemma bxip_head_bmult : forall x y : Real,
   Id (bxip_head (bxip_bmult_f x y)) (bxib_qnorm (bxip_head x * bxip_head y)%Q).
-Proof. intros x y. reflexivity. Qed.
+Proof.
+  intros x y.
+  unfold bxip_head, bxip_bmult_f, bxip_cR, real_const.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 Lemma bxip_head_bopp : forall x : Real,
   Id (bxip_head (bxip_bopp_f x)) (bxib_qnorm (- bxip_head x)%Q).
-Proof. intro x. reflexivity. Qed.
+Proof.
+  intro x.
+  unfold bxip_head, bxip_bopp_f, bxip_cR, real_const.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 (* ---- 等价三律 ---- *)
 
 Lemma bxip_f_refl : forall a : Real, bxip_bae_germ a a.
-Proof. intro a. apply id_refl. Qed.
+Proof.
+  intro a.
+  unfold bxip_bae_germ.
+  exact (@id_refl _ (bxib_qnorm (bxip_head a))).
+Qed.
 
 Lemma bxip_f_sym : forall a b : Real, bxip_bae_germ a b -> bxip_bae_germ b a.
-Proof. intros a b H. apply id_sym. exact H. Qed.
+Proof.
+  intros a b H.
+  unfold bxip_bae_germ in H |- *.
+  exact (id_sym H).
+Qed.
 
 Lemma bxip_f_trans : forall a b c : Real,
   bxip_bae_germ a b -> bxip_bae_germ b c -> bxip_bae_germ a c.
-Proof. intros a b c H1 H2. apply (id_trans H1 H2). Qed.
+Proof.
+  intros a b c H1 H2.
+  unfold bxip_bae_germ in H1 |- *.
+  unfold bxip_bae_germ in H2.
+  exact (@id_trans _ (bxib_qnorm (bxip_head a))
+            (bxib_qnorm (bxip_head b)) (bxib_qnorm (bxip_head c)) H1 H2).
+Qed.
 
 (* ---- 加法群 ---- *)
 
@@ -501,10 +564,22 @@ Qed.
 (* ---- 标量嵌入面 ---- *)
 
 Lemma bxip_f_coef_zero : bxip_bae_germ (bxip_bcoef_f 0%Q) bxip_bzero_f.
-Proof. unfold bxip_bae_germ, bxip_bcoef_f, bxip_bzero_f, bxip_head. reflexivity. Qed.
+Proof.
+  unfold bxip_bae_germ, bxip_bcoef_f, bxip_bzero_f, bxip_head, real_const.
+  unfold bxib_qnorm.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 Lemma bxip_f_coef_one : bxip_bae_germ (bxip_bcoef_f 1%Q) bxip_bone_f.
-Proof. unfold bxip_bae_germ, bxip_bcoef_f, bxip_bone_f, bxip_head. reflexivity. Qed.
+Proof.
+  unfold bxip_bae_germ, bxip_bcoef_f, bxip_bone_f, bxip_head, real_const.
+  unfold bxib_qnorm.
+  cbv beta iota zeta.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  apply id_refl.
+Qed.
 
 Lemma bxip_f_coef_mult : forall q r : Q,
   bxip_bae_germ (bxip_bcoef_f (q * r)%Q)
@@ -567,10 +642,20 @@ Qed.
 (* ---- 范数面 ---- *)
 
 Lemma bxip_f_norm_zero : Id (bxip_bnorm_f bxip_bzero_f) 0%Q.
-Proof. unfold bxip_bnorm_f, bxip_bzero_f, bxip_head. reflexivity. Qed.
+Proof.
+  unfold bxip_bnorm_f, bxip_bzero_f, bxip_head, real_const, bxib_qnorm, Qabs.
+  cbv beta iota zeta.
+  apply id_refl.
+Qed.
 
 Lemma bxip_f_norm_one : Id (bxip_bnorm_f bxip_bone_f) 1%Q.
-Proof. unfold bxip_bnorm_f, bxip_bone_f, bxip_head. reflexivity. Qed.
+Proof.
+  unfold bxip_bnorm_f, bxip_bone_f, bxip_head, real_const, bxib_qnorm, Qabs.
+  cbv beta iota zeta.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  apply id_refl.
+Qed.
 
 Lemma bxip_f_norm_opp : forall a : Real,
   QeqT (bxip_bnorm_f (bxip_bopp_f a)) (bxip_bnorm_f a).
@@ -588,7 +673,11 @@ Qed.
 
 Lemma bxip_f_norm_pos : forall a : Real, QleT' 0 (bxip_bnorm_f a).
 Proof.
-  intro a. unfold bxip_bnorm_f. apply bxip_qleT_zero_abs_qn.
+  intro a.
+  unfold bxip_bnorm_f.
+  destruct (bxip_head a) as [n d].
+  destruct n as [|p|p];
+    apply Qle_to_QleT'; unfold Qle, Qabs, bxib_qnorm; cbn; lia.
 Qed.
 
 Lemma bxip_f_norm_plus : forall a b : Real,
@@ -703,7 +792,16 @@ Lemma bxip_inst_smoke :
   @bxip_bae bxip_real_pre
     (@bxip_bcoef bxip_real_pre 1%Q)
     (@bxip_bone bxip_real_pre).
-Proof. apply bxip_bcoef_one. Qed.
+Proof.
+  unfold bxip_bae, bxip_bcoef, bxip_bone.
+  cbv delta [bxip_real_pre] beta iota zeta.
+  unfold bxip_bae_germ, bxip_bcoef_f, bxip_bone_f, bxip_head, real_const.
+  unfold bxib_qnorm.
+  cbv beta iota zeta.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  apply id_refl.
+Qed.
 
 (* 装配冒烟：W6a 二字段投影位（bcoef plus/wd 经实例字段） *)
 Lemma bxip_inst_smoke_plus : forall q r : Q,
@@ -711,13 +809,34 @@ Lemma bxip_inst_smoke_plus : forall q r : Q,
     (@bxip_bplus bxip_real_pre (@bxip_bcoef bxip_real_pre q)
                                (@bxip_bcoef bxip_real_pre r))
     (@bxip_bcoef bxip_real_pre (q + r)%Q).
-Proof. intros q r. apply bxip_bcoef_plus. Qed.
+Proof.
+  intros q r.
+  unfold bxip_bae, bxip_bcoef, bxip_bplus.
+  cbv delta [bxip_real_pre] beta iota zeta.
+  unfold bxip_bae_germ.
+  rewrite (bxip_head_bplus (bxip_bcoef_f q) (bxip_bcoef_f r)).
+  unfold bxip_bcoef_f.
+  repeat rewrite bxip_head_cR.
+  rewrite (bxib_qnorm_fix_id (bxib_qnorm q + bxib_qnorm r)%Q).
+  rewrite (bxib_qnorm_fix_id (q + r)%Q).
+  apply bxib_qnorm_id_of_qeqT.
+  apply bxib_qeqT_cong_plus; apply bxib_qnorm_fix.
+Qed.
 
 Lemma bxip_inst_smoke_wd : forall q r : Q,
   q == r ->
   @bxip_bae bxip_real_pre
     (@bxip_bcoef bxip_real_pre q) (@bxip_bcoef bxip_real_pre r).
-Proof. intros q r Hqr. apply bxip_bcoef_wd. exact Hqr. Qed.
+Proof.
+  intros q r Hqr.
+  unfold bxip_bae, bxip_bcoef.
+  cbv delta [bxip_real_pre] beta iota zeta.
+  unfold bxip_bae_germ, bxip_bcoef_f.
+  repeat rewrite bxip_head_cR.
+  rewrite (bxib_qnorm_fix_id q), (bxib_qnorm_fix_id r).
+  apply bxib_qnorm_id_of_qeqT.
+  apply qeq_imp_qeqT. exact Hqr.
+Qed.
 
 (* ============================================================ *)
 (* G3：提取探针 + 假设面自审                                      *)

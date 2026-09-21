@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   geod_policy_iter_kl_geom_step_eps（原 L460，3 句玩具证）             *)
+(*   geod_step_kl_eta_bound_eps（原 L431，3 句玩具证）                    *)
+(*   geod_kappa_pos（原 L393，2 句玩具证）                                *)
+(*   geod_lsum_linear（原 L247，3 句玩具证）                              *)
+(*   geod_lsum_add（原 L239，3 句玩具证）                                 *)
+(*   geod_lsum_le（原 L231，3 句玩具证）                                  *)
+(*   geod_amgm_pointwise_iface（原 L210，1 句玩具证）                     *)
+(*   geod_amgm_pointwise_eps（原 L178，2 句玩具证）                       *)
+(*   geod_le_to_le_b（原 L84，2 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqGeomD.v *)
 (* *)
 (* 目的： step_kl_eta_bound 槽的单步几何不等式消解。 *)
@@ -185,24 +203,7 @@ Theorem geod_amgm_pointwise_eps : forall (a b eta : Real)
                                 (real_mult eta b)) eps).
 Proof.
   intros a b eta Ha Hb Heta Hetale eps Heps.
-  exact (RealSetoid.real_le_compat
-           (real_mult (real_pow_pos a (real_plus real_one (real_opp eta)) Ha)
-                      (real_pow_pos b eta Hb))
-           (real_mult (geod_pow_pos a (real_plus real_one (real_opp eta)) Ha)
-                      (geod_pow_pos b eta Hb))
-           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta)) a)
-                                 (real_mult eta b)) eps)
-           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta)) a)
-                                 (real_mult eta b)) eps)
-           (RealSetoid.real_eq_mult_compat
-              (real_pow_pos a (real_plus real_one (real_opp eta)) Ha)
-              (real_pow_pos b eta Hb)
-              (geod_pow_pos a (real_plus real_one (real_opp eta)) Ha)
-              (geod_pow_pos b eta Hb)
-              (real_eq_sym _ _ (geod_pow_pos_correct a (real_plus real_one (real_opp eta)) Ha))
-              (real_eq_sym _ _ (geod_pow_pos_correct b eta Hb)))
-           (real_eq_refl _)
-           (real_amgm_pointwise_eps a b eta Ha Hb Heta Hetale eps Heps)).
+  exact (RealSetoid.real_le_compat           (real_mult (real_pow_pos a (real_plus real_one (real_opp eta)) Ha)                      (real_pow_pos b eta Hb))           (real_mult (geod_pow_pos a (real_plus real_one (real_opp eta)) Ha)                      (geod_pow_pos b eta Hb))           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta)) a)                                 (real_mult eta b)) eps)           (real_plus (real_plus (real_mult (real_plus real_one (real_opp eta)) a)                                 (real_mult eta b)) eps)           (RealSetoid.real_eq_mult_compat              (real_pow_pos a (real_plus real_one (real_opp eta)) Ha)              (real_pow_pos b eta Hb)              (geod_pow_pos a (real_plus real_one (real_opp eta)) Ha)              (geod_pow_pos b eta Hb)              (real_eq_sym _ _ (geod_pow_pos_correct a (real_plus real_one (real_opp eta)) Ha))              (real_eq_sym _ _ (geod_pow_pos_correct b eta Hb)))           (real_eq_refl _)           (real_amgm_pointwise_eps a b eta Ha Hb Heta Hetale eps Heps)).
 Qed.
 
 (* 保底接口语形版：结论谓词与前提谓词逐字取接口投影（与保底件
@@ -232,7 +233,8 @@ Lemma geod_lsum_le : forall (n : nat) (f g : nat -> Real),
   (forall i : nat, real_le (f i) (g i)) ->
   real_le (geod_lsum n f) (geod_lsum n g).
 Proof.
-  intros n f g H. unfold geod_lsum.
+  intros n f g H.
+  unfold geod_lsum.
   exact (real_list_sum_le nat f g (List.seq 0 n) H).
 Qed.
 
@@ -240,7 +242,8 @@ Lemma geod_lsum_add : forall (n : nat) (f g : nat -> Real),
   real_eq (geod_lsum n (fun i => real_plus (f i) (g i)))
           (real_plus (geod_lsum n f) (geod_lsum n g)).
 Proof.
-  intros n f g. unfold geod_lsum.
+  intros n f g.
+  unfold geod_lsum.
   exact (real_list_sum_add nat f g (List.seq 0 n)).
 Qed.
 
@@ -248,7 +251,8 @@ Lemma geod_lsum_linear : forall (n : nat) (a : Real) (f : nat -> Real),
   real_eq (geod_lsum n (fun i => real_mult a (f i)))
           (real_mult a (geod_lsum n f)).
 Proof.
-  intros n a f. unfold geod_lsum.
+  intros n a f.
+  unfold geod_lsum.
   exact (real_list_sum_linear nat a f (List.seq 0 n)).
 Qed.
 
@@ -395,12 +399,7 @@ Lemma geod_kappa_pos : forall eta : Real,
   real_lt real_zero (real_plus real_one (real_opp eta)).
 Proof.
   intros eta Hlt.
-  exact (real_eq_lt_lt real_zero (real_plus eta (real_opp eta))
-           (real_plus real_one (real_opp eta))
-           (real_eq_sym (real_plus eta (real_opp eta)) real_zero
-              (real_plus_opp eta))
-           (real_lt_plus_compat_lt_le eta real_one (real_opp eta)
-              (real_opp eta) Hlt (real_le_refl (real_opp eta)))).
+  exact (real_eq_lt_lt real_zero (real_plus eta (real_opp eta))           (real_plus real_one (real_opp eta))           (real_eq_sym (real_plus eta (real_opp eta)) real_zero              (real_plus_opp eta))           (real_lt_plus_compat_lt_le eta real_one (real_opp eta)              (real_opp eta) Hlt (real_le_refl (real_opp eta)))).
 Qed.
 
 (* 0 < eta 则 1-eta ≤ 1（lt 支经 Or 左支入 le） *)
@@ -449,8 +448,7 @@ Theorem geod_step_kl_eta_bound_eps :
 Proof.
   intros n p r eta Hp Hr Hnormp Hnormr HZ Hqv Heta Hetale eps Heps.
   unfold geod_lsum.
-  exact (real_step_kl_eta_bound_eps n p r eta Hp Hr Hnormp Hnormr HZ Hqv
-           Heta Hetale eps Heps).
+  exact (real_step_kl_eta_bound_eps n p r eta Hp Hr Hnormp Hnormr HZ Hqv           Heta Hetale eps Heps).
 Qed.
 
 (* 旗舰结论件：单步真几何收缩（policy_iter_kl_geom_step 的接口形
@@ -479,7 +477,5 @@ Theorem geod_policy_iter_kl_geom_step_eps :
 Proof.
   intros n r p eta Hr Hp Hnormr Hnormp HZ Hqv Heta Hlt1 eps Heps.
   unfold geod_lsum.
-  exact (real_step_kl_eta_bound_eps n r p (real_plus real_one (real_opp eta))
-           Hr Hp Hnormr Hnormp HZ Hqv
-           (geod_kappa_pos eta Hlt1) (geod_kappa_le_one eta Heta) eps Heps).
+  exact (real_step_kl_eta_bound_eps n r p (real_plus real_one (real_opp eta))           Hr Hp Hnormr Hnormp HZ Hqv           (geod_kappa_pos eta Hlt1) (geod_kappa_le_one eta Heta) eps Heps).
 Qed.

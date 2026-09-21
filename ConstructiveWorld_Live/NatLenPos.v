@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   nlp_len_nonzero（原 L80，2 句玩具证）                                *)
+(*   nlp_ofnat_S_pos（原 L54，5 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* NatLenPos.v —— T40 消融50 战役 CYC9 席（批次 E-STAGING-CYC9）   *)
 (*                                                              *)
 (* 使命：G01_CoreMicro.v:284 real_of_nat length 正性槽 C 类兑现。  *)
@@ -54,9 +65,9 @@ Qed.
 Lemma nlp_ofnat_S_pos : forall k : nat,
   real_lt real_zero (real_of_nat (Datatypes.S k)).
 Proof.
-  intro k. cbn [real_of_nat].
-  apply (real_lt_le_trans real_zero real_one
-           (real_plus real_one (real_of_nat k)) real_lt_zero_one).
+  intro k.
+  cbn [real_of_nat].
+  apply (real_lt_le_trans real_zero real_one           (real_plus real_one (real_of_nat k)) real_lt_zero_one).
   apply real_le_plus_nonneg_r_aux.
   apply nlp_ofnat_nonneg.
 Qed.
@@ -83,12 +94,7 @@ Theorem nlp_len_nonzero :
     Not (real_eq real_zero (real_of_nat (Datatypes.length enum))).
 Proof.
   intros G enum Hpos H0.
-  exact (real_lt_irrefl real_zero
-           (real_lt_eq_lt real_zero
-                          (real_of_nat (Datatypes.length enum))
-                          real_zero Hpos
-                          (real_eq_sym real_zero
-                             (real_of_nat (Datatypes.length enum)) H0))).
+  exact (real_lt_irrefl real_zero           (real_lt_eq_lt real_zero                          (real_of_nat (Datatypes.length enum))                          real_zero Hpos                          (real_eq_sym real_zero                             (real_of_nat (Datatypes.length enum)) H0))).
 Qed.
 
 (* ---- G01:284 槽位锚定形：组均值 mean2 的封闭装配

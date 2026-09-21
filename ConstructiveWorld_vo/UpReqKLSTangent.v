@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t1_kl_sum_strict_from_le（原 L176，2 句玩具证）                      *)
+(*   t1_kl_energy_nonconst（原 L155，2 句玩具证）                         *)
+(*   t1_gibbe2_gibbs_equality_bool（原 L130，2 句玩具证）                 *)
+(*   t1_exp_tangent_neg（原 L79，1 句玩具证）                             *)
+(*   t1_ep_four_terms（原 L67，2 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqKLSTangent.v *)
 (* *)
 (* 目的： KL 严格切线引理连锁（Gibbs 族严格化第一段）。 *)
@@ -140,8 +154,7 @@ Theorem t1_gibbe2_gibbs_equality_bool :
   forall s : bool, real_eq (p s) (q s).
 Proof.
   intros p q Hp Hq Hnp Hnq Hkl s.
-  exact (gibbe2_gibbs_equality_bool p q Hp Hq Hnp Hnq Hkl
-           t1_log_eq_linear_inject s).
+  exact (gibbe2_gibbs_equality_bool p q Hp Hq Hnp Hnq Hkl           t1_log_eq_linear_inject s).
 Qed.
 
 (* ============================================================ *)
@@ -165,8 +178,7 @@ Theorem t1_kl_energy_nonconst : forall (X : Type) (l1 : list X) (s0 : X)
        (l1 ++ s0 :: l2)).
 Proof.
   intros X l1 s0 l2 p q Hp Hq Hpq Hnormp Hnormq Hdiv.
-  exact (klst_kl_energy_nonconst X l1 s0 l2 p q Hp Hq Hpq Hnormp Hnormq
-           Hdiv).
+  exact (klst_kl_energy_nonconst X l1 s0 l2 p q Hp Hq Hpq Hnormp Hnormq           Hdiv).
 Qed.
 
 (* 逐项可比前提的定向消解形：逐项单向 p≤q 弱序（Gibbs 温度桥的

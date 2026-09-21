@@ -1,4 +1,19 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
+(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
+(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
+(* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
+(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性收口，文尾  *)
+(* 保留原件假设面追印。清单：                                      *)
+(*   uabT13b_g06_ros_ext/ros_le/ros_add/ros_linear（S08 实和四槽，  *)
+(*       列表归纳 nil/cons 分判就地重演，金标直取 S08_RealMainlineDPO） *)
+(*   uabT13b_g06_lebR_weight_pos（残差权正，G06_BForm 内机 discharged *)
+(*       体就地重演：展开＋rplb_sum_pos_discharged 实例化）          *)
+(*   uabT13b_g06_Zfull_pos（完整配分正，Z_full 定义性展开后          *)
+(*       S08 real_list_sum_pos 归纳体重演；非空矛盾支 eq_refl 直击） *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT13b_G06_BForm.v —— 假设消融战役 T13b 承接席（批10 实和与残差权七位）   *)
 (* 辖区：G06_BForm.v 七位（T13a 移交单 §6 批10 行点名，总账 §2.2 批⑩ 余量）：    *)
 (*   位1 :32  real_sum_over_S_ext（RealPPOLeBFull 求和外延槽）                   *)
@@ -34,7 +49,12 @@ Theorem uabT13b_g06_ros_ext :
     real_eq (real_list_sum S f l) (real_list_sum S g l).
 Proof.
   intros S l f g H.
-  exact (@real_list_sum_ext S f g l H).
+  induction l as [| w rest IH]; simpl.
+  - apply real_eq_refl.
+  - apply (RealSetoid.real_eq_plus_compat (f w) (real_list_sum S f rest)
+             (g w) (real_list_sum S g rest)).
+    + exact (H w).
+    + exact IH.
 Qed.
 
 (* 位2 ←:34（求和单调槽） *)
@@ -44,7 +64,12 @@ Theorem uabT13b_g06_ros_le :
     real_le (real_list_sum S f l) (real_list_sum S g l).
 Proof.
   intros S l f g H.
-  exact (@real_list_sum_le S f g l H).
+  induction l as [| w rest IH]; simpl.
+  - apply real_le_refl.
+  - apply (real_le_plus_compat (f w) (g w) (real_list_sum S f rest)
+             (real_list_sum S g rest)).
+    + exact (H w).
+    + exact IH.
 Qed.
 
 (* 位3 ←:36（求和可加槽） *)
@@ -54,7 +79,21 @@ Theorem uabT13b_g06_ros_add :
             (real_plus (real_list_sum S f l) (real_list_sum S g l)).
 Proof.
   intros S l f g.
-  exact (@real_list_sum_add S f g l).
+  induction l as [| w rest IH]; simpl.
+  - apply (real_eq_sym (real_plus real_zero real_zero) real_zero).
+    apply (real_plus_zero real_zero).
+  - apply (real_eq_trans _
+             (real_plus (real_plus (f w) (g w))
+                        (real_plus (real_list_sum S f rest)
+                                   (real_list_sum S g rest))) _).
+    + apply (RealSetoid.real_eq_plus_compat (real_plus (f w) (g w))
+               (real_list_sum S (fun w0 : S => real_plus (f w0) (g w0)) rest)
+               (real_plus (f w) (g w))
+               (real_plus (real_list_sum S f rest) (real_list_sum S g rest))).
+      * apply real_eq_refl.
+      * exact IH.
+    + apply (real_plus_swap_mid (f w) (g w) (real_list_sum S f rest)
+               (real_list_sum S g rest)).
 Qed.
 
 (* 位4 ←:40（求和线性槽） *)
@@ -64,7 +103,21 @@ Theorem uabT13b_g06_ros_linear :
             (real_mult a (real_list_sum S f l)).
 Proof.
   intros S l a f.
-  exact (@real_list_sum_linear S a f l).
+  induction l as [| w rest IH]; simpl.
+  - apply (real_eq_sym (real_mult a real_zero) real_zero).
+    apply (real_mult_zero a).
+  - apply (real_eq_trans _
+             (real_plus (real_mult a (f w))
+                        (real_mult a (real_list_sum S f rest))) _).
+    + apply (RealSetoid.real_eq_plus_compat (real_mult a (f w))
+               (real_list_sum S (fun w0 : S => real_mult a (f w0)) rest)
+               (real_mult a (f w))
+               (real_mult a (real_list_sum S f rest))).
+      * apply real_eq_refl.
+      * exact IH.
+    + apply (real_eq_sym (real_mult a (real_plus (f w) (real_list_sum S f rest)))
+               (real_plus (real_mult a (f w)) (real_mult a (real_list_sum S f rest)))).
+      apply (real_distrib a (f w) (real_list_sum S f rest)).
 Qed.
 
 (* 位5 ←:59（残差权聚合正；词表非空前提显式参） *)
@@ -75,7 +128,11 @@ Theorem uabT13b_g06_lebR_weight_pos :
                         (fun _ : X => real_one) (fun _ : X => real_one)).
 Proof.
   intros X vocab Hne.
-  exact (rplb_res_weight_pos_uncond X vocab Hne).
+  unfold lebR_res_weight.
+  apply (rplb_sum_pos_discharged X
+           (fun s : X => real_mult real_one real_one) vocab Hne).
+  intro s.
+  exact (real_mult_positive real_one real_one real_lt_zero_one real_lt_zero_one).
 Qed.
 
 (* 位6 ←:464（截断质量正；保留判定全保留实例供入+逐项正/非空前提显式参） *)
@@ -100,7 +157,22 @@ Theorem uabT13b_g06_Zfull_pos :
     real_lt real_zero (Z_full Token vocab rtf).
 Proof.
   intros Token vocab rtf Hf Hne.
-  exact (real_list_sum_pos Token rtf vocab Hf Hne).
+  unfold Z_full.
+  induction vocab as [| w rest IH]; simpl.
+  - exfalso. exact (Hne eq_refl).
+  - destruct rest as [| w' rest'].
+    + apply (RealSetoid.real_lt_id_r real_zero (rtf w) (real_plus (rtf w) real_zero)).
+      * apply (real_eq_sym (real_plus (rtf w) real_zero) (rtf w)).
+        apply (real_plus_zero (rtf w)).
+      * exact (Hf w).
+    + apply (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
+               (real_plus (rtf w) (real_list_sum Token rtf (w' :: rest')))).
+      * apply (real_eq_sym (real_plus real_zero real_zero) real_zero).
+        apply (real_plus_zero real_zero).
+      * apply (real_lt_plus_compat real_zero (rtf w) real_zero
+                 (real_list_sum Token rtf (w' :: rest'))).
+        -- exact (Hf w).
+        -- apply IH. discriminate.
 Qed.
 
 (* ---- 收尾段（逐件假设面打印） ---- *)

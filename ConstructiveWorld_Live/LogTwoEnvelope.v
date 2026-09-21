@@ -1,4 +1,21 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   l2e_mag_decr_pos_step（原 L166，3 句玩具证）                         *)
+(*   l2e_pair_diff_pos（原 L136，3 句玩具证）                             *)
+(*   l2e_mag_nonneg（原 L116，3 句玩具证）                                *)
+(*   l2e_mag_inv（原 L104，3 句玩具证）                                   *)
+(*   l2e_den_neq（原 L100，3 句玩具证）                                   *)
+(*   qleT'_weaken（原 L57，5 句玩具证）                                   *)
+(*   Qlt_to_QltT'（原 L54，2 句玩具证）                                   *)
+(*   QltT'_to_Qlt（原 L51，3 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* LogTwoEnvelope.v —— 施工席位 B4（2026-09-16）                  *)
 (* 全库最大数值缺口首果：ln2 = Σ_{k≥0} (−1)^k/(k+1) 交错级数的     *)
 (* Q 层双边包络三件套。                                          *)
@@ -59,7 +76,8 @@ Proof.
   intros a b c H Hbc.
   apply Qle_to_QleT'.
   apply (Qle_trans a b c H).
-  apply qeq_le. exact Hbc.
+  apply qeq_le.
+  exact Hbc.
 Qed.
 
 (* ============================================================ *)
@@ -115,7 +133,9 @@ Qed.
 
 Lemma l2e_mag_nonneg : forall k : nat, Qle 0 (l2e_mag k).
 Proof.
-  intro k. apply (Qlt_le_weak 0 (l2e_mag k)). apply l2e_mag_pos.
+  intro k.
+  apply (Qlt_le_weak 0 (l2e_mag k)).
+  apply l2e_mag_pos.
 Qed.
 
 (* ---- 严格递减：m_{k+1} < m_k（倒数反序；对照 atan_mag_decr 证明芯） ---- *)

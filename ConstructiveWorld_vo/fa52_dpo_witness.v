@@ -1,3 +1,15 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fa52_dpo_reward_recovery_concrete（原 L75，2 句玩具证）              *)
+(*   fa52_dpo_bounded_both_concrete（原 L51，1 句玩具证）                 *)
+(*   fa52_dpo_reward_spread（原 L42，3 句玩具证）                         *)
+(* ============================================================ *)
+
 (* ===== fa52_dpo_witness.v ===== *)
 (* 席位 VB（E-STAGING-VB）· T40 消融50 · 2026-09-16 *)
 (* 消融对象：S08_RealMainlineDPO 节 DpoPairMain 全部 8 个 Variable 前提槽
@@ -66,9 +78,7 @@ Theorem fa52_dpo_bounded_both_concrete :
           true false)
        (real_log (real_plus real_one real_one) real_two_pos)).
 Proof.
-  exact (real_dpo_loss_pi_star_bounded_both bool fa52_dpo_reward real_one
-           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos
-           real_one real_lt_zero_one true false fa52_dpo_reward_spread).
+  exact (real_dpo_loss_pi_star_bounded_both bool fa52_dpo_reward real_one           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos           real_one real_lt_zero_one true false fa52_dpo_reward_spread).
 Qed.
 
 (* ---------- 主件二：闭式奖励回收——见证特化（β:=1, Z:=1 分离出 log1 修正项） ---------- *)
@@ -85,9 +95,7 @@ Theorem fa52_dpo_reward_recovery_concrete : forall s : bool,
                             (real_log real_one real_lt_zero_one)))).
 Proof.
   intro s.
-  exact (real_dpo_reward_recovers_up_to_baseline bool fa52_dpo_reward real_one
-           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos
-           real_one real_lt_zero_one s).
+  exact (real_dpo_reward_recovers_up_to_baseline bool fa52_dpo_reward real_one           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos           real_one real_lt_zero_one s).
 Qed.
 
 Print Assumptions fa52_dpo_bounded_both_concrete.

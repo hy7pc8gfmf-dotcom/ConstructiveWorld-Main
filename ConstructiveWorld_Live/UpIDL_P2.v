@@ -1,3 +1,29 @@
+(* ===================================================================== *)
+(* 【切片四追记】其五至其八（xor_defused、happy_wok、conflict_once、        *)
+(*   conflict_census）四计算演示件追加落刀：全部改走定义层闭式计算——        *)
+(*   整体求值至构造子正规形后自反收口（原稿转等号反射单跳）。               *)
+(*   其九 pjR_PN、其十 pget_mjoin 两条未动（前者构造子序深坑、后者原稿      *)
+(*   已两步）。                                                             *)
+(* ===================================================================== *)
+
+(* ===================================================================== *)
+(* 【ToyR 战役替换稿 · 包J 切片三】本件为玩具证明体替换稿：原件全文逐字   *)
+(*   保留，仅换十条玩具坐标中四条的证明体（按定理名定位，语句面/声明序    *)
+(*   零改，依赖面零改）。四条换轨路线（tid 目标承 E862 卡：正路            *)
+(*   clq_tid_eq 转 eq，禁一切改写）：                                     *)
+(*   其一 hbeq_refl：枚举派发结构性推导——洞型六构造子全列举，逐支         *)
+(*      索引表定义面规约后 Nat.eqb_refl 具体收口（原稿泛型单跳）。        *)
+(*   其二 vbeq_mkVd：定义层受控展开——验钉记录定义面展开后三投影逐位       *)
+(*      消解，与右端字面同形后反射收口（原稿裸反射单跳）。                *)
+(*   其三 dbuild_len：定义层受控展开——表长与上界双层展开后转换收口        *)
+(*      （原稿裸转换单跳）。                                              *)
+(*   其四 slotiousL_cons：头展开结构性推导——欠单列表在Cons头上iota派发，  *)
+(*      与右端头展开等式逐位同形后反射收口（原稿裸反射单跳）。            *)
+(*   余下六条（vbeq_mkVd 外的 pinv 深析件与计算演示件）涉构造子序深坑与   *)
+(*   大型闭式计算，本片未动，滚动下席。                                   *)
+(*   全程纯构造性，Set 层承载，证毕记号逐条守恒，依赖面与原件逐行一致。   *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* UpIDL_P2.v *)
 (* *)
@@ -88,7 +114,8 @@ Definition hbeq (a b : hole) : bool := Nat.eqb (hix a) (hix b).
 
 Lemma hbeq_refl : forall h : hole, clq_tid bool (hbeq h h) true.
 Proof.
-  intros h. apply (clq_tid_eq bool _ true). unfold hbeq. apply Nat.eqb_refl.
+  intros h. unfold hbeq. destruct h; cbn [hix];
+    apply (clq_tid_eq bool _ _); apply Nat.eqb_refl.
 Qed.
 
 Lemma hbeq_true : forall a b : hole, clq_tid bool (hbeq a b) true -> clq_tid hole a b.
@@ -119,7 +146,7 @@ Definition vbeq (x y : verd) : bool :=
 Lemma vbeq_mkVd : forall (h1 h2 : hole) (d1 d2 : vdir) (z1 z2 : Z),
   clq_tid bool (vbeq (mkVd h1 d1 z1) (mkVd h2 d2 z2))
        (andb (hbeq h1 h2) (andb (dbeq d1 d2) (Z.eqb z1 z2))).
-Proof. intros. apply clq_tid_refl. Qed.
+Proof. intros h1 h2 d1 d2 z1 z2. unfold vbeq. cbn [vh vd vz]. apply clq_tid_refl. Qed.
 
 Lemma vbeq_head_true : forall (h1 h2 : hole) (z1 z2 : Z),
   hbeq h1 h2 = true -> z1 = z2 ->
@@ -826,7 +853,7 @@ Proof.
 Qed.
 
 Lemma dbuild_len : forall p : ipins, clq_tid nat (dlen (dbuild p)) hmax.
-Proof. intros p. apply (clq_tid_eq nat _ _). reflexivity. Qed.
+Proof. intros p. unfold dlen, hmax. apply (clq_tid_eq nat _ _). reflexivity. Qed.
 
 (* 欠单条目：缺钉 / 钉冲突 / 差条款相抵 *)
 Inductive iou : Set :=
@@ -884,7 +911,7 @@ Lemma slotiousL_cons : forall p h t,
        | PN => IOU_NOPIN h :: slotiousL p t
        | PB => IOU_BAD h :: slotiousL p t
        end).
-Proof. intros p h t. apply clq_tid_refl. Qed.
+Proof. intros p h t. cbn [slotiousL]. apply clq_tid_refl. Qed.
 
 Lemma slotiousL_nil_allpin1 : forall p hs,
   clq_tid (list iou) (slotiousL p hs) nil -> clq_tid bool (allpin1 p hs) true.
@@ -1251,7 +1278,8 @@ Theorem xor_defused :
       (wiou (IOU_NOPIN kb :: IOU_NOPIN kc :: IOU_NOPIN ke :: IOU_NOPIN kr
              :: IOU_REJ kb 0 :: nil)).
 Proof.
-  apply (clq_tid_eq weaveout _ _). reflexivity.
+  cbv.
+  apply clq_tid_refl.
 Qed.
 
 (* 幸福路：六洞全钉 + 一条可满足差条款 ⟹ 织出 *)
@@ -1261,7 +1289,8 @@ Definition sOK : list verd :=
 
 Theorem happy_wok : clq_tid bool (weave_b (melt sOK)) true.
 Proof.
-  apply (clq_tid_eq bool _ true). reflexivity.
+  cbv.
+  apply clq_tid_refl.
 Qed.
 
 (* 同洞异值：冲突位 PB ⟹ 记欠不织；冲突清点恰为 1（同洞异值记冲突一次） *)
@@ -1269,12 +1298,14 @@ Definition sC : list verd := mkVd k1 vpass 3 :: mkVd k1 vpass 5 :: nil.
 
 Theorem conflict_once : clq_tid bool (weave_b (melt sC)) false.
 Proof.
-  apply (clq_tid_eq bool _ false). reflexivity.
+  cbv.
+  apply clq_tid_refl.
 Qed.
 
 Theorem conflict_census : clq_tid nat (iconf (melt sC)) 1%nat.
 Proof.
-  apply (clq_tid_eq nat _ _). reflexivity.
+  cbv.
+  apply clq_tid_refl.
 Qed.
 
 (* 织出件装进 Q4 账态后 [内]类全准入（六槽域内零拒答） *)

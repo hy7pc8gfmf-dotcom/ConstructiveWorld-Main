@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   frd_recovery_entropy_gain_alt（原 L254，2 句玩具证）                 *)
+(*   frd_recovery_entropy_gain（原 L226，2 句玩具证）                     *)
+(*   frd_req_temp_strict_ident2（原 L193，2 句玩具证）                    *)
+(*   frd_req_relative_entropy_temp_decomp（原 L160，2 句玩具证）          *)
+(*   frd_req_entropy_temp_explicit（原 L137，2 句玩具证）                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* FirewallReqDischarge.v                                        *)
 (*                                                               *)
 (* 目的：消解宿主 UpFirewallReq.v Section FirewallReq 的温度三假设位 *)
@@ -146,11 +160,7 @@ Theorem frd_req_entropy_temp_explicit :
                                  frd_Z_temp_spec t Ht))).
 Proof.
   intros t Ht.
-  exact (UpReqTempEntropy.req_entropy_temp_explicit
-           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos
-           base_loss
-           frd_dist_log_inv_one_inv frd_dist_log_exp_neg
-           Z_temp frd_Z_temp_spec t Ht).
+  exact (UpReqTempEntropy.req_entropy_temp_explicit           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos           base_loss           frd_dist_log_inv_one_inv frd_dist_log_exp_neg           Z_temp frd_Z_temp_spec t Ht).
 Qed.
 
 (* ============================================================ *)
@@ -173,17 +183,7 @@ Theorem frd_req_relative_entropy_temp_decomp :
                                  frd_Z_temp_spec t2 Ht2))).
 Proof.
   intros t2 Ht2 t1 Ht1.
-  exact (UpReqTempEntropy.req_relative_entropy_temp_decomp
-           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos
-           base_loss
-           frd_dist_log_inv_one_inv frd_dist_log_exp_neg
-           Z_temp frd_Z_temp_spec t2 Ht2
-           (@UpFirewallReq.fw_bt R RIS S sumf frd_sum_pos base_loss Z_temp
-                                 frd_Z_temp_spec t1 Ht1)
-           (@UpFirewallReq.fw_bt_pos R RIS S sumf frd_sum_pos base_loss
-                                    Z_temp frd_Z_temp_spec t1 Ht1)
-           (@UpFirewallReq.fw_norm R RIS S sumf frd_sum_linear frd_sum_pos
-                                   base_loss Z_temp frd_Z_temp_spec t1 Ht1)).
+  exact (UpReqTempEntropy.req_relative_entropy_temp_decomp           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos           base_loss           frd_dist_log_inv_one_inv frd_dist_log_exp_neg           Z_temp frd_Z_temp_spec t2 Ht2           (@UpFirewallReq.fw_bt R RIS S sumf frd_sum_pos base_loss Z_temp                                 frd_Z_temp_spec t1 Ht1)           (@UpFirewallReq.fw_bt_pos R RIS S sumf frd_sum_pos base_loss                                    Z_temp frd_Z_temp_spec t1 Ht1)           (@UpFirewallReq.fw_norm R RIS S sumf frd_sum_linear frd_sum_pos                                   base_loss Z_temp frd_Z_temp_spec t1 Ht1)).
 Qed.
 
 (* ============================================================ *)
@@ -212,11 +212,7 @@ Theorem frd_req_temp_strict_ident2 :
                                              frd_Z_temp_spec t1 Ht1))).
 Proof.
   intros t1 t2 Ht1 Ht2.
-  exact (UpReqTempEntropy.req_temp_strict_ident2
-           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos
-           base_loss
-           frd_dist_log_inv_one_inv frd_dist_log_exp_neg
-           Z_temp frd_Z_temp_spec t1 t2 Ht1 Ht2).
+  exact (UpReqTempEntropy.req_temp_strict_ident2           S sumf frd_sum_ext frd_sum_add frd_sum_linear frd_sum_pos           base_loss           frd_dist_log_inv_one_inv frd_dist_log_exp_neg           Z_temp frd_Z_temp_spec t1 t2 Ht1 Ht2).
 Qed.
 
 (* ============================================================ *)
@@ -240,11 +236,7 @@ Theorem frd_recovery_entropy_gain :
                                   Z_temp frd_Z_temp_spec t1 t2 Ht1 Ht2)).
 Proof.
   intros t1 t2 Ht1 Ht2.
-  exact (UpFirewallReq.req_recovery_entropy_gain
-           S sumf frd_sum_pos base_loss Z_temp frd_Z_temp_spec
-           frd_req_entropy_temp_explicit
-           frd_req_relative_entropy_temp_decomp
-           t1 t2 Ht1 Ht2).
+  exact (UpFirewallReq.req_recovery_entropy_gain           S sumf frd_sum_pos base_loss Z_temp frd_Z_temp_spec           frd_req_entropy_temp_explicit           frd_req_relative_entropy_temp_decomp           t1 t2 Ht1 Ht2).
 Qed.
 
 (* ============================================================ *)
@@ -281,12 +273,7 @@ Theorem frd_recovery_entropy_gain_alt :
                                              frd_Z_temp_spec t1 Ht1))).
 Proof.
   intros t1 t2 Ht1 Ht2.
-  exact (UpFirewallReq.req_recovery_entropy_gain_alt
-           S sumf frd_sum_pos base_loss Z_temp frd_Z_temp_spec
-           frd_req_entropy_temp_explicit
-           frd_req_relative_entropy_temp_decomp
-           frd_req_temp_strict_ident2
-           t1 t2 Ht1 Ht2).
+  exact (UpFirewallReq.req_recovery_entropy_gain_alt           S sumf frd_sum_pos base_loss Z_temp frd_Z_temp_spec           frd_req_entropy_temp_explicit           frd_req_relative_entropy_temp_decomp           frd_req_temp_strict_ident2           t1 t2 Ht1 Ht2).
 Qed.
 
 End FrdTempDischarge.

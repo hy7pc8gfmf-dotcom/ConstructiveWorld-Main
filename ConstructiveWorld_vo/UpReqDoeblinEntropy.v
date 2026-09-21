@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   doe_HpbN（原 L988，1 句玩具证）                                      *)
+(*   doe_HK_pos（原 L892，4 句玩具证）                                    *)
+(*   doe_omd_nonneg'（原 L886，1 句玩具证）                               *)
+(*   doe_slack_witness（原 L806，4 句玩具证）                             *)
+(*   doe_mult_le_l（原 L283，2 句玩具证）                                 *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* UpReqDoeblinEntropy.v —— Q17 席（EXPL1 C12）：Doeblin 收缩族 δ→1        *)
 (*   熵产连续性（分析重转编译重）2026-09-17                                *)
@@ -286,8 +300,7 @@ Lemma doe_mult_le_l :
     real_le (real_mult a x) (real_mult a y).
 Proof.
   intros a x y Halt Hxy.
-  exact (real_le_mult_compat_r a x y
-           (real_lt_le_iff real_zero a (inl Halt)) Hxy).
+  exact (real_le_mult_compat_r a x y           (real_lt_le_iff real_zero a (inl Halt)) Hxy).
 Qed.
 
 (* 0 ≤ a ∧ 0 ≤ b ⟹ 0 ≤ a·b（Or 四支） *)
@@ -891,16 +904,10 @@ Qed.
 (* ---- K 逐点正（δ 凸组合保正）---- *)
 Lemma doe_HK_pos : forall s : list Real, real_lt real_zero (doe_K s).
 Proof.
-  intro s. unfold doe_K.
-  apply (RealSetoid.real_lt_id_l real_zero
-           (real_plus real_zero real_zero)
-           (real_plus (real_mult om (doe_pb s)) (real_mult doe_omd (w s)))
-           (real_eq_sym _ _ (real_plus_zero real_zero))).
-  apply (real_lt_plus_compat_lt_le real_zero (real_mult om (doe_pb s))
-           real_zero (real_mult doe_omd (w s))
-           (real_mult_pos_compat om (doe_pb s) Hom (doe_Hpb s))
-           (doe_le_mult doe_omd (w s) doe_omd_nonneg'
-              (real_lt_le_iff real_zero (w s) (inl (Hwp s))))).
+  intro s.
+  unfold doe_K.
+  apply (RealSetoid.real_lt_id_l real_zero           (real_plus real_zero real_zero)           (real_plus (real_mult om (doe_pb s)) (real_mult doe_omd (w s)))           (real_eq_sym _ _ (real_plus_zero real_zero))).
+  apply (real_lt_plus_compat_lt_le real_zero (real_mult om (doe_pb s))           real_zero (real_mult doe_omd (w s))           (real_mult_pos_compat om (doe_pb s) Hom (doe_Hpb s))           (doe_le_mult doe_omd (w s) doe_omd_nonneg'              (real_lt_le_iff real_zero (w s) (inl (Hwp s))))).
 Qed.
 
 (* ---- Stage B 定义（依赖 HK）---- *)
@@ -987,8 +994,7 @@ Qed.
 
 Lemma doe_HpbN : real_eq (doe_sumf doe_pb) real_one.
 Proof.
-  exact (real_boltzmann_dist_temp_normalized (list Real) doe_sumf doe_sumpos
-           doe_sumext doe_sumlinear T Ht energy).
+  exact (real_boltzmann_dist_temp_normalized (list Real) doe_sumf doe_sumpos           doe_sumext doe_sumlinear T Ht energy).
 Qed.
 
 (* ---- ①② 核心件 1（归一）：Σ K_om == 1 ---- *)

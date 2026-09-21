@@ -56,7 +56,11 @@ Theorem e66s_real_sum_over_S_ext :
     real_eq (e66s_sumf f) (e66s_sumf g).
 Proof.
   intros f g H.
-  exact (sumd_sum_ext S0 enum0 f g H).
+  unfold e66s_sumf, sumd_sumf.
+  induction enum0 as [| x t IH].
+  - exact (req_refl zero).
+  - exact (req_plus_compat (f x) (g x) (sumd_list_sum S0 f t)
+             (sumd_list_sum S0 g t) (H x) IH).
 Qed.
 
 (* 性质 2（求和的保序性）：若两函数逐点满足 real_le (f s) (g s)，     *)
@@ -69,7 +73,11 @@ Theorem e66s_real_sum_over_S_le :
     real_le (e66s_sumf f) (e66s_sumf g).
 Proof.
   intros f g H.
-  exact (sumd_sum_le S0 enum0 f g H).
+  unfold e66s_sumf, sumd_sumf.
+  induction enum0 as [| x t IH].
+  - exact (le_refl zero).
+  - exact (le_plus_compat (f x) (g x) (sumd_list_sum S0 f t)
+             (sumd_list_sum S0 g t) (H x) IH).
 Qed.
 
 (* 性质 3（求和的加法性）：两函数逐项相加后的列表和，等于各自列表     *)
@@ -81,7 +89,22 @@ Theorem e66s_real_sum_over_S_add :
             (real_plus (e66s_sumf f) (e66s_sumf g)).
 Proof.
   intros f g.
-  exact (sumd_sum_add S0 enum0 f g).
+  unfold e66s_sumf, sumd_sumf.
+  induction enum0 as [| x t IH].
+  - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+  - exact (req_trans
+             (plus (plus (f x) (g x))
+                   (sumd_list_sum S0 (fun s : S0 => plus (f s) (g s)) t))
+             (plus (plus (f x) (g x))
+                   (plus (sumd_list_sum S0 f t) (sumd_list_sum S0 g t)))
+             (plus (plus (f x) (sumd_list_sum S0 f t))
+                   (plus (g x) (sumd_list_sum S0 g t)))
+             (req_plus_compat (plus (f x) (g x)) (plus (f x) (g x))
+                (sumd_list_sum S0 (fun s : S0 => plus (f s) (g s)) t)
+                (plus (sumd_list_sum S0 f t) (sumd_list_sum S0 g t))
+                (req_refl (plus (f x) (g x))) IH)
+             (real_plus_swap_mid (f x) (g x)
+                (sumd_list_sum S0 f t) (sumd_list_sum S0 g t))).
 Qed.
 
 End E66SumD.

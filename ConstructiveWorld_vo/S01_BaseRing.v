@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* 【ToyR 包F 切片七·信任根本体替换稿】S01_BaseRing.v —— 基于 Main 基线           *)
+(*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 对账微刀＋尾嵌       *)
+(*   假设审计三连。                                                               *)
+(*   信任根警示：本件为全役信任根本体（全下游件依赖）。本稿为谨慎位微刀稿：          *)
+(*   仅挑三枚 reflexivity 正体位（@id_refl 命名恒等元），零深水区动刀。              *)
+(*   收编时下游全链摘要失效须全链重编，建议单独批次收编。                           *)
+(*   三微刀：core_claim5_holds(normalized_prob 位)／core_claim3_holds             *)
+(*   (entropy_gradient 位)／core_claim5_holds(boltzmann_prob 位)——                 *)
+(*   各 reflexivity 战术改为 @id_refl 命名恒等元显式正体，语句面零动。              *)
+(*   Proof 与 Qed 计数 99/99 守恒；Require 面逐字一致；禁词零新增。                 *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* S01_BaseRing.v                                              *)
 (*                                                             *)
 (* 目的：奠定构造性 Set 层基础环结构：实数接口、三类索引、      *)
@@ -1948,8 +1960,9 @@ Theorem core_claim5_holds : CoreClaim5.
 Proof.
   unfold CoreClaim5, normalized_prob.
   intros prefix w.
-  reflexivity.
+  exact (@id_refl _ _).
 Qed.
+Print Assumptions core_claim5_holds.  (* ToyR 微刀位即席假设审计 *)
 
 Variable grammar_error : Sequence -> R.
 
@@ -3024,15 +3037,17 @@ Theorem core_claim3_holds : CoreClaim3.
 Proof.
   unfold CoreClaim3, entropy_gradient.
   intro E_A.
-  reflexivity.
+  exact (@id_refl _ _).
 Qed.
+Print Assumptions core_claim3_holds.  (* ToyR 微刀位即席假设审计 *)
 
 Theorem core_claim5_holds : CoreClaim5.
 Proof.
   unfold CoreClaim5, boltzmann_prob.
   intro x.
-  reflexivity.
+  exact (@id_refl _ _).
 Qed.
+Print Assumptions core_claim5_holds.  (* ToyR 微刀位即席假设审计 *)
 
 Variable prediction_fourier_heat_conduction :
   forall E_A,
@@ -3066,4 +3081,5 @@ From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
 Import ListNotations.
 From Stdlib Require Import Lia.
 From Stdlib Require Import QArith.Qminmax.
+
 

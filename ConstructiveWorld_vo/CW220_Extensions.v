@@ -1,3 +1,17 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   r_arch_pow_attn_real（原 L1537，2 句玩具证）                         *)
+(*   one_minus_delta_pos_real（原 L1506，2 句玩具证）                     *)
+(*   req_mult_one_l（原 L231，2 句玩具证）                                *)
+(*   req_plus_zero_r（原 L224，2 句玩具证）                               *)
+(*   hlogz_discharge_full（原 L91，2 句玩具证）                           *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* CW220_Extensions.v — 扩展层（仅保留活跃分区）                           *)
 (*   基座：CW_ConstructiveWorld_219（薄壳 Require Export 全部 15 模块）     *)
@@ -1507,7 +1521,8 @@ Lemma one_minus_delta_pos_real : forall delta : Real,
   real_lt delta real_one ->
   real_lt real_zero (real_plus real_one (real_opp delta)).
 Proof.
-  intros delta Hd. exact (real_lt_opp_plus delta real_one Hd).
+  intros delta Hd.
+  exact (real_lt_opp_plus delta real_one Hd).
 Qed.
 
 (* 根注意力区前提的对称支 Real 镜像：0 < δ ⟹ 1−δ < 1
@@ -1543,10 +1558,7 @@ Theorem r_arch_pow_attn_real :
               (real_pow (real_plus real_one (real_opp delta)) N)) eps).
 Proof.
   intros delta Hd1 Hd2 a Ha eps Heps.
-  exact (r_arch_pow_real (real_plus real_one (real_opp delta))
-           (one_minus_delta_pos_real delta Hd2)
-           (one_minus_delta_lt_one_real delta Hd1)
-           a Ha eps Heps).
+  exact (r_arch_pow_real (real_plus real_one (real_opp delta))           (one_minus_delta_pos_real delta Hd2)           (one_minus_delta_lt_one_real delta Hd1)           a Ha eps Heps).
 Qed.
 
 (* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 镜像） ============ *)

@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rtk_lt_minus_cc（原 L258，4 句玩具证）                               *)
+(*   rtk_opp_zero_cc（原 L247，1 句玩具证）                               *)
+(*   rtk_inv_Z_le_inv_kept（原 L212，3 句玩具证）                         *)
+(*   rtk_kept_le_Zthermo（原 L201，5 句玩具证）                           *)
+(*   rtk_boltzmann_factor_pos_attn（原 L133，3 句玩具证）                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTopKTVChain.v *)
 (* *)
 (* 目的： 定理 7.6 topk_tv_identity 的 Real 层构造。 *)
@@ -133,7 +147,9 @@ Definition rtk_kept_partition
 Lemma rtk_boltzmann_factor_pos_attn :
   forall s : S, real_lt real_zero (rtk_boltzmann_factor s).
 Proof.
-  intro s. unfold rtk_boltzmann_factor. apply real_exp_neg_pos.
+  intro s.
+  unfold rtk_boltzmann_factor.
+  apply real_exp_neg_pos.
 Qed.
 
 (* ---- 件2（Id @5560）：if 保留项非负（keep 时 > 0，else == 0） ---- *)
@@ -202,9 +218,11 @@ Lemma rtk_kept_le_Zthermo :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))),
     real_le (rtk_kept_partition k kd) rtk_Z_thermo.
 Proof.
-  intros k kd. unfold rtk_kept_partition, rtk_Z_thermo.
+  intros k kd.
+  unfold rtk_kept_partition, rtk_Z_thermo.
   apply real_sum_over_S_le.
-  intro s. apply rtk_kept_term_le_factor.
+  intro s.
+  apply rtk_kept_term_le_factor.
 Qed.
 
 (* ---- 件6（Id @5611）：inv 反序 kept ≤ Z ⟹ 1/Z ≤ 1/kept ---- *)
@@ -216,8 +234,7 @@ Lemma rtk_inv_Z_le_inv_kept :
             (real_inv_pos (rtk_kept_partition k kd) Hkpos).
 Proof.
   intros k kd Hkpos.
-  apply (real_inv_pos_le_compat (rtk_kept_partition k kd) rtk_Z_thermo
-             Hkpos rtk_Z_thermo_pos).
+  apply (real_inv_pos_le_compat (rtk_kept_partition k kd) rtk_Z_thermo             Hkpos rtk_Z_thermo_pos).
   exact (rtk_kept_le_Zthermo k kd).
 Qed.
 
@@ -258,12 +275,10 @@ Qed.
 Lemma rtk_lt_minus_cc :
   forall a b : Real, real_lt a b -> real_lt (real_minus_r a b) real_zero.
 Proof.
-  intros a b Hab. unfold real_minus_r.
-  apply (RealSetoid.real_lt_id_r (real_plus a (real_opp b))
-                                 (real_plus b (real_opp b)) real_zero
-                                 (real_plus_opp b)).
-  exact (real_lt_plus_compat_lt_le a b (real_opp b) (real_opp b)
-             Hab (real_le_refl (real_opp b))).
+  intros a b Hab.
+  unfold real_minus_r.
+  apply (RealSetoid.real_lt_id_r (real_plus a (real_opp b))                                 (real_plus b (real_opp b)) real_zero                                 (real_plus_opp b)).
+  exact (real_lt_plus_compat_lt_le a b (real_opp b) (real_opp b)             Hab (real_le_refl (real_opp b))).
 Qed.
 
 (* ---- 件10（Id @5647）：a < 0 ⟹ |a| == −a ---- *)

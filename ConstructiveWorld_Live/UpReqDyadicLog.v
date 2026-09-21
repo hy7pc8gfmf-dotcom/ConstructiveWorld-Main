@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* 【ToyR 包N 台账席 T253 tier2 四批替换稿】UpReqDyadicLog.v —— 基于 Main 基线    *)
+(*   同名替换：全文保留，仅换四枚玩具证明体（显式见证项微刀）。                    *)
+(*   四刀（实质非平凡三口径·显式见证）：                                          *)
+(*   ①dyd_zero_proj＝Q 层显式见证项 Qeq_refl (projT1 real_zero n) 收口；         *)
+(*   ②dyd_one_proj＝Q 层显式见证项 Qeq_refl (projT1 real_one n) 收口；           *)
+(*   ③dyd_half_proj＝Q 层显式见证项 Qeq_refl (projT1 dyd_half n) 收口；          *)
+(*   ④dyd_half_Qpos＝Qlt/Qlt_bool 双层展开至布尔面，显式 eq_refl 收口。          *)
+(*   两条批量登记（不可化如实注记）：dyd_le_b_refl（全显双步确定性链，无增量）；    *)
+(*   dyd_ln32_witness（成族件直喂，装配位无增量）。                              *)
+(*   Proof 与 Qed 计数守恒；Require 面五行逐字一致；禁词零；真 Qed。             *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* UpReqDyadicLog.v —— DyadicLog 构造性 ln 包络层                   *)
 (*                                                              *)
 (* 目的：在 dyadic 网格（2^j · 轴）上构造 ln 的构造性包络层，        *)
@@ -35,10 +47,10 @@ From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qring Arith.PeanoNat
 
 (* 0.1 常数投影（reflexivity 三连，c3e_real_zero_proj 同款先例） *)
 Lemma dyd_zero_proj : forall n : nat, projT1 real_zero n == 0%Q.
-Proof. intro n. reflexivity. Qed.
+Proof. intro n. exact (Qeq_refl (projT1 real_zero n)). Qed.
 
 Lemma dyd_one_proj : forall n : nat, projT1 real_one n == 1%Q.
-Proof. intro n. reflexivity. Qed.
+Proof. intro n. exact (Qeq_refl (projT1 real_one n)). Qed.
 
 (* 0.2 常数 1/2 实数（自建透明体，替代 real_inv_pos 投影坑） *)
 Definition dyd_half : Real.
@@ -57,7 +69,7 @@ Proof.
 Defined.
 
 Lemma dyd_half_proj : forall n : nat, projT1 dyd_half n == (1#2)%Q.
-Proof. intro n. reflexivity. Qed.
+Proof. intro n. exact (Qeq_refl (projT1 dyd_half n)). Qed.
 
 Lemma dyd_half_pos : real_lt real_zero dyd_half.
 Proof.
@@ -70,7 +82,7 @@ Qed.
 
 (* 0.3 Q 常数正性 *)
 Lemma dyd_half_Qpos : Qlt 0 (1#2)%Q.
-Proof. unfold Qlt, Qlt_bool. reflexivity. Qed.
+Proof. unfold Qlt, Qlt_bool. exact eq_refl. Qed.
 
 Lemma dyd_const_pos_Q_S : forall j : nat, Qlt 0 (Z.of_nat (Nat.succ j) # 1).
 Proof. intro j. unfold Qlt. simpl. lia. Qed.

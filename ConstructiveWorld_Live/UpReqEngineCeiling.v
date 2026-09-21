@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   cec_tangent_le（原 L426，3 句玩具证）                                *)
+(*   cec_H_lower（原 L238，5 句玩具证）                                   *)
+(*   cec_div_same_denom_lt（原 L130，3 句玩具证）                         *)
+(*   cec_mult_neq0（原 L80，3 句玩具证）                                  *)
+(*   cec_neq_of_pos（原 L76，1 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEngineCeiling.v —— 席 EXP-D2B：引擎族常数天花板 Q 层定理       *)
 (*   （相位=分析重转编译重；独立新文件，零改既有文件；前缀 cec_        *)
 (*     全库开工 grep 零撞名核验在案）                                  *)
@@ -79,7 +93,9 @@ Proof. exact S03_QExp.q_neq_of_lt. Qed.
 (* 乘积非零（Qeq 面；Qmult_integral_l 本为 Qeq 面） *)
 Lemma cec_mult_neq0 : forall x y : Q, ~ (x == 0) -> ~ (y == 0) -> ~ (x * y == 0).
 Proof.
-  intros x y Hx Hy H. apply Hy. exact (Qmult_integral_l x y Hx H).
+  intros x y Hx Hy H.
+  apply Hy.
+  exact (Qmult_integral_l x y Hx H).
 Qed.
 
 (* field 侧条件统一闭法：实测 field 产出合取 ~ d == 0 /\ ...（S03 split 同款）；
@@ -130,7 +146,8 @@ Qed.
 Lemma cec_div_same_denom_lt : forall a c e : Q,
   Qlt 0 e -> Qlt a c -> Qlt (a / e) (c / e).
 Proof.
-  intros a c e He Hac. unfold Qdiv.
+  intros a c e He Hac.
+  unfold Qdiv.
   apply (Qmult_lt_compat_r _ _ _ (cec_inv_pos e He) Hac).
 Qed.
 
@@ -237,7 +254,11 @@ Qed.
 (* G1 主件：调和数下界引理（QleT' Set 面，独立成件零 And 混装） *)
 Theorem cec_H_lower : forall k : nat, (5 <= k)%nat -> QleT' (1 + 1)%Q (cec_pt k).
 Proof.
-  intros k Hk. apply Qle_to_QleT'. apply Qlt_le_weak. apply cec_pt_gt2. exact Hk.
+  intros k Hk.
+  apply Qle_to_QleT'.
+  apply Qlt_le_weak.
+  apply cec_pt_gt2.
+  exact Hk.
 Qed.
 
 (* ---- 2. 截断引擎族天花板 c*(k) = min(H_k − 1/(k+1), 2)（G2a） ---- *)

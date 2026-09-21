@@ -1,3 +1,14 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   quad_cost_descent_eps_bound（原 L197，2 句玩具证）                   *)
+(*   trajectory_eps_optimal_reach（原 L175，2 句玩具证）                  *)
+(* ============================================================ *)
+
 (* EpsOptimalReach.v — 席C7：有限轨迹上的 ε-最优可达见证（A2 组合榜组 4，20260916）
    ------------------------------------------------------------------------
    合成主件：对下降轨迹的有限采样表 l = [x₀, x₁, …, x_n]
@@ -186,9 +197,7 @@ Theorem trajectory_eps_optimal_reach :
                              -> le (keyQ xstar) (plus (keyQ w) eps)))).
 Proof.
   intros R RIS keyQ hle_dec hlt_dec h t x0 eps n Heps.
-  exact (@finite_table_eps_optimal_witness R RIS Q keyQ hle_dec hlt_dec
-           (traj_table h t x0 n) x0 eps
-           (traj_table_nonempty h t x0 n) Heps).
+  exact (@finite_table_eps_optimal_witness R RIS Q keyQ hle_dec hlt_dec           (traj_table h t x0 n) x0 eps           (traj_table_nonempty h t x0 n) Heps).
 Qed.
 
 (* B 件对接（一档）：n 步下降终点的 ε-上界。
@@ -201,9 +210,7 @@ Theorem quad_cost_descent_eps_bound :
           (qpow2 ((1 - h) * (1 - h)) n * sf_quad_cost t x0 + eps).
 Proof.
   intros h t x0 eps n Hh H2 Heps.
-  exact (qlep_add_eps (sf_quad_cost t (sf_grad_descent h t x0 n))
-           (qpow2 ((1 - h) * (1 - h)) n * sf_quad_cost t x0) eps
-           (sf_grad_descent_convergence h t x0 n Hh H2) Heps).
+  exact (qlep_add_eps (sf_quad_cost t (sf_grad_descent h t x0 n))           (qpow2 ((1 - h) * (1 - h)) n * sf_quad_cost t x0) eps           (sf_grad_descent_convergence h t x0 n Hh H2) Heps).
 Qed.
 
 (* 审查留痕面：G4（≥1 语句） *)

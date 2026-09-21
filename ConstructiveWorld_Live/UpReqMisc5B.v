@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   req_inner_sminus_l（原 L429，3 句玩具证）                            *)
+(*   req_smetric_sminus_zero（原 L415，2 句玩具证）                       *)
+(*   req_sminus_sminus_szero（原 L404，3 句玩具证）                       *)
+(*   req_inner_sminus_r（原 L362，3 句玩具证）                            *)
+(*   req_gram_schmidt_pair（原 L237，2 句玩具证）                         *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqMisc5B.v *)
 (* *)
 (* 目的： 希尔伯特空间正交分解的 req 层构造（杂件第五束 B 段）。 *)
@@ -240,7 +254,8 @@ Theorem req_gram_schmidt_pair : forall u v : @rSS R RIS SSx,
     And (req (rinner u w) zero)
         (Id v (rsplus (rproj u v) w))).
 Proof.
-  intros u v Hu. exact (req_gram_schmidt_step u v Hu).
+  intros u v Hu.
+  exact (req_gram_schmidt_step u v Hu).
 Qed.
 
 End ReqGramSchmidt.
@@ -364,11 +379,7 @@ Lemma req_inner_sminus_r : forall x u v : @rSS R RIS SSx,
 Proof.
   intros x u v.
   unfold req_minus.
-  exact (req_trans _ _ _
-    (req_inner_splus_r x u (rsopp v))
-    (req_plus_compat (rinner x u) (rinner x u)
-                     (rinner x (rsopp v)) (opp (rinner x v))
-                     (req_refl (rinner x u)) (req_inner_sopp_r x v))).
+  exact (req_trans _ _ _    (req_inner_splus_r x u (rsopp v))    (req_plus_compat (rinner x u) (rinner x u)                     (rinner x (rsopp v)) (opp (rinner x v))                     (req_refl (rinner x u)) (req_inner_sopp_r x v))).
 Qed.
 
 (* Id splus_sminus_cancel L27272：a + (b − a) = b（向量 Id 链） *)
@@ -406,8 +417,7 @@ Lemma req_sminus_sminus_szero : forall u v : @rSS R RIS SSx,
 Proof.
   intros u v.
   unfold rsminus.
-  exact (id_trans (id_cong (fun z => rsplus (rsplus u (rsopp v)) z) req_sopp_szero)
-                  (rsplus_zero (rsplus u (rsopp v)))).
+  exact (id_trans (id_cong (fun z => rsplus (rsplus u (rsopp v)) z) req_sopp_szero)                  (rsplus_zero (rsplus u (rsopp v)))).
 Qed.
 
 (* Id smetric_sminus_zero L27324：度量平移不变（smetric_snorm +
@@ -416,13 +426,7 @@ Theorem req_smetric_sminus_zero : forall u v : @rSS R RIS SSx,
   req (rsmetric (@rsminus R RIS SSx u v) rszero) (rsmetric u v).
 Proof.
   intros u v.
-  exact (req_trans _ _ _
-    (rsmetric_snorm (@rsminus R RIS SSx u v) rszero)
-    (req_trans _ _ _
-      (match req_sminus_sminus_szero u v in (Id _ z) return
-          (req (rsnorm (@rsminus R RIS SSx (@rsminus R RIS SSx u v) rszero)) (rsnorm z))
-       with id_refl => req_refl _ end)
-      (req_sym _ _ (rsmetric_snorm u v)))).
+  exact (req_trans _ _ _    (rsmetric_snorm (@rsminus R RIS SSx u v) rszero)    (req_trans _ _ _      (match req_sminus_sminus_szero u v in (Id _ z) return          (req (rsnorm (@rsminus R RIS SSx (@rsminus R RIS SSx u v) rszero)) (rsnorm z))       with id_refl => req_refl _ end)      (req_sym _ _ (rsmetric_snorm u v)))).
 Qed.
 
 (* Id inner_sminus_l L27355：⟨a−b, c⟩ = ⟨a,c⟩ − ⟨b,c⟩ *)
@@ -431,11 +435,7 @@ Lemma req_inner_sminus_l : forall a b c : @rSS R RIS SSx,
 Proof.
   intros a b c.
   unfold req_minus.
-  exact (req_trans _ _ _
-    (rinner_splus_l a (rsopp b) c)
-    (req_plus_compat (rinner a c) (rinner a c)
-                     (rinner (rsopp b) c) (opp (rinner b c))
-                     (req_refl (rinner a c)) (req_inner_sopp_l b c))).
+  exact (req_trans _ _ _    (rinner_splus_l a (rsopp b) c)    (req_plus_compat (rinner a c) (rinner a c)                     (rinner (rsopp b) c) (opp (rinner b c))                     (req_refl (rinner a c)) (req_inner_sopp_l b c))).
 Qed.
 
 (* Id sminus_zero_cancel L27369：a − b = 0 ⟹ a = b（向量 Id 链） *)

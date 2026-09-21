@@ -1,9 +1,20 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ln2b_irrational_from_supply（原 L671，2 句玩具证）                   *)
+(*   ln2b_X_proj（原 L68，2 句玩具证）                                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* Ln2Bridge.v —— ln2 无理数 supply 接口件：供给型 ln2i_pade_supply 与    *)
 (*   由其导出的 δ 提取、逃逸规格、无理性推论三件，另附平凡三元组反例      *)
 (*   ln2b_supply_trivial_hit。                                          *)
 (*                                                                     *)
-(* 基准对象：ln2b_X = ln2i_x 的柯西极限（存在性由源模块 UpReqLn2Irrational *)
+(* 基准对象：ln2b_X = ln2i_x 的柯西极限（存在性由母件 UpReqLn2Irrational *)
 (*   的尾控制 ln2i_tail 与消失条件 ln2i_vanish 供给）；整系数线性形式    *)
 (*   ln2b_line A B n = |A_n·X − B_n|，第 k 投影为 Q 层 |A_n·x_k − B_n|。 *)
 (*                                                                     *)
@@ -54,7 +65,7 @@ Require Import UpReqIrrationalCriterion.
 Require Import UpReqLn2Irrational.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
 
 (* ============================================================ *)
 (* §0 基准实数 X = lim ln2i_x 与 line 投影面                           *)
@@ -301,7 +312,7 @@ Proof.
   lia.
 Qed.
 
-(* 幂不等式 nat → Z 提升（指数/底经 Nat2Z 单射逐一转移） *)
+(* 幂不等式 nat → Z 提升（指数/底经 Nat2Z 单射搬运） *)
 Lemma ln2b_pow_lift : forall V' A' B' : nat,
   (1 <= V')%nat -> (1 <= A')%nat ->
   (V' * A' ^ (V' * A') < B' ^ (V' * A'))%nat ->
@@ -635,11 +646,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 ln2b_escape_of_supply：supply -> ln2i_escape_spec（条件形闭合） *)
+(* §5 ln2b_escape_of_supply：supply -> ln2i_escape_spec（条件形收口） *)
 (* ============================================================ *)
 
 (* 逃逸主件（与 T97 §1.2 草案的构造差异：指标不取 2v+4，不用
-   ln2i_pow_ge 与反三角路径）：以 vanish 与 δ 点式两条件直接闭合——
+   ln2i_pow_ge 与反三角路径）：以 vanish 与 δ 点式两条件直接收口——
    ln2i_vanish 于 eps:=δ 给显式 N（n≥N ⟹ ln2i_e n < δ），与 δ 提取件的
    终归点式肢（δ ≤ |q−x_k|，k≥K）在 m := S(max K N) 处合取：
    ln2i_e m < δ ≤ |q−x_m|。指标 m 全显式，零 LPO。 *)
@@ -676,8 +687,7 @@ Theorem ln2b_irrational_from_supply : forall (Hs : ln2i_pade_supply) (q : Q),
        (real_const q)))).
 Proof.
   intros Hs q.
-  exact (lic_irrational_criterion ln2i_x ln2i_e ln2i_tail
-           (ln2b_escape_of_supply Hs) ln2i_vanish q).
+  exact (lic_irrational_criterion ln2i_x ln2i_e ln2i_tail           (ln2b_escape_of_supply Hs) ln2i_vanish q).
 Qed.
 
 (* ============================================================ *)

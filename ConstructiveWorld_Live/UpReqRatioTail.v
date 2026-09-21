@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rtb_rlt_eq_r（原 L304，3 句玩具证）                                  *)
+(*   rtb_rlt_eq_l（原 L296，3 句玩具证）                                  *)
+(*   rtb_neq_of_ltT（原 L109，4 句玩具证）                                *)
+(*   rtb_qleT_mult_r（原 L83，3 句玩具证）                                *)
+(*   rtb_qleT_refl（原 L60，3 句玩具证）                                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqRatioTail.v —— 比值型几何尾界母定理（一母多子实例化）         *)
 (*                                                              *)
 (* 目的：把 exp/arctan 等级数证明里反复内联的「比值受控 ⟹ 尾和        *)
@@ -83,9 +97,9 @@ Qed.
 Lemma rtb_qleT_mult_r : forall a b c : Q,
   QleT' a b -> QleT' 0 c -> QleT' (a * c) (b * c).
 Proof.
-  intros a b c Hab Hc. apply Qle_to_QleT'.
-  apply Qmult_le_compat_r;
-    [apply QleT'_to_Qle; exact Hab | apply QleT'_to_Qle; exact Hc].
+  intros a b c Hab Hc.
+  apply Qle_to_QleT'.
+  apply Qmult_le_compat_r;    [apply QleT'_to_Qle; exact Hab | apply QleT'_to_Qle; exact Hc].
 Qed.
 
 (* ρ ≤ 1 ⟹ 0 ≤ 1-ρ（Qopp_le_compat 反向 + 环账） *)

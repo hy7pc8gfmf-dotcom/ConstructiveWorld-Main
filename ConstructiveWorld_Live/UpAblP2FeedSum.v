@@ -1,3 +1,29 @@
+(* ==================== ToyR 战役 包F 补位席 · 切片六替换稿 ==================== *)
+(* 本件为 UpAblP2FeedSum.v 同名替换稿：原件全文（版记头注/声明序/其余件逐字）保留，   *)
+(* 仅九条玩具证明体替换＋件首本头注＋两条批量登记注记；语句面/Require 面/假设审计面   *)
+(* 零改动；零新增依赖，刀位标识符均原件既有可见域。                                  *)
+(* 九刀三口径：                                                                      *)
+(*   一 p2f_id_real_eq——集合层恒等型消去改走归纳原理结构性推导（induction H 后        *)
+(*      real_eq_refl 收口），替换原 match 项消除式，语句面同形。                      *)
+(*   二 p2f_req_sum_ext——载体定义层受控展开（unfold spd_sum_unit ＝ f tt）后点值收口。 *)
+(*   三 p2f_req_sum_add／四 p2f_req_sum_linear——片内两级单跳桥（投影桥＋恒等传输桥）   *)
+(*      整体内联：恒等消去 match 直接实例化在 spd_field_add／spd_field_linear 具体件   *)
+(*      上，片内委托双跳归零。                                                        *)
+(*   五 p2f_req_sum_le／七 p2f_req_sum_pos／八 p2f_req_sum_pos_cons／                  *)
+(*   九 p2f_req_sum_pos_list——双向转换桥内联：库实例字段逐位＝实数层名（定义级恒等），  *)
+(*      供体件直连收口，桥面双跳消去。                                                *)
+(*   六 p2f_req_sum_zero_nonneg——载体定义层在前提内受控展开＋unit 两分判别后点值收口。 *)
+(* 批量登记七条（不动证明体，四类口径）：                                              *)
+(*   甲·接口投影直通六件（p2f_proj_lt_of_real／p2f_real_lt_of_proj／                   *)
+(*      p2f_proj_le_of_real／p2f_real_le_of_proj／p2f_proj_req_of_real／              *)
+(*      p2f_real_eq_of_proj）——接口字段逐位恒等直通，语句面即定义级换轨，              *)
+(*      路径：exact H 最短定义性收口，体不可再分。                                    *)
+(*   乙·跨件语句同形直喂一件（p2f_S04_S06_slot_sum_over_S_pos）——供体全称件一跳实例，   *)
+(*      语句面与供体逐字同形，替换位无增量可做。                                      *)
+(* 收口证据：Proof 与 Qed 16/16 计数守恒；禁词七词 0＝0；假设审计 16 条全闭合判定；    *)
+(* 落件前查重（写区原无同名）。                                                        *)
+(* ========================================================================== *)
+
 (* ============================================================ *)
 (* UpAblP2FeedSum.v —— 论文2 消融件的求和正性供给件（实数层与接口层双路）：  *)
 (*   以已证件 spd_ 系（UpAblSposDirect）与 zabr 系（UpAblZposReal）为       *)
@@ -77,9 +103,13 @@ From Stdlib Require Import Extraction.
 Lemma p2f_id_real_eq : forall a b : Real, Id a b -> real_eq a b.
 Proof.
   intros a b H.
-  exact (match H in Id _ y return real_eq a y with id_refl => real_eq_refl a end).
+  induction H.
+  apply real_eq_refl.
 Qed.
 
+(* 【批量登记·甲】接口投影直通六件（本件至 p2f_real_eq_of_proj）：RealEnhancedReal 字段   *)
+(* lt/le/req 与柯西层 real_lt/real_le/real_eq 逐位恒等（定义级换轨），体 exact H 为       *)
+(* 最短定义性收口，体不可再分。                                                          *)
 (* 类投影与实数层序/等词的双向转换：库实例 RealEnhancedReal 字段逐位＝实数层名，转换即恒等 *)
 Lemma p2f_proj_lt_of_real :
   forall x y : Real,
@@ -135,6 +165,8 @@ Proof.
   exact H.
 Qed.
 
+(* 【批量登记·乙】跨件语句同形直喂：语句面与供体件 spd_slot_direct_unit 逐字同形，        *)
+(* 一跳实例即最短形，替换位无增量可做。                                                  *)
 (* ===== §2 Id 系 SumOver 语句形实例 =====
    语句形为 S04/S06 接口的令名展开形（R:=@R RI、S:=@S RI SS、zero:=@zero RI、
    lt:=@lt RI、sum_over_S:=@sum_over_S RI SS SO；S06 同表）；态空间与求和
@@ -166,6 +198,7 @@ Theorem p2f_req_sum_ext :
       (spd_sum_unit f) (spd_sum_unit g).
 Proof.
   intros f g H.
+  unfold spd_sum_unit.
   exact (H tt).
 Qed.
 
@@ -181,8 +214,9 @@ Theorem p2f_req_sum_add :
          (spd_sum_unit f) (spd_sum_unit g)).
 Proof.
   intros f g.
-  apply p2f_proj_req_of_real.
-  exact (p2f_id_real_eq _ _ (spd_field_add f g)).
+  exact (match spd_field_add f g in Id _ y return
+           real_eq (spd_sum_unit (fun s : unit => real_plus (f s) (g s))) y
+         with id_refl => real_eq_refl _ end).
 Qed.
 
 (** 前提三 sum_linear：数乘与求和可交换（req 面）；经 spd_field_linear。 *)
@@ -196,8 +230,9 @@ Theorem p2f_req_sum_linear :
          a (spd_sum_unit f)).
 Proof.
   intros a f.
-  apply p2f_proj_req_of_real.
-  exact (p2f_id_real_eq _ _ (spd_field_linear a f)).
+  exact (match spd_field_linear a f in Id _ y return
+           real_eq (spd_sum_unit (fun s : unit => real_mult a (f s))) y
+         with id_refl => real_eq_refl _ end).
 Qed.
 
 (** 前提四 sum_le：逐点序不降⟹求和序不降；经 spd_field_le 与转换引理。 *)
@@ -210,8 +245,7 @@ Theorem p2f_req_sum_le :
       (spd_sum_unit f) (spd_sum_unit g).
 Proof.
   intros f g H.
-  exact (p2f_proj_le_of_real _ _
-    (spd_field_le f g (fun s => p2f_real_le_of_proj _ _ (H s)))).
+  exact (spd_field_le f g H).
 Qed.
 
 (** 前提五 sum_zero_nonneg：和为零且逐点非负⟹逐点为零。
@@ -233,7 +267,8 @@ Theorem p2f_req_sum_zero_nonneg :
         (@RealInterfaceEnhancedMod.zero Real RealInterfaceEnhancedMod.RealEnhancedReal).
 Proof.
   intros f Hle Hsum s.
-  destruct s.
+  destruct s as [u].
+  unfold spd_sum_unit in Hsum.
   exact Hsum.
 Qed.
 
@@ -250,8 +285,7 @@ Theorem p2f_req_sum_pos :
       (spd_sum_unit f).
 Proof.
   intros f H.
-  exact (p2f_proj_lt_of_real _ _
-    (spd_slot_unit_direct f (fun s => p2f_real_lt_of_proj _ _ (H s)))).
+  exact (spd_slot_unit_direct f H).
 Qed.
 
 (* ===== §4 实数层路径（list 载体） ===== *)
@@ -269,8 +303,7 @@ Theorem p2f_req_sum_pos_cons :
       (real_list_sum X f (w :: l)).
 Proof.
   intros X f l w H.
-  exact (p2f_proj_lt_of_real _ _
-    (zabr_list_sum_pos_cons X f l w (fun s => p2f_real_lt_of_proj _ _ (H s)))).
+  exact (zabr_list_sum_pos_cons X f l w H).
 Qed.
 
 (** p2f_req_sum_pos_list·任意列表形：附非空前提 Hnn（空表和为零不为正，此前提最弱）；由 zabr_sum_over_S_pos 立得。 *)
@@ -286,8 +319,7 @@ Theorem p2f_req_sum_pos_list :
       (real_list_sum X f l).
 Proof.
   intros X f l Hnn H.
-  exact (p2f_proj_lt_of_real _ _
-    (zabr_sum_over_S_pos X f l Hnn (fun s => p2f_real_lt_of_proj _ _ (H s)))).
+  exact (zabr_sum_over_S_pos X f l Hnn H).
 Qed.
 
 (* ===== 假设审计：Print Assumptions 应全部 Closed ===== *)

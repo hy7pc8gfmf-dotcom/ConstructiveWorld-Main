@@ -1,4 +1,34 @@
 (* ============================================================ *)
+(* ToyR 战役 · 包I · 切片六（T248 台账席 · 20260921）· 本件为替换稿        *)
+(*   正文系 Main/Live 基准件全文，仅换下列证明体；定理名/语句面/Require 面/  *)
+(*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
+(*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
+(*   一、ralt_lt_plus_translate：同族导出件换轨——弃 B 桥直连加双 comm 运输， *)
+(*       改消费先落之 1.4 导出件 ralt_lt_plus_compat_le_lt（le_refl b 填腿）， *)
+(*       零交换律运输直达（单路引擎面收窄至同族件单点）。 *)
+(*   二、ralt_minus_plus_common：脱钩独立重演——弃 req_minus_plus_congr 单点， *)
+(*       req_minus 载体展开后四引擎链原地重演：req_opp_plus 负号分配、 *)
+(*       req_plus_swap_mid 中项换序、plus_opp 对消、req_plus_zero_l 零元收口。 *)
+(*   三、ralt_log_exp_neg：对数桥脱钩——弃 req_log_exp_neg 引擎单点，经本节 *)
+(*       自持假设位 ralt_log_inv_exp_neg_req 与 log_inv_log 桥面对接： *)
+(*       req_opp_compat 双腿运输、req_double_neg 双负收口、req_trans 双段链。 *)
+(*   挂账（如实登记不硬凑）： *)
+(*   ralt_mult_lt_compat_l：lt_mult_compat 系严格乘法唯一引擎，comm 运输 *)
+(*       位置唯一（左形必经双 comm），单路唯一形，不化。 *)
+(*   ralt_lt_plus_compat_le_lt：B 桥 le_lt 导出复刻本体（comm 运输即导出 *)
+(*       路线全体，单桥假设位无第二引信），不化。 *)
+(*   ralt_dpo_reward_diff_is_log_ratio_diff：delta 透明件（ralt_dir 定义即 *)
+(*       beta·log_ratio，req_minus 自反即装法定义镜像），不化。 *)
+(*   ralt_dpo_pair_denom_pos：req_sigmoid_denom_pos 系分母正性唯一见证， *)
+(*       单路唯一形，不化。 *)
+(*   ralt_pi_star_implicit_reward_diff：ralt_dpo_reward_relative_exact 单点 *)
+(*       喂定，独立重演＝其 15 步链体复制注水，挂账。 *)
+(*   ralt_sigmoid_strict_inc：exp_neg_decr＋B 桥 le_lt＋区1 消解件三段装配 *)
+(*       序唯一（内行严格化仅 le_lt 单桥），挂账。 *)
+(*   ralt_real_const_req_qleT/ralt_real_const_req_eq_bool：区5 接口投影喂 *)
+(*       定，桥件唯一（QleT_to_Qle/Qeq_bool_iff 单入口），不化。 *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* UpReqAlignRestA.v *)
 (* *)
 (* 目的： 对齐族剩余段 A：DPO 奖励差与对数比面。 *)
@@ -96,7 +126,20 @@ Lemma ralt_log_exp_neg : forall x : R,
   req (log (exp_neg x) (exp_neg_pos x)) (opp x).
 Proof.
   intro x.
-  exact (req_log_exp_neg ralt_log_inv_exp_neg_req x).
+  exact (req_trans (log (exp_neg x) (exp_neg_pos x))
+                   (opp (opp (log (exp_neg x) (exp_neg_pos x))))
+                   (opp x)
+                   (req_sym (opp (opp (log (exp_neg x) (exp_neg_pos x))))
+                            (log (exp_neg x) (exp_neg_pos x))
+                            (req_double_neg (log (exp_neg x) (exp_neg_pos x))))
+                   (req_opp_compat (opp (log (exp_neg x) (exp_neg_pos x))) x
+                      (req_trans (opp (log (exp_neg x) (exp_neg_pos x)))
+                                 (log_inv (exp_neg x) (exp_neg_pos x))
+                                 x
+                                 (req_sym (log_inv (exp_neg x) (exp_neg_pos x))
+                                          (opp (log (exp_neg x) (exp_neg_pos x)))
+                                          (log_inv_log (exp_neg x) (exp_neg_pos x)))
+                                 (ralt_log_inv_exp_neg_req x)))).
 Qed.
 
 (* 1.1 real_mult_lt_compat_l 同位（基座 L38577）：左乘严格保序。
@@ -167,9 +210,7 @@ Lemma ralt_lt_plus_translate : forall (b c d : R),
   lt c d -> lt (plus b c) (plus b d).
 Proof.
   intros b c d Hcd.
-  apply (req_lt_compat (plus c b) (plus b c) (plus d b) (plus b d)
-                       (plus_comm c b) (plus_comm d b)).
-  exact (ralt_lt_plus_compat_lt_le c d b b Hcd (le_refl b)).
+  exact (ralt_lt_plus_compat_le_lt b b c d (le_refl b) Hcd).
 Qed.
 
 (* 1.6 minus_plus_common 同位（基座 L19692）：共同被加项消去。
@@ -177,8 +218,24 @@ Qed.
 Lemma ralt_minus_plus_common : forall A B C : R,
   req (req_minus (plus A B) (plus A C)) (req_minus B C).
 Proof.
-  intros A B C.
-  exact (req_minus_plus_congr A B C).
+  intros A B C. unfold req_minus.
+  apply (req_trans (plus (plus A B) (opp (plus A C)))
+                   (plus (plus A B) (plus (opp A) (opp C)))
+                   (plus B (opp C))).
+  - exact (req_plus_compat (plus A B) (plus A B)
+                           (opp (plus A C)) (plus (opp A) (opp C))
+                           (req_refl (plus A B)) (req_opp_plus A C)).
+  - apply (req_trans (plus (plus A B) (plus (opp A) (opp C)))
+                     (plus (plus A (opp A)) (plus B (opp C)))
+                     (plus B (opp C))).
+    + exact (req_plus_swap_mid A B (opp A) (opp C)).
+    + apply (req_trans (plus (plus A (opp A)) (plus B (opp C)))
+                       (plus zero (plus B (opp C)))
+                       (plus B (opp C))).
+      * exact (req_plus_compat (plus A (opp A)) zero
+                               (plus B (opp C)) (plus B (opp C))
+                               (plus_opp A) (req_refl (plus B (opp C)))).
+      * exact (req_plus_zero_l (plus B (opp C))).
 Qed.
 
 (* 1.7 real_log_lt_mono 同位：B 类桥假设位 ralt_log_lt_mono
@@ -703,3 +760,18 @@ Proof.
   exact (real_const_pos c Hc).
 Qed.
 
+
+
+(* （ToyR 增补·非原件改动）假设面收口申报节：玩具面逐件申报，
+    全 Closed 为定谳标识；基准对照件以同文申报节同法试编比对。 *)
+Print Assumptions ralt_log_exp_neg.
+Print Assumptions ralt_mult_lt_compat_l.
+Print Assumptions ralt_lt_plus_compat_le_lt.
+Print Assumptions ralt_lt_plus_translate.
+Print Assumptions ralt_minus_plus_common.
+Print Assumptions ralt_dpo_reward_diff_is_log_ratio_diff.
+Print Assumptions ralt_dpo_pair_denom_pos.
+Print Assumptions ralt_pi_star_implicit_reward_diff.
+Print Assumptions ralt_sigmoid_strict_inc.
+Print Assumptions ralt_real_const_req_qleT.
+Print Assumptions ralt_real_const_req_eq_bool.

@@ -1,3 +1,25 @@
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包J·切片六 同名替换件：G13_EvictFam（台账 T249 续作，包J 终末片）    *
+ * 本稿＝原件全文逐字保留，仅按玩具清单换写下列证明体（同一陈述、            *
+ * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
+ * 替换清单（6 件）：eviction_db_breaking_zero／eviction_steady_deviation_  *
+ *   zero／evicted_boltzmann_steady_full_keep／req_eviction_db_breaking_   *
+ *   zero／req_eviction_steady_deviation_zero／req_eviction_steady_        *
+ *   deviation_le_zero                                                     *
+ * 三口径（结构性推导为主）：原件六条均为单体内联匿名链（巨型 exact 深嵌套   *
+ *   或 apply 链），本稿逐条拆解为命名见证多段装配——逐跳 pose proof 命名    *
+ *   （换序见证、减自零见证、绝对值换形见证、行归一见证、缩放置换见证、      *
+ *   乘一见证），中间项全部显式给出，尾段显式复合收口；req 系三条            *
+ *   req_trans 中项逐位显式，杜绝匿名深嵌套与隐式统一。                     *
+ * 不可化标注（4 件，批量结案）：opp_zero_u——plus_inv_unique 即规范形       *
+ *   两步构造（根内自注无现成 Set 层 opp_zero 直供件）；minus_zero_r_u——   *
+ *   opp_zero_u 加 plus_zero 两跳极简形，再拆即拆行注水；                  *
+ *   evicted_boltzmann_steady_exact——逐点换序见证＋求和线性两跳已极简      *
+ *   （逐点腿即 evicted_db_products 换序本名直引）；                        *
+ *   evicted_transition_row_sum_one——逐点全保留桥＋归一化假设位直引两跳     *
+ *   已极简。四件均为两跳内规范形，替代路线需面外引理或同构重排，定谳不可化。 *
+ * 纪律：纯构造性；Set 层零 Prop 泄露；证明起讫配平；真 Qed。                *
+ * ═════════════════════════════════════════════════════════════════════ *)
 (* G 组：G13_EvictFam — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpEvictId + UpEvictIdReq（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G13_EvictFam 成员件：UpEvictId（原样并入，自带 Require）======== *)
@@ -190,11 +212,14 @@ Theorem eviction_db_breaking_zero :
 Proof.
   intros s s'.
   unfold evict_db_breaking.
-  apply (id_trans (id_cong abs
-    (minus_self_zero (mult (evict_evicted_boltzmann s) (evict_evicted_transition s s'))
-                     (mult (evict_evicted_boltzmann s') (evict_evicted_transition s' s))
-                     (id_sym (evicted_db_products s s'))))).
-  exact abs_zero.
+  (* 命名见证拆解：换序见证 → 减自零见证 → abs 换形见证 → 零收口，四段装配 *)
+  pose proof (id_sym (evicted_db_products s s')) as Hswap.
+  pose proof (minus_self_zero
+                (mult (evict_evicted_boltzmann s) (evict_evicted_transition s s'))
+                (mult (evict_evicted_boltzmann s') (evict_evicted_transition s' s))
+                Hswap) as Hminuszero.
+  pose proof (id_cong abs Hminuszero) as Habszero.
+  exact (id_trans Habszero abs_zero).
 Qed.
 
 (* ================= 件 1b：截断核稳态方程（精确恒等式） ====================
@@ -249,10 +274,14 @@ Corollary evicted_boltzmann_steady_full_keep :
        (evict_evicted_boltzmann s).
 Proof.
   intros Hkall s.
-  apply (id_trans (evicted_boltzmann_steady_exact s)).
-  apply (id_trans (id_cong (fun x => mult (evict_evicted_boltzmann s) x)
-                           (evicted_transition_row_sum_one Hkall s))).
-  apply (mult_one (evict_evicted_boltzmann s)).
+  (* 命名见证拆解：稳态方程见证 → 行归一见证 → 缩放置换见证 → 乘一见证，
+     三跳链逐跳命名、尾段显式复合收口 *)
+  pose proof (evicted_boltzmann_steady_exact s) as Hsteady.
+  pose proof (evicted_transition_row_sum_one Hkall s) as Hrowone.
+  pose proof (id_cong (fun x => mult (evict_evicted_boltzmann s) x) Hrowone)
+    as Hscale.
+  pose proof (mult_one (evict_evicted_boltzmann s)) as Hmultone.
+  exact (id_trans Hsteady (id_trans Hscale Hmultone)).
 Qed.
 
 (* ================= 件 1c：定理 6.1 偏差恒为零（1b 一步推论） =============
@@ -266,12 +295,14 @@ Theorem eviction_steady_deviation_zero :
        zero.
 Proof.
   intro s.
-  apply (id_trans (id_cong abs
-    (minus_self_zero
-       (sum_over_S (fun s' => mult (evict_evicted_boltzmann s') (evict_evicted_transition s' s)))
-       (mult (evict_evicted_boltzmann s) (sum_over_S (fun s' => evict_evicted_transition s s')))
-       (evicted_boltzmann_steady_exact s)))).
-  exact abs_zero.
+  (* 命名见证拆解：稳态方程见证 → 减自零见证 → abs 换形见证 → 零收口 *)
+  pose proof (evicted_boltzmann_steady_exact s) as Hsteady.
+  pose proof (minus_self_zero
+                (sum_over_S (fun s' => mult (evict_evicted_boltzmann s') (evict_evicted_transition s' s)))
+                (mult (evict_evicted_boltzmann s) (sum_over_S (fun s' => evict_evicted_transition s s')))
+                Hsteady) as Hminuszero.
+  pose proof (id_cong abs Hminuszero) as Habszero.
+  exact (id_trans Habszero abs_zero).
 Qed.
 
 Corollary eviction_steady_deviation_le_zero :
@@ -677,21 +708,27 @@ Theorem req_eviction_db_breaking_zero :
 Proof.
   intros s s'.
   unfold evq_db_breaking.
+  (* 命名见证拆解：req 换序见证 → req 减自零见证 → req abs 换形见证 →
+     req_trans 四参全显收口 *)
+  pose proof (req_sym
+                (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s))
+                (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
+                (req_evicted_db_products s s')) as Hswap.
+  pose proof (req_minus_self_zero
+                (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
+                (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s))
+                Hswap) as Hminuszero.
+  pose proof (req_abs_compat
+                (req_minus (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
+                           (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
+                zero
+                Hminuszero) as Habszero.
   exact (req_trans
            (abs (req_minus (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
                            (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s))))
            (abs zero)
            zero
-           (req_abs_compat
-              (req_minus (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
-                         (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
-              zero
-              (req_minus_self_zero
-                 (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
-                 (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s))
-                 (req_sym (mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s))
-                          (mult (evq_evicted_boltzmann s) (evq_evicted_transition s s'))
-                          (req_evicted_db_products s s'))))
+           Habszero
            abs_zero).
 Qed.
 
@@ -780,21 +817,26 @@ Theorem req_eviction_steady_deviation_zero :
          zero.
 Proof.
   intro s.
+  (* 命名见证拆解：稳态方程见证 → req 减自零见证 → req abs 换形见证 →
+     req_trans 四参全显收口（sumf 腿与旗舰一同构） *)
+  pose proof (req_evicted_boltzmann_steady_exact s) as Hsteady.
+  pose proof (req_minus_self_zero
+                (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
+                (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s')))
+                Hsteady) as Hminuszero.
+  pose proof (req_abs_compat
+                (req_minus
+                   (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
+                   (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s'))))
+                zero
+                Hminuszero) as Habszero.
   exact (req_trans
            (abs (req_minus
                    (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
                    (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s')))))
            (abs zero)
            zero
-           (req_abs_compat
-              (req_minus
-                 (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
-                 (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s'))))
-              zero
-              (req_minus_self_zero
-                 (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
-                 (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s')))
-                 (req_evicted_boltzmann_steady_exact s)))
+           Habszero
            abs_zero).
 Qed.
 
@@ -807,13 +849,16 @@ Corollary req_eviction_steady_deviation_le_zero :
        zero.
 Proof.
   intro s.
+  (* 命名见证拆解：req 零见证 + le 自反见证双命名，le_id_l 三值参全显收口 *)
+  pose proof (req_eviction_steady_deviation_zero s) as Hreqzero.
+  pose proof (le_refl zero) as Hlezero.
   exact (le_id_l
            (abs (req_minus
                    (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))
                    (mult (evq_evicted_boltzmann s) (sumf (fun s' => evq_evicted_transition s s')))))
            zero zero
-           (req_eviction_steady_deviation_zero s)
-           (le_refl zero)).
+           Hreqzero
+           Hlezero).
 Qed.
 
 (* ---- 件 12：增量逐点式（母件 L290；req 差异真证：req_minus_self_zero +
@@ -915,3 +960,15 @@ Extraction "b4b_evictid_g3.ml" req_evicted_db_products
   req_evicted_boltzmann_steady_full_keep req_eviction_steady_deviation_zero
   req_eviction_partition_increment req_eviction_partition_le_full_exact.
 *)
+
+(* —— 替换件假设面自审（切片六，十条玩具全列，应全 Closed under the global context） —— *)
+Print Assumptions eviction_db_breaking_zero.
+Print Assumptions evicted_boltzmann_steady_exact.
+Print Assumptions evicted_transition_row_sum_one.
+Print Assumptions evicted_boltzmann_steady_full_keep.
+Print Assumptions eviction_steady_deviation_zero.
+Print Assumptions opp_zero_u.
+Print Assumptions minus_zero_r_u.
+Print Assumptions req_eviction_db_breaking_zero.
+Print Assumptions req_eviction_steady_deviation_zero.
+Print Assumptions req_eviction_steady_deviation_le_zero.

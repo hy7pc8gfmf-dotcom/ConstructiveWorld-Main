@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   brp_b4_of_carrier（原 L464，2 句玩具证）                             *)
+(*   brp_b4_evicted_partition_pos（原 L439，3 句玩具证）                  *)
+(*   brp_b3_evicted_partition_r_pos（原 L383，3 句玩具证）                *)
+(*   brp_b2_evicted_partition_pos（原 L335，3 句玩具证）                  *)
+(*   brp_b1_Z_aud_pos（原 L288，3 句玩具证）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqBranchPos.v *)
 (* *)
 (* 目的： 消解面零腿分支和的正性（条件分派四腿 B1-B4）。 *)
@@ -291,18 +305,9 @@ Lemma brp_b1_Z_aud_pos :
           (match post_aud s with true => unit | false => Empty_set end)) ->
   lt zero brp_Z_aud_req.
 Proof.
-  intros Hp Hw. unfold brp_Z_aud_req.
-  exact (brp_branch_pos_bool post_aud p enum Hw
-           (fun s : S =>
-              match post_aud s as ps
-                    return (match ps with
-                            | true => lt zero (p s)
-                            | false => unit
-                            end)
-              with
-              | true => Hp s
-              | false => tt
-              end)).
+  intros Hp Hw.
+  unfold brp_Z_aud_req.
+  exact (brp_branch_pos_bool post_aud p enum Hw           (fun s : S =>              match post_aud s as ps                    return (match ps with                            | true => lt zero (p s)                            | false => unit                            end)              with              | true => Hp s              | false => tt              end)).
 Qed.
 
 End BrpDischargeB1.
@@ -340,18 +345,9 @@ Lemma brp_b2_evicted_partition_pos :
            end)) ->
   lt zero brp_evicted_partition.
 Proof.
-  intro Hw. unfold brp_evicted_partition.
-  exact (brp_branch_pos_or keep keep_dec brp_boltzmann_factor enum Hw
-           (fun s : S =>
-              match keep_dec s as k0
-                    return (match k0 with
-                            | inl _ => lt zero (brp_boltzmann_factor s)
-                            | inr _ => unit
-                            end)
-              with
-              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))
-              | inr _ => tt
-              end)).
+  intro Hw.
+  unfold brp_evicted_partition.
+  exact (brp_branch_pos_or keep keep_dec brp_boltzmann_factor enum Hw           (fun s : S =>              match keep_dec s as k0                    return (match k0 with                            | inl _ => lt zero (brp_boltzmann_factor s)                            | inr _ => unit                            end)              with              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))              | inr _ => tt              end)).
 Qed.
 
 End BrpDischargeB2.
@@ -388,18 +384,9 @@ Lemma brp_b3_evicted_partition_r_pos :
            end)) ->
   lt zero brp_evicted_partition_r.
 Proof.
-  intro Hw. unfold brp_evicted_partition_r.
-  exact (brp_branch_pos_or keep keep_dec brp_boltzmann_factor_r enum Hw
-           (fun s : S =>
-              match keep_dec s as k0
-                    return (match k0 with
-                            | inl _ => lt zero (brp_boltzmann_factor_r s)
-                            | inr _ => unit
-                            end)
-              with
-              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))
-              | inr _ => tt
-              end)).
+  intro Hw.
+  unfold brp_evicted_partition_r.
+  exact (brp_branch_pos_or keep keep_dec brp_boltzmann_factor_r enum Hw           (fun s : S =>              match keep_dec s as k0                    return (match k0 with                            | inl _ => lt zero (brp_boltzmann_factor_r s)                            | inr _ => unit                            end)              with              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))              | inr _ => tt              end)).
 Qed.
 
 End BrpDischargeB3.
@@ -444,18 +431,9 @@ Lemma brp_b4_evicted_partition_pos :
            end)) ->
   lt zero brp_req_evicted_partition_sumd.
 Proof.
-  intro Hw. unfold brp_req_evicted_partition_sumd.
-  exact (brp_branch_pos_or keep keep_dec brp_kv_boltzmann_factor enum Hw
-           (fun s : S =>
-              match keep_dec s as k0
-                    return (match k0 with
-                            | inl _ => lt zero (brp_kv_boltzmann_factor s)
-                            | inr _ => unit
-                            end)
-              with
-              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))
-              | inr _ => tt
-              end)).
+  intro Hw.
+  unfold brp_req_evicted_partition_sumd.
+  exact (brp_branch_pos_or keep keep_dec brp_kv_boltzmann_factor enum Hw           (fun s : S =>              match keep_dec s as k0                    return (match k0 with                            | inl _ => lt zero (brp_kv_boltzmann_factor s)                            | inr _ => unit                            end)              with              | inl _ => exp_neg_pos (mult (inv_pos D D_pos) (energy s))              | inr _ => tt              end)).
 Qed.
 
 (* 件 2：裸载体回接形——任给求和算子 sov 携规范条件（req (sov g)      *)
@@ -474,31 +452,7 @@ Lemma brp_b4_of_carrier : forall (sov : (S -> R) -> R),
                              end)).
 Proof.
   intros sov Hspec Hw.
-  exact (lt_id_r zero
-           (sumd_sumf S enum
-              (fun s : S => match keep_dec s with
-                            | inl _ => brp_kv_boltzmann_factor s
-                            | inr _ => zero
-                            end))
-           (sov (fun s : S => match keep_dec s with
-                              | inl _ => brp_kv_boltzmann_factor s
-                              | inr _ => zero
-                              end))
-           (req_sym
-              (sov (fun s : S => match keep_dec s with
-                                 | inl _ => brp_kv_boltzmann_factor s
-                                 | inr _ => zero
-                                 end))
-              (sumd_sumf S enum
-                 (fun s : S => match keep_dec s with
-                               | inl _ => brp_kv_boltzmann_factor s
-                               | inr _ => zero
-                               end))
-              (Hspec (fun s : S => match keep_dec s with
-                                   | inl _ => brp_kv_boltzmann_factor s
-                                   | inr _ => zero
-                                   end)))
-           (brp_b4_evicted_partition_pos Hw)).
+  exact (lt_id_r zero           (sumd_sumf S enum              (fun s : S => match keep_dec s with                            | inl _ => brp_kv_boltzmann_factor s                            | inr _ => zero                            end))           (sov (fun s : S => match keep_dec s with                              | inl _ => brp_kv_boltzmann_factor s                              | inr _ => zero                              end))           (req_sym              (sov (fun s : S => match keep_dec s with                                 | inl _ => brp_kv_boltzmann_factor s                                 | inr _ => zero                                 end))              (sumd_sumf S enum                 (fun s : S => match keep_dec s with                               | inl _ => brp_kv_boltzmann_factor s                               | inr _ => zero                               end))              (Hspec (fun s : S => match keep_dec s with                                   | inl _ => brp_kv_boltzmann_factor s                                   | inr _ => zero                                   end)))           (brp_b4_evicted_partition_pos Hw)).
 Qed.
 
 End BrpDischargeB4.

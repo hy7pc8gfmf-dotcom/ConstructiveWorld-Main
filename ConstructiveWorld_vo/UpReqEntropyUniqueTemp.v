@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t22_entropy_max_unique_temp_bool（原 L348，3 句玩具证）              *)
+(*   t22_bool_sum_add（原 L113，3 句玩具证）                              *)
+(*   t22_bool_sum_linear（原 L104，3 句玩具证）                           *)
+(*   t22_bool_sum_ext（原 L95，3 句玩具证）                               *)
+(*   t22_bool_sum_pos（原 L85，5 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyUniqueTemp.v *)
 (* *)
 (* 目的： 定理 4.6c entropy_max_unique_temp 的 Real 层。 *)
@@ -87,9 +101,11 @@ Lemma t22_bool_sum_pos :
     (forall w : bool, real_lt real_zero (f w)) ->
     real_lt real_zero (t22_bool_sumf f).
 Proof.
-  intros f Hf. unfold t22_bool_sumf.
+  intros f Hf.
+  unfold t22_bool_sumf.
   apply (real_list_sum_pos bool f [true; false] Hf).
-  intro Hc. discriminate Hc.
+  intro Hc.
+  discriminate Hc.
 Qed.
 
 Lemma t22_bool_sum_ext :
@@ -97,7 +113,8 @@ Lemma t22_bool_sum_ext :
     (forall s : bool, real_eq (f s) (g s)) ->
     real_eq (t22_bool_sumf f) (t22_bool_sumf g).
 Proof.
-  intros f g Hfg. unfold t22_bool_sumf.
+  intros f g Hfg.
+  unfold t22_bool_sumf.
   exact (real_list_sum_ext bool f g [true; false] Hfg).
 Qed.
 
@@ -106,7 +123,8 @@ Lemma t22_bool_sum_linear :
     real_eq (t22_bool_sumf (fun s : bool => real_mult a (f s)))
             (real_mult a (t22_bool_sumf f)).
 Proof.
-  intros a f. unfold t22_bool_sumf.
+  intros a f.
+  unfold t22_bool_sumf.
   exact (real_list_sum_linear bool a f [true; false]).
 Qed.
 
@@ -115,7 +133,8 @@ Lemma t22_bool_sum_add :
     real_eq (t22_bool_sumf (fun s : bool => real_plus (f s) (g s)))
             (real_plus (t22_bool_sumf f) (t22_bool_sumf g)).
 Proof.
-  intros f g. unfold t22_bool_sumf.
+  intros f g.
+  unfold t22_bool_sumf.
   exact (real_list_sum_add bool f g [true; false]).
 Qed.
 
@@ -363,18 +382,8 @@ Theorem t22_entropy_max_unique_temp_bool :
                  T T_pos energy s).
 Proof.
   intros energy T T_pos p Hp Hnp Henergy Hent s.
-  apply (t1_gibbe2_gibbs_equality_bool p
-           (real_boltzmann_dist_temp bool t22_bool_sumf t22_bool_sum_pos
-              T T_pos energy)
-           Hp
-           (real_boltzmann_dist_temp_pos bool t22_bool_sumf t22_bool_sum_pos
-              T T_pos energy)
-           Hnp
-           (real_boltzmann_dist_temp_normalized bool t22_bool_sumf t22_bool_sum_pos
-              t22_bool_sum_ext t22_bool_sum_linear T T_pos energy)).
-  exact (t22_entropy_eq_kl_zero bool t22_bool_sumf t22_bool_sum_pos
-           t22_bool_sum_ext t22_bool_sum_linear t22_bool_sum_add
-           T T_pos energy p Hp Hnp Henergy Hent).
+  apply (t1_gibbe2_gibbs_equality_bool p           (real_boltzmann_dist_temp bool t22_bool_sumf t22_bool_sum_pos              T T_pos energy)           Hp           (real_boltzmann_dist_temp_pos bool t22_bool_sumf t22_bool_sum_pos              T T_pos energy)           Hnp           (real_boltzmann_dist_temp_normalized bool t22_bool_sumf t22_bool_sum_pos              t22_bool_sum_ext t22_bool_sum_linear T T_pos energy)).
+  exact (t22_entropy_eq_kl_zero bool t22_bool_sumf t22_bool_sum_pos           t22_bool_sum_ext t22_bool_sum_linear t22_bool_sum_add           T T_pos energy p Hp Hnp Henergy Hent).
 Qed.
 
 (* ============================================================ *)

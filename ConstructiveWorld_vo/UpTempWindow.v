@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   tw_ZT_le_NEU（原 L1110，5 句玩具证）                                 *)
+(*   tw_ZT_ge_NEL（原 L1103，5 句玩具证）                                 *)
+(*   tw_lt_half_opp（原 L354，4 句玩具证）                                *)
+(*   tw_Q_min_r（原 L263，3 句玩具证）                                    *)
+(*   tw_Q_min_l（原 L258，3 句玩具证）                                    *)
+(*   tw_le_eq_l（原 L61，2 句玩具证）                                     *)
+(*   tw_le_eq_r（原 L54，2 句玩具证）                                     *)
+(*   tw_eq_le（原 L48，2 句玩具证）                                       *)
+(*   tw_lt_le（原 L42，2 句玩具证）                                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpTempWindow.v *)
 (* *)
 (* 目的： 温度窗口面：硬注意力极限的窗口载体重建。 *)
@@ -41,20 +59,23 @@ From Stdlib Require Import QArith.Qring QArith.Qabs QArith.Qminmax QArith.QOrder
 (* lt ⟹ le（real_le 的 Or 编码左支） *)
 Lemma tw_lt_le : forall a b : Real, real_lt a b -> real_le a b.
 Proof.
-  intros a b H. exact (inl H).
+  intros a b H.
+  exact (inl H).
 Qed.
 
 (* eq ⟹ le（Or 编码右支） *)
 Lemma tw_eq_le : forall a b : Real, real_eq a b -> real_le a b.
 Proof.
-  intros a b H. exact (inr H).
+  intros a b H.
+  exact (inr H).
 Qed.
 
 (* a ≤ b 且 b == c ⟹ a ≤ c *)
 Lemma tw_le_eq_r : forall a b c : Real,
   real_le a b -> real_eq b c -> real_le a c.
 Proof.
-  intros a b c Hab Hbc. exact (real_le_trans a b c Hab (inr Hbc)).
+  intros a b c Hab Hbc.
+  exact (real_le_trans a b c Hab (inr Hbc)).
 Qed.
 
 (* a ≤ b 且 a == c ⟹ c ≤ b *)
@@ -257,12 +278,16 @@ Qed.
 (* Qmin 事实（GenericMinMax 经 Qminmax.Q 实例化） *)
 Lemma tw_Q_min_l : forall e1 e2 : Q, e1 <= e2 -> Qmin e1 e2 == e1.
 Proof.
-  intros e1 e2 H. apply Q.min_l. exact H.
+  intros e1 e2 H.
+  apply Q.min_l.
+  exact H.
 Qed.
 
 Lemma tw_Q_min_r : forall e1 e2 : Q, e2 <= e1 -> Qmin e1 e2 == e2.
 Proof.
-  intros e1 e2 H. apply Q.min_r. exact H.
+  intros e1 e2 H.
+  apply Q.min_r.
+  exact H.
 Qed.
 
 Lemma tw_Q_le_min_l : forall e1 e2 : Q, Qle (Qmin e1 e2) e1.
@@ -354,7 +379,10 @@ Qed.
 Lemma tw_lt_half_opp : forall y : Real,
   real_lt real_zero (real_plus y y) -> real_lt (real_opp y) real_zero.
 Proof.
-  intros y H. apply tw_lt_opp_l. apply tw_lt_half. exact H.
+  intros y H.
+  apply tw_lt_opp_l.
+  apply tw_lt_half.
+  exact H.
 Qed.
 
 (* exp 单调的 le 版（real_le 的 Or 编码分解到 mono/wd） *)
@@ -1103,16 +1131,22 @@ Qed.
 Lemma tw_ZT_ge_NEL : forall T Ht,
   real_le (real_mult (real_of_nat (length states)) (tw_EL T Ht)) (tw_ZT T Ht).
 Proof.
-  intros T Ht. unfold tw_ZT. apply tw_const_le_sum.
-  intros x _. apply tw_EL_le_factor.
+  intros T Ht.
+  unfold tw_ZT.
+  apply tw_const_le_sum.
+  intros x _.
+  apply tw_EL_le_factor.
 Qed.
 
 Lemma tw_ZT_le_NEU : forall T Ht,
   real_le (tw_ZT T Ht)
           (real_mult (real_of_nat (length states)) (tw_EU T Ht)).
 Proof.
-  intros T Ht. unfold tw_ZT. apply tw_sum_le_const.
-  intros x _. apply tw_factor_le_EU.
+  intros T Ht.
+  unfold tw_ZT.
+  apply tw_sum_le_const.
+  intros x _.
+  apply tw_factor_le_EU.
 Qed.
 
 (* inv Z ≤ invN·e^{Δ/T}：Z ≥ N·e^{−Δ/T} 反单调 + inv 唯一性 *)

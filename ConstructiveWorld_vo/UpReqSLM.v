@@ -1,4 +1,22 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   req_greedy_kernel_limit_noslot（原 L1179，3 句玩具证）               *)
+(*   slm_discharge_pick_optimal（原 L1166，3 句玩具证）                   *)
+(*   req_log_one_plus_le_eps（原 L954，2 句玩具证）                       *)
+(*   req_set_inv_mul（原 L864，2 句玩具证）                               *)
+(*   req_set_eq_le（原 L737，2 句玩具证）                                 *)
+(*   req_greedy_kernel_limit（原 L652，3 句玩具证）                       *)
+(*   req_softmax_normalized（原 L586，3 句玩具证）                        *)
+(*   req_softmax_pos（原 L581，3 句玩具证）                               *)
+(*   req_markov_normalized（原 L317，2 句玩具证）                         *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqSLM.v *)
 (* *)
 (* 目的： 软语言模型面：温度配分、马尔可夫核与 softmax（req 载体）。 *)
@@ -318,8 +336,7 @@ Theorem req_markov_normalized : forall prefix,
   req (rsum Token (fun w => slm_markov_kernel prefix w) vocab) one.
 Proof.
   intro prefix.
-  exact (rls_kernel_norm_gen Token vocab (fun _ : Token => True) (fun _ : Token => inl I)
-                             (slm_temp_factor prefix) (slm_partition_temp_pos prefix)).
+  exact (rls_kernel_norm_gen Token vocab (fun _ : Token => True) (fun _ : Token => inl I)                             (slm_temp_factor prefix) (slm_partition_temp_pos prefix)).
 Qed.
 
 (* ---- 件 5：markov_relative（L2216，SLM 区最大 (b) 件；exp_neg 同余消费        *)
@@ -580,13 +597,17 @@ Definition slm_softmax (prefix : list Token) (w : Token) : R :=
 
 Theorem req_softmax_pos : forall prefix w, lt zero (slm_softmax prefix w).
 Proof.
-  intros prefix w. unfold slm_softmax. apply req_markov_pos_slm.
+  intros prefix w.
+  unfold slm_softmax.
+  apply req_markov_pos_slm.
 Qed.
 
 Theorem req_softmax_normalized : forall prefix,
   req (rsum Token (fun w => slm_softmax prefix w) vocab) one.
 Proof.
-  intro prefix. unfold slm_softmax. apply req_markov_normalized.
+  intro prefix.
+  unfold slm_softmax.
+  apply req_markov_normalized.
 Qed.
 
 Theorem req_softmax_bounded : forall prefix w,
@@ -736,7 +757,8 @@ Qed.
 
 Lemma req_set_eq_le : forall a b : R, req a b -> le a b.
 Proof.
-  intros a b H. exact (reqd_le_of_req a b H).
+  intros a b H.
+  exact (reqd_le_of_req a b H).
 Qed.
 
 (* ---- 件 4：set_square_nonneg（L26441） ------------------------------------- *)
@@ -955,10 +977,7 @@ Lemma req_log_one_plus_le_eps : forall (t : R) (Hpos : lt zero (plus one t)) (et
   lt zero eta -> le (log (plus one t) Hpos) (plus t eta).
 Proof.
   intros t Hpos eta Heta.
-  exact (le_id_r _ _ _
-           (req_plus_compat (plus (plus one t) (opp one)) t eta eta
-                            (req_ld3_minus_one_plus_t t) (req_refl eta))
-           (log_le_linear_eps (plus one t) Hpos eta Heta)).
+  exact (le_id_r _ _ _           (req_plus_compat (plus (plus one t) (opp one)) t eta eta                            (req_ld3_minus_one_plus_t t) (req_refl eta))           (log_le_linear_eps (plus one t) Hpos eta Heta)).
 Qed.
 
 (* ---- 件 15：log_one_plus_ge（L26638，(b)+假设位主道；链 = 件 13 + 件 14 +      *)
@@ -1169,9 +1188,9 @@ Lemma slm_discharge_pick_optimal :
     le (total_loss (prefix ++ [slm_discharge_pick_in prefix]))
        (total_loss (prefix ++ [w])).
 Proof.
-  intros prefix w Hw. unfold slm_discharge_pick_in.
-  exact (req_pick_best_token_optimal Token vocab total_loss default_token
-          prefix w Hw).
+  intros prefix w Hw.
+  unfold slm_discharge_pick_in.
+  exact (req_pick_best_token_optimal Token vocab total_loss default_token          prefix w Hw).
 Qed.
 
 (* ---- 无槽件 1：req_greedy_kernel_limit 升级（L2819 消费位已证明） -------- *)
@@ -1188,9 +1207,7 @@ Theorem req_greedy_kernel_limit_noslot :
                                     [slm_discharge_pick_in prefix]))))).
 Proof.
   intros prefix w Hw.
-  apply (req_markov_temperature_zero_limit Token vocab vocab_nonempty
-           total_loss temperature temperature_pos
-           prefix w (slm_discharge_pick_in prefix)).
+  apply (req_markov_temperature_zero_limit Token vocab vocab_nonempty           total_loss temperature temperature_pos           prefix w (slm_discharge_pick_in prefix)).
   exact (slm_discharge_pick_optimal prefix w Hw).
 Qed.
 

@@ -1,4 +1,17 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T251 台账席 战役包L（tier2 二批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列四个裸反射      *)
+(* 单跳玩具证之证明体替换为定义层受控展开收口（实例壳层与母本核层    *)
+(* unfold 显式化后转换收口，裸反射吞层改为分层显式），声明面与引用    *)
+(* 面零改动，零新增 Require，证明结尾记号与原件逐件守恒，纯构造性    *)
+(* 收口，文尾保留原件 Print Assumptions 追印面。清单：              *)
+(*   cb2w_z_pw_one（原 L55-57，裸反射单跳）                          *)
+(*   cb2w_Delta_pw_two（原 L59-61，裸反射单跳）                      *)
+(*   cb2w_core_zero_pw（原 L285-287，裸反射单跳）                    *)
+(*   cb2w_core_gap_zero（原 L298-301，裸反射单跳）                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblP7_WallEps_CB2.v —— ConcB2 的 +1 松弛常数 Δ 与中心 z 的实例双侧界与严格形否定 *)
 (*                                                              *)
 (* 数学使命：本件形式化库件 cb2_Delta = temp·max|dot| + 1 与 cb2_z 在两类实例上的 *)
@@ -54,11 +67,23 @@ Proof. intros s s'. apply in_eq. Qed.
 (* 非退化数值锚：z ≡ 1、Delta ≡ 2（与全零退化实例 z ≡ 0、core ≡ 0 形成对照） *)
 Lemma cb2w_z_pw_one : forall n : nat,
   projT1 (cb2_z unit cb2w_q cb2w_k real_one tt tt) n == 1%Q.
-Proof. intro n. reflexivity. Qed.
+Proof.
+  intro n.
+  (* 刀：实例壳层（cb2w_q/cb2w_k 常量体）＋母本核层（cb2_z = temp·dot）逐层
+     unfold 显式化，转换收口替代裸反射单跳吞层。 *)
+  unfold cb2_z, cb2w_q, cb2w_k.
+  reflexivity.
+Qed.
 
 Lemma cb2w_Delta_pw_two : forall n : nat,
   projT1 (cb2_Delta real_one cb2w_lmax) n == 2%Q.
-Proof. intro n. reflexivity. Qed.
+Proof.
+  intro n.
+  (* 刀：装配面（cb2_Delta = core + one）与封顶核（cb2_Delta_core = temp·maxabs）
+     及实例清单 cb2w_lmax 三层 unfold 显式化后转换收口。 *)
+  unfold cb2_Delta, cb2_Delta_core, cb2w_lmax.
+  reflexivity.
+Qed.
 
 (* ============================================================ *)
 (* §2 非退化实例上的严格形（eps:=1#2 具体值）                                     *)
@@ -284,7 +309,13 @@ Qed.
 (* b-2 全零退化实例的逐点面：cb2_Delta_core ≡ 0（cb2_smoke_lmax 面上逐点计算归零） *)
 Lemma cb2w_core_zero_pw : forall n : nat,
   projT1 (cb2_Delta_core real_one cb2_smoke_lmax) n == 0%Q.
-Proof. intro n. reflexivity. Qed.
+Proof.
+  intro n.
+  (* 刀：封顶核 cb2_Delta_core 与全零实例 cb2_smoke_lmax 两层 unfold 显式化
+     （temp·maxabs 在零清单上逐点归零）后转换收口。 *)
+  unfold cb2_Delta_core, cb2_smoke_lmax.
+  reflexivity.
+Qed.
 
 (* b-3 否定性见证：全零退化下 cb2_Delta_core 的严格正性见证不存在 *)
 Theorem cb2w_core_pos_death :
@@ -298,7 +329,14 @@ Qed.
 Lemma cb2w_core_gap_zero : forall n : nat,
   projT1 (cb2_Delta_core real_one cb2_smoke_lmax) n
   - projT1 (cb2_z unit cb2_smoke_q cb2_smoke_k real_one tt tt) n == 0%Q.
-Proof. intro n. reflexivity. Qed.
+Proof.
+  intro n.
+  (* 刀：封顶核与核值两母本定义（cb2_Delta_core/cb2_z）连同 b 组实例三常量
+     （cb2_smoke_lmax/cb2_smoke_q/cb2_smoke_k）五层 unfold 显式化，gap 逐点
+     差在零核与零核值上转换归零收口。 *)
+  unfold cb2_Delta_core, cb2_smoke_lmax, cb2_z, cb2_smoke_q, cb2_smoke_k.
+  reflexivity.
+Qed.
 
 Theorem cb2w_z_ub_core_death :
   real_lt (cb2_z unit cb2_smoke_q cb2_smoke_k real_one tt tt)

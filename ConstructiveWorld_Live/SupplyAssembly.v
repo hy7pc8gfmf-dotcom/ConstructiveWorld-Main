@@ -1,7 +1,21 @@
 (* ============================================================ *)
-(* SupplyAssembly.v —— 本件形式化 ln2 无理数证明的 supply 装配：实例化       *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   sa_ln2_irrational（原 L285，2 句玩具证）                             *)
+(*   sa_clo_le_p4（原 L133，1 句玩具证）                                  *)
+(*   sa_clo_int（原 L126，1 句玩具证）                                    *)
+(*   sa_clo_posT（原 L121，2 句玩具证）                                   *)
+(*   sa_norm_bridge（原 L107，2 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* SupplyAssembly.v —— 本件形式化 ln2 无理数证明的 supply 总装：实例化       *)
 (*   Ln2Bridge L1 的 ln2i_pade_supply（五层存在型）并经 L4                   *)
-(*   ln2b_irrational_from_supply 闭合 ln2 无理性。                           *)
+(*   ln2b_irrational_from_supply 收口 ln2 无理性。                           *)
 (*                                                                          *)
 (* A_n 整数面（已装）：sa_A n := 2^{n+1}·q̃_n 的 Z 承载——q̃_n ∈ nat 在册      *)
 (*   （bk_Qn_qtilde），归一桥 2^{n+1}·q̃_n == 2^{2n+1}·Q_n(1/2)               *)
@@ -12,7 +26,7 @@
 (*   起整数面不成立；② 调和形 r'_n := 2^n·p̃_n/L_n（由 pi_x_n_frac 的        *)
 (*   x'_n == p̃_n/(2·L_n·q̃_n) 换算）：L_n ∣ 2^n·p̃_n 缺在册整除定理。          *)
 (*   故 B_n 取「任意整数面 + 两实数肢」的条件接口 sa_supply_rem（语义        *)
-(*   精确：待实例化消解的正是④下界/⑤上界两肢本身）。                                  *)
+(*   精确：放电槽即④下界/⑤上界两肢本身）。                                  *)
 (* clo_n 正性肢（已装）：sa_clo n := lne_B n = (n!)²/(2n+1)!，0 < clo_n      *)
 (*   由 lne_B_posT 直供（sa_clo_posT）；整性见证 sa_clo_int（(n!)² ∈ Z      *)
 (*   的存在型见证）作 B_n 组合原料。                                         *)
@@ -27,15 +41,15 @@
 (*   与单极点 2 分解，∫₀¹(2−t)^{−1}dt = ln2 端）；(b) 残数系数               *)
 (*   c₁ = 2^n·q̃_n（Delannoy [w^n](2+w)^n(1+w)^n 抽取，bi_D 可复用）；       *)
 (*   (c) ln2 = lim ln2i_x 与线积分的对应（级数 Σ 1/(k·2^k) 的积分表示）。     *)
-(*   三者到货后 sa_supply_rem 即实例化消解，经 sa_supply_assemble 得               *)
+(*   三者到货后 sa_supply_rem 即放电，经 sa_supply_assemble 得               *)
 (*   sa_ln2_irrational 全链无条件形。                                        *)
 (*                                                                          *)
-(* 装配达成等级：两段式条件形——sa_supply_assemble（三肢已装 + 条件接口       *)
+(* 总装达成等级：两段式条件形——sa_supply_assemble（三肢已装 + 条件接口       *)
 (*   ⟹ ln2i_pade_supply 全型，真证）+ sa_ln2_irrational（由 L4              *)
-(*   ln2b_irrational_from_supply 闭合，真走源定理零旁路）；                  *)
+(*   ln2b_irrational_from_supply 收口，真走母定理零旁路）；                  *)
 (*   sa_supply_three_legs 为三肢独立封装件。                                 *)
 (*                                                                          *)
-(* 构造性注记：装配件语句面全 Set（sigT/And/QltT/QleT'/QeqT/real_le/         *)
+(* 构造性注记：总装件语句面全 Set（sigT/And/QltT/QleT'/QeqT/real_le/         *)
 (*   real_lt）；Q 层 Qeq/Qle 支撑引理仅服务推理；可提取（文末 Separate       *)
 (*   Extraction 与 Print Assumptions 复核）。                                *)
 (* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp UpReqIrrationalCriterion    *)
@@ -252,18 +266,18 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 条件接口（④⑤肢）+ 两段式装配闭合                                  *)
+(* §5 条件接口（④⑤肢）+ 两段式总装收口                                  *)
 (* ============================================================ *)
 
 (* sa_supply_rem：条件接口 B_n 整数面 + ④下界/⑤上界两实数肢——恒等式
-   本体（I_n = 2^{n+1}·q̃_n·X − r_n，三子件见头注）到货后待实例化消解的条件接口。
+   本体（I_n = 2^{n+1}·q̃_n·X − r_n，三子件见头注）到货后的放电槽。
    语义精确：本接口非空性即 θ 档 Padé 逼近列的存在性，本件不妄断。 *)
 Definition sa_supply_rem : Set :=
   sigT (fun B : nat -> Z =>
     And (ln2b_line_lower sa_A B sa_clo)
         (ln2b_line_upper sa_A B sa_theta)).
 
-(* sa_supply_assemble：两段式装配——三肢已装面 + 条件接口 ⟹ supply 全型 *)
+(* sa_supply_assemble：两段式总装——三肢已装面 + 条件接口 ⟹ supply 全型 *)
 Theorem sa_supply_assemble : forall Hm : sa_supply_rem, ln2i_pade_supply.
 Proof.
   intros [B [Hlow Hup]].
@@ -279,7 +293,7 @@ Proof.
         -- exact Hup.
 Qed.
 
-(* sa_ln2_irrational：ln2 无理数两段式闭合——由 Ln2Bridge L4 源模块
+(* sa_ln2_irrational：ln2 无理数两段式收口——由 Ln2Bridge L4 母件
    ln2b_irrational_from_supply（真走 lic_irrational_criterion，零旁路）。
    语句面 = L4 结论面的展开形（全 Set：sigT/And/QltT/real_lt）。 *)
 Theorem sa_ln2_irrational : forall (Hm : sa_supply_rem) (q : Q),
@@ -289,7 +303,8 @@ Theorem sa_ln2_irrational : forall (Hm : sa_supply_rem) (q : Q),
                          (lic_seq_cauchy ln2i_x ln2i_e ln2i_tail ln2i_vanish))
        (real_const q)))).
 Proof.
-  intros Hm q. exact (ln2b_irrational_from_supply (sa_supply_assemble Hm) q).
+  intros Hm q.
+  exact (ln2b_irrational_from_supply (sa_supply_assemble Hm) q).
 Qed.
 
 (* ============================================================ *)

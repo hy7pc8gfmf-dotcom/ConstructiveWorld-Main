@@ -1,3 +1,20 @@
+(* ============================================================
+ * ToyR 战役·包H 补位席（切片四）换轨件 —— 本文件为 Main 只读原件全文
+ * 的换轨稿：语句面/声明序/依赖面零改，仅换一处玩具证明体＋横幅前置。
+ *
+ * 换轨摘要（单刀）：mtc_delta_star_lt_one——弃原稿左因子引擎绕行
+ *   （交换换位内嵌的乘单调），直取右因子严格乘单调引擎（实小于∧零
+ *   小于右因子 ⟹ 右位积严格小），等式腿经交换律＋乘壹实等价传递链
+ *   缝合（乘交换非定义性，须显式回位），再与 lo<1 严格传递收口。
+ *   —— 切片一「右因子件 Real 层无、替换不可落地」判词经全库终验
+ *   证伪：右因子引擎 S07:5979 实存（字面名检索漏判），编译面经
+ *   vo_9.1 预编译树单根直编零阻塞（切片一 S 链雷系池D 陈旧特有）。
+ *
+ * 纪律：头注全中文；零承认面；纯构造性集合层词汇；真证收口守恒
+ *   （15 证 15 收）；判绿以四证为准（返回码/零错误串/目标新于源/
+ *   尾假设打印全闭）。
+ * ============================================================ *)
+
 (* ============================================================ *)
 (* MixTimeChain.v — 席位P7E（批次 E-STAGING-P7E）                  *)
 (*   论文7《率即算法》§5+§6 完整合龙件（本席最终合龙）              *)
@@ -158,10 +175,11 @@ Qed.
 Theorem mtc_delta_star_lt_one : real_lt delta_star real_one.
 Proof.
   exact (real_lt_trans (real_mult lo lo) lo real_one
-           (real_lt_eq_lt (real_mult lo lo) (real_mult lo real_one) lo
-              (real_mult_lt_compat_l lo real_one lo
+           (real_lt_eq_lt (real_mult lo lo) (real_mult real_one lo) lo
+              (real_mult_lt_compat lo real_one lo
                  mtc_lo_lt_one mtc_lo_pos)
-              (real_mult_one lo))
+              (real_eq_trans _ _ _ (real_mult_comm real_one lo)
+                 (real_mult_one lo)))
            mtc_lo_lt_one).
 Qed.
 

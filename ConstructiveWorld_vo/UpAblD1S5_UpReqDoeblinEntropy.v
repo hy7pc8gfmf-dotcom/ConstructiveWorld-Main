@@ -1,4 +1,21 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s5_doe_pack18_supplied（原 L599，1 句玩具证）                   *)
+(*   uabd1s5_doe_Hsq_leg（原 L454，1 句玩具证）                           *)
+(*   uabd1s5_doe_Heb_leg（原 L432，1 句玩具证）                           *)
+(*   uabd1s5_doe_Hwn_leg（原 L355，1 句玩具证）                           *)
+(*   uabd1s5_doe_omd_mult_zero（原 L139，2 句玩具证）                     *)
+(*   uabd1s5_doe_omd_one_zero（原 L134，1 句玩具证）                      *)
+(*   uabd1s5_doe_mult_zero_l（原 L128，2 句玩具证）                       *)
+(*   uabd1s5_doe_mult_one_l（原 L122，2 句玩具证）                        *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S5_UpReqDoeblinEntropy.v —— FA-D1S5 数据供给大打包第二梯 件①            *)
 (* 席位：FA-D1S5（普查批 D1-⑦ 第二梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改        *)
 (*                                                              *)
@@ -122,13 +139,15 @@ Definition uabd1s5_doe_h (states : list (list Real)) (Hnil : states <> nil)
 Lemma uabd1s5_doe_mult_one_l : forall x : Real,
   real_eq (real_mult real_one x) x.
 Proof.
-  intro x. exact (real_eq_trans _ _ _ (real_mult_comm real_one x) (real_mult_one x)).
+  intro x.
+  exact (real_eq_trans _ _ _ (real_mult_comm real_one x) (real_mult_one x)).
 Qed.
 
 Lemma uabd1s5_doe_mult_zero_l : forall x : Real,
   real_eq (real_mult real_zero x) real_zero.
 Proof.
-  intro x. exact (real_eq_trans _ _ _ (real_mult_comm real_zero x) (real_mult_zero x)).
+  intro x.
+  exact (real_eq_trans _ _ _ (real_mult_comm real_zero x) (real_mult_zero x)).
 Qed.
 
 Lemma uabd1s5_doe_omd_one_zero : real_eq (uabd1s5_doe_omd real_one) real_zero.
@@ -140,14 +159,7 @@ Lemma uabd1s5_doe_omd_mult_zero : forall x : Real,
   real_eq (real_mult (uabd1s5_doe_omd real_one) x) real_zero.
 Proof.
   intro x.
-  exact (real_eq_trans
-           (real_mult (uabd1s5_doe_omd real_one) x)
-           (real_mult real_zero x)
-           real_zero
-           (RealSetoid.real_eq_mult_compat_adapt
-              (uabd1s5_doe_omd real_one) real_zero x x
-              uabd1s5_doe_omd_one_zero (real_eq_refl x))
-           (uabd1s5_doe_mult_zero_l x)).
+  exact (real_eq_trans           (real_mult (uabd1s5_doe_omd real_one) x)           (real_mult real_zero x)           real_zero           (RealSetoid.real_eq_mult_compat_adapt              (uabd1s5_doe_omd real_one) real_zero x x              uabd1s5_doe_omd_one_zero (real_eq_refl x))           (uabd1s5_doe_mult_zero_l x)).
 Qed.
 
 Lemma uabd1s5_doe_K_eq_pb :
@@ -355,12 +367,7 @@ Qed.
 Lemma uabd1s5_doe_Hwn_leg :
   real_eq (real_list_sum (list Real) uabd1s5_doe_w uabd1s5_doe_states) real_one.
 Proof.
-  exact (real_eq_trans
-           (real_list_sum (list Real) uabd1s5_doe_w uabd1s5_doe_states)
-           (uabd1s5_doe_w nil)
-           real_one
-           (real_plus_zero (uabd1s5_doe_w nil))
-           (real_eq_refl real_one)).
+  exact (real_eq_trans           (real_list_sum (list Real) uabd1s5_doe_w uabd1s5_doe_states)           (uabd1s5_doe_w nil)           real_one           (real_plus_zero (uabd1s5_doe_w nil))           (real_eq_refl real_one)).
 Qed.
 
 (* Hew 供给腿：Σ(壹·零) == 能量期望（两侧各自两步归零） *)
@@ -443,11 +450,7 @@ Lemma uabd1s5_doe_Heb_leg :
        (uabd1s5_doe_sumpos uabd1s5_doe_states uabd1s5_doe_Hnil)
        uabd1s5_doe_T uabd1s5_doe_Ht uabd1s5_doe_energy).
 Proof.
-  exact (real_eq_refl
-           (real_energy_exp_temp (list Real)
-              (uabd1s5_doe_sumf uabd1s5_doe_states)
-              (uabd1s5_doe_sumpos uabd1s5_doe_states uabd1s5_doe_Hnil)
-              uabd1s5_doe_T uabd1s5_doe_Ht uabd1s5_doe_energy)).
+  exact (real_eq_refl           (real_energy_exp_temp (list Real)              (uabd1s5_doe_sumf uabd1s5_doe_states)              (uabd1s5_doe_sumpos uabd1s5_doe_states uabd1s5_doe_Hnil)              uabd1s5_doe_T uabd1s5_doe_Ht uabd1s5_doe_energy)).
 Qed.
 
 (* Hsq 供给腿：平方和 ≡ 零 ⟹ inr 直配（real_le = Or lt eq 的 eq 支） *)
@@ -598,25 +601,7 @@ Inductive uabd1s5_doe_pack18 : Set :=
 
 Theorem uabd1s5_doe_pack18_supplied : uabd1s5_doe_pack18.
 Proof.
-  exact (uabd1s5_doe_pack18_intro
-           uabd1s5_doe_states
-           uabd1s5_doe_Hnil
-           uabd1s5_doe_T
-           uabd1s5_doe_Ht
-           uabd1s5_doe_energy
-           uabd1s5_doe_om
-           real_lt_zero_one
-           (inr (real_eq_refl real_one))
-           uabd1s5_doe_w
-           (fun _ : list Real => real_lt_zero_one)
-           uabd1s5_doe_Hwn_leg
-           uabd1s5_doe_Hew_leg
-           uabd1s5_doe_epss0
-           uabd1s5_doe_p
-           (fun _ : list Real => real_lt_zero_one)
-           uabd1s5_doe_Heb_leg
-           uabd1s5_doe_r2
-           uabd1s5_doe_Hsq_leg).
+  exact (uabd1s5_doe_pack18_intro           uabd1s5_doe_states           uabd1s5_doe_Hnil           uabd1s5_doe_T           uabd1s5_doe_Ht           uabd1s5_doe_energy           uabd1s5_doe_om           real_lt_zero_one           (inr (real_eq_refl real_one))           uabd1s5_doe_w           (fun _ : list Real => real_lt_zero_one)           uabd1s5_doe_Hwn_leg           uabd1s5_doe_Hew_leg           uabd1s5_doe_epss0           uabd1s5_doe_p           (fun _ : list Real => real_lt_zero_one)           uabd1s5_doe_Heb_leg           uabd1s5_doe_r2           uabd1s5_doe_Hsq_leg).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

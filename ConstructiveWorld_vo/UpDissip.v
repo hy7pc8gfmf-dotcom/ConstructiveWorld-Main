@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   edge_comp_legal（原 L238，3 句玩具证）                               *)
+(*   edge_comp_b（原 L225，2 句玩具证）                                   *)
+(*   edge_comp_slope（原 L221，2 句玩具证）                               *)
+(*   bond_exchange_pos（原 L203，3 句玩具证）                             *)
+(*   bond_exchange_eps（原 L190，2 句玩具证）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpDissip.v *)
 (* *)
 (* 目的： 耗散经济模型的券/边/复合律与耗散记账（Set 层）。 *)
@@ -204,7 +218,8 @@ Theorem bond_exchange_pos : forall (e : edge_spec) (bd : bond),
   Id (edge_bi e) true -> QltT 0 (bd_eps bd) ->
   QltT 0 (bd_eps (bond_exchange e bd)).
 Proof.
-  intros e bd Hbi Hx. unfold bond_exchange.
+  intros e bd Hbi Hx.
+  unfold bond_exchange.
   apply (edge_map_pos e (bd_eps bd) Hx Hbi).
 Qed.
 
@@ -238,9 +253,9 @@ Qed.
 Theorem edge_comp_legal : forall e1 e2 : edge_spec,
   QltT 0 (ed_a e1) -> QltT 0 (ed_a e2) -> QltT 0 (ed_a (edge_comp e2 e1)).
 Proof.
-  intros e1 e2 H1 H2. apply Qlt_to_QltT.
-  apply (Qmult_lt_0_compat (ed_a e2) (ed_a e1)
-           (QltT_to_Qlt 0 (ed_a e2) H2) (QltT_to_Qlt 0 (ed_a e1) H1)).
+  intros e1 e2 H1 H2.
+  apply Qlt_to_QltT.
+  apply (Qmult_lt_0_compat (ed_a e2) (ed_a e1)           (QltT_to_Qlt 0 (ed_a e2) H2) (QltT_to_Qlt 0 (ed_a e1) H1)).
 Qed.
 
 (* 路径合法性的线性（布尔）判定器：两段路径 *)

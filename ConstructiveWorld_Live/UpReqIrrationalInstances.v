@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ir2_sqrt2_irrational_criterion（原 L1286，2 句玩具证）               *)
+(*   ir2_qp_def（原 L238，2 句玩具证）                                    *)
+(*   ir2_x1（原 L235，1 句玩具证）                                        *)
+(*   ir2_zpos_xo（原 L200，2 句玩具证）                                   *)
+(*   ir2_add_lt_r（原 L42，2 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqIrrationalInstances.v                                    *)
 (*                                                               *)
 (* 目的：母定理 lic_irrational_criterion 的第二实例装配：             *)
@@ -27,7 +41,7 @@ Require Import UpReqBanachNormOpp.
 Require Import UpReqIrrationalCriterion.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
 
 (* ============================================================ *)
 (* S0：Q 层通用小件                                                *)
@@ -41,7 +55,8 @@ Qed.
 
 Lemma ir2_add_lt_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
 Proof.
-  intros x y z H. apply (lic_qlt_add_r x y z H).
+  intros x y z H.
+  apply (lic_qlt_add_r x y z H).
 Qed.
 
 (* 非负平方单调：0 ≤ v ≤ u ⟹ v·v ≤ u·u *)
