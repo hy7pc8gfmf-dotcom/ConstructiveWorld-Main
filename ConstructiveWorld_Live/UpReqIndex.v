@@ -3224,6 +3224,24 @@ Definition ng_UpAblMetaWorld3 : NewGreenFace :=
 Definition ng_UpAblMetaWindow : NewGreenFace :=
   MkNewGreenFace "UpAblMetaWindow.v" 207 8 20260921 "M4 seat: two-sided mixing window theorem (generic collapse leg new proof + World3 existence-side two legs conjunction, 8 pieces, Axioms none)".
 
+(* ================= v4.19 增册（R109 注册波：论文7 新件 4 件同车+前波惰性件 UpReqMixLazy 补册（R1EXE 依赖前置，同车硬约束），20260922；承前 ng_ 共 382 条，本批 4 条后共 386 条） ================= *)
+
+(* ng_UpReqMixLazy —— UpReqMixLazy.v：A1 运行墙线惰性化选择器族（mix2_ 六面，R1EXE 前置依赖）（_ta1_/_tb2upr_）；vo 树 born-in-place 复证 *)
+Definition ng_UpReqMixLazy : NewGreenFace :=
+  MkNewGreenFace "UpReqMixLazy.v" 438 5 20260922 "A1 run-wall lineage: lazy selector family (mix2_ six faces), prerequisite of UpReqMixRealExec, rides this wave".
+
+(* ng_UpReqMixRealExec —— UpReqMixRealExec.v：R1EXE 席 Real 层选择器可执行化（R1 见证/证明分离+R3 惰性链，mrx_ 七面，native k=15@173ms）（_tr1exe_）；vo 树 born-in-place 复证 *)
+Definition ng_UpReqMixRealExec : NewGreenFace :=
+  MkNewGreenFace "UpReqMixRealExec.v" 272 4 20260922 "R1EXE seat: Real-layer selector executification (R1 witness/proof separation + R3 lazy chain, mrx_ seven faces PA Closed, native k=15 at 173ms)".
+
+(* ng_UpAblMetaDivQ —— UpAblMetaDivQ.v：AID1 席定理 A Q 层侧独立件（mqd_ 十二面 PA Closed，Bernoulli 下界+无界 Doeblin 见证 Defined 出口）（_taid1_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaDivQ : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaDivQ.v" 370 9 20260922 "AID1 seat: Q-layer independent piece for theorem A (mqd_ twelve faces PA Closed, Bernoulli lower bound + unbounded Doeblin witness with Defined witness exit)".
+
+(* ng_UpAblMetaTemp —— UpAblMetaTemp.v：M2R2 接力席温度-模量发散（mtp_ 十二面 PA Closed，主件 mtp_anchor_divergence 零公理）（_tm2r2_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaTemp : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaTemp.v" 642 12 20260922 "M2R2 relay seat: temperature-modulus divergence (mtp_ twelve faces PA Closed, anchor divergence zero axioms)".
+
 (* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
 Print Assumptions cnt_mod_length.
 Print Assumptions minus_absorb_r.

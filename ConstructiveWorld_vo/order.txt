@@ -563,3 +563,7 @@ UpAblRateAlgPkg.v
 UpAblSlackMix.v
 UpAblMetaWorld3.v
 UpAblMetaWindow.v
+UpReqMixLazy.v
+UpReqMixRealExec.v
+UpAblMetaDivQ.v
+UpAblMetaTemp.v
