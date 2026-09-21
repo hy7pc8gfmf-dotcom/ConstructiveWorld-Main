@@ -4191,9 +4191,7 @@ Qed.
 Lemma b5j_Sx_abs_eq : forall (x : Real),
   real_eq (real_abs (b5a_S x)) (b5a_S x).
 Proof.
-  intros x.
-  apply (real_abs_pos_req (b5a_S x)).
-  exact (b5c_S_pos x).
+  intros x. exact (real_abs_pos_req (b5a_S x) (b5c_S_pos x)).
 Qed.
 
 (* real_le real_zero |Sx|（0 < |Sx| 严格抬升；real_le 的 Or 编码左支直构） *)

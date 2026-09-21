@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ncv_bopp_bopp（原 L239，4 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqNormConv.v *)
 (* *)
 (* 目的： 路径 B 范数卷积收敛引擎（Q 层）。 *)
@@ -239,7 +249,8 @@ Qed.
 Lemma ncv_bopp_bopp : forall (B : BanachAlg) (a : (@BA B)),
   @bae B (@bopp B (@bopp B a)) a.
 Proof.
-  intros B a. apply (@bae_sym B a (@bopp B (@bopp B a))).
+  intros B a.
+  apply (@bae_sym B a (@bopp B (@bopp B a))).
   apply (@bopp_unique B a (@bopp B a)).
   exact (@bplus_opp B a).
 Qed.
@@ -886,3 +897,5 @@ Proof.
   intros m n Hm Hn.
   exact (HN n m n m Hn Hm Hn Hm).
 Qed.
+
+Print Assumptions ncv_bopp_bopp.

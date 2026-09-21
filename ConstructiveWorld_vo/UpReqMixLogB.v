@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   mixb_bsearch_S（原 L571，2 句玩具证）                                *)
+(*   mixb_gallop_S（原 L563，2 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqMixLogB.v —— 席 tathB · Path B：倍增搜索（galloping）对数级选择器 *)
 (*（AT11《对数级选择器设计分析-AT11-20260918》裁决 4 落地：k←1 起倍增    *)
 (*  测试可判定 Q 谓词，末站区间二分定位精确最小 k；与 Path A（有理二分）  *)
@@ -566,7 +577,12 @@ Lemma mixb_gallop_S : forall (test : nat -> bool) (f lo hi : nat),
    then ((lo, hi), 1%nat)
    else (let r := mixb_gallop test f hi (hi + 2 * (hi - lo))%nat in
          ((fst (fst r), snd (fst r)), Datatypes.S (snd r)))).
-Proof. intros test f lo hi. reflexivity. Qed.
+Proof. intros test f lo hi.
+  exact (eq_refl (if test hi
+                  then ((lo, hi), 1%nat)
+                  else (let r := mixb_gallop test f hi (hi + 2 * (hi - lo))%nat in
+                        ((fst (fst r), snd (fst r)), Datatypes.S (snd r))))).
+Qed.
 
 Lemma mixb_bsearch_S : forall (test : nat -> bool) (f lo hi : nat),
   mixb_bsearch test (Datatypes.S f) lo hi =
@@ -577,7 +593,15 @@ Lemma mixb_bsearch_S : forall (test : nat -> bool) (f lo hi : nat),
          else (let r2 := mixb_bsearch test f (Nat.div2 (lo + hi)%nat) hi in
                (fst r2, Datatypes.S (snd r2))))
    else (hi, 1%nat)).
-Proof. intros test f lo hi. reflexivity. Qed.
+Proof. intros test f lo hi.
+  exact (eq_refl (if Nat.ltb lo (Nat.div2 (lo + hi)%nat)
+                  then (if test (Nat.div2 (lo + hi)%nat)
+                        then (let r1 := mixb_bsearch test f lo (Nat.div2 (lo + hi)%nat) in
+                              (fst r1, Datatypes.S (snd r1)))
+                        else (let r2 := mixb_bsearch test f (Nat.div2 (lo + hi)%nat) hi in
+                              (fst r2, Datatypes.S (snd r2))))
+                  else (hi, 1%nat))).
+Qed.
 
 Lemma mixb_sel_eq : forall (test : nat -> bool) (f1 f2 l h c1 r c2 : nat),
   mixb_gallop test f1 0%nat 1%nat = ((l, h), c1) ->

@@ -1,3 +1,18 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包B·T240 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包B 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T240。       *)
+(* 替换定理清单：xq_Qle_bool_true／xq_Qle_bool_le／Pinf_eq_l／qlen_pos／     *)
+(* collide_zero／me2_weight_nonneg／me_total_eq／sqsum_app_cross_val／       *)
+(* sqsum_cross_sym_val／H_freq_app_assoc_set（共 9 刀，刀面以台账为权威）    *)
+(* 非平凡性口径：显式展开层重演与对称链就地重演，逐刀唯一性断言落刀；无一    *)
+(* 行拆分式假非平凡。                                                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    DTPT_Entropy.v — 多熵函数族扩展 + 多熵评估套件
    职责：香农熵 Q 离散版（频域计数）、条件熵 H_cond（原文附录三.4
@@ -1957,8 +1972,7 @@ Qed.
 
 Theorem H_max_q_nonneg : forall l : list Q, 0 <= H_max_q l.
 Proof.
-  intros l. unfold H_max_q.
-  apply (proj1 (Qle_0_sub' (maxfreq l) 1)). apply maxfreq_upper.
+  intros l. unfold H_max_q. exact (proj1 (Qle_0_sub' (maxfreq l) 1) (maxfreq_upper l)).
 Qed.
 
 Theorem H_max_q_le_one : forall l : list Q, H_max_q l <= 1.
@@ -1982,13 +1996,12 @@ Qed.
 Theorem H_max_q_le_inv : forall l : list Q, (0 < length l)%nat ->
   H_max_q l <= 1 - 1 / qn (length l).
 Proof.
-  intros l Hl. unfold H_max_q. apply qsub_le. apply maxfreq_lower. exact Hl.
+  intros l Hl. unfold H_max_q. exact (qsub_le (1 / qn (length l)) (maxfreq l) 1 (maxfreq_lower l Hl)).
 Qed.
 
 Theorem H_min_q_nonneg : forall l : list Q, 0 <= H_min_q l.
 Proof.
-  intros l. unfold H_min_q.
-  apply (proj1 (Qle_0_sub' (collide l) 1)). apply collide_upper.
+  intros l. unfold H_min_q. exact (proj1 (Qle_0_sub' (collide l) 1) (collide_upper l)).
 Qed.
 
 Theorem H_min_q_le_one : forall l : list Q, H_min_q l <= 1.
@@ -2262,7 +2275,7 @@ Qed.
 Theorem mkMEval_notHsh0_notHms1 : forall (l ctx : list Q),
   ~ (me_Hsh (mkMEval l ctx) == 0)%Q -> ~ (me_Hms (mkMEval l ctx) == 1)%Q.
 Proof.
-  intros l ctx H0 Hms1. apply H0. apply (mkMEval_Hms1_Hsh0 l ctx). exact Hms1.
+  intros l ctx H0 Hms1. exact (H0 (mkMEval_Hms1_Hsh0 l ctx Hms1)).
 Qed.
 
 (* 3.8 三角界证书版：|me_Hcond| <= me_Hsh + H_sh ctx（Entropy 内件组合；

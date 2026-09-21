@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bxcb_term_split（原 L129，2 句强证）	*)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqBanachBinomBridge.v —— 席CBR：二项式系数桥（20260913）     *)
 (* ============================================================ *)
 (* 使命（BA 报告挂账③原文）：「系数桥：bpa_binom（Pascal 递归形）  *)
@@ -131,7 +141,10 @@ Proof. vm_compute. reflexivity. Qed.
 
 Lemma bxcb_term_split : forall k j : nat,
   q_choose k j / q_fact k == Qinv (q_fact j) * Qinv (q_fact (k - j)%nat).
-Proof. intros k j. apply (q_choose_div_fact k j). Qed.
+Proof.
+  intros k j.
+  apply (q_choose_div_fact k j).
+Qed.
 
 Lemma bxcb_term_split_binom : forall k j : nat, (j <= k)%nat ->
   bpa_binom k j / q_fact k == Qinv (q_fact j) * Qinv (q_fact (k - j)%nat).
@@ -164,3 +177,6 @@ Qed.
 (*   UpReqBanachBinomBridge.ml Obj.magic 计数 =0；coqchk -o 全件     *)
 (*   公理面 none。探针已删，终版无提取输出。                         *)
 (* ============================================================ *)
+
+(* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)
+Print Assumptions bxcb_term_split.

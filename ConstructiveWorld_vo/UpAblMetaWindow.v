@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   mwi_degenerate_collapse_uniform（原 L160，1 句玩具证）               *)
+(*   mwi_Kunif_rows_eq（原 L156，2 句玩具证）                             *)
+(*   mwi_Kunif_row（原 L152，2 句玩具证）                                 *)
+(*   mwi_abs_zero（原 L57，1 句玩具证）                                   *)
+(*   mwi_req_minus_self（原 L50，3 句玩具证）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblMetaWindow.v —— M4 席：World3 非退化核世界的双侧混合窗定理                  *)
 (*                                                              *)
 (* 【主件】mtw_window_two_sided：双侧合取窗定理（S01 基座 Set 层合取承载）。         *)
@@ -49,7 +63,8 @@ Defined.
 (* 自差为零：a − a == 0 *)
 Lemma mwi_req_minus_self : forall a : Real, req (req_minus a a) zero.
 Proof.
-  intro a. unfold req_minus.
+  intro a.
+  unfold req_minus.
   exact (plus_opp a).
 Defined.
 
@@ -151,11 +166,11 @@ Definition mwi_Kunif (s s' : bool) : Real := mtw_half.
 
 Lemma mwi_Kunif_row : forall s : bool,
   req (plus (mwi_Kunif s true) (mwi_Kunif s false)) one.
-Proof. intro s. exact mtw_hh_one. Defined.
+Proof. intro s. unfold mwi_Kunif. exact mtw_hh_one. Defined.
 
 Lemma mwi_Kunif_rows_eq : forall s s' : bool,
   req (mwi_Kunif s s') (mwi_Kunif true s').
-Proof. intros s s'. exact (req_refl mtw_half). Defined.
+Proof. intros s s'. unfold mwi_Kunif. exact (req_refl mtw_half). Defined.
 
 Theorem mwi_degenerate_collapse_uniform :
   req (mtw_tv (mwi_step mwi_Kunif mtw_mu0) (mwi_step mwi_Kunif mtw_nu0)) zero.

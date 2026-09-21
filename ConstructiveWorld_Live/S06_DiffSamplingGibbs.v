@@ -5643,9 +5643,7 @@ Qed.
 Lemma topk_inv_Z_le_inv_kept : le (inv_pos Z_thermo Z_thermo_pos)
                                   (inv_pos topk_kept_partition topk_kept_partition_pos).
 Proof.
-  apply (inv_pos_le_compat topk_kept_partition Z_thermo
-                           topk_kept_partition_pos Z_thermo_pos).
-  exact topk_kept_le_Zthermo.
+  exact (inv_pos_le_compat topk_kept_partition Z_thermo topk_kept_partition_pos Z_thermo_pos topk_kept_le_Zthermo).
 Qed.
 
 (* 辅助：inv one == one（id_sym (mult_one) + comm + inv_pos_correct） *)

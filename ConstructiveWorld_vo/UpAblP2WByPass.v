@@ -319,10 +319,10 @@ Proof. exact (p2wb_tail_plus_kept_full p2wb_keep_dec_sel). Qed.
 
 (* 实例消去的计算面：择留世界上尾质量＝1、保留质量＝2（全定义约简） *)
 Theorem p2wb_sel_tail_mass_one : Id (p2wb_tail_mass p2wb_keep_dec_sel) one.
-Proof. exact id_refl. Qed.
+Proof. exact (@id_refl _ one). Qed.
 
 Theorem p2wb_sel_partition_two : Id (p2wb_evicted_partition p2wb_keep_dec_sel) (rplus one one).
-Proof. exact id_refl. Qed.
+Proof. exact (@id_refl _ (rplus one one)). Qed.
 
 (* ################ 第 5 部：族A 实例化——TopP 保留判定逐式复现 ############### *)
 (* 母本：S06 top_p_member（token_eq_dec x w 逐位分派，inl 支出 unit       *)

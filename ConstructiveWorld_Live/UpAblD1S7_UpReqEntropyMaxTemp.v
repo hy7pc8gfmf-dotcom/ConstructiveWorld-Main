@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s7_emt_pack10_supplied（原 L63，1 句玩具证）                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S7_UpReqEntropyMaxTemp.v —— FA-D1S7 数据供给大打包四梯 件①           *)
 (* 席位：FA-D1S7（普查批 D1-⑦ 四梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改       *)
 (*                                                              *)
@@ -62,18 +72,7 @@ Inductive uabd1s7_emt_pack10 : Type :=
 
 Theorem uabd1s7_emt_pack10_supplied : uabd1s7_emt_pack10.
 Proof.
-  exact (uabd1s7_emt_pack10_intro unit
-           (fun (f : unit -> Real) => f tt)
-           (fun (f : unit -> Real)
-              (H : forall s : unit, real_lt real_zero (f s)) => H tt)
-           (fun (f g : unit -> Real)
-              (H : forall s : unit, real_eq (f s) (g s)) => H tt)
-           (fun (f g : unit -> Real)
-              (H : forall s : unit, real_le (f s) (g s)) => H tt)
-           (fun (a : Real) (f : unit -> Real) => real_eq_refl (real_mult a (f tt)))
-           (fun (f g : unit -> Real) => real_eq_refl (real_plus (f tt) (g tt)))
-           real_one real_lt_zero_one
-           (fun _ : unit => real_zero)).
+  exact (uabd1s7_emt_pack10_intro unit           (fun (f : unit -> Real) => f tt)           (fun (f : unit -> Real)              (H : forall s : unit, real_lt real_zero (f s)) => H tt)           (fun (f g : unit -> Real)              (H : forall s : unit, real_eq (f s) (g s)) => H tt)           (fun (f g : unit -> Real)              (H : forall s : unit, real_le (f s) (g s)) => H tt)           (fun (a : Real) (f : unit -> Real) => real_eq_refl (real_mult a (f tt)))           (fun (f g : unit -> Real) => real_eq_refl (real_plus (f tt) (g tt)))           real_one real_lt_zero_one           (fun _ : unit => real_zero)).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

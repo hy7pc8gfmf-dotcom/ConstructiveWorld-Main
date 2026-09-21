@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T278 台账席 散落挂账集中清偿（原 T265 刀体    *)
+(* 方向颠倒证伪回退，本席反序修正后复刀：real_inv_lt_contra 结论为      *)
+(* 1/t2 < 1/t1 严格反序，Hinv 见证型随之反置，余四句原样）。            *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   etm_beta_diff_pos（原 L106，5 句刀体）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* EnergyTempMonoB.v — 温度-能量单调性 Bishop 档（≤_B 形）           *)
 (* 席位 CWE（批次 E-STAGING-CWE），2026-09-14                       *)
 (* ============================================================ *)
@@ -110,8 +122,10 @@ Lemma etm_beta_diff_pos : forall (t1 t2 : Real)
     (real_plus (real_inv_pos t1 Ht1) (real_opp (real_inv_pos t2 Ht2))).
 Proof.
   intros t1 t2 Ht1 Ht2 Ht12.
+  assert (Hinv : real_lt (real_inv_pos t2 Ht2) (real_inv_pos t1 Ht1)).
+  { exact (real_inv_lt_contra t1 t2 Ht1 Ht2 Ht12). }
   apply (real_lt_opp_plus (real_inv_pos t2 Ht2) (real_inv_pos t1 Ht1)).
-  exact (real_inv_lt_contra t1 t2 Ht1 Ht2 Ht12).
+  exact Hinv.
 Qed.
 
 (* 正系数除收口（负系数反变核心件）：0 < c、0 ≤_B c·D ⟹ 0 ≤_B D。

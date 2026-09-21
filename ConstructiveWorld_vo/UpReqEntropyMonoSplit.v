@@ -1,4 +1,25 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ems_entropy_peak_bound_above（原 L640，2 句玩具证）                  *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T317 恒等守恒更正注记】2026-09-21 包AV六 台账席（头注更正试点件） *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，   *)
+(* 经 T277（包AL）全量恒等核查定谳、T287（包AV）抽验复核：本件实测   *)
+(* 为恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体  *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。          *)
+(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面   *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册。         *)
+(* 附记：T277／T284 改记恒等在案  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyMonoSplit.v *)
 (* *)
 (* 目的： 约束化熵单调性分离定理（EXPL1 候选 C5 深探席 Q5）。 *)
@@ -644,13 +665,7 @@ Theorem ems_entropy_peak_bound_above :
       real_le (ems_ent u Hu) (real_plus ems_ent_star eps).
 Proof.
   intros u Hu eps Heps.
-  exact (real_max_entropy_is_boltzmann_temp_eps
-           S real_sum_over_S real_sum_pos_preserved
-           real_sum_over_S_ext real_sum_over_S_le real_sum_over_S_linear
-           real_sum_over_S_add
-           T_star T_star_pos energy
-           (ems_bt u Hu) (ems_bt_pos u Hu) (ems_bt_norm u Hu) (Hpinned u Hu)
-           eps Heps).
+  exact (real_max_entropy_is_boltzmann_temp_eps           S real_sum_over_S real_sum_pos_preserved           real_sum_over_S_ext real_sum_over_S_le real_sum_over_S_linear           real_sum_over_S_add           T_star T_star_pos energy           (ems_bt u Hu) (ems_bt_pos u Hu) (ems_bt_norm u Hu) (Hpinned u Hu)           eps Heps).
 Qed.
 
 (* ---------------------------------------------------------- *)

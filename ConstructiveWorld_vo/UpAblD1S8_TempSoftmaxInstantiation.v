@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s8_tsi_pack10_supplied（原 L68，2 句玩具证）                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S8_TempSoftmaxInstantiation.v —— FA-D1S8 数据供给大打包五梯 件②     *)
 (* 席位：FA-D1S8（普查批 D1-⑦ 五梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改     *)
 (*                                                              *)
@@ -68,21 +78,7 @@ Inductive uabd1s8_tsi_pack10 : Type :=
 Theorem uabd1s8_tsi_pack10_supplied : forall RI : RealInterfaceEnhanced, uabd1s8_tsi_pack10.
 Proof.
   intro RI.
-  exact (uabd1s8_tsi_pack10_intro RI unit
-           (fun (_ : list unit) (_ : unit) => @S01_BaseRing.zero RI)
-           (@S01_BaseRing.one RI)
-           (@S01_BaseRing.one_pos RI)
-           (fun (f : unit -> @S01_BaseRing.R RI) => f tt)
-           (fun (f g : unit -> @S01_BaseRing.R RI)
-              (H : forall w : unit, Id (f w) (g w)) => H tt)
-           (fun (a : @S01_BaseRing.R RI) (f : unit -> @S01_BaseRing.R RI) =>
-              @id_refl _ (@S01_BaseRing.mult RI a (f tt)))
-           (fun (f g : unit -> @S01_BaseRing.R RI) =>
-              @id_refl _ (@S01_BaseRing.plus RI (f tt) (g tt)))
-           (fun (f : unit -> @S01_BaseRing.R RI)
-              (H : forall w : unit,
-                     @S01_BaseRing.lt RI (@S01_BaseRing.zero RI) (f w)) =>
-              H tt)).
+  exact (uabd1s8_tsi_pack10_intro RI unit           (fun (_ : list unit) (_ : unit) => @S01_BaseRing.zero RI)           (@S01_BaseRing.one RI)           (@S01_BaseRing.one_pos RI)           (fun (f : unit -> @S01_BaseRing.R RI) => f tt)           (fun (f g : unit -> @S01_BaseRing.R RI)              (H : forall w : unit, Id (f w) (g w)) => H tt)           (fun (a : @S01_BaseRing.R RI) (f : unit -> @S01_BaseRing.R RI) =>              @id_refl _ (@S01_BaseRing.mult RI a (f tt)))           (fun (f g : unit -> @S01_BaseRing.R RI) =>              @id_refl _ (@S01_BaseRing.plus RI (f tt) (g tt)))           (fun (f : unit -> @S01_BaseRing.R RI)              (H : forall w : unit,                     @S01_BaseRing.lt RI (@S01_BaseRing.zero RI) (f w)) =>              H tt)).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

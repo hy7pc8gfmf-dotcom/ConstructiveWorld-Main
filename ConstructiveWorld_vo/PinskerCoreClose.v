@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T266 台账席 战役包AA（tier2 十七批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pkc_one_proj（原 L50，3 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* PinskerCoreClose.v —— 席 CZM13（批次 E-STAGING-CZM13·T61b C9 第二阶段主攻） *)
 (*                                                                *)
 (* 使命：消费 CZI13 基建件 EpsTrichotomy（消融50/，etc_ 12 件全真证）   *)
@@ -48,7 +58,7 @@ Require Import EpsTrichotomy.
 
 (* real_one 逐坐标投影叶：projT1 real_one n == 1（real_one 定义面透明） *)
 Lemma pkc_one_proj : forall n : nat, (projT1 real_one n == 1)%Q.
-Proof. intro n. cbv [projT1 real_one]. reflexivity. Qed.
+Proof. intro n. cbv [projT1 real_one]. exact (Qeq_refl 1%Q). Qed.
 
 (* 左元减法等值面：a == b ⟹ x − a == x − b *)
 Lemma pkc_minus_l_wd : forall a b x : Q, (a == b)%Q -> (x - a == x - b)%Q.

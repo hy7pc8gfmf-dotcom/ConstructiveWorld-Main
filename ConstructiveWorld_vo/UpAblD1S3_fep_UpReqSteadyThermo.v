@@ -115,9 +115,15 @@ Theorem uabd1s3_fep_st_real_transition_nonneg :
     real_le real_zero (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s s').
 Proof.
   intros S0 enum0 Hne base_loss D D_pos s s'.
-  apply real_lt_le_iff.
-  left.
-  exact (real_boltzmann_dist_r_pos S0 base_loss D D_pos          (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)          (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos) s').
+  exact (real_lt_le_iff real_zero
+           (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s s')
+           (@inl (real_lt real_zero
+                    (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s s'))
+                 (Id real_zero
+                    (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s s'))
+                 (real_boltzmann_dist_r_pos S0 base_loss D D_pos
+                    (uabd1s3_fep_st_Z S0 enum0 base_loss D D_pos)
+                    (uabd1s3_fep_st_Z_pos S0 enum0 Hne base_loss D D_pos) s'))).
 Qed.
 
 (* ---- 槽3 L97 real_transition_normalization（rfep_boltzmann_normalized_real *)
@@ -145,7 +151,10 @@ Theorem uabd1s3_fep_st_real_detailed_balance :
                        (uabd1s3_fep_st_kernel S0 enum0 Hne base_loss D D_pos s' s)).
 Proof.
   intros S0 enum0 Hne base_loss D D_pos s s'.
-  exact (real_mult_comm (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s)                        (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s')).
+  unfold uabd1s3_fep_st_kernel.
+  exact (real_mult_comm
+           (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s)
+           (uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s')).
 Qed.
 
 Set Extraction Output Directory "_tuabd1s3_g3out".

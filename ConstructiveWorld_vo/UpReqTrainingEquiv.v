@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_minus_r_compat（原 L144，3 句玩具证）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTrainingEquiv.v *)
 (* *)
 (* 目的： 定理 4.10 training_equivalence 的 Real 层构造。 *)
@@ -147,8 +157,7 @@ Lemma real_minus_r_compat :
 Proof.
   intros a b c d Hac Hbd.
   unfold real_minus_r.
-  exact (RealSetoid.real_eq_plus_compat a (real_opp b) c (real_opp d) Hac
-           (RealSetoid.real_eq_opp_compat b d Hbd)).
+  exact (RealSetoid.real_eq_plus_compat a (real_opp b) c (real_opp d) Hac           (RealSetoid.real_eq_opp_compat b d Hbd)).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -496,3 +505,5 @@ Qed.
 Print Assumptions real_cross_entropy.
 Print Assumptions real_cross_entropy_decomp.
 Print Assumptions real_training_equivalence.
+
+Print Assumptions real_minus_r_compat.

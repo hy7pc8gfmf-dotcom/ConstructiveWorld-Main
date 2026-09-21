@@ -1022,10 +1022,10 @@ Theorem ske_geom_step_discharged_B :
                           (fun i => real_kl_term (ske_pist i) (pit i) (ske_Hpist i) (Hpit i))
                           (List.seq 0 n))).
 Proof.
-  apply real_le_closure_b_one.
-  intros eps Heps.
-  exact (ske_geom_step_discharged eps Heps).
+  exact (real_le_closure_b_one _ _
+    (fun eps Heps => ske_geom_step_discharged eps Heps)).
 Qed.
+
 
 (* ============================================================ *)
 (* Part 4: W3 —— S05 假设位的实例化消解（保底主件）                 *)
@@ -1076,10 +1076,10 @@ Theorem ske_step_kl_eta_bound_inst_B :
                           (fun i => real_kl_term (pit i) (ske_pist i) (Hpit i) (ske_Hpist i))
                           (List.seq 0 n))).
 Proof.
-  apply real_le_closure_b_one.
-  intros eps Heps.
-  exact (ske_step_kl_eta_bound_inst eps Heps).
+  exact (real_le_closure_b_one _ _
+    (fun eps Heps => ske_step_kl_eta_bound_inst eps Heps)).
 Qed.
+
 
 (* ============================================================ *)
 (* PA 探针（零新增逻辑公理面自检）                                 *)

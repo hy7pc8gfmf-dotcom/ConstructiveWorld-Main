@@ -11,6 +11,17 @@
 (*   pint_integral_scale（原 L234，4 句玩具证）                           *)
 (*   pint_zero_div（原 L105，3 句玩具证）                                 *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
+(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包O 全量第一批整批直推（T317 六·1 方案①）                           *)
+(* ============================================================ *)
 
 (* ============================================================ *)
 (* PolyIntegral.v                                                *)
@@ -323,9 +334,9 @@ Theorem pint_integral_nonneg : forall p : list Q,
 Proof.
   intros p H.
   unfold pint_integral.
-  apply pint_integral_from_nonneg.
-  exact H.
+  exact (pint_integral_from_nonneg p 0 H).
 Qed.
+
 
 Theorem pint_integral_mono : forall p q : list Q,
   length p = length q ->
@@ -334,8 +345,9 @@ Theorem pint_integral_mono : forall p q : list Q,
 Proof.
   intros p q Hlen Hcoeff.
   unfold pint_integral.
-  apply pint_integral_from_mono; assumption.
+  exact (pint_integral_from_mono p q 0 Hlen Hcoeff).
 Qed.
+
 
 (* ============================================================ *)
 (* 假设审计留痕：Print Assumptions（编译期 stdout，verify 复核）        *)

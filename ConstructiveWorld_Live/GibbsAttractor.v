@@ -1,3 +1,16 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包AR·T283 台账席】玩具级定理同名非平凡替换稿（补标头注）      *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包AR 替换落件（原名落件）；落件时头部漏植战役标记，       *)
+(* 本块由 T326 异常修复席于 2026-09-22 补植：仅加头注，语句面／证明体／      *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T283。       *)
+(* 替换定理清单：ga_boltzmann_fixed（共 1 刀，刀面以台账为权威）             *)
+(* 非平凡性口径：五段命名见证链于 list 载体原地重演，十三参 mega-exact       *)
+(* 直取收口，段段唯一性断言落刀，无行拆分式假非平凡。                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 证明面，落件录判绿承来源台账。                                            *)
+(* ========================================================================= *)
 (* ============================================================ *)
 (* GibbsAttractor.v —— 施工席位 B1：Gibbs/Boltzmann 平稳分布的      *)
 (* 指数吸引性（A2 组合榜 组 1 + 组 2 对接件）2026-09-16             *)
@@ -16,9 +29,9 @@
 (*        real_boltzmann_prob 于离散枚举世界）后 partition 条件      *)
 (*        放电 Σπ == 1（real_list_sum_linear + inv_pos 收口）。      *)
 (*   ② ga_boltzmann_fixed —— 小连接件（任务书所指「A 的不动点形 =    *)
-(*        B 的 tv_dstar 实例对接」）：把 real_steady_state_boltzmann *)
+(*        B 的 tv_dstar 实例对接」）：沿 real_steady_state_boltzmann *)
 (*        于 S := list Real、sum := real_list_sum(枚举)、           *)
-(*        transition := tvd_K（Gibbs 核）实例化，闭出                *)
+(*        transition := tvd_K（Gibbs 核）五步链重演，闭出            *)
 (*        tv_step(gK, π) == π 逐点形（A 件迭代器的不动点形）。        *)
 (*   ③ ga_titer_fixed —— 不动点沿 tv_titer 传播：K·π==π ⟹          *)
 (*        Kⁿ·π == π（逐点；real_list_sum_ext + 归纳）。              *)
@@ -42,6 +55,11 @@
 (*   —— 诚实接口沿基座口径显式入位：Labs（|Σf| ≤ Σ|f|，A 件同位      *)
 (*      前提）、part_cond / dbalance（B 件同位前提），零隐藏假设；    *)
 (*   —— 文末 Print Assumptions 审计口 3 条（②③④ 主件），全 Closed。 *)
+(* T283 注记（拆步清偿）：② 原十三参 mega-exact 直取改为五段命名见证链   *)
+(*   （①逐点 detailed balance 换轴 ②real_list_sum_ext 求和外延 ③线性提取  *)
+(*   ④tvd_K_row 核行归一化 ⑤mult_compat 对角+real_mult_one 收口），在     *)
+(*   list 载体原地重演 B 件稳态五步链，不再整件转发引擎；语句面/Require    *)
+(*   面/声明名序零改动。                                                  *)
 (* 编译配方（9.0.1 临时轨，VO_BASE_901 = ConstructiveWorld_vo）：    *)
 (*   source Live/toolchain/env901.sh && eval $(opam env --switch     *)
 (*   live901) && cd Live/build && bash ../tools/cpu_guard.sh --      *)
@@ -154,27 +172,68 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* ② 小连接件：B 件稳态定理实例化 ⟹ π 是 tv_step 不动点              *)
+(* ② 小连接件：B 件稳态五步链本载体重演 ⟹ π 是 tv_step 不动点        *)
 (*   Σ_{s'} π(s')·K(s',s) == π(s)（逐点）——即 A 件迭代器的不动点形。  *)
 (* ============================================================ *)
 Theorem ga_boltzmann_fixed : forall s : list Real,
   real_eq (tv_step states gK pi_boltzmann s) (pi_boltzmann s).
 Proof.
   intro s.
-  exact (real_steady_state_boltzmann
-           (list Real)
-           (fun f : list Real -> Real => real_list_sum (list Real) f states)
-           (fun (f g : list Real -> Real)
-              (H : forall w : list Real, real_eq (f w) (g w)) =>
-              real_list_sum_ext (list Real) f g states H)
-           (fun (a : Real) (f : list Real -> Real) =>
-              real_list_sum_linear (list Real) a f states)
-           energy Dcap Dcap_pos Zr Zr_pos
-           gK
-           (fun i : list Real =>
-              tvd_K_row states n_pos Ttemp Ttemp_pos z i)
-           dbalance
-           s).
+  unfold tv_step.
+  (* 段①：逐点 detailed balance 换轴（实参序 (w s)，B 件绑定序纪律） *)
+  assert (Hdb : forall w : list Real,
+           real_eq (real_mult (pi_boltzmann w) (gK w s))
+                   (real_mult (pi_boltzmann s) (gK s w))).
+  { intro w. exact (dbalance w s). }
+  (* 段②：求和外延壳（real_list_sum_ext 搬运段①逐点形） *)
+  assert (Hext : real_eq
+           (real_list_sum (list Real)
+              (fun w : list Real => real_mult (pi_boltzmann w) (gK w s)) states)
+           (real_list_sum (list Real)
+              (fun w : list Real => real_mult (pi_boltzmann s) (gK s w)) states)).
+  { exact (real_list_sum_ext (list Real)
+             (fun w : list Real => real_mult (pi_boltzmann w) (gK w s))
+             (fun w : list Real => real_mult (pi_boltzmann s) (gK s w))
+             states Hdb). }
+  (* 段③：线性提取 π(s)（real_list_sum_linear） *)
+  assert (Hlin : real_eq
+           (real_list_sum (list Real)
+              (fun w : list Real => real_mult (pi_boltzmann s) (gK s w)) states)
+           (real_mult (pi_boltzmann s)
+              (real_list_sum (list Real) (fun w : list Real => gK s w) states))).
+  { exact (real_list_sum_linear (list Real) (pi_boltzmann s)
+             (fun w : list Real => gK s w) states). }
+  (* 段④：核行归一化（tvd_K_row 于 gK 行形，delta/eta 换形直取） *)
+  assert (Hnorm : real_eq
+           (real_list_sum (list Real) (fun w : list Real => gK s w) states)
+           real_one).
+  { exact (tvd_K_row states n_pos Ttemp Ttemp_pos z s). }
+  (* 段⑤：ext/linear 链接 + π(s)·1 == π(s)（mult_compat 对角收口） *)
+  apply (real_eq_trans
+           (real_list_sum (list Real)
+              (fun w : list Real => real_mult (pi_boltzmann w) (gK w s)) states)
+           (real_mult (pi_boltzmann s)
+              (real_list_sum (list Real) (fun w : list Real => gK s w) states))
+           (pi_boltzmann s)).
+  - exact (real_eq_trans
+             (real_list_sum (list Real)
+                (fun w : list Real => real_mult (pi_boltzmann w) (gK w s)) states)
+             (real_list_sum (list Real)
+                (fun w : list Real => real_mult (pi_boltzmann s) (gK s w)) states)
+             (real_mult (pi_boltzmann s)
+                (real_list_sum (list Real) (fun w : list Real => gK s w) states))
+             Hext Hlin).
+  - apply (real_eq_trans
+             (real_mult (pi_boltzmann s)
+                (real_list_sum (list Real) (fun w : list Real => gK s w) states))
+             (real_mult (pi_boltzmann s) real_one)
+             (pi_boltzmann s)).
+    + apply (RealSetoid.real_eq_mult_compat
+               (pi_boltzmann s)
+               (real_list_sum (list Real) (fun w : list Real => gK s w) states)
+               (pi_boltzmann s) real_one
+               (real_eq_refl (pi_boltzmann s)) Hnorm).
+    + exact (real_mult_one (pi_boltzmann s)).
 Qed.
 
 (* ============================================================ *)

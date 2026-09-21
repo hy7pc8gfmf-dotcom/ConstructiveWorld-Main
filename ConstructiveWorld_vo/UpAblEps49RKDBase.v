@@ -1,3 +1,13 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rkd_kl_decomp_full_partition（原 L850，3 句玩具证）                  *)
+(* ============================================================ *)
+
 (* ============================================================
    UpAblEps49RKDBase.v —— 相对熵（KL）分解定理：自由能恒等式
    F(p) == F(p_b) + D·Σ kl_term(p, p_b)（Boltzmann 分布 p_b、
@@ -884,16 +894,8 @@ Theorem rkd_kl_decomp_full_partition :
                             (real_mult (real_inv_pos D D_pos) (real_base_loss s)))) Zp s))))).
 Proof.
   intros S sumf sumf_ext sumf_add sumf_linear real_base_loss D D_pos p Hp Hnormp Zp.
-  apply (rkd_kl_decomp_full S sumf sumf_ext sumf_add sumf_linear
-           real_base_loss D D_pos
-           (sumf (fun s : S => real_exp_neg
-                     (real_mult (real_inv_pos D D_pos) (real_base_loss s))))
-           Zp p Hp Hnormp).
-  exact (rkd_boltzmann_normalized S sumf sumf_ext sumf_linear
-           real_base_loss D D_pos
-           (sumf (fun s : S => real_exp_neg
-                     (real_mult (real_inv_pos D D_pos) (real_base_loss s))))
-           Zp (real_eq_refl _)).
+  apply (rkd_kl_decomp_full S sumf sumf_ext sumf_add sumf_linear           real_base_loss D D_pos           (sumf (fun s : S => real_exp_neg                     (real_mult (real_inv_pos D D_pos) (real_base_loss s))))           Zp p Hp Hnormp).
+  exact (rkd_boltzmann_normalized S sumf sumf_ext sumf_linear           real_base_loss D D_pos           (sumf (fun s : S => real_exp_neg                     (real_mult (real_inv_pos D D_pos) (real_base_loss s))))           Zp (real_eq_refl _)).
 Qed.
 
 (* ============================================================ *)

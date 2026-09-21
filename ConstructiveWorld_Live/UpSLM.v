@@ -210,8 +210,7 @@ Qed.
 (* slm_nle 前驱消解：slm_nle (S a) (S b) -> slm_nle a b *)
 Lemma slm_nle_pred : forall a b : nat, slm_nle (S a) (S b) -> slm_nle a b.
 Proof.
-  intros a b H. apply slm_nle_of_leb.
-  exact (slm_nle_leb (S b) (S a) H).
+  intros a b H. exact (slm_nle_of_leb b a (slm_nle_leb (S b) (S a) H)).
 Qed.
 
 Lemma slm_nle_add_r : forall a b : nat, slm_nle a (a + b).

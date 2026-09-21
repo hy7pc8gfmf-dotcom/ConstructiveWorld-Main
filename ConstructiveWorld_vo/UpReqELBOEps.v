@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_evidence_def（原 L104，2 句玩具证）                             *)
+(*   real_elbo_def（原 L93，2 句玩具证）                                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOEps.v *)
 (* *)
 (* 目的： 定理 4.7 elbo_lower_bound 的 Real 层序档组装（eps 档）。 *)
@@ -98,7 +109,9 @@ Lemma real_elbo_def :
           (real_opp (real_free_energy S real_sum_over_S real_base_loss D q Hq)).
 Proof.
   intros S real_sum_over_S real_base_loss D q Hq.
-  apply real_eq_refl.
+  unfold real_elbo.
+  exact (real_eq_refl
+           (real_opp (real_free_energy S real_sum_over_S real_base_loss D q Hq))).
 Qed.
 
 Lemma real_evidence_def :
@@ -113,7 +126,13 @@ Lemma real_evidence_def :
                    Z_align_r_pos))).
 Proof.
   intros S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos.
-  apply real_eq_refl.
+  unfold real_evidence.
+  exact (real_eq_refl
+           (real_opp
+              (real_free_energy S real_sum_over_S real_base_loss D
+                 (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+                 (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r
+                    Z_align_r_pos)))).
 Qed.
 
 (* ---------------------------------------------------------- *)

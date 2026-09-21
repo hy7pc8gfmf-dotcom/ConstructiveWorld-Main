@@ -15,8 +15,9 @@
 (*     合（req_plus_exchange）+归纳腿翻面；le 刀 le_plus_compat 直缝。       *)
 (*   ⑨cms_bs_abs：real_le Or 拆支——lt 支 abs_pos 件；eq 支三段 eq_trans     *)
 (*     链（abs_eq_compat 键填充→abs_zero 收口→原 eq 收口）。                 *)
-(* 挂账（如实登记不硬凑）：⑦cms_bs_swap 双折和换序需外层归纳内外双重        *)
-(*     重排（多中项交换/结合链复合），本切片未落刀，原转发体原样保留。       *)
+(* ⑦cms_bs_swap 已由 T278 集中清偿（双列表泛型换序 Hsw 归纳原地重演：      *)
+(*     外层归纳内层套归纳补 nil 腿＋cons 腿 rpc-IH-加法分配三段链，          *)
+(*     弃 cb1_swap_lists 出节转发体，零新增 Require）。                      *)
 (* 纪律：零新增 Require；Proof./Qed. 与原件 11/11 守恒；全中文零承认。      *)
 (* ===================================================================== *)
 
@@ -86,7 +87,7 @@
 (*   接线引用：UpReqConcB1.v:96 cb1_swap_lists（双折归纳泛型件，S/f/a/b    *)
 (*   全参；cb1_mixing_cert 实喂先例 (fun f => cb1_swap_lists unit f       *)
 (*   [tt] [tt])，本件泛化至任意 S/en）                                    *)
-(*   判词：exact 一击收编，出转发定理 cms_bs_swap。                         *)
+(*   判词（T278 更新）：转发体弃用，Hsw 双列表归纳原地重演收口。            *)
 (*                                                                       *)
 (* 【槽⑧】UpReqConcMixSel.v:772 sum_eq_list                               *)
 (*   原语句：forall g : S -> R, req (sumf g) (rsq_bs_list_sum g enum)      *)
@@ -281,7 +282,7 @@ Proof.
              (rsq_bs_list_sum S0 g t) (req_refl (g x)) IH).
 Defined.
 
-(* ============ 槽⑦：bs_swap（cb1 双折归纳泛型件实例化） ================== *)
+(* ============ 槽⑦：bs_swap（T278 双列表泛型换序归纳原地重演） ============ *)
 
 Theorem cms_bs_swap :
   forall (S0 : Set) (en : list S0) (f : S0 -> S0 -> Real),
@@ -289,7 +290,57 @@ Theorem cms_bs_swap :
         (csm_sumf S0 en (fun s' : S0 => csm_sumf S0 en (fun s : S0 => f s s'))).
 Proof.
   intros S0 en f.
-  exact (cb1_swap_lists S0 f en en).
+  unfold csm_sumf.
+  assert (Hsw : forall l1 l2 : list S0,
+    req (sumd_list_sum S0 (fun s : S0 => sumd_list_sum S0 (fun s' : S0 => f s s') l2) l1)
+        (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') l1) l2)).
+  { intros l1 l2.
+    induction l1 as [| x t IH].
+    - induction l2 as [| y t2 IH2].
+      + exact (req_refl zero).
+      + exact (req_trans zero
+            (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2)
+            (plus zero
+               (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2))
+            IH2
+            (req_sym
+               (plus zero
+                  (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2))
+               (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2)
+               (req_trans
+                  (plus zero
+                     (sumd_list_sum S0
+                        (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2))
+                  (plus
+                     (sumd_list_sum S0
+                        (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2)
+                     zero)
+                  (sumd_list_sum S0
+                     (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2)
+                  (plus_comm zero
+                     (sumd_list_sum S0
+                        (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2))
+                  (plus_zero
+                     (sumd_list_sum S0
+                        (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') nil) t2))))).
+    - exact (req_trans
+            (plus (sumd_list_sum S0 (fun s' : S0 => f x s') l2)
+               (sumd_list_sum S0 (fun s : S0 => sumd_list_sum S0 (fun s' : S0 => f s s') l2) t))
+            (plus (sumd_list_sum S0 (fun s' : S0 => f x s') l2)
+               (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') t) l2))
+            (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') (x :: t)) l2)
+            (req_plus_compat (sumd_list_sum S0 (fun s' : S0 => f x s') l2)
+               (sumd_list_sum S0 (fun s' : S0 => f x s') l2)
+               (sumd_list_sum S0 (fun s : S0 => sumd_list_sum S0 (fun s' : S0 => f s s') l2) t)
+               (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') t) l2)
+               (req_refl (sumd_list_sum S0 (fun s' : S0 => f x s') l2)) IH)
+            (req_sym
+               (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') (x :: t)) l2)
+               (plus (sumd_list_sum S0 (fun s' : S0 => f x s') l2)
+                  (sumd_list_sum S0 (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') t) l2))
+               (cms_sum_add S0 l2 (fun s' : S0 => f x s')
+                  (fun s' : S0 => sumd_list_sum S0 (fun s : S0 => f s s') t)))). }
+  exact (Hsw en en).
 Defined.
 
 (* ============ 邻接伴件⑨/⑩：bs_abs / bs_lpc ============================ *)

@@ -203,7 +203,7 @@ Definition bond_exchange (e : edge_spec) (bd : bond) : bond :=
 
 Lemma bond_exchange_eps : forall (e : edge_spec) (bd : bond),
   bd_eps (bond_exchange e bd) == edge_map e (bd_eps bd).
-Proof. intros e bd. reflexivity. Qed.
+Proof. intros e bd. exact (Qeq_refl (edge_map e (bd_eps bd))). Qed.
 
 (* 币制守恒（券级实例）：入参 eps = 出参 eps + 耗散 *)
 Theorem bond_exchange_conservation : forall (e : edge_spec) (bd : bond),
@@ -220,8 +220,9 @@ Theorem bond_exchange_pos : forall (e : edge_spec) (bd : bond),
 Proof.
   intros e bd Hbi Hx.
   unfold bond_exchange.
-  apply (edge_map_pos e (bd_eps bd) Hx Hbi).
+  exact (edge_map_pos e (bd_eps bd) Hx Hbi).
 Qed.
+
 
 (* ============================================================ *)
 (* §4 件 3（主件）：edge_compound_affine——边复合 = eps 仿射复合      *)
@@ -235,11 +236,11 @@ Definition edge_comp (e2 e1 : edge_spec) : edge_spec :=
 
 Lemma edge_comp_slope : forall e1 e2 : edge_spec,
   ed_a (edge_comp e2 e1) == ed_a e2 * ed_a e1.
-Proof. intros e1 e2. reflexivity. Qed.
+Proof. intros e1 e2. exact (Qeq_refl (ed_a e2 * ed_a e1)). Qed.
 
 Lemma edge_comp_b : forall e1 e2 : edge_spec,
   ed_b (edge_comp e2 e1) == ed_a e2 * ed_b e1 + ed_b e2.
-Proof. intros e1 e2. reflexivity. Qed.
+Proof. intros e1 e2. exact (Qeq_refl (ed_a e2 * ed_b e1 + ed_b e2)). Qed.
 
 (* 主件：复合边的 eps 映射 = 两边映射的仿射复合（路径语义正确性） *)
 Theorem edge_compound_affine : forall (e1 e2 : edge_spec) (x : Q),
@@ -254,9 +255,11 @@ Theorem edge_comp_legal : forall e1 e2 : edge_spec,
   QltT 0 (ed_a e1) -> QltT 0 (ed_a e2) -> QltT 0 (ed_a (edge_comp e2 e1)).
 Proof.
   intros e1 e2 H1 H2.
-  apply Qlt_to_QltT.
-  apply (Qmult_lt_0_compat (ed_a e2) (ed_a e1)           (QltT_to_Qlt 0 (ed_a e2) H2) (QltT_to_Qlt 0 (ed_a e1) H1)).
+  exact (Qlt_to_QltT 0 (ed_a (edge_comp e2 e1))
+    (Qmult_lt_0_compat (ed_a e2) (ed_a e1)
+      (QltT_to_Qlt 0 (ed_a e2) H2) (QltT_to_Qlt 0 (ed_a e1) H1))).
 Qed.
+
 
 (* 路径合法性的线性（布尔）判定器：两段路径 *)
 Definition path2_ok (e2 e1 : edge_spec) : bool :=

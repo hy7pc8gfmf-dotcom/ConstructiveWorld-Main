@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t13_bool_max_entropy_le_eps（原 L346，2 句玩具证）                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTempDual.v *)
 (* *)
 (* 目的： 温度族 sigT 对偶闭环与定理 4.6d 组装。 *)
@@ -351,9 +361,7 @@ Lemma t13_bool_max_entropy_le_eps :
     real_le (bH p Hp) (real_plus (bH bB bBpos) eps).
 Proof.
   intros p Hp Hnormp Henergy eps Heps.
-  exact (t13_max_entropy_le_eps bool bsumf bpos bext blinear badd
-           T0 T0_pos e0 p Hp Hnormp Henergy
-           (t13_bool_gibbs_leg p Hp Hnormp) eps Heps).
+  exact (t13_max_entropy_le_eps bool bsumf bpos bext blinear badd           T0 T0_pos e0 p Hp Hnormp Henergy           (t13_bool_gibbs_leg p Hp Hnormp) eps Heps).
 Qed.
 
 (* ---------------------------------------------------------- *)

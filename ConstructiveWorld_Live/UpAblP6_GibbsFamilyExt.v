@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uagfe_gibbs_temp_two_eps（原 L65，2 句玩具证）                       *)
+(*   uagfe_gibbs_temp_one_B（原 L52，2 句玩具证）                         *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblP6_GibbsFamilyExt.v —— Gibbs 族温度化扩展的对照供给件           *)
 (* 使命：形式化 KL 散度与对称 Jeffreys 散度的温度化（乘正系数 β）在       *)
 (*   Bishop 构造性实数上的五条逐点/有限和上界性质（uagfe_ 前缀五结论）。  *)
@@ -72,11 +83,7 @@ Lemma uagfe_gibbs_temp_two_eps : forall (p q : Real)
              (real_mult (real_plus real_one real_one) (real_mult p eps))).
 Proof.
   intros p q Hp Hq eps Heps.
-  exact (gfe_gibbs_core_temp_eps p q (real_plus real_one real_one) Hp Hq
-           (gfe_le_of_lt (real_plus real_one real_one)
-              (real_plus_positive real_one real_one
-                 real_lt_zero_one real_lt_zero_one))
-           eps Heps).
+  exact (gfe_gibbs_core_temp_eps p q (real_plus real_one real_one) Hp Hq           (gfe_le_of_lt (real_plus real_one real_one)              (real_plus_positive real_one real_one                 real_lt_zero_one real_lt_zero_one))           eps Heps).
 Qed.
 
 (* ============================================================ *)

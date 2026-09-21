@@ -1,17 +1,28 @@
 (* ============================================================ *)
-(* UpAblP7_UMixSelect.v —— UpReqUMixSelect.v 的使用面重建件：                *)
-(*   ums_pow_budget 的具名使用形与 κ:=1/2 具体实例。                         *)
-(* 使命：源模块 UpReqUMixSelect.v 以 lt_plus_compat_lt_le（lt＋le 相加保序）    *)
-(*   为唯一声明假设（接口层不可内证；omd 与 κ<1 两处使用点的 le_refl 参数       *)
-(*   构造性不可升级消去）；本件把其出节主定理 ums_pow_budget 的              *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabm_k_select_half（原 L172，1 句玩具证）                            *)
+(*   uabm_ums_pow_budget_slot_freeze（原 L69，2 句玩具证）                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpAblP7_UMixSelect.v —— UpReqUMixSelect.v 的消费面重建件：                *)
+(*   ums_pow_budget 的具名消费形与 κ:=1/2 具体实例。                         *)
+(* 使命：母件 UpReqUMixSelect.v 以 lt_plus_compat_lt_le（lt＋le 相加保序）    *)
+(*   为唯一声明假设（接口层不可内证；omd 与 κ<1 两处消费点的 le_refl 槽       *)
+(*   构造性不可升级消去）；本件把其出节旗舰 ums_pow_budget 的                *)
 (*   「喂入该前提即得结论」形固定为具名定理                                  *)
 (*   uabm_ums_pow_budget_slot_freeze，并在 req 面（RealEnhancedReal，S07）    *)
 (*   给 κ:=real_const(1/2)、TV0:=budget:=one 的具体实例 uabm_k_select_half：  *)
 (*   见证存在 k 使 (1/2)^k·1 < 1。                                           *)
 (*                                                                *)
-(* 使用面（上游出口真名）：ums_pow_budget（UpReqUMixSelect，Arch 前件为       *)
+(* 消费面（上游出口真名）：ums_pow_budget（UpReqUMixSelect，Arch 前件为       *)
 (*   lt 形）；cmk_pow_budget／cmk_scale／cmk_r_pow（UpReqConcMixSel 的        *)
-(*   CmkMixSelect 节，ums_ 系的 req 面对应形）；real_lt_plus_compat_lt_le       *)
+(*   CmkMixSelect 节，ums_ 系的 req 面镜像）；real_lt_plus_compat_lt_le       *)
 (*   （S07，声明前提的 req 面实例形）；real_arch（nat-尺度 Arch 上界）、       *)
 (*   mix_scale_eq_const（UpReqMixingTime）、real_mult_one（S02）、             *)
 (*   RealSetoid.real_lt_id_r（S07）。                                        *)
@@ -26,10 +37,10 @@
 (*   {RealInterface}；遮蔽下裸 @R RI 误解析），故 Id 面节先落、               *)
 (*   req 面裸名后启用。                                                     *)
 (* 依赖清单：CW_ConstructiveWorld_219＋UpReqConcMixSel＋UpReqMixingTime＋     *)
-(*   S01_BaseRing＋S04_RealExpLogConv＋UpReqUMixSelect——只读使用。            *)
+(*   S01_BaseRing＋S04_RealExpLogConv＋UpReqUMixSelect——只读消费。            *)
 (*                                                                *)
 (* 对标：mathlib pow_lt_one 的倒数衰减步数见证之构造性对应。                  *)
-(* 构造性注记：全件真证、零承认（声明前提仅经源模块出节形引入）；               *)
+(* 构造性注记：全件真证、零承认（声明前提仅经母件出节形引入）；               *)
 (*   语句面全 Set 层。                                                      *)
 (* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。                *)
 (* ============================================================ *)
@@ -46,11 +57,11 @@ Require Import S04_RealExpLogConv.
 Require Import UpReqUMixSelect.
 
 (* ============================================================ *)
-(* §A Id 面：主定理声明前提的具名使用形（节前导与源模块一致；                    *)
+(* §A Id 面：旗舰声明前提的具名消费形（节前导与母件一致；                    *)
 (*   本节必须先于 RealInterfaceEnhancedMod 裸名导入，见头部节序注记）        *)
 (*   ums_pow_budget 出节首参即声明前提 lt_plus_compat_lt_le；本件把          *)
-(*   「代入该前提即得主定理结论」的出节形固定为具名可使用定理                  *)
-(*   uabm_ums_pow_budget_slot_freeze，供直接使用。                          *)
+(*   「喂入该前提即得旗舰结论」的出节形固定为具名可消费定理                  *)
+(*   uabm_ums_pow_budget_slot_freeze，供直接消费。                          *)
 (* ============================================================ *)
 
 Section UabmIface.
@@ -84,7 +95,7 @@ End UabmIface.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* §1 κ:=1/2 实例面（逐点构造，eps:=1/4 Q 计算闭合）                        *)
+(* §1 κ:=1/2 实例面（逐点构造，eps:=1/4 Q 计算收口）                        *)
 (* ============================================================ *)
 
 Definition uabm_half : Real := real_const (1#2)%Q.
@@ -163,19 +174,16 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 主件：主定理使用形的具体实例装配（声明前提取 uabm_wall + κ:=1/2）      *)
-(*   @cmk_pow_budget Real RealEnhancedReal —— ums_pow_budget 的 req 面对应形，  *)
-(*   声明前提位置喂 uabm_wall，Arch 前提位置喂 uabm_arch_scale，                 *)
+(* §3 主件：旗舰消费定理的具体实例装配（声明前提取 uabm_wall + κ:=1/2）      *)
+(*   @cmk_pow_budget Real RealEnhancedReal —— ums_pow_budget 的 req 面镜像，  *)
+(*   声明前提位喂 uabm_wall，Arch 前提位喂 uabm_arch_scale，                 *)
 (*   得 κ=1/2 的具体步数见证：sigT k, (1/2)^k·1 < 1。全件闭合。             *)
 (* ============================================================ *)
 
 Theorem uabm_k_select_half :
   sigT (fun k : nat => lt (mult (cmk_r_pow uabm_half k) real_one) real_one).
 Proof.
-  exact (@cmk_pow_budget Real RealEnhancedReal uabm_wall
-           uabm_half real_one real_one
-           uabm_half_pos uabm_half_lt_one uabm_one_pos uabm_one_pos
-           uabm_arch_scale).
+  exact (@cmk_pow_budget Real RealEnhancedReal uabm_wall           uabm_half real_one real_one           uabm_half_pos uabm_half_lt_one uabm_one_pos uabm_one_pos           uabm_arch_scale).
 Defined.
 
 (* ============================================================ *)

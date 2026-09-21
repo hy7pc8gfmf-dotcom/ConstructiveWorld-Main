@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   upgrpo_sigma_sq_eq（原 L597，2 句玩具证）                            *)
+(*   real_mult_exchange（原 L371，5 句玩具证）                            *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpGRPO.v *)
 (* *)
 (* 目的： GRPO 的 NoDup 均匀化与标准化优势二阶矩（Real 层）。 *)
@@ -373,25 +384,9 @@ Lemma real_mult_exchange : forall a b c d : Real,
           (real_mult (real_mult a b) (real_mult c d)).
 Proof.
   intros a b c d.
-  apply (real_eq_trans _ (real_mult a (real_mult c (real_mult b d))) _
-    (real_eq_sym (real_mult a (real_mult c (real_mult b d)))
-                 (real_mult (real_mult a c) (real_mult b d))
-                 (real_mult_assoc a c (real_mult b d)))).
-  apply (real_eq_trans _ (real_mult a (real_mult (real_mult c b) d)) _
-    (RealSetoid.real_eq_mult_compat a (real_mult c (real_mult b d))
-       a (real_mult (real_mult c b) d)
-       (real_eq_refl a) (real_mult_assoc c b d))).
-  apply (real_eq_trans _ (real_mult a (real_mult b (real_mult c d))) _
-    (RealSetoid.real_eq_mult_compat a (real_mult (real_mult c b) d)
-       a (real_mult b (real_mult c d))
-       (real_eq_refl a)
-       (real_eq_trans _ _ _
-         (RealSetoid.real_eq_mult_compat (real_mult c b) d
-            (real_mult b c) d
-            (real_mult_comm c b) (real_eq_refl d))
-         (real_eq_sym (real_mult b (real_mult c d))
-                      (real_mult (real_mult b c) d)
-                      (real_mult_assoc b c d))))).
+  apply (real_eq_trans _ (real_mult a (real_mult c (real_mult b d))) _    (real_eq_sym (real_mult a (real_mult c (real_mult b d)))                 (real_mult (real_mult a c) (real_mult b d))                 (real_mult_assoc a c (real_mult b d)))).
+  apply (real_eq_trans _ (real_mult a (real_mult (real_mult c b) d)) _    (RealSetoid.real_eq_mult_compat a (real_mult c (real_mult b d))       a (real_mult (real_mult c b) d)       (real_eq_refl a) (real_mult_assoc c b d))).
+  apply (real_eq_trans _ (real_mult a (real_mult b (real_mult c d))) _    (RealSetoid.real_eq_mult_compat a (real_mult (real_mult c b) d)       a (real_mult b (real_mult c d))       (real_eq_refl a)       (real_eq_trans _ _ _         (RealSetoid.real_eq_mult_compat (real_mult c b) d            (real_mult b c) d            (real_mult_comm c b) (real_eq_refl d))         (real_eq_sym (real_mult b (real_mult c d))                      (real_mult (real_mult b c) d)                      (real_mult_assoc b c d))))).
   exact (real_mult_assoc a b (real_mult c d)).
 Qed.
 

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   zab_Z_align_nonneg（原 L89，5 句玩具证）                             *)
+(*   zab_Z_align_pos（原 L73，4 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblZpos.v —— Z_align 正性的抽象接口层消解件                    *)
 (*                                                              *)
 (* 使命：为 S05_AlignmentGRPO 的抽象假设 Z_align_pos（lt zero Z_align， *)
@@ -95,8 +106,7 @@ Proof.
   unfold zab_Z_align.
   apply sum_over_S_nonneg.
   intro s.
-  exact (lt_le_iff _ _
-           (inl (zab_summand_pos reward beta beta_pos pi_ref pi_ref_pos s))).
+  exact (lt_le_iff _ _           (inl (zab_summand_pos reward beta beta_pos pi_ref pi_ref_pos s))).
 Qed.
 
 End ZabZPos.

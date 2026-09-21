@@ -226,7 +226,7 @@ Theorem tsi_twp_is_boltzmann_weight :
        (@S01_BaseRing.exp_neg RI
           (@S01_BaseRing.mult RI (@S01_BaseRing.inv_pos RI t Ht)
              (neg_log_prob prefix w))).
-Proof. intros RI Token neg_log_prob t Ht prefix w. exact (@id_refl _ _). Qed.
+Proof. intros RI Token neg_log_prob t Ht prefix w. exact (@id_refl _ (@S01_BaseRing.exp_neg RI (@S01_BaseRing.mult RI (@S01_BaseRing.inv_pos RI t Ht) (neg_log_prob prefix w)))). Qed.
 
 (* ===================================================================== *)
 (* 主件节：受体 LanguageModelExtensions 节面（RI Token neg_log_prob        *)

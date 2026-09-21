@@ -83,8 +83,8 @@ Lemma honest_stop_le : forall (k : Q) (tau b : nat) (c : Q),
   honest_stop tau (grun k b c) -> (tau <= b)%nat.
 Proof.
   intros k tau b c H.
-  apply NatLe_drop.
-  exact (id_trans (id_sym (id_cong (Nat.leb tau) (grun_budget k b c))) H).
+  exact (NatLe_drop tau b
+           (id_trans (id_sym (id_cong (Nat.leb tau) (grun_budget k b c))) H)).
 Qed.
 
 (* 无界预算恒等件：A2 去守卫的饱和扩展——任意深度（含触底后清零段）      *)
@@ -263,8 +263,8 @@ Theorem path2_conservation_T : forall (e1 e2 : edge_spec) (x : Q),
   Id (Qeq_bool x (exch2 e1 e2 x + path_diss2 e1 e2 x)) true.
 Proof.
   intros e1 e2 x.
-  apply sf_qeq_id.
-  apply path2_conservation.
+  exact (sf_qeq_id x (exch2 e1 e2 x + path_diss2 e1 e2 x)
+           (path2_conservation e1 e2 x)).
 Qed.
 
 (* ============================================================ *)

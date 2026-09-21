@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabT13b_sigm_partition_cond（原 L72，1 句玩具证）                    *)
+(*   uabT13b_sigm_Zthermo_pos（原 L57，5 句玩具证）                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT13b_UpSigMigrate.v —— 假设消融战役 T13b 承接席（批6 配分正性族三位）  *)
 (* 辖区：UpSigMigrate.v 三位（T13a 移交单 §6 批6 行点名加「等」位认列）：        *)
 (*   位1 UpSigMigrate.v:49   Z_pos（ReqFreeEnergyPilot 配分正性位）             *)
@@ -62,7 +73,8 @@ Theorem uabT13b_sigm_Zthermo_pos :
 Proof.
   intros S sumf Hpos D D_pos energy.
   unfold sigm_Z_thermo, sigm_boltzmann_factor.
-  apply Hpos. intros s.
+  apply Hpos.
+  intros s.
   exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
 Qed.
 

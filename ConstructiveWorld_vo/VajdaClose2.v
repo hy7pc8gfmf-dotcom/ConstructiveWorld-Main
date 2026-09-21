@@ -1,3 +1,13 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   vjc_l2hi9_cap_le_b（原 L99，4 句玩具证）                             *)
+(* ============================================================ *)
+
 Set Printing Width 500.
 (* ============================================================ *)
 (* VajdaClose2.v —— 席 CZV13（批次 E-STAGING-CZV13）                 *)
@@ -98,8 +108,10 @@ Proof. unfold QleT'. vm_compute. reflexivity. Qed.
    vb_const_le 装载；语句面 real_le_b 为 Set）。 *)
 Lemma vjc_l2hi9_cap_le_b : real_le_b (real_const vb_l2hi9) (real_const (18#25)).
 Proof.
-  apply real_le_to_le_b. apply vb_const_le.
-  apply QleT'_to_Qle. exact vjc_l2hi9_cap_T.
+  apply real_le_to_le_b.
+  apply vb_const_le.
+  apply QleT'_to_Qle.
+  exact vjc_l2hi9_cap_T.
 Qed.
 
 (* B3 :135 申报直形：饱和段（289/400 ≤ TV²）下 ln 2 柯西实数 ≤_B KL₂。
@@ -129,3 +141,5 @@ Print Assumptions vjc_kl_term_self.
 Print Assumptions vjc_vajda_sat_log2_direct.
 
 Extraction "vjc_ex_probe.ml" vjc_kl_term_self vjc_vajda_sat_log2_direct.
+
+Print Assumptions vjc_l2hi9_cap_le_b.

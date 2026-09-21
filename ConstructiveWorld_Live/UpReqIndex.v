@@ -3252,6 +3252,12 @@ Definition ng_UpAblMetaConjBridge : NewGreenFace :=
 Definition ng_UpAblMetaDivThm : NewGreenFace :=
   MkNewGreenFace "UpAblMetaDivThm.v" 1520 17 20260922 "CJS3 seat: unsealed divergence theorem (mtd_unbounded main + theorem A + restored eighth face mtd_unbounded_conj conjunction, PA 8/8 Closed, one-line bridge Require)".
 
+(* ================= v4.21 增册（ToyR 四包集成 EXEC456 席：PsQReindex 新件注册，20260922；v4.20 已被 R110 CJS3 波占用，本席顺延） ================= *)
+(* 1 件尾插 order L471（BeukersVariant 之后；拓扑位：S01_BaseRing/S02_CauchyComplete/S03_QExp+PadeErrorIntegral+BeukersLists+BeukersVariant 全在前）；_CoqProject×2 尾插同步；ng_ 条目 wc/grep 实测。 *)
+(* ng_PsQReindex —— PsQReindex.v：E-STAGING-D030r 切片 rx_ 前缀双小件（psQ↔bk_psd reindex 引理+十字衰减链可证首件；行首 decl grep 实测 19：Lemma rx_psQ_ext_lt/rx_psQ_shift/rx_psQ_scale、Theorem rx_psQ_reindex/rx_bv_c_diag/rx_qtilde3_anchor 等）（_ttoyr456e_）；vo 树 born-in-place 复证 *)
+Definition ng_PsQReindex : NewGreenFace :=
+  MkNewGreenFace "PsQReindex.v" 579 19 20260922 "rx_-prefixed pair: psQ <-> bk_psd reindex lemmas + cross-decay chain first provable piece, 19 decls".
+
 (* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
 Print Assumptions cnt_mod_length.
 Print Assumptions minus_absorb_r.

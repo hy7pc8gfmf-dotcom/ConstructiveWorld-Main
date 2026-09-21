@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   cyc_kl_dev_expand（原 L287，1 句玩具证）                             *)
+(*   cyc_kl_temp_cocycle_dev（原 L191，1 句玩具证）                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqKLCocycle.v —— 三温度对称 KL cocycle 恒等式                *)
 (* （防火墙恒等式族从双温度到三温度相容性；席 Q16，2026-09-17）     *)
 (* ============================================================ *)
@@ -296,8 +307,7 @@ Lemma cyc_kl_dev_expand : forall (X : Type) (u : X -> Real) (s0 : X) (l : list X
                                 (real_plus (retm_Eexp X u s0 l tb Hb)
                                            (real_opp (retm_Eexp X u s0 l ta Ha))))).
 Proof.
-  exact (fun X u s0 l ta Ha tb Hb tc Hc =>
-           cyc_kl_temp_cocycle X u s0 l ta Ha tb Hb tc Hc).
+  exact (fun X u s0 l ta Ha tb Hb tc Hc =>           cyc_kl_temp_cocycle X u s0 l ta Ha tb Hb tc Hc).
 Qed.
 
 (* 2-上循环闭：D(2,3,4)+D(1,2,4) == D(1,3,4)+D(1,2,3)。

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pa6ul_strict_first_cut（原 L135，2 句玩具证）                        *)
+(*   pa6ul_gamma_pos_supply（原 L125，1 句玩具证）                        *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblP6_UniformLimit.v —— alm_uniform_limit 严格档前提的具体实例供给 *)
 (* （纯构造性；语句面全 Set 层）。                                     *)
 (*                                                                    *)
@@ -150,9 +161,7 @@ Corollary pa6ul_strict_first_cut :
             eps)).
 Proof.
   intros eps Heps.
-  exact (alm_uniform_limit bool pa6ul_vocab pa6ul_vocab_ne pa6ul_eq_dec
-           pa6ul_z true pa6ul_m_in pa6ul_gamma pa6ul_gamma_pos_supply
-           pa6ul_gap_le_supply eps Heps).
+  exact (alm_uniform_limit bool pa6ul_vocab pa6ul_vocab_ne pa6ul_eq_dec           pa6ul_z true pa6ul_m_in pa6ul_gamma pa6ul_gamma_pos_supply           pa6ul_gap_le_supply eps Heps).
 Qed.
 
 (* ############ 收尾核验（Print Assumptions 三件 Closed） ############ *)

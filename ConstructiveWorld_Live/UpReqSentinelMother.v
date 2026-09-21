@@ -87,7 +87,7 @@ Qed.
 Lemma stm_domin_head : forall (x a : Z) (l : list Z),
   smin x (a :: l) <= dist x a.
 Proof.
-  intros x a l. apply stm_domin_in. left. reflexivity.
+  intros x a l. simpl. apply Z.le_min_l.
 Qed.
 
 (* 正面可达面（单调忠实性）：单元素表且核值在哨兵下界内时，输出恰为该核值

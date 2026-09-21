@@ -11,6 +11,17 @@
 (*   uabS4_abs_sum_le_B_pair（原 L129，2 句玩具证）                       *)
 (*   uabS4_abs_diff_triangle_le_B（原 L118，4 句玩具证）                  *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
+(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包O 全量第一批整批直推（T317 六·1 方案①）                           *)
+(* ============================================================ *)
 
 (* ============================================================ *)
 (* UpAblAbsSumLeB.v —— abs_sum_le 族（族 I plain Or 形）可达最强形供给件 *)
@@ -135,10 +146,13 @@ Theorem uabS4_abs_diff_triangle_le_B : forall a b c : Real,
                        (real_abs (real_plus b (real_opp c)))).
 Proof.
   intros a b c.
-  apply real_le_closure_b_one.
-  intros e He.
-  exact (uabS4_abs_diff_triangle_le_eps a b c e He).
+  exact (real_le_closure_b_one
+    (real_abs (real_plus a (real_opp c)))
+    (real_plus (real_abs (real_plus a (real_opp b)))
+               (real_abs (real_plus b (real_opp c))))
+    (fun e He => uabS4_abs_diff_triangle_le_eps a b c e He)).
 Qed.
+
 
 (* A.3 两点世界（S := bool）B 形实例：两点为 abs_sum_le 问题的最小
    非平凡世界，此处直接应用 real_abs_triangle_le_B。 *)
@@ -271,10 +285,13 @@ Theorem uabS4_abs_list_sum_le_B : forall (X : Type) (f : X -> Real) (l : list X)
             (real_list_sum X (fun x => real_abs (f x)) l).
 Proof.
   intros X f l.
-  apply (real_le_closure_b _ _ (uabS4_wlen X l) (uabS4_wlen_pos X l)).
-  intros e He.
-  exact (uabS4_abs_list_sum_le_wt X f l e He).
+  exact (real_le_closure_b
+    (real_abs (real_list_sum X f l))
+    (real_list_sum X (fun x => real_abs (f x)) l)
+    (uabS4_wlen X l) (uabS4_wlen_pos X l)
+    (fun e He => uabS4_abs_list_sum_le_wt X f l e He)).
 Qed.
+
 
 (* B.3 逐 eps 形推论：B 形 ⟹ |Σ_l f| ≤ Σ_l|f| + eps（Or-inl 注入）。
    对照结论：B 形严格强于逐 eps 形——real_le_closure_b_one 即单步反演。 *)

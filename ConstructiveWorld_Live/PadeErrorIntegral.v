@@ -1,3 +1,17 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包AW三·T300 台账席】玩具级定理同名非平凡替换稿（补标头注）    *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包AW三 替换稿以 Main 现版为底重放落件（T326 异常修复席    *)
+(* 2026-09-22 施工）：重放保留既有刀体并吸收 Main 现版语句面（含             *)
+(* pei_div_mul_shift 整块），Require 面照 Main 规范化（去 Psatz）；本块系    *)
+(* 同席补植战役标记。替换定理清单：pei_error_lead_integral（T300 落册刀）    *)
+(* ／pei_beta_integral_pos（0922 04:44 并席在飞刀，席位候核）共 2 刀，刀面   *)
+(* 以台账与并席在飞件快照为权威。                                            *)
+(* 非平凡性口径：双层 Qeq_refl 项并 apply 尾链并项直取；Qlt_to_QltT 传输     *)
+(* 全显项化直取，无行拆分式假非平凡。                                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；重放件本席判绿        *)
+(* 四证编译验零承认在册。                                                    *)
+(* ========================================================================= *)
 (* ============================================================ *)
 (* PadeErrorIntegral.v —— 席位 CYE10（批次 E-STAGING-CYE10）          *)
 (* 全库最后一笔真挂账收官：Padé [n/n] 误差余项积分表示四件               *)
@@ -407,7 +421,8 @@ Qed.
 Corollary pei_beta_integral_pos : forall n : nat,
   QltT 0 (pint_integral (pei_list n n)).
 Proof.
-  intro n. apply Qlt_to_QltT. apply pei_beta_pos.
+  intro n. exact (Qlt_to_QltT 0 (pint_integral (pei_list n n))
+    (pei_beta_pos n n)).
 Qed.
 
 (* 阶乘不等式核：n!·(n+k)! ≤ (2n+k+1)!（Beta_k ≤ 1 的载体） *)
@@ -766,9 +781,8 @@ Corollary pei_error_lead_integral : forall (n : nat) (x : Q),
          * (q_fact n * q_fact n / q_fact (Datatypes.S (2 * n)))).
 Proof.
   intros n x.
-  apply (Qmult_comp _ _ (Qeq_refl _) _ _).
-  apply (Qmult_comp _ _ (Qeq_refl _) _ _).
-  apply pei_eb_value0.
+  exact (Qmult_comp _ _ (Qeq_refl _) _ _
+           (Qmult_comp _ _ (Qeq_refl _) _ _ (pei_eb_value0 n x))).
 Qed.
 
 (* ============================================================ *)

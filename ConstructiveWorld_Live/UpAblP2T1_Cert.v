@@ -354,13 +354,13 @@ Qed.
 Definition p2t1_K_supply : nat := 1.
 
 Theorem p2t1_K_leb_true : Id (Nat.leb 1 p2t1_K_supply) true.
-Proof. exact id_refl. Qed.
+Proof. exact (@id_refl _ true). Qed.
 
 (* 行 20：default_token（默认 token 数据位）——常数载体平凡见证 *)
 Definition p2t1_default_token_supply : p2t1_tok := T0.
 
 Theorem p2t1_default_token_witness : Id p2t1_default_token_supply T0.
-Proof. exact id_refl. Qed.
+Proof. exact (@id_refl _ T0). Qed.
 
 (* 自然数嵌入 of_nat（计数嵌入形；避开 S01 顶层 S 遮蔽——用 Datatypes.S） *)
 Section P2T1EnumPos.

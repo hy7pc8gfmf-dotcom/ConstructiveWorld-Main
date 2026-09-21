@@ -1,3 +1,13 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pls_vocab_ne_shim（原 L65，2 句玩具证）                              *)
+(* ============================================================ *)
+
 (* UpReqPropLiftShim.v — AA13·B6 升面兼容性升级垫片件（pls_ 前缀）
    ==================================================================
    定性（主会话纠正令 20260914）：本件是「升面兼容性升级」接口件——
@@ -66,8 +76,7 @@ Lemma pls_vocab_ne_shim {Tok : Set} (vocab : list Tok)
   (H : pls_vocab_ne vocab) : Not (Id vocab nil).
 Proof.
   intros Hnil.
-  exact (pls_inT_nil_empty Tok (projT1 H)
-           (pls_id_transport (fun vv => InT (projT1 H) vv) (projT2 H) Hnil)).
+  exact (pls_inT_nil_empty Tok (projT1 H)           (pls_id_transport (fun vv => InT (projT1 H) vv) (projT2 H) Hnil)).
 Defined.
 
 (* ============================================================ *)
@@ -117,3 +126,5 @@ Definition pls_real_lt_eps {x y : Real} (H : real_lt x y) : Q := projT1 H.
 Definition pls_real_lt_rest {x y : Real} (H : real_lt x y) := projT2 H.
 Definition pls_real_le_cases {x y : Real} (H : real_le x y)
   := H : Or (real_lt x y) (real_eq x y).
+
+Print Assumptions pls_vocab_ne_shim.

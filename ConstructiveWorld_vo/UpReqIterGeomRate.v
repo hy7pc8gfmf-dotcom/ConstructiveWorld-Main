@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   igr_geom_step_discharged_B（原 L286，4 句玩具证）                    *)
+(*   igr_le_plus_r（原 L202，2 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqIterGeomRate.v                                          *)
 (*                                                              *)
 (* 目的： 论文 1 定理 4.8 接口消解·Real 层迭代率总装（席 GEOM-B）。    *)
@@ -203,10 +214,7 @@ Lemma igr_le_plus_r : forall (x d : Real),
   real_lt real_zero d -> real_le x (real_plus x d).
 Proof.
   intros x d Hd.
-  exact (kl_le_eq_l (real_plus x real_zero) (real_plus x d) x
-           (real_le_plus_compat x x real_zero d (real_le_refl x)
-              (kl_lt_le_bridge real_zero d Hd))
-           (real_plus_zero x)).
+  exact (kl_le_eq_l (real_plus x real_zero) (real_plus x d) x           (real_le_plus_compat x x real_zero d (real_le_refl x)              (kl_lt_le_bridge real_zero d Hd))           (real_plus_zero x)).
 Qed.
 
 (* ========== W5：单步无假设收缩（放电件 × 轨道站合龙） ========== *)
@@ -304,7 +312,8 @@ Theorem igr_geom_step_discharged_B :
             (Hr i) (geodi_iterate_pos n r Hr eta p Hp Hn t i)))).
 Proof.
   intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t.
-  apply real_le_closure_b_one. intros d Hd.
+  apply real_le_closure_b_one.
+  intros d Hd.
   exact (igr_geom_step_eps n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t d Hd).
 Qed.
 

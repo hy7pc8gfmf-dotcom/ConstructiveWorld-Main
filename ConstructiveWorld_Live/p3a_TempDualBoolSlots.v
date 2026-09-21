@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   p3a_bsum_ext（原 L51，7 句刀体）                                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* p3a_TempDualBoolSlots.v —— 席 CZC10（E-STAGING-CZC10）           *)
 (*   论文3《构造性柯西实数指数正性》假设消融施工：T56 普查档条 3-5      *)
 (*   （B 可消融，坐标 L828 定理 10.13 四求和槽；= 开放池 S05 三槽）。   *)
@@ -52,9 +62,13 @@ Lemma p3a_bsum_ext : forall f g : bool -> Real,
   (forall s : bool, real_eq (f s) (g s)) ->
   real_eq (p3a_bsum f) (p3a_bsum g).
 Proof.
-  intros f g Hfg. unfold p3a_bsum.
-  exact (RealSetoid.real_eq_plus_compat (f true) (f false) (g true) (g false)
-           (Hfg true) (Hfg false)).
+  intros f g Hfg.
+  assert (Ht : real_eq (f true) (g true)).
+  { exact (Hfg true). }
+  assert (Hff : real_eq (f false) (g false)).
+  { exact (Hfg false). }
+  unfold p3a_bsum.
+  exact (RealSetoid.real_eq_plus_compat (f true) (f false) (g true) (g false) Ht Hff).
 Qed.
 
 (* ---- 槽 3 sumlinear：线性性（分配律 + 因子序换装） ---- *)

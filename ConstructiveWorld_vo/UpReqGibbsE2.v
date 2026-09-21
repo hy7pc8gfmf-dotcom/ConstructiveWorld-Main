@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   gibbe2_le_b_id_r（原 L81，3 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqGibbsE2.v *)
 (* *)
 (* 目的： gibbs_equality 的有限具体路线（重定位段）。 *)
@@ -81,11 +91,9 @@ Qed.
 Lemma gibbe2_le_b_id_r : forall a b c : Real,
   real_le_b a b -> real_eq b c -> real_le_b a c.
 Proof.
-  intros a b c H Hbc eps Heps. unfold real_le_b in H.
-  exact (RealSetoid.real_lt_compat a a (real_plus b eps) (real_plus c eps)
-           (real_eq_refl a)
-           (RealSetoid.real_eq_plus_compat b eps c eps Hbc (real_eq_refl eps))
-           (H eps Heps)).
+  intros a b c H Hbc eps Heps.
+  unfold real_le_b in H.
+  exact (RealSetoid.real_lt_compat a a (real_plus b eps) (real_plus c eps)           (real_eq_refl a)           (RealSetoid.real_eq_plus_compat b eps c eps Hbc (real_eq_refl eps))           (H eps Heps)).
 Qed.
 
 (* B2：le_b 右加平移 *)
@@ -539,3 +547,5 @@ Print Assumptions gibbe2_clamp_head.
 Print Assumptions gibbe2_list_sum_zero_extract_bool.
 Print Assumptions gibbe2_kl_zero_tangent_eq.
 Print Assumptions gibbe2_gibbs_equality_bool.
+
+Print Assumptions gibbe2_le_b_id_r.

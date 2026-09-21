@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabT13b_evq_evicted_partition_pos（原 L51，5 句玩具证）              *)
+(*   uabT13b_evq_Zthermo_pos（原 L38，5 句玩具证）                        *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT13b_G13.v —— 假设消融战役 T13b 承接席（批6 配分正性族两位）           *)
 (* 辖区：G13_EvictFam.v 两位（T13a 移交单 §6 批6 行点名；同文件 :61/:87 两位     *)
 (*   Id 层 {RI}{SS}{SO} 世界位经核全库无具体 SumOver 实例世界，挂账移交——        *)
@@ -43,7 +54,8 @@ Theorem uabT13b_evq_Zthermo_pos :
 Proof.
   intros S sumf Hpos D D_pos energy.
   unfold evq_Z_thermo, evq_boltzmann_factor.
-  apply Hpos. intros s.
+  apply Hpos.
+  intros s.
   exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
 Qed.
 
@@ -58,7 +70,8 @@ Theorem uabT13b_evq_evicted_partition_pos :
 Proof.
   intros S sumf Hpos D D_pos energy.
   unfold evq_evicted_partition, evq_boltzmann_factor.
-  apply Hpos. intros s.
+  apply Hpos.
+  intros s.
   exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
 Qed.
 

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   lic_e_irrational_criterion（原 L747，2 句玩具证）                    *)
+(*   lic_qltt_comp_r（原 L58，5 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqIrrationalCriterion.v                                    *)
 (*                                                               *)
 (* 目的：单实例「e 部分和逃离一切有理数」引擎（SumInvFactEscape）      *)
@@ -58,9 +69,10 @@ Qed.
 Lemma lic_qltt_comp_r : forall x1 x2 z : Q, x1 == x2 -> QltT z x1 -> QltT z x2.
 Proof.
   intros x1 x2 z Heq Hlt.
-  apply Qlt_to_QltT. apply (lic_qlt_comp_r x1 x2 z Heq).
-  apply QltT_to_Qlt. exact Hlt.
+  exact (Qlt_to_QltT z x2
+    (lic_qlt_comp_r x1 x2 z Heq (QltT_to_Qlt z x1 Hlt))).
 Qed.
+
 
 Lemma lic_fact_pos1 : forall n : nat, (1 <= fact n)%nat.
 Proof.
@@ -755,9 +767,7 @@ Theorem lic_e_irrational_criterion : forall q : Q,
        (real_const q)))).
 Proof.
   intro q.
-  exact (lic_irrational_criterion (fun n => exp_series n 1)
-                                  (fun n => 1%Q / q_fact n)
-                                  lic_tail_e lic_witness_e lic_vanish_e q).
+  exact (lic_irrational_criterion (fun n => exp_series n 1)                                  (fun n => 1%Q / q_fact n)                                  lic_tail_e lic_witness_e lic_vanish_e q).
 Qed.
 
 From Stdlib Require Import Extraction.

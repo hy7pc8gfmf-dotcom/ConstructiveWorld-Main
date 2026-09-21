@@ -286,8 +286,9 @@ Theorem pm_pointwise_le_integral : forall p q : list Q,
   QleT' (pint_integral p) (pint_integral q).
 Proof.
   intros p q Hcoeff. unfold pint_integral.
-  apply pm_integral_from_mono_gen. exact Hcoeff.
+  exact (pm_integral_from_mono_gen p q 0 Hcoeff).
 Qed.
+
 
 (* ============================================================ *)
 (* §4 严格正机（QltT 面；见证 sigT 承载，零 Prop）                     *)
@@ -333,8 +334,9 @@ Theorem pm_integral_pos_strict : forall p : list Q,
   QltT 0 (pint_integral p).
 Proof.
   intros p H. unfold pint_integral.
-  apply pm_integral_from_pos_strict. exact H.
+  exact (pm_integral_from_pos_strict p 0 H).
 Qed.
+
 
 (* 严格正见证的偏移归纳主件：全系数非负 + sigT 见证（某系数严格正）
    ⟹ 偏移积分严格正。sigT 索引三分（0 ⟹ 头严格；S i' ⟹ 尾归纳；
@@ -387,8 +389,9 @@ Theorem pm_integral_pos : forall p : list Q,
   QltT 0 (pint_integral p).
 Proof.
   intros p Hcoeff Hwit. unfold pint_integral.
-  apply pm_integral_from_pos; assumption.
+  exact (pm_integral_from_pos p 0 Hcoeff Hwit).
 Qed.
+
 
 (* ============================================================ *)
 (* §5 线性两件（Beukers 恒等式链用；一期线性性只消费不重编）            *)

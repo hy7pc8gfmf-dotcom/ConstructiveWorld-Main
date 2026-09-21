@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T260 台账席 战役包U（tier2 批量面第十一批）   *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列玩具位中真刀位  *)
+(* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
+(* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
+(* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
+(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 清单：                                                          *)
+(*   fw_energy_eta（原 L119，显式见证微刀 1 处）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpFirewall.v *)
 (* *)
 (* 目的： 防火墙机制：能量-温度界、熵温度单调与防火墙循环（Real 层）。 *)
@@ -118,7 +129,7 @@ Let Et (t : R) (Ht : lt zero t) : R :=
 (* 能量期望的 η-形式桥：energy_expectation (Bt t) 定义性 == Et t *)
 Lemma fw_energy_eta : forall (t : R) (Ht : lt zero t),
   Id (energy_expectation base_loss (Bt t Ht)) (Et t Ht).
-Proof. intros t Ht. apply id_refl. Qed.
+Proof. intros t Ht. exact (@id_refl _ (energy_expectation base_loss (Bt t Ht))). Qed.
 
 (* 倍温严格升：t > 0 ⟹ t < t + t（升温目标的构造性证书）
    （接口 plus 抽象：plus zero t 与 t 非转换可互换，

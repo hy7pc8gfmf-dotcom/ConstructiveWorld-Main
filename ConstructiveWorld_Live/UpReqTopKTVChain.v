@@ -234,8 +234,8 @@ Lemma rtk_inv_Z_le_inv_kept :
             (real_inv_pos (rtk_kept_partition k kd) Hkpos).
 Proof.
   intros k kd Hkpos.
-  apply (real_inv_pos_le_compat (rtk_kept_partition k kd) rtk_Z_thermo             Hkpos rtk_Z_thermo_pos).
-  exact (rtk_kept_le_Zthermo k kd).
+  exact (real_inv_pos_le_compat (rtk_kept_partition k kd) rtk_Z_thermo
+           Hkpos rtk_Z_thermo_pos (rtk_kept_le_Zthermo k kd)).
 Qed.
 
 (* ============================================================ *)

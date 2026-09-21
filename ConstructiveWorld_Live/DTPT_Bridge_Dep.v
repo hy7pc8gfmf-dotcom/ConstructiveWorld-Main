@@ -108,7 +108,7 @@ Proof.
   intros n l.
   apply qeqT_intro.
   apply (proj1 (llm_rot_id_superseded n l                  (fun m : list Q => (H_adj m == H_adj l)%Q))).
-  apply Qeq_refl.
+  exact (Qeq_refl (H_adj l)).
 Defined.
 
 (* ========== §3 旗舰件：八件映射逐件抽样 Set 面（3 件代表作：

@@ -85,7 +85,11 @@ Definition ri_real : Real :=
     (lic_seq_cauchy ln2i_x ln2i_e ln2i_tail ln2i_vanish).
 
 Lemma ri_real_proj : forall k : nat, projT1 ri_real k == ln2i_x k.
-Proof. intro k. reflexivity. Qed.
+Proof.
+  intro k.
+  unfold ri_real. cbn [projT1].
+  exact (Qeq_refl (ln2i_x k)).
+Qed.
 
 (* ri_x：x'_n := p_n/q̃_n（即 bv_x；Q 常数，待 real_const 实嵌入） *)
 Definition ri_x (n : nat) : Q := bv_x n.
@@ -97,7 +101,7 @@ Proof.
   intro n.
   unfold ri_x, bv_x.
   apply qeq_imp_qeqT.
-  reflexivity.
+  exact (Qeq_refl (bv_p n / (Z.of_nat (bk_Qn_qtilde n) # 1)%Q)).
 Qed.
 
 (* ri_x_eq_tn：ri_x n == tn_x n（由 tn_x_eq_bv_x 经 Qeq 桥反接） *)

@@ -1,3 +1,13 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ga2_mopp_one（原 L70，8 句刀体）                                    *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
 (* GibbsAssembly.v — E-STAGING-CXD7 席位V-F2 / T41 对账 C2                  *)
 (* req2_gibbs_inequality 组装件（norm 槽面 + eps 见证形出口）                 *)
@@ -70,9 +80,13 @@ Definition ga2_le_id_r {a b c : R} (H1 : req b c) (H2 : le a b) : le a c :=
 Lemma ga2_mopp_one : forall x : R, req (mult (opp one) x) (opp x).
 Proof.
   intro x.
-  exact (req_trans (mult (opp one) x) (opp (mult one x)) (opp x)
-                   (req_opp_mult_r one x)
-                   (req_opp_compat (mult one x) x (req_mult_one_l x))).
+  assert (H1 : req (mult (opp one) x) (opp (mult one x))).
+  { exact (req_opp_mult_r one x). }
+  assert (H2 : req (mult one x) x).
+  { exact (req_mult_one_l x). }
+  assert (H3 : req (opp (mult one x)) (opp x)).
+  { exact (req_opp_compat (mult one x) x H2). }
+  exact (req_trans (mult (opp one) x) (opp (mult one x)) (opp x) H1 H3).
 Qed.
 
 (* ---- 节内辅件 2（点态核，S04 gibbs_pointwise 的 req2 面重演）：             *)

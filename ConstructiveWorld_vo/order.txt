@@ -468,6 +468,7 @@ Ln2Bridge.v
 PintPosGrid.v
 BeukersIdentity.v
 BeukersVariant.v
+PsQReindex.v
 Hanson3Pow.v
 Ln2Integrality.v
 TrueNumerator.v

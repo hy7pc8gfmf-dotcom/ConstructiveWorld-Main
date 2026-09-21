@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rfep_kl_term_equiv_real（原 L164，3 句玩具证）                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqRealFEP.v *)
 (* *)
 (* 目的： 自由能原理的 Real 层等式基座（R2-2 补强）。 *)
@@ -174,10 +184,7 @@ Lemma rfep_kl_term_equiv_real :
 Proof.
   intros p Hp s.
   apply real_eq_sym.
-  exact (logd_kl_term_minus_form (p s)
-           (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
-           (Hp s)
-           (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)).
+  exact (logd_kl_term_minus_form (p s)           (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)           (Hp s)           (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)).
 Qed.
 
 (* ---------------------------------------------------------- *)

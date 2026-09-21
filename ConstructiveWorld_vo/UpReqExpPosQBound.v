@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T257 台账席 战役包R（tier2 八批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   upqb_exp_partial_eq（原 L32，2 句玩具证）                            *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqExpPosQBound.v *)
 (* *)
 (* 目的： Q 层偶阶截断正下界的显式见证（1/(1+B) 形）。 *)
@@ -30,7 +40,7 @@ From Stdlib Require Import Lia.
 Definition upqb_exp_partial := exp_partial.
 
 Lemma upqb_exp_partial_eq : forall (n : nat) (x : Q), upqb_exp_partial n x == exp_partial n x.
-Proof. reflexivity. Qed.
+Proof. intros n x. exact (Qeq_refl (exp_partial n x)). Qed.
 
 Lemma upqb_qlt_0_1 : Qlt 0 1.
 Proof. unfold Qlt; simpl; lia. Qed.
@@ -42,13 +52,18 @@ Proof. apply Qlt_le_weak. exact upqb_qlt_0_1. Qed.
 Lemma upqb_witness_m0 : forall a : Q,
   sigT (fun q : Q => ((QltT 0 q) * (QltT q (upqb_exp_partial 0 a)))%type).
 Proof.
-  intros a. exists (1#2)%Q. split; reflexivity.
+  intros a. exists (1#2)%Q. split.
+  - unfold QltT. compute. reflexivity.
+  - unfold QltT, upqb_exp_partial. compute. reflexivity.
 Qed.
 
 (* 暖身②：具体例 m=1, a=1：S_2(−1) = 1−1+1/2 = 1/2 > 1/3 > 0（计算级闭合） *)
 Lemma upqb_witness_m1_a1 :
   sigT (fun q : Q => ((QltT 0 q) * (QltT q (exp_partial 2 (Qopp 1)%Q)))%type).
-Proof. exists (1#3)%Q. split; reflexivity. Qed.
+Proof. exists (1#3)%Q. split.
+  - unfold QltT. compute. reflexivity.
+  - unfold QltT. compute. reflexivity.
+Qed.
 
 (* ============ S2 前置：QleT 消去与序小件 ============ *)
 

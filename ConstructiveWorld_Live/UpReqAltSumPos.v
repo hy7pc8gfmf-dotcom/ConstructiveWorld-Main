@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   altsum_ex_dec3（原 L685，1 句玩具证）                                *)
+(*   altsum_ex_1（原 L681，1 句玩具证）                                   *)
+(*   altsum_ex_3（原 L677，1 句玩具证）                                   *)
+(*   altsum_ex_2（原 L673，1 句玩具证）                                   *)
+(*   altsum_acc_0_eq（原 L268，2 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqAltSumPos.v *)
 (* *)
 (* 目的： Q 层有限交错和正性引擎。 *)
@@ -267,7 +281,7 @@ Proof. intros f k m. simpl. ring. Qed.
 
 Lemma altsum_acc_0_eq : forall (sg : bool) (f : nat -> Q) (k : nat),
   altsum_acc sg f k 0%nat == 0.
-Proof. intros sg f k. apply Qeq_refl. Qed.
+Proof. intros sg f k. exact (Qeq_refl 0). Qed.
 
 (* 消费者展开方程：步长 2 的重组（相邻配对面） *)
 Lemma altsum_skip2 : forall (f : nat -> Q) (m : nat),
@@ -671,16 +685,16 @@ Qed.
 
 (* 常值列 (1#2)：两项交错 1/2 − 1/2 == 0，非负平凡成立 *)
 Example altsum_ex_2 : QleT' 0 (altsum (fun _ => (1#2)%Q) 2).
-Proof. reflexivity. Qed.
+Proof. unfold QleT'. exact (@id_refl _ true). Qed.
 
 (* 常值列 (2#1)：三项交错 2 − 2 + 2 == 2 > 0 *)
 Example altsum_ex_3 : QltT 0 (altsum (fun _ => (2#1)%Q) 3).
-Proof. reflexivity. Qed.
+Proof. unfold QltT. exact (@id_refl _ true). Qed.
 
 (* 常值列 (3#1)：单项 3 ≥ 0 *)
 Example altsum_ex_1 : QleT' 0 (altsum (fun _ => (3#1)%Q) 1).
-Proof. reflexivity. Qed.
+Proof. unfold QleT'. exact (@id_refl _ true). Qed.
 
 (* 具体递减列 f = 3, 2, 1：三项交错 3 − 2 + 1 == 2 > 0（S4 实例） *)
 Example altsum_ex_dec3 : QltT 0 (altsum (fun k => (3#1)%Q + Qopp ((Z.of_nat k # 1)%Q)) 3).
-Proof. reflexivity. Qed.
+Proof. unfold QltT. exact (@id_refl _ true). Qed.

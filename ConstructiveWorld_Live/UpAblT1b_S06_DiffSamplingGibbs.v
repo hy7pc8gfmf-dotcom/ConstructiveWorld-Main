@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   abl_S06_abs_ge_zero_id_cc（原 L134，2 句玩具证）                     *)
+(*   abl_lsum_zero（原 L68，2 句玩具证）                                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT1b_S06_DiffSamplingGibbs.v —— 假设消融战役 T1b 批施工席伴生件 *)
 (* 战役：FA1 普查第①批 swap/Fubini 族 + 第②批 abs 幂等族            *)
 (* 原树零改：本件为独立伴生件，只读消费基座，不入注册面（随 R 波）      *)
@@ -69,8 +80,7 @@ Lemma abl_lsum_zero : forall l : list S,
   Id zero (AttnDoeblin.bs_list_sum (fun _ : S => zero) l).
 Proof.
   intro l.
-  exact (id_trans (id_sym (mult_zero (AttnDoeblin.nat_to_R (length l))))
-          (id_sym (AttnDoeblin.bs_list_const_sum zero l))).
+  exact (id_trans (id_sym (mult_zero (AttnDoeblin.nat_to_R (length l))))          (id_sym (AttnDoeblin.bs_list_const_sum zero l))).
 Qed.
 
 Lemma abl_lsum_fubini_gen : forall (f : S -> S -> R) (l1 l2 : list S),

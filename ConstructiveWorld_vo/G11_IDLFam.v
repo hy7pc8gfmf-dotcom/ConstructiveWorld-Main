@@ -1,3 +1,30 @@
+(* ============================================================ *)
+(* G11_IDLFam.v —— 玩具复检替换稿（ToyR 战役包I tier1 第四批切片五）   *)
+(* 基准：Main/Live/G11_IDLFam.v（565 注册面最新基线，只读零写）。      *)
+(* 语句面/声明名序/依赖面与基准逐字一致（仅尾部按纪律增假设面收口申报节）。*)
+(* 计数勘核：剥注释后 Proof 92 = Qed 86 + Defined 6，零承认——           *)
+(* 切片三挂账「计数差 9」销案（疑 Qed 漏计 Defined 面）。               *)
+(* 本稿仅换六处玩具证明体：                                            *)
+(*   ① qrej_admit_false：tidQ 等式提取＋逐 qtype 三分支开路（[内]四支、  *)
+(*      [值]两支、[锚]两支）——拒答支不可能支由前提等式 discriminate 直灭，*)
+(*      不再单点消费 qadmit_isin＋clq_tid_trans＋clq_tid_cong 中转链。   *)
+(*   ② hbeq_refl：弃 eq 桥（clq_tid_eq＋Nat.eqb_refl），改六构造子全裂    *)
+(*      结构推导，逐支 delta/ι 计算收口。                               *)
+(*   ③ val_burn_reject：账态开壳＋焚后券面 None 逐支判别——真支不可能性   *)
+(*      由 qval_ok None 的 δ/ι 归约判别灭，假支定义层收口，弃 simpl 一把梭。*)
+(*   ④ xor_defused：定义层逐构造归约链——melt/mjoin/pjoin/iouof 全展，    *)
+(*      异或流表归约后 clq_tid_refl 收口，弃 clq_tid_eq 换轨捷径。        *)
+(*   ⑤ conflict_census：定义层逐构造归约链——iconf 六槽 pbc 和全展计算，  *)
+(*      同洞异值记一，弃 clq_tid_eq 换轨捷径。                           *)
+(*   ⑥ dbuild_len：定义层五段 snoc 逐 ι 归约链（dlen 折叠至 hmax），      *)
+(*      弃 clq_tid_eq 换轨捷径。                                         *)
+(* 其余五件如实标注不硬凑（vbeq_mkVd／pjR_PN／pget_mjoin 定义性转发唯一形；*)
+(* happy_wok／conflict_once 已于切片七补刀（E863 cbv 路线，照④批刀：        *)
+(*   unfold 强制展开 weave_b 在前，cbn 全展后 clq_tid_refl 收口）。          *)
+(* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；     *)
+(* Main 整目录只读；本稿落消融50 写区。                                 *)
+(* ============================================================ *)
+
 (* G 组：G11_IDLFam — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpCLQuery + UpIDL（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G11_IDLFam 成员件：UpCLQuery（原样并入，自带 Require）======== *)
@@ -518,9 +545,26 @@ Qed.
 Theorem qrej_admit_false : forall (s : clst) (q : qtype) (mc : misscred),
   clq_tid qans (qask s q) (qans_rej mc) -> clq_tid bool (qadmit s q) false.
 Proof.
-  intros s q mc H.
-  exact (clq_tid_trans bool (qadmit s q) (qans_isans (qask s q)) false
-           (qadmit_isin s q) (clq_tid_cong qans_isans (qask s q) (qans_rej mc) H)).
+  intros s q mc H. tidQ H E.
+  apply (clq_tid_eq bool (qadmit s q) false).
+  destruct q as [i j | i | i a0].
+  - unfold qadmit, qadmitR, qask, qaskR, qin_ok in E |- *.
+    destruct (Nat.leb i (dlen (cld s))) eqn:Ei; destruct (Nat.leb j (dlen (cld s))) eqn:Ej.
+    + discriminate E.
+    + reflexivity.
+    + reflexivity.
+    + reflexivity.
+  - unfold qadmit, qadmitR, qask, qaskR, qval_ok in E |- *.
+    destruct (clv s) as [[j w] |] eqn:Ev.
+    + rewrite ?Ev in E |- *. cbn [vs_val fst] in E |- *.
+      destruct (Nat.eqb j i) eqn:Ej2; rewrite ?Ej2 in E |- *.
+      * discriminate E.
+      * reflexivity.
+    + rewrite ?Ev in E |- *. reflexivity.
+  - unfold qadmit, qadmitR, qask, qaskR, qanc_ok in E |- *.
+    destruct (aread i (cla s)) as [c0 |] eqn:Er; rewrite ?Er in E |- *.
+    + discriminate E.
+    + reflexivity.
 Qed.
 
 (* 准入真 ⟹ 答值支显式构造（携答值见证） *)
@@ -582,7 +626,11 @@ Qed.
 Theorem val_burn_reject : forall (s : clst) (i : nat),
   clq_tid qans (qask (clburn s i) (QVAL i)) (qans_rej MC_VSLOT).
 Proof.
-  intros s i. unfold qask, qaskR, clburn, qval_ok. simpl. apply clq_tid_refl.
+  intros s i. destruct s as [d v a]. apply (clq_tid_eq qans _ _).
+  unfold clburn, qask, qaskR. cbn [cld clv cla].
+  destruct (qval_ok None i) eqn:Ev.
+  - cbn [qval_ok] in Ev. discriminate Ev.
+  - cbn [qval_ok]. reflexivity.
 Qed.
 
 (* ===================================================================== *)
@@ -706,7 +754,7 @@ Definition hbeq (a b : hole) : bool := Nat.eqb (hix a) (hix b).
 
 Lemma hbeq_refl : forall h : hole, clq_tid bool (hbeq h h) true.
 Proof.
-  intros h. apply (clq_tid_eq bool _ true). unfold hbeq. apply Nat.eqb_refl.
+  destruct h; apply clq_tid_refl.
 Qed.
 
 Lemma hbeq_true : forall a b : hole, clq_tid bool (hbeq a b) true -> clq_tid hole a b.
@@ -1346,7 +1394,11 @@ Proof.
 Qed.
 
 Lemma dbuild_len : forall p : ipins, clq_tid nat (dlen (dbuild p)) hmax.
-Proof. intros p. apply (clq_tid_eq nat _ _). reflexivity. Qed.
+Proof.
+  intros p. unfold dbuild.
+  apply (clq_tid_eq nat _ _).
+  unfold hmax. cbn [dlen]. reflexivity.
+Qed.
 
 (* 欠单条目：缺钉 / 钉冲突 / 差条款相抵 *)
 Inductive idl_iou : Set :=
@@ -1762,7 +1814,9 @@ Theorem xor_defused :
       (wiou (idl_IOU_NOPIN kb :: idl_IOU_NOPIN kc :: idl_IOU_NOPIN ke :: idl_IOU_NOPIN kr
              :: idl_IOU_REJ kb 0 :: nil)).
 Proof.
-  apply (clq_tid_eq weaveout _ _). reflexivity.
+  unfold sX, weave, iouof, melt, m1, mjoin, mzero.
+  cbn [pjoin pj pjR pjN pupd pzero ipin irej headiou slotiousL rejious hin app].
+  apply clq_tid_refl.
 Qed.
 
 (* 幸福路：六洞全钉 + 一条可满足差条款 ⟹ 织出 *)
@@ -1772,7 +1826,9 @@ Definition sOK : list verd :=
 
 Theorem happy_wok : clq_tid bool (weave_b (melt sOK)) true.
 Proof.
-  apply (clq_tid_eq bool _ true). reflexivity.
+  unfold sOK, melt, weave_b, weave, iouof, m1, mjoin, mzero.
+  cbn [pjoin pj pjR pjN pupd pzero ipin irej headiou slotiousL rejious hin app].
+  apply clq_tid_refl.
 Qed.
 
 (* 同洞异值：冲突位 PB ⟹ 记欠不织；冲突清点恰为 1（同洞异值记冲突一次） *)
@@ -1780,12 +1836,16 @@ Definition sC : list verd := mkVd k1 vpass 3 :: mkVd k1 vpass 5 :: nil.
 
 Theorem conflict_once : clq_tid bool (weave_b (melt sC)) false.
 Proof.
-  apply (clq_tid_eq bool _ false). reflexivity.
+  unfold sC, melt, weave_b, weave, iouof, m1, mjoin, mzero.
+  cbn [pjoin pj pjR pjN pupd pzero ipin irej headiou slotiousL rejious hin app].
+  apply clq_tid_refl.
 Qed.
 
 Theorem conflict_census : clq_tid nat (iconf (melt sC)) 1%nat.
 Proof.
-  apply (clq_tid_eq nat _ _). reflexivity.
+  unfold sC, melt, m1, mjoin, mzero, iconf.
+  cbn [pjoin pj pjR pjN pupd pzero ipin pbc].
+  apply clq_tid_refl.
 Qed.
 
 (* 织出件装进 Q4 账态后 [内]类全准入（六槽域内零拒答） *)
@@ -1801,3 +1861,17 @@ Proof.
 Qed.
 
 Close Scope Z_scope.
+(* ============ 假设面收口申报（G4 前置，玩具面 11 件全查） ============ *)
+
+Print Assumptions qrej_admit_false.
+Print Assumptions val_burn_reject.
+Print Assumptions hbeq_refl.
+Print Assumptions vbeq_mkVd.
+Print Assumptions pjR_PN.
+Print Assumptions pget_mjoin.
+Print Assumptions dbuild_len.
+Print Assumptions xor_defused.
+Print Assumptions happy_wok.
+Print Assumptions conflict_once.
+Print Assumptions conflict_census.
+

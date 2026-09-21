@@ -41,7 +41,7 @@ Require Import UpReqBanachNormOpp.
 Require Import UpReqIrrationalCriterion.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* S0：Q 层通用小件                                                *)
@@ -213,7 +213,7 @@ Proof.
 Qed.
 
 Lemma ir2_zpos_xo : forall p : positive, (Z.pos (xO p) = 2 * Z.pos p)%Z.
-Proof. intro p. reflexivity. Qed.
+Proof. intro p. exact eq_refl. Qed.
 
 Lemma ir2_no_sqrt2 : forall q : Q, ~ (q * q == 2%Q).
 Proof.
@@ -248,10 +248,10 @@ Fixpoint ir2_qp (m : nat) : Q :=
   end.
 
 Lemma ir2_x1 : ir2_x 1 == (3 # 2).
-Proof. reflexivity. Qed.
+Proof. unfold Qeq. cbn. exact eq_refl. Qed.
 
 Lemma ir2_qp_def : forall n : nat, ir2_qp (Datatypes.S n) == ((2 # 1) * ir2_qp n)%Q.
-Proof. intros n. reflexivity. Qed.
+Proof. intros n. exact (Qeq_refl ((2 # 1) * ir2_qp n)%Q). Qed.
 
 Lemma ir2_qp_pos : forall n : nat, Qlt 0 (ir2_qp n).
 Proof.

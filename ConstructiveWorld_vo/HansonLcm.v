@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T256 台账席 战役包Q（tier2 批量面第七批）  *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   hl_binom_S（eq_refl 显式见证项（Pascal 定义层展开位），1 刀）                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* HansonLcm.v — 席位 CZR14（批次 E-STAGING-CZR14，20260918）      *)
 (*                                                               *)
 (* 使命：T97 §4 P4 战役件——Hanson 引理战役组（纯 nat 层）。           *)
@@ -91,7 +101,8 @@ Fixpoint hl_binom (n k : nat) : nat :=
 (* Pascal 展开面（C(S n, S k) = C(n,k) + C(n,k+1)）的显式化脚手架 *)
 Lemma hl_binom_S : forall n k : nat,
   hl_binom (S n) (S k) = hl_binom n k + hl_binom n (S k).
-Proof. intros n k. reflexivity. Qed.
+Proof. intros n k.
+  exact (eq_refl (hl_binom n k + hl_binom n (S k))). Qed.
 
 (* 幂换基：4^n = 2^{2n}（照 Ln2Escape.lne_pow4 同型） *)
 Lemma hl_pow4 : forall n : nat, (4 ^ n = 2 ^ (2 * n))%nat.

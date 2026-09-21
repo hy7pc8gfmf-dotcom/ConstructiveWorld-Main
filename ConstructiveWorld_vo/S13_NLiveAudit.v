@@ -753,7 +753,9 @@ Definition sf_is_stuck (k : nat) (l : SFLog) : bool := Nat.leb k (sf_consec_fail
 Theorem sf_consec_fail_fail_step :
   forall (ag : nat) (l : SFLog),
     sf_consec_fail ((ag, (0, false)) :: l) = Datatypes.S (sf_consec_fail l).
-Proof. intros ag l. simpl. reflexivity. Qed.
+Proof.
+  intros ag l. simpl. exact (@eq_refl _ (Datatypes.S (sf_consec_fail l))).
+Qed.
 
 (* ---- 2. 焦点节奏：头部同一代理连续条数（长单件失焦风险度量） ---- *)
 
@@ -1006,7 +1008,9 @@ Qed.
 
 (* 一票否决：任一验证通道失败即整体拒绝。 *)
 Theorem sf_triple_reject : Id (sf_triple_ok true true false) false.
-Proof. simpl. exact id_refl. Qed.
+Proof.
+  simpl. exact (@id_refl _ false).
+Qed.
 
 (* ---- 8. 规格-实现逐字同步（论文-代码同步的算法形态） ---- *)
 
@@ -1244,9 +1248,7 @@ Qed.
 Lemma inT_forallb_gen : forall (A : Set) (f : A -> bool) (l : list A),
   (forall x : A, In x l -> f x = true) -> Id (forallb f l) true.
 Proof.
-  intros A f l H. apply bool_true_id.
-  apply (proj2 (forallb_forall f l)).
-  intros x Hin. exact (H x Hin).
+  intros A f l H. exact (bool_true_id (forallb f l) (proj2 (forallb_forall f l) (fun x Hin => H x Hin))).
 Qed.
 
 Lemma inT_cons_inv_gen : forall (A : Set) (x : A) (b : A) (l : list A),

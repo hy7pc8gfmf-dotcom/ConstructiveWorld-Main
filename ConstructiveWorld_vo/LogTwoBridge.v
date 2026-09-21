@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ltb_two_Qpos（原 L131，2 句玩具证）                                  *)
+(*   ltb_log_two_rate（原 L121，2 句玩具证）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* LogTwoBridge.v —— 席位 CZB12（批次 E-STAGING-CZB12）             *)
 (* T61b 尾工 C2：UpReqConstEnvelope.v:22「对接 real_log 2 需 log_seq  *)
 (* 桥，独立工程，挂账」之 dyadic 装载件（轻–中档）。                   *)
@@ -129,7 +140,7 @@ Proof. intros eps Heps. exact (c3e_env_rate_ln2 eps Heps). Qed.
 (*    常数投影归一）；上件 = real_log_le_linear_B（m − 1 形）。            *)
 (* ============================================================ *)
 Lemma ltb_two_Qpos : Qlt 0 (2#1)%Q.
-Proof. unfold Qlt, Qlt_bool. reflexivity. Qed.
+Proof. unfold Qlt, Qlt_bool. exact eq_refl. Qed.
 
 Theorem ltb_log_two_machine_bounds :
   sigT (fun lo : Q => sigT (fun hi : Q =>

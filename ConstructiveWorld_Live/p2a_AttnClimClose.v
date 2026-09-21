@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   p2a_attn_tv_seq_clim_zero（原 L112，2 句玩具证）                     *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* p2a_AttnClimClose.v —— 席 CZC10（E-STAGING-CZC10）              *)
 (*   论文2《自由能原理与注意力Gibbs桥》假设消融施工：T56 普查档条 2-8   *)
 (*   （B 可消融，坐标 L978；§9.4 开放项 5 的 clim 半边）。            *)
@@ -120,10 +130,7 @@ Theorem p2a_attn_tv_seq_clim_zero :
   real_lim tv_seq real_zero.
 Proof.
   intros tv_seq delta Hd0 Hd1 Hstep Hnonneg Hu0.
-  exact (p2a_attn_clim_zero tv_seq (real_plus real_one (real_opp delta))
-           (one_minus_delta_pos_real delta Hd1)
-           (one_minus_delta_lt_one_real delta Hd0)
-           Hstep Hnonneg Hu0).
+  exact (p2a_attn_clim_zero tv_seq (real_plus real_one (real_opp delta))           (one_minus_delta_pos_real delta Hd1)           (one_minus_delta_lt_one_real delta Hd0)           Hstep Hnonneg Hu0).
 Qed.
 
 (* ============ 预算伴件：clim 的单向 Q-eps 预算形 ============ *)

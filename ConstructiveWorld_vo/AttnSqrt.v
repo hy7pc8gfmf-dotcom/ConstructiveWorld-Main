@@ -224,7 +224,7 @@ Qed.
 (* 见证（字面形式）：d := r·r（Id 自反；即「r 即 √(r²)」的命名式） *)
 Lemma sqrt_witness_sq : forall k : nat,
   sqrt_witness (mult (nat_to_R k) (nat_to_R k)) (nat_to_R k).
-Proof. intro k. exact id_refl. Qed.
+Proof. intro k. exact (@id_refl _ (mult (nat_to_R k) (nat_to_R k))). Qed.
 
 (* 见证（非平凡形式）：d := nat_to_R (k·k) == nat_to_R k · nat_to_R k
    （由乘法同态 nat_to_R_mult_hom 给出——k² 维数的真见证）      *)

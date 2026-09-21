@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t12_elbo_tight_forward_bool（原 L356，3 句玩具证）                   *)
+(*   t12_elbo_tight_backward（原 L268，4 句玩具证）                       *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqELBOTight.v *)
 (* *)
 (* 目的： 定理 4.8 elbo_tight 的 Real 层可达形组装。 *)
@@ -279,18 +290,10 @@ Theorem t12_elbo_tight_backward :
   real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
           (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos).
 Proof.
-  intros S real_sum_over_S sumf_ext real_base_loss D D_pos Z_align_r Z_align_r_pos
-         q Hq Hpoint.
+  intros S real_sum_over_S sumf_ext real_base_loss D D_pos Z_align_r Z_align_r_pos         q Hq Hpoint.
   unfold real_elbo, real_evidence.
-  apply (RealSetoid.real_eq_opp_compat
-           (real_free_energy S real_sum_over_S real_base_loss D q Hq)
-           (real_free_energy S real_sum_over_S real_base_loss D
-              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
-              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))).
-  exact (rfep_free_energy_ext_r S real_sum_over_S sumf_ext real_base_loss D q
-           (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hq (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hpoint).
+  apply (RealSetoid.real_eq_opp_compat           (real_free_energy S real_sum_over_S real_base_loss D q Hq)           (real_free_energy S real_sum_over_S real_base_loss D              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))).
+  exact (rfep_free_energy_ext_r S real_sum_over_S sumf_ext real_base_loss D q           (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hpoint).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -370,20 +373,8 @@ Theorem t12_elbo_tight_forward_bool :
             (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos s).
 Proof.
   intros real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight s.
-  apply (t1_gibbe2_gibbs_equality_bool q
-           (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hq
-           (real_boltzmann_dist_r_pos bool real_base_loss D D_pos Z_align_r Z_align_r_pos)
-           Hnormq Hnormb).
-  exact (t12_tight_kl_zero bool
-           (fun f : bool -> Real => real_list_sum bool f [true; false])
-           (fun (f g : bool -> Real)
-                (Hfg : forall s : bool, real_eq (f s) (g s)) =>
-              real_list_sum_ext bool f g [true; false] Hfg)
-           (fun f g : bool -> Real => real_list_sum_add bool f g [true; false])
-           (fun (a : Real) (f : bool -> Real) =>
-              real_list_sum_linear bool a f [true; false])
-           real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight).
+  apply (t1_gibbe2_gibbs_equality_bool q           (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq           (real_boltzmann_dist_r_pos bool real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hnormq Hnormb).
+  exact (t12_tight_kl_zero bool           (fun f : bool -> Real => real_list_sum bool f [true; false])           (fun (f g : bool -> Real)                (Hfg : forall s : bool, real_eq (f s) (g s)) =>              real_list_sum_ext bool f g [true; false] Hfg)           (fun f g : bool -> Real => real_list_sum_add bool f g [true; false])           (fun (a : Real) (f : bool -> Real) =>              real_list_sum_linear bool a f [true; false])           real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight).
 Qed.
 
 (* ---------------------------------------------------------- *)

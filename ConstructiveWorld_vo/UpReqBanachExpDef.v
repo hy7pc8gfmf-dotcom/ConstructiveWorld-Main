@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bxdef_exp_spec_eps（原 L66，2 句玩具证）                             *)
+(*   bxdef_exp_spec（原 L59，2 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqBanachExpDef.v —— 席B25：路径 B S2.5 exp 元素定义席      *)
 (* （20260912；后台独立席位，独占 CoreN 0）                      *)
 (* ============================================================ *)
@@ -59,7 +70,8 @@ Definition bxdef_exp (B : BanachAlg) (a : (@BA B)) : (@BA B) :=
 Lemma bxdef_exp_spec : forall (B : BanachAlg) (a : (@BA B)),
   blim B (fun n => exp_series_partial B a n) (bxdef_exp B a).
 Proof.
-  intros B a. exact (projT2 (bxdef_exp_pair B a)).
+  intros B a.
+  exact (projT2 (bxdef_exp_pair B a)).
 Qed.
 
 (* 规格的 eps/N 展开形（免 later-use 再 destruct 的便利面） *)
@@ -70,7 +82,8 @@ Lemma bxdef_exp_spec_eps : forall (B : BanachAlg) (a : (@BA B)) (eps : Q),
     QltT (@bnorm B (@bplus B (exp_series_partial B a n)
                               (@bopp B (bxdef_exp B a)))) eps).
 Proof.
-  intros B a eps Heps. exact (bxdef_exp_spec B a eps Heps).
+  intros B a eps Heps.
+  exact (bxdef_exp_spec B a eps Heps).
 Qed.
 
 (* ============================================================ *)

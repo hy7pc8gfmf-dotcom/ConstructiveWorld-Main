@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T262 台账席 战役包W（tier2 十三批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   hpw_half_step（原 L76，结构性重演／显式见证直取）                            *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblHalfPow.v —— arch_decay 几何衰减谱系供给件                       *)
 (*                                                                *)
 (* 使命：为 arch_decay 衰减语句提供可计算见证的几何衰减谱系。             *)
@@ -77,8 +87,8 @@ Lemma hpw_half_step : forall n : nat,
   QleT' (q_pow (1 / 2)%Q (Datatypes.S n)) ((1 / 2)%Q * q_pow (1 / 2)%Q n).
 Proof.
   intro n.
-  apply Qle_to_QleT'.
-  apply qeq_le. reflexivity.
+  exact (Qle_to_QleT' _ _
+  (qeq_le _ _ (Qeq_refl ((1 / 2)%Q * q_pow (1 / 2)%Q n)))).
 Qed.
 
 (* ============================================================ *)
@@ -90,9 +100,9 @@ Corollary hpw_half_pow_inv_le : forall t : nat,
         (1 / (Z.of_nat (Datatypes.S t + 1)%nat # 1)).
 Proof.
   intro t.
-  apply Qle_to_QleT'.
-  exact (q_half_pow_le_inv (Datatypes.S t)).
+  exact (Qle_to_QleT' _ _ (q_half_pow_le_inv (Datatypes.S t))).
 Qed.
+
 
 (* ============================================================ *)
 (* §C · Qfloor 形接口（1#Pos.of_succ_nat 形，S4B 谱系同形对接）            *)

@@ -77,7 +77,7 @@ Definition ln2b_X : Real :=
     (lic_seq_cauchy ln2i_x ln2i_e ln2i_tail ln2i_vanish).
 
 Lemma ln2b_X_proj : forall k : nat, projT1 ln2b_X k == ln2i_x k.
-Proof. intro k. reflexivity. Qed.
+Proof. intro k. unfold ln2b_X. cbn [projT1]. exact (Qeq_refl (ln2i_x k)). Qed.
 
 (* 整系数有理线性形式在基准实数上的绝对值（supply 的 real 面界所约束的对象）：
    ln2b_line A B n = |A_n·X − B_n|，其第 k 投影 = |A_n·x_k − B_n|（Q 层）。 *)

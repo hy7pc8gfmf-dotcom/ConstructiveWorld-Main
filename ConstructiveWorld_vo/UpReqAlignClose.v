@@ -1,3 +1,13 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uac_npx_cross（原 L182，2 句强证）	*)
+(* ============================================================ *)
+
 (* UpReqAlignClose.v — 席位CYC6（批次 E-STAGING-CYC6）T42-C1 桥首步施工件
    ====================================================================
    使命：T42-C1桥判定.md「可建」裁决的首步装载——UpReqAlign.ReqAlignCore
@@ -586,3 +596,6 @@ End UacClose.
 Print Assumptions uac_pi_next_log_decomp.
 Print Assumptions uac_req_backward_kl_identity.
 Print Assumptions uac_req_policy_improvement_mono.
+
+(* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)
+Print Assumptions uac_npx_cross.

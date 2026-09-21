@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   lgz_log_z_wall_lpo（原 L540，2 句玩具证）                            *)
+(*   lgz_half_eq（原 L254，1 句玩具证）                                   *)
+(*   lgz_q_pos_quarterT（原 L100，2 句玩具证）                            *)
+(*   lgz_q_pos_quarter（原 L94，2 句玩具证）                              *)
+(*   lgz_q_pos_half（原 L88，2 句玩具证）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLogZWallEquiv.v *)
 (* *)
 (* 目的： log Z ≤ 0 精确形墙（第四面墙）与受限 LPO 的归约定理化。 *)
@@ -88,20 +102,20 @@ Local Open Scope Q_scope.
 Lemma lgz_q_pos_half : Qlt 0 (1#2).
 Proof.
   apply (proj2 (Qlt_alt 0 (1#2))).
-  reflexivity.
+  exact (@eq_refl comparison Lt).
 Qed.
 
 Lemma lgz_q_pos_quarter : Qlt 0 (1#4).
 Proof.
   apply (proj2 (Qlt_alt 0 (1#4))).
-  reflexivity.
+  exact (@eq_refl comparison Lt).
 Qed.
 
 Lemma lgz_q_pos_quarterT : QltT 0 (1#4).
 Proof.
-  apply Qlt_to_QltT.
-  exact lgz_q_pos_quarter.
+  exact (Qlt_to_QltT 0 (1#4) lgz_q_pos_quarter).
 Qed.
+
 
 (* 位移三件与 Qabs 界拆分（lra 封口；非线性单项式按原子抽象） *)
 Lemma lgz_q_lt_add_l : forall a b c : Q, a + b < c -> a < c - b.
@@ -254,8 +268,7 @@ Definition lgz_half : Real :=
 Lemma lgz_half_eq :
   real_eq (real_mult (real_plus real_one real_one) lgz_half) real_one.
 Proof.
-  exact (real_inv_pos_correct (real_plus real_one real_one)
-           (real_plus_positive real_one real_one real_lt_zero_one real_lt_zero_one)).
+  exact (real_inv_pos_correct (real_plus real_one real_one)           (real_plus_positive real_one real_one real_lt_zero_one real_lt_zero_one)).
 Qed.
 
 (* half < 1：隙 3/8 *)

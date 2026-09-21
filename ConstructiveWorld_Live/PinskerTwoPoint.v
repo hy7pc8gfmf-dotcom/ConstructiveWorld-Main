@@ -439,10 +439,10 @@ Theorem p2_kl2_nonneg_b : forall (p q : Real)
   real_le_b real_zero (p2_kl2 p q Hp Hq Hp1 Hq1).
 Proof.
   intros p q Hp Hq Hp1 Hq1 Hne.
-  apply real_le_to_le_b.
-  unfold real_le.
-  left.
-  exact (p2_kl2_pos p q Hp Hq Hp1 Hq1 Hne).
+  exact (real_le_to_le_b real_zero (p2_kl2 p q Hp Hq Hp1 Hq1)
+    (@inl (real_lt real_zero (p2_kl2 p q Hp Hq Hp1 Hq1))
+          (real_eq real_zero (p2_kl2 p q Hp Hq Hp1 Hq1))
+     (p2_kl2_pos p q Hp Hq Hp1 Hq1 Hne))).
 Qed.
 
 (* ---- 文尾假设审计 ---- *)

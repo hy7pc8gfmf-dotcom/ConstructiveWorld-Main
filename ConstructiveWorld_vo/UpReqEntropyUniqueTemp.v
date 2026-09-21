@@ -382,8 +382,18 @@ Theorem t22_entropy_max_unique_temp_bool :
                  T T_pos energy s).
 Proof.
   intros energy T T_pos p Hp Hnp Henergy Hent s.
-  apply (t1_gibbe2_gibbs_equality_bool p           (real_boltzmann_dist_temp bool t22_bool_sumf t22_bool_sum_pos              T T_pos energy)           Hp           (real_boltzmann_dist_temp_pos bool t22_bool_sumf t22_bool_sum_pos              T T_pos energy)           Hnp           (real_boltzmann_dist_temp_normalized bool t22_bool_sumf t22_bool_sum_pos              t22_bool_sum_ext t22_bool_sum_linear T T_pos energy)).
-  exact (t22_entropy_eq_kl_zero bool t22_bool_sumf t22_bool_sum_pos           t22_bool_sum_ext t22_bool_sum_linear t22_bool_sum_add           T T_pos energy p Hp Hnp Henergy Hent).
+  exact (t1_gibbe2_gibbs_equality_bool p
+           (real_boltzmann_dist_temp bool t22_bool_sumf t22_bool_sum_pos
+              T T_pos energy)
+           Hp
+           (real_boltzmann_dist_temp_pos bool t22_bool_sumf t22_bool_sum_pos
+              T T_pos energy)
+           Hnp
+           (real_boltzmann_dist_temp_normalized bool t22_bool_sumf t22_bool_sum_pos
+              t22_bool_sum_ext t22_bool_sum_linear T T_pos energy)
+           (t22_entropy_eq_kl_zero bool t22_bool_sumf t22_bool_sum_pos
+              t22_bool_sum_ext t22_bool_sum_linear t22_bool_sum_add
+              T T_pos energy p Hp Hnp Henergy Hent) s).
 Qed.
 
 (* ============================================================ *)

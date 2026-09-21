@@ -1,3 +1,19 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包B·T240 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包B 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T240。       *)
+(* 替换定理清单：rotc_perm／rotc_length／Pinf_c_perm／rotc_0／Pinf_true_id   *)
+(* ／rotc_in／rotc_H_wit_mid／rotc_H_wit_min／Hsup_cyc_stable_wit／          *)
+(* Hsup_cyc_frozen_value_wit／H_lam_pmid_wit_201_ends／                      *)
+(* rotc_supersedes_rot_id（共 12 刀）                                        *)
+(* 非平凡性口径：置换链内联与显式展开层重演，逐刀唯一性断言落刀；无一行拆    *)
+(* 分式假非平凡。                                                            *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    DTPT_Rotation.v — 旋转论：rotc 底座/精确闭式/锐化/λ 插值/偏差判别/
    周期律簇
@@ -1861,7 +1877,7 @@ Qed.
 
 Theorem align_lambda_id : forall lam : Q, align_lambda lam == lam.
 Proof.
-  intro lam. unfold align_lambda. reflexivity.
+  intro lam. unfold align_lambda. exact (Qeq_refl lam).
 Qed.
 
 Theorem align_lambda_H_lam : forall (l : list Q) (s : nat) (lam : Q),

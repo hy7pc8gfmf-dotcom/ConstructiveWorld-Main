@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T260 台账席 战役包U（tier2 批量面第十一批）   *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列玩具位中真刀位  *)
+(* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
+(* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
+(* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
+(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 清单：                                                          *)
+(*   c3e_real_zero_proj（原 L165，显式见证微刀 1 处）                        *)
+(*   c3e_ln2_proj（原 L471，显式见证微刀 1 处）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqConstEnvelope.v —— 席 Q9（EXPL1 候选 C3 深探席）          *)
 (*   三常数包络母定理：显式尾界双边有理包络                        *)
 (*   （相位=分析重转编译重）                                      *)
@@ -163,7 +175,7 @@ Qed.
 
 (* projT1 real_zero k == 0（real_zero Defined 直约） *)
 Lemma c3e_real_zero_proj : forall k : nat, projT1 real_zero k == 0.
-Proof. intro k. reflexivity. Qed.
+Proof. intro k. exact (Qeq_refl (projT1 real_zero k)). Qed.
 
 (* ============================================================ *)
 (* S1. 母定理：显式尾界双边有理包络（c3e_env_mother）                 *)
@@ -469,7 +481,7 @@ Defined.
 
 (* ln2 柯西实数投影（定义性） *)
 Lemma c3e_ln2_proj : forall k : nat, projT1 c3e_ln2_real k == c3e_l2_sum k.
-Proof. intro k. reflexivity. Qed.
+Proof. intro k. exact (Qeq_refl (projT1 c3e_ln2_real k)). Qed.
 
 (* ln2 子件：经母定理导出（proof 即 c3e_env_mother 实例，禁平行抄写） *)
 Theorem c3e_env_ln2 : forall n : nat,

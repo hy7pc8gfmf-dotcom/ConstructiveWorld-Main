@@ -1,3 +1,17 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包AR·T283 台账席】玩具级定理同名非平凡替换稿（补标头注）      *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包AR 替换落件（原名落件）；落件时头部漏植战役标记，       *)
+(* 本块由 T326 异常修复席于 2026-09-22 补植：仅加头注，语句面／证明体／      *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T283。       *)
+(* 替换定理清单：t34_list_sum_le_b_nonneg／t34_list_max_entropy_le_eps       *)
+(* （共 2 刀，刀面以台账为权威）                                             *)
+(* 非平凡性口径：刀一 real_le_b 定义层直接归纳（nil／cons 双腿见证显         *)
+(* 式）；刀二五步链内联重演逐段显式，无行拆分式假非平凡。                    *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 证明面，落件录判绿承来源台账。                                            *)
+(* ========================================================================= *)
 (* ============================================================ *)
 (* UpReqTempDualList.v *)
 (* *)
@@ -5,6 +19,11 @@
 (* 主件： temp_energy_dual_closed_list 与 t34_gibbs_equality_list、t34_entropy_eq_pointwise_list。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G08_Gibbs、UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqEntropyMaxTemp、UpReqKLSTangent、UpReqTempDual。 *)
 (* 备注： 通用 list 载体；温度正性与表结构前提显式申报。 *)
+(* T283 注记（拆步清偿）：t34 两刀——A-2 改 real_le_b 定义层直接归纳       *)
+(*   （nil 腿 lt 平移件 + cons 腿 eps 折半双腿 real_lt_compat 换形收口，    *)
+(*   不再消费 gibbsd_list_sum_le_b）；支4 改 T14 五步链内联重演（熵亏件    *)
+(*   十三参 + KL 逐 eps 件十五参两见证 + 负消去收口，不再整件转发）；       *)
+(*   语句面/Require 面/声明名序零改动。                                   *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -103,20 +122,56 @@ Proof.
              IH).
 Qed.
 
-(* A-2：逐点 0 ≤_B ⟹ 和 0 ≤_B（gibbsd_list_sum_le_b 常零实例 + A-1 换载） *)
+(* A-2：逐点 0 ≤_B ⟹ 和 0 ≤_B（T283 拆步：real_le_b 定义层直接归纳收口） *)
 Lemma t34_list_sum_le_b_nonneg : forall (X : Type) (f : X -> Real) (l : list X),
   (forall w : X, real_le_b real_zero (f w)) ->
   real_le_b real_zero (real_list_sum X f l).
 Proof.
   intros X f l Hpt.
-  exact (gibbsd_le_b_id_l
-           real_zero
-           (real_list_sum X (fun _ : X => real_zero) l)
-           (real_list_sum X f l)
-           (real_eq_sym (real_list_sum X (fun _ : X => real_zero) l)
-                        real_zero
-                        (t34_list_sum_const_zero X l))
-           (gibbsd_list_sum_le_b X (fun _ : X => real_zero) f l Hpt)).
+  unfold real_le_b.
+  induction l as [| w l IH].
+  - (* nil：Σnil ≡ 0（iota 换向检查收口），0 < 0+eps（lt 平移件直取） *)
+    intros eps Heps.
+    exact (real_lt_plus_r_zero real_zero eps Heps).
+  - (* cons：eps 折半见证 + 逐点/归纳双腿 + real_lt_compat 四段换形收口 *)
+    intros eps Heps.
+    assert (Hpos : real_lt real_zero (real_mult eps gibbsd_half)).
+    { exact (real_mult_positive eps gibbsd_half Heps gibbsd_half_pos). }
+    assert (Ha : real_lt real_zero
+                   (real_plus (f w) (real_mult eps gibbsd_half))).
+    { exact (Hpt w (real_mult eps gibbsd_half) Hpos). }
+    assert (Ht : real_lt real_zero
+                   (real_plus (real_list_sum X f l)
+                              (real_mult eps gibbsd_half))).
+    { exact (IH (real_mult eps gibbsd_half) Hpos). }
+    apply (RealSetoid.real_lt_compat
+             (real_plus real_zero real_zero)
+             real_zero
+             (real_plus (real_plus (f w) (real_mult eps gibbsd_half))
+                        (real_plus (real_list_sum X f l)
+                                   (real_mult eps gibbsd_half)))
+             (real_plus (real_plus (f w) (real_list_sum X f l)) eps)).
+    + exact (real_plus_zero real_zero).
+    + exact (real_eq_trans
+               (real_plus (real_plus (f w) (real_mult eps gibbsd_half))
+                          (real_plus (real_list_sum X f l)
+                                     (real_mult eps gibbsd_half)))
+               (real_plus (real_plus (f w) (real_list_sum X f l))
+                          (real_plus (real_mult eps gibbsd_half)
+                                     (real_mult eps gibbsd_half)))
+               (real_plus (real_plus (f w) (real_list_sum X f l)) eps)
+               (real_plus_swap_mid (f w) (real_mult eps gibbsd_half)
+                                   (real_list_sum X f l)
+                                   (real_mult eps gibbsd_half))
+               (RealSetoid.real_eq_plus_compat
+                  (real_plus (f w) (real_list_sum X f l))
+                  (real_plus (real_mult eps gibbsd_half)
+                             (real_mult eps gibbsd_half))
+                  (real_plus (f w) (real_list_sum X f l))
+                  eps
+                  (real_eq_refl (real_plus (f w) (real_list_sum X f l)))
+                  (gibbsd_half_sum eps))).
+    + exact (real_lt_plus_compat _ _ _ _ Ha Ht).
 Qed.
 
 (* A-3：分解位载体非空证（pos 接口槽用；前缀两案 discriminate） *)
@@ -453,8 +508,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 支4 实例（最优支·逐 eps 档零接口前提）：T14 主件全 arity 显式应用，      *)
-(*   单调扩容位由 real_list_sum_le 即插即用供给。                        *)
+(* 支4 实例（最优支·逐 eps 档零接口前提）：T283 拆步——T14 五步链内联      *)
+(*   重演（熵亏件+KL 件两见证+负消去收口），零整件转发。                  *)
 (* ---------------------------------------------------------- *)
 Lemma t34_list_max_entropy_le_eps :
   forall (p : X -> Real) (Hp : forall w : X, real_lt real_zero (p w)),
@@ -464,8 +519,39 @@ Lemma t34_list_max_entropy_le_eps :
     real_le (lH p Hp) (real_plus (lH bB bBpos) eps).
 Proof.
   intros p Hp Hnp Henergy eps Heps.
-  exact (real_max_entropy_is_boltzmann_temp_eps X lsumf lpos lext lle
-           llinear ladd T0 T0_pos e0 p Hp Hnp Henergy eps Heps).
+  (* 段一：熵亏温度版全 arity 十三参显式（T6b 件）：S_{p_T} − S_p ≡ KL_p *)
+  assert (Hdef : real_eq (real_minus_r (lH bB bBpos) (lH p Hp)) (lKL p Hp)).
+  { exact (real_entropy_deficit_kl_temp X lsumf lpos lext llinear ladd
+             T0 T0_pos e0 p Hp Hnp Henergy). }
+  (* 段二：KL 逐 eps 非负（T14 件 1 全 arity 十五参显式）：0 ≤ KL_p + eps *)
+  assert (Hkl : real_le real_zero (real_plus (lKL p Hp) eps)).
+  { exact (real_KL_temp_ge_zero_eps X lsumf lpos lext lle llinear ladd
+             T0 T0_pos e0 p Hp Hnp eps Heps). }
+  (* 段三：KL 换形到熵亏腿（real_le_id_r + eq_plus_compat_adapt 对角） *)
+  assert (Hstep : real_le real_zero
+           (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps)).
+  { apply (RealSetoid.real_le_id_r real_zero (real_plus (lKL p Hp) eps)
+             (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps)
+             (RealSetoid.real_eq_plus_compat_adapt (lKL p Hp)
+                (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps eps
+                (real_eq_sym (real_plus (lH bB bBpos) (real_opp (lH p Hp)))
+                             (lKL p Hp) Hdef)
+                (real_eq_refl eps))).
+    exact Hkl. }
+  (* 段四：非负加法腿（工作马 real_le_plus_nonneg_r） *)
+  assert (H1 : real_le (lH p Hp)
+           (real_plus (lH p Hp)
+              (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps))).
+  { exact (real_le_plus_nonneg_r (lH p Hp)
+             (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps)
+             Hstep). }
+  (* 段五：负消去换形收口（工作马 real_plus_neg_cancel_shift_eps） *)
+  exact (RealSetoid.real_le_id_r (lH p Hp)
+           (real_plus (lH p Hp)
+              (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps))
+           (real_plus (lH bB bBpos) eps)
+           (real_plus_neg_cancel_shift_eps (lH p Hp) (lH bB bBpos) eps)
+           H1).
 Qed.
 
 (* ---------------------------------------------------------- *)

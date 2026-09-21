@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rwl_s14_pointwise_to_tail（原 L382，4 句玩具证）                     *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqResidWallEquiv.v *)
 (* *)
 (* 目的： GEO1 残墙三段定理化收账——G07 逐项可比墙 / S14 逐点界墙 /        *)
@@ -382,7 +392,9 @@ Definition rwl_s14_tail_cert (Sq : nat -> Q) (ub : Q) : Set :=
 Theorem rwl_s14_pointwise_to_tail : forall (Sq : nat -> Q) (ub : Q),
   rwl_s14_ptw_wall Sq ub -> rwl_s14_tail_cert Sq ub.
 Proof.
-  intros Sq ub H. exists 0%nat. intros n _.
+  intros Sq ub H.
+  exists 0%nat.
+  intros n _.
   exact (H n).
 Qed.
 

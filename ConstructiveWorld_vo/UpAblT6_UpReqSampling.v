@@ -7,8 +7,8 @@
 (*   定义性收口，cons 支双腿缝合（ext/le＝逐点腿＋归纳腿；linear＝      *)
 (*   distrib 右分配中项链；add＝assoc-comm 换位内项链，弃不可达之       *)
 (*   UpReqAlgebra req_plus_exchange 改纯字段链）；pos＝中转层脱钩        *)
-(*   直取 sumd_list_sum_pos。挂账（原体保留）：A5 swap_cc（双层和       *)
-(*   换序，内外双重重排超切片边界）；B6 eq_list（sumd_sum_eq_list        *)
+(*   直取 sumd_list_sum_pos。A5 swap_cc 已由 T278 集中清偿（载体归纳    *)
+(*   换形：Hadd 加法分配泛型件＋Hsw 双列表换序归纳原地重演，弃出节转发）；B6 eq_list（sumd_sum_eq_list        *)
 (*   本体即定义性恒等 req_refl，任何替换体与之逐字同＝唯一形不化）。     *)
 (* ============================================================ *)
 
@@ -28,10 +28,9 @@
 (*    A2 uabT6_usamp_sum_linear   ←L107 sum_linear 放电 sumd_sum_linear@:135 *)
 (*    A3 uabT6_usamp_sum_add      ←L110 sum_add    放电 sumd_sum_add@:161 *)
 (*    A4 uabT6_usamp_sum_le       ←L113 sum_le     放电 sumd_sum_le@:203 *)
-(*    A5 uabT6_usamp_sum_swap_cc  ←L132 sum_swap_cc 放电 sumd_sum_swap@:384 *)
-(*        （swap 特形：f 双标函数参 f : S -> S -> R，内外两层 sumf 实例位；     *)
-(*          T3a 移交单注意位预勘命中——先 Check 出节签名再落语句，              *)
-(*          sumd_sum_swap 出节形与本件语句面逐字同构）                        *)
+(*    A5 uabT6_usamp_sum_swap_cc  ←L132 sum_swap_cc（T278 清偿：Hadd＋      *)
+(*        Hsw 双归纳原地重演，零新增 Require；原放电 sumd_sum_swap@:384      *)
+(*        出节转发体弃用）                              *)
 (*   §B ReqBoundedSoftmax（L700-747）：                                *)
 (*    B1 uabT6_bsoft_sum_ext      ←L707 sum_ext    放电 sumd_sum_ext@:112 *)
 (*    B2 uabT6_bsoft_sum_linear   ←L709 sum_linear 放电 sumd_sum_linear@:135 *)
@@ -144,7 +143,7 @@ Proof.
              (sumd_list_sum S g t) (H x) IH).
 Qed.
 
-(* A5 ←L132 sum_swap_cc（swap 特形：双标函数参，内外两层 sumf 实例位全换；放电 sumd_sum_swap@384） *)
+(* A5 ←L132 sum_swap_cc（swap 特形：双标函数参，内外两层 sumf 实例位全换；T278 载体归纳换形原地重演） *)
 Theorem uabT6_usamp_sum_swap_cc :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f : S -> S -> R),
@@ -152,7 +151,107 @@ Theorem uabT6_usamp_sum_swap_cc :
         (sumd_sumf S enum (fun s' : S => sumd_sumf S enum (fun s : S => f s s'))).
 Proof.
   intros R RIS S enum f.
-  exact (sumd_sum_swap S enum f).
+  unfold sumd_sumf.
+  assert (Hadd : forall (l : list S) (u v : S -> R),
+    req (sumd_list_sum S (fun s : S => plus (u s) (v s)) l)
+        (plus (sumd_list_sum S u l) (sumd_list_sum S v l))).
+  { intros l u v.
+    induction l as [| w tl IHl].
+    - exact (req_sym (plus zero zero) zero (plus_zero zero)).
+    - exact (req_trans
+        (plus (plus (u w) (v w)) (sumd_list_sum S (fun s : S => plus (u s) (v s)) tl))
+        (plus (plus (u w) (v w)) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl)))
+        (plus (plus (u w) (sumd_list_sum S u tl)) (plus (v w) (sumd_list_sum S v tl)))
+        (req_plus_compat (plus (u w) (v w)) (plus (u w) (v w))
+           (sumd_list_sum S (fun s : S => plus (u s) (v s)) tl)
+           (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl))
+           (req_refl (plus (u w) (v w))) IHl)
+        (req_trans
+           (plus (plus (u w) (v w)) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl)))
+           (plus (u w) (plus (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl))))
+           (plus (plus (u w) (sumd_list_sum S u tl)) (plus (v w) (sumd_list_sum S v tl)))
+           (req_sym
+              (plus (u w) (plus (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl))))
+              (plus (plus (u w) (v w)) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl)))
+              (plus_assoc (u w) (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl))))
+           (req_trans
+              (plus (u w) (plus (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl))))
+              (plus (u w) (plus (sumd_list_sum S u tl) (plus (v w) (sumd_list_sum S v tl))))
+              (plus (plus (u w) (sumd_list_sum S u tl)) (plus (v w) (sumd_list_sum S v tl)))
+              (req_plus_compat (u w) (u w)
+                 (plus (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl)))
+                 (plus (sumd_list_sum S u tl) (plus (v w) (sumd_list_sum S v tl)))
+                 (req_refl (u w))
+                 (req_trans
+                    (plus (v w) (plus (sumd_list_sum S u tl) (sumd_list_sum S v tl)))
+                    (plus (plus (v w) (sumd_list_sum S u tl)) (sumd_list_sum S v tl))
+                    (plus (sumd_list_sum S u tl) (plus (v w) (sumd_list_sum S v tl)))
+                    (plus_assoc (v w) (sumd_list_sum S u tl) (sumd_list_sum S v tl))
+                    (req_trans
+                       (plus (plus (v w) (sumd_list_sum S u tl)) (sumd_list_sum S v tl))
+                       (plus (plus (sumd_list_sum S u tl) (v w)) (sumd_list_sum S v tl))
+                       (plus (sumd_list_sum S u tl) (plus (v w) (sumd_list_sum S v tl)))
+                       (req_plus_compat (plus (v w) (sumd_list_sum S u tl))
+                          (plus (sumd_list_sum S u tl) (v w))
+                          (sumd_list_sum S v tl) (sumd_list_sum S v tl)
+                          (plus_comm (v w) (sumd_list_sum S u tl))
+                          (req_refl (sumd_list_sum S v tl)))
+                       (req_sym
+                          (plus (sumd_list_sum S u tl) (plus (v w) (sumd_list_sum S v tl)))
+                          (plus (plus (sumd_list_sum S u tl) (v w)) (sumd_list_sum S v tl))
+                          (plus_assoc (sumd_list_sum S u tl) (v w) (sumd_list_sum S v tl))))))
+              (plus_assoc (u w) (sumd_list_sum S u tl)
+                 (plus (v w) (sumd_list_sum S v tl)))))). }
+  assert (Hsw : forall l1 l2 : list S,
+    req (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) l1)
+        (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') l1) l2)).
+  { intros l1 l2.
+    induction l1 as [| x t IH].
+    - induction l2 as [| y t2 IH2].
+      + exact (req_refl zero).
+      + exact (req_trans zero
+            (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+            (plus zero
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+            IH2
+            (req_sym
+               (plus zero
+                  (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+               (req_trans
+                  (plus zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+                  (plus
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+                     zero)
+                  (sumd_list_sum S
+                     (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+                  (plus_comm zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+                  (plus_zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))))).
+    - exact (req_trans
+            (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) t))
+            (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2))
+            (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') (x :: t)) l2)
+            (req_plus_compat (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) t)
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2)
+               (req_refl (sumd_list_sum S (fun s' : S => f x s') l2)) IH)
+            (req_sym
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') (x :: t)) l2)
+               (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+                  (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2))
+               (Hadd l2 (fun s' : S => f x s')
+                  (fun s' : S => sumd_list_sum S (fun s : S => f s s') t)))). }
+  exact (Hsw enum enum).
 Qed.
 
 (* ============ §B ReqBoundedSoftmax（UpReqSampling.v L700-747） ============ *)

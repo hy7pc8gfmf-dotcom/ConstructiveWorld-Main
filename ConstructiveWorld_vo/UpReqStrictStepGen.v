@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ssg_half_eps_lt（原 L197，2 句玩具证）                               *)
+(*   ssg_quarter_eps_lt（原 L189，2 句玩具证）                            *)
+(*   ssg_half_lt（原 L95，2 句玩具证）                                    *)
+(*   ssg_lt_mul_one（原 L84，3 句玩具证）                                 *)
+(*   ssg_q_lt_one（原 L61，1 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqStrictStepGen.v —— 严格步生成器族 STG-A（DISCH1 追加件）  *)
 (*                                                              *)
 (* 目的： 把散落全库的 eps 拆分惯用法收敛为接口级命名引理族。      *)
@@ -86,8 +100,7 @@ Lemma ssg_lt_mul_one : forall c p : Real,
   real_lt (real_mult p c) p.
 Proof.
   intros c p Hc Hp.
-  apply (RealSetoid.real_lt_id_r (real_mult p c) (real_mult p real_one) p
-           (real_mult_one p)).
+  apply (RealSetoid.real_lt_id_r (real_mult p c) (real_mult p real_one) p           (real_mult_one p)).
   exact (real_lt_mult_compat c real_one p Hp Hc).
 Qed.
 

@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T258 台账席 战役包S（tier2 九批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ln2i_p2_succ（原 L64，2 句玩具证；裸 reflexivity→Qeq_refl 显式见证项 1 刀）*)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLn2Irrational.v                                          *)
 (*                                                               *)
 (* 目的：母定理 lic_irrational_criterion 的 ln2 实例供给件：           *)
@@ -62,7 +72,7 @@ Fixpoint ln2i_p2 (n : nat) : Q :=
   end.
 
 Lemma ln2i_p2_succ : forall m : nat, ln2i_p2 (Datatypes.S m) == ((2 # 1) * ln2i_p2 m)%Q.
-Proof. intro m. reflexivity. Qed.
+Proof. intro m. exact (Qeq_refl ((2 # 1) * ln2i_p2 m)%Q). Qed.
 
 Lemma ln2i_pow_ge : forall n : nat, (Datatypes.S n <= 2 ^ n)%nat.
 Proof.
@@ -100,8 +110,7 @@ Qed.
 Lemma ln2i_p2_ne0 : forall n : nat, ~ (ln2i_p2 n == 0%Q).
 Proof.
   intro n. intro Hc.
-  apply (Qlt_not_eq 0%Q (ln2i_p2 n) (ln2i_p2_pos n)).
-  apply Qeq_sym. exact Hc.
+  exact (Qlt_not_eq 0%Q (ln2i_p2 n) (ln2i_p2_pos n) (eq_sym Hc)).
 Qed.
 
 (* 2^{-m} = 2^{-(m+1)} + 2^{-(m+1)}（Qinv 形几何半恒等式） *)
@@ -237,8 +246,8 @@ Qed.
 Lemma ln2i_gsum_lt : forall n K : nat, Qlt (ln2i_gsum n K) (Qinv (ln2i_p2 n)).
 Proof.
   intros n K.
-  apply (Qle_lt_trans (ln2i_gsum n K) (ln2i_hsum n K) (Qinv (ln2i_p2 n)));
-    [apply ln2i_gsum_le_hsum | apply ln2i_hsum_lt].
+  exact (Qle_lt_trans (ln2i_gsum n K) (ln2i_hsum n K) (Qinv (ln2i_p2 n))
+           (ln2i_gsum_le_hsum n K) (ln2i_hsum_lt n K)).
 Qed.
 
 (* 部分和加法形：x_{n+K} == x_n + gsum n K *)

@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd1s9_ait_pack22_supplied（原 L189，2 句玩具证）                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD1S9_UpReqAttnIter.v —— FA-D1S9 数据供给大打包六梯 件①      *)
 (* 席位：FA-D1S9（普查批 D1-⑦ 六梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改  *)
 (*                                                              *)
@@ -191,41 +201,7 @@ Theorem uabd1s9_ait_pack22_supplied :
     uabd1s9_ait_pack22.
 Proof.
   intro Habnn.
-  exact (uabd1s9_ait_pack22_intro unit
-           (fun (f : unit -> Real) => f tt)
-           (fun (f g : unit -> Real)
-              (H : forall s : unit, req (f s) (g s)) => H tt)
-           (fun (a : Real) (f : unit -> Real) =>
-              req_refl (mult a (f tt)))
-           (fun (f g : unit -> Real) =>
-              req_refl (plus (f tt) (g tt)))
-           (fun (f g : unit -> Real)
-              (H : forall s : unit, le (f s) (g s)) => H tt)
-           (fun (f : unit -> Real)
-              (H : forall s : unit, le zero (f s)) => H tt)
-           (fun (f : unit -> Real) => le_refl (abs (f tt)))
-           Habnn
-           real_one real_lt_zero_one
-           (fun _ : unit => real_zero)
-           (exp_neg_pos (mult (inv_pos real_one real_lt_zero_one) real_zero))
-           (fun _ _ : unit => real_one)
-           (fun _ : unit => req_refl real_one)
-           (inv_pos (plus one one) real_two_pos)
-           (inv_pos_pos (plus one one) real_two_pos)
-           uabd1s9_ait_delta_lt_one_feed
-           (fun _ _ : unit =>
-              uabd1s9_ait_minor_feed
-                (inv_pos (plus one one) real_two_pos)
-                (exp_neg (mult (inv_pos real_one real_lt_zero_one) real_zero))
-                uabd1s9_ait_delta_lt_one_feed
-                (exp_neg_pos
-                   (mult (inv_pos real_one real_lt_zero_one) real_zero)))
-           (fun _ : unit => mult_one _)
-           (fun (a : Real) (Ha : lt zero a) (eps : Real) (Heps : lt zero eps) =>
-              r_arch_pow_attn_real
-                (inv_pos (plus one one) real_two_pos)
-                (inv_pos_pos (plus one one) real_two_pos)
-                uabd1s9_ait_delta_lt_one_feed a Ha eps Heps)).
+  exact (uabd1s9_ait_pack22_intro unit           (fun (f : unit -> Real) => f tt)           (fun (f g : unit -> Real)              (H : forall s : unit, req (f s) (g s)) => H tt)           (fun (a : Real) (f : unit -> Real) =>              req_refl (mult a (f tt)))           (fun (f g : unit -> Real) =>              req_refl (plus (f tt) (g tt)))           (fun (f g : unit -> Real)              (H : forall s : unit, le (f s) (g s)) => H tt)           (fun (f : unit -> Real)              (H : forall s : unit, le zero (f s)) => H tt)           (fun (f : unit -> Real) => le_refl (abs (f tt)))           Habnn           real_one real_lt_zero_one           (fun _ : unit => real_zero)           (exp_neg_pos (mult (inv_pos real_one real_lt_zero_one) real_zero))           (fun _ _ : unit => real_one)           (fun _ : unit => req_refl real_one)           (inv_pos (plus one one) real_two_pos)           (inv_pos_pos (plus one one) real_two_pos)           uabd1s9_ait_delta_lt_one_feed           (fun _ _ : unit =>              uabd1s9_ait_minor_feed                (inv_pos (plus one one) real_two_pos)                (exp_neg (mult (inv_pos real_one real_lt_zero_one) real_zero))                uabd1s9_ait_delta_lt_one_feed                (exp_neg_pos                   (mult (inv_pos real_one real_lt_zero_one) real_zero)))           (fun _ : unit => mult_one _)           (fun (a : Real) (Ha : lt zero a) (eps : Real) (Heps : lt zero eps) =>              r_arch_pow_attn_real                (inv_pos (plus one one) real_two_pos)                (inv_pos_pos (plus one one) real_two_pos)                uabd1s9_ait_delta_lt_one_feed a Ha eps Heps)).
 Qed.
 
 (* ============ 假设面收口申报 ============ *)

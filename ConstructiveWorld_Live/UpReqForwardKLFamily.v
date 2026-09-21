@@ -1,3 +1,14 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fkl_family（原 L356，1 句玩具证）                                    *)
+(*   fkl_pt_split_flip（原 L141，2 句玩具证）                             *)
+(* ============================================================ *)
+
 Set Printing Width 500.
 (* ============================================================ *)
 (* UpReqForwardKLFamily.v —— 席 Q6：GEO1 轨道缺 #1 前向 KL 族补缺席      *)
@@ -357,8 +368,7 @@ Theorem fkl_family :
   sigT (fun _ : fkl_leg_flip =>
     sigT (fun _ : fkl_leg_second_cross => fkl_leg_path_pt)).
 Proof.
-  exact (existT _ fkl_pt_split_flip
-           (existT _ fkl_pt_split_second_cross fkl_path_split_pt)).
+  exact (existT _ fkl_pt_split_flip           (existT _ fkl_pt_split_second_cross fkl_path_split_pt)).
 Qed.
 
 (* ---- 审计位 ---- *)

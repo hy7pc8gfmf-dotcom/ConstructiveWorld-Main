@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   t22b_not_optimal_of_kl_pos（原 L264，3 句玩具证）                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyUniqueNeg.v *)
 (* *)
 (* 目的： 定理 4.6c(b) 的显式分歧见证逆否形。 *)
@@ -283,13 +293,7 @@ Theorem t22b_not_optimal_of_kl_pos :
                   T T_pos energy)).
 Proof.
   intros p Hp Hnormp Henergy Hkl.
-  apply (real_lt_zero_minus
-           (real_entropy_dist S real_sum_over_S p Hp)
-           (real_entropy_dist S real_sum_over_S
-              (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved
-                 T T_pos energy)
-              (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved
-                 T T_pos energy))).
+  apply (real_lt_zero_minus           (real_entropy_dist S real_sum_over_S p Hp)           (real_entropy_dist S real_sum_over_S              (real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved                 T T_pos energy)              (real_boltzmann_dist_temp_pos S real_sum_over_S real_sum_pos_preserved                 T T_pos energy))).
   exact (t22b_entropy_deficit_pos_of_kl_pos p Hp Hnormp Henergy Hkl).
 Qed.
 

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   req_eg_minus_pos（原 L204，4 句玩具证）                              *)
+(*   req_eg_minus_def（原 L95，3 句玩具证）                               *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpEntropyGainReq.v *)
 (* *)
 (* 目的： 熵增益族的 req 抽象载体镜像件。 *)
@@ -94,7 +105,8 @@ Variable lt_plus_compat_lt_le : forall a b c d : R,
 (* ===== 件 2：减法 δ 件（req_minus 定义性展开；母件 L84 id_refl 同位） ===== *)
 Lemma req_eg_minus_def : forall a b : R, req (req_minus a b) (plus a (opp b)).
 Proof.
-  intros a b. unfold req_minus.
+  intros a b.
+  unfold req_minus.
   exact (req_refl (plus a (opp b))).
 Qed.
 
@@ -203,9 +215,9 @@ Qed.
 (* ===== 件 6：严格减正（母件 L131；req 接口 lt_id_l 字段直引） ===== *)
 Lemma req_eg_minus_pos : forall u v : R, lt u v -> lt zero (req_minus v u).
 Proof.
-  intros u v Huv. unfold req_minus.
-  apply (lt_id_l zero (plus u (opp u)) (plus v (opp u))
-                 (req_sym (plus u (opp u)) zero (plus_opp u))).
+  intros u v Huv.
+  unfold req_minus.
+  apply (lt_id_l zero (plus u (opp u)) (plus v (opp u))                 (req_sym (plus u (opp u)) zero (plus_opp u))).
   apply (lt_plus_compat_lt_le u v (opp u) (opp u) Huv (le_refl (opp u))).
 Qed.
 

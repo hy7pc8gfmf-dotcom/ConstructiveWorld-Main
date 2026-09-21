@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   enpf_split_even_odd（原 L73，4 句刀体）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* ExpNegFinale.v                                                *)
 (*                                                               *)
 (* 目的：将 S03 的参数化下界双件（exp_partial_even_lower、         *)
@@ -74,8 +84,9 @@ Lemma enpf_split_even_odd : forall n : nat,
   sigT (fun m : nat => sigT (fun b : bool => n = 2 * m + (if b then 1 else 0))%nat).
 Proof.
   intro n.
-  exact (existT _ (Nat.div2 n)
-           (existT _ (Nat.odd n) (Nat.div2_odd n))).
+  refine (existT _ (Nat.div2 n) _).
+  refine (existT _ (Nat.odd n) _).
+  exact (Nat.div2_odd n).
 Qed.
 
 (* 主件：exp(−x) 最终正性（∃N 形，材料 = S03 双 lower 参数化件） *)

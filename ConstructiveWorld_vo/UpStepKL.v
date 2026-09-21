@@ -42,14 +42,17 @@ Import RealInterfaceEnhancedMod.
 (* ========== 桥：lt/eq → le，le 双侧 eq 换形 ========== *)
 
 Lemma kl_lt_le_bridge : forall a b : Real, real_lt a b -> real_le a b.
-Proof. intros a b H. exact (inl H). Qed.
+Proof. intros a b H. unfold real_le. exact (inl H). Qed.
 
 Lemma kl_eq_le_bridge : forall a b : Real, real_eq a b -> real_le a b.
-Proof. intros a b H. exact (inr H). Qed.
+Proof. intros a b H. unfold real_le. exact (inr H). Qed.
 
 Lemma kl_le_eq_r : forall a b c : Real,
   real_le a b -> real_eq b c -> real_le a c.
-Proof. intros a b c Hab Hbc. exact (real_le_trans a b c Hab (inr Hbc)). Qed.
+Proof. intros a b c Hab Hbc. unfold real_le in Hab |- *.
+  destruct Hab as [Hlt | Heq].
+  - exact (inl (RealSetoid.real_lt_compat a a b c (real_eq_refl a) Hbc Hlt)).
+  - exact (inr (real_eq_trans a b c Heq Hbc)). Qed.
 
 Lemma kl_le_eq_l : forall a b c : Real,
   real_le a b -> real_eq a c -> real_le c b.

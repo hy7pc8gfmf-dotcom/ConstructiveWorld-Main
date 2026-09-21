@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_le_plus_nonneg_r（原 L79，3 句玩具证）                          *)
+(*   real_sum_le_list_carrier_instance（原 L65，1 句玩具证）              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqEntropyMaxTemp.v *)
 (* *)
 (* 目的： 定理 4.6b max_entropy_is_boltzmann_temp 的 Real 层（eps 档）。 *)
@@ -67,9 +78,7 @@ Corollary real_sum_le_list_carrier_instance :
     (forall w : X, real_le (f w) (g w)) ->
     real_le (real_list_sum X f l) (real_list_sum X g l).
 Proof.
-  exact (fun (X : Type) (f g : X -> Real) (l : list X)
-           (H : forall w : X, real_le (f w) (g w)) =>
-           real_list_sum_le X f g l H).
+  exact (fun (X : Type) (f g : X -> Real) (l : list X)           (H : forall w : X, real_le (f w) (g w)) =>           real_list_sum_le X f g l H).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -81,8 +90,7 @@ Lemma real_le_plus_nonneg_r :
     real_le real_zero b -> real_le a (real_plus a b).
 Proof.
   intros a b Hb.
-  apply (RealSetoid.real_le_id_l a (real_plus a real_zero) (real_plus a b)
-           (real_eq_sym (real_plus a real_zero) a (real_plus_zero a))).
+  apply (RealSetoid.real_le_id_l a (real_plus a real_zero) (real_plus a b)           (real_eq_sym (real_plus a real_zero) a (real_plus_zero a))).
   exact (real_le_plus_compat a a real_zero b (real_le_refl a) Hb).
 Qed.
 

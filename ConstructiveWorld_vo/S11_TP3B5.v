@@ -1317,7 +1317,7 @@ Qed.
 Lemma real_theta_double_eq_two : real_eq (real_plus theta1 theta1)
                                          (real_mult (real_const 2) theta1).
 Proof.
-  apply real_eq_sym. exact (real_two_mult_plus theta1).
+  exact (real_eq_sym (real_mult (real_const 2) theta1) (real_plus theta1 theta1) (real_two_mult_plus theta1)).
 Qed.
 
 (* ============ B. N5：由 H4（B3-3 值桥）+ Hsc ⟹ cos(w_leibniz) == 0 ============ *)

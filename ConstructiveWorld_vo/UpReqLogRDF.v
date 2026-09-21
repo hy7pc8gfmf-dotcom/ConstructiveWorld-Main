@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   lrdf_mul_h_inv（原 L370，2 句玩具证）                                *)
+(*   lrdf_req_minus_unfold（原 L114，2 句玩具证）                         *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLogRDF.v *)
 (* *)
 (* 目的： 对数与实数差分面（ReqDiffPlain 载体）的对数定律族。 *)
@@ -114,7 +125,8 @@ Hypothesis lrdf_sq_le_abs_sq : forall t : R,
 Lemma lrdf_req_minus_unfold : forall a b : R,
   req (req_minus a b) (plus a (opp b)).
 Proof.
-  intros a b. exact (req_refl (plus a (opp b))).
+  intros a b.
+  exact (req_refl (plus a (opp b))).
 Qed.
 
 (* 0.1：1 ≤ c·w ⟹ inv c ≤ w（inv 放缩机） *)
@@ -371,15 +383,7 @@ Lemma lrdf_mul_h_inv : forall a b inv : R,
   req (mult (mult a b) inv) (mult (mult a inv) b).
 Proof.
   intros a b inv.
-  exact (req_trans (mult (mult a b) inv) (mult a (mult b inv))
-                   (mult (mult a inv) b)
-           (req_sym (mult a (mult b inv)) (mult (mult a b) inv)
-              (mult_assoc a b inv))
-           (req_trans (mult a (mult b inv)) (mult a (mult inv b))
-                      (mult (mult a inv) b)
-              (req_mult_compat a a (mult b inv) (mult inv b)
-                 (req_refl a) (mult_comm b inv))
-              (mult_assoc a inv b))).
+  exact (req_trans (mult (mult a b) inv) (mult a (mult b inv))                   (mult (mult a inv) b)           (req_sym (mult a (mult b inv)) (mult (mult a b) inv)              (mult_assoc a b inv))           (req_trans (mult a (mult b inv)) (mult a (mult inv b))                      (mult (mult a inv) b)              (req_mult_compat a a (mult b inv) (mult inv b)                 (req_refl a) (mult_comm b inv))              (mult_assoc a inv b))).
 Qed.
 
 (* ============================================================ *)

@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fa53_plus_assoc_opp_r（原 L53，10 句刀体）                          *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* fa53_compat_abs.v — T40 消融50 席位VC（E-STAGING-VC）C 类施工件 *)
 (*                                                               *)
 (* 对账面（详见 T40-VC-对账.md §11）：消融辖区两族"诚实接口槽"，  *)
@@ -54,9 +64,15 @@ Lemma fa53_plus_assoc_opp_r :
   forall x c : R, Id (plus (plus x c) (opp c)) x.
 Proof.
   intros x c.
-  exact (id_trans (id_sym (plus_assoc x c (opp c)))
-                  (id_trans (id_cong (fun w => plus x w) (plus_opp c))
-                            (plus_zero x))).
+  assert (H1 : Id (plus (plus x c) (opp c)) (plus x (plus c (opp c)))).
+  { exact (id_sym (plus_assoc x c (opp c))). }
+  assert (H2 : Id (plus c (opp c)) zero).
+  { exact (plus_opp c). }
+  assert (H3 : Id (plus x (plus c (opp c))) (plus x zero)).
+  { exact (id_cong (fun w => plus x w) H2). }
+  assert (H4 : Id (plus x zero) x).
+  { exact (plus_zero x). }
+  exact (id_trans H1 (id_trans H3 H4)).
 Qed.
 
 (* ---- 支撑②：le 加法右消去（消去严格化的前置件） ---- *)

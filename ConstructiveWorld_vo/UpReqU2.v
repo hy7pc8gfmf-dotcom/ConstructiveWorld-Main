@@ -1,4 +1,33 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   w2_gibbs_eq（原 L479，2 句玩具证）                                   *)
+(*   w2_gap_diff（原 L457，2 句玩具证）                                   *)
+(*   w2_policy_improvement_mono（原 L445，2 句玩具证）                    *)
+(*   w2_rel_ent_self_zero（原 L438，2 句玩具证）                          *)
+(*   w2_pi_star_normalized（原 L433，1 句玩具证）                         *)
+(*   w2_pi_next_normalized（原 L425，2 句玩具证）                         *)
+(*   r2u_JJ_witness_ext（原 L417，2 句玩具证）                            *)
+(*   log_req_compat_real（原 L121，2 句玩具证）                           *)
+(*   log_req_witness_compat（原 L109，2 句玩具证）                        *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
+(* 为恒等守恒——清单所列 9 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 9 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqU2.v *)
 (* *)
 (* 目的： U2 升级面：log_req_compat 桥与对齐族 witness 扩充。 *)
@@ -122,10 +151,7 @@ Lemma log_req_compat_real : forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y
   req x y -> req (log x Hx) (log y Hy).
 Proof.
   intros x y Hx Hy Hxy.
-  exact (log_req_compat Real RealEnhancedReal
-           (fun (a b : Real) (Ha : lt zero a) (Hb : lt zero b) (Hab : le a b) =>
-              real_log_le_mono a b Ha Hb Hab)
-           x y Hx Hy Hxy).
+  exact (log_req_compat Real RealEnhancedReal           (fun (a b : Real) (Ha : lt zero a) (Hb : lt zero b) (Hab : le a b) =>              real_log_le_mono a b Ha Hb Hab)           x y Hx Hy Hxy).
 Qed.
 
 (* ============================================================ *)
@@ -426,8 +452,7 @@ Lemma w2_pi_next_normalized :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t), req (sumf (NPX pi_t Hpi_t)) one.
 Proof.
   intros pi_t Hpi_t.
-  exact (w_pi_next_normalized S sumf sum_linear sum_pos reward beta beta_pos
-                              pi_ref pi_ref_pos eta pi_t Hpi_t).
+  exact (w_pi_next_normalized S sumf sum_linear sum_pos reward beta beta_pos                              pi_ref pi_ref_pos eta pi_t Hpi_t).
 Qed.
 
 Lemma w2_pi_star_normalized : req (sumf PSTR) one.
@@ -447,11 +472,7 @@ Lemma w2_policy_improvement_mono :
     le (JJ pi_t Hpi_t) (JJ (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t)).
 Proof.
   intros pi_t Hpi_t Hn.
-  exact (r2_policy_improvement_mono S sumf sum_ext sum_add sum_linear sum_pos
-                                    log_req_compat log_inv_exp_neg_req
-                                    reward beta beta_pos pi_ref pi_ref_pos
-                                    eta eta_pos eta_le_one
-                                    req2_gibbs_inequality pi_t Hpi_t Hn).
+  exact (r2_policy_improvement_mono S sumf sum_ext sum_add sum_linear sum_pos                                    log_req_compat log_inv_exp_neg_req                                    reward beta beta_pos pi_ref pi_ref_pos                                    eta eta_pos eta_le_one                                    req2_gibbs_inequality pi_t Hpi_t Hn).
 Qed.
 
 Lemma w2_gap_diff :
@@ -466,10 +487,7 @@ Lemma w2_gap_diff :
                                Hpi_t (npx_pos pi_t Hpi_t))))).
 Proof.
   intros pi_t Hpi_t Hn.
-  exact (r2_gap_diff S sumf sum_ext sum_add sum_linear sum_pos
-                     log_req_compat log_inv_exp_neg_req
-                     reward beta beta_pos pi_ref pi_ref_pos eta eta_pos
-                     pi_t Hpi_t Hn).
+  exact (r2_gap_diff S sumf sum_ext sum_add sum_linear sum_pos                     log_req_compat log_inv_exp_neg_req                     reward beta beta_pos pi_ref pi_ref_pos eta eta_pos                     pi_t Hpi_t Hn).
 Qed.
 
 (* req_gibbs_equality 出口组装：sum_zero_nonneg + log 桥槽一次喂定。
@@ -482,18 +500,7 @@ Lemma w2_gibbs_eq :
     forall s : S, req (p s) (q s).
 Proof.
   intros p q Hp Hq Hnp Hnq Hkl0 s.
-  exact (req_gibbs_equality S sumf sum_ext sum_add sum_linear sum_zero_nonneg
-                            (fun (x : R) (Hx : lt zero x)
-                                     (Hi : lt zero (inv_pos x Hx)) =>
-                               req_trans (log (inv_pos x Hx) Hi)
-                                         (log (inv_pos x Hx) (inv_pos_pos x Hx))
-                                         (opp (log x Hx))
-                                 (log_req_witness_compat R RIS log_req_compat
-                                                         (inv_pos x Hx)
-                                                         Hi (inv_pos_pos x Hx))
-                                 (req_log_inv_one_inv log_req_compat x Hx))
-                            log_le_linear log_eq_linear p q Hp Hq
-                            Hnp Hnq Hkl0 s).
+  exact (req_gibbs_equality S sumf sum_ext sum_add sum_linear sum_zero_nonneg                            (fun (x : R) (Hx : lt zero x)                                     (Hi : lt zero (inv_pos x Hx)) =>                               req_trans (log (inv_pos x Hx) Hi)                                         (log (inv_pos x Hx) (inv_pos_pos x Hx))                                         (opp (log x Hx))                                 (log_req_witness_compat R RIS log_req_compat                                                         (inv_pos x Hx)                                                         Hi (inv_pos_pos x Hx))                                 (req_log_inv_one_inv log_req_compat x Hx))                            log_le_linear log_eq_linear p q Hp Hq                            Hnp Hnq Hkl0 s).
 Qed.
 
 (* ============================================================ *)

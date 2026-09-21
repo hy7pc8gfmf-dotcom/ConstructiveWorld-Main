@@ -1857,7 +1857,7 @@ Qed.
 (* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem llm_Pmid_zero : forall (l : list Q) (s : nat), Pmid l s 0 = Pinf l s.
 Proof.
-  intros l s. unfold Pmid, Pinf, rot. reflexivity.
+  intros l s. unfold Pmid, Pinf, rot. exact (@eq_refl _ (firstn (Datatypes.S s) l ++ skipn (Datatypes.S s) l)).
 Qed.
 
 (* 端点 lam = length l：Pmid 退化为 P0 *)
@@ -3125,7 +3125,7 @@ Qed.
 Corollary H_adj_swap_adj : forall (l : list Q) (n : nat),
   (H_adj (P0 (swap_adj l n)) == H_adj (P0 l))%Q.
 Proof.
-  intros l n. apply H_adj_qeq. apply P0_swap_adj_qeq.
+  intros l n. exact (H_adj_qeq (P0 (swap_adj l n)) (P0 l) (P0_swap_adj_qeq l n)).
 Qed.
 
 (* ---------- G.6 phase_classify 行为件（任务目标 4） ---------- *)
@@ -3315,7 +3315,7 @@ Qed.
 Theorem Pmid_len_perm_P0_left : forall (l : list Q) (s : nat),
   Permutation (P0 l) (Pmid l s (length l)).
 Proof.
-  intros l s. apply Permutation_sym. apply Pmid_len_perm_eq.
+  intros l s. exact (Permutation_sym (Pmid_len_perm_eq l s)).
 Qed.
 
 (* ---------- H.5 长度谱系：lam <= length l 时长度 = lam + (|l| - lam)（加分项二） ---------- *)

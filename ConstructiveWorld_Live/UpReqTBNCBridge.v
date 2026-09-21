@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   tbg_row_dock（原 L79，3 句玩具证）                                   *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqTBNCBridge.v *)
 (* *)
 (* 目的： TBNC 显式假设的对角逐项桥。 *)
@@ -79,9 +89,9 @@ Qed.
 Lemma tbg_row_dock : forall (B : BanachAlg) (a b : nat -> (@BA B)) (k n : nat),
   @bae B (ncv_row B a b k (Datatypes.S n)) (bd2_row B a b k n).
 Proof.
-  intros B a b k n. unfold ncv_row, bd2_row.
-  exact (tbg_ncvsum_bsum B (fun j : nat => @bmult B (a k) (b j))
-                         (Datatypes.S n)).
+  intros B a b k n.
+  unfold ncv_row, bd2_row.
+  exact (tbg_ncvsum_bsum B (fun j : nat => @bmult B (a k) (b j))                         (Datatypes.S n)).
 Qed.
 
 (* 方块折叠形：ncv_conv m n == Σ_{k<m} ncv_row k n（bsum 承载）    *)

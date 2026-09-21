@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T260 台账席 战役包U（tier2 批量面第十一批）   *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列玩具位中真刀位  *)
+(* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
+(* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
+(* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
+(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 清单：                                                          *)
+(*   reqd_of_nat_succ（原 L65，显式见证微刀 1 处）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqMpDomain.v *)
 (* *)
 (* 目的： Min-P 域面：词表、温度配分与马尔可夫核的域构造。 *)
@@ -65,7 +76,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Lemma reqd_of_nat_succ : forall n : nat,
   req (reqd_of_nat (Datatypes.S n)) (plus one (reqd_of_nat n)).
 Proof.
-  intro n. apply req_refl.
+  intro n. exact (req_refl (reqd_of_nat (Datatypes.S n))).
 Qed.
 
 (* E2 嵌入正性＝attn_nat_to_R_pos 对位（S13）：0 < reqd_of_nat (S k)。

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T263 台账席 战役包X（tier2 十四批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabt4_rlhf_B_realized（原 L85，2 句玩具证）                          *)
+(*   uabt4_rlhf_eps_realized（原 L47，2 句玩具证）                        *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblT4_RLHFkl.v —— 第⑥批 gibbs/KL 旗舰消融件（T4a 施工席 20260919）      *)
 (*                                                              *)
 (* 批次工单：_tt4a_｜辖区＝FA1 普查第⑥批 gibbs/KL 旗舰（rows 1-40）：        *)
@@ -65,17 +76,7 @@ Theorem uabt4_rlhf_eps_realized :
              (real_mult D eps)).
 Proof.
   intros X enum base D D_pos Z Z_pos p Hp Hnormp Hnormb eps Heps.
-  exact (real_rlhf_optimal_eps X (fun f => real_list_sum X f enum) base D D_pos Z Z_pos
-           (fun p0 Hp0 Hnormp0 eps0 Heps0 =>
-              logd_gibbs_sum_eps_boltzmann_list X base D D_pos Z Z_pos enum
-                p0 Hp0 Hnormp0 Hnormb eps0 Heps0)
-           (fun p0 Hp0 Hnormp0 =>
-              rfep_real_kl_decomp_full X (fun f => real_list_sum X f enum)
-                (fun f g Hpt => real_list_sum_ext X f g enum Hpt)
-                (fun f g => real_list_sum_add X f g enum)
-                (fun a f => real_list_sum_linear X a f enum)
-                base D D_pos Z Z_pos p0 Hp0 Hnormp0 Hnormb)
-           p Hp Hnormp eps Heps).
+  exact (real_rlhf_optimal_eps X (fun f => real_list_sum X f enum) base D D_pos Z Z_pos           (fun p0 Hp0 Hnormp0 eps0 Heps0 =>              logd_gibbs_sum_eps_boltzmann_list X base D D_pos Z Z_pos enum                p0 Hp0 Hnormp0 Hnormb eps0 Heps0)           (fun p0 Hp0 Hnormp0 =>              rfep_real_kl_decomp_full X (fun f => real_list_sum X f enum)                (fun f g Hpt => real_list_sum_ext X f g enum Hpt)                (fun f g => real_list_sum_add X f g enum)                (fun a f => real_list_sum_linear X a f enum)                base D D_pos Z Z_pos p0 Hp0 Hnormp0 Hnormb)           p Hp Hnormp eps Heps).
 Qed.
 
 (* ==================== 旗舰件2：RLHF 最优性 Bishop 形 discharge（N2） ==================== *)
@@ -100,17 +101,7 @@ Theorem uabt4_rlhf_B_realized :
                   (real_boltzmann_dist_r_pos X base D D_pos Z Z_pos))).
 Proof.
   intros X enum base D D_pos Z Z_pos p Hp Hnormp Hnormb.
-  exact (real_rlhf_optimal_B X (fun f => real_list_sum X f enum) base D D_pos Z Z_pos
-           (fun p0 Hp0 Hnormp0 eps0 Heps0 =>
-              logd_gibbs_sum_eps_boltzmann_list X base D D_pos Z Z_pos enum
-                p0 Hp0 Hnormp0 Hnormb eps0 Heps0)
-           (fun p0 Hp0 Hnormp0 =>
-              rfep_real_kl_decomp_full X (fun f => real_list_sum X f enum)
-                (fun f g Hpt => real_list_sum_ext X f g enum Hpt)
-                (fun f g => real_list_sum_add X f g enum)
-                (fun a f => real_list_sum_linear X a f enum)
-                base D D_pos Z Z_pos p0 Hp0 Hnormp0 Hnormb)
-           p Hp Hnormp).
+  exact (real_rlhf_optimal_B X (fun f => real_list_sum X f enum) base D D_pos Z Z_pos           (fun p0 Hp0 Hnormp0 eps0 Heps0 =>              logd_gibbs_sum_eps_boltzmann_list X base D D_pos Z Z_pos enum                p0 Hp0 Hnormp0 Hnormb eps0 Heps0)           (fun p0 Hp0 Hnormp0 =>              rfep_real_kl_decomp_full X (fun f => real_list_sum X f enum)                (fun f g Hpt => real_list_sum_ext X f g enum Hpt)                (fun f g => real_list_sum_add X f g enum)                (fun a f => real_list_sum_linear X a f enum)                base D D_pos Z Z_pos p0 Hp0 Hnormp0 Hnormb)           p Hp Hnormp).
 Qed.
 
 (* ==================== 提取探针（树外 ASCII 隔离目录） ==================== *)

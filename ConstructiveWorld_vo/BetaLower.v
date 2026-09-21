@@ -1,51 +1,51 @@
 (* ============================================================ *)
-(* BetaLower.v —— P5 载体下界：c·σ^n 型下界的 Beta 闭式构造         *)
+(* BetaLower.v — 席位切片代理M（批次 E-STAGING-D025r，20260918）    *)
 (*                                                               *)
-(* 使命：对 ln2 逼近载体 lne_B n = (n!)²/(2n+1)!（Beta 闭式，见       *)
-(*   lne_B_closed），构造并证明 c·σ^n 型下界。三种参数：              *)
-(*   · 规格参数 (c, σ) = (1/2, 3/16)；                              *)
-(*   · 族最优参数 (c, σ) = (98/135, 3/14)，在 n=2 与 n=3 同时        *)
-(*     取等号，该意义下不可改进；                                   *)
-(*   · (1+t) 侧变体偏移 (1/4)·(3/32)^n。                            *)
-(*   本件范围仅下界；恒等式不在本件。                                *)
+(* 使命：P5 载体下界首攻切片（T122 派席④；T124 §三 改判后即可开工）。 *)
+(*   P1b「段上逐点正⟹积分正」路线经 T124 死亡证书注销，本席按        *)
+(*   T124 §二(a)+(b) 合流改走：系数级/Beta 闭式 + 纯阶乘不等式，     *)
+(*   零段上逐点化。与在飞变体切片划清接口：只交下界，不碰恒等式。     *)
 (*                                                               *)
-(* 数学背景：真恒等式 ln2 − x'_n = I_n/(2^{n+1}·q̃_n)，其中            *)
-(*   I_n = ∫₀¹ tⁿ(1−t)ⁿ/(1−t/2)^{n+1} dt（分母无平方）。             *)
-(*   (1−t/2)^{−(n+1)} ≥ 1 逐点（因 2−t ≤ 2），且具正系数二项级数，    *)
-(*   故 I_n ≥ lne_B n。I_n 本体（有理被积函数的积分）不在库内，       *)
-(*   也不在 PolyIntegral 的 pint_ 多项式面（Ln2Escape 头注同判）；    *)
-(*   该不等式最后一步需全段逐点机制，故本件只断言以 lne_B n 为       *)
-(*   载体的可证下界形；至于 I_n 本体的精确下界，本件不虚称、          *)
-(*   不覆盖。                                                       *)
+(* 承载形定向（按 T118 勘误后真恒等式）：                            *)
+(*   I_n = ∫₀¹ tⁿ(1−t)ⁿ/(1−t/2)^{n+1} dt 与 lne_B n 的关系：        *)
+(*   真恒等式 ln2 − x'_n = I_n/(2^{n+1}·q̃_n)（分母无平方，T118 §0）； *)
+(*   (1−t/2)^{−(n+1)} ≥ 1 逐点（2−t ≤ 2）且具正系数二项级数，        *)
+(*   故 I_n ≥ lne_B n = (n!)²/(2n+1)!（Beta 闭式，lne_B_closed）。  *)
+(*   I_n 本体（有理被积函数）超出一期 pint_ 多项式面（Ln2Escape 头注  *)
+(*   同判），其积分对象不在库内——本席交付以 lne_B 为承载的           *)
+(*   c·σ^n 下界，即 I_n 下界的可证承载形；I_n ≥ lne_B n 的最后一步   *)
+(*   需全段逐点机（T124 §二(c) 真命题残面）或正系数级数机，精确        *)
+(*   偏移如实登记于 T125 报告，不虚报。                              *)
 (*                                                               *)
-(* 数值事实：lne_B 0..3 = 1, 1/6, 1/30, 1/140；                      *)
-(*   步比 (n+1)/(2(2n+3)) 在 n=2 处取尾最小值 3/14，                 *)
-(*   故族最优 σ = 3/14。                                            *)
+(* 数值锚定（n=0..3，vm_compute 哨兵见 §5）：                        *)
+(*   lne_B: 1, 1/6, 1/30, 1/140；步比 (n+1)/(2(2n+3))：             *)
+(*   1/6, 1/5, 3/14, 2/9, 5/22（尾min=3/14 在 n=2）。               *)
+(*   ① 规格档 c=1/2, σ=3/16（T97 §4-P5 原目标）：n=0..3 全过。       *)
+(*   ② 族最优档 c=98/135, σ=3/14：n=2、n=3 双缚等号                 *)
+(*      （98/135·(3/14)² = 1/30 = lne_B 2；×(3/14) = 1/140 =         *)
+(*      lne_B 3）——任何 c·σ^n 下界族中 σ ≤ min_{n≥2} 步比 = 3/14，    *)
+(*      故此对在「n≥2 缚」意义下不可改进（精确最优化记录）。          *)
+(*   ③ 变体偏移件（(1+t) 面）：2^{−(n+1)}·lne_B n ≥ (1/4)(3/32)^n    *)
+(*      = 2^{−(n+2)}·(3/16)^n，与 T97 §三 Λ_n 下界需求 2^{−(n+2)}     *)
+(*      (3/16)^n 精确匹配。                                          *)
 (*                                                               *)
-(* 证明结构：bl_half_pow 与 bl_opt_pow 将左侧常数幂化为单一分式，     *)
-(*   lne_B_closed 展开右端，经 bl_div_le 归约到纯 nat 阶乘不等式      *)
-(*   bl_nat_core16 / bl_nat_core14（线性证书，免高阶证书）；          *)
-(*   Q 分式与 nat 阶乘的转换由 sif_qfact_Z 承担。                    *)
-(*                                                               *)
-(* 数值锚：§5 提供 n=0..3 的 vm_compute 实例（bl_spec_anchor0..3、   *)
-(*   bl_opt_anchor0..3、bl_var_anchor3）与 lne_B 值见证 ×3           *)
-(*   （bl_value1/2/3）。                                            *)
-(*                                                               *)
-(* 依赖（本库）：S02_CauchyComplete、S03_QExp、SumInvFactEscape、     *)
-(*   PolyIntegral、Ln2Escape；stdlib：Arith.Factorial 等。           *)
-(*                                                               *)
-(* 对标：stdlib Arith.Factorial（阶乘载体）；Beta 闭式配方同          *)
-(*   Ln2Escape 的 lne_beta_value（两参数 Beta 归纳的对角特化）。      *)
-(*                                                               *)
-(* 构造性注记：语句面全 Set（QleT'/QeqT），零承认、零经典逻辑，        *)
-(*   语句位置不用 Prop；提取面 Obj.magic = 0                           *)
-(*   （§6 Separate Extraction 与 Print Assumptions 自审）。           *)
-(*                                                               *)
-(* 编译配方：Rocq 9.1 直调，unset COQLIB/ROCQLIB，                   *)
-(*   cpu_guard 包裹（LoadLimit 85，CoreN 2）。                       *)
-(*                                                               *)
-(* 诚实未竟项：I_n ≥ lne_B n 的精确偏移与全段逐点机制不在本件，       *)
-(*   见 bl_variant_shift 注。                                       *)
+(* 交付件（bl_ 前缀，语句面全 Set：QleT'/QeqT；Q 层 Prop 仅内件        *)
+(* 脚手架，UpReq 系/Ln2Escape 同款纪律）：                            *)
+(*   主件  bl_beta_lower      : (1/2)·(3/16)^n ≤ lne_B n（QleT'）    *)
+(*   最优  bl_beta_lower_opt  : (98/135)·(3/14)^n ≤ lne_B n（QleT'） *)
+(*   变体  bl_variant_shift   : (1/4)·(3/32)^n ≤ 2^{−(n+1)}·lne_B n  *)
+(*   锚哨  §5 n=0..3 vm_compute 实例 ×9 + 值见证 ×3                 *)
+(* 证明路线：Beta 闭式（lne_B_closed，两参数 Beta 归纳的对角特化，     *)
+(*   配方溯沿 PadeErrorIntegral pei_beta 族/Ln2Escape lne_beta_value） *)
+(*   → sif_qfact_Z 桥 → 纯 nat 阶乘不等式归纳（bl_nat_core16/14，     *)
+(*   核证书 3(2n+3) ≤ 8(n+1) / ≤ 7(n+1) 线性 lia，免 Psatz）→        *)
+(*   除法比较器 bl_div_le（lne_div_eq 同构配 bl_div_ge 镜像）。       *)
+(* 依赖：S02_CauchyComplete（QleT'/QltT 桥）、S03_QExp（q_pow/q_fact）、*)
+(*   SumInvFactEscape（sif_qfact_Z）、Ln2Escape（lne_B 三件套承载，    *)
+(*   side 根现编）。PadeErrorIntegral 原件因信任根缺链不直接消费       *)
+(*   （Ln2Escape 头注同判），Beta 闭式走其移植面。                   *)
+(* 红线：零公理声明词、零认授收口、零经典逻辑、零 Prop 语句位；         *)
+(*   提取探针 Obj.magic=0。                                          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Arith.Arith ZArith.ZArith Lia.
@@ -57,10 +57,10 @@ Require Import PolyIntegral.
 Require Import Ln2Escape.
 
 (* ============================================================ *)
-(* §1 Q 层支撑引理                                                   *)
+(* §1 Q 层支撑件（内件，Prop 面仅脚手架）                              *)
 (* ============================================================ *)
 
-(* 正底幂的非零下界：1 ≤ k ⟹ 1 ≤ k^n（为 Qlt 前提提供正下界） *)
+(* k^n ≥ 1（正底幂非零下界；喂 Qlt cast 腿用） *)
 Lemma bl_mul_ge1 : forall k n : nat, (1 <= k)%nat -> (1 <= k ^ n)%nat.
 Proof.
   intros k n Hk. induction n as [| n IH].
@@ -68,13 +68,13 @@ Proof.
   - rewrite Nat.pow_succ_r'. lia.
 Qed.
 
-(* Qmake 层乘法桥接引理：(a#1)·(b#1) == (a·b#1)，展开 Qmult 后为定义级计算 *)
+(* Qmake 乘法桥：(a#1)·(b#1) == (a·b#1)（定义级） *)
 Lemma bl_qmake_mul : forall a b : Z, (a # 1) * (b # 1) == (a * b # 1)%Q.
 Proof.
   intros a b. unfold Qmult. cbn [Pos.mul]. reflexivity.
 Qed.
 
-(* Qinv 对乘积分配：x、y 均非零 ⟹ Qinv (x*y) == Qinv x * Qinv y（bl_pow_div 使用） *)
+(* Qinv 对乘积分配（双非零前提；bl_pow_div/桥件用） *)
 Lemma bl_qinv_mult : forall x y : Q,
   ~ (x == 0%Q) -> ~ (y == 0%Q) -> Qinv (x * y) == Qinv x * Qinv y.
 Proof.
@@ -92,7 +92,7 @@ Proof.
   - apply (lne_mult_nz x y Hx Hy).
 Qed.
 
-(* 正底幂非零：~ (q_pow y n == 0)，对 n 归纳：情形 n=0 归约即得，归纳步由 lne_mult_nz 传递非零性 *)
+(* 正底幂非零：~ (q_pow y n == 0) *)
 Lemma bl_qpow_nz : forall (y : Q) (n : nat), ~ (y == 0%Q) -> ~ (q_pow y n == 0%Q).
 Proof.
   intros y n Hy. induction n as [| n IH].
@@ -115,11 +115,7 @@ Proof.
     ring.
 Qed.
 
-(* 乘除结合桥接引理：x·(y/z) == (x·y)/z（Qdiv 的定义即乘 Qinv，展开后为结合律） *)
-Lemma bl_mult_div_assoc : forall x y z : Q, x * (y / z) == (x * y) / z.
-Proof. intros x y z. unfold Qdiv. ring. Qed.
-
-(* 整数 cast 幂桥接引理：q_pow (Z.of_nat k # 1) n == (Z.of_nat (k ^ n) # 1) *)
+(* 整数 cast 幂桥：q_pow (k#1) n == (k^n # 1) *)
 Lemma bl_pZ : forall k n : nat, q_pow (Z.of_nat k # 1) n == (Z.of_nat (k ^ n) # 1)%Q.
 Proof.
   intros k n. induction n as [| n IH].
@@ -128,18 +124,7 @@ Proof.
     unfold Qmult. cbn [Pos.mul]. rewrite Nat2Z.inj_mul. reflexivity.
 Qed.
 
-(* 同幂相乘桥接引理：q_pow x n · q_pow y n == q_pow (x·y) n（bl_variant_shift 使用） *)
-Lemma bl_qpow_mul : forall (x y : Q) (n : nat), q_pow x n * q_pow y n == q_pow (x * y) n.
-Proof.
-  intros x y n. induction n as [| n IH].
-  - reflexivity.
-  - rewrite (q_pow_succ x n), (q_pow_succ y n), (q_pow_succ (x * y) n).
-    transitivity ((x * y) * (q_pow x n * q_pow y n)).
-    + ring.
-    + rewrite IH. ring.
-Qed.
-
-(* 左乘保序：x ≤ y、0 ≤ z ⟹ z·x ≤ z·y（Qmult_le_compat_r 经交换重排直得） *)
+(* 左乘保序：x ≤ y、0 ≤ z ⟹ z·x ≤ z·y（Qmult_le_compat_r 的左乘封装） *)
 Lemma bl_mlc : forall x y z : Q, Qle x y -> Qle 0 z -> Qle (z * x) (z * y).
 Proof.
   intros x y z H Hz.
@@ -147,7 +132,7 @@ Proof.
   exact (Qmult_le_compat_r x y z H Hz).
 Qed.
 
-(* 除法下界比较器（lne_div_le_inv 的对应形式）：0 < y、z·y ≤ x ⟹ z ≤ x/y *)
+(* 除法下界比较器（lne_div_le_inv 镜像）：0 < y、z·y ≤ x ⟹ z ≤ x/y *)
 Lemma bl_div_ge : forall x y z : Q, Qlt 0 y -> Qle (z * y) x -> Qle z (x / y).
 Proof.
   intros x y z Hy Hzy. unfold Qdiv.
@@ -217,22 +202,20 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 纯 nat 阶乘不等式核                                            *)
+(* §2 纯 nat 阶乘不等式核（lne_nat_core 同型；核证书线性 lia）          *)
 (* ============================================================ *)
 
-(* 主核：3^n·8·(2n+1)! ≤ 16^n·16·(n!)²
-   （⟺ (1/2)(3/16)^n ≤ (n!)²/(2n+1)!；与 Ln2Escape 的 lne_nat_core 同型；
-     归纳步经线性证书 3(2n+3) ≤ 8(n+1)（n≥1）比较步乘子，全程线性 lia） *)
+(* 主件核：3^n·8·(2n+1)! ≤ 16^n·16·(n!)²
+   （⟺ (1/2)(3/16)^n ≤ (n!)²/(2n+1)!；步乘子 3(2n+3)(2n+2) ≤ 16(n+1)²
+     经线性证书 3(2n+3) ≤ 8(n+1)（n≥1）×(2n+2) 达成） *)
 Lemma bl_nat_core16 : forall n : nat,
   (3 ^ n * 8 * fact (2 * n + 1) <= 16 ^ n * 16 * fact n * fact n)%nat.
 Proof.
-(* 对 n 归纳，归纳步：由 n 到 S n。 *)  induction n as [| n IH].
-  - (* 情形 n=0：两侧归约后线性。 *)cbn. lia.
-  - (* 情形分析：先处理 S n = 1，再处理 S n ≥ 2。 *)destruct n as [| m].
-    + (* 情形 n=0：即 S n = 1，归约后线性。 *)cbn. lia.
-    + (* 情形 n=S m：展开阶乘的两层新因子，公共步乘子为
-         3(2m+5)(2m+4)；线性证书 H1: 3(2m+5) ≤ 8(m+2) 乘以 (2m+4)
-         得 H2，再与 2m+4 ≤ 2(m+2) 合取得步乘子 ≤ 16(m+2)²（HAB）。 *)replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
+  induction n as [| n IH].
+  - cbn. lia.
+  - destruct n as [| m].
+    + cbn. lia.
+    + replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
         with (Datatypes.S (Datatypes.S (2 * Datatypes.S m + 1)))%nat by lia.
       cbn [fact].
       change (3 ^ Datatypes.S (Datatypes.S m))%nat with (3 * 3 ^ Datatypes.S m)%nat.
@@ -255,38 +238,34 @@ Proof.
       transitivity ((16 ^ Datatypes.S m * 16 * fact (Datatypes.S m) * fact (Datatypes.S m))
                       * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                            * (2 * Datatypes.S (Datatypes.S m))))%nat.
-      * (* 左侧 = S m 处的核 × 步乘子；核的不等式即归纳假设 IH。 *)replace ((3 * 3 ^ Datatypes.S m) * 8
+      * replace ((3 * 3 ^ Datatypes.S m) * 8
                    * ((2 * Datatypes.S (Datatypes.S m) + 1)
-                        * (2 * Datatypes.S (Datatypes.S m) * fact (2 * Datatypes.S m + 1))))%nat
+                        * (2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1)))%nat
           with ((3 ^ Datatypes.S m * 8 * fact (2 * Datatypes.S m + 1))
                   * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                        * (2 * Datatypes.S (Datatypes.S m))))%nat by ring.
         match goal with |- ?g => idtac "G16:" g end.
         apply Nat.mul_le_mono_r. exact IH.
-      * (* 右侧 = S m 处的核 × 16(m+2)²；步乘子 ≤ 16(m+2)² 即 HAB。 *)replace (Datatypes.S m * fact m)%nat with (fact (Datatypes.S m))%nat by reflexivity.
-        replace ((16 * 16 ^ Datatypes.S m) * 16
+      * replace ((16 * 16 ^ Datatypes.S m) * 16
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m))
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m)))%nat
           with ((16 ^ Datatypes.S m * 16 * fact (Datatypes.S m) * fact (Datatypes.S m))
                   * (16 * Datatypes.S (Datatypes.S m) * Datatypes.S (Datatypes.S m)))%nat by ring.
-        apply Nat.mul_le_mono_l. exact HAB.
+        apply Nat.mul_le_mono_r. exact HAB.
 
 Qed.
 
-(* 族最优核：3^n·98·(2n+1)! ≤ 14^n·135·(n!)²
-   （⟺ (98/135)(3/14)^n ≤ (n!)²/(2n+1)!；归纳步经线性证书
-     3(2n+3) ≤ 7(n+1)（n≥2）；n=2 处两侧同为 105840，即取等情形） *)
+(* 最优档核：3^n·98·(2n+1)! ≤ 14^n·135·(n!)²
+   （⟺ (98/135)(3/14)^n ≤ (n!)²/(2n+1)!；步乘子 3(2n+3)(2n+2) ≤ 14(n+1)²
+     经线性证书 3(2n+3) ≤ 7(n+1)（n≥2）×(2n+2) 达成；n=2 等号 105840） *)
 Lemma bl_nat_core14 : forall n : nat,
   (3 ^ n * 98 * fact (2 * n + 1) <= 14 ^ n * 135 * fact n * fact n)%nat.
 Proof.
-(* 对 n 归纳，归纳步：由 n 到 S n。 *)  induction n as [| n IH].
-  - (* 情形 n=0：归约后线性。 *)cbn. lia.
-  - (* 情形分析：先处理 S n = 1，再处理 S n ≥ 2。 *)destruct n as [| m].
-    + (* 情形 n=0：即 S n = 1，归约后线性。 *)cbn. lia.
-    + (* 对 m 分段：m=0 即 S n=2（取等情形），m≥1 走与 bl_nat_core16
-         相同的展开链，线性证书为 3(2m+5) ≤ 7(m+2)。 *)destruct (Nat.eq_dec m 0) as [Hm0 | Hmpos].
-      { (* 情形 m=0：即 S n = 2，线性证书取等（3·7 = 7·3）。 *)subst m. cbn. lia. }
-      { replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
+  induction n as [| n IH].
+  - cbn. lia.
+  - destruct n as [| m].
+    + cbn. lia.
+    + replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
         with (Datatypes.S (Datatypes.S (2 * Datatypes.S m + 1)))%nat by lia.
       cbn [fact].
       change (3 ^ Datatypes.S (Datatypes.S m))%nat with (3 * 3 ^ Datatypes.S m)%nat.
@@ -309,25 +288,24 @@ Proof.
       transitivity ((14 ^ Datatypes.S m * 135 * fact (Datatypes.S m) * fact (Datatypes.S m))
                       * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                            * (2 * Datatypes.S (Datatypes.S m))))%nat.
-      * (* 左侧 = S m 处的核 × 步乘子；核的不等式即归纳假设 IH。 *)replace ((3 * 3 ^ Datatypes.S m) * 98
+      * replace ((3 * 3 ^ Datatypes.S m) * 98
                    * ((2 * Datatypes.S (Datatypes.S m) + 1)
-                        * (2 * Datatypes.S (Datatypes.S m) * fact (2 * Datatypes.S m + 1))))%nat
+                        * (2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1)))%nat
           with ((3 ^ Datatypes.S m * 98 * fact (2 * Datatypes.S m + 1))
                   * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                        * (2 * Datatypes.S (Datatypes.S m))))%nat by ring.
         apply Nat.mul_le_mono_r. exact IH.
-      * (* 右侧 = S m 处的核 × 14(m+2)²；步乘子 ≤ 14(m+2)² 即 HAB。 *)replace (Datatypes.S m * fact m)%nat with (fact (Datatypes.S m))%nat by reflexivity.
-        replace ((14 * 14 ^ Datatypes.S m) * 135
+      * replace ((14 * 14 ^ Datatypes.S m) * 135
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m))
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m)))%nat
           with ((14 ^ Datatypes.S m * 135 * fact (Datatypes.S m) * fact (Datatypes.S m))
                   * (14 * Datatypes.S (Datatypes.S m) * Datatypes.S (Datatypes.S m)))%nat by ring.
-        apply Nat.mul_le_mono_l. exact HAB. }
+        apply Nat.mul_le_mono_r. exact HAB.
 
 Qed.
 
 (* ============================================================ *)
-(* §3 Q 层桥接引理：目标常数幂化为单一分式                             *)
+(* §3 Q 桥：目标常数幂 → 单除法 Z cast 形                               *)
 (* ============================================================ *)
 
 (* (1/2)·(3/16)^n == (3^n·8 # 1)/(16^n·16 # 1)
@@ -336,30 +314,26 @@ Lemma bl_half_pow : forall n : nat,
   (1 # 2) * q_pow (3 # 16) n
   == (Z.of_nat (3 ^ n * 8) # 1) / (Z.of_nat (16 ^ n * 16) # 1)%Q.
 Proof.
-(* 策略：3/16 拆为 3/1 ÷ 16/1 后由 bl_pow_div 分配幂，bl_pZ 换算
-     cast，bl_mult_div_assoc 与 bl_qmake_mul 合并因子，lne_div_eq 收束。 *)  intro n.
-  replace (3 # 16)%Q with ((Z.of_nat 3 # 1) / (Z.of_nat 16 # 1))%Q by reflexivity.
-  assert (Hnz : ~ ((Z.of_nat 16 # 1) == 0%Q)).
-  { intro Hc. unfold Qeq in Hc. cbn [Qnum Qden] in Hc.
-    pose proof (proj1 (Nat2Z.inj_lt 0 16) ltac:(lia)). lia. }
-  rewrite (bl_pow_div (Z.of_nat 3 # 1) (Z.of_nat 16 # 1) n Hnz),
-          (bl_pZ 3 n), (bl_pZ 16 n).
-  assert (E1 : (Z.of_nat (3 ^ n * 8))%Z = (8 * Z.of_nat (3 ^ n))%Z)
+  intro n.
+  rewrite bl_pow_div, (bl_pZ 3 n), (bl_pZ 16 n).
+  assert (E1 : (Z.of_nat (3 ^ n * 8))%Z == (8 * Z.of_nat (3 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
-  assert (E2 : (Z.of_nat (16 ^ n * 16))%Z = (16 * Z.of_nat (16 ^ n))%Z)
+  assert (E2 : (Z.of_nat (16 ^ n * 16))%Z == (16 * Z.of_nat (16 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
   rewrite E1, E2.
-  rewrite (bl_mult_div_assoc (1 # 2)%Q (Z.of_nat (3 ^ n) # 1) (Z.of_nat (16 ^ n) # 1)).
-  rewrite <- (bl_qmake_mul 8%Z (Z.of_nat (3 ^ n))).
-  rewrite <- (bl_qmake_mul 16%Z (Z.of_nat (16 ^ n))).
   apply lne_div_eq.
-  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
-    pose proof (bl_mul_ge1 16 n ltac:(lia)).
-    pose proof (proj1 (Nat2Z.inj_lt 0 (16 ^ n)) ltac:(lia)). lia.
-  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
-    pose proof (bl_mul_ge1 16 n ltac:(lia)).
-    pose proof (proj1 (Nat2Z.inj_lt 0 (16 ^ n)) ltac:(lia)). lia.
-  - ring.
+  - apply Qmult_lt_0_compat.
+    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 16 n ltac:(lia)). lia.
+    + unfold Qlt. cbn [Qnum Qden]. lia.
+  - apply Qmult_lt_0_compat.
+    + unfold Qlt. cbn [Qnum Qden]. lia.
+    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 16 n ltac:(lia)). lia.
+  - rewrite <- (bl_qmake_mul 16%Z (Z.of_nat (16 ^ n))).
+    rewrite <- (bl_qmake_mul 8%Z (Z.of_nat (3 ^ n))).
+    assert (E16 : (16 # 1) == ((8 # 1) * (2 # 1))%Q)
+      by (unfold Qeq; cbn [Qnum Qden Qmult Pos.mul]; lia).
+    rewrite E16.
+    unfold Qdiv. ring.
 Qed.
 
 (* (98/135)·(3/14)^n == (3^n·98 # 1)/(14^n·135 # 1) *)
@@ -367,41 +341,42 @@ Lemma bl_opt_pow : forall n : nat,
   (98 # 135) * q_pow (3 # 14) n
   == (Z.of_nat (3 ^ n * 98) # 1) / (Z.of_nat (14 ^ n * 135) # 1)%Q.
 Proof.
-(* 策略与 bl_half_pow 相同：bl_pow_div 分配幂后合并为单一分式，
-     经 bl_mult_div_assoc、bl_qmake_mul 与 lne_div_eq 收束。 *)  intro n.
-  replace (3 # 14)%Q with ((Z.of_nat 3 # 1) / (Z.of_nat 14 # 1))%Q by reflexivity.
-  assert (Hnz : ~ ((Z.of_nat 14 # 1) == 0%Q)).
-  { intro Hc. unfold Qeq in Hc. cbn [Qnum Qden] in Hc.
-    pose proof (proj1 (Nat2Z.inj_lt 0 14) ltac:(lia)). lia. }
-  rewrite (bl_pow_div (Z.of_nat 3 # 1) (Z.of_nat 14 # 1) n Hnz),
-          (bl_pZ 3 n), (bl_pZ 14 n).
-  assert (E1 : (Z.of_nat (3 ^ n * 98))%Z = (98 * Z.of_nat (3 ^ n))%Z)
+  intro n.
+  rewrite bl_pow_div, (bl_pZ 3 n), (bl_pZ 14 n).
+  assert (E1 : (Z.of_nat (3 ^ n * 98))%Z == (98 * Z.of_nat (3 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
-  assert (E2 : (Z.of_nat (14 ^ n * 135))%Z = (135 * Z.of_nat (14 ^ n))%Z)
+  assert (E2 : (Z.of_nat (14 ^ n * 135))%Z == (135 * Z.of_nat (14 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
   rewrite E1, E2.
-  rewrite (bl_mult_div_assoc (98 # 135)%Q (Z.of_nat (3 ^ n) # 1) (Z.of_nat (14 ^ n) # 1)).
-  rewrite <- (bl_qmake_mul 98%Z (Z.of_nat (3 ^ n))).
-  rewrite <- (bl_qmake_mul 135%Z (Z.of_nat (14 ^ n))).
   apply lne_div_eq.
-  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
-    pose proof (bl_mul_ge1 14 n ltac:(lia)).
-    pose proof (proj1 (Nat2Z.inj_lt 0 (14 ^ n)) ltac:(lia)). lia.
-  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
-    pose proof (bl_mul_ge1 14 n ltac:(lia)).
-    pose proof (proj1 (Nat2Z.inj_lt 0 (14 ^ n)) ltac:(lia)). lia.
-  - ring.
+  - apply Qmult_lt_0_compat.
+    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 14 n ltac:(lia)). lia.
+    + unfold Qlt. cbn [Qnum Qden]. lia.
+  - apply Qmult_lt_0_compat.
+    + unfold Qlt. cbn [Qnum Qden]. lia.
+    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 14 n ltac:(lia)). lia.
+  - rewrite <- (bl_qmake_mul 135%Z (Z.of_nat (14 ^ n))).
+    rewrite <- (bl_qmake_mul 98%Z (Z.of_nat (3 ^ n))).
+    assert (E3 : ((98 # 135) * ((Z.of_nat (3 ^ n) # 1) * Qinv (Z.of_nat (14 ^ n) # 1))
+                    * ((135 # 1) * (Z.of_nat (14 ^ n) # 1)))%Q
+                 == (((98 # 135) * (135 # 1))
+                       * ((Z.of_nat (3 ^ n) # 1) * (Z.of_nat (14 ^ n) # 1)
+                            * Qinv (Z.of_nat (14 ^ n) # 1)))%Q) by ring.
+    rewrite E3.
+    assert (E135 : (98 # 135) * (135 # 1) == (98 # 1)%Q)
+      by (unfold Qeq; cbn [Qnum Qden Qmult Pos.mul]; lia).
+    rewrite E135.
+    unfold Qdiv. ring.
 Qed.
 
 (* ============================================================ *)
-(* §4 主定理                                                         *)
+(* §4 主件（Set 面）                                                   *)
 (* ============================================================ *)
 
-(* 主定理（规格参数）：(1/2)·(3/16)^n ≤ lne_B n，QleT' 语句、Set 层 *)
+(* 主件（T97 §4-P5 规格档）：(1/2)·(3/16)^n ≤ lne_B n *)
 Theorem bl_beta_lower : forall n : nat, QleT' ((1 # 2) * q_pow (3 # 16) n) (lne_B n).
 Proof.
-(* 策略：bl_half_pow 化左侧为单一分式，lne_B_closed 展开右侧，
-     bl_div_le 归约到 bl_nat_core16 的纯 nat 阶乘不等式。 *)  intro n. apply Qle_to_QleT'.
+  intro n. apply Qle_to_QleT'.
   rewrite bl_half_pow, lne_B_closed.
   apply bl_div_le.
   - unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 16 n ltac:(lia)). lia.
@@ -412,11 +387,10 @@ Proof.
     unfold Qle. cbn [Qnum Qden Qmult Pos.mul]. lia.
 Qed.
 
-(* 族最优：(98/135)·(3/14)^n ≤ lne_B n，n=2/3 同时取等且步比尾最小 3/14 使其不可改进 *)
+(* 最优档（族最优对，n=2/3 双缚等号）：(98/135)·(3/14)^n ≤ lne_B n *)
 Theorem bl_beta_lower_opt : forall n : nat, QleT' ((98 # 135) * q_pow (3 # 14) n) (lne_B n).
 Proof.
-(* 策略与 bl_beta_lower 相同：bl_opt_pow 与 lne_B_closed 化为分式，
-     bl_div_le 归约到 bl_nat_core14。 *)  intro n. apply Qle_to_QleT'.
+  intro n. apply Qle_to_QleT'.
   rewrite bl_opt_pow, lne_B_closed.
   apply bl_div_le.
   - unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 14 n ltac:(lia)). lia.
@@ -427,17 +401,19 @@ Proof.
     unfold Qle. cbn [Qnum Qden Qmult Pos.mul]. lia.
 Qed.
 
-(* 变体偏移（(1+t) 侧）：(1/4)·(3/32)^n ≤ 2^{−(n+1)}·lne_B n。
-   注：右端 2^{−(n+1)}·lne_B n 是变体积分 I'_n 的可证载体下界形
-   （I'_n 本体的下界需全段逐点机制，不在本件范围）；
-   (1/4)(3/32)^n = 2^{−(n+2)}(3/16)^n，即由主定理直接倍半推得。 *)
+(* 变体偏移件（(1+t) 面）：(1/4)·(3/32)^n ≤ 2^{−(n+1)}·lne_B n。
+   注：右端 2^{−(n+1)}·lne_B n 是 (1+t)^{n+1} 变体积分 I'_n 的可证折叠
+   承载（I'_n ≥ 2^{−(n+1)}·lne_B n 需全段逐点机，精确偏移登记 T125）；
+   (1/4)(3/32)^n = 2^{−(n+2)}(3/16)^n 与 T97 §三 Λ_n 需求精确匹配。 *)
 Theorem bl_variant_shift : forall n : nat,
   QleT' ((1 # 4) * q_pow (3 # 32) n) (q_pow (1 # 2) (Datatypes.S n) * lne_B n).
 Proof.
   intro n. apply Qle_to_QleT'.
   apply (Qle_trans _ (q_pow (1 # 2) (Datatypes.S n) * ((1 # 2) * q_pow (3 # 16) n))).
-  - (* 恒等式：(1/2)^{S n}·((1/2)(3/16)^n) = (1/4)·((1/2)^n(3/16)^n)
-       = (1/4)(3/32)^n，幂的合并经 bl_qpow_mul。 *)apply qeq_imp_qle.
+  - apply (bl_mlc _ _ (q_pow (1 # 2) (Datatypes.S n))).
+    + apply QleT'_to_Qle. apply bl_beta_lower.
+    + apply q_pow_nonneg. unfold Qle. cbn [Qnum Qden]. lia.
+  - apply qeq_imp_qle.
     rewrite q_pow_succ.
     assert (E3 : ((1 # 2) * q_pow (1 # 2) n * ((1 # 2) * q_pow (3 # 16) n))%Q
                  == (((1 # 2) * (1 # 2)) * (q_pow (1 # 2) n * q_pow (3 # 16) n))%Q) by ring.
@@ -446,14 +422,10 @@ Proof.
     rewrite E2.
     rewrite <- (bl_qpow_mul (1 # 2) (3 # 16) n).
     reflexivity.
-  - (* 两侧乘非负因子 q_pow (1 # 2) (S n) 保序（bl_mlc），再用主定理
-       bl_beta_lower 与非零性 q_pow_nonneg。 *)apply (bl_mlc _ _ (q_pow (1 # 2) (Datatypes.S n))).
-    + apply QleT'_to_Qle. apply bl_beta_lower.
-    + apply q_pow_nonneg. unfold Qle. cbn [Qnum Qden]. lia.
 Qed.
 
 (* ============================================================ *)
-(* §5 数值锚（n=0..3 的 vm_compute 实例与 lne_B 值见证）               *)
+(* §5 数值锚哨（n=0..3 vm_compute 实例 + 载体值见证）                    *)
 (* ============================================================ *)
 
 Lemma bl_spec_anchor0 : QleT' ((1 # 2) * q_pow (3 # 16) 0) (lne_B 0).
@@ -480,11 +452,11 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma bl_opt_anchor3 : QleT' ((98 # 135) * q_pow (3 # 14) 3) (lne_B 3).
 Proof. vm_compute. reflexivity. Qed.
 
-(* 变体偏移在 n=3 的数值锚：左端 (1/4)(3/32)³ = 27/131072，右端 2^{−3}·(1/140) = 1/1120 *)
+(* 变体折叠 n=3 锚：2^{-4}·(1/140) = 1/2240 ≥ 27/131072 *)
 Lemma bl_var_anchor3 : QleT' ((1 # 4) * q_pow (3 # 32) 3) (q_pow (1 # 2) 3 * lne_B 3).
 Proof. vm_compute. reflexivity. Qed.
 
-(* lne_B 数值见证（经 lne_B_closed）：lne_B 1 = 1/6, 2 → 1/30, 3 → 1/140 *)
+(* 载体值见证（Beta 闭式数值面）：1, 1/6, 1/30, 1/140 *)
 Lemma bl_value1 : QeqT (lne_B 1) (1 # 6).
 Proof. apply qeq_imp_qeqT. rewrite lne_B_closed. reflexivity. Qed.
 
@@ -495,7 +467,7 @@ Lemma bl_value3 : QeqT (lne_B 3) (1 # 140).
 Proof. apply qeq_imp_qeqT. rewrite lne_B_closed. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §6 提取与假设审计                                                  *)
+(* §6 提取探针 + 公理面自审                                             *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

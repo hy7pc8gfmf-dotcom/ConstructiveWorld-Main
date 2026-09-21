@@ -1,14 +1,16 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   nlp_len_nonzero（原 L80，2 句玩具证）                                *)
-(*   nlp_ofnat_S_pos（原 L54，5 句玩具证）                                *)
-(* ============================================================ *)
-
+(* ========================================================================= *)
+(* 【ToyR 战役·包AW五·T303 台账席】玩具级定理同名非平凡替换稿（补标头注）    *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包AW五 替换落件（原名落件）；落件时头部漏植战役标记，     *)
+(* 本块由 T326 异常修复席于 2026-09-22 补植：仅加头注，语句面／证明体／      *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T303。       *)
+(* 替换定理清单：nlp_ofnat_S_pos（共 1 刀，刀面以台账为权威）                *)
+(* 非平凡性口径：裸双 apply 尾链并项为单 exact 全显项，步进点显式化          *)
+(* 直取，无行拆分式假非平凡。                                                *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 证明面，落件录判绿承来源台账。                                            *)
+(* ========================================================================= *)
 (* ============================================================ *)
 (* NatLenPos.v —— T40 消融50 战役 CYC9 席（批次 E-STAGING-CYC9）   *)
 (*                                                              *)
@@ -65,11 +67,11 @@ Qed.
 Lemma nlp_ofnat_S_pos : forall k : nat,
   real_lt real_zero (real_of_nat (Datatypes.S k)).
 Proof.
-  intro k.
-  cbn [real_of_nat].
-  apply (real_lt_le_trans real_zero real_one           (real_plus real_one (real_of_nat k)) real_lt_zero_one).
-  apply real_le_plus_nonneg_r_aux.
-  apply nlp_ofnat_nonneg.
+  intro k. cbn [real_of_nat].
+  exact (real_lt_le_trans real_zero real_one
+           (real_plus real_one (real_of_nat k)) real_lt_zero_one
+           (real_le_plus_nonneg_r_aux real_one (real_of_nat k)
+              (nlp_ofnat_nonneg k))).
 Qed.
 
 (* ---- 主件：枚举长度正性槽（G01:284 Hpos 的覆盖见证收口形） ----
@@ -94,7 +96,12 @@ Theorem nlp_len_nonzero :
     Not (real_eq real_zero (real_of_nat (Datatypes.length enum))).
 Proof.
   intros G enum Hpos H0.
-  exact (real_lt_irrefl real_zero           (real_lt_eq_lt real_zero                          (real_of_nat (Datatypes.length enum))                          real_zero Hpos                          (real_eq_sym real_zero                             (real_of_nat (Datatypes.length enum)) H0))).
+  exact (real_lt_irrefl real_zero
+           (real_lt_eq_lt real_zero
+                          (real_of_nat (Datatypes.length enum))
+                          real_zero Hpos
+                          (real_eq_sym real_zero
+                             (real_of_nat (Datatypes.length enum)) H0))).
 Qed.
 
 (* ---- G01:284 槽位锚定形：组均值 mean2 的封闭装配

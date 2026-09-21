@@ -1,4 +1,16 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T260 台账席 战役包U（tier2 批量面第十一批）   *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列玩具位中真刀位  *)
+(* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
+(* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
+(* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
+(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 清单：                                                          *)
+(*   ptp_sum_S（原 L71，显式见证微刀 1 处）                                  *)
+(*   ptp_exp_S（原 L266，显式见证微刀 1 处）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeTailPos.v *)
 (* *)
 (* 目的： Padé 正尾恒等式主件（C 路闭合段）。 *)
@@ -70,7 +82,7 @@ Definition ptp_beta_prefix (n M : nat) (y : Q) : Q :=
 (* sum_upto 尾部展开：定义性（sum_upto (S K) f = sum_upto K f + f K） *)
 Lemma ptp_sum_S : forall (K : nat) (f : nat -> Q),
   sum_upto (Datatypes.S K) f == sum_upto K f + f K.
-Proof. intro K. intro f. reflexivity. Qed.
+Proof. intro K. intro f. exact (Qeq_refl (sum_upto (Datatypes.S K) f)). Qed.
 
 (* 前缀步进：prefix (S M) = prefix M + f (S M) *)
 Lemma ptp_prefix_S : forall (n M : nat) (y : Q),
@@ -266,7 +278,7 @@ Definition ptp_G (k : nat) (y : Q) : Q :=
 Lemma ptp_exp_S : forall (n : nat) (y : Q),
   exp_partial (Datatypes.S n) y
   == exp_partial n y + q_pow y (Datatypes.S n) / q_fact (Datatypes.S n).
-Proof. intros n y. reflexivity. Qed.
+Proof. intros n y. exact (Qeq_refl (exp_partial (Datatypes.S n) y)). Qed.
 
 Lemma ptp_G_eq : forall k y,
   ptp_G k y

@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T258 台账席 战役包S（tier2 九批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   fa51_Z_temp_spec_def（原 L158，2 句玩具证；裸 reflexivity→@id_refl 显式见证项 1 刀）*)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* fa51_sumpos_id.v —— T40 消融50 战役 VA 席（批次 E-STAGING-VA） *)
 (*                                                               *)
 (* 目的：S04:3339 / S05:2535 / S05:4602 之 sum_over_S_pos 槽、    *)
@@ -160,7 +170,8 @@ Theorem fa51_Z_temp_spec_def :
     Id (fa51_Z_temp base_loss t Ht)
        (fa51_sumd (fun s => exp_neg (mult (inv_pos t Ht) (base_loss s))) enum).
 Proof.
-  intros base_loss t Ht. reflexivity.
+  intros base_loss t Ht.
+  exact (@id_refl _ (fa51_sumd (fun s => exp_neg (mult (inv_pos t Ht) (base_loss s))) enum)).
 Qed.
 
 Theorem fa51_Z_temp_pos :

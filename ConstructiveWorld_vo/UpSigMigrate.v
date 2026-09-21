@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   req_mult_one_l（原 L96，6 句刀体）                                  *)
+(*   req_plus_zero_r（原 L89，6 句刀体）                                 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpSigMigrate.v *)
 (* *)
 (* 目的： 签名迁移试点：req 载体上的 Boltzmann 分布与自由能。 *)
@@ -89,14 +100,22 @@ Hypothesis free_energy_boltzmann_bridge :
 Lemma req_plus_zero_r : forall a : R, req (plus zero a) a.
 Proof.
   intro a.
-  exact (req_trans (plus zero a) (plus a zero) a (plus_comm zero a) (plus_zero a)).
+  assert (Hc : req (plus zero a) (plus a zero)).
+  { exact (plus_comm zero a). }
+  assert (Hz : req (plus a zero) a).
+  { exact (plus_zero a). }
+  exact (req_trans (plus zero a) (plus a zero) a Hc Hz).
 Qed.
 
 (* 单位元左形式：mult_one 字段只有右形式 *)
 Lemma req_mult_one_l : forall a : R, req (mult one a) a.
 Proof.
   intro a.
-  exact (req_trans (mult one a) (mult a one) a (mult_comm one a) (mult_one a)).
+  assert (Hc : req (mult one a) (mult a one)).
+  { exact (mult_comm one a). }
+  assert (Ho : req (mult a one) a).
+  { exact (mult_one a). }
+  exact (req_trans (mult one a) (mult a one) a Hc Ho).
 Qed.
 
 (* 左消去：opp 唯一性的引擎（Id 系经 destruct/注入免费获得，此处 7 段链） *)

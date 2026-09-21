@@ -294,7 +294,8 @@ Lemma rppo_dpo_reward_is_implicit :
 Proof.
   intros pi Hpi s.
   unfold dpo_reward_explicit_req, dpo_implicit_reward_req.
-  apply req_refl.
+  exact (req_refl (mult beta (req_minus (log (pi s) (Hpi s))
+                                          (log (pi_ref s) (pi_ref_pos s))))).
 Qed.
 
 (* ---- 件2 advantage_expectation_zero（基座 L19844；真证） ----

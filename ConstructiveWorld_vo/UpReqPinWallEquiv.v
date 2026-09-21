@@ -1,4 +1,18 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pwe_reverse_obstacle（原 L223，2 句玩具证）                          *)
+(*   pwe_pin_wall_lpo（原 L186，2 句玩具证）                              *)
+(*   pwe_E_carrier_void（原 L147，2 句玩具证）                            *)
+(*   pwe_E_carrier_excl（原 L137，2 句玩具证）                            *)
+(*   pwe_carrier_excl（原 L127，2 句玩具证）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPinWallEquiv.v *)
 (* *)
 (* 目的： 钉定墙与受限 LPO 的等价（第三面墙定理化）。 *)
@@ -139,8 +153,7 @@ Theorem pwe_E_carrier_excl : forall bnorm : bxib_E -> Q,
   Id (2#4)%Q (1#2)%Q.
 Proof.
   intros bnorm Hpin Hcanon.
-  exact (pwe_carrier_excl bxib_E bxib_ev bnorm Hpin Hcanon
-           (bxib_esc (2#4)%Q)).
+  exact (pwe_carrier_excl bxib_E bxib_ev bnorm Hpin Hcanon           (bxib_esc (2#4)%Q)).
 Qed.
 
 (* E-载体互斥的驳斥形态（全决策力） *)

@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T278 台账席 散落挂账集中清偿（原 T265 刀体    *)
+(* 原样复验；本席连带编 P7BoundedSoftmaxDeep 入池补齐依赖链后编译判绿）*)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   lhs_lo_lt_hi（原 L96，5 句刀体）                                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* LoHiSqueeze.v —— 席位P7D（批次 E-STAGING-P7D）合璧包装定理     *)
 (*                                                                *)
 (* 使命：论文7《率即算法》夹逼包装——P7A 已证 lo=e^{−Δ/T}<1        *)
@@ -95,7 +106,11 @@ Qed.
    语句与基座 AttnDoeblin.bs_lo_lt_hi:565 对齐，前提面同（B 类证书）。 *)
 Theorem lhs_lo_lt_hi : lt lo hi.
 Proof.
-  exact (lt_trans lo one hi (fst lhs_lo_lt_one_hi) (snd lhs_lo_lt_one_hi)).
+  assert (Hlo : lt lo one).
+  { exact (fst lhs_lo_lt_one_hi). }
+  assert (Hhi : lt one hi).
+  { exact (snd lhs_lo_lt_one_hi). }
+  exact (lt_trans lo one hi Hlo Hhi).
 Qed.
 
 (* 件 c：0 < δ* < 1 完整包装（Set 层 And）。

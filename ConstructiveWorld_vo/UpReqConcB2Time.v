@@ -84,7 +84,7 @@
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
-From Stdlib Require Import Lia Lra.
+From Stdlib Require Import Lia.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.

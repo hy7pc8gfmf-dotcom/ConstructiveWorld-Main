@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_kl_decomp_full_canon_partition（原 L103，3 句玩具证）           *)
+(*   real_kl_decomp_full_canon（原 L57，2 句玩具证）                      *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqFEPCanon.v *)
 (* *)
 (* 目的： 定理 4.1 Real 复刻的正典化对接件。 *)
@@ -84,13 +95,8 @@ Lemma real_kl_decomp_full_canon :
                       (Hp s)
                       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
 Proof.
-  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-         p Hp Hnormp Hnormb.
-  exact (rfep_real_kl_decomp_full
-           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-           p Hp Hnormp Hnormb).
+  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos         p Hp Hnormp Hnormb.
+  exact (rfep_real_kl_decomp_full           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos           p Hp Hnormp Hnormb).
 Qed.
 
 (* ---------------------------------------------------------- *)
@@ -131,14 +137,7 @@ Lemma real_kl_decomp_full_canon_partition :
                       (Hp s)
                       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
 Proof.
-  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-         p Hp Hnormp Hpart.
-  apply (rfep_real_kl_decomp_full
-           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
-           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
-           p Hp Hnormp).
-  exact (rfep_boltzmann_normalized_real
-           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_linear
-           real_base_loss D D_pos Z_align_r Z_align_r_pos Hpart).
+  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos         p Hp Hnormp Hpart.
+  apply (rfep_real_kl_decomp_full           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add           real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos           p Hp Hnormp).
+  exact (rfep_boltzmann_normalized_real           S real_sum_over_S real_sum_over_S_ext real_sum_over_S_linear           real_base_loss D D_pos Z_align_r Z_align_r_pos Hpart).
 Qed.

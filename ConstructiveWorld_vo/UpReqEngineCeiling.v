@@ -255,11 +255,10 @@ Qed.
 Theorem cec_H_lower : forall k : nat, (5 <= k)%nat -> QleT' (1 + 1)%Q (cec_pt k).
 Proof.
   intros k Hk.
-  apply Qle_to_QleT'.
-  apply Qlt_le_weak.
-  apply cec_pt_gt2.
-  exact Hk.
+  exact (Qle_to_QleT' (1 + 1)%Q (cec_pt k)
+    (Qlt_le_weak (1 + 1)%Q (cec_pt k) (cec_pt_gt2 k Hk))).
 Qed.
+
 
 (* ---- 2. 截断引擎族天花板 c*(k) = min(H_k − 1/(k+1), 2)（G2a） ---- *)
 
@@ -445,7 +444,8 @@ Qed.
 
 (* QleT' 影子件（Set 面 ≤ 形） *)
 Theorem cec_tangent_le : forall m : nat, QleT' (cec_tg m) (1 + 1)%Q.
-Proof. intro m. apply qltT_leT'. apply cec_tangent_ceiling. Qed.
+Proof.
+Proof. intro m. exact (qltT_leT' (cec_tg m) (1 + 1)%Q (cec_tangent_ceiling m)). Qed.
 
 (* 缺口恒等式：2 − 2m/(m+1) == 2/(m+1)（缺口恰 2/k 的 Q 层精确形） *)
 Theorem cec_tangent_gap : forall m : nat,

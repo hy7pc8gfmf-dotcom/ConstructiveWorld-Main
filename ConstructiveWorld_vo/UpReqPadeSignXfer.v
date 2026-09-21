@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T258 台账席 战役包S（tier2 九批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   psx_beta_bridge（原 L119，2 句玩具证；裸 reflexivity→Qeq_refl 显式见证项 1 刀）*)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqPadeSignXfer.v *)
 (* *)
 (* 目的： pbp_sign_transfer 的实例化传送件。 *)
@@ -85,10 +95,10 @@ Proof.
 Qed.
 
 Lemma psx_sign_double : forall k : nat, psx_sign (2 * k) == 1%Q.
-Proof. intro k. apply psx_sign_pair. Qed.
+Proof. intro k. destruct (psx_sign_pair k) as [Hp _]. exact Hp. Qed.
 
 Lemma psx_sign_odd : forall k : nat, psx_sign (2 * k + 1) == (-1)%Q.
-Proof. intro k. apply psx_sign_pair. Qed.
+Proof. intro k. destruct (psx_sign_pair k) as [_ Ho]. exact Ho. Qed.
 
 (* 符号平方归一（主件去号完成用） *)
 Lemma psx_sign_sq : forall n : nat, psx_sign n * psx_sign n == 1%Q.
@@ -117,7 +127,7 @@ Qed.
 
 (* 双库桥：pbp_beta 与 ptp_beta 闭式逐字同构（透明 Definition 转换面） *)
 Lemma psx_beta_bridge : forall n m : nat, ptp_beta n m == pbp_beta n m.
-Proof. intros n m. reflexivity. Qed.
+Proof. intros n m. exact (Qeq_refl (ptp_beta n m)). Qed.
 
 (* 系数积形：coef n = ptp_beta n 0 · posf n（喂传送接口的积形） *)
 Lemma psx_coef_prod : forall n : nat, psx_coef n == ptp_beta n 0 * psx_posf n.

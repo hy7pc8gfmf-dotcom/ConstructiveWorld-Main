@@ -1,4 +1,15 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   disturbance_hierarchical_transitive（原 L294，2 句玩具证）           *)
+(*   landauer_bound_pos（原 L240，1 句玩具证）                            *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpPredRelaxReq.v *)
 (* *)
 (* 目的： 预报松弛族的 req 镜像：递减链与层级传递（温度差载体）。 *)
@@ -239,30 +250,7 @@ Variable prediction_landauer :
    lt_id_r 沿 req 腿把 zero < k_B·(T·log 2) 传成 zero < E_min）。 *)
 Theorem landauer_bound_pos : lt zero E_min.
 Proof.
-  exact (lt_id_r zero
-                 (mult k_B (mult T_landauer
-                                (log (plus one one)
-                                     (plus_positive one one one_pos one_pos))))
-                 E_min
-                 (req_sym E_min
-                          (mult k_B
-                                (mult T_landauer
-                                      (log (plus one one)
-                                           (plus_positive one one one_pos
-                                                         one_pos))))
-                          prediction_landauer)
-                 (mult_positive k_B
-                                (mult T_landauer
-                                      (log (plus one one)
-                                           (plus_positive one one one_pos
-                                                         one_pos)))
-                                k_B_pos
-                                (mult_positive T_landauer
-                                               (log (plus one one)
-                                                    (plus_positive one one
-                                                                     one_pos
-                                                                     one_pos))
-                                               T_pos log_two_pos))).
+  exact (lt_id_r zero                 (mult k_B (mult T_landauer                                (log (plus one one)                                     (plus_positive one one one_pos one_pos))))                 E_min                 (req_sym E_min                          (mult k_B                                (mult T_landauer                                      (log (plus one one)                                           (plus_positive one one one_pos                                                         one_pos))))                          prediction_landauer)                 (mult_positive k_B                                (mult T_landauer                                      (log (plus one one)                                           (plus_positive one one one_pos                                                         one_pos)))                                k_B_pos                                (mult_positive T_landauer                                               (log (plus one one)                                                    (plus_positive one one                                                                     one_pos                                                                     one_pos))                                               T_pos log_two_pos))).
 Qed.
 
 End PredRelaxLandauerReq.
@@ -296,9 +284,7 @@ Theorem disturbance_hierarchical_transitive : forall (u m l : PropType),
   le (disturbance u) (disturbance l).
 Proof.
   intros u m l Hum Hml.
-  exact (le_trans (disturbance u) (disturbance m) (disturbance l)
-                  (hierarchical_stability_prediction u m Hum)
-                  (hierarchical_stability_prediction m l Hml)).
+  exact (le_trans (disturbance u) (disturbance m) (disturbance l)                  (hierarchical_stability_prediction u m Hum)                  (hierarchical_stability_prediction m l Hml)).
 Qed.
 
 (* 有限链版本：沿层级链 n 步，扰动单调不增（le_refl + le_trans 的 nat

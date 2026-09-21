@@ -72,7 +72,7 @@ Local Open Scope Q_scope.
 (* ============================================================ *)
 
 Lemma rtb_qleT_refl : forall a : Q, QleT' a a.
-Proof. intro a. apply Qle_to_QleT'. apply Qle_refl. Qed.
+Proof. intro a. apply Qle_to_QleT'. exact (Qle_refl a). Qed.
 
 Lemma rtb_qleT_trans : forall a b c : Q, QleT' a b -> QleT' b c -> QleT' a c.
 Proof.
@@ -98,9 +98,11 @@ Lemma rtb_qleT_mult_r : forall a b c : Q,
   QleT' a b -> QleT' 0 c -> QleT' (a * c) (b * c).
 Proof.
   intros a b c Hab Hc.
-  apply Qle_to_QleT'.
-  apply Qmult_le_compat_r;    [apply QleT'_to_Qle; exact Hab | apply QleT'_to_Qle; exact Hc].
+  exact (Qle_to_QleT' (a * c) (b * c)
+    (Qmult_le_compat_r a b c (QleT'_to_Qle a b Hab)
+      (QleT'_to_Qle 0 c Hc))).
 Qed.
+
 
 (* ρ ≤ 1 ⟹ 0 ≤ 1-ρ（Qopp_le_compat 反向 + 环账） *)
 Lemma rtb_qle_0_minus : forall rho : Q, QleT' rho 1 -> QleT' 0 (1 - rho).
