@@ -3242,6 +3242,16 @@ Definition ng_UpAblMetaDivQ : NewGreenFace :=
 Definition ng_UpAblMetaTemp : NewGreenFace :=
   MkNewGreenFace "UpAblMetaTemp.v" 642 12 20260922 "M2R2 relay seat: temperature-modulus divergence (mtp_ twelve faces PA Closed, anchor divergence zero axioms)".
 
+(* ================= v4.20 增册（R110 注册波：MetaDivThm 跟进波——合取运输桥新件+解封主件同车，20260922；承前 ng_ 共 386 条，本批 2 条后共 388 条） ================= *)
+
+(* ng_UpAblMetaConjBridge —— UpAblMetaConjBridge.v：CJS3 席合取运输桥（mtdc_lo_inflation 旗舰 Defined+8 镜像桩，PA 1/1 Closed，镜像 LoInflation 参序）（_tcjs3_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaConjBridge : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaConjBridge.v" 399 8 20260922 "CJS3 seat: conjunction transport bridge (mtdc_lo_inflation flagship Defined + eight mirror lemmas, PA 1/1 Closed, LoInflation variable order)".
+
+(* ng_UpAblMetaDivThm —— UpAblMetaDivThm.v：CJS3 席解封件（mtd_unbounded 主件+定理 A+第 8 条 mtd_unbounded_conj 合取件恢复，PA 8/8 Closed，Require 桥件 1 行）（_tcjs3_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaDivThm : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaDivThm.v" 1520 17 20260922 "CJS3 seat: unsealed divergence theorem (mtd_unbounded main + theorem A + restored eighth face mtd_unbounded_conj conjunction, PA 8/8 Closed, one-line bridge Require)".
+
 (* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
 Print Assumptions cnt_mod_length.
 Print Assumptions minus_absorb_r.

@@ -568,3 +568,5 @@ UpReqMixLazy.v
 UpReqMixRealExec.v
 UpAblMetaDivQ.v
 UpAblMetaTemp.v
+UpAblMetaConjBridge.v
+UpAblMetaDivThm.v
