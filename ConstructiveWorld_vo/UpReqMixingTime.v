@@ -644,8 +644,83 @@ Corollary mix_k_select_le : forall (kappa TV0 budget : Real),
 Proof.
   intros kappa TV0 budget Hk1 Hk2 Ha Hbudget.
   destruct (mix_k_select kappa TV0 budget Hk1 Hk2 Ha Hbudget) as [k Hk].
-  exists k. apply (RealSetoid.real_lt_le_iff_req). left. exact Hk.
+  exists k.   apply (RealSetoid.real_lt_le_iff_req). left. exact Hk.
 Defined.
+
+(* ============================================================ *)
+(* Part 6.5：R1 见证/证明分离（§10.2 第 11 项可执行化路线，本轮已实施）    *)
+(*   症状根因：mix_pow_budget / mix_k_select 以 Defined 收束 ⟹ 提取后       *)
+(*     运行时强制计算 mix_bernoulli_upper 归纳证书链（Set 层 real_le，       *)
+(*     长度 = k，且绑定 tv_rpow 的 Real 值构造 → cauchy 模证强制）⟹ 膨胀/超时 *)
+(*   R1（改动最小、直击症状）：见证（纯计算 k）与证明（不透明 Qed）分离。      *)
+(*   · mix_k_compute : 透明 Definition，仅走 real_arch 枚举（廉价 Q 层），    *)
+(*     不构造 tv_rpow / mix_bernoulli_upper ⟹ 提取程序运行时只付 real_arch    *)
+(*     ＋基础 Real 运算（real_minus_r/real_mult/real_inv_pos），跳过膨胀链。  *)
+(*   · mix_k_spec : Qed 不透明，承载 κ^k·TV₀ < budget 的全证书（经            *)
+(*     mix_pow_budget 复用，含 mix_bernoulli_upper）；运行时不强制求值。      *)
+(*   · mix_k_select_r1 : existT 打包（witness=mix_k_compute, proof=mix_k_spec）；*)
+(*     projT1 归约固定引理 mix_k_select_r1_projT1（Qed 第二分量不影响 projT1   *)
+(*     归约——标准事实，机检固定）。                                          *)
+(*   零新增公理；mix_k_compute 全树透明、可提取；mix_k_spec 不透明。         *)
+(* ============================================================ *)
+
+Definition mix_k_compute (kappa TV0 budget : Real)
+  (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
+  (Hbudget : real_lt real_zero budget) : nat :=
+  let w := real_minus_r real_one kappa in
+  let wb := real_mult w budget in
+  let Hwb := real_mult_pos_compat w budget (tv_omd_pos_of_lt kappa Hk2) Hbudget in
+  let (n, _) := real_arch (real_mult TV0 (real_inv_pos wb Hwb)) in n.
+
+(* 见证一致引理（R1 新增证明义务，机检固定）：mix_k_compute 的 k 与
+   mix_pow_budget 证书的 k 同源于同一 real_arch sigT 的首投影；后者证明体内
+   destruct N 死支精化后呈 S 形，与裸 arch 见证命题等值（0 支由 2≤n 死支排除）。
+   real_arch 为 Qed 不透明，二者定义性不等价 ⟹ mix_k_spec 复用证书须经此引理。 *)
+Theorem mix_k_compute_eq_pow_budget (kappa TV0 budget : Real)
+  (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
+  (Ha : real_lt real_zero TV0) (Hbudget : real_lt real_zero budget) :
+  mix_k_compute kappa TV0 budget Hk1 Hk2 Hbudget
+  = projT1 (mix_pow_budget kappa TV0 budget Hk1 Hk2 Ha Hbudget).
+Proof.
+  unfold mix_k_compute, mix_pow_budget.
+  cbv zeta.
+  destruct (real_arch (real_mult TV0
+             (real_inv_pos (real_mult (real_minus_r real_one kappa) budget)
+                (real_mult_pos_compat (real_minus_r real_one kappa) budget
+                   (tv_omd_pos_of_lt kappa Hk2) Hbudget)))) as [n [Hge2 Hn]].
+  destruct n as [| m].
+  - exfalso. lia.
+  - reflexivity.
+Qed.
+
+Theorem mix_k_spec (kappa TV0 budget : Real)
+  (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
+  (Ha : real_lt real_zero TV0) (Hbudget : real_lt real_zero budget) :
+  real_lt (real_mult (tv_rpow kappa (mix_k_compute kappa TV0 budget Hk1 Hk2 Hbudget)) TV0) budget.
+Proof.
+  rewrite (mix_k_compute_eq_pow_budget kappa TV0 budget Hk1 Hk2 Ha Hbudget).
+  exact (projT2 (mix_pow_budget kappa TV0 budget Hk1 Hk2 Ha Hbudget)).
+Qed.
+
+Definition mix_k_select_r1 (kappa TV0 budget : Real)
+  (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
+  (Ha : real_lt real_zero TV0) (Hbudget : real_lt real_zero budget) :
+  sigT (fun k : nat => real_lt (real_mult (tv_rpow kappa k) TV0) budget) :=
+  existT _ (mix_k_compute kappa TV0 budget Hk1 Hk2 Hbudget)
+         (mix_k_spec kappa TV0 budget Hk1 Hk2 Ha Hbudget).
+
+(* 归约固定：projT1 (mix_k_select_r1 ...) = mix_k_compute ...（Qed 第二分量    *)
+(*   不影响 projT1 归约——R1 设计文档新增证明义务，机检固定）               *)
+Theorem mix_k_select_r1_projT1 (kappa TV0 budget : Real)
+  (Hk1 : real_lt real_zero kappa) (Hk2 : real_lt kappa real_one)
+  (Ha : real_lt real_zero TV0) (Hbudget : real_lt real_zero budget) :
+  projT1 (mix_k_select_r1 kappa TV0 budget Hk1 Hk2 Ha Hbudget)
+  = mix_k_compute kappa TV0 budget Hk1 Hk2 Hbudget.
+Proof. reflexivity. Qed.
+
+Print Assumptions mix_k_compute.
+Print Assumptions mix_k_spec.
+Print Assumptions mix_k_select_r1.
 
 (* ============================================================ *)
 (* Part 7-8（G2 mix_time_explicit / G3 mix_k_calc）：起草完成、编译未达    *)
