@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ams_sum_switch_self（原 L340，4 句轻证）	*)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqAttnMassSplit.v —— 质量分裂四件链（Σw 拆分至 L1 上界）        *)
 (*                                                              *)
 (* 目的：补齐上游冻结链的后四件（mass_split → deficit_eq →           *)
@@ -883,3 +893,6 @@ Print Assumptions ams_mass_split.
 Print Assumptions ams_deficit_eq.
 Print Assumptions ams_mass_rest_le.
 Print Assumptions ams_l1_le.
+
+(* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)
+Print Assumptions ams_sum_switch_self.

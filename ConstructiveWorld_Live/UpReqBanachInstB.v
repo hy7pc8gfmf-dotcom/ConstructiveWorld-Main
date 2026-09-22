@@ -291,7 +291,7 @@ Qed.
 (* 等价形式：Qeq（Prop 引擎面）入，Id（Set 面）出 *)
 Lemma bxib_qnorm_id_of_qeq : forall x y : Q, x == y -> Id (bxib_qnorm x) (bxib_qnorm y).
 Proof.
-  intros x y H. apply bxib_qnorm_id_of_qeqT. apply qeq_imp_qeqT. exact H.
+  intros x y H. exact (bxib_qnorm_id_of_qeqT x y (qeq_imp_qeqT x y H)).
 Qed.
 
 (* ---- QeqT 小工具族 ---- *)
@@ -427,7 +427,9 @@ Qed.
 (* 不动点的 Id 形（KEY 自举） *)
 Lemma bxib_qnorm_fix_id : forall t : Q,
   Id (bxib_qnorm (bxib_qnorm t)) (bxib_qnorm t).
-Proof. intro t. apply bxib_qnorm_id_of_qeqT. apply bxib_qnorm_fix. Qed.
+Proof.
+  intro t. exact (bxib_qnorm_id_of_qeqT (bxib_qnorm t) t (bxib_qnorm_fix t)).
+Qed.
 
 (* 规范形上的 QeqT→Id 提升两端各付一次不动点 Id *)
 Lemma bxib_id_of_qeqT_canon : forall x y : Q,
@@ -491,7 +493,9 @@ Definition bxib_bnorm (a : bxib_E) : Q := Qabs (bxib_qnorm (bxib_ev a)).
 (* ---- bae 等价三律 ---- *)
 
 Lemma bxib_bae_refl : forall a : bxib_E, bxib_bae a a.
-Proof. intro a. apply id_refl. Qed.
+Proof.
+  intro a. exact (@id_refl _ (bxib_qnorm (bxib_ev a))).
+Qed.
 
 Lemma bxib_bae_sym : forall a b : bxib_E, bxib_bae a b -> bxib_bae b a.
 Proof. intros a b H. exact (id_sym H). Qed.
@@ -520,8 +524,7 @@ Proof. intros a b H. exact (id_cong Qabs H). Qed.
 Lemma bxib_bplus_comm : forall a b : bxib_E,
   bxib_bae (bxib_eplus a b) (bxib_eplus b a).
 Proof.
-  intros a b. apply bxib_qnorm_id_of_qeqT.
-  apply bxib_qnorm_qeqT_of_qeqT. apply qeq_imp_qeqT. apply Qplus_comm.
+  intros a b. exact (bxib_qnorm_id_of_qeqT (bxib_ev (bxib_eplus a b)) (bxib_ev (bxib_eplus b a)) (bxib_qnorm_qeqT_of_qeqT (bxib_ev a + bxib_ev b)%Q (bxib_ev b + bxib_ev a)%Q (qeq_imp_qeqT (bxib_ev a + bxib_ev b)%Q (bxib_ev b + bxib_ev a)%Q (Qplus_comm (bxib_ev a) (bxib_ev b))))).
 Qed.
 
 Lemma bxib_bplus_assoc : forall a b c : bxib_E,

@@ -45,12 +45,12 @@
 (* 不引入接口之外的新前提；                                                  *)
 (* §4 RealEnhancedReal 的 zero/lt 投影与 real_zero/real_lt           *)
 (* 的定义性互换（实例展开下原句形逐字还原）；                                         *)
-(* §5 消费面对应命题：S05 中 Z_rel_pos 的实数层对应形式                           *)
+(* §5 使用面对应命题：S05 中 Z_rel_pos 的实数层对应形式                           *)
 (* （cons 非空形，和的正性由 zabr_list_sum_pos_cons 给出）。                   *)
 (*                                                               *)
 (* 各件（spd_slot_direct_unit、spd_sum_unit、spd_slot_unit_direct、    *)
 (* spd_field_*、spd_inst_zero_aligned、spd_inst_lt_aligned、        *)
-(* spd_Z_rel、spd_Z_rel_pos）均以 Qed 收口，依赖审计见文末                     *)
+(* spd_Z_rel、spd_Z_rel_pos）均以 Qed 闭合，依赖审计见文末                     *)
 (* Print Assumptions。                                            *)
 (*                                                               *)
 (* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp                   *)
@@ -240,7 +240,7 @@ Proof.
   exact Hs.
 Qed.
 
-(* ================= §5 消费面对应命题：cons 非空形的求和正性 ================= *)
+(* ================= §5 使用面对应命题：cons 非空形的求和正性 ================= *)
 
 (* spd_Z_rel：S05 中 Z_rel 的实数层对应定义，逐字对齐
    （sum_over_S ↦ real_list_sum、mult ↦ real_mult、exp_neg ↦ real_exp_neg、

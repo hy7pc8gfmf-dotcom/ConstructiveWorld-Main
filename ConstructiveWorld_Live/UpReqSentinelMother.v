@@ -87,7 +87,7 @@ Qed.
 Lemma stm_domin_head : forall (x a : Z) (l : list Z),
   smin x (a :: l) <= dist x a.
 Proof.
-  intros x a l. simpl. apply Z.le_min_l.
+  intros x a l. exact (Z.le_min_l (dist x a) (smin x l)).
 Qed.
 
 (* 正面可达面（单调忠实性）：单元素表且核值在哨兵下界内时，输出恰为该核值
@@ -95,7 +95,7 @@ Qed.
 Lemma stm_smin_singleton : forall (x a : Z),
   dist x a <= s -> smin x (a :: nil) = dist x a.
 Proof.
-  intros x a H. simpl. apply Z.min_l. exact H.
+  intros x a H. exact (Z.min_l (dist x a) s H).
 Qed.
 
 (* —— Set 层证人包（sigT 范式；提取后 Prop 位擦除为 __，数据位存活）—— *)
@@ -105,7 +105,7 @@ Definition stm_head_witness (l : list Z) (H : (0 < length l)%nat) : {a : Z & In 
 Proof.
   destruct l as [|a l'].
   - simpl in H. exfalso. lia.
-  - exists a. left. reflexivity.
+  - exact (@existT _ (fun a0 : Z => In a0 (a :: l')) a (@or_introl (a = a) (In a l') eq_refl)).
 Defined.
 
 (* argmin 条目选择器：返回实现最小核值的表内条目（纯 Set 计算）。 *)
@@ -254,30 +254,25 @@ Definition stm_g10_dmin (x : Z) (l : list Z) : Z :=
 (* 空带支吐哨兵本体：999 位形落地（空表可达面 = 哨兵位的定义面）。 *)
 Lemma stm_g10_nil_sentinel : forall x : Z, stm_g10_dmin x nil = 999.
 Proof.
-  intros x.
-  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
-  exact eq_refl.
+  intros x. exact (eq_refl 999).
 Qed.
 
 (* 发射 2 于带 [0]：费 = |2-0| = 2（核对 G10 dwm_W1 = 4 - 2）。 *)
 Lemma stm_g10_fee_emit2 : stm_g10_dmin 2 (0 :: nil) = 2.
 Proof.
-  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
-  exact eq_refl.
+  exact (eq_refl 2).
 Qed.
 
 (* 发射 1 于带 [2,0]：费 = min(1,1) = 1（核对 G10 dwm_W2 = 2 - 1）。 *)
 Lemma stm_g10_fee_emit1 : stm_g10_dmin 1 (2 :: 0 :: nil) = 1.
 Proof.
-  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
-  exact eq_refl.
+  exact (eq_refl 1).
 Qed.
 
 (* 发射 3 于带 [2,1,0]：费 = min(1,2,3) = 1（核对 G10 dwm_emit3_legal 前提）。 *)
 Lemma stm_g10_fee_emit3 : stm_g10_dmin 3 (2 :: 1 :: 0 :: nil) = 1.
 Proof.
-  unfold stm_g10_dmin, smin, stm_g10_dist, stm_g10_s.
-  exact eq_refl.
+  exact (eq_refl 1).
 Qed.
 
 (* —— 族 2 口径：999 哨兵不可达（母件 B 实例化）—— *)

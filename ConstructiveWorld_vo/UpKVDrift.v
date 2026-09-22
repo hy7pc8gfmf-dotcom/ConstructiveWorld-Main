@@ -247,7 +247,7 @@ Qed.
 Lemma kv_opp_mult_bridge : forall a b : Real,
   real_eq (real_mult a (real_opp b)) (real_opp (real_mult a b)).
 Proof.
-  intros a b. apply (real_eq_sym _ _ (real_opp_mult a b)).
+  intros a b. exact (real_eq_sym (real_opp (real_mult a b)) (real_mult a (real_opp b)) (real_opp_mult a b)).
 Qed.
 
 (* 2 = 1 + 1 > 0 *)

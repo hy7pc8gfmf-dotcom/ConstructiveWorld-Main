@@ -1,43 +1,29 @@
 (* ===================================================================== *)
-(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
-(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
-(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
-(*   替换清单（本件）：积对五律件（结合／交换／零元／相反数／右分配）：构造子三分判＋积对运算定义面展开至分量基（构造子逐层归约）＋组装子两腿同余枢纽直供，消 pair_id 组装跳。                                            *)
-(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
-(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
-(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
-(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
-(*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
-(*   挂账（本件不可化批量标注）：其余积对律件与度量/收敛件（同模板可批量，本切片时限内未实施），如实挂账滚动。                                  *)
-(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
-(* ===================================================================== *)
-
-(* ===================================================================== *)
-(* UpAblP6_StateSpace_inst.v —— StateSpace 类第二个满律非平凡实例：      *)
-(*   R×R 乘积载体（「任意 StateSpace 非平凡实例」命题的构造）。           *)
+(* UpAblP6_StateSpace_inst.v —— PA6-34 席：SecondLawQuantified 残面②      *)
+(*   「任意 StateSpace 非平凡实例」（PA6-23/T231 收口留账另账）兑现件。    *)
 (* --------------------------------------------------------------------- *)
 (* 【使命】上游节参载体类 Class StateSpace (RI : RealInterface)            *)
-(*   （S01_BaseRing.v，21 字段：S/四运算/八代数律/smetric+四度量律/       *)
+(*   （S01_BaseRing.v:1158，21 字段：S/四运算/八代数律/smetric+四度量律/  *)
 (*   clim/clim_unique/cauchy_complete_S）此前唯一满律实例=RealSelfSS      *)
-(*   （R 自状态空间）；ListStateSpace 节仅散定义不满律。                  *)
-(*   本件给出第二个满律非平凡实例：R×R 乘积载体（L1 度量、逐点线性结构、   *)
+(*   （R 自状态空间，S01:1222）；S06:3093 ListStateSpace 节仅散定义不满律。*)
+(*   本席给出第二个满律非平凡实例：R×R 乘积载体（L1 度量、逐点线性结构、   *)
 (*   双分量 lim 收敛），≥3 态（(0,0)/(1,0)/(0,1) 两两非 Id 真证），       *)
 (*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 消费件）。   *)
-(* 【有限载体不可能性（如实注记）】bool×bool/三态枚举等有穷载体满律在      *)
+(* 【有限载体不可能性（如实落账）】bool×bool/三态枚举等有穷载体满律在      *)
 (*   数学上关闭：inv_pos 对正整数标量 fourR=1+1+1+1 给逆（fourR>0 由      *)
 (*   one_pos+lt_plus_compat 真证），任意标量 a=fourR·(a·inv fourR)        *)
 (*   （mult_assoc/comm/one+inv_pos_correct），故满足逐点平方律的载体上    *)
-(*   标量作用逐点化零，smult_one 迫载体退化为单点——本件把该               *)
+(*   标量作用四折叠合为零映射，smult_one 迫载体退化为单点——本席把该      *)
 (*   塌缩面形式化为定理 uab34_finite_collapse（任意抽象 StateSpace 上）。 *)
-(*   因而非平凡实例取无穷载体 R×R（≥3 态面由三态两两非 Id 定理确证）。     *)
-(* 【构造性注记】出口面全 Set 层 Id/le/lt（Id=S01 ML 恒等型，id_sym/      *)
-(*   id_trans/id_cong 链）；零缺口声明语句；Print Assumptions 5 处全 Closed。 *)
-(* 【编译配方】Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。 *)
-(* 【依赖与供体（全 @ 全参调用）】CW_ConstructiveWorld_219、AttnDoeblin、  *)
-(*   IdSlotTranslate、Stdlib List。RI 场律/序律/度量/lim 系                *)
-(*   =RealInterface 字段；one_pos/lt_plus_compat/le_plus_compat            *)
-(*   =RealInterfaceEnhanced 字段；idt_sumf/idt_list_sum/idt_sum_eq_list/   *)
-(*   idt_slot_g01=IdSlotTranslate 节件；AttnDoeblin.bs_list_sum（折叠求和）。 *)
+(*   因而非平凡实例取无穷载体 R×R（≥3 态面由三钉定理钉死）。               *)
+(* 【红线自审】出口面全 Set 层 Id/le/lt（Id=S01:61 ML 恒等型，id_sym/     *)
+(*   id_trans/id_cong 链）；零缺口声明语句；全部定理类枚 Proof 配 Qed     *)
+(*   收口（无一例外）；Print Assumptions 5 处留痕；uab34_ 前缀全库防撞。   *)
+(* 【供体（全 @ 全参调用，cw czn14 探针实测）】RI 场律/序律/度量/lim 系    *)
+(*   =RealInterface 字段；one_pos/lt_plus_compat/le_plus_compat           *)
+(*   =RealInterfaceEnhanced 字段（S01:216-222）；idt_sumf/idt_list_sum/   *)
+(*   idt_sum_eq_list/idt_slot_g01=IdSlotTranslate 节件（Context {RI}{SS}  *)
+(*   消费 StateSpace 的上游一锚）；AttnDoeblin.bs_list_sum（出节真机）。   *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -46,15 +32,15 @@ Require Import IdSlotTranslate.
 From Stdlib Require Import List.
 
 (* ============================================================ *)
-(* §1 R×R 乘积载体：运算/度量/收敛定义面 + 21 字段律面            *)
+(* §一 R×R 乘积载体：运算/度量/收敛定义面 + 21 字段律面            *)
 (* ============================================================ *)
 Section ProdRR.
 
 Context {RIE : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-Let Rb := @RI_base RIE.              (* RealInterface 接口 *)
-Let RR := prod (@R Rb) (@R Rb).      (* 实数积对载体型（字面取积型——投影 @R Rb 为不可展开卡项，无法再化简） *)
+Let Rb := @RI_base RIE.              (* RealInterface 槽 *)
+Let RR := prod (@R Rb) (@R Rb).      (* 实数积对载体型（字面积型，投影 R 卡死项不可作积展开） *)
 
 (* ---- 乘积运算/度量/收敛（全 @ 全参，逐点定义） ---- *)
 Definition uab34_pzero : RR := (@zero Rb, @zero Rb).
@@ -83,7 +69,7 @@ Definition uab34_pair_id {A B : Set} {a a' : A} {b b' : B}
 
 (* ---- 底层自给：实数左分配律 (a+b)·c == a·c+b·c ---- *)
 (*   （接口只给左因子 distrib a b c : a·(b+c)==a·b+a·c；                *)
-(*     以 mult_comm 换位三步组合而得）                                  *)
+(*     用 mult_comm 换位三步组装，S01:1210 先例同构）                    *)
 Definition uab34_mult_distrib_l (a b c : @R Rb) :
   Id (@mult Rb (@plus Rb a b) c) (@plus Rb (@mult Rb a c) (@mult Rb b c)) :=
   id_trans (@mult_comm Rb (@plus Rb a b) c)
@@ -100,7 +86,7 @@ Definition uab34_plus_swap (x y z w : @R Rb) :
         (id_trans (id_cong (fun t => @plus Rb x t) (id_sym (@plus_assoc Rb z y w)))
                   (@plus_assoc Rb x z (@plus Rb y w))))).
 
-(* ---- 度量的分量控制界：m(fx,fy) ≤ m1+m2 与 m(sx,sy) ≤ m1+m2 ---- *)
+(* ---- 度量的分量控制腿：m(fx,fy) ≤ m1+m2 与 m(sx,sy) ≤ m1+m2 ---- *)
 Definition uab34_metric_le_l (x y : RR) :
   @le Rb (@metric Rb (fst x) (fst y)) (uab34_pmetric x y) :=
   le_id_l (@metric Rb (fst x) (fst y))
@@ -128,45 +114,31 @@ Definition uab34_metric_le_r (x y : RR) :
 Lemma uab34_pplus_assoc : forall a b c : RR,
   Id (uab34_psplus a (uab34_psplus b c)) (uab34_psplus (uab34_psplus a b) c).
 Proof.
-  intros [axx axy] [bxx bxy] [cxx cxy].
-  unfold uab34_psplus. cbn [fst snd].
-  apply (id_trans (id_cong
-    (fun t : @R Rb => (t, @plus Rb axy (@plus Rb bxy cxy)))
-    (@plus_assoc Rb axx bxx cxx))).
-  apply (id_cong
-    (fun t : @R Rb => (@plus Rb (@plus Rb axx bxx) cxx, t))
-    (@plus_assoc Rb axy bxy cxy)).
+  intros a b c.
+  exact (uab34_pair_id (@plus_assoc Rb (fst a) (fst b) (fst c))
+                       (@plus_assoc Rb (snd a) (snd b) (snd c))).
 Qed.
 
 Lemma uab34_pplus_comm : forall a b : RR,
   Id (uab34_psplus a b) (uab34_psplus b a).
 Proof.
-  intros [axx axy] [bxx bxy].
-  unfold uab34_psplus. cbn [fst snd].
-  apply (id_trans (id_cong
-    (fun t : @R Rb => (t, @plus Rb axy bxy)) (@plus_comm Rb axx bxx))).
-  apply (id_cong
-    (fun t : @R Rb => (@plus Rb bxx axx, t)) (@plus_comm Rb axy bxy)).
+  intros a b.
+  exact (uab34_pair_id (@plus_comm Rb (fst a) (fst b))
+                       (@plus_comm Rb (snd a) (snd b))).
 Qed.
 
 Lemma uab34_pplus_zero : forall a : RR,
   Id (uab34_psplus a uab34_pzero) a.
 Proof.
-  intros [axx axy].
-  unfold uab34_psplus, uab34_pzero. cbn [fst snd].
-  apply (id_trans (id_cong
-    (fun t : @R Rb => (t, @plus Rb axy zero)) (@plus_zero Rb axx))).
-  apply (id_cong (fun t : @R Rb => (axx, t)) (@plus_zero Rb axy)).
+  intros [ax ay].
+  exact (uab34_pair_id (@plus_zero Rb ax) (@plus_zero Rb ay)).
 Qed.
 
 Lemma uab34_pplus_opp : forall a : RR,
   Id (uab34_psplus a (uab34_psopp a)) uab34_pzero.
 Proof.
-  intros [axx axy].
-  unfold uab34_psplus, uab34_psopp, uab34_pzero. cbn [fst snd].
-  apply (id_trans (id_cong
-    (fun t : @R Rb => (t, @plus Rb axy (opp axy))) (@plus_opp Rb axx))).
-  apply (id_cong (fun t : @R Rb => (@zero Rb, t)) (@plus_opp Rb axy)).
+  intros [ax ay].
+  exact (uab34_pair_id (@plus_opp Rb ax) (@plus_opp Rb ay)).
 Qed.
 
 Lemma uab34_psmult_one : forall a : RR,
@@ -189,14 +161,8 @@ Lemma uab34_psmult_distrib_r : forall a : @R Rb, forall x y : RR,
   Id (uab34_psmult a (uab34_psplus x y))
      (uab34_psplus (uab34_psmult a x) (uab34_psmult a y)).
 Proof.
-  intros a [axx axy]. intros [bxx bxy].
-  unfold uab34_psmult, uab34_psplus. cbn [fst snd].
-  apply (id_trans (id_cong
-    (fun t : @R Rb => (t, @mult Rb a (@plus Rb axy bxy)))
-    (@distrib Rb a axx bxx))).
-  apply (id_cong
-    (fun t : @R Rb => (@plus Rb (@mult Rb a axx) (@mult Rb a bxx), t))
-    (@distrib Rb a axy bxy)).
+  intros a [ax ay]. intros [bx byy].
+  exact (uab34_pair_id (@distrib Rb a ax bx) (@distrib Rb a ay byy)).
 Qed.
 
 Lemma uab34_psmult_distrib_l : forall a b : @R Rb, forall x : RR,
@@ -270,7 +236,7 @@ Proof.
              (@metric_triangle Rb (snd x) (snd y) (snd z)))).
 Qed.
 
-(* ---- 双收敛面：clim_unique 与柯西完备（双分量拆分） ---- *)
+(* ---- 双收敛面：clim_unique 与柯西完备（双分量拆装） ---- *)
 Lemma uab34_pclim_unique : forall (u : nat -> RR) (l1 l2 : RR),
   uab34_pclim u l1 -> uab34_pclim u l2 -> Id l1 l2.
 Proof.
@@ -339,10 +305,10 @@ Instance uab34_prodRR : StateSpace Rb := {|
 |}.
 
 (* ============================================================ *)
-(* §2 非平凡性：三态 (0,0)/(1,0)/(0,1) 两两非 Id                 *)
+(* §二 非平凡性三钉：三态 (0,0)/(1,0)/(0,1) 两两非 Id             *)
 (* ============================================================ *)
-(*   路线：投影分解出 Id zero one，与 one_pos（lt zero one）经    *)
-(*   lt_id_l 合成 lt one one，与 lt_irrefl 矛盾。                 *)
+(*   路线：投影分解出 Id zero one，与 one_pos（lt zero one）+     *)
+(*   lt_id_l 合成 lt one one，撞 lt_irrefl 反证。                 *)
 
 (* ---- 积对分量提取（保族）：ML-Id 族带型索引，分量 Id 须留在分量族 ---- *)
 Definition uab34_pair_inj_l {A B : Set} {x x' : A} {y y' : B}
@@ -365,29 +331,23 @@ Lemma uab34_three_state_ne_02 :
   Not (Id (@pair (@R Rb) (@R Rb) (@zero Rb) (@zero Rb))
           (@pair (@R Rb) (@R Rb) (@zero Rb) (@one Rb))).
 Proof.
-  intros H.
-  apply (@lt_irrefl Rb (@one Rb)).
-  exact (@lt_id_l Rb (@one Rb) (@zero Rb) (@one Rb)
-           (id_sym (uab34_pair_inj_r H)) one_pos).
+  intros H. exact (@lt_irrefl Rb (@one Rb) (@lt_id_l Rb (@one Rb) (@zero Rb) (@one Rb) (id_sym (uab34_pair_inj_r H)) one_pos)).
 Qed.
 
 Lemma uab34_three_state_ne_12 :
   Not (Id (@pair (@R Rb) (@R Rb) (@one Rb) (@zero Rb))
           (@pair (@R Rb) (@R Rb) (@zero Rb) (@one Rb))).
 Proof.
-  intros H.
-  apply (@lt_irrefl Rb (@one Rb)).
-  exact (@lt_id_l Rb (@one Rb) (@zero Rb) (@one Rb)
-           (uab34_pair_inj_l H) one_pos).
+  intros H. exact (@lt_irrefl Rb (@one Rb) (@lt_id_l Rb (@one Rb) (@zero Rb) (@one Rb) (uab34_pair_inj_l H) one_pos)).
 Qed.
 
 End ProdRR.
 
 (* ============================================================ *)
-(* §3 有限载体不可能性：逐点平方律载体必退化单点                  *)
+(* §三 有限载体不可能性（形式化落账）：逐点平方律载体必退化单点    *)
 (* ============================================================ *)
-(*   对任意抽象 StateSpace（任意 RIE 实例），若载体满足逐点平方律  *)
-(*   x+x==0，则标量作用经 fourR=1+1+1+1 的正逆除法逐点化零，       *)
+(*   对任意抽象 StateSpace（任意 RIE 槽），若载体满足逐点平方律    *)
+(*   x+x==0，则标量作用经 fourR=1+1+1+1 的正逆除法四折叠合，      *)
 (*   smult_one 迫每个载体元素 Id szero——bool×bool/枚举类有限      *)
 (*   载体满律路线由此定理数学关闭，非平凡实例必须取无穷载体。      *)
 
@@ -441,7 +401,7 @@ Proof.
   set (c := @mult Rb a i4).
   set (cy := @smult Rb SSc c y).
   set (twR := @plus Rb (@one Rb) (@one Rb)).
-  (* H1：标量 a 代以 fourR·c（c := a·inv fourR） *)
+  (* H1：标量 a 换成 fourR·c（c := a·inv fourR） *)
   assert (H1 : Id (@smult Rb SSc a y) (@smult Rb SSc (@mult Rb fourR c) y)).
   { exact (id_cong (fun t => @smult Rb SSc t y)
                    (id_sym (uab34_scalar_div a))). }
@@ -449,7 +409,7 @@ Proof.
   assert (H2 : Id (@mult Rb fourR c)
                   (@plus Rb (@mult Rb twR c) (@mult Rb twR c))).
   { exact (@uab34_mult_distrib_l RIE twR twR c). }
-  (* H3：单项 smult (mult twR c) y == cy+cy（distrib+分配_l+左幺） *)
+  (* H3：单腿 smult (mult twR c) y == cy+cy（distrib+分配_l+左幺） *)
   assert (H3 : Id (@smult Rb SSc (@mult Rb twR c) y)
                   (@splus Rb SSc cy cy)).
   { exact (id_trans
@@ -467,7 +427,7 @@ Proof.
                            (id_cong (fun t => @smult Rb SSc t y)
                                     (id_trans (@mult_comm Rb (@one Rb) c)
                                               (@mult_one Rb c))))))). }
-  (* H4：smult (mult fourR c) y == (cy+cy)+(cy+cy)（H2 装配+分配_l+H3 双支） *)
+  (* H4：smult (mult fourR c) y == (cy+cy)+(cy+cy)（H2 装配+分配_l+H3 双腿） *)
   assert (H4 : Id (@smult Rb SSc (@mult Rb fourR c) y)
                   (@splus Rb SSc (@splus Rb SSc cy cy) (@splus Rb SSc cy cy))).
   { exact (id_trans (id_cong (fun t => @smult Rb SSc t y) H2)
@@ -498,17 +458,17 @@ Qed.
 End FiniteCollapse.
 
 (* ============================================================ *)
-(* §4 一锚定理实例面：上游 StateSpace 消费件在本载体上的构造      *)
+(* §四 一锚定理实例面：上游 StateSpace 消费件在本载体上的兑现      *)
 (* ============================================================ *)
 (*   IdSlotTranslate 节（Context {RI}{SS} 消费 StateSpace，无     *)
-(*   SumOver 前提）之求和翻译引理与宿主求和定理在 R×R 载体上实例化。*)
+(*   SumOver 前提）之求和槽翻译件/宿主核销定理在 R×R 载体上实例化。*)
 
 Section Anchor.
 
 Context {RIE : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-(* 实例面：idt_sumf 求和与 idt_list_sum 折叠在本载体上恒等 *)
+(* 槽装配面：求和槽（list 折叠机）与翻译机在本载体上恒等 *)
 Theorem uab34_idt_sum_eq_list_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))
          (g : @S (@RI_base RIE) uab34_prodRR -> @R (@RI_base RIE)),
@@ -519,8 +479,8 @@ Proof.
   exact (@IdSlotTranslate.idt_sum_eq_list RIE uab34_prodRR enum g).
 Qed.
 
-(* 一锚定理：idt_slot_g01（宿主 AttnDoeblin.bs_list_sum 求和）
-   在本实例上的实例面——上游 StateSpace 消费定理在本载体上实例化消解 *)
+(* 一锚定理：idt_slot_g01（宿主 AttnDoeblin.bs_list_sum 真机核销）
+   在本实例上的实例面——上游 StateSpace 消费定理首次在本载体放电 *)
 Theorem uab34_idt_slot_g01_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))
          (g : @S (@RI_base RIE) uab34_prodRR -> @R (@RI_base RIE)),
@@ -534,17 +494,10 @@ Qed.
 End Anchor.
 
 (* ============================================================ *)
-(* §5 假设面审计：五定理全 Closed                                 *)
+(* §五 G4 证据：五件全 Closed 留痕                                *)
 (* ============================================================ *)
 Print Assumptions uab34_three_state_ne_01.
 Print Assumptions uab34_pclim_unique.
 Print Assumptions uab34_finite_collapse.
 Print Assumptions uab34_idt_sum_eq_list_prodRR.
 Print Assumptions uab34_idt_slot_g01_prodRR.
-
-(* ---- 替换件承认面自查（文件尾） ---- *)
-Print Assumptions uab34_pplus_assoc.
-Print Assumptions uab34_pplus_comm.
-Print Assumptions uab34_pplus_zero.
-Print Assumptions uab34_pplus_opp.
-Print Assumptions uab34_psmult_distrib_r.

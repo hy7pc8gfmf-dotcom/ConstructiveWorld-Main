@@ -49,7 +49,7 @@ Lemma uap6t_sum1_pos :
     (forall s : unit, real_lt real_zero (f s)) ->
     real_lt real_zero (uap6t_sum1 f).
 Proof.
-  intros f H. unfold uap6t_sum1. exact (H tt).
+  intros f H. exact (H tt).
 Qed.
 
 Lemma uap6t_sum1_ext :
@@ -57,7 +57,7 @@ Lemma uap6t_sum1_ext :
     (forall s : unit, real_eq (f s) (g s)) ->
     real_eq (uap6t_sum1 f) (uap6t_sum1 g).
 Proof.
-  intros f g H. unfold uap6t_sum1. exact (H tt).
+  intros f g H. exact (H tt).
 Qed.
 
 Lemma uap6t_sum1_linear :
@@ -65,7 +65,7 @@ Lemma uap6t_sum1_linear :
     real_eq (uap6t_sum1 (fun s : unit => real_mult a (f s)))
             (real_mult a (uap6t_sum1 f)).
 Proof.
-  intros a f. unfold uap6t_sum1. apply real_eq_refl.
+  intros a f. exact (real_eq_refl (real_mult a (f tt))).
 Qed.
 
 Lemma uap6t_sum1_add :
@@ -73,7 +73,7 @@ Lemma uap6t_sum1_add :
     real_eq (uap6t_sum1 (fun s : unit => real_plus (f s) (g s)))
             (real_plus (uap6t_sum1 f) (uap6t_sum1 g)).
 Proof.
-  intros f g. unfold uap6t_sum1. apply real_eq_refl.
+  intros f g. exact (real_eq_refl (real_plus (f tt) (g tt))).
 Qed.
 
 (* ============ 实例装配：温度节参（T 任意正，能量任意） ============ *)
@@ -91,7 +91,7 @@ Definition uap6t_bf (s : unit) : Real :=
 (* 槽②（A）：因子正性——上游直击（exp 恒正一击） *)
 Lemma uap6t_bf_pos : forall s : unit, real_lt real_zero (uap6t_bf s).
 Proof.
-  intro s. unfold uap6t_bf. apply real_exp_neg_pos.
+  intro s. exact (real_exp_neg_pos (real_mult (real_inv_pos T T_pos) (energy s))).
 Qed.
 
 (* 槽③（D）：温度化配分函数实例 Z := Σ bf（单点载体下即 bf(tt)） *)
@@ -100,8 +100,7 @@ Definition uap6t_Z : Real := uap6t_sum1 uap6t_bf.
 (* 槽④（A）：配分正性——载体 pos＋②两步 *)
 Theorem uap6t_Z_pos : real_lt real_zero uap6t_Z.
 Proof.
-  unfold uap6t_Z. apply uap6t_sum1_pos.
-  intro s. apply uap6t_bf_pos.
+  unfold uap6t_Z. exact (uap6t_sum1_pos uap6t_bf uap6t_bf_pos).
 Qed.
 
 (* 槽⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同母本） *)
@@ -111,12 +110,7 @@ Definition uap6t_dist (s : unit) : Real :=
 (* 槽⑥（A）：分布逐点正性——乘正兼容两腿（inv 正 × 因子正） *)
 Lemma uap6t_dist_pos : forall s : unit, real_lt real_zero (uap6t_dist s).
 Proof.
-  intro s. unfold uap6t_dist.
-  apply (real_mult_pos_compat
-           (real_inv_pos uap6t_Z uap6t_Z_pos)
-           (uap6t_bf s)).
-  - apply real_inv_pos_pos.
-  - apply uap6t_bf_pos.
+  intro s. exact (real_mult_pos_compat (real_inv_pos uap6t_Z uap6t_Z_pos) (uap6t_bf s) (real_inv_pos_pos uap6t_Z uap6t_Z_pos) (uap6t_bf_pos s)).
 Qed.
 
 (* 槽⑦（A）：归一化——Σ p ≡ inv(Z)·Z ≡ 1（线性提取一步＋交换收口；      *)

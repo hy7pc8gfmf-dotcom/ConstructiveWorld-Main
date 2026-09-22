@@ -72,7 +72,7 @@ Local Open Scope Q_scope.
 (* ============================================================ *)
 
 Lemma rtb_qleT_refl : forall a : Q, QleT' a a.
-Proof. intro a. apply Qle_to_QleT'. exact (Qle_refl a). Qed.
+Proof. intro a. exact (Qle_to_QleT' a a (Qle_refl a)). Qed.
 
 Lemma rtb_qleT_trans : forall a b c : Q, QleT' a b -> QleT' b c -> QleT' a c.
 Proof.
@@ -123,7 +123,7 @@ Proof. intro n. apply Qlt_to_QltT. unfold Qlt. simpl. lia. Qed.
 
 (* 正非零 *)
 Lemma rtb_neq_of_ltT : forall q : Q, QltT 0 q -> ~ (q == 0).
-Proof. intros q H. apply q_neq_of_lt. apply QltT_to_Qlt. exact H. Qed.
+Proof. intros q H. exact (q_neq_of_lt q (QltT_to_Qlt 0 q H)). Qed.
 
 (* 除法保序（正分母）：a ≤T b ⟹ a/K ≤T b/K（承 Qmult_le_r） *)
 Lemma rtb_qleT_div_r : forall a b K : Q,

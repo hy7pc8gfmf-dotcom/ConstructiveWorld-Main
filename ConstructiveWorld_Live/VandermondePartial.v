@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   vdp_q2d_partial_succ（原 L508，1 句玩具证）                          *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* VandermondePartial.v —— 施工席 B5：Q 层有限 Vandermonde 三角重组   *)
 (* （exp 加法的第一腿；2026-09-16；只依赖 CW_ConstructiveWorld_219    *)
 (*   薄壳，S03_QExp 经薄壳可达）                                    *)
@@ -674,3 +684,5 @@ Print Assumptions vdp_sym.
 Print Assumptions vdp_opp_self_two.
 Print Assumptions vdp_opp_self_two_n1.
 Print Assumptions vdp_opp_self_two_n2.
+
+Print Assumptions vdp_q2d_partial_succ.

@@ -46,7 +46,9 @@ Lemma upqb_qlt_0_1 : Qlt 0 1.
 Proof. unfold Qlt; simpl; lia. Qed.
 
 Lemma upqb_qle_0_1 : Qle 0 1.
-Proof. apply Qlt_le_weak. exact upqb_qlt_0_1. Qed.
+Proof.
+  exact (Qlt_le_weak 0 1 upqb_qlt_0_1).
+Qed.
 
 (* 暖身①：m=0（S_0 ≡ 1 与 a 无关）：显式 q := 1/2，QltT 两面 reflexivity 级闭合 *)
 Lemma upqb_witness_m0 : forall a : Q,
