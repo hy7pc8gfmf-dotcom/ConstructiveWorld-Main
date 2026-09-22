@@ -3291,3 +3291,40 @@ Definition ng_UpAblLogSelOracle : NewGreenFace :=
 (* ng_UpAblMetaPackage —— UpAblMetaPackage.v：W3PKG 席 meta-package mpk_（跨世界三联画+world3 tv1 半幅，两旗舰 Defined 终+7 再出口别名，三绿供体打包；PA 14，G3 自面 magic=0；硬依赖 UpAblMetaTemp 已于 R109 在册，前置闸满足）（_tw3pkg_）；vo 树 born-in-place 复证 *)
 Definition ng_UpAblMetaPackage : NewGreenFace :=
   MkNewGreenFace "UpAblMetaPackage.v" 150 2 20260922 "W3PKG seat: meta-package mpk_ — cross-world triptych + world3 tv1-half (both Defined-terminated) + 7 re-export aliases over three green suppliers (PA 14, G3 self-face magic=0)".
+
+(* ================= v4.23 增册（REIN-IDX Index 增册席：R112 六行拓扑修复五源件补册，20260922；
+   v4.20 R110 / v4.21 R111 PsQReindex / v4.22 六件波（R113 已提交）均已被占，本席实勘现值 v4.22 顺延 v4.23；
+   承前 ng_ 共 395 条（Main 工作树 grep 实测；Live_X 侧树实测 382、预存滞后 13 条＝v4.19 波 7 条＋v4.22 波 6 条，挂账不动只增不改），本批 5 条后 Main 工作树共 400 条；
+   order 五行坐标 L394/L496/L497/L552/L564 双树逐一实勘命中（order 现势 584 行＝R112 认证基线 578 行＋R113 六件波 6 行，行号未漂移）；
+   五件 md5 双树实测同源，登记波次 R112＝7aeac35（CI run #108 COQCHK_ALL_PASS） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.22 块之后；尾插禁重排、只增不改）。 *)
+
+(* ng_P7BoundedSoftmaxDeep —— P7BoundedSoftmaxDeep.v：R90 入树 parked→R112 六行拓扑修复入册（7aeac35，order L496/578 行基线）；
+   18 声明 15 追印出口全 Closed，红线五件套零命中；三树 md5 同源 4614b0b2（_treinc23_ 预检 20260922＋本席双树抽验复核）（_treinidx_）；vo 树 born-in-place 复证 *)
+Definition ng_P7BoundedSoftmaxDeep : NewGreenFace :=
+  MkNewGreenFace "P7BoundedSoftmaxDeep.v" 471 15 20260922
+  "R112 six-row topo fix enrollment (7aeac35, order L496 over 578-line baseline, md5 4614b0b2); 18 decls / 15 traced exits all Closed; born-in-place three-gate green".
+
+(* ng_LoHiSqueeze —— LoHiSqueeze.v：R112 入册（7aeac35，order L497/578 行基线，紧随依赖 P7BoundedSoftmaxDeep L496，拓扑验证通过；md5 345b5868 双树实测）；
+   4 声明 4 出口全覆盖，零撞名零红线（_treinidx_）；vo 树 born-in-place 复证 *)
+Definition ng_LoHiSqueeze : NewGreenFace :=
+  MkNewGreenFace "LoHiSqueeze.v" 190 4 20260922
+  "R112 topo fix enrollment (7aeac35, order L497/578-line baseline, md5 345b5868); dependency-adjacent placement verified; 4/4 exits Closed; three-gate green".
+
+(* ng_GibbsFamilyExt —— GibbsFamilyExt.v：R112 入册（7aeac35，order L552/578 行基线；md5 d6750177 双树实测）；级联面实勘非壳件（CW 桩 631B，零 S 系直连），
+   R3 壳级联担忧解除；13 声明 13 出口全覆盖（_treinidx_）；vo 树 born-in-place 复证 *)
+Definition ng_GibbsFamilyExt : NewGreenFace :=
+  MkNewGreenFace "GibbsFamilyExt.v" 443 13 20260922
+  "R112 topo fix enrollment (7aeac35, order L552/578-line baseline, md5 d6750177); cascade face cleared (base stub 631B, no S-series edge); 13/13 exits Closed; three-gate green".
+
+(* ng_FepIdConsume —— FepIdConsume.v：R112 入册（7aeac35，order L564/578 行基线；md5 ec7152e6 双树实测）；5 声明 5 出口全覆盖；
+   未注册探针 fic2_g3(_ext) 依赖本件（H1 挂账，不影响本件在册态）（_treinidx_）；vo 树 born-in-place 复证 *)
+Definition ng_FepIdConsume : NewGreenFace :=
+  MkNewGreenFace "FepIdConsume.v" 239 5 20260922
+  "R112 topo fix enrollment (7aeac35, order L564/578-line baseline, md5 ec7152e6); 5/5 exits Closed; unregistered g3 probes downstream tracked as H1; three-gate green".
+
+(* ng_SecondLawConsume —— SecondLawConsume.v：R112 入册（7aeac35，order L394/578 行基线，先于伴件 sumdis L395；md5 850907ae 双树实测）；
+   9 声明 4 追印出口（原追印清单口径，H2 对照核验随 C23 工单 B 关 2 口径在案）（_treinidx_）；vo 树 born-in-place 复证 *)
+Definition ng_SecondLawConsume : NewGreenFace :=
+  MkNewGreenFace "SecondLawConsume.v" 382 4 20260922
+  "R112 topo fix enrollment (7aeac35, order L394/578-line baseline, md5 850907ae); 9 decls / 4 traced exits per original trace list (H2 cross-check per C23 gate-2); three-gate green".

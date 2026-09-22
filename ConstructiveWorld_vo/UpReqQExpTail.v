@@ -1,3 +1,6 @@
+(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 be4f4414ebf0f0ffa46039e37d625976 · 权威定位=主键内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
+(* ANCHOR: FILE_LEVEL（件级锚·全件 766 行；系名=文件名，消费面 Require 引用） | 现势行号 全件 L1-L766 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
+(* ANCHOR: qtail_cauchy_modulus（旗舰） | 现势行号 L728 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ============================================================ *)
 (* UpReqQExpTail.v *)
 (* *)
