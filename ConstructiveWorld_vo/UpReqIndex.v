@@ -3265,3 +3265,29 @@ Print Assumptions TotalModules_matches.
 Print Assumptions DeliveredModules_matches.
 Print Assumptions UniverseItems_matches.
 Print Assumptions Universe_splits.
+(* ================= v4.22 增册（六件注册波——预备单标签 R110，commit 波号以执行时 R112-CLOSE 落定后下一可用号为准：B2 链惰性化二件+QKTV 收束件+墙八终形+LogSel 修复定格+Meta 三供体打包件，20260922；v4.20 已被 R110 CJS3 MetaDivThm 跟进波占用、v4.21 已被 R111 PsQReindex 占用，本席顺延；承前 ng_ 共 389 条，本批 6 条后共 395 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（R111 v4.21 块及 ToyR 包A 自证段之后）；行数/出口数 wc+grep 实测（20260922，Live_X 源 md5 见 evidence_md5_20260922.txt）。 *)
+
+(* ng_UpAblB2WindowTie —— UpAblB2WindowTie.v：B2UP 席窗口约束可执行见证族（15 出口全 Defined；语句账 PA 10/10；环境账 3 条 stdlib 经典公理 intern 乘客按判例链分账如实申报）（_tb2upr_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblB2WindowTie : NewGreenFace :=
+  MkNewGreenFace "UpAblB2WindowTie.v" 276 15 20260922 "B2UP seat: window-tie executable witness family (Qed 0/Defined 15, statement ledger PA 10/10; env ledger 3 stdlib classical passengers disclosed per B2UP)".
+
+(* ng_UpReqInvPosLazy —— UpReqInvPosLazy.v：InvPos 席惰性 inv-pos 预算门 ivl_budget_at（PA 9/9，coqchk Axioms none，k=1 显式入口复跑；11 Qed+1 Defined=12 出口，含 5 条行内 Proof…Qed 一行式——行首 decl grep 与出口 grep 双口径一致）（_tinvpos_）；vo 树 born-in-place 复证 *)
+Definition ng_UpReqInvPosLazy : NewGreenFace :=
+  MkNewGreenFace "UpReqInvPosLazy.v" 280 12 20260922 "InvPos seat: lazy inv-pos budget gate ivl_budget_at (PA 9/9, coqchk Axioms none, k=1 explicit-entry run; 12 exits incl. 5 inline one-line proofs)".
+
+(* ng_UpQKTVCompose —— UpQKTVCompose.v：P2COMP 席 QK→TV 一步合成（构造性严格化 +1 裕度；qktv_abs_lt_two_side/qk_tv_iter_contraction PA Closed，G4 三遍 12 模块闭包 Axioms none）（_tp2comp_）；vo 树 born-in-place 复证 *)
+Definition ng_UpQKTVCompose : NewGreenFace :=
+  MkNewGreenFace "UpQKTVCompose.v" 245 2 20260922 "P2COMP seat: QK-to-TV one-step composition, constructive strictification +1 margin (qktv_abs_lt_two_side/qk_tv_iter_contraction PA Closed, G4 3-pass)".
+
+(* ng_UpAblLogWallFinal —— UpAblLogWallFinal.v：N3 席墙八终形 lgwd_ 族（PA 9/9，G3 magic 0/0，G4 Axioms none；11 Qed 含 1 条行内一行式；预备单注 2：N3 报告未钉 md5——本席实测 4a3b2943，执行波 G2 复证补钉后方可 commit）（_tn3_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblLogWallFinal : NewGreenFace :=
+  MkNewGreenFace "UpAblLogWallFinal.v" 447 11 20260922 "N3 seat: wall-eight final form lgwd_ family (PA 9/9, G3 magic 0/0, G4 Axioms none; md5 4a3b2943 re-pin at landing G2)".
+
+(* ng_UpAblLogSelOracle —— UpAblLogSelOracle.v：LSO-FIX 席 log-选择子 oracle，L176 旧源伤经 Z.compare_*_iff 三分支退役（14 定理型 decl 全 Qed 封+2 Definition Defined 终=16 出口，PA 17 路 Closed；Live_X/vo 树/沙箱三副本 md5 统一 00c03d2b 本席实测复核）（_tlsofix_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblLogSelOracle : NewGreenFace :=
+  MkNewGreenFace "UpAblLogSelOracle.v" 535 14 20260922 "LSO-FIX seat: log-selector oracle, L176 old-source wound retired via Z.compare_*_iff tri-branch (PA 17 Closed, three-copy md5 unified 00c03d2b)".
+
+(* ng_UpAblMetaPackage —— UpAblMetaPackage.v：W3PKG 席 meta-package mpk_（跨世界三联画+world3 tv1 半幅，两旗舰 Defined 终+7 再出口别名，三绿供体打包；PA 14，G3 自面 magic=0；硬依赖 UpAblMetaTemp 已于 R109 在册，前置闸满足）（_tw3pkg_）；vo 树 born-in-place 复证 *)
+Definition ng_UpAblMetaPackage : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaPackage.v" 150 2 20260922 "W3PKG seat: meta-package mpk_ — cross-world triptych + world3 tv1-half (both Defined-terminated) + 7 re-export aliases over three green suppliers (PA 14, G3 self-face magic=0)".

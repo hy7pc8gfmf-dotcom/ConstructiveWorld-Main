@@ -576,3 +576,9 @@ UpAblMetaDivQ.v
 UpAblMetaTemp.v
 UpAblMetaConjBridge.v
 UpAblMetaDivThm.v
+UpAblB2WindowTie.v
+UpReqInvPosLazy.v
+UpQKTVCompose.v
+UpAblLogWallFinal.v
+UpAblLogSelOracle.v
+UpAblMetaPackage.v
