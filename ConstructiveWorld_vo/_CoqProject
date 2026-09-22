@@ -287,6 +287,7 @@ UpReqAlignClose.v
 DenPosGeneralClose.v
 UpReqUMixSelect.v
 UpReqAttnMixTime.v
+UpReqTailResidual.v
 UpReqPinskerCore.v
 UpReqEnvelopeDual.v
 UpReqDyadicLog.v
@@ -306,7 +307,6 @@ p4a_GradSignQDec.v
 UpReqConcSoftmax.v
 UpReqConcMixSel.v
 UpReqConcB1.v
-UpReqTailResidual.v
 UpReqVajdaBound.v
 UpReqIrrationalInstances.v
 UpReqEqbComplete.v
@@ -392,6 +392,7 @@ UpAblP1_SecondLawQuantified_sumd.v
 UpAblP1_SqrtfCauchyArch_arch.v
 UpAblP1_SqrtfCauchy_four_slots.v
 UpAblP2_FepIdentClass_inst_bundle.v
+SecondLawConsume.v
 UpAblP2_SecondLawConsume_sumdis.v
 UpAblP2_UpMinP_tokens_pack.v
 UpAblP3_UpReqAttnMixTime.v
@@ -465,6 +466,7 @@ UpAblT9_UpReqSumD.v
 UpAblT9_UpSigMigrate.v
 UpAblT9_UpSigMigrate2.v
 UpAblT9_UpTVDoeblin.v
+PadeErrorIntegral.v
 Ln2Bridge.v
 PintPosGrid.v
 BeukersIdentity.v
@@ -491,6 +493,8 @@ UpAblP1T1_AlignCert.v
 UpAblP1T2_GrpoAuditCert.v
 UpAblP7_AbsNonNeg.v
 UpAblP7_LoHiBridge.v
+P7BoundedSoftmaxDeep.v
+LoHiSqueeze.v
 UpAblP7_LoHiSqueeze.v
 UpAblP7_P7FlagshipTail.v
 UpAblP7_Paper7Ablation.v
@@ -545,6 +549,7 @@ UpAblArchGeomBatch.v
 UpAblCauchyLim.v
 UpAblHalfPowFeed.v
 UpAblP6_TempDefs.v
+GibbsFamilyExt.v
 UpAblP6_GibbsFamilyExt.v
 UpAblP6_S5SlotWire.v
 UpAblP6_ZPosLowRef.v
@@ -556,6 +561,7 @@ UpAblP6_EntropyMonoSplit_A.v
 UpAblP6_EntropyMonoSplit_B.v
 fka_weak_triangle_ref.v
 UpAblP6_EntropyMonoSplit_C.v
+FepIdConsume.v
 UpAblP6_Package.v
 UpAblLogWall.v
 UpAblLogWallEq.v

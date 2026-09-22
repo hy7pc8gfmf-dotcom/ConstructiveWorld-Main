@@ -378,10 +378,9 @@ Proof.
                    (Datatypes.S d) (Datatypes.S k')).
         rewrite <- Hab.
         nia.
-      * assert (Hkj : k' = j) by (exfalso; lia). subst k'.
+      * assert (Hkj : k' = j) by lia. subst k'.
         rewrite rx_bkC_subdiag.
         rewrite (bkC_diag (Datatypes.S j)).
-        rewrite (bkC_out j (Datatypes.S j)) by lia.
         replace (Datatypes.S j - j) with 1%nat by lia.
         lia.
 Qed.
@@ -393,10 +392,13 @@ Lemma rx_key_d : forall n d : nat,
 Proof.
   intros n d.
   assert (Hexp : (n + (n + d) + 1) * ((n + 2 * (n + d) + 1) * (n + 2 * (n + d) + 2))
-                 + (7 * n ^ 3 + 12 * n ^ 2 * d + 4 * n * d ^ 2 + 39 * n ^ 2
-                    + 43 * n * d + 37 * n + 10 * d ^ 2 + 20 * d + 10)
+                 + (7 * n * n * n + 12 * n * n * d + 4 * n * d * d + 33 * n * n
+                    + 36 * n * d + 34 * n + 8 * d * d + 18 * d + 10)
                = ((3 * n + 2 * (n + d) + 3) * (3 * n + 2 * (n + d) + 4))
                  * ((n + d) + 1)) by ring.
+  assert (HP : 0 <= (7 * n * n * n + 12 * n * n * d + 4 * n * d * d + 33 * n * n
+                    + 36 * n * d + 34 * n + 8 * d * d + 18 * d + 10))
+    by apply Nat.le_0_l.
   lia.
 Qed.
 
@@ -421,7 +423,9 @@ Proof.
                     * ((n + 2 * m + 1) * (n + 2 * m + 2)) * (m + 1)
                   <= bkC (n + m) n * ((3 * n + 2 * m + 3) * (3 * n + 2 * m + 4))
                        * (m + 1)).
-  { rewrite HswapL, Hr.
+  { rewrite HswapL.
+    replace (Datatypes.S (n + m)) with (n + m + 1) by lia.
+    rewrite Hr.
     rewrite <- (Nat.mul_assoc (bkC (n + m) n) (n + m + 1)
                   ((n + 2 * m + 1) * (n + 2 * m + 2))).
     rewrite <- (Nat.mul_assoc (bkC (n + m) n)
@@ -434,15 +438,21 @@ Proof.
     as [Hle | Hlt].
   - exact Hle.
   - exfalso.
-    assert (Hlt2 := Nat.mul_lt_mono_pos_r (m + 1) ltac:(lia) _ _ Hlt).
-    exact (Nat.lt_irrefl _ (Nat.le_lt_trans Hstep Hlt2)).
+    assert (Hlt2 := proj1 (Nat.mul_lt_mono_pos_r (m + 1) _ _ ltac:(lia)) Hlt).
+    exact (Nat.lt_irrefl _ (Nat.le_lt_trans _ _ _ Hstep Hlt2)).
 Qed.
 
 (* Q 层小副件：正 Z 的单位分母像严格正 *)
-Lemma rx_Qlt_Z1 : forall z : Z, 0 < z -> Qlt 0 (z # 1)%Q.
+Lemma rx_Qlt_Z1 : forall z : Z, (0 < z)%Z -> Qlt 0 (z # 1)%Q.
 Proof.
   intros z Hz. unfold Qlt. cbn [Qnum Qden].
   rewrite !Z.mul_1_r. exact Hz.
+Qed.
+
+(* Qeq→Qle 桥接引理（stdlib 9.x 无 Qeq_le；按 DTPT_Entropy 的 xq_Qeq_le 同型写入本件） *)
+Lemma rx_Qeq_le : forall x y : Q, x == y -> Qle x y.
+Proof.
+  intros x y H. rewrite <- H. apply Qle_refl.
 Qed.
 
 (* 衰减 Q 面：n ≤ m ⟹ bv_term n (S m) ≤ bv_term n m（QleT' Set 面） *)
@@ -452,12 +462,15 @@ Proof.
   intros n m Hnm. apply Qle_to_QleT'.
   assert (HposD : (0 < Z.of_nat (3 * n + 2 * m + 3))%Z) by lia.
   assert (HposE : (0 < Z.of_nat (3 * n + 2 * m + 4))%Z) by lia.
-  assert (Hpm : 0 < (1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
-                    * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1))).
-  { apply Qmult_lt_0_compat; apply Qinv_lt_0_compat;
-      apply rx_Qlt_Z1; lia. }
-  assert (Hpm0 : 0 <= (1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
-                      * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1)))
+  assert (Hpm : (0 < (1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
+                    * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1)))%Q).
+  { apply Qmult_lt_0_compat.
+    - unfold Qdiv. rewrite Qmult_1_l. apply Qinv_lt_0_compat.
+        apply rx_Qlt_Z1. lia.
+    - unfold Qdiv. rewrite Qmult_1_l. apply Qinv_lt_0_compat.
+        apply rx_Qlt_Z1. lia. }
+  assert (Hpm0 : (0 <= (1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
+                      * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1)))%Q)
     by (apply Qlt_le_weak; exact Hpm).
   assert (HshapeS : bv_term n (Datatypes.S m)
     == ((Z.of_nat (bkC (Datatypes.S (n + m)) n) # 1)
@@ -466,6 +479,7 @@ Proof.
                   * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1)))))
           * (q_fact (n + 2 * m) * q_fact (2 * n + 1) / q_fact (3 * n + 2 * m + 2))).
   { unfold bv_term, Qdiv.
+    replace (n + Datatypes.S m) with (Datatypes.S (n + m)) by lia.
     replace (n + 2 * Datatypes.S m)
       with (Datatypes.S (Datatypes.S (n + 2 * m))) by lia.
     replace (3 * n + 2 * Datatypes.S m + 2)
@@ -474,11 +488,11 @@ Proof.
     rewrite (q_fact_succ (Datatypes.S (3 * n + 2 * m + 2))),
             (q_fact_succ (3 * n + 2 * m + 2)).
     rewrite !Qinv_mult_distr.
-    replace (Datatypes.S (n + 2 * m)) with (n + 2 * m + 1) by lia.
     replace (Datatypes.S (Datatypes.S (n + 2 * m))) with (n + 2 * m + 2) by lia.
-    replace (Datatypes.S (3 * n + 2 * m + 2)) with (3 * n + 2 * m + 3) by lia.
+    replace (Datatypes.S (n + 2 * m)) with (n + 2 * m + 1) by lia.
     replace (Datatypes.S (Datatypes.S (3 * n + 2 * m + 2)))
       with (3 * n + 2 * m + 4) by lia.
+    replace (Datatypes.S (3 * n + 2 * m + 2)) with (3 * n + 2 * m + 3) by lia.
     ring. }
   assert (HshapeT : bv_term n m
     == (Z.of_nat (bkC (n + m) n) # 1)
@@ -517,11 +531,10 @@ Proof.
     rewrite <- (Qinv_mult_distr (Z.of_nat (3 * n + 2 * m + 3) # 1)
                                 (Z.of_nat (3 * n + 2 * m + 4) # 1)).
     apply Qmult_inv_r.
-    intro Hc. apply (Qlt_not_eq 0%Q _).
-    apply rx_Qlt_Z1.
-    assert (Hz1 : (0 < Z.of_nat (3 * n + 2 * m + 3))%Z) by lia.
-    assert (Hz2 : (0 < Z.of_nat (3 * n + 2 * m + 4))%Z) by lia.
-    lia. }
+    assert (HposAB : Qlt 0 ((Z.of_nat (3 * n + 2 * m + 3) # 1)
+                              * (Z.of_nat (3 * n + 2 * m + 4) # 1))).
+    { apply Qmult_lt_0_compat; apply rx_Qlt_Z1; lia. }
+    intro Hc. apply (Qlt_not_eq 0%Q _ HposAB). exact (Qeq_sym _ _ Hc). }
   assert (Hmul : Qle (((Z.of_nat (bkC (Datatypes.S (n + m)) n) # 1)
                          * ((Z.of_nat (n + 2 * m + 1) # 1)
                             * (Z.of_nat (n + 2 * m + 2) # 1)))
@@ -552,11 +565,13 @@ Proof.
                               * (Z.of_nat (3 * n + 2 * m + 4) # 1)))
                           * ((1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
                              * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1))))).
-    + rewrite <- (Nat.mul_assoc (Z.of_nat (bkC (Datatypes.S (n + m)) n) # 1)
-                    ((Z.of_nat (n + 2 * m + 1) # 1) * (Z.of_nat (n + 2 * m + 2) # 1))
-                    ((1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
-                     * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1)))).
-      exact Hmul.
+    + apply (Qle_trans _ ((Z.of_nat (bkC (Datatypes.S (n + m)) n) # 1)
+                              * ((Z.of_nat (n + 2 * m + 1) # 1)
+                                   * (Z.of_nat (n + 2 * m + 2) # 1))
+                              * ((1 / (Z.of_nat (3 * n + 2 * m + 3) # 1))
+                                   * (1 / (Z.of_nat (3 * n + 2 * m + 4) # 1))))).
+      { apply (rx_Qeq_le _ _). ring. }
+      { exact Hmul. }
     + rewrite E2. apply Qle_refl.
   - apply Qlt_le_weak.
     unfold Qdiv.

@@ -74,6 +74,21 @@ Proof.
   intros a b. unfold Qmult. cbn [Pos.mul]. reflexivity.
 Qed.
 
+(* 乘除结合桥接引理：x·(y/z) == (x·y)/z（Qdiv 的定义即乘 Qinv，展开后为结合律） *)
+Lemma bl_mult_div_assoc : forall x y z : Q, x * (y / z) == (x * y) / z.
+Proof. intros x y z. unfold Qdiv. ring. Qed.
+
+(* 同幂相乘桥接引理：q_pow x n · q_pow y n == q_pow (x·y) n（bl_variant_shift 使用） *)
+Lemma bl_qpow_mul : forall (x y : Q) (n : nat), q_pow x n * q_pow y n == q_pow (x * y) n.
+Proof.
+  intros x y n. induction n as [| n IH].
+  - reflexivity.
+  - rewrite (q_pow_succ x n), (q_pow_succ y n), (q_pow_succ (x * y) n).
+    transitivity ((x * y) * (q_pow x n * q_pow y n)).
+    + ring.
+    + rewrite IH. ring.
+Qed.
+
 (* Qinv 对乘积分配（双非零前提；bl_pow_div/桥件用） *)
 Lemma bl_qinv_mult : forall x y : Q,
   ~ (x == 0%Q) -> ~ (y == 0%Q) -> Qinv (x * y) == Qinv x * Qinv y.
@@ -240,18 +255,18 @@ Proof.
                            * (2 * Datatypes.S (Datatypes.S m))))%nat.
       * replace ((3 * 3 ^ Datatypes.S m) * 8
                    * ((2 * Datatypes.S (Datatypes.S m) + 1)
-                        * (2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1)))%nat
+                        * ((2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1))))%nat
           with ((3 ^ Datatypes.S m * 8 * fact (2 * Datatypes.S m + 1))
                   * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                        * (2 * Datatypes.S (Datatypes.S m))))%nat by ring.
-        match goal with |- ?g => idtac "G16:" g end.
         apply Nat.mul_le_mono_r. exact IH.
-      * replace ((16 * 16 ^ Datatypes.S m) * 16
+      * replace (Datatypes.S m * fact m)%nat with (fact (Datatypes.S m))%nat by reflexivity.
+        replace ((16 * 16 ^ Datatypes.S m) * 16
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m))
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m)))%nat
           with ((16 ^ Datatypes.S m * 16 * fact (Datatypes.S m) * fact (Datatypes.S m))
                   * (16 * Datatypes.S (Datatypes.S m) * Datatypes.S (Datatypes.S m)))%nat by ring.
-        apply Nat.mul_le_mono_r. exact HAB.
+        apply Nat.mul_le_mono_l. exact HAB.
 
 Qed.
 
@@ -265,7 +280,9 @@ Proof.
   - cbn. lia.
   - destruct n as [| m].
     + cbn. lia.
-    + replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
+    + destruct (Nat.eq_dec m 0) as [Hm0 | Hmpos].
+      { subst m. cbn. lia. }
+      replace (2 * Datatypes.S (Datatypes.S m) + 1)%nat
         with (Datatypes.S (Datatypes.S (2 * Datatypes.S m + 1)))%nat by lia.
       cbn [fact].
       change (3 ^ Datatypes.S (Datatypes.S m))%nat with (3 * 3 ^ Datatypes.S m)%nat.
@@ -290,17 +307,18 @@ Proof.
                            * (2 * Datatypes.S (Datatypes.S m))))%nat.
       * replace ((3 * 3 ^ Datatypes.S m) * 98
                    * ((2 * Datatypes.S (Datatypes.S m) + 1)
-                        * (2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1)))%nat
+                        * ((2 * Datatypes.S (Datatypes.S m)) * fact (2 * Datatypes.S m + 1))))%nat
           with ((3 ^ Datatypes.S m * 98 * fact (2 * Datatypes.S m + 1))
                   * (3 * (2 * Datatypes.S (Datatypes.S m) + 1)
                        * (2 * Datatypes.S (Datatypes.S m))))%nat by ring.
         apply Nat.mul_le_mono_r. exact IH.
-      * replace ((14 * 14 ^ Datatypes.S m) * 135
+      * replace (Datatypes.S m * fact m)%nat with (fact (Datatypes.S m))%nat by reflexivity.
+        replace ((14 * 14 ^ Datatypes.S m) * 135
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m))
                    * (Datatypes.S (Datatypes.S m) * fact (Datatypes.S m)))%nat
           with ((14 ^ Datatypes.S m * 135 * fact (Datatypes.S m) * fact (Datatypes.S m))
                   * (14 * Datatypes.S (Datatypes.S m) * Datatypes.S (Datatypes.S m)))%nat by ring.
-        apply Nat.mul_le_mono_r. exact HAB.
+        apply Nat.mul_le_mono_l. exact HAB.
 
 Qed.
 
@@ -314,26 +332,31 @@ Lemma bl_half_pow : forall n : nat,
   (1 # 2) * q_pow (3 # 16) n
   == (Z.of_nat (3 ^ n * 8) # 1) / (Z.of_nat (16 ^ n * 16) # 1)%Q.
 Proof.
+  (* 策略：3/16 拆为 3/1 ÷ 16/1 后由 bl_pow_div 分配幂，bl_pZ 换算
+     cast，bl_mult_div_assoc 与 bl_qmake_mul 合并因子，lne_div_eq 收束。 *)
   intro n.
-  rewrite bl_pow_div, (bl_pZ 3 n), (bl_pZ 16 n).
-  assert (E1 : (Z.of_nat (3 ^ n * 8))%Z == (8 * Z.of_nat (3 ^ n))%Z)
+  replace (3 # 16)%Q with ((Z.of_nat 3 # 1) / (Z.of_nat 16 # 1))%Q by reflexivity.
+  assert (Hnz : ~ ((Z.of_nat 16 # 1) == 0%Q)).
+  { intro Hc. unfold Qeq in Hc. cbn [Qnum Qden] in Hc.
+    pose proof (proj1 (Nat2Z.inj_lt 0 16) ltac:(lia)). lia. }
+  rewrite (bl_pow_div (Z.of_nat 3 # 1) (Z.of_nat 16 # 1) n Hnz),
+          (bl_pZ 3 n), (bl_pZ 16 n).
+  assert (E1 : (Z.of_nat (3 ^ n * 8))%Z = (8 * Z.of_nat (3 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
-  assert (E2 : (Z.of_nat (16 ^ n * 16))%Z == (16 * Z.of_nat (16 ^ n))%Z)
+  assert (E2 : (Z.of_nat (16 ^ n * 16))%Z = (16 * Z.of_nat (16 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
   rewrite E1, E2.
+  rewrite (bl_mult_div_assoc (1 # 2)%Q (Z.of_nat (3 ^ n) # 1) (Z.of_nat (16 ^ n) # 1)).
+  rewrite <- (bl_qmake_mul 8%Z (Z.of_nat (3 ^ n))).
+  rewrite <- (bl_qmake_mul 16%Z (Z.of_nat (16 ^ n))).
   apply lne_div_eq.
-  - apply Qmult_lt_0_compat.
-    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 16 n ltac:(lia)). lia.
-    + unfold Qlt. cbn [Qnum Qden]. lia.
-  - apply Qmult_lt_0_compat.
-    + unfold Qlt. cbn [Qnum Qden]. lia.
-    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 16 n ltac:(lia)). lia.
-  - rewrite <- (bl_qmake_mul 16%Z (Z.of_nat (16 ^ n))).
-    rewrite <- (bl_qmake_mul 8%Z (Z.of_nat (3 ^ n))).
-    assert (E16 : (16 # 1) == ((8 # 1) * (2 # 1))%Q)
-      by (unfold Qeq; cbn [Qnum Qden Qmult Pos.mul]; lia).
-    rewrite E16.
-    unfold Qdiv. ring.
+  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (bl_mul_ge1 16 n ltac:(lia)).
+    pose proof (proj1 (Nat2Z.inj_lt 0 (16 ^ n)) ltac:(lia)). lia.
+  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (bl_mul_ge1 16 n ltac:(lia)).
+    pose proof (proj1 (Nat2Z.inj_lt 0 (16 ^ n)) ltac:(lia)). lia.
+  - ring.
 Qed.
 
 (* (98/135)·(3/14)^n == (3^n·98 # 1)/(14^n·135 # 1) *)
@@ -341,32 +364,31 @@ Lemma bl_opt_pow : forall n : nat,
   (98 # 135) * q_pow (3 # 14) n
   == (Z.of_nat (3 ^ n * 98) # 1) / (Z.of_nat (14 ^ n * 135) # 1)%Q.
 Proof.
+  (* 策略与 bl_half_pow 相同：bl_pow_div 分配幂后合并为单一分式，
+     经 bl_mult_div_assoc、bl_qmake_mul 与 lne_div_eq 收束。 *)
   intro n.
-  rewrite bl_pow_div, (bl_pZ 3 n), (bl_pZ 14 n).
-  assert (E1 : (Z.of_nat (3 ^ n * 98))%Z == (98 * Z.of_nat (3 ^ n))%Z)
+  replace (3 # 14)%Q with ((Z.of_nat 3 # 1) / (Z.of_nat 14 # 1))%Q by reflexivity.
+  assert (Hnz : ~ ((Z.of_nat 14 # 1) == 0%Q)).
+  { intro Hc. unfold Qeq in Hc. cbn [Qnum Qden] in Hc.
+    pose proof (proj1 (Nat2Z.inj_lt 0 14) ltac:(lia)). lia. }
+  rewrite (bl_pow_div (Z.of_nat 3 # 1) (Z.of_nat 14 # 1) n Hnz),
+          (bl_pZ 3 n), (bl_pZ 14 n).
+  assert (E1 : (Z.of_nat (3 ^ n * 98))%Z = (98 * Z.of_nat (3 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
-  assert (E2 : (Z.of_nat (14 ^ n * 135))%Z == (135 * Z.of_nat (14 ^ n))%Z)
+  assert (E2 : (Z.of_nat (14 ^ n * 135))%Z = (135 * Z.of_nat (14 ^ n))%Z)
     by (rewrite Nat2Z.inj_mul; lia).
   rewrite E1, E2.
+  rewrite (bl_mult_div_assoc (98 # 135)%Q (Z.of_nat (3 ^ n) # 1) (Z.of_nat (14 ^ n) # 1)).
+  rewrite <- (bl_qmake_mul 98%Z (Z.of_nat (3 ^ n))).
+  rewrite <- (bl_qmake_mul 135%Z (Z.of_nat (14 ^ n))).
   apply lne_div_eq.
-  - apply Qmult_lt_0_compat.
-    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 14 n ltac:(lia)). lia.
-    + unfold Qlt. cbn [Qnum Qden]. lia.
-  - apply Qmult_lt_0_compat.
-    + unfold Qlt. cbn [Qnum Qden]. lia.
-    + unfold Qlt. cbn [Qnum Qden]. pose proof (bl_mul_ge1 14 n ltac:(lia)). lia.
-  - rewrite <- (bl_qmake_mul 135%Z (Z.of_nat (14 ^ n))).
-    rewrite <- (bl_qmake_mul 98%Z (Z.of_nat (3 ^ n))).
-    assert (E3 : ((98 # 135) * ((Z.of_nat (3 ^ n) # 1) * Qinv (Z.of_nat (14 ^ n) # 1))
-                    * ((135 # 1) * (Z.of_nat (14 ^ n) # 1)))%Q
-                 == (((98 # 135) * (135 # 1))
-                       * ((Z.of_nat (3 ^ n) # 1) * (Z.of_nat (14 ^ n) # 1)
-                            * Qinv (Z.of_nat (14 ^ n) # 1)))%Q) by ring.
-    rewrite E3.
-    assert (E135 : (98 # 135) * (135 # 1) == (98 # 1)%Q)
-      by (unfold Qeq; cbn [Qnum Qden Qmult Pos.mul]; lia).
-    rewrite E135.
-    unfold Qdiv. ring.
+  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (bl_mul_ge1 14 n ltac:(lia)).
+    pose proof (proj1 (Nat2Z.inj_lt 0 (14 ^ n)) ltac:(lia)). lia.
+  - unfold Qlt. cbn [Qnum Qden Qmult Pos.mul].
+    pose proof (bl_mul_ge1 14 n ltac:(lia)).
+    pose proof (proj1 (Nat2Z.inj_lt 0 (14 ^ n)) ltac:(lia)). lia.
+  - ring.
 Qed.
 
 (* ============================================================ *)
@@ -410,18 +432,18 @@ Theorem bl_variant_shift : forall n : nat,
 Proof.
   intro n. apply Qle_to_QleT'.
   apply (Qle_trans _ (q_pow (1 # 2) (Datatypes.S n) * ((1 # 2) * q_pow (3 # 16) n))).
-  - apply (bl_mlc _ _ (q_pow (1 # 2) (Datatypes.S n))).
-    + apply QleT'_to_Qle. apply bl_beta_lower.
-    + apply q_pow_nonneg. unfold Qle. cbn [Qnum Qden]. lia.
-  - apply qeq_imp_qle.
-    rewrite q_pow_succ.
-    assert (E3 : ((1 # 2) * q_pow (1 # 2) n * ((1 # 2) * q_pow (3 # 16) n))%Q
-                 == (((1 # 2) * (1 # 2)) * (q_pow (1 # 2) n * q_pow (3 # 16) n))%Q) by ring.
-    rewrite E3.
-    assert (E2 : ((1 # 2) * (1 # 2))%Q == (1 # 4)) by reflexivity.
-    rewrite E2.
+  - (* 左腿：(1/4)(3/32)^n == (1/2)^{n+1}·(1/2)(3/16)^n 等号桥（LHS 无 A·因子形，
+       bl_mlc 结论 z·x ≤ z·y 与之 unify 必败——须走 qeq_imp_qle 等式轨） *)
+    apply qeq_imp_qle.
+    replace (3 # 32) with ((1 # 2) * (3 # 16))%Q by reflexivity.
     rewrite <- (bl_qpow_mul (1 # 2) (3 # 16) n).
-    reflexivity.
+    rewrite q_pow_succ.
+    ring.
+  - (* 右腿：A·(1/2)(3/16)^n ≤ A·lne_B n——bl_mlc（0 ≤ A 左乘保序）正位 *)
+    apply (bl_mlc _ _ (q_pow (1 # 2) (Datatypes.S n))).
+    + apply QleT'_to_Qle. apply bl_beta_lower.
+    + apply (q_pow_nonneg (1 # 2) (Datatypes.S n)).
+      unfold Qle. cbn [Qnum Qden]. lia.
 Qed.
 
 (* ============================================================ *)
