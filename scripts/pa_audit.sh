@@ -178,7 +178,7 @@ modsan_of() { printf '%s' "$1" | tr -c 'A-Za-z0-9_' '_'; }
 # ------------------------------------------------------------ 模块集 ----
 # 覆盖集 = 基座 + order.txt 全部 + 清单所涉在树模块；避让集剔除
 : > "$WORK/.excluded"
-MODULES="$( { echo "$BASE_MOD"; grep -vE '^\s*(#|$)' "$ORDER_FILE" | sed 's/\.v$//'; } | awk '!seen[$0]++')"
+MODULES="$( { echo "$BASE_MOD"; grep -vE '^\s*(#|$)' "$ORDER_FILE" | sed -e 's/#.*//' -e 's/\.v$//'; } | awk '!seen[$0]++')"
 COVERED=""
 for m in $MODULES; do
   if excluded "$m"; then echo "$m" >> "$WORK/.excluded"; else COVERED+="$m"$'\n'; fi

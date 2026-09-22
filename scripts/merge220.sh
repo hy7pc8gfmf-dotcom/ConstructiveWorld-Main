@@ -130,7 +130,7 @@ def module_path(f):
     if os.path.exists(p2): return p2
     return None
 
-order = [l.strip() for l in open(ORDER, encoding="utf-8") if l.strip()]
+order = [l.split('#', 1)[0].strip() for l in open(ORDER, encoding="utf-8") if l.split('#', 1)[0].strip()]
 mods = order[:NMERGE]
 paths = []
 for f in mods:

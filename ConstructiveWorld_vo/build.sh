@@ -25,5 +25,5 @@ while IFS= read -r f; do
   e=$?
   echo "$f EXIT=$e"
   if [ $e -ne 0 ]; then fail=1; tail -6 "_${f%.v}.build.log"; fi
-done < <(tr -d '\r' < order.txt | grep '\.v$')
+done < <(tr -d '\r' < order.txt | sed 's/#.*//' | grep '\.v$')
 exit $fail
