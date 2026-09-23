@@ -2,13 +2,13 @@
 (* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
-(*   替换清单（本件）：对偶三件（温度／平方见证／半温标：定义面展开至公共规约基后自反收口）＋平方见证件（两倍乘分配律闭项内联，消 req_two_mult 转发跳）＋零之相反数件与右零差件（加逆唯一性双层转发就地重演至加消去律闭项）。                                            *)
+(*   替换清单（本件）：对偶三件（温度／平方见证／半温标：定义面展开至公共规约基后自反闭合）＋平方见证件（两倍乘分配律闭项内联，消 req_two_mult 转发跳）＋零之相反数件与右零差件（加逆唯一性双层转发就地重演至加消去律闭项）。                                            *)
 (*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
 (*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
-(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
+(*   ②显式闭项 witness（加逆唯一性闭项逐肢直供／平方见证 distrib 闭项）＋  *)
 (*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
 (*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
-(*   挂账（本件不可化批量标注）：分区/软最大正性族与逐出分区族（转发对象为节假设位/在件引理，改写即同项转述或需整链重演，如实挂账不硬编）。                                  *)
+(*   遗留（本件不可化批量标注）：分区/软最大正性族与逐出分区族（转发对象为节假设位/在件引理，改写即同项转述或需整链重演，如实遗留不硬编）。                                  *)
 (*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
 (* ===================================================================== *)
 
@@ -25,7 +25,7 @@
    母本：签名迁移规划书-20260908.md 批 4 清单；
    Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L27929-30669
      （首段 = softmax 家 L27950-28600）。
-   前置锚（规划书明示直接消费，零重建）：
+   前置锚（规划书明示直接依存，零重建）：
      基座 Setoid 节已迁 7 件（L66137-66414）：exp_pos_fn_setoid /
        partition_function_setoid / partition_function_pos_setoid / softmax_setoid /
        softmax_pos_setoid / softmax_normalized_setoid / exp_neg_req_compat_setoid；
@@ -43,7 +43,7 @@
      ag_softmax_scaled_pos<-28460 ag_softmax_scaled_normalized<-28471
      ag_temp_is_scale_duality<-28537 ag_sq_witness_4<-28555
      ag_scale_sqrt_witness_dual<-28565 ag_half_scale_is_temp_two<-28577
-   【已迁 7（基座 Setoid 节，直接消费不重迁）】
+   【已迁 7（基座 Setoid 节，直接依存不重迁）】
      partition_function_pos<-27962 softmax_pos<-27980 softmax_normalized<-27991
      attention_is_gibbs<-28606 steady_state_boltzmann_attn<-28722
      boltzmann_normalized_attn<-28802 exp_neg_req_compat_setoid<-66223。
@@ -55,7 +55,7 @@
         机器缺口与语句可迁性解耦，对照见增量节头注。
      2. temperature_zero_limit<-28337：T→0 极限语义需 lim/metric 因果链
         （接口字段在而链长 >30 步）；留批 5。
-        ——批5扫尾席 2026-09-09 解冻：lim 簇消费（UpReqCauchy req_r_pow 系
+        ——批5扫尾席 2026-09-09 解冻：lim 簇依存（UpReqCauchy req_r_pow 系
         + exp_neg_geo_break 假设位 r_arch_pow 同位平移）+
         ag_hard_attention_collapse_eps 逐 eps 完成结果（尾增量节）。
      3. list 机器 13 件：规划书 (d) 明示冻结复用（evicted/list 段，L29360 起）。
@@ -68,12 +68,12 @@
      ag_softmax_mix_normalized / ag_softmax_temp_normalized /
      ag_softmax_scaled_normalized / ag_softmax_temp_mix_normalized /
      ag_softmax_is_prob；幂等δ对偶：ag_temp_is_scale_duality /
-     ag_half_scale_is_temp_two（req_refl 级，消费 reqd_scale_temp_duality）；
-     对位验证（见证记账）：ag_scale_sqrt_witness_dual（Hw 仅语句记账，
+     ag_half_scale_is_temp_two（req_refl 级，依存 reqd_scale_temp_duality）；
+     对位验证（见证核算）：ag_scale_sqrt_witness_dual（Hw 仅语句核算，
      证明路径 = reqd_scale_temp_duality，与 Id @28565 同构）。
    ----------------------------------------------------------------
    【boltzmann 块 3】ag_attention_is_gibbs_temp<-28634（节内参数化
-     softmax_temp_r 形；e^{+z/T} 约定镜像保留，因子不换号；撞车核对：
+     softmax_temp_r 形；e^{+z/T} 约定副本保留，因子不换号；撞车核对：
      UpSigMigrate.v req_attention_is_gibbs_temp 为批 0 试点 fixed-z 形
      + exp_neg 兼容桥假设申报位，本节件为 scaled 合成子链组件，
      ag_ 前缀并存不覆盖）
@@ -98,20 +98,20 @@
      ag_tv_pointwise_evict<-30477 ag_tv_if_split<-30494
      ag_eviction_if_linear_else<-30505 ag_tv_pointwise<-30516
      ag_tv_sum_decomp<-30532 ag_tv_sum_collapse<-30592
-     ag_topk_tv_identity_strict<-30638（旗舰，Print Assumptions Closed）。
+     ag_topk_tv_identity_strict<-30638（主定理，Print Assumptions Closed）。
    【参数化归一登记表】Id 固定 keep_dec 的 tail_mass/evicted_partition 与
      keep_top_k 实例统一为 (k : S -> Set)+kd 可判定参数：故
      ag_eviction_partition_le_full 一件覆盖 @29526+topk_kept_le_Zthermo<@30355，
      ag_tail_plus_kept_full 一件覆盖 @29732+topk_kept_plus_tail_full<@30330。
-   【诚实接口新增（Id SumOver 字段镜像，先例 UpReqDist L206/L1008）】
+   【诚实接口新增（Id SumOver 字段副本，先例 UpReqDist L206/L1008）】
      sum_le<-L1415 abs_sum_le_r<-L1431 req_lt_plus_compat_lt_le_h<-
      ReqStrictOrderBridge L1468（req 集合oid类无混合 plus 兼容字段，
-     构造性序无两侧消去；lt_minus_cc 符号步消费）。
+     构造性序无两侧消去；lt_minus_cc 符号步依存）。
    【冻结清单（中后段席逐件理由回写）】
      5. top_k_majorization<-30047 / top_k_swap_no_gain<-30073 /
         top_k_majorization_mem<-30264：证明引擎 = 计数/firstn/skipn/
         排序 list 机器 13 件（规划书 (d) 冻结复用，Id/nat 层），req 层
-        无桥件，不迁；交换代数核已由三辅件 req 化铺好，引擎件解冻后
+        无桥接引理，不迁；交换代数核已由三辅件 req 化铺好，引擎件解冻后
         一行组装。
      6. eviction_db_breaking_bound<-29385 / eviction_db_zero_full<-29573：
         禁区（RestB ReqKVQuantWorld 领地，首席冻结清单明示）。
@@ -149,7 +149,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* Section ReqAttnGibbs：AttentionGibbsBridge 首段 req 迁移       *)
 (*   求和诚实接口 = Id SumOver/基座 Setoid 节同款三性质 + add，    *)
-(*   节内自持（跨席假设申报不可消费纪律）。                   *)
+(*   节内自持（跨席假设申报不可依存纪律）。                   *)
 (* ============================================================ *)
 Section ReqAttnGibbs.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -191,7 +191,7 @@ Proof.
         -- exact (plus_zero one).
 Qed.
 
-(* ---- 单位温度 softmax 家（消费基座 softmax_setoid 系） ---- *)
+(* ---- 单位温度 softmax 家（依存基座 softmax_setoid 系） ---- *)
 
 (* 凸组合归一化守恒（Id @28023；组装） *)
 Theorem ag_softmax_mix_normalized :
@@ -250,7 +250,7 @@ Proof.
   - exact (softmax_normalized_setoid S sumf sum_ext sum_linear sum_pos z).
 Qed.
 
-(* ---- 温度退火家族（Id @28091-28195；消费 reqd_softmax_temp_param） ---- *)
+(* ---- 温度退火家族（Id @28091-28195；依存 reqd_softmax_temp_param） ---- *)
 
 Definition partition_function_temp_r (z : S -> R) : R :=
   sumf (fun s : S => exp_pos_fn_setoid (mult (inv_pos T T_pos) (z s))).
@@ -447,7 +447,7 @@ Proof.
   - exact Har.
 Qed.
 
-(* ---- 缩放家族（Id @28440-28535；消费 reqd_softmax_scaled） ---- *)
+(* ---- 缩放家族（Id @28440-28535；依存 reqd_softmax_scaled） ---- *)
 
 Lemma ag_partition_function_scaled_pos :
   forall (c : R) (z : S -> R),
@@ -491,7 +491,7 @@ Qed.
 
 (* ---- 缩放-温度对偶与平方维数实例（Id @28537-28600） ---- *)
 
-(* 反向对称（Id @28537；幂等δ对偶：消费 reqd_scale_temp_duality） *)
+(* 反向对称（Id @28537；幂等δ对偶：依存 reqd_scale_temp_duality） *)
 Lemma ag_temp_is_scale_duality :
   forall (c : R) (Hc : lt zero c) (z : S -> R) (s : S),
     req (reqd_softmax_temp_param S sumf sum_pos c Hc z s)
@@ -502,7 +502,7 @@ Proof.
   exact (req_refl _).
 Qed.
 
-(* d = 4 = 2² 见证（Id @28555；消费 req_two_mult 真证） *)
+(* d = 4 = 2² 见证（Id @28555；依存 req_two_mult 真证） *)
 Lemma ag_sq_witness_4 :
   reqd_sqrt_witness (plus (plus one one) (plus one one)) (plus one one).
 Proof.
@@ -516,7 +516,7 @@ Proof.
 Qed.
 
 (* 通用平方维数对偶：凡 d = r²（见证式）则 1/r 缩放 == 温度 r
-   （Id @28565；对位验证：Hw 仅语句记账，与 Id 原件同构） *)
+   （Id @28565；对位验证：Hw 仅语句核算，与 Id 原件同构） *)
 Theorem ag_scale_sqrt_witness_dual :
   forall (d r : R) (Hr : lt zero r), reqd_sqrt_witness d r ->
   forall (z : S -> R) (s : S),
@@ -551,13 +551,13 @@ Qed.
 (*   假设申报位）；本节件为节内参数化 softmax_temp_r 形，       *)
 (*   服务 scaled 合成，命名 ag_ 前缀与试点并存不覆盖。            *)
 (*   Boltzmann 约定换位登记表：ag_attention_is_gibbs_temp 保留 Id    *)
-(*   e^{+z/T} 约定（exp_pos_fn_setoid 镜像，因子不换号）；         *)
+(*   e^{+z/T} 约定（exp_pos_fn_setoid 副本，因子不换号）；         *)
 (*   ag_scale_inv_T_eq_softmax_temp 桥按 req 原生 e^{-z/T} 族     *)
 (*   （reqd_softmax_scaled）对 e^{+z/T} temp 家，缩放系数换号      *)
 
 (* ============================================================ *)
 
-(* ---- Boltzmann 侧基础设施（Id @28586-28600 镜像；诚实 Variable 位） ---- *)
+(* ---- Boltzmann 侧基础设施（Id @28586-28600 副本；诚实 Variable 位） ---- *)
 Variable D : R.
 Variable D_pos : lt zero D.
 Variable energy : S -> R.
@@ -572,7 +572,7 @@ Variable Z_thermo_r_pos : lt zero Z_thermo_r.
 Definition boltzmann_dist_attn_r (s : S) : R :=
   mult (inv_pos Z_thermo_r Z_thermo_r_pos) (boltzmann_factor_r s).
 
-(* 温度化 softmax（Id @28104 e^{+z/T} 约定镜像；分母正性直接消费
+(* 温度化 softmax（Id @28104 e^{+z/T} 约定副本；分母正性直接依存
    首段成品 ag_partition_function_temp_pos，零新假设） *)
 Definition softmax_temp_r (z : S -> R) (s : S) : R :=
   mult (exp_pos_fn_setoid (mult (inv_pos T T_pos) (z s)))
@@ -698,9 +698,9 @@ Qed.
 (*   支撑/稳态偏差量化）。禁区扣除：eviction_db_breaking_bound    *)
 (*   @29385 / eviction_db_zero_full @29573 属 eviction_db 系      *)
 (*   （RestB ReqKVQuantWorld 领地，批4首席冻结清单），不迁。       *)
-(*   诚实接口新增（Id SumOver 字段 req 镜像，先例 UpReqDist       *)
+(*   诚实接口新增（Id SumOver 字段 req 副本，先例 UpReqDist       *)
 (*   L206 sum_le / L1008 fsum_le，同为 Section 假设申报位）：     *)
-(*     sum_le<-L1415 镜像、abs_sum_le_r<-L1431 镜像。            *)
+(*     sum_le<-L1415 副本、abs_sum_le_r<-L1431 副本。            *)
 (* ============================================================ *)
 
 Variable transition : S -> S -> R.
@@ -728,12 +728,12 @@ Definition evicted_boltzmann_r (s : S) : R :=
     mult (inv_pos evicted_partition_r evicted_partition_r_pos) (boltzmann_factor_r s)
   else zero.
 
-(* 参数化保留集版配分函数（Id evicted_partition_of @29447 镜像） *)
+(* 参数化保留集版配分函数（Id evicted_partition_of @29447 副本） *)
 Definition evicted_partition_of_r
   (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) : R :=
   sumf (fun s : S => if kd s then boltzmann_factor_r s else zero).
 
-(* 逐出破缺项（Id db_breaking @29380 镜像；仅供稳态偏差件消费，
+(* 逐出破缺项（Id db_breaking @29380 副本；仅供稳态偏差件依存，
    破缺界/零破缺两定理属禁区不迁） *)
 Definition db_breaking_r (s s' : S) : R :=
   abs (req_minus (mult (evicted_boltzmann_r s) (evicted_transition_r s s'))
@@ -1015,7 +1015,7 @@ Qed.
 (*   冻结清单（(d) 理由回写）：top_k_majorization @30047 /           *)
 (*   top_k_swap_no_gain @30073 / top_k_majorization_mem @30264 ——   *)
 (*   证明引擎 = 计数/firstn/skipn/排序 list 机器 13 件（规划书 (d)  *)
-(*   冻结复用，Id/nat 层），req 层无桥件，不迁。                    *)
+(*   冻结复用，Id/nat 层），req 层无桥接引理，不迁。                    *)
 (* ============================================================ *)
 
 Definition tail_mass_of_r
@@ -1213,22 +1213,22 @@ Qed.
 (*   诚实桥（条件定理模式 + ReqStrictOrderBridge 同位）：     *)
 (*     req_lt_plus_compat_lt_le_h——req 集合oid接口仅双严格/双非   *)
 (*     严格 plus 兼容字段，混合形不可导（构造性序无两侧消去），    *)
-(*     Real 实例可满足；lt_minus_cc 符号步消费。                  *)
-(*   旗舰：ag_topk_tv_identity_strict（规划书 L42 点态结论件）。   *)
+(*     Real 实例可满足；lt_minus_cc 符号步依存。                  *)
+(*   主定理：ag_topk_tv_identity_strict（规划书 L42 点态结论件）。   *)
 (* ============================================================ *)
 
 (* 混合 plus 兼容桥（ReqStrictOrderBridge L1468 同位假设） *)
 Hypothesis req_lt_plus_compat_lt_le_h :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 
-(* Top-K 版保留配分与重归一化分布（Id @30293/@30300 参数化镜像） *)
+(* Top-K 版保留配分与重归一化分布（Id @30293/@30300 参数化副本） *)
 Definition topk_renorm_r (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
            (Hkpos : lt zero (evicted_partition_of_r k kd)) (s : S) : R :=
   if kd s then
     mult (inv_pos (evicted_partition_of_r k kd) Hkpos) (boltzmann_factor_r s)
   else zero.
 
-(* 总变差（req 节内镜像；Id tv_dist @28785 同形，1/2 因子） *)
+(* 总变差（req 节内副本；Id tv_dist @28785 同形，1/2 因子） *)
 Definition tv_dist_r (mu nu : S -> R) : R :=
   mult (inv_pos (plus one one) req_two_pos)
        (sumf (fun s : S => abs (req_minus (mu s) (nu s)))).
@@ -1761,8 +1761,8 @@ Proof.
                                              (tail_mass_of_r k kd)))).
 Qed.
 
-(* -1 主定理（旗舰）：严格逐出 ⟹ TV(boltzmann, topk 重归一)
-   == tail/Z_thermo（Id @30638 条件化精确恒等 req 镜像） *)
+(* -1 主定理（主）：严格逐出 ⟹ TV(boltzmann, topk 重归一)
+   == tail/Z_thermo（Id @30638 条件化精确恒等 req 副本） *)
 Theorem ag_topk_tv_identity_strict :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
          (Hkpos : lt zero (evicted_partition_of_r k kd)),
@@ -1847,14 +1847,14 @@ Qed.
 (*   2026-09-09 扫尾席（三小块之一/之二；冻结清单件 1/2 解冻）。    *)
 (*   ---------------------------------------------------------------- *)
 (*   【A. 逐 eps 有界和机器（结论 1 机器缺口落地；三件真证）】        *)
-(*   消费接口 min/r_max 逐 eps 字段场（基座 L40529-40539：            *)
+(*   依存接口 min/r_max 逐 eps 字段场（基座 L40529-40539：            *)
 (*   min_le_l / r_max_le_l / r_max_l_iff 全逐 eps 形）+ 节内          *)
 (*   sum_le / sum_add / sum_ext 假设位；plain 形不可导（序无消去，    *)
 (*   RestB Part4 metric_nonneg 同判），故机器为逐 eps 口径——          *)
 (*   与接口原生形式同构（log_le_linear_eps 同款口径）。               *)
 (*   【解冻对照（结论 1）】Id @28282 证明体核读 = 纯代数              *)
 (*   （softmax_temp_relative + exp_neg_le_decr + le_mult_compat_r）， *)
-(*   未消费任何有界和机器——首席结论的机器缺口真实存在（req 场此前     *)
+(*   未依存任何有界和机器——首席结论的机器缺口真实存在（req 场此前     *)
 (*   确未建），但与该语句的可迁移性解耦。本节两者均结果：机器三件     *)
 (*   （A 组）独立成件，平移件（B 组）按 Id 纯代数路径组装。           *)
 (*   【B. gap 集中 + 零温极限（Id @28282 / @28337 平移；真证/组装）】  *)
@@ -1863,22 +1863,22 @@ Qed.
 (*   e^{-z/T}（Boltzmann）约定前提 req_minus (z s) (z s_star）        *)
 (*   （gap 位 = loss 差正半轴），结论因子 exp_neg (invT·gamma)        *)
 (*   两约定同形；softmax_temp → reqd_softmax_temp_param。             *)
-(*   【C. 退火引擎（B 组系数泛化重放，供 D 组消费）】                 *)
+(*   【C. 退火引擎（B 组系数泛化重放，供 D 组依存）】                 *)
 (*   ag_softmax_temp_relative 系数泛化（T 位 → 自由系数 kappa，       *)
-(*   reqd_softmax_scaled 族；节 T 件签名不含温度槽，诚实重放非降级）。*)
+(*   reqd_softmax_scaled 族；节 T 件签名不含温度参数位，诚实重放非降级）。*)
 (*   【D. T→0 逐 eps 完成（Id 注释语义 L28330-28335 构造性读法）】     *)
 (*   ag_hard_attention_collapse_eps：任意 eps>0 存在逆温系数          *)
 (*   kappa := (1/T)·2^N 使比值 ≤ eps（温度 1/κ → 0 对位 Id "T→0"）。   *)
 
 (*   req_r_pow / req_r_pow_pos 闭包件 + exp_neg_geo_break 假设位      *)
-(*   （UpReqCauchy r_arch_pow Variable 同位平移，B 类槽 T2①；        *)
+(*   （UpReqCauchy r_arch_pow Variable 同位平移，B 类参数 T2①；        *)
 (*   Real 实例可满足：2^N·d → ∞）。                                   *)
 (*   【诚实边界注记（结论 2 精确化）】cauchy_complete/lim 字段虽然     *)
-(*   已在接口（L40589-40596），但 lim u zero 形需 metric 范数兼容槽   *)
+(*   已在接口（L40589-40596），但 lim u zero 形需 metric 范数兼容参数位   *)
 (*   （metric_abs_norm / abs_nonneg_plain / lim_metric_approx /      *)
-(*   le_all_eps_zero 四槽组——全部以 Variable 位活在 UpReqCauchy 节内， *)
+(*   le_all_eps_zero 四参数位组——全部以 Variable 位活在 UpReqCauchy 节内， *)
 (*   接口无对应字段），即结论"链长"的精确落点；本节按接口原生逐 eps   *)
-(*   形式结果同语义内容，四槽组列为后续升级路径（不硬凑）。           *)
+(*   形式结果同语义内容，四参数位组列为后续升级路径（不硬凑）。           *)
 (* ============================================================ *)
 
 (* ---- A. 逐 eps 有界和机器（三件真证） ---- *)
@@ -2026,7 +2026,7 @@ Proof.
   unfold A, B, C in Hfin. exact Hfin.
 Qed.
 
-(* ---- C. 退火引擎（系数泛化重放；消费面 = D 组） ---- *)
+(* ---- C. 退火引擎（系数泛化重放；依存面 = D 组） ---- *)
 
 (* scaled 族相对形：ag_softmax_temp_relative 系数泛化（T 位 → kappa；
    真） *)
@@ -2181,9 +2181,9 @@ Proof.
   unfold A, B, C in Hfin. exact Hfin.
 Qed.
 
-(* ---- D. T→0 逐 eps 完成（lim 簇消费 + 假设位平移） ---- *)
+(* ---- D. T→0 逐 eps 完成（lim 簇依存 + 假设位平移） ---- *)
 
-(* 逐 eps 几何击穿槽（UpReqCauchy r_arch_pow Variable 同位平移，B 类槽
+(* 逐 eps 几何击穿参数位（UpReqCauchy r_arch_pow Variable 同位平移，B 类参数
    T2①；exp 形：exp_neg (2^N·d) ≤ eps。Real 实例可满足：2^N·d → ∞。
    End 时作显式参入闭包签名，Print Assumptions 仍 Closed） *)
 Hypothesis exp_neg_geo_break :
@@ -2194,7 +2194,7 @@ Hypothesis exp_neg_geo_break :
 
 (* T→0 语义完成：任意 eps>0 存在逆温系数 kappa := (1/T)·2^N 使
    softmax 比值 ≤ eps（温度 1/κ → 0 对位 Id "T→0" 读法，即硬注意力坍缩
-   的构造性逐 eps 形；消费 exp_neg_geo_break 槽 + UpReqCauchy
+   的构造性逐 eps 形；依存 exp_neg_geo_break 参数位 + UpReqCauchy
    req_r_pow/req_r_pow_pos/req_mult_swap_mid + C 组三件） *)
 Theorem ag_hard_attention_collapse_eps :
   forall (z : S -> R) (s_star : S) (gamma : R) (s : S),
@@ -2302,23 +2302,23 @@ Qed.
 (*     Variable + minus_self_zero + abs_zero）。                    *)
 (*   Id→req 差异登记表（真证非抄写，沿 63 件先例同款）：               *)
 (*     - sum_over_S→sumf（节内三性质诚实接口）+ sum_pos_preserved→   *)
-(*       sum_pos 槽；exp_pos_fn→exp_pos_fn_setoid（req 镜像）；      *)
+(*       sum_pos 参数位；exp_pos_fn→exp_pos_fn_setoid（req 副本）；      *)
 (*     - minus→req_minus（UpReqAlgebra L728 req_minus_self_zero），  *)
-(*       Id 恒等链→req_trans 链 + req_mult_compat 双腿；             *)
+(*       Id 恒等链→req_trans 链 + req_mult_compat 双肢；             *)
 (*     - detailed_balance（Id 节 Variable）→detailed_balance_r       *)
-(*       诚实假设申报位逐位镜像（Id→req）；                        *)
+(*       诚实假设申报位逐位副本（Id→req）；                        *)
 (*     - abs 消去：接口字段 abs_zero（req (abs zero) zero）经        *)
 (*       req_abs_compat 拉回，零新公理。                             *)
 (*   禁区注记更正：头注冻结清单6 / L662 禁区扣除注记由本节更正——     *)
 (*     行1（@29385）异形维持冻结；行2（@29573）解冻结果。            *)
 (* ============================================================ *)
 
-(* ---- 行3：温度参数化配分函数（Id @28494 镜像） ---- *)
+(* ---- 行3：温度参数化配分函数（Id @28494 副本） ---- *)
 Definition partition_function_temp_param_r (T0 : R) (HT0 : lt zero T0)
   (z : S -> R) : R :=
   sumf (fun s : S => exp_pos_fn_setoid (mult (inv_pos T0 HT0) (z s))).
 
-(* ---- 行3 对位件（Id @28500；真证：sum_pos 槽 + exp_neg_pos，
+(* ---- 行3 对位件（Id @28500；真证：sum_pos 参数位 + exp_neg_pos，
    与首段 ag_partition_function_temp_pos 同款证法） ---- *)
 Lemma ag_partition_function_temp_param_pos :
   forall (T0 : R) (HT0 : lt zero T0) (z : S -> R),
@@ -2331,7 +2331,7 @@ Proof.
 Qed.
 
 (* ---- detailed_balance 诚实接口位（Id @28714 节 Variable req 逐位
-   镜像；boltzmann_dist_attn→boltzmann_dist_attn_r，Id→req） ---- *)
+   副本；boltzmann_dist_attn→boltzmann_dist_attn_r，Id→req） ---- *)
 Hypothesis detailed_balance_r :
   forall s s' : S,
     req (mult (boltzmann_dist_attn_r s) (transition s s'))

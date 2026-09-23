@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   sqo_absorb_half_le_w（原 L254，3 句玩具证）                          *)
 (* ============================================================ *)
@@ -43,7 +43,7 @@
 (*  （任务书「从 inline 证明体反推」要求的精确形态）。                  *)
 (*                                                                 *)
 (* 分层：                                                           *)
-(*   S0 Q 桥件：sqo_qeq_le、sqo_mul_inv（逆根自乘恒等，Pos2Z 单跳）、   *)
+(*   S0 Q 桥接引理：sqo_qeq_le、sqo_mul_inv（逆根自乘恒等，Pos2Z 单跳）、   *)
 (*      sqo_inv_sqrt_le_one / sqo_inv_sqrt_lt_one（1 ≤ s / 1 < s      *)
 (*      ⟹ inv 反序——乘 /s 单调 + 自乘消去，Q 正性+平方单调单跳）。      *)
 (*   S1（G1 保底）吸收最优性表征族：                                  *)
@@ -52,7 +52,7 @@
 (*      sqo_sqrt_gt_one（1 < s·s ⟹ 1 < s 严格）；                     *)
 (*      sqo_one_le_sqrt_characterization（三联 And 账）；              *)
 (*      见证接口形（√d 无 Q 全函数，按库内 sqrt 见证接口                *)
-(*      root_of d := projT1 (real_sqrt_exists d Hd) 的 Q 层镜像：      *)
+(*      root_of d := projT1 (real_sqrt_exists d Hd) 的 Q 层副本：      *)
 (*      前提 0 ≤ s ∧ s·s == d 承载）：                                *)
 (*      sqo_sqrt_ge_one_of_d、sqo_absorb_half_le（(1/2)·inv(√d)        *)
 (*      ≤ 1/2 头注①直译）、sqo_absorb_half_le_w（witness 形①）、        *)
@@ -60,10 +60,10 @@
 (*      sqo_sqrt_gt_one_of_d（d>1 ⟹ 严格）。                           *)
 (*   S2（G2 主件）紧性定理：                                          *)
 (*      sqo_absorb_general（一般 h 一般 c 吸收链：h·inv(√d) ≤ c ⟹      *)
-(*      (x+h)·inv(√d) ≤ y·inv(√d)+c——h 槽即件 2 的 eps 透传位）；       *)
+(*      (x+h)·inv(√d) ≤ y·inv(√d)+c——h 参数位即件 2 的 eps 透传位）；       *)
 (*      sqo_chain_bound（G10 头注链理想形整体：|·| ≤ 根积+1/2 形输入）；  *)
 (*      sqo_absorb_breaks（c < 阈值 ⟹ 构造性违例，x 任意）；            *)
-(*      sqo_plus1_optimal（四联账旗舰：充分+构造破界+d=1 退化反例+      *)
+(*      sqo_plus1_optimal（四联账主定理：充分+构造破界+d=1 退化反例+      *)
 (*      余量恰为零表征）；                                            *)
 (*      sqo_plus1_threshold_dec（阈值可判定二分，Set 层出口）；          *)
 (*      sqo_plus1_margin（G10 Δ 的 +1 余量 1 − (1/2)·inv(√d) ≥ 1/2      *)
@@ -71,7 +71,7 @@
 (*   S3（G3 加餐）分段精确形：                                        *)
 (*      sqo_piecewise（d==1 ⟹ (1/2)·inv(√d) 恰 1/2；d>1 ⟹ 严格小于      *)
 (*      1/2——头注「k=1 相等、k≥2 严格」的精确分段形）。eps 版对接由      *)
-(*      sqo_absorb_general 的 h 自由参量承载（G10 件 2 的 h 槽）。      *)
+(*      sqo_absorb_general 的 h 自由参量承载（G10 件 2 的 h 参数位）。      *)
 (*                                                                 *)
 (* 公理面：本文件语句面全 Set 层承载（Qeq/forall + 一个 sumbool 出口）； *)
 (*   合取账用 Stdlib and（/\）承载——本件组件全 Prop（蕴涵/Qle/Qeq），    *)
@@ -93,7 +93,7 @@ From Stdlib Require Import Lia Lqa Setoid.
 
 Open Scope Q_scope.
 
-(* ################ 第 0 部分：Q 桥件 ########################### *)
+(* ################ 第 0 部分：Q 桥接引理 ########################### *)
 
 (* Qeq → Qle 桥（分量交叉积直写，Q 正性无关） *)
 Lemma sqo_qeq_le : forall x y : Q, x == y -> x <= y.
@@ -224,7 +224,7 @@ Proof.
     + apply (Qle_trans (s * s) s 1); [exact Hb | exact Hle].
 Qed.
 
-(* G1 旗舰账：1 ≤ √d ∧ 等号/严格分界三联（头注「1 ≤ √d（k=1 时相等、
+(* G1 主账：1 ≤ √d ∧ 等号/严格分界三联（头注「1 ≤ √d（k=1 时相等、
    k≥2 时严格）」的定理化） *)
 Theorem sqo_one_le_sqrt_characterization : forall s : Q, 0 <= s ->
   (1 <= s * s -> 1 <= s) /\
@@ -237,7 +237,7 @@ Proof.
     + apply sqo_sqrt_gt_one. exact H0.
 Qed.
 
-(* 见证接口形（Q 层镜像 G10 root_of：√d 以 0 ≤ s ∧ s·s == d 承载）：
+(* 见证接口形（Q 层副本 G10 root_of：√d 以 0 ≤ s ∧ s·s == d 承载）：
    1 ≤ d ⟹ 1 ≤ √d *)
 Lemma sqo_sqrt_ge_one_of_d : forall d s : Q,
   0 <= s -> s * s == d -> 1 <= d -> 1 <= s.
@@ -294,7 +294,7 @@ Qed.
 
 (* ################ 第 2 部分：G2 紧性定理 ##################### *)
 
-(* 一般 h 一般 c 吸收链（h 槽 = G10 件 2 的 eps 透传位；本件 h := 1/2）：
+(* 一般 h 一般 c 吸收链（h 参数位 = G10 件 2 的 eps 透传位；本件 h := 1/2）：
    h·inv(√d) ≤ c ⟹ (x+h)·inv(√d) ≤ y·inv(√d) + c（x ≤ y）。
    吸收发生处：平方展开后 h·inv(√d) 被 c 吃掉——紧性阈值即 h·inv(√d)。 *)
 Lemma sqo_absorb_general : forall x y s c h : Q,
@@ -342,7 +342,7 @@ Proof.
   lra.
 Qed.
 
-(* G2 旗舰四联账：+1 换一般 c 的界保持条件完全刻画。
+(* G2 主四联账：+1 换一般 c 的界保持条件完全刻画。
    联 1（充分）：c ≥ (1/2)·inv(√d) ⟹ 吸收链对所有 x ≤ y 成立。
    联 2（必要·构造破界）：c < (1/2)·inv(√d) ⟹ 对任意 x 严格违例。
    联 3（d=1 退化点显式反例）：c < 1/2 ⟹ (0+1/2)·/1 > 0·/1 + c。

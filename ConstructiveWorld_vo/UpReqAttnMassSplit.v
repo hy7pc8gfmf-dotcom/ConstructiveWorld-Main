@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   ams_sum_switch_self（原 L340，4 句轻证）	*)
 (* ============================================================ *)
@@ -12,7 +12,7 @@
 (* UpReqAttnMassSplit.v —— 质量分裂四件链（Σw 拆分至 L1 上界）        *)
 (*                                                              *)
 (* 目的：补齐上游冻结链的后四件（mass_split → deficit_eq →           *)
-(*   mass_rest_le → l1_le），消费上游 UpReqAttnUniformLimit 的       *)
+(*   mass_rest_le → l1_le），依存上游 UpReqAttnUniformLimit 的       *)
 (*   alm_ 面（alm_switch/alm_k/alm_invk/alm_uniform）。蓝图四恒等式： *)
 (*   Σw = k·w(m)+M；k·(inv k−w(m))=M；M≤n·decay；L1 ≤ 2n·decay；      *)
 (*   数值核验（vocab=m,m,c,d 四温度点 L1==2M）先行通过。               *)
@@ -21,11 +21,11 @@
 (*   mass_rest_le/wm_le_invk/L1==2M/L1≤2n·decay）——假命题拦截纪律。   *)
 (*                                                              *)
 (* 主件（前缀 ams_，避免与库内既有名冲突）：                          *)
-(*   关键构造判断：上游 swg_switch_sum_gen 的 g 槽是 Real 常量，        *)
+(*   关键构造判断：上游 swg_switch_sum_gen 的 g 参数位是 Real 常量，        *)
 (*   质量分裂需「副本支 w(m)、非副本支 w(x)」的函数形开关。自建         *)
-(*   ams_mswitch（match 直写，c 槽常量＋g 槽函数），并按上游证明骨架    *)
+(*   ams_mswitch（match 直写，c 参数位常量＋g 参数位函数），并按上游证明骨架    *)
 (*   逐行转录函数形归纳件 ams_switch_sum_fun（alm_switch 常量 g 版      *)
-(*   不可直接消费——c2 槽喂函数即形槽不合）。其余沿既定链：              *)
+(*   不可直接依存——c2 参数位喂函数即形参数位不合）。其余沿既定链：              *)
 (*   ① ams_mass_split：Σ w_T == k·w_T(m) + M；                        *)
 (*   ② ams_deficit_eq：k·(1/k − w_T(m)) == M（亏差=溢出）；            *)
 (*   ③ ams_mass_rest_le：M ≤ n·e^{−γ/T}（复用 core_decay_bound，        *)
@@ -42,11 +42,11 @@
 (*   ams_wm_le_invk（w_T(m) ≤ 1/k：eq_mult_inv_absorb 右乘 inv          *)
 (*   换序收尾，免 35 行消去引理）。                                     *)
 (*                                                              *)
-(* 陈述面：结论全 real_eq/real_le（Set 层），前提镜像上游               *)
+(* 陈述面：结论全 real_eq/real_le（Set 层），前提副本上游               *)
 (*   core_decay_bound 的 post-End 形（vocab_nonempty/m_in_vocab/        *)
 (*   gap_le 显式入参）；T/Ht 逐件全称量化（全称 Token/vocab 形）。       *)
 (*                                                              *)
-(* 依赖（全部只读消费）：UpReqAttnUniformLimit（上游）、                 *)
+(* 依赖（全部只读依存）：UpReqAttnUniformLimit（上游）、                 *)
 (*   CW_ConstructiveWorld_219、AttnHardLimit218。零改既有文件。          *)
 (*                                                              *)
 (* 备注：公理面：零公理、零承认件、零弃证；零经典逻辑；                  *)
@@ -54,7 +54,7 @@
 (*   战术纪要：match 包装 Definition 一律 destruct 前显式 unfold         *)
 (*   （ams_mswitch/alm_uniform 双 unfold）；Real 层幺零元用右形           *)
 (*   （real_plus_zero/real_mult_one）＋comm 桥；分配律左因子              *)
-(*   real_distrib、右因子 real_distrib_r 分槽取用。                      *)
+(*   real_distrib、右因子 real_distrib_r 分参数位取用。                      *)
 (* ============================================================ *)
 
 (* Require 顺序：上游件 UpReqAttnUniformLimit 先入。 *)
@@ -64,8 +64,8 @@ Require Import AttnHardLimit218.
 From Stdlib Require Import List Arith.
 
 (* ============================================================ *)
-(* Section AmsMassSplit：镜像上游 AlmUniform 变量面（去 gamma_pos， *)
-(* 本链四件+内部件未消费它；T/Ht 逐件全称量化）。                    *)
+(* Section AmsMassSplit：副本上游 AlmUniform 变量面（去 gamma_pos， *)
+(* 本链四件+内部件未依存它；T/Ht 逐件全称量化）。                    *)
 (* ============================================================ *)
 
 Section AmsMassSplit.
@@ -85,8 +85,8 @@ Variable gap_le : forall x : Token, Not (Id x m) ->
 Definition ams_w (T : Real) (Ht : real_lt real_zero T) (x : Token) : Real :=
   w_T Token vocab vocab_nonempty z T Ht x.
 
-(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量槽 +  *)
-(* g : Token -> Real 函数槽——上游 alm_switch 双常量槽的函数形补全） *)
+(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量参数位 +  *)
+(* g : Token -> Real 函数参数位——上游 alm_switch 双常量参数位的函数形补全） *)
 Definition ams_mswitch (c : Real) (g : Token -> Real) (x : Token) : Real :=
   match token_eq_dec x m with
   | inl _ => c
@@ -100,7 +100,7 @@ Definition ams_M (T : Real) (Ht : real_lt real_zero T) : Real :=
 (* ---------- 函数形 m-开关求和恒等式（上游原证明骨架逐行转录） ---------- *)
 (* Σ ams_mswitch c g == count(m)·c + Σ ams_mswitch 0 g（对显式表 vl 归纳： *)
 (* 空表零元代数 / 副本支 of_nat(S) 定义折叠+右分配+左幺元交换桥 /          *)
-(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形槽补全）。         *)
+(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形参数位补全）。         *)
 
 Lemma ams_switch_sum_fun : forall (c : Real) (g : Token -> Real) (vl : list Token),
   real_eq (real_list_sum Token (ams_mswitch c g) vl)
@@ -524,7 +524,7 @@ Qed.
 (* ============================================================ *)
 (* 链件 ①：ams_mass_split —— vocab 质量分裂引理                     *)
 (*   Σ_vocab w_T == k·w_T(m) + M（上游原申报形；自逐点等值 +          *)
-(*   ams_switch_sum_fun 直接消费）。                                 *)
+(*   ams_switch_sum_fun 直接依存）。                                 *)
 (* ============================================================ *)
 
 Theorem ams_mass_split : forall (T : Real) (Ht : real_lt real_zero T),
@@ -580,7 +580,7 @@ Proof.
                                     (ams_w T Ht m))
                          (alm_invk Token vocab token_eq_dec m m_in_vocab))
     by exact (ams_minus_r_plus _ _).
-  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子槽） *)
+  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子参数位） *)
   assert (Hdist : real_eq (real_mult (real_of_nat (alm_k Token vocab token_eq_dec m))
                               (real_plus (real_minus_r
                                             (alm_invk Token vocab token_eq_dec m m_in_vocab)
@@ -781,7 +781,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 链件 ④：ams_l1_le —— L1 距离上界收口                             *)
+(* 链件 ④：ams_l1_le —— L1 距离上界闭合                             *)
 (*   L1(w_T, u) = Σ|u − w| == 2M ≤ 2·(n·decay)（上游原申报形；       *)
 (*   2n·decay 写成 n·decay + n·decay 直写形）。链式组装：逐点 abs    *)
 (*   折叠（部件 5）+ ams_switch_sum_fun（①同款）+ ②（k·D == M）+ ③。 *)

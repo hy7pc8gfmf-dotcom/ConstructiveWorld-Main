@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   binv_bpow_opp_add_mesh（原 L151，2 句强证）	*)
 (* ============================================================ *)
@@ -11,18 +11,18 @@
 (* ============================================================ *)
 (* UpReqBanachInvPre.v —— 席BINV2：路径 B S4 前移席（20260912） *)
 (* ============================================================ *)
-(* 使命：S4 可逆性终结腿 e^a·e^(−a)=e^0=1 的特例主链。          *)
+(* 使命：S4 可逆性终结肢 e^a·e^(−a)=e^0=1 的特例主链。          *)
 (*   一般 bpow_add（二项式恒等）= 席 BA 领地，本席绕开；        *)
 (*   本席攻其特例：x := a+(−a) 处处经 bplus_opp 塌缩为零，      *)
 (*   (a+(−a))^n ≡ bzero（n≥1）不需要任何二项式系数层。          *)
 (*                                                             *)
 (* 分层出口（前缀 binv_，全 bae/Id Set 承载面）：               *)
 (*   S1 保底  binv_bpow_opp_add   : 1<=n -> (a+(−a))^n ≡ bzero *)
-(*             （n 归纳：首腿 plus_opp 消项，后续零元塌缩逐级） *)
+(*             （n 归纳：首肢 plus_opp 消项，后续零元塌缩逐级） *)
 (*   S1 咬合  binv_bpow_opp_add_mesh : 与 BXB bxb_bpow_zero     *)
 (*             经 bpow_wd 传送对位（两席终点一致性证书）        *)
 (*   S1 主锚  binv_esp_opp_add    : (a+(−a)) 级数部分和恒一     *)
-(*             —— S4 终结腿 e^0=1 的全量部分和精确形态          *)
+(*             —— S4 终结肢 e^0=1 的全量部分和精确形态          *)
 (*   S2 保底  binv_pair           : esp m a · esp m (−a) ≡      *)
 (*             esp m (−a) + Σ_{k<m}(a^{S k}/(S k)!)·esp m (−a)  *)
 (*             （柯西方块 esp_prod_square + 首行提出=配对余项； *)
@@ -32,8 +32,8 @@
 (*             逆元乘积四件 + 偶次塌缩种子 binv_bpow_opp2       *)
 (*                                                             *)
 (* 分工边界：一般 bpow_add = 席 BA 领地；本件只碰特例 x=a+(−a)。*)
-(*   汇合点 = exp_add 总装席（下一批）：其取本件 S1 主锚为右侧  *)
-(*   e^0 腿（部分和恒一，零极限免费），取 binv_pair 为左侧乘积  *)
+(*   汇合点 = exp_add 装配席（下一批）：其取本件 S1 主锚为右侧  *)
+(*   e^0 肢（部分和恒一，零极限免费），取 binv_pair 为左侧乘积  *)
 (*   配对形，经三角转置（B3Sv2 批三）接通。                      *)
 (*                                                             *)
 (* 依赖复用（Require 原样复用，零重定义）：                      *)
@@ -129,7 +129,7 @@ Qed.
 (* n 归纳，bae 面逐级（bxb_bpow_zero 同款骨架，零在左经 §0）：  *)
 (*   n=1：bone·(a+(−a)) ≡ a+(−a) ≡ bzero（plus_opp 消项）；     *)
 (*   n=S(S j)：(a+(−a))^{S j} 已 ≡ bzero（IH），乘 (a+(−a))      *)
-(*   后经左零消去收口——每级恰好消一个 plus_opp 因子。           *)
+(*   后经左零消去闭合——每级恰好消一个 plus_opp 因子。           *)
 Lemma binv_bpow_opp_add : forall (B : BanachAlg) (a : (@BA B)) (n : nat),
   (1 <= n)%nat -> @bae B (bpow B (@bplus B a (@bopp B a)) n) (@bzero B).
 Proof.
@@ -142,7 +142,7 @@ Proof.
       apply (@bae_trans B _ (@bplus B a (@bopp B a)) _).
       * exact (@bmult_one_l B (@bplus B a (@bopp B a))).
       * exact (@bplus_opp B a).
-    + (* n = S (S j)：IH 消去首因子，左零收口 *)
+    + (* n = S (S j)：IH 消去首因子，左零闭合 *)
       assert (Hj : (1 <= Datatypes.S j)%nat) by lia.
       change (bpow B (@bplus B a (@bopp B a)) (Datatypes.S (Datatypes.S j)))
         with (@bmult B (bpow B (@bplus B a (@bopp B a)) (Datatypes.S j))
@@ -157,7 +157,7 @@ Proof.
 Qed.
 
 (* 咬合证书：本席 S1 与 BXB 席零元幂终点经 bpow_wd 传送对位—— *)
-(*   两席在 bzero 处终点一致，总装席可任取其一为 e^0 幂腿。      *)
+(*   两席在 bzero 处终点一致，装配席可任取其一为 e^0 幂肢。      *)
 Lemma binv_bpow_opp_add_mesh : forall (B : BanachAlg) (a : (@BA B)) (n : nat),
   (1 <= n)%nat ->
   @bae B (bpow B (@bplus B a (@bopp B a)) n) (bpow B (@bzero B) n).
@@ -167,7 +167,7 @@ Proof.
            (@bplus_opp B a) n).
 Qed.
 
-(* S1 主锚（S4 终结腿部分和精确形态）：(a+(−a)) 级数每一部分和  *)
+(* S1 主锚（S4 终结肢部分和精确形态）：(a+(−a)) 级数每一部分和  *)
 (* 恒等于 bone——e^0=1 在 Banach 层的全量部分和等式面（极限免费， *)
 (* 与 BXB bxb_series_zero 咬合）。                              *)
 Lemma binv_esp_opp_add : forall (B : BanachAlg) (a : (@BA B)) (n : nat),
@@ -231,8 +231,8 @@ Qed.
 (* S2 主件：esp m a · esp m (−a) ≡ esp m (−a) + Σ_{k<m} c_{S k}·esp m (−a)
    （配对余项恒等：柯西方块按行拉出后首行=第二因子整块，余行=    *)
 (*   配对余项和；精确形式以 esp_prod_square + bsum_rot 实测定形。 *)
-(*   与 S1 主锚扣合：右腿 a+(−a) 级数恒一，左侧余项经三角转置     *)
-(*   （B3Sv2 批三）与 bpow_add 特例链在总装席合流）。             *)
+(*   与 S1 主锚扣合：右肢 a+(−a) 级数恒一，左侧余项经三角转置     *)
+(*   （B3Sv2 批三）与 bpow_add 特例链在装配席合流）。             *)
 Lemma binv_pair : forall (B : BanachAlg) (a : (@BA B)) (m : nat),
   @bae B (@bmult B (exp_series_partial B a m)
                    (exp_series_partial B (@bopp B a) m))
@@ -300,7 +300,7 @@ Proof.
     + exact (binv_bmult_zero_l B z).
 Qed.
 
-(* 加法逆的右乘换符号：x·(−x) ≡ −(x·x)（bdistrib_l 镜像） *)
+(* 加法逆的右乘换符号：x·(−x) ≡ −(x·x)（bdistrib_l 副本） *)
 Lemma binv_mult_opp_r : forall (B : BanachAlg) (x : (@BA B)),
   @bae B (@bmult B x (@bopp B x)) (@bopp B (@bmult B x x)).
 Proof.
@@ -335,7 +335,7 @@ Proof.
 Qed.
 
 (* a 与 −a 可换：a·(−a) ≡ (−a)·a（双臂各 ≡ −(a·a)）——          *)
-(*   bpow_comm_r 的交换证书，幂次清项引擎接线位。                *)
+(*   bpow_comm_r 的交换证书，幂次清项引擎实例化位。                *)
 Lemma binv_mult_opp_swap : forall (B : BanachAlg) (a : (@BA B)),
   @bae B (@bmult B a (@bopp B a)) (@bmult B (@bopp B a) a).
 Proof.
@@ -383,7 +383,7 @@ Proof.
 Qed.
 
 (* 乘法四元换位：(w·y)·(x·z) ≡ (w·x)·(y·z)（给定 y·x ≡ x·y；    *)
-(*   bpow 拆分的六步清项链，bplus_swap4 的乘法镜像）。           *)
+(*   bpow 拆分的六步清项链，bplus_swap4 的乘法副本）。           *)
 Lemma binv_bmult_swap4 : forall (B : BanachAlg) (w x y z : (@BA B)),
   @bae B (@bmult B y x) (@bmult B x y) ->
   @bae B (@bmult B (@bmult B w y) (@bmult B x z))
@@ -541,17 +541,17 @@ Qed.
 
 (* ============================================================ *)
 (* 对接注记（S4 可逆性特例主链位置，不落承认件）：               *)
-(*   ① S1 幂腿：binv_bpow_opp_add（n≥1 全量零，plus_opp 逐级消  *)
+(*   ① S1 幂肢：binv_bpow_opp_add（n≥1 全量零，plus_opp 逐级消  *)
 (*     项，零二项式系数）+ binv_bpow_opp_add_mesh（与 BXB 终点   *)
 (*     对位）+ binv_esp_opp_add（e^0=1 部分和恒一主锚）。        *)
-(*   ② S2 乘积腿：binv_pair（配对余项恒等）——右侧第二因子整块   *)
-(*     提出，余行=配对余项和；总装席经三角转置（B3Sv2 批三）     *)
+(*   ② S2 乘积肢：binv_pair（配对余项恒等）——右侧第二因子整块   *)
+(*     提出，余行=配对余项和；装配席经三角转置（B3Sv2 批三）     *)
 (*     将余项归零后与 binv_esp_opp_add 合流即 S4。               *)
 (*   ③ S3 对角线：binv_diag_term_pair（幂底收于 a·(−a) ≡ −(a·a)）*)
 (*     + 偶次种子 binv_bpow_opp2/binv_bpow_oppmult2——交错结构    *)
 (*     的符号载体已全部入幂底，Q 侧系数面 (1/k!)² 恒正。         *)
 (*   分工边界：一般 bpow_add = 席 BA 领地（本席零触碰）；        *)
-(*   汇合点 = exp_add 总装席（下一批）。                          *)
+(*   汇合点 = exp_add 装配席（下一批）。                          *)
 (* ============================================================ *)
 
 (* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)

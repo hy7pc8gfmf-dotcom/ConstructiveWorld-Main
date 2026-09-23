@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   H_lam_anti_mono_real_set（原 L230，3 句玩具证）                      *)
 (*   deprecated_Hsup_mono_set（原 L106，3 句玩具证）                      *)
@@ -18,23 +18,23 @@
    独立成件，零竞争（本席独占本新建文件）。
    职责：恒等簇处置的 Set 形证书层——DTPT_Rotation.v §S10
          （CLN-1 席冻结新件，AUDIT-2 A6「llm_rot_id 恒等簇 + 8 件
-         弃用注记件逐件映射」收口段）的 Prop 证件升级为信息性
+         弃用注记件逐件映射」闭合段）的 Prop 证件升级为信息性
          Type/Set 面。
    依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
          （§S10 行号 L2427-L2676 实测；其 .vo 08:41:35 新于 .v
-         08:34:18 FRESH，FRUIT-6 §S11 已收口在同一 .vo 内）。
+         08:34:18 FRESH，FRUIT-6 §S11 已闭合在同一 .vo 内）。
          本文件不 Require DTPT_Bridge / DTPT_Bridge_Dig /
          DTPT_Bridge_Rot / DTPT_Bridge_All / DTPT_Truth /
          DTPT_Extract（并发/冻结席位文件，防竞态；QleT/QeqT 族
-         本地镜像，B1 §1 / B4 §1 / B6 §1 惯例同构——依赖链 grep
+         本地副本，B1 §1 / B4 §1 / B6 §1 惯例同构——依赖链 grep
          该族名零命中，零撞名实测在案）。
-   命名：桥件名沿任务书指定（rotc_supersedes_rot_id_set 等带
+   命名：桥接引理名沿任务书指定（rotc_supersedes_rot_id_set 等带
          _set 后缀，B1-B12 惯例）；提取产物 b14_ 前缀；模块
          DTPT_Bridge_Dep 限名隔离（八件映射定理原名的 Set 形
          变体 = 原名去 map 加 _set 或 dep_ 前缀，全链 grep 零撞名）。
    认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
    纪律：温控协议 v2（coqc 全机 ≤3 先查后编，竞争 sleep 60）；
-         禁碰本文件之外一切 .v（FRUIT-6 已收口 / TRUTH-2 已收口
+         禁碰本文件之外一切 .v（FRUIT-6 已闭合 / TRUTH-2 已闭合
          Truth 冻结 / P3-B13 在飞 Bridge.v 让窗记录在案）；禁 git；
          nat 字面量全显式 %nat（Q_scope 全开传导，FRUIT-1 坑①）。
    六字段头注完（职责/依赖/命名/认证目标/纪律/本行归并记录）。
@@ -55,7 +55,7 @@ Import DTPT_Rotation.DTPT_Rotation.
 
 Module DTPT_Bridge_Dep.
 
-(* ========== §1 本地信息性类型族（QleT/QeqT 惯例镜像） ========== *)
+(* ========== §1 本地信息性类型族（QleT/QeqT 惯例副本） ========== *)
 
 Inductive QleT (x y : Q) : Type :=
 | qleT_intro : (x <= y)%Q -> QleT x y.
@@ -68,15 +68,15 @@ Inductive QeqT (x y : Q) : Type :=
 Arguments qeqT_intro {x y} _.
 
 (* ========== §2 保底件：supersession 信息性双/三件 ==========
-   盘面（DTPT_Rotation.v §S10，只读消费）：
+   盘面（DTPT_Rotation.v §S10，只读依存）：
    - L2445 rotc_supersedes_rot_id : forall n l, rot n l = l
-     （firstn_skipn 直证，不消费弃用件 llm_rot_id）；
+     （firstn_skipn 直证，不依存弃用件 llm_rot_id）；
    - L2456 llm_rot_id_superseded : forall n l P, P l <-> P (rot n l)
      （P 面迁移零损失）。 *)
 
-(* ① 消费 L2445：rot n l = l 的 list 级直等 sumbool 判定面。
-   恒等处置定谳 ⇒ 判定恒归 Left（这就是处置的实质：旧 rot 名下
-   恒等重写消费无条件由真化底座承接）；left 构造子携 Prop 证明参
+(* ① 依存 L2445：rot n l = l 的 list 级直等 sumbool 判定面。
+   恒等处置已证结论 ⇒ 判定恒归 Left（这就是处置的实质：旧 rot 名下
+   恒等重写依存无条件由真化基础模块承接）；left 构造子携 Prop 证明参
    ＝提取擦除惯例，无 Prop 消除入 Type。 *)
 Theorem rotc_supersedes_rot_id_set : forall (n : nat) (l : list Q),
   {rot n l = l} + {rot n l <> l}.
@@ -85,7 +85,7 @@ Proof.
   exact (left (rotc_supersedes_rot_id n l)).
 Defined.
 
-(* ② 消费 L2445：list 级直等的 sigT 见证面——重构列表信息性入证书
+(* ② 依存 L2445：list 级直等的 sigT 见证面——重构列表信息性入证书
    （w := l，逐字即处置定理的等式右端），非退化旋转下 rot n l 的
    实际表值可提取。 *)
 Theorem rotc_supersedes_rot_wit_set : forall (n : nat) (l : list Q),
@@ -96,10 +96,10 @@ Proof.
              (rotc_supersedes_rot_id n l)).
 Defined.
 
-(* ③ 消费 L2456 llm_rot_id_superseded（P 面 P↔P∘rot 迁移零损失）
+(* ③ 依存 L2456 llm_rot_id_superseded（P 面 P↔P∘rot 迁移零损失）
    在熵实例 P := fun m => H_adj m == H_adj l 的 QeqT 面：迁移定理
    proj1（P l -> P (rot n l)）吃 Qeq_refl 一步——恒等重写在熵面
-   零损失的信息性证书（P 面择熵面＝恒等簇消费主力，任务书 QeqT
+   零损失的信息性证书（P 面择熵面＝恒等簇依存主力，任务书 QeqT
    面授权）。 *)
 Theorem llm_rot_id_superseded_set : forall (n : nat) (l : list Q),
   QeqT (H_adj (rot n l)) (H_adj l).
@@ -110,15 +110,15 @@ Proof.
              (Qeq_refl (H_adj l)))).
 Defined.
 
-(* ========== §3 旗舰件：八件映射逐件抽样 Set 面（3 件代表作：
+(* ========== §3 主件：八件映射逐件抽样 Set 面（3 件代表作：
    映射④ Hsup_mono / 映射⑦ H_adj_cross_phase_lb /
    映射⑧ u12_phase_side_always_zero 各一） ==========
-   共同纪律：旧面性质经真化层重述，消费 CLN-1 映射定理 + 真化层
+   共同纪律：旧面性质经真化层重述，依存 CLN-1 映射定理 + 真化层
    现役件，禁重证。 *)
 
-(* ④ 消费 L2559 deprecated_consumers_map_Hsup_mono（映射④：
+(* ④ 依存 L2559 deprecated_consumers_map_Hsup_mono（映射④：
    旧面 Hsup l n <= Hsup l (S n) 经 helper Hsup_oldface_const
-   （L2502 旧 Hsup 面恒常值 = H_adj l，X1 判词定理化）+ 真化面
+   （L2502 旧 Hsup 面恒常值 = H_adj l，X1 结论定理化）+ 真化面
    Hsup_cyc_mono 同形在册的双覆盖）旧面分量的 QleT 信息性面。 *)
 Theorem deprecated_Hsup_mono_set : forall (l : list Q) (n : nat),
   QleT (Hsup l n) (Hsup l (S n)).
@@ -127,12 +127,12 @@ Proof.
   exact (qleT_intro (proj1 (deprecated_consumers_map_Hsup_mono l n))).
 Defined.
 
-(* ⑤ 消费 L2605 deprecated_consumers_map_H_adj_cross_phase_lb
+(* ⑤ 依存 L2605 deprecated_consumers_map_H_adj_cross_phase_lb
    （映射⑦：旧跨相下界 H_adj (P0 l) <= H_adj (Pinf l s) 经
    Pinf_true_id + H_adj_P0_min（Entropy:428 现役）重推；真化面
    phcyc_min_perm + rotc_perm 覆盖任意 k 含 Pinf_c——同时是 §S7
-   两处重定向的底座）三分量的 QleT Type 积面（旧面 + 任意 k 真旋转
-   面 + Pinf_c 面，逐件照盘三分信息性无损搬运）。 *)
+   两处重定向的基础模块）三分量的 QleT Type 积面（旧面 + 任意 k 真旋转
+   面 + Pinf_c 面，逐件照盘三分信息性无损迁移）。 *)
 Theorem deprecated_H_adj_cross_phase_lb_set :
   forall (l : list Q) (s k : nat),
   (QleT (H_adj (P0 l)) (H_adj (Pinf l s)) *
@@ -148,13 +148,13 @@ Proof.
                (deprecated_consumers_map_H_adj_cross_phase_lb l s k)))))).
 Defined.
 
-(* ⑥ 消费 L2625 deprecated_consumers_map_u12_phase_side_always_zero
+(* ⑥ 依存 L2625 deprecated_consumers_map_u12_phase_side_always_zero
    （映射⑧：旧判别器 phase_side l s = 0%nat 经定义展开 + Pinf_true_id
    + xq_Qle_bool_true + H_adj_P0_min 绕行弃用名重推；真化面
    phase_side_cyc_side_zero 在册）的信息性双证书面：判别值 sigT
    见证（v := 0，判别器输出信息性入证书）+ rotc 口径判别支路
    QleT（H_adj (P0 l) <= H_adj (rotc s l)，支路取 0 分支的信息性
-   根由——消费映射⑦任意 k 面在 k := s 的实例）。 *)
+   根由——依存映射⑦任意 k 面在 k := s 的实例）。 *)
 Theorem deprecated_u12_phase_side_set : forall (l : list Q) (s : nat),
   ({v : nat & phase_side l s = v} *
    QleT (H_adj (P0 l)) (H_adj (rotc s l)))%type.
@@ -167,26 +167,26 @@ Proof.
 Defined.
 
 (* ========== §4 主件：处置完备性（八件映射联合覆盖证书） ==========
-   deprecated_cluster_fully_covered：真化层对恒等簇全部消费场景的
+   deprecated_cluster_fully_covered：真化层对恒等簇全部依存场景的
    覆盖证书——八件映射逐件 Set 形分量联合配对（信息性合取）。
-   覆盖对账（弃用件 → 本证书分量）：
+   覆盖核验（弃用件 → 本证书分量）：
    ① D5_Pinf_perm（L2515）→ 分量1+2：内容等式面强于置换面
-     （Pinf l s = w 且 w = l ⇒ Permutation 经 rotc_supersedes… 底座
+     （Pinf l s = w 且 w = l ⇒ Permutation 经 rotc_supersedes… 基础模块
      平凡成立；Pinf_c 面同理由分量2 等式承接，Permutation l
      (Pinf_c l s) 由映射⑥第三分量在册）；
    ② llm_Pmid_zero（L2529）→ 分量3：内容面（Pmid l s 0 = l）+
      熵面 QeqT 双证书；
    ③ P0_absorbs_Pmid（L2547）→ 分量4：全 k 吸收见证面（sorted
-     卫哨诚实代价照录，§S8 F2b 判词在案）；
-   ④ Hsup_mono（L2559）→ 分量5（= 旗舰④）；
+     卫哨诚实代价照录，§S8 F2b 结论在案）；
+   ④ Hsup_mono（L2559）→ 分量5（= 主④）；
    ⑤ Hsup_bounded（L2572）→ 分量6+7：旧面 len#1·B·2 界（经
-     H_adj_bound 同一底座绕行弃用名）+ 真化面 3·spread 界（诚实
+     H_adj_bound 同一基础模块绕行弃用名）+ 真化面 3·spread 界（诚实
      卫哨 SortedQ + l <> [] 随行）；
    ⑥ Pinf_eq_l（L2587）→ 分量1+2（旧名陈述由现役同形件零损失
      承接面 = Pinf l s = l；真化内容 Pinf_c l s = rotc (S s) l
      信息性携带具体旋转表）；
-   ⑦ H_adj_cross_phase_lb（L2605）→ 分量8（= 旗舰⑤ 三面全体）；
-   ⑧ u12_phase_side_always_zero（L2625）→ 分量9（= 旗舰⑥ 双证书）。
+   ⑦ H_adj_cross_phase_lb（L2605）→ 分量8（= 主⑤ 三面全体）；
+   ⑧ u12_phase_side_always_zero（L2625）→ 分量9（= 主⑥ 双证书）。
    8/8 全覆盖，零豁免。 *)
 
 (* 逐件 helper（分量3 的独立可用形）：映射② 的内容+熵双证书。 *)
@@ -234,9 +234,9 @@ Proof.
   deprecated_u12_phase_side_set l s)%type).
 Defined.
 
-(* ========== §5 加分件：§S10 消费面重定向示范双件的 Set 面 ========== *)
+(* ========== §5 加分件：§S10 依存面重定向示范双件的 Set 面 ========== *)
 
-(* ⑦ 消费 L2644 H_lam_anti_mono_real（§S7 L1615 旗舰同陈述重定向
+(* ⑦ 依存 L2644 H_lam_anti_mono_real（§S7 L1615 主同陈述重定向
    变体：斜率非正装配处经 Pinf_true_id + H_adj_P0_min 真化锚，
    弃用名零出现）的 QleT 面：λ-反单调性信息性证书。 *)
 Theorem H_lam_anti_mono_real_set :
@@ -247,7 +247,7 @@ Proof.
   exact (qleT_intro (H_lam_anti_mono_real l s lam1 lam2 Hlam)).
 Defined.
 
-(* ⑧ 消费 L2669 lam_opt_cross_phase_real（§S7 L1749 诚实锚同陈述
+(* ⑧ 依存 L2669 lam_opt_cross_phase_real（§S7 L1749 诚实锚同陈述
    变体：跨相下界经真化锚两步装配）的 QeqT 面：对齐选择器跨相
    恒取 1 的信息性证书。 *)
 Theorem lam_opt_cross_phase_real_set : forall (l : list Q) (s : nat),
@@ -259,7 +259,7 @@ Proof.
              (eq_sym (lam_opt_cross_phase_real l s))).
 Defined.
 
-(* ⑨ 同消费点的 sigT 见证面：选择器输出值信息性入证书
+(* ⑨ 同依存点的 sigT 见证面：选择器输出值信息性入证书
    （v := 1%Q）。Q 型 sigT 体的等式载体沿 B12 ⑧ 配方用 QeqT
    （Q 型 sigT 体裸 `=` 会被 Q_scope 侧解释吞成 Qeq，实测踩坑；
    QeqT 载体同时是双信息性层：见证值 + Qeq 证书）。 *)
@@ -273,7 +273,7 @@ Proof.
               (lam_opt_cross_phase_real l s))).
 Defined.
 
-(* ---------- §6 提取探针（B14；b14_ 前缀，U12 配方：
+(* ---------- §6 提取检验（B14；b14_ 前缀，U12 配方：
      逐件独立提取，验收指标＝Obj.magic 计数 0，验后产物清除） ---------- *)
 
 Set Extraction Output Directory ".".

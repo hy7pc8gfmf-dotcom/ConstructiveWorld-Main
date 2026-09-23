@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   uabT13b_sigm2_Zalign_a_pos（原 L52，5 句轻证）	*)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
 (* 附记：T277 判级全文恒等；AC 域整包直推第四批（T317 六·1 方案①）。 *)
@@ -31,15 +31,15 @@
 (*            sumf (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta  *)
 (*                                     beta_pos) (reward s))))).                *)
 (*            Variable Z_align_a_pos : lt zero Z_align_a_sum.                   *)
-(* 放电母本：                                                                   *)
-(*   位1 ←req_Z_temp_pos@UpReqDist:2808 同机制（正和槽+配分槽显式参，           *)
+(* 实例化消解母本：                                                                   *)
+(*   位1 ←req_Z_temp_pos@UpReqDist:2808 同机制（正和参数位+配分参数位显式参，           *)
 (*         迁移经 lt_id_r/req_sym 接口字段）；                                   *)
-(*   位2 ←sumd_sum_pos@UpReqSumD:233 正和族（asum 面无正字段，正和数据槽         *)
+(*   位2 ←sumd_sum_pos@UpReqSumD:233 正和族（asum 面无正字段，正和数据参数位         *)
 (*         显式参）加 mult_positive/exp_neg_pos 逐点双正链。                     *)
-(* 消融形（诚实登记）：抽象载体上不放电，典范载体加装配桥 tsi_rie_setoid（       *)
-(*   T13a 先例桥形照抄）上成立，正和数据槽显式参。                               *)
+(* 消融形（诚实登记）：抽象载体上不实例化消解，典范载体加装配桥 tsi_rie_setoid（       *)
+(*   T13a 先例桥形照抄）上成立，正和数据参数位显式参。                               *)
 (* 分级：两位全 N1。                                                            *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpSigMigrate2、         *)
+(* 依赖（只读依存，原树零改）：CW_ConstructiveWorld_219、UpSigMigrate2、         *)
 (*   TempSoftmaxInstantiation。                                                 *)
 (* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblT13b_*.log                          *)
 (* ============================================================ *)
@@ -53,7 +53,7 @@ Section UabT13bSigm2.
 Context {RI0 : RealInterfaceEnhanced}.
 Let R0 : Set := @S01_BaseRing.R RI0.
 
-(* 位1 ←:111（配分条件迁移正和正性；正和槽与配分槽显式参） *)
+(* 位1 ←:111（配分条件迁移正和正性；正和参数位与配分参数位显式参） *)
 Theorem uabT13b_sigm2_Zpos :
   forall (S : Set) (sumf : (S -> R0) -> R0)
          (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
@@ -69,7 +69,7 @@ Proof.
     exact (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s))).
 Qed.
 
-(* 位2 ←:891（正和面加逐点双正链；正和槽显式参） *)
+(* 位2 ←:891（正和面加逐点双正链；正和参数位显式参） *)
 Theorem uabT13b_sigm2_Zalign_a_pos :
   forall (S : Set) (sumf : (S -> R0) -> R0)
          (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))

@@ -8,7 +8,7 @@
 (* 替换定理清单：rsq_bs_inv_hi_lo（共 1 刀）                                 *)
 (* 非平凡性口径：消去引擎体同款模板内联重演，消除单跳转发；无一行拆分式假    *)
 (* 非平凡。                                                                  *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
@@ -20,15 +20,15 @@
    lo）：双锚断言（Hlb＝inv 与 hi·inv 之积回 inv、Hrc＝inv 与 hi·lo 之
    积回 lo，各经 mult_assoc、req_mult_compat（inv_pos_correct 桥）与
    req_mult_one_l 两步）＋取消假设 Hcancel（inv_pos_correct 与
-   rsq_bs_lo_hi_eq 的交换/对称桥）前置，三段收口 req_trans 复合（中段
-   req_mult_compat 直配取消假设，无交换桥——本方向输入形与乘积形同向）。
+   rsq_bs_lo_hi_eq 的交换/对称桥）前置，三段闭合 req_trans 复合（中段
+   req_mult_compat 直接匹配取消假设，无交换桥——本方向输入形与乘积形同向）。
    模板＝消融50 UpReqAlgebra.v req_mult_cancel_r 已验绿体（T239 切片四
-   点名候选）；消费位语句面不变，依赖面零新增，Require 面与原件逐字一致。
+   点名候选）；依存位语句面不变，依赖面零新增，Require 面与原件逐字一致。
    ============================================================ *)
 (* ============================================================ *)
 (* UpReqSampling.v *)
 (* *)
-(* 目的： 采样核的 req 层镜像：Doeblin 收缩与迭代预算面。 *)
+(* 目的： 采样核的 req 层副本：Doeblin 收缩与迭代预算面。 *)
 (* 主件： rsq_u_titer / rsq_bs_kernel 迭代核与 rsq_u_tr_decomp 分解。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
 (* 备注： 参考分布归一化与正性为 Variable 前提；一步分解为构造核。 *)
@@ -44,8 +44,8 @@
        req_lt_id_r_loc / req_two_pos / req_le_mult_compat_r；
      UpReqDist（批 2）：reqd_sum_minus / reqd_nat_to_R / reqd_nat_to_R_pos /
        reqd_minus_compat / reqd_opp_zero / reqd_softmax_scaled / reqd_softmax_temp_param
-       （ReqSoftmaxDual 节 = 本文件 BoundedSoftmax 前置锚，规划书明示直接消费）；
-     基座：exp_neg_req_compat_setoid（L66223，规划书明示直接消费不再自建桥）。
+       （ReqSoftmaxDual 节 = 本文件 BoundedSoftmax 前置锚，规划书明示直接依存）；
+     基座：exp_neg_req_compat_setoid（L66223，规划书明示直接依存不再自建桥）。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值）；纯 term-mode
    （req_trans 链 + compat 桥，零 Morphisms / 零 rewrite）；诚实接口假设位
@@ -94,7 +94,7 @@
      bs_inv_hi_lo / bs_delta_star_lt_one / bs_Zrow_pos / bs_kernel_pos /
      bs_kernel_nonneg / bs_nR_pos；
      幂等δ对偶：u_omd_pos_next 首段（omd δ 展开 req_refl 支路）；
-     对位验证（旗舰消费）：bounded_softmax_tv_contraction / bounded_softmax_tv_iter
+     对位验证（主依存）：bounded_softmax_tv_contraction / bounded_softmax_tv_iter
      （req_u_tv_contraction / req_u_tv_iter 全参对位投喂）。
    【冻结清单】本两节 34 件零冻结（Id 原件全部可 req 重述，无深链缺口）。
      结论留档：Id expf 抽象接口不迁移（由 8 项具体化替代，Part C 消解位
@@ -119,7 +119,7 @@ Fixpoint req_r_pow {R : Set} {RIS : RealInterfaceEnhancedSetoid R}
 (* ============================================================ *)
 (* Section ReqUContraction：UContraction 节 req 迁移（11 件）      *)
 (*   Id 原件 L95737-96039。求和诚实接口 = Id SumOver 类字段      *)
-(*   （L1400-1441）req 镜像，节内自持（跨席假设申报不可消费  *)
+(*   （L1400-1441）req 副本，节内自持（跨席假设申报不可依存  *)
 
 (* ============================================================ *)
 Section ReqUContraction.
@@ -128,7 +128,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 
-(* ---- 求和诚实接口（Id SumOver 字段 req 镜像，逐位） ---- *)
+(* ---- 求和诚实接口（Id SumOver 字段 req 副本，逐位） ---- *)
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
 Hypothesis sum_linear :
@@ -139,11 +139,11 @@ Hypothesis sum_add :
     req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)).
 Hypothesis sum_le :
   forall f g : S -> R, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g).
-(* 求和三角：|Σ f| ≤ Σ |f|（Id SumOver abs_sum_le 字段 req 镜像） *)
+(* 求和三角：|Σ f| ≤ Σ |f|（Id SumOver abs_sum_le 字段 req 副本） *)
 Hypothesis abs_sum_le_h :
   forall f : S -> R, le (abs (sumf f)) (sumf (fun s : S => abs (f s))).
 
-(* Σ(f−g) == Σf − Σg：消费 UpReqDist reqd_sum_minus（零新假设；签名变化 1） *)
+(* Σ(f−g) == Σf − Σg：依存 UpReqDist reqd_sum_minus（零新假设；签名变化 1） *)
 Let sum_minus :=
   reqd_sum_minus S sumf sum_ext sum_add sum_linear.
 
@@ -303,7 +303,7 @@ Proof.
   exact (req_trans _ _ _ H1 H2).
 Qed.
 
-(* δ·a + (1−δ)·a == a（Id @95833；消费 aux_delta_plus_omd） *)
+(* δ·a + (1−δ)·a == a（Id @95833；依存 aux_delta_plus_omd） *)
 Lemma rsq_delta_absorb_u : forall a : R,
   req (plus (mult delta a) (mult omd a)) a.
 Proof.
@@ -519,7 +519,7 @@ Let inv_two := inv_pos (plus one one) req_two_pos.
 Let tv_req (mu nu : S -> R) : R :=
   mult inv_two (sumf (fun s : S => abs (req_minus (mu s) (nu s)))).
 
-(* ========== 主定理 A：双点 TV 收缩（无需平稳性）【旗舰 1】==========
+(* ========== 主定理 A：双点 TV 收缩（无需平稳性）【主定理 1】==========
    Id @96034。真证：Hpt 逐点链（reqd_minus_compat 换 id_cong2 minus、
    req_minus_plus_congr_l / req_minus_factor / req_minus_factor_pt 换
    Id minus 系）+ abs 见证位（abs_mult + abs_ge_zero_req）+ Hsum 交换链。 *)
@@ -691,7 +691,7 @@ Proof.
   - exact (rsq_u_step_norm (rsq_u_titer n mu) (IH mu H)).
 Qed.
 
-(* ========== 迭代 TV 收缩【旗舰 2】（Id @96022；真证：
+(* ========== 迭代 TV 收缩【主定理 2】（Id @96022；真证：
    底 case req 数乘单位换轨 + 递归步 req_le_mult_compat_r 对位） ========== *)
 Theorem rsq_u_tv_iter : forall (n : nat) (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
@@ -1111,7 +1111,7 @@ Proof.
     + exact (inv_pos_correct nR rsq_bs_nR_pos).
 Qed.
 
-(* ---- 前置锚：消费 UpReqDist ReqSoftmaxDual reqd_softmax_scaled ----
+(* ---- 前置锚：依存 UpReqDist ReqSoftmaxDual reqd_softmax_scaled ----
    （幂等δ对偶 + 见证位桥；e^(z/T) = e^(-((-z)/T)) 换位为真证链） *)
 Lemma bs_kernel_eq_reqd_scaled :
   forall s s' : S,
@@ -1143,7 +1143,7 @@ Proof.
                           (req_sym _ _ (req_opp_mult_l invT (z s s0))))).
 Qed.
 
-(* ===== 旗舰核心：显式 Doeblin 下界 =====
+(* ===== 主核心：显式 Doeblin 下界 =====
    P(s,s') >= del星·U(s')，del星 := lo·lo = e^(-2D/T)（精确，无损耗；Id @96283 真证） *)
 Lemma rsq_bs_minorization : forall s s' : S,
   le (mult delta_star (Unif s')) (rsq_bs_kernel s s').
@@ -1209,7 +1209,7 @@ Fixpoint k_titer (n : nat) (mu : S -> R) : S -> R :=
   | Datatypes.S m => k_step (k_titer m mu)
   end.
 
-(* ===== 旗舰定理 1：有界 softmax 核的双点 TV 收缩 =====
+(* ===== 主定理 1：有界 softmax 核的双点 TV 收缩 =====
    收缩率显式：1 - e^(-2D/T)（Id @96328；对位验证：全参投喂） *)
 Theorem rsq_bounded_softmax_tv_contraction : forall (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
@@ -1223,7 +1223,7 @@ Proof.
            bs_swap bs_abs bs_lpc mu nu Hmu Hnu).
 Qed.
 
-(* ===== 旗舰定理 2：迭代收缩，显式几何率 (1 - e^(-2D/T))^n ===== *)
+(* ===== 主定理 2：迭代收缩，显式几何率 (1 - e^(-2D/T))^n ===== *)
 Theorem rsq_bounded_softmax_tv_iter : forall (n : nat) (mu nu : S -> R),
   req (sumf mu) one -> req (sumf nu) one ->
   le (tv_req (k_titer n mu) (k_titer n nu))

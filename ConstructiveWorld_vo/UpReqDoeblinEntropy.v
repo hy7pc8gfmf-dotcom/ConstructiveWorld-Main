@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   doe_HpbN（原 L988，1 句玩具证）                                      *)
 (*   doe_HK_pos（原 L892，4 句玩具证）                                    *)
@@ -14,10 +14,10 @@
 (* ============================================================ *)
 (* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 5 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 5 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
 (* 附记：T277 判级全文恒等；包P 整批直推（第二批；承 T321 §五·1）                             *)
@@ -33,13 +33,13 @@
 (*   Doeblin 中心 p_b（T = δ·p_b + (1−δ)·Q 分解的 δ→1 热浴极限），如实    *)
 (*   注明」——本席把该「注明的极限」定理化：熵产（一步核演化熵增）对      *)
 (*   收缩率 δ 的逐 eps 连续性（δ→1 ⟺ 残差 om := 1−δ → 0）。               *)
-(* 【主定理（slq 主件 lower/upper 两腿先例形，全 Set 层）】                *)
+(* 【主定理（slq 主件 lower/upper 两个合取肢先例形，全 Set 层）】                *)
 (*   一步 Doeblin 核 doe_K := om·p_b + (1−om)·w（w = 残差臂 Q̃ 演化输出）， *)
 (*   熵产 G := S[K] − S[p]，亏 KL(p‖p_T)（供体亏恒等式 S[p_b]−S[p]）：    *)
 (*   · doe_gain_kl_lower : G − KL(p) ≤ r2 + eps_s（恒等账 == KL(K‖p_b)）   *)
 (*   · doe_gain_kl_upper : KL(p) − G ≤ r2 + eps_s（== −KL(K‖p_b)）        *)
 (*   · doe_gain_close_lower/upper（eps 兑换形）：r2 ≤ eps/2 ∧ eps_s ≤     *)
-(*     eps/2 ⟹ 两腿 ≤ eps——om→0 时 r2 逐点二阶消失即得 δ→1 连续性。       *)
+(*     eps/2 ⟹ 两个合取肢 ≤ eps——om→0 时 r2 逐点二阶消失即得 δ→1 连续性。       *)
 (* 【预算接口（诚实分析接口，Labs 同口径）】r2 = Σ_s h(s)²/p_b(s) 的上界  *)
 (*   数据（h := K − p_b 为核偏差）；«|h| ≤ p_b/2 逐点 ⟹ Σh²/p_b 小» 的     *)
 (*   abs 平方代数桥在本件边界外如实注明（构造性逻辑下该形不可由基座       *)
@@ -50,17 +50,17 @@
 (*   ② 极限恒等件 doe_h_sum：Σ h == 0（一阶项沿求和严格消失）+             *)
 (*      doe_K_norm/doe_K_energy（归一/能量守恒沿 δ 核传递）；              *)
 (*   ③ log-Lipschitz 引擎 doe_D_le_up/dn：real_log_le_linear_eps 于       *)
-(*      y := K·inv(p_b) 与 y := p_b·inv(K) 双向放电（构造性）；            *)
+(*      y := K·inv(p_b) 与 y := p_b·inv(K) 双向实例化消解（构造性）；            *)
 (*   ④ 逐点 kl 双侧界 doe_pt_up/dn + real_list_sum_le 提升 ⟹              *)
 (*      KL(K‖p_b) ≤ r2 + eps_s 双侧（doe_kl_up/dn）；                      *)
 (*   ⑤ 供体亏恒等式 ×2（p 与 K 位）⟹ 熵产-亏差恒等账 doe_gain_eq_low/up   *)
-(*      ⟹ 两腿主件。                                                       *)
+(*      ⟹ 两个合取肢主件。                                                       *)
 (* 【G2 速率件】doe_slack_witness：∀eps>0，r2 ≤ eps/2 ⟹ sigT 见证          *)
-(*   e2 := eps/2（e2 腿预算 + 0 < e2）——预算 slack 的构造性兑换。          *)
+(*   e2 := eps/2（e2 肢预算 + 0 < e2）——预算 slack 的构造性兑换。          *)
 (* 【G3 对接注记（诚实边界，不冒充结论）】r2 接口即收缩量接口：取          *)
 (*   w := tv_titer k μ 时核偏差由 GibbsAttractor ④ ga_attractor_          *)
 (*   contraction 的 TV 收缩 ≤ (1−δstar)^k·TV₀ 控制；k 的显式选取由            *)
-(*   UpReqMixingTime mix_pow_budget 的 κ^k 预算放电——三件完整拼装桥待      *)
+(*   UpReqMixingTime mix_pow_budget 的 κ^k 预算实例化消解——三件完整拼装桥待      *)
 (*   专席（本席零臆造，仅注记）。                                           *)
 (* 【公理面】零公理/零 公理/零 承认件；文末 Print Assumptions 审计。    *)
 (* 【红线自审】语句面全 Set 层：比较全 real_lt/le/eq（Set 编码 Or），      *)
@@ -268,7 +268,7 @@ Proof.
                (doe_opp_plus B (real_opp A))).
 Qed.
 
-(* le 对加法双向单调（Or 四支全放电） *)
+(* le 对加法双向单调（Or 四支全实例化消解） *)
 Lemma doe_le_plus_compat :
   forall (a b c d : Real),
     real_le a b -> real_le c d ->
@@ -533,7 +533,7 @@ Proof.
              (real_mult_comm x doe_two)).
 Qed.
 
-(* eps/2 + eps/2 == eps（doe_half_budget 第二腿的独立规范形，close 族用） *)
+(* eps/2 + eps/2 == eps（doe_half_budget 第二肢的独立规范形，close 族用） *)
 Lemma doe_half_sum :
   forall eps : Real,
     real_eq (real_plus (real_mult tv_half eps) (real_mult tv_half eps)) eps.
@@ -776,7 +776,7 @@ Proof.
              (real_eq_refl (real_opp K))).
 Qed.
 
-(* 预算腿：r2 ≤ eps/2 ⟹ r2 + eps/2 ≤ eps *)
+(* 预算肢：r2 ≤ eps/2 ⟹ r2 + eps/2 ≤ eps *)
 Lemma doe_half_budget :
   forall eps r2 : Real,
     real_lt real_zero eps ->
@@ -847,7 +847,7 @@ Qed.
 
 Section DoeblinEntropyList.
 
-(* ---- 载体与热力学槽 ---- *)
+(* ---- 载体与热力学参数位 ---- *)
 Variable states : list (list Real).
 Variable Hnil : states <> nil.
 Variable T : Real.
@@ -1056,15 +1056,15 @@ Qed.
 (* 【诚实边界·主链草稿区（本席未闭合，转下一席续做）】                     *)
 (*   以下主定理链已定形未证：                                             *)
 (*   · doe_K_energy：Σ K·e == E_exp（ext(distrib+assoc 点位重排) →        *)
-(*     real_list_sum_add → linear×2 → Heb/Hew → om+omd 收口）；           *)
+(*     real_list_sum_add → linear×2 → Heb/Hew → om+omd 闭合）；           *)
 (*   · doe_h_sum：Σ h == 0（一阶项消失，同款三段求和链）；                 *)
 (*   · doe_D_le_up/dn：log-Lipschitz 双侧（real_log_le_linear_eps 于      *)
 (*     y := K·inv(p_b) / p_b·inv(K) + real_succ_mult_inv 兑换）；          *)
 (*   · doe_pt_up/dn → doe_kl_up/dn（real_list_sum_le 提升 + Hsq/r2 预算）；*)
 (*   · doe_gain_eq_low/up（doe_minus_reassoc/doe_cancel_r 账）→            *)
-(*     doe_gain_kl_lower/upper（主件两腿，slq 先例形）→ doe_gain_close_*。 *)
+(*     doe_gain_kl_lower/upper（主件两个合取肢，slq 先例形）→ doe_gain_close_*。 *)
 (*   数学方案已定型（见头注①−⑤），缺口为 Real 层 setoid 代数链的         *)
-(*   逐步机械放电（本窗预算内未完成，非数学障碍）。                        *)
+(*   逐步机械实例化消解（本窗预算内未完成，非数学障碍）。                        *)
 (* ===================================================================== *)
 
 End DoeblinEntropyList.

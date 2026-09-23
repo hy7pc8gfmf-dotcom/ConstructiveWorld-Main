@@ -9,7 +9,7 @@
 (* ／req_abs_le_abs_plus_one（共 4 条）                                      *)
 (* 非平凡性口径：消去引擎多段链内联重演（七至九段需求传递链＋双锚断言），    *)
 (* 消除单跳转发；无一行拆分式假非平凡。                                      *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
@@ -18,13 +18,13 @@
    头注逐字保留；仅四条玩具级单跳转发件的证明体在替换点重演：
    一、req_plus_inv_unique／req_plus_cancel_l：加法左消去引擎七段等价链
        在替换点整体内联（消除对件内引擎件的单跳转发），换向桥链以显式
-       中间件记账。
-   二、req_mult_cancel_r：乘法消去引擎（双锚断言＋三段收口）整体内联，
-       换向桥链以项内显式重演嵌入兼容槽。
+       中间件核算。
+   二、req_mult_cancel_r：乘法消去引擎（双锚断言＋三段闭合）整体内联，
+       换向桥链以项内显式重演嵌入兼容参数位。
    三、req_abs_le_abs_plus_one：非负加法上界件的迁移链在替换点展开重演，
-       尾腿经序判定桥左支点入单位正性，消除单跳转发。
+       尾肢经序判定桥左支点入单位正性，消除单跳转发。
    余下玩具条目按不可化四类批量登记（接口字段直引／假设位转发／字段链
-   最短形定义性收口），详见台账 T239 切片四章节。
+   最短形定义性闭合），详见台账 T239 切片四章节。
    试编：/tmp/toyr_work_a/T239d_probe.v（接口面按基线类块逐字段复刻＋
    基座和型别名同文），四体试编通过后程序直取金标准文本落件。
    ============================================================ *)
@@ -42,7 +42,7 @@
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md（批 1 清单）
    模板：UpSigMigrate.v（13 Qed 试点件，逐件平移放大）；纯 term-mode（req_trans 链 +
    compat 桥），零 Morphisms 依赖；Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
-   直接消费基座对接面：exp_neg_req_compat_setoid（L66223）。
+   直接依存基座对接面：exp_neg_req_compat_setoid（L66223）。
    ----------------------------------------------------------------
    诚实签名变化登记表（规划书 §7.4，逐件以「Id 原件 @ 行号」注明）：
    1. minus 非接口字段：Id 系 minus（L211 Definition）在 setoid 接口缺失，
@@ -1018,7 +1018,7 @@ Proof.
 Qed.
 
 (* ============ E. 序 / abs / exp 侧（Id 原件 L549-597、625-649） ============ *)
-(* 注：Id abs_plus_one_pos（L549，|a|+1 > 0）不在本批迁移——其 Id 证明消费
+(* 注：Id abs_plus_one_pos（L549，|a|+1 > 0）不在本批迁移——其 Id 证明依存
    plain 形 abs_nonneg : le zero (abs a)，而 setoid 接口已 eps 化
    （abs_nonneg : forall eps, lt zero eps -> le zero (plus (abs a) eps)），
    plain 形不可由 eps 形导出（无序消去）。归入文件尾 (d)/签名差异冻结清单。 *)
@@ -1085,7 +1085,7 @@ Proof.
   - apply abs_opp.
 Qed.
 
-(* Id exp_neg_opp_plus L638：e^{-(a+b)} == e^{-a}·e^{-b}（消费基座 L66223 兼容件） *)
+(* Id exp_neg_opp_plus L638：e^{-(a+b)} == e^{-a}·e^{-b}（依存基座 L66223 兼容件） *)
 Lemma req_exp_neg_opp_plus : forall a b : R,
   req (exp_neg (opp (plus a b))) (mult (exp_neg (opp a)) (exp_neg (opp b))).
 Proof.
@@ -1744,16 +1744,16 @@ End ReqLogBridge.
 (* 1. attn_nat_to_R_pos（Id @L95724，随 Fixpoint attn_nat_to_R *)
 (*    L95718）：nat 归纳件，载体为 nat->R 嵌入函数；req 世界如需    *)
 (*    使用须以 setoid 运算重定义 Fixpoint（跨接口不可复用——R 为不   *)
-(*    同类型族）。本批不迁，双层并行，批 4 注意力采样消费时再裁。   *)
+(*    同类型族）。本批不迁，双层并行，批 4 注意力采样依存时再裁。   *)
 (* 2. id_ring_demo_double_neg / id_ring_demo_plus_opp /            *)
 (*    id_ring_demo_mult_one（Id @L1142/1146/1150）：Ltac      *)
 (*    id_ring 演示件，语句与接口字段逐一相同（Id 系亦为平凡件）；   *)
 (*    req 系对应字段 req_double_neg / req_plus_opp_r / req_mult_one_r *)
 (*    已在本件结果，演示件无迁移语义。                              *)
 (* 3. abs_plus_one_pos（Id @L549，|a|+1 > 0）：签名差异冻结—— *)
-(*    Id 证明消费 plain 形 abs_nonneg : le zero (abs a)，setoid 接口 *)
+(*    Id 证明依存 plain 形 abs_nonneg : le zero (abs a)，setoid 接口 *)
 (*    已 eps 化（forall eps, lt zero eps -> le zero (plus (abs a)   *)
-(*    eps)），plain 形不可由 eps 形导出（序无消去）。其消费方        *)
+(*    eps)），plain 形不可由 eps 形导出（序无消去）。其依存方        *)
 (*    （differentiable_mult 系）不在批 2-4 迁移面；若后续需要，走    *)
 (*    T3 迷你接口或接口扩展批。                                     *)
 (* ============================================================ *)

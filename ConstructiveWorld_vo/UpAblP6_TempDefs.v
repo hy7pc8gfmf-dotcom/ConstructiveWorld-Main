@@ -8,31 +8,31 @@
 (* 替换定理清单：uap6t_sum1_pos（共 1 刀，刀面以台账为权威）                 *)
 (* 非平凡性口径：定义层展开，单点求和 delta 显式化直取，无行拆分式假         *)
 (* 非平凡。                                                                  *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；补标零改动不触        *)
 (* 证明面，落件录判绿承来源台账。                                            *)
 (* ========================================================================= *)
 (* ===================================================================== *)
 (* UpAblP6_TempDefs.v —— PA6-02 席位（论文6 独占件 UpReqTempDefs 消融施工件） *)
 (*                                                                       *)
 (* 盘面：UpReqTempDefs.v（468 行，Section RealTempDefs，12 声明＝5 定义件   *)
-(*   ＋7 全证件；文件级零承认、节参 9 位）。伴生件实勘：全树三面           *)
+(*   ＋7 全证件；文件级零承认、节参 9 位）。伴生件核验：全树三面           *)
 (*   （ConstructiveWorld_vo／ConstructiveWorld_Live／ConstructiveWorld-Main） *)
-(*   ls UpAbl*UpReqTempDefs* 仅 2 件——UpAblD1S3_sum_pos（节参 sum_pos 扩槽）  *)
-(*   与 UpAblD1S8（9 节参槽打包供给）：伴生覆盖落在节参面，12 声明槽零覆盖，  *)
-(*   即本席余量（任务书「9 槽余量」口径按实勘扩为 12 声明槽全勘，多勘不降级）。*)
+(*   ls UpAbl*UpReqTempDefs* 仅 2 件——UpAblD1S3_sum_pos（节参 sum_pos 扩参数位）  *)
+(*   与 UpAblD1S8（9 节参参数位封装供给）：伴生覆盖落在节参面，12 声明参数位零覆盖，  *)
+(*   即本席余量（任务书「9 参数位余量」口径按核验扩为 12 声明参数位全勘，多勘不降级）。*)
 (*                                                                       *)
 (* 本件消融形态：独立链实例装配——零 Require 母本 UpReqTempDefs，            *)
-(*   单点态空间（S:=unit）＋点态求和载体一次喂定节参面（求和接口 4 槽      *)
-(*   本件自证，非打包记录型），12 声明槽逐枚对位：                        *)
-(*   D 槽 5 枚（定义件）＝实例供给：uap6t_bf／uap6t_Z／uap6t_dist／        *)
+(*   单点态空间（S:=unit）＋点态求和载体一次喂定节参面（求和接口 4 参数位      *)
+(*   本件自证，非封装记录型），12 声明参数位逐枚对位：                        *)
+(*   D 参数位 5 枚（定义件）＝实例供给：uap6t_bf／uap6t_Z／uap6t_dist／        *)
 (*     uap6t_energy_exp／uap6t_entropy_dist。                            *)
-(*   A 槽 7 枚（全证件）＝逐枚放电（全 Qed）：                            *)
+(*   A 参数位 7 枚（全证件）＝逐枚实例化消解（全 Qed）：                            *)
 (*     ②因子正性＝上游直击（real_exp_neg_pos 一击）；                     *)
-(*     ④配分正性＝载体 pos＋②两步；⑥分布正性＝乘正兼容两腿；             *)
-(*     ⑦归一化＝线性提取＋inv_pos_correct 交换收口（独立链两步）；         *)
-(*     ⑩log invZ 辅助＝log 乘法拆解＋群律收口（独立链真证）；             *)
+(*     ④配分正性＝载体 pos＋②两步；⑥分布正性＝乘正兼容两个合取肢；             *)
+(*     ⑦归一化＝线性提取＋inv_pos_correct 交换闭合（独立链两步）；         *)
+(*     ⑩log invZ 辅助＝log 乘法拆解＋群律闭合（独立链真证）；             *)
 (*     ⑪点态负 log 恒等＝⑩＋exp log 桥（独立链真证）；                    *)
-(*     ⑫熵显式旗舰＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
+(*     ⑫熵显式主＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
 (*       母本 E404 配方在自持载体上复验）。                               *)
 (*   纪律：零 Require UpReqTempDefs（防混代际）；纯构造性；语句面零 Prop    *)
 (*     泄露（全 real_eq/real_lt 值面）；全 Qed；尾 7 Print Assumptions。   *)
@@ -40,7 +40,7 @@
 
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 载体供给：单点求和引擎（节参面 4 槽自证） ============ *)
+(* ============ 载体供给：单点求和引擎（节参面 4 参数位自证） ============ *)
 
 Definition uap6t_sum1 (f : unit -> Real) : Real := f tt.
 
@@ -84,36 +84,36 @@ Variables T : Real.
 Variable T_pos : real_lt real_zero T.
 Variable energy : unit -> Real.
 
-(* 槽①（D）：Boltzmann 因子实例 bf(s) := e^{−e(s)/T} *)
+(* 参数位①（D）：Boltzmann 因子实例 bf(s) := e^{−e(s)/T} *)
 Definition uap6t_bf (s : unit) : Real :=
   real_exp_neg (real_mult (real_inv_pos T T_pos) (energy s)).
 
-(* 槽②（A）：因子正性——上游直击（exp 恒正一击） *)
+(* 参数位②（A）：因子正性——上游直击（exp 恒正一击） *)
 Lemma uap6t_bf_pos : forall s : unit, real_lt real_zero (uap6t_bf s).
 Proof.
   intro s. exact (real_exp_neg_pos (real_mult (real_inv_pos T T_pos) (energy s))).
 Qed.
 
-(* 槽③（D）：温度化配分函数实例 Z := Σ bf（单点载体下即 bf(tt)） *)
+(* 参数位③（D）：温度化配分函数实例 Z := Σ bf（单点载体下即 bf(tt)） *)
 Definition uap6t_Z : Real := uap6t_sum1 uap6t_bf.
 
-(* 槽④（A）：配分正性——载体 pos＋②两步 *)
+(* 参数位④（A）：配分正性——载体 pos＋②两步 *)
 Theorem uap6t_Z_pos : real_lt real_zero uap6t_Z.
 Proof.
   unfold uap6t_Z. exact (uap6t_sum1_pos uap6t_bf uap6t_bf_pos).
 Qed.
 
-(* 槽⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同母本） *)
+(* 参数位⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同母本） *)
 Definition uap6t_dist (s : unit) : Real :=
   real_mult (real_inv_pos uap6t_Z uap6t_Z_pos) (uap6t_bf s).
 
-(* 槽⑥（A）：分布逐点正性——乘正兼容两腿（inv 正 × 因子正） *)
+(* 参数位⑥（A）：分布逐点正性——乘正兼容两个合取肢（inv 正 × 因子正） *)
 Lemma uap6t_dist_pos : forall s : unit, real_lt real_zero (uap6t_dist s).
 Proof.
   intro s. exact (real_mult_pos_compat (real_inv_pos uap6t_Z uap6t_Z_pos) (uap6t_bf s) (real_inv_pos_pos uap6t_Z uap6t_Z_pos) (uap6t_bf_pos s)).
 Qed.
 
-(* 槽⑦（A）：归一化——Σ p ≡ inv(Z)·Z ≡ 1（线性提取一步＋交换收口；      *)
+(* 参数位⑦（A）：归一化——Σ p ≡ inv(Z)·Z ≡ 1（线性提取一步＋交换闭合；      *)
 (*   单点载体下 Z 定义性收敛 bf(tt)，独立链真证） *)
 Theorem uap6t_dist_normalized : real_eq (uap6t_sum1 uap6t_dist) real_one.
 Proof.
@@ -130,7 +130,7 @@ Proof.
     + exact (real_inv_pos_correct (uap6t_sum1 uap6t_bf) uap6t_Z_pos).
 Qed.
 
-(* 槽⑩（A）：log invZ 辅助恒等——log 乘法拆解＋群律收口（独立链真证） *)
+(* 参数位⑩（A）：log invZ 辅助恒等——log 乘法拆解＋群律闭合（独立链真证） *)
 Lemma uap6t_log_inv_Z_aux :
   real_eq (real_log (real_inv_pos uap6t_Z uap6t_Z_pos)
                     (real_inv_pos_pos uap6t_Z uap6t_Z_pos))
@@ -199,7 +199,7 @@ Proof.
            ++ exact (real_plus_zero (real_opp LZ)).
 Qed.
 
-(* 槽⑪（A）：点态负 log 恒等——⑩＋exp log 桥两步换形（独立链真证） *)
+(* 参数位⑪（A）：点态负 log 恒等——⑩＋exp log 桥两步换形（独立链真证） *)
 Lemma uap6t_neg_log_boltzmann_point :
   forall s : unit,
     real_eq (real_opp (real_log (uap6t_dist s) (uap6t_dist_pos s)))
@@ -269,16 +269,16 @@ Proof.
     + apply real_plus_comm.
 Qed.
 
-(* 槽⑧（D）：温度化能量期望实例 E := Σ p·e *)
+(* 参数位⑧（D）：温度化能量期望实例 E := Σ p·e *)
 Definition uap6t_energy_exp : Real :=
   uap6t_sum1 (fun s : unit => real_mult (uap6t_dist s) (energy s)).
 
-(* 槽⑨（D）：分布熵实例（正性证人居前的母本同位形） *)
+(* 参数位⑨（D）：分布熵实例（正性证人居前的母本同位形） *)
 Definition uap6t_entropy_dist
   (p : unit -> Real) (Hp : forall s : unit, real_lt real_zero (p s)) : Real :=
   uap6t_sum1 (fun s : unit => real_mult (p s) (real_opp (real_log (p s) (Hp s)))).
 
-(* 槽⑫（A）：熵显式旗舰——点态换形→distrib→分和→β/logZ 双提取
+(* 参数位⑫（A）：熵显式主——点态换形→distrib→分和→β/logZ 双提取
    （母本 E404 配方在自持载体上复验，独立链真证） *)
 Theorem uap6t_entropy_temp_explicit :
   real_eq (uap6t_entropy_dist uap6t_dist uap6t_dist_pos)
@@ -383,7 +383,7 @@ Qed.
 
 End Uap6TInst.
 
-(* ============ 假设面收口（G4：全 Closed） ============ *)
+(* ============ 假设面闭合（G4：全 Closed） ============ *)
 
 Print Assumptions uap6t_sum1_pos.
 Print Assumptions uap6t_sum1_ext.

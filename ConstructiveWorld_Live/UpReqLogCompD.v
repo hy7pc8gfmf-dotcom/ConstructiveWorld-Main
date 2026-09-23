@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   logc_mult_one_l（原 L91，2 句玩具证）                                *)
 (* ============================================================ *)
@@ -11,51 +11,51 @@
 (* ============================================================ *)
 (* UpReqLogCompD.v *)
 (* *)
-(* 目的： 广义旗舰链复合族：温度对数-自由能复合面（S 阻塞七槽段）。 *)
+(* 目的： 广义主链复合族：温度对数-自由能复合面（S 阻塞七参数位段）。 *)
 (* 主件： logc_boltz_log_decomp 与 logc_fe / logc_t_kl 温度复合族。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G05_LogSmall。 *)
-(* 备注： 自由能与温度槽以 Section 变量承接；正性证书 logc_posd 为构造核。 *)
+(* 备注： 自由能与温度参数位以 Section 变量承接；正性证书 logc_posd 为构造核。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqLogCompD.v —— 广义旗舰链 G5-S 复合族消解席（重启）：S 阻塞 7 槽    *)
+(* UpReqLogCompD.v —— 广义主链 G5-S 复合族消解席（重启）：S 阻塞 7 参数位    *)
 
 (*   2026-09-10                                                            *)
 (* ------------------------------------------------------------------ *)
 
-(*  [槽1] energy_in_log_boltzmann_bridge@UpSigMigrate:65 —— 消解           *)
+(*  [参数位1] energy_in_log_boltzmann_bridge@UpSigMigrate:65 —— 消解           *)
 (*    logc_energy_in_log_boltzmann（LogcFEP 节，F1-F5 链）：req 复合重建，  *)
-(*    供给链 = sum 代数三槽 + partition_condition(N 参显式位) +            *)
-(*    B1(sup_compat)/B2(sup_log_exp_neg) 供给槽（Real 层闭合件 =           *)
+(*    供给链 = sum 代数三参数位 + partition_condition(N 参显式位) +            *)
+(*    B1(sup_compat)/B2(sup_log_exp_neg) 供给参数位（Real 层闭合件 =           *)
 (*    logd_log_compat_real / logd_log_exp_neg_real，G5）+ log_mult/        *)
 (*    log_inv_one_inv 接口分解。Id 原件 energy_in_log_boltzmann@:     *)
 (*    16116 的 req 签名独立组装（E387 双名异型：Id rewrite 链不可直连）。   *)
-(*  [槽2] free_energy_boltzmann_bridge@UpSigMigrate:70 —— 消解             *)
+(*  [参数位2] free_energy_boltzmann_bridge@UpSigMigrate:70 —— 消解             *)
 
-(*    槽1 逐点恒等 → 逐点 p·e 两项分解（F6）→ sum_ext/sum_opp/sum_add/     *)
+(*    参数位1 逐点恒等 → 逐点 p·e 两项分解（F6）→ sum_ext/sum_opp/sum_add/     *)
 (*    sum_linear 四桥（F7）→ 归一化（F4：partition+inv_pos_correct）→     *)
 (*    环代数坍缩（F8）。Id 原件 free_energy_boltzmann@:15945 同位。    *)
-(*  [槽3] rdf_log_diff@UpReqRDF:1704 —— S 阻塞（精确缺件分类）             *)
+(*  [参数位3] rdf_log_diff@UpReqRDF:1704 —— S 阻塞（精确缺件分类）             *)
 
 (*    （real_log_differentiable@:46386，df:=1/x，Bishop 逐 eps；      *)
 (*    real_log_plus_diff@44464），但其形 = RealDifferentiable 域前提记录    *)
 (*    （f : forall x, 0<x -> Real）+ 尾 slack（|D| ≤ eps|h|+eps'）；        *)
-(*    reqRDF 形 = 纯函数 f : R -> R + 精确形 |D| ≤ eps|h|。换装 + 完成      *)
+(*    reqRDF 形 = 纯函数 f : R -> R + 精确形 |D| ≤ eps|h|。重述 + 完成      *)
 
 
 (*    compose 显式应用）。阻塞分类留档接力（尾注核对节）。                      *)
-(*  [槽4] real_kl_decomp_full@UpRealLeB:218 —— 消解（双层双形）             *)
+(*  [参数位4] real_kl_decomp_full@UpRealLeB:218 —— 消解（双层双形）             *)
 (*    logc_fe_kl_decomp（F9，req 层 minus 形，泛型 RIS）+                  *)
 (*    logc_real_kl_decomp_full（Part 3，Real 层 real_kl_term 形，           *)
 (*    real_list_sum 实例化 + G6 logd_kl_term_minus_form 桥）。FEP 分解     *)
-(*    F[p] ≡ F[p_b] + D·Σ kl。链 = 槽1 逐点 → Σ p·e 两项分解 → 归一化     *)
+(*    F[p] ≡ F[p_b] + D·Σ kl。链 = 参数位1 逐点 → Σ p·e 两项分解 → 归一化     *)
 (*    坍缩 logZ 项 → KL 字面形重组。供给 = partition 显式位（Hpart）+      *)
 (*    B1/B2 + sum 代数（G6 Part E 诚实条件消解同型）。                     *)
-(*  [槽5] req_entropy_temp_explicit@UpFirewallReq:122 —— 消解               *)
+(*  [参数位5] req_entropy_temp_explicit@UpFirewallReq:122 —— 消解               *)
 (*    logc_entropy_temp_explicit（LogcTemp 节 T5）：H(t) ≡ E(t)/T +        *)
 
 
-(*  [槽6] req_relative_entropy_temp_decomp@UpFirewallReq:128 —— 消解        *)
+(*  [参数位6] req_relative_entropy_temp_decomp@UpFirewallReq:128 —— 消解        *)
 (*    logc_relative_entropy_temp_decomp（T6）：KL(t1‖t2) ≡ -H(t1) +        *)
 
 
@@ -64,16 +64,16 @@
 (*    置换坍缩（logZ 双双抵消 + X:=1/t1-1/t2 数缩，Part 0 logc_cancel_     *)
 (*    left/logc_plus_assoc_cancel 消去核已备）→ distrib 完成。供给链零     *)
 
-(* 供给槽说明（诚实条件消解，G5 logd_pos_of_agree / G6 Part E 同型）：       *)
+(* 供给参数位说明（诚实条件消解，G5 logd_pos_of_agree / G6 Part E 同型）：       *)
 (*    B1/B2 在泛型 RIS 层非接口字段，以节假设申报显式位承接；Real 层    *)
 (*    闭合实例 = G5 logd_log_compat_real / logd_log_exp_neg_real（Part 3   *)
 
 (*    req_Z_temp_pos 产物位（批 2 席领地，未 Require，以假设位承接）。        *)
 (* 防撞：logc_ 前缀 + 全部新名 26 个，全库 attn/001 grep 零命中（建前       *)
 (*    2026-09-10 逐名实查；UpReqLogCompD 文件名零命中）。                   *)
-(* 双形并存：槽4 双层（req minus 形 / Real kl_term 形）；槽1/2 与           *)
+(* 双形并存：参数位4 双层（req minus 形 / Real kl_term 形）；参数位1/2 与           *)
 (*    UpSigMigrate 节假设申报同位（本件独立重建，既有文件零改）；       *)
-(*    槽5/6/7 与 UpFirewallReq 显式假设槽同位（logc_t_* 定义族 =               *)
+(*    参数位5/6/7 与 UpFirewallReq 显式假设参数位同位（logc_t_* 定义族 =               *)
 (*    entropy_dist/req_relative_entropy@UpReqDist:1043-1046 同体重建）。    *)
 (* 红线：Set 层零 Prop（结论全 req/lt/le 接口 Set 值）；全 Qed 闭合；零公理； *)
 
@@ -187,7 +187,7 @@ Proof.
         -- exact (plus_zero w).
 Qed.
 
-(* A6：v ≡ u + w ⟹ opp u + v ≡ w（被减项消去；槽 7 数缩核） *)
+(* A6：v ≡ u + w ⟹ opp u + v ≡ w（被减项消去；参数位 7 数缩核） *)
 Lemma logc_cancel_left : forall u v w : R,
   req v (plus u w) -> req (plus (opp u) v) w.
 Proof.
@@ -208,14 +208,14 @@ Qed.
 End LogcAlg.
 
 (* ============================================================ *)
-(* Part 1：FEP 复合节（槽 1/2/4；UpSigMigrate 节供给形同位）                  *)
+(* Part 1：FEP 复合节（参数位 1/2/4；UpSigMigrate 节供给形同位）                  *)
 (* ============================================================ *)
 
 Section LogcFEP.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Type.
 
-(* sum 代数三槽（UpSigMigrate SumOver setoid 对接面同位） *)
+(* sum 代数三参数位（UpSigMigrate SumOver setoid 对接面同位） *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
@@ -235,7 +235,7 @@ Variable Z_pos : lt zero Z.
 Hypothesis fep_partition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
-(* B1/B2 供给槽（G5 结论表；Real 层闭合 = logd_log_compat_real /           *)
+(* B1/B2 供给参数位（G5 结论表；Real 层闭合 = logd_log_compat_real /           *)
 (*   logd_log_exp_neg_real） *)
 Hypothesis sup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
   req x y -> req (log x Hx) (log y Hy).
@@ -693,7 +693,7 @@ Qed.
 
 
 
-(* F9【槽 4 消解件·req 层】：FEP 分解 F[p] ≡ F[p_b] + D·Σ kl(minus 形)       *)
+(* F9【参数位 4 消解件·req 层】：FEP 分解 F[p] ≡ F[p_b] + D·Σ kl(minus 形)       *)
 Lemma logc_fe_kl_decomp : forall (p : S -> R) (Hp : logc_posd p)
     (Hnormp : req (sumf p) one),
   req (logc_fe p Hp)
@@ -709,7 +709,7 @@ Proof.
   set (U := mult D (sumf (fun s => mult (p s) (Lp s)))).
   set (V := mult D (sumf (fun s => mult (p s) (Lb s)))).
   set (W := mult D (log Z Z_pos)).
-  (* Hpe：Σ p·e ≡ opp(V + W)（逐点 F6 + sum 三桥 + Hnormp 入槽） *)
+  (* Hpe：Σ p·e ≡ opp(V + W)（逐点 F6 + sum 三桥 + Hnormp 入参数位） *)
   assert (Hpe : req (sumf (fun s => mult (p s) (base_loss s)))
                     (plus (opp V) (opp W))).
   { apply (req_trans (sumf (fun s => mult (p s) (base_loss s)))
@@ -878,7 +878,7 @@ Proof.
                (plus U (opp V))
                (mult D (sumf (fun s => mult (p s)
                                 (plus (Lp s) (opp (Lb s))))))).
-      * (* F[b] ≡ opp W（槽 2 内形） *)
+      * (* F[b] ≡ opp W（参数位 2 内形） *)
         apply (req_trans (opp (mult D (log Z Z_pos)))
                          (mult (opp D) (log Z Z_pos))
                          (logc_fe logc_boltz logc_boltz_pos)).
@@ -890,7 +890,7 @@ Qed.
 End LogcFEP.
 
 (* ============================================================ *)
-(* Part 2：【槽 4 消解件·Real 层】real_kl_term 形（real_list_sum 实例化；     *)
+(* Part 2：【参数位 4 消解件·Real 层】real_kl_term 形（real_list_sum 实例化；     *)
 (*   供给 = Hpart 显式位 + G5 B1/B2 闭合件 + G6 D1 字面形桥）                 *)
 (* ============================================================ *)
 
@@ -1001,7 +1001,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：温度复合节（槽 5/6/7；UpFirewallReq 节供给形同位）                  *)
+(* Part 3：温度复合节（参数位 5/6/7；UpFirewallReq 节供给形同位）                  *)
 (* ============================================================ *)
 
 Section LogcTemp.
@@ -1020,12 +1020,12 @@ Hypothesis tsum_linear :
 
 Variable energy : S -> R.
 Variable Z_temp : R -> R.
-(* req_Z_temp_spec（母件 L93 同位假设槽） *)
+(* req_Z_temp_spec（源模块 L93 同位假设参数位） *)
 Hypothesis zt_spec : forall (t : R) (Ht : lt zero t),
   req (Z_temp t) (sumf (fun s => exp_neg (mult (inv_pos t Ht) (energy s)))).
-(* zt_pos 槽 = UpReqTempEntropy req_Z_temp_pos 产物位（批 2 席领地） *)
+(* zt_pos 参数位 = UpReqTempEntropy req_Z_temp_pos 产物位（批 2 席领地） *)
 Hypothesis zt_pos : forall (t : R) (Ht : lt zero t), lt zero (Z_temp t).
-(* B1/B2 供给槽（同 LogcFEP） *)
+(* B1/B2 供给参数位（同 LogcFEP） *)
 Hypothesis tsup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
   req x y -> req (log x Hx) (log y Hy).
 Hypothesis tsup_log_exp_neg : forall u : R,

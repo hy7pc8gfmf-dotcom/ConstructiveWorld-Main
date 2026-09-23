@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   cst_bae_bopp_invol（原 L139，2 句玩具证）                            *)
 (* ============================================================ *)
@@ -487,7 +487,7 @@ Proof.
       * apply (IH k (NatLe_lift k m Hkm')).
 Qed.
 
-(* (1/2)^m 关于 m 反单调（NatLe 面）——arch_decay 消费形 *)
+(* (1/2)^m 关于 m 反单调（NatLe 面）——arch_decay 依存形 *)
 Lemma cst_pow12_anti : forall k m : nat, NatLe k m ->
   Qle (q_pow (1 / 2) m) (q_pow (1 / 2) k).
 Proof.
@@ -524,7 +524,7 @@ Proof.
     + apply cst_d_nonneg; exact Ha.
 Qed.
 
-(* 几何率（1/2 形）：d_m <= d0·(1/2)^m——与 arch_decay 消费形精确配 *)
+(* 几何率（1/2 形）：d_m <= d0·(1/2)^m——与 arch_decay 依存形精确配 *)
 Lemma cst_d_geo12 : forall (a : Q), Qlt 0 a -> forall m : nat,
   Qle (cst_nseq a m * cst_nseq a m - a)
       ((cst_nseq a 0 * cst_nseq a 0 - a) * q_pow (1 / 2) m).
@@ -544,7 +544,7 @@ Proof.
 Qed.
 
 (* S2 主定理：Newton 序列显式率（Q 层，N 显式可提取；
-   N := arch_decay 见证后继——库内已证几何衰减件系数化消费） *)
+   N := arch_decay 见证后继——库内已证几何衰减件系数化依存） *)
 Theorem cst_newton_rate : forall (a eps : Q), QltT 0 a -> QltT 0 eps ->
   sigT (fun N : nat => forall m : nat, NatLe N m ->
     QltT (Qabs (cst_nseq a m * cst_nseq a m - a)) eps).

@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   tbg_row_dock（原 L79，3 句玩具证）                                   *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
 (* 附记：T277 判级全文恒等；AD 域收尾第四批（T317 六·1 方案①）。 *)
@@ -25,7 +25,7 @@
 (* 目的： TBNC 显式假设的对角逐项桥。 *)
 (* 主件： tbg_conv_bsum 卷积分块和与 tbg_corner 角余项、tbg_diag_face 对角面。 *)
 (* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、UpReqBanachProd、UpReqBanachDouble、UpReqNormConv、UpReqBanachCauchyD。 *)
-(* 备注： 分块三角和的代数面重排为 TBNC 显式假设的消费形；角余一般族化。 *)
+(* 备注： 分块三角和的代数面重排为 TBNC 显式假设的依存形；角余一般族化。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -35,7 +35,7 @@
 (*   侧一（收敛面）ncv_conv_diag_cauchy @ UpReqNormConv.v:862     *)
 (*   侧二（逐项面）bd2_diagf @ UpReqBanachDouble.v:63             *)
 (* 之间的对角逐项桥——柯西方块（矩形部分和）↔ 三角/对角           *)
-(* 分块（Σ_{i+j≤n}）的代数面重排，TBNC 显式假设② 消费形。            *)
+(* 分块（Σ_{i+j≤n}）的代数面重排，TBNC 显式假设② 依存形。            *)
 (*                                                                *)
 (* 语句面适配（AA8 草案 → 实形，重要披露）：                      *)
 (*   AA8 草案字面形 bd2_diagf B a b 0 n == ncv_conv B a b n n     *)
@@ -45,7 +45,7 @@
 (*   面）+ 显式角余（tbg_corner，bxcd_U 一般族化）。显式假设② 所需    *)
 (*   「bcauchy 出口 + 代数面重排对接」即由此式承接。              *)
 (*                                                                *)
-(* 消费面（全部只 Require，禁改既有件一行）：                     *)
+(* 依存面（全部只 Require，禁改既有件一行）：                     *)
 (*   bxcd_bsum_pad_split（UpReqBanachCauchyD）补零垫分裂；        *)
 (*   bd2_tfrom_rect / bd2_tri_eq_diag（UpReqBanachDouble）        *)
 (*   三角↔对角↔矩形行化现成件；bsum_ext/bsum_plus/bplus_wd_l      *)
@@ -61,7 +61,7 @@
 (* 工程注：bae/wd 系 class 字段投影——apply 一律全参显式           *)
 (*   （bae_trans 首参=目标左端、次参=中件），禁裸 apply 假设位       *)
 
-(* 提取探针：Extraction "_taa9_tbg_extract.ml" 验 Obj.magic=0。   *)
+(* 提取检验：Extraction "_taa9_tbg_extract.ml" 验 Obj.magic=0。   *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -76,7 +76,7 @@ From Stdlib Require Import QArith.QArith Arith.Arith.
 From Stdlib Require Import Lia.
 
 (* ============================================================ *)
-(* ① 保底半边（ncv 侧）：行面换装桥 + 方块 bsum 折叠形            *)
+(* ① 保底半边（ncv 侧）：行面重述桥 + 方块 bsum 折叠形            *)
 (* ============================================================ *)
 
 (* 两套求和 Fixpoint（ncv_sum/bsum）逐点 bae 等价——体同形但在     *)
@@ -96,7 +96,7 @@ Proof.
     apply (@bplus_wd_l B). exact IH.
 Qed.
 
-(* 行面桥：ncv 行（计数宽 S n）== bd2 行（闭宽 n）——经上件换装。 *)
+(* 行面桥：ncv 行（计数宽 S n）== bd2 行（闭宽 n）——经上件重述。 *)
 Lemma tbg_row_dock : forall (B : BanachAlg) (a b : nat -> (@BA B)) (k n : nat),
   @bae B (ncv_row B a b k (Datatypes.S n)) (bd2_row B a b k n).
 Proof.
@@ -172,7 +172,7 @@ Definition tbg_corner (B : BanachAlg) (a b : nat -> (@BA B)) (n : nat) : (@BA B)
 
 (* ============================================================ *)
 (* ④ 主件：对角逐项桥                                             *)
-(*   方块（收敛侧 ncv_conv 消费域）== bd2_diagf 三角逐项面 + 角余 *)
+(*   方块（收敛侧 ncv_conv 依存域）== bd2_diagf 三角逐项面 + 角余 *)
 (* ============================================================ *)
 
 Theorem tbg_diag_face : forall (B : BanachAlg) (a b : nat -> (@BA B)) (n : nat),
@@ -240,7 +240,7 @@ Proof.
                  (tbg_fold_diagf B a b n)).
 Qed.
 
-(* 对角序列面（bd2_diag 命名形，收敛侧直接消费形） *)
+(* 对角序列面（bd2_diag 命名形，收敛侧直接依存形） *)
 Corollary tbg_diag_seq : forall (B : BanachAlg) (a b : nat -> (@BA B)) (n : nat),
   @bae B (ncv_conv B a b (Datatypes.S n) (Datatypes.S n))
          (@bplus B (bd2_diag B n a b) (tbg_corner B a b n)).

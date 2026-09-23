@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   q_0_lt_1（原 L69，2 句玩具证）                                       *)
 (* ============================================================ *)
@@ -12,7 +12,7 @@
 (* UpReqLpoEquiv.v *)
 (* *)
 (* 目的： 平方非负全称命题与受限 LPO 的双向归约。 *)
-(* 主件： rLPO 与 SqWall 的 lpn_equivalence 双向腿（q_sq_nonneg 全称形为墙面）。 *)
+(* 主件： rLPO 与 SqWall 的 lpn_equivalence 双向肢（q_sq_nonneg 全称形为墙面）。 *)
 (* 依赖： S01_BaseRing、S02_CauchyComplete。 *)
 (* 备注： 零公理、零假设负载；不证墙命题为假，证其与受限 LPO 等价（构造性边界）。 *)
 (* ============================================================ *)
@@ -53,7 +53,7 @@
 
 (*   Part 1 八引理、两面语句面、lpn_forward 左支逐字续用。         *)
 (*   余留三支（正向右支/反向两支）按「内核事实+命题式桥」完成。     *)
-(*   对 SUSPEND 余留清单的三处实形适配（探针 _taa15r_probe2/3      *)
+(*   对 SUSPEND 余留清单的三处实形适配（检验 _taa15r_probe2/3      *)
 (*   全量真验判定）：                                              *)
 (*   ①real_mult 对变量 x 卡 match（proof-mode destruct 定义体），  *)
 (*     change 内核转换路不可行 ⟹ 改 real_mult_proj 命题式提供实参；    *)
@@ -82,7 +82,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* 负支：a ≤ 0 ⟹ |a| == −a（经 Qabs (−a) 搬运） *)
+(* 负支：a ≤ 0 ⟹ |a| == −a（经 Qabs (−a) 迁移） *)
 Lemma q_abs_neg_eq : forall a : Q, a <= 0 -> Qabs a == - a.
 Proof.
   intros a Ha.
@@ -203,7 +203,7 @@ Qed.
 (*   故一切换形走「顶面 Qabs 原子」+ 自证同构引理，零实例依赖。     *)
 (* ============================================================ *)
 
-(* Qeq 到 Qle 顶面搬运（Qlt_le_dec 两分 + Qlt_irrefl 归谬） *)
+(* Qeq 到 Qle 顶面迁移（Qlt_le_dec 两分 + Qlt_irrefl 归谬） *)
 Lemma q_eq_le : forall a b : Q, a == b -> a <= b.
 Proof.
   intros a b H.
@@ -215,12 +215,12 @@ Proof.
   - exact Hle.
 Qed.
 
-(* Qabs 同构：x == y ⟹ |x| == |y|（探针 _taa15r_probe2 全量真验版） *)
+(* Qabs 同构：x == y ⟹ |x| == |y|（检验 _taa15r_probe2 全量真验版） *)
 Lemma q_abs_congr : forall x y : Q, x == y -> Qabs x == Qabs y.
 Proof.
   intros x y H.
   destruct (Qlt_le_dec 0 x) as [Hx | Hx].
-  - (* 0 < x：搬运 0 ≤ y 后两面 Qabs_pos 完成 *)
+  - (* 0 < x：迁移 0 ≤ y 后两面 Qabs_pos 完成 *)
     assert (Hxle : 0 <= x) by (apply Qlt_le_weak; exact Hx).
     pose proof Hxle as Hy.
     rewrite H in Hy.

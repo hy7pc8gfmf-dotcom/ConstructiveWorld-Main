@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   r_arch_pow_attn_real（原 L99，2 句玩具证）                           *)
 (*   one_minus_delta_pos_real（原 L68，2 句玩具证）                       *)
@@ -11,10 +11,10 @@
 (* ============================================================ *)
 (* 【T337 恒等守恒更正注记】2026-09-22 包AW十三 台账席（恒等头注更正第三批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 2 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 2 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337 台账。 *)
 (* 附记：T277 判级全文恒等；M-Z 域未及件（V 收尾＋X 整包＋Y 起步）第四批直推（T317 六·1 方案①）。 *)
@@ -23,14 +23,14 @@
 (* ============================================================ *)
 (* UpArchAttn.v *)
 (* *)
-(* 目的： r_arch_pow_attn 几何收敛假设的 Real 层镜像供给。 *)
+(* 目的： r_arch_pow_attn 几何收敛假设的 Real 层副本供给。 *)
 (* 主件： r_arch_pow_attn_real 与 attention_iterate_converges_real：N 步迭代收敛的 Real 层显式形。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpBudgetReal。 *)
 (* 备注： 接口前提对应根文件注意力收敛区；本件为该几何收敛假设的显式 N 供给口。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层镜像            *)
+(* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层副本            *)
 (*                                                              *)
 (* 扫描件背景（分析-219平凡定理热点扫描-20260907.md 榜 A3）：        *)
 (*   根文件 CW_ConstructiveWorld_219.v 注意力收敛区 L29247 的接口前提 *)
@@ -44,7 +44,7 @@
 (*   （0<κ<1、0<a、0<eps 时 sigT N, a·κ^N < eps）。本文件消除该断连： *)
 (*                                                              *)
 (* 件 1（主件）r_arch_pow_attn_real：接口前提在具体 Real 层的实例化。 *)
-(*   形态对齐映射（探针结论）：                                    *)
+(*   形态对齐映射（检验结论）：                                    *)
 (*     R（抽象，RealInterfaceEnhanced 实例参数）                  *)
 (*         ⟿ Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
 (*     lt zero / lt ⟿ real_lt real_zero / real_lt（Type 版）       *)
@@ -61,19 +61,19 @@
 (*         ⟿ 语句显式前提。                                       *)
 (*                                                              *)
 (* 件 2（组装预演）attention_iterate_converges_real：              *)
-(*   消费件 1 + 根 attention_tv_iter_contraction（L29287）结论的     *)
-(*   Real 镜像链 tv_n ≤ (1−δ)^n·tv_0（根 r_pow_dec_iter_attn 的     *)
-(*   Real 镜像即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
+(*   依存件 1 + 根 attention_tv_iter_contraction（L29287）结论的     *)
+(*   Real 副本链 tv_n ≤ (1−δ)^n·tv_0（根 r_pow_dec_iter_attn 的     *)
+(*   Real 副本即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
 (*   给出 sigT 预算 N 见证定理。覆盖面注记：根定理的语义对象        *)
 (*   attention_step/tv_dist/boltzmann_dist_attn 生活在抽象 Section  *)
 (*   世界，其实例化需在 Real 层整体消解 detailed_balance/           *)
 (*   minorization/sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等 *)
 (*   接口前提（天级工程，不属本小件）；按任务书条款以 Real 序列       *)
 (*   tv_seq := n ↦ TV(iterate n μ₀, p_b) 承载最小骨架，每步几何      *)
-(*   收缩作为镜像前提 Hstep 显式列出。主件 1 不受影响。              *)
+(*   收缩作为副本前提 Hstep 显式列出。主件 1 不受影响。              *)
 (*                                                              *)
 (* 纪律：纯构造性；Set 层语句（real_lt/real_le/real_eq/sigT）；      *)
-(*       全部 Qed 闭合；只消费根内/UpBudgetReal 已证机器。           *)
+(*       全部 Qed 闭合；只依存根内/UpBudgetReal 已证机器。           *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith.
@@ -86,7 +86,7 @@ Local Open Scope Q_scope.
 
 (* ============ 1. 1−δ 的 Real 层序引理（κ := 1−δ 良定前提） ============ *)
 
-(* 根 L14270 one_minus_kappa_pos 的 Real 镜像：δ < 1 ⟹ 0 < 1−δ *)
+(* 根 L14270 one_minus_kappa_pos 的 Real 副本：δ < 1 ⟹ 0 < 1−δ *)
 Lemma one_minus_delta_pos_real : forall delta : Real,
   real_lt delta real_one ->
   real_lt real_zero (real_plus real_one (real_opp delta)).
@@ -95,7 +95,7 @@ Proof.
   exact (real_lt_opp_plus delta real_one Hd).
 Qed.
 
-(* 根注意力区前提的对称支 Real 镜像：0 < δ ⟹ 1−δ < 1
+(* 根注意力区前提的对称支 Real 副本：0 < δ ⟹ 1−δ < 1
    （逐点差零 + real_lt_eq_lt：1−(1−δ) == δ 逐点 ring） *)
 Lemma one_minus_delta_lt_one_real : forall delta : Real,
   real_lt real_zero delta ->
@@ -131,11 +131,11 @@ Proof.
   exact (r_arch_pow_real (real_plus real_one (real_opp delta))           (one_minus_delta_pos_real delta Hd2)           (one_minus_delta_lt_one_real delta Hd1)           a Ha eps Heps).
 Qed.
 
-(* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 镜像） ============ *)
+(* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 副本） ============ *)
 
-(* 根 attention_tv_iter_contraction（L29287）结论的 Real 镜像链：
+(* 根 attention_tv_iter_contraction（L29287）结论的 Real 副本链：
    每步 tv_{n+1} ≤ (1−δ)·tv_n ⟹ tv_n ≤ (1−δ)^n·tv₀。
-   （根 r_pow_dec_iter_attn 的幂反单调 Real 镜像即
+   （根 r_pow_dec_iter_attn 的幂反单调 Real 副本即
      UpBudgetReal.real_pow_anti_mono，件 2 主定理直接复用，不重证。） *)
 Lemma tv_iter_decay_real :
   forall (delta : Real)
@@ -187,7 +187,7 @@ Qed.
 
 (* ============ 4. 件 2 主定理：迭代收敛的 sigT 显式预算见证 ============ *)
 
-(* 根 attention_iterate_converges（L29330）的 Real 层镜像组装：
+(* 根 attention_iterate_converges（L29330）的 Real 层副本组装：
    预算 N 由件 1（r_arch_pow_attn_real）构造；尾界 n ≥ N 由
    tv 衰减链（本文件件 2 前置）+ 幂反单调（real_pow_anti_mono）
    + 件 1 的 a·κ^N < eps 消解。
@@ -234,4 +234,4 @@ Proof.
                (real_mult_comm (real_pow kappa N) (tv_seq Datatypes.O)) HN).
 Qed.
 
-(* ============ 5. 提取探针（G3：零 Obj.magic） ============ *)
+(* ============ 5. 提取检验（G3：零 Obj.magic） ============ *)

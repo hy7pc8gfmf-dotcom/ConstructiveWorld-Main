@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   real_KL_temp_kl_term_bridge（原 L495，4 句玩具证）                   *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 【T343 恒等守恒更正注记】2026-09-22 包AW十七 台账席（恒等头注收尾·AD 余六件收口） *)
+(* 【T343 恒等守恒更正注记】2026-09-22 包AW十七 台账席（恒等头注收尾·AD 余六件闭合） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341／T343 台账。 *)
 (* 附记：T277 判级全文恒等；AD 域余六件收尾收官（T317 六·1 方案①）。 *)
@@ -42,10 +42,10 @@
 (*   real_entropy_dist / real_boltzmann_dist_temp(_pos) / real_Z_temp  *)
 
 (*   L41696 规范形，拆分落点 S08 L482，经 _build_219 单体 .vo 在库，    *)
-(*   探针 Check 实证零 Section 抽象污染，直用零重建）+ Σ-opp /          *)
+(*   检验 Check 实证零 Section 抽象污染，直用零重建）+ Σ-opp /          *)
 
 (* ------------------------------------------------------------------ *)
-(* 【Id 层原件对位表（S04 L3903-3933 逐槽实证）】                      *)
+(* 【Id 层原件对位表（S04 L3903-3933 逐参数位实证）】                      *)
 (*   Id normalized p                     ↦ Hnp : real_eq (Σ p) one    *)
 (*      （Id S04 L1998 同义：Id (sum_over_S p) one）                   *)
 (*   Id positive_dist p                  ↦ Hp : forall s,             *)
@@ -80,7 +80,7 @@ Require Import UpReqTempDefs.
 
 (* ---------------------------------------------------------- *)
 
-(*   去实例化镜像，同配方：log_mult + log_wd + inv_pos_correct）        *)
+(*   去实例化副本，同配方：log_mult + log_wd + inv_pos_correct）        *)
 (* ---------------------------------------------------------- *)
 Lemma real_log_inv_pos_gen :
   forall (x : Real) (Hx : real_lt real_zero x),
@@ -150,7 +150,7 @@ Qed.
 (* ---------------------------------------------------------- *)
 
 
-(*   件 0a + opp_plus/双否定/交换（T6 卡坑 2：opp 腿显式走 trans）。    *)
+(*   件 0a + opp_plus/双否定/交换（T6 卡坑 2：opp 肢显式走 trans）。    *)
 (* ---------------------------------------------------------- *)
 Lemma real_kl_term_point_bridge :
   forall (p q : Real) (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
@@ -529,7 +529,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件：real_entropy_deficit_kl_temp（Id S04 L3903 逐槽对位）          *)
+(* 主件：real_entropy_deficit_kl_temp（Id S04 L3903 逐参数位对位）          *)
 (*   同约束能量 E(p) == E_T ⟹ S[p_T] − S[p] == KL(p‖p_T)。             *)
 (*   链：熵显式（T6）+ 同能量替换（β·E_T ↦ β·E(p)）+ 分解（件 4）反向。 *)
 (* ============================================================ *)
@@ -580,7 +580,7 @@ Proof.
                   real_sum_over_S_ext real_sum_over_S_linear real_sum_over_S_add
                   T T_pos energy)
                (real_eq_refl (real_opp Sp))).
-    + (* 腿 1b：同能量替换 β·E_T ↦ β·E(p)（Henergy 换载 + 逐字余项） *)
+    + (* 肢 1b：同能量替换 β·E_T ↦ β·E(p)（Henergy 换载 + 逐字余项） *)
       apply (RealSetoid.real_eq_plus_compat_adapt
                (real_plus (real_mult bta
                              (real_energy_exp_temp S real_sum_over_S real_sum_pos_preserved
@@ -601,7 +601,7 @@ Proof.
                      (real_eq_sym _ _ Henergy))
                   (real_eq_refl LZ))
                (real_eq_refl (real_opp Sp))).
-  - (* 腿 2：分解（件 4）反向完成 *)
+  - (* 肢 2：分解（件 4）反向完成 *)
     exact (real_eq_sym _ _
              (real_KL_temp_decomp p Hp Hnp)).
 Qed.

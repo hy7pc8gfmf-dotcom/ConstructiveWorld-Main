@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   ssg_half_eps_lt（原 L197，2 句玩具证）                               *)
 (*   ssg_quarter_eps_lt（原 L189，2 句玩具证）                            *)
@@ -14,10 +14,10 @@
 (* ============================================================ *)
 (* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 5 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 5 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
 (* 附记：T277 判级全文恒等；包P 整批直推（第二批；承 T321 §五·1）                             *)
@@ -29,17 +29,17 @@
 (* 目的： 把散落全库的 eps 拆分惯用法收敛为接口级命名引理族。      *)
 (*   半量/季量常数取 h := real_const (1#2)、q := real_const (1#4)， *)
 (*   与库内 Q 层 eps/2、eps/4 内联惯用法逐位同源（S07 log 界、     *)
-(*   SCFIX 终局严格步消费形 half·eps+qrt·eps<eps）。               *)
-(* 清单（2 助记 + 1 参数化母件① + 1 拆分恒等式② + 1 终局母定理③   *)
+(*   SCFIX 终局严格步依存形 half·eps+qrt·eps<eps）。               *)
+(* 清单（2 助记 + 1 参数化源模块① + 1 拆分恒等式② + 1 终局母定理③   *)
 (*       + 3 标准严格链④件）：                                     *)
 (*   [助记] ssg_eq_const_plus（常数和逐点恒等式）                    *)
 (*   [①参数化] ssg_lt_mul_one : c<1 -> 0<p -> p·c < p              *)
 (*     （实例 ssg_half_lt：p·(1/2) < p，即 p/2<p）                  *)
 (*   [②] ssg_half_add : p·(1/2) + p·(1/2) == p                    *)
-(*     （①的严格步组合底座：real_distrib + 常数和 + mult_one）      *)
+(*     （①的严格步组合基础模块：real_distrib + 常数和 + mult_one）      *)
 (*   [③终局母定理] ssg_half_quarter_eps_lt :                       *)
 (*     0<eps -> (1/2)·eps + (1/4)·eps < eps                        *)
-(*     （SCFIX 认定的终局严格步消费形参数化）                       *)
+(*     （SCFIX 认定的终局严格步依存形参数化）                       *)
 (*   [④标准严格链] ssg_h_lt_one / ssg_q_lt_one /                   *)
 (*     ssg_quarter_eps_lt / ssg_half_eps_lt                        *)
 (*     （0<1 经 const 序 + 乘法保序组合的战役就绪严格步）            *)
@@ -47,7 +47,7 @@
 (*   与 UpReqRealLtShiftBridge 互补（彼件供 Or 分解升温/平移桥，    *)
 (*   本件供常数乘子严格步，零相互 Require）。                       *)
 (* 关卡账：G1 七禁词 0；G2 全量绿；G3 全 Set/Prop 桥面零计算内容，  *)
-(*   以说明替代提取；G4 Assumptions 探针 + coqchk。                 *)
+(*   以说明替代提取；G4 Assumptions 检验 + coqchk。                 *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qring.
@@ -104,7 +104,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ ① 参数化母件：严格乘幺消去 p·c < p ============ *)
+(* ============ ① 参数化源模块：严格乘幺消去 p·c < p ============ *)
 (* c<1、0<p ⟹ p·c < p·1 == p（real_lt_mult_compat 左乘形 + 换形） *)
 Lemma ssg_lt_mul_one : forall c p : Real,
   real_lt c real_one -> real_lt real_zero p ->
@@ -123,7 +123,7 @@ Proof.
   exact (ssg_lt_mul_one ssg_h p ssg_h_lt_one Hp).
 Qed.
 
-(* —— ①左乘镜像：c·p < p（c<1、0<p） —— *)
+(* —— ①左乘副本：c·p < p（c<1、0<p） —— *)
 Lemma ssg_lt_mul_one_l : forall c p : Real,
   real_lt c real_one -> real_lt real_zero p ->
   real_lt (real_mult c p) p.
@@ -168,7 +168,7 @@ Proof.
 Qed.
 
 (* ============ ③ 终局母定理：half·eps + qrt·eps < eps ============ *)
-(* SCFIX 认定的消费形参数化。路线：                                *)
+(* SCFIX 认定的依存形参数化。路线：                                *)
 (*   h·e + q·e == e·h + e·q == e·(h+q) < e·one == e                *)
 (*   （(h+q)==3/4 与 3/4<1 的常数链 + 乘法保序）。                  *)
 Lemma ssg_half_quarter_eps_lt : forall eps : Real,
@@ -209,7 +209,7 @@ Proof.
 Qed.
 
 (* ============ ④ 标准严格链（战役就绪严格步） ============ *)
-(* q·eps < eps：季量乘幺消去（0<1 → q<1/2<1 链 + ①母件）            *)
+(* q·eps < eps：季量乘幺消去（0<1 → q<1/2<1 链 + ①源模块）            *)
 Lemma ssg_quarter_eps_lt : forall eps : Real,
   real_lt real_zero eps -> real_lt (real_mult ssg_q eps) eps.
 Proof.
@@ -217,7 +217,7 @@ Proof.
   exact (ssg_lt_mul_one_l ssg_q eps ssg_q_lt_one Heps).
 Qed.
 
-(* h·eps < eps：半量同构（①母件实例于 c:=h）                         *)
+(* h·eps < eps：半量同构（①源模块实例于 c:=h）                         *)
 Lemma ssg_half_eps_lt : forall eps : Real,
   real_lt real_zero eps -> real_lt (real_mult ssg_h eps) eps.
 Proof.
@@ -225,7 +225,7 @@ Proof.
   exact (ssg_lt_mul_one_l ssg_h eps ssg_h_lt_one Heps).
 Qed.
 
-(* ============ 关卡 G4：假设闭包探针（八件全 Closed 为过关判据） ==== *)
+(* ============ 关卡 G4：假设闭包检验（八件全 Closed 为过关判据） ==== *)
 Print Assumptions ssg_eq_const_plus.
 Print Assumptions ssg_lt_mul_one.
 Print Assumptions ssg_half_lt.

@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   mixa_qbern（原 L769，2 句玩具证）                                    *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
 (* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
@@ -29,10 +29,10 @@
 (*   k_select_log±le/min_real_below）。四关：G1 双轨 0、G2 full+vos 双    *)
 (*   EXIT=0+PA 25×Closed、G3 Obj.magic=0、G4 coqchk 通过。证据与对照表=   *)
 (*   attn/_tathP_交付报告-20260918.md。对存档稿 5 处陈述修正见报告 §3。   *)
-(* 【原绿核交付态】Q 二分核 + 量级定理 + 可判定哨兵 +   *)
+(* 【原绿核交付态】Q 二分核 + 量级定理 + 可判定锚 +   *)
 (*   单调桥 + Real 桥全套绿；Q-Bernoulli 窗口件 mixa_qbern 撞 Q-ring 墙  *)
 (*   （Q 只注册 Add Field 未注册 Add Ring），主件族 mixa_pow_budget_log  *)
-(*   等未合龙——fail-loud 显式挂账，见文末登记与 attn/_tathA_交付报告；   *)
+(*   等未闭合——fail-loud 显式遗留，见文末登记与 attn/_tathA_交付报告；   *)
 (*   完整起草稿（961 行含主件族）存 attn/_tathA_bak/。续席配方在案。     *)
 (* 使命：把 C10 mix_k_select 的返回 k 从线性量级压到对数量级。          *)
 (*   设计依据 AT11 报告三修正案：①窗口 Q 层自算（mixa_win，地板+2 形）； *)
@@ -41,15 +41,15 @@
 (*                                                                    *)
 (* 本件承载（前缀 mixa_，先 grep 零撞名）：                             *)
 (*   ① Q 核引擎：mixa_qpow_add_le/mixa_qpow_decr（igr_qpow 指数单调）；  *)
-(*      mixa_test（Qlt_bool 严格哨兵 κ₀^m·v<b₀）；mixa_test_mono；      *)
+(*      mixa_test（Qlt_bool 严格锚 κ₀^m·v<b₀）；mixa_test_mono；      *)
 (*      mixa_qbern（Q-Bernoulli：(1−w)^m·(1+m·w)≤1）；mixa_win_gt       *)
 (*      （窗口 K:=2+⌊v/(w₀b₀)⌋ ⟹ v<K·w₀b₀，零 ceil 面）；              *)
-(*      mixa_test_at_win（窗口处哨兵必真）。                            *)
+(*      mixa_test_at_win（窗口处锚必真）。                            *)
 (*   ② 二分核：mixa_bsearch（fuel+区间不变式）；mixa_bsearch_correct    *)
 (*      （通过+最小两账，fuel 界 S(hi−lo)≤2^f）；mixa_fuel_log（量级：   *)
 (*      S K ≤ 2^(⌊log₂(S K)⌋+1)，fuel 取 ⌊log₂K⌋+1 即足，每 fuel 结构上  *)
 (*      至多一次比较）；mixa_k_log_of（Defined 选择器）；                *)
-(*      mixa_sel_accounts（三账打包）。                                 *)
+(*      mixa_sel_accounts（三账封装）。                                 *)
 (*   ③ 有理化归约链：mixa_k0_bridge（real_lt kappa real_one 的 sigT      *)
 (*      见证 ⟹ κ₀∈Q∩(0,1) 且 κ<κ₀；eps≥2 取 1/2，eps<2 取 1−eps/2）；   *)
 (*      mixa_b0_bridge（real_lt zero budget ⟹ b₀:=eps/2 严格下内点）；   *)
@@ -57,21 +57,21 @@
 (*      mixa_prod_le（回传链换底幂单调×乘积单调）；mixa_const_mult/     *)
 (*      mixa_rpow_const（tv_rpow(real_const q)==real_const(igr_qpow q)）。*)
 (*   ④ 主件（全 Defined）：mixa_pow_budget_log_cert（证书形核心）；      *)
-(*      mixa_pow_budget_log（与 C10 mix_pow_budget 同前件面，real_arch   *)
-(*      兜底 TV₀′）；mixa_k_select_log（非负放宽+显式有理上界证书前件；  *)
+(*      mixa_pow_budget_log（与 C10 mix_pow_budget 同前提面，real_arch   *)
+(*      兜底 TV₀′）；mixa_k_select_log（非负放宽+显式有理上界证书前提；  *)
 (*      TV₀==0 支 k:=0）；mixa_k_select_log_le。                        *)
 (*   ⑤ 伴生强声明（本赛车独有）：mixa_pow_budget_log_min（返回 k 为      *)
-(*      可判定 Q 哨兵的精确最小通过站——k 通过 ∧ k 以下全不通过；线性     *)
+(*      可判定 Q 锚的精确最小通过站——k 通过 ∧ k 以下全不通过；线性     *)
 (*      real_arch 代无此声明）；mixa_min_real_below（Real 回传：j<k ⟹    *)
 (*      real_const b₀ ≤ κ₀^j·v——证书零松弛时即 Real 真最小步下向界）。   *)
 (*                                                                    *)
 (* 公理面自审：本件零新增公理；前提全为 Set 层显式证书（real_lt 的       *)
 (*   sigT(eps:Q×QltT 0 eps×N) 编码 / real_le 的 Or 编码 / sigT 证书）；  *)
 (*   文末 Print Assumptions 预期全 Closed。主件 sigT 载荷全 Set；伴生    *)
-(*   三账的 bool 等式与 Prop 合取照抄 igr_k_select_min 分工（Qed 消费    *)
+(*   三账的 bool 等式与 Prop 合取照抄 igr_k_select_min 分工（Qed 依存    *)
 (*   件，不入提取签名）。                                               *)
 (* 红线自审：纯构造性（判定全压 Q 层 Qlt_bool/Qle_bool；Real 层只进不出  *)
-(*   的严格链消费）；Defined 选择器体内零 Prop 消去（纯布尔 match）；    *)
+(*   的严格链依存）；Defined 选择器体内零 Prop 消去（纯布尔 match）；    *)
 (*   诚实边界：①量级=结构上界（fuel=⌊log₂K⌋+1、每 fuel 至多一次比较），  *)
 (*   未声明比较次数下界；②窗口取 2+⌊x⌋ 比 AT11 处方 1+⌈x⌉ 松常数 1 档，   *)
 (*   换取零上取整除法面；③κ₀/b₀/TV₀′ 三层证书松弛不受控，k 与经典       *)
@@ -94,7 +94,7 @@ Local Open Scope Q_scope.
 
 (* Q 只注册了 Add Field 未注册 Add Ring——Qeq 面的 ring 须先展开到 Z 面
    （Qeq/Qnum/Qmult/Qplus/Qminus/Qopp 全 unfold + simpl 归约投影，
-   落到 Z 环账后再 ring；承 C10 mix_const_succ 的 unfold-先行的坑卡口径） *)
+   落到 Z 循环依赖清单后再 ring；承 C10 mix_const_succ 的 unfold-先行的坑卡口径） *)
 Ltac mixa_ring :=
   unfold Qeq, Qnum, Qmult, Qplus, Qminus, Qopp in *;
   simpl in *;
@@ -168,7 +168,7 @@ Proof.
 
 Qed.
 (* real_const 严格序的 Q 反射：real_lt real_zero (real_const a) ⟹ 0 < a
-   （常值序列直读证书，零 real_eq 消费——real_eq 系 eps-逼近形非逐点形） *)
+   （常值序列直读证书，零 real_eq 依存——real_eq 系 eps-逼近形非逐点形） *)
 Lemma mixa_const_lt_inv0 : forall (a : Q) (x : Real),
   real_lt real_zero (real_const a) -> Qlt 0 a.
 Proof.
@@ -219,7 +219,7 @@ Proof.
       * exact (qeq_le _ _ (Qmult_1_l (igr_qpow q m))).
 
 Qed.
-(* Q 层严格哨兵：κ₀^m·v < b₀（精确可判定） *)
+(* Q 层严格锚：κ₀^m·v < b₀（精确可判定） *)
 Definition mixa_test (k0 v b0 : Q) (m : nat) : bool :=
   Qlt_bool (Qmult (igr_qpow k0 m) v) b0.
 
@@ -346,7 +346,7 @@ Proof.
   destruct (Nat.log2_spec (Datatypes.S K) ltac:(lia)) as [_ Hlt].
   apply Nat.lt_le_incl. exact Hlt.
 Qed.
-(* Defined 选择器 mixa_k_log_of：挂账③（依赖 mixa_win 窗口件，见文末登记） *)
+(* Defined 选择器 mixa_k_log_of：遗留③（依赖 mixa_win 窗口件，见文末登记） *)
 
 (* ============================================================ *)
 (* Part 3：Real 桥（有理化归约链）                                       *)
@@ -407,7 +407,7 @@ Proof.
            exact (real_mult_comm (tv_rpow k0c k) k0c).
 
 Qed.
-(* 乘积单调合并腿：A ≤ B ∧ x ≤ y ∧ 0 ≤ x ∧ 0 ≤ B ⟹ A·x ≤ B·y *)
+(* 乘积单调合并肢：A ≤ B ∧ x ≤ y ∧ 0 ≤ x ∧ 0 ≤ B ⟹ A·x ≤ B·y *)
 Lemma mixa_prod_le : forall (A B x y : Real),
   real_le A B -> real_le x y -> real_le real_zero x ->
   real_le real_zero B ->
@@ -430,31 +430,31 @@ Definition mixa_k0 (eps : Q) : Q :=
 
 Definition mixa_b0 (eps : Q) : Q := eps * (1#2).
 
-(* mixa_k0_bridge / mixa_b0_bridge 有理化提取桥：挂账（文末登记）,完整实现体 *)
+(* mixa_k0_bridge / mixa_b0_bridge 有理化提取桥：遗留（文末登记）,完整实现体 *)
 (* 存 attn/_tathA_bak/UpReqMixLogA_v1_full_draft.v:415-479 *)
 
 
 (* ============================================================ *)
-(* 挂账登记（fail-loud，显式申报）                                       *)
+(* 遗留登记（fail-loud，显式申报）                                       *)
 (* ============================================================ *)
 (* 以下机件本席位内未达绿，完整起草稿存 attn/_tathA_bak/               *)
-(* UpReqMixLogA_v1_full_draft.v（961 行），挂账四处：                   *)
+(* UpReqMixLogA_v1_full_draft.v（961 行），遗留四处：                   *)
 (*   ① mixa_qbern（Q-Bernoulli）：le_S 分支的代数恒等式                 *)
 (*      (1−w)·(B+w) == B − (c·w)·w（B==1+m'·w, c==m'+1）在 Qeq 面的     *)
 (*      ring 撞墙——本环境 Q 只注册 Add Field(Qfield.v:76) 未注册        *)
 (*      Add Ring，Q-eq 上 ring/field 均「not a valid (field) equation」；*)
-(*      lia/nia 不展开 Q-mult 的和积结构（探针实证 _tathA_probe.v）。    *)
+(*      lia/nia 不展开 Q-mult 的和积结构（检验实证 _tathA_probe.v）。    *)
 (*      升级路径：照 C10 mix_ring_sc 的 Z 面配对展开引理口径，或以       *)
 (*      Qmult_minus/plus_distr 引理链逐项重写（链已起草于存档稿）。      *)
 (*   ② mixa_win_gt / mixa_test_at_win / mixa_win：依赖①的窗口件。       *)
-(*   ③ mixa_sel_accounts / mixa_k_log_of 主接线：依赖②。                *)
+(*   ③ mixa_sel_accounts / mixa_k_log_of 主实例化：依赖②。                *)
 (*   ④ mixa_pow_budget_log(_cert/_min) / mixa_k_select_log(_le) /        *)
 (*      mixa_min_real_below 主件族：依赖③。                             *)
 (* 绿核交付面：Q 二分核（mixa_bsearch_correct+mixa_fuel_log 量级定理）   *)
 (* 完整实现体续上注 *)
-(*   + 可判定哨兵 mixa_test/单调/双向桥 + 有理化归约链桥（k0/b0 提取、   *)
+(*   + 可判定锚 mixa_test/单调/双向桥 + 有理化归约链桥（k0/b0 提取、   *)
 (*   const_lt_inv0、rpow/prod 单调、const/rpow 精确桥）——续席按存档稿   *)
-(*   ④→③→②→① 顺序回填即可合龙。                                        *)
+(*   ④→③→②→① 顺序回填即可闭合。                                        *)
 
 Extraction "_tathA_G3.ml" mixa_bsearch mixa_test mixa_k0 mixa_b0
   mixa_qpow_decr mixa_test_mono mixa_qlt_test.
@@ -472,10 +472,10 @@ Print Assumptions mixa_qpow_decr.
 Print Assumptions mixa_qnonneg.
 Print Assumptions mixa_qmult_pos.
 (* ============================================================ *)
-(* Part 5：PIT 续作段（tathP 接管 tathA 挂账回填，2026-09-18）          *)
+(* Part 5：PIT 续作段（tathP 接管 tathA 遗留回填，2026-09-18）          *)
 (*   配方=A 报告§三（①qbern→②win/test_at_win→③k_log_of/sel_accounts   *)
 (*   →④k0/b0_bridge+主件族）。Q-ring 墙解法=Z 面展开（destruct 配对 +   *)
-(*   cbn 白名单 + Z.pos 积分裂 + ring），探针 _tathP_sbx 预验证绿。      *)
+(*   cbn 白名单 + Z.pos 积分裂 + ring），检验 _tathP_sbx 预验证绿。      *)
 (*   igr_qpow 语境的 Qeq 恒等式不走 Z 面（投影卡死=假原子），改 stdlib  *)
 (*   Qeq 引理链（Qmult_comp/assoc）；Qle 代数尾目标 cbn 后 nia。         *)
 (* ============================================================ *)
@@ -526,7 +526,7 @@ Proof.
   ring.
 Qed.
 
-(* 减法重排桥：支B 同型泛化（探针 p_sub_swap 绿） *)
+(* 减法重排桥：支B 同型泛化（检验 p_sub_swap 绿） *)
 Lemma mixa_qsub_swap : forall x e k : Q, Qeq ((x - e) - k) ((-e) + (x - k)).
 Proof.
   intros [xa xd] [ea ed] [ka kd].
@@ -678,7 +678,7 @@ Proof.
 Qed.
 
 
-(* 半量辅助：e ≥ 2 ⟹ e·½ ≤ e−½；0 ≤ e ⟹ e·½ ≤ e（桥的 ∀n 腿承重） *)
+(* 半量辅助：e ≥ 2 ⟹ e·½ ≤ e−½；0 ≤ e ⟹ e·½ ≤ e（桥的 ∀n 肢承重） *)
 Lemma mixa_qhalf_le_sub : forall e : Q, Qle (2#1) e ->
   Qle (e * (1#2)) (e - (1#2)).
 Proof.
@@ -855,7 +855,7 @@ Proof.
   unfold Qlt. cbn [Qnum Qden Qmult Pos.mul]. rewrite HZ2. nia.
 Qed.
 
-(* 窗口处哨兵必真（换基 bernoulli 直取，免改写穿 igr_qpow） *)
+(* 窗口处锚必真（换基 bernoulli 直取，免改写穿 igr_qpow） *)
 Lemma mixa_test_at_win : forall k0 v b0 : Q,
   Qlt 0 k0 -> Qlt k0 (1#1) -> Qlt 0 v -> Qlt 0 b0 ->
   mixa_test k0 v b0 (mixa_win v (1 - k0) b0) = true.
@@ -969,7 +969,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* ③ 选择器接线：mixa_k_log_of / mixa_sel_accounts                      *)
+(* ③ 选择器实例化：mixa_k_log_of / mixa_sel_accounts                      *)
 (* ============================================================ *)
 Definition mixa_k_log_of (k0 v b0 : Q) : nat :=
   mixa_bsearch (mixa_test k0 v b0)

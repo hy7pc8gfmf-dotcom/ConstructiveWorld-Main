@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   bxcb_term_split（原 L129，2 句强证）	*)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、Require 面零改动，语句                               *)
 (* 面仅 ToyR 既有追印面（Print Assumptions）未触；台账承载见 T277／T284／T317／T321／T329。  *)
 (* 附记：T281（包AP）BinomBridge 删件回补已闭环、check 锚在案，09-22 00:20＝回补重落波非补刀波（T321 §五·2 解禁；本席执行时 md5 与在案回补态逐字同）；追印变体措辞首用件 *)
@@ -22,7 +22,7 @@
 (* ============================================================ *)
 (* UpReqBanachBinomBridge.v —— 席CBR：二项式系数桥（20260913）     *)
 (* ============================================================ *)
-(* 使命（BA 报告挂账③原文）：「系数桥：bpa_binom（Pascal 递归形）  *)
+(* 使命（BA 报告遗留③原文）：「系数桥：bpa_binom（Pascal 递归形）  *)
 (*   ↔ q_choose（阶乘比形）等价件，供下游 #29 exp_term_split       *)
 (*   （C(k,j)/k! = 1/(j!(k−j)!)）。」                             *)
 (*                                                               *)
@@ -44,7 +44,7 @@
 (*   q_choose_0/q_choose_n、阶乘比分裂 q_choose_div_fact 全部取自   *)
 (*   冻结 S07 ExpPlusStage2（B2Tv2 卡点名 L940-1600）；bpr2_q_choose *)
 (*   （UpReqBanachProd2）与 q_choose 定义同构（delta 级），薄桥     *)
-(*   bxcb_binom_eq_bpr2 接线分工。本文件零新算术引擎，纯桥接组装。  *)
+(*   bxcb_binom_eq_bpr2 实例化分工。本文件零新算术引擎，纯桥接组装。  *)
 (*                                                               *)
 (* 红线自审：语句面全 Qeq（S07 同款面），nat 前提 (<=)%nat；证内    *)
 (*   无经典逻辑（Nat.eq_dec 是 Set 层 sumbool）；无承认件。         *)
@@ -112,7 +112,7 @@ Proof.
         (* 项序与 sub 双坑：q_choose_succ 尾项是 (S k'−1)（变量 k' 下
            Nat.sub 不约化，S-形免截断手法的对照坑），lia 桥 nat 层等式
            换回 k'；bpa 定义形 k' 项在前，Qplus 非定义性交换再换位——
-           两步后两侧同形，Qeq_refl 收口 *)
+           两步后两侧同形，Qeq_refl 闭合 *)
         assert (Esub : (Datatypes.S k' - 1)%nat = k'%nat) by lia.
         rewrite Esub.
         setoid_rewrite (Qplus_comm (q_choose n' k') (q_choose n' (Datatypes.S k'))).
@@ -120,7 +120,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3：哨兵数值面（reflexivity/vm_compute 级烟测）                 *)
+(* S3：锚数值面（reflexivity/vm_compute 级烟测）                 *)
 (* ============================================================ *)
 
 Lemma bxcb_sentinel_bpa_4_2 : bpa_binom 4%nat 2%nat == (6 # 1)%Q.
@@ -129,11 +129,11 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma bxcb_sentinel_qchoose_4_2 : q_choose 4%nat 2%nat == (6 # 1)%Q.
 Proof. vm_compute. reflexivity. Qed.
 
-(* 桥上对账：主桥在 (4,2) 的直接实例 ==6 两侧一致 *)
+(* 桥上核验：主桥在 (4,2) 的直接实例 ==6 两侧一致 *)
 Lemma bxcb_sentinel_bridge_4_2 : bpa_binom 4%nat 2%nat == q_choose 4%nat 2%nat.
 Proof. apply bxcb_binom_eq_choose. lia. Qed.
 
-(* 出界哨兵对（反例实形入账）：n=1,k=2 两侧分歧——bpa 侧 0，        *)
+(* 出界锚对（反例实形入账）：n=1,k=2 两侧分歧——bpa 侧 0，        *)
 (* q_choose 侧 1!/2! = 1/2（Qinv (2#1)）；两件合账即证无假设全值域    *)
 (* 桥不可立，语义对齐 (k<=n) 面为必需。                            *)
 Lemma bxcb_sentinel_out_bpa_1_2 : bpa_binom 1%nat 2%nat == 0%Q.
@@ -145,9 +145,9 @@ Proof. vm_compute. reflexivity. Qed.
 (* ============================================================ *)
 (* S4：主件 bxcb_term_split——C(k,j)/k! == 1/(j!·(k−j)!)            *)
 (*                                                               *)
-(* 下游 #29 exp_term_split 消费形。S07 已有同型原件                 *)
+(* 下游 #29 exp_term_split 依存形。S07 已有同型原件                 *)
 (*   q_choose_div_fact（B2Tv2 卡点名），复用不重写；另附 BA 侧      *)
-(*   （bpa 系数）消费形 bxcb_term_split_binom。                    *)
+(*   （bpa 系数）依存形 bxcb_term_split_binom。                    *)
 (* ============================================================ *)
 
 Lemma bxcb_term_split : forall k j : nat,
@@ -166,7 +166,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S5：薄桥——bpr2_q_choose（Prod2 阶乘比双层移植形）接线           *)
+(* S5：薄桥——bpr2_q_choose（Prod2 阶乘比双层移植形）实例化           *)
 (*                                                               *)
 (* bpr2_q_choose n k := q_fact n / (q_fact k * q_fact (Nat.sub n k)) *)
 (* 与 q_choose n k 定义同构（delta 级），change 换形后主桥直用。    *)
@@ -183,10 +183,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G3 探针记录（验后删，20260913）：四件 Print Assumptions 全部      *)
+(* G3 检验记录（验后删，20260913）：四件 Print Assumptions 全部      *)
 (*   「Closed under the global context」；Separate Extraction       *)
 (*   UpReqBanachBinomBridge.ml Obj.magic 计数 =0；coqchk -o 全件     *)
-(*   公理面 none。探针已删，终版无提取输出。                         *)
+(*   公理面 none。检验已删，终版无提取输出。                         *)
 (* ============================================================ *)
 
 (* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)

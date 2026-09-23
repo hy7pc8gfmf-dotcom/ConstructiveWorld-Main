@@ -4,7 +4,7 @@
 (* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
 (* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
 (* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
-(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 逐件守恒，纯构造性闭合，文尾保留原件 Print Assumptions 追印面。    *)
 (* 清单：                                                          *)
 (*   c3e_real_zero_proj（原 L165，显式见证微刀 1 处）                        *)
 (*   c3e_ln2_proj（原 L471，显式见证微刀 1 处）                              *)
@@ -21,9 +21,9 @@
 (*   （Bishop 形 real_le_b，Q4 evd 接口同形），一母三子              *)
 (*   （c3e_env_ln2 / c3e_env_e / c3e_env_pi 实例）。                *)
 (*                                                                *)
-(* EXPL1 判词（五处 inline 位点实测，重整化流信号=待合并同型重复）：   *)
-(*   ① e×3：S03_QExp.v:702 / :1058 / :1139 三处消费                 *)
-(*      exp_tail_abs_geom2（:622，全库最高供体消费之一）做同型          *)
+(* EXPL1 结论（五处 inline 位点实测，重整化流信号=待合并同型重复）：   *)
+(*   ① e×3：S03_QExp.v:702 / :1058 / :1139 三处依存                 *)
+(*      exp_tail_abs_geom2（:622，全库最高供体依存之一）做同型          *)
 (*      「部分和±尾界」包络推理；                                    *)
 (*   ② π×2：S10_KVQuantTrig.v:8807 real_pi_leibniz_lt_ten_thirds    *)
 (*      与 :8830 real_pi_leibniz_between_tenthirds——手搓「常数+余量   *)
@@ -31,13 +31,13 @@
 (*      桥（级数尾账）。                                             *)
 (*   ③ ln2：G05_LogSmall.v:976 logd_log_two_pos_real——正性假设面，     *)
 (*      本席 ln2 子件自建交错调和柯西实数与之独立并存（对接            *)
-(*      real_log 2 需 log_seq 桥，独立工程，挂账）。                  *)
+(*      real_log 2 需 log_seq 桥，独立工程，遗留）。                  *)
 (*                                                                *)
 (* 分层：                                                           *)
 (*   S0 Q 层小件：三分拆、|z| 双侧界、sub_le_self、倒数比较。          *)
 (*   S1 母定理 c3e_env_mother：lo := s0 − t0、hi := s0 + t0 给        *)
 (*        real_le_b (real_const lo) x ≤_B ≤_B real_le_b x (real_const hi) *)
-(*        且 hi − lo == 2·t0（sigT 打包 lo hi）。                     *)
+(*        且 hi − lo == 2·t0（sigT 封装 lo hi）。                     *)
 (*        形态校准注记：任务书「hi−lo ≤ tail n」按证书语义落为          *)
 (*        hi−lo == 2·t0（t0 为单边宽度，双侧端点各让一步）；           *)
 (*        Bishop 形 = Q4 接口预埋（evd_le_b_mult_pos_l 同形族，        *)
@@ -45,10 +45,10 @@
 (*   S2 ln2 子件（全构造性自建单跳）：交错调和配对正项级数              *)
 (*        Σ(1/(2j+1)−1/(2j+2))，伸缩尾界 1/(2n+2)，自建柯西实数        *)
 (*        c3e_ln2_real，经母定理导出。                                *)
-(*   S3 e 子件：消费 exp_tail_abs_geom2（S03:622）链——                *)
+(*   S3 e 子件：依存 exp_tail_abs_geom2（S03:622）链——                *)
 (*        exp_tail_abs_le → exp_tail_abs_geom2 实例化于 A=1，换        *)
 (*        Real 层（exp_const_proj 投影桥），经母定理导出。             *)
-(*   S4 π 子件：消费 sc_lp_odd_diff_bound（S10:2787 级数尾件在盘，     *)
+(*   S4 π 子件：依存 sc_lp_odd_diff_bound（S10:2787 级数尾件在盘，     *)
 (*        任务书预判的「级数尾缺件降档」不发生，全形态导出）+           *)
 (*        real_pi_leibniz_proj 投影桥，经母定理导出。                  *)
 (*   S5 G3 速率：c3e_env_rate（模量线性族 N_c(eps) 形，与论文 3        *)
@@ -58,7 +58,7 @@
 (*        速率件如实从缺）。                                          *)
 (*                                                                *)
 (* 领土：本件独立新文件，零改他席产物；在飞禁碰件未触碰。              *)
-(* Require 仅消费 .vo 基座：CW_ConstructiveWorld_219（S01..S15       *)
+(* Require 仅依存 .vo 基座：CW_ConstructiveWorld_219（S01..S15       *)
 (*   Require Export 聚合面）、UpRealLeB（real_le_b 完成件）。         *)
 (*                                                                *)
 (* 【公理面】本件零新公理、零假设位、零经典公理；              *)
@@ -497,12 +497,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3. e 子件：消费 exp_tail_abs_geom2 链换 Real 层                  *)
+(* S3. e 子件：依存 exp_tail_abs_geom2 链换 Real 层                  *)
 (* ============================================================ *)
 
 (* e 子件：x := e^1 的柯西实数，s n := exp_partial n 1，
    t n := (1^n/n!)·2（exp_tail_abs_geom2 实例化于 A=1，须 n ≥ 1）。
-   消费链：exp_tail_abs_le（|tail| ≤ tail_abs）→ exp_tail_abs_geom2
+   依存链：exp_tail_abs_le（|tail| ≤ tail_abs）→ exp_tail_abs_geom2
    （S03:622 供体）→ 母定理换 Real 层。 *)
 Theorem c3e_env_e : forall n : nat, (1 <= n)%nat ->
   sigT (fun lo : Q => sigT (fun hi : Q =>
@@ -552,7 +552,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S4. π 子件：消费 sc_lp_odd_diff_bound 级数尾换 Real 层             *)
+(* S4. π 子件：依存 sc_lp_odd_diff_bound 级数尾换 Real 层             *)
 (* ============================================================ *)
 
 (* π 子件：x := π_L = Cauchy(4·lp_odd)，s n := 4·lp_odd n（即 π_L 自身

@@ -1,6 +1,6 @@
 (* ===================================================================== *)
 (* UpAblP6_StateSpace_inst.v —— PA6-34 席：SecondLawQuantified 残面②      *)
-(*   「任意 StateSpace 非平凡实例」（PA6-23/T231 收口留账另账）兑现件。    *)
+(*   「任意 StateSpace 非平凡实例」（PA6-23/T231 闭合留账另账）兑现件。    *)
 (* --------------------------------------------------------------------- *)
 (* 【使命】上游节参载体类 Class StateSpace (RI : RealInterface)            *)
 (*   （S01_BaseRing.v:1158，21 字段：S/四运算/八代数律/smetric+四度量律/  *)
@@ -8,7 +8,7 @@
 (*   （R 自状态空间，S01:1222）；S06:3093 ListStateSpace 节仅散定义不满律。*)
 (*   本席给出第二个满律非平凡实例：R×R 乘积载体（L1 度量、逐点线性结构、   *)
 (*   双分量 lim 收敛），≥3 态（(0,0)/(1,0)/(0,1) 两两非 Id 真证），       *)
-(*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 消费件）。   *)
+(*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 依存件）。   *)
 (* 【有限载体不可能性（如实落账）】bool×bool/三态枚举等有穷载体满律在      *)
 (*   数学上关闭：inv_pos 对正整数标量 fourR=1+1+1+1 给逆（fourR>0 由      *)
 (*   one_pos+lt_plus_compat 真证），任意标量 a=fourR·(a·inv fourR)        *)
@@ -18,12 +18,12 @@
 (*   因而非平凡实例取无穷载体 R×R（≥3 态面由三钉定理钉死）。               *)
 (* 【红线自审】出口面全 Set 层 Id/le/lt（Id=S01:61 ML 恒等型，id_sym/     *)
 (*   id_trans/id_cong 链）；零缺口声明语句；全部定理类枚 Proof 配 Qed     *)
-(*   收口（无一例外）；Print Assumptions 5 处留痕；uab34_ 前缀全库防撞。   *)
-(* 【供体（全 @ 全参调用，cw czn14 探针实测）】RI 场律/序律/度量/lim 系    *)
+(*   闭合（无一例外）；Print Assumptions 5 处留痕；uab34_ 前缀全库防撞。   *)
+(* 【供体（全 @ 全参调用，cw czn14 检验实测）】RI 场律/序律/度量/lim 系    *)
 (*   =RealInterface 字段；one_pos/lt_plus_compat/le_plus_compat           *)
 (*   =RealInterfaceEnhanced 字段（S01:216-222）；idt_sumf/idt_list_sum/   *)
 (*   idt_sum_eq_list/idt_slot_g01=IdSlotTranslate 节件（Context {RI}{SS}  *)
-(*   消费 StateSpace 的上游一锚）；AttnDoeblin.bs_list_sum（出节真机）。   *)
+(*   依存 StateSpace 的上游一锚）；AttnDoeblin.bs_list_sum（出节真机）。   *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -39,7 +39,7 @@ Section ProdRR.
 Context {RIE : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-Let Rb := @RI_base RIE.              (* RealInterface 槽 *)
+Let Rb := @RI_base RIE.              (* RealInterface 参数位 *)
 Let RR := prod (@R Rb) (@R Rb).      (* 实数积对载体型（字面积型，投影 R 卡死项不可作积展开） *)
 
 (* ---- 乘积运算/度量/收敛（全 @ 全参，逐点定义） ---- *)
@@ -86,7 +86,7 @@ Definition uab34_plus_swap (x y z w : @R Rb) :
         (id_trans (id_cong (fun t => @plus Rb x t) (id_sym (@plus_assoc Rb z y w)))
                   (@plus_assoc Rb x z (@plus Rb y w))))).
 
-(* ---- 度量的分量控制腿：m(fx,fy) ≤ m1+m2 与 m(sx,sy) ≤ m1+m2 ---- *)
+(* ---- 度量的分量控制肢：m(fx,fy) ≤ m1+m2 与 m(sx,sy) ≤ m1+m2 ---- *)
 Definition uab34_metric_le_l (x y : RR) :
   @le Rb (@metric Rb (fst x) (fst y)) (uab34_pmetric x y) :=
   le_id_l (@metric Rb (fst x) (fst y))
@@ -346,7 +346,7 @@ End ProdRR.
 (* ============================================================ *)
 (* §三 有限载体不可能性（形式化落账）：逐点平方律载体必退化单点    *)
 (* ============================================================ *)
-(*   对任意抽象 StateSpace（任意 RIE 槽），若载体满足逐点平方律    *)
+(*   对任意抽象 StateSpace（任意 RIE 参数位），若载体满足逐点平方律    *)
 (*   x+x==0，则标量作用经 fourR=1+1+1+1 的正逆除法四折叠合，      *)
 (*   smult_one 迫每个载体元素 Id szero——bool×bool/枚举类有限      *)
 (*   载体满律路线由此定理数学关闭，非平凡实例必须取无穷载体。      *)
@@ -409,7 +409,7 @@ Proof.
   assert (H2 : Id (@mult Rb fourR c)
                   (@plus Rb (@mult Rb twR c) (@mult Rb twR c))).
   { exact (@uab34_mult_distrib_l RIE twR twR c). }
-  (* H3：单腿 smult (mult twR c) y == cy+cy（distrib+分配_l+左幺） *)
+  (* H3：单肢 smult (mult twR c) y == cy+cy（distrib+分配_l+左幺） *)
   assert (H3 : Id (@smult Rb SSc (@mult Rb twR c) y)
                   (@splus Rb SSc cy cy)).
   { exact (id_trans
@@ -427,7 +427,7 @@ Proof.
                            (id_cong (fun t => @smult Rb SSc t y)
                                     (id_trans (@mult_comm Rb (@one Rb) c)
                                               (@mult_one Rb c))))))). }
-  (* H4：smult (mult fourR c) y == (cy+cy)+(cy+cy)（H2 装配+分配_l+H3 双腿） *)
+  (* H4：smult (mult fourR c) y == (cy+cy)+(cy+cy)（H2 装配+分配_l+H3 双肢） *)
   assert (H4 : Id (@smult Rb SSc (@mult Rb fourR c) y)
                   (@splus Rb SSc (@splus Rb SSc cy cy) (@splus Rb SSc cy cy))).
   { exact (id_trans (id_cong (fun t => @smult Rb SSc t y) H2)
@@ -458,17 +458,17 @@ Qed.
 End FiniteCollapse.
 
 (* ============================================================ *)
-(* §四 一锚定理实例面：上游 StateSpace 消费件在本载体上的兑现      *)
+(* §四 一锚定理实例面：上游 StateSpace 依存件在本载体上的兑现      *)
 (* ============================================================ *)
-(*   IdSlotTranslate 节（Context {RI}{SS} 消费 StateSpace，无     *)
-(*   SumOver 前提）之求和槽翻译件/宿主核销定理在 R×R 载体上实例化。*)
+(*   IdSlotTranslate 节（Context {RI}{SS} 依存 StateSpace，无     *)
+(*   SumOver 前提）之求和参数位翻译件/宿主核销定理在 R×R 载体上实例化。*)
 
 Section Anchor.
 
 Context {RIE : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-(* 槽装配面：求和槽（list 折叠机）与翻译机在本载体上恒等 *)
+(* 参数位装配面：求和参数位（list 折叠机）与翻译机在本载体上恒等 *)
 Theorem uab34_idt_sum_eq_list_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))
          (g : @S (@RI_base RIE) uab34_prodRR -> @R (@RI_base RIE)),
@@ -480,7 +480,7 @@ Proof.
 Qed.
 
 (* 一锚定理：idt_slot_g01（宿主 AttnDoeblin.bs_list_sum 真机核销）
-   在本实例上的实例面——上游 StateSpace 消费定理首次在本载体放电 *)
+   在本实例上的实例面——上游 StateSpace 依存定理首次在本载体实例化消解 *)
 Theorem uab34_idt_slot_g01_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))
          (g : @S (@RI_base RIE) uab34_prodRR -> @R (@RI_base RIE)),

@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   pds_qlt0_eq_r（原 L96，2 句玩具证）                                  *)
 (* ============================================================ *)
@@ -27,7 +27,7 @@
 (*              (fun k => q_pow (-1) k * (pade_coeff n k * q_pow x k)) *)
 (*   n=1 时为两项交错和 Q_1(x) = 1 − x/2，于 0<x<2 为正。            *)
 (*   本件证：S1 n=0 恒一+正、S2 主件 pds_den1_pos（0<x<2 ⟹ 正）、    *)
-(*   S3 哨兵交叉 pds_den1_half（与 PC 哨兵 Q_1(1/2)=3/4 数值核对）。  *)
+(*   S3 锚交叉 pds_den1_half（与 PC 锚 Q_1(1/2)=3/4 数值核对）。  *)
 (*                                                                 *)
 (* 方法注记：                                                       *)
 (*   ① 语句面全 Set 层 QltT（S02:26，Id-of-bool 形）；证内 Prop 序   *)
@@ -75,7 +75,7 @@ Proof.
   intro f. cbn [sum_upto]. cbv beta. ring.
 Qed.
 
-(* n=1 闭式系数哨兵（PC 哨兵件 pade_den_1_half 同款 vm_compute 口径：
+(* n=1 闭式系数锚（PC 锚件 pade_den_1_half 同款 vm_compute 口径：
    Nat.sub 截断坑或交错符号写反即红）。 *)
 Lemma pds_c10 : pade_coeff 1 0%nat == 1%Q.
 Proof. vm_compute. reflexivity. Qed.
@@ -84,7 +84,7 @@ Lemma pds_c11 : pade_coeff 1 1%nat == (1#2)%Q.
 Proof. vm_compute. reflexivity. Qed.
 
 (* 显式形：Q_1(x) == 1 + (−1)·(1/2)·x——两项交错和的语义面。
-   分裂 + q_pow 指标位 change + 系数哨兵改写 + ring 完成
+   分裂 + q_pow 指标位 change + 系数锚改写 + ring 完成
    （Qopp 原子挂乘积结构，ring 直绿不触 E313）。 *)
 Lemma pds_den1_expl : forall x : Q, pade_den 1 x == 1%Q + (- (1#2)%Q) * x.
 Proof.
@@ -99,8 +99,8 @@ Proof.
   ring.
 Qed.
 
-(* Qeq 右换桥（本件最小传桥件）：a == b 时 0<a 传 0<b。
-   AA12 腿化：语句面不变，证明体退化为自建 Q 单调腿一跳
+(* Qeq 右换桥（本件最小传桥接引理）：a == b 时 0<a 传 0<b。
+   AA12 肢化：语句面不变，证明体退化为自建 Q 单调肢一跳
    （UpReqPadeQLeg.pql_qlt0_eq_r，Z 乘法单调显式装配 + lia，
    断根 Psatz/micromega 环境闭包）。 *)
 Lemma pds_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
@@ -128,15 +128,15 @@ Proof.
     + apply (proj1 (Qlt_minus_iff x (2#1))). exact H2.
 Qed.
 
-(* ===== S3 加分：哨兵交叉 ===== *)
+(* ===== S3 加分：锚交叉 ===== *)
 
-(* Q_1(1/2) > 0：与 PC 哨兵 pade_den_1_half（Q_1(1/2) == 3/4）
+(* Q_1(1/2) > 0：与 PC 锚 pade_den_1_half（Q_1(1/2) == 3/4）
    数值核对——Qlt_bool 0 (3/4) 闭式归 true，vm_compute 直绿。 *)
 Lemma pds_den1_half : QltT 0 (pade_den 1 (1#2)).
 Proof. unfold QltT. vm_compute. reflexivity. Qed.
 
 (* ===== 显式假设登记（通用 n 版 den_pos，禁硬凑） =====
-   通用 n 的 den_pos 接线图（下一批，30 分钟预算内诚实显式假设）：
+   通用 n 的 den_pos 实例化图（下一批，30 分钟预算内诚实显式假设）：
      den(x) := altsum (fun k => pade_coeff n k * q_pow x k) (n+1)
      （PC2 引擎出口，UpReqAltSumPos.v）；
    逐项非负（pade_coeff_pos）+ 相邻递减
@@ -146,7 +146,7 @@ Proof. unfold QltT. vm_compute. reflexivity. Qed.
    升 QltT 0（本件 n=1 即其手工实例）；le_head 备 <= c_0 用。
    依赖缺口：相邻递减需 c_k x^k 单调面（x^k/x^{k+1} 比式 + 系数比
    (k+1)(2n-k)/(2(k+1)(n-k)) 型），库内尚无现成件，下一批建。
-   本件三引理即 n=0/n=1 手工实例，可作通用件回来核对的哨兵。 *)
+   本件三引理即 n=0/n=1 手工实例，可作通用件回来核对的锚。 *)
 
 End PadeSignQ.
 

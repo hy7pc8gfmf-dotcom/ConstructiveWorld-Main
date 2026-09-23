@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   real_iter_step_geom_eps（原 L432，2 句玩具证）                       *)
 (*   m3_step_next_norm（原 L279，2 句玩具证）                             *)
@@ -15,41 +15,41 @@
 (* ============================================================ *)
 (* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 6 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 6 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 6 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 6 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包O 收尾 3 件（T321 台账§五·1 移交，本批收口）                       *)
+(* 附记：T277 判级全文恒等；包O 收尾 3 件（T321 台账§五·1 移交，本批闭合）                       *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* UpStepKLM3.v *)
 (* *)
-(* 目的： step_kl 的 M3 迭代版 Real 层镜像。 *)
+(* 目的： step_kl 的 M3 迭代版 Real 层副本。 *)
 (* 主件： m3_iterate 迭代包与 m3_kappa_le_one、m3_le_kappa_mul 几何率定律。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： 零公理零搁置、Set 层语句、全 Qed、可提取；几何率取 kappa < 1 显式前提。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpStepKLM3.v —— step_kl 消解的 M3 迭代版 Real 层镜像            *)
+(* UpStepKLM3.v —— step_kl 消解的 M3 迭代版 Real 层副本            *)
 (* 论文 1 定理 4.5/4.8（策略迭代向后 KL 递推 + 真几何率收缩）的      *)
 (* Real 层 list 离散状态世界对应物。                               *)
 (*   M3.0 基础定义：离散状态表 m3_states、list 版 KL（m3_kl_list，   *)
 (*         逐项 real_kl_term 折叠）、几何插值策略迭代序列 m3_pi_seq   *)
-(*         （π_{t+1}(i) := π*(i)^η·π_t(i)^{1−η}/Z，sigT 打包迭代：   *)
+(*         （π_{t+1}(i) := π*(i)^η·π_t(i)^{1−η}/Z，sigT 封装迭代：   *)
 (*         策略 + 逐点正性 + 配分函数正性 + 归一化四件套同步携带）、  *)
 (*         几何率底幂 m3_rpow (1−η)^t、误差 nat 累积 m3_nmul。       *)
 (*   M3.1 单步向后 KL 递推 real_iter_kl_step：                      *)
 (*         KL(π*‖π_{t+1}) ≤ (1−η)·KL(π*‖π_t) + KL(π_t‖π_{t+1}) + eps *)
-(*         （根内 policy_iter_backward_kl_step_le 的 eps 化镜像：    *)
+(*         （根内 policy_iter_backward_kl_step_le 的 eps 化副本：    *)
 (*           M2 换向实例 + Gibbs 下界 + eps 对半吸收）。             *)
 (*   M3.2 真几何率迭代 real_iter_kl_geom：                          *)
 (*         KL(π*‖π_t) ≤ (1−η)^t·KL(π*‖π_0) + t·eps                 *)
 (*         （根内 policy_iter_kl_geom_step / policy_iter_kl_geom_iter *)
-(*           的 eps 化镜像：M2 单步 + nat 归纳）。                   *)
+(*           的 eps 化副本：M2 单步 + nat 归纳）。                   *)
 (* 全部 Real 层顶层名（real_kl_term/real_list_sum/real_step_next），  *)
 (* Or 编码 le。                                                    *)
 (* 红线：零 公理/搁置；Set 层语句；全 Qed；可提取。             *)
@@ -303,7 +303,7 @@ Proof.
   exact (real_eq_trans           (real_list_sum nat (real_step_next n r p k Hr Hp HZ) (m3_states n))           (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                      (real_list_sum nat                         (fun i : nat => real_mult                            (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                            (real_pow_pos (p i) k (Hp i)))                         (m3_states n)))           real_one           (real_list_sum_linear_r nat              (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)              (fun i : nat => real_mult                 (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                 (real_pow_pos (p i) k (Hp i)))              (m3_states n))           (real_eq_trans              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                         (real_list_sum nat                            (fun i : nat => real_mult                               (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                               (real_pow_pos (p i) k (Hp i)))                            (m3_states n)))              (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                         (real_interp_Z n r p k Hr Hp))              real_one              (RealSetoid.real_eq_mult_compat                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                 (real_list_sum nat                    (fun i : nat => real_mult                       (real_pow_pos (r i) (real_plus real_one (real_opp k)) (Hr i))                       (real_pow_pos (p i) k (Hp i)))                    (m3_states n))                 (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                 (real_interp_Z n r p k Hr Hp)                 (real_eq_refl (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))                 (real_eq_refl (real_interp_Z n r p k Hr Hp)))              (real_eq_trans                 (real_mult (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                            (real_interp_Z n r p k Hr Hp))                 (real_mult (real_interp_Z n r p k Hr Hp)                            (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ))                 real_one                 (real_mult_comm (real_inv_pos (real_interp_Z n r p k Hr Hp) HZ)                                 (real_interp_Z n r p k Hr Hp))                 (real_inv_pos_correct (real_interp_Z n r p k Hr Hp) HZ)))).
 Qed.
 
-(* ========== 策略迭代序列（sigT 打包：策略+正性+配分函数正性+归一化） ========== *)
+(* ========== 策略迭代序列（sigT 封装：策略+正性+配分函数正性+归一化） ========== *)
 
 (* 迭代包类型：p := π_t 连同其逐点正性、下一步配分函数正性、归一化恒等 *)
 Definition m3_pkg_type (n : nat) (r : nat -> Real) (eta : Real)
@@ -396,10 +396,10 @@ Definition m3_pi_seq_norm (n : nat) (p0 r : nat -> Real) (eta : Real) (Hn : n <>
 
 (* ========== M3.1 前置：M2 换向单步几何收缩（eps 化 geom_step） ========== *)
 
-(* 单步真几何率（根内 policy_iter_kl_geom_step 的 eps 化镜像）：
+(* 单步真几何率（根内 policy_iter_kl_geom_step 的 eps 化副本）：
    KL(π*‖π_{t+1}) ≤ (1−η)·KL(π*‖π_t) + eps。
    即 UpStepKL 的 M2（real_step_kl_eta_bound_eps）在迭代序列第 t 步的
-   直接实例化：p-槽 := r（π*），r-槽 := π_t，eta-槽 := κ := 1−η。 *)
+   直接实例化：p-参数位 := r（π*），r-参数位 := π_t，eta-参数位 := κ := 1−η。 *)
 Corollary real_iter_step_geom_eps :
   forall (n : nat) (p0 r : nat -> Real) (eta : Real) (Hn : n <> 0)
     (Hp0 : forall i : nat, real_lt real_zero (p0 i))
@@ -423,7 +423,7 @@ Proof.
   exact (real_step_kl_eta_bound_eps n r           (m3_pi_seq n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_kappa eta) Hr           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           Hnormr (m3_pi_seq_norm n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_pi_seq_Zpos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 t)           (m3_pi_seq_pos n p0 r eta Hn Hp0 Hr HZ1 Hnorm0 (Datatypes.S t))           (m3_kappa_pos eta Heta_lt1) (m3_kappa_le_one eta Heta_pos)           eps Heps).
 Qed.
 
-(* ========== M3.1：单步向后 KL 递推（backward_kl_step_le 的 eps 化镜像） ========== *)
+(* ========== M3.1：单步向后 KL 递推（backward_kl_step_le 的 eps 化副本） ========== *)
 (* KL(π*‖π_{t+1}) ≤ (1−η)·KL(π*‖π_t) + KL(π_t‖π_{t+1}) + eps
    路线（对应根内 policy_iter_backward_kl_step_le 的「丢弃负项」）：
    M2 换向实例给 KL(π*‖π_{t+1}) ≤ (1−η)KL(π*‖π_t) + d（d := eps/2），
@@ -520,9 +520,9 @@ Proof.
                    (real_plus_assoc A B eps))))).
 Qed.
 
-(* ========== M3.2：真几何率迭代（geom_iter 的 eps 化镜像） ========== *)
+(* ========== M3.2：真几何率迭代（geom_iter 的 eps 化副本） ========== *)
 (* KL(π*‖π_t) ≤ (1−η)^t·KL(π*‖π_0) + t·eps
-   （根内 policy_iter_kl_geom_iter 的 eps 化镜像：单步收缩
+   （根内 policy_iter_kl_geom_iter 的 eps 化副本：单步收缩
      real_iter_step_geom_eps 对 t 归纳，误差按 t 步算术累积。） *)
 Theorem real_iter_kl_geom :
   forall (n : nat) (p0 r : nat -> Real) (eta : Real) (Hn : n <> 0)

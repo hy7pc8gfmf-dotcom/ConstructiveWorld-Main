@@ -8,7 +8,7 @@
 (* 替换定理清单：req_core_claim5_holds／req_core_claim3_lm_holds（共 2 刀）  *)
 (* 非平凡性口径：存在见证显式化与换轨中间项命名锚定，消除定义级单跳；无一    *)
 (* 行拆分式假非平凡。                                                        *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
@@ -18,10 +18,10 @@
    一、req_core_claim5_holds：exists 见证位定义层展开重演——见证由不透明
        件名 rboltzmann_prob L 改为定义体逐层显式 λ（inv_pos rZ rZ_pos 与
        exp_neg（inv_pos rD rD_pos 与 L s）两层全展开），目标位双定义
-       unfold 后自反收口（E379 卡 L455 显式参坑前置，见证同形不变）。
-   二、req_core_claim3_lm_holds：换轨中间项显式命名——负号分配腿与
-       双重负号腿两条中间 req 以命名断言锚定（Hopp／Hneg），三段收口
-       req_trans 复合重演（引擎模板同款形：双锚断言＋收口，见消融50
+       unfold 后自反闭合（E379 卡 L455 显式参坑前置，见证同形不变）。
+   二、req_core_claim3_lm_holds：换轨中间项显式命名——负号分配肢与
+       双重负号肢两条中间 req 以命名断言锚定（Hopp／Hneg），三段闭合
+       req_trans 复合重演（引擎模板同款形：双锚断言＋闭合，见消融50
        UpReqAlgebra req_mult_cancel_r 已验绿体）。
    依赖面零新增：Require 面与原件逐字一致。
    ============================================================ *)
@@ -37,17 +37,17 @@
 (* UpReqMisc5.v — 签名迁移批 5 波 3 席：杂项完成（其余小节 + 向量世界类转写层）
    工作单：attn\批5基建层处置清单-20260909.md（波3：LMI/PCC/Thermo/ConvThm/SumExp/GRPO
    24 件 + Multivar/Hilbert/GramSchmidt (b|桥) 20 件入 UpReqMisc5B.v + DiffLemmas 代数面
-   11 件（纯字段链/环，零记录消费）；differentiable_affine 1 件随 C2 记录桥（波4）结果。
+   11 件（纯字段链/环，零记录依存）；differentiable_affine 1 件随 C2 记录桥（波4）结果。
    母本：CW_ConstructiveWorld_219（行号逐件见覆盖核对）；上游：UpReqAlgebra（批1 引擎）
    ----------------------------------------------------------------
    类转写层（清单 §7.11/§9.2 波3「reqStateSpace/HilbertSpace 类转写随本波结果」；
    类体内接口投影一律 @ 全显（载体 rSS ≠ R，实例位手工喂定，零解析歧义）：
-     reqStateSpace     ← Id StateSpace L1160-1187（21 字段，语句位 Id→req 逐位镜像；
+     reqStateSpace     ← Id StateSpace L1160-1187（21 字段，语句位 Id→req 逐位副本；
                           rsmetric_pos/rsmetric_triangle 的 plain le 形为 Id 字段逐位
                           保留——setoid 接口对应字段已逐 eps 化，plain 形作类内假设位，
                           判据 0.2-5/RestB Part4 先例，T2①）
      reqStateSpaceExt  ← Id StateSpaceExtended L24738-24758（9 字段；Id 的 :> 继承
-                          改显式 rsse_base 槽 + 消费席显式 unpack，零语义差）
+                          改显式 rsse_base 参数位 + 依存席显式 unpack，零语义差）
      reqHilbertSpace   ← Id HilbertSpace L1260-1276（9 字段，语句位 Id→req）
      reqSumOver        ← Id SumOver L1408-1452（8 字段，语句位 Id→req）
    ----------------------------------------------------------------
@@ -55,9 +55,9 @@
    1. minus 非接口字段：语句位 minus → req_minus（UpReqAlgebra δ 透明同形），证明内 unfold；
    2. log 前提化：setoid log/log_inv 带 lt zero 前提——rloss_of_prop（LMI）、
       req_dpo_loss_diff_decomp 各补正性前提/同位假设位（req_log_compat_slot，
-      T2①；UpReqAlgebra ReqLogBridge 同槽先例）；
+      T2①；UpReqAlgebra ReqLogBridge 同参数位先例）；
    3. Id le_plus_nonneg_r / mult_plus_distr_r / plus_cancel_l（Id 接口字段）在 req 接口
-      缺位 → 消费 UpReqAlgebra 已结果件 req_le_plus_nonneg_r/req_mult_plus_distr_r/
+      缺位 → 依存 UpReqAlgebra 已结果件 req_le_plus_nonneg_r/req_mult_plus_distr_r/
       req_plus_cancel_l（语句同形）；
    4. count 机器（nat/list Id 层）：跨接口原样复用 Module UpGRPO219 已闭名
       （grpo_count_one/count_zero_remove_id/remove_notin_aux/nodup_g/count_g/removeT_g），
@@ -115,7 +115,7 @@ Import ListNotations.
 (* setoid 等位可迁，非降级：Id 即归纳族构造性等号）。            *)
 (* ============================================================ *)
 
-(* Id StateSpace L1160-1187 逐字段 req 镜像（21 字段） *)
+(* Id StateSpace L1160-1187 逐字段 req 副本（21 字段） *)
 Class reqStateSpace (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
   rSS : Set;
   rszero : rSS;
@@ -163,8 +163,8 @@ Definition rsminus (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
     (SS : reqStateSpace R RIS) (a b : @rSS R RIS SS) : @rSS R RIS SS :=
   @rsplus R RIS SS a (@rsopp R RIS SS b).
 
-(* Id StateSpaceExtended L24738-24758 逐字段 req 镜像（9 字段；
-   Id 的 :> 继承改显式 rsse_base 槽 + 消费席显式 unpack，零语义差） *)
+(* Id StateSpaceExtended L24738-24758 逐字段 req 副本（9 字段；
+   Id 的 :> 继承改显式 rsse_base 参数位 + 依存席显式 unpack，零语义差） *)
 Class reqStateSpaceExt (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
   rsse_base : reqStateSpace R RIS;
   rsmult_zero : forall x : @rSS R RIS rsse_base,
@@ -190,7 +190,7 @@ Class reqStateSpaceExt (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
         (rsnorm (@rsminus R RIS rsse_base u v))
 }.
 
-(* Id HilbertSpace L1260-1276 逐字段 req 镜像（9 字段） *)
+(* Id HilbertSpace L1260-1276 逐字段 req 副本（9 字段） *)
 Class reqHilbertSpace (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
     (SS : reqStateSpace R RIS) : Set := {
   rinner : @rSS R RIS SS -> @rSS R RIS SS -> R;
@@ -212,7 +212,7 @@ Class reqHilbertSpace (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
     @req R RIS (rinner (@rsplus R RIS SS v (@rsopp R RIS SS (rproj u v))) u) (@zero R RIS)
 }.
 
-(* Id SumOver L1408-1452 逐字段 req 镜像（8 字段） *)
+(* Id SumOver L1408-1452 逐字段 req 副本（8 字段） *)
 Class reqSumOver (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
     (SS : reqStateSpace R RIS) : Set := {
   rsum_over_S : (@rSS R RIS SS -> R) -> R;
@@ -235,7 +235,7 @@ Class reqSumOver (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
 }.
 
 (* ============================================================ *)
-(* Part A：PropositionConvergenceCore 4 件（Id L1454-1700 消费面） *)
+(* Part A：PropositionConvergenceCore 4 件（Id L1454-1700 依存面） *)
 (* ============================================================ *)
 Section ReqPropConvCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -312,7 +312,7 @@ Qed.
 End ReqPropConvCore.
 
 (* ============================================================ *)
-(* Part B：ThermodynamicsInstance 2 件（Id L2906-3040 消费面）    *)
+(* Part B：ThermodynamicsInstance 2 件（Id L2906-3040 依存面）    *)
 (* ============================================================ *)
 Section ReqThermoInstance.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -491,7 +491,7 @@ Qed.
 End ReqSumExpPos.
 
 (* ============================================================ *)
-(* Part E：LanguageModelInstance 6 件（Id L1777-2000 消费面；      *)
+(* Part E：LanguageModelInstance 6 件（Id L1777-2000 依存面；      *)
 (*         sum_exp_positive 孪生 L1875 已由 Part D 已证明）         *)
 (* 签名变化（登记表 2）：Id loss_of_proposition 用无前提 log_inv；   *)
 (*   req 形 log_inv 带 lt zero 前提 → 新增 3 正性假设位           *)
@@ -568,7 +568,7 @@ Theorem req_core_claim1_lm_holds :
 Proof. exact rprop_pos. Qed.
 
 (* Id core_claim3_holds L1938：req_opp_plus + req_double_neg + plus_comm
-   三步链（清单结论消费面；minus → req_minus unfold 后直配） *)
+   三步链（清单结论依存面；minus → req_minus unfold 后直接匹配） *)
 Theorem req_core_claim3_lm_holds : forall (s : list rToken) (w : rToken),
   req (rforce s w) (req_minus (rtotal_loss s) (rtotal_loss (s ++ [w]))).
 Proof.
@@ -778,8 +778,8 @@ End ReqGrpoMisc.
 
 (* ============================================================ *)
 (* Part G：DifferentiableLemmas 代数面 11 件（Id L25673-26304）    *)
-(* 零记录消费（Differentiable 系 (c) 桥C2 随波4）；语句位 minus →  *)
-(* req_minus（登记表 1）；log 消费位前提化 + 同位假设位（登记表 2）。   *)
+(* 零记录依存（Differentiable 系 (c) 桥C2 随波4）；语句位 minus →  *)
+(* req_minus（登记表 1）；log 依存位前提化 + 同位假设位（登记表 2）。   *)
 
 (* ============================================================ *)
 Section ReqDiffAlgebra.
@@ -916,7 +916,7 @@ Proof.
 Qed.
 
 (* Id square_diff_expand L26092：(x+h−t)² − ((x−t)² + 2(x−t)·h) = h²。
-   结构：Hv 换形 → 四项平方展开 → h·u 换位 → 二倍槽收拢 → plus_assoc
+   结构：Hv 换形 → 四项平方展开 → h·u 换位 → 二倍参数位收拢 → plus_assoc
    → 头部对消（req_plus_cancel_head） *)
 Lemma req_square_diff_expand : forall x target h : R,
   req (req_minus (mult (req_minus (plus x h) target) (req_minus (plus x h) target))
@@ -1007,7 +1007,7 @@ Definition req_dpo_sigmoid (x : R) : R :=
 
 (* Id dpo_loss_diff_decomp L26247：差分 = log 商（log_div 反向）。
    同位假设位（登记表 2）：setoid 接口无 log_div 字段，UpReqAlgebra
-   MinP 卡跨席消费正路 (a)），End 时入闭包签名，非公理。 *)
+   MinP 卡跨席依存正路 (a)），End 时入闭包签名，非公理。 *)
 Variable req_log_compat_slot :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y), req x y -> req (log x Hx) (log y Hy).
 

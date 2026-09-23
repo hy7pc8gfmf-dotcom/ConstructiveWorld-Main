@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   wtl_family（原 L525，1 句玩具证）                                    *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
 (* 附记：T277 判级全文恒等；AD 域收尾第四批（T317 六·1 方案①）。 *)
@@ -37,7 +37,7 @@ Set Printing Width 500.
 (*   证书取逐点乘法形 c·q_s <= r_s（Real 层 real_le 形，免除法）。         *)
 (*   修正版压测违反 0/20000（同脚本第 2 节）。逐点路线：q_s/r_s <= 1/c    *)
 (*   ⟹ log 单调（real_log_le_mono）⟹ 加权求和保序（real_list_sum_le）。   *)
-(*   KL 符号顺序逐处核对：kl_term 首槽=加权分布（p 或 q），全部前向。      *)
+(*   KL 符号顺序逐处核对：kl_term 首参数位=加权分布（p 或 q），全部前向。      *)
 (*                                                                *)
 (* 【交付清单（wtl_ 前缀全库零撞名，前棒 grep 双验）】                    *)
 (*   G1①  wtl_qdiv_pos             Q 层除法正性             [非平凡低]    *)
@@ -45,8 +45,8 @@ Set Printing Width 500.
 (*   G1①  wtl_min_ratio_pos        min 证书正性（Prop）     [非平凡低]    *)
 (*   G1②  wtl_ratio_cert + wtl_min_ratio_cert_set  sigT 交付账 [非平凡低] *)
 (*   G2    wtl_cond_triangle       条件化弱三角主件         [非平凡中]    *)
-(*   G2    wtl_family              sigT 封口账              [装配]        *)
-(*   G3    CS 权渡形/unique-max 特例：挂账（需 Real 平方族引擎，          *)
+(*   G2    wtl_family              sigT 闭合账              [装配]        *)
+(*   G3    CS 权渡形/unique-max 特例：遗留（需 Real 平方族引擎，          *)
 (*         EXPD3 报告 §2 已探明需求面；本席预算内不 attempt）。           *)
 (*                                                                *)
 (* 【对报告 §2/§3 的三处诚实偏差（编译期实读核出，已就地修正）】          *)
@@ -57,14 +57,14 @@ Set Printing Width 500.
 (*   3. G1 sigT 交付件正性证用 Qlt 0 c（Prop 件）；可计算部分=witness c    *)
 (*      （wtl_min_ratio l）+ Qle_bool 逐点下界检查，诚实标注。            *)
 (*                                                                *)
-(* 【引擎链（全只读消费，签名逐一实读核验）】CW219：S08 real_kl_term/      *)
+(* 【引擎链（全只读依存，签名逐一实读核验）】CW219：S08 real_kl_term/      *)
 (*   real_log_div/real_list_sum_le/real_list_sum_linear_r；S07 RealSetoid  *)
 (*   （real_le_compat/real_le_id_l/real_le_id_r/real_eq_mult_compat/      *)
 (*   real_eq_plus_compat）+ 顶层 real_le_mult_compat/real_le_plus_compat/ *)
 (*   real_mult_positive；S02 real_mult_comm/assoc/one、real_plus_assoc/   *)
 (*   comm；G01 real_log_le_mono；UpRealLeB real_le_b/real_le_to_le_b；     *)
 (*   UpReqPinskerTransport pnt_le_b_refl/eq_r/trans/add_r/pnt_mult_inv_r/  *)
-(*   pnt_list_gibbs_b；UpReqForwardKLFamily fkl_path_split_sum（消费供体）。*)
+(*   pnt_list_gibbs_b；UpReqForwardKLFamily fkl_path_split_sum（依存供体）。*)
 (*   禁碰件未 Require。                                                   *)
 (* 编译：coqc（9.1 钉源 COQLIB=ROCQLIB=C:/Rocq-Platform~9.1~2026.01/      *)
 (*   lib/coq）-q -native-compiler no -Q . "" UpReqWeakTriangle（cwd=Live_X，*)
@@ -310,7 +310,7 @@ Proof.
                     (real_opp (real_log (r s) (Hr s))))) m)
     (real_list_sum Y (fun s : Y => real_mult (p s) Llog) m)).
   { apply real_list_sum_le. intro s. exact (Hpt s). }
-  (* 步 3：归一化收腿 Σ(p·log(1/c)) == log(1/c)（real_list_sum_linear_r + Hnp） *)
+  (* 步 3：归一化收肢 Σ(p·log(1/c)) == log(1/c)（real_list_sum_linear_r + Hnp） *)
   assert (Hs3 : real_eq
     (real_list_sum Y (fun s : Y => real_mult (p s) Llog) m) Llog).
   { apply (real_eq_trans
@@ -459,7 +459,7 @@ Proof.
                   (real_list_sum Y
                      (fun s : Y => real_kl_term (q s) (r s) (Hq s) (Hr s))
                      m))). }
-  (* 步 6+7b：升 Bishop + Gibbs 非负腿 + pnt 组合封口 *)
+  (* 步 6+7b：升 Bishop + Gibbs 非负肢 + pnt 组合闭合 *)
   apply (pnt_le_b_trans
            (real_list_sum Y
               (fun s : Y => real_kl_term (p s) (r s) (Hp s) (Hr s)) m)
@@ -517,7 +517,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* G2 封口件：wtl 族 sigT 账（照 fkl_family 模式）                    *)
+(* G2 闭合件：wtl 族 sigT 账（照 fkl_family 模式）                    *)
 (* ================================================================ *)
 Definition wtl_leg_min_cert : Type := forall l : list (Q * Q),
   (forall qr : Q * Q, In qr l -> Qlt 0 (fst qr)) ->

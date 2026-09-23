@@ -8,7 +8,7 @@
 (* 替换定理清单：mtw_row_t／mtw_df_iter／mtw_ds_pos（共 3 刀）               *)
 (* 非平凡性口径：双锚断言、中间项显式命名、引擎体整体内联三法并落；无一行    *)
 (* 拆分式假非平凡。                                                          *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
@@ -18,18 +18,18 @@
    另附 13 条不可化批量中文注记（不动证明体）：
    一、mtw_row_t（刀一·双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地
        重演——锚一 Hdef＝核行和 3/4＋1/4 换形至定义形 (1−1/4)＋1/4（mtw_threeq
-       经 req_minus 载体透明，req_refl 最短形）；锚二 Hasso＝结合换轨腿
-       （plus_assoc 对称）；收口两段＝内项零消（plus_comm 换轨＋plus_opp 零消
+       经 req_minus 载体透明，req_refl 最短形）；锚二 Hasso＝结合换轨肢
+       （plus_assoc 对称）；闭合两段＝内项零消（plus_comm 换轨＋plus_opp 零消
        经 req_plus_compat 提级）＋外层 plus_zero；三段 req_trans 复合。
    二、mtw_df_iter（刀二·中间项显式命名）：原单点 exact 复合式拆锚重演——
-       镜像腿 Hmir（mtw_df_opp_dv n，补元镜像）与取负腿 Hneg（req_opp_compat
-       运载 mtw_dv_iter n 幂律）两条中间 req 命名锚定，req_trans 复合收口。
+       副本肢 Hmir（mtw_df_opp_dv n，补元副本）与取负肢 Hneg（req_opp_compat
+       运载 mtw_dv_iter n 幂律）两条中间 req 命名锚定，req_trans 复合闭合。
    三、mtw_ds_pos（刀三·引擎体整体内联）：mult_positive 投影位就地重演——
        模板＝S07_RealSetoidExpLog.v:6969 real_mult_positive（本件 lt/mult/
-       zero 与柯西层 real_lt/real_mult/real_zero eq_refl 直通，探针在案）：
-       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两腿）＋
-       real_mult_lt_compat (0,h,h) 收口，实例化 a:=mtw_half、b:=mtw_half。
-   不可化批量注记 13 条：定义性收口 4（mtw_K_tt/tf/ft/ff）；接口字段直引与
+       zero 与柯西层 real_lt/real_mult/real_zero eq_refl 直通，检验在案）：
+       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两个合取肢）＋
+       real_mult_lt_compat (0,h,h) 闭合，实例化 a:=mtw_half、b:=mtw_half。
+   不可化批量注记 13 条：定义性闭合 4（mtw_K_tt/tf/ft/ff）；接口字段直引与
    同件单跳 7（mtw_half_pos／mtw_qq_half／mtw_oo_one_zero／mtw_mu0_mass／
    mtw_nu0_mass／mtw_tv0_pos／mtw_omd_pos）；复合一跳链 2（mtw_no_mixing_below／
    mtw_tv_lower）。
@@ -96,7 +96,7 @@ Proof.
   - exact (req_half_twice one req_two_pos).
 Defined.
 
-(* 不可化批注（上游两跳换轨直连）：plus_comm 换轨腿＋plus_opp 零消腿经 req_trans 复合，最短形。 *)
+(* 不可化批注（上游两跳换轨直连）：plus_comm 换轨肢＋plus_opp 零消肢经 req_trans 复合，最短形。 *)
 Lemma mtw_oo_one_zero : req (plus (opp one) one) zero.
 Proof.
   exact (req_trans (plus (opp one) one) (plus one (opp one)) zero
@@ -172,7 +172,7 @@ Definition mtw_K (s s' : bool) : Real :=
   if s then (if s' then mtw_threeq else mtw_quarter)
        else (if s' then mtw_quarter else mtw_threeq).
 
-(* 不可化批注（定义性收口×4）：mtw_K 载体 if 定义级求值后 req_refl 自反收口，四件同形透明最短。 *)
+(* 不可化批注（定义性闭合×4）：mtw_K 载体 if 定义级求值后 req_refl 自反闭合，四件同形透明最短。 *)
 (* 核四参显式账：K(t,t)=3/4、K(t,f)=1/4、K(f,t)=1/4、K(f,f)=3/4 *)
 Lemma mtw_K_tt : req (mtw_K true true) mtw_threeq.
 Proof. exact (req_refl mtw_threeq). Defined.
@@ -219,7 +219,7 @@ Proof. exact (req_plus_zero_l one). Defined.
 (* ============================================================ *)
 
 (* 刀一（双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地重演。
-   锚一 Hdef：3/4＋1/4 换形至定义形 (1−1/4)＋1/4；锚二 Hasso：结合换轨腿。 *)
+   锚一 Hdef：3/4＋1/4 换形至定义形 (1−1/4)＋1/4；锚二 Hasso：结合换轨肢。 *)
 Lemma mtw_row_t : req (mtw_sumf (mtw_K true)) one.
 Proof.
   unfold mtw_sumf, mtw_K.
@@ -399,7 +399,7 @@ Proof.
            (req_minus one (mu true)) Ha Hc).
 Defined.
 
-(* 差分镜像：第二列差 == −第一列差（质量守恒 + 补元的推论，零归纳） *)
+(* 差分副本：第二列差 == −第一列差（质量守恒 + 补元的推论，零归纳） *)
 Lemma mtw_df_opp_dv : forall n : nat,
   req (mtw_df (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
       (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))).
@@ -498,7 +498,7 @@ Proof.
     + exact (mult_comm h mtw_half).
 Defined.
 
-(* 主归纳：dv(n) == (1/2)^n（单步差分耦合 + 镜像，全显式） *)
+(* 主归纳：dv(n) == (1/2)^n（单步差分耦合 + 副本，全显式） *)
 Lemma mtw_dv_iter : forall n : nat,
   req (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
       (req_r_pow mtw_half n).
@@ -566,9 +566,9 @@ Lemma mtw_df_iter : forall n : nat,
       (opp (req_r_pow mtw_half n)).
 Proof.
   intro n.
-  (* 刀二（中间项显式命名）：镜像腿 Hmir＝mtw_df_opp_dv n（补元镜像）、
-     取负腿 Hneg＝req_opp_compat 运载 mtw_dv_iter n（幂律），两腿命名锚定，
-     req_trans 复合收口重演。 *)
+  (* 刀二（中间项显式命名）：副本肢 Hmir＝mtw_df_opp_dv n（补元副本）、
+     取负肢 Hneg＝req_opp_compat 运载 mtw_dv_iter n（幂律），两个合取肢命名锚定，
+     req_trans 复合闭合重演。 *)
   assert (Hmir : req (mtw_df (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
                      (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)))).
   { exact (mtw_df_opp_dv n). }
@@ -619,7 +619,7 @@ Proof.
              (inv_pos_correct (plus one one) req_two_pos)).
 Defined.
 
-(* 不可化批注（接口字段一跳链）：lt_id_r 右端换值＋同件 mtw_tv0_one 换形＋one_pos 证书收口。 *)
+(* 不可化批注（接口字段一跳链）：lt_id_r 右端换值＋同件 mtw_tv0_one 换形＋one_pos 证书闭合。 *)
 (* Part 1c：TV₀ 严格正（非退化判据之电视面） *)
 Lemma mtw_tv0_pos : lt zero (mtw_tv mtw_mu0 mtw_nu0).
 Proof.
@@ -752,7 +752,7 @@ Defined.
 
 (* Part 3 乙：混合时间下界（AID 的 mtl_no_mixing_refuted 同形语句在此世界为真）：
    预算 B 严格小于 (1/2)^n·TV₀ 则 B 严格小于 TV(n)——未混合窗下界成立。 *)
-(* 不可化批注（接口字段一跳链）：lt_id_r＋同件 mtw_tv_exact_iter 换形，前提 H 直配收口。 *)
+(* 不可化批注（接口字段一跳链）：lt_id_r＋同件 mtw_tv_exact_iter 换形，前提 H 直接匹配闭合。 *)
 Theorem mtw_no_mixing_below : forall (n : nat) (B : Real),
   lt B (mult (req_r_pow mtw_half n) (mtw_tv mtw_mu0 mtw_nu0)) ->
   lt B (mtw_tv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)).
@@ -789,13 +789,13 @@ Defined.
 Definition mtw_omd : Real := mtw_half.
 Definition mtw_ds : Real := mtw_quarter.
 
-(* 不可化批注（同件已证件单跳直引）：mtw_omd:=mtw_half 定义透明，mtw_half_pos 直配。 *)
+(* 不可化批注（同件已证件单跳直引）：mtw_omd:=mtw_half 定义透明，mtw_half_pos 直接匹配。 *)
 Lemma mtw_omd_pos : lt zero mtw_omd.
 Proof. exact mtw_half_pos. Defined.
 
 (* 刀三（引擎体整体内联）：mult_positive 投影位就地重演（模板
    S07_RealSetoidExpLog.v:6969 real_mult_positive；本件 lt/mult/zero 与柯西层
-   字段 eq_refl 直通）：0·h ≡ 0 换序桥＋real_mult_lt_compat 收口。 *)
+   字段 eq_refl 直通）：0·h ≡ 0 换序桥＋real_mult_lt_compat 闭合。 *)
 Lemma mtw_ds_pos : lt zero mtw_ds.
 Proof.
   unfold mtw_ds, mtw_quarter.

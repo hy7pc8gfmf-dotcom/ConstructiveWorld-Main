@@ -9,13 +9,13 @@
 (* ／req_abs_minus_zero／req_gradient_zero_neg_entropy_truth（共 5 条）      *)
 (* 非平凡性口径：幂正体归纳内联与序界直造，消除单跳转发；无一行拆分式假非    *)
 (* 平凡。                                                                    *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================ *)
 (* UpReqCauchy.v *)
 (* *)
-(* 目的： 梯度下降收敛链的 req 层镜像（熵梯度幂衰减）。 *)
+(* 目的： 梯度下降收敛链的 req 层副本（熵梯度幂衰减）。 *)
 (* 主件： req_grad_decay_iter / req_r_pow_dec 幂衰减族与 req_sum_R_le 尾和界。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSLM。 *)
 (* 备注： 熵函数、梯度、动力学与步长前提以 Section 变量给出；幂衰减为显式迭代构造。 *)
@@ -25,7 +25,7 @@
    权威工单：attn\批5基建层处置清单-20260909.md（§0 判据 + §2 逐件表 + §9.2 波2）
    母本：CW_ConstructiveWorld_219.v Section ConvergenceCauchy（L14016-15235）
    上游：基座 + UpReqAlgebra + UpReqSLM（波0 共享桥，波1 席已结果稳定——
-   §0.5 ReqNonnegPlain 双槽 Require 换轨消费，节参挂实例、语句零变化；
+   §0.5 ReqNonnegPlain 双参数 Require 换轨依存，节参挂实例、语句零变化；
    纯 term-mode（req_trans 链 + compat 字段桥），零 setoid 改写器依赖；
    Set 层语句（req/lt/le 全 Set 值，零 Prop 泄露；And/Not/Or/ExistsT 用 L66-73 Set 版）。
    ----------------------------------------------------------------
@@ -36,31 +36,31 @@
       lt_plus_compat_lt_le/lt_plus_compat_le_lt/metric_refl_zero/r_arch_pow/eta_abs_pos/
       log_lt_mono_cc/lim_metric_approx/le_all_eps_zero/mu/mu_pos/strong_concavity/
       entropy_tangent/weak_trich——Id→req 同形换字（Id 换 req，minus 换 req_minus）。
-   2. 判据 0.2-5 假设位（Id 证明消费 plain 形、setoid 接口已 eps 化不可导出）：
+   2. 判据 0.2-5 假设位（Id 证明依存 plain 形、setoid 接口已 eps 化不可导出）：
       - abs_nonneg_plain : forall a, le zero (abs a)
-        （setoid abs_nonneg eps 形 @L40553；消费件：req_iterate_step_abs_diff_iter/
+        （setoid abs_nonneg eps 形 @L40553；依存件：req_iterate_step_abs_diff_iter/
         req_iterate_metric_tail_bound/req_grad_bound_aux/req_grad_squeeze_zero——
         波2 原节内自持 Variable 副本，波1 UpReqSLM ReqNonnegPlain 落地后换轨
-        Require 消费其 Class 字段（节参挂实例），语句零变化）
+        Require 依存其 Class 字段（节参挂实例），语句零变化）
       - metric_pos_plain : forall a b, le zero (metric a b)
-        （setoid metric_pos eps 形 @L40585；消费件：req_grad_squeeze_zero 完成位——同上换轨）
+        （setoid metric_pos eps 形 @L40585；依存件：req_grad_squeeze_zero 完成位——同上换轨）
       - metric_triangle_plain : forall a b c, le (metric a c) (plus (metric a b) (metric b c))
-        （setoid metric_triangle eps 形 @L40584；消费件：req_metric_tail_le_sum/
+        （setoid metric_triangle eps 形 @L40584；依存件：req_metric_tail_le_sum/
    3. 判据 0.2-4 log 前提化（setoid log 带 lt zero x 前提 @L40570 区）：
       - log_lt_mono_cc Variable 前提位升格：forall a b, lt zero a -> lt zero b ->
         （log_mult 字段见证位逐字匹配要求：字段结论固定 mult_positive 形见证，
         opaque 引理见证不可 conversion——规范形 Fixpoint 见证 delta+iota 可导）。
-        以 sigT 打包为结论第一分量（Hp : lt zero (...)），零 witness-in-statement 摩擦。
+        以 sigT 封装为结论第一分量（Hp : lt zero (...)），零 witness-in-statement 摩擦。
    4. (d) 冻结 2 件（natle_to_le @L14643 / natle_of_le @L14747，纯 nat Id 机器）：
       跨接口 Require 复用 原件（裸名），零重证——规划书 §3.4 路线；
       req_iterate_cauchy 结论位改 NatLe 形（cauchy_complete 字段 L40591 对接形），
       Id 的 (N <= m)%nat 前提由 natle_to_le 复用件在证内桥接。
-   5. §7.7 ConvergenceTheorem 3 助件节内自持（波3 对位件，消费前置）：
+   5. §7.7 ConvergenceTheorem 3 助件节内自持（波3 对位件，依存前置）：
       req_iterate_step_diff / req_iterate_step_abs_diff / req_gradient_abs_mono
-      （Id @L13880/L13929/L13982）——仅消费本节 Variables，波3 席可凭本文件已证明对位。
+      （Id @L13880/L13929/L13982）——仅依存本节 Variables，波3 席可凭本文件已证明对位。
    6. minus 非接口字段：全节语句以 req_minus（UpReqAlgebra）书写，证内 unfold；
       Id 接口字段 minus_plus_cancel/minus_plus_cancel_r/le_plus_nonneg_r/le_mult_compat_r/
-      half_pos/half_twice/abs_minus_sym 消费位 → UpReqAlgebra req_minus_plus_cancel/
+      half_pos/half_twice/abs_minus_sym 依存位 → UpReqAlgebra req_minus_plus_cancel/
       req_minus_plus_cancel_r/req_le_plus_nonneg_r/req_le_mult_compat_r/
       req_half_pos_loc（本节自持，req_two_pos 见证形）/req_half_twice/req_abs_minus_sym。
    ----------------------------------------------------------------
@@ -137,12 +137,12 @@ Variable gradient_abs_decay : forall (E_A : R) (n : nat),
 Variable lt_plus_compat_lt_le : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Variable lt_plus_compat_le_lt : forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 
-(* ============ A+. 判据 0.2-5 假设位（reqNonnegPlain 双槽 Require 换轨 + triangle 槽自持，登记表 2） ============ *)
-(* Id 证明消费 plain 形 abs_nonneg/metric_pos/metric_triangle，setoid 接口对应字段
+(* ============ A+. 判据 0.2-5 假设位（reqNonnegPlain 双参数 Require 换轨 + triangle 参数位自持，登记表 2） ============ *)
+(* Id 证明依存 plain 形 abs_nonneg/metric_pos/metric_triangle，setoid 接口对应字段
    已 Bishop eps 化（L40553/L40584/L40585），plain 形不可由 eps 形导出（序无消去）。
    abs_nonneg_plain/metric_pos_plain：与波1 UpReqSLM Class ReqNonnegPlain 字段逐字对齐
-   （波2 原节内自持 Variable 副本已删）→ 节参挂 ReqNonnegPlain 实例消费其字段：
-   投影 R/RIS/实例三位全隐式，裸名消费走类型类推断（本地实例 RN），证明体逐位零改动，
+   （波2 原节内自持 Variable 副本已删）→ 节参挂 ReqNonnegPlain 实例依存其字段：
+   投影 R/RIS/实例三位全隐式，裸名依存走类型类推断（本地实例 RN），证明体逐位零改动，
    实例位 discharged 为隐式参数（Print Assumptions 仍 Closed，零新增公理面）。
    Variable 先例同构）。 *)
 Context {RN : ReqNonnegPlain R}.
@@ -562,7 +562,7 @@ Qed.
 (* ============ I. metric 尾界（Id L14319-14436；+1 假设位 metric_triangle_plain） ============ *)
 
 (* Id metric_tail_le_sum L14319：metric 三角迭代到和。
-   签名差异登记（登记表 2）：setoid metric_triangle 为 eps 形（L40584），Id 证明消费 plain 形
+   签名差异登记（登记表 2）：setoid metric_triangle 为 eps 形（L40584），Id 证明依存 plain 形
    不可导出（序无消去）→ 新增假设位 metric_triangle_plain，语句与 Id 原件逐字同形。 *)
 Lemma req_metric_tail_le_sum : forall (E_A : R) (n m : nat),
   le (metric (iterate dynamics (n + m) E_A) (iterate dynamics n E_A))
@@ -632,7 +632,7 @@ Proof.
                      (req_sym _ _ (req_mult_plus_distr_r (req_sum_R f m) (f m) b))).
 Qed.
 
-(* Id iterate_metric_tail_bound L14376：尾部收缩（plain abs_nonneg 消费位 ×2，登记表 2） *)
+(* Id iterate_metric_tail_bound L14376：尾部收缩（plain abs_nonneg 依存位 ×2，登记表 2） *)
 Lemma req_iterate_metric_tail_bound : forall (E_A : R) (n m : nat),
   le (metric (iterate dynamics (n + m) E_A) (iterate dynamics n E_A))
      (mult (abs eta)
@@ -745,7 +745,7 @@ Proof.
                    (req_mult_swap_mid (mult a c) b d)).
 Qed.
 
-(* Id grad_bound_aux L14473（plain abs_nonneg 消费位，登记表 2） *)
+(* Id grad_bound_aux L14473（plain abs_nonneg 依存位，登记表 2） *)
 Lemma req_grad_bound_aux : forall E_A n,
   lt zero (abs (entropy_gradient (iterate dynamics 0 E_A))) ->
   le (mult (abs eta) (mult (abs (entropy_gradient (iterate dynamics n E_A))) S))
@@ -907,7 +907,7 @@ Proof.
   - exact HN0.
 Qed.
 
-(* Id iterate_cauchy_explicit_N L14610：显式可计算收敛率主定理（Hp 见证 sigT 打包，登记表 3） *)
+(* Id iterate_cauchy_explicit_N L14610：显式可计算收敛率主定理（Hp 见证 sigT 封装，登记表 3） *)
 Theorem req_iterate_cauchy_explicit_N : forall (E_A : R),
   lt zero (abs (entropy_gradient (iterate dynamics 0 E_A))) ->
   forall (eps : R) (Hep : lt zero eps),
@@ -1515,16 +1515,16 @@ End UpReqConvergenceCauchy.
 (* ---- (d) 冻结清单（本节 2 件；§1.1 边界2；零证明行） ----      *)
 (*                                                              *)
 (* 1. natle_to_le（Id @L14643）：纯 nat Id 机器（NatLe/leb/  *)
-(*    ≤，零 R）；req 侧消费 = 跨接口 Require 复用 原件裸名    *)
+(*    ≤，零 R）；req 侧依存 = 跨接口 Require 复用 原件裸名    *)
 (*    （规划书 §3.4；GRPO grpo_count_one 预定路线同款），零重证。  *)
-(*    消费位：req_iterate_cauchy / req_iterate_cauchy_explicit_N / *)
+(*    依存位：req_iterate_cauchy / req_iterate_cauchy_explicit_N / *)
 (*    req_grad_squeeze_zero（证内 (N <= n)%nat 桥接）。            *)
-(* 2. natle_of_le（Id @L14747）：同上；req 侧消费 = 跨接口    *)
-(*    Require 复用 原件裸名。消费位：req_grad_squeeze_zero    *)
+(* 2. natle_of_le（Id @L14747）：同上；req 侧依存 = 跨接口    *)
+(*    Require 复用 原件裸名。依存位：req_grad_squeeze_zero    *)
 (*    （Nat.max 两翼 NatLe 构造）。                                *)
 (* 另：req_iterate_cauchy 结论位由 Id 的 (N <= m)%nat 前提改为      *)
 (* NatLe 前提（cauchy_complete 字段 L40591 对接形）——语义同构，     *)
-(* 消费 iterate_lim_exists 零摩擦，登记头注登记表 4。                *)
+(* 依存 iterate_lim_exists 零摩擦，登记头注登记表 4。                *)
 (* ============================================================ *)
 Print Assumptions req_r_pow_nonneg.
 Print Assumptions req_minus_pos.

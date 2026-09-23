@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   bxcd_bsum_snoc（原 L139，2 句强证）	*)
 (* ============================================================ *)
@@ -13,11 +13,11 @@
 (* e^a · e^(-a) → 1：柯西方块恒等 → 三角坍缩 → 余项范数尾界。     *)
 (* 保底件 bxcd_prod_near_one：∀q>0 ∃N ∀n≥N,                      *)
 (*   ‖esp n a · esp n (-a) − bone‖ < q （QltT/sigT/NatLe 面）。   *)
-(* 等式形 bxcd_exp_opp_one 挂账：极限乘法连续性属 BASM 领地       *)
+(* 等式形 bxcd_exp_opp_one 遗留：极限乘法连续性属 BASM 领地       *)
 (* （UpReqBanachExpAdd.vo 未落，闸门裁决=候 BASM 连续性件）。     *)
 (* 坍缩特例自证（bxcd_ 前缀）：UpReqBanachInvPre.vo 未落（闸门）。 *)
 (* 依赖：UpReqBanachExp/Prod/Double/ExpBasic/Add/NormConv。       *)
-(* 20260915 席AA18 消费面迁移：追加 Require BanachNoHyp；bxcd_ 四件 *)
+(* 20260915 席AA18 依存面迁移：追加 Require BanachNoHyp；bxcd_ 四件 *)
 (* （dline_binom_term/tri_bone/prod_split/prod_near_one）签名收窄至  *)
 (* 零假设（bnh_esp_term_binom 同位供给），hplus/hwd 形参全摘。       *)
 (* 红线自审：语句面全 Set（bae/QltT/sigT/NatLe），证内 Prop 内衬；*)
@@ -273,7 +273,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* ② 标量中心重排（消费 Prod2 bpr2_bterm_split，零新证）          *)
+(* ② 标量中心重排（依存 Prod2 bpr2_bterm_split，零新证）          *)
 (* ============================================================ *)
 
 (* 项级：F a j · G a i == (a^j·(-a)^i)·bcoef(/j!·/i!)

@@ -6,14 +6,14 @@
 (* Require 面                                                                *)
 (* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：agq_omd_lt_one（共 1 条；余 13 条批量注记结案）             *)
-(* 非平凡性口径：界链显式直造收口，十四玩具全处置；无一行拆分式假非平凡。    *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 非平凡性口径：界链显式直造闭合，十四玩具全处置；无一行拆分式假非平凡。    *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================ *)
 (* UpReqAttnIter.v *)
 (* *)
-(* 目的： 注意力迭代算子的 req 层镜像（核、TV、迭代步）。 *)
+(* 目的： 注意力迭代算子的 req 层副本（核、TV、迭代步）。 *)
 (* 主件： attention_iter_i 迭代核与 q_kernel_i；agq_omd_pos / agq_p_norm 正性与范数族。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。 *)
 (* 备注： 一温度族载体以 Section 变量承接；迭代正性与 TV 一步界为构造核。 *)
@@ -21,7 +21,7 @@
 
 (* UpReqAttnIter.v — 签名迁移批 4 清账席：AttentionGibbsBridge q_kernel/收缩迭代簇 req 化
    Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L28817-29330
-     （q_kernel 簇 + 段2 TV 收缩核心 + 段3 旗舰 + 几何迭代收敛，25 Lemma/Theorem
+     （q_kernel 簇 + 段2 TV 收缩核心 + 段3 主定理 + 几何迭代收敛，25 Lemma/Theorem
       + 1 节参位；边界邻接件 one_minus_delta_pos @28793 顺带已证明）。
    ----------------------------------------------------------------
    核对三源核查结论（防重建，逐件判见头注核对表）：
@@ -29,27 +29,27 @@
      Section UContraction——与本簇 Id 行号不同节，但数学同构（通用 u + delta +
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
      全显投喂实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
-     nu := 稳态处 δ 透明合一，旗舰 agq_tv_contraction 一行 exact 闭合即脊柱
+     nu := 稳态处 δ 透明合一，主定理 agq_tv_contraction 一行 exact 闭合即脊柱
    2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记“q_kernel/收缩迭代簇
      批0 试点 UpSigMigrate.v 仅 req_attention_is_gibbs_temp（fixed-z 形），
      与本簇零交集。
-   真缺件 = 单点对稳态特有件 + 独立辅件 + 收敛旗舰，共 31 件（含节内补建
+   真缺件 = 单点对稳态特有件 + 独立辅件 + 收敛主定理，共 31 件（含节内补建
    新文件 UpReqAttnIter.v（UpReqAttnGibbs.v 已结果稳定，零触碰）。
    ----------------------------------------------------------------
-   覆盖核对（req 件名 -> Id 原件 @ 行号；判：已证明=对位消费脊柱件，
-   【脊柱 10 件·已已证明（对位消费 UpReqSampling.ReqUContraction 出节件）】
+   覆盖核对（req 件名 -> Id 原件 @ 行号；判：已证明=对位依存脊柱件，
+   【脊柱 10 件·已已证明（对位依存 UpReqSampling.ReqUContraction 出节件）】
      agq_omd_pos<-28793邻接(对位u_omd_pos_next)
      agq_kernel_nonneg<-28817(对位u_r_nonneg) agq_kernel_row<-28829(对位u_r_norm)
      agq_tr_decomp<-28848(对位u_tr_decomp) agq_delta_absorb<-28874(对位delta_absorb_u)
      agq_step_decomp<-28896(对位u_step_decomp) agq_step_norm<-28931(对位u_step_norm)
      agq_abs_kernel_bound<-29104(对位u_abs_row) agq_iter_norm<-29266(对位u_titer_norm)
-     agq_tv_contraction<-29195(旗舰·对位u_tv_contraction两点强于单点 +
-       稳态目标端换轨（p_steady_i 槽 + agq_tv_compat_r：step(p) ≡ p 逐点）；
-       req 形删非负前提位——同 rsq_u_tv_contraction 判，收缩主界不消费非负位)
+     agq_tv_contraction<-29195(主·对位u_tv_contraction两点强于单点 +
+       稳态目标端换轨（p_steady_i 参数位 + agq_tv_compat_r：step(p) ≡ p 逐点）；
+       req 形删非负前提位——同 rsq_u_tv_contraction 判，收缩主界不依存非负位)
    【单点特有 9 件·真证/组装（UpReqSampling 两点机不产出）】
      agq_p_norm<-28802(基带 setoid 件为 Id 形另席结果；本节 sumf 自持重建)
      agq_p_pos<-29012 agq_p_kernel_fixed<-29040(稳态不变性 p·Q==p：
-       消费 p_steady 槽 + agq_step_decomp + agq_plus_cancel +
+       依存 p_steady 参数位 + agq_step_decomp + agq_plus_cancel +
        agq_minus_scal_opp_cc + agq_absorb_inv)
      agq_diff_decomp<-29073(逐点差分解：reqd_minus_compat /
        agq_minus_plus_swap_cc / agq_minus_scal_opp_cc / req_mult_minus_distr_r /
@@ -64,22 +64,22 @@
    【迭代收敛 4 件】agq_r_pow_dec<-14100接口件特例(κ:=1-δ；真证)
      agq_r_pow_dec_iter<-29251(nat 层 lia/Nat.leb 与 Id 原件同构——Prop 位
        与 Id 原件同阶，先例 UpReqSampling 登记表 7)
-     agq_tv_iter<-29287(旗舰2·归纳重放：底 case 数乘单位换轨 + 递归步
+     agq_tv_iter<-29287(主2·归纳重放：底 case 数乘单位换轨 + 递归步
        req_le_mult_compat_r 对位；目标端稳态固定，两点 rsq_u_tv_iter 不直接产出)
-     agq_iterate_converges<-29330(旗舰3·真证：arch_pow 假设位消解 +
+     agq_iterate_converges<-29330(主3·真证：arch_pow 假设位消解 +
        le_mult_compat_weak + lt_id_l 换序完成)
-   【节参位 1】arch_pow_i<-29247(Id r_arch_pow_attn 诚实接口槽逐位保留；
+   【节参位 1】arch_pow_i<-29247(Id r_arch_pow_attn 诚实接口参数位逐位保留；
      幂底换 req_r_pow omd，B 类假设位)
    【定义件 δ 同构迁移另计】boltzmann_factor_i<-28592 Z_thermo_i<-28595
      boltzmann_dist_i<-28599(约定不换号：Id boltzmann_factor = exp_neg(1/D·E)
      本节同形) q_kernel_i<-28812(minus→req_minus) attention_step_i<-28789
-     inv_two_i<-28782 tv_i<-28785 attention_iter_i(iterate 镜像)。
+     inv_two_i<-28782 tv_i<-28785 attention_iter_i(iterate 副本)。
      Id Variable Z_thermo_pos @28597 → 本节保留 Variable Z_thermo_i_pos
-     （Id SumOver 类无 sum_pos 字段，诚实槽逐位）。
+     （Id SumOver 类无 sum_pos 字段，诚实参数位逐位）。
    【诚实接口新增（Id 字面 req 同位，先例 ReqStrictOrderBridge L1468/
      UpReqAttnGibbs sum_le 位）】abs_nonneg_h<-Id RealInterface abs_nonneg
      @285 平形（RIS 类仅 eps 形无平形，构造性序不可导→节内假设位，Real 实例
-     可满足）；sum_nonneg_h<-Id sum_over_S_nonneg 字段 req 镜像。
+     可满足）；sum_nonneg_h<-Id sum_over_S_nonneg 字段 req 副本。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值；nat 层 (m<=n)%nat 与
    Id 原件同阶）；纯 term-mode（req_trans 链 + compat 桥，无集合oid等价
@@ -99,8 +99,8 @@ Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
 (* Section ReqAttnIter：q_kernel/收缩迭代簇 req 迁移（29 件）      *)
-(*   求和诚实接口 = Id SumOver 类字段（L1400-1441）req 镜像，      *)
-(*   节内自持（跨席假设申报不可消费纪律）。                    *)
+(*   求和诚实接口 = Id SumOver 类字段（L1400-1441）req 副本，      *)
+(*   节内自持（跨席假设申报不可依存纪律）。                    *)
 (* ============================================================ *)
 Section ReqAttnIter.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -108,7 +108,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 
-(* ---- 求和诚实接口（Id SumOver 字段 req 镜像，逐位） ---- *)
+(* ---- 求和诚实接口（Id SumOver 字段 req 副本，逐位） ---- *)
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
 Hypothesis sum_linear :
@@ -119,17 +119,17 @@ Hypothesis sum_add :
     req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)).
 Hypothesis sum_le :
   forall f g : S -> R, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g).
-(* 非负函数求和非负（Id sum_over_S_nonneg 字段 req 镜像） *)
+(* 非负函数求和非负（Id sum_over_S_nonneg 字段 req 副本） *)
 Hypothesis sum_nonneg_h :
   forall f : S -> R, (forall s : S, le zero (f s)) -> le zero (sumf f).
-(* 求和三角（Id abs_sum_le 字段 req 镜像） *)
+(* 求和三角（Id abs_sum_le 字段 req 副本） *)
 Hypothesis abs_sum_le_h :
   forall f : S -> R, le (abs (sumf f)) (sumf (fun s : S => abs (f s))).
-(* abs 非负平形（Id RealInterface abs_nonneg @285 req 同位槽：RIS 类仅
+(* abs 非负平形（Id RealInterface abs_nonneg @285 req 同位参数位：RIS 类仅
    eps 形，构造性序不可导，Real 实例可满足） *)
 Hypothesis abs_nonneg_h : forall a : R, le zero (abs a).
 
-(* ---- Boltzmann 侧（Id @28587-28602 镜像；e^{-E/T} 约定不换号） ---- *)
+(* ---- Boltzmann 侧（Id @28587-28602 副本；e^{-E/T} 约定不换号） ---- *)
 Variable D : R.
 Variable D_pos : lt zero D.
 Variable energy : S -> R.
@@ -144,7 +144,7 @@ Variable Z_thermo_i_pos : lt zero Z_thermo_i.
 Definition boltzmann_dist_i (s : S) : R :=
   mult (inv_pos Z_thermo_i Z_thermo_i_pos) (boltzmann_factor_i s).
 
-(* ---- Markov 侧（Id @28709-28762 镜像；le 层语句同形平迁） ---- *)
+(* ---- Markov 侧（Id @28709-28762 副本；le 层语句同形平迁） ---- *)
 Variable transition : S -> S -> R.
 (* 行归一（Id transition_normalization @28711；Id->req 出口换轨） *)
 Variable transition_row_i :
@@ -155,7 +155,7 @@ Variable delta_lt_one : lt delta one.
 (* Doeblin 下界（Id minorization @28759；le 层同形逐位） *)
 Variable minorization :
   forall s s' : S, le (mult delta (boltzmann_dist_i s')) (transition s s').
-(* 混合 plus 兼容双槽（Id @28761/@28762 同位） *)
+(* 混合 plus 兼容双参数位（Id @28761/@28762 同位） *)
 Variable lt_plus_compat_lt_le_i :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Variable lt_plus_compat_le_lt_i :
@@ -166,20 +166,20 @@ Variable sum_swap_i : forall f : S -> S -> R,
       (sumf (fun s' : S => sumf (fun s : S => f s s'))).
 (* abs 见证位（Id abs_ge_zero_id_cc @28778；出口 Id 换 req，同 UpReqSampling 判） *)
 Variable abs_ge_zero_i : forall a : R, le zero a -> req (abs a) a.
-(* 稳态（Id steady_state_boltzmann_attn @28722 req 形槽：Id 件由 detailed_balance
+(* 稳态（Id steady_state_boltzmann_attn @28722 req 形参数位：Id 件由 detailed_balance
    真证且已结果基带 setoid 件；本节自持 B 类假设位逐位保留） *)
 Variable p_steady_i :
   forall s' : S,
     req (sumf (fun s : S => mult (boltzmann_dist_i s) (transition s s')))
         (boltzmann_dist_i s').
-(* 几何击穿槽（Id r_arch_pow_attn @29247 诚实接口位 req 形；幂底换 req_r_pow） *)
+(* 几何击穿参数位（Id r_arch_pow_attn @29247 诚实接口位 req 形；幂底换 req_r_pow） *)
 Variable arch_pow_i :
   forall (a : R), lt zero a -> forall eps : R, lt zero eps ->
     sigT (fun N : nat => lt (mult a (req_r_pow (req_minus one delta) N)) eps).
 
 Let omd := req_minus one delta.
 
-(* 1−δ > 0（@28793 边界邻接件顺带已证明；对位消费 rsq_u_omd_pos_next） *)
+(* 1−δ > 0（@28793 边界邻接件顺带已证明；对位依存 rsq_u_omd_pos_next） *)
 Lemma agq_omd_pos : lt zero omd.
 Proof.
   exact (@rsq_u_omd_pos_next R RIS delta delta_lt_one lt_plus_compat_lt_le_i).
@@ -221,7 +221,7 @@ Proof.
   - exact (req_le_plus_nonneg_r omd delta (lt_le_iff _ _ (inl delta_pos))).
 Qed.
 
-(* 1−δ < 1（@29032；真证：omd δ 展开 + 混合 plus 兼容槽） *)
+(* 1−δ < 1（@29032；真证：omd δ 展开 + 混合 plus 兼容参数位） *)
 Lemma agq_omd_lt_one : lt omd one.
 Proof.
   exact (lt_id_r omd (plus one zero) one (plus_zero one)
@@ -244,7 +244,7 @@ Proof.
              (inv_pos_correct Z_thermo_i Z_thermo_i_pos)).
 Qed.
 
-(* p 逐点正（@29012；真证：mult_positive 直配） *)
+(* p 逐点正（@29012；真证：mult_positive 直接匹配） *)
 Lemma agq_p_pos : forall s : S, lt zero (boltzmann_dist_i s).
 Proof.
   intro s. unfold boltzmann_dist_i.
@@ -333,7 +333,7 @@ Proof.
       * exact (req_opp_mult_r (req_minus one a) b).
 Qed.
 
-(* |c·b| ≤ c·|b|（c ≥ 0）（@29185；真证：abs_mult + abs 见证槽） *)
+(* |c·b| ≤ c·|b|（c ≥ 0）（@29185；真证：abs_mult + abs 见证参数位） *)
 Lemma agq_abs_mult_nonneg :
   forall a b : R, le zero a -> le (abs (mult a b)) (mult a (abs b)).
 Proof.
@@ -347,7 +347,7 @@ Proof.
                  (le_refl _)).
 Qed.
 
-(* ---- 脊柱十件（对位消费 UpReqSampling.ReqUContraction 出节件；
+(* ---- 脊柱十件（对位依存 UpReqSampling.ReqUContraction 出节件；
    u := boltzmann_dist_i，q_kernel_i/attention_step_i/tv_i δ 透明合一） ---- *)
 
 (* Q 核逐点非负（@28817；对位 rsq_u_r_nonneg） *)
@@ -443,9 +443,9 @@ Proof.
                 (reqd_minus_compat _ _ _ _ (req_refl _) (H s))))).
 Qed.
 
-(* ========== 旗舰 1：单步 TV 收缩（@29195）==========
-   对位消费 rsq_u_tv_contraction 两点形于 nu := p + 稳态目标端换轨
-   （p_steady_i 槽：step(p) ≡ p 逐点）；req 形删非负前提位——同
+(* ========== 主定理 1：单步 TV 收缩（@29195）==========
+   对位依存 rsq_u_tv_contraction 两点形于 nu := p + 稳态目标端换轨
+   （p_steady_i 参数位：step(p) ≡ p 逐点）；req 形删非负前提位——同
    rsq_u_tv_contraction 判。 *)
 Lemma agq_tv_contraction : forall mu : S -> R,
   req (sumf mu) one ->
@@ -481,7 +481,7 @@ Proof.
   - exact (le_mult_compat_weak zero b a Ha Hb).
 Qed.
 
-(* 单步保持非负（@29129；真证：X/Y 双腿 + le_plus_compat） *)
+(* 单步保持非负（@29129；真证：X/Y 双肢 + le_plus_compat） *)
 Lemma agq_step_nonneg : forall mu : S -> R,
   req (sumf mu) one -> (forall s : S, le zero (mu s)) ->
   forall s' : S, le zero (attention_step_i mu s').
@@ -525,7 +525,7 @@ Proof.
              (agq_iter_norm n mu Hmu) (IH mu Hmu Hnn) s).
 Qed.
 
-(* 稳态不变性：p·Q == p（@29040；真证：p_steady 槽 + 单步分解 +
+(* 稳态不变性：p·Q == p（@29040；真证：p_steady 参数位 + 单步分解 +
    agq_plus_cancel + agq_minus_scal_opp_cc + agq_absorb_inv） *)
 Lemma agq_p_kernel_fixed : forall s' : S,
   req (sumf (fun s : S => mult (boltzmann_dist_i s) (q_kernel_i s s')))
@@ -661,7 +661,7 @@ Proof.
                  (req_mult_compat _ _ _ _ (req_refl _) S5)))).
 Qed.
 
-(* TV 距离非负（@29119；真证：inv 双正 + sum_nonneg_h + abs_nonneg_h 槽） *)
+(* TV 距离非负（@29119；真证：inv 双正 + sum_nonneg_h + abs_nonneg_h 参数位） *)
 Lemma agq_tv_nonneg : forall mu nu : S -> R, le zero (tv_i mu nu).
 Proof.
   intros mu nu. unfold tv_i.
@@ -758,7 +758,7 @@ Proof.
       assert (Hm : m = Datatypes.S n) by lia. subst m. apply le_refl.
 Qed.
 
-(* ========== 旗舰 2：几何迭代 TV 收缩（@29287）==========
+(* ========== 主定理 2：几何迭代 TV 收缩（@29287）==========
    真证归纳：底 case 数乘单位换轨；递归步 agq_tv_contraction +
    req_le_mult_compat_r + 结合换轨；目标端稳态固定。 *)
 Lemma agq_tv_iter : forall (n : nat) (mu : S -> R),
@@ -797,10 +797,10 @@ Proof.
         -- apply le_refl.
 Qed.
 
-(* ========== 旗舰 3：迭代收敛（@29330）==========
+(* ========== 主定理 3：迭代收敛（@29330）==========
    真证：arch_pow_i 假设位消解 + agq_tv_iter + agq_tv_nonneg +
    agq_r_pow_dec_iter + le_mult_compat_weak + lt_id_l 换序完成；
-   req 形删初态非负前提位（agq_tv_iter 链不消费，同旗舰 1 判）。 *)
+   req 形删初态非负前提位（agq_tv_iter 链不依存，同主定理 1 判）。 *)
 Theorem agq_iterate_converges :
   forall mu0 : S -> R,
     req (sumf mu0) one ->

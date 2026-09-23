@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   gapb_conservative_B（原 L391，1 句玩具证）                           *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
 (* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
@@ -29,12 +29,12 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPPOGapB.v —— 槽消解战役 #9（重启席）：ppo_gap_exact 的 ≤_B 对偶   *)
+(* UpReqPPOGapB.v —— 参数位消解战役 #9（重启席）：ppo_gap_exact 的 ≤_B 对偶   *)
 (*   第二层（PPO 保守族 B 形精确恒等式线 · 20260910）                     *)
 (* ---------------------------------------------------------------- *)
 (* 上游侦察定妆：rppo_ppo_gap_exact（UpReqPPO.v L750-853，req 层恒等式：  *)
 (*   req_minus IS PPO == Σ π_old·((r − min(r, clip r))·adv)，min/r_max    *)
-(*   符号载体零 le 消费）在本库 Real 层镜像建造；兄弟件（G06_BForm.v      *)
+(*   符号载体零 le 依存）在本库 Real 层副本建造；兄弟件（G06_BForm.v      *)
 (*   real_ppo_conservative_B_full / UpRealLeB.v real_ppo_conservative_B  *)
 
 (*   做恒等式差的逐 eps 非负化层（≤_B 对偶面）。                          *)
@@ -43,14 +43,14 @@
 (*   [标量内机 2]                                                        *)
 (*     gapb_plus_mid_opp      a+(b+−a) == b（中位对翻塌缩）               *)
 (*     gapb_plus_opp_swap     (y+x)+−y == x（换位塌缩）                  *)
-(*   [消费机器链镜像件] gapb_gap_exact：real_eq gapb_gap gapb_gap_sum     *)
-(*     （rppo_ppo_gap_exact 的 Real 层逐位镜像：逐点双层分配拆分          *)
+(*   [依存机器链副本件] gapb_gap_exact：real_eq gapb_gap gapb_gap_sum     *)
+(*     （rppo_ppo_gap_exact 的 Real 层逐位副本：逐点双层分配拆分          *)
 (*       π·(r·A) == π·(m·A)+π·((r+−m)·A)（distrib/distrib_r 零 opp 求和   *)
 (*       机器路线）+ sum_ext 输运 + sum_add 拆项 + 换位塌缩完成）          *)
 (*   [保底件] gapb_gap_exact_res_nonneg_B：0 ≤_B (恒等式两侧差)           *)
 (*     （逐 eps 层：两侧差 ≡ 恒等式两端之 self-diff ≡ 0，leb3 运输单步）   *)
 (*   [内机] gapb_res_weight_nonneg：0 ≤ E（E := Σ π_old·adv 的非负性——    *)
-(*     接口内可导：逐点双正 mult_positive + sum_le 槽 + Σ0≡0 换形）        *)
+(*     接口内可导：逐点双正 mult_positive + sum_le 参数位 + Σ0≡0 换形）        *)
 (*   [主件·完整对偶件] gapb_gap_nonneg_B：0 ≤_B (IS − PPO)                *)
 (*     （real_le_closure_b_nonneg 完成：C := E 仅需非负——F.1 广义完成器   *)
 (*       解锁，零新增前提；逐 eps 体 = conservative_eps + Or 形差非负      *)
@@ -60,7 +60,7 @@
 (*   [连接件 2] gapb_conservative_B：PPO ≤_B IS                           *)
 (*     （语句面 = G06_BForm.real_ppo_conservative_B_full 结论 L62-72      *)
 (*       逐字同形——对偶件 ⟹ 已有 B 形保守件的推论关系，消解即核；         *)
-(*       前提面较 B_full 减 sum_pos 槽（E≥0 路线替代 E>0 证书路线））      *)
+(*       前提面较 B_full 减 sum_pos 参数位（E≥0 路线替代 E>0 证书路线））      *)
 (* ---------------------------------------------------------------- *)
 (* 结论诚实边界（不越 Or 不可证结论）：                                   *)
 (*   1. 本件全库只主张 ≤_B（real_le_b，Set 值 forall 型）形；Or 形精确     *)
@@ -68,7 +68,7 @@
 (*      real_min Or 形下界（Real 层仅 real_min_le_l_eps 逐 eps 形   *)
 (*      在案），UpRealLeB 结论 2「Or 形精确完成构造性不可证」同源，不越。  *)
 
-(*      E 的非负性（0 ≤ E 接口内可导，见内机），严格正性槽仍归 T2① 结论。 *)
+(*      E 的非负性（0 ≤ E 接口内可导，见内机），严格正性参数仍归 T2① 结论。 *)
 (*   3. 与兄弟件语义互补零重复：G06_BForm/rpl_ 簇给「PPO ≤_B IS」下界，    *)
 (*      本件给「差 ≡ 恒等式右端（逐 eps 非负化）」精确层+对翻桥。          *)
 (* 红线自审：real_le_b Set 值 forall 型、real_lt sigT 见证型零 Prop 泄露；  *)
@@ -89,8 +89,8 @@ Require Import UpRealLeB3.
 
 (* ============================================================ *)
 (* 节 GapBPPOLeB：节参面 = RealPPOMain / UpRealLeB Part C /          *)
-(*   G06_BForm RealPPOLeBFull 同位（ext/le/add/linear 四槽 + 数据参），     *)
-(*   减 sum_pos 槽（本件 E≥0 路线不需要）。                                *)
+(*   G06_BForm RealPPOLeBFull 同位（ext/le/add/linear 四参数位 + 数据参），     *)
+(*   减 sum_pos 参数位（本件 E≥0 路线不需要）。                                *)
 (* ============================================================ *)
 Section GapBPPOLeB.
 
@@ -138,7 +138,7 @@ Definition gapb_gap_pointwise (s : S) : Real :=
             (real_mult (real_plus (gapb_ratio s) (real_opp (gapb_min_ratio s)))
                        (real_advantage_fn s)).
 Definition gapb_gap_sum : Real := real_sum_over_S gapb_gap_pointwise.
-(* 残差权系数 E := Σ π_old·adv（real_ppo_res_weight 同位 δ 透明，res_fold 直配） *)
+(* 残差权系数 E := Σ π_old·adv（real_ppo_res_weight 同位 δ 透明，res_fold 直接匹配） *)
 Definition gapb_res_weight : Real :=
   real_ppo_res_weight S real_sum_over_S real_pi_old real_advantage_fn.
 
@@ -213,7 +213,7 @@ Proof.
                     (real_pi_old_pos s) (real_advantage_pos s))))).
 Qed.
 
-(* ============ 消费机器链镜像件：恒等式（rppo_ppo_gap_exact Real 层） ============ *)
+(* ============ 依存机器链副本件：恒等式（rppo_ppo_gap_exact Real 层） ============ *)
 (* 逐点拆分 π·(r·A) == π·(m·A) + π·((r+−m)·A)：distrib/distrib_r 双层分配， *)
 (* 零 opp 求和机器（Σ opp 免建——拆分形先走 sum_add 再换位塌缩）。           *)
 Lemma gapb_gap_exact : real_eq gapb_gap gapb_gap_sum.
@@ -408,7 +408,7 @@ Qed.
 
 (* ============ 连接件 2：对偶件 ⟹ 已有 B 形保守件（推论关系消解） ============ *)
 (* 语句面 = G06_BForm.real_ppo_conservative_B_full 结论（L62-72）逐字同形；  *)
-(* 证明 = 连接件 1 ← 主件 单链（零 sum_pos 槽、零 E>0 证书前提）。           *)
+(* 证明 = 连接件 1 ← 主件 单链（零 sum_pos 参数位、零 E>0 证书前提）。           *)
 Theorem gapb_conservative_B :
   real_le_b
     (real_sum_over_S (fun s : S =>
@@ -428,17 +428,17 @@ End GapBPPOLeB.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                                          *)
-(*   [分级] 内机 2（标量塌缩，结构同 rppo 内机 6 之 Real 镜像）+ 内机 1      *)
-(*     （E≥0：mult_positive 两喂 + sum_le 槽 + Σ0≡0）+ 恒等式件（逐点双层   *)
-(*     分配 + sum_ext 输运 + sum_add + 换位塌缩——rppo_ppo_gap_exact 消费    *)
-(*     机器链 Real 层逐位镜像，路线改良：拆分形先 sum_add 免 Σopp 机器）     *)
+(*   [分级] 内机 2（标量塌缩，结构同 rppo 内机 6 之 Real 副本）+ 内机 1      *)
+(*     （E≥0：mult_positive 两喂 + sum_le 参数位 + Σ0≡0）+ 恒等式件（逐点双层   *)
+(*     分配 + sum_ext 输运 + sum_add + 换位塌缩——rppo_ppo_gap_exact 依存    *)
+(*     机器链 Real 层逐位副本，路线改良：拆分形先 sum_add 免 Σopp 机器）     *)
 (*     + 保底件（leb3 运输单步）+ 主件（F.1 非负完成器——E 仅需 ≥0，         *)
 (*     完整升格零新增前提）+ 连接件 1（对翻桥，泛型）+ 连接件 2（B_full     *)
 (*     结论面逐字推论消解）。                                              *)
 (*   [结论边界] Or 形 real_le zero gapb_gap 不主张（结论 2 同源不可越）；   *)
-(*     E>0 严格正性结论 5 不被推翻（本件只消费 E≥0 接口内可导非负性）。     *)
+(*     E>0 严格正性结论 5 不被推翻（本件只依存 E≥0 接口内可导非负性）。     *)
 (*   [对位不冒领] 恒等式件为 rppo_ppo_gap_exact（req 层真证在案）的 Real    *)
-(*     层镜像，非同一编码层同名额冰——两件跨层互证（req 侧消费 UpReqPPO.v    *)
+(*     层副本，非同一编码层同名额冰——两件跨层互证（req 侧依存 UpReqPPO.v    *)
 
 
 

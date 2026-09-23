@@ -8,8 +8,8 @@
 (* 替换定理清单：sp2_pt_plus／sp2_pt_mult／sp2_pt_opp／sp2_pt_const／        *)
 (* sp2_pt_zero／sp2_qeq_le／sp2_qnewton_0／sp2_qnewton_S／sp2_q4pow_S／      *)
 (* sp2_q4pow_0／sp2_qgap_E（共 11 条）                                       *)
-(* 非平凡性口径：逐槽显式直造与换形链，消除单跳转发；无一行拆分式假非平凡。  *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 非平凡性口径：逐参数位显式直造与换形链，消除单跳转发；无一行拆分式假非平凡。  *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================ *)
@@ -699,7 +699,7 @@ Proof.
 Qed.
 
 (* L5 主率（乘法不变量）：gapₙ·4ⁿ ≤ 3 —— 除法自由、无 Or 分派 *)
-(*【AA16S 完成 20260915】率出口两件绿：主链 B≤3 腿改真不等式链               *)
+(*【AA16S 完成 20260915】率出口两件绿：主链 B≤3 肢改真不等式链               *)
 (*  （Hid 环换形 → (gap·4^m)·g ≤ 3·g ≤ 3），全链 sp2_qle_eq_l/r 传输；      *)
 
 Theorem sp2_sqrt_rate_core : forall D : Q, Qle 1 D -> Qle D 4 ->
@@ -1237,7 +1237,7 @@ Print Assumptions sp2_eig_s_pos.
 (* sp2_lower0_plus：lower0 y ⟹ lower0 z ⟹ lower0 (y+z)——           *)
 (*   H1 at ε/2 得 δ1,N1，H2 at ε/2 得 δ2,N2；δ:=δ1+δ2（正性        *)
 (*   Qplus_lt_compat），N:=max N1 N2（S02 real_lt_trans 的          *)
-(*   NatLe_lift + Nat.le_trans + NatLe_drop 消费模式照抄）；        *)
+(*   NatLe_lift + Nat.le_trans + NatLe_drop 依存模式照抄）；        *)
 (*   点态 δ1+δ2 < ε+y_n+z_n = Qplus_lt_compat + field 换形。        *)
 (* sp2_lower0_sq：∀x, lower0 (x·x) —— sp2_lower0_intro +            *)
 (*   sp2_qsq_nonneg 逐点（sp2_pt_mult 换 projT1 后直接喂）。         *)

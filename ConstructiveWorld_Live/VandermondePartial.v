@@ -3,14 +3,14 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   vdp_q2d_partial_succ（原 L508，1 句玩具证）                          *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* VandermondePartial.v —— 施工席 B5：Q 层有限 Vandermonde 三角重组   *)
-(* （exp 加法的第一腿；2026-09-16；只依赖 CW_ConstructiveWorld_219    *)
+(* （exp 加法的第一肢；2026-09-16；只依赖 CW_ConstructiveWorld_219    *)
 (*   薄壳，S03_QExp 经薄壳可达）                                    *)
 (* ============================================================ *)
 (* 目标（依 A5 席详案 D / 果实 6）：                                *)
@@ -28,7 +28,7 @@
 (*   论证层 vander_4m2 / vander_4m4 与本件 vdp_* 前缀件同名不同义——     *)
 (*   本件是 Q 层有限 exp_partial 加法恒等式（vdp_binom/vdp_sumN 三角    *)
 (*   重组），并非 S03 配对论证件；S03 无 exp_partial(a+b) 恒等式，       *)
-(*   新颖性判词成立。跨件引用时勿混淆。                                 *)
+(*   新颖性结论成立。跨件引用时勿混淆。                                 *)
 (* 红线自审：出口语句面全 QeqT/QleT'（Set 层，无 Prop 连词）；        *)
 (*   中间件沿 S03 惯例用 Qeq setoid ==；全件 Qed；文末逐件            *)
 (*   Print Assumptions 留痕。                                       *)
@@ -277,7 +277,7 @@ Proof.
         replace (Datatypes.S m - i)%nat with (Datatypes.S ((m - i)%nat)) by lia.
         reflexivity.
       - exact (vdp_eq_sym _ _ (IH (fun i => F (Datatypes.S i)))). }
-    (* L == 移位桥右端 == F 0 + Σ F (S i)；R == HG 换形后 == Σ F (S i) + F 0；ring 收口 *)
+    (* L == 移位桥右端 == F 0 + Σ F (S i)；R == HG 换形后 == Σ F (S i) + F 0；ring 闭合 *)
     apply (vdp_eq_trans _ (F 0%nat + vdp_sumN m (fun i => F (Datatypes.S i)))).
     + exact (vdp_sumN_shift m F).
     + rewrite HG. ring.
@@ -545,7 +545,7 @@ Proof.
   - exact (qeqT_imp_qeq _ _ (vdp_exp_partial_add_gen (Qopp a) (Qopp b) n)).
 Qed.
 
-(* ---------- §7 对称件 vdp_sym 与特例收口 vdp_opp_self_two ---------- *)
+(* ---------- §7 对称件 vdp_sym 与特例闭合 vdp_opp_self_two ---------- *)
 
 (* 全矩形双和：Σ_{i=0}^{n} Σ_{j=0}^{n} (A^i/i!)·(B^j/j!)（= exp·exp） *)
 Definition vdp_q2d_full (n : nat) (A B : Q) : Q :=
@@ -624,8 +624,8 @@ Proof.
     apply vdp_sumN_ext. intros i Hi. ring.
 Qed.
 
-(* 特例收口（b := −a 镜像，bxoo_exp_opp_one@UpReqBanachExpOppOne:209 的
-   Q 层有限镜像）：exp(−a)·exp(a) = 1 + 尾（精确恒等式，极限下尾 → 0） *)
+(* 特例闭合（b := −a 副本，bxoo_exp_opp_one@UpReqBanachExpOppOne:209 的
+   Q 层有限副本）：exp(−a)·exp(a) = 1 + 尾（精确恒等式，极限下尾 → 0） *)
 Theorem vdp_opp_self_two : forall (a : Q) (n : nat),
   QeqT (exp_partial n (Qopp a) * exp_partial n a) (1 + vdp_sym_tail n (Qopp a) a).
 Proof.

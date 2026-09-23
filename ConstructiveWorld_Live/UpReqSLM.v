@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   req_greedy_kernel_limit_noslot（原 L1179，3 句玩具证）               *)
 (*   slm_discharge_pick_optimal（原 L1166，3 句玩具证）                   *)
@@ -18,13 +18,13 @@
 (* ============================================================ *)
 (* 【T317 恒等守恒更正注记】2026-09-21 包AV六 台账席（头注更正试点件） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，   *)
-(* 经 T277（包AL）全量恒等核查定谳、T287（包AV）抽验复核：本件实测   *)
-(* 为恒等守恒——清单所列 9 槽证明体与 Main 现版原件逐字同文（刀体  *)
+(* 经 T277（包AL）全量恒等核查已证结论、T287（包AV）抽验复核：本件实测   *)
+(* 为恒等守恒——清单所列 9 参数位证明体与 Main 现版原件逐字同文（刀体  *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。          *)
-(* 更正口径：真替换 0 槽＋恒等守恒 9 槽；本注记为追加块，上方原头  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 9 参数位；本注记为追加块，上方原头  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面   *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册。         *)
-(* 附记：T277 人工锚件；T287 抽验 9 槽守恒  *)
+(* 附记：T277 人工锚件；T287 抽验 9 参数位守恒  *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -45,7 +45,7 @@
 (*   Section LogDiffPhase3            L26405-26685（Id 系 15 件）              *)
 (* 上游：基座 + UpReqAlgebra（req_minus 引擎/消去簇）+ UpReqDist        *)
 (*   （reqd_le_of_req/reqd_opp_zero）+ UpReqAlignRestB（rls_*/rls_kernel_norm_gen *)
-(*   /req_exp_neg_ext_local——清单 (a) 消费面）。                              *)
+(*   /req_exp_neg_ext_local——清单 (a) 依存面）。                              *)
 (* 纪律：纯构造性（G1 禁词扫描全零；零经典逻辑；纯 term-mode，零 setoid-rewrite 依赖）；*)
 (*   Set 层语句零 Prop 泄露（req/lt/le/Id/And:=A*B 均 Set 值）；               *)
 (*   纯 term-mode（req_trans 五参链 + compat 桥 + assert 分段式）；             *)
@@ -63,25 +63,25 @@
 (*     先例），Real 消解显式假设（真实种子需 Or 分解形逐 eps 消解机，随 Real 层战役）。  *)
 (*   req_le_zero_mult_nonneg：le zero a -> le zero b -> le zero (mult a b)——     *)
 (*     清单判「按需假设位」，实测 le_mult_compat_weak + mult_comm/mult_zero      *)
-(*     字段链 2 行真证——降为定理（假设位省一枚，op_lipschitz_compose 消费时免加位）。  *)
+(*     字段链 2 行真证——降为定理（假设位省一枚，op_lipschitz_compose 依存时免加位）。  *)
 
-(*     （log req 兼容槽）——假设位主道 T2①，批2 gibbs_inequality 同槽家族；清单名      *)
-(*     log_le_zero_slot 以 log_le_linear_plain 强槽统一；log_req_compat_plain 为       *)
-(*     UpReqAlgebra ReqLogBridge log_req_compat 槽同构（L1492，req_log_inv_one_inv     *)
-(*     消费所需），清单结论未列，实测 LogDiff3 下界件必需——逐位核对登记。两槽均         *)
+(*     （log req 兼容参数位）——假设位主道 T2①，批2 gibbs_inequality 同参数位家族；清单名      *)
+(*     log_le_zero_slot 以 log_le_linear_plain 强参数位统一；log_req_compat_plain 为       *)
+(*     UpReqAlgebra ReqLogBridge log_req_compat 参数位同构（L1492，req_log_inv_one_inv     *)
+(*     依存所需），清单结论未列，实测 LogDiff3 下界件必需——逐位核对登记。两参数位均         *)
 (*     永久假设位：线性界 plain 完成不可导（M2 墙）；compat 待接口扩展批（UpReqAlgebra   *)
 
-(*     副道：req_log_one_plus_le_eps（真零槽：log_le_linear_eps 字段直导）；            *)
-(*     req_log_one_plus_ge_eps（消费 log_req_compat_plain + log_le_linear_eps          *)
+(*     副道：req_log_one_plus_le_eps（真零参数位：log_le_linear_eps 字段直导）；            *)
+(*     req_log_one_plus_ge_eps（依存 log_req_compat_plain + log_le_linear_eps          *)
 
 (* --------------------------------------------------------------------- *)
 (* 逐件核对表（清单件 -> 本文件 req 件；行号 = 基座）：                    *)
-(*  [SLM §3]  17(b)+定义块；7(a) 中 6 件 rls_* 直引消费（ReqListSumTool 全泛化），  *)
+(*  [SLM §3]  17(b)+定义块；7(a) 中 6 件 rls_* 直引依存（ReqListSumTool 全泛化），  *)
 (*    唯 markov_pos 对位 req_markov_pos@RestB L477 闭在 ReqSamplingWorld 节内、      *)
-(*    参数面含 Min-P 域专属槽（min_p/req_le_dec/req_lt_dec/pick_max*），SLM 世界      *)
+(*    参数面含 Min-P 域专属参数位（min_p/req_le_dec/req_lt_dec/pick_max*），SLM 世界      *)
 (*    （无 DO 域）不可实例化——req_markov_pos_slm 3 行同语句真证，(a)->(b) 让步登记。   *)
-(*    list_sum_le_on_list 对位 rls_le@RestB L210 前件形差异（rls_le 逐点无 InT       *)
-(*    限制；Id 原件 InT 限制形）——SLM 两消费件需 InT 限制形，req_list_sum_le_on_list   *)
+(*    list_sum_le_on_list 对位 rls_le@RestB L210 前提形差异（rls_le 逐点无 InT       *)
+(*    限制；Id 原件 InT 限制形）——SLM 两依存件需 InT 限制形，req_list_sum_le_on_list   *)
 (*    6 行归纳真证（辅件，非重证 rls_le）。                                       *)
 (*    1. temp_factor_antitone        L2060 -> req_temp_factor_antitone            *)
 (*    2. list_sum_add                L2097 -> req_list_sum_add                    *)
@@ -91,23 +91,23 @@
 (*         match 项 iota+delta 对 slm_markov_kernel 逐位收敛——清单分歧表注的           *)
 (*         「RestB 头注 Id 对位待裁」件就此落定）                                   *)
 (*    5. markov_relative             L2216 -> req_markov_relative（~90 行，          *)
-(*         exp_neg 同余消费 req_exp_neg_ext_local@RestB L1354——le_antisym+             *)
+(*         exp_neg 同余依存 req_exp_neg_ext_local@RestB L1354——le_antisym+             *)
 (*         exp_neg_le_decr 自足，零新机器）                                        *)
 (*    6. markov_temperature_zero_limit L2277 -> req_markov_temperature_zero_limit    *)
 (*    7. expected_loss_min_bound     L2356 -> req_expected_loss_min_bound             *)
-(*         （消费 rls_ext/rls_linear + req_list_sum_le_on_list）                    *)
+(*         （依存 rls_ext/rls_linear + req_list_sum_le_on_list）                    *)
 (*    8. markov_kernel_le_one        L2611 -> req_markov_kernel_le_one               *)
-(*         （消费 rls_single_le）                                                  *)
+(*         （依存 rls_single_le）                                                  *)
 (*    9. temperature_zero_exponential_bound L2630 -> req_temperature_zero_          *)
-(*         exponential_bound（pick_best_in_vocab 槽消费——(d) 冻结承接）               *)
+(*         exponential_bound（pick_best_in_vocab 参数位依存——(d) 冻结承接）               *)
 (*   10. list_sum_zero_fn            L2705 -> req_list_sum_zero_fn                  *)
 (*   11. markov_entropy_pointwise_nonneg L2715 -> req_markov_entropy_pointwise_      *)
-(*         nonneg（+1 假设位 log_le_linear_plain 槽；p·(−log p) ≥ 0 经                 *)
+(*         nonneg（+1 假设位 log_le_linear_plain 参数位；p·(−log p) ≥ 0 经                 *)
 (*         req_le_mult_compat_r 严格位链——清单 req_le_zero_mult_pos_l 结论由           *)
-(*         Id 证明体直消费覆盖）                                                   *)
+(*         Id 证明体直依存覆盖）                                                   *)
 (*   12. markov_entropy_nonneg       L2791 -> req_markov_entropy_nonneg               *)
 (*   13. greedy_kernel_limit         L2819 -> req_greedy_kernel_limit                 *)
-(*         （pick_best_optimal 槽——(c) 桥C1 立项后由 reqArgmin 机消解，                *)
+(*         （pick_best_optimal 参数位——(c) 桥C1 立项后由 reqArgmin 机消解，                *)
 (*         RestB L449-451 pick_max_in_vocab 冻结承接同款）                          *)
 (*   14. softmax_pos                 L2856 -> req_softmax_pos（1 行）                 *)
 (*   15. softmax_normalized          L2862 -> req_softmax_normalized（别名件）         *)
@@ -118,17 +118,17 @@
 (*   (c) argmin_aux_token_min L2481 / pick_best_optimal L2545 -> 桥C1 显式假设注记        *)
 (*       （文件尾）；(d) InT_head_extend/argmin_aux_token_mem/argmin_aux_token_snd_  *)
 (*       correct/pick_best_in_vocab'/pick_best_in_vocab -> 冻结清单注记（零证明行）。  *)
-(*  [LogDiff3 §6] 13(b) + 2(a) 消费 + 2 eps 副道件：                                *)
+(*  [LogDiff3 §6] 13(b) + 2(a) 依存 + 2 eps 副道件：                                *)
 (*    1. minus_one_plus_t    L26409 -> req_ld3_minus_one_plus_t                      *)
-(*    2. log_one_plus_le     L26423 -> req_log_one_plus_le（槽道）+                  *)
+(*    2. log_one_plus_le     L26423 -> req_log_one_plus_le（参数位道）+                  *)
 (*                                     req_log_one_plus_le_eps（副道真证）            *)
-(*    3. set_eq_le           L26435 -> req_set_eq_le（1 行，消费 reqd_le_of_req@      *)
-(*         UpReqDist L67——Id->req 差异即语句迁移本身，别名层消费）                     *)
+(*    3. set_eq_le           L26435 -> req_set_eq_le（1 行，依存 reqd_le_of_req@      *)
+(*         UpReqDist L67——Id->req 差异即语句迁移本身，别名层依存）                     *)
 (*    4. set_square_nonneg   L26441 -> req_set_square_nonneg                        *)
 (*    5. set_cube_nonneg     L26450 -> req_set_cube_nonneg                          *)
-(*    6. set_minus_mult      L26461 -> (a) 消费 req_mult_minus_distr_l@UpReqAlgebra    *)
+(*    6. set_minus_mult      L26461 -> (a) 依存 req_mult_minus_distr_l@UpReqAlgebra    *)
 (*         L525（别名直引，不设 alias 壳）                                          *)
-(*    7. set_opp_zero        L26468 -> (a) 消费 reqd_opp_zero@UpReqDist L171           *)
+(*    7. set_opp_zero        L26468 -> (a) 依存 reqd_opp_zero@UpReqDist L171           *)
 (*    8. set_quad_cube       L26477 -> req_set_quad_cube                             *)
 (*    9. set_quad_prod       L26507 -> req_set_quad_prod                             *)
 (*   10. set_minus_cube_le   L26527 -> req_set_minus_cube_le                        *)
@@ -136,23 +136,23 @@
 (*   12. set_inv_mul         L26557 -> req_set_inv_mul                              *)
 (*   13. set_div_linear_ge_quad L26566 -> req_set_div_linear_ge_quad                *)
 (*   14. set_inv_minus_one_opp L26605 -> req_set_inv_minus_one_opp                   *)
-(*   15. log_one_plus_ge     L26638 -> req_log_one_plus_ge（槽道）+                  *)
+(*   15. log_one_plus_ge     L26638 -> req_log_one_plus_ge（参数位道）+                  *)
 (*                                     req_log_one_plus_ge_eps（副道真证）            *)
 (* --------------------------------------------------------------------- *)
 (* 定义级签名差异登记表（诚实桥逐位登记）：                                        *)
 (*   1. minus -> req_minus（δ 透明 plus a (opp b)，UpReqAlgebra L58 同形）——          *)
 (*      LogDiff3 全区减法位。                                                     *)
 (*   2. log 前提化：setoid log 带 lt zero 前提（接口 L40570 区）；slm_markov_entropy  *)
-(*      定义级内联 markov_pos prefix w 前提位（清单「log 仅经 markov_entropy 消费——     *)
+(*      定义级内联 markov_pos prefix w 前提位（清单「log 仅经 markov_entropy 依存——     *)
 (*      前提位 provable」结论实证成立）。                                          *)
 (*   3. list_sum 载体 = rsum@RestB L126（逐字同构 Fixpoint，RestB MinP 区同款口径）。   *)
 (*   4. Id 环引理（plus_swap_mid/minus_plus_cancel/opp_minus/double_neg/               *)
-(*      log_inv_one_inv/mult_minus_distr_l 等在 环节属 Id 世界）不跨接口消费——      *)
+(*      log_inv_one_inv/mult_minus_distr_l 等在 环节属 Id 世界）不跨接口依存——      *)
 (*      全部换 UpReqAlgebra req 真证件（req_plus_swap_mid/req_minus_plus_cancel/         *)
 (*      req_opp_minus/req_double_neg/req_log_inv_one_inv/req_mult_minus_distr_l），      *)
 (*      Id->req 差异真证非抄写。                                                    *)
 (*   5. pick_best_token：argmin/list Id 机器域（(d) 冻结）不迁定义——顶层两事实             *)
-(*      （in_vocab/optimal）以 Variable/假设申报槽承接（RestB 同款）。               *)
+(*      （in_vocab/optimal）以 Variable/假设申报参数位承接（RestB 同款）。               *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -174,10 +174,10 @@ Class ReqNonnegPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   metric_pos_plain : forall a b : R, le zero (metric a b)
 }.
 
-(* log 族假设位组（T2①；批2 gibbs_inequality 同槽家族；波 0 裁定主道）：
-   log_le_linear_plain（Id log_le_linear 字段逐位镜像）+ log_req_compat_plain
-   （UpReqAlgebra ReqLogBridge log_req_compat 槽同构 L1492——req_log_inv_one_inv
-   消费所需；清单结论未列此槽，实测 LogDiff3 下界件必需，逐位核对登记） *)
+(* log 族假设位组（T2①；批2 gibbs_inequality 同参数位家族；波 0 裁定主道）：
+   log_le_linear_plain（Id log_le_linear 字段逐位副本）+ log_req_compat_plain
+   （UpReqAlgebra ReqLogBridge log_req_compat 参数位同构 L1492——req_log_inv_one_inv
+   依存所需；清单结论未列此参数位，实测 LogDiff3 下界件必需，逐位核对登记） *)
 Class ReqLogPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   log_le_linear_plain : forall (x : R) (Hx : lt zero x),
     le (log x Hx) (req_minus x one);
@@ -268,7 +268,7 @@ Proof.
              (req_trans _ _ _ (plus_zero (rsum Token (fun _ : Token => zero) rest)) IH)).
 Qed.
 
-(* ---- 辅件：list_sum_le_on_list 的 InT 限制形（对位 rls_le@RestB L210 前件形  *)
+(* ---- 辅件：list_sum_le_on_list 的 InT 限制形（对位 rls_le@RestB L210 前提形  *)
 (*        差异——见头注核对；6 行归纳真证，rls_le 本体不重证） ------------------- *)
 
 Lemma req_list_sum_le_on_list : forall (l : list Token) (f g : Token -> R),
@@ -350,7 +350,7 @@ Proof.
   exact (rls_kernel_norm_gen Token vocab (fun _ : Token => True) (fun _ : Token => inl I)                             (slm_temp_factor prefix) (slm_partition_temp_pos prefix)).
 Qed.
 
-(* ---- 件 5：markov_relative（L2216，SLM 区最大 (b) 件；exp_neg 同余消费        *)
+(* ---- 件 5：markov_relative（L2216，SLM 区最大 (b) 件；exp_neg 同余依存        *)
 (*        req_exp_neg_ext_local@RestB L1354） -------------------------------- *)
 
 Theorem req_markov_relative :
@@ -471,7 +471,7 @@ Proof.
   unfold A, B, C in Hfin. exact Hfin.
 Qed.
 
-(* ---- 件 7：expected_loss_min_bound（L2356；rls_ext/rls_linear (a) 消费 +      *)
+(* ---- 件 7：expected_loss_min_bound（L2356；rls_ext/rls_linear (a) 依存 +      *)
 (*        req_list_sum_le_on_list） ------------------------------------------ *)
 
 Theorem req_expected_loss_min_bound :
@@ -517,7 +517,7 @@ Proof.
   exact (le_id_l _ _ _ (req_sym _ _ (req_trans _ _ _ Hlin Hunit)) Hsum_le).
 Qed.
 
-(* ---- 件 8：markov_kernel_le_one（L2611；rls_single_le (a) 消费） -------------- *)
+(* ---- 件 8：markov_kernel_le_one（L2611；rls_single_le (a) 依存） -------------- *)
 
 Theorem req_markov_kernel_le_one :
   forall prefix w, InT w vocab -> le (slm_markov_kernel prefix w) one.
@@ -543,7 +543,7 @@ Definition slm_markov_entropy (prefix : list Token) : R :=
                                       (req_markov_pos_slm prefix w)))) vocab.
 
 (* ---- 件 11：markov_entropy_pointwise_nonneg（L2715，(b)+假设位：              *)
-(*        log_le_linear_plain 槽 + opp_minus 链 + req_le_mult_compat_r） ------- *)
+(*        log_le_linear_plain 参数位 + opp_minus 链 + req_le_mult_compat_r） ------- *)
 
 Lemma req_markov_entropy_pointwise_nonneg : forall prefix w,
   InT w vocab ->
@@ -564,7 +564,7 @@ Proof.
     by exact (req_trans _ _ _ (req_opp_minus _ _) (plus_comm _ _)).
   assert (Hmp' : le (req_minus (slm_markov_kernel prefix w) one) zero)
     by exact (le_id_l _ _ _ (req_sym _ _ Hflip) (le_id_r _ _ _ reqd_opp_zero Hopp)).
-  (* log P ≤ P − 1（槽）且 P − 1 ≤ 0 ⟹ log P ≤ 0 ⟹ 0 ≤ −log P *)
+  (* log P ≤ P − 1（参数位）且 P − 1 ≤ 0 ⟹ log P ≤ 0 ⟹ 0 ≤ −log P *)
   assert (Hlog : le (log (slm_markov_kernel prefix w) (req_markov_pos_slm prefix w))
                     (req_minus (slm_markov_kernel prefix w) one))
     by exact (log_le_linear_plain (slm_markov_kernel prefix w) (req_markov_pos_slm prefix w)).
@@ -631,7 +631,7 @@ Proof.
 Qed.
 
 (* ---- 贪心域（argmin/list Id 机器冻结承接；RestB L449-451 pick_max 同款）：      *)
-(*      两顶层事实以槽承接，(c) 桥C1 立项后由 reqArgmin 机消解 ------------------- *)
+(*      两顶层事实以参数位承接，(c) 桥C1 立项后由 reqArgmin 机消解 ------------------- *)
 
 Section ReqSLMGreedy.
 
@@ -642,7 +642,7 @@ Hypothesis pick_best_optimal : forall (prefix : list Token) (w : Token),
   InT w vocab ->
   le (total_loss (prefix ++ [pick_best_token prefix])) (total_loss (prefix ++ [w])).
 
-(* ---- 件 9：temperature_zero_exponential_bound（L2630；pick_best_in_vocab 槽） *)
+(* ---- 件 9：temperature_zero_exponential_bound（L2630；pick_best_in_vocab 参数位） *)
 
 Theorem req_temperature_zero_exponential_bound :
   forall (prefix : list Token) (w : Token),
@@ -679,7 +679,7 @@ Proof.
 Qed.
 
 (* ---- 件 13：greedy_kernel_limit（L2819；markov_temperature_zero_limit +        *)
-(*        pick_best_optimal 槽） --------------------------------------------- *)
+(*        pick_best_optimal 参数位） --------------------------------------------- *)
 
 Theorem req_greedy_kernel_limit :
   forall (prefix : list Token) (w : Token),
@@ -697,7 +697,7 @@ Proof.
 Qed.
 
 (* ---- 件 17：nonoptimal_probability_absolute（L2887；Id 证明体独立复刻——       *)
-(*        与件 9 语句前提不同（无 lt 前件），非 exact 复用） --------------------- *)
+(*        与件 9 语句前提不同（无 lt 前提），非 exact 复用） --------------------- *)
 
 Theorem req_nonoptimal_probability_absolute :
   forall (prefix : list Token) (w : Token),
@@ -733,7 +733,7 @@ End ReqSLMGreedy.
 End ReqSLM.
 
 (* ===================================================================== *)
-(* Part 2：ReqLogDiffPhase3 尾节（清单 §6：13(b) + 2(a) 消费 + 2 eps 副道件）     *)
+(* Part 2：ReqLogDiffPhase3 尾节（清单 §6：13(b) + 2(a) 依存 + 2 eps 副道件）     *)
 (*   母本 L26405-26685。minus -> req_minus（δ 透明）；log 前提化；          *)
 (*   Id 环引理全换 UpReqAlgebra req 真证件（头注登记表 4）。                        *)
 (* ===================================================================== *)
@@ -763,7 +763,7 @@ Proof.
   exact (req_trans _ _ _ H1 (req_trans _ _ _ H2 (req_trans _ _ _ H3 (req_trans _ _ _ H4 H5)))).
 Qed.
 
-(* ---- 件 3：set_eq_le（L26435；1 行消费 reqd_le_of_req@UpReqDist——eq->le       *)
+(* ---- 件 3：set_eq_le（L26435；1 行依存 reqd_le_of_req@UpReqDist——eq->le       *)
 (*        方向接口可导，清单判「非完成类」） ----------------------------------- *)
 
 Lemma req_set_eq_le : forall a b : R, req a b -> le a b.
@@ -792,9 +792,9 @@ Proof.
   - exact (req_le_mult_compat_r t zero (mult t t) Ht (req_set_square_nonneg t Ht)).
 Qed.
 
-(* ---- 件 6：set_minus_mult（L26461）= (a) 消费 req_mult_minus_distr_l@         *)
+(* ---- 件 6：set_minus_mult（L26461）= (a) 依存 req_mult_minus_distr_l@         *)
 (*        UpReqAlgebra L525（别名直引，不设 alias 壳） ------------------------- *)
-(* ---- 件 7：set_opp_zero（L26468）= (a) 消费 reqd_opp_zero@UpReqDist L171 ------- *)
+(* ---- 件 7：set_opp_zero（L26468）= (a) 依存 reqd_opp_zero@UpReqDist L171 ------- *)
 
 (* ---- 件 8：set_quad_cube（L26477，全显式环链） ------------------------------ *)
 
@@ -867,7 +867,7 @@ Proof.
   exact (req_trans _ _ _ H1 (req_trans _ _ _ H2 (req_set_quad_cube t))).
 Qed.
 
-(* ---- 件 10：set_minus_cube_le（L26527；(a) reqd_opp_zero 消费位） ------------- *)
+(* ---- 件 10：set_minus_cube_le（L26527；(a) reqd_opp_zero 依存位） ------------- *)
 
 Lemma req_set_minus_cube_le : forall t : R, le zero t ->
   le (req_minus t (mult t (mult t t))) t.
@@ -932,7 +932,7 @@ Proof.
                           (inv_pos_pos s Hs) Hcore).
 Qed.
 
-(* ---- 件 14：set_inv_minus_one_opp（L26605；req_opp_minus 形换装） ------------- *)
+(* ---- 件 14：set_inv_minus_one_opp（L26605；req_opp_minus 形重述） ------------- *)
 
 Lemma req_set_inv_minus_one_opp : forall (t : R) (Hs : lt zero (plus one t)),
   req (mult t (inv_pos (plus one t) Hs))
@@ -982,7 +982,7 @@ Proof.
   - exact (lt_le_iff _ _ (inr (req_ld3_minus_one_plus_t t))).
 Qed.
 
-(* ---- 件 2 副道：Bishop 逐 eta 形（零槽真证，log_le_linear_eps 直导） --------- *)
+(* ---- 件 2 副道：Bishop 逐 eta 形（零参数位真证，log_le_linear_eps 直导） --------- *)
 
 Lemma req_log_one_plus_le_eps : forall (t : R) (Hpos : lt zero (plus one t)) (eta : R),
   lt zero eta -> le (log (plus one t) Hpos) (plus t eta).
@@ -1023,9 +1023,9 @@ Proof.
   - exact Hseg2.
 Qed.
 
-(* ---- 件 15 副道：Bishop 逐 eta 形（零槽真证；Hoc 的 opp 链两腿换装 ------------ *)
+(* ---- 件 15 副道：Bishop 逐 eta 形（零参数位真证；Hoc 的 opp 链两个合取肢重述 ------------ *)
 (*        （req_opp_plus/req_opp_minus/Hio 对偶），末端 req_minus_plus_cancel      *)
-(*        折叠。全链消费 log_le_linear_eps，假设位零依赖。） ---------------------- *)
+(*        折叠。全链依存 log_le_linear_eps，假设位零依赖。） ---------------------- *)
 
 Lemma req_log_one_plus_ge_eps : forall (t : R), le zero t ->
   forall (Hs : lt zero (plus one t)) (eta : R), lt zero eta ->
@@ -1039,7 +1039,7 @@ Proof.
   pose proof (log_le_linear_eps invs (inv_pos_pos s Hs) eta Heta) as Heps.
   pose proof (opp_le_compat (log invs (inv_pos_pos s Hs))
                             (plus (req_minus invs one) eta) Heps) as Hoc.
-  (* 腿 A：opp (invs − 1) == one − invs == t·invs（req_opp_minus + 对偶换装） *)
+  (* 肢 A：opp (invs − 1) == one − invs == t·invs（req_opp_minus + 对偶重述） *)
   assert (Hone_minus : req (plus one (opp invs)) (mult t invs)).
   { apply (req_trans _ (opp (req_minus invs one))).
     - apply (req_trans _ (plus (opp invs) (opp (opp one)))).
@@ -1099,12 +1099,12 @@ Qed.
 End ReqLogDiff3.
 
 (* ===================================================================== *)
-(* Part 3：ReqSLMGreedy 两槽消解（批5扫尾席 2026-09-09；桥C1 显式假设已证明）       *)
+(* Part 3：ReqSLMGreedy 两参数位消解（批5扫尾席 2026-09-09；桥C1 显式假设已证明）       *)
 
 (*   req_pick_best_token / req_pick_best_token_optimal 闭包参数面 =         *)
 (*   {R}{RIS}{DO} Token vocab total_loss default_token prefix w            *)
-(*   （Check 探针在案）。                                                   *)
-(*   槽面核对：ReqSLMGreedy 两槽面 =                                       *)
+(*   （Check 检验在案）。                                                   *)
+(*   参数位面核对：ReqSLMGreedy 两参数位面 =                                       *)
 (*     optimal  : forall prefix w, InT w vocab ->                          *)
 (*                le (total_loss (prefix++[pick prefix]))                  *)
 (*                   (total_loss (prefix++[w]))                            *)
@@ -1112,9 +1112,9 @@ End ReqLogDiff3.
 (*   optimal 面 = req_pick_best_token_optimal 语句 1:1 对齐——直接消解；     *)
 (*   in_vocab 面 C1 机未结果（(d) 冻结 list 机域），本节 req 侧归纳自证     *)
 (*   （slm_discharge_aux_acc——req_list_sum_le_on_list「辅件自证非重证」    *)
-(*   先例同款，不触 (d) 禁区本体）。两槽就此全消解，消费面三件升级          *)
-(*   无槽定理（_noslot）。                                                 *)
-(*   诚实签名差异：无槽件闭包签名增 DO : reqDecidableOrder R RIS 与        *)
+(*   先例同款，不触 (d) 禁区本体）。两参数位就此全消解，依存面三件升级          *)
+(*   无参数位定理（_noslot）。                                                 *)
+(*   诚实签名差异：无参数位件闭包签名增 DO : reqDecidableOrder R RIS 与        *)
 (*   default_token : Token 两位（C1 机同款面；DO 为永久假设类参数位——      *)
 (*   E225 LPO 结论随桥：全库零 Instance 与 Id 同构，Class 假设位非禁词面，    *)
 (*   End 时入闭包签名，Print Assumptions Closed）。                        *)
@@ -1132,7 +1132,7 @@ Variable temperature : R.
 Variable temperature_pos : lt zero temperature.
 Variable default_token : Token.
 
-(* ---- 节内简写（ReqSLM 闭包件全参喂定；签名探针 Check 在案） ---- *)
+(* ---- 节内简写（ReqSLM 闭包件全参喂定；签名检验 Check 在案） ---- *)
 
 Definition k_d (prefix : list Token) (w : Token) : R :=
   slm_markov_kernel Token vocab vocab_nonempty total_loss temperature
@@ -1142,12 +1142,12 @@ Definition pos_d (prefix : list Token) (w : Token) : lt zero (k_d prefix w) :=
   req_markov_pos_slm Token vocab vocab_nonempty total_loss temperature
     temperature_pos prefix w.
 
-(* ---- 贪心选取（C1 机 req_pick_best_token 实例化；无槽） ---------------- *)
+(* ---- 贪心选取（C1 机 req_pick_best_token 实例化；无参数位） ---------------- *)
 
 Definition slm_discharge_pick_in (prefix : list Token) : Token :=
   req_pick_best_token Token vocab total_loss default_token prefix.
 
-(* ---- 槽 in_vocab 消解前置：argmin 遍历成员归纳（req 侧自证） ---------- *)
+(* ---- 参数 in_vocab 消解前置：argmin 遍历成员归纳（req 侧自证） ---------- *)
 (*   不变式：遍历 l 后 fst 结果 ∈ (btk::l 的任一超集 super)。归纳 +        *)
 (*   rord_le_dec 双支 + InT 反转（inversion as 三名显式——OrderArgmin      *)
 (*   卡「名不足绑首参被 subst 吞」坑对位）。                                *)
@@ -1177,7 +1177,7 @@ Proof.
       intros w Hw. apply Hsuper. exact (Hmem2 w Hw).
 Qed.
 
-(* ---- 槽 in_vocab 消解（pick_best_in_vocab L2575 对位） ----------------- *)
+(* ---- 参数 in_vocab 消解（pick_best_in_vocab L2575 对位） ----------------- *)
 
 Lemma slm_discharge_pick_in_vocab :
   forall prefix : list Token, InT (slm_discharge_pick_in prefix) vocab.
@@ -1191,7 +1191,7 @@ Proof.
              (fun w Hw => Hw)).
 Qed.
 
-(* ---- 槽 optimal 消解（pick_best_optimal L2545 对位；C1 机 1:1 消费） --- *)
+(* ---- 参数 optimal 消解（pick_best_optimal L2545 对位；C1 机 1:1 依存） --- *)
 
 Lemma slm_discharge_pick_optimal :
   forall (prefix : list Token) (w : Token),
@@ -1204,7 +1204,7 @@ Proof.
   exact (req_pick_best_token_optimal Token vocab total_loss default_token          prefix w Hw).
 Qed.
 
-(* ---- 无槽件 1：req_greedy_kernel_limit 升级（L2819 消费位已证明） -------- *)
+(* ---- 无参数位件 1：req_greedy_kernel_limit 升级（L2819 依存位已证明） -------- *)
 
 Theorem req_greedy_kernel_limit_noslot :
   forall (prefix : list Token) (w : Token),
@@ -1222,7 +1222,7 @@ Proof.
   exact (slm_discharge_pick_optimal prefix w Hw).
 Qed.
 
-(* ---- 无槽件 2：temperature_zero_exponential_bound 升级（L2630） -------- *)
+(* ---- 无参数位件 2：temperature_zero_exponential_bound 升级（L2630） -------- *)
 
 Theorem req_temperature_zero_exponential_bound_noslot :
   forall (prefix : list Token) (w : Token),
@@ -1267,7 +1267,7 @@ Proof.
   exact (le_id_l _ _ _ Hrel Hbound).
 Qed.
 
-(* ---- 无槽件 3：nonoptimal_probability_absolute 升级（L2887） ------------ *)
+(* ---- 无参数位件 3：nonoptimal_probability_absolute 升级（L2887） ------------ *)
 
 Theorem req_nonoptimal_probability_absolute_noslot :
   forall (prefix : list Token) (w : Token),
@@ -1317,16 +1317,16 @@ End ReqSLMGreedyDischarge.
 (*     argmin_aux_token_snd_correct L2517（Leibniz = 正确性伴件，RestB               *)
 (*     pick_max_token_correct 同款）/ pick_best_in_vocab' L2531 /                  *)
 (*     pick_best_in_vocab L2575（别名件）。                                       *)
-(*   消费侧承接：本文件 req_temperature_zero_exponential_bound /                   *)
-(*     req_nonoptimal_probability_absolute 经 pick_best_in_vocab 槽消费其顶层事实；  *)
+(*   依存侧承接：本文件 req_temperature_zero_exponential_bound /                   *)
+(*     req_nonoptimal_probability_absolute 经 pick_best_in_vocab 参数位依存其顶层事实；  *)
 (*     跨接口复用路线 = 规划书 §3.4（(d) 机器原样 Require、结论 req 组装）。         *)
 (* (c) 桥C1 显式假设（reqDecidableOrder+reqArgmin，~200 行，波 4 立项）：              *)
 (*   SLM 区 2 件：argmin_aux_token_min L2481 / pick_best_optimal L2545——            *)
 (*     语句纯 le 可 req 1:1；证明机 = ord_le_dec 归纳（E225 结论：DecidableOrder      *)
 (*     = 整体三分律 = LPO 等价、全库零 Instance，req 侧永久假设类与 Id 同构）。        *)
-(*     本文件 pick_best_optimal 槽随桥消解（req_greedy_kernel_limit 消费位）。       *)
-(*     ——批5扫尾席 2026-09-09 已证明：波4 G09_MiscSmall 已结果，Part 3 两槽        *)
-(*     消解（optimal = req_pick_best_token_optimal 1:1 消费；in_vocab = req 侧      *)
-(*     归纳自证）+ 消费面三件升级 _noslot 无槽定理，见 Part 3。原 ReqSLMGreedy      *)
-(*     假设位节保留为波 1 终版历史（终版稳定性纪律），消费面以 Part 3 无槽件为准。      *)
+(*     本文件 pick_best_optimal 参数位随桥消解（req_greedy_kernel_limit 依存位）。       *)
+(*     ——批5扫尾席 2026-09-09 已证明：波4 G09_MiscSmall 已结果，Part 3 两参数位        *)
+(*     消解（optimal = req_pick_best_token_optimal 1:1 依存；in_vocab = req 侧      *)
+(*     归纳自证）+ 依存面三件升级 _noslot 无参数位定理，见 Part 3。原 ReqSLMGreedy      *)
+(*     假设位节保留为波 1 终版历史（终版稳定性纪律），依存面以 Part 3 无参数位件为准。      *)
 (* ===================================================================== *)

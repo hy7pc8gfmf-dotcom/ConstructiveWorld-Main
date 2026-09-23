@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   bxuq_lim_uniq（原 L185，4 句轻证）	*)
 (* ============================================================ *)
@@ -13,10 +13,10 @@
 (* ============================================================ *)
 (* 使命：把 bxce_sep 反可分性字段（UpReqBanachClassExt.v 二波）     *)
 (*   兑现为 blim 意义下的极限唯一性 bxuq_lim_uniq，给 S3/S4        *)
-(*   收口（EXPADD2/总装席）递钥匙。                                *)
-(* 挂账来源：BASM 报告「类缺反可分性字段 ⟹ 极限唯一性不可导出       *)
+(*   闭合（EXPADD2/装配席）递钥匙。                                *)
+(* 遗留来源：BASM 报告「类缺反可分性字段 ⟹ 极限唯一性不可导出       *)
 (*   ⟹ 等式形到顶」（bxadd_exp_add 双缺口之一）；B25 卡同因。      *)
-(* 承重消费：bxadd_bmult_lim（UpReqBanachExpAdd.v 保底件）经        *)
+(* 承重依存：bxadd_bmult_lim（UpReqBanachExpAdd.v 保底件）经        *)
 (*   bxuq_prod_lim_joint 演示与唯一性合流。                        *)
 (* 红线自审：                                                      *)
 (*   - 语句面全 Set 层：主件返回型 bae；Q 层 Prop（Qlt/Qle）仅作     *)
@@ -44,7 +44,7 @@ Proof.
   intros Hz. vm_compute in Hz. discriminate.
 Qed.
 
-(* 半径正性：0 <T e ⟹ 0 <T e/2（探针 q3 验证形） *)
+(* 半径正性：0 <T e ⟹ 0 <T e/2（检验 q3 验证形） *)
 Lemma bxuq_half_pos : forall e : Q, QltT 0 e -> QltT 0 (e / 2).
 Proof.
   intros e H.
@@ -61,7 +61,7 @@ Proof.
   exact (QltT_to_Qlt 0 e H).
 Qed.
 
-(* 半和等式：e/2 + e/2 == e（探针 q2 验证形；Qdiv 须显式 unfold） *)
+(* 半和等式：e/2 + e/2 == e（检验 q2 验证形；Qdiv 须显式 unfold） *)
 Lemma bxuq_half_sum_eq : forall e : Q, (e / 2 + e / 2)%Q == e%Q.
 Proof.
   intros e.
@@ -77,7 +77,7 @@ Proof.
   apply Qmult_1_r.
 Qed.
 
-(* 半径求和：x < e/2 且 y < e/2 ⟹ x + y < e（探针 q6 验证形） *)
+(* 半径求和：x < e/2 且 y < e/2 ⟹ x + y < e（检验 q6 验证形） *)
 Lemma bxuq_sum_half_lt : forall x y e : Q,
   Qlt x (e / 2) -> Qlt y (e / 2) -> Qlt (x + y) e.
 Proof.
@@ -90,7 +90,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Banach 加法群工具件（B : BanachAlg 泛型，不消费 Ext 字段）        *)
+(* Banach 加法群工具件（B : BanachAlg 泛型，不依存 Ext 字段）        *)
 (* ============================================================ *)
 
 (* 加零转等：bae (a + (-b)) 0 ⟹ bae a b（bopp_unique 双步） *)
@@ -104,7 +104,7 @@ Proof.
     exact (@bopp_unique B b (@bopp B b) (@bplus_opp B b)).
 Qed.
 
-(* 差拆：a - c == (a - b) + (b - c)（三角不等式的代数前件） *)
+(* 差拆：a - c == (a - b) + (b - c)（三角不等式的代数前提） *)
 Lemma bxuq_diff_split : forall (B : BanachAlg) (a b c : (@BA B)),
   @bae B (@bplus B a (@bopp B c))
     (@bplus B (@bplus B a (@bopp B b)) (@bplus B b (@bopp B c))).
@@ -145,7 +145,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 小范数主引理：双极限 ⟹ 差范数任意小（纯三角 + Q 记账，泛型）       *)
+(* 小范数主引理：双极限 ⟹ 差范数任意小（纯三角 + Q 核算，泛型）       *)
 (* ============================================================ *)
 
 Lemma bxuq_lim_diff_small : forall (B : BanachAlg) (u : nat -> (@BA B))
@@ -174,7 +174,7 @@ Proof.
     rewrite (@bnorm_opp B (@bplus B (u (Nat.max N1 N2)) (@bopp B l1))).
     exact Ha. }
   (* ‖d‖ ≤T ‖R2‖ ≤T ‖l1-u‖ + ‖u-l2‖ <T eps（全程 QleT'/QltT 桥，Id 面
-     rewrite 只在 QleT' 目标内——探针 q1a/q1b 定谳：Qlt 目标内不可用） *)
+     rewrite 只在 QleT' 目标内——检验 q1a/q1b 已证结论：Qlt 目标内不可用） *)
   eapply qleT'_ltT_ltT.
   - eapply qleT'_trans.
     + eapply (QeqT_Qle_bool_cong _ _ _
@@ -208,7 +208,7 @@ Qed.
 
 (* ============================================================ *)
 (* S3 钥匙演示：极限乘法（bxadd_bmult_lim）+ 唯一性合流——             *)
-(* 部分和乘积列的两个极限必 bae 相等（EXPADD2/总装席消费位）          *)
+(* 部分和乘积列的两个极限必 bae 相等（EXPADD2/装配席依存位）          *)
 (* ============================================================ *)
 
 Corollary bxuq_prod_lim_joint : forall (E : BanachAlgExt)

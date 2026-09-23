@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   rtb_rlt_eq_r（原 L304，3 句玩具证）                                  *)
 (*   rtb_rlt_eq_l（原 L296，3 句玩具证）                                  *)
@@ -24,24 +24,24 @@
 (*           rtb_qlt_0_minus、rtb_neq_of_ltT、rtb_one_minus_neq、      *)
 (*           rtb_pow_le_one。                                        *)
 (*   Part 2  Q 层母引理：rtb_tsum（有限和定义）＋                     *)
-(*           rtb_ratio_tail_Q_mult（乘形式，telescoping＋Q 环账）      *)
+(*           rtb_ratio_tail_Q_mult（乘形式，telescoping＋Q 循环依赖清单）      *)
 (*           ＋ rtb_ratio_tail_Q（除形式 ≤ u_n·(1−ρ^N)/(1−ρ)，          *)
 (*           承 Qmult_le_r）。                                        *)
 (*   Part 3  Real 层母定理：rtb_rsum ＋ 逐点/序工具                    *)
-(*           （rtb_rc_* 环账、rtb_rlt_eq_l/r、rtb_rlt_plus_l/r、       *)
+(*           （rtb_rc_* 循环依赖清单、rtb_rlt_eq_l/r、rtb_rlt_plus_l/r、       *)
 (*           rtb_rplus_le_compat、rtb_rmult_le_compat_l/r、            *)
 (*           rtb_step_le、rtb_c_nonneg）＋                             *)
 (*           rtb_ratio_tail_real（Bishop/eps 形）。                    *)
 (*   Part 4  两实例（真走母定理，非平行抄写）：                        *)
 (*           exp 位点：rtb_exp_ratio → rtb_exp_inst（Q）＋              *)
-(*                     rtb_exp_real_inst（Real 消费 rtb_ratio_tail_real）； *)
+(*                     rtb_exp_real_inst（Real 依存 rtb_ratio_tail_real）； *)
 (*           arctan 位点：rtb_atan_ratio → rtb_atan_cert（指标平移）    *)
 (*                     → rtb_atan_inst（Q，真走母定理，以 rtb_tsum      *)
-(*                     直陈式收口，无垫片）。                           *)
+(*                     直陈式闭合，无适配引理）。                           *)
 (*                                                              *)
-(* 供体位点（全部只读消费，未改任何既有文件）：                        *)
+(* 供体位点（全部只读依存，未改任何既有文件）：                        *)
 (*   S03_QExp.v:622 exp_tail_abs_geom2 系（q_pow/q_fact/               *)
-(*   q_pow_nonneg/q_fact_pos/q_fact_succ/q_neq_of_lt 供 Q 环账）；      *)
+(*   q_pow_nonneg/q_fact_pos/q_fact_succ/q_neq_of_lt 供 Q 循环依赖清单）；      *)
 (*   S11_TP3B5.v:137 atan_mag_succ_geom 系（atan_q_pow_odd3/            *)
 (*   atan_odd_pos/atan_sq_abs/arctan_term_abs 供 arctan 位点）。        *)
 (*   参照（未 Require 未改）：待入库稿 ArctanGeomTail.v                 *)
@@ -104,7 +104,7 @@ Proof.
 Qed.
 
 
-(* ρ ≤ 1 ⟹ 0 ≤ 1-ρ（Qopp_le_compat 反向 + 环账） *)
+(* ρ ≤ 1 ⟹ 0 ≤ 1-ρ（Qopp_le_compat 反向 + 循环依赖清单） *)
 Lemma rtb_qle_0_minus : forall rho : Q, QleT' rho 1 -> QleT' 0 (1 - rho).
 Proof.
   intros rho H. apply Qle_to_QleT'. apply QleT'_to_Qle in H.
@@ -186,7 +186,7 @@ Fixpoint rtb_tsum (u : nat -> Q) (n N : nat) : Q :=
   | Datatypes.S N' => u n + rtb_tsum u (Datatypes.S n) N'
   end.
 
-(* 追加引理：S d 项和 == d 项和 + 末项（供位点垫片对齐消费形） *)
+(* 追加引理：S d 项和 == d 项和 + 末项（供位点适配引理对齐依存形） *)
 Lemma rtb_tsum_S : forall (u : nat -> Q) (n d : nat),
   rtb_tsum u n (Datatypes.S d) == rtb_tsum u n d + u (n + d)%nat.
 Proof.
@@ -204,7 +204,7 @@ Proof.
     ring.
 Qed.
 
-(* 母引理核心：乘形式（telescoping + Q 环账，对任意变号 u 成立） *)
+(* 母引理核心：乘形式（telescoping + Q 循环依赖清单，对任意变号 u 成立） *)
 Lemma rtb_ratio_tail_Q_mult : forall (u : nat -> Q) (rho : Q) (N n : nat),
   QleT' 0 rho -> QltT rho 1 ->
   (forall j : nat, QleT' (u (Datatypes.S j)) (rho * u j)) ->
@@ -275,7 +275,7 @@ Fixpoint rtb_rsum (u : nat -> Real) (n N : nat) : Real :=
   | Datatypes.S N' => real_plus (u n) (rtb_rsum u (Datatypes.S n) N')
   end.
 
-(* 逐点环账 tactic（承 UpReqMixingTime mix_rring / UpTVDoeblin tvd_rring 口径） *)
+(* 逐点循环依赖清单 tactic（承 UpReqMixingTime mix_rring / UpTVDoeblin tvd_rring 口径） *)
 Ltac rtb_rproj_ring :=
   repeat match goal with
          | [ x : Real |- _ ] => destruct x
@@ -284,7 +284,7 @@ Ltac rtb_rproj_ring :=
        real_const real_of_nat] in *;
   ring.
 
-(* real_const 环账族（全自含量化，destruct 安全） *)
+(* real_const 循环依赖清单族（全自含量化，destruct 安全） *)
 Lemma rtb_rc_wd : forall a b : Q, a == b -> real_eq (real_const a) (real_const b).
 Proof.
   intros a b H. apply real_eq_of_zero_diff. intro n0.
@@ -574,7 +574,7 @@ Qed.
 Definition rtb_exp_term (A : Q) (m j : nat) : Q :=
   q_pow A (Datatypes.S (m + j)%nat) / q_fact (Datatypes.S (m + j)%nat).
 
-(* /-代数一步（field 收口，侧条件显式化） *)
+(* /-代数一步（field 闭合，侧条件显式化） *)
 Lemma rtb_field_test : forall X dd D : Q, 0 < dd -> 0 < D -> 0 < dd * D ->
   ((1 / 2) * (X * dd)) / (dd * D) == (1 / 2) * (X / D).
 Proof.
@@ -654,7 +654,7 @@ Proof.
                  (q_fact_pos (Datatypes.S k))).
 Qed.
 
-(* 垫片：exp_tail_abs 消费形 == rtb_tsum 母定理形（如实计件：1 件） *)
+(* 适配引理：exp_tail_abs 依存形 == rtb_tsum 母定理形（如实计件：1 件） *)
 Lemma rtb_exp_tsum_eq : forall (A : Q) (m d : nat),
   exp_tail_abs m (m + d)%nat A
     == rtb_tsum (fun k => rtb_exp_term A m k) 0%nat d.
@@ -749,7 +749,7 @@ Proof.
   cbn [projT1 real_mult real_const]. ring.
 Qed.
 
-(* Real 层消费实例：Q 序列经 real_const 嵌入，真走 rtb_ratio_tail_real *)
+(* Real 层依存实例：Q 序列经 real_const 嵌入，真走 rtb_ratio_tail_real *)
 Lemma rtb_exp_real_inst : forall (A : Q) (m N : nat),
   QleT' 0 A ->
   (forall t : nat, (m <= t)%nat -> QleT' ((1 + 1) * A) (Z.of_nat (t + 1)%nat # 1)) ->
@@ -837,7 +837,7 @@ Proof.
       + split.
         * exact (rtb_neq_of_ltT (Z.of_nat (2 * j + 3)%nat # 1) Hdd).
         * exact (rtb_neq_of_ltT (Z.of_nat (2 * j + 1)%nat # 1) Hd1).
-    - (* d1/(d1·dd) ≤ dd/(d1·dd) ≤ 1/d1：同分母除法保序 + 环账收口 *)
+    - (* d1/(d1·dd) ≤ dd/(d1·dd) ≤ 1/d1：同分母除法保序 + 循环依赖清单闭合 *)
       apply (rtb_qleT_trans _
                ((Z.of_nat (2 * j + 3)%nat # 1)
                   / ((Z.of_nat (2 * j + 1)%nat # 1) * (Z.of_nat (2 * j + 3)%nat # 1)))).

@@ -11,7 +11,7 @@
 (* （共 10 条）                                                              *)
 (* 非平凡性口径：最优性链显式重演与序界直造，消除单跳转发；无一行拆分式假    *)
 (* 非平凡。                                                                  *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================ *)
@@ -25,7 +25,7 @@
 
 (* UpReqAlign.v — 签名迁移批 3：对齐理论主体（Alignment 簇）req 系重述与实例化
    母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md（批 3 清单）
-   模板：UpSigMigrate.v（试点）+ UpReqAlgebra.v（批 1 地基，直接消费）；
+   模板：UpSigMigrate.v（试点）+ UpReqAlgebra.v（批 1 地基，直接依存）；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
@@ -36,7 +36,7 @@
      （req_step_kl_eta_bound 桥 + req_policy_iter_kl_geom_step/_iter +
      req_dpo_loss_iter_mono）+ KLProjection 10 件 + NaturalGradient 1 件 +
      PPO 分解 3 件 + sigmoid 快赢。
-   [保持双层/冻结] min/r_max 的 plain-le 消费件（ppo_conservative 族 4 件、
+   [保持双层/冻结] min/r_max 的 plain-le 依存件（ppo_conservative 族 4 件、
      clip_error_nonneg、ppo_clipped_improvement——setoid 接口 min 输出 eps 化，
      plain 形不可导出，与 UpReqAlgebra abs_plus_one_pos 冻结同因）；
      nat/list Id 机器（fold_right_ext 等）；深链 t12/t13 挂起件（文件尾清单）。
@@ -46,9 +46,9 @@
      align_objective_req / F_align_req / dpo_loss_req 全部携带
      pos_dist（逐点正性）参数；kl_tail_eval / projected_distribution_minimizes_kl
    2. minus 非接口字段：载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
-   3. T2① 桥件（假设位保留，与 Id 版逐位同构；规划书 §3.2/§4.4）：
+   3. T2① 桥接引理（假设位保留，与 Id 版逐位同构；规划书 §3.2/§4.4）：
       - FEP req 三件套桥（bridge_min_free_energy / bridge_free_energy_min_unique）
-        ——批 2 UpReqFreeEnergy 结果后降为消费件；
+        ——批 2 UpReqFreeEnergy 结果后降为依存件；
       - req_step_kl_eta_bound（Id Variable @L23114 的 req 同位）；
       - req_backward_kl_identity（Id theorem @L22686 的 req 语句同位，深链挂起）；
       - req_policy_improvement_mono（Id @L22065 同位，深链挂起）；
@@ -56,7 +56,7 @@
       - req_square_nonneg / req_inv_pos_lt_contra / req_log_lt_mono /
         req_lt_plus_compat_{le_lt,lt_le}（B 类假设 req 同位，§1.5 表）。
    4. 载体重建：r_pow → req_r_pow、policy_iterate → policy_iterate_req
-     （sigT 打包同构，nat 归纳件 Set 层重建，Id 件不可跨接口复用）。
+     （sigT 封装同构，nat 归纳件 Set 层重建，Id 件不可跨接口复用）。
    ---------------------------------------------------------------- *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -64,7 +64,7 @@ Require Import UpReqAlgebra.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* ReqAlignCore：对齐节 req 基础设施 + RLHF/DPO 核心 + 旗舰链     *)
+(* ReqAlignCore：对齐节 req 基础设施 + RLHF/DPO 核心 + 主链     *)
 (*   （Id 原节：Alignment L18734-23272；节参数逐位对齐）    *)
 (* ============================================================ *)
 Section ReqAlignCore.
@@ -268,7 +268,7 @@ Proof.
 Qed.
 
 (* 自由能外延（Id free_energy_ext L18951 的 req 版；真证：双 sum_ext +
-   req_mult_compat；log 前提随逐点正性搬运——登记表 1） *)
+   req_mult_compat；log 前提随逐点正性迁移——登记表 1） *)
 Lemma req_free_energy_align_ext :
   forall (f g : S -> R) (Hf : pos_dist f) (Hg : pos_dist g),
     (forall s : S, req (f s) (g s)) ->
@@ -300,7 +300,7 @@ Qed.
 (* ============ B 组：RLHF/DPO 核心（T2① FEP 桥 + 真证组装） ============ *)
 (* FEP req 三件套的 req 签名桥（Id min_free_energy_is_boltzmann /
    free_energy_min_unique 的 req 同位承接；批 2 UpReqFreeEnergy 结果后
-   降为消费件。对位简化注记：Id 侧经 align_boltzmann_is_pi_star 把
+   降为依存件。对位简化注记：Id 侧经 align_boltzmann_is_pi_star 把
    boltzmann_dist 逐点等同 pi_star，req 侧桥直接以 pi_star_req 为极小点
    载体，等价且免重复——登记表 3。） *)
 Hypothesis bridge_min_free_energy :
@@ -344,7 +344,7 @@ Proof.
                        (req_rlhf_optimal p Hn Hp)).
 Qed.
 
-(* ============ C 组：策略迭代旗舰链（Id L21237-23272 req 化） ============ *)
+(* ============ C 组：策略迭代主链（Id L21237-23272 req 化） ============ *)
 (* 节参数（Id L21238-21241 同位；sum_pos 已在节首同位承接 Id
    Variable sum_over_S_pos @L21245） *)
 Variable eta : R.
@@ -482,7 +482,7 @@ Proof.
 Qed.
 
 (* 单步真几何收缩（Id policy_iter_kl_geom_step L23146 的 req 版；
-   三 KL 精确恒等 + step 桥 + 序代数 req 组装——旗舰件） *)
+   三 KL 精确恒等 + step 桥 + 序代数 req 组装——主件） *)
 Theorem req_policy_iter_kl_geom_step :
   forall (pi_t : S -> R) (Hpi_t : pos_dist pi_t) (Hnorm : norm_one pi_t),
     le (relative_entropy_req pi_star_req (pi_next_req pi_t Hpi_t)
@@ -512,7 +512,7 @@ Proof.
 Qed.
 
 (* 迭代 Fixpoint req 化（Id policy_iterate L22879 同构：分布 + 正性
-   打包为 sigT，可提取；nat 归纳 Set 层重建——登记表 4） *)
+   封装为 sigT，可提取；nat 归纳 Set 层重建——登记表 4） *)
 Fixpoint policy_iterate_req (t : nat) (pi : S -> R) (Hpi : pos_dist pi) :
   { pi' : S -> R & pos_dist pi' } :=
   match t with
@@ -542,7 +542,7 @@ Proof.
 Qed.
 
 (* 迭代几何上界（Id policy_iter_kl_geom_iter L23181 的 req 版；
-   (1−η)^t 真几何率 req 消费版——归纳真证） *)
+   (1−η)^t 真几何率 req 依存版——归纳真证） *)
 Theorem req_policy_iter_kl_geom_iter :
   forall (t : nat) (pi : S -> R) (Hpi : pos_dist pi) (Hnorm : norm_one pi),
     le (relative_entropy_req pi_star_req (projT1 (policy_iterate_req t pi Hpi))
@@ -889,7 +889,7 @@ Proof.
 Qed.
 
 (* log(1/x) == −log x（UpReqAlgebra ReqLogBridge req_log_inv_one_inv 同款
-   本节重建——消费本节 log_req_compat 桥） *)
+   本节重建——依存本节 log_req_compat 桥） *)
 Lemma rkl_log_inv_one_inv :
   forall (x : R) (Hx : lt zero x),
     req (log (inv_pos x Hx) (inv_pos_pos x Hx)) (opp (log x Hx)).
@@ -1092,7 +1092,7 @@ Proof.
   - exact (rkl_log_inv_one_inv Z_aud_req HZ).
 Qed.
 
-(* 旗舰：审计 = KL 投影（Id projected_distribution_minimizes_kl L95587
+(* 主定理：审计 = KL 投影（Id projected_distribution_minimizes_kl L95587
    的 req 版；真证组装：split + 尾项 ≥ 0 单侧链） *)
 Theorem req_projected_distribution_minimizes_kl :
   forall (q : S -> R) (Hq : forall s : S, lt zero (q s)) (Hqn : req (sumf q) one)
@@ -1213,7 +1213,7 @@ End ReqNaturalGradient.
 
 (* ============================================================ *)
 (* ReqPPORatio：PPO 分解簇（Id 原节 PPOClipDecomp L112330-112470   *)
-(*   可迁 3 件 req 化；min 的 plain-le 消费件 2 件冻结——见尾清单） *)
+(*   可迁 3 件 req 化；min 的 plain-le 依存件 2 件冻结——见尾清单） *)
 (* ============================================================ *)
 Section ReqPPORatio.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -1232,7 +1232,7 @@ Variable Hpos : forall s : S, lt zero (p_old s).
 
 (* IS 比率 / 裁剪 / 三目标（Id policy_ratio L19613 / ppo_clip L19607 /
    clip_error L112346 / ppo_surrogate L19590 / is_objective_of L19599 同形；
-   min/r_max 为 setoid 接口字段——仅作符号载体，本组不消费其 le 性质） *)
+   min/r_max 为 setoid 接口字段——仅作符号载体，本组不依存其 le 性质） *)
 Definition ratio_req (s : S) : R := mult (pi s) (inv_pos (p_old s) (Hpos s)).
 Definition ppo_clip_req (r low high : R) : R := min (r_max low r) high.
 Definition ppo_surrogate_req (adv : S -> R) : R :=
@@ -1405,7 +1405,7 @@ End ReqSigmoidQuick.
 (*                                                                *)
 (* 1. ppo_conservative（Id @L19526）/ std_ppo_conservative    *)
 (*    (@L19559) / clip_lower（@L19521）/ ppo_clip_upper（@L19648）： *)
-(*    消费 min_le_l / r_max_le_r 的 plain-le 形式（le (min a b) a）； *)
+(*    依存 min_le_l / r_max_le_r 的 plain-le 形式（le (min a b) a）； *)
 (*    setoid 接口的 min/r_max le 输出已 eps 化（min_le_l :          *)
 (*    forall eps, lt zero eps -> le (min a b) (plus a eps)），plain  *)
 (*    形不可由 eps 形导出（序无消去）——与 UpReqAlgebra 冻结件        *)
@@ -1417,10 +1417,10 @@ End ReqSigmoidQuick.
 (*    （Id @L20160 一带）：nat/list 层 Id 与数系接口无关，原样复用   *)
 (*    （规划书 §1.1 边界 2）；dpo_total_loss(_monotone) 的 req 伴件   *)
 (*    待 dpo_pair_loss 簇 req 化后随批 4 结果。                       *)
-(* 4. GRPOCounterEx 反例见证件（不在批 3 清单）：双层并行（探针实证   *)
+(* 4. GRPOCounterEx 反例见证件（不在批 3 清单）：双层并行（检验实证   *)
 (*    顶层不可 Check，§0.3）。                                       *)
 (*                                                                *)
-(* ---- 深链挂起清单（批 3b/批 5，T2① 桥件内容承载注记） ----       *)
+(* ---- 深链挂起清单（批 3b/批 5，T2① 桥接引理内容承载注记） ----       *)
 (* 1. req_backward_kl_identity（本文件假设申报位，同位 Id theorem   *)
 (*    policy_iter_backward_kl_step @L22686）：Id 证明 ~100 行，依赖   *)
 (*    t13 代数链（minus_distr_t13 等 10 件）+                        *)
@@ -1429,12 +1429,12 @@ End ReqSigmoidQuick.
 (* 2. req_policy_improvement_mono（本文件假设申报位，同位 Id        *)
 (*    @L22065）：依赖 t12 深链（J_pi_t/J_pi_next/F_t_simpl_next_kl/  *)
 (*    surrogate_diff_identity 等 ~15 件），挂起批 3b。                *)
-(* 3. 上述两桥放行后，本文件旗舰件（req_policy_iter_kl_geom_step/    *)
+(* 3. 上述两桥放行后，本文件主件（req_policy_iter_kl_geom_step/    *)
 (*    _iter/req_dpo_loss_iter_mono）即全链闭合为无条件 req 定理——    *)
 (*    本批已真证其全部 req 侧运输与序代数内容。                       *)
 (* 4. Alignment 其余 Id 件（对齐恒等式簇 L19180-21240 的             *)
 (*    align_objective_advantage_decomp / dpo_reward 簇 / t12 环代数  *)
-(*    镜像件 ~60 件）：req 对应件多已被 UpReqAlgebra（批 1）与        *)
+(*    副本件 ~60 件）：req 对应件多已被 UpReqAlgebra（批 1）与        *)
 (*    UpReqDist（批 2 reqd_ 簇）覆盖，残余件随批 3b 按本文件模板      *)
 (*    平移；sigmoid_strict_inc（@L21028）需 inv_pos_lt_contra 桥     *)
 (*    （B 类假设 req 同位，§1.5），随 B 桥批结果。                    *)

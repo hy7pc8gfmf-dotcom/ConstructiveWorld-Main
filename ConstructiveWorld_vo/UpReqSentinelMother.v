@@ -1,46 +1,46 @@
 (* ============================================================ *)
 (* 【ToyR 包N 台账席 T253 tier2 四批替换稿】UpReqSentinelMother.v —— 基于       *)
-(*   Main 基线同名替换：全文保留，仅换四枚玩具证明体（定义层受控展开收口）。      *)
+(*   Main 基线同名替换：全文保留，仅换四枚玩具证明体（定义层受控展开闭合）。      *)
 (*   四刀（实质非平凡三口径·展开至定义层≥3实质步骤）：                            *)
-(*   ①stm_g10_nil_sentinel＝四层定义面（dmin/smin/dist/哨兵位）受控展开，        *)
-(*     空表支以显式 eq_refl 收口；                                             *)
-(*   ②stm_g10_fee_emit2＝同四层展开，发射费 |2−0|=2 的数值面显式 eq_refl 收口；  *)
-(*   ③stm_g10_fee_emit1＝同四层展开，min(1,1)=1 数值面显式收口；                 *)
-(*   ④stm_g10_fee_emit3＝同四层展开，min(1,2,3)=1 数值面显式收口。               *)
-(*   两条批量登记（不可化如实注记）：stm_domin_head（特化直喂＋构造子导航，        *)
+(*   ①stm_g10_nil_sentinel＝四层定义面（dmin/smin/dist/锚位）受控展开，        *)
+(*     空表支以显式 eq_refl 闭合；                                             *)
+(*   ②stm_g10_fee_emit2＝同四层展开，发射费 |2−0|=2 的数值面显式 eq_refl 闭合；  *)
+(*   ③stm_g10_fee_emit1＝同四层展开，min(1,1)=1 数值面显式闭合；                 *)
+(*   ④stm_g10_fee_emit3＝同四层展开，min(1,2,3)=1 数值面显式闭合。               *)
+(*   两条批量登记（不可化如实注记）：stm_domin_head（特化直接代入＋构造子导航，        *)
 (*   无增量）；stm_smin_singleton（确定性洞单喂，无增量）。                      *)
 (*   Proof 与 Qed 计数守恒；Require 面逐字一致；禁词零；纯构造性；真 Qed。       *)
 (* ============================================================ *)
 (* ===================================================================== *)
-(* UpReqSentinelMother.v —— 哨兵不可达引理母件对（哨兵支配＋域界不可达）    *)
+(* UpReqSentinelMother.v —— 锚不可达引理源模块对（锚支配＋域界不可达）    *)
 (*                                                                       *)
-(* 原申报对照：源自库内定理景观普查的方法论型候选项——「哨兵不可达引理母件   *)
-(* ——凡内置哨兵的枚举器，其永不可达性统一由构造性类型保证（哨兵=类型层的    *)
-(* empty 证人）。坐标：G10_LoebFam.v:1397-1402 dmin 空带哨兵 999（不变式     *)
-(* 纯注释级）；DenPosGeneral.v:119-124 低段严格数值哨兵（族 1，已成族无需    *)
-(* 母件）。库内普查结论：该候选项无逐字 Coq 原文，真缺口=族 2 不可达哨兵     *)
-(* 母件化，定理化路线推荐首发。**本件陈述面系自拟，候用户裁决。**            *)
+(* 原申报对照：源自库内定理景观普查的方法论型候选项——「锚不可达引理源模块   *)
+(* ——凡内置锚的枚举器，其永不可达性统一由构造性类型保证（锚=类型层的    *)
+(* empty 证人）。坐标：G10_LoebFam.v:1397-1402 dmin 空带锚 999（不变式     *)
+(* 纯注释级）；DenPosGeneral.v:119-124 低段严格数值锚（族 1，已成族无需    *)
+(* 源模块）。库内普查结论：该候选项无逐字 Coq 原文，真缺口=族 2 不可达锚     *)
+(* 源模块化，定理化路线推荐首发。**本件陈述面系自拟，候用户裁决。**            *)
 (*                                                                       *)
-(* 主件（母件对，Section 泛化，零外加假设，前提显式参；前缀 stm_，避免与     *)
+(* 主件（源模块对，Section 泛化，零外加假设，前提显式参；前缀 stm_，避免与     *)
 (* 库内既有名冲突）：                                                      *)
-(*   母件 A（哨兵支配面）：枚举器 smin 的输出被表内任一成员的核值支配——      *)
+(*   源模块 A（锚支配面）：枚举器 smin 的输出被表内任一成员的核值支配——      *)
 (*     stm_domin_in / stm_domin_head；伴随 singleton 正面可达面              *)
 (*     stm_smin_singleton。                                                *)
-(*   母件 B（域界不可达面）：显式枚举表长非空＋全表核值受界＋哨兵在域外       *)
-(*     ⟹ 哨兵位永不被命中——stm_unreach_lookup（查表型）/                     *)
+(*   源模块 B（域界不可达面）：显式枚举表长非空＋全表核值受界＋锚在域外       *)
+(*     ⟹ 锚位永不被命中——stm_unreach_lookup（查表型）/                     *)
 (*     stm_unreach_global（全域核型）/ stm_hitcount_zero（count 型，命中      *)
-(*     计数恒零）；合流门 stm_domain_gate（输出落域内 ∧ 哨兵不可达）。        *)
+(*     计数恒零）；合流门 stm_domain_gate（输出落域内 ∧ 锚不可达）。        *)
 (*   Set 层证人包（提取存活，Prop 位擦除为 __ 标准形非 magic）：              *)
 (*     stm_head_witness（sigT 非空表首元证人）/ stm_arg（argmin 条目）＋      *)
 (*     stm_arg_sound（证人落在表内且核值恰等于枚举器输出）。                  *)
-(*   实例化件（G10 dmin 场景，G10 只读零接触，消费 Require 对接）：           *)
-(*     stm_g10_dmin 镜像＋桥件 stm_g10_bridge（与 G10 dmin 逐点可证相等）＋   *)
-(*     999 空带哨兵数值核对（族 1 口径 vm_compute/reflexivity）＋999 不可达   *)
+(*   实例化件（G10 dmin 场景，G10 只读零接触，依存 Require 对接）：           *)
+(*     stm_g10_dmin 副本＋桥接引理 stm_g10_bridge（与 G10 dmin 逐点可证相等）＋   *)
+(*     999 空带锚数值核对（族 1 口径 vm_compute/reflexivity）＋999 不可达   *)
 (*     实例。                                                              *)
 (*                                                                       *)
 (* 备注：公理面自审：本件零外加公理、零承认出口、零占位收尾、零经典逻辑；     *)
 (*   主定理全部 Closed under the global context。纯构造性：不可达分支经       *)
-(*   空类型消去（False 消除）与 sigT 证人组合完成，无排中律消费。             *)
+(*   空类型消去（False 消除）与 sigT 证人组合完成，无排中律依存。             *)
 (*   Set 层纪律：定义面（smin/stm_arg/stm_head_witness/stm_hitcount/         *)
 (*   stm_g10_dmin）全 Set/Type 值，零 Prop 数据流入计算位；不可达结论的       *)
 (*   Prop 位置不回灌 Set。零推送，交付仅落 Live_X。                          *)
@@ -52,23 +52,23 @@ Import ListNotations.
 Open Scope Z_scope.
 
 (* ===================================================================== *)
-(* §1 母件区：哨兵支配 + 域界不可达（Section 泛化，双参 dist/s 放电）               *)
+(* §1 源模块区：锚支配 + 域界不可达（Section 泛化，双参 dist/s 实例化消解）               *)
 (* ===================================================================== *)
 
 Section SentinelMother.
 
-(* dist：距离核（实例化 G10 位形取 Z.abs (x - a)）；s：哨兵值（实例化 999）。 *)
+(* dist：距离核（实例化 G10 位形取 Z.abs (x - a)）；s：锚值（实例化 999）。 *)
 Variable dist : Z -> Z -> Z.
 Variable s : Z.
 
-(* 枚举器母形：镜像 G10 dmin 结构——空表吐哨兵 s，非空表取核值逐项最小。 *)
+(* 枚举器母形：副本 G10 dmin 结构——空表吐锚 s，非空表取核值逐项最小。 *)
 Fixpoint smin (x : Z) (l : list Z) : Z :=
   match l with
   | nil => s
   | a :: l' => Z.min (dist x a) (smin x l')
   end.
 
-(* —— 母件 A（哨兵支配面）—— *)
+(* —— 源模块 A（锚支配面）—— *)
 
 (* 支配主引理：表内任一成员的核值从上方支配枚举器输出（构造性归纳）。 *)
 Lemma stm_domin_in : forall (x a : Z) (l : list Z),
@@ -83,15 +83,15 @@ Proof.
       * apply IH. exact Hin.
 Qed.
 
-(* 支配头元特化：非空表输出被头元核值支配（G10 调用位消费形）。 *)
+(* 支配头元特化：非空表输出被头元核值支配（G10 调用位依存形）。 *)
 Lemma stm_domin_head : forall (x a : Z) (l : list Z),
   smin x (a :: l) <= dist x a.
 Proof.
   intros x a l. exact (Z.le_min_l (dist x a) (smin x l)).
 Qed.
 
-(* 正面可达面（单调忠实性）：单元素表且核值在哨兵下界内时，输出恰为该核值
-   ——枚举器是真最小化器非常量吐哨兵，母件非空壳的正面印证。 *)
+(* 正面可达面（单调忠实性）：单元素表且核值在锚下界内时，输出恰为该核值
+   ——枚举器是真最小化器非常量吐锚，源模块非空壳的正面印证。 *)
 Lemma stm_smin_singleton : forall (x a : Z),
   dist x a <= s -> smin x (a :: nil) = dist x a.
 Proof.
@@ -115,7 +115,7 @@ Fixpoint stm_arg (x : Z) (l : list Z) : Z :=
   | a :: l' => if Z.leb (dist x a) (smin x l') then a else stm_arg x l'
   end.
 
-(* argmin 可靠性：非空表 + 全表受界 + 哨兵在域外 ⟹ 条目落在表内
+(* argmin 可靠性：非空表 + 全表受界 + 锚在域外 ⟹ 条目落在表内
    且其核值恰等于枚举器输出（Set 数据包 + Prop 证书的构造性组合）。 *)
 Lemma stm_arg_sound : forall (B x : Z) (l : list Z),
   (forall a, In a l -> dist x a <= B) -> B < s -> (0 < length l)%nat ->
@@ -152,10 +152,10 @@ Proof.
            exact Heq.
 Qed.
 
-(* —— 母件 B（域界不可达面）—— *)
+(* —— 源模块 B（域界不可达面）—— *)
 
 (* 查表型主引理：显式枚举表长非空 + 表内全体核值受界（Z.le 显式前提）
-   + 哨兵在域外（Z.lt 显式前提）⟹ 哨兵位永不被命中。
+   + 锚在域外（Z.lt 显式前提）⟹ 锚位永不被命中。
    构造性：sigT 证人 + 支配 + 传递 + 空类型消去，零经典逻辑。 *)
 Lemma stm_unreach_lookup : forall (B x : Z) (l : list Z),
   (forall a, In a l -> dist x a <= B) -> B < s -> (0 < length l)%nat ->
@@ -169,7 +169,7 @@ Proof.
   exfalso. lia.
 Qed.
 
-(* 全域核型推论：核在全域受界（双参量词）时表非空即免哨兵
+(* 全域核型推论：核在全域受界（双参量词）时表非空即免锚
    （证书形升级包装，不可达本体仍由查表型主引理承担）。 *)
 Lemma stm_unreach_global : forall (B x : Z) (l : list Z),
   (forall y a, dist y a <= B) -> B < s -> l <> nil ->
@@ -184,7 +184,7 @@ Proof.
     + simpl. lia.
 Qed.
 
-(* count 型泛化：逐后缀位哨兵命中计数器（查表协议同形）。 *)
+(* count 型泛化：逐后缀位锚命中计数器（查表协议同形）。 *)
 Fixpoint stm_hitcount (x : Z) (l : list Z) : nat :=
   match l with
   | nil => 0%nat
@@ -192,7 +192,7 @@ Fixpoint stm_hitcount (x : Z) (l : list Z) : nat :=
                        (stm_hitcount x l')
   end.
 
-(* 命中计数恒零：受界 + 哨兵在域外 ⟹ 任何表上计数器一次都不触发
+(* 命中计数恒零：受界 + 锚在域外 ⟹ 任何表上计数器一次都不触发
    （每一受检位形是非空表，由查表型主引理逐位排除）。 *)
 Lemma stm_hitcount_zero : forall (B x : Z) (l : list Z),
   (forall a, In a l -> dist x a <= B) -> B < s ->
@@ -224,7 +224,7 @@ Proof.
   - apply Hcert. exact Ha.
 Qed.
 
-(* 合流门（母件对旗舰）：输出落域内 ∧ 哨兵不可达 双面一次交付。 *)
+(* 合流门（源模块对主）：输出落域内 ∧ 锚不可达 双面一次交付。 *)
 Corollary stm_domain_gate : forall (B x : Z) (l : list Z),
   (forall a, In a l -> dist x a <= B) -> B < s -> (0 < length l)%nat ->
   smin x l <= B /\ smin x l <> s.
@@ -240,18 +240,18 @@ End SentinelMother.
 (* §2 G10 dmin 场景实例化（G10_LoebFam.v 只读零接触；本节独立重构对照形）         *)
 (* ===================================================================== *)
 
-(* 位形常量：哨兵 999（G10:1400 空带支）；域界 998，恰在哨兵之下（哨兵在域外）。 *)
+(* 位形常量：锚 999（G10:1400 空带支）；域界 998，恰在锚之下（锚在域外）。 *)
 Definition stm_g10_s : Z := 999.
 Definition stm_g10_B : Z := 998.
 Definition stm_g10_dist (x a : Z) : Z := Z.abs (x - a).
 
-(* dmin 镜像：母件枚举器 smin 在 G10 位形下的实例（形合 G10:1398-1402）。 *)
+(* dmin 副本：源模块枚举器 smin 在 G10 位形下的实例（形合 G10:1398-1402）。 *)
 Definition stm_g10_dmin (x : Z) (l : list Z) : Z :=
   smin stm_g10_dist stm_g10_s x l.
 
-(* —— 族 1 口径数值哨兵（核对 G10 dwm 轨迹 L1430-1444）—— *)
+(* —— 族 1 口径数值锚（核对 G10 dwm 轨迹 L1430-1444）—— *)
 
-(* 空带支吐哨兵本体：999 位形落地（空表可达面 = 哨兵位的定义面）。 *)
+(* 空带支吐锚本体：999 位形落地（空表可达面 = 锚位的定义面）。 *)
 Lemma stm_g10_nil_sentinel : forall x : Z, stm_g10_dmin x nil = 999.
 Proof.
   intros x. exact (eq_refl 999).
@@ -275,10 +275,10 @@ Proof.
   exact (eq_refl 1).
 Qed.
 
-(* —— 族 2 口径：999 哨兵不可达（母件 B 实例化）—— *)
+(* —— 族 2 口径：999 锚不可达（源模块 B 实例化）—— *)
 
 (* 窗口形实例化：查表值与带内条目同落宽 ≤ 998 的窗口 ⟹ 999 永不被吐出
-   （证书面由 Z.abs_le + lia 逐点放电，lt/le 前提全显式）。 *)
+   （证书面由 Z.abs_le + lia 逐点实例化消解，lt/le 前提全显式）。 *)
 Lemma stm_g10_unreach_window : forall (x lo hi : Z) (l : list Z),
   hi - lo <= stm_g10_B -> lo <= x -> x <= hi ->
   (forall a, In a l -> lo <= a /\ a <= hi) -> l <> nil ->
@@ -309,13 +309,13 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* §3 G10 原位对接（消费 Require）：桥件 + 公理面审计 + 提取审计                *)
+(* §3 G10 原位对接（依存 Require）：桥接引理 + 公理面审计 + 提取审计                *)
 (* ===================================================================== *)
 
 Require Import G10_LoebFam.
 
-(* 桥件：G10 dmin（只读原形 G10:1398-1402）与母件镜像 stm_g10_dmin 逐点可证相等——
-   本件全部母件定理经此桥直接回账 G10 调用位（dwm_emit/halt_cert），G10 本体零改。 *)
+(* 桥接引理：G10 dmin（只读原形 G10:1398-1402）与源模块副本 stm_g10_dmin 逐点可证相等——
+   本件全部源模块定理经此桥直接回账 G10 调用位（dwm_emit/halt_cert），G10 本体零改。 *)
 Lemma stm_g10_bridge : forall (x : Z) (l : list Z),
   dmin x l = stm_g10_dmin x l.
 Proof.

@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* T242 · ToyR 战役 包D · S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
-(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 闭合。    *)
 (* 替换段：clip_lower / ppo_gap_nonneg / sigmoid_pos /            *)
 (*         u2_align_objective_ext                                  *)
 (* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
@@ -3330,8 +3330,8 @@ Proof.
                  (id_sym Hdiff) Hstep).
 Qed.
 (* ============================================================ *)
-(* T1.3：策略迭代向后 KL 显式递推（论文1 几何收敛的镜像下降核心） *)
-(*   相对熵镜像下降（entropic mirror descent）的三点恒等式组装： *)
+(* T1.3：策略迭代向后 KL 显式递推（论文1 几何收敛的副本下降核心） *)
+(*   相对熵副本下降（entropic mirror descent）的三点恒等式组装： *)
 (*   KL(pi_star‖pi_{t+1}) == (1−ηβ)·KL(pi_star‖pi_t) − η·KL(pi_t‖pi_star)    *)
 (*                        + KL(pi_t‖pi_{t+1})                     *)
 (*   构件：F_t 分解（F_t_decomp_p）+ F_t 展开（F_t_simpl_p）+     *)
@@ -3448,7 +3448,7 @@ Proof.  intros pi_t pi_t_pos.
            (fun s => id_sym (mult_minus_distr_r (Np s) (pi_t s) (A s))))).
 Qed.
 
-(* 镜像步最优性（surrogate ÷ η）：Σ(pi_next − pi_t)·A_t == (β/η)·(KL(pi_next‖pi_t) + KL(pi_t‖pi_next)) *)
+(* 副本步最优性（surrogate ÷ η）：Σ(pi_next − pi_t)·A_t == (β/η)·(KL(pi_next‖pi_t) + KL(pi_t‖pi_next)) *)
 Lemma grad_cross_identity :
   forall (pi_t : S -> R) (pi_t_pos : forall s : S, lt zero (pi_t s))
          (pi_t_norm : Id (sum_over_S pi_t) one)
@@ -3963,9 +3963,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* A-1：T1.3 几何收敛上界（镜像下降迭代的显式递推）           *)
-(*   pi_{t+1} := pi_next pi_t（相对熵镜像下降单步）              *)
-(*   1) policy_iterate：sigT 打包的迭代 Fixpoint（正性内嵌）     *)
+(* A-1：T1.3 几何收敛上界（副本下降迭代的显式递推）           *)
+(*   pi_{t+1} := pi_next pi_t（相对熵副本下降单步）              *)
+(*   1) policy_iterate：sigT 封装的迭代 Fixpoint（正性内嵌）     *)
 (*   2) policy_iter_norm：迭代保持归一化                          *)
 (*   3) step_kl_weighted：加权步长 KL 和（κ^{t-1-i} 权重）        *)
 (*   4) policy_iter_backward_kl_iter_le：                        *)
@@ -3985,7 +3985,7 @@ Qed.
 (*      KL(pi*‖pi_t) ≤ (1−η)^t·KL(pi*‖pi_0)                     *)
 (* ============================================================ *)
 
-(* 迭代 Fixpoint：分布 + 正性证明打包为 sigT（可提取） *)
+(* 迭代 Fixpoint：分布 + 正性证明封装为 sigT（可提取） *)
 Fixpoint policy_iterate (t : nat) (pi : S -> R)
          (pi_pos : forall s : S, lt zero (pi s)) :
   { pi' : S -> R & forall s : S, lt zero (pi' s) } :=
@@ -4368,14 +4368,14 @@ End Alignment.
 
 (* ============================================================ *)
 (* U2 改进算子不动点与等值刻画                                  *)
-(* （镜像 Section U2FixedPoint，整节后置于 End Alignment.）；     *)
+(* （副本 Section U2FixedPoint，整节后置于 End Alignment.）；     *)
 (* 来源：演变/.ablation/sc2_u2_fixed/u2_fixedpoint.v；10 Qed；    *)
 (* 零公理面、零承认件、零经典逻辑。                              *)
 (* ============================================================ *)
 
 Section U2FixedPoint.
 
-(* ---- 镜像 Section Alignment 的声明（同名同序；未用变量不声明） ---- *)
+(* ---- 副本 Section Alignment 的声明（同名同序；未用变量不声明） ---- *)
 Context {RI : RealInterfaceEnhanced}.
 Context {SS : StateSpace RI}.
 Context {SO : SumOver RI SS}.
@@ -4465,7 +4465,7 @@ Proof.
   intros p q Hpq.
   (* 定义层展开＋显式构造项：align_objective 两侧展开为
      opp (free_energy …)，逐点相等经 free_energy_ext 后以
-     opp 的全参映射 id_cong 一次注入收口（消 apply 两跳） *)
+     opp 的全参映射 id_cong 一次注入闭合（消 apply 两跳） *)
   unfold align_objective.
   exact (id_cong opp (free_energy_ext p q Hpq)).
 Qed.

@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   mixe_cf_select_cap（原 L640，3 句玩具证）                            *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
 (* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
@@ -37,12 +37,12 @@
 (* 公理面：本件零新增公理；全部前提为 Q 层显式序假设（Qlt/Qle/bool），   *)
 (* 文末 Print Assumptions 预期全 Closed。                               *)
 (* 依赖面：纯 Stdlib QArith（QArith + Qround + ZArith + Lia），零 CW 基座*)
-(* 依赖、零 Real 层接触——Q 层无 zify，手工环账按 AT8/IR3 卡纪律。        *)
+(* 依赖、零 Real 层接触——Q 层无 zify，手工循环依赖清单按 AT8/IR3 卡纪律。        *)
 (* 红线自审：语句面量词 nat/Q、比较 Qlt/Qle、证书 bool——全 Set 层；      *)
 (* 计算件（mixe_qpow/mixe_qlt_bool/mixe_qofnat/mixe_cf_accept/           *)
 (* mixe_cf_accept_sharp/mixe_cf_select）全 Defined 且 Set 值             *)
 (*（sumbool-if 分支合法，Defined 体零 Prop 消去）；封顶/健全性定理为     *)
-(* Qed 消费件，不进提取签名。                                           *)
+(* Qed 依存件，不进提取签名。                                           *)
 (* 诚实边界：封顶定理只对本「闭式族内可代数反解（affine 形）」的构造     *)
 (* 声明（generic 斜率形 mixe_cf_cap_gen 覆盖一切常数锐化成员）；不声明   *)
 (* 全域不可达（任何算法都无法超越线性——那是另一量级的独立研究）。        *)
@@ -163,7 +163,7 @@ Proof.
   - exact (Qmult_lt_compat_r 0 x y Hy Hx).
 Qed.
 
-(* 「x - c ≤ x」（c ≥ 0）——封顶与 Bernoulli 步进的工作马；零消去零除法 *)
+(* 「x - c ≤ x」（c ≥ 0）——封顶与 Bernoulli 步进的辅助引理；零消去零除法 *)
 Lemma mixe_le_sub : forall x c : Q, Qle 0 c -> Qle (x - c) x.
 Proof.
   intros x c Hc. unfold Qminus.
@@ -263,7 +263,7 @@ Proof.
   unfold Qle. cbn [Qnum Qden Z.mul Pos.mul]. lia.
 Qed.
 
-(* Q 上单侧严格平移（Z 层 replace+ring 归一 + Zplus_lt_compat_r 收口——    *)
+(* Q 上单侧严格平移（Z 层 replace+ring 归一 + Zplus_lt_compat_r 闭合——    *)
 (* 闭式选择器健全性 converse 承重件） *)
 Lemma mixe_qlt_plus_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
 Proof.
@@ -381,7 +381,7 @@ Proof.
 Qed.
 
 (* F1：锐化 Bernoulli 上形（只需 0 ≤ w ≤ 1，弱于现行 mix_bernoulli_upper   *)
-(* 的 0<w<1 前件——锐化） *)
+(* 的 0<w<1 前提——锐化） *)
 Lemma mixe_bern_sharp : forall (w : Q) (k : nat),
   Qle 0 w -> Qle w 1 ->
   Qle (mixe_qpow (1 - w) k * (1 + mixe_qofnat k * w)) 1.
@@ -735,7 +735,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4：自检哨兵（vm_compute 直验，w = 1#10；Qle/Qlt 侧以 bool 面直算） *)
+(* Part 4：自检锚（vm_compute 直验，w = 1#10；Qle/Qlt 侧以 bool 面直算） *)
 (*   ① 族两侧 k=9 vs k=10：接受谓词 39/20 界两侧                           *)
 (*   ② 封顶两侧：cap 实例 9 侧违反 / 10 侧满足                            *)
 (*   ③ 线性 vs 对数对照：闭式 k=91（TV0'=1, b0=1/10）——                    *)

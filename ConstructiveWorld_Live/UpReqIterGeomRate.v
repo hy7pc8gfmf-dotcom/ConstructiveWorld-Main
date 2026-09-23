@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   igr_geom_step_discharged_B（原 L286，4 句玩具证）                    *)
 (*   igr_le_plus_r（原 L202，2 句玩具证）                                 *)
@@ -12,14 +12,14 @@
 (* ============================================================ *)
 (* UpReqIterGeomRate.v                                          *)
 (*                                                              *)
-(* 目的： 论文 1 定理 4.8 接口消解·Real 层迭代率总装（席 GEOM-B）。    *)
-(*   在锚内把「单步无假设收缩」与「迭代归纳」合龙：S15 原生放电件      *)
+(* 目的： 论文 1 定理 4.8 接口消解·Real 层迭代率装配（席 GEOM-B）。    *)
+(*   在锚内把「单步无假设收缩」与「迭代归纳」闭合：S15 原生实例化消解件      *)
 (*   real_step_kl_eta_bound_eps（S15_TailFEPUp.v:1014，Require 首次     *)
-(*   被迭代轨道消费）× geodi sigT 迭代骨架（UpReqGeomIter.v）⟹          *)
+(*   被迭代轨道依存）× geodi sigT 迭代骨架（UpReqGeomIter.v）⟹          *)
 (*   Real 层真几何率 (1-eta)^t 的锐利几何和误差账与 t·eps 简化账，       *)
 (*   Bishop 形 real_le_b 交付——下游零接口假设（S05:4404 Variable       *)
 (*   step_kl_eta_bound 的假设位在 Real 层全部由轨道自供给替代：          *)
-(*   HZ-槽 := geodi_zpos（NatLt 非平凡前提），Hqv-槽 := geodi_next_pos。） *)
+(*   HZ-参数位 := geodi_zpos（NatLt 非平凡前提），Hqv-参数位 := geodi_next_pos。） *)
 (*                                                              *)
 (* 交付清单：                                                    *)
 (*   W5  igr_geom_step_eps / igr_geom_step_discharged_B           *)
@@ -35,23 +35,23 @@
 (*       S 支拆分路线 igr_ring_scale_inv + igr_iter_budget_witness_S）；  *)
 (*       igr_k_select（Q 证书面最小 t 的 Nat 枚举 Defined，C10 同构）。   *)
 (*                                                              *)
-(* 数学核（锐利记账免几何和恒等式）：                                *)
+(* 数学核（锐利核算免几何和恒等式）：                                *)
 (*   误差账递归取 G_{S m} := 1 + kappa·G_m（新步误差全额入账、         *)
-(*   旧误差 kappa 折扣），则归纳步环账                                  *)
+(*   旧误差 kappa 折扣），则归纳步循环依赖清单                                  *)
 (*     kappa·(kappa^m·KL_0 + G_m·eps) + eps                            *)
 (*       == kappa^{S m}·KL_0 + (1 + kappa·G_m)·eps                      *)
 (*   拆为三个纯 Real 原子环件（igr_ring_step_a/b、igr_ring_reassoc，    *)
 (*   destruct+ring 直闭）经 plus-compat 链组合（igr_ring_step），       *)
-(*   单步喂定取全额 eps（放电件 eps-槽任意），eta 严格正前提仅用于      *)
+(*   单步喂定取全额 eps（实例化消解件 eps-参数位任意），eta 严格正前提仅用于      *)
 (*   kappa = 1-eta 的正性/le_one 证书与 B 完成器的 D 正性。             *)
 (*                                                              *)
-(* 移植与对账：                                                  *)
+(* 移植与核验：                                                  *)
 (*   - 迭代骨架/喂定模式移植自 UpReqGeomIter.v:398-419（对子消解        *)
 (*     + q 形直供 + 同字面项烘焙）；B 完成器路线对齐                    *)
 (*     UpReqGeomIter.v:786-815（real_le_closure 族收尾）。              *)
 (*   - 环件 destruct+ring 风格移植自 UpStepKLM3.v（m3_ring_eta_kappa    *)
-(*     等模式）；一步收缩的换向消费形对齐 UpStepKLM3.v:432-461。        *)
-(*   - 与 UpStepKLM3（M3 迭代镜像，同在注册面）的差异：本件以 geodi     *)
+(*     等模式）；一步收缩的换向依存形对齐 UpStepKLM3.v:432-461。        *)
+(*   - 与 UpStepKLM3（M3 迭代副本，同在注册面）的差异：本件以 geodi     *)
 (*     轨道为载体（NatLt Set 层非平凡前提）、误差账改锐利几何和形、     *)
 (*     交付面为 Bishop 形 real_le_b。                                   *)
 (*                                                              *)
@@ -78,7 +78,7 @@ Local Open Scope nat_scope.
 Definition igr_kappa (eta : Real) : Real := real_plus real_one (real_opp eta).
 
 (* 锐利误差账：G_t = sum_{i<t} kappa^i，递归 G_O = 0、G_{S m} = 1 + kappa·G_m
-   （与逐项和 1 + k + ... + k^{t-1} 等值，记账顺序不同）。 *)
+   （与逐项和 1 + k + ... + k^{t-1} 等值，核算顺序不同）。 *)
 Fixpoint igr_gsum (k : Real) (t : nat) : Real :=
   match t with
   | Datatypes.O => real_zero
@@ -133,7 +133,7 @@ Proof. intros k G e.
   destruct k as [a Ha]. destruct G as [b Hb]. destruct e as [f Hf].
   apply real_eq_of_zero_diff. intro n. simpl. ring. Qed.
 
-(* 锐利归纳步总环账（组合件；powb_pow/igr_gsum 作原子透传）：
+(* 锐利归纳步总循环依赖清单（组合件；powb_pow/igr_gsum 作原子透传）：
    kappa·(kappa^m·KL0 + G_m·eps) + eps
      == (kappa·kappa^m)·KL0 + (1 + kappa·G_m)·eps。 *)
 Lemma igr_ring_step : forall (k KL0 G e : Real) (m : nat),
@@ -217,14 +217,14 @@ Proof.
   exact (kl_le_eq_l (real_plus x real_zero) (real_plus x d) x           (real_le_plus_compat x x real_zero d (real_le_refl x)              (kl_lt_le_bridge real_zero d Hd))           (real_plus_zero x)).
 Qed.
 
-(* ========== W5：单步无假设收缩（放电件 × 轨道站合龙） ========== *)
+(* ========== W5：单步无假设收缩（实例化消解件 × 轨道站闭合） ========== *)
 
 (* KL(pi*||pi_{t+1}) <= kappa·KL(pi*||pi_t) + eps（real_le 形）。
    S05 抽象层 policy_iter_kl_geom_step（S05_AlignmentGRPO.v:4436）的
-   Real 层 eps 化同构件：接口假设 step_kl_eta_bound 的两个承载槽
-   在轨道上自足——HZ-槽 := geodi_zpos（非平凡前提 NatLt 0 n 的
+   Real 层 eps 化同构件：接口假设 step_kl_eta_bound 的两个承载参数位
+   在轨道上自足——HZ-参数位 := geodi_zpos（非平凡前提 NatLt 0 n 的
    Set 层编码，id_false_true 爆破先例 UpReqGeomIter.v:119），
-   Hqv-槽 := geodi_next_pos（与 HZ-槽同字面项烘焙）。 *)
+   Hqv-参数位 := geodi_next_pos（与 HZ-参数位同字面项烘焙）。 *)
 Theorem igr_geom_step_eps :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -255,7 +255,7 @@ Proof.
   pose proof (geodi_seq_norm_pair n r Hr (real_plus real_one (real_opp eta)) p Hp Hn Hnormp t q Hq Em)
     as HnormQ.
   unfold geod_lsum in HnormQ.
-  (* S15 原生放电件换向实例：p-槽 := r（pi*），r-槽 := q（pi_t），eta-槽 := kappa。
+  (* S15 原生实例化消解件换向实例：p-参数位 := r（pi*），r-参数位 := q（pi_t），eta-参数位 := kappa。
      换向后 KL(pi*||next) <= kappa·KL(pi*||pi_t) + eta·eps。 *)
   pose proof (real_step_kl_eta_bound_eps n r q (igr_kappa eta) Hr Hq
                 Hnormr HnormQ
@@ -290,7 +290,7 @@ Qed.
 
 (* W5 Bishop 形（锐利）：KL(pi*||pi_{t+1}) <=_B kappa·KL(pi*||pi_t)。
    real_le_closure_b_one（UpRealLeB.v:381）一发闭合——逐 d 喂
-   igr_geom_step_eps（放电件 eps-槽任意正预算）。 *)
+   igr_geom_step_eps（实例化消解件 eps-参数位任意正预算）。 *)
 Theorem igr_geom_step_discharged_B :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -388,7 +388,7 @@ Proof.
              (igr_nmul m real_one) (real_le_refl real_one) Hstep2).
 Qed.
 
-(* (t·1)·eps == t·eps（nmul 对 one-系数的分配环账） *)
+(* (t·1)·eps == t·eps（nmul 对 one-系数的分配循环依赖清单） *)
 Lemma igr_nmul_mult_one : forall (t : nat) (eps : Real),
   real_eq (real_mult (igr_nmul t real_one) eps) (igr_nmul t eps).
 Proof.
@@ -411,7 +411,7 @@ Qed.
 
 (* 锐利几何和账（real_le 形）：
    KL(pi*||pi_t) <= (1-eta)^t·KL(pi*||pi_0) + (sum_{i<t}(1-eta)^i)·eps。
-   归纳步喂全额 eps，环账 igr_ring_step 一件闭合（免几何和恒等式）。 *)
+   归纳步喂全额 eps，循环依赖清单 igr_ring_step 一件闭合（免几何和恒等式）。 *)
 Theorem igr_iter_geom_rate_tight_eps :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -435,7 +435,7 @@ Proof.
   intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t eps Heps.
   unfold geod_lsum in *.
   induction t as [| m IH].
-  - (* t = 0：KL_0 <= 1·KL_0 + 0·eps（eq 支：0·eps == 0 环账） *)
+  - (* t = 0：KL_0 <= 1·KL_0 + 0·eps（eq 支：0·eps == 0 循环依赖清单） *)
     apply (RealSetoid.real_le_id_l
              (real_list_sum nat
                 (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i))
@@ -514,7 +514,7 @@ Proof.
                                (List.seq 0 n))))
                       (real_eq_sym (real_mult real_zero eps) real_zero
                          (igr_mult_zero_r eps))))).
-  - (* t = S m：对子消解 + 放电件全额喂定 + kappa 加权 IH + 总环账 *)
+  - (* t = S m：对子消解 + 实例化消解件全额喂定 + kappa 加权 IH + 总循环依赖清单 *)
     cbn [powb_pow igr_gsum].
     unfold geodi_iterate, geodi_iterate_pos in IH.
     unfold geodi_iterate, geodi_iterate_pos.
@@ -525,7 +525,7 @@ Proof.
     pose proof (geodi_seq_norm_pair n r Hr (real_plus real_one (real_opp eta)) p Hp Hn Hnormp m q Hq Em)
       as HnormQ.
     unfold geod_lsum in HnormQ.
-    (* S15 原生放电件换向实例（同 W5，全额 eps 喂定） *)
+    (* S15 原生实例化消解件换向实例（同 W5，全额 eps 喂定） *)
     pose proof (real_step_kl_eta_bound_eps n r q (igr_kappa eta) Hr Hq
                   Hnormr HnormQ
                   (geodi_zpos n r q (igr_kappa eta) Hr Hq Hn)
@@ -619,7 +619,7 @@ Proof.
                 (igr_gsum (igr_kappa eta) m) eps m)).
 Qed.
 
-(* B 形闭合 t=0 支共用：KL_0 <=_B 1·KL_0 + z（z 为任意零形误差槽） *)
+(* B 形闭合 t=0 支共用：KL_0 <=_B 1·KL_0 + z（z 为任意零形误差参数位） *)
 Lemma igr_B_zero : forall (KL0 z : Real),
   real_eq z real_zero ->
   real_le_b KL0 (real_plus (real_mult real_one KL0) z).
@@ -1144,7 +1144,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R2·幂上界精确腿（④L 与见证器的消费件；库内 PowB 仅 B 形）            *)
+(* R2·幂上界精确肢（④L 与见证器的依存件；库内 PowB 仅 B 形）            *)
 (* ============================================================ *)
 Lemma igr_powb_nonneg : forall (eta : Real) (Heta : real_lt real_zero eta)
     (Hlt1 : real_lt eta real_one) (t : nat),
@@ -1180,7 +1180,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R3·sigT 四层见证器（R2.2 挂账收口：S 支拆分路线）                  *)
+(* R3·sigT 四层见证器（R2.2 遗留闭合：S 支拆分路线）                  *)
 (*                                                              *)
 (*   第一层 igr_ring_scale_inv：预算换形环件（独立单目标引理）          *)
 (*     G·(e + d·invG) == G·e + d（invG 正性证书型）。                 *)
@@ -1196,7 +1196,7 @@ Qed.
 (*                                                              *)
 (* 公理面：零新增假设位；见证主件/实形件为 Defined（真可计算，          *)
 (* 非 Qed 糊封）；支件 ring_scale_inv / budget_witness_S 为 Qed 闭合。  *)
-(* 提取面组织：WALL-1 iface 别名 delta 伪影坑——接口桥件不进提取面，    *)
+(* 提取面组织：WALL-1 iface 别名 delta 伪影坑——接口桥接引理不进提取面，    *)
 (* 见证器语句面素颜 geod_*/real_*（R1 六件提取 0 magic 同款组织）。     *)
 (* ============================================================ *)
 
@@ -1533,7 +1533,7 @@ Proof.
     + discriminate Hk.
   - cbn [igr_k_enum] in Hk.
     destruct (igr_k_enum test m) eqn:Em.
-    + (* 内窗已解：destruct-eqn 已把 IH/Hk 消解为 Some n 形，同形直喂 *)
+    + (* 内窗已解：destruct-eqn 已把 IH/Hk 消解为 Some n 形，同形直接代入 *)
       apply IH. exact Hk.
     + destruct (test (Datatypes.S m)) eqn:Ht.
       * injection Hk. intros Hkk. rewrite <- Hkk. exact Ht.
@@ -1600,16 +1600,16 @@ Qed.
 (* 诚实登记表                                                    *)
 (*                                                              *)
 (* 【层级声明】本件全部语句在 Real 化离散分布层（geod_lsum/        *)
-(*   real_kl_term 折叠和），与放电件（S15:1014）同层；S05 抽象层    *)
+(*   real_kl_term 折叠和），与实例化消解件（S15:1014）同层；S05 抽象层    *)
 (*   （relative_entropy/pi_next，S05:2558）的实例化属席 GEOM-A     *)
 (*   W3 领地，本件不等待、不重叠。                                *)
 (*                                                              *)
-(* 【锐利记账豁免】几何和恒等式 eta·G_t == 1 - kappa^t 未建亦未用： *)
-(*   误差账递归取 G_{S m} := 1 + kappa·G_m 后归纳环账纯环闭合。     *)
+(* 【锐利核算豁免】几何和恒等式 eta·G_t == 1 - kappa^t 未建亦未用： *)
+(*   误差账递归取 G_{S m} := 1 + kappa·G_m 后归纳循环依赖清单纯环闭合。     *)
 (*   若下游需「闭式 (1-kappa^t)/eta」形，可由本件 igr_gsum 与该     *)
 (*   恒等式的 eq 桥换形（恒等式本身留作后续席余量）。              *)
 (*                                                              *)
-(* 【I4 缺口④对账】UpReqGeomIter.v:869-877 尾注的缺口④（le_b      *)
+(* 【I4 缺口④核验】UpReqGeomIter.v:869-877 尾注的缺口④（le_b      *)
 (*   乘法保序闭包 a <=_B b /\ 0 <=_B c ⟹ a·c <=_B b·c）本件未建：   *)
 (*   其右因子非严格情形需 KL_0 精确非负（real_le 形 Gibbs），库内  *)
 (*   仅有 eps 形（real_gibbs_inequality_eps），按分层保底纪律不     *)

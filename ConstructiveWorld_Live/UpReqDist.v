@@ -8,7 +8,7 @@
 (* 替换定理清单：reqd_le_of_req／reqd_minus_compat／reqd_opp_zero／          *)
 (* req_boltzmann_dist_pos（共 4 条）                                         *)
 (* 非平凡性口径：显式直造链就地重演，消除单跳转发；无一行拆分式假非平凡。    *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
@@ -18,15 +18,15 @@
    ① reqd_le_of_req：lt_le_iff 桥的右支改显式构造子见证（Set 层和型
      inr 直造，本件 L2112 inl 先例同款），消 apply/right 战术链。
    ② reqd_minus_compat：unfold 双侧后改 req_trans 两段链（req_plus_compat
-     先槽后证全显式参，逐段实例化），消单跳打包转发。
+     先参数位后证全显式参，逐段实例化），消单跳封装转发。
    ③ reqd_opp_zero：改 req_trans 两段链（req_plus_zero_l 对称换形 +
-     plus_opp 收口），消 req_plus_inv_unique 打包转发。
+     plus_opp 闭合），消 req_plus_inv_unique 封装转发。
    ④ req_boltzmann_dist_pos：同族复制件正体直取（req_boltzmann_positive
      的 Defined 正件体逐字内联：unfold + mult_positive 两支严界），消同名转发。
    验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
      rc=0、零错误锚、vo 新于 v、文尾四条 Print Assumptions 全 Closed。
-   余十一条复核判级：定义性收口三类（req_elbo_tight/reqd_sqrt_witness_sq/
-     reqd_scale_temp_duality，unfold 后同形收口，不可化）、接口桥位四类
+   余十一条复核判级：定义性闭合三类（req_elbo_tight/reqd_sqrt_witness_sq/
+     reqd_scale_temp_duality，unfold 后同形闭合，不可化）、接口桥位四类
      （req_kl_nonneg/req_kl_zero_iff_eq/req_Z_temp_pos/req_second_law_
      irreversible，转发目标为节假设桥，无定义面可展）、同文件深链转发
      三类（req_elbo_lower_bound/req_kl 同族见上/reqd_scale_dual_sq_k）、
@@ -45,14 +45,14 @@
 
 (* UpReqDist.v — 签名迁移批 2：分布 / 自由能 / GRPO 簇的 req 系重述与实例化
    母本：签名迁移规划书-20260908.md（批 2 清单，§5）；
-   模板：UpSigMigrate.v（13 Qed 试点件）+ UpReqAlgebra.v（批 1 地基，直接消费）。
+   模板：UpSigMigrate.v（13 Qed 试点件）+ UpReqAlgebra.v（批 1 地基，直接依存）。
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）；
    纯 term-mode（req_trans 链 + compat 桥，零 Morphisms 依赖）；
-   消费批 1 地基 UpReqAlgebra（57 件）与基内对接面 exp_neg_req_compat_setoid。
+   依存批 1 地基 UpReqAlgebra（57 件）与基内对接面 exp_neg_req_compat_setoid。
    ----------------------------------------------------------------
    诚实签名变化登记表（规划书 §7.4）：
    1. log 前提化：setoid log 带 lt zero 前提，free_energy/relative_entropy/
-     entropy_dist/cross_entropy 定义逐件加 positive_dist 参数（δ 记账）。
+     entropy_dist/cross_entropy 定义逐件加 positive_dist 参数（δ 核算）。
    2. minus 非接口字段：以批 1 req_minus 同形重建（δ 透明）。
    3. T2① 接口缺口桥（ReqFEPBridge 节，保留假设位；Real 实例可满足，
      实例化留待接口扩展批——批 1 ReqLogBridge 同结论）：
@@ -61,12 +61,12 @@
      - dist_log_eq_linear：切点唯一 x=1（Id 接口字段 L304；setoid 缺）。
    4. SumOver setoid 对接面：批 1/试点件三性质（ext/linear/pos）+ Id 系
      SumOver 字段 sum_over_S_le / sum_over_S_zero_nonneg（L1415/L1426）
-     的 req 镜像（sum_le / sum_zero_nonneg），同为 Section 假设申报位。
+     的 req 副本（sum_le / sum_zero_nonneg），同为 Section 假设申报位。
    5. SecondLaw：Not (Id (dynamics x) x) → Not (req (dynamics x) x)（签名变化）。
    6. square_nonneg（GRPO ）：保持 Id 出口假设位（显式 forall 参数，
      T2 形态①；Id 系 L24301 同为诚实 Variable）。
-   7. (a) 类消费：req_free_energy_kl_decomp @ UpSigMigrate 同构重述于本文件
-     （消费形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在核对表标注）。
+   7. (a) 类依存：req_free_energy_kl_decomp @ UpSigMigrate 同构重述于本文件
+     （依存形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在核对表标注）。
    ----------------------------------------------------------------
    覆盖核对（req 件名 -> Id 原件 @ 行号；批 2 清单逐条已证明见文件尾）：
    【SumLayer（FEP 前 2 件）】reqd_sum_opp<-15801 reqd_sum_minus<-15830
@@ -160,7 +160,7 @@ Proof.
     + apply req_exp_neg_opp_log.
 Qed.
 
-(* 乘积非负（Id 系 le_mult_nonneg_t12 的 req 镜像；le_mult_compat_weak
+(* 乘积非负（Id 系 le_mult_nonneg_t12 的 req 副本；le_mult_compat_weak
    字段 + mult_zero 运输） *)
 Lemma reqd_le_mult_nonneg_t12 : forall a b : R,
   le zero a -> le zero b -> le zero (mult a b).
@@ -232,7 +232,7 @@ End ReqDistCommon.
 (* Section ReqSumLayer：SumOver 的 setoid 对接面 + 求和层        *)
 (*   三性质沿 UpSigMigrate/基内 sum_req_over_S 规格（F4）；      *)
 (*   sum_le / sum_zero_nonneg 为 Id 系 SumOver 字段 L1415/L1426  *)
-(*   的 req 镜像（诚实假设申报位）。                         *)
+(*   的 req 副本（诚实假设申报位）。                         *)
 (* ============================================================ *)
 Section ReqSumLayer.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -669,7 +669,7 @@ Proof.
                                                          (mult m m) (mult m m)
                                                          Hm2 (req_refl (mult m m))))).
   }
-  (* 总装：(r+(−μ))·(r+(−μ)) == (r·(r+(−μ))) + ((−μ)·(r+(−μ))) → H2+H4 → H7 *)
+  (* 装配：(r+(−μ))·(r+(−μ)) == (r·(r+(−μ))) + ((−μ)·(r+(−μ))) → H2+H4 → H7 *)
   apply (req_trans (mult (plus r (opp m)) (plus r (opp m)))
                    (plus (mult r (plus r (opp m))) (mult (opp m) (plus r (opp m))))
                    (plus (mult r r)
@@ -818,7 +818,7 @@ Proof.
                                       (mult (reqd_of_nat reqd_group_size) (mult req_group_mean req_group_mean)) x
                                       (req_opp_compat _ _ H2a) (req_refl x))
                      H2c). }
-  (* 总装：CSM →(Hext/Hadd1/Hadd2/Hopp/Hcross/Hconst)→ Σr² + (opp(2·Gμ·μ) + Gμ²) →(Hcancel2)→ Σr² − Gμ² *)
+  (* 装配：CSM →(Hext/Hadd1/Hadd2/Hopp/Hcross/Hconst)→ Σr² + (opp(2·Gμ·μ) + Gμ²) →(Hcancel2)→ Σr² − Gμ² *)
   assert (Hl1 : req (reqd_list_sum_g (fun i => mult (req_grpo_advantage i) (req_grpo_advantage i)) group_enum)
                     (plus (reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum)
                           (plus (reqd_list_sum_g (fun i => opp (mult (mult (plus one one) (reward_group i)) req_group_mean)) group_enum)
@@ -1032,7 +1032,7 @@ End ReqGRPO.
 (* ============================================================ *)
 (* Section ReqFEP：FreeEnergyMinimization 节 req 迁移            *)
 (*   （Id 原件 §15759-18721）。对接口 = sum_req_over_S 三性质    *)
-(*   + SumOver 字段 sum_le/sum_zero_nonneg 的 req 镜像；         *)
+(*   + SumOver 字段 sum_le/sum_zero_nonneg 的 req 副本；         *)
 (*   T2① 桥 4 件见节内假设申报（均为 Id 接口字段/已证件，     *)
 (*   Real 实例可满足，实例化留待接口扩展批——批 1 同结论）。      *)
 (* ============================================================ *)
@@ -1371,7 +1371,7 @@ Proof.
 Qed.
 
 (* 节内求和辅助：零函数求和为零（ext + linear；ReqSumLayer reqd_sum_zero
-   的节内复刻——跨节消费需显式传 8 参，节内直造更省） *)
+   的节内复刻——跨节依存需显式传 8 参，节内直造更省） *)
 Lemma fsum_zero : req (sumf (fun _ : S => zero)) zero.
 Proof.
   apply (req_trans (sumf (fun _ : S => zero))
@@ -1607,7 +1607,7 @@ Proof.
                                     (plus_opp Eavg)).
           -- apply plus_zero.
   }
-  (* 总装：plus Eavg (D·A) →(Hsum 进 A)→ plus Eavg (D·(-logZ-(1/D)⟨E⟩))
+  (* 装配：plus Eavg (D·A) →(Hsum 进 A)→ plus Eavg (D·(-logZ-(1/D)⟨E⟩))
             →(Hmd)→ plus Eavg (-D·logZ-⟨E⟩) →(Hfin)→ opp(D·logZ) →(opp_mult_r)→ (opp D)·logZ *)
   apply (req_trans (plus Eavg (mult D A))
                    (plus Eavg (plus (opp (mult D (log Z Z_pos))) (opp Eavg)))
@@ -1681,7 +1681,7 @@ Proof.
                             (plus (mult D (mult ps Lp)) (mult D (mult ps Lz)))).
       exact (req_trans _ _ _ Hsw Hdi).
     - apply req_opp_plus. }
-  (* 总装：ps·E →(He 运输)→ ps·opp(D·(Lp+Lz)) →(opp_mult_l)→ opp(ps·(D·(Lp+Lz))) →(Hop)→ 目标 *)
+  (* 装配：ps·E →(He 运输)→ ps·opp(D·(Lp+Lz)) →(opp_mult_l)→ opp(ps·(D·(Lp+Lz))) →(Hop)→ 目标 *)
   apply (req_trans (mult ps E)
                    (opp (mult ps (mult D (plus Lp Lz))))
                    (plus (opp (mult D (mult ps Lp))) (opp (mult D (mult ps Lz))))).
@@ -1695,7 +1695,7 @@ Qed.
 
 (* ============================================================ *)
 (* 训练-推理闭环皇冠定理：F[p] == F[p_b] + D·KL(p || p_b)        *)
-(*   （Id free_energy_kl_decomp @16259；req 旗舰件——除节内      *)
+(*   （Id free_energy_kl_decomp @16259；req 主件——除节内      *)
 (*   sumf 三性质与 log 前提化 reqd_positive_dist 参数外零新增假设）  *)
 (* ============================================================ *)
 Theorem req_free_energy_kl_decomp :
@@ -1793,7 +1793,7 @@ Proof.
                         (fun s => mult (p s) (log (reqd_boltzmann_dist s)
                                                  (req_boltzmann_positive s)))).
   }
-  (* 步骤 3 总装：
+  (* 步骤 3 装配：
      Eavg + D·A →(Hse)→ (-D·B - D·logZ) + D·A →(交换重组)→ -D·logZ + (D·A - D·B)
      →(req_mult_minus_distr_l 逆向 + Hkl)→ -D·logZ + D·KL = (opp D·logZ 形) + D·KL。
      与 RHS plus F_b (D·KL)（F_b == opp(D·logZ)）对齐。 *)
@@ -1963,7 +1963,7 @@ Proof.
     + exact (req_sym _ _ (req_mult_minus_distr_l D KLp KLq)).
 Qed.
 
-(* Id relative_entropy_self_zero' @18483：KL(p||p) == 0（无条件件——旗舰演示：
+(* Id relative_entropy_self_zero' @18483：KL(p||p) == 0（无条件件——主演示：
    除节内 sumf 接口外零新增假设、零桥假设） *)
 Lemma req_relative_entropy_self_zero :
   forall (p : S -> R) (Hp : reqd_positive_dist p),
@@ -2107,7 +2107,7 @@ Proof.
 Qed.
 
 (* Id gibbs_pointwise @16538：p - q ≤ p·(log p - log q)（逐点分式约分；
-   消费 dist_log_le_linear 桥 + reqd_log_div 组装） *)
+   依存 dist_log_le_linear 桥 + reqd_log_div 组装） *)
 Lemma req_gibbs_pointwise :
   forall (p q : S -> R) (s : S) (Hps : lt zero (p s)) (Hqs : lt zero (q s)),
     le (req_minus (p s) (q s))
@@ -2309,7 +2309,7 @@ Qed.
 (* ============================================================ *)
 
 (* Id min_free_energy_is_boltzmann @16838：F[p_b] ≤ F[p]
-   【旗舰 req 无条件形态】分解恒等式 + KL ≥ 0 + D>0 保序，零额外假设位 *)
+   【主定理 req 无条件形态】分解恒等式 + KL ≥ 0 + D>0 保序，零额外假设位 *)
 Theorem req_min_free_energy_is_boltzmann :
   forall (p : S -> R) (Hp : reqd_positive_dist p), reqd_normalized p ->
     le (reqd_free_energy reqd_boltzmann_dist req_boltzmann_positive) (reqd_free_energy p Hp).
@@ -2343,7 +2343,7 @@ Proof.
                    (req_sym _ _ Hdecomp) Hfin).
 Qed.
 
-(* Id free_energy_min_unique @16888【旗舰唯一性 req 无条件形态】：
+(* Id free_energy_min_unique @16888【主唯一性 req 无条件形态】：
    F[p] == F[p_b] ⟹ p == p_b 逐点。链：decomp ⟹ D·KL==0（加法消去）
    ⟹ KL==0（D>0 乘法消去）⟹ gibbs_equality。 *)
 Theorem req_free_energy_min_unique :
@@ -3471,7 +3471,7 @@ Qed.
 
 (* ---- (b) softmax 缩放-温度对偶 req 形 ---- *)
 (*   req softmax 族 = 基座 softmax_scaled@28455 / softmax_temp_param  *)
-(*   @28511 的 setoid 重述（exp_neg 直接消费接口 exp 族；配分 =        *)
+(*   @28511 的 setoid 重述（exp_neg 直接依存接口 exp 族；配分 =        *)
 (*   Σ exp_neg(c·z)，正性证人 fsum_pos 构造内联）。                    *)
 Section ReqSoftmaxDual.
 (* R/RIS 继承外层 ReqAlgBridge2 Context（嵌套节禁止重名重声明） *)
@@ -3508,7 +3508,7 @@ Proof.
 Qed.
 
 (* 实例 1（Id scale_dual_sq_k @96603）：d := r·r 平方见证路径；
-   见证前提与 Id 原件同构（对偶本身无条件，见证仅记账）。 *)
+   见证前提与 Id 原件同构（对偶本身无条件，见证仅核算）。 *)
 Theorem reqd_scale_dual_sq_k :
   forall (k : nat) (z : S -> R) (s : S),
     reqd_sqrt_witness
@@ -3568,8 +3568,8 @@ End ReqAlgBridge2.
 (*   req_free_energy_entropy reqd_p_times_ratio reqd_p_minus_ratio         *)
 (*   reqd_minus_one_flip req_gibbs_pointwise req_gibbs_inequality          *)
 (*   req_gibbs_equality req_boltzmann_dist_pos                        [26] *)
-(* 【FEP 续建 13】req_min_free_energy_is_boltzmann【旗舰 req 无条件形态】   *)
-(*   req_free_energy_min_unique【旗舰唯一性】 req_entropy_deficit_kl        *)
+(* 【FEP 续建 13】req_min_free_energy_is_boltzmann【主定理 req 无条件形态】   *)
+(*   req_free_energy_min_unique【主唯一性】 req_entropy_deficit_kl        *)
 (*   req_max_entropy_is_boltzmann req_entropy_max_unique                   *)
 (*   req_cross_entropy_decomp req_minus_plus_common_local                  *)
 (*   req_cross_entropy_minus_self req_training_equivalence                 *)
@@ -3594,13 +3594,13 @@ End ReqAlgBridge2.
 (* 【ReqAlgBridge2 代数补件 4】req_le_plus_cancel_l<-Id @17126             *)
 (*   req_le_minus_nonneg_rev<-Id @17146 req_le_mult_pos_cancel<-Id @17162  *)
 (*   req_mult_minus_distr_r<-Id @17178（批 1 地基无对应件：仅有 _l 版与    *)
-(*   正向 req_le_minus_nonneg，本批真证补齐；消费 Setoid 接口 req 形       *)
+(*   正向 req_le_minus_nonneg，本批真证补齐；依存 Setoid 接口 req 形       *)
 (*   le_id_l/le_id_r/le_plus_compat/le_mult_compat_weak 字段）        [4]  *)
 (* 【ReqSoftmaxDual 对偶 3】reqd_softmax_scaled/reqd_softmax_temp_param    *)
 (*   （req softmax 族定义）reqd_scale_temp_duality<-Id @28590              *)
 (*   reqd_scale_dual_sq_k<-Id @96603 reqd_scale_dual_nat_sq_k<-Id @96623   *)
 (*   （SqrtWitnessGeneral 余 2 件落位：幂等 δ 对偶 req_refl 闭合，         *)
-(*   sq_k 见证记账 / nat_sq 见证经 reqd_sqrt_witness_nat_sq 真证）    [3]  *)
+(*   sq_k 见证核算 / nat_sq 见证经 reqd_sqrt_witness_nat_sq 真证）    [3]  *)
 (* -------------------------------------------------------------- *)
 (* 本文件合计：89 Qed + 2 Defined = 91 证明件（全部纯构造性）。            *)
 (* 加上 UpReqTempEntropy.v（并行席 5 件）：批 2 簇 req 结果总量 96 件。     *)
@@ -3608,7 +3608,7 @@ End ReqAlgBridge2.
 (*  a) 温度严格层 5+1：variational_temp_bound(@17468) energy_exp_temp_mono *)
 (*     (@17521) temp_strict_A_chain2(@17825) temp_strict_ident2(@17879)    *)
 (*     energy_exp_temp_strict_mono(@18019) temp_energy_dual_closed(@17788  *)
-(*     sigT 形)——组装路线：Require UpReqTempEntropy 后消费件 1（熵显式）   *)
+(*     sigT 形)——组装路线：Require UpReqTempEntropy 后依存件 1（熵显式）   *)
 (*     /件 2（KL 温度分解）+ 本文件 req_le_plus_cancel_l 移项链；因        *)
 (*     UpReqDist 是其上游（循环依赖禁止），落位=UpReqTempEntropy 增量节    *)
 (*     或批 3 文件。energy_exp_temp_mono/strict_mono 另需 inv_pos_lt_      *)

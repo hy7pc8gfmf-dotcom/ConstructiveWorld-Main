@@ -13,11 +13,11 @@
 (* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
 (* 替换定理清单：sc_lp_four_nonneg（共 1 条，语句不变）；          *)
 (*   其余 reflexive/转发族玩具经复核属定义性等式或库引理转发，     *)
-(*   非平凡化无语义增益或损语义风险高，如实挂账不硬编。            *)
+(*   非平凡化无语义增益或损语义风险高，如实遗留不硬编。            *)
 (* 非平凡性说明：仅替换上列 1 条证明体；声明面、其余定理、原头注   *)
 (*   一律原样保留。口径：lp_four 定义展开 + Qle 展开 = Z 层交叉积，  *)
-(*   字面归约后线性判定收口——消除原两跳转发。纯构造性：零 公理、  *)
-(*   零 承认件、零经典逻辑。编译态：深依赖链整件挂账。             *)
+(*   字面归约后线性判定闭合——消除原两跳转发。纯构造性：零 公理、  *)
+(*   零 承认件、零经典逻辑。编译态：深依赖链整件遗留。             *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -1073,7 +1073,7 @@ End RealKVQuantMain.
 
 (* ============================================================ *)
 (* 项 5：DPO 损失 log-ratio 凸性（softplus 凸）——2026-09-02     *)
-(* 并入（探针 _dbg_dpo_conv.v 平移）                             *)
+(* 并入（检验 _dbg_dpo_conv.v 平移）                             *)
 (*   real_dpo_logit：ℓ(x) := −log σ(x)（dpo 单样本 logit 损失）  *)
 (*   A1 real_softplus_sigmoid_eq：ℓ(x) == log(1+e^{−x})          *)
 (*     （损失 ↔ softplus 形态连接；inv 对合 + log_inv_one_inv）   *)
@@ -2191,7 +2191,7 @@ Qed.
 
 (* ============================================================ *)
 (* 批 3（轮 2）：Real 层 cauchy_real_sin / cauchy_real_cos      *)
-(* 镜像 cauchy_real_exp（主文件 L7690-7772）：对角定义 +        *)
+(* 副本 cauchy_real_exp（主文件 L7690-7772）：对角定义 +        *)
 (*   eps/2 尾项（sc_*_partial_cauchy_bounded）+ eps/(2C) 输入项 *)
 (*   （Lipschitz + 导数式级数 ≤ exp_series ≤ C）。              *)
 (* ============================================================ *)
@@ -2229,7 +2229,7 @@ Proof.
       apply q_pow_fact_nonneg. exact (QleT'_to_Qle _ _ HB).
 Qed.
 
-(* ---- real_sin 定义（镜像 cauchy_real_exp） ---- *)
+(* ---- real_sin 定义（副本 cauchy_real_exp） ---- *)
 Definition cauchy_real_sin (x : Real) : Real.
 Proof.
   destruct x as [u Hu].
@@ -2887,7 +2887,7 @@ Proof. unfold lp_four. unfold Qlt; simpl; lia. Qed.
 Lemma sc_lp_four_nonneg : Qle 0 lp_four.
 Proof.
   (* ToyR 替换：Z 层直构（消 Qlt_le_weak→sc_lp_four_pos 转发链）：
-     lp_four 定义展开为字面和，Qle 展开 = 交叉积 Z.le，线性判定收口 *)
+     lp_four 定义展开为字面和，Qle 展开 = 交叉积 Z.le，线性判定闭合 *)
   unfold Qle, lp_four.
   simpl.
   lia.
@@ -5230,7 +5230,7 @@ Proof.
   - rewrite IH. reflexivity.
 Qed.
 
-(* ---- B 部分（探针 16a 成果，原样复用） ---- *)
+(* ---- B 部分（检验 16a 成果，原样复用） ---- *)
 Lemma sc_cs_eo_raw : forall (m : nat), (1 <= m)%nat ->
   sum_upto (m + 1) (fun i : nat => Qinv (q_fact (2 * i) * q_fact (2 * m - 2 * i))) ==
   sum_upto m (fun i : nat => Qinv (q_fact (2 * i + 1) * q_fact (2 * m - 2 * i - 1))).
@@ -5391,7 +5391,7 @@ Proof.
   rewrite (Qmult_0_r (q_pow t (2 * m))). reflexivity.
 Qed.
 
-(* ---- C0：行拆分（探针 16b 成果） ---- *)
+(* ---- C0：行拆分（检验 16b 成果） ---- *)
 Lemma sc_sum_tail_split : forall (n m : nat) (h : nat -> Q), (m <= n)%nat ->
   sum_upto (Datatypes.S n) h ==
   sum_upto (Datatypes.S (n - m)) h +
@@ -6708,7 +6708,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-1 探针（批 19b-1，轮 20/21）：cos 单调差级数路线·代数地基 *)
+(* SC-1 检验（批 19b-1，轮 20/21）：cos 单调差级数路线·代数地基 *)
 (*   cos y − cos x = (y²−x²)·Σ_{k≥1} (−1)^{k−1} A_k/(2k)!       *)
 (*   本批：B0 平方幂桥、(q−p) 幂差分因子、q_pow 单调、常和       *)
 (*   下批：A_k 递减链 → 交替部分和 ≥ 1/2−(p+q)/24 ≥ 1/6          *)
@@ -7451,14 +7451,14 @@ Qed.
 
 (* ============================================================ *)
 (* SC-1 批 19d-1（轮 24）：cos 零点二分·测试机械               *)
-(*   cos 在 (3/2, 5/3) 变号 → 镜像 log 论证 Chunk 5 approx_root *)
+(*   cos 在 (3/2, 5/3) 变号 → 副本 log 论证 Chunk 5 approx_root *)
 (*   测试（目标 real_zero 精确，r 侧恒 0 简化）：cos_testA       *)
 (*   （cos m < 0）/cos_testB（0 < cos m）/双假缺陷              *)
 (*   （|cos m| ≤ 3·d4 == 3eps/16）——cos 零点 π/2 二分论证地基   *)
 (* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
-(* cos 点模量（镜像 exp_partial_cauchy；经 sc_cos_partial_cauchy_bounded + 平凡界 |x| ≤ |x|） *)
+(* cos 点模量（副本 exp_partial_cauchy；经 sc_cos_partial_cauchy_bounded + 平凡界 |x| ≤ |x|） *)
 Lemma cos_partial_cauchy : forall (x : Q) (eps : Q), Qlt 0 eps ->
   sigT (fun N : nat => forall m n : nat, (N <= m)%nat -> (N <= n)%nat ->
     QltT (Qabs (cos_partial m x - cos_partial n x)) eps).
@@ -9291,7 +9291,7 @@ Proof.
 Qed.
 
 (* ---------- C2：Real 层 cos_pi_half < 5/3（上括号） ----------
-   同下括号镜像：eps := (1/400)/C、N := S t₂（log_eps n < 1/400） *)
+   同下括号副本：eps := (1/400)/C、N := S t₂（log_eps n < 1/400） *)
 Lemma real_lt_cos_pi_half_five_thirds : real_lt cos_pi_half (real_const (5 / 3)).
 Proof.
   destruct (exp_series_arch 2 (qltT_leT' 0 2 qltT_0_2)) as [C [HC1 HC]].
@@ -9446,7 +9446,7 @@ Proof.
 Qed.
 
 (* ---- 2. 主目标：cos 在 (3/2, 2) 的零点唯一 == cos_pi_half ----
-   镜像既有 cos_pi_half_unique（61618 区）的 eps 装配：
+   副本既有 cos_pi_half_unique（61618 区）的 eps 装配：
    w 侧上端点 5/3 → 2（real_lt_upper_pt 2）、w 逐点上界 Qle w_n 2、
    z 侧逐点上界经 Qle (5/3) 2 传递、逆界换 cos_inv_dist_le2。   *)
 Lemma cos_pi_half_unique_widened : forall (w : Real),
@@ -9757,7 +9757,7 @@ Qed.
 (* ============================================================ *)
 (* SC-2 批 5（并入 196）：T-π3 Phase 1 外围                  *)
 (*   π_L·(1/2) ∈ (3/2, 5/3) 严格 Real 括号 + 常数/回代工具    *)
-(*   子代理 sD 探针改名并入（零 crux 依赖；crux 版留模板）      *)
+(*   子代理 sD 检验改名并入（零 crux 依赖；crux 版留模板）      *)
 (* ============================================================ *)
 
 Definition w_leibniz : Real := real_mult cauchy_real_pi_leibniz (real_const (1 / 2)).
@@ -12180,13 +12180,13 @@ Qed.
 (* ============================================================ *)
 (* SC-2 批（并入 202）：B1 setoid 签名迁移——论文 2 头条等号簇 *)
 (* 三定理迁移到 RealInterfaceEnhancedSetoid 签名（sB0/sB1，     *)
-(* 用户 P0：旗舰定理配套已完成实例 RealEnhancedReal）       *)
+(* 用户 P0：主定理配套已完成实例 RealEnhancedReal）       *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* b1_attngibbs_setoid.v — B1：AttentionGibbsBridge 等号簇 3 头条 *)
 (* 签名迁移：Id 系签名（RealInterfaceEnhanced）→ Setoid 系签名   *)
-(* （RealInterfaceEnhancedSetoid，实例 RealEnhancedReal 可消费） *)
+(* （RealInterfaceEnhancedSetoid，实例 RealEnhancedReal 可依存） *)
 (* 沙箱：演变\.ablation\sc2_parallel\sB1_migrate\（只写沙箱）    *)
 (* 契约：sB0 第 0 项迁移规范。*)
 (* 路线 = 上提：以 Real 层 req 链证明（real_attention_is_gibbs     *)
@@ -12358,7 +12358,7 @@ Definition boltzmann_dist_attn_setoid (s : S) : R :=
   mult (inv_pos Z_thermo_setoid Z_thermo_pos) (boltzmann_factor_setoid s).
 
 (* ============================================================ *)
-(* B1-4：单位温度 softmax = Boltzmann（旗舰 1/3 迁移）           *)
+(* B1-4：单位温度 softmax = Boltzmann（主定理 1/3 迁移）           *)
 (*   语句：Id 27823-27827 的 Id→req 版（Real 42359-42363 同型） *)
 (*   证明：Real 42364-42404 上提：req_trans / req_mult_compat /  *)
 (*   req_opp_compat 换为 exp_neg_req_compat_setoid（接口无 exp_neg *)
@@ -12422,7 +12422,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B1-5：详细平衡 ⟹ Boltzmann 分布是稳态（旗舰 3/3 迁移）        *)
+(* B1-5：详细平衡 ⟹ Boltzmann 分布是稳态（主定理 3/3 迁移）        *)
 (*   诚实接口：detailed_balance + transition_normalization      *)
 (*   （RealAttnSteady 42437-42446 同款；Id 27886-27894 同款）    *)
 (* ============================================================ *)
@@ -12438,7 +12438,7 @@ Variable detailed_balance : forall (s s' : S),
 Variable transition_normalization : forall s : S,
   req (sum_req_over_S (fun s' : S => transition s s')) one.
 
-(* 稳态方程（旗舰）：Σ_s' p(s')·T(s',s) == p(s)
+(* 稳态方程（主）：Σ_s' p(s')·T(s',s) == p(s)
    组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s)
    → 核归一化 → mult_one 证毕（Real 层对应件上提） *)
 Theorem steady_state_boltzmann_attn_setoid : forall s : S,
@@ -12466,7 +12466,7 @@ intro s.
 Qed.
 
 (* ============================================================ *)
-(* B1-3：Boltzmann 分布归一化（旗舰 2/3 迁移）                   *)
+(* B1-3：Boltzmann 分布归一化（主定理 2/3 迁移）                   *)
 (*   Id 27963-27969 直证（6 行：sum linear + inv_pos_correct）；  *)
 (*   Real 层无独立佐证（平凡）；此处 req 化直证                  *)
 (* ============================================================ *)

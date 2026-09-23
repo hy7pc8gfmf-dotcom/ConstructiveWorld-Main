@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   real_le_plus_nonneg_r（原 L79，3 句玩具证）                          *)
 (*   real_sum_le_list_carrier_instance（原 L65，1 句玩具证）              *)
@@ -11,10 +11,10 @@
 (* ============================================================ *)
 (* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 2 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 2 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
 (* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
@@ -49,7 +49,7 @@
 (*   仅求和面扩容，非加码）。具体载体实例已在库且非空：real_list_sum_le   *)
 
 (*   给出载体满足证。逐点核 real_gibbs_core_eps（S08 L199）零载体依赖     *)
-(*   直用（T6b 指认，Check 探针实证无 Section 残参）。                     *)
+(*   直用（T6b 指认，Check 检验实证无 Section 残参）。                     *)
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位表（S04 L3935-3972 逐步实证）】                          *)
 (*   Id intros t Ht p Hnp Hpp Henergy    ↦ 同口（T 正性证人在 T_pos 位；  *)
@@ -61,13 +61,13 @@
 (*     （本件件 2；Id gibbs 四前提 Real 对应：Hnp 前提位 + Hp 证人位 +    *)
 (*     real_boltzmann_dist_temp_normalized 库件 + real_boltzmann_dist_    *)
 (*     _temp_pos 库件；内部走 real_gibbs_core_eps + real_sum_over_S_le）  *)
-(*   Id Hnonneg := le_id_r Hdef Hkl      ↦ real_le_id_r + eq 兼容腿      *)
+(*   Id Hnonneg := le_id_r Hdef Hkl      ↦ real_le_id_r + eq 兼容肢      *)
 (*     （real_eq_plus_compat_adapt Hdef换向 (refl eps)）                  *)
 (*   Id Hplus := minus_plus_cancel      ↦ real_plus_neg_cancel_shift_eps  *)
 
 (*   Id Hle := le_plus_nonneg_r         ↦ real_le_plus_nonneg_r           *)
-(*     （本件工作马 A：0 ≤ b ⟹ a ≤ a+b；le_plus_compat + plus_zero）     *)
-(*   Id le_id_r 完成                    ↦ real_le_id_r + 工作马 B eq 腿   *)
+(*     （本件辅助引理 A：0 ≤ b ⟹ a ≤ a+b；le_plus_compat + plus_zero）     *)
+(*   Id le_id_r 完成                    ↦ real_le_id_r + 辅助引理 B eq 肢   *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt/real_le）；*)
 (*   前提位照 Id 层对位（eps > 0 为 Gibbs eps 档既有证人位），       *)
@@ -93,7 +93,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 工作马 A：0 ≤ b ⟹ a ≤ a+b（Id le_plus_nonneg_r Real 对位；            *)
+(* 辅助引理 A：0 ≤ b ⟹ a ≤ a+b（Id le_plus_nonneg_r Real 对位；            *)
 (*   real_le_plus_compat + real_plus_zero（右零消去形 x+0 ≡ x））         *)
 (* ---------------------------------------------------------- *)
 Lemma real_le_plus_nonneg_r :
@@ -106,8 +106,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 工作马 B：a + ((b + (−a)) + eps) ≡ b + eps                            *)
-(*   （Id minus_plus_cancel 的 eps 形镜像；六腿换形链：assoc → 内层       *)
+(* 辅助引理 B：a + ((b + (−a)) + eps) ≡ b + eps                            *)
+(*   （Id minus_plus_cancel 的 eps 形副本；六肢换形链：assoc → 内层       *)
 (*   assoc → comm → assoc 反向 → plus_opp → plus_zero）                   *)
 (* ---------------------------------------------------------- *)
 Lemma real_plus_neg_cancel_shift_eps :
@@ -120,7 +120,7 @@ Proof.
            (real_plus a (real_plus (real_plus b (real_opp a)) eps))
            (real_plus (real_plus b real_zero) eps)
            (real_plus b eps)).
-  - (* 腿 1a：换形五腿至 (b+0)+eps *)
+  - (* 肢 1a：换形五肢至 (b+0)+eps *)
     apply (real_eq_trans
              (real_plus a (real_plus (real_plus b (real_opp a)) eps))
              (real_plus (real_plus a (real_plus b (real_opp a))) eps)
@@ -172,7 +172,7 @@ Proof.
                        (real_eq_refl b)
                        (real_plus_opp a))
                     (real_eq_refl eps)).
-  - (* 腿 1b：(b+0)+eps ≡ b+eps（plus_zero 右零消去形） *)
+  - (* 肢 1b：(b+0)+eps ≡ b+eps（plus_zero 右零消去形） *)
     apply (RealSetoid.real_eq_plus_compat_adapt
              (real_plus b real_zero) b
              eps eps
@@ -236,7 +236,7 @@ Proof.
   { exact (real_KL_temp_kl_term_bridge S real_sum_over_S real_sum_pos_preserved
              real_sum_over_S_ext T T_pos energy p Hp). }
   (* 1. 逐点核：p − p_T ≤ real_kl_term + p·eps（显式应用；real_kl_term  *)
-  (*    与 real_gibbs_core_eps RHS 首和项定义性一致，S08 L508 同款消费）  *)
+  (*    与 real_gibbs_core_eps RHS 首和项定义性一致，S08 L508 同款依存）  *)
   assert (Hpt : forall s : S,
            real_le (real_plus (p s) (real_opp (pT s)))
                    (real_plus (real_kl_term (p s) (pT s) (Hp s) (HpT s))
@@ -374,7 +374,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 件 2（主件）：定理 4.6b 逐 eps 形（Id max_entropy_is_boltzmann_temp   *)
-(*   S04 L3935 逐槽对位）：同约束能量 E(p) == E_T ⟹ S[p] ≤ S[p_T] + eps。 *)
+(*   S04 L3935 逐参数位对位）：同约束能量 E(p) == E_T ⟹ S[p] ≤ S[p_T] + eps。 *)
 (*   链：熵亏温度版（T6b）→ KL 逐 eps 非负（件 1）→ le 链完成。          *)
 (* ---------------------------------------------------------- *)
 Theorem real_max_entropy_is_boltzmann_temp_eps :
@@ -411,7 +411,7 @@ Proof.
   (* 步 2：KL 逐 eps 非负（件 1；Id Hkl 对位） *)
   assert (Hkl : real_le real_zero (real_plus KL eps)).
   { exact (real_KL_temp_ge_zero_eps p Hp Hnp eps Hepspos). }
-  (* 步 3：换形到 Spt 腿（Id Hnonneg 对位；real_le_id_r + eq 兼容腿） *)
+  (* 步 3：换形到 Spt 肢（Id Hnonneg 对位；real_le_id_r + eq 兼容肢） *)
   assert (Hstep : real_le real_zero (real_plus (real_plus Spt (real_opp Sp)) eps)).
   { apply (RealSetoid.real_le_id_r real_zero (real_plus KL eps)
              (real_plus (real_plus Spt (real_opp Sp)) eps)
@@ -420,11 +420,11 @@ Proof.
                 (real_eq_sym (real_plus Spt (real_opp Sp)) KL Hdef)
                 (real_eq_refl eps))).
     exact Hkl. }
-  (* 步 4：非负加法腿（工作马 A；Id Hle 对位） *)
+  (* 步 4：非负加法肢（辅助引理 A；Id Hle 对位） *)
   assert (H1 : real_le Sp (real_plus Sp (real_plus (real_plus Spt (real_opp Sp)) eps))).
   { exact (real_le_plus_nonneg_r Sp (real_plus (real_plus Spt (real_opp Sp)) eps)
              Hstep). }
-  (* 步 5：完成（工作马 B eq 腿 + real_le_id_r；Id Hplus + 末步对位） *)
+  (* 步 5：完成（辅助引理 B eq 肢 + real_le_id_r；Id Hplus + 末步对位） *)
   exact (RealSetoid.real_le_id_r Sp
            (real_plus Sp (real_plus (real_plus Spt (real_opp Sp)) eps))
            (real_plus Spt eps)

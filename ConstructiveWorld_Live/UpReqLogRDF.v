@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   lrdf_mul_h_inv（原 L370，2 句玩具证）                                *)
 (*   lrdf_req_minus_unfold（原 L114，2 句玩具证）                         *)
@@ -11,10 +11,10 @@
 (* ============================================================ *)
 (* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 2 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 2 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
 (* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
@@ -31,7 +31,7 @@
 
 (* ============================================================ *)
 
-(*   槽 3 = rdf_log_diff@UpReqRDF:1704 S 阻塞 → 缺件 A/B 建设 + 修正消解        *)
+(*   参数位 3 = rdf_log_diff@UpReqRDF:1704 S 阻塞 → 缺件 A/B 建设 + 修正消解        *)
 (*   2026-09-10                                                            *)
 (* ------------------------------------------------------------------ *)
 
@@ -39,11 +39,11 @@
 (*    real_log_differentiable@:46386 在盘但为域前提记录形              *)
 (*    （RealDifferentiable L44447：f : forall x, 0<x -> Real）+ 尾 slack     *)
 (*    （|D| ≤ eps|h|+eps'，Bishop 逐 eps）；reqRDF 形 = 纯函数 f : R -> R    *)
-(*    + 精确形 |D| ≤ eps|h|。本件换装完成 = lrdf_log_root（Part 2）。        *)
+(*    + 精确形 |D| ≤ eps|h|。本件重述完成 = lrdf_log_root（Part 2）。        *)
 
 
 (*    forall g Hg (dg : reqRDF g), reqRDF (fun z => log (g z) (Hg z))，      *)
-(*    df z := inv(g z)·dg z（正性见证型复合求导规则/见证搬运封装）。         *)
+(*    df z := inv(g z)·dg z（正性见证型复合求导规则/见证迁移封装）。         *)
 
 
 (*      reqRDF g 前提位（与 req_rdf_compose@UpReqRDF:1227 显式 dg 同族对照； *)
@@ -51,24 +51,24 @@
 (*      非硬凑原形）。                                                      *)
 (*    ②eps'-尾 slack 与精确形之关系：非 Or 编码固有间隙——req 层 le 为抽象    *)
 (*      非严格序（非 Or 编码），配合 ReqLogPlain.log_le_linear_plain 精确形   *)
-(*      槽（UpReqSLM L143，批5 波0 资产），log(1+t) ≤ t 精确成立（           *)
+(*      参数位（UpReqSLM L143，批5 波0 资产），log(1+t) ≤ t 精确成立（           *)
 (*      req_log_one_plus_le@UpReqSLM），尾 slack 消解；精确完成余缺仅为      *)
-(*      三个 Or 编码系内点引理的 req 槽形镜像（本件三假设申报位）。   *)
-(*    ③消费链消解：rdf_log_diff 唯一消费位 = req_entropy_differentiable      *)
+(*      三个 Or 编码系内点引理的 req 参数形副本（本件三假设申报位）。   *)
+(*    ③依存链消解：rdf_log_diff 唯一依存位 = req_entropy_differentiable      *)
 
 (*      以 lrdf_entropy_differentiable 同链重建（零 rdf_log_diff 变元，      *)
 (*      dg 位由 HOmega = req_rdf_mult 产物供给——原节本就有此件，结论：       *)
-(*      槽实为「可自供的漏装位」）。                                        *)
+(*      参数位实为「可自供的漏装位」）。                                        *)
 
 (*  [S1] lrdf_abs_lower_pos : lt (abs a) c -> lt zero (plus c a)             *)
-(*       —— real_abs_lt_lower@44527（Or 编码系内证）req 槽形镜像；      *)
-(*       抽象接口无「双侧加法」lt 原语，正和形为消费可用形。                  *)
+(*       —— real_abs_lt_lower@44527（Or 编码系内证）req 参数形副本；      *)
+(*       抽象接口无「双侧加法」lt 原语，正和形为依存可用形。                  *)
 (*  [S2] lrdf_abs_le_intro : le u w -> le (opp u) w -> le (abs u) w          *)
 (*       —— real_abs_le_quad_eps@46104 四分叉核（Or 编码 |X| 桥）      *)
-(*       req 槽形镜像（双侧绝对值引入）。                                    *)
+(*       req 参数形副本（双侧绝对值引入）。                                    *)
 (*  [S3] lrdf_sq_nonneg / lrdf_sq_le_abs_sq : le zero (t·t) /                *)
 (*       le (t·t) (|t|·|t|) —— Qsquare_nonneg/q_sq_abs@46130 逐点      *)
-(*       Q 层事实 req 槽形镜像（UpReqSLM L20-25 M2 墙结论同族：plain 形需    *)
+(*       Q 层事实 req 参数形副本（UpReqSLM L20-25 M2 墙结论同族：plain 形需    *)
 (*       符号判定，抽象接口不可导）。                                       *)
 
 (*  （UpReqSLM）/ReqLogPlain（UpReqSLM L143，log_le_linear_plain 精确形 +    *)
@@ -103,7 +103,7 @@ From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part 0：节假设位组（三申报槽 S1-S3 + 三类槽承接）                              *)
+(* Part 0：节假设位组（三申报参数 S1-S3 + 三类参数位承接）                              *)
 (* ============================================================ *)
 
 Section LRDF.
@@ -113,23 +113,23 @@ Context {RNN : ReqNonnegPlain R}.
 Context {RDP : ReqDiffPlain R}.
 Context {RLL : ReqLogPlain R}.
 
-(* S1：|a| < c ⟹ 0 < c + a（real_abs_lt_lower req 槽形，正和形） *)
+(* S1：|a| < c ⟹ 0 < c + a（real_abs_lt_lower req 参数形，正和形） *)
 Hypothesis lrdf_abs_lower_pos :
   forall (a c : R), lt (abs a) c -> lt zero (plus c a).
 
-(* S2：u ≤ w ∧ −u ≤ w ⟹ |u| ≤ w（real_abs_le_quad_eps 核 req 槽形） *)
+(* S2：u ≤ w ∧ −u ≤ w ⟹ |u| ≤ w（real_abs_le_quad_eps 核 req 参数形） *)
 Hypothesis lrdf_abs_le_intro :
   forall (u w : R), le u w -> le (opp u) w -> le (abs u) w.
 
-(* S3a：0 ≤ t²（Qsquare_nonneg 逐点事实 req 槽形） *)
+(* S3a：0 ≤ t²（Qsquare_nonneg 逐点事实 req 参数形） *)
 Hypothesis lrdf_sq_nonneg : forall t : R, le zero (mult t t).
 
-(* S3b：t² ≤ |t|²（q_sq_abs@46130 req 槽形） *)
+(* S3b：t² ≤ |t|²（q_sq_abs@46130 req 参数形） *)
 Hypothesis lrdf_sq_le_abs_sq : forall t : R,
   le (mult t t) (mult (abs t) (abs t)).
 
 (* ============================================================ *)
-(* Part 0.5：纯接口小件（零槽；环/序/inv 机）                                   *)
+(* Part 0.5：纯接口小件（零参数位；环/序/inv 机）                                   *)
 (* ============================================================ *)
 
 (* 0.0：req_minus 展开机（req_minus δ 透明；unification 位显式换形用） *)
@@ -525,7 +525,7 @@ Proof.
            ++ exact (mult_assoc t t (inv_pos (plus one t) Hs)).
 Qed.
 
-(* 1.3：|t| < 1/2 ⟹ 1/2 ≤ 1+t（S1 槽 + 左 opp 消去 + one ≡ 1 − 1/2 链） *)
+(* 1.3：|t| < 1/2 ⟹ 1/2 ≤ 1+t（S1 参数位 + 左 opp 消去 + one ≡ 1 − 1/2 链） *)
 Lemma lrdf_half_le_one_t : forall t : R,
   lt (abs t) (inv_pos (plus one one) req_two_pos) ->
   le (inv_pos (plus one one) req_two_pos) (plus one t).

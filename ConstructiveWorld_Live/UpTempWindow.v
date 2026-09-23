@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   tw_ZT_le_NEU（原 L1110，5 句玩具证）                                 *)
 (*   tw_ZT_ge_NEL（原 L1103，5 句玩具证）                                 *)
@@ -18,10 +18,10 @@
 (* ============================================================ *)
 (* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 9 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 9 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 9 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 9 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
 (* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
@@ -43,7 +43,7 @@
 (*   主定理 temp_window_T_infty：                                *)
 (*     ∀eps > 0, ∃T₂ > 0, ∀T > T₂, TV(w_T, U) ≤ eps             *)
 (*                                                              *)
-(*   设定：list 离散状态世界（镜像 AttnHardLimit）：             *)
+(*   设定：list 离散状态世界（副本 AttnHardLimit）：             *)
 (*     states : list S 非空；logits z : S -> Real 一致界         *)
 (*     |z(s)| ≤ Δ（Δ > 0）；w_T(x) = e^{z(x)/T}/Z(T)；           *)
 (*     uniform(x) = 1/N（N = |states|）；TV = Σ|w_T − 1/N|。     *)
@@ -771,7 +771,7 @@ Proof.
              (RealSetoid.real_eq_opp_compat a b Heq)).
 Qed.
 
-(* 左乘保序：0 < c、a ≤ b ⟹ c·a ≤ c·b（镜像 real_le_mult_compat） *)
+(* 左乘保序：0 < c、a ≤ b ⟹ c·a ≤ c·b（副本 real_le_mult_compat） *)
 Lemma tw_le_mult_compat_l : forall a b c : Real,
   real_lt real_zero c -> real_le a b -> real_le (real_mult c a) (real_mult c b).
 Proof.
@@ -887,7 +887,7 @@ Proof.
       * apply real_eq_refl.
 Qed.
 
-(* 逐点 ≤ c ⟹ Σ f ≤ N·c（镜像 sum_nonneg_le_const_aux） *)
+(* 逐点 ≤ c ⟹ Σ f ≤ N·c（副本 sum_nonneg_le_const_aux） *)
 Lemma tw_sum_le_const : forall (X : Set) (f : X -> Real) (c : Real) (l : list X),
   (forall z : X, InT z l -> real_le (f z) c) ->
   real_le (real_list_sum X f l) (real_mult (real_of_nat (length l)) c).
@@ -923,7 +923,7 @@ Proof.
       * apply IH. intros z Hz. apply Hb. exact (InT_next z x rest Hz).
 Qed.
 
-(* 逐点 c ≤ f ⟹ N·c ≤ Σ f（下常数界，tw_sum_le_const 镜像） *)
+(* 逐点 c ≤ f ⟹ N·c ≤ Σ f（下常数界，tw_sum_le_const 副本） *)
 Lemma tw_const_le_sum : forall (X : Set) (f : X -> Real) (c : Real) (l : list X),
   (forall z : X, InT z l -> real_le c (f z)) ->
   real_le (real_mult (real_of_nat (length l)) c) (real_list_sum X f l).
@@ -962,7 +962,7 @@ Qed.
 
 Section TempWindow.
 
-(* 世界：list 离散状态非空 + logits 双界（诚实接口，镜像 AttnHardLimit） *)
+(* 世界：list 离散状态非空 + logits 双界（诚实接口，副本 AttnHardLimit） *)
 Variable Tok : Set.
 Variable states : list Tok.
 Variable states_nonempty : Not (Id states nil).
@@ -974,7 +974,7 @@ Variable Hzz_hi : forall x : Tok, real_le (zz x) Delta.
 
 (* ---------- 7.1 温度化 softmax 分布与均匀分布 ---------- *)
 
-(* 因子 e^{z(x)/T}（镜像 factor_T 形态） *)
+(* 因子 e^{z(x)/T}（副本 factor_T 形态） *)
 Definition tw_factor (T : Real) (Ht : real_lt real_zero T) (x : Tok) : Real :=
   cauchy_real_exp (real_mult (real_inv_pos T Ht) (zz x)).
 

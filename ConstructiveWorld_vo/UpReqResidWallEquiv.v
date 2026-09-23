@@ -3,17 +3,17 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   rwl_s14_pointwise_to_tail（原 L382，4 句玩具证）                     *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测为 *)
-(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
 (* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
 (* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
 (* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
 (* 附记：T277 判级全文恒等；AD 域收尾第四批（T317 六·1 方案①）。 *)
@@ -24,7 +24,7 @@
 (* *)
 (* 目的： GEO1 残墙三段定理化收账——G07 逐项可比墙 / S14 逐点界墙 /        *)
 (*        AlignIdUnclosed 参序钉定账，沿「B→Or 提升器 ⟺ rLPO」等价类范式。 *)
-(* 主件： rwl_resid_walls_lpo（残墙收账四槽账）。 *)
+(* 主件： rwl_resid_walls_lpo（残墙收账四参数位账）。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpReqSquareWallEquiv。 *)
 (* 备注： 零公理、零假设负载；段一可比墙单向归约 rLPO（符号类强于判定     *)
 (*        基座，双向不开），与 snw/g05w 双向类分野如实入账。 *)
@@ -36,7 +36,7 @@
 (*                                                              *)
 (* 公理面：本件零公理、零假设负载。语句面全 Set 层（real_le/real_lt/    *)
 (*   real_eq/Or(sigT)/QleT'/NatLe 均 Set 值；Or = S01:67 A+B 真数据   *)
-(*   和型）；墙语句作蕴含前件参数化，全程零经典逻辑；证明体内部 Prop    *)
+(*   和型）；墙语句作蕴含前提参数化，全程零经典逻辑；证明体内部 Prop    *)
 (*   仅现于 Q 层归谬 assert（KLWallClosed 先例：Prop 不外泄语句面；    *)
 (*   Set 目标经 False_rect 出——AA15「不证墙为假」口径仅指不以          *)
 (*   False 结尾的语句面，证明体内归谬不在禁域）。                      *)
@@ -46,7 +46,7 @@
 (*  段一 G07_KLWall.v:627（判定 2/3 负支链）：判定 2 所记「四项交错     *)
 (*    部分和下界」单引理缺口已由 E401 在盘闭合（klst_ep_four_terms /    *)
 (*    klst_exp_tangent_neg / klst_gibbs_core_strict_neg 全链，G07 内    *)
-(*    UpReqKLEnergy 成员；UpReqKLSTangent 头注对账在案）。残余墙 =      *)
+(*    UpReqKLEnergy 成员；UpReqKLSTangent 头注核验在案）。残余墙 =      *)
 (*    「逐项可比前提」：KL 严格和无条件化需逐点 Or (p s ≤ q s) (q s ≤   *)
 (*    p s) 的全称供给——其载体核（S := unit、常值函数实例化）即任意      *)
 (*    两实数可比性。定形 rwl_g07_cmp_wall。分类：符号类（比较判定，    *)
@@ -54,7 +54,7 @@
 (*    （四支 Or-in-Or 逐支供隙/供零见证，rwl_g07_cmp_to_rlpo）；反向    *)
 (*    （rLPO ⟹ 可比）不开（零-间隙二分不及符号，如实账）。故 G07 残    *)
 (*    墙不在 snw/g05w 双向等价类内，只单向供给判定器——本席核心分类     *)
-(*    结论，与 WALL-2「七 S 槽类外」判词同型互补。                      *)
+(*    结论，与 WALL-2「七 S 参数位类外」结论同型互补。                      *)
 (*                                                              *)
 (*  段二 S14_B5BatchBlock.v:6849（δ-D ⑤ S 上界）：逐点全 n 界不可证    *)
 (*    （log_seq/approx_root 逐点墙，δB-3 降级实证 item7 §2）⟹ 工程降    *)
@@ -65,7 +65,7 @@
 (*    透明件拼链的接口账）：rwl_s14_pointwise_to_tail /                 *)
 (*    rwl_s14_tail_plus_head。                                          *)
 (*                                                              *)
-(*  段三 AlignIdUnclosed.v（文件名「未闭合」自述其上游件 6）：对账判定   *)
+(*  段三 AlignIdUnclosed.v（文件名「未闭合」自述其上游件 6）：核验判定   *)
 (*    ② 参序倒置——件 6 前提/结论 LHS 为 NPX-先序（KLE (NPX…) PSTR），   *)
 (*    与已证桥 req2_backward_kl_step（PSTR-先序）反向；KL 数层面非对    *)
 (*    称（KLE p q 与 KLE q p 不同函数），构造性下两向不可互推。分类：   *)
@@ -84,19 +84,19 @@
 (*   严格 Or 劈裂的 free 向（real_lt 支无前提可证：x < a ⟹ x < max）    *)
 (*   需逐点 Qmax ≤ 引擎，本窗预算内止缩，留后续席位（遗留如实）。       *)
 (*   同源检验结论：#8 劈裂缝 ≤ 可比墙（LLPO 级），亦不在 rLPO 双向类   *)
-(*   内——GEO1 #8 与 WALL-1/2 序隙轴的分野在此定谳。                     *)
+(*   内——GEO1 #8 与 WALL-1/2 序隙轴的分野在此已证结论。                     *)
 (*                                                              *)
-(* 主件 rwl_resid_walls_lpo（四槽账）：cmp_wall ⟹ rLPO × cmp_wall ⟹    *)
+(* 主件 rwl_resid_walls_lpo（四参数位账）：cmp_wall ⟹ rLPO × cmp_wall ⟹    *)
 (*   snw_wall（段一与 WALL-1 类的衔接：可比强于平方墙——负支 t·t<0 与   *)
 (*   q_sq_nonneg 逐点矛盾、eq 支 real_eq_sym 直换）× cmp_wall ⟹        *)
 (*   max_split（#8 缝归约）× 段二自由向+重建通道对。                    *)
 (*                                                              *)
-(* 谱系：AA15（UpReqLpoEquiv，rLPO 基座+lpn 双腿，本席消费其            *)
+(* 谱系：AA15（UpReqLpoEquiv，rLPO 基座+lpn 双肢，本席依存其            *)
 (*   q_sq_nonneg/q_abs_neg_eq/q_abs_congr）⟶ WALL-1（UpReqSquareWall   *)
 (*   Equiv 的 snw_wall——盘上 .vo 摘要不一致，按 WALL-2 退回方案本地    *)
 (*   内联定义性同构面 rwl_snw_wall_face，零触碰他席产物）⟶ WALL-2      *)
 (*   （UpReqG05WallClass 全基桥，未 Require——可比轴不在其等价类内，    *)
-(*   头注对账替代消费）⟶ 本件（残墙三段清账）。                         *)
+(*   头注核验替代依存）⟶ 本件（残墙三段清账）。                         *)
 (* ------------------------------------------------------------ *)
 (* WALL-3（20260917）：新建。前缀 rwl_（开工 grep 零撞名）。            *)
 (* ============================================================ *)
@@ -430,13 +430,13 @@ Qed.
 
 (* 件 6 参序面（二元泛形；F 的 KLE 实例 = req2_rel_ent 参数序）。
    钉定：KL 数层面非对称（KLE p q ≠ KLE q p 一般成立），构造性下
-   swap 槽两向不可互推；勘误序闭合件 aiu_backward_kl_exact_uncond
+   swap 参数位两向不可互推；勘误序闭合件 aiu_backward_kl_exact_uncond
    （AlignIdUnclosed.v:157）已在盘。依 AA15 先例不证为假——只定形。 *)
 Definition rwl_aiu_swap_slot (F : Real -> Real -> Real) : Set :=
   forall p q : Real, real_eq (F p q) (F q p).
 
 (* ============================================================ *)
-(* Part 7：主件封口——rwl_resid_walls_lpo（残墙收账四槽账）            *)
+(* Part 7：主件闭合——rwl_resid_walls_lpo（残墙收账四参数位账）            *)
 (* ============================================================ *)
 
 Definition rwl_resid_walls_lpo :
@@ -455,10 +455,10 @@ Definition rwl_resid_walls_lpo :
      (rwl_s14_pointwise_to_tail, rwl_s14_tail_plus_head)))).
 
 (* ============================================================ *)
-(* 提取探针与假设审计面                                             *)
+(* 提取检验与假设审计面                                             *)
 (* ============================================================ *)
 
-(* 提取探针：四件素颜 real_* 语句面全量提取（段二件为 QleT'/NatLe 面
+(* 提取检验：四件素颜 real_* 语句面全量提取（段二件为 QleT'/NatLe 面
    同为 Set 值 Id/sigT，亦入面；段三定形件非定理不进面）。
    全部证明体为纯组合子复合 + Q 层算术链，实证 Obj.magic 计数=0。 *)
 Extraction "_thv3twall3.ml" rwl_g07_cmp_to_rlpo rwl_cmp_to_snw_wall

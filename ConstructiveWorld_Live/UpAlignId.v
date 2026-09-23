@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   minus_middle_t12（原 L90，2 句强证）	*)
 (* ============================================================ *)
@@ -58,12 +58,12 @@
 (*                                                                *)
 (* 红线自审：纯构造性（零公理/零弃证/零经典逻辑，库 Not 为 Set 层      *)
 (*   A -> Empty_set 编码）；语句全为 Set 层（premise 全为 lt/Id，      *)
-(*   无 Prop 前提）；全部 Qed；尾部 Extraction 探针验证可提取性。      *)
+(*   无 Prop 前提）；全部 Qed；尾部 Extraction 检验验证可提取性。      *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 
-(* ---------- 镜像 Section Alignment 的声明（同名同序；未用不声明） ---------- *)
+(* ---------- 副本 Section Alignment 的声明（同名同序；未用不声明） ---------- *)
 
 Section AlignIdWorld.
 
@@ -89,7 +89,7 @@ Variable beta_pos : lt zero beta.
 Variable pi_ref : S -> R.          (* 参考策略 *)
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable Z_align_pos : lt zero (Z_align reward beta beta_pos pi_ref).
-Variable eta : R.                  (* 镜像步长 η > 0 *)
+Variable eta : R.                  (* 副本步长 η > 0 *)
 Variable eta_pos : lt zero eta.
 Variable sum_over_S_pos : forall (f : S -> R),
   (forall s : S, lt zero (f s)) -> lt zero (sum_over_S f).
@@ -368,7 +368,7 @@ Qed.
 
 End AlignIdWorld.
 
-(* ---------- 提取探针（G3：Obj.magic = 0） ---------- *)
+(* ---------- 提取检验（G3：Obj.magic = 0） ---------- *)
 
 (* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)
 Print Assumptions minus_middle_t12.

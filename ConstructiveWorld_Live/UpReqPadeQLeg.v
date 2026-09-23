@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   pql_pos_den_pos（原 L45，1 句玩具证）                                *)
 (* ============================================================ *)
@@ -11,14 +11,14 @@
 (* ============================================================ *)
 (* UpReqPadeQLeg.v *)
 (* *)
-(* 目的： Q 层序定律腿：有理层的序与自然数比值单调。 *)
+(* 目的： Q 层序定律肢：有理层的序与自然数比值单调。 *)
 (* 主件： pql_pos_den_pos 与 pql_qlt0_eq_r / pql_nat_ratio_mono 有理序定律族。 *)
 (* 依赖： 无显式 Require 面（自足件）。 *)
 (* 备注： 零 Require Psatz（Lia 即足）、零外加假设语句（公理面声明）。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPadeQLeg.v — AA12 席：Padé nia 战术位 → 自建 Q 单调腿         *)
+(* UpReqPadeQLeg.v — AA12 席：Padé nia 战术位 → 自建 Q 单调肢         *)
 (*                                                                  *)
 (* 公理面声明：本件零 Require Psatz（Lia 即足）、零外加假设语句；      *)
 
@@ -27,11 +27,11 @@
 (* 覆盖三族（AA12 实测 12 活位点，AA1 计数 19 按此修正）：              *)
 (*   族 A：Qeq→Qlt 传桥（7 位点）= Sign/Lower/BetaPos 的               *)
 (*     *_qlt0_eq_r（3 处同形）+ Lower cpl_qlt_eq_l/cpl_qlt_eq_sr +     *)
-(*     Finale cpf_qlt_eq_l/cpf_qlt_eq_r。基腿 = pql_qlt0_eq_r，        *)
-(*     双向腿 = pql_qlt_eq_l / pql_qlt_eq_r。                         *)
+(*     Finale cpf_qlt_eq_l/cpf_qlt_eq_r。基肢 = pql_qlt0_eq_r，        *)
+(*     双向肢 = pql_qlt_eq_l / pql_qlt_eq_r。                         *)
 (*   族 B：Q 加法严格桥（3 位点）= Finale cpf_qlt_add_r /              *)
 (*     cpf_qle_lt_add / cpf_qlt_le_add。                              *)
-(*   族 C：Z 层系数比单调 Nat 腿（2 位点）= DenPos pdp_R_ge_1 /        *)
+(*   族 C：Z 层系数比单调 Nat 肢（2 位点）= DenPos pdp_R_ge_1 /        *)
 (*     DenPos12 pdq_R_ge_2 的 cbn 后 Z 目标，原 nia 位。               *)
 (* 证法：destruct 全构造子 + 端点 cbn [Qnum Qden] 后，乘法单调/非负     *)
 (*   显式装配（Z.mul_le_mono_nonneg_r / Z.mul_lt_mono_pos_r /          *)
@@ -56,7 +56,7 @@ Lemma pql_pos_den_pos : forall d : positive, (0 < Z.pos d)%Z.
 Proof. exact Pos2Z.is_pos. Qed.
 
 (* ============================================================ *)
-(* 族 A 基腿：Qeq 右传（0 起点）：a == b ⟹ 0 < a ⟹ 0 < b               *)
+(* 族 A 基肢：Qeq 右传（0 起点）：a == b ⟹ 0 < a ⟹ 0 < b               *)
 (*   Z 面：na·db = nb·da ∧ 1 ≤ na ⊢ 0 < nb（反证 + 乘单调）。          *)
 (* ============================================================ *)
 Lemma pql_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
@@ -82,7 +82,7 @@ Proof.
   - lia.
 Qed.
 
-(* 族 A 右传腿：a == b ⟹ c < a ⟹ c < b
+(* 族 A 右传肢：a == b ⟹ c < a ⟹ c < b
    Z 面：nc·da < na·dc，na·db = nb·da ⊢ nc·db < nb·dc
    （两边乘 db 正数，na·dc·db = nb·dc·da 换形，再消 da）。 *)
 Lemma pql_qlt_eq_r : forall a b c : Q, a == b -> Qlt c a -> Qlt c b.
@@ -95,7 +95,7 @@ Proof.
   assert (Hda0 : (0 <= Z.pos da)%Z) by lia.
   pose proof (pql_pos_den_pos db) as Hdb.
   pose proof (pql_pos_den_pos dc) as Hdc.
-  (* 换形恒等式（ring 只收恒等腿） *)
+  (* 换形恒等式（ring 只收恒等肢） *)
   assert (E1 : (na * Z.pos dc * Z.pos db = (na * Z.pos db) * Z.pos dc)%Z) by ring.
   assert (E2 : (nc * Z.pos da * Z.pos db = (nc * Z.pos db) * Z.pos da)%Z) by ring.
   assert (E3 : ((nb * Z.pos da) * Z.pos dc = nb * Z.pos dc * Z.pos da)%Z) by ring.
@@ -114,8 +114,8 @@ Proof.
   - lia.
 Qed.
 
-(* 族 A 左传腿：a == b ⟹ a < c ⟹ b < c
-   Z 面：na·dc < nc·da，na·db = nb·da ⊢ nb·dc < nc·db（镜像同法）。 *)
+(* 族 A 左传肢：a == b ⟹ a < c ⟹ b < c
+   Z 面：na·dc < nc·da，na·db = nb·da ⊢ nb·dc < nc·db（副本同法）。 *)
 Lemma pql_qlt_eq_l : forall a b c : Q, a == b -> Qlt a c -> Qlt b c.
 Proof.
   intros a b c Hab Hlt.
@@ -149,7 +149,7 @@ Qed.
 (* ============================================================ *)
 
 (* Qlt 0 b ⟹ a < a + b
-   Q 层装配：Qplus_lt_r （iff 形）+ (a+0)==a 环换 + 左传腿。 *)
+   Q 层装配：Qplus_lt_r （iff 形）+ (a+0)==a 环换 + 左传肢。 *)
 Lemma pql_qlt_add_r : forall a b : Q, Qlt 0 b -> Qlt a (a + b)%Q.
 Proof.
   intros a b Hb.
@@ -172,7 +172,7 @@ Proof.
   exact (Qle_lt_trans 0%Q a (a + b)%Q Ha Hlt2).
 Qed.
 
-(* Qlt 0 a ⟹ Qle 0 b ⟹ 0 < a + b（镜像件，Qplus_lt_l 形） *)
+(* Qlt 0 a ⟹ Qle 0 b ⟹ 0 < a + b（副本件，Qplus_lt_l 形） *)
 Lemma pql_qlt_le_add : forall a b : Q, Qlt 0 a -> Qle 0 b -> Qlt 0 (a + b)%Q.
 Proof.
   intros a b Ha Hb.
@@ -185,7 +185,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 族 C 系数比单调 Nat/Z 腿（DenPos / DenPos12 原nia 位形状）           *)
+(* 族 C 系数比单调 Nat/Z 肢（DenPos / DenPos12 原nia 位形状）           *)
 (*   数学核：k < n ⟹ S(n−S k) ≤ S(2n−S k)·S k                          *)
 (*     （链：X ≤ 2X ≤ 2Y ≤ Y·S k）；k=0 时 Y = 2X lia 直解。            *)
 (* ============================================================ *)

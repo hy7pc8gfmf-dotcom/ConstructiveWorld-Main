@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   bxce_binom_merge（原 L176，3 句轻证）	*)
 (* ============================================================ *)
@@ -14,11 +14,11 @@
 (* ============================================================ *)
 (* 使命：为冻结类 BanachAlg（UpReqBanachExp.v）缺「Q 加法同调入     *)
 (*   bcoef」与「Qeq 同调入 bcoef」两字段做原型验证与设计单。         *)
-(*   上游挂账：席 BA（UpReqBanachAdd.v）bpow_add 主件带 hplus/hwd   *)
-(*   显式假设（其挂账①「类扩字段后假设即消」）；席 B25 exp(0) 等。   *)
+(*   上游遗留：席 BA（UpReqBanachAdd.v）bpow_add 主件带 hplus/hwd   *)
+(*   显式假设（其遗留①「类扩字段后假设即消」）；席 B25 exp(0) 等。   *)
 (* 20260913 二波（席UNQ）：反可分性字段 bxce_sep 落地——               *)
-(*   「范数任意小 ⟹ bae 零」，B25 挂账 exp(0) 等式面与极限唯一性      *)
-(*   的共同钥匙；消费件 UpReqBanachLimUniq.v（bxuq_lim_uniq）。      *)
+(*   「范数任意小 ⟹ bae 零」，B25 遗留 exp(0) 等式面与极限唯一性      *)
+(*   的共同钥匙；依存件 UpReqBanachLimUniq.v（bxuq_lim_uniq）。      *)
 (* 本件承载：                                                      *)
 (*   S1 = Class BanachAlgExt（扩展类：底类 + 三新字段，前两形状与     *)
 (*        BA 件 hplus/hwd 假设逐字对齐，bxce_hplus_shape/           *)
@@ -69,7 +69,7 @@ Class BanachAlgExt := {
 
   (* 新字段三（二波，席UNQ 落地）：反可分性——范数小于任意 eps ⟹ bae 零。
      签名与 BCE 报告设计单①草案逐字一致；全 Set 层（QltT : Q->Q->Set，
-     S02 L26），无 Prop 前提面。消费件：UpReqBanachLimUniq.v。 *)
+     S02 L26），无 Prop 前提面。依存件：UpReqBanachLimUniq.v。 *)
   bxce_sep : forall a : (@BA bxce_base),
     (forall eps : Q, QltT 0 eps -> QltT (@bnorm bxce_base a) eps) ->
     @bae bxce_base a (@bzero bxce_base)
@@ -93,7 +93,7 @@ Definition bxce_sep_shape (E : BanachAlgExt) (a : (@BA (@bxce_base E))) :
   @bae (@bxce_base E) a (@bzero (@bxce_base E))
   := @bxce_sep E a.
 
-(* 范数零推论：Id (bnorm a) 0 ⟹ bae a 0（B25 挂账「范数零⟹相等」直取形） *)
+(* 范数零推论：Id (bnorm a) 0 ⟹ bae a 0（B25 遗留「范数零⟹相等」直取形） *)
 Lemma bxce_sep_norm0 : forall (E : BanachAlgExt) (a : (@BA (@bxce_base E))),
   Id (@bnorm (@bxce_base E) a) 0%Q ->
   @bae (@bxce_base E) a (@bzero (@bxce_base E)).
@@ -128,7 +128,7 @@ Definition bxce_mk (B : BanachAlg)
 (* 判据：以下四件无 hplus/hwd 字样假设（Print Assumptions Closed）。  *)
 (* ============================================================ *)
 
-(* 演示一：bpa_scal_plus 镜像（原版带 hplus 显式假设）
+(* 演示一：bpa_scal_plus 副本（原版带 hplus 显式假设）
    bcoef q·T + bcoef r·T == bcoef (q+r)·T —— Ext 类下零假设。 *)
 Lemma bxce_scal_plus : forall (E : BanachAlgExt) (q r : Q)
     (T : @BA (@bxce_base E)),
@@ -151,7 +151,7 @@ Proof.
     + apply (@bae_refl (@bxce_base E)).
 Qed.
 
-(* 演示二：hwd 在乘法语境的下拉（bpa_pair_tail 核心步镜像，原版带 hwd）
+(* 演示二：hwd 在乘法语境的下拉（bpa_pair_tail 核心步副本，原版带 hwd）
    q == r ⟹ bcoef q·X == bcoef r·X —— Ext 类下零假设。 *)
 Lemma bxce_mult_coef_wd : forall (E : BanachAlgExt) (q r : Q)
     (X : @BA (@bxce_base E)),
@@ -168,7 +168,7 @@ Proof.
   - apply (@bae_refl (@bxce_base E)).
 Qed.
 
-(* 演示三：bpa_pair_tail 出界收拢形镜像（原版带 hwd + Qplus_0_r）
+(* 演示三：bpa_pair_tail 出界收拢形副本（原版带 hwd + Qplus_0_r）
    c2 == 0 ⟹ bcoef (c1+c2)·Y == bcoef c1·Y —— Ext 类下零假设。 *)
 Lemma bxce_pair_tail_shape : forall (E : BanachAlgExt) (c1 c2 : Q)
     (Y : @BA (@bxce_base E)),
@@ -187,7 +187,7 @@ Proof.
   - apply (@bae_refl (@bxce_base E)).
 Qed.
 
-(* 演示四：bpa_pair_mid 消费形完整镜像（系数 Pascal 合并进标量载体）
+(* 演示四：bpa_pair_mid 依存形完整副本（系数 Pascal 合并进标量载体）
    bcoef (c+d)·Z == bcoef c·Z + bcoef d·Z —— 演示一之对称直接系。 *)
 Lemma bxce_binom_merge : forall (E : BanachAlgExt) (c d : Q)
     (Z : @BA (@bxce_base E)),
@@ -207,12 +207,12 @@ Qed.
 (*   - 正式迁移：改 UpReqBanachExp.v 类声明补两字段 → 实例补字段     *)
 (*     （或经 bxce_mk 两步）→ 下游 UpReqBanachAdd.v 18 件摘除        *)
 (*   hplus/hwd 携带（bpa_scal_plus/bpa_pair_mid/bpa_pair_tail/       *)
-(*   bpa_bpow_add/bpa_esp_term_binom/bpa_esp_binom 及其消费链）。    *)
-(*   - 反可分性字段（B25 挂账）：**已落地（20260913 二波，席UNQ）**，    *)
+(*   bpa_bpow_add/bpa_esp_term_binom/bpa_esp_binom 及其依存链）。    *)
+(*   - 反可分性字段（B25 遗留）：**已落地（20260913 二波，席UNQ）**，    *)
 (*     签名 bxce_sep : forall a, (forall eps, QltT 0 eps ->           *)
 (*                QltT (bnorm a) eps) -> bae a bzero；形状机器验证     *)
 (*     bxce_sep_shape + 范数零直取形 bxce_sep_norm0；极限唯一性        *)
-(*     消费件见 UpReqBanachLimUniq.v（bxuq_lim_uniq）。               *)
+(*     依存件见 UpReqBanachLimUniq.v（bxuq_lim_uniq）。               *)
 (* ============================================================ *)
 
 (* ---- ToyR 追印：清单件假设面逐件打印，判读全闭 ---- *)

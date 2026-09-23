@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   req_inner_sminus_l（原 L429，3 句玩具证）                            *)
 (*   req_smetric_sminus_zero（原 L415，2 句玩具证）                       *)
@@ -14,10 +14,10 @@
 (* ============================================================ *)
 (* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 5 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 5 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
 (* 附记：T277 判级全文恒等；包P 整批直推（第二批；承 T321 §五·1）                             *)
@@ -32,10 +32,10 @@
 (* 备注： 状态空间与希尔伯特结构为显式 Variable 前提；投影幂等性为显式申报。 *)
 (* ============================================================ *)
 
-(* UpReqMisc5B.v — 签名迁移批 5 波 3 席：向量世界消费簇（Hilbert/GramSchmidt/Multivar）
+(* UpReqMisc5B.v — 签名迁移批 5 波 3 席：向量世界依存簇（Hilbert/GramSchmidt/Multivar）
    工作单：attn\批5基建层处置清单-20260909.md §7.2/§7.11/§5（(b|桥) 20 件；
    类转写层（reqStateSpace/reqStateSpaceExt/reqHilbertSpace/reqSumOver）已随
-   UpReqMisc5.v Part 0 结果，本件 Require 消费——清单 §9.2 波3「类转写随本波结果」。
+   UpReqMisc5.v Part 0 结果，本件 Require 依存——清单 §9.2 波3「类转写随本波结果」。
    母本：CW_ConstructiveWorld_219（行号逐件见覆盖核对）；上游：UpReqAlgebra（批1 引擎）
    ----------------------------------------------------------------
    等号位分派（登记表 7 同口径）：R 值位等号 req；向量载体位等号 Id（req 接口
@@ -58,7 +58,7 @@
         req_mv_vec_diff_decomp<-27450
         （rmv_adjoint<-27376 rop_lipschitz<-27384 诚实假设位同构，T2①；
           清单 §5 结论「op_lipschitz_compose 加 reqNonnegPlain 位」经读证收敛：
-          Id 证明实际只消费 le_mult_compat_weak/mult_zero 接口字段 + le zero N
+          Id 证明实际只依存 le_mult_compat_weak/mult_zero 接口字段 + le zero N
           假设位（op_lipschitz 假设位自带），零新增假设位——结论收敛注记）
    ---------------------------------------------------------------- *)
 
@@ -70,7 +70,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 
 (* ============================================================ *)
-(* Part A：HilbertTheorems 2 件（Id L1281-1400 消费面）           *)
+(* Part A：HilbertTheorems 2 件（Id L1281-1400 依存面）           *)
 (* ============================================================ *)
 Section ReqHilbertTheorems.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -172,7 +172,7 @@ Qed.
 End ReqHilbertTheorems.
 
 (* ============================================================ *)
-(* Part B：GramSchmidt 4 件（Id L24738-24900 消费面；              *)
+(* Part B：GramSchmidt 4 件（Id L24738-24900 依存面；              *)
 (*         StateSpaceExtended 面 = reqStateSpaceExt）             *)
 (* ============================================================ *)
 Section ReqGramSchmidt.
@@ -183,7 +183,7 @@ Context {SSE : reqStateSpaceExt R RIS}
 Let SSx : reqStateSpace R RIS := @rsse_base R RIS SSE.
 Local Existing Instance SSx.
 
-(* Id projection_idempotent L24840 诚实假设位同构（T2①，本簇未消费，保留同位） *)
+(* Id projection_idempotent L24840 诚实假设位同构（T2①，本簇未依存，保留同位） *)
 Variable rprojection_idempotent : forall u v : @rSS R RIS SSx,
   Id (rproj u (rproj u v)) (rproj u v).
 
@@ -309,7 +309,7 @@ Proof.
                    (plus (req_minus A (plus B (mult C (req_minus G g0))))
                          (mult C (req_minus (req_minus G g0) (mult X one)))))
     by exact (req_compose_diff_decomp A B C X G g0 one).
-  (* 左槽：(mult C X)·one → C·X（mult_assoc 反向 + mult_one） *)
+  (* 左参数位：(mult C X)·one → C·X（mult_assoc 反向 + mult_one） *)
   assert (Hm0 : req (mult (mult C X) one) (mult C X))
     by exact (req_trans _ _ _
               (req_sym _ _ (mult_assoc C X one))
@@ -323,7 +323,7 @@ Proof.
                            (req_refl A)
                            (req_opp_compat (plus B (mult (mult C X) one))
                                            (plus B (mult C X)) Hm1)). }
-  (* 右槽：mult X one → X 于 req_minus 内（unfold + opp 换形） *)
+  (* 右参数位：mult X one → X 于 req_minus 内（unfold + opp 换形） *)
   assert (Hsub : req (plus (req_minus G g0) (opp (mult X one)))
                      (plus (req_minus G g0) (opp X)))
     by exact (req_plus_compat (req_minus G g0) (req_minus G g0)
@@ -501,7 +501,7 @@ Qed.
 
 (* Id op_lipschitz_compose L27409：|L∘M h| ≤ (N_L·N_M)·|h|
    （le_mult_compat_weak/mult_zero 接口字段链；清单结论「加位」经读证收敛：
-   Id 证明零 plain 乘积非负消费，零新增假设位） *)
+   Id 证明零 plain 乘积非负依存，零新增假设位） *)
 Lemma req_op_lipschitz_compose : forall (L M : @rSS R RIS SSx -> @rSS R RIS SSx),
   sigT (fun N : R => And (le zero N) (forall h : @rSS R RIS SSx,
     le (rsmetric (L (M h)) rszero) (mult N (rsmetric h rszero)))).

@@ -7,18 +7,18 @@
  *   bxib_bnorm_one／bxib_bnorm_coef_canon／bxib_bnorm_half_quarter_smoke／  *
  *   bxib_bnorm_pos                                                         *
  * 三口径：①定义层受控展开（qnorm/bcnorm/bnorm/ev 定义面 unfold＋cbv iota    *
- *   zeta 构造子分支派发至通配腿／Z0 腿；系数件 cbn [bxib_ev] 构造子腿回收——  *
- *   InstReal 首项投影同族范式）＋②显式见证（墙位保底件以 replace-by-        *
+ *   zeta 构造子分支分派至通配肢／Z0 肢；系数件 cbn [bxib_ev] 构造子肢复原——  *
+ *   InstReal 首项投影同族范式）＋②显式见证（阻隔位保底件以 replace-by-        *
  *   reflexivity 数值见证链逐步给出 gcd/div/Z.abs/Z.to_pos 各步计算值；      *
- *   bnorm_pos 以 bxib_qabs_nonneg 全应用闭项消费，消除单点转发跳）＋        *
+ *   bnorm_pos 以 bxib_qabs_nonneg 全应用闭项依存，消除单点转发跳）＋        *
  *   ③结构性推导（Qmake 字面中间形 change＋ring 零见证：Qplus/Qopp 定义面    *
- *   抬升至分子显式归零后 iota 派发 Z0 腿）。                                *
+ *   抬升至分子显式归零后 iota 分派 Z0 肢）。                                *
  * 不可化标注（批量，如实不改）：shape 双件（pos/neg_shape：语句面为         *
  *   stdlib eq＝Prop 位，处于替换件 Set 面纪律边界，如实不改）；qeqT 小工具族  *
  *   （refl/sym/trans/cong_plus/of_id/qnorm_qeqT_of_qeqT/qeq_make：Qeq/QeqT  *
- *   引擎单点消费，改写即同项转述）；bae 恒等三律与 bnorm_wd（id 族单跳，    *
+ *   引擎单点依存，改写即同项转述）；bae 恒等三律与 bnorm_wd（id 族单跳，    *
  *   bae 定义包装即内容）；bplus_comm/zero/opp 与 bcoef_mult（stdlib        *
- *   Qplus/Qmult 引擎单点消费＋破墙机中转，内联即复制）；已显式链面件        *
+ *   Qplus/Qmult 引擎单点依存＋破墙机中转，内联即复制）；已显式链面件        *
  *   （id_of_qeqT_canon/canon_pin_wall/qabs_opp_raw/gcd_nz：原链已最简，    *
  *   换序即注水）。                                                         *
  * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。           *
@@ -37,7 +37,7 @@
 (*   S0 = bxib_qnorm 正规化 + 保底两件：                         *)
 (*        bxib_coef_half_canon（墙一同位：1/2 钉定在规范形下成立）*)
 (*        bxib_zero_canon 系（墙二位：0#16/0#1 规范一致）         *)
-(*   S1 = 规范形唯一性引理 bxib_qnorm_id_of_qeqT（INS 挂账②6-3   *)
+(*   S1 = 规范形唯一性引理 bxib_qnorm_id_of_qeqT（INS 遗留②6-3   *)
 (*        的 Z-gcd/互素工作：Zis_gcd + Gauss/rel_prime_cross_    *)
 (*        prod 交叉乘唯一性）——破墙机器。                       *)
 (*   S2 = 规范形钉定墙形式化 bxib_canon_pin_wall：Qabs 原始钉定  *)
@@ -45,9 +45,9 @@
 (*        ——修正 INS 升级处方③：Qred 路线须同步改钉定字段语句面。 *)
 (*   S3 = E-载体（自由项树）规范形实例正件：canon-bae 下 bae 三律 *)
 (*        + wd 三件 + 加法交换群全字段 + 标量嵌入律 + 范数钉定族； *)
-(*        乘法结合/分配与 norm_plus/mult 位挂账（见文件尾声明）。  *)
+(*        乘法结合/分配与 norm_plus/mult 位遗留（见文件尾声明）。  *)
 (* 铁律自审：公理面零命中；语句面全 Set；冻结类与 INS/UNQ/CLS    *)
-(*   产物零改动（仅 Require 消费）；前缀 bxib_ 全库零撞名。       *)
+(*   产物零改动（仅 Require 依存）；前缀 bxib_ 全库零撞名。       *)
 (* 工程注：Rocq 9 无 Pos.div（BinPos 除法已移除）；正数除法走     *)
 (*   Z.div（pos/pos 定义级归约）+ Z.to_pos 还原分母；Z.gcd 在    *)
 (*   pos/pos 定义级还原；Z.abs 在 Zpos/Zneg 构造子上 iota 还原；  *)
@@ -414,7 +414,7 @@ Proof.
   - apply id_refl.
 Qed.
 
-(* |Qabs| 非负（QleT' 面：Qle_bool 比较位计算收口） *)
+(* |Qabs| 非负（QleT' 面：Qle_bool 比较位计算闭合） *)
 Lemma bxib_qabs_nonneg : forall w : Q, QleT' 0 (Qabs w).
 Proof.
   intros w. apply Qle_to_QleT'. unfold Qle, Qabs.
@@ -439,8 +439,8 @@ Proof.
   exact (id_trans (id_trans (id_sym Hx) (bxib_qnorm_id_of_qeqT _ _ H)) Hy).
 Qed.
 
-(* 规范形 + Qopp 的范数不变（墙二零位与 bnorm_opp 字段的桥件） *)
-(* ——挂账：需要「Qopp 与 qnorm 可交换」引理（Z.gcd 负分子不变 +   *)
+(* 规范形 + Qopp 的范数不变（墙二零位与 bnorm_opp 字段的桥接引理） *)
+(* ——遗留：需要「Qopp 与 qnorm 可交换」引理（Z.gcd 负分子不变 +   *)
 (*    Z.div_opp_l_z 的 mod-0 侧条件由 gcd 整除性供给），本席席时    *)
 (*    到点未闭合；语句面与用法已在 S3 注记，不影响其余全件。        *)
 (* Lemma bxib_qabs_opp_norm : forall u : Q,                       *)
@@ -506,12 +506,12 @@ Proof. intros a b c H1 H2. exact (id_trans H1 H2). Qed.
 
 (* ---- wd 三件（canon-bae 下纯 cong，零算术） ---- *)
 
-(* bplus_wd（canon-bae 下双层 qnorm 塌缩）：挂账——塌缩链已定位       *)
-(*   （fix-提升 + qnorm_qeqT_of_qeqT 两层），席时到点未收口。         *)
+(* bplus_wd（canon-bae 下双层 qnorm 塌缩）：遗留——塌缩链已定位       *)
+(*   （fix-提升 + qnorm_qeqT_of_qeqT 两层），席时到点未闭合。         *)
 (* Lemma bxib_bplus_wd : forall a b c d : bxib_E, ... Qed.          *)
 
 
-(* bopp_wd：与 bplus_wd 同款双层塌缩位，一并挂账。                   *)
+(* bopp_wd：与 bplus_wd 同款双层塌缩位，一并遗留。                   *)
 (* Lemma bxib_bopp_wd : forall a b : bxib_E, ... Qed.               *)
 
 
@@ -648,23 +648,23 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 挂账声明（诚实标注，无承认件）                                 *)
+(* 遗留声明（诚实标注，无承认件）                                 *)
 (* ============================================================ *)
-(* ⓪′ bplus_wd 位：双层塌缩链已定位未收口（其余 wd 两件在场）。      *)
+(* ⓪′ bplus_wd 位：双层塌缩链已定位未闭合（其余 wd 两件在场）。      *)
 (* ⓪ bnorm_opp 位（Qabs ∘ Qopp 恒等链）：需「Qopp 与 qnorm 可交换」 *)
 (*    引理（Z.gcd 负分子不变 + Z.div_opp_l_z 的 mod-0 侧条件由      *)
-(*    gcd 整除性供给），本席席时到点未闭合，见文件中段挂账注记。      *)
+(*    gcd 整除性供给），本席席时到点未闭合，见文件中段遗留注记。      *)
 (* ① 乘法群结合/幺元/分配与 bnorm_plus/bnorm_mult 字段：载体与     *)
 (*    bae 已定，按 bplus 同款（stdlib Qmult/Qabs 引擎 + S1 破墙机） *)
 (*    逐字段补齐即可，本席席时到点未填。                           *)
-(* ② 完备性字段：照 INS 先例挂账（bxin_BanachAlgPre +             *)
-(*    bxin_BanachAlg_of_pre 装配桥消费位不变）。                   *)
+(* ② 完备性字段：照 INS 先例遗留（bxin_BanachAlgPre +             *)
+(*    bxin_BanachAlg_of_pre 装配桥依存位不变）。                   *)
 (* ③ bnorm_coef 原始钉定语句在 canon-bnorm 下不可满足已由 S2      *)
 (*    形式化；冻结类字段语句面修订属上游手术，非本席领地。          *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* 提取探针（G3 面）                                              *)
+(* 提取检验（G3 面）                                              *)
 (* ============================================================ *)
 From Stdlib Require Import Extraction.
 Separate Extraction bxib_qnorm bxib_coef_half_canon bxib_zero_canon_lit

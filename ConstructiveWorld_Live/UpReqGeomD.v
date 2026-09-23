@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   geod_policy_iter_kl_geom_step_eps（原 L460，3 句玩具证）             *)
 (*   geod_step_kl_eta_bound_eps（原 L431，3 句玩具证）                    *)
@@ -18,10 +18,10 @@
 (* ============================================================ *)
 (* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
-(* 为恒等守恒——清单所列 9 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 9 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 9 槽；本注记为追加块，上方原头                                  *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 9 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
 (* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
@@ -30,15 +30,15 @@
 (* ============================================================ *)
 (* UpReqGeomD.v *)
 (* *)
-(* 目的： step_kl_eta_bound 槽的单步几何不等式消解。 *)
+(* 目的： step_kl_eta_bound 参数位的单步几何不等式消解。 *)
 (* 主件： geod_amgm_pointwise_eps / geod_lsum_le 几何-算术平均与求和界族。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： 普查核对经实读裁决，错位三处如实登记于正文；sum_le 接口为显式前提。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqGeomD.v —— 槽消解波1 #3：step_kl_eta_bound 槽消解席        *)
-(*   旗舰：UpReqAlign.req_policy_iter_kl_geom_step（评审 4.2 点名件） *)
+(* UpReqGeomD.v —— 参数位消解波1 #3：step_kl_eta_bound 参数位消解席        *)
+(*   主定理：UpReqAlign.req_policy_iter_kl_geom_step（评审 4.2 点名件） *)
 (*   假设位：req_step_kl_eta_bound（T2① 单步几何不等式假设位）        *)
 (* ---------------------------------------------------------------- *)
 (* 数学核：单步不等式归约为插值配分 Z = Σ pit^{1-eta}·pis^eta ≤ 1   *)
@@ -46,7 +46,7 @@
 (* ---------------------------------------------------------------- *)
 (* 普查核对（席48 假设位普查 + 本件 sed 实读裁决，三处错位如实登记）：  *)
 (*   在盘引擎 real_step_kl_eta_bound_eps（根 L113142）与       *)
-(*   real_step_kl_eta_bound_B（UpRealLeB.v L437）与 req 槽语句       *)
+(*   real_step_kl_eta_bound_B（UpRealLeB.v L437）与 req 参数位语句       *)
 (*   不是同形：①载体 nat-list(seq 0 n) vs 抽象 S+sumf；②序谓词      *)
 (*   eps 形/eps-le 语言 vs 接口 Or 形 le（real_le_to_le_b 单向桥，   *)
 
@@ -63,15 +63,15 @@
 (*     geod_amgm_pointwise_iface 为逐字接口投影语形版。               *)
 (*   [主件] geod_le_b（接口层 eps-le 非严格序语言，Set 值）+          *)
 (*     geod_sum_collapse（抽象求和塌缩机：逐点 eps 配权 + 双归一化    *)
-(*     吸收，任意增强接口+sumf 机器可消费）+                          *)
+(*     吸收，任意增强接口+sumf 机器可依存）+                          *)
 (*     geod_interp_Z_le_one_eps（插值 Z ≤ 1+eps 接口形实例——         *)
 (*     数学核的 req/eps 形落盘）。                                    *)
-(*   [旗舰] geod_step_kl_eta_bound_eps（槽语句的接口形消解件）+       *)
-(*     geod_policy_iter_kl_geom_step_eps（旗舰结论件：换向实例        *)
+(*   [主] geod_step_kl_eta_bound_eps（参数位语句的接口形消解件）+       *)
+(*     geod_policy_iter_kl_geom_step_eps（主结论件：换向实例        *)
 (*     KL(pis‖next) ≤ (1-eta)·KL(pis‖pit)+eps，假设位被 M2 引擎         *)
-(*     一次喂定——「槽被消解件填充的具体形态」，无条件无假设位）。       *)
+(*     一次喂定——「参数位被消解件填充的具体形态」，无条件无假设位）。       *)
 (* ---------------------------------------------------------------- *)
-(* 诚实边界（阻塞裁决见合规自查报告）：req 槽的 plain-le（Or 形）结论     *)
+(* 诚实边界（阻塞裁决见合规自查报告）：req 参数位的 plain-le（Or 形）结论     *)
 (*   不可由 eps/eps-le 引擎消解——序无消去，逆向完成需强序闭包原理，   *)
 
 (*   与红线「不等式走逐 eps/eps-le 语言」一致。                       *)
@@ -86,7 +86,7 @@ Require Import CW_ConstructiveWorld_219.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* G-A 抽象层：接口 eps-le 非严格序语言（任意增强接口可消费）        *)
+(* G-A 抽象层：接口 eps-le 非严格序语言（任意增强接口可依存）        *)
 (*   投影全 @ 显式（RIS 显式参，免实例消解歧义）                     *)
 (* ============================================================ *)
 Section GeodLeB.
@@ -239,7 +239,7 @@ Qed.
 Definition geod_lsum (n : nat) (f : nat -> Real) : Real :=
   real_list_sum nat f (List.seq 0 n).
 
-(* list 求和三槽（real_list_sum_* 显式应用，X := nat 显式） *)
+(* list 求和三参数位（real_list_sum_* 显式应用，X := nat 显式） *)
 Lemma geod_lsum_le : forall (n : nat) (f g : nat -> Real),
   (forall i : nat, real_le (f i) (g i)) ->
   real_le (geod_lsum n f) (geod_lsum n g).
@@ -401,7 +401,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G-E 旗舰：槽语句消解件 + 换向结论件（槽被引擎一次喂定的具体形态）  *)
+(* G-E 主定理：参数位语句消解件 + 换向结论件（参数位被引擎一次喂定的具体形态）  *)
 (* ============================================================ *)
 (* eta 缩放辅件：0 < eta 则 1-eta > 0（m3_kappa_pos 同款直连，
    本地零依赖复刻：ring 恒等 + lt 平移） *)
@@ -434,9 +434,9 @@ Proof.
   exact (inl Hlt).
 Qed.
 
-(* 旗舰假设位消解件：单步 KL 收缩的接口形 eps 版
+(* 主假设位消解件：单步 KL 收缩的接口形 eps 版
    KL(pit‖next) ≤ eta·KL(pit‖pis) + eps，next := 几何插值策略
-   （req 槽语句 req_step_kl_eta_bound 的 eps-le 语言对应物；
+   （req 参数位语句 req_step_kl_eta_bound 的 eps-le 语言对应物；
    证书链 = 根内 M2 引擎 real_step_kl_eta_bound_eps 一次喂定） *)
 Theorem geod_step_kl_eta_bound_eps :
   forall (n : nat) (p r : nat -> Real) (eta : Real)
@@ -462,8 +462,8 @@ Proof.
   exact (real_step_kl_eta_bound_eps n p r eta Hp Hr Hnormp Hnormr HZ Hqv           Heta Hetale eps Heps).
 Qed.
 
-(* 旗舰结论件：单步真几何收缩（policy_iter_kl_geom_step 的接口形
-   eps 对应物）——M2 换向实例（p-槽 := pis、r-槽 := pit、eta-槽 :=
+(* 主结论件：单步真几何收缩（policy_iter_kl_geom_step 的接口形
+   eps 对应物）——M2 换向实例（p-参数位 := pis、r-参数位 := pit、eta-参数位 :=
    1-eta），假设位被引擎一次喂定，无条件无假设位：
    KL(pis‖next) ≤ (1-eta)·KL(pis‖pit) + eps *)
 Theorem geod_policy_iter_kl_geom_step_eps :

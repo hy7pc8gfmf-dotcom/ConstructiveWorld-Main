@@ -16,7 +16,7 @@
 (* 替换定理清单：partition_function_pos（原逐句转发 → 定义层展开＋逐点正性断言单列＋求和保正接口显式实例化装配）。                                          *)
 (* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
 (*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
-(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明闭合语句     *)
 (*   闭尾；文件尾附假设面打印锚。                                   *)
 (* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
 (* ============================================================ *)
@@ -3668,7 +3668,7 @@ Qed.
 Definition partition_function_scaled (c : R) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult c (z s))).
 
-(* 缩放配分正性：exp 恒正 × sum_pos_preserved（镜像 L27471-27479） *)
+(* 缩放配分正性：exp 恒正 × sum_pos_preserved（副本 L27471-27479） *)
 Lemma partition_function_scaled_pos :
   forall c z, lt zero (partition_function_scaled c z).
 Proof.
@@ -3686,7 +3686,7 @@ Definition softmax_scaled (c : R) (z : logits) (s : S) : R :=
   mult (exp_pos_fn (mult c (z s)))
        (inv_pos (partition_function_scaled c z) (partition_function_scaled_pos c z)).
 
-(* 缩放族概率公理：正性（镜像 softmax_temp_pos L27486-27494） *)
+(* 缩放族概率公理：正性（副本 softmax_temp_pos L27486-27494） *)
 Theorem softmax_scaled_pos :
   forall c z s, lt zero (softmax_scaled c z s).
 Proof.
@@ -3697,7 +3697,7 @@ Proof.
   - apply inv_pos_pos.
 Qed.
 
-(* 缩放族概率公理：归一化（镜像 softmax_temp_normalized L27496-27517） *)
+(* 缩放族概率公理：归一化（副本 softmax_temp_normalized L27496-27517） *)
 Theorem softmax_scaled_normalized :
   forall c z, Id (sum_over_S (fun s => softmax_scaled c z s)) one.
 Proof.
@@ -3726,7 +3726,7 @@ Qed.
 Definition partition_function_temp_param (T0 : R) (HT0 : lt zero T0) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult (inv_pos T0 HT0) (z s))).
 
-(* 温度参数化配分正性（镜像 L27471-27479） *)
+(* 温度参数化配分正性（副本 L27471-27479） *)
 Lemma partition_function_temp_param_pos :
   forall T0 HT0 z, lt zero (partition_function_temp_param T0 HT0 z).
 Proof.
@@ -3901,7 +3901,7 @@ Qed.
 (* ============================================================ *)
 
 (* 桥：1/T 缩放族 == 库内温度化 softmax（配分函数定义性相等，    *)
-(* inv_pos_ext + id_refl；scale_temp_duality c := T + 镜像合成） *)
+(* inv_pos_ext + id_refl；scale_temp_duality c := T + 副本合成） *)
 Lemma scale_inv_T_eq_softmax_temp :
   forall (s : S),
     Id (softmax_scaled (inv_pos T T_pos) z s) (softmax_temp z s).
@@ -4283,7 +4283,7 @@ Proof.
 Qed.
 
 
-(* ============ 段 3：TV 收缩旗舰 ============ *)
+(* ============ 段 3：TV 收缩主定理 ============ *)
 
 (* |Σ f·Q| ≤ Σ |f|·Q（abs_sum_le + 接口字段 abs_mult + Q ≥ 0） *)
 Lemma abs_kernel_bound : forall (f : S -> R) (s' : S),
@@ -4366,7 +4366,7 @@ Proof.
 
 Qed.
 
-(* ============ 旗舰：单步 TV 收缩（Doeblin） ============ *)
+(* ============ 主定理：单步 TV 收缩（Doeblin） ============ *)
 Theorem attention_tv_contraction :
   forall mu, Id (sum_over_S mu) one -> (forall s, le zero (mu s)) ->
     le (tv_dist (attention_step mu) boltzmann_dist_attn)
@@ -7723,11 +7723,11 @@ End TopPSampling.
 (* ============================================================ *)
 
 (* ============================================================
-   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自探针 _dbg_kdr.v）
+   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自检验 _dbg_kdr.v）
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
    metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），
-       同文件全局冲突（探针不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
+       同文件全局冲突（检验不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
    ============================================================ *)
 
 (* ============ Core 版接口（阶段 3 组装目标）：无 exp/log 字段 ============
