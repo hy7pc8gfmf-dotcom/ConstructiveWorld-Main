@@ -81,12 +81,14 @@ Proof. intros d H. exact (proj2 (Z.compare_gt_iff d 0) H). Qed.
 (* gcd = 1 → 互素（Zis_gcd_intro 配方；rel_prime := Zis_gcd .. 1） *)
 Lemma bno_rel_prime_of_gcd1 : forall n d : Z, Z.gcd n d = 1%Z -> rel_prime n d.
 Proof.
-  intros n d H. apply Zis_gcd_intro.
-  - apply Z.divide_1_l.
-  - apply Z.divide_1_l.
-  - intros z Hz1 Hz2.
-    pose proof (Zgcd_is_gcd n d) as Hg. destruct Hg as [_ _ Hdiv].
-    rewrite H in Hdiv. exact (Hdiv z Hz1 Hz2).
+  intros n d H.
+  exact (Zis_gcd_intro n d 1%Z (Z.divide_1_l n) (Z.divide_1_l d)
+    (fun z Hz1 Hz2 =>
+       match Zgcd_is_gcd n d with
+       | Zis_gcd_intro _ _ _ _ _ Hdiv =>
+           eq_ind (Z.gcd n d) (fun g => (z | g)%Z)
+             (Hdiv z Hz1 Hz2) 1%Z H
+       end)).
 Qed.
 
 (* 规范对交叉乘唯一：两对分子分母均与 1 互素、分母正、交叉乘相等
@@ -96,11 +98,11 @@ Lemma bno_canon_pair_unique : forall n1 d1 n2 d2 : Z,
   (n1 * d2 = n2 * d1)%Z -> n1 = n2 /\ d1 = d2.
 Proof.
   intros n1 d1 n2 d2 H1 H2 P1 P2 Hc.
-  rewrite (Z.mul_comm n2 d1) in Hc.
-  destruct (rel_prime_cross_prod n1 d1 n2 d2
-    (bno_rel_prime_of_gcd1 n1 d1 H1) (bno_rel_prime_of_gcd1 n2 d2 H2)
-    P1 P2 Hc) as [E1 E2].
-  split; assumption.
+  exact (let E := rel_prime_cross_prod n1 d1 n2 d2
+             (bno_rel_prime_of_gcd1 n1 d1 H1)
+             (bno_rel_prime_of_gcd1 n2 d2 H2) P1 P2
+             (eq_ind (n2 * d1) (fun x => (n1 * d2 = x)%Z) Hc (d1 * n2) (Z.mul_comm n2 d1)) in
+         conj (proj1 E) (proj2 E)).
 Qed.
 
 (* ============================================================ *)
@@ -185,10 +187,11 @@ Definition bno_sum_inv_fact_escape : Type :=
 (* 引擎①：1 的幂归一 *)
 Lemma bno_q_pow_one : forall n : nat, q_pow 1%Q n == 1%Q.
 Proof.
-  induction n as [| m IH].
-  - reflexivity.
-  - exact (Qeq_trans (1 * q_pow 1%Q m) (q_pow 1%Q m) 1%Q
-             (Qmult_1_l (q_pow 1%Q m)) IH).
+  intro n.
+  exact (nat_ind (fun k => q_pow 1%Q k == 1%Q) (Qeq_refl 1%Q)
+    (fun (m : nat) (IH : q_pow 1%Q m == 1%Q) =>
+       Qeq_trans (1%Q * q_pow 1%Q m)%Q (q_pow 1%Q m) 1%Q
+         (Qmult_1_l (q_pow 1%Q m)) IH) n).
 Qed.
 
 (* 引擎②前小件：q*(1/q) 归一（Qdiv 定义展开位；Qmult_inv_r 的 ≠ 是 Qeq 形） *)
@@ -325,9 +328,12 @@ Qed.
 (* P3: 任一有理数乘以足够大的 n! 即为整数 *)
 Lemma bno_pos_d_nat : forall d : positive, sigT (fun n : nat => (Z.pos d <= Z.of_nat n)%Z).
 Proof.
-  intro d. exists (Z.to_nat (Z.pos d)).
-  rewrite Z2Nat.id by (pose proof (Pos2Z.is_pos d); lia).
-  exact (Z.le_refl (Z.pos d)).
+  intro d.
+  exact (existT (fun n : nat => (Z.pos d <= Z.of_nat n)%Z) (Z.to_nat (Z.pos d))
+    (eq_ind (Z.pos d) (fun z => (Z.pos d <= z)%Z) (Z.le_refl (Z.pos d))
+       (Z.of_nat (Z.to_nat (Z.pos d)))
+       (eq_sym (Z2Nat.id (Z.pos d)
+          (Z.lt_le_incl 0 (Z.pos d) (Pos2Z.is_pos d)))))).
 Qed.
 
 Lemma bno_scale_q_int : forall q : Q,

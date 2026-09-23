@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* T242 · ToyR 战役 包D · S12_B5RecycleSF.v（同名非平凡替换稿）   *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
-(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 闭合。    *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
 (* 替换段：b5q_arctan_one_leibniz_quarter / sf_qeq_le /           *)
 (*         sf_qleT_refl / sf_amp2_nonneg / sf_smx_exp_score_nonneg *)
 (* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
@@ -146,7 +146,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part C'：b5c_vdh_pts_r —— item1b Part C（b5n_vdh_pts）的 r 参数化  *)
-(*   闭式副本：导数事实源 = b5c_atan_deriv_b5a_r（bridge）；证明内     *)
+(*   闭式镜像：导数事实源 = b5c_atan_deriv_b5a_r（bridge）；证明内     *)
 (*   绑定基点 ≤1 证书 Hx := b3rr_dom_r1 x r Hxr Hr1（与 bridge 内证书  *)
 (*   逐字一致 → V 的投影桥定义性保持）。其余文本与 b5n_vdh_pts 相同。   *)
 (* ============================================================ *)
@@ -498,7 +498,7 @@ Qed.
 
 (* ============================================================ *)
 (* B5-A E-ODE T1 · cos 闭式件        *)
-(* （副本 212 根 b5a_sin_atan_diff_closed_r L79346：主件              *)
+(* （镜像 212 根 b5a_sin_atan_diff_closed_r L79346：主件              *)
 (* b5a_cos_atan_diff_closed_r（L1131）+ 12 个 b5d_* 辅助；10 Qed）。  *)
 (* 来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1d.v；   *)
 (* 依赖仅根（b5i_*/b5n_*/b5c_*/b5a_*/b5b_* 原位 < L79608）；BAD 0。  *)
@@ -506,7 +506,7 @@ Qed.
 
 (* ============================================================ *)
 (* D1：b5d_addcol_cos —— cos 版逐点列误差                        *)
-(*   （副本 b5i_addcol_sin L75266；rs_add_cos 列：               *)
+(*   （镜像 b5i_addcol_sin L75266；rs_add_cos 列：               *)
 (*     c(Ah) − (cA·cv − sA·sv)，Ah_n + v_n == Ah_n 逐点）        *)
 (* ============================================================ *)
 Definition b5d_addcol_cos (x h : Real) (Hxh : forall n : nat,
@@ -529,7 +529,7 @@ Definition b5d_S2n_cos (x h : Real) (n : nat) : Q :=
 
 (* ============================================================ *)
 (* D4：b5d_dn_split_cos —— comp_err_cos_n == S1n_cos + S2n_cos   *)
-(*   （副本 b5i_dn_split L76288；用根 b5i_cos_err_proj L75009）  *)
+(*   （镜像 b5i_dn_split L76288；用根 b5i_cos_err_proj L75009）  *)
 (* ============================================================ *)
 Lemma b5d_dn_split_cos : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -546,7 +546,7 @@ Qed.
 
 (* ============================================================ *)
 (* D5：b5d_rs_addcol_cos —— cos 列误差逐点界                    *)
-(*   （副本 b5i_rs_addcol L76303；rs_add_sin → rs_add_cos：      *)
+(*   （镜像 b5i_rs_addcol L76303；rs_add_sin → rs_add_cos：      *)
 (*     cos(A+v) == cA·cv − sA·sv 列；余同 sin 侧桥结构）         *)
 (* ============================================================ *)
 Lemma b5d_rs_addcol_cos : forall (x : Real)
@@ -637,7 +637,7 @@ Qed.
 
 (* ============================================================ *)
 (* D6：b5d_S1_quad_cos —— S1_cos 二次界（|v| ≤ 1；角色对调）    *)
-(*   |S1_cos| ≤ colQ + Mc·|v|² + Ms·|v|³（副本 b5i_S1_quad       *)
+(*   |S1_cos| ≤ colQ + Mc·|v|² + Ms·|v|³（镜像 b5i_S1_quad       *)
 (*   L75286；sin 版 Ms·|v|² + Mc·|v|³ → 系数角色对调：           *)
 (*   quad 侧 cA(cv−1) 系数 Mc、sA·(−(sv−v)) 系数 Ms）            *)
 (* ============================================================ *)
@@ -765,7 +765,7 @@ Qed.
 (* ============================================================ *)
 (* D7：b5d_S2_le_cos —— |S2_cos| ≤ Ms·wb（系数对调：            *)
 (*   sin 版 S2 := cA·(v−dh) 系数 Mc；cos 版 S2 := −sA·(v−dh)     *)
-(*   系数 Ms；副本 b5i_S2_le L75542）                            *)
+(*   系数 Ms；镜像 b5i_S2_le L75542）                            *)
 (* ============================================================ *)
 Lemma b5d_S2_le_cos : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -819,7 +819,7 @@ Qed.
 
 (* ============================================================ *)
 (* D8：b5d_S1_crude_cos —— S1_cos 全局界（无需 |v| ≤ 1）        *)
-(*   |S1_cos| ≤ |col| + Mc(Mcv+1) + Ms(Msv+|v|)（副本            *)
+(*   |S1_cos| ≤ |col| + Mc(Mcv+1) + Ms(Msv+|v|)（镜像            *)
 (*   b5i_S1_crude L75401；sin 版 Ms(Mcv+1)+Mc(Msv+|v|) →         *)
 (*   系数角色对调：quad/cv-件系数 Mc、sv-件系数 Ms）             *)
 (* ============================================================ *)
@@ -976,7 +976,7 @@ Qed.
 
 (* ============================================================ *)
 (* D9：b5d_S1_crude_x_cos —— S1_cos x-无关全局界                *)
-(*   |S1_cos| ≤ |col| + Mc(4C+2) + Ms(4C+4)（副本               *)
+(*   |S1_cos| ≤ |col| + Mc(4C+2) + Ms(4C+4)（镜像               *)
 (*   b5i_S1_crude_x L75694；cos_partial_le4/sin_partial_le4      *)
 (*   复用根；系数角色对调）                                      *)
 (* ============================================================ *)
@@ -1039,7 +1039,7 @@ Qed.
 (* D10：b5d_pern_quad_cos —— 分支 A（|v_n| ≤ 1）二次界吸收     *)
 (*   |D_cos| ≤ colQ + (2S·kδ + (3S+Ms)·k2)·(en·|h_n|)           *)
 (*                  + (3S+Ms)·E2                                 *)
-(*   （副本 b5i_pern_quad L76439；S2 侧系数 Mc → Ms）            *)
+(*   （镜像 b5i_pern_quad L76439；S2 侧系数 Mc → Ms）            *)
 (* ============================================================ *)
 Lemma b5d_pern_quad_cos : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -1333,7 +1333,7 @@ Qed.
 (* ============================================================ *)
 (* D11：b5d_pern_crude_cos —— 分支 B（|v_n| > 1）crude 全局界   *)
 (*   |D_cos| ≤ colQ + (Mc(4C+2)+Ms(4C+4)) + Ms·(en·k2·|h_n|+E2) *)
-(*   （副本 b5i_pern_crude L76729；K1e 内系数对调、S2 系数 Ms）  *)
+(*   （镜像 b5i_pern_crude L76729；K1e 内系数对调、S2 系数 Ms）  *)
 (* ============================================================ *)
 Lemma b5d_pern_crude_cos : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -1436,7 +1436,7 @@ Qed.
 (* D12：b5d_pern_main_cos —— per-n 双分支主界（cos 版）         *)
 (*   结论：|D_cos_n| ≤ en·|h_n| + (3/4)·en'                     *)
 (*   预算假设角色对调：coefQ 尾项 (3S+Ms)、coefC/addC32 系数 Ms、 *)
-(*   K1e_cos := Mc(4C+2)+Ms(4C+4)（副本 b5n_pern_main L78702）  *)
+(*   K1e_cos := Mc(4C+2)+Ms(4C+4)（镜像 b5n_pern_main L78702）  *)
 (* ============================================================ *)
 Lemma b5d_pern_main_cos : forall (x : Real)
   (Hx : forall n : nat, QleT' (Qabs (projT1 x n)) 1)
@@ -1605,7 +1605,7 @@ Qed.
 
 (* ============================================================ *)
 (* D13：b5a_cos_atan_diff_closed_r —— cos∘arctan 闭式主装配     *)
-(*   （副本 item1c Part E L219–481 / 根 L79346–79608：           *)
+(*   （镜像 item1c Part E L219–481 / 根 L79346–79608：           *)
 (*    误差件 comp_err_cos；K1e := Mc(4C+2)+Ms(4C+4)；            *)
 (*    k2/k2p 分母 (3S+Ms)；预算纯 Q 件以 Ms 作实参；             *)
 (*    col 调 b5d_rs_addcol_cos；per-n 调 b5d_pern_main_cos；     *)
@@ -2514,7 +2514,7 @@ Definition b5f_v (x h : Real) : Real :=
 Lemma b5f_g_S : forall (x : Real),
   real_eq (b5a_S x) (cauchy_real_exp (b5f_g x)).
 Proof.
-  intro x. unfold b5a_S, b5f_g. apply real_eq_refl.
+  intro x. unfold b5a_S, b5f_g. exact (real_eq_refl _).
 Qed.
 
 (* S(x+h) == S(x)·exp(v(x,h))：exp 和律（Real 层语义，非逐点） *)
@@ -3699,7 +3699,7 @@ Qed.
 
 (* ============================================================ *)
 (* M2c-4b：b5f_gdiff_pts_r —— g-diff 逐点闭式主件              *)
-(* 设计定稿（进度 §3）：副本 b5c_vdh_pts_r 逐点尾形态。          *)
+(* 设计定稿（进度 §3）：镜像 b5c_vdh_pts_r 逐点尾形态。          *)
 (*   wS := v(x,h) − x·d(x)·h；输出 ∀n≥N：                       *)
 (*     |wS_n| ≤ en·k2·sn + 2k2p·en'                             *)
 (*   δg := min(min(δL·(1#12), eps·kL-Real), (1#2)-const)；      *)
@@ -4139,7 +4139,7 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* Batch A：|Sx| 基础件（③ 的基础模块；仿 real_abs_exp_pos /        *)
+(* Batch A：|Sx| 基础件（③ 的底座；仿 real_abs_exp_pos /        *)
 (*   real_inv_pos_correct / real_abs_scaling_le 内证风格）       *)
 (* ============================================================ *)
 
@@ -4482,7 +4482,7 @@ Lemma b5a_S_exp_part_bound_closed_r :
 (* ① b5j_v_abs_bd 族（|v(x,h)| ≤ Kvq(r)·|h| + shV）            *)
 (* v == x·d·h + (1/2)·LogErr + (1/2)·d·h·h（Real 层语义：       *)
 (*   b5f_v_minus_xdh_decomp；逐点 unfold+field 就地重证，        *)
-(*   log 原子两侧相同消去——副本 item3s F0/F1 结构）。           *)
+(*   log 原子两侧相同消去——镜像 item3s F0/F1 结构）。           *)
 (* ============================================================ *)
 
 (* (a) 逐点三角：|v_n| ≤ |xdh_n| + (1/2)|LogErr_n| + (1/2)|dhh_n| *)
@@ -5678,9 +5678,7 @@ Lemma b5k_S_ge_one_pos : forall (x : Real),
   sigT (fun N : nat => forall n : nat, NatLe N n ->
     Qle 1 (projT1 (b5a_S x) n)).
 Proof.
-  intros x Hx.
-  apply (b5k_S_ge_one_cert x).
-  apply (real_mult_pos_compat x x Hx Hx).
+  intros x Hx. exact ((b5k_S_ge_one_cert x) (real_mult_pos_compat x x Hx Hx)).
 Qed.
 
 (* ============================================================ *)
@@ -5713,7 +5711,7 @@ Qed.
 (*   Batch A（Q 预算常数件）：b5l_k_posT / b5l_Mk_le             *)
 (*     （k := Qinv(8·(1+M))，M 为 b5f_S_pts_bounded 上界：       *)
 (*       QltT 0 k、Qle (M·k) (1#8)）                            *)
-(*   Batch B（逐点桥接引理）：                                       *)
+(*   Batch B（逐点桥件）：                                       *)
 (*     b5l_Sx_mult_abs_le（|S(x)·A|_n ≤ M·|A_n|，|S_n|≤M 逐点） *)
 (*     b5l_eq_abs_tri（real_eq X (E+G) ⟹ |X_n| ≤ |E_n|+|G_n|+m0 *)
 (*   Batch C（主装配 b5a_S_diff_closed_r，见文件尾注释）：       *)
@@ -5754,7 +5752,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Batch B：逐点桥接引理                                            *)
+(* Batch B：逐点桥件                                            *)
 (* ============================================================ *)
 
 (* |S(x)·A|_n ≤ M·|A_n|：|S_n| ≤ M 逐点上界抬升（Qabs 精确展开） *)
@@ -5849,8 +5847,8 @@ Qed.
 (*   Qinv(8(1+M)) 界定（|S_n| ≤ M 缩放，M := b5f_S_pts_bounded）；*)
 (*   分解松弛 b5l_eq_abs_tri @ m0 := (1#32)·e1；                 *)
 (*   δ := real_min δexp δg；逐点证得 |err_n| ≤ en·hn + (3#4)en'   *)
-(*   （系数吸收 + 线性 nra，P1 检验验证）→ eta := (1#8)e1 见证     *)
-(*   real_lt 左支（b5n_quarter_gt + b5n_close，副本 item2 E6）。  *)
+(*   （系数吸收 + 线性 nra，P1 探针验证）→ eta := (1#8)e1 见证     *)
+(*   real_lt 左支（b5n_quarter_gt + b5n_close，镜像 item2 E6）。  *)
 (* ============================================================ *)
 Lemma b5a_S_diff_closed_r :
   forall (r : Q) (Hr0 : Qle 0 r) (Hr1 : Qlt r 1),
@@ -6142,7 +6140,7 @@ Qed.
 (* ============================================================ *)
 (* （设计）逐点估计在主装配 per-n 内联完成：                      *)
 (*   非线性系数先做抽象 Q 事实（coefS1/coefG1 ≤ 1#32 型），       *)
-(*   再以 X := en·hn 原子 + 线性 nra 证毕（副本 item2 L260-287    *)
+(*   再以 X := en·hn 原子 + 线性 nra 证毕（镜像 item2 L260-287    *)
 (*   Ha/Hb + 根 sin b5n_close 模式）——无需独立件。               *)
 (* ============================================================ *)
 
@@ -6219,7 +6217,7 @@ Definition b5m_J_err (x : Real)
 
 (* S(x) 逐点正下界（Q 层尾界）：∃c>0 ∃N ∀n≥N：c ≤ S(x)_n。
    由 b5c_S_pos x（全域 real_lt）见证析出——独立 sigT 件，避免在
-   依存引理中 destruct b5c_S_pos 污染 real_inv_pos 的证书参数。 *)
+   消费引理中 destruct b5c_S_pos 污染 real_inv_pos 的证书参数。 *)
 Lemma b5m_S_pos_pt : forall (x : Real),
   sigT (fun c : Q => And (Qlt 0 c)
     (sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
@@ -6314,7 +6312,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* M2：逐点界桥接引理                                               *)
+(* M2：逐点界桥件                                               *)
 (* ============================================================ *)
 
 (* a ≥ c > 0 ⟹ |Qinv a| ≤ Qinv c（Qabs_pos + q_inv_le_contravar） *)
@@ -7210,7 +7208,7 @@ Qed.
 (* 供 T4 接口：对 real_le 区间点 y，装配方由 real_le 分支 +       *)
 (*   x<1 分离逐 y 析出 (N0, Hxr, Hx1)（N(y) 依赖 y）后实例化     *)
 (*   本件——δ 与 h/eps' 无关（Bishop 模量）；0 侧 Or(lt,eq) 分支  *)
-(*   分解属装配方（本件只依存已析出的尾证书）。                  *)
+(*   分解属装配方（本件只消费已析出的尾证书）。                  *)
 (* ============================================================ *)
 
 (* 截断：n ≥ N0 保持 x_n，早坐标（n < N0）置 0（cauchy 保持：
@@ -8318,7 +8316,7 @@ Proof.
     + apply b5p_cos_rhs_neg_one.
 Qed.
 
-(* 封装：And（Set 层 A*B） *)
+(* 打包：And（Set 层 A*B） *)
 Lemma b5p_pi_trig_signature :
   And (real_eq (cauchy_real_sin real_pi_geom) real_zero)
       (real_eq (cauchy_real_cos real_pi_geom) (real_opp real_one)).
@@ -8423,13 +8421,9 @@ Lemma b5q_collapse_unit :
                      arctan_one_real)
           arctan_one_real.
 Proof.
-  apply (real_eq_trans
-           (real_mult (real_mult (real_const (1 / 4)) (real_const 4))
-                      arctan_one_real)
-           (real_mult real_one arctan_one_real)
-           arctan_one_real).
-  - apply b5q_collapse.
-  - apply b5q_unit_left.
+  exact (real_eq_trans (real_mult (real_mult (real_const (1 / 4)) (real_const 4))
+             arctan_one_real) (real_mult real_one arctan_one_real) arctan_one_real
+             b5q_collapse (b5q_unit_left arctan_one_real)).
 Qed.
 
 (* ============================================================ *)
@@ -8469,7 +8463,7 @@ Lemma b5q_arctan_one_leibniz_quarter :
 Proof.
   (* ToyR 替换：real_eq_sym 桥就地展开至定义层（消桥转发）：
      对链等式取同一 eps 的 N 见证，差序列绝对值对称 q_abs_minus_sym，
-     经 Qcompare 相容改写对齐两侧差项后闭合 *)
+     经 Qcompare 相容改写对齐两侧差项后收口 *)
   intros eps Heps.
   destruct (b5q_leibniz_quarter_chain eps Heps) as [N HN].
   exists N.
@@ -8567,7 +8561,7 @@ Lemma sf_qeq_le : forall x y : Q, x == y -> Qle x y.
 Proof.
   intros x y H.
   (* ToyR 替换：Z 层改写链直构（消 Z.eq_le_incl 桥单跳转发）：
-     unfold 至交叉积定义层，等式假设就地改写左端为右端，Z.le 自反闭合 *)
+     unfold 至交叉积定义层，等式假设就地改写左端为右端，Z.le 自反收口 *)
   unfold Qle, Qeq in *.
   rewrite H.
   apply Z.le_refl.
@@ -8615,7 +8609,7 @@ Definition QId (x y : Q) : Set := Id (Qeq_bool x y) true.
 Lemma qid_intro : forall x y : Q, x == y -> QId x y.
 Proof.
   intros x y H.
-  apply (eq_rect true (fun b : bool => Id b true) id_refl (Qeq_bool x y)
+  exact (eq_rect true (fun b : bool => Id b true) id_refl (Qeq_bool x y)
            (eq_sym (proj2 (Qeq_bool_iff x y) H))).
 Qed.
 
@@ -8638,7 +8632,7 @@ Definition SFVec : Set := list Real.
 Definition sf_sub (a b : Real) : Real := real_plus a (real_opp b).
 Definition sf_sq (a : Real) : Real := real_mult a a.
 
-(* 逐点投影和：dist_sq 的 Q 层副本（第 n 次观测 = 前 k 对分量平方和）。 *)
+(* 逐点投影和：dist_sq 的 Q 层镜像（第 n 次观测 = 前 k 对分量平方和）。 *)
 Fixpoint sf_ptw_sum (x y : SFVec) (k : nat) : Q :=
   match x, y with
   | a :: x', b :: y' =>
@@ -8684,10 +8678,10 @@ Qed.
 
 Lemma sf_qeq_id : forall (a b : Q), a == b -> Id (Qeq_bool a b) true.
 Proof.
-  intros a b H. apply (sf_bool_true_id _ (proj2 (Qeq_bool_iff a b) H)).
+  intros a b H. exact (sf_bool_true_id _ (proj2 (Qeq_bool_iff a b) H)).
 Qed.
 
-(* 投影刻画：dist_sq 的第 k 次观测 == 逐点副本（一切 real_eq 性质的枢纽）。
+(* 投影刻画：dist_sq 的第 k 次观测 == 逐点镜像（一切 real_eq 性质的枢纽）。
    清洗：语句层 Qeq(==) → Id (Qeq_bool ..) true；证明内部经 sf_id_qeq/Qeq_bool_iff 中转。 *)
 Lemma sf_dist_sq_proj : forall (x y : SFVec) (k : nat),
   projT1 (sf_dist_sq x y) k == sf_ptw_sum x y k.
@@ -9318,7 +9312,7 @@ Proof.
     ring.
 Qed.
 
-(* lt zero a ⟹ lt (opp a) zero（正变负，逐点见证迁移）。 *)
+(* lt zero a ⟹ lt (opp a) zero（正变负，逐点见证搬运）。 *)
 Lemma sf_lt_opp_zero : forall a : Real,
   real_lt real_zero a -> real_lt (real_opp a) real_zero.
 Proof.
@@ -9351,7 +9345,7 @@ Proof.
   intros p s Hp.
   (* 桥：real_lt_zero_minus x y : lt zero (y + opp x) -> lt x y。
      余下目标 0 < E p − E(p++[s])：由 append_single 的能量式
-     E(p++[s]) == E p − pipe(last p, s) 两次 eq-迁移归结为管道正性
+     E(p++[s]) == E p − pipe(last p, s) 两次 eq-搬运归结为管道正性
      （sf_pipe_pos），中间差项 E p − (E p − pipe) == pipe 逐点环。 *)
   apply (real_lt_zero_minus (sf_path_energy (p ++ s :: nil)) (sf_path_energy p)).
   assert (Hdiff : real_eq
@@ -9373,7 +9367,7 @@ Proof.
                (real_opp (real_plus (sf_path_energy p)
                                     (real_opp (sf_pipe (sf_last p) s)))))
     (real_plus (sf_path_energy p) (real_opp (sf_path_energy (p ++ s :: nil))))).
-  - (* 0 < E p − (E p − pipe)：由 0 < pipe 经 eq 迁移 *)
+  - (* 0 < E p − (E p − pipe)：由 0 < pipe 经 eq 搬运 *)
     apply (real_lt_eq_lt real_zero (sf_pipe (sf_last p) s)
       (real_plus (sf_path_energy p)
                  (real_opp (real_plus (sf_path_energy p)
@@ -9412,9 +9406,9 @@ Hypothesis sf_pipe_le_tmax : forall x y : SFVec, real_le (sf_pipe x y) sf_tmax.
 (* 0 ≤ Tmax：管道正性 + 接口上界传递。 *)
 Lemma sf_le_zero_tmax : real_le real_zero sf_tmax.
 Proof.
-  apply (real_lt_le_iff real_zero sf_tmax). left.
-  exact (real_lt_le_trans real_zero (sf_pipe nil nil) sf_tmax
-           (sf_pipe_pos nil nil) (sf_pipe_le_tmax nil nil)).
+  exact (real_lt_le_iff real_zero sf_tmax
+           (inl (real_lt_le_trans real_zero (sf_pipe nil nil) sf_tmax
+                   (sf_pipe_pos nil nil) (sf_pipe_le_tmax nil nil)))).
 Qed.
 
 (* 0·x == 0（逐点环）。 *)
@@ -9453,7 +9447,7 @@ Proof.
   ring.
 Qed.
 
-(* x ≤ y ⟹ −y + x ≤ 0（le 分例：lt 见证逐点原样迁移 / eq 兼容链）。 *)
+(* x ≤ y ⟹ −y + x ≤ 0（le 分例：lt 见证逐点原样搬运 / eq 兼容链）。 *)
 Lemma sf_le_minus_zero : forall x y : Real,
   real_le x y -> real_le (real_plus (real_opp y) x) real_zero.
 Proof.
@@ -9984,7 +9978,7 @@ Definition sf_gfe (alpha beta gamma : Real) (p : list SFVec) : Real :=
             (real_plus (real_mult beta (sf_syn_pot p))
                        (real_mult gamma (sf_temporal p))).
 
-(* 单步延伸的精确能量核算（蓝图的差分结构；【临时承认】：四项
+(* 单步延伸的精确能量记账（蓝图的差分结构；【临时承认】：四项
    线性重组的逐点环代数，下批闭合）。 *)
 Lemma sf_gfe_adj_sum_app_proj :
   forall (f : SFVec -> SFVec -> Real) (p : list SFVec) (s : SFVec),
@@ -10049,7 +10043,7 @@ Proof.
       ring.
 Qed.
 
-(* 单步延伸的精确能量核算（蓝图的差分结构）：四项线性重组的
+(* 单步延伸的精确能量记账（蓝图的差分结构）：四项线性重组的
    逐点环代数——两个逐点分解引理 + 长度/n2r 后继事实后 ring 闭合。 *)
 Theorem sf_gfe_append_single :
   forall (alpha beta gamma : Real) (p : list SFVec) (s : SFVec),
@@ -10360,7 +10354,8 @@ Definition sf_decay (h : SFHalfLife) (dt : Real) : Real :=
 Theorem sf_decay_pos : forall (h : SFHalfLife) (dt : Real),
   real_lt real_zero (sf_decay h dt).
 Proof.
-  intros h dt. unfold sf_decay. apply real_exp_neg_pos.
+  intros h dt. unfold sf_decay.
+  exact (real_exp_neg_pos (real_mult dt (real_inv_pos (projT1 h) (projT2 h)))).
 Qed.
 
 (* 零时刻不衰减：decay(hl, 0) == 1。 *)
@@ -10691,18 +10686,12 @@ Proof.
 Qed.
 Lemma sf_qle_eq_l : forall x y z : Q, x == y -> Qle y z -> Qle x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply (Qle_trans x y z).
-  - apply sf_qeq_le. exact Hxy.
-  - exact Hyz.
+  intros x y z Hxy Hyz. exact (Qle_trans x y z (sf_qeq_le x y Hxy) Hyz).
 Qed.
 
 Lemma sf_qle_eq_r : forall x y z : Q, Qle x y -> y == z -> Qle x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply (Qle_trans x y z).
-  - exact Hxy.
-  - apply sf_qeq_le. exact Hyz.
+  intros x y z Hxy Hyz. exact (Qle_trans x y z Hxy (sf_qeq_le y z Hyz)).
 Qed.
 
 Lemma sf_id_to_eq : forall (A : Set) (x y : A), Id x y -> x = y.
@@ -10828,7 +10817,7 @@ Qed.
 
 
 
-(* 主定理（蓝图 wasserstein2_sq_nonneg/sym/same 的强化替代）：
+(* 旗舰定理（蓝图 wasserstein2_sq_nonneg/sym/same 的强化替代）：
    (质心差)² ≤ 配对均方 —— Jensen/Cauchy–Schwarz 均值形式。
    等长前提下质心差 == 差值均值，故 Lagrange 于 a := 差值均值。 *)
 Theorem sf_q_centroid_bound :
@@ -11603,7 +11592,7 @@ Proof.
   intro p. destruct p as [n q]. unfold sf_amp2.
   (* ToyR 替换：平方非负逐例直构（消 sf_q_sq_ge_0T→sf_q_sq_ge_0 双跳转发）：
      Q_dec 可计算三分就地分析——正/负支 Qmult_le_0_compat 显式构造，
-     等支 qeq_le 改写后 ring 闭合；桥步仅留 Qle_to_QleT' 一跳 *)
+     等支 qeq_le 改写后 ring 收口；桥步仅留 Qle_to_QleT' 一跳 *)
   apply (Qle_to_QleT' 0 (q * q)).
   destruct (Q_dec 0 q) as [[Hp | Hn] | Hz].
   - assert (H1 : 0 <= q) by (apply Qlt_le_weak; exact Hp).

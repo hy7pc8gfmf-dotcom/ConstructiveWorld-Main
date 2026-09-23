@@ -3580,3 +3580,22 @@ Definition ng_ToyR_fka_weak_triangle_ref : NewGreenFace :=
   MkNewGreenFace "ToyR_fka_weak_triangle_ref.v" 42 1 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f1e63, L42); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L42:m3f1e63".
 
+
+(* ================= v4.26 增册（R117 总波：DSNR 双件＋九批纯新 1 注册，20260923；号额实勘：现值 v4.25（R116 片A 尾插波）→ 本席顺延 v4.26（全文件 grep 无 v4.26 占用）；承前 ng_ 共 447 条，本批 3 条后共 450 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.25 块之后；尾插禁重排、只增不改）。 *)
+(* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（v4.24 扩列口径）；本块行数/md5=源位实测快照（20260923，R117-PREP 合并工单包），ng_qed 已按二验 [N-1] 修正令以 v2.1 口径 token 级实测回填（13/40/3）。 *)
+
+(* ng_UpAblDeltaStarSuboptimal —— UpAblDeltaStarSuboptimal.v：DSNR 基座件（dsgen_ 族底座，175 行 13 Qed（token 级实测；PREP 草案 11 系行首 grep 口径，二验 [N-1] 修正）；VET-DSNR 席四关全 PASS 20260923 独立复核 G1-G4，coqchk 闭包链含 S02_CauchyComplete；Live_X/沙箱双位 md5 恒等 5b0edbeb 本席复测；与 General 同批 order×3 尾插 2 行案）（_tvetdsnr_） *)
+Definition ng_UpAblDeltaStarSuboptimal : NewGreenFace :=
+  MkNewGreenFace "UpAblDeltaStarSuboptimal.v" 175 13 20260923
+  "DSNR twin base of dsgen_ family; four-gate PASS 20260923 (VET-DSNR independent re-verify G1-G4); coqchk closure chain with S02_CauchyComplete; md5 5b0edbeb pinned, Live_X/sandbox dual-copy identical; ng_qed token-level re-measured 13 (PREP 11 was line-start grep face, VERIFY [N-1] corrected)" "L175:m5b0edb".
+
+(* ng_UpAblDeltaStarGeneral —— UpAblDeltaStarGeneral.v：DSNR 主件（dsgen_ 推广族，577 行 48 声明面 40 Qed（token 级实测；PREP 草案 33 系行首 grep 口径，二验 [N-1] 修正）；PA 四路 Closed＝dsgen_main/rowstoch/feasible/optimal_ge3 逐件 Closed under global context；G3 独立目录 Separate Extraction Obj.magic=0；G4 Axioms <none>；头注 L24-27 自引词面按 WangWW 零承认自陷卡豁免注记在案；Require 依赖 UpAblDeltaStarSuboptimal 同批注册）（_tvetdsnr_） *)
+Definition ng_UpAblDeltaStarGeneral : NewGreenFace :=
+  MkNewGreenFace "UpAblDeltaStarGeneral.v" 577 40 20260923
+  "DSNR seat: dsgen_ generalization family (PA 4-route Closed: dsgen_main/rowstoch/feasible/optimal_ge3; G3 separate-extraction Obj.magic=0; G4 Axioms none; ng_qed token-level re-measured 40 (PREP 33 was line-start grep face, VERIFY [N-1] corrected); requires UpAblDeltaStarSuboptimal same-wave registration; WangWW self-trap lexicon exemption noted)" "L577:m032f49".
+
+(* ng_UpAblP4_UpStopTime_PA —— UpAblP4_UpStopTime_PA.v：九批 C-纯新（UpStopTime 的 PA 驱动件，81 行 3 Qed（三个行内闭合定理 minimal_stoptime/st_thresh_dominance/unguarded_no_stoptime；PREP 草案「0-Qed=PA 驱动件面」定性失实，二验 [N-1] 修正删句）；VET9B 席四面机械绿 20260923；Require Import UpStopTime. 源 L36 实证→order 尾插按依赖先行性插于 UpStopTime 后；ng_qed 按 v2.1 口径 token 级实测回填）（_tvet9b_） *)
+Definition ng_UpAblP4_UpStopTime_PA : NewGreenFace :=
+  MkNewGreenFace "UpAblP4_UpStopTime_PA.v" 81 3 20260923
+  "VET9B C-pure-new: UpStopTime PA driver (four-face green; three inline Qed closures; driver-face registry; requires UpStopTime, order insert-after per dependency precedence; ng_qed token-level 3 per VERIFY [N-1])" "L81:m1ae55c".

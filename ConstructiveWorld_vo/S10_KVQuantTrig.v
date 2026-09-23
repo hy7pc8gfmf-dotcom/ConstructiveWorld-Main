@@ -13,11 +13,11 @@
 (* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
 (* 替换定理清单：sc_lp_four_nonneg（共 1 条，语句不变）；          *)
 (*   其余 reflexive/转发族玩具经复核属定义性等式或库引理转发，     *)
-(*   非平凡化无语义增益或损语义风险高，如实遗留不硬编。            *)
+(*   非平凡化无语义增益或损语义风险高，如实挂账不硬编。            *)
 (* 非平凡性说明：仅替换上列 1 条证明体；声明面、其余定理、原头注   *)
 (*   一律原样保留。口径：lp_four 定义展开 + Qle 展开 = Z 层交叉积，  *)
-(*   字面归约后线性判定闭合——消除原两跳转发。纯构造性：零 公理、  *)
-(*   零 承认件、零经典逻辑。编译态：深依赖链整件遗留。             *)
+(*   字面归约后线性判定收口——消除原两跳转发。纯构造性：零 公理、  *)
+(*   零 承认件、零经典逻辑。编译态：深依赖链整件挂账。             *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -104,7 +104,7 @@ Lemma real_mult_minus_l : forall (a x y : Real),
   real_eq (real_plus (real_mult a x) (real_opp (real_mult a y)))
           (real_mult a (real_plus x (real_opp y))).
 Proof.
-  intros a x y.
+intros a x y.
   apply real_eq_sym.
   apply (real_eq_trans _ (real_plus (real_mult a x) (real_mult a (real_opp y))) _).
   - apply (real_distrib a x (real_opp y)).
@@ -116,10 +116,9 @@ Qed.
 (* 工具 B：(opp a)·b == opp (a·b)（real_opp_mult_r 反向） *)
 Lemma real_opp_mult_r_sym : forall (a b : Real),
   real_eq (real_mult (real_opp a) b) (real_opp (real_mult a b)).
-Proof.
-  intros a b.
-  apply real_eq_sym.
-  apply (real_opp_mult_r a b).
+Proof.  intros a b.
+  exact (real_eq_sym (real_opp (real_mult a b)) (real_mult (real_opp a) b)
+    (real_opp_mult_r a b)).
 Qed.
 
 (* 工具 C：x·z + (−(y·z)) == (x + (−y))·z（右提公因子，distrib_r + 工具 B） *)
@@ -127,7 +126,7 @@ Lemma real_mult_minus_r : forall (x y z : Real),
   real_eq (real_plus (real_mult x z) (real_opp (real_mult y z)))
           (real_mult (real_plus x (real_opp y)) z).
 Proof.
-  intros x y z.
+intros x y z.
   apply (real_eq_trans _ (real_plus (real_mult x z) (real_mult (real_opp y) z)) _).
   - (* 段 1：A == M：opp (mult y z) == mult (opp y) z（工具 B 反向） *)
     apply real_eq_sym.
@@ -1074,7 +1073,7 @@ End RealKVQuantMain.
 
 (* ============================================================ *)
 (* 项 5：DPO 损失 log-ratio 凸性（softplus 凸）——2026-09-02     *)
-(* 并入（检验 _dbg_dpo_conv.v 平移）                             *)
+(* 并入（探针 _dbg_dpo_conv.v 平移）                             *)
 (*   real_dpo_logit：ℓ(x) := −log σ(x)（dpo 单样本 logit 损失）  *)
 (*   A1 real_softplus_sigmoid_eq：ℓ(x) == log(1+e^{−x})          *)
 (*     （损失 ↔ softplus 形态连接；inv 对合 + log_inv_one_inv）   *)
@@ -1123,10 +1122,8 @@ Qed.
 (* ---- A2：1 − σ(x) > 0（σ < 1 经 real_lt_opp_plus） ---- *)
 Lemma real_one_minus_sigmoid_pos : forall x : Real,
   real_lt real_zero (real_plus real_one (real_opp (real_sigmoid x))).
-Proof.
-  intro x.
-  apply (real_lt_opp_plus (real_sigmoid x) real_one).
-  exact (real_sigmoid_lt_one x).
+Proof.  intro x.
+  exact (real_lt_opp_plus (real_sigmoid x) real_one (real_sigmoid_lt_one x)).
 Qed.
 
 (* ---- A3：σ(x)·(1−σ(x)) > 0（−log σ 二阶导的正性证据） ---- *)
@@ -1135,10 +1132,9 @@ Lemma real_sigmoid_deriv_mass_pos : forall x : Real,
                                (real_plus real_one (real_opp (real_sigmoid x)))).
 Proof.
   intro x.
-  apply (real_mult_pos_compat (real_sigmoid x)
-                              (real_plus real_one (real_opp (real_sigmoid x)))).
-  - apply (real_sigmoid_pos x).
-  - apply (real_one_minus_sigmoid_pos x).
+  exact (real_mult_pos_compat (real_sigmoid x)
+    (real_plus real_one (real_opp (real_sigmoid x)))
+    (real_sigmoid_pos x) (real_one_minus_sigmoid_pos x)).
 Qed.
 
 (* ---- A1：−log σ(x) == log(1+e^{−x})（dpo 损失 ↔ softplus 连接） ---- *)
@@ -2195,7 +2191,7 @@ Qed.
 
 (* ============================================================ *)
 (* 批 3（轮 2）：Real 层 cauchy_real_sin / cauchy_real_cos      *)
-(* 副本 cauchy_real_exp（主文件 L7690-7772）：对角定义 +        *)
+(* 镜像 cauchy_real_exp（主文件 L7690-7772）：对角定义 +        *)
 (*   eps/2 尾项（sc_*_partial_cauchy_bounded）+ eps/(2C) 输入项 *)
 (*   （Lipschitz + 导数式级数 ≤ exp_series ≤ C）。              *)
 (* ============================================================ *)
@@ -2233,7 +2229,7 @@ Proof.
       apply q_pow_fact_nonneg. exact (QleT'_to_Qle _ _ HB).
 Qed.
 
-(* ---- real_sin 定义（副本 cauchy_real_exp） ---- *)
+(* ---- real_sin 定义（镜像 cauchy_real_exp） ---- *)
 Definition cauchy_real_sin (x : Real) : Real.
 Proof.
   destruct x as [u Hu].
@@ -2733,10 +2729,7 @@ Qed.
 
 Lemma sc_lp_odd_mono : forall m : nat, Qle (lp_odd m) (lp_odd (Datatypes.S m)).
 Proof.
-  intro m.
-  change (Qle (lp_odd m) (lp_odd m + lp_pair (Datatypes.S m))).
-  apply (Qle_plus_nonneg_r (lp_odd m) (lp_pair (Datatypes.S m))).
-  apply sc_lp_pair_nonneg.
+intro m. change (Qle (lp_odd m) (lp_odd m + lp_pair (Datatypes.S m))). exact (Qle_plus_nonneg_r (lp_odd m) (lp_pair (Datatypes.S m)) (sc_lp_pair_nonneg (Datatypes.S m))).
 Qed.
 
 Lemma sc_lp_odd_chain : forall m n : nat, (m <= n)%nat ->
@@ -2852,10 +2845,10 @@ Qed.
 Lemma sc_lp_odd_le_s2 : forall n : nat, Qle (lp_odd n) (13 / 15).
 Proof.
   intro n.
-  apply (Qle_trans _ (lp_odd n + lp_a (2 * n + 2)) _).
-  - apply (Qle_plus_nonneg_r (lp_odd n) (lp_a (2 * n + 2))).
-    apply sc_lpa_nonneg.
-  - apply sc_lp_ev_le_s2.
+  exact (Qle_trans (lp_odd n) (lp_odd n + lp_a (2 * n + 2)) (13 / 15)
+    (Qle_plus_nonneg_r (lp_odd n) (lp_a (2 * n + 2))
+      (sc_lpa_nonneg (2 * n + 2)))
+    (sc_lp_ev_le_s2 n)).
 Qed.
 
 (* 下界（n ≥ 3）：lp_odd 3 ≤ lp_odd n *)
@@ -2894,7 +2887,7 @@ Proof. unfold lp_four. unfold Qlt; simpl; lia. Qed.
 Lemma sc_lp_four_nonneg : Qle 0 lp_four.
 Proof.
   (* ToyR 替换：Z 层直构（消 Qlt_le_weak→sc_lp_four_pos 转发链）：
-     lp_four 定义展开为字面和，Qle 展开 = 交叉积 Z.le，线性判定闭合 *)
+     lp_four 定义展开为字面和，Qle 展开 = 交叉积 Z.le，线性判定收口 *)
   unfold Qle, lp_four.
   simpl.
   lia.
@@ -2903,10 +2896,8 @@ Qed.
 (* 差分归约：m ≤ n ⟹ lp_odd n − lp_odd m ≥ 0 *)
 Lemma sc_lp_odd_diff_nonneg : forall m n : nat, (m <= n)%nat ->
   Qle 0 (lp_odd n - lp_odd m).
-Proof.
-  intros m n Hmn.
-  apply (proj1 (Qle_minus_iff (lp_odd m) (lp_odd n))).
-  apply sc_lp_odd_chain. exact Hmn.
+Proof.  intros m n Hmn.
+  exact (proj1 (Qle_minus_iff (lp_odd m) (lp_odd n)) (sc_lp_odd_chain m n Hmn)).
 Qed.
 
 (* |4(x−y)| == 4(y−x)（x ≤ y） *)
@@ -3165,8 +3156,7 @@ Qed.
 (* Real 层：cos(2) < cos(1)（经 real_zero 传递：cos 2 < 0 < cos 1） *)
 Lemma real_cos_two_lt_one : real_lt (cauchy_real_cos (real_const 2)) (cauchy_real_cos (real_const 1)).
 Proof.
-  apply (real_lt_trans (cauchy_real_cos (real_const 2)) real_zero
-                       (cauchy_real_cos (real_const 1))).
+  apply (real_lt_trans (cauchy_real_cos (real_const 2)) real_zero (cauchy_real_cos (real_const 1))).
   - exact real_cos_two_neg.
   - exact real_cos_one_pos.
 Qed.
@@ -3423,19 +3413,15 @@ Qed.
 
 (* ---- 绝对项非负 ---- *)
 Lemma sc_sin_alt_nonneg : forall (j : nat) (x : Q), Qle 0 x -> Qle 0 (sc_sin_alt j x).
-Proof.
-  intros j x Hx0. unfold sc_sin_alt.
-  apply q_div_nonneg.
-  - apply q_pow_nonneg. exact Hx0.
-  - apply q_fact_pos.
+Proof.  intros j x Hx0. unfold sc_sin_alt.
+  exact (q_div_nonneg (q_pow x (Datatypes.S (2 * j))) (q_fact (Datatypes.S (2 * j)))
+    (q_pow_nonneg x (Datatypes.S (2 * j)) Hx0) (q_fact_pos (Datatypes.S (2 * j)))).
 Qed.
 
 Lemma sc_cos_alt_nonneg : forall (j : nat) (x : Q), Qle 0 x -> Qle 0 (sc_cos_alt j x).
-Proof.
-  intros j x Hx0. unfold sc_cos_alt.
-  apply q_div_nonneg.
-  - apply q_pow_nonneg. exact Hx0.
-  - apply q_fact_pos.
+Proof.  intros j x Hx0. unfold sc_cos_alt.
+  exact (q_div_nonneg (q_pow x (2 * j)) (q_fact (2 * j))
+    (q_pow_nonneg x (2 * j) Hx0) (q_fact_pos (2 * j))).
 Qed.
 
 (* ---- 符号因子辅助：q_pow (−1) 在奇/偶指标 ---- *)
@@ -3999,10 +3985,7 @@ Qed.
 (* ---- q_pow 三次严格单调：0 < a < b → a³ < b³ ---- *)
 Lemma sc_qmul_lt_l : forall x y z : Q, Qlt 0 x -> Qlt y z -> Qlt (x * y) (x * z).
 Proof.
-  intros x y z Hx Hyz.
-  rewrite (Qmult_comm x y).
-  rewrite (Qmult_comm x z).
-  apply (Qmult_lt_compat_r y z x Hx). exact Hyz.
+intros x y z Hx Hyz. rewrite (Qmult_comm x y). rewrite (Qmult_comm x z). exact (Qmult_lt_compat_r y z x Hx Hyz).
 Qed.
 
 Lemma sc_qpow3_lt : forall a b : Q, Qlt 0 a -> Qlt a b -> Qlt (q_pow a 3) (q_pow b 3).
@@ -4032,13 +4015,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
 Lemma sc_qpow_dec : forall (x : Q) (m : nat), Qle 0 x -> Qle x 1 ->
   Qle (q_pow x (Datatypes.S m)) (q_pow x m).
 Proof.
-  intros x m Hx0 Hx1.
-  rewrite (q_pow_succ x m).
-  apply (Qle_trans _ (1 * q_pow x m) _).
-  - apply (Qmult_le_compat_r x 1 (q_pow x m)).
-    + exact Hx1.
-    + apply q_pow_nonneg. exact Hx0.
-  - apply qeq_le. ring.
+intros x m Hx0 Hx1. rewrite (q_pow_succ x m). exact (Qle_trans (x * q_pow x m) (1 * q_pow x m) (q_pow x m) (Qmult_le_compat_r x 1 (q_pow x m) Hx1 (q_pow_nonneg x m Hx0)) (qeq_le (1 * q_pow x m) (q_pow x m) (Qmult_1_l (q_pow x m)))).
 Qed.
 
 (* ---- q_pow 正 ---- *)
@@ -4985,7 +4962,7 @@ Lemma real_x_cube_poly_ext : forall X Y : Real,
   real_eq (real_plus X (real_opp (real_mult (real_mult X (real_mult X X)) (real_const (1 / 6)))))
           (real_plus Y (real_opp (real_mult (real_mult Y (real_mult Y Y)) (real_const (1 / 6))))).
 Proof.
-  intros X Y Hxy.
+intros X Y Hxy.
   apply RealSetoid.real_eq_plus_compat.
   - exact Hxy.
   - apply RealSetoid.real_eq_opp_compat.
@@ -5003,12 +4980,18 @@ Lemma real_half_sq_poly_ext : forall X Y : Real,
           (real_plus (real_const 1) (real_opp (real_mult (real_mult Y Y) (real_const (1 / 2))))).
 Proof.
   intros X Y Hxy.
-  apply RealSetoid.real_eq_plus_compat.
-  - exact (real_eq_refl (real_const 1)).
-  - apply RealSetoid.real_eq_opp_compat.
-    apply RealSetoid.real_eq_mult_compat.
-    + apply RealSetoid.real_eq_mult_compat; exact Hxy.
-    + exact (real_eq_refl (real_const (1 / 2))).
+  exact (RealSetoid.real_eq_plus_compat (real_const 1)
+    (real_opp (real_mult (real_mult X X) (real_const (1 / 2))))
+    (real_const 1)
+    (real_opp (real_mult (real_mult Y Y) (real_const (1 / 2))))
+    (real_eq_refl (real_const 1))
+    (RealSetoid.real_eq_opp_compat
+      (real_mult (real_mult X X) (real_const (1 / 2)))
+      (real_mult (real_mult Y Y) (real_const (1 / 2)))
+      (RealSetoid.real_eq_mult_compat (real_mult X X)
+        (real_const (1 / 2)) (real_mult Y Y) (real_const (1 / 2))
+        (RealSetoid.real_eq_mult_compat X X Y Y Hxy Hxy)
+        (real_eq_refl (real_const (1 / 2)))))).
 Qed.
 
 (* ---- 求值：X³/6 型多项式在 X := real_const 1 处 == 5/6 ---- *)
@@ -5247,7 +5230,7 @@ Proof.
   - rewrite IH. reflexivity.
 Qed.
 
-(* ---- B 部分（检验 16a 成果，原样复用） ---- *)
+(* ---- B 部分（探针 16a 成果，原样复用） ---- *)
 Lemma sc_cs_eo_raw : forall (m : nat), (1 <= m)%nat ->
   sum_upto (m + 1) (fun i : nat => Qinv (q_fact (2 * i) * q_fact (2 * m - 2 * i))) ==
   sum_upto m (fun i : nat => Qinv (q_fact (2 * i + 1) * q_fact (2 * m - 2 * i - 1))).
@@ -5408,7 +5391,7 @@ Proof.
   rewrite (Qmult_0_r (q_pow t (2 * m))). reflexivity.
 Qed.
 
-(* ---- C0：行拆分（检验 16b 成果） ---- *)
+(* ---- C0：行拆分（探针 16b 成果） ---- *)
 Lemma sc_sum_tail_split : forall (n m : nat) (h : nat -> Q), (m <= n)%nat ->
   sum_upto (Datatypes.S n) h ==
   sum_upto (Datatypes.S (n - m)) h +
@@ -5447,9 +5430,7 @@ Lemma sc_cos_sq_split : forall (t : Q) (n : nat),
   sum_upto (Datatypes.S n) (fun j : nat => sum_upto (Datatypes.S (n - j)) (fun i : nat => cos_term j t * cos_term i t)) +
   sum_upto (Datatypes.S n) (fun j : nat => sum_upto j (fun k : nat => cos_term j t * cos_term (Datatypes.S (n - j) + k)%nat t)).
 Proof.
-  intros t n.
-  rewrite (sc_cos_partial_upto n t).
-  apply (sc_sq_rect_split (fun j : nat => cos_term j t) n).
+intros t n. rewrite (sc_cos_partial_upto n t). exact (sc_sq_rect_split (fun j : nat => cos_term j t) n).
 Qed.
 
 Lemma sc_sin_sq_split : forall (t : Q) (n : nat),
@@ -5518,10 +5499,7 @@ Lemma sc_cs_deg_van_x : forall (t : Q) (m : nat), (1 <= m)%nat ->
   (q_pow (-1) (m - 1) * q_pow t (2 * m)) *
     sum_upto m (fun i : nat => Qinv (q_fact (2 * i + 1) * q_fact (2 * m - 2 * i - 1))) == 0.
 Proof.
-  intros t m Hm.
-  rewrite <- (sc_cs_cdeg_sum t m).
-  rewrite <- (sc_cs_ddeg_sum t m Hm).
-  apply sc_cs_deg_van. exact Hm.
+intros t m Hm. rewrite <- (sc_cs_cdeg_sum t m). rewrite <- (sc_cs_ddeg_sum t m Hm). exact (sc_cs_deg_van t m Hm).
 Qed.
 
 (* C3.2 三角 cos 侧 == 对角和：tri_c == Σ_{k=0}^{n} X_c(k)·E_raw(k) *)
@@ -5791,16 +5769,26 @@ Lemma sc_cs_cabs_pair : forall (t B : Q) (i : nat),
                               q_pow B (2 * i + 1) / q_fact (2 * i + 1)).
 Proof.
   intros t B i HB HtB.
-  apply (Qle_trans _ (q_pow B (2 * i) / q_fact (2 * i)) _).
-  - (* |c_i| == G'_{2i}(|t|) == |q_pow t (2i)/q_fact (2i)| ≤ G_{2i}(B) *)
-    apply (Qle_trans _ (q_pow (Qabs t) (2 * i) / q_fact (2 * i)) _).
-    + apply qeq_le. exact (sc_abs_cos_term i t).
-    + apply (Qle_trans _ (Qabs (q_pow t (2 * i) / q_fact (2 * i))) _).
-      * apply qeq_le. exact (sc_qabs_pow_even t i).
-      * apply (q_abs_pow_fact_le t B (2 * i)); assumption.
-  - apply (Qle_plus_nonneg_r (q_pow B (2 * i) / q_fact (2 * i))
-            (q_pow B (2 * i + 1) / q_fact (2 * i + 1))).
-    apply (q_pow_fact_nonneg B (2 * i + 1)). exact HB.
+  exact (Qle_trans (Qabs (cos_term i t))
+    (q_pow B (2 * i) / q_fact (2 * i))
+    (q_pow B (2 * i) / q_fact (2 * i) +
+     q_pow B (2 * i + 1) / q_fact (2 * i + 1))
+    (Qle_trans (Qabs (cos_term i t))
+      (q_pow (Qabs t) (2 * i) / q_fact (2 * i))
+      (q_pow B (2 * i) / q_fact (2 * i))
+      (qeq_le (Qabs (cos_term i t))
+        (q_pow (Qabs t) (2 * i) / q_fact (2 * i))
+        (sc_abs_cos_term i t))
+      (Qle_trans (q_pow (Qabs t) (2 * i) / q_fact (2 * i))
+        (Qabs (q_pow t (2 * i) / q_fact (2 * i)))
+        (q_pow B (2 * i) / q_fact (2 * i))
+        (qeq_le (q_pow (Qabs t) (2 * i) / q_fact (2 * i))
+          (Qabs (q_pow t (2 * i) / q_fact (2 * i)))
+          (sc_qabs_pow_even t i))
+        (q_abs_pow_fact_le t B (2 * i) HB HtB)))
+    (Qle_plus_nonneg_r (q_pow B (2 * i) / q_fact (2 * i))
+      (q_pow B (2 * i + 1) / q_fact (2 * i + 1))
+      (q_pow_fact_nonneg B (2 * i + 1) HB))).
 Qed.
 
 (* B2：0 ≤ B ∧ |t| ≤ B ⟹ |sin_term i t| ≤ G_{2i} + G_{2i+1} *)
@@ -6422,12 +6410,7 @@ Qed.
 (* ---- 辅助：左乘单调（Qmult_le_compat_r 只给右乘；此经 comm 双跳） ---- *)
 Lemma sc_qmult_le_l : forall (a b c : Q), Qle a b -> Qle 0 c -> Qle (c * a) (c * b).
 Proof.
-  intros a b c Hab Hc0.
-  apply (Qle_trans _ (a * c) _).
-  - apply qeq_le. ring.
-  - apply (Qle_trans _ (b * c) _).
-    + apply (Qmult_le_compat_r a b c); [exact Hab | exact Hc0].
-    + apply qeq_le. ring.
+intros a b c Hab Hc0. exact (Qle_trans (c * a) (a * c) (c * b) (qeq_le (c * a) (a * c) (Qmult_comm c a)) (Qle_trans (a * c) (b * c) (c * b) (Qmult_le_compat_r a b c Hab Hc0) (qeq_le (b * c) (c * b) (Qmult_comm b c)))).
 Qed.
 
 (* ---- 模量：∀eps ∃N，n ≥ N、|t| ≤ B ⟹ |c_n²+s_n²−1| < eps ---- *)
@@ -6725,7 +6708,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* SC-1 检验（批 19b-1，轮 20/21）：cos 单调差级数路线·代数地基 *)
+(* SC-1 探针（批 19b-1，轮 20/21）：cos 单调差级数路线·代数地基 *)
 (*   cos y − cos x = (y²−x²)·Σ_{k≥1} (−1)^{k−1} A_k/(2k)!       *)
 (*   本批：B0 平方幂桥、(q−p) 幂差分因子、q_pow 单调、常和       *)
 (*   下批：A_k 递减链 → 交替部分和 ≥ 1/2−(p+q)/24 ≥ 1/6          *)
@@ -7035,10 +7018,10 @@ Lemma sc_t_nonneg : forall (p q : Q) (k : nat),
 Proof.
   intros p q k Hp0 Hq0.
   unfold Qdiv.
-  apply Qmult_le_0_compat.
-  - apply (sc_A_nonneg p q k Hp0 Hq0).
-  - apply (Qlt_le_weak 0 (Qinv (q_fact (2 * k)))).
-    apply Qinv_lt_0_compat. apply q_fact_pos.
+  exact (Qmult_le_0_compat (sc_A p q k) (Qinv (q_fact (2 * k)))
+    (sc_A_nonneg p q k Hp0 Hq0)
+    (Qlt_le_weak 0 (Qinv (q_fact (2 * k)))
+      (Qinv_lt_0_compat (q_fact (2 * k)) (q_fact_pos (2 * k))))).
 Qed.
 
 (* 单步恒等 *)
@@ -7468,14 +7451,14 @@ Qed.
 
 (* ============================================================ *)
 (* SC-1 批 19d-1（轮 24）：cos 零点二分·测试机械               *)
-(*   cos 在 (3/2, 5/3) 变号 → 副本 log 论证 Chunk 5 approx_root *)
+(*   cos 在 (3/2, 5/3) 变号 → 镜像 log 论证 Chunk 5 approx_root *)
 (*   测试（目标 real_zero 精确，r 侧恒 0 简化）：cos_testA       *)
 (*   （cos m < 0）/cos_testB（0 < cos m）/双假缺陷              *)
 (*   （|cos m| ≤ 3·d4 == 3eps/16）——cos 零点 π/2 二分论证地基   *)
 (* 纪律：纯构造性 Set 层、零 承认、零经典。                    *)
 (* ============================================================ *)
 
-(* cos 点模量（副本 exp_partial_cauchy；经 sc_cos_partial_cauchy_bounded + 平凡界 |x| ≤ |x|） *)
+(* cos 点模量（镜像 exp_partial_cauchy；经 sc_cos_partial_cauchy_bounded + 平凡界 |x| ≤ |x|） *)
 Lemma cos_partial_cauchy : forall (x : Q) (eps : Q), Qlt 0 eps ->
   sigT (fun N : nat => forall m n : nat, (N <= m)%nat -> (N <= n)%nat ->
     QltT (Qabs (cos_partial m x - cos_partial n x)) eps).
@@ -7954,10 +7937,8 @@ Lemma cos_abs_lift : forall (m : Q) (M γ : Q) (N0 : nat),
   (forall k : nat, (N0 <= k)%nat -> Qle (Qabs (projT1 (cauchy_real_cos (real_const m)) k - projT1 real_zero k)) M) ->
   real_lt (real_abs (real_plus (cauchy_real_cos (real_const m)) (real_opp real_zero)))
           (real_const (M + γ)).
-Proof.
-  intros m M γ N0 Hγ Hpt.
-  apply (real_abs_diff_le_lift (cauchy_real_cos (real_const m)) real_zero M γ N0 Hγ).
-  exact Hpt.
+Proof.  intros m M γ N0 Hγ Hpt.
+  exact (real_abs_diff_le_lift (cauchy_real_cos (real_const m)) real_zero M γ N0 Hγ Hpt).
 Qed.
 
 (* 缺陷分支：逐点 |cos m_k − 0_k| ≤ 3·d4（k ≥ N0）⟹ real_lt |cos m − 0| (real_const eps)
@@ -8843,9 +8824,7 @@ Lemma real_pi_leibniz_between_tenthirds :
   And (real_lt (real_const 3) cauchy_real_pi_leibniz)
       (real_lt cauchy_real_pi_leibniz (real_const (10 / 3))).
 Proof.
-  split.
-  - exact real_pi_leibniz_gt_three.
-  - exact real_pi_leibniz_lt_ten_thirds.
+  split. - exact real_pi_leibniz_gt_three. - exact real_pi_leibniz_lt_ten_thirds.
 Qed.
 
 (* ============================================================ *)
@@ -8918,10 +8897,8 @@ Qed.
 
 (* ---- 1c：sin(π/2) > 0（real_sin_pos_lt_two 于 X := cos_pi_half） ---- *)
 Lemma real_sin_pi_half_pos : real_lt real_zero (cauchy_real_sin cos_pi_half).
-Proof.
-  apply (real_sin_pos_lt_two cos_pi_half).
-  - exact real_lt_zero_cos_pi_half.
-  - exact real_lt_cos_pi_half_two.
+Proof.  exact (real_sin_pos_lt_two cos_pi_half real_lt_zero_cos_pi_half
+    real_lt_cos_pi_half_two).
 Qed.
 
 (* ---- 1d：正平方根 == 1 桥：x² == 1 ∧ 0 < x ⟹ x == 1 ---- *)
@@ -9314,7 +9291,7 @@ Proof.
 Qed.
 
 (* ---------- C2：Real 层 cos_pi_half < 5/3（上括号） ----------
-   同下括号副本：eps := (1/400)/C、N := S t₂（log_eps n < 1/400） *)
+   同下括号镜像：eps := (1/400)/C、N := S t₂（log_eps n < 1/400） *)
 Lemma real_lt_cos_pi_half_five_thirds : real_lt cos_pi_half (real_const (5 / 3)).
 Proof.
   destruct (exp_series_arch 2 (qltT_leT' 0 2 qltT_0_2)) as [C [HC1 HC]].
@@ -9403,9 +9380,7 @@ Lemma real_pi_geom_between :
   And (real_lt (real_const 3) real_pi_geom)
       (real_lt real_pi_geom (real_const (10 / 3))).
 Proof.
-  split.
-  - exact real_pi_geom_gt_three.
-  - exact real_pi_geom_lt_ten_thirds.
+  split. - exact real_pi_geom_gt_three. - exact real_pi_geom_lt_ten_thirds.
 Qed.
 
 (* ============================================================ *)
@@ -9471,7 +9446,7 @@ Proof.
 Qed.
 
 (* ---- 2. 主目标：cos 在 (3/2, 2) 的零点唯一 == cos_pi_half ----
-   副本既有 cos_pi_half_unique（61618 区）的 eps 装配：
+   镜像既有 cos_pi_half_unique（61618 区）的 eps 装配：
    w 侧上端点 5/3 → 2（real_lt_upper_pt 2）、w 逐点上界 Qle w_n 2、
    z 侧逐点上界经 Qle (5/3) 2 传递、逆界换 cos_inv_dist_le2。   *)
 Lemma cos_pi_half_unique_widened : forall (w : Real),
@@ -9782,7 +9757,7 @@ Qed.
 (* ============================================================ *)
 (* SC-2 批 5（并入 196）：T-π3 Phase 1 外围                  *)
 (*   π_L·(1/2) ∈ (3/2, 5/3) 严格 Real 括号 + 常数/回代工具    *)
-(*   子代理 sD 检验改名并入（零 crux 依赖；crux 版留模板）      *)
+(*   子代理 sD 探针改名并入（零 crux 依赖；crux 版留模板）      *)
 (* ============================================================ *)
 
 Definition w_leibniz : Real := real_mult cauchy_real_pi_leibniz (real_const (1 / 2)).
@@ -9822,30 +9797,36 @@ Proof. apply real_mult_comm. Qed.
 Lemma real_pi_leibniz_half_lower : real_lt (real_const (3 / 2)) w_leibniz.
 Proof.
   unfold w_leibniz.
-  (* 链：3/2 == (1/2)·3 < (1/2)·π_L == π_L·(1/2) == w *)
-  apply (real_eq_lt_lt (real_const (3 / 2)) (real_mult (real_const (1 / 2)) (real_const 3)) _).
-  - apply real_eq_sym. exact real_half_const_three.
-  - apply (real_lt_eq_lt _ (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz) _).
-    + apply (real_lt_mult_compat (real_const 3) cauchy_real_pi_leibniz (real_const (1 / 2))).
-      * exact real_half_pos.
-      * exact real_pi_leibniz_gt_three.
-    + exact real_half_pi_leibniz_comm.
+  exact (real_eq_lt_lt (real_const (3 / 2))
+    (real_mult (real_const (1 / 2)) (real_const 3))
+    (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+    (real_eq_sym (real_mult (real_const (1 / 2)) (real_const 3))
+      (real_const (3 / 2)) real_half_const_three)
+    (real_lt_eq_lt (real_mult (real_const (1 / 2)) (real_const 3))
+      (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz)
+      (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+      (real_lt_mult_compat (real_const 3) cauchy_real_pi_leibniz
+        (real_const (1 / 2)) real_half_pos real_pi_leibniz_gt_three)
+      real_half_pi_leibniz_comm)).
 Qed.
 
 Lemma real_pi_leibniz_half_upper : real_lt w_leibniz (real_const (5 / 3)).
 Proof.
   unfold w_leibniz.
-  (* 链：w == π_L·(1/2) == (1/2)·π_L < (1/2)·(10/3) == 5/3 *)
-  apply (real_eq_lt_lt (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
-                       (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz)
-                       (real_const (5 / 3))).
-  - apply real_eq_sym. exact real_half_pi_leibniz_comm.
-  - apply (real_lt_eq_lt _ (real_mult (real_const (1 / 2)) (real_const (10 / 3)))
-                          (real_const (5 / 3))).
-    + apply (real_lt_mult_compat cauchy_real_pi_leibniz (real_const (10 / 3)) (real_const (1 / 2))).
-      * exact real_half_pos.
-      * exact real_pi_leibniz_lt_ten_thirds.
-    + exact real_half_const_ten_thirds.
+  exact (real_eq_lt_lt
+    (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+    (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz)
+    (real_const (5 / 3))
+    (real_eq_sym (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz)
+      (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+      real_half_pi_leibniz_comm)
+    (real_lt_eq_lt (real_mult (real_const (1 / 2)) cauchy_real_pi_leibniz)
+      (real_mult (real_const (1 / 2)) (real_const (10 / 3)))
+      (real_const (5 / 3))
+      (real_lt_mult_compat cauchy_real_pi_leibniz
+        (real_const (10 / 3)) (real_const (1 / 2)) real_half_pos
+        real_pi_leibniz_lt_ten_thirds)
+      real_half_const_ten_thirds)).
 Qed.
 
 (* ============ 乘 2 回代：2·(π_L·(1/2)) == π_L ============ *)
@@ -10710,10 +10691,7 @@ Lemma sc_add_sinc_prod_sq : forall (x y : Q) (n : nat),
   sin_partial n x * cos_partial n y ==
   sum_upto (Datatypes.S n) (fun i : nat => sum_upto (Datatypes.S n) (fun k : nat => sin_term i x * cos_term k y)).
 Proof.
-  intros x y n.
-  rewrite (sc_sin_partial_upto n x).
-  rewrite (sc_cos_partial_upto n y).
-  apply (sum_upto_prod n n (fun i : nat => sin_term i x) (fun k : nat => cos_term k y)).
+intros x y n. rewrite (sc_sin_partial_upto n x). rewrite (sc_cos_partial_upto n y). exact (sum_upto_prod n n (fun i : nat => sin_term i x) (fun k : nat => cos_term k y)).
 Qed.
 
 (* ============================================================ *)
@@ -10723,10 +10701,7 @@ Lemma sc_add_csin_prod_sq : forall (x y : Q) (n : nat),
   cos_partial n x * sin_partial n y ==
   sum_upto (Datatypes.S n) (fun i : nat => sum_upto (Datatypes.S n) (fun k : nat => cos_term i x * sin_term k y)).
 Proof.
-  intros x y n.
-  rewrite (sc_cos_partial_upto n x).
-  rewrite (sc_sin_partial_upto n y).
-  apply (sum_upto_prod n n (fun i : nat => cos_term i x) (fun k : nat => sin_term k y)).
+intros x y n. rewrite (sc_cos_partial_upto n x). rewrite (sc_sin_partial_upto n y). exact (sum_upto_prod n n (fun i : nat => cos_term i x) (fun k : nat => sin_term k y)).
 Qed.
 
 (* ============================================================ *)
@@ -10955,10 +10930,7 @@ Lemma sc_prod_le : forall (p q P Q : Q),
   Qle 0 p -> Qle 0 q -> Qle p P -> Qle q Q -> Qle 0 P ->
   Qle (p * q) (P * Q).
 Proof.
-  intros p q P Q Hp Hq HpP HqQ HP0.
-  apply (Qle_trans _ (P * q) _).
-  - apply (Qmult_le_compat_r p P q); [exact HpP | exact Hq].
-  - apply (sc_qmult_le_l q Q P); [exact HqQ | exact HP0].
+intros p q P Q Hp Hq HpP HqQ HP0. exact (Qle_trans (p * q) (P * q) (P * Q) (Qmult_le_compat_r p P q HpP Hq) (sc_qmult_le_l q Q P HqQ HP0)).
 Qed.
 
 (* ============================================================ *)
@@ -11371,10 +11343,7 @@ Lemma sc_add_cc_prod_sq : forall (x y : Q) (n : nat),
   cos_partial n x * cos_partial n y ==
   sum_upto (Datatypes.S n) (fun i : nat => sum_upto (Datatypes.S n) (fun k : nat => cos_term i x * cos_term k y)).
 Proof.
-  intros x y n.
-  rewrite (sc_cos_partial_upto n x).
-  rewrite (sc_cos_partial_upto n y).
-  apply (sum_upto_prod n n (fun i : nat => cos_term i x) (fun k : nat => cos_term k y)).
+intros x y n. rewrite (sc_cos_partial_upto n x). rewrite (sc_cos_partial_upto n y). exact (sum_upto_prod n n (fun i : nat => cos_term i x) (fun k : nat => cos_term k y)).
 Qed.
 
 (* ============================================================ *)
@@ -11384,10 +11353,7 @@ Lemma sc_add_ss_prod_sq : forall (x y : Q) (n : nat),
   sin_partial n x * sin_partial n y ==
   sum_upto (Datatypes.S n) (fun i : nat => sum_upto (Datatypes.S n) (fun k : nat => sin_term i x * sin_term k y)).
 Proof.
-  intros x y n.
-  rewrite (sc_sin_partial_upto n x).
-  rewrite (sc_sin_partial_upto n y).
-  apply (sum_upto_prod n n (fun i : nat => sin_term i x) (fun k : nat => sin_term k y)).
+intros x y n. rewrite (sc_sin_partial_upto n x). rewrite (sc_sin_partial_upto n y). exact (sum_upto_prod n n (fun i : nat => sin_term i x) (fun k : nat => sin_term k y)).
 Qed.
 
 (* ============================================================ *)
@@ -12214,13 +12180,13 @@ Qed.
 (* ============================================================ *)
 (* SC-2 批（并入 202）：B1 setoid 签名迁移——论文 2 头条等号簇 *)
 (* 三定理迁移到 RealInterfaceEnhancedSetoid 签名（sB0/sB1，     *)
-(* 用户 P0：主定理配套已完成实例 RealEnhancedReal）       *)
+(* 用户 P0：旗舰定理配套已完成实例 RealEnhancedReal）       *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* b1_attngibbs_setoid.v — B1：AttentionGibbsBridge 等号簇 3 头条 *)
 (* 签名迁移：Id 系签名（RealInterfaceEnhanced）→ Setoid 系签名   *)
-(* （RealInterfaceEnhancedSetoid，实例 RealEnhancedReal 可依存） *)
+(* （RealInterfaceEnhancedSetoid，实例 RealEnhancedReal 可消费） *)
 (* 沙箱：演变\.ablation\sc2_parallel\sB1_migrate\（只写沙箱）    *)
 (* 契约：sB0 第 0 项迁移规范。*)
 (* 路线 = 上提：以 Real 层 req 链证明（real_attention_is_gibbs     *)
@@ -12304,7 +12270,7 @@ Definition partition_function_setoid (z : S -> R) : R :=
 Lemma partition_function_pos_setoid :
   forall z : S -> R, lt zero (partition_function_setoid z).
 Proof.
-  intros z.
+intros z.
   unfold partition_function_setoid, exp_pos_fn_setoid.
   apply sum_pos_preserved_req.
   intro s. apply exp_neg_pos.
@@ -12318,7 +12284,7 @@ Definition softmax_setoid (z : S -> R) (s : S) : R :=
 Lemma softmax_pos_setoid :
   forall z : S -> R, forall s : S, lt zero (softmax_setoid z s).
 Proof.
-  intros z s.
+intros z s.
   unfold softmax_setoid, exp_pos_fn_setoid.
   apply mult_positive.
   - apply exp_neg_pos.
@@ -12329,7 +12295,7 @@ Qed.
    + lt_le_iff + req_sym 派生——按规范 §7 不立诚实接口 Variable） *)
 Lemma exp_neg_req_compat_setoid : forall x y : R, req x y -> req (exp_neg x) (exp_neg y).
 Proof.
-  intros x y Hxy.
+intros x y Hxy.
   apply (le_antisym (exp_neg x) (exp_neg y)).
   - apply (exp_neg_le_decr y x).
     apply (lt_le_iff y x). right. apply (req_sym x y Hxy).
@@ -12343,7 +12309,7 @@ Qed.
 Lemma softmax_normalized_setoid :
   forall z : S -> R, req (sum_req_over_S (fun s : S => softmax_setoid z s)) one.
 Proof.
-  intro z.
+intro z.
   unfold softmax_setoid.
   apply (req_trans _ (sum_req_over_S (fun s : S =>
         mult (inv_pos (partition_function_setoid z) (partition_function_pos_setoid z))
@@ -12392,7 +12358,7 @@ Definition boltzmann_dist_attn_setoid (s : S) : R :=
   mult (inv_pos Z_thermo_setoid Z_thermo_pos) (boltzmann_factor_setoid s).
 
 (* ============================================================ *)
-(* B1-4：单位温度 softmax = Boltzmann（主定理 1/3 迁移）           *)
+(* B1-4：单位温度 softmax = Boltzmann（旗舰 1/3 迁移）           *)
 (*   语句：Id 27823-27827 的 Id→req 版（Real 42359-42363 同型） *)
 (*   证明：Real 42364-42404 上提：req_trans / req_mult_compat /  *)
 (*   req_opp_compat 换为 exp_neg_req_compat_setoid（接口无 exp_neg *)
@@ -12456,7 +12422,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B1-5：详细平衡 ⟹ Boltzmann 分布是稳态（主定理 3/3 迁移）        *)
+(* B1-5：详细平衡 ⟹ Boltzmann 分布是稳态（旗舰 3/3 迁移）        *)
 (*   诚实接口：detailed_balance + transition_normalization      *)
 (*   （RealAttnSteady 42437-42446 同款；Id 27886-27894 同款）    *)
 (* ============================================================ *)
@@ -12472,14 +12438,14 @@ Variable detailed_balance : forall (s s' : S),
 Variable transition_normalization : forall s : S,
   req (sum_req_over_S (fun s' : S => transition s s')) one.
 
-(* 稳态方程（主）：Σ_s' p(s')·T(s',s) == p(s)
+(* 稳态方程（旗舰）：Σ_s' p(s')·T(s',s) == p(s)
    组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s)
    → 核归一化 → mult_one 证毕（Real 层对应件上提） *)
 Theorem steady_state_boltzmann_attn_setoid : forall s : S,
   req (sum_req_over_S (fun s' : S => mult (boltzmann_dist_attn_setoid s') (transition s' s)))
       (boltzmann_dist_attn_setoid s).
 Proof.
-  intro s.
+intro s.
   (* 1. 逐点 detailed balance 替换：Σ (p s'·T s' s) == Σ (p s·T s s') *)
   apply (req_trans _ (sum_req_over_S (fun s' : S => mult (boltzmann_dist_attn_setoid s) (transition s s'))) _).
   - apply (sum_req_over_S_ext (fun s' : S => mult (boltzmann_dist_attn_setoid s') (transition s' s))
@@ -12500,14 +12466,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B1-3：Boltzmann 分布归一化（主定理 2/3 迁移）                   *)
+(* B1-3：Boltzmann 分布归一化（旗舰 2/3 迁移）                   *)
 (*   Id 27963-27969 直证（6 行：sum linear + inv_pos_correct）；  *)
 (*   Real 层无独立佐证（平凡）；此处 req 化直证                  *)
 (* ============================================================ *)
 Lemma boltzmann_normalized_attn_setoid :
   req (sum_req_over_S boltzmann_dist_attn_setoid) one.
 Proof.
-  unfold boltzmann_dist_attn_setoid.
+unfold boltzmann_dist_attn_setoid.
   apply (req_trans _ (mult (inv_pos Z_thermo_setoid Z_thermo_pos)
                            (sum_req_over_S boltzmann_factor_setoid)) _).
   - apply (sum_req_over_S_linear (inv_pos Z_thermo_setoid Z_thermo_pos) boltzmann_factor_setoid).

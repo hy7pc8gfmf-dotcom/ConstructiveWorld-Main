@@ -16,7 +16,7 @@
 (* 替换定理清单：partition_function_pos（原逐句转发 → 定义层展开＋逐点正性断言单列＋求和保正接口显式实例化装配）。                                          *)
 (* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
 (*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
-(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明闭合语句     *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
 (*   闭尾；文件尾附假设面打印锚。                                   *)
 (* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
 (* ============================================================ *)
@@ -64,20 +64,12 @@ Lemma inner_sopp_l : forall x y : S,
   Id (inner (sopp x) y) (opp (inner x y)).
 Proof.
   intros x y.
-  (* sopp x = smult (opp one) x：经 smult_one + smult_opp *)
-  assert (Hsm : Id (smult (opp one) x) (sopp (smult one x)))
-    by exact (smult_opp one x).
-  assert (Hone : Id (smult one x) x)
-    by exact (smult_one x).
-  assert (Hsopp : Id (smult (opp one) x) (sopp x))
-    by exact (id_trans Hsm (id_cong sopp Hone)).
-  (* 用 inner_smult_l：⟨smult (opp one) x, y⟩ = (opp one)·⟨x,y⟩ = opp ⟨x,y⟩ *)
-  assert (Hinner : Id (inner (smult (opp one) x) y) (mult (opp one) (inner x y)))
-    by exact (inner_smult_l (opp one) x y).
-  apply (id_trans (id_sym (id_cong (fun z => inner z y) Hsopp))).
-  exact (id_trans Hinner (id_trans (opp_mult_r one (inner x y))
-                                   (id_cong opp (id_trans (mult_comm one (inner x y))
-                                                          (mult_one (inner x y)))))).
+  exact (id_trans (id_sym (id_cong (fun z => inner z y)
+                     (id_trans (smult_opp one x) (id_cong sopp (smult_one x)))))
+           (id_trans (inner_smult_l (opp one) x y)
+              (id_trans (opp_mult_r one (inner x y))
+                 (id_cong opp (id_trans (mult_comm one (inner x y))
+                                        (mult_one (inner x y))))))).
 Qed.
 
 (* 零向量与任意向量的内积为零：⟨0, y⟩ = 0（经 splus_opp + inner_splus_l） *)
@@ -85,21 +77,10 @@ Lemma inner_szero_l : forall y : S,
   Id (inner szero y) zero.
 Proof.
   intro y.
-  (* szero = splus y (sopp y)（splus_opp 的对称） *)
-  assert (Hz : Id (splus y (sopp y)) szero)
-    by exact (splus_opp y).
-  apply (id_trans (id_sym (id_cong (fun z => inner z y) Hz))).
-  (* ⟨y + (-y), y⟩ = ⟨y,y⟩ + ⟨-y,y⟩ = ⟨y,y⟩ + (-⟨y,y⟩) = 0 *)
-  assert (Hl : Id (inner (splus y (sopp y)) y) (plus (inner y y) (inner (sopp y) y)))
-    by exact (inner_splus_l y (sopp y) y).
-  assert (Hsopp : Id (inner (sopp y) y) (opp (inner y y)))
-    by exact (inner_sopp_l y y).
-  assert (Hsum : Id (plus (inner y y) (inner (sopp y) y))
-                    (plus (inner y y) (opp (inner y y))))
-    by exact (id_cong (fun t => plus (inner y y) t) Hsopp).
-  assert (Hopp : Id (plus (inner y y) (opp (inner y y))) zero)
-    by exact (plus_opp (inner y y)).
-  exact (id_trans Hl (id_trans Hsum Hopp)).
+  exact (id_trans (id_sym (id_cong (fun z => inner z y) (splus_opp y)))
+           (id_trans (inner_splus_l y (sopp y) y)
+              (id_trans (id_cong (fun t => plus (inner y y) t) (inner_sopp_l y y))
+                 (plus_opp (inner y y))))).
 Qed.
 
 (* 投影幂等性需要额外假设（proj_linear + proj_orthogonal 不足以证明
@@ -1021,9 +1002,9 @@ Lemma half_le_self : forall a : R, le zero a ->
   le (mult (inv_pos (plus one one) two_pos) a) a.
 Proof.
   intros a Ha.
-  apply (le_trans _ (mult one a) _).
-  - apply (le_mult_compat_weak _ _ _ Ha half_le_one).
-  - exact (le_id_l (mult one a) a a (id_trans (mult_comm one a) (mult_one a)) (le_refl a)).
+  exact (le_trans (mult (inv_pos (plus one one) two_pos) a) (mult one a) a
+           (le_mult_compat_weak (inv_pos (plus one one) two_pos) one a Ha half_le_one)
+           (le_id_l (mult one a) a a (id_trans (mult_comm one a) (mult_one a)) (le_refl a))).
 Qed.
 
 (* 链式法则（P1 皇冠：构造性 ε-δ 完整证明）。
@@ -1775,18 +1756,11 @@ Lemma set_quad_prod : forall t : R,
      (minus t (mult t (mult t t))).
 Proof.
   intros t.
-  (* 段1：(t−t²)·(1+t) == (t−t²)·1 + (t−t²)·t [distrib 左分配：a·(b+c)] *)
-  pose proof (distrib (minus t (mult t t)) one t) as H1.
-  (* 段2a：(t−t²)·1 == t−t² [mult_one] *)
-  (* 段2b：(t−t²)·t == t·t − t·(t·t)：
-        mult_comm 换 → mult t (minus t (mult t t))，再 set_minus_mult t t (mult t t) *)
-  pose proof (mult_comm (minus t (mult t t)) t) as Hcomm.
-  pose proof (set_minus_mult t t (mult t t)) as Hmm.
-  pose proof (id_trans Hcomm Hmm) as H2b.
-  pose proof (id_cong2 plus (mult_one (minus t (mult t t))) H2b) as H2.
-  (* 段3：环化简 (t−t²) + (t²−t³) == t−t³ [set_quad_cube] *)
-  pose proof (set_quad_cube t) as H3.
-  exact (id_trans H1 (id_trans H2 H3)).
+  exact (id_trans (distrib (minus t (mult t t)) one t)
+           (id_trans (id_cong2 plus (mult_one (minus t (mult t t)))
+                        (id_trans (mult_comm (minus t (mult t t)) t)
+                           (set_minus_mult t t (mult t t))))
+              (set_quad_cube t))).
 Qed.
 
 (* t−t³ ≤ t（t³ ≥ 0 ⟹ −t³ ≤ 0 ⟹ t+(−t³) ≤ t+0） *)
@@ -2578,13 +2552,9 @@ Qed.
 Theorem smetric_sminus_zero : forall u v : S,
   Id (smetric (sminus u v) szero) (smetric u v).
 Proof.
-  intros u v.
-  (* smetric (sminus u v) szero == snorm (sminus (sminus u v) szero)（smetric_snorm）
-     == snorm (sminus u v)（sminus_sminus_szero）
-     == smetric u v（smetric_snorm 反向）。 *)
-  apply (id_trans (smetric_snorm (sminus u v) szero)).
-  apply (id_trans (id_cong snorm (sminus_sminus_szero u v))).
-  apply (id_sym (smetric_snorm u v)).
+
+  intros u v. exact (id_trans (smetric_snorm (sminus u v) szero) (id_trans (id_cong snorm (sminus_sminus_szero u v)) (id_sym (smetric_snorm u v)))).
+
 Qed.
 
 (* 伴随接口（诚实 Variable）：线性算子 L : S -> S 的伴随 L* : S -> S 满足
@@ -3698,7 +3668,7 @@ Qed.
 Definition partition_function_scaled (c : R) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult c (z s))).
 
-(* 缩放配分正性：exp 恒正 × sum_pos_preserved（副本 L27471-27479） *)
+(* 缩放配分正性：exp 恒正 × sum_pos_preserved（镜像 L27471-27479） *)
 Lemma partition_function_scaled_pos :
   forall c z, lt zero (partition_function_scaled c z).
 Proof.
@@ -3716,7 +3686,7 @@ Definition softmax_scaled (c : R) (z : logits) (s : S) : R :=
   mult (exp_pos_fn (mult c (z s)))
        (inv_pos (partition_function_scaled c z) (partition_function_scaled_pos c z)).
 
-(* 缩放族概率公理：正性（副本 softmax_temp_pos L27486-27494） *)
+(* 缩放族概率公理：正性（镜像 softmax_temp_pos L27486-27494） *)
 Theorem softmax_scaled_pos :
   forall c z s, lt zero (softmax_scaled c z s).
 Proof.
@@ -3727,7 +3697,7 @@ Proof.
   - apply inv_pos_pos.
 Qed.
 
-(* 缩放族概率公理：归一化（副本 softmax_temp_normalized L27496-27517） *)
+(* 缩放族概率公理：归一化（镜像 softmax_temp_normalized L27496-27517） *)
 Theorem softmax_scaled_normalized :
   forall c z, Id (sum_over_S (fun s => softmax_scaled c z s)) one.
 Proof.
@@ -3756,7 +3726,7 @@ Qed.
 Definition partition_function_temp_param (T0 : R) (HT0 : lt zero T0) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult (inv_pos T0 HT0) (z s))).
 
-(* 温度参数化配分正性（副本 L27471-27479） *)
+(* 温度参数化配分正性（镜像 L27471-27479） *)
 Lemma partition_function_temp_param_pos :
   forall T0 HT0 z, lt zero (partition_function_temp_param T0 HT0 z).
 Proof.
@@ -3787,12 +3757,9 @@ Theorem scale_temp_duality :
   forall (c : R) (Hc : lt zero c) (z : logits) (s : S),
     Id (softmax_scaled (inv_pos c Hc) z s) (softmax_temp_param c Hc z s).
 Proof.
-  intros c Hc z s.
-  unfold softmax_scaled, softmax_temp_param.
-  apply (id_cong (fun x => mult (exp_pos_fn (mult (inv_pos c Hc) (z s))) x)).
-  exact (inv_pos_ext (partition_function_scaled (inv_pos c Hc) z) (partition_function_temp_param c Hc z)
-                     (partition_function_scaled_pos (inv_pos c Hc) z) (partition_function_temp_param_pos c Hc z)
-                     id_refl).
+
+  intros c Hc z s. unfold softmax_scaled, softmax_temp_param. exact (id_cong (fun x => mult (exp_pos_fn (mult (inv_pos c Hc) (z s))) x) (inv_pos_ext (partition_function_scaled (inv_pos c Hc) z) (partition_function_temp_param c Hc z) (partition_function_scaled_pos (inv_pos c Hc) z) (partition_function_temp_param_pos c Hc z) id_refl)).
+
 Qed.
 
 (* 反向对称：温度 c 的 softmax == 以 1/c 缩放的 softmax（id_sym） *)
@@ -3934,17 +3901,14 @@ Qed.
 (* ============================================================ *)
 
 (* 桥：1/T 缩放族 == 库内温度化 softmax（配分函数定义性相等，    *)
-(* inv_pos_ext + id_refl；scale_temp_duality c := T + 副本合成） *)
+(* inv_pos_ext + id_refl；scale_temp_duality c := T + 镜像合成） *)
 Lemma scale_inv_T_eq_softmax_temp :
   forall (s : S),
     Id (softmax_scaled (inv_pos T T_pos) z s) (softmax_temp z s).
 Proof.
-  intros s.
-  unfold softmax_scaled, softmax_temp.
-  apply (id_cong (fun x => mult (exp_pos_fn (mult (inv_pos T T_pos) (z s))) x)).
-  exact (inv_pos_ext (partition_function_scaled (inv_pos T T_pos) z) (partition_function_temp z)
-                     (partition_function_scaled_pos (inv_pos T T_pos) z) (partition_function_temp_pos z)
-                     id_refl).
+
+  intros s. unfold softmax_scaled, softmax_temp. exact (id_cong (fun x => mult (exp_pos_fn (mult (inv_pos T T_pos) (z s))) x) (inv_pos_ext (partition_function_scaled (inv_pos T T_pos) z) (partition_function_temp z) (partition_function_scaled_pos (inv_pos T T_pos) z) (partition_function_temp_pos z) id_refl)).
+
 Qed.
 
 (* 合成：缩放-温度对偶 + attention_is_gibbs_temp（1/T = 1/D、     *)
@@ -4051,19 +4015,17 @@ Definition attention_step (mu : S -> R) (s' : S) : R :=
 (* ============ 引理 1：1−δ > 0 ============ *)
 Lemma one_minus_delta_pos : lt zero (minus one delta).
 Proof.
-  unfold minus.
-  apply (lt_id_l zero (plus delta (opp delta)) (plus one (opp delta))
-               (id_sym (plus_opp delta))
-               (lt_plus_compat_lt_le delta one (opp delta) (opp delta) delta_lt_one (le_refl (opp delta)))).
+
+  unfold minus. exact (lt_id_l zero (plus delta (opp delta)) (plus one (opp delta)) (id_sym (plus_opp delta)) (lt_plus_compat_lt_le delta one (opp delta) (opp delta) delta_lt_one (le_refl (opp delta)))).
+
 Qed.
 
 (* ============ 引理 2：Boltzmann 分布归一化 ============ *)
 Lemma boltzmann_normalized_attn : Id (sum_over_S boltzmann_dist_attn) one.
 Proof.
-  unfold boltzmann_dist_attn.
-  apply (id_trans (sum_over_S_linear (inv_pos Z_thermo Z_thermo_pos) boltzmann_factor)).
-  apply (id_trans (mult_comm (inv_pos Z_thermo Z_thermo_pos) Z_thermo)
-                  (inv_pos_correct Z_thermo Z_thermo_pos)).
+
+  unfold boltzmann_dist_attn. exact (id_trans (sum_over_S_linear (inv_pos Z_thermo Z_thermo_pos) boltzmann_factor) (id_trans (mult_comm (inv_pos Z_thermo Z_thermo_pos) Z_thermo) (inv_pos_correct Z_thermo Z_thermo_pos))).
+
 Qed.
 
 (* ============ 引理 3：残差核 Q ============ *)
@@ -4087,20 +4049,9 @@ Qed.
 (* Q 行归一化：Σ_{s'} Q(s,s') == one *)
 Lemma q_kernel_normalized : forall s, Id (sum_over_S (fun s' => q_kernel s s')) one.
 Proof.
-  intro s.
-  unfold q_kernel.
-  apply (id_trans (sum_over_S_linear (inv_pos (minus one delta) one_minus_delta_pos)
-                                     (fun s' => minus (transition s s') (mult delta (boltzmann_dist_attn s'))))).
-  apply (id_trans (id_cong (fun x => mult (inv_pos (minus one delta) one_minus_delta_pos) x)
-                           (id_trans (sum_over_S_minus (fun s' => transition s s')
-                                                       (fun s' => mult delta (boltzmann_dist_attn s')))
-                                     (id_cong2 minus (transition_normalization s)
-                                                (id_trans (sum_over_S_linear delta boltzmann_dist_attn)
-                                                          (id_cong (fun x => mult delta x) boltzmann_normalized_attn)))))).
-  apply (id_trans (id_cong (fun x => mult (inv_pos (minus one delta) one_minus_delta_pos) x)
-                           (id_cong (fun y => minus one y) (mult_one delta)))).
-  apply (id_trans (mult_comm (inv_pos (minus one delta) one_minus_delta_pos) (minus one delta))
-                  (inv_pos_correct (minus one delta) one_minus_delta_pos)).
+
+  intro s. unfold q_kernel. exact (id_trans (sum_over_S_linear (inv_pos (minus one delta) one_minus_delta_pos) (fun s' => minus (transition s s') (mult delta (boltzmann_dist_attn s')))) (id_trans (id_cong (fun x => mult (inv_pos (minus one delta) one_minus_delta_pos) x) (id_trans (sum_over_S_minus (fun s' => transition s s') (fun s' => mult delta (boltzmann_dist_attn s'))) (id_cong2 minus (transition_normalization s) (id_trans (sum_over_S_linear delta boltzmann_dist_attn) (id_cong (fun x => mult delta x) boltzmann_normalized_attn))))) (id_trans (id_cong (fun x => mult (inv_pos (minus one delta) one_minus_delta_pos) x) (id_cong (fun y => minus one y) (mult_one delta))) (id_trans (mult_comm (inv_pos (minus one delta) one_minus_delta_pos) (minus one delta)) (inv_pos_correct (minus one delta) one_minus_delta_pos))))).
+
 Qed.
 
 (* ============ 引理 4：T 分解 T == δ·p + (1−δ)·Q ============ *)
@@ -4217,11 +4168,9 @@ Qed.
 Lemma minus_plus_swap_cc : forall a b c : R,
   Id (minus (plus a b) c) (plus b (minus a c)).
 Proof.
-  intros a b c.
-  unfold minus.
-  apply (id_trans (id_sym (plus_assoc a b (opp c)))).
-  apply (id_trans (id_cong (fun x => plus a x) (plus_comm b (opp c)))).
-  apply (id_trans (plus_assoc a (opp c) b) (plus_comm (plus a (opp c)) b)).
+
+  intros a b c. unfold minus. exact (id_trans (id_sym (plus_assoc a b (opp c))) (id_trans (id_cong (fun x => plus a x) (plus_comm b (opp c))) (id_trans (plus_assoc a (opp c) b) (plus_comm (plus a (opp c)) b)))).
+
 Qed.
 
 (* 辅助：minus (mult a b) b == opp (mult (minus one a) b) *)
@@ -4246,25 +4195,18 @@ Qed.
 Lemma plus_cancel_cc : forall a b c : R,
   Id (plus a b) c -> Id b (minus c a).
 Proof.
-  intros a b c H.
-  unfold minus.
-  apply (id_trans (id_sym (id_trans (plus_comm zero b) (plus_zero b)))).
-  apply (id_trans (id_cong (fun x => plus x b) (id_sym (plus_opp a)))).
-  apply (id_trans (id_sym (plus_assoc a (opp a) b))).
-  apply (id_trans (id_cong (fun x => plus a x) (plus_comm (opp a) b))).
-  apply (id_trans (plus_assoc a b (opp a))).
-  apply (id_cong (fun x => plus x (opp a)) H).
+
+  intros a b c H. unfold minus. exact (id_trans (id_sym (id_trans (plus_comm zero b) (plus_zero b))) (id_trans (id_cong (fun x => plus x b) (id_sym (plus_opp a))) (id_trans (id_sym (plus_assoc a (opp a) b)) (id_trans (id_cong (fun x => plus a x) (plus_comm (opp a) b)) (id_trans (plus_assoc a b (opp a)) (id_cong (fun x => plus x (opp a)) H)))))).
+
 Qed.
 
 (* 辅助：inv 吸收 mult (inv c) (mult c a) == a *)
 Lemma absorb_inv_cc : forall (c : R) (Hc : lt zero c) (a : R),
   Id (mult (inv_pos c Hc) (mult c a)) a.
 Proof.
-  intros c Hc a.
-  apply (id_trans (mult_assoc (inv_pos c Hc) c a)).
-  apply (id_trans (id_cong (fun x => mult x a)
-                           (id_trans (mult_comm (inv_pos c Hc) c) (inv_pos_correct c Hc)))).
-  apply (id_trans (mult_comm one a) (mult_one a)).
+
+  intros c Hc a. exact (id_trans (mult_assoc (inv_pos c Hc) c a) (id_trans (id_cong (fun x => mult x a) (id_trans (mult_comm (inv_pos c Hc) c) (inv_pos_correct c Hc))) (id_trans (mult_comm one a) (mult_one a)))).
+
 Qed.
 
 (* Boltzmann 分布正性 *)
@@ -4290,9 +4232,9 @@ Qed.
 (* 1−δ < 1（delta > 0） *)
 Lemma one_minus_delta_lt_one : lt (minus one delta) one.
 Proof.
-  unfold minus.
-  apply (lt_id_r (plus one (opp delta)) (plus one zero) one (plus_zero one)
-                 (lt_plus_compat_le_lt one one (opp delta) zero (le_refl one) (lt_zero_opp delta delta_pos))).
+
+  unfold minus. exact (lt_id_r (plus one (opp delta)) (plus one zero) one (plus_zero one) (lt_plus_compat_le_lt one one (opp delta) zero (le_refl one) (lt_zero_opp delta delta_pos))).
+
 Qed.
 
 (* 稳态保持：p·Q == p（p·T==p 与分解结合） *)
@@ -4335,29 +4277,13 @@ Lemma attention_diff_decomp : forall mu s',
      (mult (minus one delta)
            (sum_over_S (fun s => mult (minus (mu s) (boltzmann_dist_attn s)) (q_kernel s s')))).
 Proof.
-  intros mu s' Hmu_norm.
-  apply (id_trans (id_cong (fun x => minus x (boltzmann_dist_attn s'))
-                           (attention_step_decomp mu s' Hmu_norm))).
-  apply (id_trans (minus_plus_swap_cc (mult delta (boltzmann_dist_attn s'))
-                                      (mult (minus one delta) (sum_over_S (fun s => mult (mu s) (q_kernel s s'))))
-                                      (boltzmann_dist_attn s'))).
-  apply (id_trans (id_cong (fun x => plus (mult (minus one delta) (sum_over_S (fun s => mult (mu s) (q_kernel s s')))) x)
-                           (minus_scal_opp_cc delta (boltzmann_dist_attn s')))).
-  apply (id_trans (id_sym (mult_minus_distr_l (minus one delta)
-                                              (sum_over_S (fun s => mult (mu s) (q_kernel s s')))
-                                              (boltzmann_dist_attn s')))).
-  apply (id_cong (fun x => mult (minus one delta) x)
-                 (id_trans (id_cong (fun x => minus (sum_over_S (fun s => mult (mu s) (q_kernel s s'))) x)
-                                    (id_sym (boltzmann_q_fixed s')))
-                           (id_trans (id_sym (sum_over_S_minus (fun s => mult (mu s) (q_kernel s s'))
-                                                               (fun s => mult (boltzmann_dist_attn s) (q_kernel s s'))))
-                                     (id_sym (sum_over_S_ext _ _ (fun s => id_trans (mult_comm (minus (mu s) (boltzmann_dist_attn s)) (q_kernel s s'))
-                                                                                    (id_trans (mult_minus_distr_l (q_kernel s s') (mu s) (boltzmann_dist_attn s))
-                                                                                              (id_cong2 minus (mult_comm (q_kernel s s') (mu s)) (mult_comm (q_kernel s s') (boltzmann_dist_attn s)))))))))).
+
+  intros mu s' Hmu_norm. exact (id_trans (id_cong (fun x => minus x (boltzmann_dist_attn s')) (attention_step_decomp mu s' Hmu_norm)) (id_trans (minus_plus_swap_cc (mult delta (boltzmann_dist_attn s')) (mult (minus one delta) (sum_over_S (fun s => mult (mu s) (q_kernel s s')))) (boltzmann_dist_attn s')) (id_trans (id_cong (fun x => plus (mult (minus one delta) (sum_over_S (fun s => mult (mu s) (q_kernel s s')))) x) (minus_scal_opp_cc delta (boltzmann_dist_attn s'))) (id_trans (id_sym (mult_minus_distr_l (minus one delta) (sum_over_S (fun s => mult (mu s) (q_kernel s s'))) (boltzmann_dist_attn s'))) (id_cong (fun x => mult (minus one delta) x) (id_trans (id_cong (fun x => minus (sum_over_S (fun s => mult (mu s) (q_kernel s s'))) x) (id_sym (boltzmann_q_fixed s'))) (id_trans (id_sym (sum_over_S_minus (fun s => mult (mu s) (q_kernel s s')) (fun s => mult (boltzmann_dist_attn s) (q_kernel s s')))) (id_sym (sum_over_S_ext _ _ (fun s => id_trans (mult_comm (minus (mu s) (boltzmann_dist_attn s)) (q_kernel s s')) (id_trans (mult_minus_distr_l (q_kernel s s') (mu s) (boltzmann_dist_attn s)) (id_cong2 minus (mult_comm (q_kernel s s') (mu s)) (mult_comm (q_kernel s s') (boltzmann_dist_attn s)))))))))))))).
+
 Qed.
 
 
-(* ============ 段 3：TV 收缩主定理 ============ *)
+(* ============ 段 3：TV 收缩旗舰 ============ *)
 
 (* |Σ f·Q| ≤ Σ |f|·Q（abs_sum_le + 接口字段 abs_mult + Q ≥ 0） *)
 Lemma abs_kernel_bound : forall (f : S -> R) (s' : S),
@@ -4427,30 +4353,20 @@ Lemma tv_reduce_cc : forall (f : S -> R),
   Id (mult inv_two (sum_over_S (fun s' => mult (minus one delta) (sum_over_S (fun s => mult (f s) (q_kernel s s'))))))
      (mult (minus one delta) (mult inv_two (sum_over_S f))).
 Proof.
-  intros f.
-  apply (id_trans (id_cong (fun x => mult inv_two x)
-                           (id_trans (sum_over_S_linear (minus one delta) (fun s' => sum_over_S (fun s => mult (f s) (q_kernel s s'))))
-                                     (id_cong (fun x => mult (minus one delta) x)
-                                              (id_trans (id_sym (sum_swap_cc (fun s s' => mult (f s) (q_kernel s s'))))
-                                                        (id_trans (sum_over_S_ext _ _ (fun s => sum_over_S_linear (f s) (fun s2 => q_kernel s s2)))
-                                                                  (id_trans (sum_over_S_ext _ _ (fun s => id_cong (fun x => mult (f s) x) (q_kernel_normalized s)))
-                                                                            (sum_over_S_ext _ _ (fun s => mult_one (f s)))))))))).
-  apply (id_trans (mult_assoc inv_two (minus one delta) (sum_over_S f))).
-  apply (id_trans (id_cong (fun x => mult x (sum_over_S f)) (mult_comm inv_two (minus one delta)))).
-  apply (id_sym (mult_assoc (minus one delta) inv_two (sum_over_S f))).
+
+  intros f. exact (id_trans (id_cong (fun x => mult inv_two x) (id_trans (sum_over_S_linear (minus one delta) (fun s' => sum_over_S (fun s => mult (f s) (q_kernel s s')))) (id_cong (fun x => mult (minus one delta) x) (id_trans (id_sym (sum_swap_cc (fun s s' => mult (f s) (q_kernel s s')))) (id_trans (sum_over_S_ext _ _ (fun s => sum_over_S_linear (f s) (fun s2 => q_kernel s s2))) (id_trans (sum_over_S_ext _ _ (fun s => id_cong (fun x => mult (f s) x) (q_kernel_normalized s))) (sum_over_S_ext _ _ (fun s => mult_one (f s))))))))) (id_trans (mult_assoc inv_two (minus one delta) (sum_over_S f)) (id_trans (id_cong (fun x => mult x (sum_over_S f)) (mult_comm inv_two (minus one delta))) (id_sym (mult_assoc (minus one delta) inv_two (sum_over_S f)))))).
+
 Qed.
 
 (* |c·b| ≤ c·|b|（c ≥ 0） *)
 Lemma abs_mult_nonneg_cc : forall a b, le zero a -> le (abs (mult a b)) (mult a (abs b)).
 Proof.
-  intros a b Ha.
-  apply (le_id_l (abs (mult a b)) (mult a (abs b)) (mult a (abs b))
-                 (id_trans (abs_mult a b)
-                           (id_cong (fun x => mult x (abs b)) (abs_ge_zero_id_cc a Ha)))
-                 (le_refl _)).
+
+  intros a b Ha. exact (le_id_l (abs (mult a b)) (mult a (abs b)) (mult a (abs b)) (id_trans (abs_mult a b) (id_cong (fun x => mult x (abs b)) (abs_ge_zero_id_cc a Ha))) (le_refl _)).
+
 Qed.
 
-(* ============ 主定理：单步 TV 收缩（Doeblin） ============ *)
+(* ============ 旗舰：单步 TV 收缩（Doeblin） ============ *)
 Theorem attention_tv_contraction :
   forall mu, Id (sum_over_S mu) one -> (forall s, le zero (mu s)) ->
     le (tv_dist (attention_step mu) boltzmann_dist_attn)
@@ -4646,8 +4562,9 @@ Theorem eviction_db_breaking_bound :
     le (db_breaking s s')
        (mult (abs (energy s)) (plus (abs (energy s')) one)).
 Proof.
-  intros s s'.
-  apply fluctuation_dissipation_bound.
+
+  intros s s'. exact (fluctuation_dissipation_bound s s').
+
 Qed.
 
 (* ============================================================ *)
@@ -5564,7 +5481,9 @@ Definition topk_renorm (s : S) : R :=
 (* 辅助：单参 boltzmann_factor 正性（Section 内自证；全局 boltzmann_factor_pos 是两参版） *)
 Lemma boltzmann_factor_pos_attn : forall s : S, lt zero (boltzmann_factor s).
 Proof.
-  intro s. unfold boltzmann_factor. apply exp_neg_pos.
+
+  intro s. unfold boltzmann_factor. exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
+
 Qed.
 
 (* 辅助：if 项非负（keep 时 b > 0，else 0） *)
@@ -5628,9 +5547,9 @@ Qed.
 (* 辅助：inv one == one（id_sym (mult_one) + comm + inv_pos_correct） *)
 Lemma inv_one_cc : Id (inv_pos one one_pos) one.
 Proof.
-  apply (id_trans (id_sym (mult_one (inv_pos one one_pos)))).
-  apply (id_trans (mult_comm (inv_pos one one_pos) one)).
-  apply (inv_pos_correct one one_pos).
+
+  exact (id_trans (id_sym (mult_one (inv_pos one one_pos))) (id_trans (mult_comm (inv_pos one one_pos) one) (inv_pos_correct one one_pos))).
+
 Qed.
 
 (* 辅助：opp zero == zero（Section 内自证，防前向引用） *)
@@ -5666,8 +5585,9 @@ Qed.
 (* 辅助：minus x zero == x（opp zero == zero + plus_zero） *)
 Lemma minus_zero_cc : forall x : R, Id (minus x zero) x.
 Proof.
-  intro x. unfold minus.
-  apply (id_trans (id_cong (fun z => plus x z) (opp_zero_cc)) (plus_zero x)).
+
+  intro x. unfold minus. exact (id_trans (id_cong (fun z => plus x z) (opp_zero_cc)) (plus_zero x)).
+
 Qed.
 
 (* 逐点恒等（keep 分支，条件化）：|b/Z − b/Z_keep| == b·(1/Z_keep − 1/Z)
@@ -6204,7 +6124,9 @@ Definition minp_temp_sum (prefix : list Token) : R :=
 Lemma pick_max_token_correct : forall prefix,
   Id (markov_kernel prefix (pick_max_token prefix)) (max_markov_prob prefix).
 Proof.
-  intro prefix. unfold max_markov_prob, pick_max_token. apply id_refl.
+
+  intro prefix. unfold max_markov_prob, pick_max_token. exact id_refl.
+
 Qed.
 
 (* 引理：pick_max_token 满足 Min-P 条件（自包含性，保证截断集非空） *)
@@ -6416,7 +6338,9 @@ Lemma markov_kernel_unfold : forall (prefix : list Token) (w : Token),
            (inv_pos (partition_temp prefix)
                     (partition_temp_pos prefix))).
 Proof.
-  intros prefix w. unfold markov_kernel, temp_factor, partition_temp. apply id_refl.
+
+  intros prefix w. unfold markov_kernel, temp_factor, partition_temp. exact id_refl.
+
 Qed.
 
 (* ===== T2 保留者 minp 核展开 ===== *)
@@ -6709,27 +6633,9 @@ Lemma minp_dropped_mass_le_one_minus_max : forall prefix,
   le (minp_dropped_mass prefix)
      (minus one (max_markov_prob prefix)).
 Proof.
-  intro prefix. unfold minp_dropped_mass.
-  (* 目标：1 − inv_p·minp_sum ≤ 1 − max（由 inv_p·minp_sum ≥ max：opp 反向 + 平移） *)
-  apply (le_id_l (plus one (opp (mult (inv_pos (partition_temp prefix)
-                                                (partition_temp_pos prefix))
-                                       (minp_temp_sum prefix))))
-                 (minus one (mult (inv_pos (partition_temp prefix)
-                                            (partition_temp_pos prefix))
-                                   (minp_temp_sum prefix)))
-                 (minus one (max_markov_prob prefix))
-                 (id_refl)
-                 (le_plus_compat one one
-                                 (opp (mult (inv_pos (partition_temp prefix)
-                                                     (partition_temp_pos prefix))
-                                            (minp_temp_sum prefix)))
-                                 (opp (max_markov_prob prefix))
-                                 (le_refl one)
-                                 (opp_le_compat (max_markov_prob prefix)
-                                                (mult (inv_pos (partition_temp prefix)
-                                                               (partition_temp_pos prefix))
-                                                      (minp_temp_sum prefix))
-                                                (minp_scaled_sum_ge_max prefix)))).
+
+  intro prefix. unfold minp_dropped_mass. exact (le_id_l (plus one (opp (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (minp_temp_sum prefix)))) (minus one (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (minp_temp_sum prefix))) (minus one (max_markov_prob prefix)) (id_refl) (le_plus_compat one one (opp (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (minp_temp_sum prefix))) (opp (max_markov_prob prefix)) (le_refl one) (opp_le_compat (max_markov_prob prefix) (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (minp_temp_sum prefix)) (minp_scaled_sum_ge_max prefix)))).
+
 Qed.
 
 Definition minp_threshold_p (mp : R) (prefix : list Token) : R :=
@@ -7817,11 +7723,11 @@ End TopPSampling.
 (* ============================================================ *)
 
 (* ============================================================
-   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自检验 _dbg_kdr.v）
+   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自探针 _dbg_kdr.v）
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
    metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），
-       同文件全局冲突（检验不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
+       同文件全局冲突（探针不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
    ============================================================ *)
 
 (* ============ Core 版接口（阶段 3 组装目标）：无 exp/log 字段 ============

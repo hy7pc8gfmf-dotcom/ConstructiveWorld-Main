@@ -87,6 +87,7 @@ UpReqMisc5B.v
 UpReqPPOGapB.v
 UpReqSLM.v
 UpStopTime.v
+UpAblP4_UpStopTime_PA.v
 UpAlignIdReq.v
 UpReqCauchy.v
 UpReqRDF.v
@@ -533,6 +534,8 @@ UpAblD1S15_UpReqAlign3.v
 UpAblD1S16_UpReqMixTime.v
 UpAblD1S17_UpReqAttnGibbs.v
 UpAblD1S17_UpReqDpoLoss.v
+UpAblDeltaStarSuboptimal.v
+UpAblDeltaStarGeneral.v
 UpAblP2T1_CertB.v
 UpAblP2T1_CertC.v
 UpAblAbsQFeed.v

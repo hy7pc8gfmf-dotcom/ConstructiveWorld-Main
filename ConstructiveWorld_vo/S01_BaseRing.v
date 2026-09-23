@@ -1,10 +1,10 @@
 (* ============================================================ *)
 (* 【ToyR 包F 切片七·信任根本体替换稿】S01_BaseRing.v —— 基于 Main 基线           *)
-(*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 核验微刀＋尾嵌       *)
+(*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 对账微刀＋尾嵌       *)
 (*   假设审计三连。                                                               *)
 (*   信任根警示：本件为全役信任根本体（全下游件依赖）。本稿为谨慎位微刀稿：          *)
 (*   仅挑三枚 reflexivity 正体位（@id_refl 命名恒等元），零深水区动刀。              *)
-(*   并入时下游全链摘要失效须全链重编，建议单独批次并入。                           *)
+(*   收编时下游全链摘要失效须全链重编，建议单独批次收编。                           *)
 (*   三微刀：core_claim5_holds(normalized_prob 位)／core_claim3_holds             *)
 (*   (entropy_gradient 位)／core_claim5_holds(boltzmann_prob 位)——                 *)
 (*   各 reflexivity 战术改为 @id_refl 命名恒等元显式正体，语句面零动。              *)
@@ -364,15 +364,12 @@ Lemma plus_inv_unique :
   forall a b c : R, Id (plus a b) zero -> Id (plus a c) zero -> Id b c.
 Proof.
   intros a b c Hab Hac.
-  pose proof (id_sym (plus_zero b)) as H1.                 (* b = b + 0 *)
-  pose proof (id_cong (fun x => plus b x) (id_sym Hac)) as H2.
-                                                           (* b + 0 = b + (a + c) *)
-  pose proof (plus_assoc b a c) as H3.                     (* b + (a + c) = (b + a) + c *)
-  pose proof (id_cong (fun x => plus x c) (plus_comm b a)) as H4.
-                                                           (* (b + a) + c = (a + b) + c *)
-  pose proof (id_cong (fun x => plus x c) Hab) as H5.      (* (a + b) + c = 0 + c *)
-  pose proof (id_trans (plus_comm zero c) (plus_zero c)) as H6.  (* 0 + c = c *)
-  exact (id_trans H1 (id_trans H2 (id_trans H3 (id_trans H4 (id_trans H5 H6))))).
+  exact (id_trans (id_sym (plus_zero b))
+  (id_trans (id_cong (fun x => plus b x) (id_sym Hac))
+  (id_trans (plus_assoc b a c)
+  (id_trans (id_cong (fun x => plus x c) (plus_comm b a))
+  (id_trans (id_cong (fun x => plus x c) Hab)
+  (id_trans (plus_comm zero c) (plus_zero c))))))).
 Qed.
 
 (* 负号对加法分配：opp (a+b) = (-a) + (-b) *)
@@ -436,37 +433,7 @@ Lemma double_neg :
   forall a : R, Id (opp (opp a)) a.
 Proof.
   intros a.
-  apply id_sym.  (* 目标变为 Id a (opp (opp a)) *)
-
-  (* 1. Id a (plus a zero) *)
-  pose proof (plus_zero a) as H1.
-  pose proof (id_sym H1) as H2.    (* Id a (plus a zero) *)
-
-  (* 2. zero = plus (opp a) (opp (opp a)) *)
-  pose proof (plus_opp (opp a)) as H3.
-    (* Id (plus (opp a) (opp (opp a))) zero *)
-  pose proof (id_sym H3) as H4.    (* Id zero (plus (opp a) (opp (opp a))) *)
-
-  (* 3. plus a zero = plus a (plus (opp a) (opp (opp a))) *)
-  pose proof (id_cong (fun x => plus a x) H4) as H5.
-
-  (* 4. plus a (plus (opp a) (opp (opp a))) = plus (plus a (opp a)) (opp (opp a)) *)
-  pose proof (plus_assoc a (opp a) (opp (opp a))) as H6.
-
-  (* 5. plus a (opp a) = zero *)
-  pose proof (plus_opp a) as H10.  (* Id (plus a (opp a)) zero *)
-
-  (* 6. plus (plus a (opp a)) (opp (opp a)) = plus zero (opp (opp a)) *)
-  pose proof (id_cong (fun x => plus x (opp (opp a))) H10) as H7.
-
-  (* 7. plus zero (opp (opp a)) = plus (opp (opp a)) zero *)
-  pose proof (plus_comm zero (opp (opp a))) as H8.
-
-  (* 8. plus (opp (opp a)) zero = opp (opp a) *)
-  pose proof (plus_zero (opp (opp a))) as H12.
-
-  (* 将所有等式串联 *)
-  exact (id_trans H2 (id_trans H5 (id_trans H6 (id_trans H7 (id_trans H8 H12))))).
+  exact (id_sym (id_trans (id_sym (plus_zero a)) (id_trans (id_cong (fun x => plus a x) (id_sym (plus_opp (opp a)))) (id_trans (plus_assoc a (opp a) (opp (opp a))) (id_trans (id_cong (fun x => plus x (opp (opp a))) (plus_opp a)) (id_trans (plus_comm zero (opp (opp a))) (plus_zero (opp (opp a))))))))).
 Qed.
 
 (* 1 ≠ 0：由 one_pos 与 lt_irrefl 推出（纯 Set 层，Empty_set 归谬） *)
@@ -513,12 +480,11 @@ Lemma plus_swap_mid :
     Id (plus (plus a b) (plus c d)) (plus (plus a c) (plus b d)).
 Proof.
   intros a b c d.
-  rewrite <- (plus_assoc a b (plus c d)).
-  rewrite (plus_assoc b c d).
-  rewrite (plus_comm b c).
-  rewrite <- (plus_assoc c b d).
-  rewrite <- (plus_assoc a c (plus b d)).
-  reflexivity.
+  exact (id_trans (id_sym (plus_assoc a b (plus c d)))
+                  (id_trans (id_cong (fun w => plus a w) (plus_assoc b c d))
+                    (id_trans (id_cong (fun w => plus a (plus w d)) (plus_comm b c))
+                      (id_trans (id_cong (fun w => plus a w) (id_sym (plus_assoc c b d)))
+                                (plus_assoc a c (plus b d)))))).
 Qed.
 
 (* 减法对加法分配：(a+b)-(c+d) = (a-c)+(b-d) *)
@@ -538,24 +504,21 @@ Qed.
 Lemma abs_plus_one_pos : forall a : R, lt zero (plus (abs a) one).
 Proof.
   intro a.
-  apply (lt_le_trans _ one _).
-  - apply one_pos.
-  - apply (le_trans _ (plus zero one) _).
-    + rewrite (plus_comm zero one). rewrite (plus_zero one). apply le_refl.
-    + apply le_plus_compat.
-      * apply abs_nonneg.
-      * apply le_refl.
+  exact (lt_le_trans zero one (plus (abs a) one) one_pos
+  (le_trans one (plus zero one) (plus (abs a) one)
+  (le_id_r one one (plus zero one)
+  (id_trans (id_sym (plus_zero one)) (id_sym (plus_comm zero one)))
+  (le_refl one))
+  (le_plus_compat zero (abs a) one one (abs_nonneg a) (le_refl one)))).
 Qed.
 
 (* b ≥ 0 时 a ≤ a + b *)
 Lemma le_plus_nonneg_r : forall a b : R, le zero b -> le a (plus a b).
 Proof.
   intros a b Hb.
-  apply (le_trans _ (plus a zero) _).
-  - rewrite (plus_zero a). apply le_refl.
-  - apply le_plus_compat.
-    + apply le_refl.
-    + exact Hb.
+  exact (le_trans a (plus a zero) (plus a b)
+  (le_id_l a (plus a zero) (plus a zero) (id_sym (plus_zero a)) (le_refl (plus a zero)))
+  (le_plus_compat a a zero b (le_refl a) Hb)).
 Qed.
 
 (* |a| ≤ |a| + 1 *)
@@ -579,11 +542,9 @@ Qed.
 Lemma log_exp_neg : forall x : R, Id (log (exp_neg x)) (opp x).
 Proof.
   intro x.
-  assert (H1 : Id (log_inv (exp_neg x)) x) by exact (log_inv_exp_neg x).
-  assert (H2 : Id (log_inv (exp_neg x)) (opp (log (exp_neg x))))
-    by exact (log_inv_log (exp_neg x) (exp_neg_pos x)).
-  assert (H3 : Id x (opp (log (exp_neg x)))) by exact (id_trans (id_sym H1) H2).
-  exact (id_trans (id_sym (double_neg (log (exp_neg x)))) (id_cong opp (id_sym H3))).
+  exact (id_trans (id_sym (double_neg (log (exp_neg x))))
+  (id_cong opp (id_sym (id_trans (id_sym (log_inv_exp_neg x))
+  (log_inv_log (exp_neg x) (exp_neg_pos x)))))).
 Qed.
 
 (* log 对逆元：log (1/x) = -log x（由 log_mult + log_one + plus_inv_unique） *)
@@ -614,11 +575,8 @@ Lemma exp_neg_opp_log :
     Id (exp_neg (opp (log x))) x.
 Proof.
   intros x Hx.
-  assert (H1 : Id (log_inv x) (opp (log x))) by exact (log_inv_log x Hx).
-  assert (H2 : Id (exp_neg (opp (log x))) (exp_neg (log_inv x)))
-    by exact (id_cong (fun t => exp_neg t) (id_sym H1)).
-  assert (H3 : Id (exp_neg (log_inv x)) x) by exact (exp_neg_log_inv x).
-  exact (id_trans H2 H3).
+  exact (id_trans (id_cong (fun t => exp_neg t) (id_sym (log_inv_log x Hx)))
+  (exp_neg_log_inv x)).
 Qed.
 
 (* exp_neg 的和差：e^{-(a+b)} = e^{-a}·e^{-b}（exp_neg_plus 反向） *)
@@ -626,13 +584,8 @@ Lemma exp_neg_opp_plus :
   forall a b : R, Id (exp_neg (opp (plus a b))) (mult (exp_neg (opp a)) (exp_neg (opp b))).
 Proof.
   intros a b.
-  assert (H1 : Id (opp (plus a b)) (plus (opp a) (opp b)))
-    by exact (opp_plus a b).
-  assert (H2 : Id (exp_neg (opp (plus a b))) (exp_neg (plus (opp a) (opp b))))
-    by exact (id_cong (fun t => exp_neg t) H1).
-  assert (H3 : Id (exp_neg (plus (opp a) (opp b))) (mult (exp_neg (opp a)) (exp_neg (opp b))))
-    by exact (exp_neg_plus (opp a) (opp b)).
-  exact (id_trans H2 H3).
+  exact (id_trans (id_cong (fun t => exp_neg t) (opp_plus a b))
+  (exp_neg_plus (opp a) (opp b))).
 Qed.
 
 (* log 对商：log (a/b) = log a - log b（由 log_mult + log_inv_one_inv） *)
@@ -640,15 +593,9 @@ Lemma log_div :
   forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
     Id (log (mult a (inv_pos b Hb))) (minus (log a) (log b)).
 Proof.
-  intros a b Ha Hb.
-  assert (Hlm : Id (log (mult a (inv_pos b Hb))) (plus (log a) (log (inv_pos b Hb))))
-    by exact (log_mult a (inv_pos b Hb) Ha (inv_pos_pos b Hb)).
-  assert (Hli : Id (log (inv_pos b Hb)) (opp (log b)))
-    by exact (log_inv_one_inv b Hb).
-  assert (Htot : Id (log (mult a (inv_pos b Hb))) (plus (log a) (opp (log b))))
-    by exact (id_trans Hlm (id_cong (fun x => plus (log a) x) Hli)).
-  unfold minus.
-  exact Htot.
+  intros a b Ha Hb. unfold minus.
+  exact (id_trans (log_mult a (inv_pos b Hb) Ha (inv_pos_pos b Hb))
+  (id_cong (fun x => plus (log a) x) (log_inv_one_inv b Hb))).
 Qed.
 
 (* 减法消元：a + (b - a) = b *)
@@ -663,13 +610,11 @@ Lemma minus_plus_cancel_r : forall a b : R, Id (minus (plus a b) a) b.
 Proof.
   intros a b.
   unfold minus.
-  rewrite <- (plus_assoc a b (opp a)).
-  rewrite (plus_comm b (opp a)).
-  rewrite (plus_assoc a (opp a) b).
-  rewrite (plus_opp a).
-  rewrite (plus_comm zero b).
-  rewrite (plus_zero b).
-  reflexivity.
+  exact (id_trans (id_sym (plus_assoc a b (opp a)))
+                  (id_trans (id_cong (fun w => plus a w) (plus_comm b (opp a)))
+                            (id_trans (plus_assoc a (opp a) b)
+                                      (id_trans (id_cong (fun x => plus x b) (plus_opp a))
+                                                (id_trans (plus_comm zero b) (plus_zero b)))))).
 Qed.
 
 (* 减法的右分配：a - (b + c) = (a - b) - c *)
@@ -693,17 +638,8 @@ Lemma abs_minus_sym :
   forall a b : R, Id (abs (minus a b)) (abs (minus b a)).
 Proof.
   intros a b.
-  (* minus a b = opp (minus b a)（opp_minus 反向） *)
-  assert (H1 : Id (minus a b) (opp (minus b a))).
-  {
-    assert (H2 : Id (opp (minus b a)) (plus (opp b) a)) by exact (opp_minus b a).
-    assert (H3 : Id (plus (opp b) a) (plus a (opp b))) by exact (plus_comm (opp b) a).
-    assert (H4 : Id (opp (minus b a)) (plus a (opp b))) by exact (id_trans H2 H3).
-    exact (id_sym H4).
-  }
-  assert (H5 : Id (abs (minus a b)) (abs (opp (minus b a)))) by exact (id_cong abs H1).
-  assert (H6 : Id (abs (opp (minus b a))) (abs (minus b a))) by exact (abs_opp (minus b a)).
-  exact (id_trans H5 H6).
+  exact (id_trans (id_cong abs (id_sym (id_trans (opp_minus b a)
+  (plus_comm (opp b) a)))) (abs_opp (minus b a))).
 Qed.
 
 (* log 对商反号：log (a/b) = -log (b/a)（由 log_div 两次 + opp_minus + double_neg） *)
@@ -751,8 +687,9 @@ Lemma le_mult_compat_r : forall a b c : R,
   le zero a -> le b c -> le (mult a b) (mult a c).
 Proof.
   intros a b c Ha Hbc.
-  rewrite (mult_comm a b). rewrite (mult_comm a c).
-  apply le_mult_compat_weak. exact Ha. exact Hbc.
+  exact (le_id_r (mult a b) (mult c a) (mult a c) (mult_comm c a)
+                 (le_id_l (mult a b) (mult b a) (mult c a) (mult_comm a b)
+                          (le_mult_compat_weak b c a Ha Hbc))).
 Qed.
 
 (* 2·((1/2)·(1/2)·e)·h = (1/2·e)·h（epsilon 份额合并） *)
@@ -935,13 +872,10 @@ Qed.
 Lemma minus_eq_cancel :
   forall a b : R, Id (minus a b) zero -> Id a b.
 Proof.
-  intros a b Hab.
-  unfold minus in Hab.
-  assert (H1 : Id (opp b) (opp a))
-    by exact (plus_inv_unique a (opp b) (opp a) Hab (plus_opp a)).
-  assert (H2 : Id (opp (opp b)) (opp (opp a))) by exact (id_cong opp H1).
-  assert (H3 : Id b (opp (opp a))) by exact (id_trans (id_sym (double_neg b)) H2).
-  exact (id_sym (id_trans H3 (double_neg a))).
+  intros a b Hab. unfold minus in Hab.
+  exact (id_sym (id_trans (id_trans (id_sym (double_neg b))
+  (id_cong opp (plus_inv_unique a (opp b) (opp a) Hab (plus_opp a))))
+  (double_neg a))).
 Qed.
 
 (* 减法自零：a = b ⟹ a - b = 0（minus_eq_cancel 的逆；逐出零破缺需要） *)
@@ -956,24 +890,13 @@ Lemma plus_cancel_zero :
   forall a b : R, Id (plus a b) a -> Id b zero.
 Proof.
   intros a b Hab.
-  (* 两边左加 -a：-a + (a + b) = -a + a = 0 *)
-  assert (H1 : Id (plus (opp a) (plus a b)) (plus (opp a) a))
-    by exact (id_cong (fun x => plus (opp a) x) Hab).
-  assert (H2 : Id (plus (opp a) (plus a b)) (plus (plus (opp a) a) b))
-    by exact (plus_assoc (opp a) a b).
-  assert (H3 : Id (plus (plus (opp a) a) b) (plus zero b))
-    by exact (id_cong (fun x => plus x b) (id_trans (plus_comm (opp a) a) (plus_opp a))).
-  assert (H4 : Id (plus zero b) b)
-    by exact (id_trans (plus_comm zero b) (plus_zero b)).
-  assert (H5 : Id (plus (plus (opp a) a) b) b)
-    by exact (id_trans H3 H4).
-  assert (H6 : Id (plus (opp a) (plus a b)) b)
-    by exact (id_trans H2 H5).
-  assert (H7 : Id (plus (opp a) a) zero)
-    by exact (id_trans (plus_comm (opp a) a) (plus_opp a)).
-  assert (H8 : Id (plus (opp a) (plus a b)) zero)
-    by exact (id_trans H1 H7).
-  exact (id_trans (id_sym H6) H8).
+  exact (id_trans
+          (id_sym (id_trans (plus_assoc (opp a) a b)
+                            (id_trans (id_cong (fun x => plus x b)
+                                               (id_trans (plus_comm (opp a) a) (plus_opp a)))
+                                      (id_trans (plus_comm zero b) (plus_zero b)))))
+          (id_trans (id_cong (fun x => plus (opp a) x) Hab)
+                    (id_trans (plus_comm (opp a) a) (plus_opp a)))).
 Qed.
 
 (* 加法左消去：a + b = a + c ⟹ b = c（由 minus_plus_cancel_r 推出） *)
@@ -981,12 +904,8 @@ Lemma plus_cancel_l :
   forall a b c : R, Id (plus a b) (plus a c) -> Id b c.
 Proof.
   intros a b c Habc.
-  assert (H1 : Id (minus (plus a b) a) (minus (plus a c) a))
-    by exact (id_cong (fun x => minus x a) Habc).
-  assert (H2 : Id (minus (plus a b) a) b) by exact (minus_plus_cancel_r a b).
-  assert (H3 : Id (minus (plus a c) a) c) by exact (minus_plus_cancel_r a c).
-  assert (H4 : Id b (minus (plus a c) a)) by exact (id_trans (id_sym H2) H1).
-  exact (id_trans H4 H3).
+  exact (id_trans (id_sym (minus_plus_cancel_r a b))
+  (id_trans (id_cong (fun x => minus x a) Habc) (minus_plus_cancel_r a c))).
 Qed.
 (* 环消去（熵差-相对熵恒等式核心）：
    由 a·(-b) = a·(-c) + a·d 且 a > 0 推出 c - b = d。
@@ -1592,9 +1511,10 @@ Theorem boltzmann_prob_pos :
 Proof.
   unfold boltzmann_prob, boltzmann_factor.
   intros L s.
-  apply mult_positive.
-  - apply inv_pos_pos.   (* 目标 lt zero (inv_pos Z Z_pos) 已含前提参数，直接解决 *)
-  - apply exp_neg_pos.
+  exact (mult_positive (inv_pos Z Z_pos)
+                       (exp_neg (mult (inv_pos D D_pos) (L s)))
+                       (inv_pos_pos Z Z_pos)
+                       (exp_neg_pos (mult (inv_pos D D_pos) (L s)))).
 Qed.
 
 Variable T_A_t : nat -> R.
@@ -2017,21 +1937,13 @@ Lemma temp_factor_antitone : forall (prefix : list Token) (w1 w2 : Token),
 Proof.
   intros prefix w1 w2 Hloss.
   unfold temp_factor.
-  (* inv T > 0：le_mult_compat_r 需非负因子 *)
-  assert (Hinv_nonneg : le zero (inv_pos temperature temperature_pos))
-    by (apply (lt_le_iff _ _); left; apply inv_pos_pos).
-  (* inv T · loss w1 ≤ inv T · loss w2（le_mult_compat_r） *)
-  assert (Hm : le (mult (inv_pos temperature temperature_pos) (total_loss (prefix ++ [w1])))
-                  (mult (inv_pos temperature temperature_pos) (total_loss (prefix ++ [w2]))))
-    by exact (le_mult_compat_r (inv_pos temperature temperature_pos)
-                               (total_loss (prefix ++ [w1])) (total_loss (prefix ++ [w2]))
-                               Hinv_nonneg Hloss).
-  (* exp_neg 递减：参数大 ⟹ 指数小 ⟹ 原值大？exp_neg_le_decr : le a b -> le (exp_neg b) (exp_neg a)。
-     Hm : le (inv·loss w1) (inv·loss w2)，取 a := inv·loss w1, b := inv·loss w2，
-     得 le (exp_neg (inv·loss w2)) (exp_neg (inv·loss w1))——正是目标（temp_factor 展开） *)
   exact (exp_neg_le_decr (mult (inv_pos temperature temperature_pos) (total_loss (prefix ++ [w1])))
                          (mult (inv_pos temperature temperature_pos) (total_loss (prefix ++ [w2])))
-                         Hm).
+                         (le_mult_compat_r (inv_pos temperature temperature_pos)
+                                           (total_loss (prefix ++ [w1])) (total_loss (prefix ++ [w2]))
+                                           (lt_le_iff zero (inv_pos temperature temperature_pos)
+                                                      (inl (inv_pos_pos temperature temperature_pos)))
+                                           Hloss)).
 Qed.
 
 (* 温度采样核反单调：损失小 ⟹ 核概率大（共同配分因子约去）。
@@ -2137,10 +2049,12 @@ Qed.
 (* 核正性（温度采样概率 > 0） *)
 Lemma markov_pos : forall prefix w, lt zero (markov_kernel prefix w).
 Proof.
-  intros prefix w. unfold markov_kernel.
-  apply mult_positive.
-  - unfold temp_factor. apply exp_neg_pos.
-  - apply inv_pos_pos.
+  intros prefix w.
+  unfold markov_kernel.
+  exact (mult_positive (temp_factor prefix w)
+                       (inv_pos (partition_temp prefix) (partition_temp_pos prefix))
+                       (exp_neg_pos (mult (inv_pos temperature temperature_pos) (total_loss (prefix ++ [w]))))
+                       (inv_pos_pos (partition_temp prefix) (partition_temp_pos prefix))).
 Qed.
 
 (* 核归一化：Σ_w P(w|prefix) = 1（概率守恒——温度采样是概率测度） *)
@@ -2149,21 +2063,15 @@ Theorem markov_normalized : forall prefix,
 Proof.
   intro prefix.
   unfold markov_kernel.
-  assert (Hext : Id (list_sum (fun w => mult (temp_factor prefix w) (inv_pos (partition_temp prefix) (partition_temp_pos prefix))) vocab)
-                   (list_sum (fun w => mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (temp_factor prefix w)) vocab))
-    by (apply list_sum_ext; intro w; apply mult_comm).
-  assert (Hlin : Id (list_sum (fun w => mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (temp_factor prefix w)) vocab)
-                    (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix))
-                          (list_sum (temp_factor prefix) vocab)))
-    by exact (list_sum_linear (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (temp_factor prefix) vocab).
-  assert (Hdef : Id (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix))
-                          (list_sum (temp_factor prefix) vocab))
-                    (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (partition_temp prefix)))
-    by reflexivity.
-  assert (Hcc : Id (mult (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (partition_temp prefix)) one)
-    by exact (id_trans (mult_comm (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (partition_temp prefix))
-                       (inv_pos_correct (partition_temp prefix) (partition_temp_pos prefix))).
-  exact (id_trans Hext (id_trans Hlin (id_trans Hdef Hcc))).
+  exact (id_trans (list_sum_ext (fun w => mult (temp_factor prefix w) (inv_pos (partition_temp
+    prefix) (partition_temp_pos prefix))) (fun w => mult (inv_pos (partition_temp prefix)
+    (partition_temp_pos prefix)) (temp_factor prefix w)) vocab (fun w => mult_comm (temp_factor
+    prefix w) (inv_pos (partition_temp prefix) (partition_temp_pos prefix)))) (id_trans
+    (list_sum_linear (inv_pos (partition_temp prefix) (partition_temp_pos prefix))
+    (temp_factor prefix) vocab) (id_trans (@id_refl R (mult (inv_pos (partition_temp prefix)
+    (partition_temp_pos prefix)) (list_sum (temp_factor prefix) vocab))) (id_trans (mult_comm
+    (inv_pos (partition_temp prefix) (partition_temp_pos prefix)) (partition_temp prefix))
+    (inv_pos_correct (partition_temp prefix) (partition_temp_pos prefix)))))).
 Qed.
 
 (* 相对恒等：P(w) = P(wstar)·e^{-(loss_w - loss_wstar)/T}（温度采样核的分解） *)
