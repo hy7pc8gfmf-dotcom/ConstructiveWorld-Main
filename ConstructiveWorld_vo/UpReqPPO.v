@@ -92,6 +92,10 @@ Hypothesis sum_linear :
   forall (a : Real) (f : S -> Real),
     req (sumf (fun s => mult a (f s))) (mult a (sumf f)).
 
+(* T5 扩槽（R120 B39 后，T4R §⑤-A2 配方）：pi_star_req canonical 签名顶入
+   sum_pos 位；Zap 槽闲置化保留（:1085/:1108 inv_pos 供给位仍在用）。 *)
+Hypothesis rppo_sum_pos :
+  forall f : S -> Real, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
 
 Hypothesis rppo_log_req_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
@@ -114,9 +118,9 @@ Definition advantage_req (p : S -> Real) (s : S) : Real :=
 Definition kl_to_ref_req (p : S -> Real) (Hp : pos_dist S p) : Real :=
   relative_entropy_req S sumf p pi_ref Hp pi_ref_pos.
 Definition rppo_pistar (s : S) : Real :=
-  pi_star_req S sumf reward beta beta_pos pi_ref Zap s.
+  pi_star_req S sumf rppo_sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
 Definition rppo_pistar_pos (s : S) : lt zero (rppo_pistar s) :=
-  req_pi_star_pos S sumf reward beta beta_pos pi_ref pi_ref_pos Zap s.
+  req_pi_star_pos S sumf rppo_sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
 Definition policy_ratio_req (pi p_old : S -> Real) (s : S) (Hpos : lt zero (p_old s)) : Real :=
   mult (pi s) (inv_pos (p_old s) Hpos).
 
@@ -1105,9 +1109,31 @@ Lemma rppo_align_free_energy_pi_star :
 Proof.
   apply (rppo_free_energy_ext_gen (align_energy_req S reward beta pi_ref pi_ref_pos) beta                                  rppo_pistar rppo_boltzmann                                  rppo_pistar_pos rppo_boltzmann_pos).
   intro s.
-  apply (req_mult_compat (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))                         (exp_neg (mult (inv_pos beta beta_pos)                                        (align_energy_req S reward beta pi_ref pi_ref_pos s)))                         (req_refl (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap))).
-  apply (req_sym _ _).
-  exact (req_align_energy_exp S reward beta beta_pos pi_ref pi_ref_pos s).
+  apply (req_trans (rppo_pistar s)
+                   (mult (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)
+                         (mult (pi_ref s)
+                               (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))
+                   (rppo_boltzmann s)).
+  - (* T4R2 桥（R120 B39 后）：canonical π*（UpReqAlign.Z_align_pos 内部供给件
+       实例）与 Zap 槽闭式仅差 inv_pos 正性证明参（canonical-vs-pinned 墙）；
+       req_mult_cancel_l + inv_pos_correct 双折（Close uac_pstr_cross 同款）。 *)
+    unfold rppo_pistar.
+    apply (req_mult_compat _ _ _ _
+      (req_mult_cancel_l (Z_align_req S sumf reward beta beta_pos pi_ref) _ _
+         (@UpReqAlign.Z_align_pos Real RealEnhancedReal S sumf rppo_sum_pos
+            reward beta beta_pos pi_ref pi_ref_pos)
+         (req_trans _ _ _
+            (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+               (@UpReqAlign.Z_align_pos Real RealEnhancedReal S sumf rppo_sum_pos
+                  reward beta beta_pos pi_ref pi_ref_pos))
+            (req_sym _ _
+               (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+                  Zap))))
+      (req_refl (mult (pi_ref s)
+                      (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))).
+  - apply (req_mult_compat (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap)                         (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))                         (exp_neg (mult (inv_pos beta beta_pos)                                        (align_energy_req S reward beta pi_ref pi_ref_pos s)))                         (req_refl (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Zap))).
+    apply (req_sym _ _).
+    exact (req_align_energy_exp S reward beta beta_pos pi_ref pi_ref_pos s).
 Qed.
 
 

@@ -1579,6 +1579,7 @@ End ReqCancelMachines.
 Section ReqStrictOrderBridge.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
+(* [墙族登记·RW-MIX 混合保序（req 面）] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S07:7994-7995 req 面），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147）；req 面原点=本节——消解走实例层供给或 TB-2 字段化归一批。 *)
 Hypothesis req_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 

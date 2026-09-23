@@ -9689,6 +9689,7 @@ Qed.
         beam_search_returns_minimum 的构造性实现） ---- *)
 (* 全比较接口（诚实接口；具体模型提供）：
    Or (E p ≤ E q) (E q < E p)——Set 层可判定比较的构造性编码。 *)
+(* [墙族登记·RW-LPO 全比较] 路径能量全比较=整体序判定 LPO 实例（E225；SqWall⟺rLPO，论文7§8）——具体模型（Q 坐标/浮点层）实例化时供给（自注 :9195），接口层禁硬证禁纯删。 *)
 Variable sf_path_cmp :
   forall p q : list SFVec,
     Or (real_le (sf_path_energy p) (sf_path_energy q))

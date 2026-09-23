@@ -71,6 +71,7 @@ Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable eta : R.
 Variable eta_pos : lt zero eta.
 Variable eta_le_one : le eta one.
+(* T4R 注记（R120 B39 后）：本 Variable 在 :89/:91 canonical 化后已无喂参位（闲置保留，防下游语句面引用断裂）； pi_star_req/req_pi_star_pos 现由 UpReqAlign.Z_align_pos 供给件内部供正性。 *)
 Variable Z_align_pos : lt zero (@Z_align_req R RIS S sumf reward beta beta_pos pi_ref).
 
 (* ---- B 类桥槽同位运输（Align3:1451 req2_gibbs_inequality 的 req 语句位；
@@ -86,9 +87,30 @@ Definition uac_KLR (p q : S -> R) :
     @pos_dist R RIS S p -> @pos_dist R RIS S q -> R :=
   @relative_entropy_req R RIS S sumf p q.
 Definition uac_PSTRR (s : S) : R :=
-  @pi_star_req R RIS S sumf reward beta beta_pos pi_ref Z_align_pos s.
+  @pi_star_req R RIS S sumf sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
 Definition uac_PSTRR_pos : @pos_dist R RIS S uac_PSTRR :=
-  @req_pi_star_pos R RIS S sumf reward beta beta_pos pi_ref pi_ref_pos Z_align_pos.
+  @req_pi_star_pos R RIS S sumf sum_pos reward beta beta_pos pi_ref pi_ref_pos.
+
+(* T4R 桥（R120 B39 后）：PSTR（自绑 Z_align_pos 槽）与 canonical uac_PSTRR
+   的逐点 req——两者仅差 inv_pos 的正性证明参（Z_align_pos 变量 vs
+   UpReqAlign.Z_align_pos 内部供给件实例）；req_mult_cancel_l + inv_pos_correct
+   双折运输。kl_move 证人槽由 req_refl 改喂本桥。 *)
+Lemma uac_pstr_cross : forall s : S,
+  req (@PSTR R RIS S sumf reward beta beta_pos pi_ref Z_align_pos s) (uac_PSTRR s).
+Proof.
+  intro s.
+  apply (req_mult_compat _ _ _ _
+    (req_mult_cancel_l (Z_align_req S sumf reward beta beta_pos pi_ref) _ _
+       Z_align_pos
+       (req_trans _ _ _
+          (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+             Z_align_pos)
+          (req_sym _ _
+             (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+                (@UpReqAlign.Z_align_pos R RIS S sumf sum_pos reward beta beta_pos
+                   pi_ref pi_ref_pos)))))
+    (req_refl (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))).
+Qed.
 Definition uac_ADR (pi_t : S -> R) (Hpi_t : @pos_dist R RIS S pi_t) (s : S) : R :=
   @advantage_aug_req R RIS S reward beta pi_ref pi_ref_pos pi_t Hpi_t s.
 Definition uac_ZRR (pi_t : S -> R) (Hpi_t : @pos_dist R RIS S pi_t) : R :=
@@ -358,7 +380,7 @@ Proof.
              (@npx_pos R RIS S sumf sum_pos reward beta beta_pos pi_ref
                        pi_ref_pos eta pi_t Hpi_t)
              (uac_NPXR_pos pi_t Hpi_t)
-             (fun s => req_refl (uac_PSTRR s))
+             (fun s => uac_pstr_cross s)
              (fun s => uac_npx_cross pi_t Hpi_t s))).
   - apply (req_trans
              (uac_KLR (@PSTR R RIS S sumf reward beta beta_pos pi_ref Z_align_pos)
@@ -440,7 +462,7 @@ Proof.
                      (@PSTR_pos R RIS S sumf reward beta beta_pos pi_ref
                                 pi_ref_pos Z_align_pos)
                      uac_PSTRR_pos Hpi_t Hpi_t
-                     (fun s => req_refl (uac_PSTRR s))
+                     (fun s => uac_pstr_cross s)
                      (fun s => req_refl (pi_t s)))).
       * apply (req_plus_compat
                   (opp (mult eta
@@ -486,7 +508,7 @@ Proof.
                                                 pi_ref pi_ref_pos Z_align_pos)
                                      uac_PSTRR_pos
                                      (fun s => req_refl (pi_t s))
-                                     (fun s => req_refl (uac_PSTRR s)))))
+                                     (fun s => uac_pstr_cross s))))
                   (uac_kl_move pi_t
                                pi_t
                                (@NPX R RIS S sumf sum_pos reward beta beta_pos

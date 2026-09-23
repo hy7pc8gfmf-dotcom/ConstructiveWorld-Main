@@ -1761,9 +1761,8 @@ Definition pi_star_req_zpfinal_1
            (pi_ref : S -> R) (pi_ref_pos : forall s : S, lt zero (pi_ref s))
            (Hne : Not (enum = nil)) : S -> R :=
   @UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-    reward beta beta_pos pi_ref
-    (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-       pi_ref_pos Hne).
+    (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+    reward beta beta_pos pi_ref pi_ref_pos.
 
 (* 消去件 1a：req_pi_star_pos（π* 逐点正性）
    消去前 7 位{sumf,reward,beta,beta_pos,pi_ref,pi_ref_pos,Z_align_pos}
@@ -1776,14 +1775,12 @@ Lemma req_pi_star_pos_zpfinal_1
       (Hne : Not (enum = nil)) :
   @UpReqAlign.pos_dist R RIS S
     (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-       reward beta beta_pos pi_ref
-       (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-          pi_ref_pos Hne)).
+       (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+       reward beta beta_pos pi_ref pi_ref_pos).
 Proof.
   exact (@UpReqAlign.req_pi_star_pos R RIS S (@sumd_sumf R RIS S enum)
-           reward beta beta_pos pi_ref pi_ref_pos
-           (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-              pi_ref_pos Hne)).
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+           reward beta beta_pos pi_ref pi_ref_pos).
 Qed.
 
 (* 消去件 1b：req_pi_star_normalized（π* 归一化）
@@ -1799,17 +1796,15 @@ Lemma req_pi_star_normalized_zpfinal_1
   req
     (@sumd_sumf R RIS S enum
        (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-          reward beta beta_pos pi_ref
-          (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-             pi_ref_pos Hne)))
+          (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+          reward beta beta_pos pi_ref pi_ref_pos))
     one.
 Proof.
   exact (@UpReqAlign.req_pi_star_normalized R RIS S
            (@sumd_sumf R RIS S enum)
            (@sumd_sum_linear R RIS S enum)
-           reward beta beta_pos pi_ref
-           (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-              pi_ref_pos Hne)).
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+           reward beta beta_pos pi_ref pi_ref_pos).
 Qed.
 
 (* ============================================================ *)
@@ -1866,9 +1861,8 @@ Definition ralt_pistar_zpfinal_3
            (pi_ref : S -> R) (pi_ref_pos : forall s : S, lt zero (pi_ref s))
            (Hne : Not (enum = nil)) : S -> R :=
   @UpReqAlignRestA.ralt_pistar R RIS S (@sumd_sumf R RIS S enum)
-    reward beta beta_pos pi_ref
-    (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-       pi_ref_pos Hne).
+    (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+    reward beta beta_pos pi_ref pi_ref_pos.
 
 (* 消去件 3a：ralt_pistar_pos（π* 逐点正性见证）
    消去前 8 位{sumf,reward,beta,beta_pos,pi_ref,pi_ref_pos,Z_align_pos,s}
@@ -1882,13 +1876,11 @@ Definition ralt_pistar_pos_zpfinal_3
            (Hne : Not (enum = nil)) (s : S) :
   lt zero
     (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-       reward beta beta_pos pi_ref
-       (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-          pi_ref_pos Hne) s) :=
+       (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+       reward beta beta_pos pi_ref pi_ref_pos s) :=
   @UpReqAlignRestA.ralt_pistar_pos R RIS S (@sumd_sumf R RIS S enum)
-    reward beta beta_pos pi_ref pi_ref_pos
-    (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-       pi_ref_pos Hne) s.
+    (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+    reward beta beta_pos pi_ref pi_ref_pos s.
 
 (* 消去件 3b：ralt_log_pi_star（log π* 闭式）
    消去前 9 位{sumf,reward,beta,beta_pos,pi_ref,pi_ref_pos,Z_align_pos,
@@ -1906,9 +1898,8 @@ Lemma ralt_log_pi_star_zpfinal_3
   req
     (log
        (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-          reward beta beta_pos pi_ref
-          (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-             pi_ref_pos Hne) s)
+          (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+          reward beta beta_pos pi_ref pi_ref_pos s)
        (ralt_pistar_pos_zpfinal_3 R RIS S enum reward beta beta_pos pi_ref
           pi_ref_pos Hne s))
     (plus
@@ -1922,6 +1913,7 @@ Lemma ralt_log_pi_star_zpfinal_3
              (mult (inv_pos beta beta_pos) (reward s)))).
 Proof.
   exact (@UpReqAlignRestA.ralt_log_pi_star R RIS S (@sumd_sumf R RIS S enum)
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
            reward beta beta_pos pi_ref pi_ref_pos
            (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
               pi_ref_pos Hne)
@@ -1943,9 +1935,8 @@ Lemma ralt_dpo_reward_recovers_zpfinal_3
   req
     (@UpReqAlignRestA.ralt_dir R RIS S beta pi_ref pi_ref_pos
        (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-          reward beta beta_pos pi_ref
-          (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-             pi_ref_pos Hne))
+          (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+          reward beta beta_pos pi_ref pi_ref_pos)
        (ralt_pistar_pos_zpfinal_3 R RIS S enum reward beta beta_pos pi_ref
           pi_ref_pos Hne)
        s)
@@ -1960,6 +1951,7 @@ Lemma ralt_dpo_reward_recovers_zpfinal_3
 Proof.
   exact (@UpReqAlignRestA.ralt_dpo_reward_recovers R RIS S
            (@sumd_sumf R RIS S enum)
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
            reward beta beta_pos pi_ref pi_ref_pos
            (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
               pi_ref_pos Hne)
@@ -1982,17 +1974,15 @@ Lemma ralt_dpo_reward_relative_exact_zpfinal_3
     (req_minus
        (@UpReqAlignRestA.ralt_dir R RIS S beta pi_ref pi_ref_pos
           (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-             reward beta beta_pos pi_ref
-             (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos
-                pi_ref pi_ref_pos Hne))
+             (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+             reward beta beta_pos pi_ref pi_ref_pos)
           (ralt_pistar_pos_zpfinal_3 R RIS S enum reward beta beta_pos pi_ref
              pi_ref_pos Hne)
           s)
        (@UpReqAlignRestA.ralt_dir R RIS S beta pi_ref pi_ref_pos
           (@UpReqAlign.pi_star_req R RIS S (@sumd_sumf R RIS S enum)
-             reward beta beta_pos pi_ref
-             (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos
-                pi_ref pi_ref_pos Hne))
+             (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+             reward beta beta_pos pi_ref pi_ref_pos)
           (ralt_pistar_pos_zpfinal_3 R RIS S enum reward beta beta_pos pi_ref
              pi_ref_pos Hne)
           s'))
@@ -2000,6 +1990,7 @@ Lemma ralt_dpo_reward_relative_exact_zpfinal_3
 Proof.
   exact (@UpReqAlignRestA.ralt_dpo_reward_relative_exact R RIS S
            (@sumd_sumf R RIS S enum)
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
            reward beta beta_pos pi_ref pi_ref_pos
            (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
               pi_ref_pos Hne)
@@ -2031,6 +2022,7 @@ Lemma ralt_dpo_loss_at_pi_star_zpfinal_3
 Proof.
   exact (@UpReqAlignRestA.ralt_dpo_loss_at_pi_star R RIS S
            (@sumd_sumf R RIS S enum)
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
            reward beta beta_pos pi_ref pi_ref_pos
            (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
               pi_ref_pos Hne)
@@ -2049,9 +2041,8 @@ Definition rdl_pistar_zpfinal_4
            (pi_ref : S -> R) (pi_ref_pos : forall s : S, lt zero (pi_ref s))
            (Hne : Not (enum = nil)) : S -> R :=
   @UpReqDpoLoss.rdl_pistar R RIS S (@sumd_sumf R RIS S enum)
-    reward beta beta_pos pi_ref
-    (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-       pi_ref_pos Hne).
+    (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+    reward beta beta_pos pi_ref pi_ref_pos.
 
 (* 消去件 4a：rdl_pistar_pos
    消去前 8 位{sumf,reward,beta,beta_pos,pi_ref,pi_ref_pos,Z_align_pos,s}
@@ -2065,13 +2056,11 @@ Definition rdl_pistar_pos_zpfinal_4
            (Hne : Not (enum = nil)) (s : S) :
   lt zero
     (@UpReqDpoLoss.rdl_pistar R RIS S (@sumd_sumf R RIS S enum)
-       reward beta beta_pos pi_ref
-       (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-          pi_ref_pos Hne) s) :=
+       (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+       reward beta beta_pos pi_ref pi_ref_pos s) :=
   @UpReqDpoLoss.rdl_pistar_pos R RIS S (@sumd_sumf R RIS S enum)
-    reward beta beta_pos pi_ref pi_ref_pos
-    (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
-       pi_ref_pos Hne) s.
+    (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
+    reward beta beta_pos pi_ref pi_ref_pos s.
 
 (* 消去件 4b：rdl_dpo_total_loss_at_star（批5 解冻主件）
    消去前 12 位{sumf,reward,beta,beta_pos,pi_ref,pi_ref_pos,Z_align_pos,
@@ -2100,6 +2089,7 @@ Lemma rdl_dpo_total_loss_at_star_zpfinal_4
 Proof.
   exact (@UpReqDpoLoss.rdl_dpo_total_loss_at_star R RIS S
            (@sumd_sumf R RIS S enum)
+           (fun f0 => @sumd_sum_pos R RIS S enum f0 Hne)
            reward beta beta_pos pi_ref pi_ref_pos
            (zpfinal1_Z_align_pos_key R RIS S enum reward beta beta_pos pi_ref
               pi_ref_pos Hne)

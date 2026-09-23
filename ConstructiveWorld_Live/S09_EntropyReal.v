@@ -6163,6 +6163,7 @@ Qed.
 (*     real_sign_dec            —— 梯度三分律（Set 层 Or）      *)
 (*     real_entropy_gradient_wd —— 梯度 req 外延性（零分支）    *)
 (* ============================================================ *)
+(* [墙族登记·RW-LPO 三分实例] 梯度值三分=整体序判定 LPO 实例（E225；lpn_equivalence）——对可判定梯度（有理值/可计算实例）成立=实例层供给候选（模块自注 ：6163），接口层禁硬证禁纯删。 *)
 Variable real_sign_dec : forall x : Real,
   Or (real_lt real_zero (real_entropy_gradient x))
      (Or (real_eq (real_entropy_gradient x) real_zero)

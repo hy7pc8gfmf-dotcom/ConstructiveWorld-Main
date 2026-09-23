@@ -1061,9 +1061,19 @@ Variable base_loss : S -> R.
 Variable D : R.
 Variable D_pos : lt zero D.
 Variable Z : R.
-Variable Z_pos : lt zero Z.
 Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B43）：由 fsum_pos+逐点 exp_neg_pos+lt_id_r 运输 partition_condition 导出；零承认件（T4R 修刀：lt_id_l 参序反置红→lt_id_r+req_sym 正向运输） *)
+Lemma Z_pos : lt zero Z.
+Proof.
+  exact (lt_id_r zero
+         (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) Z
+         (req_sym Z (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s))))
+                  partition_condition)
+         (fsum_pos (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))
+                   (fun s : S => exp_neg_pos (mult (inv_pos D D_pos) (base_loss s))))).
+Qed.
+
 
 (* ---- T2① 接口缺口桥（登记表 3） ---- *)
 Hypothesis dist_log_inv_one_inv :
@@ -3246,6 +3256,7 @@ Variable entropy : R -> R.
 Variable dynamics : R -> R.
 Definition reqd_entropy_increases : Set :=
   forall x, le (entropy x) (entropy (dynamics x)).
+(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式，req 镜像）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，甄别席核），接口层原样保留记账。 *)
 Variable strict_entropy_increase :
   forall x, Not (req (dynamics x) x) -> lt (entropy x) (entropy (dynamics x)).
 Theorem req_second_law_irreversible :

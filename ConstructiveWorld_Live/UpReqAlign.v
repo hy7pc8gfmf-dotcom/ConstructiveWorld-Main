@@ -113,7 +113,13 @@ Definition norm_one (p : S -> R) : Set := req (sumf p) one.
 (* 配分函数与闭式最优策略（Id Z_align/pi_star L18769-18780 同形） *)
 Definition Z_align_req : R :=
   sumf (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))).
-Variable Z_align_pos : lt zero Z_align_req.
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B39）：由 sum_pos+pi_ref_pos+mult_positive/exp_neg_pos 导出；零承认件 *)
+Lemma Z_align_pos : lt zero Z_align_req.
+Proof.
+  unfold Z_align_req. apply sum_pos. intros s. apply mult_positive.
+  exact (pi_ref_pos s). apply exp_neg_pos.
+Qed.
+
 Definition pi_star_req (s : S) : R :=
   mult (inv_pos Z_align_req Z_align_pos)
        (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))).

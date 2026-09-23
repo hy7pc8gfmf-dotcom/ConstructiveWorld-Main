@@ -2263,8 +2263,10 @@ Variable K : nat.
 Variable real_boltzmann_factor_ : S -> Real.
 
 (* 诚实接口：线序判定（Real 层可实例化） *)
+(* [墙族登记·RW-LPO 线序判定] 整体实序可判定=LPO 不可实例化（E225；SqWall⟺rLPO 双向类=UpReqLpoEquiv.v:258/351/438 lpn_equivalence；论文7§8）——基座墙密度最高单点，禁硬证禁纯删；Q 层逐点可判定（Qlt_le_dec，E225 下半）不升级本位；Top-K 消费链（:2266-）以本位为线序判定源，实例层仅可计算模型可供给。 *)
 Variable real_le_dec : forall a b : Real, Or (real_le a b) (Not (real_le a b)).
 (* 诚实接口：线序——Not (le a b) ⟹ lt b a（柯西实数线序，可实例化） *)
+(* [墙族登记·RW-NOTLT 线序负转正] real_le=Or(lt,eq)（S02_CauchyComplete.v:471）定义形下，¬(a≤b)→b<a 需从负陈述提取正分离见证——Markov/LPO 族邻域（E225/E226；PA_UpAblD2_AbsLeId_RI_DO.v:49 在案）；库内零已证实例（G09_MiscSmall.v:635 rnot_le_lt 同形亦假设位）——禁硬证；locatedness 供给候选（UpReqCauchy 系具体层，甄别席核）。 *)
 Variable real_not_le_lt : forall a b : Real, Not (real_le a b) -> real_lt b a.
 (* 诚实接口：比 f s 更重的计数（枚举计数，语义由 real_le_dec 实例化保证） *)
 Variable real_count_heavier : S -> nat.

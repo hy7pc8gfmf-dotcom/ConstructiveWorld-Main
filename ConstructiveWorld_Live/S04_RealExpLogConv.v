@@ -82,6 +82,13 @@ Variable real_log_mult : forall a b : R, lt zero a -> lt zero b ->
                            Id (real_log (mult a b)) (plus (real_log a) (real_log b)).
 Variable real_log_one : Id (real_log one) zero.
 Variable real_log_lt : forall a b : R, lt a b -> lt (real_log a) (real_log b).
+(* 供给件：real_log_one 槽由兄弟字段（real_exp_zero+real_log_exp）推导——R120 基座消融波 T1 终判位8；签名保持式三件套之 T；零承认件 *)
+Lemma real_log_one_derived : Id (real_log one) zero.
+Proof.
+  exact (id_trans (id_sym (id_cong real_log real_exp_zero))
+                  (real_log_exp zero)).
+Qed.
+
 
 End RealExpLogInterface.
 
@@ -328,7 +335,9 @@ Variable gradient_abs_decay : forall (E_A : R) (n : nat),
      (mult kappa (abs (entropy_gradient (iterate dynamics n E_A)))).
 (* (2) lt+le 混合加保序（诚实接口假设，与主文件 DPO Section L12330 同族：
       抽象 R 层构造性缺此性质，0 < 1−κ 需要） *)
+(* [墙族登记·RW-MIX 混合保序] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批。 *)
 Variable lt_plus_compat_lt_le : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
+(* [墙族登记·RW-MIX 混合保序（对偶 le_lt 形）] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批。 *)
 Variable lt_plus_compat_le_lt : forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 
 (* 主文件 ConvergenceTheorem 闭包定理的显式别名（Section 内 Variables 同名） *)
@@ -344,7 +353,14 @@ Fixpoint r_pow (x : R) (n : nat) : R :=
 
 (* Step 4 新接口字段（诚实标准性质，E143-199 纪律） *)
 (* (3) 度量自反零：metric a a == zero（构造性度量标准性质，抽象层缺） *)
-Variable metric_refl_zero : forall a : R, Id (metric a a) zero.
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B04）：由 metric_abs+minus 展开+plus_opp+abs_zero 导出；零承认件 *)
+Lemma metric_refl_zero : forall a : R, Id (metric a a) zero.
+Proof.
+  intros a.
+  exact (id_trans (metric_abs a a)
+         (id_trans (id_cong abs (plus_opp a)) abs_zero)).
+Qed.
+
 (* (4) 几何击穿（R 层阿基米德性质）：0<a、0<eps ⟹ ∃n, a·κ^n < eps *)
 Variable r_arch_pow : forall (a : R), lt zero a -> forall eps : R, lt zero eps ->
   sigT (fun n : nat => lt (mult a (r_pow kappa n)) eps).
@@ -1432,6 +1448,7 @@ Qed.
    ============================================================ *)
 (* 诚实接口假设：弱三分（Real 层 real_weak_trich L32526 已证，构造性成立；
    ¬(x<y) ∧ ¬(y<x) ⟹ x==y，非 LPO——整体三分律才等价 LPO） *)
+(* [墙族登记·RW-TIGHT 紧性] 接口层紧性公设（Not(lt)×2→Id）：RealInterface(Enhanced) 无紧性字段，接口层不可导，禁硬证；具体层 real_weak_trich 已证（S07_RealSetoidExpLog.v:5748，构造性成立）——TB-2 字段化归一批把实例供给上收；Not 形=Prop 红线对象，Set 重述仅重写载体不消内容（白皮书§0红线2）。 *)
 Variable weak_trich : forall x y : R, Not (lt x y) -> Not (lt y x) -> Id x y.
 
 (* K1：驻点唯一性（g 严格递减 ⟹ 至多一个驻点） *)

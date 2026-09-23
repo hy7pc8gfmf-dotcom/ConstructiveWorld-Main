@@ -528,10 +528,10 @@ Theorem fic_attention_is_gibbs_temp_id :
      (@partition_function_temp RI SS SO T T_pos z0) ->
   forall s : @S01_BaseRing.S RI SS,
     Id (@softmax_temp RI SS SO spp T T_pos z0 s)
-       (@boltzmann_dist_attn RI SS SO D D_pos energy0 Zp s).
+       (@boltzmann_dist_attn RI SS SO spp D D_pos energy0 s).
 Proof.
   intros RI SS SO spp T T_pos D D_pos energy0 z0 Zp H1 H2 H3 s.
-  exact (@attention_is_gibbs_temp RI SS SO spp T T_pos D D_pos energy0 z0 Zp H1 H2 H3 s).
+  exact (@attention_is_gibbs_temp RI SS SO spp T T_pos D D_pos energy0 z0 H1 H2 H3 s).
 Qed.
 
 (* D3：库内化闭环——识别数据 → 类对象 → 重回 Id 等式：
@@ -555,13 +555,13 @@ Theorem fic_attention_is_gibbs_temp_via_id :
      (@partition_function_temp RI SS SO T T_pos z0) ->
   forall s : @S01_BaseRing.S RI SS,
     Id (@softmax_temp RI SS SO spp T T_pos z0 s)
-       (@boltzmann_dist_attn RI SS SO D D_pos energy0 Zp s).
+       (@boltzmann_dist_attn RI SS SO spp D D_pos energy0 s).
 Proof.
   intros RI SS SO spp T T_pos D D_pos energy0 z0 Zp H1 H2 H3 s.
   (* 库内化闭环：三识别条件从 fic_id_data 实例字段提取
      （req:=Id 桥下字段 ≡ Id 原语句面：ficreq δβ→ Id、ficinv δ→ @inv_pos RI、
      fic_partition_match 右形 δ→ partition_function_temp），再全参喂基座定理。 *)
-  exact (@attention_is_gibbs_temp RI SS SO spp T T_pos D D_pos energy0 z0 Zp
+  exact (@attention_is_gibbs_temp RI SS SO spp T T_pos D D_pos energy0 z0
            (@fic_temp_match (@S01_BaseRing.R RI) (fic_id_bridge RI)
               (fic_id_data RI SS SO spp T T_pos D D_pos z0 energy0 Zp H1 H2 H3))
            (@fic_energy_neg (@S01_BaseRing.R RI) (fic_id_bridge RI)

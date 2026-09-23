@@ -107,11 +107,20 @@ Hypothesis rpl_sum_le :
 Hypothesis r_max_le_r_plain :
   forall a b : R, le b (r_max a b).
 
+(* T5 扩槽（R120 B39 后，T4R §⑤-A2 配方）：pi_star_req canonical 签名顶入
+   sum_pos 位；Zap 槽闲置化保留（防下游语句面引用断裂）。 *)
+Hypothesis rpl_sum_pos :
+  forall f : S -> R, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
+
 (* ---- Id Alignment 上游链同位（L18750-18762） ---- *)
 Variable reward : S -> R.
 Variable beta : R.
 Variable beta_pos : lt zero beta.
 Variable pi_ref : S -> R.
+(* T4R2 补位（T5 移交账处方）：rpl_pistar canonical 喂参需 pi_ref_pos 位——
+   本节原缺此声明（红 :133 The reference pi_ref_pos was not found）；出节签名 +1，
+   本件系单点终端件零下游消费。 *)
+Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable Zap : lt zero (Z_align_req S sumf reward beta beta_pos pi_ref).
 
 (* ---- Id PPO 块节参同位（L19495-19517；未消费位 pi_old_norm/epsilon_pos 省略） ---- *)
@@ -125,7 +134,7 @@ Variable epsilon : R.
 
 (* Id pi_star 消费位：L18762 闭式最优策略 -> UpReqAlign pi_star_req 实例化 *)
 Definition rpl_pistar (s : S) : R :=
-  pi_star_req S sumf reward beta beta_pos pi_ref Zap s.
+  pi_star_req S sumf rpl_sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
 
 (* Id importance_ratio L19502 同形 *)
 Definition rpl_importance_ratio (s : S) : R :=

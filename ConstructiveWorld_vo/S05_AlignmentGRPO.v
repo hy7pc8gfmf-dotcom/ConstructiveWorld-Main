@@ -2195,8 +2195,10 @@ Variable inv_pos_lt_contra :
     lt a b -> lt (inv_pos b Hb) (inv_pos a Ha).
 
 (* 严格序的加法保序混合版（诚实 Variable：le 与 lt 混合，构造性可接受） *)
+(* [墙族登记·RW-MIX 混合保序（对偶 le_lt 形）] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批。 *)
 Variable lt_plus_compat_le_lt :
   forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
+(* [墙族登记·RW-MIX 混合保序] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批。 *)
 Variable lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 
@@ -2412,6 +2414,7 @@ Variable eta_le_one : le eta one.
 
 (* 诚实接口假设：正项和为正（Real 层有限和可实例化；同 Z_align_pos 先例） *)
 Variable sum_over_S_pos : forall (f : S -> R), (forall s : S, lt zero (f s)) -> lt zero (sum_over_S f).
+
 
 Definition advantage_aug (pi_t : S -> R) (s : S) : R :=
   minus (reward s) (mult beta (minus (log (pi_t s)) (log (pi_ref s)))).
@@ -4400,11 +4403,18 @@ Variable beta : R.
 Variable beta_pos : lt zero beta.
 Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
-Variable Z_align_pos : lt zero (Z_align reward beta beta_pos pi_ref).
+
 Variable eta : R.
 Variable eta_pos : lt zero eta.
 Variable eta_le_one : le eta one.
 Variable sum_over_S_pos : forall (f : S -> R), (forall s : S, lt zero (f s)) -> lt zero (sum_over_S f).
+
+(* 供给件（原 U2 节 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B17）：由 sum_over_S_pos+逐点 mult_positive/exp_neg_pos 导出；零承认件 *)
+Lemma Z_align_pos : lt zero (Z_align reward beta beta_pos pi_ref).
+Proof.
+  unfold Z_align. apply sum_over_S_pos. intros s. apply mult_positive.
+  exact (pi_ref_pos s). apply exp_neg_pos.
+Qed.
 
 (* ---- 根库 Alignment 内局部名的实例化别名（同名 Let，正文可直移） ---- *)
 Let pi_star := (pi_star reward beta beta_pos pi_ref Z_align_pos).

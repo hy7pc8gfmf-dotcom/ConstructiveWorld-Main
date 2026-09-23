@@ -72,7 +72,7 @@ Theorem fic2_attention_is_gibbs_temp_id_consume :
      (@partition_function_temp RI SS SO T T_pos z0) ->
   forall s : @S01_BaseRing.S RI SS,
     Id (@softmax_temp RI SS SO spp T T_pos z0 s)
-       (@boltzmann_dist_attn RI SS SO D D_pos energy0 Zp s).
+       (@boltzmann_dist_attn RI SS SO spp D D_pos energy0 s).
 Proof.
   intros RI SS SO spp T T_pos D D_pos energy0 z0 Zp H1 H2 H3 s.
   exact (@fic_attention_is_gibbs_temp_via_id RI SS SO spp T T_pos D D_pos
@@ -109,7 +109,7 @@ Theorem fic2_identified_boltzmann_dual :
            T T_pos
            (@partition_function_temp RI SS SO T T_pos z0)
            (@partition_function_temp_pos RI SS SO spp T T_pos z0) s)
-       (@boltzmann_dist_attn RI SS SO D D_pos energy0 Zp s).
+       (@boltzmann_dist_attn RI SS SO spp D D_pos energy0 s).
 Proof.
   intros RI SS SO spp T T_pos D D_pos energy0 z0 Zp H1 H2 H3 s.
   (* 逆元统一（识别③）：inv(Zf) == inv(Z_thermo) *)
@@ -147,11 +147,18 @@ Proof.
                              (@S01_BaseRing.opp RI (z0 s)))))
            (id_trans
               (id_cong2 (@S01_BaseRing.mult RI) Hfac Hie)
-              (mult_comm (@S01_BaseRing.exp_neg RI
-                             (@S01_BaseRing.mult RI
-                                (@S01_BaseRing.inv_pos RI D D_pos) (energy0 s)))
-                         (@S01_BaseRing.inv_pos RI
-                            (@Z_thermo RI SS SO D D_pos energy0) Zp)))).
+              (id_trans
+                 (id_cong2 (@S01_BaseRing.mult RI) id_refl
+                    (inv_pos_ext (@Z_thermo RI SS SO D D_pos energy0)
+                       (@Z_thermo RI SS SO D D_pos energy0) Zp
+                       (Z_thermo_pos spp D D_pos energy0)
+                       id_refl))
+                 (mult_comm (@S01_BaseRing.exp_neg RI
+                                (@S01_BaseRing.mult RI
+                                   (@S01_BaseRing.inv_pos RI D D_pos) (energy0 s)))
+                            (@S01_BaseRing.inv_pos RI
+                               (@Z_thermo RI SS SO D D_pos energy0)
+                               (Z_thermo_pos spp D D_pos energy0)))))).
 Qed.
 
 (* ===================================================================== *)

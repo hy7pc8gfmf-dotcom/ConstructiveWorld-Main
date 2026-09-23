@@ -54,6 +54,10 @@ Section ReqDpoLossCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
+(* T4R2 扩槽（R120 B39 后）：RestA ralt_pistar 系新出节签 sum_pos 位（T5 既成刀面
+   同形）；Z_align_pos 槽保留（ralt_dpo_pair_loss_at_star 出节签仍在用）。 *)
+Hypothesis rdl_sum_pos :
+  forall f : S -> R, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
 Variable reward : S -> R.
 Variable beta : R.
 Variable beta_pos : lt zero beta.
@@ -89,10 +93,10 @@ Definition rdl_diff_star (pref : Preference) : R :=
   req_minus (reward (pref_win pref)) (reward (pref_lose pref)).
 
 Definition rdl_pistar : S -> R :=
-  ralt_pistar S sumf reward beta beta_pos pi_ref Z_align_pos.
+  ralt_pistar S sumf rdl_sum_pos reward beta beta_pos pi_ref pi_ref_pos.
 
 Definition rdl_pistar_pos : forall s : S, lt zero (rdl_pistar s) :=
-  ralt_pistar_pos S sumf reward beta beta_pos pi_ref pi_ref_pos Z_align_pos.
+  ralt_pistar_pos S sumf rdl_sum_pos reward beta beta_pos pi_ref pi_ref_pos.
 
 (* ============ 主件 1：fold 外延 req 载体（(b) 化逐点改述） ============ *)
 
@@ -173,9 +177,9 @@ Proof.
                               rdl_pair_star pref_dataset).
   intros a Hin.
   unfold rdl_pair, rdl_pair_star.
-  exact (ralt_dpo_pair_loss_at_star S sumf reward beta beta_pos pi_ref pi_ref_pos
-           Z_align_pos rdl_log_req_compat rdl_log_inv_exp_neg_req
-           Preference pref_win pref_lose a).
+  exact (ralt_dpo_pair_loss_at_star S sumf rdl_sum_pos reward beta beta_pos
+           pi_ref pi_ref_pos Z_align_pos rdl_log_req_compat
+           rdl_log_inv_exp_neg_req Preference pref_win pref_lose a).
 Qed.
 
 (* ============ 主件 3：总损失单调性（基座 L20181 同位） ============ *)

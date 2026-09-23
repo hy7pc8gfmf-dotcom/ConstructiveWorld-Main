@@ -225,28 +225,86 @@ Theorem req_attention_minimizes_free_energy_unique :
           forall s : S, req (p s) (softmax_z s)).
 Proof.
   intros p Hp Hnp.
-  assert (Hnboltz : req (sumf boltz_z) one)
-    by exact (req_boltzmann_normalized S sumf sum_linear base T T_pos
-               Zf Zf_pos req_fep_partition_condition).
+  assert (Hpinv : req (inv_pos Zf Zf_pos)
+                    (inv_pos Zf (@Z_pos R RIS S sumf sum_pos
+                                   base T T_pos Zf req_fep_partition_condition))).
+  { apply (req_mult_cancel_l Zf _ _ Zf_pos).
+    apply (req_trans _ _ _ (inv_pos_correct Zf Zf_pos)
+             (req_sym _ _ (inv_pos_correct Zf
+                (@Z_pos R RIS S sumf sum_pos base T T_pos Zf
+                   req_fep_partition_condition)))). }
+  assert (Hpt : forall s : S,
+            req (boltz_z s)
+                (@reqd_boltzmann_dist R RIS S sumf sum_pos base T T_pos Zf
+                   req_fep_partition_condition s)).
+  { intro s. apply (req_mult_compat _ _ _ _ Hpinv
+             (req_refl (exp_neg (mult invT (base s))))). }
+  assert (Hnboltz : req (sumf boltz_z) one).
+  { assert (Hn : reqd_normalized S sumf
+                   (@reqd_boltzmann_dist R RIS S sumf sum_pos base T T_pos Zf
+                      req_fep_partition_condition))
+      by exact (@req_boltzmann_normalized R RIS S sumf sum_linear sum_pos
+                  base T T_pos Zf req_fep_partition_condition).
+    unfold reqd_normalized in Hn.
+    apply (req_trans _ _ _ (sum_ext _ _ Hpt) Hn). }
+  assert (Hposbz : forall s : S, lt zero (boltz_z s)).
+  { intro s. apply (lt_id_r zero _ _ (req_sym _ _ (Hpt s))).
+    exact (@req_boltzmann_positive R RIS S sumf sum_pos
+             base T T_pos Zf req_fep_partition_condition s). }
   assert (HFsb : req (F_attn softmax_z softmax_z_pos)
-                     (F_attn boltz_z
-                        (req_boltzmann_positive S base T T_pos Zf Zf_pos)))
+                     (F_attn boltz_z Hposbz))
     by exact (req_fep_F_ext softmax_z boltz_z softmax_z_pos
-               (req_boltzmann_positive S base T T_pos Zf Zf_pos)
+               Hposbz
                req_softmax_z_normalized Hnboltz
                (fun s : S => req_sym _ _ (req_fep_align s))).
+  assert (Hmin : le (F_attn (@reqd_boltzmann_dist R RIS S sumf sum_pos
+                               base T T_pos Zf req_fep_partition_condition)
+                            (@req_boltzmann_positive R RIS S sumf sum_pos
+                               base T T_pos Zf req_fep_partition_condition))
+                   (F_attn p Hp))
+    by exact (@req_min_free_energy_is_boltzmann R RIS S sumf sum_ext sum_add sum_linear
+                sum_pos sum_le base T T_pos Zf req_fep_partition_condition
+                log_inv_one_inv log_exp_neg log_le_linear p Hp Hnp).
+  assert (HFcong : forall (d1 d2 : S -> R) (Hd1 : forall s : S, lt zero (d1 s))
+                     (Hd2 : forall s : S, lt zero (d2 s)),
+             (forall s : S, req (d1 s) (d2 s)) ->
+             req (F_attn d1 Hd1) (F_attn d2 Hd2)).
+  { intros d1 d2 Hd1 Hd2 H. unfold F_attn. apply req_plus_compat.
+    - apply (sum_ext _ _). intro s. apply req_mult_compat.
+      + apply H.
+      + apply req_refl.
+    - apply (req_mult_compat _ _ _ _ (req_refl T) (sum_ext _ _ (fun s =>
+        req_mult_compat _ _ _ _ (H s)
+          (log_req_compat (d1 s) (d2 s) (Hd1 s) (Hd2 s) (H s))))). }
+  assert (Hle : le (F_attn boltz_z Hposbz) (F_attn p Hp)).
+  { apply (le_id_l _ _ _
+             (req_sym _ _ (HFcong
+                (@reqd_boltzmann_dist R RIS S sumf sum_pos base T T_pos Zf
+                   req_fep_partition_condition)
+                boltz_z
+                (@req_boltzmann_positive R RIS S sumf sum_pos base T T_pos Zf
+                   req_fep_partition_condition) Hposbz
+                (fun s0 : S => req_sym _ _ (Hpt s0))))
+             Hmin). }
   split.
-  - exact (le_id_l _ _ _ HFsb
-      (req_min_free_energy_is_boltzmann S sumf sum_ext sum_add sum_linear
-        sum_le base T T_pos Zf Zf_pos req_fep_partition_condition
-        log_inv_one_inv log_exp_neg log_le_linear p Hp Hnp)).
+  - exact (le_id_l _ _ _ HFsb Hle).
   - intros Heq s.
-    exact (req_trans _ _ _
-      (req_free_energy_min_unique S sumf sum_ext sum_add sum_linear
-        sum_zero_nonneg base T T_pos Zf Zf_pos req_fep_partition_condition
+    apply (req_trans _ _ _
+      (@req_free_energy_min_unique R RIS S sumf sum_ext sum_add sum_linear
+        sum_pos sum_zero_nonneg base T T_pos Zf req_fep_partition_condition
         log_inv_one_inv log_exp_neg log_le_linear log_eq_linear
-        p Hp Hnp (req_trans _ _ _ Heq HFsb) s)
-      (req_fep_align s)).
+        p Hp Hnp
+        (req_trans _ _ _ Heq
+           (HFcong softmax_z
+              (@reqd_boltzmann_dist R RIS S sumf sum_pos base T T_pos Zf
+                 req_fep_partition_condition)
+              softmax_z_pos
+              (@req_boltzmann_positive R RIS S sumf sum_pos base T T_pos Zf
+                 req_fep_partition_condition)
+              (fun s0 : S =>
+                 req_trans _ _ _ (req_sym _ _ (req_fep_align s0)) (Hpt s0))))
+        s)
+      (req_trans _ _ _ (req_sym _ _ (Hpt s)) (req_fep_align s))).
 Qed.
 
 End ReqFEPAttn.
@@ -434,13 +492,45 @@ Theorem req_free_energy_softmax_eq_neg_T_logZ :
   req (lz_F_attn lz_softmax_z lz_softmax_z_pos)
       (mult (opp T) (log lz_Zf lz_Zf_pos)).
 Proof.
+  assert (Hpinv : req (inv_pos lz_Zf lz_Zf_pos)
+                      (inv_pos lz_Zf (@Z_pos R RIS S sumf sum_pos
+                                       lz_base T T_pos lz_Zf
+                                       req_fep_partition_condition_logz))).
+  { apply (req_mult_cancel_l lz_Zf _ _ lz_Zf_pos).
+    apply (req_trans _ _ _ (inv_pos_correct lz_Zf lz_Zf_pos)
+             (req_sym _ _ (inv_pos_correct lz_Zf
+                (@Z_pos R RIS S sumf sum_pos lz_base T T_pos lz_Zf
+                   req_fep_partition_condition_logz)))). }
+  assert (Hpt : forall s : S,
+            req (lz_boltz_z s)
+                (@reqd_boltzmann_dist R RIS S sumf sum_pos lz_base T T_pos lz_Zf
+                   req_fep_partition_condition_logz s)).
+  { intro s. apply (req_mult_compat _ _ _ _ Hpinv
+             (req_refl (exp_neg (mult lz_invT (lz_base s))))). }
+  assert (Hpos : forall s : S, lt zero (lz_boltz_z s)).
+  { intro s. apply (lt_id_r zero _ _ (req_sym _ _ (Hpt s))).
+    exact (@req_boltzmann_positive R RIS S sumf sum_pos
+             lz_base T T_pos lz_Zf req_fep_partition_condition_logz s). }
   exact (req_trans _ _ _
-    (req_fep_F_ext_logz lz_softmax_z lz_boltz_z lz_softmax_z_pos
-      (req_boltzmann_positive S lz_base T T_pos lz_Zf lz_Zf_pos)
-      (fun s : S => req_sym _ _ (req_fep_align_logz s)))
-    (req_free_energy_boltzmann S sumf sum_ext sum_add sum_linear
-      lz_base T T_pos lz_Zf lz_Zf_pos req_fep_partition_condition_logz
-      log_inv_one_inv log_exp_neg)).
+    (req_trans _ _ _
+      (req_trans _ _ _
+        (req_fep_F_ext_logz lz_softmax_z lz_boltz_z lz_softmax_z_pos Hpos
+           (fun s : S => req_sym _ _ (req_fep_align_logz s)))
+        (req_fep_F_ext_logz lz_boltz_z
+           (@reqd_boltzmann_dist R RIS S sumf sum_pos lz_base T T_pos lz_Zf
+              req_fep_partition_condition_logz)
+           Hpos
+           (@req_boltzmann_positive R RIS S sumf sum_pos lz_base T T_pos lz_Zf
+              req_fep_partition_condition_logz)
+           Hpt))
+      (@req_free_energy_boltzmann R RIS S sumf sum_ext sum_add sum_linear
+        sum_pos lz_base T T_pos lz_Zf req_fep_partition_condition_logz
+        log_inv_one_inv log_exp_neg))
+    (req_mult_compat _ _ _ _ (req_refl (opp T))
+       (log_req_compat lz_Zf lz_Zf
+          (@Z_pos R RIS S sumf sum_pos lz_base T T_pos lz_Zf
+             req_fep_partition_condition_logz)
+          lz_Zf_pos (req_refl lz_Zf)))).
 Qed.
 
 End ReqFEPLogZ.

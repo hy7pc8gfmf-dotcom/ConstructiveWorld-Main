@@ -99,6 +99,11 @@ Variable S : Set.
 Variable sumf : (S -> R) -> R.
 Hypothesis ralt_sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
+(* T5 扩槽（R120 B39 后，T4R §⑤-A1 配方）：pi_star_req canonical 签名顶入
+   sum_pos 位——本节原无此槽，仿 G12 W 方增补；Z_align_pos 槽闲置保留
+  （log/inv_pos 内部供给位仍在用，防下游语句面引用断裂）。 *)
+Hypothesis ralt_sum_pos :
+  forall f : S -> R, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
 Variable reward : S -> R.
 Variable beta : R.
 Variable beta_pos : lt zero beta.
@@ -253,24 +258,50 @@ Definition ralt_dir (pi : S -> R) (Hpi : forall s : S, lt zero (pi s)) (s : S) :
 
 (* π* 逐点正性（消费批 3 成品；见证固定形态） *)
 Definition ralt_pistar_pos (s : S)
-  : lt zero (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s) :=
-  req_pi_star_pos S sumf reward beta beta_pos pi_ref pi_ref_pos Z_align_pos s.
+  : lt zero (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) :=
+  req_pi_star_pos S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
 
 (* pi* abbreviation (delta transparent) *)
 Definition ralt_pistar : S -> R :=
-  pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos.
+  pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos.
+
+(* T4R2 桥（R120 B39 后）：canonical π* 闭式（UpReqAlign.Z_align_pos 内部供给件
+   实例）与本节 Z_align_pos 槽闭式的逐点 req——两者仅差 inv_pos 的正性证明参，
+   非转换面（T4R 经验卡 canonical-vs-pinned 墙）；Close uac_pstr_cross 同款：
+   req_mult_cancel_l + inv_pos_correct 双折运输。 *)
+Lemma ralt_pistar_cross : forall s : S,
+  req (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s)
+      (mult (inv_pos (Z_align_req S sumf reward beta beta_pos pi_ref) Z_align_pos)
+            (mult (pi_ref s)
+                  (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))).
+Proof.
+  intro s.
+  unfold pi_star_req.
+  apply (req_mult_compat _ _ _ _
+    (req_mult_cancel_l (Z_align_req S sumf reward beta beta_pos pi_ref) _ _
+       (@UpReqAlign.Z_align_pos R RIS S sumf ralt_sum_pos reward beta beta_pos
+          pi_ref pi_ref_pos)
+       (req_trans _ _ _
+          (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+             (@UpReqAlign.Z_align_pos R RIS S sumf ralt_sum_pos reward beta beta_pos
+                pi_ref pi_ref_pos))
+          (req_sym _ _
+             (inv_pos_correct (Z_align_req S sumf reward beta beta_pos pi_ref)
+                Z_align_pos))))
+    (req_refl (mult (pi_ref s)
+                    (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))).
+Qed.
 
 (* 2.1 log_pi_star 同位（基座 L18812）：log π*(s) ≡ -log Z + (log π_ref(s) + r(s)/β)。
-   ralt_log_exp_neg + double_neg 折叠 *)
+   ralt_log_exp_neg + double_neg 折叠；T4R2：闭式见证据 ralt_pistar_cross 运输 *)
 Lemma ralt_log_pi_star : forall s : S,
-  req (log (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s)
+  req (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s)
             (ralt_pistar_pos s))
       (plus (opp (log (Z_align_req S sumf reward beta beta_pos pi_ref) Z_align_pos))
             (plus (log (pi_ref s) (pi_ref_pos s))
                   (mult (inv_pos beta beta_pos) (reward s)))).
 Proof.
   intro s.
-  unfold pi_star_req.
   set (iv := inv_pos beta beta_pos).
   set (Z := Z_align_req S sumf reward beta beta_pos pi_ref).
   set (lgZ := log Z Z_align_pos).
@@ -293,13 +324,14 @@ Proof.
                             (inv_pos_pos Z Z_align_pos)
                             (mult_positive (pi_ref s) e (pi_ref_pos s)
                                (exp_neg_pos (opp (mult iv (reward s)))))).
-  apply (req_trans (log (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e)) (ralt_pistar_pos s))
+  apply (req_trans (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s)
+                        (ralt_pistar_pos s))
                    (log (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e)) wit)
                    (plus (opp lgZ) (plus lgR (mult iv (reward s))))).
-  - exact (ralt_log_req_compat (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e))
+  - exact (ralt_log_req_compat (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s)
                                (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e))
                                (ralt_pistar_pos s) wit
-                               (req_refl (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e)))).
+                               (ralt_pistar_cross s)).
   - apply (req_trans (log (mult (inv_pos Z Z_align_pos) (mult (pi_ref s) e)) wit)
                      (plus lgI lgM)
                      (plus (opp lgZ) (plus lgR (mult iv (reward s))))).
@@ -315,7 +347,7 @@ Qed.
    真证：ralt_log_pi_star + 减法链（assoc/换序/plus_opp 消去）+
    distrib + β·(1/β)=1 吸收（mult_assoc + inv_pos_correct + mult_one） *)
 Lemma ralt_dpo_reward_recovers : forall s : S,
-  req (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  req (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                 (ralt_pistar_pos) s)
       (plus (reward s)
             (opp (mult beta (log (Z_align_req S sumf reward beta beta_pos pi_ref) Z_align_pos)))).
@@ -366,17 +398,17 @@ Proof.
       + exact (req_trans (mult one (reward s)) (mult (reward s) one) (reward s)
                          (mult_comm one (reward s)) (mult_one (reward s))). }
   unfold ralt_dir, ralt_log_ratio.
-  apply (req_trans (mult beta (req_minus (log (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s) (ralt_pistar_pos s)) lgR))
+  apply (req_trans (mult beta (req_minus (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) (ralt_pistar_pos s)) lgR))
                    (mult beta (plus (opp lgZ) Y))
                    (plus (reward s) (opp (mult beta lgZ)))).
   - apply (req_mult_compat beta beta
-             (req_minus (log (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s) (ralt_pistar_pos s)) lgR)
+             (req_minus (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) (ralt_pistar_pos s)) lgR)
              (plus (opp lgZ) Y) (req_refl beta)).
-    apply (req_trans (req_minus (log (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s) (ralt_pistar_pos s)) lgR)
+    apply (req_trans (req_minus (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) (ralt_pistar_pos s)) lgR)
                      (req_minus (plus (opp lgZ) (plus lgR Y)) lgR)
                      (plus (opp lgZ) Y)).
     + unfold req_minus.
-      exact (req_plus_compat (log (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos s) (ralt_pistar_pos s))
+      exact (req_plus_compat (log (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) (ralt_pistar_pos s))
                              (plus (opp lgZ) (plus lgR Y))
                              (opp lgR) (opp lgR)
                              (ralt_log_pi_star s) (req_refl (opp lgR))).
@@ -398,32 +430,32 @@ Qed.
    r_DPO(π*,s) − r_DPO(π*,s') ≡ r(s) − r(s')（基线严格消去）。
    真证：2.2 双实例 + req_minus 兼容 + 共同项消去（req_minus_plus_congr） *)
 Lemma ralt_dpo_reward_relative_exact : forall s s' : S,
-  req (req_minus (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  req (req_minus (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                            (ralt_pistar_pos) s)
-                 (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+                 (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                            (ralt_pistar_pos) s'))
       (req_minus (reward s) (reward s')).
 Proof.
   intros s s'.
   set (B := opp (mult beta (log (Z_align_req S sumf reward beta beta_pos pi_ref) Z_align_pos))).
-  assert (Hrec : req (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  assert (Hrec : req (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                (ralt_pistar_pos) s)
                      (plus (reward s) B))
     by (apply ralt_dpo_reward_recovers).
-  assert (Hrec' : req (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  assert (Hrec' : req (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                 (ralt_pistar_pos) s')
                       (plus (reward s') B))
     by (apply ralt_dpo_reward_recovers).
-  apply (req_trans (req_minus (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  apply (req_trans (req_minus (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                         (ralt_pistar_pos) s)
-                              (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+                              (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                         (ralt_pistar_pos) s'))
                    (req_minus (plus (reward s) B) (plus (reward s') B))
                    (req_minus (reward s) (reward s'))).
-  - exact (req_plus_compat (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+  - exact (req_plus_compat (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                      (ralt_pistar_pos) s)
                            (plus (reward s) B)
-                           (opp (ralt_dir (pi_star_req S sumf reward beta beta_pos pi_ref Z_align_pos)
+                           (opp (ralt_dir (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos)
                                           (ralt_pistar_pos) s'))
                            (opp (plus (reward s') B))
                            Hrec (req_opp_compat _ _ Hrec')).

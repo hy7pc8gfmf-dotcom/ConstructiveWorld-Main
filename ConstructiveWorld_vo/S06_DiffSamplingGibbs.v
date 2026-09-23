@@ -3013,6 +3013,7 @@ Variable dynamics : R -> R.
 Definition entropy_increases : Set :=
   forall x, le (entropy x) (entropy (dynamics x)).
 
+(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，甄别席核），接口层原样保留记账。 *)
 Variable strict_entropy_increase :
   forall x, Not (Id (dynamics x) x) ->
     lt (entropy x) (entropy (dynamics x)).
@@ -3820,7 +3821,13 @@ Definition boltzmann_factor (s : S) : R :=
 
 Definition Z_thermo : R := sum_over_S boltzmann_factor.
 
-Variable Z_thermo_pos : lt zero Z_thermo.
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B21）：由 sum_pos_preserved+逐点 exp_neg_pos 导出；零承认件 *)
+Lemma Z_thermo_pos : lt zero Z_thermo.
+Proof.
+  unfold Z_thermo. apply sum_pos_preserved. intros s. unfold boltzmann_factor.
+  apply exp_neg_pos.
+Qed.
+
 
 Definition boltzmann_dist_attn (s : S) : R :=
   mult (inv_pos Z_thermo Z_thermo_pos) (boltzmann_factor s).
@@ -3981,7 +3988,9 @@ Variable delta_pos : lt zero delta.
 Variable delta_lt_one : lt delta one.
 Variable minorization : forall s s', le (mult delta (boltzmann_dist_attn s')) (transition s s').
 (* lt+le 混合加保序（ConvergenceCauchy 同款；one_minus_delta_pos 需要） *)
+(* [墙族登记·RW-MIX 混合保序] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批（TB-2 归一在案 :3974）。 *)
 Variable lt_plus_compat_lt_le : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
+(* [墙族登记·RW-MIX 混合保序（对偶 le_lt 形）] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批（TB-2 归一在案 :3974）。 *)
 Variable lt_plus_compat_le_lt : forall a b c d : R, le a b -> lt c d -> lt (plus a c) (plus b d).
 (* 双和交换（任何具体有限和满足） *)
 Variable sum_swap_cc : forall (f : S -> S -> R),

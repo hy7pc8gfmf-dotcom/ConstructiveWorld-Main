@@ -2437,6 +2437,7 @@ Variable sum_swap_cc : forall f : S -> S -> R,
   Id (sum_over_S (fun s : S => sum_over_S (fun s' : S => f s s')))
      (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
 Variable abs_ge_zero_id_cc : forall a : R, le zero a -> Id (abs a) a.
+(* [墙族登记·RW-MIX 混合保序] 接口层结构墙（论文7§9.1 三分表；uabm_wall 先例 ToyR_UpAblP7_UMixSelect.v:155）：接口仅载严格-严格/弱-弱加法保序（S01:232-233），无「严格从弱」产生子，本位（h 后缀副本节 UContraction）接口层不可导，禁硬证禁纯删；具体层已证供给 real_lt_plus_compat_lt_le（S07_RealSetoidExpLog.v:6147，cms_bs_lpc 同件）——消解走实例层供给或 TB-2 字段化归一批。 *)
 Variable lt_plus_compat_lt_le_h : forall a b c d : R,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 
@@ -2766,6 +2767,8 @@ Fixpoint bs_list_sum (f : S -> R) (l : list S) : R :=
 (* 枚举求和规范化（有限世界公理：抽象求和的规模被 enum 钉住） *)
 Variable sum_eq_list : forall g : S -> R, Id (sum_over_S g) (bs_list_sum g enum).
 
+
+
 Lemma bs_list_const_sum : forall (c : R) (l : list S),
   Id (bs_list_sum (fun _ : S => c) l) (mult (attn_nat_to_R (length l)) c).
 Proof.
@@ -2778,6 +2781,70 @@ Proof.
     apply (id_trans Hstep).
     apply (id_trans (id_sym (distrib c one (attn_nat_to_R (length t))))).
     apply (mult_comm c (plus one (attn_nat_to_R (length t)))).
+Qed.
+
+(* ==== R120 基座消融波 T1 终判位49 供给件组：bs_swap 槽由兄弟字段 enum+sum_eq_list 整体导出 ==== *)
+(* （照 P7BoundedSoftmaxDeep.v 同款归纳链 born-in-place 移植；禁 import 该件——order 反序）。零承认件 ==== *)
+Lemma bs_lsum_zero : forall l : list S, Id zero (bs_list_sum (fun _ : S => zero) l).
+Proof.
+  intro l.
+  exact (id_sym (id_trans (bs_list_const_sum zero l)
+                  (mult_zero (attn_nat_to_R (length l))))).
+Qed.
+Lemma bs_lsum_ext : forall (f g : S -> R) (l : list S),
+  (forall x : S, Id (f x) (g x)) -> Id (bs_list_sum f l) (bs_list_sum g l).
+Proof.
+  intros f g l H. induction l as [| x t IH].
+  - exact id_refl.
+  - simpl. exact (id_cong2 plus (H x) IH).
+Qed.
+Lemma bs_lsum_add : forall (f g : S -> R) (l : list S),
+  Id (bs_list_sum (fun s : S => plus (f s) (g s)) l)
+     (plus (bs_list_sum f l) (bs_list_sum g l)).
+Proof.
+  intros f g l. induction l as [| x t IH].
+  - exact (id_sym (plus_zero zero)).
+  - simpl.
+    apply (id_trans (id_cong (fun w : R => plus (plus (f x) (g x)) w) IH)).
+    exact (id_trans (id_sym (plus_assoc (f x) (g x) (plus (bs_list_sum f t) (bs_list_sum g t))))
+           (id_trans (id_cong (fun w : R => plus (f x) w)
+                     (plus_assoc (g x) (bs_list_sum f t) (bs_list_sum g t)))
+           (id_trans (id_cong (fun w : R => plus (f x) w)
+                     (id_trans (id_cong (fun w : R => plus w (bs_list_sum g t))
+                                       (plus_comm (g x) (bs_list_sum f t)))
+                               (id_sym (plus_assoc (bs_list_sum f t) (g x) (bs_list_sum g t)))))
+           (plus_assoc (f x) (bs_list_sum f t) (plus (g x) (bs_list_sum g t)))))).
+Qed.
+Lemma bs_lsum_fubini_gen : forall (f : S -> S -> R) (l1 l2 : list S),
+  Id (bs_list_sum (fun s : S => bs_list_sum (f s) l2) l1)
+     (bs_list_sum (fun s' : S => bs_list_sum (fun s : S => f s s') l1) l2).
+Proof.
+  intros f l1. induction l1 as [| x t IH]; intro l2.
+  - apply (id_trans (bs_lsum_zero l2)).
+    exact (bs_lsum_ext (fun _ : S => zero)
+                       (fun s' : S => bs_list_sum (fun s : S => f s s') nil)
+                       l2 (fun s' : S => id_refl)).
+  - apply (id_trans (id_cong (fun w : R => plus (bs_list_sum (f x) l2) w) (IH l2))).
+    apply (id_sym (bs_lsum_add (fun s' : S => f x s')
+              (fun s' : S => bs_list_sum (fun s : S => f s s') t) l2)).
+Qed.
+(* 主供给件：bs_swap 出节槽的「无槽精简版」P'——出节签名仅依赖 enum+sum_eq_list 两槽 *)
+Lemma bs_swap_derived : forall f : S -> S -> R,
+  Id (sum_over_S (fun s : S => sum_over_S (fun s' : S => f s s')))
+     (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
+Proof.
+  intro f.
+  apply (id_trans (sum_eq_list (fun s : S => sum_over_S (fun s' : S => f s s')))).
+  apply (id_trans (bs_lsum_ext
+            (fun s : S => sum_over_S (fun s' : S => f s s'))
+            (fun s : S => bs_list_sum (fun s' : S => f s s') enum) enum
+            (fun s : S => sum_eq_list (fun s' : S => f s s')))).
+  apply (id_trans (bs_lsum_fubini_gen f enum enum)).
+  apply (id_trans (id_sym (bs_lsum_ext
+            (fun s' : S => sum_over_S (fun s : S => f s s'))
+            (fun s' : S => bs_list_sum (fun s : S => f s s') enum) enum
+            (fun s' : S => sum_eq_list (fun s : S => f s s'))))).
+  exact (id_sym (sum_eq_list (fun s' : S => sum_over_S (fun s : S => f s s')))).
 Qed.
 
 Lemma bs_list_le_const : forall (f : S -> R) (c : R) (l : list S),
@@ -3554,6 +3621,7 @@ Variable m_in_vocab : InT m vocab.
 Variable m_count_one : @Id nat (count_token m vocab) (Datatypes.S O).
 Variable gamma : Real.
 Variable gamma_pos : real_lt real_zero gamma.
+(* [墙族登记·RW-GAP argmax 间隙公设] m 最大化间隙（γ 余量）=模型公设：节内 m 无最大化表征兄弟字段，本位不可导，禁硬证；Not 前件=Prop 红线对象——具体层 argmax 构造实例化时供给（甄别席核），接口层原样保留记账。 *)
 Variable gap_le : forall x : Token, Not (Id x m) ->
   real_le (real_plus (z x) gamma) (z m).
 
