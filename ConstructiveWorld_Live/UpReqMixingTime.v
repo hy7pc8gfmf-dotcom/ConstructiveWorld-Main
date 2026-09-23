@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   mix_rpow_one（原 L234，2 句玩具证）                                  *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqMixingTime.v —— 席 C10：显式 k 选取的混合时间定理            *)
 (*（GibbsAttractor.v:20-34 诚实边界「率件齐备只缺 ln/ceil」缺口的     *)
 (*  构造性闭合：ln/ceil 的 Nat-枚举+Archimedean 显式替身）2026-09-17  *)
@@ -234,8 +244,7 @@ Qed.
 Lemma mix_rpow_one : forall a : Real, real_eq (tv_rpow a 1) a.
 Proof.
   intro a.
-  exact (real_eq_trans (tv_rpow a 1) (real_mult a real_one) a
-           (real_eq_refl (real_mult a real_one)) (real_mult_one a)).
+  exact (real_eq_trans (tv_rpow a 1) (real_mult a real_one) a           (real_eq_refl (real_mult a real_one)) (real_mult_one a)).
 Qed.
 
 (* 幂正：0 < a ⟹ 0 < a^k *)
@@ -739,3 +748,5 @@ Print Assumptions mix_k_select_r1.
 Print Assumptions mix_pow_budget.
 Print Assumptions mix_k_select.
 Print Assumptions mix_k_select_le.
+
+Print Assumptions mix_rpow_one.

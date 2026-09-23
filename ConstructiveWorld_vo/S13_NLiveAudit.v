@@ -17,21 +17,21 @@
 (* 替换定理清单：qleT_refl_local（原两句桥转发 → 语句体展开至      *)
 (*   Qle_bool/Qcompare 定义层，三分逐支构造矛盾项，矛盾支以 Z 层    *)
 (*   自反比较构造性排除）；natlt_intro（原桥转发 → 绝对值反映面     *)
-(*   显式装配：次大比较规约＋反映引理＋改写闭合）。                 *)
+(*   显式装配：次大比较规约＋反映引理＋改写收口）。                 *)
 (* 非平凡性说明：两处替换均消除单跳转发，显式构造推导链（三分      *)
 (*   逐支构造 / 反映面装配链），非等价拆行。                        *)
 (* 红线自检：纯构造性；零新增承认语句；Set 层合取走构造子面；       *)
-(*   替换证明全部以真证明闭合语句闭尾；文件尾附假设面打印锚。       *)
-(* 编译态：三形战术已检验件验证（ProbeC 全绿）；本件全链编译待验    *)
+(*   替换证明全部以真证明收口语句闭尾；文件尾附假设面打印锚。       *)
+(* 编译态：三形战术已探针件验证（ProbeC 全绿）；本件全链编译待验    *)
 (*   （S 系深依赖链未建，浅链试编见台账）。                         *)
 (* ============================================================ *)
 
 (* —— T241 续作·切片二追加替换：qleT_refl（原桥单跳转发 → 三分样板复用，   *)
 (*   Qcompare 逐支构造，同 qleT_refl_local 定形）；natlt_elim（原换形桥单跳 → *)
-(*   消去向独立装配：判定面消取＋次大比较反映面投影＋定义性换算闭合）。     *)
+(*   消去向独立装配：判定面消取＋次大比较反映面投影＋定义性换算收口）。     *)
 (*   文件尾增假设面打印锚两条，余见台账续作节。                             *)
 (* —— T241 续作·切片三追加替换（6 处）：sf_natlt_elim/sf_natlt_intro（natlt    *)
-(*   消去/构造定形机械复用，独立版副本）；bool_id_true/bool_true_id（等同判定面三分： *)
+(*   消去/构造定形机械复用，独立版镜像）；bool_id_true/bool_true_id（等同判定面三分： *)
 (*   布尔逐支构造/消去，假支反转穷尽或判别式构造性排除）；audit_and_comm/       *)
 (*   audit_or_comm（逐点布尔判定面四分逐支构造）。文件尾增假设面打印锚六条。   *)
 Require Import S01_BaseRing.
@@ -443,10 +443,7 @@ Definition qstep (h x g : Q) : Q := x + h * qsign (g - x).
    【临时承认】——Qabs 分例装配，闭合批 P4。 *)
 Lemma qle_add_r : forall x y z : Q, Qle x y -> Qle (x + z) (y + z).
 Proof.
-  intros x y z H.
-  apply (Qplus_le_compat x y z z).
-  - exact H.
-  - apply Qle_refl.
+  intros x y z H. exact (Qplus_le_compat x y z z H (Qle_refl z)).
 Qed.
 
 (* Qle 左项 Qeq 同构替换。 *)
@@ -630,7 +627,7 @@ Proof.
   unfold QleT'.
   change (Id (match Qcompare x x with Gt => false | _ => true end) true).
   destruct (Qcompare x x) eqn:E; simpl.
-  - (* 小于支：判定面取真，自反构造子闭合 *)
+  - (* 小于支：判定面取真，自反构造子收口 *)
     apply id_refl.
   - (* 等于支：同上 *)
     apply id_refl.
@@ -653,7 +650,7 @@ Proof.
   intros h e x t Hh He Hle. split; [exact Hle | exact (qleT_refl_local (Qabs (t - x)))].
 Qed.
 
-(* 觉醒层级记录：每完成一阶段 level+1（N+1 觉醒事件）。 *)
+(* 觉醒层级簿记：每完成一阶段 level+1（N+1 觉醒事件）。 *)
 Definition ascend (k : nat) : nat := Datatypes.S k.
 
 End NBranch.
@@ -687,7 +684,7 @@ Close Scope Q_scope.  (* _p9 全 nat/bool 层；解除 NCA 段引入的 Q_scope 
 Lemma sf_natlt_elim : forall a b : nat, NatLt a b -> a < b.
 Proof.
   intros a b H.
-  (* 消去向独立装配（natlt_elim 定形机械复用，_p9 独立版副本）：判定面
+  (* 消去向独立装配（natlt_elim 定形机械复用，_p9 独立版镜像）：判定面
      消去取布尔等式，经次大比较反映面投影落小于等于判定面——不经换形桥单跳。 *)
   unfold NatLt in H.
   assert (Hb : Nat.ltb a b = true).
@@ -698,9 +695,9 @@ Qed.
 Lemma sf_natlt_intro : forall a b : nat, a < b -> NatLt a b.
 Proof.
   intros a b H.
-  (* 展开至定义层（natlt_intro 定形机械复用，_p9 独立版副本）：布尔反映面
+  (* 展开至定义层（natlt_intro 定形机械复用，_p9 独立版镜像）：布尔反映面
      先显式取等——比较规约后大一位的小于等于判定，经反映引理与线性
-     算术装配，再改写闭合于自反构造子。 *)
+     算术装配，再改写收口于自反构造子。 *)
   unfold NatLt.
   assert (Hb : Nat.ltb a b = true).
   { unfold Nat.ltb. apply Nat.leb_le. lia. }
@@ -1161,9 +1158,9 @@ Variable ground_truth : Sequence -> bool.
 Lemma natlt_elim : forall a b : nat, NatLt a b -> (a < b)%nat.
 Proof.
   intros a b H.
-  (* 消去向独立装配（natlt_intro 反向副本）： Id 判定面消去取布尔等式，
+  (* 消去向独立装配（natlt_intro 反向镜像）： Id 判定面消去取布尔等式，
      经次大比较反映面投影落 leb 判定面；ltb 与 leb(S a) 定义性换算由
-     证明项依存——不经次大比较换形桥单跳。 *)
+     证明项消费——不经次大比较换形桥单跳。 *)
   unfold NatLt in H.
   assert (Hb : Nat.ltb a b = true).
   { exact (RealSetoid.Id_eq (Nat.ltb a b) true H). }
@@ -1174,7 +1171,7 @@ Lemma natlt_intro : forall a b : nat, (a < b)%nat -> NatLt a b.
 Proof.
   intros a b H.
   (* 展开至定义层：布尔反映面先显式取等——次大比较规约后大一位的
-     小于等于判定，经反映引理与线性算术装配，再改写闭合于自反构造子。 *)
+     小于等于判定，经反映引理与线性算术装配，再改写收口于自反构造子。 *)
   unfold NatLt.
   assert (Hb : Nat.ltb a b = true).
   { unfold Nat.ltb. apply Nat.leb_le. lia. }
@@ -1187,7 +1184,7 @@ Lemma bool_id_true : forall b : bool, Id b true -> b = true.
 Proof.
   intros b H.
   (* 消去向独立装配（Id 判定面三分）：布尔逐支，真支以自反构造子消取
-     判定面后莱布尼茨自反闭合；假支假等判定面无构造子可居，反转穷尽
+     判定面后莱布尼茨自反收口；假支假等判定面无构造子可居，反转穷尽
      构造性排除——不经莱布尼茨换桥单跳。 *)
   destruct b as [|].
   - destruct H. reflexivity.
@@ -1210,7 +1207,7 @@ Proof. intros H. inversion H. Qed.
 Lemma id_false_true_absurd : Id false true -> False.
 Proof. intros H. inversion H. Qed.
 
-(* InT → In（ Prop 内部依存用；语句层禁 In） *)
+(* InT → In（ Prop 内部消费用；语句层禁 In） *)
 Lemma inT_in_gen : forall (A : Set) (x : A) (l : list A), InT x l -> In x l.
 Proof.
   intros A x l H. induction H as [l0 | y0 l0 Hrec IH].
@@ -1231,7 +1228,7 @@ Proof.
     + exact (IH x H).
 Qed.
 
-(* forallb 逐点依存/构造（泛型） *)
+(* forallb 逐点消费/构造（泛型） *)
 Lemma forallb_inT_gen : forall (A : Set) (f : A -> bool) (l : list A) (x : A),
   Id (forallb f l) true -> InT x l -> Id (f x) true.
 Proof.
@@ -1282,7 +1279,7 @@ Proof.
   unfold QleT'.
   change (Id (match Qcompare x x with Gt => false | _ => true end) true).
   destruct (Qcompare x x) eqn:E; simpl.
-  - (* 小于支：判定面取真，自反构造子闭合 *)
+  - (* 小于支：判定面取真，自反构造子收口 *)
     apply id_refl.
   - (* 等于支：同上 *)
     apply id_refl.
@@ -1565,7 +1562,7 @@ Theorem audit_and_comm : forall (a b : PostAud) (s : Sequence),
 Proof.
   intros a b s.
   (* 判定面四分（序三分样板族推广）：展开至逐点布尔判定面，真值组合四支
-     逐支以自反构造子闭合（无矛盾支）——不经莱布尼茨换桥、不依存交换引理。 *)
+     逐支以自反构造子收口（无矛盾支）——不经莱布尼茨换桥、不消费交换引理。 *)
   unfold audit_and.
   destruct (a s) as [|]; destruct (b s) as [|]; simpl; apply id_refl.
 Qed.
@@ -1575,7 +1572,7 @@ Theorem audit_or_comm : forall (a b : PostAud) (s : Sequence),
 Proof.
   intros a b s.
   (* 判定面四分（序三分样板族推广）：展开至逐点布尔判定面，真值组合四支
-     逐支以自反构造子闭合（无矛盾支）——不经莱布尼茨换桥、不依存交换引理。 *)
+     逐支以自反构造子收口（无矛盾支）——不经莱布尼茨换桥、不消费交换引理。 *)
   unfold audit_or.
   destruct (a s) as [|]; destruct (b s) as [|]; simpl; apply id_refl.
 Qed.
@@ -1758,7 +1755,7 @@ Theorem audited_hallucination_zero :
   Id (oracle (post_stage_audited oracle cands)) true ->
   Id (ground_truth (post_stage_audited oracle cands)) true.
 Proof.
-  intros oracle Hsound cands Hpass. apply Hsound. exact Hpass.
+  intros oracle Hsound cands Hpass. exact (Hsound (post_stage_audited oracle cands) Hpass).
 Qed.
 
 (* 审计重采样：通过审计 或 回退安全序列（Or := A+B，Set 层析取） *)
@@ -2226,13 +2223,9 @@ Qed.
 (* 引理 8（中间恒等式）：minus (plus x (opp L)) x == opp L *)
 Lemma minus_plus_opp : forall x L : R, Id (minus (plus x (opp L)) x) (opp L).
 Proof.
-  intros x L. unfold minus.
-  apply (id_trans (id_sym (plus_assoc x (opp L) (opp x)))).
-  apply (id_trans (id_cong (fun w => plus x w) (plus_comm (opp L) (opp x)))).
-  apply (id_trans (plus_assoc x (opp x) (opp L))).
-  apply (id_trans (id_cong (fun w => plus w (opp L)) (plus_opp x))).
-  apply (id_trans (plus_comm zero (opp L))).
-  apply (plus_zero (opp L)).
+  intros x L.
+  unfold minus.
+  exact ((id_trans (id_sym (plus_assoc x (opp L) (opp x)))) ((id_trans (id_cong (fun w => plus x w) (plus_comm (opp L) (opp x)))) ((id_trans (plus_assoc x (opp x) (opp L))) ((id_trans (id_cong (fun w => plus w (opp L)) (plus_opp x))) ((id_trans (plus_comm zero (opp L))) ((plus_zero (opp L)))))))).
 Qed.
 
 (* 引理 9（尾项求值）：Σ q·(log projected_distribution − log p) == opp (log Z_aud) *)
@@ -2303,13 +2296,13 @@ Open Scope Q_scope.
 (*   插入位 = 基底末尾（全基底先于 Attn——依赖约束）；零公理面      *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* AttnDoeblin.v —— P1 主包：有界 logits softmax 核的显式 Doeblin 收缩 *)
+(* AttnDoeblin.v —— P1 旗舰包：有界 logits softmax 核的显式 Doeblin 收缩 *)
 (*                                                                *)
 (* Part A（抽象层）u_tv_contraction：双点 TV 收缩——相对库内           *)
 (*   attention_tv_contraction 的推广：参考分布 u 只需归一化（无需       *)
 (*   平稳性/详细平衡），收缩在任意两个归一化分布之间成立；迭代版         *)
 (*   u_tv_iter 给出几何率 (1−δ)ⁿ。                                 *)
-(* Part B（主）有界 logits softmax 核：z 双显式界（−Δ ≤ z ≤ Δ）     *)
+(* Part B（旗舰）有界 logits softmax 核：z 双显式界（−Δ ≤ z ≤ Δ）     *)
 (*   ⟹ 核逐点 ≥ δ*·U，δ* := e^{−Δ/T}·e^{+Δ/T}⁻¹ 形态 exact 化为       *)
 (*   δ* := lo·lo（lo := e^{−Δ/T}），即 e^{−2Δ/T}——温度与 logit        *)
 (*   直径的显式函数；Part A 原样实例化 ⟹ 收缩率 (1 − e^{−2Δ/T})ⁿ。     *)
@@ -2351,32 +2344,27 @@ Qed.
 Lemma minus_plus_congr_l : forall a b c : R,
   Id (minus (plus a b) (plus a c)) (minus b c).
 Proof.
-  intros a b c. unfold minus.
-  apply (id_trans (id_cong (fun x => plus (plus a b) x) (opp_plus a c))).
-  apply (id_trans (plus_exchange a (opp a) b (opp c))).
-  apply (id_trans (id_cong (fun x => plus x (plus b (opp c))) (plus_opp a))).
-  apply (id_trans (plus_comm zero (plus b (opp c)))).
-  apply (plus_zero (plus b (opp c))).
+  intros a b c.
+  unfold minus.
+  exact ((id_trans (id_cong (fun x => plus (plus a b) x) (opp_plus a c))) ((id_trans (plus_exchange a (opp a) b (opp c))) ((id_trans (id_cong (fun x => plus x (plus b (opp c))) (plus_opp a))) ((id_trans (plus_comm zero (plus b (opp c)))) ((plus_zero (plus b (opp c)))))))).
 Qed.
 
 (* 公因子提出相减（k 在前）：k·x − k·y == k·(x−y) *)
 Lemma minus_factor : forall k x y : R,
   Id (minus (mult k x) (mult k y)) (mult k (minus x y)).
 Proof.
-  intros k x y. unfold minus.
-  apply (id_trans (id_cong (fun x0 => plus (mult k x) x0) (id_sym (opp_mult_l k y)))).
-  apply (id_sym (distrib k x (opp y))).
+  intros k x y.
+  unfold minus.
+  exact ((id_trans (id_cong (fun x0 => plus (mult k x) x0) (id_sym (opp_mult_l k y)))) ((id_sym (distrib k x (opp y))))).
 Qed.
 
 (* 公因子提出相减（k 在后）：x·k − y·k == (x−y)·k *)
 Lemma minus_factor_pt : forall x y k : R,
   Id (minus (mult x k) (mult y k)) (mult (minus x y) k).
 Proof.
-  intros x y k. unfold minus.
-  apply (id_trans (id_cong (fun x0 => plus (mult x k) x0) (id_sym (opp_mult_r y k)))).
-  apply (id_trans (id_cong2 plus (mult_comm x k) (mult_comm (opp y) k))).
-  apply (id_trans (id_sym (distrib k x (opp y)))).
-  apply (mult_comm k (minus x y)).
+  intros x y k.
+  unfold minus.
+  exact ((id_trans (id_cong (fun x0 => plus (mult x k) x0) (id_sym (opp_mult_r y k)))) ((id_trans (id_cong2 plus (mult_comm x k) (mult_comm (opp y) k))) ((id_trans (id_sym (distrib k x (opp y)))) ((mult_comm k (minus x y)))))).
 Qed.
 
 (* 逆元对乘法分配：inv(a·b) == inv a · inv b（正元） *)
@@ -2726,7 +2714,7 @@ Qed.
 
 End UContraction.
 
-(* ################ Part B（主）：有界 logits softmax 核 ################ *)
+(* ################ Part B（旗舰）：有界 logits softmax 核 ################ *)
 
 Section BoundedSoftmax.
 Context {RI : RealInterfaceEnhanced}.
@@ -2762,7 +2750,7 @@ Variable expf_plus : forall a b : R, Id (expf (plus a b)) (mult (expf a) (expf b
 Variable expf_mono_lt : forall a b : R, lt a b -> lt (expf a) (expf b).
 Variable expf_mono_le : forall a b : R, le a b -> le (expf a) (expf b).
 
-(* 诚实接口三件（与 Part A 同款，供主实例化） *)
+(* 诚实接口三件（与 Part A 同款，供旗舰实例化） *)
 Variable bs_swap : forall f : S -> S -> R,
   Id (sum_over_S (fun s : S => sum_over_S (fun s' : S => f s s')))
      (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
@@ -2877,9 +2865,7 @@ Qed.
 
 Lemma bs_delta_star_lt_one : lt delta_star one.
 Proof.
-  apply (lt_id_r_loc _ _ _ (bs_lo_hi_eq)).
-  apply (lt_id_r_loc _ _ _ (mult_comm hi lo)).
-  exact (lt_mult_compat lo hi lo bs_lo_pos bs_lo_lt_hi).
+  exact ((lt_id_r_loc _ _ _ (bs_lo_hi_eq)) ((lt_id_r_loc _ _ _ (mult_comm hi lo)) ((lt_mult_compat lo hi lo bs_lo_pos bs_lo_lt_hi)))).
 Qed.
 
 Lemma bs_inv_hi_lo : Id (inv_pos hi bs_hi_pos) lo.
@@ -2920,8 +2906,7 @@ Qed.
 Lemma bs_Zrow_le : forall s : S, le (Zrow s) (mult nR hi).
 Proof.
   intro s.
-  apply (le_id_l _ _ _ (sum_eq_list (fun s' : S => factor s s'))).
-  exact (bs_list_le_const (fun s' : S => factor s s') hi enum (fun x : S => bs_factor_le_hi s x)).
+  exact ((le_id_l _ _ _ (sum_eq_list (fun s' : S => factor s s'))) ((bs_list_le_const (fun s' : S => factor s s') hi enum (fun x : S => bs_factor_le_hi s x)))).
 Qed.
 
 Lemma bs_Zrow_pos : forall s : S, lt zero (Zrow s).
@@ -2964,12 +2949,10 @@ Let Unif : S -> R := fun _ : S => inv_pos nR bs_nR_pos.
 
 Lemma bs_Unif_norm : Id (sum_over_S Unif) one.
 Proof.
-  apply (id_trans (sum_eq_list Unif)).
-  apply (id_trans (bs_list_const_sum (inv_pos nR bs_nR_pos) enum)).
-  exact (inv_pos_correct nR bs_nR_pos).
+  exact ((id_trans (sum_eq_list Unif)) ((id_trans (bs_list_const_sum (inv_pos nR bs_nR_pos) enum)) ((inv_pos_correct nR bs_nR_pos)))).
 Qed.
 
-(* ===== 主核心：显式 Doeblin 下界 =====
+(* ===== 旗舰核心：显式 Doeblin 下界 =====
    P(s,s') ≥ δ*·U(s')，δ* := lo·lo = e^{−2Δ/T}（精确，无损耗） *)
 Lemma bs_minorization : forall s s' : S,
   le (mult delta_star (Unif s')) (bs_kernel s s').
@@ -3014,7 +2997,7 @@ Proof.
 exact (le_id_l _ _ _ Heq Hchain).
 Qed.
 
-(* ===== 主定理 1：有界 softmax 核的双点 TV 收缩 =====
+(* ===== 旗舰定理 1：有界 softmax 核的双点 TV 收缩 =====
    收缩率显式：1 − e^{−2Δ/T} *)
 Theorem bounded_softmax_tv_contraction : forall (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
@@ -3028,7 +3011,7 @@ Proof.
            bs_swap bs_abs bs_lpc mu nu Hmu Hnu).
 Qed.
 
-(* ===== 主定理 2：迭代收缩，显式几何率 (1 − e^{−2Δ/T})ⁿ ===== *)
+(* ===== 旗舰定理 2：迭代收缩，显式几何率 (1 − e^{−2Δ/T})ⁿ ===== *)
 Theorem bounded_softmax_tv_iter : forall (n : nat) (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
   le (tv (@u_titer RI SS SO bs_kernel n mu) (@u_titer RI SS SO bs_kernel n nu))
@@ -3068,7 +3051,7 @@ Proof.
                         end)))))).
 Qed.
 
-(* 提取检验：实层指数构造可提取为 OCaml（零 Obj.magic） *)
+(* 提取探针：实层指数构造可提取为 OCaml（零 Obj.magic） *)
 
 (* ============================================================ *)
 (* 217 块 23 · AttnSqrt（P3：构造性平方根 real_sqrt_exists——       *)
@@ -3099,7 +3082,7 @@ Qed.
 (*      （exp 外延）+ cauchy_real_exp_pos（exp 恒正）拼装：      *)
 (*      r·r == exp(t+t) == exp(log d) == d，且 r > 0 直接由     *)
 (*      exp 正性给出（无需二分/夹逼/诊断分支）。                *)
-(*   注：规范原建议副本 cos π/2 二分模板；本实现改走库内      *)
+(*   注：规范原建议镜像 cos π/2 二分模板；本实现改走库内      *)
 (*   log 论证既有产物（其本身即二分模板的产物），构造更短、     *)
 (*   且对弱前提 d ≥ 0 严格成立（Or 左支给出正间隙证书，         *)
 (*   右支给出 r := 0 的精确相等）——无假命题修正。               *)
@@ -3342,7 +3325,7 @@ End SqrtWitnessGeneral.
 (*   只给逐固定 T 的不等式，"T→0 收敛到硬注意力"在论文中仅为     *)
 (*   interpretation；本文件把量词翻转为真极限定理（sigT 见证）。 *)
 (*                                                              *)
-(*   设定副本 MinPSampling Section（L30691）：Set 层 list 词表    *)
+(*   设定镜像 MinPSampling Section（L30691）：Set 层 list 词表    *)
 (*   世界 + token_eq_dec；权重 w_T(x) = e^{z(x)/T}/Z(T)。        *)
 (*                                                              *)
 (*   诚实接口（假命题修正协议）：                                *)
@@ -3377,7 +3360,7 @@ Proof.
   intros a b H. exact (inl H).
 Qed.
 
-(* 左乘保序：0<c、a≤b ⟹ c·a≤c·b（副本 real_le_mult_compat） *)
+(* 左乘保序：0<c、a≤b ⟹ c·a≤c·b（镜像 real_le_mult_compat） *)
 Lemma real_le_mult_compat_l_aux : forall a b c : Real,
   real_lt real_zero c -> real_le a b -> real_le (real_mult c a) (real_mult c b).
 Proof.
@@ -3531,7 +3514,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Section AttnHardLimit：list 词表世界（副本 MinPSampling）    *)
+(* Section AttnHardLimit：list 词表世界（镜像 MinPSampling）    *)
 (* ============================================================ *)
 
 Section AttnHardLimit.

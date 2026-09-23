@@ -13,16 +13,16 @@
 
 (* ============================================================ *)
 (* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
-(* 替换定理清单：b3_one_minus_q_pos（原单跳换形转发 → 加法保序装配＋环等式坍缩＋定义层转换闭合）。                                          *)
+(* 替换定理清单：b3_one_minus_q_pos（原单跳换形转发 → 加法保序装配＋环等式坍缩＋定义层转换收口）。                                          *)
 (* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
 (*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
-(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明闭合语句     *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
 (*   闭尾；文件尾附假设面打印锚。                                   *)
 (* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
 (* ============================================================ *)
 
-(* —— T241 续作·切片二追加替换：atan_odd_nonneg（原弱序桥单跳＋姊妹件依存 →  *)
-(*   三级提升链：nat 层非负见证＋整数域反映面提升＋Q 序定义体落位闭合）。     *)
+(* —— T241 续作·切片二追加替换：atan_odd_nonneg（原弱序桥单跳＋姊妹件消费 →  *)
+(*   三级提升链：nat 层非负见证＋整数域反映面提升＋Q 序定义体落位收口）。     *)
 (*   文件尾增假设面打印锚一条，余见台账续作节。                               *)
 (* —— T241 续作·切片三追加替换（4 处）：atan_odd_neq（提升链反向坍缩：商等式  *)
 (*   落定义体归约整数层＋线性算术排除）；b3_abs_sq（绝对值分子绝对整面定义体   *)
@@ -88,7 +88,7 @@ Proof.
   intro k.
   (* 三级提升链：nat 层非负见证（算术面）→ 整数域内嵌自然反映面提升 →
      Q 序定义体落位（展开＋显式换算落 Z 乘法面）——不经弱序桥单跳，
-     不依存姊妹件（奇数分母严格正件保持独立）。 *)
+     不消费姊妹件（奇数分母严格正件保持独立）。 *)
   assert (Hn : (0 <= 2 * k + 1)%nat) by lia.
   assert (Hz : (0 <= Z.of_nat (2 * k + 1))%Z) by lia.
   unfold Qle.
@@ -100,9 +100,9 @@ Qed.
 Lemma atan_odd_neq : forall k : nat, ~ (Z.of_nat (2 * k + 1) # 1) == 0.
 Proof.
   intros k Heq.
-  (* 提升链反向坍缩（atan_odd_nonneg 提升链副本）：商等式落定义体（分子/分母
+  (* 提升链反向坍缩（atan_odd_nonneg 提升链镜像）：商等式落定义体（分子/分母
      投影归约至整数层），自然层线性算术构造性排除——不经非等换形桥、
-     不依存姊妹正性件。 *)
+     不消费姊妹正性件。 *)
   unfold Qeq in Heq. simpl in Heq. lia.
 Qed.
 
@@ -1246,9 +1246,7 @@ Qed.
 (* ============ sin(θ) > 0 ============ *)
 Lemma real_sin_arctan_one_pos : real_lt real_zero (cauchy_real_sin arctan_one_real).
 Proof.
-  apply (real_sin_pos_lt_two arctan_one_real).
-  - exact real_lt_zero_arctan_one.
-  - exact real_lt_arctan_one_two.
+  exact (real_sin_pos_lt_two arctan_one_real real_lt_zero_arctan_one real_lt_arctan_one_two).
 Qed.
 
 (* ============ 顺带：θ 本身（arctan 值）在 (0, 3/2) —— 数值 sanity 用 ============ *)
@@ -1263,7 +1261,7 @@ Lemma arctan_one_tan_unfold :
           (real_mult (cauchy_real_sin arctan_one_real)
                      (real_inv_pos (cauchy_real_cos arctan_one_real) real_cos_arctan_one_pos)).
 Proof.
-  unfold arctan_one_tan, real_tan. apply real_eq_refl.
+  unfold arctan_one_tan, real_tan. exact (real_eq_refl _).
 Qed.
 (* ================================================================== *)
 (*  sT2_tan / p_n10_channel.v   N9b 完结通道：B4（N10）装配骨架        *)
@@ -1984,7 +1982,7 @@ Proof.
 Qed.
 
 (* ============ 批 B1 第 3 部分：Real 层 sin/cos 在 0 的逐 eps 线性化 ============ *)
-(* 语句副本 exp_minus_one_linear（L47823，205 实测）。设计 §2-D1 的 B1 产物：
+(* 语句镜像 exp_minus_one_linear（L47823，205 实测）。设计 §2-D1 的 B1 产物：
    "|sin h − h| ≤ C|h|³、|cos h − 1| ≤ C|h|²（|h| ≤ 1）" 的 Real 层逐 eps 形态
    （real_le 闭式非严格形式受库 real_le := Or real_lt real_eq 定义限制不可构造，
    见根文件 L13513 注释；逐 eps 形态为库 idiom，且为 B2 直接所需）。
@@ -2524,7 +2522,7 @@ Proof.
 Qed.
 
 (* ============ 批 B2 第 1 部分：Real 层 sin 可微 ============ *)
-(* 语句副本 real_exp_deriv_eq_self（根 L63005，205 实测），sin/cos 全域定义故          *)
+(* 语句镜像 real_exp_deriv_eq_self（根 L63005，205 实测），sin/cos 全域定义故          *)
 (* 无 x>0 前提（设计 §4-R3）。证明：rs_add_sin（根 L64560）分解 D = G + sin x·A +     *)
 (* cos x·B（A := cos h − 1、B := sin h − h），逐点 |P_n| ≤ M_s、|C_n| ≤ M_c 用       *)
 (* real_norm_bounded，δ := min(1, eps·(1/(8(M_s+M_c+1))))，real_lt 见证 eps1'/2。   *)
@@ -3346,8 +3344,8 @@ Lemma b3_abs_sq : forall (x : Q), Qabs (x * x) == x * x.
 Proof.
   intros x.
   (* 绝对值定义体直落（分子绝对整面）：商展开、平方项投影归约至整数层，
-     分子绝对值等式以线性算术非负见证装配，环等式闭合——不经绝对值
-     正性桥单跳、不依存平方非负姊妹件。 *)
+     分子绝对值等式以线性算术非负见证装配，环等式收口——不经绝对值
+     正性桥单跳、不消费平方非负姊妹件。 *)
   unfold Qabs.
   destruct x as [n d].
   simpl.
@@ -3409,7 +3407,7 @@ Proof.
   intros x Heq.
   (* 结构性推导（平方非负面相遇）：由零等式环换算出平方为负一的显式
      中立见证，与平方非负面在序定义体（整数层）相遇相抵——不经非等
-     换形桥、不依存姊妹正性件。 *)
+     换形桥、不消费姊妹正性件。 *)
   assert (Hs : x * x == (1 + x * x) - 1) by ring.
   rewrite Heq in Hs.
   assert (Hsn : x * x == - 1) by (rewrite Hs; ring).
@@ -3423,7 +3421,7 @@ Lemma b3_inv_sq_r : forall x : Q, (1 + x * x) * Qinv (1 + x * x) == 1.
 Proof.
   intros x.
   (* 独立非零装配：平方非负面＋环换算就地构造非零见证，再入逆元
-     反映面闭合——不依存姊妹非零件（其证明独立于本件成立）。 *)
+     反映面收口——不消费姊妹非零件（其证明独立于本件成立）。 *)
   assert (Hnz : ~ (1 + x * x == 0)).
   { intro Heq.
     assert (Hs : x * x == (1 + x * x) - 1) by ring.
@@ -3610,7 +3608,7 @@ Lemma b3_one_minus_q_pos : forall (q : Q), Qlt q 1 -> Qlt 0 (1 - q).
 Proof.
   intros q Hq1.
   (* 展开至定义层：两侧同加减元（加法保序反映面第二投影装配），
-     左端经环等式坍缩为零元，右端差式定义性即加负元形，转换闭合
+     左端经环等式坍缩为零元，右端差式定义性即加负元形，转换收口
      ——不经单跳换形引理转发。 *)
   assert (Hs : Qlt (q + -q) (1 + -q)).
   { apply (proj2 (Qplus_lt_l q 1 (-q))). exact Hq1. }
@@ -5500,10 +5498,7 @@ Lemma b3rr_dom_r1 : forall (x : Real) (r : Q),
   forall n : nat, QleT' (Qabs (projT1 x n)) 1.
 Proof.
   intros x r Hxr Hr1 n.
-  apply (b3rr_dom_lt1 x r Hxr).
-  apply Qle_to_QleT'.
-  apply Qlt_le_weak.
-  exact Hr1.
+  exact ((b3rr_dom_lt1 x r Hxr) (Qle_to_QleT' _ _ (Qlt_le_weak _ _ Hr1)) n).
 Qed.
 
 (* 0 ≤ r ⟹ (1−r)/2 ≤ 1/2·1 == 1/2 ≤ 1 *)
@@ -5525,7 +5520,7 @@ Qed.
 (* Part D：r 参数化主定理 b3rr_real_arctan_deriv_linear          *)
 (* 域 |x| ≤ r（0 ≤ r < 1，逐点 QleT' 前提）；δ := min((1−r)/2,  *)
 (*   eps·k)（k := Qinv(4(Cr+1))，Cr := b3rr_C2((1+r)/2)）。       *)
-(* 副本蓝图 sc2_b3_real.v Part 8 real_arctan_deriv_linear 的     *)
+(* 镜像蓝图 sc2_b3_real.v Part 8 real_arctan_deriv_linear 的     *)
 (* 点值链（上游只读参考；(1/2)-底换 r，Cb 换 Cr）。              *)
 (* ============================================================ *)
 Lemma b3rr_real_arctan_deriv_linear :
@@ -5852,7 +5847,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B4 链式 infra（p2 完整 + p3 前提）+ B5-B E/Hsc 桥 *)
+(* B4 链式 infra（p2 完整 + p3 前件）+ B5-B E/Hsc 桥 *)
 (* b4_chain_lipschitz 未纳入（排除项）；零公理面。                    *)
 (* ============================================================ *)
 
@@ -7233,8 +7228,7 @@ Lemma b5b_apT2 : forall (a : Q) (n : nat), QleT' (Qabs a) 1 ->
   QleT' (Qabs (arctan_partial n a)) 2.
 Proof.
   intros a n Ha.
-  apply Qle_to_QleT'.
-  apply b5b_ap_abs_le2. exact Ha.
+  exact ((Qle_to_QleT' _ _ ((b5b_ap_abs_le2 _ _ Ha)))).
 Qed.
 
 (* sin 族 Lipschitz（B := 2，常数 c，|a|,|b| ≤ 2） *)
@@ -8113,8 +8107,7 @@ Lemma b5c_d_abs : forall (x : Real),
   real_eq (real_abs (b5a_atan_d x)) (b5a_atan_d x).
 Proof.
   intro x.
-  apply real_abs_pos_req.
-  exact (b5c_d_pos x).
+  exact ((real_abs_pos_req _ ((b5c_d_pos x)))).
 Qed.
 
 (* ============================================================ *)
@@ -9640,7 +9633,8 @@ Qed.
 Lemma b5i_abs_prod_le : forall (a b : Q),
   Qle (Qabs (Qmult a b)) (Qmult (Qabs a) (Qabs b)).
 Proof.
-  intros a b. apply qeq_imp_qle. exact (Qabs_Qmult a b).
+  intros a b.
+  exact ((qeq_imp_qle _ _ ((Qabs_Qmult a b)))).
 Qed.
 
 (* |d| ≤ 1 ⟹ |d·h| ≤ |h|（逐点 dh 吸收） *)
@@ -10512,7 +10506,7 @@ Qed.
 
 (* ================= ② 严格 eps 桥 =================
    ∀e>0(Real): real_lt |x−y| e ⟹ real_eq x y。
-   p4 检验第 52/58 行 setoid_rewrite 于 Qlt(Prop) 上下文的卡点修复：
+   p4 探针第 52/58 行 setoid_rewrite 于 Qlt(Prop) 上下文的卡点修复：
    改以 Qlt_minus_iff 双向 + Qlt_le_trans/qeq_le ring 桥（无 Proper 依赖）。 *)
 Lemma b4_abs_lt_forall_eps_eq : forall (x y : Real),
   (forall (e : Real), real_lt real_zero e ->
@@ -11064,7 +11058,7 @@ Qed.
 (* ============================================================ *)
 (* B5-B task2 + task5 收尾          *)
 (* （b5b_sin_cont / b5b_cos_cont 全域逐 eps 连续；b6_f1_template 与 *)
-(* Section B5bEndpointBridge 桥接引理 b5b_f1_closure；6 Qed）；来源：    *)
+(* Section B5bEndpointBridge 桥件 b5b_f1_closure；6 Qed）；来源：    *)
 (*   演变/.ablation/sc2_parallel/sc2_b5b_endpoint/sc2_b5b_07_cont.v *)
 (* ============================================================ *)
 
@@ -11833,8 +11827,7 @@ Qed.
 Lemma b5b_hsc_theorem : real_eq (cauchy_real_sin arctan_one_real)
                                 (cauchy_real_cos arctan_one_real).
 Proof.
-  apply b5b_hsc_main.
-  exact b5b_endpoint.
+  exact ((b5b_hsc_main b5b_endpoint)).
 Qed.
 
 End B5B_Endpoint.
@@ -11851,17 +11844,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* B5-A item1b 主装配（副本 Section *)
+(* B5-A item1b 主装配（镜像 Section *)
 (* B5A_Item1B：Variable real_arctan_deriv，End 泛化为参数；24 件，  *)
 (* 16 整行 Qed，含 b5a_sin_atan_diff；BAD 0）。来源：                *)
 (* 演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item1b.v；        *)
-(* 注：本块用 Q 域 nra——由 Lqa 供给（AA6 断根重述 Psatz→Lqa）。    *)
+(* 注：本块用 Q 域 nra——由 Lqa 供给（AA6 断根换装 Psatz→Lqa）。    *)
 (* 中段 Require 先例见根 L3069。                                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import Lqa.
 (* ============================================================ *)
-(* U2 副本 Section：arctan' 条件件（B3 形态；上游根件同款规格）  *)
+(* U2 镜像 Section：arctan' 条件件（B3 形态；上游根件同款规格）  *)
 (* ============================================================ *)
 Section B5A_Item1B.
 
