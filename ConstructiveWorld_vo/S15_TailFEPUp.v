@@ -1,13 +1,13 @@
 (* ============================================================ *)
 (* T242 · ToyR 战役 包D · S15_TailFEPUp.v（同名非平凡替换稿）     *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
-(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 闭合。    *)
 (* 替换段：kl_lt_le_bridge / kl_eq_le_bridge / kl_le_eq_r /        *)
 (*         kl_le_eq_l（Or 注入 @inl/@inr 全显四件）                *)
 (* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
-(* 编译态（切片四分档明示）：四桥替换体探针代验绿（probe_s15_bridges *)
+(* 编译态（切片四分档明示）：四桥替换体检验代验绿（probe_s15_bridges *)
 (* 整件编绿＋Closed×4）；整件验绿受 S14 .vo 阻塞（S14 整件受阻于    *)
-(* 原件固有 conv 墙，见 T242 台账切片四章），本稿分档挂账交付。      *)
+(* 原件固有 conv 墙，见 T242 台账切片四章），本稿分档遗留交付。      *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* S15_TailFEPUp.v                                             *)
@@ -105,7 +105,7 @@ Proof.
       (fun s : S => id_cong2 mult (Hpt s) (id_cong log (Hpt s)))).
 Qed.
 
-(* ========== P5 旗舰：attention = 变分自由能的唯一最小点 ========== *)
+(* ========== P5 主定理：attention = 变分自由能的唯一最小点 ========== *)
 Theorem attention_minimizes_free_energy_unique :
   forall p : S -> R, normalized p -> positive_dist p ->
   And (le (F_attn (softmax_temp spp T T_pos z)) (F_attn p))
@@ -159,7 +159,7 @@ Variable sum_eq_list : forall g : S -> R, Id (sum_over_S g) (bs_list_sum g enum)
 Variable expf_agree : forall x : R, Id (expf x) (exp_pos_fn x).
 
 (* ========== 行视图：bs_kernel 的每一行 = 单查询 softmax_temp ========== *)
-(* 消费前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
+(* 依存前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
 (* 实例化通道——经 real_expf_realizable 取 expf := exp_pos_fn 即    *)
 (* 满足，一致性前提退化为 id_refl）。                                 *)
 Theorem bs_kernel_row_is_softmax_temp : forall s s' : S,
@@ -187,7 +187,7 @@ Qed.
 
 End RowView.
 
-(* 提取探针：softmax 核与自由能可提取 *)
+(* 提取检验：softmax 核与自由能可提取 *)
 
 (* ============================================================ *)
 (* 块 27 · UpPPO：PPO clip 单侧误差恒等式                         *)
@@ -312,10 +312,7 @@ Qed.
 (* 辅助：a−b ≥ 0 ⟹ b ≤ a *)
 Lemma le_of_minus_nonneg : forall a b : R, le zero (minus a b) -> le b a.
 Proof.
-  intros a b H.
-  apply (le_id_r _ _ _ (id_trans (plus_comm b (minus a b))
-                                  (minus_plus_cancel_gap a b))).
-  exact (le_plus_nonneg_r b (minus a b) H).
+  intros a b H. exact (le_id_r b (plus b (minus a b)) a (id_trans (plus_comm b (minus a b)) (minus_plus_cancel_gap a b)) (le_plus_nonneg_r b (minus a b) H)).
 Qed.
 
 (* ========== E3：裁剪代理非负 ⟹ 价值改进（单侧三件齐备） ========== *)
@@ -342,7 +339,7 @@ Qed.
 
 End PPOClipDecomp.
 
-(* 提取探针：clip 误差与代理目标可提取 *)
+(* 提取检验：clip 误差与代理目标可提取 *)
 
 (* ============================================================ *)
 (* 块 28 · UpStepKL：论文 1 定理 4.8 唯一诚实接口  *)
@@ -500,15 +497,8 @@ Lemma kl_le_lt_plus : forall a b : Real,
   real_lt real_zero (real_plus a b).
 Proof.
   intros a b Ha Hb. destruct Ha as [Hlt | Heq].
-  - exact (real_eq_lt_lt real_zero (real_plus real_zero real_zero) (real_plus a b)
-             kl_zero_plus_zero
-             (real_lt_plus_compat real_zero a real_zero b Hlt Hb)).
-  - apply (real_lt_eq_lt real_zero b (real_plus a b) Hb).
-    exact (real_eq_sym (real_plus a b) b
-             (real_eq_trans (real_plus a b) (real_plus real_zero b) b
-                (RealSetoid.real_eq_plus_compat a b real_zero b
-                   (real_eq_sym real_zero a Heq) (real_eq_refl b))
-                (kl_plus_zero_l b))).
+  exact (real_eq_lt_lt real_zero (real_plus real_zero real_zero) (real_plus a b) kl_zero_plus_zero (real_lt_plus_compat real_zero a real_zero b Hlt Hb)).
+  exact (real_lt_eq_lt real_zero b (real_plus a b) Hb (real_eq_sym (real_plus a b) b (real_eq_trans (real_plus a b) (real_plus real_zero b) b (RealSetoid.real_eq_plus_compat a b real_zero b (real_eq_sym real_zero a Heq) (real_eq_refl b)) (kl_plus_zero_l b)))).
 Qed.
 
 (* 0 ≤ m、0 < E ⟹ 0 ≤ E·m（弱乘保序 + eq 换形） *)
@@ -1418,7 +1408,7 @@ Module UpGRPO219.
 (*   B3 真均匀质量：组均值对每个 delta_j 的质量恰为 1/G。              *)
 (*   诚实注记：NoDup 不可去——双副本枚举给质量 2/G（反例只注释不证）。  *)
 (* C（Real 层）：标准化优势二阶矩——real_sqrt_exists 的 Or 前提形态     *)
-(*   与「σ > 0 需证书」的构造性语义衔接：sigT 打包 σ（0 < σ ∧ σ²==Var） *)
+(*   与「σ > 0 需证书」的构造性语义衔接：sigT 封装 σ（0 < σ ∧ σ²==Var） *)
 (*   且 Σ(A_i/σ)² == 1（Var 为未归一化中心二阶矩，与论文 1 §7.2 口径   *)
 (*   一致；population 版由重新缩放立得，注记说明）。                   *)
 (* 纪律：零公理面、零承认件；Set 层语句；全 Qed；可提取。             *)
@@ -1485,9 +1475,8 @@ Lemma list_sum_g_linear : forall (a : R) (f : Group -> R) (l : list Group),
   Id (list_sum_g (fun i : Group => mult a (f i)) l) (mult a (list_sum_g f l)).
 Proof.
   intros a f l. induction l as [| x rest IH].
-  - exact (id_sym (mult_zero a)).
-  - apply (id_trans (id_cong2 plus (id_refl : Id (mult a (f x)) (mult a (f x))) IH)).
-    apply (id_sym (distrib a (f x) (list_sum_g f rest))).
+  exact (id_sym (mult_zero a)).
+  exact (id_trans (id_cong2 plus (id_refl : Id (mult a (f x)) (mult a (f x))) IH) (id_sym (distrib a (f x) (list_sum_g f rest)))).
 Qed.
 
 Lemma list_sum_g_const : forall (c : R) (l : list Group),
@@ -1540,7 +1529,8 @@ Fixpoint removeT_g (j : Group) (l : list Group) : list Group :=
 Lemma InT_transport : forall (x y : Group) (l : list Group),
   Id x y -> InT x l -> InT y l.
 Proof.
-  intros x y l H Hin. destruct H. exact Hin.
+  intros x y l H Hin.
+  exact (match H in (Id _ y0) return InT y0 l with | id_refl => Hin end).
 Qed.
 
 Lemma not_InT_count_zero : forall (j : Group) (l : list Group),
@@ -1658,7 +1648,8 @@ Fixpoint nodup_g (l : list Group) : Set :=
 Lemma InT_list_transport : forall (x : Group) (l1 l2 : list Group),
   Id l1 l2 -> InT x l1 -> InT x l2.
 Proof.
-  intros x l1 l2 H Hin. destruct H. exact Hin.
+  intros x l1 l2 H Hin.
+  exact (match H in (Id _ l0) return InT x l0 with | id_refl => Hin end).
 Qed.
 
 (* 头元素 ≠ j ⟹ 成员关系在尾部 *)
@@ -1739,14 +1730,7 @@ Theorem grpo_uniform_mass : forall j : Group,
      (inv_pos G G_pos).
 Proof.
   intro j. intro Hin.
-  apply (id_trans (list_sum_g_linear (inv_pos G G_pos)
-            (fun i : Group => match grp_eq_dec i j with
-                              | inl _ => one
-                              | inr _ => zero
-                              end) group_enum)).
-  apply (id_trans (id_cong2 mult (id_refl : Id (inv_pos G G_pos) (inv_pos G G_pos))
-                             (grpo_indicator_sum_one j Hin))).
-  apply mult_one.
+  exact (id_trans (list_sum_g_linear (inv_pos G G_pos) (fun i : Group => match grp_eq_dec i j with | inl _ => one | inr _ => zero end) group_enum) (id_trans (id_cong2 mult (id_refl : Id (inv_pos G G_pos) (inv_pos G G_pos)) (grpo_indicator_sum_one j Hin)) (mult_one (inv_pos G G_pos)))).
 Qed.
 
 End GRPONoDup.
@@ -1815,13 +1799,13 @@ Proof.
              (RealSetoid.real_lt_id_r _ _ _ Hv0 Hvar) with end).
 Qed.
 
-(* ========== C：标准化优势二阶矩（sigT 打包 σ、正性与单位二阶矩） ========== *)
+(* ========== C：标准化优势二阶矩（sigT 封装 σ、正性与单位二阶矩） ========== *)
 (* 口径：σ² == Var（未归一化中心二阶矩，论文 1 §7.2 术语说明一致），     *)
 (* Σ(A_i/σ)² == 1；population 版（σ² = Var/G）由重新缩放立得（注记）。   *)
 (* C 主定理（最终形态）：构造性 σ 与单位二阶矩。
    实现注记：real_sqrt_exists 的 Or 前提在 inl 支携带正性证书 Hlt: 0<σ，
    inr 支（σ≈0）与 Var>0 矛盾（经 σ²==Var 运送 + real_lt_irrefl），
-   故 sigT 打包合法。为避免在定理陈述中内联巨型 match，先用
+   故 sigT 封装合法。为避免在定理陈述中内联巨型 match，先用
    real_sqrt_exists 构造中间 Module 常量（见下方 SigmaWitness）。 *)
 (* 从 real_sigma_witness 提取 σ 的投影（避免在定理陈述中内联 match） *)
 Lemma real_sigma_witness : forall Hvar : real_lt real_zero Var,
@@ -1904,10 +1888,10 @@ Module UpExtras219.
 (*   质量变为 2/G，G=2 时整体质量翻倍。常数奖励版总计 2c ≠ c。     *)
 (*                                                                *)
 (* 件3：Var ≥ 0 的条件形态（Real 层）。                            *)
-(*   real_var_nonneg_cond：若逐项平方非负（接口假设，镜像根内      *)
+(*   real_var_nonneg_cond：若逐项平方非负（接口假设，副本根内      *)
 (*   GRPO §7.3 的 square_nonneg Variable——构造性有序域无三分律，   *)
 (*   通用平方非负必须诚实接口），则 Σ A_i² ≥ 0（求和保序）。       *)
-(*   这正是根内 GRPO §7.3 的求和侧镜像，非降级形态。               *)
+(*   这正是根内 GRPO §7.3 的求和侧副本，非降级形态。               *)
 (*                                                                *)
 (* 纪律：零公理、零弃证、零接口逃逸、零经典律；Set 层语句； *)
 (* 全 Qed。自足：不 Require UpFEP/UpGRPO/AttnDoeblin。              *)
@@ -1981,7 +1965,7 @@ Proof.
       (fun s : S => id_cong2 mult (Hpt s) (id_cong log (Hpt s)))).
 Qed.
 
-(* ========== 旗舰：log-sum-exp = 负自由能 ==========
+(* ========== 主定理：log-sum-exp = 负自由能 ==========
    F_attn[softmax_temp(z)] == −T · log Z_T(z)：
    softmax 逐点 = boltzmann（fep_align）→ F 外延 →
    根内 free_energy_boltzmann（base_loss := −z, D := T）直接应用。 *)
@@ -1989,10 +1973,7 @@ Theorem free_energy_softmax_eq_neg_T_logZ :
   Id (F_attn (softmax_temp spp T T_pos z))
      (mult (opp T) (log Zf)).
 Proof.
-  apply (id_trans (fep_F_ext (softmax_temp spp T T_pos z)
-                             (boltzmann_dist base T T_pos Zf Zf_pos)
-                             (fun s : S => id_sym (fep_align s)))).
-  apply (free_energy_boltzmann base T T_pos Zf Zf_pos fep_partition_condition).
+  exact (id_trans (fep_F_ext (softmax_temp spp T T_pos z) (boltzmann_dist base T T_pos Zf Zf_pos) (fun s : S => id_sym (fep_align s))) (free_energy_boltzmann base T T_pos Zf Zf_pos fep_partition_condition)).
 Qed.
 
 End FEPLogZ.
@@ -2009,7 +1990,7 @@ Let one := @one RI.
 Let plus := @plus RI.
 Let lt := @lt RI.
 
-(* 自备组求和（镜像根内 GRPO Section 的 list_sum_g；Group 固定 nat—— *)
+(* 自备组求和（副本根内 GRPO Section 的 list_sum_g；Group 固定 nat—— *)
 (* 可判定相等天然，Nat.eq_dec 供 indicator 分支） *)
 Fixpoint list_sum_g2 (f : nat -> R) (l : list nat) : R :=
   match l with
@@ -2040,9 +2021,7 @@ Theorem counter_ex_indicator_sum_two :
   Id (list_sum_g2 indicator2 [O; O])
      (plus one one).
 Proof.
-  simpl.
-  apply (id_cong (fun x => plus one x)).
-  apply plus_zero.
+  simpl. exact (id_cong (fun x => plus one x) (plus_zero one)).
 Qed.
 
 (* 同根见证：常数奖励在双副本下的总质量 == 2c ≠ c（单副本）， *)
@@ -2051,9 +2030,7 @@ Theorem counter_ex_reward_sum_two_c :
   Id (list_sum_g2 reward2 [O; O])
      (plus c c).
 Proof.
-  simpl.
-  apply (id_cong (fun x => plus c x)).
-  apply plus_zero.
+  simpl. exact (id_cong (fun x => plus c x) (plus_zero c)).
 Qed.
 
 End GRPOCounterEx.
@@ -2067,16 +2044,16 @@ Variable reward2 : Grp2 -> Real.
 (* 组大小正性：enum 非空 ⟹ length ≥ 1 ⟹ of_nat (length) > 0 *)
 Variable Hpos : real_lt real_zero (real_of_nat (length enum2)).
 
-(* 组均值 μ = (1/G)·Σ r_i（Real 层，镜像根内 GRPO group_mean） *)
+(* 组均值 μ = (1/G)·Σ r_i（Real 层，副本根内 GRPO group_mean） *)
 Definition mean2 : Real :=
   real_mult (real_inv_pos (real_of_nat (length enum2)) Hpos)
             (real_list_sum_g Grp2 reward2 enum2).
 
-(* 组相对优势 A_i = r_i − μ（Real 层，镜像根内 GRPO grpo_advantage） *)
+(* 组相对优势 A_i = r_i − μ（Real 层，副本根内 GRPO grpo_advantage） *)
 Definition A2 (i : Grp2) : Real := real_plus (reward2 i) (real_opp mean2).
 
 (* 逐项平方非负 ⟹ 求和非负（有限列表归纳 + real_le_plus_compat；
-   镜像根内 real_list_sum_nonneg 的证明骨架，fold 换 real_list_sum_g） *)
+   副本根内 real_list_sum_nonneg 的证明骨架，fold 换 real_list_sum_g） *)
 Lemma sq_sum_list_nonneg : forall l : list Grp2,
   (forall i : Grp2, real_le real_zero (real_mult (A2 i) (A2 i))) ->
   real_le real_zero
@@ -2099,7 +2076,7 @@ Proof.
       * exact IH.
 Qed.
 
-(* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧镜像） ==========
+(* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧副本） ==========
    逐项平方非负是接口假设（构造性有序域无三分律，通用平方非负需
    接口字段——与根内 GRPO §7.3 的 Variable square_nonneg 同款诚实
    接口纪律）；此处给出其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
@@ -2114,7 +2091,7 @@ Qed.
 
 End RealVarNonNeg.
 
-(* 提取探针：件1/件2 的计算构造可提取 *)
+(* 提取检验：件1/件2 的计算构造可提取 *)
 (* 注：softmax_temp 计算性使用 Qed 引理 partition_function_temp_pos， *)
 (* 提取旁路透明度为 Coq 提取的标准信息性警告（UpFEP 同款），显式抑制； *)
 (* 提取目录显式设定为当前目录，保持与默认一致的输出位置。 *)

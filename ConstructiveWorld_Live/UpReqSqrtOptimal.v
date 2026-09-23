@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   sqo_absorb_half_le_w（原 L254，3 句玩具证）                          *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqSqrtOptimal.v —— 席Q14（EXPL1 候选 C13 深探席：            *)
 (*   G10_LoebFam 注意力 √d 缩放界「+1 常数紧性」定理化）             *)
 (* 日期：2026-09-17                                                *)
@@ -67,7 +77,7 @@
 (*   合取账用 Stdlib and（/\）承载——本件组件全 Prop（蕴涵/Qle/Qeq），    *)
 (*   CW 世界的 And: Set->Set->Set 不适用；信息性出口由 threshold_dec 的  *)
 (*   sumbool 承担；证内 Prop 仅作桥；零新增假设件、零 承认件、零       *)
-(*   Hypothesis/Variable 位、零经典逻辑（分支全走 Qlt_le_dec/Qeq_dec    *)
+(*   假设申报/Variable 位、零经典逻辑（分支全走 Qlt_le_dec/Qeq_dec    *)
 (*   可判定二分）。Print Assumptions 应全 Closed——lia/lra/ring/       *)
 (*   vm_compute 均 ax-free，Require 链（QArith/Qring/Lia/Lqa/Setoid）   *)
 (*   不触 Psatz。提取面以 Separate Extraction 产物 Obj.magic 零命中准。 *)
@@ -412,3 +422,5 @@ Proof.
     + lra.
     + apply sqo_inv_sqrt_lt_one. exact Hgt1s.
 Qed.
+
+Print Assumptions sqo_absorb_half_le_w.

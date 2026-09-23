@@ -19,7 +19,7 @@
 (*   （QltT→Qlt_bool→Qcompare→Z 层交叉积）＋ 显式算术判定 ＋      *)
 (*   结构性 tactic 组合（replace/assert/rewrite/三分 destruct），  *)
 (*   消除原单跳 reflexivity 转发。纯构造性 Set 层：零 公理、      *)
-(*   零 承认件、零经典逻辑；替换证明以真证闭收口，文件尾附         *)
+(*   零 承认件、零经典逻辑；替换证明以真证闭闭合，文件尾附         *)
 (*   假设面查证指令。基准树只读比对，零改零删。                    *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
@@ -121,9 +121,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* L2 提升引理库：QltT/QleT' 运算（消融消费者 Set 化用）     *)
+(* L2 提升引理库：QltT/QleT' 运算（消融依存者 Set 化用）     *)
 (* 证法：qltT_trans 同款（内部 Prop 论证 + 计算判定收尾），   *)
-(* 探针实测提取无 __（不可达分支提为 assert false）。        *)
+(* 检验实测提取无 __（不可达分支提为 assert false）。        *)
 (* ============================================================ *)
 (* --- 数字与基本 --- *)
 Lemma qeq_imp_qle : forall a b : Q, a == b -> Qle a b.
@@ -199,47 +199,28 @@ Qed.
 (* --- 传递族 --- *)
 Lemma qleT'_trans : forall x y z : Q, QleT' x y -> QleT' y z -> QleT' x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply Qle_to_QleT'.
-  apply (Qle_trans x y z).
-  - apply QleT'_to_Qle. exact Hxy.
-  - apply QleT'_to_Qle. exact Hyz.
+  intros x y z Hxy Hyz. exact (Qle_to_QleT' _ _ (Qle_trans x y z (QleT'_to_Qle _ _ Hxy) (QleT'_to_Qle _ _ Hyz))).
 Qed.
 
 Lemma qltT_leT' : forall x y : Q, QltT x y -> QleT' x y.
 Proof.
-  intros x y H.
-  apply Qle_to_QleT'.
-  apply Qlt_le_weak.
-  apply QltT_to_Qlt. exact H.
+  intros x y H. exact (Qle_to_QleT' _ _ (Qlt_le_weak _ _ (QltT_to_Qlt _ _ H))).
 Qed.
 
 Lemma qleT'_ltT_ltT : forall x y z : Q, QleT' x y -> QltT y z -> QltT x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply Qlt_to_QltT.
-  apply (Qle_lt_trans x y z).
-  - apply QleT'_to_Qle. exact Hxy.
-  - apply QltT_to_Qlt. exact Hyz.
+  intros x y z Hxy Hyz. exact (Qlt_to_QltT _ _ (Qle_lt_trans x y z (QleT'_to_Qle _ _ Hxy) (QltT_to_Qlt _ _ Hyz))).
 Qed.
 
 Lemma qltT_leT'_ltT : forall x y z : Q, QltT x y -> QleT' y z -> QltT x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply Qlt_to_QltT.
-  apply (Qlt_le_trans x y z).
-  - apply QltT_to_Qlt. exact Hxy.
-  - apply QleT'_to_Qle. exact Hyz.
+  intros x y z Hxy Hyz. exact (Qlt_to_QltT _ _ (Qlt_le_trans x y z (QltT_to_Qlt _ _ Hxy) (QleT'_to_Qle _ _ Hyz))).
 Qed.
 
 (* --- 加法保序族 --- *)
 Lemma qleT'_plus_compat : forall a b c d : Q, QleT' a b -> QleT' c d -> QleT' (a + c) (b + d).
 Proof.
-  intros a b c d Hab Hcd.
-  apply Qle_to_QleT'.
-  apply (Qplus_le_compat a b c d).
-  - apply QleT'_to_Qle. exact Hab.
-  - apply QleT'_to_Qle. exact Hcd.
+  intros a b c d Hab Hcd. exact (Qle_to_QleT' _ _ (Qplus_le_compat a b c d (QleT'_to_Qle _ _ Hab) (QleT'_to_Qle _ _ Hcd))).
 Qed.
 
 Lemma qleT'_plus_nonneg_rT : forall x y : Q, QleT' 0 y -> QleT' x (x + y).
@@ -254,20 +235,12 @@ Qed.
 
 Lemma qltT_plus_ltT : forall a b c d : Q, QltT a b -> QltT c d -> QltT (a + c) (b + d).
 Proof.
-  intros a b c d Hab Hcd.
-  apply Qlt_to_QltT.
-  apply (Qplus_lt_compat a b c d).
-  - apply QltT_to_Qlt. exact Hab.
-  - apply QltT_to_Qlt. exact Hcd.
+  intros a b c d Hab Hcd. exact (Qlt_to_QltT _ _ (Qplus_lt_compat a b c d (QltT_to_Qlt _ _ Hab) (QltT_to_Qlt _ _ Hcd))).
 Qed.
 
 Lemma qltT_plus_leT'_ltT : forall a b c d : Q, QltT a b -> QleT' c d -> QltT (a + c) (b + d).
 Proof.
-  intros a b c d Hab Hcd.
-  apply Qlt_to_QltT.
-  apply (Qplus_lt_le_compat a b c d).
-  - apply QltT_to_Qlt. exact Hab.
-  - apply QleT'_to_Qle. exact Hcd.
+  intros a b c d Hab Hcd. exact (Qlt_to_QltT _ _ (Qplus_lt_le_compat a b c d (QltT_to_Qlt _ _ Hab) (QleT'_to_Qle _ _ Hcd))).
 Qed.
 
 Lemma qleT'_plus_ltT_ltT : forall a b c d : Q, QleT' a b -> QltT c d -> QltT (a + c) (b + d).
@@ -285,11 +258,7 @@ Qed.
 (* --- 乘法保序族 --- *)
 Lemma qleT'_mult_compat_r : forall x y z : Q, QleT' 0 z -> QleT' x y -> QleT' (x * z) (y * z).
 Proof.
-  intros x y z Hz Hxy.
-  apply Qle_to_QleT'.
-  apply (Qmult_le_compat_r x y z).
-  - apply QleT'_to_Qle. exact Hxy.
-  - apply QleT'_to_Qle. exact Hz.
+  intros x y z Hz Hxy. exact (Qle_to_QleT' _ _ (Qmult_le_compat_r x y z (QleT'_to_Qle _ _ Hxy) (QleT'_to_Qle _ _ Hz))).
 Qed.
 
 Lemma qleT'_mult_compat_l : forall x y z : Q, QleT' 0 z -> QleT' x y -> QleT' (z * x) (z * y).
@@ -320,28 +289,18 @@ Qed.
 
 Lemma qmult_ltT_0_compat : forall a b : Q, QltT 0 a -> QltT 0 b -> QltT 0 (a * b).
 Proof.
-  intros a b Ha Hb.
-  apply Qlt_to_QltT.
-  apply (Qmult_lt_0_compat a b).
-  - apply QltT_to_Qlt. exact Ha.
-  - apply QltT_to_Qlt. exact Hb.
+  intros a b Ha Hb. exact (Qlt_to_QltT _ _ (Qmult_lt_0_compat a b (QltT_to_Qlt _ _ Ha) (QltT_to_Qlt _ _ Hb))).
 Qed.
 
 (* --- 等式与弱化 --- *)
 Lemma qeq_leT' : forall a b : Q, a == b -> QleT' a b.
 Proof.
-  intros a b Hab.
-  apply Qle_to_QleT'.
-  apply qeq_imp_qle. exact Hab.
+  intros a b Hab. exact (Qle_to_QleT' _ _ (qeq_imp_qle _ _ Hab)).
 Qed.
 
 Lemma qeq_ltT : forall a b : Q, a == b -> QltT 0 a -> QltT 0 b.
 Proof.
-  intros a b Hab Ha.
-  apply Qlt_to_QltT.
-  apply (Qlt_le_trans 0 a b).
-  - apply QltT_to_Qlt. exact Ha.
-  - apply qeq_imp_qle. exact Hab.
+  intros a b Hab Ha. exact (Qlt_to_QltT _ _ (Qlt_le_trans 0 a b (QltT_to_Qlt _ _ Ha) (qeq_imp_qle _ _ Hab))).
 Qed.
 
 (* --- Set 层 Q 相等（QeqT）：提取友好的单态语句叶子（cos_scan_spec/log_scan_spec 等） --- *)
@@ -380,9 +339,7 @@ Qed.
 (* --- 非负与绝对值 --- *)
 Lemma qabs_nonnegT : forall x : Q, QleT' 0 (Qabs x).
 Proof.
-  intro x.
-  apply Qle_to_QleT'.
-  apply Qabs_nonneg.
+  intro x. exact (Qle_to_QleT' _ _ (Qabs_nonneg x)).
 Qed.
 
 (* --- 正性算术 --- *)
@@ -408,11 +365,7 @@ Qed.
 
 Lemma qltT_eq_compat_l : forall a a' b : Q, a == a' -> QltT a b -> QltT a' b.
 Proof.
-  intros a a' b Ha H.
-  apply Qlt_to_QltT.
-  apply (Qle_lt_trans a' a b).
-  - apply qeq_imp_qle. apply Qeq_sym. exact Ha.
-  - apply QltT_to_Qlt. exact H.
+  intros a a' b Ha H. exact (Qlt_to_QltT _ _ (Qle_lt_trans a' a b (qeq_imp_qle _ _ (Qeq_sym _ _ Ha)) (QltT_to_Qlt _ _ H))).
 Qed.
 
 Lemma qltT_half_lt_selfT : forall x : Q, QltT 0 x -> QltT (x / 2) x.
@@ -428,18 +381,12 @@ Qed.
 
 Lemma qltT_eq_compat_r : forall a a' b : Q, a == a' -> QltT b a' -> QltT b a.
 Proof.
-  intros a a' b Ha H. apply Qlt_to_QltT. apply (Qlt_le_trans b a' a).
-  - apply QltT_to_Qlt. exact H.
-  - apply qeq_imp_qle. apply Qeq_sym. exact Ha.
+  intros a a' b Ha H. exact (Qlt_to_QltT _ _ (Qlt_le_trans b a' a (QltT_to_Qlt _ _ H) (qeq_imp_qle _ _ (Qeq_sym _ _ Ha)))).
 Qed.
 
 Lemma qltT_mult_ltT_compat_r : forall a b c : Q, QltT 0 c -> QltT a b -> QltT (a * c) (b * c).
 Proof.
-  intros a b c Hc Hab.
-  apply Qlt_to_QltT.
-  apply (Qmult_lt_compat_r a b c).
-  - apply QltT_to_Qlt. exact Hc.
-  - apply QltT_to_Qlt. exact Hab.
+  intros a b c Hc Hab. exact (Qlt_to_QltT _ _ (Qmult_lt_compat_r a b c (QltT_to_Qlt _ _ Hc) (QltT_to_Qlt _ _ Hab))).
 Qed.
 
 Lemma qltT_not_eq_zero : forall x : Q, QltT 0 x -> x == 0 -> False.
@@ -449,11 +396,7 @@ Qed.
 
 Lemma qltT_shift_div_lT : forall x y z : Q, QltT 0 z -> QltT (x * z) y -> QltT x (y / z).
 Proof.
-  intros x y z Hz Hxz.
-  apply Qlt_to_QltT.
-  apply (Qlt_shift_div_l x y z).
-  - apply QltT_to_Qlt. exact Hz.
-  - apply QltT_to_Qlt. exact Hxz.
+  intros x y z Hz Hxz. exact (Qlt_to_QltT _ _ (Qlt_shift_div_l x y z (QltT_to_Qlt _ _ Hz) (QltT_to_Qlt _ _ Hxz))).
 Qed.
 Definition cauchy (u : Qseq) : Set :=
   forall eps : Q, QltT 0 eps ->
@@ -679,7 +622,7 @@ Proof.
   intros x y H.
   unfold Qle, Qeq in *.
   (* ToyR 替换：Z 层改写链推导（消 Z.eq_le_incl 桥单跳转发）：
-     交叉积等式 H 就地改写左端为右端，再以 Z.le 自反收口 *)
+     交叉积等式 H 就地改写左端为右端，再以 Z.le 自反闭合 *)
   rewrite H.
   apply Z.le_refl.
 Qed.
@@ -1658,7 +1601,7 @@ Qed.
    但实值极限是 1 ≠ 0（由 real_lim_unique 分离）。 *)
 Lemma step_diag_zero : forall k : nat, step_seq k k == 0.
 Proof.
-  intro k. apply step_seq_lt. apply pow2_gt.
+  intro k. exact (step_seq_lt k k (pow2_gt k)).
 Qed.
 
 (* real_lim step_real (real_const 1)：N := 0，双向 eps/2 夹逼 *)
@@ -1822,9 +1765,9 @@ Qed.
    |v a − v b| ≤ 1/(min a b + 2) 当 a ≤ b 时化为 1/(a+2)。 *)
 (* 辅助：Nat.min a b = a 当 a ≤ b（nat 层；min 被 RealInterface.min 遮蔽，用 Nat.min） *)
 Lemma nat_min_l : forall a b : nat, (a <= b)%nat -> Nat.min a b = a.
-Proof. intros a b H. apply Nat.min_l. exact H. Qed.
+Proof. intros a b H. exact (Nat.min_l a b H). Qed.
 Lemma nat_min_r : forall a b : nat, (b <= a)%nat -> Nat.min a b = b.
-Proof. intros a b H. apply Nat.min_r. exact H. Qed.
+Proof. intros a b H. exact (Nat.min_r a b H). Qed.
 
 (* ============================================================ *)
 (* Bishop 正则化：regularize / reg_index / 统一模 / 对角线       *)
@@ -2486,7 +2429,7 @@ Qed.
 
 (* real_le 自反（real_eq_refl 直接） *)
 Lemma real_le_refl : forall x : Real, real_le x x.
-Proof. intro x. right. apply real_eq_refl. Qed.
+Proof. intro x. exact (inr (real_eq_refl x)). Qed.
 
 (* 兼容引理：real_lt x y ∧ real_eq y z ⟹ real_lt x z（eps/2 分割 + 下界） *)
 Lemma real_lt_eq_lt : forall x y z : Real, real_lt x y -> real_eq y z -> real_lt x z.
@@ -3993,7 +3936,7 @@ Qed.
 
 (* ============================================================ *)
 (* ============================================================ *)
-(* 工程③阶段 A：Q 层 exp 部分和 + 柯西性（探针 probe_exp.v 嵌入） *)
+(* 工程③阶段 A：Q 层 exp 部分和 + 柯西性（检验 probe_exp.v 嵌入） *)
 (* ============================================================ *)
 (* RealInterface 的 exp_neg/log_inv 实例化第一步：exp_partial n x := *)
 (* Sum_{k=0}^{n} x^k/k!，以及 exp_partial_cauchy（固定 x 部分和柯西）。 *)

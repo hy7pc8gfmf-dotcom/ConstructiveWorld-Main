@@ -1,4 +1,14 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   logc_mult_one_l（原 L91，2 句玩具证）                                *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqLogCompD.v *)
 (* *)
 (* 目的： 广义旗舰链复合族：温度对数-自由能复合面（S 阻塞七槽段）。 *)
@@ -55,14 +65,14 @@
 (*    left/logc_plus_assoc_cancel 消去核已备）→ distrib 完成。供给链零     *)
 
 (* 供给槽说明（诚实条件消解，G5 logd_pos_of_agree / G6 Part E 同型）：       *)
-(*    B1/B2 在泛型 RIS 层非接口字段，以节 Hypothesis 显式位承接；Real 层    *)
+(*    B1/B2 在泛型 RIS 层非接口字段，以节假设申报显式位承接；Real 层    *)
 (*    闭合实例 = G5 logd_log_compat_real / logd_log_exp_neg_real（Part 3   *)
 
 (*    req_Z_temp_pos 产物位（批 2 席领地，未 Require，以假设位承接）。        *)
 (* 防撞：logc_ 前缀 + 全部新名 26 个，全库 attn/001 grep 零命中（建前       *)
 (*    2026-09-10 逐名实查；UpReqLogCompD 文件名零命中）。                   *)
 (* 双形并存：槽4 双层（req minus 形 / Real kl_term 形）；槽1/2 与           *)
-(*    UpSigMigrate 节 Hypothesis 同位（本件独立重建，既有文件零改）；       *)
+(*    UpSigMigrate 节假设申报同位（本件独立重建，既有文件零改）；       *)
 (*    槽5/6/7 与 UpFirewallReq 显式假设槽同位（logc_t_* 定义族 =               *)
 (*    entropy_dist/req_relative_entropy@UpReqDist:1043-1046 同体重建）。    *)
 (* 红线：Set 层零 Prop（结论全 req/lt/le 接口 Set 值）；全 Qed 闭合；零公理； *)
@@ -1708,3 +1718,5 @@ Print Assumptions logc_boltzmann_normalized.
 Print Assumptions logc_boltz_log_decomp.
 Print Assumptions logc_t_log_decomp.
 Print Assumptions logc_t_sum_plogp.
+
+Print Assumptions logc_mult_one_l.

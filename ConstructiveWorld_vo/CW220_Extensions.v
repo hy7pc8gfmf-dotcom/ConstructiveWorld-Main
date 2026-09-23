@@ -3,13 +3,24 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   r_arch_pow_attn_real（原 L1537，2 句玩具证）                         *)
 (*   one_minus_delta_pos_real（原 L1506，2 句玩具证）                     *)
 (*   req_mult_one_l（原 L231，2 句玩具证）                                *)
 (*   req_plus_zero_r（原 L224，2 句玩具证）                               *)
 (*   hlogz_discharge_full（原 L91，2 句玩具证）                           *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包O 全量第一批整批直推（T317 六·1 方案①）                           *)
 (* ============================================================ *)
 
 (* ===================================================================== *)
@@ -31,7 +42,7 @@
 (*        Z_thermo / boltzmann_dist_attn / boltzmann_factor /              *)
 (*        cwe_exp_pos_fn / cwe_partition_function_temp / cwe_softmax_temp   *)
 (*        / req_attention_is_gibbs_temp / req_mult_opp_l。                 *)
-(*   4. 保留分区链闭包：G01_CoreMicro（BudgetReal 的 log_kappa_neg 消费           *)
+(*   4. 保留分区链闭包：G01_CoreMicro（BudgetReal 的 log_kappa_neg 依存           *)
 (*      hlogz_strict）。其余保留分区对被剔除分区零引用（声明名交叉核查       *)
 (*      + 限定名扫描双验证；real_log_le_mono 等来自基座 S14）。             *)
 (*                                                                    *)
@@ -57,7 +68,7 @@ Set Extraction Output Directory ".".
 (* G01_CoreMicro.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总证明   *)
 (*                                                              *)
 (* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
-(* 的显式前件 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
+(* 的显式前提 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
 (*   Z_aud ≤ 1（Z_aud_le_one，根内已证）                           *)
 (*   ⟹ log Z_aud ≤ log 1 = 0                                      *)
 (*     （log 单调 le 版 = G01_CoreMicro.real_log_le_mono；              *)
@@ -98,7 +109,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前件对齐）               *)
+(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前提对齐）               *)
 (*   同型语句，走 G01_CoreMicro 直用形态 real_log_le_zero_of_le_one，      *)
 (*   双路互证（单调链合成 / 直用形态殊途同归）。                        *)
 (* ================================================================ *)
@@ -150,7 +161,7 @@ Proof.
              (hlogz_discharge Za HZa HZa1)).
 Qed.
 
-(* 提取探针（Warning 消音：透明度旁路访问清单提示，与 UpGRPO 同法） *)
+(* 提取检验（Warning 消音：透明度旁路访问清单提示，与 UpGRPO 同法） *)
 Set Warnings "-extraction-opaque-accessed".
 
 Extraction "uphlogz.ml" hlogz_discharge hlogz_strict hlogz_opp_nonneg.
@@ -170,16 +181,16 @@ Import RealInterfaceEnhancedMod.
 (* 试点 1：FreeEnergyMinimization 节的 setoid 签名对接           *)
 (*   Id 原件：CW L15759-16440（Context {RI : RealInterfaceEnhanced}， *)
 (*   StateSpace/SumOver 为 Id 系类，其字段带 Id——故本试点以       *)
-(*   req 签名的求和三性质作为节 Hypothesis（= SumOver 类的       *)
+(*   req 签名的求和三性质作为节假设申报位（= SumOver 类的       *)
 (*   setoid 对接面），对接成本计入报告；上游两条 Id 系已证        *)
 (*   引理（energy_in_log_boltzmann / free_energy_boltzmann）以    *)
-(*   req 签名桥 Hypothesis 承接，全量迁移外推见报告。            *)
+(*   req 签名桥假设申报位承接，全量迁移外推见报告。            *)
 (* ============================================================ *)
 Section ReqFreeEnergyPilot.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- SumOver 的 req 签名对接面（Id 系 SumOver L1400 的 setoid 镜像） ---- *)
+(* ---- SumOver 的 req 签名对接面（Id 系 SumOver L1400 的 setoid 副本） ---- *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
@@ -459,7 +470,7 @@ Proof.
       * apply req_opp_plus.
 Qed.
 (* ============================================================ *)
-(* D. 旗舰迁移：req_free_energy_kl_decomp                        *)
+(* D. 主迁移：req_free_energy_kl_decomp                        *)
 (*    F[p] == F[p_b] + D·KL(p‖p_b)（Id 原件 L16259 的 setoid 签名版） *)
 (*    记号：lgpb s := log (cwe_boltzmann_dist s) Hpb；lgps s := log (p s) Hp； *)
 (*    A := D·Σ p·lgpb；B := D·Σ p·lgps；DlgZ := D·log Z；        *)
@@ -641,7 +652,7 @@ Proof.
       { apply plus_comm. }
       { apply req_refl. } }
     apply plus_comm. }
-  (* 总装：Hleg1（cwe_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
+  (* 装配：Hleg1（cwe_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
   assert (Hleg1 : req (cwe_free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
   { unfold cwe_free_energy.
     apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (cwe_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
@@ -667,7 +678,7 @@ End ReqFreeEnergyPilot.
 (*   partition_function_temp / softmax_temp / boltzmann_factor /  *)
 (*   Z_thermo / boltzmann_dist_attn）按同形定义重建。             *)
 (*   接口缺口发现：RealInterfaceEnhancedSetoid 无 exp_neg 兼容     *)
-(*   字段（Id 系 id_cong 免费可得），以 req 签名桥 Hypothesis      *)
+(*   字段（Id 系 id_cong 免费可得），以 req 签名桥假设申报位      *)
 (*   承接——Real 实例由 cauchy_real_exp_wd 满足（L40440 先例）。    *)
 (* ============================================================ *)
 Section ReqGibbsPilot.
@@ -780,7 +791,7 @@ Set Extraction Output Directory ".".
 (*                                                              *)
 (* 纪律：纯构造性（禁词零出现，见技术报告 G1）；                    *)
 (*       Set 层语句（real_lt/real_le/real_eq/sigT/And）；           *)
-(*       全部 Qed 闭合；消费根内已证机器不重证。                    *)
+(*       全部 Qed 闭合；依存根内已证机器不重证。                    *)
 (* ============================================================ *)
 
 
@@ -869,7 +880,7 @@ Proof.
       * apply real_mult_one_l.
 Qed.
 
-(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
+(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接依存） *)
 (* （此处不重证；见 real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
@@ -1454,7 +1465,7 @@ Proof.
   exact (geo_tail_budget kappa a eps Hk1 Hk2 Ha Heps p q N Hpq HN).
 Qed.
 
-(* ============ 8. 提取探针（可执行 OCaml，G3 关卡） ============ *)
+(* ============ 8. 提取检验（可执行 OCaml，G3 关卡） ============ *)
 Set Warnings "-extraction-opaque-accessed".
 Extraction "upbudgetreal.ml" r_arch_pow_real budget_cond_sufficient geo_tail_budget budget_min_tail.
 
@@ -1465,7 +1476,7 @@ From Stdlib Require Import QArith.QArith.
 Import BudgetReal.
 
 (* ============================================================ *)
-(* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层镜像            *)
+(* UpArchAttn.v —— 榜 A3：r_arch_pow_attn 的 Real 层副本            *)
 (*                                                              *)
 (* 扫描件背景（分析-219平凡定理热点扫描.md 榜 A3）：        *)
 (*   根文件 CW_ConstructiveWorld_219.v 注意力收敛区 L29247 的接口前提 *)
@@ -1479,7 +1490,7 @@ Import BudgetReal.
 (*   （0<κ<1、0<a、0<eps 时 sigT N, a·κ^N < eps）。本文件消除该断连： *)
 (*                                                              *)
 (* 件 1（主件）r_arch_pow_attn_real：接口前提在具体 Real 层的实例化。 *)
-(*   形态对齐映射（探针结论）：                                    *)
+(*   形态对齐映射（检验结论）：                                    *)
 (*     R（抽象，RealInterfaceEnhanced 实例参数）                  *)
 (*         ⟿ Real（柯西实数 sigT (u : Qseq) (cauchy u)） *)
 (*     lt zero / lt ⟿ real_lt real_zero / real_lt（Type 版）       *)
@@ -1496,19 +1507,19 @@ Import BudgetReal.
 (*         ⟿ 语句显式前提。                                       *)
 (*                                                              *)
 (* 件 2（组装预演）attention_iterate_converges_real：              *)
-(*   消费件 1 + 根 attention_tv_iter_contraction（L29287）结论的     *)
-(*   Real 镜像链 tv_n ≤ (1−δ)^n·tv_0（根 r_pow_dec_iter_attn 的     *)
-(*   Real 镜像即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
+(*   依存件 1 + 根 attention_tv_iter_contraction（L29287）结论的     *)
+(*   Real 副本链 tv_n ≤ (1−δ)^n·tv_0（根 r_pow_dec_iter_attn 的     *)
+(*   Real 副本即 UpBudgetReal.real_pow_anti_mono，直接复用），       *)
 (*   给出 sigT 预算 N 见证定理。覆盖面注记：根定理的语义对象        *)
 (*   attention_step/tv_dist/boltzmann_dist_attn 生活在抽象 Section  *)
 (*   世界，其实例化需在 Real 层整体证明 detailed_balance/           *)
 (*   minorization/sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等 *)
 (*   接口前提（天级工程，不属本小件）；按原始任务表述条款以 Real 序列       *)
 (*   tv_seq := n ↦ TV(iterate n μ₀, p_b) 承载最小骨架，每步几何      *)
-(*   收缩作为镜像前提 Hstep 显式列出。主件 1 不受影响。              *)
+(*   收缩作为副本前提 Hstep 显式列出。主件 1 不受影响。              *)
 (*                                                              *)
 (* 纪律：纯构造性；Set 层语句（real_lt/real_le/real_eq/sigT）；      *)
-(*       全部 Qed 闭合；只消费根内/UpBudgetReal 已证机器。           *)
+(*       全部 Qed 闭合；只依存根内/UpBudgetReal 已证机器。           *)
 (* ============================================================ *)
 
 
@@ -1516,7 +1527,7 @@ Local Open Scope Q_scope.
 
 (* ============ 1. 1−δ 的 Real 层序引理（κ := 1−δ 良定前提） ============ *)
 
-(* 根 L14270 one_minus_kappa_pos 的 Real 镜像：δ < 1 ⟹ 0 < 1−δ *)
+(* 根 L14270 one_minus_kappa_pos 的 Real 副本：δ < 1 ⟹ 0 < 1−δ *)
 Lemma one_minus_delta_pos_real : forall delta : Real,
   real_lt delta real_one ->
   real_lt real_zero (real_plus real_one (real_opp delta)).
@@ -1525,7 +1536,7 @@ Proof.
   exact (real_lt_opp_plus delta real_one Hd).
 Qed.
 
-(* 根注意力区前提的对称支 Real 镜像：0 < δ ⟹ 1−δ < 1
+(* 根注意力区前提的对称支 Real 副本：0 < δ ⟹ 1−δ < 1
    （逐点差零 + real_lt_eq_lt：1−(1−δ) == δ 逐点 ring） *)
 Lemma one_minus_delta_lt_one_real : forall delta : Real,
   real_lt real_zero delta ->
@@ -1561,11 +1572,11 @@ Proof.
   exact (r_arch_pow_real (real_plus real_one (real_opp delta))           (one_minus_delta_pos_real delta Hd2)           (one_minus_delta_lt_one_real delta Hd1)           a Ha eps Heps).
 Qed.
 
-(* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 镜像） ============ *)
+(* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 副本） ============ *)
 
-(* 根 attention_tv_iter_contraction（L29287）结论的 Real 镜像链：
+(* 根 attention_tv_iter_contraction（L29287）结论的 Real 副本链：
    每步 tv_{n+1} ≤ (1−δ)·tv_n ⟹ tv_n ≤ (1−δ)^n·tv₀。
-   （根 r_pow_dec_iter_attn 的幂反单调 Real 镜像即
+   （根 r_pow_dec_iter_attn 的幂反单调 Real 副本即
      UpBudgetReal.real_pow_anti_mono，件 2 主定理直接复用，不重证。） *)
 Lemma tv_iter_decay_real :
   forall (delta : Real)
@@ -1617,7 +1628,7 @@ Qed.
 
 (* ============ 4. 件 2 主定理：迭代收敛的 sigT 显式预算见证 ============ *)
 
-(* 根 attention_iterate_converges（L29330）的 Real 层镜像组装：
+(* 根 attention_iterate_converges（L29330）的 Real 层副本组装：
    预算 N 由件 1（r_arch_pow_attn_real）构造；尾界 n ≥ N 由
    tv 衰减链（本文件件 2 前置）+ 幂反单调（real_pow_anti_mono）
    + 件 1 的 a·κ^N < eps 证明。
@@ -1664,7 +1675,7 @@ Proof.
                (real_mult_comm (real_pow kappa N) (tv_seq Datatypes.O)) HN).
 Qed.
 
-(* ============ 5. 提取探针（G3：零 Obj.magic） ============ *)
+(* ============ 5. 提取检验（G3：零 Obj.magic） ============ *)
 
 Extraction "uparchattn.ml" r_arch_pow_attn_real attention_iterate_converges_real.
 

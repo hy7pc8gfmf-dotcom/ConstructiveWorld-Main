@@ -1,11 +1,11 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T278 台账席 散落挂账集中清偿（原 T265 刀体    *)
+(* ToyR 玩具证替换件 —— T278 台账席 散落遗留集中清偿（原 T265 刀体    *)
 (* 方向颠倒证伪回退，本席反序修正后复刀：real_inv_lt_contra 结论为      *)
 (* 1/t2 < 1/t1 严格反序，Hinv 见证型随之反置，余四句原样）。            *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   etm_beta_diff_pos（原 L106，5 句刀体）                              *)
 (* ============================================================ *)
@@ -19,27 +19,27 @@
 (*   Id energy_exp_temp_mono @S04_RealExpLogConv.v:3733 的构造性     *)
 (*   最强免费档）。                                                  *)
 (*                                                                 *)
-(* 路线（消费 CWC 恒等档 + E.13 Bishop KL≥0 + leb3 序代数）：          *)
-(*   ① 旗舰恒等式 retm_energy_temp_kl_pair_ident：                   *)
+(* 路线（依存 CWC 恒等档 + E.13 Bishop KL≥0 + leb3 序代数）：          *)
+(*   ① 主恒等式 retm_energy_temp_kl_pair_ident：                   *)
 (*      KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2}) == (β1−β2)·(E2−E1)；   *)
 (*   ② real_gibbs_inequality_B（UpRealLeB E.13，Bishop 形 KL≥0：     *)
 (*      0 ≤_B Σ kl_term，归一化前提由 retm_pB_norm 直供、逐点正性     *)
 (*      由 retm_pB_pos 语句面原生证书直供）；                         *)
-(*   ③ 两腿相加（real_le_b_plus_compat + refl 运输）得 0 ≤_B KL 对和； *)
+(*   ③ 两个合取肢相加（real_le_b_plus_compat + refl 运输）得 0 ≤_B KL 对和； *)
 (*   ④ 恒等式换形（leb3_le_b_eq_r）得 0 ≤_B (β1−β2)·(E2−E1)（无条件件）； *)
 (*   ⑤ β 差正性：t1<t2 ⟹ 1/t2<1/t1（real_inv_lt_contra，S07 严格    *)
 (*      逆反序）⟹ 0<β1−β2（real_lt_opp_plus 差正性桥）；              *)
 (*   ⑥ 负系数反变处理：正缩放 leb3_le_b_pos_scale（0<c 形）乘         *)
-(*      inv(β1−β2) 后代数链收口（(c·D)·inv c == D 五步 real_eq_trans）， *)
+(*      inv(β1−β2) 后代数链闭合（(c·D)·inv c == D 五步 real_eq_trans）， *)
 (*      得 0 ≤_B (E2−E1)；                                            *)
 (*   ⑦ 终桥：0 ≤_B (E2−E1) ⟹ E1 ≤_B E2——逐 eps 平移                 *)
 (*      （real_lt_plus_compat_lt_le 右加形）+ 两端 real_lt_id_l/r     *)
-(*      换形 + 纯加负代数 etm_alg 一步收口。                          *)
+(*      换形 + 纯加负代数 etm_alg 一步闭合。                          *)
 (*                                                                 *)
-(* 交付档位判词（≤_B 形即诚实交付档）：                                *)
+(* 交付档位结论（≤_B 形即诚实交付档）：                                *)
 (*   Or 形 real_le E1 E2 需构造性分支见证（real_le = Or real_lt      *)
-(*   real_eq，S02:460；Or := A+B 为 Set 值和须交分支），由 ≤_B 收口   *)
-(*   Or 形即 real_le_b → real_le 反向桥——UpRealLeB 判词 1 在案        *)
+(*   real_eq，S02:460；Or := A+B 为 Set 值和须交分支），由 ≤_B 闭合   *)
+(*   Or 形即 real_le_b → real_le 反向桥——UpRealLeB 结论 1 在案        *)
 (*   「real_le_b x y -> real_le x y 构造性不可证」（LPO 等价，同      *)
 (*   E-STAGING-DPOLip-StrongLeAbs 卡）；严格档需 KL 严格正接口        *)
 (*   （UpReqTempDual.v:40-44 台账：严格档与 4.3 严格界同源，批 2      *)
@@ -49,7 +49,7 @@
 (*                                                                 *)
 (* 交付件（etm_ 前缀，全库防撞 grep=0）：                             *)
 (*   etm_alg                代数恒等捷径 Ltac（real_eq_of_zero_diff   *)
-(*                          + proj 剥离 + ring；含 inv/log 桥件不可用， *)
+(*                          + proj 剥离 + ring；含 inv/log 桥接引理不可用， *)
 (*                          走 real_eq_trans 链——CWC 卡配方）          *)
 (*   etm_mult_zero_l        0·a == 0（real_mult_zero 是 x·0==0 形，   *)
 (*                          comm 桥补左乘形）                         *)
@@ -57,21 +57,21 @@
 (*   etm_le_b_scale_inv_zero  0<c、0 ≤_B c·D ⟹ 0 ≤_B D               *)
 (*                          （负系数反变核心件：正缩放 × inv 消系数）   *)
 (*   etm_kl_pair_nonneg_b   0 ≤_B KL(p_{t2}‖p_{t1})+KL(p_{t1}‖p_{t2}) *)
-(*                          （无条件，Bishop KL≥0 两腿相加）           *)
+(*                          （无条件，Bishop KL≥0 两个合取肢相加）           *)
 (*   etm_energy_scaled_nonneg_b  0 ≤_B (β1−β2)·(E2−E1)（无条件，      *)
 (*                          恒等档 × KL≥0 的直接合成）                 *)
 (*   etm_energy_temp_mono_b 主定理：t1<t2 ⟹ E(t1) ≤_B E(t2)           *)
 (*                                                                 *)
 (* 台账对位：UpReqTempDual.v:40-44（real_energy_exp_temp_mono 未建、  *)
-(*   严格档需 KL 严格正接口）；UpRealLeB 判词 1（le_b→le 反向不可证）； *)
-(*   G07_KLWall 判词 C；UpReqAlign3:1446（plain-le 序无消去）。        *)
+(*   严格档需 KL 严格正接口）；UpRealLeB 结论 1（le_b→le 反向不可证）； *)
+(*   G07_KLWall 结论 C；UpReqAlign3:1446（plain-le 序无消去）。        *)
 (*                                                                 *)
 (* 红线自审：① 零承认件（依赖全为库内 Closed 件：S01–S15 薄壳 +      *)
 (*   UpRealLeB/2/3 + RealEnergyTempMono）；② 语句面全 Set：           *)
 (*   real_lt（sigT 见证型）前提 + real_le_b（Set 值 forall 型）结论，  *)
 (*   零 Or 分支、零 Prop 前提位；③ 全件 Qed 真证（real_eq_trans 链    *)
-(*   term-mode 显式组装 + 收口器消费），无降级占位；④ 可提取（G3      *)
-(*   探针独立文件实测 Obj.magic=0）。                                  *)
+(*   term-mode 显式组装 + 闭合器依存），无降级占位；④ 可提取（G3      *)
+(*   检验独立文件实测 Obj.magic=0）。                                  *)
 (* 编译配方：source Live/toolchain/env.sh && cd Live/build &&        *)
 (*   rocq c -Q . '' EnergyTempMonoB.v（cpu_guard 包裹，-j2 上限）。    *)
 (* 依赖：CW_ConstructiveWorld_219（S01–S15，.vo 同轨 _364 幻数）；    *)
@@ -91,7 +91,7 @@ Require Import RealEnergyTempMono.
 (* Part 0：代数捷径 + 零乘左形                                        *)
 (* ============================================================ *)
 
-(* 代数恒等捷径：加/乘/负/原子项上的 real_eq 一步 ring 收口
+(* 代数恒等捷径：加/乘/负/原子项上的 real_eq 一步 ring 闭合
    （CWC 卡配方复刻，独立命名；含 inv_pos_correct/log 类 Bishop 等式
    桥的恒等不可用本捷径，须走 real_eq_trans 链） *)
 Ltac etm_alg :=
@@ -102,14 +102,11 @@ Ltac etm_alg :=
 (* 0·a == 0（库件 real_mult_zero 是 x·0==0 形，comm 桥补左乘形） *)
 Lemma etm_mult_zero_l : forall a : Real, real_eq (real_mult real_zero a) real_zero.
 Proof.
-  intro a.
-  apply (real_eq_trans (real_mult real_zero a) (real_mult a real_zero) real_zero).
-  - apply real_mult_comm.
-  - apply real_mult_zero.
+  intro a. exact (real_eq_trans (real_mult real_zero a) (real_mult a real_zero) real_zero (real_mult_comm real_zero a) (real_mult_zero a)).
 Qed.
 
 (* ============================================================ *)
-(* Part 1：β 差正性 + 负系数反变收口件                                 *)
+(* Part 1：β 差正性 + 负系数反变闭合件                                 *)
 (* ============================================================ *)
 
 (* t1 < t2 ⟹ 0 < β1−β2（β := 1/t）
@@ -122,13 +119,11 @@ Lemma etm_beta_diff_pos : forall (t1 t2 : Real)
     (real_plus (real_inv_pos t1 Ht1) (real_opp (real_inv_pos t2 Ht2))).
 Proof.
   intros t1 t2 Ht1 Ht2 Ht12.
-  assert (Hinv : real_lt (real_inv_pos t2 Ht2) (real_inv_pos t1 Ht1)).
-  { exact (real_inv_lt_contra t1 t2 Ht1 Ht2 Ht12). }
-  apply (real_lt_opp_plus (real_inv_pos t2 Ht2) (real_inv_pos t1 Ht1)).
-  exact Hinv.
+  exact (real_lt_opp_plus (real_inv_pos t2 Ht2) (real_inv_pos t1 Ht1)
+             (real_inv_lt_contra t1 t2 Ht1 Ht2 Ht12)).
 Qed.
 
-(* 正系数除收口（负系数反变核心件）：0 < c、0 ≤_B c·D ⟹ 0 ≤_B D。
+(* 正系数除闭合（负系数反变核心件）：0 < c、0 ≤_B c·D ⟹ 0 ≤_B D。
    正缩放 leb3_le_b_pos_scale（右因子形）乘 inv(c)：
    (0·inv c) ≤_B ((c·D)·inv c)，两端 real_eq 运输——左端 0·inv c == 0，
    右端 (c·D)·inv c == (c·(D·inv c)) == (c·(inv c·D)) == ((c·inv c)·D)
@@ -172,7 +167,7 @@ Qed.
 (* ============================================================ *)
 
 (* 0 ≤_B KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2})（无条件件）
-   real_gibbs_inequality_B（UpRealLeB E.13 Bishop 形 KL≥0）两腿：
+   real_gibbs_inequality_B（UpRealLeB E.13 Bishop 形 KL≥0）两个合取肢：
    归一化 retm_pB_norm、逐点正性 retm_pB_pos（语句面原生证书）直供；
    real_le_b_plus_compat 相加后 0+0==0 左端运输。 *)
 Lemma etm_kl_pair_nonneg_b :
@@ -227,7 +222,7 @@ Qed.
    给 eps>0，0 < (E2−E1)+eps（Hediff）右加平移 E1（real_lt_plus_compat_
    lt_le 右加形）得 0+E1 < (E2−E1)+eps+E1；两端换形——左 0+E1 == E1
    （comm + zero），右 (E2−E1)+eps+E1 == E2+eps（etm_alg 一步）；再
-   E1+0 == E1 左端运输收口。 *)
+   E1+0 == E1 左端运输闭合。 *)
 Theorem etm_energy_temp_mono_b :
   forall (X : Type) (u : X -> Real) (s0 : X) (l : list X)
     (t1 : Real) (Ht1 : real_lt real_zero t1) (t2 : Real) (Ht2 : real_lt real_zero t2),
@@ -247,7 +242,7 @@ Proof.
   apply (RealSetoid.real_lt_id_l (retm_Eexp X u s0 l t1 Ht1)
            (real_plus real_zero (retm_Eexp X u s0 l t1 Ht1))
            (real_plus (retm_Eexp X u s0 l t2 Ht2) eps)).
-  - (* E1 == 0+E1：zero 与 comm 双腿 trans（real_eq_sym 双 Real 参显式，term 式占位） *)
+  - (* E1 == 0+E1：zero 与 comm 双肢 trans（real_eq_sym 双 Real 参显式，term 式占位） *)
     exact (real_eq_trans (retm_Eexp X u s0 l t1 Ht1)
              (real_plus (retm_Eexp X u s0 l t1 Ht1) real_zero)
              (real_plus real_zero (retm_Eexp X u s0 l t1 Ht1))
@@ -264,7 +259,7 @@ Proof.
                                     eps)
                         (retm_Eexp X u s0 l t1 Ht1))
              (real_plus (retm_Eexp X u s0 l t2 Ht2) eps)).
-    + (* (E2−E1)+eps+E1 == E2+eps：纯加负代数一步收口 *)
+    + (* (E2−E1)+eps+E1 == E2+eps：纯加负代数一步闭合 *)
       etm_alg.
     + apply (real_lt_plus_compat_lt_le real_zero
                (real_plus (real_plus (retm_Eexp X u s0 l t2 Ht2)

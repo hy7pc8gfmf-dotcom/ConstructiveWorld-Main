@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   eoe_abs_bound（原 L325，3 句玩具证）                                 *)
 (*   eoe_abs_Qle（原 L318，2 句玩具证）                                   *)
@@ -14,7 +14,7 @@
 (* ============================================================ *)
 (* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
 (* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
 (* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
 (* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
@@ -80,7 +80,7 @@ From Stdlib Require Import Lia QArith.Qminmax.
 Definition QltT' (x y : Q) : Set := Id (Qlt_bool x y) true.
 
 Lemma QltT'_to_Qlt : forall x y : Q, QltT' x y -> Qlt x y.
-Proof. intros x y H. apply (QltT_to_Qlt x y). exact H. Qed.
+Proof. intros x y H. exact (QltT_to_Qlt x y H). Qed.
 
 Lemma Qlt_to_QltT' : forall x y : Q, Qlt x y -> QltT' x y.
 Proof. intros x y H. exact (Qlt_to_QltT x y H). Qed.
@@ -88,10 +88,7 @@ Proof. intros x y H. exact (Qlt_to_QltT x y H). Qed.
 Lemma qleT'_weaken : forall a b c : Q, Qle a b -> b == c -> QleT' a c.
 Proof.
   intros a b c H Hbc.
-  apply Qle_to_QleT'.
-  apply (Qle_trans a b c H).
-  apply qeq_le.
-  exact Hbc.
+  exact (Qle_to_QleT' a c (Qle_trans a b c H (qeq_le b c Hbc))).
 Qed.
 
 (* ============================================================ *)
@@ -101,32 +98,25 @@ Qed.
 (* ---- Qeq 左端运输：x == y -> y < z -> x < z ---- *)
 Lemma eoe_lt_eq_l : forall x y z : Q, x == y -> Qlt y z -> Qlt x z.
 Proof.
-  intros x y z Hxy Hyz.
-  apply (Qle_lt_trans x y z).
-  - apply qeq_le. exact Hxy.
-  - exact Hyz.
+  intros x y z Hxy Hyz. exact (Qle_lt_trans x y z (qeq_le x y Hxy) Hyz).
 Qed.
 
 (* ---- Qeq 右端运输：x < y -> y == z -> x < z ---- *)
 Lemma eoe_lt_eq_r : forall x y z : Q, Qlt x y -> y == z -> Qlt x z.
 Proof.
   intros x y z Hxy Hyz.
-  apply (Qlt_le_trans x y z).
-  - exact Hxy.
-  - apply qeq_le. exact Hyz.
+  exact (Qlt_le_trans x y z Hxy (qeq_le y z Hyz)).
 Qed.
 
 (* ---- 乘左单调（Qmult_le_compat_r 的项序桥：u*v ≤ u*w） ---- *)
 Lemma eoe_mult_le_l : forall u v w : Q, Qle v w -> Qle 0 u -> Qle (u * v) (u * w).
 Proof.
   intros u v w Hvw Hu.
-  apply (Qle_trans _ (v * u)).
-  - apply qeq_le. ring.
-  - apply (Qle_trans _ (w * u)).
-    + apply Qmult_le_compat_r.
-      * exact Hvw.
-      * exact Hu.
-    + apply qeq_le. ring.
+  exact (Qle_trans (u * v) (v * u) (u * w)
+           (qeq_le (u * v) (v * u) (Qmult_comm u v))
+           (Qle_trans (v * u) (w * u) (u * w)
+              (Qmult_le_compat_r v w u Hvw Hu)
+              (qeq_le (w * u) (u * w) (Qmult_comm w u)))).
 Qed.
 
 (* ---- 倒数反序（Qle 形）：0 < x -> 0 < y -> y ≤ x -> /x ≤ /y ---- *)
@@ -134,9 +124,8 @@ Lemma eoe_qinv_le : forall x y : Q, Qlt 0 x -> Qlt 0 y -> Qle y x -> Qle (/ x) (
 Proof.
   intros x y Hx Hy Hyx.
   destruct (Qle_lt_or_eq y x Hyx) as [Hlt | Heq].
-  - apply Qlt_le_weak.
-    apply (proj1 (Qinv_lt_contravar y x Hy Hx)). exact Hlt.
-  - rewrite Heq. apply Qle_refl.
+  - exact (Qlt_le_weak (/ x) (/ y) (proj1 (Qinv_lt_contravar y x Hy Hx) Hlt)).
+  - rewrite Heq. exact (Qle_refl (/ x)).
 Qed.
 
 (* ---- 除法单调（Qle 形）：同分子、正分母，大分母商更小 ---- *)
@@ -144,14 +133,12 @@ Lemma eoe_div_le : forall a y z : Q,
   Qlt 0 a -> Qlt 0 y -> Qlt 0 z -> Qle z y -> Qle (a / y) (a / z).
 Proof.
   intros a y z Ha Hy Hz Hzy.
-  assert (Hinv : Qle (/ y) (/ z)) by (apply (eoe_qinv_le y z); assumption).
-  apply (Qle_trans _ (/ y * a)).
-  - apply qeq_le. unfold Qdiv. ring.
-  - apply (Qle_trans _ (/ z * a)).
-    + apply Qmult_le_compat_r.
-      * exact Hinv.
-      * apply (Qlt_le_weak 0 a). exact Ha.
-    + apply qeq_le. unfold Qdiv. ring.
+  exact (Qle_trans (a / y) (/ y * a) (a / z)
+           (qeq_le (a / y) (/ y * a) (Qmult_comm a (/ y)))
+           (Qle_trans (/ y * a) (/ z * a) (a / z)
+              (Qmult_le_compat_r (/ y) (/ z) a (eoe_qinv_le y z Hy Hz Hzy)
+                 (Qlt_le_weak 0 a Ha))
+              (qeq_le (/ z * a) (a / z) (Qmult_comm (/ z) a)))).
 Qed.
 
 (* ---- 除法单调（Qlt 形）：严格版 ---- *)
@@ -159,15 +146,12 @@ Lemma eoe_div_lt : forall a y z : Q,
   Qlt 0 a -> Qlt 0 y -> Qlt 0 z -> Qlt z y -> Qlt (a / y) (a / z).
 Proof.
   intros a y z Ha Hy Hz Hzy.
-  assert (Hinv : Qlt (/ y) (/ z)).
-  { apply (proj1 (Qinv_lt_contravar z y Hz Hy)). exact Hzy. }
-  apply (eoe_lt_eq_l _ (/ y * a)).
-  - unfold Qdiv. ring.
-  - apply (eoe_lt_eq_r _ (/ z * a)).
-    + apply (Qmult_lt_compat_r (/ y) (/ z) a).
-      * exact Ha.
-      * exact Hinv.
-    + unfold Qdiv. ring.
+  exact (eoe_lt_eq_l (a / y) (/ y * a) (a / z)
+           (Qmult_comm a (/ y))
+           (eoe_lt_eq_r (/ y * a) (/ z * a) (a / z)
+              (Qmult_lt_compat_r (/ y) (/ z) a Ha
+                 (proj1 (Qinv_lt_contravar z y Hz Hy) Hzy))
+              (Qmult_comm (/ z) a))).
 Qed.
 
 (* ============================================================ *)
@@ -223,14 +207,14 @@ Proof.
   - replace (a + Datatypes.S d)%nat with (Datatypes.S (a + d)) by lia.
     apply (Qle_trans _ (q_fact (a + d))).
     + exact IH.
-    + apply eoe_fact_step_ge.
+    + exact (eoe_fact_step_ge (a + d)).
 Qed.
 
 Lemma eoe_fact_mono : forall a b : nat, (a <= b)%nat -> Qle (q_fact a) (q_fact b).
 Proof.
   intros a b Hab.
   replace b with (a + (b - a))%nat by lia.
-  apply eoe_fact_mono_add.
+  exact (eoe_fact_mono_add (b - a) a).
 Qed.
 
 (* ============================================================ *)
@@ -258,11 +242,11 @@ Qed.
 Lemma eoe_term_pos : forall n : nat,
   Qlt 0 (q_pow 1 (Datatypes.S n) / q_fact (Datatypes.S n)).
 Proof.
-  intro n.
-  apply (eoe_lt_eq_r 0 (/ q_fact (Datatypes.S n))).
-  - apply Qinv_lt_0_compat. apply q_fact_pos.
-  - rewrite (eoe_q_pow_one (Datatypes.S n)).
-    unfold Qdiv. symmetry. apply Qmult_1_l.
+  intro n. rewrite (eoe_q_pow_one (Datatypes.S n)).
+  exact (eoe_lt_eq_r 0 (/ q_fact (Datatypes.S n)) (1 / q_fact (Datatypes.S n))
+           (Qinv_lt_0_compat (q_fact (Datatypes.S n)) (q_fact_pos (Datatypes.S n)))
+           (Qeq_sym (1 * / q_fact (Datatypes.S n)) (/ q_fact (Datatypes.S n))
+              (Qmult_1_l (/ q_fact (Datatypes.S n))))).
 Qed.
 
 Lemma eoe_step_pos : forall n : nat,
@@ -272,9 +256,9 @@ Proof.
   assert (Hd : exp_partial (Datatypes.S n) 1 - exp_partial n 1 ==
                q_pow 1 (Datatypes.S n) / q_fact (Datatypes.S n)).
   { simpl. ring. }
-  apply (eoe_lt_eq_r 0 (q_pow 1 (Datatypes.S n) / q_fact (Datatypes.S n))).
-  - apply eoe_term_pos.
-  - apply (Qeq_sym _ _). exact Hd.
+  exact (eoe_lt_eq_r 0 (q_pow 1 (Datatypes.S n) / q_fact (Datatypes.S n))
+           (exp_partial (Datatypes.S n) 1 - exp_partial n 1)
+           (eoe_term_pos n) (Qeq_sym _ _ Hd)).
 Qed.
 
 Lemma eoe_mono_add : forall d m : nat, Qle (exp_partial m 1) (exp_partial (m + d) 1).
@@ -295,7 +279,7 @@ Lemma eoe_mono : forall m n : nat, (m <= n)%nat -> Qle (exp_partial m 1) (exp_pa
 Proof.
   intros m n Hmn.
   replace n with (m + (n - m))%nat by lia.
-  apply eoe_mono_add.
+  exact (eoe_mono_add (n - m) m).
 Qed.
 
 (* ============================================================ *)
@@ -345,15 +329,14 @@ Lemma eoe_abs_Qle : forall m n : nat, (1 <= n)%nat -> (n <= m)%nat ->
   Qle (Qabs (exp_partial m 1 - exp_partial n 1)) ((1 + 1)%Q / q_fact n).
 Proof.
   intros m n H1n Hnm.
-  apply (eoe_tail_explicit n m); assumption.
+  exact (eoe_tail_explicit n m H1n Hnm).
 Qed.
 
 Theorem eoe_abs_bound : forall m n : nat, (1 <= n)%nat -> (n <= m)%nat ->
   QleT' (Qabs (exp_partial m 1 - exp_partial n 1)) ((1 + 1)%Q / q_fact n).
 Proof.
   intros m n H1n Hnm.
-  apply Qle_to_QleT'.
-  apply eoe_abs_Qle; assumption.
+  exact (Qle_to_QleT' _ _ (eoe_abs_Qle m n H1n Hnm)).
 Qed.
 
 (* ============================================================ *)

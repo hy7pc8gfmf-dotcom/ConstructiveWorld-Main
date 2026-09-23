@@ -56,7 +56,7 @@
 (*     交付面为 Bishop 形 real_le_b。                                   *)
 (*                                                              *)
 (* 公理面：零新增假设位；全件 Qed 闭合；语句面全 Set/Type 值            *)
-(* （real_le/real_lt/real_eq/real_le_b/NatLt/sigT），Hypothesis 位      *)
+(* （real_le/real_lt/real_eq/real_le_b/NatLt/sigT），假设申报位      *)
 (* 无排序命题承载。                                                     *)
 (* ============================================================ *)
 
@@ -312,9 +312,9 @@ Theorem igr_geom_step_discharged_B :
             (Hr i) (geodi_iterate_pos n r Hr eta p Hp Hn t i)))).
 Proof.
   intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t.
-  apply real_le_closure_b_one.
-  intros d Hd.
-  exact (igr_geom_step_eps n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn t d Hd).
+  exact (real_le_closure_b_one _ _
+    (fun d Hd => igr_geom_step_eps n r Hr eta Heta Hlt1 p Hp
+                   Hnormr Hnormp Hn t d Hd)).
 Qed.
 
 (* ========== W6 前置：误差账的序性质 ========== *)

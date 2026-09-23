@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   bv_pos_cint（原 L233，4 句玩具证）                                   *)
 (*   bv_zeros_int0（原 L222，3 句玩具证）                                 *)
@@ -231,7 +231,7 @@ Proof.
 Qed.
 
 Theorem bv_zeros_int0 : forall L : nat, pint_integral (bv_zeros L) == 0%Q.
-Proof. intro L. unfold pint_integral. apply bv_zeros_int. Qed.
+Proof. intro L. unfold pint_integral. exact (bv_zeros_int L 0). Qed.
 
 Lemma bv_c_pos_le : forall n m : nat, QleT' 0 ((Z.of_nat (bkC (n + m) n) # 1)%Q).
 Proof.
@@ -245,9 +245,10 @@ Lemma bv_pos_cint : forall n m : nat,
   QleT' 0 (pint_integral (pei_list (n + 2 * m) (2 * n + 1))).
 Proof.
   intros n m.
-  apply Qle_to_QleT'.
-  apply Qlt_le_weak.
-  apply pei_beta_pos.
+  exact (Qle_to_QleT' 0
+    (pint_integral (pei_list (n + 2 * m) (2 * n + 1)))
+    (Qlt_le_weak 0 (pint_integral (pei_list (n + 2 * m) (2 * n + 1)))
+       (pei_beta_pos (n + 2 * m) (2 * n + 1)))).
 Qed.
 
 (** bv_carrier_value：截断积分 == 级数部分和 Σ_{m≤M} bv_term n m（精确 QeqT）。 *)

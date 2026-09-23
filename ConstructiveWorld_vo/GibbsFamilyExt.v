@@ -1,15 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   gfe_gibbs_inequality_temp_B（原 L277，4 句玩具证）                   *)
-(*   gfe_le_of_lt（原 L56，2 句玩具证）                                   *)
-(* ============================================================ *)
-
-(* ============================================================ *)
 (* GibbsFamilyExt.v —— 席位 P6C（批次 E-STAGING-P6C）                   *)
 (* 论文6 §4.3 Gibbs 不等式族扩展消融：两个真缺变体面的施工件              *)
 (* ------------------------------------------------------------------ *)
@@ -24,18 +13,18 @@
 (*   logd_gibbs_inequality_minus_B / _eps（G05 换形）、                  *)
 (*   gibbe2_gibbs_equality_bool（等号）、req_gibbs_*（UpReqDist）、      *)
 (*   GibbsWall ↔ rLPO（UpReqGibbsWallEquiv）。                          *)
-(*   真缺面（全库零命中实测定谳）：                                      *)
+(*   真缺面（全库零命中实测已证结论）：                                      *)
 (*   (A) 温度参数化形——β 加权 Gibbs 核（乘正数保序 × Gibbs 族）：        *)
 (*       逐点 eps / 逐点 Bishop / 有限和 eps / 有限和 Bishop /          *)
 (*       无条件 gap Bishop，全库无一件 β 加权出口。                     *)
 (*       构造性差异点：eps 形容许 β = 0（弱前提 real_le real_zero b），  *)
-(*       Bishop 收口须 β > 0（D 证书 real_mult_positive b p）——同一     *)
+(*       Bishop 闭合须 β > 0（D 证书 real_mult_positive b p）——同一     *)
 (*       变体两形前提强度不同，是 §4.3「形态选择」叙事的构造性延伸。     *)
 (*   (B) 对称 Jeffreys 形（非对称互补面）——kl(p‖q)+kl(q‖p) ≥ 0 的       *)
 (*       Bishop 形：逐点 + 有限和，全库零命中（klstb 两支各自在盘，      *)
 (*       其和在盘外）。                                                 *)
 (* ------------------------------------------------------------------ *)
-(* 消费（全在盘只读，零改上游）：CW_ConstructiveWorld_219（S08 之       *)
+(* 依存（全在盘只读，零改上游）：CW_ConstructiveWorld_219（S08 之       *)
 (*   real_gibbs_core_eps / real_gibbs_inequality_eps / real_kl_term /   *)
 (*   real_distrib / real_mult_assoc / real_plus 系列 / real_eq 系列）、 *)
 (*   UpRealLeB（real_le_b / real_le_closure_b）、UpRealLeB2             *)
@@ -67,8 +56,7 @@ Require Import UpReqKLStrictB.
 Lemma gfe_le_of_lt : forall b : Real,
   real_lt real_zero b -> real_le real_zero b.
 Proof.
-  intros b Hb.
-  exact (inl Hb).
+  intros b Hb. exact (inl Hb).
 Qed.
 
 (* 0.2 (q−p)+(p−q) == 0：非对称对消核（assoc 三跳链，零 opp 分配依赖；
@@ -82,7 +70,7 @@ Proof.
   { exact (real_eq_trans (real_plus (real_opp p) p)
                          (real_plus p (real_opp p)) real_zero
              (real_plus_comm (real_opp p) p) (real_plus_opp p)). }
-  (* 步1：assoc 两跳把 p 腿并入 q 腿 *)
+  (* 步1：assoc 两跳把 p 肢并入 q 肢 *)
   assert (Hs1 : real_eq (real_plus (real_plus q (real_opp p))
                                    (real_plus p (real_opp q)))
                         (real_plus (real_plus q (real_plus (real_opp p) p))
@@ -115,7 +103,7 @@ Proof.
       + apply real_eq_refl.
       + exact Hopp0.
     - apply real_eq_refl. }
-  (* 步3+4：(q+0)+(−q) 换形后 plus_opp 收口 *)
+  (* 步3+4：(q+0)+(−q) 换形后 plus_opp 闭合 *)
   assert (Hs3 : real_eq (real_plus (real_plus q real_zero) (real_opp q))
                         real_zero).
   { apply (real_eq_trans
@@ -139,7 +127,7 @@ Proof.
 Qed.
 
 (* 0.3 平移对消恒等式：(a+s)+(d+t) == a+d（当 s+t == 0）；
-   swap_mid 一跳收口——对称 Jeffreys 主恒等式的引擎 *)
+   swap_mid 一跳闭合——对称 Jeffreys 主恒等式的引擎 *)
 Lemma gfe_sym_sum_eq : forall (a d s t : Real),
   real_eq (real_plus s t) real_zero ->
   real_eq (real_plus (real_plus a s) (real_plus d t)) (real_plus a d).
@@ -207,7 +195,7 @@ Qed.
 
 (* A2 温度参数化逐点核 Bishop 形（β > 0 严格前提）：
    β·(p−q) ≤_B β·kl(p‖q)。
-   收口器：real_le_closure_b，D := β·p（正性证书 real_mult_positive）；
+   闭合器：real_le_closure_b，D := β·p（正性证书 real_mult_positive）；
    逐 eps 余量 (β·p)·eps 由 A1 经 mult_assoc 换形供给。
    注：β = 0 时 D 证书无从供给——Bishop 形前提强于 eps 形，
    即 §4.3 形态选择在温度参数化下的构造性分化。 *)
@@ -284,8 +272,8 @@ Qed.
 
 (* A4 温度参数化有限和 Bishop 形（β > 0 严格前提）：
    0 ≤_B β·Σ_s kl(p s‖q s)。
-   收口器：real_le_closure_b，D := β；A3 出口余量形状
-   (β·Σkl) + β·eps 与 closure 供给形 y + D·eps 逐字同形，一步直喂。 *)
+   闭合器：real_le_closure_b，D := β；A3 出口余量形状
+   (β·Σkl) + β·eps 与 closure 供给形 y + D·eps 逐字同形，一步直接代入。 *)
 Theorem gfe_gibbs_inequality_temp_B : forall (X : Type) (l : list X)
   (p q : X -> Real)
   (Hp : forall s : X, real_lt real_zero (p s))
@@ -298,15 +286,18 @@ Theorem gfe_gibbs_inequality_temp_B : forall (X : Type) (l : list X)
         (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l)).
 Proof.
   intros X l p q Hp Hq Hnormp Hnormq b Hb.
-  apply (real_le_closure_b real_zero           (real_mult b (real_list_sum X               (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l))           b Hb).
-  intros eps Heps.
-  exact (gfe_gibbs_inequality_temp_eps X l p q Hp Hq Hnormp Hnormq b           (gfe_le_of_lt b Hb) eps Heps).
+  exact (real_le_closure_b real_zero
+           (real_mult b (real_list_sum X
+               (fun s : X => real_kl_term (p s) (q s) (Hp s) (Hq s)) l))
+           b Hb
+           (fun eps Heps => gfe_gibbs_inequality_temp_eps X l p q Hp Hq
+              Hnormp Hnormq b (gfe_le_of_lt b Hb) eps Heps)).
 Qed.
 
 (* A5 族级组合器：Bishop 形正数乘保序器（全库无 ≤_B 乘法出口，本件补位）：
    x ≤_B y ∧ 0 < β ⟹ β·x ≤_B β·y。
    证书链：le_b 逐 eps 展形 → real_lt_le_iff_req 升 le →
-   左乘保序 → distrib 换形 → closure_b（D := β）再收口。 *)
+   左乘保序 → distrib 换形 → closure_b（D := β）再闭合。 *)
 Lemma gfe_le_b_mult_pos : forall (x y b : Real),
   real_lt real_zero b -> real_le_b x y -> real_le_b (real_mult b x) (real_mult b y).
 Proof.
@@ -365,11 +356,11 @@ Qed.
 (* Part B：对称 Jeffreys 形（真缺变体面 B；非对称互补面两件）            *)
 (* ============================================================ *)
 
-(* B1 对称 Jeffreys 逐点 Bishop 形（非对称形的互补收口）：
+(* B1 对称 Jeffreys 逐点 Bishop 形（非对称形的互补闭合）：
    0 ≤_B kl(p‖q) + kl(q‖p)。
    证书链：klstb 两支 shift 形各自 ≥_B 0 → real_le_b_plus_compat
    相加 → 平移对消项 (q−p)+(p−q) 经 gfe_sym_sum_eq（swap_mid 引擎）
-   从和式中收口剥除。 *)
+   从和式中闭合剥除。 *)
 Theorem gfe_jeffreys_sym_B : forall (p q : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q),
   real_le_b real_zero

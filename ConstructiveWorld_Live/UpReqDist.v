@@ -1,3 +1,16 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
+(* 替换定理清单：reqd_le_of_req／reqd_minus_compat／reqd_opp_zero／          *)
+(* req_boltzmann_dist_pos（共 4 条）                                         *)
+(* 非平凡性口径：显式直造链就地重演，消除单跳转发；无一行拆分式假非平凡。    *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    T246 包G 台账席（tier1 次批）同名替换注记 —— UpReqDist.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
@@ -48,7 +61,7 @@
      - dist_log_eq_linear：切点唯一 x=1（Id 接口字段 L304；setoid 缺）。
    4. SumOver setoid 对接面：批 1/试点件三性质（ext/linear/pos）+ Id 系
      SumOver 字段 sum_over_S_le / sum_over_S_zero_nonneg（L1415/L1426）
-     的 req 镜像（sum_le / sum_zero_nonneg），同为 Section Hypothesis。
+     的 req 镜像（sum_le / sum_zero_nonneg），同为 Section 假设申报位。
    5. SecondLaw：Not (Id (dynamics x) x) → Not (req (dynamics x) x)（签名变化）。
    6. square_nonneg（GRPO ）：保持 Id 出口假设位（显式 forall 参数，
      T2 形态①；Id 系 L24301 同为诚实 Variable）。
@@ -219,7 +232,7 @@ End ReqDistCommon.
 (* Section ReqSumLayer：SumOver 的 setoid 对接面 + 求和层        *)
 (*   三性质沿 UpSigMigrate/基内 sum_req_over_S 规格（F4）；      *)
 (*   sum_le / sum_zero_nonneg 为 Id 系 SumOver 字段 L1415/L1426  *)
-(*   的 req 镜像（诚实 Hypothesis 位）。                         *)
+(*   的 req 镜像（诚实假设申报位）。                         *)
 (* ============================================================ *)
 Section ReqSumLayer.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -1020,7 +1033,7 @@ End ReqGRPO.
 (* Section ReqFEP：FreeEnergyMinimization 节 req 迁移            *)
 (*   （Id 原件 §15759-18721）。对接口 = sum_req_over_S 三性质    *)
 (*   + SumOver 字段 sum_le/sum_zero_nonneg 的 req 镜像；         *)
-(*   T2① 桥 4 件见节内 Hypothesis（均为 Id 接口字段/已证件，     *)
+(*   T2① 桥 4 件见节内假设申报（均为 Id 接口字段/已证件，     *)
 (*   Real 实例可满足，实例化留待接口扩展批——批 1 同结论）。      *)
 (* ============================================================ *)
 Section ReqFEP.

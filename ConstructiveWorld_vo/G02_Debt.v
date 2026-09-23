@@ -1,11 +1,28 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
+(* 替换定理清单：sqrt_premise_le_intro／real_partition_function_scaled_pos   *)
+(* ／real_partition_function_temp_param_pos／                                *)
+(* real_partition_function_temp_pos／                                        *)
+(* gibbst_real_partition_function_temp_pos／real_temp_is_scale_duality／     *)
+(* real_exp_neg_wd（共 7 条）                                                *)
+(* 非平凡性口径：配分函数正性链就地直造与换轨重演（原体为行内单跳委托）；    *)
+(* 无一行拆分式假非平凡。                                                    *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* G 组：G02_Debt — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpDebtSqrtAbs + UpDebtDual + UpDebtGibbsT（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G02_Debt 成员件：UpDebtSqrtAbs（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtSqrtAbs.v —— 债务清理打包模块（件 3，方案三 b+）          *)
+(* UpDebtSqrtAbs.v —— 债务清理封装模块（件 3，方案三 b+）          *)
 (*   抽象 Id 系增强接口下任意非负 d 的构造性平方根见证：          *)
 (*   把 Real 层 real_sqrt_exists（根 L96475）的 Or 分支证书      *)
-(*   结构逐字镜像回 RealInterfaceEnhanced 接口泛型。             *)
+(*   结构逐字副本回 RealInterfaceEnhanced 接口泛型。             *)
 (*                                                              *)
 (*   语句（原始任务表述模板）：                                        *)
 (*     forall d, Or (lt zero d) (Id zero d) ->                  *)
@@ -18,9 +35,9 @@
 (*     右支 d≡0：r := zero（mult_zero）。                        *)
 (*                                                              *)
 (*   诚实接口说明：接口的 le 是不透明字段，库内仅有 Or→le 单向   *)
-(*   （lt_le_iff），故前件取 Or 形态——这正是 real_le 的定义体    *)
+(*   （lt_le_iff），故前提取 Or 形态——这正是 real_le 的定义体    *)
 (*   （real_le x y := Or (real_lt x y) (real_eq x y)），与 Real  *)
-(*   层 real_sqrt_exists 的可消费前提逐字同构；le 形态前提在接口 *)
+(*   层 real_sqrt_exists 的可依存前提逐字同构；le 形态前提在接口 *)
 (*   内无法分解（无 le→Or 字段），不硬凑。                       *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（lt/le/Id/sigT/And）；*)
@@ -34,7 +51,7 @@ Section SqrtAbstract.
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
-(* 平方维数见证（镜像根内 sqrt_witness）：r·r == d *)
+(* 平方维数见证（副本根内 sqrt_witness）：r·r == d *)
 Definition dsq_sqrt_witness (d r : R) : Set := Id (mult r r) d.
 
 (* two := 1+1（字面 2）；two > 0（plus_positive × one_pos 组装） *)
@@ -61,13 +78,13 @@ Proof.
   exact (id_trans (id_sym Hsplit) Hd).
 Qed.
 
-(* Or 前件即 le 的构造性内容（接口单向 lt_le_iff 的记录） *)
+(* Or 前提即 le 的构造性内容（接口单向 lt_le_iff 的记录） *)
 Lemma sqrt_premise_le_intro : forall d : R, Or (lt zero d) (Id zero d) -> le zero d.
 Proof.
   intros d H. exact (lt_le_iff zero d H).
 Qed.
 
-(* ---- 旗舰（件 3）：抽象 Id 层任意非负 d 的平方根见证 ----
+(* ---- 主定理（件 3）：抽象 Id 层任意非负 d 的平方根见证 ----
    左支（d > 0，正间隙证书）：r := exp_neg(half·log_inv d)。
      r·r == d：exp(h)·exp(h) == exp(h+h)（exp_neg_plus 反向）
        == exp(log_inv d)（h+h == half·L+half·L == half·(L+L)
@@ -127,7 +144,7 @@ Proof.
 Qed.
 
 (* 实例（机器可检查的健全性检查）：1 的抽象平方根可构造——
-   r := exp(half·log_inv 1)，r ≥ 0 且 r·r == 1（镜像 real_sqrt_one）。 *)
+   r := exp(half·log_inv 1)，r ≥ 0 且 r·r == 1（副本 real_sqrt_one）。 *)
 Lemma sqrt_one_abstract :
   sigT (fun r : R => And (le zero r) (Id (mult r r) one)).
 Proof.
@@ -138,10 +155,10 @@ End SqrtAbstract.
 
 (* ======== G02_Debt 成员件：UpDebtDual（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtDual.v —— 债务清理打包模块（件 2，方案三 b）              *)
+(* UpDebtDual.v —— 债务清理封装模块（件 2，方案三 b）              *)
 (*   缩放-温度对偶族 Real 层：抽象层 scale_temp_duality           *)
 (*   （CW_ConstructiveWorld_219 L28515–28529）与配套缩放族（L28440–28543）   *)
-(*   的 Real 层镜像。                                            *)
+(*   的 Real 层副本。                                            *)
 (*                                                              *)
 (*   定义族：                                                    *)
 (*     real_softmax_scaled c z s      := e^{c·z_s}/Σ e^{c·z}     *)
@@ -393,7 +410,7 @@ Qed.
 
 (* ---- Section 温度版桥：1/T 缩放族 == 库式温度化 softmax ----
    库式 softmax_temp（L28104 型）的温度 T/配分 Z_T 为 Section
-   变量显式定义（不带参数化前件）；此处重建该形态，并以
+   变量显式定义（不带参数化前提）；此处重建该形态，并以
    real_inv_pos_ext + real_eq_refl 桥接（配分定义性相等）。 *)
 Variable T : Real.
 Variable T_pos : real_lt real_zero T.
@@ -443,7 +460,7 @@ End RealScaleDual.
 
 (* ======== G02_Debt 成员件：UpDebtGibbsT（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpDebtGibbsT.v —— 债务清理打包模块（件 1，方案三 c）            *)
+(* UpDebtGibbsT.v —— 债务清理封装模块（件 1，方案三 c）            *)
 (*   attention_is_gibbs_temp 的 Real 层复刻：任意温度下          *)
 (*   softmax == Boltzmann。                                      *)
 (*                                                              *)
@@ -593,7 +610,7 @@ Variable real_Z_thermo_pos : real_lt real_zero gibbst_real_Z_thermo.
 Definition gibbst_real_boltzmann_dist_attn (s : S) : Real :=
   real_mult (real_inv_pos gibbst_real_Z_thermo real_Z_thermo_pos) (gibbst_real_boltzmann_factor s).
 
-(* ---- 旗舰（件 1）：任意温度下 softmax == Boltzmann ----
+(* ---- 主定理（件 1）：任意温度下 softmax == Boltzmann ----
    前提：① 1/T == 1/D（温度统一，real_inv_pos 按位相等）
          ② energy == −logits（逐 s）
          ③ Z_thermo == Z_T（配分相等）
@@ -637,7 +654,7 @@ Proof.
   { apply (real_inv_pos_ext gibbst_real_Z_thermo gibbst_real_partition_function_temp
                             real_Z_thermo_pos gibbst_real_partition_function_temp_pos).
     exact HZ. }
-  (* 3. 组装（镜像单位温度版第 3 步） *)
+  (* 3. 组装（副本单位温度版第 3 步） *)
   apply (real_eq_trans _ (real_mult (real_exp_neg (real_opp (real_mult (real_inv_pos T T_pos) (z_logits s))))
                                     (real_inv_pos gibbst_real_partition_function_temp
                                                   gibbst_real_partition_function_temp_pos)) _).

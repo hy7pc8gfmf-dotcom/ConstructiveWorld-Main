@@ -75,7 +75,7 @@
    【boltzmann 块 3】ag_attention_is_gibbs_temp<-28634（节内参数化
      softmax_temp_r 形；e^{+z/T} 约定镜像保留，因子不换号；撞车核对：
      UpSigMigrate.v req_attention_is_gibbs_temp 为批 0 试点 fixed-z 形
-     + exp_neg 兼容桥 Hypothesis 位，本节件为 scaled 合成子链组件，
+     + exp_neg 兼容桥假设申报位，本节件为 scaled 合成子链组件，
      ag_ 前缀并存不覆盖）
      ag_scale_inv_T_eq_softmax_temp<-28679（约定换位登记表：Id 两侧同
      e^{+} 字面闭合，req 侧跨 reqd_softmax_scaled 引擎须真桥，缩放
@@ -149,7 +149,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* Section ReqAttnGibbs：AttentionGibbsBridge 首段 req 迁移       *)
 (*   求和诚实接口 = Id SumOver/基座 Setoid 节同款三性质 + add，    *)
-(*   节内自持（跨席 Hypothesis 不可消费纪律）。                   *)
+(*   节内自持（跨席假设申报不可消费纪律）。                   *)
 (* ============================================================ *)
 Section ReqAttnGibbs.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -548,7 +548,7 @@ Qed.
 (*   @28679 / scaled_attention_is_gibbs_temp @28694）。           *)
 (*   撞车核对：req_attention_is_gibbs_temp 已由批 0 试点结果      *)
 (*   （UpSigMigrate.v ReqGibbsPilot，fixed-z 形 + exp_neg 兼容桥  *)
-(*   Hypothesis 位）；本节件为节内参数化 softmax_temp_r 形，       *)
+(*   假设申报位）；本节件为节内参数化 softmax_temp_r 形，       *)
 (*   服务 scaled 合成，命名 ag_ 前缀与试点并存不覆盖。            *)
 (*   Boltzmann 约定换位登记表：ag_attention_is_gibbs_temp 保留 Id    *)
 (*   e^{+z/T} 约定（exp_pos_fn_setoid 镜像，因子不换号）；         *)
@@ -699,7 +699,7 @@ Qed.
 (*   @29385 / eviction_db_zero_full @29573 属 eviction_db 系      *)
 (*   （RestB ReqKVQuantWorld 领地，批4首席冻结清单），不迁。       *)
 (*   诚实接口新增（Id SumOver 字段 req 镜像，先例 UpReqDist       *)
-(*   L206 sum_le / L1008 fsum_le，同为 Section Hypothesis）：     *)
+(*   L206 sum_le / L1008 fsum_le，同为 Section 假设申报位）：     *)
 (*     sum_le<-L1415 镜像、abs_sum_le_r<-L1431 镜像。            *)
 (* ============================================================ *)
 
@@ -1936,9 +1936,7 @@ Lemma ag_sum_r_max_collapse :
   forall f g : S -> R, (forall s : S, le (g s) (f s)) ->
     req (sumf (fun s : S => r_max (f s) (g s))) (sumf f).
 Proof.
-  intros f g Hle.
-  apply (sum_ext (fun s : S => r_max (f s) (g s)) f).
-  intro s. exact (r_max_l_iff (f s) (g s) (Hle s)).
+  intros f g Hle. exact (sum_ext (fun s : S => r_max (f s) (g s)) f (fun s : S => r_max_l_iff (f s) (g s) (Hle s))).
 Qed.
 
 (* ---- B. gap 集中 + 零温极限（Id @28282 / @28337 平移） ---- *)
@@ -2308,7 +2306,7 @@ Qed.
 (*     - minus→req_minus（UpReqAlgebra L728 req_minus_self_zero），  *)
 (*       Id 恒等链→req_trans 链 + req_mult_compat 双腿；             *)
 (*     - detailed_balance（Id 节 Variable）→detailed_balance_r       *)
-(*       诚实 Hypothesis 逐位镜像（Id→req）；                        *)
+(*       诚实假设申报位逐位镜像（Id→req）；                        *)
 (*     - abs 消去：接口字段 abs_zero（req (abs zero) zero）经        *)
 (*       req_abs_compat 拉回，零新公理。                             *)
 (*   禁区注记更正：头注冻结清单6 / L662 禁区扣除注记由本节更正——     *)

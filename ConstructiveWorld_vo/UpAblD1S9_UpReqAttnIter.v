@@ -3,13 +3,24 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   uabd1s9_ait_pack22_supplied（原 L189，2 句玩具证）                   *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
+(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头注一字 *)
+(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
+(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
+(* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
+(* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblD1S9_UpReqAttnIter.v —— FA-D1S9 数据供给大打包六梯 件①      *)
+(* UpAblD1S9_UpReqAttnIter.v —— FA-D1S9 数据供给大封装六梯 件①      *)
 (* 席位：FA-D1S9（普查批 D1-⑦ 六梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改  *)
 (*                                                              *)
 (* 领地认领（防撞协议快照 20260919）：D1-⑦ 池 S4＝UpReqStepKLEtaInst＋        *)
@@ -41,17 +52,17 @@
 (*   （L132-133）为母亲节内定义，pack 语句按其定义体 δ 内联同体（L128/L132 逐字）。    *)
 (* 零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷）。                                *)
 (*                                                              *)
-(* 形态：P2S1/S4/S7 打包记录型先例（槽语句逐字入包）＋实例供给申报形。               *)
+(* 形态：P2S1/S4/S7 封装记录型先例（槽语句逐字入包）＋实例供给申报形。               *)
 (* 实例供给：S:=unit（单点态空间）｜sumf:=fun f => f tt（单点求和）｜               *)
 (*   D:=real_one｜energy:=零函数｜transition:=恒一函数｜delta:=半（inv two，         *)
-(*   inv_pos_pos 两腿）｜Z_thermo_i_pos:=exp_neg_pos 一行直配（S4 件②               *)
+(*   inv_pos_pos 两个合取肢）｜Z_thermo_i_pos:=exp_neg_pos 一行直接匹配（S4 件②               *)
 (*   rtk_Z_thermo_pos 先例）｜arch_pow_i:=r_arch_pow_attn_real@CW220_Extensions:   *)
 (*   1537 直接喂（req_r_pow 在 Real 实例 δ≡real_pow、req_minus δ≡plus a (opp b)，   *)
 (*   CW220:777 转换喂定）｜transition_row_i/p_steady_i＝单点归一坍缩 mult_one 一行｜  *)
 (*   minorization＝比率归一链（inv_pos_correct+mult_comm+req_mult_compat+mult_one    *)
 (*   +lt_le_iff）机械 6 步。机械位平凡性实测兑现。                                  *)
 (*                                                              *)
-(* 分级（禁注水如实申报）：22 位＝21 喂（全部 T·数据/接口/一行直配供给级，合并申报      *)
+(* 分级（禁注水如实申报）：22 位＝21 喂（全部 T·数据/接口/一行直接匹配供给级，合并申报      *)
 (*   不逐槽计战果）＋1 墙（W·abs_nonneg_h 判定墙族，墙登记不立）。普查 N/N2/N3/N1      *)
 (*   降标 T·供给级口径与 S4/S7 先例同判。                                          *)
 (*                                                              *)
@@ -70,7 +81,7 @@ Require Import UpReqAlign.
 Require Import CW220_Extensions.
 Import RealInterfaceEnhancedMod.
 
-(* ============ helper 0：1 < 1+1（delta_lt_one 供给腿前置） ============ *)
+(* ============ helper 0：1 < 1+1（delta_lt_one 供给肢前置） ============ *)
 
 Lemma uabd1s9_ait_one_lt_two : real_lt real_one (real_plus real_one real_one).
 Proof.
@@ -84,7 +95,7 @@ Proof.
 Qed.
 
 (* ============ helper 1：半 < 1（delta_lt_one 槽供给件） ============ *)
-(*   腿：real_inv_pos_lt_contra@S07:6040（inv 反单调）+ real_inv_one_local@       *)
+(*   肢：real_inv_pos_lt_contra@S07:6040（inv 反单调）+ real_inv_one_local@       *)
 (*   S08:1474（inv 1==1 运输）——CW220_Extensions:1044 同构链。                   *)
 
 Lemma uabd1s9_ait_delta_lt_one_feed :
@@ -123,7 +134,7 @@ Proof.
            (inl Hd1)).
 Qed.
 
-(* ============ 打包记录型：22 槽语句逐字入包（对照母本 L94-164） ============ *)
+(* ============ 封装记录型：22 槽语句逐字入包（对照母本 L94-164） ============ *)
 (*   槽序＝母本声明序；Z_thermo_i/boltzmann_dist_i 按母亲 L128/L132-133 δ 内联。     *)
 
 Inductive uabd1s9_ait_pack22 : Type :=
@@ -149,7 +160,7 @@ Inductive uabd1s9_ait_pack22 : Type :=
         (* L114 abs_sum_le_h *)
         (forall f : S -> Real,
             le (abs (sumf f)) (sumf (fun s : S => abs (f s)))) ->
-        (* L118 abs_nonneg_h（W 墙位·原语句保留） *)
+        (* L118 abs_nonneg_h（W 阻隔位·原语句保留） *)
         (forall a : Real, le zero (abs a)) ->
         (* L121 D *)
         forall D : Real,
@@ -204,6 +215,6 @@ Proof.
   exact (uabd1s9_ait_pack22_intro unit           (fun (f : unit -> Real) => f tt)           (fun (f g : unit -> Real)              (H : forall s : unit, req (f s) (g s)) => H tt)           (fun (a : Real) (f : unit -> Real) =>              req_refl (mult a (f tt)))           (fun (f g : unit -> Real) =>              req_refl (plus (f tt) (g tt)))           (fun (f g : unit -> Real)              (H : forall s : unit, le (f s) (g s)) => H tt)           (fun (f : unit -> Real)              (H : forall s : unit, le zero (f s)) => H tt)           (fun (f : unit -> Real) => le_refl (abs (f tt)))           Habnn           real_one real_lt_zero_one           (fun _ : unit => real_zero)           (exp_neg_pos (mult (inv_pos real_one real_lt_zero_one) real_zero))           (fun _ _ : unit => real_one)           (fun _ : unit => req_refl real_one)           (inv_pos (plus one one) real_two_pos)           (inv_pos_pos (plus one one) real_two_pos)           uabd1s9_ait_delta_lt_one_feed           (fun _ _ : unit =>              uabd1s9_ait_minor_feed                (inv_pos (plus one one) real_two_pos)                (exp_neg (mult (inv_pos real_one real_lt_zero_one) real_zero))                uabd1s9_ait_delta_lt_one_feed                (exp_neg_pos                   (mult (inv_pos real_one real_lt_zero_one) real_zero)))           (fun _ : unit => mult_one _)           (fun (a : Real) (Ha : lt zero a) (eps : Real) (Heps : lt zero eps) =>              r_arch_pow_attn_real                (inv_pos (plus one one) real_two_pos)                (inv_pos_pos (plus one one) real_two_pos)                uabd1s9_ait_delta_lt_one_feed a Ha eps Heps)).
 Qed.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设面闭合申报 ============ *)
 
 Print Assumptions uabd1s9_ait_pack22_supplied.

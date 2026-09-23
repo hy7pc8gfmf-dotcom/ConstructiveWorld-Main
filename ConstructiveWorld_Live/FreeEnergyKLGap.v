@@ -1,18 +1,31 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包M·T252 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包M 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T252。       *)
+(* 替换定理清单：fekl_sumf_ext／fekl_sumf_add／fekl_sumf_linear（共 3 位）   *)
+(* 非平凡性口径：母本体换形归纳重演（反向分配链与尾对换位显式化）；无一行    *)
+(* 拆分式假非平凡。                                                          *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================ *)
 (* FreeEnergyKLGap.v — 施工席位 B2：Real 层自由能–KL 间隙            *)
 (* ============================================================ *)
 (* 目标定理（A2 席组合榜组 3 + A4 席 T4）：Real 层 FEP 核心形——        *)
 (*   forall p,（归一前提）→ F(π_boltzmann) ≤ F(p) 且 差 == D·Σ kl_term。*)
 (*                                                                   *)
-(* 墙位判词（S1/S2，RealEnergyTempMono 头注复证）：KL≥0 的 plain-le    *)
+(* 阻隔位结论（S1/S2，RealEnergyTempMono 头注复证）：KL≥0 的 plain-le    *)
 (*   （real_le = Or real_lt real_eq，S02:460/S01:69 Set 值和）全称非负 *)
 (*   ⟺ rLPO（p==q 点 KL==0 无一致 gap、Or 分支不可判定）。故 ≤ 方向   *)
-(*   依广播降档两形，撞墙位零硬攻：                                   *)
+(*   依广播降档两形，撞阻隔位零硬攻：                                   *)
 (*   ① B 形：real_le_b（Bishop ≤_B，Set 层 ∀eps>0 形，UpRealLeB:63）； *)
 (*   ② eps 见证形：plain real_le 出口 + eps 余量（S08:490 面）。       *)
-(*   差 = D·KL 一侧不受墙位影响，走 real_eq 分解形。                  *)
+(*   差 = D·KL 一侧不受阻隔位影响，走 real_eq 分解形。                  *)
 (*                                                                   *)
-(* 依赖坐标（215 vo 基座内，语句面均探针核对）：                       *)
+(* 依赖坐标（215 vo 基座内，语句面均检验核对）：                       *)
 (*   · A 件 RealKLDecomp.v:765 rkd_kl_decomp_full（F(p) == F(πb)+D·Σ  *)
 (*     kl_term，real_eq 形、S/sumf/ext/add/linear/base/D/Dp/Z/Zp/p/   *)
 (*     Hp/Hnormp/Hnormb 接口全显参）+ :709 rkd_boltzmann_normalized； *)
@@ -21,16 +34,16 @@
 (*     real_gibbs_inequality_eps（0 ≤ Σ kl + eps，Or 形出口）；        *)
 (*   · ≤_B 序代数 UpRealLeB3:63/51/165 leb3_le_b_eq_r/eq_l/           *)
 (*     pos_scale_l（右端运输/左端运输/正缩放）+ UpRealLeB:373         *)
-(*     real_le_closure_b_one（plain-eps 余量单步收口器）；             *)
+(*     real_le_closure_b_one（plain-eps 余量单步闭合器）；             *)
 (*   · B 件 S12_B5RecycleSF sf_vfe_ge_complexity_eps（eps 余量形）    *)
-(*     升 B 形收口（Part 5，组合榜组 3 消费面）。                     *)
+(*     升 B 形闭合（Part 5，组合榜组 3 依存面）。                     *)
 (*                                                                   *)
 (* 红线自审：①语句面全 Set（real_eq/real_lt/real_le_b/real_le；       *)
 (*   real_le 为 S01:69 Set 值和 Or 编码、其 Or 前提仅以显式参/证内     *)
-(*   destruct 消费，零裸 Prop 连词、零 ex、出口无 QltT/QleT 直书）；   *)
+(*   destruct 依存，零裸 Prop 连词、零 ex、出口无 QltT/QleT 直书）；   *)
 (*   ②公理面零假设（无公理/自认/参数声明/猜想/中止/半途认输，零经典逻辑）*)
 (*   （依赖全为库内闭合件）；③非平凡（差形换算链 + Or 形正乘保序 +    *)
-(*   正缩放复用收口 + D·eps 位移换形 + 分解装配 + 归一化放电 + SF     *)
+(*   正缩放复用闭合 + D·eps 位移换形 + 分解装配 + 归一化实例化消解 + SF     *)
 (*   升形）；④文末 Print Assumptions 审计口 11 处。                  *)
 (* 编译配方（9.1 主轨实测 EXIT=0；live901+215 基座轨已判死——基座 .vo  *)
 (*   Corelib.Init.Prelude digest 与重装后 stdlib 不一致）：            *)
@@ -56,7 +69,7 @@ Require Import S12_B5RecycleSF.
 (* ============================================================ *)
 
 (* 0.1 差形换算：fp == fb + dk ⟹ fp + (−fb) == dk
-   （assoc/comm/opp/zero 纯 eq 链，零消费序判词） *)
+   （assoc/comm/opp/zero 纯 eq 链，零消费序结论） *)
 Lemma fekl_diff_shift : forall (fb fp dk : Real),
   real_eq fp (real_plus fb dk) ->
   real_eq (real_plus fp (real_opp fb)) dk.
@@ -225,7 +238,7 @@ Qed.
 (* ============================================================ *)
 (* Part 2：list 载体（s0 :: l）求和实例件                              *)
 (*   sumf := fekl_sumf（real_list_sum 的 cons 载体闭包），             *)
-(*   ext/add/linear 三件由 real_list_sum_ext/add/linear 直连放电。     *)
+(*   ext/add/linear 三件由 real_list_sum_ext/add/linear 直连实例化消解。     *)
 (* ============================================================ *)
 Definition fekl_sumf (X : Type) (s0 : X) (l : list X) (f : X -> Real) : Real :=
   real_list_sum X f (s0 :: l).
@@ -421,7 +434,7 @@ Proof.
              Hp
              (fun s : X => real_boltzmann_dist_r_pos X real_base_loss D D_pos Z Z_pos s)
              Hnormp Hnormb). }
-  (* 步2：0 ≤_B D·K（正缩放收口，Part 0.5） *)
+  (* 步2：0 ≤_B D·K（正缩放闭合，Part 0.5） *)
   assert (HDK : real_le_b real_zero (real_mult D K))
     by exact (fekl_mult_pos_le_b D K D_pos HK).
   (* 步3：F(p) == F(πb) + D·K（A 件直连） *)
@@ -435,7 +448,7 @@ Proof.
                             (real_plus Fpi (real_mult D K))).
   { exact (real_le_b_plus_compat Fpi Fpi real_zero (real_mult D K)
              (leb3_le_b_refl Fpi) HDK). }
-  (* 步5：左端 +0 消去、右端沿分解件运输收口 *)
+  (* 步5：左端 +0 消去、右端沿分解件运输闭合 *)
   exact (leb3_le_b_eq_r Fpi (real_plus Fpi (real_mult D K)) Fp
            (leb3_le_b_eq_l (real_plus Fpi real_zero) Fpi
               (real_plus Fpi (real_mult D K)) (real_plus_zero Fpi) Hstep)
@@ -445,7 +458,7 @@ Qed.
 (* ============================================================ *)
 (* Part 4：FEP 核心形·规范配分实例（前提仅归一前提，全闭合）            *)
 (*   Z := Σ e^{−e/D}（fekl_part，正性内证），Σ π_b == 1 由             *)
-(*   rkd_boltzmann_normalized 以 partition 恒等放电。                  *)
+(*   rkd_boltzmann_normalized 以 partition 恒等实例化消解。                  *)
 (* ============================================================ *)
 Theorem fekl_fep_gap_canonical_le_b :
   forall (X : Type) (s0 : X) (l : list X)
@@ -556,7 +569,7 @@ Proof.
       + apply (RealSetoid.real_eq_plus_compat Fpi real_zero Fpi
                  (real_plus (real_mult D K) eps)
                  (real_eq_refl Fpi) Heq0). }
-  (* 步5：右端 F(πb)+(D·K+eps) == F(p)+eps 运输收口 *)
+  (* 步5：右端 F(πb)+(D·K+eps) == F(p)+eps 运输闭合 *)
   apply (RealSetoid.real_le_id_r Fpi
            (real_plus Fpi (real_plus (real_mult D K) eps))
            (real_plus Fp eps)).
@@ -572,9 +585,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 6：B 件消费（S12 sf_vfe_ge_complexity_eps 升 B 形收口）         *)
+(* Part 6：B 件依存（S12 sf_vfe_ge_complexity_eps 升 B 形闭合）         *)
 (*   SF 层对照：复杂度 ≤_B vfe（匹配态自由能 ≥ 复杂度的 Bishop 对应物； *)
-(*   组合榜组 3 / A4 T4 的 S 系消费面）。                               *)
+(*   组合榜组 3 / A4 T4 的 S 系依存面）。                               *)
 (* ============================================================ *)
 Theorem fekl_sf_vfe_ge_complexity_B :
   forall v : SFVec, real_le_b (sf_n2r (length v)) (sf_vfe v v).
@@ -592,7 +605,7 @@ Proof.
   { apply (RealSetoid.real_lt_id_r dh (real_mult eps real_one) eps).
     - exact (real_mult_one eps).
     - exact (real_mult_lt_compat_l h real_one eps real_inv_two_lt_one Heps). }
-  (* 以半量 dh 消费 B 件（Or 两支均闭合） *)
+  (* 以半量 dh 依存 B 件（Or 两支均闭合） *)
   destruct (sf_vfe_ge_complexity_eps v dh Hdpos) as [Hlt | Heq].
   - (* lt 支：c−dh < vfe ⟹ c < vfe+dh < vfe+eps *)
     assert (HeqL : real_eq c (real_plus dh (real_plus c (real_opp dh)))).

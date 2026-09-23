@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   uabd1s5_doe_pack18_supplied（原 L599，1 句玩具证）                   *)
 (*   uabd1s5_doe_Hsq_leg（原 L454，1 句玩具证）                           *)
@@ -14,15 +14,26 @@
 (*   uabd1s5_doe_mult_zero_l（原 L128，2 句玩具证）                       *)
 (*   uabd1s5_doe_mult_one_l（原 L122，2 句玩具证）                        *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 8 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 8 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
+(* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblD1S5_UpReqDoeblinEntropy.v —— FA-D1S5 数据供给大打包第二梯 件①            *)
+(* UpAblD1S5_UpReqDoeblinEntropy.v —— FA-D1S5 数据供给大封装第二梯 件①            *)
 (* 席位：FA-D1S5（普查批 D1-⑦ 第二梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改        *)
 (*                                                              *)
 (* 辖区：UpReqDoeblinEntropy.v Section DoeblinEntropyList 全 18 个 N 位             *)
 (*   （Live_X 副本与 ConstructiveWorld_vo 正册 md5 同代                            *)
 (*    873fa3238ca63a5fcce0bbec3260aa20，零代际漂移）                              *)
-(*   槽位行号锚（母本实测）：states:827｜Hnil:828｜T:829｜Ht:830｜energy:831｜      *)
+(*   接口参数行号锚（母本实测）：states:827｜Hnil:828｜T:829｜Ht:830｜energy:831｜      *)
 (*     om:834｜Hom:835｜Hom1:836｜w:837｜Hwp:838｜Hwn:839｜Hew:840-848｜           *)
 (*     epss0:909｜p:929｜Hpp:930｜Heb:935-937｜r2:938｜Hsq:940-943                *)
 (*   另 4 个 T·零消费位（Hepss:910/Hpn:931/Hep:932/Hr2:939）按普查 §④ 剪除申报，    *)
@@ -30,25 +41,25 @@
 (* 主锚注记：本模块数据位为 Doeblin 一步核 δ 参数化节参（普查 D1-⑦ 批注记），         *)
 (*   主锚 real_step_kl_eta_bound_eps@UpStepKL.v:682 属首梯辖区，本批零触碰。        *)
 (*                                                              *)
-(* 形态：D1S4 打包记录型先例照抄（UpAblD1S4_UpReqStepKLEtaInst 同款，               *)
+(* 形态：D1S4 封装记录型先例照抄（UpAblD1S4_UpReqStepKLEtaInst 同款，               *)
 (*   Inductive 单构造子逐槽语句入包）。本模块无 Type 字段，包落 Set 排序             *)
 (*   （G3 提取 magic=0 干净，D1S4 偏差2 对照）。                                   *)
 (* 母本节内定义件 doe_sumf/doe_sumpos/doe_pb/doe_Hpb/doe_omd/doe_K/doe_h            *)
-(*   （母本 L851-884）以显式参形实名镜像（参形=槽位显式参形，δ 展开同体，            *)
+(*   （母本 L851-884）以显式参形实名副本（参形=接口参数显式参形，δ 展开同体，            *)
 (*   P1S1 sfc_two δ 展开同款），件头登记。                                         *)
 (*                                                              *)
 (* 实例供给：states:=单点 [nil]（cons nil nil）｜T:=real_one｜energy:=零函数｜       *)
 (*   om:=real_one｜w:=壹函数｜p:=壹函数｜epss0:=real_one｜r2:=real_zero。           *)
 (*   单点载体下全部求和按 cons 折叠 δ/ι 展开：Σ_g ≡ g(nil)+0。                      *)
-(*   供给腿全部为一步直配/两步 trans 链（mult_one/mult_zero/plus_zero/plus_opp      *)
+(*   供给肢全部为一步直接匹配/两步 trans 链（mult_one/mult_zero/plus_zero/plus_opp      *)
 (*   族），机械位平凡性实测兑现。                                                  *)
 (*                                                              *)
-(* 分级（禁注水如实申报）：18 槽全部 T·数据供给级合并申报（Hsq 供给腿为              *)
-(*   四步 trans 链 h==0 → 平方和归零 → le-inr 直配，如实登记仍属机械供给）。          *)
+(* 分级（禁注水如实申报）：18 槽全部 T·数据供给级合并申报（Hsq 供给肢为              *)
+(*   四步 trans 链 h==0 → 平方和归零 → le-inr 直接匹配，如实登记仍属机械供给）。          *)
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219（S02 序与环律/S03 逆元器/S07 Setoid 桥/            *)
 (*   S08 列表和与 log 器）＋UpReqTempDefs（温度族定义件——母本自身依赖面，只读        *)
-(*   消费，非槽位母本）；零 Require 槽位母本（防 P3S1 坑1 混代际）。                 *)
+(*   依存，非接口参数母本）；零 Require 接口参数母本（防 P3S1 坑1 混代际）。                 *)
 (* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S5_*.{log,exit}                      *)
 (* ============================================================ *)
 
@@ -81,7 +92,7 @@ Definition uabd1s5_doe_p : list Real -> Real := fun _ : list Real => real_one.
 
 Definition uabd1s5_doe_r2 : Real := real_zero.
 
-(* ============ 母本节内定义件显式参形镜像（δ 展开同体） ============ *)
+(* ============ 母本节内定义件显式参形副本（δ 展开同体） ============ *)
 (* doe_sumf (母本 L851-852)：sumf g := real_list_sum (list Real) g states          *)
 
 Definition uabd1s5_doe_sumf (states : list (list Real))
@@ -134,7 +145,7 @@ Definition uabd1s5_doe_h (states : list (list Real)) (Hnil : states <> nil)
   real_minus_r (uabd1s5_doe_K states Hnil T Ht energy om w s)
                (uabd1s5_doe_pb states Hnil T Ht energy s).
 
-(* ============ 机械供给腿（一步直配/短 trans 链） ============ *)
+(* ============ 机械供给肢（一步直接匹配/短 trans 链） ============ *)
 
 Lemma uabd1s5_doe_mult_one_l : forall x : Real,
   real_eq (real_mult real_one x) x.
@@ -209,7 +220,7 @@ Proof.
   - exact (real_plus_opp (uabd1s5_doe_pb states Hnil T Ht energy s)).
 Qed.
 
-(* Hsq 供给腿：平方和归零（h==0 逐点 → 平方归零 → 乘积归零 → 单点和归零）
+(* Hsq 供给肢：平方和归零（h==0 逐点 → 平方归零 → 乘积归零 → 单点和归零）
    实例供给级陈述（states 钉单点常量——real_list_sum 折叠需构造元收敛） *)
 Lemma uabd1s5_doe_sumsq_zero :
   real_eq
@@ -363,14 +374,14 @@ Proof.
                      uabd1s5_doe_T uabd1s5_doe_Ht uabd1s5_doe_energy nil))).
 Qed.
 
-(* Hwn 供给腿：单点和 Σ壹 = 壹（cons 折叠 δ/ι 展开） *)
+(* Hwn 供给肢：单点和 Σ壹 = 壹（cons 折叠 δ/ι 展开） *)
 Lemma uabd1s5_doe_Hwn_leg :
   real_eq (real_list_sum (list Real) uabd1s5_doe_w uabd1s5_doe_states) real_one.
 Proof.
   exact (real_eq_trans           (real_list_sum (list Real) uabd1s5_doe_w uabd1s5_doe_states)           (uabd1s5_doe_w nil)           real_one           (real_plus_zero (uabd1s5_doe_w nil))           (real_eq_refl real_one)).
 Qed.
 
-(* Hew 供给腿：Σ(壹·零) == 能量期望（两侧各自两步归零） *)
+(* Hew 供给肢：Σ(壹·零) == 能量期望（两侧各自两步归零） *)
 Lemma uabd1s5_doe_Hew_leg :
   real_eq
     (real_list_sum (list Real)
@@ -435,7 +446,7 @@ Proof.
                 (real_plus_zero real_zero))).
 Qed.
 
-(* Heb 供给腿：两侧 δ/ι 展开逐字同体（同一载体 SC/SP/T/Ht/energy），reflexivity 一行 *)
+(* Heb 供给肢：两侧 δ/ι 展开逐字同体（同一载体 SC/SP/T/Ht/energy），reflexivity 一行 *)
 Lemma uabd1s5_doe_Heb_leg :
   real_eq
     (real_list_sum (list Real)
@@ -453,7 +464,7 @@ Proof.
   exact (real_eq_refl           (real_energy_exp_temp (list Real)              (uabd1s5_doe_sumf uabd1s5_doe_states)              (uabd1s5_doe_sumpos uabd1s5_doe_states uabd1s5_doe_Hnil)              uabd1s5_doe_T uabd1s5_doe_Ht uabd1s5_doe_energy)).
 Qed.
 
-(* Hsq 供给腿：平方和 ≡ 零 ⟹ inr 直配（real_le = Or lt eq 的 eq 支） *)
+(* Hsq 供给肢：平方和 ≡ 零 ⟹ inr 直接匹配（real_le = Or lt eq 的 eq 支） *)
 Lemma uabd1s5_doe_Hsq_leg :
   real_le
     (uabd1s5_doe_sumf uabd1s5_doe_states
@@ -476,7 +487,7 @@ Proof.
   exact (inr uabd1s5_doe_sumsq_zero).
 Qed.
 
-(* ============ 打包记录型：18 槽语句逐字入包（对照母本 L827-943） ============ *)
+(* ============ 封装记录型：18 槽语句逐字入包（对照母本 L827-943） ============ *)
 
 Inductive uabd1s5_doe_pack18 : Set :=
 | uabd1s5_doe_pack18_intro :
@@ -604,6 +615,6 @@ Proof.
   exact (uabd1s5_doe_pack18_intro           uabd1s5_doe_states           uabd1s5_doe_Hnil           uabd1s5_doe_T           uabd1s5_doe_Ht           uabd1s5_doe_energy           uabd1s5_doe_om           real_lt_zero_one           (inr (real_eq_refl real_one))           uabd1s5_doe_w           (fun _ : list Real => real_lt_zero_one)           uabd1s5_doe_Hwn_leg           uabd1s5_doe_Hew_leg           uabd1s5_doe_epss0           uabd1s5_doe_p           (fun _ : list Real => real_lt_zero_one)           uabd1s5_doe_Heb_leg           uabd1s5_doe_r2           uabd1s5_doe_Hsq_leg).
 Qed.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设面闭合申报 ============ *)
 
 Print Assumptions uabd1s5_doe_pack18_supplied.

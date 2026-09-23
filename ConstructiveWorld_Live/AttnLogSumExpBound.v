@@ -3,10 +3,21 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   attn_log_partition_bound_B（原 L505，3 句玩具证）                    *)
 (*   attn_log_partition_bound_full（原 L388，2 句玩具证）                 *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -28,8 +39,8 @@
 (*     attn_logit_le_log_partition（s ≤ log Z，配分控制逐 logit）；    *)
 (*   · B 件 G08:192 gibbsd_p_mult_ratio（p·(q/p) == q）→              *)
 (*     attn_tilted_eq（倾斜配分恒等 T == Z·Agg，逐项 ext 装配）        *)
-(*     + attn_logit_le_log_partition 内 e^s == Z·w 第二消费位；        *)
-(*   · 支撑 ≥2：attn_aggregate_le_bound（权重归一传递件，A1 消费）     *)
+(*     + attn_logit_le_log_partition 内 e^s == Z·w 第二依存位；        *)
+(*   · 支撑 ≥2：attn_aggregate_le_bound（权重归一传递件，A1 依存）     *)
 (*     + attn_wsum_le_scale（有界质量件：Σ w·f ≤ B·Σw，list 面）       *)
 (*     + attn_sum_nonneg / attn_elem_le_sum（最大值控制件 max ≤ sum   *)
 (*     型，list 面，InT 逐点受限版）+ attn_aggregate_pos /            *)
@@ -37,7 +48,7 @@
 (*                                                                   *)
 (* log 墙策略（A4/E-STAGING-C1：log 反单调方向翻车前科规避）：          *)
 (*   全链只走 log 单调升向 real_log_le_mono（G01:536，Or 编码逐支     *)
-(*   放电，plain real_le）+ real_log_mult eq 重排（S07:7845）；        *)
+(*   实例化消解，plain real_le）+ real_log_mult eq 重排（S07:7845）；        *)
 (*   零反单调、零 plain 形硬攻；另出 real_le_b Bishop 形（            *)
 (*   UpRealLeB:78 real_le_to_le_b 单向桥）作 eps/B 出口。             *)
 (*                                                                   *)
@@ -146,8 +157,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 3. 支撑（权重归一传递件，A 件 1 消费位）：值场逐点 ≤ B ⟹            *)
-(*    聚合 ≤ B（Σw == 1 归一收口）。                                   *)
+(* 3. 支撑（权重归一传递件，A 件 1 依存位）：值场逐点 ≤ B ⟹            *)
+(*    聚合 ≤ B（Σw == 1 归一闭合）。                                   *)
 (* ============================================================ *)
 
 Lemma attn_aggregate_le_bound :
@@ -294,9 +305,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 6. B 件消费位（G08:192 gibbsd_p_mult_ratio）：倾斜配分恒等           *)
+(* 6. B 件依存位（G08:192 gibbsd_p_mult_ratio）：倾斜配分恒等           *)
 (*    T == Z·Agg（逐项 real_list_sum_ext 装配；B 件在 A×B 装配中的      *)
-(*    主消费面）。                                                     *)
+(*    主依存面）。                                                     *)
 (* ============================================================ *)
 
 Lemma attn_tilted_eq :
@@ -393,7 +404,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 8. 主件诚实接口全形：正性/聚合界证书由本文件支撑件放电。             *)
+(* 8. 主件诚实接口全形：正性/聚合界证书由本文件支撑件实例化消解。             *)
 (* ============================================================ *)
 
 Theorem attn_log_partition_bound_full :
@@ -410,7 +421,9 @@ Theorem attn_log_partition_bound_full :
             (real_plus (real_log (sf_partition ss) Wp) (real_log B HB)).
 Proof.
   intros ss f Wp B HB Hnil Hb Hub.
-  apply (attn_log_partition_bound ss f Wp B HB           (attn_aggregate_pos ss f Wp Hnil Hb)           (attn_aggregate_le_bound ss f Wp B Hnil Hub)).
+  exact (attn_log_partition_bound ss f Wp B HB
+           (attn_aggregate_pos ss f Wp Hnil Hb)
+           (attn_aggregate_le_bound ss f Wp B Hnil Hub)).
 Qed.
 
 (* ============================================================ *)
@@ -446,7 +459,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 10. A 件 2 消费位（S12:12017 sf_softmax_le_one）+ B 件第二消费位：   *)
+(* 10. A 件 2 依存位（S12:12017 sf_softmax_le_one）+ B 件第二依存位：   *)
 (*     逐 logit 配分控制 s ≤ log Z（log-partition 支配下界面）。        *)
 (* ============================================================ *)
 
@@ -523,8 +536,8 @@ Corollary attn_log_partition_bound_B :
               (real_plus (real_log (sf_partition ss) Wp) (real_log B HB)).
 Proof.
   intros ss f Wp B HB HposAgg HAggB.
-  apply real_le_to_le_b.
-  exact (attn_log_partition_bound ss f Wp B HB HposAgg HAggB).
+  exact (real_le_to_le_b _ _
+    (attn_log_partition_bound ss f Wp B HB HposAgg HAggB)).
 Qed.
 
 (* ============================================================ *)

@@ -16,7 +16,7 @@
 (* 替换定理清单：partition_function_pos（原逐句转发 → 定义层展开＋逐点正性断言单列＋求和保正接口显式实例化装配）。                                          *)
 (* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
 (*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
-(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明收口语句     *)
+(* 红线自检：纯构造性；零新增承认语句；替换证明以真证明闭合语句     *)
 (*   闭尾；文件尾附假设面打印锚。                                   *)
 (* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
 (* ============================================================ *)
@@ -256,7 +256,7 @@ Theorem kl_nonneg : forall p : S -> R,
 Proof.
   intros p Hnp Hpp.
   unfold kl_divergence.
-  apply (gibbs_inequality p q Hnp Hpp q_norm q_pos).
+  exact (gibbs_inequality p q Hnp Hpp q_norm q_pos).
 Qed.
 
 (* Gibbs 等式（KL = 0 ⟹ p = q）：由已证 gibbs_equality 特化（P1 消解：
@@ -267,7 +267,7 @@ Theorem kl_zero_iff_eq : forall p : S -> R,
 Proof.
   intros p Hnp Hpp Hkl0 s.
   unfold kl_divergence in Hkl0.
-  apply (gibbs_equality p q Hnp Hpp q_norm q_pos Hkl0 s).
+  exact (gibbs_equality p q Hnp Hpp q_norm q_pos Hkl0 s).
 Qed.
 
 End KLDivergence.
@@ -1522,9 +1522,8 @@ Theorem dpo_loss_diff_decomp : forall x h : R,
                 (inv_pos (plus one (exp_neg x)) (dpo_logit_denom_pos x)))).
 Proof.
   intros x h.
-  apply id_sym.
-  apply (log_div (plus one (exp_neg (plus x h))) (plus one (exp_neg x))
-                 (dpo_logit_denom_pos (plus x h)) (dpo_logit_denom_pos x)).
+  exact (id_sym (log_div (plus one (exp_neg (plus x h))) (plus one (exp_neg x))
+                 (dpo_logit_denom_pos (plus x h)) (dpo_logit_denom_pos x))).
 Qed.
 
 (* sigmoid（Set 层构造）：σ(x) = 1/(1+e^{-x})，正性见证内嵌 *)
@@ -1534,7 +1533,8 @@ Definition dpo_sigmoid (x : R) : R :=
 (* sigmoid 正性：0 < σ(x)（inv_pos_pos） *)
 Lemma dpo_sigmoid_pos : forall x : R, lt zero (dpo_sigmoid x).
 Proof.
-  intro x. unfold dpo_sigmoid. apply inv_pos_pos.
+  intro x. unfold dpo_sigmoid.
+  exact (inv_pos_pos (plus one (exp_neg x)) (dpo_logit_denom_pos x)).
 Qed.
 
 (* sigmoid 定义方程：σ(x)·(1+e^{-x}) = 1（inv_pos_correct + mult_comm） *)
@@ -1696,53 +1696,47 @@ Lemma log_one_plus_le : forall (t : R), lt zero (plus one t) ->
   le (log (plus one t)) t.
 Proof.
   intros t Hpos.
-  apply (le_trans _ (minus (plus one t) one) _).
-  - apply (log_le_linear (plus one t)). exact Hpos.
-  - apply (lt_le_iff _ _).
-    right. exact (minus_one_plus_t t).
+  exact (le_trans (log (plus one t)) (minus (plus one t) one) t
+           (log_le_linear (plus one t) Hpos)
+           (lt_le_iff (minus (plus one t) one) t (inr (minus_one_plus_t t)))).
 Qed.
 
 (* ============ 2. Set 层代数辅助 ============ *)
 (* eq → le 桥 *)
 Lemma set_eq_le : forall a b : R, Id a b -> le a b.
 Proof.
-  intros a b Hab. apply (lt_le_iff _ _). right. exact Hab.
+  intros a b Hab. exact (lt_le_iff a b (inr Hab)).
 Qed.
 
 (* t ≥ 0 ⟹ t² ≥ 0：t·0 == 0 ≤ t·t（le_mult_compat_r 于 t、0≤t） *)
 Lemma set_square_nonneg : forall t : R, le zero t -> le zero (mult t t).
 Proof.
   intros t Ht.
-  apply (le_trans _ (mult t zero) _).
-  - apply set_eq_le. apply id_sym. apply (mult_zero t).
-  - apply (le_mult_compat_r t zero t); [exact Ht | exact Ht].
+  exact (le_trans zero (mult t zero) (mult t t)
+           (set_eq_le zero (mult t zero) (id_sym (mult_zero t)))
+           (le_mult_compat_r t zero t Ht Ht)).
 Qed.
 
 (* t ≥ 0 ⟹ t³ ≥ 0 *)
 Lemma set_cube_nonneg : forall t : R, le zero t -> le zero (mult t (mult t t)).
 Proof.
   intros t Ht.
-  apply (le_trans _ (mult t zero) _).
-  - apply set_eq_le. apply id_sym. apply (mult_zero t).
-  - apply (le_mult_compat_r t zero (mult t t)).
-    + exact Ht.
-    + exact (set_square_nonneg t Ht).
+  exact (le_trans zero (mult t zero) (mult t (mult t t))
+           (set_eq_le zero (mult t zero) (id_sym (mult_zero t)))
+           (le_mult_compat_r t zero (mult t t) Ht (set_square_nonneg t Ht))).
 Qed.
 
 (* a·(b−c) == a·b − a·c *)
 Lemma set_minus_mult : forall a b c : R,
   Id (mult a (minus b c)) (minus (mult a b) (mult a c)).
 Proof.
-  intros a b c. apply (mult_minus_distr_l a b c).
+  intros a b c. exact (mult_minus_distr_l a b c).
 Qed.
 
 (* opp zero == zero（opp_le_compat 桥需要；主文件无 Set 层 opp_zero） *)
 Lemma set_opp_zero : Id (opp zero) zero.
 Proof.
-  apply id_sym.
-  apply (plus_inv_unique zero zero (opp zero)).
-  - apply (plus_zero zero).
-  - apply (plus_opp zero).
+  exact (id_sym (plus_inv_unique zero zero (opp zero) (plus_zero zero) (plus_opp zero))).
 Qed.
 
 (* 环化简：(t + −t²) + (t² + −t³) == t + −t³（全显式组装，弃 setoid rewrite） *)
@@ -1813,10 +1807,9 @@ Qed.
 Lemma set_one_plus_pos : forall t : R, le zero t -> lt zero (plus one t).
 Proof.
   intros t Ht0.
-  apply (lt_le_trans zero one (plus one t)).
-  - exact one_pos.
-  - apply (le_id_l _ _ _ (id_sym (plus_zero one))).
-    apply (le_plus_compat one one zero t (le_refl one) Ht0).
+  exact (lt_le_trans zero one (plus one t) one_pos
+           (le_id_l one (plus one zero) (plus one t) (id_sym (plus_zero one))
+              (le_plus_compat one one zero t (le_refl one) Ht0))).
 Qed.
 
 (* ============ 3. 主引理：0 ≤ t ⟹ t−t² ≤ t·(1/(1+t)) ============ *)
@@ -1830,9 +1823,7 @@ Lemma set_inv_mul : forall (s : R) (Hs : lt zero s),
   Id (mult (inv_pos s Hs) s) one.
 Proof.
   intros s Hs.
-  pose proof (mult_comm (inv_pos s Hs) s) as H1.
-  pose proof (inv_pos_correct s Hs) as H2.
-  exact (id_trans H1 H2).
+  exact (id_trans (mult_comm (inv_pos s Hs) s) (inv_pos_correct s Hs)).
 Qed.
 
 Lemma set_div_linear_ge_quad : forall (t : R) (Ht0 : le zero t),
@@ -1995,14 +1986,9 @@ Lemma inner_splus_r : forall x y z : S,
   Id (inner x (splus y z)) (plus (inner x y) (inner x z)).
 Proof.
   intros x y z.
-  (* ⟨x, y+z⟩ = ⟨y+z, x⟩（sym）= ⟨y,x⟩ + ⟨z,x⟩（splus_l） = ⟨x,y⟩ + ⟨x,z⟩（sym ×2） *)
-  assert (H1 : Id (inner x (splus y z)) (inner (splus y z) x))
-    by exact (inner_sym x (splus y z)).
-  assert (H2 : Id (inner (splus y z) x) (plus (inner y x) (inner z x)))
-    by exact (inner_splus_l y z x).
-  assert (H3 : Id (plus (inner y x) (inner z x)) (plus (inner x y) (inner x z)))
-    by exact (id_cong2 plus (inner_sym y x) (inner_sym z x)).
-  exact (id_trans H1 (id_trans H2 H3)).
+  exact (id_trans (inner_sym x (splus y z))
+           (id_trans (inner_splus_l y z x)
+              (id_cong2 plus (inner_sym y x) (inner_sym z x)))).
 Qed.
 
 (* 多变量复合误差分解（mv 版 compose_diff_decomp）：复用单变量版特化
@@ -2501,13 +2487,9 @@ Lemma inner_smult_r : forall (a : R) (x y : S),
   Id (inner x (smult a y)) (mult a (inner x y)).
 Proof.
   intros a x y.
-  assert (H1 : Id (inner x (smult a y)) (inner (smult a y) x))
-    by exact (inner_sym x (smult a y)).
-  assert (H2 : Id (inner (smult a y) x) (mult a (inner y x)))
-    by exact (inner_smult_l a y x).
-  assert (H3 : Id (mult a (inner y x)) (mult a (inner x y)))
-    by exact (id_cong (fun z => mult a z) (inner_sym y x)).
-  exact (id_trans H1 (id_trans H2 H3)).
+  exact (id_trans (inner_sym x (smult a y))
+           (id_trans (inner_smult_l a y x)
+              (id_cong (fun z => mult a z) (inner_sym y x)))).
 Qed.
 
 (* 内积第二参数对 sopp：⟨x, -y⟩ = -⟨x,y⟩（smult_opp + smult_one + inner_smult_r） *)
@@ -3069,7 +3051,7 @@ Theorem second_law_irreversible :
   forall x, Not (Id (dynamics x) x) ->
     lt (entropy x) (entropy (dynamics x)).
 Proof.
-  intros x Hneq. apply strict_entropy_increase. exact Hneq.
+  intros x Hneq. exact (strict_entropy_increase x Hneq).
 Qed.
 
 End SecondLaw.
@@ -3169,19 +3151,19 @@ Proof. intro a. apply plus_zero. Qed.
 
 Lemma plus_opp_r :
   forall a : R, Id (plus a (opp a)) zero.
-Proof. intro a. apply plus_opp. Qed.
+Proof. intro a. exact (plus_opp a). Qed.
 
 Lemma mult_one_r :
   forall a : R, Id (mult a one) a.
-Proof. intro a. apply mult_one. Qed.
+Proof. intro a. exact (mult_one a). Qed.
 
 Lemma mult_zero_r :
   forall a : R, Id (mult a zero) zero.
-Proof. intro a. apply mult_zero. Qed.
+Proof. intro a. exact (mult_zero a). Qed.
 
 Lemma mult_comm_rewrite :
   forall a b : R, Id (mult a b) (mult b a).
-Proof. intros a b. apply mult_comm. Qed.
+Proof. intros a b. exact (mult_comm a b). Qed.
 
 (* ============================================================ *)
 (* 环论补充引理已前移至 Enhanced 定义后的 Section RingLemmas， *)
@@ -3716,7 +3698,7 @@ Qed.
 Definition partition_function_scaled (c : R) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult c (z s))).
 
-(* 缩放配分正性：exp 恒正 × sum_pos_preserved（镜像 L27471-27479） *)
+(* 缩放配分正性：exp 恒正 × sum_pos_preserved（副本 L27471-27479） *)
 Lemma partition_function_scaled_pos :
   forall c z, lt zero (partition_function_scaled c z).
 Proof.
@@ -3734,7 +3716,7 @@ Definition softmax_scaled (c : R) (z : logits) (s : S) : R :=
   mult (exp_pos_fn (mult c (z s)))
        (inv_pos (partition_function_scaled c z) (partition_function_scaled_pos c z)).
 
-(* 缩放族概率公理：正性（镜像 softmax_temp_pos L27486-27494） *)
+(* 缩放族概率公理：正性（副本 softmax_temp_pos L27486-27494） *)
 Theorem softmax_scaled_pos :
   forall c z s, lt zero (softmax_scaled c z s).
 Proof.
@@ -3745,7 +3727,7 @@ Proof.
   - apply inv_pos_pos.
 Qed.
 
-(* 缩放族概率公理：归一化（镜像 softmax_temp_normalized L27496-27517） *)
+(* 缩放族概率公理：归一化（副本 softmax_temp_normalized L27496-27517） *)
 Theorem softmax_scaled_normalized :
   forall c z, Id (sum_over_S (fun s => softmax_scaled c z s)) one.
 Proof.
@@ -3774,7 +3756,7 @@ Qed.
 Definition partition_function_temp_param (T0 : R) (HT0 : lt zero T0) (z : logits) : R :=
   sum_over_S (fun s => exp_pos_fn (mult (inv_pos T0 HT0) (z s))).
 
-(* 温度参数化配分正性（镜像 L27471-27479） *)
+(* 温度参数化配分正性（副本 L27471-27479） *)
 Lemma partition_function_temp_param_pos :
   forall T0 HT0 z, lt zero (partition_function_temp_param T0 HT0 z).
 Proof.
@@ -3818,8 +3800,7 @@ Lemma temp_is_scale_duality :
   forall (c : R) (Hc : lt zero c) (z : logits) (s : S),
     Id (softmax_temp_param c Hc z s) (softmax_scaled (inv_pos c Hc) z s).
 Proof.
-  intros c Hc z s.
-  apply (id_sym (scale_temp_duality c Hc z s)).
+  intros c Hc z s. exact (id_sym (scale_temp_duality c Hc z s)).
 Qed.
 
 (* ============================================================ *)
@@ -3848,8 +3829,7 @@ Theorem scale_sqrt_witness_dual :
     forall (z : logits) (s : S),
       Id (softmax_scaled (inv_pos r Hr) z s) (softmax_temp_param r Hr z s).
 Proof.
-  intros d r Hr Hw z s.
-  apply scale_temp_duality.
+  intros d r Hr Hw z s. exact (scale_temp_duality r Hr z s).
 Qed.
 
 (* d = 4（r = 2）实例：softmax(z/2) == 温度 2 的 softmax          *)
@@ -3859,8 +3839,7 @@ Lemma half_scale_is_temp_two :
     Id (softmax_scaled (inv_pos (plus one one) two_pos) z s)
        (softmax_temp_param (plus one one) two_pos z s).
 Proof.
-  intros z s.
-  apply scale_temp_duality.
+  intros z s. exact (scale_temp_duality (plus one one) two_pos z s).
 Qed.
 
 (* ---- Boltzmann 分布（温度 D > 0，能量 energy） ---- *)
@@ -3955,7 +3934,7 @@ Qed.
 (* ============================================================ *)
 
 (* 桥：1/T 缩放族 == 库内温度化 softmax（配分函数定义性相等，    *)
-(* inv_pos_ext + id_refl；scale_temp_duality c := T + 镜像合成） *)
+(* inv_pos_ext + id_refl；scale_temp_duality c := T + 副本合成） *)
 Lemma scale_inv_T_eq_softmax_temp :
   forall (s : S),
     Id (softmax_scaled (inv_pos T T_pos) z s) (softmax_temp z s).
@@ -4378,7 +4357,7 @@ Proof.
 Qed.
 
 
-(* ============ 段 3：TV 收缩旗舰 ============ *)
+(* ============ 段 3：TV 收缩主定理 ============ *)
 
 (* |Σ f·Q| ≤ Σ |f|·Q（abs_sum_le + 接口字段 abs_mult + Q ≥ 0） *)
 Lemma abs_kernel_bound : forall (f : S -> R) (s' : S),
@@ -4471,7 +4450,7 @@ Proof.
                  (le_refl _)).
 Qed.
 
-(* ============ 旗舰：单步 TV 收缩（Doeblin） ============ *)
+(* ============ 主定理：单步 TV 收缩（Doeblin） ============ *)
 Theorem attention_tv_contraction :
   forall mu, Id (sum_over_S mu) one -> (forall s, le zero (mu s)) ->
     le (tv_dist (attention_step mu) boltzmann_dist_attn)
@@ -7838,11 +7817,11 @@ End TopPSampling.
 (* ============================================================ *)
 
 (* ============================================================
-   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自探针 _dbg_kdr.v）
+   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自检验 _dbg_kdr.v）
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
    metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），
-       同文件全局冲突（探针不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
+       同文件全局冲突（检验不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
    ============================================================ *)
 
 (* ============ Core 版接口（阶段 3 组装目标）：无 exp/log 字段 ============

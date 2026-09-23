@@ -13,10 +13,10 @@
 (* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
 (* 替换定理清单：Q2_nonneg / Qhalf_nonneg（共 2 条，语句不变）；   *)
 (*   其余 reflexive 族玩具（q_pow_succ 等）经复核为定义性等式，    *)
-(*   非平凡化无语义增益，如实挂账不硬编（详见台账 T242）。         *)
+(*   非平凡化无语义增益，如实遗留不硬编（详见台账 T242）。         *)
 (* 非平凡性说明：仅替换上列 2 条证明体；声明面、其余定理、原头注   *)
 (*   一律原样保留。替换口径：Qle 展开 = Z 层交叉积，字面归约后      *)
-(*   线性判定收口——消除原 Qlt_le_weak 双跳转发，实质非平凡。       *)
+(*   线性判定闭合——消除原 Qlt_le_weak 双跳转发，实质非平凡。       *)
 (*   纯构造性 Set 层：零 公理、零 承认件、零经典逻辑。             *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
@@ -284,7 +284,7 @@ Qed.
 (* 路线：A=|x| → 阿基米德 N0（2A ≤ (t+1)#1）→ 尾和三角          *)
 (*   ≤ Σ A^{Datatypes.S k}/(Datatypes.S k)! ≤ (A^m/m!)·geo_sum ≤ (A^m/m!)·2         *)
 (*   → 取 m ≥ N0 使 (A^m/m!)·2 < eps（(1/2)^t 衰减 + 阿基米德）  *)
-(* 纯构造性：Set 层等同类型 Id + QltT（镜像主文件 L57/L2943）   *)
+(* 纯构造性：Set 层等同类型 Id + QltT（副本主文件 L57/L2943）   *)
 (* 零 承认、零经典公理、sigT 信息性结论、可提取 OCaml          *)
 (* ============================================================ *)
 
@@ -294,7 +294,7 @@ Proof. unfold Qlt; simpl; lia. Qed.
 Lemma Q2_nonneg : Qle 0 (1 + 1)%Q.
 Proof.
   (* ToyR 替换：Z 层直构（消 Qlt_le_weak→Q2_pos 转发链）：
-     Qle 展开 = 交叉积 Z.le，字面归约后线性判定收口 *)
+     Qle 展开 = 交叉积 Z.le，字面归约后线性判定闭合 *)
   unfold Qle.
   simpl.
   lia.
@@ -306,7 +306,7 @@ Proof. unfold Qlt; simpl; lia. Qed.
 Lemma Qhalf_nonneg : Qle 0 (1 / 2)%Q.
 Proof.
   (* ToyR 替换：Z 层直构（消 Qlt_le_weak→Qhalf_pos 转发链）：
-     Qle 展开 = 交叉积 Z.le，字面归约后线性判定收口 *)
+     Qle 展开 = 交叉积 Z.le，字面归约后线性判定闭合 *)
   unfold Qle.
   simpl.
   lia.
@@ -2798,7 +2798,7 @@ Qed.
 (* ============ ksum_diff_row 论证：corr 差分 == 行差分（备份 89 并入，来自 _dbg_kdr.v） ============ *)
 
 (* ===== ksum_diff_row 直接证明（不归纳）：corr 差分 == 行差分 =====
-   第一步探针：corr_succ_decomp 反向 + ksum_succ/ksum_diff_correct 链，看目标形态 *)
+   第一步检验：corr_succ_decomp 反向 + ksum_succ/ksum_diff_correct 链，看目标形态 *)
 Lemma ksum_diff_row_step1 : forall (a : Q) (m : nat),
   (1 <= m)%nat ->
   ksum_diff m m a + inner2 (2 * m + 1) (2 * Datatypes.S m - (2 * m + 1)) a ==
@@ -2858,7 +2858,7 @@ Lemma ksum_diff_nat_eq : forall (m1 m2 k : nat) (a : Q),
   m1 = m2 -> ksum_diff m1 k a == ksum_diff m2 k a.
 Proof. intros. subst. reflexivity. Qed.
 
-(* 步骤4探针：ksum_diff_row LHS 用 ksum_diff_sum_upto 展开（m−1 版本）
+(* 步骤4检验：ksum_diff_row LHS 用 ksum_diff_sum_upto 展开（m−1 版本）
    ksum_diff m m == sum_upto m (inner2 (m+1+k') (m+1−k') − inner2 (m+k') (m−k')) *)
 Lemma ksum_diff_row_step4 : forall (a : Q) (m : nat),
   (1 <= m)%nat ->
@@ -4102,10 +4102,10 @@ Qed.
    推荐 A（altf_zero 已备、结构清晰），B 作后备。预计 2–4 小时。
 *)
 
-(* 本探针当前进度：基础设施 + corr 结构 + 非负性 + altf_zero + esq_succ 全部 Qed；
+(* 本检验当前进度：基础设施 + corr 结构 + 非负性 + altf_zero + esq_succ 全部 Qed；
    下轮：esq_eq_corr 主恒等式（路线 A 对角线系数匹配）。 *)
 
-(* ===== 配对论证 vander 系支撑引理（探针 _dbg_kdr.v 690-775 行，随 vander 块并入） ===== *)
+(* ===== 配对论证 vander 系支撑引理（检验 _dbg_kdr.v 690-775 行，随 vander 块并入） ===== *)
 (* Q 层 2·(1/x) == 2/x（Qdiv 展开 ring）——E_0/O_0 抵消用 *)
 Lemma q_div_scale2 : forall (x : Q), 2 * (1 / x) == 2 / x.
 Proof.
@@ -4194,7 +4194,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ 配对论证第三步：Vandermonde 恒等（vander_4m2 / vander_4m4，探针 _dbg_kdr.v 67 Qed 并入） ============ *)
+(* ============ 配对论证第三步：Vandermonde 恒等（vander_4m2 / vander_4m4，检验 _dbg_kdr.v 67 Qed 并入） ============ *)
 (* q_pow 1 任意幂 == 1 *)
 Lemma q_pow_one : forall n, q_pow 1 n == 1.
 Proof.
@@ -4358,7 +4358,7 @@ Proof.
     ring.
 Qed.
 
-(* 镜像对称（偶数项数）：f j == f (2n+1−j)（j ≤ n）⟹ Σ_{j=0}^{2n+1} f j == 2·Σ_{j=0}^{n} f j *)
+(* 副本对称（偶数项数）：f j == f (2n+1−j)（j ≤ n）⟹ Σ_{j=0}^{2n+1} f j == 2·Σ_{j=0}^{n} f j *)
 Lemma sum_upto_mirror_even : forall (n : nat) (f : nat -> Q),
   (forall j, (j <= n)%nat -> f j == f (2 * n + 1 - j)%nat) ->
   sum_upto (2 * n + 2)%nat f == 2 * sum_upto (n + 1) f.
@@ -4368,7 +4368,7 @@ Proof.
   assert (Hadd : (2 * n + 2 = (n + 1) + (n + 1))%nat) by lia.
   rewrite (sum_upto_nat_eq (2 * n + 2)%nat ((n + 1) + (n + 1)) f Hadd).
   setoid_rewrite (sum_upto_split_gen (n + 1) (n + 1) f).
-  (* 第二和：Σ_{i=0}^{n} f (n+1+i) == Σ_{i=0}^{n} f i（镜像 f (2n+1−i) == f i） *)
+  (* 第二和：Σ_{i=0}^{n} f (n+1+i) == Σ_{i=0}^{n} f i（副本 f (2n+1−i) == f i） *)
   assert (Hsec : sum_upto (n + 1) (fun i => f (n + 1 + i)%nat) == sum_upto (n + 1) f).
   { (* sum_upto_rev 反向：sum_upto (n+1) h == sum_upto (n+1) (fun i => h (n−i))，h i = f (n+1+i) *)
     setoid_rewrite <- (sum_upto_rev (n + 1) (fun i => f (n + 1 + i)%nat)).
@@ -4383,7 +4383,7 @@ Proof.
   ring.
 Qed.
 
-(* 镜像对称（奇数项数）：f j == f (2n−j)（j ≤ n）⟹ Σ_{j=0}^{2n} f j == 2·Σ_{j=0}^{n−1} f j + f n *)
+(* 副本对称（奇数项数）：f j == f (2n−j)（j ≤ n）⟹ Σ_{j=0}^{2n} f j == 2·Σ_{j=0}^{n−1} f j + f n *)
 Lemma sum_upto_mirror_odd : forall (n : nat) (f : nat -> Q),
   (forall j, (j <= n)%nat -> f j == f (2 * n - j)%nat) ->
   sum_upto (2 * n + 1)%nat f == 2 * sum_upto n f + f n.
@@ -4393,7 +4393,7 @@ Proof.
   assert (Hadd : (2 * n + 1 = n + (n + 1))%nat) by lia.
   rewrite (sum_upto_nat_eq (2 * n + 1)%nat (n + (n + 1)) f Hadd).
   setoid_rewrite (sum_upto_split_gen n (n + 1) f).
-  (* 第二和：Σ_{i=0}^{n} f (n+i) == Σ_{i=0}^{n} f (2n−i) == Σ_{i=0}^{n} f i（镜像） *)
+  (* 第二和：Σ_{i=0}^{n} f (n+i) == Σ_{i=0}^{n} f (2n−i) == Σ_{i=0}^{n} f i（副本） *)
   assert (Hsec : sum_upto (n + 1) (fun i => f (n + i)%nat) == sum_upto (n + 1) f).
   { setoid_rewrite <- (sum_upto_rev (n + 1) (fun i => f (n + i)%nat)).
     rewrite (sum_upto_ext_below (n + 1) (fun i => f (n + (n + 1 - 1 - i))%nat) (fun i => f (2 * n - i)%nat)).
@@ -4414,7 +4414,7 @@ Qed.
    Σ_{j=0}^{m−1} [−2/((4m+2−2j)!(2j)!) + 2/((4m+1−2j)!(2j+1)!)]
    == 2/((2m+2)!(2m)!) − 1/((2m+1)!(2m+1)!)
    证明路线：altf_zero (4m+2)（== 0）→ altf_as_sum_upto → 偶奇拆分
-   → q_pow_neg1 奇偶归约 → 镜像对称（偶部×2、奇部×2+中项）→ 代数变形。
+   → q_pow_neg1 奇偶归约 → 副本对称（偶部×2、奇部×2+中项）→ 代数变形。
    核心：0 == 2·Σ_{j=0}^{m} E_j − (2·Σ_{j=0}^{m−1} O_j + O_m)
         ⟹ 2·Σ_{j=0}^{m−1}(O_j−E_j) == 2·E_m − O_m == RHS（分母交换）。 *)
 Lemma vander_4m2 : forall (m : nat),
@@ -4455,7 +4455,7 @@ Proof.
        setoid_replace (q_fact (4 * m + 2 - (2 * j + 1))) with (q_fact (4 * m + 1 - 2 * j)).
        2: { apply q_fact_nat_eq. lia. }
        ring. }
-  (* 4. 镜像对称：偶部 Σ_{j=0}^{2m+1} E_j == 2·Σ_{j=0}^{m} E_j *)
+  (* 4. 副本对称：偶部 Σ_{j=0}^{2m+1} E_j == 2·Σ_{j=0}^{m} E_j *)
   assert (HmirE : sum_upto (2 * m + 2)
              (fun j => 1 / (q_fact (2 * j) * q_fact (4 * m + 2 - 2 * j))) ==
            2 * sum_upto (m + 1)
@@ -4471,7 +4471,7 @@ Proof.
     2: { apply q_fact_nat_eq. exact H2. }
     field.
     all: split; apply q_neq_of_lt; apply q_fact_pos. }
-  (* 5. 镜像对称：奇部 Σ_{j=0}^{2m} O_j == 2·Σ_{j=0}^{m−1} O_j + O_m（O_m = −1/((2m+1)!(2m+1)!)） *)
+  (* 5. 副本对称：奇部 Σ_{j=0}^{2m} O_j == 2·Σ_{j=0}^{m−1} O_j + O_m（O_m = −1/((2m+1)!(2m+1)!)） *)
   assert (HmirO : sum_upto (2 * m + 1)
              (fun j => - 1 / (q_fact (2 * j + 1) * q_fact (4 * m + 1 - 2 * j))) ==
            2 * sum_upto m
@@ -4498,7 +4498,7 @@ Proof.
     2: { apply q_fact_nat_eq. exact H2. }
     field.
     all: split; apply q_neq_of_lt; apply q_fact_pos. }
-  (* 6. 代入镜像：Hz == 2·Σ_{j=0}^{m} E_j − (2·Σ_{j=0}^{m−1} O_j + O_m) == 0 *)
+  (* 6. 代入副本：Hz == 2·Σ_{j=0}^{m} E_j − (2·Σ_{j=0}^{m−1} O_j + O_m) == 0 *)
   setoid_rewrite HmirE in Hz.
   setoid_rewrite HmirO in Hz.
   (* 7. 拆分 E 和：Σ_{j=0}^{m} E_j == Σ_{j=0}^{m−1} E_j + E_m，E_m = 1/((2m)!(2m+2)!) *)
@@ -4620,7 +4620,7 @@ Qed.
    + [−2/((4m+4)!(0)!) + 2/((4m+3)!(1)!)] == 1/((2m+2)!(2m+2)!)
    证明路线（同构 vander_4m2）：altf_zero (4m+4) → altf_as_sum_upto (4m+4)
    → 偶奇拆分（sum_upto (4m+5) = sum_upto (2(2m+2)+1)）→ q_pow_neg1 归约
-   → 镜像（偶部×2、奇部×2，无中项）→ Qeq 移项（Qopp_comp 模式）。
+   → 副本（偶部×2、奇部×2，无中项）→ Qeq 移项（Qopp_comp 模式）。
    尾项 [−2/((4m+4)!(0)!) + 2/((4m+3)!(1)!)] 与 j=0 项合并：j=0 时
    −2/((4m+2)!(2)!) + 2/((4m+1)!(3)!) + 尾项——需整体配对。 *)
 Lemma vander_4m4 : forall (m : nat),
@@ -4661,7 +4661,7 @@ Proof.
        setoid_replace (q_fact (4 * m + 4 - (2 * j + 1))) with (q_fact (4 * m + 3 - 2 * j)).
        2: { apply q_fact_nat_eq. lia. }
        ring. }
-  (* 4. 镜像对称：
+  (* 4. 副本对称：
          偶部 sum_upto (2m+3) E（2m+3 项，j=0..2m+2）：mirror_odd n=m+1 ⟹ 2·Σ_{j=0}^{m} E_j + E_{m+1}
          奇部 sum_upto (2m+2) O（2m+2 项，j=0..2m+1）：mirror_even n=m ⟹ 2·Σ_{j=0}^{m} O_j *)
   assert (HmirE : sum_upto (2 * m + 3)
@@ -4702,7 +4702,7 @@ Proof.
     field.
     all: repeat (split; [apply q_neq_of_lt; apply q_fact_pos | idtac]);
          apply q_neq_of_lt; apply q_fact_pos. }
-  (* 5. 代入镜像：Hz == 偶部 + 奇部 == 0（q_pow_neg1 后 even − odd == 0）
+  (* 5. 代入副本：Hz == 偶部 + 奇部 == 0（q_pow_neg1 后 even − odd == 0）
          even == 2·Σ_{j=0}^{m} E_j + E_{m+1}，odd == 2·Σ_{j=0}^{m} O_j
          ⟹ (2Σ_{j=0}^{m} E_j + E_{m+1}) − 2Σ_{j=0}^{m} O_j == 0
          ⟹ 2Σ_{j=0}^{m} O_j − 2Σ_{j=0}^{m} E_j == E_{m+1} == 1/((2m+2)!(2m+2)!) *)
@@ -4849,7 +4849,7 @@ Proof.
                   (fun k => 1 / (q_fact (4 * m + 3 - 2 * k) * q_fact (2 * k + 1))) -
                 2 * sum_upto (m + 1)
                   (fun k => 1 / (q_fact (4 * m + 4 - 2 * k) * q_fact (2 * k)))).
-  - (* 目标 LHS == 2ΣO - 2ΣE（E_0/O_0 抵消）——assert 独立探针目标后 exact（找差异） *)
+  - (* 目标 LHS == 2ΣO - 2ΣE（E_0/O_0 抵消）——assert 独立检验目标后 exact（找差异） *)
     assert (Htmp : - 2 * (sum_upto (m + 1) (fun k => 1 / (q_fact (4 * m + 4 - 2 * k) * q_fact (2 * k))) +
                           - (1 / (q_fact (4 * m + 4) * q_fact 0))) +
                    2 * (sum_upto (m + 1) (fun k => 1 / (q_fact (4 * m + 3 - 2 * k) * q_fact (2 * k + 1))) -
@@ -4919,7 +4919,7 @@ Proof.
 Qed.
 
 End QExpEOSplit.
-(* ============ 配对论证（备份 92 并入，来自 _dbg_kdr.v 探针全绿） ============
+(* ============ 配对论证（备份 92 并入，来自 _dbg_kdr.v 检验全绿） ============
    row_pair_main：行差分闭合（分层组装：a^{4m+6} 抵消 + vander_4m2/4m4 + 低层 refl）
    ksum_diff_row：corr 差分 == RHS（corr_diff_expand + 换元 + row_pair_main）——配对论证完结 *)
 Lemma esq_row_nat_eq2 : forall (N i1 i2 : nat) (a : Q),
@@ -5873,7 +5873,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ esq_eq_corr 论证（备份 93 并入，探针 _dbg_kdr.v 全绿） ============
+(* ============ esq_eq_corr 论证（备份 93 并入，检验 _dbg_kdr.v 全绿） ============
    corr_diff_eq_sq_diff：corr 差分 == E/O 平方差分差（corr_succ_decomp → ksum_diff_row → ksum_diff_row_rhs）
    esq_eq_corr：E_m²−O_m² == 1 + corr m（主恒等式，base 0/1 + 归纳 step）——注释目标 L10664 达成 *)
 Lemma corr_diff_eq_sq_diff : forall (a : Q) (m : nat), (1 <= m)%nat ->
@@ -5926,7 +5926,7 @@ Proof.
       unfold Qminus. ring.
 Qed.
 
-(* ============ exp_even_neg_nonneg 论证（备份 94 并入，探针 _dbg_kdr.v 全绿） ============
+(* ============ exp_even_neg_nonneg 论证（备份 94 并入，检验 _dbg_kdr.v 全绿） ============
    q_div_nonneg / e_sum_ge_one / o_sum_nonneg（辅助：E≥1、O≥0）
    exp_even_mul_eq：S_{2m}(−a)·S_{2m}(a) == 1 + corr m a（(E−O)(E+O) = E²−O²）
    exp_even_neg_nonneg：0 ≤ a ⟹ 0 ≤ exp_partial (2·m) (−a)（corr_nonneg + S(a)>0 + field 恒等） *)
@@ -6021,7 +6021,7 @@ Proof.
   setoid_rewrite <- Hfield in Hpos.
   apply (Qlt_le_weak 0 (exp_partial (2 * m) (- a))). exact Hpos.
 Qed.
-(* ============ exp_partial_tail_pos 论证（备份 95 并入，探针 _dbg_kdr.v 全绿） ============
+(* ============ exp_partial_tail_pos 论证（备份 95 并入，检验 _dbg_kdr.v 全绿） ============
    exp_even_neg_pos：0 ≤ a ⟹ 0 < exp_partial (2·m) (−a)（严格正版，S(−a)·S(a) ≥ 1 + S(a) > 0）
    exp_partial_tail_pos：0 ≤ a ⟹ 0 < exp_partial (2m+2) (−a)（尾截断正，exp_even_neg_pos 的 S m 版）
    下轮：cauchy_real_exp_pos（real_lt zero (cauchy_real_exp x)，exp_neg_pos 字段实例化材料） *)
@@ -6522,10 +6522,8 @@ Qed.
 Lemma qltT_trans : forall x y z : Q, QltT x y -> QltT y z -> QltT x z.
 Proof.
   intros x y z Hxy Hyz.
-  apply Qlt_to_QltT.
-  apply (Qlt_trans _ y _).
-  - apply QltT_to_Qlt. exact Hxy.
-  - apply QltT_to_Qlt. exact Hyz.
+  exact (Qlt_to_QltT x z
+    (Qlt_trans x y z (QltT_to_Qlt x y Hxy) (QltT_to_Qlt y z Hyz))).
 Qed.
 
 (* real_abs：逐点 Qabs + 柯西性（反三角 + QltT 桥） *)

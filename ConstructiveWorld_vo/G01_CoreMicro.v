@@ -1,3 +1,19 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
+(* 替换定理清单：uex_fep_partition_condition／ufep_fep_partition_condition   *)
+(* ／uex_fep_align／ufep_fep_align／free_energy_softmax_eq_neg_T_logZ／      *)
+(* counter_ex_indicator_sum_two／counter_ex_reward_sum_two_c／               *)
+(* ppo_is_decomp／le_of_minus_nonneg（共 9 条）                              *)
+(* 非平凡性口径：全参直造与逐点换形链，消除应用链单跳；无一行拆分式假非平    *)
+(* 凡。                                                                      *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— G01_CoreMicro.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
@@ -6,11 +22,11 @@
      unfold 后 sum_over_S_ext 全参直造（逐点 id_cong exp_neg +
      id_sym opp_mult_l 换形），消 apply 单跳。
    ② uex_fep_align / ⑦ ufep_fep_align：id_trans 两段链（mult_comm
-     换形 + id_cong2 mult 双侧同余、id_refl 收口），消三段 apply 链。
+     换形 + id_cong2 mult 双侧同余、id_refl 闭合），消三段 apply 链。
    ③ free_energy_softmax_eq_neg_T_logZ：id_trans 两段链（uex_fep_F_ext
      外延 + free_energy_boltzmann 根件），消两段 apply 链。
    ④ counter_ex_indicator_sum_two / ⑤ counter_ex_reward_sum_two_c：
-     simpl 后 id_cong 单段直造（plus_zero 显式实例收口），消两段
+     simpl 后 id_cong 单段直造（plus_zero 显式实例闭合），消两段
      apply 链。
    ⑧ ppo_is_decomp：id_trans 两段链（sum_over_S_ext 逐点分解 +
      sum_over_S_add 求和分配），消两段 apply 链。
@@ -34,7 +50,7 @@
 (* UpHlogZ.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总证明   *)
 (*                                                              *)
 (* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
-(* 的显式前件 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
+(* 的显式前提 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
 (*   Z_aud ≤ 1（Z_aud_le_one，根内已证）                           *)
 (*   ⟹ log Z_aud ≤ log 1 = 0                                      *)
 (*     （log 单调 le 版 = UpLogMono.real_log_le_mono；              *)
@@ -76,7 +92,7 @@ Proof.
 Qed.
 
 (* ================================================================ *)
-(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前件对齐）               *)
+(* 主结果 2：HlogZ 证明完整版（与 KLProjection 前提对齐）               *)
 (*   同型语句，走 UpLogMono 直用形态 real_log_le_zero_of_le_one，      *)
 (*   双路互证（单调链合成 / 直用形态殊途同归）。                        *)
 (* ================================================================ *)
@@ -128,7 +144,7 @@ Proof.
              (hlogz_discharge Za HZa HZa1)).
 Qed.
 
-(* 提取探针（Warning 消音：透明度旁路访问清单提示，与 UpGRPO 同法） *)
+(* 提取检验（Warning 消音：透明度旁路访问清单提示，与 UpGRPO 同法） *)
 Set Warnings "-extraction-opaque-accessed".
 
 (* ======== G01_CoreMicro 成员件：UpExtras（原样并入，自带 Require）======== *)
@@ -148,10 +164,10 @@ Set Warnings "-extraction-opaque-accessed".
 (*   质量变为 2/G，G=2 时整体质量翻倍。常数奖励版总计 2c ≠ c。     *)
 (*                                                                *)
 (* 件3：Var ≥ 0 的条件形态（Real 层）。                            *)
-(*   real_var_nonneg_cond：若逐项平方非负（接口假设，镜像根内      *)
+(*   real_var_nonneg_cond：若逐项平方非负（接口假设，副本根内      *)
 (*   GRPO §7.3 的 square_nonneg Variable——构造性有序域无三分律，   *)
 (*   通用平方非负必须诚实接口），则 Σ A_i² ≥ 0（求和保序）。       *)
-(*   这正是根内 GRPO §7.3 的求和侧镜像，非降级形态。               *)
+(*   这正是根内 GRPO §7.3 的求和侧副本，非降级形态。               *)
 (*                                                                *)
 (* 红线：零公理、零弃证、零接口逃逸、零经典律；Set 层语句； *)
 (* 全 Qed。自足：不 Require UpFEP/UpGRPO/AttnDoeblin。              *)
@@ -223,7 +239,7 @@ Proof.
       (fun s : S => id_cong2 mult (Hpt s) (id_cong log (Hpt s)))).
 Qed.
 
-(* ========== P5b 旗舰：log-sum-exp = 负自由能 ==========
+(* ========== P5b 主定理：log-sum-exp = 负自由能 ==========
    F_attn[softmax_temp(z)] == −T · log Z_T(z)：
    softmax 逐点 = boltzmann（uex_fep_align）→ F 外延 →
    根内 free_energy_boltzmann（base_loss := −z, D := T）证明。 *)
@@ -250,7 +266,7 @@ Let one := @one RI.
 Let plus := @plus RI.
 Let lt := @lt RI.
 
-(* 自备组求和（镜像根内 GRPO Section 的 list_sum_g；Group 固定 nat—— *)
+(* 自备组求和（副本根内 GRPO Section 的 list_sum_g；Group 固定 nat—— *)
 (* 可判定相等天然，Nat.eq_dec 供 indicator 分支） *)
 Fixpoint list_sum_g2 (f : nat -> R) (l : list nat) : R :=
   match l with
@@ -304,16 +320,16 @@ Variable reward2 : Grp2 -> Real.
 (* 组大小正性：enum 非空 ⟹ length ≥ 1 ⟹ of_nat (length) > 0 *)
 Variable Hpos : real_lt real_zero (real_of_nat (length enum2)).
 
-(* 组均值 μ = (1/G)·Σ r_i（Real 层，镜像根内 GRPO group_mean） *)
+(* 组均值 μ = (1/G)·Σ r_i（Real 层，副本根内 GRPO group_mean） *)
 Definition mean2 : Real :=
   real_mult (real_inv_pos (real_of_nat (length enum2)) Hpos)
             (real_list_sum_g Grp2 reward2 enum2).
 
-(* 组相对优势 A_i = r_i − μ（Real 层，镜像根内 GRPO grpo_advantage） *)
+(* 组相对优势 A_i = r_i − μ（Real 层，副本根内 GRPO grpo_advantage） *)
 Definition A2 (i : Grp2) : Real := real_plus (reward2 i) (real_opp mean2).
 
 (* 逐项平方非负 ⟹ 求和非负（有限列表归纳 + real_le_plus_compat；
-   镜像根内 real_list_sum_nonneg 的证明骨架，fold 换 real_list_sum_g） *)
+   副本根内 real_list_sum_nonneg 的证明骨架，fold 换 real_list_sum_g） *)
 Lemma sq_sum_list_nonneg : forall l : list Grp2,
   (forall i : Grp2, real_le real_zero (real_mult (A2 i) (A2 i))) ->
   real_le real_zero
@@ -336,7 +352,7 @@ Proof.
       * exact IH.
 Qed.
 
-(* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧镜像） ==========
+(* ========== Var ≥ 0（条件形态，根内 GRPO §7.3 的求和侧副本） ==========
    逐项平方非负是接口假设（构造性有序域无三分律，通用平方非负需
    接口字段——与根内 GRPO §7.3 的 Variable square_nonneg 同款诚实
    接口纪律）；此处给出其求和侧：给定逐项假设，Σ A_i² ≥ 0 由求和
@@ -351,7 +367,7 @@ Qed.
 
 End RealVarNonNeg.
 
-(* 提取探针：件1/件2 的计算构造可提取 *)
+(* 提取检验：件1/件2 的计算构造可提取 *)
 (* 注：softmax_temp 计算性使用 Qed 引理 partition_function_temp_pos， *)
 (* 提取旁路透明度为 Coq 提取的标准信息性警告（UpFEP 同款），显式抑制； *)
 (* 提取目录显式设定为当前目录，保持与默认一致的输出位置。 *)
@@ -366,7 +382,7 @@ Extraction "upextras.ml" softmax_temp partition_function_temp free_energy
 (* UpFEP.v —— 二轮快赢批·P5：attention = 变分自由能的唯一最小点      *)
 (*            + 行视图引理（bs_kernel 行 = 单查询 softmax_temp）      *)
 (*                                                                *)
-(* P5（FEP × Gibbs 桥合龙，纯组装）：以 base_loss := −z、D := T      *)
+(* P5（FEP × Gibbs 桥闭合，纯组装）：以 base_loss := −z、D := T      *)
 (*   实例化自由能-KL 分解三件套（free_energy_kl_decomp/             *)
 (*   min_free_energy_is_boltzmann/free_energy_min_unique，对        *)
 (*   base_loss/D/Z 全泛化），配对齐引理（boltzmann 因子 = softmax    *)
@@ -441,7 +457,7 @@ Proof.
       (fun s : S => id_cong2 mult (Hpt s) (id_cong log (Hpt s)))).
 Qed.
 
-(* ========== P5 旗舰：attention = 变分自由能的唯一最小点 ========== *)
+(* ========== P5 主定理：attention = 变分自由能的唯一最小点 ========== *)
 Theorem ufep_attention_minimizes_free_energy_unique :
   forall p : S -> R, normalized p -> positive_dist p ->
   And (le (F_attn (softmax_temp spp T T_pos z)) (F_attn p))
@@ -495,7 +511,7 @@ Variable sum_eq_list : forall g : S -> R, Id (sum_over_S g) (bs_list_sum g enum)
 Variable expf_agree : forall x : R, Id (expf x) (exp_pos_fn x).
 
 (* ========== 行视图：bs_kernel 的每一行 = 单查询 softmax_temp ========== *)
-(* 消费前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
+(* 依存前提：expf 与注意力区的 exp_pos_fn 逐点一致（expf 迷你接口的   *)
 (* 实例化通道——real_expf_realizable 证明后取 expf := exp_pos_fn 即    *)
 (* 满足，一致性前提退化为 id_refl）。                                 *)
 Theorem ufep_bs_kernel_row_is_softmax_temp : forall s s' : S,
@@ -523,7 +539,7 @@ Qed.
 
 End RowView.
 
-(* 提取探针：softmax 核与自由能可提取 *)
+(* 提取检验：softmax 核与自由能可提取 *)
 From Stdlib Require Import Extraction.
 Extraction "upfep.ml" softmax_temp partition_function_temp free_energy.
 
@@ -579,7 +595,7 @@ Proof.
              (real_log_one Hone)).
 Qed.
 
-(* 提取探针 *)
+(* 提取检验 *)
 From Stdlib Require Import Extraction.
 Extraction "uplogmono.ml" real_log cw_log.
 
@@ -731,7 +747,7 @@ Qed.
 
 End PPOClipDecomp.
 
-(* 提取探针：clip 误差与代理目标可提取 *)
+(* 提取检验：clip 误差与代理目标可提取 *)
 From Stdlib Require Import Extraction.
 Extraction "upppo.ml" policy_ratio ppo_clip clip_error.
 

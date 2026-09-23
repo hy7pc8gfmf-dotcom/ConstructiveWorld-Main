@@ -1,4 +1,29 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabd2_do_ltle_iffdec_real（原 L121，2 句玩具证）                     *)
+(*   uabd2_ri_reqface_abs_ge_zero_id（原 L108，1 句玩具证）               *)
+(*   uabd2_ri_real_abs_ge_zero_id（原 L98，1 句玩具证）                   *)
+(*   uabd2_ali_abs_ge_zero_id_explicit（原 L79，2 句玩具证）              *)
+(*   uabd2_ali_abs_ge_zero_id_pair（原 L66，2 句玩具证）                  *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包O 全量第一批整批直推（T317 六·1 方案①）                           *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpAblD2_AbsLeId_RI_DO.v — FA-D2S1 论文域消融施工席             *)
 (* （FA-D2 唯一施工项：AbsLeId 两 Context 槽 N3 实例供给）         *)
 (*                                                               *)
@@ -8,27 +33,27 @@
 (*     L47 Context {DO : DecidableOrder RI}（可判定序扩展槽，      *)
 (*          类本体 S01_BaseRing:329 五字段全 Set 层）             *)
 (*   槽语句主件 ali_abs_ge_zero_id（AbsLeId.v:50，被 AMT:103/     *)
-(*   MixSel:770 等消费），本体证明 fa53:141 直喂零循环。           *)
+(*   MixSel:770 等依存），本体证明 fa53:141 直接代入零循环。           *)
 (*                                                               *)
 (* 交付三面（逐位对普查表）：                                      *)
-(*  ①RI 槽（N1，库内放电件直喂）：具体 Real 载体字段映照          *)
+(*  ①RI 槽（N1，库内实例化消解件直接代入）：具体 Real 载体字段映照          *)
 (*    （le 映 real_le / zero 映 real_zero / abs 映 real_abs /      *)
 (*    Id 映 real_eq）下，槽语句的载体形即 AbsLeId.v:91            *)
 (*    ali_real_abs_ge_zero_id（在库自证）——本件逐字引用两形：      *)
 (*    real 面一件 + RealEnhancedReal（S07:8566）实例投影 req 面    *)
-(*    一件（两语句经实例字段展开可转换同体，同母本收口）。          *)
+(*    一件（两语句经实例字段展开可转换同体，同母本闭合）。          *)
 (*    注：全树 Real 载体上无 Id 面接口束具体实例（唯 req 面一件）  *)
 (*    ——按 FA-D1S1 载体分层供给形登记，零重证。                   *)
 (*  ②DO 槽（N3，出节全参供给对）：ali_abs_ge_zero_id 语句          *)
 (*    （AbsLeId.v:50 逐字）复现两形：                              *)
-(*    (a) 节内镜像形（AbsLeId L43-54 同款语境，出节 RI0/DO0 消为    *)
+(*    (a) 节内副本形（AbsLeId L43-54 同款语境，出节 RI0/DO0 消为    *)
 (*        实例隐式参——与 AbsLeId 自身出节形同款，Check 实证）；     *)
 (*    (b) 显式全参形（T2b 节7 同款）：RI0/DO0/a 顶层 forall 显式    *)
 (*        全参，母本 fa53_abs_ge_zero_id_dec（fa53:141）exact       *)
-(*        直喂——任意 (RI0,DO0) 对喂即得。                          *)
+(*        直接代入——任意 (RI0,DO0) 对喂即得。                          *)
 (*  ③DO 槽具体层（诚实分账）：                                    *)
 (*    - 可构造面：字段5（lt_le_iff_dec 载体形）一件，T 档显式       *)
-(*      登记（real_le 于 S02:469 定义性展开即同款 Or，exact 收口，  *)
+(*      登记（real_le 于 S02:469 定义性展开即同款 Or，exact 闭合，  *)
 (*      防注水口径：不计非平凡战果）；                             *)
 (*    - 墙登记（可判定序三分/非退化判定族，不发全实例件）：         *)
 (*      字段1 ord_le_dec / 字段2 lt_dec / 字段3 eq_dec /           *)
@@ -38,11 +63,11 @@
 (*      满足）+ AA15R SqWall 与 rLPO 等价判例。全树实例构造        *)
 (*      复验零命中（20260919：Build 解构仅 fa53:43/S06:5164        *)
 (*      两处投影解构形）。邻接 N 坐标：fa53:141（抽象面供给）/      *)
-(*      AbsLeId.v:91（具体面供给）。定理化路线挂账：DO 类参数       *)
+(*      AbsLeId.v:91（具体面供给）。定理化路线遗留：DO 类参数       *)
 (*      需 Id 面接口实例，全树该实例亦为零，墙语句面无法库内        *)
 (*      内化——登记不施工（FA3 墙件处置三要素齐备）。               *)
 (*                                                               *)
-(* 依赖（只读消费零改）：S01_BaseRing / fa53_compat_abs /          *)
+(* 依赖（只读依存零改）：S01_BaseRing / fa53_compat_abs /          *)
 (*   S02_CauchyComplete / S03_QExp / S07_RealSetoidExpLog /        *)
 (*   AbsLeId（N1 母本所在，仅引用 ali_real_abs_ge_zero_id）。       *)
 (* 纪律：语句面全 Set 层（Or/Not/Id 均为 S01:67-70 Set 层定义）；   *)
@@ -53,7 +78,7 @@
 Require Import S01_BaseRing.
 Require Import fa53_compat_abs.
 
-(* ============ ② DO 槽：出节全参供给对（N3，fa53:141 直喂） ====== *)
+(* ============ ② DO 槽：出节全参供给对（N3，fa53:141 直接代入） ====== *)
 (* 与 AbsLeId L43-54 同款语境（RI_base 实例解析投影裸名）；出节后  *)
 (* RI0/DO0 消为显式头参（全参形，节后 Check 实证）。               *)
 Section UabD2PairWorld.
@@ -75,7 +100,7 @@ End UabD2PairWorld.
 (* 出节形实证（FA3 纪律6：节参消失不对称 Check 实证） *)
 Check uabd2_ali_abs_ge_zero_id_pair.
 
-(* —— 出节显式全参形（T2b 节7 同款；探针 t1 形逐字，fa53:141 直喂） —— *)
+(* —— 出节显式全参形（T2b 节7 同款；检验 t1 形逐字，fa53:141 直接代入） —— *)
 Theorem uabd2_ali_abs_ge_zero_id_explicit :
   forall (RI1 : RealInterfaceEnhanced) (DO1 : DecidableOrder RI1)
          (a : @S01_BaseRing.R RI1),
@@ -86,7 +111,7 @@ Proof.
   exact (@fa53_abs_ge_zero_id_dec RI1 DO1 a Ha).
 Qed.
 
-(* ============ ① RI 槽：具体 Real 载体直配（N1，双形） =========== *)
+(* ============ ① RI 槽：具体 Real 载体直接匹配（N1，双形） =========== *)
 (* 具体层 Require 置于抽象节后（AbsLeId L86 遮蔽注记同款）。       *)
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -104,7 +129,7 @@ Qed.
 (* req 面：RealEnhancedReal（S07:8566）实例投影形——投影常量居于     *)
 (* S07_RealSetoidExpLog.RealInterfaceEnhancedMod 模块（Locate 实证， *)
 (* T2b 节7 前缀同款）；le/zero/abs/req 四字段展开与 real_* 面       *)
-(* delta/iota 可转换同体，同母本收口。                              *)
+(* delta/iota 可转换同体，同母本闭合。                              *)
 Theorem uabd2_ri_reqface_abs_ge_zero_id :
   forall a : Real,
     @RealInterfaceEnhancedMod.le Real RealInterfaceEnhancedMod.RealEnhancedReal
@@ -117,7 +142,7 @@ Qed.
 
 (* ============ ③ DO 槽具体层：可构造面（字段5，T 档） ============ *)
 (* 字段5 载体形：real_le（S02:469）定义性展开即同款 Set 层 Or——    *)
-(* 透明展开一行收口，T 档显式登记（防注水口径，不计非平凡战果）。   *)
+(* 透明展开一行闭合，T 档显式登记（防注水口径，不计非平凡战果）。   *)
 Theorem uabd2_do_ltle_iffdec_real :
   forall a b : Real,
     S01_BaseRing.Or (real_lt a b) (real_eq a b) -> real_le a b.

@@ -8,52 +8,52 @@
 (* 替换定理清单：sa_norm_bridge（共 1 刀，刀面以台账为权威）                 *)
 (* 非平凡性口径：unfold sa_A 后 bi_norm_factor 本述展开形 delta 显式化       *)
 (* 直取，无行拆分式假非平凡。                                                *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；补标零改动不触        *)
 (* 证明面，落件录判绿承来源台账。                                            *)
 (* ========================================================================= *)
 (* ============================================================ *)
 (* SupplyAssembly.v — 切片代理D034（批次 E-STAGING-D034，20260918）   *)
-(*               T135 supply 总装攻坚（d_n² 战役收官件）。              *)
+(*               T135 supply 装配攻坚（d_n² 战役收官件）。              *)
 (*                                                               *)
-(* 使命：实例化 Ln2Bridge L1 的 ln2i_pade_supply（sigT 五层五腿）并     *)
-(*   消费 L4 ln2b_irrational_from_supply 出 ln2 无理数收口。           *)
+(* 使命：实例化 Ln2Bridge L1 的 ln2i_pade_supply（sigT 五层五肢）并     *)
+(*   依存 L4 ln2b_irrational_from_supply 出 ln2 无理数闭合。           *)
 (*                                                               *)
 (* 【装配判定（五件 API 实形择路，诚实降档登记）】                      *)
 (*  A_n 整数面（已装）：sa_A n := 2^{n+1}·q̃_n 的 Z.of_nat nat 承载      *)
 (*    ——q̃_n := bk_Qn_qtilde n ∈ nat 在册（BeukersLists），D016 勘误    *)
 (*    真归一因子 2^{n+1}q̃_n == 2^{2n+1}Q_n(1/2)（bi_norm_factor）即    *)
-(*    本面之归一桥（§4 sa_norm_bridge 全等换算）。腿② 0<|A_n| 由       *)
+(*    本面之归一桥（§4 sa_norm_bridge 全等换算）。肢② 0<|A_n| 由       *)
 (*    q̃_n ≥ 3^n ≥ 1 供给（sa_A_nonzeroT 真证）。                      *)
 (*    择路理由：B_n 候选两形皆无在册 Z 面——① r_n := 2^{n+1}p_n 形：     *)
 (*    D021 bv_p3_anchor 锚定 p_3 == 131/3 非整 ⟹ r_3 = 2^4·131/3       *)
 (*    非整（n=3 起整数面塌）；② 调和形 r'_n := 2^n·p̃_n/L_n（据          *)
 (*    pi_x_n_frac 的 x'_n == p̃_n/(2L_nq̃_n) 强面换算）：L_n | 2^n p̃_n  *)
-(*    无在册整除定理。故 B_n 取「任意整数面 + 两 real 腿」的缺口接口    *)
-(*    sa_supply_rem 挂账（语义精确：放电槽=④下界/⑤上界两腿本身）。      *)
-(*  clo_n 正性腿（已装）：sa_clo n := lne_B n = (n!)²/(2n+1)!，        *)
-(*    腿③ 0 < clo_n 由 lne_B_posT（Beta 闭式正性，CZW13）直供；        *)
+(*    无在册整除定理。故 B_n 取「任意整数面 + 两 real 肢」的缺口接口    *)
+(*    sa_supply_rem 遗留（语义精确：实例化消解槽=④下界/⑤上界两个合取肢本身）。      *)
+(*  clo_n 正性肢（已装）：sa_clo n := lne_B n = (n!)²/(2n+1)!，        *)
+(*    肢③ 0 < clo_n 由 lne_B_posT（Beta 闭式正性，CZW13）直供；        *)
 (*    另挂整性面 sa_clo_int（(n!)² ∈ Z 的 sigT 见证）作 B_n 组合原料。  *)
-(*  θ<1 上界腿（θ 档已装，⑤本体挂账）：θ := 1/2。纯 Q 换算件           *)
+(*  θ<1 上界肢（θ 档已装，⑤本体遗留）：θ := 1/2。纯 Q 换算件           *)
 (*    sa_theta_leg_scaffold 真证 1/(2^{n+1}q̃_n) ≤ (1/2)^n = θ^n——      *)
 (*    即勘误恒等式误差端 I_n/(2^{n+1}q̃_n) ≤ 2^{1−n}/(2^{n+1}q̃_n)      *)
 (*    = 2^{−2n}/q̃_n ≤ θ^n 的收尾档（I_n ≤ 2^{1−n} = 2^{n+1}·B_n      *)
-(*    ≤ 2^{n+1}·4^{−n} 由 lne_B_le_p4 换算，其积分端半边亦挂账）。      *)
+(*    ≤ 2^{n+1}·4^{−n} 由 lne_B_le_p4 换算，其积分端半边亦遗留）。      *)
 (*    窗匹配件 sa_clo_in_theta_window：clo_n < θ^n（n≥1，真证）——      *)
 (*    载体严格落入 θ 档判定窗（lne_B_lt_p2 + 半幂逆换算）。             *)
-(*  【精确卡点（⑤④腿挂账面，禁虚报 unconditional）】两 real 腿需要     *)
+(*  【精确卡点（⑤④肢遗留面，禁虚报 unconditional）】两 real 肢需要     *)
 (*    P2 恒等式本体 I_n = 2^{n+1}q̃_n·X − r_n（X := ln2b_X = lim        *)
 (*    ln2i_x）：五件 API 无任何已证定理把 A_n/B_n 组合与 X 连接          *)
-(*    （D016 头注定谳「恒等式本体需积分/部分分式引擎，窗内不可达」）。   *)
+(*    （D016 头注已证结论「恒等式本体需积分/部分分式引擎，窗内不可达」）。   *)
 (*    本体拆三子件均未建：(a) 部分分式引擎（tⁿ(1−t)ⁿ/(1−t/2)^{n+1}     *)
 (*    的多项式部+单极点 2 分解，∫₀¹(2−t)^{−1}dt = ln2 端）；            *)
 (*    (b) 残数系数 c₁ = 2^n·q̃_n（Delannoy [w^n](2+w)^n(1+w)^n 抽取，  *)
-(*    bi_D 核心在册可复用）；(c) ln2 = lim ln2i_x 与线积分对账          *)
+(*    bi_D 核心在册可复用）；(c) ln2 = lim ln2i_x 与线积分核验          *)
 (*    （级数 Σ 1/(k·2^k) 的积分表示）。三者到货后 sa_supply_rem 即可    *)
-(*    放电，经 sa_supply_assemble ⟹ sa_ln2_irrational 全链无条件形。    *)
-(*  总装达成等级：**两段式条件形**——sa_supply_assemble（三腿已装 +      *)
+(*    实例化消解，经 sa_supply_assemble ⟹ sa_ln2_irrational 全链无条件形。    *)
+(*  装配达成等级：**两段式条件形**——sa_supply_assemble（三肢已装 +      *)
 (*    缺口接口 ⟹ ln2i_pade_supply 全型，真证）+ sa_ln2_irrational      *)
-(*    （消费 L4 ln2b_irrational_from_supply，真走母定理零旁路）。        *)
-(*    sa_supply_three_legs 为三腿独立打包件。零认授、零虚报。            *)
+(*    （依存 L4 ln2b_irrational_from_supply，真走母定理零旁路）。        *)
+(*    sa_supply_three_legs 为三肢独立封装件。零认授、零虚报。            *)
 (*                                                               *)
 (* 验证（本地信任缓存策略，t120g/d015/e118 配方）：G1 官方禁词 0；       *)
 (*   G2 side-compile /tmp/d034_side（异地 cwd + czn14_union 并集根      *)
@@ -66,7 +66,7 @@
 (*   BeukersIdentity（e118）、Ln2Escape（本席 /tmp/d034_side 现编）、    *)
 (*   Ln2Bridge（t120g）；Stdlib QArith、ZArith、Arith、Lia、Setoid、    *)
 (*   Morphisms、Lra、Qfield。                                           *)
-(* 语句面纪律：总装件全 Set（sigT/S01.And/QltT/QleT'/QeqT/real_le/      *)
+(* 语句面纪律：装配件全 Set（sigT/S01.And/QltT/QleT'/QeqT/real_le/      *)
 (*   real_lt）；Q 层 Qeq/Qle 支撑引理仅作推理脚手架（Ln2Bridge 先例）。  *)
 (* ============================================================ *)
 
@@ -84,7 +84,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
 From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
 
 (* ============================================================ *)
-(* §1 A_n 整数面（腿②）+ 归一桥换算                                     *)
+(* §1 A_n 整数面（肢②）+ 归一桥换算                                     *)
 (* ============================================================ *)
 
 (* A_n := 2^{n+1}·q̃_n 的整数面（nat 承载 Z 化） *)
@@ -99,7 +99,7 @@ Proof.
   intro n. rewrite bi_q_pow_2. symmetry. apply bk_Qmul_nat.
 Qed.
 
-(* 腿②真证：0 < |A_n|（q̃_n ≥ 3^n ≥ 1 ⟹ A_n ≥ 2） *)
+(* 肢②真证：0 < |A_n|（q̃_n ≥ 3^n ≥ 1 ⟹ A_n ≥ 2） *)
 Theorem sa_A_nonzeroT : forall n : nat, QltT 0 (Qabs ((sa_A n) # 1)%Q).
 Proof.
   intro n.
@@ -124,15 +124,15 @@ Theorem sa_norm_bridge : forall n : nat,
 Proof. intro n. unfold sa_A. exact (bi_norm_factor n). Qed.
 
 (* ============================================================ *)
-(* §2 clo_n 正性腿（腿③）+ 载体整性/上界支撑面                          *)
+(* §2 clo_n 正性肢（肢③）+ 载体整性/上界支撑面                          *)
 (* ============================================================ *)
 
 (* 载体：clo_n := lne_B n = ∫₀¹ tⁿ(1−t)ⁿ dt 的闭式 (n!)²/(2n+1)! *)
 Definition sa_clo (n : nat) : Q := lne_B n.
 
-(* 腿③真证：0 < clo_n（Beta 闭式正性直供） *)
+(* 肢③真证：0 < clo_n（Beta 闭式正性直供） *)
 Theorem sa_clo_posT : forall n : nat, QltT 0 (sa_clo n).
-Proof. intro n. apply lne_B_posT. Qed.
+Proof. intro n. exact (lne_B_posT n). Qed.
 
 (* 载体整性面：clo_n·(2n+1)! == (n!)² ∈ Z（sigT 见证——B_n 整数面
    组合原料，P2 分子侧到货后 r_n 的 Z 化即走此面） *)
@@ -142,17 +142,17 @@ Theorem sa_clo_int : forall n : nat,
 Proof. exact lne_B_int. Qed.
 
 (* 载体上界面：clo_n ≤ 4^{−n}（I_n ≤ 2^{n+1}·clo_n ≤ 2^{1−n} 的 Q 端
-   原料；其积分端半边 1/(1−t/2)^{n+1} ≤ 2^{n+1} 随 P2 本体挂账） *)
+   原料；其积分端半边 1/(1−t/2)^{n+1} ≤ 2^{n+1} 随 P2 本体遗留） *)
 Theorem sa_clo_le_p4 : forall n : nat, QleT' (sa_clo n) (Qinv (lne_p4 n)).
 Proof. exact lne_B_le_p4. Qed.
 
 (* ============================================================ *)
-(* §3 θ 档（腿①）+ 半幂换算机                                          *)
+(* §3 θ 档（肢①）+ 半幂换算机                                          *)
 (* ============================================================ *)
 
 Definition sa_theta : Q := (1 # 2)%Q.
 
-(* 腿①真证：θ = 1/2 < 1 *)
+(* 肢①真证：θ = 1/2 < 1 *)
 Theorem sa_theta_lt1 : QltT sa_theta (1 # 1)%Q.
 Proof.
   apply Qlt_to_QltT. unfold Qlt, sa_theta. cbn [Qnum Qden]. lia.
@@ -206,7 +206,7 @@ Proof.
   destruct an; destruct bn; cbn in *; nia.
 Qed.
 
-(* θ 腿纯 Q 换算件（真证）：1/(2^{n+1}·q̃_n) ≤ (1/2)^n = θ^n——
+(* θ 肢纯 Q 换算件（真证）：1/(2^{n+1}·q̃_n) ≤ (1/2)^n = θ^n——
    勘误恒等式误差端 2^{−2n}/q̃_n ≤ θ^n 的收尾档（q̃_n ≥ 3^n ≥ 1） *)
 Theorem sa_theta_leg_scaffold : forall n : nat,
   QleT' (Qinv ((q_pow (2 # 1)%Q (Datatypes.S n)
@@ -242,10 +242,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 三腿独立打包件（①②③已装面）                                      *)
+(* §4 三肢独立封装件（①②③已装面）                                      *)
 (* ============================================================ *)
 
-(* 三腿头型（supply 五腿之①②③的独立打包） *)
+(* 三肢头型（supply 五肢之①②③的独立封装） *)
 Definition sa_supply_head : Set :=
   sigT (fun A : nat -> Z =>
     sigT (fun clo : nat -> Q =>
@@ -265,18 +265,18 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 缺口接口（④⑤腿精确挂账）+ 两段式总装收口                          *)
+(* §5 缺口接口（④⑤肢精确遗留）+ 两段式装配闭合                          *)
 (* ============================================================ *)
 
-(* 缺口接口：B_n 整数面 + ④下界/⑤上界两 real 腿——P2 恒等式本体
-   （I_n = 2^{n+1}q̃_n·X − r_n，三子件见头注 (a)(b)(c)）到货后的放电槽。
+(* 缺口接口：B_n 整数面 + ④下界/⑤上界两 real 肢——P2 恒等式本体
+   （I_n = 2^{n+1}q̃_n·X − r_n，三子件见头注 (a)(b)(c)）到货后的实例化消解槽。
    语义精确：本接口非空性即 θ 档 Padé 逼近列的存在性，本席不虚判。 *)
 Definition sa_supply_rem : Set :=
   sigT (fun B : nat -> Z =>
     And (ln2b_line_lower sa_A B sa_clo)
         (ln2b_line_upper sa_A B sa_theta)).
 
-(* 两段式总装：三腿已装面 + 缺口接口 ⟹ supply 全型（五层 sigT 全填） *)
+(* 两段式装配：三肢已装面 + 缺口接口 ⟹ supply 全型（五层 sigT 全填） *)
 Theorem sa_supply_assemble : forall Hm : sa_supply_rem, ln2i_pade_supply.
 Proof.
   intros [B [Hlow Hup]].
@@ -292,7 +292,7 @@ Proof.
         -- exact Hup.
 Qed.
 
-(* ln2 无理数两段式收口：消费 Ln2Bridge L4 母件
+(* ln2 无理数两段式闭合：依存 Ln2Bridge L4 源模块
    ln2b_irrational_from_supply（真走 lic_irrational_criterion 零旁路）。
    语句面 = L4 结论面焊开形（全 Set：sigT/And/QltT/real_lt）。 *)
 Theorem sa_ln2_irrational : forall (Hm : sa_supply_rem) (q : Q),
@@ -306,7 +306,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 数值哨兵（vm_compute 档：A_1 = 2²·q̃_1 = 12，A_2 = 2³·q̃_2 = 104，  *)
+(* §6 数值锚（vm_compute 档：A_1 = 2²·q̃_1 = 12，A_2 = 2³·q̃_2 = 104，  *)
 (*    clo_1 = 1/6，θ^n 档半幂锚）                                       *)
 (* ============================================================ *)
 
@@ -323,7 +323,7 @@ Theorem sa_theta2_anchor : QeqT (q_pow sa_theta 2) (1 # 4)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §7 提取探针与 PA 自审（G3/G4 本地段）                                 *)
+(* §7 提取检验与 PA 自审（G3/G4 本地段）                                 *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

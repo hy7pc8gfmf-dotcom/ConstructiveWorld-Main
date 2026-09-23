@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   elv_neg_pow_odd（原 L144，2 句玩具证）                               *)
 (*   elv_exp_step_any（原 L51，2 句玩具证）                               *)
@@ -26,7 +26,7 @@
 (*   容纳 le/Even_or_Odd 的 Prop 消解）→ QleT' Set 出口薄壳。          *)
 (*   实测坑①：le/Even_or_Odd 属 Prop，不得 destruct 进 Set 语句目标。  *)
 (*   实测坑②：Qeq 集合 rewrite 只能在 Qeq goal 内动；Qle 面一律        *)
-(*   Qle_trans 分腿 + qeq_le 桥（库版同款纪律）。                      *)
+(*   Qle_trans 分肢 + qeq_le 桥（库版同款纪律）。                      *)
 (*                                                                *)
 (* 依赖侧编实况：库版 ConstructiveWorld_Live/ExpNegPos.v（347 行，    *)
 (*   非 Live/build 十六稿同名件；不在 order.txt，vorebuild 无其 .vo）。*)
@@ -151,11 +151,11 @@ Qed.
 Lemma elv_qopp_div : forall u v : Q, Qopp (u / v) == Qopp u / v.
 Proof. intros u v. unfold Qdiv. ring. Qed.
 
-(* 奇次：(−x)^{S(2k)} == −x^{S(2k)}（q_pow_neg_odd 指数形 S(2k) 直配） *)
+(* 奇次：(−x)^{S(2k)} == −x^{S(2k)}（q_pow_neg_odd 指数形 S(2k) 直接匹配） *)
 Lemma elv_neg_pow_odd : forall (x : Q) (k : nat),
   q_pow (Qopp x) (Datatypes.S (2 * k))
   == Qopp (q_pow x (Datatypes.S (2 * k))).
-Proof. intros x k. apply q_pow_neg_odd. Qed.
+Proof. intros x k. exact (q_pow_neg_odd x k). Qed.
 
 (* 偶次：(−x)^{S(S(2k))} == x^{S(S(2k))}（指标归一 S(S 2k) == 2 * S k） *)
 Lemma elv_neg_pow_even : forall (x : Q) (k : nat),
@@ -201,7 +201,7 @@ Proof.
     + (* 尾差展开同式（Qeq 桥） *)
       apply qeq_le. apply Qeq_sym.
       apply (elv_exp_step_any (Datatypes.S (2 * m)) (Qopp x)).
-    + (* 第二腿：LHS 为 Qopp 形，先偶负桥归 x 形，再 enp_decr 配对项差 *)
+    + (* 第二肢：LHS 为 Qopp 形，先偶负桥归 x 形，再 enp_decr 配对项差 *)
       apply (Qle_trans
               (exp_partial (Datatypes.S (2 * m)) (Qopp x)
                + q_pow (Qopp x) (Datatypes.S (Datatypes.S (2 * m)))

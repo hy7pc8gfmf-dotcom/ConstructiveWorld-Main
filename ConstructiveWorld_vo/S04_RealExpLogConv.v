@@ -1,24 +1,39 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
+(* 替换定理清单：r_pow_nonneg／mult_one_minus_r／telescoping／               *)
+(* one_minus_kappa_pos／mult_swap_mid／mult_swap_outer／minus_pos／          *)
+(* mult_minus_distr_r（共 8 条）                                             *)
+(* 非平凡性口径：正体内联与显式直造链（逐段换形闭合），消除单跳转发；无一    *)
+(* 行拆分式假非平凡。                                                        *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— S04_RealExpLogConv.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
    仅八条玩具证明体替换为定义层显式重演，语句面零改动：
    ① r_pow_nonneg：兄弟件 r_pow_pos 归纳正体就地内联（归纳骨架与两支
      叶项 one_pos/mult_positive 逐段直取金标体），叶位改 lt_le_iff 桥
-     左支显式构造子（inl）收口，消对兄弟件的单跳转发。
+     左支显式构造子（inl）闭合，消对兄弟件的单跳转发。
    ② mult_one_minus_r：unfold 后改 id_trans 两段链（mult_plus_distr_r
      展开 + id_cong2 双侧同余），消两段 apply 链。
    ③ telescoping：改 id_trans 两段链（id_sym plus_assoc 换形 + id_cong
-     逐段 plus_assoc/plus_comm/plus_opp/plus_zero 收口），消 apply 链。
+     逐段 plus_assoc/plus_comm/plus_opp/plus_zero 闭合），消 apply 链。
    ④ one_minus_kappa_pos：lt_id_l 五参全显式直造（id_sym plus_opp 换形
      + lt_plus_compat_lt_le 严界见证），消 apply 链。
    ⑤ mult_swap_mid：id_trans 三段链（id_sym mult_assoc + id_cong
-     mult_comm 换形 + mult_assoc 收口），消三段 apply 链。
+     mult_comm 换形 + mult_assoc 闭合），消三段 apply 链。
    ⑥ mult_swap_outer：id_trans 两段链（id_cong 换形 + mult_swap_mid
      双实例复合），消单跳组合。
    ⑦ minus_pos：lt_id_l 全参直造（id_sym plus_opp 换形 +
      lt_plus_compat_lt_le 加法严界），消两段 apply 链。
    ⑧ mult_minus_distr_r：id_trans 五段嵌套链（mult_comm/distrib/
-     id_cong/opp_mult_r 逐段换形收口），消单跳打包。
+     id_cong/opp_mult_r 逐段换形闭合），消单跳封装。
    验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
      rc=0、零错误锚、vo 新于 v、文尾八条 Print Assumptions 全 Closed。
    余六条复核判级：接口桥位三类（entropy_gradient_strict_mono/
@@ -1404,7 +1419,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   论文4 收敛缺口补强（差距二闭合，2026-09-01，探针 _dbg_unique_attractor.v 验证）：
+   论文4 收敛缺口补强（差距二闭合，2026-09-01，检验 _dbg_unique_attractor.v 验证）：
    唯一吸引子 —— 任意两条轨道（任意初值）的极限相同。
    路线：弱三分（诚实接口 Variable，Real 层 real_weak_trich L32526 已证供给）
          + 严格递减（strict_concavity）⟹ 驻点唯一（gradient_zero_unique）
@@ -3358,7 +3373,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T2.2：温度-期望能量单调性（论文2 旗舰之二）                *)
+(* T2.2：温度-期望能量单调性（论文2 主之二）                *)
 (*   主定理：t1 < t2 ⟹ E_temp(t1) ≤ E_temp(t2)（温度升高 ⟹ 能量期望不降） *)
 (*   方法：变分法——Gibbs 不等式交叉相加（无导数、无三分律）    *)
 (*     KL(q‖p_β) ≥ 0 对 (q=p_{β2},β=β1) 与 (q=p_{β1},β=β2)    *)

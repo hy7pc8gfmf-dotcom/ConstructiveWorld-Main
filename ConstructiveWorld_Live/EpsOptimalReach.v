@@ -3,10 +3,21 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   quad_cost_descent_eps_bound（原 L197，2 句玩具证）                   *)
 (*   trajectory_eps_optimal_reach（原 L175，2 句玩具证）                  *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
 (* ============================================================ *)
 
 (* EpsOptimalReach.v — 席C7：有限轨迹上的 ε-最优可达见证（A2 组合榜组 4，20260916）
@@ -22,7 +33,7 @@
 
    对位台账：
      finite_table_eps_optimal_witness  <- A 件 rae_pick_optimal @ UpReqArgminEngine.v:160
-                                          + rae_pick_mem（支配证书 sigT 打包）
+                                          + rae_pick_mem（支配证书 sigT 封装）
      eps_loosen                        <- 支撑：支配 + eps≥0 ⟹ ε-支配
                                           （RIS 字段 le_trans/le_plus_compat/
                                             lt_le_iff/req_sym/plus_zero 装配）
@@ -80,7 +91,7 @@ Proof.
   - apply InT_here.
 Qed.
 
-(* 表非空（nil 支配案经构造子失配 inversion 收口——引擎件同位先例） *)
+(* 表非空（nil 支配案经构造子失配 inversion 闭合——引擎件同位先例） *)
 Lemma traj_table_nonempty : forall (h t x : Q) (n : nat),
   Not (Id (traj_table h t x n) nil).
 Proof.
@@ -145,7 +156,7 @@ Proof.
       * exact Heps.
 Qed.
 
-(* ε-最优可达见证形（Set 层 sigT 打包：成员 + 支配 + ε-支配） *)
+(* ε-最优可达见证形（Set 层 sigT 封装：成员 + 支配 + ε-支配） *)
 Definition optimal_pick_witness (l : list A) (default : A) (eps : R) : Set :=
   sigT (fun xstar =>
     And (InT xstar l)
@@ -181,7 +192,7 @@ End EpsOptimalReachCore.
 
 (* 合成主件：下降轨迹采样表上的 ε-最优可达见证。
    A := Q（B 件轨迹点载体），key 抽象（任意代价函数），
-   支配证书由段2 主件在 l := traj_table h t x0 n 槽位实例化。
+   支配证书由段2 主件在 l := traj_table h t x0 n 接口参数实例化。
    出口：sigT + And + InT + RIS le，零 Prop 语句面。 *)
 Theorem trajectory_eps_optimal_reach :
   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R) (keyQ : Q -> R)

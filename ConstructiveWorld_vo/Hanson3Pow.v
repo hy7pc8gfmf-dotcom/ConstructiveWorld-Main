@@ -285,7 +285,12 @@ Qed.
 Theorem h3_lcm_le_halfbinom_t : forall n : nat,
   hl_le_t (hl_lcm_upto n)
     (hl_binom (2 * S (n / 2)) (S (n / 2)) * fact (S (n / 2)))%nat.
-Proof. intro n. apply hl_le_to_le_t. apply h3_lcm_le_halfbinom. Qed.
+Proof.
+  intro n.
+  exact (hl_le_to_le_t (hl_lcm_upto n)
+    (hl_binom (2 * S (n / 2)) (S (n / 2)) * fact (S (n / 2)))
+    (h3_lcm_le_halfbinom n)).
+Qed.
 
 (* 假设审计：以下 Print Assumptions 输出应为零依赖（零承认复核）。 *)
 Print Assumptions h3_lcm_double_divide.

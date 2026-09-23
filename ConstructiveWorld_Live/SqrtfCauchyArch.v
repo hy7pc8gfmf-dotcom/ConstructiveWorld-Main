@@ -1,14 +1,23 @@
-(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 d1ffe23723b7f6506e6a047ebfee6172 · 权威定位=定理名内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
-(* ANCHOR: sfcy_arch_decay_slot | 现势行号 L446 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ============================================================ *)
 (* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
-(*   sfcy_arch_decay_slot（现势 L446（基线 1719a2d），1 句玩具证）                          *)
+(*   sfcy_arch_decay_slot（原 L434，1 句玩具证）                          *)
 (*   sfcy_half_pos（原 L76，1 句玩具证）                                  *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -38,7 +47,7 @@
 (* [命名] 前缀 sfcy_（全库实扫零命中防撞，20260915）。                    *)
 (* [纪律] 纯构造性零承认；语句全 Set 层（real_le/real_lt/real_eq/sigT）；  *)
 (*   零 Prop 泄露（nat 分支 lia，无 bool 消去需求）；全 Qed 完成；        *)
-(*   引理消费走接口投影形（@lt_mult_compat 等，实例透明 δ 可归约，        *)
+(*   引理依存走接口投影形（@lt_mult_compat 等，实例透明 δ 可归约，        *)
 (*   类型权威免疫参数序记忆错）；非字段独立引理         *)
 (*   （real_arch/real_const_lt/real_const_proj/real_plus_proj/          *)
 (*   real_mult_proj/real_eq_of_zero_diff）走 S02/S07 顶层裸名。          *)
@@ -99,7 +108,7 @@ Proof.
   - exact (@mult_positive Real RealEnhancedReal _ sfcy_half IH sfcy_half_pos).
 Qed.
 
-(* ============ §2 const 桥件（real_arch 输出面 ⟷ 接口代数面） ============ *)
+(* ============ §2 const 桥接引理（real_arch 输出面 ⟷ 接口代数面） ============ *)
 
 Lemma sfcy_const_one : real_eq (real_const (1 # 1)) real_one.
 Proof.
@@ -247,7 +256,7 @@ Proof.
                 (real_const (2 # 1))).
       * exact IH.
       * exact (real_eq_sym _ _ sfcy_const_two).
-    + (* B→C：const 乘法同态 + const 内 Qeq 换头（二段 trans 复合腿） *)
+    + (* B→C：const 乘法同态 + const 内 Qeq 换头（二段 trans 复合肢） *)
       assert (Hq : Qeq ((Z.of_nat (sfcy_npow2 k) # 1) * (2 # 1))
                        (Z.of_nat (2 * sfcy_npow2 k) # 1)).
       { unfold Qeq. cbn [Qnum Qden Qmult].
@@ -442,7 +451,7 @@ Proof.
               (real_eq_refl eps) Heps).
 Qed.
 
-(* 假设位3 显式应用桥（宿主假设位语句逐字，接口投影面；消费位 SqrtfCauchy.v:1070）
+(* 假设位3 显式应用桥（宿主假设位语句逐字，接口投影面；依存位 SqrtfCauchy.v:1070）
    ——素颜面到接口面只走实例 delta/iota，exact 一行（与 sfcx_*_slot 同式）。
    接入：sfc_arch_decay 参位 ← 本件。 *)
 Theorem sfcy_arch_decay_slot :
@@ -454,7 +463,7 @@ Theorem sfcy_arch_decay_slot :
         (@mult Real RealEnhancedReal c (sfc_pow_half k)) eps).
 Proof. exact sfcy_arch_decay_real. Qed.
 
-(* ============ 四关自证面：G3 提取探针 + G4 假设审计口 ============ *)
+(* ============ 四关自证面：G3 提取检验 + G4 假设审计口 ============ *)
 (* 两主件证明体全走 real_* 素颜顶层函数链与接口投影 δ 面预判            *)
 (* Obj.magic = 0（与 sfcx_G3 同判据）。                              *)
 

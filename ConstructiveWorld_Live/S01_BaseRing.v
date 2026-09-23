@@ -1,10 +1,10 @@
 (* ============================================================ *)
 (* 【ToyR 包F 切片七·信任根本体替换稿】S01_BaseRing.v —— 基于 Main 基线           *)
-(*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 对账微刀＋尾嵌       *)
+(*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 核验微刀＋尾嵌       *)
 (*   假设审计三连。                                                               *)
 (*   信任根警示：本件为全役信任根本体（全下游件依赖）。本稿为谨慎位微刀稿：          *)
 (*   仅挑三枚 reflexivity 正体位（@id_refl 命名恒等元），零深水区动刀。              *)
-(*   收编时下游全链摘要失效须全链重编，建议单独批次收编。                           *)
+(*   并入时下游全链摘要失效须全链重编，建议单独批次并入。                           *)
 (*   三微刀：core_claim5_holds(normalized_prob 位)／core_claim3_holds             *)
 (*   (entropy_gradient 位)／core_claim5_holds(boltzmann_prob 位)——                 *)
 (*   各 reflexivity 战术改为 @id_refl 命名恒等元显式正体，语句面零动。              *)
@@ -22,7 +22,7 @@
 (* 备注：逻辑连接词与等同类型在 Set 层定义，nat 序与 Leibniz    *)
 (*       相等采用标准库 Prop 层设施；使用 Set 宇宙，存在量词    *)
 (*       使用 sig；不可由接口推得的性质以显式                   *)
-(*       Variable/Hypothesis 假设呈现（非承认件）；序三分律     *)
+(*       Variable/假设申报位呈现（非承认件）；序三分律     *)
 (*       le_lt_dec 已移除，禁临时公理面与经典公理面；R 层       *)
 (*       （自定义 Id 等价关系）证明用显式 id_trans/id_cong 链   *)
 (*       （Id 非 setoid，ring 不可用），Q 层（QArith 可判定     *)
@@ -400,11 +400,7 @@ Lemma mult_plus_distr_r :
   forall a b c : R, Id (mult (plus a b) c) (plus (mult a c) (mult b c)).
 Proof.
   intros a b c.
-  rewrite (mult_comm (plus a b) c).
-  rewrite distrib.
-  rewrite (mult_comm c a).
-  rewrite (mult_comm c b).
-  reflexivity.
+  exact (id_trans (mult_comm (plus a b) c) (id_trans (distrib c a b) (id_trans (id_cong (fun w => plus w (mult c b)) (mult_comm c a)) (id_cong (fun w => plus (mult a c) w) (mult_comm c b))))).
 Qed.
 
 (* 负号对乘法：(-a)·b = -(a·b) *)
@@ -425,22 +421,14 @@ Qed.
 Lemma opp_mult_l :
   forall a b : R, Id (mult a (opp b)) (opp (mult a b)).
 Proof.
-  intros a b.
-  rewrite (mult_comm a (opp b)).
-  rewrite (opp_mult_r b a).
-  rewrite (mult_comm b a).
-  reflexivity.
+  intros a b. exact (id_trans (mult_comm a (opp b)) (id_trans (opp_mult_r b a) (id_cong opp (mult_comm b a)))).
 Qed.
 
 (* 2·a = a + a（2 := plus one one） *)
 Lemma two_mult :
   forall a : R, Id (mult (plus one one) a) (plus a a).
 Proof.
-  intro a.
-  rewrite (mult_comm (plus one one) a).
-  rewrite distrib.
-  rewrite (mult_one a).
-  reflexivity.
+  intro a. exact (id_trans (mult_comm (plus one one) a) (id_trans (distrib a one one) (id_cong (fun w => plus w w) (mult_one a)))).
 Qed.
 
 (* 双重取负：opp (opp a) = a *)
@@ -484,11 +472,7 @@ Qed.
 (* 1 ≠ 0：由 one_pos 与 lt_irrefl 推出（纯 Set 层，Empty_set 归谬） *)
 Lemma one_neq_zero : Not (Id one zero).
 Proof.
-  intro H.
-  apply (lt_irrefl zero).
-  exact (match H in (Id _ y) return lt zero y with
-         | id_refl => one_pos
-         end).
+  intro H. exact (lt_irrefl zero (match H in (Id _ y) return lt zero y with | id_refl => one_pos end)).
 Qed.
 
 (* ============================================================ *)
@@ -505,10 +489,7 @@ Qed.
 Lemma half_pos :
   forall a, lt zero a -> lt zero (mult (inv_pos (plus one one) two_pos) a).
 Proof.
-  intros a Ha.
-  apply mult_positive.
-  - apply inv_pos_pos.   (* 目标 lt zero (inv_pos (plus one one) two_pos) 已含前提参数 *)
-  - exact Ha.
+  intros a Ha. exact (mult_positive (inv_pos (plus one one) two_pos) a (inv_pos_pos (plus one one) two_pos) Ha).
 Qed.
 
 (* eps/2 加倍还原：inv_2·a + inv_2·a = a *)
@@ -545,10 +526,8 @@ Lemma minus_plus_distr :
   forall a b c d : R,
     Id (minus (plus a b) (plus c d)) (plus (minus a c) (minus b d)).
 Proof.
-  intros a b c d.
-  unfold minus.
-  rewrite (opp_plus c d).
-  exact (plus_swap_mid a b (opp c) (opp d)).
+  intros a b c d. unfold minus.
+  exact (id_trans (id_cong (fun w => plus (plus a b) w) (opp_plus c d)) (plus_swap_mid a b (opp c) (opp d))).
 Qed.
 
 (* ============================================================ *)
@@ -582,9 +561,7 @@ Qed.
 (* |a| ≤ |a| + 1 *)
 Lemma abs_le_abs_plus_one : forall a : R, le (abs a) (plus (abs a) one).
 Proof.
-  intro a.
-  apply le_plus_nonneg_r.
-  apply (lt_le_iff zero one). left. apply one_pos.
+  intro a. exact (le_plus_nonneg_r (abs a) one (lt_le_iff zero one (inl one_pos))).
 Qed.
 
 (* 非负 + 正 = 正：le zero a + lt zero b ⟹ lt zero (plus a b) *)
@@ -677,14 +654,8 @@ Qed.
 (* 减法消元：a + (b - a) = b *)
 Lemma minus_plus_cancel : forall a b : R, Id (plus a (minus b a)) b.
 Proof.
-  intros a b.
-  unfold minus.
-  rewrite plus_assoc.
-  rewrite (plus_comm a b).
-  rewrite <- (plus_assoc b a (opp a)).
-  rewrite (plus_opp a).
-  rewrite (plus_zero b).
-  reflexivity.
+  intros a b. unfold minus.
+  exact (id_trans (plus_assoc a b (opp a)) (id_trans (id_cong (fun w => plus w (opp a)) (plus_comm a b)) (id_trans (id_sym (plus_assoc b a (opp a))) (id_trans (id_cong (fun w => plus b w) (plus_opp a)) (plus_zero b))))).
 Qed.
 
 (* 减法消元（右）：(a + b) - a = b *)
@@ -705,21 +676,15 @@ Qed.
 Lemma minus_plus_r : forall a b c : R,
   Id (minus a (plus b c)) (minus (minus a b) c).
 Proof.
-  intros a b c.
-  unfold minus.
-  rewrite (opp_plus b c).
-  rewrite plus_assoc.
-  reflexivity.
+  intros a b c. unfold minus.
+  exact (id_trans (id_cong (fun w => plus a w) (opp_plus b c)) (plus_assoc a (opp b) (opp c))).
 Qed.
 
 (* 负号对减法：-(a - b) = (-a) + b *)
 Lemma opp_minus : forall a b : R, Id (opp (minus a b)) (plus (opp a) b).
 Proof.
-  intros a b.
-  unfold minus.
-  rewrite (opp_plus a (opp b)).
-  rewrite (double_neg b).
-  reflexivity.
+  intros a b. unfold minus.
+  exact (id_trans (opp_plus a (opp b)) (id_cong (fun w => plus (opp a) w) (double_neg b))).
 Qed.
 
 (* |a - b| = |b - a|（减法对称；逐出稳态偏差量化需要。
@@ -847,11 +812,8 @@ Qed.
 Lemma mult_minus_distr_l : forall a b c : R,
   Id (mult a (minus b c)) (minus (mult a b) (mult a c)).
 Proof.
-  intros a b c.
-  unfold minus.
-  rewrite distrib.
-  rewrite (opp_mult_l a c).
-  reflexivity.
+  intros a b c. unfold minus.
+  exact (id_trans (distrib a b (opp c)) (id_cong (fun w => plus (mult a b) w) (opp_mult_l a c))).
 Qed.
 
 (* 乘积误差分解：f(x+h)g(x+h) - [f(x)g(x) + (df·g + f·dg)·h]
@@ -957,11 +919,7 @@ Qed.
 Lemma mult_cancel_r :
   forall a b c : R, lt zero a -> Id (mult b a) (mult c a) -> Id b c.
 Proof.
-  intros a b c Ha Hba.
-  apply (mult_cancel_l a b c Ha).
-  assert (H1 : Id (mult a b) (mult b a)) by exact (mult_comm a b).
-  assert (H2 : Id (mult c a) (mult a c)) by exact (mult_comm c a).
-  exact (id_trans H1 (id_trans Hba H2)).
+  intros a b c Ha Hba. exact (mult_cancel_l a b c Ha (id_trans (mult_comm a b) (id_trans Hba (mult_comm c a)))).
 Qed.
 
 (* 减法非负：a ≤ b ⟹ 0 ≤ b - a（由 le_plus_compat 推导；
@@ -969,12 +927,8 @@ Qed.
 Lemma le_minus_nonneg :
   forall a b : R, le a b -> le zero (minus b a).
 Proof.
-  intros a b Hab.
-  unfold minus.
-  assert (H1 : le (plus a (opp a)) (plus b (opp a)))
-    by exact (le_plus_compat a b (opp a) (opp a) Hab (le_refl (opp a))).
-  assert (H2 : Id (plus a (opp a)) zero) by exact (plus_opp a).
-  apply (le_id_l zero (plus a (opp a)) (plus b (opp a)) (id_sym H2) H1).
+  intros a b Hab. unfold minus.
+  exact (le_id_l zero (plus a (opp a)) (plus b (opp a)) (id_sym (plus_opp a)) (le_plus_compat a b (opp a) (opp a) Hab (le_refl (opp a)))).
 Qed.
 
 (* 减法为零消去：a - b = 0 ⟹ a = b（Gibbs 等号条件 d(s) = 0 ⟹ 项相等） *)
@@ -994,11 +948,7 @@ Qed.
 Lemma minus_self_zero :
   forall a b : R, Id a b -> Id (minus a b) zero.
 Proof.
-  intros a b Hab.
-  unfold minus.
-  assert (H1 : Id (plus a (opp b)) (plus b (opp b)))
-    by exact (id_cong (fun x => plus x (opp b)) Hab).
-  exact (id_trans H1 (plus_opp b)).
+  intros a b Hab. unfold minus. exact (id_trans (id_cong (fun x => plus x (opp b)) Hab) (plus_opp b)).
 Qed.
 
 (* 加法消去（右）：a + b = a ⟹ b = 0（两边加 -a，重组为 0 + b = b） *)
@@ -1212,8 +1162,7 @@ Context {RI : RealInterface}.
 (* 左单位元：1·a == a（RealInterface 只给右单位 mult_one，由 mult_comm 补左） *)
 Lemma smult_one_l : forall a : @R RI, Id (@mult RI (@one RI) a) a.
 Proof.
-  intro a.
-  apply (id_trans (@mult_comm RI (@one RI) a) (@mult_one RI a)).
+  intro a. exact (id_trans (@mult_comm RI (@one RI) a) (@mult_one RI a)).
 Qed.
 
 (* 右分配律：(a+b)·x == a·x + b·x（mult_comm + distrib 直接组装；
@@ -1221,12 +1170,7 @@ Qed.
 Lemma smult_distrib_l_real : forall a b x : @R RI,
   Id (@mult RI (@plus RI a b) x) (@plus RI (@mult RI a x) (@mult RI b x)).
 Proof.
-  intros a b x.
-  apply (id_sym (id_trans (id_trans (id_trans
-    (id_cong (fun z => @plus RI (@mult RI a x) z) (@mult_comm RI b x))
-    (id_cong (fun z => @plus RI z (@mult RI x b)) (@mult_comm RI a x)))
-    (id_sym (@distrib RI x a b)))
-    (id_sym (@mult_comm RI (@plus RI a b) x)))).
+  intros a b x. exact (id_sym (id_trans (id_trans (id_trans (id_cong (fun z => @plus RI (@mult RI a x) z) (@mult_comm RI b x)) (id_cong (fun z => @plus RI z (@mult RI x b)) (@mult_comm RI a x))) (id_sym (@distrib RI x a b))) (id_sym (@mult_comm RI (@plus RI a b) x)))).
 Qed.
 
 (* 全部字段由 RI 字段直供（clim := @lim RI / clim_unique := @lim_unique RI /
@@ -1639,8 +1583,7 @@ Theorem boltzmann_factor_pos :
   forall L : S -> R, forall s : S, lt zero (boltzmann_factor L s).
 Proof.
   unfold boltzmann_factor.
-  intros L s.
-  apply exp_neg_pos.
+  intros L s. exact (exp_neg_pos (mult (inv_pos D D_pos) (L s))).
 Qed.
 
 (* Boltzmann 概率正性：inv_pos_pos（Enhanced 字段）+ mult_positive + exp_neg_pos *)
@@ -2836,10 +2779,7 @@ Theorem greedy_kernel_limit :
        (exp_neg (mult (inv_pos temperature temperature_pos)
                       (minus (total_loss (prefix ++ [w])) (total_loss (prefix ++ [pick_best_token prefix]))))).
 Proof.
-  intros prefix w Hw.
-  apply (markov_temperature_zero_limit prefix w (pick_best_token prefix)).
-  (* pick_best 的损失 ≤ w 的（pick_best_optimal） *)
-  exact (pick_best_optimal prefix w Hw).
+  intros prefix w Hw. exact (markov_temperature_zero_limit prefix w (pick_best_token prefix) (pick_best_optimal prefix w Hw)).
 Qed.
 
 (* 温度退火：升温（T 增大）⟹ 熵不减（探索增强）。
@@ -2866,14 +2806,14 @@ Definition softmax (prefix : list Token) (w : Token) : R :=
 (* Softmax 输出正性（构造性：exp 正 × 逆元正） *)
 Theorem softmax_pos : forall prefix w, lt zero (softmax prefix w).
 Proof.
-  intros prefix w. unfold softmax. apply markov_pos.
+  intros prefix w. unfold softmax. exact (markov_pos prefix w).
 Qed.
 
 (* Softmax 归一化：Σ_w softmax(prefix, w) = 1（概率守恒） *)
 Theorem softmax_normalized : forall prefix,
   Id (list_sum (fun w => softmax prefix w) vocab) one.
 Proof.
-  intro prefix. unfold softmax. apply markov_normalized.
+  intro prefix. unfold softmax. exact (markov_normalized prefix).
 Qed.
 
 (* Softmax 有界：0 ≤ softmax ≤ 1（概率上界，markov_kernel_le_one） *)
@@ -2881,10 +2821,9 @@ Theorem softmax_bounded : forall prefix w,
   InT w vocab ->
   And (le zero (softmax prefix w)) (le (softmax prefix w) one).
 Proof.
-  intros prefix w Hin.
-  split.
-  - apply (lt_le_iff _ _). left. apply (softmax_pos prefix w).
-  - unfold softmax. apply (markov_kernel_le_one prefix w Hin).
+  intros prefix w Hin. split.
+  - exact (lt_le_iff zero (softmax prefix w) (inl (softmax_pos prefix w))).
+  - unfold softmax. exact (markov_kernel_le_one prefix w Hin).
 Qed.
 
 (* ============================================================ *)

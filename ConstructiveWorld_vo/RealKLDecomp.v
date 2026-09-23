@@ -3,9 +3,20 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   rkd_kl_decomp_full_partition（原 L844，3 句玩具证）                  *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T330 恒等守恒更正注记】2026-09-22 包AW十 台账席（恒等头注更正全量第三批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T330 台账。                   *)
+(* 附记：T277 判级全文恒等；包AA A-L 包域（AA/AB/AC/AD）第三批整批直推（T317 六·1 方案①）         *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -14,11 +25,11 @@
 (* ============================================================ *)
 (* 【使命】把 UpRealLeB.v Section RealRLHFLeB L218 的 Variable 槽     *)
 (*   real_kl_decomp_full（被 real_rlhf_optimal_B L235 经             *)
-(*   real_rlhf_optimal_eps L247 直接消费）闭合为非平凡定理。          *)
+(*   real_rlhf_optimal_eps L247 直接依存）闭合为非平凡定理。          *)
 (*   S08_RealMainlineDPO.v Section RealRLHFMain L2516 同名槽同判      *)
-(*   （被 real_rlhf_optimal_eps L2602 消费），本件一并覆盖。          *)
+(*   （被 real_rlhf_optimal_eps L2602 依存），本件一并覆盖。          *)
 (* ------------------------------------------------------------------ *)
-(* 【侦查定谳（槽语句形状）】槽结论面（UpRealLeB L220-231 原文）：     *)
+(* 【侦查已证结论（槽语句形状）】槽结论面（UpRealLeB L220-231 原文）：     *)
 (*   real_eq (F p) (F p_b + D·Σ kl_term(p s, p_b s))，前提面仅        *)
 (*   (Hp, Hnormp)。数学核查：F(p)−F(p_b)−D·Σkl = D·logZ·(Σp_b−1)，   *)
 (*   故 Z_align_r 为任意正 Variable 时槽语句实质为假（反例：单点态   *)
@@ -28,7 +39,7 @@
 (*   （Σ p_b == 1，UpReqRealFEP.v 头注「诚实前提申报」同判）。        *)
 (*   本件双交付：                                                     *)
 (*   主件1 rkd_kl_decomp_full（一般 Z + Hnormb 条件件，结论面与槽    *)
-(*   逐字同构，为槽参数位的直接放电件）；                             *)
+(*   逐字同构，为槽参数位的直接实例化消解件）；                             *)
 (*   主件2 rkd_kl_decomp_full_partition（定义 Z 形：Z := Σ exp(−e/D)，*)
 (*   前提面 = 求和代数接口 ext/add/linear + 定义 Z 正性证书，零残留   *)
 (*   数学前提——归一化内证，即「无条件定理」交付形）。                 *)
@@ -36,23 +47,23 @@
 (* 【喂入链选型】retm_KL_decomp（RealEnergyTempMono）为 list 载体 +   *)
 (*   温度参量形，与抽象 sumf 槽载体不同轴（UpReqRealFEP.v 头注①同    *)
 (*   判）；req 层 req_relative_entropy_temp_decomp /                  *)
-(*   req_recovery_entropy_gain 层位不同。本件消费：retm_log_inv_pos_gen*)
+(*   req_recovery_entropy_gain 层位不同。本件依存：retm_log_inv_pos_gen*)
 (*   （log(1/x)==−log x 一般件）+ CW219 real_log_mult/real_log_exp_neg/*)
 (*   real_log_wd/real_inv_pos_correct 根基元 + rfep 五桥机蓝图模式，  *)
 (*   全链自证。UpReqRealFEP.v 在本机 Live/build 有源无 .vo（其依赖    *)
 (*   G04/G05 .vo 亦缺），不补编他席文件，本件自包含。                 *)
 (* ------------------------------------------------------------------ *)
-(* 【同位对账表（槽位参数对齐，消费位逐参核对）】                      *)
+(* 【同位核验表（接口参数参数对齐，依存位逐参核对）】                      *)
 (*   槽 discharge 序（S08 RealRLHFMain / UpRealLeB RealRLHFLeB）：     *)
 (*     S sumf ext add [linear] base D Dp Z Zp ｜ p Hp Hnormp          *)
 (*   主件1 全参序：                                                    *)
 (*     S sumf ext add linear base D Dp Z Zp ｜ p Hp Hnormp Hnormb     *)
 (*   差异两处（诚实增量申报，与 UpReqRealFEP.v 头注同款）：            *)
-(*   ① linear（标量提取桥）为放电所需最小增量——原槽为 Variable 不需   *)
+(*   ① linear（标量提取桥）为实例化消解所需最小增量——原槽为 Variable 不需   *)
 (*      证明，故节内无此字段；                                        *)
 (*   ② Hnormb（Σ p_b == 1）为槽语句缺失的归一化前提（任意 Z 下不可    *)
 (*      免，见上数学核查）；主件2 在定义 Z 形下将其内证消去。          *)
-(*   消费位喂入法（UpReqRealFEP.v 头注同款）：real_rlhf_optimal_eps /  *)
+(*   依存位喂入法（UpReqRealFEP.v 头注同款）：real_rlhf_optimal_eps /  *)
 (*   real_rlhf_optimal_B 的 real_kl_decomp_full 参数位以主件1前九参   *)
 (*   部分应用喂入（p Hp Hnormp Hnormb 留槽）；主件2 适用于下游把 Z    *)
 (*   取真配分函数的实例化。                                           *)
@@ -60,20 +71,20 @@
 (* 【红线】Set 层零 Prop 泄露（real_eq/real_lt 全 Set 值，语句面纯    *)
 (*   forall 型）；纯构造性（零未闭合证明、零经典逻辑）；real_eq 非    *)
 (*   Id 禁改写，全链 real_eq_trans 与 RealSetoid compat/adapt 成对形  *)
-(*   （1配2、3配4）；原子级代数收口走 rkd_alg（real_eq_of_zero_diff  *)
+(*   （1配2、3配4）；原子级代数闭合走 rkd_alg（real_eq_of_zero_diff  *)
 (*   加 proj 剥离加 ring；含 log/inv Bishop 桥段与 one/zero 字面位    *)
 (*   不走 rkd_alg，改具名引理，CWC 卡限制）；全 Qed 闭合。            *)
 (* 编译配方：source Live/toolchain/env.sh 后 cd Live/build 执行        *)
 (*   rocq c -Q . '' RealKLDecomp.v（cpu_guard 包裹，双核上限）。       *)
 (* 依赖：CW_ConstructiveWorld_219（.vo 在）、RealEnergyTempMono（.vo  *)
-(*   在，消费 retm_log_inv_pos_gen）、Stdlib QArith.Qring。           *)
+(*   在，依存 retm_log_inv_pos_gen）、Stdlib QArith.Qring。           *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 Require Import RealEnergyTempMono.
 
-(* 原子级代数收口：加/乘/负/原子项上的 real_eq 一步 ring（retm_alg 同款； *)
+(* 原子级代数闭合：加/乘/负/原子项上的 real_eq 一步 ring（retm_alg 同款； *)
 (*   限纯原子代数——含 one/zero 字面与 log/inv 桥位改走具名引理链）       *)
 Ltac rkd_alg :=
   apply real_eq_of_zero_diff; intro n;
@@ -157,7 +168,7 @@ Qed.
 (* ============================================================ *)
 
 (* log p_b(s) == −(e(s)/D + log Z)（零前提直证；rfep 件5a 同位重证，    *)
-(*   log(inv Z) 腿消费 retm_log_inv_pos_gen 引擎）                      *)
+(*   log(inv Z) 肢依存 retm_log_inv_pos_gen 引擎）                      *)
 Lemma rkd_log_pB : forall (S : Type) (real_base_loss : S -> Real)
   (D : Real) (D_pos : real_lt real_zero D) (Z : Real) (Z_pos : real_lt real_zero Z) (s : S)
   (Hpb : real_lt real_zero (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)),
@@ -306,7 +317,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：能量期望工作马（plus 形，任意正分布 q）                     *)
+(* Part 3：能量期望辅助引理（plus 形，任意正分布 q）                     *)
 (*   Σ q·e + D·Σ q·log p_b == −D·log Z（归一化 Σ q == 1 入槽）         *)
 (* ============================================================ *)
 Lemma rkd_energy_horse :
@@ -426,7 +437,7 @@ Proof.
   { apply sumf_ext. intro w.
     exact (RealSetoid.real_eq_mult_compat_adapt (q w) (q w) _ _
              (real_eq_refl (q w)) (Hpt w)). }
-  (* distrib 点态 + add：拆两腿 *)
+  (* distrib 点态 + add：拆两个合取肢 *)
   assert (Hsplit : real_eq
              (sumf (fun s : S => real_mult (q s)
                       (real_plus
@@ -471,7 +482,7 @@ Proof.
                      (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)
                                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s)))))
                (fun s : S => real_mult (q s) (real_opp (real_mult D LZ)))). }
-  (* 腿1：Σ q·(−D·Lb) == −(D·SLB) *)
+  (* 肢1：Σ q·(−D·Lb) == −(D·SLB) *)
   assert (HT1 : real_eq
              (sumf (fun s : S => real_mult (q s)
                       (real_opp (real_mult D
@@ -517,7 +528,7 @@ Proof.
                   (fun s : S => real_mult (q s)
                      (real_log (real_boltzmann_dist_r S real_base_loss D D_pos Z Z_pos s)
                                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z Z_pos s))))). }
-  (* 腿2：Σ q·(−D·log Z) == (−D)·log Z·Σ q，归一化收口 *)
+  (* 肢2：Σ q·(−D·log Z) == (−D)·log Z·Σ q，归一化闭合 *)
   assert (HT2 : real_eq
              (sumf (fun s : S => real_mult (q s) (real_opp (real_mult D LZ))))
              (real_mult (real_opp D) LZ)).
@@ -766,7 +777,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5：主件——real_kl_decomp_full 槽放电件                          *)
+(* Part 5：主件——real_kl_decomp_full 槽实例化消解件                          *)
 (* ============================================================ *)
 
 (* 主件1（一般 Z 条件件）：结论面与 UpRealLeB L218 / S08 L2516 槽      *)

@@ -61,7 +61,7 @@
 (* Require 仅消费 .vo 基座：CW_ConstructiveWorld_219（S01..S15       *)
 (*   Require Export 聚合面）、UpRealLeB（real_le_b 完成件）。         *)
 (*                                                                *)
-(* 【公理面】本件零新公理、零 Hypothesis 位、零经典公理；              *)
+(* 【公理面】本件零新公理、零假设位、零经典公理；              *)
 (*   文末对全部主件 Print Assumptions 核验 Closed。                   *)
 (* 红线：纯构造性；主件结论全 Set 层（sigT/real_le_b/QeqT；real_lt    *)
 (*   内嵌 And 为 Q4 evd 同款已验形态）；零 Obj.magic（不进提取面）；    *)
@@ -491,10 +491,9 @@ Theorem c3e_env_ln2 : forall n : nat,
              (QeqT (hi - lo) (2 * (1 / (Z.of_nat (2 * n + 2) # 1))))))).
 Proof.
   intro n.
-  apply (c3e_env_mother c3e_ln2_real (c3e_l2_sum n)
-                        (1 / (Z.of_nat (2 * n + 2) # 1)) n).
-  intros k Hk.
-  exact (c3e_l2_cert n k Hk).
+  exact (c3e_env_mother c3e_ln2_real (c3e_l2_sum n)
+           (1 / (Z.of_nat (2 * n + 2) # 1)) n
+           (fun k Hk => c3e_l2_cert n k Hk)).
 Qed.
 
 (* ============================================================ *)

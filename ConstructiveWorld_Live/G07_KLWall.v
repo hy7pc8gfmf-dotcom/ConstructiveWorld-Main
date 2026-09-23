@@ -1,18 +1,32 @@
+(* ========================================================================= *)
+(* 【ToyR 战役·包F·T245 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包F 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T245。       *)
+(* 替换定理清单：klcx_epos_correct／jens_exp_tangent／jens_two_point（共 3   *)
+(*  刀）                                                                     *)
+(* 非平凡性口径：单跳体内联与组合器体双实例内联（结构重演非拆行）；无一行    *)
+(* 拆分式假非平凡。                                                          *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
 (* ============================================================
    T245 包F 台账席 切片三 · G07_KLWall 三刀落刀（同名替换，全中文零承认）
    本件为基线原件（md5 b87b3006…，与 Main 基线逐字）的同名替换件：语句面、
    声明序、其余定理与既有版记头注逐字保留；仅三条玩具级证明体在替换点重演：
    一、klcx_epos_correct：同件单跳 klcx_opp_opp 体整体内联——destruct 解构
        ＋real_eq_of_zero_diff＋ring 逐字重演（消除同件单跳，klcx_opp_opp
-       本体及其余消费位不动）。
+       本体及其余依存位不动）。
    二、jens_exp_tangent：real_le_closure_b_one 组合器体整体内联（模板＝
        UpRealLeB.v:381-400，D:=one 特化＋1·eps≈eps 换形桥两步：eps≈eps·1
        （mult_one 对称）经 mult_comm 运输至 1·eps，RealSetoid.real_le_id_r
        右端等式换形；real_eq_plus_compat 逐槽换形），A:=1−x、B:=exp(−x)
-       显式实例化，eps 形委托 jens_exp_tangent_eps 收口不变。
+       显式实例化，eps 形委托 jens_exp_tangent_eps 闭合不变。
    三、jens_two_point：同刀二组合器体整体内联，A:=exp((1−η)x+ηy)、
        B:=(1−η)exp x＋η exp y 显式实例化，eps 形委托 jens_two_point_eps
-       收口不变（全序 eta/x/y/前提位照旧）。
+       闭合不变（全序 eta/x/y/前提位照旧）。
    依赖面零新增：Require 面与原件逐字一致；本件 PowB 段自带
    UpRealLeB／UpRealLeB2、KLCvx 段自带 CW220_Extensions Require（原件即有，
    非本切片新增）。
@@ -652,7 +666,7 @@ Print Assumptions klst_kl_sum_strict.
 (*     无正间隙见证字段 ⟹ 单引理缺口，补齐后与 Part D 逐项前提换全称弱序    *)
 (*     即得无条件件（温度桥：β₂<β₁、E₀<E₁ ⟹ 比率严格分离，               *)
 (*     cauchy_real_exp_mono 严格单调已备，exp_neg 反号换形一路可通）。     *)
-(*   判定 3（与 eps 形引擎关系）：本件不消费 real_le_b 闭合组合器——严格层      *)
+(*   判定 3（与 eps 形引擎关系）：本件不依存 real_le_b 闭合组合器——严格层      *)
 (*     real_lt 为 sigT 正陈述，无 Or 等号分支提取障碍；障碍在库侧切线      *)
 (*     字段缺失（real_exp_ge_linear_eps / real_log_le_linear_eps 均为     *)
 (*     eps 形 Or 编码），与 UpRealLeB 尾注已知限制同源不同位。             *)
@@ -685,7 +699,7 @@ Print Assumptions klst_kl_sum_strict.
 (*     → klcx_boltzmann_diff_bridge（纯投影+eq 换形证明）。          *)
 (*   [证明] UpReqCauchy:221 r_arch_pow / UpReqAttnIter:163           *)
 (*     arch_pow_i —— 几何击穿阿基米德件（Bernoulli + 逆元链）        *)
-(*     → klcx_geo_pow_break 统一件 + 两槽镜像实例。                  *)
+(*     → klcx_geo_pow_break 统一件 + 两槽副本实例。                  *)
 (* ---------------------------------------------------------------- *)
 (* 落点层：Real 实例化定理（载体 Real，real_le/real_lt 即接口        *)
 (* RealEnhancedReal 的 le/lt 字段——iface 投影件给出 @le/@lt 语形     *)
@@ -737,7 +751,7 @@ Qed.
 (* ============================================================ *)
 (* K-B 证明件 1：req_boltzmann_diff_bridge（UpReqAlignRestB:1569）   *)
 (*   槽形：|e^{-u}−e^{-v}| ≤ e^{-v}·(|u−v|·epos(|u−v|)+eps)，        *)
-(*   epos := exp_neg∘opp（req 层 req_epos 的 Real 层镜像）。          *)
+(*   epos := exp_neg∘opp（req 层 req_epos 的 Real 层副本）。          *)
 (*   证书链 = root P1 主引理 real_exp_neg_diff_bound 一次给定。      *)
 (* ============================================================ *)
 
@@ -792,12 +806,12 @@ Qed.
 (* ============================================================ *)
 (* K-C 证明件 2：exp_neg_geo_break（UpReqAttnGibbs:2146）            *)
 (*   槽形：d>0 ⟹ ∃N, e^{−2^N·d} ≤ eps（req_r_pow(1+1) N → 载体      *)
-(*   klcx_r_pow 镜像 req_r_pow 逐位定义）。                          *)
+(*   klcx_r_pow 副本 req_r_pow 逐位定义）。                          *)
 (*   证书链：root exp_lower_q（e^{−N₀}<eps，N₀≥2）+ real_arch        *)
 (*   （N₀/d < m#1）+ 2^m>m（nat+real_const_lt）+ exp 单调。          *)
 (* ============================================================ *)
 
-(* 载体：镜像 req_r_pow（1 / x·x^k 逐位），Real 层 *)
+(* 载体：副本 req_r_pow（1 / x·x^k 逐位），Real 层 *)
 Fixpoint klcx_r_pow (x : Real) (n : nat) : Real :=
   match n with
   | Datatypes.O => real_one
@@ -921,7 +935,7 @@ Qed.
 
 (* ============================================================ *)
 (* K-D 证明件 3：r_arch_pow（UpReqCauchy:221）+ arch_pow_i           *)
-(*   （UpReqAttnIter:163）统一件 + 两槽镜像实例                      *)
+(*   （UpReqAttnIter:163）统一件 + 两槽副本实例                      *)
 (*   证书链 = CW220_Extensions.BudgetReal.r_arch_pow_real（在盘      *)
 (*   件：real_arch + Bernoulli + 逆元链，其 .vo 同轨四项关卡通过）一次      *)
 (*   给定；klcx_r_pow 与 BudgetReal.real_pow 逐位同 Fixpoint 体       *)
@@ -951,7 +965,7 @@ Proof.
   exact (r_arch_pow_real k Hk1 Hk2 a Ha eps Heps).
 Qed.
 
-(* 槽镜像 1：r_arch_pow（UpReqCauchy:221）接口语形投影出口
+(* 槽副本 1：r_arch_pow（UpReqCauchy:221）接口语形投影出口
    （k 对应节变量 kappa，0<k<1 前提位随槽显式参） *)
 Theorem klcx_r_arch_pow_iface : forall (k a eps : Real),
   @lt Real RealEnhancedReal real_zero k ->
@@ -964,7 +978,7 @@ Proof.
   exact (fun k a eps => klcx_geo_pow_break k a eps).
 Qed.
 
-(* 槽镜像 2：arch_pow_i（UpReqAttnIter:163）接口语形投影出口
+(* 槽副本 2：arch_pow_i（UpReqAttnIter:163）接口语形投影出口
    （底 := 1−δ；0<δ 与 δ<1 两前提位对应节内 omd 正性条件） *)
 Theorem klcx_arch_pow_omd_iface : forall (delta a eps : Real),
   @lt Real RealEnhancedReal real_zero delta ->
@@ -991,8 +1005,8 @@ Print Assumptions klcx_arch_pow_omd_iface.
 
 (* ======== G07_KLWall 成员件：UpReqPowB（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqPowB.v —— 幂运算 le_b/Bishop 序构造模块（广义旗舰链·定理 4.8      *)
-(*   Bishop 形两大承重墙之一：幂律骨架）                              *)
+(* UpReqPowB.v —— 幂运算 le_b/Bishop 序构造模块（广义主链·定理 4.8      *)
+(*   Bishop 形两大关键引理之一：幂律骨架）                              *)
 (*                                                              *)
 (* 主结果（全部 Set 层、零 Prop 泄露、零新公理、单调性零 Or 分支）：      *)
 (*   0. powb_pow：nat 指数幂载体（Real 层 Fixpoint，O ↦ one，          *)
@@ -1014,7 +1028,7 @@ Print Assumptions klcx_arch_pow_omd_iface.
 (*      （基座 Id(leb) 编码，全库先例）；归纳直证——le 推导链上每步       *)
 (*      sub_one + real_le_b_trans（eps 半分组合器）传递，零 Or 分支、     *)
 (*      零精确比较）。                                                  *)
-(*   7. 旗舰（定理 4.8 幂律直接入口）：(1−η)^t 的 Bishop 形——            *)
+(*   7. 主定理（定理 4.8 幂律直接入口）：(1−η)^t 的 Bishop 形——            *)
 (*      powb_one_minus_eta_pos：0<η<1 ⟹ 0<1−η（平移+opp 换形）；         *)
 (*      powb_one_minus_eta_base_le_one：0<η ⟹ 1−η ≤ 1（加 η 换形=1）；   *)
 (*      powb_one_minus_eta_le_one：(1−η)^t ≤_B 1；                       *)
@@ -1024,7 +1038,7 @@ Print Assumptions klcx_arch_pow_omd_iface.
 (*   （1−η==0 与 1−η>0 不可分），闭端版本须另设零退化分支——对应显式假设件未建；    *)
 (*   开区间 (0,1) 版已覆盖定理 4.8 收缩入口（η 为收缩率恒 <1）。         *)
 (*                                                              *)
-(* 引擎消费：UpRealLeB（real_le_b/单向桥 real_le_to_le_b/lt 平移底座     *)
+(* 引擎依存：UpRealLeB（real_le_b/单向桥 real_le_to_le_b/lt 平移基础模块     *)
 (* real_lt_plus_r_zero）＋ UpRealLeB2（real_le_b_trans ≤_B 传递组合器，  *)
 (* eps 半分）。基底 CW_ConstructiveWorld_219（Real 层代数与序引擎件）。  *)
 (* 红线：零公理零未闭合证明（G1 禁词全零）；全语句 Set 层（序界 NatLe、   *)
@@ -1097,7 +1111,7 @@ Proof.
   unfold real_le_b. intros eps Heps. cbn [powb_pow].
   pose proof (real_mult_positive eps (real_inv_pos (powb_pow base n) Hu)
                 Heps Hinv) as He0.
-  (* 换形底座：(1 + e₀)·u == u + eps（e₀ := eps·inv u） *)
+  (* 换形基础模块：(1 + e₀)·u == u + eps（e₀ := eps·inv u） *)
   assert (Hshape : real_eq
     (real_mult (real_plus real_one
                   (real_mult eps (real_inv_pos (powb_pow base n) Hu)))
@@ -1216,9 +1230,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 5. 旗舰：(1−η)^t 的 Bishop 形（定理 4.8 幂律直接入口）               *)
+(* 5. 主定理：(1−η)^t 的 Bishop 形（定理 4.8 幂律直接入口）               *)
 (*    （1−η 以 real_plus real_one (real_opp eta) 字面承载，与根层        *)
-(*      real_pow_pos 消费面同形）                                      *)
+(*      real_pow_pos 依存面同形）                                      *)
 (* ============================================================ *)
 
 (* 1−η 严格正（0<η<1：平移 + opp 换形，零分支） *)
@@ -1277,7 +1291,7 @@ Proof.
            real_one (inl Hlt1)).
 Qed.
 
-(* 旗舰上界：(1−η)^t ≤_B 1 *)
+(* 主上界：(1−η)^t ≤_B 1 *)
 Lemma powb_one_minus_eta_le_one : forall (eta : Real) (t : nat),
   real_lt real_zero eta -> real_lt eta real_one ->
   real_le_b (powb_pow (real_plus real_one (real_opp eta)) t) real_one.
@@ -1288,7 +1302,7 @@ Proof.
   - exact (powb_one_minus_eta_base_le_one eta Hpos).
 Qed.
 
-(* 旗舰单调：(1−η)^{t1} ≤_B (1−η)^t（t ≤ t1；几何收缩幂律） *)
+(* 主单调：(1−η)^{t1} ≤_B (1−η)^t（t ≤ t1；几何收缩幂律） *)
 Theorem powb_one_minus_eta_mono_dec : forall (eta : Real) (t t1 : nat),
   real_lt real_zero eta -> real_lt eta real_one -> NatLe t t1 ->
   real_le_b (powb_pow (real_plus real_one (real_opp eta)) t1)
@@ -1303,7 +1317,7 @@ Qed.
 (* ============================================================ *)
 (* 尾注：诚实登记表（判定供论文侧与四项关卡报告引用）                          *)
 (* 【判定 P1｜载体】powb_pow 与 CW220_Extensions real_pow 同形独立复刻——零上游      *)
-(*   依赖（仅 Require 根层 + LeB 引擎两库），消费者可按需与 real_pow     *)
+(*   依赖（仅 Require 根层 + LeB 引擎两库），依存者可按需与 real_pow     *)
 (*   换形对接（eq_compat 级对接件对应显式假设件未建，非本文件红线内）。              *)
 (* 【判定 P2｜单调性零 Or 分支】powb_mono_dec 归纳直证成立——序界取      *)
 (*   NatLe（Set 层 Id(leb) 编码）后，le 推导链每步 sub_one + ≤_B 传递    *)
@@ -1315,7 +1329,7 @@ Qed.
 (*   1−η>0 不可分），闭区间 (0,1] 版须零退化分支另设路径——对应显式假设件未建；      *)
 (*   开区间 (0,1) 版为定理 4.8 收缩率场景的正配入口。                    *)
 (* 【检查记录】四项关卡卡证据：G1 禁词全零；G2 EXIT=0 + 十件 Print           *)
-(*   Assumptions Closed；G3 提取探针 Obj.magic=0；G4 coqchk 通过         *)
+(*   Assumptions Closed；G3 提取检验 Obj.magic=0；G4 coqchk 通过         *)
 (*   （log 见 _powb_* 序列）。                                          *)
 (* ============================================================ *)
 
@@ -1332,8 +1346,8 @@ Print Assumptions powb_one_minus_eta_mono_dec.
 
 (* ======== G07_KLWall 成员件：UpReqJensen（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqJensen.v —— 定理 4.8 承重墙模块：log-sum-exp 凸性 Bishop 形    *)
-(*   （jens_ 前缀；广义旗舰链·le_b 证明模块）                         *)
+(* UpReqJensen.v —— 定理 4.8 关键引理模块：log-sum-exp 凸性 Bishop 形    *)
+(*   （jens_ 前缀；广义主链·le_b 证明模块）                         *)
 (*                                                                *)
 (* 数学目标（构造性，le_b/eps 语言，Set 层零 Prop）：               *)
 (*   ① jens_exp_tangent：1 − x ≤ exp(−x)（逐 eps + le_b 双形）      *)
@@ -1351,7 +1365,7 @@ Print Assumptions powb_one_minus_eta_mono_dec.
 (*        ⟹ Σ w_i·exp(x_i) ≥ exp(z)·1 == exp(z)。                   *)
 (*      误差吸收走 real_le_closure_b（D := E > 0 闭合组合器），          *)
 (*      零除法、零折半、零三分律。                                   *)
-(*   ④ jens_partition（旗舰）：Z = Σ π_t^{1−η}·π*^η ≤_B 1           *)
+(*   ④ jens_partition（主）：Z = Σ π_t^{1−η}·π*^η ≤_B 1           *)
 (*      （逐点 AM-GM + 误差配权 eps·π_t 归一化吸收；                 *)
 (*        CW_ConstructiveWorld_219 real_interp_Z_le_one_eps 的任意指标型泛化            *)
 (*        （nat-seq → list X）+ le_b 闭合——                          *)
@@ -1365,7 +1379,7 @@ Print Assumptions powb_one_minus_eta_mono_dec.
 (*   本文件按真值方向陈述：exp(Σ w_i x_i) ≤ Σ w_i exp(x_i) + eps      *)
 (*   （等价负参形 exp(−Σw x) ≤ Σ w exp(−x) + eps）。                 *)
 (*   该方向恰为 Hölder/插值 Z ≤ (Σπ)^{1−η}(Σπ* )^η = 1 的可行路径   *)
-(*   （逐点凸性 + 归一化求和），与旗舰④一致——勘误后目标不变。       *)
+(*   （逐点凸性 + 归一化求和），与主④一致——勘误后目标不变。       *)
 (*   另：侦察注记——CW_ConstructiveWorld_219 的 exp 全参数可用（real_exp_ge_linear_eps  *)
 (*   三分支覆盖全 t），接口记录的 exp_neg 命名系字段名而非限制；      *)
 (*   本文件所有语句直接用 cauchy_real_exp 任意实参，零符号翻转负担。   *)
@@ -1395,7 +1409,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 
 (* ============================================================ *)
-(* Part A：环换形底座（real_eq 链件，纯 term-mode 组装）             *)
+(* Part A：环换形基础模块（real_eq 链件，纯 term-mode 组装）             *)
 (* ============================================================ *)
 
 (* A.1：z + (x + (−z)) == x（切线锥坍缩的核恒等式） *)
@@ -1863,7 +1877,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：旗舰 —— jens_partition（Σ π^{1−η}·π*^η ≤_B 1）            *)
+(* Part E：主定理 —— jens_partition（Σ π^{1−η}·π*^η ≤_B 1）            *)
 (*   任意指标型 list X 泛化（CW_ConstructiveWorld_219 nat-seq 版 → list X）+ le_b 闭合。 *)
 (*   路线：逐点 AM-GM（误差配权 eps·π_t，正权归一化吸收）             *)
 (*   ⟹ Z ≤ (1−η)·Σπ + η·Σπ* + eps == 1 + eps。零除法零折半。        *)
@@ -1974,7 +1988,7 @@ Proof.
               (RealSetoid.real_eq_plus_compat _ _ _ _ Hf Hg))).
 Qed.
 
-(* E.2 旗舰 Bishop 闭合（le_b）：Σ π^{1−η}·π*^η ≤_B 1
+(* E.2 主定理 Bishop 闭合（le_b）：Σ π^{1−η}·π*^η ≤_B 1
    ——定理 4.8 step_kl_eta_bound 的数学核（le_b/eps 形；Or 形精确
    闭合构造性不可证，判定见 UpRealLeB 尾注登记表）。 *)
 Theorem jens_partition : forall (X : Type) (pit pist : X -> Real) (l : list X) (eta : Real)
@@ -2003,7 +2017,7 @@ Qed.
 (* 【判定 J1｜方向勘误④】原始任务表述原式 Σ w exp(−x) ≤ exp(−Σw x) + eps    *)
 (*   为 Jensen 反向、一般假（数值反例在案）；本文件按真值方向            *)
 (*   exp(Σw x) ≤ Σ w exp(x) + eps 陈述并全件贯通——沿 CW220_Extensions M0.1      *)
-(*   「假命题修正」先例，勘误后目标（Bishop 形凸性 + 旗舰 Z ≤ 1）     *)
+(*   「假命题修正」先例，勘误后目标（Bishop 形凸性 + 主定理 Z ≤ 1）     *)
 (*   不变且恰为可证方向。                                            *)
 (* 【判定 J2｜切线锥逐点化】主件路线 = 切线下界（保底件2）×非负系数    *)
 (*   （kl_le_mult_weak_swap）×求和（real_list_sum_le）×归一化坍缩     *)
@@ -2014,23 +2028,23 @@ Qed.
 (* 【判定 J3｜逐 eps 统一余量】主件闭合组合器面取 h := eps 全称位实例，    *)
 (*   与 sumb_ 判定 S1 同源：real_le_b 全称面余量可复制，无需          *)
 (*   构造性对半。                                                    *)
-(* 【判定 J4｜旗舰泛化边界】CW_ConstructiveWorld_219 real_interp_Z_le_one_eps 系          *)
+(* 【判定 J4｜主泛化边界】CW_ConstructiveWorld_219 real_interp_Z_le_one_eps 系          *)
 (*   nat 索引 seq 0 n 特化；本文件 jens_partition 泛化至任意指标型      *)
 (*   list X（real_list_sum 引擎本就 X 首参泛型，逐点/求和/坍缩       *)
 (*   三段全泛化直迁），并与 UpRealLeB real_interp_Z_le_one_B          *)
-(*   （E.18）互为特化关系——E.18 消费本件只需 X := nat、              *)
+(*   （E.18）互为特化关系——E.18 依存本件只需 X := nat、              *)
 (*   l := seq 0 n 单步实例（本文件未回改既有文件）。                    *)
 (* 【判定 J5｜两点件增量边界】两点凸性 eps 形核 CW_ConstructiveWorld_219 已有             *)
 (*   （real_exp_two_point_cvx_eps，Varberg 锥）；本文件增量为           *)
 (*   le_b 闭合双形（C.2/C.4）+ w 参数形伴生（C.3/C.4，含             *)
 (*   1−(1−w) == w 换形核 A.2 与 0 ≤ w ⟹ 1−w ≤ 1 链）。               *)
 (* 【检查记录】四项关卡卡：G1 禁词全零（含头注注记位）；G2 重编 EXIT=0；   *)
-(*   G3 提取探针 Obj.magic 计数零；G4 coqchk 认证通过（见技术报告）。  *)
+(*   G3 提取检验 Obj.magic 计数零；G4 coqchk 认证通过（见技术报告）。  *)
 (* 沉淀卡索引回填行（备卡尾）：                                       *)
 (*   E389（拟）：jens_ 十件全部通过——le_b Jensen 有限离散族               *)
 (*   （tangent/two_point 双形/w 形/n 点双形/partition 双形），         *)
 (*   切线锥逐点化定式（免除法 n 点路线）首次沉淀；                     *)
-(*   消费面：step_kl_eta_bound_B 数学核、UpStepKL 插值族泛化位。       *)
+(*   依存面：step_kl_eta_bound_B 数学核、UpStepKL 插值族泛化位。       *)
 (* ============================================================ *)
 
 Print Assumptions jens_exp_tangent_eps.

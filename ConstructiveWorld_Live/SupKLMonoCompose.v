@@ -1,14 +1,22 @@
-(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 54ceca1ac44d351ee093e1da24659980 · 权威定位=定理名内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
-(* ANCHOR: skm_le_b_mult_r_nonneg_bfree（旗舰） | 现势行号 L105 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
-(* ANCHOR: skm_pow_kl_mono_le_b_bfree | 现势行号 L521（头注自书「原 L511」已漂 +10） | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ============================================================ *)
 (* ToyR 玩具证替换件 —— T266 台账席 战役包AA（tier2 十七批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
-(*   skm_pow_kl_mono_le_b_bfree（现势 L521（基线 1719a2d），2 句玩具证）                    *)
+(*   skm_pow_kl_mono_le_b_bfree（原 L511，2 句玩具证）                    *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T330 恒等守恒更正注记】2026-09-22 包AW十 台账席（恒等头注更正全量第三批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T330 台账。                   *)
+(* 附记：T277 判级全文恒等；包AA A-L 包域（AA/AB/AC/AD）第三批整批直推（T317 六·1 方案①）         *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -30,8 +38,8 @@
 (*       G01_CoreMicro、UpRealLeB、UpRealLeB2、G07_KLWall、           *)
 (*       UpReqGeomD、UpReqGeomIter；Stdlib List（ListNotations）、     *)
 (*       Extraction。                                                *)
-(* 备注：消费位实测——主桥 geodi_policy_iter_kl_geom_iter_B 已由       *)
-(*       real_le_closure_b_one 闭合，不缺④；④的消费位在              *)
+(* 备注：依存位实测——主桥 geodi_policy_iter_kl_geom_iter_B 已由       *)
+(*       real_le_closure_b_one 闭合，不缺④；④的依存位在              *)
 (*       UpReqI4Bridge.v 件1/件2（i4b_pow_kl_mono_le_b 与             *)
 (*       i4b_policy_iter_kl_pow_mono_B），二者均卡前提 Hkl0or :       *)
 (*       real_le real_zero KL_0（Or 形非负证书），而库内只有 B 形      *)
@@ -50,7 +58,7 @@
 (*       处理）：给 W=eps>0，取 M := 3+W、X := W·inv(M)、              *)
 (*       eta := X·inv(L+2)。链：a·c < a·(c+eta) < (b+eta)·(c+eta)      *)
 (*       = (b·c + eta·c) + (b·eta + eta·eta)。小项三份额：             *)
-(*       (i) eta·c ≤ eta·L ≤ eta·(L+2) == X（精确等式底座）；          *)
+(*       (i) eta·c ≤ eta·L ≤ eta·(L+2) == X（精确等式基础模块）；          *)
 (*       (ii) b·eta ≤ eta ≤ X；(iii) eta·eta 经 inv(L+2) 因子精确      *)
 (*       吸收后 X·eta ≤ X·X ≤ X（X ≤ 1 自乘收敛）。合计                *)
 (*       (X+X)+X < eps（X+X+X == eps·(invM·3) < eps·(M·invM) == eps，  *)
@@ -90,7 +98,7 @@ Proof.
   - cbn [powb_pow]. apply real_le_refl.
   - cbn [powb_pow].
     (* 9.1 全量适配：real_le_mult_compat_r 结论为 base·x ≤ base·one，
-       距目标 base·x ≤ one 尚差 base ≤ one（H1）——外套 real_le_trans 两腿拼接 *)
+       距目标 base·x ≤ one 尚差 base ≤ one（H1）——外套 real_le_trans 两个合取肢拼接 *)
     apply (real_le_trans (real_mult base (powb_pow base m)) base real_one).
     + apply (RealSetoid.real_le_id_r (real_mult base (powb_pow base m))
                (real_mult base real_one) base).
@@ -217,7 +225,7 @@ Proof.
     by exact (real_mult_positive X (real_inv_pos L2 HL2) HXpos HL2inv).
   assert (Hetale : real_le real_zero eta)
     by exact (RealSetoid.real_lt_le_iff_req real_zero eta (inl Hetapos)).
-  (* ============ 核心精确等式底座：eta·(L+2) == X ============ *)
+  (* ============ 核心精确等式基础模块：eta·(L+2) == X ============ *)
   assert (HetaL2 : real_eq (real_mult eta L2) X).
   { apply (real_eq_trans _ (real_mult X (real_mult (real_inv_pos L2 HL2)
                                        L2)) _).
@@ -549,8 +557,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 主桥包：t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0（判词 I4 目标形在           *)
-(*    B 形因子 + skb 上界材料下无条件闭合；镜像 i4b 件2，跳②换 §3 件）   *)
+(* §4 主桥包：t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0（结论 I4 目标形在           *)
+(*    B 形因子 + skb 上界材料下无条件闭合；副本 i4b 件2，跳②换 §3 件）   *)
 (* ============================================================ *)
 
 Lemma skm_policy_iter_kl_pow_mono_B_bfree :
@@ -607,11 +615,11 @@ Qed.
 (*   面），代价新增 a 严格正与 b ≤ 1（Or 形）——KL 场景由 powb_pos_lt   *)
 (*   与 skm_powb_le_one_or 供给。强度互不支配：件5 对任意 c≤M、a 任意； *)
 (*   本件对 a>0、b≤1 的几何收缩场景零 Or 形非负前提。                   *)
-(* 【skb 供给位】Hkl0ub 的消费实参 = skb_sup_kl_log_inv_min nat         *)
+(* 【skb 供给位】Hkl0ub 的依存实参 = skb_sup_kl_log_inv_min nat         *)
 (*   (seq 0 n) p q Hp Hq Hp1 Hnormp m Hm Hmpos 的结论面——其载体          *)
 (*   real_list_sum nat (kl_term…) (seq 0 n) 与 geod_lsum n (kl_term…)   *)
 (*   定义性重合（UpReqGeomD:218 geod_lsum 即该 delta），exact 一步衔接。 *)
-(*   HLpos 由 m<1 面（min q<1）供给，属消费位上游证书。                  *)
+(*   HLpos 由 m<1 面（min q<1）供给，属依存位上游证书。                  *)
 (* 【主桥替换注记】i4b_policy_iter_kl_pow_mono_B 的 Hkl0or 前提位可换用 *)
 (*   本件 §4 引理（Hkl0ub+HLpos 三件套），缺口④目标形即在 B 形伴件 +    *)
 (*   skb 上界材料下闭合；该替换属上游改动，本件零改上游。                *)
@@ -619,7 +627,7 @@ Qed.
 (*   单侧攻破（交叉项需 a·eta ≥ 0 与 b·eta ≤ eta 两面），如实留档。     *)
 (* ============================================================ *)
 
-(* ============ 提取探针（Obj.magic 计数，配套 skm_g3.v） ============ *)
+(* ============ 提取检验（Obj.magic 计数，配套 skm_g3.v） ============ *)
 Extraction "skm_G3.ml" skm_powb_le_one_or skm_le_b_mult_r_nonneg_bfree
   skm_pow_kl_mono_le_b_bfree skm_policy_iter_kl_pow_mono_B_bfree.
 

@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   hl_binom_S（eq_refl 显式见证项（Pascal 定义层展开位），1 刀）                 *)
 (* ============================================================ *)
@@ -43,14 +43,14 @@
 (*   （280 mod 12 = 4）；n=3: 6 ∤ C(6,3)=20 但 6 | 3·20=60，无一致   *)
 (*   整除型，且 Farhi 型正确桥（lcm(1..n+1) | (n+1)·lcm_k C(n,k)）   *)
 (*   的证明仍需素数幂 val 分析，工程量同级。判否登记。               *)
-(* 红线四要素宣言（逐件）：                                        *)
+(* 红线四要素声明（逐件）：                                        *)
 (*   - 纯构造性：全件 Qed/Defined，零公理声明词、零认授、零经典逻辑；   *)
 (*   - Set 层：主语句面 hl_le_t : Set（Id (Nat.leb a b) true 型，    *)
 (*     与 S02 QleT' = Id (Qle_bool x y) true 同构，零 Prop 泄露；    *)
 (*     支撑引理 nat 层 Prop 面仅作推理脚手架，照 Ln2Escape 先例）；  *)
 (*   - 非平凡：hl_binom Pascal 递归定义 + 双参数归纳界 + lcm 列表机   *)
 (*     整除/上界桥皆真构造，非占位；件①未达已显式登记非默默降级；    *)
-(*   - 可提取：hl_lcm_upto/hl_binom 皆 Fixpoint 可执行；G3 探针       *)
+(*   - 可提取：hl_lcm_upto/hl_binom 皆 Fixpoint 可执行；G3 检验       *)
 (*     Separate Extraction 验证 Obj.magic = 0。                    *)
 (* 依赖：纯 Stdlib（Arith/Factorial/Lia），零项目件、零自建 .vo——   *)
 (*   G2 免基座墙，交付物仅本 .v 源码（信任缓存纪律）。               *)
@@ -71,11 +71,10 @@ Proof. intros A x y H. induction H. reflexivity. Qed.
 
 Definition hl_le_t (a b : nat) : Set := hl_id (Nat.leb a b) true.
 
-(* 四要素·宣言件：Prop 面 le 与 Set 面 hl_le_t 的双向桥（脚手架） *)
+(* 四要素·声明件：Prop 面 le 与 Set 面 hl_le_t 的双向桥（脚手架） *)
 Lemma hl_le_to_le_t : forall a b : nat, a <= b -> hl_le_t a b.
 Proof.
-  intros a b H. apply Nat.leb_le in H.
-  unfold hl_le_t. rewrite H. apply hl_idrefl.
+  intros a b H. apply Nat.leb_le in H. unfold hl_le_t. rewrite H. exact (hl_idrefl true).
 Qed.
 
 Lemma hl_le_t_to_le : forall a b : nat, hl_le_t a b -> a <= b.
@@ -125,7 +124,7 @@ Qed.
 (* 单点界核（非平凡主归纳）：任意二项式系数 ≤ 2^n（全 n,k，无前提——
    越界系数为 0 自动被归纳覆盖）。
    归纳步：C(S n, S k) = C(n,k) + C(n,k+1) ≤ 2^n + 2^n = 2^{S n}
-   （双参数归纳假设 (n,k) 与 (n,k+1) 皆消费） *)
+   （双参数归纳假设 (n,k) 与 (n,k+1) 皆依存） *)
 Lemma hl_binom_le_pow2 : forall n k : nat, hl_binom n k <= 2 ^ n.
 Proof.
   induction n as [| n IH]; intro k.
@@ -189,7 +188,7 @@ Proof.
   exists (q * p)%nat. rewrite Hq. rewrite Hp. ring.
 Qed.
 
-(* 中转桥一：1 ≤ m ≤ n ⟹ m | L(n)（逐层折叠，stdlib divide_lcm 双腿） *)
+(* 中转桥一：1 ≤ m ≤ n ⟹ m | L(n)（逐层折叠，stdlib divide_lcm 双肢） *)
 Lemma hl_lcm_divide_all : forall n m : nat,
   1 <= m -> m <= n -> Nat.divide m (hl_lcm_upto n).
 Proof.
@@ -236,9 +235,9 @@ Qed.
    kernel conv 在温控并发下对 divmod 链是分钟级墙钟坑
    （E-STAGING-CZR14 卡），可执行性见证改由 G3 提取面承担。 *)
 Theorem hl_lcm_le_fact_t : forall n : nat, hl_le_t (hl_lcm_upto n) (fact n).
-Proof. intro n. apply hl_le_to_le_t. apply hl_lcm_le_fact. Qed.
+Proof. intro n. exact (hl_le_to_le_t (hl_lcm_upto n) (fact n) (hl_lcm_le_fact n)). Qed.
 
-(* 与件②的耦合展示（战役接线预览）：C(24,12) ≤ 4^12 于 Set 面。
+(* 与件②的耦合展示（战役实例化预览）：C(24,12) ≤ 4^12 于 Set 面。
    打点纪律：12 实例上禁用 apply——unify 的 whd 会把 hl_binom 24 12
    完整数值化（unary 270 万构造子，温控并发下 14 分钟级墙钟坑，
    已实测入 E-STAGING-CZR14 卡）；exact 显式实例只比参数 conv，轻。 *)

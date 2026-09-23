@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* T242 · ToyR 战役 包D · S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
-(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 收口。    *)
+(* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 闭合。    *)
 (* 替换段：clip_lower / ppo_gap_nonneg / sigmoid_pos /            *)
 (*         u2_align_objective_ext                                  *)
 (* 其余正文与基线原件逐字节同源；文件尾附替换件 Print Assumptions。*)
@@ -263,12 +263,7 @@ Lemma align_partition_condition :
   Id Z_align (sum_over_S (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy s)))).
 Proof.
   unfold Z_align.
-  assert (Hext : Id (sum_over_S (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))
-                   (sum_over_S (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy s)))))
-    by exact (sum_over_S_ext (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s)))))
-                             (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy s)))
-                             (fun s => id_sym (align_energy_exp s))).
-  exact Hext.
+  exact (sum_over_S_ext (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))) (fun s => exp_neg (mult (inv_pos beta beta_pos) (align_energy s))) (fun s => id_sym (align_energy_exp s))).
 Qed.
 
 (* ============================================================ *)
@@ -312,32 +307,22 @@ Lemma align_boltzmann_is_pi_star :
     Id (boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s)
        (pi_star s).
 Proof.
-  intro s.
-  unfold boltzmann_dist, pi_star.
-  assert (Hexp : Id (exp_neg (mult (inv_pos beta beta_pos) (align_energy s)))
-                    (mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))
-    by exact (align_energy_exp s).
-  exact (id_cong (fun x => mult (inv_pos Z_align Z_align_pos) x) Hexp).
+  intro s. unfold boltzmann_dist, pi_star.
+  exact (id_cong (fun x => mult (inv_pos Z_align Z_align_pos) x) (align_energy_exp s)).
 Qed.
 
 (* 对齐 Boltzmann 归一化（pi_star_normalized + 外延） *)
 Lemma align_boltzmann_normalized :
   Id (sum_over_S (fun s => boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s)) one.
 Proof.
-  assert (Hext : Id (sum_over_S (fun s => boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s))
-                   (sum_over_S pi_star))
-    by (apply sum_over_S_ext; intro s; exact (align_boltzmann_is_pi_star s)).
-  exact (id_trans Hext pi_star_normalized).
+  exact (id_trans (sum_over_S_ext (fun s => boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s) pi_star (fun s => align_boltzmann_is_pi_star s)) pi_star_normalized).
 Qed.
 
 (* 对齐 Boltzmann 正性（pi_star_pos + lt_id_l） *)
 Lemma align_boltzmann_pos :
   forall s : S, lt zero (boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s).
 Proof.
-  intro s.
-  apply (lt_id_r zero (pi_star s) (boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s)).
-  - exact (id_sym (align_boltzmann_is_pi_star s)).
-  - exact (pi_star_pos s).
+  intro s. exact (lt_id_r zero (pi_star s) (boltzmann_dist align_energy beta beta_pos Z_align Z_align_pos s) (id_sym (align_boltzmann_is_pi_star s)) (pi_star_pos s)).
 Qed.
 
 (* RLHF 最优性：J(pi) <= J(pi_star)（对齐目标在奖励加权 Boltzmann 处最大）
@@ -396,11 +381,8 @@ Theorem dpo_optimal :
     normalized pi -> positive_dist pi ->
     le (dpo_loss pi_star) (dpo_loss pi).
 Proof.
-  intros pi Hnpi Hppi.
-  unfold dpo_loss.
-  assert (Hopt : le (align_objective pi) (align_objective pi_star))
-    by exact (rlhf_optimal pi Hnpi Hppi).
-  apply (opp_le_compat (align_objective pi) (align_objective pi_star) Hopt).
+  intros pi Hnpi Hppi. unfold dpo_loss.
+  exact (opp_le_compat (align_objective pi) (align_objective pi_star) (rlhf_optimal pi Hnpi Hppi)).
 Qed.
 
 (* ============================================================ *)
@@ -418,9 +400,7 @@ Qed.
 (* 取负的逆：-a = -b ⟹ a = b（double_neg 两折） *)
 Lemma opp_eq : forall a b : R, Id (opp a) (opp b) -> Id a b.
 Proof.
-  intros a b Hab.
-  assert (H1 : Id (opp (opp a)) (opp (opp b))) by exact (id_cong opp Hab).
-  exact (id_trans (id_sym (double_neg a)) (id_trans H1 (double_neg b))).
+  intros a b Hab. exact (id_trans (id_sym (double_neg a)) (id_trans (id_cong opp Hab) (double_neg b))).
 Qed.
 
 Theorem rlhf_optimal_unique :
@@ -482,13 +462,8 @@ Definition kl_to_ref (pi : S -> R) : R :=
 Lemma minus_minus_distr : forall a b c : R,
   Id (minus (minus a b) c) (minus a (plus b c)).
 Proof.
-  intros a b c.
-  unfold minus.
-  assert (H1 : Id (plus (plus a (opp b)) (opp c)) (plus a (plus (opp b) (opp c))))
-    by exact (id_sym (plus_assoc a (opp b) (opp c))).
-  assert (H2 : Id (plus a (plus (opp b) (opp c))) (plus a (opp (plus b c))))
-    by exact (id_cong (fun x => plus a x) (id_sym (opp_plus b c))).
-  exact (id_trans H1 H2).
+  intros a b c. unfold minus.
+  exact (id_trans (id_sym (plus_assoc a (opp b) (opp c))) (id_cong (fun x => plus a x) (id_sym (opp_plus b c)))).
 Qed.
 
 (* KL(p||p) = 0（自相对熵为零；Gibbs 等号条件的平凡方向） *)
@@ -910,7 +885,7 @@ Definition is_objective_of (pi pi_old : S -> R) (adv : S -> R)
 Lemma ppo_clip_upper :
   forall r low high, le (ppo_clip r low high) high.
 Proof.
-  intros r low high. unfold ppo_clip. apply min_le_r.
+  intros r low high. unfold ppo_clip. exact (min_le_r (r_max low r) high).
 Qed.
 
 (* DPO 隐式奖励的显式对数形式（与 dpo_implicit_reward 逐点恒等） *)
@@ -1213,29 +1188,7 @@ Theorem exact_improvement_identity :
               (mult beta (kl_to_ref pi_new))).
 Proof.
   intros pi_new Hnorm Hpos.
-  (* J(pi_new) = J(pi_ref) + E_new[A_ref] − beta·KL(pi_new‖pi_ref) *)
-  assert (Hnew : Id (align_objective pi_new)
-                    (plus (align_objective pi_ref)
-                          (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s)))
-                                 (mult beta (kl_to_ref pi_new)))))
-    by exact (align_objective_advantage_decomp pi_new Hnorm Hpos).
-  (* 两侧减 J(pi_ref)：minus (J_ref + X) J_ref = X（minus_plus_cancel_r） *)
-  assert (Hdiff : Id (minus (align_objective pi_new) (align_objective pi_ref))
-                     (minus (plus (align_objective pi_ref)
-                                  (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s)))
-                                         (mult beta (kl_to_ref pi_new))))
-                            (align_objective pi_ref)))
-    by exact (id_cong (fun x => minus x (align_objective pi_ref)) Hnew).
-  assert (Hcancel : Id (minus (plus (align_objective pi_ref)
-                                    (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s)))
-                                           (mult beta (kl_to_ref pi_new))))
-                              (align_objective pi_ref))
-                       (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s)))
-                              (mult beta (kl_to_ref pi_new))))
-    by exact (minus_plus_cancel_r (align_objective pi_ref)
-                                  (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s)))
-                                         (mult beta (kl_to_ref pi_new)))).
-  exact (id_trans Hdiff Hcancel).
+  exact (id_trans (id_cong (fun x => minus x (align_objective pi_ref)) (align_objective_advantage_decomp pi_new Hnorm Hpos)) (minus_plus_cancel_r (align_objective pi_ref) (minus (sum_over_S (fun s => mult (pi_new s) (advantage pi_ref s))) (mult beta (kl_to_ref pi_new))))).
 Qed.
 
 (* PPO 单调改进：E_{π_new}[A_ref] − β·KL(π_new‖π_ref) ≥ 0
@@ -1387,20 +1340,8 @@ Qed.
 Theorem ppo_gap_nonneg :
   le zero (minus is_objective ppo_objective).
 Proof.
-  (* 就地展开 le_minus_nonneg 桥（原语三步直构，消桥跳）：
-     minus 定义层展开为 plus·opp；ppo_conservative 保序经
-     le_plus_compat 抬升；plus_opp 自逆归零；le_id_l 值代入收口 *)
-  assert (Hcon : le ppo_objective is_objective) by exact ppo_conservative.
   unfold minus.
-  assert (H1 : le (plus ppo_objective (opp ppo_objective))
-                  (plus is_objective (opp ppo_objective)))
-    by exact (le_plus_compat ppo_objective is_objective
-                (opp ppo_objective) (opp ppo_objective)
-                Hcon (le_refl (opp ppo_objective))).
-  assert (H2 : Id (plus ppo_objective (opp ppo_objective)) zero)
-    by exact (plus_opp ppo_objective).
-  exact (le_id_l zero (plus ppo_objective (opp ppo_objective))
-           (plus is_objective (opp ppo_objective)) (id_sym H2) H1).
+  exact (le_id_l zero (plus ppo_objective (opp ppo_objective)) (plus is_objective (opp ppo_objective)) (id_sym (plus_opp ppo_objective)) (le_plus_compat ppo_objective is_objective (opp ppo_objective) (opp ppo_objective) ppo_conservative (le_refl (opp ppo_objective)))).
 Qed.
 
 (* ============================================================ *)
@@ -1455,12 +1396,8 @@ Definition dpo_pair_loss_star (pref : Preference) : R :=
 Theorem dpo_pair_loss_at_star : forall pref : Preference,
   Id (dpo_pair_loss pi_star pref) (dpo_pair_loss_star pref).
 Proof.
-  intro pref.
-  unfold dpo_pair_loss, dpo_pair_loss_star.
-  assert (Hdiff : Id (implicit_reward_diff pi_star pref)
-                     (minus (reward (pref_win pref)) (reward (pref_lose pref))))
-    by exact (pi_star_implicit_reward_diff pref).
-  exact (id_cong (fun x => log (plus one (exp_neg x))) Hdiff).
+  intro pref. unfold dpo_pair_loss, dpo_pair_loss_star.
+  exact (id_cong (fun x => log (plus one (exp_neg x))) (pi_star_implicit_reward_diff pref)).
 Qed.
 
 (* 数据集级聚合：总损失 = 单对损失的 fold *)
@@ -1575,13 +1512,8 @@ Qed.
 Lemma minus_opp_opp :
   forall a b : R, Id (minus (opp a) (opp b)) (minus b a).
 Proof.
-  intros a b.
-  unfold minus.
-  assert (H1 : Id (plus (opp a) (opp (opp b))) (plus (opp a) b))
-    by exact (id_cong (fun x => plus (opp a) x) (double_neg b)).
-  assert (H2 : Id (plus (opp a) b) (plus b (opp a)))
-    by exact (plus_comm (opp a) b).
-  exact (id_trans H1 H2).
+  intros a b. unfold minus.
+  exact (id_trans (id_cong (fun x => plus (opp a) x) (double_neg b)) (plus_comm (opp a) b)).
 Qed.
 
 (* Σ pi·opp g = opp (Σ pi·g)（sum_opp + 逐点 opp_mult_l） *)
@@ -1591,13 +1523,7 @@ Lemma sum_mult_opp_r :
        (opp (sum_over_S (fun s => mult (pi s) (g s)))).
 Proof.
   intros pi g.
-  assert (H1 : Id (sum_over_S (fun s => mult (pi s) (opp (g s))))
-                 (sum_over_S (fun s => opp (mult (pi s) (g s)))))
-    by (apply sum_over_S_ext; intro s; exact (opp_mult_l _ _)).
-  assert (H2 : Id (sum_over_S (fun s => opp (mult (pi s) (g s))))
-                 (opp (sum_over_S (fun s => mult (pi s) (g s)))))
-    by exact (sum_opp _).
-  exact (id_trans H1 H2).
+  exact (id_trans (sum_over_S_ext (fun s => mult (pi s) (opp (g s))) (fun s => opp (mult (pi s) (g s))) (fun s => opp_mult_l (pi s) (g s))) (sum_opp (fun s => mult (pi s) (g s)))).
 Qed.
 
 (* RLHF 自由能-KL 恒等式：F_align[pi] = F_align[pi* ] + β·KL(pi‖pi* )
@@ -2353,15 +2279,8 @@ Variable log_lt_mono :
 Lemma sigmoid_strict_inc : forall x y : R,
   lt x y -> lt (sigmoid x) (sigmoid y).
 Proof.
-  intros x y Hxy.
-  unfold sigmoid.
-  (* exp_neg_decr：x < y ⟹ e^{-y} < e^{-x} *)
-  assert (Hexp : lt (exp_neg y) (exp_neg x)) by exact (exp_neg_decr x y Hxy).
-  (* 分母：1 + e^{-y} < 1 + e^{-x}（le one one + Hexp 混合保序） *)
-  assert (Hden : lt (plus one (exp_neg y)) (plus one (exp_neg x)))
-    by exact (lt_plus_compat_le_lt one one (exp_neg y) (exp_neg x) (le_refl one) Hexp).
-  exact (inv_pos_lt_contra (plus one (exp_neg y)) (plus one (exp_neg x))
-                           (sigmoid_denom_pos y) (sigmoid_denom_pos x) Hden).
+  intros x y Hxy. unfold sigmoid.
+  exact (inv_pos_lt_contra (plus one (exp_neg y)) (plus one (exp_neg x)) (sigmoid_denom_pos y) (sigmoid_denom_pos x) (lt_plus_compat_le_lt one one (exp_neg y) (exp_neg x) (le_refl one) (exp_neg_decr x y Hxy))).
 Qed.
 
 (* σ(0) = 1/(1+1) = inv_pos 2：exp_neg_zero 折叠 + inv_pos_ext *)
@@ -2369,11 +2288,7 @@ Lemma sigmoid_zero_half :
   Id (sigmoid zero) (inv_pos (plus one one) two_pos).
 Proof.
   unfold sigmoid.
-  assert (He : Id (exp_neg zero) one) by exact (exp_neg_zero).
-  assert (Hp : Id (plus one (exp_neg zero)) (plus one one))
-    by exact (id_cong (fun x => plus one x) He).
-  exact (inv_pos_ext (plus one (exp_neg zero)) (plus one one)
-                     (sigmoid_denom_pos zero) two_pos Hp).
+  exact (inv_pos_ext (plus one (exp_neg zero)) (plus one one) (sigmoid_denom_pos zero) two_pos (id_cong (fun x => plus one x) exp_neg_zero)).
 Qed.
 
 (* DPO 损失在 π* 处有界：r_w > r_l ⟹ L_DPO(π*, s_w, s_l) < log 2
@@ -2750,14 +2665,8 @@ Lemma free_energy_ext_t12 :
     (forall s : S, Id (p s) (q s)) ->
     Id (free_energy energy D p) (free_energy energy D q).
 Proof.
-  intros energy D p q Hpq.
-  unfold free_energy.
-  apply (id_cong2 plus
-         (sum_over_S_ext (fun s => mult (p s) (energy s)) (fun s => mult (q s) (energy s))
-                         (fun s => id_cong (fun x => mult x (energy s)) (Hpq s)))
-         (id_cong (fun x => mult D x)
-                  (sum_over_S_ext (fun s => mult (p s) (log (p s))) (fun s => mult (q s) (log (q s)))
-                                  (fun s => id_cong2 mult (Hpq s) (id_cong log (Hpq s)))))).
+  intros energy D p q Hpq. unfold free_energy.
+  exact (id_cong2 plus (sum_over_S_ext (fun s => mult (p s) (energy s)) (fun s => mult (q s) (energy s)) (fun s => id_cong (fun x => mult x (energy s)) (Hpq s))) (id_cong (fun x => mult D x) (sum_over_S_ext (fun s => mult (p s) (log (p s))) (fun s => mult (q s) (log (q s))) (fun s => id_cong2 mult (Hpq s) (id_cong log (Hpq s)))))).
 Qed.
 
 (* 引理 E：相对自由能分解 *)
@@ -2931,14 +2840,7 @@ Lemma beta_eta_inv_absorb_t12 : forall (a : R),
   Id (mult beta (mult (mult eta (inv_pos beta beta_pos)) a)) (mult eta a).
 Proof.
   intro a.
-  apply (id_trans (mult_assoc beta (mult eta (inv_pos beta beta_pos)) a)).
-  apply (id_trans (id_cong (fun x => mult x a)
-    (id_trans (mult_assoc beta eta (inv_pos beta beta_pos))
-              (id_trans (id_cong (fun x => mult x (inv_pos beta beta_pos)) (mult_comm beta eta))
-                        (id_sym (mult_assoc eta beta (inv_pos beta beta_pos))))))).
-  apply (id_cong (fun x => mult x a)
-               (id_trans (id_cong (fun x => mult eta x) (inv_pos_correct beta beta_pos))
-                         (mult_one eta))).
+  exact (id_trans (mult_assoc beta (mult eta (inv_pos beta beta_pos)) a) (id_trans (id_cong (fun x => mult x a) (id_trans (mult_assoc beta eta (inv_pos beta beta_pos)) (id_trans (id_cong (fun x => mult x (inv_pos beta beta_pos)) (mult_comm beta eta)) (id_sym (mult_assoc eta beta (inv_pos beta beta_pos)))))) (id_cong (fun x => mult x a) (id_trans (id_cong (fun x => mult eta x) (inv_pos_correct beta beta_pos)) (mult_one eta))))).
 Qed.
 
 Lemma F_t_simpl_next :
@@ -3148,11 +3050,7 @@ Qed.
 Lemma le_mult_nonneg_t12 : forall a b : R, le zero a -> le zero b -> le zero (mult a b).
 Proof.
   intros a b Ha Hb.
-  assert (Hstep : le (mult zero b) (mult a b))
-    by exact (le_mult_compat_weak zero a b Hb Ha).
-  assert (Hl : Id (mult zero b) zero)
-    by (apply (id_trans (mult_comm zero b)); apply mult_zero).
-  exact (le_id_l zero (mult zero b) (mult a b) (id_sym Hl) Hstep).
+  exact (le_id_l zero (mult zero b) (mult a b) (id_sym (id_trans (mult_comm zero b) (mult_zero b))) (le_mult_compat_weak zero a b Hb Ha)).
 Qed.
 
 (* 右分配减法：mult (minus a b) c == minus (mult a c) (mult b c) *)
@@ -3528,8 +3426,8 @@ Proof.
                  (id_sym Hdiff) Hstep).
 Qed.
 (* ============================================================ *)
-(* T1.3：策略迭代向后 KL 显式递推（论文1 几何收敛的镜像下降核心） *)
-(*   相对熵镜像下降（entropic mirror descent）的三点恒等式组装： *)
+(* T1.3：策略迭代向后 KL 显式递推（论文1 几何收敛的副本下降核心） *)
+(*   相对熵副本下降（entropic mirror descent）的三点恒等式组装： *)
 (*   KL(pi_star‖pi_{t+1}) == (1−ηβ)·KL(pi_star‖pi_t) − η·KL(pi_t‖pi_star)    *)
 (*                        + KL(pi_t‖pi_{t+1})                     *)
 (*   构件：F_t 分解（F_t_decomp_p）+ F_t 展开（F_t_simpl_p）+     *)
@@ -3647,7 +3545,7 @@ Proof.
            (fun s => id_sym (mult_minus_distr_r (Np s) (pi_t s) (A s))))).
 Qed.
 
-(* 镜像步最优性（surrogate ÷ η）：Σ(pi_next − pi_t)·A_t == (β/η)·(KL(pi_next‖pi_t) + KL(pi_t‖pi_next)) *)
+(* 副本步最优性（surrogate ÷ η）：Σ(pi_next − pi_t)·A_t == (β/η)·(KL(pi_next‖pi_t) + KL(pi_t‖pi_next)) *)
 Lemma grad_cross_identity :
   forall (pi_t : S -> R) (pi_t_pos : forall s : S, lt zero (pi_t s))
          (pi_t_norm : Id (sum_over_S pi_t) one)
@@ -3805,12 +3703,8 @@ Lemma minus_opp_opp_mult_t13 : forall (a b : R),
   Id (minus (opp (mult eta a)) (opp (mult eta b)))
      (mult eta (minus b a)).
 Proof.
-  intros a b.
-  unfold minus.
-  apply (id_trans (id_cong (fun x => plus (opp (mult eta a)) x) (double_neg (mult eta b)))
-         (id_trans (plus_comm (opp (mult eta a)) (mult eta b))
-         (id_trans (id_cong (fun x => plus (mult eta b) x) (id_sym (opp_mult_l eta a)))
-                   (id_sym (distrib eta b (opp a)))))).
+  intros a b. unfold minus.
+  exact (id_trans (id_cong (fun x => plus (opp (mult eta a)) x) (double_neg (mult eta b))) (id_trans (plus_comm (opp (mult eta a)) (mult eta b)) (id_trans (id_cong (fun x => plus (mult eta b) x) (id_sym (opp_mult_l eta a))) (id_sym (distrib eta b (opp a)))))).
 Qed.
 
 (* 主定理辅助 1：Hexp——minus 展开到 mult 形式 *)
@@ -3844,25 +3738,16 @@ Qed.
 Lemma minus_split_t13 : forall a b c : R,
   Id (minus a c) (plus (minus a b) (minus b c)).
 Proof.
-  intros a b c.
-  unfold minus.
-  apply (id_trans (id_sym (id_cong (fun x => plus x (opp c)) (plus_zero a)))
-         (id_trans (id_sym (id_cong (fun x => plus (plus a x) (opp c))
-                                    (id_trans (plus_comm (opp b) b) (plus_opp b))))
-         (id_trans (id_sym (id_cong (fun x => plus x (opp c))
-                                    (id_sym (plus_assoc a (opp b) b))))
-                   (id_sym (plus_assoc (plus a (opp b)) b (opp c)))))).
+  intros a b c. unfold minus.
+  exact (id_trans (id_sym (id_cong (fun x => plus x (opp c)) (plus_zero a))) (id_trans (id_sym (id_cong (fun x => plus (plus a x) (opp c)) (id_trans (plus_comm (opp b) b) (plus_opp b)))) (id_trans (id_sym (id_cong (fun x => plus x (opp c)) (id_sym (plus_assoc a (opp b) b)))) (id_sym (plus_assoc (plus a (opp b)) b (opp c)))))).
 Qed.
 
 (* minus (plus a b) b == a（minus_plus_cancel_gap 的逆形态） *)
 Lemma minus_plus_cancel_gap_rev_t13 : forall a b : R,
   Id (minus (plus a b) b) a.
 Proof.
-  intros a b.
-  unfold minus.
-  apply (id_trans (id_sym (plus_assoc a b (opp b)))
-         (id_trans (id_cong (fun x => plus a x) (plus_opp b))
-                   (plus_zero a))).
+  intros a b. unfold minus.
+  exact (id_trans (id_sym (plus_assoc a b (opp b))) (id_trans (id_cong (fun x => plus a x) (plus_opp b)) (plus_zero a))).
 Qed.
 
 (* 坍缩：a 与 −a 抵消，e − d 与 b 重组 *)
@@ -4176,9 +4061,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* A-1：T1.3 几何收敛上界（镜像下降迭代的显式递推）           *)
-(*   pi_{t+1} := pi_next pi_t（相对熵镜像下降单步）              *)
-(*   1) policy_iterate：sigT 打包的迭代 Fixpoint（正性内嵌）     *)
+(* A-1：T1.3 几何收敛上界（副本下降迭代的显式递推）           *)
+(*   pi_{t+1} := pi_next pi_t（相对熵副本下降单步）              *)
+(*   1) policy_iterate：sigT 封装的迭代 Fixpoint（正性内嵌）     *)
 (*   2) policy_iter_norm：迭代保持归一化                          *)
 (*   3) step_kl_weighted：加权步长 KL 和（κ^{t-1-i} 权重）        *)
 (*   4) policy_iter_backward_kl_iter_le：                        *)
@@ -4198,7 +4083,7 @@ Qed.
 (*      KL(pi*‖pi_t) ≤ (1−η)^t·KL(pi*‖pi_0)                     *)
 (* ============================================================ *)
 
-(* 迭代 Fixpoint：分布 + 正性证明打包为 sigT（可提取） *)
+(* 迭代 Fixpoint：分布 + 正性证明封装为 sigT（可提取） *)
 Fixpoint policy_iterate (t : nat) (pi : S -> R)
          (pi_pos : forall s : S, lt zero (pi s)) :
   { pi' : S -> R & forall s : S, lt zero (pi' s) } :=
@@ -4412,14 +4297,8 @@ Lemma policy_iter_gap_mono :
     le (minus (align_objective pi_star) (align_objective (pi_next pi_t pi_t_pos)))
        (minus (align_objective pi_star) (align_objective pi_t)).
 Proof.
-  intros pi_t pi_t_pos pi_t_norm.
-  unfold minus.
-  apply (le_plus_compat (align_objective pi_star) (align_objective pi_star)
-                         (opp (align_objective (pi_next pi_t pi_t_pos)))
-                         (opp (align_objective pi_t))
-                         (le_refl (align_objective pi_star))
-                         (opp_le_compat (align_objective pi_t) (align_objective (pi_next pi_t pi_t_pos))
-                                        (policy_improvement_mono pi_t pi_t_pos pi_t_norm))).
+  intros pi_t pi_t_pos pi_t_norm. unfold minus.
+  exact (le_plus_compat (align_objective pi_star) (align_objective pi_star) (opp (align_objective (pi_next pi_t pi_t_pos))) (opp (align_objective pi_t)) (le_refl (align_objective pi_star)) (opp_le_compat (align_objective pi_t) (align_objective (pi_next pi_t pi_t_pos)) (policy_improvement_mono pi_t pi_t_pos pi_t_norm))).
 Qed.
 
 (* ============================================================
@@ -4442,21 +4321,14 @@ Variable step_kl_eta_bound : forall (pi_t : S -> R) (pi_t_pos : forall s : S, lt
 Lemma plus_opp_le_zero : forall (B C : R), le C B -> le (plus (opp B) C) zero.
 Proof.
   intros B C HCB.
-  assert (H1 : le (plus (opp B) C) (plus (opp B) B))
-    by (apply (le_plus_compat (opp B) (opp B) C B (le_refl (opp B)) HCB)).
-  exact (le_id_r (plus (opp B) C) (plus (opp B) B) zero
-                 (id_trans (plus_comm (opp B) B) (plus_opp B))
-                 H1).
+  exact (le_id_r (plus (opp B) C) (plus (opp B) B) zero (id_trans (plus_comm (opp B) B) (plus_opp B)) (le_plus_compat (opp B) (opp B) C B (le_refl (opp B)) HCB)).
 Qed.
 
 (* plus A (plus (opp B) C) ≤ A  whenever  C ≤ B *)
 Lemma plusA_opp_cancel_le : forall (A B C : R), le C B -> le (plus A (plus (opp B) C)) A.
 Proof.
   intros A B C HCB.
-  pose proof (plus_opp_le_zero B C HCB) as Hz.
-  assert (Hadd : le (plus A (plus (opp B) C)) (plus A zero))
-    by (apply (le_plus_compat A A (plus (opp B) C) zero (le_refl A) Hz)).
-  exact (le_id_r (plus A (plus (opp B) C)) (plus A zero) A (plus_zero A) Hadd).
+  exact (le_id_r (plus A (plus (opp B) C)) (plus A zero) A (plus_zero A) (le_plus_compat A A (plus (opp B) C) zero (le_refl A) (plus_opp_le_zero B C HCB))).
 Qed.
 
 (* ============================================================
@@ -4569,10 +4441,8 @@ Theorem dpo_loss_iter_step_le :
          (pi_t_norm : Id (sum_over_S pi_t) one),
     le (dpo_loss (pi_next pi_t pi_t_pos)) (dpo_loss pi_t).
 Proof.
-  intros pi_t pi_t_pos pi_t_norm.
-  unfold dpo_loss.
-  apply (opp_le_compat (align_objective pi_t) (align_objective (pi_next pi_t pi_t_pos))).
-  exact (policy_improvement_mono pi_t pi_t_pos pi_t_norm).
+  intros pi_t pi_t_pos pi_t_norm. unfold dpo_loss.
+  exact (opp_le_compat (align_objective pi_t) (align_objective (pi_next pi_t pi_t_pos)) (policy_improvement_mono pi_t pi_t_pos pi_t_norm)).
 Qed.
 
 (* 迭代：dpo_loss(pi_{t+1}) ≤ dpo_loss(pi_t)（policy_iterate 轨道） *)
@@ -4596,14 +4466,14 @@ End Alignment.
 
 (* ============================================================ *)
 (* U2 改进算子不动点与等值刻画                                  *)
-(* （镜像 Section U2FixedPoint，整节后置于 End Alignment.）；     *)
+(* （副本 Section U2FixedPoint，整节后置于 End Alignment.）；     *)
 (* 来源：演变/.ablation/sc2_u2_fixed/u2_fixedpoint.v；10 Qed；    *)
 (* 零公理面、零承认件、零经典逻辑。                              *)
 (* ============================================================ *)
 
 Section U2FixedPoint.
 
-(* ---- 镜像 Section Alignment 的声明（同名同序；未用变量不声明） ---- *)
+(* ---- 副本 Section Alignment 的声明（同名同序；未用变量不声明） ---- *)
 Context {RI : RealInterfaceEnhanced}.
 Context {SS : StateSpace RI}.
 Context {SO : SumOver RI SS}.
@@ -4704,7 +4574,7 @@ Proof.
   intros p q Hpq.
   (* 定义层展开＋显式构造项：align_objective 两侧展开为
      opp (free_energy …)，逐点相等经 free_energy_ext 后以
-     opp 的全参映射 id_cong 一次注入收口（消 apply 两跳） *)
+     opp 的全参映射 id_cong 一次注入闭合（消 apply 两跳） *)
   unfold align_objective.
   exact (id_cong opp (free_energy_ext p q Hpq)).
 Qed.
@@ -5576,11 +5446,7 @@ Lemma inv_G_absorb : forall (G : R) (Hg : lt zero G) (x : R),
   Id (mult (inv_pos G Hg) (mult G x)) x.
 Proof.
   intros G Hg x.
-  apply (id_trans (mult_assoc (inv_pos G Hg) G x)).
-  apply (id_trans (id_cong (fun z => mult z x)
-                           (id_trans (mult_comm (inv_pos G Hg) G) (inv_pos_correct G Hg)))).
-  apply (id_trans (mult_comm one x)).
-  apply (mult_one x).
+  exact (id_trans (mult_assoc (inv_pos G Hg) G x) (id_trans (id_cong (fun z => mult z x) (id_trans (mult_comm (inv_pos G Hg) G) (inv_pos_correct G Hg))) (id_trans (mult_comm one x) (mult_one x)))).
 Qed.
 
 (* ===== 主定理：group_variance == (1/G)·Σr² − μ² =====

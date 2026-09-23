@@ -2825,7 +2825,7 @@ Definition ng_PintPosGrid : NewGreenFace :=
   MkNewGreenFace "PintPosGrid.v" 179 8 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions" "L179:mb4d650".
 (* ng_BeukersIdentity —— BeukersIdentity.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
 Definition ng_BeukersIdentity : NewGreenFace :=
-  MkNewGreenFace "BeukersIdentity.v" 265 15 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions" "L265:m282de5".
+  MkNewGreenFace "BeukersIdentity.v" 265 15 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions" "L265:mb2a825".
 (* ng_BeukersVariant —— BeukersVariant.v：R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_) *)
 Definition ng_BeukersVariant : NewGreenFace :=
   MkNewGreenFace "BeukersVariant.v" 522 30 20260919 "R93 colleague afternoon increment (ln2-chain core family), four-gate green (_tr93aud_); born-in-place verified in vo tree, zero new assumptions" "L536:m8c7d7d".
@@ -3341,3 +3341,242 @@ Definition ng_SecondLawConsume : NewGreenFace :=
    （仅 Print Assumptions 两定理，投影型不受元数变更影响，随树重编 1 件）。 *)
 (* 插位说明：本块为版记尾插；条目扩列为原位改写（A5 扩列特例，区别于注册波尾插红线），
    列表装配/字面值/等式引理全数投影型零触碰。 *)
+(* ================= v4.25 增册（R116 片A 尾插波：47 纯新件注册，20260923；号额实勘：现值 v4.24（A5 扩列波）→ 本席顺延 v4.25；承前 ng_ 共 400 条，本批 47 条后共 447 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.24 块之后；尾插禁重排、只增不改）。 *)
+(* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（v4.24 扩列口径）；本块行数/md5=包版实测（20260923，R116b-PREP 工单包草案），落树后由执行席以树内实测复核回填，ng_qed 为 grep 级计数（token 级双口径归执行席）。 *)
+
+(* ng_PA_AttnSqrt —— PA_AttnSqrt.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_AttnSqrt : NewGreenFace :=
+  MkNewGreenFace "PA_AttnSqrt.v" 276 12 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 c05b40, L276); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L276:mc05b40".
+
+(* ng_PA_CW220_Extensions —— PA_CW220_Extensions.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_CW220_Extensions : NewGreenFace :=
+  MkNewGreenFace "PA_CW220_Extensions.v" 1677 42 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5ad943, L1677); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L1677:m5ad943".
+
+(* ng_PA_DTPT_Bridge_Dep —— PA_DTPT_Bridge_Dep.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_DTPT_Bridge_Dep : NewGreenFace :=
+  MkNewGreenFace "PA_DTPT_Bridge_Dep.v" 317 0 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 124ee5, L317); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L317:m124ee5".
+
+(* ng_PA_ExpOneEnvelope —— PA_ExpOneEnvelope.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_ExpOneEnvelope : NewGreenFace :=
+  MkNewGreenFace "PA_ExpOneEnvelope.v" 527 29 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e2cbe6, L527); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L527:me2cbe6".
+
+(* ng_PA_FirewallReqDischarge —— PA_FirewallReqDischarge.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_FirewallReqDischarge : NewGreenFace :=
+  MkNewGreenFace "PA_FirewallReqDischarge.v" 296 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 4c1bac, L296); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L296:m4c1bac".
+
+(* ng_PA_PolyIntegral —— PA_PolyIntegral.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_PolyIntegral : NewGreenFace :=
+  MkNewGreenFace "PA_PolyIntegral.v" 357 17 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6ba7f6, L357); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L357:m6ba7f6".
+
+(* ng_PA_TempMonoW2Mark —— PA_TempMonoW2Mark.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_TempMonoW2Mark : NewGreenFace :=
+  MkNewGreenFace "PA_TempMonoW2Mark.v" 277 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 1b8f64, L277); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L277:m1b8f64".
+
+(* ng_PA_TempSoftmaxInstantiation —— PA_TempSoftmaxInstantiation.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_TempSoftmaxInstantiation : NewGreenFace :=
+  MkNewGreenFace "PA_TempSoftmaxInstantiation.v" 420 6 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 349ea1, L420); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L420:m349ea1".
+
+(* ng_PA_ToyR_IdSlotTranslate —— PA_ToyR_IdSlotTranslate.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_ToyR_IdSlotTranslate : NewGreenFace :=
+  MkNewGreenFace "PA_ToyR_IdSlotTranslate.v" 195 7 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f064f, L195); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L195:m3f064f".
+
+(* ng_PA_ToyR_SecondLawConsume —— PA_ToyR_SecondLawConsume.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_ToyR_SecondLawConsume : NewGreenFace :=
+  MkNewGreenFace "PA_ToyR_SecondLawConsume.v" 389 9 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 2e8c46, L389); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L389:m2e8c46".
+
+(* ng_PA_ToyR_SupplyAssembly —— PA_ToyR_SupplyAssembly.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_ToyR_SupplyAssembly : NewGreenFace :=
+  MkNewGreenFace "PA_ToyR_SupplyAssembly.v" 347 21 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5fcbe3, L347); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L347:m5fcbe3".
+
+(* ng_PA_ToyR_fa57_ext —— PA_ToyR_fa57_ext.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_ToyR_fa57_ext : NewGreenFace :=
+  MkNewGreenFace "PA_ToyR_fa57_ext.v" 248 11 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 1286ae, L248); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L248:m1286ae".
+
+(* ng_PA_UpAblAbsSumLeB —— PA_UpAblAbsSumLeB.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblAbsSumLeB : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblAbsSumLeB.v" 364 11 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 9a7fdb, L364); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L364:m9a7fdb".
+
+(* ng_PA_UpAblD1S3_fep_UpReqSteadyThermo —— PA_UpAblD1S3_fep_UpReqSteadyThermo.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblD1S3_fep_UpReqSteadyThermo : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblD1S3_fep_UpReqSteadyThermo.v" 165 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6b64c1, L165); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L165:m6b64c1".
+
+(* ng_PA_UpAblD1S4_UpReqStepKLEtaInst —— PA_UpAblD1S4_UpReqStepKLEtaInst.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblD1S4_UpReqStepKLEtaInst : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblD1S4_UpReqStepKLEtaInst.v" 118 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 b7106e, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L118:mb7106e".
+
+(* ng_PA_UpAblD2_AbsLeId_RI_DO —— PA_UpAblD2_AbsLeId_RI_DO.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblD2_AbsLeId_RI_DO : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblD2_AbsLeId_RI_DO.v" 157 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 7e3991, L157); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L157:m7e3991".
+
+(* ng_PA_UpAblMetaWindow —— PA_UpAblMetaWindow.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblMetaWindow : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblMetaWindow.v" 229 0 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 c0901e, L229); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L229:mc0901e".
+
+(* ng_PA_UpAblT1_UpFirewallReq —— PA_UpAblT1_UpFirewallReq.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpAblT1_UpFirewallReq : NewGreenFace :=
+  MkNewGreenFace "PA_UpAblT1_UpFirewallReq.v" 118 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 206e3b, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L118:m206e3b".
+
+(* ng_PA_UpDissip —— PA_UpDissip.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpDissip : NewGreenFace :=
+  MkNewGreenFace "PA_UpDissip.v" 803 38 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 0660de, L803); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L803:m0660de".
+
+(* ng_PA_UpStepKLM3 —— PA_UpStepKLM3.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_PA_UpStepKLM3 : NewGreenFace :=
+  MkNewGreenFace "PA_UpStepKLM3.v" 665 18 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 494c15, L665); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L665:m494c15".
+
+(* ng_ToyR_AbsLeId —— ToyR_AbsLeId.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_AbsLeId : NewGreenFace :=
+  MkNewGreenFace "ToyR_AbsLeId.v" 137 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 c9e06c, L137); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L137:mc9e06c".
+
+(* ng_ToyR_BeukersLists —— ToyR_BeukersLists.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_BeukersLists : NewGreenFace :=
+  MkNewGreenFace "ToyR_BeukersLists.v" 576 29 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 c483b4, L576); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L576:mc483b4".
+
+(* ng_ToyR_BeukersVariant —— ToyR_BeukersVariant.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_BeukersVariant : NewGreenFace :=
+  MkNewGreenFace "ToyR_BeukersVariant.v" 547 30 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3d42c9, L547); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L547:m3d42c9".
+
+(* ng_ToyR_EntropyMonoSplitInst —— ToyR_EntropyMonoSplitInst.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_EntropyMonoSplitInst : NewGreenFace :=
+  MkNewGreenFace "ToyR_EntropyMonoSplitInst.v" 298 8 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 40f3d9, L298); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L298:m40f3d9".
+
+(* ng_ToyR_GibbsFamilyExt —— ToyR_GibbsFamilyExt.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_GibbsFamilyExt : NewGreenFace :=
+  MkNewGreenFace "ToyR_GibbsFamilyExt.v" 454 13 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d3b3d8, L454); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L454:md3b3d8".
+
+(* ng_ToyR_Ln2Integrality —— ToyR_Ln2Integrality.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_Ln2Integrality : NewGreenFace :=
+  MkNewGreenFace "ToyR_Ln2Integrality.v" 508 27 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 871ae3, L508); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L508:m871ae3".
+
+(* ng_ToyR_NatLenPos —— ToyR_NatLenPos.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_NatLenPos : NewGreenFace :=
+  MkNewGreenFace "ToyR_NatLenPos.v" 128 4 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 475527, L128); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L128:m475527".
+
+(* ng_ToyR_Paper12345Sample —— ToyR_Paper12345Sample.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_Paper12345Sample : NewGreenFace :=
+  MkNewGreenFace "ToyR_Paper12345Sample.v" 165 6 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5d0b29, L165); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L165:m5d0b29".
+
+(* ng_ToyR_PhysPredAblation —— ToyR_PhysPredAblation.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_PhysPredAblation : NewGreenFace :=
+  MkNewGreenFace "ToyR_PhysPredAblation.v" 303 13 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3393f5, L303); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L303:m3393f5".
+
+(* ng_ToyR_RateTheoryAblation —— ToyR_RateTheoryAblation.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_RateTheoryAblation : NewGreenFace :=
+  MkNewGreenFace "ToyR_RateTheoryAblation.v" 233 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 7d324c, L233); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L233:m7d324c".
+
+(* ng_ToyR_SecondLawConsume —— ToyR_SecondLawConsume.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_SecondLawConsume : NewGreenFace :=
+  MkNewGreenFace "ToyR_SecondLawConsume.v" 393 9 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 9e3e16, L393); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L393:m9e3e16".
+
+(* ng_ToyR_SumEqListFeed —— ToyR_SumEqListFeed.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_SumEqListFeed : NewGreenFace :=
+  MkNewGreenFace "ToyR_SumEqListFeed.v" 198 8 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 39fb1a, L198); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L198:m39fb1a".
+
+(* ng_ToyR_SumEqListMark —— ToyR_SumEqListMark.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_SumEqListMark : NewGreenFace :=
+  MkNewGreenFace "ToyR_SumEqListMark.v" 200 8 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 948434, L200); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L200:m948434".
+
+(* ng_ToyR_SupplyAssembly —— ToyR_SupplyAssembly.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_SupplyAssembly : NewGreenFace :=
+  MkNewGreenFace "ToyR_SupplyAssembly.v" 351 21 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 8e7e36, L351); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L351:m8e7e36".
+
+(* ng_ToyR_UpAblP6_GibbsFamilyExt —— ToyR_UpAblP6_GibbsFamilyExt.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP6_GibbsFamilyExt : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP6_GibbsFamilyExt.v" 184 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6a07fd, L184); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L184:m6a07fd".
+
+(* ng_ToyR_UpAblP6_UniformLimit —— ToyR_UpAblP6_UniformLimit.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP6_UniformLimit : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP6_UniformLimit.v" 182 3 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6cb954, L182); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L182:m6cb954".
+
+(* ng_ToyR_UpAblP7_AbsNonNeg —— ToyR_UpAblP7_AbsNonNeg.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP7_AbsNonNeg : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP7_AbsNonNeg.v" 374 13 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6d95b2, L374); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L374:m6d95b2".
+
+(* ng_ToyR_UpAblP7_LoHiCross —— ToyR_UpAblP7_LoHiCross.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP7_LoHiCross : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP7_LoHiCross.v" 126 3 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6164aa, L126); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L126:m6164aa".
+
+(* ng_ToyR_UpAblP7_LoHiSqueeze —— ToyR_UpAblP7_LoHiSqueeze.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP7_LoHiSqueeze : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP7_LoHiSqueeze.v" 287 7 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d8d6c8, L287); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L287:md8d6c8".
+
+(* ng_ToyR_UpAblP7_Paper7Ablation_S1inst —— ToyR_UpAblP7_Paper7Ablation_S1inst.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP7_Paper7Ablation_S1inst : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP7_Paper7Ablation_S1inst.v" 292 6 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 bdfade, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L292:mbdfade".
+
+(* ng_ToyR_UpAblP7_UMixSelect —— ToyR_UpAblP7_UMixSelect.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_UpAblP7_UMixSelect : NewGreenFace :=
+  MkNewGreenFace "ToyR_UpAblP7_UMixSelect.v" 209 4 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e31c5b, L209); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L209:me31c5b".
+
+(* ng_ToyR_ZPosSlotFeed —— ToyR_ZPosSlotFeed.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_ZPosSlotFeed : NewGreenFace :=
+  MkNewGreenFace "ToyR_ZPosSlotFeed.v" 179 5 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d912ad, L179); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L179:md912ad".
+
+(* ng_ToyR_fa52_dpo_witness —— ToyR_fa52_dpo_witness.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_fa52_dpo_witness : NewGreenFace :=
+  MkNewGreenFace "ToyR_fa52_dpo_witness.v" 113 4 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 2c5f33, L113); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L113:m2c5f33".
+
+(* ng_ToyR_fa52_entropy_diff_unsat —— ToyR_fa52_entropy_diff_unsat.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_fa52_entropy_diff_unsat : NewGreenFace :=
+  MkNewGreenFace "ToyR_fa52_entropy_diff_unsat.v" 99 2 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d11c00, L99); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L99:md11c00".
+
+(* ng_ToyR_fa56b_ext —— ToyR_fa56b_ext.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_fa56b_ext : NewGreenFace :=
+  MkNewGreenFace "ToyR_fa56b_ext.v" 292 12 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5d4f38, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L292:m5d4f38".
+
+(* ng_ToyR_fa57_ext —— ToyR_fa57_ext.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_fa57_ext : NewGreenFace :=
+  MkNewGreenFace "ToyR_fa57_ext.v" 251 11 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 809125, L251); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L251:m809125".
+
+(* ng_ToyR_fka_weak_triangle_ref —— ToyR_fka_weak_triangle_ref.v：R116 片A 尾插波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）；_tr116bprep_ 草案登记，执行席四门实测回填 20260923） *)
+Definition ng_ToyR_fka_weak_triangle_ref : NewGreenFace :=
+  MkNewGreenFace "ToyR_fka_weak_triangle_ref.v" 42 1 20260923
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f1e63, L42); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L42:m3f1e63".
+

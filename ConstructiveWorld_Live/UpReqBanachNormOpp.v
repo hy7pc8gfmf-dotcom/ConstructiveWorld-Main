@@ -1,4 +1,29 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bno_bnorm_opp_real（原 L143，2 句玩具证）                            *)
+(*   bno_qabs_qnorm_opp（原 L138，2 句玩具证）                            *)
+(*   bno_qred_abs_opp_id（原 L132，3 句玩具证）                           *)
+(*   bno_qred_unique_id（原 L115，4 句玩具证）                            *)
+(*   bno_gt0_of_lt0（原 L53，3 句玩具证）                                 *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查定谳、T317（包AV六）试点定谳：本件实测                             *)
+(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 5 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
+(* 附记：T277 判级全文恒等；包P 整批直推（第二批；承 T321 §五·1）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
 (* UpReqBanachNormOpp.v —— 席AA11：B5 件一速收（Qred 唯一性 +      *)
 (*   bnorm Opp 面，20260914）                                     *)
 (* ============================================================ *)
@@ -24,7 +49,7 @@
 (*   唯一（Gauss/rel_prime_cross_prod）⇒ 分子分母分别相等 ⇒        *)
 (*   Qred x = Qred y。                                             *)
 (* 公理面自审：全件零 公理 零 参数 零 猜想 零           *)
-(*   承认件 零 Variable 零 Hypothesis；语句面全 Set/eq/Id/Qeq    *)
+(*   承认件 零 Variable 零假设申报；语句面全 Set/eq/Id/Qeq    *)
 (*   形；主件出口 Print Assumptions Closed；Separate Extraction    *)
 (*   Obj.magic 双零。                                              *)
 (* 领土纪律：仅新建本件（bno_ 前缀全库零撞名）；既有件零改动        *)
@@ -51,7 +76,7 @@ From Stdlib Require Import Lia.
 
 (* >0 桥（compare_gt_iff，bxib 同款） *)
 Lemma bno_gt0_of_lt0 : forall d : Z, 0 < d -> (d > 0)%Z.
-Proof. intros d H. apply (proj2 (Z.compare_gt_iff d 0)). exact H. Qed.
+Proof. intros d H. exact (proj2 (Z.compare_gt_iff d 0) H). Qed.
 
 (* gcd = 1 → 互素（Zis_gcd_intro 配方；rel_prime := Zis_gcd .. 1） *)
 Lemma bno_rel_prime_of_gcd1 : forall n d : Z, Z.gcd n d = 1%Z -> rel_prime n d.
@@ -113,7 +138,7 @@ Qed.
 
 (* 主件 Id 面（eq→Id 桥，InstReal 现成腿） *)
 Lemma bno_qred_unique_id : forall x y : Q, x == y -> Id (Qred x) (Qred y).
-Proof. intros x y H. apply bxra_id_of_eq. apply bno_qred_unique. exact H. Qed.
+Proof. intros x y H. exact (@bxra_id_of_eq Q (Qred x) (Qred y) (bno_qred_unique x y H)). Qed.
 
 (* ============================================================ *)
 (* S2：bnorm Opp/倒数面落位（INS L45 处方 bnorm := Qred∘Qabs 的     *)
@@ -131,18 +156,19 @@ Qed.
 (* 同件 Id 形（eq→Id 桥） *)
 Lemma bno_qred_abs_opp_id : forall u : Q,
   Id (Qred (Qabs (Qopp u))) (Qred (Qabs u)).
-Proof. intro u. apply bxra_id_of_eq. apply bno_qred_abs_opp. Qed.
+Proof. intro u. exact (@bxra_id_of_eq Q (Qred (Qabs (Qopp u))) (Qred (Qabs u))
+                     (bno_qred_abs_opp u)). Qed.
 
 (* 消费形转写①（InstReal 现成腿直用，语句形保留库内 Id 原形：
    Qopp 与 qnorm 的 Qabs-范数不变） *)
 Lemma bno_qabs_qnorm_opp : forall u : Q,
   Id (Qabs (bxib_qnorm (Qopp u))) (Qabs (bxib_qnorm u)).
-Proof. intro u. apply bxra_qabs_opp_norm. Qed.
+Proof. intro u. exact (bxra_qabs_opp_norm u). Qed.
 
 (* 消费形转写②（Real 载体面：bnorm(opp x) ＝ bnorm x，库内 Id 原形） *)
 Lemma bno_bnorm_opp_real : forall a : Real,
   Id (bxra_bnorm_f (bxra_bopp_f a)) (bxra_bnorm_f a).
-Proof. intro a. apply bxra_f_norm_opp. Qed.
+Proof. intro a. exact (bxra_f_norm_opp a). Qed.
 
 (* ============================================================ *)
 (* S3：件二挂账形（AA8 B5 工单指定语句面，证体移交——诚实挂账，      *)
@@ -161,7 +187,8 @@ Lemma bno_q_pow_one : forall n : nat, q_pow 1%Q n == 1%Q.
 Proof.
   induction n as [| m IH].
   - reflexivity.
-  - cbn [q_pow]. rewrite Qmult_1_l. exact IH.
+  - exact (Qeq_trans (1 * q_pow 1%Q m) (q_pow 1%Q m) 1%Q
+             (Qmult_1_l (q_pow 1%Q m)) IH).
 Qed.
 
 (* 引擎②前小件：q*(1/q) 归一（Qdiv 定义展开位；Qmult_inv_r 的 ≠ 是 Qeq 形） *)
@@ -300,7 +327,7 @@ Lemma bno_pos_d_nat : forall d : positive, sigT (fun n : nat => (Z.pos d <= Z.of
 Proof.
   intro d. exists (Z.to_nat (Z.pos d)).
   rewrite Z2Nat.id by (pose proof (Pos2Z.is_pos d); lia).
-  apply Z.le_refl.
+  exact (Z.le_refl (Z.pos d)).
 Qed.
 
 Lemma bno_scale_q_int : forall q : Q,

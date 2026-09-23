@@ -11,11 +11,11 @@
 (*   ① bk_Qn_list / bk_Qn_eval：Q_n 系数列表（第 k 项 = C(n,k)²，      *)
 (*      nat 层 Pascal 二项式系数 bkC + 平方）与求值面（Horner 折叠）；   *)
 (*   ② bk_Qn_int：q̃_n := 2^n·Q_n(1/2) ∈ Z 的 sigT 整性见证            *)
-(*      （= Σ_k C(n,k)²·2^{n−k}，nat 降幂和 bk_psd 转 Z，QeqT 收口）；  *)
+(*      （= Σ_k C(n,k)²·2^{n−k}，nat 降幂和 bk_psd 转 Z，QeqT 闭合）；  *)
 (*   ③ bk_Qn_ge_3pow：q̃_n ≥ 3^n（C(n,k)² ≥ C(n,k) 逐项 +              *)
 (*      Σ_k C(n,k)·2^{n−k} = 3^n 降幂二项定理，QleT' Set 面）；         *)
 (*   ④ bk_Pn_list / bk_Pn_eval：P_n 谐和系数列表（H_k 的 Q 层承载——    *)
-(*      整化（lcm 整化）留给 P3 封口席，本件只建 Q 层列表与求值面）；    *)
+(*      整化（lcm 整化）留给 P3 闭合席，本件只建 Q 层列表与求值面）；    *)
 (*   ⑤ bk_Qn_sym：C(n,k) = C(n,n−k) 对称引理（后续恒等式归纳用）。      *)
 (*                                                                 *)
 (* 库存勘定（开工三查③）：Rocq 9.1 stdlib 无 nat 层二项式系数/二项定理   *)
@@ -36,7 +36,7 @@
 (*   ② 语句面 Set（主件 sigT/QeqT/QleT'；nat/Z/Q 层支撑引理 Prop 面     *)
 (*      仅作推理脚手架，Ln2Escape lne_nat_core 先例同构）；              *)
 (*   ③ 非平凡（bk_half_psd 换基归纳 + bk_psd_binom 二项定理 + Pascal    *)
-(*      对称归纳）；④ 可提取（G3 探针独立文件实测，Obj.magic=0）。       *)
+(*      对称归纳）；④ 可提取（G3 检验独立文件实测，Obj.magic=0）。       *)
 (* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（vo_901 信任根在册，  *)
 (*   按 CZU13/CZY13 并集根配方 side 现编）。零云端零 git。               *)
 (* ============================================================ *)
@@ -476,9 +476,10 @@ Theorem bk_Qn_int : forall n : nat,
     QeqT ((q_pow (2 # 1)%Q n * bkQ (bk_Qn_list n) (1 # 2)%Q)%Q) ((z # 1)%Q)).
 Proof.
   intro n.
-  exists (Z.of_nat (bk_Qn_qtilde n)).
-  apply qeq_imp_qeqT.
-  apply bk_Qn_half_closed.
+  exact (@existT _ (fun z : Z =>
+    QeqT ((q_pow (2 # 1)%Q n * bkQ (bk_Qn_list n) (1 # 2)%Q)%Q) ((z # 1)%Q))
+    (Z.of_nat (bk_Qn_qtilde n))
+    (qeq_imp_qeqT _ _ (bk_Qn_half_closed n))).
 Qed.
 
 (* 主件③：q̃_n ≥ 3^n（QleT' Set 面） *)
@@ -486,9 +487,8 @@ Theorem bk_Qn_ge_3pow : forall n : nat,
   QleT' ((Z.of_nat (3 ^ n) # 1)%Q) ((Z.of_nat (bk_Qn_qtilde n) # 1)%Q).
 Proof.
   intro n.
-  apply Qle_to_QleT'.
-  apply bk_Qle_nat.
-  apply bk_Qn_ge_3pow_nat.
+  exact (Qle_to_QleT' ((Z.of_nat (3 ^ n) # 1)%Q) ((Z.of_nat (bk_Qn_qtilde n) # 1)%Q)
+    (bk_Qle_nat (3 ^ n) (bk_Qn_qtilde n) (bk_Qn_ge_3pow_nat n))).
 Qed.
 
 (* 求值面语义：bk_Qn_eval n z == Σ_{k≤n} C(n,k)²·z^k（QeqT Set 面） *)
@@ -503,7 +503,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §E P_n 谐和系数列表（Q 层承载；整化留给 P3 封口席）                    *)
+(* §E P_n 谐和系数列表（Q 层承载；整化留给 P3 闭合席）                    *)
 (* ============================================================ *)
 
 (* 谐和数 H_k = Σ_{j=1}^{k} 1/j（Q 层 Fixpoint） *)

@@ -12,7 +12,7 @@
    非平凡性说明：定义性方程族按口径一展开至定义层（逐层给出
    消约序列，消除单跳转发）；llm_Tabs_const 按口径二显式构造
    见证；llm_rot_id 按口径三对切深做完整归纳推导，替代库引理
-   单跳转发。挂账与滚动清单见 消融50/T240-ToyR-包B-DTPT族替换.md。
+   单跳转发。遗留与滚动清单见 消融50/T240-ToyR-包B-DTPT族替换.md。
    ============================================================ *)
 
 (* ============================================================
@@ -37,7 +37,7 @@
          Tex_of_Tabs 前提恒真定理化；纯追加零退役、零既有件改动）
    认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14；
          2026-09-15 F2 受触链复验）
-   纪律：纯构造性；四关收割；温控协议
+   纪律：纯构造性；四关收束；温控协议
    ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -114,7 +114,7 @@ Proof.
     + apply insert_q_perm_cons.
 Qed.
 
-(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等基础模块下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem D5_Pinf_perm : forall (l : list Q) (s : nat), Permutation l (Pinf l s).
 Proof.
   intros l s. unfold Pinf, rot.
@@ -127,7 +127,7 @@ Qed.
 Theorem D5_support_same : forall (l : list Q) (s : nat),
   Permutation l (P0 l) /\ Permutation l (Pinf l s).
 Proof.
-  intros l s. split; [apply D5_P0_perm | apply D5_Pinf_perm].
+  intros l s. split; [exact (D5_P0_perm l) | exact (D5_Pinf_perm l s)].
 Qed.
 
 (* ========== §4 多熵函数族与序列熵分离（N9 + 定理 C） ========== *)
@@ -900,19 +900,19 @@ Definition gate_pass (threshold H : Q) : bool :=
    DTPT_CGen.v — 热点升级单 C-GEN（X1 扫描席 Top-1 推荐）
    席位：DTPT-U1（零竞争：新建文件，Require DTPT，不碰既有八件）
 
-   旗舰（定理 C 全排列类泛化）：
+   主定理（定理 C 全排列类泛化）：
      C_gen : forall (l p : list Q), Permutation l p -> H_adj (P0 l) <= H_adj p
-   现役旗舰 DTPT.C_sorted_min_adj 只证「排序 <= 恒等排列」；
+   现役主定理 DTPT.C_sorted_min_adj 只证「排序 <= 恒等排列」；
    本件把比较对象泛化到 l 的任意排列 p（全排列类）。
 
    路线：H_adj (P0 l) 经 xq_telescope（排序伸缩）== lastq - hd，
    首尾成员性经 D5_P0_perm + 置换传递搬到 p，再用 xq_pair_dist_le
-   （跨度下界：表内任意两元 Qabs 距离 <= H_adj）收口。
+   （跨度下界：表内任意两元 Qabs 距离 <= H_adj）闭合。
 
    加分项：
      C_gen_sym_rev  —— SYM 前置件：反转不变 H_adj (rev l) == H_adj l
      C_gen_attained —— 紧性见证：p := P0 l 直构，界在排列类内取得
-     C_gen_sorted   —— 现役旗舰 C_sorted_min_adj 的泛化重推（特例核对）
+     C_gen_sorted   —— 现役主定理 C_sorted_min_adj 的泛化重推（特例核对）
 
    纪律：零公理、零承认、零中止，全程 Qed；Q 层 lia 禁用，
    全部不等式走 xq_ 桥 + ring（Qabs/lastq/H_adj 作原子）。
@@ -985,11 +985,11 @@ Proof.
       ring.
 Qed.
 
-(* ========== §2 旗舰：定理 C 全排列类泛化 ========== *)
+(* ========== §2 主定理：定理 C 全排列类泛化 ========== *)
 
 (* C_gen：排序最小化对 l 的任意排列 p 成立。
-   p := l 特例即现役旗舰 C_sorted_min_adj；证明骨架与其同构，
-   仅成员性搬运段改为「置换传递复合」：P0 l ~> l ~> p 一步到位。 *)
+   p := l 特例即现役主定理 C_sorted_min_adj；证明骨架与其同构，
+   仅成员性迁移段改为「置换传递复合」：P0 l ~> l ~> p 一步到位。 *)
 Theorem C_gen : forall (l p : list Q), Permutation l p -> H_adj (P0 l) <= H_adj p.
 Proof.
   intros l p Hperm. destruct l as [| a rest].
@@ -1027,7 +1027,7 @@ Proof.
     assert (HPd : Qabs (hd 0 (P0 (a :: rest)) - lastq (P0 (a :: rest)))
                   <= H_adj p)
       by (apply xq_pair_dist_le; assumption).
-    (* Qeq setoid 链收口：H_adj (P0 l) == 尾-首 == Qabs(首-尾) <= H_adj p *)
+    (* Qeq setoid 链闭合：H_adj (P0 l) == 尾-首 == Qabs(首-尾) <= H_adj p *)
     rewrite HP. rewrite <- HP2. exact HPd.
 Qed.
 
@@ -1044,7 +1044,7 @@ Proof.
   - apply Qeq_refl.
 Qed.
 
-(* 现役旗舰 C_sorted_min_adj 是 C_gen 的特例（p := l 重推核对） *)
+(* 现役主定理 C_sorted_min_adj 是 C_gen 的特例（p := l 重推核对） *)
 Corollary C_gen_sorted : forall l : list Q, H_adj (P0 l) <= H_adj l.
 Proof.
   intro l. apply (C_gen l l). apply Permutation_refl.
@@ -1065,11 +1065,11 @@ Print Assumptions C_gen_sorted.
    ============================================================ *)
 (* ============================================================
    DTPT_N9Opt.v — N9O 分离常数最优性（席 U14R 续席重跑件）
-   底座：Require Import DTPT（stdlib QArith/List/Lia/Permutation）
-   纪律：零承认体；全部定理以 Qed 收口；陈述全称、数值面 vm_compute。
+   基础模块：Require Import DTPT（stdlib QArith/List/Lia/Permutation）
+   纪律：零承认体；全部定理以 Qed 闭合；陈述全称、数值面 vm_compute。
    内容：
      [保底件] perm3_cases          —— 长度 3 排列类六形穷举
-     [旗舰]   n9_max / n9_max_attained / n9_min_is_sorted
+     [主]   n9_max / n9_max_attained / n9_min_is_sorted
                                —— 见证列 n9_l0 = [0;1;2] 三件全称定理
      [主件]   n9_const_ratio / n9_separation_exact
                                —— 分离比 3/2 精确，两侧均取得
@@ -1217,7 +1217,7 @@ Proof.
   - simpl in Hlen. discriminate.
   - simpl in Hlen. discriminate.
   - simpl in Hlen. discriminate.
-  - (* p = [x1;x2;x3]：逐位成员搬运消解 *)
+  - (* p = [x1;x2;x3]：逐位成员迁移消解 *)
     assert (Hin1 : In x1 [a; b; c]).
     { apply Permutation_in with (l := [x1; x2; x3]).
       - apply Permutation_sym. exact Hp.
@@ -1314,7 +1314,7 @@ Proof.
     simpl in Hlen. lia.
 Qed.
 
-(* ========== 【旗舰】见证列 n9_l0 = [0;1;2] 类上极值三件 ==========
+(* ========== 【主】见证列 n9_l0 = [0;1;2] 类上极值三件 ==========
    数值事实：六形 H_adj = 2,3,3,3,3,2，max 3、min 2。 ========== *)
 
 Theorem n9_max : forall p, Permutation n9_l0 p -> H_adj p <= 3.
@@ -1426,7 +1426,7 @@ Print Assumptions n9_naive_bound_Hadj.
    ============================================================ *)
 (* ============================================================
    DTPT_D8Ext.v — 热点升级单 D8X（X1 扫描席热点 5：D8 阶乘族定理化）
-   席位：DTPT-U7 ｜ 日期：2026-09-13 ｜ 底座：Require Import DTPT
+   席位：DTPT-U7 ｜ 日期：2026-09-13 ｜ 基础模块：Require Import DTPT
    （DTPT.vo 稳定基线，既有十三件 .v 零改动、禁重证 D8 六件）
 
    交付分级（任务书 D8X 升级目标 1-4）：
@@ -1617,7 +1617,7 @@ Proof.
   unfold Qlt. simpl. lia.
 Qed.
 
-(* 旗舰：Σ_{k=0}^{n} 1/k! < 3
+(* 主定理：Σ_{k=0}^{n} 1/k! < 3
    （S_n < S_n + 1/n! 严格 <--- 0 < 1/n!；再 <= 3 由不变量） *)
 Theorem sum_fact_recip_lt3 : forall n : nat, (sum_fact_recip n < 3)%Q.
 Proof.
@@ -1687,7 +1687,7 @@ Qed.
    源席 DTPT-S4（interleave/gate_pass/rot 循环旋转/Pmid 端点/
    Tex/Tabs 语义桥/gate_pass 行为族）。仅剥去独立文件 Require/
    Import/Open Scope 头与 Module 壳行（由本文件头统一承载），
-   注释与全部证明体、Qed 面零改动逐字搬运。
+   注释与全部证明体、Qed 面零改动逐字迁移。
    ============================================================ *)
 
 (* ========== §0 通用列表辅助（firstn/skipn 边界引理） ========== *)
@@ -1815,7 +1815,7 @@ Qed.
 
 Theorem llm_rot_full : forall l : list Q, rot (length l) l = l.
 Proof.
-  intros l. apply llm_rot_id.
+  intros l. exact (llm_rot_id (length l) l).
 Qed.
 
 (* cyclic 逆元形：rot (length l - n) (rot n l) = l（n <= length l） *)
@@ -1837,7 +1837,7 @@ Qed.
 Theorem llm_rot_cyclic_length : forall (n : nat) (l : list Q),
   length (skipn n l ++ firstn n l) = length l.
 Proof.
-  intros n l. apply (Permutation_length (llm_rot_cyclic_perm n l)).
+  intros n l. exact (Permutation_length (llm_rot_cyclic_perm n l)).
 Qed.
 
 (* ========== §D Pmid 端点退化（主件） ========== *)
@@ -1854,7 +1854,7 @@ Proof.
 Qed.
 
 (* 端点 lam = 0：Pmid 退化为 Pinf *)
-(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等基础模块下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem llm_Pmid_zero : forall (l : list Q) (s : nat), Pmid l s 0 = Pinf l s.
 Proof.
   intros l s. unfold Pmid, Pinf, rot. exact (@eq_refl _ (firstn (Datatypes.S s) l ++ skipn (Datatypes.S s) l)).
@@ -1942,7 +1942,7 @@ Qed.
    源席 DTPT-S5（freq 频数/freq_perm 置换不变/sumf·Sigma_freq 质量
    守恒 sum_freq_dedup/mu 均匀测度·mu_total_mass 总质量一）。
    仅剥去独立文件 Require/Import/Open Scope 头与 Module 壳行
-   （由本文件头统一承载），注释与全部证明体、Qed 面零改动逐字搬运。
+   （由本文件头统一承载），注释与全部证明体、Qed 面零改动逐字迁移。
    ============================================================ *)
 
 (* ========== §1 频数函数 ========== *)
@@ -2005,7 +2005,7 @@ Proof.
     intro Hc. apply Hn. apply (proj2 (Qmem_cons x a l)). right. exact Hc.
 Qed.
 
-(* ========== §2 频数置换不变性（旗舰件） ========== *)
+(* ========== §2 频数置换不变性（主件） ========== *)
 
 (* 相邻换位守恒：两元素判等布尔四案枚举，案案 refl 闭合 *)
 Lemma freq_swap : forall (a b : Q) (l : list Q) (x : Q),
@@ -2015,7 +2015,7 @@ Proof.
   destruct (Qeq_bool a x); destruct (Qeq_bool b x); reflexivity.
 Qed.
 
-(* 旗舰件：频数沿置换不变——perm_nil 平凡 / perm_skip 判等分票 /
+(* 主件：频数沿置换不变——perm_nil 平凡 / perm_skip 判等分票 /
    perm_swap 经 freq_swap / perm_trans 传递链，逐构造核毕 *)
 Theorem freq_perm : forall (l p : list Q) (x : Q),
   Permutation l p -> freq l x = freq p x.
@@ -2104,7 +2104,7 @@ Fixpoint qsum (m : list Q) : Q :=
 Definition mu (l : list Q) (x : Q) : Q :=
   ((Z.of_nat (freq l x) # 1) / (Z.of_nat (length l) # 1))%Q.
 
-(* 均匀测度沿置换不变：频数与表长双不变直接放电 *)
+(* 均匀测度沿置换不变：频数与表长双不变直接实例化消解 *)
 Theorem mu_perm : forall (l p : list Q) (x : Q),
   Permutation l p -> mu l x = mu p x.
 Proof.
@@ -2167,8 +2167,8 @@ Qed.
    源席 DTPT-U10（缺口单 COZIDEAL；U10R 续席修面）。仅剥去独立文件的
    Require/Import/Open Scope 头与 Module 壳行（由本文件头统一承载，
    含 Sorting.Sorted 增补）——并入后位于 Module DTPT 内，其对 DTPT
-   底座（qadd_le/Qle_0_sub' 等）的引用改同文件直引，语义零变；
-   注释与全部证明体、Qed 面、Print Assumptions 审计出口零改动逐字搬运。
+   基础模块（qadd_le/Qle_0_sub' 等）的引用改同文件直引，语义零变；
+   注释与全部证明体、Qed 面、Print Assumptions 审计出口零改动逐字迁移。
    ============================================================ *)
 (* ============================================================
    DTPT_CoZero.v — 余零理想 ℐ 计数化（席 DTPT-U10 · 缺口单 COZIDEAL）
@@ -2182,7 +2182,7 @@ Qed.
      · 理想 ℐ_w = { fiber φ w : φ 为可观测量 }，即「可忽略集」的计数化。
    理想公理面（本件定理对应）：
      · 空区域 ∈ ℐ（fiber 常一）；全域 ∈ ℐ（fiber 常零）；
-     · 并封闭（旗舰）：fiber (φ·ψ) 与 fiber φ ∪ fiber ψ 元素一致
+     · 并封闭（主）：fiber (φ·ψ) 与 fiber φ ∪ fiber ψ 元素一致
        ——承重件 = Q 无零因子（a·b == 0 ⟺ a == 0 ∨ b == 0，Z 层直解）；
      · 交封闭（主件）：fiber (φ²+ψ²) 与 fiber φ ∩ fiber ψ 元素一致
        ——承重件 = Q 平方非负（Z 层三分直解）+ 平方和零序夹挤；
@@ -2193,7 +2193,7 @@ Qed.
      值级 Qeq 口径对任意 φ 不保零点（非外延 φ 反例：φ 读 Qnum 低位），
      故 fiber 成员刻画必须用 In——这正合 filter_In 的语义，非降档。
    依赖：DTPT（qadd_le / Qle_0_sub' 系 + Open Q_scope）；stdlib QArith/List。
-   纪律：零公理零承认；nat 全显式 %nat；全程 Qed 收口。
+   纪律：零公理零承认；nat 全显式 %nat；全程 Qed 闭合。
    ============================================================ *)
 (* 原独立文件 Require/Import/Open Scope 头（Require DTPT、From Stdlib
    QArith/List/Arith/Lia、Import ListNotations、Open Scope Q_scope、
@@ -2207,7 +2207,7 @@ Proof.
   intros x y H. unfold Qeq in H. unfold Qle. lia.
 Qed.
 
-(* Q 无零因子·正向分解（Z 层 Z.mul_eq_0 两段收口） *)
+(* Q 无零因子·正向分解（Z 层 Z.mul_eq_0 两段闭合） *)
 Lemma qmul_eq0_fwd : forall a b : Q, (a * b == 0)%Q -> a == 0 \/ b == 0.
 Proof.
   intros [an ad] [bn bd] H.
@@ -2255,7 +2255,7 @@ Proof.
   intros x H. destruct (qmul_eq0_fwd x x H) as [Hx|Hx]; exact Hx.
 Qed.
 
-(* 平方和零 ⟹ 两因子零（序夹挤：0 <= a² <= a²+b² == 0，反对称收口） *)
+(* 平方和零 ⟹ 两因子零（序夹挤：0 <= a² <= a²+b² == 0，反对称闭合） *)
 Lemma qsum_sq_zero : forall a b : Q, (a * a + b * b == 0)%Q -> a == 0 /\ b == 0.
 Proof.
   intros a b Hsum.
@@ -2329,7 +2329,7 @@ Definition fiber (f : Q -> Q) (w : list Q) : list Q :=
 Definition cozero (f : Q -> Q) (w : list Q) : list Q :=
   filter (fun x => negb (Qeq_bool (f x) 0)) w.
 
-(* 成员刻画（记录级 In 口径，经 filter_In 显式项收口——HO-unify 免疫） *)
+(* 成员刻画（记录级 In 口径，经 filter_In 显式项闭合——HO-unify 免疫） *)
 Lemma fiber_in : forall (f : Q -> Q) (w : list Q) (x : Q),
   In x (fiber f w) <-> (In x w /\ Qeq_bool (f x) 0 = true).
 Proof.
@@ -2349,7 +2349,7 @@ Proof.
     apply negb_true_iff. exact Hb.
 Qed.
 
-(* ========== §3 旗舰·并封闭：乘积可观测量分解为零因子之并 ========== *)
+(* ========== §3 主·并封闭：乘积可观测量分解为零因子之并 ========== *)
 
 (* 原典语义：可忽略集对有限并封闭——零点语言下即
    fiber (φ·ψ) w = fiber φ w ∪ fiber ψ w（元素级一致），
@@ -2508,11 +2508,11 @@ Print Assumptions fiber_cozero_length.
    + DTPT-M2 归并席（DTPT_PmidEnd/DTPT_OrgDiff 已先期并入其 §H/§I）。
    仅剥去独立文件 Require/Import/Open Scope 头与 Module 壳行（由本文件
    头统一承载，含 Sorting.Sorted 增补）——并入后位于 Module DTPT 内，
-   其消费的 insert_q/P0/sum_adjdiff/H_adj/P0/Pinf/Pmid/D5_P0_perm/
-   D5_Pinf_perm/C_sorted_min_adj/xq_minus_self/Qeqb_true_of 等底座改
+   其依存的 insert_q/P0/sum_adjdiff/H_adj/P0/Pinf/Pmid/D5_P0_perm/
+   D5_Pinf_perm/C_sorted_min_adj/xq_minus_self/Qeqb_true_of 等基础模块改
    同文件直引，语义零变；注释与全部证明体、Qed 面、3 条弃用注记
   （P0_absorbs_Pmid/Hsup_mono/Hsup_bounded 随行）与 Print Assumptions
-   审计出口零改动逐字搬运。
+   审计出口零改动逐字迁移。
    撞名预检：两源合计 108 顶层名 grep 本文件归并前 = 0 命中
   （llm_Pmid_len_endpoint 与 Pmid_len_endpoint 异名共存，零冲突）。
    ============================================================ *)
@@ -2533,7 +2533,7 @@ Print Assumptions fiber_cozero_length.
      6 件 → §I）；归并序先 PmidEnd 后 OrgDiff；Pmid_len_endpoint /
      P0_idempotent 引用改同文件直引（删两源 Require 面）；追加式
      归并，既有件零改动、Qed 面零改动；两源以 .retired_ 快照退役。
-   【认证】归并族旗舰 9 件文件尾 §J Print Assumptions 全 Closed；
+   【认证】归并族主定理 9 件文件尾 §J Print Assumptions 全 Closed；
      禁词面全零（字面自查判据见 DTPT_M2_归并报告.md）。
    【纪律】纯构造、全程 Qed；DTPT.v 已 Open Scope Q_scope，
      nat 算术/比较一律 %nat 显式；快照 .bak_M2 / .snap_M2 在册。
@@ -2810,7 +2810,7 @@ Proof.
 Qed.
 
 (* 缺项3：P0 吸收中间相——组织收敛律（P0 ∘ Pmid = P0） *)
-(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等基础模块下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem P0_absorbs_Pmid : forall (l : list Q) (s : nat),
   P0 (Pmid l s 0) = P0 l.  (* lam=0 endpoint *)
 Proof.
@@ -2851,7 +2851,7 @@ Proof.
   intro d. unfold proj_W, real_W. apply D5_P0_perm.
 Qed.
 
-(* 有损诚实标注：Permutation 等价类内的信息差不可恢复（挂账 ℒ7） *)
+(* 有损诚实标注：Permutation 等价类内的信息差不可恢复（遗留 ℒ7） *)
 
 (* ========== §D 熵上界族（D7 H_∞ 动态上确界——原典七大核心概念之一） ========== *)
 
@@ -2871,7 +2871,7 @@ Lemma Hsup_S_eq : forall (l : list Q) (n : nat),
 Proof. reflexivity. Qed.
 
 (* 缺项10：单调律——前缀最大值天然递增（D7「动态无限上升族」） *)
-(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等基础模块下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem Hsup_mono : forall (l : list Q) (n : nat),
   (Hsup l n <= Hsup l (S n))%Q.
 Proof.
@@ -2882,7 +2882,7 @@ Proof.
 Qed.
 
 (* 缺项11：有穷上界——H_adj 有理值有界（对固定 l，H_adj ≤ Σ|x_i|+|x_{i+1}| 上界） *)
-(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等基础模块下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem Hsup_bounded : forall (l : list Q) (n : nat) (B : Q),
   (forall x, In x l -> Qabs x <= B) ->
   (Hsup l n <= (Z.of_nat (length l) # 1)%Q * B * 2)%Q.
@@ -2939,7 +2939,7 @@ Definition phase_classify (l : list Q) (s : nat) : PhaseTag :=
 (* ============================================================
    §G DTPT-S1 补强席追加块（2026-09-13，追加于文件末尾）
    内容：swap_adj 行为件 / count_q 数值计数口径 / 排序唯一性 /
-         旗舰 P0_perm_inv（排序对置换的不变性）/ 熵载荷推论 /
+         主定理 P0_perm_inv（排序对置换的不变性）/ 熵载荷推论 /
          phase_classify 行为件
    全部纯构造（无承认式证明），逐条 Qed。
    ============================================================ *)
@@ -3060,7 +3060,7 @@ Proof.
       apply Forall2_cons; [exact Hxy | apply IH; assumption].
 Qed.
 
-(* ---------- G.4 旗舰：P0 排序对置换的不变性（任务目标 1） ---------- *)
+(* ---------- G.4 主定理：P0 排序对置换的不变性（任务目标 1） ---------- *)
 
 (* 多重集决定排序形：P0 l 仅依赖 l 的数值多重集。
    路线：P0 l ~ l ~ p ~ P0 p（D5_P0_perm）⟹ 数值重数相等
@@ -3108,14 +3108,14 @@ Lemma H_adj_qeq : forall (l1 l2 : list Q),
   Forall2 Qeq l1 l2 -> H_adj l1 == H_adj l2.
 Proof. intros l1 l2 H. unfold H_adj. apply sum_adjdiff_qeq. exact H. Qed.
 
-(* 熵的置换不变性（旗舰的熵载荷）：H_adj ∘ P0 只看多重集 *)
+(* 熵的置换不变性（主的熵载荷）：H_adj ∘ P0 只看多重集 *)
 Corollary H_adj_P0_perm : forall (l p : list Q),
   Permutation l p -> (H_adj (P0 l) == H_adj (P0 p))%Q.
 Proof.
   intros l p Hp. apply H_adj_qeq. apply P0_perm_inv. exact Hp.
 Qed.
 
-(* 对换件的 P0 不变性（G.1 行为件 × 旗舰组合） *)
+(* 对换件的 P0 不变性（G.1 行为件 × 主组合） *)
 Corollary P0_swap_adj_qeq : forall (l : list Q) (n : nat),
   Forall2 Qeq (P0 (swap_adj l n)) (P0 l).
 Proof.
@@ -3131,7 +3131,7 @@ Qed.
 (* ---------- G.6 phase_classify 行为件（任务目标 4） ---------- *)
 
 (* 判定器 lam 死参已删（ADJ-2 2026-09-14：原第三参 lam 在定义体 L375-380
-   从不被消费——设计缺口的终局处置是删参而非恒等引理记录；
+   从不被依存——设计缺口的终局处置是删参而非恒等引理记录；
    删参后本件为平凡重合式，保留名位作删参历史记录） *)
 Lemma phase_classify_lam_const : forall (l : list Q) (s : nat),
   phase_classify l s = phase_classify l s.
@@ -3169,7 +3169,7 @@ Proof.
       * intro Heq. rewrite (Qeqb_true_of _ _ Heq) in E2. discriminate E2.
 Qed.
 
-(* 相位判定对置换不变（旗舰的判定载荷）：组织标签是多重集的函数 *)
+(* 相位判定对置换不变（主的判定载荷）：组织标签是多重集的函数 *)
 (* 诚实口径注记：无条件版「判定对置换不变」为假——Pinf 槽熵
    H_adj (Pinf l s)=H_adj l 依赖顺序（D12.2 组织差异的有序性本体），
    反例见 phase_classify_perm_counter。故全标签不变需
@@ -3216,9 +3216,9 @@ Qed.
 
 (* ========== §H M2 归并块一：DTPT_PmidEnd 端点族（2026-09-14 并入） ==========
    Pmid 通用 λ 截断的非平凡端点定律：λ = 列长时三相退化回 P0。
-   偿还在册诚实挂账：DTPT_Dig.v L65-69 与 DTPT.v L86 的
+   偿还在册诚实遗留：DTPT_Dig.v L65-69 与 DTPT.v L86 的
    D5_Pmid_perm 一般 lam 不成立注记——本族补全其中 lam = length l 端点。
-   挂账病灶与正解：firstn_all 的模式 firstn (length ?l) ?l 对目标
+   遗留病灶与正解：firstn_all 的模式 firstn (length ?l) ?l 对目标
    子项 firstn (length l) (P0 l) 单化失败（?l 须同为 l 与 P0 l）；
    改用带长度前提形 firstn_all2 / skipn_all2，前提由置换长度守恒
    （D5_P0_perm / D5_Pinf_perm + Permutation_length）供给。
@@ -3238,9 +3238,9 @@ Proof.
   intros l s. exact (Permutation_length (D5_Pinf_perm l s)).
 Qed.
 
-(* ---------- H.2 主定理：λ = length l 端点（挂账偿还） ---------- *)
+(* ---------- H.2 主定理：λ = length l 端点（遗留偿还） ---------- *)
 
-(* 挂账病灶正解：firstn_all 模式 firstn (length ?l) ?l 对
+(* 遗留病灶正解：firstn_all 模式 firstn (length ?l) ?l 对
    firstn (length l) (P0 l) 单化失败；firstn_all2/skipn_all2 的
    显式实参序在 9.0 有版本漂移——故以 apply 按结论单化（免疫参序）
    先落两条方程引理，主定理只 rewrite 方程。 *)
@@ -3338,10 +3338,10 @@ Qed.
    X1 清单热点 7【ORG】升级 + U2 留账偿还（U15R 席 2026-09-14 交付面）。
    归并处理：原件 Require Import DTPT DTPT_Phases DTPT_PmidEnd 一行
    全删——Pmid_len_endpoint 引用改本文件 §H 直引，P0_idempotent
-   引用改本文件 §A 直引，OrgDiff 定义在本文件 §B，其余底座
+   引用改本文件 §A 直引，OrgDiff 定义在本文件 §B，其余基础模块
    （Pinf/rot/firstn_skipn/C_sorted_min_adj/Qle_0_sub'/xq_minus_self）
    全在 DTPT（文件头已 Require）。
-   底座实形：OrgDiff l s := H_adj (Pinf l s) - H_adj (P0 l)（§B）；
+   基础模块实形：OrgDiff l s := H_adj (Pinf l s) - H_adj (P0 l)（§B）；
    Pinf l s = rot (S s) l = firstn (S s) l ++ skipn (S s) l = l
    （firstn_skipn），故 OrgDiff 实形 = H_adj l - H_adj (P0 l)。 ========== *)
 
@@ -3409,7 +3409,7 @@ Proof.
   vm_compute in H. congruence.
 Qed.
 
-(* ========== §J 零公理自证（M2 归并族旗舰 9 件，集中于文件尾：
+(* ========== §J 零公理自证（M2 归并族主定理 9 件，集中于文件尾：
    PmidEnd 面 3 件 + OrgDiff 面 6 件） ========== *)
 Print Assumptions Pmid_len_endpoint.
 Print Assumptions Pmid_len_perm.
@@ -3431,7 +3431,7 @@ Print Assumptions OrgDiff_Pmid_general_nonzero.
    · mu_fiber_mass_lb（保底②·主桥·fiber 质量的经验频率下界）：
      纤维支撑上的 w-测度质量 ≥ 零点经验频率 |fiber|/|w|——filter
      子表逐点频数不增 + sum_freq_dedup 质量守恒，Q 侧同分母乘法
-     保序收口；
+     保序闭合；
    · mu_fiber_mass_eq（加分·质量守恒显式形）：φ 沿支撑 Qeq-外延
      时取等——P_φ(0) 的经验频率恰为纤维的 w-测度质量
      （mu_total_mass 的零点加权推广；f := 常零时退化为原件）。
@@ -3624,7 +3624,7 @@ Proof.
   - apply (proj1 (Qeq_bool_iff (f y) 0)). exact Hy.
 Qed.
 
-(* sumf 右侧逐点相等搬运 *)
+(* sumf 右侧逐点相等迁移 *)
 Lemma sumf_ext : forall (m l1 l2 : list Q),
   (forall y : Q, In y m -> freq l1 y = freq l2 y) ->
   sumf m l1 = sumf m l2.
@@ -3670,15 +3670,15 @@ Print Assumptions mu_fiber_mass_eq.
    靶子（DTPT_平凡占位审计与新果实清单.md §三 C 系 + §四 F8）：
      · C5/F8 保底：OrgDiff 的 s 参零消费——把「未用参数」升格为
        「显式无关性定理」（占位变性质证明），非删参路线（删参
-       需改 §B 定义体与全部消费点，ADJ-2 先例属改源动作，本席
+       需改 §B 定义体与全部依存点，ADJ-2 先例属改源动作，本席
        走追加式供证：为后续删参备好供证件，phase_classify_lam_const
        保留名位格式同源）；
      · C2 主件：LLMPhaseView（§7 记录）零定理面真化三件——
        投影方程面 / 视图↔相判定器一致面（phase_classify 本土
-       消费，与桥件 P3-B10/P3-B11 零交集）/ 构造往返面；
+       依存，与桥接引理 P3-B10/P3-B11 零交集）/ 构造往返面；
      · 加分：Tex_of_Tabs 前提恒真定理化——审计在案的「前提恒真」
-       升格为显式定理（前提由在册 llm_Tabs_const 放电）。
-   纪律：纯追加零退役零既有件改动；全部 Qed；消费件全为 §A–§J
+       升格为显式定理（前提由在册 llm_Tabs_const 实例化消解）。
+   纪律：纯追加零退役零既有件改动；全部 Qed；依存件全为 §A–§J
    与 §7/§14 现役名（phase_classify_P0_spec / llm_view_gate_iff /
    llm_Tabs_const / Tex_of_Tabs / P0_idempotent / Qle_refl）。
    ============================================================ *)
@@ -3688,7 +3688,7 @@ Print Assumptions mu_fiber_mass_eq.
 (* 审计 C5 逐字：s 参数惰性已被定理化（OrgDiff_eq 对 s 全称），
    但「s 惰性」本身未升格为定理。本件即升格：OrgDiff 对 s 全称
    常值——s 是本质惰性参而非缺陷（Pinf 槽恒等旋转 firstn_skipn
-   的直接语义后果，消费 §I.2 封闭式 OrgDiff_eq）。 *)
+   的直接语义后果，依存 §I.2 封闭式 OrgDiff_eq）。 *)
 Theorem OrgDiff_s_irrelevant : forall (l : list Q) (s t : nat),
   OrgDiff l s == OrgDiff l t.
 Proof.
@@ -3697,8 +3697,8 @@ Proof.
   reflexivity.
 Qed.
 
-(* 消费面（任务书指定）：与 §I.3 非负面组合出 s-无关的非负运输
-   推论——任一 s 槽的非负性沿惰性参免费搬运到任意 t 槽。 *)
+(* 依存面（任务书指定）：与 §I.3 非负面组合出 s-无关的非负运输
+   推论——任一 s 槽的非负性沿惰性参免费迁移到任意 t 槽。 *)
 Corollary OrgDiff_nonneg_transport : forall (l : list Q) (s t : nat),
   (0 <= OrgDiff l s)%Q -> (0 <= OrgDiff l t)%Q.
 Proof.
@@ -3732,7 +3732,7 @@ Proof.
   intros v. destruct v as [lam mk gt]. reflexivity.
 Qed.
 
-(* ---------- 16.2b 视图↔相判定器一致面（phase_classify 本土消费） ---------- *)
+(* ---------- 16.2b 视图↔相判定器一致面（phase_classify 本土依存） ---------- *)
 
 (* 规范视图：从（表，种子）铸造。三字段全部落在 §A/§B 现役面上。 *)
 Definition llm_view_of (l : list Q) (s : nat) : LLMPhaseView :=
@@ -3771,7 +3771,7 @@ Proof.
 Qed.
 
 (* 一致面①（P0 支）：判定器判 P0 ⟹ 规范视图两字段与 Pmid-0 槽熵
-   数值重合——消费 §G.6 phase_classify_P0_spec（本土件，桥件零交集）。 *)
+   数值重合——依存 §G.6 phase_classify_P0_spec（本土件，桥接引理零交集）。 *)
 Theorem llm_view_PhP0_consistent : forall (l : list Q) (s : nat),
   phase_classify l s = PhP0 ->
   gate_threshold (llm_view_of l s) == H_adj (Pmid l s 0) /\
@@ -3786,7 +3786,7 @@ Qed.
 
 (* 一致面②（P0 支·门行为）：判定器判 P0 ⟹ 规范视图的门对 Pmid-0
    槽熵放行——门判据经在册 llm_view_gate_iff 走数值面，非负运输
-   由 Qeq 自反收口。诚实口径：Qeq_bool/Qle_bool 均为记录层比较，
+   由 Qeq 自反闭合。诚实口径：Qeq_bool/Qle_bool 均为记录层比较，
    故一致面以数值 ==/<= 陈述（§G.6 同口径）。 *)
 Theorem llm_view_PhP0_gate_exact : forall (l : list Q) (s : nat),
   phase_classify l s = PhP0 ->
@@ -3807,7 +3807,7 @@ Theorem llm_view_roundtrip : forall (lam : Q) (mk : list Q) (gt : Q),
             (gate_threshold (mkLLMView lam mk gt)) = mkLLMView lam mk gt.
 Proof.
   intros lam mk gt.
-  (* 推导链（口径一）：三投影各自展开记录构造器取回原槽位，
+  (* 推导链（口径一）：三投影各自展开记录构造器取回原接口参数，
      逐层消约后与原记录同形闭合 *)
   change (mkLLMView (lam_param (mkLLMView lam mk gt))
                     (phase_marker (mkLLMView lam mk gt))
@@ -3830,10 +3830,10 @@ Qed.
 (* ---------- §16.3 加分：Tex_of_Tabs 前提恒真定理化 ----------
    审计在案：Tex_of_Tabs（§E）的前提 (forall m', Evidence) 恒真——
    在册 llm_Tabs_const（§11）已给常量证据族实现。真化＝把「恒真」
-   从审计注记升格为显式定理：前提由在册件放电，得无条件形；
+   从审计注记升格为显式定理：前提由在册件实例化消解，得无条件形；
    并给构造性见证（铸节点逐字可读）与 inhabitance 推论。 *)
 
-(* 前提恒真的定理化：Tex_of_Tabs 的前提经 llm_Tabs_const 放电后
+(* 前提恒真的定理化：Tex_of_Tabs 的前提经 llm_Tabs_const 实例化消解后
    的无条件简化面——Tex phi 对任意 phi 恒可构造，无需任何前提。 *)
 Theorem Tex_of_Tabs_premise_trivial : forall (phi m : Dig), Tex phi.
 Proof.
@@ -3878,7 +3878,7 @@ End DTPT.
    归并席 M1（2026-09-14）退役记录：DTPT_Dig.v —— 不并入，直接退役
    判定依据：其全部声明（Inductive Dig、insert_q、P0、rot、Pinf、
    Pmid、insert_q_perm_cons、D5_P0_perm、D5_Pinf_perm）与本文件
-   §1–§3 逐字重复；独有内容仅注释（Pmid 端点挂账注记已由
+   §1–§3 逐字重复；独有内容仅注释（Pmid 端点遗留注记已由
    DTPT_PmidEnd.v 偿还）。源件以 .retired_ 前缀快照留存。
    ============================================================ *)
 
