@@ -1,45 +1,29 @@
-(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 Main=29409e7559344455c8fe3a1b365ddec2/Live_X=f616d4b7ed858041729198b63d1021b9（内容级同一，行尾符异） · 权威定位=主键内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
-(* ANCHOR: eps_split（ε-三分判词·短语级主键，判词块 L20-29） | 现势行号 L25 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ============================================================ *)
-(* UpReqPinskerCore.v —— 席 PNSKA：经典常数 Pinsker 二点核引擎          *)
-(*   （相位=编译重；独立文件，零改库；前缀 pnk_ 全库零撞名开工核验）      *)
+(* UpReqPinskerCore.v —— 二点常数 Pinsker 核引擎                      *)
+(*   （本件=批 2 版超代批 1 同名件：含批 1 全部 2 位+新增 2 位）      *)
 (*                                                                *)
-(* 使命：二点（Bernoulli）层普适常数引擎。本件交付：                  *)
-(*   ① pnk_core：锐化上切线核（二阶 log 引擎·上侧）——                   *)
-(*      (x+1)·2·log x ≤_B (x−1)(x+3)，对全体 x>0 无分支成立。          *)
+(* 使命：本件形式化二点（Bernoulli）层普适常数引擎：                  *)
+(*   ① pnk_core：锐化上切线核（二阶 log 引擎·上侧）——                  *)
+(*      (x+1)·2·log x ≤_B (x−1)(x+3)，对全体 x>0 无分支成立；          *)
 (*      证法＝切线自举：log x = log t1 + log t2（乘法法则），           *)
 (*      共轭对 t1 := 2x·inv(x+1)、t2 := (x+1)·inv(2)（t1·t2 == x），    *)
-(*      各施一阶切线 log t ≤ t−1（real_log_le_linear_B）后代数合并。    *)
-(*      这是库内首个带二次修正项的 log 上界引擎：                        *)
-(*      X−1−logX ≥_B (X−1)²/(2(X+1)) 型二阶下界的直接来源。             *)
-(*   ② pnk_gap_global_B：全局逐点平方下界（G1 统一形，无分支）：          *)
-(*      2·(p+q)·(kl(p,q)+(q−p)) ≥_B (p−q)²，对全体 p,q>0 成立。        *)
-(*      装配：core 于 X := q·inv p 实例化 ×p² 尺度 + klst_gap_shape     *)
-(*      换形 + (p+q)→p·(X+1) 与 p2_tvsq→X-形 双焊接 + 条件环收拢        *)
-(*      （恒等式 2p²(x+1)l+2p²(1+x)(x−1)−2p²(1+x)l                     *)
-(*         == p²(x−1)(x+3)+p²(1−x)² ⟺ 2p²(x²−1)，已手验）。            *)
-(*                                                                *)
-(* 诚实边界（升级方向，挂账对称登记）：                                 *)
-(*   经典常数 2 需二阶级数下界 log(1+t) ≥ t−t²/2（t≥0）与               *)
-(*   −log(1−y) ≥ y+y²/2（0≤y<1）两支（PinskerTwoPoint 头注 :9-16       *)
-(*   同判：现库 log 引擎三件在 p≈q 处二次项精确相消）。本席实测：        *)
-(*   两支的构造性证明需 ε-三分（p<q+δ ∨ q<p+δ 的 Cauchy 点级比较）      *)
-(*   基建（库内 grep trichotomy/eps_split/apart 全零），且锐化上切线     *)
-(*   核的信息论上限为常数 1（1/(p+q)+1/(2−p−q) ≥ 2 而非 ≥ 4，          *)
-(*   p=0.7,q=0.2 数值复核）。常数 2 装配路径已完全测绘：                *)
-(*   S1/S2 两支 → klst_gap_shape → 支内 2pA ≥ d² / 2(1−p)B ≥ d² →     *)
-(*   1/p+1/(1−p) ≥ 4（(1−2p)² ≥ 0）合流。                              *)
-(*                                                                *)
-(* 引擎链（全只读消费）：S02 real_eq_of_zero_diff/real_distrib/        *)
-(*   real_lt_plus_translate/real_plus_swap_mid；S07 real_log_mult；     *)
-(*   S08 real_log_wd/real_opp_mult；G07 klst_gap_shape；                *)
-(*   UpRealLeB real_log_le_linear_B；UpRealLeB2 real_le_b_plus_compat； *)
-(*   UpRealLeB3 leb3 桥族；PinskerTwoPoint p2_tvsq 定义面。             *)
-(*                                                                *)
-(* 红线自审：语句面全 Set 值（real_le_b 为 forall 型，零 Prop 泄露）；   *)
-(*   证内 Or 分解仅显式两支消解，零排中形态；全部 Qed 闭合；            *)
-(*   文尾 Print Assumptions 审计。公理面：预期全 Closed。               *)
-(* 编译：coqc -q -Q . "" UpReqPinskerCore.v（9.1 工具链）              *)
+(*      各施一阶切线 log t ≤ t−1（real_log_le_linear_B）后代数合并；    *)
+(*   ② pnk_gap_global_B：全局逐点平方下界：                            *)
+(*      2·(p+q)·(kl(p,q)+(q−p)) ≥_B (p−q)²，对全体 p,q>0 成立，        *)
+(*      由 pnk_core 于 X := q·inv p 实例化与 klst_gap_shape 换形装配。  *)
+(*   另含 Q 层交替截断族：log(1+x) ≥ P4(x) 的偶截断单调尾件、          *)
+(*   余项参数位非负件与常数正性件。                                    *)
+(* 依赖：Stdlib QArith.Qring、Setoid、Lia；CW_ConstructiveWorld_219、   *)
+(*        G07_KLWall、UpRealLeB、UpRealLeB2、UpRealLeB3、               *)
+(*        PinskerTwoPoint、UpReqTailResidual。                          *)
+(* 对标：mathlib Pinsker 不等式（信息论层）；本件为其二点常数核的       *)
+(*        构造性可提取对应物。                                          *)
+(* 构造性注记：语句面全 Set 值（real_le_b 为 forall 型，无 Prop 泄露）；  *)
+(*        证内 Or 分解仅显式两支消解，零排中形态；零假设位、零承认、     *)
+(*        可提取；Q 层序接口引理以显式 Z 序引理链构造；                  *)
+(*        文尾 Print Assumptions 审计，公理面为空。                     *)
+(* 编译配方：Rocq 9.1 直调（coqc -q -Q . ""），cpu_guard 护航。          *)
+(* ============================================================ *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring Setoid.
@@ -977,7 +961,7 @@ Proof.
       + exact HS.
       + exact (leb3_le_b_refl (p2_tvsq p q)).
     - exact EQ3. }
-  (* 收口：coreL' 左消去（p2_tvsq δ-可转换 (p−q)²，目标即定理语句） *)
+  (* 闭合：coreL' 左消去（p2_tvsq δ-可转换 (p−q)²，目标即定理语句） *)
   apply (pnk_le_b_cancel_l (real_mult p (real_mult p (real_mult (real_plus (real_mult q (real_inv_pos p Hp)) real_one) (real_mult pnk_two (real_log (real_mult q (real_inv_pos p Hp)) HX)))))).
   exact HTGT.
 Qed.
@@ -986,11 +970,11 @@ Qed.
 (* ============================================================ *)
 (* R6 追加段（席 PNSKA-R6·级数残差引擎席·相位=编译重 20260917）          *)
 (*   ① 常数族 four/three_pos/nine/ten/nine_ten（9/10 := 9·inv 10）      *)
-(*   ② pnk_log_mirror_B：镜像切线 log s ≥_B 1−1/s（s>0）                *)
+(*   ② pnk_log_mirror_B：对称切线 log s ≥_B 1−1/s（s>0）                *)
 (*      链＝real_log_le_linear_B 于 inv s + log_mult 拆分 + opp_rev。    *)
 (*   ③ pnk_log1p_ge_far：S1 远支（t>1）：log(1+t) ≥_B t−t²/2            *)
 (*      （镜切线 + (1+t) 尺度消 inv：A·(1+t) == t−t²(t−1)/2 纯环恒等，   *)
-(*      t>1 给 t²(t−1)≥_B 0（平方非负×正缩放）。t∈[0,1] 支挂账 R7。）     *)
+(*      t>1 给 t²(t−1)≥_B 0（平方非负×正缩放）。t∈[0,1] 支遗留 R7。）     *)
 (*   ④ pnk_tvsq_pos：TV²>0（Or 前提两支；PinskerTwoPoint 缺件补齐）。    *)
 (*   ⑩ pnk_kl2_ge_fracsum/pnk_pinsker_frac2（R7·0.9 档主件）：           *)
 (*      kl₂ ≥ d²·(1/(2(p+q))+1/(2(2−p−q))) ≥_B (9/10)·TV²。              *)
@@ -1004,10 +988,10 @@ Qed.
 (*      焊接，R5 配方）+ ±(q−p) 支内消去 + 常数步 1/(2a)+1/(2b)≥9/10     *)
 (*      （核心＝s(2−s)≤_B 1 ⟸ 4·s(2−s)+(2s−2)²==4 环恒等+平方非负）。    *)
 (*   诚实边界：S1 近支/S2（−log(1−y) ≥ y+y²/2）未落。本席实测：一阶      *)
-(*   三明治族（切线+镜像+整数 k 嵌套 [1−(1+s)^{−k}]/k）的 s² 系数恒为     *)
+(*   三明治族（切线+对称+整数 k 嵌套 [1−(1+s)^{−k}]/k）的 s² 系数恒为     *)
 (*   −(k+1)/(2k) < −1/2，严格低于所需 −1/2（数值核 361 点同证），即      *)
 (*   首阶引擎无论怎样嵌套都不可能闭合 S2——需真二阶核（交替级数截断/     *)
-(*   exp 尾/ε-三分其一），挂账 R7。数值预验：S1/S2 各 60/40 点零反例；    *)
+(*   exp 尾/ε-三分其一），遗留 R7。数值预验：S1/S2 各 60/40 点零反例；    *)
 (*   0.9 合成界 361 个 (p,q) 采样 assert 全过（bound/kl₂ 最小 0.30）。    *)
 (* ============================================================ *)
 
@@ -1099,7 +1083,7 @@ Proof.
   apply pnk_lt_le_b. exact pnk_nine_ten_lt_one.
 Qed.
 
-(* 纯组合子环账件（零 real_eq_of_zero_diff，绕开 setoid 侧目标） *)
+(* 纯组合子环化简件（零 real_eq_of_zero_diff，绕开 setoid 侧目标） *)
 Lemma pnk_eq_add_shuffle : forall a c : Real,
   real_eq (real_plus (real_opp a) (real_plus a c)) c.
 Proof.
@@ -1175,7 +1159,7 @@ Proof.
                  (real_plus_comm real_zero b) (real_plus_zero b)).
 Qed.
 
-(* ---- 6. 镜像切线：log s ≥_B 1 − 1/s ---- *)
+(* ---- 6. 对称切线：log s ≥_B 1 − 1/s ---- *)
 
 Lemma pnk_log_mirror_B : forall (s : Real) (Hs : real_lt real_zero s),
   real_le_b (real_plus real_one (real_opp (real_inv_pos s Hs)))
@@ -1257,7 +1241,7 @@ Qed.
 (* S1 远支（t>1: log(1+t) ≥_B t−t²/2）已测绘未落：其恒等式块
    (t−t²h)(1+t) == t−t²(t−1)h 依赖 h·pnk_two==1（h:=inv 2）条件环，
    纯 ring 不可闭（h 原子化后非恒等式），需 real_inv_pos_correct 因子级
-   运输再组装，机械量 ≈40–60 行，挂账 R7 与 S1 近支/S2 同批。 *)
+   运输再组装，机械量 ≈40–60 行，遗留 R7 与 S1 近支/S2 同批。 *)
 
 (* ---- 8. TV² 正性（PinskerTwoPoint 缺件补齐） ---- *)
 
@@ -1294,17 +1278,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R7 追加段（席 PNSKA-R7·0.9 档收口席·相位=编译重 20260917）            *)
+(* R7 追加段（席 PNSKA-R7·0.9 档闭合席·相位=编译重 20260917）            *)
 (*   10.1 pnk_kl2_ge_fracsum：kl₂ ≥ d²·(1/(2(p+q))+1/(2(2−p−q)))。      *)
 (*        装配＝pnk_gap_global_B×2 + leb3_le_b_pos_scale 消 inv           *)
 (*        （real_inv_pos_correct 因子级焊接）+ p2_one_minus_diff         *)
-(*        支内消去 + real_distrib 合流 + kl₂ 定义面环账。                 *)
+(*        支内消去 + real_distrib 合流 + kl₂ 定义面环化简。                 *)
 (*   10.2 pnk_pinsker_frac2（0.9 档主件）：kl₂ ≥ (9/10)·TV²。            *)
 (*        常数步核：4·s(2−s)+(2s−2)²==4 环恒等（RIDENT）+                *)
 (*        real_square_nonneg_B ⟹ s(2−s) ≤ 1（HX4 缩 inv4=HX1）；         *)
 (*        EQE：(i1+i2)·MM == 4 ⟹ 1 == (i1+i2)·s(2−s)（EQ4/EQ4M）；       *)
-(*        故 1 ≤ (i1+i2)（HTEN）≥ 9/10 ⟹ pos_scale 合成收口。           *)
-(*   诚实边界：S1 近支/S2（交替级数截断二阶核）未落，挂账 R8。            *)
+(*        故 1 ≤ (i1+i2)（HTEN）≥ 9/10 ⟹ pos_scale 合成闭合。           *)
+(*   诚实边界：S1 近支/S2（交替级数截断二阶核）未落，遗留 R8。            *)
 (* ============================================================ *)
 
 (* ---- 10.1 fracsum 主件 ---- *)
@@ -1960,7 +1944,7 @@ Proof.
                  (real_mult pnk_two (real_plus p q))).
         * apply real_mult_comm.
         * apply real_mult_one. }
-  (* EB：B2+B1 == 4（环账） *)
+  (* EB：B2+B1 == 4（环化简） *)
   assert (EB : real_eq
                  (real_plus
                     (real_mult pnk_two
@@ -2013,7 +1997,7 @@ Proof.
                E1 E2).
           -- exact EB. }
 
-  (* EQMM：MM == 4·(s·(2−s))（环账） *)
+  (* EQMM：MM == 4·(s·(2−s))（环化简） *)
   assert (EQMM : real_eq
                    (real_mult
                       (real_mult pnk_two (real_plus p q))
@@ -2229,7 +2213,7 @@ Proof.
       + apply (leb3_le_b_eq_r (real_mult (real_mult (real_plus p q) (real_plus (p2_one_minus p) (p2_one_minus q))) (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b))) (real_mult real_one (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b))) (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b))).
         * exact (leb3_le_b_pos_scale (real_mult (real_plus p q) (real_plus (p2_one_minus p) (p2_one_minus q))) real_one (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b)) HX1 HSUM).
         * apply (real_eq_trans (real_mult real_one (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b))) (real_mult (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b)) real_one) (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b)) (real_mult_comm real_one (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b))) (real_mult_one (real_plus (real_inv_pos (real_mult pnk_two (real_plus p q)) H2s) (real_inv_pos (real_mult pnk_two (real_plus (p2_one_minus p) (p2_one_minus q))) H2b)))). }
-  (* 收口：9/10·d² ≤ (i1+i2)·d² == d²·(i1+i2) ≤ kl₂（fracsum） *)
+  (* 闭合：9/10·d² ≤ (i1+i2)·d² == d²·(i1+i2) ≤ kl₂（fracsum） *)
   apply (real_le_b_trans
            (real_mult pnk_nine_ten (p2_tvsq p q))
            (real_mult
@@ -2282,16 +2266,16 @@ Print Assumptions pnk_pinsker_frac2.
 
 (* ============================================================ *)
 (* R8 续建（席 PNSKA-R8，20260917·二阶核战役）：                     *)
-(*   ① Q 层交替截断族（G1-Q 件）：S1 核多项式槽 P4 := x−x²/2+x³/3−x⁴/4  *)
-(*     + 偶截断单调尾步件（P4 ≥ P2、余项槽 x⁵/5 非负）——R7 情报 7       *)
+(*   ① Q 层交替截断族（G1-Q 件）：S1 核多项式参数位 P4 := x−x²/2+x³/3−x⁴/4  *)
+(*     + 偶截断单调尾步件（P4 ≥ P2、余项参数位 x⁵/5 非负）——R7 情报 7       *)
 (*     「Q 层有限和族基建」的首块。                                   *)
 (*   ② 常数 2 键石（G2 键件）：AM-GM 四倍件 4ab ≤_B (a+b)²（平方非负    *)
 (*     环恒等 (a+b)² == 4ab+(a−b)² 直连）+ 支内四倍合流主件             *)
 (*     4·q·(1−p) ≤_B q+(1−p)（0<q、0<1−p、q ≤_B p 支内）——R9 常数 2     *)
 (*     装配（A ≥ d²/(2p) ⟕ B ≥ d²/(2(1−q)) 合流 (p+q−1)² ≥ 0）的       *)
 (*     秩序件。                                                       *)
-(* R8 数学定谳（供 R9）：库内 log 内容引擎全一阶（real_log_le_linear_eps  *)
-(*   系）；镜像侧双切线合流族二阶系数 Σλᵢ²>0 恒正，数学上到不了 S2      *)
+(* R8 数学已证结论（供 R9）：库内 log 内容引擎全一阶（real_log_le_linear_eps  *)
+(*   系）；对称侧双切线合流族二阶系数 Σλᵢ²>0 恒正，数学上到不了 S2      *)
 (*   修正——二阶核必须交替级数截断（R7 情报 7 复核成立，               *)
 (*   _tpnska_r8_sanity.py 数值账：S1 25 点/S2 24 点/装配 342 点零违反，  *)
 (*   2·TV² ≤ KL 最小余量 0.0033·d²）。常数 2 装配图：                   *)
@@ -2312,12 +2296,24 @@ Definition pnk_s1_poly (x : Q) : Q :=
 Lemma pnk_qeq_le : forall x y : Q, x == y -> (x <= y)%Q.
 Proof.
   intros [nx dx] [ny dy] Hxy. unfold Qeq in Hxy; simpl in Hxy.
-  unfold Qle; simpl. lia.
+  unfold Qle; simpl.
+  (* Qeq 前件即两侧交叉积的 Z 相等：目标亦为交叉积的 Z 序，            *)
+  (* 等式重写后余下的相等序由 Z.le_refl 构造                            *)
+  rewrite Hxy.
+  apply Z.le_refl.
 Qed.
 
-(* 常数正性：0 ≤ 1/5（余项槽系数） *)
+(* 常数正性：0 ≤ 1/5（余项参数位系数） *)
 Lemma pnk_qpos_1_5 : Qle 0 (1#5).
-Proof. unfold Qle, Qnum, Qden; cbn [Qnum Qden]. lia. Qed.
+Proof.
+  unfold Qle, Qnum, Qden; cbn [Qnum Qden].
+  (* 目标即 Z 序 0·den(1/5) ≤ 1·den(0)：乘法以 Z.mul_0_l/Z.mul_1_l      *)
+  (* 显式归约，余下 0 ≤ 1 由 Z.lt_le_incl 与 1 的正性见证               *)
+  (* Pos2Z.is_pos 构造                                                  *)
+  rewrite Z.mul_0_l, Z.mul_1_l.
+  apply Z.lt_le_incl.
+  exact (Pos2Z.is_pos 1%positive).
+Qed.
 
 (* 尾增量换形（纯环）：x³/3−x⁴/4 == x³·(4−3x)·(1/12) *)
 Lemma pnk_s1_tail2_shape : forall x : Q,
@@ -2325,26 +2321,79 @@ Lemma pnk_s1_tail2_shape : forall x : Q,
 Proof. intros x. ring. Qed.
 
 (* 偶截断单调尾步件（深度 2 实例）：x³(4−3x)/12 ≥ 0（x∈[0,1]）
-   —— P4 ≥ P2 的尾增量非负；证法＝num/den 降 Z + nia（非线性 Z 算术）。
-   一般深度 m 的同型件 R9 按此模板机械展开（P_{2m+2}−P_{2m}
-   = x^{2m+1}((2m+2)−(2m+1)x)/((2m+1)(2m+2))，同构单跳）。 *)
+   —— P4 ≥ P2 的尾增量非负；证法＝Q 层保号乘法显式链（Qmult_le_0_compat）：
+   0 ≤ x ≤ 1 ⟹ x³ ≥ 0 且 4−3x ≥ 4−3 == 1 > 0（乘法保序与反号保序），
+   逐级保号收束；深度 m 的同型件同构展开（单跳）。 *)
 Lemma pnk_s1_tail2_nonneg : forall x : Q,
   Qle 0 x -> Qle x 1 -> Qle 0 (x*x*x*(4 - 3*x)*(1#12)).
 Proof.
-  intros [nx dx] Hx0 Hx1.
-  unfold Qle, Qnum, Qden in Hx0, Hx1; cbn [Qnum Qden] in Hx0, Hx1.
-  unfold Qle, Qmult, Qplus, Qminus, Qopp;
-    cbn [Qnum Qden Qplus Qmult Qminus Qopp]. nia.
+  intros x Hx0 Hx1.
+  (* ① x³ ≥ 0：非负数乘法保号（Qmult_le_0_compat 两步显式实参） *)
+  assert (Hx3 : Qle 0 (x*x*x)).
+  { apply (Qmult_le_0_compat (x*x) x).
+    - apply (Qmult_le_0_compat x x); exact Hx0.
+    - exact Hx0. }
+  (* ② 0 ≤ 3 与 3*x ≤ 3：乘法右单调（Qmult_le_compat_r）+ 1*3 == 3 桥 *)
+  assert (H0le3 : Qle 0 3).
+  { unfold Qle, Qnum, Qden; cbn [Qnum Qden].
+    rewrite Z.mul_0_l, Z.mul_1_r.
+    apply Z.lt_le_incl. exact (Pos2Z.is_pos 3%positive). }
+  assert (H3x : Qle (3*x) 3).
+  { apply (Qle_trans (3*x) (x*3) 3).
+    - apply pnk_qeq_le. apply Qmult_comm.
+    - apply (Qle_trans (x*3) (1*3) 3).
+      + apply (Qmult_le_compat_r x 1 3); [exact Hx1 | exact H0le3].
+      + apply pnk_qeq_le. apply Qmult_1_l. }
+  (* ③ 3*x ≤ 3 ⟹ −3 ≤ −(3*x)（Qopp_le_compat），左加 4 保序：       *)
+  (*    0 ≤ 1 == 4 + −3 ≤ 4 + −(3*x)，即 0 ≤ 4 − 3*x。               *)
+  assert (HtailP : Qle 0 (4 + (-(3*x)))).
+  { apply (Qle_trans 0 (4 + (-3)) (4 + (-(3*x)))).
+    - apply (Qle_trans 0 1 (4 + (-3))).
+      + exact Qle_0_1.
+      + assert (Hz : (4 + (-3) == 1)%Q) by ring.
+        apply pnk_qeq_le. exact (Qeq_sym (4 + (-3)) 1 Hz).
+    - apply (Qplus_le_compat 4 4 (-3) (-(3*x))).
+      + apply Qle_refl.
+      + exact (Qopp_le_compat (3*x) 3 H3x). }
+  assert (Htail : Qle 0 (4 - 3*x)).
+  { apply (Qle_trans 0 (4 + (-(3*x))) (4 - 3*x)).
+    - exact HtailP.
+    - apply pnk_qeq_le. reflexivity. }
+  (* ④ 0 ≤ 1/12：num/den 降 Z 显式构造（0·den(1/12) ≤ 1·den(0)） *)
+  assert (Hq12 : Qle 0 (1#12)).
+  { unfold Qle, Qnum, Qden; cbn [Qnum Qden].
+    rewrite Z.mul_0_l, Z.mul_1_l.
+    apply Z.lt_le_incl. exact (Pos2Z.is_pos 1%positive). }
+  (* ⑤ 汇合：0 ≤ x³·(4−3x)·(1/12) 由保号乘法两级收束 *)
+  apply (Qmult_le_0_compat (x*x*x*(4 - 3*x)) (1#12)).
+  - apply (Qmult_le_0_compat (x*x*x) (4 - 3*x)).
+    + exact Hx3.
+    + exact Htail.
+  - exact Hq12.
 Qed.
 
-(* 余项槽非负（深度 3 实例）：x⁵/5 ≥ 0 —— P5 == P4 + x⁵/5 的显式余项
-   （S1 陈述：log(1+x) ≥ P4(x) 且 P5−P4 == x⁵/5，Q 层槽宽恒等）。 *)
+(* 余项参数位非负（深度 3 实例）：x⁵/5 ≥ 0 —— P5 == P4 + x⁵/5 的显式余项
+   （S1 陈述：log(1+x) ≥ P4(x) 且 P5−P4 == x⁵/5，Q 层参数位宽恒等）。 *)
 Lemma pnk_s1_rem_nonneg : forall x : Q,
   Qle 0 x -> Qle 0 (x*x*x*x*x*(1#5)).
 Proof.
-  intros [nx dx] Hx0.
-  unfold Qle, Qnum, Qden in Hx0; cbn [Qnum Qden] in Hx0.
-  unfold Qle, Qmult, Qnum, Qden; cbn [Qnum Qden Qmult]. nia.
+  intros x Hx0.
+  (* ① x⁴ ≥ 0：非负数乘法保号三级链（Qmult_le_0_compat 显式实参） *)
+  assert (Hx4 : Qle 0 (x*x*x*x)).
+  { apply (Qmult_le_0_compat (x*x*x) x).
+    - apply (Qmult_le_0_compat (x*x) x).
+      + apply (Qmult_le_0_compat x x); exact Hx0.
+      + exact Hx0.
+    - exact Hx0. }
+  (* ② 0 ≤ 1/5：num/den 降 Z 显式构造（0·den(1/5) ≤ 1·den(0)） *)
+  assert (Hq5 : Qle 0 (1#5)).
+  { unfold Qle, Qnum, Qden; cbn [Qnum Qden].
+    rewrite Z.mul_0_l, Z.mul_1_l.
+    apply Z.lt_le_incl. exact (Pos2Z.is_pos 1%positive). }
+  (* ③ 汇合：0 ≤ x⁵·(1/5)，x⁵ == x⁴·x 由保号乘法收束 *)
+  apply (Qmult_le_0_compat (x*x*x*x*x) (1#5)).
+  - apply (Qmult_le_0_compat (x*x*x*x) x); [exact Hx4 | exact Hx0].
+  - exact Hq5.
 Qed.
 
 (* ---- R8.2 常数 2 键石 ---- *)
@@ -2445,9 +2494,9 @@ Print Assumptions pnk_conf4_branch.
 (*   相位=编译重；纯追加（af_ 冻结纪律，不动上文 35 Qed 任何一行）。    *)
 (*                                                                *)
 (* R8 施工单三项对照（诚实口径，详见 attn/_tpnsk_交付报告-20260918.md）：*)
-(*   第 6 项（G3 阶梯）本节执行收口：常数 1 档显式主件 pnk2_pinsker_one。 *)
+(*   第 6 项（G3 阶梯）本节执行闭合：常数 1 档显式主件 pnk2_pinsker_one。 *)
 (*     阶梯定位：9/10（pnk_pinsker_frac2）< 1（本节）< 2（待 W3）。    *)
-(*     「数值选形」定谳：在盘引擎（pnk_core 二阶上切线 + fracsum 全局）  *)
+(*     「数值选形」已证结论：在盘引擎（pnk_core 二阶上切线 + fracsum 全局）  *)
 (*     的一致可达常数上确界=1（角点 p→1,q→0 处 1/(2p)+1/(2(1−q))→1，   *)
 (*     对角线仅到 2 的下确界靠高阶尾残差，属 W3 开放解析环）。          *)
 (*   第 5 项（常数 2 完整形 pnk_binary_pinsker2）本窗不落——前置缺口：   *)
@@ -2456,19 +2505,19 @@ Print Assumptions pnk_conf4_branch.
 (*     （(p,q)=(0.9,0.1) 处实值≈1.11），按红线③显式申报禁硬凑。        *)
 (*   第 4 项（S1/S2 Real 层本体）本窗不落——exp 桥所需 Real 层级数尾     *)
 (*     控制基建（W2 pnk_qsum 族+几何尾）未在盘；施工单自估预算 ≥1 席。 *)
-(*   跨件组合消费：本节主件消费 pnk_kl2_ge_fracsum（本件）+             *)
+(*   跨件组合使用：本节主件使用 pnk_kl2_ge_fracsum（本件）+             *)
 (*     p2_kl2/p2_tvsq（PinskerTwoPoint）+ UpRealLeB3 序代数族；         *)
 (*     cec_trunc_sup（UpReqEngineCeiling）为 Q 层常数算术层（天花板    *)
 (*     常数 c*(k)=2 的 k≥5 段），与 KL 语义的桥接件（kl₂ ≥ c*(k)·TV²） *)
-(*     即 W3 依赖的 pnk_pinsker_trunc5，未在盘，挂账如实登记。          *)
+(*     即 W3 依赖的 pnk_pinsker_trunc5，未在盘，遗留如实登记。          *)
 (*                                                                *)
 (* 新增件：pnk2_half（1/2 常数）；pnk2_half_mult_two / pnk2_half_expand *)
 (*   / pnk2_si_half（inv 焊接三件）；pnk2_sprod_le_one（s(2−s) ≤ 1，    *)
 (*   平方恒等直证，替代 frac2 的 EQ4/inv4 长链，无前提）；              *)
 (*   pnk2_pinsker_one（阶梯主件：1·TV² ≤ kl₂；链=fracsum +              *)
-(*   s(2−s)≤1 + HTEN 同构 pos_scale 收口）。                            *)
+(*   s(2−s)≤1 + HTEN 同构 pos_scale 闭合）。                            *)
 (* 红线自审：纯构造性；公理面预期全 Closed；语句面 Set 纪律沿 frac2     *)
-(*   （无 Prop 前提泄漏）；非平凡性=真装配定理（消费 fracsum 非重述）。 *)
+(*   （无 Prop 前提泄漏）；非平凡性=真装配定理（使用 fracsum 非重述）。 *)
 (* ============================================================ *)
 
 (* ---- R9-PNSK.1 半常数与 inv 焊接件 ---- *)
@@ -2668,7 +2717,7 @@ Proof.
                    H2b)).
   assert (HPOS : real_lt real_zero (p2_tvsq p q))
     by exact (pnk_tvsq_pos p q Hp Hq Hp1 Hq1 Hne).
-  (* 支内乘积恒等：s·(2−s)·(i1+i2) == 1 的两条腿 *)
+  (* 支内乘积恒等：s·(2−s)·(i1+i2) == 1 的两个组成恒等式 *)
   assert (W1 : real_eq
                  (real_mult
                     (real_mult (real_plus p q)
@@ -2970,7 +3019,7 @@ Proof.
                                              (p2_one_minus q))) H2b))).
         * apply real_mult_comm.
         * apply real_mult_one. }
-  (* 收口：1·d² ≤ (i1+i2)·d² == d²·(i1+i2) ≤ kl₂（fracsum） *)
+  (* 闭合：1·d² ≤ (i1+i2)·d² == d²·(i1+i2) ≤ kl₂（fracsum） *)
   apply (real_le_b_trans
            (real_mult real_one (p2_tvsq p q))
            (real_mult
@@ -3020,9 +3069,9 @@ Print Assumptions pnk2_pinsker_one.
 (* R10-PNK2B 块（席 PNK2B·20260918·纯追加）—— Pinsker 常数 2 桥件层      *)
 (*                                                              *)
 (* 使命：头注「已知边界」测绘的常数 2 装配路径之支内二阶砖。            *)
-(*   数值定谳（400² 网格，_tpnk2b_交付报告 §哨兵）：                    *)
+(*   数值已证结论（400² 网格，_tpnk2b_交付报告 §反例见证）：                    *)
 (*   ① 近支砖 q<p：d² ≤ 2p·KL₂ 全域零违反——pnk2_pinsker_trunc5；        *)
-(*   ② 镜像砖 p<q：d² ≤ 2(1−p)·KL₂ 全域零违反——mirror（经二点 KL       *)
+(*   ② 对称件 p<q：d² ≤ 2(1−p)·KL₂ 全域零违反——mirror（经二点 KL       *)
 (*      原子反射恒等式 p2_kl2(1−p,1−q)==p2_kl2(p,q) 归约到①）；          *)
 (*   ③ 测绘路径的远支砖 2(1−p)·gap₂ ≥ d² 网格 79,401 处违反             *)
 (*      （(0.7,0.2) 处 0.2058<0.4167）——字面合流式算术不成立；          *)
@@ -3048,7 +3097,7 @@ Print Assumptions pnk2_pinsker_one.
 
 Require Import UpReqTailResidual.
 
-(* ---- R10-PNK2B.1 点级环放电与代数小件 ---- *)
+(* ---- R10-PNK2B.1 点级环消解与代数小件 ---- *)
 
 Ltac pnk2_ring_eq :=
   apply real_eq_of_zero_diff; intro n0;
@@ -3173,7 +3222,7 @@ Proof.
 Qed.
 
 
-(* inv 焊接内腿：p·(d·inv p) == d *)
+(* inv 焊接内层恒等式：p·(d·inv p) == d *)
 Lemma pnk2_mult_inv_scale : forall (p d : Real) (Hp : real_lt real_zero p),
   real_eq (real_mult p (real_mult d (real_inv_pos p Hp))) d.
 Proof.
@@ -3284,7 +3333,7 @@ Proof.
                     Hbd (pnk2_inv_wd a c Ha Hc Hac))))).
 Qed.
 
-(* 1−p 的对合：p2_one_minus(p2_one_minus p) == p（镜像前提运输用） *)
+(* 1−p 的对合：p2_one_minus(p2_one_minus p) == p（对称前提运输用） *)
 Lemma pnk2_one_minus_inv : forall p : Real,
   real_eq (p2_one_minus (p2_one_minus p)) p.
 Proof. intros p. pnk2_ring_eq. Qed.
@@ -3530,7 +3579,7 @@ Proof.
                                 (real_mult (p2_diff p q) (real_inv_pos p Hp)))))
                   (p2_kl2 p q Hp Hq Hp1 Hq1))
     by exact (real_le_b_trans _ _ _ H10 HGL').
-  (* 收口：d² ≤_B 2p·kl₂ *)
+  (* 闭合：d² ≤_B 2p·kl₂ *)
   assert (H2p : real_lt real_zero (real_mult pnk_two p))
     by exact (real_mult_positive pnk_two p pnk_two_pos Hp).
   apply (leb3_le_b_eq_l
@@ -3554,7 +3603,7 @@ Proof.
     + exact (pnk2_ring_eq_lscale p (p2_kl2 p q Hp Hq Hp1 Hq1)).
 Qed.
 
-(* ---- R10-PNK2B.3 镜像砖：p<q ⟹ d² ≤ 2(1−p)·KL₂ ---- *)
+(* ---- R10-PNK2B.3 对称件：p<q ⟹ d² ≤ 2(1−p)·KL₂ ---- *)
 (*   经二点 KL 原子反射恒等式 p2_kl2(1−p,1−q) == p2_kl2(p,q) 与        *)
 (*   TV² 反射 ((1−p)−(1−q))² == (p−q)² 归约到近支砖。                   *)
 

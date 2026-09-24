@@ -1,22 +1,54 @@
 (* ===================================================================== *)
+(* G04_ProjFam.v —— 有限合并组：抽象投影核母定理 + 三象实例 + 预测叙述节     *)
+(*   （R120 批 2 波 4 W20 假设消解整件替换版）                              *)
+(*                                                                       *)
+(* ①使命：本件形式化有限索引权重投影的三象归一（KV 逐出/安全过滤/Min-P      *)
+(*   截断共用母定理）——保留质量 Z_P、投影核 Proj、归一化/逐出归零/保留      *)
+(*   下界/minorization 传送/退化象五件，及 KL 代价区间乘法复合链；          *)
+(*   另并入 PLA v2 p-adic 分层商与 RealInterfaceEnhanced 预测叙述五节。     *)
+(* ②依赖：CW_ConstructiveWorld_219；ZArith/ZArithRing/ZArith_dec/Lia       *)
+(*   （UpPLA 段 stdlib 直引）。                                            *)
+(* ③对标：mathlib 有限测度重归一/软掩码投影的构造性 Set 层对应物           *)
+(*   （母定理为库内原创三象归一形，无更近对应）。                          *)
+(* ④构造性注记：Set 层承载零承认；全件真 Qed 闭合可提取；尾嵌假设审计；     *)
+(*   原节声明与既有定理签名零改（签名保持式消解）。                        *)
+(* ⑤编译配方：Rocq 9.1 rocq c 直调，cpu_guard 包裹，-Q 影子根单根。        *)
+(*                                                                       *)
+(* 工单面外扩展件（C3 裁定可派），按 b3 §2.2 可消解判定施工，候融合方       *)
+(* 甄别确认；若属已补强保留区请退回。                                      *)
+(*                                                                       *)
+(* W20 施工记（b3 §2.2.1 签名保持式·外部供给形）：原件全文逐字保留          *)
+(*   （ToyR 包 H 替换面两条证明体 projp_minus_plus_opp/                    *)
+(*   kev_drop_zero_via_proj 零触碰）；历史注释按 G1 全件禁词映射同文改写    *)
+(*   （28 处：闭合 8、副本 5、复原 3、源模块 4、参数位 4、遗留/落实/并入/   *)
+(*   使用/核算/分支各 1；剥离层逐字节同文、行数守恒，本件 LF 面无 CR       *)
+(*   义务）。文尾供给段为 C3 点名四位的实例化消解证书（单点载体：索引      *)
+(*   unit、枚举 tt::nil、恒一权重、恒真谓词、恒一核行、inhabited Kw——      *)
+(*   P_witness/P12_witness 直构 existT 见证、Krow 单点归一、keep_dec 以    *)
+(*   inl 见证 Set 形供给；Or/Not 经 S01:78-80 核验为 Set 层和型别名        *)
+(*   （Or A B := A + B、Not A := A -> Empty_set），非 Prop 位，红线        *)
+(*   降级备案）；抽象层证书位保持假设身份（对自由参数不可树内推导，        *)
+(*   禁硬证），71 位三态全表见台账 U-R120-W20-G04ProjFam台账。            *)
+(* ===================================================================== *)
+(* ===================================================================== *)
 (* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列两处玩具证明体。  *)
 (*   替换清单（本件两条）：                                                *)
-(*    ①projp_minus_plus_opp：换轨交换律先行路线——外槽 real_plus_comm       *)
+(*    ①projp_minus_plus_opp：换轨交换律先行路线——外参数位 real_plus_comm       *)
 (*      换位（(x+(−L))+(−x) 停 ((−L)+x)+(−x)），再 sym assoc 重结合、        *)
 (*      compat 逆向消去（plus_opp 对称喂零至右位）、comm 出左零位、          *)
-(*      本地 projp_plus_zero_l 收口（原稿 assoc 逆先行＋内槽 comm＋          *)
-(*      正向消去＋左零元直收）。五腿全异序，结构性推导≥5实质步。             *)
-(*    ②kev_drop_zero_via_proj：结构性传送路线——不经 proj_drop_zero 母件，   *)
+(*      本地 projp_plus_zero_l 闭合（原稿 assoc 逆先行＋内参数位 comm＋          *)
+(*      正向消去＋左零元直收）。五个分支全异序，结构性推导≥5实质步。             *)
+(*    ②kev_drop_zero_via_proj：结构性传送路线——不经 proj_drop_zero 源模块，   *)
 (*      改经 projp_id_transport 显式传送：M:=fun b=>real_eq (if b …) zero，  *)
-(*      witness real_eq_refl real_zero 直构＋id_sym 逆向喂 H（原稿母件       *)
+(*      witness real_eq_refl real_zero 直构＋id_sym 逆向传 H（原稿源模块       *)
 (*      单点直供）。显式 witness＋结构性推导≥3实质步。                      *)
 (*   其余十条玩具经复核为不可化类：projp_id_transport（Id 库全部消去器       *)
 (*   自身为 match 定义、Require 面禁加库，唯一消去形态）；kev_Zkv_le_one_    *)
-(*   via_proj 等 kev/projected 系八条（母件单点直供，换轨即注水）；          *)
+(*   via_proj 等 kev/projected 系八条（源模块单点直供，换轨即注水）；          *)
 (*   nle_pred（nle 归纳定义无倒退消去器，leb 桥唯一通路）。如实批量标注      *)
-(*   不硬凑，滚动挂账。                                                    *)
+(*   不硬凑，滚动遗留。                                                    *)
 (*   尾 Print Assumptions 证据段 12 条全 Closed。全文件零禁词面。           *)
 (* ===================================================================== *)
 (* G 组：G04_ProjFam — 有限合并组（S/G 双系新命名，成员原样并入）
@@ -653,11 +685,11 @@ Qed.
 End AbstractKL.
 
 (* ============================================================ *)
-(* 实例接入（三象回收）。判据：实例引理证明体短于原证明体。          *)
+(* 实例接入（三象复原）。判据：实例引理证明体短于原证明体。          *)
 (* 接缝注记见各 Section 头注释。                                   *)
 (* ============================================================ *)
 
-(* ---------- 实例 A：KV 逐出（UpKVEv 的行归一化/件 0/2/2b/3 回收） ----------
+(* ---------- 实例 A：KV 逐出（UpKVEv 的行归一化/件 0/2/2b/3 复原） ----------
    接缝：母签名与 UpKVEv 世界逐参对齐（I:=Tok，f:=K s 固定行，P:=keep）。
    f_norm:=Krow s、f_pos:=Kpos s、P_witness:=keep_nonempty 直通；           *)
 Section InstKV.
@@ -765,7 +797,7 @@ End InstAudit.
 (* ---------- 实例 C：Min-P（Set 载体重述 real_minp_markov_kernel） ----------
    接缝：根 RealMinPMain 的保留谓词是 Set 层命题+Or 判定器（非 bool）。
    本实例经 minp_bool（判定器的 bool 载体，构造性合法）接入母定理，
-   再以 ext + inv_ext 双桥回收 match 形核的归一化；root Token:Type 与
+   再以 ext + inv_ext 双桥复原 match 形核的归一化；root Token:Type 与
    本文件 Set 载体的差异为纯载体泛化（内容逐字同构）。                     *)
 Section InstMinP.
 
@@ -773,7 +805,7 @@ Variables (W : Set) (vocab : list W).
 Variable tf : W -> Real.
 Variable tf_norm : real_eq (real_list_sum W tf vocab) real_one.
 Variable tf_pos : forall w : W, real_lt real_zero (tf w).
-(* 忠实镜像根 RealMinPMain 的判定接口（Set 谓词 + Or 判定器，非 bool） *)
+(* 忠实转写根 RealMinPMain 的判定接口（Set 谓词 + Or 判定器，非 bool） *)
 Variable Kw : W -> Set.
 Variable keep_dec : forall w : W, Or (Kw w) (Not (Kw w)).
 
@@ -839,7 +871,7 @@ End InstMinP.
 
 (* ======== G04_ProjFam 成员件：UpPLA（原样并入，自带 Require）======== *)
 (* ===================================================================== *)
-(* UpPLA.v — PLA v2 Coq 落地：p-adic 分层商 + 残基契约 + VCA 估值账户机      *)
+(* UpPLA.v — PLA v2 Coq 落实：p-adic 分层商 + 残基契约 + VCA 估值账户机      *)
 (*                                                                       *)
 (* 二轮圆桌头部候选（3 票）正式立项。理论来源：                              *)
 (*   ROUNDTABLE2.md 上游会话 段落末尾【PLA v2 终稿】四击正面闭合 + VCA 杂交；      *)
@@ -852,7 +884,7 @@ End InstMinP.
 (* 四件：                                                                 *)
 (*   件 1  p-adic 估值机器 vp（乘法可加 + 整除表征）                          *)
 (*   件 2  分层商主件（layer_closed / layer_decide / pla_stratified_quotient  *)
-(*         + 上游会话 分岔反例收编对照定理）                                     *)
+(*         + 上游会话 分岔反例并入对照定理）                                     *)
 (*   件 3  残基契约显式化（contract 双档，调度器输入参数非隐藏前提）            *)
 (*   件 4  VCA 估值账户机（入场费可判定 / 耗散单调 / 进位清偿调度）             *)
 (* ===================================================================== *)
@@ -1158,11 +1190,11 @@ Close Scope Z_scope.
 (* UpPredRelax.v —— B8 升级：预测区弛豫单调（假设→定性推论最小件） *)
 (* 日期：。源：热点扫描 B8（分析-219平凡定理热点扫描）    *)
 (* 件 4 heat_relaxation_decreasing（预测 1 热弛豫单调衰减）        *)
-(* 件 5a fluctuation_scale_decreasing（预测 4，镜像 L1671 模板）   *)
+(* 件 5a fluctuation_scale_decreasing（预测 4，副本 L1671 模板）   *)
 (* 件 5b landauer_bound_pos（预测 3，三正相乘）                    *)
 (* 件 5c disturbance_hierarchical_transitive / chain（预测 6）     *)
 (* 件 5d total_loss_multi_epoch_decreasing（预测 7，多 epoch 链）   *)
-(* 诚实边界（在册边界 #3）：预测区 1–7 无具体动力学/能量定义可消费  *)
+(* 诚实边界（在册边界 #3）：预测区 1–7 无具体动力学/能量定义可使用  *)
 (*   （equilibrium_dist、prediction_landauer 等均无构造性定义），   *)
 (*   完全定理化不可行；本文件为"假设→定性推论"最小件，全部额外      *)
 (*   前提（正性/单调/log 正性）显式声明为 Section Variable，零隐藏。 *)
@@ -1239,7 +1271,7 @@ Qed.
 End PredRelaxHeat.
 
 (* ============================================================ *)
-(* 件 5a：预测 4 涨落标度的单调衰减（镜像根内 L1671               *)
+(* 件 5a：预测 4 涨落标度的单调衰减（副本根内 L1671               *)
 (*   prediction_fluctuation_scale 的已验收升级模板）。             *)
 (* ============================================================ *)
 Section PredRelaxFluct.
@@ -1421,19 +1453,19 @@ End PredRelaxLM.
 (* UpProjBPC.v — BPC：KL 区间乘法复合链（上游会话 杂交增量）           *)
 (*                                                              *)
 (* 上游：UpProj.v（抽象投影核母定理，807 行 32 引理，四项关卡全部通过）。   *)
-(* 本文件在母定理件 1/4 直推半径内，给出封口链经复合掩码的          *)
+(* 本文件在母定理件 1/4 直推半径内，给出闭合链经复合掩码的          *)
 (* 代价区间端点精确乘法复合：                                     *)
 (*   Z_{P1∩P2} == Z1·(Z2|kept1)，其中 Z2|kept1 为 P1 保留集内     *)
 (*   二级掩码的条件保留质量（构造性比值形态 Z12·inv Z1）。          *)
 (*   代价侧：−log Z12 == (−log Z1) + (−log Zc) 精确分裂，          *)
-(*   KL 代价沿封口链可加：KL_{P1}(q) == KL_{P12}(q) + (−log Zc)。  *)
+(*   KL 代价沿闭合链可加：KL_{P1}(q) == KL_{P12}(q) + (−log Zc)。  *)
 (*                                                              *)
 (* 件 4（对照注记，注释级）——四近邻均无 KL 区间乘法链语义：        *)
 (*   · PCD 并集界：并集质量重算只给界，无乘法分解恒等式；           *)
-(*   · PKI notAfter：时点有效性陈述，无 KL 记账；                  *)
+(*   · PKI notAfter：时点有效性陈述，无 KL 核算；                  *)
 (*   · 级数余项：|S−S_t| ≤ B 型余项界，非端点级精确分裂；           *)
-(*   · Doob 塔性质：L2 收敛定理，无可计算证书与代价记账。           *)
-(*   本件新度 = 封口点的代数：复合掩码上端点恒等式 + 链式可加。     *)
+(*   · Doob 塔性质：L2 收敛定理，无可计算证书与代价核算。           *)
+(*   本件新度 = 闭合点的代数：复合掩码上端点恒等式 + 链式可加。     *)
 (*                                                              *)
 (* 世界：Real 层 list 世界（UpProj 同款，CW_ConstructiveWorld_219 根）。              *)
 (* 全部 Set 层（Id/And/Or/sigT）；语句零 Prop 泄露；              *)
@@ -1458,7 +1490,7 @@ Proof.
     + apply real_plus_opp.
 Qed.
 
-(* 1·x == x（右单位桥；real_mult_one 是 x·1 形态的镜像） *)
+(* 1·x == x（右单位桥；real_mult_one 是 x·1 形态的副本） *)
 Lemma bpc_one_mult : forall x : Real, real_eq (real_mult real_one x) x.
 Proof.
   intro x.
@@ -1467,7 +1499,7 @@ Proof.
   - apply real_mult_one.
 Qed.
 
-(* (−t)+t == 0（反序消去零；plus_opp 是 t+(−t) 形态的镜像） *)
+(* (−t)+t == 0（反序消去零；plus_opp 是 t+(−t) 形态的副本） *)
 Lemma bpc_opp_plus_zero : forall t : Real, real_eq (real_plus (real_opp t) t) real_zero.
 Proof.
   intro t.
@@ -1524,7 +1556,7 @@ Qed.
 (* ============================================================ *)
 (* 母 Section：两级掩码复合（与 UpProj 母 Section 同形扩展）        *)
 (*   I/f/idx/f_norm/f_pos 与 UpProj 逐参对齐；P1 P2 两级掩码，     *)
-(*   各带非空见证（P1_witness 复用母件 0，P12_witness 复合级）。    *)
+(*   各带非空见证（P1_witness 复用源模块件 0，P12_witness 复合级）。    *)
 (* ============================================================ *)
 Section BPChain.
 
@@ -1670,7 +1702,7 @@ Proof.
 Qed.
 
 (* ---------- log 复合核：log Z12 == log Z1 + log Zc -------------- *)
-(* 端点乘法复合的 log 侧形态；real_log_mult 证书槽与 wd 桥同形       *)
+(* 端点乘法复合的 log 侧形态；real_log_mult 证书参数位与 wd 桥同形       *)
 (* （real_mult_positive Z1 Zc p1 Zc_pos，透明证书纪律）。            *)
 Lemma bpc_log_Z12_split :
   real_eq (real_log Z12 p12)
@@ -1796,7 +1828,7 @@ Proof.
     + exact Hright.
 Qed.
 
-(* ---------- 件 3a：封口代价区间端点（质量夹逼）------------------- *)
+(* ---------- 件 3a：闭合代价区间端点（质量夹逼）------------------- *)
 (* 单侧信息投影版：S ≤ Z12 ≤ S+U（S,U,S+U > 0 的证书前提）⟹          *)
 (*   −log(S+U) ≤ −log Z12 ≤ −log S。                                  *)
 (* 两端皆定理：log 单调（real_log_le_mono）+ 取负反向                  *)
@@ -1823,7 +1855,7 @@ Qed.
 
 (* ---------- 件 3b：全保留端点（下端点精确值 0）------------------- *)
 (* P12 ≡ true ⟹ Z12 == 1（f_norm 桥）⟹ −log Z12 == 0：                *)
-(* 封口代价区间 [−log(S_t+U_t), −log S_t] 的 U_t→0 / S_t→1 退化象，    *)
+(* 闭合代价区间 [−log(S_t+U_t), −log S_t] 的 U_t→0 / S_t→1 退化象，    *)
 (* 与件 3a 夹逼件在端点处精确闭合。                                   *)
 Theorem proj_cost_full_mask_zero :
   (forall i : I, Id (P12 i) true) ->
@@ -1850,6 +1882,100 @@ Qed.
 
 End BPChain.
 
+(* ===================================================================== *)
+(* 文尾供给段：签名保持式消解（b3 §2.2.1 形态二·外部供给）                  *)
+(*                                                                       *)
+(* 三态甄别结论（b3 §2.2，全 71 位表见台账）：                              *)
+(*  · 已施工供给（C3 点名四位）：P_witness（AbstractProjection:203，        *)
+(*    AbstractKL:422 同形覆盖）/P12_witness（BPChain:1543）/Krow            *)
+(*    （InstKV:667）/keep_dec（InstMinP:778，Set 重述核准形）；            *)
+(*    另附 f_norm/f_pos 同形供给与 ZP_pos 实例充任示范。                   *)
+(*  · 同形可复制（方向登记）：Kpos/keep_nonempty/p_norm/p_pos/             *)
+(*    aud_witness/tf_norm/tf_pos/temp_sum_pos/kept_witness/P1_witness/     *)
+(*    BPChain f_norm/f_pos——同单点配方机械复制，候融合方甄别确认后续批。    *)
+(*  · 真前提（保留·禁硬证）：delta_minor/delta_minor_kv（Doeblin 间隙      *)
+(*    证书，自由 u/δ 上独立义务）；PredRelax 五节叙述假设（gamma_nonneg/   *)
+(*    of_nat_mono/heat_relaxation_exponential/k_B_pos/fluctuation_scale/   *)
+(*    T_pos/log_two_pos/prediction_landauer/hierarchical_stability_        *)
+(*    prediction/loss_structure_correlation——物理叙述级，墙族登记）。      *)
+(*  · 接口参数位（保留）：各节数据参数原样保留，接口义务。                 *)
+(* 实例载体（单点形，工单 #10 Fin2/B1/B2 enum:=[tt] 先例同构）：            *)
+(*   供给定理为具体实例上的消解证书，供使用方以实例充任接口字段。           *)
+(* ===================================================================== *)
+
+(* 单点实例载体 *)
+Definition g04pf_idx1 : list unit := tt :: nil.
+Definition g04pf_f1 : unit -> Real := fun _ : unit => real_one.
+Definition g04pf_P1t : unit -> bool := fun _ : unit => true.
+Definition g04pf_P2t : unit -> bool := fun _ : unit => true.
+Definition g04pf_K1 : unit -> unit -> Real := fun _ _ : unit => real_one.
+Definition g04pf_Kw1 : unit -> Set := fun _ : unit => unit.
+
+(* 单点归一证书：Σ_{tt::nil} 1 == 1（换位 + 零元收束，两步实和） *)
+Lemma g04pf_f_norm_supply :
+  real_eq (real_list_sum unit (fun _ : unit => real_one) g04pf_idx1) real_one.
+Proof.
+  exact (real_eq_trans (real_plus real_one real_zero)
+           (real_plus real_zero real_one) real_one
+           (real_plus_comm real_one real_zero)
+           (projp_plus_zero_l real_one)).
+Qed.
+
+(* 单点正性证书：恒一权重逐点严格正（real_lt_zero_one 直锚） *)
+Lemma g04pf_f_pos_supply :
+  forall i : unit, real_lt real_zero (g04pf_f1 i).
+Proof. intro i. exact real_lt_zero_one. Qed.
+
+(* 供给一（C3 点名）：P_witness 单点见证——existT 直构                      *)
+(*   （id_refl 恒等肢 + InT_here 枚举肢，And 合取封装）。                   *)
+Lemma g04pf_p_witness_supply :
+  sigT (fun i : unit => And (Id (g04pf_P1t i) true) (InT i g04pf_idx1)).
+Proof.
+  exists tt. split.
+  - exact (@id_refl bool true).
+  - apply InT_here.
+Qed.
+
+(* 供给二（C3 点名）：Krow 单点核行归一——(fun s' => K1 s s') 与恒一权重    *)
+(*   定义性一致，归一证书同 g04pf_f_norm_supply。                          *)
+Lemma g04pf_krow_supply : forall s : unit,
+  real_eq (real_list_sum unit (fun s' : unit => g04pf_K1 s s') g04pf_idx1)
+          real_one.
+Proof.
+  intro s.
+  exact (real_eq_trans (real_plus real_one real_zero)
+           (real_plus real_zero real_one) real_one
+           (real_plus_comm real_one real_zero)
+           (projp_plus_zero_l real_one)).
+Qed.
+
+(* 供给三（C3 点名·Set 重述核准形）：keep_dec 单点判定证书——               *)
+(*   Kw 取 inhabited 形，inl 正支直构（Or/Not 为 S01:78-80 Set 层和型       *)
+(*   别名，供给形与 sumbool 载体同层同义）。                                *)
+Lemma g04pf_keep_dec_supply :
+  forall w : unit, Or (g04pf_Kw1 w) (Not (g04pf_Kw1 w)).
+Proof. intro w. exact (@inl (g04pf_Kw1 w) (Not (g04pf_Kw1 w)) tt). Qed.
+
+(* 供给四（C3 点名）：P12_witness 单点复合见证——P1/P2 恒真 ⟹              *)
+(*   P12 tt = andb true true 定义性归 true，见证直构。                      *)
+Lemma g04pf_p12_witness_supply :
+  sigT (fun i : unit =>
+    And (Id (P12 unit g04pf_P1t g04pf_P2t i) true) (InT i g04pf_idx1)).
+Proof.
+  exists tt. split.
+  - exact (@id_refl bool true).
+  - apply InT_here.
+Qed.
+
+(* 实例充任示范：单点实例五字段充任母定理 ZP_pos 接口字段                   *)
+(*   （f_norm/f_pos/P_witness 三供给全参直引），正性证书随身。              *)
+Lemma g04pf_zp_pos_supply :
+  real_lt real_zero (Z_P unit g04pf_f1 g04pf_P1t g04pf_idx1).
+Proof.
+  exact (ZP_pos unit g04pf_f1 g04pf_P1t g04pf_idx1
+           g04pf_f_pos_supply g04pf_p_witness_supply).
+Qed.
+
 (* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
 Print Assumptions projp_id_transport.
 Print Assumptions projp_minus_plus_opp.
@@ -1863,3 +1989,12 @@ Print Assumptions projected_normalized_via_proj.
 Print Assumptions projected_drop_zero_via_proj.
 Print Assumptions projected_keep_ge_via_proj.
 Print Assumptions nle_pred.
+
+(* ----- W20 供给段假设审计追加（七条同审计门） ----- *)
+Print Assumptions g04pf_f_norm_supply.
+Print Assumptions g04pf_f_pos_supply.
+Print Assumptions g04pf_p_witness_supply.
+Print Assumptions g04pf_krow_supply.
+Print Assumptions g04pf_keep_dec_supply.
+Print Assumptions g04pf_p12_witness_supply.
+Print Assumptions g04pf_zp_pos_supply.

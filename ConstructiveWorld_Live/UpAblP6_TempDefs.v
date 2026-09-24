@@ -1,3 +1,15 @@
+(* ===================================================================== *)
+(* 【工单面外扩展件标注】本件为工单面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
+(*   形态实例层消解），候融合方甄别确认；若属已补强保留区请退回。 *)
+(* A 区五字段（工单 §5.1）： *)
+(* ① 模块名+数学使命：UpAblP6_TempDefs.v——单点求和载体上温度化 *)
+(* Boltzmann 装配件：配分函数/温度化分布/能量期望/熵显式式全 Set 层形式化。 *)
+(* ② 依赖清单：CW_ConstructiveWorld_219；尾插供给段另 Require UpReqConcFin2 *)
+(* （cf2_temp/cf2_temp_pos 见证锚）。 *)
+(* ③ 对标行：mathlib/stdlib 无同构物（库内自持 Real 载体装配件），省略。 *)
+(* ④ 构造性注记：Set 层承载；零承认零公理；全部定理 Qed 闭合，可提取。 *)
+(* ⑤ 编译配方：Rocq 9.1.0 直调 rocq c -Q <信任池> ""，cpu_guard 包裹单飞。 *)
+(* ===================================================================== *)
 (* ========================================================================= *)
 (* 【ToyR 战役·包AV二·T296 台账席】玩具级定理同名非平凡替换稿（补标头注）    *)
 (*                                                                           *)
@@ -21,7 +33,7 @@
 (*   与 UpAblD1S8（9 节参参数位封装供给）：伴生覆盖落在节参面，12 声明参数位零覆盖，  *)
 (*   即本席余量（任务书「9 参数位余量」口径按核验扩为 12 声明参数位全勘，多勘不降级）。*)
 (*                                                                       *)
-(* 本件消融形态：独立链实例装配——零 Require 母本 UpReqTempDefs，            *)
+(* 本件消融形态：独立链实例装配——零 Require 源模块 UpReqTempDefs，            *)
 (*   单点态空间（S:=unit）＋点态求和载体一次喂定节参面（求和接口 4 参数位      *)
 (*   本件自证，非封装记录型），12 声明参数位逐枚对位：                        *)
 (*   D 参数位 5 枚（定义件）＝实例供给：uap6t_bf／uap6t_Z／uap6t_dist／        *)
@@ -33,7 +45,7 @@
 (*     ⑩log invZ 辅助＝log 乘法拆解＋群律闭合（独立链真证）；             *)
 (*     ⑪点态负 log 恒等＝⑩＋exp log 桥（独立链真证）；                    *)
 (*     ⑫熵显式主＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
-(*       母本 E404 配方在自持载体上复验）。                               *)
+(*       源模块 E404 配方在自持载体上复验）。                               *)
 (*   纪律：零 Require UpReqTempDefs（防混代际）；纯构造性；语句面零 Prop    *)
 (*     泄露（全 real_eq/real_lt 值面）；全 Qed；尾 7 Print Assumptions。   *)
 (* ===================================================================== *)
@@ -103,7 +115,7 @@ Proof.
   unfold uap6t_Z. exact (uap6t_sum1_pos uap6t_bf uap6t_bf_pos).
 Qed.
 
-(* 参数位⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同母本） *)
+(* 参数位⑤（D）：温度化分布实例 p(s) := inv(Z)·bf(s)（因子序逐字段同源模块） *)
 Definition uap6t_dist (s : unit) : Real :=
   real_mult (real_inv_pos uap6t_Z uap6t_Z_pos) (uap6t_bf s).
 
@@ -273,13 +285,13 @@ Qed.
 Definition uap6t_energy_exp : Real :=
   uap6t_sum1 (fun s : unit => real_mult (uap6t_dist s) (energy s)).
 
-(* 参数位⑨（D）：分布熵实例（正性证人居前的母本同位形） *)
+(* 参数位⑨（D）：分布熵实例（正性证人居前的源模块同位形） *)
 Definition uap6t_entropy_dist
   (p : unit -> Real) (Hp : forall s : unit, real_lt real_zero (p s)) : Real :=
   uap6t_sum1 (fun s : unit => real_mult (p s) (real_opp (real_log (p s) (Hp s)))).
 
 (* 参数位⑫（A）：熵显式主——点态换形→distrib→分和→β/logZ 双提取
-   （母本 E404 配方在自持载体上复验，独立链真证） *)
+   （源模块 E404 配方在自持载体上复验，独立链真证） *)
 Theorem uap6t_entropy_temp_explicit :
   real_eq (uap6t_entropy_dist uap6t_dist uap6t_dist_pos)
           (real_plus (real_mult (real_inv_pos T T_pos) uap6t_energy_exp)
@@ -396,3 +408,32 @@ Print Assumptions uap6t_dist_normalized.
 Print Assumptions uap6t_log_inv_Z_aux.
 Print Assumptions uap6t_neg_log_boltzmann_point.
 Print Assumptions uap6t_entropy_temp_explicit.
+
+
+(* ============================================================ *)
+(* 供给段二（签名保持式消解续，b3 §2.2.1；原节声明与既有签名零改）：              *)
+(*   温度 T 正性前提（原假设形 real_lt real_zero T，T 为自由参数，               *)
+(*   对抽象参数不可树内推导，抽象层保持假设身份）的实例化时点消解证书：            *)
+(*   具体见证温度的正性在树内已证，供下游以具体值充任 T 参数并以此二件            *)
+(*   填入正性前提：                                                            *)
+(*   见证一 T:=real_one——引 S07 已证引理 real_lt_zero_one；                     *)
+(*   见证二 T:=cf2_temp（UpReqConcFin2，定义性等于 one）——引 cf2_temp_pos，      *)
+(*   其语句面为类字段形 lt zero cf2_temp，本件以规范名 real_lt real_zero 重述，    *)
+(*   类型转换核验即类字段 lt/zero 与 real_lt/real_zero 在 Real 载体上定义性       *)
+(*   一致的机器凭证；与 ConcFin2 载体族同源，供融合侧按载体族整取。              *)
+(* ============================================================ *)
+Require Import UpReqConcFin2.
+
+Theorem utd_tpos_one_supply : real_lt real_zero real_one.
+Proof.
+  exact real_lt_zero_one.
+Qed.
+
+Theorem utd_tpos_cf2temp_pos_supply : real_lt real_zero cf2_temp.
+Proof.
+  exact cf2_temp_pos.
+Qed.
+
+(* ---- 供给段二假设审计（二连 Print Assumptions） ---- *)
+Print Assumptions utd_tpos_one_supply.
+Print Assumptions utd_tpos_cf2temp_pos_supply.

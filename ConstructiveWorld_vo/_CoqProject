@@ -642,3 +642,5 @@ UpReqMixRationalProxy_R2.v
 UpReqMixRationalProxy_R3.v
 UpReqCauchyLogBound.v
 uabl_attn_full_instance.v
+BBDBridgeSupply.v
+UpReqSamplingFeed.v

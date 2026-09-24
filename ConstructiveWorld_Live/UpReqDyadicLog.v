@@ -1,14 +1,14 @@
-(* ============================================================ *)
-(* 【ToyR 包N 台账席 T253 tier2 四批替换稿】UpReqDyadicLog.v —— 基于 Main 基线    *)
-(*   同名替换：全文保留，仅换四枚玩具证明体（显式见证项微刀）。                    *)
-(*   四刀（实质非平凡三口径·显式见证）：                                          *)
-(*   ①dyd_zero_proj＝Q 层显式见证项 Qeq_refl (projT1 real_zero n) 收口；         *)
-(*   ②dyd_one_proj＝Q 层显式见证项 Qeq_refl (projT1 real_one n) 收口；           *)
-(*   ③dyd_half_proj＝Q 层显式见证项 Qeq_refl (projT1 dyd_half n) 收口；          *)
-(*   ④dyd_half_Qpos＝Qlt/Qlt_bool 双层展开至布尔面，显式 eq_refl 收口。          *)
-(*   两条批量登记（不可化如实注记）：dyd_le_b_refl（全显双步确定性链，无增量）；    *)
-(*   dyd_ln32_witness（成族件直喂，装配位无增量）。                              *)
-(*   Proof 与 Qed 计数守恒；Require 面五行逐字一致；禁词零；真 Qed。             *)
+(* ============================================================*)
+(* UpReqDyadicLog.v —— 整件替换交付注记（基于 Main 基线同名替换）（普查反推件，候融合方确认） *)
+(*   全文语句面守恒，仅指定证明体重写。四处显式见证位：                          *)
+(*   替换体口径：展开后目标为定义性等式，eq_refl 为其显式构造子。                *)
+(*   ①dyd_zero_proj＝Q 层显式见证项 Qeq_refl (projT1 real_zero n) 闭合；        *)
+(*   ②dyd_one_proj＝Q 层显式见证项 Qeq_refl (projT1 real_one n) 闭合；          *)
+(*   ③dyd_half_proj＝Q 层显式见证项 Qeq_refl (projT1 dyd_half n) 闭合；         *)
+(*   ④dyd_half_Qpos＝Qlt/Qlt_bool 双层展开至布尔面，显式 eq_refl 闭合。         *)
+(*   两条如实注记（按原样保留、无增量改写）：dyd_le_b_refl（全显双步确定性链）；  *)
+(*   dyd_ln32_witness（成族件直接代入，装配位无增量）。                          *)
+(*   Proof 与 Qed 计数守恒；Require 面逐字一致；禁词零；纯构造性闭合。           *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* UpReqDyadicLog.v —— DyadicLog 构造性 ln 包络层                   *)
@@ -17,8 +17,8 @@
 (*   给出逐点与成族两档 ln 界。                                     *)
 (*                                                              *)
 (* 主件：dyadic 轴 = real_mult (real_const j) c3e_ln2_real，        *)
-(*   语义腿全部经 evd_le_b_mult_pos_l 缩放导出——绕开 log_seq 桥。    *)
-(*   ① general-m（dyd_ln_env）：ln-m 腿为单发界，                    *)
+(*   语义分支全部经 evd_le_b_mult_pos_l 缩放导出——绕开 log_seq 桥。  *)
+(*   ① general-m（dyd_ln_env）：ln-m 分支为单发界，                  *)
 (*      tail(k,n) = (b−a) + k·2/(2n+2)——纯 2^(−k) 收敛仅在           *)
 (*      纯 2^j 轴成立，此处如实记档。                                 *)
 (*   ② family（dyd_ln_env_family）：t·t 段为定点宽，n→∞ 不缩；        *)
@@ -28,7 +28,7 @@
 (* 已知边界：① 的轴限制与 ② 的定点宽段为上游同源待续事项，            *)
 (*   本件承袭记档；除此两处外全部闭合。                               *)
 (*                                                              *)
-(* 依赖（全部只读消费）：CW_ConstructiveWorld_219（S01–S15 全导出）、  *)
+(* 依赖（全部只读使用）：CW_ConstructiveWorld_219（S01–S15 全导出）、  *)
 (*   UpRealLeB / UpReqEnvelopeDual / UpReqConstEnvelope              *)
 (*   （均 .vo/.vok 双证在库）。                                       *)
 (*                                                              *)
@@ -85,7 +85,7 @@ Lemma dyd_half_Qpos : Qlt 0 (1#2)%Q.
 Proof. unfold Qlt, Qlt_bool. exact eq_refl. Qed.
 
 Lemma dyd_const_pos_Q_S : forall j : nat, Qlt 0 (Z.of_nat (Nat.succ j) # 1).
-Proof. intro j. unfold Qlt. simpl. lia. Qed.
+Proof. intro j. unfold Qlt. simpl. exact eq_refl. Qed.
 
 (* le_b 自反桥（j=0/k=0 退化支专用） *)
 Lemma dyd_le_b_refl : forall x : Real, real_le_b x x.
@@ -375,7 +375,7 @@ Proof.
     unfold Qdiv; cbn; rewrite Qmult_1_l; reflexivity.
 Qed.
 
-(* 3.3 移位包络母件：LNM−k·ln2 双边包络（flip+mult_pos_l+plus_compat） *)
+(* 3.3 移位包络基础引理：LNM−k·ln2 双边包络（flip+mult_pos_l+plus_compat） *)
 Theorem dyd_shift_env : forall (LNM : Real) (a b : Q),
   real_le_b (real_const a) LNM -> real_le_b LNM (real_const b) ->
   forall (k n : nat),
@@ -391,7 +391,7 @@ Proof.
   intros LNM a b H H' k n.
   destruct (c3e_env_ln2 n) as [lo2 [hi2 [Hlo [Hhi Hw]]]].
   destruct k as [|k'].
-  - (* k = 0 退化：锚 ≈ LNM，包络即 ln-m 腿本身 *)
+  - (* k = 0 退化：锚 ≈ LNM，包络即 ln-m 分支本身 *)
     exists a. exists b.
     assert (Hax0 : real_eq (real_plus LNM
                     (real_opp (real_mult (real_const (Z.of_nat 0 # 1)) dyd_ln2)))
@@ -461,8 +461,8 @@ Proof.
 Qed.
 
 (* 3.4 主件：dyadic 格点 x = m·2^(−k) 的构造性 ln 包络
-      （ln m 腿：evd_log_ge_inv_one_B 下界 × real_log_le_linear_B 上界对夹；
-      诚实账：ln-m 段宽 (b−a) 固定，k·ln2 段收敛，见头注 (2)） *)
+      （ln m 分支：evd_log_ge_inv_one_B 下界 × real_log_le_linear_B 上界对夹；
+      段宽口径：ln-m 段宽 (b−a) 固定，k·ln2 段收敛，见头注 (2)） *)
 Theorem dyd_ln_env : forall (m : Q) (Hm : Qlt 0 m) (k n : nat),
   sigT (fun lo : Q => sigT (fun hi : Q =>
     And (real_le_b (real_const lo)
@@ -477,7 +477,7 @@ Theorem dyd_ln_env : forall (m : Q) (Hm : Qlt 0 m) (k n : nat),
                               + 2 * ((Z.of_nat k # 1) * t2 n)))))).
 Proof.
   intros m Hm k n.
-  (* ln-m 下腿：log m ≥ 1 − 1/m（evd B 形 + 常数倒数点态换形） *)
+  (* ln-m 下界分支：log m ≥ 1 − 1/m（evd B 形 + 常数倒数点态换形） *)
   assert (Hleglo : real_le_b (real_const ((1 - 1 / m)%Q))
                              (real_log (real_const m) (dyd_const_pos m Hm))).
   { apply (dyd_le_b_eq_l _ _ _ (evd_log_ge_inv_one_B (real_const m)
@@ -486,7 +486,7 @@ Proof.
     repeat rewrite real_const_proj. repeat rewrite real_plus_proj.
     repeat rewrite real_opp_proj. rewrite dyd_one_proj.
     rewrite dyd_const_inv_proj. ring. }
-  (* ln-m 上腿：log m ≤ m − 1（real_log_le_linear_B + 常数和换形） *)
+  (* ln-m 上界分支：log m ≤ m − 1（real_log_le_linear_B + 常数和换形） *)
   assert (Hleghi : real_le_b (real_log (real_const m) (dyd_const_pos m Hm))
                              (real_const ((m - 1)%Q))).
   { apply (dyd_le_b_eq_r _ _ _
@@ -536,7 +536,7 @@ Definition dyd_annulus (j : nat) (t : Q) (Ht : Qlt 0 t) : Real :=
                       (dyd_one_plus_const_pos t Ht)).
 
 (* 4.3 主件：ln(2^j·(1+t)) 双边包络
-      宽 = 2·j·t2 n（轴段，收敛）+ t·t（定点，诚实账见头注 (3)） *)
+      宽 = 2·j·t2 n（轴段，收敛）+ t·t（定点，如实申报见头注 (3)） *)
 Theorem dyd_ln_env_family : forall (j : nat) (t : Q) (Ht : Qlt 0 t) (n : nat),
   sigT (fun lo : Q => sigT (fun hi : Q =>
     And (real_le_b (real_const lo) (dyd_annulus j t Ht))

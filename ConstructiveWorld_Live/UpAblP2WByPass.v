@@ -1,9 +1,36 @@
+(* ===================================================================== *)
+(* 工单面外扩展件（C2 底册），按 b3 §2.2 可消解判定施工，候融合方甄别确认；若属已补强保留区请退回 *)
+(* ===================================================================== *)
+(* 模块名：UpAblP2WByPass.v——本件形式化论文 2 自有域两判定接口的 bool 具体 *)
+(*   载体实例与泛用封装证书。以下横幅与尾部 Set 重述位为本轮新增，Main 原件 *)
+(*   全文逐字保留（原件作为新增前缀与后缀之间的完整字节段，声明面零改）。  *)
+(* 依赖清单：零本库依赖（原件自建极小基座；本块零新增 Require）。          *)
+(* 对标：stdlib 的 bool_eq_dec 类具体判定实例与 sigT 见证形判定封装。      *)
+(* 构造性注记：Set 层承载，零承认；重述位见证形可提取；新证明分判构造，    *)
+(*   零一键收敛。                                                          *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 包裹；影子根单根 -Q 编译。           *)
+(* 三态甄别总表（Section TopPMirror 两声明位，工单面外扩展对象）：         *)
+(*   ① W（原件 :335 位）=Set 型参数位，接口义务保留。                      *)
+(*   ② W_dec（原件 :336 位）查读更正：本件 Or/Not 为件内自定义 Set 层形    *)
+(*     （Or A B := A + B、Not A := A -> Empty_set，A B : Set），W_dec 已   *)
+(*     属 Set 值判定接口，零 Prop 泄露（C2 底册「Prop 位」读数为词面形     *)
+(*     判断，以实际查读更正）。按工单核准仍落 sigT bool 见证形重述位与    *)
+(*     具体层供给，并同批供给双形桥接证书（原 Or 形接口零改动）。          *)
+(* Set 重述位标注：尾部第 8 部（新增节后块），p2wb_wdec_set 定义位。       *)
+(* 红线四条自检：①纯构造性零经典逻辑；②Set 层承载零 Prop 泄露（重述形    *)
+(*   负支取 Set 层否定见证 W t p -> Empty_set）；③非平凡强制（重述位、   *)
+(*   双形桥接与具体层供给三件俱实）；④可提取（重述位见证形可提取，新增  *)
+(*   证明项全 Closed，公理面为空）。                                       *)
+(* 三关凭证：原件字节段全保留（前缀+后缀逐字节不变）；新增面 LF 单字节   *)
+(*   换行；新增代码括号配平经编译门验证。                                  *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
 (* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   p2wb_supplied_sel（原 L379，1 句玩具证）                             *)
 (*   p2wb_supplied（原 L371，1 句玩具证）                                 *)
@@ -29,9 +56,9 @@
 (* 路线依据（诚实边界）：抽象 Token/抽象 keep 上的两判定接口在构造性语境        *)
 (*   不可通构造——抽象不可判定性结论维持不变；本件为载体相对性实例，仅证         *)
 (*   具体 bool 载体上的可构造性；采用零依赖路线（仅 Stdlib Extraction 一项      *)
-(*   Require），自建 S01 同型极小基座，母本件零触碰。                           *)
+(*   Require），自建 S01 同型极小基座，源模块零触碰。                           *)
 (*                                                                      *)
-(* 母本对应面（复现对象）：族B 代表结论 tail_plus_kept_full——质量守恒          *)
+(* 源文件对应面（复现对象）：族B 代表结论 tail_plus_kept_full——质量守恒          *)
 (*   Id (plus tail_mass evicted_partition) Z_thermo，tail_mass 经 keep_dec      *)
 (*   逐点分派；族A 代表结论 top_p_member→top_p_keep——头位保留见证仅经          *)
 (*   token_eq_dec 实例消去生成；阈值判定轴（抽象序可判位）以 W/W_dec 参量       *)
@@ -246,7 +273,7 @@ Proof.
 Qed.
 
 (* ################ 第 4 部：族B 实例化——KV 守恒结论逐式复现 ################# *)
-(* 母本：S06 tail_mass／evicted_partition／Z_thermo 与                    *)
+(* 源文件：S06 tail_mass／evicted_partition／Z_thermo 与                    *)
 (*   tail_plus_kept_full（Id (plus tail_mass evicted_partition)           *)
 (*   Z_thermo）；实数轴取 nat 极小载体（实层判定面不在本件范围）。         *)
 
@@ -325,7 +352,7 @@ Theorem p2wb_sel_partition_two : Id (p2wb_evicted_partition p2wb_keep_dec_sel) (
 Proof. exact (@id_refl _ (rplus one one)). Qed.
 
 (* ################ 第 5 部：族A 实例化——TopP 保留判定逐式复现 ############### *)
-(* 母本：S06 top_p_member（token_eq_dec x w 逐位分派，inl 支出 unit       *)
+(* 源文件：S06 top_p_member（token_eq_dec x w 逐位分派，inl 支出 unit       *)
 (*   元素）→ top_p_keep。阈值判定轴（抽象序可判位，族A 与 LPO 邻接，      *)
 (*   不在本件范围）以 W/W_dec 参量全称化维持抽象；                       *)
 (*   头位见证仅经 token_eq_dec 实例消去生成。                             *)
@@ -435,3 +462,69 @@ Print Assumptions p2wb_tok_dec_core_correct.
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory "_a2_p2w_ex".
 Separate Extraction p2wb_tok_dec_core.
+
+(* ################ 第 8 部：W_dec 位 Set 重述位与具体层供给（R120 批 2，   *)
+(* ################ C2 底册 #11） ########################################## *)
+(* 件内先例：第 2 部 p2wb_token_eq_dec（Or 形四支构造子逐一判定）；         *)
+(*   重述形同 UpReqAttnUniformLimit 文尾 alm_token_eq_dec_set 款式：       *)
+(*   sigT bool 见证形——正支给 W t p 见证，负支给 W t p -> Empty_set 函数   *)
+(*  （Set 层否定见证，可提取）。                                           *)
+
+(* Set 重述形定义位（台账标注：本位即 W_dec 参数位的 Set 重述位） *)
+Definition p2wb_wdec_set (W : bool -> nat -> Set) : Set :=
+  forall (t : bool) (p : nat),
+    sigT (fun d : bool =>
+      match d with
+      | true => W t p
+      | false => W t p -> Empty_set
+      end).
+
+(* 桥一：Or 形判定接口 -> sigT bool 见证形 *)
+Definition p2wb_wdec_of_or (W : bool -> nat -> Set)
+           (kd : forall (t : bool) (p : nat), Or (W t p) (Not (W t p))) :
+  p2wb_wdec_set W :=
+  fun t p =>
+    match kd t p with
+    | inl h => existT _ true h
+    | inr h => existT _ false h
+    end.
+
+(* 桥二：sigT bool 见证形 -> Or 形判定接口（原 Or 形接口签名零改动） *)
+Definition p2wb_wdec_or_of (W : bool -> nat -> Set)
+           (ds : p2wb_wdec_set W) :
+  forall (t : bool) (p : nat), Or (W t p) (Not (W t p)) :=
+  fun t p =>
+    match ds t p with
+    | existT _ true h => inl h
+    | existT _ false h => inr h
+    end.
+
+(* 具体层供给：W 取布尔择留族（true 恒驻 unit、false 恒空），判定由       *)
+(*   构造子分派直接给出（正支 tt 见证；负支构造子分裂空匹配）。            *)
+Definition p2wb_W_sel : bool -> nat -> Set :=
+  fun t _ =>
+    match t with
+    | true => unit
+    | false => Empty_set
+    end.
+
+Theorem p2wb_wdec_supply : p2wb_wdec_set p2wb_W_sel.
+Proof.
+  intros t p.
+  destruct t as [ | ].
+  - exact (existT _ true tt).
+  - refine (existT _ false _).
+    intro h.
+    exact (match h with end).
+Qed.
+
+(* 双形往返证书：重述形经桥二回到 Or 形接口（择留实例） *)
+Definition p2wb_wdec_roundtrip :
+  forall (t : bool) (p : nat), Or (p2wb_W_sel t p) (Not (p2wb_W_sel t p)) :=
+  p2wb_wdec_or_of p2wb_W_sel p2wb_wdec_supply.
+
+(* ================= 重述位假设面核验（预期全 Closed） ==================== *)
+Print Assumptions p2wb_wdec_of_or.
+Print Assumptions p2wb_wdec_or_of.
+Print Assumptions p2wb_wdec_supply.
+Print Assumptions p2wb_wdec_roundtrip.

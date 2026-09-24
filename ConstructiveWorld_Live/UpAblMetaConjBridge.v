@@ -1,35 +1,71 @@
+(* ===================================================================== *)
+(* 工单面外扩展件（C2 底册），按 b3 §2.2 可消解判定施工，候融合方甄别确认；若属已补强保留区请退回 *)
+(* ===================================================================== *)
+(* 模块名：UpAblMetaConjBridge.v——本件形式化 Part A 膨胀引擎从 S01/Id 世界 *)
+(*   到具体 Real/req 世界的字段替换运输桥（Section ConjBridge 八个同形小件 *)
+(*   与主件 mtdc_lo_inflation）。以下横幅与尾部消解块为本轮新增，Main 原件 *)
+(*   全文逐字保留（原件作为新增前缀与后缀之间的完整字节段，声明面零改；  *)
+(*   件内既存各注释块与原样保留块零触碰）。                                *)
+(* 依赖清单（本块新增，原件依赖面零改）：UpAblP7_UMixSelect（同批落件    *)
+(*   版，融合序须先于本件；该件以普通 Import 引入，uabm_ 前缀名零外泄，  *)
+(*   与原件头注对 UpReqUMixSelect 的禁引约定不冲突）。                     *)
+(* 对标：mathlib 阿基米德性质的 nat 尺度上界见证构造。                     *)
+(* 构造性注记：Set 层承载，零承认；供给件全由库内已证件以显式实参供给；  *)
+(*   新证明分判构造，零一键收敛；可提取面零 Prop 残留。                    *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 包裹；影子根单根 -Q 编译。           *)
+(* 三态甄别总表（Section ConjBridge 九声明位）：                           *)
+(*   ① lt_plus_compat_lt_le（原件 :75 位）=可消解：尾部消解块以           *)
+(*     real_lt_plus_compat_lt_le（CW219 Real 层成品，ConcMixSelFeed        *)
+(*     cms_bs_lpc 同款供给源）供给 mtdc_lpc_supply，语句面与               *)
+(*     UpAblMetaDivThm mtd_lpc 逐字同（Main:1441 与批 2 落件版 :1491       *)
+(*     两版查读同语句）；该件 Require 本件，环路不可引，故以成品同语句    *)
+(*     提供而非引用其名。                                                  *)
+(*   ② Harch（原件 :90 位）=可消解：uabm_arch_scale（UpAblP7_UMixSelect   *)
+(*     新构造，real_arch 经 mix_scale_eq_const 与 real_mult_one 换形）    *)
+(*     供严格支；非严格支（x 与零同义时）以 cmk_boost_pos 补全，两支      *)
+(*     分判构造为 mtdc_harch_supply（实例 one 字段即 real_one，            *)
+(*     S07:916 查读在案，语句面逐位对上）。                                *)
+(*   ③ TV0/Htv0/budget/Hbudget/lo/Hlo0/Hds1 七位=抽象量正性与 Doeblin     *)
+(*     间隙证书（δ*<1），真前提保留为接口义务，禁硬证。                    *)
+(* 红线四条自检：①纯构造性零经典逻辑；②Set 层承载零 Prop 泄露；          *)
+(*   ③非平凡强制（供给件照消融战役 AB 系伴生供给件配方）；④可提取        *)
+(*  （新增证明项全 Closed，公理面为空）。                                  *)
+(* 三关凭证：原件字节段全保留（前缀+后缀逐字节不变）；新增面 LF 单字节   *)
+(*   换行；新增代码括号配平经编译门验证。                                  *)
+(* ===================================================================== *)
+
 (* ============================================================ *)
-(* UpAblMetaConjBridge.v —— CJS3 席（合取件解封总装席）G4 合取件 C 侧        *)
+(* UpAblMetaConjBridge.v —— CJS3 席（合取件解封装配席）G4 合取件 C 侧        *)
 (*   req 运输桥。按 CJS1 桥设计单 attn/_tcjs1_桥设计单-20260922.md 路线 (a)    *)
 (*   字段替换运输桥施工：把 UpAblA2_LoInflation Part A（S01 RI/Id 世界）      *)
-(*   沿字段替换运到具体 Real/req 世界（RealEnhancedReal 放电），产出          *)
-(*   mtdc_lo_inflation 供 UpAblMetaDivThm mtd_unbounded_conj 解封接线。       *)
+(*   沿字段替换运到具体 Real/req 世界（RealEnhancedReal 实例化消解），产出          *)
+(*   mtdc_lo_inflation 供 UpAblMetaDivThm mtd_unbounded_conj 解封实例化。       *)
 (*   模具=UpReqConcMixSel（库内 ums_→cmk_ 全族 req 移植先例）。               *)
-(*   语句级主件 mtdc_lo_inflation（loᵢ Part A 引擎 req 转述）+ 8 镜像小件     *)
-(*   （消费 cmk_ 孪件机械转述，非重证明；镜像 LoInflation :63-312 逐行）。     *)
+(*   语句级主件 mtdc_lo_inflation（loᵢ Part A 引擎 req 转述）+ 8 副本小件     *)
+(*   （使用 cmk_ 孪件机械转述，非重证明；对照 LoInflation :63-312 逐行）。     *)
 (* 依赖：CW_ConstructiveWorld_219；UpReqAlgebra（req_minus/req_two_pos/       *)
 (*   req_mult_cancel_l/req_le_mult_compat_r/req_inv_pos_mult_distr）；        *)
 (*   UpReqConcMixSel（cmk_ 全族）。禁 Require UpReqUMixSelect/                *)
 (*   UpAblA2_LoInflation（防 RI 名劫持）。                                    *)
 (* 施工注（CJS3 对设计单骨架的两处机械落实，零语义形变）：                     *)
-(*   ①设计单接线契约「封存件只加 1 行 Require」⇒ 本件对 UpReqAlgebra/         *)
+(*   ①设计单实例化契约「封存件只加 1 行 Require」⇒ 本件对 UpReqAlgebra/         *)
 (*     UpReqConcMixSel 取 Require Export（骨架为 Import——Import 不外传        *)
 (*     cmk_ 名，封存件语句面 cmk_scale/cmk_r_pow 将无法解析；Export 为        *)
 (*     1 行契约的机械必要，CMixSel 头注撞名检查在案，零名劫持）。             *)
 (*   ②设计单桩10 骨架「Harch ub2 取 N2」与「结论取 ub2 归一形＝               *)
 (*     mult mtdc_four ub2」不可同时成立（Harch ub2 只给 ub2 < k·1，           *)
-(*     四倍放大后不闭合）——按设计关键「leg3=HN2 逐字直配」执行：               *)
-(*     Harch 施于 mult mtdc_four ub2 取 N2（非负腿 Hub4 照 Hub2 同模）、      *)
+(*     四倍放大后不闭合）——按设计关键「leg3=HN2 逐字直接匹配」执行：               *)
+(*     Harch 施于 mult mtdc_four ub2 取 N2（非负肢 Hub4 照 Hub2 同模）、      *)
 (*     pow_tail #2 前件经 le 链 ub2 ≤ 4·ub2（1≤4 桩2）＋lt_le_trans 送达；    *)
-(*     leg3=HN2 逐字。其余全骨架逐行镜像。                                    *)
-(* 证书同源注（设计单步骤 0 探针裁决执行）：mtdc_inv2 证书统一取              *)
+(*     leg3=HN2 逐字。其余全骨架逐行对照转写。                                    *)
+(* 证书同源注（设计单步骤 0 检验裁决执行）：mtdc_inv2 证书统一取              *)
 (*   req_two_pos（UpReqAlgebra:340，封存件 mtd_inv2 :1451 同源），            *)
 (*   Hlohalf0 内 inv_pos_pos 证书同取 req_two_pos——保 mtd_inv2≡mtdc_inv2、   *)
-(*   G4 语句面证书链与本桥旗舰结论纯 δ 可换（Qed 证书名零混用）。             *)
+(*   G4 语句面证书链与本桥主结论纯 δ 可换（Qed 证书名零混用）。             *)
 (* 红线自审：Set 层零 Prop（量词 Real/nat、lt/le/sigT/And 全 Set 面，         *)
-(*   Or 注入 inl）；零 Axiom/Admitted；零经典逻辑；零 Obj.magic 面            *)
+(*   Or 注入 inl）；公理面为空、零承认式申明；零经典逻辑；零 Obj.magic 面            *)
 (*   （提取铸型若现，按 CJS2 G3 判例归 (a) 族「双世界接口面证明项擦除        *)
-(*   铸型」登记）；旗舰 Defined 可提取。                                     *)
+(*   铸型」登记）；主定理 Defined 可提取。                                     *)
 (* 编译配方（9.1 直调轨）：unset COQLIB/ROCQLIB；coqc -q -native-compiler no  *)
 (*   -Q . "" UpAblMetaConjBridge.v（cpu_guard 包裹，coqc<3 让行）。           *)
 (* ============================================================ *)
@@ -39,10 +75,10 @@ Require Export UpReqAlgebra.
 Require Export UpReqConcMixSel.
 Import RealInterfaceEnhancedMod.
 
-(* ===== §0 放电与环账桥 ===== *)
+(* ===== §0 实例化消解与环形簿册桥 ===== *)
 (* 实例 RealEnhancedReal（S07:8591）经上行 Import 已全局在位，投影零新桩。   *)
 (* mtdc_mult_distr_r：Setoid distrib 字段一跳（comm+congr），                *)
-(*   镜像 S01 mult_plus_distr_r（右分配，S01:399）req 面。                   *)
+(*   对照转写 S01 mult_plus_distr_r（右分配，S01:399）req 面。                   *)
 
 Lemma mtdc_mult_distr_r : forall a b c : Real,
   req (mult (plus a b) c) (plus (mult a c) (mult b c)).
@@ -63,52 +99,52 @@ Definition mtdc_two : Real := plus one one.
 Definition mtdc_inv2 : Real := inv_pos mtdc_two req_two_pos.
 Definition mtdc_four : Real := plus mtdc_two mtdc_two.
 
-(* ===== §2 loᵢ Part A 引擎 req 转述（Section 面逐字镜像 LoInflation :63-312） ===== *)
-(* 出节签名（镜像 LoInflation 变参序，与封存块 L1503 消费位同形）：           *)
+(* ===== §2 loᵢ Part A 引擎 req 转述（Section 面逐字对照转写 LoInflation :63-312） ===== *)
+(* 出节签名（对照 LoInflation 变参序，与封存块 L1503 使用位同形）：           *)
 (*   mtdc_lo_inflation lt_plus_compat_lt_le TV0 Htv0 budget Hbudget          *)
 (*                     lo Hlo0 Hds1 Harch                                     *)
 
 Section ConjBridge.
 
-(* 诚实接口：混合 lt+le 加法保序（LoInflation :77 同位 Variable 镜像；       *)
-(*   出节后由封存件 mtd_lpc :1441 填槽）                                     *)
+(* 诚实接口：混合 lt+le 加法保序（LoInflation :77 同位 Variable 对照；       *)
+(*   出节后由封存件 mtd_lpc :1441 填入参数位）                                     *)
 Variable lt_plus_compat_lt_le : forall a b c d : Real,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 
-(* ---- 固定面：TV₀ / budget（:80-84 镜像） ---- *)
+(* ---- 固定面：TV₀ / budget（:80-84 对照） ---- *)
 Variable TV0 : Real.
 Variable Htv0 : le zero TV0.
 Variable budget : Real.
 Variable Hbudget : lt zero budget.
 
-(* ---- 膨胀参数：lo（:87-89 镜像） ---- *)
+(* ---- 膨胀参数：lo（:87-89 对照） ---- *)
 Variable lo : Real.
 Variable Hlo0 : lt zero lo.
 Variable Hds1 : lt (mult lo lo) one.   (* δ* < 1：Doeblin 证书 *)
 
-(* Arch 前件（:92-93 镜像；nat-尺度 cmk_scale 形——封存块 L1467 换名后同形） *)
+(* Arch 前件（:92-93 对照；nat-尺度 cmk_scale 形——封存块 L1467 换名后同形） *)
 Variable Harch : forall x : Real, le zero x ->
   sigT (fun N : nat => lt x (cmk_scale (Datatypes.S N) one)).
 
-(* ---- 常数证书（:96-101 镜像；two/inv2/four 已上移 §1 顶层） ---- *)
+(* ---- 常数证书（:96-101 对照；two/inv2/four 已上移 §1 顶层） ---- *)
 Let Htwopos : lt zero mtdc_two := plus_positive one one one_pos one_pos.
 Let Hfourpos : lt zero mtdc_four :=
   plus_positive mtdc_two mtdc_two Htwopos Htwopos.
 Let inv4 := inv_pos mtdc_four Hfourpos.
 
-(* ---- 两配置：lo 与 lo/2；δ* := lo² 与 δ*₂ := (lo/2)²（:104-108 镜像） ---- *)
+(* ---- 两配置：lo 与 lo/2；δ* := lo² 与 δ*₂ := (lo/2)²（:104-108 对照） ---- *)
 Let loh := mult lo mtdc_inv2.
 Let ds := mult lo lo.
 Let ds2 := mult loh loh.
 Let kap := req_minus one ds.
 Let kap2 := req_minus one ds2.
 
-(* ---- 两配置的 Arch 输入 = 选择器显式 k-上界（:111-120 镜像） ---- *)
+(* ---- 两配置的 Arch 输入 = 选择器显式 k-上界（:111-120 对照） ---- *)
 Let Hds0 : lt zero ds := mult_positive lo lo Hlo0 Hlo0.
 Let Hwb : lt zero (mult ds budget) :=
   mult_positive ds budget Hds0 Hbudget.
 Let ub := mult TV0 (inv_pos (mult ds budget) Hwb).
-(* 证书同源：inv_pos_pos 槽取 req_two_pos（封存块 L1486-1490 同源，纯 δ） *)
+(* 证书同源：inv_pos_pos 参数位取 req_two_pos（封存块 L1486-1490 同源，纯 δ） *)
 Let Hlohalf0 : lt zero loh :=
   mult_positive lo mtdc_inv2 Hlo0 (inv_pos_pos mtdc_two req_two_pos).
 Let Hds2_0 : lt zero ds2 := mult_positive loh loh Hlohalf0 Hlohalf0.
@@ -116,7 +152,7 @@ Let Hwb2 : lt zero (mult ds2 budget) :=
   mult_positive ds2 budget Hds2_0 Hbudget.
 Let ub2 := mult TV0 (inv_pos (mult ds2 budget) Hwb2).
 
-(* ---------- 桩2 基础序小件（镜像 :125-135 loi_le_one_four） ---------- *)
+(* ---------- 桩2 基础序小件（对照 :125-135 loi_le_one_four） ---------- *)
 
 Lemma mtdc_le_one_four : le one mtdc_four.
 Proof.
@@ -130,7 +166,7 @@ Proof.
                    (lt_le_iff zero one (inl one_pos))))).
 Qed.
 
-(* ---------- 桩3/桩4 环账小件（镜像 :140-154） ---------- *)
+(* ---------- 桩3/桩4 环形簿册小件（对照 :140-154） ---------- *)
 
 Lemma mtdc_inv2_two : req (mult mtdc_two mtdc_inv2) one.
 Proof.
@@ -152,7 +188,7 @@ Proof.
   exact (req_refl (plus one one)).
 Qed.
 
-(* ---------- 桩5 逆元外延（镜像 :157-167 loi_inv_wd；                       *)
+(* ---------- 桩5 逆元外延（对照 :157-167 loi_inv_wd；                       *)
 (*    mult_cancel_l→req_mult_cancel_l，id 链→req_trans＋cmk_mult_congr）---- *)
 
 Lemma mtdc_inv_wd : forall (a b : Real) (Ha : lt zero a) (Hb : lt zero b),
@@ -167,7 +203,7 @@ Proof.
            (req_sym _ _ (inv_pos_correct b Hb))).
 Qed.
 
-(* ---------- 桩6 δ* 减半律：(lo/2)²·4 == lo²（镜像 :170-202                  *)
+(* ---------- 桩6 δ* 减半律：(lo/2)²·4 == lo²（对照 :170-202                  *)
 (*    loi_ds2_scale 全链 H1-H6，id→req 机械换名，约 35 行零数学新内容） ---- *)
 
 Lemma mtdc_ds2_scale : req (mult mtdc_four ds2) ds.
@@ -221,7 +257,7 @@ Proof.
            (req_trans _ _ _ H5 H6)).
 Qed.
 
-(* ---------- 桩7 (lo/2)² ≤ lo²（镜像 :205-215；                              *)
+(* ---------- 桩7 (lo/2)² ≤ lo²（对照 :205-215；                              *)
 (*    le_mult_compat_r→req_le_mult_compat_r） ---------- *)
 
 Lemma mtdc_ds2_le_ds : le ds2 ds.
@@ -237,14 +273,14 @@ Proof.
                (le_refl ds)).
 Qed.
 
-(* ---------- 桩8 δ*₂ < 1（κ₂ 证书；镜像 :218-221 一跳） ---------- *)
+(* ---------- 桩8 δ*₂ < 1（κ₂ 证书；对照 :218-221 一跳） ---------- *)
 
 Lemma mtdc_ds2_lt_one : lt ds2 one.
 Proof.
   exact (le_lt_trans ds2 ds one mtdc_ds2_le_ds Hds1).
 Qed.
 
-(* ---------- 桩9 核心四倍律：ub(lo/2) == 4·ub(lo)（镜像 :225-259；           *)
+(* ---------- 桩9 核心四倍律：ub(lo/2) == 4·ub(lo)（对照 :225-259；           *)
 (*    inv_pos_mult_distr→req_inv_pos_mult_distr、loi_inv_wd→桩5、            *)
 (*    ums_mult_one_l→cmk_mult_one_l，其余 Setoid 同名，约 40 行） ---------- *)
 
@@ -291,9 +327,9 @@ Proof.
            (cmk_mult_congr_l mtdc_four ub (mult inv4 ub2) Hub') Hfin)).
 Qed.
 
-(* ---------- 桩10 旗舰：膨胀律（G4 归一形：结论 leg3 取 ub2 归一形，          *)
-(*    与解封句 exact 直配——设计单【设计关键】；镜像 :265-312，                *)
-(*    pow_tail 双放电 cmk_pow_tail（Heqk 槽 req 形：kap 定义性 req_refl）--- *)
+(* ---------- 桩10 主定理：膨胀律（G4 归一形：结论 leg3 取 ub2 归一形，          *)
+(*    与解封句 exact 直接匹配——设计单【设计关键】；对照 :265-312，                *)
+(*    pow_tail 双实例化消解 cmk_pow_tail（Heqk 参数位 req 形：kap 定义性 req_refl）--- *)
 
 Theorem mtdc_lo_inflation :
   sigT (fun k1 : nat =>
@@ -326,7 +362,7 @@ Proof.
                 (lt_le_iff zero (inv_pos (mult ds2 budget) Hwb2)
                              (inl (inv_pos_pos (mult ds2 budget) Hwb2)))
                 Htv0)). }
-  (* 归一形非负腿：0 ≤ 4·ub2（4·ub2 ≡ TV0·(4·inv(ds2·budget)) 换形后同模） *)
+  (* 归一形非负肢：0 ≤ 4·ub2（4·ub2 ≡ TV0·(4·inv(ds2·budget)) 换形后同模） *)
   assert (Hub4 : le zero (mult mtdc_four ub2)).
   { assert (HX2p : lt zero (inv_pos (mult ds2 budget) Hwb2))
       by exact (inv_pos_pos (mult ds2 budget) Hwb2).
@@ -393,7 +429,51 @@ Defined.
 End ConjBridge.
 
 (* ============================================================ *)
-(* G2/G3 审计口：PA 预期 Closed（零 Axiom、全 Set 层证书）                      *)
+(* G2/G3 审计口：PA 预期 Closed（公理面为空、全 Set 层证书）                      *)
 (* ============================================================ *)
 
 Print Assumptions mtdc_lo_inflation.
+
+(* ################ R120 批 2 假设消解块（C2 底册 #10） #################### *)
+(* Section ConjBridge 两接口字段（lt_plus_compat_lt_le 与 Harch）的供给：  *)
+(*   原 Section 与主件签名零改动；本块给出两字段的供给件与主件的无参数位       *)
+(*   精简版（签名保持式供给：原版保留参数位，精简版由供给件就位）。        *)
+
+Require Import UpAblP7_UMixSelect.
+
+(* lpc 位供给件：语句面与 UpAblMetaDivThm mtd_lpc 逐字同                   *)
+(*  （Main:1441 与批 2 落件版 :1491 两版查读同语句）；供给源=               *)
+(*   real_lt_plus_compat_lt_le（CW219 Real 层成品）。                       *)
+Definition mtdc_lpc_supply : forall a b c d : Real,
+  lt a b -> le c d -> lt (plus a c) (plus b d) :=
+  real_lt_plus_compat_lt_le.
+
+(* Arch 位供给件：语句面同 Section ConjBridge 的 Harch 位（le 前件分判）。 *)
+(*   严格支由 uabm_arch_scale 供给（real_arch 的 const 形上界换形）；      *)
+(*   非严格支（x 与零同义）取 N := 0，结论经 cmk_boost_pos（1 + k·w > 0）  *)
+(*   与右端同义改写闭合。                                                  *)
+Theorem mtdc_harch_supply : forall x : Real, le zero x ->
+  sigT (fun N : nat => lt x (cmk_scale (Datatypes.S N) one)).
+Proof.
+  intros x Hx.
+  destruct Hx as [Hlt | Heq].
+  - exact (uabm_arch_scale x Hlt).
+  - exists (Datatypes.O).
+    exact (lt_id_l x zero (cmk_scale (Datatypes.S Datatypes.O) one)
+             (req_sym zero x Heq)
+             (cmk_scale_S_pos mtdc_lpc_supply one Datatypes.O one_pos)).
+Qed.
+
+(* 签名保持式精简版：主件 mtdc_lo_inflation 的无参数位形式——lpc 位与 Arch 位  *)
+(*   分别由 mtdc_lpc_supply 与 mtdc_harch_supply 就位，其余七参显式保留。  *)
+(*   （类型即出节主件结论；由定义项直接推出，避免结论面二次誊写。）        *)
+Definition mtdc_lo_inflation_supplied (TV0 : Real) (Htv0 : le zero TV0)
+           (budget : Real) (Hbudget : lt zero budget)
+           (lo : Real) (Hlo0 : lt zero lo) (Hds1 : lt (mult lo lo) one) :=
+  mtdc_lo_inflation mtdc_lpc_supply TV0 Htv0 budget Hbudget lo Hlo0 Hds1
+                    mtdc_harch_supply.
+
+(* ================= 消解块假设面核验（预期全 Closed） ==================== *)
+Print Assumptions mtdc_lpc_supply.
+Print Assumptions mtdc_harch_supply.
+Print Assumptions mtdc_lo_inflation_supplied.

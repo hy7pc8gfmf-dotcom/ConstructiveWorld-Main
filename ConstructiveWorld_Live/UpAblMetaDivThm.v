@@ -1,30 +1,27 @@
 (* ============================================================ *)
-(* UpAblMetaDivThm.v —— THMASM 席：lo→0 非混合性无界定理总装件              *)
-(*   （论文7 §10.2 第 8 项升级的库内定理；mtd_ 前缀）                        *)
+(* UpAblMetaDivThm.v —— 参数化两态核的 lo→0 非混合性无界定理件（mtd_ 前缀；普查反推件，候融合方确认） *)
 (*                                                              *)
-(* 【主件】mtd_unbounded（nat 见证形，零极限/拓扑）：                         *)
-(*   forall N budget, 0<budget<1 -> sigT (fun lo => 0<lo /\ lo<1 /\          *)
-(*     budget < TV(K_lo 迭代 N 步的点质量对)).                                *)
-(*   见证 lo := (1−budget)·inv(reqd_nat_to_R (S N))（零开方路线）；           *)
-(*   Real 层 Bernoulli 不等式（plus-形归纳）闭合。                            *)
-(* 【G1】mtd_qbernoulli：Q 层 Bernoulli 传递形（QltT 面）。                   *)
-(* 【定理A】mtd_q_doeblin_unbounded：Q 层 Doeblin 界无界性（QltT 见证形）。*)
-(* 【G2/G3】参数化两态核 mtd_K（偏移 lo²/2，行随机，收缩因子 1−lo²）：        *)
-(*   精确幂律 mtd_tv_exact_iter + 预算下界 mtd_no_mixing_below——             *)
-(*   World3（UpAblMetaWorld3，lo=1/2 定点实例）逐行翻译的参数化。             *)
-(* 【G4】mtd_unbounded_conj：B 侧（本件下界）与 C 侧（LoInflation 膨胀律      *)
-(*   loi_lo_inflation 逐字）在共享见证 lo 上的合取收尾；lpc 槽件内自证。      *)
-(* 【供体消费账（只读零改）】UpAblMetaWorld3（mtw_mu0/nu0/half/sumf/tv/dv/df  *)
-(*   + mtw_compl/mtw_minus_plus_r/mtw_hh_one + 质量账模板）；                 *)
-(*   UpAblMetaEngine（mte_lt_plus_r/mte_lt_le_trans/mte_lt_plus_one/mte_le_* 等）；*)
-(*   严格性运输；mte_inv_divergence 同型口径母版——R9）；                     *)
-(*   UpAblA2_LoInflation（loi_lo_inflation 逐字=G4 C 侧；R12）。              *)
-(* 【勘误采信】规格书 0.2 节称 UpAblMetaTemp 不在库——实测在库且四关绿         *)
-(*   （md5 9816ce59，主件 mtp_anchor_divergence）；本件未直接消费其语句面     *)
-(*   （温度线属后继波），在此如实申报。                                       *)
-(* 【红线自审】零承认件；零经典逻辑；结论/见证面全 Set 层（sigT+And+lt/req/   *)
-(*   QltT），前件显式证书值参。                                              *)
-(* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，coqc -Q . ""（cpu_guard 包裹）。*)
+(* 使命：本件形式化给定点态核 K_lo（偏移 lo²/2，行随机，收缩因子 1−lo²）  *)
+(*   的三重结论：①mtd_unbounded——混合时间无界（nat 见证形）：           *)
+(*   forall N budget, 0<budget<1 -> sigT lo, 0<lo ∧ lo<1 ∧              *)
+(*   budget < TV(K_lo 迭代 N 步)，见证 lo:=(1−budget)·inv(reqd_nat_to_R *)
+(*   (S N))（零开方路线），Real 层 Bernoulli plus-形归纳闭合；           *)
+(*   ②mtd_q_doeblin_unbounded——Q 层 Doeblin 界无界性（QltT 见证形，      *)
+(*   见证按 Qle_bool 可判定分裂取 q 与 l02 的较小者）；                  *)
+(*   ③mtd_unbounded_conj——B 侧下界与 C 侧膨胀律（桥接引理               *)
+(*   mtdc_lo_inflation）在共享见证 lo 上的合取。                        *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、            *)
+(*   UpReqSampling、UpReqUMixSelect、UpAblMetaWorld3（mtw_mu0/nu0/half/ *)
+(*   sumf/tv/dv/df、mtw_compl/mtw_minus_plus_r/mtw_hh_one）、AttnDoeblin、*)
+(*   UpAblA2_LoInflation、UpAblMetaConjBridge（mtdc_lo_inflation）、     *)
+(*   UpAblMetaEngine（mte_lt_plus_r/mte_lt_le_trans/mte_le_* 等）。     *)
+(* 对标：mathlib bernoulli_inequality（幂下界形）；stdlib QArith 序引理族。*)
+(* 构造性注记：零承认件；零经典逻辑；结论/见证面全 Set 层（sigT+And+lt/ *)
+(*   req/QltT），前件显式证书值参；分式序 Q 嵌入小件以显式 Z 序引理链   *)
+(*   构造（逐位显式归约与正性见证，不经一键算术自动战术）；主件         *)
+(*   mtd_unbounded 以 Defined 收束（见证 lo 可提取可计算）。            *)
+(* 编译配方：Rocq 9.1 直调，unset COQLIB/ROCQLIB，coqc -Q . ""         *)
+(*   （cpu_guard 包裹）。                                               *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -56,11 +53,11 @@ Proof.
              (inl (reqd_nat_to_R_pos n))).
 Defined.
 
-(* Q 层 Qlt/Qle 在 Qeq 下的换端运输（R7 定谳：stdlib Q_Setoid+Qlt_compat
-   /Qle_comp instance 集合态重写一次成型；前任 Z 层 nia/compat_r 直调路线废弃） *)
+(* Q 层 Qlt/Qle 在 Qeq 下的换端运输（stdlib Q_Setoid+Qlt_compat
+   /Qle_comp instance 集合态重写一次成型；Z 层 nia/compat_r 直调路线弃用） *)
 
-(* R8 定谳：9.1 stdlib 与全部供体件 grep 零命中 Qof_nat（前任自造名）——
-   件内自建（Qmake·Z.of_nat 载体；mtd_ 前缀防撞），fail-loud 申报。 *)
+(* 9.1 stdlib 与全部依赖模块 grep 零命中 Qof_nat——
+   件内自建（Qmake·Z.of_nat 载体；mtd_ 前缀防撞）。 *)
 Definition mtd_Qof_nat (n : nat) : Q := Qmake (Z.of_nat n) 1.
 
 Lemma mtd_qlt_eq_r : forall u v w : Q, v == w -> Qlt u v -> Qlt u w.
@@ -83,8 +80,8 @@ Proof.
   intros u v w Huv Hle. rewrite <- Huv in Hle. exact Hle.
 Qed.
 
-(* Qle 加正项：0 ≤ p -> a ≤ a+p（R7 换名：Qplus_le_compat+Qplus_0_r 组合，
-   替代 nia——Zpos(ad*pd) 原子项与 Z 乘积无 definitional 链，nia 盲区实测） *)
+(* Qle 加正项：0 ≤ p -> a ≤ a+p（Qplus_le_compat+Qplus_0_r 组合；
+   Zpos(ad*pd) 原子项与 Z 乘积无 definitional 链，nia 盲区） *)
 Lemma mtd_qle_plus_pos_r : forall a p : Q, (0 <= p)%Q -> Qle a (a + p).
 Proof.
   intros a p Hp.
@@ -93,8 +90,8 @@ Proof.
   - exact (Qplus_le_compat a a 0 p (Qle_refl a) Hp).
 Qed.
 
-(* Qlt 右端同加项消去：x+z < y+z -> x < y（R7 换名：stdlib Qplus_lt_l iff 形
-   proj1 直取，替代 nia） *)
+(* Qlt 右端同加项消去：x+z < y+z -> x < y（stdlib Qplus_lt_l iff 形
+   proj1 直取） *)
 Lemma mtd_qlt_cancel_r : forall x y z : Q, Qlt (x + z) (y + z) -> Qlt x y.
 Proof.
   intros x y z Hlt. exact (proj1 (Qplus_lt_l x y z) Hlt).
@@ -110,25 +107,70 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §0b R11 批修件：lia 对 Q 目标零支持（9.1 micromega 无 ZifyQ，R10 实测）——
-   凡 lia-on-Q 一律 unfold+simpl 落 Z 或 stdlib 项级组合。Q 镜像小件：          *)
+(* §0b Q 层换算小件：lia 对 Q 目标零支持（9.1 micromega 无 ZifyQ）——
+   序小件一律 unfold 后落显式 Z 序引理链或 stdlib 项级组合。Q 层小件：          *)
 (* ============================================================ *)
 
 Lemma mtd_Qof_nat_0 : forall n : nat, (0 <= mtd_Qof_nat n)%Q.
-Proof. intro n. unfold Qle, mtd_Qof_nat. simpl. lia. Qed.
+Proof.
+  intro n. unfold Qle, mtd_Qof_nat. cbn [Qnum Qden].
+  (* Z 层化：两端乘积显式归约后对 n 归纳，S 步由 Z.le_succ_diag_r 递进   *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  induction n as [| m IH].
+  - change (Z.of_nat 0) with 0%Z. apply Z.le_refl.
+  - rewrite Znat.Nat2Z.inj_succ.
+    exact (Z.le_trans 0 (Z.of_nat m) (Z.succ (Z.of_nat m))
+             IH (Z.le_succ_diag_r (Z.of_nat m))).
+Qed.
 
 Lemma mtd_Qof_nat_pos : forall n : nat, (0 < mtd_Qof_nat (Datatypes.S n))%Q.
-Proof. intro n. unfold Qlt, mtd_Qof_nat. simpl. lia. Qed.
+Proof.
+  intro n. unfold Qlt, mtd_Qof_nat. cbn [Qnum Qden].
+  (* Z 层化：乘积归约后 Z.of_nat (S n) 依定义化为 Z.pos (Pos.of_succ_nat *)
+  (* n)，取正性见证 Pos2Z.pos_is_pos                                    *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  change (Z.of_nat (Datatypes.S n)) with (Z.pos (Pos.of_succ_nat n)).
+  apply Pos2Z.pos_is_pos.
+Qed.
 
 Lemma mtd_Qof_nat_le_S : forall n : nat,
   (mtd_Qof_nat n < mtd_Qof_nat (Datatypes.S n))%Q.
-Proof. intro n. unfold Qlt, mtd_Qof_nat. simpl. lia. Qed.
+Proof.
+  intro n.
+  (* 换端：右端以 Qeq 换为 mtd_Qof_nat n + 1（Z 层 inj_succ+Z.add_1_r）  *)
+  apply (mtd_qlt_eq_r (mtd_Qof_nat n) (mtd_Qof_nat n + 1)
+                      (mtd_Qof_nat (Datatypes.S n))).
+  - unfold Qeq, Qplus, mtd_Qof_nat. cbn [Qnum Qden].
+    rewrite !Z.mul_1_r, Znat.Nat2Z.inj_succ, Z.add_1_r. reflexivity.
+  - (* 严格一步：0 < 1 经 Qplus_lt_r 前向（proj2，左加 z+x<z+y）平移，     *)
+    (* 左端 Qeq 运输 z+0 ≡ z                                              *)
+    assert (H01 : (0 < 1)%Q).
+    { unfold Qlt. cbn [Qnum Qden].
+      rewrite Z.mul_0_l, Z.mul_1_r. apply Pos2Z.pos_is_pos. }
+    apply (mtd_qlt_eq_l (mtd_Qof_nat n) (mtd_Qof_nat n + 0)
+                        (mtd_Qof_nat n + 1)).
+    + ring.
+    + exact (proj2 (Qplus_lt_r 0 1 (mtd_Qof_nat n)) H01).
+Qed.
 
 Lemma mtd_Qof_nat_Sge1 : forall n : nat,
   (1 <= mtd_Qof_nat (Datatypes.S n))%Q.
-Proof. intro n. unfold Qle, mtd_Qof_nat. simpl. lia. Qed.
+Proof.
+  intro n.
+  (* 换端：右端以 Qeq 换为 mtd_Qof_nat n + 1（同 le_S 的 Z 层恒等链）    *)
+  apply (mtd_qle_eq_r 1 (mtd_Qof_nat n + 1) (mtd_Qof_nat (Datatypes.S n))).
+  - unfold Qeq, Qplus, mtd_Qof_nat. cbn [Qnum Qden].
+    rewrite !Z.mul_1_r, Znat.Nat2Z.inj_succ, Z.add_1_r. reflexivity.
+  - (* 1 ≤ mtd_Qof_nat n + 1 ← 0 ≤ mtd_Qof_nat n（本件 mtd_Qof_nat_0）   *)
+    (* 经 Qplus_le_r 前向（proj2，左加 z+x≤z+y）平移，两端 Qeq 运输       *)
+    apply (mtd_qle_eq_l 1 (1 + 0) (mtd_Qof_nat n + 1)).
+    + ring.
+    + apply (mtd_qle_eq_r (1 + 0) (1 + mtd_Qof_nat n) (mtd_Qof_nat n + 1)).
+      * ring.
+      * exact (proj2 (Qplus_le_r 0 (mtd_Qof_nat n) 1) (mtd_Qof_nat_0 n)).
+Qed.
 
-(* b<1 -> 0<1-b（Real 侧 mtd_lt_one_minus 的 Q 镜像） *)
+(* b<1 -> 0<1-b（Real 侧 mtd_lt_one_minus 的 Q 层同形件） *)
 Lemma mtd_qlt_one_minus : forall b : Q, (b < 1)%Q -> (0 < 1 - b)%Q.
 Proof.
   intros b Hb.
@@ -140,7 +182,7 @@ Proof.
     + exact Hb.
 Qed.
 
-(* 0<b -> 1-b<1（Real 侧 mtd_lt_minus_one 的 Q 镜像） *)
+(* 0<b -> 1-b<1（Real 侧 mtd_lt_minus_one 的 Q 层同形件） *)
 Lemma mtd_qlt_minus_one : forall b : Q, (0 < b)%Q -> (1 - b < 1)%Q.
 Proof.
   intros b Hb.
@@ -152,8 +194,8 @@ Proof.
     + exact (proj2 (Qplus_lt_r 0 b 1) Hb).
 Qed.
 
-(* b<=1 -> 0<=1-b（Real 侧 mtd_le_one_minus 的 Q 镜像；落 Z 后 lia。
-   R12 定谳：simpl 会把 Qsub 展成 Z 的 match 结构 lia 穿不透——change 手工落形） *)
+(* b<=1 -> 0<=1-b（Real 侧 mtd_le_one_minus 的 Q 层同形件；落 Z 后链式闭合。
+   simpl 会把 Qsub 展成 Z 的 match 结构 lia 穿不透——change 手工落形） *)
 Lemma mtd_qle_one_minus : forall b : Q, (b <= 1)%Q -> (0 <= 1 - b)%Q.
 Proof.
   intros b H.
@@ -181,9 +223,11 @@ Lemma mtd_qbern_prop : forall (n : nat) (x : Q),
   (0 <= x <= 1)%Q -> (1 - mtd_Qof_nat n * x <= mtd_qpow (1 - x) n)%Q.
 Proof.
   intro n. induction n as [| n IH]; intro x; intro Hb.
-  - unfold Qle, mtd_Qof_nat.
-    destruct x as [xn xd]; simpl in *.
-    lia.
+  - (* 基步定义性归约：n=0 时两端同为 1，零乘消去后取序自反 *)
+    change (1 - mtd_Qof_nat 0 * x <= mtd_qpow (1 - x) 0)%Q
+      with (1 - 0 * x <= 1)%Q.
+    rewrite Qmult_0_l.
+    apply Qle_refl.
   - assert (Hx0 : (0 <= x)%Q) by exact (proj1 Hb).
     assert (Hx1 : (x <= 1)%Q) by exact (proj2 Hb).
     assert (Hxx : (0 <= x * x)%Q) by exact (Qmult_le_0_compat x x Hx0 Hx0).
@@ -191,7 +235,9 @@ Proof.
       by exact (Qmult_le_0_compat (mtd_Qof_nat n) (x * x)
                   (mtd_Qof_nat_0 n) Hxx).
     assert (HSn : (mtd_Qof_nat (Datatypes.S n) == mtd_Qof_nat n + 1)%Q).
-    { unfold Qeq, mtd_Qof_nat. simpl. lia. }
+    { (* 后继恒等：Z 层由 inj_succ 与 Z.add_1_r 双向收拢为同一项 *)
+      unfold Qeq, Qplus, mtd_Qof_nat. cbn [Qnum Qden].
+      rewrite !Z.mul_1_r, Znat.Nat2Z.inj_succ, Z.add_1_r. reflexivity. }
     assert (Hmid : (1 - mtd_Qof_nat (Datatypes.S n) * x
                     <= (1 - x) * (1 - mtd_Qof_nat n * x))%Q).
     { rewrite HSn.
@@ -236,8 +282,8 @@ Proof.
   - exact (mtd_qbern_prop n x Hb).
 Defined.
 
-(* 定理 A 合取尾件：见证 w 的三重账（下界链全代数）。
-   R11 补前件申报：0<r 与 mtd_Qof_nat N<y（y 抽象时 N<y 不可证——语义伤定谳） *)
+(* 定理 A 合取尾件：见证 w 的三重刻画（下界链全代数）。
+   补前件申报：0<r 与 mtd_Qof_nat N<y（y 抽象时 N<y 不可证——语义必需前件） *)
 Lemma mtd_q_tail : forall (N : nat) (lo0 r w q l02 y : Q),
   (0 < r)%Q -> (0 < q)%Q -> (q * y == 1 - r)%Q -> (0 < y)%Q -> (1 <= y)%Q ->
   (mtd_Qof_nat N < y)%Q ->
@@ -366,12 +412,15 @@ Proof.
   set (l02 := (1#2) * lo0).
   assert (Hl020 : (0 < l02)%Q).
   { apply (mtd_qpos_mult (1#2) lo0).
-    - unfold Qlt. simpl. lia.
+    - unfold Qlt. cbn [Qnum Qden]. rewrite Z.mul_0_l, Z.mul_1_r.
+      exact (Pos2Z.pos_is_pos 1).
     - exact (QltT_to_Qlt (0#1) lo0 Hlo0). }
   assert (Hl02lt : (l02 < lo0)%Q).
   { apply (mtd_qlt_eq_r l02 (1 * lo0) lo0).
     - ring.
-    - assert (Hh : ((1#2) < 1)%Q) by (unfold Qlt; simpl; lia).
+    - assert (Hh : ((1#2) < 1)%Q)
+        by (unfold Qlt; cbn [Qnum Qden];
+            rewrite Z.mul_1_r, Z.mul_1_l; exact (Z.lt_succ_diag_r 1)).
       exact (Qmult_lt_compat_r (1#2) 1 lo0
                (QltT_to_Qlt (0#1) lo0 Hlo0) Hh). }
   destruct (Qle_bool q l02) eqn:E.
@@ -395,9 +444,9 @@ Defined.
 (* §2 Real 层序小件（严格性运输 + Bernoulli plus-形）                          *)
 (* ============================================================ *)
 
-(* R51 桥件：类场（req/le/lt，RealEnhancedReal 实例）与具体 real_eq/real_le
+(* 类场（req/le/lt，RealEnhancedReal 实例）与具体 real_eq/real_le
    /real_lt 的 definitional 互转（实例 req:=real_eq / le:=real_le / lt:=real_lt）。
-   边界通行证：mte_*/mtw_*（具体面）与本件类面件互喂时显式包桥。 *)
+   mte_*/mtw_*（具体面）与本件类面件互换时经此组显式桥接。 *)
 Lemma mtd_req_real_eq : forall a b : Real, req a b -> real_eq a b.
 Proof. intros a b H. exact H. Defined.
 
@@ -452,8 +501,8 @@ Proof.
   exact (mte_lt_plus_r zero b (req_minus one b) Hb).
 Defined.
 
-(* 0 ≤ 1 − x（由 x ≤ 1；R12 定谳：le_plus_cancel_l 仅 S04/R 型在库——
-   改类场 lt_le_iff+le_id_r 组合） *)
+(* 0 ≤ 1 − x（由 x ≤ 1；le_plus_cancel_l 仅 S04/R 型在库——
+   取类场 lt_le_iff+le_id_r 组合） *)
 Lemma mtd_le_one_minus : forall x : Real, le x one -> le zero (req_minus one x).
 Proof.
   intro x. intro H.
@@ -511,7 +560,7 @@ Proof.
          (mult_one x) (mult_comm x (reqd_nat_to_R n))))).
 Defined.
 
-(* 幂非负（(1−x) 载体；R43 语句面修正：前件=0≤1−x（原 0≤x 使命题为假——
+(* 幂非负（(1−x) 载体；语句面修正：前件=0≤1−x（原 0≤x 使命题为假——
    x>1 时 (1−x)^1<0），自洽形且调用面零改） *)
 Lemma mtd_rpow_nonneg : forall (n : nat) (x : Real),
   le zero (req_minus one x) -> le zero (req_r_pow (req_minus one x) n).
@@ -704,7 +753,7 @@ Proof.
                            (mtd_Snat_mult n x))))).
 Defined.
 
-(* le 右端同加项消去（R41 定谳：le_plus_cancel_l 仅 S04/R 型在库——
+(* le 右端同加项消去（le_plus_cancel_l 仅 S04/R 型在库——
    自建：le_plus_compat + plus_assoc/plus_opp/plus_zero 运输） *)
 Lemma mtd_le_cancel_r : forall a b c : Real,
   le (plus a c) (plus b c) -> le a b.
@@ -907,7 +956,7 @@ Proof.
            ++ exact (IH mu Hm).
 Defined.
 
-(* 差分镜像（World3 mtw_df_opp_dv 的参数化翻译） *)
+(* 差分反号对应（World3 mtw_df_opp_dv 的参数化翻译） *)
 Lemma mtd_df_opp_dv : forall n : nat,
   req (mtw_df (mtd_titer n mtw_mu0) (mtd_titer n mtw_nu0))
       (opp (mtw_dv (mtd_titer n mtw_mu0) (mtd_titer n mtw_nu0))).
@@ -1438,7 +1487,7 @@ Defined.
 (* §5 G4：合取收尾（B 侧下界 × C 侧 LoInflation 膨胀律，共享见证 lo）           *)
 (* ============================================================ *)
 
-(* lpc 槽件内自证（复用 mte_lt_plus_r；零接口槽） *)
+(* lpc 件内自证（复用 mte_lt_plus_r；零接口参数位） *)
 Definition mtd_lpc : forall a b c d : Real,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 Proof.
@@ -1454,13 +1503,13 @@ Definition mtd_four : Real := plus (plus one one) (plus one one).
 Definition mtd_loh (l : Real) : Real := mult l mtd_inv2.
 
 (* ============================================================ *)
-(* 【G4 合取件解封 20260922 CJS3】——原 fail-loud 封存块按 CJS1 桥设计单       *)
-(*   （attn/_tcjs1_桥设计单-20260922.md）路线 (a) 解封：3 族 6 处换名          *)
+(* 【G4 合取件】——B 侧下界（本件 mtd_unbounded）与 C 侧膨胀律               *)
+(*   （桥接引理 mtdc_lo_inflation，居 UpAblMetaConjBridge）在共享见证 lo      *)
+(*   上的合取：3 族 6 处载体换名                                             *)
 (*   （ums_scale→cmk_scale ×2、r_pow→cmk_r_pow ×2、minus→req_minus ×2）       *)
-(*   ＋1 处换件（loi_lo_inflation→mtdc_lo_inflation，桥件                     *)
-(*   UpAblMetaConjBridge 旗舰）＋1 行 Require（文件头）。语句面最小换名，     *)
-(*   语义零形变；两锁定主件 mtd_unbounded/mtd_q_doeblin_unbounded 语句面      *)
-(*   零触碰。封存原态备份：attn/_tcjs3_bak/（md5 5bab9e23）。                 *)
+(*   语句面最小换名，语义零形变；两主件                                     *)
+(*   mtd_unbounded/mtd_q_doeblin_unbounded 语句面                           *)
+(*   零触碰。                                                               *)
 (* ============================================================ *)
 Theorem mtd_unbounded_conj :
   forall (N : nat) (TV0 : Real) (Htv0 : le zero TV0)

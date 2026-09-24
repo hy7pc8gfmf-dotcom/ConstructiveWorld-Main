@@ -1,60 +1,27 @@
 (* ============================================================ *)
-(* UpAblP7_WallEpsChain_B.v —— 论文7 专项消融战役 席 PA7-21（W1 链身 eps 乙肢） *)
+(* UpAblP7_WallEpsChain_B.v —— 论文7 收缩链链身逐 eps 化件：边界见证与迭代副本。   *)
 (*                                                              *)
-(* 假设任务：W1 链身 eps 化（T154 申报终装遗留）——乙肢 UpReqConcMixSel 侧      *)
-(*   （cmk_* 段 + 跨件闭合）。姊妹席 PA7-20 辖甲肢 UpAblP7_WallEpsChain_A.v/    *)
-(*   T163（本席零接触）；本件独立自证防在飞依赖，闭合注记留 T164。              *)
+(* ①使命：本件形式化 W1 链身 eps 化的完成度边界与链身副本组：余量消除论证原理     *)
+(*   ⟹ plain 形不可证结果的否定性见证（3b/3d）、逐 eps 迭代副本（余量系数        *)
+(*   c_{n+1}=1+omd·c_n 精确递推，4a）、cmk 末端依存定理逐 eps 副本（4b 严格/      *)
+(*   4c 非严格）。                                                              *)
+(* ②依赖：Stdlib List、CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、        *)
+(*   UpReqConcSoftmax、UpReqSampling、UpReqConcMixSel；供给段另引 UpReqConcFin2。 *)
+(* ③对标：Doeblin 收缩链逐 eps 混合时间论证的构造性直构（无对应直引）。           *)
+(* ④构造性注记：全件语句集合值面；零承认、零经典逻辑捷径、零排中律；              *)
+(*   文尾逐件 Print Assumptions 假设审计封闭。                                   *)
+(* ⑤编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。   *)
 (*                                                              *)
-(* 母本坐标（union 根现行版实测，文件:行号）→ 依存/重建位：                     *)
-(*   UpReqConcSoftmax.v:248 csm_abs_sum_le_eps（逐 eps 三角免费档）             *)
-(*     → 否定性见证件的反向喂入位（eps 三角 = 墙 plain 形的逐 eps 逼近像）         *)
-(*   UpReqSampling.v:116/488 abs_sum_le_h 槽与唯一深依存位 rsq_u_abs_row        *)
-(*   UpReqSampling.v:499/669/1160 rsq_u_tv_contraction / rsq_u_tv_iter /        *)
-(*     rsq_bounded_softmax_tv_iter（链身三节；:1153/:1166 全参投喂）            *)
-(*   UpReqConcMixSel.v:856/887 cmk_attention_mixing_time/_le                    *)
-(*     （:879-882/:910-913 末端依存 rsq_bounded_softmax_tv_iter）               *)
-(*   UpReqConcMixSel.v:601/694 cmk_k_select/_le（构造选择器核心，首参为          *)
-(*     lt_plus_compat_lt_le 诚实证书位——UpReqAlgebra ReqStrictOrderBridge       *)
-(*     注记：混合加法保序不可由接口字段抽象导出；本件以 S07:6118                 *)
-(*     real_lt_plus_compat_lt_le 具体层成品闭证书（ConcMixSelFeed.v:112 实例化     *)
-(*     先例同款），零承认。                                                     *)
-(*                                                              *)
-(* 链身 eps 化边界实读甄别（本件定理化对象）：                                   *)
-(*   墙槽 abs_sum_le_h 在库内仅链根一次深依存（rsq_u_abs_row:488）；链身        *)
-(*   （tv_contraction 以上）全部经继承吃墙——链身 eps 化的完成度边界不在墙槽       *)
-(*   本身，而在「余量消除论证位」：逐 eps 链结论（X ≤ Y + eps 对一切 eps>0）闭合到     *)
-(*   plain 链结论（X ≤ Y）必须依存余量消除论证原理。本件以否定性见证定理化：             *)
-(*   余量消除论证原理 ⟹ plain 墙（csm 三角 plain 形）——余量消除论证买下的恰是墙，边界=墙。   *)
-(*   升级方向（plain ⟹ 逐 eps）另以边界引理证明可构造，两侧夹出边界位置。        *)
-(*                                                              *)
-(* 分级申报：                                                   *)
-(*   N1 库内实例化消解件直连：csm_abs_sum_le_eps、real_lt_plus_compat_lt_le、          *)
-(*     cmk_k_select/_le、cmk_r_pow/_req_r_pow、req_r_pow、req_mult_one_l、       *)
-(*     plus_zero/plus_comm/plus_assoc/mult_zero/mult_one/mult_comm/              *)
-(*     mult_assoc/distrib（接口字段级）、req_plus_zero_l、req_plus_compat、      *)
-(*     req_mult_compat、req_lt_id_r_loc、opp_lt_compat、plus_opp、               *)
-(*     le_id_l/le_id_r/le_refl/le_trans/le_lt_trans/lt_id_r/lt_le_iff/           *)
-(*     le_plus_compat/lt_plus_compat/req_lt_compat（接口字段级）。               *)
-(*   N2 已证导出：ubw_b_chain_eps_iter（链身 eps 迭代镜件，余量系数               *)
-(*     ubw_b_cslack 递推 c_{n+1}=1+omd·c_n 精确闭合，零 bounding 冒充）；         *)
-(*     ubw_b_cmk_eps_mirror/_le（cmk 末端依存定理逐 eps 副本，依存库选择器）。    *)
-(*   N3 实例供给：两点 bool 混合号载体（正负支各一点，正性证书显式）。            *)
-(*                                                              *)
-(* 链身接口参数诚实申报：链身单步收缩的逐 eps 形（Hstep_eps 槽）系诚实证书位          *)
-(*   （同 UpReqAlgebra ReqStrictOrderBridge/AT5 接口参数警告族）：其由链根            *)
-(*   abs_row eps 形（T154 甲肢 uabp7we_abs_row_eps 同层）重推需穿越               *)
-(*   rsq_u_tv_contraction 约 150 行 req 链，属终装 S8 范畴，本切片帽内未开工，    *)
-(*   未降级未冒充——接口参数假设面与库内 cmk_* 依存 rsq_bounded_softmax_tv_iter        *)
-(*   的假设位同构。                                              *)
-(*                                                              *)
-(* 依赖清单（只读依存，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、      *)
-(*   UpReqSumD、UpReqConcSoftmax、UpReqSampling、UpReqConcMixSel；               *)
-(*   具体层 = S07 RealEnhancedReal 实例（模块导入后裸名同源同解析）。             *)
-(*                                                              *)
-(* 红线自审：全件语句集合值面；全件真证闭合；无承认件、无未证断言、无经典逻辑    *)
-(*   捷径、无选择公理、无排中律；文尾逐件假设审计全封闭。                        *)
+(* 面外扩展标注：本件为工单面外扩展件，按 b3 §2.2 可消解判定施工，候融合方        *)
+(*   甄别确认；若属已补强保留区请退回。既往战役自述核实：有——原件头注含既往       *)
+(*   战役分级申报（N1/N2/N3）与「Hstep_eps 链身单步收缩逐 eps 形系诚实证书位、     *)
+(*   属终装 S8 范畴未开工」自述；本波差异加倍标注：本波按 b3 §2.2 判定            *)
+(*   Homd_pos/Homd_lt_one/Hstep_eps 三位为抽象层假设身份保持、实例层可消解，      *)
+(*   尾段供给段以 cf2 实例给出三份供给证书（cf2_omd_pos 直引；                    *)
+(*   cf2_aux_ds_omd 与 cf2_ds_pos 严格加法换形链；cf2_tv_contraction_eps 直引），  *)
+(*   并以 sigT 封装成组（ubw_b_cf2_certs）；抽象参数位（S/tvr/tstep/omd/eps0）    *)
+(*   与三假设声明零改，原有证明体零改动。                                        *)
 (* ============================================================ *)
-
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -81,7 +48,7 @@ Qed.
 (* ============ §2 小机器（req 链辅件与载体） ============ *)
 
 (* 两点混合号载体：正支 true 点 = a（正），负支 false 点 = −b——
-   plain 墙注记（UpReqConcSoftmax.v:11-16 已证结论）中的混合号形状 *)
+   plain 不可证结果注记（UpReqConcSoftmax.v:11-16 已证结论）中的混合号形状 *)
 Definition ubw_b_mixed_f (a b : Real) : bool -> Real :=
   fun s : bool => if s then a else opp b.
 
@@ -127,7 +94,7 @@ Qed.
 (* ============ §3 链身 eps 化边界诚实件组 ============ *)
 
 (* 3a 升级方向边界引理：plain 链结论 ⟹ 逐 eps 链结论（可构造方向）。
-   与 3b 否定性见证构成边界两侧：升级方向免费，余量消除论证方向=墙。 *)
+   与 3b 否定性见证构成边界两侧：升级方向免费，余量消除论证方向=不可证结果。 *)
 Lemma ubw_b_plain_upgrade_eps : forall X Y eps : Real,
   le X Y -> lt zero eps -> le X (plus Y eps).
 Proof.
@@ -143,9 +110,9 @@ Definition ubw_b_deslack_principle : Set :=
   forall X Y : Real,
     (forall eps : Real, lt zero eps -> le X (plus Y eps)) -> le X Y.
 
-(* 3b 否定性见证一般形：余量消除论证原理 ⟹ plain 墙。
-   csm 逐 eps 三角（免费档）正是墙 plain 形的逐 eps 逼近像：
-   余量消除论证买下的恰是墙本体——链身 eps 化的完成度边界=墙。 *)
+(* 3b 否定性见证一般形：余量消除论证原理 ⟹ plain 不可证结果。
+   csm 逐 eps 三角（免费档）正是不可证结果 plain 形的逐 eps 逼近像：
+   余量消除论证买下的恰是不可证结果本体——链身 eps 化的完成度边界=不可证结果。 *)
 Lemma ubw_b_deslack_wall : forall (S : Set) (enum : list S) (f : S -> Real),
   ubw_b_deslack_principle ->
   le (abs (csm_sumf S enum f))
@@ -158,7 +125,7 @@ Proof.
 Qed.
 
 (* 3c 混合号锚：两点载体上正负支逐点已证结论（sigT 封装防宇宙坑——
-   Set 值面合取走依存对，T154 坑卡 1 同族） *)
+   Set 值面合取走依存对，依存对封装同族形） *)
 Lemma ubw_b_twopt_mixed_sign : forall a b : Real,
   lt zero a -> lt zero b ->
   sigT (fun _ : lt zero (ubw_b_mixed_f a b true) =>
@@ -175,8 +142,8 @@ Proof.
               (opp_lt_compat zero b Hb))).
 Qed.
 
-(* 3d 否定性见证封装件（PA7-12 cb2w_death_certificate 范式）：
-   「余量消除论证原理在混合号载体上买下 plain 墙实例」×「载体确为混合号」
+(* 3d 否定性见证封装件（cb2w_death_certificate 同范式）：
+   「余量消除论证原理在混合号载体上买下 plain 不可证结果实例」×「载体确为混合号」
    双证 sigT 封装——链身 eps 化完成度边界的定理化固化。 *)
 Theorem ubw_b_death_certificate : forall a b : Real,
   lt zero a -> lt zero b ->
@@ -202,12 +169,12 @@ Proof.
                  (opp_lt_compat zero b Hb)))).
 Qed.
 
-(* ============ §4 链身 eps 迭代镜件 + cmk 末端依存定理逐 eps 副本 ============ *)
+(* ============ §4 链身 eps 迭代副本件 + cmk 末端依存定理逐 eps 副本 ============ *)
 
 Section ChainEpsBody.
 
 (* 链身体：步算子 + TV 泛函抽象位（库内同位 = rsq/k_step 核迭代 +
-   tv_req；链身单步收缩的逐 eps 形为诚实证书槽，见文件头申报） *)
+   tv_req；链身单步收缩的逐 eps 形为诚实证书参数位，见文件头申报） *)
 Variable S : Set.
 Variable tvr : (S -> Real) -> (S -> Real) -> Real.
 Variable tstep : (S -> Real) -> (S -> Real).
@@ -217,7 +184,7 @@ Variable eps0 : Real.
 Hypothesis Homd_pos : lt zero omd.
 Hypothesis Homd_lt_one : lt omd one.
 
-(* 链身 eps 收缩槽：tv_contraction 链身层的逐 eps 形——
+(* 链身 eps 收缩参数位：tv_contraction 链身层的逐 eps 形——
    接口参数假设面与库内 cmk_* 依存 rsq_bounded_softmax_tv_iter 的假设位同构 *)
 Hypothesis Hstep_eps : forall mu nu : S -> Real,
   le (tvr (tstep mu) (tstep nu)) (plus (mult omd (tvr mu nu)) eps0).
@@ -237,7 +204,7 @@ Fixpoint ubw_b_titer (n : nat) (mu : S -> Real) : S -> Real :=
   | Datatypes.S m => tstep (ubw_b_titer m mu)
   end.
 
-(* 4a 链身 eps 迭代镜件：n 步后 TV ≤ omd^n·TV₀ + c_n·eps₀（精确余量递推）。
+(* 4a 链身 eps 迭代副本件：n 步后 TV ≤ omd^n·TV₀ + c_n·eps₀（精确余量递推）。
    底 case req 数乘单位换轨；递归步 = 接口参数一次 + IH 经 omd 数乘抬升
    （req_le_mult_compat_r）+ 同右端加项保序（ubw_b_le_plus_r）+
    分配/结合/交换 req 链闭合 c_{n+1} 递推形。 *)
@@ -467,3 +434,58 @@ Print Assumptions ubw_b_chain_eps_iter.
 Print Assumptions ubw_b_cmk_eps_mirror.
 Print Assumptions ubw_b_cmk_eps_mirror_le.
 Print Assumptions ubw_b_req_le.
+
+(* ============================================================ *)
+(* 供给段（签名保持式消解，b3 §2.2.1；原节声明与三假设声明零改）：                *)
+(*   链身三证书位在 cf2 实例（UpReqConcFin2 两点有界 softmax 具体层）上供给：      *)
+(*   Homd_pos 位引 cf2_omd_pos；Homd_lt_one 位由 cf2_aux_ds_omd 与 cf2_ds_pos     *)
+(*   经严格加法保序及右端 req 换形链导出；Hstep_eps 位引 cf2_tv_contraction_eps    *)
+(*   （带两侧分布归一前提的逐 eps 单步收缩，余量参数全称量化，强于固定余量的      *)
+(*   原假设形）。抽象层三位保持假设身份，本段为具体实例上的消解证书，              *)
+(*   并以 sigT 封装成组供下游整取。                                              *)
+(* ============================================================ *)
+Require Import UpReqConcFin2.
+
+Theorem ubw_b_omd_pos_supply : lt zero cf2_omd.
+Proof.
+  exact cf2_omd_pos.
+Qed.
+
+Theorem ubw_b_omd_lt_one_supply : lt cf2_omd one.
+Proof.
+  exact (lt_id_r cf2_omd (plus cf2_delta_star cf2_omd) one
+           cf2_aux_ds_omd
+           (lt_id_l cf2_omd (plus zero cf2_omd)
+              (plus cf2_delta_star cf2_omd)
+              (req_sym (plus zero cf2_omd) cf2_omd (req_plus_zero_l cf2_omd))
+              (ubw_b_lt_plus_compat_lt_le zero cf2_delta_star cf2_omd cf2_omd
+                 cf2_ds_pos (le_refl cf2_omd)))).
+Qed.
+
+Theorem ubw_b_step_eps_supply :
+  forall (mu nu : bool -> Real) (eps : Real),
+    req (cf2_sumf mu) one -> req (cf2_sumf nu) one -> lt zero eps ->
+    le (cf2_tv (cf2_k_step mu) (cf2_k_step nu))
+       (plus (mult cf2_omd (cf2_tv mu nu)) eps).
+Proof.
+  exact cf2_tv_contraction_eps.
+Qed.
+
+Theorem ubw_b_cf2_certs :
+  sigT (fun _ : lt zero cf2_omd =>
+        sigT (fun _ : lt cf2_omd one =>
+              forall (mu nu : bool -> Real) (eps : Real),
+                req (cf2_sumf mu) one -> req (cf2_sumf nu) one ->
+                lt zero eps ->
+                le (cf2_tv (cf2_k_step mu) (cf2_k_step nu))
+                   (plus (mult cf2_omd (cf2_tv mu nu)) eps))).
+Proof.
+  exact (existT _ ubw_b_omd_pos_supply
+           (existT _ ubw_b_omd_lt_one_supply ubw_b_step_eps_supply)).
+Qed.
+
+(* ---- 供给段假设审计（四连 Print Assumptions） ---- *)
+Print Assumptions ubw_b_omd_pos_supply.
+Print Assumptions ubw_b_omd_lt_one_supply.
+Print Assumptions ubw_b_step_eps_supply.
+Print Assumptions ubw_b_cf2_certs.

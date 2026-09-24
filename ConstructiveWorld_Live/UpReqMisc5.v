@@ -1,104 +1,62 @@
 (* ========================================================================= *)
-(* 【ToyR 战役·包F·T245 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
-(*                                                                           *)
-(* 本稿系 ToyR 战役包F 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
-(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
-(* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T245。       *)
-(* 替换定理清单：req_core_claim5_holds／req_core_claim3_lm_holds（共 2 刀）  *)
-(* 非平凡性口径：存在见证显式化与换轨中间项命名锚定，消除定义级单跳；无一    *)
-(* 行拆分式假非平凡。                                                        *)
-(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
-(* 抽验编译均验零承认。                                                      *)
+(* UpReqMisc5.v —— 本件形式化热力学与语言模型核心命题的 req 层杂项第五束：      *)
+(*   向量世界类转写层（reqStateSpace/reqStateSpaceExt/reqHilbertSpace/         *)
+(*   reqSumOver 四类，Id 接口逐字段 req 副本）与 PropositionConvergenceCore、  *)
+(*   ThermodynamicsInstance、ConvergenceTheorem、SumExpPositive、              *)
+(*   LanguageModelInstance、GRPONoDup、DifferentiableLemmas 各节对应件；        *)
+(*   主件含 req_boltzmann_factor_pos、req_boltzmann_prob_pos 与                *)
+(*   req_entropy_gradient_strict_mono，另附 GRPO 计数机 req 面复用件组与        *)
+(*   枚举嵌入正性的签名保持式供给组（rgrp_ 系，见 ReqGrpoMisc 节）。             *)
+(*                                                                             *)
+(* 【工单面外扩展件（C4 裁定可派），按 b3 §2.2 可消解判定施工，候融合方          *)
+(*   甄别确认；若属已补强保留区请退回】                                         *)
+(*                                                                             *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。                    *)
+(* 对标：mathlib 有限和与热力学分布的构造性 Set 层对应物。                       *)
+(* 构造性注记：Set 层承载，零承认，可提取；配分正性、温度正性等为接口参数位，      *)
+(*   其中枚举嵌入正性的非空条件推导路径由树内引理自持供给（登记见节内）。          *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                               *)
+(*                                                                             *)
+(* 语句对应登记（Id 源模块 CW_ConstructiveWorld_219，行号为其内坐标）：           *)
+(*   reqStateSpace←Id StateSpace L1160-1187（21 字段，语句位置 Id→req 逐位副本；  *)
+(*     rsmetric_pos/rsmetric_triangle 的 plain le 形为 Id 字段逐位保留——          *)
+(*     setoid 接口对应字段已逐 eps 化，plain 形作类内参数位）                      *)
+(*   reqStateSpaceExt←Id StateSpaceExtended L24738-24758（9 字段；Id 的 :> 继承   *)
+(*     改显式 rsse_base 参数位，零语义差）                                        *)
+(*   reqHilbertSpace←Id HilbertSpace L1260-1276（9 字段）                         *)
+(*   reqSumOver←Id SumOver L1408-1452（8 字段）                                   *)
+(*   PCC：req_core_claim5_holds←1619 req_boltzmann_factor_pos←1628                *)
+(*     req_boltzmann_prob_pos←1637 req_prediction_fluctuation_scale←1671          *)
+(*   Thermo：req_thermo_core_claim3_holds←3025 req_thermo_core_claim5_holds←3032   *)
+(*   ConvThm：req_entropy_gradient_strict_mono←13912                              *)
+(*     req_gradient_diff_from_zero←13920 req_gradient_step_recurrence←13944        *)
+(*     （req_iterate_step_diff←13880/req_gradient_abs_mono←13982 已由 UpReqCauchy  *)
+(*       落盘已证明；单点步差辅件 req_step_diff_point 节内自足）                    *)
+(*   SumExp：req_sum_exp_positive←15266（LanguageModelInstance 孪生←1875，         *)
+(*     同语句同证）                                                               *)
+(*   LMI：req_exp_neg_positive←1872 req_core_claim1_lm_holds←1931                  *)
+(*     req_core_claim3_lm_holds←1938 req_core_claim5_lm_holds←1949                 *)
+(*     req_normalized_prob_pos←1981 req_prediction_boltzmann_sampling_holds←1993   *)
+(*   GRPO：req_grpo_count_one←113775 req_list_sum_g_zero_fn←113609                 *)
+(*     req_grpo_indicator_sum_one←113793 req_grpo_uniform_mass←113832              *)
+(*     （req_split_count_one 为 Id split_count_one_id←113720 的 req 需求生）       *)
+(*   DiffAlgebra：req_compose_diff_decomp←25673 req_half_le_one←25729              *)
+(*     req_half_le_self←25748 req_minus_plus_zero_r←26076                          *)
+(*     req_square_diff_expand←26092 req_dpo_logit_denom_pos←26239                  *)
+(*     req_dpo_loss_diff_decomp←26247 req_dpo_sigmoid 系←26255-26298               *)
+(* 诚实签名变化登记（Id→req 迁移）：                                               *)
+(*   1. minus 非接口字段：语句位置 minus→req_minus（UpReqAlgebra δ 透明同形），      *)
+(*      证明内 unfold；                                                           *)
+(*   2. log 前提化：setoid log/log_inv 带 lt zero 前提——rloss_of_prop 与            *)
+(*      req_dpo_loss_diff_decomp 各补正性前提/同位参数位（req_log_compat_slot）；   *)
+(*   3. Id le_plus_nonneg_r/mult_plus_distr_r/plus_cancel_l 在 req 接口缺位→        *)
+(*      引 UpReqAlgebra 已结果件（语句同形）；                                      *)
+(*   4. count 机器（nat/list 层）跨接口原样复用 UpGRPO219 已闭名；                  *)
+(*   5. iterate 多态纯 nat 递归跨接口原样复用；                                     *)
+(*   6. two_pos 的 req 侧以 UpReqAlgebra req_two_pos 内联；                          *)
+(*   7. 向量载体位等号保持 Id（载体无 setoid 等位可迁）；R 值位等号 req；            *)
+(*   8. 函数等号位逐点化：Id p (boltzmann_prob L)→forall s, req (p s) (...)。       *)
 (* ========================================================================= *)
-(* ============================================================
-   T245 包F 台账席 切片二 · 包A 尾巴清偿件一（UpReqMisc5 同名替换，全中文零承认）
-   本件为基线原件的同名替换件：语句面、声明序、其余定理与既有版记头注
-   逐字保留；仅两条玩具级证明体在替换点重演：
-   一、req_core_claim5_holds：exists 见证位定义层展开重演——见证由不透明
-       件名 rboltzmann_prob L 改为定义体逐层显式 λ（inv_pos rZ rZ_pos 与
-       exp_neg（inv_pos rD rD_pos 与 L s）两层全展开），目标位双定义
-       unfold 后自反闭合（E379 卡 L455 显式参坑前置，见证同形不变）。
-   二、req_core_claim3_lm_holds：换轨中间项显式命名——负号分配肢与
-       双重负号肢两条中间 req 以命名断言锚定（Hopp／Hneg），三段闭合
-       req_trans 复合重演（引擎模板同款形：双锚断言＋闭合，见消融50
-       UpReqAlgebra req_mult_cancel_r 已验绿体）。
-   依赖面零新增：Require 面与原件逐字一致。
-   ============================================================ *)
-(* ============================================================ *)
-(* UpReqMisc5.v *)
-(* *)
-(* 目的： 热力学核心命题的 req 层杂件第五束。 *)
-(* 主件： req_boltzmann_factor_pos / req_boltzmann_prob_pos 与 req_entropy_gradient_strict_mono。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
-(* 备注： 配分正性为接口前提；温度与分布参数以 Section 变量给出。 *)
-(* ============================================================ *)
-
-(* UpReqMisc5.v — 签名迁移批 5 波 3 席：杂项完成（其余小节 + 向量世界类转写层）
-   工作单：attn\批5基建层处置清单-20260909.md（波3：LMI/PCC/Thermo/ConvThm/SumExp/GRPO
-   24 件 + Multivar/Hilbert/GramSchmidt (b|桥) 20 件入 UpReqMisc5B.v + DiffLemmas 代数面
-   11 件（纯字段链/环，零记录依存）；differentiable_affine 1 件随 C2 记录桥（波4）结果。
-   母本：CW_ConstructiveWorld_219（行号逐件见覆盖核对）；上游：UpReqAlgebra（批1 引擎）
-   ----------------------------------------------------------------
-   类转写层（清单 §7.11/§9.2 波3「reqStateSpace/HilbertSpace 类转写随本波结果」；
-   类体内接口投影一律 @ 全显（载体 rSS ≠ R，实例位手工喂定，零解析歧义）：
-     reqStateSpace     ← Id StateSpace L1160-1187（21 字段，语句位 Id→req 逐位副本；
-                          rsmetric_pos/rsmetric_triangle 的 plain le 形为 Id 字段逐位
-                          保留——setoid 接口对应字段已逐 eps 化，plain 形作类内假设位，
-                          判据 0.2-5/RestB Part4 先例，T2①）
-     reqStateSpaceExt  ← Id StateSpaceExtended L24738-24758（9 字段；Id 的 :> 继承
-                          改显式 rsse_base 参数位 + 依存席显式 unpack，零语义差）
-     reqHilbertSpace   ← Id HilbertSpace L1260-1276（9 字段，语句位 Id→req）
-     reqSumOver        ← Id SumOver L1408-1452（8 字段，语句位 Id→req）
-   ----------------------------------------------------------------
-   诚实签名变化登记表（规划书 §7.4，逐件登记）：
-   1. minus 非接口字段：语句位 minus → req_minus（UpReqAlgebra δ 透明同形），证明内 unfold；
-   2. log 前提化：setoid log/log_inv 带 lt zero 前提——rloss_of_prop（LMI）、
-      req_dpo_loss_diff_decomp 各补正性前提/同位假设位（req_log_compat_slot，
-      T2①；UpReqAlgebra ReqLogBridge 同参数位先例）；
-   3. Id le_plus_nonneg_r / mult_plus_distr_r / plus_cancel_l（Id 接口字段）在 req 接口
-      缺位 → 依存 UpReqAlgebra 已结果件 req_le_plus_nonneg_r/req_mult_plus_distr_r/
-      req_plus_cancel_l（语句同形）；
-   4. count 机器（nat/list Id 层）：跨接口原样复用 Module UpGRPO219 已闭名
-      （grpo_count_one/count_zero_remove_id/remove_notin_aux/nodup_g/count_g/removeT_g），
-   5. iterate（L1394）：多态纯 nat 递归零 Id 内容，跨接口原样复用
-      （G09_MiscSmall.v 先例同款）；
-   6. two_pos（Id 顶层件）req 侧以 UpReqAlgebra req_two_pos 内联；
-   7. 向量载体位等号保持 Id（req 字段仅定义于 R 上，载体无 setoid 等位——
-      Part 0 头注）；R 值位等号 req 逐件核对；
-   8. 函数等号位逐点化：rCoreClaim5 的 Id p (boltzmann_prob L) →
-      forall s, req (p s) (rboltzmann_prob L s)（见证同形，定义级闭合不变）。
-   ----------------------------------------------------------------
-   覆盖核对（req 件名 -> Id 原件 @ 行号）：
-   PCC：req_core_claim5_holds<-1619 req_boltzmann_factor_pos<-1628
-        req_boltzmann_prob_pos<-1637 req_prediction_fluctuation_scale<-1671
-        （reqSumOver 类<-1408 rboltzmann_factor<-1568 rboltzmann_prob<-1572
-          rpartition_condition<-1576 rCoreClaim5<-1608 定义转写）
-   Thermo：req_thermo_core_claim3_holds<-3025 req_thermo_core_claim5_holds<-3032
-        （rE_B<-2918 rentropy_gradient<-2984 rboltzmann_prob_t<-3000 定义转写）
-   ConvThm：req_iterate_step_diff<-13880 req_entropy_gradient_strict_mono<-13912
-        req_gradient_diff_from_zero<-13920 req_iterate_step_abs_diff<-13929
-        req_gradient_step_recurrence<-13944 req_gradient_abs_mono<-13982
-   SumExp：req_sum_exp_positive<-15266（KeyProofs 区；LMI L1875 孪生同模板）
-   LMI：req_exp_neg_positive<-1872 req_sum_exp_positive_lm<-1875
-        req_core_claim1_lm_holds<-1931 req_core_claim3_lm_holds<-1938
-        req_core_claim5_lm_holds<-1949 req_normalized_prob_pos<-1981
-        req_prediction_boltzmann_sampling_holds<-1993
-        （rsequence_loss_prefix<-1796 rtotal_loss<-1818 rforce<-1822
-          rpartition_function<-1870 rnormalized_prob<-1975 定义转写）
-   GRPO：req_list_sum_g_zero_fn<-113609 req_grpo_count_one<-113775
-        req_grpo_indicator_sum_one<-113793 req_grpo_uniform_mass<-113832
-        （req_split_count_one 为 Id split_count_one_id<-113720 的 req 需求生）
-   DiffAlgebra：req_compose_diff_decomp<-25673 req_half_le_one<-25729
-        req_half_le_self<-25748 req_minus_plus_zero_r<-26076
-        req_square_diff_expand<-26092 req_dpo_logit_denom_pos<-26239
-        req_dpo_loss_diff_decomp<-26247 req_dpo_sigmoid<-26255(定义)
-        req_dpo_sigmoid_pos<-26263 req_dpo_sigmoid_identity<-26269
-        req_dpo_sigmoid_complement<-26280 req_dpo_gradient_alt<-26298
-   (d) 冻结注记（双层并行，零证明行）：argmin_aux_snd_correct L15352（Leibniz 等号
-   伴件）、id_app_nil_r L15436 / id_app_cons_assoc L15443 / sequence_loss_prefix_app
-   L15451（list 载体 Id 换形）——归批5 (d) 冻结清单，本件不建。
-   ---------------------------------------------------------------- *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -108,7 +66,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 
 (* ============================================================ *)
-(* Part 0：向量世界类转写层（清单 §8 行 4，一次性 ~70 行）        *)
+(* Part 0：向量世界类转写层        *)
 (* 等号位分派（登记表 7）：req 接口 req 字段仅定义在 R 上（接口     *)
 (* L40471 req : R -> R -> Set）——R 值位等号 req（逐件核对），    *)
 (* 向量载体位等号保持 Id（Leibniz 多态，L69；载体无        *)
@@ -139,7 +97,7 @@ Class reqStateSpace (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
   rsmetric : rSS -> rSS -> R;
   rsmetric_sym : forall a b : rSS, @req R RIS (rsmetric a b) (rsmetric b a);
   (* Id smetric_pos L1177 plain le 逐位保留（setoid 接口对应字段已逐 eps 化，
-     plain 形为诚实假设位：判据 0.2-5，RestB Part4 先例） *)
+     plain 形为诚实参数位，RestB Part4 先例） *)
   rsmetric_pos : forall a b : rSS, @le R RIS (@zero R RIS) (rsmetric a b);
   rsmetric_zero : forall a b : rSS,
     @req R RIS (rsmetric a b) (@zero R RIS) -> Id a b;
@@ -258,7 +216,7 @@ Definition rboltzmann_factor (L : S -> R) (s : S) : R :=
 Definition rboltzmann_prob (L : S -> R) (s : S) : R :=
   mult (inv_pos rZ rZ_pos) (rboltzmann_factor L s).
 
-(* Id partition_condition L1576（sum_over_S 位 = rsum_over_S；语句位 Id→req） *)
+(* Id partition_condition L1576（sum_over_S 位置 = rsum_over_S；语句位置 Id→req） *)
 Definition rpartition_condition (L : S -> R) : Set :=
   req rZ (sumS (rboltzmann_factor L)).
 
@@ -333,7 +291,7 @@ Definition rentropy_gradient (E_A : R) : R :=
   req_minus (inv_pos (rtemperature_A E_A) (rtemperature_A_pos E_A))
             (inv_pos (rtemperature_B (rE_B E_A)) (rtemperature_B_pos (rE_B E_A))).
 
-(* Id CoreClaim3 L3018（语句位 minus → req_minus） *)
+(* Id CoreClaim3 L3018（语句位置 minus → req_minus） *)
 Definition rCoreClaim3 : Set := forall E_A,
   req (rentropy_gradient E_A)
       (req_minus (inv_pos (rtemperature_A E_A) (rtemperature_A_pos E_A))
@@ -371,7 +329,7 @@ End ReqThermoInstance.
 
 (* ============================================================ *)
 (* Part C：ConvergenceTheorem 余 3 件（Id L13837-14010）          *)
-(* 跨席核对（MinP 卡语句级口径，20260909 04:38）：               *)
+(* 语句级口径核对（MinP 卡）：               *)
 (*   req_iterate_step_diff<-13880 req_iterate_step_abs_diff<-13929 *)
 (*   req_gradient_abs_mono<-13982 —— 已由 UpReqCauchy.v 落盘已证明  *)
 
@@ -471,8 +429,8 @@ Fixpoint req_sum_exp (prefix : list rToken) (l : list rToken) : R :=
   | w :: rest => plus (exp_neg (rneg_log_prob prefix w)) (req_sum_exp prefix rest)
   end.
 
-(* Id sum_exp_positive L15266（归纳 + lt_id_r 换形 + plus_positive；premise
-   Not (Id l nil) 为 list 层假设位原样保留，T2①） *)
+(* Id sum_exp_positive L15266（归纳 + lt_id_r 换形 + plus_positive；前提
+   Not (Id l nil) 为 list 层参数位原样保留） *)
 Lemma req_sum_exp_positive :
   forall (prefix l : list rToken), Not (Id l nil) -> lt zero (req_sum_exp prefix l).
 Proof.
@@ -494,10 +452,10 @@ End ReqSumExpPos.
 (* Part E：LanguageModelInstance 6 件（Id L1777-2000 依存面；      *)
 (*         sum_exp_positive 孪生 L1875 已由 Part D 已证明）         *)
 (* 签名变化（登记表 2）：Id loss_of_proposition 用无前提 log_inv；   *)
-(*   req 形 log_inv 带 lt zero 前提 → 新增 3 正性假设位           *)
+(*   req 形 log_inv 带 lt zero 前提 → 新增 3 正性参数位           *)
 (*   rhas_verb_pos/rsemantics_coherent_pos/rstyle_appropriate_pos  *)
-(*   （T2①，逐位登记）。core_claim3 证明体为纯代数链（不解开       *)
-(*   rtotal_loss），假设位仅入语句签名。                           *)
+(*   （逐位登记）。core_claim3 证明体为纯代数链（不解开       *)
+(*   rtotal_loss），参数位仅入语句签名。                           *)
 (* ============================================================ *)
 Section ReqLangModelInstance.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -530,7 +488,7 @@ Fixpoint rsequence_loss_prefix (prefix : list rToken) (s : list rToken) : R :=
 
 Definition rsequence_loss (s : list rToken) : R := rsequence_loss_prefix nil s.
 
-(* Id total_loss L1818 定义转写（正性前提位显式化） *)
+(* Id total_loss L1818 定义转写（正性前提显式化） *)
 Definition rtotal_loss (s : list rToken) : R :=
   plus (rsequence_loss s)
        (plus (mult ralpha_grammar (rloss_of_prop rhas_verb s (rhas_verb_pos s)))
@@ -635,6 +593,47 @@ Variable rnd_g : UpGRPO219.nodup_g rGroup rgroup_enum.
 Let rG : R := reqd_of_nat (length rgroup_enum).
 Variable rG_pos : lt zero rG.
 
+(* ---- 正性供给组（签名保持式，形态二外部供给）----
+   rG_pos 原样保留为接口参数位：枚举可取空表，此时 rG 化为零元、
+   严格正不可证（反模型＝空枚举）。以下三件给出非空条件下的无条件
+   推导，供实例化时点直接取用；出节签名零变动。
+   树内对照锚：reqd_of_nat_pos（UpReqMpDomain，S k 形）——本件自持
+   重演同构证明，维持依赖面零新增（不引 UpReqMpDomain）。 *)
+Lemma rgrp_of_nat_S_pos : forall k : nat, lt zero (reqd_of_nat (Datatypes.S k)).
+Proof.
+  intro k. induction k as [| k IH].
+  - (* 基座：reqd_of_nat 1 定义层即 plus one zero，换形回 one 后由 one_pos 闭合 *)
+    apply (lt_id_r zero one (reqd_of_nat (Datatypes.S O))).
+    + apply (req_trans one (plus one zero) (reqd_of_nat (Datatypes.S O))).
+      * apply (req_sym (plus one zero) one). apply plus_zero.
+      * apply req_refl.
+    + exact one_pos.
+  - (* 步：reqd_of_nat (S (S k)) 定义层即 1 + reqd_of_nat (S k)，双正性相加保持 *)
+    apply (lt_id_r zero (plus one (reqd_of_nat (Datatypes.S k)))
+                      (reqd_of_nat (Datatypes.S (Datatypes.S k)))).
+    + apply req_refl.
+    + apply plus_positive. exact one_pos. exact IH.
+Qed.
+
+(* 非空列表的嵌入正性：InT 见证给出长度后继形（sigT 见证出口） *)
+Theorem rgrp_G_pos_of_nonempty :
+  forall l : list rGroup,
+    sigT (fun t : rGroup => InT t l) -> lt zero (reqd_of_nat (length l)).
+Proof.
+  intros l. destruct l as [| x rest].
+  - (* 空表：InT 见证不可构造，inversion 消去 *)
+    intros [t Ht]. inversion Ht.
+  - (* 非空：长度为后继形，正性由 rgrp_of_nat_S_pos 直接给出 *)
+    intros _. exact (rgrp_of_nat_S_pos (length rest)).
+Qed.
+
+(* 本节枚举位 rG_pos 的实例化时点供给：枚举非空时无条件成立 *)
+Theorem rgrp_G_pos_of_nonempty_enum :
+  sigT (fun t : rGroup => InT t rgroup_enum) -> lt zero rG.
+Proof.
+  intro Hne. exact (rgrp_G_pos_of_nonempty rgroup_enum Hne).
+Qed.
+
 (* Id UpGRPO219.grpo_count_one L113775：结论 @Id nat 原样，count 机跨接口复用（1 行组装） *)
 Theorem req_grpo_count_one : forall (l : list rGroup) (Hnd : UpGRPO219.nodup_g rGroup l)
     (j : rGroup), InT j l -> Id (UpGRPO219.count_g rGroup rgrp_eq_dec j l) (Datatypes.S O).
@@ -642,7 +641,7 @@ Proof.
   intros l Hnd j Hin. exact (UpGRPO219.grpo_count_one rGroup rgrp_eq_dec l Hnd j Hin).
 Qed.
 
-(* Id list_sum_g_zero_fn L113609（归纳 + plus_zero 换形；premise InT 位原样） *)
+(* Id list_sum_g_zero_fn L113609（归纳 + plus_zero 换形；前提 InT 位原样） *)
 Lemma req_list_sum_g_zero_fn : forall (f : rGroup -> R) (l : list rGroup),
   (forall i : rGroup, InT i l -> req (f i) zero) ->
   req (reqd_list_sum_g rGroup f l) zero.
@@ -747,7 +746,7 @@ Proof.
 Qed.
 
 (* Id grpo_uniform_mass L113832（req_list_sum_g_linear + 组装；
-   G 位 = reqd_of_nat (length rgroup_enum)，G_pos 假设位同构） *)
+   G 位置 = reqd_of_nat (length rgroup_enum)，G_pos 参数位同构） *)
 Theorem req_grpo_uniform_mass : forall j : rGroup,
   InT j rgroup_enum ->
   req (reqd_list_sum_g rGroup
@@ -778,8 +777,8 @@ End ReqGrpoMisc.
 
 (* ============================================================ *)
 (* Part G：DifferentiableLemmas 代数面 11 件（Id L25673-26304）    *)
-(* 零记录依存（Differentiable 系 (c) 桥C2 随波4）；语句位 minus →  *)
-(* req_minus（登记表 1）；log 依存位前提化 + 同位假设位（登记表 2）。   *)
+(* 零记录依存语句位置 minus →  *)
+(* req_minus（登记表 1）；log 依存位置前提化 + 同位参数位（登记表 2）。   *)
 
 (* ============================================================ *)
 Section ReqDiffAlgebra.
@@ -1006,8 +1005,8 @@ Definition req_dpo_sigmoid (x : R) : R :=
   inv_pos (plus one (exp_neg x)) (req_dpo_logit_denom_pos x).
 
 (* Id dpo_loss_diff_decomp L26247：差分 = log 商（log_div 反向）。
-   同位假设位（登记表 2）：setoid 接口无 log_div 字段，UpReqAlgebra
-   MinP 卡跨席依存正路 (a)），End 时入闭包签名，非公理。 *)
+   同位参数位（登记表 2）：setoid 接口无 log_div 字段——抽象层为
+   接口义务原样保留（End 时入闭包签名，非公理）；实例化时点供给锚：log_req_compat_real（UpReqU2）与单参桥 log_req_compat（UpReqU2）可直接取用。 *)
 Variable req_log_compat_slot :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y), req x y -> req (log x Hx) (log y Hy).
 

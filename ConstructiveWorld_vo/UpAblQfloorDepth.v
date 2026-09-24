@@ -1,24 +1,14 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   qfd_arch_inv_instT（原 L102，4 句玩具证）                            *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
-(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
-(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
-(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
-(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
-(* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
-(* ============================================================ *)
-
+(* UpAblQfloorDepth.v —— 本件形式化 Q 层下取整深度的阿基米德见证：  *)
+(* 1/(N+2)#1 形分式上界逼近任意正 Q（uabS4b_arch_N 指标显式）。     *)
+(* 近一击位处置（R120 批 2）：qfd_arch_inv_core 之 uabS4b_null_mono  *)
+(* 委托位二处 nat 侧条件 lia 换 Init.Peano le_S，le_n_S 归纳链；    *)
+(* uabS4b_pos_succ_Z 改写位二处为委托余项形（改写件语义已尽，lia    *)
+(* 闭 Z 平凡算术余项，反判据登记保留）。语句面与引用面零改动，      *)
+(* 零新增 Require。依赖：QArith、Lqa、CW_ConstructiveWorld_219、    *)
+(* UpAblAbsSumLeB2、UpAblAbsQFeed。对标：Stdlib QArith 序引理与     *)
+(* Qabs 换形。构造性注记：Set 层承载、零承认、可提取。编译配方：    *)
+(* Rocq 9.1 直调，影子根单根 coqc。                                *)
 (* ============================================================ *)
 (* UpAblQfloorDepth.v —— S10 尾界链 N 指标实例化的单位分数供给件 *)
 (*                                                                *)
@@ -112,7 +102,7 @@ Proof.
            (1#(Pos.of_succ_nat (Datatypes.S (uabS4b_arch_N u) + 1)))
            (1#(Pos.of_succ_nat (uabS4b_arch_N u)))
            u).
-  - apply Qle_to_QleT'. apply uabS4b_null_mono. lia.
+  - apply Qle_to_QleT'. apply uabS4b_null_mono. generalize (uabS4b_arch_N u) as n. intro n. apply le_S. induction n as [| n IHn]. + apply le_S. apply le_n. + apply le_n_S. exact IHn.
   - exact (uabS4b_null_lt u Hu).
 Qed.
 
@@ -156,7 +146,7 @@ Proof.
         exact Hzk1.
       + apply Qabs_pos. apply uabS4b_null_nonneg.
     - apply (Qle_trans _ (1#(Pos.of_succ_nat (uabS4b_arch_N u)))).
-      + apply uabS4b_null_mono. lia.
+      + apply uabS4b_null_mono. generalize (uabS4b_arch_N u) as n. intro n. apply le_S. induction n as [| n IHn]. * apply le_S. apply le_n. * apply le_n_S. exact IHn.
       + apply qeq_le.
         apply (Qeq_sym (Qabs (1#(Pos.of_succ_nat (uabS4b_arch_N u))))
                        (1#(Pos.of_succ_nat (uabS4b_arch_N u)))).

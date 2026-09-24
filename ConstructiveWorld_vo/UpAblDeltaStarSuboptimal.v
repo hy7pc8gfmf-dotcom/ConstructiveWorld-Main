@@ -1,5 +1,5 @@
 (* ============================================================
-   使命行：2 态 softmax 核 Q 层反例件——证明 Doeblin 常数 δ* = lo²
+   使命行：2 态 softmax 核 Q 层反例件——证明 Doeblin 常数 δ* = lo²（普查反推件，候融合方确认）
    （论文 §6.1 定义）严格次优：最优常数 δ*_opt = 2·lo²/(1+lo²) > lo²，
    显式正间隙 δ*_opt − δ* = lo²·(1−lo²)/(1+lo²) > 0（前件 0<lo<1）。
    依赖：Stdlib QArith/Lia；S02_CauchyComplete（Set 层 QltT 见证形
@@ -13,14 +13,14 @@
    δ≤2K，故最优常数 = min_{s,s'} 2·K(s,s') = 2·lo²/(1+lo²)。
    构造性注记：语句层 Set 值见证形 QltT；无承认项、无经典逻辑、
    无排中律；定义位全部纯 Q 算术 Defined，透明可提取（独立目录提取
-   验证于 attn/_tdsopt_g3out，Obj 魔数计数=0）。
-   注（如实申报）：任务书「对角 K(s,s)=lo/(1+lo)」若两行同取则行和
+   验证，Obj 魔数计数=0）。
+   注（如实申报）：若按「对角 K(s,s)=lo/(1+lo)」两行同取则行和
    ≠1，与归一化验证矛盾；按行随机一致形取 K(+Δ,+Δ)=1/(1+lo²)。
    四元集合不变，min_{s,s'} 2K 不变，主定理不受影响。
-   编译配方：cd attn/_tdsopt_sbx 后钉 COQLIB/ROCQLIB 至 9.1 库根
-   （双装 Rocq 环境未钉则按 9.0 运行时报 .vo 版本号不匹配，
-   E-STAGING-Q1015 卡②），再 coqc -q -Q . "" UpAblDeltaStarSuboptimal.v。
-   ============================================================ *)
+   编译配方：Rocq 9.1 直调，钉 COQLIB/ROCQLIB 至 9.1 库根
+   （双装环境未钉会报 .vo 版本号不匹配），
+   再 coqc -q -Q . "" UpAblDeltaStarSuboptimal.v，cpu_guard 分档。
+   ============================================================*)
 
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Lia.
@@ -41,7 +41,7 @@ Proof.
 Qed.
 
 Lemma mdsopt_01 : (0 < 1)%Q.
-Proof. unfold Qlt, Qnum, Qden; cbn; lia. Qed.
+Proof. unfold Qlt, Qnum, Qden; cbn. exact eq_refl. Qed.
 
 Lemma mdsopt_den_pos : forall lo : Q, (0 < lo)%Q -> (0 < 1 + lo*lo)%Q.
 Proof.

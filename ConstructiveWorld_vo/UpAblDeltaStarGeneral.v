@@ -1,5 +1,5 @@
 (* ============================================================
-   使命行：Doeblin 常数 δ* = lo² 次优性从 2 态核到一般 nR≥2 态行随机
+   使命行：Doeblin 常数 δ* = lo² 次优性从 2 态核到一般 nR≥2 态行随机（普查反推件，候融合方确认）
    核的构造性推广——显式 nR 态核族 dsgen_k（2 态 softmax 块的凸组合
    嵌入：K := (1−β)·块 + β·均匀，β := (1+lo²)/2），对一切 nR≥2 证：
    行随机性、δ* = lo² 是可行 Doeblin 常数、β 也是可行常数且
@@ -10,7 +10,7 @@
    dsgen_gap_ratio/dsgen_gap_ratio_ge1 给出闭式）。
    依赖：Stdlib QArith/Lia/List；S02_CauchyComplete（QltT 见证形
    Qlt_to_QltT）；UpAblDeltaStarSuboptimal（2 态核块 mdsopt_k* 与
-   归一化 mdsopt_row*_norm、间隙闭式 mdsopt_gap，按任务书零改消费）。
+   归一化 mdsopt_row*_norm、间隙闭式 mdsopt_gap，签名零改使用）。
    对标：论文7 §6.1 δ* 设计理由段（lo/hi = lo² 为比值界产物，非
    min，故一般 nR 下仍次优）；§10.2 开放工作第 4 项。
    数学内核：nR 态 s,j ∈ {0,…,nR−1}；参考分布均匀 U=1/nR，Doeblin
@@ -23,11 +23,11 @@
    2 态最优闭式 2lo²/(1+lo²) 见 UpAblDeltaStarSuboptimal（mdsopt_main）。
    构造性注记：语句层 Set 值见证形 QltT；无承认项、无经典逻辑；
    定义位全部纯 Q/nat 算术 Defined，透明可提取。Q 序链全部走
-   Qlt_trans/Qplus_lt_r/Qmult_le_r/unfold+lia，零 Psatz（按卡
-   E-STAGING-WangWW：Psatz 是 micromega 闭包经典公理隐性载体）。
-   编译配方：cd attn/_dsnr_sbx 后按 E-STAGING-Q1015 卡②设
-   COQLIB/ROCQLIB 至 9.1 库根，再 coqc -q -Q . "" UpAblDeltaStarGeneral.v。
-   ============================================================ *)
+   Qlt_trans/Qplus_lt_r/Qmult_le_r/unfold+lia，零 Psatz（Psatz 属
+   micromega 闭包经典公理隐性载体）。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" UpAblDeltaStarGeneral.v，cpu_guard 分档执行。
+   ============================================================*)
 
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Lia.
@@ -40,7 +40,7 @@ Import ListNotations.
 (* ========== §1 Q 算术基件（正性、非零、除法、加法单调） ========== *)
 
 Lemma dsgen_2pos : (0 < 2)%Q.
-Proof. unfold Qlt, Qnum, Qden; cbn; lia. Qed.
+Proof. unfold Qlt, Qnum, Qden; cbn. exact eq_refl. Qed.
 
 Lemma dsgen_ne_of_pos : forall d : Q, (0 < d)%Q -> ~ ((d) == 0)%Q.
 Proof.
@@ -172,7 +172,7 @@ Lemma dsgen_dstar_le_beta : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q ->
   (lo*lo <= dsgen_beta lo)%Q.
 Proof. intros lo H0 H1. apply Qlt_le_weak. apply dsgen_dstar_lt_beta; assumption. Qed.
 
-(* ========== §4 2 态块条目正性（消费 UpAblDeltaStarSuboptimal） ========== *)
+(* ========== §4 2 态块条目正性（使用 UpAblDeltaStarSuboptimal） ========== *)
 
 Lemma dsgen_onelo_pos : forall lo : Q, (0 < lo)%Q -> (0 < 1 + lo)%Q.
 Proof.

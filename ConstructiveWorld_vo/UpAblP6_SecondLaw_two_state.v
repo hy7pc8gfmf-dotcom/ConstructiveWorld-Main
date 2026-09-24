@@ -1,15 +1,28 @@
 (* ===================================================================== *)
+(* 【工单面外扩展件标注】本件为工单面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
+(*   形态实例层消解），候融合方甄别确认；若属已补强保留区请退回。 *)
+(* A 区五字段（工单 §5.1）： *)
+(* ① 模块名+数学使命：UpAblP6_SecondLaw_two_state.v——SlqSecondLaw 节在 *)
+(* two_state 具体载体上的整节实例化供给件（热力学第二定律定量锚）。 *)
+(* ② 依赖清单：CW_ConstructiveWorld_219、SecondLawQuantified、UpReqEntropyDeficitTemp、 *)
+(* UpReqTempDefs、Stdlib List；尾插供给段另 Require UpReqConcFin2（cf2_temp/ *)
+(* cf2_temp_pos 见证锚）。 *)
+(* ③ 对标行：mathlib/stdlib 无同构物（库内自持 Real 载体装配件），省略。 *)
+(* ④ 构造性注记：Set 层承载；零承认零公理；全部定理 Qed 闭合，可提取。 *)
+(* ⑤ 编译配方：Rocq 9.1.0 直调 rocq c -Q <信任池> ""，cpu_guard 包裹单飞。 *)
+(* ===================================================================== *)
+(* ===================================================================== *)
 (* 【ToyR 战役包H·tier1 第三批·切片三补位席】本件为基准原件（Main 只读）的     *)
 (*   玩具证明体换轨稿：语句面/声明序/依赖面零改动，仅按玩具清单以异构构造性     *)
 (*   证明体替换标注定理。头注全中文；零承认件；纯构造性；Set 层零泄露；        *)
-(*   真收口守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
+(*   真闭合守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
 (* ===================================================================== *)
 (* ===================================================================== *)
 (* UpAblP6_SecondLaw_two_state.v —— SecondLawQuantified SlqSecondLaw       *)
 (*   节的 two_state 整节实例化供给件（纯构造性；语句面全 Set 层）。          *)
 (*                                                                        *)
 (* --------------------------------------------------------------------- *)
-(* 【使命】母件 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数    *)
+(* 【使命】源模块 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数    *)
 (*   S/sumf/sumpos/sumext/sumlinear/sumadd/T/T_pos/energy）在 two_state     *)
 (*   具体载体上整节实例化：载体与求和机器全具体（二元直接和，非 list        *)
 (*   机器），节前导件与双向定量锚逐一全参数实例化，另闭合零前提实例。        *)
@@ -412,3 +425,32 @@ Print Assumptions uab23_ts_gain_kl_upper.
 Print Assumptions uab23_ts_second_law_eps.
 Print Assumptions uab23_ts_anchor_closed_lower.
 Print Assumptions uab23_ts_anchor_closed_upper.
+
+
+(* ============================================================ *)
+(* 供给段二（签名保持式消解续，b3 §2.2.1；原节声明与既有签名零改）：              *)
+(*   温度 T 正性前提（原假设形 real_lt real_zero T，T 为自由参数，               *)
+(*   对抽象参数不可树内推导，抽象层保持假设身份）的实例化时点消解证书：            *)
+(*   具体见证温度的正性在树内已证，供下游以具体值充任 T 参数并以此二件            *)
+(*   填入正性前提：                                                            *)
+(*   见证一 T:=real_one——引 S07 已证引理 real_lt_zero_one；                     *)
+(*   见证二 T:=cf2_temp（UpReqConcFin2，定义性等于 one）——引 cf2_temp_pos，      *)
+(*   其语句面为类字段形 lt zero cf2_temp，本件以规范名 real_lt real_zero 重述，    *)
+(*   类型转换核验即类字段 lt/zero 与 real_lt/real_zero 在 Real 载体上定义性       *)
+(*   一致的机器凭证；与 ConcFin2 载体族同源，供融合侧按载体族整取。              *)
+(* ============================================================ *)
+Require Import UpReqConcFin2.
+
+Theorem usl2_tpos_one_supply : real_lt real_zero real_one.
+Proof.
+  exact real_lt_zero_one.
+Qed.
+
+Theorem usl2_tpos_cf2temp_pos_supply : real_lt real_zero cf2_temp.
+Proof.
+  exact cf2_temp_pos.
+Qed.
+
+(* ---- 供给段二假设审计（二连 Print Assumptions） ---- *)
+Print Assumptions usl2_tpos_one_supply.
+Print Assumptions usl2_tpos_cf2temp_pos_supply.

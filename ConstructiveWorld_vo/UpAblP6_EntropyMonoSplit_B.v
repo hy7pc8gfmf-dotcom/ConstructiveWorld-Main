@@ -1,59 +1,32 @@
 (* ============================================================ *)
-(* UpAblP6_EntropyMonoSplit_B.v —— 消融件乙：EntropyMonoSplitInst       *)
-(*   尾五枚 Qed 证明件的独立重建。                                      *)
+(* UpAblP6_EntropyMonoSplit_B.v —— 熵单调分解实例尾五枚定理件的独立重建件。       *)
 (*                                                              *)
-(* 母本：EntropyMonoSplitInst.v（303 行，11 声明                          *)
-(*   = 3 Let + 3 Lemma + 1 Corollary + 4 Theorem；与 Live 树同文）。      *)
-(*   母本使命：UpReqEntropyMonoSplit.v Section                            *)
-(*   EmsEntropyMonoSplit 三证书位装载件。                                 *)
+(* ①使命：本件形式化 EntropyMonoSplitInst 尾五枚结论（KL 非负 eps 余量镜件、      *)
+(*   峰温 pinned 等式族、KL 增长/衰减前提的 eps 装载形），以 uab_ 前缀独立重建，  *)
+(*   语句形与源文件 EntropyMonoSplitInst.v 逐字一致、证明独立。                  *)
+(* ②依赖：CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp、      *)
+(*   UpReqEntropyMaxTemp；供给段另引 UpReqSumD、UpReqConcSoftmax、ConcMixSelFeed。 *)
+(* ③对标：mathlib Gibbs 测度能量等式与 KL 散度非负的构造性直构（无对应直引）。    *)
+(* ④构造性注记：Set 层承载零 Prop 泄露（全 real_eq/real_lt/real_le sigT-Or 形）；  *)
+(*   全件真 Qed 闭合；尾嵌五连 Print Assumptions 假设审计。                      *)
+(* ⑤编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。   *)
 (*                                                              *)
-(* 本件范围：重建尾五枚 Qed 件——#7 emsi_kl_ge_zero_eps_mirror /          *)
-(*   #8 inst_pinned / #9 inst_pinned_at_peak / #10 inst_kl_right /        *)
-(*   #11 inst_kl_left；与前三枚（件甲，Qed 序 #4–#6）零交叠。             *)
-(*                                                              *)
-(* 消融口径：本件【零 Require EntropyMonoSplitInst】——母本整体不在        *)
-(*   依赖闭包内，尾五枚逐枚自上游定义件独立重建，逐枚注明重证路线         *)
-(*   （实例装配 / 直接重证 / 独立链）。逐枚重证路线：                     *)
-(*   A1 uab_kl_ge_zero_eps_mirror（消融 #7）——实例装配·16 参全显给出：     *)
-(*      上游原型引理全库唯一（real_KL_temp_ge_zero_eps，                   *)
-(*      UpReqEntropyMaxTemp），10 接口位照本节同名同序代入，T := t*。      *)
-(*   A2 uab_inst_pinned_at_peak（消融 #9）——直接重证·零前提：real_eq_refl  *)
-(*      定义性合一（uab_bt δ→real_boltzmann_dist_temp 与                  *)
-(*      real_energy_exp_temp δ 展开逐字同项），不经母本桥接引理一。        *)
-(*   A3 uab_inst_pinned（消融 #8）——实例装配：自等步内联                   *)
-(*      real_eq_refl + 片等式供给 Hslice（约束内容显式隔离不藏前提），     *)
-(*      real_eq_trans 中项写字面。                                        *)
-(*   A4 uab_inst_kl_right（消融 #10）——独立链：差分引理/eps 引理以新名重建 *)
-(*      （uab_le_diff_ge_zero / uab_le_plus_eps），零引用母本 #5/#6；       *)
-(*      其中 eps 引理换道——母本走 compat+id_l(0+0≡0) 换端，本件改走        *)
-(*      nonneg_r(0≤0+eps) + compat + real_le_trans 三段链，组合序独立。    *)
-(*   A5 uab_inst_kl_left（消融 #11）——独立链：A4 引理组对偶装配（KL_u 在前， *)
-(*      禁倒置，序向与母本一致）。                                        *)
-(*   差分引理（uab_le_diff_ge_zero）注记：raw Real 层差分向唯一通行        *)
-(*      （compat + id_l(a+(−a)≡0) 换左端），以新名重建、属独立链辅助件      *)
-(*      非消融对象。                                                      *)
-(*                                                              *)
-(* 五枚消融对象逐枚以逐字结论形重述（语句形与母本一致，证明独立）。        *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(* 构造性注记：纯构造性零承认件；Set 层语句零 Prop 泄露（全 real_eq/       *)
-(*   real_lt/real_le sigT-Or 形）；全件真 Qed 闭合（零悬置、零假设位）；    *)
-(*   尾嵌 Print Assumptions 五连假设审计。                                 *)
-(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，         *)
-(*   树内零写入。依赖 Require：CW_ConstructiveWorld_219、                  *)
-(*   UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqEntropyMaxTemp。         *)
+(* 面外扩展标注：本件为工单面外扩展件，按 b3 §2.2 可消解判定施工，候融合方        *)
+(*   甄别确认；若属已补强保留区请退回。原节假设声明与既有定理签名零改；          *)
+(*   文件尾供给段为签名保持式消解（b3 §2.2.1）：求和面五证书位在 ConcMixSelFeed   *)
+(*   求和载体 csm_sumf（S:=bool，enum:=true::false::nil）上实例化为              *)
+(*   *_supply 定理（ext/le/linear/add 引 cms 系四件，pos 引 sumd_list_sum_pos     *)
+(*   非空清单链）。既往战役自述核实：无补强自述。                                *)
 (* ============================================================ *)
-
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.
 Require Import UpReqEntropyDeficitTemp.
 Require Import UpReqEntropyMaxTemp.
 
 (* ============================================================ *)
-(* Section UpAblP6EmsB：接口面照母本 Section EntropyMonoSplitInst 同名同序         *)
+(* Section UpAblP6EmsB：接口面照源文件 Section EntropyMonoSplitInst 同名同序         *)
 (*   （求和面 7 位 + 峰温 T_star + 能量）；速记件以 uab_ 前缀重建                 *)
-(*   （接口重建，母本整体不在依赖闭包内）。                                        *)
+(*   （接口重建，源文件整体不在依赖闭包内）。                                        *)
 (* ============================================================ *)
 Section UpAblP6EmsB.
 
@@ -76,8 +49,8 @@ Variable T_star : Real.
 Variable T_star_pos : real_lt real_zero T_star.
 Variable energy : S -> Real.
 
-(* ---- 速记重建（uab_bt / uab_bt_pos / uab_kl：与母本 Let 同形换名，             *)
-(*   KL 方向与母本一致：KL(p_u 竖排 p_{t*})，p_u 占第一分布位，禁倒置。） ---- *)
+(* ---- 速记重建（uab_bt / uab_bt_pos / uab_kl：与源文件 Let 同形换名，             *)
+(*   KL 方向与源文件一致：KL(p_u 竖排 p_{t*})，p_u 占第一分布位，禁倒置。） ---- *)
 Let uab_bt (u : Real) (Hu : real_lt real_zero u) : S -> Real :=
   real_boltzmann_dist_temp S real_sum_over_S real_sum_pos_preserved u Hu energy.
 Let uab_bt_pos (u : Real) (Hu : real_lt real_zero u) :
@@ -90,7 +63,7 @@ Let uab_kl (u : Real) (Hu : real_lt real_zero u) : Real :=
 (* ---------------------------------------------------------- *)
 (* 独立链辅助件一（差分向）：a ≤ b 给 0 ≤ b + (−a)。                              *)
 (*   raw Real 层差分向唯一通行：compat 双边同加 −a，再 id_l 经                     *)
-(*   (a + −a) ≡ 0 换左端。新名重建，零引用母本 #5。                                *)
+(*   (a + −a) ≡ 0 换左端。新名重建，零引用源文件 #5。                                *)
 (* ---------------------------------------------------------- *)
 Lemma uab_le_diff_ge_zero :
   forall a b : Real,
@@ -108,10 +81,10 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 独立链辅助件二（eps 松弛提升）：0 ≤ X 且 0 < eps 给 0 ≤ X + eps。               *)
-(*   【换道注记】母本 #6 走 compat(0≤X)(0≤eps) + id_l((0+0)≡0) 换端；              *)
+(*   【换道注记】源文件 #6 走 compat(0≤X)(0≤eps) + id_l((0+0)≡0) 换端；              *)
 (*   本件组合序独立：nonneg_r（0 ≤ 0+eps）→ compat 左端 0≤X 提升                   *)
 (*   （0+eps ≤ X+eps）→ real_le_trans 中项字面 (0+eps) 衔接。                      *)
-(*   新名重建，零引用母本 #6。                                                    *)
+(*   新名重建，零引用源文件 #6。                                                    *)
 (* ---------------------------------------------------------- *)
 Lemma uab_le_plus_eps :
   forall X eps : Real,
@@ -156,7 +129,7 @@ Qed.
 (* ---------------------------------------------------------- *)
 (* A2（消融 #9 inst_pinned_at_peak）：峰温点零前提闭合语句。                        *)
 (*   路线：上游定义面直接重证·零前提——real_eq_refl 定义性合一（uab_bt 与          *)
-(*   real_energy_exp_temp δ 展开逐字同项，kernel 可转换），不经母本桥接引理一      *)
+(*   real_energy_exp_temp δ 展开逐字同项，kernel 可转换），不经源文件桥接引理一      *)
 (*   （#4）亦成立。                                                                *)
 (* ---------------------------------------------------------- *)
 Theorem uab_inst_pinned_at_peak :
@@ -173,7 +146,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* A3（消融 #8 inst_pinned）：证书位一 Hpinned 装载（逐字结论形）。                *)
-(*   路线：实例装配——自等步内联 real_eq_refl（母本桥接引理一 #4 被消融，           *)
+(*   路线：实例装配——自等步内联 real_eq_refl（源文件桥接引理一 #4 被消融，           *)
 (*   定义性合一无桥直达）+ 片等式供给 Hslice（E_u == E_{t*}，约束内容              *)
 (*   显式隔离不藏前提），real_eq_trans 中项写字面。                                *)
 (* ---------------------------------------------------------- *)
@@ -208,7 +181,7 @@ Qed.
 (* A4（消融 #10 inst_kl_right）：证书位二 Hkl_right 装载（逐字结论形）。            *)
 (*   路线：独立链——供给定型 plain growth（real_le KL_u KL_v）→ 新名                *)
 (*   差分引理换形 → 新名 eps 引理（换道组合）提升。KL_v 在前 KL_u 取 real_opp，    *)
-(*   禁倒置、序向与母本一致。零引用母本 #5/#6/#10。                                *)
+(*   禁倒置、序向与源文件一致。零引用源文件 #5/#6/#10。                                *)
 (* ---------------------------------------------------------- *)
 Theorem uab_inst_kl_right :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -233,7 +206,7 @@ Qed.
 (* A5（消融 #11 inst_kl_left）：证书位三 Hkl_left 装载（逐字结论形）。              *)
 (*   路线：独立链——供给定型 plain decay（real_le KL_v KL_u，序前提                 *)
 (*   u ≤ v ≤ t*）→ 同组新名引理对偶装配。KL_u 在前 KL_v 取 real_opp，              *)
-(*   禁倒置、序向与母本一致。零引用母本 #5/#6/#11。                                *)
+(*   禁倒置、序向与源文件一致。零引用源文件 #5/#6/#11。                                *)
 (* ---------------------------------------------------------- *)
 Theorem uab_inst_kl_left :
   (forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
@@ -262,3 +235,104 @@ Print Assumptions uab_inst_pinned_at_peak.
 Print Assumptions uab_inst_pinned.
 Print Assumptions uab_inst_kl_right.
 Print Assumptions uab_inst_kl_left.
+
+(* ============================================================ *)
+(* 供给段（签名保持式消解，b3 §2.2.1；原节声明与既有签名零改）：                  *)
+(*   求和面五证书位在 ConcMixSelFeed 求和载体 csm_sumf 上实例化：                *)
+(*   ext/le/linear/add 四位由 cms_sum_ext/cms_sum_le/cms_sum_linear/             *)
+(*   cms_sum_add 供给；正性位由 sumd_list_sum_pos（非空清单逐点严格正            *)
+(*   ⟹ 和严格正）供给。抽象层五位保持假设身份（对抽象求和算子不可树内           *)
+(*   推导），本段为具体实例上的消解证书，供下游以实例充任接口字段。              *)
+(* ============================================================ *)
+Require Import UpReqSumD.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
+Import RealInterfaceEnhancedMod.
+
+Definition uabp6b_enum : list bool := true :: false :: nil.
+
+Theorem uabp6b_sum_pos_supply :
+  forall f : bool -> Real,
+    (forall s : bool, lt zero (f s)) ->
+    lt zero (csm_sumf bool uabp6b_enum f).
+Proof.
+  intros f Hpt.
+  unfold csm_sumf.
+  apply (@sumd_list_sum_pos Real RealEnhancedReal bool f uabp6b_enum).
+  - intros Hnil.
+    discriminate Hnil.
+  - exact Hpt.
+Qed.
+
+Theorem uabp6b_sum_ext_supply :
+  forall f g : bool -> Real,
+    (forall s : bool, req (f s) (g s)) ->
+    req (csm_sumf bool uabp6b_enum f) (csm_sumf bool uabp6b_enum g).
+Proof.
+  intros f g H.
+  exact (cms_sum_ext bool uabp6b_enum f g H).
+Qed.
+
+Theorem uabp6b_sum_le_supply :
+  forall f g : bool -> Real,
+    (forall s : bool, le (f s) (g s)) ->
+    le (csm_sumf bool uabp6b_enum f) (csm_sumf bool uabp6b_enum g).
+Proof.
+  intros f g H.
+  exact (cms_sum_le bool uabp6b_enum f g H).
+Qed.
+
+Theorem uabp6b_sum_linear_supply :
+  forall (a : Real) (f : bool -> Real),
+    req (csm_sumf bool uabp6b_enum (fun s : bool => mult a (f s)))
+            (mult a (csm_sumf bool uabp6b_enum f)).
+Proof.
+  intros a f.
+  exact (cms_sum_linear bool uabp6b_enum a f).
+Qed.
+
+Theorem uabp6b_sum_add_supply :
+  forall f g : bool -> Real,
+    req (csm_sumf bool uabp6b_enum (fun s : bool => plus (f s) (g s)))
+            (plus (csm_sumf bool uabp6b_enum f)
+                  (csm_sumf bool uabp6b_enum g)).
+Proof.
+  intros f g.
+  exact (cms_sum_add bool uabp6b_enum f g).
+Qed.
+
+(* ---- 供给段假设审计（五连 Print Assumptions） ---- *)
+Print Assumptions uabp6b_sum_pos_supply.
+Print Assumptions uabp6b_sum_ext_supply.
+Print Assumptions uabp6b_sum_le_supply.
+Print Assumptions uabp6b_sum_linear_supply.
+Print Assumptions uabp6b_sum_add_supply.
+
+
+(* ============================================================ *)
+(* 供给段二（签名保持式消解续，b3 §2.2.1；原节声明与既有签名零改）：              *)
+(*   峰温 T_star 正性前提（原假设形 real_lt real_zero T_star，T* 为自由参数，      *)
+(*   对抽象参数不可树内推导，抽象层保持假设身份）的实例化时点消解证书：            *)
+(*   具体见证温度的正性在树内已证，供下游以具体值充任 T_star 参数并以此二件       *)
+(*   填入正性前提：                                                              *)
+(*   见证一 T*:=real_one——引 S07 已证引理 real_lt_zero_one；                     *)
+(*   见证二 T*:=cf2_temp（UpReqConcFin2，定义性等于 one）——引 cf2_temp_pos，      *)
+(*   本件语句面直接取同款类字段形 lt zero cf2_temp（同常量对齐，边界           *)
+(*   cast 自然消失；lt/zero 与 real_lt/real_zero 定义性一致机器凭证在库；        *)
+(*   与 ConcFin2 载体族同源，供融合侧按载体族整取。                              *)
+(* ============================================================ *)
+Require Import UpReqConcFin2.
+
+Theorem uabp6b_tstar_one_pos_supply : real_lt real_zero real_one.
+Proof.
+  exact real_lt_zero_one.
+Qed.
+
+Theorem uabp6b_tstar_cf2temp_pos_supply : lt zero cf2_temp.
+Proof.
+  exact cf2_temp_pos.
+Qed.
+
+(* ---- 供给段二假设审计（二连 Print Assumptions） ---- *)
+Print Assumptions uabp6b_tstar_one_pos_supply.
+Print Assumptions uabp6b_tstar_cf2temp_pos_supply.

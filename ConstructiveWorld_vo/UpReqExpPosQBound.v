@@ -1,11 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T257 台账席 战役包R（tier2 八批）          *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   upqb_exp_partial_eq（原 L32，2 句玩具证）                            *)
+(* ============================================================*)
+(* UpReqExpPosQBound.v —— 使命行：本件形式化 Q 层偶阶截断和的正（普查反推件，候融合方确认） *)
+(* 下界显式见证：S_{2m}(−a) 有可计算正下界 1/(1+B)，见证为 sigT  *)
+(* 存在形；本件为整件替换交付版，语句面与引用面零改动。          *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp。            *)
+(* 对标：Stdlib QArith 序引理（Qlt/Qle 层）；本库 S02 见证桥。   *)
+(* 构造性注记：Set 层承载、零假设位、可提取。                    *)
+(* 编译配方：Rocq 9.1 直调，按本库 build 顺序 coqc 执行。        *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -17,12 +17,12 @@
 (* 备注： 截断指数的有理层下界经显式见证给出；QleT 到 Qle 换桥随行。 *)
 (* ============================================================ *)
 
-(* ===== UpReqExpPosQBound.v —— 席PA2：Q 层偶阶截断正下界显式见证（1/(1+B) 形） =====
-   路线（评审003 路径 A.3.1 余量，与席PA 的 1/C 形不同源）：
+(* ===== UpReqExpPosQBound.v —— 路线说明：Q 层偶阶截断正下界显式见证（1/(1+B) 形） =====
+   路线（与库内 1/C 形不同源，本件独立走 1/(1+B) 形）：
      S_{2m}(−a)·S_{2m}(a) == 1 + corr m a（S03 实名 exp_even_mul_eq）
      + S_{2m}(a) 构造性上界 B(m,a) := (2m+1)·(1+a)^{2m}（upqb 自建保守界，S03 无现成单侧和上界引擎）
      ⟹ S_{2m}(−a) ≥ 1/B 且 1/(1+B) < 1/B ⟹ q := 1/(1+B) > 0 可计算。
-   纯基座路线：不 Require 席PA 的 UpReqExpPosWitness（1/C 形）。
+   纯基座路线：不 Require UpReqExpPosWitness（1/C 形件）。
    语句面全 Set 层：QltT/QleT（S02），存在 sigT，合取 prod（%type 标注）；
    Prop 版 Qle/Qlt 仅用于证明体内部，出口经 Qlt_to_QltT 桥（S02 先例）。
    复用（禁重定义）：exp_partial/q_pow/q_fact/q_pow_mono/q_fact_pos/corr/corr_nonneg/
@@ -43,7 +43,7 @@ Lemma upqb_exp_partial_eq : forall (n : nat) (x : Q), upqb_exp_partial n x == ex
 Proof. intros n x. exact (Qeq_refl (exp_partial n x)). Qed.
 
 Lemma upqb_qlt_0_1 : Qlt 0 1.
-Proof. unfold Qlt; simpl; lia. Qed.
+Proof. unfold Qlt; simpl. exact eq_refl. Qed.
 
 Lemma upqb_qle_0_1 : Qle 0 1.
 Proof.

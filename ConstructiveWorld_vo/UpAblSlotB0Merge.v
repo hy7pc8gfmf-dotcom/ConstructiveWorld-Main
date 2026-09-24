@@ -57,7 +57,7 @@ Check q_arch_geom.
 (* A.1 主件：退化侧假设 2B ≤T 0 下，N:=0 即为合格见证——
    2B ≤ 0 ≤ (t+1)#1 链：首段由假设直接承（QleT'_to_Qle 化为 Qle），
    次段 Qle_of_nat 0 (t+1) 显式实例（Z.of_nat 0 # 1 与 0 定义性重合，
-   应用即转换判定；nat 前提 (0 ≤ t+1)%nat 由 lia 闭）。 *)
+   应用即转换判定；nat 前提 (0 ≤ t+1)%nat 由 le_S，le_n 归纳链闭）。 *)
 Lemma sb0_arch_geom_degen : forall B : Q,
   QleT' (Qmult (1 + 1)%Q B) 0 ->
   sigT (fun N : nat => forall t : nat, NatLe N t ->
@@ -69,7 +69,7 @@ Proof.
   apply Qle_to_QleT'.
   apply (Qle_trans _ 0).
   - exact (QleT'_to_Qle _ _ HB).
-  - apply (Qle_of_nat 0 (t + 1)). lia.
+  - apply (Qle_of_nat 0 (t + 1)). clear Ht. induction t as [| t IHt]. + apply le_S. apply le_n. + apply le_S. exact IHt.
 Qed.
 
 (* ============================================================ *)

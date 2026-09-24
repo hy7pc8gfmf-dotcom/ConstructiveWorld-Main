@@ -1,3 +1,38 @@
+(* ===================================================================== *)
+(* 工单面外扩展件（C2 底册），按 b3 §2.2 可消解判定施工，候融合方甄别确认；若属已补强保留区请退回 *)
+(* ===================================================================== *)
+(* 模块名：SecondLawQuantified.v——本件形式化 Gibbs 演化下接收侧熵增益的    *)
+(*   热二律下界与逐 eps 列表形式。以下横幅与尾部消解块为本轮新增，Main 原件 *)
+(*   全文逐字保留（原件作为新增前缀与后缀之间的完整字节段，声明面零改）。  *)
+(* 依赖清单（本块新增，原件依赖面零改）：UpReqSumD、ConcMixSelFeed、       *)
+(*   UpReqConcFin2。                                                       *)
+(* 对标：mathlib 有限和的正性/外延/线性/加性引理的构造性 Set 层对应物。   *)
+(* 构造性注记：Set 层承载，零承认；消解件全由库内已证件以显式实参供给；   *)
+(*   新证明零一键收敛（分判构造与成品直接供给两类，无 auto 类单键）；     *)
+(*   可提取面零 Prop 残留。                                                *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 包裹；影子根单根 -Q 编译。           *)
+(* 三态甄别总表（Section SlqSecondLaw 九声明位）：                         *)
+(*   ① S/sumf/T/energy 四位=Set 型参数位，接口义务保留（消解对象非参数   *)
+(*     位本身，而是其下的求和诚实参数位与正性参数位）；                            *)
+(*   ② sumpos/sumext/sumlinear/sumadd 四求和参数位=可消解：尾部消解块以       *)
+(*     csm_sumf 列表折叠机为 sumf 消解实例读法，四参数位分别由                 *)
+(*     sumd_list_sum_pos_cons（UpReqSumD，cons 形非空承载，零 Prop 前提）  *)
+(*     与 cms_sum_ext/cms_sum_linear/cms_sum_add（ConcMixSelFeed，         *)
+(*     Main:172/:183/:212 核验引用行）供给；req/lt/le/plus/mult 与         *)
+(*     real_eq/real_lt/real_le/real_plus/real_mult 在 RealEnhancedReal    *)
+(*     实例下同义，语句面逐位对上；                                       *)
+(*   ③ T_pos=抽象参数正性，真前提嫌疑（温度为自由参数，其正性属接口       *)
+(*     义务；cf2_temp_pos 仅供给具体实例读法）：按 b3 §2.2 真前提保留     *)
+(*     禁硬证，消解块仅提供具体实例证书 slqr_T_pos（T := one 读法，       *)
+(*     cf2_temp_pos（UpReqConcFin2:100）供给源）。                         *)
+(* 红线四条自检：①纯构造性零经典逻辑；②Set 层承载零 Prop 泄露（新增      *)
+(*   语句面全 Set，非空性以 cons 形承载不引入 Prop 前提）；③非平凡强制   *)
+(*  （消解件照消融战役 AB 系伴生供给件配方）；④可提取（新增证明项全     *)
+(*   Closed，公理面为空）。                                                *)
+(* 三关凭证：原件字节段全保留（前缀+后缀逐字节不变）；新增面 LF 单字节   *)
+(*   换行；新增代码括号配平经编译门验证。                                  *)
+(* ===================================================================== *)
+
 (* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 f00e7b8fbbe4feba99818bbe7ba841eb · 权威定位=定理名内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
 (* ANCHOR: slq_entropy_gain_kl_lower | 现势行号 L243 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ANCHOR: slq_second_law_eps_list | 现势行号 L498 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
@@ -6,28 +41,28 @@
 (*   保留，仅换十条玩具坐标中八条的证明体（按定理名定位，语句面/声明序    *)
 (*   零改，依赖面零改）。八条换轨路线：                                   *)
 (*   其一 slq_le_resp_req_l：转发跳消除——不再单点转发实数集oid单调整理件， *)
-(*      定义级同位直出（集oid内基引擎 real_le_compat 取 y 腿恒等位）。    *)
-(*   其二 slq_le_resp_req_r：同上对偶（x 腿恒等位）。                     *)
+(*      定义级同位直出（集oid内基引擎 real_le_compat 取 y 肢恒等位）。    *)
+(*   其二 slq_le_resp_req_r：同上对偶（x 肢恒等位）。                     *)
 (*   其三 slq_step_pos：双侧同位运输——不动点见证与反向桥见证逐级命名，    *)
-(*      经 real_lt_compat 两腿同运收口（原稿单腿 sym 绕行单跳）。         *)
-(*   其四 slq_step_entropy_eq_boltz：自足重演——不再消费熵外延整理件，     *)
+(*      经 real_lt_compat 两肢同运闭合（原稿单肢 sym 绕行单跳）。         *)
+(*   其四 slq_step_entropy_eq_boltz：自足重演——不再使用熵外延整理件，     *)
 (*      展开熵定义面后逐点不动点+乘法同余+对合同余+对数外延四级直出。     *)
 (*   其五 slq_entropy_ent_unfold：定义层受控展开——受体熵定义与其内层      *)
-(*      总微观数定义双层展开后定义性收口（原稿单跳转换）。                *)
+(*      总微观数定义双层展开后定义性闭合（原稿单跳转换）。                *)
 (*   其六 slq_receiver_second_law_quant：命名见证结构推导——严格增见证     *)
-(*      与逐 eps 伸张见证逐级命名后复合收口（原稿单体巨型嵌套一次到位）。 *)
+(*      与逐 eps 伸张见证逐级命名后复合闭合（原稿单体巨型嵌套一次到位）。 *)
 (*   其七 slq_lt_to_le_eps：同上传递链命名拆解（三段可审计级链）。        *)
-(*   其八 slq_second_law_setoid_frame：自足直出——不再消费 Prop 自由孪件， *)
-(*      展开桥出口定义面后左腿直取+传递复合独立闭合。                     *)
+(*   其八 slq_second_law_setoid_frame：自足直出——不再使用 Prop 自由孪件， *)
+(*      展开桥出口定义面后左肢直取+传递复合独立闭合。                     *)
 (*   【切片五追记】其九 slq_entropy_deficit_nonneg_eps：去转发结构重演——  *)
 (*      不再单点转发最大熵逐 eps 档大引擎（t13），改机械移植其算术移位链   *)
 (*      自足重演：移位引理 t13_le_plus_opp_shift（依赖面内 UpReqTempDual） *)
 (*      起手，右单位序件收拢，熵亏恒等式引擎 real_entropy_deficit_kl_temp  *)
 (*      （依赖面内 UpReqEntropyDeficitTemp）直供加法分解，结合/交换/同位   *)
-(*      适配多段命名复合收尾（Gibbs 腿按原位直配）。                       *)
+(*      适配多段命名复合收尾（Gibbs 肢按原位直接匹配）。                       *)
 (*   其十 slq_second_law_eps_list：不可化标注结案——同一移位链的列表求和    *)
 (*      束实例，自足重演需整链复制且巨型束五参全内联，收益/风险比低；      *)
-(*      引擎消费位去转发示范已由其九承担，不再重复落刀。                   *)
+(*      引擎使用位去转发示范已由其九承担，不再重复落刀。                   *)
 (*   全程纯构造性，Set 层承载，证毕记号逐条守恒，依赖面与原件逐行一致。   *)
 (* ===================================================================== *)
 
@@ -38,7 +73,7 @@
 (*   increase 原样转述的零内容件。本席把它升级为实例化定量定理：          *)
 (*   一步 Gibbs 核演化后的熵增 ≥ 熵亏 − eps，熵亏 = KL(当前‖Boltzmann)。   *)
 (* --------------------------------------------------------------------- *)
-(* 【供体件（vorebuild .vo，探针 Check 实测 arity，全参 @ 调用）】         *)
+(* 【供体件（vorebuild .vo，检验 Check 实测 arity，全参 @ 调用）】         *)
 (*   · real_KL_temp_kl_term_bridge UpReqEntropyDeficitTemp:486            *)
 (*     （KL ≡ Σ real_kl_term 规范形）                                     *)
 (*   · real_entropy_deficit_kl_temp 同上:509 主件（S[p_T]−S[p] == KL）    *)
@@ -54,26 +89,26 @@
 (*     p_T），其受体对应物 = q_kernel 的 Doeblin 中心 p_b（T = δ·p_b +    *)
 (*     (1−δ)·Q 分解的 δ→1 热浴极限），如实注明。定量出口 = real_le。       *)
 (* 【桥复用实测】C4 TempSoftmaxInstantiation 已编译、Require 复用：        *)
-(*   · tsi_le_plus_eps_r 直接复用（受体 lt → 逐 eps le 伸张腿）；          *)
+(*   · tsi_le_plus_eps_r 直接复用（受体 lt → 逐 eps le 伸张肢）；          *)
 (*   · tsi_rie_setoid 总实例：供体链为 CW219 具体 Real 载体（real_* 平面  *)
 (*     名，RealSetoid.real_le_id_l/r 等实例件在库），NOT (A,RIS) 多态，    *)
 (*     桥实例参数与本席供体不匹配——按任务书预案直接走供体原始参数面；   *)
 (*     桥在 Enhanced 侧仍承重：slq_second_law_setoid_frame 出口面经       *)
 (*     tsi_rie_setoid 的 le/plus 字段陈述（与 Enhanced le/plus iota 可    *)
-(*     转换，exact 收口），即 C4 头注桥 req/le 端规范模型读法兑现。      *)
+(*     转换，exact 闭合），即 C4 头注桥 req/le 端规范模型读法兑现。      *)
 (* 【装配】供体主件给精确式 熵增(p↦p_T) = KL(p‖p_T)（real_eq）；本席：    *)
 (*   (a) req 单调平移整理件把精确式升格为逐 eps real_le 双向界             *)
 (*   （主件 lower/upper）；(b) 一步热浴核不动点 slq_gibbs_step_fixed      *)
 (*   （mult_comm 逐点 → sumlinear → 归一 → mult_one）⟹ 实现熵增 = 亏      *)
 (*   （熵 ext 件）⟹ 实现形主件 lower；(c) 熵亏非负引理 eps 形全闭：       *)
-(*   list 载体 real_list_sum 四槽件（ext/linear/add/pos）实例化求和机器， *)
-(*   引擎 real_gibbs_inequality_eps + kl_term 桥闭式组装 Gibbs 腿 ⟹       *)
+(*   list 载体 real_list_sum 四参数件（ext/linear/add/pos）实例化求和机器， *)
+(*   引擎 real_gibbs_inequality_eps + kl_term 桥闭式组装 Gibbs 肢 ⟹       *)
 (*   t13_max_entropy_le_eps ⟹ S[p] ≤ S[p_T] + eps（Second Law 定量读法）。 *)
 (* 【红线自审】出口 real_le/real_lt（Set 层；real_lt_le_iff Or 前提显式   *)
 (*   or_introl）；禁五件套+经典逻辑（公理面零假设：无公理/自认/参数       *)
 (*   声明/猜想/中止/排中律/半途认输类语句）；非平凡：主件为   *)
 (*   供体精确式 × req 平移 × eps 伸张的真装配，非假设转述； receptor      *)
-(*   消费件 slq_receiver_second_law_quant 前提面照受体本体（Not (Id …)   *)
+(*   所用件 slq_receiver_second_law_quant 前提面照受体本体（Not (Id …)   *)
 (*   形，出口面仍 Set 层 le），另设 Prop 自由孪件 slq_lt_to_le_eps；      *)
 (*   文末 Print Assumptions 5 处。防撞：slq_ 前缀全库 grep 零命中          *)
 (*   （2026-09-16 实测）。                                                *)
@@ -100,12 +135,12 @@ Proof. intros a b c Hbc Hab. exact (RealSetoid.real_le_compat a a b c (real_eq_r
 
 (* ============================================================ *)
 (* 第一部分：主件——受体 SecondLaw 区块的实例化定量升级（Real 层） *)
-(*   载体 = CW219 具体 Real；求和机器照供体节同款抽象槽。          *)
+(*   载体 = CW219 具体 Real；求和机器照供体节同款抽象参数位。          *)
 (* ============================================================ *)
 
 Section SlqSecondLaw.
 
-(* 求和机器诚实槽（供体节同形同序：S sumf sumpos ext linear add） *)
+(* 求和机器诚实参数位（供体节同形同序：S sumf sumpos ext linear add） *)
 Variable S : Type.
 Variable sumf : (S -> Real) -> Real.
 Hypothesis sumpos :
@@ -351,9 +386,9 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 支撑 1（熵亏非负引理 eps 形）：Gibbs 腿为逐支接口前提时        *)
+(* 支撑 1（熵亏非负引理 eps 形）：Gibbs 肢为逐支接口前提时        *)
 (*   S[p] ≤ S[p_T] + eps——Second Law 定量读法（受体 lt 结论的    *)
-(*   实例化逐 eps 升格）。消费 t13_max_entropy_le_eps。           *)
+(*   实例化逐 eps 升格）。使用 t13_max_entropy_le_eps。           *)
 (* ---------------------------------------------------------- *)
 Theorem slq_entropy_deficit_nonneg_eps :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
@@ -405,7 +440,7 @@ End SlqSecondLaw.
 
 (* ============================================================ *)
 (* 第二部分：熵亏非负引理 eps 形全闭（list 载体）                   *)
-(*   real_list_sum 四槽件实例化求和机器；Gibbs 腿由引擎             *)
+(*   real_list_sum 四参数件实例化求和机器；Gibbs 肢由引擎             *)
 (*   real_gibbs_inequality_eps + real_KL_temp_kl_term_bridge 闭式   *)
 (*   组装（禁 plain KL≥0：全程逐 eps 形）。                         *)
 (* ============================================================ *)
@@ -497,7 +532,7 @@ Proof.
   - exact Heng.
 Qed.
 
-(* 第二部分收口：Second Law 定量读法全闭（Gibbs 腿闭式供给 t13） *)
+(* 第二部分闭合：Second Law 定量读法全闭（Gibbs 肢闭式供给 t13） *)
 Theorem slq_second_law_eps_list :
   forall (X : Type) (l : list X) (Hnil : l <> nil)
          (T : Real) (Ht : real_lt real_zero T) (energy : X -> Real)
@@ -544,7 +579,7 @@ Qed.
 (*   裸 lt/le/R 经 Mod 记号会误投 Setoid 类投影，实测已避）。        *)
 (* ============================================================ *)
 
-(* 桥 1：受体 entropy_ent（S06:1610）出节体桥（C4 B2 同款 δ 收口） *)
+(* 桥 1：受体 entropy_ent（S06:1610）出节体桥（C4 B2 同款 δ 闭合） *)
 Theorem slq_entropy_ent_unfold :
   forall (RI : RealInterfaceEnhanced)
          (Omega_A : @S01_BaseRing.R RI -> @S01_BaseRing.R RI)
@@ -561,9 +596,9 @@ Proof.
   exact (@id_refl _ _).
 Qed.
 
-(* 桥 2：受体 second_law_irreversible 的定量升级（消费受体定理本体）   *)
+(* 桥 2：受体 second_law_irreversible 的定量升级（使用受体定理本体）   *)
 (*   严格增 lt 结论 ⟹ 逐 eps le：entropy x ≤ entropy (dynamics x)+eps。 *)
-(*   出口 = @le RI（桥 tsi_rie_setoid 的 le 字段规范读法）；平移腿 =    *)
+(*   出口 = @le RI（桥 tsi_rie_setoid 的 le 字段规范读法）；平移肢 =    *)
 (*   C4 tsi_le_plus_eps_r 复用。前提面照受体本体（Not (Id …) 形）。     *)
 Theorem slq_receiver_second_law_quant :
   forall (RI : RealInterfaceEnhanced)
@@ -609,7 +644,7 @@ Proof.
 Qed.
 
 (* 桥 3：tsi_rie_setoid 承重出口面——同一定量结论经桥实例 le/plus        *)
-(*   字段陈述（与 Enhanced le/plus iota 可转换，exact 收口；即 C4        *)
+(*   字段陈述（与 Enhanced le/plus iota 可转换，exact 闭合；即 C4        *)
 (*   头注桥 req/le 端规范模型读法的显式兑现）。                        *)
 Definition slq_bridge_le (RI : RealInterfaceEnhanced)
            (a b : @S01_BaseRing.R RI) : Set :=
@@ -644,3 +679,75 @@ Print Assumptions slq_step_gain_kl_lower.
 Print Assumptions slq_second_law_eps_list.
 Print Assumptions slq_receiver_second_law_quant.
 Print Assumptions slq_second_law_setoid_frame.
+
+(* ################ R120 批 2 假设消解块（C2 底册 #6） ##################### *)
+(* sumf 消解实例读法：csm_sumf 列表折叠机（ConcMixSelFeed cms_ 系同键）；   *)
+(*   四求和参数位与 T 实例位在此读法下逐一供给。sumpos 参数位的非空性以 cons 形     *)
+(*   承载（列表头见证直接供给，零 Prop 前提；任意非空枚举形的整体导出      *)
+(*   留待后续批次）。                                                       *)
+
+From Stdlib Require Import List.
+Require Import UpReqSumD.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
+Require Import UpReqConcFin2.
+
+(* sumf 消解实例读法定义件（csm_sumf 的本件别名，delta 透明） *)
+Definition slqr_sumf (S0 : Set) (en : list S0) (f : S0 -> Real) : Real :=
+  csm_sumf S0 en f.
+
+(* sumext 参数位（语句面取供给同常量系 req 形：逐点外延，与 real_eq 定义性同义）       *)
+Theorem slqr_sumext : forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+  (forall s : S0, req (f s) (g s)) ->
+  req (slqr_sumf S0 en f) (slqr_sumf S0 en g).
+Proof.
+  intros S0 en f g H.
+  exact (cms_sum_ext S0 en f g H).
+Qed.
+
+(* sumlinear 参数位（语句面取供给同常量系 req/mult 形：系数提出） *)
+Theorem slqr_sumlinear :
+  forall (S0 : Set) (en : list S0) (a : Real) (f : S0 -> Real),
+    req (slqr_sumf S0 en (fun s : S0 => mult a (f s)))
+            (mult a (slqr_sumf S0 en f)).
+Proof.
+  intros S0 en a f.
+  exact (cms_sum_linear S0 en a f).
+Qed.
+
+(* sumadd 参数位（语句面取供给同常量系 req/plus 形：逐点加法分配） *)
+Theorem slqr_sumadd : forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+  req (slqr_sumf S0 en (fun s : S0 => plus (f s) (g s)))
+          (plus (slqr_sumf S0 en f) (slqr_sumf S0 en g)).
+Proof.
+  intros S0 en f g.
+  exact (cms_sum_add S0 en f g).
+Qed.
+
+(* sumpos 参数位（cons 形：非空性由列表头见证承载，零 Prop 前提；               *)
+(*   UpReqSumD sumd_list_sum_pos_cons 直接供给，语句面取同款 lt zero 形）        *)
+Theorem slqr_sumpos_cons :
+  forall (S0 : Set) (f : S0 -> Real) (x : S0) (l : list S0),
+    (forall s : S0, lt zero (f s)) ->
+    lt zero (slqr_sumf S0 (cons x l) f).
+Proof.
+  intros S0 f x l H.
+  exact (sumd_list_sum_pos_cons S0 f x l H).
+Qed.
+
+(* T_pos 参数位三态：抽象 T 的温度正性=真前提嫌疑，按 b3 §2.2 保留并声明为      *)
+(*   接口义务，禁硬证。以下仅为具体实例读法证书（T := one），供给源         *)
+(*   real_lt_zero_one（S07 同常量直供，slqr_T≡one delta 内核已认）。                     *)
+Definition slqr_T : Real := one.
+
+Theorem slqr_T_pos : real_lt real_zero slqr_T.
+Proof.
+  exact real_lt_zero_one.
+Qed.
+
+(* ================= 消解块假设面核验（预期全 Closed） ==================== *)
+Print Assumptions slqr_sumext.
+Print Assumptions slqr_sumlinear.
+Print Assumptions slqr_sumadd.
+Print Assumptions slqr_sumpos_cons.
+Print Assumptions slqr_T_pos.

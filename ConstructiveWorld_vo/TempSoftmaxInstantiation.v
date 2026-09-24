@@ -1,9 +1,47 @@
 (* ============================================================ *)
+(* TempSoftmaxInstantiation.v —— R120 批 2 波 3 W17 假设消解落件          *)
+(*                                                                       *)
+(* ①使命：本件形式化温度 softmax 三件套实例化——RealInterfaceEnhanced     *)
+(*   到 RealInterfaceEnhancedSetoid 的总实例桥（tsi_rie_setoid）、受体    *)
+(*   定义出节 arity 桥（tsi_twp_is_boltzmann_weight），与受体温度加权     *)
+(*   概率的归一性/混合归一/温度-尺度对偶/Boltzmann 相对式四定理。          *)
+(* ②依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、             *)
+(*   UpReqAttnGibbs；供给段另引 UpReqSumD、UpReqConcSoftmax、             *)
+(*   ConcMixSelFeed、UpReqConcFin2。                                      *)
+(* ③对标：mathlib softmax/Boltzmann 权重温度化与有限和机器的构造性        *)
+(*   Set 层对应物（供体 UpReqAttnGibbs ag_ 系四件全参直引，无更近对应）。  *)
+(* ④构造性注记：Set 层承载零承认；全件真 Qed 闭合；尾嵌假设审计；          *)
+(*   原节声明与既有定理签名零改。                                          *)
+(* ⑤编译配方：Rocq 9.1 rocq c 直调，cpu_guard 包裹，-Q 影子根单根。        *)
+(*                                                                       *)
+(* 面外扩展标注：本件为工单面外扩展件（C2 底册 #7 独立攒批），按 b3 §2.2   *)
+(*   可消解判定施工，候融合方甄别确认；若属已补强保留区请退回。            *)
+(* 处置说明：原件全文逐字保留；历史注释按 G1 全件禁词映射同文改写          *)
+(*   （13 处：闭合 5、检验 1、使用 3、参数位 4；剥离层逐字节同文、         *)
+(*   行数守恒，本件 LF 面无 CR 义务）。文尾供给段为签名保持式消解          *)
+(*   （b3 §2.2.1；头注层/段注层/件注层三层显式标注）：求和面四证书位在     *)
+(*   ConcMixSelFeed 求和载体 csm_sumf（UpReqConcSoftmax 定义面）上取       *)
+(*   S:=bool、enum:=true::false::nil 实例化——外延/序/齐性/加法四位引      *)
+(*   cms_sum_ext（ConcMixSelFeed:172）/cms_sum_le（:243）/cms_sum_linear   *)
+(*   （:183）/cms_sum_add（:212）一步实例，正性位由 sumd_list_sum_pos      *)
+(*   （UpReqSumD，非空清单逐点严格正 ⟹ 和严格正）供给；抽象层四证书位      *)
+(*   保持假设身份（对抽象求和算子不可树内推导），供给段为具体实例上的      *)
+(*   消解证书，供使用方以实例充任接口字段。温度正性位为自由参数正性        *)
+(*   （抽象层保持假设身份，禁硬证），按实例化时点消解出双见证：见证一      *)
+(*   temperature:=one——类字段 one_pos（凡 RealInterfaceEnhanced 可用，    *)
+(*   与 cf2_temp_pos := one_pos 同构）；见证二 T:=cf2_temp                *)
+(*   （UpReqConcFin2:98，定义性等于 one）——引 cf2_temp_pos                 *)
+(*   （UpReqConcFin2:100），以规范名 real_lt real_zero 重述（类字段        *)
+(*   lt/zero 与 real_lt/real_zero 在 Real 载体上定义性一致）。              *)
+(*   RI/Token/neg_log_prob/temperature/sumf 为接口参数位原样保留          *)
+(*   （诚实接口义务），详见文尾段注。                                      *)
+(* ============================================================ *)
+(* ============================================================ *)
 (* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   tsi_temp_weighted_relative（原 L359，2 句玩具证）                    *)
 (*   tsi_temp_scale_duality（原 L331，2 句玩具证）                        *)
@@ -16,24 +54,24 @@
 (* TempSoftmaxInstantiation.v —— C4 席：温度 softmax 三件套实例化          *)
 (*   （A4 移植榜 T1：供体 UpReqAttnGibbs.v:262/282/341/477 四件 →          *)
 (*    受体 S06_DiffSamplingGibbs.v LanguageModelExtensions 节              *)
-(*    temperature_weighted_prob（出节后全参形，Check 探针实测 arity：      *)
+(*    temperature_weighted_prob（出节后全参形，Check 检验实测 arity：      *)
 (*    RI Token neg_log_prob temperature temperature_pos prefix w）。       *)
 (*                                                                       *)
 (* 供体→受体装配结构：                                                    *)
-(*   · 装配桥 B1（缺口1收口）：tsi_rie_setoid —— S06 老层 R（             *)
+(*   · 装配桥 B1（缺口1闭合）：tsi_rie_setoid —— S06 老层 R（             *)
 (*     RealInterfaceEnhanced 实例）与 Up 系 req 层接口桥的总实例：        *)
 (*     RealInterfaceEnhancedSetoid (@R RI)，req := Id（S01 Set 层幺等），  *)
 (*     89 字段中 76 字段 = 接口字段直引（Id 形与 req 形逐字同一），        *)
 (*     13 个逐 eps 形字段（min/r_max/pos_part/abs/metric/log 家）经       *)
-(*     tsi_le_plus_eps_r（le_plus_nonneg 型一步引理）+ le_trans 收口；    *)
+(*     tsi_le_plus_eps_r（le_plus_nonneg 型一步引理）+ le_trans 闭合；    *)
 (*     log_le_linear_eps 的非 eps 源 = Enhanced 接口 log_le_linear 字段。 *)
 (*     本实例为全闭合 Definition（零新开口），对偶件接口不过深、不砍。     *)
 (*   · 装配桥 B2：tsi_twp_is_boltzmann_weight —— 受体定义出节 arity 桥，  *)
 (*     temperature_weighted_prob ≡ exp_neg(mult(inv_pos t Ht)(nlp w))    *)
-(*     （δ 收口，id_refl 级）。                                           *)
-(*   · 主件 4（≥2 达标，四件全消费）：受体定义逐字进语句面，              *)
+(*     （δ 闭合，id_refl 级）。                                           *)
+(*   · 主件 4（≥2 达标，四件全使用）：受体定义逐字进语句面，              *)
 (*     配分见证 = 受体正性证人 exp_neg_pos 同位内联，证 = 供体四件        *)
-(*     G12 消费链式全参 exact 实例化（@R RIS S sumf … 全参形，先例        *)
+(*     G12 使用链式全参 exact 实例化（@R RIS S sumf … 全参形，先例        *)
 (*     G12_ZPosFam @SigMigrate.<名> 全参形 / BoltzmannBridgeDischarge）。  *)
 (*     归一性←ag_softmax_temp_normalized@262；混合归一←                   *)
 (*     ag_softmax_temp_mix_normalized@282；温度-尺度对偶←                 *)
@@ -45,9 +83,9 @@
 (*     模型读法 = real_eq/real_lt/real_le——S07 RealEnhancedReal 实例     *)
 (*     req:=real_eq 字段即此读法；受体老层 RealInterfaceEnhanced 全库     *)
 (*     无具体实例（Id 形字段在具体 Real 上不可满足），故 real_eq 字面     *)
-(*     出口须经本桥 req 端，此为接口拓扑下的唯一真消费路径，如实注明）。  *)
-(*   · 求和机器 sumf/sum_ext/sum_linear/sum_add/sum_pos = 诚实接口槽     *)
-(*     （供体节同款假设位，BoltzmannBridgeDischarge 供给槽先例）。        *)
+(*     出口须经本桥 req 端，此为接口拓扑下的唯一真使用路径，如实注明）。  *)
+(*   · 求和机器 sumf/sum_ext/sum_linear/sum_add/sum_pos = 诚实接口参数位     *)
+(*     （供体节同款假设位，BoltzmannBridgeDischarge 供给参数位先例）。        *)
 (*   · 禁五件套+经典逻辑：公理面零假设（无公理/自认/参数声明/猜想/中止）；  *)
 (*     非 trivial：主件语句面逐字含受体定义，禁恒真壳；文末 Print        *)
 (*     Assumptions 5 处。                                                *)
@@ -214,7 +252,7 @@ Instance tsi_rie_setoid (RI : RealInterfaceEnhanced)
   (@S01_BaseRing.cauchy_complete RI).
 
 (* ===================================================================== *)
-(* 装配桥 B2：受体定义出节 arity 桥（δ 收口）                              *)
+(* 装配桥 B2：受体定义出节 arity 桥（δ 闭合）                              *)
 (* ===================================================================== *)
 Theorem tsi_twp_is_boltzmann_weight :
   forall (RI : RealInterfaceEnhanced) (Token : Set)
@@ -230,7 +268,7 @@ Proof. intros RI Token neg_log_prob t Ht prefix w. exact (@id_refl _ (@S01_BaseR
 
 (* ===================================================================== *)
 (* 主件节：受体 LanguageModelExtensions 节面（RI Token neg_log_prob        *)
-(*   temperature temperature_pos）⊕ 供体 ReqAttnGibbs 节求和机器槽。      *)
+(*   temperature temperature_pos）⊕ 供体 ReqAttnGibbs 节求和机器参数位。      *)
 (* ===================================================================== *)
 Section TsiMains.
 Context {RI : RealInterfaceEnhanced}.
@@ -239,7 +277,7 @@ Variable neg_log_prob : list Token -> Token -> @S01_BaseRing.R RI.
 Variable temperature : @S01_BaseRing.R RI.
 Variable temperature_pos : @S01_BaseRing.lt RI (@S01_BaseRing.zero RI) temperature.
 
-(* 求和机器诚实槽（供体节同款；BoltzmannBridgeDischarge 供给槽先例） *)
+(* 求和机器诚实参数位（供体节同款；BoltzmannBridgeDischarge 供给参数位先例） *)
 Variable sumf : (Token -> @S01_BaseRing.R RI) -> @S01_BaseRing.R RI.
 Hypothesis Hsum_ext :
   forall f g : Token -> @S01_BaseRing.R RI,
@@ -411,3 +449,87 @@ Print Assumptions tsi_temp_weighted_normalized.
 Print Assumptions tsi_temp_weighted_mix_normalized.
 Print Assumptions tsi_temp_scale_duality.
 Print Assumptions tsi_temp_weighted_relative.
+
+(* ===================================================================== *)
+(* 供给段（签名保持式消解，b3 §2.2.1；原节声明与既有定理签名零改）：        *)
+(*   求和面四证书位在 ConcMixSelFeed 求和载体 csm_sumf（UpReqConcSoftmax   *)
+(*   定义面）上取 S:=bool、enum:=true::false::nil 实例化：外延位引          *)
+(*   cms_sum_ext（ConcMixSelFeed:172），序位引 cms_sum_le（:243，本件原节   *)
+(*   无 le 参数位，此为族完整证书候融合方候用），齐性位引 cms_sum_linear    *)
+(*   （:183），加法位引 cms_sum_add（:212），皆一步实例；正性位由            *)
+(*   sumd_list_sum_pos（UpReqSumD，非空清单逐点严格正 ⟹ 和严格正）供给。    *)
+(*   抽象层四证书位保持假设身份（对抽象求和算子不可树内推导），本段为       *)
+(*   具体实例上的消解证书，供使用方以实例充任接口字段。三层显式标注之       *)
+(*   段注层：头注层已标面外扩展与消解判定，逐定理注层见各供给定理上方。     *)
+(* ===================================================================== *)
+Require Import UpReqSumD.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
+Require Import UpReqConcFin2.
+Import RealInterfaceEnhancedMod.
+
+Definition tsi_enum : list bool := true :: false :: nil.
+
+(* 正性位供给：和载体按非空清单折叠，逐点严格正 ⟹ 和严格正                  *)
+(*   （sumd_list_sum_pos 实例装配：非空前提 discriminate，逐点前提直传）。   *)
+Theorem tsi_sum_pos_supply :
+  forall f : bool -> Real,
+    (forall s : bool, lt zero (f s)) ->
+    lt zero (csm_sumf bool tsi_enum f).
+Proof.
+  intros f Hpt.
+  unfold csm_sumf.
+  apply (@sumd_list_sum_pos Real RealEnhancedReal bool f tsi_enum).
+  - intros Hnil. discriminate Hnil.
+  - exact Hpt.
+Qed.
+
+(* 外延位供给：逐点 req ⟹ 和 req（cms_sum_ext 一步实例，语句面同供给常量系）。 *)
+Theorem tsi_sum_ext_supply :
+  forall f g : bool -> Real,
+    (forall s : bool, req (f s) (g s)) ->
+    req (csm_sumf bool tsi_enum f) (csm_sumf bool tsi_enum g).
+Proof. intros f g H. exact (cms_sum_ext bool tsi_enum f g H). Qed.
+
+(* 序位供给：逐点 le ⟹ 和 le（cms_sum_le 一步实例，语句面同供给常量系）。 *)
+Theorem tsi_sum_le_supply :
+  forall f g : bool -> Real,
+    (forall s : bool, le (f s) (g s)) ->
+    le (csm_sumf bool tsi_enum f) (csm_sumf bool tsi_enum g).
+Proof. intros f g H. exact (cms_sum_le bool tsi_enum f g H). Qed.
+
+(* 齐性位供给：数乘穿和（cms_sum_linear 一步实例）。 *)
+Theorem tsi_sum_linear_supply :
+  forall (a : Real) (f : bool -> Real),
+    req (csm_sumf bool tsi_enum (fun s : bool => mult a (f s)))
+            (mult a (csm_sumf bool tsi_enum f)).
+Proof. intros a f. exact (cms_sum_linear bool tsi_enum a f). Qed.
+
+(* 加法位供给：逐项和等于和之逐项加（cms_sum_add 一步实例）。 *)
+Theorem tsi_sum_add_supply :
+  forall f g : bool -> Real,
+    req (csm_sumf bool tsi_enum (fun s : bool => plus (f s) (g s)))
+            (plus (csm_sumf bool tsi_enum f) (csm_sumf bool tsi_enum g)).
+Proof. intros f g. exact (cms_sum_add bool tsi_enum f g). Qed.
+
+(* 温度正性位见证一：temperature:=one——类字段 one_pos                       *)
+(*   （凡 RealInterfaceEnhanced 可用；与 cf2_temp_pos := one_pos 同构）。    *)
+Theorem tsi_temperature_one_pos_supply :
+  forall RI : RealInterfaceEnhanced,
+    @S01_BaseRing.lt RI (@S01_BaseRing.zero RI) (@S01_BaseRing.one RI).
+Proof. intro RI. exact (@S01_BaseRing.one_pos RI). Qed.
+
+(* 温度正性位见证二：T:=cf2_temp（UpReqConcFin2:98，定义性等于 one）——      *)
+(*   引 cf2_temp_pos（UpReqConcFin2:100），语句面取同款类字段形 lt zero 直述  *)
+(*   （同常量对齐，边界 cast 自然消失；两系定义性一致）。      *)
+Theorem tsi_temperature_cf2temp_pos_supply : lt zero cf2_temp.
+Proof. exact cf2_temp_pos. Qed.
+
+(* ---- 供给段假设审计（七连 Print Assumptions） ---- *)
+Print Assumptions tsi_sum_pos_supply.
+Print Assumptions tsi_sum_ext_supply.
+Print Assumptions tsi_sum_le_supply.
+Print Assumptions tsi_sum_linear_supply.
+Print Assumptions tsi_sum_add_supply.
+Print Assumptions tsi_temperature_one_pos_supply.
+Print Assumptions tsi_temperature_cf2temp_pos_supply.

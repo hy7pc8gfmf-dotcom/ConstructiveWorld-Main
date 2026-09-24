@@ -1,36 +1,36 @@
 (* ============================================================ *)
-(* UpAblAbsSumLeB2.v —— abs_sum_le 族余项闭合件（同时性反例与抽象折叠）   *)
+(* UpAblAbsSumLeB2.v —— abs_sum_le 族余项闭合件（同时性反例与抽象折叠）  *)
 (*                                                                *)
-(* 零承认件：无承认词面、无经典逻辑、全件 Qed 闭合；                        *)
-(*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b/QltT/           *)
-(*   And=集合积），语句面无裸命题；证明全构造（Or 逐支、sigT 见证直接构造）。*)
-(*                                                                *)
-(* 两余项（闭合目标）：                                                  *)
-(*   余项一＝全余量同时性反例——Q 层柯西证书：                             *)
-(*     X_n := q0 + 1/(n+1)（Y:=real_zero，e:=real_const q0，0<q0）。      *)
-(*     构造性给出六项：                                                  *)
-(*     ① real_eq X (Y+e)——Or 编码 eq 支为真相等的构造性在场；             *)
-(*     ② real_le X (Y+e)——经 eq 支 inr 注入（le 在场）；                 *)
-(*     ③ real_lt Y X——反向 strict 与②同时成立（共存反例本体）；           *)
-(*     ④ real_lt X (Y+e) 被精确排除——全余量紧致：余量被 eq 支占满，        *)
-(*        此见证下任何 le 证明必取 eq 支；                                *)
-(*     ⑤ real_lt (Y+2e) X 被精确排除——与                                *)
-(*        uabS4_lt_double_margin_le_half_contr（倍率 2 不可共存）一致：    *)
-(*        全余量见证下其前提不可达；                                      *)
-(*     ⑥ ②与③的共存合取（And=集合积）＝同时性语句。                      *)
-(*   余项二＝抽象折叠算子 sumL 的 B 形（list 折叠形的抽象接口版）：         *)
-(*     抽象折叠 sumL（仅假设 nil/cons 两条 real_eq 接口方程，              *)
-(*     接口假设相对形如实陈述），证 |Σ sumL f| ≤_B Σ sumL|f|（B 形三角    *)
-(*     传输；cons 步逐点核应用 real_abs_triangle_le_eps；加权沿用          *)
-(*     uabS4_wlen 正性证书与 real_le_closure_b 闭合）；                    *)
-(*     ＋real_list_sum 实例（接口可满足性/非空性），与 uabS4_abs_list_sum_le_B 对照一致。 *)
-(*     接口事实陈述：SumOver 类的 abs_sum_le 字段即该类假设本体；          *)
-(*     接口层的 le 字段不透明（仅 lt_le_iff 单向转换）且字段集              *)
-(*     无严格序平移位，SumOver 字段面到接口层 B 形的直接传输不可达——       *)
-(*     本件给出的是折叠接口相对形（有限和折叠），该假设本体保持原状。       *)
-(* 依赖：CW_ConstructiveWorld_219＋UpRealLeB＋S08_RealMainlineDPO＋        *)
-(*   UpAblAbsSumLeB（uabS4_le_add_r/uabS4_wlen/uabS4_wlen_pos/            *)
-(*   uabS4_cons_glue 直接应用）。                                          *)
+(* 使命：本件形式化两余项的构造性闭合：（普查反推件，候融合方确认） *)
+(*   余项一＝全余量同时性反例——Q 层柯西证书：                            *)
+(*     X_n := q0 + 1/(n+1)（Y:=real_zero，e:=real_const q0，0<q0）。     *)
+(*     构造性给出六项：                                                 *)
+(*     ① real_eq X (Y+e)——real_eq 定义的见证构造（与柯西证书同构：      *)
+(*        阿基米德指标＋单位分数单调夹逼）；                            *)
+(*     ② real_le X (Y+e)——经 eq 支 inr 注入（le 在场）；                *)
+(*     ③ real_lt Y X——反向 strict 与②同时成立（共存反例本体）；          *)
+(*     ④ real_lt X (Y+e) 被精确排除——全余量紧致：余量被 eq 支占满，      *)
+(*        此见证下任何 le 证明必取 eq 支；                              *)
+(*     ⑤ real_lt (Y+2e) X 被精确排除——与倍率 2 不可共存引理一致：        *)
+(*        全余量见证下其前提不可达；                                    *)
+(*     ⑥ ②与③的共存合取（And=集合积）＝同时性语句。                    *)
+(*   余项二＝抽象折叠算子 sumL 的 B 形（list 折叠形的抽象接口版）：       *)
+(*     |Σ sumL f| ≤_B Σ sumL|f|（cons 步逐点核应用                      *)
+(*     real_abs_triangle_le_eps；加权沿用 uabS4_wlen 正性证书与         *)
+(*     real_le_closure_b 闭合）；＋real_list_sum 实例（接口可满足性/    *)
+(*     非空性）。SumOver 字段面到接口层 B 形的直接传输不可达，本件给出   *)
+(*     折叠接口相对形（有限和折叠），接口假设本体保持原状。             *)
+(* 依赖：CW_ConstructiveWorld_219、UpRealLeB、S08_RealMainlineDPO、      *)
+(*   UpAblAbsSumLeB（uabS4_le_add_r/uabS4_wlen/uabS4_wlen_pos/          *)
+(*   uabS4_cons_glue 直接应用）；stdlib List、QArith.Qring、Lia、Lqa。   *)
+(* 对标：mathlib abs_sum_le_sum_abs（和的绝对值三角不等式）；本件为     *)
+(*   Bishop 余量形 ≤_B 的构造性对应物。                                 *)
+(* 构造性注记：全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b/    *)
+(*   QltT/And=集合积），语句面无裸命题；证明全构造（Or 逐支、sigT       *)
+(*   见证直接构造）；单位分数 1/(n+1) 的非负/正性以显式 Z 序引理链      *)
+(*   构造（正性见证 Pos2Z.pos_is_pos，不经一键算术自动战术）；全件      *)
+(*   Qed 闭合，文尾 Print Assumptions 预期全 Closed。                   *)
+(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -75,7 +75,11 @@ Check RealSetoid.real_eq_le. Check RealSetoid.real_eq_abs_compat.
 (* A.0 单位分数族 1/(n+1)：Q 层非负性＋单调性＋阿基米德性质（柯西证书核心） *)
 Lemma uabS4b_null_nonneg : forall n : nat, Qle 0 (1#(Pos.of_succ_nat n)).
 Proof.
-  intros n. unfold Qle. simpl. lia.
+  intros n. unfold Qle. cbn [Qnum Qden].
+  (* Z 层化：Qle 展开为 (0 * Z.pos (Pos.of_succ_nat n) <= 1 * 1)%Z，     *)
+  (* 两乘积显式归约后由 Z.lt_le_incl+Pos2Z.pos_is_pos 取正性见证        *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  apply Z.lt_le_incl. apply Pos2Z.pos_is_pos.
 Qed.
 
 (* 正指标 Z 桥接（归纳）：Pos.of_succ_nat 的单调性与加一恒等式。
@@ -101,7 +105,11 @@ Qed.
 
 Lemma uabS4b_null_pos : forall n : nat, Qlt 0 (1#(Pos.of_succ_nat n)).
 Proof.
-  intros n. unfold Qlt. simpl. lia.
+  intros n. unfold Qlt. cbn [Qnum Qden].
+  (* Z 层化：Qlt 展开为 (0 * Z.pos (Pos.of_succ_nat n) < 1 * 1)%Z，      *)
+  (* 两乘积显式归约后由正性见证 Pos2Z.pos_is_pos 直接闭合               *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  apply Pos2Z.pos_is_pos.
 Qed.
 
 Lemma uabS4b_null_mono : forall m k : nat, (k <= m)%nat ->

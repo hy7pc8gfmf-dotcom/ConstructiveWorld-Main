@@ -1,66 +1,32 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   l2e_mag_decr_pos_step（原 L166，3 句玩具证）                         *)
-(*   l2e_pair_diff_pos（原 L136，3 句玩具证）                             *)
-(*   l2e_mag_nonneg（原 L116，3 句玩具证）                                *)
-(*   l2e_mag_inv（原 L104，3 句玩具证）                                   *)
-(*   l2e_den_neq（原 L100，3 句玩具证）                                   *)
-(*   qleT'_weaken（原 L57，5 句玩具证）                                   *)
-(*   Qlt_to_QltT'（原 L54，2 句玩具证）                                   *)
-(*   QltT'_to_Qlt（原 L51，3 句玩具证）                                   *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 8 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 8 槽；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
-(* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* LogTwoEnvelope.v —— 施工席位 B4（2026-09-16）                  *)
-(* 全库最大数值缺口首果：ln2 = Σ_{k≥0} (−1)^k/(k+1) 交错级数的     *)
-(* Q 层双边包络三件套。                                          *)
-(* 依 A5 席数值果 1：全库 grep 实锤 ln2 级数零命中（仅            *)
-(*   G05:985 logd_log_two_pos_real 一个正性件）——本席自足补缺。   *)
-(* ============================================================ *)
-(* 三件（Q 层，出口全 Set 层）：                                  *)
-(*  1. l2e_alt_partial : nat -> Q                                *)
-(*     ln2 = Σ_{k≥0} (−1)^k/(k+1) 的部分和，Z.of_nat # 1 构造；   *)
-(*  2. l2e_alt_two_sided（QleT' 化出口）：                        *)
-(*     forall m n, m ≤ n -> QleT' (Qabs (S_n − S_m)) (1/(m+1))   *)
-(*     —— 尾界显式公式；配套奇偶双边夹逼件（l2e_even_le_odd /     *)
-(*     l2e_parity_gap / l2e_even_mono / l2e_odd_mono）：          *)
-(*     任一偶部分和 ≤ 任一奇部分和，相邻偶奇之差 == 1/(2m+1)      *)
-(*     显式（ln2 本体是 real 层对象，按任务书改为对 Q 层交替和    *)
-(*     的独立定理——奇偶单调两翼 + 显式隙宽，纯 Q 层落地）。       *)
-(*  3. l2e_cauchy_modulus : forall eps, QltT' 0 eps -> sigT N,    *)
-(*     forall m n, N ≤ m -> N ≤ n -> QltT' (Qabs (S_n − S_m)) eps *)
-(*     N := l2e_modulus eps = S (Z.to_nat (Qceiling (1/eps)))     *)
-(*     —— ceil(1/eps) 显式可抽取（G3 预备见 l2e_g3.v 检验）。      *)
-(* 模板对照（S11 atan 四段式同构）：                               *)
-(*   atan_pair_factor/atan_pair_abs@211/228 → l2e_pair_factor /   *)
-(*     l2e_pair_abs（成对项恒等 |t_k+t_{k+1}| == m_k−m_{k+1}）；   *)
-(*   atan_mag_decr@265 → l2e_mag_decr（模量单调递减）；            *)
-(*   atan_tail_bound@276 → l2e_tail_bound（lt_wf_ind 尾界）；      *)
-(*   arctan_partial_cauchy@417 → l2e_cauchy_modulus（sigT 模量）； *)
-(*   atan_sign_even/odd@463（库件直用）；S03:186 geo_sum_closed   *)
-(*   （递推级数先例）。                                            *)
-(* 红线自审：公理面零假设（无公理/自认/参数声明/猜想/中止类语句，  *)
-(*   零经典逻辑/排中律）；出口一律 QltT'/QleT'/NatLe/sigT   *)
-(*   （Id-of-bool 形，禁 QleT Or 形作载体）；尾界 1/(m+1) 为显式   *)
-(*   公式，非恒真壳；文末 Print Assumptions 留痕。                 *)
-(* 领土纪律：本席仅新建 Live/build/LogTwoEnvelope.v 与            *)
-(*   Live/build/l2e_g3.v；其余只读。                              *)
+(* LogTwoEnvelope.v —— ln2 交错级数的 Q 层双边包络件                    *)
+(*                                                              *)
+(* 使命：本件形式化 ln2 = Σ_{k≥0} (−1)^k/(k+1) 交错级数的 Q 层双边（普查反推件，候融合方确认） *)
+(*   包络三件套（出口全 Set 层）：                                      *)
+(*   1. l2e_alt_partial：部分和 S_n（Z.of_nat # 1 构造）；              *)
+(*   2. l2e_alt_two_sided（QleT' 出口）：forall m n, m ≤ n ->           *)
+(*      QleT' (Qabs (S_n − S_m)) (1/(m+1))——尾界显式公式；配套奇偶     *)
+(*      双边夹逼件（l2e_even_le_odd / l2e_parity_gap / l2e_even_mono /  *)
+(*      l2e_odd_mono）：任一偶部分和 ≤ 任一奇部分和，相邻偶奇之差       *)
+(*      == 1/(2m+1) 显式（ln2 本体是 real 层对象，本件对 Q 层交替和     *)
+(*      独立建理——奇偶单调两翼＋显式隙宽，纯 Q 层落实）；               *)
+(*   3. l2e_cauchy_modulus：forall eps, QltT' 0 eps -> sigT N,          *)
+(*      forall m n, N ≤ m -> N ≤ n -> QltT' (Qabs (S_n − S_m)) eps，    *)
+(*      N := l2e_modulus eps = S (Z.to_nat (Qceiling (1/eps)))——       *)
+(*      ceil(1/eps) 显式可抽取。                                        *)
+(*   模量序结构：恒等 l2e_mag_inv、正性 l2e_den_pos/l2e_mag_pos、       *)
+(*   严格递减 l2e_mag_lt、单调 l2e_mag_decr（委托 l2e_mag_antitone）、  *)
+(*   成对项恒等 l2e_pair_abs：|t_k+t_{k+1}| == m_k−m_{k+1}。            *)
+(* 依赖：CW_ConstructiveWorld_219；stdlib QArith.QArith、QArith.Qabs、  *)
+(*   QArith.Qround、ZArith.ZArith、Arith.Arith、Bool.Bool、Lists.List、 *)
+(*   Setoid、Morphisms、Lia、QArith.Qminmax。                           *)
+(* 对标：mathlib 交错级数 Leibniz 部分和包络形；stdlib QArith 序/绝对值 *)
+(*   引理族。                                                           *)
+(* 构造性注记：出口一律 QltT'/QleT'/NatLe/sigT（Id-of-bool 形）；零经典 *)
+(*   逻辑；尾界 1/(m+1) 为显式公式；分母正性 l2e_den_pos 以显式 Z 正性  *)
+(*   见证构造（Pos2Z.pos_is_pos，不经一键算术自动战术）；文末 Print     *)
+(*   Assumptions 追印。                                                 *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 护航，信任缓存 vo 树 -Q 映射。    *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -72,7 +38,7 @@ From Stdlib Require Import Lia QArith.Qminmax.
 (* ============================================================ *)
 (* §0 Set 层出口件：QltT'（Qlt_bool 反映形，Id-of-bool，同 QltT） *)
 (* ============================================================ *)
-(* 库内已有 QltT/QleT'（S02）；按任务书语句面命名补 QltT'。        *)
+(* 库内已有 QltT/QleT'（S02）；本件按同形语句面命名补 QltT'。      *)
 
 Definition QltT' (x y : Q) : Set := Id (Qlt_bool x y) true.
 
@@ -124,7 +90,14 @@ Proof. intro n. simpl. ring. Qed.
 (* ============================================================ *)
 
 Lemma l2e_den_pos : forall k : nat, Qlt 0 (Z.of_nat (Datatypes.S k) # 1).
-Proof. intro k. unfold Qlt. simpl. lia. Qed.
+Proof.
+  intro k. unfold Qlt. cbn [Qnum Qden].
+  (* Z 层化：乘积归约后 Z.of_nat (S k) 依定义化为 Z.pos (Pos.of_succ_nat *)
+  (* k)，取正性见证 Pos2Z.pos_is_pos                                    *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  change (Z.of_nat (Datatypes.S k)) with (Z.pos (Pos.of_succ_nat k)).
+  apply Pos2Z.pos_is_pos.
+Qed.
 
 Lemma l2e_den_neq : forall k : nat, ~ ((Z.of_nat (Datatypes.S k) # 1) == 0).
 Proof. intro k. apply q_neq_of_lt. apply l2e_den_pos. Qed.
@@ -160,7 +133,10 @@ Proof.
   apply (proj1 (Qinv_lt_contravar (Z.of_nat (Datatypes.S k) # 1)
                                   (Z.of_nat (Datatypes.S (Datatypes.S k)) # 1)
                                   (l2e_den_pos k) (l2e_den_pos (Datatypes.S k)))).
-  unfold Qlt. simpl. lia.
+  (* 收束：倒数反序的核=S k < S (S k)，Z 层由 inj_succ 化为后继一步严格序 *)
+  unfold Qlt. cbn [Qnum Qden].
+  rewrite (Znat.Nat2Z.inj_succ (Datatypes.S k)), !Z.mul_1_r.
+  exact (Z.lt_succ_diag_r (Z.of_nat (Datatypes.S k))).
 Qed.
 
 (* ---- 模量差为正：m_k − m_{k+1} > 0 ---- *)
@@ -172,7 +148,7 @@ Proof.
   apply l2e_mag_lt.
 Qed.
 
-(* ---- 模量反序（N ≤ M ⟹ m_M ≤ m_N；对照 atan_inv_chain@S11:393） ---- *)
+(* ---- 模量反序（N ≤ M ⟹ m_M ≤ m_N；对照 atan_inv_chain） ---- *)
 Lemma l2e_mag_antitone : forall a b : nat, (a <= b)%nat -> Qle (l2e_mag b) (l2e_mag a).
 Proof.
   intros a b Hab.
@@ -187,10 +163,13 @@ Proof.
       apply (proj1 (Qinv_lt_contravar (Z.of_nat (Datatypes.S a) # 1)
                                       (Z.of_nat (Datatypes.S b) # 1)
                                       (l2e_den_pos a) (l2e_den_pos b))).
-      unfold Qlt. simpl. lia.
+      (* 收束：a < b 经后继单调（Z.succ_lt_mono）平移到 Z 层分母序 *)
+      unfold Qlt. cbn [Qnum Qden]. rewrite !Znat.Nat2Z.inj_succ, !Z.mul_1_r.
+      exact (proj1 (Z.succ_lt_mono (Z.of_nat a) (Z.of_nat b))
+                   (proj1 (Znat.Nat2Z.inj_lt a b) Hlt)).
 Qed.
 
-(* ---- 单调：m_{k+1} ≤ m_k（对照 atan_mag_decr@S11:265） ---- *)
+(* ---- 单调：m_{k+1} ≤ m_k（对照 atan_mag_decr） ---- *)
 Lemma l2e_mag_decr : forall k : nat, Qle (l2e_mag (Datatypes.S k)) (l2e_mag k).
 Proof. intro k. apply l2e_mag_antitone. lia. Qed.
 
@@ -205,7 +184,7 @@ Qed.
 (* §3 项恒等（|t_k|==m_k；成对项 |t_k+t_{k+1}|==m_k−m_{k+1}）      *)
 (* ============================================================ *)
 
-(* ---- |t_k| == m_k（对照 arctan_term_abs@S11:141） ---- *)
+(* ---- |t_k| == m_k（对照 arctan_term_abs） ---- *)
 Lemma l2e_term_abs : forall k : nat, Qabs (l2e_term k) == l2e_mag k.
 Proof.
   intro k.
@@ -215,13 +194,13 @@ Proof.
   setoid_rewrite Qabs_Qinv.
   assert (Hd : Qabs (Z.of_nat (Datatypes.S k) # 1) ==
                (Z.of_nat (Datatypes.S k) # 1)).
-  { apply Qabs_pos. unfold Qle. simpl. lia. }
+  { apply Qabs_pos. apply Qlt_le_weak. apply l2e_den_pos. }
   setoid_rewrite Hd.
   unfold l2e_mag, Qdiv.
   ring.
 Qed.
 
-(* ---- 成对项代数分解（对照 atan_pair_factor@S11:211） ---- *)
+(* ---- 成对项代数分解（对照 atan_pair_factor） ---- *)
 Lemma l2e_pair_factor : forall k : nat,
   l2e_term k + l2e_term (Datatypes.S k) ==
   q_pow (-1) k * (l2e_mag k - l2e_mag (Datatypes.S k)).
@@ -232,7 +211,7 @@ Proof.
   ring.
 Qed.
 
-(* ---- 成对项界：|t_k + t_{k+1}| == m_k − m_{k+1}（对照 atan_pair_abs@S11:228） ---- *)
+(* ---- 成对项界：|t_k + t_{k+1}| == m_k − m_{k+1}（对照 atan_pair_abs） ---- *)
 Lemma l2e_pair_abs : forall k : nat,
   Qabs (l2e_term k + l2e_term (Datatypes.S k)) ==
   l2e_mag k - l2e_mag (Datatypes.S k).
@@ -254,7 +233,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 奇偶双边夹逼（对照 S11 x=1 桥段 atan_sign_even/odd@463）     *)
+(* §4 奇偶双边夹逼（对照 atan_sign_even/odd）                     *)
 (*   两翼：偶列不减（l2e_even_mono）、奇列不增（l2e_odd_mono）；   *)
 (*   夹口：任一偶部分和 ≤ 任一奇部分和（l2e_even_le_odd），        *)
 (*   隙宽显式：S_{2m+1} − S_{2m} == 1/(2m+1)（l2e_parity_gap）。   *)
@@ -264,7 +243,7 @@ Qed.
 Lemma l2e_boundary : forall j : nat, Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * j + 1)).
 Proof.
   intro j.
-  assert (H1 : (2 * j + 1)%nat = Datatypes.S (2 * j)) by lia.
+  assert (H1 : (2 * j + 1)%nat = Datatypes.S (2 * j)) by (exact (Nat.add_1_r (2 * j))).
   rewrite H1.
   assert (Hpos : Qle 0 (l2e_alt_partial (Datatypes.S (2 * j)) - l2e_alt_partial (2 * j))).
   { rewrite (l2e_gap1 (2 * j)).
@@ -286,9 +265,9 @@ Lemma l2e_boundary_rev : forall j : nat,
 Proof.
   intro j. destruct j as [| j'].
   - apply Qle_refl.
-  - replace (2 * Datatypes.S j')%nat with (2 * j' + 2)%nat by lia.
+  - replace (2 * Datatypes.S j')%nat with (2 * j' + 2)%nat by (exact (eq_sym (Nat.mul_succ_r 2 j'))).
     replace (2 * j' + 2 - 1)%nat with (2 * j' + 1)%nat by lia.
-    replace (2 * j' + 2)%nat with (Datatypes.S (2 * j' + 1)) by lia.
+    replace (2 * j' + 2)%nat with (Datatypes.S (2 * j' + 1)) by (exact (eq_sym (Nat.add_succ_r (2 * j') 1))).
     assert (Hpos : Qle 0 (l2e_alt_partial (2 * j' + 1) -
                           l2e_alt_partial (Datatypes.S (2 * j' + 1)))).
     { assert (Hd : l2e_alt_partial (2 * j' + 1) -
@@ -370,7 +349,7 @@ Lemma l2e_even_mono : forall d j : nat,
 Proof.
   intros d j. induction d as [| d IH].
   - replace (2 * (j + 0))%nat with (2 * j)%nat by ring. apply Qle_refl.
-  - replace (2 * (j + Datatypes.S d))%nat with (2 * (j + d) + 2)%nat by lia.
+  - replace (2 * (j + Datatypes.S d))%nat with (2 * (j + d) + 2)%nat by (rewrite (Nat.add_succ_r j d); symmetry; apply Nat.mul_succ_r).
     apply (Qle_trans _ (l2e_alt_partial (2 * (j + d))) _).
     + exact IH.
     + exact (l2e_even_step (j + d)).
@@ -411,7 +390,7 @@ Lemma l2e_parity_gap : forall m : nat,
   l2e_alt_partial (2 * m + 1) - l2e_alt_partial (2 * m) == l2e_mag (2 * m).
 Proof.
   intro m.
-  assert (H1 : (2 * m + 1)%nat = Datatypes.S (2 * m)) by lia.
+  assert (H1 : (2 * m + 1)%nat = Datatypes.S (2 * m)) by (exact (Nat.add_1_r (2 * m))).
   rewrite H1.
   rewrite (l2e_gap1 (2 * m)).
   unfold l2e_term.
@@ -421,7 +400,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 尾界（四段式之四：Leibniz 余项；对照 atan_tail_bound@S11:276） *)
+(* §5 尾界（四段式之四：Leibniz 余项；对照 atan_tail_bound）       *)
 (*   m ≤ n ⟹ |S_n − S_m| ≤ m_m == 1/(m+1)（显式公式）            *)
 (* ============================================================ *)
 
@@ -501,13 +480,13 @@ Proof.
   intros m n Hmn.
   apply (qleT'_weaken _ (l2e_mag m) _).
   - apply l2e_tail_bound. exact Hmn.
-  - assert (Hb : (Z.of_nat m + 1)%Z = Z.of_nat (Datatypes.S m)) by lia.
+  - assert (Hb : (Z.of_nat m + 1)%Z = Z.of_nat (Datatypes.S m)) by (exact (eq_trans (Z.add_1_r (Z.of_nat m)) (eq_sym (Znat.Nat2Z.inj_succ m)))).
     unfold l2e_mag. rewrite Hb. reflexivity.
 Qed.
 
 (* ============================================================ *)
 (* §7 出口三：显式模量 N := S(ceil(1/eps))（Qceiling）+ sigT 柯西件 *)
-(*   （对照 arctan_partial_cauchy@S11:417；witness 由 Qround 的    *)
+(*   （对照 arctan_partial_cauchy；见证 N 由 Qround 的            *)
 (*   Qceiling 显式给出，可抽取）                                  *)
 (* ============================================================ *)
 
@@ -524,12 +503,14 @@ Proof.
     - apply (Qlt_le_weak 0 (Qinv eps)). exact Hx0.
     - apply Qle_ceiling. }
   assert (Hcpos : (0 <= Qceiling (Qinv eps))%Z).
-  { unfold Qle in Hcq. simpl in Hcq. lia. }
+  { unfold Qle in Hcq. cbn [Qnum Qden] in Hcq.
+    rewrite Z.mul_0_l, Z.mul_1_r in Hcq. exact Hcq. }
   assert (Hstep : Qlt (Qinv eps) ((Z.succ (Qceiling (Qinv eps))) # 1)).
   { apply (Qle_lt_trans (Qinv eps) (Qceiling (Qinv eps) # 1)
                         ((Z.succ (Qceiling (Qinv eps))) # 1)).
     - apply Qle_ceiling.
-    - unfold Qlt, Qle. simpl. lia. }
+    - unfold Qlt, Qle. cbn [Qnum Qden]. rewrite !Z.mul_1_r.
+      exact (Z.lt_succ_diag_r (Qceiling (Qinv eps))). }
   assert (Hz : (Z.succ (Qceiling (Qinv eps)) = Z.of_nat (l2e_modulus eps))%Z)
     by (unfold l2e_modulus; lia).
   assert (Hmul : Qlt (Qinv eps * eps) ((Z.of_nat (l2e_modulus eps) # 1) * eps)).
@@ -540,14 +521,20 @@ Proof.
   setoid_replace ((Z.of_nat (l2e_modulus eps) # 1) * eps)
     with (eps * (Z.of_nat (l2e_modulus eps) # 1)) in Hmul by ring.
   assert (Hd1 : Qlt 0 (Z.of_nat (l2e_modulus eps) # 1)).
-  { unfold Qlt. simpl.
-    assert (Hge : (1 <= Z.of_nat (l2e_modulus eps))%Z) by (unfold l2e_modulus; lia).
-    lia. }
+  { unfold Qlt. cbn [Qnum Qden]. rewrite Z.mul_0_l, Z.mul_1_r.
+    assert (Hge : (1 <= Z.of_nat (l2e_modulus eps))%Z).
+    { (* 模量=S(Z.to_nat _)：非负性（Nat2Z.is_nonneg）经后继单调前向给出 1<=_ *)
+      unfold l2e_modulus. rewrite Znat.Nat2Z.inj_succ.
+      exact (proj1 (Z.succ_le_mono 0 (Z.of_nat (Z.to_nat (Qceiling (Qinv eps)))))
+                   (Znat.Nat2Z.is_nonneg (Z.to_nat (Qceiling (Qinv eps))))). }
+    apply (Z.lt_le_trans 0 1 (Z.of_nat (l2e_modulus eps)) (Pos2Z.pos_is_pos 1) Hge). }
   assert (Hd2 : Qlt 0 (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
     by (apply (l2e_den_pos (l2e_modulus eps))).
   assert (Hlt2 : Qlt (Z.of_nat (l2e_modulus eps) # 1)
                      (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
-    by (unfold Qlt; simpl; lia).
+    by (unfold Qlt; cbn [Qnum Qden];
+        rewrite Znat.Nat2Z.inj_succ, !Z.mul_1_r;
+        exact (Z.lt_succ_diag_r (Z.of_nat (l2e_modulus eps)))).
   setoid_replace (l2e_mag (l2e_modulus eps))
     with (/ (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
     by (apply (l2e_mag_inv (l2e_modulus eps))).
@@ -592,7 +579,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §8 假设留痕（红线④：Print Assumptions ≥ 1）                    *)
+(* §8 审计注记（文末 Print Assumptions 追印）                     *)
 (* ============================================================ *)
 
 Print Assumptions l2e_alt_two_sided.

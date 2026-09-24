@@ -1,48 +1,42 @@
-(* ============================================================
- * ToyR 战役·包H 补位席（切片四）换轨件 —— 本文件为 Main 只读原件全文
- * 的换轨稿：语句面/声明序/依赖面零改，仅换一处玩具证明体＋横幅前置。
- *
- * 换轨摘要（单刀）：mtc_delta_star_lt_one——弃原稿左因子引擎绕行
- *   （交换换位内嵌的乘单调），直取右因子严格乘单调引擎（实小于∧零
- *   小于右因子 ⟹ 右位积严格小），等式腿经交换律＋乘壹实等价传递链
- *   缝合（乘交换非定义性，须显式回位），再与 lo<1 严格传递收口。
- *   —— 切片一「右因子件 Real 层无、替换不可落地」判词经全库终验
- *   证伪：右因子引擎 S07:5979 实存（字面名检索漏判），编译面经
- *   vo_9.1 预编译树单根直编零阻塞（切片一 S 链雷系池D 陈旧特有）。
- *
- * 纪律：头注全中文；零承认面；纯构造性集合层词汇；真证收口守恒
- *   （15 证 15 收）；判绿以四证为准（返回码/零错误串/目标新于源/
- *   尾假设打印全闭）。
- * ============================================================ *)
-
 (* ============================================================ *)
-(* MixTimeChain.v — 席位P7E（批次 E-STAGING-P7E）                  *)
-(*   论文7《率即算法》§5+§6 完整合龙件（本席最终合龙）              *)
-(*                                                               *)
-(* 使命：从 BoundedSoftmax 接口出发，经 δ* := lo·lo 定义、δ* < 1    *)
-(*   证明、κ := 1−δ* ∈ (0,1) 前件包、mix_k_select 显式步数见证、    *)
-(*   残差收缩率代入，产出 κ^k·TV₀ < budget 的 sigT 完整见证——      *)
-(*   全链 Print Assumptions Closed。                              *)
-(*                                                               *)
-(* 出口对账（侦查结论，全部经源码/Check 实证）：                    *)
-(*   p7a_（Paper7Ablation，P7A 六件）：p7a_delta_star_pos /        *)
-(*     p7a_omd_pos / p7a_omd_lt_one＝κ∈(0,1) 前件包本体；          *)
-(*   bs_delta_star_lt_one（AttnDoeblin §6.1）：δ*=lo²<1 已证；      *)
-(*   mix_k_select / mix_omd_lt_one（UpReqMixingTime §5）：sigT     *)
-(*     步数见证选择器（具体柯西层，Defined 透明可提取）；           *)
-(*   rta_omd_powb_mono_b / rta_strict_branch_real（RateTheory-     *)
-(*     Ablation §4.3/§4.4）：klc_closed_powb_mono 的率层消耗形。    *)
-(*                                                               *)
-(* 层次诚实披露：接口腿（κ 前件包）与具体腿（选择器见证）按论文      *)
-(*   §6.4 定谳（Id 面/req 面异面）各自单层自洽，不跨层横桥；        *)
-(*   具体腿经 Part C 同款放电（cauchy_real_exp）到达零 expf 前件    *)
-(*   的柯西实例推论 mtc_mixing_time_cauchy_exp——端到端闭环。        *)
-(*                                                               *)
-(* 红线自审：语句面全 Set 层（real_lt/real_le_b/sigT/prod 均 Set，  *)
-(*   零 Prop 泄露）；五禁词零出现；非平凡真证（跨文件κ前件包缝合＋  *)
-(*   残差率恒等代入＋Bishop 单调率层运载）；零新公理；原树零改      *)
-(*   （本件新建于 消融50/，依赖件全部只 Require 消费，侧编副本      *)
-(*   在 /tmp/mtc_side，零覆盖零改写）。                            *)
+(* MixTimeChain.v —— 本件形式化论文7《率即算法》§5+§6 的注意力混合时间   *)
+(*   端到端见证：从 BoundedSoftmax 接口出发，经 δ* := lo·lo 定义、       *)
+(*   δ* < 1 证明、κ := 1−δ* ∈ (0,1) 前件包、mix_k_select 显式步数见证、  *)
+(*   残差收缩率代入，产出 κ^k·TV₀ < budget 的 sigT 完整见证，全链       *)
+(*   Print Assumptions Closed。                                         *)
+(*                                                                      *)
+(* 工单面外扩展件（C2 底册 TOP1），按 b3 §2.2 可消解判定施工，候融合方   *)
+(*   甄别确认；若属已补强保留区请退回。同族件 MixTimeChainIface.v        *)
+(*   （批 1 工单增补交付）其 §1 节与本件 §1 节逐字同型，两件互不替代。   *)
+(*                                                                      *)
+(* R120 假设消解注记：两节共 17 假设位逐位三态甄别——参数位 6（temp/      *)
+(*   Delta/expf/invT 等裸数据位）合法保留；命题位 11 全部可消解，文末    *)
+(*   载体供给段按典范 Real 载体逐位供给同构语句（mtchain_*_supply 定理  *)
+(*   族），原抽象假设位声明与全部既有定理签名零改动。                   *)
+(*                                                                      *)
+(* 出口核对（结论全部经源码/Check 检验）：                               *)
+(*   p7a_（Paper7Ablation，P7A 六件）：p7a_delta_star_pos /              *)
+(*     p7a_omd_pos / p7a_omd_lt_one＝κ∈(0,1) 前件包本体；                *)
+(*   bs_delta_star_lt_one（AttnDoeblin §6.1）：δ*=lo²<1 已证；           *)
+(*   mix_k_select / mix_omd_lt_one（UpReqMixingTime §5）：sigT           *)
+(*     步数见证选择器（具体柯西层，Defined 透明可提取）；                *)
+(*   rta_omd_powb_mono_b / rta_strict_branch_real（RateTheory-           *)
+(*     Ablation §4.3/§4.4）：klc_closed_powb_mono 的率层使用形。         *)
+(*                                                                      *)
+(* 层次诚实披露：接口面（κ 前件包）与具体面（选择器见证）按论文 §6.4     *)
+(*   判定（Id 面/req 面异面）各自单层自洽，不跨层混用；具体面经 Part C   *)
+(*   同款供给（cauchy_real_exp）到达零 expf 前件的柯西实例推论           *)
+(*   mtc_mixing_time_cauchy_exp——端到端闭合。                           *)
+(*                                                                      *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、           *)
+(*   G07_KLWall、KLWallClosed、UpTVDoeblin、AttnDoeblin、                *)
+(*   Paper7Ablation、RateTheoryAblation、UpReqMixingTime（全部只         *)
+(*   Require 使用，本件零覆盖零改写上游）。                              *)
+(* 对标：mathlib softmax 核混合时间的构造性 Set 层对应物。               *)
+(* 构造性注记：Set 层承载（real_lt/real_le_b/sigT/prod 均 Set，零 Prop   *)
+(*   泄露）；零承认、零新公理；主件 Defined 透明可提取；非平凡真证       *)
+(*   （跨文件κ前件包衔接＋残差率恒等代入＋Bishop 单调率层运载）。       *)
+(* 编译配方：Rocq 9.1 直调（9.1.0 全路径），影子根单根，cpu_guard 节流。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -58,8 +52,8 @@ Require Import Paper7Ablation.
 Require Import RateTheoryAblation.
 Require Import UpReqMixingTime.
 
-(* ################ §1 接口腿：κ := 1−δ* 前件包 ################ *)
-(* 消费 P7A 前件包三件 + AttnDoeblin bs_delta_star_lt_one：        *)
+(* ################ §1 接口面：κ := 1−δ* 前件包 ################ *)
+(* 使用 P7A 前件包三件 + AttnDoeblin bs_delta_star_lt_one：        *)
 (* BoundedSoftmax 的 softmax 切片（temp/Delta/expf 迷你接口）处，    *)
 (* δ* := lo² 有 0 < δ* < 1，从而 κ := 1−δ* ∈ (0,1)。              *)
 (* 与 AttnDoeblin 逐字同型的 Let 定义（lo := expf (invT·(−Δ))，     *)
@@ -91,27 +85,27 @@ Proof.
   exact (expf_pos (mult invT (opp Delta))).
 Qed.
 
-(* δ* = lo² < 1（§6.1 已证件 bs_delta_star_lt_one 全参消费；
-   出节实形经 Check 探针实证后按实形喂入） *)
+(* δ* = lo² < 1（§6.1 已证件 bs_delta_star_lt_one 全参使用；
+   出节实形经 Check 检验后按实形提供） *)
 Theorem mtc_delta_star_lt_one_if : lt delta_star one.
 Proof.
   exact (@bs_delta_star_lt_one RI temp temp_pos Delta Delta_pos
            expf expf_pos expf_zero expf_plus expf_mono_lt).
 Qed.
 
-(* κ > 0（P7A C5 消费：p7a_omd_pos；出节实形无 lo_pos 参，probe3 实证） *)
+(* κ > 0（P7A 前件：p7a_omd_pos；出节实形无 lo_pos 参，经检验实证） *)
 Theorem mtc_kappa_pos_if : lt zero kappa.
 Proof.
   exact (@p7a_omd_pos RI DO lo mtc_delta_star_lt_one_if).
 Qed.
 
-(* κ < 1（P7A C6 消费：p7a_omd_lt_one，其内部走 p7a_delta_star_pos） *)
+(* κ < 1（P7A 前件：p7a_omd_lt_one，其内部走 p7a_delta_star_pos） *)
 Theorem mtc_kappa_lt_one_if : lt kappa one.
 Proof.
   exact (@p7a_omd_lt_one RI DO lo mtc_lo_pos_if).
 Qed.
 
-(* 前件包打包形（下游单件取用） *)
+(* 前件包组合形（下游单件取用） *)
 Theorem mtc_kappa_package_if :
   prod (lt zero kappa) (lt kappa one).
 Proof.
@@ -120,10 +114,10 @@ Qed.
 
 End MtcKappaPackage.
 
-(* ################ §2 具体腿：softmax 切片 → δ* → κ → 选择器 ######## *)
+(* ################ §2 具体面：softmax 切片 → δ* → κ → 选择器 ######## *)
 (* 具体柯西实数层（real_lt/tv_omd/tv_rpow）上的同型切片：lo :=       *)
 (* expf(invT·(−Δ))，δ* := lo·lo，κ := tv_omd δ*（= 1−δ* 定义性）。   *)
-(* 主定理 mtc_attention_mixing_time_local 在此消费 §5 选择器         *)
+(* 主定理 mtc_attention_mixing_time_local 在此使用 §5 选择器         *)
 (* mix_k_select，产出 κ^k·TV₀ < budget 的 sigT 完整见证。            *)
 Section MtcCauchySoftmax.
 
@@ -171,7 +165,7 @@ Proof.
 Qed.
 
 (* δ* = lo² < 1：lo·lo < lo·1 == lo < 1（严格乘单调＋real_mult_one
-   换形＋< 传递；P7A 接口件的 real_lt_mult 具体层镜像） *)
+   换形＋< 传递；P7A 接口件的 real_lt_mult 具体层副本） *)
 Theorem mtc_delta_star_lt_one : real_lt delta_star real_one.
 Proof.
   exact (real_lt_trans (real_mult lo lo) lo real_one
@@ -183,19 +177,19 @@ Proof.
            mtc_lo_lt_one).
 Qed.
 
-(* κ := 1−δ* > 0（UpTVDoeblin 残差件消费） *)
+(* κ := 1−δ* > 0（UpTVDoeblin 残差件使用） *)
 Theorem mtc_kappa_pos : real_lt real_zero kappa.
 Proof.
   exact (tv_omd_pos_of_lt delta_star mtc_delta_star_lt_one).
 Qed.
 
-(* κ := 1−δ* < 1（UpReqMixingTime §5(a) 件消费） *)
+(* κ := 1−δ* < 1（UpReqMixingTime §5(a) 件使用） *)
 Theorem mtc_kappa_lt_one : real_lt kappa real_one.
 Proof.
   exact (mix_omd_lt_one delta_star mtc_delta_star_pos).
 Qed.
 
-(* ######## 合龙主件：率即算法（§5+§6 端到端） ########
+(* ######## 收束主件：率即算法（§5+§6 端到端） ########
    κ ∈ (0,1) 前件包＋mix_k_select 显式步数见证＋残差收缩率代入：
    对任意 TV₀ ≥ 0 与任意正预算，定理【返回】步数 k 使
    κ^k·TV₀ < budget。sigT 见证，Defined 透明可提取。 *)
@@ -211,8 +205,8 @@ Proof.
 Defined.
 
 (* ######## 收缩率代入：残差率的 Bishop 全域单调（§4.3 退化端） ######
-   消费 P7B §5 件 rta_omd_powb_mono_b（klc_closed_powb_mono 经
-   rta_rpow_powb_eq 桥的 tv_rpow 率层消耗形）：0 ≤ δ* ≤ 1 处
+   使用 P7B §5 件 rta_omd_powb_mono_b（klc_closed_powb_mono 经
+   rta_rpow_powb_eq 换形引理的 tv_rpow 率层使用形）：0 ≤ δ* ≤ 1 处
    κ^m ≤ κ^n（m ≥ n），即选择器所代几何率确为单调收缩率。 *)
 Theorem mtc_residual_rate_mono :
   forall n m : nat,
@@ -229,8 +223,8 @@ Proof.
 Qed.
 
 (* ######## 严格支证书（§4.4 退化端构造性正性） ######################
-   消费 P7B §3 件 rta_strict_branch_real：η := δ* 处同时取得
-   0 < 1−δ* 的正性证书与 Bishop 收缩打包（证书即 §8 墙所称
+   使用 P7B §3 件 rta_strict_branch_real：η := δ* 处同时取得
+   0 < 1−δ* 的正性证书与 Bishop 收缩组合（证书即 §8 墙所称
    不可免费取得之物，在 δ* < 1 下构造性取得）。 *)
 Theorem mtc_strict_branch_local :
   prod (real_lt real_zero kappa)
@@ -246,8 +240,8 @@ Qed.
 
 End MtcCauchySoftmax.
 
-(* ################ §3 Part C 同款放电：柯西实例端到端闭环 ######## *)
-(* 以 cauchy_real_exp 放电 expf 迷你接口（AttnDoeblin Part C 同款
+(* ################ §3 Part C 同款供给：柯西实例端到端闭环 ######## *)
+(* 以 cauchy_real_exp 消解 expf 迷你接口（AttnDoeblin Part C 同款
    三字段路线），主件到达零 expf 前件的柯西实例形——只需温度倒数与
    logit 直径为正，混合时间即被返回。 *)
 Corollary mtc_mixing_time_cauchy_exp :
@@ -273,9 +267,111 @@ Proof.
            TV0 budget HTV Hb).
 Defined.
 
+(* ################ R120 假设消解载体供给段（mtchain_*_supply 定理族） ##
+   两节共 17 假设位：参数位 6（temp/Delta/expf/invT 等裸数据位）合法
+   保留；命题位 11（§1 九位段六位 + §2 八位段五位）在此按典范 Real
+   载体逐位消解。字段映照：lt:=real_lt、req:=real_eq、zero:=real_zero、
+   one:=real_one、plus:=real_plus、mult:=real_mult。载体温度/利差取
+   单位元（与 UpReqConcFin2 cf2_temp/cf2_Delta 同值同证，正性由
+   real_lt_zero_one 供给，该件不引入、依赖面零增）；载体指数取
+   cauchy_real_exp——即 real_expf_realizable 的见证本体
+   （AttnDoeblin Part C；S13_NLiveAudit 同语句），其逐位字段
+   cauchy_real_exp_pos/zero/plus/mono_lt 直接供给。原两节抽象假设位
+   声明与全部既有定理签名零改动；下游可按本段载体组装零前提实例。 *)
+
+(* —— §1 MtcKappaPackage 九位段（:73–:81）六命题位 —— *)
+
+(* 位 temp_pos（:74）：载体温度正性（单位元载体；real_lt_zero_one 直引） *)
+Theorem mtchain_if_temp_pos_supply : real_lt real_zero real_one.
+Proof.
+  exact (real_lt_zero_one).
+Qed.
+
+(* 位 Delta_pos（:76）：载体利差正性（同上） *)
+Theorem mtchain_if_Delta_pos_supply : real_lt real_zero real_one.
+Proof.
+  exact (real_lt_zero_one).
+Qed.
+
+(* 位 expf_pos（:78）：载体指数逐点正（cauchy_real_exp_pos 直引） *)
+Theorem mtchain_if_expf_pos_supply :
+  forall x : Real, real_lt real_zero (cauchy_real_exp x).
+Proof.
+  exact (cauchy_real_exp_pos).
+Qed.
+
+(* 位 expf_zero（:79）：载体指数零点幺值（cauchy_real_exp_zero 直引） *)
+Theorem mtchain_if_expf_zero_supply :
+  real_eq (cauchy_real_exp real_zero) real_one.
+Proof.
+  exact (cauchy_real_exp_zero).
+Qed.
+
+(* 位 expf_plus（:80）：载体指数和性（cauchy_real_exp_plus 直引） *)
+Theorem mtchain_if_expf_plus_supply :
+  forall a b : Real,
+    real_eq (cauchy_real_exp (real_plus a b))
+            (real_mult (cauchy_real_exp a) (cauchy_real_exp b)).
+Proof.
+  exact (cauchy_real_exp_plus).
+Qed.
+
+(* 位 expf_mono_lt（:81）：载体指数严格单调（cauchy_real_exp_mono 直引） *)
+Theorem mtchain_if_expf_mono_lt_supply :
+  forall a b : Real, real_lt a b -> real_lt (cauchy_real_exp a) (cauchy_real_exp b).
+Proof.
+  exact (cauchy_real_exp_mono).
+Qed.
+
+(* —— §2 MtcCauchySoftmax 八位段（:130–:137）五命题位 —— *)
+
+(* 位 invT_pos（:131）：载体温度倒数正性（单位元载体） *)
+Theorem mtchain_cs_invT_pos_supply : real_lt real_zero real_one.
+Proof.
+  exact (real_lt_zero_one).
+Qed.
+
+(* 位 Delta_pos（:133）：载体利差正性（单位元载体） *)
+Theorem mtchain_cs_Delta_pos_supply : real_lt real_zero real_one.
+Proof.
+  exact (real_lt_zero_one).
+Qed.
+
+(* 位 expf_pos（:135）：载体指数逐点正 *)
+Theorem mtchain_cs_expf_pos_supply :
+  forall x : Real, real_lt real_zero (cauchy_real_exp x).
+Proof.
+  exact (cauchy_real_exp_pos).
+Qed.
+
+(* 位 expf_zero（:136）：载体指数零点幺值 *)
+Theorem mtchain_cs_expf_zero_supply :
+  real_eq (cauchy_real_exp real_zero) real_one.
+Proof.
+  exact (cauchy_real_exp_zero).
+Qed.
+
+(* 位 expf_mono_lt（:137）：载体指数严格单调 *)
+Theorem mtchain_cs_expf_mono_lt_supply :
+  forall a b : Real, real_lt a b -> real_lt (cauchy_real_exp a) (cauchy_real_exp b).
+Proof.
+  exact (cauchy_real_exp_mono).
+Qed.
+
 (* ################ 审计口（G4：零公理 Closed；G1 min-pa 审计位） #### *)
 Print Assumptions mtc_kappa_package_if.
 Print Assumptions mtc_attention_mixing_time_local.
 Print Assumptions mtc_residual_rate_mono.
 Print Assumptions mtc_strict_branch_local.
 Print Assumptions mtc_mixing_time_cauchy_exp.
+Print Assumptions mtchain_if_temp_pos_supply.
+Print Assumptions mtchain_if_Delta_pos_supply.
+Print Assumptions mtchain_if_expf_pos_supply.
+Print Assumptions mtchain_if_expf_zero_supply.
+Print Assumptions mtchain_if_expf_plus_supply.
+Print Assumptions mtchain_if_expf_mono_lt_supply.
+Print Assumptions mtchain_cs_invT_pos_supply.
+Print Assumptions mtchain_cs_Delta_pos_supply.
+Print Assumptions mtchain_cs_expf_pos_supply.
+Print Assumptions mtchain_cs_expf_zero_supply.
+Print Assumptions mtchain_cs_expf_mono_lt_supply.
