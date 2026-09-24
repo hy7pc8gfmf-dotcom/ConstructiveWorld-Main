@@ -1,37 +1,15 @@
 (* ============================================================ *)
-(* UpReqAttnUniformLimit.v —— 并列最大值注意力极限定理                *)
+(* UpReqAttnUniformLimit.v —— 本件形式化并列最大值注意力温度极限的        *)
+(*   L1 收敛性质：对任意 eps>0 存在 T₀>0，使任意 T(0<T<T₀) 满足           *)
+(*   L1(w_T, u) ≤ eps，其中 u 为副本上的均匀分布。                       *)
 (*                                                              *)
-(* 目的：闭合 AttnHardLimit218 自注的待补缺口（其头注接口①注记，      *)
-(*   :23-30）：「若 m 有并列副本，w_T 的 T→0 极限是副本上的均匀分布」。 *)
+(* 依赖清单：CW_ConstructiveWorld_219（伞壳）、AttnHardLimit218。         *)
 (*                                                              *)
-(* 主件（前缀 alm_，避免与库内既有名冲突）：                          *)
-(*   ① alm_gap_witness——Q 层并列间隙证书：非空 Q 表上极大值           *)
-(*      （可判定枚举 alm_max_ne）＋多重数 k≥1＋逐点上界＋两分支：      *)
-(*      (i) 全表同值（均匀退化档）或 (ii) 并列间隙 g>0 且逐点          *)
-(*      q==qmax ∨ q+g≤qmax（镜像现件 gap_le 形）。全构造性。           *)
-(*   ② 定义面——副本多重数 alm_k := count_token m vocab（不要求        *)
-(*      唯一）、副本均匀目标 alm_uniform、m-开关 alm_switch：          *)
-(*      并列副本→均匀的计算核，Defined 可提取。                        *)
-(*   ③ m-开关求和恒等式 swg_switch_sum_gen / swg_switch_sum。          *)
+(* 构造性注记：Set 层承载/零承认/可提取；Q 层并列间隙证书、副本均匀       *)
+(*   目标分布与 m-开关求和恒等式全构造性；词表非空位与 token 可判定       *)
+(*   相等位的 Set 重述与具体层供给见文尾节。                             *)
 (*                                                              *)
-(* 主定理（2026-09-20 Z1a 席闭合，原冻结注注销）：                    *)
-(*   alm_uniform_limit——∀eps>0, ∃T₀>0, ∀T(0<T<T₀), L1(w_T,u) ≤ eps。  *)
-(*   装配：质量分裂四件链以 alu_ 前缀全文转录自承（Part 2.5 区，因      *)
-(*   UpReqAttnMassSplit 为下游消费者不可反向 Require）；阈值 T₀ 无 log  *)
-(*   扁形构造 T₀ := γ·(eps·½)·(1/n)（real_exp_ge_linear e^t>1+t 承载，  *)
-(*   免 cw_log 有理上界包装；原申报「T₀ := γ/ln(1+2n/eps) cw_log 形」   *)
-(*   由该等价阈值替代闭合，率形 L1 ≤ 2n·e^{−γ/T} 不变）。原两处诚实     *)
-(*   障碍处置：跨 token 同值情形由并列副本显式入模覆盖（u 在副本支       *)
-(*   恒 1/k，无需 argmax 集合可判定证书）；T₀ 有理化由扁形 inv 构造      *)
-(*   承载（Q 字面量数值哨兵面另见 Q18Tail）。四关证据：G1 禁词 0；       *)
-(*   G2 全量 coqc RC=0、PA 6/6 Closed、.vo 头字节 5ff4；                *)
-(*   G3 提取 magic=0；G4 coqchk Axioms <none>。                        *)
-(*                                                              *)
-(* 依赖（全部只读消费）：CW_ConstructiveWorld_219（伞壳）；              *)
-(*   AttnHardLimit218（已完成机器验证，只读）。                         *)
-(*                                                              *)
-(* 备注：纯构造性、零改既有文件。公理面：零公理、零承认件、零弃证；      *)
-(*   零经典逻辑。文末 Print Assumptions 核验 Closed。                   *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -335,7 +313,7 @@ Definition alm_uniform (x : Token) : Real :=
   | inr _ => real_zero
   end.
 
-(* m-开关函数：副本支 c1，非副本支 c2（求和恒等式的工作马） *)
+(* m-开关函数：副本支 c1，非副本支 c2（求和恒等式的辅助引理） *)
 Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
   match token_eq_dec x m with
   | inl _ => c1
@@ -584,7 +562,7 @@ Proof.
                              rest)).
 Qed.
 
-(* 收口引理：以 vocab 实例化（alm_k 即 count_token m vocab） *)
+(* 闭合引理：以 vocab 实例化（alm_k 即 count_token m vocab） *)
 Lemma swg_switch_sum : forall c g : Real,
   real_eq (real_list_sum Token (alm_switch c g) vocab)
     (real_plus (real_mult (real_of_nat alm_k) c)
@@ -613,8 +591,8 @@ Variable gap_le : forall x : Token, Not (Id x m) ->
 Definition alu_w (T : Real) (Ht : real_lt real_zero T) (x : Token) : Real :=
   w_T Token vocab vocab_nonempty z T Ht x.
 
-(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量槽 +  *)
-(* g : Token -> Real 函数槽——上游 alm_switch 双常量槽的函数形补全） *)
+(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量参数位 +  *)
+(* g : Token -> Real 函数参数位——上游 alm_switch 双常量参数位的函数形补全） *)
 Definition alu_mswitch (c : Real) (g : Token -> Real) (x : Token) : Real :=
   match token_eq_dec x m with
   | inl _ => c
@@ -628,7 +606,7 @@ Definition alu_M (T : Real) (Ht : real_lt real_zero T) : Real :=
 (* ---------- 函数形 m-开关求和恒等式（上游原证明骨架逐行转录） ---------- *)
 (* Σ alu_mswitch c g == count(m)·c + Σ alu_mswitch 0 g（对显式表 vl 归纳： *)
 (* 空表零元代数 / 副本支 of_nat(S) 定义折叠+右分配+左幺元交换桥 /          *)
-(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形槽补全）。         *)
+(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形参补全）。         *)
 
 Lemma alu_switch_sum_fun : forall (c : Real) (g : Token -> Real) (vl : list Token),
   real_eq (real_list_sum Token (alu_mswitch c g) vl)
@@ -1052,7 +1030,7 @@ Qed.
 (* ============================================================ *)
 (* 链件 ①：alu_mass_split —— vocab 质量分裂引理                     *)
 (*   Σ_vocab w_T == k·w_T(m) + M（上游原申报形；自逐点等值 +          *)
-(*   alu_switch_sum_fun 直接消费）。                                 *)
+(*   alu_switch_sum_fun 直接使用）。                                 *)
 (* ============================================================ *)
 
 Theorem alu_mass_split : forall (T : Real) (Ht : real_lt real_zero T),
@@ -1108,7 +1086,7 @@ Proof.
                                     (alu_w T Ht m))
                          (alm_invk Token vocab token_eq_dec m m_in_vocab))
     by exact (alu_minus_r_plus _ _).
-  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子槽） *)
+  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子参数位） *)
   assert (Hdist : real_eq (real_mult (real_of_nat (alm_k Token vocab token_eq_dec m))
                               (real_plus (real_minus_r
                                             (alm_invk Token vocab token_eq_dec m m_in_vocab)
@@ -1309,7 +1287,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 链件 ④：alu_l1_le —— L1 距离上界收口                             *)
+(* 链件 ④：alu_l1_le —— L1 距离上界闭合                             *)
 (*   L1(w_T, u) = Σ|u − w| == 2M ≤ 2·(n·decay)（上游原申报形；       *)
 (*   2n·decay 写成 n·decay + n·decay 直写形）。链式组装：逐点 abs    *)
 (*   折叠（部件 5）+ alu_switch_sum_fun（①同款）+ ②（k·D == M）+ ③。 *)
@@ -1413,12 +1391,12 @@ End AluChain.
 (* Part 2.9：本体闭合——alm_uniform_limit                        *)
 (*   陈述（R85 冻结形）：∀eps>0, sigT T₀(>0) ∧ ∀T(0<T<T₀),        *)
 (*   L1(w_T,u) ≤ eps。装配路线：质量分裂链（Part 2.5 alu_ 链自承    *)
-(*   转录，因 MassSplit 为下游消费者不可反向 Require）给出          *)
+(*   转录，因 MassSplit 为下游使用方不可反向 Require）给出          *)
 (*   L1 ≤ n·d + n·d（d = e^{−γ/T}）；间隙证书/副本计数/均匀目标/     *)
 (*   开关核为 Part 1-2 之 alm_ 件。阈值 T₀ := γ·δ、                 *)
 (*   δ := (eps·½)·(1/n)：cw_log 缺席下的无 log 扁形替代——            *)
 (*   real_exp_ge_linear（e^t > 1+t）+ exp 单调 + δ·e^{γ/T} ≥        *)
-(*   δ·inv δ == 1 收口，零嵌套 inv、零经典逻辑。                    *)
+(*   δ·inv δ == 1 闭合，零嵌套 inv、零经典逻辑。                    *)
 (* ============================================================ *)
 
 Theorem alm_uniform_limit :
@@ -1623,7 +1601,7 @@ Proof.
         + exact Hrhs.
         + apply (real_le_mult_compat (real_mult (decay_T gamma T Ht) E)
                    (real_mult delta E) invE HinvE Hcancel). }
-    (* 步6-7：L1 ≤ n·d + n·d ≤ n·δ + n·δ == eps（链收口） *)
+    (* 步6-7：L1 ≤ n·d + n·d ≤ n·δ + n·δ == eps（链闭合） *)
     apply (real_le_trans
              (real_list_sum Token
                 (fun x : Token => real_abs (real_minus_r
@@ -1775,3 +1753,51 @@ Print Assumptions alm_uniform.
 (* 新增主件审计口：m-开关求和恒等式两件（swg_switch_sum_gen/swg_switch_sum） *)
 Print Assumptions swg_switch_sum_gen.
 Print Assumptions swg_switch_sum.
+(* ============================================================ *)
+(* 词表非空位 vocab_nonempty 与 token 可判定相等位 token_eq_dec 的        *)
+(* Set 重述位与具体层供给                                                *)
+(*                                                                     *)
+(* 原两位为 Prop 形（Not (Id vocab nil) 与 forall a b, Or (Id a b)        *)
+(* (Not (Id a b))）；本节将其重述为 Set 层形并给出具体层供给：非空取      *)
+(* sigT 见证形 sigT (fun t => InT t vocab)（见证更强：可提取出具体元素），  *)
+(* 可判定相等取 sigT bool 形——正支给出 Id 相等见证，负支给出              *)
+(* Id a b -> Empty_set 函数（Set 层否定见证，可提取）。二点清单（bool      *)
+(* 载体）上，非空见证由 InT_here 构造子直接给出，可判定相等由构造子四分    *)
+(* 逐一给出（正支 id_refl，负支构造子分裂消去）。原 Prop 形假设位声明与    *)
+(* 既有定理签名零改动。                                                  *)
+(* ============================================================ *)
+Definition alm_vocab_nonempty_set (X : Set) (vocab : list X) : Set :=
+  sigT (fun t : X => InT t vocab).
+Definition alm_token_eq_dec_set (X : Set) : Set :=
+  forall a b : X,
+    sigT (fun d : bool =>
+      match d with
+      | true => Id a b
+      | false => Id a b -> Empty_set
+      end).
+
+Theorem alm_vocab_nonempty_supply :
+  alm_vocab_nonempty_set bool (cons true (cons false nil)).
+Proof. exact (existT _ true (@InT_here bool true (cons false nil))). Qed.
+
+Theorem alm_token_eq_dec_supply : alm_token_eq_dec_set bool.
+Proof.
+  intros a b.
+  destruct a; destruct b.
+  - exact (existT _ true (@id_refl bool true)).
+  - refine (existT _ false _).
+    intro H.
+    (* 构造子分裂：Id true false 无构造元，J 形索引匹配消去 *)
+    exact (match H in Id _ y return
+             match y with true => unit | false => Empty_set end with
+           id_refl => tt end).
+  - refine (existT _ false _).
+    intro H.
+    exact (match H in Id _ y return
+             match y with false => unit | true => Empty_set end with
+           id_refl => tt end).
+  - exact (existT _ true (@id_refl bool false)).
+Qed.
+
+Print Assumptions alm_vocab_nonempty_supply.
+Print Assumptions alm_token_eq_dec_supply.

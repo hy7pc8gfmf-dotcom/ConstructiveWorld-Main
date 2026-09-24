@@ -1,10 +1,13 @@
 (* ============================================================ *)
-(* UpAlignIdReq.v *)
-(* *)
-(* 目的： 对齐递减恒等式的 req 抽象载体镜像件。 *)
-(* 主件： req 形 policy_gap_decrement_exact / dpo_loss_step_exact / policy_gap_backward_kl_exact，配 w_gap_base、w_subgap_base。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqAlign、UpReqAlign2、UpReqAlign3。 *)
-(* 备注： 各 Variable 前提逐位保留；对数与负数等接口前提为显式假设位。 *)
+(* UpAlignIdReq.v —— 本件形式化对齐递减恒等式族的 req 抽象载体件： *)
+(*   差分代数两核、gap 单步精确分解、gap 递减量、dpo_loss 单步精确差， *)
+(*   与后向 KL 递推换轴恒等式（条件形）；并供给 sum 接口实例层证书。 *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqAlign、 *)
+(*   UpReqAlign2、UpReqAlign3、UpReqConcSoftmax、ConcMixSelFeed。 *)
+(* 对标：mathlib 相对熵策略改进界；stdlib Coq Reals。 *)
+(* 构造性注记：Set 层承载（req/lt/le 均 Set 值）；零承认件； *)
+(*   新增供给段零假设位、全 Qed；可提取。 *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 单道守护。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -40,14 +43,14 @@
 (*      （Id policy_iter_backward_kl_step @L22686 根 Qed）在 req    *)
 (*      侧为批 3 深链显式假设（UpReqAlign req_backward_kl_identity 假   *)
 
-(*      将其作为件 6 语句的显式前提位（零新公理：Print Assumptions  *)
+(*      将其作为件 6 语句的显式前提位置（零新公理：Print Assumptions  *)
 (*      Closed，条件性在语句层可见）。                             *)
 (*   3. 节参数与 UpReqAlign3 Req3AlignCore 逐位对齐（sumf + 六假设  *)
 (*      + reward/beta/pi_ref 簇 + ZAL_pos + eta 簇），基座件以 @    *)
-(*      全参形式消费，零重证。                                     *)
+(*      全参形式使用，零重证。                                     *)
 (*                                                                *)
 (* 红线自审：纯构造性（零公理/零弃证/零经典逻辑）；语句全为 Set 层  *)
-(*   （req/lt/le 均 Set 值，零 Prop 泄露）；全部 Qed；无提取探针残留。*)
+(*   （req/lt/le 均 Set 值，零 Prop 泄露）；全部 Qed；无提取检验残留。*)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -57,6 +60,46 @@ Require Import UpReqAlign.
 Require Import UpReqAlign2.
 Require Import UpReqAlign3.
 Import RealInterfaceEnhancedMod.
+
+(* ============================================================ *)
+(* 实例层供给段（假设消融：证书位转已证定理，签名保持式） *)
+(*   语句面 = 原假设命题（载体换成锚件实例 csm_sumf S0 en）； *)
+(*   证明 = 锚件全参显式应用（ConcMixSelFeed cms_sum_* 四件）。 *)
+(*   三节同名 sum 假设位共用本段单一供给，出节签名零改动。 *)
+(* ============================================================ *)
+From Stdlib Require Import List.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
+
+(* sum 外延：逐点 req 相等给出和的 req 相等（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_idreq_sum_ext_sup :
+  forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+    (forall s : S0, req (f s) (g s)) -> req (csm_sumf S0 en f) (csm_sumf S0 en g).
+Proof.
+  intros S0 en f g H.
+  exact (cms_sum_ext S0 en f g H).
+Qed.
+
+(* sum 可加：两项和的分解（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_idreq_sum_add_sup :
+  forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+    req (csm_sumf S0 en (fun s : S0 => plus (f s) (g s)))
+        (plus (csm_sumf S0 en f) (csm_sumf S0 en g)).
+Proof.
+  intros S0 en f g.
+  exact (cms_sum_add S0 en f g).
+Qed.
+
+(* sum 线性：常数因子提出（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_idreq_sum_linear_sup :
+  forall (S0 : Set) (en : list S0) (a : Real) (f : S0 -> Real),
+    req (csm_sumf S0 en (fun s : S0 => mult a (f s)))
+        (mult a (csm_sumf S0 en f)).
+Proof.
+  intros S0 en a f.
+  exact (cms_sum_linear S0 en a f).
+Qed.
+
 
 (* ============================================================ *)
 (* Part 1：差分代数两核（纯 req_minus 代数，仅依赖接口）           *)
@@ -177,7 +220,7 @@ Definition PSTR_pos : pos3 PSTR :=
 Definition AO (p : S -> R) (Hp : pos3 p) : R :=
   @req2_dpo_loss R RIS S sumf reward beta pi_ref pi_ref_pos p Hp.
 
-(* ---- 基座件消费（@ 全参；零重证） ---- *)
+(* ---- 基座件使用（@ 全参；零重证） ---- *)
 Lemma w_gap_base : forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
   req (req_minus (JJ (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t)) (JJ pi_t Hpi_t))
       (mult beta
@@ -204,7 +247,7 @@ Proof.
                                     ZAL_pos p Hp Hn).
 Qed.
 
-(* ===== 件 3（旗舰）：gap 的单步精确分解 ===== *)
+(* ===== 件 3（主定理）：gap 的单步精确分解 ===== *)
 (* gap(pi_{t+1}) == gap(pi_t) − Δ
    装配：minus_middle_t12 的对称形 + reqd_minus_compat（Hgap/Hdiff 保形）。
    记 G := J(pi_star)，T := J(pi_t)，N := J(pi_{t+1})：
@@ -331,7 +374,7 @@ Proof.
   - exact (w_gap_base pi_t Hpi_t Hn).
 Qed.
 
-(* ===== 件 6（旗舰）：后向 KL 递推的换轴精确恒等式（条件形） ===== *)
+(* ===== 件 6（主定理）：后向 KL 递推的换轴精确恒等式（条件形） ===== *)
 (* β·KL(pi*‖pi_{t+1}) == (1−η)·β·KL(pi*‖pi_t) − η·gap(pi_t) + β·K2
    前提 = 三 KL 精确恒等（req 同位深链显式假设，见文件头登记表 2）；
    本件结果的构造性内容 = 整体 β 缩放链（mult_assoc/comm/反结合 +

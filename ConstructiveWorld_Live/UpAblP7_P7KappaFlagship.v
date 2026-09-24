@@ -18,15 +18,17 @@
 (*     其中 half:=inv_pos (plus one one) two_pos。                            *)
 (*   uapk7_flagship_hi_kappa : κ∈(0,1) 前提包 ∧ lt one hi。                    *)
 (*                                                              *)
-(* 来源：母本 Paper7Ablation.v、LoHiSqueeze.v、P7BoundedSoftmaxDeep.v、        *)
+(* 来源：源文件 Paper7Ablation.v、LoHiSqueeze.v、P7BoundedSoftmaxDeep.v、       *)
 (*   UpAblP7_Paper7Ablation.v（uabp7_kappa_in01_package 前提包源件）、         *)
 (*   UpAblP7_LoHiSqueeze.v（half 别名同构的姊妹件）；本件只使用其已证出口面，   *)
 (*   原树零改。                                                                *)
 (*                                                              *)
-(* 依赖清单：S01_BaseRing（half_twice/two_pos/inv_pos_pos/le_plus_nonneg_r/    *)
-(*   plus_cancel_l/lt_le_iff/lt_dec 等序与正性面）、Paper7Ablation、            *)
-(*   LoHiSqueeze、P7BoundedSoftmaxDeep（p7d_hi_gt_one）、                       *)
-(*   UpAblP7_Paper7Ablation、UpAblP7_LoHiSqueeze。                             *)
+(* 依赖清单：CW_ConstructiveWorld_219、S01_BaseRing（half_twice/two_pos/       *)
+(*   inv_pos_pos/le_plus_nonneg_r/plus_cancel_l/lt_le_iff/lt_dec 等序与正性面）、*)
+(*   Paper7Ablation、LoHiSqueeze、P7BoundedSoftmaxDeep（p7d_hi_gt_one）、       *)
+(*   UpAblP7_Paper7Ablation、UpAblP7_LoHiSqueeze；载体供给节另引                *)
+(*   UpReqConcFin2（cf2_temp_pos/cf2_Delta_pos）与 UpAblD1_expf_pack            *)
+(*   （real_expf_realizable 的逐位拆包引用形，uabd1x_expf 系）。                *)
 (*                                                              *)
 (* 证明要点：件a 由 Or 消去：lt 支直取，eq 支以 Not (Id a b) 矛盾消去。        *)
 (*   件b-0 以 DecidableOrder 三分情形构造：lt 支直取；eq 支经 plus_cancel_l     *)
@@ -56,12 +58,15 @@
 (*                                                              *)
 (* ============================================================ *)
 
+Require Import CW_ConstructiveWorld_219.
 Require Import S01_BaseRing.
 Require Import Paper7Ablation.
 Require Import LoHiSqueeze.
 Require Import P7BoundedSoftmaxDeep.
 Require Import UpAblP7_Paper7Ablation.
 Require Import UpAblP7_LoHiSqueeze.
+Require Import UpReqConcFin2.
+Require Import UpAblD1_expf_pack.
 
 (* ################ 段一：由 Or 见证与不等性得严格序的桥 ############## *)
 (* 该桥只用基类前提（零 DO 依赖）：见证为 Or 型，消去即构造。               *)
@@ -214,8 +219,57 @@ Qed.
 
 End Uapk7Flagship.
 
+(* ################ 六前提位的载体供给节（逐位消解） ################
+   原六假设位（temp_pos/Delta_pos/expf_pos/expf_zero/expf_plus/
+   expf_mono_lt）为 RI 面抽象证书位；本节在典范 Real 载体 req 面
+   逐位供给同构语句（字段映照：lt:=real_lt、req:=real_eq、
+   zero:=real_zero、one:=real_one、plus:=real_plus、mult:=real_mult）。
+   载体：温度=cf2_temp、利差=cf2_Delta（UpReqConcFin2），指数函数=
+   uabd1x_expf（real_expf_realizable 的签名投影，其逐位拆包引用形
+   uabd1x_expf_pos/zero/plus/mono_lt 见 UpAblD1_expf_pack）。
+   kappa 前提包位由 uabp7_kappa_in01_package 在抽象接口层供给
+   （uapk7_flagship_hi_kappa 全参显式使用，签名保持）；Id 面无具体
+   载体实例，故载体供给在 req 面陈述。原抽象假设位声明与既有定理
+   签名零改动。 *)
+Section Uapk7CarrierSupply.
+
+(* 位 temp_pos：载体温度正性（cf2_temp_pos 全参直引） *)
+Theorem uapk7_temp_pos_supply : real_lt real_zero cf2_temp.
+Proof. exact (cf2_temp_pos). Qed.
+
+(* 位 Delta_pos：载体利差正性（cf2_Delta_pos 全参直引） *)
+Theorem uapk7_Delta_pos_supply : real_lt real_zero cf2_Delta.
+Proof. exact (cf2_Delta_pos). Qed.
+
+(* 位 expf_pos：载体指数逐点正（uabd1x_expf_pos 直引） *)
+Theorem uapk7_expf_pos_supply : forall x : Real, real_lt real_zero (uabd1x_expf x).
+Proof. exact (uabd1x_expf_pos). Qed.
+
+(* 位 expf_zero：载体指数零点幺值（uabd1x_expf_zero 直引） *)
+Theorem uapk7_expf_zero_supply : real_eq (uabd1x_expf real_zero) real_one.
+Proof. exact (uabd1x_expf_zero). Qed.
+
+(* 位 expf_plus：载体指数和性（uabd1x_expf_plus 直引） *)
+Theorem uapk7_expf_plus_supply : forall a b : Real,
+  real_eq (uabd1x_expf (real_plus a b))
+          (real_mult (uabd1x_expf a) (uabd1x_expf b)).
+Proof. exact (uabd1x_expf_plus). Qed.
+
+(* 位 expf_mono_lt：载体指数严格单调（uabd1x_expf_mono_lt 直引） *)
+Theorem uapk7_expf_mono_lt_supply : forall a b : Real,
+  real_lt a b -> real_lt (uabd1x_expf a) (uabd1x_expf b).
+Proof. exact (uabd1x_expf_mono_lt). Qed.
+
+End Uapk7CarrierSupply.
+
 (* ---- 假设审计（对逐件 Print Assumptions） ---- *)
 Print Assumptions uapk7_le_neq_to_lt.
 Print Assumptions uapk7_lt_x_plus_x.
 Print Assumptions uapk7_delta_star_bounded_half.
 Print Assumptions uapk7_flagship_hi_kappa.
+Print Assumptions uapk7_temp_pos_supply.
+Print Assumptions uapk7_Delta_pos_supply.
+Print Assumptions uapk7_expf_pos_supply.
+Print Assumptions uapk7_expf_zero_supply.
+Print Assumptions uapk7_expf_plus_supply.
+Print Assumptions uapk7_expf_mono_lt_supply.

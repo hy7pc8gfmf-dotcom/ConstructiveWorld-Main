@@ -3621,3 +3621,21 @@ Definition ng_BBDBridgeSupply : NewGreenFace :=
 Definition ng_UpReqSamplingFeed : NewGreenFace :=
   MkNewGreenFace "UpReqSamplingFeed.v" 293 22 20260924
   "Batch-2/3 companion supply piece (usrq_ 22 supply theorems for ReqUContraction two-section sum honest-premise interfaces); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 22/22 Closed vo magic 436f712100015ff4; G3 self-scope 10 DECLARED residuals (6 D-form abs-twin abstract-le destructive reads X1-#30-slot-frozen class, 2 B-form sum_pos sigT/InT witness boxing p2wb class, 2 abstract-relation Coq_inl boxings z-twin; zero E/L/T sites so fix-3 not applicable; same class as in-tree mtdc/p2wb declared residuals, P2 deferred; W23 ledger L99 declared no probe, EB2 re-verify declares on its behalf); G4 coqchk Axioms none; deps all in-tree current, leaf at order L645 anchor R124-7ccbe2 sha1-6" "L293:mf918e5".
+(* ================= v4.29 增册（R126 P7FIN2 注册波·三件 born-in-place 尾插：GenSupply 一件双定理＋反向真等价／GenWorld 泛型／W3 Fin3 探针，20260925；号额实勘：现值 v4.28 → 本席顺延 v4.29（全文件 grep 无 v4.29 占用）；承前 ng_ 共 453 条，本批 3 条后共 456 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.28 块之后；尾插禁重排、只增不改）。 *)
+(* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（v4.24 扩列口径）；本块行数/md5=落位树实测（20260925，R126-EXEC 执行席 born-in-place 四关实测回填；order 锚=md5 前 6 照 E1 §四①处方——R124 尾块三行锚值经本席现测定谳：c40c13=md5 前 6、988a53/7ccbe2=文件 SHA1 前 6，两口径历史混用在案，本波统一 md5 前 6 与 ng_meta 自洽）。 *)
+
+(* ng_UpReqCf2TvGenSupply —— UpReqCf2TvGenSupply.v：C1 席产一件双定理供给件（192 行 3 Qed；件一 uc2t_habs_cf2tv_nonneg 强形＋uc2t_habs_cf2tv_nonneg_norm 规格形，件二 uc2t_cf2tv_nonneg_habs_rev 反向真等价（V-C1 判「真等价·无降档·升格成立」：plain 形复原＋归一性件内已证＋合成判词三查全过）；PA×3 全 Closed；G3 单命令三常数提取主 ml Obj.magic=0；G4 coqchk Axioms 3 条传递环境＋CONTAINMENT-EQUAL 新增=0；born-in-place 绿判四件套 20260925；沙箱/Live/vo 三方 md5 恒等 bcac27f1；Require CW219/Algebra/SumD/Dist/ConcSoftmax/Sampling/ConcMixSel/ConcB1/ConcB2/AttnDoeblin/ConcFin2 全在册）（_tp7fin2c1_） *)
+Definition ng_UpReqCf2TvGenSupply : NewGreenFace :=
+  MkNewGreenFace "UpReqCf2TvGenSupply.v" 192 3 20260925
+  "P7FIN2 piece-1+2 supply: cf2-TV nonneg strong+normalized forms and reverse true-equivalence (plain-form restoration, in-piece normalization, both directions machine-checked; V-C1 upgraded); PA 3/3 Closed; G3 single-command three-constant extraction Obj.magic=0; G4 coqchk 3 transitive axioms CONTAINMENT-EQUAL zero-new; born-in-place four-gate green 20260925; triple md5 bcac27f1" "L192:mbcac27".
+
+(* ng_UpReqCf2TvGenWorld —— UpReqCf2TvGenWorld.v：C2 席产泛型件（144 行 6 Qed；8 语句 uc2t_gen_tv/eq_list/nonneg_habs/sum_const/gen_nR/gen_nR_pos/gen_unif_norm/gen_enum_ne；Require CW219/Algebra/SumD/Dist 最小面与 R121x 16 件零交集；PA×6 全 Closed；G3 主 ml Obj.magic=0；G4 同款 3 条传递环境；勘误① lt zero inv2 前件经 V-C2 反例验立）（_tp7fin2c2_） *)
+Definition ng_UpReqCf2TvGenWorld : NewGreenFace :=
+  MkNewGreenFace "UpReqCf2TvGenWorld.v" 144 6 20260925
+  "P7FIN2 piece-3 generic supply: 8 uc2t_gen_* statements over minimal CW219/Algebra/SumD/Dist face (zero intersection with R121x wave); PA 6/6 Closed; extraction Obj.magic=0; erratum-1 lt zero inv2 premise verified by counterexample; born-in-place four-gate green 20260925; triple md5 6b0d5cd3" "L144:m6b0d5c".
+
+(* ng_UpReqCf2TvW3 —— UpReqCf2TvW3.v：C2 席产 Fin3 探针件（161 行 0 Qed＝Definition 面交付·非降档：11 语句全定义型 uc2t_w3/enum3/mu0w3/nu0w3/pt3/tv3＋abs_pt_w3/tv3_sum_two/tv3_pos/tv3_nonneg/fin2_sumf_gen_instance，PA×5 全 Closed；勘误② wC 支值域 {one,one,zero} 修正经 V-C2 验立（照抄模板即静默假语句反例在案）；Require CW219/Algebra/SumD/Dist/ConcFin2；G3 主 ml Obj.magic=0）（_tp7fin2c2_） *)
+Definition ng_UpReqCf2TvW3 : NewGreenFace :=
+  MkNewGreenFace "UpReqCf2TvW3.v" 161 0 20260925
+  "P7FIN2 piece-4 Fin3 probe: 11 definition-form statements (zero Qed by design, PA 5/5 Closed, non-trivial per redline-3 registered); erratum-2 wC-branch value range corrected (silent-false-statement counterexample archived); extraction Obj.magic=0; born-in-place four-gate green 20260925; triple md5 6b186fbf" "L161:m6b186f".

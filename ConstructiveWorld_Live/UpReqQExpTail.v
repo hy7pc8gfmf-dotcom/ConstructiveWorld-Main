@@ -1,31 +1,28 @@
-(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 be4f4414ebf0f0ffa46039e37d625976 · 权威定位=主键内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
-(* ANCHOR: FILE_LEVEL（件级锚·全件 766 行；系名=文件名，消费面 Require 引用） | 现势行号 全件 L1-L766 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
-(* ANCHOR: qtail_cauchy_modulus（旗舰） | 现势行号 L728 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
 (* ============================================================ *)
-(* UpReqQExpTail.v *)
-(* *)
-(* 目的： Q 层指数截断尾的控制引理族。 *)
-(* 主件： qtail_fact_ge_pow / qtail_Qlt01 与 qtail_pos_upper 尾上界族。 *)
-(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp。 *)
-(* 备注： 阶乘对幂的控制为构造核；QleT 到 Qle 换桥随行。 *)
+(* UpReqQExpTail.v                                                    *)
+(*                                                                *)
+(* 使命：本件形式化 Q 层指数截断尾的控制引理族：给定范数 b ≥ 0 与       *)
+(*   精度 e > 0，显式输出 N 使 m,n ≥ N 时                               *)
+(*   qtail_sum b (min m n) (max m n) = Σ_{k=min}^{max-1} b^k/k! < e。    *)
+(*   主件：qtail_fact_ge_pow（阶乘压倒 2 的幂，nat 归纳构造核）、         *)
+(*   qtail_Qlt01 与 qtail_pos_upper 尾上界族、qtail_cauchy_modulus       *)
+(*   （N 全显式：N = max(4, 2·⌊b⌋₊) + t0，t0 = Z.to_nat (Qnum (C·2/e))，  *)
+(*   几何余项用 2^t ≥ t+1（qtail_two_pow_ge）显式，全程不触               *)
+(*   Qarchimedean——N 是 b 与 e 的可计算函数，可提取）。                   *)
+(*   与 S03 的关系：S03 exp_tail m n x = Σ_{k=m}^{n-1} x^(S k)/(S k)!     *)
+(*   （指标错位 1）；qtail_sum b m n = Σ_{k=m}^{n-1} b^k/k!（正指标）。    *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；                     *)
+(*        Stdlib QArith.QArith、QArith.Qabs、QArith.Qround、Lists.List、   *)
+(*        Bool、Arith.Arith、Arith.Factorial、Setoid、Morphisms、Lia、     *)
+(*        QArith.Qminmax。                                                *)
+(* 对标：mathlib exp 截断尾控制（分析层特殊函数）；                       *)
+(*        本件为显式柯西模量的构造性对应物。                              *)
+(* 构造性注记：语句面 Set 层出口一律 QltT/QleT（stdlib Qlt/Qle 仅在       *)
+(*        证明内核使用，出口 T 化）；零假设位、零承认、可提取；            *)
+(*        nat 界引理为归纳构造核；Q 层字面序以显式 Z 序引理链构造          *)
+(*        （乘法归约与正性见证 Pos2Z.is_pos）。                            *)
+(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                    *)
 (* ============================================================ *)
-
-(* ===== 席PB2：Q 层阶乘尾和构造性控制（路径 B/C 公共引擎件） =====
-   结果：UpReqQExpTail.v，引理前缀 qtail_。
-   目标：给定范数 b ≥ 0 与精度 e > 0，显式输出 N 使 m,n ≥ N 时
-         qtail_sum b (min m n) (max m n) = Σ_{k=min}^{max-1} b^k/k! < e。
-   与 S03 的关系（S4 对接注记）：
-   - S03 exp_tail m n x = Σ_{k=m}^{n-1} x^(S k)/(S k)!（指标错位 1），
-     qtail_sum b m n = Σ_{k=m}^{n-1} b^k/k!（正指标）；桥式恒等式：
-     qtail_sum b m n == exp_tail (pred m) (pred n) b（m,n ≥ 1，注记未证）。
-   - S03 exp_partial_cauchy / exp_partial_cauchy_bounded 的 N 来自
-     q_arch_geom（Qarchimedean 抽象 witness）+ arch_decay（再取一次
-     Qarchimedean）；本件 qtail_cauchy_modulus 的 N 全显式：
-     N = max(4, 2·⌊b⌋₊) + t0，t0 = Z.to_nat (Qnum ((C·2)/e))，
-     其中 C = b^K/K!；几何余项用 2^t ≥ t+1（qtail_two_pow_ge）显式，
-     全程不触 Qarchimedean —— N 是 b 与 e 的可计算函数（G3 可抽取）。
-   语句面：Set 层出口一律 QltT/QleT（禁 stdlib Qlt/Qle 出场）；
-   证明内核沿用 S03 惯例在 Prop（Qle/Qlt）中推理，出口 T 化。 *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -62,7 +59,13 @@ Qed.
 (* ================= Q 侧小引擎（Prop 内核） ================= *)
 
 Lemma qtail_Qlt01 : Qlt 0 1.
-Proof. unfold Qlt. simpl. lia. Qed.
+Proof.
+  unfold Qlt. cbn [Qnum Qden].
+  (* 目标即 Z 严格序 0·den(1) < 1·den(0)：乘法以 Z.mul_0_l/Z.mul_1_l    *)
+  (* 显式归约，余下 0 < 1 由 1 的正性见证 Pos2Z.is_pos 构造             *)
+  rewrite Z.mul_0_l, Z.mul_1_l.
+  exact (Pos2Z.is_pos 1%positive).
+Qed.
 
 Lemma qtail_neq0 : forall x : Q, Qlt 0 x -> ~ (x == 0).
 Proof. intros x H. apply (q_neq_of_lt x). exact H. Qed.

@@ -15,7 +15,9 @@
 (*                                                              *)
 (* 依赖清单：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、                 *)
 (*   UpReqConcSoftmax（提供 csm_abs_sum_le_eps：逐 eps 三角不等式）、             *)
-(*   UpReqSampling（提供 rsq_u_r_kernel/rsq_u_r_nonneg/rsq_u_abs_row 同形参照）； *)
+(*   UpReqSampling（提供 rsq_u_r_kernel/rsq_u_r_nonneg/rsq_u_abs_row 同形参照）、 *)
+(*   ConcMixSelFeed（cms_sum_ext：求和外延位载体供给锚）、                        *)
+(*   UpReqConcFin2（cf2_minorization：核下界位 Fin2 载体供给）；                  *)
 (*   实例面 = RealEnhancedReal 具体层实例（导入后类型类解析，与源模块同源同解析）。*)
 (*                                                              *)
 (* 证明要点：二元约简 uabp7we_sumd_twopt 由 sumd_list_sum 的折叠定义经           *)
@@ -41,6 +43,8 @@ Require Import UpReqAlgebra.
 Require Import UpReqSumD.
 Require Import UpReqConcSoftmax.
 Require Import UpReqSampling.
+Require Import ConcMixSelFeed.
+Require Import UpReqConcFin2.
 Import RealInterfaceEnhancedMod.
 
 (* ============ 二元变号载体上的逐 eps 实例面 ============ *)
@@ -218,6 +222,41 @@ Qed.
 
 End WallEpsRowRsq.
 
+(* ============ 前提位的载体供给节（逐位消解） ============
+
+   sum_ext（两节同位）与 abs_sum_le_eps_h（两节同位）为抽象求和算子
+   sumf 的接口义务；本节在有限和载体 csm_sumf S0 enum（枚举清单折叠，
+   UpReqConcSoftmax）上供给同构语句——两节同位语句同型，共件消解。
+   供给锚：cms_sum_ext（ConcMixSelFeed）与 csm_abs_sum_le_eps
+   （UpReqConcSoftmax，本件已引）。minorization 位为抽象核下界义务；
+   本节在 Fin2 载体（delta:=cf2_delta_star、u:=cf2_Unif、
+   transition:=cf2_kernel，UpReqConcFin2）上供给同构语句，供给锚=
+   cf2_minorization。原抽象假设位声明与既有定理签名零改动。 *)
+
+Section WallEpsSlotsSupply.
+Variable S0 : Set.
+Variable enum : list S0.
+
+(* 位 sum_ext：求和外延（cms_sum_ext S0 enum 全参直引） *)
+Theorem uabp7we_sum_ext_supply : forall (f g : S0 -> Real),
+  (forall s : S0, req (f s) (g s)) ->
+  req (csm_sumf S0 enum f) (csm_sumf S0 enum g).
+Proof. exact (cms_sum_ext S0 enum). Qed.
+
+(* 位 abs_sum_le_eps_h：逐 eps 三角（csm_abs_sum_le_eps S0 enum 全参直引） *)
+Theorem uabp7we_abs_sum_le_eps_supply : forall (f : S0 -> Real) (eps : Real),
+  lt zero eps ->
+  le (abs (csm_sumf S0 enum f))
+     (plus (csm_sumf S0 enum (fun s : S0 => abs (f s))) eps).
+Proof. exact (csm_abs_sum_le_eps S0 enum). Qed.
+
+(* 位 minorization：核下界的 Fin2 载体实例（cf2_minorization 全参直引） *)
+Theorem uabp7we_minorization_supply : forall s s' : bool,
+  le (mult cf2_delta_star (cf2_Unif s')) (cf2_kernel s s').
+Proof. exact (cf2_minorization). Qed.
+
+End WallEpsSlotsSupply.
+
 (* ============ 假设审计（对逐件 Print Assumptions） ============ *)
 Print Assumptions uabp7we_sumd_twopt.
 Print Assumptions uabp7we_csm_eps_twopt.
@@ -225,3 +264,6 @@ Print Assumptions uabp7we_twopt_mixed_sign.
 Print Assumptions uabp7we_abs_row_eps_absK.
 Print Assumptions uabp7we_rkern_nonneg.
 Print Assumptions uabp7we_abs_row_eps.
+Print Assumptions uabp7we_sum_ext_supply.
+Print Assumptions uabp7we_abs_sum_le_eps_supply.
+Print Assumptions uabp7we_minorization_supply.

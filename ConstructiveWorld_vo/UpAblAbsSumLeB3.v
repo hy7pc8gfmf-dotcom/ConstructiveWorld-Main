@@ -1,38 +1,32 @@
 (* ============================================================ *)
-(* UpAblAbsSumLeB3.v —— abstract sumf 接口本位 B 形供给件                 *)
+(* UpAblAbsSumLeB3.v —— abstract sumf 接口本位 B 形供给件              *)
 (*                                                                *)
-(* 零承认件：无承认词面、无假设参数声明、无经典逻辑、全件 Qed 闭合。        *)
-(*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b/Qle/Qlt 均集合层， *)
-(*   语句面无裸命题；证明全构造（Or 逐支、sigT 见证直接构造、Q 侧可判定符号）。*)
-(*                                                                *)
-(* 结论（本件头注即结论正文）：                                          *)
-(*   SumOver 类的 abs_sum_le 字段即该类假设本体；UpReqSampling 的        *)
-(*   求和诚实接口实形＝sum_ext/sum_linear/sum_add/sum_le/abs_sum_le_h    *)
-(*   五个接口字段。本件在该接口形上（R:=Real 特化面，                    *)
-(*   RealInterfaceEnhancedSetoid 的 Real 实例在场）以显式 Set 层前提     *)
-(*   供给 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)——接口本位 B 形：        *)
-(*   单调字段取 Bishop 升级形（逐点 real_le_b；库形 Or 字段经             *)
-(*   real_le_to_le_b 单步升格即得，故本前提严格弱于库 Or 字段＝结论更强）。*)
-(*   与 UpAblAbsSumLeB2.v 的折叠接口相对形（sumL 为 list 索引、          *)
+(* 使命：本件形式化 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)——            *)
+(*   在 UpReqSampling 的诚实求和接口形（sum_ext/sum_linear/sum_add/     *)
+(*   sum_le/abs_sum_le_h 五接口字段；R:=Real 特化面，                   *)
+(*   RealInterfaceEnhancedSetoid 的 Real 实例在场）上，以显式 Set 层    *)
+(*   前提供给：单调字段取 Bishop 升级形（逐点 real_le_b；库形 Or 字段    *)
+(*   经 real_le_to_le_b 单步升格即得，本前提严格弱于库 Or 字段＝结论     *)
+(*   更强）。与 UpAblAbsSumLeB2 的折叠接口相对形（list 索引、            *)
 (*   nil/cons 两条方程、归纳机理）不同构：彼为有限折叠，本件为求和接口    *)
-(*   本位（任意 S:Set、无 list 结构、接口代数+双侧夹逼机理）——            *)
+(*   本位（任意 S:Set、无 list 结构、接口代数+双侧夹逼机理）——           *)
 (*   并列共存，互为对照。                                                *)
-(*                                                                *)
-(* Closed 约定＝零公理而非零前提：全件 Print Assumptions 闭合（节变量在  *)
-(*   End 时全称化收纳，零外部承认）；非零前提＝三接口字段（外延/加法/单调  *)
-(*   Bishop 形）+无其它，逐条显式量词化在案。                             *)
-(*                                                                *)
-(* 三面供给：                                                            *)
-(*   A 实数层基础引理：点态 B 吸收×2（x ≤_B |x|、−x ≤_B |x|）＋双侧夹逼⟹abs B 形 *)
-(*      （q_abs_lt_two_sided 同核机理：两点核三角的双侧承载，Q 层符号二分）    *)
-(*      ＋B 形右相等运输＋半分构造（half e ＋ half e ≡ e 的逐点环恒等式）      *)
-(*      ＋B 形 plus 兼容/opp 反序兼容；                                    *)
-(*   B 接口主件：接口代数（sum_zero、sum_opp 由 ext/add 消去链自证）＋        *)
-(*      主定理 uabS4c_abs_sum_le_B_slot（B 形本位）＋逐 eps 形推论（inl 注入） *)
-(*      ＋双倍余量矛盾引理；                                               *)
-(*   C 实例与供体对照：bool 两点和形实例经接口重导（与供体 A.3 同语句——      *)
-(*      零增量对照）＋双倍余量矛盾（应用 uabS4_lt_double_margin_le_half_contr *)
-(*      ＋本件逐 eps 形）。                                                 *)
+(*   Closed 约定＝零公理而非零前提：节变量在 End 时全称化收纳，           *)
+(*   非零前提＝三接口字段（外延/加法/单调 Bishop 形）+无其它，            *)
+(*   逐条显式量词化在案。                                                *)
+(* 依赖：Stdlib List、QArith.Qring、QArith.Qabs、QArith.Qminmax、        *)
+(*        Lia、Lqa；CW_ConstructiveWorld_219、UpRealLeB、                 *)
+(*        S08_RealMainlineDPO、UpAblAbsSumLeB。                           *)
+(* 对标：mathlib abs_sum_le_sum_abs（和的绝对值三角不等式）；             *)
+(*        本件为接口本位 Bishop 形的构造性对应物。                        *)
+(* 构造性注记：零承认件：无承认词面、无假设参数声明、无经典逻辑、          *)
+(*   全件 Qed 闭合；全部语句 Set 层值（real_le/real_lt/real_eq/           *)
+(*   real_le_b/Qle/Qlt 均集合层），语句面无裸命题；                       *)
+(*   证明全构造（Or 逐支、sigT 见证直接构造、Q 侧 Qlt_le_dec 可判定       *)
+(*   符号二分；Q 层吸收引理以显式 Z 序引理链构造：                        *)
+(*   乘法单调 Z.mul_le_mono_nonneg_r、反序性 Z.opp_le_mono、              *)
+(*   正性见证 Pos2Z.is_pos）。                                            *)
+(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -86,7 +80,19 @@ Lemma uabS4c_q_abs_ge_l : forall u : Q, Qle u (Qabs u).
 Proof.
   intros u. destruct (Qlt_le_dec u 0) as [Hlt | Hge].
   - assert (Habs : Qabs u == - u) by (apply Qabs_neg; apply Qlt_le_weak; exact Hlt).
-    rewrite Habs. lra.
+    rewrite Habs.
+    (* 负支：u < 0 时目标 u ≤ −u。num/den 显式分解后以右因子非负的       *)
+    (* 乘法单调 Z.mul_le_mono_nonneg_r 化为 nu ≤ −nu，再由                *)
+    (* Z.le_trans 取 nu ≤ 0 ≤ −nu 两段构造（右段由反序性                  *)
+    (* Z.opp_le_mono 从 nu ≤ 0 转出）                                     *)
+    destruct u as [nu du]. unfold Qle, Qopp. cbn [Qnum Qden].
+    unfold Qlt in Hlt. cbn [Qnum Qden] in Hlt.
+    rewrite Z.mul_1_r, Z.mul_0_l in Hlt.
+    apply Z.mul_le_mono_nonneg_r.
+    + apply Z.lt_le_incl. apply Pos2Z.is_pos.
+    + apply (Z.le_trans nu 0 (- nu)).
+      * apply Z.lt_le_incl. exact Hlt.
+      * exact (proj1 (Z.opp_le_mono nu 0) (Z.lt_le_incl nu 0 Hlt)).
   - assert (Habs : Qabs u == u) by (apply Qabs_pos; exact Hge).
     rewrite Habs. apply Qle_refl.
 Qed.
@@ -98,7 +104,19 @@ Proof.
   - assert (Habs : Qabs u == - u) by (apply Qabs_neg; apply Qlt_le_weak; exact Hlt).
     rewrite Habs. apply Qle_refl.
   - assert (Habs : Qabs u == u) by (apply Qabs_pos; exact Hge).
-    rewrite Habs. lra.
+    rewrite Habs.
+    (* 非负支：0 ≤ u 时目标 −u ≤ u。num/den 显式分解后以右因子非负的     *)
+    (* 乘法单调 Z.mul_le_mono_nonneg_r 化为 −nu ≤ nu，再由                *)
+    (* Z.le_trans 取 −nu ≤ 0 ≤ nu 两段构造（左段由反序性                  *)
+    (* Z.opp_le_mono 从 0 ≤ nu 转出）                                     *)
+    destruct u as [nu du]. unfold Qle, Qopp. cbn [Qnum Qden].
+    unfold Qle in Hge. cbn [Qnum Qden] in Hge.
+    rewrite Z.mul_0_l, Z.mul_1_r in Hge.
+    apply Z.mul_le_mono_nonneg_r.
+    + apply Z.lt_le_incl. apply Pos2Z.is_pos.
+    + apply (Z.le_trans (- nu) 0 nu).
+      * exact (proj1 (Z.opp_le_mono 0 nu) Hge).
+      * exact Hge.
 Qed.
 
 (* A.2 点态 B 吸收（正向）：x ≤_B |x|。逐点 Qabs(u_n) ≥ u_n ＋正性见证内建半量 *)

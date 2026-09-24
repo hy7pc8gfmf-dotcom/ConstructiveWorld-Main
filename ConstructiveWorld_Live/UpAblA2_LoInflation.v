@@ -1,62 +1,28 @@
 (* ============================================================ *)
-(* UpAblA2_LoInflation.v —— k ∝ lo⁻² 膨胀律定理（四倍律与反单调）        *)
-(*                                                            *)
-(* 使命：本件形式化 lo 膨胀律：固定初始偏差 TV₀ 与预算 budget，          *)
-(*  Doeblin 常数 lo 减半 ⟹ 混合选择器所需步数 k 的显式上界精确翻四倍——   *)
-(*  ub(lo/2) == 4·ub(lo)（Id 层面精确，无损耗；由 k 上界 ∝ 1/δ* =        *)
-(*  1/lo² 直接导出，1/(lo/2)² = 4/lo²）；且该上界对 lo² 反单调           *)
-(*  （lo 越小上界越大）。                                                *)
-(*  定位：论文7 §2.3 定性对照（lo → 0 时 δ* → 0、收缩因子 1−δ* → 1、     *)
-(*  Doeblin 界混合时间无界）的库内定量上界侧推论。onset 边界注记：        *)
-(*  winner-takes-all 的「不可混合」下界方向（TV 的下界估计）本件不承载，  *)
-(*  下界方向仍开放，与论文7 §2.3 末注一致。                              *)
-(*                                                            *)
-(* 内容总览（§1 抽象膨胀律，Section LoInflation，接口层）：               *)
-(*  · loi_ds2_scale：(lo/2)²·4 == lo²（δ* 减半律，精确 Id）；            *)
-(*  · loi_ds2_le_ds / loi_ds2_lt_one：(lo/2)² ≤ lo² 与 (lo/2)² < 1；     *)
-(*  · loi_ub2_quad：ub(lo/2) == 4·ub(lo)（核心四倍律，精确 Id）；        *)
-(*  · loi_lo_inflation：双配置预算达成（κ := 1−lo² 与                    *)
-(*    κ₂ := 1−(lo/2)²，由 ums_pow_tail 给出）与支配界：减半配置选择器    *)
-(*    返回步数 k₂ 满足 k₂ > 4·ub(lo) = 4·TV₀/(lo²·budget)；              *)
-(*  · loi_ub_antitone：lo² 单调 ⟹ k-上界反单调。                         *)
-(* 内容总览（§2 注意力实例化，Section LoInflationAttn）：                 *)
-(*  · loi_attn_ds_lt_one：δ* = lo·lo < 1（由 bs_delta_star_lt_one）；     *)
-(*  · loi_attention_inflation：注意力核 TV 形预算达成与支配界（同一       *)
-(*    k 满足 TV(T^k μ,T^k ν) < budget 且 k > TV₀/(δ*·budget)）；          *)
-(*  · loi_attention_halving_quad：注意力核上 ub(lo/2) == 4·ub(lo)        *)
-(*    （loi_ub2_quad 在 TV₀ := tv μ ν 的实例化）；                        *)
-(*  · loi_attention_inflation_half：loi_lo_inflation 在注意力 TV₀/lo     *)
-(*    的全参实例化（结论为 r_pow 形态的双配置合取）。                    *)
-(*                                                            *)
-(* 来源参照：AttnDoeblin.v BoundedSoftmax 节（lo := expf(invT·(−Δ))、     *)
-(*  delta_star := lo·lo、bs_delta_star_lt_one）；UpReqMixingTime.v       *)
-(*  mix_k_select 线性代价结构（k ≈ TV₀/((1−κ)·budget)，κ := 1−δ*）；     *)
-(*  UpReqUMixSelect.v ums_pow_tail（Arch 输入 TV₀·inv(w·budget) 的       *)
-(*  显式入口）。                                                         *)
-(*                                                            *)
-(* 口径注记：ums_pow_tail 的 Arch 输入 x := TV₀·inv(w·budget) 与          *)
-(*  ums_k_select 内部应用点逐字同型——故本件 projT1 给出的步数即          *)
-(*  选择器在同 Arch 见证下的返回步数（同型 congruence）。                *)
-(*                                                            *)
-(* 诚实接口（Variable，与 AttnDoeblin/UpReqUMixSelect 一致）：Arch 前提   *)
-(*  取 ums_k_select 的 nat-尺度 ums_scale 形态；本件零新增接口参数。      *)
-(*                                                            *)
-(* 依赖：CW_ConstructiveWorld_219（S01 接口/环律、S04 r_pow、S06 tv）；  *)
-(*  AttnDoeblin（BoundedSoftmax 全集、bs_delta_star_lt_one）；           *)
-(*  UpReqUMixSelect（ums_pow_tail/ums_scale/ums_le_plus_r/ums_mult_one_l）。*)
-(* 对标：mathlib Doeblin 条件混合时间定量上界的构造性 Set 层对应物。     *)
-(*                                                            *)
-(* 构造性注记：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；  *)
-(*  sigT + And 承载，同 AttnDoeblin.v 的 real_expf_realizable 形态）；    *)
-(*  零经典逻辑；零新增公理，前提全为 Set 层显式证书值参；                *)
-(*  Print Assumptions 预期全 Closed；主定理 Defined 可提取。             *)
-(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。           *)
+(* UpAblA2_LoInflation.v —— 本件形式化 lo 膨胀律：固定初始偏差 TV0 与      *)
+(*   预算 budget，Doeblin 常数 lo 减半使混合选择器所需步数 k 的显式上界    *)
+(*   精确翻四倍（ub(lo/2) == 4*ub(lo)，Id 层面精确无损耗），且该上界对     *)
+(*   lo^2 反单调。                                                        *)
+(*   内容：Section LoInflation 抽象膨胀律（loi_ 系）；Section             *)
+(*   LoInflationAttn 注意力核实例化（loi_attention_ 系）。另附接口证书位   *)
+(*   的就地消解定理（loir_ 系）与 expf 五字段封装投影、Fin 2 非退化实例    *)
+(*   读法、列表折叠实现化读法等具体层消解供给。                           *)
+(* 依赖：CW_ConstructiveWorld_219、AttnDoeblin、UpReqUMixSelect、         *)
+(*   fa53_compat_abs、AbsLeId、P7BoundedSoftmaxDeep、UpReqConcFin2。      *)
+(* 对标：mathlib Doeblin 混合时间定量上界与膨胀律的构造性 Set 层对应物。  *)
+(* 构造性注记：Set 层承载，零承认；主定理 Defined 可提取；消解定理全由    *)
+(*   库内已证件以显式实参供给，可提取面零 Prop 残留。                     *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                         *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 Require Import AttnDoeblin.
 Require Import UpReqUMixSelect.
+Require Import fa53_compat_abs.
+Require Import AbsLeId.
+Require Import P7BoundedSoftmaxDeep.
+Require Import UpReqConcFin2.
 
 (* ================= §1 抽象膨胀律（接口层） ================= *)
 
@@ -513,6 +479,36 @@ Proof.
            budget Hbudget lo Hlo0 loi_attn_ds_lt_one Harch).
 Qed.
 
+
+(* ================= 证书位就地消解（签名保持式） ===================== *)
+(* bs_swap 参数位：由 sum_eq_list 参数位与列表 Fubini 组合学整体导出             *)
+(*   （p7d_swap_of_sum_eq_list 全参显式供给，本槽非独立接口位）。        *)
+
+Context {DO : DecidableOrder RI}.
+
+Theorem loir_bs_swap : forall f : S -> S -> R,
+  Id (sum_over_S (fun s : S => sum_over_S (fun s' : S => f s s')))
+     (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
+Proof.
+  intro f.
+  exact (p7d_swap_of_sum_eq_list enum sum_eq_list f).
+Qed.
+
+(* bs_abs 参数位：abs 非负恒等（ali_abs_ge_zero_id 供给，S01/fa53 深链） *)
+Theorem loir_bs_abs : forall a : R, le zero a -> Id (abs a) a.
+Proof.
+  intros a Ha.
+  exact (ali_abs_ge_zero_id a Ha).
+Qed.
+
+(* bs_lpc 参数位：lt 与 le 混合加法严格保序（fa53_lt_plus_compat_lt_le_dec） *)
+Theorem loir_bs_lpc : forall a b c d : R,
+  lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  intros a b c d Hab Hcd.
+  exact (@fa53_lt_plus_compat_lt_le_dec RI DO a b c d Hab Hcd).
+Qed.
+
 End LoInflationAttn.
 
 (* ============================================================ *)
@@ -526,3 +522,114 @@ Print Assumptions loi_ub_antitone.
 Print Assumptions loi_attention_inflation.
 Print Assumptions loi_attention_halving_quad.
 Print Assumptions loi_attention_inflation_half.
+
+(* ================= 具体实现化读法消解块 ============================= *)
+
+(* expf 参数位五字段：real_expf_realizable 封装投影（uabd1x 拆件形）。
+   Id 面槽（expf_zero/plus）在典范载体 req 幺等下取 req 形。 *)
+Definition loir_expf : Real -> Real := projT1 real_expf_realizable.
+
+Theorem loir_expf_pos : forall x : Real, real_lt real_zero (loir_expf x).
+Proof.
+  intro x.
+  exact (fst (projT2 real_expf_realizable) x).
+Qed.
+
+Theorem loir_expf_zero : real_eq (loir_expf real_zero) real_one.
+Proof.
+  exact (fst (snd (projT2 real_expf_realizable))).
+Qed.
+
+Theorem loir_expf_plus : forall a b : Real,
+  real_eq (loir_expf (real_plus a b)) (real_mult (loir_expf a) (loir_expf b)).
+Proof.
+  exact (fst (snd (snd (projT2 real_expf_realizable)))).
+Qed.
+
+Theorem loir_expf_mono_lt : forall a b : Real,
+  real_lt a b -> real_lt (loir_expf a) (loir_expf b).
+Proof.
+  exact (fst (snd (snd (snd (projT2 real_expf_realizable))))).
+Qed.
+
+Theorem loir_expf_mono_le : forall a b : Real,
+  real_le a b -> real_le (loir_expf a) (loir_expf b).
+Proof.
+  exact (snd (snd (snd (snd (projT2 real_expf_realizable))))).
+Qed.
+
+
+(*   折叠机与出节真机 bs_list_sum 逐元素一致，en 上归纳）。           *)
+Section LoiResSumEqListIdt.
+
+Context {RI : RealInterfaceEnhanced}.
+Local Existing Instance RI_base.
+Context {SS : StateSpace RI}.
+
+Fixpoint loir_idt_list_sum (f : S -> R) (l : list S) : R :=
+  match l with
+  | nil => @zero RI
+  | x :: t => @plus RI (f x) (loir_idt_list_sum f t)
+  end.
+
+Definition loir_idt_sumf (en : list S) (f : S -> R) : R :=
+  loir_idt_list_sum f en.
+
+Theorem loir_sum_eq_list : forall (en : list S) (g : S -> R),
+  Id (loir_idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
+Proof.
+  intros en g.
+  unfold loir_idt_sumf.
+  induction en as [| x t IH].
+  - exact id_refl.
+  - simpl. exact (id_cong2 (@plus RI) id_refl IH).
+Qed.
+
+End LoiResSumEqListIdt.
+
+Import RealInterfaceEnhancedMod.
+
+(* temp/Delta/z/enum 参数位：Fin 2 非退化实例读法（cf2 供给件直引） *)
+
+Theorem loir_temp_pos : lt zero cf2_temp.
+Proof.
+  exact cf2_temp_pos.
+Qed.
+
+Theorem loir_Delta_pos : lt zero cf2_Delta.
+Proof.
+  exact cf2_Delta_pos.
+Qed.
+
+Theorem loir_z_lb : forall s s' : bool, le (opp cf2_Delta) (cf2_z s s').
+Proof.
+  exact cf2_z_lb.
+Qed.
+
+Theorem loir_z_ub : forall s s' : bool, le (cf2_z s s') cf2_Delta.
+Proof.
+  exact cf2_z_ub.
+Qed.
+
+(* enum 参数位非空性的 Set 层 sigT 见证重述（InT 载体，见证 true） *)
+Theorem loir_enum_nonempty : sigT (fun t : bool => InT t cf2_enum2).
+Proof.
+  exact (existT _ true (InT_here true (false :: nil))).
+Qed.
+
+(* sum_eq_list 参数位：列表折叠实现化读法（抽象求和参数位实现为列表折叠机， *)
+
+Print Assumptions loir_bs_swap.
+Print Assumptions loir_bs_abs.
+Print Assumptions loir_bs_lpc.
+Print Assumptions loir_expf_pos.
+Print Assumptions loir_expf_zero.
+Print Assumptions loir_expf_plus.
+Print Assumptions loir_expf_mono_lt.
+Print Assumptions loir_expf_mono_le.
+Print Assumptions loir_temp_pos.
+Print Assumptions loir_Delta_pos.
+Print Assumptions loir_z_lb.
+Print Assumptions loir_z_ub.
+Print Assumptions loir_enum_nonempty.
+Print Assumptions loir_sum_eq_list.

@@ -1,38 +1,15 @@
 (* ============================================================ *)
-(* AttnHardLimit218.v *)
-(* *)
-(* 目的： 硬注意力极限的逐固定温度 T 显式不等式刻划。 *)
-(* 主件： hard_dist / decay_T：注意力分布到硬分布的距离随 T 递减的显式衰减界（ZT_pos、w_T、factor_T）。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 仅给出逐固定 T 的不等式，不做 T→0 收敛语句主张；词表非空与 Token 可判定相等以显式 Variable 前提给出。 *)
+(* AttnHardLimit218.v —— 本件形式化硬注意力极限的逐固定温度 T 显式        *)
+(*   不等式刻划：主件 hard_dist/decay_T 给出注意力分布到硬分布的距离      *)
+(*   随 T 递减的显式衰减界。                                             *)
+(*                                                              *)
+(* 依赖清单：CW_ConstructiveWorld_219。                                  *)
+(*                                                              *)
+(* 构造性注记：Set 层承载/零承认/可提取；词表非空与 token 可判定相等      *)
+(*   以显式 Variable 前提给出，其 Set 重述与具体层供给见文尾节。          *)
+(*                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
 (* ============================================================ *)
-
-(* ============================================================ *)
-(* AttnHardLimit.v —— P4 升级包：硬注意力极限定理               *)
-(*                                                              *)
-(*   主定理 hard_attention_limit：T→0 的总变差收敛（量词翻转）  *)
-(*     ∃T₀>0, ∀T（0<T<T₀）, TV(w_T, δ_m) ≤ eps                  *)
-(*                                                              *)
-(*   上游 softmax_gap_concentration / temperature_zero_limit     *)
-(*   只给逐固定 T 的不等式，"T→0 收敛到硬注意力"在论文中仅为     *)
-(*   interpretation；本文件把量词翻转为真极限定理（sigT 见证）。 *)
-(*                                                              *)
-(*   设定镜像 MinPSampling Section（L30691）：Set 层 list 词表    *)
-(*   世界 + token_eq_dec；权重 w_T(x) = e^{z(x)/T}/Z(T)。        *)
-(*                                                              *)
-(*   诚实接口（假命题修正协议）：                                *)
-(*   ① m 在 vocab 中恰好出现一次（count_token m vocab == 1）。   *)
-(*     若 m 有并列副本，w_T 的 T→0 极限是副本上的均匀分布，      *)
-(*     δ_m 硬分布的 TV 不趋零——原陈述为假命题，须收紧前提。     *)
-(*   ② 一致间隙 γ>0：∀x≠m, z(x)+γ ≤ z(m)。Cauchy 实数的          *)
-(*     real_le 是 Or( lt, eq ) 编码，从逐 x 的 real_lt 见证构造  *)
-(*     一致 real_le 常数间隙在构造性框架内不可行（无实数序的     *)
-(*     可判定比较），故以单一显式 γ 为前提变量（可实例化）。    *)
-(*                                                              *)
-(*   纪律：纯构造性、零 公理/承认件/弃证/经典逻辑；         *)
-(*         语句全 Set 层（sigT/库内 And/Or/Id）；全部 Qed。      *)
-(* ============================================================ *)
-
 Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import List Arith Lia.
 Import ListNotations.
@@ -53,7 +30,7 @@ Proof.
   intros a b H. exact (inl H).
 Qed.
 
-(* 左乘保序：0<c、a≤b ⟹ c·a≤c·b（镜像 real_le_mult_compat） *)
+(* 左乘保序：0<c、a≤b ⟹ c·a≤c·b（副本 real_le_mult_compat） *)
 Lemma real_le_mult_compat_l_aux : forall a b c : Real,
   real_lt real_zero c -> real_le a b -> real_le (real_mult c a) (real_mult c b).
 Proof.
@@ -207,7 +184,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Section AttnHardLimit：list 词表世界（镜像 MinPSampling）    *)
+(* Section AttnHardLimit：list 词表世界（副本 MinPSampling）    *)
 (* ============================================================ *)
 
 Section AttnHardLimit.
@@ -1228,6 +1205,53 @@ Qed.
 
 End AttnHardLimit.
 
-(* 提取探针：T0 构造与硬分布可提取为 OCaml（零 Obj.magic） *)
+(* 提取检验：T0 构造与硬分布可提取为 OCaml（零 Obj.magic） *)
 From Stdlib Require Import Extraction.
 Extraction "attn_hardlimit218.ml" count_token removeT hard_dist.
+(* ============================================================ *)
+(* 词表非空位 vocab_nonempty 与 token 可判定相等位 token_eq_dec 的        *)
+(* Set 重述位与具体层供给                                                *)
+(*                                                                     *)
+(* 原两位为 Prop 形（Not (Id vocab nil) 与 forall a b, Or (Id a b)        *)
+(* (Not (Id a b))）；本节将其重述为 Set 层形并给出具体层供给：非空取      *)
+(* sigT 见证形 sigT (fun t => InT t vocab)（见证更强：可提取出具体元素），  *)
+(* 可判定相等取 sigT bool 形——正支给出 Id 相等见证，负支给出              *)
+(* Id a b -> Empty_set 函数（Set 层否定见证，可提取）。二点清单（bool      *)
+(* 载体）上，非空见证由 InT_here 构造子直接给出，可判定相等由构造子四分    *)
+(* 逐一给出（正支 id_refl，负支构造子分裂消去）。原 Prop 形假设位声明与    *)
+(* 既有定理签名零改动。                                                  *)
+(* ============================================================ *)
+Definition hard_vocab_nonempty_set (X : Set) (vocab : list X) : Set :=
+  sigT (fun t : X => InT t vocab).
+Definition hard_token_eq_dec_set (X : Set) : Set :=
+  forall a b : X,
+    sigT (fun d : bool =>
+      match d with
+      | true => Id a b
+      | false => Id a b -> Empty_set
+      end).
+
+Theorem hard_vocab_nonempty_supply :
+  hard_vocab_nonempty_set bool (cons true (cons false nil)).
+Proof. exact (existT _ true (@InT_here bool true (cons false nil))). Qed.
+
+Theorem hard_token_eq_dec_supply : hard_token_eq_dec_set bool.
+Proof.
+  intros a b.
+  destruct a; destruct b.
+  - exact (existT _ true (@id_refl bool true)).
+  - refine (existT _ false _).
+    intro H.
+    exact (match H in Id _ y return
+             match y with true => unit | false => Empty_set end with
+           id_refl => tt end).
+  - refine (existT _ false _).
+    intro H.
+    exact (match H in Id _ y return
+             match y with false => unit | true => Empty_set end with
+           id_refl => tt end).
+  - exact (existT _ true (@id_refl bool false)).
+Qed.
+
+Print Assumptions hard_vocab_nonempty_supply.
+Print Assumptions hard_token_eq_dec_supply.

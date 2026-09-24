@@ -1,55 +1,17 @@
 (* ============================================================ *)
-(* UpReqAttnQ18Tail.v —— 温度常数 T₀ 有理化与跨 token 同值两件        *)
+(* UpReqAttnQ18Tail.v —— 本件形式化温度常数 T₀ 的 Q 有理字面量承载与      *)
+(*   跨 token 同值贡献恒等两件性质。                                     *)
 (*                                                              *)
-(* 目的：补齐上游注意力极限链申报的两件尾残（消费面 alm_/swg_/ams_     *)
-(*   只读参照）：                                                    *)
-(*   件 1（T₀ 有理化件）：线温度常数 T₀ 从实参形改为 Q 有理数字面量    *)
-(*      承载（stdlib Q 层字面量＋可判定 Qlt_bool 证书），配套良定义/   *)
-(*      运输小件（Q→Real 嵌入＋严格正传输＋inv 乘积良定义核＋公共      *)
-(*      分母换序），目标=后续数值哨兵可计算化。上游原申报的诚实障碍     *)
-(*      （有理化 T₀ 需 cw_log 的有理上界包装）仍在：本件先把可承载、    *)
-(*      可判定、可传输、可被 ams_ 链消费的字面量面落盘；ln 有理上界     *)
-(*      包装与跨字面量表示 wd 消费（of_nat 乘法同态缺席）为待续工作。   *)
-(*   件 2（跨 token 同值件）：同一 token 值在开关求和下的同值引理——     *)
-(*      token 相等（Id）则 alm_switch/ams_mswitch 贡献相等、softmax    *)
-(*      权重相等；Id/setoid 传输走 id_cong＋aid_real_eq 范式            *)
-(*      （Id 非 setoid，禁 rewrite）。上游范围边界（全覆盖需 argmax     *)
-(*      可判定证书墙）仍在：本件交付其 building block（同值贡献恒等），  *)
-(*      整墙不伸。                                                    *)
+(* 依赖清单：UpReqAttnUniformLimit、UpReqAttnMassSplit、                  *)
+(*   CW_ConstructiveWorld_219、AttnHardLimit218。                         *)
 (*                                                              *)
-(* 数值验真先行（假命题拦截）：3000 随机样本（canonical 实例            *)
-(*   vocab=m,m,c,d、γ=2、eps=1/100；字面量 299/1000 < 2/ln(801)        *)
-(*   下界余量 1.387e-4；T<0.299 逐点 L1==2M≤eps 全绿；同值贡献相等      *)
-(*   3000 样本零失败）。                                              *)
+(* 构造性注记：Set 层承载/零承认/可提取；件 1 以 stdlib Q 字面量与        *)
+(*   Qlt_bool 可判定证书承载 T₀ 并配套良定义/传输小件；件 2 沿            *)
+(*   id_cong 与 aid_real_eq 范式给出同值贡献恒等；词表非空位与 token      *)
+(*   可判定相等位的 Set 重述与具体层供给见文尾节。                        *)
 (*                                                              *)
-(* 主件非平凡性分级（前缀 aqt_，避免与库内既有名冲突）：                *)
-(*   A 级（真代数核）aqt_inv_prod（inv 乘积分裂：吸收＋重排＋双归一）、  *)
-(*      aqt_inv_common（公共分母换序八步链）、aqt_q2r_wd_core（换序     *)
-(*      两次装配＋跨乘等式 compat 桥）、aqt_w_congr（id_cong z＋        *)
-(*      aid_real_eq＋exp 良定义＋mult compat 四层传输链）。             *)
-(*   B 级（分讨/传输）aqt_eq_cancel_l/aqt_inv_wd（eq 消去与 inv 良      *)
-(*      定义）、aqt_q2r_pos（Qlt_bool 证书三分传输）、aqt_switch_id/     *)
-(*      aqt_switch_congr/aqt_mswitch_congr（Id 分讨：矛盾支             *)
-(*      id_trans/id_sym 构造消去，同值支消费 aqt_w_congr）。            *)
-(*   C 级（消费面 exact 装配）aqt_T0_mass_rest/aqt_T0_l1                *)
-(*      （ams_mass_rest_le/ams_l1_le 在 T:=aqt_q2r aqt_T0 处真实例化    *)
-(*      ——Q 字面量作合法温度被上游链消费）。                            *)
-(*                                                              *)
-(* 陈述面：Set 层（real_eq/real_le/real_lt/Id/bool 证书），              *)
-(*   无 Hypothesis 位语句。                                            *)
-(*                                                              *)
-(* 依赖（全部只读消费）：UpReqAttnUniformLimit / UpReqAttnMassSplit      *)
-(*   及其上游面；零改既有文件。                                        *)
-(*                                                              *)
-(* 备注：公理面：零公理、零承认件、零弃证；零经典逻辑；                  *)
-(*   文末 Print Assumptions 审计。提取口零 magic。                      *)
-(*   战术纪要：match 包装 Definition 一律 destruct 前显式 unfold         *)
-(*   （alm_switch/ams_mswitch）；compat 参序 (A B C D) 左内/右内成对：    *)
-(*   compat A B C D 要求 eq A C 与 eq B D 得 eq (A·B) (C·D)；            *)
-(*   Q 层 lia 不食（Z 层字面量计算走 cbn/reflexivity）；S 遮蔽用         *)
-(*   Datatypes.S；Q 投影小写 Qden（QDen 是 Z 值 abbrev）。               *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
 (* ============================================================ *)
-
 Require Import UpReqAttnUniformLimit.
 Require Import UpReqAttnMassSplit.
 Require Import CW_ConstructiveWorld_219.
@@ -78,7 +40,7 @@ Proof.
   - lia.
 Qed.
 
-(* 正 nat 的 Real 层严格正（镜像上游 alm_k_pos 体） *)
+(* 正 nat 的 Real 层严格正（对照上游 alm_k_pos 体） *)
 Lemma aqt_of_nat_pos : forall n : nat, (1 <= n)%nat -> real_lt real_zero (real_of_nat n).
 Proof.
   intros n Hn. destruct n as [| j].
@@ -352,7 +314,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part T3：T₀ 字面量承载与可判定哨兵（件 1 主体）                   *)
+(* Part T3：T₀ 字面量承载与可判定数值锚（件 1 主体）                   *)
 (* ============================================================ *)
 
 (* Q 有理数字面量承载：canonical 实例 γ=2、n=4、eps=1/100 的阈值
@@ -361,7 +323,7 @@ Qed.
    余量 1.387e-4，Python 3000 样本复核）。 *)
 Definition aqt_T0 : Q := (299 # 1000)%Q.
 
-(* 可判定哨兵证书：Qlt_bool 计算零舍入 *)
+(* 可判定数值锚证书：Qlt_bool 计算零舍入 *)
 Lemma aqt_T0_pos_q : Qlt_bool 0%Q aqt_T0 = true.
 Proof. unfold aqt_T0. reflexivity. Qed.
 
@@ -385,7 +347,7 @@ Lemma aqt_T0_pos : real_lt real_zero (aqt_q2r aqt_T0).
 Proof. exact (aqt_q2r_pos aqt_T0 aqt_T0_pos_q). Qed.
 
 (* ============================================================ *)
-(* Part S：跨 token 同值件（件 2）+ 件 1 消费面实例化                *)
+(* Part S：跨 token 同值件（件 2）+ 件 1 使用面实例化                *)
 (* ============================================================ *)
 
 Section AqtTail.
@@ -441,8 +403,8 @@ Proof.
   exact (aid_real_eq _ _ (aqt_switch_id c1 c2 x y Hxy)).
 Qed.
 
-(* ---------- 同值件 2.3：ams_mswitch 贡献同值（函数形开关求和工作马， *)
-(* 同值支真消费 aqt_w_congr） ---------- *)
+(* ---------- 同值件 2.3：ams_mswitch 贡献同值（函数形开关求和辅助引理， *)
+(* 同值支直接使用 aqt_w_congr） ---------- *)
 Lemma aqt_mswitch_congr : forall (c : Real) (T : Real) (Ht : real_lt real_zero T)
   (x y : Token), Id x y ->
   real_eq (ams_mswitch Token token_eq_dec m c
@@ -460,7 +422,7 @@ Proof.
   - exact (aqt_w_congr T Ht x y Hxy).
 Qed.
 
-(* ---------- 件 1 消费面实例化：Q 字面量温度被上游 ams_ 链真实消费        *)
+(* ---------- 件 1 使用面实例化：Q 字面量温度被上游 ams_ 链真实使用        *)
 (* （C 级 exact 装配：ams_mass_rest_le / ams_l1_le 于 T:=aqt_q2r aqt_T0） *)
 
 Theorem aqt_T0_mass_rest :
@@ -494,7 +456,7 @@ Qed.
 End AqtTail.
 
 (* ============================================================ *)
-(* 提取口（字面量哨兵可计算化：aqt_q2r/aqt_T0 入口）+ 公理面审计     *)
+(* 提取口（字面量数值锚可计算化：aqt_q2r/aqt_T0 入口）+ 公理面审计     *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
@@ -510,3 +472,50 @@ Print Assumptions aqt_q2r_wd_core.
 Print Assumptions aqt_T0_pos.
 Print Assumptions aqt_T0_mass_rest.
 Print Assumptions aqt_T0_l1.
+(* ============================================================ *)
+(* 词表非空位 vocab_nonempty 与 token 可判定相等位 token_eq_dec 的        *)
+(* Set 重述位与具体层供给                                                *)
+(*                                                                     *)
+(* 原两位为 Prop 形（Not (Id vocab nil) 与 forall a b, Or (Id a b)        *)
+(* (Not (Id a b))）；本节将其重述为 Set 层形并给出具体层供给：非空取      *)
+(* sigT 见证形 sigT (fun t => InT t vocab)（见证更强：可提取出具体元素），  *)
+(* 可判定相等取 sigT bool 形——正支给出 Id 相等见证，负支给出              *)
+(* Id a b -> Empty_set 函数（Set 层否定见证，可提取）。二点清单（bool      *)
+(* 载体）上，非空见证由 InT_here 构造子直接给出，可判定相等由构造子四分    *)
+(* 逐一给出（正支 id_refl，负支构造子分裂消去）。原 Prop 形假设位声明与    *)
+(* 既有定理签名零改动。                                                  *)
+(* ============================================================ *)
+Definition aqt_vocab_nonempty_set (X : Set) (vocab : list X) : Set :=
+  sigT (fun t : X => InT t vocab).
+Definition aqt_token_eq_dec_set (X : Set) : Set :=
+  forall a b : X,
+    sigT (fun d : bool =>
+      match d with
+      | true => Id a b
+      | false => Id a b -> Empty_set
+      end).
+
+Theorem aqt_vocab_nonempty_supply :
+  aqt_vocab_nonempty_set bool (cons true (cons false nil)).
+Proof. exact (existT _ true (@InT_here bool true (cons false nil))). Qed.
+
+Theorem aqt_token_eq_dec_supply : aqt_token_eq_dec_set bool.
+Proof.
+  intros a b.
+  destruct a; destruct b.
+  - exact (existT _ true (@id_refl bool true)).
+  - refine (existT _ false _).
+    intro H.
+    exact (match H in Id _ y return
+             match y with true => unit | false => Empty_set end with
+           id_refl => tt end).
+  - refine (existT _ false _).
+    intro H.
+    exact (match H in Id _ y return
+             match y with false => unit | true => Empty_set end with
+           id_refl => tt end).
+  - exact (existT _ true (@id_refl bool false)).
+Qed.
+
+Print Assumptions aqt_vocab_nonempty_supply.
+Print Assumptions aqt_token_eq_dec_supply.

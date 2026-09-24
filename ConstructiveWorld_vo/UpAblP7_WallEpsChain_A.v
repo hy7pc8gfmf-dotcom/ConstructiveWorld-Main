@@ -26,7 +26,8 @@
 (*   件 5 ua7c_budget_compose：两步预算合成（率²·基 + 率·eps1 + eps2）。        *)
 (*                                                              *)
 (* 依赖清单：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSumD、     *)
-(*   UpReqConcSoftmax、UpReqSampling、UpAblP7_WallEps_CSM（链根起点）；         *)
+(*   UpReqConcSoftmax、UpReqSampling、UpAblP7_WallEps_CSM（链根起点）、         *)
+(*   ConcMixSelFeed（cms_sum_ext/cms_sum_linear/cms_sum_add：求和位载体供给锚）；*)
 (*   实数接口取 RealEnhancedReal 具体层实例（导入后类型类解析，与源模块同源）。 *)
 (*                                                              *)
 (* 证明要点：件 1 由 le_trans 与 req_le_plus_nonneg_r；件 2 由 distrib 与       *)
@@ -61,6 +62,7 @@ Require Import UpReqSumD.
 Require Import UpReqConcSoftmax.
 Require Import UpReqSampling.
 Require Import UpAblP7_WallEps_CSM.
+Require Import ConcMixSelFeed.
 Import RealInterfaceEnhancedMod.
 
 Section WallEpsChainA.
@@ -297,9 +299,53 @@ Qed.
 
 End WallEpsChainA.
 
+(* ============ 四前提位的载体供给节（逐位消解） ============
+
+   sum_ext/sum_linear/sum_add/abs_sum_le_eps_h 为抽象求和算子 sumf 的
+   接口义务；本节在有限和载体 csm_sumf S0 enum（枚举清单折叠，
+   UpReqConcSoftmax）上逐位供给同构语句。供给锚：cms_sum_ext/
+   cms_sum_linear/cms_sum_add（ConcMixSelFeed）与 csm_abs_sum_le_eps
+   （UpReqConcSoftmax，本件已引）。原抽象假设位声明与既有定理签名
+   零改动。 *)
+
+Section WallEpsChainSupply.
+Variable S0 : Set.
+Variable enum : list S0.
+
+(* 位 sum_ext：求和外延（cms_sum_ext S0 enum 全参直引） *)
+Theorem ua7c_sum_ext_supply : forall (f g : S0 -> Real),
+  (forall s : S0, req (f s) (g s)) ->
+  req (csm_sumf S0 enum f) (csm_sumf S0 enum g).
+Proof. exact (cms_sum_ext S0 enum). Qed.
+
+(* 位 sum_linear：标量提取（cms_sum_linear S0 enum 全参直引） *)
+Theorem ua7c_sum_linear_supply : forall (a : Real) (f : S0 -> Real),
+  req (csm_sumf S0 enum (fun s : S0 => mult a (f s)))
+      (mult a (csm_sumf S0 enum f)).
+Proof. exact (cms_sum_linear S0 enum). Qed.
+
+(* 位 sum_add：求和逐点加法分配（cms_sum_add S0 enum 全参直引） *)
+Theorem ua7c_sum_add_supply : forall (f g : S0 -> Real),
+  req (csm_sumf S0 enum (fun s : S0 => plus (f s) (g s)))
+      (plus (csm_sumf S0 enum f) (csm_sumf S0 enum g)).
+Proof. exact (cms_sum_add S0 enum). Qed.
+
+(* 位 abs_sum_le_eps_h：逐 eps 三角（csm_abs_sum_le_eps S0 enum 全参直引） *)
+Theorem ua7c_abs_sum_le_eps_supply : forall (f : S0 -> Real) (eps : Real),
+  lt zero eps ->
+  le (abs (csm_sumf S0 enum f))
+     (plus (csm_sumf S0 enum (fun s : S0 => abs (f s))) eps).
+Proof. exact (csm_abs_sum_le_eps S0 enum). Qed.
+
+End WallEpsChainSupply.
+
 (* ============ 假设审计（对逐件 Print Assumptions） ============ *)
 Print Assumptions ua7c_le_plus_eps_r.
 Print Assumptions ua7c_mult_le_plus_distr_r.
 Print Assumptions ua7c_abs_row_eps.
 Print Assumptions ua7c_hpt_eps.
 Print Assumptions ua7c_budget_compose.
+Print Assumptions ua7c_sum_ext_supply.
+Print Assumptions ua7c_sum_linear_supply.
+Print Assumptions ua7c_sum_add_supply.
+Print Assumptions ua7c_abs_sum_le_eps_supply.

@@ -1,10 +1,12 @@
 (* ============================================================ *)
-(* UpReqTempDefs.v *)
-(* *)
-(* 目的： FEP 温度族的 Real 层定义件。 *)
-(* 主件： real_boltzmann_factor_temp / real_Z_temp / real_boltzmann_dist_temp 定义族与正性、归一化定律。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 和泛函外延/线性/可加/保正为显式 Variable 前提；温度族为下游定理件的公共定义面。 *)
+(* UpReqTempDefs.v —— 本件形式化 FEP 温度族的 Real 层定义件： *)
+(*   Boltzmann 因子、温度化配分函数、温度化 Boltzmann 分布、能量期望 *)
+(*   与分布熵的定义族及正性、归一化定律；并供给求和接口实例层证书。 *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqConcSoftmax、ConcMixSelFeed。 *)
+(* 对标：mathlib 测度论 Boltzmann 分布；stdlib Coq Reals。 *)
+(* 构造性注记：Set 层承载（语句全 real_eq/real_lt）；零承认件； *)
+(*   新增供给段零假设位、全 Qed；可提取。 *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 单道守护。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -19,13 +21,13 @@
 (*   本件不做 4.6a 熵亏恒等式本体（等式档组装，留滚动席）。             *)
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位（逐字段对照表，全 grep 实证）】                     *)
-(*   real_Z_temp              <- Id partition_function_temp 槽形       *)
+(*   real_Z_temp              <- Id partition_function_temp 参数形       *)
 (*      (S06 L3339 Variable T/T_pos 形；S04 L3410 Z_temp_spec 的       *)
 (*       sum_over_S (fun s => exp_neg (mult (inv_pos t Ht) (base_loss  *)
 (*       s))) 展开体)：此处取 Section 固定 T 实例化，配分即求和本体，   *)
 (*       Z_temp_spec 恒等式退化为 real_eq_refl（定义性相等）。          *)
 (*   real_boltzmann_factor_temp <- Id exp_neg (mult (inv_pos t Ht)     *)
-(*       (base_loss s)) 分子槽（S04 L3421 内层）。                      *)
+(*       (base_loss s)) 分子参数位（S04 L3421 内层）。                      *)
 (*   real_boltzmann_dist_temp <- Id boltzmann_dist_temp (S04 L3421)：  *)
 (*      mult (inv_pos (Z_temp t) (Z_temp_pos t Ht))                    *)
 (*           (exp_neg (mult (inv_pos t Ht) (base_loss s)))，           *)
@@ -34,7 +36,7 @@
 (*      sum_over_S (fun s => mult (dist s) (base_loss s))。             *)
 (*   real_entropy_dist        <- Id entropy_dist (S04 L3150)：         *)
 
-(*      唯一前提位差：Id log 全值，Real real_log 带正性证人             *)
+(*      唯一前提位置差：Id log 全值，Real real_log 带正性证人             *)
 (*      (S07 L7842)，故 Hp : forall s, real_lt real_zero (p s) 前移，   *)
 (*      与 req 层先例 reqd_entropy_dist S sumf p Hp 同位。              *)
 (*   正性/归一化基础引理对位：real_Z_temp_pos <- Id Z_temp_pos          *)
@@ -51,7 +53,7 @@
 (*      real_boltzmann_dist_temp 供货（inv_pos 归一化即温度化 softmax）。*)
 (* ------------------------------------------------------------------ *)
 (* 【红线】纯构造性四条红线：零承认件、经典实数公理禁；Set 层零 Prop    *)
-(*   泄露（语句全 real_eq/real_lt）；T_pos 前提位照 Id 层 Variable      *)
+(*   泄露（语句全 real_eq/real_lt）；T_pos 前提位置照 Id 层 Variable      *)
 (*   对位（Section Variable T/T_pos，S06 L3338 同形）；全 Qed 完成。    *)
 (* 编译配方（同 _t2_build.cmd）：                                       *)
 
@@ -59,6 +61,45 @@
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
+
+(* ============================================================ *)
+(* 实例层供给段（假设消融：证书位转已证定理，签名保持式） *)
+(*   语句面 = 原假设命题（载体换成锚件实例 csm_sumf S0 en）； *)
+(*   证明 = 锚件全参显式应用（ConcMixSelFeed cms_sum_* 三件）。 *)
+(* ============================================================ *)
+From Stdlib Require Import List.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
+
+(* 求和外延：逐点 real_eq 给出和的 real_eq（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_tempdef_sum_ext_sup :
+  forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+    (forall s : S0, real_eq (f s) (g s)) ->
+    real_eq (csm_sumf S0 en f) (csm_sumf S0 en g).
+Proof.
+  intros S0 en f g H.
+  exact (cms_sum_ext S0 en f g H).
+Qed.
+
+(* 求和线性：常数因子提出（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_tempdef_sum_linear_sup :
+  forall (S0 : Set) (en : list S0) (a : Real) (f : S0 -> Real),
+    real_eq (csm_sumf S0 en (fun s : S0 => real_mult a (f s)))
+            (real_mult a (csm_sumf S0 en f)).
+Proof.
+  intros S0 en a f.
+  exact (cms_sum_linear S0 en a f).
+Qed.
+
+(* 求和可加：两项和的分解（原假设命题@csm_sumf 实例）。 *)
+Theorem w3p_tempdef_sum_add_sup :
+  forall (S0 : Set) (en : list S0) (f g : S0 -> Real),
+    real_eq (csm_sumf S0 en (fun s : S0 => real_plus (f s) (g s)))
+            (real_plus (csm_sumf S0 en f) (csm_sumf S0 en g)).
+Proof.
+  intros S0 en f g.
+  exact (cms_sum_add S0 en f g).
+Qed.
 
 (* ============================================================ *)
 (* Section RealTempDefs：温度族 Real 层定义件（抽象 sumf 载体）         *)
@@ -79,7 +120,7 @@ Variable real_sum_over_S_add : forall (f g : S -> Real),
   real_eq (real_sum_over_S (fun s => real_plus (f s) (g s)))
           (real_plus (real_sum_over_S f) (real_sum_over_S g)).
 
-(* 温度（前提位照 Id 层 Variable 对位：S06 L3338）与能量 *)
+(* 温度（前提位置照 Id 层 Variable 对位：S06 L3338）与能量 *)
 Variable T : Real.
 Variable T_pos : real_lt real_zero T.
 Variable energy : S -> Real.
@@ -92,7 +133,7 @@ Variable energy : S -> Real.
 Definition real_boltzmann_factor_temp (s : S) : Real :=
   real_exp_neg (real_mult (real_inv_pos T T_pos) (energy s)).
 
-(* Boltzmann 因子正性（exp 恒正；对位 Id exp_neg_pos 槽） *)
+(* Boltzmann 因子正性（exp 恒正；对位 Id exp_neg_pos 参数位） *)
 Lemma real_boltzmann_factor_temp_pos :
   forall s : S, real_lt real_zero (real_boltzmann_factor_temp s).
 Proof.
@@ -202,7 +243,7 @@ Definition real_energy_exp_temp : Real :=
 (* ---------------------------------------------------------- *)
 (* 定义件 4：分布熵（信息熵分布版）                                  *)
 
-(*   对位 Id entropy_dist（S04 L3150）逐字段；唯一前提位差：          *)
+(*   对位 Id entropy_dist（S04 L3150）逐字段；唯一前提位置差：          *)
 
 (*   （req 层先例 reqd_entropy_dist 同位）。                          *)
 (* ---------------------------------------------------------- *)
@@ -212,7 +253,7 @@ Definition real_entropy_dist
 
 (* ============================================================ *)
 (* 加做件：real_entropy_temp_explicit（Id entropy_temp_explicit        *)
-(*   @L17271 的 Real 层镜像；req 先例 req_entropy_temp_explicit  *)
+(*   @L17271 的 Real 层同构副本；req 先例 req_entropy_temp_explicit  *)
 (*   UpReqTempEntropy 件 1/5 同语句档）：                              *)
 
 

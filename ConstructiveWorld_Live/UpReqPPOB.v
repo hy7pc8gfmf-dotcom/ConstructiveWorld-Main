@@ -1,34 +1,27 @@
 (* ============================================================ *)
-(* UpReqPPOB.v *)
-(* *)
-(* 目的： 定理 6.6 对应物（PPO 保守性）的 Bishop 完整形升格。 *)
-(* 主件： real_ppo_conservative_B_full 与 rplb_res_weight_pos_unconditional 无条件形。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpRealLeB。 *)
-(* 备注： 显式参随节进入出口签名（非公理、零未闭合）；槽系为接口前提而非结论削弱，见正文诚实边界。 *)
+(* UpReqPPOB.v —— 本件形式化 PPO 保守性（定理 6.6 对应物结论 5）的 Bishop       *)
+(*   完整形升格：主件 real_ppo_conservative_B_full 为                           *)
+(*   Σ π_old·min(r,clip r)·adv ≤_B Σ π_old·r·adv，缺口前提「E>0 显式证书」       *)
+(*   由节内 lebR_res_weight_pos 导出；伴件 rplb_sum_pos_discharged 与           *)
+(*   rplb_res_weight_pos_unconditional 为求和正性前提的载体实例消解形。         *)
+(*                                                                              *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpRealLeB；求和前提位消解节另引           *)
+(*   UpReqConcSoftmax（csm_sumf 折叠载体）与 ConcMixSelFeed（cms_sum_ext 系      *)
+(*   供给锚）。                                                                 *)
+(*                                                                              *)
+(* 构造性注记：语句面全 Set 层（real_le_b Set 值 forall 型、real_lt sigT Set 层， *)
+(*   零 Prop 泄露）；显式参随节进入出口签名（非公理、零未闭合）；原 Prop 形      *)
+(*   词表非空位重述为 Set 层非空见证形并给出具体层供给；零承认、零经典逻辑；      *)
+(*   文尾 Print Assumptions 逐件闭合。                                          *)
+(*                                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                                    *)
 (* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqPPOB.v —— 定理 6.6 对应物结论 5 升格席：ppo 保守性 Bishop 完整形 *)
-(*   （B 形扩展建造队列 T2 席 · 侦察规格单目标 2 · 20260910）        *)
-(* 主件 real_ppo_conservative_B_full：Σ π_old·min(r,clip r)·adv ≤_B    *)
-(*   Σ π_old·r·adv——UpRealLeB.v 有条件件 real_ppo_conservative_B 的     *)
-(*   唯一缺口前提「E>0 显式证书」由本节内机导出，语句面零新增前提：      *)
-(*   ① T2① 求和正性槽 rplb_sum_pos（逐点正 ⟹ 和正）：Hypothesis 位     *)
-(*     显式参随节消解入出口签名——非公理零未闭合（UpReqPPOPlain         *)
-(*     rpl_sum_le/rpl_sum_nonneg 槽实例同款）；                        *)
-(*   ② 内机 lebR_res_weight_pos：逐点 π_old·adv 双正（两喂）经槽升 E>0； *)
-(*   ③ 主件证明体与 Part C 同构：closure_b 完成器 + res_fold 出节件     *)
-(*     （Require 消费，探针打表后全参显喂）+ eps 形源件直连（13 参全显）。*)
-(* 结论诚实边界：槽系接口前提（T2① 显式参消解），非推翻结论 5「无内在   *)
-(*   供给链」论证——总账回写口径=「完整升格（sum_pos 槽接口前提在案）」。*)
-(* 红线自审：real_le_b Set 值 forall 型、real_lt sigT Set 层零 Prop 泄露； *)
-(*   前提位 pi_old_pos/advantage_pos 照抄源件零新增；纯项模式（real_eq 非  *)
-
-
 (* ============================================================ *)
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
+Require Import UpReqConcSoftmax.
+Require Import ConcMixSelFeed.
 Section RealPPOLeBFull.
 
 Variable S : Type.
@@ -100,22 +93,22 @@ Proof.
 Qed.
 End RealPPOLeBFull.
 
-(* 尾注：出口签名消解序探针打表在案（_wb17_sig_probe）；残差折叠
-   real_ppo_res_fold 7 参、eps 形源件 13 参，均全参显喂。 *)
+(* 尾注：出口签名消解序经语句形检验登记在案；残差折叠
+   real_ppo_res_fold 7 参、eps 形源件 13 参，均全参显式提供实参。 *)
 Print Assumptions lebR_res_weight_pos.
 Print Assumptions real_ppo_conservative_B_full.
 Print Assumptions lebR_res_weight.
 
 (* ============================================================ *)
-(* 消解节（槽消解战役 #7 · 20260910）：rplb_sum_pos 槽构造性消解件     *)
+(* 消解节：rplb_sum_pos 前提的构造性消解件                            *)
 (*   载体勘定：RealListSumMain 节 real_list_sum（list Fixpoint， *)
 (*   X 泛型，nil 支 real_zero）。语句形态按空支路裁决：空表支 sum 实为  *)
 (*   real_zero，严格正不真——消解语句必带非空前提 Not (Id l nil)        *)
 (*   （sum_temp_positive 同款；E385 完成器空支路判据同源）。      *)
-(*   先件=槽语句的 list 载体实例（归纳真理两支：nil 矛盾直击、cons      *)
-(*   real_plus_positive 两喂）；伴件以固定非空 vocab 无条件实例化内机    *)
-(*   lebR_res_weight_pos（π_old/adv 取常 real_one，证书 real_lt_zero_one, *)
-(*   L39486）——槽变量随节全参显喂，出口零残留。                 *)
+(*   先件=前提语句的 list 载体实例（归纳真理两支：nil 矛盾直击、cons      *)
+(*   real_plus_positive 两处提供实参）；伴件以固定非空 vocab 无条件实例化内机    *)
+(*   lebR_res_weight_pos（π_old/adv 取常 real_one，证书 real_lt_zero_one）      *)
+(*   ——节变量随节全参显式提供实参，出口零残留。                 *)
 (* ============================================================ *)
 Section RplbSumPosDischarged.
 Variable X : Set.
@@ -165,5 +158,66 @@ Proof.
 Qed.
 End RplbResWeightPosUncond.
 
+(* ============================================================ *)
+(* 求和四前提位与词表非空位的消解节（逐位消解）                        *)
+(*                                                                              *)
+(* 四个求和前提位（real_sum_over_S_ext/real_sum_over_S_le/                      *)
+(* real_sum_over_S_add/real_sum_over_S_linear）为抽象求和算子                   *)
+(* real_sum_over_S 的接口义务；本节在有限和载体 csm_sumf S0 enum                *)
+(* （枚举清单折叠，UpReqConcSoftmax）上逐位供给同构语句——语句与原               *)
+(* 假设位逐字同型（载体代换 real_sum_over_S := csm_sumf S0 enum），             *)
+(* 供给锚：cms_sum_ext/cms_sum_le/cms_sum_add/cms_sum_linear                    *)
+(* （ConcMixSelFeed）。原抽象假设位声明与既有定理签名零改动。                   *)
+(* ============================================================ *)
+Section PpoBSumSlotsSupply.
+Variable S0 : Set.
+Variable enum : list S0.
+
+(* 位 real_sum_over_S_ext：求和外延（cms_sum_ext S0 enum 全参直引） *)
+Theorem ppoB_sum_ext_supply : forall (f g : S0 -> Real),
+  (forall s : S0, real_eq (f s) (g s)) ->
+  real_eq (csm_sumf S0 enum f) (csm_sumf S0 enum g).
+Proof. exact (cms_sum_ext S0 enum). Qed.
+
+(* 位 real_sum_over_S_le：求和保序（cms_sum_le S0 enum 全参直引） *)
+Theorem ppoB_sum_le_supply : forall (f g : S0 -> Real),
+  (forall s : S0, real_le (f s) (g s)) ->
+  real_le (csm_sumf S0 enum f) (csm_sumf S0 enum g).
+Proof. exact (cms_sum_le S0 enum). Qed.
+
+(* 位 real_sum_over_S_add：求和逐点加法分配（cms_sum_add 全参直引） *)
+Theorem ppoB_sum_add_supply : forall (f g : S0 -> Real),
+  real_eq (csm_sumf S0 enum (fun s : S0 => real_plus (f s) (g s)))
+          (real_plus (csm_sumf S0 enum f) (csm_sumf S0 enum g)).
+Proof. exact (cms_sum_add S0 enum). Qed.
+
+(* 位 real_sum_over_S_linear：标量提取（cms_sum_linear 全参直引） *)
+Theorem ppoB_sum_linear_supply : forall (a : Real) (f : S0 -> Real),
+  real_eq (csm_sumf S0 enum (fun s : S0 => real_mult a (f s)))
+          (real_mult a (csm_sumf S0 enum f)).
+Proof. exact (cms_sum_linear S0 enum). Qed.
+
+End PpoBSumSlotsSupply.
+
+(* ============================================================ *)
+(* 词表非空位 vocab_nonempty 的 Set 重述位与具体层供给                 *)
+(*                                                                              *)
+(* 原位为 Prop 形 Not (Id vocab nil)；重述为 Set 层非空见证形                    *)
+(* sigT (fun t : X => InT t vocab)，见证更强：可提取出具体元素。                *)
+(* 具体层供给取二点清单（bool 载体），见证由 InT_here 构造子直接给出。           *)
+(* 原 Prop 形假设位声明零改动。                                                 *)
+(* ============================================================ *)
+Definition ppoB_vocab_nonempty_set (X : Set) (vocab : list X) : Set :=
+  sigT (fun t : X => InT t vocab).
+
+Theorem ppoB_vocab_nonempty_supply :
+  ppoB_vocab_nonempty_set bool (cons true (cons false nil)).
+Proof. exact (existT _ true (@InT_here bool true (cons false nil))). Qed.
+
 Print Assumptions rplb_sum_pos_discharged.
 Print Assumptions rplb_res_weight_pos_uncond.
+Print Assumptions ppoB_sum_ext_supply.
+Print Assumptions ppoB_sum_le_supply.
+Print Assumptions ppoB_sum_add_supply.
+Print Assumptions ppoB_sum_linear_supply.
+Print Assumptions ppoB_vocab_nonempty_supply.

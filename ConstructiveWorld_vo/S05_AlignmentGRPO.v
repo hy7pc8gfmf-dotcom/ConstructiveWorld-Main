@@ -445,38 +445,19 @@ Proof.
   exact (id_trans (id_sym (plus_assoc a (opp b) (opp c))) (id_cong (fun x => plus a x) (id_sym (opp_plus b c)))).
 Qed.
 
-(* KL(p||p) = 0（自相对熵为零；Gibbs 等号条件的平凡方向） *)
+(* KL(p||p) = 0（自相对熵为零；Gibbs 等号条件的平凡方向）
+   [T3 KL 孪生正典化·席 D2 20260925] 跨件孪生统一：正典 = S04:4768 relative_entropy_self_zero'
+   （两件语句逐字同形 forall p : S -> R, Id (relative_entropy p p) zero；原证明体 ~85% 同构，
+   唯一实质差 = 零和见证取 mult zero (p s)（本件）vs mult zero one（S04 版），
+   收尾链 sum_over_S_linear 的目标和 sum p vs sum (fun _ => one) 随之而异）。
+   本件降为 2 行 exact 转发壳（照 S14:5407 wd 桥转发样板），签名逐字保持；
+   转发方向受 Require 拓扑约束：S05 本 Require S04（L24），反向即环，故正典必落 S04。 *)
 Lemma relative_entropy_self_zero :
   forall p : S -> R,
     Id (relative_entropy p p) zero.
 Proof.
   intro p.
-  unfold relative_entropy.
-  assert (Hpt : forall s, Id (mult (p s) (minus (log (p s)) (log (p s)))) zero).
-  {
-    intro s.
-    assert (Hz : Id (minus (log (p s)) (log (p s))) zero)
-      by exact (minus_self_zero (log (p s)) (log (p s)) (@id_refl R (log (p s)))).
-    assert (Hm : Id (mult (p s) zero) zero) by exact (mult_zero (p s)).
-    exact (id_trans (id_cong (fun x => mult (p s) x) Hz) Hm).
-  }
-  assert (Hext : Id (sum_over_S (fun s => mult (p s) (minus (log (p s)) (log (p s)))))
-                   (sum_over_S (fun _ : S => zero)))
-    by exact (sum_over_S_ext _ _ Hpt).
-  assert (Hzs : Id (sum_over_S (fun _ : S => zero)) zero).
-  {
-    assert (H : Id (sum_over_S (fun _ : S => zero))
-                   (sum_over_S (fun s => mult zero (p s))))
-      by exact (sum_over_S_ext (fun _ => zero) (fun s => mult zero (p s))
-                               (fun s => id_sym (id_trans (mult_comm zero (p s)) (mult_zero (p s))))).
-    rewrite H.
-    assert (Hlin : Id (sum_over_S (fun s => mult zero (p s))) (mult zero (sum_over_S p)))
-      by exact (sum_over_S_linear zero p).
-    assert (Hz : Id (mult zero (sum_over_S p)) zero)
-      by exact (id_trans (mult_comm zero (sum_over_S p)) (mult_zero (sum_over_S p))).
-    exact (id_trans Hlin Hz).
-  }
-  exact (id_trans Hext Hzs).
+  exact (relative_entropy_self_zero' p).
 Qed.
 
 (* 自由能展开：F_align(pi) = -V(pi) + beta·KL(pi||pi_ref)（对齐能量的显式求值，

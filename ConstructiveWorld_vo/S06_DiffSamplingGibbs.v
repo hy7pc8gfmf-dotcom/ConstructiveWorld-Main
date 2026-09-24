@@ -7510,8 +7510,11 @@ Definition lt_dec_field_tk : forall a b : R, Or (lt a b) (Or (Id a b) (lt b a)) 
 (* 严格小于（nat 版） *)
 Definition NatLt_tk (n m : nat) : Set := Id (Nat.ltb n m) true.
 
-Lemma id_false_true_tk : forall (H : Id false true), Empty_set.
-Proof. intro H. inversion H. Qed.
+(* AB2-T2 孪生合并（20260925 席 D1）：id_false_true_tk 与上游 id_false_true
+   （AttentionGibbsBridge，本文件 5134 行，keep_top_k_dec 同款直引）语句与证明
+   100% 重合（forall H : Id false true, Empty_set / intro. inversion.）。
+   _tk 改名族中仅 lt_dec_field_tk/NatLt_tk 系 Stdlib 遮蔽改名所必需，
+   id_false_true 无任何遮蔽与撞名——消去本重定义，下游 topk_keep_dec 直引上游件。 *)
 
 (* ===== Top-k 计数：vocab 中 kernel 严格大于 kernel w 的 token 数 ===== *)
 Fixpoint count_kernel_heavier (prefix : list Token) (w : Token) (l : list Token) : nat :=
@@ -7535,7 +7538,7 @@ Definition topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
   match Nat.ltb (count_kernel_heavier prefix w vocab) K as b
         return Or (Id b true) (Not (Id b true)) with
   | true => inl id_refl
-  | false => inr (fun H => id_false_true_tk H)
+  | false => inr (fun H => id_false_true H)
   end.
 
 (* 诚实前提（排序正确性弱化，E215 障碍绕行）：pick_max 在前 K 个中（K ≥ 1） *)

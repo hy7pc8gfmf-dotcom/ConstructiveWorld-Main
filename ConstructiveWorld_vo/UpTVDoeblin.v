@@ -1,54 +1,16 @@
 (* ============================================================ *)
-(* UpTVDoeblin.v *)
-(* *)
-(* 目的： 定理 5.10 双点 TV 收缩的 Real 复刻（树兼容重建件）。 *)
-(* 主件： tv_doeblin 双点 TV 收缩与 tv_titer 迭代、tvd_invT 温度逆。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 诚实接口仅一处（与存档件同位）；核行随机与正性为 Variable 前提。 *)
+(* UpTVDoeblin.v —— 本件形式化定理 5.10 双点全变差收缩的 Real 层性质：     *)
+(*   tv_doeblin_contraction：TV(K·μ, K·ν) ≤ (1−δ)·TV(μ,ν)，               *)
+(*   并经 tv_doeblin_iter 给出迭代形 TV(Kⁿ·μ, Kⁿ·ν) ≤ (1−δ)ⁿ·TV(μ,ν)。    *)
+(*                                                              *)
+(* 依赖清单：CW_ConstructiveWorld_219。                                  *)
+(*                                                              *)
+(* 构造性注记：Set 层承载/零承认/可提取；状态世界 list Real、求和沿        *)
+(*   枚举 real_list_sum、序用 real_lt/real_le/real_eq；δ 接口字段的       *)
+(*   实例层供给见 Part 2（tvd_dstar 系，含位 minorization 证书供给登记）。 *)
+(*                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
 (* ============================================================ *)
-
-(* ============================================================ *)
-(* UpTVDoeblin.v —— 定理 5.10 双点 TV 收缩 Real 复刻·树兼容重建件   *)
-(*                                                                *)
-(* 蓝本：attn 工作区存档件 UpTVReal.v（1,518 行，只读零触碰）。      *)
-(* 本件为其并入模块化树的树兼容重建：                               *)
-(*   1. Require 仅基座 CW_ConstructiveWorld_219（替换存档件的        *)
-(*      CW_ConstructiveWorld_219 旧扫描座）；Stdlib 仅 List/QArith.Qring。       *)
-(*   2. Part 0 本地代数/求和辅助一律 tvd_ 前缀（其中                *)
-(*      real_eq_minus_compat / real_le_minus_nonneg 两名基座已有，   *)
-(*      改名防遮蔽；其余为树内防撞统一口径）。                       *)
-(*   3. 接口与主件名与存档件逐字一致：                              *)
-(*      tv_doeblin_contraction / tv_doeblin_iter（定理 5.10），      *)
-(*      tv_doeblin/tv_step/tv_omd/tv_r_kernel/tv_rpow/tv_titer，    *)
-(*      基座与全树 grep 零撞名。                                    *)
-(*                                                                *)
-(* 数学内容（与存档件同构，Real 层 list 离散状态世界）：              *)
-(*   状态世界 X := list Real；枚举 states : list (list Real)；       *)
-(*   求和沿枚举 real_list_sum（RealListSumMain 节）；序用            *)
-(*   real_lt/real_le/real_eq（Or 编码），无 RI Context。            *)
-(*   主结果：                                                      *)
-(*   tv_doeblin_contraction：TV(K·μ, K·ν) ≤ (1−δ)·TV(μ,ν)          *)
-(*   tv_doeblin_iter：TV(Kⁿ·μ, Kⁿ·ν) ≤ (1−δ)ⁿ·TV(μ,ν)              *)
-(*                                                                *)
-(* 诚实接口（仅 1 条，与存档件同位）：                               *)
-(*   abs_sum_le_list —— SumOver 类 abs_sum_le 字段的 list 版。      *)
-(*   注：|Σf| ≤ Σ|f| 的精确 real_le 形态（Or 编码）是对两者间隙的     *)
-(*   解析二分，库内 SumOver 抽象层同款字段亦为接口形态；其余三件      *)
-(*   （abs 恒等 / 双和交换 / 加法保序）库内均已构造性建成，           *)
-(*   δ=1 退化支亦构造性处理。                                       *)
-(*                                                                *)
-(* δ 接口（Section TVRealWorld 字段面，以存档件实际定义为准）：       *)
-(*   delta（实数）+ delta_pos（0<δ）+ delta_le_one（δ≤1）+           *)
-(*   minorization（核下界形 K i j ≥ δ·u j）。显式常数实例化          *)
-(*   δ* := e^{−2γ/T}（γ 即论文记号 Δ）的消解件见本文件 Part 2        *)
-(*  （tvd_dstar_*：双界 logits 前提下字段面消解 + 显式率            *)
-(*   (1 − e^{−2γ/T})ⁿ 旗舰推论）。                                  *)
-(*                                                                *)
-(* 红线：零公理、零弃证、零参数化声明、零中途放弃、零经典逻辑；        *)
-(* Set 层语句；全 Qed./Defined. 闭合；可提取。                       *)
-(* ============================================================ *)
-
-
 From Stdlib Require Import List.
 Import ListNotations.
 From Stdlib Require Import QArith.Qring.
@@ -1955,7 +1917,16 @@ Proof.
                (tvd_expz_ge_lo i j)).
 Qed.
 
-(* ---- 2.10 打包：δ 接口字段面被显式常数满足（Set 层 And，定理 5.6b 同款口径） ---- *)
+
+(* ---- 2.9b 位 minorization 证书供给登记：语句与节位 minorization 逐字同型 ----
+   实例层核行供给锚＝tvd_minorization（本节 2.9；载体代换 delta := tvd_dstar、
+   u := tvd_u、K := tvd_K；核行随机与正性由 tvd_K_row/tvd_Z_pos 系构造承载，
+   cf2 核行供给面经树内检索由本件实例层承担）。原假设位声明与既有定理签名
+   零改动。 *)
+Theorem tvd_minorization_supply : forall i j : list Real,
+  real_le (real_mult tvd_dstar (tvd_u j)) (tvd_K i j).
+Proof. exact tvd_minorization. Qed.
+(* ---- 2.10 装配：δ 接口字段面被显式常数满足（Set 层 And，定理 5.6b 同款口径） ---- *)
 Theorem tvd_dstar_instance :
   And (real_lt real_zero tvd_dstar)
   (And (real_le tvd_dstar real_one)
@@ -1974,7 +1945,7 @@ Proof.
         -- exact tvd_u_norm.
 Qed.
 
-(* ---- 2.11 旗舰：显式率 (1 − e^{−2γ/T})ⁿ（主迭代件以 δ* 消解；
+(* ---- 2.11 主定理：显式率 (1 − e^{−2γ/T})ⁿ（主迭代件以 δ* 消解；
         诚实接口 abs_sum_le_list 随前提位显式携带） ---- *)
 Theorem tvd_dstar_iter_contraction :
   (forall f : list Real -> Real,
@@ -1993,3 +1964,5 @@ Proof.
 Qed.
 
 End TVDStar.
+
+Print Assumptions tvd_minorization_supply.

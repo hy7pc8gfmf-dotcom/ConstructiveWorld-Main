@@ -1,46 +1,30 @@
 (* ============================================================ *)
-(* MixTimeChainIface.v — 席位CZE13（批次 E-STAGING-CZE13）          *)
-(*   P7E 未决事项 2 收口：接口层 ums_k_select 腿                    *)
-(*   论文7 6.3 完整形 amt_attention_mixing_time 的本基座重交付       *)
-(*                                                               *)
-(* 使命：以 BoundedSoftmax 接口节（bs_delta_star_lt_one 九参出节形） *)
-(*   ＋ P7A 包（p7a_omd_pos / p7a_omd_lt_one）打包 kappa ∈ (0,1)，  *)
-(*   喂 UpReqUMixSelect 的 ums_k_select，出接口层混合时间定理        *)
-(*   mti_amt_attention_mixing_time（sigT 步数见证形）。对照          *)
-(*   MixTimeChain.v 具体腿先例但走接口层，不跨 Id/req 异面横桥。      *)
-(*                                                               *)
-(* 出节实形勘误（本席 probe_cze13 Check 探针实证，20260918）：        *)
-(*   1. ums_k_select 出节首参是 lt_plus_compat_lt_le 槽（UMixSelect  *)
-(*      诚实接口 Variable，forall a b c d, lt a b -> le c d ->       *)
-(*      lt (plus a c) (plus b d)），其后才是 kappa TV0 budget、      *)
-(*      四前件（lt zero kappa / lt kappa one / le zero TV0 /         *)
-(*      lt zero budget）、Arch 槽（forall x, le zero x ->            *)
-(*      sigT (fun N => lt x (ums_scale (S N) one))）；结论           *)
-(*      sigT (fun k => lt (mult (r_pow kappa k) TV0) budget)。       *)
-(*      —— 按 UpReqAttnMixTime 源码位序念（AT3 换装注记）会漏 lpc 位。*)
-(*   2. p7a_omd_pos 无 lo_pos 参：forall lo, lt (mult lo lo) one ->  *)
-(*      lt zero (minus one (mult lo lo))（P7E 卡同款实证复验）；      *)
-(*      p7a_omd_lt_one 才吃 lo_pos。结论形即 kappa :=                *)
-(*      minus one (mult lo lo)，与 bs 包无面差，唯 lpc/Arch/le 三槽   *)
-(*      是 bs 包不带的面 —— 此即换装小桥 mti_select_of_package       *)
-(*      的全部职能。                                                *)
-(*   3. bs_delta_star_lt_one 九参全显（temp temp_pos Delta Delta_pos *)
-(*      expf expf_pos expf_zero expf_plus expf_mono_lt，RI 隐式      *)
-(*      领头），结论 lo 展开形，enum/z/bs_kernel 系全剪除。           *)
-(*                                                               *)
-(* 层次诚实披露：本件接口腿单层自洽 —— kappa 几何收缩引擎端到端       *)
-(*   （任意 TV0 ≥ 0、budget ＞ 0 返回步数 k 使 kappa^k·TV0 ＜ budget），*)
-(*   kappa 由 softmax 切片构造性打包；不含 Doeblin TV 放电腿          *)
-(*   （bounded_softmax_tv_iter 为 Id 面件，居 UpReqAttnMixTime       *)
-(*   amt_attention_mixing_time 完整形另一腿），零异面横桥。           *)
-(*                                                               *)
-(* 红线自审：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；  *)
-(*   sigT 第二分量 lt 值型 Set 层，UMixSelect 同款定谳）；五禁词零出现；  *)
-(*   非平凡真证（跨文件 kappa 前件包缝合：AttnDoeblin 6.1 + P7A C5/C6  *)
-(*   ＋ ums_k_select 出节实形参数面换装桥＋sigT 主件 Defined 收束）；   *)
-(*   零新公理（全部前提为显式证书参数，Print Assumptions 预期全 Closed）； *)
-(*   原树零改（本件新建于 消融50/，依赖件全部只 Require 消费，侧编副本    *)
-(*   在 /tmp/cze13_side，零覆盖零改写）。                            *)
+(* MixTimeChainIface.v —— 本件形式化 BoundedSoftmax 接口层注意力混合时间的     *)
+(*   可提取步数见证：以 kappa := 1 − (e^(−Delta/T))² ∈ (0,1) 封装为前提包，     *)
+(*   经参数面适配桥接入 ums_k_select，主定理 mti_amt_attention_mixing_time      *)
+(*   对任意非负初值 TV0 与正预算返回步数 k 使 kappa^k·TV0 ＜ budget（sigT 形）。 *)
+(*                                                                              *)
+(* 依赖清单：CW_ConstructiveWorld_219、S04_RealExpLogConv、AttnDoeblin、        *)
+(*   Paper7Ablation、UpReqUMixSelect；载体供给节另引 UpReqConcFin2              *)
+(*   （cf2_temp_pos/cf2_Delta_pos）与 UpAblD1_expf_pack（real_expf_realizable   *)
+(*   的逐位拆包引用形，uabd1x_expf 系）。                                       *)
+(*                                                                              *)
+(* 出节实形注记：ums_k_select 出节首参是 lt_plus_compat_lt_le 位（UMixSelect    *)
+(*   诚实接口 Variable，forall a b c d, lt a b -> le c d ->                     *)
+(*   lt (plus a c) (plus b d)），其后才是 kappa TV0 budget、四前件               *)
+(*   （lt zero kappa / lt kappa one / le zero TV0 / lt zero budget）、Arch 位    *)
+(*   （forall x, le zero x -> sigT (fun N => lt x (ums_scale (S N) one))）；     *)
+(*   结论 sigT (fun k => lt (mult (r_pow kappa k) TV0) budget)。                *)
+(*   p7a_omd_pos 无 lo_pos 参：forall lo, lt (mult lo lo) one ->                *)
+(*   lt zero (minus one (mult lo lo))；p7a_omd_lt_one 以 lo_pos 为前提。         *)
+(*                                                                              *)
+(* 构造性注记：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；          *)
+(*   sigT 步数见证第二分量 lt 值型 Set 层）；六前提位的载体供给节在典范          *)
+(*   Real 载体 req 面逐位消解（原抽象假设位声明与既有定理签名零改动）；          *)
+(*   零承认、零经典逻辑、公理面零新增，Print Assumptions 预期全 Closed；         *)
+(*   主件 Defined 透明可提取。                                                  *)
+(*                                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流、-o 临时目录输出（树内零写入）。      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -50,12 +34,14 @@ Require Import S04_RealExpLogConv.
 Require Import AttnDoeblin.
 Require Import Paper7Ablation.
 Require Import UpReqUMixSelect.
+Require Import UpReqConcFin2.
+Require Import UpAblD1_expf_pack.
 
 (* ################ 6.1 softmax 切片 kappa 前件包 ################ *)
 (* 与 MixTimeChain.v 6.1（MtcKappaPackage）逐字同型的 Let 定义：     *)
 (*   invT := inv_pos temp temp_pos，lo := expf (invT·(−Delta))，     *)
 (*   delta_star := mult lo lo，kappa := minus one delta_star。       *)
-(* 换装桥与合龙主件同节共存，kappa 包被主件同面真消费（接口层单层     *)
+(* 参数面适配桥与主定理同节共存，kappa 包被主定理同面真使用（接口层单层 *)
 (* 自洽，非 mtc 的双层分立形）。                                    *)
 Section MtiIface.
 
@@ -84,40 +70,40 @@ Proof.
   exact (expf_pos (mult invT (opp Delta))).
 Qed.
 
-(* delta* = lo² ＜ 1（6.1 已证件 bs_delta_star_lt_one 九参全显消费；
-   出节实形经 probe_cze13 Check 探针实证后按实形喂入） *)
+(* delta* = lo² ＜ 1（6.1 已证件 bs_delta_star_lt_one 九参全显使用；
+   出节实形经语句形核验后按实形提供实参） *)
 Theorem mti_delta_star_lt_one_if : lt delta_star one.
 Proof.
   exact (@bs_delta_star_lt_one RI temp temp_pos Delta Delta_pos
            expf expf_pos expf_zero expf_plus expf_mono_lt).
 Qed.
 
-(* kappa ＞ 0（P7A C5 消费：p7a_omd_pos 无 lo_pos 参，探针实证；
+(* kappa ＞ 0（P7A C5 使用：p7a_omd_pos 无 lo_pos 参，语句核验；
    结论形 lt zero (minus one (mult lo lo)) 与 Let kappa 定义性重合） *)
 Theorem mti_kappa_pos_if : lt zero kappa.
 Proof.
   exact (@p7a_omd_pos RI DO lo mti_delta_star_lt_one_if).
 Qed.
 
-(* kappa ＜ 1（P7A C6 消费：p7a_omd_lt_one，其吃 lo_pos 槽） *)
+(* kappa ＜ 1（P7A C6 使用：p7a_omd_lt_one 以 lo_pos 为前提） *)
 Theorem mti_kappa_lt_one_if : lt kappa one.
 Proof.
   exact (@p7a_omd_lt_one RI DO lo mti_lo_pos_if).
 Qed.
 
-(* 前件包打包形（换装桥单槽取用） *)
+(* 前件包封装形（参数面适配桥单参数位取用） *)
 Theorem mti_kappa_package_if :
   prod (lt zero kappa) (lt kappa one).
 Proof.
   exact (pair mti_kappa_pos_if mti_kappa_lt_one_if).
 Qed.
 
-(* ################ 换装小桥：kappa 包 → ums_k_select 消费面 ########
-   参数面差桥三槽：lpc（UMixSelect 诚实接口 lt_plus_compat_lt_le，
-   出节首参）、le zero TV0（接口 le 面，bs 包不带）、Arch 槽
-   （nat-尺度 ums_scale (S N) one 形）。桥件吃抽象 kappa ∈ (0,1)
-   打包形，出 ums_k_select 的 sigT 见证出形 —— 全部差槽显式
-   discharge，UMixSelect 出节实形由此冻结为具名可消费件。 *)
+(* ################ 参数面适配桥：kappa 包 → ums_k_select 使用面 ########
+   参数面差位三处：lpc（UMixSelect 诚实接口 lt_plus_compat_lt_le，
+   出节首参）、le zero TV0（接口 le 面，bs 包不带）、Arch 位
+   （nat-尺度 ums_scale (S N) one 形）。桥件以抽象 kappa ∈ (0,1)
+   封装形为输入，出 ums_k_select 的 sigT 见证出形 —— 全部差位显式
+   消解，UMixSelect 出节实形由此冻结为具名可用件。 *)
 Theorem mti_select_of_package :
   forall kappa0 : R,
     prod (lt zero kappa0) (lt kappa0 one) ->
@@ -134,8 +120,8 @@ Proof.
   exact (ums_k_select lpc kappa0 TV0 budget Hk1 Hk2 HTV Hb Harch).
 Defined.
 
-(* ################ 合龙主件：接口层腿（6.3 重交付） ##################
-   softmax 切片 kappa 包 → 换装桥 → ums_k_select：对任意 TV0 ≥ 0 与
+(* ################ 主定理：接口层构造路线（6.3 重交付） ##################
+   softmax 切片 kappa 包 → 参数面适配桥 → ums_k_select：对任意 TV0 ≥ 0 与
    任意正预算，定理【返回】步数 k 使 kappa^k·TV0 ＜ budget。
    kappa := 1 − (e^(−Delta/T))²，sigT 见证，Defined 透明可提取。
    lpc/Arch 为接口诚实前件，显式带出（不跨 Id/req 异面横桥）。 *)
@@ -155,7 +141,54 @@ Defined.
 
 End MtiIface.
 
+(* ################ 六前提位的载体供给节（逐位消解） ################
+   原六假设位（temp_pos/Delta_pos/expf_pos/expf_zero/expf_plus/
+   expf_mono_lt）为 RI 面抽象证书位；本节在典范 Real 载体 req 面
+   逐位供给同构语句（字段映照：lt:=real_lt、req:=real_eq、
+   zero:=real_zero、one:=real_one、plus:=real_plus、mult:=real_mult）。
+   载体：温度=cf2_temp、利差=cf2_Delta（UpReqConcFin2），指数函数=
+   uabd1x_expf（real_expf_realizable 的签名投影，其逐位拆包引用形
+   uabd1x_expf_pos/zero/plus/mono_lt 见 UpAblD1_expf_pack）。
+   原抽象假设位声明与既有定理签名零改动；出节后下游可按本节载体
+   组装零前提实例。 *)
+Section MtiCarrierSupply.
+
+(* 位 temp_pos：载体温度正性（cf2_temp_pos 全参直引） *)
+Theorem mti_temp_pos_supply : real_lt real_zero cf2_temp.
+Proof. exact (cf2_temp_pos). Qed.
+
+(* 位 Delta_pos：载体利差正性（cf2_Delta_pos 全参直引） *)
+Theorem mti_Delta_pos_supply : real_lt real_zero cf2_Delta.
+Proof. exact (cf2_Delta_pos). Qed.
+
+(* 位 expf_pos：载体指数逐点正（uabd1x_expf_pos 直引） *)
+Theorem mti_expf_pos_supply : forall x : Real, real_lt real_zero (uabd1x_expf x).
+Proof. exact (uabd1x_expf_pos). Qed.
+
+(* 位 expf_zero：载体指数零点幺值（uabd1x_expf_zero 直引） *)
+Theorem mti_expf_zero_supply : real_eq (uabd1x_expf real_zero) real_one.
+Proof. exact (uabd1x_expf_zero). Qed.
+
+(* 位 expf_plus：载体指数和性（uabd1x_expf_plus 直引） *)
+Theorem mti_expf_plus_supply : forall a b : Real,
+  real_eq (uabd1x_expf (real_plus a b))
+          (real_mult (uabd1x_expf a) (uabd1x_expf b)).
+Proof. exact (uabd1x_expf_plus). Qed.
+
+(* 位 expf_mono_lt：载体指数严格单调（uabd1x_expf_mono_lt 直引） *)
+Theorem mti_expf_mono_lt_supply : forall a b : Real,
+  real_lt a b -> real_lt (uabd1x_expf a) (uabd1x_expf b).
+Proof. exact (uabd1x_expf_mono_lt). Qed.
+
+End MtiCarrierSupply.
+
 (* ################ 审计口（G4：零公理 Closed；G1 min-pa 审计位） #### *)
 Print Assumptions mti_kappa_package_if.
 Print Assumptions mti_select_of_package.
 Print Assumptions mti_amt_attention_mixing_time.
+Print Assumptions mti_temp_pos_supply.
+Print Assumptions mti_Delta_pos_supply.
+Print Assumptions mti_expf_pos_supply.
+Print Assumptions mti_expf_zero_supply.
+Print Assumptions mti_expf_plus_supply.
+Print Assumptions mti_expf_mono_lt_supply.

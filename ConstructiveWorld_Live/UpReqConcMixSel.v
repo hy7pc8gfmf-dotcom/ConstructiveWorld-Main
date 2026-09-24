@@ -1,59 +1,16 @@
 (* ============================================================ *)
-(* UpReqConcMixSel.v —— 席 AT6：混合时间选择器 req 面镜像（S2）        *)
-(*   + 合龙件 req 面镜像（S3）。路线①（req 镜像系补齐）第二棒。        *)
-(* 论文7 §10.2 第 7 项 · 无条件合龙（attn/_tat4_侦察报告切片工单        *)
-(*   S2/S3 · attn/_tat5_交付报告余切片清单）2026-09-18                *)
-(*                                                              *)
-(* 母本：Live_X/UpReqUMixSelect.v（Id 面 ums_ 系，AT1 席）逐件镜像；      *)
-(*   合龙胶水母本：Live_X/UpReqAttnMixTime.v（Id 面 amt_ 系）。           *)
-(* 面定谳（AT5 S1 探针 P4 实测）：Id 面 System A 实例不可建，req 面       *)
-(*   （RealInterfaceEnhancedSetoid + 实例 RealEnhancedReal，S07）为      *)
-(*   唯一具体层基座；本件全部语句 Set 值 req/le/lt 面。                  *)
-(*                                                              *)
-(* S2（本件主增量）：k 选取器 req 化——cmk_scale/cmk_r_pow 累加器与幂、    *)
-(*   抽象环账 req 链（bernoulli_cancel/ring_sc/minus_le）、Bernoulli     *)
-(*   上界 cmk_bernoulli_upper、逆元腿 cmk_le_inv、尾链核 cmk_pow_tail、  *)
-(*   选择器双头 cmk_k_select/cmk_pow_budget/cmk_k_select_le。            *)
-(*   混合加法保序 lt_plus_compat_lt_le 与 Id 面同位保持诚实 Variable      *)
-(*   （req 类字段仅 strict-strict 形 lt_plus_compat，混合形抽象层        *)
-(*   不可内证——UpReqSampling bs_lpc 同位先例），镜像签名同构。            *)
-(*                                                              *)
-(* S3（同件下半）：合龙件 req 化——cmk_ds_lt_one/cmk_omd_pos/              *)
-(*   cmk_omd_lt_one/cmk_one_eq 四胶水 + cmk_tv + 合龙定理双头            *)
-(*   cmk_attention_mixing_time（±le），消费：                            *)
-(*   ① S2 选择器 cmk_k_select（本件上半）；                              *)
-(*   ② rsq_bounded_softmax_tv_iter（UpReqSampling 旗舰 2，全显式证书参）  *)
-(*     ——其 abs_sum_le 槽为 plain 形冻结位（AT5 槽位警告：Or 编码对       *)
-(*     混合号 f 真墙），本节保持同位诚实 Hypothesis（具体层由             *)
-(*     csm_abs_sum_le_eps（UpReqConcSoftmax）供逐 eps 形或 B1 一元        *)
-(*     enum 平推，终装消解归 S8）；                                      *)
-(*   ③ real_expf_realizable（AttnDoeblin Part C）req 面拆件镜像           *)
-(*     cmk_expf_realizable（expf 五性质一件全供，具体 Real 层）。          *)
-(*   TV₀ 非负槽位警告：req 面 abs≥0 的 plain le 形同属 Or 墙              *)
-(*   （类字段 abs_nonneg 仅 Bishop 逐 eps 形），合龙定理以显式证书参      *)
-(*   Htv0 : le zero (tv mu nu) 保持诚实（Id 面 amt_tv_nonneg 的          *)
-(*   tv_dist_nonneg 依赖 Id 面 abs 公理组，req 面无同款无条件件）。        *)
-(*                                                              *)
-(* 消费面（全 Require 已认证 .vo，零改上游）：CW219（S02/S07 req 面       *)
-(*   字段全套直用——plus_assoc/mult_comm/le_id_l/lt_le_iff/inv_pos 系）；  *)
-(*   UpReqAlgebra（req_minus/req_opp_mult_l/req_double_neg/req_opp_plus/  *)
-(*   req_minus_plus_cancel/req_two_pos）；UpReqSumD+UpReqConcSoftmax      *)
-(*   （req 面有限和供给，S3 槽位注记锚点）；UpReqSampling（req_r_pow +    *)
-(*   rsq 旗舰链）；AttnDoeblin（real_expf_realizable）。                  *)
-(*                                                              *)
-(* 公理面自审：全件语句 Set 值（req/le/lt/sigT 均 Set 值面）；前提位全    *)
-(*   显式证书参数（接口前件=显式参数，探针应 Closed）；无未证断言；       *)
-(*   雞经典逻辑、无选择公理、无排中律；选择器/合龙件全 Defined 收束       *)
-(*   可提取。本件零新增未证假设位（lpc/abs_sum_le_h/Htv0 均为母本同位    *)
-(*   诚实接口，跨席可全显式证书参数消费）。                                *)
-(* 红线自审：①real_arch 的 And(2<=n)%nat Prop 组件未入 Set 值 sigT 槽     *)
-(*   （本件不消费 real_arch，Arch 前件保持 nat-尺度 ums_scale 形）；      *)
-(*   ②零 enum_nonempty 消去位（S3 走 rsq 链，其内部先例合规）；           *)
-(*   ③面-面搬运逐字面对面（Id→req 全件重镜像，零 retype）。              *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——E-STAGING-AT5 卡①）：      *)
-(*   cpu_guard → _tat6_run.cmd（coqc -q -native-compiler no -Q . ""）；   *)
-(*   前台编译（后台挂死坑②）；${PIPESTATUS[0]} 收口。                    *)
-(* 撞名检查：cmk_ 前缀全树 grep 零撞名（20260918 实测，花名册条目除外）。  *)
+(* UpReqConcMixSel.v —— 本件形式化 req 面混合选择器与注意力核混合时间的    *)
+(*   对应层：cmk_ 系 k 选取器/幂机器（CmkMixSelect）与收束件              *)
+(*   cmk_attention_mixing_time（及 <= 版，CmkMixTime），以及 expf 迷你     *)
+(*   接口的 req 面一件全供（cmk_expf_realizable）。另附 CmkMixTime 六个参数位   *)
+(*   与世界数据参数位的就地消解定理（cmkr_ 系：sumf 以 csm_sumf 实现化，      *)
+(*   sum 四个参数位与 sum_eq_list 由 csm_ 系供给，世界数据取 Fin 2 实例读法）。  *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、              *)
+(*   UpReqConcSoftmax、UpReqSampling、AttnDoeblin。                       *)
+(* 对标：mathlib 有限和与 softmax 核混合时间的构造性 Set 层对应物。       *)
+(* 构造性注记：Set 层承载，零承认；选择器与收束件全 Defined 可提取；      *)
+(*   消解定理全由库内已证件以显式实参供给，可提取面零 Prop 残留。         *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                         *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -67,14 +24,14 @@ Import RealInterfaceEnhancedMod.
 Import ListNotations.
 
 (* ============================================================ *)
-(* Section CmkMixSelect：S2 · k 选取器 req 面镜像（ums_ 系逐件）        *)
+(* Section CmkMixSelect：S2 · k 选取器 req 面对应形（ums_ 系逐件）        *)
 (* ============================================================ *)
 
 Section CmkMixSelect.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
-(* 诚实接口：混合 lt+le 加法保序（Id 面 UMixSelect 同位 Variable 镜像；   *)
+(* 诚实接口：混合 lt+le 加法保序（Id 面 UMixSelect 同位 Variable 对应形；   *)
 (*   req 类字段仅 strict-strict lt_plus_compat，混合形抽象层不可内证） *)
 Variable lt_plus_compat_lt_le : forall a b c d : R,
   lt a b -> le c d -> lt (plus a c) (plus b d).
@@ -100,7 +57,7 @@ Arguments cmk_mult_congr_l a {x y} _.
 Arguments cmk_mult_congr_r b {x y} _.
 
 (* ============================================================ *)
-(* Part 1：nat-尺度部分和累加器（ums_scale req 镜像）                  *)
+(* Part 1：nat-尺度部分和累加器（ums_scale req 对应）                  *)
 (* ============================================================ *)
 
 Fixpoint cmk_scale (k : nat) (w : R) : R :=
@@ -143,7 +100,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 2：抽象环账小件（@ums 环账 req 链重放）                        *)
+(* Part 2：抽象环化简小件（@ums 环化简 req 链重放）                        *)
 (* ============================================================ *)
 
 (* 1·x == x（@ums_mult_one_l） *)
@@ -296,7 +253,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 4：Bernoulli 上形式（@ums_bernoulli_upper 承重墙 req 镜像）      *)
+(* Part 4：Bernoulli 上形式（@ums_bernoulli_upper 关键引理 req 对应）      *)
 (* ============================================================ *)
 
 (* 泛型环主件（cancel-ready 形）：(1−w)(1+w+s) + (w+s)·w == 1+s           *)
@@ -392,7 +349,7 @@ Proof.
                  (cmk_plus_congr_r (opp Y) HC)))).
 Defined.
 
-(* 环账承接口：(1−u)(1+u+a) == (1+a) − (u+a)·u（@ums_ring_sc） *)
+(* 环化简承接口：(1−u)(1+u+a) == (1+a) − (u+a)·u（@ums_ring_sc） *)
 Lemma cmk_ring_sc : forall u a : R,
   req (mult (req_minus one u) (plus one (plus u a)))
        (req_minus (plus one a) (mult (plus u a) u)).
@@ -417,8 +374,8 @@ Proof.
                 (req_trans _ _ _ (mult_one (plus one (cmk_scale 0 w)))
                            (plus_zero one)))
              (le_refl one)).
-  - (* 归纳步：环账 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w ≤ 1+kw；        *)
-    (* 再乘幂正腿接 IH 换位（@ums 同构） *)
+  - (* 归纳步：环化简 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w ≤ 1+kw；        *)
+    (* 再乘幂正性分支接 IH 换位（@ums 同构） *)
     assert (Hbpos : lt zero (req_minus one w))
       by exact (cmk_omd_lt_one w Hwp Hwlt).
     assert (HPk : lt zero (cmk_r_pow (req_minus one w) k))
@@ -481,7 +438,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 5：逆元腿（@ums_le_inv）                                       *)
+(* Part 5：逆元环节（@ums_le_inv）                                       *)
 (* ============================================================ *)
 
 Lemma cmk_le_inv : forall (A B : R) (HB : lt zero B),
@@ -527,7 +484,7 @@ Proof.
     by exact (cmk_boost_pos w (Datatypes.S N) Hwle).
   set (invB := inv_pos boost Hboost0).
   assert (HinvB : lt zero invB) by exact (inv_pos_pos boost Hboost0).
-  (* ---- 预算腿：TV0 < Ms·budget ---- *)
+  (* ---- 预算前提：TV0 < Ms·budget ---- *)
   assert (Hstep : lt (mult (mult TV0 invwb) wb)
                        (mult (cmk_scale (Datatypes.S N) one) wb))
     by exact (lt_mult_compat (mult TV0 invwb)
@@ -597,7 +554,7 @@ Defined.
 (* Part 7：选择器双头（@ums_k_select / ums_pow_budget / ums_k_select_le）  *)
 (* ============================================================ *)
 
-(* 主形：le 前件 + le 形 Arch 直给（@ums_k_select 同形镜像） *)
+(* 主形：le 前件 + le 形 Arch 直给（@ums_k_select 同形对应） *)
 Lemma cmk_k_select :
   forall (kappa TV0 budget : R),
     lt zero kappa -> lt kappa one ->
@@ -648,7 +605,7 @@ Proof.
            hwp hwlt Heqk Ha (lt_le_iff zero budget (inl Hbudget)) HN).
 Defined.
 
-(* 严格版（lt 前件 + lt 形 Arch；@ums_pow_budget 同形镜像） *)
+(* 严格版（lt 前件 + lt 形 Arch；@ums_pow_budget 同形对应） *)
 Lemma cmk_pow_budget :
   forall (kappa TV0 budget : R),
     lt zero kappa -> lt kappa one ->
@@ -690,7 +647,7 @@ Proof.
            (lt_le_iff zero budget (inl Hbudget)) HN).
 Defined.
 
-(* ≤ 版（同前件，结论降温 lt→le；@ums_k_select_le 同形镜像） *)
+(* ≤ 版（同前件，结论降温 lt→le；@ums_k_select_le 同形对应） *)
 Lemma cmk_k_select_le :
   forall (kappa TV0 budget : R),
     lt zero kappa -> lt kappa one ->
@@ -709,7 +666,7 @@ Defined.
 End CmkMixSelect.
 
 (* 幂机器换形桥：cmk_r_pow == req_r_pow（两同构 Fixpoint 的 req 逐步转换；     *)
-(*   中性 k 上两种 fix 非转换可判——须归纳证明，恰为 S2/S3 两幂机器的缝合位） *)
+(*   中性 k 上两种 fix 非转换可判——须归纳证明，恰为 S2/S3 两幂机器的衔接位） *)
 Section CmkRPowBridge.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Lemma cmk_r_pow_req_r_pow : forall (x : R) (k : nat),
@@ -722,9 +679,9 @@ Defined.
 End CmkRPowBridge.
 
 (* ============================================================ *)
-(* Section CmkMixTime：S3 · 合龙件 req 面镜像（amt_ 系逐件）            *)
-(*   求和诚实接口六槽（rsq ReqBoundedSoftmax 同位，abs_sum_le_h 为       *)
-(*   plain 形冻结槽——AT5 槽位警告：具体层由 csm_abs_sum_le_eps 供        *)
+(* Section CmkMixTime：S3 · 闭合件 req 面对应形（amt_ 系逐件）            *)
+(*   求和诚实接口六个参数位（rsq ReqBoundedSoftmax 同位，abs_sum_le_h 为       *)
+(*   plain 形冻结参数位——AT5 接口参数警告：具体层由 csm_abs_sum_le_eps 供        *)
 (*   逐 eps 形或 B1 一元 enum 平推，终装消解归 S8）。                    *)
 (* ============================================================ *)
 
@@ -739,7 +696,7 @@ Variable lt_plus_compat_lt_le : forall a b c d : R,
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 
-(* ---- 求和诚实接口（rsq 同位六槽） ---- *)
+(* ---- 求和诚实接口（rsq 同位六个参数位） ---- *)
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
 Hypothesis sum_linear :
@@ -750,11 +707,11 @@ Hypothesis sum_add :
     req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)).
 Hypothesis sum_le :
   forall f g : S -> R, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g).
-(* 求和三角：|Σ f| ≤ Σ |f|（plain 形冻结槽；UpReqSampling abs_sum_le_h 同位） *)
+(* 求和三角：|Σ f| ≤ Σ |f|（plain 形冻结参数位；UpReqSampling abs_sum_le_h 同位） *)
 Hypothesis abs_sum_le_h :
   forall f : S -> R, le (abs (sumf f)) (sumf (fun s : S => abs (f s))).
 
-(* ---- 有限世界数据（Id 面 amt 节 Variable 全集 req 镜像） ---- *)
+(* ---- 有限世界数据（Id 面 amt 节 Variable 全集 req 对应） ---- *)
 Variable enum : list S.
 Variable enum_nonempty : Not (enum = nil).
 Variable temp : R.
@@ -772,7 +729,7 @@ Variable bs_lpc : forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b 
 Variable sum_eq_list : forall g : S -> R, req (sumf g) (rsq_bs_list_sum S g enum).
 
 (* ---- 核实例数据（rsq 混合率形：expf := rsq_exp_pos_fn，AT5 expf 供给予   *)
-(*      cmk_expf_realizable（件尾）一件全供镜像） ---- *)
+(*      cmk_expf_realizable（件尾）一件全供对应） ---- *)
 Let invT := inv_pos temp temp_pos.
 Let lo := rsq_exp_pos_fn (mult invT (opp Delta)).
 Let delta_star := mult lo lo.
@@ -785,15 +742,15 @@ Let cmk_tv (mu nu : S -> R) : R :=
 Let cmk_titer (n : nat) (mu : S -> R) : S -> R :=
   k_titer S sumf enum enum_nonempty temp temp_pos Delta z z_lb sum_eq_list n mu.
 
-(* ================= B 档：放电件消费桥（@amt B 档镜像） ================= *)
+(* ================= B 档：消解件使用桥（@amt B 档对应） ================= *)
 
-(* δ* < 1（消费 rsq_bs_delta_star_lt_one；@amt_ds_lt_one） *)
+(* δ* < 1（使用 rsq_bs_delta_star_lt_one；@amt_ds_lt_one） *)
 Lemma cmk_ds_lt_one : lt delta_star one.
 Proof.
   exact (rsq_bs_delta_star_lt_one temp temp_pos Delta Delta_pos).
 Qed.
 
-(* 1 − δ* > 0（@amt_omd_pos；lpc 槽同位喂 bs_lpc） *)
+(* 1 − δ* > 0（@amt_omd_pos；lpc 参数位同位传入 bs_lpc） *)
 Lemma cmk_omd_pos : lt zero omd.
 Proof.
   exact (lt_id_l zero (plus delta_star (opp delta_star)) omd
@@ -802,7 +759,7 @@ Proof.
               (opp delta_star) cmk_ds_lt_one (le_refl (opp delta_star)))).
 Qed.
 
-(* ================= A 档：自证胶水（@amt A 档镜像） ================= *)
+(* ================= A 档：自证胶水（@amt A 档对应） ================= *)
 
 (* one = 1−δ*+δ* （@amt_one_eq；req 链三段）*)
 Lemma cmk_one_eq : req one (plus omd delta_star).
@@ -823,7 +780,7 @@ Proof.
               (plus_zero one))).
 Qed.
 
-(* 1−δ* < one：δ* > 0 退化端（@amt_omd_lt_one；bs_lpc 严格缝合 + 双侧换形） *)
+(* 1−δ* < one：δ* > 0 退化端（@amt_omd_lt_one；bs_lpc 严格衔接 + 双侧换形） *)
 Lemma cmk_ds_omd_lt_one : lt omd one.
 Proof.
   assert (Hds : lt zero delta_star).
@@ -847,12 +804,12 @@ Proof.
   exact (req_lt_id_r_loc _ _ _ (req_sym _ _ cmk_one_eq) Hshift).
 Qed.
 
-(* ================= C 档：合龙主件（@amt C 档镜像） ================= *)
+(* ================= C 档：闭合主件（@amt C 档对应） ================= *)
 
-(* 合龙定理（严格版）：TV(T^k μ, T^k ν) < budget
-   TV₀ 非负诚实证书位 Htv0：req 面 abs≥0 的 plain le 形属 Or 墙（类字段
+(* 闭合定理（严格版）：TV(T^k μ, T^k ν) < budget
+   TV₀ 非负诚实证书位 Htv0：req 面 abs≥0 的 plain le 形属 Or 层不可证结果（类字段
    abs_nonneg 仅 Bishop 逐 eps 形），Id 面 tv_dist_nonneg 的无条件件在
-   req 面无同款——显式证书参数保持面诚实（AT5 槽位警告同族申报）。 *)
+   req 面无同款——显式证书参数保持面诚实（AT5 接口参数警告同族申报）。 *)
 Theorem cmk_attention_mixing_time :
   forall mu nu : S -> R,
   req (sumf mu) one -> req (sumf nu) one ->
@@ -883,7 +840,7 @@ Proof.
   - exact Hk.
 Defined.
 
-(* 合龙定理（非严格版）：TV(T^k μ, T^k ν) ≤ budget *)
+(* 闭合定理（非严格版）：TV(T^k μ, T^k ν) ≤ budget *)
 Theorem cmk_attention_mixing_time_le :
   forall mu nu : S -> R,
   req (sumf mu) one -> req (sumf nu) one ->
@@ -917,7 +874,7 @@ Defined.
 End CmkMixTime.
 
 (* ============================================================ *)
-(* 具体层锚点：expf 迷你接口 req 面一件全供（AttnDoeblin Part C 镜像）     *)
+(* 具体层锚点：expf 迷你接口 req 面一件全供（AttnDoeblin Part C 对应）     *)
 (*   real_expf_realizable 的五性质即 req 面语句（real_lt/real_eq/real_le  *)
 (*   = 实例 RealEnhancedReal 的 lt/req/le 字段值），拆件直给终装 S8。      *)
 (* ============================================================ *)
@@ -938,3 +895,225 @@ Print Assumptions cmk_bernoulli_upper.
 Print Assumptions cmk_attention_mixing_time.
 Print Assumptions cmk_attention_mixing_time_le.
 Print Assumptions cmk_expf_realizable.
+
+(* ################ R120 假设消解块：基础件（req 面列表和桥） ############ *)
+(* sumd 折叠机与 rsq 列表和的逐点一致（en 上归纳；ConcMixSelFeed          *)
+(*   cms_sum_eq_list 同构证明的本件就地复演——该件 Require 本件，环路      *)
+(*   不可引，故以同名证明链自持）。                                       *)
+Lemma cmkr_sum_eq_list_aux : forall (S0 : Set) (en : list S0) (g : S0 -> Real),
+  req (sumd_list_sum S0 g en) (rsq_bs_list_sum S0 g en).
+Proof.
+  intros S0 en g.
+  induction en as [| x t IH].
+  - exact (req_refl zero).
+  - simpl.
+    exact (req_plus_compat (g x) (g x) (sumd_list_sum S0 g t)
+             (rsq_bs_list_sum S0 g t) (req_refl (g x)) IH).
+Defined.
+
+(* ################ R120 假设消解块：sumf 实现化读法 ##################### *)
+(* CmkMixTime 的求和诚实接口六参数位在 sumf := csm_sumf S enum 实现化读法下   *)
+(*   全部由 UpReqConcSoftmax csm_ 系已证件以显式实参供给。                *)
+
+Section CmkMixTimeResolved.
+
+Variable S : Set.
+Variable enum : list S.
+
+Let sumf : (S -> Real) -> Real := csm_sumf S enum.
+
+(* sum_ext 参数位（CmkMixTime :743 同语句） *)
+Theorem cmkr_sum_ext : forall f g : S -> Real,
+  (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
+Proof.
+  intros f g H.
+  exact (csm_sum_ext S enum f g H).
+Qed.
+
+(* sum_linear 参数位（:745 同语句） *)
+Theorem cmkr_sum_linear : forall (a : Real) (f : S -> Real),
+  req (sumf (fun s : S => mult a (f s))) (mult a (sumf f)).
+Proof.
+  intros a f.
+  exact (csm_sum_linear S enum a f).
+Qed.
+
+(* sum_add 参数位（:748 同语句） *)
+Theorem cmkr_sum_add : forall f g : S -> Real,
+  req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)).
+Proof.
+  intros f g.
+  exact (csm_sum_add S enum f g).
+Qed.
+
+(* sum_le 参数位（:751 同语句） *)
+Theorem cmkr_sum_le : forall f g : S -> Real,
+  (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g).
+Proof.
+  intros f g H.
+  exact (csm_sum_le S enum f g H).
+Qed.
+
+(* sum_eq_list 参数位（:772 同语句） *)
+Theorem cmkr_sum_eq_list : forall g : S -> Real,
+  req (sumf g) (rsq_bs_list_sum S g enum).
+Proof.
+  intro g.
+  exact (cmkr_sum_eq_list_aux S enum g).
+Qed.
+
+(* bs_swap 参数位（:767 同语句）：sum_eq_list 参数位与双重列表和交换整体导出 *)
+Theorem cmkr_bs_swap : forall f : S -> S -> Real,
+  req (sumf (fun s : S => sumf (fun s' : S => f s s')))
+      (sumf (fun s' : S => sumf (fun s : S => f s s'))).
+Proof.
+  intros f.
+  assert (Hsw : forall l1 l2 : list S,
+    req (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) l1)
+        (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') l1) l2)).
+  { intros l1 l2.
+    induction l1 as [| x t IH].
+    - induction l2 as [| y t2 IH2].
+      + exact (req_refl zero).
+      + exact (req_trans zero
+            (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+            (plus zero
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+            IH2
+            (req_sym
+               (plus zero
+                  (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+               (req_trans
+                  (plus zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+                  (plus
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+                     zero)
+                  (sumd_list_sum S
+                     (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2)
+                  (plus_comm zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))
+                  (plus_zero
+                     (sumd_list_sum S
+                        (fun s' : S => sumd_list_sum S (fun s : S => f s s') nil) t2))))).
+    - exact (req_trans
+            (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) t))
+            (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2))
+            (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') (x :: t)) l2)
+            (req_plus_compat (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s' : S => f x s') l2)
+               (sumd_list_sum S (fun s : S => sumd_list_sum S (fun s' : S => f s s') l2) t)
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2)
+               (req_refl (sumd_list_sum S (fun s' : S => f x s') l2)) IH)
+            (req_sym
+               (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') (x :: t)) l2)
+               (plus (sumd_list_sum S (fun s' : S => f x s') l2)
+                  (sumd_list_sum S (fun s' : S => sumd_list_sum S (fun s : S => f s s') t) l2))
+               (csm_sum_add S l2 (fun s' : S => f x s')
+                  (fun s' : S => sumd_list_sum S (fun s : S => f s s') t)))). }
+  exact (Hsw enum enum).
+Qed.
+
+(* bs_abs 参数位（:770 同语句）：abs 非负恒等（实数层已证件就地复演） *)
+Theorem cmkr_bs_abs : forall a : Real, le zero a -> req (abs a) a.
+Proof.
+  intros a H.
+  assert (H' : real_le zero a) by exact H.
+  unfold real_le in H'.
+  destruct H' as [Hlt | Heq].
+  - exact (real_abs_pos_req a Hlt).
+  - exact (real_eq_trans (real_abs a) zero a
+             (real_eq_trans (real_abs a) (real_abs zero) zero
+                (real_abs_eq_compat a zero (real_eq_sym zero a Heq))
+                real_abs_zero_req)
+             Heq).
+Qed.
+
+(* bs_lpc 参数位（:771 同语句）：lt 与 le 混合加法严格保序（就地复演） *)
+Theorem cmkr_bs_lpc :
+  forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  intros a b c d Hab Hcd.
+  assert (Hcd' : real_le c d) by exact Hcd.
+  unfold real_le in Hcd'.
+  destruct Hcd' as [Hlt | Heq].
+  - exact (real_lt_plus_compat a b c d Hab Hlt).
+  - apply (real_eq_lt_lt (plus a c) (plus a d) (plus b d)).
+    + apply (RealSetoid.real_eq_plus_compat a c a d).
+      * apply real_eq_refl.
+      * exact Heq.
+    + apply (real_eq_lt_lt (plus a d) (plus d a) (plus b d)).
+      * apply real_plus_comm.
+      * apply (real_lt_eq_lt (plus d a) (plus d b) (plus b d)).
+        -- apply (real_lt_plus_translate d a b Hab).
+        -- apply real_plus_comm.
+Qed.
+
+End CmkMixTimeResolved.
+
+(* ################ R120 假设消解块：世界数据 Fin 2 实例读法 ############# *)
+(* temp/Delta/z/enum 参数位在 Fin 2 非退化实例（温度取单位元、z 取 +/-1 对称对、     *)
+(*   enum 取二元表）下的证书（cf2 供给件同构；该件 Require 本件，环路     *)
+(*   不可引，故以同款证明项自持）。                                       *)
+
+Definition cmkr_temp : Real := one.
+
+Theorem cmkr_temp_pos : lt zero cmkr_temp.
+Proof.
+  unfold cmkr_temp.
+  exact one_pos.
+Qed.
+
+Definition cmkr_Delta : Real := one.
+
+Theorem cmkr_Delta_pos : lt zero cmkr_Delta.
+Proof.
+  unfold cmkr_Delta.
+  exact one_pos.
+Qed.
+
+Definition cmkr_z (s s' : bool) : Real := if s then one else opp one.
+
+Theorem cmkr_z_lb : forall s s' : bool, le (opp cmkr_Delta) (cmkr_z s s').
+Proof.
+  intros s s'. destruct s as [ | ].
+  - exact (inl (@rsq_bs_opp_lt Real RealEnhancedReal cmkr_Delta cmkr_Delta_pos)).
+  - exact (le_refl (opp cmkr_Delta)).
+Qed.
+
+Theorem cmkr_z_ub : forall s s' : bool, le (cmkr_z s s') cmkr_Delta.
+Proof.
+  intros s s'. destruct s as [ | ].
+  - exact (le_refl cmkr_Delta).
+  - exact (inl (@rsq_bs_opp_lt Real RealEnhancedReal cmkr_Delta cmkr_Delta_pos)).
+Qed.
+
+(* enum 参数位非空性的 Set 层 sigT 见证重述（InT 载体，见证 true） *)
+Definition cmkr_enum : list bool := [true; false].
+
+Theorem cmkr_enum_nonempty : sigT (fun t : bool => InT t cmkr_enum).
+Proof.
+  exact (existT _ true (InT_here true (false :: nil))).
+Qed.
+
+(* ================= 消解件假设面核验（预期全 Closed） =============== *)
+
+Print Assumptions cmkr_sum_ext.
+Print Assumptions cmkr_sum_linear.
+Print Assumptions cmkr_sum_add.
+Print Assumptions cmkr_sum_le.
+Print Assumptions cmkr_sum_eq_list.
+Print Assumptions cmkr_bs_swap.
+Print Assumptions cmkr_bs_abs.
+Print Assumptions cmkr_bs_lpc.
+Print Assumptions cmkr_temp_pos.
+Print Assumptions cmkr_Delta_pos.
+Print Assumptions cmkr_z_lb.
+Print Assumptions cmkr_z_ub.
+Print Assumptions cmkr_enum_nonempty.

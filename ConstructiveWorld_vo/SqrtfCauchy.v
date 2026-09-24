@@ -1,35 +1,22 @@
 (* ============================================================ *)
-(* SqrtfCauchy.v                                                *)
+(* SqrtfCauchy.v —— 本件形式化 Newton 迭代残差序列的柯西性质：            *)
+(*   残差 sfc_t n = s(z_n) 满足逐 eps 柯西判据（主件 sfc_newton_cauchy，   *)
+(*   Bishop 逐 eps 形；辅件 sfc_pick_K 与 sfc_geom_tail_t）。             *)
 (*                                                              *)
-(* 目的：证明 Newton 迭代序列 z_n 的残差序列 sfc_t n = s(z_n)    *)
-(*       满足柯西判据的逐 eps 形式。                             *)
-(* 主件：sfc_newton_cauchy（逐 eps Cauchy 证书，接口原生         *)
-(*       Bishop 逐 eps 形）；辅件 sfc_pick_K（取档步）与        *)
-(*       sfc_geom_tail_t（几何尾和上界）。                       *)
-(* 依赖：CW_ConstructiveWorld_219（RealInterfaceEnhancedSetoid  *)
-(*       接口）、UpReqAlgebra、UpReqSqrtF（Newton 迭代 sqrtf_    *)
-(*       newton / sqrtf_step / sqrtf_slack 与常数 half、two）。  *)
-(* 备注：六枚显式假设位——平方非负 sfc_square_nonneg、          *)
-(*       metric_abs 桥接 sfc_metric_abs（上游 UpReqCauchy 同位； *)
-(*       接口层 metric 与 abs 为无桥接公理的独立原语）、阿基米德 *)
-(*       sfc_arch_decay（上游 S03 arch_decay 同形）、abs         *)
-(*       锐化 sfc_abs_le_plus_eps（Real 实例经 Or 分解：lt 支    *)
-(*       abs_pos / eq 支 abs_zero）、1 < 2 严格档 Hlt_one_two    *)
-(*       （假设位5：抽象接口不可内证，Real 层经                  *)
-(*       sfcx_lt_one_two_slot 消解）、严格加法混合保序           *)
-(*       sfc_lt_plus_compat_lt_le（假设位6，UpReqCauchy:123      *)
-(*       同位，Real 层 Or 分解可消解）。                         *)
-(*       sfc_sumf_nonneg_le_two 含显式前提 Hnn（f 逐点非负），  *)
-(*       调用点同步提供实参。                                    *)
-(*       数学路线：残差满足恒等式 t_{n+1} + t_n == z_n 且        *)
-(*       n ≥ 1 时 t_n ≥ 0，与压缩比率恒等式                      *)
-(*       2·z_{n+1}·t_{n+1} == t_n² 联立得单步半衰减              *)
-(*       t_{n+1} ≤ t_n/2，几何尾和 Σ ≤ 2·t_N 一步完成。         *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSqrtF；          *)
+(*   位 sfc_square_nonneg 证书供给节另引 AbsSqClose（asc_sq_nonneg 锚）。  *)
 (*                                                              *)
+(* 构造性注记：Set 层承载/零承认/可提取；残差恒等式 t_{n+1} + t_n == z_n   *)
+(*   与压缩比率恒等式 2·z_{n+1}·t_{n+1} == t_n² 联立得单步半衰减           *)
+(*   t_{n+1} ≤ t_n/2，几何尾和 Σ ≤ 2·t_N 一步完成。                       *)
+(*                                                              *)
+(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
+(* ============================================================ *)
 From Stdlib Require Import Extraction.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqSqrtF.
+Require Import AbsSqClose.
 From Stdlib Require Import Arith Lia.
 Import RealInterfaceEnhancedMod.
 
@@ -62,12 +49,12 @@ Variable sfc_abs_le_plus_eps : forall (t : R), le zero t -> forall (eps : R),
   lt zero eps -> le (abs t) (plus t eps).
 (* 假设位5（1 < 2 严格档假设位。抽象接口无 le 分解/三分律字段，one_pos+
    lt_plus_compat 双严格形只达 0 < 2，混合平移不可导出（ReqStrictOrderBridge
-   闭节后假设位不独立导出：沙箱探针 not found + UpReqAlgebra:1466 注释双证）；
+   闭节后假设位不独立导出：沙箱检验 not found + UpReqAlgebra:1466 注释双证）；
    Firewall-TempEntMono / E347 区 Variable 诚实前置先例同位。Real 层经
    real_lt_plus_translate 消解，见 SqrtfCauchyDischarge §A3 sfcx_lt_one_two_slot。） *)
 Hypothesis Hlt_one_two : lt one sfc_two.
 (* 假设位6（严格加法混合保序 lt_le 形。接口仅双严格 lt_plus_compat，混合形
-   不可内证（UpReqAlgebra:1466 注释 + 沙箱探针双证）；UpReqCauchy:123
+   不可内证（UpReqAlgebra:1466 注释 + 沙箱检验双证）；UpReqCauchy:123
    lt_plus_compat_lt_le 同位 Variable 先例，语句逐字。Real 层经
    real_lt_plus_translate + real_le Or 分解可消解。） *)
 Variable sfc_lt_plus_compat_lt_le :
@@ -929,7 +916,7 @@ Proof.
                 (sfc_t_rec n)).
 Qed.
 
-(* 单步半衰减：t_{S S n} ≤ half·t_{S n}（消费假设位1：t'·t' ≥ 0） *)
+(* 单步半衰减：t_{S S n} ≤ half·t_{S n}（使用假设位1：t'·t' ≥ 0） *)
 Lemma sfc_t_decay : forall n : nat,
   le (sfc_t (Datatypes.S (Datatypes.S n))) (mult sfc_half (sfc_t (Datatypes.S n))).
 Proof.
@@ -1364,3 +1351,22 @@ End SqrtfCauchy.
 (* 参照 KLWallClosed.v 同式，Obj.magic 计数=0 为通过，产物 sfc_G3.ml。 *)
 (* ============================================================ *)
 Extraction "sfc_G3.ml" sfc_newton_cauchy sfc_pick_K sfc_geom_tail_t.
+(* ============================================================ *)
+(* 位 sfc_square_nonneg 的证书供给（载体代换：抽象 RIS 载体 → 锚件世界     *)
+(* DO 可判定序增强载体）。                                               *)
+(*                                                                     *)
+(* 原位（Section SqrtfCauchy 假设位1，抽象 RIS 世界）为已登记的结构性     *)
+(* 阻隔面——全称平方非负的 Or 编码数据形等价逐实数符号判定器，抽象世界内   *)
+(* 不可供给（判定标注见 SqrtfCauchyDischarge §C）；锚件 AbsSqClose 在      *)
+(* RealInterfaceEnhanced 与 DecidableOrder 双 Context 世界内对同语句给出  *)
+(* 实证（asc_sq_nonneg，AbsSqClose:156，三分可判定序逐支构造）。本供给件   *)
+(* 为锚语句的透明别名直引——语句形与原假设位逐字同型由锚语句自身携带，      *)
+(* 投影世界（le/zero/mult 所属接口类）随锚解析，规避本文件 Import 面的     *)
+(* RealInterfaceEnhancedSetoid 类投影错配。原假设位声明与既有定理签名      *)
+(* 零改动。                                                              *)
+(* ============================================================ *)
+Definition sfc_square_nonneg_supply
+  (RI : RealInterfaceEnhanced) (DO : DecidableOrder RI) :=
+  @asc_sq_nonneg RI DO.
+
+Print Assumptions sfc_square_nonneg_supply.

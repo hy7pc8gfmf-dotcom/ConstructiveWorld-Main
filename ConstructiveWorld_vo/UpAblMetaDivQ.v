@@ -1,33 +1,29 @@
 (* ============================================================ *)
-(* UpAblMetaDivQ.v —— AID1 席（Q 层侧独立件援助席）                 *)
+(* UpAblMetaDivQ.v —— Q 层 Bernoulli 幂下界与 Doeblin 界无界性件      *)
 (*                                                              *)
-(* 目的：论文7 §10.2-8「lo→0 混合时间无界」的 Q 层侧独立件两件：      *)
-(*   件① mqd_bernoulli_lower（规格书缺口 G1 的 Q 独立形）：          *)
-(*        Bernoulli 幂下界 (1−x)^N ≥ 1 − N·x（0 ≤ x ≤ 1，          *)
-(*        QleT' 出口；N 归纳一次成型）。库内 grep 实测：             *)
-(*        mixe_bern_lower（UpReqMixLogE）为 (1+w)^k ≥ 1+k·w 形，     *)
-(*        mixe_bern_sharp 为 (1−w)^k·(1+k·w) ≤ 1 形——均为上/配对    *)
-(*        方向，规格 G1 所需「下界方向」无现成件，故自建；            *)
-(*        配套 mqd_bern_complement 对 mixe_bern_sharp 消费+桥接      *)
-(*        （任务书 (1−w)^k·(1+k·w) ≤ 1 的 QleT' 版）。              *)
-(*   件② mqd_q_doeblin_bound_unbounded（规格书 §1.2 定理 A 精确形，  *)
-(*        Q 层 Doeblin 界无界性，QltT 见证形）：                    *)
-(*        forall N lo0 r, 0<lo0, 0<r, r<1（QltT 证书面）→            *)
-(*        sigT (fun lo => And (0<lo) (And (lo<lo0) (r < (1−lo²)^N))) *)
-(*        见证 lo := Qmin (lo0/2) ((1−r)·inv(S N))（规格书 §1.2      *)
-(*        构造直译：min(lo0/2, (1−r)/(N+1))，除法以倒数积承载）。     *)
-(*        两态链口径：偏移 w := lo²/2 时收缩因子 1−2w = 1−lo²，       *)
-(*        TV₀=1、TV(n) = (1−lo²)ⁿ——本件承载其 Q 层纯代数因子面。     *)
-(* 语句纪律：全 Set 层出口（QltT/QleT'，S01.And:=A*B 合取，sigT      *)
-(*        见证），前件显式正性证书，无 Prop 泄露；证明内核按库惯例    *)
-(*        在 Prop（Qle/Qlt/lra）中推理，出口 T 化。                  *)
-(* 消费面：UpReqMixLogE（mixe_qofnat、mixe_qmult_nonneg、             *)
-(*        mixe_qlt_eq_l、mixe_qlt_eq_r、mixe_qle_eq_l、               *)
-(*        mixe_qle_eq_r、mixe_sub_nonneg、mixe_bern_sharp）、          *)
-(*        S02_CauchyComplete（QltT、QleT'、Qlt_to_QltT）、Qminmax     *)
-(*        （Q.min_glb_lt、Q.le_min_l、Q.le_min_r）、stdlib Lqa。      *)
-(* 定理 A 收束：Defined.（见证 lo 可提取可计算——projT1 归约直出       *)
-(*        Qmin 闭式）。                                              *)
+(* 使命：本件形式化两件 Q 层独立结论：                                *)
+(*   件① mqd_bernoulli_lower：Bernoulli 幂下界                        *)
+(*        (1−x)^N ≥ 1−N·x（0≤x≤1，QleT' 出口，N 归纳一次成型）——      *)
+(*        库内 mixe_bern_lower（(1+w)^k ≥ 1+k·w）与 mixe_bern_sharp    *)
+(*        均为上/配对方向，下界方向自建；配套 mqd_bern_complement      *)
+(*        以 mixe_bern_sharp 供给 (1−w)^k·(1+k·w) ≤ 1 的 QleT' 形；    *)
+(*   件② mqd_q_doeblin_bound_unbounded：Q 层 Doeblin 界无界性          *)
+(*        （QltT 见证形）：forall N lo0 r, 0<lo0, 0<r, r<1 →           *)
+(*        sigT (fun lo => And (0<lo) (And (lo<lo0) (r < (1−lo²)^N)))， *)
+(*        见证 lo := Qmin (lo0/2) ((1−r)·inv(S N))（除法以倒数积        *)
+(*        承载）；两态链口径：偏移 w := lo²/2 时收缩因子 1−lo²，        *)
+(*        TV₀=1、TV(n) = (1−lo²)ⁿ——本件承载其 Q 层纯代数因子面。      *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、UpReqMixLogE；              *)
+(*        stdlib QArith.QArith、QArith.Qminmax、ZArith.ZArith、        *)
+(*        Arith.Arith、Lia、micromega.Lqa。                            *)
+(* 对标：mathlib bernoulli_inequality（幂下界形）；stdlib QArith       *)
+(*        序引理族（Qmult_lt_compat_r、Q.min_glb_lt 等）。              *)
+(* 构造性注记：语句面全 Set 层出口（QltT/QleT'，S01.And:=A*B 合取，    *)
+(*        sigT 见证），前件显式正性证书，无 Prop 泄露；零假设位、       *)
+(*        零承认、可提取；分式序接口引理以显式 Z 序引理链构造           *)
+(*        （逐位显式归约与正性见证，不经一键算术自动战术）；            *)
+(*        定理 A 以 Defined 收束（见证 lo 可提取可计算）。              *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 护航，信任缓存 vo 树 -Q 映射。    *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -69,14 +65,23 @@ Qed.
 
 Lemma mqd_invSN_pos : forall n : nat, Qlt 0 (mqd_invSN n).
 Proof.
-  intro n. unfold mqd_invSN, Qlt. cbn [Qnum Qden]. lia.
+  intro n. unfold mqd_invSN, Qlt. cbn [Qnum Qden].
+  (* 目标即 Z 严格序 0·den lo < 1·den 0：以 Z.mul_0_l/Z.mul_1_l 显式    *)
+  (* 归约两侧乘法，余下 0 < 1 由零侧分母位正数 1 的正性见证             *)
+  (* Pos2Z.is_pos 构造                                                  *)
+  rewrite Z.mul_0_l, Z.mul_1_l.
+  exact (Pos2Z.is_pos 1%positive).
 Qed.
 
 Lemma mqd_invSN_le1 : forall n : nat, Qle (mqd_invSN n) 1.
 Proof.
-  intro n. unfold mqd_invSN, Qle, Qmult. cbn [Qnum Qden].
-  pose proof (Pos2Z.pos_is_pos (Pos.of_nat (Datatypes.S n))).
-  lia.
+  intro n. unfold mqd_invSN, Qle. cbn [Qnum Qden].
+  (* 目标即 Z 序 1·1 ≤ 1·den：两侧乘法以 Z.mul_1_l 归约，               *)
+  (* 1 ≤ Z.pos den 经 Z.le_succ_l（1 与 Z.succ 0 可转换）化为           *)
+  (* 0 < Z.pos den，由分母位 Pos.of_nat (S n) 的正性见证构造             *)
+  rewrite !Z.mul_1_l.
+  apply (proj2 (Z.le_succ_l 0 (Z.pos (Pos.of_nat (Datatypes.S n))))).
+  apply Pos2Z.is_pos.
 Qed.
 
 Lemma mqd_kQ_inv_le : forall n : nat,
@@ -84,7 +89,11 @@ Lemma mqd_kQ_inv_le : forall n : nat,
 Proof.
   intro n. unfold mqd_invSN, Qle, Qmult, mixe_qofnat. cbn [Qnum Qden].
   rewrite Pos.mul_1_l.
-  pose proof (mqd_znat_le_posS n). lia.
+  (* 目标即 Z 序 Z.of_nat n·1·1 ≤ 1·den：正数位积以 Pos.mul_1_l 归约，  *)
+  (* 两侧乘法单位元以 Z.mul_1_r/Z.mul_1_l 逐步归约，                    *)
+  (* 余下 Z 序结论即既有构造性引理 mqd_znat_le_posS n                   *)
+  rewrite !Z.mul_1_r, Z.mul_1_l.
+  exact (mqd_znat_le_posS n).
 Qed.
 
 (* ============================================================ *)
