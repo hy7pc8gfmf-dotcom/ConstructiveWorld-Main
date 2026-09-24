@@ -65,7 +65,7 @@ Require Import UpReqIrrationalCriterion.
 Require Import UpReqLn2Irrational.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* §0 基准实数 X = lim ln2i_x 与 line 投影面                           *)

@@ -51,7 +51,7 @@
 (*   （树内 .vo 不动）。                                                *)
 (* ============================================================ *)
 
-From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia Psatz.
+From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 From Stdlib Require Import Setoid.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
 Require Import BeukersLists.

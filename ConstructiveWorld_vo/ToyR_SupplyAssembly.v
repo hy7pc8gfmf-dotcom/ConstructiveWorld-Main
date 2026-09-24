@@ -93,7 +93,7 @@ Require Import Ln2Escape.
 Require Import Ln2Bridge.
 From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
   Arith.Arith Bool.Bool.
-From Stdlib Require Import Lia Setoid Morphisms Lra Qfield.
+From Stdlib Require Import Lia Setoid Morphisms Qfield.
 
 (* ============================================================ *)
 (* §1 A_n 整数面（肢②）+ 归一桥换算                                     *)
