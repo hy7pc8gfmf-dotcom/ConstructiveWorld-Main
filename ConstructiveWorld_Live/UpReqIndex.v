@@ -3599,3 +3599,11 @@ Definition ng_UpAblDeltaStarGeneral : NewGreenFace :=
 Definition ng_UpAblP4_UpStopTime_PA : NewGreenFace :=
   MkNewGreenFace "UpAblP4_UpStopTime_PA.v" 81 3 20260923
   "VET9B C-pure-new: UpStopTime PA driver (four-face green; three inline Qed closures; driver-face registry; requires UpStopTime, order insert-after per dependency precedence; ng_qed token-level 3 per VERIFY [N-1])" "L81:m1ae55c".
+(* ================= v4.27 增册（R124 注册波：uabl_attn_full_instance 单入口供给件注册，20260924；号额实勘：现值 v4.26（R117 总波）→ 本席顺延 v4.27（全文件 grep 无 v4.27 占用）；承前 ng_ 共 450 条，本批 1 条后共 451 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.26 块之后；尾插禁重排、只增不改）。 *)
+(* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（v4.24 扩列口径）；本块行数/md5=落位树实测（20260924，R124-SUB 执行席 born-in-place 四件套绿后实测回填）。 *)
+
+(* ng_uabl_attn_full_instance —— uabl_attn_full_instance.v：R2-ABL S3 席产单入口供给件（BoundedSoftmax 接口十九字段的 Fin2 默认实例，135 行 2 Qed；单入口 Require Export 六件封装 CW_ConstructiveWorld_219/AttnDoeblin/UpReqConcFin2/UpReqConcB1/UpAblD1_expf_pack/UpReqSampling，下游 Require Import 一行即得 uabl_ 前缀全名空间；Part A-C 逐行语句面与上游源件逐字同面零换面税；PA Closed 四路 bs_abs_id/bs_lpc_id/expf_pos/bs_abs；G3 Separate Extraction Obj.magic=0（ml 10f2d638/mli 6afe7ea0 双锚）；born-in-place 绿判四件套 EXIT=0+PA+vo 魔数 5ff4+vo 新于 v 20260924；沙箱/Live/vo 三方 md5 恒等 c40c13a1 本席复测；fa53_compat_abs 内部 Require 零改）（_tsub_） *)
+Definition ng_uabl_attn_full_instance : NewGreenFace :=
+  MkNewGreenFace "uabl_attn_full_instance.v" 135 2 20260924
+  "R124 single-entry supply module: BoundedSoftmax 19-field Fin2 default instance as uabl_-prefixed named rows; one Require Import line exposes full namespace via six Require Export; Part A-C rows verbatim-identical to upstream faces (zero face-conversion tax); PA Closed x4 (bs_abs_id/bs_lpc_id/expf_pos/bs_abs); G3 Separate Extraction Obj.magic=0 (ml 10f2d638 / mli 6afe7ea0 anchors); born-in-place four-gate green 20260924; sandbox/Live/vo triple md5 c40c13a1 pinned; fa53_compat_abs required internally unchanged" "L135:mc40c13".
