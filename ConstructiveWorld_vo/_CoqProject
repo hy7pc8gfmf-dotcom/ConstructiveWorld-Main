@@ -635,3 +635,7 @@ ToyR_fa57_ext
 ToyR_fka_weak_triangle_ref
 R2BishopLogSel.v
 UpReqMixRationalProxy.v
+UpReqQArchSite.v
+UpReqBishopLedger1.v
+UpReqBishopFull.v
+UpReqMixRationalProxy_R2.v
