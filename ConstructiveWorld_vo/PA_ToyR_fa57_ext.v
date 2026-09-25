@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -14,10 +13,8 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* fa57_ext.v —— T40 消融50 战役 CYB7 席（批次 E-STAGING-CYB7）    *)
 (*                                                              *)
 (* 使命：VD 辖区（G01/G02/G04/G11+UpAlignId…UpGRPO）夜间静默死亡    *)
-(*       补席施工件。核验=T40-CYB7-核验.md；本件四簇 C 类：         *)
 (*                                                              *)
 (* 簇一 G02_Debt.v:165-175 抽象载体三性质槽＋非空位一次兑现包      *)
 (*      （sigT 见证＝list 折叠 fa51_sumd；pos/ext/linear 三组件    *)
@@ -28,7 +25,6 @@
 (*      plus_assoc 恒等运河；正向 1 段，逆向 assoc/opp/zero 四段）。*)
 (* 簇三 UpGRPO.v:66 G_pos 兑现链：group_cover（InT 见证）⟹        *)
 (*      enum 非空（InT 零构造子灭支）⟹ length 定义性 S k ⟹ 正性。   *)
-(*      nat_to_R_g/nat_to_R_g_pos 按 E346「节参不导出，依存席本节    *)
 (*      重声明同位」先例本地复刻（UpGRPO.v:51-65 证明体同构：        *)
 (*      plus_positive＋one_pos 两字段归纳），零公理面 PA 仍 Closed。  *)
 (* 簇四 G04_ProjFam.v:175-181/394-400 W2' 簇两点均匀投影族槽面     *)
@@ -239,7 +235,6 @@ Print Assumptions fa57_grpo_G_pos.
 Print Assumptions fa57_W2p_uniform_two_realized.
 Print Assumptions fa57_dpolip_Z_realizer.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions fa57_half_plus_half.
 Print Assumptions fa57_half_pos.
 Print Assumptions fa57_two_pos.

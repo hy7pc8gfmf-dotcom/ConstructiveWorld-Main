@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,7 +12,6 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* ExpOneEnvelope.v —— 施工席位 C8（2026-09-16）                  *)
 (* e 的显式有理双区间——A5 数值果 4 基础版（Q 层自足）。            *)
 (*                                                              *)
 (* 主对象：exp_partial n 1 = Σ_{k<n} 1/k!（S03 引擎，x := 1）。    *)
@@ -25,7 +23,6 @@
 (*     配套 eoe_abs_bound（直接双 QleT' 形）：                    *)
 (*     |S_m − S_n| ≤ 2/n!（1 ≤ n ≤ m）—— 任一后继部分和          *)
 (*     落在显式有理区间 [S_n, S_n + 2/n!] 内（e_target 的 Q 层    *)
-(*     自足替代：S07 的 cauchy_real_exp 接口过深，照任务书走       *)
 (*     Q 自足版 + 单调支）。                                      *)
 (*  2. eoe_cauchy_modulus（精度可计算支，B4 模量同款纪律）：       *)
 (*     forall eps, QltT' 0 eps -> sigT N, ∀ m n ≥ N,              *)
@@ -45,14 +42,12 @@
 (*   l2e_cauchy_modulus → eoe_cauchy_modulus（sigT + NatLe +      *)
 (*     Qceiling 模量，leb 分案同构）；                            *)
 (*   qleT'_weaken/QltT' 桥 → §0 原样复用。                        *)
-(* 已知坑对防（C3 席实测）：stdlib 无 Qabs_eq（只用 Qabs_pos       *)
 (*   分档）；Qeq 显式 Q 参数（Qeq_sym _ _）；apply 不做项序归一    *)
 (*   （1*a vs a*1 走 qeq_le + ring == 链 / eoe_mult_le_l 桥）；    *)
 (*   Qdiv 出现处先 unfold Qdiv 再 ring（防 ring 按原子误配）。     *)
 (* 红线自审：公理面零假设（无公理/自认/参数声明/猜想/中止类语句，  *)
 (*   零经典逻辑/排中律）；出口 QltT'/QleT'/NatLe/sigT；     *)
 (*   尾界 2/n! 为显式公式，非恒真壳；文末 Print Assumptions 留痕。 *)
-(* 领土纪律：本席仅新建 Live/build/ExpOneEnvelope.v；其余只读      *)
 (*   （特别不 Require/不触碰 SumInvFactEscape.v）。               *)
 (* ============================================================ *)
 
@@ -519,7 +514,6 @@ Print Assumptions eoe_abs_bound.
 Print Assumptions eoe_cauchy_modulus.
 Print Assumptions eoe_mono.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions eoe_abs_bound.
 Print Assumptions eoe_abs_Qle.
 Print Assumptions qleT'_weaken.

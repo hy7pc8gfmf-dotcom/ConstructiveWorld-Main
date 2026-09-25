@@ -8,8 +8,6 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqGibbsD.v —— 槽消解战役 #1：gibbs_inequality（UpReqDist.v）      *)
-(*   Real 实例化消解件（皇冠执行席，2026-09-10）                        *)
 (* ------------------------------------------------------------------ *)
 (* 引擎形状核对结论（普查 §380 落点纪律执行记录）：                      *)
 (*   引擎 real_log_le_linear_B @UpRealLeB:535 输出 Bishop 形序          *)
@@ -563,7 +561,6 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 核对（槽消解战役 #1 结果清单）：                                     *)
 (*   gibbsd_lt_add_opp_r / gibbsd_le_b_opp / gibbsd_le_b_id_l /         *)
 (*   gibbsd_minus_flip / gibbsd_le_b_mult_pos_r —— Bishop 序代数 5 件    *)
 (*   （req 层 opp_le_compat / le_id_l / req_le_mult_compat_r 的          *)
@@ -575,11 +572,9 @@ Qed.
 (*   gibbsd_gibbs_pointwise_B —— 槽消解位（dist_log_le_linear 显式应用）。  *)
 
 (*   gibbsd_cross_entropy_decomp —— 级联首层主件。                      *)
-(* 沉淀卡（索引回填行见合规自查报告）：                                     *)
 (*   E-GIBBSD-1：B 形引擎消解 req 层 Hypothesis 槽，序异向不可显式应用——    *)
 (*   落点纪律 §380 fallback（Real 实例化定理）首次全链执行；缺口件=      *)
 (*   Bishop 序代数基元 5 件 + Bishop 和单调 1 件（本文件 Part A/C      *)
-(*   可跨战役复用：log_le_linear/log_lt_mono 族槽消解同构缺口）。       *)
 
 
 

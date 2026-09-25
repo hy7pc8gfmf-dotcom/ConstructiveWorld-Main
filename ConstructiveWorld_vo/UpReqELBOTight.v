@@ -9,12 +9,9 @@
 (*   t12_elbo_tight_backward（原 L268，4 句玩具证）                       *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 【恒等守恒更正注记】 *)
 (* 上方头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经全量 *)
 (* 恒等核查与试点复核：本件实测为恒等守恒——清单所列 2 参数位证明体与 *)
 (* Main 现版原件逐字同文（刀体＝原体，零变化），头注「替换」声称与实物 *)
-(* 不符，特此更正。 *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 2 参数位；证明体、声明面、语句面、 *)
 (* Require 面零改动；头注过程流水词面已作中性化处理。 *)
 (* ============================================================ *)
 
@@ -41,7 +38,6 @@
 (*     逆向半边：逐点 q s ≡ p_b s ⟹ ELBO(q) ≡ evidence。                *)
 (*   双向组装为 prod 双函数记录（Set 层 And 形，零 Prop）。              *)
 (* ------------------------------------------------------------------ *)
-(* 【术语映射表（承 T10 结果件，逐字沿用）】                             *)
 (*   ELBO(q) := −F[q]        ↔ real_elbo（UpReqELBOEps 件 0）           *)
 
 (*   真实后验/输出分布       ↔ real_boltzmann_dist_r（π* 锚闭式解实例）  *)
@@ -50,7 +46,6 @@
 (* ------------------------------------------------------------------ *)
 (* 【组装链结构图（各步引用件名）】                                     *)
 (*   件 0 切点式谓词 t12_tangent_eq（Set 层显式前提形的逐点结论面）。    *)
-(*   件 1 紧致核 t12_tight_kl_zero：紧致假设沿 T10 等值核               *)
 (*     real_evidence_kl_decomp 运输 ⟹ ELBO ≡ ELBO + D·KL ⟹             *)
 (*     加法消去（S08 real_eq_plus_cancel_l）⟹ D·KL ≡ 0 ⟹                *)
 (*     D>0 右因子消去（S08 real_eq_mult_cancel_r + S02 real_mult_comm）  *)
@@ -128,7 +123,6 @@ Definition t12_tangent_eq
 
 (* ---------------------------------------------------------- *)
 (* 件 1：紧致核——紧致假设 ⟹ KL ≡ 0（抽象载体）                          *)
-(*   链：T10 等值核（evidence ≡ ELBO + D·KL）+ 紧致（ELBO ≡ evidence）  *)
 (*   ⟹ ELBO ≡ ELBO + D·KL ⟹ 加法消去 ⟹ D·KL ≡ 0 ⟹ D>0 右因子消去      *)
 (*   ⟹ KL ≡ 0。                                                         *)
 (* ---------------------------------------------------------- *)
@@ -166,7 +160,6 @@ Proof.
   set (pb := real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos).
   set (pbpos := real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos).
   set (KLsum := real_sum_over_S (fun s : S => real_kl_term (q s) (pb s) (Hq s) (pbpos s))).
-  (* 第 1 步：等值核（T10 件 1 实例化；set 折叠面经局部定义展开可转换） *)
   assert (Hdec : real_eq (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
                          (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
                                     (real_mult D KLsum))).

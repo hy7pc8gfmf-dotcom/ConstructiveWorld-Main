@@ -493,7 +493,6 @@ Proof.
   assert (Hdef : real_eq (real_minus_r (lH bB bBpos) (lH p Hp)) (lKL p Hp)).
   { exact (real_entropy_deficit_kl_temp X lsumf lpos lext llinear ladd
              T0 T0_pos e0 p Hp Hnp Henergy). }
-  (* 段二：KL 逐 eps 非负（T14 件 1 全 arity 十五参显式）：0 ≤ KL_p + eps *)
   assert (Hkl : real_le real_zero (real_plus (lKL p Hp) eps)).
   { exact (real_KL_temp_ge_zero_eps X lsumf lpos lext lle llinear ladd
              T0 T0_pos e0 p Hp Hnp eps Heps). }

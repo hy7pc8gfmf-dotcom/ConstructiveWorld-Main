@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T266 台账席 战役包AA（tier2 十七批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -9,7 +8,6 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* Paper12345Sample.v —— 席 P67B（E-STAGING-P67B）T56 样例件        *)
 (*   论文5 §5.2「诚实边界（挂账登记）」可消融 B 类首步施工件：         *)
 (*   定理 5.2（cec_kernel_coef）一般 k 形的参数化恒等式               *)
 (*     cec_r6_s k v == k·v + bcoef k·v² + v³·w                       *)
@@ -18,14 +16,9 @@
 (*                                                                *)
 (*   纪律：前缀 p12_；自足定义（正本对照 ConstructiveWorld_Live/       *)
 (*   UpReqEngineCeiling.v 的 cec_r6_s/cec_r6_bcoef/cec_r6_coef）；      *)
-(*   零 公理/承认件/参数；普查席禁编译——本件未过四关，          *)
-(*   接续席按交接文档 §3.1 模板补跑 G1-G4（-Q vo_901 单根）。           *)
 (*                                                                *)
-(* 【CZD10 勘误注记 20260918·跳件登记】本件 p12_mul_neq0 证明面为        *)
 (*   结构性错稿（语句面 eq / 证明面 Qeq 两面不同构），3 轮跳件。        *)
-(* 【CYE12 修证 20260918】p12_mul_neq0 第 4 轮按 Z 层注入级重构闭合；    *)
 (*   p12_div_cancel 定谳为语句面语义假（见该引理注记），跳件。          *)
-(* 【CZD13 修证定稿 20260918】:85 真错件手修完成——                    *)
 (*   ① p12_div_cancel 语句面维修：原 Leibniz 面 `a <> 0` 语义为假      *)
 (*     （反例 a := Qmake 0 2：Leibniz 非 0 但 Qeq 为 0，此时 /a == 0，  *)
 (*     左端 == 0 ≠ x），换装为 Qeq 面 `~ a == 0` 真前提（非改弱）；      *)
@@ -61,7 +54,7 @@ Definition p12_coef (k : nat) : Q :=
 
 Lemma p12_mul_neq0 : forall a b : Q, a <> 0 -> b <> 0 -> a * b <> 0.
 Proof.
-  (* CYE12 重构 20260918（第4轮，终）：按 CZD10 头注「Z 层注入级重构」路线。
+  (*
      语句面 <> 是表示级 eq（记录 Leibniz），证明体弃 Qeq(==) 面 tactic，
      改纯 Z 层：destruct 拆 Qmake → injection 分量等式 → positive 单位
      9 情形 discriminate 收敛 ad=bd=1 → Z.mul_eq_0 收口。 *)
@@ -77,11 +70,11 @@ Proof.
   - apply Hb. rewrite H1. reflexivity.
 Qed.
 
-(* 【CZD13 语句面维修登记 20260918】原语句面 `a <> 0`（Leibniz/表示级）
+(*
    为【假命题】：反例 a := Qmake 0 2 满足 Leibniz 非 0，但 Qeq 面为零，
    此时 /a == 0，左端 a * (x / a) == 0 ≠ x。故本引理原形不可证非 tactic
    之过，最小维修 = 前提换装 Qeq 面 `~ a == 0`（真前提，语义恰所需，
-   非改弱）。另 :85 原报错（T63 定格：Found no subterm matching
+   非改弱）。另 :85 原报错（组 定格：Found no subterm matching
    "(Qnum (?M * (?M * ?M)) * QDen (?M * ?M * ?M))%Z"）双因：
    ① Qmult_assoc 实形 `n * (m * p) == n * m * p` LHS 右结合，
      目标 (x*a)*/a 左结合无匹配（即该 Z 展开模式）；
@@ -112,7 +105,7 @@ Theorem p12_param_general_k : forall (k : nat) (v : Q),
   exists w : Q,
     p12_s k v == (Z.of_nat k # 1) * v + p12_bcoef k * v * v + v * v * v * w.
 Proof.
-  (* CZD13 证体重构 20260918：原稿除法消去支依赖「v³ Qeq 非 0」，
+  (*
      而 Leibniz 前提 v <> 0 推不出它（Qmake 0 2 反例同源）——非 tactic
      缺陷而是覆盖面缺口。按 Qeq_dec v 0 双分支收口：
      零支（Qeq 为 0，含非正规形）p12_s == 0，取 w := 0；

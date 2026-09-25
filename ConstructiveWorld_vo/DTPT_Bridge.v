@@ -1,5 +1,4 @@
 (* ============================================================
-   T241 · ToyR 战役包B 补位席切片二（DTPT_Bridge.v 同名非平凡替换稿）
    本片口径：Set 形桥接件中「包装构造子 + Prop 母件转发」的十九条
    循主会话转发件挂账口径如实挂账（母件皆他件非玩具归纳/代数链，
    内联即整链搬运超切片预算）；tarski_set 与 layered_network_liar_set
@@ -7,11 +6,10 @@
    非法），existT 直构即唯一合法 Set 通道；H_min_q_anti_set 复判为
    非玩具（证明体已是定义面展开＋反变桥＋前提抽取三步直构，无
    转发跳可消）；其余六条按口径三内联母件骨架（布尔三律/双副本
-   守恒归纳×2/H_max_q 反变定义面/nat 提升桥×2）替换；台账：
-   消融50/T240-ToyR-包B-DTPT族替换.md 切片二节。
+   守恒归纳×2/H_max_q 反变定义面/nat 提升桥×2）替换。
    ============================================================ *)
 (* ============================================================
-   DTPT_Bridge.v — P3 桥接层首件（席 P3-B1，2026-09-14）
+   DTPT_Bridge.v — P3 桥接层首件。
    职责：DTPT 冻结旗舰的 Set 层信息性桥接——
          §1 信息性比较类型族 Type 版（QleT/QltT/QeqT，单构造子
             携 Prop 证明参数＝提取擦除惯例）+ Qle 双向桥 + 传播引理
@@ -32,10 +30,10 @@
          S02 L77 QleT' := Id (Qle_bool x y) true
          S01 L68 And (A B : Set) := A * B
          S01 L73 ExistsT P := sigT P
-         本件比较族改取「单构造子归纳＋Prop 证明参数」形（任务书
+         本件比较族改取「单构造子归纳＋Prop 证明参数」形（规格
          指定）：信息角色与提取行为同构（Prop 参提取即擦除），
          并避开主库 Or/Id 形在隔离区缺 Id 底座的依赖。
-   命名：沿用任务书指定名；模块 DTPT_Bridge 限名隔离防撞。
+   命名：沿用规格指定名；模块 DTPT_Bridge 限名隔离防撞。
    认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
    纪律：温控协议 v2（coqc 全机 ≤3 先查后编）；禁碰既有 .v；
          H_freq/Entropy 族桥留待后续棒（Entropy 置换不变命题经
@@ -147,7 +145,7 @@ Extraction "b1_C_sorted_min_adj_set_ext.ml" C_sorted_min_adj_set.
 Extraction "b1_C_gen_set_ext.ml" C_gen_set.
 Extraction "b1_H_devsum_nonneg_set_ext.ml" H_devsum_nonneg_set.
 
-(* ========== §5 P3-B2 追加：熵族旗舰 Set 形桥接（2026-09-14） ==========
+(*
    前置核查裁决（详见 DTPT_P3B2_桥接报告.md §1）：
    DTPT_Entropy.v L125 注记所指命题＝「H_devsum 置换不变」（质心偏移
    占位形；盘上 H_shannon_q_perm_inv_counterex 已构造性证伪，反例
@@ -161,7 +159,7 @@ Extraction "b1_H_devsum_nonneg_set_ext.ml" H_devsum_nonneg_set.
      L1903 三成员）；H_shannon_q_zero_iff_sorted L2484 与 stdlib
      Qeq_bool_iff；freq_perm（DTPT.v L1974）；
      mu_total_mass（DTPT.v L2094）。
-   类型注记：任务书草式「1 # Z.of_nat (length l)」的 # 分母须
+   类型注记：规格草式「1 # Z.of_nat (length l)」的 # 分母须
    positive 实参（Measure 卡同族坑：# 不可吃 Z），盘上类型正确形
    ＝ 1 / qn (length l)（collide_lower / maxfreq_lower 同面），
    从盘面。 *)
@@ -229,7 +227,7 @@ Extraction "b2_H_devsum_zero_iff_sorted_set_ext.ml" H_devsum_zero_iff_sorted_set
 Extraction "b2_freq_perm_set_ext.ml" freq_perm_set.
 Extraction "b2_mu_total_mass_set_ext.ml" mu_total_mass_set.
 
-(* ========== §7 P3-B3 追加：真理网/审查器旗舰 Set 形桥接（2026-09-15） ==========
+(*
    消费盘上已证件（DTPT_Truth.v 835 行冻结终态，全部只读）：
      level_le L89 / level_le_total L468 / trLevel_geq_trans L480 /
      audit_node L700 / diag_closed L247（对角化引理＝显式前提，
@@ -411,10 +409,10 @@ Extraction "b3_cv_size_preservation_D_set_ext.ml" cv_size_preservation_D_set.
 Extraction "b3_cv_lv_total_set_ext.ml" cv_lv_total_set.
 Extraction "b3_layered_network_liar_set_ext.ml" layered_network_liar_set.
 
-(* ========== §9 P3-B5 追加：熵族剩余旗舰 Set 形桥接（2026-09-15） ==========
+(*
    消费盘面现役名 grep 实测表（DTPT_Entropy.v 2,708 行冻结终态，
-   全部只读；棒 6a 在飞 Cyc/RotSpec/Lam 无交叠——DTPT_Lam.v 未
-   Require 未消费，H_lam_anti_mono 禁消费在飞件照办）：
+   全部只读；棒 6a 进行中 Cyc/RotSpec/Lam 无交叠——DTPT_Lam.v 未
+   Require 未使用，H_lam_anti_mono 禁使用外部件照办）：
      collide_upper        L1743  forall l, collide l <= 1
      collide_lower        L1757  forall l, (0 < length l)%nat ->
                                    1 / qn (length l) <= collide l
@@ -430,7 +428,7 @@ Extraction "b3_layered_network_liar_set_ext.ml" layered_network_liar_set.
    主件二择一裁决：取 H_max_q_anti 反变单调面（QleT 前提经 §1
      QleT_to_Qle 抽取、结论经 qleT_intro 包装——双向桥同件串接，
      消费深度高于 collide_perm 直构形）；collide_perm 实测在册
-     （L1778，EntFam2 归并区），按任务书二择一让位，如实记账。
+     （L1778，EntFam2 归并区），按规格二择一让位，如实记录。
    H_lam 面声明：H_lam_mono（L94）现役但不在本棒任务清单，让位
      后续棒；H_lam_anti_mono 在 DTPT_Lam.v 棒 6a 归并中，禁消费。
    惯例：全部 Defined（B1 坑④提取消费件惯例）；# 分母 positive
@@ -508,10 +506,10 @@ Extraction "b5_H_max_q_anti_set_ext.ml" H_max_q_anti_set.
 Extraction "b5_H_max_q_nonneg_set_ext.ml" H_max_q_nonneg_set.
 Extraction "b5_H_min_q_nonneg_set_ext.ml" H_min_q_nonneg_set.
 
-(* ========== §11 P3-B8 追加：DPI 旗舰 Set 形桥接 + 熵族补充桥件（2026-09-15） ==========
-   消费盘面现役名实测表（全部只读；FRUIT-2 在飞改 DTPT.v/DTPT_Entropy.v，
+(*
+   使用盘面现役名实测表（全部只读；FRUIT-2 修改 DTPT.v/DTPT_Entropy.v，
    本节名面经冻结 .vo 的 coqtop Check 探针逐一实测解析成立后才落笔；
-   DTPT_Entropy2.v / DTPT_Rotation §S8 零 Require——禁消费在飞件照办）：
+   DTPT_Entropy2.v / DTPT_Rotation §S8 零 Require——禁使用外部件照办）：
      H_freq_dpi           L1439  forall f, (forall x y : Q, x == y ->
                                  f x == f y) -> forall l,
                                  H_freq (map f l) <= H_freq l
@@ -607,8 +605,8 @@ Extraction "b8_H_freq_map_chain_set_ext.ml" H_freq_map_chain_set.
 Extraction "b8_H_min_q_anti_set_ext.ml" H_min_q_anti_set.
 Extraction "b8_H_freq_eq0_all_same_set_ext.ml" H_freq_eq0_all_same_set.
 
-(* ========== §13 P3-B11 追加：FRUIT-2 新定理 Set 形桥接（2026-09-15） ==========
-   消费盘面现役名实测表（全部只读；双实测＝grep 在飞 .v + coqtop Check
+(*
+   使用盘面现役名实测表（全部只读；双实测＝grep 工作树 .v + coqtop Check
    冻结 .vo（DTPT.vo 07:11 / DTPT_Entropy.vo 07:11，FRUIT-2 收口版），
    七名签名逐项吻合后才落笔，探针日志 _p3b11_probe.log 在案）：
      sqsum_app_ge_l   DTPT_Entropy.v L2696  forall l1 l2,
@@ -624,10 +622,10 @@ Extraction "b8_H_freq_eq0_all_same_set_ext.ml" H_freq_eq0_all_same_set.
                         (|fiber|/|w|) <= qsum (map (mu w) (dedup (fiber)))
      mu_fiber_mass_eq DTPT.v L3560  forall f w, w <> [] -> φ 外延卫哨 ->
                         qsum (map (mu w) (dedup (fiber))) == |fiber|/|w|
-   让窗声明（本棒特记）：ADJ-4 在飞改 DTPT_Entropy.v §A7（.v 07:39
-     新于 .vo 07:11）——本席零消费 §A7，消费名经冻结 .vo Check 实测
-     解析成立；FRUIT-3 在飞 Rotation §S9 与本席零交集。ADJ-4 收口重编
-     Entropy.vo 后本席重验 Bridge.vo 一轮（消费名面按上表核销）。
+   让窗声明（本棒特记）：ADJ-4 修改 DTPT_Entropy.v §A7（.v 07:39
+     新于 .vo 07:11）——本件零使用 §A7，使用名经冻结 .vo Check 实测
+     解析成立；FRUIT-3 进行中 Rotation §S9 与本件零交集。ADJ-4 闭合重编
+     Entropy.vo 后本件重验 Bridge.vo 一轮（使用名面按上表复核）。
    nat → Q 提升惯例（B2 freq_perm_set 同款）：sqsum/freq_q/nsum 族为
      nat 值，信息性面取 (Z.of_nat · # 1)%Q 归一提升（# 分母 positive
      实参形照盘面，B2 坑②）；nat ≤/＝ 经 Znat.Nat2Z.inj_le/_add
@@ -732,14 +730,14 @@ Extraction "b11_QeqT_of_nat_eq_ext.ml" QeqT_of_nat_eq.
 Extraction "b11_sqsum_app_eq_set_ext.ml" sqsum_app_eq_set.
 Extraction "b11_mu_fiber_mass_eq_set_ext.ml" mu_fiber_mass_eq_set.
 
-(* ========== §15 P3-B13 追加：FRUIT-5 §A8 新定理 Set 形桥接——拼接精确卷积式（2026-09-15） ==========
+(*
    消费盘面现役名实测表（全部只读；FRUIT-5 已收口冻结面＝DTPT_Entropy.vo
    08:38:12 > .v 08:37:55，六名 grep .v 实测 + 探针编译链接冻结 .vo 实测
    双证在案（_p3b13_probe.log），签名逐项吻合后才落笔）：
      sqsum_app_cross   DTPT_Entropy.v L2990  sqsum (l1++l2) = sqsum l1 +
                         sqsum l2 + Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1
                         （交叉项显式四项形；盘面证明体 exact 消费 §A6
-                        sqsum_app_eq，本席照盘面名位件消费）
+                        sqsum_app_eq，本件照盘面名位件使用）
      sqsum_cross_sym   DTPT_Entropy.v L2999  Σ_{x∈l1} freq_q x l2 =
                         Σ_{x∈l2} freq_q x l1（对称双和，2X 标准形承重面）
      sqsum_app_eq2     DTPT_Entropy.v L3020  sqsum (l1++l2) = sqsum l1 +
@@ -751,7 +749,7 @@ Extraction "b11_mu_fiber_mass_eq_set_ext.ml" mu_fiber_mass_eq_set.
      H_freq_app_eq     DTPT_Entropy.v L3073  H_freq (l1++l2) == w1²·H_freq l1
                         + w2²·H_freq l2 + 2·w1·w2 − X/n²（熵族拼接卷积完整
                         恒等式；其盘面证明即消费 H_freq_eq_bridge L1993
-                        「H_freq == 1 − collide」桥面——本席随链继承）
+                        「H_freq == 1 − collide」桥面——本件随链继承）
      H_freq_app_assoc  DTPT_Entropy.v L3118  H_freq ((l1++l2)++l3) ==
                         H_freq (l1++(l2++l3))（三段结合律一致性值面）
    基建与惯例：QeqT/Defined 沿 §1（B1）/§13（B11）；nat 面经 §13.3
@@ -892,7 +890,6 @@ Extraction "b13_H_freq_app_assoc_set_ext.ml" H_freq_app_assoc_set.
 
 End DTPT_Bridge.
 
-(* —— 切片二替换件闭包打印（T241 补位席追加，四关 G4 附件） —— *)
 Import DTPT_Bridge.
 Print Assumptions liar_diag_point.
 Print Assumptions cv_size_preservation_T_set.

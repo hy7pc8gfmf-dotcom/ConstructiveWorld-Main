@@ -38,7 +38,6 @@
 (*   收尾，非提取面），照 UpReqLpoEquiv 的 lpn_equivalence 体例。            *)
 (*   诚实边界：反向肢接口为条件化形——全称无前提形已被 lgwe_minsel_refutable *)
 (*   驳斥，条件化是唯一可行路线；条件里的非负 Or 族在 Real 乘法单调性引理   *)
-(*   缺席下不可从四正性前提导出（如实注记），rLPO 的贡献 = 归零否证的免序数据短路。 *)
 (*                                                                *)
 (* 构造性注记：纯构造性、零承认；选择器本体 sigT/Set 形（lgwe_MinSelC、     *)
 (*   lgwe_scan、lgwe_station_dec 全 Set），合取走 Prop Qed 形               *)

@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -45,7 +44,6 @@
 (*   兑现装载（E354 装法同族）：转移核取独立提议核（与首参无关）；        *)
 (*     Z 取定义为 boltzmann 非正规和实例（sumd 引擎），partition 前提     *)
 (*     链显式承载。                                                       *)
-(*   防重认领（20260919 实测）：Live_X 无 UpAblD1S1_*/UpAblD1S2_*/       *)
 (*     UpAblP3S1_* 认领件；本四槽 Live_X 无既有同槽实例化消解件。             *)
 (*   纪律：零 git、原树零改、前缀 uabd1s3_ 全树零撞名；                  *)
 (*     文尾 Print Assumptions 收尾；G3 提取检验内嵌一人一目录            *)
@@ -157,7 +155,6 @@ Print Assumptions uabd1s3_fep_st_real_transition_nonneg.
 Print Assumptions uabd1s3_fep_st_real_transition_normalization.
 Print Assumptions uabd1s3_fep_st_real_detailed_balance.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions uabd1s3_fep_st_real_detailed_balance.
 Print Assumptions uabd1s3_fep_st_real_transition_normalization.
 Print Assumptions uabd1s3_fep_st_real_transition_nonneg.

@@ -1,9 +1,7 @@
-(* ToyR 消融刀位注记（T259 台账席·包T·tier2十批）：本件三玩具位（sumd 族单 exact 直喂）
-   按结构性推导口径落刀重证：unfold sumd_sumf 定义层展开＋enum 列表归纳＋simpl 定义层化简，
+(*
    接口引理显式项装配（req_refl/req_plus_compat/req_plus_exchange/plus_zero/mult_zero/
    distrib/req_sym/req_trans 复合链）。语句面逐字未动；零新增 Require；其余位逐字保留。 *)
 (* ============================================================ *)
-(* UpAblT12_G13.v —— 假设消融战役 T12 扫尾席（sumf 零头 5 位之 G13 3 位）        *)
 (* 辖区：G13_EvictFam.v EvictIdReq 节 sumf 接口面（L435/438/441 三位）            *)
 (* 放电母本：sumd_*@UpReqSumD                                                   *)
 (*                                                              *)
@@ -11,10 +9,6 @@
 (*   假设位在具体有限和实例 sumf := sumd_sumf S enum 上全部无条件成立——          *)
 (*   前提减薄为纯数据槽（枚举清单），假设位逐条消除。                            *)
 (*                                                              *)
-(* 主件清单（3 件，前缀 uabT12_，逐件标注被消融位坐标与放电件）：                 *)
-(*    A1 uabT12_g13_sum_linear ←L435 sum_linear 放电 sumd_sum_linear@UpReqSumD:135 *)
-(*    A2 uabT12_g13_sum_add    ←L438 sum_add    放电 sumd_sum_add@:161          *)
-(*    A3 uabT12_g13_sum_ext    ←L441 sum_ext    放电 sumd_sum_ext@:112          *)
 (*                                                              *)
 (* 分级：3 件全 N1（库内放电件直连；证明体非平凡内容在放电件本体——               *)
 (*   列表归纳链 sumd_list_sum_*@UpReqSumD，本件直连不注水）。                    *)
@@ -27,7 +21,6 @@
 (*   接口投影 @R RIS 位）在出节全参形下经实例消解同轨。                          *)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾逐件 Print Assumptions 收尾。          *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT12_G13.log。                      *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

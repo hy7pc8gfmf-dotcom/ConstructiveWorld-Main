@@ -1,5 +1,4 @@
 (* ===================================================================== *)
-(* FepIdentClass.v —— E-STAGING-P6A 席位（论文6 §10 开放项「识别条件的库内化」） *)
 (*                                                                       *)
 (* 论文坐标：论文6-自由能变分原理的构造性同一性-正式版.md                 *)
 (*   §6.5 三条建模识别（Id 语句面原文）：                                  *)
@@ -32,7 +31,6 @@
 (*      fic_attention_is_gibbs_temp_via_id —— 类字段出发重回 Id 等式     *)
 (*      （库内化闭环：识别数据 → 类对象 → 同一性）。                     *)
 (* 墙面诚实声明：受体老层 RealInterfaceEnhanced 全库无具体实例（Id 形字段 *)
-(*   在具体 Real 上不可满足——TempSoftmaxInstantiation 席已定谳），故      *)
 (*   「Real 层实例」取接口拓扑下唯一真消费路径：S07 RealEnhancedReal      *)
 (*   （req := real_eq）载体面；Id 形语句面经 req:=Id 桥（D 段）保持原样。 *)
 (* 纪律：纯构造性；语句面零 Prop（req/lt/le 均 Set 值）；零               *)

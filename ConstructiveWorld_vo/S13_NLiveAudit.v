@@ -13,7 +13,6 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
 (* 替换定理清单：qleT_refl_local（原两句桥转发 → 语句体展开至      *)
 (*   Qle_bool/Qcompare 定义层，三分逐支构造矛盾项，矛盾支以 Z 层    *)
 (*   自反比较构造性排除）；natlt_intro（原桥转发 → 绝对值反映面     *)
@@ -23,14 +22,10 @@
 (* 红线自检：纯构造性；零新增承认语句；Set 层合取走构造子面；       *)
 (*   替换证明全部以真证明收口语句闭尾；文件尾附假设面打印锚。       *)
 (* 编译态：三形战术已探针件验证（ProbeC 全绿）；本件全链编译待验    *)
-(*   （S 系深依赖链未建，浅链试编见台账）。                         *)
 (* ============================================================ *)
 
-(* —— T241 续作·切片二追加替换：qleT_refl（原桥单跳转发 → 三分样板复用，   *)
 (*   Qcompare 逐支构造，同 qleT_refl_local 定形）；natlt_elim（原换形桥单跳 → *)
 (*   消去向独立装配：判定面消取＋次大比较反映面投影＋定义性换算收口）。     *)
-(*   文件尾增假设面打印锚两条，余见台账续作节。                             *)
-(* —— T241 续作·切片三追加替换（6 处）：sf_natlt_elim/sf_natlt_intro（natlt    *)
 (*   消去/构造定形机械复用，独立版镜像）；bool_id_true/bool_true_id（等同判定面三分： *)
 (*   布尔逐支构造/消去，假支反转穷尽或判别式构造性排除）；audit_and_comm/       *)
 (*   audit_or_comm（逐点布尔判定面四分逐支构造）。文件尾增假设面打印锚六条。   *)
@@ -859,7 +854,7 @@ Definition sf_cur_agent (l : SFLog) : nat :=
 (* 单步（可提取策略）：
    停滞点（连续失败 ≥ 阈值）→ 强制分解 + 更替新代理；
    焦点超限（同代理连续 ≥ 上限）→ 强制更替（防失焦）；
-   正常 → 记录本轮（成功则已闭合计数 +1）。 *)
+*)
 Definition sf_step (cfg : SFConf) (res : bool) (st : SFState) : SFState :=
   match st with
   | (t, (log, (fuel, done))) =>
@@ -3621,7 +3616,6 @@ Variable m_in_vocab : InT m vocab.
 Variable m_count_one : @Id nat (count_token m vocab) (Datatypes.S O).
 Variable gamma : Real.
 Variable gamma_pos : real_lt real_zero gamma.
-(* [墙族登记·RW-GAP argmax 间隙公设] m 最大化间隙（γ 余量）=模型公设：节内 m 无最大化表征兄弟字段，本位不可导，禁硬证；Not 前件=Prop 红线对象——具体层 argmax 构造实例化时供给（甄别席核），接口层原样保留记账。 *)
 Variable gap_le : forall x : Token, Not (Id x m) ->
   real_le (real_plus (z x) gamma) (z m).
 
@@ -4603,7 +4597,6 @@ Qed.
 
 End AttnHardLimit.
 
-(* ToyR 包C 替换席：替换定理假设面打印（零新增依赖验证锚） *)
 Print Assumptions qleT_refl_local.
 Print Assumptions LCAudit.natlt_intro.
 

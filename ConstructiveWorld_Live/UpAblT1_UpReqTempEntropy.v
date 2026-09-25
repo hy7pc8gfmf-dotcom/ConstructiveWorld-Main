@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* UpAblT1_UpReqTempEntropy.v —— 假设消融战役 T1 批·席 a（FA2 第 1 批前 25 位之 6 位） *)
 (* 辖区：UpReqTempEntropy.v Section ReqTempEntropy sumf 接口面（求和假设位六面）   *)
 (* 放电母本：sumd_*@UpReqSumD（SumDischarge 具体有限和机械）                       *)
 (*                                                              *)

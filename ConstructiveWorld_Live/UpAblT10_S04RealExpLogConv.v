@@ -1,8 +1,5 @@
 (* ============================================================ *)
-(* UpAblT10_S04RealExpLogConv.v —— 假设消融战役 T10a 批·翻案验证席      *)
-(* 辖区：T8a 勘误表 E-3 指认坐标 S04_RealExpLogConv.v:1388 weak_trich 槽 *)
 (* 消融母本：real_weak_trich@S07_RealSetoidExpLog.v:5719（全绿 Qed 收口  *)
-(*   L5866；本轮探针后 Check 实测签名零参直给，见 g1 留痕）              *)
 (*                                                                      *)
 (* 目的：普查对 S04:1388 weak_trich 判 W（三分律墙=rLPO 族）与源注       *)
 (*   L1386-87「Real 层 real_weak_trich 已证供给，非 LPO」冲突。本件实测  *)
@@ -32,7 +29,6 @@
 (*   RealSetoid.real_lt_id_l/r L449/L456）。                             *)
 (* 语句面全 Set 层（real_lt/real_eq : Real -> Real -> Set 实测；Not 用   *)
 (*   S01 基座层）；公理面零新增；文尾逐件 Print Assumptions 收尾。        *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblT10_S04RealExpLogConv.*      *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

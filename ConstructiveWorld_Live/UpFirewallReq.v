@@ -8,10 +8,8 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpFirewallReq.v — 签名迁移批 4 第二席：UpFirewall 的 req 伴件  *)
 (*   （10 件）                                                    *)
 (*   母件：attn\UpFirewall.v（熵防火墙：退化检测与恢复的构造性闭环, *)
-(*   2026-09-07）；规划书批 4「模块伴件」                         *)
 (*   伴件形态：req_* 独立伴 Section，与母件同树（attn 目录）       *)
 (* -------------------------------------------------------------- *)
 (* 覆盖核对（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id  *)
@@ -29,7 +27,6 @@
 (*   件 9  req_fw_detect_warm                   <- 母件 L388        *)
 (*   件 10 req_firewall_loop                    <- 母件 L412        *)
 (* -------------------------------------------------------------- *)
-(* 显式假设注记（温度严格层，温度席领地——本件零重建，仅假设假设位）：    *)
 (*   批 2 余件清单 a) 项（variational_temp_bound/energy_exp_temp_  *)
 (*   mono/temp_strict_A_chain2/temp_strict_ident2/energy_exp_temp_ *)
 (*   strict_mono/temp_energy_dual_closed）与 UpReqTempEntropy 件 1  *)
@@ -127,7 +124,6 @@ Definition fw_kl (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2) : R :=
   req_relative_entropy S sumf (fw_bt t1 Ht1) (fw_bt t2 Ht2)
                        (fw_bt_pos t1 Ht1) (fw_bt_pos t2 Ht2).
 
-(* ---- 温度严格层显式假设假设位（五件，温度席领地；本件零重建） ---- *)
 Variable req_entropy_temp_explicit : forall (t : R) (Ht : lt zero t),
   req (fw_h t Ht)
       (plus (mult (inv_pos t Ht) (fw_et t Ht))

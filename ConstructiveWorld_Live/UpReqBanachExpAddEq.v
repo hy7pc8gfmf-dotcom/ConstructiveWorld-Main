@@ -1,6 +1,4 @@
 (* ============================================================ *)
-(* UpReqBanachExpAddEq.v —— 席EXPADD2：S3 exp_add 等式形总装       *)
-(* (20260913，路径 B；闸门 UNQ+CBR 双开 04:26 确认后直接总装)        *)
 (* ============================================================ *)
 (* 使命主件：bxae_exp_add                                         *)
 (*   bae (bxdef_emul (bxdef_exp a) (bxdef_exp b))                *)
@@ -9,7 +7,6 @@
 (*   ① bnh_esp_term_binom（BanachNoHyp，(a+b)^k 项二项式形零假设）  *)
 (*   ② esp_as_bsum/bpa_bsum_mult_r（方块行形，UpReqBanachProd/Add） *)
 (*   ③ bxcb_term_split_binom（UpReqBanachBinomBridge 系数桥）      *)
-(*   ④ esp_diff_le_tail（UpReqBanachExp 尾界）+ 块和→0（本席新建）  *)
 (*   ⑤ bxadd_esp_prod_blim（UpReqBanachExpAdd 部分积序列极限）      *)
 (*   ⑥ bxuq_lim_uniq（UpReqBanachLimUniq 极限唯一性）              *)
 (* 工艺：行形三角 bxae_tri_row（自建归纳，免 bd2 转置）+ 差=块和     *)
@@ -1115,7 +1112,6 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件：e^a·e^b == e^(a+b)（hab 交换面；20260915 席AA18 起零假设）  *)
 (* 六环总装：⑤ 左极限 + ④ 差小移位 + ⑥ 唯一性                      *)
 (* 迁移史注：bxae_ 族七件（term_reassoc/binom_row/tri_row/           *)
 (* diff_block/block_norm_le/diff_small/exp_add）签名收窄至零假设，   *)

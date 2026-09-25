@@ -461,7 +461,6 @@ End FiniteCollapse.
 (* §四 一锚定理实例面：上游 StateSpace 依存件在本载体上的兑现      *)
 (* ============================================================ *)
 (*   IdSlotTranslate 节（Context {RI}{SS} 依存 StateSpace，无     *)
-(*   SumOver 前提）之求和参数位翻译件/宿主核销定理在 R×R 载体上实例化。*)
 
 Section Anchor.
 
@@ -479,7 +478,7 @@ Proof.
   exact (@IdSlotTranslate.idt_sum_eq_list RIE uab34_prodRR enum g).
 Qed.
 
-(* 一锚定理：idt_slot_g01（宿主 AttnDoeblin.bs_list_sum 真机核销）
+(*
    在本实例上的实例面——上游 StateSpace 依存定理首次在本载体实例化消解 *)
 Theorem uab34_idt_slot_g01_prodRR :
   forall (enum : list (@S (@RI_base RIE) uab34_prodRR))

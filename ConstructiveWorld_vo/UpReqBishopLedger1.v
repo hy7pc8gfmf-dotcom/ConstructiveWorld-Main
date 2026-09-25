@@ -1,6 +1,4 @@
 (* ============================================================ *)
-(* UpReqBishopLedger1.v -- RBA 席（Bishop 挂账连体闭合件）20260924        *)
-(*   按前任 R2-B 席 R2BishopLogSel.v L317-324 挂账施工图施工：            *)
 (*   1) rb_le_b_mult_r：<=_B 右乘保序（Bishop 组合器家族增员）            *)
 (*   2) rb_valid_up：klc 向上谱系（消费 klc_closed_powb_mono）            *)
 (* 消费已云认证 .vo（库树只读禁改）；路线全为机检非猜想。                 *)

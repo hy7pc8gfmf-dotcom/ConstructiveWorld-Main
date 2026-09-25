@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* InvPosLtCompat.v —— T40 消融50 战役 CYC9 席（批次 E-STAGING-CYC9） *)
 (*                                                              *)
 (* 使命：UpFirewall.v:102 inv_pos_lt_compat 诚实接口槽 C 类兑现。  *)
 (*   槽语句（UpFirewall.v:102-103，根 L17119 同名 Variable 复刻）： *)

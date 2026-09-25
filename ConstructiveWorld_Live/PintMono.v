@@ -1,9 +1,7 @@
 (* ============================================================ *)
-(* PintMono.v — 席位 CZS14（批次 E-STAGING-CZS14，20260918）       *)
 (*                                                               *)
 (* 目的：PolyIntegral 一期（Q 系数列表线性泛函 pint_integral）之上  *)
 (*       的 P1 积分二期机——单调/正性双机，供候选一 Beukers 主线    *)
-(*       (a)/正性/下界消费（T97 §4 P1 条目，CZI14 落盘）。          *)
 (* 四要素逐件宣言（语句面 / 前提面 / 证明面 / 提取面）：            *)
 (*  §1 pm_qleT'_mult_r / pm_qle_wd_l / pm_qle_wd_r：               *)
 (*     语句面 QleT'（Set）；前提面 QleT' 与 Qeq（内部支撑件，       *)
@@ -31,7 +29,6 @@
 (*       无未证收口、无经典逻辑依赖。语句面零 Prop（Qeq/Qle 仅证内）；*)
 (*       一期刊物 pint_integral_* 全部只消费不重编。诚实边界：真      *)
 (*       「段上逐点正而系数任意」面需网格/Sturm 机器，超本期窗口，    *)
-(*       登记 P1b 残面（见 T107 报告）。                             *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs Lists.List Arith.Arith

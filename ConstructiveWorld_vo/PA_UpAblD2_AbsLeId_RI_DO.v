@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,10 +12,8 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblD2_AbsLeId_RI_DO.v — FA-D2S1 论文域消融施工席             *)
 (* （FA-D2 唯一施工项：AbsLeId 两 Context 槽 N3 实例供给）         *)
 (*                                                               *)
-(* 使命：attn/_tfad2_普查报告-20260919.md ④表 D2-① 批——           *)
 (*   AbsLeId.v（P7）Section AbsLeIdAbstract（L43-81）两接口槽：    *)
 (*     L45 Context {RI : RealInterfaceEnhanced}（接口束槽）        *)
 (*     L47 Context {DO : DecidableOrder RI}（可判定序扩展槽，      *)
@@ -50,7 +47,6 @@
 (*      E225 判定（G09_MiscSmall:566「可判定序=整体三分律=LPO      *)
 (*      等价、全库零实例」）+ S01 序三分律注记（构造性模型不可      *)
 (*      满足）+ AA15R SqWall 与 rLPO 等价判例。全树实例构造        *)
-(*      复验零命中（20260919：Build 解构仅 fa53:43/S06:5164        *)
 (*      两处投影解构形）。邻接 N 坐标：fa53:141（抽象面供给）/      *)
 (*      AbsLeId.v:91（具体面供给）。定理化路线遗留：DO 类参数       *)
 (*      需 Id 面接口实例，全树该实例亦为零，墙语句面无法库内        *)
@@ -61,7 +57,6 @@
 (*   AbsLeId（N1 母本所在，仅引用 ali_real_abs_ge_zero_id）。       *)
 (* 纪律：语句面全 Set 层（Or/Not/Id 均为 S01:67-70 Set 层定义）；   *)
 (*   公理面零新增；无禁用收尾词；前缀 uabd2_ 全库防撞已 grep 核    *)
-(*   （20260919 零命中）；原树零改；论文目录未触碰。               *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -149,7 +144,6 @@ Print Assumptions uabd2_ri_real_abs_ge_zero_id.
 Print Assumptions uabd2_ri_reqface_abs_ge_zero_id.
 Print Assumptions uabd2_do_ltle_iffdec_real.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions uabd2_do_ltle_iffdec_real.
 Print Assumptions uabd2_ri_reqface_abs_ge_zero_id.
 Print Assumptions uabd2_ri_real_abs_ge_zero_id.

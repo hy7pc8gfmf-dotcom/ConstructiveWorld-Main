@@ -1,5 +1,5 @@
 (* ═════════════════════════════════════════════════════════════════════ *
- * ToyR 包E·切片六 同名替换件：UpReqBanachInstB（台账 T243 续作，切片六）     *
+ * 组件E·切片六 同名替换件：UpReqBanachInstB（记录 组 续作，切片六） *
  * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、         *
  * 同一符号、零新增 Require、零承认件、全中文头注）。                       *
  * 替换清单（9 件）：bxib_coef_half_canon／bxib_half_quarter_canon_id／      *
@@ -24,8 +24,6 @@
  * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。           *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
-(* UpReqBanachInstB.v —— 席INSTB：ConstructiveWorld 路径 B       *)
-(*   非弱化路径实例席（规范形破墙，20260913）                     *)
 (* ============================================================ *)
 (* 使命：冻结类签名不变，以 gcd 正规化（bxib_qnorm：约分至最简 +  *)
 (*   分母正 + 零规范到 0#1）破 INS 两墙：                        *)
@@ -441,7 +439,6 @@ Qed.
 
 (* 规范形 + Qopp 的范数不变（墙二零位与 bnorm_opp 字段的桥接引理） *)
 (* ——遗留：需要「Qopp 与 qnorm 可交换」引理（Z.gcd 负分子不变 +   *)
-(*    Z.div_opp_l_z 的 mod-0 侧条件由 gcd 整除性供给），本席席时    *)
 (*    到点未闭合；语句面与用法已在 S3 注记，不影响其余全件。        *)
 (* Lemma bxib_qabs_opp_norm : forall u : Q,                       *)
 (*   Id (Qabs (bxib_qnorm (Qopp u))) (Qabs (bxib_qnorm u)).        *)
@@ -507,7 +504,6 @@ Proof. intros a b c H1 H2. exact (id_trans H1 H2). Qed.
 (* ---- wd 三件（canon-bae 下纯 cong，零算术） ---- *)
 
 (* bplus_wd（canon-bae 下双层 qnorm 塌缩）：遗留——塌缩链已定位       *)
-(*   （fix-提升 + qnorm_qeqT_of_qeqT 两层），席时到点未闭合。         *)
 (* Lemma bxib_bplus_wd : forall a b c d : bxib_E, ... Qed.          *)
 
 
@@ -653,14 +649,11 @@ Qed.
 (* ⓪′ bplus_wd 位：双层塌缩链已定位未闭合（其余 wd 两件在场）。      *)
 (* ⓪ bnorm_opp 位（Qabs ∘ Qopp 恒等链）：需「Qopp 与 qnorm 可交换」 *)
 (*    引理（Z.gcd 负分子不变 + Z.div_opp_l_z 的 mod-0 侧条件由      *)
-(*    gcd 整除性供给），本席席时到点未闭合，见文件中段遗留注记。      *)
 (* ① 乘法群结合/幺元/分配与 bnorm_plus/bnorm_mult 字段：载体与     *)
 (*    bae 已定，按 bplus 同款（stdlib Qmult/Qabs 引擎 + S1 破墙机） *)
-(*    逐字段补齐即可，本席席时到点未填。                           *)
 (* ② 完备性字段：照 INS 先例遗留（bxin_BanachAlgPre +             *)
 (*    bxin_BanachAlg_of_pre 装配桥依存位不变）。                   *)
 (* ③ bnorm_coef 原始钉定语句在 canon-bnorm 下不可满足已由 S2      *)
-(*    形式化；冻结类字段语句面修订属上游手术，非本席领地。          *)
 (* ============================================================ *)
 
 (* ============================================================ *)

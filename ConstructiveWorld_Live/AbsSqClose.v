@@ -1,8 +1,5 @@
 (* ============================================================ *)
-(* AbsSqClose.v — 席位 CZD12（批次 E-STAGING-CZD12）P3 施工件     *)
-(* abs/平方簇收口件：T62 C 类 #40-46 + 顺手件 #47 一件收口        *)
 (*                                                               *)
-(* 对账坐标（消融50/T62-零引用47枚triage.md §2-C 表）：           *)
 (*   #40 UpReqLogRDF.v:95   lrdf_abs_lower_pos（|a|<c ⟹ 0<c+a）   *)
 (*   #41 UpReqLogRDF.v:99   lrdf_abs_le_intro（|u|≤w 引入律）     *)
 (*   #42 UpReqLogRDF.v:103  lrdf_sq_nonneg（0≤t²）                *)
@@ -12,13 +9,11 @@
 (*   #46 UpReqAttnGibbs.v:690 abs_sum_le_r（abs 和三角）           *)
 (*   #47 UpReqLogCompD.v:225 fep_partition（配分函数定义钉扎）     *)
 (*                                                               *)
-(* 收口原理（T62 §3-P3 路线）：fa53_lt_dec 三分引擎；abs 恒等      *)
 (*   双向桥——a≥0 支 = fa53_abs_ge_zero_id_dec 现成（fa53:141），   *)
 (*   a<0 支 = 本件新小件 asc_abs_neg_id（abs_opp 字段回转 +       *)
 (*   abs_pos 反号，~6 行）；(−t)²==t² 环小件 asc_sq_opp 由        *)
 (*   S01 opp_mult_l/r（RingLemmas:399/413）+ opp 对合新件拼装。   *)
 (*   #46：S01 接口自带 abs_triangle 平形字段（S01:284；RIS 面     *)
-(*   仅 eps 形不可用），宿主抽象 sumf 位无归纳数据，按 T62 #46    *)
 (*   路线"逐层特化"诚实收口——sumd 具体有限和层列表归纳成件。      *)
 (*   #47：定义钉扎（fa51:158 fa51_Z_temp_spec_def / G12 同型），   *)
 (*   Z := sumd_sumf 具体化，partition 槽 req_refl 定义性闭，      *)
@@ -27,10 +22,8 @@
 (* 纪律：语句面全 Set 层；零 Prop 泄露（Z_pos 前提取 fa51 同款     *)
 (*   Id 形非 nil，归纳件零空支匹配）；禁词面零命中；原树零改。     *)
 (*                                                               *)
-(* CZJ14 可见性桥适配登记（T98，20260919）：尾节 Import            *)
 (*   RealInterfaceEnhancedMod 所需模块定义于 S07_RealSetoidExpLog   *)
 (*   （:7904-8668），原稿 Require 闭包（S01/fa53_compat_abs/TSI/     *)
-(*   UpReqSumD）无一可见该模块（全链无 Export 桥，T89 §3.2 定格     *)
 (*   行 266 Cannot find module）。适配：Import 前补                 *)
 (*   Require S07_RealSetoidExpLog.（裸 Require 不 Import 库面，      *)
 (*   零新增顶层名遮蔽），Import 改全限定                            *)
@@ -235,7 +228,7 @@ Proof.
              (lt_le_iff zero (opp a) (inl Ht0))).
 Qed.
 
-(* ---- #46：abs 和三角（逐层特化收口，T62 #46 路线） ----
+(*
    宿主槽为抽象 sumf 位（无消解/归纳数据，类字段 rabs_sum_le
    同形但为假设位）；S01 接口自带 abs_triangle 平形字段
    （S01:284；RIS 面仅 eps 形），故在 sumd 具体有限和层

@@ -1,15 +1,10 @@
 (* ========================================================================= *)
-(* 【ToyR 战役·包B·T240 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 战役包B 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
-(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T240。       *)
 (* 替换定理清单：rotc_perm／rotc_length／Pinf_c_perm／rotc_0／Pinf_true_id   *)
 (* ／rotc_in／rotc_H_wit_mid／rotc_H_wit_min／Hsup_cyc_stable_wit／          *)
 (* Hsup_cyc_frozen_value_wit／H_lam_pmid_wit_201_ends／                      *)
 (* rotc_supersedes_rot_id（共 12 刀）                                        *)
-(* 非平凡性口径：置换链内联与显式展开层重演，逐刀唯一性断言落刀；无一行拆    *)
 (* 分式假非平凡。                                                            *)
 (* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
 (* 抽验编译均验零承认。                                                      *)
@@ -17,9 +12,9 @@
 (* ============================================================
    DTPT_Rotation.v — 旋转论：rotc 底座/精确闭式/锐化/λ 插值/偏差判别/
    周期律簇
-   （U8 席新建；M5 归并席并入 DTPT_HsupStable.v 后定形；S5 棒并入
+   （U8 件新建；M5 归并件并入 DTPT_HsupStable.v 后定形；S5 棒并入
    DTPT_ROTC.v；S6a 棒并入 DTPT_RotSpec.v 与 DTPT_Lam.v；S6b 棒改名
-   DTPT_Rotation.v 收官，DTPT_ROTC/DTPT_Entropy2 随棒退役）
+   DTPT_Rotation.v 完成，DTPT_ROTC/DTPT_Entropy2 随棒退役）
    ── 标准六字段头 ──
    【一·职责】
      §0-§8（U8 原面）：firstn/skipn 保序 + rotc_two_runs 双升序段分解 +
@@ -45,7 +40,7 @@
      + align_lambda 行为面 + 端点外插双警戒（[1;5;2]）+ 真旋转底座
      λ-相位插值族 H_lam_cyc/lam_opt_cyc（端点双件/差分恒等式/双方向
      单调/旧件分离双见证/λ-argmin_cyc）。
-     §S8 起（FRUIT-1 席追加；含 AUDIT-2 改道件）：F1 拼接分解恒等式
+     §S8 起（FRUIT-1 件追加；含 AUDIT-2 改道件）：F1 拼接分解恒等式
      H_adj_app（判过时·消费 §2 H_adj_app_seam 既有件的定向包装）+
      F2'/F2 旗舰 Pmid 中相熵分解双形 H_adj_Pmid_seam /
      H_adj_Pmid_decomp（Pmid 第三相首个熵定理：中相 = 排序前缀 ×
@@ -55,7 +50,7 @@
      H_adj_Pmid_ub_gen（尾段不可吞入如实分项）+ 端点退化三件
      （k=0＝P∞ 相、k=length＝P0 相）+ F7 三相判定死支定理化
      phase_classify_ne_PMid（PhMid 构造子不可达）。
-     §S9 起（FRUIT-3 席追加）：H_lam_pmid 三相互补熵理论最后
+     §S9 起（FRUIT-3 件追加）：H_lam_pmid 三相互补熵理论最后
      一块——P0↔Pmid 真 λ-插值载体（λ 从排序相滑向真中相，
      中相端 = 有序前缀×接缝×原始尾三分量熵）+ 端点双件（λ=1 取
      P0 相、λ=0 取 Pmid 相）+ 旗舰仿射差分恒等式与标准形（消费
@@ -65,7 +60,7 @@
      + 加分 k=0 旧件重合桥（与 H_lam 逐点相等，迁移零丢旧信息）
      + k=length 常值面（λ 失效）+ 与 H_lam 分离见证（未排序
      [2;0;1]：中相端 1 ≠ 原始尾端 3，3/2 ≠ 5/2）+ 数值锚双件。
-     §S10 起（CLN-1 席追加；AUDIT-2 A6 恒等簇处置）：保底处置面
+     §S10 起（CLN-1 件追加；AUDIT-2 A6 恒等簇处置）：保底处置面
      定理 rotc_supersedes_rot_id（旧 rot=firstn++skipn 恒等面的
      定谳件，firstn_skipn 直证不消费弃用件）+ 恒等簇真化覆盖面
      三件（llm_rot_id_superseded P 面零损失迁移 / rot_cyclic_
@@ -79,7 +74,7 @@
      = H_adj l）+ 加分消费面重定向示范双件（H_lam_anti_mono_
      real / lam_opt_cross_phase_real：§S7 两消费点同陈述新证法，
      跨相下界改经 Pinf_true_id + H_adj_P0_min 真化锚）。
-     §S11 起（FRUIT-6 席追加；深水区第二件·三相互补统一族）：
+     §S11 起（FRUIT-6 件追加；深水区第二件·三相互补统一族）：
      三族 λ-插值（H_lam 第二端 P∞ l s≡l / H_lam_cyc 第二端
      rotc k l / H_lam_pmid 第二端 Pmid l s k）的单一仿射族
      定理——统一载体 H_lam_gen（第一端恒 P0、第二端参数化）+
@@ -111,17 +106,17 @@
      DTPT_ROTC 与 §S6 顶后置重导共三行删，对 DTPT_ROTC/DTPT_Entropy2
      依赖归零，全树 Require 面仅 DTPT/DTPT_Entropy。
    【三·归并记录】
-     M5 席：DTPT_HsupStable.v（U18-3 拆分席，U8 留账偿还件）全文并入
+     M5 件：DTPT_HsupStable.v（U18-3 拆分件，U8 留账偿还件）全文并入
      本文件尾（§M5-1 分隔注起，除 Require 块外逐字保留），源文件退役
      （.retired_M5 快照留存）。其 Require DTPT/DTPT_ROTC/DTPT_Cyc 三行
      删除——ROTC 依赖经本文件现有 Require DTPT_ROTC 可达。
-     S5 棒（2026-09-15）：DTPT_ROTC.v 全文并入本文件尾（§S5 分隔注起，
+     S5 棒：DTPT_ROTC.v 全文并入本文件尾（§S5 分隔注起，
      除 Require 块外逐字保留，其头部职责任务注原文随行）。撞名预检：
      ROTC 顶层 17 名对本文件既有名 grep 零撞；U18-3 对账表适用面为空
      （rotc_add/rotc_periodic_full 实际在 DTPT_RotSpec.v 侧，跨文件
      二选一去重按头【四】留下游统一裁决）。源件因下游 Lam/RotSpec 在册
      保留不退役。
-     S6a 棒（2026-09-15）：DTPT_RotSpec.v 全文并入本文件（§S6 分隔注
+     S6a 棒：DTPT_RotSpec.v 全文并入本文件（§S6 分隔注
      起，剥壳除头部与 Require/Import 块外逐字搬运）；DTPT_Lam.v 全文
      并入（§S7 分隔注起，剥壳逐字搬运，其头部 Open Scope Q_scope 随
      行）。撞名预检：两源 63 顶层名（RotSpec 29 + Lam 34）对本文件
@@ -130,7 +125,7 @@
      rotc_add_unbounded_false 删，逐名裁决见【四】，删除点留注记，
      原件全文见 .retired_S6 快照）。两源实测全工作区零下游
      Require/Import，随棒退役（.retired_S6 快照留存）。
-     S6b 棒（2026-09-15，收官棒）：本件改名 DTPT_Cyc.v →
+     S6b 棒（完成棒）：本件改名 DTPT_Cyc.v →
      DTPT_Rotation.v（Module DTPT_Cyc → DTPT_Rotation 同名改，头部
      职责行改「旋转论：rotc 底座/精确闭式/锐化/λ 插值/偏差判别/周期律
      簇」）。终态吸收三件：DTPT_ROTC（S5 棒）+ DTPT_RotSpec（S6a）+
@@ -141,22 +136,22 @@
      留存；下游实测全工作区零 Require/Import）；本件下游实测零消费
      （改后无人 Require DTPT_Rotation）。改名前双快照
      DTPT_Cyc.v.bak_S6b_Cyc / DTPT_Cyc.v.snap_S6b_pre。
-     FRUIT-3 席（2026-09-15）：§S9 追加（H_lam_pmid 三相互补——
+     FRUIT-3 件：§S9 追加（H_lam_pmid 三相互补——
      P0↔Pmid 真 λ-插值 13 件：1 Definition + 12 Qed，消费 §S7
      lam_affine_diff_sub 泛形与 §S8 Pmid_sorted_collapse /
      H_adj_Pmid_sorted_exact 既有件零重证），纯尾部追加（End 前插
      段 + 文尾审计块 + 头注职责/归并/认证三行刷新），底座零重证
      零修改。
-     CLN-1 席（2026-09-15）：§S10 追加（恒等簇处置——AUDIT-2
+     CLN-1 件：§S10 追加（恒等簇处置——AUDIT-2
      A6「llm_rot_id 恒等簇 + 8 件弃用注记件仍以现役名被引用」的
      处置收口：15 件全 Qed，保底 4 + 主件 9（含 helper）+ 加分 2），
      纯尾部追加（End 前插段 + 文尾审计块 + 头注三处刷新），
      §S8/§S9 与既有行零改动零触碰；旧面性质全绕行弃用名重推
      （Pinf_eq_l 弃用件不经手，一律改经 §4 Pinf_true_id）；
-     依赖链前置实修一次（FRUIT-4 在飞重编 DTPT.vo 后
+     依赖链前置实修一次（FRUIT-4 重编 DTPT.vo 后
      DTPT_Entropy.vo 假设不一致，_cln1_dep.cmd 补编 Entropy，
      .v 零触碰）（DTPT_CLN1_处置报告.md）。
-     FRUIT-6 席（2026-09-15）：§S11 追加（三相互补统一族——
+     FRUIT-6 件：§S11 追加（三相互补统一族——
      H_lam/H_lam_cyc/H_lam_pmid 三族 λ-插值单一仿射族定理
      14 件：1 Definition + 13 Qed，消费 §S7 lam_affine_diff_sub
      / lam_opt_min 泛形、§4 Pinf_true_id、§S8 H_adj_Pmid_k0 /
@@ -187,17 +182,17 @@
      （DTPT_棒6a_归并报告.md）；底座零重证零修改。S6b 棒（改名+ROTC/
      Entropy2 退役+ROTC 副本前移）重编 6/6 全绿 + coqchk 6 模块 EXIT=0
      （DTPT_棒6b_归并报告.md）。
-     FRUIT-1 席（2026-09-14）：§S8 追加 14 件（14 Qed + 0 Definition，
+     FRUIT-1 件：§S8 追加 14 件（14 Qed + 0 Definition，
      F1 判过时引 seam 件 / F2'+F2 / F2b / F3 / F7 / 加分端点 /
      数值实测锚双件全交，含 AUDIT-2 改道三件），纯尾部追加+头部
      职责行/认证行刷新，底座零重证零修改；单轮编译全绿 +
      coqchk EXIT=0（DTPT_FRUIT1_果实报告.md）。
-     FRUIT-3 席（2026-09-15）：§S9 追加 12 件（12 Qed + 1
+     FRUIT-3 件：§S9 追加 12 件（12 Qed + 1
      Definition：定义/端点双件/仿射差分+标准形/排序坍缩一致面三件/
      k=0 旧件重合桥/k=length 常值面/分离见证/数值锚双件全交），
      纯尾部追加+头部职责行/归并记录/认证行刷新，底座零重证零修改；
      单轮编译全绿 + coqchk EXIT=0（DTPT_FRUIT3_果实报告.md）。
-     CLN-1 席（2026-09-15）：§S10 追加 15 件（15 Qed + 0
+     CLN-1 件：§S10 追加 15 件（15 Qed + 0
      Definition，保底处置面+覆盖面四件 / 逐件映射八件+helper /
      重定向示范双件全交），纯尾部追加+头部三处刷新；首轮编译
      一次绿，Print Assumptions 全 Closed（新增 15/15）+ coqchk
@@ -355,7 +350,7 @@ Qed.
    分歧消解为单一本地本体（逐字同形，语义等价）。
    ============================================================ *)
 (* ============================================================
-   DTPT_ROTC.v — 真循环旋转底座（X1 扫描席 A 级发现：伪定理簇真化）
+   DTPT_ROTC.v — 真循环旋转底座（X1 扫描件 A 级发现：伪定理簇真化）
    职责：Pinf 伪装簇真化层操作语义——纯增量新建真循环旋转底座
          rotc = skipn ++ firstn（取尾段接到前段，n 起转一圈），
          证明新相算子非退化：存在列表与转数使
@@ -366,7 +361,7 @@ Qed.
          （llm_rot_cyclic_perm / llm_rot_cyclic_length 现成置换件
          与长度件——底座纪律：不重证，直接引用）。
    归并记录：无（原生成模块）。
-   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
+   认证：零承认零公理；全树 coqchk EXIT=0。
    纪律：纯构造性；四关收割；温控协议；全程 Qed；
          nat 全显式 %nat（上游 Q_scope 劫持传导）。
    附注：真化动机——DTPT.v 的 rot = firstn ++ skipn 是恒等重构，
@@ -843,7 +838,7 @@ Qed.
 
 (* ========== §6 加分项：真动态上确界 Hsup_cyc ========== *)
 
-(* 二元最大值：走 Qle_bool 两分，绕开 stdlib 缺席的 Qmax 引理族；
+(*
    上界两向只需布尔分支 + Qle_bool_iff/Qle_bool_false_le，零总序前提 *)
 Definition qmax2 (x y : Q) : Q := if Qle_bool x y then y else x.
 
@@ -946,8 +941,8 @@ Print Assumptions rotc_H_wit_mid.
 Print Assumptions rotc_H_wit_min.
 
 (* ============================================================
-   §M5-1 归并分隔注 —— 以下为原 DTPT_HsupStable.v 全文（U18-3 席）
-   M5 席追加至本文件尾：除头部与 Require 块（DTPT/DTPT_ROTC/DTPT_Cyc，
+   §M5-1 归并分隔注 —— 以下为原 DTPT_HsupStable.v 全文（U18-3 件）
+   M5 件追加至本文件尾：除头部与 Require 块（DTPT/DTPT_ROTC/DTPT_Cyc，
    经本文件头部现有 Require 均可达）外逐字保留，声明序与证法零改动。
    对账注记见本文件头【四】。
    ============================================================ *)
@@ -1454,7 +1449,7 @@ Print Assumptions rotc_class_sharp_attained.
    快照 DTPT_RotSpec.v.retired_S6）——
    【四·对账注记（phcyc_min_perm 去重取证）】
      phcyc_min_perm 与 DTPT_CGen.C_gen 同语句（U18-2 已声明本地重推，
-     因 C_gen 所在件不在原席允许清单）。M5 去重取证：现役底座
+     因 C_gen 所在件不在原件允许清单）。M5 去重取证：现役底座
      （DTPT/DTPT_ROTC/DTPT_Entropy/DTPT_Cyc/DTPT_Entropy2）中排序
      最小化仅有 DTPT.C_sorted_min_adj（Permutation l l 恒等特例：
      forall l, H_adj (P0 l) <= H_adj l），排列类全称形不可由其直推
@@ -1466,8 +1461,6 @@ Print Assumptions rotc_class_sharp_attained.
 
 
 (* ===================================================================== *)
-(* §M5-1 归并分隔注 —— 以下为原 DTPT_PhCyc.v 全文（U18-2 拆分席）           *)
-(* M5 席追加至本文件尾：除头部与 Require 块（DTPT/DTPT_ROTC/DTPT_Entropy   *)
 (* 及 stdlib 导入，均与本文件现有 Require 重合可达）外逐字保留，声明序与    *)
 (* 证法零改动。phcyc_min_perm 去重取证与对账注记见本文件头【四】。           *)
 (* ===================================================================== *)
@@ -1983,7 +1976,7 @@ Qed.
 
 (* ========== 【旗舰】差分恒等式 + 双方向单调 ========== *)
 
-(* 差分恒等式：U5 席泛形 lam_affine_diff_sub 的真底座实形——
+(*
    H_lam_cyc l k lam1 - H_lam_cyc l k lam2 = (lam1-lam2)·(h0-hk)。
    直接 exact 实例化（禁重证）。 *)
 Theorem H_lam_cyc_diff : forall (l : list Q) (k : nat) (lam1 lam2 : Q),
@@ -2012,7 +2005,7 @@ Proof.
 Qed.
 
 (* 递减方向：排序端不高于旋转端（h0 <= hk）时，λ 增 ⟹ 熵减。
-   斜率 (h0-hk) <= 0 与差 (lam1-lam2) <= 0 双非正——U5 席反号装配
+   斜率 (h0-hk) <= 0 与差 (lam1-lam2) <= 0 双非正——U5 件反号装配
    配方：先换位恒等式（change 防御 + ring）再做非负乘法。 *)
 Theorem H_lam_cyc_mono_dec : forall (l : list Q) (k : nat) (lam1 lam2 : Q),
   (H_adj (P0 l) <= H_adj (rotc k l))%Q ->
@@ -2041,7 +2034,7 @@ Qed.
 (* ========== 【主件】与旧件的诚实分离 ========== *)
 
 (* 分离件（s-坍缩面形）：存在 l k lam 使真底座插值 ≠ 旧件 s-坍缩面。
-   见证复用 U3 席 H_rotc_separates 的 [0;1;2] 转 1 格：
+   见证复用 U3 件 H_rotc_separates 的 [0;1;2] 转 1 格：
    H_adj (P0 [0;1;2]) = 2，H_adj (rotc 1 [0;1;2]) = H_adj [1;2;0] = 3，
    lam = 1/2：左 = 1 + 3/2 = 5/2 ≠ 1 + 1 = 2 = 右。vm_compute 数值面。 *)
 Theorem H_lam_cyc_oldface_separates : exists (l : list Q) (k : nat) (lam : Q),
@@ -2063,7 +2056,7 @@ Qed.
 
 (* ========== 【加分】λ-argmin_cyc ========== *)
 
-(* 最优 λ 选择器：直接引 U5 席 lam_opt（h0 <= hk 取 1 冲排序端，
+(*
    否则取 0 落旋转端）——底座纪律：禁重证。 *)
 Definition lam_opt_cyc (h0 hk : Q) : Q := lam_opt h0 hk.
 
@@ -2103,7 +2096,7 @@ Proof.
   - right. rewrite E. apply H_lam_cyc_lam0.
 Qed.
 
-(* ========== §S8 中相熵分解（FRUIT-1 席追加；含 AUDIT-2 改道件：
+(*
    F2' seam 定向形 / F2b 排序坍缩 list 级 / F7 三相判定死支定理化。
    分层：F1 拼接分解（判过时·引 seam 件包装）/ F2 旗舰 Pmid 中相
    熵分解（第三相首块）/ F3 排序上界 / 端点退化） ========== *)
@@ -2114,7 +2107,7 @@ Qed.
    【F1 判过时（AUDIT-2 审计在案）】核心件已在本文件 §2 在盘
    （H_adj_app_seam，L215 起，对 u 归纳 + snoc 步主件，其骨架与
    DTPT.v U1 件 cgen_H_adj_snoc 同配方）——本件不重证不改原件，
-   仅消费既有件做 3 行任务书定向包装（Qabs 方向 xq_abs_sub_comm
+   仅使用既有件做 3 行规格定向封装（Qabs 方向 xq_abs_sub_comm
    + ring 项序归一），零新数学。 *)
 Lemma H_adj_app : forall (l1 l2 : list Q),
   l1 <> [] -> l2 <> [] ->
@@ -2203,7 +2196,7 @@ Proof.
 Qed.
 
 (* F3 主件·精确坍缩面：排序表下中相与 P0 相熵逐点相等——
-   直接消费 F2b 的 list 级坍缩（比任务书 2·spread 模板更强） *)
+*)
 Theorem H_adj_Pmid_sorted_exact : forall (l : list Q) (s : nat) (k : nat),
   SortedQ l -> H_adj (Pmid l s k) == H_adj l.
 Proof.
@@ -2213,7 +2206,7 @@ Proof.
 Qed.
 
 (* F3 主件·上界面：排序卫哨下 H_adj (Pmid l s k) <= 2·spread
-   （P0 面 spread 口径与任务书模板逐字对齐；实由精确坍缩 +
+   （P0 面 spread 口径与规格模板逐字对齐；实由精确坍缩 +
    xq_telescope + rs_le_double 收口——排序情形界可锐化至 1·spread） *)
 Theorem H_adj_Pmid_sorted_ub2 : forall (l : list Q) (s : nat) (k : nat),
   SortedQ l ->
@@ -2339,7 +2332,7 @@ Theorem H_adj_Pmid_decomp_wit_012 :
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================
-   §S9 H_lam_pmid —— 三相互补熵理论最后一块（FRUIT-3 席追加）：
+   §S9 H_lam_pmid —— 三相互补熵理论最后一块（FRUIT-3 件追加）：
    P0↔Pmid 真 λ-插值。H_lam（DTPT_Entropy.v，第二端 Pinf≡l）与
    H_lam_cyc（§S7 并入段，第二端 rotc k l）之后 λ-插值族的第三块
    载体：第二端取真中相 Pmid l s k = firstn k (P0 l) ++ skipn k l
@@ -2421,7 +2414,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* λ=1 端 sorted 精确面（任务书字面形）：端点件 + xq_sortQ_P0_id
+(*
    两步收口。 *)
 Theorem H_lam_pmid_sorted_lam1 : forall (l : list Q) (s : nat) (k : nat),
   SortedQ l -> H_lam_pmid l s k 1 == H_adj l.
@@ -2506,7 +2499,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   §S10 恒等簇处置（CLN-1 席追加；AUDIT-2 A6 条目收口）：
+   §S10 恒等簇处置（CLN-1 件追加；AUDIT-2 A6 条目闭合）：
    「llm_rot_id 恒等簇 + 8 件弃用注记件仍以现役名被引用」的
    处置收口——把「弃用注记」升级为「机器检查的逐件映射」。
    纪律：纯追加；既有行零改动；全部旧面性质绕行弃用名重推
@@ -2518,7 +2511,7 @@ Qed.
 
 (* ========== 【保底】处置面定理 + 恒等簇真化覆盖面 ========== *)
 
-(* 处置面定理（任务书字面形；§S8 未含，grep 实测零命中）：旧
+(*
    rot = firstn ++ skipn 恒等重构之恒等面在真化底座（§1 rotc 系
    在册）下的处置定谳——firstn_skipn 一步直证，不消费弃用件
    llm_rot_id（DTPT.v:1781）。此件即「恒等簇处置」的机器检查
@@ -2764,8 +2757,8 @@ Proof.
 Qed.
 
 (* ============================================================
-   §S11 三相互补统一族（FRUIT-6 席追加；深水区第二件·α 论文 §5
-   收官定理位）：H_lam / H_lam_cyc / H_lam_pmid 三族 λ-插值的
+   §S11 三相互补统一族（FRUIT-6 件追加；深水区第二件·α 论文 §5
+   完成定理位）：H_lam / H_lam_cyc / H_lam_pmid 三族 λ-插值的
    单一仿射族定理——三相插值不是三个独立理论，而是一个第二端
    参数化仿射族 H_lam_gen 的三个实例。
    分层：保底（Definition H_lam_gen + 统一仿射差分
@@ -2791,7 +2784,7 @@ Qed.
 Definition H_lam_gen (l l2 : list Q) (lam : Q) : Q :=
   lam * H_adj (P0 l) + (1 - lam) * H_adj l2.
 
-(* 统一仿射差分定理（任务书字面形）：差 = (lam1-lam2)·(h0-hl2)。
+(*
    exact 实例化 §S7 泛形 lam_affine_diff_sub 一步（底座纪律：
    禁重证，H_lam_diff_sub / H_lam_cyc_diff / H_lam_pmid_diff
    同款配方）。 *)
@@ -2851,7 +2844,7 @@ Qed.
 
 (* 端点选择器在全族上一致最优：λ* := lam_opt (H_adj (P0 l))
    (H_adj l2) 实现 H_lam_gen 在 [0,1] 上任意 λ 处的最小值
-   （对齐选择器最优性的族级版；任务书 align_opt 实测现役名
+   （对齐选择器最优性的族级版；规格 align_opt 实测现役名
    = §S7 lam_opt）。§S7 lam_opt_min 泛形一步 unfold + apply。 *)
 Theorem H_lam_gen_opt : forall (l l2 : list Q) (lam : Q),
   (0 <= lam <= 1)%Q ->
@@ -2995,7 +2988,7 @@ Print Assumptions H_lam_cyc_H_lam_separates.
 Print Assumptions H_lam_cyc_lam_opt_cyc_min.
 Print Assumptions H_lam_cyc_lam_opt_cyc_endpoint.
 
-(* —— 以下为 FRUIT-1 席 §S8 中相熵分解假设审计块（G4，期望全
+(*
    Closed under the global context） —— *)
 
 Print Assumptions H_adj_app.
@@ -3013,7 +3006,7 @@ Print Assumptions phase_classify_ne_PMid.
 Print Assumptions Pmid_sorted_collapse_wit_012.
 Print Assumptions H_adj_Pmid_decomp_wit_012.
 
-(* —— 以下为 FRUIT-3 席 §S9 H_lam_pmid 三相互补假设审计块（G4，
+(*
    期望全 Closed under the global context） —— *)
 
 Print Assumptions H_lam_pmid_lam1.
@@ -3029,7 +3022,7 @@ Print Assumptions H_lam_pmid_H_lam_separates.
 Print Assumptions H_lam_pmid_wit_201.
 Print Assumptions H_lam_pmid_wit_201_ends.
 
-(* —— 以下为 CLN-1 席 §S10 恒等簇处置假设审计块（G4，期望全
+(*
    Closed under the global context） —— *)
 
 Print Assumptions rotc_supersedes_rot_id.
@@ -3048,7 +3041,7 @@ Print Assumptions deprecated_consumers_map_u12_phase_side_always_zero.
 Print Assumptions H_lam_anti_mono_real.
 Print Assumptions lam_opt_cross_phase_real.
 
-(* —— 以下为 FRUIT-6 席 §S11 三相互补统一族假设审计块（G4，
+(*
    期望全 Closed under the global context） —— *)
 
 Print Assumptions H_lam_gen_diff.
@@ -3065,7 +3058,6 @@ Print Assumptions H_lam_gen_klen_const.
 Print Assumptions H_lam_gen_wit_201_id.
 Print Assumptions H_lam_gen_wit_201_pmid.
 
-(* ========== 切片三替换件闭包审计（T240·2026-09-21） ========== *)
 Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_perm.
 Print Assumptions DTPT_Rotation.DTPT_Rotation.rotc_length.
 Print Assumptions DTPT_Rotation.DTPT_Rotation.Pinf_c_perm.

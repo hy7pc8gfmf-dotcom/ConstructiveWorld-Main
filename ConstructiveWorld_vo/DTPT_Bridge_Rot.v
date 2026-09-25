@@ -1,5 +1,4 @@
 (* ═════════════════════════════════════════════════════════════════════ *
- * ToyR 包F·tier1 头批 同名替换件：DTPT_Bridge_Rot（台账 T245 切片五）       *
  * 本稿＝原件全文逐字保留，仅换写下列证明体（同一陈述、同一符号、            *
  * 零新增 Require、零承认件、全中文头注）。                                 *
  * 替换清单（6 条，引擎体整体内联——族级盘件 DTPT_Rotation 证明体在           *
@@ -23,11 +22,11 @@
  *   为本件既有惯例）；证明口逐条配平；全部真收口。                          *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================
-   DTPT_Bridge_Rot.v — P3 桥接层第六棒（席 P3-B6，2026-09-15）
-   续棒：P3-B7（2026-09-15）尾部追加 §8——Rotation §S8 新定理
-         桥接（FRUIT-1 席 §S8 冻结新件的 Set 形面，12 件）
-   续棒：P3-B12（2026-09-15）尾部追加 §9——Rotation §S9 新定理
-         桥接（FRUIT-3 席 §S9 冻结新件 H_lam_pmid 三相互补熵族的
+   DTPT_Bridge_Rot.v — P3 桥接层第六棒。
+   续棒：P3-B7尾部追加 §8——Rotation §S8 新定理
+         桥接（FRUIT-1 件 §S8 冻结新件的 Set 形面，12 件）
+   续棒：P3-B12尾部追加 §9——Rotation §S9 新定理
+         桥接（FRUIT-3 件 §S9 冻结新件 H_lam_pmid 三相互补熵族的
          Set 形面，9 件：端点双件 + 双旗舰 + 分离见证 sigT + 加分
          端点旧件桥/常值面 + vm_compute 锚双件）
    职责：旋转族旗舰 Set 形桥接——底座 DTPT_Rotation.v
@@ -61,24 +60,24 @@
         {=PhP0}+{=PhPinf}）+ 加分端点三件（k0/klen QeqT +
         sorted 端点对 Type 积面）+ vm_compute 锚见证双件
    归并记录：§1–§7 = P3-B6 首棒（旋转族旗舰 Set 形桥接，稳定段
-        零改）；§8 = P3-B7 追加（任务书「§2 = S8 新定理桥接」
+        零改）；§8 = P3-B7 追加（规格「§2 = S8 新定理桥接」
         号段；沿文内既有 §2–§7 编号顺延为 §8，B6 段保持原样）；
-        §9 = P3-B12 追加（任务书「§4 = §S9 三相互补桥接」号段；
+        §9 = P3-B12 追加（规格「§4 = §S9 三相互补桥接」号段；
         沿文内既有 §2–§8 编号顺延为 §9，B6/B7 段保持原样）；
         提取产物 b7_ / b12_ 前缀（B6 段 b6_ 不变）。
    依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
          （棒 6b 改名件；其下游 ROTC/Entropy2 已退役，本文件
          与退役件零接触）。本文件不 Require DTPT_Bridge /
-         DTPT_Bridge_Dig（并发席位文件，防竞态；QleT/QeqT 族
+         DTPT_Bridge_Dig（并发工位文件，防竞态；QleT/QeqT 族
          本地镜像，惯例同构 B1 §1 / B4 §1 同款形——依赖链
          DTPT/DTPT_Entropy/DTPT_Rotation 全链 grep 该族名零
          命中，零撞名实测在案）。
-   命名：桥件名沿任务书指定（H_rotc_separates_set 等 8 件，
+   命名：桥件名沿规格指定（H_rotc_separates_set 等 8 件，
          _set 后缀 B1-B5 惯例）；提取产物 b6_ 前缀；模块
          DTPT_Bridge_Rot 限名隔离。
    认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
    纪律：温控协议 v2（coqc 全机 ≤3 先查后编）；禁碰一切既有 .v
-         （本席独占本新建件）；禁 git；nat 字面量全显式 %nat；
+         （本件独占本新建件）；禁 git；nat 字面量全显式 %nat；
          Q_scope 自开。
    ============================================================ *)
 
@@ -128,7 +127,7 @@ Defined.
 
 (* 盘上 rotc_class_sharp_ub（DTPT_Rotation.v §S6 段）为 Qle ≤ 面：
    forall l k, SortedQ l -> (H_adj (rotc k l) <= 2 * (lastq l - hd 0 l))%Q.
-   桥面逐字对齐（任务书草式即此形），qleT_intro 一跳包装。 *)
+*)
 Theorem rotc_class_sharp_ub_set : forall (l : list Q) (k : nat),
   SortedQ l -> QleT (H_adj (rotc k l)) (2 * (lastq l - hd 0 l)).
 Proof.
@@ -239,8 +238,8 @@ Print Assumptions H_lam_cyc_lam0_set.
 
 (* ========== §8 Rotation §S8 新定理桥接（P3-B7 追加段） ========== *)
 
-(* 消费对象＝DTPT_Rotation.v §S8 冻结新件（FRUIT-1 席产，只读；
-   行号实测：.v 2026-09-15 06:12:51 / .vo 2026-09-15 06:28:58 新于
+(*
+   行号实测：.v 与 .vo 时序均新于所引件：
    .v）：L1994 H_adj_Pmid_seam、L2019 H_adj_Pmid_decomp、L2039
    sorted_abs_le_spread、L2056 Pmid_sorted_collapse、L2068
    H_adj_Pmid_sorted_exact、L2079 H_adj_Pmid_sorted_ub2、L2099
@@ -461,8 +460,8 @@ Print Assumptions H_adj_Pmid_wit_set.
 
 (* ========== §9 Rotation §S9 新定理桥接（P3-B12 追加段） ========== *)
 
-(* 消费对象＝DTPT_Rotation.v §S9 冻结新件（FRUIT-3 席产，只读；
-   行号实测：.v 2026-09-15 07:38:09 / .vo 2026-09-15 07:40:58 新于
+(*
+   行号实测：.v 与 .vo 时序均新于所引件：
    .v）：L2244 H_lam_pmid（Definition）、L2248 H_lam_pmid_lam1、
    L2257 H_lam_pmid_lam0、L2271 H_lam_pmid_diff、L2298
    H_lam_pmid_sorted_consistency、L2333 H_lam_pmid_k0_oldface、

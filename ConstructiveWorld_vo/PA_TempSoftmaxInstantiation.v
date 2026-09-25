@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,7 +12,6 @@
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* TempSoftmaxInstantiation.v —— C4 席：温度 softmax 三件套实例化          *)
 (*   （A4 移植榜 T1：供体 UpReqAttnGibbs.v:262/282/341/477 四件 →          *)
 (*    受体 S06_DiffSamplingGibbs.v LanguageModelExtensions 节              *)
 (*    temperature_weighted_prob（出节后全参形，Check 检验实测 arity：      *)
@@ -51,7 +49,6 @@
 (*   · 禁五件套+经典逻辑：公理面零假设（无公理/自认/参数声明/猜想/中止）；  *)
 (*     非平凡：主件语句面逐字含受体定义，禁恒真壳；文末 Print        *)
 (*     Assumptions 5 处。                                                *)
-(* 防撞：tsi_ 前缀全库 grep 零命中（建前实测 2026-09-16）。               *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -412,7 +409,6 @@ Print Assumptions tsi_temp_weighted_mix_normalized.
 Print Assumptions tsi_temp_scale_duality.
 Print Assumptions tsi_temp_weighted_relative.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions tsi_temp_weighted_relative.
 Print Assumptions tsi_temp_scale_duality.
 Print Assumptions tsi_temp_weighted_mix_normalized.

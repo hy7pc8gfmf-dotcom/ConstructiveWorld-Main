@@ -11,7 +11,6 @@
 
 (* ============================================================ *)
 (* UpDPOLip.v —— A4/B5 升级：DPO softplus-Lipschitz 敏感性界     *)
-(* 日期：2026-09-07。源：热点扫描 A4/B5（分析-219平凡定理热点扫描） *)
 (* 件 1 real_softplus 定义 + 恒等桥 + 单调性                     *)
 (* 件 2 real_softplus_diff_le（序前提单侧核，Lipschitz 数学核）   *)
 (*      + real_softplus_lipschitz（Or 序前提 abs/metric 推论）   *)

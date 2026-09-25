@@ -1,5 +1,4 @@
 (* ===== fa52_entropy_diff_unsat.v ===== *)
-(* 席位 VB（E-STAGING-VB）· T40 消融50 · 2026-09-16 *)
 (* 消融对象：S09_EntropyReal 节 EntropyDiffReal 全部 10 个 Variable 前提槽
    （ConstructiveWorld_Live/S09_EntropyReal.v:4541-4553）。 *)
 (* 定谳：E_B_pos 槽（:4553）全称限定词过强——

@@ -10,15 +10,11 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqTempDefs.v —— 席T6：FEP 温度族 Real 层定义件席                 *)
 
 (* ------------------------------------------------------------------ *)
-(* 【使命】席N1 实证四定义件全库零命中（real_boltzmann_dist_temp /     *)
 (*   real_Z_temp / real_entropy_dist / real_energy_exp_temp），定理    *)
 (*   4.6a entropy_deficit_kl_temp（等式档 real_eq）及其后 4.6b/c 的    *)
 (*   Real 层复刻全部卡在定义层缺失。本件新建温度族 Real 层定义件 4 件  *)
-(*   + 基础引理（正性件 / 归一化件），为滚动席 4.6a-c 定理组装供货。   *)
-(*   本件不做 4.6a 熵亏恒等式本体（等式档组装，留滚动席）。             *)
 (* ------------------------------------------------------------------ *)
 (* 【Id 层原件对位（逐字段对照表，全 grep 实证）】                     *)
 (*   real_Z_temp              <- Id partition_function_temp 参数形       *)
@@ -47,7 +43,6 @@
 (*   载体裁决：求和载体取抽象 real_sum_over_S + ext/linear/pos 接口     *)
 (*      （G02_Debt RealScaleDual/RealAttnGibbsTemp 与 UpReqRealFEP      *)
 (*      RFEPMain 既有先例；Id sum_over_S 同轴对位），非 real_list_sum   *)
-(*      具体 list 载体——4.6a 组装席需要抽象接口喂 假设位。          *)
 (*   命名回避：real_softmax_temp / real_softmax_temp_param 已被         *)
 
 (*      real_boltzmann_dist_temp 供货（inv_pos 归一化即温度化 softmax）。*)

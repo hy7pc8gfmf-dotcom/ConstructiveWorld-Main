@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -41,7 +40,6 @@
 (*   UpBudgetReal （原 L10250–10967，Module BudgetReal）                  *)
 (*   UpArchAttn   （原 L10968–11177，根层，Import BudgetReal）             *)
 (* 剔除分区清单见 _lxR 归档（回滚用原件备份          *)
-(*   _lxR_backup-CW220-orig-20260911.v）。                               *)
 (*                                                                    *)
 (* 下游接口零改动：G07 `Require Import CW220_Extensions.` +               *)
 (*   `Import CW220_Extensions.BudgetReal.`；G12 `Require Import            *)
@@ -1669,7 +1667,6 @@ Qed.
 Extraction "uparchattn.ml" r_arch_pow_attn_real attention_iterate_converges_real.
 
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions r_arch_pow_attn_real.
 Print Assumptions one_minus_delta_pos_real.
 Print Assumptions SigMigrate.req_mult_one_l.

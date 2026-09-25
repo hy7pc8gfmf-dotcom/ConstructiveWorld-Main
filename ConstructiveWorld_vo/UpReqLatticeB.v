@@ -17,7 +17,6 @@
 (*   real_lt sigT 见证型、stdlib 泛型格严格形 Q.max_lub_lt 与     *)
 (*   Q.min_dec、Qopp_le_compat、Qlt_minus_iff）。                 *)
 (*                                                              *)
-(* 勘误一则（对早期侦察稿）：逐点 Qmax 上界严格形无需 witness 全   *)
 (*   重排——stdlib 泛型格库 Q.max_lub_lt（n<p ⟹ m<p ⟹ max n m<p）  *)
 (*   在案可直连，逐点归约后一步闭合；新基元工作量减半，min 对偶    *)
 (*   （Q.min_glb_lt 同库在案）可由同法平移）。                    *)

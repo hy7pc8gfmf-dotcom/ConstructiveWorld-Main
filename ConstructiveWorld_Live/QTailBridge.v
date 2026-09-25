@@ -105,7 +105,6 @@ Proof.
     + (* 双假：双空和 *) ring.
 Qed.
 
-(* ===== 件 2：主定理（Qeq 层，台账原文语句形） ===== *)
 
 Theorem qtb_qtail_sum_eq_exp_tail : forall (b : Q) (m n : nat),
   (1 <= m)%nat -> (1 <= n)%nat ->

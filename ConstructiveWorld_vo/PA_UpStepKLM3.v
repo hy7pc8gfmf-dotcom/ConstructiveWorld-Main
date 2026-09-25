@@ -1,5 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -656,7 +655,6 @@ Proof.
                    (real_plus_comm Y eps))).
 Qed.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions real_iter_step_geom_eps.
 Print Assumptions m3_step_next_norm.
 Print Assumptions m3_interp_Z_pos3.
