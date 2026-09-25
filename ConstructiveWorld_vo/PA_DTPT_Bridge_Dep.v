@@ -21,8 +21,8 @@
          弃用注记件逐件映射」闭合段）的 Prop 证件升级为信息性
          Type/Set 面。
    依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
-         （§S10 行号 L2427-L2676 实测；其 .vo 08:41:35 新于 .v
-         08:34:18 FRESH，FRUIT-6 §S11 已闭合在同一 .vo 内）。
+         （§S10 行号 L2427-L2676 实测；其 .vo  新于 .v
+          FRESH，FRUIT-6 §S11 已闭合在同一 .vo 内）。
          本文件不 Require DTPT_Bridge / DTPT_Bridge_Dig /
          DTPT_Bridge_Rot / DTPT_Bridge_All / DTPT_Truth /
          DTPT_Extract（并发/冻结席位文件，防竞态；QleT/QeqT 族
@@ -76,7 +76,7 @@ Arguments qeqT_intro {x y} _.
 
 (* ① 依存 L2445：rot n l = l 的 list 级直等 sumbool 判定面。
    恒等处置已证结论 ⇒ 判定恒归 Left（这就是处置的实质：旧 rot 名下
-   恒等重写依存无条件由真化基础模块承接）；left 构造子携 Prop 证明参
+   恒等重写依存无条件由真化基础模块给出）；left 构造子携 Prop 证明参
    ＝提取擦除惯例，无 Prop 消除入 Type。 *)
 Theorem rotc_supersedes_rot_id_set : forall (n : nat) (l : list Q),
   {rot n l = l} + {rot n l <> l}.
@@ -179,7 +179,7 @@ Defined.
    覆盖核验（弃用件 → 本证书分量）：
    ① D5_Pinf_perm（L2515）→ 分量1+2：内容等式面强于置换面
      （Pinf l s = w 且 w = l ⇒ Permutation 经 rotc_supersedes… 基础模块
-     平凡成立；Pinf_c 面同理由分量2 等式承接，Permutation l
+     平凡成立；Pinf_c 面同理由分量2 等式给出，Permutation l
      (Pinf_c l s) 由映射⑥第三分量在册）；
    ② llm_Pmid_zero（L2529）→ 分量3：内容面（Pmid l s 0 = l）+
      熵面 QeqT 双证书；
@@ -190,7 +190,7 @@ Defined.
      H_adj_bound 同一基础模块绕行弃用名）+ 真化面 3·spread 界（诚实
      卫哨 SortedQ + l <> [] 随行）；
    ⑥ Pinf_eq_l（L2587）→ 分量1+2（旧名陈述由现役同形件零损失
-     承接面 = Pinf l s = l；真化内容 Pinf_c l s = rotc (S s) l
+     给出面 = Pinf l s = l；真化内容 Pinf_c l s = rotc (S s) l
      信息性携带具体旋转表）；
    ⑦ H_adj_cross_phase_lb（L2605）→ 分量8（= 主⑤ 三面全体）；
    ⑧ u12_phase_side_always_zero（L2625）→ 分量9（= 主⑥ 双证书）。
@@ -267,7 +267,7 @@ Defined.
 
 (* ⑨ 同依存点的 sigT 见证面：选择器输出值信息性入证书
    （v := 1%Q）。Q 型 sigT 体的等式载体沿 B12 ⑧ 配方用 QeqT
-   （Q 型 sigT 体裸 `=` 会被 Q_scope 侧解释吞成 Qeq，实测踩坑；
+   （Q 型 sigT 体裸 `=` 会被 Q_scope 侧解释吞成 Qeq，实测遇到问题；
    QeqT 载体同时是双信息性层：见证值 + Qeq 证书）。 *)
 Theorem lam_opt_cross_phase_wit_set : forall (l : list Q) (s : nat),
   {v : Q & QeqT (lam_opt (H_adj (P0 l)) (H_adj (Pinf l s))) v}.

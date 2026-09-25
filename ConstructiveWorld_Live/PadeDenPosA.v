@@ -1,13 +1,13 @@
 (* ============================================================ *)
-(* PadeDenPosA.v — Padé 分母正性严格正版（挂账 a 攻坚）               *)
-(* 席位 CWE（批次 E-STAGING-CWE），2026-09-14                       *)
+(* PadeDenPosA.v — Padé 分母正性严格正版（遗留 a 攻坚）               *)
+(* 席位 CWE（组 E-STAGING-CWE），2026-09-14                       *)
 (* ============================================================ *)
-(* 使命：UpReqPadeDenPos.v 挂账 a 的严格正版——0 ≤ x < 2 处            *)
+(* 使命：UpReqPadeDenPos.v 遗留 a 的严格正版——0 ≤ x < 2 处            *)
 (*   QltT 0 (pade_den n x)（对一切 n；非负版 pdp_den_pos 只给         *)
 (*   QleT' 0 且前提 x ≤ 1）。真零点排除注记：n=1 分母 1−x/2 在 x=2    *)
 (*   恰为零，故严格版前提取 x < 2（半开区间 [0,2) 天然排除真零点）。    *)
 (*                                                                 *)
-(* 数学路线（挂账 a 的「首对严格 + 逐对配比细化」路线走通）：            *)
+(* 数学路线（遗留 a 的「首对严格 + 逐对配比细化」路线走通）：            *)
 (*   系数比 c_k/c_{k+1} = (2n−k)(k+1)/(n−k) 的逐 k 下界从 1 细化到 2   *)
 (*   （pdpa_R_ge_2：2(n−k) ≤ (2n−k)(k+1) ⟺ k(2n+1−k) ≥ 0，nia），      *)
 (*   于是衰减 t_{k+1} ≤ t_k 对 x ≤ 2 全段成立（比式消元：               *)
@@ -16,14 +16,14 @@
 (*   t_1 = c_1·x < c_1·2 == c_0 == t_0 由 qltT_mult_ltT_compat_r        *)
 (*   （0 < c_1）+ c_1·2 == c_0（pdpa_c1_2_c0，经 R n 0 == 2 与          *)
 (*   pdp_coeff_ratio n 0 组装）闭合。引擎 altsum_pos_strict             *)
-(*   （首对严格 + 全指标非负递减 + n ≥ 2）放电；n=0 特例由              *)
-(*   pade_den 0 x == 1 直接收口。                                       *)
+(*   （首对严格 + 全指标非负递减 + n ≥ 2）实例化消解；n=0 特例由              *)
+(*   pade_den 0 x == 1 直接闭合。                                       *)
 (*                                                                 *)
-(* 对位台账：UpReqPadeDenPos.v 头注挂账 a（「严格正版 QltT 0：引擎出口   *)
+(* 对位台账：UpReqPadeDenPos.v 头注遗留 a（「严格正版 QltT 0：引擎出口   *)
 (*   altsum_pos_strict 需首对严格 t_1 < t_0……本轮不攻」）——本席以       *)
-(*   配比下界 1→2 细化攻下；挂账 b（x∈(1,2] 段递减装配需比式消元）——    *)
-(*   本席比式消元即 pdp_coeff_ratio 改写步，一并清偿；挂账 c（误差积分   *)
-(*   表示）维持挂账。CWA 报告注记「x<2 时 altsum_pos_strict 路线已可探」 *)
+(*   配比下界 1→2 细化攻下；遗留 b（x∈(1,2] 段递减装配需比式消元）——    *)
+(*   本席比式消元即 pdp_coeff_ratio 改写步，一并清偿；遗留 c（误差积分   *)
+(*   表示）维持遗留。CWA 报告注记「x<2 时 altsum_pos_strict 路线已可探」 *)
 (*   在此兑现。                                                        *)
 (*                                                                 *)
 (* 交付件（pdpa_ 前缀，全库防撞 grep=0）：                             *)
@@ -36,14 +36,14 @@
 (*   pdpa_g1_lt_g0       1 ≤ n、x < 2 ⟹ t_1 <T t_0（首对严格）           *)
 (*   pdpa_den0_one       pade_den 0 x == 1（n=0 特例）                   *)
 (*   pdpa_den_pos_strict 主定理：0 ≤ x < 2 ⟹ QltT 0 (pade_den n x)      *)
-(*   pdpa_den_pos_strict_lt1  挂账 a 原形桥：0 ≤ x < 1 ⟹ 同结论         *)
+(*   pdpa_den_pos_strict_lt1  遗留 a 原形桥：0 ≤ x < 1 ⟹ 同结论         *)
 (*                                                                 *)
 (* 红线自审：① 零承认件（依赖全为库内 Closed 件：S01–S03 薄壳 +        *)
 (*   UpReqPadeExp/UpReqAltSumPos/UpReqPadeDenPos）；② 语句面全 Set      *)
 (*   （QltT/QleT/QleT' bool·Or 反映形；Prop 序仅证内转译——Qle/Qeq      *)
 (*   中间件全部 assert 消化，不留语句面前提位）；③ 全件 Qed 真证        *)
 (*   （nia 比式 + Qmult_comp 项式组装 + qeq 链），无降级占位；④ 可提取  *)
-(*   （G3 探针独立文件实测 Obj.magic=0）。                              *)
+(*   （G3 检验独立文件实测 Obj.magic=0）。                              *)
 (* 编译配方：source Live/toolchain/env.sh && cd Live/build &&          *)
 (*   rocq c -Q . '' PadeDenPosA.v（cpu_guard 包裹，-j2 上限）。          *)
 (* 依赖：CW_ConstructiveWorld_219；UpReqPadeExp（pade_den/pade_coeff/  *)
@@ -70,7 +70,7 @@ Proof.
 Qed.
 
 (* c_0 == 1：pade_coeff n 0 = (2n)!·n!/((2n)!·(0!·n!))——Qmult_comp
-   项式组装 + Qmult_inv_r 收口（q_fact 0 == 1 由转换消解，免改写） *)
+   项式组装 + Qmult_inv_r 闭合（q_fact 0 == 1 由转换消解，免改写） *)
 Lemma pdpa_c0_one : forall n : nat, pade_coeff n 0%nat == 1%Q.
 Proof.
   intro n. unfold pade_coeff, Qdiv.
@@ -100,7 +100,7 @@ Proof.
 Qed.
 
 (* 首对比值精确值：pdp_R n 0 == 2（(2n)·1/n == 2——Z 层 S(2n−1)==2·S(n−1)
-   lia 定值 + Qmult_inv_r 尾收口） *)
+   lia 定值 + Qmult_inv_r 尾闭合） *)
 Lemma pdpa_R0_two : forall n : nat, (1 <= n)%nat -> pdp_R n 0%nat == 2%Q.
 Proof.
   intros n Hn. unfold pdp_R.
@@ -149,7 +149,7 @@ Qed.
 
 (* 配比下界细化：0 ≤ k < n ⟹ 2 ≤ pdp_R n k
    （pdpa_R_ge_1 的 1 下界细化到 2：2(n−k) ≤ (2n−k)(k+1)
-   ⟺ k(2n+1−k) ≥ 0，k ≥ 0 且 k ≤ n−1 时恒真，nia 收口） *)
+   ⟺ k(2n+1−k) ≥ 0，k ≥ 0 且 k ≤ n−1 时恒真，nia 闭合） *)
 Lemma pdpa_R_ge_2 : forall n k : nat, (k < n)%nat -> QleT' 2%Q (pdp_R n k).
 Proof.
   intros n k Hk. unfold pdp_R.
@@ -195,7 +195,7 @@ Proof.
 Qed.
 
 (* 项衰减（x ≤ 2 全段）：k < n、0 ≤ x < 2 ⟹ t_{k+1} ≤ t_k。
-   比式消元（挂账 b 的清偿步）：t_{k+1} = c_{k+1}·(x·x^k)
+   比式消元（遗留 b 的清偿步）：t_{k+1} = c_{k+1}·(x·x^k)
    ≤ c_{k+1}·(R·x^k)（qleT'_mult 两次：x ≤ 2 ≤ R）
    == (c_{k+1}·R)·x^k == c_k·x^k（pdp_coeff_ratio 换写）。 *)
 Lemma pdpa_term_decay : forall (n k : nat) (x : Q),
@@ -311,7 +311,7 @@ Proof.
 Qed.
 
 (* 主定理：0 ≤ x < 2 ⟹ 0 <T 分母（一切 n）。
-   n=0：den == 1 直接收口；n ≥ 1：altsum_pos_strict 放电——
+   n=0：den == 1 直接闭合；n ≥ 1：altsum_pos_strict 实例化消解——
    全指标非负（pdp_g_nonneg）、全指标递减（k < n 走 pdpa_term_decay、
    k ≥ n 走 pdp_g_decay_hi 清零段）、首对严格（pdpa_g1_lt_g0）、
    2 ≤ S n；pade_den 桥（pdp_den_altsum）回原形。 *)
@@ -349,7 +349,7 @@ Proof.
       * lia.
 Qed.
 
-(* 挂账 a 原形桥：0 ≤ x < 1 ⟹ 同结论（x < 1 ≤ 2 上界传递） *)
+(* 遗留 a 原形桥：0 ≤ x < 1 ⟹ 同结论（x < 1 ≤ 2 上界传递） *)
 Corollary pdpa_den_pos_strict_lt1 : forall (n : nat) (x : Q),
   QleT 0 x -> QltT x 1 -> QltT 0 (pade_den n x).
 Proof.

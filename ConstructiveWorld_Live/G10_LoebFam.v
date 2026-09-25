@@ -15,16 +15,16 @@
  *   MPc_dP_closed 内联 MPc_prf_closed 转发跳（MPc_code_closed 见证重演闭项  *
  *   直供＋Nat.le_refl 燃料自证）；grm_two_step_budget_blown 内联            *
  *   residue_class_never_freezes 七步链于 j=2 实例就地重演。                *
- * 三口径：①定义层受控展开（solvent/insolvent→Z.leb→Z.compare 匹配收口、      *
+ * 三口径：①定义层受控展开（solvent/insolvent→Z.leb→Z.compare 匹配闭合、      *
  *   X_test→Z.abs+Z.ltb+Z.eqb 比较 MATCH 链、dmin→Z.min 链、melt_wallet→     *
  *   Z.sub 加逆形）＋②显式见证（dec_gnT 以 gnT_fuel 燃料自给闭项一步供给）    *
- *   ＋③结构性推导（unp2_S 燃料-值双参构造子分判；dwm 轨迹两腿 dmin 辅件      *
+ *   ＋③结构性推导（unp2_S 燃料-值双参构造子分判；dwm 轨迹两个合取肢 dmin 辅件      *
  *   assert＋发射机投影归约＋数值锚点 staged 归约；presentb 逐点判等三分判）   ；
- * 挂账（切片五后滚动）：wpm_solvent_bounded_family（恒等转发，改写即同项     *
+ * 遗留（切片五后滚动）：wpm_solvent_bounded_family（恒等转发，改写即同项     *
  *   转述＝伪非平凡）／wpm_unbounded_family_unsound（组合子两跳，内联需重演  *
  *   熔券链，如实标注）／Prf_replay（原证已即 gnPrf_replay 燃料自给闭项，    *
  *   无深化空间）／ledger_inhabited（显式见证＋账本行组装已足）／            *
- *   MPc_prf_closed（已属 MPc_code_closed 见证消费形）等（判别面/定义性收口）。*
+ *   MPc_prf_closed（已属 MPc_code_closed 见证使用形）等（判别面/定义性闭合）。*
  * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。            *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* G 组：G10_LoebFam — 有限合并组（S/G 双系新命名，成员原样并入）
@@ -848,7 +848,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 诚实边界（显式声明，不硬凑）：                                            *)
+(* 诚实边界（显式声明，不特设构造）：                                            *)
 (*   1. 语法恒等式 d = th(⌜d⌝) 在一般情况下假（尺寸论证），故 D1 给出的是        *)
 (*      「可证版本」——Prf 双向蕴含；这正是对角引理的标准形态。                  *)
 (*   2. D1 对象理论 = 真闭方程 + MP + Σ0 替换不变量(repl)，其可靠性             *)
@@ -1177,11 +1177,11 @@ Qed.
 (* 件 2. p-adic 进位级联连坐两字段 + 剩余类环交替不达不动点（上游会话 实验 E1）      *)
 (*                                                                     *)
 (* GRM 普查迁到共享分母坐标域：字段 = 有理担保 w 的素坐标。取 p = 3，           *)
-(* 消费流 = PLA 避零环流 2/3, 1/3, 2/3, 1/3, …（乘法份额），公分母下的          *)
+(* 使用流 = PLA 避零环流 2/3, 1/3, 2/3, 1/3, …（乘法份额），公分母下的          *)
 (* 累计分子轨迹：N(0)=0, N(2j)=3j, N(2j+1)=3j+2。                              *)
 (*   字段一 coordA：Z/9 剩余类坐标（粗分辨率）；                               *)
 (*   字段二 coordB：Z/3 零类检测位（= p-账本归一化/进位触发位）。                *)
-(* 击破：(a) 任一枚消费证据同时改写两字段坐标（连坐）——含触发步本身；            *)
+(* 击破：(a) 任一枚使用证据同时改写两字段坐标（连坐）——含触发步本身；            *)
 (*       (b) 触发位沿 0↔2 剩余类环逐位交替、相邻状态永不重合——                   *)
 (*           「≤ |普查| = 2 步到不动点」公理在预算外仍在移动（公理死）；          *)
 (*       (c) 进位级联深度 2：N(6) = 9 时粗坐标 Z/9 也进零类。                    *)
@@ -1425,7 +1425,7 @@ Proof.
   - exact (refu_tid_trans bool _ _ _ (loom_step_inv (loom_iter k)) IH).
 Qed.
 
-(* 自振荡：槽值逐轮翻转（非卡死空转），周期 2 内永在两非法元间振荡 *)
+(* 自振荡：槽值逐轮翻转（非停滞空转），周期 2 内永在两非法元间振荡 *)
 Lemma loom_flips : forall k : nat,
   refu_tid bool (xorb (fst (loom_iter (Datatypes.S k))) (fst (loom_iter k))) true.
 Proof.
@@ -1483,7 +1483,7 @@ Definition dwm_W0 : Z := 4.       (* 初始钱包 = 1 = 4 格距单位 *)
 Definition X_test (a b : Z) : bool :=
   if Z.ltb (Z.abs (a - b)) dwm_grain then Z.eqb a b else true.
 
-(* 入场费 = 与最近在场者的格距（空带哨兵 999 永不可达：带内置 a0） *)
+(* 入场费 = 与最近在场者的格距（空带数值锚 999 永不可达：带内置 a0） *)
 Fixpoint dmin (x : Z) (l : list Z) : Z :=
   match l with
   | nil => 999
@@ -1622,7 +1622,7 @@ Close Scope Z_scope.
 (* ======== G10_LoebFam 成员件：UpQKBound（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpQKBound.v —— 方案一 QKᵀ 管线收尾：界转化件 + QKᵀ 绑定 +       *)
-(*   Δ 显式 sigT 打包（下游消费 UpCS 的 dotp/sql/Q 层核）          *)
+(*   Δ 显式 sigT 封装（下游使用 UpCS 的 dotp/sql/Q 层核）          *)
 (*                                                              *)
 (* 数学目标（Real 层，list 向量世界，CW_ConstructiveWorld_219）：   *)
 (*   向量 = list Real；维数 d := 向量长度；                       *)
@@ -1638,16 +1638,16 @@ Close Scope Z_scope.
 (* 件 2（界转化·主件）real_logit_bound_of_norm_bounds：            *)
 (*   根有界前提（root⟨q,q⟩ ≤ Q、root⟨k,k⟩ ≤ K，Q,K > 0）⟹         *)
 (*   real_le |⟨q,k⟩| (Q·K·√d + eps)（eps 版；证明走 inl 严格支）。  *)
-(*   装配：C-Datatypes.S 严格版（eps 簿记显式：C-Datatypes.S 的 eps := (h/2)²，经       *)
+(*   装配：C-Datatypes.S 严格版（eps 记录显式：C-Datatypes.S 的 eps := (h/2)²，经       *)
 (*   abs 转化件（abs_le_add_of_sq_lt）转化为 |⟨q,k⟩| < 根积 + h，   *)
 (*   再正数乘单调（根积 ≤ Q·K）+ 1 ≤ √d（k=1 时相等、k≥2 时严格    *)
 (*   ——k 分支）合并入最终 +eps。                                  *)
 (*                                                              *)
-(* 件 3（QKᵀ 绑定 + Δ 打包·旗舰）qk_logits_bounded：               *)
+(* 件 3（QKᵀ 绑定 + Δ 封装·主定理）qk_logits_bounded：               *)
 (*   attn_logit q k d s s' := dotp(q s, k s')·inv(√d)             *)
 (*   （inv 形态：real_inv_pos root_d (root_d_pos d)——正性证书      *)
 (*   构造性携带）。前提全 s s' 根有界一致。Δ := (Q·K)·inv(√d)+1，   *)
-(*   sigT 打包：Δ > 0 ∧ ∀s s' |logit| ≤ Δ。                        *)
+(*   sigT 封装：Δ > 0 ∧ ∀s s' |logit| ≤ Δ。                        *)
 (*   +1 余量代数（eps 透传吸收，零 eps 版）：                      *)
 (*     |dotp| < 根积 + 1/2 （件 2 机制，h := 1/2）                 *)
 (*     ⟹ |logit| = |dotp|·inv(√d) < (根积 + 1/2)·inv(√d)           *)
@@ -1662,7 +1662,7 @@ Close Scope Z_scope.
 (*                                                              *)
 (* 关键构造性事实（设计发现）：                                   *)
 (*   real_eq 的柯西语义只约束尾段（∀δ>0 ∃N ∀n≥N |x_n−y_n|<δ），     *)
-(*   不给出任何固定下标的逐点相等——故 sqrt 见证 r·r == d 的消费     *)
+(*   不给出任何固定下标的逐点相等——故 sqrt 见证 r·r == d 的使用     *)
 (*   一律取尾界形式（固定 δ 截断），所有结论为 real_lt（尾段严格    *)
 (*   分离），零逐点相等提取、零经典逻辑。                          *)
 (*                                                              *)
@@ -1870,9 +1870,9 @@ Proof.
   - cbn [dotpQ sqlQ]. rewrite IH. ring.
 Qed.
 
-(* ################ 第 2 部分：向量世界 + Real 尾段消费件 ########## *)
-(* 本文件自带 dotp/sql（CW_ConstructiveWorld_219 Real 版；UpCS 的同名件锚定扫描版     *)
-(* Real，不可跨用；UpCS 的纯 Q 层 cs_Q/dotpQ/sqlQ 照常消费）。      *)
+(* ################ 第 2 部分：向量世界 + Real 尾段使用件 ########## *)
+(* 本文件自带 dotp/sql（CW_ConstructiveWorld_219 Real 版；UpCS 的同名件确定扫描版     *)
+(* Real，不可跨用；UpCS 的纯 Q 层 cs_Q/dotpQ/sqlQ 照常使用）。      *)
 
 Fixpoint qkb_dotp (a b : list Real) : Real :=
   match a, b with
@@ -1944,7 +1944,7 @@ Proof.
   - exact Hgt.
 Qed.
 
-(* ---- real_le 尾段消费（eq 支带 eps 松弛；lt 支精确） ---- *)
+(* ---- real_le 尾段使用（eq 支带 eps 松弛；lt 支精确） ---- *)
 
 Lemma real_lt_pt_le : forall x y : Real,
   real_lt x y ->
@@ -2893,7 +2893,7 @@ Proof.
       lra.
 Qed.
 
-(* ################ 第 10 部分：件 3 QKᵀ 绑定 + Δ 打包（Section 旗舰） ## *)
+(* ################ 第 10 部分：件 3 QKᵀ 绑定 + Δ 封装（Section 主定理） ## *)
 
 Section QKLogitSection.
 
@@ -3463,7 +3463,7 @@ Proof.
       * exact Hpw.
 Qed.
 
-(* bsearch 的逐点 loeb_tid 同变（Σ-子句沿 loeb_tid 语义的搬运件，供 D3） *)
+(* bsearch 的逐点 loeb_tid 同变（Σ-子句沿 loeb_tid 语义的迁移件，供 D3） *)
 Theorem bsearch_tid_cong : forall (bd : nat) (p q : nat -> bool),
   (forall j : nat, loeb_tid bool (p j) (q j)) ->
   loeb_tid bool (bsearch bd p) (bsearch bd q).
@@ -3593,7 +3593,7 @@ Lemma Sigma_bound_tight : evalF2 (fsig (numT 2623) (numT (gnF (teq tzero tzero))
 Proof. vm_compute. reflexivity. Qed.
 
 (* ===================================================================== *)
-(* 诚实边界（显式声明，不硬凑）：                                            *)
+(* 诚实边界（显式声明，不特设构造）：                                            *)
 (*   1. dP2/verPf 只重演「被证公式」，不重构 Prf 凭证本身：ax_eqT/repl 的       *)
 (*      元级前提是赋值全称的 loeb_tid 值等（外延函数），原理上不可从码重构。          *)
 (*      故账本行把凭证 pf 作为一等分量随行挂载（D1 接口建议的原样落实），        *)
@@ -3616,7 +3616,7 @@ Proof. vm_compute. reflexivity. Qed.
 (*      需把 ax_eqT/repl 前提的元级 loeb_tid 值等替换为可判定的码级证书             *)
 (*      （如限制 ax_eqT 到闭项对并配 dT2 证书；repl 配 (th,t1,t2) 的           *)
 (*      dF2/dT2 证书三元组）——这是账本升为语言内可证性谓词的关键一步。          *)
-(*   c. bsearch_tid_cong 可把 Σ-子句沿 loeb_tid 语义搬运；evalF2_subst 已保证       *)
+(*   c. bsearch_tid_cong 可把 Σ-子句沿 loeb_tid 语义迁移；evalF2_subst 已保证       *)
 (*      代入交换；Löb 句 diagF2 := substF2 (wrap2 th) (numT (gnF2 (wrap2 th))) *)
 (*      的对角组装可直接照抄 D1 §7 的 repl + 码恒等 + 值恒等三件套。            *)
 (* ===================================================================== *)

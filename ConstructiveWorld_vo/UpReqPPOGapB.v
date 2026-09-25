@@ -38,12 +38,12 @@
 (* ------------------------------------------------------------ *)
 (* 本件清单（前缀 gapb_；9 定义 + 8 件）：                        *)
 (*   [标量内机 2]                                                *)
-(*     gapb_plus_mid_opp      a+(b+−a) == b（中位对翻塌缩）       *)
-(*     gapb_plus_opp_swap     (y+x)+−y == x（换位塌缩）           *)
+(*     gapb_plus_mid_opp      a+(b+−a) == b（中位对翻退化）       *)
+(*     gapb_plus_opp_swap     (y+x)+−y == x（换位退化）           *)
 (*   [依存机器链副本件] gapb_gap_exact：real_eq gapb_gap gapb_gap_sum *)
 (*     （rppo_ppo_gap_exact 的 Real 层逐位副本：逐点双层分配拆分   *)
 (*       π·(r·A) == π·(m·A)+π·((r+−m)·A)（distrib/distrib_r 零   *)
-(*       opp 求和机器路线）+ sum_ext 输运 + sum_add 拆项 + 换位塌缩完成） *)
+(*       opp 求和机器路线）+ sum_ext 输运 + sum_add 拆项 + 换位退化完成） *)
 (*   [保底件] gapb_gap_exact_res_nonneg_B：0 ≤_B (恒等式两侧差)   *)
 (*     （逐 eps 层：两侧差 ≡ 恒等式两端之 self-diff ≡ 0，leb3 运输单步） *)
 (*   [内机] gapb_res_weight_nonneg：0 ≤ E（E := Σ π_old·adv 的非负性 *)
@@ -53,7 +53,7 @@
 (*       解锁，零新增前提；逐 eps 体 = conservative_eps + Or 形差非负 *)
 (*       real_le_minus_nonneg_aux + res_fold 换形）               *)
 (*   [连接件 1] gapb_le_b_of_gap_nonneg_b：0 ≤_B (x+−y) ⟹ y ≤_B x *)
-(*     （纯 Bishop 代数对翻桥：平移基元 + 中位对翻塌缩 + lt 换形） *)
+(*     （纯 Bishop 代数对翻桥：平移基元 + 中位对翻退化 + lt 换形） *)
 (*   [连接件 2] gapb_conservative_B：PPO ≤_B IS                   *)
 (*     （语句面 = G06_BForm.real_ppo_conservative_B_full 结论     *)
 (*       逐字同形——对偶件 ⟹ 已有 B 形保守件的推论关系，消解即核； *)
@@ -144,7 +144,7 @@ Definition gapb_res_weight : Real :=
 
 (* ============ 标量内机 ============ *)
 
-(* 内机 1：中位对翻塌缩 a+(b+−a) == b（连接桥与恒等式逐点共用） *)
+(* 内机 1：中位对翻退化 a+(b+−a) == b（连接桥与恒等式逐点共用） *)
 Lemma gapb_plus_mid_opp : forall a b : Real,
   real_eq (real_plus a (real_plus b (real_opp a))) b.
 Proof.
@@ -166,7 +166,7 @@ Proof.
         -- apply real_plus_zero.
 Qed.
 
-(* 内机 2：换位塌缩 (y+x)+−y == x（恒等式完成位） *)
+(* 内机 2：换位退化 (y+x)+−y == x（恒等式完成位） *)
 Lemma gapb_plus_opp_swap : forall x y : Real,
   real_eq (real_plus (real_plus y x) (real_opp y)) x.
 Proof.
@@ -215,7 +215,7 @@ Qed.
 
 (* ============ 依存机器链副本件：恒等式（rppo_ppo_gap_exact Real 层） ============ *)
 (* 逐点拆分 π·(r·A) == π·(m·A) + π·((r+−m)·A)：distrib/distrib_r 双层分配， *)
-(* 零 opp 求和机器（Σ opp 免建——拆分形先走 sum_add 再换位塌缩）。           *)
+(* 零 opp 求和机器（Σ opp 免建——拆分形先走 sum_add 再换位退化）。           *)
 Lemma gapb_gap_exact : real_eq gapb_gap gapb_gap_sum.
 Proof.
   assert (Hpt : forall s : S,
@@ -428,9 +428,9 @@ End GapBPPOLeB.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                              *)
-(*   [分级] 内机 2（标量塌缩，结构同 rppo 内机 6 之 Real 副本）+ 内机 1 *)
+(*   [分级] 内机 2（标量退化，结构同 rppo 内机 6 之 Real 副本）+ 内机 1 *)
 (*     （E≥0：mult_positive 两喂 + sum_le 参数位 + Σ0≡0）+ 恒等式件 *)
-(*     （逐点双层分配 + sum_ext 输运 + sum_add + 换位塌缩——依存    *)
+(*     （逐点双层分配 + sum_ext 输运 + sum_add + 换位退化——依存    *)
 (*     机器链 Real 层逐位副本，路线改良：拆分形先 sum_add 免 Σopp  *)
 (*     机器）+ 保底件（leb3 运输单步）+ 主件（非负完成器——E 仅需   *)
 (*     ≥0，完整升格零新增前提）+ 连接件 1（对翻桥，泛型）+         *)

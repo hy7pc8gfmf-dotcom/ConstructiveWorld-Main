@@ -9,7 +9,7 @@
 (*   模链 T(d)=2·T(d-1)；大预算档复现运行超界）。              *)
 (* R1 见证/证明分离（本件核心）：                                          *)
 (*   ① 计算面 mrx_arch_n / mrx_k_compute —— 纯计算 Definition，           *)
-(*      选择器消费的是它，不消费证明项；                                   *)
+(*      选择器使用的是它，不使用证明项；                                   *)
 (*   ② 证明面 mrx_k_spec —— 独立引理 Qed 封闭，零语句面角色；              *)
 (*   ③ 封装面 mrx_k_exec —— existT _ 计算面 证明面 组装 sigT，            *)
 (*      projT1 归约与证明面无关（机检小引理 mrx_projT1_exec 固定）；       *)
@@ -89,7 +89,7 @@ Proof.
   destruct N as [| N'].
   - exfalso. exact (Nat.nle_succ_0 1 Hge2).
   - (* ---- 以下承 mix2_pow_budget 主链（κ 形 Bernoulli + 常量桥尾） ---- *)
-    (* 证书统一面：real_inv_pos 证书 proof-relevant，全链只准消费同一
+    (* 证书统一面：real_inv_pos 证书 proof-relevant，全链只准使用同一
        证书应用——把 HN 内拼出的证书应用 remember 为唯一变量 Hwb。 *)
     set (w := real_minus_r real_one kappa) in *.
     set (wb := real_mult w budget) in *.

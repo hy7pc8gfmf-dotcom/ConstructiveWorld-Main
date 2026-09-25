@@ -46,7 +46,7 @@
 (*      反单调（inv 连续性的 ε-配平），为独立工作——与「B⟹Or          *)
 (*      提升器等价于弱排中原理」同型的构造性诚实边界，非缺陷。         *)
 (*                                                              *)
-(* 依赖（全部只读消费）：CW_ConstructiveWorld_219（S01..S15          *)
+(* 依赖（全部只读使用）：CW_ConstructiveWorld_219（S01..S15          *)
 (*   Require Export 聚合面）、UpRealLeB / UpRealLeB2（B 形完成件）、  *)
 (*   UpReqPinskerCore（pnk_core）。                                  *)
 (*                                                              *)

@@ -4,22 +4,22 @@
 (* 【定位】B2 退化端实例衔接件；原 B2 定位（装配路径验证，UpReqConcB2Time         *)
 (*   §6.4 候）不变——本件零改原 B2 既有装配，只做「窗定理视角」的新增连接：              *)
 (*   证明 B2 单点世界（S:=unit、enum:=[tt]、z:=cb2_z、Delta:=cb2_Delta、          *)
-(*   核=rsq_bs_kernel 系）是 M4 泛型塌缩定理（UpAblMetaWindow）的实例。             *)
+(*   核=rsq_bs_kernel 系）是 M4 泛型退化定理（UpAblMetaWindow）的实例。             *)
 (*                                                              *)
 (* 【两件升级内容】                                                        *)
-(*   (i) 前提分支：B2 核 cbt_kernel 满足 M4 塌缩前提——                          *)
+(*   (i) 前提分支：B2 核 cbt_kernel 满足 M4 退化前提——                          *)
 (*       · 行随机：单点世界仅一行，行和 = 核值 = one（softmax 单点归一）；           *)
 (*       · 核行全同：仅一行，平凡成立（ubt_rows_eq 由 unit 归纳平凡收束）；          *)
 (*       · 点质量对：单点世界唯一归一分布即 tt 处点质量（ubt_mass_point）。          *)
-(*   (ii) 具名实例：B2 世界一步塌缩 TV==0（与 cbt_tv 恒等式并读），                 *)
-(*       且 M4 泛型塌缩分支被字面使用（ubt_b2_m4_collapse_instance：唯一行经          *)
+(*   (ii) 具名实例：B2 世界一步退化 TV==0（与 cbt_tv 恒等式并读），                 *)
+(*       且 M4 泛型退化分支被字面使用（ubt_b2_m4_collapse_instance：唯一行经          *)
 (*       点质量嵌入 bool 载体为 (1,0)-常行，mwi_collapse_row_equal 直接代入）。        *)
 (*                                                              *)
-(* 【衔接语义诚实注记】M4 塌缩分支载体为 bool 载体（World3 两态），B2 世界为        *)
+(* 【衔接语义诚实注记】M4 退化分支载体为 bool 载体（World3 两态），B2 世界为        *)
 (*   unit 单点；字面使用经唯一态嵌入：B2 核唯一行（单条目 = one）映为                 *)
 (*   ubt_Klift = 常行 (cbt_kernel tt tt, 0)——即 bool 上的 tt-点质量行。             *)
 (*   该行满足 M4 两前提（行随机由 ubt_kernel_pt、行全同平凡），故泛型引理使用          *)
-(*   合法；B2 自身指数（cbt_tv/cbt_titer）的一步塌缩另由 §3 直接链自证，              *)
+(*   合法；B2 自身指数（cbt_tv/cbt_titer）的一步退化另由 §3 直接链自证，              *)
 (*   两读互证：泛型分支（嵌入像）＋本征分支（unit 原像）。                               *)
 (*                                                              *)
 (* 依赖：S01_BaseRing、CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSampling、          *)
@@ -44,7 +44,7 @@ Import RealInterfaceEnhancedMod.
 Import ListNotations.
 
 (* ============================================================ *)
-(* §1 前提分支：B2 核行双档（M4 塌缩前提的单点世界形式）                             *)
+(* §1 前提分支：B2 核行双档（M4 退化前提的单点世界形式）                             *)
 (* ============================================================ *)
 
 (* 1a. 行随机（核行和 = one）：rsq_bs_kernel_row 泛型分支全显实例直接代入 *)
@@ -89,7 +89,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* §2 M4 泛型塌缩分支的字面使用：唯一行经点质量嵌入 bool 载体                        *)
+(* §2 M4 泛型退化分支的字面使用：唯一行经点质量嵌入 bool 载体                        *)
 (* ============================================================ *)
 
 (* 嵌入核：B2 核唯一行（单条目 = one）映为 bool 上的 tt-点质量常行 *)
@@ -117,7 +117,7 @@ Proof.
   intros s s'. exact (req_refl (mult (cbt_kernel tt tt) (mtw_mu0 s'))).
 Defined.
 
-(* M4 泛型塌缩分支使用：B2 嵌入核的 TV 一步塌缩 == 0 *)
+(* M4 泛型退化分支使用：B2 嵌入核的 TV 一步退化 == 0 *)
 Theorem ubt_b2_m4_collapse_instance :
   req (mtw_tv (mwi_step ubt_Klift mtw_mu0) (mwi_step ubt_Klift mtw_nu0)) zero.
 Proof.
@@ -125,7 +125,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* §3 B2 本征分支：单点世界质量双档 + 一步塌缩 TV==0（与 cbt_tv 恒等式并读）               *)
+(* §3 B2 本征分支：单点世界质量双档 + 一步退化 TV==0（与 cbt_tv 恒等式并读）               *)
 (* ============================================================ *)
 
 (* 1 元档折叠处方：sumf g = g tt + 0（cbt_sum_eq_list 桥 + iota） *)
@@ -224,7 +224,7 @@ Proof.
            (mult_zero cbt_inv_two)).
 Defined.
 
-(* 具名实例（本征分支）：B2 世界一步塌缩 TV==0 *)
+(* 具名实例（本征分支）：B2 世界一步退化 TV==0 *)
 Theorem ubt_b2_one_step_collapse :
   forall mu nu : unit -> Real,
     req (cbt_sumf mu) one -> req (cbt_sumf nu) one ->

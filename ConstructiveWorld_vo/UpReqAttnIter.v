@@ -16,7 +16,7 @@
 (* 目的： 注意力迭代算子的 req 层副本（核、TV、迭代步）。 *)
 (* 主件： attention_iter_i 迭代核与 q_kernel_i；agq_omd_pos / agq_p_norm 正性与范数族。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。 *)
-(* 备注： 一温度族载体以 Section 变量承接；迭代正性与 TV 一步界为构造核。 *)
+(* 备注： 一温度族载体以 Section 变量给出；迭代正性与 TV 一步界为构造核。 *)
 (* ============================================================ *)
 
 (* UpReqAttnIter.v — 签名迁移批 4 清账席：AttentionGibbsBridge q_kernel/收缩迭代簇 req 化
@@ -28,7 +28,7 @@
    1. 首席席 UpReqSampling.v（ReqUContraction 11 件）：领地为 L95737-96039
      Section UContraction——与本簇 Id 行号不同节，但数学同构（通用 u + delta +
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
-     全显投喂实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
+     全显提供实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
      nu := 稳态处 δ 透明合一，主定理 agq_tv_contraction 一行 exact 闭合即脊柱
    2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记“q_kernel/收缩迭代簇
      批0 试点 UpSigMigrate.v 仅 req_attention_is_gibbs_temp（fixed-z 形），

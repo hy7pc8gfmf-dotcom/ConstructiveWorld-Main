@@ -21,8 +21,8 @@
 (*   件三的构造要点：单点下界 + 逐项非负 + 求和保序 + 零和恒等式     *)
 (*   重排 + real_lt 与 real_le 的复合。                            *)
 (*                                                               *)
-(* 依赖：S01_BaseRing – S07_RealSetoidExpLog（命名空间与母本一致）； *)
-(*   S08_RealMainlineDPO（假设位所在母本）。                       *)
+(* 依赖：S01_BaseRing – S07_RealSetoidExpLog（命名空间与源文件一致）； *)
+(*   S08_RealMainlineDPO（假设位所在源文件）。                       *)
 (*                                                               *)
 (* 对标：mathlib mul_pos / Real.exp_pos（积与指数函数的严格正性）。  *)
 (*                                                               *)
@@ -179,7 +179,7 @@ Proof.
 Qed.
 
 (* ################ 件二：real_advantage_pos 参数位的边际条件形 #################### *)
-(* 以 beta·eps 的显式边际前提为条件，结论即母本 real_advantage_pos 参数位语句之形。   *)
+(* 以 beta·eps 的显式边际前提为条件，结论即源文件 real_advantage_pos 参数位语句之形。   *)
 (* 证明两步：由乘法正性得 0 < beta·eps，再由 real_lt 与 real_le 的传递复合。      *)
 (* adv 的逐点严格正性对任意 adv 不成立，故取条件形为其构造性表述。                *)
 

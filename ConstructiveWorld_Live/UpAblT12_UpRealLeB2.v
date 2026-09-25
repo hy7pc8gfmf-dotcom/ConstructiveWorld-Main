@@ -3,7 +3,7 @@
 (* 1 位，Real 载体）                                                          *)
 (* 辖区：UpRealLeB2.v RealKVQuantLeB 节（L464-616）求和正性假设位               *)
 (*   L482-483 real_evicted_partition_pos（一位）                                *)
-(* 放电母本：正和族 sumd_list_sum_pos@UpReqSumD:224（同构自持升 Type 层）        *)
+(* 实例化消解源文件：正和族 sumd_list_sum_pos@UpReqSumD:224（同构自持升 Type 层）        *)
 (*   + real_exp_neg_pos@S07_RealSetoidExpLog:7774                               *)
 (*                                                              *)
 (* 目的：real_evicted_partition_pos（Z=逐出配分函数 > 0）在具体有限和实例        *)
@@ -12,8 +12,8 @@
 (*                                                              *)
 (* 主件清单（1 件，前缀 uabT12_）：                                             *)
 (*    A1 uabT12_rl2_evicted_partition_pos ←L482-483                             *)
-(*        放电：正和族同构自持机械（本节 uabT12_rsum_pos，逐腿同                 *)
-(*        sumd_list_sum_pos_cons@UpReqSumD 款式）× real_exp_neg_pos 直喂。       *)
+(*        实例化消解：正和族同构自持机械（本节 uabT12_rsum_pos，逐腿同                 *)
+(*        sumd_list_sum_pos_cons@UpReqSumD 款式）× real_exp_neg_pos 直接代入。       *)
 (*                                                              *)
 (* 升层申报（诚实口径，非降档）：                                               *)
 (*   ① 被消融位所在节 S : Type（UpRealLeB2 L466 逐字），而 sumd_list_sum/in      *)
@@ -25,10 +25,10 @@
 (*     pos 面须加强为「保留元证书」槽 uabT12_find_kept（枚举清单携带保留元）      *)
 (*     + 逐点两支（保留支严格正 × 非保留支非负）。槽形变化如实登记。             *)
 (*                                                              *)
-(* 分级：N2（由库内已证件 sumd 正和族同构导出 + real_exp_neg_pos 直喂；           *)
+(* 分级：N2（由库内已证件 sumd 正和族同构导出 + real_exp_neg_pos 直接代入；           *)
 (*   witness 归纳链为本件独立构造内容，非 trivial 直连）。                       *)
 (*                                                              *)
-(* 依赖（全部只读消费，原树零改）：CW_ConstructiveWorld_219（real_evicted_      *)
+(* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219（real_evicted_      *)
 (*   partition/real_kv_boltzmann_factor/real_exp_neg_pos 经其 Export 链供给）、  *)
 (*   UpReqSumD（sumd_lt_le 抬升腿）。                                           *)
 (*   语句面逐字抽取自现档 UpRealLeB2.v L482-483（两树逐字节同验：Main/Live_X    *)
@@ -37,7 +37,7 @@
 (* 备注：语句面全集合层；公理面零新增；文尾 Print Assumptions 收尾。              *)
 (*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT12_UpRealLeB2.log。               *)
 (*   G3 预期：Real 载体树拉入 S07_RealSetoidExpLog，inherent 伪影按 T6a 登记口径  *)
-(*   放行（T6a 同形先例 71 处，实例记录字段打包位，与被消融语句零涉）。          *)
+(*   放行（T6a 同形先例 71 处，实例记录字段封装位，与被消融语句零涉）。          *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -116,7 +116,7 @@ Qed.
 
 End UabT12RListPos.
 
-(* ============ A1 ←UpRealLeB2.v L482-483（逐字语句面，实例位换装） ============ *)
+(* ============ A1 ←UpRealLeB2.v L482-483（逐字语句面，实例位重述） ============ *)
 (* 原位：Variable real_evicted_partition_pos : real_lt real_zero
    (real_evicted_partition S keep keep_dec real_energy D D_pos real_sum_over_S).
    本件：real_sum_over_S 换具体实例 fun g => uabT12_rsum S g enum，

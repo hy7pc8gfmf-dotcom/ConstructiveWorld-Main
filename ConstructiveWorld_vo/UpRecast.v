@@ -4,7 +4,7 @@
 (* 目的： 恒等谓词 tid 与非严格序 nle 的 Set 层再造面。 *)
 (* 主件： rc_leb_refl_tid / rc_nle_SS 再造族与 nle_S_diag、nle_add_r_any 传递/加法定律。 *)
 (* 依赖： 无显式 Require 面（自足件）。 *)
-(* 备注： tid（恒等）与 nle（非严格序）为 Set 层谓词再造；fuse2 / lsum_w 融合器为下游供给。 *)
+(* 备注： tid（恒等）与 nle（非严格序）为 Set 层谓词再造；fuse2 / lsum_w 合并器为下游供给。 *)
 (* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
 (*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
@@ -13,7 +13,7 @@
 (* UpRecast.v — GRM 再铸链 Coq 落实：use 事件账本 + survive 幸存扫描 +       *)
 (*              recast 再铸 + 未桥尾义务（可再入）+ 摩擦计量                 *)
 (*                                                                       *)
-(* 设计要点：结构性抢救方案（保全场最干净的结构与首尾咬合）。设计来源：      *)
+(* 设计要点：结构性抢救方案（保全场最干净的结构与首尾衔接）。设计来源：      *)
 (*   GRM 签名草稿与 v2 终稿；                                              *)
 (*   WPM → GRM 账本上的再铸链抢救实验。                                    *)
 (*                                                                       *)
@@ -31,10 +31,10 @@
 
 (*   件 5  摩擦计量（每轮精确差值 +1/+2 + 全链单调 + 循环严格推进）            *)
 (*                                                                       *)
-(* 定稿决策（原设计未定稿处，按「结构最干净 + 首尾咬合」定稿）：               *)
+(* 定稿决策（原设计未定稿处，按「结构最干净 + 首尾衔接」定稿）：               *)
 (*   D1  载体细化：fid=tier=nat、evid=Z（证据强度取 |ev| 的 nat 编码）；       *)
 (*       Cert = 普查 census + 未桥义务账 obls + 计量 meter 三分账，           *)
-(*       义务账户独立成账（原草稿义务混在普查标记里），首尾咬合更干净。         *)
+(*       义务账户独立成账（原草稿义务混在普查标记里），首尾衔接更干净。         *)
 (*   D2  行内测验语义：passes f ev c := find 普查读出 f 的等级 t，             *)
 (*       t <= |ev| 判通过（bool 全判定）；通过档计量 +1 不动普查，             *)
 (*       击穿档走 survive 扫描降级再铸（计量 +1+1）。                         *)
@@ -713,7 +713,7 @@ Proof.
   - apply acc_balance.
 Qed.
 
-(* 首尾咬合·循环严格推进：击穿再铸一轮摩擦精确 +2（链不死锁、单调递增） *)
+(* 首尾衔接·循环严格推进：击穿再铸一轮摩擦精确 +2（链不死锁、单调递增） *)
 Theorem cycle_friction_strict : forall (c : Cert) (f : fid) (ev : evid),
   rc_tid bool (passes f ev (rebridge c f)) false ->
   rc_tid nat (S (S (friction c))) (friction (recast (rebridge c f) (use f ev))).

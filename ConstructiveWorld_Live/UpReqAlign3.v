@@ -7,11 +7,11 @@
    sum_linear 逐环展开＋代数银行兼容桥显式实例化；w_sum_minus 与
    w_sum_ptimes_opp_scal 内联 opp-sum 子链消除对上游 req2_sum_opp 的
    槽参依赖）。语句面零改动。
-   验绿方式：Require 面语义语境探针（T239c_probe.v，池内）——按
+   验绿方式：Require 面语义语境检验（T239c_probe.v，池内）——按
    S07_RealSetoidExpLog.v:7915 类块与 UpReqAlgebra.v:104/230/255 真名
-   真签名复刻接口面，五条替换体逐字粘贴试编，rocq c EXIT=0。
-   整件连带编译挂账：本件 Require CW_ConstructiveWorld_219（16 行薄壳
-   =S01-S15 巨基），池内连带重编超 cpu_guard 时帽，留待底座预算批。
+   真签名复刻接口面，五条替改写证体逐字粘贴试编，rocq c EXIT=0。
+   整件连带编译遗留：本件 Require CW_ConstructiveWorld_219（16 行薄壳
+   =S01-S15 巨基），池内连带重编超 cpu_guard 时帽，留待基础模块预算批。
    ============================================================ *)
 
 (* ============================================================ *)
@@ -20,14 +20,14 @@
 (* 目的： 对齐族第三段：温度权 w 的归一化与自由能 KL 分解。 *)
 (* 主件： w_pi_next_normalized / w_pi_star_normalized 与 w_F_t_rel_decomp / w_F_t_simpl_next_kl。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqAlign2、UpReqAlign3 前段。 *)
-(* 备注： 温度权载体（pos3/nrm/KLE 等）以 Section 变量承接；KL 分解为逐 eps 接口形。 *)
+(* 备注： 温度权载体（pos3/nrm/KLE 等）以 Section 变量给出；KL 分解为逐 eps 接口形。 *)
 (* ============================================================ *)
 
-(* UpReqAlign3.v — 签名迁移批 3c：旗舰链无条件化闭合
-   母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
+(* UpReqAlign3.v — 签名迁移批 3c：主定理链无条件化闭合
+   源文件：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3c = 批 3b 文件尾挂起清单的放行批）
    上游：UpReqAlgebra.v（批 1 代数银行）+ UpReqAlign.v（批 3）+
-     UpReqAlign2.v（批 3b 求和-自由能深链机器 40 Qed）——全部 Require 消费；
+     UpReqAlign2.v（批 3b 求和-自由能深链机器 40 Qed）——全部 Require 使用；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
@@ -41,13 +41,13 @@
      rlhf_policy_improvement/sum_advance_gap/t13_hexp/
      backward_kl_step_beta/backward_kl_step（批 3 桥位
      req_backward_kl_identity 放行）/step_le/iter_le（step_kl_weighted
-     sigT 打包 + req2_r_pow 幂）。
-   [旗舰无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
+     sigT 封装 + req2_r_pow 幂）。
+   [主定理无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
      KL(pi_star‖pi_next) == (1−η)·KL(pi_star‖pi_t) − η·KL(pi_t‖pi_star)
        + KL(pi_t‖pi_next)
      为**无条件定理**——全链每一环均为 Qed 真证（无 B 类桥假设位）：
      桥位 req_backward_kl_identity 的语句由本文件 req2_backward_kl_step
-     以同位定理形态供给（批 3 假设位降为消费件）。
+     以同位定理形态供给（批 3 假设位降为使用件）。
    [dpo/preference 簇] dpo_reward 簇（is_implicit/recovers_up_to_baseline/
      relative_exact/diff_is_log_ratio_diff）+ preference 节（denom_pos/
      implicit_reward_diff/pair_loss_at_star）+ dpo_loss_at_pi_star +
@@ -60,11 +60,11 @@
    3. B 类桥（假设位保留，与 Id 同位；本批**新增放行**两条）：
      - req2_gibbs_inequality（Id gibbs_inequality@16629 的 req 同位）：
        KL ≥ 0 的 plain-le 形态不可由接口逐 eps 字段导出（序无消去），
-       保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为消费件；
+       保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为使用件；
      - req2_inv_pos_lt_contra / req2_log_lt_mono（Id Variable
-       L21013/21024 的 req 同位，sigmoid_strict_inc 消费）。
+       L21013/21024 的 req 同位，sigmoid_strict_inc 使用）。
      - req2_step_kl_eta_bound：**不在本批**（Id @23114 B 类 Variable，
-       UpReqAlign 已承接假设位；其消解留待 req 求和实例批，不属深链）。
+       UpReqAlign 已给出假设位；其消解留待 req 求和实例批，不属深链）。
    4. (d) 冻结（沿批 3/3b）：ppo_gap_nonneg、fold_right_ext 与 list fold
      机器（nat/list 层 Id，双层并行）——dpo_total_loss_at_star/
      dpo_total_loss_monotone 因此冻结（fold 载体）。
@@ -77,7 +77,7 @@ Require Import UpReqAlign2.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Req3AlignCore：旗舰链闭合节（节参数与批 3b Req2AlignCore 逐位对齐） *)
+(* Req3AlignCore：主定理链闭合节（节参数与批 3b Req2AlignCore 逐位对齐） *)
 (* ============================================================ *)
 Section Req3AlignCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -151,7 +151,7 @@ Definition zrel_pos (pi_t : S -> R) (Hpi_t : pos3 pi_t) : lt zero (ZR pi_t Hpi_t
   @req2_Z_rel_pos R RIS S sumf sum_pos reward beta beta_pos pi_ref
                   pi_ref_pos eta pi_t Hpi_t.
 
-(* ---- 上游件消费包装（UpReqAlign2 Qed 件 → 本节参数；零重证） ---- *)
+(* ---- 上游件使用包装（UpReqAlign2 Qed 件 → 本节参数；零重证） ---- *)
 Lemma w_pi_next_normalized :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t), req (sumf (NPX pi_t Hpi_t)) one.
 Proof.
@@ -742,7 +742,7 @@ Proof.
                  (le_mult_compat_weak zero a b Hb Ha)).
 Qed.
 
-(* η ≤ 1 ⟹ 1 ≤ inv(η)（Id inv_pos_le_compat 消费形） *)
+(* η ≤ 1 ⟹ 1 ≤ inv(η)（Id inv_pos_le_compat 使用形） *)
 Lemma r2_inv_ge_one : le one (inv_pos eta eta_pos).
 Proof.
   apply (le_id_l one (mult eta (inv_pos eta eta_pos)) (inv_pos eta eta_pos)
@@ -1589,7 +1589,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* [T12] 旗舰完成：策略改进单调性（Id policy_improvement_mono     *)
+(* [T12] 主定理完成：策略改进单调性（Id policy_improvement_mono     *)
 (*   @22065 的 req 定理化；批 3 桥位 3 req_policy_improvement_mono *)
 (*   的 t12 链放行）                                              *)
 (* ============================================================ *)
@@ -1606,7 +1606,7 @@ Qed.
 (* ---- B 类桥（登记表 3，本批新增放行位）：req2_gibbs_inequality
    （Id gibbs_inequality @16629 的 req 同位）。KL ≥ 0 的 plain-le
    形态不可由接口逐 eps 字段导出（序无消去）；保留假设位，待
-   UpReqFreeEnergy（批 2 FEP）结果后降为消费件。req2 KLE 语句无
+   UpReqFreeEnergy（批 2 FEP）结果后降为使用件。req2 KLE 语句无
    归一化前提，桥取无 norm 的加强可用形。 ---- *)
 Hypothesis req2_gibbs_inequality :
   forall (p q : S -> R) (Hp : pos3 p) (Hq : pos3 q),
@@ -1656,7 +1656,7 @@ Proof.
 Qed.
 
 (* ---- [T12] 件 10：dpo_loss(pi_next) ≤ dpo_loss(pi_t)（Id @23244
-   同位；消费 r2_policy_improvement_mono + opp 保序） ---- *)
+   同位；使用 r2_policy_improvement_mono + opp 保序） ---- *)
 Corollary r2_dpo_loss_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (AO (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t)) (AO pi_t Hpi_t).
@@ -1683,7 +1683,7 @@ Proof.
   exact (req2_log_exp_neg log_inv_exp_neg_req x).
 Qed.
 
-(* β·(η·(β⁻¹·A)) == η·A（消费上游 req2_beta_eta_inv_absorb） *)
+(* β·(η·(β⁻¹·A)) == η·A（使用上游 req2_beta_eta_inv_absorb） *)
 Lemma r2_beta_eta_iv_scal : forall A : R,
   req (mult beta (mult (mult eta (inv_pos beta beta_pos)) A)) (mult eta A).
 Proof.
@@ -1884,7 +1884,7 @@ Proof.
 Qed.
 
 (* ---- 1) [T12 完成] gap 单调不增（Id policy_iter_gap_mono @23086
-   的 req 定理化；消费 r2_policy_improvement_mono + opp 保序） ---- *)
+   的 req 定理化；使用 r2_policy_improvement_mono + opp 保序） ---- *)
 Corollary req2_gap_mono :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (req_minus (JJ PSTR PSTR_pos)
@@ -2016,7 +2016,7 @@ Proof.
                                (req_refl (opp (mult eta SAp))) Htail).
 Qed.
 
-(* ---- 3) [T13] F_t_beta_form 消费包装 ---- *)
+(* ---- 3) [T13] F_t_beta_form 使用包装 ---- *)
 Lemma w_F_t_beta_form :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p)
          (Hpn : nrm p),
@@ -2836,7 +2836,7 @@ Proof.
 Qed.
 
 (* ---- 11) [T13] grad_cross_identity req 版（Id @22328 同位；
-   消费 r2_surrogate_diff_identity + eta 逆吸收） ---- *)
+   使用 r2_surrogate_diff_identity + eta 逆吸收） ---- *)
 Lemma r2_grad_cross_identity :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (sumf (fun s => mult (req_minus (NPX pi_t Hpi_t s) (pi_t s))
@@ -3117,7 +3117,7 @@ Proof.
 Qed.
 
 
-(* ---- 17) 旗舰完成坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
+(* ---- 17) 主定理完成坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
 Lemma r2_bksn_collapse2 :
   forall a b u v w : R,
     req (plus (plus (plus (plus a b) (opp u)) (opp v)) (plus w (opp a)))
@@ -3186,7 +3186,7 @@ Proof.
                                                      (plus b (opp u)))))).
 Qed.
 
-(* ---- 18) β·KSN == FE 星差 − FE 下一差（旗舰 HA 首腿供件） ---- *)
+(* ---- 18) β·KSN == FE 星差 − FE 下一差（主定理 HA 首腿供件） ---- *)
 Lemma r2_beta_KSN_Fdiff :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (mult beta (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos
@@ -3302,14 +3302,14 @@ Proof.
                  Hleg4))).
 Qed.
 (* ============================================================ *)
-(* [旗舰无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
+(* [主定理无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
    KL(PI_STAR||PI_NEXT) == (1-eta)*KL(PI_STAR||PI_T) - eta*KL(PI_T||PI_STAR)
       + KL(PI_T||PI_NEXT)
    无条件定理——全链每一环均为 Qed 真证（无 B 类桥假设位）：
    桥位 req_backward_kl_identity（UpReqAlign.v 假设位）的语句由本定理
    以同位定理形态供给。非平凡：FE-KL-diff（ET/对齐两侧）+
    surrogate 最优性 + 次优间隙 + collapse 坍缩 + beta 逆吸收。 *)
-(* ---- 19) 旗舰：逐段组装（段1 骨架 + HA） ---- *)
+(* ---- 19) 主定理：逐段组装（段1 骨架 + HA） ---- *)
 Theorem req2_backward_kl_step :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos (npx_pos pi_t Hpi_t))
@@ -3555,7 +3555,7 @@ Proof.
 Qed.
 
 
-(* ---- 20) [T13] step_le：旗舰恒等式的 le 形（Id @22790 同位） ---- *)
+(* ---- 20) [T13] step_le：主定理恒等式的 le 形（Id @22790 同位） ---- *)
 Corollary r2_backward_kl_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos (npx_pos pi_t Hpi_t))
@@ -3616,7 +3616,7 @@ Proof.
 Qed.
 
 (* ---- 21) [T13] rlhf_policy_improvement：KL 下降 ⟹ J 上升
-   （Id @20591 同位；消费 r2_rlhf_suboptimality_gap 双件 + β 保序） ---- *)
+   （Id @20591 同位；使用 r2_rlhf_suboptimality_gap 双件 + β 保序） ---- *)
 Lemma r2_rlhf_policy_improvement :
   forall (p_old p_new : S -> R) (Hp_old : pos3 p_old) (Hp_new : pos3 p_new)
          (Hn_old : nrm p_old) (Hn_new : nrm p_new),
@@ -3720,7 +3720,7 @@ Fixpoint r2_step_kl_weighted (t : nat) (pi : S -> R) (Hpi : pos3 pi) : R :=
   end.
 
 (* ---- 23) [T13] iter_le：向后 KL 迭代精确加权上界（Id @22915 同位；
-   消费 r2_backward_kl_step_le + η≤1（经 req_le_minus_nonneg）+ 归纳） ---- *)
+   使用 r2_backward_kl_step_le + η≤1（经 req_le_minus_nonneg）+ 归纳） ---- *)
 (* ---- 22a) 尾重排纯代数件（iter_le 终桥） ---- *)
 Lemma r2_step_kl_rearr :
   forall p q r s t : R,
@@ -3910,17 +3910,17 @@ End Req3AlignCore.
      （r2_rlhf_policy_improvement）/ iter_le（r2_backward_kl_iter_le，
      含 r2_step_kl_weighted Fixpoint + r2_step_kl_rearr 尾重排件）
      亦于同日收官席全数落本文件，T13 头注承诺全已证明。
-   3. [旗舰无条件化演示] req2_backward_kl_step 已落本文件（20260909
+   3. [主定理无条件化演示] req2_backward_kl_step 已落本文件（20260909
      收官席，五段逐段组装：HA β·KSN=FE差 / HB t13_hexp / HC·HK split /
      HD r2_bksn_collapse2 坍缩 / HE iv 成形 / β 逆吸收完成）；
      [T12] req2_gap_mono 亦已落本文件；桥位 req_backward_kl_identity
-     语句由旗舰同位供给，UpReqAlign.v 假设位可已证明。
-   （.vo magic 90001 同轨）；G3 提取探针 Obj.magic=0（旗舰/保底六件
+     语句由主定理同位供给，UpReqAlign.v 假设位可已证明。
+   （.vo magic 90001 同轨）；G3 提取检验 Obj.magic=0（主定理/保底六件
    "Modules were successfully checked"。
    ============================================================ *)
 
 (* ============================================================
-   T239 切片三 · 替换件尾部假设清查（整件连带编译挂账，五条一并清查）
+   T239 切片三 · 替换件尾部假设清查（整件连带编译遗留，五条一并清查）
    ============================================================ *)
 Print Assumptions w_sum_ptimes_const.
 Print Assumptions w_sum_minus.

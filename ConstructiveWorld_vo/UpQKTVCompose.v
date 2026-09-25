@@ -27,7 +27,7 @@
 (*     （z ≈ −γ 反例堵死 eq 支）。接缝解法（构造性严格化）：           *)
 (*     以 γ′ := Δ + 1 为收缩率常数——real_le_lt_trans 把 abs 界       *)
 (*     升为 |logit| < γ′（严格），再逐点 Qabs 三角把严格界拆为        *)
-(*     −γ′ < logit < γ′ 双边（桥件 qktv_abs_lt_two_side）。           *)
+(*     −γ′ < logit < γ′ 双边（桥接引理 qktv_abs_lt_two_side）。           *)
 (*     +1 余量即分离编码下 abs→双边的构造性代价，如实入率。           *)
 (*   ②率常数 γ′ = Qb·Kb·inv(√d) + 2 由 QK 端范数数据具体给出          *)
 (*     （合成前是 TV 端自由变元），核 z := attn_logit d 由 QK 端      *)
@@ -35,7 +35,7 @@
 (*                                                                *)
 (* 非平凡性自审：合成陈述的率常数与核分别来自两端件各自输出，          *)
 (*   单独 QK 端无任何 TV/收缩语汇，单独 TV 端 γ、z 均为自由前提取     *)
-(*   ——非包装、非转述。桥件①为分离编码下的新构造性步。               *)
+(*   ——非包装、非转述。桥接引理①为分离编码下的新构造性步。               *)
 (*                                                                *)
 (* 诚实边界：合成率的 +2（Δ 的 +1 与严格化的 +1）如实写进率常数，      *)
 (*   不冒充无余量形态；核逐行随机性由 TVDStar 出节件自带前提承担。     *)
@@ -57,11 +57,11 @@ Require Import UpTVDoeblin.
 From Stdlib Require Import List QArith.QArith QArith.Qabs QArith.Qring Arith.Arith.
 From Stdlib Require Import Lia Lqa.
 
-(* ################ 桥件：abs 严格界的构造性双边提取 ################ *)
+(* ################ 桥接引理：abs 严格界的构造性双边提取 ################ *)
 
 (* |x| < c ⟹ (−c < x ∧ x < c)。
    逐点走 real_abs_proj（|x|_n == Qabs x_n）+ Qle_abs_self（x_n ≤ |x_n|、
-   −x_n ≤ |x_n|），分离编码下 lt 支的逐点余量原样传递。本桥件即
+   −x_n ≤ |x_n|），分离编码下 lt 支的逐点余量原样传递。本桥接引理即
    「abs 界 → 双边界」的构造性代价具形处：仅严格（lt）形可行。 *)
 Lemma qktv_abs_lt_two_side : forall (x c : Real),
   real_lt (real_abs x) c ->
@@ -240,7 +240,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G4 审计口（桥件 + 主定理，全 Closed 预期）                        *)
+(* G4 审计口（桥接引理 + 主定理，全 Closed 预期）                        *)
 (* ============================================================ *)
 Print Assumptions qktv_abs_lt_two_side.
 Print Assumptions qk_tv_iter_contraction.

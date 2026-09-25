@@ -4,7 +4,7 @@
 (* 目的： 路径 C：指数函数的 Padé [n/n] 带符号逼近定义面。 *)
 (* 主件： pade_coeff / pade_num / pade_den 定义族与 pade_coeff_pos、pade_den_sym。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 消费引理带 (k <= n) 前提守卫（诚实注记见正文）；对称显式假设申报，登记于文末。 *)
+(* 备注： 使用引理带 (k <= n) 前提守卫（诚实注记见正文）；对称显式假设申报，登记于文末。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -22,7 +22,7 @@
 (*   余项积分表示（误差符号/误差界的最终形态）依赖构造性积分基建，    *)
 (*   本轮禁攻、对称显式假设（升级路径见文末登记段）。                     *)
 (*                                                                 *)
-(* 依赖复用（全部 Require 消费，零改写库件）：                       *)
+(* 依赖复用（全部 Require 使用，零改写库件）：                       *)
 (*   CW_ConstructiveWorld_219（薄壳 Export S01..S15）：              *)
 (*   - S03: q_fact（Q 阶乘）/ q_pow / sum_upto（有界和）             *)
 (*         / sum_upto_ext（逐点外延）/ q_fact_pos；                  *)
@@ -33,10 +33,10 @@
 (*   (2*n−k) 与 (n−k)。当 k>n 时 nat 减法截断为 0，公式会静默产出     *)
 (*   与真系数无关的值（例：n=1,k=2 时得 1/4，而非任何真系数）。故：    *)
 (*   ① pade_coeff n k 仅在 (k <= n)%nat 时承载 Padé [n/n] 系数语义；  *)
-(*   ② 按任务书纪律，消费引理带 (k <= n)%nat 前提守卫。诚实注记：     *)
+(*   ② 按任务书纪律，使用引理带 (k <= n)%nat 前提守卫。诚实注记：     *)
 (*     正性命题本身对越界截断值也成立（q_fact 处处为正），守卫不为    *)
 (*     正性服务，而为「值 = 真系数」的语义服务；后续误差符号/误差界   *)
-(*     引理消费 pade_coeff 时必须携带并使用该守卫。                   *)
+(*     引理使用 pade_coeff 时必须携带并使用该守卫。                   *)
 (*                                                                 *)
 
 
@@ -189,7 +189,7 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma pade_den_1_half : pade_den 1 (1#2) == (3#4).
 Proof. vm_compute. reflexivity. Qed.
 
-(* ===== 显式假设登记（对称，禁硬凑） =====
+(* ===== 显式假设登记（对称，禁特设构造） =====
    显式假设四件：pade_error_integral / pade_integral_pos / pade_error_sign /
    pade_error_bound——Padé [n/n] 余项积分表示：
      eˣ − P_n(x)/Q_n(x) = (−1)^n · x^{2n+1} / ((2n)!·Q_n(x))
@@ -201,7 +201,7 @@ Proof. vm_compute. reflexivity. Qed.
       复用 S02 柯西完备面）；
    ② pade_integral_pos：被积函数逐点正 ⟹ 积分正（积分单调性基建）；
       （pade_q_pow_opp_sign + pade_den_sym + pade_coeff_pos，
-      Q_n(x)>0 于 x>=0 由系数正 + 交错和下界估计接力）；
+      Q_n(x)>0 于 x>=0 由系数正 + 交错和下界估计接续）；
    ④ pade_error_bound：|x|<=B 时 |余项| <= e^B·B^{2n+1}/((2n)!·(2n+1))
       型显式 Q 界（q_fact 正性 + 库内 pow_fact_geom 几何衰减可复用）。 *)
 

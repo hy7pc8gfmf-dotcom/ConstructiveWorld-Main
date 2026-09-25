@@ -21,7 +21,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT13b_G13.v —— 假设消融战役 T13b 承接席（批6 配分正性族两位）           *)
+(* UpAblT13b_G13.v —— 假设消融战役 T13b 给出席（批6 配分正性族两位）           *)
 (* 辖区：G13_EvictFam.v 两位（T13a 移交单 §6 批6 行点名；同文件 :61/:87 两位     *)
 (*   Id 层 {RI}{SS}{SO} 世界位经核全库无具体 SumOver 实例世界，遗留移交——        *)
 (*   本席零触碰；:68/:464 规范化与 :71/:468 详细平衡两位按 T13a-2 勘误移交，     *)
@@ -34,7 +34,7 @@
 (*   :481-484 Definition evq_evicted_partition : R :=                            *)
 (*            sumf (fun s => if keep_dec s then evq_boltzmann_factor s else zero).*)
 (*          Variable evicted_partition_pos : lt zero evq_evicted_partition.      *)
-(* 实例化消解母本：                                                                    *)
+(* 实例化消解源文件：                                                                    *)
 (*   位1 ←sumd_sum_pos@UpReqSumD:233 正和族（节内无正字段，正和数据参数位显式参）     *)
 (*         加 exp_neg_pos 逐点正；                                              *)
 (*   位2 ←正和族加保留分支具体实例供给（keep 全保留判定 inl tt 供入，分支          *)

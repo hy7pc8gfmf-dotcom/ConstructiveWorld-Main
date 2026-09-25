@@ -10,11 +10,11 @@
 (*   主件     = bxem_one + 单位律 l/r + 分配律 l/r + 交换律        *)
 (*            + bxem_mult_zero（类字段 bmult_zero 位）。           *)
 (*   附带供给 = bxem_bplus_wd / bxem_bopp_wd（INSTB 未消解项        *)
-(*   ⓪′/⓪ 的 wd 位——同款双 qnorm 塌缩技术即可闭合）。             *)
+(*   ⓪′/⓪ 的 wd 位——同款双 qnorm 退化技术即可闭合）。             *)
 (* 选型账：乘法定义取载体既有构造子位 bxib_emult（E 是自由项树，   *)
 (*   ev 在 emult 位已按 qnorm∘Qmult 复合，零新算术）；全部代数律    *)
 (*   = stdlib Qmult 引擎（Qmult_assoc/1_l/1_r/0_r/comm/plus_distr）*)
-(*   + bxib_qnorm_fix（换心）+ bxib_qnorm_fix_id（双 qnorm 塌缩）  *)
+(*   + bxib_qnorm_fix（换心）+ bxib_qnorm_fix_id（双 qnorm 退化）  *)
 (*   + bxib_qnorm_id_of_qeqT（Id 闭合）三件套，与 INSTB bplus 同款。*)
 (* 铁律自审：公理面零命中；语句面全 Set（bae/Id/QeqT）；冻结件与   *)
 (*   Pre/ExpAddEq/CauchyD 零改动（仅 Require 使用）；前缀 bxem_    *)
@@ -67,7 +67,7 @@ Qed.
 
 (* ============================================================ *)
 (* E1：保底件②——bxem_mult_wd（bae-良定义）                        *)
-(*   双 qnorm 塌缩（fix_id）+ 求值像 Q 层 cong_mult + id_of_qeqT。  *)
+(*   双 qnorm 退化（fix_id）+ 求值像 Q 层 cong_mult + id_of_qeqT。  *)
 (* ============================================================ *)
 
 Lemma bxem_mult_wd : forall a b c d : bxib_E,
@@ -238,7 +238,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* E4：附带供给——INSTB 未消解项 ⓪′/⓪ 的 wd 位（同款塌缩技术顺带闭合）*)
+(* E4：附带供给——INSTB 未消解项 ⓪′/⓪ 的 wd 位（同款退化技术顺带闭合）*)
 (*   （bxem_bplus_wd / bxem_bopp_wd：装配位与类字段 bplus_wd/       *)
 (*    bopp_wd 逐字同形，W6 可直取。）                              *)
 (* ============================================================ *)

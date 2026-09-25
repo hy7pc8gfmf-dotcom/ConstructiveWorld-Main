@@ -20,7 +20,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT13b_UpSigMigrate2.v —— 假设消融战役 T13b 承接席（批6 配分正性族两位） *)
+(* UpAblT13b_UpSigMigrate2.v —— 假设消融战役 T13b 给出席（批6 配分正性族两位） *)
 (* 辖区：UpSigMigrate2.v 两位（T13a 移交单 §6 批6 行点名；T9a 已收 :112 位，     *)
 (*   本席零重叠）：                                                            *)
 (*   位1 UpSigMigrate2.v:111  Z_pos（ReqFECore 配分正性位）                     *)
@@ -31,7 +31,7 @@
 (*            sumf (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta  *)
 (*                                     beta_pos) (reward s))))).                *)
 (*            Variable Z_align_a_pos : lt zero Z_align_a_sum.                   *)
-(* 实例化消解母本：                                                                   *)
+(* 实例化消解源文件：                                                                   *)
 (*   位1 ←req_Z_temp_pos@UpReqDist:2808 同机制（正和参数位+配分参数位显式参，           *)
 (*         迁移经 lt_id_r/req_sym 接口字段）；                                   *)
 (*   位2 ←sumd_sum_pos@UpReqSumD:233 正和族（asum 面无正字段，正和数据参数位         *)

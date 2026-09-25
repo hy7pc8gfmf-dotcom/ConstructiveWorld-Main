@@ -3,18 +3,18 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   uahl_lo_lt_hi_one（原 L185，1 句玩具证）                             *)
 (*   uahl_lo_lt_hi（原 L76，1 句玩具证）                                  *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblP7_LoHiSqueeze.v —— 母件 LoHiSqueeze.v 四定理的独立镜像与三件实例形。 *)
-(* 使命：母件（LhsPair/LhsStar 两节）的编译产物与 Paper7Ablation 摘要不一致，   *)
-(*   本件不装设母件，仅依赖其上游 S01_BaseRing＋Paper7Ablation＋               *)
-(*   P7BoundedSoftmaxDeep，对母件四定理独立重证并实例化。                      *)
-(* 消费面（上游出口真名）：p7a_lo_lt_one —— lo<1（利差 Delta/Delta_pos 与      *)
+(* UpAblP7_LoHiSqueeze.v —— 源模块 LoHiSqueeze.v 四定理的独立对偶与三件实例形。 *)
+(* 使命：源模块（LhsPair/LhsStar 两节）的编译产物与 Paper7Ablation 摘要不一致，   *)
+(*   本件不装设源模块，仅依赖其上游 S01_BaseRing＋Paper7Ablation＋               *)
+(*   P7BoundedSoftmaxDeep，对源模块四定理独立重证并实例化。                      *)
+(* 使用面（上游出口真名）：p7a_lo_lt_one —— lo<1（利差 Delta/Delta_pos 与      *)
 (*   指数字段 expf/expf_zero/expf_mono_lt 五参＋invT 正性位）；                *)
 (*   p7d_hi_gt_one —— hi>1 全称八参形；p7a_delta_star_pos —— 0<δ*:=lo²；       *)
 (*   p7a_omd_pos / p7a_omd_lt_one —— κ:=1−δ*∈(0,1) 两支，出口带可判定序        *)
@@ -39,7 +39,7 @@
 (*   inv_pos_correct、lt_mult_compat、lt_id_l、lt_id_r、plus_positive、          *)
 (*   mult_positive、one_pos。                                                 *)
 (* 另注：柯西实数侧的 cauchy_real_exp_pos 属异接口（real_lt/cauchy_real_exp      *)
-(*   世界），为未来具体 expf 实例预备，本件接口节不消费。                       *)
+(*   世界），为未来具体 expf 实例预备，本件接口节不使用。                       *)
 (*                                                                *)
 (* 对标：mathlib 夹逼（squeeze）与 1−x<1 型界的构造性 Set 层对应；stdlib 无同形  *)
 (*   （序与运算皆本库类字段）。                                               *)
@@ -52,7 +52,7 @@ Require Import Paper7Ablation.
 Require Import P7BoundedSoftmaxDeep.
 
 (* ############ 段一：合取 lo<1∧1<hi、夹逼 lo<hi、δ*∈(0,1)（无序可判定参） ## *)
-(* 节变量面与母件 LoHiSqueeze.v 的 LhsPair 节一致（温度对＋利差对＋指数族四件）。 *)
+(* 节变量面与源模块 LoHiSqueeze.v 的 LhsPair 节一致（温度对＋利差对＋指数族四件）。 *)
 
 Section UahlPair.
 
@@ -72,7 +72,7 @@ Let invT := inv_pos temp temp_pos.
 Let lo := expf (mult invT (opp Delta)).
 Let hi := expf (mult invT Delta).
 
-(* uahl_lo_lt_one_hi（母件 lhs_lo_lt_one_hi 的独立重证）：左支经              *)
+(* uahl_lo_lt_one_hi（源模块 lhs_lo_lt_one_hi 的独立重证）：左支经              *)
 (*   p7a_lo_lt_one，右支经 p7d_hi_gt_one；invT 正性由 inv_pos_pos 提供。      *)
 Theorem uahl_lo_lt_one_hi : And (lt lo one) (lt one hi).
 Proof.
@@ -83,13 +83,13 @@ Proof.
              expf_zero expf_mono_lt).
 Qed.
 
-(* uahl_lo_lt_hi（母件 lhs_lo_lt_hi 的独立重证）：lt_trans 两步，两支取自 uahl_lo_lt_one_hi 的两肢 *)
+(* uahl_lo_lt_hi（源模块 lhs_lo_lt_hi 的独立重证）：lt_trans 两步，两支取自 uahl_lo_lt_one_hi 的两肢 *)
 Theorem uahl_lo_lt_hi : lt lo hi.
 Proof.
   exact (lt_trans lo one hi (fst uahl_lo_lt_one_hi) (snd uahl_lo_lt_one_hi)).
 Qed.
 
-(* uahl_delta_star_bounded（母件 lhs_delta_star_bounded 的独立重证）：        *)
+(* uahl_delta_star_bounded（源模块 lhs_delta_star_bounded 的独立重证）：        *)
 (*   左支 p7a_delta_star_pos；右支 δ*<1 独立三步：lt_mult_compat、             *)
 (*   lt_id_l（经 mult_one）与 lt_trans。 *)
 Theorem uahl_delta_star_bounded :
@@ -110,7 +110,7 @@ Qed.
 End UahlPair.
 
 (* ############ 段二：uahl_omd_bounded —— κ:=1−δ*∈(0,1)（带可判定序参节） #### *)
-(* 节变量面与母件 LoHiSqueeze.v 的 LhsStar 节一致；p7a_omd_pos/p7a_omd_lt_one  *)
+(* 节变量面与源模块 LoHiSqueeze.v 的 LhsStar 节一致；p7a_omd_pos/p7a_omd_lt_one  *)
 (* 的可判定序隐式参不可由结论反推，故以 @ 全参显式应用。                       *)
 
 Section UahlStar.
@@ -131,7 +131,7 @@ Variable expf_mono_lt : forall a b : R, lt a b -> lt (expf a) (expf b).
 Let invT := inv_pos temp temp_pos.
 Let lo := expf (mult invT (opp Delta)).
 
-(* uahl_omd_bounded（母件 lhs_omd_bounded 的独立重证）：左支以 δ*<1 前提       *)
+(* uahl_omd_bounded（源模块 lhs_omd_bounded 的独立重证）：左支以 δ*<1 前提       *)
 (*   应用 @p7a_omd_pos；右支以 0<lo 应用 @p7a_omd_lt_one——全参显式。 *)
 Theorem uahl_omd_bounded :
   And (lt zero (minus one (mult lo lo)))

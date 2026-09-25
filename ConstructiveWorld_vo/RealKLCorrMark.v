@@ -17,7 +17,7 @@
 (* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 组滚动）                        *)
 (* ============================================================ *)
 
 (* RealKLCorrMark.v
@@ -142,7 +142,7 @@ Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
 
 (* 假设位A 语句原位修正形：结论面与 UpRealLeB.v:218-231 逐字同构，     *)
 (* 依存位 :247-248 的 exact 由此件 + real_boltzmann_normalized_rkc    *)
-(* 承接（回灌时 :248 调用点 +1 实参，即本节接口位的传参方式）。        *)
+(* 给出（回灌时 :248 调用点 +1 实参，即本节接口位的传参方式）。        *)
 Theorem rkc_slotA_kl_decomp_full_mend :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s))
     (Hnormp : real_eq (real_sum_over_S p) real_one),

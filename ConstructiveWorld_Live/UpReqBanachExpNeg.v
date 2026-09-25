@@ -68,7 +68,7 @@ Qed.
 (* ============================================================ *)
 (* S1 系列面：bopp a 处级数的形态定形                              *)
 (* （Class 无 bneg 类字段——(−1)^k 载体取 bmult (bopp bone) 路线：  *)
-(*   偶次 bae bone、奇次 bae (bopp bone)，符号交错落位。）         *)
+(*   偶次 bae bone、奇次 bae (bopp bone)，符号交错定位。）         *)
 (* ============================================================ *)
 
 (* 负单位平方：bmult (bopp bone) (bopp bone) bae bone。            *)
@@ -220,7 +220,7 @@ Proof.
     exact (@bmult_zero B (@bzero B)).
 Qed.
 
-(* 负零级数项塌缩：负零幂 × 系数 bae bzero。                       *)
+(* 负零级数项退化：负零幂 × 系数 bae bzero。                       *)
 Lemma bxn_esp_term_opp_zero : forall (B : BanachAlg) (k : nat) (q : Q),
   @bae B (@bmult B (bpow B (@bopp B (@bzero B)) (Datatypes.S k))
                    (@bcoef B q))
@@ -239,7 +239,7 @@ Proof.
 Qed.
 
 (* exp_neg(0) 部分和恒一：esp (bopp bzero) n bae bone。            *)
-(* （对接 BXB 的 bxb_series_zero 同族面：负零处级数列同塌缩。）     *)
+(* （对接 BXB 的 bxb_series_zero 同族面：负零处级数列同退化。）     *)
 Lemma bxn_series_opp_zero : forall (B : BanachAlg) (n : nat),
   @bae B (exp_series_partial B (@bopp B (@bzero B)) n) (@bone B).
 Proof.

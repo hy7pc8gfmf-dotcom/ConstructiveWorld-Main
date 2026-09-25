@@ -10,7 +10,7 @@
 (*   Σ_{i+j≤n} ≠ 方块 Σ_{i,j≤n}），按「以双侧件实形适配」取              *)
 (*   S n × S n 方块 == bd2_diagf + 显式角余 tbg_corner（bxcd_U 一般      *)
 (*   族化）；显式假设② 所需「bcauchy 出口 + 代数面重排对接」由此式       *)
-(*   承接。                                                             *)
+(*   给出。                                                             *)
 (* 主件：tbg_diag_face（+ 推论 tbg_diag_seq 对角命名形）；保底半边       *)
 (*   tbg_ncvsum_bsum / tbg_row_dock / tbg_conv_bsum（ncv 侧）与          *)
 (*   tbg_fold_diagf（bd2 侧）各自独立成件。                              *)

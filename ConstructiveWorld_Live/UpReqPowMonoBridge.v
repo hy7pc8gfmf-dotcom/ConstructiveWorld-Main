@@ -35,7 +35,7 @@
 (*      c≤M ⟹ a·c ≤_B b·c（逐 eps 直证：e₀:=eps·inv(M+1)，a<b+e₀ 乘出后  *)
 (*      经 e₀·c ≤ e₀·M < eps 压回——结论 I4 所指「给定上界材料则逐 eps     *)
 (*      闭合」的定理化；零上界的纯 B 形因子版仍显式假设，见尾注）。            *)
-(* 对接位（消费式验证件 _x3d_I4BridgeCheck.v，临时件不落正式树）：         *)
+(* 对接位（使用式验证件 _x3d_I4BridgeCheck.v，临时件不落正式树）：         *)
 (*   geodi_policy_iter_kl_geom_iter_B（①）＋ x3d_le_b_mult_r_nonneg_or   *)
 (*   （④，因子取 KL_0）＋ powb_one_minus_eta_mono_dec（③）经             *)
 (*   real_le_b_trans 合成「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」——补充 Or 形   *)
@@ -45,7 +45,7 @@
 (*   语句面全 Set 值（real_le_b/real_le/real_lt 全 Set，Or:=A+B 库内      *)
 (*   定义）；纯 term-mode 组装（real_eq 非 Id 禁改写，全链 real_eq_trans  *)
 (*   / RealSetoid 运输族）；禁词全零（按全文件计含头注）。                 *)
-(* 编译配方（消费式，vo 树前置；引号从略防注释串警告）：                  *)
+(* 编译配方（使用式，vo 树前置；引号从略防注释串警告）：                  *)
 
 (*   ConstructiveWorld_vo EMPTY -Q . EMPTY UpReqPowMonoBridge.v           *)
 (*   （EMPTY 处实为空串实参；cpu_guard 包装零裸调，CoreN 2；               *)
@@ -339,8 +339,8 @@ Print Assumptions x3d_le_b_mult_r_nonneg_bnd.
 (* 尾注：诚实登记表                                                        *)
 
 (*   「B 形因子＋上界面」（件5，结论所指上界材料的定理化）；③powb 单调、  *)
-(*   ①② GeomIter 伴件的合成闭环在消费式验证件 _x3d_I4BridgeCheck.v       *)
+(*   ①② GeomIter 伴件的合成闭环在使用式验证件 _x3d_I4BridgeCheck.v       *)
 (*   完成：Hkl0or（Or 形 KL_0 非负证书）在位时「t ≤ t1 ⟹ KL_{t1} ≤_B     *)
 (*   κ^t·KL_0」全闭合。零上界且因子仅 B 形已知的④仍显式假设——卡点即          *)
-(*   B⟹Or 转换位（件4 反向），禁硬凑（分层保底纪律）。                    *)
+(*   B⟹Or 转换位（件4 反向），禁特设构造（分层保底纪律）。                    *)
 (* ============================================================ *)

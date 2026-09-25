@@ -21,26 +21,26 @@
 
 (* ============================================================ *)
 (* UpAblT5_S06_DiffSamplingGibbs.v —— 假设消融战役 T5a 席（FA1 第⑧批 r_arch_pow） *)
-(* 母本：S06_DiffSamplingGibbs.v（原树零改，只读依存）                            *)
+(* 源文件：S06_DiffSamplingGibbs.v（原树零改，只读依存）                            *)
 (*                                                              *)
 (* 辖区一参数位（普查表 _tfa1_ §④ 批8 + §① 行号锚）：                     *)
 (*   L4504 r_arch_pow_attn —— Real 层实例供给（N3）                   *)
 (*      实例化消解件：r_arch_pow_attn_real@CW220_Extensions.v:1537            *)
-(*      （母本节 Section AttentionGibbsBridge:3186；节参 delta/delta_pos/    *)
+(*      （源文件节 Section AttentionGibbsBridge:3186；节参 delta/delta_pos/    *)
 (*        delta_lt_one@S06:4013-4015 出节全参形）                        *)
 (*      依存位：S06:4595（几何迭代收缩收尾 destruct 位）                  *)
 (*      G07_KLWall:946 参数位副本 2 同构先例（arch_pow_i 底 k:=1−δ 同形）。     *)
-(*      母本 minus one delta 与本件 real_plus real_one (real_opp delta)    *)
+(*      源文件 minus one delta 与本件 real_plus real_one (real_opp delta)    *)
 (*      定义级同构（minus a b := plus a (opp b)，S01 全局定义）。           *)
 (*                                                              *)
 (* 纪律：纯构造性 / 语句面全 Set 层 / 公理面零新增 / 原树零改 /          *)
-(*       独立伴生件不并入原模块 / 前缀 abl_ 本件内防撞。               *)
+(*       独立配套模块不并入原模块 / 前缀 abl_ 本件内防撞。               *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import CW220_Extensions.
 
-(* 副本幂：母本族节内 Fixpoint r_pow 逐形复刻于具体层；                  *)
+(* 副本幂：源文件族节内 Fixpoint r_pow 逐形复刻于具体层；                  *)
 (* 与 real_pow@CW220:777 定义级同构（G07:924 先例同桥）。                *)
 Fixpoint abl_r_pow (x : Real) (n : nat) : Real :=
   match n with
@@ -48,7 +48,7 @@ Fixpoint abl_r_pow (x : Real) (n : nat) : Real :=
   | Datatypes.S m => real_mult x (abl_r_pow x m)
   end.
 
-(* 母本节参出节全参形：delta/delta_pos/delta_lt_one（S06:4013-4015）+ 接口参数三参。 *)
+(* 源文件节参出节全参形：delta/delta_pos/delta_lt_one（S06:4013-4015）+ 接口参数三参。 *)
 Theorem abl_S06_r_arch_pow_attn :
   forall (delta : Real) (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
          (a : Real) (Ha : real_lt real_zero a) (eps : Real) (Heps : real_lt real_zero eps),

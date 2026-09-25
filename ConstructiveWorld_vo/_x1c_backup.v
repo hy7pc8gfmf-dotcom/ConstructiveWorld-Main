@@ -2,7 +2,7 @@
 (* UpReqMinPKLChain.v —— X1 席：复合熵链一步拼装                  *)
 (*   KL(minp‖full) ≤ S ≤ log|S|   （论文 2 正式版 §10.2 第 6 项）  *)
 (*                                                              *)
-(* 拼装件（全在盘，只读消费）：                                   *)
+(* 拼装件（全在盘，只读使用）：                                   *)
 (*   UpAuditBridge : real_minp_kl_cost（KL(minp‖full) == −log Z_aud）*)
 (*                   real_Z_aud_is_kept_mass（Z_aud == 保留质量）  *)
 (*   UpMinP        : dropped_le_one_minus_exp_neg_S（dropped ≤ 1−e^−S）*)
@@ -19,13 +19,13 @@
 (*   [4] um_log_le_mono + log_inv_exp_neg_thm ⟹ KL ≤ S            *)
 (*   [5] real_gibbs_inequality_eps（q := 均匀 1/N）+ log 代数      *)
 (*       ⟹ S ≤ log N + eps（逐 eps 形）                           *)
-(*   [6] 三分探针 + 半隙收口 ⟹ S ≤ log N（闭形）                  *)
+(*   [6] 三分检验 + 半隙闭合 ⟹ S ≤ log N（闭形）                  *)
 (*   [7] real_le_trans ⟹ KL ≤ log N 与合取形复合链                 *)
 (*                                                              *)
 (* 世界：UpMinP 概率表世界（tokens : list Real，逐项正、和 == 1，   *)
-(* ratio ∈ (0,1]，三分探针 trich 随行）；UpAuditBridge 抽象 Min-P   *)
+(* ratio ∈ (0,1]，三分检验 trich 随行）；UpAuditBridge 抽象 Min-P   *)
 (* 机器在 (Real, tokens, x1_tf, x1_keep, x1_keep_dec) 上实例化。    *)
-(* 纪律：零公理、零搁置、零经典（纯构造，三分探针显式随行）；        *)
+(* 纪律：零公理、零搁置、零经典（纯构造，三分检验显式随行）；        *)
 (*       语句全 Set 层；全 Qed 闭合；um_/x1_ 前缀防遮蔽。           *)
 (* ============================================================ *)
 
@@ -110,7 +110,7 @@ Proof.
 Qed.
 
 (* 通用输运：list 和 == seq 下标和（任意 f；um_seq_nth_sum 的泛化版， *)
-(*   nth 全程保符号，仅经 x1_seq_shift 位移——镜像 UpMinP 纪律）      *)
+(*   nth 全程保符号，仅经 x1_seq_shift 位移——对偶 UpMinP 纪律）      *)
 Lemma x1_sum_list_seq : forall (l : list Real) (f : Real -> Real),
   real_eq (real_list_sum Real f l)
           (real_list_sum nat (fun i => f (ListDef.nth i l real_zero))
@@ -223,7 +223,7 @@ Proof.
                                     (real_inv_pos_pos x Hx))
                            (real_plus (cw_log x Hx)
                               (real_opp (cw_log x Hx))))).
-    + (* X1b：子弹1目标实为 `A == A+(B+−B)`（非 assoc 形），经 A+0 收口 *)
+    + (* X1b：子弹1目标实为 `A == A+(B+−B)`（非 assoc 形），经 A+0 闭合 *)
       apply (real_eq_trans _
                  (real_plus (cw_log (real_inv_pos x Hx)
                                         (real_inv_pos_pos x Hx))
@@ -231,7 +231,7 @@ Proof.
       * apply real_eq_sym. apply real_plus_zero.
       * apply RealSetoid.real_eq_plus_compat.
         -- apply real_eq_refl.
-        -- (* X1b：此槽目标是 `0 == B+−B`（compat 第二槽反向），sym 后放电 *)
+        -- (* X1b：此槽目标是 `0 == B+−B`（compat 第二槽反向），sym 后实例化消解 *)
            apply real_eq_sym. apply real_plus_opp.
     + (* X1b：assoc 本朝向即 `x+(y+z) == (x+y)+z`（S02 L2333），直放即可 *)
       apply real_plus_assoc.
@@ -247,7 +247,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 1. 审计桥实例（UpAuditBridge 在概率表世界上放电）              *)
+(* 1. 审计桥实例（UpAuditBridge 在概率表世界上实例化消解）              *)
 (* ============================================================ *)
 
 (* 温度因子安全包装：正元恒等，非正元取 1（保证全局正性） *)
@@ -275,7 +275,7 @@ Proof.
   - apply real_eq_refl.
 Qed.
 
-(* Min-P 保留判定（阈值 thr = ratio·p_max；与 um_keepF 同一探针项） *)
+(* Min-P 保留判定（阈值 thr = ratio·p_max；与 um_keepF 同一检验项） *)
 Definition x1_keep (_ : list Real) (x : Real) : Set :=
   match trich thr x with
   | inl _ => unit
@@ -324,7 +324,7 @@ Qed.
 
 Lemma x1_Zfull_pos : real_lt real_zero (Z_full Real tokens x1_tf).
 Proof.
-  (* X1b：lt_compat 剖面 x1 x2 y1 y2 + 三证据；0<1 与 Z_full==1 换装到 0<Z_full *)
+  (* X1b：lt_compat 剖面 x1 x2 y1 y2 + 三证据；0<1 与 Z_full==1 重述到 0<Z_full *)
   apply (RealSetoid.real_lt_compat real_zero real_zero real_one
            (Z_full Real tokens x1_tf)
            (real_eq_refl real_zero)
@@ -390,8 +390,8 @@ Proof.
                 (real_lt_irrefl (ListDef.nth istar tokens real_zero)
                 (real_lt_le_trans (ListDef.nth istar tokens real_zero) thr
                    (ListDef.nth istar tokens real_zero) Hd Hthle)))). }
-  (* X1b：先证 seq 和版正性（single_le 收口），再经 lt_compat 运输回 uab_temp_sum。
-     原稿 compat 槽位错位（x2 误占 real_one 且 eq 证据顺序颠倒） *)
+  (* X1b：先证 seq 和版正性（single_le 闭合），再经 lt_compat 运输回 uab_temp_sum。
+     原稿 compat 接口参数错位（x2 误占 real_one 且 eq 证据顺序颠倒） *)
   assert (HM : real_lt real_zero
     (real_list_sum nat
        (fun i => match x1_keep_dec nil (ListDef.nth i tokens real_zero) with
@@ -465,7 +465,7 @@ Proof.
          (1) 先 destruct keep_dec（目标无语法 trich，抽象平凡合法）；
          (2) kernel 运输后 unfold x1_keep/um_keepF，再 destruct trich
              （此时载体 Kk:match o0 with unit|Empty 为非嵌套谓词，抽象合法）；
-         (3) 混合支用载体空/居头矛盾收口。 *)
+         (3) 混合支用载体空/居头矛盾闭合。 *)
       destruct (x1_keep_dec nil (ListDef.nth i tokens real_zero)) as [Kk | Kd].
       * (* dec 判 keep：LHS iota 归到 kernel(w)，再与 um_keepF(w) 对齐 *)
         apply (real_eq_trans _
@@ -545,7 +545,7 @@ Proof.
       * apply real_opp_le_compat. exact H4.
 Qed.
 
-(* 0 < K（kept 正性：0 < e^−S ≤ K；X1b 新增，供互补恒等与 wd 槽位放电） *)
+(* 0 < K（kept 正性：0 < e^−S ≤ K；X1b 新增，供互补恒等与 wd 接口参数实例化消解） *)
 Lemma x1_K_pos : real_lt real_zero K.
 Proof.
   exact (real_lt_le_trans real_zero (real_exp_neg S) K
@@ -601,8 +601,8 @@ Proof.
   { apply (RealSetoid.real_le_id_l (real_opp S)
              (cw_log (real_exp_neg S) (real_exp_neg_pos S))
              (real_log K Hlogpos)).
-    - (* X1b：−S == log(e^−S)：log_inv 放电给 cauchy 形，正性证明经
-         real_log_wd 换装为 real_exp_neg_pos S（不透明常量须语法同形） *)
+    - (* X1b：−S == log(e^−S)：log_inv 实例化消解给 cauchy 形，正性证明经
+         real_log_wd 重述为 real_exp_neg_pos S（不透明常量须语法同形） *)
       apply (real_eq_trans _
                  (cw_log (cauchy_real_exp (real_opp S))
                     (cauchy_real_exp_pos (real_opp S)))).
@@ -635,7 +635,7 @@ Qed.
 
 Lemma x1_N_pos : real_lt real_zero (um_nreal N).
 Proof.
-  (* X1b：um_Npos（UpMinP L847，语句仅依赖 tokens）直接放电——
+  (* X1b：um_Npos（UpMinP L847，语句仅依赖 tokens）直接实例化消解——
      原稿 destruct/rewrite 组合在 Rocq9 下「length tokens」语法面已被
      destruct 代换，rewrite 必空转 *)
   exact (um_Npos tokens tokens_ne).
@@ -673,7 +673,7 @@ Proof.
       * apply RealSetoid.real_eq_plus_compat.
         -- exact x1_log_U_eq_opp_LN.
         -- exact (x1_log_inv_eq_opp_log k Hk).
-  - (* X1b：M1 == RHS 经 k·(LN+log k) 两段收口 *)
+  - (* X1b：M1 == RHS 经 k·(LN+log k) 两段闭合 *)
     apply (real_eq_trans _
                (real_mult k (real_plus LN (cw_log k Hk)))).
     + apply RealSetoid.real_eq_mult_compat.

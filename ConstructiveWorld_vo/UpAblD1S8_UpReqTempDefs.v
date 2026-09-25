@@ -21,7 +21,7 @@
 
 (* ============================================================ *)
 (* UpAblD1S8_UpReqTempDefs.v —— FA-D1S8 数据供给大封装五梯 件①               *)
-(* 席位：FA-D1S8（普查批 D1-⑦ 五梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改     *)
+(* 席位：FA-D1S8（普查批 D1-⑦ 五梯 ≤40 位·按模块聚合）｜独立配套模块·原树零改     *)
 (*                                                              *)
 (* 辖区：UpReqTempDefs.v Section RealTempDefs（L66 起）全 9 槽                 *)
 (*   S:69｜real_sum_over_S:70｜real_sum_pos_preserved:71-73｜                   *)
@@ -32,9 +32,9 @@
 (* 扩槽登记：real_sum_pos_preserved（L71）属 E389/E703 sum_pos 槽家族            *)
 (*   （fa57_sum_carrier_realizes@fa57_ext:63 直接匹配先例，D1-⑤ 批同族），            *)
 (*   S3 已立同槽件 UpAblD1S3_sum_pos_UpReqTempDefs.v（sumd 列表和引擎面）——      *)
-(*   本件按「扩槽不重立」处置：单点载体直取形供给，不另立母本证，                 *)
+(*   本件按「扩槽不重立」处置：单点载体直取形供给，不另立源文件证，                 *)
 (*   闭合账记「S3 单槽＋本席封装 9 槽＝模块 9 位全闭合」。                        *)
-(*   零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷）。                             *)
+(*   零 Require 源文件（防 P3S1 坑1 混代际 .vo 地雷）。                             *)
 (*                                                              *)
 (* 形态：P2S1/S4/S7 封装记录型先例（槽语句逐字入包）＋实例供给申报形。             *)
 (*   S7 报告移交单明确「本模块与 S7 四件同族同构，单点封装件可逐字复用             *)
@@ -56,7 +56,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：9 槽语句逐字入包（对照母本 L69-85） ============ *)
+(* ============ 封装记录型：9 槽语句逐字入包（对照源文件 L69-85） ============ *)
 
 Inductive uabd1s8_tpd_pack9 : Type :=
 | uabd1s8_tpd_pack9_intro :
@@ -79,7 +79,7 @@ Inductive uabd1s8_tpd_pack9 : Type :=
           forall energy : S -> Real,
             uabd1s8_tpd_pack9.
 
-(* ============ 供给件：单点实例一次喂定 9 槽 ============ *)
+(* ============ 依赖模块：单点实例一次喂定 9 槽 ============ *)
 
 Theorem uabd1s8_tpd_pack9_supplied : uabd1s8_tpd_pack9.
 Proof.

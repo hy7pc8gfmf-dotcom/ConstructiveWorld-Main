@@ -17,7 +17,7 @@
 (*       （UpReqBanachInstEMult.v:242）、bopp_wd 位 :=              *)
 (*       bxem_bopp_wd（UpReqBanachInstEMult.v:260）、bxib_qabs_opp  *)
 (*       _norm 位 := bxra_qabs_opp_norm（UpReqBanachInstReal）。    *)
-(*       证明不复制 Z 层链，经 ev 展开塌缩后直取 bxra_qabs_opp_norm *)
+(*       证明不复制 Z 层链，经 ev 展开退化后直取 bxra_qabs_opp_norm *)
 (*       （bxem 同款 change 面）；零新算术。全件 Qed；无公理、       *)
 (*       无承认式、无经典逻辑；结论全为 Set 层 Id / QeqT 形。       *)
 (*       文末对全件附 Print Assumptions 审计。                     *)
@@ -41,7 +41,7 @@ Proof.
   exact (bxra_qabs_opp_norm (bxib_ev a)).
 Qed.
 
-(* QeqT 面（bxip_norm_wd_qeqt 同款派生形，供 QeqT 消费位） *)
+(* QeqT 面（bxip_norm_wd_qeqt 同款派生形，供 QeqT 使用位） *)
 Lemma ibw_bnorm_opp_qeqt : forall a : bxib_E,
   QeqT (bxib_bnorm (bxib_eopp a)) (bxib_bnorm a).
 Proof.
@@ -49,7 +49,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 既有供给指针（零新件；对应语句位的消费位直取下列已证引理）：       *)
+(* 既有供给指针（零新件；对应语句位的使用位直取下列已证引理）：       *)
 (*   bplus_wd 位 := bxem_bplus_wd（EMult:242，逐位同语句）          *)
 (*   bopp_wd  位 := bxem_bopp_wd （EMult:260，逐位同语句）          *)
 (*   Q 面引理位 := bxra_qabs_opp_norm（InstReal，逐字同语句）。      *)

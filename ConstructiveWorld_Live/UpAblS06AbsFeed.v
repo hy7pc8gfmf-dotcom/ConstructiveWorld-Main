@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpAblS06AbsFeed.v —— S06 abs_sum_le 语句形的 B 层供给件         *)
+(* UpAblS06AbsFeed.v —— S06 abs_sum_le 语句形的 B 层依赖模块         *)
 (*                                                                *)
 (* 使命：S06 经典 R 世界中两处求和语句（abs_kernel_bound 与        *)
 (*   eviction_steady_deviation 形）的结论属 SumOver 类字段 abs_sum_le； *)

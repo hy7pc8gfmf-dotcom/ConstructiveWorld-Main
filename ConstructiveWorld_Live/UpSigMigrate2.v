@@ -7,13 +7,13 @@
 (* 备注： 承第一段载体约定；指数与对数接口为显式前提面。 *)
 (* ============================================================ *)
 
-(* UpSigMigrate2.v — 签名迁移旗舰席：论文 1 §4 RLHF 核心链（定理 4.1–4.4）
-   的 req 系（setoid 层）重述 + RealEnhancedReal 实例装配 + 端到端旗舰。
+(* UpSigMigrate2.v — 签名迁移主定理席：论文 1 §4 RLHF 核心链（定理 4.1–4.4）
+   的 req 系（setoid 层）重述 + RealEnhancedReal 实例装配 + 端到端主定理。
 
    结构：
    Part A  §4.1 通用出口 req 系重述（对 Id 系 CW L15759-16440 FreeEnergyMinimization 节）
            —— 相对试点 UpSigMigrate.v 的升级：试点把 Id 上游已证件
-              energy_in_log_boltzmann / free_energy_boltzmann 作桥假设承接，
+              energy_in_log_boltzmann / free_energy_boltzmann 作桥假设给出，
               此处全部内部真证（req_log_inv_one_inv / req_boltzmann_log_decomp /
               Real 实例由 real_log_exp_neg CW L42231 消解）。
    Part B  对齐层 req 系重述（对 Id 系 CW L18734-19158 Alignment 节）：
@@ -23,18 +23,18 @@
              req_rlhf_free_energy_kl —— F[pi] == F[pi*] + beta·KL （Id L20290 间隙恒等）
              req_dpo_optimal         —— Id L19096
              req_rlhf_optimal_unique —— Id L19128
-           桥假设 = Id 免费件的 req 签名承接：b_gibbs_pos / b_gibbs_sum_eps
+           桥假设 = Id 免费件的 req 签名给出：b_gibbs_pos / b_gibbs_sum_eps
            （Id 已证 gibbs_inequality L16629；Real 层 real_gibbs_inequality_eps
-           b_mult_cancel / b_gibbs_eq（Id 字段 mult_cancel_l / log_eq_linear 消费链，
+           b_mult_cancel / b_gibbs_eq（Id 字段 mult_cancel_l / log_eq_linear 使用链，
            setoid 层 log_eq_linear 为构造性诚实边界）。
    Part C  两状态具体实例（S := bool + real_list_sum）装配消解 +
-           端到端旗舰定理（供提取探针消费，Obj.magic=0）。
+           端到端主定理定理（供提取检验使用，Obj.magic=0）。
 
    纪律：纯构造性；Set 层语句零 Prop；全 Qed；无 Id 消去（全 req_trans 链 +
    compat 桥）；禁词面与试点一致。
 
    ------------------------------------------------------------------
-   接管席续建结果（2026-09-08，系统中断事件后接管）：
+   承担席续建结果（2026-09-08，系统中断事件后承担）：
    [幸存基线核验] 前任席 31 件稿 -vos 实测语句层不健康：L985 语法错
    （括号层中断）+ L1001 陈述句多右括号 + L1034 起深度失衡到文件尾，
    且缺 End ReqAlignCore；a_KL_ext_r / a_fe_kl_decomp / a_min_free_energy_eps
@@ -48,18 +48,18 @@
    a_rlhf_optimal_eps（Bishop 逐 eps，real_rlhf_optimal_eps L43804 对位，
    环收尾 A+oppX<=B ⟹ A<=B+X）+ 4.3b a_dpo_optimal（Id L19096 对位）+
    4.4 a_rlhf_optimal_unique（Id L19128 对位；加法消去 + b_mult_cancel +
-   b_gibbs_eq 桥消费链，req 世界无 destruct 注入消去的构造性替代）。
+   b_gibbs_eq 桥使用链，req 世界无 destruct 注入消去的构造性替代）。
    [Part C 端到端] R:=Real（RealEnhancedReal 消解）+ S:=bool（两状态）+
-   sumf:=real_list_sum[true;false]；三性质消解消费基座 real_list_sum 三件；
-   c_partition 逐项消解；旗舰 #1 two_state_free_energy_boltzmann（F[p_b]==
-   p_u=(1/2,1/2) 的自由能-KL 分解）各以核心定理一次性 exact 消费；
-   c_mult_cancel_l = (c.2) 左乘消去引擎实例。G3 提取探针
+   sumf:=real_list_sum[true;false]；三性质消解使用基座 real_list_sum 三件；
+   c_partition 逐项消解；主定理 #1 two_state_free_energy_boltzmann（F[p_b]==
+   p_u=(1/2,1/2) 的自由能-KL 分解）各以核心定理一次性 exact 使用；
+   c_mult_cancel_l = (c.2) 左乘消去引擎实例。G3 提取检验
    upsigmigrate2_probe（Obj.magic=0，验后删）。
    ------------------------------------------------------------------
    [断点已证明] 幸存稿 Part C 三处实例-evar 易碎位（apply 类字段投影
    于具体 Real 层统一失败：c_partition L1355 / c_mult_cancel_l /
    c_pu_normalized）→ 全显式参数 exact 形态已证明（c_exp_neg_zero 先例）。
-   [卸载元数实证] 旗舰消费件 13/16 元 exact 调用经依赖闭包分析确证：
+   [卸载元数实证] 主定理使用件 13/16 元 exact 调用经依赖闭包分析确证：
    section 卸载 = 语句 ∪ 证明项传递使用变量（req_free_energy_boltzmann
    经 p_times_energy_decomp→boltzmann_log_decomp→{log_compat,log_exp_neg}
    且经 sum_pb_cancel→boltzmann_normalized→partition_condition，15 槽全满）。
@@ -77,7 +77,7 @@
    ⟹ J_old <= J_new；4.3 ×2 换元 + β>0 左乘保序（le_mult_compat 经
    mult_comm 双换元）+ le_plus_compat 两侧加 opp J* + 消去串 Hsimpl
    + opp_le_compat 双负完成。
-   [端到端旗舰复验] Part C 旗舰 #1/#2 复跑 G3 提取（upsigmigrate2r_probe）：
+   [端到端主定理复核] Part C 主定理 #1/#2 复跑 G3 提取（upsigmigrate2r_probe）：
    多态核 Obj.magic=0 + ocamlopt 可执行 + Print Assumptions 全 Closed；
    ------------------------------------------------------------------ *)
 
@@ -92,7 +92,7 @@ Section ReqFECore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- SumOver 的 req 签名对接面（Id 系 SumOver 类的 setoid 镜像规格） ---- *)
+(* ---- SumOver 的 req 签名对接面（Id 系 SumOver 类的 setoid 对偶规格） ---- *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
@@ -113,7 +113,7 @@ Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
 (* ---- 诚实缺口桥（setoid 类真缺字段；Real 实例消解见 Part C） ---- *)
-(* log ∘ exp_neg 消去：Id 系 log_exp_neg（CW L592 已证引理）的 req 承接 *)
+(* log ∘ exp_neg 消去：Id 系 log_exp_neg（CW L592 已证引理）的 req 给出 *)
 Hypothesis req_log_exp_neg :
   forall x : R, req (log (exp_neg x) (exp_neg_pos x)) (opp x).
 
@@ -132,7 +132,7 @@ Definition free_energy_m2 (p : S -> R) (Hp : positive_dist_m2 p) : R :=
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
 
 (* ============================================================ *)
-(* A0. req 代数前奏（试点 UpSigMigrate.v 已证模板；仅消费接口字段） *)
+(* A0. req 代数前奏（试点 UpSigMigrate.v 已证模板；仅使用接口字段） *)
 (* ============================================================ *)
 
 Lemma req_plus_zero_r : forall a : R, req (plus zero a) a.
@@ -835,7 +835,7 @@ Proof.
       { apply plus_comm. }
       { apply req_refl. } }
     apply plus_comm. }
-  (* 总装：Hleg1（free_energy_m2 p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
+  (* 装配：Hleg1（free_energy_m2 p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
   assert (Hleg1 : req (free_energy_m2 p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist_m2 s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
   { unfold free_energy.
     apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (boltzmann_dist_m2 s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
@@ -861,12 +861,12 @@ End ReqFECore.
 (*   a_rlhf_suboptimality_gap；4.4 policy_improvement@L20591 ↔        *)
 (*   a_rlhf_policy_improvement；另有 dpo_optimal（定理 5.2 对位）       *)
 (*   与 a_fe_kl_decomp（§8 统一视角锚 rlhf_free_energy_kl@L20290 对位）。 *)
-(*   诚实桥（req 签名承接 Id 免费件）：                              *)
+(*   诚实桥（req 签名给出 Id 免费件）：                              *)
 (*     b_gibbs_pos/b_gibbs_sum_eps（Id 已证 gibbs_inequality L16629；*)
 (*        Real 层 real_gibbs_inequality_eps L41704 逐 eps 消解）     *)
 (*     b_log_exp_neg（real_log_exp_neg 消解）/ b_log_compat（        *)
 (*        real_log_wd 消解）/ b_mult_cancel+b_gibbs_eq（Id 字段       *)
-(*        mult_cancel_l/log_eq_linear 消费链，G6 遗留）。             *)
+(*        mult_cancel_l/log_eq_linear 使用链，G6 遗留）。             *)
 (* ============================================================ *)
 Section ReqAlignCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -981,7 +981,7 @@ Definition pb_a : S -> R :=
   boltzmann_dist_m2 S align_energy_a beta beta_pos Z_align_a_sum Z_align_a_pos.
 
 (* 透明件：直接取 Part A 出口 req_boltzmann_positive（Qed 不透明件之间的
-   conversion 桥——语句层消费 Part A 结论时正性证明位必须 δ 相同） *)
+   conversion 桥——语句层使用 Part A 结论时正性证明位必须 δ 相同） *)
 Definition a_pb_pos : pdist_a pb_a :=
   req_boltzmann_positive S align_energy_a beta beta_pos
                          Z_align_a_sum Z_align_a_pos.
@@ -1073,7 +1073,7 @@ Proof.
 Qed.
 
 (* ---- 4.1 对齐实例：F_a[p] == F_a[p_b] + beta·KL_a(p‖p_b) ---- *)
-(* 消费 Part A 旗舰 req_free_energy_kl_decomp 于对齐参数处实例化
+(* 使用 Part A 主定理 req_free_energy_kl_decomp 于对齐参数处实例化
    （base_loss := align_energy_a，D := beta，Z := Z_align_a_sum） *)
 Lemma a_fe_kl_decomp :
   forall (p : S -> R) (Hn : nrm_a p) (Hp : pdist_a p),
@@ -1142,7 +1142,7 @@ Proof.
                                        (req_refl (mult beta eps))))).
 Qed.
 
-(* ---- 4.2 旗舰（精确形，Id rlhf_optimal@L19049 对位）：J(p) <= J(pistar) ---- *)
+(* ---- 4.2 主定理（精确形，Id rlhf_optimal@L19049 对位）：J(p) <= J(pistar) ---- *)
 (* 证明结构沿 Id 原件：KL 分解 ⟹ F(pb) <= F(p)（KL>=0 桥）⟹ F(pb)==F(pistar)
    ⟹ req_le_compat 换元 ⟹ opp_le_compat 取负。 *)
 Theorem a_rlhf_optimal :
@@ -1182,7 +1182,7 @@ Proof.
                        a_fe_boltzmann_pistar (req_refl (fe_a p Hp)) Hmin).
 Qed.
 
-(* ---- 4.2 旗舰（Bishop 逐 eps 形，real_rlhf_optimal_eps@L43804 对位）：
+(* ---- 4.2 主定理（Bishop 逐 eps 形，real_rlhf_optimal_eps@L43804 对位）：
    J(p) <= J(pistar) + beta·eps ---------------------------------------------- *)
 (* 环收尾恒等：A + opp X <= B ⟹ A <= B + X（Real 层同构步骤的 req 版） *)
 Theorem a_rlhf_optimal_eps :
@@ -1260,7 +1260,7 @@ Qed.
    J(p) == J(pistar) ⟹ p == pistar（逐点）。
    消去链：目标相等 ⟹ F 相等 ⟹ beta·KL == 0（加法消去）⟹ KL == 0
    （b_mult_cancel）⟹ 逐点（b_gibbs_eq）⟹ pi* 换元。req 世界无 destruct+eq_ind
-   注入消去，此链为 (c.2) 消去引擎的 b 桥消费形态。 *)
+   注入消去，此链为 (c.2) 消去引擎的 b 桥使用形态。 *)
 Lemma a_add_cancel_r : forall (u v w : R), req (plus u v) (plus u w) -> req v w.
 Proof.
   intros u v w H.
@@ -1530,17 +1530,17 @@ Qed.
 
 End ReqAlignCore.
 (* ============================================================ *)
-(* Part C：两状态具体实例装配消解 + 端到端旗舰                    *)
+(* Part C：两状态具体实例装配消解 + 端到端主定理                    *)
 (*   R := Real（Instance RealEnhancedReal 消解；req ≡ real_eq），   *)
 (*   S := bool（两状态），sumf := real_list_sum f [true; false]。  *)
-(*   链路：具体实例装配 → §4.1 核心定理消费 → G3 提取探针          *)
+(*   链路：具体实例装配 → §4.1 核心定理使用 → G3 提取检验          *)
 (*   （upsigmigrate2_probe.ml，Obj.magic=0）。                     *)
 (* ============================================================ *)
 
 Definition bsum (f : bool -> Real) : Real :=
   real_list_sum bool f (cons true (cons false nil)).
 
-(* ---- 实例装配：求和三性质消解（消费基座 real_list_sum 三件） ---- *)
+(* ---- 实例装配：求和三性质消解（使用基座 real_list_sum 三件） ---- *)
 Lemma c_sum_ext :
   forall f g : bool -> Real, (forall s : bool, req (f s) (g s)) -> req (bsum f) (bsum g).
 Proof.
@@ -1621,7 +1621,7 @@ Definition two_state_boltz_pos : forall s : bool, lt zero (two_state_boltz s) :=
                          two_state_Z two_state_Z_pos.
 
 (* ============================================================ *)
-(* 端到端旗舰 #1：§4.1 核心定理 req_free_energy_boltzmann 消费     *)
+(* 端到端主定理 #1：§4.1 核心定理 req_free_energy_boltzmann 使用     *)
 
 (* ============================================================ *)
 Theorem two_state_free_energy_boltzmann :
@@ -1710,7 +1710,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 端到端旗舰 #2：§4.1 核心定理 req_free_energy_kl_decomp 消费     *)
+(* 端到端主定理 #2：§4.1 核心定理 req_free_energy_kl_decomp 使用     *)
 (*   均匀策略 p_u 的自由能-KL 分解（可提取 Set 层语句）            *)
 (* ============================================================ *)
 Theorem two_state_free_energy_kl_flagship :

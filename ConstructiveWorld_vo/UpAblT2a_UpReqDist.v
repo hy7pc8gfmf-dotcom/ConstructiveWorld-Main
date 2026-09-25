@@ -25,7 +25,7 @@
 (* 辖区：UpReqDist.v ReqFEP 节（L1001-1037）log 接口面假设位 2 位：              *)
 (*   L1030 dist_log_inv_one_inv（倒数面）/ L1033 dist_log_exp_neg（负指面）。    *)
 (*   （同文件 sumf 接口面 14 位已由 T1a 席 UpAblT1_UpReqDist.v 收束，本件零重叠。）*)
-(* 母本：logd_log_inv_one_inv_real / logd_log_exp_neg_real@G05_LogSmall          *)
+(* 源文件：logd_log_inv_one_inv_real / logd_log_exp_neg_real@G05_LogSmall          *)
 (*   （零前提 Real 层参数形；倒数面同形 kl_log_inv@UpStepKL:583；负指面根供给      *)
 (*   real_log_exp_neg，CW 基座直取）。                                          *)
 (* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 3576=现档         *)

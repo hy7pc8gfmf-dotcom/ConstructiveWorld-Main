@@ -6,9 +6,9 @@ Require Import fa56b_ext.
 Require Import fa56c_ext.
 Require Import PhysPredAblation.
 
-(* G3 探针（ppa 前缀）：取三槽主件 + 计算面装法代表件。
+(* G3 检验（ppa 前缀）：取三槽主件 + 计算面装法代表件。
    ppa_dev_orbit 带 StateSpace 投影头（证明-only 面不出计算码），
-   故探针取纯计算装法件 + 三主件的 @ 全参 witness。 *)
+   故检验取纯计算装法件 + 三主件的 @ 全参 witness。 *)
 
 Definition ppa_g3_witness :=
   @ppa_physical_force_is_gradient.

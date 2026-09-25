@@ -27,7 +27,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* EntropyMonoSplitInst.v —— 席位CZB13（批次 E-STAGING-CZB13）       *)
+(* EntropyMonoSplitInst.v —— 席位CZB13（组 E-STAGING-CZB13）       *)
 (* T61b C3：UpReqEntropyMonoSplit 三证书槽装载件                     *)
 (*                                                              *)
 (* 【使命】源件 ConstructiveWorld_Live/UpReqEntropyMonoSplit.v        *)

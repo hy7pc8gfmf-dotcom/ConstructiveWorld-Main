@@ -584,7 +584,7 @@ Fixpoint mixd_scan_up (k0 v b0 : Q) (d i : nat) (pacc acc : Q) (c : nat)
   end.
 
 (* 二进制回退合成（贪心加-败位）：j 号位权重 2^j；候选 k+2^j 败则加位 *)
-(* 重设计（D2 接管 01:00）：desc 增 k0 参、弃 p·p 传参（层级递减×升幂 rung
+(* 重设计（D2 承担 ）：desc 增 k0 参、弃 p·p 传参（层级递减×升幂 rung
    与 desc_spec 合同结构性矛盾——见 _tatd2_交付报告 §7.2），rung 由
    mixd_ladder k0 (S j') 现场算（ladder_spec 正确性随取）。 *)
 Fixpoint mixd_desc (k0 v b0 : Q) (j : nat) (k : nat) (val : Q) (c : nat)
@@ -641,7 +641,7 @@ Definition mixd_k_select_log_cert (k0 v b0 : Q) (h0 : QltT 0 k0)
 
 (* ============================================================ *)
 (* Part 5：Q-Bernoulli 与窗口（Q 层自算——AT11 裁决 3 陷阱处方）            *)
-(*   （D2 接管段：cont 稿移入；qbern 步进肢按 tathD 报告§4-① 重写——       *)
+(*   （D2 承担段：cont 稿移入；qbern 步进肢按 tathD 报告§4-① 重写——       *)
 (*     Qle_trans 中段拆 (1−w)·(q^m·(1+M·w)) ≤ 1−w 与 q^(S m)·w ≤ w 双肢） *)
 (* ============================================================ *)
 
@@ -846,7 +846,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part 6：选择器三账（sound / min / cost——igr_k_select_min 同形）        *)
-(*   （D2 接管段：三处 mixd_scan_up 部分施加补全 Hacc:=Qeq_refl k0；      *)
+(*   （D2 承担段：三处 mixd_scan_up 部分施加补全 Hacc:=Qeq_refl k0；      *)
 (*     scan_up_some 调用补 Hpa；cert_none 子弹 5→3）                      *)
 (* ============================================================ *)
 
@@ -993,7 +993,7 @@ Qed.
 
 (* 回退合成账：入口不变量（p ≡ κ₀^(2^j)、val ≡ κ₀^k·v、k 以下全败）⟹
    出口（kf 以下全败 ∧ S kf ≤ k + 2^(j+1) ∧ 成本 ≤ 3j+2）。 *)
-(* 重设计版回退合成账（D2 接管 01:00）：rung 由 mixd_ladder 现场算，
+(* 重设计版回退合成账（D2 承担 ）：rung 由 mixd_ladder 现场算，
    Hval 不变式 val == q^k·v 全程可保持（旧 p·p 传参在此断链——已证结论见
    _tatd2_交付报告 §7.2）。合同：kf 以下全败 ∧ S kf ≤ k + 2^(S j) ∧ 成本。 *)
 Lemma mixd_desc_spec : forall (k0 v b0 : Q) (Hq0 : 0 < k0) (Hq1 : k0 <= 1)
@@ -1098,7 +1098,7 @@ Proof.
     + lia.
   - cbn [mixd_k_select_log_cert] in Hrun.
     revert Hrun.
-    (* D3 实录：对卡死 fixpoint 应用的 destruct 产出 [Some-first, None-last]
+    (* D3 实录：对停滞 fixpoint 应用的 destruct 产出 [Some-first, None-last]
        分支序 + 自动命名 binder（嵌套模式 match 编译序所致），as-模式整体
        被无视（"Unused introduction pattern"）——故无 as + 分步 1 级解构。 *)
     destruct (mixd_scan_up k0 v b0 d 0%nat k0 k0 0%nat (Qeq_refl k0))
@@ -1178,7 +1178,7 @@ Qed.
 (* 量级定理（机器可陈述 nat 上界式——赛马卖点）：乘法次数 ≤ 5·d + 2， *)
 (* 其中 d = 阶梯深度（梯级数 ≈ log₂K）：阶梯构造 d 乘 + 上扫 ≤ d+1 乘   *)
 (* + 回退合成 ≤ 3d 乘，无重复计算（对照：线性代 k ≈ TV₀/(w·budget)）。  *)
-(* 【cost-model 诚实申报（D3 席，承接 D2 报告 §8.1）】：mixd_desc 重设计  *)
+(* 【cost-model 诚实申报（D3 席，给出 D2 报告 §8.1）】：mixd_desc 重设计  *)
 (* 后 rung 由 mixd_ladder k0 (S j') 现场计算（弃 p·p 传参），desc 内部    *)
 (* c-线程计数与实际 Q 乘法执行次数脱钩——mulcost 的 c ≤ 5d+2 对"证书线程" *)
 (* 成立，非逐乘法计数；与 N3 提取对比表并列时须注记此差异。彻底解 = scan  *)
@@ -1319,7 +1319,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part 7：Real 壳（Q→Real 反映 + κ₀/b₀ 提取 + 幂桥 + 回传链）             *)
-(*   （D2 接管段：real_const_proj 缺名→自建 mixd_const_proj；              *)
+(*   （D2 承担段：real_const_proj 缺名→自建 mixd_const_proj；              *)
 (*     split with→split/子弹；Qeq-改写→change+ring；                       *)
 (*     const_mult/rpow_const 采 A 席绿件同款 cbn 白名单配方）              *)
 (* ============================================================ *)

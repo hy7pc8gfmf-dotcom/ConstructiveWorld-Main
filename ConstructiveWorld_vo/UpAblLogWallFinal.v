@@ -32,7 +32,7 @@
 (*     ∀x∈(0,1]，Or(real_lt x one, real_eq x one)。N2 归约的前提化适配：    *)
 (*     选择器施于 κ:=half、TV₀:=x、B:=half（四前提在场：0<half、half<1、    *)
 (*     0<x、0<half），最小站三分支 k=0（x<half）/k=1（x<1）/k≥2（站 1       *)
-(*     否证 + x≤1 前件合流 x=1）——最小站数值即序信息，选择器被真实消费，    *)
+(*     否证 + x≤1 前件合流 x=1）——最小站数值即序信息，选择器被真实使用，    *)
 (*     不再空虚真（L3 已证无前件接口为空集，故本支对无前件形平凡性失效）。  *)
 (*     另供锐化件 lgwd_decision_dec：免 x≤1 前件，对一切 0<x 出             *)
 (*     Or(x<1, x<1→Empty_set)——「x<1 可判定」非任何前件的投影，              *)
@@ -41,7 +41,7 @@
 (*   件④ 等价定装 lgwd_equivalence：四前提 -> And(lgwd_MinSelD ->           *)
 (*     lgwd_lpo_family, rLPO -> 逐点选择器)——⟸=件② 特化，⟹=件③+LPO         *)
 (*     实例重述；S01 Set-And 承载（Set 支不可入 Prop 合取，照 L3/AA15R      *)
-(*     口径）。对照注记件 lgwd_contrast_refutable：Require 消费 L3 发现件   *)
+(*     口径）。对照注记件 lgwd_contrast_refutable：Require 使用 L3 发现件   *)
 (*     lgwe_minsel_refutable——无前件全称形构造性可驳（空 Set），故前提     *)
 (*     必要，对照留存于 UpAblLogWallEq。                                    *)
 (*                                                              *)
@@ -54,7 +54,7 @@
 (*     不失效）。                                                          *)
 (*                                                              *)
 (* 纪律：纯构造性 Set 层、语句面全 sigT/自定义 And/Or，零 Prop 泄露；        *)
-(*   归约前提（rLPO/选择器）以定理显式参承接，非全局无据项。                *)
+(*   归约前提（rLPO/选择器）以定理显式参给出，非全局无据项。                *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、CW_ConstructiveWorld_219、       *)
 (*   UpTVDoeblin（tv_rpow）、UpReqLpoEquiv（rLPO、q_abs_neg_eq、            *)
 (*   q_abs_congr）、UpReqMixingTime（mix_k_select）、UpAblLogWall（lgw_*    *)
@@ -334,7 +334,7 @@ Qed.
 (* Part 3：件③ 非空虚归约支（half 三站实例——最小站数值即序信息）            *)
 (* ============================================================ *)
 
-(* half 常量的两前提（选择器实例化时反复消费） *)
+(* half 常量的两前提（选择器实例化时反复使用） *)
 Lemma lgwd_half_pos : real_lt real_zero lgw_half.
 Proof.
   unfold real_lt. exists (1#4). split.

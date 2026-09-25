@@ -13,7 +13,7 @@
 (*     UpReqSumD（sumd_list_sum／sumd_list_sum_nonneg）、                *)
 (*     UpReqDist（reqd_nat_to_R 系；UpReqSumD 传递依赖，闭包零增量）。   *)
 (* 三、对标行：UpReqConcFin2.v cf2_enum_ne(L93)／cf2_sum_eq_list(L138)／ *)
-(*     cf2_Unif_norm(L152)／cf2_tv(L236)；核心供给件                     *)
+(*     cf2_Unif_norm(L152)／cf2_tv(L236)；核心依赖模块                     *)
 (*     sumd_list_sum_nonneg（UpReqSumD.v L112，前件全称不限 In，宽形）。 *)
 (* 四、构造性注记：全件语句 Set 值（req／le／lt 全 Set 层接口面，        *)
 (*     enum 非空证书沿用库内 Not 认证形先例）；零承认件（无未证断言、    *)
@@ -52,7 +52,7 @@ Definition uc2t_gen_tv (inv2 : R) (mu nu : S -> R) (l : list S) : R :=
   mult inv2 (sumd_list_sum S (fun s : S => abs (req_minus (mu s) (nu s))) l).
 
 (* 求和桥泛型封装（cf2_sum_eq_list 的列表泛型对应物）：泛型 TV 定义性    *)
-(* 即「系数乘列表和」，req_refl 定义级收口。                              *)
+(* 即「系数乘列表和」，req_refl 定义级闭合。                              *)
 Lemma uc2t_gen_tv_eq_list :
   forall (inv2 : R) (mu nu : S -> R) (l : list S),
     req (uc2t_gen_tv inv2 mu nu l)
@@ -134,7 +134,7 @@ Proof.
 Qed.
 
 (* enum 非空证书泛型封装（cf2_enum_ne 的列表泛型对应物；同款 Not 认证    *)
-(* 形——False 消去落 Set 的库内先例认证形，消费面＝核链非空槽）。 *)
+(* 形——False 消去落 Set 的库内先例认证形，使用面＝核链非空槽）。 *)
 Lemma uc2t_gen_enum_ne :
   forall (s : S) (l : list S), Not (cons s l = (@nil S)).
 Proof.

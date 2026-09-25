@@ -21,7 +21,7 @@
 
 (* ============================================================ *)
 (* UpAblD1S7_UpReqEntropyDeficitTemp.v —— FA-D1S7 数据供给大封装四梯 件③       *)
-(* 席位：FA-D1S7（普查批 D1-⑦ 四梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改      *)
+(* 席位：FA-D1S7（普查批 D1-⑦ 四梯 ≤40 位·按模块聚合）｜独立配套模块·原树零改      *)
 (*                                                              *)
 (* 辖区：UpReqEntropyDeficitTemp.v Section RealEntropyDeficitTemp（L201 起）       *)
 (*   全 9 槽：S:202｜real_sum_over_S:203｜real_sum_pos_preserved:204｜            *)
@@ -31,8 +31,8 @@
 (*    997e22c4fcd195b3609895b5d13bd8d0，零代际漂移）                              *)
 (* 扩槽登记：real_sum_pos_preserved（L204）属 E389/E703 sum_pos 槽家族            *)
 (*   （fa57_sum_carrier_realizes@fa57_ext:63 直接匹配先例，D1-⑤ S3 批同族），          *)
-(*   本件按「扩槽不重立」处置——单点载体直取形供给，不另立母本证。                  *)
-(*   零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷）。                              *)
+(*   本件按「扩槽不重立」处置——单点载体直取形供给，不另立源文件证。                  *)
+(*   零 Require 源文件（防 P3S1 坑1 混代际 .vo 地雷）。                              *)
 (*                                                              *)
 (* 形态：P2S1/S4 封装记录型先例（槽语句逐字入包）＋实例供给申报形。                *)
 (* 实例供给：S:=unit（单点态空间）｜求和载体:=fun f => f tt（单点求和）｜           *)
@@ -52,7 +52,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：9 槽语句逐字入包（对照母本 L202-217） ============ *)
+(* ============ 封装记录型：9 槽语句逐字入包（对照源文件 L202-217） ============ *)
 
 Inductive uabd1s7_edt_pack9 : Type :=
 | uabd1s7_edt_pack9_intro :
@@ -75,7 +75,7 @@ Inductive uabd1s7_edt_pack9 : Type :=
           forall energy : S -> Real,
             uabd1s7_edt_pack9.
 
-(* ============ 供给件：单点实例一次喂定 9 槽 ============ *)
+(* ============ 依赖模块：单点实例一次喂定 9 槽 ============ *)
 
 Theorem uabd1s7_edt_pack9_supplied : uabd1s7_edt_pack9.
 Proof.

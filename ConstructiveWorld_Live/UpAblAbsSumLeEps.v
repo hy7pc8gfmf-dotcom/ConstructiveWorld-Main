@@ -2,7 +2,7 @@
 (* UpAblAbsSumLeEps.v —— 单求和形 eps 闭合件（B 形 inl 反演＋论文2 载体）  *)
 (*                                                                *)
 (* 使命：闭合「|Σ f| ≤ Σ|f| + ε」单求和形（UpAblP2FeedSumLe 头注诚实定性  *)
-(*   第 4 条所列未竟项），经 B 形供给件（UpAblAbsSumLeB，uabS4_ 系）的    *)
+(*   第 4 条所列未竟项），经 B 形依赖模块（UpAblAbsSumLeB，uabS4_ 系）的    *)
 (*   inl 反演路线闭合，并在论文2 载体（S0＋enum0 单求和接口）上给出实例。 *)
 (*                                                                *)
 (* 形态差结论（三轴对照，本件头注即结论正文）：                          *)
@@ -26,7 +26,7 @@
 (*       库内 uabS4_abs_list_sum_le_eps 为特例内联版，普适命名版此前无），*)
 (*       两形关系的形式化对照。                                           *)
 (*   A.2 uabS4e_single_sum_eps：单求和形的原生折叠全称闭合                *)
-(*       （B 形供给件＋A.1 两步合成；与 uabS4_abs_list_sum_le_eps 语句面  *)
+(*       （B 形依赖模块＋A.1 两步合成；与 uabS4_abs_list_sum_le_eps 语句面  *)
 (*       同构，普适反演介导版与内联一体版两路线并存）。                   *)
 (*   B 区（论文2 载体）：uabS4e_sumf 单求和算子＋B 形实例＋               *)
 (*       主件闭合＋uabS4_abs_list_sum_le_eps 直接应用对照件（零增量对照）。*)
@@ -62,7 +62,7 @@ From Stdlib Require Import List.
 (* §0 库内接口核对（Check 逐项对照真实签名）                              *)
 (* ============================================================ *)
 
-Check uabS4_abs_list_sum_le_B.   (* B 形供给件：|Σ_l f| ≤_B Σ_l|f|（出自 UpAblAbsSumLeB） *)
+Check uabS4_abs_list_sum_le_B.   (* B 形依赖模块：|Σ_l f| ≤_B Σ_l|f|（出自 UpAblAbsSumLeB） *)
 Check uabS4_abs_list_sum_le_eps. (* B 形的逐 eps 内联反演（UpAblAbsSumLeB B.3，对照件） *)
 Check uabS4_lt_double_margin_le_half_contr. (* 倍率 2 不可共存引理（UpAblAbsSumLeB C.1） *)
 Check real_le_b.                 (* Bishop 形 ≤ 谓词（Set 层全称型） *)
@@ -89,7 +89,7 @@ Proof.
 Qed.
 
 (* A.2 单求和形的全称闭合：|Σ_l f| ≤ Σ_l|f| + e（0<e，载体全称）。
-   两步合成：B 形供给件＋A.1 反演。与 uabS4_abs_list_sum_le_eps 语句面
+   两步合成：B 形依赖模块＋A.1 反演。与 uabS4_abs_list_sum_le_eps 语句面
    同构（普适反演介导版 vs 内联一体版，两路线并存）。 *)
 Theorem uabS4e_single_sum_eps : forall (X : Type) (f : X -> Real) (l : list X)
                                        (e : Real),

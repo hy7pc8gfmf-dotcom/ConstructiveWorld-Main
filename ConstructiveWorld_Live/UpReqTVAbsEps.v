@@ -29,7 +29,7 @@
 (* 铁律：UpTVDoeblin.v L1971-1975 的 Or 形前提位禁动——Or 形精确版    *)
 (* 与 LPO 等价，构造性不可证；本伴随件是唯一合法产出（禁碰本体）。    *)
 (* 载体：归纳变元 = list 本身（real_list_sum 三参形态与 real_plus   *)
-(* 直接咬合）。半量取 h := (1/(1+1))·eps，三角形件与归纳前提各吃 h，  *)
+(* 直接衔接）。半量取 h := (1/(1+1))·eps，三角形件与归纳前提各吃 h，  *)
 (* h+h == eps 倍半归一收尾。                                        *)
 (* 环境：monolith （-Q ../attn/_build_219 ""，Live_X 树零 vo）； *)
 (* QArith.Qring 供逐点 ring（UpTVDoeblin 头部同款）。全部名字可见性  *)
@@ -176,7 +176,7 @@ Proof.
              (real_plus real_zero eps)).
     + exact real_abs_zero_req.
     + exact (tv9_lt_plus_r_zero real_zero eps Heps).
-  - (* 步例 w::rest：cbn 咬合 real_plus 后，三角形件与归纳前提
+  - (* 步例 w::rest：cbn 衔接 real_plus 后，三角形件与归纳前提
        各吃半量 h := tv9_half·eps（正性 real_mult_pos_compat），
        倍半归一 h+h==eps（tv9_double_inv + real_inv_pos_correct）
        交 tv9_abs_triangle_ih 一步完成。 *)

@@ -1,5 +1,5 @@
-(* _t24_g3.v — 席T24 批 C G3 证据探针（-Full 跑；-vos 吞打印）
-   两枚核销宣言重申件：About 节闭签名 + Print Assumptions 闭包判据 *)
+(* _t24_g3.v — 席T24 批 C G3 证据检验（-Full 跑；-vos 吞打印）
+   两枚核销声明重申件：About 节闭签名 + Print Assumptions 闭包判据 *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqAlign.

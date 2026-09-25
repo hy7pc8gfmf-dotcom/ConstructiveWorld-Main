@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpAblD1S15_GibbsAssembly.v —— 源模块 GibbsAssembly.v 的实例装配供给件   *)
+(* UpAblD1S15_GibbsAssembly.v —— 源模块 GibbsAssembly.v 的实例装配依赖模块   *)
 (*   数学使命：接口封装、导出链与 Gibbs 逐 eps 不等式的典范载体实例。     *)
 (* ============================================================ *)
 (* 【使命】为源模块 GibbsAssembly.v 的接口语句与导出语句供给具体实例，      *)
@@ -23,11 +23,11 @@
 (* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
 (*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
 (* 【结构总览】§A 接口封装 uabd1s15_ga2_pack8：八项接口/前提的合取封装；   *)
-(*   供给件 uabd1s15_ga2_pack8_supplied——载体取 Real 与                    *)
+(*   依赖模块 uabd1s15_ga2_pack8_supplied——载体取 Real 与                    *)
 (*   uabd1s15_ren，求和取 sumd_sumf unit (tt::nil)；四条求和性质由         *)
 (*   UpReqSumD 相应引理（sumd_sum_ext/sumd_sum_add/sumd_sum_linear/        *)
 (*   sumd_sum_le）直接推得，log 相容性由 uabd1s2_ga2_log_req_compat 供给；  *)
-(*   §B 导出链：req 传递组合器 uabd1s15_ga2_rt、le 承接组合器对             *)
+(*   §B 导出链：req 传递组合器 uabd1s15_ga2_rt、le 给出组合器对             *)
 (*   （uabd1s15_ga2_le_id_l/uabd1s15_ga2_le_id_r）、opp one 乘法归一        *)
 (*   uabd1s15_ga2_mopp_one；点态切线核 uabd1s15_ga2_ptw_le——log 相容性     *)
 (*   以节参数 LOGC 显式承载，证明经 log_le_linear_eps、log_mult、           *)
@@ -73,7 +73,7 @@ Inductive uabd1s15_ga2_pack8 : Type :=
                                           req x y -> req (log x Hx) (log y Hy)),
                   uabd1s15_ga2_pack8.
 
-(* 供给件：S2 基础模块的骨架实例（sumd_sumf 有限和，典范 Real 载体）——
+(* 依赖模块：S2 基础模块的骨架实例（sumd_sumf 有限和，典范 Real 载体）——
    四条求和性质由 UpReqSumD 相应引理直接推得，log 相容性由
    uabd1s2_ga2_log_req_compat 供给（不重立）。 *)
 Theorem uabd1s15_ga2_pack8_supplied : uabd1s15_ga2_pack8.
@@ -100,7 +100,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Definition uabd1s15_ga2_rt {x y z : R} (H1 : req x y) (H2 : req y z) : req x z :=
   req_trans x y z H1 H2.
 
-(* ---- le 承接组合器对（左/右置换） ---- *)
+(* ---- le 给出组合器对（左/右置换） ---- *)
 Definition uabd1s15_ga2_le_id_l {a b c : R} (H1 : req a b) (H2 : le b c) : le a c :=
   le_id_l a b c H1 H2.
 Definition uabd1s15_ga2_le_id_r {a b c : R} (H1 : req b c) (H2 : le a b) : le a c :=

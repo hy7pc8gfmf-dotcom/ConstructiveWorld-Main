@@ -23,7 +23,7 @@
 (* UpAblT2a_UpReqMisc5.v —— 假设消融战役 T2a 批（FA2 第 2 批·log 三面）     *)
 (* 辖区：UpReqMisc5.v ReqDiffAlgebra 节（L751 起）L977 req_log_compat_slot       *)
 (*   （相容面 1 位；原位为 Variable 书写形，参数位语句同假设申报同位处理）。      *)
-(* 母本：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；G05 头注 B1 族    *)
+(* 源文件：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；G05 头注 B1 族    *)
 (*   明列 req_log_compat_slot 本位；副路 hzlogd_log_req_compat_real@G08:799）。   *)
 (* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 1058=现档          *)
 (*   行数 1058，21 位语句逐字双检通过）；语句逐字抽取后仅 R 换实例位 Real，         *)

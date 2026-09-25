@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   gsq_kappa_pos（原 L100，4 句玩具证）                                 *)
 (* ============================================================ *)
@@ -30,8 +30,8 @@
 (*         |g(x_{n+k})| ≤ κ^k·|g(x_n)|（real_grad_decay_full_sign_iter *)
 (*         同型装载，κ := 1−ημ 显式前件化）；                         *)
 (*   主件3 gsq_grad_tail_budget：给定 N 见证前提的尾界预算              *)
-(*         （镜像 UpBudgetReal.v:676 geo_tail_budget 的 Q 层同构，      *)
-(*         供 4-5 r_arch_pow 选 N 见证口直接消费）。                   *)
+(*         （对偶 UpBudgetReal.v:676 geo_tail_budget 的 Q 层同构，      *)
+(*         供 4-5 r_arch_pow 选 N 见证口直接使用）。                   *)
 (*                                                                *)
 (*   纪律：纯构造性（Q_dec 为和类型构造判定，零经典逻辑）；              *)
 (*   前提全显式前件化（论文5"零接口 Variable"纪律）；                  *)
@@ -127,7 +127,7 @@ Proof.
   - exact Hm.
 Qed.
 
-(* ---- 单步动力学值：step x == κ·x（三分支统一收口） ---- *)
+(* ---- 单步动力学值：step x == κ·x（三分支统一闭合） ---- *)
 
 Lemma gsq_step_val : forall eta mu x : Q,
   gsq_step eta mu x == gsq_kappa eta mu * x.
@@ -163,7 +163,7 @@ Proof.
   exact (gsq_qeq_le _ _ Hval).
 Qed.
 
-(* ---- 左乘保序（Qmult_le_compat_r 因子序换装） ---- *)
+(* ---- 左乘保序（Qmult_le_compat_r 因子序重述） ---- *)
 
 Lemma gsq_le_mult_compat_l : forall a x y : Q,
   0 <= a -> Qle x y -> Qle (a * x) (a * y).
@@ -234,7 +234,7 @@ Proof.
       * apply gsq_qeq_le. apply Qmult_assoc.
 Qed.
 
-(* ---- 主件3：尾界预算（geo_tail_budget Q 层镜像：给 N 见证前提出尾界） ---- *)
+(* ---- 主件3：尾界预算（geo_tail_budget Q 层对偶：给 N 见证前提出尾界） ---- *)
 
 Theorem gsq_grad_tail_budget : forall (eta mu x0 : Q) (N n : nat) (eps : Q),
   0 < eta -> 0 < mu -> eta * mu < 1 ->
@@ -258,7 +258,7 @@ Proof.
   - exact Hbudget.
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取探针 ---- *)
+(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions gsq_grad_step_abs_contraction_full.
 Print Assumptions gsq_grad_decay_full_sign_iter.

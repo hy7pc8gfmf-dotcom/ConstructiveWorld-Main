@@ -14,7 +14,7 @@
    判定书（解冻依据，证据坐标）：
    1. 冻结前提已消失：其注记「待 dpo_pair_loss 簇 req 化后随批4」——RestA 已结果
      ralt_dpo_pair_loss/ralt_dpo_pair_loss_star/ralt_dpo_pair_loss_at_star
-     （UpReqAlignRestA.v L404-462，.vo 出口签名已探针实证）。
+     （UpReqAlignRestA.v L404-462，.vo 出口签名已检验实证）。
    2. 载体形路径：Id 泛型 fold_right_ext（L20160，{A B : Set} 全称形）的 req
      伴件不可直建——req 接口无通用 id_cong 字段（函数外延性敏感件，(d) 冻结维持）。
      ："逐点 req 前提版，语义无变动不冻结"）：fold 递归载体直接归纳，
@@ -22,7 +22,7 @@
    3. 结论：total_loss 簇 3 件全部解冻建成为真证（本文件）；Id 泛型 fold_right_ext
      (d) 冻结维持（泛型形需任意 g 的 compat 场，接口不可表达——诚实边界在案）。
    ----------------------------------------------------------------
-   上游（全部 .vo 态消费，开节源码不重编）：CW_ConstructiveWorld_219（基座：
+   上游（全部 .vo 态使用，开节源码不重编）：CW_ConstructiveWorld_219（基座：
      dpo_total_loss L20152/dpo_total_loss_star L20155/fold_right_ext L20160/
      dpo_total_loss_at_star L20171/dpo_total_loss_monotone L20181/
      dpo_total_loss_star_characterization L20199/InT L99）+ UpReqAlgebra（req_minus/
@@ -31,9 +31,9 @@
    1. rdl_pair/rdl_pair req 化携带 Hpi 逐点正性见证位（log 前提化，RestA 登记表 1）。
    2. monotone 逐点前提 le 形与 Id 同位；Hpi1/Hpi2 见证位为诚实新增。
    3. fold 外延件 (b) 化逐点改述（先例：u2_kl_arg2_ext）；InT 限制形为
-     characterization 的诚实镜像（Id 原件 L20199 逐元素 InT 供给形）。
+     characterization 的诚实对偶（Id 原件 L20199 逐元素 InT 供给形）。
    4. 桥假设位自持（RestA 同形，各席自持纪律）：rdl_log_req_compat /
-     rdl_log_inv_exp_neg_req；节闭后随件出参，消费以 .vo 出口签名为准
+     rdl_log_inv_exp_neg_req；节闭后随件出参，使用以 .vo 出口签名为准
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）；纯 term-mode（req_trans 链 +
      compat 桥），零模性等变结构依赖（禁词扫描全零面）。
    ---------------------------------------------------------------- *)
@@ -54,7 +54,7 @@ Section ReqDpoLossCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
-(* T4R2 扩槽（R120 B39 后）：RestA ralt_pistar 系新出节签 sum_pos 位（T5 既成刀面
+(* T4R2 扩位（既有节签调整后）：RestA ralt_pistar 系新出节签 sum_pos 位（T5 既成刀面
    同形）；Z_align_pos 槽保留（ralt_dpo_pair_loss_at_star 出节签仍在用）。 *)
 Hypothesis rdl_sum_pos :
   forall f : S -> R, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
@@ -128,7 +128,7 @@ Proof.
                (IH (fun a Hin => Hpt a (InT_next a p rest Hin)))).
 Qed.
 
-(* 全称形推论：无 InT 限制的逐点前提版（at_star 消费形；1 行直推） *)
+(* 全称形推论：无 InT 限制的逐点前提版（at_star 使用形；1 行直推） *)
 Lemma rdl_fold_plus_ext :
   forall (f g : Preference -> R) (l : list Preference),
     (forall a, req (f a) (g a)) ->
@@ -147,7 +147,7 @@ Definition rdl_dpo_total_loss (pi : S -> R) (Hpi : forall s : S, lt zero (pi s))
 Definition rdl_dpo_total_loss_star : R :=
   fold_right (fun pref acc => plus (rdl_pair_star pref) acc) zero pref_dataset.
 
-(* ============ 辅件：单对损失 req 外延（前提版；characterization 消费） ============ *)
+(* ============ 辅件：单对损失 req 外延（前提版；characterization 使用） ============ *)
 
 (* 逐点差分 req 前提 ⟹ 单对损失 req。真证：log 缺口桥 + one 同位 +
    exp_neg 兼容（ralt_dpo_pair_loss_at_star RestA L448 的前提版改述） *)
@@ -229,5 +229,5 @@ End ReqDpoLossCore.
    - Id 泛型 fold_right_ext（L20160）(d) 冻结维持：泛型 {A B} 形需任意
      fold 函数的 compat 场，req 接口不可表达（函数外延性敏感边界在案）；
      DPO 实例形已由本件 (b) 化完成。
-   - 消费入口：Require Import UpReqDpoLoss.
+   - 使用入口：Require Import UpReqDpoLoss.
    ---------------------------------------------------------------- *)

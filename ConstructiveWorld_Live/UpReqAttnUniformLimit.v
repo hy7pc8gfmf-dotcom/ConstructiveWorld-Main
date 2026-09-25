@@ -326,7 +326,7 @@ Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
    非副本支用 plus 交换/结合。——蓝图已由下列 swg_ 两件落成。 *)
 
 (* —— 补编：m-开关求和恒等式蓝图落成（下两件 swg_）—— *)
-(* 头注所述待续部分自本节起由下列 swg_ 两件承接。 *)
+(* 头注所述待续部分自本节起由下列 swg_ 两件给出。 *)
 (* 对显式表 vl 归纳（不归纳 Section Variable：vocab 被 m_in_vocab 等钉死）。 *)
 (* 基座核对（全数对上零漂移）：real_list_sum/
    real_of_nat（S08，O↦0、S n↦1+of_nat n 定义折叠）、real_eq_refl/sym/trans、
@@ -1389,7 +1389,7 @@ End AluChain.
 
 (* ============================================================ *)
 (* Part 2.9：本体闭合——alm_uniform_limit                        *)
-(*   陈述（R85 冻结形）：∀eps>0, sigT T₀(>0) ∧ ∀T(0<T<T₀),        *)
+(*   陈述（冻结形）：∀eps>0, sigT T₀(>0) ∧ ∀T(0<T<T₀),        *)
 (*   L1(w_T,u) ≤ eps。装配路线：质量分裂链（Part 2.5 alu_ 链自承    *)
 (*   转录，因 MassSplit 为下游使用方不可反向 Require）给出          *)
 (*   L1 ≤ n·d + n·d（d = e^{−γ/T}）；间隙证书/副本计数/均匀目标/     *)

@@ -9,11 +9,11 @@
 
 (* ============================================================ *)
 (* UpGeomB.v —— 定理 4.8 策略迭代几何收缩的 Bishop 形无条件版建造席    *)
-(*   （广义旗舰链·评审 07 点名「最能提升的单一改动」落盘件）           *)
+(*   （广义主定理链·评审 07 点名「最能提升的单一改动」落盘件）           *)
 (* ---------------------------------------------------------------- *)
 (* 数学目标：策略迭代几何收缩的无条件 Bishop 形（le_b 序语言）：        *)
 (*   KL(π*‖π_{t+1}) ≤_B (1−η)·KL(π*‖π_t)        （主件1·单步）        *)
-(*   KL(π*‖π_t)   ≤_B (1−η)^t·KL(π*‖π_0)       （主件2·迭代·旗舰）    *)
+(*   KL(π*‖π_t)   ≤_B (1−η)^t·KL(π*‖π_0)       （主件2·迭代·主定理）    *)
 (* 关键：Or-序编码下 step_kl_eta_bound 的「log Z ≤ 0 精确形」不可证    *)
 (*   （等号分支提取需排中）——Bishop 形绕开：逐 eps 余量替代精确       *)
 (*   不等式，严格 lt 见证替代 eq 分支。全文件零 Or 形精确完成目标，     *)
@@ -25,22 +25,22 @@
 (*     geod_b_kappa_lt_one（η>0 ⟹ 1−η<1 严格）/ geod_b_ring_mlcr /    *)
 (*     geod_b_scale_reshape（零名依赖 ring 换形）/                     *)
 (*     geod_b_half_double（(1+1)·i==1 ⟹ e·i+e·i==e——eps 半量机）。     *)
-(*   [P-B 旗舰 geod_b_eta_pow] geod_b_pow（(1−η)^t 幂载体 Fixpoint）+  *)
+(*   [P-B 主定理 geod_b_eta_pow] geod_b_pow（(1−η)^t 幂载体 Fixpoint）+  *)
 (*     geod_b_pow_pos（正性保持）+ geod_b_pow_mono_decr（单调递减      *)
 (*     的 Bishop 序版：0<x≤1 ⟹ x^{t+1} ≤_B x^t）。                     *)
 (*   [P-C 语义件] geod_b_kl_sum（KL 和载体）/ geod_b_interp_Z_pos /    *)
 (*     geod_b_step_next_pos / geod_b_step_next_norm（下一步策略三证书： *)
-(*     正性/归一化——迭代轨道自足供给）/ geod_b_iterate（sigT 打包      *)
+(*     正性/归一化——迭代轨道自足供给）/ geod_b_iterate（sigT 封装      *)
 (*     迭代 Fixpoint，正性+归一化内嵌，policy_iterate 同构）。          *)
 (*   [P-D 保底件] geod_b_step_kl_eps——单步 KL 收缩 Bishop 形          *)
 (*     KL(π_t‖π_{t+1}) ≤_B η·KL(π_t‖π★)——席55 引擎                    *)
-(*     real_step_kl_eta_bound_B 一次喂定（核验后 Require 消费）。      *)
+(*     real_step_kl_eta_bound_B 一次喂定（核验后 Require 使用）。      *)
 (*   [P-E 主件1] geod_b_policy_iter_step_margin（逐 eps 严格余量       *)
-(*     工作马：三 KL 恒等式的逐点镜像 kl(r,q)==(1−η)·kl(r,p)+r·log Z   *)
+(*     辅助引理：三 KL 恒等式的逐点对偶 kl(r,q)==(1−η)·kl(r,p)+r·log Z   *)
 
 (*     geod_b_policy_iter_step（Bishop 完成：KL(π*‖π_{t+1}) ≤_B        *)
 (*     (1−η)·KL(π*‖π_t)，real_le_closure_b_one 一步）。                *)
-(*   [P-F 主件2·旗舰] geod_b_policy_iter_iter——t 步几何收缩 Bishop 形： *)
+(*   [P-F 主件2·主定理] geod_b_policy_iter_iter——t 步几何收缩 Bishop 形： *)
 (*     KL(π*‖π_t) ≤_B (1−η)^t·KL(π*‖π_0)（le_b 归纳；eps 累积=         *)
 (*     逐 eps 半量分配 h+（1−η)h < 2h == eps，免 1/n 拆分——SumD        *)
 (*     先例同款）。                                                    *)
@@ -98,7 +98,7 @@ Proof.
                (geod_eta_plus_kappa eta)).
 Qed.
 
-(* 环辅件：kl_ring_neg4 的换向镜像（m := 1−η 内嵌）：
+(* 环辅件：kl_ring_neg4 的换向对偶（m := 1−η 内嵌）：
    −((m·lp + η·lr) + (−LZ + −lr)) == m·(lr − lp) + LZ *)
 Lemma geod_b_ring_neg4_b : forall eta lp lr LZ : Real,
   real_eq (real_opp (real_plus
@@ -113,7 +113,7 @@ Proof.
   intro n. simpl. ring.
 Qed.
 
-(* 环辅件：关联重排（换向镜像，kk 任意实——终点为 −lr 而非 −lp）：
+(* 环辅件：关联重排（换向对偶，kk 任意实——终点为 −lr 而非 −lp）：
    kk·lp + (η·lr + (−LZ + −lr)) == (kk·lp + η·lr) + (−LZ + −lr) *)
 Lemma geod_b_ring_log4_b : forall kk eta lp lr LZ : Real,
   real_eq (real_plus (real_mult kk lp)
@@ -197,7 +197,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P-B 旗舰：geod_b_eta_pow —— (1−η)^t 的 Bishop 序幂件族              *)
+(* P-B 主定理：geod_b_eta_pow —— (1−η)^t 的 Bishop 序幂件族              *)
 (* ============================================================ *)
 
 (* 幂载体：x^t := x·x^{t−1}（klcx_r_pow/req_r_pow 逐位同体 Fixpoint） *)
@@ -334,7 +334,7 @@ Proof.
              (real_inv_pos_correct Z HZ)).
 Qed.
 
-(* 迭代轨道：π_{t+1} := real_step_next(π_t, r)（sigT 打包逐点正 + 归一化；
+(* 迭代轨道：π_{t+1} := real_step_next(π_t, r)（sigT 封装逐点正 + 归一化；
    policy_iterate 同构，正性/归一化内嵌自足供给——零新增前提） *)
 Fixpoint geod_b_iterate (n : nat) (Hn : (0 < n)%nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i)) (eta : Real) (t : nat)
@@ -357,7 +357,7 @@ Fixpoint geod_b_iterate (n : nat) (Hn : (0 < n)%nat) (r : nat -> Real)
   end.
 
 (* ============================================================ *)
-(* P-D 保底件：单步 KL 收缩 Bishop 形（Require 消费席55 引擎）          *)
+(* P-D 保底件：单步 KL 收缩 Bishop 形（Require 使用席55 引擎）          *)
 (* ============================================================ *)
 
 (* KL(π_t‖π_{t+1}) ≤_B η·KL(π_t‖π★)：
@@ -382,8 +382,8 @@ Qed.
 
 (* ============================================================ *)
 (* P-E 主件1：单步真几何收缩 Bishop 形（三 KL 恒等式的 le_b 形）        *)
-(*   工作马：逐 eps 严格余量 KL(r‖q) < (1−η)·KL(r‖p) + eps——           *)
-(*   逐点恒等 kl(r_i,q_i) == (1−η)·kl(r_i,p_i) + r_i·log Z（M2 镜像）   *)
+(*   辅助引理：逐 eps 严格余量 KL(r‖q) < (1−η)·KL(r‖p) + eps——           *)
+(*   逐点恒等 kl(r_i,q_i) == (1−η)·kl(r_i,p_i) + r_i·log Z（M2 对偶）   *)
 
 (* ============================================================ *)
 
@@ -741,7 +741,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* P-F 主件2（旗舰）：t 步几何收缩 Bishop 形                            *)
+(* P-F 主件2（主定理）：t 步几何收缩 Bishop 形                            *)
 (*   KL(π*‖π_t) ≤_B (1−η)^t·KL(π*‖π_0)——le_b 归纳；eps 累积 =          *)
 (*   逐 eps 半量分配（每步取 h := eps/2，余 (1−η)·h < h，合 2h == eps；  *)
 (*   免 1/n 拆分——SumD 先例同款）。                                    *)

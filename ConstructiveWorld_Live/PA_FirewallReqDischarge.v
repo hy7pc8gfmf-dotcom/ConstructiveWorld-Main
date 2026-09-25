@@ -19,7 +19,7 @@
 (*       （:122 req_entropy_temp_explicit / :128                  *)
 (*       req_relative_entropy_temp_decomp / :144                  *)
 (*       req_temp_strict_ident2），宿主文件本体零改动，以逐字语句   *)
-(*       重申件 + 下游依存承接。                                   *)
+(*       重申件 + 下游依存给出。                                   *)
 (* 主件：frd_req_entropy_temp_explicit——                         *)
 (*         H(p_t) ≡ (1/t)·E(p_t) + log Z_t；                       *)
 (*       frd_req_relative_entropy_temp_decomp——                  *)

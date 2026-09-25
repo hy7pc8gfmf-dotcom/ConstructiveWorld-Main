@@ -8,7 +8,7 @@
 (*      min_p_pos／temperature_pos／q_pos 八件供给族＋min_p_lt_one    *)
 (*      序界件＋spp 单和件。其余 18 件申报为未消解项（端点双供两件＋形状异质    *)
 (*      十六件：Not/Id/leb/B 形/包形混布，壹模板不适用，未硬编）。    *)
-(*   ② 逐位供给件族：原证明为核引理单跳转发； *)
+(*   ② 逐位依赖模块族：原证明为核引理单跳转发； *)
 (*      新证明展开至定义层——实数 lt 的逐点见证编码原地展开            *)
 (*      （unfold real_lt ＋显式存在有理见证 q·(1/2) ＋两支 split：     *)
 (*      上界支 Qmult_lt_compat_r 保序乘法链、逐点支 projT1 载体投影    *)
@@ -26,7 +26,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblP2T1_Cert.v —— 论文2 T 簇证书供给件：为 T 簇接口的 25 个数据位        *)
+(* UpAblP2T1_Cert.v —— 论文2 T 簇证书依赖模块：为 T 簇接口的 25 个数据位        *)
 (*   与前提位逐位供给具名证书（载体重、世界实例、显式前提形与直引形）。       *)
 (*   体例同族：UpAblP1T1_AlignCert／UpAblP1T2_GrpoAuditCert。                 *)
 (*                                                                          *)
@@ -335,7 +335,7 @@ Definition p2t1_S_enum : list p2t1_tok := T0 :: T1 :: nil.
 (* 行 13：vocab_nonempty（实形 Not (Id vocab nil)）——二元枚举表直构          *)
 (*   （Not 为 S01 Set 层别名 A -> Empty_set）；索引取字面构造子形＋          *)
 (*   空匹配消解（UpAblP2WByPass 同款体例，可转换性成立）。                    *)
-(*   注记：伴生件 p2wb_vocab_nonempty（UpAblP2WByPass）在库，与本件           *)
+(*   注记：配套模块 p2wb_vocab_nonempty（UpAblP2WByPass）在库，与本件           *)
 (*   p2t1_vocab_nonempty_supply 并列在册，互不排斥。 *)
 Theorem p2t1_vocab_nonempty_supply : Not (Id (cons T0 (cons T1 nil)) nil).
 Proof. exact (fun h => match h with end). Qed.

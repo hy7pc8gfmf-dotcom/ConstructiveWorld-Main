@@ -1,25 +1,25 @@
 (* ============================================================ *)
 (* UpReqConcB1.v —— 席 AT7：S5 具体件（bs_swap 双折归纳 + bs_abs req 自证）  *)
-(*   + S6 · B1 最小档装配 = 无条件合龙定理成文（第三棒收官）。              *)
-(* 论文7 §10.2 第 7 项 · 无条件合龙路线①（AT4 侦察切片工单 S5/S6，           *)
+(*   + S6 · B1 最小档装配 = 无条件闭合定理成文（第三棒收官）。              *)
+(* 论文7 §10.2 第 7 项 · 无条件闭合路线①（AT4 侦察切片工单 S5/S6，           *)
 (*   AT5/AT6 交付报告余切片清单）2026-09-18                                 *)
 (*                                                              *)
-(* 上游（零改四母本）：UpReqConcSoftmax（csm_ 六槽五件委派）、                *)
-(*   UpReqConcMixSel（cmk_attention_mixing_time 合龙件 + cmk_le_plus_r +    *)
+(* 上游（零改四源文件）：UpReqConcSoftmax（csm_ 六槽五件委派）、                *)
+(*   UpReqConcMixSel（cmk_attention_mixing_time 闭合件 + cmk_le_plus_r +    *)
 (*   cmk_scale）、UpReqSampling（k_titer 迭代器 + rsq_bs_list_sum 折叠）、    *)
 (*   UpReqSumD（sumd_list_sum 机器 + sumd_list_sum_add/ext）、CW219          *)
 (*   （RealEnhancedReal 实例 + real_lt_plus_compat_lt_le + real_arch +      *)
-(*   real_const 机器 + real_eq_of_zero_diff 逐点打包机）。                   *)
+(*   real_const 机器 + real_eq_of_zero_diff 逐点封注册）。                   *)
 (*                                                              *)
 (* S5（本件上半，泛型 req 面）：                                            *)
 (*   ① cb1_list_sum_zero：逐点归零则列表和归零（bs_swap nil 支）。           *)
 (*   ② cb1_swap_lists：Σ_a Σ_b f == Σ_b Σ_a f 双折归纳（bs_swap 泛型件，     *)
-(*      消费 sumd_list_sum_add + req_plus_compat + IH 对称缝合）。          *)
+(*      使用 sumd_list_sum_add + req_plus_compat + IH 对称拼接）。          *)
 (*   ③ cb1_bs_abs：le zero a -> req (abs a) a（Or 拆支：lt 支 = abs_pos     *)
 (*      字段；req 支 = req_abs_compat + abs_zero 字段 req 链——AT6 卡⑥      *)
 (*      Or 墙的「有前提形」合法走廊，AT4 §① bs_abs 行锚位）。               *)
 (*                                                              *)
-(* S6（本件下半，B1 具体装配，全参喂入 cmk_attention_mixing_time 出节形）：   *)
+(* S6（本件下半，B1 具体装配，全参输入 cmk_attention_mixing_time 出节形）：   *)
 (*   · 世界：S := unit、enum := [tt]（1 元档）；                            *)
 (*   · sumf := csm_sumf unit [tt]（UpReqConcSoftmax 折叠机，AT5 交付）；     *)
 (*   · 六槽：ext/linear/add/le = csm_ 委派件；abs_sum_le_h 槽 = 1 元平推     *)
@@ -28,15 +28,15 @@
 (*   · z := fun _ _ => zero、Delta := temp := one（z_lb/z_ub 逐对 lt→le）；  *)
 (*   · bs_swap := cb1_swap_lists（S5 泛型件实例化）、bs_abs := cb1_bs_abs；  *)
 (*   · bs_lpc 槽 = lt_plus_compat_lt_le 槽同件：real_lt_plus_compat_lt_le   *)
-(*     （CW219 Real 层混合加法保序现成件——AT6 报告 §五备选路线定谳：抽象层    *)
+(*     （CW219 Real 层混合加法保序现成件——AT6 报告 §五备选路线已证结论：抽象层    *)
 (*     不可内证、具体层已成品，零重证）；                                   *)
 (*   · Htv0 消解（AT6 报告 §四备选路线择优）：cb1_tv0——1 元档 TV₀ =          *)
 (*     ½·|μ tt − ν tt|，由质量前件 Hmu/Hnu（req sumf μ = one 推得 μ tt ≡ one） *)
 (*     得差 ≡ zero，abs 面走 abs_zero + req_abs_compat 合法链，plain le     *)
-(*     构造达成——零 Or 墙硬凑；                                             *)
+(*     构造达成——零 Or 墙特设构造；                                             *)
 (*   · Arch 消解（AT4 §④配方，And-Prop/2≤n 支只弃不搬）：cb1_arch——        *)
-(*     real_arch 出 n 与 x < n#1，桥件 cb1_scale_const（cmk_scale n one ≡    *)
-(*     n#1，real_const 逐点打包 + Q 层 ring/lia 恒等）换形后直喂，           *)
+(*     real_arch 出 n 与 x < n#1，桥接引理 cb1_scale_const（cmk_scale n one ≡    *)
+(*     n#1，real_const 逐点封装 + Q 层 ring/lia 恒等）换形后直接代入，           *)
 (*     le zero x 前件弃用（real_arch 本就无条件）。                          *)
 (*                                                              *)
 (* 终装：csm_b1_unconditional_mixing_time——零接口前件、零 Arch 前件、        *)
@@ -53,10 +53,10 @@
 (*   未证假设位。终装 Defined 收束可提取。                                  *)
 (* 红线自审：①real_arch 的 (2<=n) 支在 cb1_arch 内整体弃置（prod 拆分后     *)
 (*   不入任何 Set 槽——只搬 real_lt 支）；②enum_nonempty（Not-Prop）仅作     *)
-(*   证书直喂 k_titer（零消去位）；③面-面逐字：全件 req 面，real_eq 与实例字段逐字对位 *)
+(*   证书直接代入 k_titer（零消去位）；③面-面逐字：全件 req 面，real_eq 与实例字段逐字对位 *)
 (*   与实例字段逐字对位（AT5 卡④全项 exact 纪律）。                         *)
 (* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——E-STAGING-AT5 卡①）：          *)
-(*   _tat7_run.cmd 前台编译；${PIPESTATUS[0]} 收口；陈旧 .vos 先刷后验        *)
+(*   _tat7_run.cmd 前台编译；${PIPESTATUS[0]} 闭合；陈旧 .vos 先刷后验        *)
 (*   （E-STAGING-AT6 卡③）。                                              *)
 (* 撞名检查：cb1_/b1_ 前缀全树 grep 零撞名（20260918 实测）。                 *)
 (* ============================================================ *)
@@ -151,7 +151,7 @@ Definition b1_enum_ne : Not ([tt] = (@nil unit)).
 Proof. intro H. discriminate H. Qed.
 
 (* abs_sum_le_h 槽：1 元 plain 形平推（AT5 §四 B1 绕墙配方）——
-   |Σf| = |f tt + 0| ≡ |f tt|、Σ|f| = |f tt| + 0 ≡ |f tt|，req 缝合后 le_refl *)
+   |Σf| = |f tt + 0| ≡ |f tt|、Σ|f| = |f tt| + 0 ≡ |f tt|，req 拼接后 le_refl *)
 Lemma cb1_abs_sum_le : forall f : unit -> Real,
   le (abs (b1_sumf f)) (b1_sumf (fun s : unit => abs (f s))).
 Proof.
@@ -164,7 +164,7 @@ Proof.
 Defined.
 
 (* sum_eq_list 槽：两折叠机器在一元列表上定义性同一（req_refl 保底，
-   探针 P12 实测：元组为具体构造子，fix iota 走通——非 AT6 卡①中性墙位） *)
+   检验 P12 实测：元组为具体构造子，fix iota 走通——非 AT6 卡①中性阻隔位） *)
 Lemma cb1_sum_eq_list : forall g : unit -> Real,
   req (b1_sumf g) (rsq_bs_list_sum unit g [tt]).
 Proof. intro g. exact (req_refl (rsq_bs_list_sum unit g [tt])). Defined.
@@ -186,7 +186,7 @@ Proof. intros s s'. apply (lt_le_iff zero one). apply inl. exact one_pos. Define
 
 (* ---- real_const 换形机器（Arch 桥基座） ---- *)
 
-(* 逐点打包：real_const 外延（Qeq 保底） *)
+(* 逐点封装：real_const 外延（Qeq 保底） *)
 Lemma cb1_real_const_ext : forall q1 q2 : Q,
   Qeq q1 q2 -> req (real_const q1) (real_const q2).
 Proof.
@@ -195,7 +195,7 @@ Proof.
   rewrite H. ring.
 Defined.
 
-(* real_const 加法同态（逐点 proj 打包） *)
+(* real_const 加法同态（逐点 proj 封装） *)
 Lemma cb1_real_const_plus : forall q1 q2 : Q,
   req (real_const (Qplus q1 q2)) (real_plus (real_const q1) (real_const q2)).
 Proof.
@@ -239,7 +239,7 @@ Lemma cb1_scale_const : forall n : nat,
   req (real_const (Qmake (Z.of_nat n) 1)) (cmk_scale n one).
 Proof.
   intro n. induction n as [| n IH].
-  - (* 0：real_const 0#1 ≡ zero（逐点 0 差打包） *)
+  - (* 0：real_const 0#1 ≡ zero（逐点 0 差封装） *)
     change (cmk_scale Datatypes.O one) with real_zero.
     apply real_eq_of_zero_diff. intro k.
     change (Z.of_nat Datatypes.O) with 0%Z.
@@ -276,7 +276,7 @@ Proof.
                 (lt_le_iff zero one (inl one_pos)))).
 Defined.
 
-(* ---- TV₀ 非负消解件（1 元档：质量前件 ⟹ 差 ≡ zero，零 Or 墙硬凑） ---- *)
+(* ---- TV₀ 非负消解件（1 元档：质量前件 ⟹ 差 ≡ zero，零 Or 墙特设构造） ---- *)
 
 Definition b1_tv (mu nu : unit -> Real) : Real :=
   mult b1_inv_two (b1_sumf (fun s : unit => abs (req_minus (mu s) (nu s)))).
@@ -327,11 +327,11 @@ Definition b1_titer (n : nat) (mu : unit -> Real) : unit -> Real :=
   k_titer unit b1_sumf [tt] b1_enum_ne one one_pos one
           (fun _ _ : unit => zero) cb1_z_lb cb1_sum_eq_list n mu.
 
-(* ---- 合龙证书：cmk_attention_mixing_time 25+8 参全显喂入 ---- *)
+(* ---- 闭合证书：cmk_attention_mixing_time 25+8 参全显输入 ---- *)
 
 Definition cb1_mixing_cert :=
   @cmk_attention_mixing_time Real RealEnhancedReal
-    real_lt_plus_compat_lt_le          (* lt_plus_compat_lt_le 槽（Real 层成品直喂） *)
+    real_lt_plus_compat_lt_le          (* lt_plus_compat_lt_le 槽（Real 层成品直接代入） *)
     unit b1_sumf
     (csm_sum_ext unit [tt])
     (csm_sum_linear unit [tt])
@@ -347,7 +347,7 @@ Definition cb1_mixing_cert :=
     real_lt_plus_compat_lt_le          (* bs_lpc 槽（同件同形） *)
     cb1_sum_eq_list.
 
-(* ============ 终装：B1 无条件合龙定理（零接口/零 Arch/零 Htv0 前件） ============ *)
+(* ============ 终装：B1 无条件闭合定理（零接口/零 Arch/零 Htv0 前件） ============ *)
 
 Theorem csm_b1_unconditional_mixing_time :
   forall mu nu : unit -> Real,
@@ -361,7 +361,7 @@ Proof.
            cb1_arch (cb1_tv0 mu nu Hmu Hnu)).
 Defined.
 
-(* ≤ 版：le 降温镜像（同一证书链，cmk_attention_mixing_time_le 喂入） *)
+(* ≤ 版：le 降温对偶（同一证书链，cmk_attention_mixing_time_le 输入） *)
 Theorem csm_b1_unconditional_mixing_time_le :
   forall mu nu : unit -> Real,
   req (b1_sumf mu) one -> req (b1_sumf nu) one ->

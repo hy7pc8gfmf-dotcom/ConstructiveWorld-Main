@@ -2,7 +2,7 @@
 (* QstepConvergenceBound.v —— 席位 C9：qstep 迭代收敛步数界          *)
 (*   （A4 移植榜 T9：迭代 eps 形模板 → Q 层 qstep 轨道移植）          *)
 (* ------------------------------------------------------------ *)
-(* 受体（单步收缩引擎，直接消费 .vo）：                               *)
+(* 受体（单步收缩引擎，直接使用 .vo）：                               *)
 (*   S13_NLiveAudit.v L461 qstep_contracts：                        *)
 (*     forall h x g, QltT 0 h -> QleT' h (Qabs (g - x)) ->          *)
 (*       QId (Qabs (g - qstep h x g)) (Qabs (g - x) - h).           *)
@@ -26,7 +26,7 @@
 (*     —— 由 r<1 的几何倒数经 Qceiling 的显式可计算步数公式。          *)
 (* 支撑件 ≥2：                                                       *)
 (*   qpow_mono_dec（r<1 幂单调递减件，QleT' 面）                     *)
-(*   qiter_dist_recur（迭代距离递推件，QId 面，逐例消费受体）          *)
+(*   qiter_dist_recur（迭代距离递推件，QId 面，逐例使用受体）          *)
 (*   qbern_kt（Bernoulli 型幂界：(1+kt)·r^k ≤ 1，可计算步数引擎）     *)
 (* ------------------------------------------------------------ *)
 (* 红线自审：出口 QltT'/QleT'/sigT；零 承认 族、零经典逻辑；          *)
@@ -46,7 +46,7 @@ From Stdlib Require Import Setoid Morphisms.
 From Stdlib Require Import Lia QArith.Qminmax.
 
 (* ============================================================ *)
-(* A. 薄壳严格 T 面：QltT'（镜像 S02 QleT' 的 bool 反映形；           *)
+(* A. 薄壳严格 T 面：QltT'（对偶 S02 QleT' 的 bool 反映形；           *)
 (*    S02 只有 QltT/QleT'，本席补严格比较的 T' 面）                  *)
 (* ============================================================ *)
 
@@ -256,7 +256,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* D. 迭代轨道与距离递推件（支撑件二；受体 qstep 逐例消费）             *)
+(* D. 迭代轨道与距离递推件（支撑件二；受体 qstep 逐例使用）             *)
 (* ============================================================ *)
 
 (* 受体步映射上的迭代轨道：x_0 := x0，
@@ -544,7 +544,7 @@ Proof.
       + ring.
       + exact (Qmult_div_r (Qabs (xg - x0)) (eps * (1 - r)) Hzne).
     - exact Hmul. }
-  (* Bernoulli 幂界 + 尾链收口（Prop-Q 层） *)
+  (* Bernoulli 幂界 + 尾链闭合（Prop-Q 层） *)
   assert (Hb : Qle ((1 + QofN k * (1 - r)) * qpow r k) 1).
   { exact (qbern_kt r (1 - r) k Htp Hrt Hr0p). }
   assert (Hb' : Qle (QofN k * (1 - r) * qpow r k) 1).

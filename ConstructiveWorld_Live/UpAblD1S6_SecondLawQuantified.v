@@ -22,7 +22,7 @@
 (* ============================================================ *)
 (* UpAblD1S6_SecondLawQuantified.v —— FA-D1S6 数据供给大封装第三梯 件②           *)
 (* 席位：FA-D1S6（论文域消融施工席·D1-⑦ 第三梯 ≤40 位·按模块聚合）                 *)
-(*   ｜独立伴生件·原树零改｜零 Require 母本（防混代际 .vo 地雷，P3S1 坑1）          *)
+(*   ｜独立配套模块·原树零改｜零 Require 源文件（防混代际 .vo 地雷，P3S1 坑1）          *)
 (*                                                              *)
 (* 辖区：SecondLawQuantified.v Section SlqSecondLaw 余量 8 槽                      *)
 (*   S:76｜sumf:77｜sumext:81-82｜sumlinear:83-84｜sumadd:85-87｜                 *)
@@ -51,7 +51,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：8 槽语句逐字入包（对照母本 L76-92） ============ *)
+(* ============ 封装记录型：8 槽语句逐字入包（对照源文件 L76-92） ============ *)
 (* sumpos 槽（L78）不入包：D1-⑤/P1S1 已闭合（见件头遗留登记）。                   *)
 
 Inductive uabd1s6_slq_pack8 : Type :=
@@ -71,7 +71,7 @@ Inductive uabd1s6_slq_pack8 : Type :=
             forall energy : S -> Real,
               uabd1s6_slq_pack8.
 
-(* ============ 供给件：单点实例一次喂定 8 槽 ============ *)
+(* ============ 依赖模块：单点实例一次喂定 8 槽 ============ *)
 
 Theorem uabd1s6_slq_pack8_supplied : uabd1s6_slq_pack8.
 Proof.

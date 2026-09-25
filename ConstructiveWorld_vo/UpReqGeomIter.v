@@ -1,34 +1,34 @@
 (* ============================================================ *)
 (* UpReqGeomIter.v *)
 (* *)
-(* 目的： 策略迭代族的 Real 层迭代镜像（非平凡补强段）。 *)
+(* 目的： 策略迭代族的 Real 层迭代对偶（非平凡补强段）。 *)
 (* 主件： geodi_iterate 迭代族与 geodi_seq_norm / geodi_step_norm 范数递减链。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB。 *)
-(* 备注： 诚实边界与结论见正文登记；几何率前提经单步几何不等式承接。 *)
+(* 备注： 诚实边界与结论见正文登记；几何率前提经单步几何不等式给出。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqGeomIter.v —— 第二轮非平凡补强 ①：策略迭代族 Real 层迭代镜像席  *)
+(* UpReqGeomIter.v —— 第二轮非平凡补强 ①：策略迭代族 Real 层迭代对偶席  *)
 (*   任务书源＝第二轮非平凡补强-前十分析-20260910.md R2-1（L9/L96）：    *)
 (*   定理 4.8 的抽象层迭代收缩 KL(π*‖π_t) 以 (1−η)^t 几何收缩，        *)
-(*   在 Real 层按「单步消解件＋幂载体」归纳合龙（eps 形）。             *)
+(*   在 Real 层按「单步消解件＋幂载体」归纳闭合（eps 形）。             *)
 (* ---------------------------------------------------------------- *)
-(* 先例件（全部只消费 .vo，零改已绿文件）：                              *)
-(*   UpReqGeomD：旗舰单步 geod_policy_iter_kl_geom_step_eps（L451）      *)
+(* 先例件（全部只使用 .vo，零改已绿文件）：                              *)
+(*   UpReqGeomD：主定理单步 geod_policy_iter_kl_geom_step_eps（L451）      *)
 (*     KL(r‖next) ≤ (1−η)·KL(r‖p)+eps ＋ geod_lsum/geod_kappa_pos；      *)
 (*   G07_KLWall：幂载体 powb_pow（(1−η)^t）；                             *)
 (*   UpRealLeB：real_le_b/real_le_to_le_b（B 伴件语言）；                *)
-(*   UpGeomB：geod_b_half_double（半量机，KL Bishop 非负伴件消费）。      *)
+(*   UpGeomB：geod_b_half_double（半量机，KL Bishop 非负伴件使用）。      *)
 (* ---------------------------------------------------------------- *)
-(* 数学核（归纳合龙，单点 eps 引入→常数加权→末端完成）：                 *)
+(* 数学核（归纳闭合，单点 eps 引入→常数加权→末端完成）：                 *)
 (*   迭代轨道 π_0 := p，π_{t+1} := step_next(π*, π_t; κ:=1−η)。          *)
 (*   不变式：KL(π*‖π_t) ≤ κ^t·KL(π*‖π_0) + eps（同一 eps 全程不变动）。  *)
 (*   归纳步：单步件喂余量 η·eps（0<η·eps 引擎件喂定），                  *)
 (*     κ·(κ^t·KL0 + eps) + η·eps = κ^{t+1}·KL0 + (κ+η)·eps              *)
-(*     = κ^{t+1}·KL0 + 1·eps = κ^{t+1}·KL0 + eps——κ+η==1 环账一次完成，  *)
+(*     = κ^{t+1}·KL0 + 1·eps = κ^{t+1}·KL0 + eps——κ+η==1 循环记录一次完成，  *)
 (*   余量链零中途翻倍（单误差源单点引入，C.2 模板要点）。                *)
 (* ---------------------------------------------------------------- *)
-(* 分层保底（分件 Qed）：单步（消费 GeomD 旗舰）→ 一步件 → 两步件 →      *)
+(* 分层保底（分件 Qed）：单步（使用 GeomD 主定理）→ 一步件 → 两步件 →      *)
 
 (* ---------------------------------------------------------------- *)
 (* 诚实边界与结论：                                                      *)
@@ -39,9 +39,9 @@
 (*   【结论 I2｜n 非平凡】n≥1 显式前提：Z:=Σ r^{1−κ}q^κ 的正性在 n=0     *)
 (*   时不可证（空和=0），沿 real_list_sum_pos 非空前提同格。             *)
 
-(*   迭代轨道以 sigT（Set 值）打包逐站证书线程（UpGeomB geod_b_iterate    *)
+(*   迭代轨道以 sigT（Set 值）封装逐站证书线程（UpGeomB geod_b_iterate    *)
 (*   同构先例）；语句面全 Set 值零 Prop 泄露。                           *)
-(*   【结论 I4｜PowB 幂单调衔接差距】主件只消费 powb_pow 幂载体；         *)
+(*   【结论 I4｜PowB 幂单调衔接差距】主件只使用 powb_pow 幂载体；         *)
 (*   powb_one_minus_eta_mono_dec（κ^{t1} ≤_B κ^t）与主件合成为           *)
 (*   「t ≤ t1 ⟹ KL_{t1} ≤ κ^t·KL_0」需 κ^{t1}·KL_0 ≤ κ^t·KL_0+δ 的      *)
 (*   le_b 乘法保序闭包（非负右因子版），其证需 KL_0 上界材料或专门的     *)
@@ -145,7 +145,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* C. 迭代轨道载体：sigT 打包逐站证书的依赖递归（全 Set 值）              *)
+(* C. 迭代轨道载体：sigT 封装逐站证书的依赖递归（全 Set 值）              *)
 (*   π_0 := p；π_{S m} := step_next(π*, π_m; κ)，Z 正/逐点正自足供给。   *)
 (* ============================================================ *)
 Fixpoint geodi_seq (n : nat) (r : nat -> Real)
@@ -194,14 +194,14 @@ Proof.
   intros n r Hr eta p Hp Hn m.
   unfold geodi_iterate, geodi_iterate_pos.
   (* 先单步 ι 展开 (S m) 支露出 match（变量 m 上 fix 不动、内层保持折叠），  *)
-  (* 再 destruct 内层轨道 existT 换形——顺序颠倒则 match 永远卡死。          *)
+  (* 再 destruct 内层轨道 existT 换形——顺序颠倒则 match 永远停滞。          *)
   cbn [geodi_seq].
   destruct (geodi_seq n r Hr (real_plus real_one (real_opp eta)) p Hp Hn m)
     as [q Hq].
   reflexivity.
 Qed.
 
-(* 轨道 sigT 对子方程：S 站整对 == existT 打包(step(q), next证书(q))。        *)
+(* 轨道 sigT 对子方程：S 站整对 == existT 封装(step(q), next证书(q))。        *)
 (*   依赖证书换型的合法 rewrite 目标：对 geodi_seq (S m) 整体抽象是依赖      *)
 (*   良定的（证书的类型随对子整体换型），对裸值 geodi_iterate (S m) 抽象     *)
 (*   则不适定（real_kl_term 第4参类型依赖第2参值）。                         *)
@@ -290,7 +290,7 @@ Proof.
 Qed.
 
 (* 成对泛化范数：m 站轨道分量 q 的归一化（destruct 换形后的 Hp-槽直供件）。 *)
-(*   fold 包装 geodi_iterate … m 与消解后 q 不可转换（变量 m 上 fix 卡死），  *)
+(*   fold 包装 geodi_iterate … m 与消解后 q 不可转换（变量 m 上 fix 停滞），  *)
 (*   故沿轨证书族须以「轨道 = existT q Hq」方程为载体成对泛化。              *)
 Lemma geodi_seq_norm_pair : forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i)) (eta : Real)
@@ -393,7 +393,7 @@ Proof.
                     eps Heps)).
   - (* 归纳步：单步件喂 η·eps，κ 加权，(κ+η)==1 末端完成 *)
     (* 轨道对子消解：IH 先 unfold+revert 使其随对子整体换形为 q 形——          *)
-    (*   fold 包装的 IH 与消解后 q 不可转换（变量 m 上 fix 卡死），故证书族    *)
+    (*   fold 包装的 IH 与消解后 q 不可转换（变量 m 上 fix 停滞），故证书族    *)
     (*   （范数/Z 正/逐点正）全部以 q/Hq 直供（geodi_seq_norm_pair 等）。      *)
     unfold geodi_iterate, geodi_iterate_pos in IH.
     unfold geodi_iterate, geodi_iterate_pos.
@@ -408,7 +408,7 @@ Proof.
     pose proof (geodi_zpos n r q (real_plus real_one (real_opp eta)) Hr Hq Hn)
       as HZq.
     pose proof (real_mult_positive eta eps Heta Heps) as Hetaeps.
-    (* 单步消解件（GeomD 旗舰）实例：KL_{S m} ≤ κ·KL_q + η·eps               *)
+    (* 单步消解件（GeomD 主定理）实例：KL_{S m} ≤ κ·KL_q + η·eps               *)
     (*   HZ/Hqv 两槽须同字面项：geodi_next_pos 输出类型的 HZ 位烘焙为         *)
     (*   geodi_zpos … Hn，别名假设不可合一（rigid-rigid）。                   *)
     pose proof (geod_policy_iter_kl_geom_step_eps n r q eta Hr Hq
@@ -875,9 +875,9 @@ Qed.
 (*   保序闭包：a ≤_B b ∧ 0 ≤_B c ⟹ a·c ≤_B b·c——其逐 eps 证需把           *)
 (*   κ^{t1} ≤ κ^t+δ 的 δ 乘出后压回 eps，即需 KL_0 上界（sup KL）材料；   *)
 (*   单纯形上 sup KL 可由 min 正性给出，但库内无该上界件——④显式假设未建，    *)
-(*   缺口的准确形状如上，禁硬凑（分层保底纪律②）。                        *)
+(*   缺口的准确形状如上，禁特设构造（分层保底纪律②）。                        *)
 
-(*   Assumptions 全 Closed（见文末逐件）；G3 提取探针 Obj.magic=0；        *)
+(*   Assumptions 全 Closed（见文末逐件）；G3 提取检验 Obj.magic=0；        *)
 
 (* ============================================================ *)
 

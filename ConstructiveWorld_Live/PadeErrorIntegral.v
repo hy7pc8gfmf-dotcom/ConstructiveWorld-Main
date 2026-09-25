@@ -5,17 +5,17 @@
 (* 2026-09-22 施工）：重放保留既有刀体并吸收 Main 现版语句面（含             *)
 (* pei_div_mul_shift 整块），Require 面照 Main 规范化（去 Psatz）；本块系    *)
 (* 同席补植战役标记。替换定理清单：pei_error_lead_integral（T300 落册刀）    *)
-(* ／pei_beta_integral_pos（0922 04:44 并席在飞刀，席位候核）共 2 刀，刀面   *)
+(* ／pei_beta_integral_pos（0922  并席在飞刀，席位候核）共 2 刀，刀面   *)
 (* 以台账与并席在飞件快照为权威。                                            *)
 (* 非平凡性口径：双层 Qeq_refl 项并 apply 尾链并项直取；Qlt_to_QltT 传输     *)
 (* 全显项化直取，无行拆分式假非平凡。                                        *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；重放件本席判绿        *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；重放件本席判绿        *)
 (* 四证编译验零承认在册。                                                    *)
 (* ========================================================================= *)
 (* ============================================================ *)
-(* PadeErrorIntegral.v —— 席位 CYE10（批次 E-STAGING-CYE10）          *)
-(* 全库最后一笔真挂账收官：Padé [n/n] 误差余项积分表示四件               *)
-(*   （UpReqPadeExp.v:193 显式假设四件 + PadeDenPosA.v:26 挂账 c）。   *)
+(* PadeErrorIntegral.v —— 席位 CYE10（组 E-STAGING-CYE10）          *)
+(* 全库最后一笔真遗留收官：Padé [n/n] 误差余项积分表示四件               *)
+(*   （UpReqPadeExp.v:193 显式假设四件 + PadeDenPosA.v:26 遗留 c）。   *)
 (*                                                                 *)
 (* 原阻塞 = 构造性积分基建缺位；现 PolyIntegral.v 已在 vorebuild_901    *)
 (* 基座在册（[0,1] 多项式 Q 系数构造性定积分），阻塞解除。              *)
@@ -25,7 +25,7 @@
 (*   （S03:39 在册）。故四件落地为「截断指数被积函数」构造性有限核：      *)
 (*   pei_eb_list n x M := Σ_{k=0}^{M} (x^k/k!)·list(t^{n+k}(1−t)ⁿ)      *)
 (*   ——其逐点语义恰为 tⁿ(1−t)ⁿ·exp_partial M (x·t)。                    *)
-(*   ① pei_integral_pos：0 ≤ x ⟹ ∫₀¹ > 0（k=0 项 Beta 严格正接力）；   *)
+(*   ① pei_integral_pos：0 ≤ x ⟹ ∫₀¹ > 0（k=0 项 Beta 严格正接续）；   *)
 (*   ② pei_eb_value：∫ 闭式 = Σ x^k/k!·Beta(n+k+1,n+1)——余项积分表示   *)
 (*      的构造性泰勒系数对接件（精确全形 e^x−P/Q=… 需极限交换，          *)
 (*      B4TwoStage 已判 LPO 墙，显式假设维持，本件交付其有限核）；        *)
@@ -41,7 +41,7 @@
 (* 红线自审：① 零承认面（全件 Qed 真证，依赖全为在册 Closed 件）；       *)
 (*   ② 语句面 Set（主件 Qeq/QltT/QleT'；Qle/Qlt 仅支撑件内面）；         *)
 (*   ③ 非平凡（Beta 闭式两参数归纳 + 有理域交叉相消引擎）；               *)
-(*   ④ 可提取（G3 探针独立文件实测）。前缀 pei_ 全库防撞 grep=0。         *)
+(*   ④ 可提取（G3 检验独立文件实测）。前缀 pei_ 全库防撞 grep=0。         *)
 (* 编译：vorebuild_901 单根（PolyIntegral 同库直接可见）。               *)
 (* ============================================================ *)
 
@@ -450,7 +450,7 @@ Proof.
       by apply q_fact_succ.
     (* REV-R1 20260918：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
        2*S m+k=2m+k+2，lia "Cannot find witness"）；下方 q_fact_succ
-       重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形定谳改回
+       重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形已证结论改回
        两层 S。 *)
     replace (2 * Datatypes.S m + k)%nat
       with (Datatypes.S (Datatypes.S (2 * m + k)))%nat by lia.

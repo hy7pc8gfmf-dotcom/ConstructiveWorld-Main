@@ -39,7 +39,7 @@
 (*                                                              *)
 (* 纪律：纯构造性（禁词零出现，见合规自查报告 G1）；                    *)
 (*       Set 层语句（real_lt/real_le/real_eq/sigT/And）；           *)
-(*       全部 Qed 闭合；消费根内已证机器不重证。                    *)
+(*       全部 Qed 闭合；使用根内已证机器不重证。                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -133,7 +133,7 @@ Proof.
       * apply real_mult_one_l.
 Qed.
 
-(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
+(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接使用） *)
 (* （此处不重证；见 real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
@@ -717,7 +717,7 @@ Proof.
   exact (geo_tail_budget kappa a eps Hk1 Hk2 Ha Heps p q N Hpq HN).
 Qed.
 
-(* ============ 8. 提取探针（可执行 OCaml，G3 关卡） ============ *)
+(* ============ 8. 提取检验（可执行 OCaml，G3 关卡） ============ *)
 From Stdlib Require Import Extraction.
 Set Warnings "-extraction-opaque-accessed".
 Set Extraction Output Directory ".".

@@ -14,7 +14,7 @@
 
 (* ============================================================ *)
 (* UpAblD1S4_UpReqStepKLEtaInst.v —— FA-D1S4 数据供给大封装首梯 件①              *)
-(* 席位：FA-D1S4（普查批 D1-⑦ 首梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改        *)
+(* 席位：FA-D1S4（普查批 D1-⑦ 首梯 ≤40 位·按模块聚合）｜独立配套模块·原树零改        *)
 (*                                                              *)
 (* 辖区：UpReqStepKLEtaInst.v Section SkeInst 全 12 槽                            *)
 (*   （现档坐标 L176-189；Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代       *)
@@ -24,8 +24,8 @@
 (*   （L177-178 为 Let n := S k，非接口参数；Hpitn 槽内 n 依 Let 展开 δ 内联           *)
 (*    为 Datatypes.S k，语句逐字同体）                                            *)
 (* 主锚注记：本节 12 槽＝主锚 real_step_kl_eta_bound_eps@UpStepKL.v:682 的实例面   *)
-(*   （普查 D1-⑦ 判语原文）；本件只供实例面数据，不动主锚本体；零 Require 母本      *)
-(*   （防 P3S1 坑1 混代际 .vo 地雷；语句面逐字抽取自现档母本，与母本坐标核验）      *)
+(*   （普查 D1-⑦ 判语原文）；本件只供实例面数据，不动主锚本体；零 Require 源文件      *)
+(*   （防 P3S1 坑1 混代际 .vo 地雷；语句面逐字抽取自现档源文件，与源文件坐标核验）      *)
 (*                                                              *)
 (* 形态：P2S1 封装记录型先例（UpAblP2_UpMinP_tokens_pack.v，槽语句逐字入包）       *)
 (*   ＋ fa57 两点实例一件喂全域先例（fa57_W2p_uniform_two_realized@               *)
@@ -35,7 +35,7 @@
 (*   one_pos/半正性一行直接匹配｜Hpitn:=半+半==one 归一链。                            *)
 (*                                                              *)
 (* 分级（禁注水如实申报）：12 槽全部 T·数据供给级——普查注记「实例供给即平凡        *)
-(*   成立」本席实测兑现；供给件合并申报一件（pack12_supplied），不逐槽计战果。      *)
+(*   成立」本席实测兑现；依赖模块合并申报一件（pack12_supplied），不逐槽计战果。      *)
 (*   其中 Hpitn 供给肢为最长肢：依存 half+half==one 归一链（乘壹×2＋分配逆＋       *)
 (*   交换＋逆反自乘，五段 real_eq_trans 机械链），非平凡语句形但零逻辑墙，          *)
 (*   如实登记仍属 T 级机械供给（reflexivity/一行直接匹配级之上、重施工之下）。          *)
@@ -77,7 +77,7 @@ Proof.
   exact (real_eq_trans           (real_list_sum nat (fun _ : nat => uabd1s4_half) (List.seq 0 2))           (real_plus uabd1s4_half uabd1s4_half)           real_one           (RealSetoid.real_eq_plus_compat uabd1s4_half (real_plus uabd1s4_half real_zero)                                uabd1s4_half uabd1s4_half                                (real_eq_refl uabd1s4_half)                                (real_plus_zero uabd1s4_half))           uabd1s4_half_plus_half).
 Qed.
 
-(* ============ 封装记录型：12 槽语句逐字入包（对照母本 L176-189） ============ *)
+(* ============ 封装记录型：12 槽语句逐字入包（对照源文件 L176-189） ============ *)
 
 Inductive uabd1s4_ske_pack12 : Set :=
 | uabd1s4_ske_pack12_intro :
@@ -95,7 +95,7 @@ Inductive uabd1s4_ske_pack12 : Set :=
                 (forall i : nat, real_lt real_zero (piref i)) ->
                 uabd1s4_ske_pack12.
 
-(* ============ 供给件：两点均匀实例一次喂定 12 槽 ============ *)
+(* ============ 依赖模块：两点均匀实例一次喂定 12 槽 ============ *)
 
 Theorem uabd1s4_ske_pack12_supplied : uabd1s4_ske_pack12.
 Proof.

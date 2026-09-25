@@ -125,7 +125,7 @@ Definition bbd_rminus (a b : R) : R := plus a (opp b).
 
 (* 正性证人：证体逐字 = 宿主 req_boltzmann_positive（UpSigMigrate.v:56-60）
    与消解件 logc_boltz_pos（UpReqLogCompD.v:230-236）；Defined（透明）为
-   delta 闭合所必需（Qed 不透明则 conversion 卡死）。 *)
+   delta 闭合所必需（Qed 不透明则 conversion 停滞）。 *)
 Definition bbd_boltzmann_positive : bbd_positive_dist bbd_boltzmann_dist.
 Proof.
   intro s.

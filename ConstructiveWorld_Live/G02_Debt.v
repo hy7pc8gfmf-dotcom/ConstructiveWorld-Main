@@ -38,7 +38,7 @@
 (*   （lt_le_iff），故前提取 Or 形态——这正是 real_le 的定义体    *)
 (*   （real_le x y := Or (real_lt x y) (real_eq x y)），与 Real  *)
 (*   层 real_sqrt_exists 的可依存前提逐字同构；le 形态前提在接口 *)
-(*   内无法分解（无 le→Or 字段），不硬凑。                       *)
+(*   内无法分解（无 le→Or 字段），不特设构造。                       *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（lt/le/Id/sigT/And）；*)
 (*   全部 Qed 完成。                                             *)

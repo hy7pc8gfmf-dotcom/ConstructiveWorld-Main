@@ -5,11 +5,11 @@
 (* 使命：S4 可逆性 (e^a)⁻¹=e^(−a) 的终结腿是 e^0=1（对照 T42     *)
 (* Real 层件 2 单位元腿同构）。Banach 设定下这条现在就可证：     *)
 (*   exp_series_partial m bzero ≡ bone（k≥1 项因 bpow bzero k    *)
-(*   = bzero 塌缩，只留首项）。本件把该块 + 范数上界落独立件。   *)
+(*   = bzero 退化，只留首项）。本件把该块 + 范数上界落独立件。   *)
 (*                                                             *)
 (* 分层出口（前缀 bxb_，全部 bae/Id/QleT' Set 承载面）：         *)
 (*   S1 保底  bxb_bpow_zero       : 1<=n -> bae (bpow bzero n)  *)
-(*                                    bzero（bpow 递归塌缩）    *)
+(*                                    bzero（bpow 递归退化）    *)
 (*   S2 保底  bxb_series_zero     : bae (exp_series_partial     *)
 (*                                    B bzero m) bone（主件）   *)
 (*   S2 伴随  bxb_norm_series_zero: Id (bnorm (esp B bzero m))  *)
@@ -22,7 +22,7 @@
 (*                                                             *)
 (* 对接位：B25 席（UpReqBanachExpDef，exp 元素定义路线甲         *)
 (* projT1）已落盘（其 .vo 双证新鲜于本席 S4 落件时点，按任务书    *)
-(* Require 其出口、零触碰其文件）。其尾挂账自陈「exp(0)=bone 的   *)
+(* Require 其出口、零触碰其文件）。其尾遗留自陈「exp(0)=bone 的   *)
 (* bae 完全等式面被 Class 缺反可分性字段挡住」——故 e^0=one 元素   *)
 (* 面在现 Class 接口下的可达顶点即本件 S2 全量部分和等式 + 元素   *)
 (* 邻域面（S4 跨席组合件 bxb_expdef_exp_zero_close）。           *)
@@ -45,12 +45,12 @@ From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Lia.
 
 (* ============================================================ *)
-(* S1 保底：零元幂塌缩                                           *)
+(* S1 保底：零元幂退化                                           *)
 (* ============================================================ *)
 
 (* bpow 递归展开：n≥1 时 bzero^n ≡ bzero                        *)
 (* （0 次项 = bone 由 n≥1 前提排除；S 0 腿 bmult_one_l 直连，     *)
-(*   S (S j) 腿 bmult_wd 传 IH + bmult_zero 收口。）             *)
+(*   S (S j) 腿 bmult_wd 传 IH + bmult_zero 闭合。）             *)
 Lemma bxb_bpow_zero : forall (B : BanachAlg) (n : nat),
   (1 <= n)%nat -> @bae B (bpow B (@bzero B) n) (@bzero B).
 Proof.
@@ -74,7 +74,7 @@ Proof.
       exact (@bmult_zero B (@bzero B)).
 Qed.
 
-(* 级数项在零元处塌缩：bzero^(S k)·q ≡ bzero（对任意标量 q）      *)
+(* 级数项在零元处退化：bzero^(S k)·q ≡ bzero（对任意标量 q）      *)
 Lemma bxb_esp_term_zero : forall (B : BanachAlg) (k : nat) (q : Q),
   @bae B (@bmult B (bpow B (@bzero B) (Datatypes.S k)) (@bcoef B q))
         (@bzero B).
@@ -96,8 +96,8 @@ Qed.
 (* ============================================================ *)
 
 (* exp_series_partial B bzero m ≡ bone（bae 等词面，对 m 归纳：  *)
-(* 首项 bone 留守，k≥1 项经 bxb_esp_term_zero 全数塌缩为零，     *)
-(* 再 bplus_zero 收口——e^0=1 的 Banach 层完全等式面。）          *)
+(* 首项 bone 留守，k≥1 项经 bxb_esp_term_zero 全数退化为零，     *)
+(* 再 bplus_zero 闭合——e^0=1 的 Banach 层完全等式面。）          *)
 Lemma bxb_series_zero : forall (B : BanachAlg) (m : nat),
   @bae B (exp_series_partial B (@bzero B) m) (@bone B).
 Proof.
@@ -133,7 +133,7 @@ Qed.
 
 (* 平凡柯西证书：零元级数列两两差恒零，模量 N=0 显式闭式         *)
 (* （对照 exp_series_cauchy 的阿基米德 witness 链——零元处全免，  *)
-(*   N=0 即收口；S4 可逆性链中 e^0 极限存在性的免费位。）        *)
+(*   N=0 即闭合；S4 可逆性链中 e^0 极限存在性的免费位。）        *)
 Lemma bxb_series_zero_bcauchy : forall (B : BanachAlg) (eps : Q),
   QltT 0 eps ->
   sigT (fun N : nat => forall m n : nat,
@@ -214,7 +214,7 @@ Qed.
 (*   ⟹ 取 n=N 后以 bnorm_wd 把部分和位换成本件 bone 精确面。      *)
 (* （语句面与 B25 bxdef_exp_zero_close 同型——本证走本件精确面     *)
 (*   组合而入，验两席接口对位可组合；bae 完全等式面仍被 Class     *)
-(*   缺反可分性字段挡住，对称挂账不动。）                         *)
+(*   缺反可分性字段挡住，对称遗留不动。）                         *)
 Lemma bxb_expdef_exp_zero_close : forall (B : BanachAlg) (eps : Q),
   QltT 0 eps ->
   QltT (@bnorm B (@bplus B (bxdef_exp B (@bzero B))
@@ -234,7 +234,7 @@ Proof.
                   (@bae_refl B (@bopp B (bxdef_exp B (@bzero B)))))) HN) as HN2.
   clear HN. rename HN2 into HN.
   (* 规格位是 bone+(−E)；目标位 E+(−bone)——换序经 comm +        *)
-  (* bplus_opp_swap（E+(−bone) ≡ −(bone+(−E))）+ bnorm_opp 收口。 *)
+  (* bplus_opp_swap（E+(−bone) ≡ −(bone+(−E))）+ bnorm_opp 闭合。 *)
   eapply (QeqT_Qlt_bool_cong _ _ eps
     (qeqT_sym_hw _ _ (@bnorm_wd B
       (@bplus B (bxdef_exp B (@bzero B)) (@bopp B (@bone B)))
@@ -259,7 +259,7 @@ Qed.
 (*   ⑤ 元素面 ④→S4：bxb_expdef_exp_zero_close（与 B25 出口      *)
 (*      组合而入）。                                             *)
 (*   完全等式 exp(bzero)=bone 需 Class 增反可分性字段（bnorm      *)
-(*   任意小 ⟹ bae bzero）——接口扩容属上游裁决，两席对称挂账，    *)
+(*   任意小 ⟹ bae bzero）——接口扩容属上游裁决，两席对称遗留，    *)
 (*   不擅动。后继（exp_add/可逆性）承 UpReqBanachExp 文件尾      *)
 (*   四步闭包登记。                                              *)
 (* ============================================================ *)

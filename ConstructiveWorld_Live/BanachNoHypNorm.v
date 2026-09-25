@@ -7,15 +7,15 @@
 (*   bnorm_plus/bnorm_mult 字段」——乘法群四面已由 UpReqBanachInstEMult 闭合 *)
 (*   （UpReqBanachInstEMult.v：bxem_mult_assoc/one_l/one_r/        *)
 (*   distrib_l/distrib_r），本件收其剩余位 bnorm_plus/bnorm_mult。  *)
-(* 技术（bxem 同款双层 qnorm 塌缩机）：                             *)
+(* 技术（bxem 同款双层 qnorm 退化机）：                             *)
 (*   E-载体 bxib_E 上 bnorm := Qabs ∘ qnorm ∘ ev；运算位 ev 按定义   *)
 (*   已带一层 qnorm，故字段位左端出现双层 qnorm——先 bxib_qnorm_     *)
-(*   fix_id（Id 不动点，Leibniz 改写可入 QleT' 目标）塌缩为单层，    *)
+(*   fix_id（Id 不动点，Leibniz 改写可入 QleT' 目标）退化为单层，    *)
 (*   再落 Qle（Prop 引擎内衬）层用 stdlib Qabs 引擎（Qabs_triangle/ *)
 (*   Qabs_Qmult/Qabs_wd 同余 + Qplus_comp/Qmult_comp Proper 项式）  *)
 (*   + qeq_le 运输组装，末级 Qle_to_QleT' 回 Set 面。                *)
 (*   钉定位注记：Qabs (qnorm t) 与 Qabs t 的 Leibniz 等式被         *)
-(*   bxib_canon_pin_wall 阻断（2#4/1#2 位钉定阻碍），故塌缩与换形   *)
+(*   bxib_canon_pin_wall 阻断（2#4/1#2 位钉定阻碍），故退化与换形   *)
 (*   全走 Qeq/QeqT/Id-不动点面，不触 Leibniz 钉定——本件路径与        *)
 (*   该钉定阻碍正交（Id 改写只沿 qnorm∘qnorm→qnorm 不动点位，非钉定位）。*)
 (* 红线自审：                                                      *)
@@ -43,7 +43,7 @@ From Stdlib Require Import Lia.
 (* 件一：bnorm_plus 字段位（次可加）——                               *)
 (*   QleT' (bnorm (eplus a b)) (bnorm a + bnorm b)                  *)
 (*   （类字段 bnorm_plus 在 E-载体 bxib_E 上的同位定理；双层 qnorm    *)
-(*     塌缩 + Qabs_triangle 三段运输。）                             *)
+(*     退化 + Qabs_triangle 三段运输。）                             *)
 (* ============================================================ *)
 
 Lemma bnhn_bnorm_plus : forall a b : bxib_E,
@@ -53,7 +53,7 @@ Proof.
   intros a b. unfold bxib_bnorm.
   change (bxib_ev (bxib_eplus a b))
     with (bxib_qnorm (Qplus (bxib_ev a) (bxib_ev b))).
-  (* 双层 qnorm 塌缩（Id 不动点，QleT' 目标内 Leibniz 改写合法位） *)
+  (* 双层 qnorm 退化（Id 不动点，QleT' 目标内 Leibniz 改写合法位） *)
   rewrite (bxib_qnorm_fix_id (Qplus (bxib_ev a) (bxib_ev b))).
   apply Qle_to_QleT'.
   apply (Qle_trans _ (Qabs (bxib_ev a + bxib_ev b)%Q) _).
@@ -75,7 +75,7 @@ Qed.
 (* ============================================================ *)
 (* 件二：bnorm_mult 字段位（次可乘）——                               *)
 (*   QleT' (bnorm (emult a b)) (bnorm a * bnorm b)                  *)
-(*   （类字段 bnorm_mult 在 E-载体 bxib_E 上的同位定理；塌缩同款 +    *)
+(*   （类字段 bnorm_mult 在 E-载体 bxib_E 上的同位定理；退化同款 +    *)
 (*     Qabs_Qmult 等式换形（Qeq 强于 Qle 经 qeq_le 降取）。）         *)
 (* ============================================================ *)
 
@@ -112,7 +112,7 @@ Qed.
 (*     bnorm_coef 钉定语句面修订属上游改形——两处维持原未消解项状态）。 *)
 (*   ② 伴随注：bxem_mult 与 bxib_emult 为 delta 同一定义              *)
 (*     （bxem_mult a b := bxib_emult a b），本件语句面取构造子直形。   *)
-(*   ③ 塌缩机同源性：本件双层塌缩 = bxem_mult_wd 同款                 *)
+(*   ③ 退化机同源性：本件双层退化 = bxem_mult_wd 同款                 *)
 (*     （fix_id → qnorm_id_of_qeqT → fix_id 链的 QleT' 版），          *)
 (*     序面用 Qabs_triangle/Qabs_Qmult 替 bxem 的 qeqT cong 位。       *)
 (* ============================================================ *)

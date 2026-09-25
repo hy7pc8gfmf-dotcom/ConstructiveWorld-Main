@@ -279,7 +279,7 @@ Qed.
 
 (* 触底检测单调：n 步内触底 ⟹ 后继步内仍触底 *)
 (*   修复记录：不动点观察 gbottom_at (S n) (gstep b ..) 里的 Nat.leb b 0   *)
-(*   是卡死项——直接 destruct b，令 leb (S b') 0 ≡ false 定义性归约。     *)
+(*   是停滞项——直接 destruct b，令 leb (S b') 0 ≡ false 定义性归约。     *)
 Lemma gbottom_mono : forall (n : nat) (ch : GChain),
   Id (gbottom_at n ch) true -> Id (gbottom_at (Datatypes.S n) ch) true.
 Proof.
@@ -304,7 +304,7 @@ Qed.
 
 (* 触底 ⟹ 后继深度预算清零（清零制口径；需全程递减前提
    排除「预算 0 仍续步」的空洞链——该前提即 GuardedChain 纪律本体） *)
-(*   修复记录：原稿 destruct (Nat.leb b 0) eqn: 留卡死 if，且 Hdec 多传   *)
+(*   修复记录：原稿 destruct (Nat.leb b 0) eqn: 留停滞 if，且 Hdec 多传   *)
 (*   实参；改为 destruct b + Hdec 单实参 + Id_eq 换形 nat 序后 lia。     *)
 Lemma gbottom_true_spend : forall (n : nat) (ch : GChain),
   (forall m : nat, NatLt (gbudget_at (Datatypes.S m) ch) (gbudget_at m ch)) ->
@@ -390,7 +390,7 @@ Lemma test_grun_running3 : Id (gbottom_at 3 (grun (1#2) 4 (8#10))) false.
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §2 件 2：生产性⟹健全性（消费 UpConstitution.q_decay_breaks）      *)
+(* §2 件 2：生产性⟹健全性（使用 UpConstitution.q_decay_breaks）      *)
 (*   生产性：CoFixpoint 生成器每步严格递减预算 ⟹ b 步内必触底；        *)
 (*   健全性：以 q_decay_breaks 解出的击穿预算 N 作链预算，             *)
 (*   链在深度 N 触底且终值 = c0·(1−κ)^N < eps——停时携带证书。         *)
@@ -472,7 +472,7 @@ Definition st_miss (P : nat -> bool) (U : nat) : Set :=
 Definition st_res (P : nat -> bool) (U : nat) : Set :=
   Or (st_hit P U) (st_miss P U).
 
-(* 搜索步（须 Defined：stsearch 是可执行判定器，提取探针要用其本体） *)
+(* 搜索步（须 Defined：stsearch 是可执行判定器，提取检验要用其本体） *)
 Lemma stsearch_step_0 (P : nat -> bool) : st_res P 0%nat.
 Proof.
 destruct (P 0%nat) eqn:E0.
@@ -833,7 +833,7 @@ pose proof (unguarded_budget_const c n) as H1.
 pose proof (id_trans (id_sym H0) H1) as Hcontra. inversion Hcontra.
 Qed.
 
-(* 平凡性总装（三联观察） *)
+(* 平凡性装配（三联观察） *)
 Theorem unguarded_trivial : forall (c : Q) (n : nat),
   And (Id (gbudget_at n (uloop c)) 1%nat)
       (And (Id (gbottom_at n (uloop c)) false)
@@ -879,7 +879,7 @@ Lemma test_waste_gap : Id (st_waste stpred_demo 6) 2%nat.
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §7 提取探针（G3：Obj.magic = 0）                                  *)
+(* §7 提取检验（G3：Obj.magic = 0）                                  *)
 (*   提取停时判定器全链：谓词 / 搜索 / 报告 / 无效服务计数 / 幂核。      *)
 (* ============================================================ *)
 

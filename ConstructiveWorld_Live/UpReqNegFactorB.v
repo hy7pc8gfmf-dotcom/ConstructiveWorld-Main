@@ -69,7 +69,7 @@ Qed.
 (* ============================================================ *)
 (* 一、共轭核：0 ≤ −c（Or 形）给 b·c ≤_B a·c                              *)
 (*   链：正面件1 于因子 −c 处（Hrev）→ le_b 取负反序（Hflip，eps 翻转     *)
-(*   步由 leb3_le_b_opp_rev 承接）→ real_opp_mult＋opp 对合 双端等式      *)
+(*   步由 leb3_le_b_opp_rev 给出）→ real_opp_mult＋opp 对合 双端等式      *)
 (*   运输（HoppA/HoppB）→ eq_r／eq_l 双运输完成。                         *)
 (* ============================================================ *)
 Lemma t27_le_b_mult_r_nonpos_opp : forall a b c : Real,

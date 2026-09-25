@@ -19,26 +19,26 @@
 (*   real_list_sum（s0 :: l）；UpReqEntropyMaxTemp 用抽象 real_sum_over_S *)
 (*   接口（sum/pos/ext/le/linear/add 六口）。合成靠 list 载体实例化抽象   *)
 (*   接口：tum_sum（cons 非空有限和）+ 五口证人（real_list_sum_* 库件    *)
-(*   逐口直喂，正性口含 cons 非空内证，语句面零 Prop）。                  *)
-(*   换装桥件 tum_carrier_energy_shape：可读同能量前提                    *)
+(*   逐口直接代入，正性口含 cons 非空内证，语句面零 Prop）。                  *)
+(*   重述桥接引理 tum_carrier_energy_shape：可读同能量前提                    *)
 (*     real_eq (E(t1)) (E(t2))                                           *)
 (*   ⟹ 抽象件字面能量前提（retm_pB ↔ real_boltzmann_dist_temp 逐点换形： *)
 (*     因子序 comm + inv_pos 证人无关（real_inv_pos_ext + real_eq_refl）  *)
 (*     + sum ext 换载）。                                                *)
 (* ------------------------------------------------------------------ *)
-(* 【依赖坐标（全部 215 vo 基座库件，只读消费）】                        *)
+(* 【依赖坐标（全部 215 vo 基座库件，只读使用）】                        *)
 (*   CW_ConstructiveWorld_219（S01–S15 薄壳 + real_list_sum_* 五口 +     *)
-(*     real_le_to_le_b/real_le_b_trans/real_lt_plus_r_zero 桥件）；       *)
+(*     real_le_to_le_b/real_le_b_trans/real_lt_plus_r_zero 桥接引理）；       *)
 (*   EnergyTempMonoB（etm_energy_temp_mono_b）；                         *)
 (*   UpReqEntropyMaxTemp（real_max_entropy_is_boltzmann_temp_eps 主件）； *)
 (*   UpReqTempDual（t13_entropy_eq_kl_zero / temp_energy_dual_closed_real *)
-(*     在库备用，本稿合成未直接消费，坐标留档）。                        *)
+(*     在库备用，本稿合成未直接使用，坐标留档）。                        *)
 (* 【红线自审】① 语句面全 Set：sigT/prod 容器 + real_lt/real_eq/real_le/ *)
 (*   real_le_b 出口，零 Or 新增、零 Prop 前提位（eps>0 走 real_lt 证人    *)
 (*   位）；② 零承认件零经典逻辑（唯一性走 sigT 见证 d := eps 构造给出，   *)
-(*   不用"不唯一则矛盾"经典形）；③ 全件 Qed 真证（term-mode exact 直喂 +   *)
-(*   换装桥 real_eq_trans 链）；④ 文末 Print Assumptions 全量审计。       *)
-(* 【full 槽位纪律】UpReqTempEntropy.v:616 判词遵从：本稿全部定理取      *)
+(*   不用"不唯一则矛盾"经典形）；③ 全件 Qed 真证（term-mode exact 直接代入 +   *)
+(*   重述桥 real_eq_trans 链）；④ 文末 Print Assumptions 全量审计。       *)
+(* 【full 接口参数纪律】UpReqTempEntropy.v:616 结论遵从：本稿全部定理取      *)
 (*   条件形/同能量显式前提形，零 full 形前提入签名。                      *)
 (* 编译配方（航向修正后主轨：switch live 9.1.0 + vorebuild 本地重编基座）：*)
 (*   source Live/toolchain/env.sh && eval $(opam env --switch live)      *)
@@ -65,7 +65,7 @@ Definition tum_sum (X : Type) (s0 : X) (l : list X) (f : X -> Real) : Real :=
   real_list_sum X f (s0 :: l).
 
 (* 正性口证人：逐点 0 < f s ⟹ 0 < Σ_{s0::l} f
-   （real_list_sum_pos 直喂；cons 非空腿证内 discriminate 消费，
+   （real_list_sum_pos 直接代入；cons 非空腿证内 discriminate 使用，
    语句面零 Prop） *)
 Lemma tum_sum_pos_wit :
   forall (X : Type) (s0 : X) (l : list X) (f : X -> Real),
@@ -101,7 +101,7 @@ Definition tum_Hb (X : Type) (u : X -> Real) (s0 : X) (l : list X)
        X (tum_sum X s0 l) (tum_sum_pos_wit X s0 l) t Ht u).
 
 (* ============================================================ *)
-(* Part 2：换装桥件（可读同能量前提 ⟹ 抽象件字面能量前提）               *)
+(* Part 2：重述桥接引理（可读同能量前提 ⟹ 抽象件字面能量前提）               *)
 (*   retm_pB t2 与 real_boltzmann_dist_temp（list 载体实例）逐点换形：   *)
 (*   因子序（exp·inv ↔ inv·exp）real_mult_comm + inv 证人差              *)
 (*   real_inv_pos_ext（底 real_eq_refl）+ sum ext 换载，三段 trans。     *)
@@ -231,7 +231,7 @@ Proof.
            eps Heps).
 Qed.
 
-(* 对称件：纤维条件换向后 t1 点同形占优（real_eq_sym 换向 + 全参镜像）   *)
+(* 对称件：纤维条件换向后 t1 点同形占优（real_eq_sym 换向 + 全参对偶）   *)
 Theorem tum_entropy_max_eps_same_E_sym :
   forall (X : Type) (u : X -> Real) (s0 : X) (l : list X)
     (t1 : Real) (Ht1 : real_lt real_zero t1) (t2 : Real) (Ht2 : real_lt real_zero t2),
@@ -305,9 +305,9 @@ Qed.
 
 (* ============================================================ *)
 (* 主件二：熵-温度单峰双支组合（prod 形，两库件逐字合成）                 *)
-(*   单调支：t1 < t2 ⟹ E(t1) ≤_B E(t2)（etm 主件直喂，B 层链）；         *)
+(*   单调支：t1 < t2 ⟹ E(t1) ≤_B E(t2)（etm 主件直接代入，B 层链）；         *)
 (*   峰值支：同能量纤维条件下 S(t1) ≤ S(t2)+eps（∀eps>0，最大熵主件      *)
-(*   list 载体实例直喂）——沿温度轴约束水平 Bishop 单调、同纤维上          *)
+(*   list 载体实例直接代入）——沿温度轴约束水平 Bishop 单调、同纤维上          *)
 (*   熵取 eps 峰的两支结构，分峰段拆两件的合取出口（And := prod）。       *)
 (* ============================================================ *)
 

@@ -13,13 +13,13 @@
 (* ============================================================ *)
 (* 使命：S4 可逆性终结肢 e^a·e^(−a)=e^0=1 的特例主链。          *)
 (*   一般 bpow_add（二项式恒等）= 席 BA 领地，本席绕开；        *)
-(*   本席攻其特例：x := a+(−a) 处处经 bplus_opp 塌缩为零，      *)
+(*   本席攻其特例：x := a+(−a) 处处经 bplus_opp 退化为零，      *)
 (*   (a+(−a))^n ≡ bzero（n≥1）不需要任何二项式系数层。          *)
 (*                                                             *)
 (* 分层出口（前缀 binv_，全 bae/Id Set 承载面）：               *)
 (*   S1 保底  binv_bpow_opp_add   : 1<=n -> (a+(−a))^n ≡ bzero *)
-(*             （n 归纳：首肢 plus_opp 消项，后续零元塌缩逐级） *)
-(*   S1 咬合  binv_bpow_opp_add_mesh : 与 BXB bxb_bpow_zero     *)
+(*             （n 归纳：首肢 plus_opp 消项，后续零元退化逐级） *)
+(*   S1 衔接  binv_bpow_opp_add_mesh : 与 BXB bxb_bpow_zero     *)
 (*             经 bpow_wd 传送对位（两席终点一致性证书）        *)
 (*   S1 主锚  binv_esp_opp_add    : (a+(−a)) 级数部分和恒一     *)
 (*             —— S4 终结肢 e^0=1 的全量部分和精确形态          *)
@@ -29,7 +29,7 @@
 (*               精确形式实测定形，见交付报告）                  *)
 (*   S3 加分  对角线交错结构起步：                              *)
 (*             binv_diag_term/binv_diag_term_pair +             *)
-(*             逆元乘积四件 + 偶次塌缩种子 binv_bpow_opp2       *)
+(*             逆元乘积四件 + 偶次退化种子 binv_bpow_opp2       *)
 (*                                                             *)
 (* 分工边界：一般 bpow_add = 席 BA 领地；本件只碰特例 x=a+(−a)。*)
 (*   汇合点 = exp_add 装配席（下一批）：其取本件 S1 主锚为右侧  *)
@@ -42,7 +42,7 @@
 (*   UpReqBanachProd : bsum/和式引擎/bpow_comm_r/esp_as_bsum/   *)
 (*                     esp_prod_square/bsum_rot                 *)
 (*   UpReqBanachExpBasic : bxb_bpow_zero/bxb_series_zero        *)
-(*                     （链终点咬合位）                          *)
+(*                     （链终点衔接位）                          *)
 (*                                                             *)
 (* 红线自审：语句面全 Set 层（bae/Id/sigT/QltT），无命题层泄露  *)
 (*   （证内 Prop 仅 Q 等式内衬，同库先例）；无承认件；无经典    *)
@@ -156,7 +156,7 @@ Proof.
       * exact (binv_bmult_zero_l B (@bplus B a (@bopp B a))).
 Qed.
 
-(* 咬合证书：本席 S1 与 BXB 席零元幂终点经 bpow_wd 传送对位—— *)
+(* 衔接证书：本席 S1 与 BXB 席零元幂终点经 bpow_wd 传送对位—— *)
 (*   两席在 bzero 处终点一致，装配席可任取其一为 e^0 幂肢。      *)
 Lemma binv_bpow_opp_add_mesh : forall (B : BanachAlg) (a : (@BA B)) (n : nat),
   (1 <= n)%nat ->
@@ -169,7 +169,7 @@ Qed.
 
 (* S1 主锚（S4 终结肢部分和精确形态）：(a+(−a)) 级数每一部分和  *)
 (* 恒等于 bone——e^0=1 在 Banach 层的全量部分和等式面（极限免费， *)
-(* 与 BXB bxb_series_zero 咬合）。                              *)
+(* 与 BXB bxb_series_zero 衔接）。                              *)
 Lemma binv_esp_opp_add : forall (B : BanachAlg) (a : (@BA B)) (n : nat),
   @bae B (exp_series_partial B (@bplus B a (@bopp B a)) n) (@bone B).
 Proof.
@@ -208,7 +208,7 @@ Proof.
     + apply (@bae_sym B). exact (esp_as_bsum B b m).
 Qed.
 
-(* 首行（j=0）塌缩为 esp m b：c_0 = bone·coef(1/0!) ≡ bone。     *)
+(* 首行（j=0）退化为 esp m b：c_0 = bone·coef(1/0!) ≡ bone。     *)
 Lemma binv_row_zero : forall (B : BanachAlg) (b : (@BA B)) (m : nat),
   @bae B (@bmult B (@bmult B (@bone B) (@bcoef B (/ q_fact 0%nat)))
                    (exp_series_partial B b m))
@@ -254,7 +254,7 @@ Proof.
                                   (@bcoef B (/ q_fact i)))))) _).
   - (* 柯西方块（esp_prod_square 正向直连） *)
     exact (esp_prod_square B a (@bopp B a) m).
-  - (* 行折叠 → 首行提出（rot）→ 首行塌缩 *)
+  - (* 行折叠 → 首行提出（rot）→ 首行退化 *)
     apply (@bae_trans B _
       (bsum B (Datatypes.S m)
          (fun j : nat =>
@@ -359,7 +359,7 @@ Proof.
                (@bplus_opp B (@bmult B x x))).
 Qed.
 
-(* 偶次塌缩种子：bpow (−u) 2 ≡ bpow u 2（交错结构偶次项全正位） *)
+(* 偶次退化种子：bpow (−u) 2 ≡ bpow u 2（交错结构偶次项全正位） *)
 Lemma binv_bpow_opp2 : forall (B : BanachAlg) (u : (@BA B)),
   @bae B (bpow B (@bopp B u) (Datatypes.S (Datatypes.S 0%nat)))
          (bpow B u (Datatypes.S (Datatypes.S 0%nat))).

@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpAblTwLeFeed.v —— tw_h_le 两点核差界的形式供给件                     *)
+(* UpAblTwLeFeed.v —— tw_h_le 两点核差界的形式依赖模块                     *)
 (*                                                                *)
 (* 【使命】为 UpTempWindow 的 Section TempWindow 接口语句 tw_h_le         *)
 (*   （逐点绝对值界 |w_T(x) − 1/N| ≤ (e^{2Δ/T} − 1)·(1/N)，节卸载后      *)
@@ -132,7 +132,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2 · 两支基件：接口语句锐界的两支（B 形主件与 plain 形供给件共用）*)
+(* Part 2 · 两支基件：接口语句锐界的两支（B 形主件与 plain 形依赖模块共用）*)
 (*   正分支：w − (1/N) ≤ (E2 − 1)·(1/N)——tw_wT_le_E2invN ＋ 加法保序   *)
 (*         ＋ tw_ring_sub_mult 换形。                                   *)
 (*   负分支：−(w − (1/N)) ≤ (E2 − 1)·(1/N)——tw_E2LinvN_le_wT 经负号    *)
@@ -312,7 +312,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4 · 主件 B：plain 形供给件（语句与接口语句实形逐字对齐）         *)
+(* Part 4 · 主件 B：plain 形依赖模块（语句与接口语句实形逐字对齐）         *)
 (*   语句＝tw_h_le 节卸载后外形逐字（世界接口同位同序）；证明＝两支      *)
 (*   重组（tw_abs_le 内构 Or 分支），不调用语句本体（独立重建，          *)
 (*   与语句本体结论内容等价——如实注记：本件为该界的 plain 形供给）。    *)
@@ -336,7 +336,7 @@ Proof.
   - exact (ntl_tw_arm_lower Tok states states_nonempty zz Delta HDelta Hlo Hhi T Ht x).
 Qed.
 
-(* 转换演示：plain 形供给件经单向转换引理得 B 形＝主件 A 同语句          *)
+(* 转换演示：plain 形依赖模块经单向转换引理得 B 形＝主件 A 同语句          *)
 Corollary ntl_tw_h_le_feed_to_b : forall (Tok : Set) (states : list Tok)
   (states_nonempty : Not (Id states nil)) (zz : Tok -> Real) (Delta : Real)
   (HDelta : real_lt real_zero Delta)

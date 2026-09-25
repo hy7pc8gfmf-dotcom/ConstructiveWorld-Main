@@ -20,7 +20,7 @@
 (*       证内 Prop（Qlt/Qle）仅作 Q 层推理脚手架，不进结论面；           *)
 (*       判定一律 Qlt_bool 路线（Qle_lt_or_eq 类 Prop 消去零出现）。    *)
 (* 依赖：UpReqIrrationalCriterion（母定理件，只读）；                   *)
-(*       UpReqIrrationalInstances（√2 成活机械，Require 消费其导出面：   *)
+(*       UpReqIrrationalInstances（√2 成活机械，Require 使用其导出面：   *)
 (*       ir2_qp/qp_pos/qp_pow/pow_ge/pow3sq/step_le 及通用 Q 层小件，    *)
 (*       只读禁改）；Stdlib QArith、ZArith、Arith、Lia、Lra、Qfield。    *)
 (* 泛化注记（√n 族雏形，仅注记不落码）：对任意非平方 n，Newton 列          *)
@@ -1118,7 +1118,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* S7：主定理装配（真走母定理 exact 装配，零旁路）+ 提取探针 + 公理面自审 *)
+(* S7：主定理装配（真走母定理 exact 装配，零旁路）+ 提取检验 + 公理面自审 *)
 (* ============================================================ *)
 
 Theorem is3_sqrt3_irrational_criterion : forall q : Q,

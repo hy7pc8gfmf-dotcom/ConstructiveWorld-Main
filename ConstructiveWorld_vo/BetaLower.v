@@ -1,8 +1,8 @@
 (* ============================================================ *)
-(* BetaLower.v — 席位切片代理M（批次 E-STAGING-D025r，20260918）    *)
+(* BetaLower.v — 席位切片代理M（组 E-STAGING-D025r，20260918）    *)
 (*                                                               *)
 (* 使命：P5 载体下界首攻切片（T122 派席④；T124 §三 改判后即可开工）。 *)
-(*   P1b「段上逐点正⟹积分正」路线经 T124 死亡证书注销，本席按        *)
+(*   P1b「段上逐点正⟹积分正」路线经 T124 否定性见证注销，本席按        *)
 (*   T124 §二(a)+(b) 合流改走：系数级/Beta 闭式 + 纯阶乘不等式，     *)
 (*   零段上逐点化。与在飞变体切片划清接口：只交下界，不碰恒等式。     *)
 (*                                                               *)
@@ -17,7 +17,7 @@
 (*   需全段逐点机（T124 §二(c) 真命题残面）或正系数级数机，精确        *)
 (*   偏移如实登记于 T125 报告，不虚报。                              *)
 (*                                                               *)
-(* 数值锚定（n=0..3，vm_compute 哨兵见 §5）：                        *)
+(* 数值确定（n=0..3，vm_compute 数值锚见 §5）：                        *)
 (*   lne_B: 1, 1/6, 1/30, 1/140；步比 (n+1)/(2(2n+3))：             *)
 (*   1/6, 1/5, 3/14, 2/9, 5/22（尾min=3/14 在 n=2）。               *)
 (*   ① 规格档 c=1/2, σ=3/16（T97 §4-P5 原目标）：n=0..3 全过。       *)
@@ -39,13 +39,13 @@
 (*   配方溯沿 PadeErrorIntegral pei_beta 族/Ln2Escape lne_beta_value） *)
 (*   → sif_qfact_Z 桥 → 纯 nat 阶乘不等式归纳（bl_nat_core16/14，     *)
 (*   核证书 3(2n+3) ≤ 8(n+1) / ≤ 7(n+1) 线性 lia，免 Psatz）→        *)
-(*   除法比较器 bl_div_le（lne_div_eq 同构配 bl_div_ge 镜像）。       *)
+(*   除法比较器 bl_div_le（lne_div_eq 同构配 bl_div_ge 对偶）。       *)
 (* 依赖：S02_CauchyComplete（QleT'/QltT 桥）、S03_QExp（q_pow/q_fact）、*)
 (*   SumInvFactEscape（sif_qfact_Z）、Ln2Escape（lne_B 三件套承载，    *)
-(*   side 根现编）。PadeErrorIntegral 原件因信任根缺链不直接消费       *)
+(*   side 根现编）。PadeErrorIntegral 原件因信任根缺链不直接使用       *)
 (*   （Ln2Escape 头注同判），Beta 闭式走其移植面。                   *)
-(* 红线：零公理声明词、零认授收口、零经典逻辑、零 Prop 语句位；         *)
-(*   提取探针 Obj.magic=0。                                          *)
+(* 红线：零公理声明词、零认授闭合、零经典逻辑、零 Prop 语句位；         *)
+(*   提取检验 Obj.magic=0。                                          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Arith.Arith ZArith.ZArith Lia.
@@ -89,7 +89,7 @@ Proof.
     + rewrite IH. ring.
 Qed.
 
-(* Qinv 对乘积分配（双非零前提；bl_pow_div/桥件用） *)
+(* Qinv 对乘积分配（双非零前提；bl_pow_div/桥接引理用） *)
 Lemma bl_qinv_mult : forall x y : Q,
   ~ (x == 0%Q) -> ~ (y == 0%Q) -> Qinv (x * y) == Qinv x * Qinv y.
 Proof.
@@ -147,7 +147,7 @@ Proof.
   exact (Qmult_le_compat_r x y z H Hz).
 Qed.
 
-(* 除法下界比较器（lne_div_le_inv 镜像）：0 < y、z·y ≤ x ⟹ z ≤ x/y *)
+(* 除法下界比较器（lne_div_le_inv 对偶）：0 < y、z·y ≤ x ⟹ z ≤ x/y *)
 Lemma bl_div_ge : forall x y z : Q, Qlt 0 y -> Qle (z * y) x -> Qle z (x / y).
 Proof.
   intros x y z Hy Hzy. unfold Qdiv.
@@ -489,7 +489,7 @@ Lemma bl_value3 : QeqT (lne_B 3) (1 # 140).
 Proof. apply qeq_imp_qeqT. rewrite lne_B_closed. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §6 提取探针 + 公理面自审                                             *)
+(* §6 提取检验 + 公理面自审                                             *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

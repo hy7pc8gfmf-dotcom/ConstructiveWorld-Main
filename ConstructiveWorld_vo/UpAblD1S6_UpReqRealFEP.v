@@ -22,7 +22,7 @@
 (* ============================================================ *)
 (* UpAblD1S6_UpReqRealFEP.v —— FA-D1S6 数据供给大封装第三梯 件①                  *)
 (* 席位：FA-D1S6（论文域消融施工席·D1-⑦ 第三梯 ≤40 位·按模块聚合）                 *)
-(*   ｜独立伴生件·原树零改｜零 Require 母本（防混代际 .vo 地雷，P3S1 坑1）          *)
+(*   ｜独立配套模块·原树零改｜零 Require 源文件（防混代际 .vo 地雷，P3S1 坑1）          *)
 (*                                                              *)
 (* 辖区：UpReqRealFEP.v Section RFEPMain 全 10 槽                                 *)
 (*   S:84｜real_sum_over_S:85｜real_sum_over_S_ext:86-87｜                       *)
@@ -50,7 +50,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：10 槽语句逐字入包（对照母本 L84-100） ============ *)
+(* ============ 封装记录型：10 槽语句逐字入包（对照源文件 L84-100） ============ *)
 
 Inductive uabd1s6_rfep_pack10 : Type :=
 | uabd1s6_rfep_pack10_intro :
@@ -72,7 +72,7 @@ Inductive uabd1s6_rfep_pack10 : Type :=
                 forall Z_align_r_pos : real_lt real_zero Z_align_r,
                   uabd1s6_rfep_pack10.
 
-(* ============ 供给件：单点实例一次喂定 10 槽 ============ *)
+(* ============ 依赖模块：单点实例一次喂定 10 槽 ============ *)
 
 Theorem uabd1s6_rfep_pack10_supplied : uabd1s6_rfep_pack10.
 Proof.

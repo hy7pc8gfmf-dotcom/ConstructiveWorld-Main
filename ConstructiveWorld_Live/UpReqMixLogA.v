@@ -23,8 +23,8 @@
 (* UpReqMixLogA.v —— 赛马 A 席：mix_k_select 的对数级升级件          *)
 (* （路径一：有理化归约 + Q 层可判定二分；2026-09-18）                *)
 (* ============================================================ *)
-(* 【本稿状态：四关全绿交付（tathP 三段接管回填完成，2026-09-19 01:10）】  *)
-(*   绿核（原 1-446 行）未回退；Part 5 续作段全绿：qbern 全族/窗口件/      *)
+(* 【本稿状态：四关全部通过交付（tathP 三段承担回填完成，2026-09-19 ）】  *)
+(*   绿核（原 1-446 行）未回退；Part 5 续作段全部通过：qbern 全族/窗口件/      *)
 (*   sel_accounts/k0+b0 双桥/五主件族（pow_budget_log±cert±min/           *)
 (*   k_select_log±le/min_real_below）。四关：G1 双轨 0、G2 full+vos 双    *)
 (*   EXIT=0+PA 25×Closed、G3 Obj.magic=0、G4 coqchk 通过。证据与对照表=   *)
@@ -441,7 +441,7 @@ Definition mixa_b0 (eps : Q) : Q := eps * (1#2).
 (* UpReqMixLogA_v1_full_draft.v（961 行），遗留四处：                   *)
 (*   ① mixa_qbern（Q-Bernoulli）：le_S 分支的代数恒等式                 *)
 (*      (1−w)·(B+w) == B − (c·w)·w（B==1+m'·w, c==m'+1）在 Qeq 面的     *)
-(*      ring 撞墙——本环境 Q 只注册 Add Field(Qfield.v:76) 未注册        *)
+(*      ring 受阻——本环境 Q 只注册 Add Field(Qfield.v:76) 未注册        *)
 (*      Add Ring，Q-eq 上 ring/field 均「not a valid (field) equation」；*)
 (*      lia/nia 不展开 Q-mult 的和积结构（检验实证 _tathA_probe.v）。    *)
 (*      升级路径：照 C10 mix_ring_sc 的 Z 面配对展开引理口径，或以       *)
@@ -472,11 +472,11 @@ Print Assumptions mixa_qpow_decr.
 Print Assumptions mixa_qnonneg.
 Print Assumptions mixa_qmult_pos.
 (* ============================================================ *)
-(* Part 5：PIT 续作段（tathP 接管 tathA 遗留回填，2026-09-18）          *)
+(* Part 5：PIT 续作段（tathP 承担 tathA 遗留回填，2026-09-18）          *)
 (*   配方=A 报告§三（①qbern→②win/test_at_win→③k_log_of/sel_accounts   *)
 (*   →④k0/b0_bridge+主件族）。Q-ring 墙解法=Z 面展开（destruct 配对 +   *)
 (*   cbn 白名单 + Z.pos 积分裂 + ring），检验 _tathP_sbx 预验证绿。      *)
-(*   igr_qpow 语境的 Qeq 恒等式不走 Z 面（投影卡死=假原子），改 stdlib  *)
+(*   igr_qpow 语境的 Qeq 恒等式不走 Z 面（投影停滞=假原子），改 stdlib  *)
 (*   Qeq 引理链（Qmult_comp/assoc）；Qle 代数尾目标 cbn 后 nia。         *)
 (* ============================================================ *)
 

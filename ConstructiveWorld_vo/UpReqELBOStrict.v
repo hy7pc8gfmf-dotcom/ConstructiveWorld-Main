@@ -27,7 +27,7 @@
 (* 目的： 定理 4.8 ELBO 紧性的严格逆否肢补齐。 *)
 (* 主件： t33_elbo_strict_of_fe_strict / t33_elbo_strict_of_kl_pos 严格肢族与 bool 编码形。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP、UpReqELBOEps、G07_KLWall、UpReqFEPCanon。 *)
-(* 备注： 逆否肢经 KL 墙件承接；bool 形与 Or 形双编码并存。 *)
+(* 备注： 逆否肢经 KL 墙件给出；bool 形与 Or 形双编码并存。 *)
 (* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
 (*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
