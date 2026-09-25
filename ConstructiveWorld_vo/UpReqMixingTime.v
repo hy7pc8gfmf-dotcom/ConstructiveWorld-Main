@@ -1,19 +1,12 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   mix_rpow_one（原 L234，2 句玩具证）                                  *)
+(* UpReqMixingTime.v —— 显式 k 选取的混合时间定理                    *)
+(* 使命：转移核混合时间的显式构造：给定谱隙参数 κ（0<κ<1）、初值      *)
+(*   偏差 TV₀ 与精度预算 budget，构造显式自然数步数 k 使              *)
+(*   TV(K^k μ, K^k ν) < budget（sigT 见证，Defined 可计算）。          *)
+(*   本件亦为 GibbsAttractor 诚实边界「率件齐备只缺 ln/ceil」缺口的   *)
+(*   构造性闭合：ln/ceil 的 Nat-枚举+Archimedean 显式替身。            *)
 (* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqMixingTime.v —— 席 C10：显式 k 选取的混合时间定理            *)
-(*（GibbsAttractor.v:20-34 诚实边界「率件齐备只缺 ln/ceil」缺口的     *)
-(*  构造性闭合：ln/ceil 的 Nat-枚举+Archimedean 显式替身）2026-09-17  *)
-(* ============================================================ *)
-(* 依赖坐标（只 Require 三件授权绿盘件 + 基座伞壳）：                  *)
+(* 依赖（只 Require 三件授权绿盘件 + 基座伞壳）：                      *)
 (*   基座 CW_ConstructiveWorld_219（S01-S15 Export 伞壳）：            *)
 (*     real_arch（S07:2772 Real 层 Archimedean，显式 nat 见证）、        *)
 (*     real_mult_div（S08:79）、real_distrib（S02:2384）、               *)
@@ -21,7 +14,7 @@
 (*     real_le_mult_compat（S07:6800）、real_inv_pos 族（S02）、          *)
 (*     Nat2Z.inj_succ（ZArith，const-succ 桥的 Z 腿）。                   *)
 (*   A 件 UpTVDoeblin：tv_rpow/tv_titer/tv_doeblin/tv_step、             *)
-(*     tv_doeblin_iter（:1573 TV(Kⁿμ,Kⁿν) ≤ (1−δ)ⁿ·TV₀ 旗舰迭代件）、      *)
+(*     tv_doeblin_iter（:1573 TV(Kⁿμ,Kⁿν) ≤ (1−δ)ⁿ·TV₀ 主迭代引理）、      *)
 (*     tv_omd/_pos_of_lt/_nonneg/_eq_zero（率 κ := 1−δ 证书族）。         *)
 (*   R2 件 UpReqIterGeomRate：igr_lt_plus_r / igr_le_plus_r             *)
 (*     （严格正 d 的 x ▹ x+d 序平移，:185/:197）。                        *)
@@ -30,33 +23,32 @@
 (*      mix_scale_eq_const / mix_scale_mult_distrib ——                   *)
 (*      nat-尺度（迭代和 k·w）与 const-尺度（(k#1)·w）双向桥，            *)
 (*      消解 real_arch 输出 real_const (Z.of_nat k #1) 与 Nat 层          *)
-(*      枚举尺度的会合（Nat2Z.inj_succ + Q 环账）。                       *)
+(*      枚举尺度的会合（Nat2Z.inj_succ + Q 环运算）。                     *)
 (*   ② mix_bernoulli_upper —— Bernoulli 上形式                           *)
-(*      (1−w)^k·(1+k·w) ≤ 1（0<w<1；归纳；纯 Real 环账，零 exp/log）。    *)
+(*      (1−w)^k·(1+k·w) ≤ 1（0<w<1；归纳；纯 Real 环运算，零 exp/log）。  *)
 (*   ③ mix_le_inv —— A·B ≤ 1 ∧ 0<B ⟹ A ≤ 1/B（逆元腿）。                *)
-(*   ④ mix_pow_budget —— k 选取旗舰（G1）：0<κ<1 ∧ 0<TV₀ ∧ 0<budget      *)
+(*   ④ mix_pow_budget —— k 选取主定理：0<κ<1 ∧ 0<TV₀ ∧ 0<budget          *)
 (*      ⟹ sigT (fun k:nat => κ^k·TV₀ < budget)；k := real_arch 在预算    *)
 (*      实数 TV₀·(1/(w·budget))（w:=1−κ）上解出的显式 nat，Defined        *)
-(*      可提取。此即「显式 ln/ceil 的构造性替身」新件。侦察所记           *)
-(*      「库内 0 同形」修正：CW220_Extensions.v:1025 r_arch_pow_real      *)
-(*      为 abstract r_pow 层同形先例（本件未 Require CW220，自建于        *)
-(*      tv_rpow 层，含 ⑤⑥ 的 TV/混合组装，见交付报告修正节）。            *)
+(*      可提取。此即「显式 ln/ceil 的构造性替身」。注：CW220_Extensions   *)
+(*      .v:1025 r_arch_pow_real 为 abstract r_pow 层同形先例（本件未      *)
+(*      Require CW220，自建于 tv_rpow 层，含 ⑤⑥ 的 TV/混合组装）。        *)
 (*   ⑤ mix_k_select / mix_k_select_le —— TV₀ 非负（Or 逐支）放宽形：      *)
-(*      TV₀==0 支 k:=0 一发闭合；lt 支归 ④；le 形经 Or 左支。              *)
-(*   ⑥ mix_time_explicit —— 混合时间定理（G2 旗舰）：Section MixingTV     *)
-(*      （TVRealWorld 消费面 9+1 变量）内：tv_doeblin_iter × ④ 组装，     *)
+(*      TV₀==0 支 k:=0 一步闭合；lt 支归 ④；le 形经 Or 左支。              *)
+(*   ⑥ mix_time_explicit —— 混合时间主定理：Section MixingTV              *)
+(*      （TVRealWorld 环境共 9+1 变量）内：tv_doeblin_iter × ④ 组装，     *)
 (*      sigT k ∧ TV(K^k μ, K^k ν) < budget（严格 real_lt 形）；           *)
-(*      δ=1 支与 TV₀==0 支 k:=1 一发闭合；+ le 形推论。                    *)
-(*   ⑦ mix_k_calc —— Defined k-计算器（G3 见证提取口）。                  *)
+(*      δ=1 支与 TV₀==0 支 k:=1 一步闭合；+ le 形推论。                    *)
+(*   ⑦ mix_k_calc —— Defined k-计算器（见证提取口）。                     *)
 (* 公理面：本件零新增公理；全部前提为 Set 层显式证书（real_lt /           *)
 (*   real_le Or 编码 / sigT），Print Assumptions 预期全 Closed。          *)
-(* 红线自审：语句面全 Set 层（量词 nat/list Real/函数空间；比较全         *)
+(* 构造性注记：语句面全 Set 层（量词 nat/list Real/函数空间；比较全       *)
 (*   real_lt/real_le/real_eq；sigT 第二分量 real_lt : Set）；零 Prop      *)
 (*   泄露于签名；零经典逻辑（real_arch/real_lt 均携带构造性见证；         *)
-(*   证明内部 Prop 分支仅证明性 case-bash，产物全 Set）；k 选取全程       *)
+(*   证明内部 Prop 分支仅证明性分情形消去，产物全 Set）；k 选取全程       *)
 (*   Defined 可计算（Nat-枚举 = real_arch 显式 nat，非存在性省略）。      *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——WALL-2 坑）：               *)
-(*   cpu_guard -Command "cmd /c _tc10_run.cmd"（-Q . "" -native-compiler no）  *)
+(* 编译配方（Rocq 9.1 直调，COQLIB/ROCQLIB 环境变量全字面设置）：         *)
+(*   cpu_guard -Command "cmd /c 编译批"（-Q . "" -native-compiler no）     *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -69,7 +61,7 @@ Require Import UpReqIterGeomRate.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part 0：环账 tactic（承 UpTVDoeblin tvd_rring 口径）与 nat-尺度        *)
+(* Part 0：环运算 tactic（沿用 UpTVDoeblin tvd_rring 口径）与 nat-尺度    *)
 (* ============================================================ *)
 
 
@@ -135,7 +127,7 @@ Qed.
 Lemma mix_const_zero : real_eq (real_const (Z.of_nat 0 # 1)) real_zero.
 Proof. mix_rring. Qed.
 
-(* const-succ：(Datatypes.S k)#1 == (k#1) + 1（Nat2Z.inj_succ + Q 环账） *)
+(* const-succ：(Datatypes.S k)#1 == (k#1) + 1（Nat2Z.inj_succ + Q 环运算） *)
 Lemma mix_const_succ : forall k : nat,
   real_eq (real_const (Z.of_nat (Datatypes.S k) # 1))
           (real_plus (real_const (Z.of_nat k # 1)) real_one).
@@ -370,7 +362,7 @@ Proof.
                (real_plus real_one (mix_scale 0 w)) real_one real_one
                (real_eq_refl real_one) (real_plus_zero real_one)).
     + exact (real_mult_one real_one).
-  - (* 归纳步：环账 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w；
+  - (* 归纳步：环运算化简 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w；
        子 claim (1−w)(1+(k+1)w) ≤ 1+kw；再乘 Pk 接 IH *)
     assert (Hbpos : real_lt real_zero (real_minus_r real_one w))
       by exact (tv_omd_pos_of_lt w Hwlt).
@@ -488,7 +480,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5：k 选取旗舰（G1）——mix_pow_budget                               *)
+(* Part 5：k 选取主定理 —— mix_pow_budget                                 *)
 (* ============================================================ *)
 
 Theorem mix_pow_budget : forall (kappa TV0 budget : Real),
@@ -657,17 +649,17 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 6.5：R1 见证/证明分离（§10.2 第 11 项可执行化路线，本轮已实施）    *)
-(*   症状根因：mix_pow_budget / mix_k_select 以 Defined 收束 ⟹ 提取后       *)
+(* Part 6.5：见证与证明分离（提取效率设计）                                *)
+(*   动因：mix_pow_budget / mix_k_select 以 Defined 收束 ⟹ 提取后           *)
 (*     运行时强制计算 mix_bernoulli_upper 归纳证书链（Set 层 real_le，       *)
 (*     长度 = k，且绑定 tv_rpow 的 Real 值构造 → cauchy 模证强制）⟹ 膨胀/超时 *)
-(*   R1（改动最小、直击症状）：见证（纯计算 k）与证明（不透明 Qed）分离。      *)
+(*   方案：见证（纯计算 k）与证明（不透明 Qed）分离。                        *)
 (*   · mix_k_compute : 透明 Definition，仅走 real_arch 枚举（廉价 Q 层），    *)
 (*     不构造 tv_rpow / mix_bernoulli_upper ⟹ 提取程序运行时只付 real_arch    *)
 (*     ＋基础 Real 运算（real_minus_r/real_mult/real_inv_pos），跳过膨胀链。  *)
 (*   · mix_k_spec : Qed 不透明，承载 κ^k·TV₀ < budget 的全证书（经            *)
 (*     mix_pow_budget 复用，含 mix_bernoulli_upper）；运行时不强制求值。      *)
-(*   · mix_k_select_r1 : existT 打包（witness=mix_k_compute, proof=mix_k_spec）；*)
+(*   · mix_k_select_r1 : existT 封装（witness=mix_k_compute, proof=mix_k_spec）；*)
 (*     projT1 归约固定引理 mix_k_select_r1_projT1（Qed 第二分量不影响 projT1   *)
 (*     归约——标准事实，机检固定）。                                          *)
 (*   零新增公理；mix_k_compute 全树透明、可提取；mix_k_spec 不透明。         *)
@@ -732,17 +724,16 @@ Print Assumptions mix_k_spec.
 Print Assumptions mix_k_select_r1.
 
 (* ============================================================ *)
-(* Part 7-8（G2 mix_time_explicit / G3 mix_k_calc）：起草完成、编译未达    *)
-(*   四关——诚实挂账（未静默降档，承 GEOM-B R2.2 先例）。可判定墙实体：    *)
-(*   G2 的 TV₀ 符号分叉需「real_le real_zero TV0」的居住者，而该 Or-Set    *)
-(*   不可由基座判定构造（构造性逻辑），须随接口显式携带或改 B 形。         *)
-(*   完整起草稿（Section MixingTV 9+1 变量面 + tv_doeblin_iter × ④ 组装    *)
-(*   + δ=1/TV₀=0 支 k:=1 一发闭合 + mix_k_calc Defined 计算器）全文保存于  *)
-(*   attn/_tc10_bak/UpReqMixingTime_v1_G2draft.v，交付报告§挂账详述。      *)
+(* Part 7-8（mix_time_explicit / mix_k_calc）：遗留项说明。可判定性实体：  *)
+(*   mix_time_explicit 的 TV₀ 符号分叉需「real_le real_zero TV0」的居住者， *)
+(*   而该 Or-Set 不可由基座判定构造（构造性逻辑），须随接口显式携带或改    *)
+(*   B 形：完整起草（Section MixingTV 9+1 变量面 + tv_doeblin_iter × ④     *)
+(*   组装 + δ=1/TV₀=0 支 k:=1 一步闭合 + mix_k_calc Defined 计算器）待    *)
+(*   接口扩展后并入。                                                      *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* G4 审计口（绿核件，全 Closed 预期）                                    *)
+(* 审计口（Print Assumptions 追印面，全 Closed 预期）                     *)
 (* ============================================================ *)
 
 Print Assumptions mix_pow_budget.
