@@ -30,7 +30,7 @@
 (*     p7a_omd_lt_one：1−δ* < 1（fa53_lt_plus_compat_le_lt_dec   *)
 (*       对偶件引用）。                                          *)
 (*                                                               *)
-(* 红线自审：语句面全 Set 层（Id/Or/Not 用 S01:63-68 Set 层      *)
+(* 构造性注记：语句面全 Set 层（Id/Or/Not 用 S01:63-68 Set 层      *)
 (*   定义，零 Prop 泄露）；非平凡真证（消去链/                   *)
 (*   三分分解/归谬/平移四段字段链）；原树零改（本件新建，        *)
 (*   只 Require 引用 S01_BaseRing 与 fa53_compat_abs 零改）。 *)

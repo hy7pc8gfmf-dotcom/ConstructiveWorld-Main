@@ -20,6 +20,10 @@
 (* 红线自检：无承认件/无经典逻辑/无任何外挂假设；j 为 nat 显式项        *)
 (*   （stdlib Qfloor + Z.to_nat，Q 层全可判定零墙）；语句面与 Hqarch    *)
 (*   契约原形逐字同构（sigT 见证形，projT1 可提取）。                   *)
+   依赖：UpReqMixLogE（mixe_qpow/mixe_qofnat/mixe_bern_sharp/mixe_qfloor_lt/mixe_qofnat_nonneg，Require 引入）。
+   构造性注记：全构造（j 为 nat 显式可计算项，无反证存在性）；零承认件、零经典逻辑、零外加假设。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
    ============================================================*)
 
 From Stdlib Require Import QArith.QArith_base.

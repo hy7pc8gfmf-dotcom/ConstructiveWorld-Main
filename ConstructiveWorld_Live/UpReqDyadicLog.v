@@ -20,7 +20,7 @@
 (*   UpRealLeB / UpReqEnvelopeDual / UpReqConstEnvelope              *)
 (*   （均 .vo/.vok 双证在库）。                                       *)
 (*                                                              *)
-(* 备注：前缀 dyd_ 避免与库内既有名冲突。  *)
+(* 构造性注记：前缀 dyd_ 避免与库内既有名冲突。 *)
 (*   公理面：本件零新公理；文末 Print Assumptions 留痕核验 Closed；    *)
 (* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
    coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)

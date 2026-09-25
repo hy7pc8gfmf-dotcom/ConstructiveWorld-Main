@@ -155,7 +155,7 @@ Proof.
     + exact Hdep.
 Qed.
 
-(* 任务书目标形（两联合）：存在树，正确识别 K+1 个单调阈值位置，          *)
+(* 目标形（两联合）：存在树，正确识别 K+1 个单调阈值位置，                *)
 (* 且深度 <= S (Nat.log2 (S K))。 *)
 Theorem btight_tight : forall K : nat,
   sigT (fun T : bylb_dtree =>
@@ -168,7 +168,7 @@ Proof.
   - exact Hd.
 Qed.
 
-(* 按任务书目标形命名的同体出口（基座件无此名，零冲突）。 *)
+(* 按目标形命名的同体出口（基座件无此名，零冲突）。 *)
 Definition bylb_tight : forall K : nat,
   sigT (fun T : bylb_dtree =>
     (forall t, t <= K -> bylb_run T (bylb_ft t) = bylb_dleaf t) /\

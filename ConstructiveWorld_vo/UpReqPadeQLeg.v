@@ -2,7 +2,7 @@
    UpReqPadeQLeg —— 使命行：Q 层序定律肢：有理层的序与自然数比值单调。
    主件：pql_pos_den_pos 与 pql_qlt0_eq_r / pql_nat_ratio_mono 有理序定律族。
    依赖：无显式 Require 面（自足件）。
-   备注：零 Require Psatz（Lia 即足）、零外加假设语句（公理面声明）。
+   构造性注记：零 Require Psatz（Lia 即足）、零外加假设语句（公理面声明）。
    编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
    coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
    ============================================================ *)
@@ -26,7 +26,7 @@
 (* 证法：destruct 全构造子 + 端点 cbn [Qnum Qden] 后，乘法单调/非负     *)
 (*   显式装配（Z.mul_le_mono_nonneg_r / Z.mul_lt_mono_pos_r /          *)
 (*   Z.mul_nonneg_nonneg）+ lia 线性完成——零非线性反射依赖，            *)
-(*   即断根 Psatz/micromega 环境闭包。                                *)
+(*   即不引入 Psatz/micromega 环境闭包。                                *)
 (* 坑记：Q_scope 开启下 %Z 内的 == 仍解析为 Qeq（Z 面必须写 =）；       *)
 (*   9.0 本环境无 Z.mul_le_mono_l/r 与 Z.mul_le_mono 四参通形，        *)
 (*   可用形是非负前提三参 Z.mul_le_mono_nonneg_l/r 与 iff 形           *)

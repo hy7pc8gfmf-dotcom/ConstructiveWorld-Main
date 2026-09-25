@@ -583,7 +583,7 @@ Qed.
 Check uabS4c_abs_sum_le_B_slot.
 
 (* C.1 两点和形经抽象接口重导：与供体 A.3（uabS4_abs_sum_le_B_pair）
-   同语句——接口通路独立复验（零增量对照，两读并列）。
+   同语句——接口通路独立复核（零增量对照，两读并列）。
    附带语义点：A.7 的半分构造在本实例单调字段处被真实使用。 *)
 Theorem uabS4c_slot_pair_B : forall f : bool -> Real,
   real_le_b (real_abs (real_plus (f true) (f false)))

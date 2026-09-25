@@ -29,6 +29,11 @@
 (*   Set 层纪律：定义面（smin/stm_arg/stm_head_witness/stm_hitcount/         *)
 (*   stm_g10_dmin）全 Set/Type 值，零 Prop 数据流入计算位；不可达结论的       *)
 (*   Prop 位置不回灌 Set。                                                   *)
+   依赖：CW_ConstructiveWorld_219；Stdlib ZArith、Lia、List。
+   构造性注记：零外加公理、零承认出口、零占位收尾、零经典逻辑；不可达分支经
+   空类型消去（False 消除）与 sigT 证人组合完成；定义面全 Set/Type 值。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
    =====================================================================*)
 
 From Stdlib Require Import ZArith.
