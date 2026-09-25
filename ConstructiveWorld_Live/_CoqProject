@@ -647,3 +647,15 @@ UpReqSamplingFeed.v
 UpReqCf2TvGenSupply.v
 UpReqCf2TvGenWorld.v
 UpReqCf2TvW3.v
+UpAblBYDecisionTree.v
+UpAblBYLowerBound.v
+UpAblBYUpperTight.v
+UpAblMixACount.v
+UpAblMixBSharp.v
+UpAblD1S12_UpReqAttnUniformLimit.v
+UpAblD1S12_UpReqAttnMassSplit.v
+UpAblD1S12_UpReqAttnQ18Tail.v
+UpAblD1S13_UpReqAlignClose.v
+UpAblD1S13_AlignIdUnclosed.v
+UpAblMetaLow.v
+UpReqPaperAnchor.v

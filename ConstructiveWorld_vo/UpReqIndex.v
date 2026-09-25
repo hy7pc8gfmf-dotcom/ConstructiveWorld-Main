@@ -3639,3 +3639,66 @@ Definition ng_UpReqCf2TvGenWorld : NewGreenFace :=
 Definition ng_UpReqCf2TvW3 : NewGreenFace :=
   MkNewGreenFace "UpReqCf2TvW3.v" 161 0 20260925
   "P7FIN2 piece-4 Fin3 probe: 11 definition-form statements (zero Qed by design, PA 5/5 Closed, non-trivial per redline-3 registered); erratum-2 wC-branch value range corrected (silent-false-statement counterexample archived); extraction Obj.magic=0; born-in-place four-gate green 20260925; triple md5 6b186fbf" "L161:m6b186f".
+(* ================= v4.30 增册（R132 Live_X 收编波·12 件 born-in-place 尾插：BY 项链 5／D1S12 供给包 3／D1S13 供给包 2／MetaLow 机器反驳形／PaperAnchor 锚机制，20260925；号额实勘：现值 v4.29 → 本席顺延 v4.30（全文件 grep 无 v4.30 占用）；承前 ng_ 共 456 条，本批 12 条后共 468 条） ================= *)
+(* 插位：两树 UpReqIndex.v 文件尾追加本块（v4.29 块之后；尾插禁重排、只增不改）。 *)
+(* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（v4.24 扩列口径）；本块行数/md5=落位树实测（20260925，R132-EXEC 执行席 born-in-place 四关实测回填；order 锚=md5 前 6 照 R126 尾块统一口径；源=Live_X 逐字拷贝；两红件 UpAblD1S11_UpReqCauchy（头注注释失衡）/UpReqBregmanBase（L119 证明体伤）已单件停刀剔除留账移交源席）。 *)
+
+(* ng_UpAblBYDecisionTree —— UpAblBYDecisionTree.v：DS 战役 BY 项链基建件（218 行 8 Qed；dt_ 前缀决策树叶位正值/叶数守恒及树清点八定理；纯 stdlib Require Arith/PeanoNat/List/Lia 零项目依赖；R132 收编波 born-in-place 四关绿 20260925：G2 EXIT=0 PA Closed、vo 魔数 436f712100015ff4、G3 提取 own ml Obj.magic=0 闭包 0、G4 coqchk Axioms none；与 J7 七件联合核定稿版 md5 同代 594c6e）（_tr132exec_） *)
+Definition ng_UpAblBYDecisionTree : NewGreenFace :=
+  MkNewGreenFace "UpAblBYDecisionTree.v" 218 8 20260925
+  "BY necklace infrastructure: dt_ leaf positivity/equality and tree inventory, eight theorems, pure stdlib; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 594c6e (J7-identical)" "L218:m594c6e".
+
+(* ng_UpAblBYLowerBound —— UpAblBYLowerBound.v：BY 下界件（277 行 12 Qed；bylb_ 前缀阈值/燃料链下界；纯 stdlib Require List/Bool/Arith/Lia；四关绿同上口径 20260925；md5 3136b2=J7 同代）（_tr132exec_） *)
+Definition ng_UpAblBYLowerBound : NewGreenFace :=
+  MkNewGreenFace "UpAblBYLowerBound.v" 277 12 20260925
+  "BY lower bound: bylb_ threshold/fuel chain, twelve theorems, pure stdlib; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 3136b2 (J7-identical)" "L277:m3136b2".
+
+(* ng_UpAblBYUpperTight —— UpAblBYUpperTight.v：BY 上紧化件（189 行 5 Qed；btight_ 前缀半燃料紧界；Require Arith/Lia＋UpAblBYLowerBound 包内依赖＝本项链内拓扑序 LB→UT；四关绿同上口径 20260925；md5 4f4990=J7 同代）（_tr132exec_） *)
+Definition ng_UpAblBYUpperTight : NewGreenFace :=
+  MkNewGreenFace "UpAblBYUpperTight.v" 189 5 20260925
+  "BY upper-tightening: btight_ half-fuel tight bound, five theorems, requires UpAblBYLowerBound (intra-set topo order); four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 4f4990 (J7-identical)" "L189:m4f4990".
+
+(* ng_UpAblMixACount —— UpAblMixACount.v：混合选择器计数件（144 行 6 Qed；macnt_ 前缀二分选择计数；Require PeanoNat/Lia/QArith＋UpReqMixLogA（在册）；四关绿同上口径 20260925；md5 53bf04=J7 同代）（_tr132exec_） *)
+Definition ng_UpAblMixACount : NewGreenFace :=
+  MkNewGreenFace "UpAblMixACount.v" 144 6 20260925
+  "Mix selector counting: macnt_ binary-search choice counting over UpReqMixLogA, six theorems; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 53bf04 (J7-identical)" "L144:m53bf04".
+
+(* ng_UpAblMixBSharp —— UpAblMixBSharp.v：混合计数界紧化件（222 行 4 Qed；msharp_ 前缀计数界 5→4 紧化；Require PeanoNat/Lia＋UpReqMixLogB（在册）；四关绿同上口径 20260925；md5 9300a0=J7 同代）（_tr132exec_） *)
+Definition ng_UpAblMixBSharp : NewGreenFace :=
+  MkNewGreenFace "UpAblMixBSharp.v" 222 4 20260925
+  "Mix counting bound sharpening 5->4: msharp_ over UpReqMixLogB, four theorems; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 9300a0 (J7-identical)" "L222:m9300a0".
+
+(* ng_UpAblD1S12_UpReqAttnUniformLimit —— UpAblD1S12_UpReqAttnUniformLimit.v：FA-D1S12 供给包件①（90 行 4 Qed；母本 UpReqAttnUniformLimit Section AlmUniform 7 数据槽的 Token:=bool 具体有限集实例供给（uabd1s12_ul_ 前缀）；独立伴生件零 Require 母本（P3S1 工艺）；母本现势槽对账 PASS（R132-SCREEN 抽检＋EXEC 全槽实扫）；四关绿 20260925：G3 own magic=0 闭包 0；md5 042868）（_tr132exec_） *)
+Definition ng_UpAblD1S12_UpReqAttnUniformLimit : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S12_UpReqAttnUniformLimit.v" 90 4 20260925
+  "FA-D1S12 supply pack 1: AlmUniform 7 data slots as bool finite-set instances (uabd1s12_ul_), zero Require on mother P3S1, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 042868" "L90:m042868".
+
+(* ng_UpAblD1S12_UpReqAttnMassSplit —— UpAblD1S12_UpReqAttnMassSplit.v：FA-D1S12 供给包件②（86 行 4 Qed；AmsMassSplit 8 数据槽 bool 实例供给（uabd1s12_ams_）；独立伴生件零 Require 母本；槽对账 PASS；四关绿 20260925：G3 own magic=0 闭包 0；md5 b9a01d）（_tr132exec_） *)
+Definition ng_UpAblD1S12_UpReqAttnMassSplit : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S12_UpReqAttnMassSplit.v" 86 4 20260925
+  "FA-D1S12 supply pack 2: AmsMassSplit 8 data slots bool instances (uabd1s12_ams_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b9a01d" "L86:mb9a01d".
+
+(* ng_UpAblD1S12_UpReqAttnQ18Tail —— UpAblD1S12_UpReqAttnQ18Tail.v：FA-D1S12 供给包件③（86 行 4 Qed；AqtTail 8 数据槽 bool 实例供给（uabd1s12_aqt_）；独立伴生件零 Require 母本；槽对账 PASS；四关绿 20260925：G3 own magic=0 闭包 0；md5 03a40f）（_tr132exec_） *)
+Definition ng_UpAblD1S12_UpReqAttnQ18Tail : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S12_UpReqAttnQ18Tail.v" 86 4 20260925
+  "FA-D1S12 supply pack 3: AqtTail 8 data slots bool instances (uabd1s12_aqt_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 03a40f" "L86:m03a40f".
+
+(* ng_UpAblD1S13_UpReqAlignClose —— UpAblD1S13_UpReqAlignClose.v：FA-D1S13 供给包件①（154 行 2 Qed；母本 UpReqAlignClose UacClose 节余量 16 槽供给（uabd1s13_ 前缀）；独立伴生件零 Require 母本；槽对账 PASS；四关绿 20260925：G3 own magic=0 闭包 71 全落 S07 既档伪影轨；md5 dd1670）（_tr132exec_） *)
+Definition ng_UpAblD1S13_UpReqAlignClose : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S13_UpReqAlignClose.v" 154 2 20260925
+  "FA-D1S13 supply pack 1: UacClose residual 16 slots (uabd1s13_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 on documented S07 artifact trail), coqchk Axioms none; md5 dd1670" "L154:mdd1670".
+
+(* ng_UpAblD1S13_AlignIdUnclosed —— UpAblD1S13_AlignIdUnclosed.v：FA-D1S13 供给包件②（117 行 2 Qed；母本 AlignIdUnclosed 节 AiuBackwardKL 余量 14 槽供给（R/RIS/sumf/sum_ext/sum_add/sum_linear/reward/beta/beta_pos/pi_ref/pi_ref_pos/eta/ZAL_pos）；S2/S3 已收槽排除登记在头注；独立伴生件零 Require 母本；槽对账 PASS；四关绿 20260925：G3 own magic=0 闭包 71 同款既档伪影；md5 45d9ae）（_tr132exec_） *)
+Definition ng_UpAblD1S13_AlignIdUnclosed : NewGreenFace :=
+  MkNewGreenFace "UpAblD1S13_AlignIdUnclosed.v" 117 2 20260925
+  "FA-D1S13 supply pack 2: AiuBackwardKL residual 14 slots (S2/S3-claimed slots excluded per header ledger), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 45d9ae" "L117:m45d9ae".
+
+(* ng_UpAblMetaLow —— UpAblMetaLow.v：AID 席机器反驳形下界件（396 行 0 Qed＝构造项定义面交付·非降档：21 语句 mtl_ 前缀（核行全同⟹TV(1)=0 一步混同，cf2 下界反驳），Set 层 Not/Empty_set 构造性否定形（S12 件族先例同款）；Require CW219/UpReqAlgebra/UpReqDist/UpReqSampling/UpReqConcFin2 全在册；0921 窗十件名册唯一漏收件（R132-SCREEN 差集考古定谳）；四关绿 20260925：G3 own magic=0 闭包 71 既档伪影；md5 3fb1d4）（_tr132exec_） *)
+Definition ng_UpAblMetaLow : NewGreenFace :=
+  MkNewGreenFace "UpAblMetaLow.v" 396 0 20260925
+  "AID machine-refutation lower bound: identical core rows imply TV(1)=0, 21 mtl_ statements Definition-form zero-Qed delivery (non-trivial per redline-3, Set-layer constructive negation S12-family precedent), sole survivor of 0921 ten-piece window per差集考古; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 3fb1d4" "L396:m3fb1d4".
+
+(* ng_UpReqPaperAnchor —— UpReqPaperAnchor.v：R114 ANCHOR-A 论文引用锚机制件（244 行 14 Qed；pan_ 前缀具名锚记录 pan_anchor_list＋pan_find_* 检索函数＋三重不变式（sym_ck/file_ck/md5_len/day_uniform）——论文引用行号漂移痛点的在册机制化解法；纯 Ascii/String 零项目依赖；R132-SCREEN git 考古=从未落树非被移除；四关绿 20260925：G3 own magic=0 闭包 0；md5 b49e12）（_tr132exec_） *)
+Definition ng_UpReqPaperAnchor : NewGreenFace :=
+  MkNewGreenFace "UpReqPaperAnchor.v" 244 14 20260925
+  "R114 ANCHOR-A paper-reference anchor mechanism: pan_anchor_list named anchors + pan_find_* retrievers + triple invariants (sym/file/md5_len/day), pure Ascii/String zero project deps, never-in-tree verified by git archaeology; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b49e12" "L244:mb49e12".
