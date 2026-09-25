@@ -35,6 +35,37 @@ jobs:
             --tree ConstructiveWorld_Live --tree ConstructiveWorld_vo \
             --json gate1_ci.json --text
 
+      # 闸④ 注释哨兵（comment hygiene hard-gate，R135 落树）：gate1 后顺位——
+      # 注释面先于公理面红闸（GATE4-EXT 草案口径）。gate4_comment_guard.py v2.0：
+      # 头注五字段＋基座 65 禁词＋扩展五族共 130 扫描单元＋三域全量（文件头注/
+      # 证明体内/子结构头注）＋判定原则启发式（--no-principle 可作降噪开关，CI 默认开）。
+      # exit 0=PASS 绿；1=硬违规红屏（五字段缺/词面硬命中/承认式/席次战役/日期戳——
+      # bash -e 下同 gate1 教义，非零红且后续步不启，禁红后继续）；2=黄级（仅原则
+      # 启发式复核项/语境双义词如「载体」）——artifact 收编不红屏，人工复核清单
+      # 随 gate4_report.json 出。双树口径与 gate1 同款；升级方向：CW219_split
+      # 消融波断根后回补第三 --tree。
+      - name: gate4 comment guard (pre-build, exit1=red exit2=yellow artifact-only)
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        run: |
+          set +e
+          python scripts/gates/gate4_comment_guard.py \
+            --tree ConstructiveWorld_Live --tree ConstructiveWorld_vo \
+            --json gate4_report.json
+          rc=$?
+          set -e
+          if [ "$rc" -eq 1 ]; then
+            echo "GATE4-RED: comment-guard hard violations — see gate4_report.json artifact"
+            exit 1
+          elif [ "$rc" -eq 2 ]; then
+            echo "GATE4-YELLOW: review-only findings — artifact-collected, not red"
+            exit 0
+          elif [ "$rc" -eq 0 ]; then
+            echo "GATE4-GREEN: all comment checks passed"
+          else
+            echo "GATE4-UNEXPECTED-EXIT rc=$rc — fail-loud, treat as red"
+            exit 1
+          fi
+
       # 闸③ 跨树 Require 毒面对称检查（E957 暗雷族／世系倒灌）。秒级，常开。
       # SINGLE-TREE-POISON exit 1=红；REQUIRE-DRIFT 仅登记 exit 0（卫生信息）。
       - name: gate3 cross-tree require-face diff
@@ -120,6 +151,7 @@ jobs:
             gate1_ci.json
             gate3_ci.json
             gate2_verdict.json
+            gate4_report.json
 
       - name: Merged single-file build (retired with CW220 megafile; kept disabled for history)
         if: false
