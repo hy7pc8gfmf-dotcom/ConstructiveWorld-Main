@@ -44,6 +44,15 @@ jobs:
       # 启发式复核项/语境双义词如「载体」）——artifact 收编不红屏，人工复核清单
       # 随 gate4_report.json 出。双树口径与 gate1 同款；升级方向：CW219_split
       # 消融波断根后回补第三 --tree。
+      # 【CI-ARTIFACT-FIX 20260926 事实登记】report 先写后判：脚本在 exit 码裁决前
+      # 无条件落 gate4_report.json（v2.0/v2.1 同序，红/黄/绿三态均留证）。实证：
+      # run 36156662359(红) 与 36152669096 a1(红)/a2(取消) 三包内均含
+      # gate4_report.json+gate1_ci.json——红态 artifact 面可用，gate4 权威数以
+      # coqchk-logs 包内 report 为准，run log 扫描行降为旁证。
+      # 【--tree-recursive 裁决 20260926】默认关（守 1227 口径连续性，R135 1281→
+      # R134 1245→LATEST 1227 对照链不破）；v2.1 脚本随下一波认证合流入库后，
+      # 候探针件族归册/清偿 commit 落树再原子开启（vo 树 +22 盲区面如实入红账，
+      # 红只增不减，禁降档）。
       - name: gate4 comment guard (pre-build, exit1=red exit2=yellow artifact-only)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
@@ -69,6 +78,7 @@ jobs:
       # 闸③ 跨树 Require 毒面对称检查（E957 暗雷族／世系倒灌）。秒级，常开。
       # SINGLE-TREE-POISON exit 1=红；REQUIRE-DRIFT 仅登记 exit 0（卫生信息）。
       - name: gate3 cross-tree require-face diff
+        if: always()  # CI-ARTIFACT-FIX：gate4 红屏不阻断 gate3 出证（gate3_ci.json 随 coqchk-logs 上传，补红态证据链缺口）
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
           python scripts/gates/gate3_cross_tree_diff.py \
@@ -132,10 +142,17 @@ jobs:
       # 前置硬要求：coqchk_all.sh 已带 -o（无 Axioms 段=exit 2 不可判，一律红）。
       # exit 0 CLEAN／1 DIRTY／2 NO_AXIOMS_SECTION／3 LOG_INCOMPLETE——1/2/3 一律红（fail-loud）。
       # 代际钉：banner 必须 Chicken 9.1.0（COQLIB 钉代防假红，SW2；8.3 落 9.0 陷阱免疫实证形）。
+      # log 缺失≠代际失守：gate4/build 夭折时 coqchk 被 skipped、无日志可查——
+      # 分支报 GATE-BANNER-ABSENT 指向上游红因（E-STAGING-R135GATE-1 连带红不指控下游域），
+      # 仍 exit 1 保持红（禁降档），仅诊断文案分流。
       - name: gate2 axioms sentinel (block-state-machine, fail-loud)
         if: always()
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
+          if [ ! -f ConstructiveWorld_vo/_chk_all.log ]; then
+            echo "GATE-BANNER-ABSENT: _chk_all.log 不在盘——coqchk 未产出日志（上游 gate4/build 夭折连带，红因看上游步），非 COQLIB 代际失守"
+            exit 1
+          fi
           grep -q "Welcome to Chicken 9.1.0" ConstructiveWorld_vo/_chk_all.log \
             || { echo "GATE-BANNER-FAIL: coqchk 代际非 9.1（COQLIB 钉代失守，log 不可作公理判据）"; exit 1; }
           python scripts/gates/gate2_axioms_parser.py \
@@ -146,6 +163,8 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: coqchk-logs
+          # gate4_report.json 随本件搭车出证，无独立 gate4 artifact 名——
+          # 按 artifact 名清点会误判「gate4 件缺席」（CI-ARTIFACT-FIX 20260926 三包实勘在案）。
           path: |
             ConstructiveWorld_vo/_chk_*.log
             gate1_ci.json
