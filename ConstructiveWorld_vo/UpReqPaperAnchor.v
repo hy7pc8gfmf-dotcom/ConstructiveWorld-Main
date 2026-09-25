@@ -1,37 +1,38 @@
 (* ========================================================================= *)
-(* UpReqPaperAnchor.v —— 论文引用稳定锚点机制件（A1 锚点基建，ANCHOR-A 席）    *)
+(* UpReqPaperAnchor.v —— 论文引用稳定锚点机制件（A1 锚点基建）    *)
+(* 依赖：Stdlib Ascii／String；零库内件依赖。 *)
 (*                                                                           *)
 (* 使命：九篇论文引用库内坐标 file:line，随每波大规模替换行号大面积漂移        *)
-(* （R105-R111 六波实证；本席开工实勘再取证：UpAblMetaWindow.v               *)
+(* （六波大规模替换实证；实测取样：UpAblMetaWindow.v               *)
 (* mtw_window_two_sided 论文7 引 L172-186，现势 L187，+15 漂移当场复现）。    *)
 (* 本件把论文引用从「行号」切换到「稳定锚符号」：库内提供具名锚记录，          *)
 (* 论文引用锚符号名；锚符号指向的实现位置随波移动而引用不断链。               *)
 (*                                                                           *)
 (* 机制四条：                                                                *)
 (*   ① 权威定位=定理名主键（decl 行首+词边界唯一命中），辅助行号仅快照；       *)
-(*      判词类无定理名块用唯一内容短语级主键（本件首例 eps_split）；           *)
+(*      结论类无定理名块用唯一内容短语级主键（本件首例 eps_split）；           *)
 (*      件级锚用保留主键 FILE_LEVEL。                                        *)
 (*   ② 锚记录六元组：被锚文件、主键、辅助行号快照、基线 md5、自检日、论文域。  *)
 (*   ③ 锚层零 Require 独立于被锚层（承 UpReqIndex.v 先例）：锚的建立/刷新     *)
 (*      不触碰目标件、不触发任何 vo 缓存失效，维护成本与替换波解耦。          *)
-(*   ④ 刷新协议：每波落云后复验门=主键内容级唯一命中+命中行 vs 快照 diff；     *)
+(*   ④ 刷新协议：每波落云后复核门=主键内容级唯一命中+命中行 vs 快照 diff；     *)
 (*      漂移则只改快照三字段（行号/md5/自检日），锚符号名永不变 → 论文不断链。 *)
 (*                                                                           *)
-(* 机检面（四关可过部分）：主键/件名内容校验和（锚主键被改名即编译红——防篡改  *)
+(* 机检面（四项可机检部分）：主键/件名内容校验和（锚主键被改名即编译红——防篡改  *)
 (* 面）、md5 字段 32 位良构不变式、自检日齐刷不变式（刷新日必同步翻）、锚清单  *)
 (* 计数闭合、按主键解析面（pan_find：论文侧「主键→锚记录」解析在件内机检，    *)
 (* 含后缀族混淆机检排除）。                                                  *)
 (* 诚实边界：Coq 件内无文件 I/O，「主键在被锚件内唯一命中」不能件内自证，      *)
-(* 该半边归复验脚本门（设计单 §四.1）；件内机检面+脚本内容门两层合成完整锚门。 *)
+(* 该半边归复核脚本门（设计单 §四.1）；件内机检面+脚本内容门两层合成完整锚门。 *)
 (*                                                                           *)
 (* 与 UpReqIndex.v ng_ 登记面关系：ng_=件级在册账（归注册波管辖），pan_=论文   *)
-(* 引用坐标账（归论文修订战役管辖）；两面以 pan_file+pan_symbol 弱耦合，      *)
-(* 互不依赖；未来 Index 扩列（v4.22+）若增设锚列可由本件导出，本件不动。      *)
+(* 引用坐标账（归论文修订维护管辖）；两面以 pan_file+pan_symbol 弱耦合，      *)
+(* 互不依赖；未来 Index 扩列若增设锚列可由本件导出，本件不动。      *)
 (*                                                                           *)
 (* 构造性注记：零承认件、全 Qed、纯构造、无经典逻辑；自建前缀 pan_。          *)
-(*   坐标/行号/md5 为 20260922 实测值。归属：pan_paper 为清单 A1 批次级归属，  *)
+(*   坐标/行号/md5 为建锚时实测快照。归属：pan_paper 为清单 A1 域级归属，  *)
 (*   带 ? 者为逐篇精确归属待验，不冒充实证。文尾 Print Assumptions 审计。      *)
-(* 编译配方：coqc -q -Q . "" UpReqPaperAnchor.v（9.1 工具链，born-in-place）   *)
+(* 编译配方：coqc -q -Q . "" UpReqPaperAnchor.v（9.1 工具链）   *)
 (* ========================================================================= *)
 
 From Stdlib Require Import Ascii String.
@@ -44,7 +45,7 @@ Record PaperAnchor : Set := MkPaperAnchor
   ; pan_line   : nat      (* 辅助行号快照（锚建立日现势，会漂，仅辅助） *)
   ; pan_md5    : string   (* 被锚件基线 md5（锚建立日全文件摘要） *)
   ; pan_day    : nat      (* 自检日期 yyyymmdd *)
-  ; pan_paper  : string   (* 引用方论文域（批次级，带 ? 者精确归属待验） *)
+  ; pan_paper  : string   (* 引用方论文域（域级，带 ? 者精确归属待验） *)
   }.
 
 (* ---------- 机检工具面 ---------- *)
@@ -105,7 +106,7 @@ Definition pan_cec_trunc_sup : PaperAnchor :=
   MkPaperAnchor "UpReqEngineCeiling.v" "cec_trunc_sup" 275
     "1095c5835c4ef1a563dafbcbb33b75c8" 20260922 "P1/P2?".
 
-(* 论文5 域：UpReqPinskerCore.v ε-三分判词（无定理名块，唯一内容短语级主键；
+(* 论文5 域：UpReqPinskerCore.v ε-三分结论（无定理名块，唯一内容短语级主键；
    现势 L24；精确论文归属待验） *)
 Definition pan_pnk_eps_trichotomy : PaperAnchor :=
   MkPaperAnchor "UpReqPinskerCore.v" "eps_split" 24
@@ -121,7 +122,7 @@ Definition pan_mtw_window_two_sided : PaperAnchor :=
   MkPaperAnchor "UpAblMetaWindow.v" "mtw_window_two_sided" 187
     "ffa0c2662e6d8bc91db45fc6882c3627" 20260922 "P7".
 
-(* 论文7：UpReqUMixSelect.v——PR-D 勘误#2 悬案销案供料（声明行现勘 L532） *)
+(* 论文7：UpReqUMixSelect.v——ums_k_select 锚（声明行实测 L532） *)
 Definition pan_ums_k_select : PaperAnchor :=
   MkPaperAnchor "UpReqUMixSelect.v" "ums_k_select" 532
     "cbf1aba4caaa77dd68789a55f5316502" 20260922 "P7".
@@ -176,7 +177,7 @@ Lemma pan_md5_len_invariant :
   pan_slen (pan_md5 pan_upreq_concfin2_file) = 32.
 Proof. repeat split; reflexivity. Qed.
 
-(* 自检日齐刷不变式：复验刷新必须整列翻新（机械提醒），禁单锚漏刷 *)
+(* 自检日齐刷不变式：复核刷新必须整列翻新（机械提醒），禁单锚漏刷 *)
 Lemma pan_day_uniform_invariant :
   pan_day pan_slq_entropy_gain_kl_lower = 20260922 /\
   pan_day pan_slq_second_law_eps_list = 20260922 /\

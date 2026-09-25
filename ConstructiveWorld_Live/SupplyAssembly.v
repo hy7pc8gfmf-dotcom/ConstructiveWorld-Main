@@ -3,15 +3,17 @@
 (*                                                               *)
 (* 使命：实例化 Ln2Bridge L1 的 ln2i_pade_supply（sigT 五层五肢）并     *)
 (*   依存 L4 ln2b_irrational_from_supply 出 ln2 无理数闭合。           *)
+(* 构造性注记：零承认语句，纯构造证明，条件形如实申报。 *)
+(* 编译配方：coqc -q -Q . "" SupplyAssembly.v（9.1 工具链）。 *)
 (*                                                               *)
 (* 【装配判定（五件 API 实形择路，诚实降档登记）】                      *)
 (*  A_n 整数面（已装）：sa_A n := 2^{n+1}·q̃_n 的 Z.of_nat nat 承载      *)
-(*    ——q̃_n := bk_Qn_qtilde n ∈ nat 在册（BeukersLists），D016 勘误    *)
+(*    ——q̃_n := bk_Qn_qtilde n ∈ nat 在册（BeukersLists），D016 修正后    *)
 (*    真归一因子 2^{n+1}q̃_n == 2^{2n+1}Q_n(1/2)（bi_norm_factor）即    *)
 (*    本面之归一桥（§4 sa_norm_bridge 全等换算）。肢② 0<|A_n| 由       *)
 (*    q̃_n ≥ 3^n ≥ 1 供给（sa_A_nonzeroT 真证）。                      *)
 (*    择路理由：B_n 候选两形皆无在册 Z 面——① r_n := 2^{n+1}p_n 形：     *)
-(*    D021 bv_p3_anchor 锚定 p_3 == 131/3 非整 ⟹ r_3 = 2^4·131/3       *)
+(*    D021 bv_p3_anchor 确定 p_3 == 131/3 非整 ⟹ r_3 = 2^4·131/3       *)
 (*    非整（n=3 起整数面塌）；② 调和形 r'_n := 2^n·p̃_n/L_n（据          *)
 (*    pi_x_n_frac 的 x'_n == p̃_n/(2L_nq̃_n) 强面换算）：L_n | 2^n p̃_n  *)
 (*    无在册整除定理。故 B_n 取「任意整数面 + 两 real 肢」的缺口接口    *)
@@ -21,7 +23,7 @@
 (*    另挂整性面 sa_clo_int（(n!)² ∈ Z 的 sigT 见证）作 B_n 组合原料。  *)
 (*  θ<1 上界肢（θ 档已装，⑤本体遗留）：θ := 1/2。纯 Q 换算件           *)
 (*    sa_theta_leg_scaffold 真证 1/(2^{n+1}q̃_n) ≤ (1/2)^n = θ^n——      *)
-(*    即勘误恒等式误差端 I_n/(2^{n+1}q̃_n) ≤ 2^{1−n}/(2^{n+1}q̃_n)      *)
+(*    即修正恒等式误差端 I_n/(2^{n+1}q̃_n) ≤ 2^{1−n}/(2^{n+1}q̃_n)      *)
 (*    = 2^{−2n}/q̃_n ≤ θ^n 的收尾档（I_n ≤ 2^{1−n} = 2^{n+1}·B_n      *)
 (*    ≤ 2^{n+1}·4^{−n} 由 lne_B_le_p4 换算，其积分端半边亦遗留）。      *)
 (*    窗匹配件 sa_clo_in_theta_window：clo_n < θ^n（n≥1，真证）——      *)
@@ -45,7 +47,7 @@
 (*   G2 side-compile /tmp/d034_side（异地 cwd + czn14_union 并集根      *)
 (*   单 -Q + t120g_side/e118_side 现编池 + cpu_guard，≤15 分钟）；      *)
 (*   G3 Separate Extraction Obj.magic=0；G4 rocq check -o + PA 全       *)
-(*   Closed 候 detached 链（台账 Live/logs/）。本地绿=放行信号，         *)
+(*   Closed 候 detached 链（记录见运行日志）。本地验证绿后，         *)
 (*   终验归隔壁 CI。                                                    *)
 (* 依赖（czn14_union 信任根 + side 现编池在册）：S01_BaseRing、         *)
 (*   S02_CauchyComplete、S03_QExp、BeukersLists（e118/d015/e121）、     *)
@@ -102,7 +104,7 @@ Proof.
 Qed.
 
 (* 归一桥换算件：sa_A n # 1 == 2^{2n+1}·Q_n(1/2)（bi_norm_factor 全等
-   换算——D016 勘误真归一因子 2^{n+1}q̃_n 的闭式落点） *)
+   换算——D016 修正后真归一因子 2^{n+1}q̃_n 的闭式落点） *)
 Theorem sa_norm_bridge : forall n : nat,
   QeqT ((sa_A n) # 1)%Q
        ((q_pow (2 # 1)%Q (Datatypes.S (2 * n))
@@ -193,7 +195,7 @@ Proof.
 Qed.
 
 (* θ 肢纯 Q 换算件（真证）：1/(2^{n+1}·q̃_n) ≤ (1/2)^n = θ^n——
-   勘误恒等式误差端 2^{−2n}/q̃_n ≤ θ^n 的收尾档（q̃_n ≥ 3^n ≥ 1） *)
+   修正恒等式误差端 2^{−2n}/q̃_n ≤ θ^n 的收尾档（q̃_n ≥ 3^n ≥ 1） *)
 Theorem sa_theta_leg_scaffold : forall n : nat,
   QleT' (Qinv ((q_pow (2 # 1)%Q (Datatypes.S n)
                  * (Z.of_nat (bk_Qn_qtilde n) # 1))%Q))
@@ -256,7 +258,7 @@ Qed.
 
 (* 缺口接口：B_n 整数面 + ④下界/⑤上界两 real 肢——P2 恒等式本体
    （I_n = 2^{n+1}q̃_n·X − r_n，三子件见头注 (a)(b)(c)）到货后的实例化消解槽。
-   语义精确：本接口非空性即 θ 档 Padé 逼近列的存在性，本席不虚判。 *)
+   语义精确：本接口非空性即 θ 档 Padé 逼近列的存在性，本件不虚判。 *)
 Definition sa_supply_rem : Set :=
   sigT (fun B : nat -> Z =>
     And (ln2b_line_lower sa_A B sa_clo)

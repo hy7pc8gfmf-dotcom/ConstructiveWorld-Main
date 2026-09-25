@@ -1,6 +1,9 @@
 (* ============================================================ *)
-(* UpAblD1S13_AlignIdUnclosed.v —— FA-D1S13 数据供给大打包七梯 件②   *)
-(* 席位：FA-D1S13（普查批 D1-⑦ 第七梯 ≤40 位·按模块聚合）｜独立伴生件  *)
+(* UpAblD1S13_AlignIdUnclosed.v —— AiuBackwardKL 节数据供给模块（件②）   *)
+(* 使命：AiuBackwardKL 节余量 14 参数位的实例供给（辖区见下）。 *)
+(* 构造性注记：零承认语句，纯构造证明，供给级无条件机械供给。 *)
+(* 编译配方：coqc -q -Q . "" UpAblD1S13_AlignIdUnclosed.v（9.1 工具链）。 *)
+(* 独立模块  *)
 (* ·原树零改                                                      *)
 (*                                                              *)
 (* 辖区：AlignIdUnclosed.v 节 AiuBackwardKL 余量 14 槽：              *)
@@ -11,7 +14,7 @@
 (* 排除位（扩位不重立，零触碰）：L87-88 sum_pos 已由                                          *)
 (*   UpAblD1S3_sum_pos_AlignIdUnclosed.v 供给；L89-93 log_req_compat 与                       *)
 (*   log_inv_exp_neg_req 已由 UpAblD1S2_reqlog_AlignIdUnclosed.v 供给。                       *)
-(*   合计 14＋1＋2＝17，模块收官。                                                           *)
+(*   合计 14＋1＋2＝17，模块完备。                                                           *)
 (*                                                              *)
 (* 形态：供给记录型（参数位语句逐字入件）＋实例供给申报形；与同族件                           *)
 (*   同构（无 eta_pos/eta_le_one 位——源文件节头注自述「pi_ref_norm/eta_le_one               *)
@@ -84,7 +87,7 @@ Inductive uabd1s13_aiu_pack14 : Type :=
                                          beta_pos pi_ref)),
                       uabd1s13_aiu_pack14.
 
-(* ============ 供给件：单点实例一次喂定 14 槽 ============ *)
+(* ============ 实例供给：单点实例一次喂定 14 槽 ============ *)
 
 Theorem uabd1s13_aiu_pack14_supplied :
   uabd1s13_aiu_pack14.
@@ -107,7 +110,7 @@ Proof.
            uabd1s13_aiu_zal_pos).
 Qed.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设面闭合申报 ============ *)
 
 Print Assumptions uabd1s13_aiu_zal_pos.
 Print Assumptions uabd1s13_aiu_pack14_supplied.

@@ -1,5 +1,7 @@
 (* ============================================================ *)
 (* UpReqSymplecticBridge.v —— spec2x2 判别式框架 × 辛旋转特征刻画桥接件 *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S12_B5RecycleSF、S13_NLiveAudit、UpReqSpec2x2、SymplecticRotationSpec。 *)
+(* 编译配方：coqc -q -Q . "" UpReqSymplecticBridge.v（9.1 工具链）。 *)
 (*                                                                *)
 (* 使命：桥接两座已注册模块——                                      *)
 (*   供体一 UpReqSpec2x2.v（M2(Q) 2×2 判别式/特征值率框架：          *)
@@ -84,7 +86,7 @@ Proof.
     rewrite Hexp, <- Hi. ring.
 Qed.
 
-(* q ≥ 0 ⟹ qⁿ ≥ 0（压缩档几何和正负性之腿）。 *)
+(* q ≥ 0 ⟹ qⁿ ≥ 0（压缩档几何和正负性之支）。 *)
 Lemma syb_qnpow_nn : forall (n : nat) (q : Q), Qle 0 q -> Qle 0 (srs_qnpow n q).
 Proof.
   intros n. induction n as [| k IH]; intros q H0.
