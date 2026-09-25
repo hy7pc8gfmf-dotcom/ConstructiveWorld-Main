@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpAblMixBSharp.v —— mixb 两相选择器二分相计数界的紧化（常数 5 → 4）    *)
+(* ============================================================
+   UpAblMixBSharp —— 使命行：mixb 两相选择器二分相计数界的紧化（常数 5 → 4）
 (* 数学使命：UpReqMixLogB 的 mixb_bsearch 求值计数上界原为燃料加一         *)
 (*   （mixb_bsearch_c_le 的燃料零基例以 0 ≤ 1 收束，松弛沿归纳传播；      *)
 (*   mixb_bsearch_account 结论同为 c ≤ S f）。本件按 mixb_bsearch 定义    *)
@@ -20,8 +20,9 @@
 (*   Nat.log2_spec。                                                   *)
 (* 构造性注记：全部语句为 nat 面的等式与序（Prop 层，Qed 收束）；零       *)
 (*   承认；算术收束一律 lia。                                            *)
-(* 编译配方：9.1 直调 coqc -q -Q . ""；进程环境零 COQLIB/ROCQLIB 注入。  *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import PeanoNat.
 From Stdlib Require Import Lia.

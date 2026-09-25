@@ -1,12 +1,10 @@
-(* ============================================================ *)
-(* UpReqSamplingFeed.v —— 本件形式化 UpReqSampling 两节求和诚实接口与        *)
-(*   伴生假设位的实现化供给：sumf 取 csm_sumf 折叠读法（载体 Real），        *)
+(* ============================================================
+   UpReqSamplingFeed —— 使命行：本件形式化 UpReqSampling 两节求和诚实接口与
+(*   配套前提位的实现化给出：sumf 取 csm_sumf 折叠读法（载体 Real），        *)
 (*   求和四件与 sum_eq_list/bs_swap/lt_plus 混合保序经 ConcMixSelFeed       *)
 (*   cms 系已证件以显式实参供给；abs 非负恒等就地复演；sum_pos 以 sigT      *)
 (*   非空见证加列表头证书供给；温度/Delta 取单位元实例、z 取 ±1 对称对、    *)
 (*   enum 取二元表给 Set 层 sigT 见证。                                      *)
-(* 工单面外扩展件（C4 裁定可派），按 b3 §2.2 可消解判定施工，候融合方       *)
-(*   甄别确认；若属已补强保留区请退回。                                      *)
 (* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、                *)
 (*   UpReqConcSoftmax、UpReqSampling、ConcMixSelFeed。                      *)
 (* 对标：mathlib 有限和线性/单调/次可加性质的构造性 Set 层对应物。          *)
@@ -14,8 +12,9 @@
 (*   结构化分情形构造，可提取面零 Prop 残留；plain 形逐项三角               *)
 (*   （abs_sum_le_h 同语句位）属墙族永久位，本件只供逐 eps 邻接形，         *)
 (*   不越界硬证。                                                            *)
-(* 编译配方：Rocq 9.1 直调 rocq c，cpu_guard 包裹。                         *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
@@ -29,7 +28,7 @@ Import ListNotations.
 
 (* ################ 块一：ReqUContraction 节求和接口实现化读法 ############ *)
 (* 对应 UpReqSampling Section ReqUContraction 的求和诚实接口五假设位：      *)
-(*   四件折叠面直供，另供同节伴生三件 sum_swap_cc/abs 非负恒等/lt_plus      *)
+(*   四件折叠面直供，另供同节配套三件 sum_swap_cc/abs 非负恒等/lt_plus      *)
 (*   混合保序。abs_sum_le_h 同语句位不在供给面：plain 形对混合号函数        *)
 (*   无构造性路线（UpReqConcSoftmax 头注与 ConcMixSelFeed 同判），          *)
 (*   真前提保留；逐 eps 邻接形见块二 usrq_bs_abs_sum_le_eps_supply          *)
@@ -267,7 +266,7 @@ Proof.
   exact (existT _ true (InT_here true (false :: nil))).
 Qed.
 
-(* ============ 供给件假设面核验（预期全 Closed） ==================== *)
+(* ============ 供给定理假设面核验（预期全 Closed） ==================== *)
 
 Print Assumptions usrq_sum_ext_supply.
 Print Assumptions usrq_sum_linear_supply.

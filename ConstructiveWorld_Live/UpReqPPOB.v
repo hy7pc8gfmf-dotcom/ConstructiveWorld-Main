@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpReqPPOB.v —— 本件形式化 PPO 保守性（定理 6.6 对应物结论 5）的 Bishop       *)
+(* ============================================================
+   UpReqPPOB —— 使命行：本件形式化 PPO 保守性（定理 6.6 对应物结论 5）的 Bishop
 (*   完整形升格：主件 real_ppo_conservative_B_full 为                           *)
 (*   Σ π_old·min(r,clip r)·adv ≤_B Σ π_old·r·adv，缺口前提「E>0 显式证书」       *)
 (*   由节内 lebR_res_weight_pos 导出；伴件 rplb_sum_pos_discharged 与           *)
@@ -14,9 +14,9 @@
 (*   词表非空位重述为 Set 层非空见证形并给出具体层供给；零承认、零经典逻辑；      *)
 (*   文尾 Print Assumptions 逐件闭合。                                          *)
 (*                                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                                    *)
-(* ============================================================ *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.

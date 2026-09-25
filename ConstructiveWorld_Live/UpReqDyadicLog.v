@@ -1,17 +1,5 @@
-(* ============================================================*)
-(* UpReqDyadicLog.v —— 整件替换交付注记（基于 Main 基线同名替换）（普查反推件，候融合方确认） *)
-(*   全文语句面守恒，仅指定证明体重写。四处显式见证位：                          *)
-(*   替换体口径：展开后目标为定义性等式，eq_refl 为其显式构造子。                *)
-(*   ①dyd_zero_proj＝Q 层显式见证项 Qeq_refl (projT1 real_zero n) 闭合；        *)
-(*   ②dyd_one_proj＝Q 层显式见证项 Qeq_refl (projT1 real_one n) 闭合；          *)
-(*   ③dyd_half_proj＝Q 层显式见证项 Qeq_refl (projT1 dyd_half n) 闭合；         *)
-(*   ④dyd_half_Qpos＝Qlt/Qlt_bool 双层展开至布尔面，显式 eq_refl 闭合。         *)
-(*   两条如实注记（按原样保留、无增量改写）：dyd_le_b_refl（全显双步确定性链）；  *)
-(*   dyd_ln32_witness（成族件直接代入，装配位无增量）。                          *)
-(*   Proof 与 Qed 计数守恒；Require 面逐字一致；禁词零；纯构造性闭合。           *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* UpReqDyadicLog.v —— DyadicLog 构造性 ln 包络层                   *)
+(* ============================================================
+   UpReqDyadicLog —— 使命行：DyadicLog 构造性 ln 包络层
 (*                                                              *)
 (* 目的：在 dyadic 网格（2^j · 轴）上构造 ln 的构造性包络层，        *)
 (*   给出逐点与成族两档 ln 界。                                     *)
@@ -32,10 +20,11 @@
 (*   UpRealLeB / UpReqEnvelopeDual / UpReqConstEnvelope              *)
 (*   （均 .vo/.vok 双证在库）。                                       *)
 (*                                                              *)
-(* 备注：本文件为新建，零既有件改动；前缀 dyd_ 避免与库内既有名冲突。  *)
+(* 备注：前缀 dyd_ 避免与库内既有名冲突。  *)
 (*   公理面：本件零新公理；文末 Print Assumptions 留痕核验 Closed；    *)
-(*   本件已完成机器验证。                                             *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB UpReqEnvelopeDual UpReqConstEnvelope.

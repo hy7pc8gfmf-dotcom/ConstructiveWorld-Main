@@ -1,12 +1,12 @@
-(* ============================================================ *)
-(* UpAblSlotB0Merge.v —— q_arch_geom 之 B≤0 退化支供给件                 *)
+(* ============================================================
+   UpAblSlotB0Merge —— q_arch_geom 之 B≤0 退化支供给模块
 (*                                                                *)
-(* 使命：为 S10_KVQuantTrig 五处同形调用点                                *)
+(* 使命：为 S10_KVQuantTrig 五处同形调用点 *)
 (*   （destruct (q_arch_geom B) as [N0 HN0]）提供退化支供给。其目标形：   *)
 (*   q_arch_geom : forall A : Q, sigT (fun N : nat => forall t : nat,    *)
 (*     NatLe N t -> QleT' (Qmult (1 + 1)%Q A) (Z.of_nat (t + 1) # 1))。  *)
 (*   非退化支（QltT 0 B）由 S02 层反演桥接引理另行供给；                  *)
-(*   B≤0 退化支以 N:=0 平凡承接——本件即该退化支的供给件。                *)
+(*   B≤0 退化支以 N:=0 平凡承接——本件即该退化支的供给模块。                *)
 (*                                                                *)
 (* 语句对齐注记（形态差显式）：                                          *)
 (*   结论面与 S03_QExp 之 q_arch_geom 接口逐字同形（A:=B，含 NatLe 全称、 *)
@@ -34,7 +34,9 @@
 (*                                                                *)
 (* 构造性注记：语句面全 Set 层值（QleT'＝S02 Id 形＋sigT 见证）；零承认；  *)
 (*   证明全构造；等式换形全部内联于证明内部（不进入语句面）；Qed 闭合。    *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Lia.

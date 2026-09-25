@@ -1,50 +1,49 @@
-(* ============================================================ *)
-(* Paper7Ablation.v — 席位P7A（批次 E-STAGING-P7A）论文7接口假设消融 *)
-(*                                                               *)
-(* 使命：论文7《率即算法》§9.1 披露的 AttnDoeblin.v Section        *)
-(*   BoundedSoftmax（vo_901 源码 L437–750）全部 Variable 接口     *)
-(*   假设逐个三分类（A 已放电 / B 接口字段 / C 可消融），并对     *)
-(*   C 类逐条施工非平凡定理。                                    *)
-(*                                                               *)
-(* C 类施工面（本件六定理，前缀 p7a_ 全库防撞已 grep 核零命中）：  *)
+(* ============================================================
+   Paper7Ablation —— 使命行：论文7《率即算法》§9.1 披露的 AttnDoeblin.v
+   Section BoundedSoftmax（vo_901 源码 L437–750）全部 Variable 接口
+   假设逐个三分类（A 已实例化消解 / B 接口字段 / C 可由已证件导出），
+   并对 C 类逐条给出非平凡定理。
+   内容（本件六定理，前缀 p7a_ 全库防撞已核零命中）：
 (*   §1 expf 迷你接口两件——                                      *)
 (*     p7a_expf_wd：同余性从 {expf_plus, expf_zero, expf_pos}     *)
-(*       经 mult_cancel_l（S01:906）消去链消融——expf 五字段      *)
-(*       内部冗余第一刀（同余性无须独立假设）；                   *)
+(*       经 mult_cancel_l（S01:906）消去链导出——expf 五字段      *)
+(*       内部冗余第一步（同余性无须独立假设）；                   *)
 (*     p7a_expf_mono_le_do：mono_le 从 mono_lt + DecidableOrder  *)
-(*       （S01:329 三分）+ p7a_expf_wd 消融——BoundedSoftmax      *)
+(*       （S01:329 三分）+ p7a_expf_wd 导出——BoundedSoftmax      *)
 (*       的 expf 字段面 6 → 5（AttnDoeblin:469 的 expf_mono_le   *)
-(*       槽在抽象接口层无单向消去（le 原生字段、lt_le_iff 仅     *)
-(*       Or→le），但可选扩展类 DecidableOrder 一桥收口，与       *)
-(*       fa53_compat_abs 同款收口原理）；                         *)
+(*       语句位在抽象接口层无单向消去（le 原生字段、lt_le_iff 仅  *)
+(*       Or→le），但可选扩展类 DecidableOrder 一桥闭合，与        *)
+(*       fa53_compat_abs 同款闭合原理）；                         *)
 (*   §2 有界 softmax 上界件——                                    *)
 (*     p7a_lo_lt_one：lo = e^{−Δ/T} < 1 严格上界（bs_lo_pos     *)
 (*       AttnDoeblin:550 的对偶补件；由 lt_zero_opp +            *)
 (*       expf_mono_lt + expf_zero 三步链，字段面比               *)
 (*       bs_delta_star_lt_one（:584）更细）；                     *)
 (*     p7a_lo_lt_one_instant：invT := inv_pos temp temp_pos      *)
-(*       处的字面 lo < 1 形（消费 inv_pos_pos）。                 *)
-(*   §3 κ := 1−δ* 选择器供给三件（论文 §6.3 合龙的 κ∈(0,1)      *)
+(*       处的字面 lo < 1 形（引用 inv_pos_pos）。                 *)
+(*   §3 κ := 1−δ* 选择器供给三件（论文 §6.3 闭合的 κ∈(0,1)      *)
 (*       前件包，全部从 B 类接口证书 lo_pos 与 δ*<1 出发）——     *)
-(*     p7a_delta_star_pos：0 < δ* = lo²（mult_positive 消费）；  *)
+(*     p7a_delta_star_pos：0 < δ* = lo²（引用 mult_positive）；  *)
 (*     p7a_omd_pos：0 < 1−δ*（Part A u_omd_pos_next             *)
 (*       AttnDoeblin:164 的 softmax 实例形，混合加法保序经       *)
-(*       fa53_lt_plus_compat_lt_le_dec，A 类锚消费）；            *)
+(*       fa53_lt_plus_compat_lt_le_dec，A 类锚引用）；            *)
 (*     p7a_omd_lt_one：1−δ* < 1（fa53_lt_plus_compat_le_lt_dec   *)
-(*       镜像件消费）。                                          *)
+(*       对偶件引用）。                                          *)
 (*                                                               *)
 (* 红线自审：语句面全 Set 层（Id/Or/Not 用 S01:63-68 Set 层      *)
-(*   定义，零 Prop 泄露）；五禁词零出现；非平凡真证（消去链/     *)
-(*   三分分解/归谬/平移四段字段链）；原树零改（本件新建于        *)
-(*   消融50/，只 Require 消费 S01_BaseRing 与 fa53_compat_abs    *)
-(*   零改）。                                                    *)
-(* ============================================================ *)
+(*   定义，零 Prop 泄露）；非平凡真证（消去链/                   *)
+(*   三分分解/归谬/平移四段字段链）；原树零改（本件新建，        *)
+(*   只 Require 引用 S01_BaseRing 与 fa53_compat_abs 零改）。 *)
+   依赖：S01_BaseRing、fa53_compat_abs。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import fa53_compat_abs.
 
-(* ################ §1 expf 迷你接口消融 ################ *)
-(* 对照 AttnDoeblin.v L463-469 的五字段 + mono_le 槽。            *)
+(* ################ §1 expf 迷你接口精简 ################ *)
+(* 对照 AttnDoeblin.v L463-469 的五字段 + mono_le 语句位。         *)
 Section P7aExpf.
 
 Context {RI : RealInterfaceEnhanced}.
@@ -57,7 +56,7 @@ Variable expf_zero : Id (expf zero) one.
 Variable expf_plus : forall a b : R, Id (expf (plus a b)) (mult (expf a) (expf b)).
 Variable expf_mono_lt : forall a b : R, lt a b -> lt (expf a) (expf b).
 
-(* C1：expf 同余性消融（{plus, zero, pos} ⟹ wd，无须独立假设） *)
+(* C1：expf 同余性导出（{plus, zero, pos} ⟹ wd，无须独立假设） *)
 Theorem p7a_expf_wd : forall a b : R, Id a b -> Id (expf a) (expf b).
 Proof.
   intros a b Hab.
@@ -76,7 +75,7 @@ Proof.
                   (id_sym (id_trans (mult_comm (expf (opp b)) (expf b)) Hb1))).
 Qed.
 
-(* C2：expf_mono_le 消融（mono_lt + 三分 + C1 ⟹ mono_le；字段面 6→5） *)
+(* C2：expf_mono_le 导出（mono_lt + 三分 + C1 ⟹ mono_le；字段面 6→5） *)
 Theorem p7a_expf_mono_le_do : forall a b : R, le a b -> le (expf a) (expf b).
 Proof.
   intros a b Hab.
@@ -138,7 +137,7 @@ End P7aSoftBound.
 
 (* ################ §3 κ := 1−δ* 选择器供给 ################ *)
 (* 对照 AttnDoeblin.v L548 的 delta_star := mult lo lo 与
-   论文 §6.3（合龙前件：κ ∈ (0,1)）。前提恰为 B 类接口证书：
+   论文 §6.3（闭合前件：κ ∈ (0,1)）。前提恰为 B 类接口证书：
    lo_pos（= bs_lo_pos 之形）与 δ* < 1（= bs_delta_star_lt_one）。 *)
 Section P7aKappa.
 
@@ -169,7 +168,7 @@ Proof.
            (le_refl (opp (mult lo lo)))).
 Qed.
 
-(* C6：0 < δ* ⟹ 1−δ* < 1（镜像件 fa53 件2 消费） *)
+(* C6：0 < δ* ⟹ 1−δ* < 1（对偶件 fa53 件2 引用） *)
 Theorem p7a_omd_lt_one : lt (minus one (mult lo lo)) one.
 Proof.
   apply (lt_id_r (plus one (opp (mult lo lo))) (plus one zero) one

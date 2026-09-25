@@ -1,5 +1,5 @@
-(* ========================================================================= *)
-(* UpReqMisc5.v —— 本件形式化热力学与语言模型核心命题的 req 层杂项第五束：      *)
+(* =========================================================================
+   UpReqMisc5 —— 使命行：本件形式化热力学与语言模型核心命题的 req 层杂项第五束：
 (*   向量世界类转写层（reqStateSpace/reqStateSpaceExt/reqHilbertSpace/         *)
 (*   reqSumOver 四类，Id 接口逐字段 req 副本）与 PropositionConvergenceCore、  *)
 (*   ThermodynamicsInstance、ConvergenceTheorem、SumExpPositive、              *)
@@ -8,14 +8,14 @@
 (*   req_entropy_gradient_strict_mono，另附 GRPO 计数机 req 面复用件组与        *)
 (*   枚举嵌入正性的签名保持式供给组（rgrp_ 系，见 ReqGrpoMisc 节）。             *)
 (*                                                                             *)
-(* 【工单面外扩展件（C4 裁定可派），按 b3 §2.2 可消解判定施工，候融合方          *)
-(*   甄别确认；若属已补强保留区请退回】                                         *)
+   扩展件按可消解判定施工，登记见节内。
 (*                                                                             *)
 (* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。                    *)
 (* 对标：mathlib 有限和与热力学分布的构造性 Set 层对应物。                       *)
 (* 构造性注记：Set 层承载，零承认，可提取；配分正性、温度正性等为接口参数位，      *)
 (*   其中枚举嵌入正性的非空条件推导路径由树内引理自持供给（登记见节内）。          *)
-(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                               *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *                               *)
 (*                                                                             *)
 (* 语句对应登记（Id 源模块 CW_ConstructiveWorld_219，行号为其内坐标）：           *)
 (*   reqStateSpace←Id StateSpace L1160-1187（21 字段，语句位置 Id→req 逐位副本；  *)
@@ -56,7 +56,7 @@
 (*   6. two_pos 的 req 侧以 UpReqAlgebra req_two_pos 内联；                          *)
 (*   7. 向量载体位等号保持 Id（载体无 setoid 等位可迁）；R 值位等号 req；            *)
 (*   8. 函数等号位逐点化：Id p (boltzmann_prob L)→forall s, req (p s) (...)。       *)
-(* ========================================================================= *)
+   =========================================================================*)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -122,7 +122,7 @@ Definition rsminus (R : Set) (RIS : RealInterfaceEnhancedSetoid R)
   @rsplus R RIS SS a (@rsopp R RIS SS b).
 
 (* Id StateSpaceExtended L24738-24758 逐字段 req 副本（9 字段；
-   Id 的 :> 继承改显式 rsse_base 参数位 + 依存席显式 unpack，零语义差） *)
+   Id 的 :> 继承改显式 rsse_base 参数位 + 依存模块显式 unpack，零语义差） *)
 Class reqStateSpaceExt (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
   rsse_base : reqStateSpace R RIS;
   rsmult_zero : forall x : @rSS R RIS rsse_base,
@@ -381,7 +381,7 @@ Qed.
 
 (* Id gradient_step_recurrence L13944：|g(x_{n+1}) − g(x_n)| ≤ (L·|η|)·|g(x_n)|。
    iterate 位以定义级归约接 req_step_diff_point（iterate f (S n) x ≡ f (iterate f n x)），
-   |·| 换形走 abs_compat + abs_mult 字段（零跨席 Require）。 *)
+   |·| 换形走 abs_compat + abs_mult 字段（零跨模块 Require）。 *)
 Theorem req_gradient_step_recurrence : forall (E_A : R) (n : nat),
   le (abs (req_minus (rentropy_gradient (iterate rdynamics (Datatypes.S n) E_A))
                      (rentropy_gradient (iterate rdynamics n E_A))))

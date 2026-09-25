@@ -1,20 +1,19 @@
-(* ===================================================================== *)
-(* BBDBridgeSupply.v —— 本件形式化 Boltzmann 自由能桥接件求和接口的伴生供给： *)
-(*   BBDFepWriteoff 节三个求和前提位（sum_ext/sum_add/sum_linear）在        *)
-(*   sumf := csm_sumf S enum 实现化读法下由 ConcMixSelFeed csm_ 系已证件    *)
-(*   全参供给（bbridge_sum_ext_supply/bbridge_sum_linear_supply/            *)
-(*   bbridge_sum_add_supply 三定理），并给出求和前提位全免的精简版自由能桥  *)
-(*   bbridge_free_energy_boltzmann_bridge 与能量入对数桥 Real 层实例读法    *)
-(*   bbridge_energy_in_log_boltzmann_bridge。                               *)
-(* 依赖：CW_ConstructiveWorld_219、UpReqLogCompD、UpReqConcSoftmax、        *)
-(*   ConcMixSelFeed、BoltzmannBridgeDischarge。                            *)
-(* 对标：mathlib 有限和线性性与 Boltzmann 配分自由能的构造性 Set 层对应物。 *)
-(* 构造性注记：Set 层承载，零承认；供给定理与两桥全 Qed 闭合可提取；        *)
-(*   提取 Obj.magic = 0。                                                  *)
-(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                          *)
-(* ===================================================================== *)
-(* 工单面外扩展件（C2 底册 #9），按 b3 §2.2 可消解判定施工，候融合方甄别确认；若属已补强保留区请退回。 *)
-(* ===================================================================== *)
+(* ============================================================
+   BBDBridgeSupply —— 使命行：本件形式化 Boltzmann 自由能桥接件求和接口的
+   配套供给：BBDFepWriteoff 节三个求和前提位（sum_ext/sum_add/sum_linear）在
+   sumf := csm_sumf S enum 实现化读法下由 ConcMixSelFeed csm_ 系已证件全参供给
+   （bbridge_sum_ext_supply/bbridge_sum_linear_supply/bbridge_sum_add_supply
+   三定理），并给出求和前提位全免的精简版自由能桥
+   bbridge_free_energy_boltzmann_bridge 与能量入对数桥 Real 层实例读法
+   bbridge_energy_in_log_boltzmann_bridge。
+   依赖：CW_ConstructiveWorld_219、UpReqLogCompD、UpReqConcSoftmax、
+   ConcMixSelFeed、BoltzmannBridgeDischarge；Stdlib List。
+   对标：mathlib 有限和线性性与 Boltzmann 配分自由能的构造性 Set 层对应物。
+   构造性注记：Set 层承载，零承认；供给定理与两桥全 Qed 闭合可提取，
+   提取 Obj.magic = 0。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
@@ -25,7 +24,7 @@ Require Import BoltzmannBridgeDischarge.
 Import RealInterfaceEnhancedMod.
 
 (* ===================================================================== *)
-(* Section BBDBridgeSumSupply：求和接口实现化读法下的伴生供给               *)
+(* Section BBDBridgeSumSupply：求和接口实现化读法下的配套供给               *)
 (*                                                                       *)
 (* 三态甄别结论（b3 §2.2）：                                              *)
 (*  · 可消解×3：sum_ext/sum_linear/sum_add——抽象 sumf 在 csm_sumf 实现化  *)
@@ -50,7 +49,7 @@ Variable enum : list S.
 (* 求和实现化读法：抽象 sumf 取 ConcMixSelFeed 列表折叠和 *)
 Let sumf : (S -> Real) -> Real := csm_sumf S enum.
 
-(* ---- 伴生供给三定理（与 BBDFepWriteoff 三求和前提位逐字同语句） ---- *)
+(* ---- 配套供给三定理（与 BBDFepWriteoff 三求和前提位逐字同语句） ---- *)
 
 (* sum_ext 前提位：逐点相等对有限和的等式保持（cms_sum_ext 供给） *)
 Theorem bbridge_sum_ext_supply : forall f g : S -> Real,

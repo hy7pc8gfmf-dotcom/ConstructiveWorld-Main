@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpReqAttnMixTime.v —— 本件形式化有界 softmax 注意力核的混合时间性质：  *)
+(* ============================================================
+   UpReqAttnMixTime —— 使命行：本件形式化有界 softmax 注意力核的混合时间性质：
 (*   对任意归一化行分布 mu nu 与正预算 budget，构造性给出迭代步数 k 使     *)
 (*   TV(T^k mu, T^k nu) < budget（及 <= 版），几何率 1-delta* 的 k 次幂，  *)
 (*   delta* = e^{-2Delta/T} = lo*lo（lo = e^{-Delta/T}，精确无损耗）。     *)
@@ -12,8 +12,9 @@
 (* 对标：mathlib Doeblin 条件混合时间定量界的构造性 Set 层对应物。        *)
 (* 构造性注记：Set 层承载，零承认；主件 Defined 可提取；消解定理全由      *)
 (*   库内已证件以显式实参供给，可提取面零 Prop 残留。                     *)
-(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                         *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
@@ -277,7 +278,7 @@ End AmtResSumEqListIdt.
 
 Import RealInterfaceEnhancedMod.
 
-(* temp/Delta/z/enum 参数位：Fin 2 非退化实例读法（cf2 供给件直引） *)
+(* temp/Delta/z/enum 参数位：Fin 2 非退化实例读法（cf2 模块直接引用） *)
 
 Theorem amtr_temp_pos : lt zero cf2_temp.
 Proof.

@@ -1,21 +1,19 @@
-(* ============================================================ *)
-(* UpAblMixACount.v —— mixa 对数二分选择器的谓词求值次数显式计数件        *)
-(* 数学使命：本件为二分搜索 mixa_bsearch 配备逐步计数的伴随函数            *)
-(*   macnt_bsearch，证明其搜索结果与 mixa_bsearch 逐点一致（同构展开，    *)
-(*   计数不空）且谓词求值次数以燃料配给为上界；量级实例（区间 [0,K]、      *)
-(*   燃料 S(log₂(S K))）给出计数 ≤ S(log₂(S K)) = log₂(K+1)+1 的显式     *)
-(*   定理，并实例化到 Q 层选择器 mixa_k_log_of，其窗口上端为              *)
-(*   K_win = mixa_win v (1-k0) b0。                                    *)
-(* ------------------------------------------------------------ *)
-(* 依赖：UpReqMixLogA（mixa_bsearch / mixa_test / mixa_win /             *)
-(*   mixa_k_log_of / mixa_sel_accounts）；stdlib 仅 PeanoNat、Lia、      *)
-(*   QArith。                                                          *)
-(* 对标：UpReqMixLogB.v mixb_sel_count（无窗两相选择器的计数定理）在本库   *)
-(*   的单相带窗对偶形；stdlib Nat.log2_spec。                            *)
-(* 构造性注记：macnt_bsearch 是 Set 层 (nat*nat) 值的结构递归函数（递归位   *)
-(*   为燃料参数）；全部语句为 nat/Q 面的等式与序；零承认；全件可提取。      *)
-(* 编译配方：9.1 直调 coqc -Q . ""；进程环境零 COQLIB/ROCQLIB 注入。      *)
-(* ============================================================ *)
+(* ============================================================
+   UpAblMixACount —— 使命行：mixa 对数二分选择器的谓词求值次数显式计数件。
+   本件为二分搜索 mixa_bsearch 配备逐步计数的伴随函数 macnt_bsearch，
+   证明其搜索结果与 mixa_bsearch 逐点一致（同构展开，计数不空）且谓词求值
+   次数以燃料配给为上界；量级实例（区间 [0,K]、燃料 S(log₂(S K))）给出
+   计数 ≤ S(log₂(S K)) = log₂(K+1)+1 的显式定理，并实例化到 Q 层选择器
+   mixa_k_log_of，其窗口上端为 K_win = mixa_win v (1-k0) b0。
+   依赖：UpReqMixLogA（mixa_bsearch / mixa_test / mixa_win /
+   mixa_k_log_of / mixa_sel_accounts）；stdlib 仅 PeanoNat、Lia、QArith。
+   对标：UpReqMixLogB.v mixb_sel_count（无窗两相选择器的计数定理）在本库的
+   单相带窗对偶形；stdlib Nat.log2_spec。
+   构造性注记：macnt_bsearch 是 Set 层 (nat*nat) 值的结构递归函数（递归位为
+   燃料参数）；全部语句为 nat/Q 面的等式与序；零承认；全件可提取。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 
 From Stdlib Require Import PeanoNat.
 From Stdlib Require Import Lia.

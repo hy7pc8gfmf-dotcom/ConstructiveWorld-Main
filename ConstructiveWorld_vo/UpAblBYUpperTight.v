@@ -1,26 +1,21 @@
-(* ============================================================ *)
-(* UpAblBYUpperTight.v *)
-(* *)
-(* 使命： BY-LB-1 信息论地板的可达半边——按区间折半构造平衡二分决策树，     *)
-(*   正确识别 K+1 个单调阈值位置 t∈{0,…,K}（运行像即叶标签），且决策       *)
-(*   深度 <= S (Nat.log2 (S K))。与 UpAblBYLowerBound.v 的                 *)
-(*   bylb_lower_bound 并读：正确树的决策深度落在闭区间                     *)
-(*   [Nat.log2 (S K), S (Nat.log2 (S K))] 内，信息论地板双侧贴合。         *)
-(* 主件： btight_tight / bylb_tight（sigT 形，witness 为 btight_build       *)
-(*   燃料限步构造的平衡树）；btight_leaves_tight 并给叶数恰 = S K。        *)
-(* 依赖： UpAblBYLowerBound（bylb_dtree / bylb_run / bylb_depth /           *)
-(*   bylb_nleaves / bylb_ft，Require 引入，零重复定义）；Stdlib：           *)
-(*   Arith.Arith（Nat.log2_spec / Nat.leb_le / Nat.leb_gt /                *)
-(*   Nat.div_mod_eq / Nat.mod_upper_bound）、Lia。 *)
-(* 对标： stdlib Nat.log2_spec 的双向夹逼（2^(log2 n) <= n <                *)
-(*   2^(S (log2 n))）对应燃料-宽度关系 w <= 2^f 的选取；区间折半递归        *)
-(*   对应 Nat.log2 的折半结构。 *)
-(* 构造性注记： 全件 Set 层承载；零承认；btight_build 为燃料位上的结构      *)
-(*   Fixpoint，可提取。 *)
-(* 编译配方： Rocq 9.1 直调 coqc -Q . "" UpAblBYUpperTight.v（先清空        *)
-(*   COQLIB/ROCQLIB 环境变量；经 cmd 批处理 btight_g2_build.cmd 执行，      *)
-(*   规避 Git Bash 直调吞空串实参问题）。 *)
-(* ============================================================ *)
+(* ============================================================
+   UpAblBYUpperTight —— 使命行：BY-LB-1 信息论地板的可达半边——按区间折半
+   构造平衡二分决策树，正确识别 K+1 个单调阈值位置 t∈{0,…,K}（运行像即叶
+   标签），且决策深度 <= S (Nat.log2 (S K))。与 UpAblBYLowerBound.v 的
+   bylb_lower_bound 并读：正确树的决策深度落在闭区间
+   [Nat.log2 (S K), S (Nat.log2 (S K))] 内，信息论地板双侧贴合。
+   主件：btight_tight / bylb_tight（sigT 形，witness 为 btight_build 燃料限步
+   构造的平衡树）；btight_leaves_tight 并给叶数恰 = S K。
+   依赖：UpAblBYLowerBound（bylb_dtree / bylb_run / bylb_depth / bylb_nleaves /
+   bylb_ft，Require 引入，零重复定义）；Stdlib：Arith.Arith（Nat.log2_spec /
+   Nat.leb_le / Nat.leb_gt / Nat.div_mod_eq / Nat.mod_upper_bound）、Lia。
+   对标：stdlib Nat.log2_spec 的双向夹逼（2^(log2 n) <= n < 2^(S (log2 n))）
+   对应燃料-宽度关系 w <= 2^f 的选取；区间折半递归对应 Nat.log2 的折半结构。
+   构造性注记：全件 Set 层承载；零承认；btight_build 为燃料位上的结构
+   Fixpoint，可提取。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 
 From Stdlib Require Import Arith.Arith Lia.
 Require Import UpAblBYLowerBound.

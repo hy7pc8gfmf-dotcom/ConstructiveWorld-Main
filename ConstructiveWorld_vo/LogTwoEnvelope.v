@@ -1,33 +1,31 @@
-(* ============================================================ *)
-(* LogTwoEnvelope.v —— ln2 交错级数的 Q 层双边包络件                    *)
-(*                                                              *)
-(* 使命：本件形式化 ln2 = Σ_{k≥0} (−1)^k/(k+1) 交错级数的 Q 层双边（普查反推件，候融合方确认） *)
-(*   包络三件套（出口全 Set 层）：                                      *)
-(*   1. l2e_alt_partial：部分和 S_n（Z.of_nat # 1 构造）；              *)
-(*   2. l2e_alt_two_sided（QleT' 出口）：forall m n, m ≤ n ->           *)
-(*      QleT' (Qabs (S_n − S_m)) (1/(m+1))——尾界显式公式；配套奇偶     *)
-(*      双边夹逼件（l2e_even_le_odd / l2e_parity_gap / l2e_even_mono /  *)
-(*      l2e_odd_mono）：任一偶部分和 ≤ 任一奇部分和，相邻偶奇之差       *)
-(*      == 1/(2m+1) 显式（ln2 本体是 real 层对象，本件对 Q 层交替和     *)
-(*      独立建理——奇偶单调两翼＋显式隙宽，纯 Q 层落实）；               *)
-(*   3. l2e_cauchy_modulus：forall eps, QltT' 0 eps -> sigT N,          *)
-(*      forall m n, N ≤ m -> N ≤ n -> QltT' (Qabs (S_n − S_m)) eps，    *)
-(*      N := l2e_modulus eps = S (Z.to_nat (Qceiling (1/eps)))——       *)
-(*      ceil(1/eps) 显式可抽取。                                        *)
-(*   模量序结构：恒等 l2e_mag_inv、正性 l2e_den_pos/l2e_mag_pos、       *)
-(*   严格递减 l2e_mag_lt、单调 l2e_mag_decr（委托 l2e_mag_antitone）、  *)
-(*   成对项恒等 l2e_pair_abs：|t_k+t_{k+1}| == m_k−m_{k+1}。            *)
-(* 依赖：CW_ConstructiveWorld_219；stdlib QArith.QArith、QArith.Qabs、  *)
-(*   QArith.Qround、ZArith.ZArith、Arith.Arith、Bool.Bool、Lists.List、 *)
-(*   Setoid、Morphisms、Lia、QArith.Qminmax。                           *)
-(* 对标：mathlib 交错级数 Leibniz 部分和包络形；stdlib QArith 序/绝对值 *)
-(*   引理族。                                                           *)
-(* 构造性注记：出口一律 QltT'/QleT'/NatLe/sigT（Id-of-bool 形）；零经典 *)
-(*   逻辑；尾界 1/(m+1) 为显式公式；分母正性 l2e_den_pos 以显式 Z 正性  *)
-(*   见证构造（Pos2Z.pos_is_pos，不经一键算术自动战术）；文末 Print     *)
-(*   Assumptions 追印。                                                 *)
-(* 编译配方：Rocq 9.1 直调，cpu_guard 护航，信任缓存 vo 树 -Q 映射。    *)
-(* ============================================================ *)
+(* ============================================================
+   LogTwoEnvelope —— 使命行：ln2 交错级数的 Q 层双边包络件。
+   本件形式化 ln2 = Σ_{k≥0} (−1)^k/(k+1) 交错级数的 Q 层双边包络三件套
+   （出口全 Set 层）：
+   1. l2e_alt_partial：部分和 S_n（Z.of_nat # 1 构造）；
+   2. l2e_alt_two_sided（QleT' 出口）：forall m n, m ≤ n ->
+      QleT' (Qabs (S_n − S_m)) (1/(m+1))——尾界显式公式；配套奇偶
+      双边夹逼件（l2e_even_le_odd / l2e_parity_gap / l2e_even_mono /
+      l2e_odd_mono）：任一偶部分和 ≤ 任一奇部分和，相邻偶奇之差
+      == 1/(2m+1) 显式（ln2 本体是 real 层对象，本件对 Q 层交替和
+      独立建理——奇偶单调两翼＋显式隙宽，纯 Q 层落实）；
+   3. l2e_cauchy_modulus：forall eps, QltT' 0 eps -> sigT N,
+      forall m n, N ≤ m -> N ≤ n -> QltT' (Qabs (S_n − S_m)) eps，
+      N := l2e_modulus eps = S (Z.to_nat (Qceiling (1/eps)))——
+      ceil(1/eps) 显式可抽取。
+   模量序结构：恒等 l2e_mag_inv、正性 l2e_den_pos/l2e_mag_pos、
+   严格递减 l2e_mag_lt、单调 l2e_mag_decr（委托 l2e_mag_antitone）、
+   成对项恒等 l2e_pair_abs：|t_k+t_{k+1}| == m_k−m_{k+1}。
+   依赖：CW_ConstructiveWorld_219；stdlib QArith.QArith、QArith.Qabs、
+   QArith.Qround、ZArith.ZArith、Arith.Arith、Bool.Bool、Lists.List、
+   Setoid、Morphisms、Lia、QArith.Qminmax。
+   对标：mathlib 交错级数 Leibniz 部分和包络形；stdlib QArith 序/绝对值引理族。
+   构造性注记：出口一律 QltT'/QleT'/NatLe/sigT（Id-of-bool 形）；零经典逻辑；
+   尾界 1/(m+1) 为显式公式；分母正性 l2e_den_pos 以显式 Z 正性见证构造
+   （Pos2Z.pos_is_pos，不经一键算术自动战术）；文末 Print Assumptions 追印。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 
 Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround

@@ -1,19 +1,17 @@
-(* ============================================================ *)
-(* UpReqSteadyThermo.v —— 本件形式化定理 4.9 steady_state_boltzmann       *)
-(*   的 Real 层构造：稳态分布的 Boltzmann 形（热力学侧载体），            *)
-(*   主件 real_steady_state_boltzmann：Σ_{s'} p(s')·T(s',s) == p(s)。     *)
-(*                                                              *)
-(* 依赖清单：CW_ConstructiveWorld_219；求和前提位供给节另引               *)
-(*   UpReqConcSoftmax（csm_sumf 有限和载体）与 ConcMixSelFeed             *)
-(*   （cms_sum_ext/cms_sum_linear 供给锚）。                              *)
-(*                                                              *)
-(* 构造性注记：语句面全 Set 层（real_eq/real_lt/real_le 全 Set 载体，      *)
-(*   零 Prop 泄露）；零承认、零经典逻辑；全件 Qed 闭合、可提取；           *)
-(*   抽象求和算子两位（real_sum_over_S_ext/real_sum_over_S_linear）的     *)
-(*   证书供给见文尾消解节（载体代换 real_sum_over_S := csm_sumf S0 enum）。 *)
-(*                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
-(* ============================================================ *)
+(* ============================================================
+   UpReqSteadyThermo —— 使命行：本件形式化定理 4.9 steady_state_boltzmann
+   的 Real 层构造：稳态分布的 Boltzmann 形（热力学侧载体），
+   主件 real_steady_state_boltzmann：Σ_{s'} p(s')·T(s',s) == p(s)。
+   依赖：CW_ConstructiveWorld_219；求和前提位供给节另引
+   UpReqConcSoftmax（csm_sumf 有限和载体）与 ConcMixSelFeed
+   （cms_sum_ext/cms_sum_linear 供给锚）。
+   构造性注记：语句面全 Set 层（real_eq/real_lt/real_le 全 Set 载体，零 Prop
+   泄露）；零承认、零经典逻辑；全件 Qed 闭合、可提取；
+   抽象求和算子两位（real_sum_over_S_ext/real_sum_over_S_linear）的证书供给
+   见文尾消解节（载体代换 real_sum_over_S := csm_sumf S0 enum）。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqConcSoftmax.
 Require Import ConcMixSelFeed.

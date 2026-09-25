@@ -1,31 +1,28 @@
-(* ============================================================ *)
-(* MixTimeChainIface.v —— 本件形式化 BoundedSoftmax 接口层注意力混合时间的     *)
-(*   可提取步数见证：以 kappa := 1 − (e^(−Delta/T))² ∈ (0,1) 封装为前提包，     *)
-(*   经参数面适配桥接入 ums_k_select，主定理 mti_amt_attention_mixing_time      *)
-(*   对任意非负初值 TV0 与正预算返回步数 k 使 kappa^k·TV0 ＜ budget（sigT 形）。 *)
-(*                                                                              *)
-(* 依赖清单：CW_ConstructiveWorld_219、S04_RealExpLogConv、AttnDoeblin、        *)
-(*   Paper7Ablation、UpReqUMixSelect；载体供给节另引 UpReqConcFin2              *)
-(*   （cf2_temp_pos/cf2_Delta_pos）与 UpAblD1_expf_pack（real_expf_realizable   *)
-(*   的逐位拆包引用形，uabd1x_expf 系）。                                       *)
-(*                                                                              *)
-(* 出节实形注记：ums_k_select 出节首参是 lt_plus_compat_lt_le 位（UMixSelect    *)
-(*   诚实接口 Variable，forall a b c d, lt a b -> le c d ->                     *)
-(*   lt (plus a c) (plus b d)），其后才是 kappa TV0 budget、四前件               *)
-(*   （lt zero kappa / lt kappa one / le zero TV0 / lt zero budget）、Arch 位    *)
-(*   （forall x, le zero x -> sigT (fun N => lt x (ums_scale (S N) one))）；     *)
-(*   结论 sigT (fun k => lt (mult (r_pow kappa k) TV0) budget)。                *)
-(*   p7a_omd_pos 无 lo_pos 参：forall lo, lt (mult lo lo) one ->                *)
-(*   lt zero (minus one (mult lo lo))；p7a_omd_lt_one 以 lo_pos 为前提。         *)
-(*                                                                              *)
-(* 构造性注记：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；          *)
-(*   sigT 步数见证第二分量 lt 值型 Set 层）；六前提位的载体供给节在典范          *)
-(*   Real 载体 req 面逐位消解（原抽象假设位声明与既有定理签名零改动）；          *)
-(*   零承认、零经典逻辑、公理面零新增，Print Assumptions 预期全 Closed；         *)
-(*   主件 Defined 透明可提取。                                                  *)
-(*                                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流、-o 临时目录输出（树内零写入）。      *)
-(* ============================================================ *)
+(* ============================================================
+   MixTimeChainIface —— 使命行：本件形式化 BoundedSoftmax 接口层注意力混合
+   时间的可提取步数见证：以 kappa := 1 − (e^(−Delta/T))² ∈ (0,1) 封装为前提包，
+   经参数面适配桥接入 ums_k_select，主定理 mti_amt_attention_mixing_time
+   对任意非负初值 TV0 与正预算返回步数 k 使 kappa^k·TV0 ＜ budget（sigT 形）。
+   依赖：CW_ConstructiveWorld_219、S04_RealExpLogConv、AttnDoeblin、
+   Paper7Ablation、UpReqUMixSelect；载体供给节另引 UpReqConcFin2
+   （cf2_temp_pos/cf2_Delta_pos）与 UpAblD1_expf_pack（real_expf_realizable
+   的逐位拆包引用形，uabd1x_expf 系）。
+   构造性注记：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；
+   sigT 步数见证第二分量 lt 值型 Set 层）；六前提位的载体供给节在典范
+   Real 载体 req 面逐位消解（原抽象假设位声明与既有定理签名零改动）；
+   零承认、零经典逻辑、公理面零新增，Print Assumptions 预期全 Closed；
+   主件 Defined 透明可提取。出节实形：ums_k_select 出节首参是
+   lt_plus_compat_lt_le 位（UMixSelect 诚实接口 Variable，
+   forall a b c d, lt a b -> le c d -> lt (plus a c) (plus b d)），
+   其后才是 kappa TV0 budget、四前件（lt zero kappa / lt kappa one /
+   le zero TV0 / lt zero budget）、Arch 位（forall x, le zero x ->
+   sigT (fun N => lt x (ums_scale (S N) one))）；
+   结论 sigT (fun k => lt (mult (r_pow kappa k) TV0) budget)。
+   p7a_omd_pos 无 lo_pos 参：forall lo, lt (mult lo lo) one ->
+   lt zero (minus one (mult lo lo))；p7a_omd_lt_one 以 lo_pos 为前提。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 
 From Stdlib Require Import List.
 From Stdlib Require Import PeanoNat.
@@ -101,7 +98,7 @@ Qed.
 (* ################ 参数面适配桥：kappa 包 → ums_k_select 使用面 ########
    参数面差位三处：lpc（UMixSelect 诚实接口 lt_plus_compat_lt_le，
    出节首参）、le zero TV0（接口 le 面，bs 包不带）、Arch 位
-   （nat-尺度 ums_scale (S N) one 形）。桥件以抽象 kappa ∈ (0,1)
+   （nat-尺度 ums_scale (S N) one 形）。桥接引理以抽象 kappa ∈ (0,1)
    封装形为输入，出 ums_k_select 的 sigT 见证出形 —— 全部差位显式
    消解，UMixSelect 出节实形由此冻结为具名可用件。 *)
 Theorem mti_select_of_package :

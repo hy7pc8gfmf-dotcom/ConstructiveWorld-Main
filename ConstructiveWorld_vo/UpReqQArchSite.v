@@ -1,7 +1,6 @@
-(* ============================================================ *)
-(* UpReqQArchSite.v —— R2BB 席：Hqarch 前件构造性闭合                  *)
-(*   （Bernoulli × Archimedes Q 层站点件）2026-09-24                   *)
-(* ============================================================ *)
+(* ============================================================
+   UpReqQArchSite —— 使命行：Hqarch 前件构造性闭合
+   （Bernoulli × Archimedes Q 层站点件）。
 (* 使命：闭合主定理 mix_k_select_bishop（R2BishopLogSel.v L330，只读）  *)
 (*   的显式前件 Hqarch——「Q 层收缩幂 Archimedean 站点」：               *)
 (*     forall (p v b : Q), Qlt 0 p -> Qlt p 1 -> Qlt 0 v -> Qlt 0 b ->  *)
@@ -21,7 +20,7 @@
 (* 红线自检：无承认件/无经典逻辑/无任何外挂假设；j 为 nat 显式项        *)
 (*   （stdlib Qfloor + Z.to_nat，Q 层全可判定零墙）；语句面与 Hqarch    *)
 (*   契约原形逐字同构（sigT 见证形，projT1 可提取）。                   *)
-(* ============================================================ *)
+   ============================================================*)
 
 From Stdlib Require Import QArith.QArith_base.
 From Stdlib Require Import QArith.Qround.

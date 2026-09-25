@@ -1,42 +1,32 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   fa53_plus_assoc_opp_r（原 L53，10 句刀体）                          *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* fa53_compat_abs.v — T40 消融50 席位VC（E-STAGING-VC）C 类施工件 *)
-(*                                                               *)
-(* 对账面（详见 T40-VC-对账.md §11）：消融辖区两族"诚实接口槽"，  *)
-(*   族1 加法保序严格×非严（lt a b -> le c d -> lt (a+c) (b+d)）： *)
-(*     槽位 S13_NLiveAudit:2349 / AttnDoeblin:158（bs_lpc 同语句  *)
-(*     AttnDoeblin:476 / S13:2667）；辖区外同语句槽 S04:285、      *)
-(*     UpFirewall:107、SqrtfCauchy:73、UpEntropyGainReq:91 同受益。 *)
-(*   族2 le 版 abs 恒等（le zero a -> Id (abs a) a）：             *)
-(*     槽位 S13:2348 / AttnDoeblin:157（bs_abs 同语句 :475/S13:2666）； *)
-(*     S06_DiffSamplingGibbs:4031 挂账"诚实缺口"同语句受益。        *)
-(*                                                               *)
-(* 收口原理：两族槽在 RealInterfaceEnhanced 纯字段内不可直接导出   *)
-(*   （缺单侧严格平移），但 S01_BaseRing:329 已有 DecidableOrder   *)
-(*   可判定序扩展类（Set 层 Or 三分），本件五步收口：              *)
-(*   ① le 加法右消去（le_plus_compat 加 -c + 环归一位运河）；      *)
-(*   ② 单侧严格平移（Not(le) 经 not_le_lt 翻转，矛盾支撞 irrefl）  *)
-(*      ——此件为接口层新果实（S07:6118 配套 translate 件此前仅     *)
-(*      具体 Real 层）；                                           *)
-(*   ③④ 族1/族2 主件：三分分解，双严走 lt_plus_compat 字段，      *)
-(*      eq 支走 id_cong 运河 + ②平移，反侧支撞 lt_irrefl 归谬；    *)
-(*   ⑤ abs 恒等：lt 支走 abs_pos 字段（S01:293），eq 支走          *)
-(*      id_cong abs + abs_zero 的 id 链，反侧支同归谬。            *)
-(*   ——前提可由库内件构造兑现，条件可收口：C 类消融定谳。          *)
-(*                                                               *)
-(* 纪律：语句面全 Set 层（Or/Not/Empty_set 均为 S01 Set 层定义），  *)
-(*   零 Prop 泄露；无 公理/承认件/参数/猜想/弃证；  *)
-(*   非平凡真证（消去/平移/三分/归谬四段字段链）。原树零改。       *)
-(* ============================================================ *)
+(* ============================================================
+   fa53_compat_abs —— 使命行：RealInterfaceEnhanced 纯字段上两族
+   语句在可判定序扩展类之下的构造性闭合：
+   族1 加法保序严格×非严（lt a b -> le c d -> lt (a+c) (b+d)），
+     适用位 S13_NLiveAudit:2349 / AttnDoeblin:158（bs_lpc 同语句
+     AttnDoeblin:476 / S13:2667）；同语句位 S04:285、
+     UpFirewall:107、SqrtfCauchy:73、UpEntropyGainReq:91 同受益。
+   族2 le 版 abs 恒等（le zero a -> Id (abs a) a）：
+     适用位 S13:2348 / AttnDoeblin:157（bs_abs 同语句 :475/S13:2666）；
+     S06_DiffSamplingGibbs:4031 遗留「诚实缺口」同语句受益。
+   闭合原理：两族语句在 RealInterfaceEnhanced 纯字段内不可直接导出
+   （缺单侧严格平移），但 S01_BaseRing:329 已有 DecidableOrder
+   可判定序扩展类（Set 层 Or 三分），本件五步闭合：
+   ① le 加法右消去（le_plus_compat 加 -c + 环归一位运河）；
+   ② 单侧严格平移（Not(le) 经 not_le_lt 翻转，矛盾支撞 irrefl）
+      ——此件为接口层新结论（S07:6118 配套 translate 件此前仅
+      具体 Real 层）；
+   ③④ 族1/族2 主件：三分分解，双严走 lt_plus_compat 字段，
+      eq 支走 id_cong 运河 + ②平移，反侧支撞 lt_irrefl 归谬；
+   ⑤ abs 恒等：lt 支走 abs_pos 字段（S01:293），eq 支走
+      id_cong abs + abs_zero 的 id 链，反侧支同归谬。
+   ——前提可由库内件构造兑现，条件可闭合：C 类已证结论。
+   依赖：S01_BaseRing。
+   构造性注记：语句面全 Set 层（Or/Not/Empty_set 均为 S01 Set 层定义），
+   零 Prop 泄露；无 公理/承认件/参数/猜想/弃证；
+   非平凡真证（消去/平移/三分/归谬四段字段链）。原树零改。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================ *)
 
 Require Import S01_BaseRing.
 
@@ -113,7 +103,7 @@ Proof.
     + exact (fa53_lt_plus_translate_r a b c Hab).
 Qed.
 
-(* ---- 件1：严格×非严加法保序（族1 槽位消融主件） ----
+(* ---- 件1：严格×非严加法保序（族1 主件） ----
    三分 c d：inl 双严走 lt_plus_compat；inr-eq 走 id_cong 运河 +
    ③平移；inr-gt 与 le c d 撞 irrefl。 *)
 Theorem fa53_lt_plus_compat_lt_le_dec :
@@ -131,7 +121,7 @@ Proof.
     destruct (lt_irrefl d (lt_le_trans d c d Hcd_gt Hcd)).
 Qed.
 
-(* ---- 件2：镜像非严×严格加法保序（族1 对偶槽位） ----
+(* ---- 件2：非严×严格加法保序（族1 对偶语句位） ----
    三分 a b：inl 双严；inr-eq 走 id_cong 运河 + ③平移（b 侧）；
    inr-gt 与 le a b 撞 irrefl。与件1 对称，同为无条件件。 *)
 Theorem fa53_lt_plus_compat_le_lt_dec :
@@ -149,10 +139,10 @@ Proof.
     destruct (lt_irrefl a (le_lt_trans a b a Hab Hab_gt)).
 Qed.
 
-(* ---- 件3：le 版 abs 恒等（族2 槽位消融主件） ----
+(* ---- 件3：le 版 abs 恒等（族2 主件） ----
    三分 zero a：lt 支走 abs_pos 字段（S01:293）；eq 支走
    id_cong abs + abs_zero 的 id 链；反侧支撞 irrefl。
-   —— abs_ge_zero_id_cc 全体槽位的接口级完整消解形：
+   —— abs_ge_zero_id_cc 全体语句位的接口级完整消解形：
       库内此前仅有 lt 版 abs_pos 字段与具体 Real 层佐证组合。 *)
 Theorem fa53_abs_ge_zero_id_dec :
   forall a : R, le zero a -> Id (abs a) a.
@@ -168,9 +158,9 @@ Proof.
     destruct (lt_irrefl a (lt_le_trans a zero a Haz Ha)).
 Qed.
 
-(* ---- 件4：族2 的 bs 形状直配（改喂锚定形） ----
-   AttnDoeblin:475 / S13:2666 的 bs_abs 槽位与件3 逐字同语句，
-   此处给显式改喂形（对账坐标锚定）。 *)
+(* ---- 件4：族2 的 bs 形状直接匹配（显式改喂形） ----
+   AttnDoeblin:475 / S13:2666 的 bs_abs 语句位与件3 逐字同语句，
+   此处给显式改喂形（坐标同件3）。 *)
 Corollary fa53_bs_abs_shape :
   forall a : R, le zero a -> Id (abs a) a.
 Proof.
@@ -179,7 +169,7 @@ Qed.
 
 End Fa53CompatAbs.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- 自检段：文件内显式 Print Assumptions 声明 ---- *)
 Print Assumptions fa53_le_plus_cancel_r.
 Print Assumptions fa53_lt_plus_translate_r.
 Print Assumptions fa53_lt_plus_translate_l.

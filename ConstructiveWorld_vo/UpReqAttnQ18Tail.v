@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpReqAttnQ18Tail.v —— 本件形式化温度常数 T₀ 的 Q 有理字面量承载与      *)
+(* ============================================================
+   UpReqAttnQ18Tail —— 使命行：本件形式化温度常数 T₀ 的 Q 有理字面量承载与
 (*   跨 token 同值贡献恒等两件性质。                                     *)
 (*                                                              *)
 (* 依赖清单：UpReqAttnUniformLimit、UpReqAttnMassSplit、                  *)
@@ -10,8 +10,9 @@
 (*   id_cong 与 aid_real_eq 范式给出同值贡献恒等；词表非空位与 token      *)
 (*   可判定相等位的 Set 重述与具体层供给见文尾节。                        *)
 (*                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 Require Import UpReqAttnUniformLimit.
 Require Import UpReqAttnMassSplit.
 Require Import CW_ConstructiveWorld_219.
@@ -24,7 +25,7 @@ From Stdlib Require Import QArith.QArith.
 (* ============================================================ *)
 
 (* positive → nat 自持换算（本安装 Pos2Nat 系不齐：Pos2Nat.neq_0 实测 *)
-(* 缺席，自建以避 stdlib API 漂移雷；S 被基库遮蔽，用 Datatypes.S）  *)
+(* 缺位，自建以避 stdlib API 漂移；S 被基库遮蔽，用 Datatypes.S）  *)
 Fixpoint aqt_pos_nat (p : positive) : nat :=
   match p with
   | xH => 1%nat

@@ -1,15 +1,13 @@
-(* ============================================================ *)
-(* AttnHardLimit218.v —— 本件形式化硬注意力极限的逐固定温度 T 显式        *)
-(*   不等式刻划：主件 hard_dist/decay_T 给出注意力分布到硬分布的距离      *)
-(*   随 T 递减的显式衰减界。                                             *)
-(*                                                              *)
-(* 依赖清单：CW_ConstructiveWorld_219。                                  *)
-(*                                                              *)
-(* 构造性注记：Set 层承载/零承认/可提取；词表非空与 token 可判定相等      *)
-(*   以显式 Variable 前提给出，其 Set 重述与具体层供给见文尾节。          *)
-(*                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
-(* ============================================================ *)
+(* ============================================================
+   AttnHardLimit218 —— 使命行：本件形式化硬注意力极限的逐固定温度 T 显式
+   不等式刻划：主件 hard_dist/decay_T 给出注意力分布到硬分布的距离随 T 递减的
+   显式衰减界。
+   依赖：CW_ConstructiveWorld_219；Stdlib List、Arith、Lia。
+   构造性注记：Set 层承载/零承认/可提取；词表非空与 token 可判定相等以显式
+   Variable 前提给出，其 Set 重述与具体层供给见文尾节。
+   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
+   ============================================================*)
 Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import List Arith Lia.
 Import ListNotations.

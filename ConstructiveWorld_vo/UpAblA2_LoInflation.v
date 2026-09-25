@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpAblA2_LoInflation.v —— 本件形式化 lo 膨胀律：固定初始偏差 TV0 与      *)
+(* ============================================================
+   UpAblA2_LoInflation —— 使命行：本件形式化 lo 膨胀律：固定初始偏差 TV0 与
 (*   预算 budget，Doeblin 常数 lo 减半使混合选择器所需步数 k 的显式上界    *)
 (*   精确翻四倍（ub(lo/2) == 4*ub(lo)，Id 层面精确无损耗），且该上界对     *)
 (*   lo^2 反单调。                                                        *)
@@ -12,8 +12,9 @@
 (* 对标：mathlib Doeblin 混合时间定量上界与膨胀律的构造性 Set 层对应物。  *)
 (* 构造性注记：Set 层承载，零承认；主定理 Defined 可提取；消解定理全由    *)
 (*   库内已证件以显式实参供给，可提取面零 Prop 残留。                     *)
-(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹。                         *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
@@ -589,7 +590,7 @@ End LoiResSumEqListIdt.
 
 Import RealInterfaceEnhancedMod.
 
-(* temp/Delta/z/enum 参数位：Fin 2 非退化实例读法（cf2 供给件直引） *)
+(* temp/Delta/z/enum 参数位：Fin 2 非退化实例读法（cf2 模块直接引用） *)
 
 Theorem loir_temp_pos : lt zero cf2_temp.
 Proof.

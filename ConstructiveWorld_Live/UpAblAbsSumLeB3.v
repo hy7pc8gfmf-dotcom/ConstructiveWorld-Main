@@ -1,7 +1,7 @@
-(* ============================================================ *)
-(* UpAblAbsSumLeB3.v —— abstract sumf 接口本位 B 形供给件              *)
+(* ============================================================
+   UpAblAbsSumLeB3 —— 使命行：abstract sumf 接口本位 B 形供给模块
 (*                                                                *)
-(* 使命：本件形式化 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)——            *)
+(* 使命：本件形式化 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)—— *)
 (*   在 UpReqSampling 的诚实求和接口形（sum_ext/sum_linear/sum_add/     *)
 (*   sum_le/abs_sum_le_h 五接口字段；R:=Real 特化面，                   *)
 (*   RealInterfaceEnhancedSetoid 的 Real 实例在场）上，以显式 Set 层    *)
@@ -26,8 +26,9 @@
 (*   符号二分；Q 层吸收引理以显式 Z 序引理链构造：                        *)
 (*   乘法单调 Z.mul_le_mono_nonneg_r、反序性 Z.opp_le_mono、              *)
 (*   正性见证 Pos2Z.is_pos）。                                            *)
-(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                    *)
-(* ============================================================ *)
+(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
+   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
+   ============================================================*)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.Qring QArith.Qabs QArith.Qminmax.
