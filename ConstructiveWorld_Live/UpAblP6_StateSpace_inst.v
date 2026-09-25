@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===================================================================== *)
 (* UpAblP6_StateSpace_inst.v —— SecondLawQuantified 残面②                 *)
 (*   「任意 StateSpace 非平凡实例」实现件。                                *)
@@ -8,13 +9,13 @@
 (*   （R 自状态空间，S01:1222）；S06:3093 ListStateSpace 节仅散定义不满律。*)
 (*   本件给出第二个满律非平凡实例：R×R 乘积载体（L1 度量、逐点线性结构、   *)
 (*   双分量 lim 收敛），≥3 态（(0,0)/(1,0)/(0,1) 两两非 Id 真证），       *)
-(*   21 字段全构造零缺口，另附一锚定理实例面（IdSlotTranslate 依存件）。   *)
+(*   21 字段全构造零缺口，另附一互核理实例面（IdSlotTranslate 依存件）。   *)
 (* 【有限载体不可能性（如实记录）】bool×bool/三态枚举等有穷载体满律在      *)
 (*   数学上关闭：inv_pos 对正整数标量 fourR=1+1+1+1 给逆（fourR>0 由      *)
 (*   one_pos+lt_plus_compat 真证），任意标量 a=fourR·(a·inv fourR)        *)
 (*   （mult_assoc/comm/one+inv_pos_correct），故满足逐点平方律的载体上    *)
 (*   标量作用四折叠合为零映射，smult_one 迫载体退化为单点——本件把该      *)
-(*   塌缩面形式化为定理 uab34_finite_collapse（任意抽象 StateSpace 上）。 *)
+(*   收缩面形式化为定理 uab34_finite_collapse（任意抽象 StateSpace 上）。 *)
 (*   因而非平凡实例取无穷载体 R×R（≥3 态面由三钉定理钉死）。               *)
 (* 【红线自审】出口面全 Set 层 Id/le/lt（Id=S01:61 ML 恒等型，id_sym/     *)
 (*   id_trans/id_cong 链）；零缺口声明语句；全部定理类枚 Proof 配 Qed     *)
@@ -40,7 +41,7 @@ Context {RIE : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
 Let Rb := @RI_base RIE.              (* RealInterface 参数位 *)
-Let RR := prod (@R Rb) (@R Rb).      (* 实数积对载体型（字面积型，投影 R 卡死项不可作积展开） *)
+Let RR := prod (@R Rb) (@R Rb).      (* 实数积对载体型（字面积型，投影 R 停滞项不可作积展开） *)
 
 (* ---- 乘积运算/度量/收敛（全 @ 全参，逐点定义） ---- *)
 Definition uab34_pzero : RR := (@zero Rb, @zero Rb).
@@ -391,7 +392,7 @@ Proof.
                   (@mult_one Rb a))))).
 Qed.
 
-(* 作用塌缩：任意标量的作用把任意载体元素送至 szero *)
+(* 作用收缩：任意标量的作用把任意载体元素送至 szero *)
 Lemma uab34_action_null :
   forall (a : @R Rb) (y : @S Rb SSc),
     Id (@smult Rb SSc a y) (@szero Rb SSc).
@@ -458,7 +459,7 @@ Qed.
 End FiniteCollapse.
 
 (* ============================================================ *)
-(* §四 一锚定理实例面：上游 StateSpace 依存件在本载体上的兑现      *)
+(* §四 一互核理实例面：上游 StateSpace 依存件在本载体上的兑现      *)
 (* ============================================================ *)
 (*   IdSlotTranslate 节（Context {RI}{SS} 依存 StateSpace，无     *)
 

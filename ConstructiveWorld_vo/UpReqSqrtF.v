@@ -91,7 +91,7 @@ Definition sqrtf_newton (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
 
 (* 正性不变量：任意步迭代严格正（依赖 Fixpoint 第二分量直引）。
    透明 Definition 而非引理：正性见证进入迭代值位（inv_pos 的
-   见证位是值位，proof-relevant——E352/E348 先例），规范见证必须
+   见证位是值位，proof-relevant——既有先例），规范见证必须
    delta 可导以与 Fixpoint 体内 witnesses conversion 对齐。 *)
 Definition sqrtf_newton_pos (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
            (n : nat) : lt zero (sqrtf_newton a Ha x Hx n) :=
@@ -959,7 +959,7 @@ Proof.
   intros a y Ha Hy.
   pose proof (nsq_step_residual_req a y Ha Hy) as Hres.
   set (Hu := sqrtf_step_pos a y Ha Hy) in *.
-  (* 腿 A：2·u·s_u == u·u + opp a *)
+  (* 支路 A：2·u·s_u == u·u + opp a *)
   assert (HA : req (mult (mult nsq_two (sqrtf_step a y Ha Hy))
                          (sqrtf_slack a (sqrtf_step a y Ha Hy) Ha Hu))
                    (plus (mult (sqrtf_step a y Ha Hy) (sqrtf_step a y Ha Hy))

@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* ToyR 战役包I · 切片七扫尾 —— UpAblT6_UpReqSampling 玩具替换稿        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ToyR 工程 · 切片七扫尾 —— UpAblT6_UpReqSampling 玩具替换稿        *)
 (*   基准：Main/Live 同名件（全程只读零改）；语句面/定理名/依赖面/      *)
 (*   声明序与基准逐字守恒，仅换标注刀位的证明体。                      *)
 (*   刀路（九槽落，两槽如实遗留）：弃 sumd_sum_* 出节转发件单点直接代入，    *)
@@ -7,13 +7,13 @@
 (*   定义性闭合，cons 支双腿拼接（ext/le＝逐点腿＋归纳腿；linear＝      *)
 (*   distrib 右分配中项链；add＝assoc-comm 换位内项链，弃不可达之       *)
 (*   UpReqAlgebra req_plus_exchange 改纯字段链）；pos＝中转层脱钩        *)
-(*   直取 sumd_list_sum_pos。A5 swap_cc 已由 T278 集中清偿（载体归纳    *)
+(*   直取 sumd_list_sum_pos。A5 swap_cc 已由  集中完成清理（载体归纳    *)
 (*   换形：Hadd 加法分配泛型件＋Hsw 双列表换序归纳原地重演，弃出节转发）；B6 eq_list（sumd_sum_eq_list        *)
 (*   本体即定义性恒等 req_refl，任何替改写证体与之逐字同＝唯一形不化）。     *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT6_UpReqSampling.v —— 假设消融战役 T6 批·席 a（T3a 移交同根余量前 ≤25 位之 11 位） *)
+(* UpAblT6_UpReqSampling.v —— 假设消融工程 T6 批· a（T3a 移交同根余量前 ≤25 位之 11 位） *)
 (* 辖区：UpReqSampling.v sumf 接口面（ReqUContraction/ReqBoundedSoftmax 两节）   *)
 (* 实例化消解源文件：sumd_*@UpReqSumD                                                   *)
 (*                                                              *)
@@ -28,7 +28,7 @@
 (*    A2 uabT6_usamp_sum_linear   ←L107 sum_linear 实例化消解 sumd_sum_linear@:135 *)
 (*    A3 uabT6_usamp_sum_add      ←L110 sum_add    实例化消解 sumd_sum_add@:161 *)
 (*    A4 uabT6_usamp_sum_le       ←L113 sum_le     实例化消解 sumd_sum_le@:203 *)
-(*    A5 uabT6_usamp_sum_swap_cc  ←L132 sum_swap_cc（T278 清偿：Hadd＋      *)
+(*    A5 uabT6_usamp_sum_swap_cc  ←L132 sum_swap_cc（ 完成清理：Hadd＋      *)
 (*        Hsw 双归纳原地重演，零新增 Require；原实例化消解 sumd_sum_swap@:384      *)
 (*        出节转发体弃用）                              *)
 (*   §B ReqBoundedSoftmax（L700-747）：                                *)
@@ -59,7 +59,7 @@
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、                   *)
 (*   UpReqSumD（经其传递 UpReqAlgebra/UpReqDist）。                            *)
 (*   语句面逐字抽取自现档 UpReqSampling.v（两树逐字节同验：                      *)
-(*   Main/Live_X md5 同 2ce2c50a，2026-09-15 版，与 FA2 普查表行号              *)
+(*   Main/Live_X md5 同 2ce2c50a， 版，与 FA2 普查表行号              *)
 (*   逐位核对一致），仅 sumf → sumd_sumf S enum 换实例位。                     *)
 (*                                                              *)
 (* 备注：语句面全集合层（req/le/lt 均集合值谓词）；公理面零新增；文尾逐件        *)
@@ -143,7 +143,7 @@ Proof.
              (sumd_list_sum S g t) (H x) IH).
 Qed.
 
-(* A5 ←L132 sum_swap_cc（swap 特形：双标函数参，内外两层 sumf 实例位全换；T278 载体归纳换形原地重演） *)
+(* A5 ←L132 sum_swap_cc（swap 特形：双标函数参，内外两层 sumf 实例位全换； 载体归纳换形原地重演） *)
 Theorem uabT6_usamp_sum_swap_cc :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S)
     (f : S -> S -> R),

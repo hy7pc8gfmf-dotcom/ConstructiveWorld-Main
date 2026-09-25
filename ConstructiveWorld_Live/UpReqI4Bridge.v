@@ -1,7 +1,7 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqI4Bridge.v *)
 (* *)
-(* 目的： 结论 I4 消费位的对接桥（KL 幂单调 B 形）。 *)
+(* 目的： 结论 I4 使用位的对接桥（KL 幂单调 B 形）。 *)
 (* 主件： i4b_policy_iter_kl_pow_mono_B 及其 eq0 形：KL 幂单调的策略迭代版本。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB、UpReqGeomIter、UpReqPowMonoBridge。 *)
 (* 备注： 证书位形态以诚实登记表申报（见尾注）；幂单调取 ≤_B 显式形。 *)
@@ -33,8 +33,8 @@
 (*   件0a i4b_kl0_or_of_lt：严格见证支 Or 证书构造；                      *)
 (*   件0b i4b_kl0_or_of_eq：等式反射支 Or 证书构造；                      *)
 (*   件1 i4b_pow_kl_mono_le_b：结论 I4 尾注所指缺口形状的实例闭合         *)
-(*      （κ^{t1}·KL_0 ≤_B κ^t·KL_0；④∘③ 在消费点直连）；                 *)
-(*   件2 i4b_policy_iter_kl_pow_mono_B：主桥（结论 I4 消费位对接件，      *)
+(*      （κ^{t1}·KL_0 ≤_B κ^t·KL_0；④∘③ 在使用点直连）；                 *)
+(*   件2 i4b_policy_iter_kl_pow_mono_B：主桥（结论 I4 使用位对接件，      *)
 (*      X3d 草案 x3d_i4_bridge_draft 正式化；补充 Hkl0or 前提下闭合）；   *)
 (*   件3 i4b_policy_iter_kl_pow_mono_eq0：eq 支证书端到端闭合实例         *)
 (*      （主件包＋KL_0==0 见证 ⟹ 结论 I4 目标形无条件成立）。             *)
@@ -82,7 +82,7 @@ Qed.
 (* ============================================================ *)
 (* 一、结论 I4 缺口形状实例闭合：κ^{t1}·KL_0 ≤_B κ^t·KL_0                 *)
 (*   ＝ UpReqGeomIter 尾注所指「κ^{t1}·KL_0 ≤ κ^t·KL_0+δ 的 le_b 乘法    *)
-(*   保序闭包（非负右因子版）」在消费点的单点落成（④件1 ∘ ③powb 单调）。 *)
+(*   保序闭包（非负右因子版）」在使用点的单点落成（④件1 ∘ ③powb 单调）。 *)
 (* ============================================================ *)
 
 Lemma i4b_pow_kl_mono_le_b : forall (n : nat) (r : nat -> Real)
@@ -112,7 +112,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 二、主桥：结论 I4 消费位对接件（X3d 草案 x3d_i4_bridge_draft 正式化）  *)
+(* 二、主桥：结论 I4 使用位对接件（X3d 草案 x3d_i4_bridge_draft 正式化）  *)
 (* ============================================================ *)
 
 Lemma i4b_policy_iter_kl_pow_mono_B :
@@ -148,7 +148,7 @@ Proof.
            (real_mult (powb_pow (real_plus real_one (real_opp eta)) t)
               (geod_lsum n (fun i : nat =>
                  real_kl_term (r i) (p i) (Hr i) (Hp i))))).
-  (* 跳①：主件 B 伴件（t1 站位，UpReqGeomIter 旗舰伴件） *)
+  (* 跳①：主件 B 伴件（t1 站位，UpReqGeomIter 主定理伴件） *)
   - exact (geodi_policy_iter_kl_geom_iter_B n r Hr eta Heta Hlt1 p Hp
              Hnormr Hnormp Hn t1).
   (* 跳②：件1（④∘③，非负右因子取 KL_0） *)
@@ -156,7 +156,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 三、证书支路实例：eq 支端到端闭合（证书位接口消费演示）                *)
+(* 三、证书支路实例：eq 支端到端闭合（证书位接口使用演示）                *)
 (* ============================================================ *)
 
 Lemma i4b_policy_iter_kl_pow_mono_eq0 :
@@ -199,11 +199,11 @@ Print Assumptions i4b_policy_iter_kl_pow_mono_eq0.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                                        *)
-(* 【对接判定】结论 I4 消费位（UpReqGeomIter 尾注）所指缺口「④le_b       *)
+(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口「④le_b       *)
 (*   乘法保序闭包（非负右因子版）」已由 UpReqPowMonoBridge 件1 落库；     *)
 
 (*   结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」在补充 Or 形证书     *)
-(*   Hkl0or 下全闭合——消费位需求满足（草案残差即本证书位）。             *)
+(*   Hkl0or 下全闭合——使用位需求满足（草案残差即本证书位）。             *)
 (* 【证书位残差｜B⟹Or 单点】Or 形 0 ≤ KL_0 无一般构造性证书：            *)
 (*   · 库内已有全为 B 形（geodi_kl_nonneg_B / real_gibbs_inequality_B /  *)
 (*     gibbsd_gibbs_inequality），其链根 real_gibbs_core_eps 与          *)
@@ -211,12 +211,12 @@ Print Assumptions i4b_policy_iter_kl_pow_mono_eq0.
 (*     逐 eps 完成不给 Or 分支判定（KL_0>0 与 KL_0==0 构造性不可分，     *)
 (*     gibbs 等号条件 r==p 逐点判定同样不可分），B⟹Or 方向显式假设成立，     *)
 
-(*   · 两支可通行支路已登记为接口件（件0a lt 支／件0b eq 支）：消费位    *)
+(*   · 两支可通行支路已登记为接口件（件0a lt 支／件0b eq 支）：使用位    *)
 (*     上游能供严格见证或等式见证时任取一支即全闭合（件3 为 eq 支        *)
 (*     端到端实例）；                                                    *)
 (*   · 有界面 ④件5 亦要求 Or 形 0≤c 前提，同样绕不开本单点——换合成器    *)
 (*     变体不消除残差；唯有上游见证，或「sup KL 上界材料＋纯 B 形因子    *)
 (*     新合成器」路线（库内上界件显式假设，见 UpReqGeomIter 尾注）。          *)
 
-(*   G3 提取探针 Obj.magic=0（_t20_g3.v，产物目录验后即删）。            *)
+(*   G3 提取检验 Obj.magic=0（_t20_g3.v，产物目录验后即删）。            *)
 (* ============================================================ *)

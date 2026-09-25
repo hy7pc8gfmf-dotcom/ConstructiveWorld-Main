@@ -1,13 +1,9 @@
-(* ============================================================ *)
 (* UpReqLogCompD2.v —— 严格恒等式 2 的复合重建件。                *)
-(* *)
 (* 使命： 本件形式化 req_temp_strict_ident2 的复合重建装配。      *)
 (* 主件： logc_temp_strict_ident2：严格恒等式 2 的复合重建。      *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G05_LogSmall、UpReqLogCompD、UpReqAlgebra。 *)
 (* 构造性： Set 层零 Prop 表面（结论全 req/lt 接口 Set 值）；全 Qed、零公理面；可提取。 *)
 (* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。 *)
-
-(* ============================================================ *)
 (* 装配说明：req_temp_strict_ident2 的复合重建消解                *)
 (*   目标参数位 = UpFirewallReq.req_temp_strict_ident2（七参数结论  *)
 (*   之参数位 7）。路线：T6 两例（logc_relative_entropy_temp_decomp *)
@@ -20,18 +16,6 @@
 (*   sum 桥机三件 tsum_ext / tsum_add / tsum_linear + zt_spec +     *)
 (*   zt_pos + tsup_compat + tsup_log_exp_neg（七件，全为既有供给形）。*)
 (* 命名：logc2_ 前缀库内独占。                                     *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(*                                                              *)
-(* ============================================================ *)
-(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.

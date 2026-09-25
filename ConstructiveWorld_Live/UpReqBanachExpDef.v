@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -54,7 +54,7 @@ From Stdlib Require Import Lia.
 (* ============================================================ *)
 
 (* 元素+证书封装：柯西级数序列经完备性字段直接取得              *)
-(*   （BISH 式「柯西序列即元素」的字段化落位——见证成对取出）。   *)
+(*   （BISH 式「柯西序列即元素」的字段化定位——见证成对取出）。   *)
 Definition bxdef_exp_pair (B : BanachAlg) (a : (@BA B)) :
   sigT (fun l : (@BA B) => blim B (fun n => exp_series_partial B a n) l) :=
   bcauchy_complete_sig B (fun n => exp_series_partial B a n)
@@ -107,7 +107,7 @@ Proof.
     exact (@bmult_zero B (@bzero B)).
 Qed.
 
-(* 级数项在零元处塌缩：bzero^{S k}·(1/(S k)!) ≡ bzero *)
+(* 级数项在零元处收缩：bzero^{S k}·(1/(S k)!) ≡ bzero *)
 Lemma bxdef_esp_term_zero : forall (B : BanachAlg) (k : nat) (q : Q),
   @bae B (@bmult B (bpow B (@bzero B) (Datatypes.S k)) (@bcoef B q))
         (@bzero B).
@@ -186,7 +186,7 @@ Qed.
 (* ============================================================ *)
 (* 遗留登记（对称，不落承认件）：                                *)
 (*      依赖闭包承 UpReqBanachExp 文件尾四步登记（本件第②步      *)
-(*      「极限定义经 bcauchy_complete_sig」已由本件补齐落位）。   *)
+(*      「极限定义经 bcauchy_complete_sig」已由本件补齐定位）。   *)
 (*   ② exp(0)=bone 完全等式面：需 Class 增反可分性字段           *)
 (*      （bnorm 任意小 ⟹ bae bzero）——接口扩容属上游裁决，       *)
 (*   ③ 极限唯一性（同序列双极限 bae 相等）：同②依赖反可分性，    *)

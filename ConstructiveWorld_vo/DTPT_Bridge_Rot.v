@@ -1,84 +1,29 @@
-(* ═════════════════════════════════════════════════════════════════════ *
- * 本稿＝原件全文逐字保留，仅换写下列证明体（同一陈述、同一符号、            *
- * 零新增 Require、零承认件、全中文头注）。                                 *
- * 替换清单（6 条，引擎体整体内联——族级盘件 DTPT_Rotation 证明体在           *
- * qeqT_intro 包装位就地重演，消除跨件单跳委托）：                           *
- *   ① phase_dev_stable_set＝盘件二分布尔判别链内联（unfold phase_dev＋      *
- *     Qeq_bool destruct eqn 命名＋真支 Qeq_sym/Qeq_bool_eq 换向＋          *
- *     假支 simpl/discriminate 矛盾排除）；                                 *
- *   ②③ H_lam_cyc_lam1_set／lam0_set＝端点定义层展开内联（unfold            *
- *     H_lam_cyc＋字面数值 replace 见证＋ring 重排收口）；                   *
- *   ④ H_adj_Pmid_seam_set＝接缝公式内联（unfold Pmid＋Pinf_true_id 改写＋   *
- *     H_adj_app_seam 拼接＋firstn/skipn 非空双证 lia 链）；                 *
- *   ⑤⑥ H_adj_Pmid_k0_set／klen_set＝端点坍缩改写链内联（llm_Pmid_zero／    *
- *     llm_Pmid_len_endpoint 端点改写＋Pinf_true_id／reflexivity 收口）。    *
- * 批量登记（10 条，不动证明体）：rotc_class_sharp_ub_set／                  *
- *   H_adj_Pmid_sorted_exact_set／H_adj_Pmid_sorted_ub2_set／               *
- *   H_adj_Pmid_ub_gen_set／H_lam_pmid_lam1_set／H_lam_pmid_lam0_set／      *
- *   H_lam_pmid_diff_set／H_lam_pmid_sorted_consistency_set／               *
- *   H_lam_pmid_k0_oldface_set／H_lam_pmid_klen_const_set——族级旗舰         *
- *   长体（多支分情况／三相互补熵族）不内联不凑数，保持一跳包装原样。         *
- * 纪律：纯构造性；Set/Type 层零 Prop 泄露（QeqT/QleT 构造子携 Prop 证明参    *
- *   为本件既有惯例）；证明口逐条配平；全部真收口。                          *
- * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================
-   DTPT_Bridge_Rot.v — P3 桥接层第六棒。
-   续棒：P3-B7尾部追加 §8——Rotation §S8 新定理
-         桥接（FRUIT-1 件 §S8 冻结新件的 Set 形面，12 件）
-   续棒：P3-B12尾部追加 §9——Rotation §S9 新定理
-         桥接（FRUIT-3 件 §S9 冻结新件 H_lam_pmid 三相互补熵族的
-         Set 形面，9 件：端点双件 + 双旗舰 + 分离见证 sigT + 加分
-         端点旧件桥/常值面 + vm_compute 锚双件）
-   职责：旋转族旗舰 Set 形桥接——底座 DTPT_Rotation.v
-         （棒 6b 改名件：原 DTPT_Cyc.v 全量 2,005 行，名不变只变
-         限定路径；本棒消费其改名后形态）的 Prop 证件升级为
-         信息性 Type/Set 面。
+   DTPT_Bridge_Rot.v — 旋转族 Set 形桥接。
+   使命：将 DTPT_Rotation.v 的 Prop 证件升级为信息性 Type/Set 面：
      §1 本地信息性类型族 QleT/QeqT（构造子携 Prop 证明参＝提取
-        擦除惯例 B1 同款；以 Arguments 显式声明取代全局
-        Set Implicit Arguments——B3 坑3 根除，B4 同款）
-     §2 保底件：H_rotc_separates_set——非退化分离见证的
-        sigT 信息性形（Prop exists 不可消除入 Type，按 B3
-        tarski_set 同款直构包装：见证 [0;1;2] 转 1 格照盘照录）
-     §3 旗舰件：rotc_class_sharp_ub_set——2·spread 锐化上界的
-        QleT 面（盘上 rotc_class_sharp_ub 为 Qle ≤ 面，逐字对齐）
-     §4 旗舰副件：rotc_spectrum_bound_set——谱有限性的 sigT
-        信息性形（Prop 版二分为 cyc_nat_le_gt_cases 的 or 面，
-        不可消除；此处换 stdlib 可计算二分 le_lt_dec 同款直构，
-        两支见证与界逐字照盘）
-     §5 主件：偏差判别器 phase_dev 可执行面三件——sumbool
-        判定器 / 稳定面 QeqT 证书（消费盘上 phase_dev_stable）/
-        sigT 偏差见证（消费盘上 phase_dev_witness 直构）
-     §6 加分件：H_lam_cyc 端点双件 QeqT 面（消费盘上
-        H_lam_cyc_lam1 / H_lam_cyc_lam0）
-     §7 提取探针：逐件独立提取，验收 Obj.magic 计数 0
-     §8 Rotation §S8 新定理桥接（P3-B7 追加段）：保底双件
-        （H_adj_Pmid_seam_set QeqT 面 / Pmid_sorted_collapse_set
-        sumbool 可执行表等判定面）+ 旗舰四件（精确坍缩 QeqT 面
-        H_adj_Pmid_sorted_exact_set + 1·spread 精确值信息性携带
-        spread 面 + 上界双件 ub2/gen QleT）+ 主件
-        phase_classify_ne_PMid_set（死支定理可执行 sumbool 面
-        {=PhP0}+{=PhPinf}）+ 加分端点三件（k0/klen QeqT +
-        sorted 端点对 Type 积面）+ vm_compute 锚见证双件
-   归并记录：§1–§7 = P3-B6 首棒（旋转族旗舰 Set 形桥接，稳定段
-        零改）；§8 = P3-B7 追加（规格「§2 = S8 新定理桥接」
-        号段；沿文内既有 §2–§7 编号顺延为 §8，B6 段保持原样）；
-        §9 = P3-B12 追加（规格「§4 = §S9 三相互补桥接」号段；
-        沿文内既有 §2–§8 编号顺延为 §9，B6/B7 段保持原样）；
-        提取产物 b7_ / b12_ 前缀（B6 段 b6_ 不变）。
-   依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
-         （棒 6b 改名件；其下游 ROTC/Entropy2 已退役，本文件
-         与退役件零接触）。本文件不 Require DTPT_Bridge /
-         DTPT_Bridge_Dig（并发工位文件，防竞态；QleT/QeqT 族
-         本地镜像，惯例同构 B1 §1 / B4 §1 同款形——依赖链
-         DTPT/DTPT_Entropy/DTPT_Rotation 全链 grep 该族名零
-         命中，零撞名实测在案）。
-   命名：桥件名沿规格指定（H_rotc_separates_set 等 8 件，
-         _set 后缀 B1-B5 惯例）；提取产物 b6_ 前缀；模块
-         DTPT_Bridge_Rot 限名隔离。
-   认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
-   纪律：温控协议 v2（coqc 全机 ≤3 先查后编）；禁碰一切既有 .v
-         （本件独占本新建件）；禁 git；nat 字面量全显式 %nat；
-         Q_scope 自开。
+        擦除惯例；以 Arguments 显式声明取代全局 Set Implicit
+        Arguments）
+     §2 保底件：H_rotc_separates_set——非退化分离见证的 sigT
+        信息性形（Prop exists 不可消除入 Type，直构包装）
+     §3 主定理件：rotc_class_sharp_ub_set——2·spread 锐化上界
+     §4 谱界副件：rotc_spectrum_bound_set——谱有限性 sigT 形
+     §5 主件：偏差判别器 phase_dev 可执行面三件（sumbool 判定器
+        /稳定面 QeqT 证书/sigT 偏差见证）
+     §6 加分件：H_lam_cyc 端点双件 QeqT 面
+     §7 提取检验：逐件独立提取，验收 Obj.magic=0
+     §8 §S8 新定理桥接：保底双件＋精确坍缩与上界件＋主件
+        phase_classify_ne_PMid_set＋加分端点与计算锚双件
+     §9 §S9 三相互补熵族桥接：端点双件＋双主定理＋分离见证
+        sigT＋端点旧件桥/常值面＋计算锚双件
+   依赖（全部只读）：DTPT / DTPT_Entropy / DTPT_Rotation；本
+         文件不 Require DTPT_Bridge / DTPT_Bridge_Dig（QleT/QeqT
+         族本地副本，惯例同构，零撞名）。
+   对标：DTPT_Rotation.v §S8/§S9 现役陈述（逐字对齐面）。
+   构造性：零承认零公理；Set/Type 层零 Prop 泄露（Prop 证明参
+         随提取擦除）；nat 字面量全显式 %nat；Q_scope 自开。
+   编译配方：coqc -native-compiler no -q -Q . ""（全机 ≤3 道先查
+         后编）。
    ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -96,7 +41,7 @@ Import DTPT_Rotation.DTPT_Rotation.
 
 Module DTPT_Bridge_Rot.
 
-(* ========== §1 本地信息性类型族（QleT/QeqT 惯例镜像） ========== *)
+(* ========== §1 本地信息性类型族（QleT/QeqT 惯例同构） ========== *)
 
 Inductive QleT (x y : Q) : Type :=
 | qleT_intro : (x <= y)%Q -> QleT x y.
@@ -123,7 +68,7 @@ Proof.
   intro Hc. vm_compute in Hc. discriminate Hc.
 Defined.
 
-(* ========== §3 旗舰件：2·spread 锐化上界的 QleT 面 ========== *)
+(* ========== §3 主定理件：2·spread 锐化上界的 QleT 面 ========== *)
 
 (* 盘上 rotc_class_sharp_ub（DTPT_Rotation.v §S6 段）为 Qle ≤ 面：
    forall l k, SortedQ l -> (H_adj (rotc k l) <= 2 * (lastq l - hd 0 l))%Q.
@@ -135,14 +80,14 @@ Proof.
   exact (rotc_class_sharp_ub l k HS).
 Defined.
 
-(* ========== §4 旗舰副件：谱有限性的 sigT 信息性形 ========== *)
+(* ========== §4 谱界副件：谱有限性的 sigT 信息性形 ========== *)
 
 (* 盘上 rotc_spectrum_bound（DTPT_Rotation.v §M5-1 段）：
    exists k', (k' <= length l - 1)%nat /\ rotc k l = rotc k' l
    （Leibniz 表等）。其证之二分为 Prop or 面（cyc_nat_le_gt_cases）
    不可消除入 Type；此处换 stdlib 可计算二分 le_lt_dec 同款直构：
    两支见证（k >= 表长取 k' = k；越界冻结回 k' = 0）与界逐字照盘，
-   rotc_ge_len_id / rotc_0 消费面不变。 *)
+   rotc_ge_len_id / rotc_0 使用面不变。 *)
 Theorem rotc_spectrum_bound_set : forall (k : nat) (l : list Q),
   {k' : nat & (k' <= length l - 1)%nat /\ rotc k l = rotc k' l}.
 Proof.
@@ -161,7 +106,7 @@ Defined.
 (* 盘上 phase_dev（DTPT_Rotation.v §S6 段）本为 bool 值可执行定义：
    negb (Qeq_bool (H_adj (P0 l)) (H_adj (rotc k l)))。
    ① sumbool 判定器：bool 二分直构（分支目标被 destruct 抽象为
-   计算形——B3 坑1 在案，处方 reflexivity 收口）。 *)
+   计算形，处方 reflexivity 闭合）。 *)
 Theorem phase_dev_spec_set : forall (l : list Q) (k : nat),
   {phase_dev l k = true} + {phase_dev l k = false}.
 Proof.
@@ -170,7 +115,7 @@ Proof.
   - right. reflexivity.
 Defined.
 
-(* ② 稳定面 QeqT 证书：不偏差时两侧数值相等（消费盘上
+(* ② 稳定面 QeqT 证书：不偏差时两侧数值相等（所用盘上
    phase_dev_stable：phase_dev l k = false -> H_adj (rotc k l)
    == H_adj (P0 l)），qeqT_intro 一跳包装。 *)
 Theorem phase_dev_stable_set : forall (l : list Q) (k : nat),
@@ -212,7 +157,7 @@ Proof.
   ring.
 Defined.
 
-(* ========== §7 提取探针（U12 配方：逐件独立提取，
+(* ========== §7 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Set Extraction Output Directory ".".
@@ -245,12 +190,12 @@ Print Assumptions H_lam_cyc_lam0_set.
    H_adj_Pmid_sorted_exact、L2079 H_adj_Pmid_sorted_ub2、L2099
    H_adj_Pmid_ub_gen、L2141/L2150/L2158 端点三件、L2175
    phase_classify_ne_PMid、L2193/L2197 vm_compute 锚双件。
-   H_devsum/垫片/弃用注记零消费零触碰（弃用件 Pinf_eq_l 沿 FRUIT-1
-   同款绕行，仅经 Pinf_true_id 面）。 *)
+   H_devsum/适配层/弃用注记零使用零触碰（弃用件 Pinf_eq_l 绕行，
+   仅经 Pinf_true_id 面）。 *)
 
 (* ---------- §8.1 保底件：中相分解 Set 面 ---------- *)
 
-(* ① 消费 L1994 H_adj_Pmid_seam（Qeq == 面，seam 定向 hd 在前）：
+(* ① 所用 L1994 H_adj_Pmid_seam（Qeq == 面，seam 定向 hd 在前）：
    qeqT_intro 一跳包装，QeqT 面逐字对齐，接缝项保持盘面原定向。 *)
 Theorem H_adj_Pmid_seam_set : forall (l : list Q) (s : nat) (k : nat),
   k <> 0%nat -> (k < length l)%nat ->
@@ -268,13 +213,13 @@ Proof.
   - exact (skipn_ne_of_lt k l Hlt).
 Defined.
 
-(* ② 消费 L2056 Pmid_sorted_collapse（list 级 Leibniz 直等面）：
+(* ② 所用 L2056 Pmid_sorted_collapse（list 级 Leibniz 直等面）：
    盘上结论为 Prop eq，信息性化取 sumbool 可执行表等判定面——
    本地可计算判定底 list_qeqb（Qeq 逐点口径，Module 内限定名，
    全链 grep 零撞名实测）。soundness：true 支由盘面坍缩件直供；
    false 支经 list_qeqb_refl（list_qeqb a a = true）与坍缩件矛盾
-   排除——无 Prop 消除入 Type，无硬凑。SortedQ 前提为 Prop 整参
-   （提取擦除惯例，B6 rotc_class_sharp_ub_set 同款诚实声明）。 *)
+   排除——无 Prop 消除入 Type，无强造。SortedQ 前提为 Prop 整参
+   （提取擦除惯例，rotc_class_sharp_ub_set 同款诚实声明）。 *)
 Fixpoint list_qeqb (a b : list Q) : bool :=
   match a, b with
   | [], [] => true
@@ -299,9 +244,9 @@ Proof.
     rewrite list_qeqb_refl in E. discriminate E.
 Defined.
 
-(* ---------- §8.2 旗舰件：精确坍缩 Set 面 + 上界双件 ---------- *)
+(* ---------- §8.2 主定理件：精确坍缩 Set 面 + 上界双件 ---------- *)
 
-(* ③ 消费 L2068 H_adj_Pmid_sorted_exact（sorted 卫哨 Qeq 面）：
+(* ③ 所用 L2068 H_adj_Pmid_sorted_exact（sorted 卫哨 Qeq 面）：
    QeqT 证书面——sorted 下中相熵 == H_adj l，QeqT 载体即把
    「1·spread 精确值」信息性携带为可提取证书（非 mere ≤ 界）。 *)
 Theorem H_adj_Pmid_sorted_exact_set : forall (l : list Q) (s : nat) (k : nat),
@@ -323,7 +268,7 @@ Proof.
   apply H_adj_Pmid_sorted_exact. exact HS.
 Defined.
 
-(* ⑤ 消费 L2079 H_adj_Pmid_sorted_ub2（2·spread 上界，P0 面
+(* ⑤ 所用 L2079 H_adj_Pmid_sorted_ub2（2·spread 上界，P0 面
    spread 口径）：qleT_intro 一跳包装，QleT 面逐字对齐。 *)
 Theorem H_adj_Pmid_sorted_ub2_set : forall (l : list Q) (s : nat) (k : nat),
   SortedQ l -> QleT (H_adj (Pmid l s k)) (2 * (lastq (P0 l) - hd 0 (P0 l))).
@@ -332,8 +277,8 @@ Proof.
   apply H_adj_Pmid_sorted_ub2. exact HS.
 Defined.
 
-(* ⑥ 消费 L2099 H_adj_Pmid_ub_gen（无排序诚实界，尾段如实分项——
-   FRUIT-1 诚实障碍声明随行：无排序时尾段 H_adj (skipn k l) 不可
+(* ⑥ 所用 L2099 H_adj_Pmid_ub_gen（无排序诚实界，尾段如实分项——
+   诚实障碍声明随行：无排序时尾段 H_adj (skipn k l) 不可
    吞入 2·spread，见证 [0;1;0;1] k=1 在案）：QleT 面逐字对齐。 *)
 Theorem H_adj_Pmid_ub_gen_set : forall (l : list Q) (s : nat) (k : nat),
   k <> 0%nat -> (k < length l)%nat ->
@@ -346,7 +291,7 @@ Defined.
 
 (* ---------- §8.3 主件：死支定理 Set 面 ---------- *)
 
-(* ⑦ 消费 L2175 phase_classify_ne_PMid + DTPT.v L2846/L2848 实测
+(* ⑦ 所用 L2175 phase_classify_ne_PMid + DTPT.v L2846/L2848
    （PhaseTag : Type := PhP0 | PhMid | PhPinf；phase_classify 为
    Qeq_bool 双测试判定树：第一测试 h0=hm → PhP0，第二测试 hm=hi →
    PhPinf，否则 PhMid）。盘上死支定理（PhMid 构造子不可达）的
@@ -371,7 +316,7 @@ Defined.
 
 (* ---------- §8.4 加分件：端点三件 Set 面（对账 U2 端点族） ---------- *)
 
-(* ⑧ 消费 L2141 H_adj_Pmid_k0（k=0 端点＝P∞ 相，原始全体）：
+(* ⑧ 所用 L2141 H_adj_Pmid_k0（k=0 端点＝P∞ 相，原始全体）：
    QeqT 一跳包装。 *)
 Theorem H_adj_Pmid_k0_set : forall (l : list Q) (s : nat),
   QeqT (H_adj (Pmid l s 0%nat)) (H_adj l).
@@ -382,7 +327,7 @@ Proof.
   reflexivity.
 Defined.
 
-(* ⑨ 消费 L2150 H_adj_Pmid_klen（k=length 端点＝P0 相，排序全体）：
+(* ⑨ 所用 L2150 H_adj_Pmid_klen（k=length 端点＝P0 相，排序全体）：
    QeqT 一跳包装。 *)
 Theorem H_adj_Pmid_klen_set : forall (l : list Q) (s : nat),
   QeqT (H_adj (Pmid l s (length l))) (H_adj (P0 l)).
@@ -391,7 +336,7 @@ Proof.
   rewrite (llm_Pmid_len_endpoint l s). reflexivity.
 Defined.
 
-(* ⑩ 消费 L2158 H_adj_Pmid_endpoints_sorted（sorted 下两端点熵皆
+(* ⑩ 所用 L2158 H_adj_Pmid_endpoints_sorted（sorted 下两端点熵皆
    == lastq l - hd 0 l）：Set 面取 QeqT 双证书的 Type 积（prod）——
    分量经盘面 conj 的 proj1/proj2 取得（仅 Prop→Prop 投影，无
    Prop 消除入 Type），两证书信息性并存。 *)
@@ -407,7 +352,7 @@ Defined.
 
 (* ---------- §8.5 vm_compute 锚见证件（G4 实测面） ---------- *)
 
-(* ⑪ 消费 L2193 Pmid_sorted_collapse_wit_012：见证列 [0;1;2]
+(* ⑪ 所用 L2193 Pmid_sorted_collapse_wit_012：见证列 [0;1;2]
    （sorted）上中相整体坍缩的 sigT 信息性形——坍缩结果表
    [0;1;2] 作为见证信息性携带，vm_compute 一步闭项照盘。 *)
 Theorem Pmid_collapse_wit_set : {l : list Q & Pmid [0; 1; 2] 0%nat 1%nat = l}.
@@ -415,7 +360,7 @@ Proof.
   exists [0; 1; 2]. vm_compute. reflexivity.
 Defined.
 
-(* ⑫ 消费 L2197 H_adj_Pmid_decomp_wit_012：接缝分解恒等式数值锚
+(* ⑫ 所用 L2197 H_adj_Pmid_decomp_wit_012：接缝分解恒等式数值锚
    的 sigT 信息性形——熵见证值（盘面 RHS 逐字照录）经 QeqT 载体
    信息性携带，vm_compute 一步闭项照盘。 *)
 Theorem H_adj_Pmid_wit_set :
@@ -425,7 +370,7 @@ Proof.
   apply qeqT_intro. vm_compute. reflexivity.
 Defined.
 
-(* ========== §8.6 提取探针（B7 追加；b7_ 前缀，U12 配方：
+(* ========== §8.6 Extraction 检验（b7_ 前缀：
      逐件独立提取，验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Set Extraction Output Directory ".".
@@ -467,20 +412,20 @@ Print Assumptions H_adj_Pmid_wit_set.
    H_lam_pmid_sorted_consistency、L2333 H_lam_pmid_k0_oldface、
    L2343 H_lam_pmid_klen_const、L2357 H_lam_pmid_H_lam_separates、
    L2368 H_lam_pmid_wit_201、L2372 H_lam_pmid_wit_201_ends。
-   H_devsum/垫片/弃用注记零消费零触碰（弃用件 Pinf_eq_l 沿 FRUIT-3
-   同款绕行，仅经 Pinf_true_id 面，DTPT_Rotation.v L417 实测）。 *)
+   H_devsum/适配层/弃用注记零使用零触碰（弃用件 Pinf_eq_l 绕行，
+   仅经 Pinf_true_id 面，DTPT_Rotation.v L417）。 *)
 
 (* ---------- §9.1 保底件：端点双件 QeqT 面 ---------- *)
 
-(* ① 消费 L2248 H_lam_pmid_lam1（λ=1 端点，s、k 解耦）：qeqT_intro
-   一跳包装，QeqT 面逐字对齐（B6 §6 H_lam_cyc_lam1_set 同款）。 *)
+(* ① 所用 L2248 H_lam_pmid_lam1（λ=1 端点，s、k 解耦）：qeqT_intro
+   一跳包装，QeqT 面逐字对齐（§6 H_lam_cyc_lam1_set 同款）。 *)
 Theorem H_lam_pmid_lam1_set : forall (l : list Q) (s : nat) (k : nat),
   QeqT (H_lam_pmid l s k 1) (H_adj (P0 l)).
 Proof.
   intros l s k. apply qeqT_intro. apply H_lam_pmid_lam1.
 Defined.
 
-(* ② 消费 L2257 H_lam_pmid_lam0（λ=0 端点＝真中相 Pmid）：QeqT
+(* ② 所用 L2257 H_lam_pmid_lam0（λ=0 端点＝真中相 Pmid）：QeqT
    一跳包装。 *)
 Theorem H_lam_pmid_lam0_set : forall (l : list Q) (s : nat) (k : nat),
   QeqT (H_lam_pmid l s k 0) (H_adj (Pmid l s k)).
@@ -488,12 +433,12 @@ Proof.
   intros l s k. apply qeqT_intro. apply H_lam_pmid_lam0.
 Defined.
 
-(* ---------- §9.2 旗舰件：仿射差分 + 排序一致性 QeqT 面 ---------- *)
+(* ---------- §9.2 主定理件：仿射差分 + 排序一致性 QeqT 面 ---------- *)
 
-(* ③ 消费 L2271 H_lam_pmid_diff（仿射差分恒等式：插值两端之差 =
+(* ③ 所用 L2271 H_lam_pmid_diff（仿射差分恒等式：插值两端之差 =
    (λ1-λ2)·(排序相熵 - 中相熵)，§S7 泛形 lam_affine_diff_sub 的
-   真中相实形）：Prop 消费 + QeqT 包装——差分恒等式升为信息性
-   证书，右端全计算面（B7 §8.2 件③④同款配方）。 *)
+   真中相实形）：Prop 使用 + QeqT 包装——差分恒等式升为信息性
+   证书，右端全计算面（§8.2 件③④同款配方）。 *)
 Theorem H_lam_pmid_diff_set : forall (l : list Q) (s : nat) (k : nat)
     (lam1 lam2 : Q),
   QeqT (H_lam_pmid l s k lam1 - H_lam_pmid l s k lam2)
@@ -502,7 +447,7 @@ Proof.
   intros l s k lam1 lam2. apply qeqT_intro. apply H_lam_pmid_diff.
 Defined.
 
-(* ④ 消费 L2298 H_lam_pmid_sorted_consistency（排序一致性全 λ 面：
+(* ④ 所用 L2298 H_lam_pmid_sorted_consistency（排序一致性全 λ 面：
    SortedQ l -> H_lam_pmid l s k lam == H_lam l s lam）——三相互补
    熵与经典序列熵相容性的 QeqT 证书面：sorted 卫哨下第三块 λ-插值
    与 H_lam 逐点重合，相容性面定理化后升为可提取信息性载体。
@@ -518,7 +463,7 @@ Defined.
 
 (* ---------- §9.3 主件：分离见证 sigT 信息性形 ---------- *)
 
-(* ⑤ 消费 L2357 H_lam_pmid_H_lam_separates（Prop exists 形：
+(* ⑤ 所用 L2357 H_lam_pmid_H_lam_separates（Prop exists 形：
    exists l k s lam, H_lam_pmid l s k lam <> H_lam l s lam）。Prop
    exists 不可消除入 Type，sigT 信息性形按 B3 tarski_set 同款直构
    （B6 §2 H_rotc_separates_set 同款）：见证 [2;0;1]（未排序）、
@@ -537,7 +482,7 @@ Defined.
 
 (* ---------- §9.4 加分件：端点旧件桥/常值面 + vm_compute 锚双件 ---------- *)
 
-(* ⑥ 消费 L2333 H_lam_pmid_k0_oldface（k=0 端点与旧件 H_lam 逐点
+(* ⑥ 所用 L2333 H_lam_pmid_k0_oldface（k=0 端点与旧件 H_lam 逐点
    重合，迁移零丢旧信息）：QeqT 一跳包装。 *)
 Theorem H_lam_pmid_k0_oldface_set : forall (l : list Q) (s : nat) (lam : Q),
   QeqT (H_lam_pmid l s 0%nat lam) (H_lam l s lam).
@@ -545,7 +490,7 @@ Proof.
   intros l s lam. apply qeqT_intro. apply H_lam_pmid_k0_oldface.
 Defined.
 
-(* ⑦ 消费 L2343 H_lam_pmid_klen_const（k=length 两端重合，λ 失效
+(* ⑦ 所用 L2343 H_lam_pmid_klen_const（k=length 两端重合，λ 失效
    常值面）：QeqT 一跳包装。 *)
 Theorem H_lam_pmid_klen_const_set : forall (l : list Q) (s : nat) (lam : Q),
   QeqT (H_lam_pmid l s (length l) lam) (H_adj (P0 l)).
@@ -553,7 +498,7 @@ Proof.
   intros l s lam. apply qeqT_intro. apply H_lam_pmid_klen_const.
 Defined.
 
-(* ⑧ 消费 L2368 H_lam_pmid_wit_201：数值锚的 sigT 信息性形——
+(* ⑧ 所用 L2368 H_lam_pmid_wit_201：数值锚的 sigT 信息性形——
    见证列 [2;0;1] 上插值值（盘面 RHS (3#2)%Q 逐字）经 QeqT 载体
    信息性携带，vm_compute 一步闭项照盘（B7 §8.5 件⑫同款）。 *)
 Theorem H_lam_pmid_wit_201_set :
@@ -562,7 +507,7 @@ Proof.
   exists (3#2)%Q. apply qeqT_intro. vm_compute. reflexivity.
 Defined.
 
-(* ⑨ 消费 L2372 H_lam_pmid_wit_201_ends（分离根因双值面：排序相端
+(* ⑨ 所用 L2372 H_lam_pmid_wit_201_ends（分离根因双值面：排序相端
    2、中相端 1）：sigT over Q*Q——双端见证值信息性携带（fst/snd
    显式入证书），两分量各经 QeqT 载体 vm_compute 一步闭项（B7
    §8.4 件⑩ Prop 合取→Type 证书配方 × §8.5 锚配方的复合）。 *)
@@ -576,7 +521,7 @@ Proof.
   - apply qeqT_intro. vm_compute. reflexivity.
 Defined.
 
-(* ---------- §9.5 提取探针（B12 追加；b12_ 前缀，U12 配方：
+(* ---------- §9.5 Extraction 检验（b12_ 前缀：
      逐件独立提取，验收指标＝Obj.magic 计数 0，验后产物清除） ---------- *)
 
 Set Extraction Output Directory ".".

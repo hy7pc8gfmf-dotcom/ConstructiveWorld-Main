@@ -1,18 +1,25 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* G 组：G06_BForm — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqPPOB + UpReqSumB + UpReqMinPProjB + UpReqLatticeB（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G06_BForm 成员件：UpReqPPOB（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpReqPPOB.v —— 定理 6.6 对应物判定 5 升格模块：ppo 保守性 Bishop 完整形 *)
-(*   （B 形扩展建造队列 T2 模块 · 侦察规格单目标 2 ·）        *)
+(*   （B 形扩展建造队列  模块 · 侦察规格单目标 2 ·）        *)
 (* 主件 real_ppo_conservative_B_full：Σ π_old·min(r,clip r)·adv ≤_B    *)
 (*   Σ π_old·r·adv——UpRealLeB.v 有条件件 real_ppo_conservative_B 的     *)
-(*   唯一缺口前提「E>0 显式证书」自 T5 模块前提弱化（）起为聚合正   *)
+(*   唯一缺口前提「E>0 显式证书」自  模块前提弱化（）起为聚合正   *)
 (*   前提直供：Hypothesis 位 lebR_res_weight_pos : real_lt zero E（E :=   *)
-(*   Σ π_old·adv，聚合正），闭合组合器喂法=前提直接提供（apply 行零改动）——      *)
+(*   Σ π_old·adv，聚合正），闭合组合器用法=前提直接提供（apply 行零改动）——      *)
 (*   旧 sum_pos 槽 rplb_sum_pos 与内机导出链（逐点双正两喂→槽提升）整体  *)
 (*   退场。主件证明体与 Part C 同构：closure_b 闭合组合器 + res_fold 出节件  *)
 (*   + eps 形源件直连（13 参全显）。                                     *)
-(* 判定勘误（上游注册项 注册项复核，T5）：逐点 advantage_pos 前提     *)
+(* 判定校注（上游注册项 注册项复核，）：逐点 advantage_pos 前提     *)
 (*   **不可删**——eps 形源件 real_ppo_conservative_eps（S08 L2342）在     *)
 (*   real_le_mult_compat 位逐点使用之（S08 L2367），仅聚合正时主件结论   *)
 (*   为假（模型反例：S={1,2}、π≡1、adv=(0.2,−0.1)、r=(1.2,5)、εc=0.1     *)
@@ -40,7 +47,7 @@ Variable real_sum_over_S_add : forall (f g : S -> Real),
 Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
   real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
            (real_mult a (real_sum_over_S f)).
-(* T2① 求和正性槽（显式参位）已随 T5 前提弱化（）退场：
+(* T2① 求和正性槽（显式参位）已随  前提弱化（）退场：
    聚合正 E>0 直升 Hypothesis 位（见 lebR_res_weight 定义后），不再经
    「逐点正 ⟹ 和正」参数位中转。 *)
 Variable real_pi_star_ : S -> Real.
@@ -53,8 +60,8 @@ Variable epsilon : Real.
 Definition lebR_res_weight : Real :=
   real_sum_over_S (fun s : S => real_mult (real_pi_old s) (real_advantage_fn s)).
 
-(* 聚合正前提（T5 前提弱化）：E>0 由内机导出降为前提直供——
-   主件闭合组合器喂法 apply 行零改动，名字面不变，供给面由「槽+内机导出链」
+(* 聚合正前提（ 前提弱化）：E>0 由内机导出降为前提直供——
+   主件闭合组合器用法 apply 行零改动，名字面不变，供给面由「槽+内机导出链」
    换为本 Hypothesis 位（显式参随节证明入出口签名，非全局无据项）。 *)
 Hypothesis lebR_res_weight_pos : real_lt real_zero lebR_res_weight.
 (* 主件：≤_B 完整形（与 Part C 有条件件同构，E>0 证书由聚合正前提直供） *)
@@ -92,7 +99,7 @@ End RealPPOLeBFull.
 
 (* 尾注：出口签名证明序检验打表在案（_wb17_sig_probe）；残差折叠
    real_ppo_res_fold 7 参、eps 形源件 13 参，均全参显喂。 *)
-(* T5 尾注（）：lebR_res_weight_pos 自前提弱化起为节内
+(*  尾注（）：lebR_res_weight_pos 自前提弱化起为节内
    Hypothesis 位，随节证明入主件出口签名（不再以独立常量出口），
    三连打改打主件/残差权定义/证明伴件三件。 *)
 Print Assumptions real_ppo_conservative_B_full.
@@ -101,7 +108,7 @@ Print Assumptions lebR_res_weight.
    在文末证明节后（定义位在后，此处不可引用）。 *)
 
 (* ============================================================ *)
-(* 证明节（假设位证明系列 #7 ·；T5 改注）：求和正性的      *)
+(* 证明节（假设位证明系列 #7 ·； 改注）：求和正性的      *)
 (*   构造性载体件——原 rplb_sum_pos 槽随前提弱化退场后，本节作为「逐点    *)
 (*   正 ⟹ 和正」在 list 载体上的独立构造真理存续（伴件改由本节直接       *)
 (*   重构 E>0 载体面，不再经槽实例化）。                                 *)
@@ -142,7 +149,7 @@ Proof.
 Qed.
 End RplbSumPosDischarged.
 
-(* 伴件（T5 改建）：E>0 载体面的无条件重构——π_old/adv 取常      *)
+(* 伴件（ 改建）：E>0 载体面的无条件重构——π_old/adv 取常      *)
 (*   real_one，经先件（逐点双正 real_mult_positive 两喂 + 求和正性载体   *)
 (*   件）直接给出，零依赖弱化后的前提位。 *)
 Section RplbResWeightPosUncond.
@@ -169,7 +176,7 @@ Print Assumptions rplb_res_weight_pos_uncond.
 
 (* ======== G06_BForm 成员件：UpReqSumB（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqSumB.v —— 逐点 ≤_B 求和提升模块（T3：real_list_sum_le_b_compat） *)
+(* UpReqSumB.v —— 逐点 ≤_B 求和提升模块（：real_list_sum_le_b_compat） *)
 (*   任务来源：B形扩展建造队列.md 目标 3（两段给出：段1 长度机器    *)
 (*   + 逐点基件；段2 nonneg 闭合组合器收尾 + 完整 compat 主件）。           *)
 (*                                                                *)
@@ -347,7 +354,7 @@ Qed.
 (*   real_le），与判定 2（Or 形 min 反例不可证）边界一致——本件           *)
 (*   不主张 Or 形逐点前提升格。                                          *)
 (* 【核对】原始任务表述目标 3 规格四件（lenR/lenR_nonneg/sum_const/主件）      *)
-(*   全部落盘本文件；前缀 sumb_ 全库零占用（leb3_ 系 T1 领地已用，        *)
+(*   全部落盘本文件；前缀 sumb_ 全库零占用（leb3_ 系  领地已用，        *)
 (*   本文件分区避让）。E360 判定 G2「组合器止步二元」自此补齐 n 元面。      *)
 (* 【检查记录】四项关卡卡：G1 禁词全零（含头注注记位）；G2 重编 EXIT=0；      *)
 (*   G3 提取检验 Obj.magic 计数为零（检验验后删）；G4 coqchk 认证         *)
@@ -370,7 +377,7 @@ Print Assumptions sumb_list_sum_le_b.
 (*      KL_list(q‖minp) ≤_B KL_list(q‖full)，eps 余量全称消去。        *)
 (*      路线 = real_le_closure_b_one 单步闭合 + 基座 eps 形原件直连     *)
 (*      （E358 判定3：plain-eps 余量族统一 Bishop 闭合；min 反例在案，   *)
-(*        经典析取精确形不可证——本件即该裁决的 Bishop 形正解落地）。      *)
+(*        经典析取精确形不可证——本件即该裁决的 Bishop 形正解落实）。      *)
 (*   2. real_minp_tail_nonneg_B（伴件 A）：尾项非负的 B 形              *)
 (*      0 ≤_B Σ kl_tail；链 = uab_kl_tail_eval 等式换形（real_eq_sym）  *)
 (*      + real_opp_log_Z_aud_nonneg + 单向桥 real_le_to_le_b。          *)
@@ -611,21 +618,21 @@ Print Assumptions real_minp_projection_B_split.
 
 (* ======== G06_BForm 成员件：UpReqLatticeB（原样并入，自带 Require）======== *)
 (* ============================================================ *)
-(* UpReqLatticeB.v —— B 形格组合面前段（T4a）：strict-lt 新基元 + max 侧 *)
-(*   （B 形扩展建造队列 T4 拆分前段模块 · §9.4 格特征强扩展）           *)
+(* UpReqLatticeB.v —— B 形格组合面前段（）：strict-lt 新基元 + max 侧 *)
+(*   （B 形扩展建造队列  拆分前段模块 · §9.4 格特征强扩展）           *)
 (*                                                                *)
-(* 立项：侦察模块「B形扩展建造队列」目标 4 前段。min 侧与格      *)
-(* 组合律留 T4b 后模块；本库只做 strict-lt 基元、两连接件、max 侧三件。   *)
-(* 上游使用：UpRealLeB3（运输三件 eq_r/plus_nonneg_r/refl，T1 给出，   *)
+(* 定位：侦察模块「B形扩展建造队列」目标 4 前段。min 侧与格      *)
+(* 组合律留  后模块；本库只做 strict-lt 基元、两连接件、max 侧三件。   *)
+(* 上游使用：UpRealLeB3（运输三件 eq_r/plus_nonneg_r/refl， 给出，   *)
 (* .v/.vo 双证新鲜）+ UpRealLeB（闭合组合器 D 置 one 特化 + 单向桥）+      *)
 (* CW_ConstructiveWorld_219 锚点（real_max_proj@L39803 Q 层点态投影通道、real_max         *)
 (* 逐点 Qmax 编码@L39763、real_lt sigT 见证型@L3517、stdlib 泛型格     *)
 (* 严格形 Q.max_lub_lt 与 Q.min_dec、Qopp_le_compat、Qlt_minus_iff）。 *)
 (*                                                                *)
-(* 勘误一则（对侦察单 T4 草图）：逐点 Qmax 上界严格形无需 witness 全     *)
+(* 校注一则（对侦察单  草图）：逐点 Qmax 上界严格形无需 witness 全     *)
 (* 重排——stdlib 泛型格库 Q.max_lub_lt（n<p ⟹ m<p ⟹ max n m<p）       *)
 (* 在案可直连，逐点归约后一步闭合；新基元工作量减半，min 对偶           *)
-(*（Q.min_glb_lt 同库在案）可由 T4b 同法平移。                         *)
+(*（Q.min_glb_lt 同库在案）可由  同法平移。                         *)
 (*                                                                *)
 (* 六件清单：1 latb_lt_b 严格序基元（∃δ>0，x ≤_B y−δ；sigT+And 形       *)
 (*     沿 real_lt 同构，Set 层零 Prop 出面）/ 2 latb_lt_b_to_le_b      *)
@@ -813,7 +820,7 @@ Print Assumptions latb_max_le_b.
 Print Assumptions latb_max_le_r.
 
 (* ============================================================ *)
-(* 四、min 侧组合件（T4b 后段模块追加节）：对偶基元 + 下界格律 + glb 主件 *)
+(* 四、min 侧组合件（ 后段模块追加节）：对偶基元 + 下界格律 + glb 主件 *)
 (*                                                                *)
 (* 五件清单：7 latb_min_glb 严格下界引入基元（Q 层通道：Qmin 见证 +   *)
 (*     Q.min_glb_lt 逐点直连；严格界 e+pₙ<aₙ 平移经 Qle_lt_trans +    *)
@@ -828,7 +835,7 @@ Print Assumptions latb_max_le_r.
 (*   11 latb_min_le_le trans 组装件（real_le_b_trans @UpRealLeB2     *)
 (*     F.2 + 件 9 两步：min a b ≤_B a ≤_B c ⟹ min a b ≤_B c）。       *)
 (*                                                                *)
-(* 红线沿 T4a 口径：语句面全 Set 层（real_lt sigT 见证形 + real_le_b  *)
+(* 红线沿  口径：语句面全 Set 层（real_lt sigT 见证形 + real_le_b  *)
 (* forall 型，零 Prop 出面）；前提位零新增；全件真证闭合无降级。      *)
 (* ============================================================ *)
 
@@ -1020,7 +1027,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 五、T4b 假设审计（全件 Closed，证据在编译日志）                      *)
+(* 五、 假设审计（全件 Closed，证据在编译日志）                      *)
 (* ============================================================ *)
 
 Print Assumptions latb_min_glb.
@@ -1030,15 +1037,15 @@ Print Assumptions latb_min_le_r.
 Print Assumptions latb_min_le_le.
 
 (* ============================================================ *)
-(* 六、与基座严格序的互连（假设位证明系列波1 #8：T4 决策项复活）          *)
-(*     （T4b 交接注记「节五：latb_lt_b ⟵ real_lt 互连」实装）        *)
+(* 六、与基座严格序的互连（假设位证明系列 #8： 决策项复活）          *)
+(*     （ 交接注记「节五：latb_lt_b ⟵ real_lt 互连」实装）        *)
 (*                                                                *)
-(* 目标语句（T4b 交接注记原文）：real_lt x y ⟹ latb_lt_b x y——        *)
+(* 目标语句（ 交接注记原文）：real_lt x y ⟹ latb_lt_b x y——        *)
 (* 把 CW_ConstructiveWorld_219 基座严格序（real_lt@L3517，Cauchy 追赶型：∃eps>0，∃N，    *)
 (* ∀n≥N，eps<yₙ−xₙ）接入 latb_lt_b（∃δ>0，x ≤_B y+(−δ)）。方向单研：  *)
 (* 反向（latb_lt_b ⟹ real_lt）不在范围。                            *)
 (*                                                                *)
-(* 证法（T4b 卡 §七+勘误③路线）：real_lt 见证 (eps,N) 即"最终分离"    *)
+(* 证法（ 卡 §七+校注③路线）：real_lt 见证 (eps,N) 即"最终分离"    *)
 (* 窗口；正性 Real δ 置 real_const eps（正性见证 eps·(1/2)，常值序列  *)
 (* 窗口 N:=0；正性半量恒等式 eps−eps·(1/2)==eps·(1−1/2) 走 ring      *)
 (* 多项式形+闭式 1−1/2==1/2 计算闭合——Q 的「/」系 Qdiv 独立算子，    *)

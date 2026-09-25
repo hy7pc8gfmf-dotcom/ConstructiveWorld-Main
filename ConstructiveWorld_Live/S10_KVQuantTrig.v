@@ -1,3 +1,10 @@
+(* ============================================================
+   使命：本件定理/引理声明面所述性质的形式化（原头注为历史注记块，
+         实质整编候后波；本块为五字段指针）。
+   依赖：件内 Require 声明面所列库件。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* S10_KVQuantTrig.v                                           *)
 (*                                                             *)
@@ -10,7 +17,7 @@
 (*       L53932-L66414，去头正文与原文区间逐字节同源。           *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
+(* ToyR 工程 （S 系下半） · 记录册号         *)
 (* 替换定理清单：sc_lp_four_nonneg（共 1 条，语句不变）；          *)
 (*   其余 reflexive/转发族玩具经复核属定义性等式或库引理转发，     *)
 (*   非平凡化无语义增益或损语义风险高，如实遗留不硬编。            *)
@@ -1072,7 +1079,7 @@ End RealKVQuantMain.
 
 
 (* ============================================================ *)
-(* 项 5：DPO 损失 log-ratio 凸性（softplus 凸）——2026-09-02     *)
+(* 项 5：DPO 损失 log-ratio 凸性（softplus 凸）——     *)
 (* 并入（检验 _dbg_dpo_conv.v 平移）                             *)
 (*   real_dpo_logit：ℓ(x) := −log σ(x)（dpo 单样本 logit 损失）  *)
 (*   A1 real_softplus_sigmoid_eq：ℓ(x) == log(1+e^{−x})          *)
@@ -12362,7 +12369,7 @@ Definition boltzmann_dist_attn_setoid (s : S) : R :=
 (*   语句：Id 27823-27827 的 Id→req 版（Real 42359-42363 同型） *)
 (*   证明：Real 42364-42404 上提：req_trans / req_mult_compat /  *)
 (*   req_opp_compat 换为 exp_neg_req_compat_setoid（接口无 exp_neg *)
-(*   Proper，派生引理承接）/ inv_pos_ext / mult_comm / mult_one  *)
+(*   Proper，派生引理承担）/ inv_pos_ext / mult_comm / mult_one  *)
 (* ============================================================ *)
 Theorem attention_is_gibbs_setoid :
   (req (inv_pos D D_pos) one) ->
@@ -12486,5 +12493,5 @@ Qed.
 
 End AttentionGibbsBridgeSetoid.
 
-(* ToyR 替换席：替换定理假设面查证 *)
+(* ToyR ：替换定理假设面查证 *)
 Print Assumptions sc_lp_four_nonneg.

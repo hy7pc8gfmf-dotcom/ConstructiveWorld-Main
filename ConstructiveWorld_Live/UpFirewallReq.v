@@ -1,31 +1,31 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpFirewallReq.v *)
 (* *)
-(* 目的： 防火墙机制的 req 抽象载体镜像件。 *)
+(* 目的： 防火墙机制的 req 抽象载体同构件。 *)
 (* 主件： req_fw_energy_eta / req_entropy_temp_mono / req_entropy_temp_strict_mono 及 req_firewall_loop。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
-(* 备注： Id 层陈述经假设位承接；温度严格层的显式假设注记见正文。 *)
+(* 备注： Id 层陈述经假设位承担；温度严格层的显式假设注记见正文。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (*   （10 件）                                                    *)
-(*   母件：attn\UpFirewall.v（熵防火墙：退化检测与恢复的构造性闭环, *)
-(*   伴件形态：req_* 独立伴 Section，与母件同树（attn 目录）       *)
+(*   源定理：attn\UpFirewall.v（熵防火墙：退化检测与恢复的构造性闭环, *)
+(*   伴件形态：req_* 独立伴 Section，与源定理同树（attn 目录）       *)
 (* -------------------------------------------------------------- *)
-(* 覆盖核对（req 件名 -> 母件 Id 原件 @ 行号；件数规则：陈述含 Id  *)
-(* 或证明核为 Id 搬运的声明，Variable 假设位计入；grep 实测 10，   *)
+(* 覆盖核对（req 件名 -> 源定理 Id 原件 @ 行号；件数规则：陈述含 Id  *)
+(* 或证明核为 Id 迁移的声明，Variable 假设位计入；grep 实测 10，   *)
 (* 规划书约 9，实测 10，全数结果零冻结；fw_double_pos @L130 零 Id  *)
 (* 内容，按辅件结果不计件）：                                      *)
-(*   件 1  req 假设位 req_Z_temp_spec           <- 母件 L93        *)
-(*   件 2  req_fw_energy_eta                    <- 母件 L113（δ 件）*)
-(*   件 3  req_fw_lt_double                     <- 母件 L120        *)
-(*   件 4  req_recovery_entropy_gain            <- 母件 L139（旗舰一）*)
-(*   件 5  req_entropy_temp_mono                <- 母件 L207        *)
-(*   件 6  req_entropy_temp_strict_mono         <- 母件 L261        *)
-(*   件 7  req_recovery_entropy_gain_alt        <- 母件 L318（旗舰二）*)
-(*   件 8  req_fw_verdict                       <- 母件 L382（陈述迁移）*)
-(*   件 9  req_fw_detect_warm                   <- 母件 L388        *)
-(*   件 10 req_firewall_loop                    <- 母件 L412        *)
+(*   件 1  req 假设位 req_Z_temp_spec           <- 源定理 L93        *)
+(*   件 2  req_fw_energy_eta                    <- 源定理 L113（δ 件）*)
+(*   件 3  req_fw_lt_double                     <- 源定理 L120        *)
+(*   件 4  req_recovery_entropy_gain            <- 源定理 L139（主定理一）*)
+(*   件 5  req_entropy_temp_mono                <- 源定理 L207        *)
+(*   件 6  req_entropy_temp_strict_mono         <- 源定理 L261        *)
+(*   件 7  req_recovery_entropy_gain_alt        <- 源定理 L318（主定理二）*)
+(*   件 8  req_fw_verdict                       <- 源定理 L382（陈述迁移）*)
+(*   件 9  req_fw_detect_warm                   <- 源定理 L388        *)
+(*   件 10 req_firewall_loop                    <- 源定理 L412        *)
 (* -------------------------------------------------------------- *)
 (*   批 2 余件清单 a) 项（variational_temp_bound/energy_exp_temp_  *)
 (*   mono/temp_strict_A_chain2/temp_strict_ident2/energy_exp_temp_ *)
@@ -35,16 +35,16 @@
 (*   req_relative_entropy_temp_decomp / req_energy_exp_temp_mono /  *)
 (*   req_energy_exp_temp_strict_mono / req_temp_strict_ident2），    *)
 (*   假设位逐位保留不放大主张。                                     *)
-(* 复用增量：Bt/归一/正性消费批 2 ReqTemp reqd_boltzmann_dist_temp  *)
+(* 复用增量：Bt/归一/正性使用批 2 ReqTemp reqd_boltzmann_dist_temp  *)
 
 (*   dist_log_inv_one_inv / dist_log_le_linear 同位声明）；减法/    *)
-(*   旋转/分配消费批 1 UpReqAlgebra 引擎件。                        *)
-(* 非平凡性分级：件 4/7 = A+（母件最重 AC 链的 req 全链真证）；     *)
-(*   件 5/6 = A（gibbs+恒等式搬运+加法保序 req 装配）；件 3 = A      *)
+(*   旋转/分配使用批 1 UpReqAlgebra 引擎件。                        *)
+(* 非平凡性分级：件 4/7 = A+（源定理最重 AC 链的 req 全链真证）；     *)
+(*   件 5/6 = A（gibbs+恒等式迁移+加法保序 req 装配）；件 3 = A      *)
 (*   （id_transport→lt_id_l 字段的传输真改）；件 9/10 = B（闭环     *)
 (*   组装）；件 8 = 陈述迁移；件 2 = δ 平凡；件 1 = 假设位迁移。    *)
-(* 诚实边界（母件同款红线）：防火墙不主张 TV-熵传递；fw_verdict 的  *)
-(*   Or 是证书和而非布尔判定器；全部接口假设有母件同位先例。        *)
+(* 诚实边界（源定理同款红线）：防火墙不主张 TV-熵传递；fw_verdict 的  *)
+(*   Or 是证书和而非布尔判定器；全部接口假设有源定理同位先例。        *)
 (* 纪律：纯 term-mode（零 rewrite/零 Morphisms）；语句全 Set 层；   *)
 (*   全 Qed 完成；零禁词。                                          *)
 (* ============================================================ *)
@@ -70,7 +70,7 @@ Let log := @log R RIS.
 Let inv_pos := @inv_pos R RIS.
 Let exp_neg := @exp_neg R RIS.
 
-(* ---- req 求和假设位（母件 SumOver 消费字段逐位 req 化） ---- *)
+(* ---- req 求和假设位（源定理 SumOver 使用字段逐位 req 化） ---- *)
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 Hypothesis ssum_ext :
@@ -88,12 +88,12 @@ Hypothesis ssum_pos :
 
 Variable base_loss : S -> R.
 
-(* 件 1：母件 L93 Z_temp_spec 的 req 同形（假设位逐位保留） *)
+(* 件 1：源定理 L93 Z_temp_spec 的 req 同形（假设位逐位保留） *)
 Variable Z_temp : R -> R.
 Hypothesis req_Z_temp_spec : forall (t : R) (Ht : lt zero t),
   req (Z_temp t) (sumf (fun s => exp_neg (mult (inv_pos t Ht) (base_loss s)))).
 
-(* 母件 L96-102 严格性/保序接口（同位假设槽，零放大） *)
+(* 源定理 L96-102 严格性/保序接口（同位假设槽，零放大） *)
 Variable inv_pos_lt_compat : forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),
   lt a b -> lt (inv_pos b Hb) (inv_pos a Ha).
 Variable lt_minus_nonneg : forall a b : R, lt a b -> lt zero (req_minus b a).
@@ -107,7 +107,7 @@ Variable dist_log_inv_one_inv :
 Variable dist_log_le_linear :
   forall (x : R) (Hx : lt zero x), le (log x Hx) (req_minus x one).
 
-(* ---- 温度参数化 Boltzmann 族（批 2 ReqTemp 直接消费） ---- *)
+(* ---- 温度参数化 Boltzmann 族（批 2 ReqTemp 直接使用） ---- *)
 Definition fw_bt (t : R) (Ht : lt zero t) : S -> R :=
   reqd_boltzmann_dist_temp S sumf ssum_pos base_loss Z_temp req_Z_temp_spec t Ht.
 Definition fw_bt_pos (t : R) (Ht : lt zero t) :
@@ -156,7 +156,7 @@ Variable req_temp_strict_ident2 :
 
 (* ---- 基础引理 ---- *)
 
-(* 件 2（δ 件）：能量期望的 η-形式桥（母件 L113 id_refl 同位；req_minus
+(* 件 2（δ 件）：能量期望的 η-形式桥（源定理 L113 id_refl 同位；req_minus
    /sumf 同形定义性展开） *)
 Definition fw_energy_expectation (e p : S -> R) : R :=
   sumf (fun s => mult (p s) (e s)).
@@ -167,13 +167,13 @@ Proof.
   exact (req_refl (sumf (fun s => mult (fw_bt t Ht s) (base_loss s)))).
 Qed.
 
-(* 辅件（零 Id 内容，不计件）：倍温正性（母件 L130 同位） *)
+(* 辅件（零 Id 内容，不计件）：倍温正性（源定理 L130 同位） *)
 Lemma fw_double_pos : forall (t : R) (Ht : lt zero t), lt zero (plus t t).
 Proof.
   intros t Ht. apply plus_positive; exact Ht.
 Qed.
 
-(* 件 3：倍温严格升（母件 L120；req 差异真证：母件 id_transport 换 req
+(* 件 3：倍温严格升（源定理 L120；req 差异真证：源定理 id_transport 换 req
    接口 lt_id_l 字段，zero+t ↦ t 的传输走 req_trans） *)
 Lemma req_fw_lt_double : forall (t : R) (Ht : lt zero t), lt t (plus t t).
 Proof.
@@ -185,9 +185,9 @@ Proof.
   apply (lt_plus_compat_lt_le zero t t t Ht (le_refl t)).
 Qed.
 
-(* ===== 件 4（旗舰一）：恢复增益精确恒等式 =====
-   母件 L139：ΔH == β₂·(E₂ − E₁) + KL₁₂。req 全链真证：熵显式与
-   KL 温度分解为显式假设假设位，余为母件 AC 重排的扁平 req 跳链
+(* ===== 件 4（主定理一）：恢复增益精确恒等式 =====
+   源定理 L139：ΔH == β₂·(E₂ − E₁) + KL₁₂。req 全链真证：熵显式与
+   KL 温度分解为显式假设假设位，余为源定理 AC 重排的扁平 req 跳链
    （u1/u2/v1-v3/u3/u4，每跳一个扁平项，零深嵌套）。 *)
 Theorem req_recovery_entropy_gain :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
@@ -302,8 +302,8 @@ Proof.
 Qed.
 
 (* ===== 件 5（主结果）：温度-熵单调 =====
-   母件 L207：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})。路径：能量单调显式假设槽
-   + 件 4 恒等式搬运 + 批 2 req_gibbs_inequality。 *)
+   源定理 L207：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})。路径：能量单调显式假设槽
+   + 件 4 恒等式迁移 + 批 2 req_gibbs_inequality。 *)
 Theorem req_entropy_temp_mono :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
   lt t1 t2 -> le (fw_h t1 Ht1) (fw_h t2 Ht2).
@@ -362,7 +362,7 @@ Proof.
 Qed.
 
 (* ===== 件 6（严格档）：升温 ⟹ 熵严格恢复 =====
-   母件 L261；诚实条件同款：KL(p_{t2}‖p_{t1}) > 0。 *)
+   源定理 L261；诚实条件同款：KL(p_{t2}‖p_{t1}) > 0。 *)
 Theorem req_entropy_temp_strict_mono :
   forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
   lt t1 t2 ->
@@ -431,7 +431,7 @@ Proof.
                                       Hfin (le_refl (fw_h t1 Ht1))).
 Qed.
 
-(* ===== 件 7（旗舰二，对偶形态）：对称 KL 联立 =====
+(* ===== 件 7（主定理二，对偶形态）：对称 KL 联立 =====
    形态 = req_temp_strict_ident2 假设位条件形（出节成显式参，假设位零放大）。
    记 b1/b2、E1/E2、dE、H1/H2、K_A（假设位首和项）、K_B（fw_kl）：
      β1·dE == β2·dE + (β1−β2)·dE →[假设位之对称]→ β2·dE + (K_A + K_B)
@@ -527,7 +527,6 @@ Proof.
 Qed.
 
 (* ===== 件 8/9/10：闭环封装（证书形态状态机） =====
-   母件 L382/L388/L412。诚实边界：req_fw_verdict 的 Or 是证书和
    （Set 层，非布尔判定器）；退化支重装判定仍为 inr。 *)
 
 Definition req_fw_verdict (Hmin : R) (t : R) (Ht : lt zero t) : Set :=

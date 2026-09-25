@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -36,7 +36,7 @@
 (*   Print Assumptions 不受影响）。                                              *)
 (* δ 内联登记（P1S1 sfc_two／S4 件② 同款）：Z_thermo_i（L128）与 boltzmann_dist_i    *)
 (*   （L132-133）为母亲节内定义，pack 语句按其定义体 δ 内联同体（L128/L132 逐字）。    *)
-(* 零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷）。                                *)
+(* 零 Require 源版本（防 P3S1 坑1 混代际 .vo 地雷）。                                *)
 (*                                                              *)
 (* 形态：P2S1/S4/S7 封装记录型先例（槽语句逐字入包）＋实例供给申报形。               *)
 (* 实例供给：S:=unit（单点态空间）｜sumf:=fun f => f tt（单点求和）｜               *)
@@ -80,7 +80,7 @@ Proof.
     vm_compute. first [exact I | exact eq_refl].
 Qed.
 
-(* ============ helper 1：半 < 1（delta_lt_one 槽供给件） ============ *)
+(* ============ helper 1：半 < 1（delta_lt_one 槽前置引理） ============ *)
 (*   肢：real_inv_pos_lt_contra@S07:6040（inv 反单调）+ real_inv_one_local@       *)
 (*   S08:1474（inv 1==1 运输）——CW220_Extensions:1044 同构链。                   *)
 
@@ -94,7 +94,7 @@ Proof.
   - exact real_inv_one_local.
 Qed.
 
-(* ============ helper 2：比率归一链（minorization 槽供给件） ============ *)
+(* ============ helper 2：比率归一链（minorization 槽前置引理） ============ *)
 (*   δ·(1/E·E) ≤ 1：inv_pos_correct 归一 + req_mult_compat 提升 + mult_one        *)
 (*   坍缩 + lt_le_iff（inl 位）——机械 6 步。                                    *)
 
@@ -120,8 +120,8 @@ Proof.
            (inl Hd1)).
 Qed.
 
-(* ============ 封装记录型：22 槽语句逐字入包（对照母本 L94-164） ============ *)
-(*   槽序＝母本声明序；Z_thermo_i/boltzmann_dist_i 按母亲 L128/L132-133 δ 内联。     *)
+(* ============ 封装记录型：22 槽语句逐字入包（对照源版本 L94-164） ============ *)
+(*   槽序＝源版本声明序；Z_thermo_i/boltzmann_dist_i 按母亲 L128/L132-133 δ 内联。     *)
 
 Inductive uabd1s9_ait_pack22 : Type :=
 | uabd1s9_ait_pack22_intro :
@@ -191,7 +191,7 @@ Inductive uabd1s9_ait_pack22 : Type :=
                     lt (mult a (req_r_pow (req_minus one delta) N)) eps)) ->
             uabd1s9_ait_pack22.
 
-(* ============ 供给件：单点实例一次喂定 21 槽＋1 墙显式参承接 ============ *)
+(* ============ 前置引理：单点实例一次喂定 21 槽＋1 墙显式参承担 ============ *)
 
 Theorem uabd1s9_ait_pack22_supplied :
   forall (Habnn : forall a : Real, le zero (abs a)),

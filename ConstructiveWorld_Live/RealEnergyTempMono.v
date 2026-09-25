@@ -1,9 +1,9 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* RealEnergyTempMono.v — real_energy_exp_temp_mono 恒等档        *)
 (* ============================================================ *)
 (* 使命：交付 real_energy_exp_temp_mono 的恒等档（Real 层对位）。    *)
 (*   Id 原件：S04_RealExpLogConv.v:3733 energy_exp_temp_mono       *)
-(*   （乘正消去收口前的恒等核 = (b1−b2)·(E2−E1) ≡ KL1+KL2）。       *)
+(*   （乘正消去闭合前的恒等核 = (b1−b2)·(E2−E1) ≡ KL1+KL2）。       *)
 (*   req 层同位件：UpReqTempEntropy.v:90 req_entropy_temp_explicit、 *)
 (*   :225 req_relative_entropy_temp_decomp、:1208                  *)
 (*   req_temp_strict_ident2（KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2})  *)
@@ -11,13 +11,13 @@
 (*                                                                 *)
 (*   · UpReqAlign3.v:1446-1450「KL ≥ 0 的 plain-le 形态不可由接口    *)
 (*     逐 eps 字段导出（序无消去）；保留假设位，待 UpReqFreeEnergy   *)
-(*     （批 2 FEP）交付后降为消费件」。                              *)
+(*     （批 2 FEP）交付后降为使用件」。                              *)
 (*   · UpReqAlign4.v:469-473「[供给槽②·诚实假设位] sup_gibbs…序无   *)
 (*     消去，plain-le 不可由接口逐 eps 字段导出…待 UpReqFreeEnergy   *)
-(*     （批 2 FEP）交付后降为消费件」；:509-510「Real 层闭合实例：    *)
+(*     （批 2 FEP）交付后降为使用件」；:509-510「Real 层闭合实例：    *)
 (*     槽2/N4 无（sup_gibbs 的 Real 供给 = Real 层 KL≥0 件，属       *)
 (*     UpReqFreeEnergy 批 2 范围，批外）」。                          *)
-(*   · G07_KLWall.v:2824-2830 判词 C「逐项 real_le real_zero (G s)   *)
+(*   · G07_KLWall.v:2824-2830 裁定结论 C「逐项 real_le real_zero (G s)   *)
 (*     （Or 形）对任意 p,q 不可构造（等号点不可判定）…逐项 Bishop    *)
 (*     形（eps 余量）无前提路线由库侧 real_gibbs_core_eps /          *)
 (*     real_gibbs_inequality_eps 承载」。                            *)
@@ -27,8 +27,8 @@
 (*   ；Id 层能证只因 Id 接口带 lt_dec 三分律字段（S01:333），req     *)
 (*   接口刻意降逐 eps（E152-5）后无消去。逐 eps 件可证机理：eps 松   *)
 (*   弛使左支严格（real_exp_ge_linear_eps S07:8404 unfold real_le;   *)
-(*   left 实证）。故恒等档（real_eq 链，零 le 消费）为本位无条件闭  *)
-(*   合的最强免费形；单调性档需消费 KL≥0，留待批 2 FEP/Bishop 桥。   *)
+(*   left 实证）。故恒等档（real_eq 链，零 le 使用）为本位无条件闭  *)
+(*   合的最强免费形；单调性档需使用 KL≥0，留待批 2 FEP/Bishop 桥。   *)
 (*                                                                 *)
 (* 交付件（retm_ 前缀，全库防撞 grep=0）：                           *)
 (*   retm_Ztemp/retm_pB/retm_pB_pos/retm_Eexp/retm_LZ/retm_KL 定义族 *)
@@ -39,16 +39,16 @@
 (*   retm_log_pB           log p_t(s) == −β·u_s − log Z_t             *)
 (*   retm_kl_point         real_kl_term 逐点温度分解                   *)
 (*   retm_KL_decomp        KL(p_{t1}‖p_{t2}) == (β2−β1)·E1 + (logZ2−logZ1) *)
-(*   retm_energy_temp_kl_pair_ident（旗舰恒等档主定理）               *)
+(*   retm_energy_temp_kl_pair_ident（主定理恒等档主定理）               *)
 (*                         KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2})      *)
 (*                         == (β1−β2)·(E2−E1)                          *)
 (*                                                                 *)
 (* 红线自审：① 零 公理/承认件/参数/猜想/弃证/经典逻辑  *)
 (*   （依赖全为库内 Closed 件）；② 语句面全 Set（real_eq/real_lt/    *)
 (*   real_list_sum，零 Prop 前提；real_list_sum_pos 的 <> 前提仅在   *)
-(*   证内以 discriminate 消费，语句面以 cons 载体 s0::l 非空化）；    *)
+(*   证内以 discriminate 使用，语句面以 cons 载体 s0::l 非空化）；    *)
 (*   ③ 真证 Qed 全闭合、无条件语句（非平凡：温度 KL 分解 + 归一化    *)
-(*   + log/inv 桥 + 代数链）；④ 可提取（G3 探针独立文件实测           *)
+(*   + log/inv 桥 + 代数链）；④ 可提取（G3 检验独立文件实测           *)
 (*   Obj.magic=0）。                                                  *)
 (* 编译配方：source Live/toolchain/env.sh && cd Live/build &&        *)
 (*   rocq c -Q . '' RealEnergyTempMono.v（cpu_guard 包裹）。         *)
@@ -69,7 +69,7 @@ Definition retm_Ztemp (X : Type) (u : X -> Real) (s0 : X) (l : list X)
   real_list_sum X (fun s => real_exp_neg (real_mult (real_inv_pos t Ht) (u s))) (s0 :: l).
 
 (* Z_t > 0：逐点正 + cons 载体非空（real_list_sum_pos 的 <> 前提
-   在证内以 discriminate 消费，语句面零 Prop） *)
+   在证内以 discriminate 使用，语句面零 Prop） *)
 Lemma retm_Ztemp_pos : forall (X : Type) (u : X -> Real) (s0 : X) (l : list X)
   (t : Real) (Ht : real_lt real_zero t),
   real_lt real_zero (retm_Ztemp X u s0 l t Ht).
@@ -113,7 +113,7 @@ Definition retm_KL (X : Type) (u : X -> Real) (s0 : X) (l : list X)
                                           (retm_pB_pos X u s0 l t1 Ht1 s) (retm_pB_pos X u s0 l t2 Ht2 s))
                   (s0 :: l).
 
-(* 代数恒等捷径：加/乘/负/原子项上的 real_eq 一步 ring 收口 *)
+(* 代数恒等捷径：加/乘/负/原子项上的 real_eq 一步 ring 闭合 *)
 Ltac retm_alg :=
   apply real_eq_of_zero_diff; intro n;
   repeat first [ rewrite real_plus_proj | rewrite real_mult_proj | rewrite real_opp_proj ];
@@ -277,7 +277,7 @@ Qed.
 
 (* real_kl_term(p_{t1}(s), p_{t2}(s)) == p_{t1}(s)·((β2−β1)·u_s + (logZ2−logZ1))
    链：kl_term = p1·(−log(p2/p1))；log(p2/p1) == log p2 + log(inv p1)
-   == (−β2·u_s−LZ2) + −(−β1·u_s−LZ1)；展开 + 代数收口。 *)
+   == (−β2·u_s−LZ2) + −(−β1·u_s−LZ1)；展开 + 代数闭合。 *)
 Lemma retm_kl_point : forall (X : Type) (u : X -> Real) (s0 : X) (l : list X)
   (t1 : Real) (Ht1 : real_lt real_zero t1) (t2 : Real) (Ht2 : real_lt real_zero t2) (s : X),
   real_eq (real_kl_term (retm_pB X u s0 l t1 Ht1 s) (retm_pB X u s0 l t2 Ht2 s)
@@ -431,7 +431,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4：旗舰恒等档主定理                                         *)
+(* Part 4：主定理恒等档主定理                                         *)
 (* ============================================================ *)
 
 (* KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2}) == (β1−β2)·(E2−E1)

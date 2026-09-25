@@ -1,3 +1,10 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
@@ -24,17 +31,17 @@
 (*     槽4 L99  real_detailed_balance：forall s s', real_eq              *)
 (*             (real_mult (real_boltzmann_prob s) (real_transition s s'))*)
 (*             (real_mult (real_boltzmann_prob s') (real_transition s' s))) *)
-(*   母本账（普查表钦定坐标＋面差诚实登记）：                            *)
+(*   源文件账（普查表钦定坐标＋面差诚实登记）：                            *)
 (*     槽1 ← req_fep_partition_condition@UpReqFEPAttn.v:137（P2:428      *)
-(*       五.2）：母本 req 面经 RealEnhancedReal 实例（S07:8566，字段映照  *)
+(*       五.2）：源文件 req 面经 RealEnhancedReal 实例（S07:8566，字段映照  *)
 (*       req:=real_eq/lt:=real_lt/mult:=real_mult/exp_neg:=real_exp_neg/  *)
 (*       inv_pos:=real_inv_pos 逐位 delta 重合）落 Real 载体；sumf 取     *)
-(*       sumd_sumf 消解实例、sum_ext 取 sumd_sum_ext；Z_r 取母本 Zf 实例   *)
+(*       sumd_sumf 消解实例、sum_ext 取 sumd_sum_ext；Z_r 取源文件 Zf 实例   *)
 (*       （exp_pos_fn_setoid 面，delta 展开＝real_exp_neg∘real_opp）、     *)
-(*       energy 取 real_opp∘z0、D 取母本温度 T0——母本逐字实例化。        *)
+(*       energy 取 real_opp∘z0、D 取源文件温度 ——源文件逐字实例化。        *)
 (*     槽2 ← fa56_markov_kernel_nonneg@fa56_id_carrier.v:129 之 Real 面   *)
 (*       同构件 real_boltzmann_dist_r_pos@S08_RealMainlineDPO.v:2488 直接代入 *)
-(*       （Id 面母本不可达 Real 载体：无 RealInterfaceEnhanced 实例，      *)
+(*       （Id 面源文件不可达 Real 载体：无 RealInterfaceEnhanced 实例，      *)
 (*       FA-D1S1 偏差 4 同款复核；E751-A 同阶）。                         *)
 (*     槽3 ← fa56_markov_kernel_normalized@fa56_id_carrier.v:139 之       *)
 (*       Real 面副本 rfep_boltzmann_normalized_real@UpReqRealFEP.v:340     *)
@@ -45,7 +52,7 @@
 (*     Z 取定义为 boltzmann 非正规和实例（sumd 引擎），partition 前提     *)
 (*     链显式承载。                                                       *)
 (*     UpAblP3S1_* 认领件；本四槽 Live_X 无既有同槽实例化消解件。             *)
-(*   纪律：零 git、原树零改、前缀 uabd1s3_ 全树零撞名；                  *)
+(*   纪律：零 git、原树零改、前缀 uabd1s3_ 全树零同名冲突；                  *)
 (*     文尾 Print Assumptions 收尾；G3 提取检验内嵌一人一目录            *)
 (*     _tuabd1s3_g3out（验后判读）。四关留痕 attn/logs/g1..4-UpAblD1S3_* *)
 (* ============================================================ *)
@@ -88,7 +95,7 @@ Definition uabd1s3_fep_st_kernel (S0 : Set) (enum0 : list S0)
   (D_pos : real_lt real_zero D) : S0 -> S0 -> Real :=
   fun _ s' => uabd1s3_fep_st_dist S0 enum0 Hne base_loss D D_pos s'.
 
-(* ---- 槽1 L82 real_partition_condition（母本 req_fep_partition_condition *)
+(* ---- 槽1 L82 real_partition_condition（源文件 req_fep_partition_condition *)
 (*    @UpReqFEPAttn:137 经 RealEnhancedReal 实例逐字实例化） ---- *)
 Theorem uabd1s3_fep_st_real_partition_condition :
   forall (S0 : Set) (enum0 : list S0) (Hne : Not (enum0 = nil))

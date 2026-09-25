@@ -139,7 +139,7 @@ Proof. intros; discriminate. Qed.
 (* ========== §3 塔尺寸理论【主件】 ========== *)
 (* dig_size：按构造子结构递归，二叉节点取子件尺寸求和加一，
    序列节点取表内子件尺寸求和加一，dCode 取参数位计数（见头注 a)。
-   实现注记：mutual Fixpoint 方案被守卫拒绝（dig_lsize 对表头的
+   实现注记：mutual Fixpoint 方案被守卫拒绝（dig_lsize 作用于表头的
    dig_size x 调用，x 非尾参 xs 的子项）——改用 dSeq 分支内嵌
    匿名 fix：y 经 d ⊳ l ⊳ m ⊳ y 三层 match 嵌套仍是 d 的子项，
    守卫通过；dig_lsize 随后独立定义，方程组 face 经转换性成立。 *)

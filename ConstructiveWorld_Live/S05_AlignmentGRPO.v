@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
@@ -4390,7 +4391,7 @@ Variable eta_pos : lt zero eta.
 Variable eta_le_one : le eta one.
 Variable sum_over_S_pos : forall (f : S -> R), (forall s : S, lt zero (f s)) -> lt zero (sum_over_S f).
 
-(* 供给件（原 U2 节 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B17）：由 sum_over_S_pos+逐点 mult_positive/exp_neg_pos 导出；零承认件 *)
+(* 前置引理（原 U2 节 Variable 换同名 Lemma， 基座消融波 T2 终判 B17）：由 sum_over_S_pos+逐点 mult_positive/exp_neg_pos 导出；零承认件 *)
 Lemma Z_align_pos : lt zero (Z_align reward beta beta_pos pi_ref).
 Proof.
   unfold Z_align. apply sum_over_S_pos. intros s. apply mult_positive.

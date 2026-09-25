@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpReqConcMixSel.v —— 本件形式化 req 面混合选择器与注意力核混合时间的    *)
+(* UpReqConcMixSel.v —— 使命：本件形式化 req 面混合选择器与注意力核混合时间的    *)
 (*   对应层：cmk_ 系 k 选取器/幂机器（CmkMixSelect）与收束件              *)
 (*   cmk_attention_mixing_time（及 <= 版，CmkMixTime），以及 expf 迷你     *)
 (*   接口的 req 面一件全供（cmk_expf_realizable）。另附 CmkMixTime 六个参数位   *)

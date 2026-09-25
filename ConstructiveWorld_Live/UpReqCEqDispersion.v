@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqCEqDispersion.v *)
 (* *)
 (* 目的： CDispersion S 档等号槽的严格化（三件）。 *)
@@ -8,11 +8,11 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqCEqDispersion.v —— 席T34：CDispersion S 档等号槽严格化消解席        *)
-(*   2026-09-11；承席T26 头注诚实边界（UpReqCDispersion.v L26-28）：        *)
+(* UpReqCEqDispersion.v —— ：CDispersion S         *)
+(*   ； 头注诚实边界（UpReqCDispersion.v L26-28）：        *)
 (*   「s6 w2_gibbs_eq / req_u2_fixed_point_unique 等还吃 log_le_linear /  *)
 
-(*   席T1 结果之前；席A3 候选 A-3 判：T1 已建「切点⟹一」件，等号条件位      *)
+(*   T1 结果之前；A3 候选 A-3 判：T1 已建「切点⟹一」件，等号条件位      *)
 
 (* ------------------------------------------------------------------ *)
 
@@ -26,7 +26,7 @@
 
 (*         (real_plus u (real_opp real_one)) -> real_eq u real_one        *)
 
-(*         req_minus a b:=plus a (opp b)，δ 透明）——与席T1                *)
+(*         req_minus a b:=plus a (opp b)，δ 透明）——T1                *)
 
 (*         同形。T1 链：real_weak_trich（S07:5710 弱三分，直觉主义有效）    *)
 (*         + klst_log_tangent_neg/pos 双支 + real_lt_compat + 非自反收紧； *)
@@ -36,11 +36,11 @@
 (*         real_log_le_linear_B）到 Or 编码的逆向桥构造性不可证（登记表      *)
 
 (*   3. 供给（全部上游在盘，vo 树今日全部通过）：                              *)
-(*      B1 logd_log_compat_real      ——compat 槽 Real 闭合（T26 同喂）     *)
-(*      B4 logd_log_inv_exp_neg_real ——inv_exp_neg 槽 Real 闭合（T26 同喂）*)
+(*      B1 logd_log_compat_real      ——compat 槽 Real 闭合（ 同喂）     *)
+(*      B4 logd_log_inv_exp_neg_real ——inv_exp_neg 槽 Real 闭合（ 同喂）*)
 
 (*      sum 面（sum_ext/add/linear/pos/zero_nonneg）与 le 面槽、KL>=0 面    *)
-(*      槽：接口型参数位（T26 实测 raw→接口重述在提取层生成运行型转换残留， *)
+(*      槽：接口型参数位（ 实测 raw→接口重述在提取层生成运行型转换残留， *)
 (*      自段口径不 ship；载体与满足证上游在盘，接口形补上即全 Concrete）。  *)
 
 (*   [桥接引理] t34_log_eq_linear_weak —— t1 切点⟹一件的接口形重曝：           *)

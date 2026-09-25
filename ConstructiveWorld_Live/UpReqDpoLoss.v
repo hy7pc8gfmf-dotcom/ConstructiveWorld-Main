@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqDpoLoss.v *)
 (* *)
 (* 目的： DPO 损失的 req 层折叠与最优点刻画。 *)
@@ -7,12 +7,11 @@
 (* 备注： 奖励、温度与逐点正性为 Variable 前提；折叠外延性 rdl_fold_plus_ext 为构造核。 *)
 (* ============================================================ *)
 
-(* UpReqDpoLoss.v — 批5 完成行动清单第 2 项：dpo_total_loss 簇解冻评估（可行）+ 建设
+(* UpReqDpoLoss.v —  完成行动清单第 2 项：dpo_total_loss 簇解冻评估（可行）+ 建设
    冻结结论（UpReqAlignRestA.v 头注区3）：“total_loss 簇冻结（fold_right_ext 载体，
      _monotone/_star_characterization (d) 冻结（fold 载体 + nat/list 层 Id 双层并行）。
    ----------------------------------------------------------------
    判定书（解冻依据，证据坐标）：
-   1. 冻结前提已消失：其注记「待 dpo_pair_loss 簇 req 化后随批4」——RestA 已结果
      ralt_dpo_pair_loss/ralt_dpo_pair_loss_star/ralt_dpo_pair_loss_at_star
      （UpReqAlignRestA.v L404-462，.vo 出口签名已检验实证）。
    2. 载体形路径：Id 泛型 fold_right_ext（L20160，{A B : Set} 全称形）的 req
@@ -32,7 +31,7 @@
    2. monotone 逐点前提 le 形与 Id 同位；Hpi1/Hpi2 见证位为诚实新增。
    3. fold 外延件 (b) 化逐点改述（先例：u2_kl_arg2_ext）；InT 限制形为
      characterization 的诚实对偶（Id 原件 L20199 逐元素 InT 供给形）。
-   4. 桥假设位自持（RestA 同形，各席自持纪律）：rdl_log_req_compat /
+   4. 桥假设位自持（RestA 同形，自持纪律）：rdl_log_req_compat /
      rdl_log_inv_exp_neg_req；节闭后随件出参，使用以 .vo 出口签名为准
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）；纯 term-mode（req_trans 链 +
      compat 桥），零模性等变结构依赖（禁词扫描全零面）。

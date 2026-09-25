@@ -1,5 +1,6 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* Paper1Ablation.v —— 席位 CZD11（组 E-STAGING-CZD11）        *)
+(* Paper1Ablation.v —— 位 CZD11（组 E-STAGING-CZD11）        *)
 (* 论文1《构造性ML对齐统一形式化》可消融 C 类槽施工              *)
 (*                                                              *)
 (* 前缀 pa1_（防撞 grep）；基座 ConstructiveWorld_vo_901（268）  *)
@@ -65,7 +66,7 @@ Proof.
 Qed.
 
 (* ############ 第0.5件：乘法四因子交换（自足内联，卸 UpGRPO 依赖） ############ *)
-(* 与 UpGRPO.real_mult_exchange 同构；为使本稿只依赖 czc10 批1+2 件集，   *)
+(* 与 UpGRPO.real_mult_exchange 同构；为使本稿只依赖 czc10 +2 件集，   *)
 (* 以 monolith/S02 基元代数自证内联。 *)
 Lemma pa1_mult_exchange : forall a b c d : Real,
   real_eq (real_mult (real_mult a c) (real_mult b d))

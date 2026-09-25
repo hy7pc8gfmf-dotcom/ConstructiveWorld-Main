@@ -151,7 +151,7 @@ Qed.
 (* bpow_add 二项式恒等：ab=ba ⟹
    bpow (a+b) n == Σ_{k≤n} C(n,k)·a^k·b^(n−k)
    （Pascal 归纳 L1..L13 显式中件链，骨架与 UpReqBanachAdd.v 逐段同位；
-     ①④②③⑤..⑨ 各步使用：bsum 引擎（Prod）+ 零假设助件（Add 白名单）
+     ①④②③⑤..⑨ 各步使用：bsum 引擎（Prod）+ 零假设助件（Add 许可清单）
      + 配对件 bnh_pair_mid/bnh_pair_tail（本件 S2，根=类字段）。） *)
 Lemma bnh_bpow_add : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
@@ -196,7 +196,7 @@ Proof.
     + apply (@bae_sym B). exact (@bplus_zero_l B (@bone B)).
     + apply (@bplus_wd_r B).
       apply (@bae_sym B). exact HX.
-  - (* 归纳步：Pascal 配对组装（蓝图 E152-13 降层） *)
+  - (* 归纳步：Pascal 配对组装（蓝图降层） *)
     set (g := fun k : nat =>
                 @bmult B (@bcoef B (bpa_binom n' k))
                          (@bmult B (bpow B a k)

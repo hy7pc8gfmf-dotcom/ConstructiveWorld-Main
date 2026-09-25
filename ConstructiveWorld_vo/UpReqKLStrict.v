@@ -1,26 +1,19 @@
-(* ============================================================ *)
 (* UpReqKLStrict.v —— KL>0 严格引理族：Gibbs 族严格化              *)
 (* 使命： 形式化「能量非常数 ⟹ KL > 0」的严格引理族（Gibbs 族严格化）。 *)
 (* 依赖： CW_ConstructiveWorld_219（Q 层有理数基座；Stdlib QArith）。    *)
 (*   与 eps 形引擎 real_gibbs_inequality_B（UpRealLeB E.13）成对的      *)
 (*   「能量非常数 ⟹ KL > 0」缺口的严格件族。                        *)
-(*                                                                *)
 (* 主结果（全 Set 层、零 Prop 表出面、零新公理）：                      *)
 (*   A. klst_ep_two_terms：Q 层二阶部分和下界 n≥2、x≥0 ⟹              *)
 (*        1+x+x²/2 ≤ exp_partial n x（严格切线的间隙源）。              *)
 (*   B. klst_exp_tangent_pos：0<w ⟹ 1+w < e^w（严格指数切线正支；        *)
 (*        间隙见证 δ := eps²/2）；klst_log_tangent_pos：1<x ⟹            *)
-
 (*   C. klst_gibbs_core_strict：p<q ⟹ 0 < kl_term(p,q)+(q−p)            *)
-
 (*        klst_gibbs_core_zero：p==q ⟹ kl_term(p,q)+(q−p)==0            *)
-
 (*   D. klst_kl_sum_strict：KL 严格正主件——逐项正性 + 双归一化 +          *)
 (*        逐项 p≤q（弱序 Or 形，排除 q>p 支）+ s₀ 处严格分离见证          *)
 (*        （p s₀ < q s₀）⟹ 0 < Σ_s kl_term（表 l₁++s₀::l₂）。            *)
-(*                                                                *)
 (* 【阻塞精确裁决】逐项 g≥0 的 q<p 支需要「负 argument 严格指数切线」     *)
-
 (*   上切线 x<1 侧；其 Q 层间隙源需四项交错部分和下界                     *)
 (*   1−t+t²/2−t³/6 ≤ ep_n(−t)，现有 exp_partial 族仅一阶                 *)
 (*   （exp_partial_ge_plus_x）与符号分段非严格件（odd/even_ge_minus），   *)
@@ -29,11 +22,9 @@
 (*   接口对照：exp 严格单调字段已有（cauchy_real_exp_mono）；缺严格切线    *)
 (*   字段（real_exp_ge_linear_eps 为 eps 形 Or 编码，等号分支不可提取——   *)
 (*   UpRealLeB 尾注同一已知限制在严格层的显形）。                        *)
-(*                                                                *)
 (* 构造性注记（红线）：零公理零未闭合证明；Set 层语句（real_lt 为 sigT    *)
 (*   见证集值）；全 Qed. 闭合；Print Assumptions 须 Closed。             *)
 (* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。 *)
-(* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
 From Stdlib Require Import QArith.Qfield.

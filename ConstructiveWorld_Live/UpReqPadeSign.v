@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -98,7 +98,7 @@ Qed.
 (* Qeq 右换桥（本件最小传桥接引理）：a == b 时 0<a 传 0<b。
    AA12 肢化：语句面不变，证明体退化为自建 Q 单调肢一跳
    （UpReqPadeQLeg.pql_qlt0_eq_r，Z 乘法单调显式装配 + lia，
-   断根 Psatz/micromega 环境闭包）。 *)
+   根除 Psatz/micromega 环境闭包）。 *)
 Lemma pds_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
   intros a b Hab Ha.
@@ -131,7 +131,7 @@ Qed.
 Lemma pds_den1_half : QltT 0 (pade_den 1 (1#2)).
 Proof. unfold QltT. vm_compute. reflexivity. Qed.
 
-(* ===== 显式假设登记（通用 n 版 den_pos，禁硬凑） =====
+(* ===== 显式假设登记（通用 n 版 den_pos，禁强造） =====
    通用 n 的 den_pos 实例化图（下一批，30 分钟预算内诚实显式假设）：
      den(x) := altsum (fun k => pade_coeff n k * q_pow x k) (n+1)
      （PC2 引擎出口，UpReqAltSumPos.v）；

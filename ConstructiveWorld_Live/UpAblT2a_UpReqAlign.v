@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
@@ -15,7 +16,7 @@
 (* ============================================================ *)
 (* 辖区：UpReqAlign.v ReqAlignCore 节 L81 + ReqKLProjection 节 L704，          *)
 (*   log 相容面假设位 2 位（同名 log_req_compat 两节同形位）。                  *)
-(* 母本：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；               *)
+(* 源版本：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；               *)
 (*   副路：hzlogd_log_req_compat_real@G08_Gibbs:799，其证=                     *)
 (*   real_log_wd@S08_RealMainlineDPO:1074 直取）。                             *)
 (*   行数 1424，21 位语句逐字双检通过）；语句逐字抽取后仅 R 换实例位 Real，        *)

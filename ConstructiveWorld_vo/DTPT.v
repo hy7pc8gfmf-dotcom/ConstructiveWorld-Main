@@ -1418,7 +1418,7 @@ Print Assumptions n9_naive_bound_Hadj.
      q_fact_inv_le_pow2 : 1/(k+1)! <= 1/2^k
 
    纪律：零公理、零承认、零中止、零经典排中，全程 Qed 完成。
-   Q 层 lia 禁用（E307）：全部不等式经 Qnum/Qden 展开 + Z 层 lia/ring；
+   Q 层 lia 禁用：全部不等式经 Qnum/Qden 展开 + Z 层 lia/ring；
    `#` 分母槽是 positive（实证坑），Z 分母一律走 q_inv_den1。
    ============================================================ *)
 (* 原独立文件 Require/Import/Open Scope 头（From Stdlib QArith/List/Arith/Lia、

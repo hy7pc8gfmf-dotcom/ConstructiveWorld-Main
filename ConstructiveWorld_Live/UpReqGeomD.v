@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -53,7 +53,7 @@
 (*     逐点凸性（a^{1-e}b^e ≤ (1-e)a+e·b+eps），接口 req 语言换形；    *)
 (*     geod_amgm_pointwise_iface 为逐字接口投影语形版。               *)
 (*   [主件] geod_le_b（接口层 eps-le 非严格序语言，Set 值）+          *)
-(*     geod_sum_collapse（抽象求和塌缩机：逐点 eps 配权 + 双归一化    *)
+(*     geod_sum_collapse（抽象求和收缩机：逐点 eps 配权 + 双归一化    *)
 (*     吸收，任意增强接口+sumf 机器可依存）+                          *)
 (*     geod_interp_Z_le_one_eps（插值 Z ≤ 1+eps 接口形实例——         *)
 (*     数学核的 req/eps 形落盘）。                                    *)
@@ -84,7 +84,7 @@ Section GeodLeB.
 Context {R : Set} (RIS : RealInterfaceEnhancedSetoid R).
 
 (* eps-le 语言：x ≤_ge y := 对全部正 eps，x ≤ y+eps（Set 值 forall 形；
-   与 UpRealLeB.real_le_b（lt 形）同族，取 le 支以适配 sum_le 直接塌缩） *)
+   与 UpRealLeB.real_le_b（lt 形）同族，取 le 支以适配 sum_le 直接收缩） *)
 Definition geod_le_b (x y : R) : Set :=
   forall eps : R, @lt R RIS zero eps -> @le R RIS x (@plus R RIS y eps).
 
@@ -313,7 +313,7 @@ Proof.
         -- exact (geod_eta_plus_kappa eta).
 Qed.
 
-(* list 版求和塌缩（real 面——G3 提取闭包零实例记录；与抽象机
+(* list 版求和收缩（real 面——G3 提取闭包零实例记录；与抽象机
    geod_sum_collapse 同构，sumf := geod_lsum n 实例化） *)
 Lemma geod_lsum_collapse_real : forall (n : nat) (u f g : nat -> Real),
   real_eq (geod_lsum n u) real_one ->
@@ -349,7 +349,7 @@ Qed.
 
 (* 主件：插值配分 Z ≤ 1 + eps（接口形，数学核落盘）
    Z := Σ pit^{1-eta}·pis^eta ≤ 1+eps——逐点 AM-GM（保底件）配权
-   eps·pit(i)，geod_sum_collapse 求和塌缩吸收（归一化双前提）。 *)
+   eps·pit(i)，geod_sum_collapse 求和收缩吸收（归一化双前提）。 *)
 Theorem geod_interp_Z_le_one_eps : forall (n : nat) (pit pist : nat -> Real) (eta : Real)
     (Hpit : forall i : nat, real_lt real_zero (pit i))
     (Hpist : forall i : nat, real_lt real_zero (pist i))

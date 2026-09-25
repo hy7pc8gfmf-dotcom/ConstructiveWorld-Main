@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqAlignRestB.v *)
 (* *)
 (* 目的： 对齐族剩余段 B：求和接口与 Min-P/马尔可夫核域准备。 *)
@@ -7,7 +7,7 @@
 (* 备注： 求和接口为显式前提；词表非空见证与温度配分正性为显式构造。 *)
 (* ============================================================ *)
 
-(* UpReqAlignRestB.v — 签名迁移批 3 余量 B 席：Top-k/Min-P/熵动力学/逐出四区
+(* UpReqAlignRestB.v — 签名迁移批 3 余量 B ：Top-k/Min-P/熵动力学/逐出四区
    抽象层定理的 req 系（setoid 层）req 化。
    源文件：CW_ConstructiveWorld_219（行号 = 219 基座）四区：
      Min-P 区     Section MinPSampling      L30684-31866（Id 系抽象层）
@@ -83,7 +83,7 @@
    3. [签名变化] minp_dropped_mass 的 minus → req_minus（= plus a (opp b)，
       UpReqAlgebra 登记表 1 同形重建）；count_kernel_heavier 中支 Id → req；
       Part 1+2 合并单节（基座 TopP 以 12 参闭包显式形式使用 MinP 机器，
-      req 席同构合并避免调用噪音，定义/语句逐件对应）。
+      req 同构合并避免调用噪音，定义/语句逐件对应）。
       Part 4 续：接口无 plain exp——e^{·} 全部以 req_epos（:= exp_neg∘opp，
       正指数幂 = exp_neg 逆的 req 重建）陈述，boltzmann_upper/abs_diff_prod_
       bound/boltzmann_diff_bound/bound_eps 的 e^{E_max/D}、e^{|u−v|}、e^{Ulips}
@@ -93,7 +93,6 @@
       le_mult_compat/req_le_mult_compat_r 双段单调 + req_le_zero_mult_pos_l
       （le zero (p·x) 接口级导出：le 字段抽象不可分解下的非负积引理）——
       全部真证，无新增冻结件。
-   4. [承担席续建记录（20260909，原席死于系统盘写故障）]
       断点修复 5 处（正向修复，零缩水零掉 Qed）：
       a. req_temp_factor_max_eq：mult_assoc 方向反（外层 req_sym 后需再翻回，
          显式 req_sym + mult_assoc）；
@@ -106,7 +105,6 @@
       续建：Part 3（熵动力学区 Section ReqEntropyWorld：req_exp_neg_ext_local
       + 4 对位件 + 熵定义组 3 件 + req_Omega_total_pos）与 Part 4（逐出区
       Section ReqKVQuantWorld：epos 定义组 + 环/abs 工具 4 件 + P1 桥位 +
-      B1/B2c/B3a/B3b/B3c/B3/B4 全链）由承担席按源文件逐件对位续建。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le/req_minus 均接口 Set 值；Or/And/
    Id(list/nat)/Not 按 UpKVEv 先例）；核心件 Qed、判定件 Defined；
@@ -119,7 +117,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
 Require Import UpReqPropLiftShim.
-(* B6W 实例化（20260915，AA13 显式假设①首批）：pls_ 升面适配引理接入。 *)
+(* B6W 实例化（，AA13 显式假设①首批）：pls_ 升面适配引理接入。 *)
 
 (* ============================================================ *)
 (* Part 0：req list-sum 机器（基座 MinPSampling L30710-30768/    *)
@@ -227,7 +225,6 @@ Qed.
 
 (* req 通用归一化核（基座四归一化定理共用代数骨架的 req 真证；
    基座对 minp/topp/combined/combined_topk 四次重复同款 Id 证明，
-   req 席一次真证 + 四次语句级实例化，实例经 conversion 逐位对应：
    各区 temp_sum 定义即本件 S 项的 δ 展开） *)
 Lemma rls_kernel_norm_gen :
   forall (l : list A)
@@ -423,7 +420,7 @@ End ReqOrdTools.
 (* ============================================================ *)
 (* Part 1+2：采样世界（Min-P 区 L30684-31866 + Top-k 区          *)
 (*   L31872-32542）。基座 TopP 以「闭包显式参数形式」使用 MinP    *)
-(*   机器（L31914 同款 12 参显式调用）；req 席合并单节同构重述，  *)
+(*   机器（L31914 同款 12 参显式调用）；req 合并单节同构重述，  *)
 (*   逐件定义/语句仍与基座一一对应。                              *)
 (*   top_p_keep（sort_kernel 成员形态，L31962）不迁：其排序/成员  *)
 (*   机器为 list-Id 域（规划书 §1.1 边界 2），基座定理全部使用     *)
@@ -436,7 +433,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
-(* B6W 实例化位（AA13 #10，20260915）：老否定形前提经 pls_ 适配引理升 sigT 见证形—— *)
+(* B6W 实例化位（AA13 #10，）：老否定形前提经 pls_ 适配引理升 sigT 见证形—— *)
 (* 深实例化使用位：pls_vocab_ne_lift 原地升形，下游可直取走 sigT 通路。旧语句保留。 *)
 Definition alb_vocab_ne_witness_s1 : pls_vocab_ne vocab
   := pls_vocab_ne_lift vocab vocab_nonempty.
@@ -911,7 +908,7 @@ Proof.
               (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
                     (alb_partition_temp prefix)))).
-      (* 盘故障断点修复（承担席 20260909）：外层 req_sym 已翻转目标，
+      (* 盘故障断点修复（ ）：外层 req_sym 已翻转目标，
          assoc 步实为 mult_assoc 之对称——req_sym 显式翻回（正向修复）。 *)
       apply (req_sym
         (mult (alb_temp_factor prefix (pick_max_token prefix))
@@ -1575,7 +1572,7 @@ Qed.
 
 (* ---- P1 桥假设位（诚实登记表 1 续）：基座 real_exp_neg_diff_bound L53901
    的 req 对偶；其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析
-   （LogDiffPhase4 域），setoid 接口无 exp 线性 eps 字段——同主定理席
+   （LogDiffPhase4 域），setoid 接口无 exp 线性 eps 字段——
    UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式。P1 给出为桥，
    其余 B2/B3a/B3b/B3c/B4 各件全部真证 ---- *)
 Variable req_boltzmann_diff_bridge : forall (u v eps : R),
@@ -2621,10 +2618,9 @@ Qed.
 End ReqKVQuantWorld.
 
 (* ============================================================ *)
-(* 文件尾清单注记（承担席核对登记表，20260909 结席）                *)
+(* 文件尾清单注记（核对登记表， ）                *)
 (* ============================================================ *)
 (*
-   1. 结果核对（原席头注四区计划 vs 实建）：
       [Part 0] rls_ext/rls_linear/rls_nonneg/rls_single_le/rls_pos/rls_le/
       rls_kernel_norm_gen + req_lt_zero_le_trans/req_le_mult_le_one_r —— 全建。
       [Part 1] 14 件全建（另附 3 件辅助：req_partition_temp_pos/
@@ -2646,7 +2642,7 @@ End ReqKVQuantWorld.
       Part 4 工具族/B1/B2c/B3a/B3b/B3c/B4（req 链 + 接口字段 + UpReqAlgebra
       引擎）；组装 = B3（P1 桥 + distrib + 单调链 + req 重排）；幂等 δ 对偶 =
       alb_markov_kernel 定义族（δ 展开 + rls_kernel_norm_gen 一击）。
-   3. 冻结沿用原席登记表 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
+   3. 登记表 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
       Q 逐点乘积界），续建未新增冻结件；新增诚实假设位 2 枚（bridge、
       transition_nonneg Or 形）均已逐位核对（头注登记表 1）。
    4. 断点事故与修复：见头注登记表 4（5 处正向修复，快照链

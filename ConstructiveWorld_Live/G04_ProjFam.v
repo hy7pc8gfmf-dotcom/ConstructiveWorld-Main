@@ -1833,7 +1833,7 @@ End BPChain.
 (*    T_pos/log_two_pos/prediction_landauer/hierarchical_stability_        *)
 (*    prediction/loss_structure_correlation——物理叙述级，墙族登记）。      *)
 (*  · 接口参数位（保留）：各节数据参数原样保留，接口义务。                 *)
-(* 实例载体（单点形，工单 #10 Fin2/B1/B2 enum:=[tt] 先例同构）：            *)
+(* 实例载体（单点形，Fin2/B1/B2 enum:=[tt] 先例同构）：            *)
 (*   供给定理为具体实例上的消解证书，供使用方以实例充任接口字段。           *)
 (* ===================================================================== *)
 

@@ -104,7 +104,7 @@ Print Assumptions lebR_res_weight.
 (*   载体勘定：RealListSumMain 节 real_list_sum（list Fixpoint， *)
 (*   X 泛型，nil 支 real_zero）。语句形态按空支路裁决：空表支 sum 实为  *)
 (*   real_zero，严格正不真——消解语句必带非空前提 Not (Id l nil)        *)
-(*   （sum_temp_positive 同款；E385 完成器空支路判据同源）。      *)
+(*   （sum_temp_positive 同款；完成器空支路判据同源）。      *)
 (*   先件=前提语句的 list 载体实例（归纳真理两支：nil 矛盾直击、cons      *)
 (*   real_plus_positive 两处提供实参）；伴件以固定非空 vocab 无条件实例化内机    *)
 (*   lebR_res_weight_pos（π_old/adv 取常 real_one，证书 real_lt_zero_one）      *)

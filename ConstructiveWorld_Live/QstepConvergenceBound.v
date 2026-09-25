@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* QstepConvergenceBound.v —— 席位 C9：qstep 迭代收敛步数界          *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* QstepConvergenceBound.v —— 位 C9：qstep 迭代收敛步数界          *)
 (*   （A4 移植榜 T9：迭代 eps 形模板 → Q 层 qstep 轨道移植）          *)
 (* ------------------------------------------------------------ *)
 (* 受体（单步收缩引擎，直接使用 .vo）：                               *)
@@ -47,7 +47,7 @@ From Stdlib Require Import Lia QArith.Qminmax.
 
 (* ============================================================ *)
 (* A. 薄壳严格 T 面：QltT'（对偶 S02 QleT' 的 bool 反映形；           *)
-(*    S02 只有 QltT/QleT'，本席补严格比较的 T' 面）                  *)
+(*    S02 只有 QltT/QleT'，补严格比较的 T' 面）                  *)
 (* ============================================================ *)
 
 Definition QltT' (x y : Q) : Set := Id (Qlt_bool x y) true.
@@ -187,7 +187,7 @@ Proof.
     left. exact Hy.
 Qed.
 
-(* Qabs 对 Qeq 的同余（stdlib 未注册 Qabs 形态隐喻，本席自证）：
+(* Qabs 对 Qeq 的同余（stdlib 未注册 Qabs 形态隐喻，自证）：
    只用整项重写 + 已注册的 Qopp/Qlt 形态隐喻。 *)
 Lemma qabs_eq_compat : forall x y : Q, x == y -> Qabs x == Qabs y.
 Proof.

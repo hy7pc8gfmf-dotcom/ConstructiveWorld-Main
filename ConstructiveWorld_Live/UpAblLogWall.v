@@ -23,7 +23,7 @@
 (*   数学核心 = 从最小站规格提取序信息；全部换形走投影级 Q 算术               *)
 (*   （real_mult_proj / real_const_proj，配合两个桥接引理                     *)
 (*   lgw_qlt_half_gap 与 lgw_qlt_half_gap_inv），不依赖 Real 层乘法           *)
-(*   单调性引理——库内缺席本身即此构造性边界的内容。                          *)
+(*   单调性引理——本身即此构造性边界的内容。                          *)
 (*                                                              *)
 (* 对照件 lgw_oracle_pin：lgw_ord_oracle -> lgw_lpo_family——序判定神谕       *)
 (*   在场时 LPO 族实例直接可得，对照表明障碍在序判定数据的可得性。           *)

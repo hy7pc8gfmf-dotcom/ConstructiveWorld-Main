@@ -1,18 +1,18 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpAblD1S13_UpReqAlignClose.v —— FA-D1S13 数据供给大封装七梯 件①   *)
-(* 席位：FA-D1S13（普查批 D1-⑦ 第七梯 ≤40 位·按模块聚合）｜独立配套模块  *)
+(* 位：FA-D1S13（普查批 D1-⑦ 第七梯 ≤40 位·按模块聚合）｜独立配套模块  *)
 (* ·原树零改                                                      *)
 (*                                                              *)
-(* 领地认领（防撞协议快照 20260919 实测，报告+在飞件双口径）：        *)
+(* 领地认领（防撞协议快照  实测，报告+进行中件双口径）：        *)
 (*   S1＝fa53_lpc 九槽＋expf 六槽；S2＝E752 净新二槽＋req log 桥十槽； *)
 (*   S3＝sum_pos 十二槽＋fep 五槽；S4＝StepKLEtaInst＋TopKTVChain；   *)
 (*   S5＝DoeblinEntropy＋EntropyMonoSplit；S6＝RealFEP＋SLQ＋        *)
 (*   SteadyThermo＋MinPKLChain；S7＝Entropy 簇四件；S8＝TempDefs＋    *)
 (*   TSI＋PPOPlain 拆前 20；S9＝UpReqAttnIter 余量 22（PPO 弃领）；   *)
-(*   S10＝UpReqConcMixSel 19 行＋PPOPlain 节2余3＋节3全11（在飞已落盘）； *)
-(*   S11＝PPOPlain 节2余3＋节3全11（在飞已落盘，与 S10 同槽双认领，    *)
+(*   S10＝UpReqConcMixSel 19 行＋PPOPlain 节2余3＋节3全11（进行中已落盘）； *)
+(*   S11＝PPOPlain 节2余3＋节3全11（进行中已落盘，与 S10 同槽双认领，    *)
 (*   双口径并账——PPOPlain 全模块 35 槽已无净新面）。                 *)
-(*   本席认领＝⑦池未认领模块中 UpReqAlignClose 余量 16 槽＋           *)
+(*   认领＝⑦池未认领模块中 UpReqAlignClose 余量 16 槽＋           *)
 (*   AlignIdUnclosed 余量 14 槽＝30 位 ≤40（按模块聚合，两模块全闭合）。 *)
 (*                                                              *)
 (* 本件辖区：UpReqAlignClose.v 节 UacClose 余量 16 槽：              *)
@@ -86,7 +86,7 @@ Proof.
 Qed.
 
 (* ============ 封装记录型：对照源文件 L29-70（槽语句逐字入包） ============ *)
-(* 槽序＝供给序；sum_pos(L42)/log 两槽(L48-52) 他席已收不入包（件头排除登记）。 *)
+(* 槽序＝供给序；sum_pos(L42)/log 两槽(L48-52) 已收不入包（件头排除登记）。 *)
 
 Inductive uabd1s13_uac_pack16 : Type :=
 | uabd1s13_uac_pack16_intro :

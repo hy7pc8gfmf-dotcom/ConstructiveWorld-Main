@@ -1,39 +1,30 @@
-(* ============================================================ *)
-(* EngineCeilingK.v —— 席 CZC13：UpReqEngineCeiling 一般 k 参数化件    *)
-(*   （T61b C4 工单；批次 E-STAGING-CZC13；独立新文件零改既有文件；     *)
-(*     前缀 eck_ 全库开工 grep 零撞名核验在案）                        *)
-(*                                                                *)
-(* 使命：核销 UpReqEngineCeiling.v 双挂账（:42 头注诚实边界段 +          *)
-(*   :351 G2b 主件注）「cec_kernel_coef 一般 k 形以参数化恒等式          *)
-(*   s == k·v + k(k+1)/2·v^2 + v^3·w 为显式假设」——本件对一般 k 给出     *)
-(*   显式见证 w = eck_Wk k v 的无条件参数化恒等式，并据此把二阶反演      *)
-(*   主件升格为一般 k 无条件形（k=1 退化为已闭件 cec_kernel_coef_k1）。  *)
-(*                                                                *)
-(* 路线（T61b 建议「几何和 + 逐幂二阶 + 求和三归纳」落地变体）：         *)
-(*   ① 几何和小引擎：eck_gsum + eck_geom_sum_closed（q_pow Q 层版      *)
-(*     闭式；库内 grep geom_sum 仅 Id 层 req_geom_sum_closed 与         *)
-(*     Real 层 geom_sum_closed，q_pow Q 层版缺，本件首节自建）；         *)
-(*   ② 逐幂面：eck_pow_minus_one（(x-1)·Σ == x^k - 1）、eck_q_pow_inv    *)
-(*     （倒数幂），合成 R6 核几何表象 eck_r6s_geom；步递推               *)
-(*     eck_r6s_step：s_{k+1} == s_k/(1-v) + v/(1-v)（逐幂一跳）；        *)
-(*   ③ 求和归纳：二阶系数递推引擎 eck_Wk（W_1 = 1/(1-v)，               *)
-(*     W_{k+1} = (W_k + b_{k+2})/(1-v)，b_k = k(k+1)/2）。求和三常数     *)
-(*     Σ1=k / Σj = k(k-1)/2 / Σ_{j<k}C(j,2)=C(k,3) 在递推侧内敛为        *)
-(*     bcoef 步恒等 eck_bcoef_step，主归纳 eck_r6_param_k 一跳收口。     *)
-(*   ④ 主定理 eck_kernel_coef_k：cec_kernel_coef 的一般 k 无条件实例。   *)
-(*                                                                *)
-(* 数学内核（fractions 数值抽检 k=1,2,3 与 1/(1-v)^k 幂展开逐系数一致）： *)
-(*   s_k(v) = 1/(1-v)^k - 1；s_k = k·v + b_k·v^2 + v^3·W_k(v)，          *)
-(*   b_k = k(k+1)/2 = cec_r6_bcoef k；W_1 = 1/(1-v)，                    *)
-(*   W_{k+1} = (W_k + b_{k+2})/(1-v)。步恒等 b_{k+2} = b_{k+1} + (k+2)。 *)
-(*                                                                *)
-(* 红线自审：纯构造性；Set 面 Qeq + sigT 见证装载（proj1 可计算提取）；  *)
-(*   非平凡真实现（几何和闭式 + 步递推 + Wk 二阶系数递推引擎，非源件     *)
-(*   重述）；全部 Qed 闭合零承认语句；文尾 Print Assumptions 审计。      *)
-(* 每主件配核销/挂账四要素宣言（对象/语句强度/边界/去向），见前注。      *)
-(* 编译：rocq c -q -native-compiler no -Q <信任缓存根> "" -Q . ""        *)
-(*   EngineCeilingK.v（9.1 live 轨）。                                  *)
-(* ============================================================ *)
+(* ============================================================
+   EngineCeilingK.v — UpReqEngineCeiling 一般 k 参数化件。
+   使命：兑现 UpReqEngineCeiling.v 双留记（:42 头注诚实边界段 +
+     :351 G2b 主件注）「cec_kernel_coef 一般 k 形以参数化恒等式
+     s == k·v + k(k+1)/2·v^2 + v^3·w 为显式假设」——本件对一般 k
+     给出显式见证 w = eck_Wk k v 的无条件参数化恒等式，并据此把
+     二阶反演主件升格为一般 k 无条件形（k=1 退化为已闭件
+     cec_kernel_coef_k1）。
+   路线（几何和 + 逐幂二阶 + 求和三归纳）：
+     ① 几何和小引擎：eck_gsum + eck_geom_sum_closed（q_pow Q 层版
+       闭式；库内 q_pow Q 层版缺，本件首节自建）；
+     ② 逐幂面：eck_pow_minus_one / eck_q_pow_inv，合成 R6 核几何
+       表象 eck_r6s_geom；步递推 eck_r6s_step；
+     ③ 求和归纳：二阶系数递推引擎 eck_Wk（W_1 = 1/(1-v)，
+       W_{k+1} = (W_k + b_{k+2})/(1-v)，b_k = k(k+1)/2）；主归纳
+       eck_r6_param_k 一跳闭合；
+     ④ 主定理 eck_kernel_coef_k：cec_kernel_coef 的一般 k 无条件实例。
+   数学内核（fractions 数值抽检 k=1,2,3 与 1/(1-v)^k 幂展开逐系数
+     一致）：s_k(v) = 1/(1-v)^k - 1；s_k = k·v + b_k·v^2 + v^3·W_k(v)；
+     b_k = k(k+1)/2 = cec_r6_bcoef k；步恒等 b_{k+2} = b_{k+1} + (k+2)。
+   构造性：纯构造性；Set 面 Qeq + sigT 见证装载（proj1 可计算提取）；
+     非平凡真实现；全部 Qed 闭合零承认语句；文尾 Print Assumptions
+     审计。每主件配四要素注明（对象/语句强度/边界/去向），见前注。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   对标：UpReqEngineCeiling.v:42/:351 留记语句面；cec_r6_bcoef。
+   依赖：S01_BaseRing / S02_CauchyComplete（库内既有件）。
+   ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qring QArith.Qabs
                Lists.List Bool.Bool Arith.Arith.
@@ -52,7 +43,7 @@ Lemma eck_z_shift : forall n : nat,
   (Z.of_nat (Datatypes.S n) # 1) == (Z.of_nat n # 1) + (1 # 1).
 Proof. intro n. unfold Qeq, Qplus. simpl. lia. Qed.
 
-(* 正幂非零（Qeq 面；步乘积分裂消费 Qmult_integral_l） *)
+(* 正幂非零（Qeq 面；步乘积分裂使用 Qmult_integral_l） *)
 Lemma eck_q_pow_neq0 : forall (x : Q) (n : nat),
   ~ (x == 0) -> ~ (q_pow x n == 0).
 Proof.
@@ -109,9 +100,9 @@ Qed.
 (* ---- 2. R6 核的几何表象与步递推（逐幂一跳） ---- *)
 
 (* R6 核几何表象：s_k(v) == (t-1)·Σ_{j<k} t^j，t = 1/(1-v)。
-   【四要素】①对象：:42 挂账「几何和」第一环；②语句：核的几何和表象
-   等式（Qeq）；③强度：一般 k，仅 1-v≠0 域假设；④去向：核销
-   （几何和环节闭，消费本件自建 eck_gsum 引擎）。 *)
+   【四要素】①对象：:42 留记「几何和」第一环；②语句：核的几何和表象
+   等式（Qeq）；③强度：一般 k，仅 1-v≠0 域假设；④去向：兑现
+   （几何和环节闭，使用本件自建 eck_gsum 引擎）。 *)
 Lemma eck_r6s_geom : forall (k : nat) (v : Q), ~ ((1 # 1) - v == 0) ->
   cec_r6_s k v ==
   (((1 # 1) / (1 - v)) - (1 # 1)) * eck_gsum k ((1 # 1) / (1 - v)).
@@ -154,9 +145,9 @@ Fixpoint eck_Wk (n : nat) (v : Q) : Q :=
       (eck_Wk m v + cec_r6_bcoef (Datatypes.S (Datatypes.S m))) / (1 - v)
   end.
 
-(* 一般 k 参数化主恒等式（T61b C4 交付主件之一）：
+(* 一般 k 参数化主恒等式（交付主件之一）：
    s_{k+1}(v) == (k+1)·v + b_{k+1}·v^2 + v^3·W_k(v)。
-   【四要素】①对象：UpReqEngineCeiling.v:42/:351 挂账「一般 k 形以
+   【四要素】①对象：UpReqEngineCeiling.v:42/:351 留记「一般 k 形以
    参数化恒等式为显式假设」；②语句：见证 w = eck_Wk k v 显式给出，
    假设卸载（Qeq 无条件形）；③强度：一般 k 无条件（1-v≠0 为 q_pow/
    分母内禀域假设，非降级非虚报）；④边界：v=0 点两面包络仍闭

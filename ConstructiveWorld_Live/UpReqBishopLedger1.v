@@ -1,7 +1,8 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (*   1) rb_le_b_mult_r：<=_B 右乘保序（Bishop 组合器家族增员）            *)
-(*   2) rb_valid_up：klc 向上谱系（消费 klc_closed_powb_mono）            *)
-(* 消费已云认证 .vo（库树只读禁改）；路线全为机检非猜想。                 *)
+(*   2) rb_valid_up：klc 向上谱系（使用 klc_closed_powb_mono）            *)
+(* 使用已云认证 .vo（库树只读禁改）；路线全为机检非猜想。                 *)
 (* 红线自检：零公理/零承认件/零经典逻辑/语句面全 Set 层（real_le_b/     *)
 (*   real_lt/real_le/NatLe 均本项目 Set 版，Or := A + B）/Real 层零序分支  *)
 (*   （real_le 0 c 的两支为 Set-sum 构造消去，非经典分裂）/可提取。       *)
@@ -113,5 +114,5 @@ Proof.
           Hvalid).
 Qed.
 
-(* G3 提取探针：终末构造面 Separate Extraction，Obj.magic 计数=0 为绿 *)
+(* G3 提取检验：终末构造面 Separate Extraction，Obj.magic 计数=0 为绿 *)
 Separate Extraction rb_valid_up rb_le_b_mult_r.

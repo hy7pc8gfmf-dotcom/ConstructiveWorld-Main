@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpAblP2_SecondLawConsume_sumdis.v —— 假设消融战役 FA-P2 批1施工席 S1          *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* UpAblP2_SecondLawConsume_sumdis.v —— 假设消融工程 FA-P2  S1          *)
 (* 辖区：SecondLawConsume.v SlcSecondLawConsume 节 9 位中 4 个求和槽              *)
 (*   （sumpos/sumext/sumlinear/sumadd，Live_X 现档 L132/L135/L137/L139）          *)
 (* 实例化消解源文件：real_list_sum 系四件（源文件自身出节全参插件同款）＋                   *)

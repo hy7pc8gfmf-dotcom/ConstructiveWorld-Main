@@ -493,7 +493,7 @@ Definition kcxr_real_backward_kl_identity
 (* ---------------------------------------------------------------- *)
 
 (* ============================================================ *)
-(*   前件：批 A 全绿（参数位 1 kcxr_req_backward_kl_identity 在上段，     *)
+(*   前件：批 A 全部通过（参数位 1 kcxr_req_backward_kl_identity 在上段，     *)
 (*   其后 Real 实例与批 B 余留清单注记为批 A 原文，追加不改）。      *)
 (*   本段机制（节参面/别名/节内证人/N0 重述/N1 参数位 1 件）为批 A 段     *)
 (*   逐字节同复制，置于 Module 命名空间内——文件级批 A 同名全局件     *)
@@ -1002,7 +1002,7 @@ Qed.
 
 (*
    语句 = UpReqAlign.v:636-639 req_dpo_loss_iter_step_le 逐字同位；
-   证 = 参数位② 供给件 + opp_le_compat（宿主 :640-646 同构）。 *)
+   证 = 参数位② 前置引理 + opp_le_compat（宿主 :640-646 同构）。 *)
 Theorem kcxr_req_dpo_loss_iter_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos_dist pi_t) (Hnorm : norm_one pi_t),
     le (dpo_loss_req (pi_next_req pi_t Hpi_t) (req_pi_next_pos pi_t Hpi_t))
@@ -1171,7 +1171,7 @@ Hypothesis sup_gibbs :
    跨面使用的证人位桥：inv_pos 载体证人万能重述 + KL 逐点全部重述 +
    align_objective 逐点重述。证词条位判据：_t24_probe2/_probe3 实测
    两枚同名 Qed 件应用不可转换（Qed 件不可 delta），conv 只通无证人
-   定义面（P0-P3/P5 全绿）——凡语句含 Qed 证人项位，一律以重述件完成。 *)
+   定义面（P0-P3/P5 全部通过）——凡语句含 Qed 证人项位，一律以重述件完成。 *)
 Lemma kcxr_inv_pos_witness :
   forall (x : R) (w w' : lt zero x), req (inv_pos x w) (inv_pos x w').
 Proof.

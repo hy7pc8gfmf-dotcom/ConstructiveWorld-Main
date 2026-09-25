@@ -509,7 +509,7 @@ Proof.
     rewrite real_plus_proj. rewrite !real_mult_proj.
     assert (H1 : projT1 real_one n == 1%Q) by reflexivity.
     rewrite H1.
-    (* gap = (tn·M + 1) − tn·dn ≥ 1（cb2_qminus_gap，Huv 封顶腿） *)
+    (* gap = (tn·M + 1) − tn·dn ≥ 1（cb2_qminus_gap，Huv 封顶支路） *)
     exact (Qlt_le_trans (1#2)%Q 1%Q
              (Qminus (Qplus (projT1 temp n * projT1 (cb2_list_max_abs real_zero lmax) n) 1)
                 (projT1 temp n * projT1 (cb2_dot (q s) (k s')) n))

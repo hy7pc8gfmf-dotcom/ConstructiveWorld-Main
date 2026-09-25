@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,11 +19,11 @@
 (* ============================================================ *)
 
 (* ============================================================
-   DTPT_Bridge_Dep.v — P3 桥接层第十四棒（席 P3-B14，2026-09-15）
+   DTPT_Bridge_Dep.v — P3 桥接层第十四棒（件 P3-B14，）
    【独立新建件】与 Bridge/Bridge_Dig/Bridge_Rot 分离——处置面
-   独立成件，零竞争（本席独占本新建文件）。
+   独立成件，零竞争（本件独占本新建文件）。
    职责：恒等簇处置的 Set 形证书层——DTPT_Rotation.v §S10
-         （CLN-1 席冻结新件，AUDIT-2 A6「llm_rot_id 恒等簇 + 8 件
+         （CLN-1 件冻结新件，AUDIT-2 A6「llm_rot_id 恒等簇 + 8 件
          弃用注记件逐件映射」闭合段）的 Prop 证件升级为信息性
          Type/Set 面。
    依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
@@ -25,17 +31,17 @@
           FRESH，FRUIT-6 §S11 已闭合在同一 .vo 内）。
          本文件不 Require DTPT_Bridge / DTPT_Bridge_Dig /
          DTPT_Bridge_Rot / DTPT_Bridge_All / DTPT_Truth /
-         DTPT_Extract（并发/冻结席位文件，防竞态；QleT/QeqT 族
+         DTPT_Extract（并发/冻结处理位文件，防竞态；QleT/QeqT 族
          本地副本，B1 §1 / B4 §1 / B6 §1 惯例同构——依赖链 grep
-         该族名零命中，零撞名实测在案）。
-   命名：桥接引理名沿任务书指定（rotc_supersedes_rot_id_set 等带
+         该族名零命中，零同名冲突实测在案）。
+   命名：桥接引理名沿规格文件指定（rotc_supersedes_rot_id_set 等带
          _set 后缀，B1-B12 惯例）；提取产物 b14_ 前缀；模块
          DTPT_Bridge_Dep 限名隔离（八件映射定理原名的 Set 形
-         变体 = 原名去 map 加 _set 或 dep_ 前缀，全链 grep 零撞名）。
+         变体 = 原名去 map 加 _set 或 dep_ 前缀，全链 grep 零同名冲突）。
    认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
    纪律：温控协议 v2（coqc 全机 ≤3 先查后编，竞争 sleep 60）；
          禁碰本文件之外一切 .v（FRUIT-6 已闭合 / TRUTH-2 已闭合
-         Truth 冻结 / P3-B13 在飞 Bridge.v 让窗记录在案）；禁 git；
+         Truth 冻结 / P3-B13 进行中 Bridge.v 让窗记录在案）；禁 git；
          nat 字面量全显式 %nat（Q_scope 全开传导，FRUIT-1 坑①）。
    六字段头注完（职责/依赖/命名/认证目标/纪律/本行归并记录）。
    ============================================================ *)
@@ -100,7 +106,7 @@ Defined.
 (* ③ 依存 L2456 llm_rot_id_superseded（P 面 P↔P∘rot 迁移零损失）
    在熵实例 P := fun m => H_adj m == H_adj l 的 QeqT 面：迁移定理
    proj1（P l -> P (rot n l)）吃 Qeq_refl 一步——恒等重写在熵面
-   零损失的信息性证书（P 面择熵面＝恒等簇依存主力，任务书 QeqT
+   零损失的信息性证书（P 面择熵面＝恒等簇依存主力，规格文件 QeqT
    面授权）。 *)
 Theorem llm_rot_id_superseded_set : forall (n : nat) (l : list Q),
   QeqT (H_adj (rot n l)) (H_adj l).
@@ -309,7 +315,7 @@ Print Assumptions lam_opt_cross_phase_wit_set.
 
 End DTPT_Bridge_Dep.
 
-(* PA 追印段（T254 核验副本件） *)
+(* PA 追印段（ 核验副本件） *)
 Print Assumptions DTPT_Bridge_Dep.H_lam_anti_mono_real_set.
 Print Assumptions DTPT_Bridge_Dep.deprecated_Hsup_mono_set.
 Print Assumptions DTPT_Bridge_Dep.llm_rot_id_superseded_set.

@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpReqEntropyMonoSplit.v —— R120 批 2 波 3 W15 假设消解落件                     *)
+(* UpReqEntropyMonoSplit.v ——  批 2 波 3 W15 假设消解落件                     *)
 (*                                                              *)
 (* ①使命：本件形式化约束化熵单调性分离——峰温两侧熵单调（eps 余量）、约束片熵       *)
 (*   峰界、与 prod 账统一分离定理（Section EmsEntropyMonoSplit 五件结论）。        *)
@@ -12,7 +12,7 @@
 (* ⑤编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-Q 影子池单根。                 *)
 (*                                                              *)
 (* 面外扩展标注：本件为工单面外扩展件（C2 底册 TOP2），按 b3 §2.2 可消解判定施工，  *)
-(*   候融合方甄别确认；若属已补强保留区请退回。同族 UpAblP6_EntropyMonoSplit_A/B/C  *)
+(*   候合并方甄别确认；若属已补强保留区请退回。同族 UpAblP6_EntropyMonoSplit_A/B/C  *)
 (*   为既往消融件已另行处置，勿混淆勿触碰。既往补强自述核实：本件 ToyR 头注自述     *)
 (* 处置说明：原件全文逐字保留；历史注释按 G1 全件禁词映射同文改写（剥离层逐字节      *)
 (*   签名保持式消解：求和面五证书位＋峰温正性位的实例化时点供给证书（三层显式        *)
@@ -99,7 +99,7 @@
 (*   审计）。                                                           *)
 (* 编译配方：coqc -q -native-compiler no -Q . "" UpReqEntropyMonoSplit.v *)
 (*   （四关卡 9.1 配方：vos 秒审 → cpu_guard 全量 → 提取零 magic →      *)
-(*   coqchk；环境钉 COQLIB=ROCQLIB=C:/Rocq-Platform~9.1~2026.01/lib/coq） *)
+(*   coqchk；环境钉 COQLIB=ROCQLIB=C:/Rocq-Platform~9.1~.01/lib/coq） *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -794,7 +794,7 @@ Print Assumptions urems_sum_add_supply.
 (*   见证二 T*:=cf2_temp（UpReqConcFin2:98，定义性等于 one）——引 cf2_temp_pos      *)
 (*   （UpReqConcFin2:100），本件语句面取同款类字段形 lt zero cf2_temp（同常量       *)
 (*   对齐，边界 cast 自然消失；lt/zero 与 real_lt/real_zero 定义性一致凭证在库；     *)
-(*   与 ConcFin2 载体族同源，供融合侧按载体族整取。                                  *)
+(*   与 ConcFin2 载体族同源，供合并侧按载体族整取。                                  *)
 (*   整取。三层显式标注之段注层同前段。                                            *)
 (* ============================================================ *)
 Require Import UpReqConcFin2.

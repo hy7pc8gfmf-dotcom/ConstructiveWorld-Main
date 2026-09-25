@@ -267,9 +267,9 @@ Definition m3_pkg_type (n : nat) (r : nat -> Real) (eta : Real)
 
 (* π_{t+1}(i) := real_step_next n r π_t (1−η)：几何插值策略更新
    π_{t+1}(i) := π*(i)^η·π_t(i)^{1−η}/Z_t。
-   单 Fixpoint（对 t 结构递归），O 情形携带初值四件套，
+   单 Fixpoint（对 t 结构递归），O 情形携带初值四元组，
    S 情形经 m3_step_pos_pt / m3_interp_Z_pos2 / m3_step_next_norm
-   同步重建四件套。 *)
+   同步重建四元组。 *)
 Fixpoint m3_pi_pkg (n : nat) (p0 r : nat -> Real) (eta : Real) (Hn : n <> 0)
     (Hp0 : forall i : nat, real_lt real_zero (p0 i))
     (Hr : forall i : nat, real_lt real_zero (r i))

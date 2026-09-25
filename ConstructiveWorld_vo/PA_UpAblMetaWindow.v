@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,7 +19,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblMetaWindow.v —— M4 席：World3 非退化核世界的双侧混合窗定理                  *)
+(* UpAblMetaWindow.v —— M4 件：World3 非退化核世界的双侧混合窗定理                  *)
 (*                                                              *)
 (* 【主件】mtw_window_two_sided：双侧合取窗定理（S01 基座 Set 层合取承载）。         *)
 (*   退化侧（退化世界）：凡核行全同的行随机核，点质量对一步即退化为行分布——               *)
@@ -23,7 +29,7 @@
 (*     mtw_no_mixing_below（budget < (1/2)^n·TV₀ ⟹ budget < TV(n) 预算下界），      *)
 (*   合取即「混合窗恰存在于非退化世界；退化世界以 TV(1)=0 显式退化」。               *)
 (*                                                              *)
-(* 【供体依存账（只读，零改）】UpAblMetaWorld3（N4 席）：mtw_step/mtw_titer/         *)
+(* 【供体依存账（只读，零改）】UpAblMetaWorld3（N4 件）：mtw_step/mtw_titer/         *)
 (*   mtw_tv/mtw_mu0/mtw_nu0/mtw_half/mtw_sumf/req_r_pow 机器面 +                   *)
 (*   mtw_tv_exact_iter/mtw_no_mixing_below/mtw_hh_one 三肢。                        *)
 (*   退化侧不依存 cf2 链（UpReqConcFin2/UpAblMetaLow）——其闭包携带 stdlib 经典       *)
@@ -221,7 +227,7 @@ Print Assumptions mwi_Kunif_rows_eq.
 Print Assumptions mwi_degenerate_collapse_uniform.
 Print Assumptions mtw_window_two_sided.
 
-(* PA 追印段（T254 核验副本件） *)
+(* PA 追印段（ 核验副本件） *)
 Print Assumptions mwi_degenerate_collapse_uniform.
 Print Assumptions mwi_Kunif_rows_eq.
 Print Assumptions mwi_Kunif_row.

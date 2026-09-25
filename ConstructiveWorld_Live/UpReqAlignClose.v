@@ -1,5 +1,6 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
+(* ToyR 玩具证替换件 ——   工程包AC（tier2 末段第一批）      *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -8,15 +9,13 @@
 (*   uac_npx_cross（原 L182，2 句强证）	*)
 (* ============================================================ *)
 
-(* UpReqAlignClose.v — 席位CYC6（组 E-STAGING-CYC6）T42-C1 桥首步施工件
+(* UpReqAlignClose.v — 位CYC6（组 E-STAGING-CYC6）-C1 桥首步施工件
    ====================================================================
-   使命：T42-C1桥判定.md「可建」裁决的首步装载——UpReqAlign.ReqAlignCore
    两个深链假设位（req_backward_kl_identity :434 / req_policy_improvement_mono
    :630）以同位定理形态装载；log-mult 全字段桥（Align2:877 配方）req 世界移植。
    引擎供给（零新引擎）：
      - UpReqAlign2.v:877 req2_pi_next_log_decomp（配方源文件，:884-959 逐字移植）
      - UpReqAlign3.v:3162 req2_backward_kl_step（主定理三点恒等式，无条件五段）
-     - UpReqAlign3.v:1456 r2_policy_improvement_mono（T12 对偶槽）
    施工纪律：纯 term-mode req_trans 链；log_mult 见证位逐字 mult_positive 形；
    既有文件零改（G07:652 阻塞注记不回改，另出对账声明——见文件尾）。
    ==================================================================== *)
@@ -32,7 +31,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* UacClose：同位装载节（节参数与 ReqAlignCore/Req2AlignCore 逐位对齐）  *)
 (*   证人面：posd/nrm1/KLR/PSTRR/NPXR/... 全部为上游闭名 δ 透明包装      *)
-(*   （E346/E370 定型三步：本席 δ 透明包装一次喂定，语句层逐位同位）。    *)
+(*   （E346/E370 定型三步： δ 透明包装一次喂定，语句层逐位同位）。    *)
 (* ============================================================ *)
 Section UacClose.
 
@@ -575,7 +574,7 @@ End UacClose.
 (* ============================================================ *)
 (* 对账声明段（两桥放行）——G07:655/UpReqAlign 尾清单对账注记              *)
 (* ============================================================ *)
-(* 一、G07_KLWall.v:652-659 [阻塞裁决] 翻案（结论过时，引 T42-C1桥判定.md
+(* 一、G07_KLWall.v:652-659 [阻塞裁决] 翻案（结论过时，引 -C1桥判定.md
    组 E-STAGING-CYC6 实测）：
    G07:658-659 结论「构造性引擎不在盘……precise 阻塞词：softmax-KL 深链
    log-mult 接口字段缺口」已过时。引擎三件实测在盘（grep 全库实证）：
@@ -600,7 +599,7 @@ End UacClose.
    req_dpo_loss_iter_mono）两桥放行后全链闭合路径：以本件两 uac 定理
    同位替换 UpReqAlign:484/:645 的假设位使用点即得无条件 req 定理
    （链上其余 req 侧运输与序代数内容批 3 已真证，尾清单自记）。               *)
-(* 三、诚实前提面（装载件签名，供核销批对账）：
+(* 三、诚实前提面（装载件签名，供兑现批对账）：
    uac_pi_next_log_decomp —— sum 四槽 + log_req_compat +
      log_inv_exp_neg_req（前五槽为 ReqAlignCore 原生节参，第六槽为
      Align2 增槽；Real 层无条件实例化消解沿 log_req_compat_real@UpReqU2 模板）；
@@ -609,10 +608,10 @@ End UacClose.
    uac_req_policy_improvement_mono —— 同上 + uac_gibbs_le_zero
      （B 类 KL≥0 plain-le 槽，Align3:1451 req2_gibbs_inequality 同位运输；
      序无消去=LPO 家族墙，与 UpReqAlign 冻结清单第 1 条同因，诚实保留）。
-   四关状态：本件 G1/G2 本席自验；G3 提取检验与 G4 rocqchk 留待四关组。        *)
+   四关状态：本件 G1/G2 自验；G3 提取检验与 G4 rocqchk 留待四关组。        *)
 (* 四、界外件声明：G07:648-654 [跳过] req_step_kl_eta_bound 不在本件 scope
    （GeomD eps 形已实例化消解，plain-le 闭合属 Or 形=X 红线，防重复不重建）；
-   既有文件零改（本件为纯新建 shim，V-F2/CWD6/CWE5 各席领地未触碰）。            *)
+   既有文件零改（本件为纯新建 shim，V-F2/CWD6/CWE5 领地未触碰）。            *)
 (* ============================================================ *)
 
 Print Assumptions uac_pi_next_log_decomp.

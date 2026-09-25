@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqB4TwoStage.v *)
 (* *)
 (* 目的： B4 单（B 档垫底）的两段式降档完成件。 *)
@@ -15,7 +15,7 @@
 (*   （∫₀¹ tⁿ(1−t)ⁿ·e^{tx} 需「极限与积分交换」，库内判定缺位，        *)
 
 (*   禁立注定不可证的精确形（LPO/交换墙先例：假/被阻语句诚实降档，      *)
-(*   绝不硬凑）。                                                   *)
+(*   绝不强造）。                                                   *)
 (*                                                                 *)
 (* 两段式语句面设计（判据先行；全部 Set 层 Type 版，出口 QltT/QleT'）： *)
 (*   段一（保底）＝有限和交换/一致控制面（纯 Q 有限组合层）：           *)
@@ -46,12 +46,12 @@
 (*                                                                 *)
 (* 公理面/七项禁词扫描：0——全件无承认面、无自由变量位、无条件寄生      *)
 (*   参数位；本头注以中文承载扫描表述，禁词字面量不落盘（AA13 卡前科    *)
-(*   规避）。消费面仅 Require：CW_ConstructiveWorld_219（S03/S07 的    *)
+(*   规避）。使用面仅 Require：CW_ConstructiveWorld_219（S03/S07 的    *)
 (*   sum_upto 族/sum_upto_prod）、UpReqQExpTail（qtail 引擎：           *)
 (*   qtail_cauchy_modulus_ord/qtail_sum_add/le_m/nonneg、单调件、      *)
 (*   QleT'/QleT 桥）、UpReqPadeExp（pade_coeff/num/den/pade_coeff_pos）  *)
 (*   ——禁改任何既有件一行。UpReqPadeLower 系（环境有额外承认闭包）与    *)
-(*   bxuq_lim_uniq（需 B7 完备装配闸）本单按需不消费，理由见合规自查报告。  *)
+(*   bxuq_lim_uniq（需 B7 完备装配闸）本单按需不使用，理由见合规自查报告。  *)
 (*                                                                 *)
 
 (*   全量经 cwfix_aa14.cmd（cpu_guard CoreN 1，coqc 并发≥3 则候 60s）。  *)
@@ -313,7 +313,7 @@ Qed.
       乘积 ε 传递 × Qeq-QltT 相容桥。其中 Qeq 面已全闭合；
       「Qeq-QltT 相容桥」与「乘积 ε 传递」两库面现缺位，作为
       显式接口假设位列于语句面（非承认件——∀ 量化假设），
-      库面落位后零改动 discharge = D2 闸显式假设。 *)
+      库面定位后零改动 discharge = D2 闸显式假设。 *)
 Lemma bts_rem_cauchy : forall (n : nat) (b e : Q),
   QleT 0 b -> QltT 0 e ->
   (forall u v w : Q, u == v -> QltT v w -> QltT u w) ->
@@ -355,4 +355,4 @@ Qed.
    段一四件 + 段二三件全数闭合，零降档零承认面；
    原四件（积分表示族）不属本件语句面，维持显式假设：
    其精确形需构造性积分基建与极限-积分交换面，本库缺位判定
-   （UpReqPadeExp 显式假设段），禁硬凑——D2 闸显式假设单列于合规自查报告。 *)
+   （UpReqPadeExp 显式假设段），禁强造——D2 闸显式假设单列于合规自查报告。 *)

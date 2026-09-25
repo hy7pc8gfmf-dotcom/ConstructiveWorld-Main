@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpStopTime.v *)
 (* *)
 (* 目的： 可证书化停时原语与 GuardedChain 守恒击穿链。 *)
@@ -10,11 +10,11 @@
 (* ============================================================ *)
 (* UpStopTime.v —— 可证书化停时原语 + GuardedChain 守恒击穿链        *)
 (*                                                              *)
-(* 理论来源：成果存档/圆桌会议/ROUNDTABLE-六席圆桌实验-20260907.md    *)
-(*   头部候选「可证书化停时原语」——席 4 BDA 击穿反解 × 席 6 SPC      *)
+(* 理论来源：成果存档/圆桌会议/ROUNDTABLE-圆桌实验-.md    *)
+(*   头部候选「可证书化停时原语」—— 4 BDA 击穿反解 ×  6 SPC      *)
 
 (*   方法论 §5：GuardedChain = 生产性非良基（CoInductive 每步        *)
-(*   携带预算见证），席 2 终稿的阈值策略双目标占优定理离散形态。       *)
+(*   携带预算见证）， 2 终稿的阈值策略双目标占优定理离散形态。       *)
 (*                                                              *)
 (* 五件结果：                                                    *)
 (*   件 1  GChain/grun      GuardedChain 守恒击穿链                 *)
@@ -46,7 +46,7 @@ Require Import UpConstitution.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §0 本地桥（nat 序 / bool 反映 / Q 换形；宪法席解法口径）          *)
+(* §0 本地桥（nat 序 / bool 反映 / Q 换形；解法口径）          *)
 (* ============================================================ *)
 
 (* NatLt 双向桥（NatLt = Id (Nat.ltb n m) true；       *)
@@ -94,7 +94,7 @@ apply (uc_qeq_lt_l y x z (Qeq_sym x y (sf_id_qeq x y Hq))).
 apply QltT_to_Qlt. exact Hlt.
 Qed.
 
-(* QltT ⟹ Qle（Prop 序前提位；Qlt_le_weak 宪法席已验证口径） *)
+(* QltT ⟹ Qle（Prop 序前提位；Qlt_le_weak 已验证口径） *)
 Lemma st_qle_of_ltT : forall x y : Q, QltT x y -> Qle x y.
 Proof. intros x y H. apply Qlt_le_weak. apply QltT_to_Qlt. exact H. Qed.
 

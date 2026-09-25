@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpAblLogSelOracle.v —— 局限(1b)·神谕前件 Real 层对数选择器                *)
 (*                                                              *)
 (* 【零承认件】本件零承认、零假设负载、零经典逻辑：全文无任何全局无据项。       *)
@@ -36,7 +36,7 @@
 (*      loso_sem b k = And (Id b true → real_lt κ^k·TV₀ budget)               *)
 (*                       (Id b false → real_le budget κ^k·TV₀)。              *)
 (*      bool 等式取基座 Id（Set 层恒等族，QltT 同款）——语句面全 Set、零 Prop    *)
-(*      泄露；Prop 面桥（stdlib eq 形）以 Qed 伴生件 loso_oracle_true_lt /      *)
+(*      泄露；Prop 面桥（stdlib eq 形）以 Qed 附属引理 loso_oracle_true_lt /      *)
 (*      loso_oracle_false_le 承载。假支方向判定：mixa_sel_accounts 两账中      *)
 (*      test j = false ⟺ b₀ ≤ κ₀^j·v（mixa_min_real_below 下向界），故 Real    *)
 (*      面假支取 real_le budget (κ^j·TV₀)——与真支互斥，构成「真支供隙+假支      *)
@@ -51,11 +51,11 @@
 (* 单调性支（幂列递减）双轨申报：                                             *)
 (*   (a) 实形使用轨：loso_powb_mono_b（使用 klc_closed_powb_mono：底 (1−κ)      *)
 (*      Bishop 幂单调，经 rta_rpow_powb_eq 运载至 tv_rpow——rta_omd_powb_mono_b *)
-(*      同法）与 loso_strict_shrink（消费 rta_strict_branch_real：0≤κ<1 严格支  *)
+(*      同法）与 loso_strict_shrink（使用 rta_strict_branch_real：0≤κ<1 严格支  *)
 (*      正性证书 × Bishop 收缩封装）。                                        *)
 (*   (b) 本件承重轨：loso_rpow_dec_le（底 κ、Or 编码 real_le 形指数单调，直接  *)
 (*      归纳自证）——树内 UpRealLeB 仅有 real_le→real_le_b 单向桥，Bishop→Or    *)
-(*      如实申报，非降档（(a) 全量消费实形、(b) 全量真证）。                   *)
+(*      如实申报，非降档（(a) 全量使用实形、(b) 全量真证）。                   *)
 (*                                                              *)
 (* 窗口配给申报（量力择一）：显式 K 前件形——Hhit : exists k, k ≤ K ∧ 探测 k 真   *)
 (*   窗命中假设（mixb_qsel_account_ex Hhit 形同构），非 real_arch 发散兜底形；  *)
@@ -63,7 +63,7 @@
 (*   账需 const 层证书链（mixb_k_select_log 已承），本件不重复该链。            *)
 (*                                                              *)
 (* 红线自审：①纯构造性（前件为显式函数参；零全局无据项；Qed 件内 Not/False    *)
-(*   仅构造性消费）；②Set 层零 Prop 泄露（选择器 sigT Defined 全 Set 载荷；    *)
+(*   仅构造性使用）；②Set 层零 Prop 泄露（选择器 sigT Defined 全 Set 载荷；    *)
 (*   bool 账等式用基座 Id；两账/三账 Prop 面 Qed 不入提取签名）；③非平凡件     *)
 (*   全量真证，缺口逐条显式申报；④Set 组件 Separate Extraction 魔术字零。      *)
 (* 依赖：CW_ConstructiveWorld_219、UpTVDoeblin（tv_rpow）、UpReqIterGeomRate    *)
@@ -71,7 +71,7 @@
 (*   KLWallClosed（klc_closed_powb_mono）、RateTheoryAblation（rta 两件）、     *)
 (*   Stdlib QArith/Lia/Extraction。                                          *)
 (* 编译配方（9.1 直调轨，unset COQLIB ROCQLIB，全路径全量）：                   *)
-(*   C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe -q -Q . "" UpAblLogSelOracle.v *)
+(*   C:/Rocq-Platform~9.1~.01/bin/coqc.exe -q -Q . "" UpAblLogSelOracle.v *)
 (* 供给结构：件① 前件定义+语义两桥+const 层在场实证；件② 对数选择器 sigT      *)
 (*   Defined 与 le 形对偶；件③ Prop 三账与 Real 侧双账。                     *)
 (*                                                                            *)
@@ -91,7 +91,7 @@ Require Import UpRealLeB.
 Require Import G07_KLWall.
 
 (* ============================================================ *)
-(* Part 0：换形小件（real_le_b 的两侧 eq 运载；real_le 侧消费                   *)
+(* Part 0：换形小件（real_le_b 的两侧 eq 运载；real_le 侧使用                   *)
 (*   RealSetoid.real_le_compat 既有件）                                       *)
 (* ============================================================ *)
 
@@ -298,7 +298,6 @@ Proof.
 Qed.
 
 (* —— (b) 轨主件：全量指数单调 κ^{j'} ≤ κ^j（0≤κ≤1，Or 编码 real_le 形）。
-   序界取 Set 层 NatLe（Prop 面 le 的归纳不可消去入 Set——本件撞墙点，
    klc_powb_mono_weak 同款 nat 归纳 + NatLe_lift/drop 桥绕行）—— *)
 Lemma loso_rpow_dec_le : forall (kappa : Real) (j j' : nat),
   real_le real_zero kappa -> real_le kappa real_one -> NatLe j j' ->

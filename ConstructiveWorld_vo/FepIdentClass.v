@@ -1,45 +1,25 @@
-(* ===================================================================== *)
-(*                                                                       *)
-(* 论文坐标：论文6-自由能变分原理的构造性同一性-正式版.md                 *)
-(*   §6.5 三条建模识别（Id 语句面原文）：                                  *)
-(*     ① 温度匹配      Id (inv_pos T T_pos) (inv_pos D D_pos)             *)
-(*     ② 能量为负logits forall s, Id (energy s) (opp (z s))               *)
-(*     ③ 配分函数匹配  Id Z_thermo (partition_function_temp z)            *)
-(*   §10.2 开放项 2：「把 §6 的三条识别组织为该库内的具名接口字段，        *)
-(*   使"识别"本身成为可复用的对象，而非每次重新陈述。」                   *)
-(*                                                                       *)
-(* 本件实现（fic_ 前缀全库防撞）：                                        *)
-(*   A. Class FepIdentification —— 三条识别条件 = 三个具名字段             *)
-(*      fic_temp_match / fic_energy_neg / fic_partition_match，           *)
-(*      伴随前提（正性）同样具名：fic_T_pos/fic_D_pos/fic_Z_thermo_pos/   *)
-(*      fic_sum_pos（§6.5「识别是建模假设」的记录化）。                   *)
-(*   B. fic_softmax_temp / fic_boltzmann_factor / fic_boltzmann_dist ——   *)
-(*      论文 §6.1/§6.3 两侧构造的类字段化定义；                           *)
-(*      fic_attention_is_gibbs_temp：三条识别齐备 ⟹ 注意力 = Boltzmann    *)
-(*      （req 面；req:=Id 桥下即 Id 等式，见 D 段）。                     *)
-(*   C. Instance FepIdentificationReal —— 具体柯西实数 Real（S02 载体）   *)
-(*      上的实例：接口伴随 = RealEnhancedReal（S07，req := real_eq），    *)
-(*      fic_S := bool，求和 := 二元 plus；三条识别【全部构造性证出】      *)
-(*      （fic_T := fic_D := one、fic_energy := opp·one、配分两侧经        *)
-(*      fic_opp_mult_r 逐点桥 + exp 兼容提升），即「三条在具体模型上      *)
-(*      可满足」的构造性见证（§6.5：识别不是定理，但可满足性是）。        *)
-(*   D. Id 形消费件（论文 §6.2 原语句面）：                               *)
-(*      fic_attention_is_gibbs_temp_id —— 全参消费基座已证                *)
-(*      attention_is_gibbs_temp（S06.AttentionGibbsBridge）；             *)
-(*      fic_id_data —— Id 形三识别数据 ⟹ FepIdentification 实例装载件    *)
-(*      （接口桥 req:=Id 取 tsi_rie_setoid@TempSoftmaxInstantiation）；   *)
-(*      fic_attention_is_gibbs_temp_via_id —— 类字段出发重回 Id 等式     *)
-(*      （库内化闭环：识别数据 → 类对象 → 同一性）。                     *)
-(* 墙面诚实声明：受体老层 RealInterfaceEnhanced 全库无具体实例（Id 形字段 *)
-(*   「Real 层实例」取接口拓扑下唯一真消费路径：S07 RealEnhancedReal      *)
-(*   （req := real_eq）载体面；Id 形语句面经 req:=Id 桥（D 段）保持原样。 *)
-(* 纪律：纯构造性；语句面零 Prop（req/lt/le 均 Set 值）；零               *)
-(*   公理/承认件/参数/猜想/弃证；非平凡（三识别为真字段，  *)
-(*   消费定理为 exp 兼容 + opp-mult 七步群律桥 + inv 统一 + 交换律真证）； *)
-(*   假设位 = 显式定理参非公理（T2① 形：exp 兼容提升位）。               *)
-(* ===================================================================== *)
-
-Require Import CW_ConstructiveWorld_219.
+(* =====================================================================
+   FepIdentClass.v — Fep 识别条件的具名接口字段化（论文6 §6.5/§10.2）。
+   使命：论文6 §6.5 三条建模识别（温度匹配/能量为负 logits/配分
+     函数匹配）组织为具名接口字段 Class FepIdentification
+     （fic_temp_match/fic_energy_neg/fic_partition_match，伴随正性
+     前提同样具名），并给具体模型实例与 Id 形使用件
+     （§10.2 开放项 2：使「识别」成为可复用对象）。
+     fic_ 前缀全库防同名冲突。
+   要点：A. Class 三字段+正性前提；B. 论文 §6.1/§6.3 两侧构造
+     的类字段化定义；C. Instance FepIdentificationReal——具体
+     柯西实数上的实例，三条识别全部构造性证出（「识别
+     不是定理，但可满足性是」的构造性见证）；D. Id 形
+     使用件（经 req:=Id 桥）。
+   对标：论文6-自由能变分原理的构造性同一性-正式版.md
+     §6.5/§10.2；S06.AttentionGibbsBridge attention_is_gibbs_temp。
+   构造性：纯构造性；语句面零 Prop（req/lt/le 均 Set 值）；
+     零公理/承认件/参数/猜想/弃证；非平凡（exp 兼容提升 +
+     opp-mult 七步群律桥 + inv 统一 + 交换律真证）；假设位
+     =显式定理参非公理。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   依赖：S02/S06/S07/TempSoftmaxInstantiation（库内既有件）。
+   ===================================================================== *)Require Import CW_ConstructiveWorld_219.
 Require Import TempSoftmaxInstantiation.
 Import RealInterfaceEnhancedMod.
 
@@ -97,7 +77,7 @@ Class FepIdentification : Type := {
 End FepIdentCore.
 
 (* ===================================================================== *)
-(* B 段：两侧构造的类字段化 + 消费定理 fic_attention_is_gibbs_temp        *)
+(* B 段：两侧构造的类字段化 + 使用定理 fic_attention_is_gibbs_temp        *)
 (* ===================================================================== *)
 
 Section FepIdentConsumer.
@@ -232,7 +212,7 @@ Definition fic_boltzmann_factor (s : Sc) : R :=
 Definition fic_boltzmann_dist (s : Sc) : R :=
   ficmult (ficinv Z0 Zpos) (fic_boltzmann_factor s).
 
-(* ---- 消费定理（论文 §6.3 attention_is_gibbs_temp 的类字段形）：          *)
+(* ---- 使用定理（论文 §6.3 attention_is_gibbs_temp 的类字段形）：          *)
 (*   三条识别齐备（fic_temp_match/fic_energy_neg/fic_partition_match 三字段）*)
 (*   ⟹ 温度 softmax = Boltzmann 分布逐点。exp 兼容提升为显式定理参          *)
 (*   （req 面机器伴随前提；Id 面经 id_cong 免费满足，见 D 段 via_id）。      *)
@@ -260,7 +240,7 @@ Proof.
                 (@fic_temp_match R RIS I)
                 (ficreqsym (energy0 s) (ficopp (z0 s))
                   (@fic_energy_neg R RIS I s)))). }
-  (* 交换 + 逆元统一收口：A·inv(P) == inv(Z)·B *)
+  (* 交换 + 逆元统一闭合：A·inv(P) == inv(Z)·B *)
   exact (ficreqtrans (ficmult (ficexpn (ficopp (ficmult (ficinv T T_pos) (z0 s))))
                               (ficinv fic_partition_function_temp fic_partition_function_temp_pos))
            (ficmult (ficinv fic_partition_function_temp fic_partition_function_temp_pos)
@@ -460,7 +440,7 @@ Proof.
 Defined.
 
 (* ===================================================================== *)
-(* D 段：Id 形消费件（论文 §6.2 原语句面）——基座消费 + 库内化闭环          *)
+(* D 段：Id 形使用件（论文 §6.2 原语句面）——基座使用 + 库内化闭环          *)
 (* ===================================================================== *)
 
 (* D0：Id 层接口桥（req := Id，tsi_rie_setoid；论文 Id 语句面的库内通道） *)
@@ -507,7 +487,7 @@ Proof.
 Defined.
 
 (* D2：三条识别齐备 ⟹ 注意力 = Boltzmann（论文 §6.2/§6.3 Id 原语句面；
-   全参消费基座已证 attention_is_gibbs_temp@S06.AttentionGibbsBridge）。 *)
+   全参使用基座已证 attention_is_gibbs_temp@S06.AttentionGibbsBridge）。 *)
 Theorem fic_attention_is_gibbs_temp_id :
   forall (RI : RealInterfaceEnhanced) (SS : StateSpace RI) (SO : SumOver RI SS),
   forall (spp : forall f : @S01_BaseRing.S RI SS -> @S01_BaseRing.R RI,
@@ -533,7 +513,7 @@ Proof.
 Qed.
 
 (* D3：库内化闭环——识别数据 → 类对象 → 重回 Id 等式：
-   fic_id_data 装载的实例喂 B 段消费定理，结论与 S06 Id 语句面逐字转换；
+   fic_id_data 装载的实例喂 B 段使用定理，结论与 S06 Id 语句面逐字转换；
    exp 兼容提升参在桥下由 id_cong 免费满足（Id 面 exp 为纯函数）。 *)
 Theorem fic_attention_is_gibbs_temp_via_id :
   forall (RI : RealInterfaceEnhanced) (SS : StateSpace RI) (SO : SumOver RI SS),
@@ -569,7 +549,7 @@ Proof.
            s).
 Qed.
 
-(* ---- 审计：主件假设面收束（PA≥1；出节 G3 探针另件） ---- *)
+(* ---- 审计：主件假设面收束（PA≥1；出节 G3 检验另件） ---- *)
 Print Assumptions fic_attention_is_gibbs_temp.
 Print Assumptions fic_attention_is_gibbs_temp_id.
 Print Assumptions fic_attention_is_gibbs_temp_via_id.

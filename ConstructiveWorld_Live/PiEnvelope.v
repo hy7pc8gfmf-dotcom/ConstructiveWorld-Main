@@ -1,5 +1,6 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* PiEnvelope.v —— 施工席位 C13（2026-09-16）                     *)
+(* PiEnvelope.v —— 位 C13（）                     *)
 (* π 有理包络基础版：Leibniz 级数 4·Σ_{k≥0} (−1)^k/(2k+1) 的      *)
 (* 奇偶双边夹逼 + 显式模量 + Real 层 cauchy_real_pi_leibniz 桥。  *)
 (*                                                               *)
@@ -25,7 +26,7 @@
 (* 经典逻辑/排中；出口一律 QltT'/QleT'/real_lt/sigT   *)
 (* +And:=prod（零 Prop 语句面）；隙宽 4/(4m+1) 型与模量           *)
 (* ceil(4/eps) 均显式非平凡；文末 Print Assumptions 留痕。        *)
-(* 领土纪律：本席仅新建 Live/build/PiEnvelope.v；其余只读。       *)
+(* 领土纪律：仅新建 Live/build/PiEnvelope.v；其余只读。       *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -546,7 +547,7 @@ Lemma pie_parity_gap4 : forall m : nat,
   4 * pie_partial (2 * m + 1) - 4 * pie_partial (2 * m) == 4 * pie_mag (2 * m).
 Proof.
   intro m.
-  (* 续接席注：原 qeq_le（S02:608，实签 == -> Qle）方向不合；经 4·(a−b) 中转两步环 *)
+  (* 注：原 qeq_le（S02:608，实签 == -> Qle）方向不合；经 4·(a−b) 中转两步环 *)
   assert (Hgap := pie_parity_gap m).
   apply (Qeq_trans _ (4 * (pie_partial (2 * m + 1) - pie_partial (2 * m))) _).
   - ring.
@@ -589,9 +590,9 @@ Proof.
        intro Hzz. apply (Qlt_not_eq 0 eps Heps). exact (Qeq_sym _ _ Hzz). }
   assert (Hn1 : (1 <= pie_modulus eps)%nat) by (unfold pie_modulus; lia).
   assert (HzN1 : (0 < Z.of_nat (pie_modulus eps))%Z)
-    by (unfold pie_modulus; lia).  (* 续接席注：Nat2Z.inj_lt 系 IFF 不可直 apply；lia 经 zify 直证 *)
+    by (unfold pie_modulus; lia).  (* 注：Nat2Z.inj_lt 系 IFF 不可直 apply；lia 经 zify 直证 *)
   assert (Hzd1 : (0 < Z.of_nat (2 * pie_modulus eps + 1))%Z)
-    by lia.  (* 续接席注：同上，Nat2Z.inj_lt IFF 不可直 apply *)
+    by lia.  (* 注：同上，Nat2Z.inj_lt IFF 不可直 apply *)
   assert (Hzlt : (Z.of_nat (pie_modulus eps) < Z.of_nat (2 * pie_modulus eps + 1))%Z)
     by (apply Nat2Z.inj_lt; lia).
   setoid_replace (pie_mag (pie_modulus eps))
@@ -602,7 +603,7 @@ Proof.
   { apply (proj1 (Qinv_lt_contravar (Z.of_nat (pie_modulus eps) # 1)
                                     (Z.of_nat (2 * pie_modulus eps + 1) # 1)
                                     HzN1 Hzd1)).
-    unfold Qlt. simpl. lia. }  (* 续接席注：Qlt(z#1,w#1) 与 Zlt(z,w) 差 Qnum/Qden 一层，lia 桥 *)
+    unfold Qlt. simpl. lia. }  (* 注：Qlt(z#1,w#1) 与 Zlt(z,w) 差 Qnum/Qden 一层，lia 桥 *)
   assert (Hstep1 : Qlt (4 * / (Z.of_nat (2 * pie_modulus eps + 1) # 1))
                        (4 * / (Z.of_nat (pie_modulus eps) # 1))).
   { setoid_replace (4 * / (Z.of_nat (2 * pie_modulus eps + 1) # 1))
@@ -614,16 +615,16 @@ Proof.
     - unfold Qlt; simpl; lia.
     - exact Hinvlt. }
   assert (Hfinv : Qlt 0 (/ (Z.of_nat (pie_modulus eps) # 1)))
-    by (apply Qinv_lt_0_compat; unfold Qlt; simpl; lia).  (* 续接席注：子目标系 Qlt 面需展 Z 桥 *)
+    by (apply Qinv_lt_0_compat; unfold Qlt; simpl; lia).  (* 注：子目标系 Qlt 面需展 Z 桥 *)
   assert (Hs2 : Qlt (4 * / (Z.of_nat (pie_modulus eps) # 1))
                     (((Z.of_nat (pie_modulus eps) # 1) * eps)
-                     * / (Z.of_nat (pie_modulus eps) # 1))).  (* 续接席注：# 与 * 同级，z#1*eps 无括号被析作 z#(1*eps) 落 positive 槽 *)
+                     * / (Z.of_nat (pie_modulus eps) # 1))).  (* 注：# 与 * 同级，z#1*eps 无括号被析作 z#(1*eps) 落 positive 槽 *)
   { apply (Qmult_lt_compat_r 4 ((Z.of_nat (pie_modulus eps) # 1) * eps)
                                (/ (Z.of_nat (pie_modulus eps) # 1)) Hfinv Hmul). }
   assert (Heq : ((Z.of_nat (pie_modulus eps) # 1) * eps)
                 * / (Z.of_nat (pie_modulus eps) # 1) == eps).
   { field. intro Hzz.
-    (* 续接席注：原路 Qeq_sym Hzz 得 0==z#1 推不出 0==eps；改从 Hmul:4<(z#1)*eps 出谬 *)
+    (* 注：原路 Qeq_sym Hzz 得 0==z#1 推不出 0==eps；改从 Hmul:4<(z#1)*eps 出谬 *)
     rewrite Hzz in Hmul.
     assert (Hz00 : (0 * eps)%Q == 0) by ring.
     rewrite Hz00 in Hmul.
@@ -649,7 +650,7 @@ Proof.
       * apply pie_tail4. exact E.
       * rewrite (Qmult_comm 4 (pie_mag m)), (Qmult_comm 4 (pie_mag (pie_modulus eps))).
         apply Qmult_le_compat_r; [apply pie_mag_antitone; apply NatLe_drop in HNm; exact HNm | unfold Qle; simpl; discriminate].
-        (* 续接席注：9.1 无 _l 版；comm 换右乘形接 _r *)
+        (* 注：9.1 无 _l 版；comm 换右乘形接 _r *)
     + exact (pie_modulus_bound eps Hlt).
   - apply Nat.leb_gt in E.
     apply (Qle_lt_trans _ (4 * pie_mag (pie_modulus eps)) _).
@@ -715,7 +716,7 @@ Qed.
 Lemma pie_real_lower_gen : forall (N : nat) (c lo : Q),
   Qlt 0 c -> Qle (lo + c) (4 * pie_partial (2 * N + 2)) ->
   real_lt (real_const lo) cauchy_real_pi_leibniz.
-  (* 续接席注（挂起语义补全，唯此一处语句面触改）：原稿假设缺 + c，本件不可证
+  (* 注（挂起语义补全，唯此一处语句面触改）：原稿假设缺 + c，本件不可证
      （反例 lo:=4·S_{2N+2} 满足原假设而结论要求 1/2<0）；证明体 Hlo 实用于
      lo+c<=4·S_{2N+2}，对偶上翼 pie_real_upper_gen 带 + c、全部调用点按
      lo+c==v N 实例化——按作者显见意图补齐。 *)

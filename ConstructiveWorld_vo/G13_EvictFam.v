@@ -1,6 +1,6 @@
 (* ==========================================================================)
    G13_EvictFam.v — KV 逐出恒等式族的 req 层副本
-   使命: UpEvictId 节（Id 层）：detailed_balance、破缺恒为零（eviction_db_breaking_zero）、稳态方程精确形、配分增量族；EvictIdReq 节（req 层逐位副本）：req_boltzmann_factor_detailed_balance 等 14 件同名 req 形，附逐件覆盖核对表。
+   使命: UpEvictId 节（Id 层）：detailed_balance、破缺恒为零（eviction_db_breaking_zero）、稳态方程精确形、配分增量族；EvictIdReq 节（req 层逐位副本）：req_boltzmann_factor_detailed_balance 等 14 件同名 req 形，附逐件覆盖核对清单。
    依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist；Stdlib Extraction。
    对标: 马尔可夫链逐出转移的细致平衡与稳态恒等式（KV cache 逐出策略的形式化）。
    构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
@@ -778,7 +778,7 @@ Theorem req_eviction_steady_deviation_zero :
 Proof.
   intro s.
   (* 命名见证拆解：稳态方程见证 → req 减自零见证 → req abs 换形见证 →
-     req_trans 四参全显闭合（sumf 腿与主定理一同构） *)
+     req_trans 四参全显闭合（sumf 支路与主定理一同构） *)
   pose proof (req_evicted_boltzmann_steady_exact s) as Hsteady.
   pose proof (req_minus_self_zero
                 (sumf (fun s' => mult (evq_evicted_boltzmann s') (evq_evicted_transition s' s)))

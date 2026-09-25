@@ -1,8 +1,8 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   altsum_ex_dec3（原 L685，1 句玩具证）                                *)
 (*   altsum_ex_1（原 L681，1 句玩具证）                                   *)
@@ -23,12 +23,12 @@
 (* ============================================================ *)
 (*                                                                *)
 (* 使命：把「非负递减序列的有限交错和为正（Leibniz 有限形）」做成    *)
-(* 独立 Q 层引擎件，供路径 C（Padé [n/n] 误差符号）den_pos 直接消费： *)
+(* 独立 Q 层引擎件，供路径 C（Padé [n/n] 误差符号）den_pos 直接使用： *)
 (*   den(x) = Σ_{k=0}^{n} (−1)^k c_k x^k，0 ≤ x < 2 时各项          *)
 (*   (c_k x^k) 非负递减 ⟹ den(x) ≥ 0。                              *)
 (*                                                                *)
 (* 【S03 对接判定（实名侦察结论）】S03_QExp.v 的 altf 家族不是通用形： *)
-(*   altf_zero (S03:2001) : forall N, 1 <= N -> altf N == 0 ——      *)
+(*   altf_zero (S03:) : forall N, 1 <= N -> altf N == 0 ——      *)
 (*   是 (1−1)^N 展开系数==0 的【具体恒等式】（Pascal 归纳），序列项    *)
 (*   1/(u!(N−u)!) 无递减条件面、结论是无条件 ==0；vander_4m2/4m4     *)
 (*   (S03:4390/4596) 是 corr 家族的 Vandermonde 恒等。均不可承载      *)
@@ -47,10 +47,10 @@
 (*   到 QleT' 假设面的换桥（QleT 的两支均可健全入 QleT'）。           *)
 (*   全文件语句面零 stdlib Prop Qlt/Qle；Qle/Qlt 仅在证明体内转译用。 *)
 (*                                                                *)
-(* 【den_pos 接线说明】消费者定义 den(x) := altsum (fun k => c_k x^k)  *)
+(* 【den_pos 连接说明】使用者定义 den(x) := altsum (fun k => c_k x^k)  *)
 (*   (n+1)，然后：递减条件面 forall k, QleT 0 (c_k x^k) +             *)
 (*   QleT (c_{k+1} x^{k+1}) (c_k x^k) ⟹ altsum_nonneg 直接给出        *)
-(*   QleT' 0 (den x)。奇偶分段消费用 altsum_nonneg_even/odd；        *)
+(*   QleT' 0 (den x)。奇偶分段使用用 altsum_nonneg_even/odd；        *)
 (*   展开方程用 altsum_skip2（步长 2）。                              *)
 (* ============================================================ *)
 
@@ -278,7 +278,7 @@ Lemma altsum_acc_0_eq : forall (sg : bool) (f : nat -> Q) (k : nat),
   altsum_acc sg f k 0%nat == 0.
 Proof. intros sg f k. exact (Qeq_refl 0). Qed.
 
-(* 消费者展开方程：步长 2 的重组（相邻配对面） *)
+(* 使用者展开方程：步长 2 的重组（相邻配对面） *)
 Lemma altsum_skip2 : forall (f : nat -> Q) (m : nat),
   altsum f (Datatypes.S (Datatypes.S m)) == (f 0%nat + Qopp (f 1%nat)) + altsum_acc true f 2%nat m.
 Proof. intros f m. unfold altsum. rewrite altsum_acc_T. rewrite altsum_acc_F. ring. Qed.

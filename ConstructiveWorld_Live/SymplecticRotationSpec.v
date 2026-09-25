@@ -171,7 +171,7 @@ Proof.
   induction n as [| k IH]; intros q H0 H1.
   - cbn [srs_qnpow]. apply Qle_refl.
   - cbn [srs_qnpow].
-    (* 注：9.1 Qmult_le_compat_r 双前提（x<=y -> 0<=z），补 qⁿ 非负腿
+    (* 注：9.1 Qmult_le_compat_r 双前提（x<=y -> 0<=z），补 qⁿ 非负支
        （stdlib 前提显式化税族，QArith_base:1279 Qmult_le_0_compat）。 *)
     assert (Hz : Qle 0 (srs_qnpow k q)).
     { clear IH.  (* 外层 IH 钉 k 会劫持内层归纳泛化（assumption 找不到 0≤qʲ 形） *)

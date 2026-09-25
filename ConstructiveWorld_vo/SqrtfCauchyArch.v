@@ -415,7 +415,7 @@ Theorem sfcy_arch_decay_slot :
         (@mult Real RealEnhancedReal c (sfc_pow_half k)) eps).
 Proof. exact sfcy_arch_decay_real. Qed.
 
-(* ============ 四关自证面：G3 提取检验 + G4 假设审计口 ============ *)
+(* ============ 公理面自审：G3 提取检验 + G4 假设审计口 ============ *)
 (* 两主件证明体全走 real_* 素颜顶层函数链与接口投影 δ 面预判            *)
 (* Obj.magic = 0（与 sfcx_G3 同判据）。                              *)
 

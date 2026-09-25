@@ -266,7 +266,7 @@ End ReqMpKernelWorld.
       le_mult_compat 弱形（接口字段在盘）；难度：低（引擎齐备）。
       1 == Σkernel（I3）≤ |S|·max（I2 实例）⟹ inv(|S|) ≤ max
       （E3）；链式组装，Id/req 等式桥按 RestB 归一化定理同形。
-      难度：中（三腿全在盘）。
+      难度：中（三支全在盘）。
       链②）：dropped ≤ 1 − p_max（RestB req_minp_dropped_mass_le_
       one_minus_max 已在盘）+ 链① + opp_le_compat 组装；难度：中。
    附：argmin_aux_token / pick_best_token / max_markov_prob 三定义
@@ -287,9 +287,9 @@ End ReqMpKernelWorld.
         （le_mult_compat_weak 接口字段直用 + I4 req_temp_factor_
         antitone_mp + 件 3）
         （I3 归一化 + I2 req_rsum_le_const_mp + E3 req_le_one_mult_
-        le_inv_mp 三腿组装；mp_of_nat → reqd_of_nat 桥）
+        le_inv_mp 三支组装；mp_of_nat → reqd_of_nat 桥）
      6 mpd_minp_dropped_mass_le_inv_vocab_size <- S06 /
-         链②（dropped ≤ 1−max 腿按 RestB req_minp_dropped_
+         链②（dropped ≤ 1−max 支按 RestB req_minp_dropped_
         mass_le_one_minus_max 同证形移植（alb_→mpd_ 逐位改名），+
         链① + opp_le_compat 组装）
    定义簇（S06-6061/L6167-6171/L6174-6191/L6504 对位；
@@ -464,7 +464,7 @@ Definition mpd_max_markov_prob (prefix : list Token) : R :=
 
 (* 4 <- markov_kernel_le_max_mp（S06 / ）：
    le_mult_compat_weak 接口字段（le zero c → le a b → le a·c ≤ b·c）
-   直用；单调腿 = I4 + 件 3。 *)
+   直用；单调支路 = I4 + 件 3。 *)
 Lemma mpd_markov_kernel_le_max_mp : forall (prefix : list Token) (w : Token),
   InT w vocab ->
   le (mpd_markov_kernel Token vocab vocab_nonempty total_loss temperature temperature_pos prefix w)
@@ -490,7 +490,7 @@ Proof.
 Qed.
 
 (* 5 <- minp_max_ge_inv_vocab_size（S06 / ，链①）：
-   inv(|S|) ≤ max。三腿：I3 归一化（Σkernel == 1）+ I2 逐项和界
+   inv(|S|) ≤ max。三支：I3 归一化（Σkernel == 1）+ I2 逐项和界
    （Σkernel ≤ |S|·max，逐项 = 件 4）+ E3 除以正数。 *)
 Lemma mpd_minp_max_ge_inv_vocab_size : forall prefix : list Token,
   le (inv_pos (reqd_of_nat (length vocab))
@@ -816,7 +816,7 @@ Qed.
 End ReqMpKernelWorld2.
 
 (* ============================================================ *)
-(* X3b2 段收尾：12 件全清（首批 8 decl + 本批 6 件 + 辅件）。      *)
+(* X3b2 段收尾：12 件全清（首批 8 decl + 续段 6 件 + 辅件）。      *)
 (* 文件尾原余件清单（上文）由本节全数闭合，特此注记。            *)
 (* ============================================================ *)
 (* ============================================================ *)
@@ -826,13 +826,13 @@ End ReqMpKernelWorld2.
        二批辅件 mpd_pick_max_tf_le_minp_sum（ReqMpKernelWorld2）语句
        逐位同形（le (tf pick_max) (minp_temp_sum)），对位成立、就此
      1 mpd_minp_keep_p_antitone <- minp_keep_p_antitone
-       max ≥ 0 腿由 mpd_markov_pos 经 δ 展开免费取得）
+       max ≥ 0 支路由 mpd_markov_pos 经 δ 展开免费取得）
      2 mpd_temp_factor_nonneg_p <- temp_factor_nonneg_p
      3 mpd_minp_term_nonneg_p <- minp_term_nonneg_p
      4 mpd_minp_temp_sum_p_antitone <- minp_temp_sum_p_antitone
        keep2 ⟹ keep1 反单调 + term_nonneg 逐点两分支同形）
      5 mpd_minp_dropped_mass_p_monotone <- minp_dropped_mass_p_monotone
-       opp_le_compat 反向 + le_plus_compat 平移三腿组装）
+       opp_le_compat 反向 + le_plus_compat 平移三支组装）
    定义簇（S06-6751 对位；p 簇阈值以 mp : R 显式参替代固定
    min_p，故本节节假设不携 min_p/min_p_lt_one——比 S06 节更省；
    二批 discharged 定义全闭包显式使用，mpd_pick_max_token 六参形 /
@@ -912,8 +912,8 @@ Qed.
 
 (* 1 <- minp_keep_p_antitone（S06 / ，T4a）：
    mp1 ≤ mp2 ⟹ keep_p mp2 w ⟹ keep_p mp1 w（阈值增大保留集缩小）。
-   max ≥ 0 腿：mpd_max_markov_prob δ 展开 == kernel(pick_max)，
-   mpd_markov_pos 免费；单调腿 le_mult_compat_weak 接口字段直用。 *)
+   max ≥ 0 支路：mpd_max_markov_prob δ 展开 == kernel(pick_max)，
+   mpd_markov_pos 免费；单调支路 le_mult_compat_weak 接口字段直用。 *)
 Lemma mpd_minp_keep_p_antitone : forall (mp1 mp2 : R),
   le mp1 mp2 ->
   forall (prefix : list Token) (w : Token),
@@ -982,7 +982,7 @@ Qed.
 
 (* 5 <- minp_dropped_mass_p_monotone（S06 / ，T4c）：
    mp1 ≤ mp2 ⟹ 截断质量单调（mass_p mp1 ≤ mass_p mp2）。
-   三腿：sum_p 反单调（件 4）→ inv_p 左乘保序（req_le_mult_compat_r）
+   三支：sum_p 反单调（件 4）→ inv_p 左乘保序（req_le_mult_compat_r）
    → 1−X 反向（opp_le_compat + le_plus_compat 平移）。 *)
 Lemma mpd_minp_dropped_mass_p_monotone : forall (mp1 mp2 : R),
   le mp1 mp2 ->

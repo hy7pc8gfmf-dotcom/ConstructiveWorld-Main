@@ -1,13 +1,13 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===== fa52_entropy_diff_unsat.v ===== *)
 (* 消融对象：S09_EntropyReal 节 EntropyDiffReal 全部 10 个 Variable 前提槽
    （ConstructiveWorld_Live/S09_EntropyReal.v:4541-4553）。 *)
-(* 定谳：E_B_pos 槽（:4553）全称限定词过强——
+(* 已证结论：E_B_pos 槽（:4553）全称限定词过强——
      eB : forall E, 0 < E -> 0 < E_total - E
    取 E:=1 得 E_total > 1（故 0 < E_total），再取 E:=E_total 得 0 < 0，
    与 real_lt_irrefl（S02:2400）矛盾。前提集不可满足 ⟹ 该节一切结论空虚真。
    本件给出构造性证伪：fa52_EDP_E_B_pos_unsat（单槽即崩）
    + fa52_EntropyDiffReal_premises_unsat（全 10 槽包装）。
-   消费基座件：S02 real_lt 矛盾面（irrefl/eq_lt_lt/lt_eq_lt/lt_le_trans/le_refl）、
    S02 代数面（plus_assoc/comm/zero/opp、eq_sym/trans/refl）、
    S07 混合加保序（real_lt_plus_compat_lt_le:6118）、
    S07 RealSetoid.real_eq_plus_compat:219、S07 real_lt_zero_one:6937。

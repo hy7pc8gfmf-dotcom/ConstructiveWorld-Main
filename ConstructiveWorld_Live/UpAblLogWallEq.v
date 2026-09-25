@@ -269,7 +269,7 @@ Proof.
     rewrite Hj0 in Htj. apply Href. exact Htj.
 Qed.
 
-(* 搜索步：前段 [0,m'] 已决——首过站承接上界放宽；全挡 ⟹ 并入站 S m' 判定 *)
+(* 搜索步：前段 [0,m'] 已决——首过站承担上界放宽；全挡 ⟹ 并入站 S m' 判定 *)
 Lemma lgwe_scan_S : forall (kappa TV0 budget : Real) (m' : nat),
   (forall j : nat, lgwe_station_dec kappa TV0 budget j) ->
   Or
@@ -298,7 +298,7 @@ Proof.
            ++ exact Htj.
     + apply inr. intros j Hj Htj.
       destruct (Nat.leb j m') eqn:Elb.
-      * (* j ≤ m'：前段否证结论承接 *)
+      * (* j ≤ m'：前段否证结论承担 *)
         apply (Hall j).
         -- apply NatLe_lift. exact (proj1 (Nat.leb_le j m') Elb).
         -- exact Htj.

@@ -17,7 +17,7 @@ Open Scope nat_scope.
 (* §A nat 层二项式系数（Pascal 递归）与对称引理                          *)
 (* ============================================================ *)
 
-(* Pascal 递归二项式系数 C(n,k)（名字 bkC 避 E075 的 C 遮蔽坑） *)
+(* Pascal 递归二项式系数 C(n,k)（名字 bkC 避免与 C 遮蔽冲突） *)
 Fixpoint bkC (n k : nat) : nat :=
   match n with
   | 0 => match k with

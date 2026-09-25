@@ -1,9 +1,10 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* 评审003 路径 B：把 0<e^x 推广到 Banach 代数层。             *)
 (* 分层交付：S1 = Class BanachAlg（Set 层最小面）；             *)
 (*           S2 = exp 级数部分和 Fixpoint + 尾界 + 柯西性；     *)
-(*           S3 = 交换 exp_add：挂账（依赖闭包见文件尾+交付报告）*)
+(*           S3 = 交换 exp_add：留记（依赖闭包见文件尾+交付报告）*)
 (*                                                             *)
 (* 红线自审（文档 B.3.1 草图 req : A -> A -> Prop 系 Prop 泄露，*)
 (* 禁照抄）：本文件语句面全 Set 层——                           *)
@@ -141,12 +142,12 @@ Proof.
   - apply qeq_le. apply qeqT_imp_qeq. exact Hxy.
 Qed.
 
-(* Qeq 改写桥（Qle/Qeq 面位点：stdlib Qle 已注册 Qeq 同伦实例，一线换装） *)
+(* Qeq 改写桥（Qle/Qeq 面位点：stdlib Qle 已注册 Qeq 同伦实例，一线转换） *)
 Lemma bnorm_wd_qeq : forall (B : BanachAlg) (a b : (@BA B)),
   bae a b -> @bnorm B a == @bnorm B b.
 Proof. intros B a b H. apply qeqT_imp_qeq. apply (@bnorm_wd B a b H). Qed.
 
-(* Qeq 目标面位点专用桥（Qle/Qeq 改写族同关系面直改，免同余件；垫片配方具象件） *)
+(* Qeq 目标面位点专用桥（Qle/Qeq 改写族同关系面直改，免同余件；适配层配方具象件） *)
 Lemma bnorm_coef_qeq : forall (B : BanachAlg) (q : Q),
   @bnorm B (@bcoef B q) == Qabs q.
 Proof. intros B q. apply qeqT_imp_qeq. apply (@bnorm_coef B q). Qed.
@@ -461,7 +462,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3 挂账（对称登记，不落承认件）：                           *)
+(* S3 留记（对称登记，不落承认件）：                           *)
 (*   exp_add（交换情形 e^{a+b}=e^a·e^b）与 exp 可逆性           *)
 (*   (e^a)^{-1}=e^{-a} 依赖闭包：                               *)
 (*   ① S2 尾界（本件 esp_diff_le_tail + exp_series_cauchy 已交） *)
@@ -472,5 +473,5 @@ Qed.
 (*      bplus_middle_swap/bplus_opp_swap 同族放大）；           *)
 (*      极限乘法连续性 + ‖·‖ 次可乘界收尾                       *)
 (*   ④ C* 层正性/Löwner：构造性谱定理=已知开放难题，禁攻，      *)
-(*      对称挂账（评审003 判定原文）。                          *)
+(*      对称留记（评审003 判定原文）。                          *)
 (* ============================================================ *)

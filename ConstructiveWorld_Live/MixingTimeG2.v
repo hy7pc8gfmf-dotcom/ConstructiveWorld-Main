@@ -1,26 +1,33 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
 (*                                                                *)
-(*   G2 原挂账的 TV₀ 符号分叉需「real_le real_zero TV0」的居住者；    *)
+(*   G2 原留记的 TV₀ 符号分叉需「real_le real_zero TV0」的居住者；    *)
 (*   real_le = Or(real_lt, real_eq)（Set 层 Or 编码），该 Or-Set      *)
 (*   无基座可构造居住者=可判定墙实体。本件追加实证：墙体对具体        *)
 (*   TV 面（tv_doeblin = (1/2)·Σ|μ−ν|）同样成立——0 ≤ |x| 的 Or 分叉  *)
 (*   需逐点判定 x==0 ∨ x≠0，构造性不可消；改 B 形路线受制于 n 元      *)
 (*   ≤_B 求和提升未入库（E380 冻结表第③前沿），按诚实边界登记。       *)
-(*   故恢复路线定谳=接口显式携带 TV₀ 符号证书前提（与 κ∈(0,1) 证书    *)
-(*   打包），绕开 Or 分解——对照 mix_k_select（UpReqMixingTime:620，  *)
+(*   故恢复路线已证结论=接口显式携带 TV₀ 符号证书前提（与 κ∈(0,1) 证书    *)
+(*   封装），绕开 Or 分解——对照 mix_k_select（UpReqMixingTime:620，  *)
 (*   Defined 可提取）的 sigT 步数见证形重建真证件。                   *)
 (*                                                                *)
 (* 本件承载（全 mtg_ 前缀）：                                        *)
-(*   A  mtg_kappa_cert —— δ 证书 → κ := tv_omd δ ∈ (0,1) 打包        *)
-(*       （prod 证书形；消费 tv_omd_pos_of_lt + mix_omd_lt_one，     *)
-(*        后者内部即 UpReqIterGeomRate igr_lt_plus_r 率收口）。       *)
+(*   A  mtg_kappa_cert —— δ 证书 → κ := tv_omd δ ∈ (0,1) 封装        *)
+(*       （prod 证书形；使用 tv_omd_pos_of_lt + mix_omd_lt_one，     *)
+(*        后者内部即 UpReqIterGeomRate igr_lt_plus_r 率闭合）。       *)
 (*   B  mtg_mixing_time_explicit_k —— C5 主件（证书前提形）：          *)
 (*       给定 κ∈(0,1) 证书包（And := prod）与 0≤TV₀ 证书，产出        *)
 (*       sigT k 使 κ^k·TV₀ < budget；Defined 可提取。                *)
 (*   B2 mtg_mixing_time_rate_explicit —— 率形（κ := tv_omd δ，        *)
-(*       几何率收口）：δ 双证书 ⟹ tv_omd δ ^k·TV₀ < budget。          *)
-(*   C  mtg_mixing_time_TV —— G2 旗舰（链面合龙）：TVRealWorld        *)
-(*       消费面（states/K/K_row/u/u_norm/δ≤1/minorization/Labs）      *)
+(*       几何率闭合）：δ 双证书 ⟹ tv_omd δ ^k·TV₀ < budget。          *)
+(*   C  mtg_mixing_time_TV —— G2 主定理（链面接合）：TVRealWorld        *)
+(*       使用面（states/K/K_row/u/u_norm/δ≤1/minorization/Labs）      *)
 (*       × tv_doeblin_iter × B 件组装；TV₀ 符号证书随接口显式携带；   *)
 (*       δ≤1 的 Or 两支分决：δ<1 支走选取器，δ==1 支 k:=1 一发        *)
 (*       闭合（κ^1·TV₀==0< budget）——承草案「δ=1/TV₀=0 支 k:=1        *)
@@ -28,15 +35,15 @@
 (*   D  mtg_k_calc / mtg_k_calc_correct —— G3 复活（Defined k-       *)
 (*       计算器 + 正确性件，见证提取口）。                            *)
 (*   E  mtg_budget_slack / mtg_k_slack —— igr 腿：0<e 预算放宽，      *)
-(*       消费 UpReqIterGeomRate igr_le_plus_r（#273 已收口件）。      *)
+(*       使用 UpReqIterGeomRate igr_le_plus_r（#273 已闭合件）。      *)
 (*                                                                *)
 (*   [A] 语句面=prod(real_lt,real_lt) 全 Set；证明面=term 直连两件     *)
-(*        已收口率件；依赖面=UpTVDoeblin/UpReqMixingTime；公理面=零。  *)
+(*        已闭合率件；依赖面=UpTVDoeblin/UpReqMixingTime；公理面=零。  *)
 (*   [B] 语句面=prod 证书前提 + sigT nat 见证 + real_lt 严格结论       *)
 (*        全 Set；证明面=mix_k_select 全参直连；依赖面=UpReqMixingTime；*)
 (*        公理面=零。                                                *)
 (*   [C] 语句面=链面 14 参接口 + sigT nat + real_lt 全 Set；证明面=    *)
-(*        tv_doeblin_iter × mix_k_select 组装 + δ==1 支环账（plus/opp  *)
+(*        tv_doeblin_iter × mix_k_select 组装 + δ==1 支环说明（plus/opp  *)
 (*        compat 链，零经典逻辑）；依赖面=UpTVDoeblin/UpReqMixingTime； *)
 (*        公理面=零。                                                *)
 (*   [D] 语句面=nat 出口 + real_lt 正确性全 Set；证明面=projT1/projT2  *)
@@ -48,11 +55,11 @@
 (*   ① 具体 TV 面非负（Or 形）与 B 形 TV 面非负均不可由现库消解——      *)
 (*      前者撞 Or 判定墙本体，后者缺 n 元 ≤_B 求和提升（E380 前沿）；   *)
 (*      故 TV₀ 符号证书在链面接口显式携带，此即最强可证形。            *)
-(*   ② δ==1 支的环账腿 real_eq (tv_omd real_one) real_zero 以          *)
+(*   ② δ==1 支的环说明腿 real_eq (tv_omd real_one) real_zero 以          *)
 (*      plus_opp 恒等式链闭合（real_one 不展开双关，见证内注释）。     *)
 (*                                                                *)
 (* 验证：G1 五禁词零 / side-compile（P7E 配方，/tmp/czf13_side）/     *)
-(*   Extraction Obj.magic 探针。日志 Live/logs/czf13-*。              *)
+(*   Extraction Obj.magic 检验。日志 Live/logs/czf13-*。              *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -66,7 +73,7 @@ Require Import UpReqMixingTime.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part A：κ 率证书包（几何率收口：δ 双证书 → κ := tv_omd δ ∈ (0,1)）   *)
+(* Part A：κ 率证书包（几何率闭合：δ 双证书 → κ := tv_omd δ ∈ (0,1)）   *)
 (* ============================================================ *)
 
 Theorem mtg_kappa_cert : forall delta : Real,
@@ -90,7 +97,7 @@ Proof.
   exact (mix_k_select kappa TV0 budget (fst Hcert) (snd Hcert) Ha Hb).
 Defined.
 
-(* ---- B2：率形（κ := tv_omd δ，几何率收口实例） ---- *)
+(* ---- B2：率形（κ := tv_omd δ，几何率闭合实例） ---- *)
 
 Theorem mtg_mixing_time_rate_explicit : forall (delta TV0 budget : Real),
   real_lt real_zero delta -> real_lt delta real_one ->
@@ -105,7 +112,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part C：G2 旗舰——链面合龙（tv_doeblin_iter × B 件，δ≤1 两支）       *)
+(* Part C：G2 主定理——链面接合（tv_doeblin_iter × B 件，δ≤1 两支）       *)
 (* ============================================================ *)
 
 Theorem mtg_mixing_time_TV :
@@ -138,7 +145,7 @@ Proof.
          Hmu Hnu TV0nn Hd0 budget Hbudget.
   assert (Hd1' : real_le delta real_one) by exact Hd1.
   unfold real_le in Hd1. destruct Hd1 as [Hdlt | Hdeq].
-  - (* δ < 1 支：κ := tv_omd δ ∈ (0,1)，选取器出 k，迭代件收口 *)
+  - (* δ < 1 支：κ := tv_omd δ ∈ (0,1)，选取器出 k，迭代件闭合 *)
     assert (Hk1 : real_lt real_zero (tv_omd delta))
       by exact (tv_omd_pos_of_lt delta Hdlt).
     assert (Hk2 : real_lt (tv_omd delta) real_one)
@@ -230,7 +237,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：igr 腿——预算放宽（UpReqIterGeomRate #273 已收口件消费）      *)
+(* Part E：igr 腿——预算放宽（UpReqIterGeomRate #273 已闭合件使用）      *)
 (* ============================================================ *)
 
 Lemma mtg_budget_slack : forall (a b e : Real),

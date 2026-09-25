@@ -327,7 +327,7 @@ End BrpDischargeB3.
 (*   参数位：req_evicted_partition = sum_over_S (fun s => match           *)
 (*   keep_dec s with inl _ => req_kv_boltzmann_factor s | inr _ =>    *)
 (*   zero end)；载体 sum_over_S 为裸 Variable（无枚举/无字段）。       *)
-(*   两形结果：件 1 = sumd 具体实例形（E354 装法）；                  *)
+(*   两形结果：件 1 = sumd 具体实例形（既有装法）；                  *)
 (*   件 2 = 裸载体回接形（规范条件 + lt_id_r 换轨，                    *)
 (*   zposd_Z_pos_of_partition 同法；RestB 侧补规范位即直装）。        *)
 (* ============================================================ *)

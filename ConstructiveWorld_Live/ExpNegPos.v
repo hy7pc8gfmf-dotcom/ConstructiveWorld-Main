@@ -119,7 +119,7 @@ Proof.
   assert (Hstep := enp_two_step_odd x m).
   assert (Hd := enp_decr x (2 * m + 2) H0 H1).
   pose proof (Qopp_le_compat _ _ Hd) as Hopp.
-  (* AA21 第3轮修：Hopp 内 nat 指标归一 S(2m+2)==2m+3（HV2 续接配方照方） *)
+  (* AA21 修正：Hopp 内 nat 指标归一 S(2m+2)==2m+3（HV2 续接配方照方） *)
   replace (Datatypes.S (2 * m + 2))%nat with (2 * m + 3)%nat in Hopp by lia.
   (* Hopp : Qopp t_{2m+3} ≤ Qopp t_{2m+2} *)
   assert (HAB : Qle 0 (q_pow x (2 * m + 2) / q_fact (2 * m + 2)
@@ -139,7 +139,7 @@ Proof.
      + (q_pow x (2 * m + 2) / q_fact (2 * m + 2)
         + Qopp (q_pow x (2 * m + 3) / q_fact (2 * m + 3))))
     (exp_partial (Datatypes.S (Datatypes.S (2 * m + 1))) (Qopp x))).
-  - (* AA21 第3轮修②：LHS 原子形不能与 Qplus_le_compat 的 x+z 统一，中转 A+0 归位 *)
+  - (* AA21 修正②：LHS 原子形不能与 Qplus_le_compat 的 x+z 统一，中转 A+0 归位 *)
     apply (Qle_trans (exp_partial (2 * m + 1) (Qopp x))
       (exp_partial (2 * m + 1) (Qopp x) + 0)
       (exp_partial (2 * m + 1) (Qopp x)

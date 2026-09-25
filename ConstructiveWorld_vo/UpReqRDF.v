@@ -354,7 +354,7 @@ Qed.
 End ReqRDFBase.
 
 (* ===================================================================== *)
-(* Part 2：标量簇 §4 (c) 10 件 + entropy 1 件（逐件核对表 1-11）                 *)
+(* Part 2：标量簇 §4 (c) 10 件 + entropy 1 件（逐件核对清单 1-11）                 *)
 (* ===================================================================== *)
 
 Section ReqRDFScalar.
@@ -1657,7 +1657,7 @@ End ReqEntropyDiff.
 (*      Id 形——载体 req 形需载体集oid字段而 16 件使用面实证全在 R 值层（逐件       *)
 (*      核读），零使用即零假设，诚实从简。req 形更弱，使用安全方向。              *)
 (*   6. rdf_inner_zero 槽（⟨szero,h⟩ ≡ zero）：req 接口零 id_cong——szero 入     *)
-(*      inner 实参位换形无运输机（E349 M2 墙同族），T2① 假设位接续；Id 侧      *)
+(*      inner 实参位换形无运输机（既有同族限制），T2① 假设位接续；Id 侧      *)
 (*      inner_szero_l 为可证定理，其 req 对位件接口级不可复刻，登记显式假设。      *)
 (* ===================================================================== *)
 
@@ -1874,7 +1874,7 @@ Qed.
 (* ---- 件 14：differentiable_mv_plus L26885 -> req_rdf_mv_plus --------------- *)
 (*   （req_inner_splus_r 使用 + req_rdf_plus 同构 eps/2 核算；req 接口 min        *)
 (*    plain-le 双槽（ReqDiffPlain）对应副本 Id min_le_l/min_le_r；误差分解三跳：       *)
-(*    inner 线性换形 -> plus 换中 -> req_minus_plus_distr 拆双腿） -------------- *)
+(*    inner 线性换形 -> plus 换中 -> req_minus_plus_distr 拆两支） -------------- *)
 
 Theorem req_rdf_mv_plus : forall f g : Sc -> R,
   reqRDFMV SS HS f -> reqRDFMV SS HS g ->
@@ -2144,7 +2144,7 @@ Proof.
     assert (Hef : le eps_f one).
     { exact (min_le_l_plain one (mult (inv_pos M HM) eps4)). }
     assert (Hspos : le zero s) by exact (rs_metric_pos R RIS SS h S0).
-    (* (a) |Dg| ≤ L·s：split + 三角 + eps_f/N 双腿 + 系数 (eps_f+N) ≤ L *)
+    (* (a) |Dg| ≤ L·s：split + 三角 + eps_f/N 两支 + 系数 (eps_f+N) ≤ L *)
     assert (HDg : le (abs Dg) (mult L s)).
     { apply (le_id_l (abs Dg)
                (abs (plus (req_minus (f (spl x h)) (plus (f x) (inn (df x) h)))

@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===================================================================== *)
 (* UpAblP6_ZPosLowRef.v —— 玩具复检替换稿（历史自称 ToyR_UpAblP6_ZPosLowRef，落名无 ToyR_ 前缀，命名归属候裁定） *)
 (* 基准：Main/Live/UpAblP6_ZPosLowRef.v（565 注册面最新基线，只读零写）。  *)
@@ -213,7 +214,7 @@ Qed.
 
 (* RI 面复合：S01_BaseRing RealInterface 环境（与 AttnDoeblin、             *)
 (* S05_AlignmentGRPO 的接口环境相同），将 lf4_inv_pos_lt_contra 与          *)
-(* lf4_lt_plus_compat_lt_le_h 复合为库内缺席的复合传递面：倒数交换 × 加法保序。 *)
+(* lf4_lt_plus_compat_lt_le_h 的复合传递面：倒数交换 × 加法保序。 *)
 Section UAZLRRIFace.
 
 Context {RI : RealInterfaceEnhanced}.

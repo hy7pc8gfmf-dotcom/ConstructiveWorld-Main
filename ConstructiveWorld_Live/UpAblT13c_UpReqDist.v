@@ -1,14 +1,15 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (*   位1 UpReqDist.v:3091 transition_normalization（ReqSteadyState req 层）   *)
 (*        → 两点世界行归一核 supply（half+half==one 纯接口代数链；            *)
 (*          Token/vocab 世界专属非同语句，本件改走实例供给路线落地）           *)
 (*   位2 UpReqDist.v:3096 detailed_balance（ReqSteadyState req 层）           *)
 (*        → 源核缩放族 t(s,s')=p(s')·c supply（assoc-comm 纯代数；非循环——    *)
-(*          普查依据 G13:120/:528 消费节内 Variable 本体，禁直喂已定谳）       *)
+(*          普查依据 G13:120/:528 使用节内 Variable 本体，禁直接供给已已证结论）       *)
 (* 消融形（诚实申报）：全参 {R}{RIS} 抽象载体，零桥零具体实例零数据槽隐藏；    *)
 (*   逐点代数不依赖载体大小，两点供给世界为最小可达面。                       *)
 (* 分级：位1 = N3（实例供给）；位2 = N3（实例供给·核族构造）。                *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqDist。          *)
+(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqDist。          *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqDist.

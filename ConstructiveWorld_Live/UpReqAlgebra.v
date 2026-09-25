@@ -1,4 +1,4 @@
-(* ========================================================================= *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
 (*                                                                           *)
 (* Require 面                                                                *)
 (* 替换定理清单：req_plus_inv_unique／req_plus_cancel_l／req_mult_cancel_r   *)
@@ -30,7 +30,7 @@
 (* 目的： req 实数接口的代数定律库（加/乘/逆/序兼容）。 *)
 (* 主件： req_plus_zero_r / req_mult_one_l / req_add_cancel_l / req_plus_inv_unique 等域定律族。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 抽象 R 载体配 RealInterfaceEnhancedSetoid；lt/le 接口兼容性逐条以接口字段承接。 *)
+(* 备注： 抽象 R 载体配 RealInterfaceEnhancedSetoid；lt/le 接口兼容性逐条以接口字段承担。 *)
 (* ============================================================ *)
 
 (* UpReqAlgebra.v — 签名迁移批 1：req 系代数地基（服务规划书 §5 全部后续批）
@@ -44,7 +44,6 @@
      本件以模块级 Definition req_minus := plus a (opp b) 同形重建（δ 透明，零摩擦）；
      减法簇各件语句以 req_minus 书写，证明内 unfold。
    2. log 前提化：setoid log 带 lt zero 前提（接口 L40570），log 簇语句逐件补正性参数。
-   3. 接口缺口桥（ReqLogBridge 节，T2 落位① 保留假设位）：
         免费；setoid 接口无该字段（exp_neg 注入性不可由接口字段导出——le_antisym
         实例化留待接口扩展批。
       - log_inv_exp_neg_req：req 化的 Id 接口字段 log_inv_exp_neg（L187）——
@@ -1566,7 +1565,7 @@ End ReqCancelMachines.
 (* ============================================================ *)
 (* ReqStrictOrderBridge：(c) 新机器 3 —— 严格序加法混合保序       *)
 (*   Id 系本就是诚实 Variable（L21018/L21020）；req 化保持  *)
-(*   假设位同构（T2 落位①）。接口字段仅双严格 lt_plus_compat /    *)
+(*   假设位同构（T2 定位①）。接口字段仅双严格 lt_plus_compat /    *)
 (*   双非严格 le_plus_compat，混合形式不可由现有字段导出（构造性  *)
 (*   序无两侧消去，与 Id 系同因）。le_lt 形式由 lt_le 形式零新     *)
 (*   假设导出。                                                   *)

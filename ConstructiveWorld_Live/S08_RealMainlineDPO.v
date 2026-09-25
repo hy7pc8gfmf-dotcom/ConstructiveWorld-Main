@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S08_RealMainlineDPO.v                                       *)
 (*                                                             *)
@@ -69,7 +70,7 @@ Proof.
   ring.
 Qed.
 End OppMultMain.
-(* ============ Gibbs 逐点核心并入（2026-08-30，来自探针 _dbg_gibbs4.v 5 Qed 全绿） ============
+(* ============ Gibbs 逐点核心并入（，来自检验 _dbg_gibbs4.v 5 Qed 全部通过） ============
    real_mult_div（p·(q/p) == q，inv_correct 抽象链）、real_opp_opp（opp 对合）、
    real_hpq1（p−q == p·(−(q/p−1))）、real_hpq2（p·(−X) == p·(−(X+eps)) + p·eps）、
    real_gibbs_core_eps（p−q ≤ p·(−log(q/p)) + p·eps——Gibbs 逐点核心）。
@@ -459,7 +460,7 @@ Qed.
    （strict 版。Real 层有限列表和的正性真定理——L21132/L17000 注释
    「Real 层有限和可实例化」的文件内背书：一旦以具体有限状态表
    （list X + real_list_sum）实例化 Section Alignment，sum_over_S_pos /
-   Z_align_pos 的 Real 层佐证即此形态。sTB3 论证 C1，2026-09-03 并入） *)
+   Z_align_pos 的 Real 层佐证即此形态。sTB3 论证 C1， 并入） *)
 Lemma real_list_sum_pos : forall (f : X -> Real) (l : list X),
   (forall w : X, real_lt real_zero (f w)) ->
   l <> nil ->
@@ -1449,7 +1450,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T1.4（2026-09-02）：π* 处 DPO 损失双侧定量界（论文1 P2 项 10）*)
+(* T1.4（）：π* 处 DPO 损失双侧定量界（论文1 P2 项 10）*)
 (*   r_l < r_w ⟹ 0 < L_DPO(π*,s_w,s_l) < log 2                 *)
 (*   链①（下界）：1 < 1+e^{−x}（e^{−x} > 0 平移）→ σ(x) < 1    *)
 (*     （inv 反序 + inv one == one）→ log σ < log 1 == 0        *)
@@ -1893,7 +1894,7 @@ Proof.
   apply (real_list_sum_g_const real_group_mean l).
 Qed.
 
-(* 零均值（B-8-2 旗舰）：Σ_i (r_i − μ)·c == 0（对任意缩放 c） *)
+(* 零均值（B-8-2 主定理）：Σ_i (r_i − μ)·c == 0（对任意缩放 c） *)
 Theorem real_grpo_advantage_zero_mean : forall c : Real,
   real_eq (real_list_sum_g (fun i => real_mult (real_grpo_advantage i) c) group_enum) real_zero.
 Proof.
@@ -2022,7 +2023,7 @@ Variable real_Z_thermo_pos : real_lt real_zero real_Z_thermo.
 Definition real_boltzmann_dist_attn (s : S) : Real :=
   real_mult (real_inv_pos real_Z_thermo real_Z_thermo_pos) (real_boltzmann_factor s).
 
-(* 单位温度下 softmax = Boltzmann（B-8-3 旗舰）：
+(* 单位温度下 softmax = Boltzmann（B-8-3 主定理）：
    inv D == 1 且 energy == −logits 且 Z_thermo == partition_function z_logits
    ⟹ 对任意状态 s：softmax(z_logits,s) == boltzmann_dist_attn(s) *)
 Theorem real_attention_is_gibbs :
@@ -2114,7 +2115,7 @@ Variable real_detailed_balance : forall (s s' : S),
 Variable real_transition_normalization : forall s : S,
   real_eq (real_sum_over_S (fun s' => real_transition s s')) real_one.
 
-(* 稳态方程（B-8-4 旗舰）：Σ_s' p(s')·T(s',s) == p(s)
+(* 稳态方程（B-8-4 主定理）：Σ_s' p(s')·T(s',s) == p(s)
    组装：detailed balance 逐点替换 → 求和外延 → 线性提取 p(s) → 核归一化 → mult_one 证毕 *)
 Theorem real_steady_state_boltzmann_attn : forall s : S,
   real_eq (real_sum_over_S (fun s' => real_mult (real_boltzmann_dist_attn_s s') (real_transition s' s)))
@@ -2183,7 +2184,7 @@ Definition real_minp_markov_kernel (prefix : list Token) (w : Token) : Real :=
   | inr _ => real_zero
   end.
 
-(* 归一化（B-8-5 旗舰）：Σ_w minp_kernel(prefix,w) == 1
+(* 归一化（B-8-5 主定理）：Σ_w minp_kernel(prefix,w) == 1
    组装：分支交换（ext）→ 线性提取 inv(temp_sum) → temp_sum 定义性换形 →
    inv(temp_sum)·temp_sum == 1（comm + inv_pos_correct） *)
 Theorem real_minp_markov_kernel_normalized : forall prefix : list Token,
@@ -2263,10 +2264,10 @@ Variable K : nat.
 Variable real_boltzmann_factor_ : S -> Real.
 
 (* 诚实接口：线序判定（Real 层可实例化） *)
-(* [墙族登记·RW-LPO 线序判定] 整体实序可判定=LPO 不可实例化（E225；SqWall⟺rLPO 双向类=UpReqLpoEquiv.v:258/351/438 lpn_equivalence；论文7§8）——基座墙密度最高单点，禁硬证禁纯删；Q 层逐点可判定（Qlt_le_dec，E225 下半）不升级本位；Top-K 消费链（:2266-）以本位为线序判定源，实例层仅可计算模型可供给。 *)
+(* [墙族登记·RW-LPO 线序判定] 整体实序可判定=LPO 不可实例化（E225；SqWall⟺rLPO 双向类=UpReqLpoEquiv.v:258/351/438 lpn_equivalence；论文7§8）——基座墙密度最高单点，禁硬证禁纯删；Q 层逐点可判定（Qlt_le_dec，E225 下半）不升级本位；Top-K 使用链（:2266-）以本位为线序判定源，实例层仅可计算模型可供给。 *)
 Variable real_le_dec : forall a b : Real, Or (real_le a b) (Not (real_le a b)).
 (* 诚实接口：线序——Not (le a b) ⟹ lt b a（柯西实数线序，可实例化） *)
-(* [墙族登记·RW-NOTLT 线序负转正] real_le=Or(lt,eq)（S02_CauchyComplete.v:471）定义形下，¬(a≤b)→b<a 需从负陈述提取正分离见证——Markov/LPO 族邻域（E225/E226；PA_UpAblD2_AbsLeId_RI_DO.v:49 在案）；库内零已证实例（G09_MiscSmall.v:635 rnot_le_lt 同形亦假设位）——禁硬证；locatedness 供给候选（UpReqCauchy 系具体层，甄别席核）。 *)
+(* [墙族登记·RW-NOTLT 线序负转正] real_le=Or(lt,eq)（S02_CauchyComplete.v:471）定义形下，¬(a≤b)→b<a 需从负陈述提取正分离见证——Markov/LPO 族邻域（E225/E226；PA_UpAblD2_AbsLeId_RI_DO.v:49 在案）；库内零已证实例（G09_MiscSmall.v:635 rnot_le_lt 同形亦假设位）——禁硬证；locatedness 供给候选（UpReqCauchy 系具体层，核）。 *)
 Variable real_not_le_lt : forall a b : Real, Not (real_le a b) -> real_lt b a.
 (* 诚实接口：比 f s 更重的计数（枚举计数，语义由 real_le_dec 实例化保证） *)
 Variable real_count_heavier : S -> nat.
@@ -2279,7 +2280,7 @@ Variable real_keep_top_k_iff : forall s : S,
   And (real_keep_top_k s -> NatLt (real_count_heavier s) K)
       (NatLt (real_count_heavier s) K -> real_keep_top_k s).
 
-(* Top-K 支配性（B-8-6 旗舰）：保留者权重 ≥ 逐出者权重
+(* Top-K 支配性（B-8-6 主定理）：保留者权重 ≥ 逐出者权重
    组装：le_dec 分叉 → 反证（not_le_lt ⟹ lt (f s1) (f s2) ⟹ 计数矛盾 lia） *)
 Theorem real_top_k_majorization : forall s1 s2 : S,
   real_keep_top_k s1 -> Not (real_keep_top_k s2) ->
@@ -2349,7 +2350,7 @@ Definition real_importance_ratio_ (s : S) : Real :=
 Definition real_ppo_clip_ (r : Real) : Real :=
   real_max (real_min r (real_plus real_one epsilon)) (real_plus real_one (real_opp epsilon)).
 
-(* PPO 保守性（B-8-7 旗舰，eps 化）：
+(* PPO 保守性（B-8-7 主定理，eps 化）：
    ppo_objective ≤ is_objective + Σ π_old·(eps·adv)
    组装：min ≤ ρ+eps → ×adv → 右分配 → ×π_old → Σ 保序 → sum_add 拆项 *)
 Theorem real_ppo_conservative_eps : forall eps : Real,
@@ -2595,7 +2596,7 @@ Proof.
                                     (fun s => real_kl_sum_term p Hp s))).
       intro s. exact (real_kl_term_equiv p Hp s).
 Qed.
-(* RLHF 最优性（B-8-8 旗舰，eps 化）：
+(* RLHF 最优性（B-8-8 主定理，eps 化）：
    J(π) := −F(π) ≤ J(π⋆) + D·eps（π⋆ == p_b 逐点由 real_pi_star_align 提供） *)
    组装：KL 分解（kl_decomp_full）→ gibbs eps（0 ≤ Σkl + eps）→ D 正乘 →
    le_plus_compat（F(p_b) ≤ F(π) + D·eps）→ opp 取负（opp_le_compat +
@@ -2734,7 +2735,7 @@ End RealRLHFMain.
 
 (* ============================================================ *)
 
-(* Real 层 log 可微性论证：Bishop 逐 eps 复刻（探针 54 Qed 全绿，2026-08-30） *)
+(* Real 层 log 可微性论证：Bishop 逐 eps 复刻（检验 54 Qed 全部通过，） *)
 Section LogDiffPhase4.
 Section LogDiffPhase2.
 
@@ -3863,7 +3864,7 @@ Qed.
 
 (* ============ 18. 放缩：t²·inv s ≤ t²·2 + eps（需 1/2 < s；逐点 Q 层） ============
    主定理下界链收尾：t²/(1+t) ≤ 2t²。
-   Real 层：real_inv_pos (real_plus real_one real_one) (real_two_pos_local) < s ⟹ inv s < inv real_inv_pos (real_plus real_one real_one) (real_two_pos_local) == 2（strict，避开 real_le eq 分支逐点卡死 E191-1）
+   Real 层：real_inv_pos (real_plus real_one real_one) (real_two_pos_local) < s ⟹ inv s < inv real_inv_pos (real_plus real_one real_one) (real_two_pos_local) == 2（strict，避开 real_le eq 分支逐点停滞 E191-1）
    逐点：t²·inv s ≤ t²·2 + eps（invs ≤ 2 逐点 + t² ≥ 0 Qsquare_nonneg + 见证 eps0） *)
 Lemma real_quad_div_le_two_eps : forall (t s eps : Real)
   (Hs : real_lt real_zero s)
@@ -5609,7 +5610,7 @@ End LogDiffPhase4.
 
 (* ============================================================ *)
 (* entropy Real 层：RealDifferentiable 组合引理族（E194 后续）  *)
-(* + mult 份额（real_differentiable_mult）探针并入 2026-08-31   *)
+(* + mult 份额（real_differentiable_mult）检验并入    *)
 (* 依赖：上面 LogDiffPhase4 的 RealDifferentiable 记录          *)
 (* ============================================================ *)
 

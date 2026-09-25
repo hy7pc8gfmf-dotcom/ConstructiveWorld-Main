@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S07_RealSetoidExpLog.v                                      *)
 (*                                                             *)
@@ -21,7 +22,7 @@
 (*   魔法）；NatLe 两桥改 assert 两段组合投影链。全为实质非平凡     *)
 (*   构造性推导：零 公理、零 承认件、零经典逻辑，真证闭闭合。      *)
 (*   编译态：深依赖链（S01–S06 vo 摘要链断裂），整件遗留；         *)
-(*   替换证明体已经语境检验（S01+S02 语义面）G4 全绿。       *)
+(*   替换证明体已经语境检验（S01+S02 语义面）G4 全部通过。       *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -6945,7 +6946,7 @@ Instance Real_RealInterfaceSetoid : RealSetoid.RealInterfaceSetoid Real := {
 }.
 
 End FullInstance.
-(* ============ RealInterfaceEnhancedSetoid 阶段 2 并入（来自检验 _dbg_riesetoid.v 39 Qed 全绿） ============
+(* ============ RealInterfaceEnhancedSetoid 阶段 2 并入（来自检验 _dbg_riesetoid.v 39 Qed 全部通过） ============
    req 版 RealInterfaceEnhanced（L195）独立接口 + Real 层实现 + Instance RealEnhancedReal。
    - Real 层引理（segA）名字与主文件无冲突（real_log 系列是 Section 内 Variable，End 后释放），直接追加。
    - 独立接口（39 字段全显式，不继承）：字段名与 RealInterface / RealSetoid.RealInterfaceSetoid
@@ -8695,7 +8696,7 @@ Instance RealEnhancedReal : RealInterfaceEnhancedSetoid Real := {
   cauchy_complete := RealSetoid.real_cauchy_complete_metric_natle;
 }.
 End RealInterfaceEnhancedMod.
-(* ============ log_le_linear 论证并入（来自检验 _dbg_log_linear.v 11 Qed 全绿） ============
+(* ============ log_le_linear 论证并入（来自检验 _dbg_log_linear.v 11 Qed 全部通过） ============
    Real 层核心：real_exp_ge_linear_eps（e^t ≥ 1+t，Bishop 逐 eps）
    + real_log_le_linear_eps（log x ≤ x−1+eps）。
    数学：t≥0 用 exp_partial_ge_plus_x；t≤0、0≤a≤1 用奇截断配对非负；

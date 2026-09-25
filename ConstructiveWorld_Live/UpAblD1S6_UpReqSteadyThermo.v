@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -14,7 +14,7 @@
 
 (* ============================================================ *)
 (* UpAblD1S6_UpReqSteadyThermo.v —— FA-D1S6 数据供给大封装第三梯 件③             *)
-(*   ｜独立伴生件·原树零改｜零 Require 母本（防混代际 .vo 地雷，P3S1 坑1）          *)
+(*   ｜独立附属引理·原树零改｜零 Require 源版本（防混代际 .vo 地雷，P3S1 坑1）          *)
 (*                                                              *)
 (* 辖区：UpReqSteadyThermo.v Section RealThermoSteady 余量 10 槽                   *)
 (*   S:66｜real_sum_over_S:67｜real_sum_over_S_ext:68-69｜                        *)
@@ -25,7 +25,7 @@
 (* 本模块遗留（零触碰，防重复立件）：real_partition_condition:82 与                *)
 (*   real_transition_nonneg:95/real_transition_normalization:97/                  *)
 (*   real_detailed_balance:99 四槽已由 D1-⑥（S3）                                 *)
-(*   仅作核验登记。母本 boltzmann 载体 real_boltzmann_unnorm/prob（L83-88 定义）    *)
+(*   仅作核验登记。源版本 boltzmann 载体 real_boltzmann_unnorm/prob（L83-88 定义）    *)
 (*   与本批槽语句无引用耦合，零 δ 内联需求（对比 S4 件② Z 槽）。                   *)
 (*                                                              *)
 (* 形态：P2S1 封装记录型＋S4 件② TopKTV 同款（Type 排序单点实例供给）。            *)
@@ -44,7 +44,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：10 槽语句逐字入包（对照母本 L66-94） ============ *)
+(* ============ 封装记录型：10 槽语句逐字入包（对照源版本 L66-94） ============ *)
 (* partition_condition/transition_nonneg/normalization/detailed_balance           *)
 (* 四槽不入包：D1-⑥（S3）已闭合（见件头遗留登记）。                                *)
 
@@ -66,7 +66,7 @@ Inductive uabd1s6_rst_pack10 : Type :=
                   forall real_transition : S -> S -> Real,
                     uabd1s6_rst_pack10.
 
-(* ============ 供给件：单点实例一次喂定 10 槽 ============ *)
+(* ============ 前置引理：单点实例一次喂定 10 槽 ============ *)
 
 Theorem uabd1s6_rst_pack10_supplied : uabd1s6_rst_pack10.
 Proof.

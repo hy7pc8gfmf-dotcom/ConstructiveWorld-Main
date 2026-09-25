@@ -1,8 +1,9 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   req_mult_one_l（原 L96，6 句刀体）                                  *)
 (*   req_plus_zero_r（原 L89，6 句刀体）                                 *)
@@ -34,13 +35,13 @@ Import RealInterfaceEnhancedMod.
 (*   req 签名的求和三性质作为节 Hypothesis（= SumOver 类的       *)
 (*   setoid 对接面），对接成本计入报告；上游两条 Id 系已证        *)
 (*   引理（energy_in_log_boltzmann / free_energy_boltzmann）以    *)
-(*   req 签名桥 Hypothesis 承接，全量迁移外推见报告。            *)
+(*   req 签名桥 Hypothesis 承担，全量迁移外推见报告。            *)
 (* ============================================================ *)
 Section ReqFreeEnergyPilot.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- SumOver 的 req 签名对接面（Id 系 SumOver L1400 的 setoid 镜像） ---- *)
+(* ---- SumOver 的 req 签名对接面（Id 系 SumOver L1400 的 setoid 同构） ---- *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
@@ -328,7 +329,7 @@ Proof.
       * apply req_opp_plus.
 Qed.
 (* ============================================================ *)
-(* D. 旗舰迁移：req_free_energy_kl_decomp                        *)
+(* D. 主定理迁移：req_free_energy_kl_decomp                        *)
 (*    F[p] == F[p_b] + D·KL(p‖p_b)（Id 原件 L16259 的 setoid 签名版） *)
 
 
@@ -510,7 +511,7 @@ Proof.
       { apply plus_comm. }
       { apply req_refl. } }
     apply plus_comm. }
-  (* 总装：Hleg1（sigm_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
+  (* 合成：Hleg1（sigm_free_energy p 定义展开 conversion + Hse 于 compat 槽）；Hleg2（Hfin + Hfb'/Hkl 反向收尾槽） *)
   assert (Hleg1 : req (sigm_free_energy p p0) (plus (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))))).
   { unfold sigm_free_energy.
     apply (req_plus_compat (sumf (fun s => mult (p s) (base_loss s))) (plus (opp (mult D (sumf (fun s => mult (p s) (log (sigm_boltzmann_dist s) (req_boltzmann_positive s)))))) (opp (mult D (log Z Z_pos)))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s))))) (mult D (sumf (fun s => mult (p s) (log (p s) (p0 s)))))).
@@ -537,7 +538,7 @@ End ReqFreeEnergyPilot.
 (*   Z_thermo / boltzmann_dist_attn）按同形定义重建。             *)
 (*   接口缺口发现：RealInterfaceEnhancedSetoid 无 exp_neg 兼容     *)
 (*   字段（Id 系 id_cong 免费可得），以 req 签名桥 Hypothesis      *)
-(*   承接——Real 实例由 cauchy_real_exp_wd 满足（L40440 先例）。    *)
+(*   承担——Real 实例由 cauchy_real_exp_wd 满足（L40440 先例）。    *)
 (* ============================================================ *)
 Section ReqGibbsPilot.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.

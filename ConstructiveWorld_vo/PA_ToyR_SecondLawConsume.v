@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -13,10 +19,10 @@
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* SecondLawConsume.v —— 席位 P6D（组 E-STAGING-P6D）：论文6 §7 第二定律  *)
+(* SecondLawConsume.v —— 件位 P6D（组 E-STAGING-P6D）：论文6 §7 第二定律  *)
 (*   的依存定理推导——从核心定理 real_entropy_deficit_kl_temp              *)
 (*   （S[p_T] − S[p] == KL(p‖p_T)，UpReqEntropyDeficitTemp 主件）出发，    *)
-(*   依存 SecondLawQuantified（C10 席）定量出口，导出四件新结论回喂基座。   *)
+(*   依存 SecondLawQuantified（C10 件）定量出口，导出四件新结论回喂基座。   *)
 (* --------------------------------------------------------------------- *)
 (* 【依存链（只读依存，零基座改动）】                                      *)
 (*   · real_entropy_deficit_kl_temp（13 参核心定理，检验 Check 实测）      *)
@@ -24,7 +30,7 @@
 (*   · slq_entropy_gain_kl_upper（15 参）：熵增 − KL ≤ eps（互补向）       *)
 (*   · slq_second_law_eps_list（list 机器全闭形）：S[p] ≤ S[p_T] + eps     *)
 (* --------------------------------------------------------------------- *)
-(* 【交付四定理（slc_ 前缀防撞，全库 grep 零命中 2026-09-18 实测）】        *)
+(* 【交付四定理（slc_ 前缀防同名冲突，全库 grep 零命中 实测）】        *)
 (*   · slc_gain_kl_two_sided_eps：per-eps 双边定量（Set 层 slc_band 对；   *)
 (*     下界+上界同时依存，KL ≤ 增+eps 与 增 ≤ KL+eps 合成带状）            *)
 (*   · slc_gain_ge_kl_minus_eps：熵增益 ≥ KL 缺陷 − eps 的显式形           *)
@@ -40,7 +46,7 @@
 (* 编译配方（vorebuild 基座 + 私槽侧编 SLQ/TSI，基座零改）：                *)
 (*   rocq c -Q Live/vorebuild "" -Q /tmp/p6d_side "" -Q . ""               *)
 (*     SecondLawConsume.v                                                 *)
-(*   （vo_901 基座 2026-09-18  起被他席全链重编中 S01_BaseRing 已换，  *)
+(*   （vo_901 基座  起被他件全链重编中 S01_BaseRing 已换，  *)
 (*    CW_ConstructiveWorld_219.vo 尚未刷 → 假设不一致；vorebuild 链经       *)
 (*    检验实测与当前 stdlib 一致，故取之。SLQ/TSI 侧编 /tmp/p6d_side，      *)
 (*    EXIT=0 且 Print Assumptions 全 Closed。）                            *)
@@ -381,7 +387,7 @@ Print Assumptions slc_gain_ge_kl_minus_eps.
 Print Assumptions slc_kl_boltz_self_zero.
 Print Assumptions slc_second_law_kl_floor_eps_list.
 
-(* PA 追印段（T254 核验副本件） *)
+(* PA 追印段（ 核验副本件） *)
 Print Assumptions slc_gain_ge_kl_minus_eps.
 Print Assumptions slc_gain_kl_two_sided_eps.
 Print Assumptions slc_plus_comm_r_shift.

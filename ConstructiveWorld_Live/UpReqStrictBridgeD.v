@@ -26,7 +26,7 @@ Definition sbd_req_lt_plus_compat_lt_le :
 (* ============ ② 槽2 实例化消解：log 参数 req 兼容 ============ *)
 (* 槽语句（UpReqAlgebra L1498）：forall x y (Hx : lt zero x) (Hy : lt zero y),
    req x y -> req (log x Hx) (log y Hy)。
-   E372 判决路线：real_log_wd（S08:1074，锚点法已验件）语句与槽语句在
+   判定路线：real_log_wd（S08:1074，锚点法已验件）语句与槽语句在
    Real 实例面逐字同构（zero:=real_zero、log:=real_log、req:=real_eq），
    直接代入一步，零重述零组装。 *)
 Definition sbd_log_req_compat :

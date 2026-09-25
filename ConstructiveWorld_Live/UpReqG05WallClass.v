@@ -1,5 +1,5 @@
-(* ===================================================================== *)
-(* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ===================================================================== *)
+(* ToyR 工程 切片二  替换稿（全中文零承认面）                    *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列一处玩具证明体。  *)
 (*   替换清单（本件一条）：                                                *)
@@ -15,12 +15,12 @@
 (* UpReqG05WallClass.v *)
 (* *)
 (* 目的： G05_LogSmall 阻塞面 × Bishop 逆向墙 ⟺ rLPO 等价类普查统一     *)
-(*   （WALL-2 席，相位=分析重转编译重，20260916）。                     *)
+(*   （WALL-2 ，相位=分析重转编译重，）。                     *)
 (* 主件： g05w_wall_class_lpo——G05 序隙类（:403 桥零基形/全基形、      *)
 (*   log 线性四站槽、WALL-1 平方墙）与 rLPO 的归约/消解全链账。         *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpRealLeB。          *)
 (*   WALL-1 复用面采取退回方案：不 Require UpReqSquareWallEquiv（其 vo   *)
-(*   与盘上 UpReqLpoEquiv.vo 摘要不一致，且不触碰他席构建产物），而直挂  *)
+(*   与盘上 UpReqLpoEquiv.vo 摘要不一致，构建产物），而直挂  *)
 (*   UpReqLpoEquiv 本地内联同构事实（lpn_forward/lpn_backward 双腿 +    *)
 (*   平方实例 + real_square_nonneg_B 免费证书），语义与 WALL-1 等价类    *)
 (*   完全同面（snw_b_lift 即 g05w_sq_b_lift 定义性同形）。              *)
@@ -29,7 +29,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqG05WallClass.v —— 席 WALL-2：G05 阻塞槽等价类普查与定理化       *)
+(* UpReqG05WallClass.v ——  WALL-2：G05 阻塞槽等价类普查与定理化       *)
 (*                                                              *)
 (* 公理面：本件零公理、零假设负载（Print Assumptions 全 Closed）。      *)
 (*                                                              *)
@@ -88,10 +88,10 @@
 (*     （expf_agree @UpReqFEPAttn:265）为 expf 抽象算子规格本体，       *)
 (*     不可证明（G05:71-72 判定）。                                     *)
 (*                                                              *)
-(* 本席新数学：                                                        *)
+(* 新数学：                                                        *)
 (*   g05w_q_lt_sub_r：Q 层右减位移小件（Qplus_lt_l iff 直连）。          *)
 (*   g05w_b_lift（全基 B 到 Or 桥）：:403 缺口的全称显形。               *)
-(*   g05w_rlpo_to_b_lift（反向可达·本席关键新事实）：rLPO 对差实数       *)
+(*   g05w_rlpo_to_b_lift（反向可达·关键新事实）：rLPO 对差实数       *)
 (*     t−a 施隙/归零两支，隙支与 B 证书（eps := real_const c）联立      *)
 (*     逐点排负支（Qabs_pos/q_abs_neg_eq 符号两支），归零支弃参直供     *)
 (*     real_eq——B 形在、Or 形缺类缺口的全部厚度恰为判定器（与 WALL-1    *)
@@ -110,7 +110,7 @@
 (* 纪律：纯构造性 Set 层、语句面全 Set/自定义 And/Or（S01 积和型），     *)
 (*       零经典逻辑、零 Prop 泄露；全 Qed 闭合；既有文件零改。           *)
 (* ------------------------------------------------------------ *)
-(* WALL-2（20260916）：新建。前缀 g05w_（开工 grep 零撞名）。           *)
+(* WALL-2（）：新建。前缀 g05w_（开工 grep 零撞名）。           *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
@@ -174,7 +174,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4：反向——rLPO ⟹ 全基桥（可达性定理·本席关键新事实）           *)
+(* Part 4：反向——rLPO ⟹ 全基桥（可达性定理·关键新事实）           *)
 (*   证法：rLPO 施于差实数 (t + opp a)。归零支：逐点归零直供 real_eq   *)
 (*   （opp 换形 q_abs_congr/Qabs_opp）。隙支：B 证书取 eps :=          *)
 (*   real_const c（real_const_pos 免半分），逐点 d > −c；与隙界       *)
@@ -406,7 +406,7 @@ Print Assumptions g05w_rlpo_to_sq_b_lift.
 Print Assumptions g05w_wall_class_lpo.
 Print Assumptions g05w_verdict_engine_resolves.
 
-(* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
+(* ======== ToyR 工程 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
 Print Assumptions g05w_q_lt_sub_r.
 Print Assumptions g05w_b_lift_to_rlpo.
 Print Assumptions g05w_b_lift0_to_rlpo.

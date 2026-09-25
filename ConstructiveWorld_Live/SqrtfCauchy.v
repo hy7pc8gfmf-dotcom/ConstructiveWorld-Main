@@ -1081,7 +1081,7 @@ Proof.
                  sfc_half_pos IH).
 Qed.
 
-(* ===== 单调下降：t_{n+2} ≤ t_{n+1}（前席引用未定义，本席补装；
+(* ===== 单调下降：t_{n+2} ≤ t_{n+1}（引用未定义，补装；
    指标同移一位——t 非负仅 n ≥ 1 有保证，sfc_t_nonneg 同界） ===== *)
 Lemma sfc_t_mono : forall n : nat,
   le (sfc_t (Datatypes.S (Datatypes.S n))) (sfc_t (Datatypes.S n)).

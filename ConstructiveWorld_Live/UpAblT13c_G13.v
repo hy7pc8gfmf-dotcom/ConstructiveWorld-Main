@@ -1,9 +1,7 @@
-(* ═════════════════════════════════════════════════════════════════════ *
- * ToyR 包J·切片六 同名替换件：UpAblT13c_G13（台账 T249 续作，包J 终末片）   *
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ═════════════════════════════════════════════════════════════════════ *
+ * ToyR ·切片六 同名替换件：UpAblc_G13（记录册  续作， 终末片）   *
  * 本稿＝原件全文逐字保留，仅按玩具清单换写下列证明体（同一陈述、            *
  * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
- * 替换清单（5 件）：uabT13c_swap_id_gen／uabT13c_evict71／                 *
- *   uabT13c_swap_req_gen／uabT13c_half_row／uabT13c_evq_db468             *
  * 三口径：①定义层受控展开＋③结构性推导并用——swap 双_GEN 与 71/468 两       *
  *   使用位：原件为单体匿名链（巨型 exact 深嵌套），本稿拆为命名见证多段     *
  *   装配（结合见证、交换放置换见证、右结合逆见证、单位乘归一见证、正和     *
@@ -12,16 +10,14 @@
  *   裸乘积族上实例化，展开面 conversion 闭合（不再使用不透明函数形）。     *
  * 不可化标注（7 件，批量结案）：uab_unit_unique（unit 世界逐点 destruct     *
  *   后 reflexivity 定义性闭合）；uab_ssUnit_elem（记录 iota 投影至 tt      *
- *   定义性闭合）；uabT13c_evict61／uabT13c_evict87（unfold 后单点          *
- *   exp_neg_pos 引擎直接代入，微引擎形）；uabT13c_evict68（id_refl 定义性      *
- *   闭合）；uabT13c_evq_norm464（uabT13c_half_row 单跳转发，微转发形）；   *
- *   uabT13c_evq_Zpos2（两点正和引擎四参直接代入，微引擎形）。七件均为两跳内    *
+ *   定义性闭合）；uabc_evict61／uabc_evict87（unfold 后单点          *
+ *   exp_neg_pos 引擎直接代入，微引擎形）；uabc_evict68（id_refl 定义性      *
  *   规范形/定义性闭合，替代路线需面外引理或同构重排，已证结论不可化。          *
  * 纪律：纯构造性；Set 层零 Prop 泄露；证明起讫配平；真 Qed。                *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
-(* UpAblT13c_G13.v —— 消融清欠席 T13c（批9 三路+G13 Id 束）G13 位件        *)
-(* 辖区（T13a-2 勘误与 T13b-3/D4 遗留移交，逐位现档坐标）：                 *)
+(* UpAblc_G13.v ——  c（ 三路+G13 Id 束）G13 位件        *)
+(* 辖区（a-2 修订与 b-3/D4 遗留移交，逐位现档坐标）：                 *)
 (*   位1 G13_EvictFam.v:61  Z_thermo_pos（UpEvictId Id 层）                 *)
 (*        → 单点 SumOver 包 discharge（exp_neg_pos 直接代入）                  *)
 (*   位2 G13_EvictFam.v:68  transition_normalization（UpEvictId Id 层）     *)
@@ -35,7 +31,7 @@
 (*        → 两点世界行归一核 supply（half+half==one 纯接口代数链）          *)
 (*   位6 G13_EvictFam.v:468 detailed_balance（EvictIdReq req 层）           *)
 (*        → 源核缩放族 supply（配分正性由两点正和 discharge，零数据槽）     *)
-(* 最小 SumOver 实例构造（T13b D4 遗留工单兑现；照 T7b 两点包先例最小化）： *)
+(* 最小 SumOver 实例构造（b D4 遗留工单兑现；照 T7b 两点包先例最小化）： *)
 (*   全库 SumOver Class@S01:1398 零具体 Instance，abs_sum_le 字段系 W1 墙   *)
 (*   在两点/任意多点载体不可满足；单点状态空间上八字段全退化可构造          *)
 (*   （abs_sum_le 退化为 le_refl）——uab_ssUnit+uab_soUnit 即最小 SumOver   *)
@@ -45,7 +41,7 @@
 (*   由两点正和 discharge（plus_positive+exp_neg_pos），非显式参。          *)
 (* 分级：位1/2/4/5 = N3（实例供给）；位3/6 = N3（实例供给·核族构造）。      *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、G13_EvictFam。    *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblT13c_*                         *)
+(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblc_*                         *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import G13_EvictFam.
@@ -321,7 +317,7 @@ Print Assumptions uabT13c_evict68.
 Print Assumptions uabT13c_evict71.
 Print Assumptions uabT13c_evq_norm464.
 Print Assumptions uabT13c_evq_db468.
-(* —— 切片六落刀件假设面自审增补（应全 Closed under the global context） —— *)
+(* —— 切片六实施件假设面自审增补（应全 Closed under the global context） —— *)
 Print Assumptions uabT13c_swap_id_gen.
 Print Assumptions uabT13c_swap_req_gen.
 Print Assumptions uabT13c_half_row.

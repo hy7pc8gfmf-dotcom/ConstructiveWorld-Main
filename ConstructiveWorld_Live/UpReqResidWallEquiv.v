@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -65,7 +65,7 @@
 (*   G06_BForm:642「不主张 real_le (real_max a b) c 精确形（分支选择    *)
 (*   面）」在案注记即其库内见证）：定形 rwl_max_split_wall，并证       *)
 (*   cmp_wall ⟹ 劈裂缝（rwl_cmp_to_max_split：分支选择面由逐点可比供   *)
-(*   给，S07 real_r_max_l_iff/real_r_max_r_iff 两支塌缩件免费复合）；   *)
+(*   给，S07 real_r_max_l_iff/real_r_max_r_iff 两支收缩件免费复合）；   *)
 (*   严格 Or 劈裂的 free 向（real_lt 支无前提可证：x < a ⟹ x < max）    *)
 (*   同源检验结论：#8 劈裂缝 ≤ 可比墙（LLPO 级），亦不在 rLPO 双向类   *)
 (*   内——GEO1 #8 与 WALL-1/2 序隙轴的分野在此已证结论。                     *)
@@ -106,7 +106,7 @@ Definition rwl_snw_wall_face : Set :=
 (* 供隙位移：b−a > e 且 |b−c| < d < e ⟹ c−a > e−d。
    正支（a<c）三角形直链；负支（c≤a）给 |b−c| = b−c ≥ b−a > e > d > |b−c| 矛盾。
    纪律：Qeq 改写只进目标侧与 QltT/Id 型假设（UpReqLpoEquiv 先例），
-   不做 Qle/Qlt 假设内改写（库 delta 展开坑，vos 假绿后全量首测实测）。 *)
+   不做 Qle/Qlt 假设内改写（库 delta 展开坑，vos 虚假通过后全量首测实测）。 *)
 Lemma rwl_q_gap_shift : forall a b c e d : Q,
   Qlt 0 d -> Qlt d e -> Qlt e (b - a) -> Qlt (Qabs (b - c)) d ->
   Qlt (e - d) (c - a).
@@ -355,8 +355,8 @@ Definition rwl_max_split_wall : Set :=
     real_le x (real_max a b) -> Or (real_le x a) (real_le x b).
 
 (* 归约定理：可比墙 ⟹ 劈裂缝。分支选择面由逐点可比供给：
-   a ≤ b 支 max 塌缩到 b（real_r_max_r_iff），b ≤ a 支塌缩到 a
-   （real_r_max_l_iff），序沿塌缩等距右迁移（rwl_le_eq_transfer_r）。 *)
+   a ≤ b 支 max 收缩到 b（real_r_max_r_iff），b ≤ a 支收缩到 a
+   （real_r_max_l_iff），序沿收缩等距右迁移（rwl_le_eq_transfer_r）。 *)
 Theorem rwl_cmp_to_max_split : rwl_g07_cmp_wall -> rwl_max_split_wall.
 Proof.
   intros Hcmp x a b Hx.

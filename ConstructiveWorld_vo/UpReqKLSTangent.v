@@ -110,7 +110,7 @@ Qed.
 (* 使命形重曝光：双归一化 + 逐项全称双向弱序 + s₀ 处严格分离（任一
    方向 Or）⟹ 0 < Σ_s kl_term。相对 klst_kl_sum_strict 的单向弱序
    （p≤q，排除 q>p 支），负支由 klst_gibbs_core_strict_neg 补齐
-   （ E401 完成），温度桥两向均入。 *)
+   ），温度桥两向均入。 *)
 Theorem t1_kl_energy_nonconst : forall (X : Type) (l1 : list X) (s0 : X)
   (l2 : list X) (p q : X -> Real)
   (Hp : forall s : X, real_lt real_zero (p s))

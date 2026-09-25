@@ -37,7 +37,7 @@ Proof.
   apply Hb in Hle. rewrite H in Hle. discriminate Hle.
 Qed.
 
-(* 实测核对：本安装 Qorder 缺席——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
+(* 实测核对：本安装 Qorder ——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
    全无；以 Qplus_le_l（iff 形右消去）+Qlt_irrefl+Qlt_le_trans 自建
    单侧严格单调桥，兼作 Qeq_lt 替代面（ witness 严格支用）。 *)
 Lemma alm_qlt_compat_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
@@ -1394,7 +1394,7 @@ End AluChain.
 (*   转录，因 MassSplit 为下游使用方不可反向 Require）给出          *)
 (*   L1 ≤ n·d + n·d（d = e^{−γ/T}）；间隙证书/副本计数/均匀目标/     *)
 (*   开关核为 Part 1-2 之 alm_ 件。阈值 T₀ := γ·δ、                 *)
-(*   δ := (eps·½)·(1/n)：cw_log 缺席下的无 log 扁形替代——            *)
+(*   δ := (eps·½)·(1/n)：cw_log 下的无 log 扁形替代——            *)
 (*   real_exp_ge_linear（e^t > 1+t）+ exp 单调 + δ·e^{γ/T} ≥        *)
 (*   δ·inv δ == 1 闭合，零嵌套 inv、零经典逻辑。                    *)
 (* ============================================================ *)

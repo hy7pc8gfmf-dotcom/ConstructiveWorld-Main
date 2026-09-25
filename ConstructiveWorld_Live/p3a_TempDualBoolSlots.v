@@ -1,8 +1,8 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   p3a_bsum_ext（原 L51，7 句刀体）                                    *)
 (* ============================================================ *)
@@ -16,14 +16,14 @@
 (*                                                                *)
 (*   施工：最小有限枚举 StateSpace 实例化——二点空间 S := bool，          *)
 (*   求和泛函 bsum f := f true + f false（二元 real_plus 直接折叠），    *)
-(*   四槽逐一真证装载，并消费基座件：                                   *)
+(*   四槽逐一真证装载，并使用基座件：                                   *)
 (*     ① real_entropy_deficit_kl_temp（UpReqEntropyDeficitTemp.v:518，  *)
 (*        13 参全 arity 显式应用——KL 熵亏分解 T6b 主件）；              *)
 (*     ② real_boltzmann_dist_temp / _pos / real_energy_exp_temp /        *)
 (*        real_entropy_dist / real_KL_temp（UpReqTempDefs 温度族，       *)
 (*        Section 按需消散 6/8 参形）；                                  *)
-(*     ③ real_list_sum（S08_RealMainlineDPO.v:288）——bsum↔list 换装      *)
-(*        桥（SumEqListFeed 换装 shim 的求和面镜像），把本实例接回        *)
+(*     ③ real_list_sum（S08_RealMainlineDPO.v:288）——bsum↔list 转换      *)
+(*        桥（SumEqListFeed 转换 shim 的求和面同构），把本实例接回        *)
 (*        list 载体已闭面。                                             *)
 (*                                                                *)
 (*   纪律：纯构造性；Set 层语句（real_lt/real_eq）；零经典逻辑；          *)
@@ -68,7 +68,7 @@ Proof.
   exact (RealSetoid.real_eq_plus_compat (f true) (f false) (g true) (g false) Ht Hff).
 Qed.
 
-(* ---- 槽 3 sumlinear：线性性（分配律 + 因子序换装） ---- *)
+(* ---- 槽 3 sumlinear：线性性（分配律 + 因子序转换） ---- *)
 
 Lemma p3a_bsum_lin : forall (a : Real) (f : bool -> Real),
   real_eq (p3a_bsum (fun s : bool => real_mult a (f s)))
@@ -123,7 +123,7 @@ Proof.
     + apply real_plus_assoc.
 Qed.
 
-(* ---- 换装桥：bsum ↔ list 求和（二点枚举 [true; false] 喂入） ---- *)
+(* ---- 转换桥：bsum ↔ list 求和（二点枚举 [true; false] 输入） ---- *)
 
 Lemma p3a_bsum_list_feed : forall f : bool -> Real,
   real_eq (p3a_bsum f) (real_list_sum bool f (true :: false :: nil)).
@@ -158,7 +158,7 @@ Proof.
            T Ht energy p Hp Hnormp Henergy).
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取探针 ---- *)
+(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions p3a_bsum_add.
 Print Assumptions p3a_two_state_entropy_deficit_kl_zero.

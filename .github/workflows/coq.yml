@@ -131,6 +131,43 @@ jobs:
           name: tree-stats
           path: tree-stats.json
 
+      # 闸⑤ .vo/.vos/.vok 二进制依赖层检疫（GATE-VOQ 20260926，E-STAGING-AXFORENSIC-1 判例：
+      # 休眠毒代 .vo 播种激活——gate1 源面绿与 coqchk Axioms 现形两口径不相交，载体在源闸半径外的
+      # .vo 依赖串表层）。coqchk 消费闭包前对 vo 树递归全量：①解压感知 token 串扫描（raw+gzip+zlib，
+      # 裸 grep 有 glob 零命中假象）硬四族 Lra/Reals/ClassicalDedekindReals/FunctionalExtensionality
+      # （净主树 2474 件实测 0/0/0/0 校准；\b 词边界大小写敏感，ConstructiveReals/Qreals 不误配）；
+      # ②毒 digest 黑名单 v2 对照（25 枚 vendored scripts/gates/poison_digest_blacklist_v2.txt，
+      # 同名 vo 即净假设不成立，一切按 digest 对账）；③platform 对照组内建 SELF-HIT 校准
+      # （ClassicalDedekindReals.vo 必自命中，否则方法不可证）。Psatz 二进制层=信息档非硬
+      # （净主树 173 件串表携带=Lia 闭包 Q 域供给非毒，AXFORENSIC §1.1 判例；源面 Require Psatz
+      # 由 gate1 硬闸把守）。
+      # exit 0=洁净（扫全+对照过+零命中）；1=命中（红）；2=无可扫面/树无效/对照失效（红，
+      # 诊断文案分流，禁降档——gate2 GATE-BANNER-ABSENT 先例）。上游红时 if:always() 照 gate3
+      # 先例不阻断本闸出证；evidence=本步 stdout 全量 HIT 清单（gate5_vodep_report.json 落盘于
+      # 工作区根，artifact 收编候合流窗——Upload 步 path 清单本波禁改，登记于 _tgatevoq_ 报告 §四）。
+      - name: gate5 vo-binary quarantine (pre-coqchk, token+digest, control-calibrated)
+        if: always()  # gate3 先例：上游红不阻断 gate5 出证
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        run: |
+          set +e
+          python scripts/gates/gate5_vodep_quarantine.py \
+            --tree ConstructiveWorld_vo \
+            --json gate5_vodep_report.json
+          rc=$?
+          set -e
+          if [ "$rc" -eq 1 ]; then
+            echo "GATE5-RED: poison token/digest hit in .vo/.vos/.vok binary layer — HIT list above; disposition per VO-RES-CLEAN (purge poison gen + rebuild consumer closure from clean source + Axioms=<none> recheck)"
+            exit 1
+          elif [ "$rc" -eq 2 ]; then
+            echo "GATE5-NOSCANNABLE: no scannable surface / tree missing / control SELF-HIT failed — treat as red (fail-loud, gate2 GATE-BANNER-ABSENT precedent; upstream red cause first)"
+            exit 1
+          elif [ "$rc" -eq 0 ]; then
+            echo "GATE5-GREEN: vo binary layer clean (hard token 0-hit + digest 0-hit + control SELF-HIT pass; Psatz soft counts in gate5_vodep_report.json)"
+          else
+            echo "GATE5-UNEXPECTED-EXIT rc=$rc — fail-loud, treat as red"
+            exit 1
+          fi
+
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |

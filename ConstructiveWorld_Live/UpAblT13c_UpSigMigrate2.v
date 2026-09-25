@@ -1,6 +1,7 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* UpAblT13c_UpSigMigrate2.v —— 消融清欠席 T13c（批9）b_gibbs 三位出节件      *)
-(* 辖区（T13a-2/T13b D3 深施工单列移交·现档坐标）：                           *)
+(* UpAblc_UpSigMigrate2.v ——  c（）b_gibbs 三位出节件      *)
+(* 辖区（a-2/b D3 深施工单列移交·现档坐标）：                           *)
 (*   位1 UpSigMigrate2.v:913 b_gibbs_pos     （ReqAlignCore）                 *)
 (*   位2 UpSigMigrate2.v:916 b_gibbs_sum_eps （ReqAlignCore）                 *)
 (*   位3 UpSigMigrate2.v:921 b_gibbs_eq      （ReqAlignCore）                 *)
@@ -21,7 +22,7 @@
 (* 分级：位1/位3 = 条件 discharge（出节形·W4 族槽携带）；位2 = N3（位1 链）。  *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、        *)
 (*   UpReqDist、UpSigMigrate2。                                               *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblT13c_*                            *)
+(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblc_*                            *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.

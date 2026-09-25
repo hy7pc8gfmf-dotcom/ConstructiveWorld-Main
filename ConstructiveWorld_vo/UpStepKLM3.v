@@ -1,15 +1,10 @@
-(* ============================================================ *)
 (* UpStepKLM3.v *)
-(* *)
 (* 使命： step_kl 的 M3 迭代版 Real 层副本。 *)
 (* 主件： m3_iterate 迭代包与 m3_kappa_le_one、m3_le_kappa_mul 几何率定律。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 构造性注记： 零公理零搁置、Set 层语句、全 Qed、可提取；几何率取 kappa < 1 显式前提。 *)
 (* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
 (*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
 (* UpStepKLM3.v —— step_kl 消解的 M3 迭代版 Real 层副本            *)
 (* 论文 1 定理 4.5/4.8（策略迭代向后 KL 递推 + 真几何率收缩）的      *)
 (* Real 层 list 离散状态世界对应物。                               *)
@@ -29,7 +24,6 @@
 (* 全部 Real 层顶层名（real_kl_term/real_list_sum/real_step_next），  *)
 (* Or 编码 le。                                                    *)
 (* 红线：零 公理/搁置；Set 层语句；全 Qed；可提取。             *)
-(* ============================================================ *)
 
 From Stdlib Require Import List.
 Import ListNotations.

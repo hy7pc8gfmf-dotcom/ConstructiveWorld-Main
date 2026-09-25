@@ -1,4 +1,4 @@
-(* ==================== ToyR 战役 包F 补位席 · 切片六替换稿 ==================== *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ==================== ToyR 工程   · 切片六替换稿 ==================== *)
 (* 本件为 UpReqConcB2Time.v 同名替换稿：原件全文（版记头注/声明序/其余件逐字）保留，  *)
 (* 仅三条玩具证明体替换＋件首本头注＋六条批量登记注记；语句面/Require 面/假设审计面    *)
 (* 零改动；零新增依赖，刀位标识符均原件既有可见域。                                  *)
@@ -24,9 +24,9 @@
 (* ========================================================================== *)
 
 (* ============================================================ *)
-(* UpReqConcB2Time.v —— 席 AT9：B2 终装棒（实质 logit 核的无条件混合时间定理） *)
+(* UpReqConcB2Time.v ——  AT9：B2 终装棒（实质 logit 核的无条件混合时间定理） *)
 (* 论文7 §10.2 第 7 项 · 无条件闭合路线①（AT8 §三实例化图 S7 第二棒施工）       *)
-(*   2026-09-18                                                            *)
+(*                                                               *)
 (*                                                              *)
 (* 上游（零改六源文件）：CW219（RealEnhancedReal 实例 + real_arch +            *)
 (*   cauchy_real_exp_mono/wd）、AttnDoeblin（real_expf_realizable 一件全供）,*)
@@ -65,7 +65,7 @@
 (*   δ* = lo²（lo=exp(−Delta/temp)）较字面 Delta_core=temp·max|dot| 形偏     *)
 (*   保守——这是构造性可达形态的诚实代价（AT8 §一设计决断）；且本档世界为    *)
 (*   1 元 enum（plain 形冻结槽 abs_sum_le_h 与 Htv0 的 Or 墙在 ≥2 元档      *)
-(*   不可构造——AT5/AT6/AT8 三席已证结论），核值与封顶 Delta 仍为实质 cb2_        *)
+(*   不可构造——AT5/AT6/AT8 已证结论），核值与封顶 Delta 仍为实质 cb2_        *)
 (*   机器（冒烟：dot(5)=−2、Delta_core(5)=2、Delta(5)=3、gap(5)=5>1#2）。   *)
 (*                                                              *)
 (* 公理面自审：全件语句 Set 值（req/le/lt/sigT/Or 均本库 Set 面）；前提位全  *)
@@ -79,7 +79,7 @@
 (* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——E-STAGING-AT5 卡①）：          *)
 (*   _tat9_run.cmd 前台编译；full 后 -vos 重跑生成实体（AT8 卡⑧）；           *)
 (*   ${PIPESTATUS[0]} 闭合；检验/提取件 _tat9_ 前缀验后删。                  *)
-(* 撞名检查：cbt_ 前缀全树 grep 零撞名（20260918 实测）。                     *)
+(* 撞名检查：cbt_ 前缀全树 grep 零撞名（ 实测）。                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -213,7 +213,7 @@ Proof.
 Defined.
 
 (* eps 形侧供件（AT8 §三.2 的 csm_abs_sum_le_eps 供入形态记录位：
-   plain 槽不在此层，本件备查备续席改槽用） *)
+   plain 槽不在此层，改槽用） *)
 Definition cbt_abs_sum_le_eps : forall (f : unit -> Real) (eps : Real),
   lt zero eps ->
   le (abs (cbt_sumf f)) (plus (cbt_sumf (fun s : unit => abs (f s))) eps) :=

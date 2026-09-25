@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -356,7 +362,7 @@ Print Assumptions uabS4_abs_list_sum_le_eps.
 Print Assumptions uabS4_lt_double_margin_le_half_contr.
 Print Assumptions uabS4_diff_double_kill.
 
-(* PA 追印段（T254 核验副本件） *)
+(* PA 追印段（ 核验副本件） *)
 Print Assumptions uabS4_diff_double_kill.
 Print Assumptions uabS4_abs_list_sum_le_eps.
 Print Assumptions uabS4_abs_list_sum_le_B.

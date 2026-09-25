@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpBudgetReal.v *)
 (* *)
 (* 目的： 几何击穿的迭代预算定理在具体柯西实数上的 Real 层构造。 *)
@@ -58,7 +58,7 @@ Fixpoint real_pow (x : Real) (n : nat) : Real :=
   | Datatypes.S m => real_mult x (real_pow x m)
   end.
 
-(* 与任务书同名接口：r_pow kappa N 即 real_pow kappa N *)
+(* 与任务说明同名接口：r_pow kappa N 即 real_pow kappa N *)
 Notation r_pow := real_pow (only parsing).
 
 (* 幂对 real_eq 的相容性 *)

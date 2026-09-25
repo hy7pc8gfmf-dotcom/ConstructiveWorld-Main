@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* UpReqBanachInst.v —— 席INS：BanachAlg 具体实例席（20260913）    *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* UpReqBanachInst.v —— INS：BanachAlg （）    *)
 (* ============================================================ *)
 (* 使命：为冻结类 BanachAlg（UpReqBanachExp.v，实例为零）落地第一个 *)
 (*   具体实例。实形普查已证结论：墙不在 bcauchy_complete（BCE 已证结论），   *)
@@ -254,7 +254,7 @@ Class bxin_BanachAlgPre := {
     bxin_bae (bxin_bcoef (q * r)%Q) (bxin_bmult (bxin_bcoef q) (bxin_bcoef r));
   bxin_bcoef_comm : forall (q : Q) (a : bxin_BA),
     bxin_bae (bxin_bmult a (bxin_bcoef q)) (bxin_bmult (bxin_bcoef q) a);
-  (* ---- 20260913 补丁 B 联动：BCE 二字段 Pre 对偶扩容（37→39）---- *)
+  (* ----  补丁 B 联动：BCE 二字段 Pre 对偶扩容（37→39）---- *)
   bxin_bcoef_plus : forall q r : Q,
     bxin_bae (bxin_bplus (bxin_bcoef q) (bxin_bcoef r)) (bxin_bcoef (q + r)%Q);
   bxin_bcoef_wd : forall q r : Q, q == r -> bxin_bae (bxin_bcoef q) (bxin_bcoef r);
@@ -284,7 +284,7 @@ Definition bxin_pre_complete (p : bxin_BanachAlgPre) : Set :=
           (@bxin_bplus p (u n) (@bxin_bopp p l))) eps)).
 
 (* 装配桥：Pre + 完备性 -> 完整 BanachAlg。 *)
-(* 机器核验：除完备性字段外零缺口——实例席后续只需补一个 p 与一份 Hc。 *)
+(* 机器核验：除完备性字段外零缺口——后续只需补一个 p 与一份 Hc。 *)
 Definition bxin_BanachAlg_of_pre (p : bxin_BanachAlgPre)
   (Hc : bxin_pre_complete p) : BanachAlg.
 Proof.

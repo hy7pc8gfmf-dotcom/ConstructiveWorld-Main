@@ -40,7 +40,7 @@ Require Import Ln2Escape.
 (* §1 Q 层支撑件（内件，Prop 面仅脚手架）                              *)
 (* ============================================================ *)
 
-(* k^n ≥ 1（正底幂非零下界；喂 Qlt cast 腿用） *)
+(* k^n ≥ 1（正底幂非零下界；供 Qlt cast 支路用） *)
 Lemma bl_mul_ge1 : forall k n : nat, (1 <= k)%nat -> (1 <= k ^ n)%nat.
 Proof.
   intros k n Hk. induction n as [| n IH].
@@ -412,14 +412,14 @@ Theorem bl_variant_shift : forall n : nat,
 Proof.
   intro n. apply Qle_to_QleT'.
   apply (Qle_trans _ (q_pow (1 # 2) (Datatypes.S n) * ((1 # 2) * q_pow (3 # 16) n))).
-  - (* 左腿：(1/4)(3/32)^n == (1/2)^{n+1}·(1/2)(3/16)^n 等号桥（LHS 无 A·因子形，
+  - (* 左支路：(1/4)(3/32)^n == (1/2)^{n+1}·(1/2)(3/16)^n 等号桥（LHS 无 A·因子形，
        bl_mlc 结论 z·x ≤ z·y 与之 unify 必败——须走 qeq_imp_qle 等式轨） *)
     apply qeq_imp_qle.
     replace (3 # 32) with ((1 # 2) * (3 # 16))%Q by reflexivity.
     rewrite <- (bl_qpow_mul (1 # 2) (3 # 16) n).
     rewrite q_pow_succ.
     ring.
-  - (* 右腿：A·(1/2)(3/16)^n ≤ A·lne_B n——bl_mlc（0 ≤ A 左乘保序）正位 *)
+  - (* 右支路：A·(1/2)(3/16)^n ≤ A·lne_B n——bl_mlc（0 ≤ A 左乘保序）正位 *)
     apply (bl_mlc _ _ (q_pow (1 # 2) (Datatypes.S n))).
     + apply QleT'_to_Qle. apply bl_beta_lower.
     + apply (q_pow_nonneg (1 # 2) (Datatypes.S n)).

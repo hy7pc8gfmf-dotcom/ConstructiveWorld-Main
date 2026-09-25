@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -30,7 +30,7 @@
 (*     证书 3：fic_T_pos:86 / fic_D_pos:88 / fic_Z_thermo_pos:92                  *)
 (*     识别 3：fic_temp_match:94 / fic_energy_neg:96 / fic_partition_match:98-101 *)
 (*   L112 Context (R){RIS}{I : FepIdentification R}（FepIdentConsumer 节）        *)
-(* 实例化消解母本：实例锚 FepIdentificationReal:312（三识别构造性可满足见证）＋          *)
+(* 实例化消解源版本：实例锚 FepIdentificationReal:312（三识别构造性可满足见证）＋          *)
 (*   fic_opp_mult_r:154＋fic_real_exp_neg_compat:294（识别③桥接引理）                *)
 (*                                                              *)
 (* 目的：N3 实例供给整包实例化消解——两 Context 以 R:=Real、RIS:=RealEnhancedReal、      *)
@@ -44,7 +44,7 @@
 (*   · PC=依存节 L112 消解成品：识别三条件齐 ⟹ 注意力=Boltzmann（零类前提）。     *)
 (*                                                              *)
 (*   的投影在定义检查层不可展开（u1/u2/u3 检验实测），故数据面与性质面改由          *)
-(*   件内自建透明实例承载（字段值与库锚逐字同源），C0 仍直接匹配库锚作对照锚定。        *)
+(*   件内自建透明实例承载（字段值与库锚逐字同源），C0 仍直接匹配库锚作对照互核。        *)
 (*                                                              *)
 (* 主件清单（前缀 uabp2_）：                                                     *)
 (*   C0 uabp2_fic_ctx_core ←L59（库锚直接匹配）                                      *)
@@ -76,7 +76,7 @@ Require Import FepIdentClass.
 Import RealInterfaceEnhancedMod.
 From Stdlib Require Import List.
 
-(* 接口投影记号（全显式 @，防 elaborator 隐参歧义；母本 L62-68 同款形） *)
+(* 接口投影记号（全显式 @，防 elaborator 隐参歧义；源版本 L62-68 同款形） *)
 Notation ubreq x y := (@RealInterfaceEnhancedMod.req Real RealEnhancedReal x y).
 Notation ublt x y := (@RealInterfaceEnhancedMod.lt Real RealEnhancedReal x y).
 Notation ubzero := (@RealInterfaceEnhancedMod.zero Real RealEnhancedReal).

@@ -45,7 +45,7 @@ Qed.
 
 (* ---- Q 层二元 CS 核（未竟项「Σa²·Σb² ≥ (Σab)²」Q 引擎级）：          *)
 (*      Lagrange 二元恒等式 (a²+b²)(c²+d²) == (ac+bd)²+(ad−bc)²       *)
-(*      ring 一击展开，平方非负双腿 + 加法保序闭合。 ---- *)
+(*      ring 一击展开，平方非负两支 + 加法保序闭合。 ---- *)
 Theorem wtc_cs2_q : forall a b c d : Q,
   (a * c + b * d) * (a * c + b * d) <= (a * a + b * b) * (c * c + d * d).
 Proof.
@@ -424,7 +424,7 @@ Proof.
 Qed.
 
 (* ---- G2：real 层二元 CS 装载——(ac+bd)² ≤ (a²+b²)(c²+d²)。          *)
-(*      Gram 恒等式重述 + 平方非负腿 + 加法保序。 ---- *)
+(*      Gram 恒等式重述 + 平方非负支 + 加法保序。 ---- *)
 Theorem wtc_cs2_real : forall a b c d : R,
   le (mult (plus (mult a c) (mult b d)) (plus (mult a c) (mult b d)))
      (mult (plus (mult a a) (mult b b)) (plus (mult c c) (mult d d))).
@@ -458,7 +458,7 @@ Proof.
   exact wtc_cs2_real.
 Qed.
 
-(* ---- G2 闭合件：wtc 族 sigT 两级账（Q 引擎腿 + real 装载腿，        *)
+(* ---- G2 闭合件：wtc 族 sigT 两级账（Q 引擎支路 + real 装载支路，        *)
 (*      照 wtl_family 模式）。 ---- *)
 Definition wtc_leg_q_cs2 : Type :=
   forall a b c d : Q,

@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
@@ -17,7 +18,7 @@
 (*                                     pi_ref).                                *)
 (*   （Z_align_req 即 UpReqAlign.ReqAlignCore 出节件，本节 Require Import        *)
 (*     UpReqAlign 后同名直引——六显参形态与其 :74 引用逐字同形。）                *)
-(* 实例化消解母本：UpReqAlign.ReqAlignCore 兄弟参数 sum_pos（:68 正和面）加逐点双正链    *)
+(* 实例化消解源版本：UpReqAlign.ReqAlignCore 兄弟参数 sum_pos（:68 正和面）加逐点双正链    *)
 (*   （mult_positive/exp_neg_pos 接口字段直引）。                               *)
 (* 分级：N1（库内正和实例化消解族直接代入，证明体=逐点双正链）。                           *)
 (* 依赖（只读依存，原树零改）：CW_ConstructiveWorld_219、UpReqAlign、            *)

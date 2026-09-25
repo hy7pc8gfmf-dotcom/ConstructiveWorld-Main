@@ -57,7 +57,7 @@ Proof.
            (id_trans (id_sym (plus_comm a (opp a))) (plus_opp a))).
 Qed.
 
-(* ---- 小件③：(−t)² == t² 环小件（#43 环腿；opp_mult_l/r 拼装） ---- *)
+(* ---- 小件③：(−t)² == t² 环小件（#43 环等式支路；opp_mult_l/r 拼装） ---- *)
 Lemma asc_sq_opp : forall t : R, Id (mult t t) (mult (opp t) (opp t)).
 Proof.
   intro t.
@@ -158,7 +158,7 @@ Proof.
 Qed.
 
 (* ---- #43：t² ≤ |t|²（q_sq_abs 槽形） ----
-   三分 0? t：非负支 |t|==t（fa53 件3 覆盖 lt/eq 双腿）目标即
+   三分 0? t：非负支 |t|==t（fa53 件3 覆盖 lt/eq 双支）目标即
    le_refl 变形；负支 |t|==−t 桥 + (−t)²==t² 小件串联变形。 *)
 Theorem asc_sq_le_abs_sq :
   forall t : R, le (mult t t) (mult (abs t) (abs t)).
@@ -226,7 +226,7 @@ Proof.
   - (* nil：|0| == 0 ≤ 0 *)
     exact (le_id_l (abs (sumd_list_sum S f nil)) zero zero
              abs_zero (le_refl zero)).
-  - (* cons：abs_triangle + le_plus_compat 双腿（逐项 abs 恒等反射） *)
+  - (* cons：abs_triangle + le_plus_compat 双支（逐项 abs 恒等反射） *)
     exact (le_trans (abs (plus (f x) (sumd_list_sum S f t)))
              (plus (abs (f x)) (abs (sumd_list_sum S f t)))
              (plus (abs (f x)) (sumd_list_sum S (fun s => abs (f s)) t))
@@ -310,7 +310,7 @@ Qed.
 
 End FepPartitionPin.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（公理面自审前置：文件内显式 PA 声明） ---- *)
 Print Assumptions asc_opp_zero_id.
 Print Assumptions asc_opp_opp.
 Print Assumptions asc_sq_opp.

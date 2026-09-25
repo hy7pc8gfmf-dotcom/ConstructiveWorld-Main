@@ -1,8 +1,8 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqPadeFinale.v *)
 (* *)
-(* 目的： 路径 C 总装预备段（n=2 旗舰完成）。 *)
-(* 主件： cpf_witness_n2 与 cpf_exp_pos_pade2 旗舰；免除法传送 cpf_transport_no_div。 *)
+(* 目的： 路径 C 合成预备段（n=2 主定理完成）。 *)
+(* 主件： cpf_witness_n2 与 cpf_exp_pos_pade2 主定理；免除法传送 cpf_transport_no_div。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeLower、UpReqPadeQLeg。 *)
 (* 备注： 免除法纪律：库内 Real 层无除法面，全部以乘积面构造；显式假设随登记段申报。 *)
 (* ============================================================ *)
@@ -15,7 +15,7 @@
 (* 闸门裁决（候③）：UpReqPadeLower.vo 开工时不在盘（ls 双证：       *)
 
 (*   按闸门协议主件以下界件为【显式接口参数】（语句形与工单 §1.3     *)
-(*   cpl_lower_even 同面，落盘后可直接 exact 实例化消费），显式假设  *)
+(*   cpl_lower_even 同面，落盘后可直接 exact 实例化使用），显式假设  *)
 (*   是先例非承认件（出口 Print Assumptions 全 Closed）。            *)
 (*                                                                 *)
 (* 完全平方构造性面（保底件一）：                                   *)
@@ -29,13 +29,13 @@
 (*   「e ≥ P/Q、误差 ≥ w/Q」⟺「e·Q ≥ P + w」（Q>0 传送）。          *)
 (*   Q 层见证也用乘法形（w := x⁵·(1#720)，Qdiv 不进 ring）。         *)
 (*                                                                 *)
-(* 公理面声明：AA12 腿化后本件零 Require Psatz（原 nia 桥件五处      *)
+(* 公理面声明：AA12 腿化后本件零 Require Psatz（原 nia 连接引理五处      *)
 (*   一跳 UpReqPadeQLeg 自建 Q 单调腿，Psatz 环境闭包公理三件随之     *)
-(*   断根）；本件出口 Print Assumptions 预期全 Closed。语句面 Prop    *)
+(*   根除）；本件出口 Print Assumptions 预期全 Closed。语句面 Prop    *)
 (*   泄露 0：结论面全 QltT/real_lt(sigT,Set)，唯 Prop 语句面是       *)
-(*   Q 层桥件 cpf_qeq_qlt 等（S02 QltT_to_Qlt 同款桥件定位）。        *)
+(*   Q 层连接引理 cpf_qeq_qlt 等（S02 QltT_to_Qlt 同款连接引理定位）。        *)
 (*                                                                 *)
-(* 数值哨兵（TCS1 侦察报告 §②）：E₆·Q₂−P₂ == y⁵/720+y⁶/1440+        *)
+(* 数值标记（TCS1 侦察报告 §②）：E₆·Q₂−P₂ == y⁵/720+y⁶/1440+        *)
 (*   y⁸/8640（系数全非负）；主件见证 w := x⁵/720 即正尾首项          *)
 (*   c₀ = (2!)²/(4!·5!) = 1/720。诚实注记：真误差 e−P₂/Q₂ 严格       *)
 (*   大于 x⁵/(720·Q₂)（正尾余项），「误差 ≤」面不成立，本件取下界    *)
@@ -50,10 +50,9 @@ From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 
 Section CpfFinale.
 
-(* ===== §0 Q 层桥件（AA12 腿化：一跳 UpReqPadeQLeg 自建单调腿） ===== *)
+(* ===== §0 Q 层连接引理（AA12 腿化：一跳 UpReqPadeQLeg 自建单调腿） ===== *)
 
 (* Qeq 穿透墙桥：== 不可 rewrite 进 Qlt/QltT 目标（CS 卡），
-   以桥件承载换形。桥件语句面 Prop——S02 QltT_to_Qlt 同款定位。
    AA12 实测：四元合证曾 nia 拒拆两步组合；现双腿直达，零 nia。 *)
 Lemma cpf_qlt_eq_l : forall a b c : Q, a == b -> Qlt a c -> Qlt b c.
 Proof.
@@ -129,7 +128,7 @@ Proof.
   - unfold Qlt. simpl. lia.
 Qed.
 
-(* n=2 系数哨兵（vm_compute 闭式；字面点无 Nat.sub 截断坑） *)
+(* n=2 系数标记（vm_compute 闭式；字面点无 Nat.sub 截断坑） *)
 Lemma cpf_c20 : pade_coeff 2 0%nat == 1%Q.
 Proof. vm_compute. reflexivity. Qed.
 
@@ -301,7 +300,7 @@ Proof.
     exact HA4.
 Qed.
 
-(* ===== §5 主件（闸门候③）：定量旗舰组合形 ===== *)
+(* ===== §5 主件（闸门候③）：定量主定理组合形 ===== *)
 
 (* 主件：x>0 的下界接口（显式参数，候③——UpReqPadeLower 落盘后以
    cpl_lower_even (k:=1) 实例化消去）⟹ P₂ < eˣ·Q₂（乘法形承载

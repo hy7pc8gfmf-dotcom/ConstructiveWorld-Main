@@ -1,8 +1,8 @@
-(* ===================================================================== *)
-(* ToyR 战役包H T247 台账席替换稿（全中文零承认面）                         *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ===================================================================== *)
+(* ToyR 工程  替换稿（全中文零承认面）                         *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列两条玩具证明体，  *)
-(*   并按战役判绿口径补尾 Print Assumptions 证据段（语句面零改）。          *)
+(*   并按工程判绿口径补尾 Print Assumptions 证据段（语句面零改）。          *)
 (*   替换清单（本件两条）：                                                *)
 (*    ①ums_mult_opp_r：换轨三步路线——先乘法交换律出左负因子位，经          *)
 (*      opp_mult_r（左因子负形）换形，再 opp 同余内交换律回位（原稿为      *)
@@ -16,10 +16,10 @@
 (* ===================================================================== *)
 
 (* ============================================================ *)
-(* UpReqUMixSelect.v —— 席 AT1：混合时间选择器的接口层移植            *)
+(* UpReqUMixSelect.v ——  AT1：混合时间选择器的接口层移植            *)
 (*（把具体柯西实数层 UpReqMixingTime.v 的显式 k 选取机器移植到         *)
 (*  RealInterface 抽象接口层：论文7 §6.3 闭合定理                       *)
-(*  attention_mixing_time 的承重引擎）2026-09-17                    *)
+(*  attention_mixing_time 的承重引擎）                    *)
 (* ============================================================ *)
 (* 移植坐标（对照 concrete 源 UpReqMixingTime.v，全件 Defined 可提取）： *)
 (*   mix_scale            → ums_scale（nat-尺度部分和累加器，接口 plus）  *)
@@ -43,7 +43,7 @@
 (*   分量与 N=0 矛盾支在 (S N) 形下整体消去。                             *)
 (* 诚实接口（Variable，S04 ConvergenceCauchy L285 / UpEntropyGain L86     *)
 (* 同名先例）：lt_plus_compat_lt_le——接口 le 侧无正性提取，混合加法        *)
-(* 保序在抽象层不可内证（E-STAGING-Firewall-TempEntMono 已证结论），本席       *)
+(* 保序在抽象层不可内证（E-STAGING-Firewall-TempEntMono 已证结论），       *)
 (* 全部严格升温处（scale 正性 / boost 正性 / omd 双向）仅使用此一件。      *)
 (* 可判定墙申报（红线③）：目标书原形「le zero TV0 + lt 形 Arch」在接口层   *)
 (* 不可证——接口 le 为不透明 Set 字段（非 Or 编码），TV₀ 的                *)
@@ -636,7 +636,7 @@ Defined.
 
 End UMixSelect.
 
-(* ToyR 台账席补：判绿证据段（尾 Print Assumptions，全 Closed 预期） *)
+(* ToyR 补：判绿证据段（尾 Print Assumptions，全 Closed 预期） *)
 Print Assumptions UpReqUMixSelect.ums_scale_S_pos.
 Print Assumptions UpReqUMixSelect.ums_boost_pos.
 Print Assumptions UpReqUMixSelect.ums_mult_one_l.

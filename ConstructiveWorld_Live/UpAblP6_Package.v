@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===================================================================== *)
 (* UpAblP6_Package.v —— 论文6 消融件族装配总成件（v1 七件装配）           *)
 (*                                                                       *)
@@ -12,7 +13,7 @@
 (*      8 枚逐枚一行 Corollary，另以封装 completeness 句闭合。              *)
 (*   c 依赖模块族整合：S5SlotWire＋ZPosLowRef＋ConcMixSelFeed 三依赖模块面的    *)
 (*      代表性实例总成句（抽象接口面 + 具体实例面两件）。                   *)
-(*   d 战役面总成 Corollary：论文6 五独占模块（GibbsFamilyExt / TempDefs /  *)
+(*   d 工程面总成 Corollary：论文6 五独占模块（GibbsFamilyExt / TempDefs /  *)
 (*      FepIdConsume 零参数位 / EntropyMonoSplitInst / 依赖模块族）假设供给闭合   *)
 (*      的一揽子陈述，每支引对应件真证（uapkg6_campaign_supply_closed）。   *)
 (*                                                                       *)
@@ -407,7 +408,7 @@ Qed.
 Close Scope Q_scope.
 
 (* ===================================================================== *)
-(* d 面：战役面总成 Corollary——论文6 五独占模块假设供给闭合一揽子          *)
+(* d 面：工程面总成 Corollary——论文6 五独占模块假设供给闭合一揽子          *)
 (*   支1 GibbsFamilyExt：对称 Jeffreys 温度面（点态代表）。                 *)
 (*   支2 TempDefs：温度节参全字段供给核心两枚（配分正＋归一化）。           *)
 (*   支3 FepIdConsume 零参数位：具体柯西实例识别面 Gibbs==Boltzmann（该支零     *)
@@ -470,10 +471,10 @@ Print Assumptions uapkg6_feeder_concrete_faces.
 Print Assumptions uapkg6_campaign_supply_closed.
 
 (* ===================================================================== *)
-(* v2 收官装配段（v1 段零改动纯追加）                                      *)
+(* v2 完成装配段（v1 段零改动纯追加）                                      *)
 (*                                                                       *)
 (* 使命：v1（七件装配）建于 EMS_C/UniformLimit/two_state/fka 四件完成      *)
-(*   之前——本段补齐四面，收官装配：                                       *)
+(*   之前——本段补齐四面，完成装配：                                       *)
 (*   ① EMS_C（覆盖验证 15 Qed）覆盖 completeness 引用面：uac_e11_full_    *)
 (*      muster 出节形全实参总成引证（语句面=五分量洁净展开形，             *)
 (*      c_bt/c_bt_pos/c_kl 内联还原上游定义面）。                          *)
@@ -482,7 +483,7 @@ Print Assumptions uapkg6_campaign_supply_closed.
 (*      为真名 UpReqAttnUniformLimit，同名旧版隔离在依赖链外）。           *)
 (*   ③ two_state（12 Qed）整节实例引用：uab23_ts_second_law_eps 全实参     *)
 (*      引证＋零前提锚闭形双向封装（anchor_closed_lower/upper）。          *)
-(*   ④ fka（1 Qed）装载引证＋战役面总成 v2：九支供给闭合一揽子             *)
+(*   ④ fka（1 Qed）装载引证＋工程面总成 v2：九支供给闭合一揽子             *)
 (*      升级句（v1 五支→v2 九支，每支引对应件真证）。                      *)
 (*                                                                       *)
 (* 构造性注记：v1 段与四件本体零改（只 Require）；真名件装载根             *)
@@ -665,7 +666,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ④ fka 引述件引证＋战役面总成 v2（本节上下文照 S01/fa53/WTC/fka 同款     *)
+(* ④ fka 引述件引证＋工程面总成 v2（本节上下文照 S01/fa53/WTC/fka 同款     *)
 (*   Section 定式：Context {RI}{DO}＋RI_base 实例前提＋裸名 Let 前提）。   *)
 (* ===================================================================== *)
 Section Uapkg6V2Fka.
@@ -691,7 +692,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* ④ 战役面总成 v2：九支供给闭合一揽子升级句（v1 五支→v2 九支）——         *)
+(* ④ 工程面总成 v2：九支供给闭合一揽子升级句（v1 五支→v2 九支）——         *)
 (*   支1 GibbsFamilyExt 对称 Jeffreys 温度面；支2 TempDefs 温度节参两枚；  *)
 (*   支3 FepIdConsume 零参数位 Gibbs==Boltzmann；支4 EMS A+B 覆盖链组合引理；  *)
 (*   支5 依赖模块族具体实例面；支6 EMS_C 覆盖验证零前提峰温对偶面；          *)

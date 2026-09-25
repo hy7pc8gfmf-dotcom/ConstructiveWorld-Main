@@ -96,7 +96,7 @@ Qed.
 (* ==================== 簇三：UpGRPO:66 G_pos 兑现链 ==================== *)
 (* 槽：G := nat_to_R_g (length group_enum)；G_pos : lt zero G 原为 Variable。
    兑现＝cover（全称 InT 见证）＋任点 g0 ⟹ enum 非空（nil 支由 InT 零
-   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按 E346 先例本地
+   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按既有先例本地
    重声明（UpGRPO.v:51-65 同构：S 位 plus one 递归＋plus_positive/
    one_pos 归纳，证体逐字同构）。 *)
 

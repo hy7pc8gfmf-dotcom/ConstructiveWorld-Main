@@ -1,5 +1,4 @@
-
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqTopKTVChain.v *)
 (* *)
 (* 目的： 定理 7.6 topk_tv_identity 的 Real 层构造。 *)
@@ -10,7 +9,7 @@
 
 (* ============================================================ *)
 (* UpReqTopKTVChain.v —— 定理 7.6 topk_tv_identity（前半段） *)
-(*   Real 层平移·前半段（Id 层 19 引理链前 10 件）2026-09-11      *)
+(*   Real 层平移·前半段（Id 层 19 引理链前 10 件）      *)
 (* ------------------------------------------------------------------ *)
 (* 【使命】定理 7.6 topk_tv_identity_strict（论文2 P2 项 9）：        *)
 (*   TV(boltzmann, topk 重归一) == tail_mass / Z_thermo（精确恒等）。  *)
@@ -36,7 +35,7 @@
 (*     9. lt_minus_cc @5637                                            *)
 (*    10. abs_neg_cc @5647                                             *)
 (*    11. minus_zero_cc @5658（_cc 符号辅件家族收尾）                  *)
-(*   余件（T17 续作清单，8 件，自 TV 点态链起）：                       *)
+(*   余件（ 续作清单，8 件，自 TV 点态链起）：                       *)
 (*     topk_tv_pointwise_keep @5667 / topk_tv_pointwise_evict @5725    *)
 (*     / topk_if_split @5742 / eviction_if_linear_else @5753           *)
 (*     / topk_tv_pointwise @5764 / topk_sum_decomp @5780               *)
@@ -45,7 +44,7 @@
 (* ------------------------------------------------------------------ *)
 (* 【载体选择（req 对位 UpReqAttnGibbs 同轴）】                        *)
 (*   Id 固定 keep_dec 的 tail/kept 家统一为 (k : S -> Set) + kd 可判定  *)
-(*   保留集形参（req 版参数化归一登记表同轴，Id @30289-30294 实例统一）； *)
+(*   保留集形参（req 版参数化归一登记表同轴，-30294 实例统一）； *)
 (*  相等/序载体：real_eq（逐 eps 函数型 Set 值等价，S02 L387）/        *)
 (*   real_lt（见证 eps 的 sigT，S02 L456）/ real_le = Or(lt,eq)        *)
 (*   （S02 L460）——全 Set 载体，零 Prop 泄露。                         *)
@@ -59,7 +58,7 @@
 (*     real_sum_over_S_add   <- Id sum_over_S_add（件4 使用）          *)
 (*     real_sum_over_S_le    <- Id sum_over_S_le（件5 使用；req 位      *)
 (*                                诚实新增先例 UpReqAttnGibbs sum_le）  *)
-(*   热力学载体：D/D_pos/energy/Z_thermo_pos 逐位对位 Id @3837-3845     *)
+(*   热力学载体：D/D_pos/energy/Z_thermo_pos 逐位对位 -3845     *)
 (*   （boltzmann_factor := exp_neg(inv(D)·energy) 同构副本）。          *)
 (*   全件无非推导假设：Print Assumptions 十件全闭（G3 提取检验）。  *)
 (* ------------------------------------------------------------------ *)
@@ -70,7 +69,7 @@
 
 (*   real_lt_plus_compat_lt_le（S07 L6109）；real_opp_lt_compat         *)
 (*   （S07 L6667）；real_abs_pos_req（S07 L7280）；real_abs_opp         *)
-(*   （S03 L6522）；real_opp_zero（S08 L386，件8 直引——Id @5628        *)
+(*   （S03 L6522）；real_opp_zero（S08 L386，件8 直引——        *)
 (*   节内自证防前向引用，Real 基座已在盘，直引即诚实）；                *)
 (*   real_lt_zero_one（S07 L6928，件7 one 正性 witnesses 位）。         *)
 (* ------------------------------------------------------------------ *)
@@ -90,7 +89,7 @@ Require Import CW_ConstructiveWorld_219.
 (* ============================================================ *)
 Section RealTopKTVChain.
 
-(* 世界：状态类型（Id @3177 Context 位副本；Id 经 RealInterface 取 S， *)
+(* 世界：状态类型（ Context 位副本；Id 经 RealInterface 取 S， *)
 (*   Real 层直取 Type 形参——求和载体三位同取抽象位，E246 坑2 同款）。 *)
 Variable S : Type.
 
@@ -106,7 +105,7 @@ Variable real_sum_over_S_le : forall (f g : S -> Real),
   (forall s : S, real_le (f s) (g s)) ->
   real_le (real_sum_over_S f) (real_sum_over_S g).
 
-(* ---- Boltzmann 载体（Id @3837-3843 逐位副本；req 版 L537-541 同构） ---- *)
+(* ---- Boltzmann 载体（-3843 逐位副本；req 版 L537-541 同构） ---- *)
 Variable D : Real.
 Variable D_pos : real_lt real_zero D.
 Variable energy : S -> Real.
@@ -118,7 +117,7 @@ Definition rtk_Z_thermo : Real := real_sum_over_S rtk_boltzmann_factor.
 
 Variable rtk_Z_thermo_pos : real_lt real_zero rtk_Z_thermo.
 
-(* ---- 定义件（Id @5537/@5541 参数化副本；req 版 tail_mass_of_r 同轴） -- *)
+(* ---- 定义件（/@5541 参数化副本；req 版 tail_mass_of_r 同轴） -- *)
 (* Top-K 版尾部质量（Id topk_tail_mass：逐出态质量） *)
 Definition rtk_tail_mass
   (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) : Real :=
@@ -129,7 +128,7 @@ Definition rtk_kept_partition
   (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) : Real :=
   real_sum_over_S (fun s : S => if kd s then rtk_boltzmann_factor s else real_zero).
 
-(* ---- 件1（Id @5554）：单参 boltzmann 因子正性 ---- *)
+(* ---- 件1（）：单参 boltzmann 因子正性 ---- *)
 (* Id 证明 = exp_neg_pos 直引；Real 层同型（real_exp_neg_pos 引擎位）。 *)
 Lemma rtk_boltzmann_factor_pos_attn :
   forall s : S, real_lt real_zero (rtk_boltzmann_factor s).
@@ -139,7 +138,7 @@ Proof.
   apply real_exp_neg_pos.
 Qed.
 
-(* ---- 件2（Id @5560）：if 保留项非负（keep 时 > 0，else == 0） ---- *)
+(* ---- 件2（）：if 保留项非负（keep 时 > 0，else == 0） ---- *)
 Lemma rtk_kept_term_nonneg :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S),
     real_le real_zero (if kd s then rtk_boltzmann_factor s else real_zero).
@@ -150,7 +149,7 @@ Proof.
   - apply real_le_refl.
 Qed.
 
-(* ---- 件3（Id @5569）：if 保留项 ≤ 因子（keep 时自反，else 0 < b） ---- *)
+(* ---- 件3（）：if 保留项 ≤ 因子（keep 时自反，else 0 < b） ---- *)
 Lemma rtk_kept_term_le_factor :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S),
     real_le (if kd s then rtk_boltzmann_factor s else real_zero)
@@ -162,7 +161,7 @@ Proof.
     left. apply rtk_boltzmann_factor_pos_attn.
 Qed.
 
-(* ---- 件4（Id @5578）：守恒 kept + tail == Z_thermo ---- *)
+(* ---- 件4（）：守恒 kept + tail == Z_thermo ---- *)
 (* Id 证明链：逐点 plus 消零（plus_zero 两向）→ 求和外延 → 求和可加；   *)
 (* Real 层同构重放（real_eq_trans 链 + ext/add 双肢；E393 纪律）。      *)
 Lemma rtk_kept_plus_tail_full :
@@ -200,7 +199,7 @@ Proof.
   exact (real_eq_trans _ _ _ (real_eq_sym _ _ Hadd) Hext).
 Qed.
 
-(* ---- 件5（Id @5603）：kept ≤ Z_thermo（子集和 ≤ 全和） ---- *)
+(* ---- 件5（）：kept ≤ Z_thermo（子集和 ≤ 全和） ---- *)
 Lemma rtk_kept_le_Zthermo :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))),
     real_le (rtk_kept_partition k kd) rtk_Z_thermo.
@@ -212,7 +211,7 @@ Proof.
   apply rtk_kept_term_le_factor.
 Qed.
 
-(* ---- 件6（Id @5611）：inv 反序 kept ≤ Z ⟹ 1/Z ≤ 1/kept ---- *)
+(* ---- 件6（）：inv 反序 kept ≤ Z ⟹ 1/Z ≤ 1/kept ---- *)
 (* 引擎：real_inv_pos_le_compat（S07 L6775；Id inv_pos_le_compat 同位）。 *)
 Lemma rtk_inv_Z_le_inv_kept :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
@@ -226,10 +225,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* _cc 符号辅件四件（Id @5620-@5647；与 topk 载体解耦，纯 Real 代数）  *)
+(* _cc 符号辅件四件（-@5647；与 topk 载体解耦，纯 Real 代数）  *)
 (* ============================================================ *)
 
-(* ---- 件7（Id @5620）：inv one == one ---- *)
+(* ---- 件7（）：inv one == one ---- *)
 (* Id 证明 = mult_one 对称 → comm → inv_pos_correct；Real 层同链重放。   *)
 Lemma rtk_inv_one_cc :
   real_eq (real_inv_pos real_one real_lt_zero_one) real_one.
@@ -245,7 +244,7 @@ Proof.
     + exact (real_inv_pos_correct real_one real_lt_zero_one).
 Qed.
 
-(* ---- 件8（Id @5628）：opp zero == zero ---- *)
+(* ---- 件8（）：opp zero == zero ---- *)
 (* Id 节内自证防前向引用；Real 基座 S08 L386 real_opp_zero 已在盘，      *)
 (* 直引使用（前置核验引用零重建纪律；检验核验 Closed）。        *)
 Lemma rtk_opp_zero_cc : real_eq (real_opp real_zero) real_zero.
@@ -253,7 +252,7 @@ Proof.
   exact real_opp_zero.
 Qed.
 
-(* ---- 件9（Id @5637）：a < b ⟹ a − b < 0 ---- *)
+(* ---- 件9（）：a < b ⟹ a − b < 0 ---- *)
 (* Id 链：minus 展开 → lt_id_r（b + opp b == 0）→ 混合 plus 兼容；       *)
 (* Real 层：real_minus_r 展开 → real_lt_id_r + real_plus_opp 肢          *)
 (* + real_lt_plus_compat_lt_le 混合兼容（S07 L6109，req 版假设位          *)
@@ -268,7 +267,7 @@ Proof.
   exact (real_lt_plus_compat_lt_le a b (real_opp b) (real_opp b)             Hab (real_le_refl (real_opp b))).
 Qed.
 
-(* ---- 件10（Id @5647）：a < 0 ⟹ |a| == −a ---- *)
+(* ---- 件10（）：a < 0 ⟹ |a| == −a ---- *)
 (* Id 链：abs_opp 对称 → abs_pos（负支）→ opp 保序换向；                 *)
 (* Real 层：real_abs_opp 对称肢 + real_abs_pos_req（负号消去引擎，       *)
 (* 施于 −a）+ real_opp_lt_compat 换向（a < 0 ⟹ 0 < −a，经               *)
@@ -285,10 +284,10 @@ Proof.
                (real_opp_lt_compat a real_zero Ha)).
 Qed.
 
-(* ---- 件11（Id @5658，_cc 家族收尾件）：x − 0 == x ---- *)
+(* ---- 件11（，_cc 家族收尾件）：x − 0 == x ---- *)
 (* Id 链：minus 展开 → opp zero == zero 换元 → plus_zero；Real 层：     *)
 (* real_minus_r 展开 → RealSetoid.real_eq_plus_compat 换右元（opp 0 ≈ 0）*)
-(* → real_plus_zero 完成。至此 _cc 符号辅件五件全平移，T17 自 TV 点态   *)
+(* → real_plus_zero 完成。至此 _cc 符号辅件五件全平移， 自 TV 点态   *)
 (* 链（@5667 topk_tv_pointwise_keep）起续。                             *)
 Lemma rtk_minus_zero_cc :
   forall x : Real, real_eq (real_minus_r x real_zero) x.
@@ -313,13 +312,13 @@ End RealTopKTVChain.
 (*   rtk_minus_zero_cc<-5658                                            *)
 (*   定义载体：rtk_boltzmann_factor<-3840 rtk_Z_thermo<-3843            *)
 (*   rtk_tail_mass<-5537                  rtk_kept_partition<-5541      *)
-(*   （topk_renorm<-5548 属 TV 链后半段使用面，留 T17 与件 12-19 同批）。 *)
-(* 【T17 续作清单（Id @5667-@5886，8 件）】                              *)
+(*   （topk_renorm<-5548 属 TV 链后半段使用面，留  与件 12-19 同批）。 *)
+(* 【 续作清单（-@5886，8 件）】                              *)
 (*   topk_tv_pointwise_keep<-5667 / topk_tv_pointwise_evict<-5725 /      *)
 (*   topk_if_split<-5742 / eviction_if_linear_else<-5753 /               *)
 (*   topk_tv_pointwise<-5764 / topk_sum_decomp<-5780 /                   *)
 (*   topk_sum_collapse<-5840 / topk_tv_identity_strict<-5886（主定理）。   *)
-(*   T17 使用面：本节三求和位 + linear 位（tv 链点态/分解需               *)
+(*    使用面：本节三求和位 + linear 位（tv 链点态/分解需               *)
 (*   real_sum_over_S_linear，Id sum_over_S_linear 字段同位，诚实新增）；  *)
 (*   件9 rtk_lt_minus_cc / 件10 rtk_abs_neg_cc / 件11 rtk_minus_zero_cc  *)
 (*   为逐点差分解符号肢引擎。                                            *)
@@ -331,7 +330,7 @@ End RealTopKTVChain.
 
 (* ============================================================ *)
 (* UpReqTopKTVChain.v —— 定理 7.6 topk_tv_identity（后半段） *)
-(*   Real 层平移·后半段收官（TV 点态链 8 件 + 主定理闭合）2026-09-11 *)
+(*   Real 层平移·后半段完成（TV 点态链 8 件 + 主定理闭合） *)
 (* ------------------------------------------------------------------ *)
 
 (*   件12 rtk_tv_pointwise_keep       <- S06 5667（keep 分支符号恒等） *)
@@ -343,16 +342,16 @@ End RealTopKTVChain.
 (*   件18 rtk_sum_collapse            <- S06 5840（完成 2·invZ·T）    *)
 (*   件19 rtk_tv_identity_strict      <- S06 5886（主定理 TV==tail/Z）  *)
 (* ------------------------------------------------------------------ *)
-(* 【新增载体（T16 升参名直引，零重建；Id 同位锚见行尾）】              *)
-(*   rtk2_bfactor<-T16 rtk_boltzmann_factor  rtk2_Z<-rtk_Z_thermo      *)
+(* 【新增载体（ 升参名直引，零重建；Id 同位锚见行尾）】              *)
+(*   rtk2_bfactor<- rtk_boltzmann_factor  rtk2_Z<-rtk_Z_thermo      *)
 (*   rtk2_kept<-rtk_kept_partition @5541  rtk2_tail<-rtk_tail_mass @5537 *)
 (*   rtk2_topk_renorm<-S06 5548  rtk2_boltzmann_dist_attn<-S06 3847    *)
 (*   rtk2_tv_dist<-S06 4033（inv2 := 1/(1+1)，real_two_pos S08 593）   *)
 
-(*   S01 1402；T16 头注预留 T17 补位，件17 使用）。辅件两件（使用面）：  *)
+(*   S01 1402； 头注预留  补位，件17 使用）。辅件两件（使用面）：  *)
 (*   rtk_minus_plus_cancel_r_cc（Id minus_plus_cancel_r 副本，件18 使用）*)
 (*   rtk_eviction_if_linear<-S06 4653（keep 分支线性，件17 使用）。     *)
-(* 【使用引用】T16 件9 lt_minus_cc/件10 abs_neg_cc/件11 minus_zero_cc    *)
+(* 【使用引用】 件9 lt_minus_cc/件10 abs_neg_cc/件11 minus_zero_cc    *)
 (*   （符号肢引擎）+ 基座：real_distrib S02 2375 / real_distrib_r S09   *)
 (*   111 / real_mult_opp_l S08 49 / real_opp_plus S07 7786 /            *)
 (*   real_opp_opp S08 95 / real_plus_assoc S02 2333 / real_plus_opp     *)
@@ -360,7 +359,7 @@ End RealTopKTVChain.
 (*   5112 / real_abs_pos_req S07 7280 / real_mult_positive S07 6960 /   *)
 (*   real_inv_pos_pos S03 6771 / real_inv_pos_correct S03 6722。        *)
 (* 【红线】纯构造性；Set 层零 Prop 泄露；real_eq 非 Id 禁改写——全链     *)
-(*   real_eq_trans 显式端点（T16 双卡参序坑：族件 x y 显式首参）；       *)
+(*   real_eq_trans 显式端点（ 双卡参序坑：族件 x y 显式首参）；       *)
 (*   全件 Qed 闭合。                                                    *)
 (* ============================================================ *)
 
@@ -379,12 +378,12 @@ Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
   real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
           (real_mult a (real_sum_over_S f)).
 
-(* ---- 热力学载体（Id @3837-3843 逐位对位；T16 节同形） ---- *)
+(* ---- 热力学载体（-3843 逐位对位； 节同形） ---- *)
 Variable D : Real.
 Variable D_pos : real_lt real_zero D.
 Variable energy : S -> Real.
 
-(* ---- Boltzmann 载体实例化（T16 升参名直引） ---- *)
+(* ---- Boltzmann 载体实例化（ 升参名直引） ---- *)
 Definition rtk2_bfactor (s : S) : Real :=
   rtk_boltzmann_factor S D D_pos energy s.
 
@@ -443,7 +442,7 @@ Proof.
   - exact (real_plus_zero x).
 Qed.
 
-(* ---- 件14（Id @5742）：逐点 if 加法分解 ---- *)
+(* ---- 件14（）：逐点 if 加法分解 ---- *)
 Lemma rtk_if_split :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
          (X Y : Real) (s : S),
@@ -457,7 +456,7 @@ Proof.
              (real_eq_sym _ _ (real_plus_comm real_zero Y))).
 Qed.
 
-(* ---- 辅件 A2（Id @4653）：keep 分支线性（件17 使用） ---- *)
+(* ---- 辅件 A2（）：keep 分支线性（件17 使用） ---- *)
 Lemma rtk_eviction_if_linear :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
          (a : Real) (f : S -> Real) (s : S),
@@ -469,7 +468,7 @@ Proof.
   - exact (real_eq_sym _ _ (real_mult_zero a)).
 Qed.
 
-(* ---- 件15（Id @5753）：else 分支线性（对偶 A2） ---- *)
+(* ---- 件15（）：else 分支线性（对偶 A2） ---- *)
 Lemma rtk_eviction_if_linear_else :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
          (a : Real) (f : S -> Real) (s : S),
@@ -482,9 +481,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件12（Id @5667）：keep 分支点态符号恒等                              *)
+(* 件12（）：keep 分支点态符号恒等                              *)
 (*   |b·invZ − invK·b| == b·(invK − invZ)，前提 invZ < invK（严格逐出， *)
-(*   Real 层由 T > 0 实例化）；符号肢 = T16 件9+件10 引擎。             *)
+(*   Real 层由 T > 0 实例化）；符号肢 =  件9+件10 引擎。             *)
 (* ============================================================ *)
 Lemma rtk_tv_pointwise_keep :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S)
@@ -609,7 +608,7 @@ Proof.
                  (real_eq_refl
                     (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
                                             (real_inv_pos (rtk2_kept k kd) Hkpos))))). }
-  (* 肢3（符号，前提 invZ < invK）：T16 件9+件10 引擎 *)
+  (* 肢3（符号，前提 invZ < invK）： 件9+件10 引擎 *)
   assert (Hsign : real_eq
            (real_abs (real_minus_r (real_inv_pos rtk2_Z rtk2_Zpos)
                                    (real_inv_pos (rtk2_kept k kd) Hkpos)))
@@ -656,7 +655,7 @@ Proof.
                (real_eq_refl (rtk2_bfactor s)) Hsign).
 Qed.
 
-(* ---- 件13（Id @5725）：evict 分支 |b·invZ − 0| == b·invZ ---- *)
+(* ---- 件13（）：evict 分支 |b·invZ − 0| == b·invZ ---- *)
 Lemma rtk_tv_pointwise_evict :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))) (s : S)
          (Hnk : Not (k s)),
@@ -675,7 +674,7 @@ Proof.
     + exact (rtk_boltzmann_factor_pos_attn S D D_pos energy s).
 Qed.
 
-(* ---- 件16（Id @5764）：逐点总恒等（条件化） ---- *)
+(* ---- 件16（）：逐点总恒等（条件化） ---- *)
 Lemma rtk_tv_pointwise :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
          (Hkpos : real_lt real_zero (rtk2_kept k kd)) (s : S)
@@ -697,7 +696,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件17（Id @5780）：求和分解                                           *)
+(* 件17（）：求和分解                                           *)
 (*   Σ(if keep then b·D' else invZ·b) == kept·D' + invZ·T               *)
 (*   链：if 加法分解（件14）→ 求和可加 → 双 linear 肢（linear 位 +       *)
 (*   A2/件15）→ kept/tail 端点定义性完成。                              *)
@@ -814,7 +813,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件18（Id @5840）：完成代数 kept·D' + invZ·T == (1+1)·(invZ·T)        *)
+(* 件18（）：完成代数 kept·D' + invZ·T == (1+1)·(invZ·T)        *)
 (* ============================================================ *)
 Lemma rtk_sum_collapse :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
@@ -973,7 +972,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件19（Id @5886，主定理）：严格逐出 ⟹ TV(boltzmann, topk) == tail/Z    *)
+(* 件19（，主定理）：严格逐出 ⟹ TV(boltzmann, topk) == tail/Z    *)
 (* ============================================================ *)
 Theorem rtk_tv_identity_strict :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s)))
@@ -1098,7 +1097,7 @@ Qed.
 End RealTopKTVFinish.
 
 (* ============================================================ *)
-(* 【T17 后半段结果核对（本件 8 引理件 + 2 辅件 + 6 定义载体 + 1 补位）】 *)
+(* 【 后半段结果核对（本件 8 引理件 + 2 辅件 + 6 定义载体 + 1 补位）】 *)
 (*   件12 rtk_tv_pointwise_keep<-5667   件13 rtk_tv_pointwise_evict<-5725*)
 (*   件14 rtk_if_split<-5742            件15 rtk_eviction_if_linear_else  *)
 (*   件16 rtk_tv_pointwise<-5764        件17 rtk_sum_decomp<-5780         *)
@@ -1108,7 +1107,7 @@ End RealTopKTVFinish.
 (*   rtk_eviction_if_linear<-4653；载体：rtk2_bfactor/rtk2_Z/rtk2_invZ    *)
 (*   rtk2_kept/rtk2_tail/rtk2_invK/rtk2_topk_renorm/rtk2_boltzmann_dist_ *)
 (*   attn/rtk2_tv_dist（TopK 家 8 载体全平移）。                          *)
-(*   补位：real_sum_over_S_linear（Id SumOver 字段同位，T16 头注预留）。   *)
+(*   补位：real_sum_over_S_linear（Id SumOver 字段同位， 头注预留）。   *)
 
 (*   G1 禁词 0（自查脚本）；G3 Print Assumptions 全闭（全量模式，         *)
 

@@ -1,3 +1,10 @@
+(* ============================================================
+   使命：本件定理/引理声明面所述性质的形式化（原头注为历史注记块，
+         实质整编候后波；本块为五字段指针）。
+   依赖：件内 Require 声明面所列库件。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
+
 (* ============================================================ *)
 (* UpReqI4Witness.v *)
 (* *)
@@ -45,9 +52,9 @@
 (*   件W6 i4b_policy_iter_kl_pow_mono_unconditional：无条件闭合主件——    *)
 (*       结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
 
-(*       内部合成（使用 T20 主桥接引理2 一次直连）；                          *)
+(*       内部合成（使用  主桥接引理2 一次直连）；                          *)
 (*   件W7/W8 i4bw_..._nonconst / i4bw_..._const：两支端到端实例——        *)
-(*       单支见证即全闭合的分布级演示（T20 件3 的分布级升级版）。         *)
+(*       单支见证即全闭合的分布级演示（ 件3 的分布级升级版）。         *)
 (* ---------------------------------------------------------------- *)
 (* 诚实边界（残差精确形状，承 T1 结论）：                                 *)
 (*   · 逐项可比前提 Or (real_le (r i) (p i)) (real_le (p i) (r i)) 的    *)
@@ -243,7 +250,7 @@ Definition t30_div_witness (n : nat) (r p : nat -> Real) : Set :=
       sigT (fun _ : Id n (Nat.succ (j + k)) =>
         Or (real_lt (r j) (p j)) (real_lt (p j) (r j))))).
 
-(* 件W5：组装件。左支（逐点相等）走 T20 件0b；右支（分离见证）走 T20 件0a。 *)
+(* 件W5：组装件。左支（逐点相等）走  件0b；右支（分离见证）走  件0a。 *)
 Lemma t30_kl0_or_of_case : forall (n : nat) (r p : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
     (Hp : forall i : nat, real_lt real_zero (p i))
@@ -338,7 +345,7 @@ Proof.
            t t1 Hle).
 Qed.
 
-(* 件W8：const 支端到端——逐点相等 ⟹ 结论 I4 目标形（T20 件3 的分布级升级） *)
+(* 件W8：const 支端到端——逐点相等 ⟹ 结论 I4 目标形（ 件3 的分布级升级） *)
 Lemma i4bw_policy_iter_kl_pow_mono_const :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -387,7 +394,7 @@ Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                                        *)
-(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
+(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经       *)
 
 (*   使用位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
 (*   同形，结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)

@@ -1,9 +1,16 @@
-(* ToyR 玩具化战役·包H·切片五：G08_Gibbs 五刀替换稿（T247 台账席补位，2026-09-21）
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
+(* ToyR 玩具化··切片五：G08_Gibbs 五刀替换稿（ 记录件补位，）
    本稿为基准树 G08_Gibbs.v 同文替换：语句面/声明序/Require 面/其余正文逐字不动，
    仅换五处玩具证明体——① gibbsd_two_pos ② hzlogd_discharge_real
    ③ hzlogd_proj_min_kl_hlogzfree ④ hzlogd_proj_min_kl_bool ⑤ gibbe2_le_b_id_r。
-   五刀均结构性换轨，本席逐条独立勘验、未照抄包E 结论（假设位正性族结论不适用于
-   G08 其余条目；12 条中 7 条经勘验维持不可化标注，见台账切片五节）。
+   五刀均结构性换轨，本件逐条独立勘验、未照抄 结论（假设位正性族结论不适用于
+   G08 其余条目；12 条中 7 条经勘验维持不可化标注，见记录切片五节）。
    刀① gibbsd_two_pos：原 real_plus_positive 一步直供；换轨 real_lt_plus_compat_
    lt_le（0<1 ∧ 0≤1 ⟹ 0+0<1+1，le 腿 inl 装载 real_lt_zero_one 严证人）＋
    real_eq_lt_lt 左端转移沿 sym(real_plus_zero 0) 退化零站（0=0+0），原引擎全退役。
@@ -39,7 +46,7 @@
 (*   按普查 §380 纪律落点升格为「Real 实例化定理」——本文件以            *)
 (*   real_le_b 为序复演 req_gibbs_pointwise → req_gibbs_inequality      *)
 (*   使用链，参数位 dist_log_le_linear 由 real_log_le_linear_B 直接提供。     *)
-(*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例直接提供）。     *)
+(*   模板：UpReqU2 log_req_compat_real（ 模板 ②：显式实例直接提供）。     *)
 (* ------------------------------------------------------------------ *)
 (* 给出：                                                              *)
 (*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽证明位：与                *)
@@ -59,7 +66,7 @@
 (*   δ 透明（UpReqDist 登记表 2「minus 非接口字段」同判定）。             *)
 (* 红线：Set 层零 Prop（real_le_b / real_eq / real_lt 全 Set 值，      *)
 (*   语句与证明零 Prop 泄露）；全 Qed 闭合；零公理；既有文件零改；      *)
-(*   gibbsd_ 前缀全库防撞（建前 grep 实测零命中）。                     *)
+(*   gibbsd_ 前缀全库防同名冲突（建前 grep 实测零命中）。                     *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -592,7 +599,7 @@ Qed.
 (*   gibbsd_gibbs_pointwise_B —— 槽证明位（dist_log_le_linear 直接提供）。  *)
 (*   gibbsd_gibbs_inequality —— 保底主件（四项关卡目标）。                  *)
 (*   gibbsd_cross_entropy_decomp —— 级联首层主件。                      *)
-(* 固化卡（索引回填行见技术报告）：                                     *)
+(* 固化卡（索引回补行见技术报告）：                                     *)
 (*   E-GIBBSD-1：B 形引擎证明 req 层 Hypothesis 槽，序异向不可直接提供——    *)
 (*   落点纪律 §380 fallback（Real 实例化定理）首次全链执行；缺口件=      *)
 (*   Bishop 序代数基元 5 件 + Bishop 和单调 1 件（本文件 Part A/C      *)
@@ -610,7 +617,7 @@ Qed.
 (*   （KL 投影 req 版，ReqKLProjection 节已闭；节后导出签名经        *)
 (*     _hzlogd_probe.v Check 打表核实）。                           *)
 (*                                                              *)
-(* HlogZ 槽实测形（勘误要点）：                                     *)
+(* HlogZ 槽实测形（校注要点）：                                     *)
 (*   le (log (@Z_aud_req R RIS S sumf post_aud p) HZ) zero          *)
 (*   ——是 log Z 的「上界形」（log Z ≤ 0），不是 lt zero (log Z)      *)
 (*   下界形，也不是逐 eps 形。故证明路线勘定为：                     *)
@@ -620,9 +627,9 @@ Qed.
 (*       Real 层种子 = CW_ConstructiveWorld_219 real_log_le_mono/real_log_le_zero_of_le_one）。 *)
 (*   原始任务表述草图「Z ≥ max p_i ⟹ log Z 下界」为下界槽路线，实测槽无     *)
 (*   此形态：max 提取不入职；「逐点正性见证」在二态实例里由           *)
-(*   hzlogd_HZ_bool 给出（HZ 槽一并证明），勘误详见技术报告。         *)
+(*   hzlogd_HZ_bool 给出（HZ 槽一并证明），校注详见技术报告。         *)
 (*                                                              *)
-(* 结果清单（前缀 hzlogd_ 独占，编前 grep 复核 0 撞名）：             *)
+(* 结果清单（前缀 hzlogd_ 独占，编前 grep 复核 0 同名冲突）：             *)
 (*   [保底] hzlogd_log_le_zero_of_le_one —— Z 正性+Z ≤ 1 ⟹ log Z ≤ 0  *)
 (*           抽象证明（log 单调 le 槽显式位，Set 层零 Prop）；         *)
 (*   [T2②]  hzlogd_discharge_real —— 抽象单调槽由 CW_ConstructiveWorld_219 种子          *)
@@ -664,7 +671,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T2 模板 ②：Real 具体证明（抽象单调槽由 CW_ConstructiveWorld_219 种子直接提供）             *)
+(*  模板 ②：Real 具体证明（抽象单调槽由 CW_ConstructiveWorld_219 种子直接提供）             *)
 (*   real_log_le_mono（CW_ConstructiveWorld_219 L112104 区，G01_CoreMicro 对偶）喂单参槽；    *)
 (*   语句层 lt/le/log 经 RealEnhancedReal 实例 delta 等同 real_*。     *)
 (* ============================================================ *)
@@ -823,7 +830,7 @@ Proof.
            (H true) (H false)).
 Qed.
 
-(* log 兼容场实例（real_log_wd 直取；与 UpReqU2 T2 ② 同位闭合件） *)
+(* log 兼容场实例（real_log_wd 直取；与 UpReqU2  ② 同位闭合件） *)
 Lemma hzlogd_log_req_compat_real :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -862,7 +869,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 主件 2：主定理 bool/Real 具体实例（HlogZ 槽由 T2 ② 证明件填充）        *)
+(* 主件 2：主定理 bool/Real 具体实例（HlogZ 槽由  ② 证明件填充）        *)
 (*   post_aud := fun b => b（审计集 = {true}）；和四前提全实证；        *)
 (*   HZ 槽由 hzlogd_HZ_bool 证明（语句内联，免 assert 不透明墙）；       *)
 (*   HlogZ 槽由 hzlogd_discharge_real 证明（Z_aud ≤ one 走               *)
@@ -929,7 +936,7 @@ Print Assumptions hzlogd_HZ_bool.
 Print Assumptions hzlogd_proj_min_kl_bool.
 
 (* ============================================================ *)
-(* 终验记录（编后核对回填）：                                          *)
+(* 终验记录（编后核对回补）：                                          *)
 (*   Qed 计数：11 = 保底1 + T2双形2 + 主件1 + 和地基4 + log兼容1 +      *)
 (*   HZ证明1 + 主件2。                                                 *)
 (*   G1 禁词 0；G2 EXIT=0；G3 提取双轨 core/real + PA 全 Closed；       *)
@@ -940,7 +947,7 @@ Print Assumptions hzlogd_proj_min_kl_bool.
 (* ============================================================ *)
 (* UpReqGibbsE2.v —— 假设位证明系列 #2 重定位模块：gibbs_equality 有限具体路线      *)
 (*   （上游版本 UpReqGibbsE.v 抽象 Or 形稿已阻塞判定，本文件零碰旧稿；              *)
-(*     gibbe2_ 前缀全库防撞，建前 grep 实测零命中。）                          *)
+(*     gibbe2_ 前缀全库防同名冲突，建前 grep 实测零命中。）                          *)
 (* ------------------------------------------------------------------ *)
 (* 侦察结论（实读判定）：                                          *)
 (*   1. 逐项钳零可行：real_eq/real_lt 全 Set 值逐 eps 形（CW_ConstructiveWorld_219:3448/3517），  *)

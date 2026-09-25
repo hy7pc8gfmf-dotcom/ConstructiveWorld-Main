@@ -35,7 +35,7 @@ Definition Tabs (phi : Dig) : Type := forall (m : Dig), Evidence.
 
 (* ============================================================
    补强段（追加式；上方既有语句零改动）
-   四件套：序律 / 证据代数 / 见证构造 / 层升审查器
+   四部分：序律 / 证据代数 / 见证构造 / 层升审查器
    防御注记：DTPT.v 已 Open Scope Q_scope，本段 nat 层代码
    一律显式 Datatypes.S / Nat.add / 构造子 O，不裸用 +、<=、S
    ============================================================ *)
@@ -428,7 +428,7 @@ Qed.
    全限名引用防遮蔽」——并入后 DTPT_Truth.DTPT_Truth.X 限名前缀逐处
    改直引 X（M4 塔斯基段先例；原件所引即本件侧定义，U12 卡口径，
    语义指向逐一核对不变）；DTPT.DTPT. 限名保持原样（跨库双副本面）。
-   头部依赖行所记 DTPT_LLM 已随棒 1 归并入 DTPT.v §11（改写后引用形
+   头部依赖行所记 DTPT_LLM 已归并入 DTPT.v §11（现引用形
    DTPT.DTPT.llm_gate_pass_mono_thr 即其现态，随行有效）。撞名预检
    与下游登记见本文件头 ③。
    ============================================================ *)
@@ -939,8 +939,8 @@ Theorem tneg_counter_size : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
            (ev_size (cv_ev (refCounter (mkRef phi m v)))).
 Proof.
   intros phi m v.
-  (* 口径三：合取双腿分证——左腿 RefNode 计数投影 iota 与桥测度
-     delta 展开双侧归一；右腿内联 ev_size_pos 三构造子骨架：
+  (* 口径三：合取两支分证——左支 RefNode 计数投影 iota 与桥测度
+     delta 展开双侧归一；右支内联 ev_size_pos 三构造子骨架：
      叶支下界直构、Pair 支后继单调链闭合 *)
   split.
   - reflexivity.
@@ -1404,7 +1404,7 @@ Qed.
 
 (* 深度预算枚举器：ev_enum n = 预算 n 的证据有限截断。诚实边界：
    Q 无穷 ⇒ 叶内容完备枚举不可能，叶只放单见证 0%Q（fiber 离散化
-   截断点如实声明）；Pair 支按预算分裂生成（左件取自 ev_enum n'，
+   截断位置如实声明）；Pair 支按预算分裂生成（左件取自 ev_enum n'，
    右件预算 n' - size a，保障有界面） *)
 Fixpoint ev_enum (n : nat) : list Evidence :=
   match n with
@@ -1522,7 +1522,7 @@ Qed.
 End DTPT_Truth.
 Import DTPT_Truth.
 
-(* ========== 假设面自查（四关 G4 附件） ========== *)
+(* ========== 假设面自查（公理面自审附件） ========== *)
 Print Assumptions tarski.
 Print Assumptions no_uniform_truth.
 Print Assumptions layer_self_refutation.
@@ -1531,7 +1531,7 @@ Print Assumptions tarski_via_renaming.
 
 (* —— 以下 6 件为原 DTPT_Audit.v 文尾审计块逐字随行（S5 棒） —— *)
 
-(* ========== 四关取证：主定理假设闭包打印 ========== *)
+(* ========== 公理面自审：主定理假设闭包打印 ========== *)
 Print Assumptions cv_size_preservation_T.
 Print Assumptions cv_size_preservation_D.
 Print Assumptions cv_ev_round_trip_fwd.

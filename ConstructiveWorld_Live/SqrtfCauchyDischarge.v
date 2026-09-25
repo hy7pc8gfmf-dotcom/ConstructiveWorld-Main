@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* SqrtfCauchyDischarge.v                                        *)
 (*                                                               *)
 (* 目的：消解宿主 SqrtfCauchy.v 四个节参数假设中可消解的两位，      *)
@@ -157,7 +157,7 @@ Instance ReqMetricAbsReal : @ReqMetricAbs Real RealEnhancedReal := {
 (* §A3 假设位5 消解（1 < 2 严格档）：宿主假设位5 Hlt_one_two        *)
 (*   （lt one sfc_two，sfc_two δ 展开 = real_plus real_one            *)
 (*   real_one）实例面逐字。0 < 1（one_pos）经 real_lt_plus_translate  *)
-(*   单侧平移 +one，plus_zero 换形收 1 < 1+1（SCFIX 20260916）。      *)
+(*   单侧平移 +one，plus_zero 换形收 1 < 1+1（SCFIX ）。      *)
 (* ============================================================ *)
 Theorem sfcx_lt_one_two_slot :
   @lt Real RealEnhancedReal (@one Real RealEnhancedReal)
@@ -208,7 +208,6 @@ Print Assumptions sfcx_lt_one_two_slot.
       供给面）。五指针（均已实扫）：
    ① UpReqLpoEquiv.v（机器判定）：SqWall:230 / rLPO:234 /
       lpn_forward:249 / lpn_backward:342 / lpn_equivalence:429。
-   ② SqWallCorrMark.v:44-45（勘误接回件）：SqrtfCauchy.v:76
       同位升参形 sfc_square_nonneg 登记，使用位 :560/:827；
       供给方式 = swc_lpn_backward_slot（rLPO 证书 → 位面，一行替换）。
    ③ S02:802（同源注记）：real_square_not_negative（:804）自注
@@ -227,5 +226,5 @@ Print Assumptions sfcx_lt_one_two_slot.
 (*   接口补装 ReqMetricAbs mixin Class + ReqMetricAbsReal 实例           *)
 (*   假设位3 未动（独立后续件，S07:2762 real_arch 种子已登记）           *)
 (*   假设位1 未动（本 §C 判定标注段）                                    *)
-(*   假设位5 sfcx_lt_one_two_slot（1 < 2 严格档，§A3，SCFIX 20260916）   *)
+(*   假设位5 sfcx_lt_one_two_slot（1 < 2 严格档，§A3，SCFIX ）   *)
 (* ============================================================ *)

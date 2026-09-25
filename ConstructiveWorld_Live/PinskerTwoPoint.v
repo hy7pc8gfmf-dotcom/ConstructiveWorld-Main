@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ToyR 玩具证替换件 ——   工程（tier2 十二批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -10,7 +10,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* PinskerTwoPoint.v —— 席位 C14：构造性 Pinsker 型 eps 形前置件        *)
+(* PinskerTwoPoint.v —— 位 C14：构造性 Pinsker 型 eps 形前置件        *)
 (*   （A4 移植榜 T5 的可着陆核；二点分布 p=(p,1−p)、q=(q,1−q)）          *)
 (*                                                                *)
 (* 使命：二点 TV-KL 下界（Real 层）。全称 list 形不在本件；本件交付：    *)
@@ -22,7 +22,7 @@
 (*     klst_log_tangent_pos/neg（log x < x−1）、log(1+t) ≤ t、           *)
 (*     log(1+t) ≥ t−t²（S06 log_one_plus_ge，二次系数 1 过粗）。         *)
 (*     逐项估计链试算表明：仅凭这三件，二次项损失与增益在 p≈q 处精确    *)
-(*     相消，得不到任何显式正常数（差一份级数/导数型引擎）。故按任务书   *)
+(*     相消，得不到任何显式正常数（差一份级数/导数型引擎）。故按任务说明   *)
 (*     允许的第三档落地「见证真形」：常数 c 为闭式显式项、KL>0 时真正    *)
 (*     常数、下界以 real_le_b（∀eps>0, x<y+eps）Set 面出口。            *)
 (*     附带真非平凡支承：库内 G07 严格 Gibbs 逐点核只有 p<q 支，本件补   *)
@@ -218,7 +218,7 @@ Proof.
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
                  (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
-                 (p2_diff p q)).  (* 续接席注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
+                 (p2_diff p q)).  (* 注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
         + apply real_eq_refl.
         + exact (p2_one_minus_diff q p).
       - exact (p2_gibbs_core_strict_pgtq (p2_one_minus p) (p2_one_minus q)
@@ -252,7 +252,7 @@ Proof.
       * apply (RealSetoid.real_eq_plus_compat
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_plus (p2_diff q p) (p2_diff p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 续接席注：交叉腿序重排（同前） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉腿序重排（同前） *)
       -- p2_ring_eq.
       -- apply real_eq_sym. p2_ring_eq.
       * apply real_plus_zero.
@@ -264,7 +264,7 @@ Proof.
                              (p2_diff p q)))
                (real_plus (p2_kl2 p q Hp Hq Hp1 Hq1)
                           (real_plus (p2_diff q p) (p2_diff p q)))).
-      * (* 续接席注：B'-C' 纯 assoc/comm 项链重建（S02 实例，trans/sym/compat 参全显式） *)
+      * (* 注：B'-C' 纯 assoc/comm 项链重建（S02 实例，trans/sym/compat 参全显式） *)
         exact (real_eq_trans
           (real_plus (real_plus (real_kl_term p q Hp Hq) (p2_diff q p)) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q))) (real_plus (real_kl_term p q Hp Hq) (real_plus (p2_diff q p) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))) (real_plus (real_plus (real_kl_term p q Hp Hq) (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)) (real_plus (p2_diff q p) (p2_diff p q)))
           (real_eq_sym (real_plus (real_kl_term p q Hp Hq) (real_plus (p2_diff q p) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))) (real_plus (real_plus (real_kl_term p q Hp Hq) (p2_diff q p)) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))
@@ -299,7 +299,7 @@ Proof.
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
                  (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
-                 (p2_diff p q)).  (* 续接席注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
+                 (p2_diff p q)).  (* 注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
         + apply real_eq_refl.
         + exact (p2_one_minus_diff q p).
       - exact (klst_gibbs_core_strict (p2_one_minus p) (p2_one_minus q)
@@ -333,7 +333,7 @@ Proof.
       * apply (RealSetoid.real_eq_plus_compat
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_plus (p2_diff q p) (p2_diff p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 续接席注：交叉腿序重排（同前） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉腿序重排（同前） *)
       -- p2_ring_eq.
       -- apply real_eq_sym. p2_ring_eq.
       * apply real_plus_zero.
@@ -345,7 +345,7 @@ Proof.
                              (p2_diff p q)))
                (real_plus (p2_kl2 p q Hp Hq Hp1 Hq1)
                           (real_plus (p2_diff q p) (p2_diff p q)))).
-      * (* 续接席注：B'-C' 纯 assoc/comm 项链重建（S02 实例，trans/sym/compat 参全显式） *)
+      * (* 注：B'-C' 纯 assoc/comm 项链重建（S02 实例，trans/sym/compat 参全显式） *)
         exact (real_eq_trans
           (real_plus (real_plus (real_kl_term p q Hp Hq) (p2_diff q p)) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q))) (real_plus (real_kl_term p q Hp Hq) (real_plus (p2_diff q p) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))) (real_plus (real_plus (real_kl_term p q Hp Hq) (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)) (real_plus (p2_diff q p) (p2_diff p q)))
           (real_eq_sym (real_plus (real_kl_term p q Hp Hq) (real_plus (p2_diff q p) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))) (real_plus (real_plus (real_kl_term p q Hp Hq) (p2_diff q p)) (real_plus (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1) (p2_diff p q)))
@@ -412,7 +412,7 @@ Proof.
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_mult (real_inv_pos (p2_tvsq p q) Htv)
                             (p2_tvsq p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_one).  (* 续接席注：交叉腿序重排（9.1 适配税#2 同族） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_one).  (* 注：交叉腿序重排（9.1 适配税#2 同族） *)
         * apply real_eq_refl.
         * apply (real_eq_trans
                    _ (real_mult (p2_tvsq p q)
@@ -420,7 +420,7 @@ Proof.
           -- exact (real_mult_comm (real_inv_pos (p2_tvsq p q) Htv)
                       (p2_tvsq p q)).
           -- exact (real_inv_pos_correct (p2_tvsq p q) Htv).
-      + exact (real_mult_one (p2_kl2 p q Hp Hq Hp1 Hq1)).  (* 续接席注：real_mult_one 实向 x·one==x，去多余 sym *) }
+      + exact (real_mult_one (p2_kl2 p q Hp Hq Hp1 Hq1)).  (* 注：real_mult_one 实向 x·one==x，去多余 sym *) }
   apply (leb3_le_b_eq_l (p2_kl2 p q Hp Hq Hp1 Hq1)
            (real_mult (real_mult (p2_kl2 p q Hp Hq Hp1 Hq1)
                         (real_inv_pos (p2_tvsq p q) Htv))

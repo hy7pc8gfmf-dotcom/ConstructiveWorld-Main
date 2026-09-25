@@ -1,9 +1,9 @@
-(* ToyR 消融刀位注记（T259 台账席·包T·tier2十批）：本件三玩具位（sumd 族单 exact 直接代入）
-   按结构性推导口径落刀重证：unfold sumd_sumf 定义层展开＋enum 列表归纳＋simpl 定义层化简，
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ToyR 消融刀位注记（ ··tier2十批）：本件三玩具位（sumd 族单 exact 直接代入）
+   按结构性推导口径实施重证：unfold sumd_sumf 定义层展开＋enum 列表归纳＋simpl 定义层化简，
    接口引理显式项装配（req_refl/req_plus_compat/req_plus_exchange/plus_zero/mult_zero/
    distrib/req_sym/req_trans 复合链）。语句面逐字未动；零新增 Require；其余位逐字保留。 *)
 (* ============================================================ *)
-(* UpAblT6_UpSigMigrate2.v —— 假设消融战役 T6 批·席 a（T3a 移交同根余量前 ≤25 位之 3 位） *)
+(* UpAblT6_UpSigMigrate2.v —— 假设消融工程 T6 批· a（T3a 移交同根余量前 ≤25 位之 3 位） *)
 (* 辖区：UpSigMigrate2.v ReqFECore 节 sumf 接口面（L97-102 三位）                *)
 (* 实例化消解源文件：sumd_*@UpReqSumD                                                   *)
 (*                                                              *)
@@ -23,7 +23,7 @@
 (*                                                              *)
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。         *)
 (*   语句面逐字抽取自现档 UpSigMigrate2.v（两树逐字节同验：Main/Live_X          *)
-(*   md5 同 e1430b0e，2026-09-15 版，与 FA2 普查表行号逐位核对一致），            *)
+(*   md5 同 e1430b0e， 版，与 FA2 普查表行号逐位核对一致），            *)
 (*   仅 sumf → sumd_sumf S enum 换实例位（源语句面 fun s => 无类型注形逐字保留）。*)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾逐件 Print Assumptions 收尾。          *)

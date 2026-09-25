@@ -1,25 +1,10 @@
-(* UpSLM.v *)
-(* *)
-(* 使命： 软语言模型序面：tid/nle 载体上的非严格序与熔合器。 *)
-(* 主件： slm_nle_trans / slm_nle_10_absurd 序定律与 fuse2 / lsum_w 熔合器。 *)
-(* 依赖： 无显式 Require 面（自足件）。 *)
-(* 构造性注记： 纯构造性（禁公理面/承认件/值参声明/猜想/弃证）；bool 判定式取 Set 层恒等。 *)
-(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
-(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
-
-(* ===================================================================== *)
-(* UpSLM.v — SLM v2 熔合不可逆演算（见证擦除演算）Coq 落实                    *)
-(*                                                                       *)
-(* 演算出处：                                                            *)
-(*   SLM 2.0 见证擦除演算（设计终稿）；                                     *)
-
-(*                                                                       *)
-(* 载体：Z / nat / bool 判定层；语句零 Prop（tid / nle / bool / sigT）。      *)
-(* 纪律：纯构造性（禁 公理 / 承认件 / 值参声明 / 猜想 / 弃证）；   *)
+(* UpSLM.v *) (* 使命： 软语言模型序面：tid/nle 载体上的非严格序与熔合器。 *)
+(* 主件： slm_nle_trans / slm_nle_10_absurd 序定律与 fuse2 / lsum_w 熔合器。 *) (* 依赖： 无显式 Require 面（自足件）。 *)
+(* 构造性注记： 纯构造性（禁公理面/承认件/值参声明/猜想/弃证）；bool 判定式取 Set 层恒等。 *) (* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *) (* UpSLM.v — SLM v2 熔合不可逆演算（见证擦除演算）Coq 落实                    *)
+(* 演算出处：                                                            *) (*   SLM 2.0 见证擦除演算（设计终稿）；                                     *)
+(* 载体：Z / nat / bool 判定层；语句零 Prop（tid / nle / bool / sigT）。      *) (* 纪律：纯构造性（禁 公理 / 承认件 / 值参声明 / 猜想 / 弃证）；   *)
 (* stdlib only；可提取（检验 Obj.magic = 0）。                              *)
-(*                                                                       *)
-
 (*  D1 严格性单元 = (权重 w : Z, pos 结论, 生产者 pid : nat)；                 *)
 (*     pos 结论取 tid bool (Z.ltb 0 w) true —— bool 判定式的 Set 层恒等，      *)
 (*     忠实（Z.ltb_lt 可反演 0 < w）且可提取。                              *)
@@ -35,7 +20,6 @@
 (*     原账保真并签发无地址需求票（负向事件产出可再出资义务）；                  *)
 (*     赎回 = race-to-mint：任一生产者在自报预算内铸出新定位单元即销票，         *)
 (*     票据按代数焚毁（同票不可赎两次），铸造单元完成重定位。                    *)
-(*                                                                       *)
 (* 六件：                                                                *)
 (*  件 1  单元与结论机器（locu / agg / probe_pid + 结论桥 + pos_add 两结论合一） *)
 (*  件 2  熔合一等运算（fuse2 / fuseL_into + 和守恒 + Σ>0 健全）                *)
@@ -44,7 +28,6 @@
 (*  件 5  花：spend 即废（在场判定 / pid 消失 / 总量严格下降 nle 见证）          *)
 (*  件 6  多租户安全 + race-to-mint 赎回（未 funded 不发射 / 保真 / 签票；        *)
 (*        铸造赎回 / 票据焚毁 / 重定位 / 单票单铸程）                           *)
-(* ===================================================================== *)
 
 From Stdlib Require Import ZArith.
 From Stdlib Require Import ZArithRing.

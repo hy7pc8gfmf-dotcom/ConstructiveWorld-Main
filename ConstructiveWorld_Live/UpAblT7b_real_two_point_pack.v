@@ -1,6 +1,6 @@
-(* ============================================================
- * ToyR 战役·包H 补位席（切片四）替换件 —— 本文件为 Main 只读原件全文
- * 的换轨稿：语句面/声明序/依赖面零改，仅换四处玩具证明体＋横幅前置。
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================
+ * ToyR 工程· （切片四）替换件 —— 本文件为 Main 只读原件全文
+ * 的换轨稿：语句面/声明序/依赖面零改，仅换四处玩具证明体＋通栏标题前置。
  *
  * 换轨摘要（四刀，刀刀异构于原稿）：
  *  ① uab7b_pos_transfer_any：零元中停站双跳传送（半+0 站两段换端接续，
@@ -20,13 +20,13 @@
  * ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT7b_real_two_point_pack.v —— 假设消融战役 T7b 批              *)
+(* UpAblT7b_real_two_point_pack.v —— 假设消融工程 T7b 批              *)
 (*   Real 具体层（S02/S07 世界）两点实例封装件·126 位可达性修复         *)
 (*                                                              *)
 (* 辖区（T7a 覆盖底册遗留段·rows 1-40 内 S02/S07 Real 具体层 126 位      *)
 (*   ＋偏差账 D2 建议随批补件 UpMinP:632 tokens_ne 反射级 1 位）：       *)
 (*   逐位映射见 T7b 覆盖表增量（attn/_tt7b_covtable.json）＋           *)
-(*   报告 attn/_tt7b_消融报告-20260919.md §三分级表。                   *)
+(*   报告 attn/_tt7b_消融报告-.md §三分级表。                   *)
 (*                                                              *)
 (* 世界勘定（T7a 偏差账 D1/坑 6 的兑现）：S02/S07 Real 具体层为            *)
 (*   独立全局定义世界（real_lt/real_eq/real_list_sum/real_of_nat），      *)
@@ -160,7 +160,7 @@ Proof.
 Qed.
 
 (* ============ 三、界证书族（半 < 壹 · 半 ≤ 壹） ============ *)
-(* 槽形对偶：ratio_le_one（UpMinP:641，装载 ratio↦half）。半<壹为本席       *)
+(* 槽形对偶：ratio_le_one（UpMinP:641，装载 ratio↦half）。半<       *)
 (*   新构造：零+半 < 半+半（real_lt_plus_compat_lt_le@S07:6118 混合严＋    *)
 (*   real_le_refl@S02:2417）→ 换端 half < half+half → 换端 half < one。   *)
 Theorem uab7b_half_lt_one : real_lt uab7b_half real_one.
@@ -259,7 +259,7 @@ Qed.
 (* ============ 五、势正性族（of_nat 长度·两点枚举装载） ============ *)
 (* 槽形对偶：real_group_size_pos（S08:1741）、real_size_pos（S15:1734/      *)
 (*   UpGRPO:361）、Hpos（S15:2041/G01:284）。兑现=枚举槽装载两点表          *)
-(*   （cover 位由 InT 逐元素构造，T7a uab7_cover_two_point 同款）＋本席      *)
+(*   （cover 位由 InT 逐元素构造，T7a uab7_cover_two_point 同款）＋      *)
 (*   势正性新构造链（先例登记：tw_list_len_pos@UpTempWindow:804 同构，      *)
 (*   本件按两点特化自足重证，零 Require、零空匹配）。                      *)
 Theorem uab7b_of_nat_one_pos_aux : real_lt real_zero (real_plus real_one real_zero).
