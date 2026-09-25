@@ -29,7 +29,7 @@
 (*   GramSchmidt：req_inner_sopp_l / req_inner_szero_l /          *)
 (*     req_gram_schmidt_step / req_gram_schmidt_pair；            *)
 (*   Multivar：req_inner_splus_r / req_mv_compose_diff_decomp 等  *)
-(*     14 件（件名见文内各横幅）。                                *)
+(*     14 件（件名见文内各分节标题）。                                *)
 (* ============================================================ *)
 
 (* 向量世界依存簇（Hilbert/GramSchmidt/Multivar）的 req 层伴生：  *)

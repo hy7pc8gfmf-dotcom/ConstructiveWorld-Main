@@ -1,72 +1,11 @@
-(* ========================================================================= *)
-(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
-(*                                                                           *)
-(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
-(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
-(* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
-(* 替换定理清单：uex_fep_partition_condition／ufep_fep_partition_condition   *)
-(* ／uex_fep_align／ufep_fep_align／free_energy_softmax_eq_neg_T_logZ／      *)
-(* counter_ex_indicator_sum_two／counter_ex_reward_sum_two_c／               *)
-(* ppo_is_decomp／le_of_minus_nonneg（共 9 条）                              *)
-(* 非平凡性口径：全参直造与逐点换形链，消除应用链单跳；无一行拆分式假非平    *)
-(* 凡。                                                                      *)
-(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
-(* 抽验编译均验零承认。                                                      *)
-(* ========================================================================= *)
-(* ============================================================
-   T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— G01_CoreMicro.v
-   本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
-   仅九条玩具证明体替换为定义层显式重演，语句面零改动：
-   ① uex_fep_partition_condition / ⑥ ufep_fep_partition_condition：
-     unfold 后 sum_over_S_ext 全参直造（逐点 id_cong exp_neg +
-     id_sym opp_mult_l 换形），消 apply 单跳。
-   ② uex_fep_align / ⑦ ufep_fep_align：id_trans 两段链（mult_comm
-     换形 + id_cong2 mult 双侧同余、id_refl 闭合），消三段 apply 链。
-   ③ free_energy_softmax_eq_neg_T_logZ：id_trans 两段链（uex_fep_F_ext
-     外延 + free_energy_boltzmann 根件），消两段 apply 链。
-   ④ counter_ex_indicator_sum_two / ⑤ counter_ex_reward_sum_two_c：
-     simpl 后 id_cong 单段直造（plus_zero 显式实例闭合），消两段
-     apply 链。
-   ⑧ ppo_is_decomp：id_trans 两段链（sum_over_S_ext 逐点分解 +
-     sum_over_S_add 求和分配），消两段 apply 链。
-   ⑨ le_of_minus_nonneg：le_id_r 全参直造（id_trans plus_comm +
-     minus_plus_cancel_gap 换形 + le_plus_nonneg_r 严界），消两段
-     apply 链。
-   验绿方式：池内全件编译（单根 vo_9.1 预编译树），四证齐：
-     rc=0、零错误锚、vo 新于 v、文尾九条 Print Assumptions 全 Closed。
-   余五条复核判级：接口桥位两类（hlogz_discharge_full 转发上游
-     real_log_le_zero_of_le_one、real_var_nonneg_cond 转发上游
-     sq_sum_list_nonneg，上游体不在本件，无定义面可展）、已实质件
-     两类（real_lt_le_bridge/real_eq_le_bridge 已为显式构造子最小体）、
-     长链泛化一类（ppo_pointwise_decomp 五段 min 块泛化体，移植超本
-     切片预算）——均登记于 T246 台账，不动原文。
-   ============================================================ *)
-
-(* G 组：G01_CoreMicro — 有限合并组（S/G 双系新命名，成员原样并入）
-   成员：UpHlogZ + UpExtras + UpFEP + UpLogMono + UpPPO（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
-(* ======== G01_CoreMicro 成员件：UpHlogZ（原样并入，自带 Require）======== *)
-(* ============================================================ *)
-(* UpHlogZ.v —— 根内 KLProjection 主定理 HlogZ 前提的 Real 层总证明   *)
-(*                                                              *)
-(* 目标：projected_distribution_minimizes_kl（KLProjection.v L189）  *)
-(* 的显式前提 HlogZ : le (log Z_aud) zero 在 Real 层总是成立：        *)
-(*   Z_aud ≤ 1（Z_aud_le_one，根内已证）                           *)
-(*   ⟹ log Z_aud ≤ log 1 = 0                                      *)
-(*     （log 单调 le 版 = UpLogMono.real_log_le_mono；              *)
-(*       log 1 == 0 = real_log_one，根内已证）。                    *)
-(*                                                              *)
-(* 结果清单：                                                      *)
-(*   hlogz_discharge       —— 主证明：0 < Z ≤ 1 ⟹ log Z ≤ 0        *)
-(*   hlogz_discharge_full  —— 同型对齐版（走 UpLogMono 直用形态）    *)
-(*   hlogz_strict          —— 严格版：0 < Z < 1 ⟹ log Z < 0         *)
-(*                            （过滤器确实拦截了质量）               *)
-(*   hlogz_opp_nonneg      —— KL 尾项形态：0 ≤ opp (log Z)          *)
-(*                            （主定理证明中 opp_le_compat 的直接输入）*)
-(*                                                              *)
-(* 全部 Real 层、Set 层语句（real_lt / real_le / real_eq，Or 编码）、 *)
-(* 纯构造、全 Qed 闭合、可提取。                                    *)
-(* ============================================================ *)
+(* ==========================================================================)
+   G01_CoreMicro.v — 微观核心杂件：对数号律、softmax 自由能闭式与组优势方差非负
+   使命: hlogz_discharge/hlogz_strict（Za≤1 ⟹ log Za ≤ 0 号律）、free_energy_softmax_eq_neg_T_logZ（F(softmax) == −T·log Z）、ufep_attention_minimizes_free_energy_unique（自由能极小唯一）与双副本枚举反例（indicator2 求和、组相对优势 A2 平方和非负条件）。
+   依赖: CW_ConstructiveWorld_219、AttnDoeblin；Stdlib List、PeanoNat、Extraction
+   对标: Boltzmann–Gibbs 自由能变分原理与组相对策略优化（GRPO）优势二阶矩非负性。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 

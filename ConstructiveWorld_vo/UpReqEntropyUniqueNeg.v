@@ -285,7 +285,7 @@ End RealEntropyUniqueNeg.
 (*   逐项 p ≤ p_T（诚实接口前提）+ s₀ 处分歧 Or 见证 ⟹ 件 N0 挤压出      *)
 (*   前向严格见证 ⟹ G07 klst_kl_sum_strict ⟹ KL>0 ⟹ 件 N1b ⟹ p 非最优。 *)
 (*   方向对位：klst 原件吃 p≤q + p s₀ < q s₀；本件 p=p、q=p_T，          *)
-(*   与 T6b 熵亏恒等式 KL(p‖p_T) 同向（余留任务书警示参数位已对位）。        *)
+(*   与 T6b 熵亏恒等式 KL(p‖p_T) 同向（余留警示参数位已对位）。        *)
 (* ============================================================ *)
 Theorem t22b_entropy_strict_divergence_le :
   forall (X : Type) (l₁ : list X) (s₀ : X) (l₂ : list X)
@@ -440,7 +440,7 @@ Qed.
 (* 件 N4：可达形 (b) bool 完成——件 N3 在 [true; false] 载体的实例        *)
 (*   （s₀ := true，l₁ := []，l₂ := [false]；结构四件套显式应用 t22_bool 辅件）  *)
 (*   t22_bool_* helpers；[] ++ true :: [false] 与 [true; false] 定义     *)
-(*   可转换，exact 直过——T15 卡定式）。                                  *)
+(*   可转换，exact 直过）。                                             *)
 (* ============================================================ *)
 Theorem t22b_entropy_strict_divergence_bool :
   forall (energy : bool -> Real) (T : Real) (T_pos : real_lt real_zero T)

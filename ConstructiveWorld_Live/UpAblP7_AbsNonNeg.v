@@ -1,35 +1,11 @@
-(* ============================================================ *)
-(* UpAblP7_AbsNonNeg.v                                           *)
-(*                                                               *)
-(* 使命：本件形式化具体柯西实数层（Real，S02/S03 编码）上的无条件绝对值    *)
-(*   非负件：「le zero a -> req (abs a) a」。它是接口字段 abs_pos          *)
-(*   （S07，仅覆盖严格正前提 lt zero a）的弱前提强化版；              *)
-(*   setoid 接口的 abs_nonneg 字段（S07）仅有 Bishop 逐 eps 形，      *)
-(*   plain 形不能由 eps 形导出（缺序消去面），故本件主结论落具体层；        *)
-(*   语句面经 Instance RealEnhancedReal（S07）与 UpReqAlgebra 对齐。   *)
-(*                                                               *)
-(*   结构：Q 层辅件九件（半量与四分量的序关系、Qabs 下界翻转、逐点收尾）    *)
-(*   + 主件 uabp7an_core + 接口字段形 uabp7an_abs_nonneg_uncond            *)
-(*   + 双向桥：无条件件 ⟹ 接口 eps 形（uabp7an_uncond_to_eps，任意抽象      *)
-(*   载体），Bishop 逐 eps 形 ⟹ 无条件件（uabp7an_eps_to_uncond，具体层）。 *)
-(*                                                               *)
-(*   证明策略：real_le（S02 Or real_lt real_eq）的 Or 分歧在假设侧      *)
-(*   可构造消去——Q 层序可判定（Qlt_le_dec），零经典逻辑：                   *)
-(*   严格正支以见证 e 逐点定位 Qabs_pos（|a_n|==a_n），差归零；             *)
-(*   相等支取对半 eps，由 Qabs_triangle 双倍放行。                          *)
-(*   real_abs（S03）为逐点 Qabs 抬升。                               *)
-(*   抽象接口层（forall R RIS）无 le 消去面，无条件件在该层不可达，          *)
-(*   故主件落具体层。                                                    *)
-(*                                                               *)
-(* 依赖：CW_ConstructiveWorld_219（real_lt/real_le/QltT）、UpReqAlgebra     *)
-(*   （req_plus_le_lt_pos/lt_le_iff）、stdlib QArith。                    *)
-(*                                                               *)
-(* 构造性：纯构造性、零承认、全 Qed；除语句前提 le zero a 外无假设位；       *)
-(*   文尾 Print Assumptions 逐件核验假设闭包为空。                        *)
-(*                                                               *)
-(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律              *)
-(*   -o 临时目录，树内 .vo 不重写。                                       *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblP7_AbsNonNeg.v — 具体柯西实数层上的无条件绝对值非负件
+   使命: uabp7an_abs_nonneg_uncond（le zero a -> req (abs a) a）：接口字段 abs_pos（仅严格正前提）的弱前提强化版；含 Q 层辅件九件、主件 uabp7an_core 与双向桥（无条件件与接口逐 eps 形互推）。
+   依赖: QArith、QArith.Qabs、Lia、QArith.Qminmax、CW_ConstructiveWorld_219、UpReqAlgebra。
+   对标: Bishop 构造性分析中绝对值的非负性；abs_nonneg 接口字段的 plain 形补件。
+   构造性: 纯构造性、零承认词面、全 Qed；real_le 的 Or 分歧在假设侧构造消去（Q 层序可判定），零经典逻辑；文尾 Print Assumptions 核验假设闭包为空。
+   编译配方: Rocq 9.1 直调 coqc，cpu_guard 限核包裹；验证编译一律 -o 临时目录，树内 .vo 不重写。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia QArith.Qminmax.

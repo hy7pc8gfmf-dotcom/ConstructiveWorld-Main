@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* UpReqGibbsWallEquiv.v                                                *)
 (*                                                                     *)
-(* 目的：gibbs plain-le 结构不可证结果与受限 LPO 的双向归约。            *)
+(* 使命：gibbs plain-le 结构不可证结果与受限 LPO 的双向归约。            *)
 (* 主件：gwe_plain_le_lpo / gwe_lpo_plain_le 双向件与 GibbsWall 等价器   *)
 (*   gwe_equivalence。                                                  *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv；Stdlib         *)

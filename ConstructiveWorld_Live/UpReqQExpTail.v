@@ -1,28 +1,11 @@
-(* ============================================================ *)
-(* UpReqQExpTail.v                                                    *)
-(*                                                                *)
-(* 使命：本件形式化 Q 层指数截断尾的控制引理族：给定范数 b ≥ 0 与       *)
-(*   精度 e > 0，显式输出 N 使 m,n ≥ N 时                               *)
-(*   qtail_sum b (min m n) (max m n) = Σ_{k=min}^{max-1} b^k/k! < e。    *)
-(*   主件：qtail_fact_ge_pow（阶乘压倒 2 的幂，nat 归纳构造核）、         *)
-(*   qtail_Qlt01 与 qtail_pos_upper 尾上界族、qtail_cauchy_modulus       *)
-(*   （N 全显式：N = max(4, 2·⌊b⌋₊) + t0，t0 = Z.to_nat (Qnum (C·2/e))，  *)
-(*   几何余项用 2^t ≥ t+1（qtail_two_pow_ge）显式，全程不触               *)
-(*   Qarchimedean——N 是 b 与 e 的可计算函数，可提取）。                   *)
-(*   与 S03 的关系：S03 exp_tail m n x = Σ_{k=m}^{n-1} x^(S k)/(S k)!     *)
-(*   （指标错位 1）；qtail_sum b m n = Σ_{k=m}^{n-1} b^k/k!（正指标）。    *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；                     *)
-(*        Stdlib QArith.QArith、QArith.Qabs、QArith.Qround、Lists.List、   *)
-(*        Bool、Arith.Arith、Arith.Factorial、Setoid、Morphisms、Lia、     *)
-(*        QArith.Qminmax。                                                *)
-(* 对标：mathlib exp 截断尾控制（分析层特殊函数）；                       *)
-(*        本件为显式柯西模量的构造性对应物。                              *)
-(* 构造性注记：语句面 Set 层出口一律 QltT/QleT（stdlib Qlt/Qle 仅在       *)
-(*        证明内核使用，出口 T 化）；零假设位、零承认、可提取；            *)
-(*        nat 界引理为归纳构造核；Q 层字面序以显式 Z 序引理链构造          *)
-(*        （乘法归约与正性见证 Pos2Z.is_pos）。                            *)
-(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                    *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqQExpTail.v — Q 指数尾和的 Cauchy 模量
+   使命: qtail_sum 簇（尾和非负/单调/几何上界）、qtail_term_decay（项衰减）、qtail_cauchy_modulus 及 ord 形（Cauchy 模量的显式构造）、qtail_ratio_chain（比率链）。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib QArith、Setoid、Morphisms、Lia、QArith.Qminmax。
+   对标: 指数衰减级数尾和的控制与 Cauchy 模量（收敛性构造）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -761,7 +744,7 @@ Qed.
 
 (* ================= S4：与 S03 exp 级数件的对接注记 =================
    1) 路径 B（Banach exp 级数柯西性）：exp_partial m x 的差经
-      exp_partial_diff_tail 归约为尾和；对 |x| ≤ b 直接消费
+      exp_partial_diff_tail 归约为尾和；对 |x| ≤ b 直接使用
       qtail_cauchy_modulus_ord（N(b,e) 显式可算，替代 S03 的
       q_arch_geom + arch_decay 双 Qarchimedean witness 链）。
    2) 路径 C（Padé 误差界）：Padé 截断余项 Σ b^k/k! 以

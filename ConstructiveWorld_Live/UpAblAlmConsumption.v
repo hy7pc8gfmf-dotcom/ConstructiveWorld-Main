@@ -1,38 +1,11 @@
-(* ============================================================ *)
-(* UpAblAlmConsumption.v —— alm 链剩余前提形实例件：在并列双 max 最小 *)
-(*   世界（二元词表 [true; false]，logit 常值——并列副本世界的最小模型）*)
-(*   中实例化「并列副本情形 TV(w_T, δ_uniform) ≤ eps 分解上界链」。   *)
-(* 使命补记：本件只使用上游已注册出口，不重证上游结论。               *)
-(* 所用上游出口（均真实标识符）：UpReqAttnQ18Tail 之 aqt_T0_mass_rest *)
-(*   与 aqt_T0_l1 两件出节定理（即 UpReqAttnMassSplit 之              *)
-(*   ams_mass_rest_le／ams_l1_le 在 T₀=299/1000 载体处，配合           *)
-(*   UpReqAttnUniformLimit 之 alm_invk／alm_uniform 定义面）。         *)
-(* 对标行：无直接对应物（应用实例层）。                               *)
-(* 范围注记：本件为「alm 主定理闭合前的结构验证」，非本体闭合——       *)
-(*   主定理 alm_uniform_limit 的陈述已在上游定形                      *)
-(*   （∀eps>0, sigT T₀(>0) ∧ ∀T<T₀, L1(w_T,u) ≤ eps；其证明归上游     *)
-(*   后续工作）。本件把该主定理在 T₀ 载体温度的实例（L1 ≤ k·eps）以   *)
-(*   显式前提保留（剩余前提形，条件形范式），分解结构完整可验：       *)
-(*     TV := (1/k)·L1（alm_invk 并列实例=半和因子）                   *)
-(*     引理其一：aqt_T0_mass_rest——非 m 质量 M ≤ n·decay_T₀           *)
-(*     引理其二：aqt_T0_l1——L1 ≤ n·decay_T₀ + n·decay_T₀              *)
-(*     剩余前提：(n·decay + n·decay) ≤ k·eps —— γ=0 档 decay 不       *)
-(*       趋于 0（并列副本=一致间隙前提未覆盖面），此位即主定理        *)
-(*       闭合缺口，显式保留；接通后 TV ≤ eps 即可推得。               *)
-(* 主定理闭合缺口不在本件补齐，属上游 alm_uniform_limit 的证明义务。   *)
-(* 并列世界数据引理：almc_tie（双 max 同值）+ almc_gap0（γ:=0 非严格  *)
-(*   档一致间隙前提的构造——并列世界只能满足 γ=0 档；严格档 γ>0 与     *)
-(*   并列证书相斥，这正是链件 l1_le／mass_rest_le 在此只能以剩余前提  *)
-(*   形承载的原因）。                                                 *)
-(* 依赖清单：S01_BaseRing／S02_CauchyComplete／S03_QExp／             *)
-(*   S04_RealExpLogConv／S07_RealSetoidExpLog／CW_ConstructiveWorld_219／*)
-(*   AttnHardLimit218／UpReqAttnUniformLimit／UpReqAttnMassSplit／    *)
-(*   UpReqAttnQ18Tail；Stdlib List／Arith（提取面另用 Extraction）。  *)
-(* 构造性注记：语句面全 Set 层（real_lt 为见证和形、real_le／real_eq  *)
-(*   为 S01／S07 可解码面；零裸命题层泄露、零假设声明）；全 Qed；     *)
-(*   前缀 almc_（全库唯一）。                                         *)
-(* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。*)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblAlmConsumption.v — 并列双 max 最小世界上的 TV 分解上界链实例
+   使命: TV(w_T, δ_uniform) ≤ eps 的结构验证件——非 m 质量 M ≤ n·decay_T₀ 与 L1 ≤ n·decay_T₀ + n·decay_T₀ 两上游出口代入，剩余前提 (n·decay+n·decay) ≤ k·eps 显式保留（即主定理 alm_uniform_limit 的闭合缺口定位）。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、S07_RealSetoidExpLog、CW_ConstructiveWorld_219、AttnHardLimit218、UpReqAttnUniformLimit、UpReqAttnMassSplit、UpReqAttnQ18Tail；Stdlib List、Arith、Extraction。
+   对标: 无直接对应物（应用实例层）；退化并列情形下一致收敛界剩余间隙的显式定位。
+   构造性: 语句面全 Set 层（real_lt 为见证和形、real_le/real_eq 为可解码面）；零裸命题层泄露、零假设声明；全 Qed。
+   编译配方: Rocq 9.1 直调 coqc（无 -Q），cpu_guard 包裹，-o 输出临时目录。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

@@ -25,10 +25,10 @@
 (* 目的： Min-P 温度反单调面（质量随阈值温度单调递减）。 *)
 (* 主件： req_minp_keep_p_antitone / req_minp_temp_sum_p_antitone 反单调族。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlignRestB、UpReqPropLiftShim。 *)
-(* 备注： 词表非空见证与温度正性为显式前提；反单调以 P 载体（适配引理接口）承接。 *)
+(* 备注： 词表非空见证与温度正性为显式前提；反单调经适配引理接口在 P 实例层传递。 *)
 (* ============================================================ *)
 
-(* MinP p-antitone 簇 5 件的 req 系（setoid 层）伴生件：          *)
+(* MinP p-antitone 簇 5 件的 req 系（setoid 层）伴生族：          *)
 (*   temp_factor_max_le_sum 对位注记：req_pick_max_tf_le_minp_sum *)
 (*   （UpReqAlignRestB）语句逐字同形已证，本件 le_sum 形不再另建；*)
 (*   与 req_temp_factor_max_eq 的对位：eq 件 RestB 已有。         *)
@@ -91,7 +91,7 @@ Variable temperature_pos : lt zero temperature.
 Hypothesis req_le_dec : forall a b : R, Or (le a b) (Not (le a b)).
 
 (* ---- Min-P 选取机器 pick_max_token（与源模块同位；
-      只需选取函数本身，argmin 冻结承接面不触及） ---- *)
+      只需选取函数本身，argmin 冻结面不触及） ---- *)
 Variable pick_max_token : list Token -> Token.
 
 (* ---- RestB minp 系成品 δ 透明包装（闭名全参显式提供；零物理重复） ---- *)

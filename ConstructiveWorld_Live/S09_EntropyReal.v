@@ -4600,7 +4600,7 @@ Qed.
 End EntropyDiffReal.
 
 (* ================================================================
-   论文4 差距一 Real 层复刻（gradient_zero → is_truth），排序 4，2026-09-01
+   论文4 差距一 Real 层复刻（gradient_zero → is_truth），排序 4
    诚实接口 real_entropy_tangent（Real 层凹函数切线不等式，一阶条件）
    ⟹ real_gradient_zero_entropy_max：驻点（g(x)==0）是熵的全局最大点
    ⟹ real_gradient_zero_neg_entropy_truth：is_truth 桥（损失=负熵）。
@@ -4682,7 +4682,7 @@ Qed.
 End RealGapOne.
 
 (* ================================================================
-   论文4 κ 收缩 Real 层复刻（正分支），排序 5，2026-09-01
+   论文4 κ 收缩 Real 层复刻（正分支），排序 5
    探针 _dbg_kappa_real.v（8 Qed / 0 承认）平移并入。
    接口：real_dynamics_gradient_step（动力学=梯度上升步进）、
          real_strong_concavity（μ-强凹，标准优化假设，非经典公理）。
@@ -6286,7 +6286,7 @@ Qed.
 End RealKappaSignReal.
 
 (* ================================================================ *)
-(* T3.2（论文3 次旗舰，2026-09-02 并入）：exp-log 有序群同构组装      *)
+(* T3.2（论文3 次旗舰，并入）：exp-log 有序群同构组装      *)
 (* 新内容：值域刻画（sigT 双向）+ 序同构像侧完备性（逆序保持）        *)
 (* 纪律：Set 层（real_lt/real_eq 均 Set 值）、sigT 信息性、           *)
 (*       零经典（无三分律）、零 承认；探针 _dbg_t32_20260902.v 全绿  *)
@@ -6365,7 +6365,7 @@ Qed.
 
 End ExpLogGroupIso.
 (* ================================================================ *)
-(* T3.3（论文3，2026-09-02 并入）：exp 不等式族（回应 S4）            *)
+(* T3.3（论文3，并入）：exp 不等式族（回应 S4）            *)
 (* ① real_exp_ge_linear：0 < t ⟹ 1 + t < e^t（非 eps，升级 eps 版）   *)
 (* ② real_exp_le_inv_one_minus：0 < x ⟹ x < 1 ⟹ e^x ≤ 1/(1−x)        *)
 (* ③ real_exp_abs_minus_one_eps：|e^x − 1| ≤ |x|·e^{|x|} + eps       *)
@@ -6913,7 +6913,7 @@ End ExpInequalities.
 
 
 (* ============================================================ *)
-(* T2.3 KV 逐出定量界（2026-09-02 并入，探针 _dbg_t23.v +       *)
+(* T2.3 KV 逐出定量界（并入，探针 _dbg_t23.v +       *)
 (* _dbg_t23b.v 平移；评审 S2 回应：db_breaking 与温度 D、能量界  *)
 (* E_max、Lipschitz L 的显式定量联系）                          *)
 (* 结构：P1 exp_neg 差界（全局，T3.3 材料 real_exp_abs_minus_   *)

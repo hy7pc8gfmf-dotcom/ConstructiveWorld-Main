@@ -1,18 +1,11 @@
-(* ============================================================ *)
-(* UpAblT9_UpReqDist.v —— T9 批配分正性族·UpReqDist 辖区                    *)
-(*   （sumf 面=T1a、log 面=T2a 已毕，本件只收配分正性两位，零重叠）         *)
-(* 被消融位（普查表 §2 UpReqDist 行）：                                    *)
-(*   位1 UpReqDist.v:1025  Z_pos（ReqFEP 数据证书位；正和族导出）           *)
-(*   位2 UpReqDist.v:2805  Z_temp_spec（ReqTemp 接口位；机制+实例双面）     *)
-(* 母本（零施工直喂，出节签名实测自 _tt9a_sig 探针）：                      *)
-(*   位1 ←sumd_sum_pos@UpReqSumD:233（正和族；非空数据槽显式参——           *)
-(*       UpReqSumD 头注同形同阶，Z:=Boltzmann 配分具体实例）                *)
-(*   位2 ←req_Z_temp_pos@UpReqDist:2808（同文件 2808 机制件材料化）         *)
-(*        + hzlogd_HZ_bool@G08_Gibbs:812（aud 实例面， census 判词双引）    *)
-(* 分级：三位全 N1（两位坐标、三件：位2 机制面+实例面各一件）。             *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqSumD、        *)
-(*   UpReqDist、UpReqAlign、G08_Gibbs。                                    *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblT9_UpReqDist.v — 配分正性族之 UpReqDist 辖区材料化件
+   使命: Z_pos（正和族导出）与 Z_temp_spec（机制与实例双面）两位在具体实例上的材料化——uabT9_dist_Zpos_boltzmann、uabT9_dist_Ztemp_pos_real、uabT9_dist_Zpos_aud_inst 三定理。
+   依赖: CW_ConstructiveWorld_219、UpReqSumD、UpReqDist、UpReqAlign、G08_Gibbs、List。
+   对标: Boltzmann 配分函数正性的具体实例层。
+   构造性: 全 Qed 闭合、零承认词面；上游定理零施工直接代入（出节签名按 Check 定位）；只读依赖，原树零改。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqSumD.
 Require Import UpReqDist.
@@ -48,7 +41,7 @@ Proof.
   exact (@req_Z_temp_pos Real RealEnhancedReal S sumf Hpos base_loss Z_temp Hspec t Ht).
 Qed.
 
-(* 位2 实例面 ←:2805（aud 实例证书镜像 @G08:812） *)
+(* 位2 实例面 ←:2805（aud 实例证书对应副本 @G08:812） *)
 Theorem uabT9_dist_Zpos_aud_inst :
   forall p : bool -> Real, lt zero (p true) ->
     lt zero (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum

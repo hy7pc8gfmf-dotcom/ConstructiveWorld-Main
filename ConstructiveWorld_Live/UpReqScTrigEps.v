@@ -1,13 +1,13 @@
 (* ============================================================ *)
 (* UpReqScTrigEps.v                                             *)
 (*                                                             *)
-(* 目的：S10_KVQuantTrig.v 的 sc_cos/sc_sin 族（全库最大重整化山，  *)
+(* 使命：S10_KVQuantTrig.v 的 sc_cos/sc_sin 族（全库最大重整化山，  *)
 (*       GEO1 插值缝 #4，实测 124 处命中）的 eps-Bishop 补脸——     *)
 (*       把「Or-le 精确形 + Id 恒等式在库、eps 形缺位」的首段       *)
-(*       粗粒化收割为可消费的逐 eps 余量/Bishop 形。               *)
+(*       粗粒化残留改写为逐 eps 余量/Bishop 形。                   *)
 (*                                                             *)
 (* 主件（全部纯构造性、Set 层语句、零新公理）：                     *)
-(*   Part A（母件）：sce_real_le_eps_face——族母桥：                *)
+(*   Part A（主桥）：sce_real_le_eps_face——族母桥：              *)
 (*       Or 编码 real_le ⟹ plain-eps 余量面                       *)
 (*       (∀eps>0, real_le lhs (rhs+eps))；上游 real_le_to_le_b      *)
 (*       （UpRealLeB Part A 单向桥）+ real_lt sigT 拆装，零稠密性。  *)
@@ -17,7 +17,7 @@
 (*       0 ≤ X ≤ 1 定义域照抄源件，零新增前提）的 eps 形四件          *)
 (*       （sce_real_*_eps）与 Bishop 形四件（sce_real_*_B，          *)
 (*       经 real_le_closure_b_one 特化完成器），全链                 *)
-(*       Or ⟹ eps ⟹ ≤_B 三面同族可消费。                           *)
+(*       Or ⟹ eps ⟹ ≤_B 三面同族可用。                            *)
 (*   Part C（G2 尾部余项 eps 件）：sc_cos/sc_sin 部分和截断尾的        *)
 (*       构造性量化——Q 层尾界 sce_cos_partial_tail_le /             *)
 (*       sce_sin_partial_tail_le（sc_cos/sc_sin_diff_bound2 于      *)
@@ -27,12 +27,15 @@
 (*       （real_lt 证书 δ:=T_n/2；q==0 支走 real_eq 精确闭合——       *)
 (*       0<q 与 q==0 经 Qle_lt_or_eq 构造可分，无不可达精确形）。     *)
 (*                                                             *)
-(* 公理面：零新公理、零 承认、零经典；上游依赖 CW219（S01–S15       *)
-(*       闭合）与 UpRealLeB（同零公理面）。文末主件                  *)
+(* 依赖：上游 CW_ConstructiveWorld_219（S01–S15 闭合）与             *)
+(*       UpRealLeB（同零公理面）。                                  *)
+(* 公理面：零新公理、零 承认、零经典。文末主件                       *)
 (*       Print Assumptions 全 Closed。                              *)
-(* 红线：纯构造性 / Set 层语句（real_le_b 与 real_lt 皆 Set 值；      *)
-(*       Qle 前提位沿 S10 族内先例）/ 非平凡真实现 / Obj.magic=0。   *)
+(* 构造性注记（红线）：纯构造性 / Set 层语句（real_le_b 与 real_lt    *)
+(*       皆 Set 值；Qle 前提位沿 S10 族内先例）/ 非平凡真实现 /       *)
+(*       Obj.magic=0。                                              *)
 (* 领地：新件零撞名（sce_ 前缀开工 grep 零撞）；S10 本体只读。        *)
+(* 编译配方：Rocq 9.1 coqc -Q . "" UpReqScTrigEps.v。                *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -42,7 +45,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
 
 (* ============================================================ *)
-(* Part A：母件——Or-le 形 ⟹ plain-eps 余量面（族母桥）              *)
+(* Part A：基件——Or-le 形 ⟹ plain-eps 余量面（族母桥）              *)
 (* ============================================================ *)
 
 (* 母桥：Or 编码 real_le lhs rhs ⟹ ∀eps>0, real_le lhs (rhs+eps)。
@@ -356,7 +359,7 @@ Proof.
     exact (proj2 (Qplus_le_l (T + Qabs diff) (3 * T) (- Qabs diff)) Hle3).
 Qed.
 
-(* C.7 G2 旗舰：cos Real 尾件 Bishop 形——
+(* C.7 G2 主件：cos Real 尾件 Bishop 形——
    |cauchy_real_cos(real_const q) − S_n(q)| ≤_B 3·T_n(q)，q ∈ [0,1]。
    构造：q==0 支 real_eq 精确闭合（cos_partial k 0 == 1 恒等）；
    0<q 支 real_lt 证书 δ := T_n/2（C.6），最终指数 N := n，

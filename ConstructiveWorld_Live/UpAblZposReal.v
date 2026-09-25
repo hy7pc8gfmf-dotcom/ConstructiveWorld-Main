@@ -1,35 +1,11 @@
-(* ============================================================ *)
-(* UpAblZposReal.v —— Z_align 正性假设的柯西实数层消解件             *)
-(*                                                                *)
-(* 使命：S05_AlignmentGRPO 主节「配分函数为正」抽象假设（Z_align_pos） *)
-(*       在具体柯西实数层（裸 Real 函数面）的无条件消解：以显式全参    *)
-(*       forall 前提（逐项正 + 归一化 + 温度正）证明 Z_align 对应体    *)
-(*       为正；连带给出「正性求和」的实数层等价形（非空有限和）。      *)
-(*                                                                *)
-(* 主件清单与证明路线：                                            *)
-(*   1. zabr_Z_align：配分函数的实数层定义——与 S05 主节 Z_align     *)
-(*      定义逐字对齐（sum_over_S↦real_list_sum·l，mult↦real_mult，  *)
-(*      exp_neg↦real_exp_neg，opp↦real_opp，inv_pos↦real_inv_pos；   *)
-(*      参数序照 S05 迭代节消解形 reward·beta·beta_pos·pi_ref）。    *)
-(*   2. zabr_list_sum_pos_cons（伴件）：折叠结构归纳。               *)
-(*      归纳不变式取「任意头 w 的 cons 和」形，归纳步以头项正+尾和正  *)
-(*      经 real_lt_plus_compat 拼接、real_lt_id_l 回写零侧规范形；    *)
-(*      基例单元素以 real_lt_id_r + real_plus_zero 收尾。全链显式     *)
-(*      构造，零占位。                                              *)
-(*   3. zabr_sum_over_S_pos（正性求和实数层等价形）：逐项正 + 列表非空 *)
-(*      ⟹ 和为正。非空前提取 S01 集合层 Not/Id 别名（零命题面泄露）。 *)
-(*      诚实边界：S05 抽象面无该前提（接口直断言）；实数层空表和       *)
-(*      归约到 real_zero 不为正，故非空前提为可实现的最弱补全。        *)
-(*   4. zabr_Z_align_pos（主定理）：前提=逐项正+归一化+温度正，       *)
-(*      归一化与实数层零壹分离件 upreq_real_zero_ne_one 联合导出列表  *)
-(*      非空（经 Id→real_eq 传输 + real_eq_trans 链），再经伴件+     *)
-(*      逐项正性链（real_mult_positive：参考策略正 × exp_neg_pos，    *)
-(*      后者链路 S03 cauchy_real_exp_pos→S07 real_exp_neg_pos）收尾。 *)
-(*                                                                *)
-(* 依赖（只读使用，零改动）：S01–S08 全链；UpReqExpPos（零壹分离）。  *)
-(* 备注：全件集合层面（Id/Not 用 S01 集合层别名，real_lt/real_eq 为  *)
-(*       集合值）；零承认件；纯构造性。                              *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblZposReal.v — Z_align 正性的实数层实例件
+   使命: zabr_Z_align 定义、zabr_list_sum_pos_cons（cons 求和正性）、zabr_sum_over_S_pos（SumOver 正性）与 zabr_Z_align_pos 主件。
+   依赖: S01_BaseRing 至 S08_RealMainlineDPO、UpReqExpPos；Stdlib Extraction。
+   对标: 对齐场正性的具体实例供给（逐分支见证构造）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -64,7 +40,7 @@ Proof.
     + apply (real_eq_sym (real_plus (f w) real_zero) (f w)).
       apply (real_plus_zero (f w)).
     + exact (Hf w).
-  - (* 步例：f w 与（w::t 的和）皆正，零侧回写规范形 *)
+  - (* 步例：f w 与（w::t 的和）皆正，零侧记录规范形 *)
     simpl.
     apply (RealSetoid.real_lt_id_l real_zero (real_plus real_zero real_zero)
              (real_plus (f w) (real_plus (f x) (real_list_sum X f t)))).

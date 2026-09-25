@@ -1,40 +1,11 @@
-(* KLWallClosed.v
-   目的：闭区间 (0,1] 端几何收缩中收缩率 η = 1 的零退化分支闭合件——
-   (1−η)^{t1} ≤_B (1−η)^t（0 ≤ η ≤ 1，幂单调全量）。
-
-   主件：klc_closed_powb_mono（Real 载体全域版）；klc_strict_branch /
-   klc_one_branch（Q 载体严格收缩支 / 零退化非增支）；klc_closed_Q
-   （可判定分裂 × 统一收缩 × 分支附加证书的 sigT 总装）。
-   支撑引擎：klc_split_one（Qcompare 三分分裂）、klc_powb_mono_weak
-   （弱前提幂单调）、klc_le_mult_r_weak（弱乘法右保序）等。
-
-   依赖：CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall；
-   Stdlib PeanoNat、QArith.Qring、Lia、Extraction。
-
-   备注：上游注记（只读树 ConstructiveWorld_Live/G07_KLWall.v
-   :1001-1004、:1295-1297）指出诚实边界——闭区间上端 η=1 时 1−η 的
-   严格正性证书构造性不可得（1−η==0 与 1−η>0 不可分），闭端版本须
-   另设零退化分支；:1286-1288 注明 powb_pow 与 CW220 real_pow 同形
-   独立复刻，可 Require 消费。本件即该另设路径，分两条路线：
-   1. Real 载体全域版（零退化分支被弱单调吸收）：real_le 在本基座是
-      Set 层 Or(lt,eq) 编码，逐支可分叉组装，故「0≤η≤1」弱前提下
-      (1−η)^t 的 ≤_B 单调可全量真证——η=1 支（1−η==0）无须任何
-      1−η 严格正性证书即被弱乘法单调 klc_le_mult_r_weak 吸收。这
-      正是上游注记所要求的「另设零退化分支」的 ≤_B 形。
-   2. Q 载体两支打包版（可判定分裂支证书）：η 取 Q 载体时 Qcompare
-      三分可判定，严格正性证书在 η<1 支构造性可得（real_const_pos
-      桥）。klc_closed_Q 以 sigT 打包「分裂证书 s × (统一 ≤_B 收缩
-      × 分支附加证书)」：inl 支附 (1−η)^{t1} > 0 严格正证书（上游
-      注记指明 Real 层拿不到的那件，Q 层拿到），inr 支附 unit（零
-      退化支平凡）。s 的第二支取 QeqT（bool 反映形）而非 S02 QleT
-      的 Id 支——Id 支对变元 η 构造性不可得（S02 消融注释同判词）。
-
-   红线自检：零公理、零未闭合证明、零显式外加假设、零猜想、零中止；
-   主定理语句全 Set 层
-   （QleT'/QltT/QeqT/NatLe/sum/prod/sigT/unit，零 Prop 前提、零 -> False，
-   含全部 helper 语句面——Qeq 只在证明体 assert 内部出现）；
-   真证不降级（两支分支各自真证）；文末提取探针 + Print Assumptions。
-   ============================================================ *)
+(* ==========================================================================)
+   KLWallClosed.v — KL 墙闭端：零退化分支的幂单调闭合
+   使命: klc_closed_powb_mono（Real 载体全域版 (1−η)^{t1} ≤_B (1−η)^t）、klc_strict_branch/one_branch（Q 载体两支）、klc_closed_Q（可判定分裂 × 统一收缩 × 分支附加证书 sigT 组装）、弱前提引擎件（klc_powb_mono_weak/le_mult_r_weak）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB/2、G07_KLWall；Stdlib PeanoNat、QArith.Qring、Lia、Extraction。
+   对标: 几何收缩率 η=1 端的零退化分支处理（Pinsker 型证明的闭端修补）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import PeanoNat.
 From Stdlib Require Import QArith.Qring.
@@ -123,7 +94,7 @@ Qed.
 
 (* 闭端可判定分裂引擎件：Qcompare 三分 ⟹ 严格支 / 零退化支 二选一。
    第二支取 QeqT（bool 反映形）——S02 QleT 的 Id 支对变元 η 构造性不可得，
-   消融注释同款判词，故本件是 QleT 的可构造精化。 *)
+   消融注释同款判定，故本件是 QleT 的可构造精化。 *)
 Lemma klc_split_one : forall eta : Q,
   QleT' eta (1#1) -> sum (QltT eta (1#1)) (QeqT eta (1#1)).
 Proof.
@@ -140,7 +111,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part C：Real 层弱序代数（0≤η≤1 弱前提的闭端核心；零三分律消费）     *)
+(* Part C：Real 层弱序代数（0≤η≤1 弱前提的闭端核心；零三分律使用）     *)
 (* ============================================================ *)
 
 Lemma klc_le_refl : forall x : Real, real_le x x.
@@ -231,7 +202,7 @@ Proof.
   - cbn [powb_pow]. exact (klc_mult_nonneg base (powb_pow base m) Hb IH).
 Qed.
 
-(* (1−η)+η == 1 的无条件换形底座（G07 powb_one_minus_eta_base_le_one
+(* (1−η)+η == 1 的无条件换形基座（G07 powb_one_minus_eta_base_le_one
    同款 Heqsum 链：assoc/comm/plus_opp/plus_zero，零假设） *)
 Lemma klc_one_minus_eta_plus_eta_eq_one : forall eta : Real,
   real_eq (real_plus (real_plus real_one (real_opp eta)) eta) real_one.
@@ -253,7 +224,7 @@ Proof.
       * apply real_plus_zero.
 Qed.
 
-(* 闭端上界：0 ≤ η ⟹ 1−η ≤ 1（弱版：G07 旗舰同件去严格化——
+(* 闭端上界：0 ≤ η ⟹ 1−η ≤ 1（弱版：G07 主定理同件去严格化——
    lt 支 (1−η) < (1−η)+η == 1；eq 支（η==0）(1−η) == (1−η)+η == 1） *)
 Lemma klc_one_minus_eta_le_one_weak : forall eta : Real,
   real_le real_zero eta ->
@@ -337,7 +308,7 @@ Proof.
     + exact IH.
 Qed.
 
-(* 幂单调全量件（Set 层序界 NatLe；powb_mono_dec 逐支镜像，弱前提） *)
+(* 幂单调全量件（Set 层序界 NatLe；powb_mono_dec 逐支对应副本，弱前提） *)
 Lemma klc_powb_mono_weak : forall (base : Real) (m : nat),
   real_le real_zero base -> real_le base real_one ->
   forall n : nat, NatLe n m ->
@@ -358,7 +329,7 @@ Proof.
         -- apply IH.
            apply (NatLe_lift (Datatypes.S n1) m).
            apply (proj1 (Nat.leb_le (Datatypes.S n1) m)). exact E2.
-      * (* n1 = m：Nat 反对称回填后自反 *)
+      * (* n1 = m：Nat 反对称回代后自反 *)
         pose proof (proj1 (Nat.leb_gt (Datatypes.S n1) m) E2) as Hgt.
         pose proof (NatLe_drop n1 m Hnm) as Hn1m.
         pose proof (Nat.le_antisymm n1 m Hn1m
@@ -368,12 +339,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：旗舰。                                                      *)
+(* Part E：主定理。                                                      *)
 (*   E.1 Real 载体闭端全域版：0 ≤ η ≤ 1（real_le Set 层 Or 编码）下      *)
 (*       (1−η)^{t1} ≤_B (1−η)^t——零退化分支被弱单调吸收，即上游注记     *)
 (*       所要求的另设零退化分支之 ≤_B 形。                              *)
 (*   E.2/E.3 Q 载体两支定理（严格收缩支 + 零退化非增支）。               *)
-(*   E.4 Q 载体闭端总装：可判定分裂 × 统一收缩 × 分支附加证书 sigT 打包。*)
+(*   E.4 Q 载体闭端组装：可判定分裂 × 统一收缩 × 分支附加证书 sigT 组合。*)
 (* ============================================================ *)
 
 Theorem klc_closed_powb_mono : forall (eta : Real) (t t1 : nat),
@@ -388,7 +359,7 @@ Proof.
 Qed.
 
 (* 严格收缩支：0 ≤ η < 1（Q 载体）⟹ 1−η > 0 严格正证书 + 全量 ≤_B 收缩。
-   严格正证书正是上游判词「Real 层 1−η==0 与 1−η>0 不可分」所缺——
+   严格正证书正是上游判定「Real 层 1−η==0 与 1−η>0 不可分」所缺——
    Q 载体下由 Qcompare 可判定分裂构造性取得。 *)
 Theorem klc_strict_branch : forall (eta : Q) (t t1 : nat),
   QleT' (0#1) eta -> QltT eta (1#1) -> NatLe t t1 ->
@@ -430,7 +401,7 @@ Proof.
   - inversion Heq.
 Qed.
 
-(* 闭端总装（Q 载体）：0 ≤ η ≤ 1 ⟹ sigT 打包
+(* 闭端组装（Q 载体）：0 ≤ η ≤ 1 ⟹ sigT 组合
    「可判定分裂证书 s ×（统一 ≤_B 收缩 × 分支附加证书）」：
    inl 支附加 (1−η)^{t1} > 0（严格正证书——上游注记所指缺口件的
    构造性到位），
@@ -461,7 +432,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 探针审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                   *)
+(* 检验审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                   *)
 (* ============================================================ *)
 
 Extraction "klc_G3.ml" klc_closed_powb_mono klc_closed_Q klc_strict_branch

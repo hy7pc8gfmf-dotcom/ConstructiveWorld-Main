@@ -1,24 +1,11 @@
-(* ============================================================ *)
-(* UpReqTailResidual.v —— 席 W2：Real 层尾残差引擎（编译重相位）      *)
-(*                                                              *)
-(* 使命（R8/PNSK 升级路径点名 blocker）：                          *)
-(*   target2 主件 w2t_exp_upper：0 ≤ t ≤ 1 ⟹ e^t ≤_B P(t)，          *)
-(*     P(t) = 1+t+t²/2+t³/6+t⁴/8（尾残差显式 Q 式：(1/24+1/12)t⁴）。  *)
-(*   target1 w2t_log_lower_quad：log(1+t) ≥_B t−t²/2（S2 级锐化）。    *)
-(*   target3 镜像核：−log(1−y) ≥ y+y²/2 型 per-point kernel。          *)
-(* 本窗收口（诚实边界）：Q 层尾残差引擎（引擎 1a-1e）四关绿全链闭合；  *)
-(*   Real 层包装件（投影/wd/zero/lt 加法保序）四关绿；                  *)
-(*   exp 上界定理的 lt-witness 样板层（w2t_half_pos 起六件）伤单化，    *)
-(*   语句面与逐条墙形已定谳，见 attn/_tw2_交付报告-20260918.md §伤单。 *)
-(* 只读引擎链：S03 exp_partial/exp_tail/pow_fact 系/geo_sum 系；        *)
-(*   S07 cauchy_real_exp 系/cw_log_exp_right/log_inv_exp_neg_thm/      *)
-(*   real_log_lt_mono/real_inv_pos_le_compat；UpRealLeB le_b 闭合器。   *)
-(* 红线自审：语句面全 Set（real_le_b/real_le/real_lt 的 Set 编码）；    *)
-(*   证明内核 Prop(Qle/Qlt) 推理、出口 T 化沿 qtail 惯例；纯构造性：    *)
-(*   公理面零新增，全 Qed/Defined 闭合，头注不用任何禁词字面量。        *)
-(* 数值哨兵：p4 上界/尾界/链式余量/镜像核，Python 复核零违反。          *)
-(* 编译：coqc -q -Q . "" UpReqTailResidual.v（9.1 工具链）             *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqTailResidual.v — 指数尾残差的对数界族
+   使命: w2t_exp_bound（指数部分和上界）、exp ≥ 1+g 桥接件、w2t_log_lower_quad/log_upper_lin（log(1+x) 二次下界与线性上界）、w2t_log_bound/trunc5_bridge（截断五项桥）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB；Stdlib QArith.Qring、Qabs、Arith、Lia、Lqa。
+   对标: log(1+x) 与 exp 的截断不等式族（初等分析标准估计）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.Qring QArith.Qabs Arith.Arith Lia.
 Require Import CW_ConstructiveWorld_219.
@@ -370,8 +357,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 本窗收口线（席 W2）：以上为四关绿已证件。                      *)
-(* 伤单（下席续接，墙形详见 attn/_tw2_交付报告-20260918.md）：     *)
+(* 本段界线：以上为已验证件。                      *)
+(* 未竟清单（详见交付档案）：     *)
 (*   w2t_half_pos / w2t_half_lt / w2t_exp_upper_ptw /            *)
 (*   w2t_exp_upper_one / w2t_exp_upper_transport / w2t_exp_upper *)
 (*   —— 语句面已定稿（见报告 §伤单），全部卡在 real_lt 逐点        *)
@@ -380,7 +367,7 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* Section 3（席 W2B 纯追加）：target1 log 界对 + target3 trunc5 桥   *)
+(* Section 3（纯追加）：target1 log 界对 + target3 trunc5 桥   *)
 (*   + 三堵样板墙拆除件。前缀 w2t_ 延续；公理面零新增；              *)
 (*   全部声明在本注释框之后追加，既有行零改动。                      *)
 (*   路线（对 _tw2_ 报告 §四/§六 的落地化）：                         *)
@@ -426,7 +413,7 @@ Proof.
   field.
 Qed.
 
-(* Q 小件：exp ≥ 1 + g（g ≥ 0，n ≥ 1）——exp≥1+t 桥件的 Q 内核 *)
+(* Q 小件：exp ≥ 1 + g（g ≥ 0，n ≥ 1）——exp≥1+t 桥接件的 Q 内核 *)
 Lemma w2t_q_ep_ge_1plus : forall (g : Q) (n : nat),
   Qle 0 g -> (1 <= n)%nat -> Qle (1 + g) (exp_partial n g).
 Proof.
@@ -614,7 +601,7 @@ Proof.
                 - (1#8)*(s*(s*(s*s))))%Q
                ((1#2)*(s*s) + (1#6)*(s*(s*s)) + (1#8)*(s*(s*(s*s))))%Q).
       exact HD. }
-  (* 收口：P4(s) = 1 + s + R ≤ 1 + s + t²/2 = 1 + t *)
+  (* 闭合：P4(s) = 1 + s + R ≤ 1 + s + t²/2 = 1 + t *)
   unfold w2t_q_p4.
   apply (Qle_trans _ ((1 + s) + ((1#2)*(s*s) + (1#6)*(s*(s*s))
                                   + (1#8)*(s*(s*(s*s)))))%Q).
@@ -839,18 +826,18 @@ Proof.
   ring.
 Qed.
 
-(* ---------------- 3.c/3.d（席 W2B 伤单，未竟——源文存 attn/_tw2b_伤单片段-3c3d.v） ---------------- *)
+(* ---------------- 3.c/3.d（未竟段——源文存 attn/_tw2b_伤单片段-3c3d.v） ---------------- *)
 (* 以下四件语句面已定稿、证明链已写至样板层（Qminus-in-Qlt 重写墙+逐点差值链），
-   完整源文含逐条注释移存伤单片段文件，续席按配方续写即可：
+   完整源文含逐条注释移存伤单片段文件，后续按配方续写即可：
    w2t_exp_s_le / w2t_lt_gap_strict / w2t_log_lower_quad / w2t_log_upper_lin /
-   w2t_log_bound / w2t_trunc5_bridge。本窗仅交付至 3.b 样板墙拆除件全绿。 *)
+   w2t_log_bound / w2t_trunc5_bridge。本段仅交付至 3.b 样板墙拆除件。 *)
 (* ============================================================ *)
-(* 席 W2B 收口线：以上为四关验绿已证件。伤单详见                   *)
-(*   attn/_tw2b_交付报告-20260918.md §四（未竟件清单+续席配方）。    *)
+(* W2B 段界线：以上为已验证件。未竟详见                   *)
+(*   交付档案 §四（未竟件清单+续写配方）。    *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* Section 4（席 W2C 纯追加）：3.c/3.d 伤单清偿。                   *)
+(* Section 4（纯追加）：3.c/3.d 未竟清结。                   *)
 (*   六件：w2t_exp_s_le（★）/ w2t_lt_gap_strict /                   *)
 (*   w2t_log_lower_quad / w2t_log_upper_lin / w2t_log_bound /       *)
 (*   w2t_trunc5_bridge。配方：compat 先行拆 Qminus-in-QltT 墙；      *)
@@ -899,7 +886,7 @@ Proof.
   - rewrite IH. rewrite Hxy. reflexivity.
 Qed.
 
-(* ---------------- 4.b (★) exp(t−t²/2) ≤_B 1+t（W2B 伤单 3.c 清偿） ---------------- *)
+(* ---------------- 4.b (★) exp(t−t²/2) ≤_B 1+t（3.c 未竟段清结） ---------------- *)
 
 (* ---------------- 3.c (★)：exp(t−t²/2) ≤_B 1 + t ---------------- *)
 
@@ -1323,7 +1310,7 @@ Proof.
   intros t Hs. exact (real_log_one_plus_le_B t Hs).
 Qed.
 
-(* target1 收口：log(1+x) 上下界对（Set 层 sigT 对偶） *)
+(* target1 闭合：log(1+x) 上下界对（Set 层 sigT 对偶） *)
 Definition w2t_log_bound (t : Real)
   (H0 : real_le real_zero t) (H1 : real_le t real_one)
   (Hs : real_lt real_zero (real_plus real_one t))
@@ -1403,7 +1390,7 @@ Proof.
                (real_log (real_plus real_one y) Hp)
                (real_mult gamma w2t_c_half)
                HB0) as HB.
-  (* 求和 + HE 换形（log M ≈ log(1−y)+log(1+y)）+ 数值收口 + 换边 *)
+  (* 求和 + HE 换形（log M ≈ log(1−y)+log(1+y)）+ 数值闭合 + 换边 *)
   pose proof (real_lt_plus_compat
                (real_log (real_mult (real_plus real_one (real_opp y))
                           (real_plus real_one y)) HM)

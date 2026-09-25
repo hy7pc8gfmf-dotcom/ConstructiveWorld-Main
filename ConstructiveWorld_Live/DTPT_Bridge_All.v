@@ -1,46 +1,11 @@
-(* ============================================================
-   DTPT_Bridge_All.v —— 八棒桥接件 + 计算件的统一提取回归套件
-   使命：桥接层全部使用件的统一回归面——
-     §A 基建：Require 三桥（DTPT_Bridge / DTPT_Bridge_Dig /
-        DTPT_Bridge_Rot）+ 计算件 DTPT / DTPT_Entropy（传递依赖
-        DTPT_Rotation / DTPT_Truth / DTPT_DigTheory / DTPT_Extract）。
-        注记：原任务面 Require「DTPT_Measure」实测偏差：该件已 S1
-        归并退役（盘面 DTPT_Measure.v / .vo 均带 .retired_S1 后缀，
-        Require 无现役 .vo 可解析），其测度面现役落点＝
-        DTPT.v（qsum L2054 / mu L2062）与 DTPT_Entropy.v（collide
-        L1737）——Require DTPT + DTPT_Entropy 已全数覆盖使用面；
-        本件按盘面现役态执行，退役件零触碰零改动。
-     §B 使用面抽验：八簇（B1–B8）每簇 2–3 件代表桥件的重述式
-        re-Port——陈述面照抄被使用桥件，证明＝直接别名使用
-        （零重证、零新证明思想）；QleT / QeqT / sumbool / sigT
-        四形各至少一件（覆盖矩阵见 §B 头注），另含 B4 dQleT /
-        dQeqT 对偶形、B2 And(Type) 积形、B4 prod 证书形。
-     §C 金标准数值锚 8 件：gate_pass / phase_dev 双向 / collide /
-        mu / H_freq 零点判定 + 值面 / H_adj 样例，全部闭式数值等式
-        （证明＝核内换形显式项直取，右端为显式见证值；各值实算
-        核对在案：gate_pass 1 0 = true、phase_dev [0;1;2] 1 = true /
-        0 = false、collide [0;1;2] = 3#9、mu [0;1;2] 0 = 1#3、
-        Qeq_bool (H_freq [5;5;5]) 0 = true、Qeq_bool (H_freq
-        [0;1;2]) (2#3) = true、Qeq_bool (H_adj [0;1;2]) 2 = true）。
-     §D 统一提取面：全部使用件（22 抽验 + 8 数值锚）逐件 Extraction
-        （b10_ 前缀），Obj.magic 全量 grep 计数 0。
-     §E 公理闭包审计：全部使用件 Print Assumptions，期望全 Closed。
-   依赖：DTPT、DTPT_Entropy、DTPT_Rotation、DTPT_DigTheory、
-     DTPT_Extract、DTPT_Truth、DTPT_Bridge、DTPT_Bridge_Dig、
-     DTPT_Bridge_Rot；Stdlib QArith、List、Bool、ZArith、
-     Permutation、Lia、Extraction。
-   限定名纪律：三桥模块零 Import（QleT/QeqT 在 DTPT_Bridge 与
-     DTPT_Bridge_Rot 双处定义、dQleT/dQeqT 在 Bridge_Dig——限名
-     隔离防撞），使用面一律全限定名或 §B0 缩记；计算件名面按三桥
-     各文件生效 Import 序复刻（相对次序保持；DTPT_Truth 置末＝
-     B3 §7 生效遮蔽序复刻，Level/Evidence 取 Truth 侧与其一致）。
-   构造性注记：零承认、公理面为空；Error=0；Obj.magic=0；
-     语句面全 Set（QleT/QeqT/sumbool/sigT）。
-   对标：桥接/重述层（type synonym re-export）惯例。
-   编译配方：Rocq 9.1 直调 rocq c -Q . "" DTPT_Bridge_All.v，
-     cpu_guard 包装；提取产物定向本目录（Set Extraction Output
-     Directory "."）。
-   ============================================================ *)
+(* ==========================================================================)
+   DTPT_Bridge_All.v — DTPT 桥接层与计算件的统一使用面回归套件
+   使命: 八簇使用面抽验（桥接件重述式 re-Port，覆盖 QleT/QeqT/sumbool/sigT 四形）、八件闭式数值锚、全部使用件逐件 Extraction（Obj.magic 计数 0）与 Print Assumptions 公理闭包审计。
+   依赖: DTPT、DTPT_Entropy、DTPT_Rotation、DTPT_DigTheory、DTPT_Extract、DTPT_Truth、DTPT_Bridge、DTPT_Bridge_Dig、DTPT_Bridge_Rot；Stdlib QArith、List、Bool、ZArith、Permutation、Lia、Extraction。
+   对标: 桥接/重述层（type synonym re-export）惯例。
+   构造性: 零承认、公理面为空；Error=0、Obj.magic=0；语句面全 Set（QleT/QeqT/sumbool/sigT）；三桥模块零 Import，使用面一律全限定名或缩记。
+   编译配方: Rocq 9.1 直调 rocq c -Q . "" DTPT_Bridge_All.v（vo 影子树原地重编），cpu_guard 包裹；提取产物定向本目录。
+   ========================================================================== *)
 
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -70,7 +35,7 @@ Import DTPT_DigTheory.DTPT_DigTheory.
 Import DTPT_Extract.DTPT_Extract.
 Import DTPT_Truth.DTPT_Truth.
 
-(* ========== §B0 桥件缩记（纯 Notation 缩写，零语义新增） ========== *)
+(* ========== §B0 桥接件缩记（纯 Notation 缩写，零语义新增） ========== *)
 
 Notation QleTB := DTPT_Bridge.DTPT_Bridge.QleT.
 Notation QeqTB := DTPT_Bridge.DTPT_Bridge.QeqT.
@@ -83,7 +48,7 @@ Notation QeqTR := DTPT_Bridge_Rot.DTPT_Bridge_Rot.QeqT.
 (* ========== §B 使用面抽验（八簇 × 每簇 2–3 件，全部直接别名
      使用＝重述式 re-Port，每件 <=5 行，零重证） ==========
    簇 × 形覆盖矩阵：
-     簇  | 桥件(形)                                   | 基础件
+     簇  | 桥接件(形)                                   | 基础件
      B1  | C_sorted_min_adj_set(QleT)                 | DTPT L729
          | qeqT_intro/QeqT_to_Qeq(QeqT 双向桥)        | 基建 §1
      B2  | H_freq_perm_set(QeqT)                      | Entropy L1239

@@ -5,7 +5,7 @@
 (*   (forall a,(forall eps,QltT 0 eps -> QltT (bnorm a) eps) ->         *)
 (*    bae a bzero) 从「假设参数位」转化为「库内可证定理面」（候选 A：    *)
 (*   Real 载体实例 bxra_real_pre）。三步论证：                          *)
-(*   S0 = Q 引擎件 spt_q_abs_arb_small_eq0（+消桥件 spt_qabs_eq0_inv）： *)
+(*   S0 = Q 引擎件 spt_q_abs_arb_small_eq0（+桥消解件 spt_qabs_eq0_inv）： *)
 (*        |x| 任意小 ⟹ x == 0；分臂 Qlt_le_dec：正臂 eps:=½·|x|          *)
 (*        （Qmult_lt_r 乘积正性，双参数驱动）自反矛盾；负臂 Qle_antisym  *)
 (*        合流 Qabs_nonneg；正负臂构造子分支经定义归约与判别直拆。       *)
@@ -49,7 +49,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs.
 (* S0：① Q 引擎件                                                     *)
 (* ============================================================ *)
 
-(* 消桥件：|x| == 0 ⟹ x == 0（三分构造子级直拆，Qabs 定义级归约） *)
+(* 桥消解件：|x| == 0 ⟹ x == 0（三分构造子级直拆，Qabs 定义级归约） *)
 Lemma spt_qabs_eq0_inv : forall x : Q, Qabs x == 0 -> x == 0.
 Proof.
   intros [n d] H.

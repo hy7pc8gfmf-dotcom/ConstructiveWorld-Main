@@ -1,21 +1,11 @@
-(* ===================================================================== *)
-(* UpAblP6_ConcMixSelFeed.v —— ConcMixSelFeed 的具体实例供给件            *)
-(* 使命：对上游 ConcMixSelFeed（UpReqConcMixSel 的实例化层，11 声明        *)
-(*       全 Defined 可提取）以具体数据实例化，使结论真实求值——实例供给，    *)
-(*       零新数学。覆盖：csm_sumf 折叠的单位点外延/线性/可加/单调四性质     *)
-(*       （cms_sum_ext/cms_sum_linear/cms_sum_add/cms_sum_le）、lt_plus    *)
-(*       两节同型结论各取一具体点（cms_lt_plus_compat_lt_le_sel/_time）、   *)
-(*       bool 二点枚举的双换位（cms_bs_swap）、两折叠的相等与适配           *)
-(*       （cms_sum_eq_list/cms_fold_req_list_sum）、abs 与 lt_plus 的      *)
-(*       具体点伴随实例（cms_bs_abs/cms_bs_lpc）。                         *)
-(* 求值注记：单点折叠和＝plus one zero、二点折叠和＝plus one (plus one     *)
-(*       zero)，折叠 sumd_list_sum 与 rsq_bs_list_sum 沿具体数据透明展开   *)
-(*       至字面项，恒等由 id_refl 给出——具体值实算可得。                  *)
-(* 构造性注记：零新数学；语句面全本库 Set 层（req/le/lt/Id 全 Set 值）；    *)
-(*       全件 Qed 收束；零公理零承认。                                    *)
-(* 依赖：CW_ConstructiveWorld_219、UpReqSumD、UpReqConcSoftmax、UpReqSampling、UpReqConcMixSel、UpReqConcB1、ConcMixSelFeed。 *)
-(* 编译配方：coqc 9.1 直调，cpu_guard 温控，-o 临时目录，树内零写入。      *)
-(* ===================================================================== *)
+(* ==========================================================================)
+   UpAblP6_ConcMixSelFeed.v — 单点载体上的 conc/mix/select 接口实例件
+   使命: uacms_ 系十九件：单位枚举世界（en_unit/en_bool/mix_f）上求和接口（sumf_unit_eval/norm、sum_ext/linear/add/le_unit）、lt_plus 选择（lt_plus_sel_unit/lt_plus_time_point）、bs_swap 与 sum_eq_list 的 bool 实例闭合。
+   依赖: CW_ConstructiveWorld_219、UpReqSumD、UpReqConcSoftmax、UpReqSampling、UpReqConcMixSel、UpReqConcB1、ConcMixSelFeed；Stdlib List。
+   对标: 求和/混合/选择接口的单点具体实例层（接口实例化方法论）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqSumD.

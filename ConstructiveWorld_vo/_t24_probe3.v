@@ -1,4 +1,4 @@
-(* _t24_probe3.v — 席T24 批 C 收口判据（-Full 跑）
+(*
    P6：pi_next_req 载体 conv（我节 vs 批 A 节闭面，含 req_Z_rel_pos
    证人证词条位）；P7：KL 语句面 req_refl 全收口可达性 *)
 Require Import CW_ConstructiveWorld_219.

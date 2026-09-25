@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* UpReqMinPKLChain.v *)
 (* *)
-(* 目的： 复合熵链的一步拼装（Min-P KL 链）。 *)
+(* 使命： 复合熵链的一步拼装（Min-P KL 链）。 *)
 (* 主件： x1_KL 与 x1_minp_kernel / x1_Zaud_pos_cert：KL 链的显式组装件。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpMinP。 *)
 (* 备注： 三分性判定器显式随行；零公理面、零经典逻辑（纯构造）。 *)
@@ -890,7 +890,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R4（席X1c）：闭形 + 复合件（照单施工 X1b 合规自查报告 R4 节）          *)
+(* R4：闭形 + 复合件                                                    *)
 (*   消解剖面：0<d（d:=S+(−LN)）→ inv2<1（real_inv_pos_lt_contra）  *)
 (*     → d·inv2<d（real_lt_mult_compat）→ LN+d·inv2<LN+d            *)
 (*     （real_lt_plus_compat_le_lt）→ real_lt_trans（S02 L463）完成  *)

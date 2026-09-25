@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* T242 · ToyR 战役 包D · S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
+(* S05_AlignmentGRPO.v（同名非平凡替换稿）  *)
 (* 本件为零 公理／零 承认件交付稿：全文无假设命令、无中途放弃、   *)
 (* 无未证参数；所有玩具证明体均为纯构造性替换并以真 Qed 闭合。    *)
 (* 替换段：clip_lower / ppo_gap_nonneg / sigmoid_pos /            *)
@@ -446,7 +446,7 @@ Proof.
 Qed.
 
 (* KL(p||p) = 0（自相对熵为零；Gibbs 等号条件的平凡方向）
-   [T3 KL 孪生正典化·席 D2 20260925] 跨件孪生统一：正典 = S04:4768 relative_entropy_self_zero'
+   [T3 KL 孪生正典化] 跨件孪生统一：正典 = S04:4768 relative_entropy_self_zero'
    （两件语句逐字同形 forall p : S -> R, Id (relative_entropy p p) zero；原证明体 ~85% 同构，
    唯一实质差 = 零和见证取 mult zero (p s)（本件）vs mult zero one（S04 版），
    收尾链 sum_over_S_linear 的目标和 sum p vs sum (fun _ => one) 随之而异）。
@@ -776,7 +776,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T1.1：标准 PPO 代理目标与无前提保守性（2026-09-02 并入）    *)
+(* T1.1：标准 PPO 代理目标与无前提保守性（并入）    *)
 (*   标准形式 min(r·A, clip(r)·A) ≤ r·A 是纯定义性的           *)
 (*   （min_le_l，无需 advantage_nonneg）——把 §6 使用限制 2     *)
 (*   的"形式非标准"改写为等价性引理 + 无前提保守性            *)
@@ -2349,7 +2349,7 @@ Definition align_cross_entropy (pi : S -> R) : R :=
   sum_over_S (fun s => mult (pi s) (opp (log (pi_ref s)))).
 
 (* ============================================================
-   论文1 PPO 补强（T1.1，2026-09-01）：
+   论文1 PPO 补强（T1.1）：
    标准形式 PPO 保守性——任意符号 adv（无需 advantage_nonneg）。
    ppo_surrogate（L18056）已是标准形式 min(r·A, clip(r)·A)；
    其保守性 min(r·A, clip(r)·A) ≤ r·A 由 min_le_l 一步给出，
@@ -2638,7 +2638,7 @@ Proof.
 Qed.
 
 
-(* ===== T1.2 第二阶段：策略改进单调性主定理（2026-09-01） ===== *)
+(* ===== T1.2 第二阶段：策略改进单调性主定理 ===== *)
 (* opp 提和：Σ (opp·f) == opp (Σ f) *)
 Lemma sum_over_S_opp_t12 : forall (f : S -> R),
   Id (sum_over_S (fun s => opp (f s))) (opp (sum_over_S f)).
@@ -4188,7 +4188,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   诚实接口升级（R2.1 / 审稿 M4，sR21 判定 2026-09-03）：
+   诚实接口升级（R2.1 / 审稿 M4，sR21 判定）：
    旧 step_kl_ratio_bound（前向 KL ≤ c·向后 KL）对任意常数 c
    非定理——两方向 KL 在单纯形上不可比（前向 KL 可无界
    而 KL(pi*‖pi_t) 有界，比值无界）。数学正确的几何插值收缩
@@ -4312,7 +4312,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* DPO 损失沿策略改进轨道单调不增（2026-09-02 并入）            *)
+(* DPO 损失沿策略改进轨道单调不增（并入）            *)
 (*   dpo_loss(pi) := opp (align_objective pi)（L18360）          *)
 (*   单步：dpo_loss(pi_{t+1}) ≤ dpo_loss(pi_t)                   *)
 (*     （policy_improvement_mono + opp_le_compat 组装）           *)
@@ -5352,7 +5352,7 @@ Proof.  unfold group_variance.
 Qed.
 
 (* ============================================================ *)
-(* T1.5（2026-09-02）：GRPO 基线方差归约（回应评审 3 的 S4）     *)
+(* T1.5：GRPO 基线方差归约（回应评审 3 的 S4）     *)
 (*   Var ≤ (1/G)·Σr²：group_variance_identity（Var == raw − μ²） *)
 (*   + 平方非负（μ² ≥ 0）——形式化 GRPO 核心动机"减均值降低二阶矩"； *)
 (*   gap = μ²，等号当且仅当组均值零（square_zero 双向夹另行落地）。  *)
@@ -5827,7 +5827,7 @@ Class StateSpaceExtended (RI : RealInterface) := {
 (* ------------------------------------------------------------ *)
 
 (* ============================================================ *)
-(* 替换件全局假设核查（T242 切片三）                              *)
+(* 替换件全局假设核查（切片三）                              *)
 (* ============================================================ *)
 Print Assumptions clip_lower.
 Print Assumptions ppo_gap_nonneg.

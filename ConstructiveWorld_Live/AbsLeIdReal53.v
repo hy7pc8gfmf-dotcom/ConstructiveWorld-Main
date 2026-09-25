@@ -1,50 +1,18 @@
-(* ============================================================ *)
-(* AbsLeIdReal53.v — T40 消融50 席位T53B（批次 E-STAGING-T53B）   *)
-(* Real 具体层兑现独立稿件                                        *)
-(*                                                               *)
-(* 使命：CYB6 的 AbsLeId.v 已在抽象层（DecidableOrder 桥）消解    *)
-(*   abs_ge_zero_id_cc 槽（S06_DiffSamplingGibbs:4035）。本席把   *)
-(*   其 Real 具体层兑现路径 ali_real_abs_ge_zero_id 扩展为独立    *)
-(*   四关稿件：消费 fa53 系基座件与 S07 Real 层三件               *)
-(*   （real_lt_plus_translate S07:6086 + real_abs_pos_req         *)
-(*   S07:7289 + real_abs_zero_req S07:7266），零依赖 AbsLeId.v    *)
-(*   （减少依赖面；AbsLeId.v 不在被消费集）。                     *)
-(*                                                               *)
-(* 侦查对照（防重复施工）：                                       *)
-(*   - CYB6 AbsLeId.v 件5 ali_real_abs_ge_zero_id：同路径首次     *)
-(*     施工（lt 支 real_abs_pos_req；eq 支 real_eq_abs_compat     *)
-(*     + real_abs_zero_req + sym/trans 链）。本件独立重铸主件，   *)
-(*     另交付三件 CYB6 未有的扩展：                               *)
-(*     (a) r53_real_abs_lt_translate——strict 平移形：消费         *)
-(*         real_lt_plus_translate（左加法平移 S07:6086）把        *)
-(*         0<a 搬到 b+0 < b+|a|，右端点经 ≈ 运河换装 |a|          *)
-(*         （RealSetoid.real_lt_id_r S07:456）；                  *)
-(*     (b) r53_real_abs_eq_translate——eq 支平移形：消费           *)
-(*         real_abs_zero_req + real_eq_plus_compat（S07:219，     *)
-(*         参序 (a,c)/(b,d) 配对）；                              *)
-(*     (c) r53_real_abs_plus_translate——le 版 Or 编码打包         *)
-(*         （real_le = Or real_lt real_eq，S02:469，Set 层 Or     *)
-(*         S01:67-68=A+B，inl/inr 构造）；及 r53_real_abs_mult_id *)
-(*         Real 层乘位打包（镜像 CYB6 抽象层 ali_abs_id_mult_l，  *)
-(*         RealSetoid.real_eq_mult_compat S07:282）。             *)
-(*   - DPOLip 卡判词“库内 abs 引理全 eps/strict 型无 le 版        *)
-(*     abs==self”——le 版真引理族仅 fa53（抽象）/AbsLeId（抽象     *)
-(*     +本路径），本件 Real 层平移形为净新增，零占用。            *)
-(*                                                               *)
-(* 纪律：语句面全 Set 层（Or/Not 用 S01:67-68 Set 层定义）；       *)
-(*   零 Prop 泄露；无 公理/承认件/参数/猜想/弃证； *)
-(*   非平凡真证（三分/平移/≈运河/配对 compat 四段字段链）；       *)
-(*   fa53_compat_abs 只 Require 消费零改；原树零改。              *)
-(*   前缀 r53_ 全库防撞已 grep 核（消融50/vo_901/Live/build       *)
-(*   零命中，20260918 06:04 实测）。                              *)
-(* ============================================================ *)
+(* ==========================================================================)
+   AbsLeIdReal53.v — 实数具体层 le 版绝对值恒等引理族
+   使命: 主件 r53_real_abs_ge_zero_id（le zero a -> Id (abs a) a 的 Real 层独立兑现），并交付 strict/eq/le 三种平移形扩展与乘法兼容引理 r53_real_abs_mult_id；与抽象层 fa53 件相互独立，仅 Require 复用。
+   依赖: S01_BaseRing、fa53_compat_abs、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog。
+   对标: 数学原型：绝对值的恒等性 |a|=a（a≥0）及其平移与乘法形式；库内抽象层对应件为 fa53_compat_abs。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面全 Set 层（序谓词与等词为 Set 值，零 Prop 泄露）；文末 Print Assumptions 审计全部 Closed。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import fa53_compat_abs.
 
-(* ============ 第一层：抽象桥（fa53 系基座件直配，槽语句同面） ==== *)
-(* 与 fa53 同款上下文；@ 全显消费（DO 为证明体消费的节参，CYB6    *)
-(* 定谳：省略写法赌类型类解析不如显式喂）。                        *)
+(* ============ 第一层：抽象桥（fa53 系基座件直接匹配，槽语句同面） ==== *)
+(* 与 fa53 同款上下文；@ 全显使用（DO 为证明体使用的节参，CYB6    *)
+(* 结论：省略写法不如显式代入）。                        *)
 Section R53AbsBridge.
 
 Context {RI : RealInterfaceEnhanced}.
@@ -70,7 +38,7 @@ Require Import S03_QExp.
 Require Import S07_RealSetoidExpLog.
 
 (* ---- 主件：CYB6 路径独立重铸（real_abs_pos_req +               *)
-(*      real_abs_zero_req 双消费） ---- *)
+(*      real_abs_zero_req 双处使用） ---- *)
 Theorem r53_real_abs_ge_zero_id :
   forall a : Real, real_le real_zero a -> real_eq (real_abs a) a.
 Proof.
@@ -90,9 +58,9 @@ Proof.
       * exact Heq.
 Qed.
 
-(* ---- 扩展件1（消费 real_lt_plus_translate S07:6086）：strict 平移形
+(* ---- 扩展件1（使用 real_lt_plus_translate S07:6086）：strict 平移形
    real_lt_plus_translate 只做左加法平移（b+c < b+d），此处先把
-   0 < a 搬成 b+0 < b+a，再用 ≈ 运河把右端点 b+a 换装 b+|a|
+   0 < a 搬成 b+0 < b+a，再用 ≈ 运河把右端点 b+a 重述 b+|a|
    （|a| ≈ a 来自主件 lt 支；real_lt_id_r S07:456：req y z ->
    lt x y -> lt x z）。 ---- *)
 Theorem r53_real_abs_lt_translate :
@@ -109,12 +77,12 @@ Proof.
   - exact (real_lt_plus_translate b real_zero a Hlt).
 Qed.
 
-(* ---- 扩展件2（消费 real_abs_zero_req）：eq 支平移形 ----
+(* ---- 扩展件2（使用 real_abs_zero_req）：eq 支平移形 ----
    0 == a 时 b+0 ≈ b+|a|：sym 逆行后 |a| ≈ |0|（compat，a≈0 由
    Heq sym 供给）+ |0| ≈ 0（zero_req）单层 trans 即达；加法位经
    real_eq_plus_compat（参序 (a,c)/(b,d) 配对，交接文档 §4.2.15
    口诀）。坑记：嵌套 trans 尾段中项被 zero_req 定死为 real_zero
-   后 Heq 对不上（首跑实撞，见本席经验卡）。 ---- *)
+   后 Heq 对不上。 ---- *)
 Theorem r53_real_abs_eq_translate :
   forall a b : Real, real_eq real_zero a ->
     real_eq (real_plus b real_zero) (real_plus b (real_abs a)).
@@ -130,7 +98,7 @@ Proof.
     + exact real_abs_zero_req.
 Qed.
 
-(* ---- 扩展件3：le 版 Or 编码打包（S02:469 两支分决到件1/件2） ----
+(* ---- 扩展件3：le 版 Or 编码组合（S02:469 两支分决到件1/件2） ----
    语句面 Or = S01:67-68 Set 层（A + B），inl/inr 构造。 ---- *)
 Theorem r53_real_abs_plus_translate :
   forall a b : Real, real_le real_zero a ->
@@ -144,7 +112,7 @@ Proof.
   - exact (inr (r53_real_abs_eq_translate a b Heq)).
 Qed.
 
-(* ---- 扩展件4：Real 层乘位打包（镜像 CYB6 抽象层 ali_abs_id_mult_l）
+(* ---- 扩展件4：Real 层乘位组合（对应副本 CYB6 抽象层 ali_abs_id_mult_l）
    real_eq_mult_compat（S07:282）参序 (a,c)/(b,d) 配对：
    |a| ≈ a 喂 Hac 槽，b ≈ b 喂 Hbd 槽。 ---- *)
 Theorem r53_real_abs_mult_id :

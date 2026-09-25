@@ -1,45 +1,11 @@
-(* ============================================================ *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   bxcb_term_split（原 L129，2 句强证）	*)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 为恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
-(* 注一字未改（历史证据保全）；证明体、声明面、Require 面零改动，语句                               *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* ============================================================ *)
-(* 使命（BA 报告遗留③原文）：「系数桥：bpa_binom（Pascal 递归形）  *)
-(*   ↔ q_choose（阶乘比形）等价件，供下游 #29 exp_term_split       *)
-(*   （C(k,j)/k! = 1/(j!(k−j)!)）。」                             *)
-(*                                                               *)
-(*   左：UpReqBanachAdd L53 bpa_binom——对 n Pascal 递归 Fixpoint，  *)
-(*       S-形匹配免 Nat.sub 截断；k>n 出界恒为零（bpa_binom_out）。 *)
-(*   右：S07 L943 q_choose n k := q_fact n / (q_fact k * q_fact    *)
-(*       (n−k))——纯阶乘比 Definition，无 k≤n 守卫；k>n 时 Nat.sub  *)
-(*       截断使 q_choose n k == n!/k! ≠ 0（见 bxcb_q_choose_out）。 *)
-(*                                                               *)
-(* 【出界语义对齐，本桥第一坑】两侧仅在 0 ≤ k ≤ n 同义：无假设计   *)
-(*   面命题 forall n k, bpa_binom n k == q_choose n k 可反驳       *)
-(*   （反例 n=1,k=2：bpa 侧 0，q_choose 侧 1!/2!=1/2）。故主桥限定  *)
-(*   (k <= n)%nat——这是两侧定义形决定的语义对齐，非缩水；出界面    *)
-(*   另立 bxcb_q_choose_out（截断形显式）与 bpa_binom_out（零形）   *)
-(*   配对成账，全值域两半皆有正式件。                              *)
-(*                                                               *)
-(* 复用账（不重写，普查实测）：Pascal 恒等式 q_choose_succ、边界    *)
-(*   q_choose_0/q_choose_n、阶乘比分裂 q_choose_div_fact 全部取自   *)
-(*   冻结 S07 ExpPlusStage2（B2Tv2 卡点名 L940-1600）；bpr2_q_choose *)
-(*   （UpReqBanachProd2）与 q_choose 定义同构（delta 级），薄桥     *)
-(*   bxcb_binom_eq_bpr2 实例化分工。本文件零新算术引擎，纯桥接组装。  *)
-(*                                                               *)
-(* 红线自审：语句面全 Qeq（S07 同款面），nat 前提 (<=)%nat；证内    *)
-(*   无经典逻辑（Nat.eq_dec 是 Set 层 sumbool）；无承认件。         *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqBanachBinomBridge.v — 二项式系数双实现的恒等桥
+   使命: bxcb_binom_eq_choose（bpa_binom == q_choose 主桥）、数值锚组（(4,2) 双侧 == 6、出界 (1,2) 分歧锚）、bxcb_term_split（C(k,j)/k! == 1/(j!·(k−j)!)）与 bxcb_binom_eq_bpr2。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog、UpReqBanachAdd、UpReqBanachProd2；Stdlib QArith、Setoid、Lia
+   对标: 组合数两种实现的恒等桥与代数恒等式 C(k,j)/k! = 1/(j!(k−j)!)（二项式级数系数面）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

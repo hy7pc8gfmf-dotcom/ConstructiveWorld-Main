@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* UpReqPinWallEquiv.v —— 钉定不可证结果 ⟺ 受限 LPO（第三类定理化）    *)
 (*                                                                     *)
-(* 目的：钉定接口不可满足性与受限 LPO 的等价（第三类定理化）。           *)
+(* 使命：钉定接口不可满足性与受限 LPO 的等价（第三类定理化）。           *)
 (* 主件：pwe_pin_wall_lpo 与 pwe_canon_cstar_ok：钉定等价器与 C* 正典范  *)
 (*   可判定对接。                                                       *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv、               *)
@@ -114,7 +114,7 @@ Definition pwe_pin_gen (C : Set) (ev : C -> Q) (bnorm : C -> Q) : Set :=
 Definition pwe_canon_gen (C : Set) (ev : C -> Q) (bnorm : C -> Q) : Set :=
   forall c : C, Id (bnorm c) (Qabs (bxib_qnorm (ev c))).
 
-(* 泛型互斥定理：钉定形 × canon 形在任一落位点逼出 canon-raw 假等式 *)
+(* 泛型互斥定理：钉定形 × canon 形在任一实例点逼出 canon-raw 假等式 *)
 Theorem pwe_carrier_excl :
   forall (C : Set) (ev : C -> Q) (bnorm : C -> Q),
     pwe_pin_gen C ev bnorm -> pwe_canon_gen C ev bnorm ->
@@ -124,7 +124,7 @@ Proof.
   exact (id_trans (id_sym (Hpin x0)) (Hcanon x0)).
 Qed.
 
-(* E-载体（INSTB 自由项树）实例：esc 2#4 落位点直取假等式 2#4 = 1#2 *)
+(* E-载体（INSTB 自由项树）实例：esc 2#4 实例点直取假等式 2#4 = 1#2 *)
 Theorem pwe_E_carrier_excl : forall bnorm : bxib_E -> Q,
   pwe_pin_gen bxib_E bxib_ev bnorm -> pwe_canon_gen bxib_E bxib_ev bnorm ->
   Id (2#4)%Q (1#2)%Q.

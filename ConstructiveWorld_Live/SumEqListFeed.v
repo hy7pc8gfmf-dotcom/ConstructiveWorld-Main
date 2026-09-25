@@ -1,56 +1,32 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   sef_s15_slot_arg_pt（原 L154，2 句玩具证）                           *)
-(*   sef_g01_slot_arg_pt（原 L148，2 句玩具证）                           *)
-(*   sef_s13_unif_norm（原 L121，2 句玩具证）                             *)
-(*   sef_s13_zrow_le（原 L112，2 句玩具证）                               *)
-(*   sef_s13_zrow_ge（原 L103，2 句玩具证）                               *)
-(*   sef_attn_unif_norm（原 L89，2 句玩具证）                             *)
-(*   sef_attn_zrow_le（原 L79，2 句玩具证）                               *)
-(*   sef_attn_zrow_ge（原 L69，2 句玩具证）                               *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* SumEqListFeed.v —— 席位 CZB8（组 E-STAGING-CZB8）              *)
-(* sum_eq_list 四槽使用位「槽假设 → idt 核销件」重述 shim 补装件     *)
-(* 接 CYD7 交付（消融50/IdSlotTranslate.v：idt_sum_eq_list 定义性    *)
-(* 桥 + idt_slot_attdoeblin/g01/s13/s15 四宿主核销定理）            *)
-(*                                                               *)
-(* 侦查结论（真源 ConstructiveWorld_Live 逐字核对）：                *)
-(* 1) 使用形两类（四宿主八使用位全定位）：                           *)
-(*    【Form A｜槽证明项直接代入】AttnDoeblin:622/:629/:673 与           *)
-(*      S13:2813/:2820/:2864——槽语句 sum_eq_list g 作证明项喂        *)
-(*      le_id_r（:622/:2813，配 id_sym）/ le_id_l（:629/:2820）/      *)
-(*      id_trans 链头（:673/:2864，bs_Unif_norm）。                  *)
-(*    【Form B｜槽作显式实参】G01:485/:500 与 S15:156/:171——          *)
-(*      槽语句作 forall g, Id (sum_over_S g) (bs_list_sum g enum)    *)
-(*      型实参，填装上游泛化件 bs_kernel/bs_Zrow_pos 的槽参数位       *)
-(*      （G01:362 Require Import AttnDoeblin；S15:26 Require S13）。 *)
-(* 2) shim 形状已证结论：idt_slot_* 已是「槽语句形」核销件                *)
-(*      （forall enum g, Id (idt_sumf enum g) (宿主机 g enum)），     *)
+(* SumEqListFeed.v —— 使命：sum_eq_list 四槽使用位的「槽假设 → idt 衔接   *)
+(*   定理」重述 shim 补装件：接 IdSlotTranslate.v 交付（idt_sum_eq_list    *)
+(*   定义性桥 + idt_slot_attdoeblin/g01/s13/s15 四宿主衔接定理）。         *)
+(* 侦查结论（真源逐字核对）：                                              *)
+(* 1) 使用形两类（四宿主八使用位全定位）：                                *)
+(*    Form A｜槽证明项直接代入：AttnDoeblin:622/:629/:673 与               *)
+(*      S13:2813/:2820/:2864——槽语句 sum_eq_list g 作证明项喂              *)
+(*      le_id_r（:622/:2813，配 id_sym）/ le_id_l（:629/:2820）/            *)
+(*      id_trans 链头（:673/:2864，bs_Unif_norm）。                        *)
+(*    Form B｜槽作显式实参：G01:485/:500 与 S15:156/:171——                *)
+(*      槽语句作 forall g, Id (sum_over_S g) (bs_list_sum g enum)          *)
+(*      型实参，填装上游泛化件 bs_kernel/bs_Zrow_pos 的槽参数位            *)
+(*      （G01:362 Require Import AttnDoeblin；S15:26 Require S13）。       *)
+(* 2) shim 形状已证结论：idt_slot_* 已是「槽语句形」衔接定理               *)
+(*      （forall enum g, Id (idt_sumf enum g) (宿主机 g enum)），          *)
 (*    即 sum_over_S := idt_sumf 实例化消解读法下的槽假设本体——             *)
-(*    Form A 的重述 shim = 同骨架使用定理：原槽腿逐字换成             *)
-(*    idt_slot_*，结论侧 sum_over_S g 同步实现为 idt_sumf enum g；   *)
-(*    Form B 的重述 shim = 参数位填充件（改传参数形恰为 idt_slot_*   *)
-(*    型，Definition 级定义性填装）。                                *)
-(* 3) Form B 完整改喂（bs_kernel/softmax_temp 上游链以               *)
-(*    sum_over_S ↦ idt_sumf enum 重述）属宿主稿改写，非 shim 件       *)
-(*    范围；本件证其参数位可填装且填装件零前提（Closed）。            *)
-(* 4) 基座已证结论：任务书坐标 Live/vorebuild 无 IdSlotTranslate.vo      *)
-(*    （find 全库唯 vo_901 在盘）；CYD7 经验卡已证结论 Live/vorebuild     *)
-(*    旧 .vo 混轮勿 -Q，实证路径 = ConstructiveWorld_vo_901          *)
-(*    （268 件 .vo，IdSlotTranslate.vo  与本树 .v md5 同）。     *)
-(*                                                               *)
-(* 交付：Form A 重述桥六件（AttnDoeblin 三使用形 + S13 三使用形）     *)
-(* + Form B 参数位填充件两件（G01/S15）+ G4 Print Assumptions 八件。  *)
-(*                                                               *)
-(* 红线：全 Set 层（Id/le 均接口 Set 值字段）；纯构造性零承认位；     *)
-(* 既有文件零改；前缀 sef_ 全库防撞已核（grep 零命中）。              *)
+(*    Form A 的重述 shim = 同骨架使用定理：原槽支路逐字换成                *)
+(*    idt_slot_*，结论侧 sum_over_S g 同步实现为 idt_sumf enum g；         *)
+(*    Form B 的重述 shim = 参数位填充件，Definition 级定义性填装。         *)
+(* 3) Form B 完整改喂（bs_kernel/softmax_temp 上游链以                    *)
+(*    sum_over_S ↦ idt_sumf enum 重述）属宿主稿改写，非 shim 件           *)
+(*    范围；本件证其参数位可填装且填装件零前提（Closed）。                 *)
+(* 交付：Form A 重述桥六件（AttnDoeblin 三使用形 + S13 三使用形） + Form B 参数位填充件两件（G01/S15）+ G4 Print Assumptions 八件。     *)
+(* 依赖：Stdlib List；CW_ConstructiveWorld_219 UpReqSumD AttnDoeblin       *)
+(*   S13_NLiveAudit IdSlotTranslate。                                     *)
+(* 构造性注记：全 Set 层（Id/le 均接口 Set 值字段）；纯构造性（语句面     *)
+(*   无承认式构造）；既有文件零改；前缀 sef_ 全库防撞已核（grep 零命中）。 *)
+(* 编译配方：coqc 9.1 直调（vo 树内 -Q . "" 平面命名空间），信任缓存前置。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -82,7 +58,7 @@ Let le := @le RI.
 (* —— 使用位 AttnDoeblin:622（bs_Zrow_ge 骨架）——
    原推论形：le_id_r a (bs_list_sum g enum) (sum_over_S g)
              (id_sym (sum_eq_list g)) : le a (bs_list_sum g enum) -> le a (sum_over_S g)
-   改装推论形：槽腿逐字换 idt_slot_attdoeblin，结论求和位实现为 idt_sumf。 *)
+   改装推论形：槽支路逐字换 idt_slot_attdoeblin，结论求和位实现为 idt_sumf。 *)
 Lemma sef_attn_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (AttnDoeblin.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
@@ -100,7 +76,7 @@ Proof.
 Qed.
 
 (* —— 使用位 AttnDoeblin:673（bs_Unif_norm 骨架）——
-   原推论形：id_trans (sum_eq_list Unif) 后续链：槽为 id_trans 首腿。 *)
+   原推论形：id_trans (sum_eq_list Unif) 后续链：槽为 id_trans 首支路。 *)
 Lemma sef_attn_unif_norm : forall (en : list S) (g : S -> R) (b : R),
   Id (AttnDoeblin.bs_list_sum g en) b -> Id (idt_sumf en g) b.
 Proof.
@@ -114,7 +90,7 @@ Qed.
 (*      骨架与 AttnDoeblin 逐字同构，仅换机与改喂件）                  *)
 (* ============================================================ *)
 
-(* —— 使用位 S13:2813（bs_Zrow_ge 骨架，le_id_r + id_sym 槽腿）—— *)
+(* —— 使用位 S13:2813（bs_Zrow_ge 骨架，le_id_r + id_sym 槽支路）—— *)
 Lemma sef_s13_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (S13_NLiveAudit.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
@@ -130,7 +106,7 @@ Proof.
   exact (le_id_l (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en) b                 (idt_slot_s13 en g) Hle).
 Qed.
 
-(* —— 使用位 S13:2864（bs_Unif_norm 骨架，id_trans 链头槽腿）—— *)
+(* —— 使用位 S13:2864（bs_Unif_norm 骨架，id_trans 链头槽支路）—— *)
 Lemma sef_s13_unif_norm : forall (en : list S) (g : S -> R) (b : R),
   Id (S13_NLiveAudit.bs_list_sum g en) b -> Id (idt_sumf en g) b.
 Proof.

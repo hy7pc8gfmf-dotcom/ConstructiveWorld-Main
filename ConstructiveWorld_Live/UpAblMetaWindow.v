@@ -1,26 +1,11 @@
-(* ============================================================ *)
-(* UpAblMetaWindow.v —— World3 非退化核世界的双侧混合窗定理                          *)
-(*                                                              *)
-(* 【主件】mtw_window_two_sided：双侧合取窗定理（S01 基座 Set 层合取承载）。         *)
-(*   退化侧（退化世界）：凡核行全同的行随机核，点质量对一步即被退化——               *)
-(*     一步演化后两态分布逐点等于首行，TV == 0，混合窗退化为零。                    *)
-(*   存在侧（非退化世界）：World3（行互异+精确衰减）供体两支——                     *)
-(*     mtw_tv_exact_iter（TV(n) == (1/2)^n·TV₀ 精确幂律）与                        *)
-(*     mtw_no_mixing_below（budget < (1/2)^n·TV₀ ⟹ budget < TV(n) 预算下界），      *)
-(*   合取即「混合窗恰存在于非退化世界；退化世界以 TV(1)=0 显式退化」。               *)
-(*                                                              *)
-(* 【上游依赖（只读，零改）】UpAblMetaWorld3：mtw_step/mtw_titer/         *)
-(*   mtw_tv/mtw_mu0/mtw_nu0/mtw_half/mtw_sumf/req_r_pow 机器面 +                   *)
-(*   mtw_tv_exact_iter/mtw_no_mixing_below/mtw_hh_one 三支。                        *)
-(*   退化侧不使用 cf2 链（UpReqConcFin2/UpAblMetaLow）——其闭包携带 stdlib 经典       *)
-(*   公理继承面；本件退化支以泛型条件定理自证（比单世界实例更强：凡退化核皆退化）。      *)
-(*                                                              *)
-(* 【红线自审】零承认件；零经典逻辑；零新假设（前提位全显式定理参数）；                 *)
-(*   语句面全 Set 值（req/lt/le/Not 均基座 Set 层别名），无紫层泄露；                  *)
-(*   全件 Defined 收束可提取；基座代数桥（左零乘/自差零/零绝对值）本件自建。           *)
-(* 对标：mathlib 马尔可夫核混合窗（收因收敛上下界）；stdlib 无同形。                  *)
-(* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，-Q . ""，cpu_guard CoreN 2。         *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblMetaWindow.v — 两态核的退化窗与双侧混合窗
+   使命: mwi_step（两态核一步演化）、mwi_collapse_row_equal（核行全同 ⟹ 一步 TV == 0）、mwi_Kunif 均匀核实例与 mtw_window_two_sided（退化侧与持续侧双侧合取）。
+   依赖: S01_BaseRing、CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling、UpAblMetaWorld3
+   对标: 有限马尔可夫链混合时间窗（退化核与均匀核的总变差距离）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import CW_ConstructiveWorld_219.

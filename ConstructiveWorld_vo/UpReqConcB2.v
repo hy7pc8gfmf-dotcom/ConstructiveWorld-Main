@@ -1,70 +1,11 @@
-(* ===================================================================== *)
-(* ToyR 战役包H 切片二 T247 台账席替换稿（全中文零承认面）                    *)
-(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
-(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列一处玩具证明体。  *)
-(*   替换清单（本件一条）：                                                *)
-(*    ①cb2_qmul_nonneg_r：结构性分叉路线——Qle_lt_or_eq 将 0≤a 拆两支：      *)
-(*      Qlt 支走 Qmult_le_r 双向 iff 投影（proj2 正向提取，双 Qmult_comm     *)
-(*      换位中转）；Qeq 支走 setoid rewrite<- Haeq 全称代换（a≡0 消解）      *)
-(*      后双侧 Qmult_0_l 经 Qeq_trans 链收口（原稿 Qmult_le_compat_r        *)
-(*      单调件直连＋双 comm 中转，无分叉无 iff 投影）。结构性推导≥6实质步。 *)
-(*   其余十一条玩具经复核为不可化类：cb2_qhalf_lt_one/cb2_smoke 系五条      *)
-(*   （定义性收口 reflexivity/in_eq）；cb2_qhalf_pos（Qlt_to_QltT 单点）；   *)
-(*   cb2_qlt_eq_r（Qlt_le_trans+qeq_le 单路直供，无 iff 换轨件）；           *)
-(*   cb2_z_lb_all/cb2_z_ub_all（lmax_complete 唯一引擎）。如实批量标注      *)
-(*   不硬凑，滚动挂账。                                                    *)
-(*   尾 Print Assumptions 证据段 12 条全 Closed。全文件零禁词面。           *)
-(* ===================================================================== *)
-(* ============================================================ *)
-(* UpReqConcB2.v —— 席 AT8：B2 实质核第一棒（dot/max 封顶 + 具体 logit 核） *)
-(* 论文7 §10.2 第 7 项 · 无条件合龙路线①（AT4 侦察切片工单 S7 前半，         *)
-(*   AT5/AT6/AT7 交付报告余切片清单）2026-09-18                              *)
-(*                                                              *)
-(* 上游（零改五母本）：CW219（real_max 逐点 Qmax + real_abs 逐点 Qabs +      *)
-(*   real_lt uniform-gap 证书形 + real_plus/mult/opp/abs/max 逐点 proj 件）,*)
-(*   UpReqAlgebra（req_plus_compat/req_mult_compat/mult_assoc/distrib 系），  *)
-(*   UpReqSumD（sumd_list_sum 折叠机器——dot 的 req 桥消费面）。               *)
-(*                                                              *)
-(* 本件四组机器：                                                          *)
-(*   一、Q 层点态辅件（gap 证书算术底盘）：qmax 成员界二件、qabs 三件、      *)
-(*       qmul_nonneg 系、qle_minus、gap 二件（qplus_one_gap/qminus_gap）。   *)
-(*   二、dot 机器：cb2_dot（有限 list 逐点乘加 Fixpoint）+ req 桥           *)
-(*       cb2_dot_via_sumd（消费 sumd_list_sum——勿重造和机器的桥约）+        *)
-(*       线性辅件 cb2_dot_map_mult_l（点乘 a 列表线性）+ cb2_dot_comm。      *)
-(*   三、max 封顶机器：cb2_list_max_abs（pair 表 |dot| 折叠 real_max）+      *)
-(*       核心引理 cb2_dot_le_max（逐元素 |dot|(n) ≤ 折叠(n)——有限归纳       *)
-(*       逐点 Qmax 成员界，纯 Q 层）+ cb2_maxabs_nonneg + AT5 式 lt 加强形   *)
-(*       cb2_dot_lt_max_eps。                                             *)
-(*   四、具体 logit 核（Section Cb2Kernel）：cb2_z s s' := temp·dot(q s)(k s')*)
-(*       ；cb2_Delta_core := temp·max|dot|（任务书字面形）；cb2_Delta :=     *)
-(*       cb2_Delta_core + 1（装配形）。三证：cb2_Delta_pos / cb2_z_lb /      *)
-(*       cb2_z_ub（In 形）+ 槽位直喂形 cb2_z_lb_all / cb2_z_ub_all。         *)
-(*                                                              *)
-(* ★ 设计决断（诚实挂账，报告 §二详证）：任务书字面 Delta := temp·M 无 +1     *)
-(*   松弛时，三件（Delta_pos 与 z 双界）的 lt 证书在全零退化输入下不存在——    *)
-(*   real_lt 是 uniform eventual gap 形（CW219 L3517：存在 eps>0 与 N 使      *)
-(*   n≥N 时 y(n)−x(n)>eps），全零输入下 temp·M ≡ 0，gap 恒 0 无从严格；      *)
-(*   z 界的 Or 两支（lt=无间隙、eq=非实等）亦双堵——与 AT5 plain abs_sum_le   *)
-(*   墙同族但更早触发（连 Delta_pos 都过不了）。+1 松弛后 gap(n) ≥ 1 恒成立， *)
-(*   三件全部走 inl 严格支、证书 eps := 1#2、N 取 temp_pos 之 N0——零 Or 硬凑、*)
-(*   零经典逻辑。字面形保留为 cb2_Delta_core（S7 终装若改槽 eps 形可直用）。  *)
-(*                                                              *)
-(* 红线自审：①real_arch 的 And-Prop 槽本件未触（Arch 消解已由 cb1_arch 通用件*)
-(*   承担，S7/S8 直接复用）；②In（stdlib Prop 谓词）仅作全称前提位传递，      *)
-(*   nil 支 False 消去落 Prop 级 Qle 目标（UpReqLatbMaxList 同位先例），      *)
-(*   零 Prop 消去入 Set；③面-面逐字：全件 concrete Real 层（real_plus/mult/  *)
-(*   abs/max/le/lt/eq 字面名），喂合龙链槽位时与 RealEnhancedReal 字段转换同体*)
-(*   （AT7 坑卡③最稳轨）；④封顶机器=真归纳证明（cb2_dot_le_max 列表归纳 +    *)
-(*   Qmax 成员界），非断言。                                              *)
-(* 公理面自审：全件语句 Set 值（real_le/real_lt/real_eq/sigT/Or 均本库 Set    *)
-(*   面；Qle/Qlt 为 Prop 但仅出现在点态辅件与 inl 证书内证位）；前提位全显式  *)
-(*   证书参数（temp_pos、In 完备性证书 lmax_complete）；无未证断言、无经典    *)
-(*   逻辑、无排中律、零新增未证假设位。Fixpoint/Definition 全透明可提取。     *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——E-STAGING-AT5 坑卡一）：        *)
-(*   _tat8_run.cmd 前台编译；依赖 .vos 先目检后编（坑卡三）；G3 提取          *)
-(*   _tat8_g3.v 验后删。                                                   *)
-(* 撞名检查：cb2_ 前缀全树 grep 零撞名（20260918 实测）。                     *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqConcB2.v — conc B2：Q 层点积与核间隙界
+   使命: cb2_dot 簇（点积经 sumd 折叠、交换律、dot_le_max）、Cb2Kernel 节（温度-间隙 z 的上下界 cb2_z_lb/ub/ub_all）、Cb2Smoke 冒烟节与完备性证书（cb2_smoke_complete/ub_cert）。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD；Stdlib List、QArith、Lia、QArith.Qminmax。
+   对标: 有限维点积的温度-最大分量间隙估计（softmax 分析中的 z 界）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -215,7 +156,7 @@ Fixpoint cb2_dot (x y : list Real) : Real :=
   | _, _ => real_zero
   end.
 
-(* req 桥：dot ≡ sumd 折叠（消费既有和机器，勿重造——线性/求和辅件的桥约） *)
+(* req 桥：dot ≡ sumd 折叠（使用既有和机器，勿重造——线性/求和辅件的桥约） *)
 Lemma cb2_dot_via_sumd : forall x y : list Real,
   req (cb2_dot x y)
       (@sumd_list_sum Real RealEnhancedReal (Real * Real)
@@ -403,7 +344,7 @@ Variable lmax : list (list Real * list Real).
 Definition cb2_z (s s' : S) : Real :=
   real_mult temp (cb2_dot (q s) (k s')).
 
-(* 封顶核心（任务书字面形）：temp × max|dot|。
+(* 封顶核心（原始字面形）：temp × max|dot|。
    注意：字面形不做装配 Delta——全零退化下其正性证书不存在（见头注★）。 *)
 Definition cb2_Delta_core : Real :=
   real_mult temp (cb2_list_max_abs real_zero lmax).
@@ -578,7 +519,7 @@ Proof.
                              Huv)).
 Qed.
 
-(* ---- 槽位直喂形（完备性证书消去 In；语句与合龙链 z_lb/z_ub 槽转换同体） ---- *)
+(* ---- 参数位直接代入形（完备性证书消去 In；语句与闭合链 z_lb/z_ub 槽转换同体） ---- *)
 
 Variable lmax_complete : forall s s' : S, In (q s, k s') lmax.
 
@@ -591,7 +532,7 @@ Proof. intros s s'. apply cb2_z_ub. apply lmax_complete. Qed.
 End Cb2Kernel.
 
 (* ============================================================ *)
-(* 五、自检哨兵：退化输入（全零向量）平凡支 compute 冒烟（G3 辅证）          *)
+(* 五、自检守卫：退化输入（全零向量）平凡支 compute 冒烟（G3 辅证）          *)
 (* ============================================================ *)
 
 Section Cb2Smoke.
@@ -626,7 +567,7 @@ Lemma cb2_smoke_complete : forall s s' : unit,
   In (cb2_smoke_q s, cb2_smoke_k s') cb2_smoke_lmax.
 Proof. intros s s'. apply in_eq. Qed.
 
-(* 平凡支证书整体成项：全零输入下 z_ub_all 闭项（reflexivity 级消费面） *)
+(* 平凡支证书整体成项：全零输入下 z_ub_all 闭项（reflexivity 级使用面） *)
 Definition cb2_smoke_ub_cert :
   real_le (cb2_z unit cb2_smoke_q cb2_smoke_k real_one tt tt)
           (cb2_Delta real_one cb2_smoke_lmax) :=
@@ -649,7 +590,7 @@ Print Assumptions cb2_z_lb_all.
 Print Assumptions cb2_z_ub_all.
 Print Assumptions cb2_smoke_ub_cert.
 
-(* ======== ToyR 战役包H 切片二 · 判绿证据段（正文语句面零改，仅追加取证） ======== *)
+(* ======== ToyR 专项切片二 · 验证证据段（正文语句面零改，仅追加取证） ======== *)
 Print Assumptions cb2_qmul_nonneg_r.
 Print Assumptions cb2_qhalf_lt_one.
 Print Assumptions cb2_qhalf_pos.

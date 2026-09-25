@@ -1,43 +1,11 @@
-(* ============================================================ *)
-(* UpAblTwLeFeed.v —— tw_h_le 两点核差界的形式依赖模块                     *)
-(*                                                                *)
-(* 【使命】为 UpTempWindow 的 Section TempWindow 接口语句 tw_h_le         *)
-(*   （逐点绝对值界 |w_T(x) − 1/N| ≤ (e^{2Δ/T} − 1)·(1/N)，节卸载后      *)
-(*   外形）供给独立证明：语句与接口语句逐字对齐（世界接口                 *)
-(*   Tok/states/states_nonempty/zz/Delta/Delta_pos 逐字同位），           *)
-(*   外层谓词取 Bishop B 形（real_le_b，UpRealLeB 中可达的最强形）。      *)
-(*                                                                *)
-(* 【形态差异注记（三条）】                                               *)
-(*   ① 三角不等式路线的余量差：两点核差三角不等式                         *)
-(*     uabS4_abs_diff_triangle_le_B 经中点 m=E2L·u 在窗口三点上实例化     *)
-(*     （本件转换层 ntl_tw_diff_tri_*），给出 |w−u| ≤ |w−m|+|m−u| ≤       *)
-(*     (E2−2·E2L+1)·u，较接口语句的锐界 (E2−1)·u 多出                     *)
-(*     2·(1−E2L)·u ≥ 0（E2L ≤ 1）——锐界不可经单次三角不等式直达，        *)
-(*     故锐界主件改走「绝对值两支重组＋右吸收正余量」路线。                *)
-(*   ② B 形与 plain 形：接口语句实形为 plain Or 编码序                     *)
-(*     （real_le = Or(lt,eq)）；主件 A 取 B 形（real_le_b，Set 层         *)
-(*     forall 型）。plain⟹B 单向转换引理 real_le_to_le_b 在库；           *)
-(*     B⟹plain 方向按本库形态 doctrine 不可达（实数层构造序的形态         *)
-(*     边界）。故主件 A 交付 B 形，plain 形由 ntl_tw_h_le_feed 以         *)
-(*     两支重组独立供给（tw_abs_le 内构 Or 分支），不调用语句本体。        *)
-(*   ③ 前提同位：两支路线与语句本体同需 Delta_pos（负分支                  *)
-(*     「1−E2L ≤ E2−1」步经 tw_u2_pos 实例化，正性证书同源）——            *)
-(*     主件两件逐字保留接口全形（Delta_pos 在场且被使用），如实注记：      *)
-(*     接口无增无减，差异仅在外层谓词与证明路线。                          *)
-(* 【供给关系注记】主件 B 形两支均经 uabS4_le_add_r 右吸收 eps——该引理被   *)
-(*   实质使用（非平凡）；转换层三角实例为逐字实例化（见形态差异①）。       *)
-(*                                                                *)
-(* 【依赖】CW_ConstructiveWorld_219＋UpRealLeB＋S08_RealMainlineDPO＋     *)
-(*   UpTempWindow（接口语句源）＋UpAblAbsSumLeB（三角与右吸收供给源）。    *)
-(*   本件不触碰任何既有文件；不入 order.txt/_CoqProject。                 *)
-(* 【对标】数学原型：温度窗口下逐点分布对均匀分布的指数逼近界；            *)
-(*   mathlib/stdlib 无直接构造对应物。                                   *)
-(* 【构造性注记】零承认词面、无节内假设声明、无经典逻辑、全件 Qed 闭合；   *)
-(*   语句全 Set 层值；证明全构造，语句面无裸命题层。                       *)
-(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
-(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
-(*                                                                *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblTwLeFeed.v — 温度窗逐点三角不等式与供给族
+   使命: ntl_tw_diff_tri_B/ntl_tw_diff_tri_eps（温度窗差的 ≤_B/ε 三角形）、ntl_tw_arm_upper/ntl_tw_arm_lower（上下臂）与 ntl_tw_h_le_b_feed/ntl_tw_h_le_feed/ntl_tw_h_le_feed_to_b 供给族。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB、S08_RealMainlineDPO、UpTempWindow、UpAblAbsSumLeB；Stdlib List、QArith
+   对标: 温度加权分布扰动的逐点三角不等式与臂界（softmax 温度敏感性）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.Qring.

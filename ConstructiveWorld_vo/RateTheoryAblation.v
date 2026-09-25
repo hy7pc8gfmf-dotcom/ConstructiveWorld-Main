@@ -1,54 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T266 台账席 战役包AA（tier2 十七批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   rta_iter_contraction_wo_le_one（原 L114，2 句玩具证）                *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* RateTheoryAblation.v — 席位P7B（批次 E-STAGING-P7B）           *)
-(*   论文7《率即算法》§4 抽象率理论 假设消融施工件                 *)
-(*                                                               *)
-(* 使命：对 §4 的四条定理——4.1 tv_doeblin_contraction、           *)
-(*   4.2 tv_doeblin_iter（UpTVDoeblin.v Section TVRealWorld，      *)
-(*   L893/L1573）、4.3 klc_closed_powb_mono、4.4 klc_strict_branch  *)
-(*   （KLWallClosed.v L379/L393）——的前提假设逐条三分类，并对      *)
-(*   C 类（可消融）施工非平凡定理。前缀 rta_ 全库防撞。             *)
-(*                                                               *)
-(* 三分类定谳（详见交付报告）：                                    *)
-(*   A（库内已消融/更强形）：§9.1 表列接口中 delta_pos、K_pos、     *)
-(*     n_pos 三项未被证明体消费，出节后不提升为前提——实证坐标      *)
-(*     UpTVDoeblin.v L1991 调用形（仅 9 接口位）；δ=1 退化支已在    *)
-(*     tv_doeblin_contraction 内闭合（destruct delta_le_one，      *)
-(*     minorization 逼 K(i,j)==u j）。                             *)
-(*   B（接口前提=抽象参数，实例化已覆盖）：δ/minorization 接口由    *)
-(*     §6 注意力实例（δ*=lo²，AttnDoeblin）与 UpTVDoeblin Part 2    *)
-(*     （tvd_dstar_instance/tvd_dstar_iter_contraction，L1975/     *)
-(*     L1984）双实例覆盖；klc_closed_powb_mono 的 0≤η≤1 为紧前提。  *)
-(*   C（本件施工五定理）：                                          *)
-(*     §1 delta_le_one 前提消去——minorization + K_row + u_norm +    *)
-(*        逐点和单调 + 数乘线性 ⟹ δ ≤ 1（零分支判定，非平凡：       *)
-(*        Doeblin 接口的 δ 上界是推论而非前提）；                   *)
-(*     §2 定理 4.2 前提减薄实例形——以 §1 派生件喂出节后的           *)
-(*        tv_doeblin_iter，得无 delta_le_one/delta_pos/K_pos/       *)
-(*        n_pos 前提的迭代收缩实例定理；                            *)
-(*     §3 定理 4.4 的 Real 载体对应支——klc_strict_branch 仅 Q       *)
-(*        载体；本件以 real_lt（eps 见证形）前提给出 Real 载体的     *)
-(*        严格正证书 × Bishop 收缩 prod 打包（证书即 §8 墙所称      *)
-(*        不可免费取得之物，在 lt 前提下构造性取得）；               *)
-(*     §4 率层桥——tv_rpow（§4.2 率载体）与 powb_pow（§4.3 率代数    *)
-(*        载体）逐点相等（两 Fixpoint 同构的 eq 证）；               *)
-(*     §5 定理 4.3 在 tv_rpow 率层上的消耗形——经 §4 桥把            *)
-(*        klc_closed_powb_mono 运载到 Doeblin 残差率 (1−δ) 上。     *)
-(*                                                               *)
-(* 红线自审：语句面全 Set 层（real_le/real_lt/real_le_b/NatLe/     *)
-(*   prod 均 Set；零 Prop 泄露）；五禁词零出现；非平凡真证（逐点和  *)
-(*   单调×线性×setoid 链 / 桥归纳 / Or 分支分解）；零新公理；      *)
-(*   原树零改（本件新建于 消融50/，只 Require 消费基座件零改）。    *)
-(* ============================================================ *)
+(* ==========================================================================)
+   RateTheoryAblation.v — 率理论的消融对照件
+   使命: rta_delta_le_one_of_minorization（minorization 常数界）、rta_iter_contraction_wo_le_one（迭代收缩）、rta_strict_branch_real（严格支 Real 载体形）、rta_omd_powb_mono_b（幂单调）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB/2、G07_KLWall、KLWallClosed、UpTVDoeblin；Stdlib List、QArith.Qring。
+   对标: 马尔可夫链收敛率的组件化分解（消融分析）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 Import ListNotations.
@@ -117,7 +74,7 @@ Qed.
 (* ============================================================ *)
 (* §2 定理 4.2 前提减薄实例形：无 delta_le_one（更无 delta_pos/     *)
 (*   K_pos/n_pos）的 n 步迭代收缩——δ ≤ 1 由 §1 从 minorization      *)
-(*   派生（消费出节后的 tv_doeblin_iter 全参形，接口位序实证坐标    *)
+(*   派生（使用出节后的 tv_doeblin_iter 全参形，接口位序实证坐标    *)
 (*   UpTVDoeblin.v L1991）                                        *)
 (* ============================================================ *)
 
@@ -146,7 +103,7 @@ Qed.
 
 (* ============================================================ *)
 (* §3 定理 4.4 的 Real 载体对应支：0 ≤ η < 1 ⟹ 正性证书 × Bishop    *)
-(*   收缩 打包（klc_strict_branch 仅 Q 载体；本件 Real 载体，正性   *)
+(*   收缩 组合（klc_strict_branch 仅 Q 载体；本件 Real 载体，正性   *)
 (*   证书由 real_lt 的平移链构造性取得——tv_omd_pos_of_lt 泛化形）   *)
 (* ============================================================ *)
 
@@ -165,7 +122,7 @@ Proof.
                (real_plus_opp eta)).
     + exact (real_lt_plus_compat_lt_le eta real_one (real_opp eta)
                (real_opp eta) Hlt (real_le_refl (real_opp eta))).
-  - (* Bishop 收缩：klc_closed_powb_mono 消费 0 ≤ η ≤ 1 *)
+  - (* Bishop 收缩：klc_closed_powb_mono 使用 0 ≤ η ≤ 1 *)
     exact (klc_closed_powb_mono eta t t1 H0 (inl Hlt) Hle).
 Qed.
 
@@ -188,7 +145,7 @@ Qed.
 (* ============================================================ *)
 (* §5 定理 4.3 在 tv_rpow 率层上的消耗形：Doeblin 残差率 (1−δ) 的    *)
 (*   幂列 Bishop 单调——经 §4 桥把 klc_closed_powb_mono 运载到       *)
-(*   率层（§4.1/4.2 的率代数与 §4.3 的退化端处置就此合龙）          *)
+(*   率层（§4.1/4.2 的率代数与 §4.3 的退化端处置就此闭合）          *)
 (* ============================================================ *)
 
 Theorem rta_omd_powb_mono_b : forall (delta : Real) (n m : nat),

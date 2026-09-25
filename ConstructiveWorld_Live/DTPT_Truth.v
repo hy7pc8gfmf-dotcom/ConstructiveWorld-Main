@@ -1,97 +1,11 @@
-(* ============================================================
-   T241 · ToyR 战役包B 补位席切片二（DTPT_Truth.v 同名非平凡替换稿）
-   本片口径：层判别消解族（lv0_ne_lv1 / lv0_ne_lv2 / lv1_ne_lv2 /
-   level_pairwise_distinct）循主会话挂账口径如实标注「判别语义
-   边界」不硬编；tarski 复判为非玩具（见证构造即塔斯基语义半边
-   载荷，等价改写不增实质，见台账改判节）；其余二十五条按三条
-   口径替换——①定义层展开（change 全形消约序列）②显式见证
-   （含转发件母体逐字内联）③结构性推导（九支判定面/加强形归纳
-   骨架内联）；全部真 Qed、纯构造性；台账：
-   消融50/T240-ToyR-包B-DTPT族替换.md 切片二节。
-   ============================================================ *)
-(* ============================================================
-   DTPT_Truth.v — 证据分层判断网络（D10 构造性转译）
-                 + 塔斯基防自指定理构造性化（B1 缺口 TARSKI）
-   ①职责：
-     · 基础段（D10）：证据分层 Level/Evidence/TrNode 判断网络、
-       Tex/Tabs 真理载体；
-     · 补强段（S3 四件套）：序律（level_le 三律）/ 证据代数
-       （ev_size 正性、ev_append 结合）/ 见证构造（default_Tex）/
-       层升审查器（trLevel_geq、Lv2 节点存在）；
-     · 塔斯基段（U11，M4 并入）：tarski 主定理（对角化引理 =
-       显式前提 diag_closed，主定理承担语义半边）、no_uniform_truth、
-       否定对合条件性（involutive/negS 反例）、分层必要性桥
-       （Tr_α 只适用于 L_α：layer_self_refutation /
-       layered_network_liar_each_layer / level_confusion_revives_liar）、
-         renaming 封闭（diag_conj_spec / tarski_via_renaming）。
-     · 审查器段（S5 棒并入 DTPT_Audit.v）：零消费名救活（level_le_total/
-       trLevel_geq_trans/chain_ok 传递链/ev_append 精确加性）+ 双副本
-       相干桥（cv_ev/cv_lv/cv_node 往返保构与尺寸守恒）+ 组合审查器
-       （audit_node 行为双向/审查不降/桥上相干/门槛组合）。
-   ②依赖：Require Import QArith.QArith / List / Bool / Arith / Lia /
-          DTPT（Bool/Arith/Lia 三行随 S5 棒 Audit 并入增补，From Stdlib
-          形；negb / nat 构造子皆 Datatypes 预载）。
-          注意：本件与 DTPT.v 存在 Level/Evidence 双定义（U12 卡
-          在册）——本文件内裸名 Level/Lv0/Lv1/Lv2/Evidence 恒指
-          本件侧定义（文件内定义遮蔽 Import）。
-   ③归并记录：2026-09-14 DTPT-M4 席将 DTPT_Tarski.v（U11 席
-          2026-09-13）全量并入本文件尾部：删其 Require DTPT_Truth
-          （并入后同文件直引）；其 DTPT_Truth.Level/Lv0/Lv1/Lv2
-          限名引用逐处改直引并核对语义指向（原件引用本就是 Truth
-          侧定义，U12 卡口径）；Qed 面零改动。撞名预检：Tarski
-          顶层 19 名对 Truth 既有名 grep 零撞。源件退役为
-          DTPT_Tarski.v.retired_M4（全工作区 grep 无下游 Require）。
-          S5 棒（2026-09-15）：DTPT_Audit.v（U6 席 2026-09-13）全量并入
-          本文件尾（审查器段分隔注起，除 Require 块外逐字搬运；其
-          DTPT_Truth.DTPT_Truth. 限名逐处改直引——M4 先例、U12 卡口径，
-          语义指向逐一核对不变；DTPT.DTPT. 限名保持原样）。撞名预检：
-          Audit 顶层 38 名对本件既有名 grep 零撞。源件退役
-          DTPT_Audit.v.retired_S5（全工作区 grep 零下游）。
-          TRUTH-1 席（2026-09-14，AUDIT-2 审计 P2 梯队·Truth 集群）：
-          尾部追加真化段 T1——Tex 纤维带证据见证族与非平凡面
-          （审计 C1）/ RefNode·Tneg 定理化三件（审计 C3）/
-          ev_append 精确加性 Set 见证面（审计 C4·加分）六 Qed 四
-          Definition；layer_self_refutation 死参 lv 复核**真死**，
-          裁决仅注记不改陈述（A8 对账件，注记随行于该件后）。
-          既有语句零改动；认证件数随段增（56 → 62 件全 Qed，另
-          T1 新 Definition 四件：tex_with / tneg_tex_dual /
-          ev_append_size_set / ev_append_size_mono_set）；
-          文尾假设闭包打印块追加 T1 新件六条。下游 DTPT_Bridge.v
-          随棒重编不改正文（B3 消费 Truth，独占权延伸面）。
-          TRUTH-2 席（2026-09-14，AUDIT-2 审计 C 类最后深水件·
-          Evidence 内容面）：尾部追加真化段 T2（审计 C4/B7 深水区
-          「evSeq list Q 内容盲」判定面回填）四块——内容相等判定器
-          （ev_eqb 叶判 Qeq_bool + ev_cong 内容同余 + ev_eqb_true_iff
-          双向 iff；S7 边界诚实声明：Leibniz 可靠面在 Qeq_bool 叶判
-          下为假，ev_eqb_leibniz_gap 反例定理（1#2 vs 2#4）封死该向，
-          Leibniz 面由 ev_eqb_raw（Qnum/Qden 结构叶判）补全 iff）/
-          内容归纳原理（ev_rect' 显式三构造子消去 + beta 三方程 +
-          ev_size_pos 第三方法重证 ev_size_pos_third + 叶刻画
-          ev_size_1_leaf_iff 消费面）/ 深度有界面（ev_case_set 三叉
-          sigT 分解 + ev_size_ge_2_pair 尺寸门槛分解 +
-          ev_pair_decomp_exact 精确加性回收）/ 有界枚举器（ev_enum +
-          ev_enum_size_bound 有界面 + 形状级生成规则
-          ev_enum_pair_member；Q 叶截断至 0%Q 单见证的诚实边界
-          随段注记）。既有语句零改动；认证件数随段增（62 → 90 件
-          全 Qed，另 T2 新 Definition/Fixpoint/Inductive 十件）；
-          文尾假设闭包打印块追加 T2 新件八条 + 提取探针三件
-          （_t2_ext_eqb / _t2_ext_decomp / _t2_ext_enum）。下游
-          DTPT_Bridge.v（P3-B11 在飞）只读消费不受影响（纯追加、
-          既有名零改动）。
-   ④认证：56 件全 Qed（补强段 12 + 塔斯基段 15 + 审查器段 29）；
-          塔斯基段 5 件 + 审查器段 6 件 Print Assumptions 公理闭包
-          审计（应全 Closed）。
-          四关：G1 禁词 grep=0 / G2 .vo 新于 .v / G3 Qed 对账 /
-          G4 stderr 无 Anomaly/Error。
-   ⑤纪律：塔斯基段全显式 forall 形，无 Section Variable；零公理
-          零承认零中途放弃，全程 Qed 收口。
-   ⑥边界：nat 层代码一律显式 Datatypes.S / Nat.add / 构造子 O，
-          不裸用 +、<=、S（防 DTPT 传导 Q_scope 劫持，S3 头注）；
-          Tex 非空由 default_Tex 见证；Tabs 为全称函数面（无额外
-          方程）；塔斯基不可定义性的句法半边（对角化引理）以
-          diag_closed 公理化形状显式封包，非平凡化（见塔斯基段
-          方法论声明）。
-   ============================================================ *)
+(* ==========================================================================)
+   DTPT_Truth.v — 真谓词理论：塔斯基定理与层化说谎者
+   使命: tarski 定理与 no_uniform_truth、说谎者族（layer_self_refutation/layered_network_liar_each_layer/level_confusion_revives_liar）、层判别消解族（lv0_ne_lv1 等）、审查器（chain_ok/audit 事件尺寸族）、cv_/dt_ 编码转换与尺寸保持、有界面与尺寸预算族。
+   依赖: DTPT；Stdlib QArith、List、Bool、Arith、Lia、Extraction。
+   对标: 塔斯基真不可定义与说谎者悖论的层化（弱化）形式化。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import List.
 From Stdlib Require Import Bool Arith Lia.
@@ -120,7 +34,7 @@ Definition Tex (phi : Dig) : Type := { t : TrNode & trPhi t = phi }.
 Definition Tabs (phi : Dig) : Type := forall (m : Dig), Evidence.
 
 (* ============================================================
-   补强段（S3 席，追加式；上方既有语句零改动）
+   补强段（追加式；上方既有语句零改动）
    四件套：序律 / 证据代数 / 见证构造 / 层升审查器
    防御注记：DTPT.v 已 Open Scope Q_scope，本段 nat 层代码
    一律显式 Datatypes.S / Nat.add / 构造子 O，不裸用 +、<=、S
@@ -180,7 +94,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* nat 局部底座：Arith 的 Import 不经 DTPT 透传，自证零依赖 *)
+(* nat 局部基座：Arith 的 Import 不经 DTPT 透传，自证零依赖 *)
 Lemma nat_le_0 : forall n : nat, le O n.
 Proof.
   intros n. induction n as [| n' IH].
@@ -267,8 +181,8 @@ Proof.
 Qed.
 
 (* ============================================================
-   塔斯基段（M4 归并：原件 DTPT_Tarski.v，席 DTPT-U11，2026-09-13；
-   2026-09-14 全量并入，上方既有语句零改动，Qed 面零改动）
+   塔斯基段（M4 归并：原件 DTPT_Tarski.v；
+   全量并入，上方既有语句零改动，Qed 面零改动）
    原典对应（数字全域—熵相三元论·基座）：
      · :267-279 定义 2.8.1/2.8.2 语言分层 L_α 与 Tr_α 网络：
        真谓词 T_α 只适用于 L_α、不适用于自身 —— 本段 §3
@@ -366,7 +280,7 @@ Definition neg_truth (Code : Type) (neg : Code -> Code)
   fun c => negb (truth (neg c)).
 
 (* 条件性主引理：仅当 neg 对合时，码层否定真值在 neg c 处的取值
-   回收为 negb (truth c) —— 否定与真谓词的相容交换以对合为前提 *)
+   复用为 negb (truth c) —— 否定与真谓词的相容交换以对合为前提 *)
 Lemma neg_truth_at_neg :
   forall (Code : Type) (neg : Code -> Code) (truth : Code -> bool),
   involutive Code neg ->
@@ -416,25 +330,25 @@ Theorem layer_self_refutation :
   exists s, truth s = negb (truth s).
 Proof.
   intros lv Code diag truth Hclosed.
-  (* 口径二：内联母件 tarski 见证体——说谎句取同层对角化子
-     作用于「本句不真」性质，封闭前提一次消费即得方程 *)
+  (* 口径二：内联源件 tarski 见证体——说谎句取同层对角化子
+     作用于「本句不真」性质，封闭前提一次使用即得方程 *)
   exists (diag (fun c => negb (truth c))).
   exact (Hclosed (fun c => negb (truth c))).
 Qed.
 
-(* 【死参裁决 2026-09-14 TRUTH-1｜审计 A8 对账件】上件 layer_self_refutation
-   的全称参 lv : Level 经本席复核**真死**：lv 不出现于其余 binder（Code/
+(* 【死参裁决｜审计对账件】上件 layer_self_refutation
+   的全称参 lv : Level 经复核确认**真死**：lv 不出现于其余 binder（Code/
    diag/truth）的类型、前提 diag_closed Code diag truth 或结论 exists 中，
    证明体 exact (tarski Code diag truth Hclosed) 亦零消费——定理对 lv
    全称惰性，实质即 tarski 的换名包装。裁决：**仅注记、不改陈述**
    （删参将改动既有定理型，破坏本件尾注 Print Assumptions 面与下游
-   只读消费契约；对照 ADJ-2 phase_classify 删参先例的「保留名位」
-   格式，本件取纯注释形）。分层实质的真消费面为其后继
+   只读使用契约；对照 ADJ-2 phase_classify 删参先例的「保留名位」
+   格式，本件取纯注释形）。分层实质的真使用面为其后继
    layered_network_liar_each_layer（truth/diag 经 lv 逐层索引，lv 在
    diag_lv lv / truth lv 中真出现）——「Tr_α 只适用于 L_α」的类型级
    载荷由该件与 level_confusion_revives_liar 承担，与本件无涉。
    下游核查：DTPT_Bridge.v §7 grep 实测零引用本件（其层网件为
-   layered_network_liar_set，内联 existT 直构，只消费 diag_closed 形）。 *)
+   layered_network_liar_set，内联 existT 直构，只使用 diag_closed 形）。 *)
 
 (* 3.3 分层网络逐层说谎者：若真值网络对每层均匀取同层对角封闭，
        则每层都产出说谎句 —— 分层本身不豁免，豁免只来自不封闭 *)
@@ -445,14 +359,14 @@ Theorem layered_network_liar_each_layer :
   forall lv, exists s, truth lv s = negb (truth lv s).
 Proof.
   intros Code truth diag_lv H lv.
-  (* 口径二：内联母件 tarski 见证体的逐层实例——对角化子与真
-     谓词先按层 lv 取件，见证构造与封闭前提消费同层咬合 *)
+  (* 口径二：内联源件 tarski 见证体的逐层实例——对角化子与真
+     谓词先按层 lv 取件，见证构造与封闭前提使用同层契合 *)
   exists (diag_lv lv (fun c => negb (truth lv c))).
   exact (H lv (fun c => negb (truth lv c))).
 Qed.
 
 (* 3.4 层级混淆复活说谎者：Lv2 审 Lv1 时，若把 Lv1 层对角化子生成
-       的码当 Lv2 自家封闭律的实例消费（跨层误配 = 单层坍缩的工程
+       的码当 Lv2 自家封闭律的实例使用（跨层误配 = 单层坍缩的工程
        形状），说谎句即在 Lv2 复活。逆否读法：跨层求值（Lv2 审 Lv1）
        要安全，就必须带层指标、不得落入同层 diag 的封闭方程 ——
        这正是原典 :267-274「T_α 只适用于 L_α 不适用于自身」为何
@@ -464,8 +378,8 @@ Theorem level_confusion_revives_liar :
   exists s, truth Lv2 s = negb (truth Lv2 s).
 Proof.
   intros Code truth diag_l1 Hcross.
-  (* 口径二：内联母件 tarski 见证体——跨层封闭前提以 Lv2 真谓词
-     为消费面，对角化子保持 Lv1 层原件，见证一次构造成句 *)
+  (* 口径二：内联源件 tarski 见证体——跨层封闭前提以 Lv2 真谓词
+     为使用面，对角化子保持 Lv1 层原件，见证一次构造成句 *)
   exists (diag_l1 (fun c => negb (truth Lv2 c))).
   exact (Hcross (fun c => negb (truth Lv2 c))).
 Qed.
@@ -508,9 +422,9 @@ Qed.
 
 (* ============================================================
    审查器段（S5 棒归并分隔注）—— 以下为原 DTPT_Audit.v 全文
-   （S5 整合棒并入本文件尾；原件席 DTPT-U6，2026-09-13）
-   除 Require 块外逐字搬运，声明序与证法零改动；其头部职责任务注
-   原文照录于下。唯一非逐字面：原件对三底座「只 Require 不 Import、
+   （S5 整合棒并入本文件尾；源件 DTPT-U6）
+   除 Require 块外逐字移植，声明序与证法零改动；其头部职责任务注
+   原文照录于下。唯一非逐字面：原件对三基座「只 Require 不 Import、
    全限名引用防遮蔽」——并入后 DTPT_Truth.DTPT_Truth.X 限名前缀逐处
    改直引 X（M4 塔斯基段先例；原件所引即本件侧定义，U12 卡口径，
    语义指向逐一核对不变）；DTPT.DTPT. 限名保持原样（跨库双副本面）。
@@ -521,7 +435,7 @@ Qed.
 (* ============================================================
    DTPT_Audit.v — X2-4 组合审查器 + 双副本相干桥 + 零消费名救活
    职责：§1 零消费名救活——level_le_total / trLevel_geq_trans /
-           chain_ok 传递链（消费 level_le_trans）/ ev_append 精确
+           chain_ok 传递链（使用 level_le_trans）/ ev_append 精确
            加性（常数 k=1，由定义实形归纳推得，非拍脑袋）；
          §2 双副本相干桥——DTPT.Evidence 与 DTPT_Truth.Evidence
            逐构造同形，转换函数 cv_ev 即恒等映射形态，但往返保构
@@ -530,13 +444,12 @@ Qed.
            保构 + Tex 纤维铸造；
          §3 组合审查器——audit_node（层判 × 证据非空 bool 化）行为
            双向定理 + 换更高层节点审查不降 + 桥上审查相干 +
-           门槛单调与层判的组合审查定理（消费 llm_gate_pass_mono_thr）。
+           门槛单调与层判的组合审查定理（使用 llm_gate_pass_mono_thr）。
    依赖：QArith（QArith/Qabs）、Bool、Arith、Lia；DTPT / DTPT_Truth /
-         DTPT_LLM 三底座（均限名引用防遮蔽，本文件对三底座只
+         DTPT_LLM 三基座（均限名引用防遮蔽，本文件对三基座只
          Require 不 Import）。
-   归并记录：无（原生成模块；席 DTPT-U6，2026-09-13）。
-   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
-   纪律：纯构造性；四关收割；温控协议；nat 层一律显式
+   归并记录：无（原生成模块；源件 DTPT-U6）。
+   认证：零承认零公理；全树 coqchk EXIT=0。
          Datatypes.S / O / Nat.add / Nat.leb（防 Q_scope 劫持）；
          Q 语句一律 %Q 标注。
    ============================================================ *)
@@ -553,7 +466,7 @@ Proof.
 Qed.
 
 (* 1.1 层升检查的传递形：节点对要求层 a 过审（a ≤ 节点层）且要求
-   不升（b ≤ a）时对 b 过审——消费 level_le_trans 的第一下游。
+   不升（b ≤ a）时对 b 过审——使用 level_le_trans 的第一下游。
    （方向注记：trLevel_geq t lv 语义是 lv ≤ trLevel t，故传递律的
    合法形是"要求递降"，反向陈述为假命题，a=Lv0,b=Lv2,t=Lv0 反例） *)
 Theorem trLevel_geq_trans : forall (t : TrNode)
@@ -564,13 +477,13 @@ Theorem trLevel_geq_trans : forall (t : TrNode)
 Proof.
   intros t a b Ha Hb.
   (* 口径三：内联 level_le_trans 骨架——节点层投影 iota 归约后
-     九支布尔判定面逐一消约，不可行支判别剪枝，可行支反射收口 *)
+     九支布尔判定面逐一消约，不可行支判别剪枝，可行支反射闭合 *)
   destruct t as [lv p m v].
   unfold trLevel_geq in *.
   destruct a, b, lv; simpl in *; try discriminate; reflexivity.
 Qed.
 
-(* 1.2 传递链审查器：chain_ok 三节点链式判定（消费 level_le_trans） *)
+(* 1.2 传递链审查器：chain_ok 三节点链式判定（使用 level_le_trans） *)
 Definition chain_ok (l1 l2 l3 : Level) : bool :=
   andb (level_le l1 l2) (level_le l2 l3).
 
@@ -709,13 +622,13 @@ Proof.
 Qed.
 
 (* 2.9 保序·反对称性运输：level_le 反对称律经桥回运到 DTPT 侧
-   （消费 level_le_antisym + cv_lv_inj） *)
+   （使用 level_le_antisym + cv_lv_inj） *)
 Theorem cv_lv_antisym_transport : forall a b : DTPT.DTPT.Level,
   level_le (cv_lv a) (cv_lv b) = true ->
   level_le (cv_lv b) (cv_lv a) = true -> a = b.
 Proof.
   intros a b H1 H2.
-  (* 口径三：内联 cv_lv_inj 与 level_le_antisym 双母件骨架——
+  (* 口径三：内联 cv_lv_inj 与 level_le_antisym 双源件骨架——
      桥像上九支布尔面直接判定，对角支反射、异层支判别剪枝 *)
   destruct a, b; simpl in H1, H2; try discriminate; reflexivity.
 Qed.
@@ -730,7 +643,7 @@ Proof.
     first [ left; reflexivity | right; reflexivity ].
 Qed.
 
-(* 2.11 节点桥：DTPT.DTPT.TrNode → TrNode 四投影搬运 *)
+(* 2.11 节点桥：DTPT.DTPT.TrNode → TrNode 四投影移植 *)
 Definition cv_node (t : DTPT.DTPT.TrNode) : TrNode :=
   mkTrNode (cv_lv (DTPT.DTPT.trLevel t))
                       (DTPT.DTPT.trPhi t) (DTPT.DTPT.trModel t)
@@ -833,7 +746,7 @@ Proof.
   - intros [ H1 H2 ]. apply andb_true_intro. split; assumption.
 Qed.
 
-(* 3.3 尺寸支恒真引理（消费零消费名 ev_size_pos）：审查器退化为层判 *)
+(* 3.3 尺寸支恒真引理（使用零使用名 ev_size_pos）：审查器退化为层判 *)
 Theorem audit_node_eq_trLevel : forall t : TrNode,
   audit_node t = trLevel_geq t Lv1.
 Proof.
@@ -880,7 +793,7 @@ Proof.
 Qed.
 
 (* 3.7 桥上审查的语义相干：DTPT 侧节点过桥过审 ⟺ 层判经桥保序
-   （消费 audit_node_eq_trLevel + 节点桥投影） *)
+   （使用 audit_node_eq_trLevel + 节点桥投影） *)
 Theorem audit_bridge_iff : forall t : DTPT.DTPT.TrNode,
   audit_node (cv_node t) = true <->
   level_le Lv1 (cv_lv (DTPT.DTPT.trLevel t)) = true.
@@ -906,7 +819,7 @@ Proof.
   - exact (DTPT.DTPT.llm_gate_pass_mono_thr H thr1 thr2 Hthr Hgate).
 Qed.
 
-(* 3.9 收官：审查器升级（值提升至 Lv2 节点必过审）× 门槛单调合流 *)
+(* 3.9 完成：审查器升级（值提升至 Lv2 节点必过审）× 门槛单调合流 *)
 Theorem audit_node_chain_combo : forall (t : TrNode)
     (thr1 thr2 H : Q) (p m : DTPT.DTPT.Dig),
   (thr1 <= thr2)%Q ->
@@ -922,8 +835,8 @@ Proof.
 Qed.
 
 (* ============================================================
-   真化段 T1（TRUTH-1 席，AUDIT-2 审计 P2 梯队·Truth 集群，
-   2026-09-14，追加式；上方既有语句零改动）
+   真化段 T1（审计 P2 梯队·Truth 集群，
+   追加式；上方既有语句零改动）
    ①Tex 纤维真化（审计 C1）：既有面仅 eta 三件 + 铸造一件
      （llm_Tex_fiber / llm_Tex_fiber_inv / default_Tex_phi /
      Tex_fiber_cast，投影往返形）；本段新增带证据约束的信息性
@@ -933,7 +846,7 @@ Qed.
      Tneg 纤维）定义后零理论——本段补结构面/对偶面/尺寸面。
    ③Evidence 深水区（审计 C4/B7 加分件）：ev_append 精确加性
      （k=1）的 Set 见证形（Truth 本土版，以盘面实形核验：
-     DTPT_Bridge.v §7 桥件清单未消费 audit_ev_append_size_exact，
+     DTPT_Bridge.v §7 桥接件清单未使用 audit_ev_append_size_exact，
      与桥零重复；P3B3 报告 §1 表与 Bridge.v grep 双证）。
    纪律：零公理零承认零中途放弃，全程 Qed；nat 层显式
      Datatypes.S / O / Nat.add（防 Q_scope 劫持）；Q 字面 %Q。
@@ -944,7 +857,7 @@ Qed.
 (* 带证据约束的信息性见证族：对任意 phi 与任意证据值 e，纤维中
    存在携带该证据值的节点（sigT 首分量承载节点、第二分量合取
    方程 trPhi t = phi /\ trValue t = e——不止投影往返，证据值
-   信息性存活）。诚实注记：本族对 e 全称无前提（比任务书草图
+   信息性存活）。诚实注记：本族对 e 全称无前提（比早期草图
    ev_size e >= 1 更强）；且依 ev_size_pos（本件 §2），任意证据
    的尺寸恒 >= 1，该约束对全体 Evidence 可满足，非平凡性面见下。 *)
 Definition tex_with (phi : Dig) (e : Evidence) :
@@ -953,7 +866,7 @@ Definition tex_with (phi : Dig) (e : Evidence) :
 
 (* 纤维非平凡性面：存在尺寸 >= 1 的证据见证。evNum 0 直构可满足
    （核实 ev_size 定义如实：ev_size (evNum _) = Datatypes.S O，
-   恰为 1，le (S O) (S O) 以 le_n 收口）。 *)
+   恰为 1，le (S O) (S O) 以 le_n 闭合）。 *)
 Theorem tex_nontrivial : forall phi : Dig,
   exists t : TrNode,
     trPhi t = phi /\ le (Datatypes.S Datatypes.O) (ev_size (trValue t)).
@@ -963,12 +876,12 @@ Proof.
   split.
   - reflexivity.
   - (* 口径一：尺寸下界定义层消约——trValue 投影与 evNum 支
-       逐层归约出后继一，le (S O) (S O) 以 le_n 直构收口 *)
+       逐层归约出后继一，le (S O) (S O) 以 le_n 直构闭合 *)
     exact (le_n (Datatypes.S Datatypes.O)).
 Qed.
 
 (* 纤维 × 审查器组合面：Lv2 层携带证据的纤维见证必过审
-   （消费 audit_node_lv2，纤维族与审查器段首条组合边） *)
+   （使用 audit_node_lv2，纤维族与审查器段首条组合边） *)
 Theorem tex_nontrivial_audited : forall phi : Dig,
   exists t : TrNode, trPhi t = phi /\ audit_node t = true.
 Proof.
@@ -1003,9 +916,9 @@ Qed.
 (* 件二·对偶面：Tneg 与 Tex 同为「载体 × 首投影 = phi」纤维
    （以盘面定义实形为准：DTPT.v Tneg phi = {r : RefNode & refPhi r
    = phi}，本件 Tex phi = {t : TrNode & trPhi t = phi}）。同一 phi
-   的反例载体与肯定载体镜像同居：模型槽 m 逐字对齐，反证数据 v
+   的反例载体与肯定载体对应副本同居：模型槽 m 逐字对齐，反证数据 v
    经 cv_ev 桥映为肯定侧证据——「反例节点非空 iff 存在反例节点」
-   的盘面实形即双纤维无条件同居，本件给其信息性 Set 面（镜像
+   的盘面实形即双纤维无条件同居，本件给其信息性 Set 面（对应副本
    三元组全量方程存活，非单纯非空断言）。 *)
 Definition tneg_tex_dual : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
   {w : {r : RefNode & refPhi r = phi /\ refModel r = m /\ refCounter r = v}
@@ -1018,7 +931,7 @@ Definition tneg_tex_dual : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
 
 (* 件三·尺寸面：反例数据的桥测度与直测逐点重合（dt_ev_size =
    ev_size ∘ cv_ev 的定义方程在 Tneg 载体上实例化）+ 非退化支
-   （消费 ev_size_pos：任意反证数据过桥后尺寸 >= 1——反例门
+   （使用 ev_size_pos：任意反证数据过桥后尺寸 >= 1——反例门
    ev_size 恒开，与 audit_node_eq_trLevel 的审查器退化档互证） *)
 Theorem tneg_counter_size : forall (phi m : Dig) (v : DTPT.DTPT.Evidence),
   ev_size (cv_ev (refCounter (mkRef phi m v))) = dt_ev_size v
@@ -1028,7 +941,7 @@ Proof.
   intros phi m v.
   (* 口径三：合取双腿分证——左腿 RefNode 计数投影 iota 与桥测度
      delta 展开双侧归一；右腿内联 ev_size_pos 三构造子骨架：
-     叶支下界直构、Pair 支后继单调链收口 *)
+     叶支下界直构、Pair 支后继单调链闭合 *)
   split.
   - reflexivity.
   - destruct v as [q | l | a b].
@@ -1040,7 +953,7 @@ Qed.
 (* ---------- T1.3 Evidence 深水区：ev_append 精确加性 Set 面 ---------- *)
 
 (* 精确加性（k=1）的后继形方程：ev_size (ev_append a b) =
-   S (ev_size a + ev_size b)（消费底座件 audit_ev_append_size_exact
+   S (ev_size a + ev_size b)（使用基座件 audit_ev_append_size_exact
    重述为 Datatypes.S 形，供 Set 面与下游改写） *)
 Theorem ev_append_size_succ : forall a b : Evidence,
   ev_size (ev_append a b) = Datatypes.S (Nat.add (ev_size a) (ev_size b)).
@@ -1068,27 +981,27 @@ Definition ev_append_size_mono_set (a b : Evidence) :
   existT _ (ev_size a) (ev_append_size_mono_succ a b).
 
 (* ============================================================
-   真化段 T2（TRUTH-2 席，AUDIT-2 审计 C 类最后深水件·Evidence
-   内容面，2026-09-14，追加式；上方既有语句零改动）
+   真化段 T2（审计 C 类深水件·Evidence
+   内容面，追加式；上方既有语句零改动）
    审计 C4/B7 深水区定位：evSeq 携带的 list Q 内容全理论盲、
    Evidence 代数有尺寸/拼接而无内容相等/分解/枚举面——本段四块：
    ① 内容相等判定器（保底）：ev_eqb（叶判 Qeq_bool，list Q 逐点
      Qeq_bool）+ ev_cong 内容同余关系 + ev_eqb_true_iff 双向 iff。
-     S7 边界诚实声明（对齐 negS_not_involutive 反例范式）：任务书
+     S7 边界诚实声明（对齐 negS_not_involutive 反例范式）：早期草案
      草图 ev_eqb_eq : ev_eqb a b = true -> a = b（Leibniz）在此
      **不可证且为假**——Q 非正规化（1#2 与 2#4 异记录同值），
      Qeq_bool 只刻画 Qeq（有理等值）而非 Leibniz。本段以
      ev_eqb_leibniz_gap 显式反例定理封死该方向（对照 S7 边界声明
      范式照录），正方向可靠面改交 ev_eqb_true_iff（对 ev_cong 的
      完整双向）+ Leibniz 叶判变体 ev_eqb_raw（Z.eqb × Pos.eqb，
-     叶级 Leibniz）补全 iff——两种可判定等价各归其位，禁硬凑。
+     叶级 Leibniz）补全 iff——两种可判定等价各归其位，禁硬性拼合。
    ② 内容归纳原理（主件）：ev_rect' 显式三构造子消去（自由代数
      归纳原理显式化；与自动生成 Evidence_rect 同型，自建零依赖）
-     + beta 三方程 + 消费样板两件（ev_size_pos_third 第三方法
+     + beta 三方程 + 使用样板两件（ev_size_pos_third 第三方法
      重证 / ev_size_1_leaf_iff 叶刻画）。
    ③ 深度有界面（主件）：ev_case_set 三叉 sigT 信息性分解 +
      ev_size_ge_2_pair 尺寸门槛分解（size ≥ 2 必为 evPair 形）+
-     ev_pair_decomp_exact 精确加性回收（消费 ev_size_pair）。
+     ev_pair_decomp_exact 精确加性复用（使用 ev_size_pair）。
    ④ 有界枚举器（加分）：ev_enum 深度预算枚举 Fixpoint +
      ev_enum_size_bound 有界面（枚举出 ⇒ 尺寸 ≤ 预算）。
      诚实边界：Q 无穷 ⇒ 叶内容完备枚举不可能，枚举叶截断至
@@ -1217,13 +1130,13 @@ Proof.
   - apply ev_cong_eqb_complete.
 Qed.
 
-(* 【S7 边界诚实声明 2026-09-14 TRUTH-2｜任务书草图 ev_eqb_eq 的
+(* 【S7 边界诚实声明｜早期草图 ev_eqb_eq 的
    裁决件】Leibniz 可靠面 ev_eqb a b = true -> a = b 在 Qeq_bool
    叶判下**为假**，反例显式定理化：1#2 与 2#4 有理等值（Qeq_bool
    = true）但 Q 记录 Leibniz 相异（Qnum 1 ≠ 2）。裁决：以反例定理
    封死该方向（对照本件 negS_not_involutive 反例范式），内容相等
    的正确可靠面由 ev_eqb_true_iff（对 ev_cong）承担，Leibniz 面由
-   下述 ev_eqb_raw 变体承担——三面各归其位，非补丁非硬凑。 *)
+   下述 ev_eqb_raw 变体承担——三面各归其位，非补丁非硬性拼合。 *)
 Theorem ev_eqb_leibniz_gap :
   ev_eqb (evNum (1#2)%Q) (evNum (2#4)%Q) = true
   /\ (evNum (1#2)%Q : Evidence) <> evNum (2#4)%Q.
@@ -1257,7 +1170,7 @@ Lemma Qraw_eqb_refl : forall q : Q, Qraw_eqb q q = true.
 Proof.
   intros q.
   (* 口径一：原始叶判定义层展开——分子 Z.eqb 与分母 Pos.eqb
-     双通道各经命名自反方程改写，andb true true 归一反射收口 *)
+     双通道各经命名自反方程改写，andb true true 归一反射闭合 *)
   unfold Qraw_eqb.
   rewrite Z.eqb_refl, Pos.eqb_refl.
   reflexivity.
@@ -1310,7 +1223,7 @@ Proof.
   - apply andb_true_intro. split; assumption.
 Qed.
 
-(* Leibniz 可靠面（任务书 ev_eqb_eq 之名在此兑现）：raw 判定真 ⇒
+(* Leibniz 可靠面（ev_eqb_eq 之名在此兑现）：raw 判定真 ⇒
    Leibniz 相等 *)
 Theorem ev_eqb_raw_eq : forall a b : Evidence,
   ev_eqb_raw a b = true -> a = b.
@@ -1393,8 +1306,8 @@ Proof.
   reflexivity.
 Qed.
 
-(* 消费样板一：ev_size 正性的第三方法重证（对照 §2 ev_size_pos 的
-   induction 原证与 §审查器段消费面，本件经 ev_rect' 显式消去） *)
+(* 使用样板一：ev_size 正性的第三方法重证（对照 §2 ev_size_pos 的
+   induction 原证与 §审查器段使用面，本件经 ev_rect' 显式消去） *)
 Definition ev_size_pos_rect (e : Evidence) :
   le (Datatypes.S O) (ev_size e) :=
   ev_rect' (fun e' => le (Datatypes.S O) (ev_size e'))
@@ -1421,8 +1334,8 @@ Proof.
     e).
 Qed.
 
-(* 消费样板二：尺寸恰 1 ⟺ 叶（evNum/evSeq 二形）——内容归纳原理
-   的非平凡消费（Pair 支由尺寸方程封死），叶刻画定理 *)
+(* 使用样板二：尺寸恰 1 ⟺ 叶（evNum/evSeq 二形）——内容归纳原理
+   的非平凡使用（Pair 支由尺寸方程封死），叶刻画定理 *)
 Theorem ev_size_1_leaf_iff : forall e : Evidence,
   ev_size e = Datatypes.S O <->
   ((exists q : Q, e = evNum q) \/ (exists l : list Q, e = evSeq l)).
@@ -1444,7 +1357,7 @@ Qed.
 
 (* 三叉 sigT 信息性分解器：任意证据逐构造给等式见证（叶/序列/
    对三分支各携 Leibniz 方程）——Evidence 内容层的 case 分析
-   Set 面，下游 sigT 消费的基座 *)
+   Set 面，下游 sigT 使用的基座 *)
 Definition ev_case_set (e : Evidence) :
   {q : Q & e = evNum q}
   + ({l : list Q & e = evSeq l}
@@ -1472,7 +1385,7 @@ Proof.
   - exact (existT _ a (existT _ b Hpair)).
 Qed.
 
-(* 精确加性回收：分解 + ev_size_pair（§2）合流——尺寸 ≥ 2 的证据
+(* 精确加性复用：分解 + ev_size_pair（§2）合流——尺寸 ≥ 2 的证据
    尺寸恰为其二分件的后继和（存在式 Prop 包装，信息性核心在上件） *)
 Theorem ev_pair_decomp_exact : forall e : Evidence,
   le (Datatypes.S (Datatypes.S O)) (ev_size e) ->
@@ -1527,17 +1440,17 @@ Proof.
         simpl. lia.
 Qed.
 
-(* 有界面（任务书型）：枚举出 ⇒ 尺寸 ≤ 预算 *)
+(* 有界面（原始型）：枚举出 ⇒ 尺寸 ≤ 预算 *)
 Theorem ev_enum_size_bound : forall (n : nat) (e : Evidence),
   In e (ev_enum n) -> le (ev_size e) n.
 Proof.
   intros n e H.
   revert H.
-  (* 口径三：内联母件加强形归纳骨架（归纳假设对一切不超过 n 的
+  (* 口径三：内联源件加强形归纳骨架（归纳假设对一切不超过 n 的
      预算层齐备——裸陈述直接归纳在拼接右件的预算层处失配，
      加强形为本件最小自持形状）：零预算层空表剪枝，正预算层
      三分支——双叶见证位置直证，拼接支经 flat_map 与 map 双重
-     成员分解后两条归纳假设按预算差线性算术收口；终以自身
+     成员分解后两条归纳假设按预算差线性算术闭合；终以自身
      预算层实例化 *)
   assert (Haux : forall m : nat, le m n ->
            forall e0 : Evidence, In e0 (ev_enum m) -> le (ev_size e0) m).
@@ -1618,7 +1531,7 @@ Print Assumptions tarski_via_renaming.
 
 (* —— 以下 6 件为原 DTPT_Audit.v 文尾审计块逐字随行（S5 棒） —— *)
 
-(* ========== 四关取证：旗舰假设闭包打印 ========== *)
+(* ========== 四关取证：主定理假设闭包打印 ========== *)
 Print Assumptions cv_size_preservation_T.
 Print Assumptions cv_size_preservation_D.
 Print Assumptions cv_ev_round_trip_fwd.
@@ -1626,7 +1539,7 @@ Print Assumptions cv_lv_antisym_transport.
 Print Assumptions audit_gate_level_combo.
 Print Assumptions audit_bridge_iff.
 
-(* —— T1 真化段新增件假设闭包打印（TRUTH-1 席追加，四关 G4 附件） —— *)
+(* —— T1 真化段新增件假设闭包打印（真化段 T1 追加，G4 附件） —— *)
 Print Assumptions tex_with.
 Print Assumptions tex_nontrivial.
 Print Assumptions tex_nontrivial_audited.
@@ -1635,8 +1548,8 @@ Print Assumptions tneg_tex_dual.
 Print Assumptions tneg_counter_size.
 Print Assumptions ev_append_size_succ.
 
-(* —— T1 新增件提取探针（TRUTH-1 席；Obj.magic=0 取证用。B3 先例：
-   探针命令随宿主文件在册，产物 *_t1_ext_*.ml/.mli 验收后清场，
+(* —— T1 新增件提取检验（真化段 T1；Obj.magic=0 取证用。先例：
+   检验命令随宿主文件在册，产物 *_t1_ext_*.ml/.mli 验收后清场，
    下次重编再生、再清——同 Bridge.v §8 惯例） —— *)
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory ".".
@@ -1645,7 +1558,7 @@ Extraction "_t1_ext_evset" ev_append_size_set.
 Extraction "_t1_ext_evmono" ev_append_size_mono_set.
 Extraction "_t1_ext_dual" tneg_tex_dual.
 
-(* —— T2 真化段新增件假设闭包打印（TRUTH-2 席追加，四关 G4 附件） —— *)
+(* —— T2 真化段新增件假设闭包打印（真化段 T2 追加，G4 附件） —— *)
 Print Assumptions ev_eqb_true_iff.
 Print Assumptions ev_eqb_leibniz_gap.
 Print Assumptions ev_eqb_raw_true_iff.
@@ -1655,14 +1568,14 @@ Print Assumptions ev_size_ge_2_pair.
 Print Assumptions ev_pair_decomp_exact.
 Print Assumptions ev_enum_size_bound.
 
-(* —— T2 新增件提取探针（TRUTH-2 席；Obj.magic=0 取证用。B3/T1
-   先例：探针命令随宿主文件在册，产物 *_t2_ext_*.ml/.mli 验收后
+(* —— T2 新增件提取检验（真化段 T2；Obj.magic=0 取证用。先例：
+   先例：检验命令随宿主文件在册，产物 *_t2_ext_*.ml/.mli 验收后
    清场，下次重编再生、再清——同 Bridge.v §8 惯例） —— *)
 Extraction "_t2_ext_eqb" ev_eqb.
 Extraction "_t2_ext_decomp" ev_case_set.
 Extraction "_t2_ext_enum" ev_enum.
 
-(* —— 切片二替换件闭包打印（T241 补位席追加，四关 G4 附件） —— *)
+(* —— 切片二替换件闭包打印（切片二追加，G4 附件） —— *)
 Print Assumptions ev_size_pair.
 Print Assumptions default_Tex_phi.
 Print Assumptions exists_level2_node.

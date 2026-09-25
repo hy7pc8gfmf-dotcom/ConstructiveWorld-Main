@@ -1,86 +1,31 @@
 (* ============================================================ *)
-(* 【同名替换稿说明】本件为玩具级定理同名替换件：原件全文逐字保留， *)
-(* 仅将清单所列玩具位中真刀位之证明体替换为显式见证微刀（裸          *)
-(* reflexivity 换 Qeq_refl 显式项；apply 反射位换全参显式见证项），   *)
-(* 非刀位玩具体与其余全部文本逐字保留，声明面与引用面零改动，零新增  *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留原件   *)
-(* Print Assumptions 追印面。                                        *)
-(* 清单：                                                          *)
-(*   fw_energy_eta（原 L119，显式见证微刀 1 处）                             *)
+(* UpFirewall.v —— 熵防火墙：退化检测与恢复的构造性闭环               *)
+(* 使命: 形式化能量-温度界与熵温度单调性，及其上的防火墙循环。        *)
+(*   主件: fw_energy_eta／fw_lt_double（能量界）；entropy_temp_mono／  *)
+(*   entropy_temp_strict_mono（熵温度单调）；recovery_entropy_gain    *)
+(*   （恢复增益精确恒等式）及 fw_verdict／fw_detect_warm／            *)
+(*   firewall_loop（退化判定、升温目标与闭环证书）。                   *)
+(*   数学要点（代数恒等式路线，不取导数）: 对任意两正温度 t1 t2，     *)
+(*     ΔH := H(p_{t2}) − H(p_{t1})                                    *)
+(*        == β₂·(E₂ − E₁) + KL(p_{t1} ‖ p_{t2})   （β₂ := 1/t₂），    *)
+(*     由 relative_entropy_temp_decomp 与 entropy_temp_explicit       *)
+(*     三行即得；KL 项承担连续版 Var_T(E)（离散方差）的角色。         *)
+(*     单调性是恒等式的推论：t1 < t2 ⟹ E₁ ≤ E₂ ⟹ ΔH ≥ 0。            *)
+(*     对称 KL 恒等 (β₁−β₂)·(E₂−E₁) == KL(p_{t2}‖p_{t1}) +           *)
+(*     KL(p_{t1}‖p_{t2}) 与上式联立，给出第二恢复形态                 *)
+(*     recovery_entropy_gain_alt。                                    *)
+(*   显式边界: 1) 不主张 TV-熵传递（Pinsker 型不在此列）——只证        *)
+(*     升温 ⟹ 熵不降且增量有精确分解；2) fw_verdict 的 Or 是证书和    *)
+(*     （A+B），非布尔判定器（接口 le 序不可判定）；3) 前提接口       *)
+(*     base_loss／sum_over_S_pos／Z_temp／Z_temp_spec／inv_pos_lt_    *)
+(*     compat／lt_minus_nonneg／lt_plus_compat_lt_le 均为根区同名     *)
+(*     Variable 复刻（Real 层可实例化，非经典公理）。                 *)
+(* 依赖: CW_ConstructiveWorld_219。                                   *)
+(* 构造性注记: 纯构造性 / Set 层 / 语句零 Prop（Id/le/lt/And:=A*b/     *)
+(*     Or:=A+b/sigT）/ 全程零未证缺口、零经典公理 / 可提取 OCaml。     *)
+(* 编译配方: SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空），  *)
+(*     Rocq 9.1 coqc -q -native-compiler no，-Q 单根。                *)
 (* ============================================================ *)
-
-(* ============================================================ *)
-(* UpFirewall.v *)
-(* *)
-(* 目的： 防火墙机制：能量-温度界、熵温度单调与防火墙循环（Real 层）。 *)
-(* 主件： fw_energy_eta / fw_lt_double 能量界；entropy_temp_mono / entropy_temp_strict_mono；firewall_loop。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 基损失非负、求和正性等以显式 Variable 前提给出；判定面 fw_verdict 为 Set 层编码。 *)
-(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
-(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
-
-(* ============================================================
-   UpFirewall.v —— 熵防火墙：退化检测与恢复的构造性闭环
-   （上游三段：UpEntropyGain 增量核算 + UpBudgetReal 预算击穿）
-
-   纸笔推导（先于动手，完整链）：
-     连续对偶：H(T) = log Z(T) + E(T)/T，∂H/∂T = Var_T(E)/T² ≥ 0。
-     构造性离散版不走导数，走**代数恒等式**（本件件 2）：
-       对任意两正温度 t1 t2（无需任何序前提）：
-         ΔH := H(p_{t2}) − H(p_{t1})
-            == β₂·(E₂ − E₁) + KL(p_{t1} ‖ p_{t2})      （β₂ := 1/t₂）
-       三行证明：
-                relative_entropy_temp_decomp]
-             = H₂ − H₁                                 [熵显式
-                entropy_temp_explicit]
-       KL 项承担了连续版 Var_T(E) 的角色——"离散方差"。
-     单调（件 1）是恒等式的推论：
-       t1 < t2 ⟹ E₁ ≤ E₂（根 energy_exp_temp_mono，L17521）
-              ⟹ β₂·(E₂−E₁) ≥ 0（β₂ > 0，le_mult_compat_r）
-       KL ≥ 0（根 gibbs_inequality，L16629）
-       ⟹ ΔH ≥ 0 ⟹ H(p_{t1}) ≤ H(p_{t2})。
-     对称 KL 恒等（根 temp_strict_ident2，L17879）：
-       (β₁−β₂)·(E₂−E₁) == KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2})
-     与件 2 联立消 ΔE 得第二恢复形态（件 2 alt）：
-       ΔH == β₁·(E₂−E₁) − KL(p_{t2}‖p_{t1})
-     （除法式 ΔH == β₂(K₁₂+K₂₁)/(β₁−β₂) + K₂₁ 需 inv_pos 链，
-       无增量信息，显式弃用。）
-
-   结果件：
-     件 1  entropy_temp_mono：t1 < t2 ⟹ H(p_{t1}) ≤ H(p_{t2})
-           （严格前提版；接口层 le 序不可判定，非严格版以件 2
-             恒等式为精确内容——恒等式对一切正温度对成立）
-     件 2  recovery_entropy_gain：恢复增益精确恒等式（主形态）
-           + recovery_entropy_gain_alt：对称 KL 联立形态
-           + entropy_temp_strict_mono：严格单调档
-            （显式条件 同款：KL(p_{t2}‖p_{t1}) > 0）
-     件 3  fw_verdict（Or 编码健康/退化判定）+ fw_detect_warm
-           （退化 ⟹ sigT 升温目标 t' := t+t 与恢复证书）
-           + firewall_loop（闭环：温度不降 + 熵不降 + 判定重装）
-
-   显式边界（写进头的红线）：
-     1) 熵防火墙不主张 TV-熵传递（Pinsker 型在册构造性红线）——
-        闭环只证"升温 ⟹ 熵不降（且增量有精确分解）"，
-        不证"熵恢复 ⟹ 分布距离收缩"。
-     2) 闭环为证书形态非可判定检测：Real 层序不可判定（接口 le
-        无三分律；root L139-141 已移除 le_lt_dec 并注明其经典性），
-        fw_verdict 的 Or 是**证书和**（A+B），不是布尔判定器。
-     3) 显式接口假设（全部有根内同名先例，非经典公理）：
-          base_loss / sum_over_S_pos / Z_temp / Z_temp_spec
-            —— 根 FreeEnergyMinimization 区同名 Variable 复刻；
-          inv_pos_lt_compat / lt_minus_nonneg
-            —— 根 区同名 Variable（L17119-17121）复刻，
-               Real 层可实例化；
-          lt_plus_compat_lt_le
-            —— 根 ConvergenceCauchy 区同名 Variable 先例
-               （UpEntropyGain.v 同名复用），仅用于升温目标
-               t' := t+t 的严格性 lt t (t+t)。
-
-   纪律：纯构造性 / Set 层 / 语句零 Prop（Id/le/lt/And:=A*B/
-        Or:=A+b/sigT）/ 全程零未证缺口、零经典公理 / 可提取
-        OCaml（提取产物经验收关卡核验）。
-   ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 
 Section FirewallLoop.

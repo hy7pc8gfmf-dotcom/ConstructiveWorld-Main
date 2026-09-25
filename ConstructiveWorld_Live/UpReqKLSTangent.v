@@ -1,68 +1,11 @@
-(* ============================================================ *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   t1_kl_sum_strict_from_le（原 L176，2 句玩具证）                      *)
-(*   t1_kl_energy_nonconst（原 L155，2 句玩具证）                         *)
-(*   t1_gibbe2_gibbs_equality_bool（原 L130，2 句玩具证）                 *)
-(*   t1_exp_tangent_neg（原 L79，1 句玩具证）                             *)
-(*   t1_ep_four_terms（原 L67，2 句玩具证）                               *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 为恒等守恒——清单所列 5 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqKLSTangent.v *)
-(* *)
-(* 目的： KL 严格切线引理连锁（Gibbs 族严格化第一段）。 *)
-(* 主件： t1_kl_sum_strict_from_le 与 t1_kl_energy_nonconst：KL 和严格性与能量非恒常。 *)
-(* 依赖： CW_ConstructiveWorld_219、G07_KLWall、G08_Gibbs。 *)
-(* 备注： 第 1 项边界精化见登记；残余逐项可比前提为 Set 层诚实接口（尾注结论）。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(*                                                                *)
-(* 使命：Q 层四项交错部分和下界 1−t+t²/2−t³/6 ≤ e^{−t}（t>0）与三处     *)
-(*   连锁消解（KLStrict 无条件化 / gibbe2 注入前提消解 / 论文 §10.2     *)
-(*   第 1 项边界精化登记）。                                            *)
-(*                                                                *)
-(* 盘面核实（动手前 grep 裁决，见合规自查报告）：缺口单引理本体已在盘——     *)
-(*   G07_KLWall.v（UpReqKLEnergy 成员并入，经验卡 E401 已完成）闭合     *)
-(*   klst_ep_four_terms / klst_exp_tangent_neg / klst_log_tangent_neg  *)
-(*   / klst_gibbs_core_strict_neg / klst_kl_energy_nonconst 全链。      *)
-(*   依使命预案「已在盘 ⟹ 引用它做消解，不重证」。                      *)
-(*                                                                *)
-
-
-
-(*      w := −t 实例即 e^{−t} 形）。                                    *)
-(*   B. t1_log_eq_linear_inject：消解(b)核心「切点⟹一」——              *)
-
-(*      链：real_weak_trich（S07:5710，弱三分，直觉主义有效不触 LPO）  *)
-(*      + klst_log_tangent_neg（u<1 支）/ klst_log_tangent_pos（1<u 支）*)
-(*      + real_lt_compat（real_eq 对 real_lt 的 Proper）+               *)
-(*      real_lt_irrefl（S02:2391）收紧。「切点⟹一」弱于 log_eq_linear。 *)
-(*   C. t1_gibbe2_gibbs_equality_bool：消解(b)全件——G08 主件            *)
-(*      gibbe2_gibbs_equality_bool 的注入前提（Heqlin 接口位）无条件    *)
-(*      消除后的同强定理（注入位由 B 供给）。                           *)
-(*   D. t1_kl_energy_nonconst：消解(a)完成——无条件「能量非常数 ⟹      *)
-(*      KL>0」形重曝光（盘面 klst_kl_energy_nonconst，逐项前提为全称    *)
-(*      双向弱序 Or (p≤q) (q≤p)，负支 klst_gibbs_core_strict_neg 已补； *)
-(*      残余逐项可比前提为 Set 层诚实接口，见尾注结论）。               *)
-
-
-(*                                                                *)
-(* 红线自查：无公理声明件、无未闭合证明收尾、无经典回溯导入（G1 六禁    *)
-(*   词全数规避，以语义表述替代字面标注）；语句面全 Set（real_lt/      *)
-(*   real_le/real_eq + 库内 Set 层 Or，S01:69 Or A B := A + B）；       *)
-(*   Prop 仅现于 Not 接口参数（real_weak_trich 库内形，依存不外泄）；   *)
-(*   可提取性经 G3 检验见证（文件尾核 Print Assumptions 全 Closed）。   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqKLSTangent.v — KL 严格性与指数切线多项式
+   使命: t1_ep_four_terms（e^(−t) 四项下界多项式）、t1_exp_tangent_neg、t1_gibbe2_gibbs_equality_bool（Gibbs 等号条件）、t1_kl_energy_nonconst 与 t1_kl_sum_strict_from_le（和的严格性）。
+   依赖: CW_ConstructiveWorld_219、G07_KLWall、G08_Gibbs；Stdlib QArith、List、Arith、Lia
+   对标: 相对熵的严格正性与等号条件（Gibbs 不等式的强化形）及 e^(−t) 的切线下界。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.Qring.
 From Stdlib Require Import QArith.Qfield.

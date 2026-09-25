@@ -1,57 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   scale_dual_nat_sq_k（原 L243，2 句玩具证）                           *)
-(*   scale_dual_sq_k（原 L224，2 句玩具证）                               *)
-(*   sqrt_witness_nat_sq（原 L217，2 句玩具证）                           *)
-(*   sqrt_witness_sq（原 L211，2 句玩具证）                               *)
-(*   real_sqrt_one（原 L148，1 句玩具证）                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* AttnSqrt.v *)
-(* *)
-(* 目的： 构造性平方根的一般维数推广（抽象 R 层与 Real 层）。 *)
-(* 主件： real_sqrt_exists：正元的平方根存在性 sigT 见证形；sqrt_witness_sq / sqrt_witness_nat_sq 给出 k^2 维数一般化；nat_to_R 正性。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 纯构造性 Set 层；正性由指数函数给出，无需二分、夹逼或分支；零公理面。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* AttnSqrt.v —— P3 升级包：构造性平方根一般化                  *)
-(*                                                              *)
-(* G1（一般平方维数见证，抽象 R 层）：                           *)
-(*   - sqrt_witness_sq / sqrt_witness_nat_sq：k² 维数下的       *)
-(*     sqrt_witness 见证（库内此前仅有 d=4 机器检查实例）。      *)
-(*   - nat_to_R_pos：nat → R 嵌入的正性。                       *)
-(*   - scale_dual_sq_k：k² 维数下「1/k 缩放 == 温度 k」的       *)
-(*     scale_sqrt_witness_dual 实例化。                         *)
-(*                                                              *)
-(* G2（主菜，Real 层）：构造性平方根存在性                      *)
-(*   real_sqrt_exists : forall d : Real, real_le real_zero d -> *)
-(*   sigT (fun r => And (real_le real_zero r)                   *)
-(*                     (real_eq (real_mult r r) d)).            *)
-(*   路线（构造性，零经典）：real_le 在库内展开为              *)
-(*   Or (real_lt zero d) (real_eq zero d)——前提本身就是 Or，    *)
-(*   提供构造性情形数据：                                       *)
-(*   ① d ≡ 0（右支）：r := real_zero，r·r == 0 == d。           *)
-
-
-(*      cauchy_real_exp_plus（exp 加法性）+ cauchy_real_exp_wd  *)
-(*      （exp 外延）+ cauchy_real_exp_pos（exp 恒正）拼装：      *)
-
-(*      exp 正性给出（无需二分/夹逼/诊断分支）。                *)
-(*   注：任务书原建议对偶 cos π/2 二分模板；本实现改走库内      *)
-
-(*   且对弱前提 d ≥ 0 严格成立（Or 左支给出正间隙证书，         *)
-(*   右支给出 r := 0 的精确相等）——无假命题修正。               *)
-(*                                                              *)
-(* 纪律：纯构造性 Set 层、零 公理/承认件/弃证/经典。        *)
-(* ============================================================ *)
+(* ==========================================================================)
+   AttnSqrt.v — 构造性平方根存在性与一般维数推广
+   使命: real_sqrt_exists（正元平方根存在性 sigT 见证形）、sqrt_witness_sq/nat_sq（k² 维数一般化）、nat_to_R 嵌入三件、scale_dual_sq_k/nat_sq_k 温度缩放实例化。
+   依赖: CW_ConstructiveWorld_219；Stdlib List、QArith、Setoid、Morphisms。
+   对标: 实平方根存在性（Bishop 构造性分析；正性由指数给出，无二分分支）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.

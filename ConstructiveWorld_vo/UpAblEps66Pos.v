@@ -1,39 +1,11 @@
-(* ============================================================ *)
-(* UpAblEps66Pos.v                                               *)
-(*                                                               *)
-(* 使命：本件形式化 PPO 正性证书四件——Boltzmann 形 pi_old 的逐点    *)
-(*   严格正性（S08_RealMainlineDPO Section RealPPOMain 假设位      *)
-(*   real_pi_old_pos 的实例）、advantage 逐点正性的 beta·eps 边际    *)
-(*   条件形（假设位 real_advantage_pos 的条件形）、残差权           *)
-(*   E := Σ pi_old·adv 的严格正性（件三）及其边际供给形（件四），     *)
-(*   后者为 real_ppo_conservative_B 的前提提供实例供给。             *)
-(*                                                               *)
-(*   四件标识符：e66p_pi_old_pos、e66p_real_advantage_pos_margin、  *)
-(*   e66p_res_weight_pos、e66p_res_weight_pos_margin；另含两点具体  *)
-(*   和 e66p_sum2 及其外延、保序、加法、齐次四引理，为件三、件四     *)
-(*   的构造提供有限和实例。                                        *)
-(*                                                               *)
-(* 备注：件一的正性证明与 S08 的 real_boltzmann_dist_r_pos 同链      *)
-(*   （real_mult_positive × real_inv_pos_pos × real_exp_neg_pos），  *)
-(*   于独立载体上独立陈述。adv 的逐点严格正性对任意 adv 不成立，      *)
-(*   故件二取显式边际前提下的条件形，此为其构造性表述。              *)
-(*                                                               *)
-(*   件三的构造要点：单点下界 + 逐项非负 + 求和保序 + 零和恒等式     *)
-(*   重排 + real_lt 与 real_le 的复合。                            *)
-(*                                                               *)
-(* 依赖：S01_BaseRing – S07_RealSetoidExpLog（命名空间与源文件一致）； *)
-(*   S08_RealMainlineDPO（假设位所在源文件）。                       *)
-(*                                                               *)
-(* 对标：mathlib mul_pos / Real.exp_pos（积与指数函数的严格正性）。  *)
-(*                                                               *)
-(* 构造性：纯构造性、零承认、全 Qed；语句面全 Set 层（real_lt 为     *)
-(*   sigT 见证形、real_le 为 S01 的 Or 和型可解码形），无裸 Prop。   *)
-(*                                                               *)
-(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律        *)
-(*   -o 临时目录，树内 .vo 不重写。                                *)
-(*                                                               *)
-(*                                                               *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblEps66Pos.v — 重要性权重与优势余量的正性
+   使命: e66p_pi_old_boltzmann/e66p_pi_old_pos（旧策略 Boltzmann 形正性）、e66p_sum2 两点和外推族、e66p_res_weight_pos/e66p_res_weight_pos_margin（权重正性与余量）与 e66p_real_advantage_pos_margin。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、S05_AlignmentGRPO、S06_DiffSamplingGibbs等；Stdlib Extraction
+   对标: 重要性采样权重正性与组优势余量下界（策略梯度 clip 分析面）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

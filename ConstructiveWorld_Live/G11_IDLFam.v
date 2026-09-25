@@ -1,61 +1,11 @@
-(* ============================================================ *)
-(* G11_IDLFam.v —— 玩具复检替换稿（ToyR 战役包I tier1 第四批切片五）   *)
-(* 基准：Main/Live/G11_IDLFam.v（565 注册面最新基线，只读零写）。      *)
-(* 语句面/声明名序/依赖面与基准逐字一致（仅尾部按纪律增假设面收口申报节）。*)
-(* 计数勘核：剥注释后 Proof 92 = Qed 86 + Defined 6，零承认——           *)
-(* 切片三挂账「计数差 9」销案（疑 Qed 漏计 Defined 面）。               *)
-(* 本稿仅换六处玩具证明体：                                            *)
-(*   ① qrej_admit_false：tidQ 等式提取＋逐 qtype 三分支开路（[内]四支、  *)
-(*      [值]两支、[锚]两支）——拒答支不可能支由前提等式 discriminate 直灭，*)
-(*      不再单点消费 qadmit_isin＋clq_tid_trans＋clq_tid_cong 中转链。   *)
-(*   ② hbeq_refl：弃 eq 桥（clq_tid_eq＋Nat.eqb_refl），改六构造子全裂    *)
-(*      结构推导，逐支 delta/ι 计算收口。                               *)
-(*   ③ val_burn_reject：账态开壳＋焚后券面 None 逐支判别——真支不可能性   *)
-(*      由 qval_ok None 的 δ/ι 归约判别灭，假支定义层收口，弃 simpl 一把梭。*)
-(*   ④ xor_defused：定义层逐构造归约链——melt/mjoin/pjoin/iouof 全展，    *)
-(*      异或流表归约后 clq_tid_refl 收口，弃 clq_tid_eq 换轨捷径。        *)
-(*   ⑤ conflict_census：定义层逐构造归约链——iconf 六槽 pbc 和全展计算，  *)
-(*      同洞异值记一，弃 clq_tid_eq 换轨捷径。                           *)
-(*   ⑥ dbuild_len：定义层五段 snoc 逐 ι 归约链（dlen 折叠至 hmax），      *)
-(*      弃 clq_tid_eq 换轨捷径。                                         *)
-(* 其余五件如实标注不硬凑（vbeq_mkVd／pjR_PN／pget_mjoin 定义性转发唯一形；*)
-(* happy_wok／conflict_once 已于切片七补刀（E863 cbv 路线，照④批刀：        *)
-(*   unfold 强制展开 weave_b 在前，cbn 全展后 clq_tid_refl 收口）。          *)
-(* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；     *)
-(* Main 整目录只读；本稿落消融50 写区。                                 *)
-(* ============================================================ *)
-
-(* G 组：G11_IDLFam — 有限合并组（S/G 双系新命名，成员原样并入）
-   成员：UpCLQuery + UpIDL（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
-(* ======== G11_IDLFam 成员件：UpCLQuery（原样并入，自带 Require）======== *)
-(* ===================================================================== *)
-(* UpCLQuery.v — CL 2.0 分型拒答 Coq 落地：三类查询显式分型 + 结构性拒答      *)
-(*              + 差表封闭律语法免疫                                        *)
-(*                                                                       *)
-(* 设计出处：ROUNDTABLE2 上游会话 终稿（轮次 3）CL 2.0（2 票，上游会话/6 投票理由：    *)
-(*   Coq 落地路径全场最短）；排队模块位方案-二轮成果Coq化.md Q4 条目。  *)
-(*                                                                       *)
-(* 三组件：                                                                *)
-(*   件 1  三类查询显式分型 qtype：[内]QIN 平移不变 / [值]QVAL 价值 /          *)
-(*         [锚]QANC 绝对；可判定准入谓词（sumbool 三分派定义 bool 准入，       *)
-(*         *_eq 引理给直读形式；正确性 iffT 定理：准入 ⟺ sigT 凭证）。        *)
-(*   件 2  结构性拒答：qans = qans_val Z | qans_rej misscred——拒答是显式      *)
-(*         构造，缺失凭证型标 misscred 显式枚举（缺在册 MC_RANGE / 缺头券      *)
-(*         MC_VSLOT / 缺锚闭 MC_ANCH）；qdc 总分派 + qdc_spec +              *)
-(*         q·r·e·j·_·a·d·m·i·t·_·f·a·l·s·e + 券一次性（val_fresh_answer / val_burn_reject）。*)
-(*   件 3  差表封闭律语法免疫：dtab 归纳型，封闭律 dsub_cocycle 对一切         *)
-(*         d : dtab 无前提成立（破律差表在语法层不可写出——构造子封闭）；       *)
-(*         gauge shift 下 [内]类裁决平移不变（qin_gauge_invariant），绝对读出  *)
-(*         恰平移 c（pot_shift_moves）——语言中无平移不变的绝对读出通道。       *)
-(*                                                                       *)
-(* 载体全程 Z/nat/bool 判定层；语句零 Prop：等式用 tid、序用 nle、            *)
-(* 存在用 sigT、分支用 sumbool / bool+tid、⟺ 用 iffT（Set 层双函数记录）。   *)
-(* 纪律：纯构造性、无任何公理式出口、stdlib only、全链可提取。                 *)
-(* 定稿决策（未定稿细节按「落地最短+判定天然」自定，见技术报告）：             *)
-(*   差量域取 Z（Q 的整数格，判定天然）；头元规范 h=0 固定（pot i = 差 i 0）；  *)
-(*   头券 = 单槽 option (nat*Z)（指标+熔合绝对量），答一次即焚；               *)
-(*   锚义务列 = acol 归纳型（锚闭合事件 acolS），准入 = aread 命中。           *)
-(* ===================================================================== *)
+(* ==========================================================================)
+   G11_IDLFam.v — 查询-应答接口的判定语义族
+   使命: iffT 记录等价、距离/位移 cocycle（dsub_cocycle/dsub_shift_invariant）、查询正确性三件（qin_correct/qval_correct/qanc_correct）、判据器 qdc_spec 与拒答语义（qrej_admit_false/qadmit_answer/qadmit_reject）、烧毁计数器（val_fresh_answer/val_burn_reject）与异或编织演示段。
+   依赖: CW_ConstructiveWorld_219；Stdlib ZArith、ZArithRing、ZArith_dec、Bool、List、Lia。
+   对标: 可判定查询系统的语义正确性（判定 oracle 与编 Boxing 无关性的形式化）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import ZArith.
 From Stdlib Require Import ZArithRing.
@@ -664,8 +614,8 @@ Close Scope Z_scope.
 (*                                                                       *)
 (* 设计出处：ROUNDTABLE2 上游会话 轮次 3 终稿「熔锭差分织机（Ingot-Differential    *)
 (*   Loom, IDL）——两段制，判定流永不逐条重放」（含上游会话 异或击杀与上游会话 活锁     *)
-(*   击杀的双重收编）；排队模块位方案-二轮成果Coq化.md Q5 条目          *)
-(*   （依赖 Q4 语义——UpCLQuery.v 已给出，本件 Require Import 直接消费）。     *)
+(*   击杀的双重汇集）；排队模块位方案-二轮成果Coq化.md Q5 条目          *)
+(*   （依赖 Q4 语义——UpCLQuery.v 已给出，本件 Require Import 直接使用）。     *)
 (*                                                                       *)
 (* 两段制：                                                                *)
 (*   构造段（熔炼 melt）：判定流单遍右折叠为锭 ingot——六洞钉位（同值累计       *)
@@ -679,12 +629,12 @@ Close Scope Z_scope.
 (*   每枚判定都被织出表满足——出生免疫跨洞非法）/ weave_replay_b/_d +          *)
 (*   replay_census（整流重放：织造判定、织出件、冲突清点全部不变——活锁       *)
 (*   失去载体）/ recheck_pass（织出件交 Q4 判定面 [内]类查询逐词复核）/        *)
-(*   xor_defused（异或流如实记欠不织——二轮击杀实验的收编回归）。              *)
+(*   xor_defused（异或流如实记欠不织——二轮击杀实验的汇集回归）。              *)
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层（延续 Q4 Set 层路线：clq_tid/clq_nle/iffT/sigT）；      *)
 (* 语句零 Prop：等式 clq_tid、序 clq_nle、⟺ iffT、分支 bool/prod/sigT。              *)
 (* 纪律：纯构造性、零公理式出口、stdlib + UpCLQuery、全链可提取。              *)
-(* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面咬合最紧」自定）：     *)
+(* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面契合最紧」自定）：     *)
 (*   ① 六洞型 hole=k0 k1 kb kc ke kr 具象为六槽，参数位=Q4 dtab 指标 0..5，      *)
 (*      头元 k0 恒 0（gauge 规范），全部判定语义走头相对差 dsub d (hix h) 0。  *)
 (*   ② 判定 verd=洞型×向×Z 证据：pass(h,w) 立钉「值=w」；rej(h,e) 出差条款     *)
@@ -1158,7 +1108,7 @@ Proof.
   - tidQ H E2. discriminate E2.
 Qed.
 
-(* pin_P1_in：由 pin_P1_in_val/pin_PN_absurd 组合覆盖（见 pin_iffT 消费面） *)
+(* pin_P1_in：由 pin_P1_in_val/pin_PN_absurd 组合覆盖（见 pin_iffT 使用面） *)
 
 (* 钉位 = PN ⟹ 流中不可能有 pass(h,z) 判定（荒谬件，任意 Set 可关） *)
 Lemma pin_PN_absurd : forall (s : list verd) (h : hole) (z : Z),
@@ -1674,7 +1624,7 @@ Proof.
   apply (clq_tid_eq bool _ _). rewrite andb3_idem_eq. reflexivity.
 Qed.
 
-(* 桥：weave_b = isnil ∘ iouof（双 match 不交换，独立桥件） *)
+(* 桥：weave_b = isnil ∘ iouof（双 match 不交换，独立桥接件） *)
 Lemma weave_b_isnil : forall g : ingot,
   clq_tid bool (weave_b g) (isnil (iouof g)).
 Proof.
@@ -1765,7 +1715,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 8. Q4 判定面咬合：织出件受 [内]类查询逐词复核                                *)
+(* 8. Q4 判定面契合：织出件受 [内]类查询逐词复核                                *)
 (* ===================================================================== *)
 
 Lemma hix_nle : forall h : hole, clq_nle (hix h) hmax.
@@ -1780,7 +1730,7 @@ Proof.
 Qed.
 
 (* 主定理 5：织出件交给 Q4 问答机复核——[内]类差值查询的答案恰为判定钉值。
-   织机出生即证 + Q4 判定面独立复核，两件咬合。 *)
+   织机出生即证 + Q4 判定面独立复核，两件契合。 *)
 Theorem recheck_pass : forall (s : list verd) (d : dtab) (h : hole) (w : Z),
   clq_tid weaveout (weave (melt s)) (wok d) ->
   clq_tid bool (vIn (mkVd h vpass w) s) true ->
@@ -1801,7 +1751,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 9. 计算演示：异或流收编回归 + 幸福路 + 同洞异值记冲突一次                     *)
+(* 9. 计算演示：异或流汇集回归 + 幸福路 + 同洞异值记冲突一次                     *)
 (* ===================================================================== *)
 
 (* 二轮击杀实验（上游会话 异或流）的 IDL 回归：pass-A 后 rej-B——
@@ -1861,7 +1811,7 @@ Proof.
 Qed.
 
 Close Scope Z_scope.
-(* ============ 假设面收口申报（G4 前置，玩具面 11 件全查） ============ *)
+(* ============ 假设面闭合申报（G4 前置，玩具面 11 件全查） ============ *)
 
 Print Assumptions qrej_admit_false.
 Print Assumptions val_burn_reject.

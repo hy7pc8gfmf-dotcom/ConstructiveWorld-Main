@@ -1,6 +1,5 @@
 (* ============================================================
    UpAblAbsSumLeB3 —— 使命行：abstract sumf 接口本位 B 形供给模块
-(*                                                                *)
 (* 使命：本件形式化 |Σ sumf f| ≤_B Σ sumf (fun s => |f s|)—— *)
 (*   在 UpReqSampling 的诚实求和接口形（sum_ext/sum_linear/sum_add/     *)
 (*   sum_le/abs_sum_le_h 五接口字段；R:=Real 特化面，                   *)

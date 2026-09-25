@@ -1,20 +1,11 @@
-(* ===== fka_weak_triangle_ref.v ===== *)
-(* fka_weak_triangle_ref.v —— 二元 Gram 不等式核实例化引述件 *)
-(* 使命：二元 Gram 不等式核 (ac+bd)² ≤ (a²+b²)(c²+d²) 在实数层的实例化；
-   语句面逐字照录 ForwardKLAdjudication.v 定格区（三 Require ＋ Theorem ＋ exact 直接给出被引主件）。
-   被引主件 = WeakTriangleClose.wtc_weak_triangle_load（Section WeakTriangleLoad
-   花括号上下文出节后的形式：双隐最大插入 @wtc ?RI ?DO，DO 型=DecidableOrder(@RI_base ?RI)。
-   调形注记：定格区 exact 直接裸名调用与该形参数个数失配，故本件在证明内
-   intros 五参后以 @ 全显给出 wtc_weak_triangle_load，语句面零改动。
-   范围如实注记：本件所证内容为二元 Gram 核
-   (ac+bd)² ≤ (a²+b²)(c²+d²) 的实数层实例，并非 KL 弱三角真形本体
-   wtl_cond_triangle（后者仍是唯一真形，
-   见 ForwardKLAdjudication §二 件 1，UpReqWeakTriangle）。
-   构造性注记：语句面零公理零承认——本件唯一定理由被引主件直接给出，无新证明面、
-   无新声明、无经典逻辑面。
-   依赖 Require：S01_BaseRing、fa53_compat_abs、WeakTriangleClose；
-   Local Existing Instance RI_base 为裸名 R/plus/mult/le 顶层解析前提。
-   编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。 *)
+(* ==========================================================================)
+   fka_weak_triangle_ref.v — 二元 Gram 不等式核的实数层实例引述件
+   使命: fka_weak_triangle_ref：(ac+bd)² ≤ (a²+b²)(c²+d²) 的实数层实例——语句面逐字照录 ForwardKLAdjudication 定格区，由被引主件 wtc_weak_triangle_load 直接给出；范围如实注记为 Gram 核实例而非 KL 弱三角本体。
+   依赖: S01_BaseRing、fa53_compat_abs、WeakTriangleClose；Local Existing Instance RI_base。
+   对标: Cauchy–Schwarz 不等式的二元实数实例。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing. Require Import fa53_compat_abs.
 Require Import WeakTriangleClose.

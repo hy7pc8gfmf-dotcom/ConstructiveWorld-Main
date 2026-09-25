@@ -1,16 +1,9 @@
 (* ============================================================ *)
-(* UpReqKLStrict.v —— KL>0 严格引理族件。                        *)
-(* *)
-(* 使命： 本件形式化 KL>0 严格引理族（Gibbs 族严格化基座）。      *)
-(* 主件： klst_gap_shape 与 klst_exp_tangent_pos / klst_log_tangent_pos 切线正性族。 *)
-(* 依赖： CW_ConstructiveWorld_219。                              *)
-(* 构造性： 全 Set 层、零经典逻辑表面、零新公理面；全 Qed 闭合；可提取。 *)
-(* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。 *)
-
-(* ============================================================ *)
 (* UpReqKLStrict.v —— KL>0 严格引理族：Gibbs 族严格化              *)
+(* 使命： 形式化「能量非常数 ⟹ KL > 0」的严格引理族（Gibbs 族严格化）。 *)
+(* 依赖： CW_ConstructiveWorld_219（Q 层有理数基座；Stdlib QArith）。    *)
 (*   与 eps 形引擎 real_gibbs_inequality_B（UpRealLeB E.13）成对的      *)
-(*   「能量非常数 ⟹ KL > 0」缺口的第一批严格件。                        *)
+(*   「能量非常数 ⟹ KL > 0」缺口的严格件族。                        *)
 (*                                                                *)
 (* 主结果（全 Set 层、零 Prop 表出面、零新公理）：                      *)
 (*   A. klst_ep_two_terms：Q 层二阶部分和下界 n≥2、x≥0 ⟹              *)
@@ -37,8 +30,9 @@
 (*   字段（real_exp_ge_linear_eps 为 eps 形 Or 编码，等号分支不可提取——   *)
 (*   UpRealLeB 尾注同一已知限制在严格层的显形）。                        *)
 (*                                                                *)
-(* 红线：零公理零未闭合证明；Set 层语句（real_lt 为 sigT 见证集值）；     *)
-(*   全 Qed. 闭合；Print Assumptions 须 Closed。                        *)
+(* 构造性注记（红线）：零公理零未闭合证明；Set 层语句（real_lt 为 sigT    *)
+(*   见证集值）；全 Qed. 闭合；Print Assumptions 须 Closed。             *)
+(* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -616,11 +610,11 @@ Print Assumptions klst_list_sum_app.
 Print Assumptions klst_kl_sum_strict.
 
 (* ============================================================ *)
-(* 尾注（结论登记表）                                                    *)
+(* 尾注（结论总表）                                                      *)
 (*   结论 1（正支全链闭合）：严格指数/对数切线正支 + 严格 Gibbs 核 q>p 支 +   *)
 (*     退化对照件 + KL 严格和（弱序 p≤q 支）全 Qed，零假设位——            *)
 (*     「能量非常数 ⟹ KL>0」在 p≤q 侧已完整闭合。                        *)
-(*     勘误（后续续建完成）：①Part A 步进 case 以 Qle_trans 过 (B+0)           *)
+(*     技术注记：①Part A 步进 case 以 Qle_trans 过 (B+0)                      *)
 
 (*     ②gap_shape 的 real_eq_of_zero_diff 路线证伪（real_inv_pos 投影带    *)
 (*     if leb 分支，逐点 q == p·q·inv p 非恒等），改实层链               *)
