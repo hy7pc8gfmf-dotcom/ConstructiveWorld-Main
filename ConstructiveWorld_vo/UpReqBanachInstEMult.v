@@ -1,26 +1,30 @@
 (* ============================================================ *)
-(* UpReqBanachInstEMult.v —— 席E2：ConstructiveWorld 路径 B       *)
-(*   E-载体乘法群席（20260913，后台独立作业）                      *)
+(* UpReqBanachInstEMult.v —— ConstructiveWorld 路径 B             *)
+(*   E-载体乘法群件                                               *)
 (* ============================================================ *)
-(* 使命：消费 UpReqBanachInstB 的 E-载体正件（bxib_E 自由项树 +    *)
+(* 使命：使用 UpReqBanachInstB 的 E-载体正件（bxib_E 自由项树 +    *)
 (*   bxib_ev 求值 + bxib_bae 规范形 Leibniz 判据），补齐 INSTB     *)
-(*   挂账①的乘法群：                                              *)
+(*   未消解项①的乘法群：                                          *)
 (*   保底三件 = bxem_mult（定义）+ bxem_mult_wd（bae-良定义）      *)
 (*            + bxem_mult_assoc（结合律，R2L 向对齐类字段）。      *)
 (*   主件     = bxem_one + 单位律 l/r + 分配律 l/r + 交换律        *)
 (*            + bxem_mult_zero（类字段 bmult_zero 位）。           *)
-(*   席间回赠 = bxem_bplus_wd / bxem_bopp_wd（INSTB 挂账 ⓪′/⓪的   *)
-(*            wd 位——本席双 qnorm 塌缩技术同款即可闭合）。         *)
+(*   附带供给 = bxem_bplus_wd / bxem_bopp_wd（INSTB 未消解项        *)
+(*   ⓪′/⓪ 的 wd 位——同款双 qnorm 塌缩技术即可闭合）。             *)
 (* 选型账：乘法定义取载体既有构造子位 bxib_emult（E 是自由项树，   *)
 (*   ev 在 emult 位已按 qnorm∘Qmult 复合，零新算术）；全部代数律    *)
 (*   = stdlib Qmult 引擎（Qmult_assoc/1_l/1_r/0_r/comm/plus_distr）*)
 (*   + bxib_qnorm_fix（换心）+ bxib_qnorm_fix_id（双 qnorm 塌缩）  *)
-(*   + bxib_qnorm_id_of_qeqT（Id 收口）三件套，与 INSTB bplus 同款。 *)
+(*   + bxib_qnorm_id_of_qeqT（Id 闭合）三件套，与 INSTB bplus 同款。*)
 (* 铁律自审：公理面零命中；语句面全 Set（bae/Id/QeqT）；冻结件与   *)
-(*   Pre/ExpAddEq/CauchyD 零改动（仅 Require 消费）；前缀 bxem_    *)
+(*   Pre/ExpAddEq/CauchyD 零改动（仅 Require 使用）；前缀 bxem_    *)
 (*   零撞名。                                                     *)
 (* 工程注：目标内含 bxib_qnorm（Z.gcd/Z.div）的子项一律禁 simpl，   *)
 (*   走 change 显式 iota + 引理改写；Qeq 改写面与 INSTB 同款。      *)
+(* 构造性注记：全链 Qed 收束，公理面零命中，零承认、零经典逻辑；语句面全 *)
+(*   Set 层（bae/Id/QeqT 承载）。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -38,7 +42,7 @@ Definition bxem_mult (a b : bxib_E) : bxib_E := bxib_emult a b.
 
 Definition bxem_one : bxib_E := bxib_esc 1%Q.
 
-(* ---- QeqT 乘法cong（镜像 INSTB bxib_qeqT_cong_plus，stdlib 缺口） ---- *)
+(* ---- QeqT 乘法cong（与 INSTB bxib_qeqT_cong_plus 同构，stdlib 缺口） ---- *)
 
 Lemma bxem_qeqT_cong_mult : forall a b c d : Q,
   QeqT a b -> QeqT c d -> QeqT (Qmult a c) (Qmult b d).
@@ -234,7 +238,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* E4：席间回赠——INSTB 挂账 ⓪′/⓪ 的 wd 位（同款塌缩技术顺收）      *)
+(* E4：附带供给——INSTB 未消解项 ⓪′/⓪ 的 wd 位（同款塌缩技术顺带闭合）*)
 (*   （bxem_bplus_wd / bxem_bopp_wd：装配位与类字段 bplus_wd/       *)
 (*    bopp_wd 逐字同形，W6 可直取。）                              *)
 (* ============================================================ *)
@@ -268,7 +272,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 提取探针（G3 面）                                              *)
+(* 提取检验                                                       *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

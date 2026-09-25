@@ -55,7 +55,10 @@ Definition almc_z : bool -> Real := fun _ => real_one.
 
 (* 并列证书：双 max 同值（z 常值，定义形） *)
 Lemma almc_tie : real_eq (almc_z true) (almc_z false).
-Proof. apply real_eq_refl. Qed.
+Proof.
+  (* 并列证书：双 max 同值——常值载体两侧定义性归约为 real_one，恒等见证取该公共项。 *)
+  exact (real_eq_refl real_one).
+Qed.
 
 (* 表可判定等词（S01 Id 面，@inl／@inr 构造；异构造子支以
    J-式依赖返回子句排除：P(y) 在失配指标取空型、在参数侧取 unit，

@@ -3,6 +3,7 @@
 (* 前提：S15_TailFEPUp.v 的 grp_eq_dec（Variable grp_eq_dec : forall      *)
 (*   i j : Group, Or (Id i j) (Not (Id i j))，族A·可判等）。          *)
 (* 世界：Group := bool 二元枚举型；R := nat 极小 Set 层载体。          *)
+(* 依赖清单：零本库依赖（§0 S01 同型极小基座自建零依赖；Stdlib Extraction 直引）。 *)
 (* 零承认件：本件纯构造，无任何承认式底层，全部 Qed，可提取。          *)
 (* 范围注记：抽象 Group 上的 grp_eq_dec 一般构造仍属未竟（本件不改变   *)
 (*   此状况）；本件为载体相对性实证——可判等实例依托 bool 载体的        *)
@@ -423,7 +424,13 @@ Lemma bg_grp_eq_dec_core_correct : forall i j : bool,
   end.
 Proof.
   intros i j.
-  destruct i; destruct j; cbn [bg_grp_eq_dec bg_dec_core]; apply id_refl.
+  (* 分情形：bool 载体四支判定——inl 支判定核 bg_dec_core 归约为 true，inr 支归约为
+     false，逐支以 Id 自反见证 @id_refl 连显式右端项收束。 *)
+  destruct i; destruct j; cbn [bg_grp_eq_dec bg_dec_core].
+  - exact (@id_refl _ true).
+  - exact (@id_refl _ false).
+  - exact (@id_refl _ false).
+  - exact (@id_refl _ true).
 Qed.
 
 (* 该位公理依赖核验（应全为 Closed） *)

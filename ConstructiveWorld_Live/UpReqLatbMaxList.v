@@ -1,13 +1,3 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   latb_max_list_le_prepend（原 L229，2 句玩具证）                      *)
-(*   latb_max_list_cons_eq（原 L91，4 句玩具证）                          *)
-(* ============================================================ *)
 
 (* ============================================================ *)
 (* UpReqLatbMaxList.v *)
@@ -16,17 +6,19 @@
 (* 主件： latb_max_list_le_b 及其归纳形 latb_max_list_le_b_ind；latb_lt_max_list_intro。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、UpRealLeB3、G06_BForm。 *)
 (* 备注： 为逐点函数而非最小上界公理；上界参数无需稠密性或分支证书。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqLatbMaxList.v —— B 形扩展线 · max 侧列表版格组合件（席T19b）  *)
+(* UpReqLatbMaxList.v —— B 形扩展线 · max 侧列表版格组合件  *)
 (*                                                                *)
 (* 立项：B形扩展线仪表-20260910 §⑥3「侦察单未立项面」首项——        *)
 (*   「r_max 列表面：real_r_max_le_l_eps/le_r_eps 下界件已入  *)
 (*   LeB Part E（L475/482），r_max 上界格组合（max 侧同构的列表版）  *)
 (*   侦察单 T4 草图未含、未立项」。本库即该面立项落盘。              *)
 (*                                                                *)
-(* 上游消费（全既有件，零新增前提位）：                              *)
+(* 上游使用（全既有件，零新增前提位）：                              *)
 (*   G06_BForm（T4a/T4b latb_ 十一件：二元上界格主件 latb_max_le_b、  *)
 (*     严格上界引入基元 latb_lt_max_intro——本列表版的两块格胶水）；   *)
 (*   UpRealLeB（Part E 下界件 real_r_max_le_l_B / real_r_max_le_r_B  *)
@@ -43,8 +35,8 @@
 (*   1. latb_lt_max_list_intro：严格上界引入基元（latb_min_glb 的     *)
 (*      lub 面列表对偶位）——凡成员严格小于 d，折叠 max 严格小于 d。   *)
 (*   2. latb_max_list_le_b：主件（上界格律列表版）——成员全 ≤_B c     *)
-(*      ⟹ 折叠 max ≤_B c。max 侧 eps 槽红利同构直达：eps 恰挂        *)
-(*      latb_lt_max_list_intro 结论槽 d = c+eps 内，one 完成器单步    *)
+(*      ⟹ 折叠 max ≤_B c。max 侧 eps 位红利同构直达：eps 恰挂        *)
+(*      latb_lt_max_list_intro 结论位 d = c+eps 内，one 完成器单步    *)
 (*      闭合（对照 min 侧主件 latb_min_le_b 须完整逐点证+Q.min_dec    *)
 (*      分支——不对称判据见 T4b 勘误卡，勿对偶砍半）。                 *)
 (*   3. latb_max_list_le_b_ind：主件另径（逐 list 归纳 + 二元律       *)
@@ -60,11 +52,11 @@
 (*      （件 6 换形推论，零新证）。                                    *)
 (*                                                                *)
 (* 不对称判据如实记录（仪表 L46 + T4b 勘误卡 L24 同源）：              *)
-(*   —— max 侧：eps 挂引入式结论槽内（real_lt (max l) d 的 d 位），   *)
+(*   —— max 侧：eps 挂引入式结论位内（real_lt (max l) d 的 d 位），   *)
 (*      主件可 one 完成器单步（件 2 六行）；列表版红利保持——严格      *)
 (*      引入件自身一次归纳封装折叠，主件不再展开列表。                  *)
 (*   —— min 侧：eps 挂 min 外侧（目标 c < min l + eps），min_glb      *)
-(*      结论槽无 eps 位，单步不可达，须完整逐点证（T4b 件 8 同量级）。  *)
+(*      结论位无 eps 位，单步不可达，须完整逐点证（T4b 件 8 同量级）。  *)
 (*      本库不建 min 列表版（未立项，勿凭对擅自动工）。                 *)
 (*                                                                *)
 (* 红线自检口径：                                                     *)
@@ -73,7 +65,7 @@
 (*      Prop 谓词，仅作全称前提位传递（构造 In 见证合法，全程零       *)
 (*      Prop 消去入 Set——无 Or/In 分支拆除）。                         *)
 (*   —— 前提位零新增；全件真证闭合无降级；禁词扫描口径零命中            *)
-(*      （注释同律）；提取探针 Obj.magic=0（独立小探针，验后删）。      *)
+(*      （注释同律）；提取检验 Obj.magic=0（独立小检验，验后删）。      *)
 (*   —— Print Assumptions 全件 Closed（文末七连打，证据在编译日志）。  *)
 (* 编译配方（cpu_guard 包装，vo 树 = ConstructiveWorld-Main/          *)
 (* ConstructiveWorld_vo，前置 .vo 121 件全族在树）：                   *)
@@ -116,7 +108,7 @@ Qed.
 (* 件 1：严格上界引入：凡成员 x <ᴮ d，则折叠 max l <ᴮ d。
    逐 list 归纳 + 二元基元 latb_lt_max_intro 粘合；nil 案即头自身
    严格界（头驱动形免单位元义务）。对偶位注记：此为 latb_min_glb
-   （T4b 件 7，glb 面：p<成分 ⟹ p<min）的 max/lub 镜像，eps 槽
+   （T4b 件 7，glb 面：p<成分 ⟹ p<min）的 max/lub 副本，eps 位
    即本件结论 d 位——主件红利之源。 *)
 Lemma latb_lt_max_list_intro : forall (h : Real) (t : list Real) (d : Real),
   (forall x : Real, In x (h :: t) -> real_lt x d) ->
@@ -212,7 +204,7 @@ Qed.
 (* 件 6：换头吸收：折叠 max(h::t) ≤_B max h（折叠 max(x::t)）。
    E.2（b ≤_B max a b）列表化主件前半。cons 案二元律两支：
    新头 u 支经 r_max 左参上界 + 右参抬升两步；旧折叠支经 IH
-   （换头 x 后同 h 路径）+ 右参同头单调抬升（二元律两次喂入）。
+   （换头 x 后同 h 路径）+ 右参同头单调抬升（二元律两次输入）。
    全程零 comm 依赖——r_max 交换面在 无直连件，本库
    以归纳轮廓（u 连同 h 一起泛化）绕开，不立交换桥。 *)
 Lemma latb_max_list_le_cons_init : forall (h x : Real) (t : list Real),

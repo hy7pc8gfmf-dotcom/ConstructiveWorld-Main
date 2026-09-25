@@ -5,6 +5,8 @@
 (* 主件： real_softplus_lipschitz：softplus 的 1-Lipschitz 界；real_softplus_mono / real_softplus_diff_le 单调与差分界。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： β > 0 与参考策略逐点正以显式 Variable 前提给出；序谓词为 Or(lt, eq) 强编码，abs 形态边界见正文。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)

@@ -1,8 +1,8 @@
 (* ============================================================ *)
-(* UpAblD1S17_UpReqDpoLoss.v —— 母本 UpReqDpoLoss.v 的单点实例供给件 *)
+(* UpAblD1S17_UpReqDpoLoss.v —— 源模块 UpReqDpoLoss.v 的单点实例供给件 *)
 (*   数学使命：直接偏好优化损失接口的典范载体实例与对齐正性证书。   *)
 (* ============================================================ *)
-(* 【使命】母本 UpReqDpoLoss 的 Section ReqDpoLossCore 以全体接口语句为 *)
+(* 【使命】源模块 UpReqDpoLoss 的 Section ReqDpoLossCore 以全体接口语句为 *)
 (*   节内前提；本件将这些前提在单点态空间上逐一给出见证，并装配为记录    *)
 (*   uabd1s17_dpo_pack13，共十三项字段：                                *)
 (*   R/RIS 实数载体、S 态空间载体、sumf 求和算子、reward（奖励函数）、    *)
@@ -18,7 +18,7 @@
 (*   Preference:=unit；pref_win/pref_lose:=fun _ => tt；                  *)
 (*   pref_dataset:=cons tt nil（单元素数据集）。                          *)
 (* 【依赖】CW_ConstructiveWorld_219／UpReqAlign（Z_align_req 定义件）；    *)
-(*   不 Require 母本 UpReqDpoLoss.v 本体。mathlib/stdlib 无直接对应物。   *)
+(*   不 Require 源模块 UpReqDpoLoss.v 本体。mathlib/stdlib 无直接对应物。   *)
 (* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑；  *)
 (*   文末两条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证判据。 *)
 (* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
@@ -27,7 +27,7 @@
 (*   uabd1s17_dpo_zap_pos：Z_align_req 展开后为逐点和                      *)
 (*   Σ_s pi_ref(s)·exp_neg(−inv_pos(beta)·reward(s))，单点实例上化为一项， *)
 (*   正性由 mult_positive 连同 one_pos 与 exp_neg_pos 直接给出。§3 接口    *)
-(*   封装记录 uabd1s17_dpo_pack13：十三项字段对应母本 Section ReqDpoLossCore *)
+(*   封装记录 uabd1s17_dpo_pack13：十三项字段对应源模块 Section ReqDpoLossCore *)
 (*   的节内声明（逐字相同）；rdl_log_req_compat 与 rdl_log_inv_exp_neg_req *)
 (*   两项不在本记录中（供给见 UpAblD1S2_reqlog_UpReqDpoLoss）。§4 供给定理 *)
 (*   uabd1s17_dpo_pack13_supplied 一次性给出全部字段；§5 假设审计区。      *)
@@ -69,8 +69,8 @@ Proof.
                     zero)))).
 Qed.
 
-(* ============ 接口封装记录：对应母本 Section ReqDpoLossCore 的节内声明 ============ *)
-(* 字段序＝母本声明序；两个 log 相容性语句不在本记录中（件头已注明）。    *)
+(* ============ 接口封装记录：对应源模块 Section ReqDpoLossCore 的节内声明 ============ *)
+(* 字段序＝源模块声明序；两个 log 相容性语句不在本记录中（件头已注明）。    *)
 
 Inductive uabd1s17_dpo_pack13 : Type :=
 | uabd1s17_dpo_pack13_intro :

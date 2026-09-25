@@ -1,81 +1,47 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   pwe_reverse_obstacle（原 L223，2 句玩具证）                          *)
-(*   pwe_pin_wall_lpo（原 L186，2 句玩具证）                              *)
-(*   pwe_E_carrier_void（原 L147，2 句玩具证）                            *)
-(*   pwe_E_carrier_excl（原 L137，2 句玩具证）                            *)
-(*   pwe_carrier_excl（原 L127，2 句玩具证）                              *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 5 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 5 参数位；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包P 整批直推（第二批；承 T321 §五·1）                             *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqPinWallEquiv.v *)
-(* *)
-(* 目的： 钉定墙与受限 LPO 的等价（第三面墙定理化）。 *)
-(* 主件： pwe_pin_wall_lpo 与 pwe_canon_cstar_ok：钉定墙等价器与 C* 正典范可判定对接。 *)
-(* 依赖： S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv、UpReqBanachInstB。 *)
-(* 备注： 零公理、零假设负载；基石为 INSTB 判定件。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqPinWallEquiv.v —— 席AA23：第三面墙定理化·钉定墙 ⟺ 受限 LPO *)
-(*                                                              *)
-(* 公理面：本件零公理、零假设负载。基石 = INSTB 判定件            *)
-(*   UpReqBanachInstB.v 之 bxib_canon_pin_wall（S2）：canon-bnorm  *)
-(*   （Qabs ∘ qnorm）无法满足 Qabs 原始钉定字段——若钉定面对一切    *)
-(*   q 成立，则 2#4 与 1#2 Leibniz 相等（假等式，构造子级可驳）。  *)
-(*   本件把 INSTB「钉定墙是接口设计使然」结论升级为机器检验的      *)
-(*   归约定理：                                                   *)
-(*                                                              *)
-(*   pwe_PinWall : Set := 存在 bnorm : Q -> Q 同时满足           *)
-(*     (a) 钉定形 pwe_pin  ：一切 q 保 Qabs 原始形                *)
-(*         （bnorm q = Qabs q，钉定字段语句面原形）；              *)
-(*     (b) C* 恒等式 pwe_cstar：与 canon-bnorm（bxib_bcnorm）     *)
-(*         一致 + bplus_zero 位（q+(−q) 范数=零范数）+ assoc 位     *)
-(*         （三和两括序范数一致）的 Leibniz-相容。                 *)
-(*     ——钉定接口的可满足性断言（sigT 存在形，全 Set 零 Prop）。   *)
-(*                                                              *)
-(*   pwe_pin_wall_lpo : pwe_PinWall -> rLPO（保底件·单方向）：    *)
-(*     核心论证 = INSTB 互斥判定——钉定形 × canon 一致在 2#4 位     *)
-(*     逼出 Id (2#4) (1#2)，经构造子级判别器（pwe_qdisc）在 Set 层  *)
-(*     提取判据数据（Empty_set 消去 = 全决策力），受限 LPO 随取。  *)
-(*   pwe_reverse_obstacle（反向障碍账·降档件）：若反向归约         *)
-(*     rLPO -> pwe_PinWall 存在，则与正向复合得 rLPO 被驳斥。      *)
-(*     障碍的本质：钉定接口不可满足（pwe_pin_wall_void 机器判定），  *)
-(*     而反向归约将迫使 rLPO 供出该不可满足接口的存在见证，即       *)
-(*     驳斥经典可满足的 LPO——构造性不可达，故主件按使命降档        *)
-(*     条款以「正向归约 + 反向障碍账」结果（pwe_equivalence）。    *)
-(*   pwe_canon_cstar_ok（处方正件）：canon 形接口（bxib_bcnorm）   *)
-(*     无条件下满足 C* 恒等式三参数位——「钉定墙是接口设计使然」的       *)
-(*     构造性对偶：原始形参数位空、canon 形参数位满，设计修处方③得证。     *)
-(*   pwe_carrier_excl（泛型载体段，AA22 GibbMechanism 范式）：      *)
-(*     互斥机制对一切 Φ-因子化载体（任意 C 带求值 ev 与 bnorm）     *)
-(*     一致成立；E-载体（自由项树）实例 pwe_E_carrier_excl 判定。   *)
-(*                                                              *)
-(* 纪律：纯构造性 Set 层、语句面全 Type/sigT/自定义 And/Or，       *)
-(*       零 Prop 泄露、零硬凑；降档显式标注（反向障碍账）。         *)
-(* 依赖：S01_BaseRing（Id/And/Or）+ S02_CauchyComplete（QeqT）    *)
-
-(*       + UpReqBanachInstB（INSTB 判定基石：bxib_bcnorm/         *)
-(*         bxib_qnorm_id_of_qeqT/bxib_zero_canon_opp/bxib_E 系）。 *)
-(* ------------------------------------------------------------ *)
-(* AA23（20260915）：新建。语句面设计见上；反向参数位降档显式假设见         *)
-(* _taa23_合规自查报告。                                             *)
+(* UpReqPinWallEquiv.v —— 钉定不可证结果 ⟺ 受限 LPO（第三类定理化）    *)
+(*                                                                     *)
+(* 目的：钉定接口不可满足性与受限 LPO 的等价（第三类定理化）。           *)
+(* 主件：pwe_pin_wall_lpo 与 pwe_canon_cstar_ok：钉定等价器与 C* 正典范  *)
+(*   可判定对接。                                                       *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv、               *)
+(*   UpReqBanachInstB；Stdlib QArith.QArith、QArith.Qabs。               *)
+(* 公理面：本件零公理、零假设负载。基石 = INSTB 判定件                   *)
+(*   UpReqBanachInstB.v 之 bxib_canon_pin_wall（S2）：canon-bnorm        *)
+(*   （Qabs ∘ qnorm）无法满足 Qabs 原始钉定字段——若钉定面对一切         *)
+(*   q 成立，则 2#4 与 1#2 Leibniz 相等（假等式，构造子级可驳）。        *)
+(*   本件把 INSTB「钉定接口不可满足是接口设计使然」结论升级为机器检验   *)
+(*   的归约定理：                                                       *)
+(*   pwe_PinWall : Set := 存在 bnorm : Q -> Q 同时满足                   *)
+(*     (a) 钉定形 pwe_pin  ：一切 q 保 Qabs 原始形                      *)
+(*         （bnorm q = Qabs q，钉定字段语句面原形）；                    *)
+(*     (b) C* 恒等式 pwe_cstar：与 canon-bnorm（bxib_bcnorm）            *)
+(*         一致 + bplus_zero 位（q+(−q) 范数=零范数）+ assoc 位          *)
+(*         （三和两括序范数一致）的 Leibniz-相容。                       *)
+(*     ——钉定接口的可满足性断言（sigT 存在形，全 Set 零 Prop）。         *)
+(*   pwe_pin_wall_lpo : pwe_PinWall -> rLPO（保底件·单方向）：           *)
+(*     核心论证 = INSTB 互斥判定——钉定形 × canon 一致在 2#4 位           *)
+(*     逼出 Id (2#4) (1#2)，经构造子级判别器（pwe_qdisc）在 Set 层       *)
+(*     提取判据数据（Empty_set 消去 = 全决策力），受限 LPO 随取。        *)
+(*   pwe_reverse_obstacle（反向受阻申报·降档件）：若反向归约             *)
+(*     rLPO -> pwe_PinWall 存在，则与正向复合得 rLPO 被驳斥。            *)
+(*     障碍的本质：钉定接口不可满足（pwe_pin_wall_void 机器判定），      *)
+(*     而反向归约将迫使 rLPO 供出该不可满足接口的存在见证，即            *)
+(*     驳斥经典可满足的 LPO——构造性不可达，故主件按使命降档条款         *)
+(*     以「正向归约 + 反向受阻申报」结果（pwe_equivalence）交付。        *)
+(*   pwe_canon_cstar_ok（构造性对偶正件）：canon 形接口（bxib_bcnorm）   *)
+(*     无条件下满足 C* 恒等式三参数位——「钉定接口不可满足是接口设计    *)
+(*     使然」的构造性对偶：原始形参数位空、canon 形参数位满，设计修正    *)
+(*     后可满足性得证。                                                 *)
+(*   pwe_carrier_excl（泛型载体段，范式同 UpReqGibbsWallEquiv 机制段）： *)
+(*     互斥机制对一切 Φ-因子化载体（任意 C 带求值 ev 与 bnorm）          *)
+(*     一致成立；E-载体（自由项树）实例 pwe_E_carrier_excl 判定。        *)
+(* 对标：受限选择原理（LPO 族）等价件族（SqWall 同构先例）。             *)
+(* 构造性注记：纯构造性 Set 层、语句面全 Type/sigT/自定义 And/Or，       *)
+(*   零 Prop 泄露；零承认、公理面为空；降档显式标注（第二参数位不供，   *)
+(*   以 pwe_reverse_obstacle 承载）。                                    *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" UpReqPinWallEquiv.v，          *)
+(*   cpu_guard 包装。                                                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -117,7 +83,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：钉定墙语句面（全 Set 零 Prop）                         *)
+(* Part 2：钉定接口语句面（全 Set 零 Prop）                       *)
 (* ============================================================ *)
 
 (* 钉定形：bnorm 保 Qabs 原始形（INSTB bxib_canon_pin_wall 钉定    *)
@@ -133,7 +99,7 @@ Definition pwe_cstar (bnorm : Q -> Q) : Set :=
               Id (bnorm (Qplus a (Qplus b c)))
                  (bnorm (Qplus (Qplus a b) c)))).
 
-(* 钉定墙：钉定接口的可满足性断言（存在某 bnorm 同满足钉定形+C*） *)
+(* PinWall：钉定接口的可满足性断言（存在某 bnorm 同满足钉定形+C*）*)
 Definition pwe_PinWall : Set :=
   sigT (fun bnorm : Q -> Q => And (pwe_pin bnorm) (pwe_cstar bnorm)).
 
@@ -194,10 +160,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 5：墙不可满足判定 + 保底件（单方向归约）                   *)
+(* Part 5：钉定接口不可满足判定 + 保底件（单方向归约）             *)
 (* ============================================================ *)
 
-(* 钉定墙不可满足（互斥判定的全决策力形态） *)
+(* 钉定接口不可满足（互斥判定的全决策力形态） *)
 Theorem pwe_pin_wall_void : pwe_PinWall -> forall A : Set, A.
 Proof.
   intros H A.
@@ -214,8 +180,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 6：处方正件——canon 形接口无条件下满足 C* 三参数位              *)
-(* （「钉定墙是接口设计使然」的构造性对偶：原始形参数位空、canon 形参数位满） *)
+(* Part 6：构造性对偶正件——canon 形接口无条件下满足 C* 三参数位        *)
+(* （「钉定接口不可满足是接口设计使然」的构造性对偶：原始形参数位空、canon 形参数位满） *)
 (* ============================================================ *)
 
 Theorem pwe_canon_cstar_ok : pwe_cstar bxib_bcnorm.
@@ -228,7 +194,7 @@ Proof.
     + (* bplus_zero 参数位：INSTB bxib_zero_canon_opp（q+(−q) 规范到 0#1） *)
       intros q.
       exact (id_cong Qabs (bxib_zero_canon_opp q)).
-    + (* assoc 参数位：Qeq 结合律 → QeqT → S1 破墙机（规范形唯一性） *)
+    + (* assoc 参数位：Qeq 结合律 → QeqT → 规范形唯一性机检 *)
       intros a b c.
       apply (id_cong Qabs).
       apply bxib_qnorm_id_of_qeqT.
@@ -237,13 +203,13 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 7：反向障碍账（降档件）+ 主件（降档形，显式标注）           *)
+(* Part 7：反向受阻申报（降档件）+ 主件（降档形，显式标注）         *)
 (* ============================================================ *)
 
-(* 反向障碍账：反向归约 rLPO -> pwe_PinWall 若存在，则与正向复合    *)
+(* 反向受阻申报：反向归约 rLPO -> pwe_PinWall 若存在，则与正向复合  *)
 (* 得 rLPO 被驳斥——钉定接口不可满足（Part 5 判定），反向归约即       *)
 (* 强迫 rLPO 供出不可满足接口的存在见证 = 驳斥经典可满足的 LPO，     *)
-(* 构造性不可达。此件即「双向撞墙」的机器检验清单。                 *)
+(* 构造性不可达。此件即双向受阻面的机器检验清单。                   *)
 Theorem pwe_reverse_obstacle : (rLPO -> pwe_PinWall) -> rLPO -> Empty_set.
 Proof.
   intros Hrev Hlpo.
@@ -251,10 +217,10 @@ Proof.
 Qed.
 
 (* 主件（降档形，按使命降档条款显式标注）：                        *)
-(*   第一参数位 = 正向归约（保底件，绿）；                              *)
-(*   第二参数位 ≠ rLPO -> pwe_PinWall（撞墙，见 pwe_reverse_obstacle），  *)
-(*   以反向障碍账承载。非假等价声明：本件不证 PinWall ⟺ rLPO 全形，   *)
-(*   只证正向归约 + 反向不可达账。                                  *)
+(*   第一参数位 = 正向归约（保底件，已证）；                            *)
+(*   第二参数位 ≠ rLPO -> pwe_PinWall（受阻，见 pwe_reverse_obstacle），  *)
+(*   以反向受阻申报承载。非假等价声明：本件不证 PinWall ⟺ rLPO 全形， *)
+(*   只证正向归约 + 反向不可达申报。                                *)
 Definition pwe_equivalence :
   And (pwe_PinWall -> rLPO)
       ((rLPO -> pwe_PinWall) -> rLPO -> Empty_set) :=

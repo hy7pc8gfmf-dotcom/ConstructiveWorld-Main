@@ -1,67 +1,31 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   tbg_row_dock（原 L79，3 句玩具证）                                   *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
-(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
-(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
-(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
-(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
-(* 附记：T277 判级全文恒等；AD 域收尾第四批（T317 六·1 方案①）。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqTBNCBridge.v *)
-(* *)
-(* 目的： TBNC 显式假设的对角逐项桥。 *)
-(* 主件： tbg_conv_bsum 卷积分块和与 tbg_corner 角余项、tbg_diag_face 对角面。 *)
-(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、UpReqBanachProd、UpReqBanachDouble、UpReqNormConv、UpReqBanachCauchyD。 *)
-(* 备注： 分块三角和的代数面重排为 TBNC 显式假设的依存形；角余一般族化。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqTBNCBridge.v —— 席AA9：TBNC 显式假设② 对角逐项桥（20260914）  *)
-(* ============================================================ *)
-(* 任务（AA8 分解报告 B3 工单，优先分 7.2）：双侧件              *)
-(*   侧一（收敛面）ncv_conv_diag_cauchy @ UpReqNormConv.v:862     *)
-(*   侧二（逐项面）bd2_diagf @ UpReqBanachDouble.v:63             *)
-(* 之间的对角逐项桥——柯西方块（矩形部分和）↔ 三角/对角           *)
-(* 分块（Σ_{i+j≤n}）的代数面重排，TBNC 显式假设② 依存形。            *)
-(*                                                                *)
-(* 语句面适配（AA8 草案 → 实形，重要披露）：                      *)
-(*   AA8 草案字面形 bd2_diagf B a b 0 n == ncv_conv B a b n n     *)
-(*   在实形下不真：ncv_conv 0 n = bzero（n=0 处即败），且三角形   *)
-(*   Σ_{i+j≤n} ≠ 方块 Σ_{i,j≤n}。按工单「以双侧件实形适配」，     *)
-
-(*   面）+ 显式角余（tbg_corner，bxcd_U 一般族化）。显式假设② 所需    *)
-(*   「bcauchy 出口 + 代数面重排对接」即由此式承接。              *)
-(*                                                                *)
-(* 依存面（全部只 Require，禁改既有件一行）：                     *)
-(*   bxcd_bsum_pad_split（UpReqBanachCauchyD）补零垫分裂；        *)
-(*   bd2_tfrom_rect / bd2_tri_eq_diag（UpReqBanachDouble）        *)
-(*   三角↔对角↔矩形行化现成件；bsum_ext/bsum_plus/bplus_wd_l      *)
-(*   （UpReqBanachProd）和式引擎。                                *)
-(*                                                                *)
-(* 保底结构：tbg_row_dock / tbg_conv_bsum（ncv 半边）与           *)
-(*   tbg_fold_diagf（bd2 半边）各自独立成件，主件任一环失败       *)
-
-(*                                                                *)
-(* 红线自审：语句面全 Set 层（bae 承载等词，零 LPO 面）；证内     *)
-(*   无经典逻辑；无承认件；公理面：零（主件与全部半边             *)
-(*   Print Assumptions = Closed under the global context）。      *)
-(* 工程注：bae/wd 系 class 字段投影——apply 一律全参显式           *)
-(*   （bae_trans 首参=目标左端、次参=中件），禁裸 apply 假设位       *)
-
-(* 提取检验：Extraction "_taa9_tbg_extract.ml" 验 Obj.magic=0。   *)
+(* UpReqTBNCBridge.v —— TBNC 显式假设的对角逐项桥                       *)
+(*                                                                     *)
+(* 目的：柯西方块（矩形部分和 ncv_conv）↔ 三角/对角分块                  *)
+(*   （Σ_{i+j≤n}，bd2_diagf）的代数面重排桥，TBNC 显式假设② 依存形。     *)
+(*   双侧件：侧一（收敛面）ncv_conv_diag_cauchy @ UpReqNormConv.v:862；  *)
+(*   侧二（逐项面）bd2_diagf @ UpReqBanachDouble.v:63。                  *)
+(*   语句面适配披露：字面形 bd2_diagf B a b 0 n == ncv_conv B a b n n    *)
+(*   在实形下不真（ncv_conv 0 n = bzero，n=0 处即败，且三角形            *)
+(*   Σ_{i+j≤n} ≠ 方块 Σ_{i,j≤n}），按「以双侧件实形适配」取              *)
+(*   S n × S n 方块 == bd2_diagf + 显式角余 tbg_corner（bxcd_U 一般      *)
+(*   族化）；显式假设② 所需「bcauchy 出口 + 代数面重排对接」由此式       *)
+(*   承接。                                                             *)
+(* 主件：tbg_diag_face（+ 推论 tbg_diag_seq 对角命名形）；保底半边       *)
+(*   tbg_ncvsum_bsum / tbg_row_dock / tbg_conv_bsum（ncv 侧）与          *)
+(*   tbg_fold_diagf（bd2 侧）各自独立成件。                              *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、    *)
+(*   UpReqBanachProd、UpReqBanachDouble、UpReqNormConv、                 *)
+(*   UpReqBanachCauchyD；Stdlib QArith.QArith、Arith.Arith、Lia。        *)
+(*   依存件（全部只 Require，禁改既有件一行）：bxcd_bsum_pad_split      *)
+(*   （补零和拆分）、bd2_tfrom_rect / bd2_tri_eq_diag（三角↔对角↔       *)
+(*   矩形行化现成件）、bsum_ext / bsum_plus / bplus_wd_l（和式引擎）。   *)
+(* 对标：mathlib 二重级数三角求和与方块部分和的换算引理族。              *)
+(* 构造性注记：语句面全 Set 层（bae 承载等词，零 LPO 面）；零承认、      *)
+(*   公理面为空；证内无经典逻辑；工程注：bae/wd 系 class 字段投影——      *)
+(*   apply 一律全参显式（bae_trans 首参=目标左端、次参=中件）。          *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" UpReqTBNCBridge.v，            *)
+(*   cpu_guard 包装；提取检验 Extraction 产物 Obj.magic=0。              *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -143,7 +107,7 @@ Proof.
                    (fun j : nat => @bmult B (a (0%nat + i)%nat) (b j)))).
     intros k Hk.
     unfold bd2_row.
-    assert (H0k : (0%nat + k)%nat = k) by lia.
+    assert (H0k : (0%nat + k)%nat = k) by apply Nat.add_0_l.
     rewrite H0k.
     apply (@bae_refl B).
   - apply (@bae_trans B
@@ -201,7 +165,7 @@ Proof.
                             if Nat.ltb (Nat.sub n i) j
                             then @bmult B (a i) (b j)
                             else @bzero B))))).
-    * (* 逐行补零垫分裂（i < S n ⟹ n−i ≤ n） *)
+    * (* 逐行补零拆分（i < S n ⟹ n−i ≤ n） *)
       apply (@bsum_ext B (Datatypes.S n)
                (fun k : nat => bd2_row B a b k n)
                (fun i : nat =>
@@ -215,7 +179,7 @@ Proof.
       eapply bae_trans.
       -- apply (@bae_refl B).
       -- exact (bxcd_bsum_pad_split B (Nat.sub n i) n
-                    (fun j : nat => @bmult B (a i) (b j)) ltac:(lia)).
+                    (fun j : nat => @bmult B (a i) (b j)) (Nat.le_sub_l n i)).
       * (* 双和拆并：Σ(行+角) == Σ行 + Σ角；行侧折叠 == diagf *)
       eapply bae_trans.
       -- exact (bsum_plus B (Datatypes.S n)

@@ -1,36 +1,36 @@
 (* ============================================================ *)
-(* UpReqLogCompD2.v *)
+(* UpReqLogCompD2.v —— 严格恒等式 2 的复合重建件。                *)
 (* *)
-(* 目的： req_temp_strict_ident2 的复合重建装配（槽 7）。 *)
-(* 主件： logc_temp_strict_ident2：严格恒等式 2 的复合重建。 *)
+(* 使命： 本件形式化 req_temp_strict_ident2 的复合重建装配。      *)
+(* 主件： logc_temp_strict_ident2：严格恒等式 2 的复合重建。      *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G05_LogSmall、UpReqLogCompD、UpReqAlgebra。 *)
-(* 备注： Set 层零 Prop 表面（结论全 req/lt 接口 Set 值）；全 Qed、零公理面。 *)
-(* ============================================================ *)
+(* 构造性： Set 层零 Prop 表面（结论全 req/lt 接口 Set 值）；全 Qed、零公理面；可提取。 *)
+(* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。 *)
 
 (* ============================================================ *)
-(* UpReqLogCompD2.v —— 槽 7 装配完成席：req_temp_strict_ident2 复合重建消解    *)
-(*   目标槽 = req_temp_strict_ident2@UpFirewallReq:144（七槽结论之槽 7：       *)
-
-
-(*     T6 两例（logc_relative_entropy_temp_decomp @ (t1,t2)/(t2,t1) 实例化）   *)
-
-(*     → 8 项置换坍缩（logZ 双抵消 + X:=1/t1-1/t2 数缩）→ distrib 完成。       *)
-(*   消去核：UpReqLogCompD Part 0 logc_cancel_left/logc_plus_assoc_cancel      *)
-
-(*     logpair_zero），全程 req 求和桥机只经 T5/T6 消费，零逐点私开。          *)
-(* ------------------------------------------------------------------ *)
-(* 供给槽（与 UpReqLogCompD LogcTemp 节同位，零新增）：                        *)
-(*   sum 桥机三件 tsum_ext/tsum_add/tsum_linear + zt_spec + zt_pos             *)
-(*   + B1 tsup_compat + B2 tsup_log_exp_neg（七件，全为 T5/T6 既有供给形）。   *)
-(* 防撞：logc2_ 前缀 + logc_temp_strict_ident2，全库 attn/001 grep 零命中      *)
-(*   （建前 2026-09-10 逐名实查；文件名 UpReqLogCompD2 零命中）。              *)
-(* 红线：Set 层零 Prop（结论全 req/lt 接口 Set 值）；全 Qed 闭合；零公理；      *)
-
-(*   零改既有脚本）。req_minus δ 透明（UpReqAlgebra:58 = plus a (opp b)），     *)
-(*   消解件陈述与 UpFirewallReq:144 原文同位（minus 形），证内 unfold 换形。    *)
-(* 编译配方：cpu_guard.ps1 负载包装（CoreN 绑核）                              *)
-
-
+(* 装配说明：req_temp_strict_ident2 的复合重建消解                *)
+(*   目标参数位 = UpFirewallReq.req_temp_strict_ident2（七参数结论  *)
+(*   之参数位 7）。路线：T6 两例（logc_relative_entropy_temp_decomp *)
+(*   于 (t1,t2)/(t2,t1) 实例化）→ 8 项置换坍缩（logZ 双抵消 +       *)
+(*   X:=1/t1-1/t2 数缩）→ distrib 完成。                           *)
+(*   消去核：UpReqLogCompD Part 0 logc_cancel_left /                *)
+(*   logc_plus_assoc_cancel / logc_logpair_zero。                   *)
+(*   全程 req 求和桥机只经 T5/T6 使用，零逐点私开。                 *)
+(* 供给前提（与 UpReqLogCompD LogcTemp 节同位，零新增）：           *)
+(*   sum 桥机三件 tsum_ext / tsum_add / tsum_linear + zt_spec +     *)
+(*   zt_pos + tsup_compat + tsup_log_exp_neg（七件，全为既有供给形）。*)
+(* 命名：logc2_ 前缀库内独占。                                     *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(*                                                              *)
+(* ============================================================ *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -43,7 +43,7 @@ From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part 0：置换助件（泛型 RIS；纯 req 代数，零供给槽）                         *)
+(* Part 0：置换助件（泛型 RIS；纯 req 代数，零供给前提）                         *)
 (* ============================================================ *)
 
 Section LogcAlg2.
@@ -96,7 +96,7 @@ Proof.
         -- exact (plus_assoc a c (plus b d)).
 Qed.
 
-(* P3：对消零件 (x-y)+(y-x) ≡ 0（槽 7 logZ 双抵消核） *)
+(* P3：对消零件 (x-y)+(y-x) ≡ 0（logZ 双抵消核） *)
 Lemma logc2_logpair_zero : forall x y : R,
   req (plus (plus x (opp y)) (plus y (opp x))) zero.
 Proof.
@@ -126,7 +126,7 @@ Qed.
 End LogcAlg2.
 
 (* ============================================================ *)
-(* Part 1：温度节（供给槽与 UpReqLogCompD LogcTemp 节同位，零新增）            *)
+(* Part 1：温度节（供给前提与 UpReqLogCompD LogcTemp 节同位，零新增）            *)
 (* ============================================================ *)
 
 Section LogcTemp2.
@@ -145,12 +145,12 @@ Hypothesis tsum_linear :
 
 Variable energy : S -> R.
 Variable Z_temp : R -> R.
-(* req_Z_temp_spec 槽（UpFirewallReq 同位） *)
+(* req_Z_temp_spec 前提（UpFirewallReq 同位） *)
 Hypothesis zt_spec : forall (t : R) (Ht : lt zero t),
   req (Z_temp t) (sumf (fun s => exp_neg (mult (inv_pos t Ht) (energy s)))).
-(* zt_pos 槽 = UpReqTempEntropy req_Z_temp_pos 产物位 *)
+(* zt_pos 前提 = UpReqTempEntropy req_Z_temp_pos 产物位 *)
 Hypothesis zt_pos : forall (t : R) (Ht : lt zero t), lt zero (Z_temp t).
-(* B1/B2 供给槽（同 UpReqLogCompD LogcTemp） *)
+(* B1/B2 供给前提（同 UpReqLogCompD LogcTemp） *)
 Hypothesis tsup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
   req x y -> req (log x Hx) (log y Hy).
 Hypothesis tsup_log_exp_neg : forall u : R,
@@ -328,7 +328,7 @@ Proof.
               ** exact (plus_comm (opp L1) L2).
 Qed.
 
-(* Q4【槽 7 消解件】：KL(t2‖t1)+KL(t1‖t2) ≡ (1/t1-1/t2)·(E2-E1)              *)
+(* Q4【参数位 7 消解件】：KL(t2‖t1)+KL(t1‖t2) ≡ (1/t1-1/t2)·(E2-E1)              *)
 (*   （req_temp_strict_ident2@UpFirewallReq:144 复合重建；req_minus δ 透明，   *)
 (*   证内 unfold 换 plus/opp 形后 8 项置换坍缩 + distrib 完成）                *)
 Lemma logc_temp_strict_ident2 :

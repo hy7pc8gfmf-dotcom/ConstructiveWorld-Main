@@ -1,17 +1,22 @@
 (* ============================================================ *)
-(* UpReqMixLazy.v —— 席 A1：运行墙修复·惰性化重述（路线一/二实验件）      *)
-(* 2026-09-19 · Live_X 沙箱新实验件（母本 UpReqMixingTime.v 零改）        *)
-(* ============================================================ *)
-(* 墙机制（本席探针定谳，见 attn/_ta1_/）：原 mix_bernoulli_upper 的       *)
-(*   HeqR 腿经 mix_mult_swap → real_eq_mult_compat，其体急切调            *)
-(*   real_norm_bounded（对 tv_rpow 类乘嵌项），模链 T(d)=2·T(d-1) → 2^d。  *)
-(* 修复面（本件三原则）：                                                  *)
-(*   ① 一切 eq 桥改走 real_eq_of_zero_diff 形常量证书（提取后零成本）；    *)
-(*   ② Bernoulli 直接以 κ 幂形式陈述（κ^k·(1+k·(1−κ)) ≤ 1），              *)
-(*      绕开 master 尾部 κ↔(1−(1−κ)) 幂传递（其自身是未引爆的 2^k 炸）；   *)
-(*   ③ lt/le 桥全走数据件（mult_lt_compat/le_mult_compat，零 norm）。      *)
-(* 红线自审：语句面全 Set 层（real_lt/real_le/sigT/QltT 均 Set）；零       *)
-(*   Axiom/Admitted；新件全 Defined/Qed 透明可提取。                       *)
+(* UpReqMixLazy.v —— 惰性化混合时间上界（运行瓶颈修复·重述实验件）        *)
+(*                                                              *)
+(* 使命：本件形式化 κ 形 Bernoulli 混合上界 mix2_pow_budget——             *)
+(*   对任意 0<κ<1 与任意正 TV₀、正 budget，存在 k 使 κ^k·TV₀ < budget。    *)
+(*   性能成因（如实说明）：原 mix_bernoulli_upper 的 HeqR 支经              *)
+(*   mix_mult_swap → real_eq_mult_compat，其体急切调 real_norm_bounded     *)
+(*  （对 tv_rpow 类乘嵌项），模链 T(d)=2·T(d-1) → 2^d，构成运行瓶颈。       *)
+(* 本件三原则：                                                            *)
+(*   ① 一切 eq 桥改走 real_eq_of_zero_diff 形常量证书（提取后零成本）；     *)
+(*   ② Bernoulli 直接以 κ 幂形式陈述（κ^k·(1+k·(1−κ)) ≤ 1），               *)
+(*      绕开上游尾部 κ↔(1−(1−κ)) 幂传递（其自身呈 2^k 复杂度）；            *)
+(*   ③ lt/le 桥全走数据件（mult_lt_compat/le_mult_compat，零 norm）。       *)
+(* 依赖：CW_ConstructiveWorld_219、UpTVDoeblin、UpReqIterGeomRate、         *)
+(*   UpReqMixingTime（源模块 UpReqMixingTime.v 零改）。                     *)
+(* 对标：stdlib QArith 环式归一；mathlib 无构造性对应物。                   *)
+(* 构造性注记：语句面全 Set 层（real_lt/real_le/sigT/QltT 均 Set）；        *)
+(*   零承认、公理面为空；新件全 Defined/Qed 透明可提取。                    *)
+(* 编译配方：Rocq 9.1 直调 coqc + cpu_guard 包裹，输出至临时目录。          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
@@ -24,7 +29,7 @@ Require Import UpReqMixingTime.
 
 Local Open Scope Q_scope.
 
-(* 常量环账 tactic（承母本 mix_rring 口径：实元解构+cbn+Q 环） *)
+(* 常量环式归一 tactic（承源模块 mix_rring 口径：实元解构+cbn+Q 环） *)
 Ltac mix2_ring :=
   apply real_eq_of_zero_diff; intro n0;
   repeat match goal with
@@ -36,12 +41,12 @@ Ltac mix2_ring :=
 
 (* ============ 常量证书族（提取后 = fun _ _ _ _ => N=0，零成本） ============ *)
 
-(* 乘换位：(w·q)·c == (w·c)·q —— 替代 mix_mult_swap（其 compat 是墙根） *)
+(* 乘换位：(w·q)·c == (w·c)·q —— 替代 mix_mult_swap（其 compat 是性能瓶颈根源） *)
 Lemma mix2_swap_ring : forall w q c : Real,
   real_eq (real_mult (real_mult w q) c) (real_mult (real_mult w c) q).
 Proof. intros w q c. mix2_ring. Qed.
 
-(* 步进环账：κ·(1+((1−κ)+m)) == (1+m) − ((1−κ)+m)·(1−κ)
+(* 步进环式恒等式：κ·(1+((1−κ)+m)) == (1+m) − ((1−κ)+m)·(1−κ)
    （κ 形 Bernoulli 归纳步的收缩恒等式；替代 mix_ring_sc 的 κ 形用法） *)
 Lemma mix2_step_ring : forall c m : Real,
   real_eq
@@ -73,8 +78,8 @@ Proof.
                real_one real_one
                (real_eq_refl real_one) (real_plus_zero real_one)).
     + exact (real_mult_one real_one).
-  - (* 归纳步：环账 κ·(1+(S k)·w) == (1+k·w) − ((S k)·w)·w（w:=1−κ）；
-       子 claim κ·(1+(S k)·w) ≤ 1+k·w；乘 κ^k 接 IH。全常量环账。 *)
+  - (* 归纳步：环式恒等式 κ·(1+(S k)·w) == (1+k·w) − ((S k)·w)·w（w:=1−κ）；
+       子 claim κ·(1+(S k)·w) ≤ 1+k·w；乘 κ^k 接 IH。全常量环式归一。 *)
     assert (Hbpos : real_lt real_zero (real_minus_r real_one kappa))
       by exact (tv_omd_pos_of_lt kappa Hk2).
     assert (HPk : real_lt real_zero (tv_rpow kappa k))
@@ -189,7 +194,7 @@ Proof.
     by exact (mix2_bernoulli kappa k Hk0 Hk1 Hk1le Hk2).
   assert (HPk : real_lt real_zero (tv_rpow kappa k))
     by exact (mix_rpow_pos kappa k Hk1).
-  (* 预算腿：TV0·κ^k < (budget·boost)·κ^k —— lt 数据件 + 常量换位 *)
+  (* 预算分支：TV0·κ^k < (budget·boost)·κ^k —— lt 数据件 + 常量换位 *)
   assert (Hstep : real_lt (real_mult TV0 (tv_rpow kappa k))
                     (real_mult (real_mult budget
                                   (real_plus real_one
@@ -234,7 +239,7 @@ Proof.
                          (real_plus real_one
                             (mix_scale k (real_minus_r real_one kappa))))))
     by exact (real_lt_eq_lt _ _ _ Hlt1 E2).
-  (* Bernoulli 腿：budget·(κ^k·boost) ≤ budget·1 ≤ budget —— 常量桥 *)
+  (* Bernoulli 分支：budget·(κ^k·boost) ≤ budget·1 ≤ budget —— 常量桥 *)
   assert (Hbern' : real_le
               (real_mult budget
                  (real_mult (tv_rpow kappa k)
@@ -272,8 +277,8 @@ Proof.
               (RealSetoid.real_eq_le _ _ E3))).
 Qed.
 
-(* ============ 路线一旗舰：mix2_pow_budget（arch 锚全自形态，同 master 口径）
-   母本同构，但主链换 κ 形 Bernoulli + 常量桥尾（去 eq-compat 幂炸）         *)
+(* ============ 路线一主定理：mix2_pow_budget（arch 全自形态，同上游口径）
+   与源模块同构，但主链换 κ 形 Bernoulli + 常量桥尾（去 eq-compat 幂爆炸）         *)
 Theorem mix2_pow_budget : forall (kappa TV0 budget : Real),
   real_lt real_zero kappa -> real_lt kappa real_one ->
   real_lt real_zero TV0 -> real_lt real_zero budget ->
@@ -290,13 +295,13 @@ Proof.
              (real_inv_pos (real_mult (real_minus_r real_one kappa) budget)
                 Hwb))) as [N [Hge2 HN]].
   destruct N as [| N'].
-  - exfalso. lia.
+  - exfalso. exact (Nat.nle_succ_0 1%nat Hge2).
   - set (w := real_minus_r real_one kappa) in *.
     set (wb := real_mult w budget) in *.
     set (Ms := mix_scale (Datatypes.S N') w) in *.
     set (boost := real_plus real_one Ms) in *.
     set (mR := real_const (Z.of_nat (Datatypes.S N') # 1)).
-    (* ---- 预算腿（承母本，P5 实证瞬时：全 O(N') 数据/常量件） ---- *)
+    (* ---- 预算分支（承源模块，实测瞬时：全 O(N') 数据/常量件） ---- *)
     assert (Hstep : real_lt (real_mult (real_mult TV0
                                    (real_inv_pos wb Hwb)) wb)
                          (real_mult mR wb))

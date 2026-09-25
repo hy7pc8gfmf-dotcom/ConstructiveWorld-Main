@@ -1,12 +1,12 @@
 (* ============================================================ *)
-(* ToyR 战役包E 替换席（T243 台账席）·玩具级定理同名非平凡替换稿      *)
+(* 玩具级定理同名非平凡替换稿（先行消融波切片产物）                  *)
 (* ============================================================ *)
-(* 本件为 ToyR 战役第一波切片产物：原稿全文保留（声明序/头注/其余     *)
+(* 本件为先行消融波切片产物：原稿全文保留（声明序/头注/其余     *)
 (*   定理原样），仅对下述玩具级定理的证明体做同名非平凡替换。         *)
 (* 替换定理清单与非平凡性口径：                                       *)
 (*   ① 本切片实替换 10/28 件：T_pos／T／D_pos／Delta_pos／temp_pos／  *)
 (*      min_p_pos／temperature_pos／q_pos 八件供给族＋min_p_lt_one    *)
-(*      序界件＋spp 单和件。其余 18 件挂账（端点双供两件＋形状异质    *)
+(*      序界件＋spp 单和件。其余 18 件申报为未消解项（端点双供两件＋形状异质    *)
 (*      十六件：Not/Id/leb/B 形/包形混布，壹模板不适用，未硬编）。    *)
 (*   ② 逐位供给件族：原证明为核引理单跳转发； *)
 (*      新证明展开至定义层——实数 lt 的逐点见证编码原地展开            *)
@@ -19,9 +19,9 @@
 (*      投影逐层 cbn 归约至唯一点取值），前提逐点直取。                *)
 (*   ⑤ 端点双供两件（p2t1_one_pos_lt／p2t1_one_le_one）未替换：        *)
 (*      语句本身为单点序事实（壹之正／壹之自反），任何改写只可能是     *)
-(*      同一构造项的转述（伪非平凡），如实挂账不硬编。                 *)
+(*      同一构造项的转述（伪非平凡），如实申报未消解项、不硬编。                 *)
 (* 红线：纯构造性；Set 层零 Prop 泄露（见证为 sigT 编码，析取为 sum）； *)
-(*   全部替换证明真Qed收口；文件尾附 Print Assumptions 验证。         *)
+(*   全部替换证明真 Qed 闭合；文件尾附 Print Assumptions 验证。         *)
 (* 原头注与全部原有声明照录于后，语义零改动。                         *)
 (* ============================================================ *)
 
@@ -53,9 +53,9 @@
 (*   行 13 vocab_nonempty  → p2t1_vocab_nonempty_supply（段四，二元枚举直构）  *)
 (*   行 14 S_finite_cover  → p2t1_S_finite_cover_supply（段四，InT 递推直构）  *)
 (*   行 15 K               → p2t1_K_supply＋p2t1_K_leb_true＋p2t1_K_of_nat_pos *)
-(*                            （段四，容量一载体＋Nat.leb 镜像＋嵌入正性）      *)
+(*                            （段四，容量一载体＋Nat.leb 副本＋嵌入正性）      *)
 (*   行 16 topk_pickmax_head → p2t1_topk_pickmax_head_pack（段五，前提形；      *)
-(*                            (1<=K) 前提以 Set 层 Nat.leb 镜像，Nat.leb_le 桥） *)
+(*                            (1<=K) 前提以 Set 层 Nat.leb 副本，Nat.leb_le 桥） *)
 (*   行 17 spp             → p2t1_spp_supply（段三，单点世界构造性供给）        *)
 (*   行 18 q_pos           → p2t1_q_pos_supply（段二，常值函数载体）            *)
 (*   行 19 q_norm          → p2t1_q_norm_pack（段五，接口面不可构造，           *)
@@ -67,7 +67,7 @@
 (*   行 22 Z_temp_spec     → p2t1_Z_temp_pos_supply（段五，在库件              *)
 (*                            real_Z_temp_pos 直引；spec 面为定义性恒等式注记） *)
 (*   行 23 inv_pos_lt_compat → p2t1_inv_pos_lt_compat_pack（段七，              *)
-(*                            显式前提形；req 系同名字段镜像）                  *)
+(*                            显式前提形；req 系同名字段副本）                  *)
 (*   行 24 lt_minus_nonneg → p2t1_lt_minus_nonneg_supply（段二，序差正性，      *)
 (*                            real_minus_r 逐点展开，eps 取（q2−q1）/2）        *)
 (*   行 25 real_minp_temp_sum_pos → p2t1_real_minp_temp_sum_pos_pack            *)
@@ -282,7 +282,7 @@ Qed.
 (*   和恒等于 f 于唯一点，前提逐点直取。                                      *)
 (* 行 8/9：evicted_partition_pos／topk_kept_partition_pos——保留判定取常真、   *)
 (*   保留分支取常一，配分和即一，                                            *)
-(*   one_pos 直引（p1t2 B11 形单点世界兑现）。                                 *)
+(*   one_pos 直引（p1t2 B11 形单点世界实现）。                                 *)
 
 Theorem p2t1_spp_supply : forall (RI0 : RealInterfaceEnhanced)
     (f : @S RI0 (@uab_ssUnit (@RI_base RI0)) -> @R RI0),
@@ -350,7 +350,7 @@ Proof.
 Qed.
 
 (* 行 15：K（容量数据位，nat）——容量取一载体＋                              *)
-(*   (1<=K) 的 Set 层 Nat.leb 镜像＋嵌入正性。 *)
+(*   (1<=K) 的 Set 层 Nat.leb 副本＋嵌入正性。 *)
 Definition p2t1_K_supply : nat := 1.
 
 Theorem p2t1_K_leb_true : Id (Nat.leb 1 p2t1_K_supply) true.
@@ -410,7 +410,7 @@ Theorem p2t1_q_norm_pack : forall (RI0 : RealInterfaceEnhanced)
 Proof. intros RI0 SS0 SO0 q Hn. exact Hn. Qed.
 
 (* 行 16：topk_pickmax_head（实形）——显式前提形；前提 (1 <= K)%nat 为裸       *)
-(*   命题面，改以 Set 层 Nat.leb 镜像（Nat.leb_le 双向桥），                  *)
+(*   命题面，改以 Set 层 Nat.leb 副本（Nat.leb_le 双向桥），                  *)
 (*   keep/pick 以函数参量全称化（出节签名如实保留）。 *)
 Theorem p2t1_topk_pickmax_head_pack :
   forall (Tok0 : Set)
@@ -439,7 +439,7 @@ Theorem p2t1_Hrow_pack : forall (Tok0 : Set) (states : list Tok0)
                   states) c.
 Proof. intros Tok0 states Kk kv c Hrow s. exact (Hrow s). Qed.
 
-(* 行 22：Z_temp_spec（槽形之 Real 载体对应面）——real_Z_temp_pos             *)
+(* 行 22：Z_temp_spec（参数形之 Real 载体对应面）——real_Z_temp_pos             *)
 (*   （UpReqTempDefs）在库直引（五参泛化形）；spec 恒等式面＝                *)
 (*   real_Z_temp 定义性展开（定义件头注自书「spec 退化定义性相等」）。        *)
 Theorem p2t1_Z_temp_pos_supply : forall (S0 : Type) (sumf : (S0 -> Real) -> Real),
@@ -570,7 +570,7 @@ Proof.
 Qed.
 
 (* 行 23：inv_pos_lt_compat（实形）——接口面不可构造，                        *)
-(*   显式前提形（p1t2 B12 同形；req 系同名字段镜像）。 *)
+(*   显式前提形（p1t2 B12 同形；req 系同名字段副本）。 *)
 Theorem p2t1_inv_pos_lt_compat_pack :
   forall (a b : R0) (Ha : lt zero a) (Hb : lt zero b),
     lt a b -> lt (inv_pos b Hb) (inv_pos a Ha) ->
@@ -622,7 +622,7 @@ Print Assumptions p2t1_kv_drift_bound_B.
 Print Assumptions p2t1_x3d_le_b_mult_one.
 Print Assumptions p2t1_x3d_le_b_mult_r.
 
-(* ToyR 替换席验证位：对替换代表件做假设面核验（零承认件句式自证） *)
+(* 替换验证位：对替换代表件做假设面核验（零承认件句式自证） *)
 Print Assumptions p2t1_pos_const_core.
 Print Assumptions p2t1_T_pos_supply.
 Print Assumptions p2t1_min_p_lt_one_supply.

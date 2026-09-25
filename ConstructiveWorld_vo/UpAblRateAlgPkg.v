@@ -45,7 +45,7 @@
 (*   非必要条件完备刻画；无可判定测试的率形（如纯 Real 层不可判定测试形）   *)
 (*   不入封装，其不可算法化一侧由 UpAblLogWall 的构造性不可达定理承载。     *)
 (*                                                                *)
-(* 上游（零改母本）：CW_ConstructiveWorld_219 基座 + UpReqIterGeomRate      *)
+(* 上游（零改源文件）：CW_ConstructiveWorld_219 基座 + UpReqIterGeomRate    *)
 (*   （igr_k_enum 三引理）+ UpReqMixLogB（mixb_sel 搜索核/scale 引理/       *)
 (*   qtest 全家——搜索直接使用 mixb_sel）+ UpTVDoeblin（tv_rpow，           *)
 (*   件③用）+ UpReqMixingTime（mix_rpow_nonneg/mix_mult_one_l，            *)
@@ -126,7 +126,7 @@ Proof.
       pose proof (igr_k_enum_min test kw kmin Eenum) as Hmin.
       pose proof (mixb_enum_le test kw kmin Eenum) as HminK.
       assert (H1 : (1 <= kmin)%nat).
-      { destruct kmin as [| m]. exfalso. congruence. lia. }
+      { destruct kmin as [| m]. exfalso. congruence. exact (le_n_S 0 m (le_0_n m)). }
       assert (HK : (kmin <= Nat.max kw 2)%nat)
         by (exact (Nat.le_trans kmin kw (Nat.max kw 2) HminK
                     (Nat.le_max_l kw 2))).
@@ -174,7 +174,7 @@ Proof.
     assert (H1 : (1 <= kmin)%nat).
     { destruct kmin as [| m].
       - rewrite H0 in Hsnd. discriminate Hsnd.
-      - lia. }
+      - exact (le_n_S 0 m (le_0_n m)). }
     assert (HK : (kmin <= Nat.max kw 2)%nat)
       by (exact (Nat.le_trans kmin kw (Nat.max kw 2) HminK
                   (Nat.le_max_l kw 2))).

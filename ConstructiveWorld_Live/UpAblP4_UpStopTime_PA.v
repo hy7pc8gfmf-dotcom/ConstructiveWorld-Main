@@ -1,30 +1,30 @@
 (* ============================================================ *)
-(* UpAblP4_UpStopTime_PA.v —— UpStopTime 证据链姊妹验证件（战役席 P5-M，T197）        *)
+(* UpAblP4_UpStopTime_PA.v —— UpStopTime 闭合结论伴生件。        *)
 (*                                                              *)
-(* 母本坐标：ConstructiveWorld_Live/UpStopTime.v（889 行，Live 树只读零改）。          *)
-(*   母本尾部 §7 仅有提取检验块（L886-889），无 Print Assumptions 闭合块——              *)
-(*   G4 面证据链由本姊妹件以「依存性重述」补全（PA7-36 诊断支援同款：                     *)
-(*   Live 只读铁律下的合规路径；母本本体入册候补块另见 T197 台账建议文案）。              *)
+(* 使命： 本件以依存性重述为 UpStopTime 模块补全文尾闭合结论面：  *)
+(*   三件定理语句与 UpStopTime 源模块同名件逐字同形，证明体       *)
+(*   exact 直连源模块已证同名件，文尾逐件 Print Assumptions       *)
+(*   给出闭合结论——源模块尾部仅有提取检验块、无 Print            *)
+(*   Assumptions 块，本伴生件补全该证据链，源模块本体零改。       *)
 (*                                                              *)
-(* 母本清点（T197 台账同步）：47 语句 = 38 Lemma + 1 Corollary + 8 Theorem；           *)
-(*   闭合 45 处 Qed + 2 处 Defined（stsearch_step_0 / stsearch_step_S——可执行            *)
-(*   搜索步，提取器须吃其本体，E530 卡口径）；闭合面零悬置、零假设位、零 Section；         *)
-(*   母本头注「全部 Qed」按「全闭合零悬置」口径读取（两件 Defined 为可执行件特例）。       *)
+(* 语句覆盖（三件，均与源模块同名件逐字同形）：                   *)
+(*   1  uastp_minimal_stoptime_pa      最小停时三联证书（存在性、  *)
+(*                                     最小性、上界单调）；       *)
+(*   2  uastp_st_thresh_dominance_pa   阈值策略双目标占优的几何    *)
+(*                                     衰减实例化；              *)
+(*   3  uastp_unguarded_no_stoptime_pa 无见证恒值链停时不存在      *)
+(*                                     （分离件）。              *)
 (*                                                              *)
-(* 依存权威态：/tmp/czn14_union_full/UpStopTime.vo——源副本与 Live 源 md5 同值             *)
-(*   （8089d2de374577e4d305a33e20d33242），.vo 代际（09-19 06:02）新于源（09-15 23:44），    *)
-(*   无 .vos/.vok 混装；姊妹件 Require 直连依存，零重编在飞上游。                       *)
+(* 依赖： UpStopTime 及其传递面 CW_ConstructiveWorld_219、        *)
+(*   UpBudgetReal、UpConstitution、QArith、Lia、PeanoNat——只读    *)
+(*   依存，源模块本体零改。                                       *)
+(* 构造性： 全件真证闭合——零悬置、零假设位、零经典逻辑依赖；      *)
+(*   源模块 47 语句 = 38 Lemma + 1 Corollary + 8 Theorem，其中     *)
+(*   45 处 Qed + 2 处 Defined（stsearch_step_0 / stsearch_step_S  *)
+(*   为可执行搜索步，提取器须保留其本体）。                       *)
+(* 编译配方： 9.1 直调（toolchain env.sh 同源）、cpu_guard 绑核。  *)
+(* 对标： 无（本项目停时演算自建）。                              *)
 (*                                                              *)
-(* 抽验口径（母本自称全闭合 → 代表主定理 + 装配 + 反面抽验三件，不逐件爆炸）：              *)
-(*   主定理  minimal_stoptime   件 3 最小停时三联证书（存在性+3a 最小性+3b 上界单调）       *)
-(*   装配  st_thresh_dominance 件 4 阈值策略双目标占优的几何衰减实例化                    *)
-(*   反面  unguarded_no_stoptime 件 5 无见证恒值链停时不存在（分离件）                   *)
-(*   三件语句与母本逐字同形、真 Qed 闭合（exact 直连母本同名件），                        *)
-(*   文尾逐件 Print Assumptions 出闭合结论。                                           *)
-(* 依赖清单：UpStopTime（及其传递面 CW_ConstructiveWorld_219 / UpBudgetReal /              *)
-(*   UpConstitution / QArith / Lia / PeanoNat）——只读依存，原树零改，在飞席零接触。        *)
-(* 红线自审：全中文表述；全件真证闭合（零悬置、零假设位、零经典逻辑依赖）；                 *)
-(*   编译产物只落 /tmp（Live 树与消融50 源树除本 .v 外零写入）。                          *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -36,7 +36,7 @@ Require Import UpConstitution.
 Require Import UpStopTime.
 
 (* ============================================================ *)
-(* 一、主依存性重述：件 3 最小停时（语句逐字同形母本 L594-600）                       *)
+(* 一、主依存性重述：最小停时三联证书（语句与 minimal_stoptime 逐字同形） *)
 (* ============================================================ *)
 
 Theorem uastp_minimal_stoptime_pa : forall (k c0 eps : Q) (U : nat),
@@ -49,7 +49,7 @@ Theorem uastp_minimal_stoptime_pa : forall (k c0 eps : Q) (U : nat),
 Proof. exact minimal_stoptime. Qed.
 
 (* ============================================================ *)
-(* 二、装配依存性重述：件 4 阈值策略双目标占优（语句逐字同形母本 L744-753）               *)
+(* 二、装配依存性重述：阈值策略双目标占优（语句与 st_thresh_dominance 逐字同形） *)
 (* ============================================================ *)
 
 Theorem uastp_st_thresh_dominance_pa : forall (k c0 eps : Q) (U : nat)
@@ -65,7 +65,7 @@ Theorem uastp_st_thresh_dominance_pa : forall (k c0 eps : Q) (U : nat)
 Proof. exact st_thresh_dominance. Qed.
 
 (* ============================================================ *)
-(* 三、反面抽验依存性重述：件 5 停时不存在（语句逐字同形母本 L819-820）                  *)
+(* 三、反面依存性重述：停时不存在分离件（语句与 unguarded_no_stoptime 逐字同形） *)
 (* ============================================================ *)
 
 Theorem uastp_unguarded_no_stoptime_pa : forall (c : Q) (n : nat),

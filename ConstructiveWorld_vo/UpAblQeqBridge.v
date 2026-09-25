@@ -1,25 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T267 台账席 战役包AB（tier2 十八批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   qbg_ltT_eq_compat_r（原 L70，5 句玩具证）                            *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
-(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
-(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
-(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
-(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
-(* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
 (* UpAblQeqBridge.v —— Q 层 Qeq 右换形＋Qmult_inv 桥接引理件              *)
 (*                                                                *)
 (* 使命：补齐 Q 层 Qeq 右换形与 Qmult_inv 两类桥接引理，并为五处同形      *)
@@ -47,6 +26,8 @@
 (*                                                                *)
 (* 依赖：CW_ConstructiveWorld_219（S01–S15 全部 Export）＋                *)
 (*   UpAblAbsSumLeB2（S4B Qfloor 谱系件）。                               *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-Q 依赖池单根映射，      *)
+(*   输出落施工副本区，树内零写入。                                       *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -108,7 +89,7 @@ Proof.
   apply Qlt_shift_div_l; [ | ].
   - exact Hc.
   - setoid_replace (0 * c) with 0%Q by ring.
-    reflexivity.
+    unfold Qlt. exact Z.lt_0_1.
 Qed.
 
 (* B2 · Qinv 正性引理（Set 面）：0 <T x ⟹ 0 <T Qinv x——Qfloor 供给入口    *)
@@ -144,7 +125,10 @@ Proof.
     pose proof (uabS4b_null_lt (Qinv ((1 + 1)%Q * B)) Hinvpos) as Hfloor.
     pose proof (QltT_to_Qlt _ _ Hfloor) as HfloorP.
     assert (Hc1 : Qlt 0 (Z.of_nat (Datatypes.S (uabS4b_arch_N (Qinv ((1 + 1)%Q * B)))) # 1))
-      by (unfold Qlt; simpl; lia).
+      by (unfold Qlt; cbn [Qnum Qden]; rewrite !Z.mul_1_r;
+          change (Z.of_nat (Datatypes.S (uabS4b_arch_N (Qinv ((1 + 1)%Q * B)))))
+            with (Z.pos (Pos.of_succ_nat (uabS4b_arch_N (Qinv ((1 + 1)%Q * B)))));
+          exact (Pos2Z.is_pos _)).
     assert (Hkey : Qlt ((1 + 1)%Q * B)
                      (Z.of_nat (Datatypes.S (uabS4b_arch_N (Qinv ((1 + 1)%Q * B)))) # 1)).
     { apply (proj2 (Qinv_lt_contravar ((1 + 1)%Q * B)
@@ -160,7 +144,9 @@ Proof.
     apply Qlt_le_weak.
     apply (Qlt_le_trans _ (Z.of_nat (Datatypes.S (uabS4b_arch_N (Qinv ((1 + 1)%Q * B)))) # 1) _).
     + exact Hkey.
-    + apply Qle_of_nat. apply NatLe_drop in Ht. lia.
+    + apply Qle_of_nat. apply NatLe_drop in Ht.
+      rewrite PeanoNat.Nat.add_1_r.
+      exact (proj1 (PeanoNat.Nat.succ_le_mono _ _) Ht).
   - (* 情形 B ≤ 0：N := 0 平凡承接 *)
     exists 0%nat.
     intros t Ht.
@@ -174,8 +160,11 @@ Proof.
         -- exact Hle.
         -- apply Q2_nonneg.
       * apply qeq_le. ring.
-    + (* 0 ≤ (t+1)#1：与 S02 同款的 unfold-simpl-lia 步骤 *)
-      unfold Qle. simpl. lia.
+    + (* 0 ≤ (t+1)#1：unfold 后 Z 字面比较，自然数到整数像的非负性直给 *)
+      unfold Qle. cbn [Qnum Qden]. rewrite !Z.mul_1_r.
+      rewrite PeanoNat.Nat.add_1_r.
+      change (Z.of_nat (Datatypes.S t)) with (Z.pos (Pos.of_succ_nat t)).
+      exact (Pos2Z.is_nonneg (Pos.of_succ_nat t)).
 Qed.
 
 (* ============================================================ *)

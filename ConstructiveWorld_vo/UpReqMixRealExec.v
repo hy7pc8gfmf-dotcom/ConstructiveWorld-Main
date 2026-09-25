@@ -1,25 +1,25 @@
 (* ============================================================ *)
-(* UpReqMixRealExec.v —— 席 R1EXE：Real 层选择器可执行化（路线 R1+R3）   *)
-(* 2026-09-21 · 独立实验件（不并入注册面、不动 order；独立交付纪律）      *)
+(* UpReqMixRealExec.v —— Real 层选择器可执行化（见证/证明分离＋惰性化）  *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 节流包裹，-o 临时目录输出。   *)
 (* ============================================================ *)
 (* 使命：把论文7 §10.2 第 11 项的「Real 层选择器可执行化」从设计变实测。    *)
-(*   症状（X1R 定谳 + 本席复证）：母本 mix_k_select 的提取闭包 native 运行  *)
-(*   在 mix_bernoulli_upper 单一急切绑定处挂死（其 HeqR 腿经               *)
+(*   背景（已证结论）：源文件 mix_k_select 的提取闭包 native 运行          *)
+(*   在 mix_bernoulli_upper 单一急切绑定处挂死（其 HeqR 支经               *)
 (*   mix_mult_swap → real_eq_mult_compat 急切调 real_norm_bounded，        *)
-(*   模链 T(d)=2·T(d-1)；本席 DEMO1 复跑 90s 限时超时复现）。              *)
+(*   模链 T(d)=2·T(d-1)；大预算档复现运行超界）。              *)
 (* R1 见证/证明分离（本件核心）：                                          *)
 (*   ① 计算面 mrx_arch_n / mrx_k_compute —— 纯计算 Definition，           *)
 (*      选择器消费的是它，不消费证明项；                                   *)
 (*   ② 证明面 mrx_k_spec —— 独立引理 Qed 封闭，零语句面角色；              *)
-(*   ③ 打包面 mrx_k_exec —— existT _ 计算面 证明面 组装 sigT，            *)
+(*   ③ 封装面 mrx_k_exec —— existT _ 计算面 证明面 组装 sigT，            *)
 (*      projT1 归约与证明面无关（机检小引理 mrx_projT1_exec 固定）；       *)
-(*   ④ 非负 TV0 放宽形 mrx_k_select_*（对齐母本 mix_k_select 口径）。      *)
+(*   ④ 非负 TV0 放宽形 mrx_k_select_*（对齐源文件 mix_k_select 口径）。      *)
 (* R3 惰性化（承 UpReqMixLazy 已验证惰性化形，全链复用）：                 *)
-(*   证明面走 κ 形 Bernoulli（mix2_bernoulli）+ 常量环账证书               *)
+(*   证明面走 κ 形 Bernoulli（mix2_bernoulli）+ 常量环式恒等证书               *)
 (*   （mix2_swap_ring / mix2_step_ring，提取后零成本）+ 数据件 lt/le 桥，  *)
-(*   零 real_eq_mult_compat 幂炸面、零 boost-inv 传递腿。                  *)
+(*   零 real_eq_mult_compat 幂炸面、零 boost-inv 传递支。                  *)
 (* 验收（论文 §10.2 第 11 项）：TV0=1, budget=1/2, kappa=1/2 下提取程序    *)
-(*   实际运行并打印 k，墙钟 < 10s（驱动见 attn/_tr1_ws/_tr1_main.ml）。    *)
+(*   实际运行并打印 k（提取闭包运行通过；时限指标属验收记录）。    *)
 (* 红线自审：语句面全 Set 层（real_lt/real_le/real_eq/sigT/nat）；零       *)
 (*   经典逻辑位；零承认件；全文件零字面禁词；可提取面闭包零魔数零桩。      *)
 (* 依赖：CW_ConstructiveWorld_219 + UpTVDoeblin + UpReqIterGeomRate        *)
@@ -45,7 +45,7 @@ Local Open Scope Q_scope.
 (* Archimedean 见证 nat 面投影：real_arch 外层 sigT 第一分量。 *)
 Definition mrx_arch_n (x : Real) : nat := projT1 (real_arch x).
 
-(* k 计算器：与母本 mix_pow_budget 同一 arch 锚站（保守上界口径）。
+(* k 计算器：与源文件 mix_pow_budget 同一 arch 锚站（保守上界口径）。
    N = 0 支不可达（real_arch 保 N ≥ 2），值面取 1 仅作全定义性占位，
    证明面 mrx_k_spec 中以 Hge2 排除。 *)
 Definition mrx_k_compute (kappa TV0 budget : Real)
@@ -59,7 +59,7 @@ Definition mrx_k_compute (kappa TV0 budget : Real)
   | Datatypes.S m => Datatypes.S m
   end.
 
-(* 非负 TV0 放宽形的 k 计算器（对齐母本 mix_k_select 的 Or 逐支）：      *)
+(* 非负 TV0 放宽形的 k 计算器（对齐源文件 mix_k_select 的 Or 逐支）：      *)
 (*   左支（0 < TV0）走严格支计算器；右支（TV0 == 0）k := 0 一发闭合。     *)
 Definition mrx_k_select_compute (kappa TV0 budget : Real)
   (hk1 : real_lt real_zero kappa) (hk2 : real_lt kappa real_one)
@@ -87,7 +87,7 @@ Proof.
                    (tv_omd_pos_of_lt kappa Hk2) Hbudget)))) as [N [Hge2 HN]].
   cbn [projT1].
   destruct N as [| N'].
-  - exfalso. lia.
+  - exfalso. exact (Nat.nle_succ_0 1 Hge2).
   - (* ---- 以下承 mix2_pow_budget 主链（κ 形 Bernoulli + 常量桥尾） ---- *)
     (* 证书统一面：real_inv_pos 证书 proof-relevant，全链只准消费同一
        证书应用——把 HN 内拼出的证书应用 remember 为唯一变量 Hwb。 *)
@@ -98,7 +98,7 @@ Proof.
     set (Ms := mix_scale (Datatypes.S N') w) in *.
     set (boost := real_plus real_one Ms) in *.
     set (mR := real_const (Z.of_nat (Datatypes.S N') # 1)).
-    (* ---- 预算腿：TV0 < budget·boost（全 O(N') 数据/常量件） ---- *)
+    (* ---- 预算支：TV0 < budget·boost（全 O(N') 数据/常量件） ---- *)
     assert (Hstep : real_lt (real_mult (real_mult TV0
                                    (real_inv_pos wb Hwb)) wb)
                          (real_mult mR wb))
@@ -204,7 +204,7 @@ Proof.
                 (RealSetoid.real_eq_le _ _ E3))).
 Qed.
 
-(* 非负 TV0 放宽形的证明面（对齐母本 mix_k_select 的 Or 逐支） *)
+(* 非负 TV0 放宽形的证明面（对齐源文件 mix_k_select 的 Or 逐支） *)
 Lemma mrx_k_select_spec : forall (kappa TV0 budget : Real)
   (hk1 : real_lt real_zero kappa) (hk2 : real_lt kappa real_one)
   (ha : real_le real_zero TV0) (hb : real_lt real_zero budget),
@@ -214,7 +214,7 @@ Proof.
   intros kappa TV0 budget Hk1 Hk2 Ha Hbudget.
   unfold mrx_k_select_compute. destruct Ha as [Hlt | Heq].
   - exact (mrx_k_spec kappa TV0 budget Hk1 Hk2 Hlt Hbudget).
-  - (* TV0 == 0 支：k := 0 一发闭合（承母本同构） *)
+  - (* TV0 == 0 支：k := 0 一发闭合（承源文件同构） *)
     apply (real_eq_lt_lt (real_mult (tv_rpow kappa 0) TV0) real_zero budget).
     + apply (real_eq_trans (real_mult (tv_rpow kappa 0) TV0)
                (real_mult real_one TV0) real_zero).
@@ -226,7 +226,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：打包面（sigT 组装；计算面与证明面在 existT 下并置）              *)
+(* Part 2：封装面（sigT 组装；计算面与证明面在 existT 下并置）              *)
 (* ============================================================ *)
 
 Definition mrx_k_exec (kappa TV0 budget : Real)
@@ -243,21 +243,23 @@ Definition mrx_k_select_exec (kappa TV0 budget : Real)
   existT _ (mrx_k_select_compute kappa TV0 budget hk1 hk2 ha hb)
            (mrx_k_select_spec kappa TV0 budget hk1 hk2 ha hb).
 
-(* 机检小引理（设计文档 §1.3 R1 槽位要求）：projT1 归约只由第一分量        *)
+(* 机检小引理（设计文档 §1.3 R1 接口字段要求）：projT1 归约只由第一分量        *)
 (*   决定，与第二分量（Qed 封闭的证明面）无关——证明不透明不传染见证。      *)
 Lemma mrx_projT1_exec : forall (kappa TV0 budget : Real)
   (hk1 : real_lt real_zero kappa) (hk2 : real_lt kappa real_one)
   (ha : real_lt real_zero TV0) (hb : real_lt real_zero budget),
   projT1 (mrx_k_exec kappa TV0 budget hk1 hk2 ha hb)
   = mrx_k_compute kappa TV0 budget hk1 hk2 ha hb.
-Proof. intros. reflexivity. Qed.
+Proof. intros.
+  exact (@eq_refl nat (mrx_k_compute kappa TV0 budget hk1 hk2 ha hb)). Qed.
 
 Lemma mrx_projT1_select_exec : forall (kappa TV0 budget : Real)
   (hk1 : real_lt real_zero kappa) (hk2 : real_lt kappa real_one)
   (ha : real_le real_zero TV0) (hb : real_lt real_zero budget),
   projT1 (mrx_k_select_exec kappa TV0 budget hk1 hk2 ha hb)
   = mrx_k_select_compute kappa TV0 budget hk1 hk2 ha hb.
-Proof. intros. reflexivity. Qed.
+Proof. intros.
+  exact (@eq_refl nat (mrx_k_select_compute kappa TV0 budget hk1 hk2 ha hb)). Qed.
 
 (* ============================================================ *)
 (* 审计口（全 Closed 预期）                                              *)

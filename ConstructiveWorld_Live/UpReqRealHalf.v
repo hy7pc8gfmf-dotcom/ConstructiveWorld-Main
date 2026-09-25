@@ -1,12 +1,3 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   upreq_half_plus（原 L88，2 句玩具证）                                *)
-(* ============================================================ *)
 
 (* ============================================================ *)
 (* UpReqRealHalf.v *)
@@ -15,10 +6,12 @@
 (* 主件： upreq_half 定义与 upreq_half_plus / upreq_half_opp / upreq_exp_half_sq 定律族。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： 半元的良定义性由乘法直接继承，无需重证模数；柯西序列性质随承。 *)
+(* 构造性注记：Set 层承载、零承认、可提取。 *)
+(* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqRealHalf.v —— 席T42A：Real 层 halving 基建件（2026-09-11） *)
+(* UpReqRealHalf.v —— Real 层 halving 基建件（2026-09-11） *)
 (*                                                                *)
 (* 定位：eˣ>0 五步链步骤3（eˣ=(eˣᐟ²)²）的缺位基础模块——Real 层半元    *)
 (*   函数形。UpReqExpPos.v 头注步骤3 标注「halving 件库内缺位」，   *)
@@ -29,7 +22,7 @@
 (* 主定理：upreq_half_plus : forall x : Real,                      *)
 (*   real_eq (real_plus (upreq_half x) (upreq_half x)) x。          *)
 (*                                                                *)
-(* 路线裁决（任务书路线A vs 依存纪律⑤的合流）：                    *)
+(* 路线裁决（候选路线A 与依存纪律⑤的合流）：                    *)
 (*   路线A 的逐项半化 v_n := u_n/2 在本库的合法包装即              *)
 (*   upreq_half x := real_mult (real_const (1#2)) x——real_mult 对  *)
 (*   cauchy 序列封闭（S02 real_mult Defined 级收敛装配），「v 仍是  *)
@@ -87,7 +80,7 @@ Proof.
   unfold upreq_half.
   rewrite (real_mult_const_proj (1#2) x n).
   rewrite (real_const_proj (1#2) n).
-  reflexivity.
+  exact (Qeq_refl ((1#2) * projT1 x n)).
 Qed.
 
 (* ============================================================ *)
@@ -123,7 +116,7 @@ Proof.
                         - projT1 (real_opp (upreq_half x)) n) == 0%Q).
   { apply Qeq_trans with (Qabs 0%Q).
     - apply Qabs_wd. exact Hd.
-    - reflexivity. }
+    - exact (Qeq_refl 0%Q). }
   apply Qlt_to_QltT.
   setoid_rewrite Habs0.
   apply QltT_to_Qlt. exact Heps.
@@ -148,7 +141,7 @@ Proof.
                         - projT1 x n) == 0%Q).
   { apply Qeq_trans with (Qabs 0%Q).
     - apply Qabs_wd. exact Hd.
-    - reflexivity. }
+    - exact (Qeq_refl 0%Q). }
   apply Qlt_to_QltT.
   setoid_rewrite Habs0.
   apply QltT_to_Qlt. exact Heps.

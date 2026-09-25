@@ -5,14 +5,16 @@
 (* 主件： t26_s1_algebra_log_compat 至 t26_s9_alignid_log_compat 九实例与 log 幂定律串接。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G05_LogSmall、UpReqEntropyUniqueTemp、UpReqAlgebra、UpReqAlign、UpReqAlign2、UpReqAlign3、UpReqU2、UpReqFEPAttn、UpReqAlignIdReq（对齐族各段）。 *)
 (* 备注： 诚实边界：s6 w2_gibbs_eq / req_u2_fixed_point_unique 等还吃 log_le_ 前提，为显式假设位，见正文登记。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqCDispersion.v —— C 档余槽批量消解席 T26（log_req_compat 9 实例打头） *)
-(*   2026-09-11；承席N2 Top3 结论：「G5 logd_ 闭合实例与 LogCompD 六槽完成  *)
-(*   已把『需新基元』降维成『Require+实例化』纯组装；9 实例同形一喂即收」  *)
+(* UpReqCDispersion.v —— C 档余位批量消解（log_req_compat 9 实例打头） *)
+(*   承上游结论：logd_ 闭合实例与 LogCompD 六位完成，已把『需新基元』  *)
+(*   降维成『Require+实例化』纯组装；9 实例同形直接代入即闭合。        *)
 (* ------------------------------------------------------------------ *)
-(* 假设位名单（普查 attn/T2①假设位普查与消解分级-20260910.md C 档区段）：      *)
+(* 前提位置名单（C 档区段）：                                        *)
 (*   s1 UpReqAlgebra:1492   ReqLogBridge   （下游 3 件）                  *)
 (*   s2 UpReqAlign:75       ReqAlignCore   （下游 1 件）                  *)
 (*   s3 UpReqAlign:698      ReqKLProjection（下游 4 件）                  *)
@@ -23,20 +25,20 @@
 (*   s8 UpReqFEPAttn:344    ReqFEPLogZ     （下游 2 件）                  *)
 (*   s9 UpAlignIdReq:134    AlignGapReq    （下游 6 件）                  *)
 (* 供给（G5 G05_LogSmall UpReqLogPrimD Real 层闭合件，上游已建成）：        *)
-(*   B1 logd_log_compat_real        ——9 槽 log_req_compat 同形一喂        *)
-(*   B4 logd_log_inv_exp_neg_real   ——伴生槽 log_inv_exp_neg_req（s5/s9） *)
+(*   B1 logd_log_compat_real        ——9 位 log_req_compat 同形直接代入   *)
+(*   B4 logd_log_inv_exp_neg_real   ——伴生参数位 log_inv_exp_neg_req（s5/s9） *)
 (* 消解形态（纯组装，两层）：                                             *)
-(*   Part A：9 槽语句 Real 层闭合证书（载体重命名 R:=Real、喂 B1）         *)
-(*   Part C：9 槽普查点名下游件的 Real 实例化——compat 槽喂 B1、            *)
-(*     log_inv_exp_neg_req 槽喂 B4（每件=槽真插入位类型化证据）；          *)
-(*     sum 面槽保持接口型参数位（t22_bool_sumf 两点载体为其 Real 满足证，  *)
-(*     上游在盘；其 raw real_eq/real_lt →接口 req/lt 换装会在提取层生成    *)
+(*   Part A：9 位语句 Real 层闭合证书（载体重命名 R:=Real、代入 B1）      *)
+(*   Part C：9 位点名下游件的 Real 实例化——compat 参数位代入 B1、         *)
+(*     log_inv_exp_neg_req 参数位代入 B4（每件=参数位类型化证据）；        *)
+(*     sum 面参数位保持接口型（t22_bool_sumf 两点载体为其 Real 满足证，  *)
+(*     上游在盘；其 raw real_eq/real_lt →接口 req/lt 重述会在提取层生成   *)
 
 (* 诚实边界：s6 w2_gibbs_eq / req_u2_fixed_point_unique 等还吃 log_le_    *)
-(*   linear / log_eq_linear 等号槽（普查 S 档 G6 属，构造性逆向桥不可证    *)
+(*     linear / log_eq_linear 等号参数位（S 档归属，构造性逆向桥不可证 *)
 
 (* 红线：Set 层零 Prop 泄露（结论全 req/lt 接口 Set 值）；全 Qed 闭合；     *)
-(*   既有文件零改；零 git；新名 t26_ 前缀（2026-09-11 全库 grep 零命中）。 *)
+(*   既有文件零改；新名 t26_ 前缀全库零撞名。                          *)
 
 
 
@@ -57,13 +59,13 @@ Require Import UpAlignIdReq.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part A：9 槽 log_req_compat 语句 Real 层闭合证书（同形批，B1 显式应用）      *)
-(*   槽形（普查原文）：forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),  *)
+(* Part A：9 位 log_req_compat 语句 Real 层闭合证书（同形批，B1 显式应用） *)
+(*   参数形（源文件原文）：                                            *)
 
 (*   RIS := RealEnhancedReal（S07 Instance，Export 链入域）。        *)
 (* ============================================================ *)
 
-(* 槽 s1：UpReqAlgebra:1492（ReqLogBridge） *)
+(* 参数位 s1：UpReqAlgebra ReqLogBridge *)
 Theorem t26_s1_algebra_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -72,7 +74,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s2：UpReqAlign:75（ReqAlignCore） *)
+(* 参数位 s2：UpReqAlign ReqAlignCore *)
 Theorem t26_s2_align_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -81,7 +83,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s3：UpReqAlign:698（ReqKLProjection） *)
+(* 参数位 s3：UpReqAlign ReqKLProjection *)
 Theorem t26_s3_alignklp_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -90,7 +92,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s4：UpReqAlign2:81（Req2AlignCore） *)
+(* 参数位 s4：UpReqAlign2 Req2AlignCore *)
 Theorem t26_s4_align2_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -99,7 +101,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s5：UpReqAlign3:72（Req3AlignCore） *)
+(* 参数位 s5：UpReqAlign3 Req3AlignCore *)
 Theorem t26_s5_align3_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -108,7 +110,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s6：UpReqU2:307（ReqU2FixedPoint） *)
+(* 参数位 s6：UpReqU2 ReqU2FixedPoint *)
 Theorem t26_s6_u2_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -117,7 +119,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s7：UpReqFEPAttn:97（ReqFEPAttn） *)
+(* 参数位 s7：UpReqFEPAttn ReqFEPAttn *)
 Theorem t26_s7_fepattn_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -126,7 +128,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s8：UpReqFEPAttn:344（ReqFEPLogZ） *)
+(* 参数位 s8：UpReqFEPAttn ReqFEPLogZ *)
 Theorem t26_s8_feplogz_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -135,7 +137,7 @@ Proof.
   exact (logd_log_compat_real x y Hx Hy Hxy).
 Qed.
 
-(* 槽 s9：UpAlignIdReq:134（AlignGapReq） *)
+(* 参数位 s9：UpAlignIdReq AlignGapReq *)
 Theorem t26_s9_alignid_log_compat :
   forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
@@ -153,12 +155,12 @@ Qed.
 Definition t26_bsum (f : bool -> Real) : Real := t22_bool_sumf f.
 
 (* ============================================================ *)
-(* Part C：普查点名下游件 Real 实例化（compat 槽喂 B1、log_inv_exp_neg_req  *)
-(*   槽喂 B4；sum 面槽为接口型参数位——见头注诚实边界）                     *)
+(* Part C：点名下游件 Real 实例化（compat 参数位代入 B1、log_inv_exp_neg_req *)
+(*   参数位代入 B4；sum 面参数位为接口型——见头注诚实边界）                 *)
 (* ============================================================ *)
 
 (* ---- s1 UpReqAlgebra ReqLogBridge（普查点名 req_log_inv_one_inv@1519、  *)
-(*      req_log_div@1536；本节无节参，compat 单槽显式应用，全 Concrete） ---- *)
+(*      req_log_div@1536；本节无节参，compat 单参数位显式应用，全 Concrete） ---- *)
 
 Theorem t26_s1_req_log_inv_one_inv :
   forall (x : Real) (Hx : lt zero x),
@@ -181,7 +183,7 @@ Proof.
 Qed.
 
 (* ---- s2 UpReqAlign ReqAlignCore（普查点名 req_free_energy_align_ext@251； *)
-(*      载体 S:=bool、sumf:=t26_bsum；sum_ext 槽接口型参数位） ---- *)
+(*      载体 S:=bool、sumf:=t26_bsum；sum_ext 参数位接口型） ---- *)
 
 Theorem t26_s2_req_free_energy_align_ext :
   forall (sum_ext : forall f g : bool -> Real,
@@ -203,7 +205,7 @@ Proof.
 Qed.
 
 (* ---- s3 UpReqAlign ReqKLProjection（普查点名 rkl_log_inv_one_inv@871、  *)
-(*      req_log_proj_pass@910；后者零 sum 槽，全 Concrete） ---- *)
+(*      req_log_proj_pass@910；后者零 sum 参数位，全 Concrete） ---- *)
 
 Theorem t26_s3_rkl_log_inv_one_inv :
   forall (x : Real) (Hx : lt zero x),
@@ -243,7 +245,7 @@ Proof.
 Qed.
 
 (* ---- s5 UpReqAlign3 Req3AlignCore（普查点名 r2_log_inv_opp@1511、        *)
-(*      w_F_t_rel_decomp@163；后者四 sum 槽接口型参数位 + B4 显式应用）       ---- *)
+(*      w_F_t_rel_decomp@163；后者四 sum 参数位接口型 + B4 显式应用）       ---- *)
 
 Theorem t26_s5_r2_log_inv_opp :
   forall (x : Real) (Hx : lt zero x),
@@ -359,7 +361,7 @@ Proof.
 Qed.
 
 (* ---- s9 UpAlignIdReq AlignGapReq（普查点名 w_gap_base@172、              *)
-(*      w_subgap_base@187；四 sum 槽接口型参数位 + B4 显式应用）             ---- *)
+(*      w_subgap_base@187；四 sum 参数位接口型 + B4 显式应用）             ---- *)
 
 Theorem t26_s9_w_gap_base :
   forall (sum_ext : forall f g : bool -> Real,

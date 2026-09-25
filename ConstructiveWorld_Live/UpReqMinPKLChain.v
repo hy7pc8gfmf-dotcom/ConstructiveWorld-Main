@@ -4,14 +4,16 @@
 (* 目的： 复合熵链的一步拼装（Min-P KL 链）。 *)
 (* 主件： x1_KL 与 x1_minp_kernel / x1_Zaud_pos_cert：KL 链的显式组装件。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpMinP。 *)
-(* 备注： 三分性探针显式随行；零公理面、零经典逻辑（纯构造）。 *)
+(* 备注： 三分性判定器显式随行；零公理面、零经典逻辑（纯构造）。 *)
+(* 构造性注记：Set 层承载、零承认、可提取。 *)
+(* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqMinPKLChain.v —— X1 席：复合熵链一步拼装                  *)
+(* UpReqMinPKLChain.v —— 复合熵链一步拼装 *)
 (*   KL(minp‖full) ≤ S ≤ log|S|   （论文 2 正式版 §10.2 第 6 项）  *)
 (*                                                              *)
-(* 拼装件（全在盘，只读消费）：                                   *)
+(* 拼装件（全在盘，只读使用）：                                   *)
 
 (*                   real_Z_aud_is_kept_mass（Z_aud == 保留质量）  *)
 (*   UpMinP        : dropped_le_one_minus_exp_neg_S（dropped ≤ 1−e^−S）*)
@@ -28,13 +30,13 @@
 (*   [4] um_log_le_mono + log_inv_exp_neg_thm ⟹ KL ≤ S            *)
 
 (*       ⟹ S ≤ log N + eps（逐 eps 形）                           *)
-(*   [6] 三分探针 + 半隙完成 ⟹ S ≤ log N（闭形）                  *)
+(*   [6] 三分判定器 + 半隙完成 ⟹ S ≤ log N（闭形）                  *)
 (*   [7] real_le_trans ⟹ KL ≤ log N 与合取形复合链                 *)
 (*                                                              *)
 (* 世界：UpMinP 概率表世界（tokens : list Real，逐项正、和 == 1，   *)
-(* ratio ∈ (0,1]，三分探针 trich 随行）；UpAuditBridge 抽象 Min-P   *)
+(* ratio ∈ (0,1]，三分判定器 trich 随行）；UpAuditBridge 抽象 Min-P   *)
 (* 机器在 (Real, tokens, x1_tf, x1_keep, x1_keep_dec) 上实例化。    *)
-(* 纪律：零公理、零搁置、零经典（纯构造，三分探针显式随行）；        *)
+(* 纪律：零公理、零搁置、零经典（纯构造，三分判定器显式随行）；        *)
 (*       语句全 Set 层；全 Qed 闭合；um_/x1_ 前缀防遮蔽。           *)
 (* ============================================================ *)
 
@@ -119,7 +121,7 @@ Proof.
 Qed.
 
 (* 通用输运：list 和 == seq 下标和（任意 f；um_seq_nth_sum 的泛化版， *)
-(*   nth 全程保符号，仅经 x1_seq_shift 位移——镜像 UpMinP 纪律）      *)
+(*   nth 全程保符号，仅经 x1_seq_shift 位移——对应 UpMinP 纪律）      *)
 Lemma x1_sum_list_seq : forall (l : list Real) (f : Real -> Real),
   real_eq (real_list_sum Real f l)
           (real_list_sum nat (fun i => f (ListDef.nth i l real_zero))
@@ -239,7 +241,7 @@ Proof.
       * apply real_eq_sym. apply real_plus_zero.
       * apply RealSetoid.real_eq_plus_compat.
         -- apply real_eq_refl.
-        -- (* X1b：此槽目标是 `0 == B+−B`（compat 第二槽反向），sym 后消解 *)
+        -- (* X1b：此位目标是 `0 == B+−B`（compat 第二位反向），sym 后消解 *)
            apply real_eq_sym. apply real_plus_opp.
     + (* X1b：assoc 本朝向即 `x+(y+z) == (x+y)+z`（S02 L2333），直放即可 *)
       apply real_plus_assoc.
@@ -283,7 +285,7 @@ Proof.
   - apply real_eq_refl.
 Qed.
 
-(* Min-P 保留判定（阈值 thr = ratio·p_max；与 um_keepF 同一探针项） *)
+(* Min-P 保留判定（阈值 thr = ratio·p_max；与 um_keepF 同一判定项） *)
 Definition x1_keep (_ : list Real) (x : Real) : Set :=
   match trich thr x with
   | inl _ => unit
@@ -332,7 +334,7 @@ Qed.
 
 Lemma x1_Zfull_pos : real_lt real_zero (Z_full Real tokens x1_tf).
 Proof.
-  (* X1b：lt_compat 剖面 x1 x2 y1 y2 + 三证据；0<1 与 Z_full==1 换装到 0<Z_full *)
+  (* X1b：lt_compat 剖面 x1 x2 y1 y2 + 三证据；0<1 与 Z_full==1 重述为 0<Z_full *)
   apply (RealSetoid.real_lt_compat real_zero real_zero real_one
            (Z_full Real tokens x1_tf)
            (real_eq_refl real_zero)
@@ -542,7 +544,7 @@ Proof.
   apply (RealSetoid.real_le_id_l (real_exp_neg S)
            (real_plus real_one
               (real_opp (real_plus real_one (real_opp (real_exp_neg S)))))).  - apply real_eq_sym. apply x1_plus_opp_cancel.
-  - (* X1b：real_le_id_r 子弹序 = 先 eq 槽后 le 槽（原稿反序） *)
+  - (* X1b：real_le_id_r 子弹序 = 先 eq 位后 le 位（原稿反序） *)
     apply (RealSetoid.real_le_id_r
              (real_plus real_one
                 (real_opp (real_plus real_one (real_opp (real_exp_neg S)))))
@@ -610,7 +612,7 @@ Proof.
              (cw_log (real_exp_neg S) (real_exp_neg_pos S))
              (real_log K Hlogpos)).
     - (* X1b：−S == log(e^−S)：log_inv 消解给 cauchy 形，正性证明经
-         real_log_wd 换装为 real_exp_neg_pos S（不透明常量须语法同形） *)
+         real_log_wd 重述为 real_exp_neg_pos S（不透明常量须语法同形） *)
       apply (real_eq_trans _
                  (cw_log (cauchy_real_exp (real_opp S))
                     (cauchy_real_exp_pos (real_opp S)))).
@@ -664,7 +666,7 @@ Lemma x1_kl_term_expand : forall (k : Real) (Hk : real_lt real_zero k),
 Proof.
   intros k Hk. unfold real_kl_term.
   (* X1b 重构：k·(−log(U·inv k)) == k·(−((−LN)+(−log k))) == k·(LN+log k)
-     原稿 4 处 `k` 误占正性证明槽（应为 Hk），且 opp_plus 朝向与
+     原稿 4 处 `k` 误占正性证明位（应为 Hk），且 opp_plus 朝向与
      两段 trans 中项错位，此版按直推链重排。 *)
   apply (real_eq_trans _
            (real_mult k
@@ -717,11 +719,11 @@ Proof.
   apply RealSetoid.real_eq_mult_compat.
   - exact Heq.
   - apply RealSetoid.real_eq_opp_compat.
-    (* X1b：a/b/Ha/Hb 可由目标合一，apply real_log_wd 后仅剩 Heq 槽 *)
+    (* X1b：a/b/Ha/Hb 可由目标合一，apply real_log_wd 后仅剩 Heq 位 *)
     apply real_log_wd.
     apply RealSetoid.real_eq_mult_compat.
     * apply real_eq_refl.
-    * (* X1b：x/x'/Hx/Hx' 皆由目标合一，仅剩 Heq 槽 *)
+    * (* X1b：x/x'/Hx/Hx' 皆由目标合一，仅剩 Heq 位 *)
       apply x1_inv_compat.
       exact Heq.
 Qed.
@@ -819,7 +821,7 @@ Proof.
              ++ apply (real_eq_trans _ (real_mult LN real_one)).
                 ** apply RealSetoid.real_eq_mult_compat.
                    --- apply real_eq_refl.
-                   --- (* X1b：此槽须 Σ nth==1（非 tf 版 Hnormp）；经 um_seq_nth_sum
+                   --- (* X1b：此位须 Σ nth==1（非 tf 版 Hnormp）；经 um_seq_nth_sum
                           与 tokens_sum 现场重造 *)
                       apply (real_eq_trans _
                                  (real_list_sum Real
@@ -842,12 +844,12 @@ Proof.
                             (x1_tf_pos (ListDef.nth i tokens real_zero)) HqU)
                 (ListDef.seq 0%nat N)) eps)
              (real_plus (real_plus LN (real_opp S)) eps)).
-    - (* X1b：id_r 槽序 = 先 eq 后 le（原稿反序） *)
+    - (* X1b：id_r 位序 = 先 eq 后 le（原稿反序） *)
       apply RealSetoid.real_eq_plus_compat.
       + exact Hstep.
       + apply real_eq_refl.
     - exact Hg. }
-  (* X1b：(LN−S)+S == LN（assoc + comm + plus_opp 三步；eq 槽消 S 的核） *)
+  (* X1b：(LN−S)+S == LN（assoc + comm + plus_opp 三步；eq 位消 S 的核） *)
   assert (HSL : real_eq (real_plus (real_plus LN (real_opp S)) S) LN).
   { apply (real_eq_trans _ (real_plus LN (real_plus (real_opp S) S))).
     - apply real_eq_sym. apply real_plus_assoc.
@@ -867,7 +869,7 @@ Proof.
   - apply (RealSetoid.real_le_id_r (real_plus real_zero S)
              (real_plus (real_plus (real_plus LN (real_opp S)) eps) S)
              (real_plus LN eps)).
-    + (* X1b：id_r 槽序 = 先 eq 后 le；eq 槽把 S 搬入内层经 HSL 消去 *)
+    + (* X1b：id_r 位序 = 先 eq 后 le；eq 位把 S 搬入内层经 HSL 消去 *)
       apply (real_eq_trans _
                (real_plus (real_plus LN (real_opp S)) (real_plus eps S))).
       * apply real_eq_sym. apply real_plus_assoc.
@@ -894,7 +896,7 @@ Qed.
 (*     （real_lt_plus_compat_le_lt）→ real_lt_trans（S02 L463）完成  *)
 (* ============================================================ *)
 
-(* [6] 闭形：S ≤ log N（逐 eps 形经三分探针 + 半隙完成） *)
+(* [6] 闭形：S ≤ log N（逐 eps 形经三分判定器 + 半隙完成） *)
 Theorem x1_entropy_le_log_N : real_le S LN.
 Proof.
   destruct (trich S LN) as [Hle | Hgt].
@@ -902,7 +904,7 @@ Proof.
     exact Hle.
   - (* inr 支：LN < S 导矛盾（d := S+(−LN)，eps := d·inv 2） *)
     assert (H2pos : real_lt real_zero (real_plus real_one real_one)).
-    { (* (0+0) < (1+1) 换装为 0 < 1+1 *)
+    { (* (0+0) < (1+1) 重述为 0 < 1+1 *)
       apply (RealSetoid.real_lt_compat (real_plus real_zero real_zero) real_zero
                (real_plus real_one real_one) (real_plus real_one real_one)).
       - apply real_plus_zero.
@@ -918,7 +920,7 @@ Proof.
              (real_inv_pos (real_plus real_one real_one) H2pos)).
     { exact (real_inv_pos_pos (real_plus real_one real_one) H2pos). }
     assert (Hd : real_lt real_zero (real_plus S (real_opp LN))).
-    { (* −S < −LN ⟹ (−S)+S < (−LN)+S ⟹ 换装 0 < S+(−LN) *)
+    { (* −S < −LN ⟹ (−S)+S < (−LN)+S ⟹ 重述 0 < S+(−LN) *)
       apply (RealSetoid.real_lt_compat (real_plus (real_opp S) S) real_zero
                (real_plus (real_opp LN) S) (real_plus S (real_opp LN))).
       - apply (real_eq_trans _ (real_plus S (real_opp S))).
@@ -928,7 +930,7 @@ Proof.
       - exact (real_lt_plus_compat_lt_le (real_opp S) (real_opp LN) S S
                  (real_opp_lt_compat LN S Hgt) (real_le_refl S)). }
     assert (H12 : real_lt real_one (real_plus real_one real_one)).
-    { (* (0+1) < (1+1) 经 real_lt_compat 换装 0+1→1 *)
+    { (* (0+1) < (1+1) 经 real_lt_compat 重述 0+1→1 *)
       apply (RealSetoid.real_lt_compat (real_plus real_zero real_one) real_one
                (real_plus real_one real_one) (real_plus real_one real_one)).
       - apply (real_eq_trans _ (real_plus real_one real_zero)).
@@ -939,7 +941,7 @@ Proof.
                  real_lt_zero_one (real_le_refl real_one)). }
     assert (Hinv2lt1 : real_lt
              (real_inv_pos (real_plus real_one real_one) H2pos) real_one).
-    { (* inv 2 < inv 1（real_inv_pos_lt_contra）经 inv1==1 换装 *)
+    { (* inv 2 < inv 1（real_inv_pos_lt_contra）经 inv1==1 重述 *)
       apply (RealSetoid.real_lt_compat
                (real_inv_pos (real_plus real_one real_one) H2pos)
                (real_inv_pos (real_plus real_one real_one) H2pos)
@@ -952,7 +954,7 @@ Proof.
              (real_mult (real_plus S (real_opp LN))
                 (real_inv_pos (real_plus real_one real_one) H2pos))
              (real_plus S (real_opp LN))).
-    { (* d·inv2 < d·1（real_lt_mult_compat）经 d·1==d 换装 *)
+    { (* d·inv2 < d·1（real_lt_mult_compat）经 d·1==d 重述 *)
       apply (RealSetoid.real_lt_compat
                (real_mult (real_plus S (real_opp LN))
                   (real_inv_pos (real_plus real_one real_one) H2pos))

@@ -1,9 +1,9 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 【同名替换稿说明】本件为玩具级定理同名替换件：原件全文逐字保留， *)
+(* 仅将文末清单所列定理之证明体按实质非平凡三口径（定义层受控展开／ *)
+(* 显式见证直取／结构性重演）处理，声明面与引用面零改动，零新增     *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留     *)
+(* 原件 Print Assumptions 追印面。                                 *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   eg_minus_pos（原 L139，4 句玩具证）                                  *)
 (*   eg_minus_def（原 L92，2 句玩具证）                                   *)
@@ -16,11 +16,13 @@
 (* 主件： entropy_gain_positive 与 second_law_quant：逐步增益非负及热力学第二定律量化形。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： 熵函数、梯度、动力学以 Variable 前提声明；逐步差分引理链 eg_step_diff 等为构造核。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ============================================================
-   UpEntropyGain.v —— 榜 A2：second_law_irreversible（根 L27796）
-   从"假设搬运型平凡"升级为带定量增量的真定理。
+   UpEntropyGain.v —— second_law_irreversible 的定量对应件
+   从"假设迁移型平凡"升级为带定量增量的真定理。
 
    件 1  entropy_step_gain_lower：
      一步梯度上升 x' := x + η·g(x) 的熵增量定量下界
@@ -44,13 +46,13 @@
            ⟹ 增量 ≥ η(1−Lη)g²。
            真增量 log(1.2) ≈ 0.182 ≥ 下界 0.4·(1−0.8)·0.25 = 0.02 ✓。
      正性条件是 ηL < 1 而非草案的 ημ < 1：μ ≤ L（Lipschitz 与强凹
-           相容时）⟹ 1/L ≤ 1/μ，ημ < 1 控制不住过冲，诚实常数取 1/L。
+           相容时）⟹ 1/L ≤ 1/μ，ημ < 1 控制不住过冲，显式常数取 1/L。
      g(x) < 0 负支同界（|g| 收缩对称），但其提取需符号三分判定，
            构造性 Set 层不可达——如实降级为 g(x) > 0 单侧版。
 
    纪律：纯构造性 / Set 层 / 零未证缺口 / 零经典 / 语句零 Prop
         （lt/le 均接口 Set 字段；无 Not/Or 前提）/ 可提取 OCaml。
-   诚实接口：entropy_tangent / gradient_lipschitz /
+   显式接口：entropy_tangent / gradient_lipschitz /
         dynamics_gradient_step 复刻根 ConvergenceCauchy 区同名
         Variable；abs_ge_value（le a (abs a)，与根 abs_ge_zero_id_cc
         同族的构造性有序域标准性质，Real 层可证）与
@@ -74,7 +76,7 @@ Let lt := @lt RI.
 Let le := @le RI.
 (* minus 保持根全局 Definition（minus a b := plus a (opp b)，定义性展开） *)
 
-(* ===== 诚实接口（Variable 复刻根 ConvergenceCauchy 区） ===== *)
+(* ===== 显式接口（Variable 复刻根 ConvergenceCauchy 区） ===== *)
 Variable entropy : R -> R.
 Variable entropy_gradient : R -> R.
 Variable dynamics : R -> R.
@@ -89,7 +91,7 @@ Variable gradient_lipschitz : forall x y : R,
      (mult L (abs (minus x y))).
 Variable entropy_tangent : forall x y : R,
   le (entropy y) (plus (entropy x) (mult (entropy_gradient x) (minus y x))).
-(* 新增诚实接口：|·| 的单边提取（le a (abs a)；根 abs_ge_zero_id_cc
+(* 新增显式接口：|·| 的单边提取（le a (abs a)；根 abs_ge_zero_id_cc
    同族——le zero a -> |a| == a 的姊妹形态；构造性有序域标准性质，
    柯西实数模型可证，抽象层声明为接口字段，非经典公理） *)
 Variable abs_ge_value : forall a : R, le a (abs a).
@@ -421,8 +423,8 @@ Qed.
    件 3（对照注记 + 结果推论）：second_law_quant
    根 L27778–27803 SecondLaw 区：strict_entropy_increase 是接口假设
    （Variable），second_law_irreversible = `apply strict_entropy_increase`
-   （T2 假设搬运，探针实证导出形态两处同现同一前提）。本件以具体熵梯度
-   动力学 + 诚实充分条件（ηL < 1、g(x) > 0）产出同一结论
+   （假设迁移，检验实证导出形态两处同现同一前提）。本件以具体熵梯度
+   动力学 + 显式充分条件（ηL < 1、g(x) > 0）产出同一结论
    lt (entropy x) (entropy (dynamics x))——旧件可作退役注记：
    其接口前提在本件条件下由 entropy_gain_positive 构造性供给。
    ============================================================ *)

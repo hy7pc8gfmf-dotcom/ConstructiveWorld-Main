@@ -1,10 +1,10 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T251 台账席 战役包L（tier2 二批）          *)
+(* 玩具证替换件 —— 先行消融波落件（四刀清单见下）                  *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列四个裸反射      *)
-(* 单跳玩具证之证明体替换为定义层受控展开收口（实例壳层与母本核层    *)
-(* unfold 显式化后转换收口，裸反射吞层改为分层显式），声明面与引用    *)
+(* 单跳玩具证之证明体替换为定义层受控展开闭合（实例壳层与源模块核层    *)
+(* unfold 显式化后转换闭合，裸反射吞层改为分层显式），声明面与引用    *)
 (* 面零改动，零新增 Require，证明结尾记号与原件逐件守恒，纯构造性    *)
-(* 收口，文尾保留原件 Print Assumptions 追印面。清单：              *)
+(* 闭合，文尾保留原件 Print Assumptions 追印面。清单：              *)
 (*   cb2w_z_pw_one（原 L55-57，裸反射单跳）                          *)
 (*   cb2w_Delta_pw_two（原 L59-61，裸反射单跳）                      *)
 (*   cb2w_core_zero_pw（原 L285-287，裸反射单跳）                    *)
@@ -24,10 +24,10 @@
 (*   两侧合起来刻画 +1 松弛的严格性边界。                                        *)
 (*                                                              *)
 (* 依赖清单：CW_ConstructiveWorld_219（实数接口面）、UpReqAlgebra、UpReqSumD、     *)
-(*   UpReqConcB2（母本全件：cb2_Delta/cb2_Delta_core/cb2_z、逐点不等式引理族      *)
+(*   UpReqConcB2（源模块全件：cb2_Delta/cb2_Delta_core/cb2_z、逐点不等式引理族      *)
 (*   cb2_q* 系列、全参一般引理 cb2_z_lb_all/cb2_z_ub_all、退化面 cb2_smoke_*）。   *)
 (*                                                              *)
-(* 证明要点：§2 三个严格形沿用母本证明链的逐点结构：由 one_pos 取正性见证         *)
+(* 证明要点：§2 三个严格形沿用源模块证明链的逐点结构：由 one_pos 取正性见证         *)
 (*   N0，以 eps:=1#2 把 strict 拆为 Qlt (1#2) 1 与 1 ≤ … 两段，配合               *)
 (*   cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap/           *)
 (*   cb2_qopp_abs_le/cb2_qle_minus/cb2_qmul_nonneg/cb2_qmul_nonneg_r/             *)
@@ -38,7 +38,7 @@
 (*                                                              *)
 (* 编译配方：Rocq 9.1 直调、cpu_guard 节流、-o 临时目录输出（树内零写入）。       *)
 (*                                                              *)
-(* 标识符约定：本件实例层命名以前缀 cb2w_ 区分于母本 cb2_ 系列。                  *)
+(* 标识符约定：本件实例层命名以前缀 cb2w_ 区分于源模块 cb2_ 系列。                  *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -52,7 +52,7 @@ Import ListNotations.
 Require Import UpReqConcB2.
 
 (* ============================================================ *)
-(* §1 实例数据面（a 组：非退化实例；b 组复用母本 cb2_smoke_* 全零面）       *)
+(* §1 实例数据面（a 组：非退化实例；b 组复用源模块 cb2_smoke_* 全零面）       *)
 (* ============================================================ *)
 
 Definition cb2w_q : unit -> list Real := fun _ => real_one :: nil.
@@ -69,8 +69,8 @@ Lemma cb2w_z_pw_one : forall n : nat,
   projT1 (cb2_z unit cb2w_q cb2w_k real_one tt tt) n == 1%Q.
 Proof.
   intro n.
-  (* 刀：实例壳层（cb2w_q/cb2w_k 常量体）＋母本核层（cb2_z = temp·dot）逐层
-     unfold 显式化，转换收口替代裸反射单跳吞层。 *)
+  (* 刀：实例壳层（cb2w_q/cb2w_k 常量体）＋源模块核层（cb2_z = temp·dot）逐层
+     unfold 显式化，转换闭合替代裸反射单跳吞层。 *)
   unfold cb2_z, cb2w_q, cb2w_k.
   reflexivity.
 Qed.
@@ -80,20 +80,20 @@ Lemma cb2w_Delta_pw_two : forall n : nat,
 Proof.
   intro n.
   (* 刀：装配面（cb2_Delta = core + one）与封顶核（cb2_Delta_core = temp·maxabs）
-     及实例清单 cb2w_lmax 三层 unfold 显式化后转换收口。 *)
+     及实例清单 cb2w_lmax 三层 unfold 显式化后转换闭合。 *)
   unfold cb2_Delta, cb2_Delta_core, cb2w_lmax.
   reflexivity.
 Qed.
 
 (* ============================================================ *)
 (* §2 非退化实例上的严格形（eps:=1#2 具体值）                                     *)
-(*   证明结构与母本 UpReqConcB2 的证明链（cb2_Delta_pos/cb2_z_lb/cb2_z_ub）        *)
-(*   逐行同构，实例化 temp:=real_one、lmax:=cb2w_lmax，逐点不等式全用母本          *)
+(*   证明结构与源模块 UpReqConcB2 的证明链（cb2_Delta_pos/cb2_z_lb/cb2_z_ub）        *)
+(*   逐行同构，实例化 temp:=real_one、lmax:=cb2w_lmax，逐点不等式全用源模块          *)
 (*   已证引理（cb2_maxabs_nonneg/cb2_dot_le_max/cb2_qplus_one_gap/cb2_qminus_gap）， *)
 (*   即 cb2_Delta_core 的实例化重建本体。                                        *)
 (* ============================================================ *)
 
-(* a-2：Delta 正性的实例化重建（同构于母本 cb2_Delta_pos 的严格支） *)
+(* a-2：Delta 正性的实例化重建（同构于源模块 cb2_Delta_pos 的严格支） *)
 Theorem cb2w_Delta_pos_half : real_lt real_zero (cb2_Delta real_one cb2w_lmax).
 Proof.
   destruct one_pos as [e0 [He0 [N0 HN0]]].
@@ -137,7 +137,7 @@ Proof.
              Hzg).
 Qed.
 
-(* a-3：z 上界严格形的实例化重建（同构于母本 cb2_z_ub 的 inl 支，语句强化为 real_lt 本体） *)
+(* a-3：z 上界严格形的实例化重建（同构于源模块 cb2_z_ub 的 inl 支，语句强化为 real_lt 本体） *)
 Theorem cb2w_z_ub_lt :
   real_lt (cb2_z unit cb2w_q cb2w_k real_one tt tt)
           (cb2_Delta real_one cb2w_lmax).
@@ -187,7 +187,7 @@ Proof.
                 Huv1)).
 Qed.
 
-(* a-4：z 下界严格形的实例化重建（同构于母本 cb2_z_lb 的 inl 支，语句强化为 real_lt 本体） *)
+(* a-4：z 下界严格形的实例化重建（同构于源模块 cb2_z_lb 的 inl 支，语句强化为 real_lt 本体） *)
 Theorem cb2w_z_lb_lt :
   real_lt (real_opp (cb2_Delta real_one cb2w_lmax))
           (cb2_z unit cb2w_q cb2w_k real_one tt tt).
@@ -287,7 +287,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 全零退化对照件（母本 UpReqConcB2 头注如实记载的局限的定理化）：              *)
+(* §3 全零退化对照件（源模块 UpReqConcB2 头注如实记载的局限的定理化）：              *)
 (*   uniform eventual gap 形的严格见证遇上点态恒零 gap 即自相矛盾                  *)
 (*   （0<eps 且 eps<0，由 Qlt 传递性与非自反性导出矛盾，零经典逻辑）。             *)
 (* ============================================================ *)
@@ -312,7 +312,7 @@ Lemma cb2w_core_zero_pw : forall n : nat,
 Proof.
   intro n.
   (* 刀：封顶核 cb2_Delta_core 与全零实例 cb2_smoke_lmax 两层 unfold 显式化
-     （temp·maxabs 在零清单上逐点归零）后转换收口。 *)
+     （temp·maxabs 在零清单上逐点归零）后转换闭合。 *)
   unfold cb2_Delta_core, cb2_smoke_lmax.
   reflexivity.
 Qed.
@@ -331,9 +331,9 @@ Lemma cb2w_core_gap_zero : forall n : nat,
   - projT1 (cb2_z unit cb2_smoke_q cb2_smoke_k real_one tt tt) n == 0%Q.
 Proof.
   intro n.
-  (* 刀：封顶核与核值两母本定义（cb2_Delta_core/cb2_z）连同 b 组实例三常量
+  (* 刀：封顶核与核值两源模块定义（cb2_Delta_core/cb2_z）连同 b 组实例三常量
      （cb2_smoke_lmax/cb2_smoke_q/cb2_smoke_k）五层 unfold 显式化，gap 逐点
-     差在零核与零核值上转换归零收口。 *)
+     差在零核与零核值上转换归零闭合。 *)
   unfold cb2_Delta_core, cb2_smoke_lmax, cb2_z, cb2_smoke_q, cb2_smoke_k.
   reflexivity.
 Qed.

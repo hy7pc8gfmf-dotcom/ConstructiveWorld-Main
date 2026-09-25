@@ -16,6 +16,8 @@
 (*       显式（delta/x 正性证书），无 Prop 泄露；零承认、无公理面。          *)
 (* 注记：具体柯西实数层内 S02/S03 无 nat 嵌入实名，故本件自备               *)
 (*       mte_nat_to_R（形状同 S04 接口层同名件：零 ↦ 零、后继 ↦ 壹 + 递降）。*)
+(* 对标：stdlib Arith（nat 嵌入与发散构造）；mathlib 无构造性对应物。        *)
+(* 编译配方：Rocq 9.1 直调 coqc + cpu_guard 包裹，输出至临时目录。            *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -307,9 +309,11 @@ Proof.
     rewrite H1, H2.
     assert (Hz : Z.of_nat 0 = 0%Z) by reflexivity.
     rewrite Hz. field.
-  - assert (Hzs : Z.of_nat (Datatypes.S n) = Z.succ (Z.of_nat n)) by lia.
+  - assert (Hzs : Z.of_nat (Datatypes.S n) = Z.succ (Z.of_nat n))
+      by apply Znat.Nat2Z.inj_succ.
     assert (Hzq : (Z.of_nat (Datatypes.S n) # 1)%Q == (1 + (Z.of_nat n # 1))%Q).
-    { unfold Qeq. rewrite Hzs. cbn [Qnum Qden Qplus]. lia. }
+    { unfold Qeq. rewrite Hzs. cbn [Qnum Qden Qplus].
+      rewrite !Z.mul_1_r. symmetry. apply Z.add_1_l. }
     apply (real_eq_trans _ (real_plus real_one (real_const (Z.of_nat n # 1)%Q))).
     + exact (RealSetoid.real_eq_plus_compat real_one (mte_nat_to_R n) real_one
                (real_const (Z.of_nat n # 1)%Q)
@@ -798,7 +802,23 @@ Proof.
   exists n0. intros n Hn.
   destruct (Nat.eq_dec n n0) as [Heq | Hne].
   - rewrite Heq. exact Hbase.
-  - assert (Hgt : (n = n0 + Datatypes.S (n - Datatypes.S n0))%nat) by lia.
+  - assert (Hgt : (n = n0 + Datatypes.S (n - Datatypes.S n0))%nat).
+    { (* 差量分解：由 Nat.sub_add 得 n = (n−n₀)+n₀（E1）；
+         又 n≠n₀，故 n−n₀>0，立 S(n−S n₀)=n−n₀（E2，零支经 E1 导 n=n₀ 反设）；
+         E3 以 E2 与加法交换律桥接，与 E1 级联得分解式 *)
+      assert (E1 : (n = (n - n0) + n0)%nat)
+        by (symmetry; apply Nat.sub_add; exact Hn).
+      assert (E2 : Datatypes.S (n - Datatypes.S n0) = (n - n0)%nat).
+      { rewrite Nat.sub_succ_r. destruct ((n - n0)%nat) as [| q] eqn:Hq.
+        - exfalso.
+          assert (Hnn0 : n = n0) by (rewrite E1; reflexivity).
+          exact (Hne Hnn0).
+        - reflexivity. }
+      assert (E3 : (n0 + Datatypes.S (n - Datatypes.S n0))%nat =
+                   ((n - n0) + n0)%nat).
+      { rewrite (Nat.add_comm n0 (Datatypes.S (n - Datatypes.S n0))),
+                E2. reflexivity. }
+      exact (eq_trans E1 (eq_sym E3)). }
     rewrite Hgt.
     exact (real_lt_trans (mte_nat_to_R M) (mte_rpow (cauchy_real_exp x) n0)
              (mte_rpow (cauchy_real_exp x)

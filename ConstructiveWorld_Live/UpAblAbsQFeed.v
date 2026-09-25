@@ -102,8 +102,13 @@ Proof.
     - apply Qabs_opp. }
   apply (proj2 (Qabs_Qle_condition (Qabs a - Qabs b) (Qabs (a - b)))).
   split.
-  - (* Qopp 支：−|a−b| ≤ |a|−|b|（lra 线性推理：由 Heq 与 Hrev 承接） *)
-    lra.
+  - (* Qopp 支：−|a−b| ≤ |a|−|b|：先由 Heq 把 Hrev 右端换形为 Qabs (a − b)，
+       再经 Qopp_le_compat 反号保序，差形恒等式 −(x − y) == y − x
+       于 Qminus 展开后收尾 *)
+    rewrite Heq in Hrev.
+    apply (Qle_trans _ (Qopp (Qabs b - Qabs a))).
+    + apply Qopp_le_compat. exact Hrev.
+    + apply qeq_le. unfold Qminus. ring.
   - (* 正向支：|a|−|b| ≤ |a−b| *)
     exact (Qabs_triangle_reverse a b).
 Qed.

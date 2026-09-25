@@ -1,36 +1,22 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   enpf_split_even_odd（原 L73，4 句刀体）                             *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* ExpNegFinale.v                                                *)
-(*                                                               *)
-(* 目的：将 S03 的参数化下界双件（exp_partial_even_lower、         *)
-(*       exp_partial_odd_lower）打包为 exp(−x) 的最终正性定理：    *)
-(*       ∀ x ≥ 0, ∃ N, ∀ n ≥ N, 0 < exp_partial n (−x)。           *)
-(* 主件：enpf_eventual_pos : forall x : Q, QleT' 0 x ->            *)
-(*       sigT (fun N : nat => forall n : nat, NatLe N n ->         *)
-(*         QltT 0 (exp_partial n (Qopp x)))。                      *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；               *)
-(*       Stdlib QArith.QArith、QArith.Qabs、Arith.Arith、Setoid、    *)
-(*       Lia。                                                    *)
-(* 备注：材料强度经逐字核对 S03 原文：两 lower 件下界形为 1/C（偶档） *)
-(*       与 1/(2C)（奇档），均严格正，无"1−x"型约束负担，故取        *)
-(*       N := 2·m0+1 分偶奇组装即可，零附加前提。组装骨架仿         *)
-(*       S03 cauchy_real_exp_pos 的固定 y = −x 简化：M := 1+x       *)
-(*       （0 ≤ M 且 |−x| = x ≤ 1+x），C 由 exp_series_arch 给出     *)
-(*       （1 ≤ C 且 ∀n, exp_series n M ≤ C），m0 由                 *)
-(*       exp_partial_tail_small 给出。与 ExpNegPosUp.v（前缀 enpx_） *)
-(*       互补不冲突：其主件是偶档切面（全 m 严格正、无 N 门限），     *)
-(*       本件补齐奇档的最终门限；奇档逐点正性为假命题               *)
-(*       （反例 S₁(−3) = −2 < 0），故须门限形。全件 Qed；无公理、     *)
-(*       无承认式、无经典逻辑；语句面全 Set，存在见证走 sigT。       *)
+(* ExpNegFinale.v —— exp(−x) 偶奇分档最终正性定理（∃N 门限形）          *)
+(*                                                                     *)
+(* 使命：本件形式化 exp(−x) 的最终正性：∀ x ≥ 0, ∃ N, ∀ n ≥ N,          *)
+(*   0 < exp_partial n (−x)（Q 层，Set 层 sigT 见证形）。主件            *)
+(*   enpf_eventual_pos 把 S03 参数化下界双件（exp_partial_even_lower    *)
+(*   的 1/C 偶档、exp_partial_odd_lower 的 1/(2C) 奇档）整合为          *)
+(*   N := 2·m0+1 分偶奇组装；M := 1+x 之上 C 由 exp_series_arch 给出，   *)
+(*   m0 由 exp_partial_tail_small 给出，零附加前提。与 ExpNegPosUp.v    *)
+(*   （偶档切面全 m 严格正）互补：奇档逐点正性为假命题（反例            *)
+(*   S₁(−3) = −2 < 0），故须门限形。                                    *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib             *)
+(*   QArith.QArith、QArith.Qabs、Arith.Arith、Setoid、Lia。             *)
+(* 对标：mathlib exp 部分和下界（exp series lower bounds）。            *)
+(* 构造性注记：全件 Qed；零承认、公理面为空、零经典逻辑；语句面全       *)
+(*   Set 层，存在见证走 sigT；辅件 enpf_halfC_lt_invC 证法沿 S03        *)
+(*   cauchy_real_exp_pos 偶支首段。                                     *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" ExpNegFinale.v，cpu_guard     *)
+(*   包装。                                                             *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -51,15 +37,15 @@ Proof.
   { field.
     apply q_neq_of_lt.
     apply (Qlt_le_trans 0 1 C).
-    - reflexivity.
+    - exact Z.lt_0_1.
     - exact (QleT'_to_Qle 1 C HC1). }
   setoid_rewrite Hf.
   apply (Qlt_le_trans _ (Qinv (2 * C)) _).
   - apply Qinv_lt_0_compat.
     apply (Qmult_lt_0_compat 2 C).
-    + unfold Qlt; simpl; lia.
+    + exact (Z.lt_succ_diag_r 1).
     + apply (Qlt_le_trans 0 1 C).
-      * reflexivity.
+      * exact Z.lt_0_1.
       * exact (QleT'_to_Qle 1 C HC1).
   - apply qeq_le. apply Qeq_sym. apply (Qmult_1_l (Qinv (2 * C))).
 Qed.
@@ -77,7 +63,7 @@ Proof.
       * exact HC1.
 Qed.
 
-(* 偶奇拆分（Set 层 sigT 打包）：兼容性：9.1 下 Nat.Even_or_Odd 为 Prop 层
+(* 偶奇拆分（Set 层 sigT 封装）：兼容性：9.1 下 Nat.Even_or_Odd 为 Prop 层
    or，向 Set 目标消除被禁；改用 stdlib div2/odd 判定的 Set 层拆分
    （商 m 与奇偶标记 b，恒等件 Nat.div2_odd）。 *)
 Lemma enpf_split_even_odd : forall n : nat,
@@ -102,11 +88,11 @@ Proof.
        走 Qle_to_QleT' + Qle 链 0 ≤ 1 ≤ 1+x *)
     apply Qle_to_QleT'.
     apply (Qle_trans 0 1 (1 + x)).
-    - unfold Qle. simpl. lia.
+    - exact Qle_0_1.
     - exact HM1. }
   assert (HxM : Qle x (1 + x)).
   { apply (Qle_trans x (x + 1) (1 + x)).
-    - apply (Qle_plus_nonneg_r x 1). unfold Qle. simpl. lia.
+    - apply (Qle_plus_nonneg_r x 1). exact Qle_0_1.
     - apply qeq_le. ring. }
   assert (Hneg : Qle (Qopp x) 0).
   { (* 兼容性：change-with 触发 setoid 自反关系回退报错；Qopp 0 为闭项可转换，直接 apply *)
@@ -130,13 +116,16 @@ Proof.
   destruct (enpf_split_even_odd n) as [k [b Hkb]].
   destruct b; subst n.
   - (* n 奇（b = true：n = 2k+1）且 k ≥ m0；0 < 1/(2C) < exp_partial (2k+1) (−x) *)
-    assert (Hk0 : (m0 <= k)%nat) by lia.
+    assert (Hk0 : (m0 <= k)%nat).
+    { rewrite !Nat.add_1_r in Hn.
+      apply (proj2 (Nat.mul_le_mono_pos_l m0 k 2 (Nat.lt_0_succ 1))).
+      exact (proj2 (Nat.succ_le_mono (2 * m0) (2 * k)) Hn). }
     apply (qltT_trans 0 (1 / (2 * C)) (exp_partial (2 * k + 1) (Qopp x))).
     + exact Hhalfpos.
     + apply Qlt_to_QltT.
       exact (exp_partial_odd_lower (1 + x) C m0 k (Qopp x) HM0 HC1 HC Hm0 Hk0 Hy).
   - (* n 偶（b = false：n = 2k）；0 < 1/(2C) < 1/C ≤ exp_partial (2k) (−x) *)
-    assert (Hkz : (2 * k + 0 = 2 * k)%nat) by lia.
+    assert (Hkz : (2 * k + 0 = 2 * k)%nat) by apply Nat.add_0_r.
     rewrite Hkz.
     apply (qltT_trans 0 (1 / (2 * C)) (exp_partial (2 * k) (Qopp x))).
     + exact Hhalfpos.

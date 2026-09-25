@@ -1,10 +1,10 @@
 (* ============================================================ *)
-(* UpAblLogWallFinal.v —— 席N3：判定墙族第 8 位·修正陈述终形定装席            *)
+(* UpAblLogWallFinal.v —— 判定不可证结果族第 8 位·修正陈述终形定装件        *)
 (*                                                              *)
 (* 【零承认件】本件零承认、零假设负载、零经典逻辑：全文无任何全局无据项，     *)
-(*   四关卡全绿申报（G1 禁词双轨 0 / G2 全量编译 EXIT=0+Closed+5ff4 头+      *)
-(*   vo 新于 v / G3 独立目录 Obj.magic=0 / G4 coqchk 无承认项）。            *)
-(*   rLPO 仅作为定理语句左方的被消费前件出现（非公理、非假设）。             *)
+(*   四关通过（G1 禁词双轨 0；G2 全量编译 EXIT=0＋Closed＋5ff4 头＋      *)
+(*   vo 新于 v；G3 独立目录 Obj.magic=0；G4 coqchk 公理面为空）。            *)
+(*   rLPO 仅作为定理语句左方的被使用前件出现（非公理、非假设）。             *)
 (*                                                              *)
 (* 使命：把「全称无前件 lgw_MinSel 可驳（L3 发现件 lgwe_minsel_refutable：   *)
 (*   κ=TV₀=budget=1 处站账逐点差 1−1=0，供隙支自撞 ⟹ 空 Set）」修正为       *)
@@ -15,41 +15,41 @@
 (*     两账形照 N2 lgw_min_sel_spec 实形逐字复用（站 k 供隙真账 ∧           *)
 (*     ∀j<k 逐站否证账）；四前提恰好排除 L3 自撞点 κ=TV₀=B=1。             *)
 (*                                                              *)
-(*   件② 可证腿 lgwd_inhabited：rLPO -> 四前提 -> lgwd_MinSelD。            *)
-(*     【本席新腿=L3 挂账放电】L3 构造腿 lgwe_min_sel_of_rlpo 需逐站非负     *)
+(*   件② 可证支 lgwd_inhabited：rLPO -> 四前提 -> lgwd_MinSelD。            *)
+(*     【本件新支=L3 未消解项的消解】L3 构造支 lgwe_min_sel_of_rlpo 需逐站非负     *)
 (*     Or 族前提（real_le real_zero (差量 j)），并申报「rLPO 不供给符号面」  *)
-(*     挂账——本席发现该挂账可放电：rLPO 离零支携带尾项一致正隙              *)
+(*     为未消解项——本件发现该项可消解：rLPO 离零支携带尾项一致正隙              *)
 (*     （∀n≥N: c<|x_n|），与 Cauchy 模数（eps:=c/2）联用得尾项符号一致，     *)
 (*     采样一点比较有理数即得整支符号 ⟹ lgwd_sign_of_apart：离零支直接      *)
 (*     供 Or(0<x, x<0)。于是逐站判定 lgwd_station_decide 仅需 rLPO          *)
 (*     （归零支短路否证照 L3 lgwe_test_refute_of_zero 原件；离零支正者      *)
-(*     经 L3 lgwe_test_of_diff 出供隙账、负者经本席 lgwd_test_refute_of_neg  *)
-(*     出否证账）——非负 Or 族前提全免，四前提规格足矣。上界消费             *)
-(*     mix_k_select（UpReqMixingTime），幂列换装照 L3 lgwe_rpow_eq_tv，     *)
-(*     线性扫复用 L3 lgwe_scan 原件，两账打包。                             *)
+(*     经 L3 lgwe_test_of_diff 出供隙见证、负者经 lgwd_test_refute_of_neg  *)
+(*     出否证见证）——非负 Or 族前提全免，四前提规格足矣。上界使用             *)
+(*     mix_k_select（UpReqMixingTime），幂列重述照 L3 lgwe_rpow_eq_tv，     *)
+(*     线性扫复用 L3 lgwe_scan 原件，两账封装。                             *)
 (*                                                              *)
-(*   件③ 非空虚归约腿 lgwd_decision：四前提 -> lgwd_MinSelD ->              *)
+(*   件③ 非空虚归约支 lgwd_decision：四前提 -> lgwd_MinSelD ->              *)
 (*     ∀x∈(0,1]，Or(real_lt x one, real_eq x one)。N2 归约的前提化适配：    *)
 (*     选择器施于 κ:=half、TV₀:=x、B:=half（四前提在场：0<half、half<1、    *)
 (*     0<x、0<half），最小站三分支 k=0（x<half）/k=1（x<1）/k≥2（站 1       *)
 (*     否证 + x≤1 前件合流 x=1）——最小站数值即序信息，选择器被真实消费，    *)
-(*     不再空虚真（L3 已证无前件接口为空集，故本腿对无前件形平凡性失效）。  *)
+(*     不再空虚真（L3 已证无前件接口为空集，故本支对无前件形平凡性失效）。  *)
 (*     另供锐化件 lgwd_decision_dec：免 x≤1 前件，对一切 0<x 出             *)
 (*     Or(x<1, x<1→Empty_set)——「x<1 可判定」非任何前件的投影，              *)
-(*     为归约腿非平凡性的独立锚点。                                        *)
+(*     为归约支非平凡性的独立判据。                                        *)
 (*                                                              *)
 (*   件④ 等价定装 lgwd_equivalence：四前提 -> And(lgwd_MinSelD ->           *)
 (*     lgwd_lpo_family, rLPO -> 逐点选择器)——⟸=件② 特化，⟹=件③+LPO         *)
-(*     实例换装；S01 Set-And 承载（Set 腿不可入 Prop 合取，照 L3/AA15R      *)
+(*     实例重述；S01 Set-And 承载（Set 支不可入 Prop 合取，照 L3/AA15R      *)
 (*     口径）。对照注记件 lgwd_contrast_refutable：Require 消费 L3 发现件   *)
 (*     lgwe_minsel_refutable——无前件全称形构造性可驳（空 Set），故前提     *)
 (*     必要，对照留存于 UpAblLogWallEq。                                    *)
 (*                                                              *)
 (*   诚实边界申报：①real_le = Or(real_lt, real_eq)（S02:469 定义形），故    *)
 (*     件③/件④的目标证书型与「real_le x one」前件型同定义——非平凡性由      *)
-(*     选择器真实消费路线（三分支最小站解读）与锐化件 lgwd_decision_dec      *)
-(*     （结论非前件投影）承载；②件②之所以四前提可证，核心是新符号腿        *)
-(*     （rLPO 离零支+Cauсhy 模数 ⟹ 符号），较 L3 条件形更强、覆盖更广       *)
+(*     选择器真实使用路线（三分支最小站解读）与锐化件 lgwd_decision_dec      *)
+(*     （结论非前件投影）承载；②件②之所以四前提可证，核心是新符号支        *)
+(*     （rLPO 离零支+Cauchy 模数 ⟹ 符号），较 L3 条件形更强、覆盖更广       *)
 (*     （L3 接口在 TV₀>B 的合法点如 (half,100,half) 处前提失效，本接口      *)
 (*     不失效）。                                                          *)
 (*                                                              *)
@@ -58,10 +58,10 @@
 (* 依赖：S01_BaseRing、S02_CauchyComplete、CW_ConstructiveWorld_219、       *)
 (*   UpTVDoeblin（tv_rpow）、UpReqLpoEquiv（rLPO、q_abs_neg_eq、            *)
 (*   q_abs_congr）、UpReqMixingTime（mix_k_select）、UpAblLogWall（lgw_*    *)
-(*   规格面、half 桥、正向腿原料）、UpAblLogWallEq（lgwe_*：差量、两桥、    *)
+(*   规格面、half 桥、正向支原料）、UpAblLogWallEq（lgwe_*：差量、两桥、    *)
 (*   扫描、可驳对照件）。                                                   *)
 (* ------------------------------------------------------------ *)
-(* N3（20260920）：新建。                                                   *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 节流包裹，-o 临时目录输出。      *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -80,17 +80,17 @@ Require Import UpAblLogWallEq.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part 0：Q 层支点与本席新核心——符号提取腿（L3 挂账放电）                   *)
+(* Part 0：Q 层支点与本件新核心——符号提取支（L3 未消解项消解）                   *)
 (* ============================================================ *)
 
 Lemma lgwd_q_half_pos : Qlt 0 (1#2).
 Proof.
-  apply (proj2 (Qlt_alt 0 (1#2))). reflexivity.
+  exact (proj2 (Qlt_alt 0 (1#2)) (@eq_refl comparison Lt)).
 Qed.
 
 (* 符号提取：rLPO 离零支（尾项一致正隙 c，∀n≥N: c<|x_n|）+ Cauchy 模数      *)
 (*   （eps:=c/2）⟹ 尾项（max N M 起）符号一致 ⟹ 采样点有理比较即得整支符号。*)
-(*   产出 Or(0<x, x<0)——rLPO 独力供给符号面，L3「非负 Or 族」挂账在此放电。 *)
+(*   产出 Or(0<x, x<0)——rLPO 独力供给符号面，L3「非负 Or 族」未消解项在此消解。 *)
 Lemma lgwd_sign_of_apart : forall x : Real,
   sigT (fun c : Q =>
     And (QltT 0 c)
@@ -132,7 +132,7 @@ Proof.
       rewrite Hz0.
       assert (Hm1 : u n - 0 == u n) by ring.
       rewrite Hm1.
-      (* HM : |u n − u P| < c/2 ⟹ u P − u n < c/2（经 |−a|=|a| 搬运） *)
+      (* HM : |u n − u P| < c/2 ⟹ u P − u n < c/2（经 |−a|=|a| 迁移） *)
       assert (Hneg1 : u (Nat.max Nc M) - u n == - (u n - u (Nat.max Nc M))) by ring.
       assert (H1 : u (Nat.max Nc M) - u n < c * (1#2)).
       { rewrite Hneg1.
@@ -276,7 +276,7 @@ Proof.
              (Qlt_trans (eps0 + eps) 0 (eps0 + eps) Hsum Hpos)).
 Qed.
 
-(* 逐站判定主件：rLPO 独力供给（归零支短路否证照 L3；离零支经符号腿两账）    *)
+(* 逐站判定主件：rLPO 独力供给（归零支短路否证照 L3；离零支经符号支两账）    *)
 Theorem lgwd_station_decide :
   forall (kappa TV0 budget : Real) (j : nat),
   rLPO -> lgwe_station_dec kappa TV0 budget j.
@@ -290,7 +290,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：件① 修正规格 + 件② 可证腿                                        *)
+(* Part 2：件① 修正规格 + 件② 可证支                                        *)
 (* ============================================================ *)
 
 (* 件①：带四前提的最小站选择器（两账形照 N2 lgw_min_sel_spec 逐字复用；      *)
@@ -302,7 +302,7 @@ Definition lgwd_MinSelD : Set :=
     sigT (fun k : nat => lgw_min_sel_spec kappa TV0 budget k).
 
 (* 件②：rLPO -> 四前提 -> lgwd_MinSelD（上界=mix_k_select；逐站判定=        *)
-(*   Part 1 新腿；线性扫=L3 lgwe_scan 原件；幂列换装=L3 lgwe_rpow_eq_tv）   *)
+(*   Part 1 新支；线性扫=L3 lgwe_scan 原件；幂列重述=L3 lgwe_rpow_eq_tv）   *)
 Theorem lgwd_inhabited : rLPO -> lgwd_MinSelD.
 Proof.
   intros Hrlpo kappa TV0 budget Hk1 Hk2 Ha Hb.
@@ -310,7 +310,7 @@ Proof.
   assert (Hale : real_le real_zero TV0).
   { apply (RealSetoid.real_lt_le_iff_req real_zero TV0). left. exact Ha. }
   destruct (mix_k_select kappa TV0 budget Hk1 Hk2 Hale Hb) as [kp Hmix].
-  (* tv_rpow 形换装回 lgw_test 面（L3 原桥） *)
+  (* tv_rpow 形重述回 lgw_test 面（L3 原桥） *)
   assert (Hpass : lgw_test kappa TV0 budget kp).
   { unfold lgw_test.
     apply (real_eq_lt_lt (real_mult (lgw_rpow kappa kp) TV0)
@@ -320,10 +320,10 @@ Proof.
       + exact (lgwe_rpow_eq_tv kappa kp).
       + apply real_eq_refl.
     - exact Hmix. }
-  (* 逐站可判定测试：rLPO 全供给（本席新腿） *)
+  (* 逐站可判定测试：rLPO 全供给（本件新支） *)
   assert (Hdec : forall j : nat, lgwe_station_dec kappa TV0 budget j).
   { intros j. exact (lgwd_station_decide kappa TV0 budget j Hrlpo). }
-  (* 线性扫 [0,k_pass] + 两账打包（L3 lgwe_scan 原件） *)
+  (* 线性扫 [0,k_pass] + 两账封装（L3 lgwe_scan 原件） *)
   destruct (lgwe_scan kappa TV0 budget Hdec kp) as [[k [Hk Hspec]] | Hall].
   - exists k. exact Hspec.
   - assert (Hkk : NatLe kp kp) by (apply NatLe_lift; lia).
@@ -331,28 +331,28 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：件③ 非空虚归约腿（half 三站实例——最小站数值即序信息）            *)
+(* Part 3：件③ 非空虚归约支（half 三站实例——最小站数值即序信息）            *)
 (* ============================================================ *)
 
 (* half 常量的两前提（选择器实例化时反复消费） *)
 Lemma lgwd_half_pos : real_lt real_zero lgw_half.
 Proof.
   unfold real_lt. exists (1#4). split.
-  - apply Qlt_to_QltT. apply (proj2 (Qlt_alt 0 (1#4))). reflexivity.
+  - apply Qlt_to_QltT. exact (proj2 (Qlt_alt 0 (1#4)) (@eq_refl comparison Lt)).
   - exists 0%nat. intros n Hn.
     apply Qlt_to_QltT.
-    apply (proj2 (Qlt_alt (1#4) (projT1 lgw_half n - projT1 real_zero n))).
-    reflexivity.
+    exact (proj2 (Qlt_alt (1#4) (projT1 lgw_half n - projT1 real_zero n))
+             (@eq_refl comparison Lt)).
 Qed.
 
 Lemma lgwd_half_lt_one : real_lt lgw_half real_one.
 Proof.
   unfold real_lt. exists (1#4). split.
-  - apply Qlt_to_QltT. apply (proj2 (Qlt_alt 0 (1#4))). reflexivity.
+  - apply Qlt_to_QltT. exact (proj2 (Qlt_alt 0 (1#4)) (@eq_refl comparison Lt)).
   - exists 0%nat. intros n Hn.
     apply Qlt_to_QltT.
-    apply (proj2 (Qlt_alt (1#4) (projT1 real_one n - projT1 lgw_half n))).
-    reflexivity.
+    exact (proj2 (Qlt_alt (1#4) (projT1 real_one n - projT1 lgw_half n))
+             (@eq_refl comparison Lt)).
 Qed.
 
 (* 件③ 主件：选择器施于 (κ,B,x):=(half,half,x)，x∈(0,1]：                   *)
@@ -379,7 +379,7 @@ Proof.
 Qed.
 
 (* 锐化件：免 x≤1 前件——「x<1 可判定」对一切 0<x 成立，结论非任何前件投影，  *)
-(*   为归约腿非平凡性的独立锚点 *)
+(*   为归约支非平凡性的独立判据 *)
 Definition lgwd_station_decD (x : Real) : Set :=
   Or (real_lt x real_one) (real_lt x real_one -> Empty_set).
 
@@ -405,13 +405,13 @@ Qed.
 (* Part 4：件④ 等价定装 + 对照注记件                                        *)
 (* ============================================================ *)
 
-(* LPO 实例面：(0,1] 上序分解决策族（件③ 换装目标） *)
+(* LPO 实例面：(0,1] 上序分解决策族（件③ 重述目标） *)
 Definition lgwd_lpo_family : Set :=
   forall x : Real, real_lt real_zero x -> real_le x real_one ->
     Or (real_lt x real_one) (real_eq x real_one).
 
-(* 等价定装：⟸=件② 特化（rLPO 建逐点选择器，四前提真实消费）；              *)
-(*   ⟹=件③+LPO 实例换装（选择器出序证书族）。S01 Set-And 承载（Set 腿不可   *)
+(* 等价定装：⟸=件② 特化（rLPO 建逐点选择器，四前提真实使用）；              *)
+(*   ⟹=件③+LPO 实例重述（选择器出序证书族）。S01 Set-And 承载（Set 支不可   *)
 (*   入 Prop 合取，照 L3/AA15R 口径）。 *)
 Theorem lgwd_equivalence : forall kappa TV0 budget : Real,
   real_lt real_zero kappa -> real_lt kappa real_one ->
@@ -424,7 +424,7 @@ Proof.
   - intros Hrlpo. exact (lgwd_inhabited Hrlpo kappa TV0 budget Hk1 Hk2 Ha Hb).
 Qed.
 
-(* 对照注记件：消费 L3 发现件——无前件全称形构造性可驳（空 Set），            *)
+(* 对照注记件：使用 L3 发现件——无前件全称形构造性可驳（空 Set），            *)
 (*   故四前提必要；对照留存于 UpAblLogWallEq。 *)
 Theorem lgwd_contrast_refutable : lgw_MinSel -> Empty_set.
 Proof. exact lgwe_minsel_refutable. Qed.

@@ -1,38 +1,37 @@
 (* ============================================================ *)
-(* UpReqBanachSepThm.v —— 席AA7：bxce_sep 论证包落地（B7 首单，       *)
-(* 20260914；禁改 ClassExt/LimUniq 本体一行，只 Require 消费）        *)
-(* ============================================================ *)
-(* 使命：B25 挂账「exp(0) 完全等式面」转化件——bxce_sep 字段            *)
-(*   (forall a,(forall eps,QltT 0 eps -> QltT (bnorm a) eps) ->       *)
-(*    bae a bzero) 从「假设槽位」转化为「库内可证定理面」（候选 A：     *)
-(*   Real 载体实例 bxra_real_pre，AA3 装配）。                        *)
-(* 三步论证包（AA5 工单逐级落地）：                                    *)
-(*   S0 = ① Q 引擎件 spt_q_abs_arb_small_eq0（+消桥件                  *)
-(*        spt_qabs_eq0_inv）：|x| 任意小 ⟹ x == 0；分臂 Qlt_le_dec；   *)
-(*        正臂 eps:=½·|x|（Qmult_lt_r 乘积正性，双参数驱动）自反矛盾；  *)
-(*        负臂 Qle_antisym 合流 Qabs_nonneg；消桥臂 vm_compute 直拆。  *)
-(*   S1 = ② 载体特化 spt_qabs_qnorm_head：范数处方 Qabs∘qnorm∘head      *)
-(*        定义级 unwrap（bxib_qnorm_fix 换代表元 + Qabs_wd）。         *)
-(*   S2 = ③ bae 闭环 spt_bxce_sep_real（主件：bxra_real_pre 上的       *)
-(*        bxce_sep 字段语句面定理化；bae 与范数同读 head，盲区互消）。 *)
-(*   S3 = 装配位消费（条件件）：spt_ext_sep_slot_theorem（完备性闸门    *)
-(*        Hc 作显式 Set 参数，非承认件，EQV 席先例形）+                *)
-(*        spt_ext_of_real（bxce_mk 三引理桥全装配，sp 槽由定理喂入）    *)
-(*        + spt_uniq_reap（bxuq_lim_uniq 极限唯一性收割演示）——        *)
-(*        B7 骨架落地时零返工接入。                                   *)
-(* 适配点（工单→库内实形，详交付报告）：                               *)
-(*   - 工单目标形为 Ext 装配槽位级；Ext 实例须完备载体，完备性语句      *)
-(*     （bxin_pre_complete）系诚实挂账面，故主件落在 Pre 实例级        *)
-(*     （现可达最高级），Ext 级以条件件呈现；                          *)
-(*   - 正臂矛盾收口取 eps:=½·|x| 的乘积形（Qmult_lt_r 双参驱动：        *)
-(*     Hpos 作 0<z 前提、Hhalfpos 作 x<y 驱动），工单「两边乘 2」      *)
-(*     语义等价改走 ≤ 链（Qmult_le_compat_r+Qmult_1_l），少两跳重写。 *)
-(* 公理面自审：全件零公理零承认零中断；主件出口 Closed（G3 面）。       *)
-(* 语句面注记：Q 引擎件结论 x == 0 为 Qeq 面（Q 层可判定相等，承        *)
-(*   ClassExt bxce_coef_wd 前提面既有形），余结论全 Set 面（bae/QeqT/  *)
-(*   QltT/Id）。                                                       *)
-(* 领土纪律：只新增本件（spt_ 前缀全库零撞名）；冻结类与在飞席位        *)
-(*   文件未动一字；编译产物 .ml 定向 attn/_taa7_bak/ml。              *)
+(* UpReqBanachSepThm.v —— bxce_sep 字段定理化（Banach 完全等式面）      *)
+(*                                                                     *)
+(* 使命：「exp(0) 完全等式面」未消解项的转化件——bxce_sep 字段           *)
+(*   (forall a,(forall eps,QltT 0 eps -> QltT (bnorm a) eps) ->         *)
+(*    bae a bzero) 从「假设参数位」转化为「库内可证定理面」（候选 A：    *)
+(*   Real 载体实例 bxra_real_pre）。三步论证：                          *)
+(*   S0 = Q 引擎件 spt_q_abs_arb_small_eq0（+消桥件 spt_qabs_eq0_inv）： *)
+(*        |x| 任意小 ⟹ x == 0；分臂 Qlt_le_dec：正臂 eps:=½·|x|          *)
+(*        （Qmult_lt_r 乘积正性，双参数驱动）自反矛盾；负臂 Qle_antisym  *)
+(*        合流 Qabs_nonneg；正负臂构造子分支经定义归约与判别直拆。       *)
+(*   S1 = 载体特化 spt_qabs_qnorm_head：范数处方 Qabs∘qnorm∘head 定义级  *)
+(*        unwrap（bxib_qnorm_fix 换代表元 + Qabs_wd）。                  *)
+(*   S2 = bae 闭环 spt_bxce_sep_real（主件：bxra_real_pre 上的           *)
+(*        bxce_sep 字段语句面定理化；bae 与范数同读 head）。             *)
+(*   S3 = 装配位使用（条件件）：spt_ext_sep_slot_theorem（完备性闸门     *)
+(*        Hc 作显式 Set 参数）+ spt_ext_of_real（bxce_mk 三引理桥全      *)
+(*        装配）+ spt_uniq_reap（bxuq_lim_uniq 极限唯一性接入演示）。    *)
+(* 适配点：目标形为 Ext 装配参数位级；Ext 实例须完备载体，完备性语句     *)
+(*   （bxin_pre_complete）系显式登记前提，故主件落在 Pre 实例级          *)
+(*   （现可达最高级），Ext 级以条件件呈现；正臂矛盾闭合取 eps:=½·|x|     *)
+(*   的乘积形（Qmult_lt_r 双参驱动：Hpos 作 0<z 前提、Hhalfpos 作        *)
+(*   x<y 驱动），「两边乘 2」语义等价改走 ≤ 链                           *)
+(*   （Qmult_le_compat_r+Qmult_1_l）。                                   *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、    *)
+(*   UpReqBanachInstB、UpReqBanachInst、UpReqBanachInstReal、            *)
+(*   UpReqBanachClassExt、UpReqBanachLimUniq；Stdlib QArith。            *)
+(* 对标：mathlib 范数分离公理（norm-separation）的定理化对应物。         *)
+(* 构造性注记：公理面为空、零承认、零中断；语句面 Q 引擎件结论           *)
+(*   x == 0 为 Qeq 面（Q 层可判定相等，承 ClassExt bxce_coef_wd 前提面   *)
+(*   既有形），余结论全 Set 面（bae/QeqT/QltT/Id）；主件出口 Closed。     *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" UpReqBanachSepThm.v，          *)
+(*   cpu_guard 包装；提取检验 Separate Extraction 四件 Obj.magic=0，     *)
+(*   产物定向 attn/_taa7_bak/ml。                                        *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -57,11 +56,11 @@ Proof.
   unfold Qeq in H. unfold Qeq.
   destruct n as [|p|p].
   - exact H.
-  - exfalso. revert H. vm_compute. intro Hc. discriminate Hc.
-  - exfalso. revert H. vm_compute. intro Hc. discriminate Hc.
+  - exfalso. simpl in H. discriminate H.
+  - exfalso. simpl in H. discriminate H.
 Qed.
 
-(* 引擎主件：|x| 小于任意正 eps ⟹ x == 0（AA5 工单①语句面逐字） *)
+(* 引擎主件：|x| 小于任意正 eps ⟹ x == 0（三分判定构造）        *)
 Theorem spt_q_abs_arb_small_eq0 : forall x : Q,
   (forall eps : Q, QltT 0 eps -> QltT (Qabs x) eps) -> x == 0.
 Proof.
@@ -70,9 +69,9 @@ Proof.
   - (* 正臂 0 < |x|：eps := 0·|x|（=½·|x| 的乘积正性形），Hall 给
        |x| < 0·|x| < ½·|x| ≤ 1·|x| = |x| 自反矛盾 *)
     exfalso.
-    assert (Hhalfpos : Qlt 0 (1#2)%Q) by reflexivity.
+    assert (Hhalfpos : Qlt 0 (1#2)%Q) by exact Z.lt_0_1.
     assert (Hhalf_le : Qle (1#2)%Q 1%Q).
-    { intro Hc. vm_compute in Hc. discriminate Hc. }
+    { unfold Qle. simpl. exact (Z.le_succ_diag_r 1). }
     assert (Heps : QltT 0 ((1#2)%Q * Qabs x)%Q).
     { pose proof (proj2 (Qmult_lt_r 0 (1#2)%Q (Qabs x) Hpos) Hhalfpos) as Hp.
       setoid_rewrite (Qmult_0_l (Qabs x)) in Hp.
@@ -105,8 +104,8 @@ Qed.
 
 (* ============================================================ *)
 (* S1.5：③ 核心件（具体 Id 面算法形，G3 提取出口——类投影型语句面       *)
-(* 提取必生类型擦除垫片（bxin_bae＝__，先例 bxra_real_pre 实例同因），  *)
-(* 故提取走本件；主件保持工单字段面语句、经本件定义级转换接线）          *)
+(* 提取必生类型擦除产物（bxin_bae＝__，bxra_real_pre 实例同因），        *)
+(* 故提取走本件；主件保持字段面语句、经本件定义级转换衔接）              *)
 (* ============================================================ *)
 
 Definition spt_bxce_sep_core (a : Real)
@@ -123,7 +122,7 @@ Definition spt_bxce_sep_core (a : Real)
 
 (* ============================================================ *)
 (* S2：③ 主件——bxce_sep 字段语句面在 bxra_real_pre 上的定理化          *)
-(* （工单目标形逐字，底座＝Pre 实例投影：bnorm＝Qabs∘qnorm∘head，       *)
+(* （目标形逐字，承自 Pre 实例投影：bnorm＝Qabs∘qnorm∘head，            *)
 (*   bae＝规范种型 Id(qnorm(head ·))(qnorm(head ·))，bzero＝const 0）  *)
 (* ============================================================ *)
 
@@ -136,10 +135,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3：装配位消费（条件件，完备性闸门 Hc＝显式 Set 参数，EQV 先例形）    *)
+(* S3：装配位使用（条件件，完备性闸门 Hc＝显式 Set 参数）               *)
 (* ============================================================ *)
 
-(* bxce_sep 槽位定理化面（Ext 装配位点：桥产物 BanachAlg 上的字段形） *)
+(* bxce_sep 参数位定理化面（Ext 装配位点：桥产物 BanachAlg 上的字段形） *)
 Lemma spt_ext_sep_slot_theorem :
   forall (Hc : bxin_pre_complete bxra_real_pre)
          (a : (@BA (bxra_BanachAlg_of_real Hc))),
@@ -151,7 +150,7 @@ Proof.
   exact (spt_bxce_sep_real a Hall).
 Qed.
 
-(* 全装配：bxce_mk 三引理桥，sp 槽由定理喂入（B7 落地时零返工接入） *)
+(* 全装配：bxce_mk 三引理桥，sp 参数位由定理供给（落地时直接接入）   *)
 Definition spt_ext_of_real (Hc : bxin_pre_complete bxra_real_pre) :
   BanachAlgExt :=
   bxce_mk (bxra_BanachAlg_of_real Hc)
@@ -159,8 +158,8 @@ Definition spt_ext_of_real (Hc : bxin_pre_complete bxra_real_pre) :
           (@bcoef_wd (bxra_BanachAlg_of_real Hc))
           (spt_ext_sep_slot_theorem Hc).
 
-(* 收割件：B25 挂账第二件（极限唯一性）在条件装配下的兑现演示——
-   bxuq_lim_uniq 消费 spt_ext_of_real，泛型双极限 ⟹ bae 相等 *)
+(* 接入件：极限唯一性未消解项第二件在条件装配下的实现演示——
+   bxuq_lim_uniq 使用 spt_ext_of_real，泛型双极限 ⟹ bae 相等 *)
 Lemma spt_uniq_reap :
   forall (Hc : bxin_pre_complete bxra_real_pre)
          (u : nat -> (@BA (@bxce_base (spt_ext_of_real Hc))))
@@ -179,7 +178,7 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* G3 面：提取探针 + 出口闭包自检                                      *)
+(* G3 面：提取检验 + 出口闭包自检                                      *)
 (* ============================================================ *)
 From Stdlib Require Import Extraction.
 Set Extraction Output Directory "../attn/_taa7_bak/ml".

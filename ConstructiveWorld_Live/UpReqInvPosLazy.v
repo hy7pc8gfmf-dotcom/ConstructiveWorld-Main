@@ -1,8 +1,8 @@
 (* ============================================================ *)
-(* UpReqInvPosLazy.v —— INVPOS 席：inv_pos 运行墙·惰性化主轨（门定理形） *)
-(*   2026-09-21 · Live_X 沙箱新增实验件（B2 链母本件全只读零改）          *)
+(* UpReqInvPosLazy.v —— inv_pos 运行瓶颈·惰性化主轨（门定理形）          *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSampling、UpReqConcSoftmax、UpReqConcB1、UpReqConcMixSel、UpReqDist、UpAblMetaWorld3、UpAblMetaWindow、UpReqConcB2Time、UpAblB2WindowTie。 *)
 (* ============================================================ *)
-(* 【根因承力（B2UPR 20260920 定谳，勿重查）】                             *)
+(* 【根因判定】                                                  *)
 (*   P1：inv_pos 位=证明载体归约病理（擦除即愈，非本件对象）；              *)
 (*   P2：kernel/titer/终装 k 链=模量追逐无界螺旋（双侧同根）——            *)
 (*        病灶在 cmk 终装以 real_arch 锚「急切选 k」：inv_pos·arch·       *)
@@ -11,16 +11,16 @@
 (*   把急切选 k 改写为按需交付的定理门：k 站位由调用方给定（N 显式入参），  *)
 (*   门不等式（Q 层可核）真 ⟹ 终装语句 sigT k（k = S N）当站闭合。         *)
 (*   组装＝两条已证链的给定-k 剖面：                                      *)
-(*     · 收缩腿：rsq_bounded_softmax_tv_iter（Doeblin 迭代收缩，           *)
-(*       TV(T^k) ≤ κ^k·TV₀，κ = 1 − δ星；上游成品零改直喂）；              *)
-(*     · 预算腿：cmk_pow_tail（@ums_pow_tail 本就收 N 为参——arch 锚        *)
-(*       只是它的一个调用方；本件换成调用方直喂，arch 从求值路径除名）。    *)
+(*     · 收缩支：rsq_bounded_softmax_tv_iter（Doeblin 迭代收缩，           *)
+(*       TV(T^k) ≤ κ^k·TV₀，κ = 1 − δ星；上游成品零改直接代入）；              *)
+(*     · 预算支：cmk_pow_tail（@ums_pow_tail 本就收 N 为参——arch 锚        *)
+(*       只是它的一个调用方；本件换成调用方直接代入，arch 从求值路径除名）。    *)
 (* 【thunk/Share 装置（本件运行语义核心）】                                *)
-(*   全部重证书腿（收缩腿/预算腿/门证书/质量前件）以不透明引用收束         *)
+(*   全部重证书支（收缩支/预算支/门证书/质量前件）以不透明引用收束         *)
 (*   （Qed 收束=按引用共享的 thunk），运行位只强制 witness（k 站位）；      *)
 (*   故 vm 取 k 沿途零展开 inv_pos/kernel 载体——P1 载体病理与 P2 无界      *)
 (*   螺旋均不入求值路径。数值内容独立性由 Q 层复核道单独承担。             *)
-(* 【运行证据（同 B2UP 组：mu=nu=one/T=1/Δ=3/预算=1/2）】                  *)
+(* 【运行证据（mu=nu=one/T=1/Δ=3/预算=1/2）】                  *)
 (*   ivl_run：vm_compute 真跑出 k；ivl_recheck：κ^1·TV₀ < 1/2 Q 层 true；  *)
 (*   ivl_kneed：泛型几何界对照站（TV₀=1 最坏档 Q 层扫描）。                *)
 (* 【红线自审】纯构造性；语句面全 Set 层（req/le/lt/sigT 均基座 Set 面）；  *)
@@ -47,7 +47,7 @@ Import RealInterfaceEnhancedMod.
 Import ListNotations.
 
 (* ============================================================ *)
-(* 一、收缩率具体件（镜像 cmk 链 Let 形，逐 delta 可转换）                  *)
+(* 一、收缩率具体件（副本 cmk 链 Let 形，逐 delta 可转换）                  *)
 (* ============================================================ *)
 
 Definition ivl_invT : Real := inv_pos cbt_temp cbt_temp_pos.
@@ -68,10 +68,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 二、给定-k 剖面两腿（重证书腿全 thunk 收束）                             *)
+(* 二、给定-k 剖面两支（重证书支全 thunk 收束）                             *)
 (* ============================================================ *)
 
-(* 预算腿：门（站位 N 的 arch 不等式形，Q 层可核）⟹ κ^(S N)·TV₀ < budget *)
+(* 预算支：门（站位 N 的 arch 不等式形，Q 层可核）⟹ κ^(S N)·TV₀ < budget *)
 Lemma ivl_leg_tail : forall (mu nu : unit -> Real)
     (Hmu : req (cbt_sumf mu) one) (Hnu : req (cbt_sumf nu) one)
     (budget : Real) (Hbudget : lt zero budget) (N : nat),
@@ -82,7 +82,7 @@ Lemma ivl_leg_tail : forall (mu nu : unit -> Real)
   lt (mult (cmk_r_pow ivl_omd (Datatypes.S N)) (cbt_tv mu nu)) budget.
 Proof.
   intros mu nu Hmu Hnu budget Hbudget N Hgate.
-  (* cmk_pow_tail 的 witness 逐 delta 定义性即 S N（探针实证 reflexivity 道）；
+  (* cmk_pow_tail 的 witness 逐 delta 定义性即 S N（检验实证 reflexivity 道）；
      接驳位须内联常量（context local 不入 tactic 展开道） *)
   assert (Heq : projT1 (cmk_pow_tail real_lt_plus_compat_lt_le ivl_omd (cbt_tv mu nu) budget
                     ivl_delta_star N
@@ -103,7 +103,7 @@ Proof.
                     Hgate)).
 Qed.
 
-(* 收缩腿：TV(T^k μ, T^k ν) ≤ κ^k · TV₀，κ = 1 − δ星（Doeblin 收缩直喂） *)
+(* 收缩支：TV(T^k μ, T^k ν) ≤ κ^k · TV₀，κ = 1 − δ星（Doeblin 收缩直接代入） *)
 Lemma ivl_leg_iter : forall (mu nu : unit -> Real)
     (Hmu : req (cbt_sumf mu) one) (Hnu : req (cbt_sumf nu) one) (k : nat),
   le (cbt_tv (cbt_titer k mu) (cbt_titer k nu))
@@ -154,7 +154,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* 四、显式输入组实例（同 B2UP 组）与运行证据                               *)
+(* 四、显式输入组实例与运行证据                               *)
 (* ============================================================ *)
 
 (* 输入组：mu = nu = const one（单点世界唯一归一分布）；预算 = 1/2 *)
@@ -203,8 +203,8 @@ Proof.
   - exact (cmk_scale_S_pos real_lt_plus_compat_lt_le one 0%nat one_pos).
 Qed.
 
-(* 终装实例：门定理在本输入组 N=0 站闭合（k = 1，一步拍平站）。
-   接驳走 reflexivity 道（statement 级转换，探针实证；tactic 级不展开常量） *)
+(* 终装实例：门定理在本输入组 N=0 站闭合（k = 1，一步退化站）。
+   接驳走 reflexivity 道（statement 级转换，检验实证；tactic 级不展开常量） *)
 Lemma ivl_terminal :
   lt (cbt_tv (cbt_titer 1%nat ivl_mu) (cbt_titer 1%nat ivl_nu)) ivl_budget.
 Proof.
@@ -216,7 +216,7 @@ Proof.
                    ivl_budget ivl_budget_pos 0%nat ivl_gate0)).
 Qed.
 
-(* thunk 打包：witness 显式前置、证书按引用共享（运行位只强制前者） *)
+(* thunk 封装：witness 显式前置、证书按引用共享（运行位只强制前者） *)
 Definition ivl_run :
   sigT (fun k : nat =>
     lt (cbt_tv (cbt_titer k ivl_mu) (cbt_titer k ivl_nu)) ivl_budget) :=
@@ -227,12 +227,12 @@ Eval vm_compute in projT1 ivl_run.
 
 (* kernel 侧交付凭据（惰性归约道，与 vm 道双证） *)
 Lemma ivl_run_wit : projT1 ivl_run = 1%nat.
-Proof. reflexivity. Qed.
+Proof. exact (@eq_refl nat 1%nat). Qed.
 
 (* ---- 输入组常数记录：Δ=3（Q5；温度 T=1 为 cbt_temp=one 固定） ---- *)
 Eval vm_compute in projT1 cbt_Delta 5%nat.
 
-(* ---- 复核关：Q 层独立数值复核（同 B2UP 探针道） ---- *)
+(* ---- 复核关：Q 层独立数值复核道 ---- *)
 Definition ivl_exp3_q : Q := projT1 (rsq_exp_pos_fn (reqd_nat_to_R 3)) 5%nat.
 Eval vm_compute in ivl_exp3_q.
 

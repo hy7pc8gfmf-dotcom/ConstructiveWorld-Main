@@ -1,6 +1,6 @@
 (* ============================================================ *)
 (* UpQKTVCompose.v —— 论文2 末端一步组合件：QKᵀ 界 × TV Doeblin 收缩  *)
-(* 席位：P2COMP（REV-SCOUT 候选 #4·P1），20260921                  *)
+(* 依赖清单：CW_ConstructiveWorld_219、G10_LoebFam（qk_logits_bounded）、UpTVDoeblin（tvd_*） *)
 (*                                                                *)
 (* 目的：闭合论文2 §10.2-2 自陈开放项「仅余末端一步」——             *)
 (*   UpQKBound（G10）界转化输出与 UpTVDoeblin 前提的模块级组合       *)
@@ -12,7 +12,7 @@
 (*     ⟹ 注意力 Gibbs 核 Kⁿ 迭代 TV 收缩                           *)
 (*        TV(Kⁿμ, Kⁿν) ≤ (1 − e^{−2(Qb·Kb/√d+2)/T})ⁿ · TV(μ,ν)。     *)
 (*                                                                *)
-(* 两端实测签名（本席实测，非报告转述）：                            *)
+(* 两端实测签名（树上实名直引）：                                    *)
 (*   QK 端（G10_LoebFam，原 UpQKBound 并树件）：                    *)
 (*     qk_logits_bounded : 范数界前提取 And(Δ>0, ∀s s' |logit| ≤ Δ)，  *)
 (*       Δ := Qb·Kb·inv(√d)+1（QKLogitSection 出节，attn_logit d a b）。 *)
@@ -44,11 +44,11 @@
 (*   比较全 real_lt/real_le/real_eq（Set 编码）；全件 Qed 闭合；      *)
 (*   零公理、零经典逻辑、零魔数直取、可提取。                       *)
 (*                                                                *)
-(* 编译配方（在案席位同款，9.1 主轨；9.0 全路径=毒源禁触）：           *)
+(* 编译配方（9.1 主轨直调；9.0 全路径不使用）：                       *)
 (*   unset COQLIB ROCQLIB;                                          *)
 (*   export COQLIB="C:/Rocq-Platform~9.1~2026.01/lib/coq" ROCQLIB="$COQLIB"; *)
 (*   cwd=Live_X: coqc.exe -q -native-compiler no -Q . "" UpQKTVCompose.v *)
-(*   （本席全部编译/coqchk 必经 attn\_tp2comp_cpu_guard.ps1，禁裸调）  *)
+(*   cpu_guard 节流包裹，输出至临时目录，树内零写入。                  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -136,7 +136,7 @@ Definition qktv_K (states : list (list Real))
   (i j : list Real) : Real :=
   tvd_K states Hn Ttemp HT (attn_logit d) i j.
 
-(* ################ 旗舰：模块级单步合成定理 ################ *)
+(* ################ 主定理：模块级单步合成定理 ################ *)
 
 (* 范数界 + 温度 ⟹ 注意力 Gibbs 核迭代 TV 收缩、显式率 (1−δ*′)ⁿ。
    QK 端供给：γ′ 的数据源（Δ）与每对 |attn_logit d i j| ≤ Δ 证书；
@@ -181,7 +181,8 @@ Proof.
     exact Hdp. }
   (* 0 < 1（QK 端常量正性件于 c := 1） *)
   assert (Hone : real_lt real_zero (real_const 1)).
-  { apply qkb_real_const_pos. lra. }
+  { apply qkb_real_const_pos.
+    exact (proj2 (Qlt_alt 0 1) (@eq_refl comparison Lt)). }
   (* Δ < γ′（γ′ := Δ+1；右零恒等 + 平移） *)
   assert (Hgltp : real_lt (Delta d Qb Kb) (qktv_gamma d Qb Kb)).
   { unfold qktv_gamma.
@@ -232,14 +233,14 @@ Proof.
                   (Delta d Qb Kb) (qktv_gamma d Qb Kb) Habs Hgltp))
       as [Hlo _].
     exact Hlo. }
-  (* TV 端旗舰于 γ := γ′、z := attn_logit d 一步放电 *)
+  (* TV 端主定理于 γ := γ′、z := attn_logit d 一步消解 *)
   exact (tvd_dstar_iter_contraction states Hn Ttemp HT
            (qktv_gamma d Qb Kb) Hgpos
            (attn_logit d) Hzlo Hzhi Labs n mu nu Hmu Hnu).
 Qed.
 
 (* ============================================================ *)
-(* G4 审计口（桥件 + 旗舰，全 Closed 预期）                          *)
+(* G4 审计口（桥件 + 主定理，全 Closed 预期）                        *)
 (* ============================================================ *)
 Print Assumptions qktv_abs_lt_two_side.
 Print Assumptions qk_tv_iter_contraction.

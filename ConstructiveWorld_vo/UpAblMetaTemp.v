@@ -1,7 +1,7 @@
-(* UpAblMetaTemp.v —— M2R 席：亚稳标度线·上界侧打包主件
+(* UpAblMetaTemp.v —— 亚稳标度线·上界侧整合主件
    温度-δ* 链（件①）与 温度-模量发散定理（件②·见证形），mtp_ 前缀，裸 Real 层。
    零承认件：本文件无任何承认式声明，全部构造性证明，Set 层见证（sigT/And）。
-   承重消费件（Require 直用，零重造）：
+   上游依赖件（Require 直用，零重造）：
      UpAblMetaEngine：mte_nat_to_R / mte_rpow / mte_nat_const_eq /
        mte_nat_to_R_S_pos / mte_lt_plus_one / mte_exp_pow_iter / mte_exp_divergence
      S03：real_inv_pos / real_inv_pos_correct / real_inv_pos_pos
@@ -9,13 +9,15 @@
    布景：Δ>0 能障、V=TV₀ 初值整体变差、b=budget 预算、T>0 温度。
      lo(T)  := e^(−Δ/T)          （exp_neg 语义）
      δ*(T)  := lo(T)·lo(T) = e^(−2Δ/T)
-     anchor(T) := V·inv(δ*(T)·b)  （mix_pow_budget 式混合模量锚值·实量形）
+     anchor(T) := V·inv(δ*(T)·b)  （mix_pow_budget 式混合模量参考值·实量形）
    主件（温度趋零发散·显式模量）：∀M:nat, ∃T₀>0, ∀T∈(0,T₀), M < anchor(T)。
-   路线（任务书骨架 rigorous 化，代数排布修正见交付报告）：
+   路线（骨架 rigorous 化，代数排布修正如实注记）：
      T<T₀ ⟹ inv T₀ < inv T ⟹ 2Δ/T₀ < 2Δ/T ⟹ E₀:=e^{2Δ/T₀} < E(T):=e^{2Δ/T}；
      选 T₀ := inv(n̄_{S N}) 使 w·invV < E₀（real_arch 选 n₀、mte_exp_divergence
      于 a2=Δ+Δ 选 N，w := M·b）；δ*(T)=inv(E(T)) < inv(E₀) ⟹ w·inv(E(T)) <
-     w·inv(E₀) < V ⟹ M·(δ*(T)·b) < V ⟹ M < anchor(T)。 *)
+     w·inv(E₀) < V ⟹ M·(δ*(T)·b) < V ⟹ M < anchor(T)。
+   对标：mathlib 温度-发散率构造（metastable scaling）；stdlib 无同形。
+   编译配方：Rocq 9.1 直调 coqc + cpu_guard 包裹，输出至临时目录。 *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -295,7 +297,7 @@ Qed.
 
 (* ---------- 件②：温度-模量发散定理（见证形） ---------- *)
 
-(* anchor(T) := V·inv(δ*(T)·b) —— mix_pow_budget 式混合模量锚值（实量形） *)
+(* anchor(T) := V·inv(δ*(T)·b) —— mix_pow_budget 式混合模量参考值（实量形） *)
 Definition mtp_anchor (delta V b : Real) (Hd : real_lt real_zero delta)
   (HV : real_lt real_zero V) (Hb : real_lt real_zero b)
   (T : Real) (HT : real_lt real_zero T) : Real :=
@@ -515,7 +517,7 @@ Proof.
                               (real_eq_refl (mtp_lo delta T Hd HT))).
                  ++ exact Eal.
       }
-      (* 终局代数：w·invV < E₀ ⟹ w < V·E₀ ⟹ w·inv(E₀) < V ⟹ 链收口 *)
+      (* 终局代数：w·invV < E₀ ⟹ w < V·E₀ ⟹ w·inv(E₀) < V ⟹ 链闭合 *)
       assert (HA : real_lt (real_mult (real_mult (mte_nat_to_R (Datatypes.S M)) b)
                                   (real_inv_pos V HV))
                           (mte_rpow (cauchy_real_exp (real_plus delta delta))
@@ -568,7 +570,7 @@ Proof.
                           V)
         by (exact (mtp_lt_inv_rw (real_mult (mte_nat_to_R (Datatypes.S M)) b) V E0x
                      (cauchy_real_exp_pos (real_plus xT0 xT0)) HwVE0)).
-      (* 总装 *)
+      (* 装配 *)
       unfold mtp_anchor.
       apply (mtp_mult_inv_fwd (mte_nat_to_R (Datatypes.S M)) V
                (real_mult (mtp_delta_star delta T Hd HT) b)

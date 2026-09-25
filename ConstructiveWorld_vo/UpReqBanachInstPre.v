@@ -1,48 +1,37 @@
-(* ═════════════════════════════════════════════════════════════════════ *
- * ToyR 包F·tier1 头批 同名替换件：UpReqBanachInstPre（台账 T245 切片五）    *
- * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、         *
- * 同一符号、零新增 Require、零承认件、全中文头注）。                       *
- * 替换清单（17 条）：bxip_head_cR／bxip_head_bplus／bxip_norm_wd／          *
- *   bxip_norm_wd_qeqt／bxip_head_bmult／bxip_head_bopp／bxip_f_refl／       *
- *   bxip_f_sym／bxip_f_trans／bxip_f_coef_zero／bxip_f_coef_one／           *
- *   bxip_f_norm_zero／bxip_f_norm_one／bxip_f_norm_pos／bxip_inst_smoke／   *
- *   bxip_inst_smoke_plus／bxip_inst_smoke_wd                              *
- * 三口径（BanachInstReal·InstB·Strong 同族范式直套）：①定义层受控展开       *
- *   （head 评估与 real_const 透明 delta 消化 projT1 iota；qnorm match 腿    *
- *   派发：Z0 腿 cbv 一跳收口，Zpos 腿 gcd/div 逐位 replace-by-reflexivity   *
- *   数值见证链——head 四件／coef 两件／norm 两件）                          *
- *   ＋②换轨桥接（germ 定义层 unfold 后 id_cong／id_sym／@id_trans 中间项   *
- *   显式命名收口——norm_wd／f_refl／f_sym／f_trans；qeqT 形改走             *
- *   bxib_qeqT_of_id 桥直连——norm_wd_qeqt）                                 *
- *   ＋③结构性推导（QleT' 叶引擎体在 head 投影位整体内联——norm_pos；         *
- *   实例投影 delta 展开＋同族引擎体重演——inst_smoke 三件，消除跨层单跳）。  *
- * 纪律：纯构造性；Set 层零 Prop 泄露；证明口逐条配平；全部真收口。         *
- * ═════════════════════════════════════════════════════════════════════ *)
-(* ============================================================ *)
-(* UpReqBanachInstPre.v —— 席INST3：路径 B 弱化类具体实例席        *)
-(* （弱化轨首例，20260913）                                       *)
-(* W6a 接线（20260913）：W5a 类手术二字段 bcoef_plus/bcoef_wd      *)
-(*   Pre 镜像对齐——类 37→39 + 首例补二字段 discharge（qnorm 链）。  *)
-(* ============================================================ *)
-(* 使命：把 S02 Real 载体装配进 BanachAlgPre 弱化类，交付 B 路首个  *)
-(*   具体实例。架构＝canon-germ（INSTB E-载体机器的 Real-类型移植）：*)
-(*   载体 := Real（sigT(序列,柯西见证)）；bae := 规范种型等价       *)
-(*   Id(qnorm(head a))(qnorm(head b))；一切运算＝首项有理运算后    *)
-(*   规范化再包常值实数（real_const 透明，head 定义级还原）；       *)
-(*   范数 := Qabs ∘ qnorm ∘ head（INSTB 处方修正定形）。            *)
-(* 分工对账：E-载体（UpReqBanachInstB）＝Q 基自由项树；本件＝Real  *)
-(*   基种型载体——互补不重复；bxib_qnorm/qnorm 机器全套复用。       *)
-(* 钉定面语句：按处方修正，bnorm_coef 用 Qabs∘qnorm 形；原始        *)
-(*   Qabs-钉定在规范形下不可满足，以 bxip_raw_pin_wall 机器固化。   *)
-(* 钉定面实测修正：bnorm_opp 点态 Id 形依赖「Qopp 与 qnorm 的       *)
-(*   Qabs-范数不变」（INSTB 同位挂账，本席未闭合）——诚实降为 QeqT   *)
-(*   形 discharge；bxip_qeqT_cong_mult＝cong 机器补乘法位。         *)
-(* 完备性：bxin_pre_complete 同构语句照录；本架构下不可交付         *)
-(*   （范数读首项 ⟹ 完备性＝Q 列完备，1/n 模量列压死，与 INS 候选  *)
-(*   B 同构）——诚实挂账，零硬凑。                                  *)
-(* 铁律自审：全件零承认件零假目标零中断，语句面零 Props 泄露；       *)
-(*   冻结类与在飞席位文件未动一字；前缀 bxip_ 全库零撞名。          *)
-(* ============================================================ *)
+(* ═════════════════════════════════════════════════════════════════════ *)
+(* UpReqBanachInstPre.v —— S02 Real 载体上的 BanachAlgPre 具体实例          *)
+(* 使命：本件形式化 B 路首个具体实例：把 S02 Real 载体装配进                *)
+(*       BanachAlgPre 弱化类（含 bcoef_plus/bcoef_wd 两字段的消解）。        *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、       *)
+(*       UpReqBanachInstB。                                                *)
+(* 对标：stdlib QArith gcd/div 正规化；Banach 代数范数公理组。              *)
+(* 构造性注记：Set 层承载——语句面零 Prop 泄露；零承认件、零假目标、        *)
+(*   零中断；证明口逐条配平，全部真闭合；前缀 bxip_ 全库零撞名。            *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 温控包装，-Q 单根。                   *)
+(* ═════════════════════════════════════════════════════════════════════ *)
+(* 架构＝canon-germ（INSTB E-载体机器的 Real-类型移植）：                   *)
+(*   载体 := Real（sigT(序列,柯西见证)）；bae := 规范种型等价               *)
+(*   Id(qnorm(head a))(qnorm(head b))；一切运算＝首项有理运算后             *)
+(*   规范化再包常值实数（real_const 透明，head 定义级还原）；               *)
+(*   范数 := Qabs ∘ qnorm ∘ head（INSTB 处方修正定形）。                    *)
+(* 分工核验：E-载体（UpReqBanachInstB）＝Q 基自由项树；本件＝Real          *)
+(*   基种型载体——互补不重复；bxib_qnorm/qnorm 机器全套复用。               *)
+(* 钉定面语句：按处方修正，bnorm_coef 用 Qabs∘qnorm 形；原始                *)
+(*   Qabs-钉定在规范形下不可满足，以 bxip_raw_pin_wall 机器固化。           *)
+(* 钉定面实测修正：bnorm_opp 点态 Id 形依赖「Qopp 与 qnorm 的               *)
+(*   Qabs-范数不变」（INSTB 同位未消解项，此处未闭合）——诚实降为 QeqT      *)
+(*   形消解；bxip_qeqT_cong_mult＝cong 机器补乘法位。                       *)
+(* 完备性：bxin_pre_complete 同构语句照录；本架构下不可交付                 *)
+(*   （范数读首项 ⟹ 完备性＝Q 列完备，1/n 模量列压死，与 INS 候选          *)
+(*   B 同构）——诚实登记为未消解项，零无依据凑形。                          *)
+(* 证明方法（同族范式）：①定义层受控展开（head 评估与 real_const 透明      *)
+(*   delta 消化 projT1 iota；qnorm match 分支各别处理：Z0 分支 cbv 一跳闭合，   *)
+(*   Zpos 分支 gcd/div 逐位以 Z.gcd_1_l／Z.div_1_r 具名换算收束）；         *)
+(*   ②换轨桥接（germ 定义层 unfold 后 id_cong／id_sym／@id_trans 中间项    *)
+(*   显式命名闭合；qeqT 形改走 bxib_qeqT_of_id 桥直连）；                   *)
+(*   ③结构性推导（Qabs 非负叶由 Qabs_nonneg 直接给出；实例投影 delta       *)
+(*   展开＋同族引擎体重演，消除跨层单跳）。                                 *)
+(* ═════════════════════════════════════════════════════════════════════ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -120,11 +109,10 @@ Proof.
   rewrite Z.abs_mul. ring.
 Qed.
 
-(* Qabs 非负（QleT' 叶） *)
+(* Qabs 非负（QleT' 叶；由 Qabs_nonneg 一步给出） *)
 Lemma bxip_qleT_zero_abs_qn : forall x : Q, QleT' 0 (Qabs (bxib_qnorm x)).
 Proof.
-  intros [n d]. destruct n as [|p|p];
-    apply Qle_to_QleT'; unfold Qle, Qabs, bxib_qnorm; cbn; lia.
+  intro x. exact (Qle_to_QleT' _ _ (Qabs_nonneg (bxib_qnorm x))).
 Qed.
 
 (* 规范正偶对不动点：互素正偶对的 qnorm 定义级自返 *)
@@ -148,7 +136,7 @@ Proof.
   apply bxip_qnorm_pos_pair_fix. exact Hg1.
 Qed.
 
-(* INSTB 挂账闭合：Qopp 与 qnorm 的 Qabs-范数不变 *)
+(* INSTB 未消解项闭合：Qopp 与 qnorm 的 Qabs-范数不变 *)
 (* 墙一弱化形（实为 Id 形直证）：种型等价的范数 Id-良定 *)
 Lemma bxip_norm_wd : forall a b : Real,
   bxip_bae_germ a b -> Id (bxip_bnorm_f a) (bxip_bnorm_f b).
@@ -206,7 +194,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3：BanachAlgPre 弱化类（39 字段＝W6a 对齐 W5a 手术后镜像，      *)
+(* S3：BanachAlgPre 弱化类（39 字段＝两字段扩容对齐后的同构副本，       *)
 (*   钉定面按处方修正）＋首例装配                                  *)
 (* ============================================================ *)
 
@@ -257,8 +245,8 @@ Class bxip_BanachAlgPre := {
     bxip_bae (bxip_bcoef (q * r)%Q) (bxip_bmult (bxip_bcoef q) (bxip_bcoef r));
   bxip_bcoef_comm : forall (q : Q) (a : bxip_BA),
     bxip_bae (bxip_bmult a (bxip_bcoef q)) (bxip_bmult (bxip_bcoef q) a);
-  (* ---- 20260913 W6a 联动：W5a 类手术二字段 Pre 镜像扩容（37→39，  *)
-  (*   语句形逐字承 UpReqBanachInst.v 镜像 L258-260）---- *)
+(* ---- 两字段扩容联动：Pre 副本扩容（37→39，                    *)
+(*   语句形逐字承 UpReqBanachInst.v 同构副本）---- *)
   bxip_bcoef_plus : forall q r : Q,
     bxip_bae (bxip_bplus (bxip_bcoef q) (bxip_bcoef r)) (bxip_bcoef (q + r)%Q);
   bxip_bcoef_wd : forall q r : Q, q == r -> bxip_bae (bxip_bcoef q) (bxip_bcoef r);
@@ -576,8 +564,8 @@ Proof.
   unfold bxip_bae_germ, bxip_bcoef_f, bxip_bone_f, bxip_head, real_const.
   unfold bxib_qnorm.
   cbv beta iota zeta.
-  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
-  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.gcd_1_l).
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.div_1_r).
   apply id_refl.
 Qed.
 
@@ -652,8 +640,8 @@ Lemma bxip_f_norm_one : Id (bxip_bnorm_f bxip_bone_f) 1%Q.
 Proof.
   unfold bxip_bnorm_f, bxip_bone_f, bxip_head, real_const, bxib_qnorm, Qabs.
   cbv beta iota zeta.
-  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
-  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.gcd_1_l).
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.div_1_r).
   apply id_refl.
 Qed.
 
@@ -674,10 +662,7 @@ Qed.
 Lemma bxip_f_norm_pos : forall a : Real, QleT' 0 (bxip_bnorm_f a).
 Proof.
   intro a.
-  unfold bxip_bnorm_f.
-  destruct (bxip_head a) as [n d].
-  destruct n as [|p|p];
-    apply Qle_to_QleT'; unfold Qle, Qabs, bxib_qnorm; cbn; lia.
+  exact (Qle_to_QleT' _ _ (Qabs_nonneg (bxib_qnorm (bxip_head a)))).
 Qed.
 
 Lemma bxip_f_norm_plus : forall a b : Real,
@@ -787,7 +772,7 @@ Instance bxip_real_pre : bxip_BanachAlgPre := {|
   bxip_bnorm_coef := bxip_f_norm_coef;
 |}.
 
-(* 装配冒烟：实例投影面（bcoef 1 ~ bone，经实例字段） *)
+(* 装配检验：实例投影面（bcoef 1 ~ bone，经实例字段） *)
 Lemma bxip_inst_smoke :
   @bxip_bae bxip_real_pre
     (@bxip_bcoef bxip_real_pre 1%Q)
@@ -798,12 +783,12 @@ Proof.
   unfold bxip_bae_germ, bxip_bcoef_f, bxip_bone_f, bxip_head, real_const.
   unfold bxib_qnorm.
   cbv beta iota zeta.
-  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
-  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by reflexivity.
+  replace (Z.gcd (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.gcd_1_l).
+  replace (Z.div (Z.pos 1) (Z.pos 1)) with (Zpos 1) by (symmetry; apply Z.div_1_r).
   apply id_refl.
 Qed.
 
-(* 装配冒烟：W6a 二字段投影位（bcoef plus/wd 经实例字段） *)
+(* 装配检验：W6a 二字段投影位（bcoef plus/wd 经实例字段） *)
 Lemma bxip_inst_smoke_plus : forall q r : Q,
   @bxip_bae bxip_real_pre
     (@bxip_bplus bxip_real_pre (@bxip_bcoef bxip_real_pre q)
@@ -839,7 +824,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G3：提取探针 + 假设面自审                                      *)
+(* 提取检验 + 假设面自审                                      *)
 (* ============================================================ *)
 From Stdlib Require Import Extraction.
 Separate Extraction bxip_bnorm_f bxip_qeqT_cong_mult bxip_qabs_mult bxip_raw_pin_wall bxip_norm_wd_qeqt

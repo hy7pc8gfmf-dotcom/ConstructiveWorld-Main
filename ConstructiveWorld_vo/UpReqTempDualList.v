@@ -1,90 +1,60 @@
 (* ========================================================================= *)
-(* 【ToyR 战役·包AR·T283 台账席】玩具级定理同名非平凡替换稿（补标头注）      *)
-(*                                                                           *)
-(* 本稿系 ToyR 战役包AR 替换落件（原名落件）；落件时头部漏植战役标记，       *)
-(* 本块由 T326 异常修复席于 2026-09-22 补植：仅加头注，语句面／证明体／      *)
-(* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T283。       *)
-(* 替换定理清单：t34_list_sum_le_b_nonneg／t34_list_max_entropy_le_eps       *)
-(* （共 2 刀，刀面以台账为权威）                                             *)
-(* 非平凡性口径：刀一 real_le_b 定义层直接归纳（nil／cons 双腿见证显         *)
-(* 式）；刀二五步链内联重演逐段显式，无行拆分式假非平凡。                    *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
-(* 证明面，落件录判绿承来源台账。                                            *)
+(* UpReqTempDualList.v —— 温度族 sigT 对偶的通用 list 载体装配               *)
+(* 使命：本件形式化定理 4.6d 的通用 list 载体版：从熵等 + 同能量 + 归一化/    *)
+(*       逐点正 ⟹ 指定位逐点 p ≡ p_T，并以五合取支（归一化/正性/约束/        *)
+(*       最优/唯一）sigT 形装配总件 temp_energy_dual_closed_list。           *)
+(* 依赖：CW_ConstructiveWorld_219、UpRealLeB、G08_Gibbs、UpReqTempDefs、      *)
+(*       UpReqEntropyDeficitTemp、UpReqEntropyMaxTemp、UpReqKLSTangent、      *)
+(*       UpReqTempDual。                                                     *)
+(* 对标：stdlib List 折叠求和；Gibbs 分布温度族（Boltzmann 分布族）。         *)
+(* 构造性注记：Set 层承载——装配语句全 real_eq/real_lt/real_le 逐点 Set 值  *)
+(*   + sigT/prod 组装，零 Prop 泄露；零承认、公理面为空；全 Qed；             *)
+(*   非平凡交付（两处定义层直接归纳/五步链内联重演，无拆分式假非平凡）。      *)
+(* 编译配方：Rocq 9.1 直调，cpu_guard 温控包装，-Q 单根。                     *)
 (* ========================================================================= *)
-(* ============================================================ *)
-(* UpReqTempDualList.v *)
-(* *)
-(* 目的： 温度族 sigT 对偶的通用 list 载体总装。 *)
-(* 主件： temp_energy_dual_closed_list 与 t34_gibbs_equality_list、t34_entropy_eq_pointwise_list。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、G08_Gibbs、UpReqTempDefs、UpReqEntropyDeficitTemp、UpReqEntropyMaxTemp、UpReqKLSTangent、UpReqTempDual。 *)
-(* 备注： 通用 list 载体；温度正性与表结构前提显式申报。 *)
-(* T283 注记（拆步清偿）：t34 两刀——A-2 改 real_le_b 定义层直接归纳       *)
-(*   （nil 腿 lt 平移件 + cons 腿 eps 折半双腿 real_lt_compat 换形收口，    *)
-(*   不再消费 gibbsd_list_sum_le_b）；支4 改 T14 五步链内联重演（熵亏件    *)
-(*   十三参 + KL 逐 eps 件十五参两见证 + 负消去收口，不再整件转发）；       *)
-(*   语句面/Require 面/声明名序零改动。                                   *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqTempDualList.v —— 席T34：温度族 sigT 对偶·通用 list 载体总装     *)
-
+(* 数学结构：                                                               *)
+(*   逐项 kl_term 消去链（gibbe2/gibbsd 组内件逐位复用，零重建）：           *)
+(*   1. Σ(p−q) ≡ 0（gibbsd_list_sum_minus + 双归一化 + plus_opp）            *)
+(*   2. Σ(kl + −(p−q)) ≡ 0（real_list_sum_add + real_list_sum_opp           *)
+(*      + 前步换载）                                                        *)
+(*   3. 逐点 0 ≤_B kl + −(p−q)（gibbsd_gibbs_pointwise_B[D0 切线参数位]     *)
+(*      + gibbe2_le_b_nonneg_diff[B3]）                                     *)
+(*   4. 分解位提取：载体取 app l1 (cons s0 l2) 分解形（同                    *)
+(*      UpReqKLSTangent l1++s0::l2 形先例），前缀归纳 + 二项钳零             *)
+(*      （gibbe2_clamp_head/_r[C1/C2]）+ 非负和抬升（gibbsd_list_sum_le_b    *)
+(*      实例）⟹                                                            *)
+(*   5. kl ≡ p−q（gibbe2_kl_eq_of_w_zero[D0]）⟹ 切点等式                    *)
+(*      （gibbe2_tangent_eq[D1]）⟹ q/p ≡ 1（t1_log_eq_linear_inject         *)
+(*      [无条件注入形]）⟹ p ≡ q（gibbsd_p_mult_ratio）。                    *)
 (* ------------------------------------------------------------------ *)
-(* 【使命】补建席T13 列余留「通用 list 逐点提取件」并总装 4.6d：         *)
-(*   通用 list 载体（real_list_sum 折叠面）下，从熵等 + 同能量 +        *)
-(*   归一化/逐点正 ⟹ 指定位逐点 p ≡ p_T——走逐项 kl_term 消去 +         *)
-(*   切点⟹一链（T1 t1_log_eq_linear_inject 完成）；再以五合取支         *)
-(*   （归一化/正性/约束/最优/唯一）sigT 形总装通用 list 载体版 4.6d。   *)
+(* 装配件五合取支逐位对照（Id 层 4.6d）：                                  *)
+(*   Id sigT (fun pb => …)        ↝ Real sigT×2（pb + 正性见证 Hpb          *)
+(*     第二见证位——real_entropy_dist 前提位所需；同族两装配件同形）         *)
+(*   Id And                       ↝ Real prod（Set 层乘积，零 Prop）        *)
+(*   支1 归一化 normalized pb     ↝ real_eq (Σ pb) one                      *)
+(*     （real_boltzmann_dist_temp_normalized 全 arity 显式应用）             *)
+(*   支2 正性 positive_dist pb    ↝ sigT 第二见证 Hpb                       *)
+(*   支3 约束 Id (E pb) (E_temp)  ↝ real_eq (E pb) E_T（定义性收敛，        *)
+(*     real_eq_refl 完成；E 位 UpReqEntropyDeficitTemp real_energy_exp_temp  *)
+(*     同位）                                                               *)
+(*   支4 最优 le (S p) (S pb)     ↝ 逐 eps 档 real_le (S p) (S pb+eps)      *)
+(*     （real_max_entropy_is_boltzmann_temp_eps 全 arity 显式应用——         *)
+(*     list 载体单调接口 real_list_sum_le 直接供给，Gibbs 支零接口前提      *)
+(*     消解；Or 形无条件版受比较判定界，逐 eps 档为序档最强可达形，         *)
+(*     与依赖族分档结论同源）                                               *)
+(*   支5 唯一 熵等⟹逐点 p≡pb    ↝ 分解位档 real_eq (p s0) (p_T s0)：       *)
+(*     t13_entropy_eq_kl_zero[熵亏件反向] ⟹ KL≡0 + 熵亏桥换载              *)
+(*     kl_term 消去链完成。受判定界说明：通用载体 Or 形精确逐点仍受          *)
+(*     三分判定界；Bishop ≤_B 档 + 分解位提取为构造性可达最强档，           *)
+(*     KL 的构造内容（切线+钳零+注入）全量进入，非缩水。                    *)
 (* ------------------------------------------------------------------ *)
-
-(*   gibbe2_gibbs_equality_bool 的通用 list 分解位推广；G08 组内件      *)
-(*   逐位复用，零重建）】                                               *)
-(*   1. Σ(p−q) ≡ 0（gibbsd_list_sum_minus + 双归一化 + plus_opp）       *)
-(*   2. Σ(kl + −(p−q)) ≡ 0（real_list_sum_add + real_list_sum_opp       *)
-(*      + 前步换载）                                                    *)
-(*   3. 逐点 0 ≤_B kl + −(p−q)（gibbsd_gibbs_pointwise_B[D0 切线槽]    *)
-(*      + gibbe2_le_b_nonneg_diff[B3]）                                 *)
-(*   4. 分解位提取：载体取 app l1 (cons s0 l2) 分解形（T1 Part D        *)
-(*      l1++s0::l2 同形先例），前缀归纳 + 二项钳零（gibbe2_clamp_head   *)
-(*      /_r[C1/C2]）+ 非负和抬升（gibbsd_list_sum_le_b 实例）⟹         *)
-
-
-(*   5. kl ≡ p−q（gibbe2_kl_eq_of_w_zero[D0]）⟹ 切点等式                *)
-(*      （gibbe2_tangent_eq[D1]）⟹ q/p ≡ 1（t1_log_eq_linear_inject     *)
-(*      [T1 无条件注入形]）⟹ p ≡ q（gibbsd_p_mult_ratio）。             *)
-(* ------------------------------------------------------------------ *)
-(* 【总装件五合取支逐位对照（Id 层 4.6d，CW L17788）】                  *)
-(*   Id sigT (fun pb => …)        ↝ Real sigT×2（pb + 正性证人 Hpb      *)
-(*     第二见证位——real_entropy_dist 前提位所需；T13 两总装件同形）     *)
-(*   Id And                       ↝ Real prod（Set 层乘积，零 Prop）    *)
-(*   支1 归一化 normalized pb     ↝ real_eq (Σ pb) one                  *)
-(*     （T6 real_boltzmann_dist_temp_normalized 全 arity 显式应用）          *)
-(*   支2 正性 positive_dist pb    ↝ sigT 第二见证 Hpb（T6 pos 件）       *)
-(*   支3 约束 Id (E pb) (E_temp)  ↝ real_eq (E pb) E_T（定义性收敛，     *)
-(*     real_eq_refl 完成；E 槽 T6b real_energy_exp_temp 同位）           *)
-(*   支4 最优 le (S p) (S pb)     ↝ 逐 eps 档 real_le (S p) (S pb+eps)   *)
-(*     （T14 real_max_entropy_is_boltzmann_temp_eps 全 arity 显式应用——     *)
-(*     list 载体单调接口 real_list_sum_le 即插即用，Gibbs 腿零接口前提   *)
-(*     消解；Or 形无条件版受比较判定界，逐 eps 档为序档最强可达形，      *)
-(*     与 T7/T13 分档结论同源）                                          *)
-(*   支5 唯一 熵等⟹逐点 p≡pb    ↝ 分解位档 real_eq (p s0) (p_T s0)      *)
-
-(*     t13_entropy_eq_kl_zero[T6b 熵亏件反向] ⟹ KL≡0 + T6b 桥            *)
-
-(*     kl_term 消去链完成。受判定界说明：通用载体 Or 形精确逐点仍受      *)
-(*     三分判定界；Bishop ≤_B 档 + 分解位提取为构造性可达最强档，        *)
-(*     KL 的构造内容（切线+钳零+注入）全量进入，非缩水。）               *)
-(* ------------------------------------------------------------------ *)
-(* 【红线】纯构造性四条红线：零承认件；Set 层零 Prop 泄露（总装语句全    *)
-(*   real_eq/real_lt/real_le 逐点 Set 值 + sigT/prod 组装）；G1 禁词     *)
-(*   条目零命中（头注以中文转述）；G3 探针尾核全闭；全 Qed 完成。        *)
-(*   前置件只读：/ UpRealLeB / G08_Gibbs / UpReqTempDefs(T6) /     *)
-(*   UpReqEntropyDeficitTemp(T6b) / UpReqEntropyMaxTemp(T14) /           *)
-(*   UpReqKLSTangent(T1) / UpReqTempDual(T13)。                          *)
-(* 编译配方（T7/T13 vo 树式）：_t34_build.cmd 两段（-vos 秒审后全量）    *)
-
+(* 节内前提位申报：节 ListTempDual 七位接口字段（X、l1、s0、l2、T0、         *)
+(*   T0_pos、e0）为通用载体数据参数：求和面结构位（求和/正性/外延/单调/     *)
+(*   线性/加法）已由 S08 real_list_sum 族在节内以 Let 直接供给消解；         *)
+(*   余七位全部被节内定理语句面使用，实例化将收窄语句签名，按签名不动       *)
+(*   纪律保留为显式接口前提。温度正性 T0_pos 与表非空由 t34_app_cons_nonnil *)
+(*   结构位消解。                                                           *)
 (* ============================================================ *)
-
 Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
 Require Import G08_Gibbs.
@@ -98,7 +68,7 @@ Require Import UpReqTempDual.
 
 (* ============================================================ *)
 
-(* A-1：常零折叠 ≡ 0（A-2 换载腿用；nil 支 refl，cons 支 comm+plus_zero） *)
+(* 常零折叠 ≡ 0（换载支用；nil 支 refl，cons 支 comm+plus_zero） *)
 Lemma t34_list_sum_const_zero : forall (X : Type) (l : list X),
   real_eq (real_list_sum X (fun _ : X => real_zero) l) real_zero.
 Proof.
@@ -122,7 +92,7 @@ Proof.
              IH).
 Qed.
 
-(* A-2：逐点 0 ≤_B ⟹ 和 0 ≤_B（T283 拆步：real_le_b 定义层直接归纳收口） *)
+(* 逐点 0 ≤_B ⟹ 和 0 ≤_B（real_le_b 定义层直接归纳闭合） *)
 Lemma t34_list_sum_le_b_nonneg : forall (X : Type) (f : X -> Real) (l : list X),
   (forall w : X, real_le_b real_zero (f w)) ->
   real_le_b real_zero (real_list_sum X f l).
@@ -130,10 +100,10 @@ Proof.
   intros X f l Hpt.
   unfold real_le_b.
   induction l as [| w l IH].
-  - (* nil：Σnil ≡ 0（iota 换向检查收口），0 < 0+eps（lt 平移件直取） *)
+  - (* nil：Σnil ≡ 0（iota 换向检查闭合），0 < 0+eps（lt 平移件直取） *)
     intros eps Heps.
     exact (real_lt_plus_r_zero real_zero eps Heps).
-  - (* cons：eps 折半见证 + 逐点/归纳双腿 + real_lt_compat 四段换形收口 *)
+  - (* cons：eps 折半见证 + 逐点/归纳双支 + real_lt_compat 四段换形闭合 *)
     intros eps Heps.
     assert (Hpos : real_lt real_zero (real_mult eps gibbsd_half)).
     { exact (real_mult_positive eps gibbsd_half Heps gibbsd_half_pos). }
@@ -267,7 +237,7 @@ Proof.
                     (real_list_sum X q (app l1 (cons s0 l2)))
                     real_one Hnq)).
       + exact (real_plus_opp real_one). }
-  (* 步 2：Σ(kl + −(p−q)) ≡ 0（add 分和 + opp 换载 + 双零腿） *)
+  (* 步 2：Σ(kl + −(p−q)) ≡ 0（add 分和 + opp 换载 + 双零支） *)
   assert (HsumD : real_eq
            (real_list_sum X
               (fun s : X => real_plus
@@ -427,7 +397,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part C：Section ListTempDual——通用 list 载体总装                      *)
+(* Part C：节 ListTempDual——通用 list 载体装配                          *)
 (*   载体 = app l1 (cons s0 l2) 分解形（T1 Part D 同形先例）；求和面    *)
 (*   四接口 + 单调扩容位全由 S08 real_list_sum 族即插即用供给。          *)
 (* ============================================================ *)
@@ -483,7 +453,7 @@ Let bBnorm : real_eq (lsumf bB) real_one :=
 (* ---------------------------------------------------------- *)
 
 (*   的 4.6d 档）：熵等 + 同能量 + 归一化 ⟹ 指定位 p s0 ≡ p_T s0。      *)
-(*   链 = T13 工作马2（D1 档：熵亏件反向 ⟹ KL≡0）+ T6b 桥换载           *)
+(*   链 = 辅助引理 t13_entropy_eq_kl_zero（熵亏件反向 ⟹ KL≡0）+ 熵亏桥换载           *)
 (*   Σ kl_term ≡ 0 + Part B 逐项 kl_term 消去完成。                      *)
 (* ---------------------------------------------------------- *)
 Lemma t34_entropy_eq_pointwise_list :
@@ -508,8 +478,8 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 支4 实例（最优支·逐 eps 档零接口前提）：T283 拆步——T14 五步链内联      *)
-(*   重演（熵亏件+KL 件两见证+负消去收口），零整件转发。                  *)
+(* 支4 实例（最优支·逐 eps 档零接口前提）：熵上界件五步链内联      *)
+(*   重演（熵亏件+KL 件两见证+负消去闭合），零整件转发。                  *)
 (* ---------------------------------------------------------- *)
 Lemma t34_list_max_entropy_le_eps :
   forall (p : X -> Real) (Hp : forall w : X, real_lt real_zero (p w)),
@@ -527,7 +497,7 @@ Proof.
   assert (Hkl : real_le real_zero (real_plus (lKL p Hp) eps)).
   { exact (real_KL_temp_ge_zero_eps X lsumf lpos lext lle llinear ladd
              T0 T0_pos e0 p Hp Hnp eps Heps). }
-  (* 段三：KL 换形到熵亏腿（real_le_id_r + eq_plus_compat_adapt 对角） *)
+  (* 段三：KL 换形到熵亏支（real_le_id_r + eq_plus_compat_adapt 对角） *)
   assert (Hstep : real_le real_zero
            (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps)).
   { apply (RealSetoid.real_le_id_r real_zero (real_plus (lKL p Hp) eps)
@@ -538,14 +508,14 @@ Proof.
                              (lKL p Hp) Hdef)
                 (real_eq_refl eps))).
     exact Hkl. }
-  (* 段四：非负加法腿（工作马 real_le_plus_nonneg_r） *)
+  (* 段四：非负加法支（辅助引理 real_le_plus_nonneg_r） *)
   assert (H1 : real_le (lH p Hp)
            (real_plus (lH p Hp)
               (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps))).
   { exact (real_le_plus_nonneg_r (lH p Hp)
              (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps)
              Hstep). }
-  (* 段五：负消去换形收口（工作马 real_plus_neg_cancel_shift_eps） *)
+  (* 段五：负消去换形闭合（辅助引理 real_plus_neg_cancel_shift_eps） *)
   exact (RealSetoid.real_le_id_r (lH p Hp)
            (real_plus (lH p Hp)
               (real_plus (real_plus (lH bB bBpos) (real_opp (lH p Hp))) eps))
@@ -555,7 +525,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 总装件：temp_energy_dual_closed_list（通用 list 载体五合取支 sigT 形）*)
+(* 装配件：temp_energy_dual_closed_list（通用 list 载体五合取支 sigT 形）*)
 (*   支1 归一化 + 支2 正性（sigT 第二见证位）+ 支3 约束（定义性收敛）   *)
 (*   + 支4 最优（逐 eps 档，零接口前提）+ 支5 唯一（分解位档）全闭。    *)
 (* ---------------------------------------------------------- *)
@@ -590,7 +560,7 @@ Qed.
 End ListTempDual.
 
 (* ============================================================ *)
-(* 尾核：G3 探针（零公理见证）                                            *)
+(* 尾核：提取检验（零公理见证） *)
 (* ============================================================ *)
 Print Assumptions t34_list_sum_const_zero.
 Print Assumptions t34_list_sum_le_b_nonneg.

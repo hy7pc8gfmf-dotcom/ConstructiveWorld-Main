@@ -2,16 +2,18 @@
 (* UpReqMinUniqueTight.v *)
 (* *)
 (* 目的： 定理 4.5 free_energy_min_unique 的 Real 层两可达形。 *)
-(* 主件： t15_free_energy_min_unique 与 t15_fe_eq_kl_zero 等价核；严格分歧腿 t15_fe_strict_*。 *)
+(* 主件： t15_free_energy_min_unique 与 t15_fe_eq_kl_zero 等价核；严格分歧肢 t15_fe_strict_*。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP、UpReqFEPCanon、G07_KLWall、UpReqKLSTangent、G08_Gibbs。 *)
 (* 备注： 承定理 4.3 构造性边界；bool 形与 Or 形双编码并存。 *)
+(* 构造性注记：Set 层承载、零承认、可提取。 *)
+(* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqMinUniqueTight.v —— 席T15：定理 4.5 free_energy_min_unique      *)
+(* UpReqMinUniqueTight.v —— 定理 4.5 free_energy_min_unique *)
 
 (* ------------------------------------------------------------------ *)
-(* 【使命】席N1 判定（C3）：定理 4.5（论文正式版 L284-286：若            *)
+(* 【使命】判定（C3）：定理 4.5（论文正式版 L284-286：若            *)
 (*   F[p] = F[p_b] 则 p 与 p_b 逐点相等；〔构造强度〕「等式/唯一性档——  *)
 (*   承定理 4.3 的构造性边界；Real 层无复刻」）的 Real 层两可达形：      *)
 (*   (a) gibbe2 式显式前提形：log 切线塌缩前提 + KL≡0 ⟹ 逐点 real_eq；  *)
@@ -36,11 +38,11 @@
 (*     ELBO 等值核。）                                                  *)
 (*   件 2 可达形 (a) 显式前提形 t15_fe_eq_unique_explicit（抽象载体）：  *)
 (*     件 1 + 显式接口前提「KL≡0 ⟹ 逐点切点式」（gibbe2 主件注入位     *)
-(*     的载体级抬升）+ 席T1 t1_log_eq_linear_inject（「切点⟹一」，      *)
+(*     的载体级抬升）+ t1_log_eq_linear_inject（「切点⟹一」，      *)
 (*     无条件消解）+ gibbe2 主件尾链同款比值一消去（G08                 *)
 (*     gibbsd_p_mult_ratio）⟹ 逐点 p s ≡ p_b s。                       *)
 (*   件 3 可达形 (a) bool 完成 t15_fe_eq_unique_bool：件 1 的 bool      *)
-(*     载体实例 + 席T1 t1_gibbe2_gibbs_equality_bool 整链消解（KL≡0    *)
+(*     载体实例 + t1_gibbe2_gibbs_equality_bool 整链消解（KL≡0    *)
 (*     ⟹ 逐点等直达）——样板载体上零接口前提。                          *)
 (*   件 4 严格尾链 t15_fe_strict_of_kl_pos（list 载体）：KL>0 ⟹         *)
 (*     D·KL>0（S07 real_mult_pos_compat）⟹ 加法平移（S07               *)
@@ -55,32 +57,32 @@
 (*     在 [true; false] 载体、s₀ := true 的实例。                       *)
 (*   件 8 组装件 t15_free_energy_min_unique（bool 载体，prod 双函数     *)
 (*     记录——Set 层 And 形，零 Prop）：(Feq ⟹ 逐点等) × (可比 +        *)
-(*     见证 ⟹ F 严格差)。(a) 腿零接口前提；(b) 腿保留逐项可比的        *)
+(*     见证 ⟹ F 严格差)。(a) 肢零接口前提；(b) 肢保留逐项可比的        *)
 (*     诚实接口位。                                                     *)
 (* ------------------------------------------------------------------ *)
 (* 【可达强度如实标注】                                                 *)
 (*   ① 可达形 (a) 两档：抽象载体为显式接口形（件 2，接口位=「KL≡0 ⟹    *)
-(*     逐点」非负提取步的载体诚实接口）；bool 样板载体由席T1 整链件     *)
-(*     完全消解（件 3/件 8 (a) 腿，零接口残留）。                       *)
+(*     逐点」非负提取步的载体诚实接口）；bool 样板载体由整链件     *)
+(*     完全消解（件 3/件 8 (a) 肢，零接口残留）。                       *)
 (*   ② 无条件形不可达机理（如实标注）：仅凭 Feq : F[p] ≡ F[p_b]（无     *)
 (*     塌缩前提、无分歧见证）得逐点等，其机理链需「KL≡0 ⟹ 逐点切点式」 *)
 
 
-(*     结论在案，构造性不可达。本件改用其弱形「切点⟹一」（席T1         *)
+(*     结论在案，构造性不可达。本件改用其弱形「切点⟹一」（         *)
 (*     t1_log_eq_linear_inject：弱三分 + 双支切线，不触判定边界），     *)
 (*     该弱形在盘无条件闭合，件 2/3 即弱形闭合实例。                    *)
 (*   ③ 可达形 (b) 逐项可比前提为诚实接口位：去除逐项 Or (real_le)       *)
 (*     (real_le) 等价于对任意实对给三分判定见证（LLPO 形），非直觉主义  *)
-(*     可证（席T1 卡结论）；s₀ 处分歧见证以 Set 层 Or (real_lt) 承载    *)
-(*     （实序不可判定，显式见证输入）。F[p]−F[p_b] = D·KL 账目由正典   *)
-(*     分解逐字保留（D 因子不吸收、不缩水），严格腿 = D>0 × KL>0。      *)
+(*     可证（在库结论）；s₀ 处分歧见证以 Set 层 Or (real_lt) 承载    *)
+(*     （实序不可判定，显式见证输入）。F[p]−F[p_b] = D·KL 核算由正典   *)
+(*     分解逐字保留（D 因子不吸收、不缩水），严格肢 = D>0 × KL>0。      *)
 (* ------------------------------------------------------------------ *)
 (* 【红线】Set 层零 Prop（real_eq/real_lt/real_le 全 Set 值，组装载体   *)
 (*   prod 双函数记录）；全 Qed 闭合；禁词条目零命中（头注以中文转述，   *)
 (*   不引英文原词）；real_eq 非 Id 禁改写，全链 real_eq_trans /         *)
 (*   RealSetoid 运输；D 因子逐字保留。禁改红线：UpReqRealFEP.v /        *)
 (*   UpReqFEPCanon.v / UpReqKLSTangent.v / G07_KLWall.v / G08_Gibbs.v   *)
-(*   / S 模块全程只读（只消费 .vo）。                                   *)
+(*   / S 模块全程只读（只使用 .vo）。                                   *)
 
 (*   全量 -Q vo 树；前置 .vo 全在 ConstructiveWorld_vo/。               *)
 (* ============================================================ *)
@@ -192,7 +194,7 @@ Qed.
 (* 件 2：可达形 (a)——gibbe2 式显式前提形（抽象载体）                    *)
 (*   F[p] ≡ F[p_b]（⟹ KL ≡ 0，件 1）+ 显式接口前提（KL≡0 ⟹ 逐点切点式）*)
 (*   ⟹ 逐点 p s ≡ p_b s。                                               *)
-(*   逐点消去链：切点式 + 席T1 t1_log_eq_linear_inject（切点⟹一，       *)
+(*   逐点消去链：切点式 + t1_log_eq_linear_inject（切点⟹一，       *)
 (*   无条件）⟹ 比值一 ⟹ gibbe2 主件尾链同款消去 ⟹ p s ≡ p_b s。        *)
 (* ---------------------------------------------------------- *)
 
@@ -215,7 +217,7 @@ Theorem t15_fe_eq_unique_explicit :
              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
           real_one ->
   (* 显式接口前提位（载体诚实接口）：KL ≡ 0 ⟹ 逐点切点式；
-     bool 样板载体上由件 3 整链消解（席T1 件直达），零残留。 *)
+     bool 样板载体上由件 3 整链消解（整链件直达），零残留。 *)
   (real_eq (real_sum_over_S
               (fun s : S => real_kl_term (p s)
                  (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
@@ -243,7 +245,7 @@ Proof.
                          real_zero).
   { exact (t15_fe_eq_kl_zero S real_sum_over_S sumf_ext sumf_add sumf_linear
              real_base_loss D D_pos Z_align_r Z_align_r_pos p Hp Hnormp Hnormb Feq). }
-  (* 第 2 步：切点式 + 「切点⟹一」（席T1 无条件消解）⟹ 比值一 *)
+  (* 第 2 步：切点式 + 「切点⟹一」（无条件消解）⟹ 比值一 *)
   assert (Hu1 : real_eq (real_mult (pb s) (real_inv_pos (p s) (Hp s))) real_one).
   { apply (t1_log_eq_linear_inject (real_mult (pb s) (real_inv_pos (p s) (Hp s)))
              (real_mult_positive (pb s) (real_inv_pos (p s) (Hp s))
@@ -265,7 +267,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 件 3：可达形 (a) bool 完成——显式接口前提整链消解形                   *)
-(*   显式前提位由席T1 t1_gibbe2_gibbs_equality_bool 整链消解            *)
+(*   显式前提位由t1_gibbe2_gibbs_equality_bool 整链消解            *)
 (*   （KL≡0 ⟹ 逐点 p≡p_b 直达，注入位由 t1_log_eq_linear_inject        *)
 (*   无条件供给）：gibbe2 样板载体上 (a) 形零接口前提（除物理前提）。    *)
 (* ---------------------------------------------------------- *)
@@ -311,7 +313,7 @@ Qed.
 (* 件 4：严格尾链——KL > 0 ⟹ F[p_b] < F[p]（list 载体，real_lt）         *)
 (*   链：D·KL > 0（real_mult_pos_compat）⟹ 加法平移                    *)
 (*   （real_lt_plus_translate）⟹ real_lt_compat 运输两跳 ⟹ 严格差。     *)
-(*   F[p]−F[p_b] 账目由正典分解逐字保留（D 因子不吸收）。               *)
+(*   F[p]−F[p_b] 核算由正典分解逐字保留（D 因子不吸收）。               *)
 (* ---------------------------------------------------------- *)
 
 Lemma t15_fe_strict_of_kl_pos :
@@ -491,8 +493,8 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 件 8：组装件（bool 载体，prod 双函数记录——Set 层 And 形，零 Prop）    *)
-(*   定理 4.5 两可达形的合取载体：(a) 腿（F 等 ⟹ 逐点等，零接口）×      *)
-(*   (b) 腿（逐项可比 + s₀ 分歧见证 ⟹ F 严格差）。                      *)
+(*   定理 4.5 两可达形的合取载体：(a) 肢（F 等 ⟹ 逐点等，零接口）×      *)
+(*   (b) 肢（逐项可比 + s₀ 分歧见证 ⟹ F 严格差）。                      *)
 (* ---------------------------------------------------------- *)
 
 Theorem t15_free_energy_min_unique :

@@ -5,24 +5,26 @@
 (* 主件： i4b_policy_iter_kl_pow_mono_unconditional：经 t30 见证族去假设位化。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB、UpReqGeomIter、UpReqPowMonoBridge、UpReqI4Bridge。 *)
 (* 备注： 实例化件：t30_kl_term_eq_zero 等见证把桥件假设位落实为零前提形。 *)
+(* 构造性注记：Set 层承载、零承认、可提取。 *)
+(* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqI4Witness.v —— 结论 I4 证书位实例化席 T30（独占 CoreN 0）          *)
+(* UpReqI4Witness.v —— 结论 I4 证书位实例化件 *)
 (*   使命＝为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书，使结论 I4 的        *)
-(*   消费位（UpReqI4Bridge 主桥件2 的 Hkl0or 前提）从接口化降为          *)
+(*   使用位（UpReqI4Bridge 主桥件2 的 Hkl0or 前提）从接口化降为          *)
 (*   「证书内部构造」：调用方不再提供 KL_0 形态的任何前提，只需提供      *)
 
 (* ---------------------------------------------------------------- *)
-(* 上游链（全只读消费，既有绿件零改）：                                   *)
-(*   · T1 端点件 klst_kl_energy_nonconst（G07 Part G，KL>0 无条件主件）： *)
+(* 上游链（全只读使用，既有绿件零改）：                                   *)
+(*   · 端点件 klst_kl_energy_nonconst（G07 Part G，KL>0 无条件主件）： *)
 (*     双归一化＋逐项双向弱序＋s0 处任一方向严格分离 ⟹ 0 < Σ kl_term。   *)
 
 (*   · klst_gibbs_core_zero（G07）：r==p ⟹ kl_term＋(p−r) == 0——        *)
 
-(*   · T20 接口件 i4b_kl0_or_of_lt / i4b_kl0_or_of_eq（UpReqI4Bridge     *)
+(*   · 接口件 i4b_kl0_or_of_lt / i4b_kl0_or_of_eq（UpReqI4Bridge     *)
 
-(*   · T20 主桥 i4b_policy_iter_kl_pow_mono_B（件2）：结论 I4 消费位，   *)
+(*   · 主桥 i4b_policy_iter_kl_pow_mono_B（件2）：结论 I4 使用位，   *)
 
 (*   · geod_lsum（UpReqGeomD L218）≡ real_list_sum nat f (seq 0 n)——     *)
 (*     定义性展开即与 G07 的 list 形（l1 ++ s0 :: l2）无磨合对接。        *)
@@ -43,7 +45,7 @@
 (*   件W6 i4b_policy_iter_kl_pow_mono_unconditional：无条件闭合主件——    *)
 (*       结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
 
-(*       内部合成（消费 T20 主桥件2 一次直连）；                          *)
+(*       内部合成（使用 T20 主桥件2 一次直连）；                          *)
 (*   件W7/W8 i4bw_..._nonconst / i4bw_..._const：两支端到端实例——        *)
 (*       单支见证即全闭合的分布级演示（T20 件3 的分布级升级版）。         *)
 (* ---------------------------------------------------------------- *)
@@ -385,9 +387,9 @@ Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                                        *)
-(* 【对接判定】结论 I4 消费位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
+(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
 
-(*   消费位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
+(*   使用位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
 (*   同形，结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)
 (*   KL_0 证书成立。                                                    *)
 (* 【残差精确形状】情形 Or 前提（逐点相等 支 / 分离见证 支）与逐点双向   *)
@@ -396,5 +398,5 @@ Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
 (*   可判定逐点供给（如均匀参考分布对有理可算扰动分布）。                *)
 
-(*   G3 提取探针 Obj.magic=0（_t30_g3.v，产物验后即删）。                *)
+(*   G3 提取检验 Obj.magic=0（产物验后即删）。                *)
 (* ============================================================ *)

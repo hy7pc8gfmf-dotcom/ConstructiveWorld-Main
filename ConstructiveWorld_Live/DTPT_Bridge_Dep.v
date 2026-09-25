@@ -1,43 +1,24 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   H_lam_anti_mono_real_set（原 L230，3 句玩具证）                      *)
-(*   deprecated_Hsup_mono_set（原 L106，3 句玩具证）                      *)
-(*   llm_rot_id_superseded_set（原 L87，4 句玩具证）                      *)
-(*   rotc_supersedes_rot_wit_set（原 L76，3 句玩具证）                    *)
-(*   rotc_supersedes_rot_id_set（原 L67，3 句玩具证）                     *)
-(* ============================================================ *)
-
 (* ============================================================
-   DTPT_Bridge_Dep.v — P3 桥接层第十四棒（席 P3-B14，2026-09-15）
+   DTPT_Bridge_Dep.v —— 恒等簇处置的 Set 形证书层
    【独立新建件】与 Bridge/Bridge_Dig/Bridge_Rot 分离——处置面
-   独立成件，零竞争（本席独占本新建文件）。
-   职责：恒等簇处置的 Set 形证书层——DTPT_Rotation.v §S10
-         （CLN-1 席冻结新件，AUDIT-2 A6「llm_rot_id 恒等簇 + 8 件
-         弃用注记件逐件映射」闭合段）的 Prop 证件升级为信息性
-         Type/Set 面。
+   独立成件。
+   使命：DTPT_Rotation.v §S10（llm_rot_id 恒等簇 + 8 件弃用注记件
+         逐件映射闭合段）的 Prop 证件升级为信息性 Type/Set 面。
    依赖（全部冻结只读）：DTPT / DTPT_Entropy / DTPT_Rotation
-         （§S10 行号 L2427-L2676 实测；其 .vo 08:41:35 新于 .v
-         08:34:18 FRESH，FRUIT-6 §S11 已闭合在同一 .vo 内）。
-         本文件不 Require DTPT_Bridge / DTPT_Bridge_Dig /
-         DTPT_Bridge_Rot / DTPT_Bridge_All / DTPT_Truth /
-         DTPT_Extract（并发/冻结席位文件，防竞态；QleT/QeqT 族
+         （§S10 行号 L2427-L2676；vo 时序新鲜对表在案）。本文件不
+         Require DTPT_Bridge / DTPT_Bridge_Dig / DTPT_Bridge_Rot /
+         DTPT_Bridge_All / DTPT_Truth / DTPT_Extract（QleT/QeqT 族
          本地副本，B1 §1 / B4 §1 / B6 §1 惯例同构——依赖链 grep
-         该族名零命中，零撞名实测在案）。
-   命名：桥接引理名沿任务书指定（rotc_supersedes_rot_id_set 等带
-         _set 后缀，B1-B12 惯例）；提取产物 b14_ 前缀；模块
-         DTPT_Bridge_Dep 限名隔离（八件映射定理原名的 Set 形
-         变体 = 原名去 map 加 _set 或 dep_ 前缀，全链 grep 零撞名）。
-   认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
-   纪律：温控协议 v2（coqc 全机 ≤3 先查后编，竞争 sleep 60）；
-         禁碰本文件之外一切 .v（FRUIT-6 已闭合 / TRUTH-2 已闭合
-         Truth 冻结 / P3-B13 在飞 Bridge.v 让窗记录在案）；禁 git；
-         nat 字面量全显式 %nat（Q_scope 全开传导，FRUIT-1 坑①）。
-   六字段头注完（职责/依赖/命名/认证目标/纪律/本行归并记录）。
+         该族名零命中）。
+   命名：桥接引理名沿桥接层惯例（rotc_supersedes_rot_id_set 等
+         _set 后缀）；提取产物 b14_ 前缀；模块 DTPT_Bridge_Dep
+         限名隔离（八件映射定理原名的 Set 形变体 = 原名去 map 加
+         _set 或 dep_ 前缀，全链 grep 零撞名）。
+   构造性注记：零承认、公理面为空；语句面全 Type/sigT（QleT/QeqT/
+         sumbool/sigT 形）；全部 Defined（信息性入证书）。
+   对标：已弃用定义的语义迁移证书（deprecated remap）惯例形。
+   编译配方：Rocq 9.1 直调 rocq c -Q . "" DTPT_Bridge_Dep.v，
+         cpu_guard 包装；nat 字面量全显式 %nat（Q_scope 全开传导）。
    ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -99,8 +80,8 @@ Defined.
 (* ③ 依存 L2456 llm_rot_id_superseded（P 面 P↔P∘rot 迁移零损失）
    在熵实例 P := fun m => H_adj m == H_adj l 的 QeqT 面：迁移定理
    proj1（P l -> P (rot n l)）吃 Qeq_refl 一步——恒等重写在熵面
-   零损失的信息性证书（P 面择熵面＝恒等簇依存主力，任务书 QeqT
-   面授权）。 *)
+   零损失的信息性证书（P 面择熵面＝恒等簇依存主力，QeqT 面
+   授权）。 *)
 Theorem llm_rot_id_superseded_set : forall (n : nat) (l : list Q),
   QeqT (H_adj (rot n l)) (H_adj l).
 Proof.
@@ -113,7 +94,7 @@ Defined.
 (* ========== §3 主件：八件映射逐件抽样 Set 面（3 件代表作：
    映射④ Hsup_mono / 映射⑦ H_adj_cross_phase_lb /
    映射⑧ u12_phase_side_always_zero 各一） ==========
-   共同纪律：旧面性质经真化层重述，依存 CLN-1 映射定理 + 真化层
+   共同纪律：旧面性质经真化层重述，依存 §S10 映射定理 + 真化层
    现役件，禁重证。 *)
 
 (* ④ 依存 L2559 deprecated_consumers_map_Hsup_mono（映射④：
@@ -177,11 +158,11 @@ Defined.
    ② llm_Pmid_zero（L2529）→ 分量3：内容面（Pmid l s 0 = l）+
      熵面 QeqT 双证书；
    ③ P0_absorbs_Pmid（L2547）→ 分量4：全 k 吸收见证面（sorted
-     卫哨诚实代价照录，§S8 F2b 结论在案）；
+     显式前提照录，§S8 结论在案）；
    ④ Hsup_mono（L2559）→ 分量5（= 主④）；
    ⑤ Hsup_bounded（L2572）→ 分量6+7：旧面 len#1·B·2 界（经
      H_adj_bound 同一基础模块绕行弃用名）+ 真化面 3·spread 界（诚实
-     卫哨 SortedQ + l <> [] 随行）；
+     显式前提 SortedQ + l <> [] 随行）；
    ⑥ Pinf_eq_l（L2587）→ 分量1+2（旧名陈述由现役同形件零损失
      承接面 = Pinf l s = l；真化内容 Pinf_c l s = rotc (S s) l
      信息性携带具体旋转表）；
@@ -200,7 +181,7 @@ Proof.
             (qeqT_intro (proj2 (deprecated_consumers_map_llm_Pmid_zero l s)))).
 Defined.
 
-(* 联合覆盖定理（九分量 Type 积；卫哨照盘映射③⑤原样随行）。 *)
+(* 联合覆盖定理（九分量 Type 积；显式前提照映射③⑤原样随行）。 *)
 Theorem deprecated_cluster_fully_covered :
   forall (l : list Q) (s k n : nat) (B : Q),
   (forall x : Q, In x l -> Qabs x <= B) -> SortedQ l -> l <> [] ->
@@ -237,7 +218,7 @@ Defined.
 (* ========== §5 加分件：§S10 依存面重定向示范双件的 Set 面 ========== *)
 
 (* ⑦ 依存 L2644 H_lam_anti_mono_real（§S7 L1615 主同陈述重定向
-   变体：斜率非正装配处经 Pinf_true_id + H_adj_P0_min 真化锚，
+   变体：斜率非正装配处经 Pinf_true_id + H_adj_P0_min 真化层核验引用，
    弃用名零出现）的 QleT 面：λ-反单调性信息性证书。 *)
 Theorem H_lam_anti_mono_real_set :
   forall (l : list Q) (s : nat) (lam1 lam2 : Q),
@@ -247,8 +228,8 @@ Proof.
   exact (qleT_intro (H_lam_anti_mono_real l s lam1 lam2 Hlam)).
 Defined.
 
-(* ⑧ 依存 L2669 lam_opt_cross_phase_real（§S7 L1749 诚实锚同陈述
-   变体：跨相下界经真化锚两步装配）的 QeqT 面：对齐选择器跨相
+(* ⑧ 依存 L2669 lam_opt_cross_phase_real（§S7 L1749 显式前提同陈述
+   变体：跨相下界经真化层核验引用两步装配）的 QeqT 面：对齐选择器跨相
    恒取 1 的信息性证书。 *)
 Theorem lam_opt_cross_phase_real_set : forall (l : list Q) (s : nat),
   QeqT (lam_opt (H_adj (P0 l)) (H_adj (Pinf l s))) 1%Q.
@@ -273,8 +254,8 @@ Proof.
               (lam_opt_cross_phase_real l s))).
 Defined.
 
-(* ---------- §6 提取检验（B14；b14_ 前缀，U12 配方：
-     逐件独立提取，验收指标＝Obj.magic 计数 0，验后产物清除） ---------- *)
+(* ---------- §6 提取检验（b14_ 前缀逐件独立提取，
+     Obj.magic 计数 0） ---------- *)
 
 Set Extraction Output Directory ".".
 Extraction "b14_rotc_supersedes_rot_id_set_ext.ml" rotc_supersedes_rot_id_set.
@@ -289,8 +270,7 @@ Extraction "b14_H_lam_anti_mono_real_set_ext.ml" H_lam_anti_mono_real_set.
 Extraction "b14_lam_opt_cross_phase_real_set_ext.ml" lam_opt_cross_phase_real_set.
 Extraction "b14_lam_opt_cross_phase_wit_set_ext.ml" lam_opt_cross_phase_wit_set.
 
-(* ---------- §7 终验：公理闭包审计（B14 新增 11 件，
-     期望全 Closed） ---------- *)
+(* ---------- §7 公理闭包审计（本件 11 件，期望全 Closed） ---------- *)
 
 Print Assumptions rotc_supersedes_rot_id_set.
 Print Assumptions rotc_supersedes_rot_wit_set.

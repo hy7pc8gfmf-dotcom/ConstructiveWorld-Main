@@ -1,11 +1,11 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
-(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
-(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
-(* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
-(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性闭合，文尾  *)
-(* 保留原件假设面追印。清单：                                      *)
-(*   N_R_pos（N_R 定义性展开后 kv_N_pos 母本体就地重演：             *)
+(* 【同名替换稿说明】本件为玩具级定理同名替换件：原件全文逐字保留， *)
+(* 仅将下列定理之证明体按实质非平凡三口径（定义层受控展开、显式见证 *)
+(* 直取、结构性重演）处理；替换体以源文件金标文本断言同文后落刀，    *)
+(* 声明面与引用面零改动，零新增 Require，证尾记号逐件守恒，纯构造性  *)
+(* 闭合，文尾保留原件假设面追印。清单（原坐标）：                    *)
+(*   N_R_pos（N_R 定义性展开后 kv_N_pos 证明体就地重演：             *)
+(*   kvev 同型件见 UpKVEv.v；本件重演于下方件 0 块。清单行续下：      *)
 (*       states 归纳＋空表矛盾支＋尾表 kv_ofnat_S_pos 闭合）         *)
 (* ============================================================ *)
 
@@ -16,6 +16,8 @@
 (* 主件： Z_keep_pos / N_R_pos 正性族与 tv_row、lstep 行 TV 界（第二段组织）。 *)
 (* 依赖： CW_ConstructiveWorld_219。 *)
 (* 备注： 与第一段同型：eps-Bishop 形态的显式假设承接；核行随机与严格正为 Variable 前提。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ========================================================================= *)
@@ -36,7 +38,7 @@
 (*   因 invZ ≥ 1），drop 支 == K；分部求和                                   *)
 (*   Σ_keep(K·invZ − K) == (invZ−1)·Z_keep == 1 − Z_keep == tail_row，      *)
 (*   drop 支 == tail_row，合计 == 2·tail_row == 2·(1 − Z_keep)——精确最简   *)
-(*   形态（强于任务书预案的 ≤ 形态，以等式结果；≤ 形态与 1−Z 形态并列）。  *)
+(*   形态（较 ≤ 形态更强，以等式结果；≤ 形态与 1−Z 形态并列）。  *)
 (*                                                                           *)
 (* 件 4  kv_drift_bound（主定理·变动）：                                    *)
 (*   前提 Hrow : ∀s, tv_row(s) ≤ c（一致行误差常数，规避 sup），对任意      *)
@@ -47,16 +49,16 @@
 (*     ≤ (c + ε/3) + (a_n + ε/3) + ε/3（行误差 + K 非扩张）——三分支 ε/3    *)
 (*   经 3·(ε0/3) == ε0 吸收精确闭合 (S n)·ε0。                              *)
 (*                                                                           *)
-(* 诚实边界（eps-Bishop 形态的必然性）：Real 层 |a+b| ≤ |a|+|b| 只有逐 eps  *)
+(* 显式边界（eps-Bishop 形态的必然性）：Real 层 |a+b| ≤ |a|+|b| 只有逐 eps  *)
 (*   形（real_abs_triangle_le_eps；根内 RealSetoid 接口即 Bishop 逐 eps 惯  *)
 (*   例），exact le 为 Or(lt,eq) 编码，exact 三角构造性不可得。故件 3 全程  *)
 (*   exact（符号证书绕开三角），件 4 为 Bishop 逐 eps 形 ≤ n·c + eps——      *)
-(*   与根内 real_abs_nonneg_le_eps 同一诚实档位。TV(inv2·Σ|−|) 同构形态    *)
+(*   与根内 real_abs_nonneg_le_eps 同一显式档位。TV(inv2·Σ|−|) 同构形态    *)
 (*   以 kv_drift_bound_tv 并列结果。                                        *)
 (*                                                                           *)
 (* 红线自审：纯构造性（零公理/零弃证/零经典逻辑）；语句全 Set 层            *)
 (*   （real_eq/real_lt/real_le/Id/InT 均 Set 编码，keep 判定 bool）；       *)
-(*   keep_nonempty 契约占位以 sigT/And/Id/InT 落地；全部 Qed。              *)
+(*   keep_nonempty 契约占位以 sigT/And/Id/InT 落实；全部 Qed。              *)
 (* ========================================================================= *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -221,7 +223,7 @@ Fixpoint k_iter (n : nat) (mu : Tok -> Real) : Tok -> Real :=
   | Datatypes.S m => lstep K (k_iter m mu)
   end.
 
-(* 逐和 TV（任务书许可的逐和形态） *)
+(* 逐和 TV（逐和形态） *)
 Definition Ddist (mu nu : Tok -> Real) : Real :=
   real_list_sum Tok (fun x : Tok => real_abs (real_minus_r (mu x) (nu x))) states.
 
@@ -422,7 +424,7 @@ Qed.
 
 
 (* |Σ l f| ≤ Σ l |f| + eps（Bishop 逐 eps 形；exact 三角在 Real 层不可得，
-   见文件头诚实边界。归纳步 ε 对半，half + half == eps 由 inv2 吸收。） *)
+   见文件头显式边界。归纳步 ε 对半，half + half == eps 由 inv2 吸收。） *)
 (* 加法重排：(a+(b+h))+h == (a+b)+(h+h)（ε/2 吸收的结构步） *)
 Lemma kv_merge_regroup : forall a b h : Real,
   real_eq (real_plus (real_plus a (real_plus b h)) h)

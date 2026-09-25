@@ -4,14 +4,14 @@
 (*                                                                              *)
 (* 依赖：CW_ConstructiveWorld_219——S01 老层接口 RealInterfaceEnhanced，及其     *)
 (*   StateSpace、SumOver、lt、le、one、one_pos、szero 等字段与常元；            *)
-(*   零 Require 母本 UpReqAttnMixTime，字段序以母本声明序为准。                 *)
+(*   零 Require 源模块 UpReqAttnMixTime，字段序以源模块声明序为准。                 *)
 (* 对标：stdlib——恒等类型 Id 的依赖消去、Or 注入 inl、lt_le_iff 换向。          *)
 (* 构造性注记：载体为 Type 层归纳类型 uabd1s16_fmt_pack12；节内以 Context        *)
 (*   {RI : RealInterfaceEnhanced} 承载，出节即为全称条件形；零公理零承认，      *)
 (*   Print Assumptions 全 Closed；随树可提取。                                  *)
 (* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 包裹，-o 输出临时目录，树内零写入。   *)
 (*                                                                              *)
-(* 12 位语句（字段序＝母本声明序）：                                            *)
+(* 12 位语句（字段序＝源模块声明序）：                                            *)
 (*   接口三字段：SS : StateSpace RI，SO : SumOver RI SS（构造子显式参数）；      *)
 (*   数据九字段：enum（状态枚举）、enum_nonempty（枚举非空）、temp（温度）、     *)
 (*   temp_pos（温度为正）、Delta（步长）、Delta_pos（步长为正）、z（评分函数）、 *)
@@ -64,7 +64,7 @@ Require Import CW_ConstructiveWorld_219.
 (*   可达锚注明件以限定名引用。 *)
 
 (* ============ §1 12 位语句的接口封装条件形（节内 Context，出节全称） ============ *)
-(* 字段序＝母本声明序：SS/SO 接口字段为构造子显式参数；数据九字段逐一对应。 *)
+(* 字段序＝源模块声明序：SS/SO 接口字段为构造子显式参数；数据九字段逐一对应。 *)
 
 Section UabD1S16Fmt.
 

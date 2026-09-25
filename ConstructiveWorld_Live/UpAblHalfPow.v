@@ -1,14 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T262 台账席 战役包W（tier2 十三批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   hpw_half_step（原 L76，结构性重演／显式见证直取）                            *)
-(* ============================================================ *)
-
-(* ============================================================ *)
 (* UpAblHalfPow.v —— arch_decay 几何衰减谱系供给件                       *)
 (*                                                                *)
 (* 使命：为 arch_decay 衰减语句提供可计算见证的几何衰减谱系。             *)
@@ -49,6 +39,8 @@
 (* 对标：mathlib 置顶使命与声明注释惯例；stdlib 文档注释惯例。            *)
 (* 构造性注记：语句面全 Set 层值（QltT/QleT'＝S02 Id 形＋sigT 见证）；    *)
 (*   语句面无裸命题；Qeq/Z 换形全部内联于证明内部；零承认；Qed 闭合。     *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-Q 依赖池单根映射，      *)
+(*   输出落施工副本区，树内零写入。                                       *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -118,8 +110,8 @@ Proof.
   - exact (q_half_pow_le_inv (Datatypes.S t)).
   - change (Z.of_nat (Datatypes.S t + 1)%nat)
       with (Z.pos (Pos.of_succ_nat (t + 1)%nat)).
-    replace (t + 1)%nat with (Datatypes.S t) by lia.
-    unfold Qle. cbn [Qdiv Qinv Qnum Qden Qmult]. lia.
+    replace (t + 1)%nat with (Datatypes.S t) by (symmetry; apply Nat.add_1_r).
+    unfold Qle. cbn [Qdiv Qinv Qnum Qden Qmult]. apply Z.le_refl.
 Qed.
 
 (* ============================================================ *)
@@ -137,18 +129,38 @@ Proof.
   destruct C as [c d]. destruct eps as [e f].
   assert (Hepos : (0 < e)%Z).
   { pose proof (QltT_to_Qlt 0 (Qmake e f) Hep) as Hlt0.
-    unfold Qlt in Hlt0. simpl in Hlt0. lia. }
+    unfold Qlt in Hlt0. simpl in Hlt0.
+    rewrite Z.mul_1_r in Hlt0. exact Hlt0. }
   assert (Hed1 : (1 <= e * Z.pos d)%Z).
-  { assert (Hstep : (1 * Z.pos d <= e * Z.pos d)%Z)
-      by (apply (Z.mul_le_mono_nonneg_r 1 e (Z.pos d)); lia).
-    lia. }
+  { assert (Hpd : (0 < Z.pos d)%Z) by exact (Pos2Z.is_pos d).
+    assert (Hpd1 : (1 <= Z.pos d)%Z).
+    { exact (proj2 (Z.le_succ_l 0 (Z.pos d)) Hpd). }
+    assert (He1 : (1 <= e)%Z).
+    { exact (proj2 (Z.le_succ_l 0 e) Hepos). }
+    assert (Hstep : (Z.pos d <= e * Z.pos d)%Z).
+    { pose proof (Z.mul_le_mono_nonneg_r 1 e (Z.pos d)
+                     (Z.lt_le_incl 0 (Z.pos d) Hpd) He1) as Hm.
+      rewrite Z.mul_1_l in Hm. exact Hm. }
+    exact (Z.le_trans 1 (Z.pos d) (e * Z.pos d) Hpd1 Hstep). }
   exists (Z.to_nat (Z.max 0 (c * Z.pos f) + 1)).
   assert (Hqv : (Z.max 0 (c * Z.pos f) + 1
                  <= Z.pos (Pos.of_succ_nat
                        (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))%Z).
   { change (Z.pos (Pos.of_succ_nat (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
       with (Z.of_nat (Datatypes.S (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1))).
-    lia. }
+    assert (Hge : (0 <= Z.max 0 (c * Z.pos f) + 1)%Z).
+    { apply (Z.le_trans 0 (Z.max 0 (c * Z.pos f))
+               (Z.succ (Z.max 0 (c * Z.pos f)))).
+      - exact (Z.le_max_l 0 (c * Z.pos f)).
+      - exact (Z.le_le_succ_r (Z.max 0 (c * Z.pos f)) (Z.max 0 (c * Z.pos f))
+                 (Z.le_refl (Z.max 0 (c * Z.pos f)))). }
+    rewrite Nat2Z.inj_succ. rewrite Nat2Z.inj_add.
+    rewrite (Z2Nat.id (Z.max 0 (c * Z.pos f) + 1) Hge).
+    change (Z.of_nat 1) with 1%Z.
+    apply (Z.le_trans (Z.max 0 (c * Z.pos f) + 1)
+                      (Z.succ (Z.max 0 (c * Z.pos f) + 1))).
+    - apply Z.le_succ_diag_r.
+    - apply Z.le_succ_diag_r. }
   assert (Hmul : (Z.pos (Pos.of_succ_nat
                        (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)) * 1
                   <= Z.pos (Pos.of_succ_nat
@@ -157,7 +169,7 @@ Proof.
   { apply (Z.mul_le_mono_nonneg_l 1 (e * Z.pos d)
              (Z.pos (Pos.of_succ_nat
                   (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))).
-    - lia.
+    - exact (Z.lt_le_incl 0 _ (Pos2Z.is_pos _)).
     - exact Hed1. }
   assert (Hpow : Qle (q_pow (1 / 2)%Q
                             (Datatypes.S (Z.to_nat (Z.max 0 (c * Z.pos f) + 1)))
@@ -175,7 +187,54 @@ Proof.
                      (e # f)).
   { change (Z.of_nat (Datatypes.S (Z.to_nat (Z.max 0 (c * Z.pos f) + 1)) + 1)%nat)
       with (Z.pos (Pos.of_succ_nat (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1))).
-    unfold Qlt. cbn [Qdiv Qinv Qnum Qden Qmult]. lia. }
+    unfold Qlt. cbn [Qdiv Qinv Qnum Qden Qmult].
+    rewrite !Z.mul_1_l.
+    assert (Hcf : Z.lt (c * Z.pos f)
+                       (Z.pos (Pos.of_succ_nat
+                            (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))).
+    { apply (Z.lt_le_trans (c * Z.pos f) (Z.succ (c * Z.pos f))
+               (Z.pos (Pos.of_succ_nat
+                    (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))).
+      - apply Z.lt_succ_diag_r.
+      - apply (Z.le_trans (Z.succ (c * Z.pos f))
+                 (Z.succ (Z.max 0 (c * Z.pos f)))
+                 (Z.pos (Pos.of_succ_nat
+                      (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))).
+        + apply (proj1 (Z.succ_le_mono (c * Z.pos f) (Z.max 0 (c * Z.pos f)))).
+          exact (Z.le_max_r 0 (c * Z.pos f)).
+        + exact Hqv. }
+    assert (He1 : (1 <= e)%Z).
+    { exact (proj2 (Z.le_succ_l 0 e) Hepos). }
+    assert (Hd1 : (1 <= Z.pos d)%Z).
+    { exact (proj2 (Z.le_succ_l 0 (Z.pos d)) (Pos2Z.is_pos d)). }
+    assert (HP : Z.le (Z.pos (Pos.of_succ_nat
+                            (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
+                       (e * (Z.pos (Pos.of_succ_nat
+                            (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1))
+                             * Z.pos d))).
+    { apply (Z.le_trans _ (e * Z.pos (Pos.of_succ_nat
+                            (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1))) _).
+      - exact (Z.mul_le_mono_nonneg_r 1 e
+                 (Z.pos (Pos.of_succ_nat
+                      (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
+                 (Z.lt_le_incl 0 _ (Pos2Z.is_pos _)) He1).
+      - pose proof (Z.mul_le_mono_nonneg_l 1 (Z.pos d)
+                       (Z.pos (Pos.of_succ_nat
+                            (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
+                       (Z.lt_le_incl 0 _ (Pos2Z.is_pos _)) Hd1) as Hm2.
+        rewrite Z.mul_1_r in Hm2.
+        exact (Z.mul_le_mono_nonneg_l
+                 (Z.pos (Pos.of_succ_nat
+                      (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
+                 (Z.pos (Pos.of_succ_nat
+                      (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)) * Z.pos d)
+                 e (Z.lt_le_incl 0 e Hepos) Hm2). }
+    exact (Z.lt_le_trans (c * Z.pos f)
+             (Z.pos (Pos.of_succ_nat
+                  (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)))
+             (e * (Z.pos (Pos.of_succ_nat
+                  (Z.to_nat (Z.max 0 (c * Z.pos f) + 1) + 1)) * Z.pos d))
+             Hcf HP). }
   apply Qlt_to_QltT.
   apply (Qle_lt_trans _
           (q_pow (1 / 2)%Q (Datatypes.S (Z.to_nat (Z.max 0 (c * Z.pos f) + 1))) * (c # d)) _).

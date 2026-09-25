@@ -103,10 +103,13 @@ Lemma lgwe_rpow_one_proj : forall (k n : nat),
   projT1 (lgw_rpow real_one k) n == 1.
 Proof.
   intros k. induction k as [|k IH]; intros n.
-  - reflexivity.
+  - (* 归纳基座：lgw_rpow real_one 0 定义性归约至实幺元投影，右端显式取 1 *)
+    exact (Qeq_refl 1).
   - cbn [lgw_rpow].
     rewrite (real_mult_proj real_one (lgw_rpow real_one k) n).
-    rewrite IH. reflexivity.
+    rewrite IH.
+    (* 归纳步：幺元投影恒 1，乘 1 后两端显式同为 1 *)
+    exact (Qeq_refl 1).
 Qed.
 
 (* kappa=TV0=budget=real_one 处站点测试逐点差 = 1−1 = 0，供隙支自相矛盾 ⟹ 全称接口空集 *)
@@ -116,16 +119,16 @@ Proof.
   destruct (Hsel real_one real_one real_one) as [k [Htk _]].
   unfold lgw_test in Htk. unfold real_lt in Htk.
   destruct Htk as [eps [Heps [N HN]]].
-  assert (HNN : NatLe N N) by (apply NatLe_lift; lia).
+  assert (HNN : NatLe N N) by (apply (NatLe_lift _ _ (Nat.le_refl N))).
   specialize (HN N HNN).
   apply QltT_to_Qlt in HN. apply QltT_to_Qlt in Heps.
   assert (Hz : projT1 real_one N
                - projT1 (real_mult (lgw_rpow real_one k) real_one) N == 0).
-  { assert (H1 : projT1 real_one N == 1) by reflexivity.
+  { assert (H1 : projT1 real_one N == 1) by exact (Qeq_refl 1).
     rewrite H1.
     rewrite (real_mult_proj (lgw_rpow real_one k) real_one N).
     rewrite (lgwe_rpow_one_proj k N).
-    rewrite H1. reflexivity. }
+    rewrite H1. exact (Qeq_refl 0). }
   rewrite Hz in HN.
   destruct (Qlt_irrefl eps (Qlt_trans eps 0 eps HN Heps)).
 Qed.
@@ -162,7 +165,7 @@ Proof.
   - exists N. intros n Hn. specialize (HN n Hn).
     apply QltT_to_Qlt in HN.
     rewrite (lgwe_diff_proj kappa TV0 budget j n) in HN.
-    assert (Hz : projT1 real_zero n == 0) by reflexivity.
+    assert (Hz : projT1 real_zero n == 0) by exact (Qeq_refl 0).
     rewrite Hz in HN.
     apply Qlt_to_QltT.
     rewrite (real_mult_proj (lgw_rpow kappa j) TV0 n).
@@ -185,8 +188,8 @@ Proof.
   unfold lgw_test in Htk. unfold real_lt in Htk.
   destruct Htk as [eps0 [Heps0 [N0 HN0]]].
   destruct (Hz eps0 Heps0) as [N1 HN1].
-  assert (Hm0 : NatLe N0 (Nat.max N0 N1)) by (apply NatLe_lift; lia).
-  assert (Hm1 : NatLe N1 (Nat.max N0 N1)) by (apply NatLe_lift; lia).
+  assert (Hm0 : NatLe N0 (Nat.max N0 N1)) by (apply (NatLe_lift _ _ (Nat.le_max_l N0 N1))).
+  assert (Hm1 : NatLe N1 (Nat.max N0 N1)) by (apply (NatLe_lift _ _ (Nat.le_max_r N0 N1))).
   specialize (HN0 _ Hm0). specialize (HN1 _ Hm1).
   apply QltT_to_Qlt in HN0. apply QltT_to_Qlt in HN1.
   rewrite (real_mult_proj (lgw_rpow kappa j) TV0 (Nat.max N0 N1)) in HN0.
@@ -228,7 +231,7 @@ Proof.
       { intros eps Heps. destruct (Heq0 eps Heps) as [N HN].
         exists N. intros n Hn. specialize (HN n Hn).
         apply QltT_to_Qlt in HN.
-        assert (Hz0 : projT1 real_zero n == 0) by reflexivity.
+        assert (Hz0 : projT1 real_zero n == 0) by exact (Qeq_refl 0).
         rewrite Hz0 in HN.
         assert (H1 : (0 - projT1 (lgwe_diff kappa TV0 budget j) n)%Q
                      == (- projT1 (lgwe_diff kappa TV0 budget j) n)%Q) by ring.
@@ -254,16 +257,16 @@ Proof.
   intros kappa TV0 budget Hdec.
   destruct (Hdec 0%nat) as [Hpass | Href].
   - apply inl. exists 0%nat. split.
-    + apply NatLe_lift. lia.
+    + apply (NatLe_lift _ _ (Nat.le_refl 0%nat)).
     + split.
       * exact Hpass.
       * intros j Hj _.
         assert (Hd : (Datatypes.S j <= 0)%nat) by (apply NatLe_drop; exact Hj).
-        assert (HF : False) by lia.
+        assert (HF : False) by exact (Nat.nle_succ_0 j Hd).
         destruct HF.
   - apply inr. intros j Hj Htj.
     assert (Hd : (j <= 0)%nat) by (apply NatLe_drop; exact Hj).
-    assert (Hj0 : j = 0%nat) by lia.
+    assert (Hj0 : j = 0%nat) by exact (proj1 (Nat.le_0_r j) Hd).
     rewrite Hj0 in Htj. apply Href. exact Htj.
 Qed.
 
@@ -281,18 +284,18 @@ Proof.
   destruct Hscan as [[k [Hk Hspec]] | Hall].
   - apply inl. exists k. split.
     + assert (Hd : (k <= m')%nat) by (apply NatLe_drop; exact Hk).
-      apply NatLe_lift. lia.
+      apply (NatLe_lift _ _ (Nat.le_le_succ_r _ _ Hd)).
     + exact Hspec.
   - destruct (Hdec (Datatypes.S m')) as [Hpass | Href].
     + apply inl. exists (Datatypes.S m'). split.
-      * apply NatLe_lift. lia.
+      * apply (NatLe_lift _ _ (Nat.le_refl (Datatypes.S m'))).
       * split.
         -- exact Hpass.
         -- intros j Hj Htj.
            apply (Hall j).
            ++ assert (Hd : (Datatypes.S j <= Datatypes.S m')%nat)
                 by (apply NatLe_drop; exact Hj).
-              apply NatLe_lift. lia.
+              apply (NatLe_lift _ _ (proj2 (Nat.succ_le_mono j m') Hd)).
            ++ exact Htj.
     + apply inr. intros j Hj Htj.
       destruct (Nat.leb j m') eqn:Elb.
@@ -303,7 +306,8 @@ Proof.
       * (* m' < j ∧ j ≤ S m' ⟹ j = S m'：本站否证 *)
         apply (proj1 (Nat.leb_gt j m')) in Elb.
         assert (Hd : (j <= Datatypes.S m')%nat) by (apply NatLe_drop; exact Hj).
-        assert (Heq : j = Datatypes.S m') by lia.
+        assert (Heq : j = Datatypes.S m')
+          by exact (Nat.le_antisymm j (Datatypes.S m') Hd Elb).
         rewrite Heq in Htj. apply Href. exact Htj.
 Qed.
 
@@ -352,7 +356,7 @@ Proof.
   (* ③ 线性扫 [0,k_pass] + 两态合成 *)
   destruct (lgwe_scan kappa TV0 budget Hdec kp) as [[k [Hk Hspec]] | Hall].
   - exists k. exact Hspec.
-  - assert (Hkk : NatLe kp kp) by (apply NatLe_lift; lia).
+  - assert (Hkk : NatLe kp kp) by (apply (NatLe_lift _ _ (Nat.le_refl kp))).
     destruct (Hall kp Hkk Hpass).
 Qed.
 

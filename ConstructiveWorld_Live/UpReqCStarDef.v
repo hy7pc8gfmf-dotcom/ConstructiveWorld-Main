@@ -1,52 +1,30 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   cst_bae_bopp_invol（原 L139，2 句玩具证）                            *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqCStarDef.v *)
-(* *)
-(* 目的： C* 代数定义面与正元 Newton 平方根准备。 *)
-(* 主件： cst_star_zero / cst_star_opp / cst_norm_star 对合定律族与 cst_nseq / cst_pos 正元面。 *)
-(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp。 *)
-(* 备注： 零承认件、零经典公理面；语句面全 Set/sigT 编码。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqCStarDef.v —— 席AA20：C* 代数定义面 + 正元 Newton 平方根  *)
-(*   显式率（谱定理阶梯第 1 级开工件，20260915）                  *)
-(* ============================================================ *)
-(* 使命：在 BanachAlg（UpReqBanachExp，B 路基建）之上装配        *)
-(*   C* 代数（对合 Banach 代数 + C* 恒等式 ‖a*a‖=‖a‖²）的        *)
-(*   Set/sigT 定义面，并给严格正元 Newton 平方根的构造性收敛     *)
-(*   与显式率（经典证明用序完备性；本件给显式模量+可提取 N）。    *)
-(*                                                             *)
-(* 分层结果：                                                    *)
-(*   S1 = Class CStarAlg：BanachAlg 包装 + 对合 cst_star         *)
-(*        （反线性 add/mult/involution + star 1 + star 系数）     *)
-(*        + C* 恒等式场 cst_norm_sq（QeqT 面）。                 *)
-(*        派生：star 零/负、‖star a‖=‖a‖ 等距（Q 双侧消去）。     *)
-(*   S2 = Q 层 Newton 引擎：x0=a+1，x_{n+1}=(x_n+a/x_n)/2，      *)
-(*        精确恒等式 d_{n+1}=d_n²/(4·x_n²)（二次收敛系数化），    *)
-(*        几何率 d_m ≤ d0·(1/4)^m，显式 N 经 q_arch_geom 系数化。 *)
-(*   S3 = 范数迁移：bcoef 嵌入面 ‖x_m²−bcoef q‖<eps（任意        *)
-(*        BanachAlg，显式 N 逐字继承）。                          *)
-(*   S4 = 正元锥（a = star b·b 形，sigT 见证——LPO 规避：正性      *)
-(*        一律走见证形不走序判定）+ 正元自伴 + star 残差交换。    *)
-(*                                                             *)
-(* 公理面：零承认件、零经典公理、零中断件；语句面全 Set/sigT     *)
-(*   零 Prop（bae/QeqT/QleT'/QltT/NatLe/sigT）；证内 Q 层        *)
-(*   Prop（Qle/Qlt）仅作引擎内衬，不落语句面（PB 件同纪律）。     *)
-(*                                                             *)
-(* 工程注：Rocq 9 类投影实例参为隐式——类字段一律 @显式喂实例；    *)
-(*   Q 层积/商一律 %Q 显式作用域（AA3 卡裸 * 陷阱）。             *)
-(* 降档标注：S3 为 bcoef 嵌入面（标量子代数）；S4 为锥级引理；    *)
-
+(* UpReqCStarDef.v —— C* 代数定义面 + 正元 Newton 平方根显式率          *)
+(*                                                                     *)
+(* 使命：在 BanachAlg（UpReqBanachExp，B 路基建）之上装配 C* 代数       *)
+(*   （对合 Banach 代数 + C* 恒等式 ‖a*a‖=‖a‖²）的 Set/sigT 定义面，    *)
+(*   并给严格正元 Newton 平方根的构造性收敛与显式率（经典证明用序       *)
+(*   完备性；本件给显式模量与可提取 N）。分层结果：                     *)
+(*   S1 = Class CStarAlg：BanachAlg 包装 + 对合 cst_star（反线性        *)
+(*        add/mult/involution + star 1 + star 系数）+ C* 恒等式场       *)
+(*        cst_norm_sq（QeqT 面）；派生 star 零/负、‖star a‖=‖a‖ 等距   *)
+(*        （Q 双侧消去）。                                              *)
+(*   S2 = Q 层 Newton 引擎：x0=a+1，x_{n+1}=(x_n+a/x_n)/2，精确恒等式   *)
+(*        d_{n+1}=d_n²/(4·x_n²)（二次收敛系数化），几何率               *)
+(*        d_m ≤ d0·(1/4)^m，显式 N 经 q_arch_geom 系数化。              *)
+(*   S3 = 范数迁移：bcoef 嵌入面 ‖x_m²−bcoef q‖<eps（任意 BanachAlg，   *)
+(*        显式 N 逐字继承；标量子代数嵌入面，如实降档登记）。           *)
+(*   S4 = 正元锥（a = star b·b 形，sigT 见证——LPO 规避：正性一律走      *)
+(*        见证形不走序判定）+ 正元自伴 + star 残差交换；锥级引理面。    *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp；   *)
+(*   Stdlib QArith.QArith、QArith.Qabs、Arith.Arith、Lia。              *)
+(* 对标：mathlib C*-algebra 基础定义与正元平方根构造。                  *)
+(* 构造性注记：零承认、公理面为空、零中断件；语句面全 Set/sigT 零      *)
+(*   Prop（bae/QeqT/QleT'/QltT/NatLe/sigT）；证内 Q 层 Prop（Qle/Qlt）  *)
+(*   仅作引擎内衬，不落语句面。                                         *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" UpReqCStarDef.v，cpu_guard    *)
+(*   包装；类投影实例参为隐式——类字段一律 @ 显式传实例参数；Q 层       *)
+(*   积/商一律 %Q 显式作用域。                                          *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -106,7 +84,8 @@ Qed.
 Lemma cst_nat_q_le : forall n m : nat, (n <= m)%nat ->
   Qle (Z.of_nat n # 1) (Z.of_nat m # 1).
 Proof.
-  intros n m H. unfold Qle. simpl. lia.
+  intros n m H. unfold Qle. simpl. rewrite !Z.mul_1_r.
+  apply (proj1 (Znat.Nat2Z.inj_le n m)). exact H.
 Qed.
 
 (* Qeq 左运载：x == y 且 y <= z ⟹ x <= z（rewrite 进 Qeq 假设类型不达，改走运载件） *)
@@ -165,7 +144,7 @@ Proof.
                                        (@bzero (@cbase C)))
                                (@bzero (@cbase C)) Hz)).
     - exact (@cst_star_add C (@bzero (@cbase C)) (@bzero (@cbase C))). }
-  (* 两侧加 −star 0 完成（bopp_unique 三明治） *)
+  (* 两侧加 −star 0 完成（bopp_unique 传递链） *)
   apply @bae_sym.
   eapply @bae_trans.
   { apply (@bae_sym (@cbase C) _ _
@@ -319,7 +298,7 @@ Lemma cst_nseq_pos : forall (a : Q), Qlt 0 a -> forall n : nat, Qlt 0 (cst_nseq 
 Proof.
   intros a Ha n. induction n as [| m IH].
   - apply (Qlt_le_trans 0 1 (a + 1)).
-    + unfold Qlt. simpl. lia.
+    + exact Z.lt_0_1.
     + pose proof (Qplus_le_compat 0 a 1 1
                     (Qlt_le_weak 0 a Ha) (Qle_refl 1)) as Hle.
       change (0 + 1)%Q with 1 in Hle. exact Hle.
@@ -332,7 +311,7 @@ Proof.
       by (apply (Qplus_lt_compat 0 (cst_nseq a m) 0 (a / cst_nseq a m));
           assumption).
     apply (Qmult_lt_0_compat (cst_nseq a m + a / cst_nseq a m) (/ 2));
-      [exact Hsum | unfold Qlt; simpl; lia].
+      [exact Hsum | exact Z.lt_0_1].
 Qed.
 
 (* 残差恒非负：0 <= x_n² − a *)
@@ -348,7 +327,7 @@ Proof.
     + apply (Qplus_lt_compat 0 (a * a) 0 a).
       * apply (Qmult_lt_0_compat a a); exact Ha.
       * exact Ha.
-    + unfold Qlt. simpl. lia.
+    + exact Z.lt_0_1.
   - change (cst_nseq a (Datatypes.S m) * cst_nseq a (Datatypes.S m) - a)
       with (((cst_nseq a m + a / cst_nseq a m) / 2)
             * ((cst_nseq a m + a / cst_nseq a m) / 2) - a).
@@ -360,7 +339,7 @@ Proof.
           apply cst_nseq_pos; exact Ha).
     assert (H4p : Qlt 0 (4 * (cst_nseq a m * cst_nseq a m)))
       by (apply (Qmult_lt_0_compat 4 (cst_nseq a m * cst_nseq a m));
-          [unfold Qlt; simpl; lia | exact Hx2p]).
+          [exact (proj1 (Z.ltb_lt 0 4) eq_refl) | exact Hx2p]).
     assert (H4n : ~ (4 * (cst_nseq a m * cst_nseq a m) == 0))
       by (apply q_neq_of_lt; exact H4p).
     assert (Hid : ((cst_nseq a m + a / cst_nseq a m) / 2)
@@ -409,7 +388,7 @@ Proof.
         apply cst_nseq_pos; exact Ha).
   assert (H4p : Qlt 0 (4 * (cst_nseq a n * cst_nseq a n)))
     by (apply (Qmult_lt_0_compat 4 (cst_nseq a n * cst_nseq a n));
-        [unfold Qlt; simpl; lia | exact Hx2p]).
+        [exact (proj1 (Z.ltb_lt 0 4) eq_refl) | exact Hx2p]).
   assert (H4n : ~ (4 * (cst_nseq a n * cst_nseq a n) == 0))
     by (apply q_neq_of_lt; exact H4p).
   change (cst_nseq a (Datatypes.S n) * cst_nseq a (Datatypes.S n) - a)
@@ -462,7 +441,7 @@ Proof.
       rewrite (Qmult_assoc (cst_nseq a 0 * cst_nseq a 0 - a)
                            (q_pow (1 / 4) m) (1 / 4)).
       apply (Qmult_le_compat_r _ _ (1 / 4) IH).
-      unfold Qle. simpl. lia.
+      unfold Qle. simpl. exact (proj1 (Z.leb_le 0 1) eq_refl).
 Qed.
 
 (* (1/4)^m 关于 m 反单调（NatLe 面） *)
@@ -471,18 +450,26 @@ Lemma cst_pow14_anti : forall k m : nat, NatLe k m ->
 Proof.
   intros k m. revert k. induction m as [| m IH]; intros k Hkm.
   - pose proof (NatLe_drop k 0%nat Hkm) as Hk0.
-    assert (Hk : k = 0%nat) by lia.
+    assert (Hk : k = 0%nat)
+      by exact (Nat.le_antisymm k 0%nat Hk0 (Nat.le_0_l k)).
     rewrite Hk. apply Qle_refl.
   - destruct (Nat.eq_dec (Datatypes.S m) k) as [Heq | Hne].
     + rewrite Heq. apply Qle_refl.
     + assert (Hkm' : (k <= m)%nat).
-      { pose proof (NatLe_drop k (Datatypes.S m) Hkm) as Hle. lia. }
+      { pose proof (NatLe_drop k (Datatypes.S m) Hkm) as Hle.
+        destruct (proj1 (Nat.lt_eq_cases k (Datatypes.S m)) Hle) as [Hlt | Heq].
+        - exact (proj1 (Nat.lt_succ_r k m) Hlt).
+        - exfalso. apply Hne. exact (eq_sym Heq). }
       eapply (Qle_trans _ (q_pow (1 / 4) m)).
       * change (q_pow (1 / 4) (Datatypes.S m)) with ((1 / 4) * q_pow (1 / 4) m).
         eapply (Qle_trans _ (1 * q_pow (1 / 4) m)%Q).
         -- apply (Qmult_le_compat_r (1 / 4) 1 (q_pow (1 / 4) m)).
-           ++ unfold Qle. simpl. lia.
-           ++ apply q_pow_nonneg. unfold Qle. simpl. lia.
+           ++ unfold Qle. simpl.
+              exact (Z.le_trans 1 2 4 (Z.le_succ_diag_r 1)
+                       (Z.le_trans 2 3 4 (Z.le_succ_diag_r 2)
+                          (Z.le_succ_diag_r 3))).
+           ++ apply q_pow_nonneg. unfold Qle. simpl.
+              exact (proj1 (Z.leb_le 0 1) eq_refl).
         -- rewrite (Qmult_1_l (q_pow (1 / 4) m)). apply Qle_refl.
       * apply (IH k (NatLe_lift k m Hkm')).
 Qed.
@@ -493,18 +480,23 @@ Lemma cst_pow12_anti : forall k m : nat, NatLe k m ->
 Proof.
   intros k m. revert k. induction m as [| m IH]; intros k Hkm.
   - pose proof (NatLe_drop k 0%nat Hkm) as Hk0.
-    assert (Hk : k = 0%nat) by lia.
+    assert (Hk : k = 0%nat)
+      by exact (Nat.le_antisymm k 0%nat Hk0 (Nat.le_0_l k)).
     rewrite Hk. apply Qle_refl.
   - destruct (Nat.eq_dec (Datatypes.S m) k) as [Heq | Hne].
     + rewrite Heq. apply Qle_refl.
     + assert (Hkm' : (k <= m)%nat).
-      { pose proof (NatLe_drop k (Datatypes.S m) Hkm) as Hle. lia. }
+      { pose proof (NatLe_drop k (Datatypes.S m) Hkm) as Hle.
+        destruct (proj1 (Nat.lt_eq_cases k (Datatypes.S m)) Hle) as [Hlt | Heq].
+        - exact (proj1 (Nat.lt_succ_r k m) Hlt).
+        - exfalso. apply Hne. exact (eq_sym Heq). }
       eapply (Qle_trans _ (q_pow (1 / 2) m)).
       * change (q_pow (1 / 2) (Datatypes.S m)) with ((1 / 2) * q_pow (1 / 2) m).
         eapply (Qle_trans _ (1 * q_pow (1 / 2) m)%Q).
         -- apply (Qmult_le_compat_r (1 / 2) 1 (q_pow (1 / 2) m)).
-           ++ unfold Qle. simpl. lia.
-           ++ apply q_pow_nonneg. unfold Qle. simpl. lia.
+           ++ unfold Qle. simpl. exact (Z.le_succ_diag_r 1).
+           ++ apply q_pow_nonneg. unfold Qle. simpl.
+              exact (proj1 (Z.leb_le 0 1) eq_refl).
         -- rewrite (Qmult_1_l (q_pow (1 / 2) m)). apply Qle_refl.
       * apply (IH k (NatLe_lift k m Hkm')).
 Qed.
@@ -520,7 +512,8 @@ Proof.
   - rewrite (Qmult_comm (cst_nseq a n * cst_nseq a n - a) (1 / 4)).
     rewrite (Qmult_comm (cst_nseq a n * cst_nseq a n - a) (1 / 2)).
     apply (Qmult_le_compat_r (1 / 4) (1 / 2) (cst_nseq a n * cst_nseq a n - a)).
-    + unfold Qle. simpl. lia.
+    + unfold Qle. simpl.
+      exact (Z.le_trans 2 3 4 (Z.le_succ_diag_r 2) (Z.le_succ_diag_r 3)).
     + apply cst_d_nonneg; exact Ha.
 Qed.
 
@@ -540,7 +533,7 @@ Proof.
       rewrite (Qmult_assoc (cst_nseq a 0 * cst_nseq a 0 - a)
                            (q_pow (1 / 2) m) (1 / 2)).
       apply (Qmult_le_compat_r _ _ (1 / 2) IH).
-      unfold Qle. simpl. lia.
+      unfold Qle. simpl. exact (proj1 (Z.leb_le 0 1) eq_refl).
 Qed.
 
 (* S2 主定理：Newton 序列显式率（Q 层，N 显式可提取；
@@ -621,7 +614,7 @@ Proof.
   { eapply @bae_trans.
     { exact (@bcoef_plus B 1 (- 1)). }
     eapply @bae_trans.
-    { apply (@bcoef_wd B (1 + (- 1))%Q 0%Q). reflexivity. }
+    { apply (@bcoef_wd B (1 + (- 1))%Q 0%Q). exact (Qeq_refl 0). }
     exact (@bcoef_zero B). }
   pose proof (@bae_trans B _ _ _
     (@bplus_wd_l B (@bone B) (@bcoef B 1) (@bcoef B (- 1))
@@ -761,7 +754,7 @@ Qed.
 (*   ① 一般正元 a 的代数内 Newton 序列需反演面（x_n 可逆 + 与 a   *)
 (*      交换的 sigT 见证）；本件 S3 结果 bcoef 嵌入面，一般元经    *)
 (*      Neumann 级数反演 + C* 恒等式收紧属下一级。                *)
-(*   ② x∞² == a 的 baé 闭合形：需 Q 列完备墙破缺（INST3 判定在    *)
+(*   ② x∞² == a 的 baé 闭合形：需 Q 列完备性破缺（INST3 判定在     *)
 (*      案）或序列直接取极限面；本件以显式率邻域形结果。           *)
 (*   ③ 锥上加法封闭/序面（Löwner）= 构造性谱定理开放带，对称显式假设。 *)
 (*   ④ star 幂交换：需同元幂交换引理，归纳可证，下一注册波补装。   *)

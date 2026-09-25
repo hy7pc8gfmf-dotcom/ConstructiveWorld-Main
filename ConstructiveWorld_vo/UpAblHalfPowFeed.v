@@ -139,7 +139,7 @@ Proof.
   intros B eps C HB Hep HC1 HC.
   destruct (q_arch_geom B) as [N0 HN0].
   assert (HC0 : Qle 0 C)
-    by (apply (Qle_trans _ 1 _); [unfold Qle; simpl; lia | exact (QleT'_to_Qle _ _ HC1)]).
+    by (apply (Qle_trans _ 1 _); [exact Qle_0_1 | exact (QleT'_to_Qle _ _ HC1)]).
   assert (Htwo0 : Qle 0 (1 + 1)) by apply Q2_nonneg.
   assert (Hfour0 : Qle 0 ((1 + 1) * (1 + 1)))
     by (apply Qmult_le_0_compat; [exact Htwo0 | exact Htwo0]).
@@ -171,7 +171,7 @@ Proof.
   intros B eps C HB Hep HC1 HC.
   destruct (q_arch_geom B) as [N0 HN0].
   assert (HC0 : Qle 0 C)
-    by (apply (Qle_trans _ 1 _); [unfold Qle; simpl; lia | exact (QleT'_to_Qle _ _ HC1)]).
+    by (apply (Qle_trans _ 1 _); [exact Qle_0_1 | exact (QleT'_to_Qle _ _ HC1)]).
   assert (Htwo0 : Qle 0 (1 + 1)) by apply Q2_nonneg.
   assert (Hfour0 : Qle 0 ((1 + 1) * (1 + 1)))
     by (apply Qmult_le_0_compat; [exact Htwo0 | exact Htwo0]).
@@ -204,7 +204,7 @@ Proof.
   intros B eps C HB Hep HC1 HC.
   destruct (q_arch_geom B) as [N0 HN0].
   assert (HC0 : Qle 0 C)
-    by (apply (Qle_trans _ 1 _); [unfold Qle; simpl; lia | exact (QleT'_to_Qle _ _ HC1)]).
+    by (apply (Qle_trans _ 1 _); [exact Qle_0_1 | exact (QleT'_to_Qle _ _ HC1)]).
   assert (Htwo0 : Qle 0 (1 + 1)) by apply Q2_nonneg.
   assert (Hsix0 : Qle 0 ((1 + 1) * (1 + 1 + 1))) by (unfold Qle; simpl; lia).
   set (P := (((1 + 1) * (1 + 1 + 1 + 1 + 1 + 1)) + 1) * (C * (q_pow B N0 / q_fact N0))).

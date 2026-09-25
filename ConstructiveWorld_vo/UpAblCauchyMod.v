@@ -36,6 +36,7 @@
 (* 构造性注记：语句面全 Set 层值（QltT/QleT'＝S02 Id 形＋sigT 见证、      *)
 (*   NatLe＝S01 Id 形）；Prop 面换形（Qlt/Qeq）全内联于证明内部；         *)
 (*   零承认；全件 Qed 闭合。                                              *)
+(* 编译配方：Rocq 9.1 coqc 直调＋cpu_guard 包裹，输出经 -o 临时目录，树内 .vo 不重写。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

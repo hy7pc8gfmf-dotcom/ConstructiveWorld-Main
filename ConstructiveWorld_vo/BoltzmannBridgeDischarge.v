@@ -1,24 +1,4 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   bbd_free_energy_boltzmann_bridge（原 L157，1 句玩具证）              *)
-(*   bbd_energy_in_log_boltzmann_bridge（原 L139，2 句玩具证）            *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
-(* ============================================================ *)
 
 (* ===================================================================== *)
 (* BoltzmannBridgeDischarge.v                                            *)
@@ -51,6 +31,9 @@
 (*       由 cumulativity 兼容（Set ≤ Type，参数直传）。                   *)
 (*       语句全 Set 层（零 Prop 值）；全 Qed/Defined 闭合；               *)
 (*       提取 Obj.magic = 0；bbd_ 前缀全库零撞名。                        *)
+(* 对标：Boltzmann-Gibbs 分布自由能恒等式（能量入对数与自由能显式式）。*)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" BoltzmannBridgeDischarge.v，  *)
+(*   cpu_guard 包装；提取检验 Recursive Extraction 双件 Obj.magic=0。   *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -58,38 +41,38 @@ Require Import UpReqLogCompD.
 Import RealInterfaceEnhancedMod.
 
 (* ===================================================================== *)
-(* 【消解定理陈述段】（依赖方向评估 + 四槽逐条 + 签名实测）                 *)
+(* 【消解定理陈述段】（依赖方向评估 + 四参数位逐条 + 签名实测）               *)
 (* ===================================================================== *)
 (* [依赖方向评估] 宿主 UpSigMigrate.v / CW220_Extensions.v 已在基座盘      *)
 (*   （.vo 在先），不能反向 Require 本文件 → 消解形态 = 本文件尾部定理段   *)
-(*   + 逐字语句重申件；宿主文件本体零改动，槽假设位原样保留，其下游依存位   *)
+(*   + 逐字语句重申件；宿主文件本体零改动，假设位原样保留，其下游依存位   *)
 (*   （UpSigMigrate :278 apply (energy_in_log_boltzmann_bridge s) /        *)
 (*   :325 exact free_energy_boltzmann_bridge；CW220 :422 / :469 同位）     *)
 (*   零扰动。                                                              *)
-(* [四槽逐条定理陈述]                                                      *)
-(*  · 槽1a UpSigMigrate.v:65-68（顶层 Section ReqFreeEnergyPilot）          *)
+(* [四参数位逐条定理陈述]                                                  *)
+(*  · 参数位1a UpSigMigrate.v:65-68（顶层 Section ReqFreeEnergyPilot）        *)
 (*      energy_in_log_boltzmann_bridge ← 消解件 logc_energy_in_log_boltzmann *)
 (*      @UpReqLogCompD.v:325（LogcFEP 节 F1-F5 链）。节闭签名               *)
 (*      （证明体传递闭包）：8 显式参                                        *)
 (*      S base_loss D D_pos Z Z_pos sup_compat sup_log_exp_neg              *)
-(*      （sumf/sum_ext/sum_add/sum_linear/fep_partition 不入 —— 与槽2      *)
+(*      （sumf/sum_ext/sum_add/sum_linear/fep_partition 不入 —— 与参数位2  *)
 (*      不对称，禁互混）。                                                  *)
-(*  · 槽1b CW220_Extensions.v:209-212（Module SigMigrate > Section          *)
-(*      ReqFreeEnergyPilot）energy_in_log_boltzmann_bridge：语句与槽1a 逐字 *)
+(*  · 参数位1b CW220_Extensions.v:209-212（Module SigMigrate > Section       *)
+(*      ReqFreeEnergyPilot）energy_in_log_boltzmann_bridge：语句与参数位1a 逐字 *)
 (*      同型（仅分布/证人名 cwe_ 换 sigm_）→ 同一桥接引理消解（一件双宿主）。   *)
-(*  · 槽2a UpSigMigrate.v:70-71 free_energy_boltzmann_bridge ← 消解件       *)
+(*  · 参数位2a UpSigMigrate.v:70-71 free_energy_boltzmann_bridge ← 消解件     *)
 (*      logc_free_energy_boltzmann @UpReqLogCompD.v:600（F6-F8 链）。       *)
 (*      节闭签名：11 显式参（B1/B2 纠正：见下补注）                                  *)
 (*      S sumf sum_ext sum_add sum_linear base_loss D D_pos Z Z_pos         *)
 (*      fep_partition sup_compat sup_log_exp_neg（B1/B2 在 fep_partition 之后入签名，调用点按此传参）。                  *)
-(*  · 槽2b CW220_Extensions.v:214-215：语句与槽2a 逐字同型（cwe_ 换名）     *)
+(*  · 参数位2b CW220_Extensions.v:214-215：语句与参数位2a 逐字同型（cwe_ 换名）*)
 (*      → 同一桥接引理消解。                                                    *)
-(* [实例化桥说明] 桥1/桥2 重申件语句逐字 = 宿主槽语句（分布 sigm_boltzmann_ *)
+(* [实例化桥说明] 桥1/桥2 重申件语句逐字 = 宿主参数位语句（分布 sigm_boltzmann_*)
 (*   dist / 自由能 sigm_free_energy / 正性 req_boltzmann_positive 三名以    *)
 (*   bbd_ 前缀同 body 复制；cwe_* 同 body 故一件双宿主消解）。证 = 全参     *)
 (*   exact 实例化消解件（泛型层 @R RIS 显式，零 evar；末段 conversion 由    *)
 (*   三套同名件 delta-beta 同 body 闭合）。                                 *)
-(* [供给槽开口申报] 宿主槽节 Context 无 B1/B2 供给位（sup_compat /          *)
+(* [供给参数位开口申报] 宿主参数位节 Context 无 B1/B2 供给位（sup_compat /    *)
 (*   sup_log_exp_neg）而消解件节（LogcFEP）必需 → 本节新开口此二位（诚实    *)
 (*   条件化消解；Real 层闭合实例 = G05                                      *)
 (*   logd_log_compat_real / logd_log_exp_neg_real，见 UpReqLogCompD 头注）。*)
@@ -100,11 +83,11 @@ Import RealInterfaceEnhancedMod.
 Module BBDFepWriteoff.
 Section BBDFepWriteoff.
 
-(* ---- 节参面：逐字照抄宿主槽节 UpSigMigrate.v:33-47 / CW220_Extensions.v:164-183 ---- *)
+(* ---- 节参面：逐字照抄宿主参数位节 UpSigMigrate.v:33-47 / CW220_Extensions.v:164-183 ---- *)
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* SumOver 的 req 签名对接面（宿主三槽逐字） *)
+(* SumOver 的 req 签名对接面（宿主三位逐字） *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
@@ -124,7 +107,7 @@ Variable Z_pos : lt zero Z.
 Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
 
-(* B1/B2 供给槽（本节新开口；消解件节 LogcFEP:221-225 同位；宿主槽节无此二位） *)
+(* B1/B2 供给参数位（本节新开口；消解件节 LogcFEP:221-225 同位；宿主参数位节无此二位） *)
 Hypothesis sup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
   req x y -> req (log x Hx) (log y Hy).
 Hypothesis sup_log_exp_neg : forall u : R,
@@ -152,10 +135,10 @@ Proof.
 Defined.
 
 (* ===================================================================== *)
-(* 桥1【消解槽1a + 槽1b】：逐字语句重申 UpSigMigrate.v:66-68 /             *)
+(* 桥1【消解参数位1a + 参数位1b】：逐字语句重申 UpSigMigrate.v:66-68 /      *)
 (*   CW220_Extensions.v:210-212（证人名 bbd_ 重述）。                       *)
 (* 证 = 消解件 logc_energy_in_log_boltzmann 全参实例化（@R RIS 显式，       *)
-(*   8 显式节参按 LogcFEP 声明序喂入；末段 conversion 由 logc_boltz /      *)
+(*   8 显式节参按 LogcFEP 声明序接入；末段 conversion 由 logc_boltz /      *)
 (*   logc_boltz_pos 与 bbd_ 证人同 body delta-beta 闭合）。                 *)
 (* ===================================================================== *)
 Theorem bbd_energy_in_log_boltzmann_bridge :
@@ -169,10 +152,10 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 桥2【消解槽2a + 槽2b】：逐字语句重申 UpSigMigrate.v:70-71 /              *)
+(* 桥2【消解参数位2a + 参数位2b】：逐字语句重申 UpSigMigrate.v:70-71 /      *)
 (*   CW220_Extensions.v:214-215。                                           *)
 (* 证 = 消解件 logc_free_energy_boltzmann 全参实例化（13 显式节参；          *)
-(*   sum 三槽 + fep_partition:=partition_condition + sup 二位喂入；  *)
+(*   sum 三位 + fep_partition:=partition_condition + sup 二位提供；  *)
 (*   B1/B2 入其签名（在 fep_partition 之后）。                                                       *)
 (* ===================================================================== *)
 Theorem bbd_free_energy_boltzmann_bridge :

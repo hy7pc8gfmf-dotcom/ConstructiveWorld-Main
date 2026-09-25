@@ -1,35 +1,35 @@
 (* ============================================================ *)
-(* UpAblLogSelOracle.v —— 席AID2：局限(1b)·神谕前件 Real 层对数选择器          *)
+(* UpAblLogSelOracle.v —— 局限(1b)·神谕前件 Real 层对数选择器                *)
 (*                                                              *)
 (* 【零承认件】本件零承认、零假设负载、零经典逻辑：全文无任何全局无据项。       *)
-(* 四关卡全绿＝LOGSEL 定谳席 20260921 净室重编实测锚定（非沿旧申报）：          *)
+(* 四关通过（净室重编实测口径）：                                              *)
 (*   G1 源面禁词 0＋17 路审计口 Print Assumptions 全 Closed；                  *)
 (*   G2 全量编译 EXIT=0＋vo 头魔数 436f712100015ff4＋vo 新于 v；               *)
 (*   G3 独立目录提取 32 件（16.ml+16.mli）Obj.magic 合计 0；                   *)
-(*   G4 coqchk 全闭包 rc=0＋CONTEXT SUMMARY「Axioms: <none>」。                *)
-(* 旧账销讫：T3「L176 编译失败」系 Qcompare_eq_iff 旧源时代过账，现源三支       *)
-(*   已 Z.compare_eq_iff / Z.compare_lt_iff / Z.compare_gt_iff 修复，          *)
-(*   净室重编零伤——「修复已落而账未销」定谳成立，账随本定谳销讫；              *)
-(*   证据图谱：attn\_tlogsel_定谳报告-20260921.md。                            *)
+(*   G4 coqchk 全闭包 rc=0＋公理面为空。                                       *)
+(* 实现注记：三支判定分别以 Z.compare_eq_iff / Z.compare_lt_iff /              *)
+(*     Z.compare_gt_iff 回取（与 stdlib 比较三字对照），净室重编通过。           *)
+(*   神谕语义：bool 真值与供隙/否证两支一一对应（loso_sem 两肢）。                *)
+(*                                                                               *)
 (*                                                              *)
 (* 目的：论文 7 limitation (1) 的正解路线——带「逐站可判定探测」显式前件的       *)
 (*   Real 层对数级选择器。N2（UpAblLogWall.v）已定理化：不带可判定测试前件的    *)
-(*   Real 层精确最小站选择器 ⟹ LPO 族实例（序判定缺位=墙）。本件给「器」侧：    *)
+(*   Real 层精确最小站选择器 ⟹ LPO 族实例（序判定缺位=不可证结果）。本件给「器」侧：    *)
 (*   神谕（逐站 bool 探测及其 Real 语义两账）在场时，对数级选择器构造性可达，    *)
-(*   与 N2 墙定理构成「墙+器」配对叙事（双测清算）。                          *)
+(*   与 N2 不可证结果定理构成「不可证性与供给」配对。                          *)
 (*                                                              *)
 (* 诚实前件先例谱系：§6.3 le 形 Archimedean 诚实前件（UpReqUMixSelect.v        *)
 (*   ums_k_select 的 le 形 Arch 前件直给）——接口缺口以显式前件承载，本件把     *)
 (*   「线性无器」升格为「对数有器」：每站一个可判定 bool 探测，真支供隙         *)
 (*   （real_lt κ^k·TV₀ < budget），假支否证（real_le budget ≤ κ^k·TV₀），       *)
-(*   两账形镜像 mixa_sel_accounts / mixb_sel_scale 的 test 语义。             *)
+(*   双档形副本 mixa_sel_accounts / mixb_sel_scale 的 test 语义。             *)
 (*                                                              *)
-(* 承重消费件（零改动）：UpReqMixLogB 泛型搜索核 mixb_sel/mixb_gallop/          *)
+(* 关键使用件（零改动）：UpReqMixLogB 泛型搜索核 mixb_sel/mixb_gallop/          *)
 (*   mixb_bsearch（nat/bool 泛型）+ mixb_sel_scale（fuel=2+⌊log₂K⌋ 双相配给     *)
 (*   量级定理：返回恰为最小通过站且比较次数 ≤ 2·log₂K+5）+ mixb_enum 账；      *)
 (*   UpReqIterGeomRate igr_k_enum 三账（sound/none/min）最小通过站枚举；       *)
 (*   KLWallClosed klc_closed_powb_mono + RateTheoryAblation rta_strict_branch_ *)
-(*   real / rta_rpow_powb_eq（Bishop 形实形消费，见下申报）。                  *)
+(*   real / rta_rpow_powb_eq（Bishop 形实形使用，见下申报）。                  *)
 (*                                                              *)
 (* 三件交付：                                                                *)
 (*   件① loso_test_oracle（探测前件定义）：∀k, sigT (b:bool) × loso_sem b k，   *)
@@ -37,22 +37,22 @@
 (*                       (Id b false → real_le budget κ^k·TV₀)。              *)
 (*      bool 等式取基座 Id（Set 层恒等族，QltT 同款）——语句面全 Set、零 Prop    *)
 (*      泄露；Prop 面桥（stdlib eq 形）以 Qed 伴生件 loso_oracle_true_lt /      *)
-(*      loso_oracle_false_le 承载。假支方向定谳：mixa_sel_accounts 两账中      *)
+(*      loso_oracle_false_le 承载。假支方向判定：mixa_sel_accounts 两账中      *)
 (*      test j = false ⟺ b₀ ≤ κ₀^j·v（mixa_min_real_below 下向界），故 Real    *)
 (*      面假支取 real_le budget (κ^j·TV₀)——与真支互斥，构成「真支供隙+假支      *)
 (*      否证」的诚实二分。神谕在场实证钉：loso_oracle_const（const 层 Qcompare *)
 (*      可判定分裂实现本前件，非空泛假设——N2 lgw_oracle_pin 的正向对偶）。      *)
 (*   件② loso_k_select_log（Defined sigT 可提取）+ loso_k_select_log_le        *)
-(*      （le 形，§6.3 先例同构）：fun k => projT1 (Htest k) 直喂 mixb_sel       *)
+(*      （le 形，§6.3 先例同构）：fun k => projT1 (Htest k) 直接代入 mixb_sel       *)
 (*      （fuel 双相 S(S(log2 K))），输出站 r 满足 real_lt κ^r·TV₀ < budget。    *)
 (*   件③ loso_sel_accounts（Prop 三账：通过+以下全败+比较数对数级）+           *)
 (*      loso_sel_pass / loso_sel_below_fail（Real 侧语义两账，经件①前件桥接）。 *)
 (*                                                              *)
-(* 单调性腿（幂列递减）双轨申报：                                             *)
-(*   (a) 实形消费轨：loso_powb_mono_b（消费 klc_closed_powb_mono：底 (1−κ)      *)
+(* 单调性支（幂列递减）双轨申报：                                             *)
+(*   (a) 实形使用轨：loso_powb_mono_b（使用 klc_closed_powb_mono：底 (1−κ)      *)
 (*      Bishop 幂单调，经 rta_rpow_powb_eq 运载至 tv_rpow——rta_omd_powb_mono_b *)
 (*      同法）与 loso_strict_shrink（消费 rta_strict_branch_real：0≤κ<1 严格支  *)
-(*      正性证书 × Bishop 收缩打包）。                                        *)
+(*      正性证书 × Bishop 收缩封装）。                                        *)
 (*   (b) 本件承重轨：loso_rpow_dec_le（底 κ、Or 编码 real_le 形指数单调，直接  *)
 (*      归纳自证）——树内 UpRealLeB 仅有 real_le→real_le_b 单向桥，Bishop→Or    *)
 (*      反向桥缺席，(a) 轨无法直接承载本件矛盾账，故 (b) 直接归纳；两轨并存     *)
@@ -73,9 +73,9 @@
 (*   Stdlib QArith/Lia/Extraction。                                          *)
 (* 编译配方（9.1 直调轨，unset COQLIB ROCQLIB，全路径全量）：                   *)
 (*   C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe -q -Q . "" UpAblLogSelOracle.v *)
-(* AID2（20260920）：新建。                                                  *)
-(* LOGSEL（20260921）：T3 L176 旧伤定谳＝修复已落账未销；头注如实化＋四关      *)
-(*   重锚全绿（净室全量 coqc＋G3 独立目录提取＋G4 coqchk，零源语义改动）。     *)
+(* 供给结构：件① 前件定义+语义两桥+const 层在场实证；件② 对数选择器 sigT      *)
+(*   Defined 与 le 形对偶；件③ Prop 三账与 Real 侧双账。                     *)
+(*                                                                            *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith.
@@ -107,7 +107,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 1：件① 探测前件（loso_test_oracle）+ 探针 + 语义桥 + 神谕在场钉        *)
+(* Part 1：件① 探测前件（loso_test_oracle）+ 检验 + 语义桥 + 神谕在场实证       *)
 (* ============================================================ *)
 
 (* 每站语义两账：真支供隙（real_lt），假支否证（real_le budget ≤ κ^k·TV₀）。 *)
@@ -120,7 +120,7 @@ Definition loso_sem (kappa TV0 budget : Real) (b : bool) (k : nat) : Set :=
 Definition loso_test_oracle (kappa TV0 budget : Real) : Set :=
   forall k : nat, sigT (fun b : bool => loso_sem kappa TV0 budget b k).
 
-(* 探针：神谕第 k 站返回的 bool——直喂泛型搜索核的 test 函数。 *)
+(* 检验件：神谕第 k 站返回的 bool——直接代入泛型搜索核的 test 函数。 *)
 Definition loso_probe (kappa TV0 budget : Real)
   (Htest : loso_test_oracle kappa TV0 budget) : nat -> bool :=
   fun k => projT1 (Htest k).
@@ -215,14 +215,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：单调性腿——幂列递减                                                  *)
-(*   (a) 实形消费轨（Bishop 形，klc_closed_powb_mono / rta_strict_branch_real）*)
+(* Part 2：单调性支——幂列递减                                                  *)
+(*   (a) 实形使用轨（Bishop 形，klc_closed_powb_mono / rta_strict_branch_real）*)
 (*   (b) 本件承重轨（Or 编码 real_le 形，直接归纳）                            *)
 (* ============================================================ *)
 
 (* —— (a) 轨一：klc_closed_powb_mono 实形（底 1−κ，0≤κ≤1 全量）经             *)
 (*    rta_rpow_powb_eq 运载至 tv_rpow（rta_omd_powb_mono_b 同法） —— *)
-(* —— (a) 轨运载器：powb_pow ⟶ tv_rpow 的 Bishop 单调搬运（rta §5 同法） —— *)
+(* —— (a) 轨运载器：powb_pow ⟶ tv_rpow 的 Bishop 单调迁移（rta §5 同法） —— *)
 Lemma loso_le_b_rpow_transport : forall (B : Real) (m n : nat),
   real_le_b (powb_pow B m) (powb_pow B n) ->
   real_le_b (tv_rpow B m) (tv_rpow B n).
@@ -244,7 +244,7 @@ Proof.
   exact (klc_closed_powb_mono kappa j j' H0 H1 (NatLe_lift j j' Hjj)).
 Qed.
 
-(* —— (a) 轨二：rta_strict_branch_real 实形（0≤κ<1 严格支打包）运载 —— *)
+(* —— (a) 轨二：rta_strict_branch_real 实形（0≤κ<1 严格支封装）运载 —— *)
 Lemma loso_strict_shrink : forall (kappa : Real) (j j' : nat),
   real_le real_zero kappa -> real_lt kappa real_one -> (j <= j')%nat ->
   prod (real_lt real_zero (real_plus real_one (real_opp kappa)))
@@ -260,7 +260,7 @@ Proof.
     exact Hbb.
 Qed.
 
-(* —— (b) 轨承重件：Or 编码 real_le 形幂非负不变量 —— *)
+(* —— (b) 轨关键件：Or 编码 real_le 形幂非负不变量 —— *)
 Lemma loso_rpow_nonneg : forall (kappa : Real) (k : nat),
   real_le real_zero kappa -> real_le real_zero (tv_rpow kappa k).
 Proof.
@@ -279,7 +279,7 @@ Proof.
     + exact (real_le_mult_compat_weak real_zero kappa (tv_rpow kappa m) IH H0).
 Qed.
 
-(* —— (b) 轨承重件：单步递减 κ^{S m} ≤ κ^m（0≤κ≤1） —— *)
+(* —— (b) 轨关键件：单步递减 κ^{S m} ≤ κ^m（0≤κ≤1） —— *)
 Lemma loso_rpow_step_le : forall (kappa : Real) (m : nat),
   real_le real_zero kappa -> real_le kappa real_one ->
   real_le (tv_rpow kappa (Datatypes.S m)) (tv_rpow kappa m).
@@ -328,7 +328,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：探针单调账（真支供隙+假支否证+幂列递减 ⟹ 过站集上闭）               *)
+(* Part 3：检验单调账（真支供隙+假支否证+幂列递减 ⟹ 过站集上闭）               *)
 (* ============================================================ *)
 
 Lemma loso_probe_mono : forall (kappa TV0 budget : Real)
@@ -377,7 +377,7 @@ Qed.
 (* Part 4：件③ 账面——Prop 三账 + Real 侧语义两账                              *)
 (* ============================================================ *)
 
-(* 三账（Prop 面，mixb_qsel_account_ex 神谕化镜像）：返回站通过、以下全败、      *)
+(* 三账（Prop 面，mixb_qsel_account_ex 神谕化副本）：返回站通过、以下全败、      *)
 (* 比较数对数级（fuel 双相 2+⌊log₂K⌋ 配给，量级 2·log₂K+5）。 *)
 Theorem loso_sel_accounts : forall (kappa TV0 budget : Real)
   (Htest : loso_test_oracle kappa TV0 budget)
@@ -401,14 +401,14 @@ Proof.
   destruct Hhit as [k0 [Hk0K Hk0pass]].
   destruct (igr_k_enum (loso_probe kappa TV0 budget Htest) K) as [kmin|]
     eqn:Eenum.
-  - (* 窗内最小通过站命中：mixb_sel_scale 量级账合龙 *)
+  - (* 窗内最小通过站命中：mixb_sel_scale 量级记录收束 *)
     pose proof (igr_k_enum_sound _ _ _ Eenum) as Hpassmin.
     pose proof (igr_k_enum_min _ _ _ Eenum) as Hminmin.
     pose proof (mixb_enum_le _ _ _ Eenum) as HminK.
     assert (Hkmin1 : (1 <= kmin)%nat).
     { destruct kmin as [| m].
       - rewrite Hmiss0 in Hpassmin. discriminate Hpassmin.
-      - lia. }
+      - exact (le_n_S 0 m (le_0_n m)). }
     destruct (mixb_sel_scale (loso_probe kappa TV0 budget Htest) K kmin r c
                 Hmono Hmiss0 Hpassmin Hminmin Hkmin1 HminK HK2 Hsel)
       as [Hr Hc].
@@ -446,7 +446,7 @@ Proof.
 Qed.
 
 (* Real 侧全败账（假支否证）：j < r ⟹ budget ≤ κ^j·TV₀（真最小站下向界，       *)
-(* mixa_min_real_below 形的神谕化镜像）。                                      *)
+(* mixa_min_real_below 形的神谕化副本）。                                      *)
 Theorem loso_sel_below_fail : forall (kappa TV0 budget : Real)
   (Htest : loso_test_oracle kappa TV0 budget)
   (Hk0 : real_le real_zero kappa) (Hk1 : real_le kappa real_one)

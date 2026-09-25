@@ -1,8 +1,8 @@
 (* ============================================================ *)
 (* UpAblD1S14_UpReqCauchy.v —— UpReqCauchy 待供给语句的实例供给件        *)
-(*   数学使命：为母本八条待供给语句在具体 Real 实例上给出显式供给。       *)
+(*   数学使命：为源模块八条待供给语句在具体 Real 实例上给出显式供给。       *)
 (* ============================================================ *)
-(* 【使命】母本 UpReqCauchy 以接口参数化方式陈述其语句；本件承接其中八条： *)
+(* 【使命】源模块 UpReqCauchy 以接口参数化方式陈述其语句；本件承接其中八条： *)
 (*   五条无条件供给——strict_concavity（熵梯度的严格单调反转）、           *)
 (*   strong_concavity（强凹性，取 mu:=one）、entropy_tangent（零函数的    *)
 (*   切线不等式）、r_arch_pow（几何衰减的阿基米德性质，kappa:=exp_neg     *)
@@ -11,7 +11,7 @@
 (*   （结论为 plain Or 形序谓词，见 §B 注记）；weak_trich 附具体实例供给（见 §C 注记）。 *)
 (* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / CW220_Extensions；   *)
 (*   Stdlib：QArith / QArith.Qabs / Setoid / Morphisms / Arith / Lia /    *)
-(*   Lqa。母本仅以接口参数只读引用，不 Require 其实现文件。               *)
+(*   Lqa。源模块仅以接口参数只读引用，不 Require 其实现文件。               *)
 (* 【对标】数学原型：阿基米德性质、极限的距离刻画（ε-N）与熵函数的       *)
 (*   凹性不等式；mathlib/stdlib 无直接构造实数对应物。                    *)
 (* 【构造性注记】语句面全 Set 层（接口的 Or/Not 亦 Set 层）；全件 Qed     *)
@@ -70,7 +70,7 @@ Definition uabd1s14_cau_half :=
 (* kappa 实例：κ := exp_neg half（κ>0 与 κ<1 均由接口字段直接推得） *)
 Definition uabd1s14_cau_kappa := exp_neg uabd1s14_cau_half.
 
-(* 幂函数副本：与母本节内 Fixpoint req_r_pow 逐层展开相同（one/mult 相同） *)
+(* 幂函数副本：与源模块节内 Fixpoint req_r_pow 逐层展开相同（one/mult 相同） *)
 Fixpoint uabd1s14_cau_rpow (x : Real) (n : nat) : Real :=
   match n with
   | O => one
@@ -78,7 +78,7 @@ Fixpoint uabd1s14_cau_rpow (x : Real) (n : nat) : Real :=
   end.
 
 (* ============ §A1 · strict_concavity 供给（实例 entropy_gradient := opp） ============ *)
-(* 母本语句：forall x y : R, lt x y -> lt (entropy_gradient y) (entropy_gradient x) *)
+(* 源模块语句：forall x y : R, lt x y -> lt (entropy_gradient y) (entropy_gradient x) *)
 Theorem uabd1s14_cau_strict_concavity_supply :
   forall x y : Real, lt x y -> lt (opp y) (opp x).
 Proof.
@@ -87,7 +87,7 @@ Proof.
 Qed.
 
 (* ============ §A2 · strong_concavity 供给（实例 mu := one，entropy_gradient := opp） ============ *)
-(* 母本语句：forall x y : R, lt x y -> le (mult mu (req_minus y x))                *)
+(* 源模块语句：forall x y : R, lt x y -> le (mult mu (req_minus y x))                *)
 (*   (req_minus (entropy_gradient x) (entropy_gradient y))                        *)
 Theorem uabd1s14_cau_strong_concavity_supply :
   forall x y : Real,
@@ -112,7 +112,7 @@ Proof.
 Qed.
 
 (* ============ §A3 · entropy_tangent 供给（实例 entropy := 零函数，entropy_gradient := 零函数） ============ *)
-(* 母本语句：forall x y : R,                                                     *)
+(* 源模块语句：forall x y : R,                                                     *)
 (*   le (entropy y) (plus (entropy x) (mult (entropy_gradient x) (req_minus y x))) *)
 Theorem uabd1s14_cau_entropy_tangent_supply :
   forall x y : Real,
@@ -136,7 +136,7 @@ Proof.
 Qed.
 
 (* ============ §A4 · r_arch_pow 供给（实例 kappa := exp_neg half） ============ *)
-(* 母本语句：forall (a : R), lt zero a -> forall eps : R, lt zero eps ->           *)
+(* 源模块语句：forall (a : R), lt zero a -> forall eps : R, lt zero eps ->           *)
 (*   sigT (fun n : nat => lt (mult a (req_r_pow kappa n)) eps)                    *)
 Theorem uabd1s14_cau_r_arch_pow_supply :
   forall (a : Real), lt zero a ->
@@ -156,7 +156,7 @@ Proof.
 Qed.
 
 (* ============ §A5 · lim_metric_approx 供给（ε-N 论证链，本件唯一实质构造） ============ *)
-(* 母本语句：forall (u : nat -> R) (l : R), lim u l -> forall eps : R, lt zero eps -> *)
+(* 源模块语句：forall (u : nat -> R) (l : R), lim u l -> forall eps : R, lt zero eps -> *)
 (*   sigT (fun N : nat => forall n : nat, NatLe N n -> lt (metric (u n) l) eps)    *)
 Theorem uabd1s14_cau_lim_metric_supply :
   forall (u : nat -> Real) (l : Real), lim u l ->
@@ -221,7 +221,7 @@ Qed.
 
 (* ============ §B · 条件形组（结论以全称前提显式承载） ============ *)
 (* metric_triangle_plain 与 le_all_eps_zero：结论为 plain Or 形序谓词，             *)
-(* 无法由逐 eps 形消去导出（母本头注自述「序无消去」；具体层 real_le 为 Or(lt,eq)   *)
+(* 无法由逐 eps 形消去导出（源模块头注自述「序无消去」；具体层 real_le 为 Or(lt,eq)   *)
 (* 两支，取支需序上的符号判定，非现有基础引理可构造）——故以全称前提显式承载，        *)
 (* 如实申报为条件供给而非无条件供给。 *)
 Inductive uabd1s14_cau_cond_pack2 : Type :=

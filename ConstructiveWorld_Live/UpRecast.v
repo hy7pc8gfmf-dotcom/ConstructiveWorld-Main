@@ -5,16 +5,18 @@
 (* 主件： rc_leb_refl_tid / rc_nle_SS 再造族与 nle_S_diag、nle_add_r_any 传递/加法定律。 *)
 (* 依赖： 无显式 Require 面（自足件）。 *)
 (* 备注： tid（恒等）与 nle（非严格序）为 Set 层谓词再造；fuse2 / lsum_w 融合器为下游供给。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* UpRecast.v — GRM 再铸链 Coq 落地：use 事件账本 + survive 幸存扫描 +       *)
+(* UpRecast.v — GRM 再铸链 Coq 落实：use 事件账本 + survive 幸存扫描 +       *)
 (*              recast 再铸 + 未桥尾义务（可再入）+ 摩擦计量                 *)
 (*                                                                       *)
-(* 二轮圆桌 Q3 立项（2 票：席 2/席 3，投票理由：全场最干净结构性抢救 +       *)
-(* 首尾咬合）。设计出处：                                                  *)
-(*   ROUNDTABLE2.md 席 1 段落（GRM 签名草稿 + v2 终稿）；                   *)
-(*   ROUNDTABLE2.md 席 1 实验区【抢救一：WPM → GRM 账本上的再铸链】；        *)
+(* 设计要点：结构性抢救方案（保全场最干净的结构与首尾咬合）。设计来源：      *)
+(*   GRM 签名草稿与 v2 终稿；                                              *)
+(*   WPM → GRM 账本上的再铸链抢救实验。                                    *)
+(*                                                                       *)
 
 (*                                                                       *)
 (* 载体全程 Z/nat/bool 判定层；语句零 Prop（Set/Type 层 tid 恒等型 + nle 序型  *)
@@ -41,10 +43,10 @@
 (*   D4  再入语义：rebridge c f 把义务账中 f 的全部条目移回普查尾部的，        *)
 (*       同一 keepF/hitF 判定面复用于普查与义务两账（一台机器两本账）；        *)
 
-(*   D5  v2 耦合谱系账的归并机制不在本件（属上游普查结构假设，E1 反例          *)
-(*       已证字段独立公理不可依赖）；本件在任意普查上建账，耦合谱系可作为      *)
-(*       上游换代挂入，recast 链接口不变——与 Q3 条目「未定稿细节自行定稿」    *)
-(*       一致，诚实声明而非降级。                                           *)
+(*   D5  v2 耦合谱系账的归并机制不在本件（属上游普查结构假设；字段独立性的     *)
+(*       反例已证其不可依赖）；本件在任意普查上建账，耦合谱系可作为           *)
+(*       上游换代挂入，recast 链接口不变——与设计条目「未定稿细节自行定稿」    *)
+(*       一致，显式声明而非降级。                                           *)
 (* ===================================================================== *)
 
 From Stdlib Require Import ZArith.
@@ -227,7 +229,11 @@ Lemma rc_filter_partition_len : forall (A : Type) (g : A -> bool) (l : list A),
 Proof.
   intros A g l. induction l as [| a l IH]; simpl.
   - reflexivity.
-  - destruct (g a); simpl; lia.
+  - destruct (g a); simpl.
+    + (* g a = true：条目 a 留在幸存侧；后继加法经 iota 已归位，IH 代入即闭合 *)
+      rewrite IH. reflexivity.
+    + (* g a = false：条目 a 落入补侧；IH 代入后按后继加法归位 *)
+      rewrite IH. rewrite Nat.add_succ_r. reflexivity.
 Qed.
 
 Lemma rc_filter_app : forall (A : Type) (g : A -> bool) (l1 l2 : list A),
@@ -303,7 +309,8 @@ Definition use_cnt (f : fid) (l : list evt) : nat :=
 Theorem ledger_len_step : forall (l : list evt) (e : evt),
   rc_tid nat (S (length l)) (length (ledger_step l e)).
 Proof.
-  intros l e. apply tid_nat_eq. unfold ledger_step. rewrite rc_len_app. simpl. lia.
+  intros l e. apply tid_nat_eq. unfold ledger_step. rewrite rc_len_app. simpl.
+  rewrite Nat.add_1_r. reflexivity.
 Qed.
 
 (* 账本推进守恒/单调：use 事件只增不减逐字段账户 *)
@@ -397,7 +404,7 @@ Lemma rc_tsum_app : forall (l1 l2 : list (fid * tier)),
 Proof.
   intros l1. unfold tsum. induction l1 as [| a l1 IH]; intros l2; simpl.
   - reflexivity.
-  - rewrite IH. lia.
+  - rewrite IH. rewrite Nat.add_assoc. reflexivity.
 Qed.
 
 Lemma rc_tsum_filter_partition : forall (g : fid * tier -> bool)
@@ -406,7 +413,13 @@ Lemma rc_tsum_filter_partition : forall (g : fid * tier -> bool)
 Proof.
   intros g l. unfold tsum. induction l as [| a l IH]; simpl.
   - reflexivity.
-  - destruct (g a); simpl; lia.
+  - destruct (g a); simpl.
+    + (* g a = true：条目 a 归幸存侧；IH 代入后按结合律归位 *)
+      rewrite IH. rewrite Nat.add_assoc. reflexivity.
+    + (* g a = false：条目 a 归补侧；IH 代入后三步 AC 换形（结合→交换→反结合） *)
+      rewrite IH. rewrite Nat.add_assoc.
+      rewrite (Nat.add_comm (snd a)).
+      rewrite <- Nat.add_assoc. reflexivity.
 Qed.
 
 (* 扫描完备性之四：等级质量分割守恒——幸存 + 击穿 = 原质量 *)
@@ -446,7 +459,7 @@ Definition recast_b (c : Cert) (f : fid) (ev : evid) (b : bool) : Cert :=
            (obls c ++ pierced f (census c))
            (mkM (S (m_ev (mtr c))) (S (m_rc (mtr c)))).
 
-(* 消费事件驱动的再铸：下游实例化即行使一次行内测验 *)
+(* 使用事件驱动的再铸：下游实例化即行使一次行内测验 *)
 Definition recast (c : Cert) (e : evt) : Cert :=
   match e with
   | use f ev => recast_b c f ev (passes f ev c)
@@ -534,7 +547,11 @@ Proof.
   - apply tid_nat_eq. unfold total_acc, recast_b. cbn [census obls].
     rewrite rc_len_app.
     pose proof (scan_partition_len f (census c)) as HP. tidE HP.
-    rewrite HE. lia.
+    rewrite HE.
+    rewrite <- (Nat.add_assoc (length (survive_scan f (census c)))
+                              (length (pierced f (census c))) (length (obls c))).
+    rewrite (Nat.add_comm (length (pierced f (census c))) (length (obls c))).
+    reflexivity.
 Qed.
 
 (* 义务转移封闭性·等级质量守恒：降级 verbatim 转账，质量分毫不差 *)
@@ -549,7 +566,10 @@ Proof.
   - apply tid_nat_eq. unfold recast_b. cbn [census obls].
     rewrite rc_tsum_app.
     rewrite (rc_tsum_scan f (census c)).
-    lia.
+    rewrite <- (Nat.add_assoc (tsum (survive_scan f (census c)))
+                              (tsum (pierced f (census c))) (tsum (obls c))).
+    rewrite (Nat.add_comm (tsum (pierced f (census c))) (tsum (obls c))).
+    reflexivity.
 Qed.
 
 (* ===================================================================== *)
@@ -576,7 +596,9 @@ Theorem friction_pierce_step : forall (c : Cert) (f : fid) (ev : evid),
 Proof.
   intros c f ev H.
   change (recast c (use f ev)) with (recast_b c f ev (passes f ev c)).
-  tidE H. rewrite HE. apply tid_nat_eq. unfold friction, recast_b. simpl. lia.
+  tidE H. rewrite HE. apply tid_nat_eq. unfold friction, recast_b. simpl.
+  (* S e + S r 经 iota 已归约为 S (e + S r)：后继加法归位即闭合 *)
+  rewrite Nat.add_succ_r. reflexivity.
 Qed.
 
 (* 摩擦计量单调：任意再铸摩擦不减 *)
@@ -634,7 +656,12 @@ Proof.
   intros c f. apply tid_nat_eq. unfold total_acc, rebridge. cbn [census obls].
   rewrite rc_len_app.
   pose proof (scan_partition_len f (obls c)) as HP. tidE HP.
-  rewrite HE. lia.
+  rewrite HE.
+  rewrite (Nat.add_comm (length (survive_scan f (obls c)))
+                        (length (pierced f (obls c)))).
+  rewrite (Nat.add_assoc (length (census c)) (length (pierced f (obls c)))
+                         (length (survive_scan f (obls c)))).
+  reflexivity.
 Qed.
 
 (* 再入守恒之二：等级质量守恒 *)
@@ -645,7 +672,11 @@ Proof.
   intros c f. apply tid_nat_eq. unfold rebridge. cbn [census obls].
   rewrite rc_tsum_app.
   rewrite (rc_tsum_scan f (obls c)).
-  lia.
+  rewrite (Nat.add_comm (tsum (survive_scan f (obls c)))
+                        (tsum (pierced f (obls c)))).
+  rewrite (Nat.add_assoc (tsum (census c)) (tsum (pierced f (obls c)))
+                         (tsum (survive_scan f (obls c)))).
+  reflexivity.
 Qed.
 
 
@@ -661,7 +692,7 @@ Qed.
 Definition cnt (f : fid) (l : list (fid * tier)) : nat :=
   length (pierced f l).
 
-(* 再入回补：普查上 f 的条目数 = 原普查条目 + 义务账条目（可再入的记账面） *)
+(* 再入回补：普查上 f 的条目数 = 原普查条目 + 义务账条目（可再入的核算面） *)
 Theorem rebridge_cnt_reentry : forall (c : Cert) (f : fid),
   rc_tid nat (cnt f (census (rebridge c f)))
            (Nat.add (cnt f (census c)) (cnt f (obls c))).
@@ -690,7 +721,7 @@ Proof.
   intros c f ev H. exact (friction_pierce_step (rebridge c f) f ev H).
 Qed.
 
-(* 再铸链驱动器：n 轮燃料消费事件流（{struct n} 保证结构递归） *)
+(* 再铸链驱动器：n 轮燃料使用事件流（{struct n} 保证结构递归） *)
 Fixpoint chain (n : nat) (c : Cert) (es : list evt) {struct n} : Cert :=
   match n with
   | O => c

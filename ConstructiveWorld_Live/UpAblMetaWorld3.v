@@ -1,43 +1,27 @@
 (* ========================================================================= *)
-(* 【ToyR 战役·包F·T245 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
-(*                                                                           *)
-(* 本稿系 ToyR 战役包F 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
-(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
-(* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T245。       *)
-(* 替换定理清单：mtw_row_t／mtw_df_iter／mtw_ds_pos（共 3 刀）               *)
-(* 非平凡性口径：双锚断言、中间项显式命名、引擎体整体内联三法并落；无一行    *)
-(* 拆分式假非平凡。                                                          *)
-(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
-(* 抽验编译均验零承认。                                                      *)
+(* 证明结构注记（三处替换位的构造法，如实注记）：                              *)
+(*   一、mtw_row_t（位一·双断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地     *)
+(*       重演——断言一 Hdef＝核行和 3/4＋1/4 换形至定义形 (1−1/4)＋1/4             *)
+(*      （mtw_threeq 经 req_minus 载体透明，req_refl 最短形）；断言二 Hasso＝      *)
+(*       结合换形（plus_assoc 对称）；闭合两段＝内项零消（plus_comm 换轨＋        *)
+(*       plus_opp 零消经 req_plus_compat 提级）＋外层 plus_zero；三段 req_trans    *)
+(*       复合。                                                                   *)
+(*   二、mtw_df_iter（位二·中间项显式命名）：原单点 exact 复合式拆位重演——        *)
+(*       副本支 Hmir（mtw_df_opp_dv n，补元副本）与取负支 Hneg（req_opp_compat      *)
+(*       运载 mtw_dv_iter n 幂律）两条中间 req 命名，req_trans 复合闭合。          *)
+(*   三、mtw_ds_pos（位三·引擎体整体内联）：mult_positive 投影位就地重演——        *)
+(*       模板＝S07_RealSetoidExpLog.v real_mult_positive（本件 lt/mult/zero 与     *)
+(*       柯西层 real_lt/real_mult/real_zero eq_refl 直通，检验在案）：             *)
+(*       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两个合取肢）＋             *)
+(*       real_mult_lt_compat (0,h,h) 闭合，实例化 a:=mtw_half、b:=mtw_half。       *)
+(*   不可化批量注记 13 位：定义性闭合 4（mtw_K_tt/tf/ft/ff）；接口字段直引与       *)
+(*   同件单跳 7（mtw_half_pos／mtw_qq_half／mtw_oo_one_zero／mtw_mu0_mass／        *)
+(*   mtw_nu0_mass／mtw_tv0_pos／mtw_omd_pos）；复合一跳链 2（mtw_no_mixing_below／  *)
+(*   mtw_tv_lower）。依赖面零新增：Require 面与原件逐字一致。                      *)
 (* ========================================================================= *)
-(* ============================================================
-   T245 包F 台账席 切片四 · UpAblMetaWorld3 三刀落刀（同名替换，全中文零承认）
-   本件为基线原件（md5 599051c9…，与 Main 基线逐字）的同名替换件：语句面、
-   声明序、其余定理与既有版记头注逐字保留；仅三条玩具级证明体在替换点重演，
-   另附 13 条不可化批量中文注记（不动证明体）：
-   一、mtw_row_t（刀一·双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地
-       重演——锚一 Hdef＝核行和 3/4＋1/4 换形至定义形 (1−1/4)＋1/4（mtw_threeq
-       经 req_minus 载体透明，req_refl 最短形）；锚二 Hasso＝结合换轨肢
-       （plus_assoc 对称）；闭合两段＝内项零消（plus_comm 换轨＋plus_opp 零消
-       经 req_plus_compat 提级）＋外层 plus_zero；三段 req_trans 复合。
-   二、mtw_df_iter（刀二·中间项显式命名）：原单点 exact 复合式拆锚重演——
-       副本肢 Hmir（mtw_df_opp_dv n，补元副本）与取负肢 Hneg（req_opp_compat
-       运载 mtw_dv_iter n 幂律）两条中间 req 命名锚定，req_trans 复合闭合。
-   三、mtw_ds_pos（刀三·引擎体整体内联）：mult_positive 投影位就地重演——
-       模板＝S07_RealSetoidExpLog.v:6969 real_mult_positive（本件 lt/mult/
-       zero 与柯西层 real_lt/real_mult/real_zero eq_refl 直通，检验在案）：
-       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两个合取肢）＋
-       real_mult_lt_compat (0,h,h) 闭合，实例化 a:=mtw_half、b:=mtw_half。
-   不可化批量注记 13 条：定义性闭合 4（mtw_K_tt/tf/ft/ff）；接口字段直引与
-   同件单跳 7（mtw_half_pos／mtw_qq_half／mtw_oo_one_zero／mtw_mu0_mass／
-   mtw_nu0_mass／mtw_tv0_pos／mtw_omd_pos）；复合一跳链 2（mtw_no_mixing_below／
-   mtw_tv_lower）。
-   依赖面零新增：Require 面与原件逐字一致。
-   ============================================================ *)
 (* ============================================================ *)
-(* UpAblMetaWorld3.v —— N4 席：非退化 2 元核世界（核行互异）+ TV 精确几何衰减      *)
-(*   + 混合时间下界（AID 在 cf2 上反驳的下界件在此世界为真）· 2026-09-20          *)
+(* UpAblMetaWorld3.v —— 非退化 2 元核世界（核行互异）+ TV 精确几何衰减            *)
+(*   + 混合时间下界（AID 在 cf2 上反驳的下界件在此世界为真）。                       *)
 (*                                                              *)
 (* 【世界构造】bool 载体，硬编码对称常数核（Q 可判定，全定义级）：                  *)
 (*     K(t,t) = 3/4   K(t,f) = 1/4   K(f,t) = 1/4   K(f,f) = 3/4               *)
@@ -54,9 +38,11 @@
 (*   le ((1/2)^n·TV₀) (TV(n))（mtw_tv_lower——AID 的 mtl_refute_lower 同形在此为真）。*)
 (*   跨世界对照：cf2 = 一步即混退化世界（TV(1)==zero）vs 本世界 = 真几何衰减         *)
 (*   非退化世界（TV(n) == (1/2)^n ≠ 0）。                                          *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。        *)
+(* 对标：mathlib 有限马尔可夫链几何收敛率；stdlib 无同形。                            *)
 (* 【红线自审】零承认件；零经典逻辑；零新假设（前提位全显式证书/定理参数）；           *)
 (*   语句面全 Set 值（req/le/lt/Not 均基座 Set 层别名），无紫层泄露；                 *)
-(*   本件自含（不依赖 cf2 世界件），只读上游零改母本。                               *)
+(*   本件自含（不依赖 cf2 世界件），只读上游零改源模块。                               *)
 (* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，全量 coqc -Q . ""（cpu_guard 包裹）。 *)
 (* ============================================================ *)
 
@@ -218,8 +204,8 @@ Proof. exact (req_plus_zero_l one). Defined.
 (* §2 Part 1a：行随机账（每行和 = one）+ 行互异账（非退化判据）                    *)
 (* ============================================================ *)
 
-(* 刀一（双锚断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地重演。
-   锚一 Hdef：3/4＋1/4 换形至定义形 (1−1/4)＋1/4；锚二 Hasso：结合换轨肢。 *)
+(* 位一（双中间断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地重演。
+   断言一 Hdef：3/4＋1/4 换形至定义形 (1−1/4)＋1/4；断言二 Hasso：结合换轨肢。 *)
 Lemma mtw_row_t : req (mtw_sumf (mtw_K true)) one.
 Proof.
   unfold mtw_sumf, mtw_K.
@@ -566,8 +552,8 @@ Lemma mtw_df_iter : forall n : nat,
       (opp (req_r_pow mtw_half n)).
 Proof.
   intro n.
-  (* 刀二（中间项显式命名）：副本肢 Hmir＝mtw_df_opp_dv n（补元副本）、
-     取负肢 Hneg＝req_opp_compat 运载 mtw_dv_iter n（幂律），两个合取肢命名锚定，
+  (* 位二（中间项显式命名）：副本支 Hmir＝mtw_df_opp_dv n（补元副本）、
+     取负支 Hneg＝req_opp_compat 运载 mtw_dv_iter n（幂律），两个合取肢显式命名，
      req_trans 复合闭合重演。 *)
   assert (Hmir : req (mtw_df (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0))
                      (opp (mtw_dv (mtw_titer n mtw_mu0) (mtw_titer n mtw_nu0)))).
@@ -793,7 +779,7 @@ Definition mtw_ds : Real := mtw_quarter.
 Lemma mtw_omd_pos : lt zero mtw_omd.
 Proof. exact mtw_half_pos. Defined.
 
-(* 刀三（引擎体整体内联）：mult_positive 投影位就地重演（模板
+(* 位三（引擎体整体内联）：mult_positive 投影位就地重演（模板
    S07_RealSetoidExpLog.v:6969 real_mult_positive；本件 lt/mult/zero 与柯西层
    字段 eq_refl 直通）：0·h ≡ 0 换序桥＋real_mult_lt_compat 闭合。 *)
 Lemma mtw_ds_pos : lt zero mtw_ds.

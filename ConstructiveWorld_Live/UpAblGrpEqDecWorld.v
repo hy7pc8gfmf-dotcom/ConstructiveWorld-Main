@@ -1,6 +1,6 @@
 (* ============================================================ *)
 (* UpAblGrpEqDecWorld.v —— 族A grp_eq_dec 可判等前提的载体世界装配件      *)
-(* 母本前提位置：S15_TailFEPUp.v                                  *)
+(* 源文件前提位置：S15_TailFEPUp.v                                  *)
 (*   （Module UpGRPO219 · Section GRPONoDup） *)
 (*   Variable grp_eq_dec : forall i j : Group, Or (Id i j) (Not (Id i j)) *)
 (* 本件使命：仿照既有 keep_dec:=@inl unit 的实例化先例，                  *)
@@ -23,11 +23,11 @@
 (* 非平凡承载点：Id 构造子判别（Id true/false 构造子冲突的 J 依赖消去，  *)
 (*   内核模式匹配判别——非 Corelib or_introl，Or 为 S01 Set 层别名        *)
 (*   Or:=A+B，@inl/@inr 直用）；四支判定逐支构造性见证；InT 判别         *)
-(*   （inversion 冲突消解）；nodup_g 项式装配；母本 B2/B3 主定理 bool 世界实例化消解。 *)
+(*   （inversion 冲突消解）；nodup_g 项式装配；源模块 B2/B3 主定理 bool 世界实例化消解。 *)
 (*                                                              *)
 (* 所用上游出口（限定名引用）：UpGRPO219.nat_to_R_g/nodup_g/list_sum_g/  *)
 (*   grpo_indicator_sum_one/grpo_uniform_mass——Module 限定名避撞名；    *)
-(*   母本源件零改动。                                                    *)
+(*   源文件零改动。                                                    *)
 (* 对标行：无直接对应物（可判等前提的具体载体实例层）。                  *)
 (* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。   *)
 (* ============================================================ *)
@@ -83,7 +83,7 @@ Definition gqc_grp_eq_dec : forall i j : gqc_Group, Or (Id i j) (Not (Id i j)) :
 
 Definition gqc_reward : gqc_Group -> R := fun _ => zero.
 
-(* ===== §5 规模正性前提（母本实名 G_pos；规模＝二元组群，|枚举|=2） ===== *)
+(* ===== §5 规模正性前提（源模块实名 G_pos；规模＝二元组群，|枚举|=2） ===== *)
 
 Lemma gqc_G_pos : lt zero (UpGRPO219.nat_to_R_g (length gqc_enum)).
 Proof.
@@ -106,7 +106,7 @@ Definition gqc_Hnd : UpGRPO219.nodup_g gqc_Group gqc_enum :=
   (gqc_notin_tf, (gqc_InT_nil_empty false, tt)).
 
 (* ===== §7 封装证书（前提组封装记录型：仿 S17 keep_dec 实例先例） ===== *)
-(* 前提序＝母本声明序（Group/group_enum/group_cover/grp_eq_dec/          *)
+(* 前提序＝源模块声明序（Group/group_enum/group_cover/grp_eq_dec/          *)
 (*   reward_group/G_pos/Hnd_g）；实层轴以抽象参量入包泛量化。            *)
 
 Inductive gqc_pack : Type :=
@@ -125,7 +125,7 @@ Proof.
                         gqc_reward gqc_G_pos gqc_Hnd).
 Qed.
 
-(* ===== §8 抽象前提在具体载体上的实例化消解（母本 B2/B3 主定理） ===== *)
+(* ===== §8 抽象前提在具体载体上的实例化消解（源模块 B2/B3 主定理） ===== *)
 
 Theorem gqc_indicator_sum_one_bool : forall j : gqc_Group,
   InT j gqc_enum ->

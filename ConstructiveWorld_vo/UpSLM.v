@@ -1,34 +1,33 @@
 (* ============================================================ *)
 (* ========================================================================= *)
-(* 【ToyR 战役·包A·T239 台账席】玩具级定理同名非平凡替换稿                       *)
+(* 【同名替换稿】熔合见证族四条引理的非平凡证明说明（声明面见下方正式头注）        *)
 (*                                                                           *)
-(* 本稿承原件全文（声明序、头注、其余定理原样保留），本切片对熔合见证族四条玩具级    *)
-(* 引理做同名非平凡替换：                                                        *)
+(* 本件声明面与引用面为源文件原样保留，下列四条引理的证明为实质推导（非转发）：    *)
 (*   ① fuse2_sum——熔合定义面展开＋聚合元和字段投影定向出列＋同一构造子闭合；        *)
 (*   ② fuse2_pos——熔合定义面展开后不再走正性字段投影单跳转发，改为两单元正性结论       *)
 (*      直接在场合成：查负界引理双实例提取＋加法保序目标化约＋线性算术闭合（即         *)
 (*      pos_add 的证明体在替换点显式重演，消除投影转发）；                         *)
 (*   ③ col_same_fused——四具名单元（定位 7/4 与 5/11，pid 互异）与熔合定义面展开，      *)
 (*      两产物和字段 3+4 定向化简显式同值，定位擦除的计算内容在场；                  *)
-(*   ④ col_preds_distinguishable——探针与两账本定义面展开，存在扫描与 pid 判定在        *)
+(*   ④ col_preds_distinguishable——probe_pid 与两账本定义面展开，存在扫描与 pid 判定在  *)
 (*      具体账面上定向化简（P 组命中 7、Q 组 5/11 皆未中），布尔结构显式闭合。        *)
 (* 非平凡性口径：消除单跳转发（slm_tid 同余构造子直达/上游投影直达），每条推导链≥3      *)
 (* 实质步骤（定义面展开/投影定向化简/具体账面计算/正性合成），叶端构造子闭合；          *)
 (* 无一行拆分式假非平凡。                                                       *)
-(* 其余玩具（账本机器族/赎回族等）本切片未动，如实挂账滚动。                        *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；文件尾附替换件假设清查自证。   *)
+(* 其余位置（账本机器族/赎回族等）由续作说明覆盖，未消解项如实申报滚动。            *)
+(* 本件零公理、零承认件、全闭合、纯构造性、无经典逻辑；文件尾附假设面清查自证。     *)
 (* ========================================================================= *)
 (* ------------------------------------------------------------------------- *)
-(* 【切片二续作】在熔合见证族四条基础上，本切片续作账本机器族与赎回族：            *)
+(* 【续作说明】在熔合见证族四条基础上，本件续作账本机器族与赎回族：                *)
 (*   ⑤ 熔合见证族余量——空带熔断恒等（匹配空支＋投影出列）与熔后失明（熔合入口/两账本  *)
-(*      /四具名单元全展开，非空带熔为空带、探针在空带上定向化简），消除对             *)
+(*      /四具名单元全展开，非空带熔为空带、probe_pid 在空带上定向化简），消除对        *)
 (*      熔合失明引理的单跳转发，失明的计算内容在场；                               *)
 (*   ⑥ 花与单步发射四条——花取头/发射/保真/签票的定义面展开＋匹配支触发＋投影定向出列；  *)
 (*   ⑦ 长度见证——不走可加性引理转发，判定式定义面计算（leb 1 (S k) ⟶ leb 0 k ⟶ 真）； *)
 (*   ⑧ 赎回族五条——与门左支提取的分支分划在替换点显式重演（假支与门定义性坍缩自爆）；  *)
 (*      「后继不判等自身」归纳体在替换点显式重演（基例定向坍缩＋步例降一位交归纳假设）； *)
 (*      铸造产物投影定向出列；具体票面（单缺口/零缺口）上判等式定向坍缩为真；           *)
-(*   （序前驱消解一条为轻量档，其结构分划触碰小反转极限，如实挂账不动）              *)
+(*   （序前驱消解一条为轻量档，其结构分划触碰小反转极限，如实申报不动）              *)
 (* 口径：每条链≥3 实质步骤（定义面展开/匹配支触发/投影定向化简/具体票面计算/归纳体      *)
 (* 重演），叶端构造子闭合；无拆行注水、无假非平凡。                                *)
 (* ------------------------------------------------------------------------- *)
@@ -38,18 +37,20 @@
 (* 主件： slm_nle_trans / slm_nle_10_absurd 序定律与 fuse2 / lsum_w 融合器。 *)
 (* 依赖： 无显式 Require 面（自足件）。 *)
 (* 备注： 纯构造性（禁公理面/承认件/值参声明/猜想/弃证）；bool 判定式取 Set 层恒等。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* UpSLM.v — SLM v2 熔合不可逆演算（见证擦除演算）Coq 落地                    *)
+(* UpSLM.v — SLM v2 熔合不可逆演算（见证擦除演算）Coq 落实                    *)
 (*                                                                       *)
-(* 立项出处：                                                            *)
-(*   ROUNDTABLE.md 席 5 终稿（SLM 2.0 见证擦除演算）；                       *)
+(* 演算出处：                                                            *)
+(*   SLM 2.0 见证擦除演算（设计终稿）；                                     *)
 
 (*                                                                       *)
 (* 载体：Z / nat / bool 判定层；语句零 Prop（tid / nle / bool / sigT）。      *)
 (* 纪律：纯构造性（禁 公理 / 承认件 / 值参声明 / 猜想 / 弃证）；   *)
-(* stdlib only；可提取（探针验 Obj.magic = 0）。                            *)
+(* stdlib only；可提取（检验 Obj.magic = 0）。                              *)
 (*                                                                       *)
 
 (*  D1 严格性单元 = (权重 w : Z, pos 结论, 生产者 pid : nat)；                 *)
@@ -62,7 +63,7 @@
 (*     「账本不制造严格性」落实为：无定位单元则无新聚合元（fuse_all 空带恒等）。 *)
 (*  D4 不可逆的构造性刻画 = 具体碰撞见证：两组 pid 互异的前驱（3,4 权重，         *)
 (*     pid 7/9 与 pid 5/11）熔合出同一聚合元（tid 判定相等），且前驱在熔合前     *)
-(*     由 bool 探针可判定区分、熔合对象对一切 pid 探针失明（探针恒 false）。     *)
+(*     由 bool 判定器 probe_pid 可判定区分、熔合对象对一切 pid 判定失明（恒 false）。 *)
 (*  D5 花与需求流：spend 取头定位单元（花后 pid 即废）；未 funded 事件永不发射、  *)
 (*     原账保真并签发无地址需求票（负向事件产出可再出资义务）；                  *)
 (*     赎回 = race-to-mint：任一生产者在自报预算内铸出新定位单元即销票，         *)
@@ -72,7 +73,7 @@
 (*  件 1  单元与结论机器（locu / agg / probe_pid + 结论桥 + pos_add 两结论合一） *)
 (*  件 2  熔合一等运算（fuse2 / fuseL_into + 和守恒 + Σ>0 健全）                *)
 (*  件 3  账本熔合（union_led / fuse_all / fuse_ledger + 总量守恒 + 定位清零）   *)
-(*  件 4  不可逆碰撞见证（同产物 / 前驱可判定区分 / 熔后全探针失明 / 总量守恒）    *)
+(*  件 4  不可逆碰撞见证（同产物 / 前驱可判定区分 / 熔后全判定失明 / 总量守恒）   *)
 (*  件 5  花：spend 即废（在场判定 / pid 消失 / 总量严格下降 nle 见证）          *)
 (*  件 6  多租户安全 + race-to-mint 赎回（未 funded 不发射 / 保真 / 签票；        *)
 (*        铸造赎回 / 票据焚毁 / 重定位 / 单票单铸程）                           *)
@@ -231,7 +232,8 @@ Lemma slm_zle_to_nle_S : forall a b : Z, (0 <= a)%Z -> (a < b)%Z ->
   slm_nle (S (Z.to_nat a)) (Z.to_nat b).
 Proof.
   intros a b Ha Hlt.
-  assert (Hb : (0 <= b)%Z) by lia.
+  assert (Hb : (0 <= b)%Z).
+  { apply Z.lt_le_incl. exact (Z.le_lt_trans 0 a b Ha Hlt). }
   apply slm_nle_of_leb.
   assert (Hleb : (Nat.leb (S (Z.to_nat a)) (Z.to_nat b)) = true).
   { apply Nat.leb_le.
@@ -246,16 +248,16 @@ Proof.
   intros n H. tidE H.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
   apply (slm_zle_to_nle_S 0 (Z.abs n)).
-  - lia.
-  - pose proof (proj2 (Z.abs_pos n) Hne). lia.
+  - apply Z.le_refl.
+  - pose proof (proj2 (Z.abs_pos n) Hne) as Habs. exact Habs.
 Qed.
 
 (* 1 ≤ x ⟹ slm_nle (S O) (Z.to_nat x)（Z 正量 → slm_nle 编码） *)
 Lemma zpos_to_nle : forall x : Z, (1 <= x)%Z -> slm_nle (S O) (Z.to_nat x).
 Proof.
   intros x Hx.
-  assert (Hb : (0 <= x)%Z) by lia.
-  assert (Hb1 : (0 <= 1)%Z) by lia.
+  assert (Hb : (0 <= x)%Z) by exact (Z.le_trans 0 1 x Z.le_0_1 Hx).
+  assert (Hb1 : (0 <= 1)%Z) by exact Z.le_0_1.
   apply slm_nle_of_leb. apply slm_lebT.
   exact (proj1 (Z2Nat.inj_le 1 x Hb1 Hb) Hx).
 Qed.
@@ -316,14 +318,18 @@ Lemma pos_add : forall a b : Z,
   slm_tid bool (Z.ltb 0 (a + b)) true.
 Proof.
   intros a b Ha Hb. apply ltbT.
-  pose proof (ltbF_inv a Ha). pose proof (ltbF_inv b Hb). lia.
+  pose proof (ltbF_inv a Ha) as Hpa. pose proof (ltbF_inv b Hb) as Hpb.
+  (* 两严格下界相加：0 + a < b + a 经左零与交换换形得 a < a + b，再传递 *)
+  pose proof (proj1 (Z.add_lt_mono_r 0 b a) Hpb) as Hs.
+  rewrite Z.add_0_l in Hs. rewrite (Z.add_comm b a) in Hs.
+  exact (Z.lt_trans 0 a (a + b) Hpa Hs).
 Qed.
 
 (* 熔合（两单元 → 一聚合元）：只携和与 Σ 结论，pid 无处安放 *)
 Definition fuse2 (u v : locu) : agg :=
   mkAgg (lu_w u + lu_w v) (pos_add (lu_w u) (lu_w v) (lu_pos u) (lu_pos v)).
 
-(* 定位单元账的和（守恒记账的量） *)
+(* 定位单元账的和（守恒核算的量） *)
 Fixpoint lsum_w (l : list locu) : Z :=
   match l with
   | nil => 0
@@ -343,9 +349,9 @@ Lemma fuseL_into_sum : forall (l : list locu) (a : agg),
   slm_tid Z (ag_sum (fuseL_into a l)) (ag_sum a + lsum_w l).
 Proof.
   induction l as [| u t IH]; intros a.
-  - cbn. apply tid_Z_of_eq. lia.
+  - cbn. apply tid_Z_of_eq. symmetry. apply Z.add_0_r.
   - cbn. tidQl (IH (mkAgg (ag_sum a + lu_w u) (pos_add _ _ (ag_pos a) (lu_pos u)))) E1.
-    rewrite E1. cbn. apply tid_Z_of_eq. lia.
+    rewrite E1. cbn. apply tid_Z_of_eq. symmetry. apply Z.add_assoc.
 Qed.
 
 (* 熔合健全（Σ>0 沿熔合链不灭）：正种子 + 正单元 ⟹ 产物结论恒真 *)
@@ -374,9 +380,13 @@ Proof.
      ②两单元正性结论逐元提取严格下界（查负界引理双实例）
      ③加法保序目标化约＋线性算术闭合（正性合成体在替换点显式重演） *)
   intros u v. unfold fuse2. cbn [ag_sum].
-  pose proof (ltbF_inv (lu_w u) (lu_pos u)).
-  pose proof (ltbF_inv (lu_w v) (lu_pos v)).
-  apply ltbT. lia.
+  pose proof (ltbF_inv (lu_w u) (lu_pos u)) as Hu.
+  pose proof (ltbF_inv (lu_w v) (lu_pos v)) as Hv.
+  apply ltbT.
+  (* 两单元权重严格下界相加：与 pos_add 同一构造链在替换点显式重演 *)
+  pose proof (proj1 (Z.add_lt_mono_r 0 (lu_w v) (lu_w u)) Hv) as Hs.
+  rewrite Z.add_0_l in Hs. rewrite (Z.add_comm (lu_w v) (lu_w u)) in Hs.
+  exact (Z.lt_trans 0 (lu_w u) (lu_w u + lu_w v) Hu Hs).
 Qed.
 
 (* ===================================================================== *)
@@ -395,10 +405,10 @@ Fixpoint lsum_a (l : list agg) : Z :=
   | a :: t => ag_sum a + lsum_a t
   end.
 
-(* 账本总量（守恒记账的量） *)
+(* 账本总量（守恒核算的量） *)
 Definition led_total (L : ledger) : Z := lsum_w (led_loc L) + lsum_a (led_agg L).
 
-(* 定位探针：pid p 是否仍在账（bool 判定） *)
+(* 定位判定器 probe_pid：pid p 是否仍在账（bool 判定） *)
 Definition probe_pid (p : nat) (L : ledger) : bool :=
   existsb (fun x : locu => Nat.eqb (lu_pid x) p) (led_loc L).
 
@@ -410,16 +420,16 @@ Lemma lsum_w_app : forall l1 l2 : list locu,
   slm_tid Z (lsum_w (l1 ++ l2)) (lsum_w l1 + lsum_w l2).
 Proof.
   induction l1 as [| u t IH]; intros l2.
-  - cbn. apply tid_Z_of_eq. lia.
-  - cbn. tidQl (IH l2) E1. rewrite E1. apply tid_Z_of_eq. lia.
+  - cbn. apply tid_Z_of_eq. symmetry. apply Z.add_0_l.
+  - cbn. tidQl (IH l2) E1. rewrite E1. apply tid_Z_of_eq. apply Z.add_assoc.
 Qed.
 
 Lemma lsum_a_app : forall l1 l2 : list agg,
   slm_tid Z (lsum_a (l1 ++ l2)) (lsum_a l1 + lsum_a l2).
 Proof.
   induction l1 as [| a t IH]; intros l2.
-  - cbn. apply tid_Z_of_eq. lia.
-  - cbn. tidQl (IH l2) E1. rewrite E1. apply tid_Z_of_eq. lia.
+  - cbn. apply tid_Z_of_eq. symmetry. apply Z.add_0_l.
+  - cbn. tidQl (IH l2) E1. rewrite E1. apply tid_Z_of_eq. apply Z.add_assoc.
 Qed.
 
 (* 合并守恒：并置零损失（对照：真熔合才擦除） *)
@@ -429,7 +439,18 @@ Proof.
   intros L1 L2. unfold led_total, union_led. cbn.
   tidQl (lsum_w_app (led_loc L1) (led_loc L2)) E1.
   tidQl (lsum_a_app (led_agg L1) (led_agg L2)) E2.
-  apply tid_Z_of_eq. lia.
+  apply tid_Z_of_eq.
+  (* 四项 AC 重排五步：反结合 → 结合 → 中间交换 → 反结合 → 结合 *)
+  rewrite E1, E2.
+  rewrite <- (Z.add_assoc (lsum_w (led_loc L1)) (lsum_w (led_loc L2))
+             (lsum_a (led_agg L1) + lsum_a (led_agg L2))).
+  rewrite (Z.add_assoc (lsum_w (led_loc L2)) (lsum_a (led_agg L1)) (lsum_a (led_agg L2))).
+  rewrite (Z.add_comm (lsum_w (led_loc L2)) (lsum_a (led_agg L1))).
+  rewrite <- (Z.add_assoc (lsum_a (led_agg L1)) (lsum_w (led_loc L2))
+             (lsum_a (led_agg L2))).
+  rewrite (Z.add_assoc (lsum_w (led_loc L1)) (lsum_a (led_agg L1))
+             (lsum_w (led_loc L2) + lsum_a (led_agg L2))).
+  reflexivity.
 Qed.
 
 (* 熔断：整条定位带熔为单一聚合元（不可逆主运算） *)
@@ -457,7 +478,7 @@ Lemma fuse_all_total_cons : forall (u : locu) (t : list locu) (ags : list agg),
 Proof.
   intros u t ags. unfold fuse_all, led_total. cbn.
   tidQl (fuseL_into_sum t (mkAgg (lu_w u) (lu_pos u))) E1.
-  apply tid_Z_of_eq. rewrite E1. cbn. lia.
+  apply tid_Z_of_eq. rewrite E1. reflexivity.
 Qed.
 
 (* 两账本熔合为一等对象：先并置再熔断（唯一的账本级熔合入口） *)
@@ -473,10 +494,19 @@ Proof.
   tidQl (fuseL_into_sum (t1 ++ led_loc L2) (mkAgg (lu_w u1) (lu_pos u1))) E1.
   tidQl (lsum_w_app t1 (led_loc L2)) E2.
   tidQl (lsum_a_app ags1 (led_agg L2)) E3.
-  apply tid_Z_of_eq. rewrite E1, E2, E3. cbn. lia.
+  apply tid_Z_of_eq. rewrite E1, E2, E3. cbn [ag_sum].
+  rewrite (Z.add_assoc (lu_w u1) (lsum_w t1) (lsum_w (led_loc L2))).
+  rewrite <- (Z.add_assoc (lu_w u1 + lsum_w t1) (lsum_w (led_loc L2))
+             (lsum_a ags1 + lsum_a (led_agg L2))).
+  rewrite (Z.add_assoc (lsum_w (led_loc L2)) (lsum_a ags1) (lsum_a (led_agg L2))).
+  rewrite (Z.add_comm (lsum_w (led_loc L2)) (lsum_a ags1)).
+  rewrite <- (Z.add_assoc (lsum_a ags1) (lsum_w (led_loc L2)) (lsum_a (led_agg L2))).
+  rewrite (Z.add_assoc (lu_w u1 + lsum_w t1) (lsum_a ags1)
+             (lsum_w (led_loc L2) + lsum_a (led_agg L2))).
+  reflexivity.
 Qed.
 
-(* 熔合定位清零：熔合产物对任意 pid 探针失明（单向擦除的判定形态） *)
+(* 熔合定位清零：熔合产物对任意 pid 判定失明（单向擦除的判定形态） *)
 Lemma fuse_all_blind : forall (L : ledger) (p : nat),
   slm_tid bool (probe_pid p (fuse_all L)) false.
 Proof.
@@ -504,10 +534,10 @@ Qed.
 
 (* 具体 pos 结论 *)
 Lemma hw3 : slm_tid bool (Z.ltb 0 3) true.
-Proof. apply ltbT. lia. Qed.
+Proof. apply ltbT. exact (proj1 (Z.ltb_lt 0 3) eq_refl). Qed.
 
 Lemma hw4 : slm_tid bool (Z.ltb 0 4) true.
-Proof. apply ltbT. lia. Qed.
+Proof. apply ltbT. exact (proj1 (Z.ltb_lt 0 4) eq_refl). Qed.
 
 (* 前驱组 P：权重 (3,4)，生产者定位 7 与 9 *)
 Definition uA1 : locu := mkLocu 3 hw3 7.
@@ -532,12 +562,12 @@ Proof.
   apply slm_tid_refl.
 Qed.
 
-(* 见证 2（前驱可判定区分）：熔合前探针 7 在 P 在账、在 Q 不在账——
+(* 见证 2（前驱可判定区分）：熔合前 probe_pid 7 在 P 在账、在 Q 不在账——
    两个前驱由一次 bool 判定即可分开。 *)
 Lemma col_preds_distinguishable :
   slm_tid bool (andb (probe_pid 7 ledP) (negb (probe_pid 7 ledQ))) true.
 Proof.
-  (* ①探针、两账本与四具名单元定义面展开
+  (* ①probe_pid、两账本与四具名单元定义面展开
      ②存在扫描与 pid 判定在具体账面上定向化简（P 组命中 7、Q 组 5/11 皆未中）
      ③合取-取反布尔结构显式闭合 *)
   unfold probe_pid, ledP, ledQ, uA1, uA2, uB1, uB2.
@@ -545,7 +575,7 @@ Proof.
   apply slm_tid_refl.
 Qed.
 
-(* 见证 3（熔后失明）：两账本熔合产物对任意 pid 探针恒 false——
+(* 见证 3（熔后失明）：两账本熔合产物对任意 pid 判定恒 false——
    熔合前可回答的判定问题（谁出的资）熔合后对一切 p 不可答。 *)
 Lemma col_fused_blind : forall p : nat,
   slm_tid bool (probe_pid p (fuse_ledger ledP ledQ)) false.
@@ -553,7 +583,7 @@ Proof.
   intros p.
   (* ①熔合入口、两账本与四具名单元定义面展开：并置定位带为 7/9 与 5/11 的四元非空带
      ②熔断匹配非空支：整条定位带熔为单聚合元，产物定位带显式为空带
-     ③探针存在扫描在空带上定向化简（空带扫描=假），布尔构造子闭合（失明计算内容在场） *)
+     ③判定存在扫描在空带上定向化简（空带扫描=假），布尔构造子闭合（失明计算内容在场） *)
   unfold probe_pid, fuse_ledger, fuse_all, union_led, ledP, ledQ, uA1, uA2, uB1, uB2.
   cbn [led_loc led_agg app existsb].
   apply slm_tid_refl.
@@ -563,10 +593,10 @@ Qed.
 Lemma col_total :
   slm_tid Z (led_total (fuse_ledger ledP ledQ)) (led_total ledP + led_total ledQ).
 Proof.
-  unfold ledP, ledQ. cbn. apply tid_Z_of_eq. lia.
+  unfold ledP, ledQ. cbn. exact (tid_Z_of_eq _ _ eq_refl).
 Qed.
 
-(* 不可逆主定理（碰撞三联的打包陈述，零 Prop 载体）：
+(* 不可逆主定理（碰撞三联的封装陈述，零 Prop 载体）：
    若前驱可判定区分（andb 位为 true）则其熔合产物与对照产物 slm_tid 相等——
    判定位在熔合中丢失。 *)
 Record irrev_wit : Type := mkIrrev {
@@ -588,7 +618,7 @@ Definition irrev_collision : irrev_wit :=
 (* 件 5. 花：spend 即废（不可复制）                                           *)
 (* ===================================================================== *)
 
-(* 花掉头定位单元；无定位单元时花为恒等（诚实降档，不硬判） *)
+(* 花掉头定位单元；无定位单元时花为恒等（显式降档，不硬判） *)
 Definition spend_led (L : ledger) : ledger :=
   match led_loc L with
   | nil => L
@@ -637,7 +667,14 @@ Proof.
   intros w hw p tl ags.
   apply (zpos_to_nle (led_total (mkLed (mkLocu w hw p :: tl) ags)
                         - led_total (spend_led (mkLed (mkLocu w hw p :: tl) ags)))).
-  pose proof (ltbF_inv w hw). unfold led_total. cbn. lia.
+  pose proof (ltbF_inv w hw) as Hw.
+  unfold led_total. cbn.
+  (* 差值 = w + (尾和 − 尾和) = w：反结合归位 → 同项相减为零 → 右零 → 1 ≤ w *)
+  rewrite <- (Z.add_assoc w (lsum_w tl) (lsum_a ags)).
+  rewrite <- (Z.add_sub_assoc w (lsum_w tl + lsum_a ags) (lsum_w tl + lsum_a ags)).
+  rewrite Z.sub_diag.
+  rewrite Z.add_0_r.
+  exact (proj2 (Z.le_succ_l 0 w) Hw).
 Qed.
 
 (* 非空定位带的长度编码（slm_nle 在场见证） *)
@@ -836,7 +873,7 @@ Proof.
   apply slm_tid_refl.
 Qed.
 
-(* ---------- ToyR 包A 替换席自证：替换件假设清查（零承认件自证） ---------- *)
+(* ---------- 替换件假设清查（零承认件自证） ---------- *)
 Print Assumptions fuse2_sum.
 Print Assumptions fuse2_pos.
 Print Assumptions col_same_fused.
