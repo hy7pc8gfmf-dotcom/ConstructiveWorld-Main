@@ -35,10 +35,10 @@
 (*                                                              *)
 (*   lgz_LogZWall : Set := 插值数据（正性×2 + 归一化×2 + η∈(0,1]）     *)
 (*     全体的 real_le Z real_one 精确判定形（mission 许可语句面；       *)
-(*     log 形经 log 单调互为镜像，见尾注「log 形注记」）。              *)
+(*     log 形经 log 单调相互等价，见尾注「log 形注记」）。              *)
 (*                                                              *)
 (*   lgz_log_z_wall_lpo（主件·AA22 GibbMechanism 范式）：任一配分函数族  *)
-(*     ZWf 带两槽——槽A 族内逐点正（配分语义）+ 槽B 载体编码（任意 x 的   *)
+(*     ZWf 带两参数位——参数位A 族内逐点正（配分语义）+ 参数位B 载体编码（任意 x 的   *)
 (*     1−x² 形可经某落位点 real_eq 编码进 ZWf 值域）——则其 plain-le 形   *)
 (*     给出 SqWall，经 lpn_forward 升为受限 LPO。解码双侧透明：         *)
 (*     eq 支经 |1−x²−1| 链 ⟹ x² 逐点归零（Q 环 + 容差半分）；lt 支取     *)
@@ -49,28 +49,28 @@
 (*     le_one_eps 的 Or 两支各通：lt 支直递、eq 支经 real_eq_le +        *)
 (*     le-lt 拼接）+ Q 层两分（Z_n<1 / ≥1，后者经 half<5/8 界消去）      *)
 (*     ⟹ real_lt Z 1。                                                 *)
-(*   对角双槽（具体内容位）：lgz_diag_one（r:=p ⟹ Z==1，exp 加法性      *)
+(*   对角双参数位（具体内容位）：lgz_diag_one（r:=p ⟹ Z==1，exp 加法性      *)
 (*     cauchy_real_exp_plus + exp-wd + 分布律环链）与 lgz_diag_no_gap    *)
 (*     （对角位 lt 支灭绝：real_lt_not_eq 直驳）——AA22 gwe_diag_zero/   *)
-(*     gwe_diag_no_gap 的 LogZ 镜像：墙的全部判据内容活在非对角位的      *)
+(*     gwe_diag_no_gap 的 LogZ 对偶形：墙的全部判据内容活在非对角位的      *)
 (*     Z<1-vs-Z==1 二分上。                                             *)
 (*                                                              *)
-(*   诚实障碍账（具体正向）：lgz_LogZWall ⟹ rLPO 的具体归约需载体编码槽   *)
+(*   诚实障碍（具体正向）：lgz_LogZWall ⟹ rLPO 的具体归约需载体编码槽   *)
 (*     在真插值族上的实例——编码 x 进严格正归一 r₀,r₁（如 e^x/(1+e^x)     *)
 (*     形）后 Z 值域为 Hellinger 型 [1/√2,1]，Z==1 ⟺ x==0 的解码链需     *)
 (*     exp 投影不透明层的量化 log/exp 代数（exp 单调 + 左右逆 + 间隙      *)
-(*     搬运），非本席窗口可封；故具体正向以泛型槽段条件形承载（AA22       *)
-(*     「泛型段只做正向」先例同格），具体反向全证。两向合账：LogZWall     *)
-(*     与 rLPO 的精确归约强度双向均未封口，本件交付该边界的机器检验      *)
+(*     迁移），非本件可闭合；故具体正向以泛型槽段条件形承载（AA22       *)
+(*     「泛型段只做正向」先例同格），具体反向全证。两向合记：LogZWall     *)
+(*     与 rLPO 的精确归约强度双向均未闭合，本件交付该边界的机器检验      *)
 (*     部分。                                                          *)
 (*                                                              *)
 (*   同族注记（C15·G05_LogSmall.v:893 判定表）：log 等号桥墙（log_eq_   *)
 (*     linear 族 X 阻塞位「需强三分/受限 LPO」）与本件同属 LPO 归约      *)
 (*     家族，但其等号凹性机制与本件的 Z-二分机制归约未同构在案，         *)
 (*     不并类，留未归约注记（如实）。                                  *)
-(*   消费面：S05_AlignmentGRPO.v:4404 step_kl_eta_bound 接口的精确形      *)
-(*     依赖本墙——本件即该接口「不可消解性」的证书（与在飞席 GEOM-A      *)
-(*     的 eps 形实例化件 UpReqStepKLEtaInst.v 互补：彼证 eps 可达形，    *)
+(*   使用面：S05_AlignmentGRPO.v:4404 step_kl_eta_bound 接口的精确形      *)
+(*     依赖本墙——本件即该接口「不可消解性」的证书（与 eps 形实例化件                                                  *)
+(*     的 UpReqStepKLEtaInst.v 互补：彼证 eps 可达形，    *)
 (*     此证精确形归约强度）。                                          *)
 (*                                                              *)
 (* 纪律：纯构造性 Set 层、语句面全 Type/sigT/自定义 And/Or/QltT，       *)
@@ -79,7 +79,7 @@
 (*       + CW/UpRealLeB/UpReqGeomD（interp-Z 求和面）+ UpReqLpoEquiv     *)
 (*       （rLPO/lpn_forward/Q 层桥）。                                 *)
 (* ------------------------------------------------------------ *)
-(* EXPL2（20260916）：新建。前缀 lgz_（grep 全库零撞名实测）。          *)
+(* 前缀 lgz_（全库零撞名实测）。                                                      *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -166,7 +166,7 @@ Proof.
 Qed.
 
 (* Qeq 位移四件：Qlt/Qabs 位换形（q_eq_le/q_abs_congr 桥）——
-   Qeq 集合重写只在 Qeq-目标内可用（AA22 先例），Qlt/Id 位经此四件搬运 *)
+   Qeq 集合重写只在 Qeq-目标内可用（AA22 先例），Qlt/Id 位经此四件迁移 *)
 Lemma lgz_qlt_shift : forall u u' w : Q, u == u' -> Qlt u w -> Qlt u' w.
 Proof.
   intros u u' w Huu H.
@@ -468,7 +468,7 @@ Proof.
       assert (Hfin : Qlt (eps * (1#2)) (projT1 x n * projT1 x n))
         by (apply (lgz_q_decode_lt eps (projT1 (ZWf xi) n)
                      (projT1 x n * projT1 x n) HepsQ H1 H2)).
-      (* 终局搬运：目标位 projT1 (real_mult x x) n − projT1 real_zero n *)
+      (* 终局迁移：目标位 projT1 (real_mult x x) n − projT1 real_zero n *)
       apply Qlt_to_QltT.
       apply (lgz_qlt_shift2_r (eps * (1#2))
                (projT1 x n * projT1 x n)
@@ -537,7 +537,7 @@ Proof.
       - rewrite Hone.
         ring.
       - exact HN2n'. }
-    (* 终局搬运 *)
+    (* 终局迁移 *)
     apply Qlt_to_QltT.
     apply (lgz_qlt_abs_shift (0 - projT1 x n * projT1 x n)
              (projT1 real_zero n - projT1 (real_mult x x) n) del).
@@ -560,7 +560,7 @@ Qed.
 End LogZMechanism.
 
 (* ============================================================ *)
-(* Part 5：对角双槽（具体内容位）——r := p ⟹ Z == 1 与左支灭绝         *)
+(* Part 5：对角双参数位（具体内容位）——r := p ⟹ Z == 1 与左支灭绝         *)
 (* ============================================================ *)
 
 (* 逐点幂拆：p^{1−η}·p^η == p（exp 加法性 + exp-wd + 分布律环链） *)

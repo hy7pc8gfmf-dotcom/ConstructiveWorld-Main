@@ -28,13 +28,10 @@
 (* 引用坐标账（归论文修订战役管辖）；两面以 pan_file+pan_symbol 弱耦合，      *)
 (* 互不依赖；未来 Index 扩列（v4.22+）若增设锚列可由本件导出，本件不动。      *)
 (*                                                                           *)
-(* 红线自审：零网络；零触碰 order×3/_CoqProject/UpReqIndex.ng_/他席文件；     *)
-(* 零公理零承认件全 Qed 纯构造无经典逻辑；自建前缀 pan_（order×3 全表         *)
-(* grep=0、Live_X decl 词面 grep=0，开工核验）；坐标/行号/md5 全为            *)
-(* 20260922 开工实勘值，非任何任务书字面转录。文尾 Print Assumptions 审计。   *)
-(* 归属申报（fail-loud）：pan_paper 为 REIN 清单 A1 批次级归属，带 ? 者为逐篇 *)
-(* 精确归属待验（归 A2/A3 格式波复核），本席不冒充实证。                      *)
-(* 编译：coqc -q -Q . "" UpReqPaperAnchor.v（9.1 工具链，born-in-place）      *)
+(* 构造性注记：零承认件、全 Qed、纯构造、无经典逻辑；自建前缀 pan_。          *)
+(*   坐标/行号/md5 为 20260922 实测值。归属：pan_paper 为清单 A1 批次级归属，  *)
+(*   带 ? 者为逐篇精确归属待验，不冒充实证。文尾 Print Assumptions 审计。      *)
+(* 编译配方：coqc -q -Q . "" UpReqPaperAnchor.v（9.1 工具链，born-in-place）   *)
 (* ========================================================================= *)
 
 From Stdlib Require Import Ascii String.
@@ -92,7 +89,7 @@ Fixpoint pan_find (k : string) (l : list PaperAnchor) : option PaperAnchor :=
   | cons a tl => if pan_seqb k (pan_symbol a) then Some a else pan_find k tl
   end.
 
-(* ---------- 首批 8 锚（坐标/md5 = 20260922 开工实勘） ---------- *)
+(* ---------- 首批 8 锚 ---------- *)
 
 (* 论文1/2 第二定律面：SecondLawQuantified.v 两锚（PR-A/B/C 论文1/2 域） *)
 Definition pan_slq_entropy_gain_kl_lower : PaperAnchor :=

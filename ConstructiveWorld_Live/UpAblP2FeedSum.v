@@ -1,29 +1,3 @@
-(* ==================== ToyR 战役 包F 补位席 · 切片六替换稿 ==================== *)
-(* 本件为 UpAblP2FeedSum.v 同名替换稿：原件全文（版记头注/声明序/其余件逐字）保留，   *)
-(* 仅九条玩具证明体替换＋件首本头注＋两条批量登记注记；语句面/Require 面/假设审计面   *)
-(* 零改动；零新增依赖，刀位标识符均原件既有可见域。                                  *)
-(* 九刀三口径：                                                                      *)
-(*   一 p2f_id_real_eq——集合层恒等型消去改走归纳原理结构性推导（induction H 后        *)
-(*      real_eq_refl 收口），替换原 match 项消除式，语句面同形。                      *)
-(*   二 p2f_req_sum_ext——载体定义层受控展开（unfold spd_sum_unit ＝ f tt）后点值收口。 *)
-(*   三 p2f_req_sum_add／四 p2f_req_sum_linear——片内两级单跳桥（投影桥＋恒等传输桥）   *)
-(*      整体内联：恒等消去 match 直接实例化在 spd_field_add／spd_field_linear 具体件   *)
-(*      上，片内委托双跳归零。                                                        *)
-(*   五 p2f_req_sum_le／七 p2f_req_sum_pos／八 p2f_req_sum_pos_cons／                  *)
-(*   九 p2f_req_sum_pos_list——双向转换桥内联：库实例字段逐位＝实数层名（定义级恒等），  *)
-(*      供体件直连收口，桥面双跳消去。                                                *)
-(*   六 p2f_req_sum_zero_nonneg——载体定义层在前提内受控展开＋unit 两分判别后点值收口。 *)
-(* 批量登记七条（不动证明体，四类口径）：                                              *)
-(*   甲·接口投影直通六件（p2f_proj_lt_of_real／p2f_real_lt_of_proj／                   *)
-(*      p2f_proj_le_of_real／p2f_real_le_of_proj／p2f_proj_req_of_real／              *)
-(*      p2f_real_eq_of_proj）——接口字段逐位恒等直通，语句面即定义级换轨，              *)
-(*      路径：exact H 最短定义性收口，体不可再分。                                    *)
-(*   乙·跨件语句同形直喂一件（p2f_S04_S06_slot_sum_over_S_pos）——供体全称件一跳实例，   *)
-(*      语句面与供体逐字同形，替换位无增量可做。                                      *)
-(* 收口证据：Proof 与 Qed 16/16 计数守恒；禁词七词 0＝0；假设审计 16 条全闭合判定；    *)
-(* 落件前查重（写区原无同名）。                                                        *)
-(* ========================================================================== *)
-
 (* ============================================================ *)
 (* UpAblP2FeedSum.v —— 论文2 消融件的求和正性供给件（实数层与接口层双路）：  *)
 (*   以已证件 spd_ 系（UpAblSposDirect）与 zabr 系（UpAblZposReal）为       *)
@@ -165,8 +139,6 @@ Proof.
   exact H.
 Qed.
 
-(* 【批量登记·乙】跨件语句同形直喂：语句面与供体件 spd_slot_direct_unit 逐字同形，        *)
-(* 一跳实例即最短形，替换位无增量可做。                                                  *)
 (* ===== §2 Id 系 SumOver 语句形实例 =====
    语句形为 S04/S06 接口的令名展开形（R:=@R RI、S:=@S RI SS、zero:=@zero RI、
    lt:=@lt RI、sum_over_S:=@sum_over_S RI SS SO；S06 同表）；态空间与求和

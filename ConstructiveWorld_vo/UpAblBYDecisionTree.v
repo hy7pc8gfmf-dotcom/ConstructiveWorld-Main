@@ -1,12 +1,11 @@
 (* ============================================================
-   UpAblBYDecisionTree.v —— DS-DT 席：二叉决策树归纳类型基建件
+   UpAblBYDecisionTree.v —— 二叉决策树归纳类型基建件
    （BY-LB-1 信息论下界定理供基；全中文零承认·纯构造性零承认项）
-   2026-09-23
    ------------------------------------------------------------ 
    上游（零改任何既有件）：仅 stdlib（Arith/PeanoNat/List/Lia），
    零 Require 库内件；库内检索（检索索引.md + Live_X 全 .v grep
-   dtree/dt_leaf/dt_node/dt_leaves/dt_depth）零撞名 20260923 实测。
-   下游消费者：BY-LB-1（信息论下界定理）；参照
+   dtree/dt_leaf/dt_node/dt_leaves/dt_depth）零撞名。
+   下游使用件：BY-LB-1（信息论下界定理）；参照
    UpReqMixLogB.v mixb_sel_scale（L832，c ≤ 2·log₂K+5 量级形）
    ——本件供其树侧对偶基座：S K 个可能输入各需一叶 ⇒
    dt_leaves t ≥ S K ⇒ dt_depth t ≥ log₂(S K)。
@@ -19,7 +18,7 @@
          Set 面全可提取）。
    ② dt_leaves_eq：叶数 = 内部数 + 1（归纳证）。
    ③ dt_depth_ge_log2：深度 ≥ log₂(叶数)（归纳证；
-      消费 stdlib Nat.log2_spec / Nat.log2_lt_pow2 /
+      调用 stdlib Nat.log2_spec / Nat.log2_lt_pow2 /
       Nat.pow_le_mono_r 单调性）。
    ④ 正确性框架（计数引理三件，为 BY-LB-1 供基）：
       dt_run_val_leaf（求值器答案落在叶值序列内——正确性挂钩）

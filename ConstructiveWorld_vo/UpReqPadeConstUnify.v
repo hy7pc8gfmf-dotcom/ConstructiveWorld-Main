@@ -28,7 +28,7 @@
 (*          ptp_beta n 0/q_fact(2n)——首系数定义性展开形。               *)
 (*   位点④ UpReqPadeTailPos.v:141  ptp_beta_n2_first：同③核心形 n=2。    *)
 (*   位点⑤ UpReqPadeTailPos.v:161  ptp_n2_poly 首项系数 (1#720)·y⁵。     *)
-(*   位点⑥ UpReqPadeTailPos.v:176  ptp_sentinel_n2_half 数值哨兵首项。   *)
+(*   位点⑥ UpReqPadeTailPos.v:176  ptp_sentinel_n2_half 数值锚首项。   *)
 (*   六位点同数学量 c₀(2)·y⁵（y=1 退化 c₀(2)）；n=1 孪生 1/12 随行。      *)
 (*                                                                 *)
 (* 分层：                                                             *)
@@ -36,15 +36,15 @@
 (*   S2 闭式评估定值件：n=1,2,3（vm_compute 交叉乘 lia，库内同款）。     *)
 (*   S3 一般闭式定理（G2 主件）：pcu_c0 n == ptp_beta n 0/q_fact(2n)     *)
 (*      全称 n——站点定义展开 + Qinv 乘法分配（pcu_Qinv_mult 自证）+      *)
-(*      ring 收口；全程绕开 field 原子分母坑（TailPos E268/E293 先例）。 *)
+(*      ring 闭合；全程绕开 field 原子分母坑（TailPos 先例）。 *)
 (*   S4 正性件与对账（「正性已证、闭式今统」成对）：pcu_c0_pos 直构；     *)
 (*      pcu_first_coef_pair 把 pbp_beta_pos（β 正性族，BetaPos 在盘）     *)
 (*      双正性并排（Set 面），闭式桥 pcu_c0_eq_pbp 相邻三件成对。         *)
 (*   S5 站点桥：每站点一处定义性实例——桥语句一律指向站点真定义项          *)
 (*      （unfold 直转/直 apply/库件 rewrite），禁自造 1#720 冒充；        *)
 (*      pcu_c0 2 == 1/720 只出现在闭式评估件（S2）。                     *)
-(*   S7 哨兵链（G3 加餐）：½⁵·c₀(2) = ½⁵/720 = 1/23040，与 Lower 哨兵    *)
-(*      cpl_sent_witness_half 对账合流；TailPos 数值哨兵统一形。          *)
+(*   S7 哨兵链（G3 加餐）：½⁵·c₀(2) = ½⁵/720 = 1/23040，与 Lower 数值锚    *)
+(*      cpl_sent_witness_half 核验合流；TailPos 数值锚统一形。            *)
 (*   S6 主件（G1）：pcu_beta2_unify 七项 And 账（每站点一处实例化）+      *)
 (*      pcu_beta1_unify（n=1 孪生 1/12 账）。                            *)
 (*                                                                 *)
@@ -54,9 +54,9 @@
 (*   均 ax-free，Require 链不触 Psatz。提取面 Separate Extraction        *)
 (*   产物以 Obj.magic 零命中为准。                                      *)
 (*                                                                 *)
-(* 红线自审：纯构造性；站点桥真走各站点定义展开（位点①⑥⑥直消费          *)
-(*   cpf_witness_n2/ptp_n2_poly/ptp_sentinel_n2_half 真形）；禁改既有     *)
-(*   文件一行——本席纯新文件。                                            *)
+(* 红线自审：纯构造性；站点桥真走各站点定义展开（直用                  *)
+(*   cpf_witness_n2/ptp_n2_poly/ptp_sentinel_n2_half 真形）；零承认件；   *)
+(*   编译配方：Rocq 9.1 直调 coqc -q -Q . ""，cpu_guard 单道守护。          *)
 (* ============================================================ *)
 
 Require Import S02_CauchyComplete.
@@ -90,15 +90,15 @@ Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
 
 (* ===== S3 一般闭式定理（G2 主件，全称 n） ===== *)
 
-(* Qinv 乘法分配（stdlib Qinv_mult_distr 一行实装，探针定谳；
+(* Qinv 乘法分配（stdlib Qinv_mult_distr 一行实装，检验已证结论；
    q_fact (2*n) 类变元项非 constructor 形，conversion/reflexivity
-   直击不可（本席实测坑），故经此桥。 *)
+   直击不可（实测），故经此桥。 *)
 Lemma pcu_Qinv_mult : forall p q : Q, Qinv (p * q) == Qinv p * Qinv q.
 Proof. intro p. intro q. apply Qinv_mult_distr. Qed.
 
 (* 主桥：c₀(n) = β(n,0)/(2n)!。展开 ptp_beta 定义（q_fact (n+0)、
    (2n+0+1) 归一走 Nat.add_0_r），除法链 Qdiv 定义性展开后 Qinv
-   乘法分配（pcu_Qinv_mult）+ ring 收口。 *)
+   乘法分配（pcu_Qinv_mult）+ ring 闭合。 *)
 Lemma pcu_c0_eq_ptp : forall n : nat,
   pcu_c0 n == ptp_beta n 0 / q_fact (2 * n).
 Proof.
@@ -189,16 +189,16 @@ Proof.
   intro y. rewrite (ptp_n2_poly y). rewrite pcu_c0_val_n2. reflexivity.
 Qed.
 
-(* ===== S7 哨兵链（G3 加餐） ===== *)
+(* ===== S7 数值锚链 ===== *)
 
-(* 闭式与 Lower 哨兵对账桥：½⁵·c₀(2) == ½⁵/720 *)
+(* 闭式与 Lower 数值锚核验桥：½⁵·c₀(2) == ½⁵/720 *)
 Lemma pcu_sent_cpl_agree :
   q_pow (1#2) 5%nat * pcu_c0 2 == q_pow (1#2) 5%nat / 720.
 Proof.
   rewrite (pcu_c0_val_n2). reflexivity.
 Qed.
 
-(* 合流：½⁵·c₀(2) = ½⁵/720 = 1/23040（位点②哨兵 cpl_sent_witness_half 供货） *)
+(* 合流：½⁵·c₀(2) = ½⁵/720 = 1/23040（位点② cpl_sent_witness_half 供货） *)
 Lemma pcu_sent_unified : q_pow (1#2) 5%nat * pcu_c0 2 == (1#23040).
 Proof.
   apply (Qeq_trans _ (q_pow (1#2) 5%nat / 720) _).
@@ -232,7 +232,7 @@ Theorem pcu_beta2_unify :
 Proof.
   (* 注意：repeat split 会经 delta+eq_refl 把闭式可转换的 Qeq 合取项
      （前三项两边皆封闭且同值）直接收掉，bullet 错位——apply conj
-     不做转换穿透，目标数恒定（本席实测坑）。 *)
+     不做转换穿透，目标数恒定（实测）。 *)
   repeat apply conj.
   - apply pcu_c0_val_n2.
   - apply pcu_site_ptp_first.
