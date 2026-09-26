@@ -1,4 +1,6 @@
 (* ============================================================ *)
+(* UpAblT13_UpReqSampling.v —— 假设消融战役 T13a 承接席（批4 fa53/abs 面四连位） *)
+(* 辖区：UpReqSampling.v 四位（FA2 普查批4〔无批承接〕余量，总账 §2.2 批4 行点名）： *)
 (*   位1 L135 abs_ge_zero_req（abs 面，AbsLeId 直喂）                              *)
 (*   位2 L136 lt_plus_compat_lt_le_h（fa53 面）                                   *)
 (*   位3 L737 bs_abs（abs 面双槽镜像，=L135 同语句）                               *)
@@ -19,6 +21,7 @@
 (* 分级：四位全 N1（库内放电件直喂；abs 面经装配桥 req=Id 定义性转换）。             *)
 (* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、fa53_compat_abs、          *)
 (*   AbsLeId、TempSoftmaxInstantiation。                                           *)
+(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblT13_UpReqSampling.log                   *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

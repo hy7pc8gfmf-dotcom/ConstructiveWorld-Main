@@ -1,14 +1,14 @@
-(* uabl_attn_full_instance.v — BoundedSoftmax 接口十九字段的 Fin2 默认实例与单入口聚合导出面。 *)
+(* uabl_attn_full_instance.v — BoundedSoftmax 接口十九字段的 Fin2 默认实例与单入口供给件。 *)
 (* 模块使命：Require 一行后，十九字段（expf 六槽/诚实接口三件/世界数据位与证书）以 uabl_ 前缀具名行全部在位，另附 Id 面条件形两件（任一装可判定序的模型给 RI DO 两参即得）。 *)
-(* 依赖：CW_ConstructiveWorld_219、AttnDoeblin、UpReqConcFin2、UpReqConcB1、UpAblD1_expf_pack、UpReqSampling、fa53_compat_abs（全部只读引用，基座件零改）。 *)
+(* 依赖：CW_ConstructiveWorld_219、AttnDoeblin、UpReqConcFin2、UpReqConcB1、UpAblD1_expf_pack、UpReqSampling、fa53_compat_abs（全部只读消费，基座件零改）。 *)
 (* 构造性注记：全件 Set 层承载、零承认位、可提取。DecidableOrder 于柯西实数载体的整体判定实例不存在（属受限线性全称等价族，lt_dec/ord_le_dec/eq_dec 为整体判定槽，UpReqLpoEquiv.v:448 lpn_equivalence 已机器双向归约），故不构造之；值载体侧 bs_abs/bs_lpc 走具体层无条件供件（UpReqConcB1:128、S07:6147），Id 面取条件形由使用方提供实例。 *)
-(* 编译配方：ASCII .cmd、COQLIB/ROCQLIB 置空、coqc 9.1 -native-compiler no -Q <库树> ""。 *)
+(* 编译配方：ASCII .cmd、COQLIB/ROCQLIB 置空、coqc 9.1 -native-compiler no -Q <库树> ""、四关后收。 *)
 
 From Stdlib Require Import List.
 Import ListNotations.
 
 (* 单入口 Export 面：下游 Require Import uabl_attn_full_instance 一行， *)
-(* 即得下列全部名字空间与十九字段具名定义行。                          *)
+(* 即得下列全部名字空间＋十九字段供给件。                             *)
 Require Export CW_ConstructiveWorld_219.
 Require Export AttnDoeblin.
 Require Export UpReqConcFin2.
@@ -17,7 +17,7 @@ Require Export UpAblD1_expf_pack.
 Require Export UpReqSampling.
 
 
-(* 条件形实例化消解源文件（Part E 引用；本件内部 Require 零改） *)
+(* 条件形实例化消解源文件（Part E 消费；本件内部 Require 零改） *)
 Require Import fa53_compat_abs.
 
 (* ============================================================ *)
@@ -97,7 +97,7 @@ Definition uabl_sum_eq_list := cf2_sum_eq_list.
 
 (* Part E：Id 面条件形实例化消解件（(RI DO) 显式前提随件形态）              *)
 (*   任一未来装 DecidableOrder 的模型：Require 本件＋给 RI DO 两参，  *)
-(*   bs_abs/bs_lpc 两 Id 面槽即实例化消解，零证明体。 *)
+(*   bs_abs/bs_lpc 两 Id 面槽即实例化消解，零证明体。S1 交付报告 §三形态 B 兑现。 *)
 (* ============================================================ *)
 
 Section UablIdFaceDischarge.
@@ -122,8 +122,8 @@ Qed.
 End UablIdFaceDischarge.
 
 (* ============================================================ *)
-(* 证据段： Closed 判读＋提取检验（本件编译运行目录产出 .ml，        *)
-(*   魔数判读按工程规程执行）                                        *)
+(* 证据段： Closed 判读＋抽取检验（G3 主构造件，一人一目录在本件      *)
+(*   编译运行目录产出 .ml，魔数判读归四关门）                        *)
 (* ============================================================ *)
 
 Print Assumptions uabl_bs_abs_id.

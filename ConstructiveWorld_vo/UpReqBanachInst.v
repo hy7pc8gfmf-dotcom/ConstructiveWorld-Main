@@ -2,9 +2,9 @@
 (* UpReqBanachInst.v —— 席INS：BanachAlg 具体实例席（20260913）    *)
 (* ============================================================ *)
 (* 使命：为冻结类 BanachAlg（UpReqBanachExp.v，实例为零）落地第一个 *)
-(*   具体实例。实形普查已证结论：墙不在 bcauchy_complete（BCE 已证结论），   *)
+(*   具体实例。实形普查定谳：墙不在 bcauchy_complete（BCE 定谳），   *)
 (*   而在 bnorm 字段族：bnorm_wd 余域是 Id（ML 恒等型），bnorm_coef *)
-(*   把标量范数 Leibniz-钉死为 Qabs q。三载体全数受阻：             *)
+(*   把标量范数 Leibniz-钉死为 Qabs q。三载体全数撞墙：             *)
 (*   (a) Q 载体 + QeqT 等词：2#4 == 1#2 可证，wd+coef 强逼          *)
 (*       Id (2#4) (1#2) 假等式（S3 墙一，机器形式化）；             *)
 (*   (b) Q 载体 + Leibniz 等词：bplus_opp 撞分母规范化墙            *)
@@ -20,10 +20,10 @@
 (*   S2 = 两堵墙的机器形式化（Implication 面，不落 Prop 终面）；     *)
 (*   S3 = BanachAlgPre 37 字段记录 + 完备性缺口感装配桥              *)
 (*        （Pre + 完备性 -> 完整 BanachAlg，机器核验唯一缺口）。     *)
-(* 降档声明：完整 Q/Real 实例因 S2 墙不可达（禁特设构造），墙的消解=     *)
+(* 降档声明：完整 Q/Real 实例因 S2 墙不可达（禁硬凑），墙的消解=     *)
 (*   上游手术（bnorm : BA -> Real，或 bnorm_wd 余域弱化为 Qeq 型）   *)
 (*   ——详见交付报告实例设计单。                                     *)
-(* 铁律自审：零公理零遗留零中断；语句面零 Prop；冻结类未动一字；      *)
+(* 铁律自审：零公理零挂账零中断；语句面零 Prop；冻结类未动一字；      *)
 (*   前缀 bxin_ 全库零撞名。                                        *)
 (* 工程注：Rocq 9 无 Pos2Z.inj_le/Z.mul_le_mono_l 旧名；positive 桥  *)
 (*   一律走 lia（zify 内建 positive 实例），Z 假设形直传。           *)
@@ -38,7 +38,7 @@ From Stdlib Require Import ZArith.ZArith.
 From Stdlib Require Import Lia.
 
 (* ============================================================ *)
-(* S0：Id 与 QeqT/Qle 的迁移小工具（Id 非 setoid，显式桥）         *)
+(* S0：Id 与 QeqT/Qle 的搬运小工具（Id 非 setoid，显式桥）         *)
 (* ============================================================ *)
 
 (* ML 恒等单侧保 Qle：Id x y -> Qle z x -> Qle z y *)
@@ -157,7 +157,7 @@ Proof.
   exact (bxin_scalar_seq_cauchy B eps Heps).
 Qed.
 
-(* 标量范数钉定检验：bnorm_coef 把 bcoef q 的范数逐点钉为 Qabs q。 *)
+(* 标量范数钉定探针：bnorm_coef 把 bcoef q 的范数逐点钉为 Qabs q。 *)
 (* 离散范数否证的类内承载：q := 1/2 处钉值为 1#2，离散值 1 直接矛盾。 *)
 Lemma bxin_bnorm_coef_pin : forall (B : BanachAlg) (q : Q),
   QeqT (@bnorm B (@bcoef B q)) (Qabs q).
@@ -172,7 +172,7 @@ Proof. intros B. apply bcoef_one. Qed.
 (* S2：两堵墙的机器形式化（Implication 面，结论全 Set 型，禁 Prop） *)
 (* ============================================================ *)
 
-(* 2#4 == 1#2（QeqT 层可证：交叉乘 4 = 4，Qcompare 计算闭合） *)
+(* 2#4 == 1#2（QeqT 层可证：交叉乘 4 = 4，Qcompare 计算收口） *)
 Lemma bxin_qeqT_quarter_half : QeqT (2#4)%Q (1#2)%Q.
 Proof. unfold QeqT. reflexivity. Qed.
 
@@ -254,7 +254,7 @@ Class bxin_BanachAlgPre := {
     bxin_bae (bxin_bcoef (q * r)%Q) (bxin_bmult (bxin_bcoef q) (bxin_bcoef r));
   bxin_bcoef_comm : forall (q : Q) (a : bxin_BA),
     bxin_bae (bxin_bmult a (bxin_bcoef q)) (bxin_bmult (bxin_bcoef q) a);
-  (* ---- 20260913 补丁 B 联动：BCE 二字段 Pre 对偶扩容（37→39）---- *)
+  (* ---- 20260913 补丁 B 联动：BCE 二字段 Pre 镜像扩容（37→39）---- *)
   bxin_bcoef_plus : forall q r : Q,
     bxin_bae (bxin_bplus (bxin_bcoef q) (bxin_bcoef r)) (bxin_bcoef (q + r)%Q);
   bxin_bcoef_wd : forall q r : Q, q == r -> bxin_bae (bxin_bcoef q) (bxin_bcoef r);
@@ -341,7 +341,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 提取检验（G3 面）                                              *)
+(* 提取探针（G3 面）                                              *)
 (* ============================================================ *)
 From Stdlib Require Import Extraction.
 Separate Extraction bxin_scalar_seq_cauchy bxin_scalar_limit_exists

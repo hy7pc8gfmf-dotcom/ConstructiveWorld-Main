@@ -1,7 +1,7 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* UpReqBanachAdd.v —— BA：路径 B bpow_add （） *)
 (* ============================================================ *)
-(* 任务（S3 装配前置主件，B3Sv2 报告点名"约一件中型件工期"）：    *)
+(* UpReqBanachAdd.v —— 席BA：路径 B bpow_add 二项式恒等席（20260912） *)
+(* ============================================================ *)
+(* 任务（S3 总装前置主件，B3Sv2 报告点名"约一件中型件工期"）：    *)
 (*   bpow_add：ab=ba 时 bpow (a+b) n == Σ_{k≤n} C(n,k)·a^k·b^(n−k) *)
 (*   （二项式恒等，Pascal 归纳）。与已绿的柯西方块恒等            *)
 (*   esp_prod_square 分工：本件管 (a+b)^n，方块管 e^a·e^b。       *)
@@ -10,19 +10,19 @@
 (*   S1 bpa_binom：Pascal 递归 Fixpoint（Q 值，S-形匹配免        *)
 (*      Nat.sub 截断；边界 k=0/n 由 match 分支+out/diag 件守卫）  *)
 (*      + Pascal 单点（定义形）+ 出界为零 + 对角为一。            *)
-(*   S2 bpa_bpow_add：主件（Pascal 归纳，使用 bpow_comm_r 清项   *)
+(*   S2 bpa_bpow_add：主件（Pascal 归纳，消费 bpow_comm_r 清项   *)
 (*      链 + bsum rot/加法 AC 引擎）。                            *)
 (*   S3 bpa_esp_term_binom/bpa_esp_binom：esp 的二项式展开形。    *)
 (*                                                               *)
 (* 依赖复用（Require，禁重定义）：UpReqBanachExp（BanachAlg/bpow） *)
 (*   + UpReqBanachProd（bsum 引擎/清项链，只读冻结）。            *)
 (*                                                               *)
-(* 接口缺口（如实遗留，非承认件）：冻结类 BanachAlg 只有          *)
+(* 接口缺口（如实挂账，非承认件）：冻结类 BanachAlg 只有          *)
 (*   bcoef_mult/comm/zero/one，无「Q 加法同调入 bcoef」字段——    *)
 (*   Pascal 配对合并（c1+c2 系数合并进标量载体）数学上必需此面。  *)
 (*   故主件带两个显式假设（hplus: bcoef 加法同调；               *)
 (*   hwd: Qeq 同调入 bcoef），与 UpReqBanachExpDef/Basic          *)
-(*   「类缺字段即显式假设+遗留」先例同款。上游扩类后假设即消。    *)
+(*   「类缺字段即显式假设+挂账」先例同款。上游扩类后假设即消。    *)
 (*                                                               *)
 (* 红线自审：语句面全 Set 层（bae 承载等词；Q 层 Qeq 仅假设面），  *)
 (*   证内无经典逻辑；无承认件。                                   *)
@@ -153,7 +153,7 @@ Proof.
         -- exact (@bplus_zero B (@bmult B (@bzero B) x)).
 Qed.
 
-(* 右乘拉出（bsum_mult_l 对偶）：Σ (f i·x) == (Σ f)·x
+(* 右乘拉出（bsum_mult_l 镜像）：Σ (f i·x) == (Σ f)·x
    （bdistrib_r 对称向；基例零元经 bpa_bmult_zero_l 左零消） *)
 Lemma bpa_bsum_mult_r : forall (B : BanachAlg) (n : nat) (x : (@BA B))
                                (f : nat -> (@BA B)),
@@ -173,7 +173,7 @@ Proof.
 Qed.
 
 (* 标量配对合并：bcoef q·T + bcoef r·T == bcoef (q+r)·T
-   （使用 hplus：bcoef 加法同调——类缺字段，显式假设面） *)
+   （消费 hplus：bcoef 加法同调——类缺字段，显式假设面） *)
 Lemma bpa_scal_plus : forall (B : BanachAlg) (q r : Q) (T : (@BA B)),
   (forall q r : Q, @bae B (@bplus B (@bcoef B q) (@bcoef B r))
                            (@bcoef B (q + r)%Q)) ->
@@ -645,10 +645,10 @@ Qed.
 (* ============================================================ *)
 (* S3 加分：esp 的二项式展开形（与 esp_prod_square 对接注记：      *)
 (*   本件管 (a+b)^k 单和层；柯西方块管 e^a·e^b 双和层——三角转置    *)
-(*   （exp_cauchy_swap 降层，进行中）后方能对接装配 exp_add。）  *)
+(*   （exp_cauchy_swap 降层，另席在飞）后方能对接总装 exp_add。）  *)
 (* ============================================================ *)
 
-(* 标量重封装：(bcoef c·T)·bcoef s == bcoef (c·s)·T *)
+(* 标量重打包：(bcoef c·T)·bcoef s == bcoef (c·s)·T *)
 Lemma bpa_scal_repack : forall (B : BanachAlg) (c s : Q) (T : (@BA B)),
   @bae B (@bmult B (@bmult B (@bcoef B c) T) (@bcoef B s))
          (@bmult B (@bcoef B (c * s)%Q) T).
@@ -744,12 +744,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 遗留登记（对称登记，不落承认件）：                              *)
+(* 挂账登记（对称登记，不落承认件）：                              *)
 (*   ① 接口缺口：BanachAlg 类缺 bcoef 加法同调/Qeq 同调字段——     *)
 (*     本件以显式假设（hplus/hwd）承载，上游扩类后即消。          *)
-(*   ② exp_add 装配：需三角转置 exp_cauchy_swap 降层（进行中）  *)
+(*   ② exp_add 总装：需三角转置 exp_cauchy_swap 降层（另席在飞）  *)
 (*     + 极限乘法连续性；本件 S2 为其 (a+b)^n 层，S3 为其          *)
-(*     esp 展开层，。                                   *)
+(*     esp 展开层，均不属本席。                                   *)
 (*   ③ 系数桥：Pascal 递归形 bpa_binom 与阶乘比形                 *)
 (*     q_fact n/(q_fact k·q_fact (n−k)) 的等价（供下游 #29 项      *)
 (*     分裂 exp_term_split）为对接件，另立。                       *)

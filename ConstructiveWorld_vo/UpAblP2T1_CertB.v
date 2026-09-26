@@ -1,11 +1,38 @@
-(* ==========================================================================)
-   UpAblP2T1_CertB.v — 结论 9(e)/(f) 无余量供给证书 B 组
-   使命: p2t1b_T2_abs_le_quad_supply/quad_t_le_h_supply/abs_h_sq_supply/db_breaking_bound_supply 四供给定理（|x|≤x²+¼ 型估计链）与 p2t1b_g3_pick 选择子。
-   依赖: CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2；Stdlib List、QArith、Extraction。
-   对标: |x| ≤ x² + 1/4 型初等不等式链（分析学标准估计）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblP2T1_CertB.v —— 结论 9(e)/(f) 无余量供给证书件（CertB）          *)
+(*   数学使命：实数不等式四条的具名供给与 Q 层提取见证。                 *)
+(* ============================================================ *)
+(* 【使命】将 UpRealLeB2 已建的四条实数不等式引理以具名供给定理形式接入    *)
+(*   供给面，对应结论 9(e)/(f) 的余量显式入前提形式；≤_b 记 Set 层序谓词   *)
+(*   real_le_b。四条定理均为转引：前提逐一显式承接，证明由 UpRealLeB2      *)
+(*   相应引理直接给出，本件不引入新证明。                                  *)
+(*   p2t1b_T2_abs_le_quad_supply：|X| ≤ 2t²+eps 的双余量形式；             *)
+(*   p2t1b_T2_quad_t_le_h_supply：(h/x)² 的内嵌 |h| 余量形式；             *)
+(*   p2t1b_T2_abs_h_sq_supply：A·|h|² 的倍率余量形式；                    *)
+(*   p2t1b_T2_db_breaking_bound_supply：db 破界上界的复合系数形式。        *)
+(* 【依赖】Stdlib（List／QArith.QArith／Extraction）／CW_ConstructiveWorld_219 *)
+(*   ／UpRealLeB／UpRealLeB2（real_abs_le_quad_B、real_quad_t_le_h_B、     *)
+(*   real_abs_h_sq_le_B、real_db_breaking_bound_B 供给源）。               *)
+(* 【对标】数学原型：分析学中 abs-平方与破界估计的显式余量形式；           *)
+(*   mathlib/stdlib 无直接构造对应物。                                     *)
+(* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑。  *)
+(*   四条供给定理的前提（含 keep_dec 的排除律前提）逐一显式承接；文末对    *)
+(*   四条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证假设判据。 *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
+(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
+(* 【结构总览】§1 p2t1b_T2_abs_le_quad_supply——若 X ≤ eps1 且             *)
+(*   −X ≤ 2t²+eps2 且 0<eps1、0<eps2，则 |X| ≤_b 2t²+(eps1+eps2)；         *)
+(*   由 real_abs_le_quad_B 直接推得。                                      *)
+(*   §2 p2t1b_T2_quad_t_le_h_supply——若 0<x 且 |h| < eps·x²/4 且 0<eps，   *)
+(*   则 2·(h/x)² ≤_b eps·|h|/2；由 real_quad_t_le_h_B 直接推得。           *)
+(*   §3 p2t1b_T2_abs_h_sq_supply——若 0<A 且 |h|<eps3，则 A·|h|² ≤_b       *)
+(*   (A·eps3)·|h|；由 real_abs_h_sq_le_B 直接推得。                       *)
+(*   §4 p2t1b_T2_db_breaking_bound_supply——db 破界上界的复合系数形式：    *)
+(*   转移核非负与对称、能量 Lipschitz 与下界、逐出分区正性等 16 个节参数   *)
+(*   逐一显式承接；复合系数 C:=invZ·T·(exp+1) 仅具非负性；由               *)
+(*   real_db_breaking_bound_B 直接推得。                                   *)
+(*   §5 提取核验：供给定理均为实数层接口语句不入提取集，见证面另立 Q 层    *)
+(*   纯函数 p2t1b_g3_pick；§6 假设审计区。                                 *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith.
@@ -66,7 +93,7 @@ Proof.
 Qed.
 
 (* p2t1b_T2_db_breaking_bound_supply：db 破界上界的复合系数形式——16 个
-   节参数逐一显式接续（转移核非负与对称、能量 Lipschitz 与下界、
+   节参数逐一显式承接（转移核非负与对称、能量 Lipschitz 与下界、
    逐出分区正性等），eps 与 eps′ 并入显式前提；复合系数
    C:=invZ·T·(exp+1) 仅具非负性；转引 UpRealLeB2 的 real_db_breaking_bound_B。 *)
 Theorem p2t1b_T2_db_breaking_bound_supply :

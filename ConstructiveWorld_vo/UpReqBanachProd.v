@@ -1,11 +1,36 @@
-(* ==========================================================================)
-   UpReqBanachProd.v — 有限和算子的代数律与指数乘积展开
-   使命: bsum 定义族（bsum_ext/bsum_plus/bsum_scal/bsum_mult_l）、bplus_swap4、bpow_comm_r、esp_as_bsum（指数部分和实现）、bsum_prod 与 esp_prod_square（部分和乘积重排）。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp；Stdlib QArith、Lia
-   对标: 有限求和的线性/换序律与指数级数 Cauchy 乘积（二项展开预备）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   bplus_swap4（原 L82，2 句强证）	*)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqBanachProd.v —— 席B3Sv2：路径 B S3 前哨席（20260912）   *)
+(* ============================================================ *)
+(* 任务：S3 交换函数方程 e^(a+b)=e^a·e^b（ab=ba）的关键引理——    *)
+(*   级数乘法重组（ExpPlusStage2 降层移植，评审003 模板）。     *)
+(* 本件首批：                                                   *)
+(*   ① bsum：Banach 层部分和 Fixpoint（对齐库内 sum_upto 形）； *)
+(*  ② bae 面和式引擎（ext/mult_l/plus/scal/swap4）；           *)
+(*  ③ bpow_comm_r：ab=ba ⟹ a^n·b=b·a^n（comm 清项引擎）；      *)
+(*  ④ esp_as_bsum：exp_series_partial 展开为和式；             *)
+(*  ⑤ bsum_prod/esp_prod_square：柯西乘积部分和恒等形（方块）。 *)
+(* 交付① bpow_add（二项式恒等）为第二批（Pascal 系数层组装）。 *)
+(*                                                             *)
+(* 依赖复用：UpReqBanachExp（Class BanachAlg/bpow/              *)
+(*   exp_series_partial 全出口），禁重定义。                    *)
+(*                                                             *)
+(* 红线自审：语句面全 Set 层（bae:BA->BA->Set 承载等词），      *)
+(*   证内无经典逻辑；无承认件（不落遗留字面量）。               *)
+(* 工程注（沿 UpReqBanachExp 同款）：类字段投影一律 @显式喂实例；*)
+(*   自定 Fixpoint/Lemma 常规显式参不加 @。bae 面 Set 承载等词  *)
+(*   无 rewrite 实例——一律 change（定义形）+ bae_trans 显式链， *)
+(*   禁 rewrite/setoid_rewrite 于 bae（Q 层 Leibniz 等式除外）。 *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -17,6 +42,7 @@ From Stdlib Require Import Lia.
 (* ============================================================ *)
 (* ① bsum：Banach 层部分和（对齐库内 sum_upto：                 *)
 (*   bsum n f = Σ_{k=0}^{n-1} f k，bsum (S m) f = bsum m f + f m）*)
+(* 全库无撞名：grep "bsum" 20260912 仅 t26_bsum（异名）零冲突。 *)
 (* ============================================================ *)
 
 Fixpoint bsum (B : BanachAlg) (n : nat) (f : nat -> (@BA B)) : (@BA B) :=
@@ -389,9 +415,9 @@ Qed.
 
 (* ============================================================ *)
 (* 遗留登记（对称遗留，不落承认件）：                           *)
-(*   第二部分：交付① bpow_add（ab=ba 下二项式恒等：q_choose/     *)
+(*   第二批：交付① bpow_add（ab=ba 下二项式恒等：q_choose/     *)
 (*     Pascal 系数层 + bsum 换元/配对 + bpow_comm_r 清项）；    *)
-(*   第三部分：三角转置（exp_cauchy_swap 降层）→ e^(a+b) 主链；   *)
+(*   第三批：三角转置（exp_cauchy_swap 降层）→ e^(a+b) 主链；   *)
 (*   尾界对接：esp_diff_le_tail/exp_series_cauchy 已绿          *)
 (*     （UpReqBanachExp），带尾估计为收敛收尾件。               *)
 (* ============================================================ *)

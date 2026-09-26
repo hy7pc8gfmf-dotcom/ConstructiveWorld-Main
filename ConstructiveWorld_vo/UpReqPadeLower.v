@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   cpl_sent_exp0（原 L157，1 句玩具证）                                 *)
 (*   cpl_sent_s_b2（原 L139，1 句玩具证）                                 *)
@@ -19,14 +19,14 @@
 (* ============================================================ *)
 (* UpReqPadeLower.v *)
 (* *)
-(* 目的： Padé [2/2] 免除法正尾下界（误差界装配切片）。 *)
+(* 目的： Padé [2/2] 免除法正尾下界（误差界总装切片）。 *)
 (* 主件： cpl_qpow_pos / cpl_sq_nonneg 与正尾下界构造（数值实证 n=2）。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqQExpTail、UpReqPadeQLeg。 *)
 (* 备注： 语句面取 real_lt sigT 见证形，免除法（乘积面）；免积分第三形态。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPadeLower.v —— 席C-S1：Padé [2/2] 免除法正尾下界（误差界装配切片③） *)
+(* UpReqPadeLower.v —— 席C-S1：Padé [2/2] 免除法正尾下界（误差界总装切片③） *)
 (* 日期：2026-09-14                                                *)
 (*                                                                 *)
 (* 任务定位：侦察报告 attn/_tcs1_侦察报告-20260914.md 结论【直通】的   *)
@@ -39,15 +39,15 @@
 (*   E₆·Q₂ − P₂ == y⁵/720 + y⁶/1440 + y⁸/8640（Q 层符号 y 恒等式），   *)
 (*   尾项全非负且 y⁶/1440 > 0（y>0）⟹ e^y·Q₂ − P₂ > y⁵/720。          *)
 (*   见证：eps := y⁵/720（=β₀·y^(2n+1)，β₀=(2!)²/(4!·5!)=1/720，      *)
-(*   与 S1 检验经典式同值；工单 §1.3 的额外 /(2n)! 因子系笔误，   *)
+(*   与 S1 探针经典式同值；工单 §1.3 的额外 /(2n)! 因子系笔误，   *)
 (*   以 S1 实测为准）。N := 6（截断指数安全位：M=5 时 y⁶ 系数 −1/1440  *)
 (*   为负、M=6 起无损伤——S1 报告②-4 截断损伤警示）。                  *)
 (*                                                                 *)
 (* 语句面：real_lt sigT 见证形（S02:455），免除法（乘积面），          *)
 (*   正性全走 QltT/Qlt 见证形——LPO 墙规避（E225 逐点可判定口径），     *)
-(*   零经典极限/积分性质。奇 n 对偶（上界）对称显式假设，禁特设构造。          *)
+(*   零经典极限/积分性质。奇 n 镜像（上界）对称显式假设，禁硬凑。          *)
 (*                                                                 *)
-(* 使用面：CW_ConstructiveWorld_219（S01 NatLe_drop/S02 real_lt       *)
+(* 消费面：CW_ConstructiveWorld_219（S01 NatLe_drop/S02 real_lt       *)
 (*   real_mult_proj real_const_proj QltT_to_Qlt Qlt_to_QltT /        *)
 (*   S03 exp_partial q_pow q_fact q_fact_pos）；UpReqPadeExp          *)
 (*   （pade_num/pade_den/pade_coeff）；UpReqQExpTail（qtail_le_plus_r）。*)
@@ -55,8 +55,8 @@
 (*   -Q . "" UpReqPadeLower.v（PC 卡实测配方；工单草方 ../001 无       *)
 
 (* 公理面：主件 Print Assumptions 预期 Closed（无公理依赖）。          *)
-(* 数值锚值（核对工单 §1.4，S1 检验实测）：                            *)
-(*   S-b: pade_num 1 (1#2)==5#4、pade_den 1 (1#2)==3#4（直引 PC 数值锚）； *)
+(* 哨兵值（核对工单 §1.4，S1 探针实测）：                            *)
+(*   S-b: pade_num 1 (1#2)==5#4、pade_den 1 (1#2)==3#4（直引 PC 哨兵）； *)
 (*   G6 恒等式 y=1/2: 121/2211840、y=1: 19/8640（fractions 精确）；    *)
 (*   见证 y=1/2: (1#2)^5/720 == 1#23040；n=0 退化: exp_partial 0 == 1， *)
 (*   P₀=Q₀=1（pade_num_0_one/pade_den_0_one 既有）。                   *)
@@ -70,8 +70,8 @@ From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 Section PadeLower.
 
-(* ===== B0 桥接引理（Qeq→Qlt 传桥；AA12 腿化：自建 Q 单调腿一跳，
-   不引入 Psatz/micromega 环境闭包；语句面全不变） ===== *)
+(* ===== B0 桥件（Qeq→Qlt 传桥；AA12 腿化：自建 Q 单调腿一跳，
+   断根 Psatz/micromega 环境闭包；语句面全不变） ===== *)
 
 (* 等值右传桥：a==b 时 0<a 传给 0<b（pds_qlt0_eq_r 同款证法，自持零依赖）。 *)
 Lemma cpl_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
@@ -106,7 +106,7 @@ Proof.
   exact (pql_qlt_eq_r a b x Hab Ha).
 Qed.
 
-(* 幂非负：0<=y ⟹ 0<=y^k（逐项非负的单调性链基础模块）。 *)
+(* 幂非负：0<=y ⟹ 0<=y^k（逐项非负的单调性链底座）。 *)
 Lemma cpl_qpow_nonneg : forall (y : Q) (k : nat), Qle 0 y -> Qle 0 (q_pow y k).
 Proof.
   intros y k Hy. induction k as [| k IH].
@@ -135,7 +135,7 @@ Proof.
   destruct x as [nx dx]. destruct y as [ny dy]. simpl in *. lia.
 Qed.
 
-(* 平方非负：Q 序逐点可判定（Qlt_le_dec），非 LPO 面；负支走 −t·−t 对偶。 *)
+(* 平方非负：Q 序逐点可判定（Qlt_le_dec），非 LPO 面；负支走 −t·−t 镜像。 *)
 Lemma cpl_sq_nonneg : forall t : Q, Qle 0 (t * t).
 Proof.
   intro t. destruct t as [tn td].
@@ -148,16 +148,16 @@ Proof.
     + apply qeq_le. ring.
 Qed.
 
-(* ===== B1 数值锚件（工单 §1.4 核对；字面量点 vm_compute——CS 卡数值锚纪律） ===== *)
+(* ===== B1 哨兵件（工单 §1.4 核对；字面量点 vm_compute——CS 卡哨兵纪律） ===== *)
 
-(* S-b：PC 数值锚直引（系数公式+有界和+交错符号端到端）。 *)
+(* S-b：PC 哨兵直引（系数公式+有界和+交错符号端到端）。 *)
 Lemma cpl_sent_s_b1 : pade_num 1%nat (1#2) == (5#4).
 Proof. exact pade_num_1_half. Qed.
 
 Lemma cpl_sent_s_b2 : pade_den 1%nat (1#2) == (3#4).
 Proof. exact pade_den_1_half. Qed.
 
-(* G6 恒等式数值交叉（S1 检验 fractions 精确值）。 *)
+(* G6 恒等式数值交叉（S1 探针 fractions 精确值）。 *)
 Lemma cpl_sent_g6_half : exp_partial 6%nat (1#2) * pade_den 2%nat (1#2)
                          - pade_num 2%nat (1#2) == (121#2211840).
 Proof. vm_compute. reflexivity. Qed.
@@ -171,7 +171,7 @@ Lemma cpl_sent_witness_half : q_pow (1#2) 5%nat / 720 == (1#23040).
 Proof. vm_compute. reflexivity. Qed.
 
 (* n=0 退化：E₀==1（P₀=Q₀=1 即 e^y−1 >= y 面，pade_num_0_one/ *)
-(* pade_den_0_one 既有直引，此处补部分和基例数值锚）。 *)
+(* pade_den_0_one 既有直引，此处补部分和基例哨兵）。 *)
 Lemma cpl_sent_exp0 : forall y : Q, exp_partial 0%nat y == 1%Q.
 Proof. intro y. exact (Qeq_refl 1%Q). Qed.
 
@@ -247,7 +247,7 @@ Proof.
 Qed.
 
 (* 核心恒等式（工单接口缺口件二：E₆·Q₂−P₂ 免积分正尾多项式； *)
-(* S1 检验 500 随机 Q 点 fractions 全验 + 数值锚 B1 双点交叉）。 *)
+(* S1 探针 500 随机 Q 点 fractions 全验 + 哨兵 B1 双点交叉）。 *)
 Lemma cpl_g6_identity : forall y : Q,
   exp_partial 6%nat y * pade_den 2%nat y - pade_num 2%nat y ==
   q_pow y 5%nat / 720 + q_pow y 6%nat / 1440 + q_pow y 8%nat / 8640.

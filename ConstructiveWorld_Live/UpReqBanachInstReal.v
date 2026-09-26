@@ -1,5 +1,5 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ═════════════════════════════════════════════════════════════════════ *
- * 组件E·切片三 同名替换件：UpReqBanachInstReal（记录 组 续作，切片三） *
+(* ═════════════════════════════════════════════════════════════════════ *
+ * ToyR 包E·切片三 同名替换件：UpReqBanachInstReal（台账 T243 续作，切片三）   *
  * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、          *
  * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
  * 替换清单（11 件）：bxra_head_cR／bxra_head_bplus／bxra_head_bmult／       *
@@ -8,34 +8,42 @@
  *   bxra_inst_smoke_norm_wd                                               *
  * 三口径：①定义层受控展开（head→projT1 首项投影 iota、coef/zero/one→       *
  *   规范链 head_cR→qnorm_fix_id 两级回位、bnorm→Qabs 形）＋②显式见证        *
- * （smoke 件以 change 逐位把库类投影还原到实例字段原基，直接使用本件 *
+ *   （smoke 件以 change 逐位把库类投影还原到实例字段原基，直接消费本席       *
  *   具体证明 bxra_f_coef_one／bxra_norm_coef_qeqt／bxra_norm_wd_qeqt，     *
  *   消除 bxin_bcoef_one／bxin_bnorm_coef／bxin_bnorm_wd 类字段中转跳）      *
  *   ＋③结构性推导（实例投影 iota 回原基的三段 staged change 链）。           *
+ * 挂账（本切片未实施，滚动）：bxra_id_of_eq／bxra_norm_wd／                *
  *   bxra_norm_wd_qeqt／bxra_f_refl／bxra_f_sym／bxra_f_trans／             *
  *   bxra_f_norm_pos／bxra_bridge_smoke（恒等三律为单点公理面、bridge 为      *
+ *   跨类装配收口，如实不改批量标注）。                                     *
  * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。            *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
+(* UpReqBanachInstReal.v —— 席AA3：B1 单第一期·候选 A 实例装配     *)
+(* （S02 Real 载体 → 库类 bxin_BanachAlgPre 全字段装配，20260914） *)
 (* ============================================================ *)
-(* 使命：AA1 普查已证结论「实例非空性 0%→100%」——把 S02 Real 载体装配  *)
+(* 使命：AA1 普查定谳「实例非空性 0%→100%」——把 S02 Real 载体装配  *)
 (*   进库类 bxin_BanachAlgPre（UpReqBanachInst.v 39 字段弱化类），  *)
 (*   产出全库首个库类具体实例 bxra_real_pre。                      *)
 (* 架构＝承 INST3/INST5 已证机器（UpReqBanachInstPre.v 改名复用）： *)
 (*   载体 := Real（sigT(序列,柯西见证)）；bae := 规范种型等价       *)
 (*   Id(qnorm(head a))(qnorm(head b))；运算＝首项有理运算规范化；   *)
 (*   范数 := Qabs ∘ qnorm ∘ head（bxib_qnorm 处方定形）。           *)
+(* 本席新增三刀：                                                  *)
+(*   ① bxra_qabs_opp_norm——INSTB/INST3/INST5 三席挂账的            *)
+(*      bnorm_opp Id 形墙，本席闭合：纯 iota 不达（Z.gcd 展开        *)
 (*      ggcd 机器符号参卡壳），Z 层引理链闭合（Z.gcd_opp_l +        *)
 (*      bxib_div_exact + Z.abs_opp，eq 桥回 Id）；                  *)
-(*   ② bxra_qltT_wd——QeqT 传递件（qleT'_ltT_ltT 组装），获取      *)
+(*   ② bxra_qltT_wd——QeqT 传递件（qleT'_ltT_ltT 组装），收割      *)
 (*      完备性红利用；                                             *)
-(*   ③ 完备性红利半获取：head 列本身是 Q-Cauchy（bxra_head_col_    *)
+(*   ③ 完备性红利半收割：head 列本身是 Q-Cauchy（bxra_head_col_    *)
 (*      cauchy），极限【元素】在载体上构造可得（bxra_cauchy_limit_ *)
 (*      elem）——载体红利内建实测；唯 head 盲区使收敛语句（范数读   *)
-(*      第 0 项）不可闭合，诚实留记（INST3 已证结论维持，零强造）。     *)
+(*      第 0 项）不可闭合，诚实挂账（INST3 定谳维持，零硬凑）。     *)
 (* 公理面自审：全件零 公理 零 参数 零 猜想 零 承认件  *)
 (*   零 Variable 零 Hypothesis；语句面零 Props 泄露（结论全 Set、   *)
 (*   Id、QeqT、QleT' 形）；主件出口 Print Assumptions Closed。      *)
+(* 领土纪律：仅新建本件（bxra_ 前缀全库零撞名）；冻结类与在飞席位   *)
 (*   文件未动一字；禁 git。                                        *)
 (* ============================================================ *)
 
@@ -133,6 +141,7 @@ Proof.
     apply Qle_to_QleT'; unfold Qle, Qabs, bxib_qnorm; cbn; lia.
 Qed.
 
+(* 本席新增②：QeqT 传递件（QltT 面沿 Qeq 换代表元） *)
 Lemma bxra_qltT_wd : forall a b c : Q, QeqT a b -> QltT a c -> QltT b c.
 Proof.
   intros a b c Hab H.
@@ -143,9 +152,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* S2：两堵墙的 Real 载体 discharge（保底件）＋ 本席新增①攻墙件     *)
 (* ============================================================ *)
 
-(* Qabs-范数不变（Id 形）。攻法已证结论：纯 iota 不达（Z.gcd 展开 ggcd  *)
+(* 本席新增①：INSTB/INST3/INST5 三席挂账墙——Qopp 与 qnorm 的       *)
+(* Qabs-范数不变（Id 形）。攻法定谳：纯 iota 不达（Z.gcd 展开 ggcd  *)
 (* 机器符号参卡壳），Z 层引理链闭合——Z.gcd_opp_l + bxib_div_exact  *)
 (* + Z.abs_opp；eq 桥回 Id。                                        *)
 Lemma bxra_id_of_eq : forall (A : Set) (x y : A), x = y -> Id x y.
@@ -238,7 +249,7 @@ Proof.
     + apply Qeq_refl.
 Qed.
 
-(* bnorm_opp 字段 discharge（库类 Id 形）＝新增①的使用位 *)
+(* bnorm_opp 字段 discharge（库类 Id 形）＝新增①的消费位 *)
 Lemma bxra_f_norm_opp : forall a : Real,
   Id (bxra_bnorm_f (bxra_bopp_f a)) (bxra_bnorm_f a).
 Proof.
@@ -737,7 +748,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S5：完备性红利半获取（bcauchy 优先吃位）＋ 诚实留记              *)
+(* S5：完备性红利半收割（bcauchy 优先吃位）＋ 诚实挂账              *)
 (* ============================================================ *)
 
 (* 范数差换算：bnorm(u m ⊖ u n) 的 Qeq 值＝首项列差绝对值 *)
@@ -760,7 +771,7 @@ Proof.
   - apply Qabs_wd. apply qeqT_imp_qeq. apply bxib_qnorm_fix.
 Qed.
 
-(* 红利获取①：Pre-柯西列的首项列本身是 S02 意义的 Q-Cauchy 列 *)
+(* 红利收割①：Pre-柯西列的首项列本身是 S02 意义的 Q-Cauchy 列 *)
 Lemma bxra_head_col_cauchy : forall u : nat -> Real,
   (forall eps : Q, QltT 0 eps ->
     sigT (fun N : nat => forall m n : nat,
@@ -777,7 +788,7 @@ Proof.
   - apply HN; assumption.
 Qed.
 
-(* 红利获取②：极限【元素】在 Real 载体上构造可得                *)
+(* 红利收割②：极限【元素】在 Real 载体上构造可得                *)
 (* （载体内建完备性红利的实测形：柯西见证由首项列自供，          *)
 (*   existT 包装即得真 Real 元素——载体侧零缺口。）               *)
 Definition bxra_cauchy_limit_elem (u : nat -> Real)
@@ -789,13 +800,13 @@ Definition bxra_cauchy_limit_elem (u : nat -> Real)
   existT (fun s : Qseq => cauchy s)
          (fun k => bxra_head (u k)) (bxra_head_col_cauchy u Hu).
 
-(* 诚实留记：收敛语句（bxin_pre_complete 的内层）——范数读第 0 项， *)
+(* 诚实挂账：收敛语句（bxin_pre_complete 的内层）——范数读第 0 项， *)
 (* 极限元素的第 0 项须为（构造性不可命名的）首项列极限值，        *)
-(* ＝Q 列完备墙（INST3 已证结论维持，零强造；余项逐条见交付报告）。    *)
+(* ＝Q 列完备墙（INST3 定谳维持，零硬凑；余项逐条见交付报告）。    *)
 Definition bxra_pre_complete_real : Set :=
   bxin_pre_complete bxra_real_pre.
 
-(* 装配桥连接（条件形：完备性输入就位即得完整 BanachAlg） *)
+(* 装配桥接线（条件形：完备性输入就位即得完整 BanachAlg） *)
 Definition bxra_BanachAlg_of_real
   (Hc : bxin_pre_complete bxra_real_pre) : BanachAlg :=
   bxin_BanachAlg_of_pre bxra_real_pre Hc.
@@ -807,11 +818,11 @@ Lemma bxra_bridge_smoke : forall Hc : bxin_pre_complete bxra_real_pre,
 Proof. intro Hc. apply bxin_bone_is_one. Qed.
 
 (* ============================================================ *)
-(* S6：提取检验 + 假设面自审（G3 面）                              *)
+(* S6：提取探针 + 假设面自审（G3 面）                              *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
-(* 提取检验（INST5 同款纪律：标量/引理级件，依赖载体项不提取——   *)
+(* 提取探针（INST5 同款纪律：标量/引理级件，依赖载体项不提取——   *)
 (*   existT/记录提取 inherent Obj.magic 属提取器特性，非语句负债； *)
 (*   依赖项 bxra_cauchy_limit_elem/bxra_BanachAlg_of_real 以       *)
 (*   Print Assumptions Closed 承担假设面自审）。                   *)

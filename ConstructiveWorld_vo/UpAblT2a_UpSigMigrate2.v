@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* UpAblT2a_UpSigMigrate2.v —— 假设消融战役 T2a 批（FA2 第 2 批·log 三面）  *)
 (* 辖区：UpSigMigrate2.v ReqFECore 节（L92-121）+ ReqAlignCore 节（L872-921）   *)
 (*   log 接口面假设位 4 位：L117 req_log_exp_neg / L120 req_log_compat /        *)
 (*   L908 b_log_exp_neg / L910 b_log_compat。                                  *)
@@ -7,6 +8,7 @@
 (*     其证=real_log_wd@S08_RealMainlineDPO:1074 直取）                         *)
 (*   负指面←logd_log_exp_neg_real（根供给 real_log_exp_neg，CW 基座直取）        *)
 (*   倒数面←logd_log_inv_one_inv_real（本件未用位；同形 kl_log_inv@UpStepKL:583）*)
+(* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 1731=现档        *)
 (*   行数 1731，21 位语句逐字双检通过）；语句逐字抽取后仅 R 换实例位 Real，        *)
 (*   RIS 取 RealEnhancedReal（hzlogd_discharge_real@G08:646 同形先例）。         *)
 (* 分级：4 件全 N1（库内放电件直连：被消融位在库内已有零前提无条件形；            *)

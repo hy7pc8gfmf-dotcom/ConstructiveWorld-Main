@@ -8,6 +8,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqFEPAttn.v — 批4注意力席：FEPAttention 4 + RowView 1 +    *)
 
 (*                                                              *)
 (* Id 原件定位（grep 实证）：                                     *)
@@ -24,6 +25,7 @@
 (*      FEPAttention/RowView 与 G01_CoreMicro.v 逐字同构，FEPLogZ 不在     *)
 (*      G01_CoreMicro.v，在基座 UpExtras219（fep_F_ext 较弱：无归一前提）。*)
 (*                                                              *)
+(* 解锁消费面（D.3.1：批2 FEP req 三件套结果后 bridge 降为消费件）*)
 
 (*     req_min_free_energy_is_boltzmann（无条件形态，探针签名      *)
 
@@ -533,7 +535,7 @@ Qed.
 
 End ReqFEPLogZ.
 
-(*
+(* 覆盖核对总表（req 件名 -> Id 原件 @ 行号；9/9 显式假设清偿）：
    【FEPAttention】req_fep_partition_condition<-112193
      req_fep_align<-112201 req_fep_F_ext<-112211
      req_attention_minimizes_free_energy_unique<-112225【旗舰】

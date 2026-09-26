@@ -1,26 +1,63 @@
 (* ============================================================ *)
-(* UpEntropyGain.v —— 熵增益的逐步下界与热二律（Real 层 list 离散世界） *)
-(* 使命: 形式化梯度上升一步的熵增量定量下界 entropy_step_gain_lower、   *)
-(*     其正性推论 entropy_gain_positive，以及热力学第二定律的充分条件  *)
-(*     量化形 second_law_quant（严格熵增 lt (entropy x)                *)
-(*     (entropy (dynamics x))）。                                      *)
-(*   数学要点（tangent 接口 + Lipschitz 常数 L）:                      *)
-(*     切线不等式给 e' − e ≥ η·g·g'；单边 Lipschitz 给 g' ≥ (1−Lη)g    *)
-(*     （强凹常数 μ 只给上界 g' ≤ (1−μη)g，控制不住步长过大时的回落，  *)
-(*     故正性条件取 ηL < 1 而非 ημ < 1）；两侧乘 (1−Lη)g 得            *)
-(*     增量 ≥ η(1−Lη)g²。g(x) < 0 负支同界，但其提取需符号三分判定，   *)
-(*     构造性 Set 层不可达，故定理取 g(x) > 0 单侧版。                 *)
-(* 依赖: CW_ConstructiveWorld_219；entropy_tangent／gradient_lipschitz／ *)
-(*     dynamics_gradient_step 以 Section Variable 声明（与根           *)
-(*     ConvergenceCauchy 区同名接口一致）；abs_ge_value 与             *)
-(*     lt_plus_compat_lt_le 为本件新增实证件。                         *)
-(* 对标: 根 SecondLaw 区的 Variable strict_entropy_increase 假设重述—— *)
-(*     本件以其充分条件定理取代之。                                    *)
-(* 构造性注记: 纯构造性 / Set 层 / 零未证缺口 / 零经典逻辑 / 语句零 Prop *)
-(*     （lt/le 均接口 Set 字段；无 Not/Or 前提）/ 可提取 OCaml。       *)
-(* 编译配方: SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空），   *)
-(*     Rocq 9.1 coqc -q -native-compiler no，-Q 单根。                 *)
+(* 【同名替换稿说明】本件为玩具级定理同名替换件：原件全文逐字保留， *)
+(* 仅将文末清单所列定理之证明体按实质非平凡三口径（定义层受控展开／ *)
+(* 显式见证直取／结构性重演）处理，声明面与引用面零改动，零新增     *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留     *)
+(* 原件 Print Assumptions 追印面。                                 *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   eg_minus_pos（原 L139，4 句玩具证）                                  *)
+(*   eg_minus_def（原 L92，2 句玩具证）                                   *)
 (* ============================================================ *)
+
+(* ============================================================ *)
+(* UpEntropyGain.v *)
+(* *)
+(* 目的： 熵增益的逐步下界与热二律（Real 层 list 离散世界）。 *)
+(* 主件： entropy_gain_positive 与 second_law_quant：逐步增益非负及热力学第二定律量化形。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： 熵函数、梯度、动力学以 Variable 前提声明；逐步差分引理链 eg_step_diff 等为构造核。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
+(* ============================================================ *)
+
+(* ============================================================
+   UpEntropyGain.v —— second_law_irreversible 的定量对应件
+   从"假设迁移型平凡"升级为带定量增量的真定理。
+
+   件 1  entropy_step_gain_lower：
+     一步梯度上升 x' := x + η·g(x) 的熵增量定量下界
+       entropy(x') − entropy(x) ≥ η·(1 − L·η)·g(x)²     （g(x) > 0）
+   件 2  entropy_gain_positive：
+     0 < η、0 < L、ηL < 1、g(x) > 0 ⟹ 0 < entropy(x') − entropy(x)
+   件 3  second_law_quant（对照注记）：
+     同条件下严格熵增 lt (entropy x) (entropy (dynamics x))——
+     以"充分条件版定理"取代根 SecondLaw 区的
+     Variable strict_entropy_increase 假设重述（旧件可退役）。
+
+   纸笔推导（tangent 接口 + Lipschitz 实际形态）：
+     (i)   切线（凹景观上界）在 x' 处取 y := x：
+           e ≤ e' + g'·(x − x')，而 x − x' = −η·g
+           ⟹ e' − e ≥ η·g·g'。
+     (ii)  下界 g' ≥ (1 − Lη)·g 来自 Lipschitz 单边提取：
+           g − g' ≤ |g − g'| ≤ L|x − x'| = Lη·g（g > 0 时 |x−x'| = ηg）。
+           注意 strong_concavity(μ) 只给 g' ≤ (1−ημ)·g（上界），
+           无法控制步长过大时的回落——曲率修正项的常数只能是 L。
+     (iii) g > 0 两侧乘 (1−Lη)g ≥ g' 得 g·g' ≥ (1−Lη)g²
+           ⟹ 增量 ≥ η(1−Lη)g²。
+           真增量 log(1.2) ≈ 0.182 ≥ 下界 0.4·(1−0.8)·0.25 = 0.02 ✓。
+     正性条件是 ηL < 1 而非草案的 ημ < 1：μ ≤ L（Lipschitz 与强凹
+           相容时）⟹ 1/L ≤ 1/μ，ημ < 1 控制不住过冲，显式常数取 1/L。
+     g(x) < 0 负支同界（|g| 收缩对称），但其提取需符号三分判定，
+           构造性 Set 层不可达——如实降级为 g(x) > 0 单侧版。
+
+   纪律：纯构造性 / Set 层 / 零未证缺口 / 零经典 / 语句零 Prop
+        （lt/le 均接口 Set 字段；无 Not/Or 前提）/ 可提取 OCaml。
+   显式接口：entropy_tangent / gradient_lipschitz /
+        dynamics_gradient_step 复刻根 ConvergenceCauchy 区同名
+        Variable；abs_ge_value（le a (abs a)，与根 abs_ge_zero_id_cc
+        同族的构造性有序域标准性质，Real 层可证）与
+        lt_plus_compat_lt_le（根区同名 Variable 先例）为本区新增。
+   ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 
 Section EntropyGainQuant.

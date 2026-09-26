@@ -1,11 +1,34 @@
-(* ==========================================================================)
-   UpAblQeqBridge.v — Q 层倒数与几何级数桥
-   使命: qbg_mult_inv/lt_eq_compat_r/ltT_eq_compat_r/div_pos/Qinv_pos 与 qbg_arch_geom_direct（阿基米德几何级数直接形）。
-   依赖: CW_ConstructiveWorld_219、UpAblAbsSumLeB2；Stdlib List、QArith、Lia、Lqa。
-   对标: 有理数域上的倒数算术与几何级数上界（初等数论/分析）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblQeqBridge.v —— Q 层 Qeq 右换形＋Qmult_inv 桥接引理件              *)
+(*                                                                *)
+(* 使命：补齐 Q 层 Qeq 右换形与 Qmult_inv 两类桥接引理，并为五处同形      *)
+(*   q_arch_geom 调用点提供无 Qarchimedean 的直接供给。                   *)
+(* 构造性注记：主件 qbg_arch_geom_direct 全 Set 层（sigT/NatLe/QleT'，    *)
+(*   与 S03_QExp 之 q_arch_geom 逐字同形）；qbg_Qinv_pos/                 *)
+(*   qbg_ltT_eq_compat_r 亦 Set 面。qbg_mult_inv/qbg_lt_eq_compat_r/      *)
+(*   qbg_div_pos 为 Qeq/Qlt 序面辅助引理（同 S02 库内序面辅助件           *)
+(*   体例，供下游局部链复用），全部构造证明，不落 Set 层语句；             *)
+(*   零承认；全件 Qed 闭合。                                              *)
+(*                                                                *)
+(* 动机（两处阻断，逐条对应）：                                            *)
+(*   阻断一：Qinv 的三支符号 match 阻断定义性换形（Qinv x 的分子          *)
+(*     符号分支使 Qmake 互换拒绝转换）——桥接引理 A1 qbg_mult_inv          *)
+(*     以 Qdiv 展开＋Qmult_1_l 具名（将 S02 的内联步骤命名），            *)
+(*     正性引理 B2 以之绕开 match 的逐支展开；                            *)
+(*   阻断二：S02 qltT_eq_compat_l 仅左向——桥接引理 A2/A3 补               *)
+(*     右向换形（Qlt Prop 基座＋QltT Set 基座对偶）。                     *)
+(*                                                                *)
+(* 见证构造：五处同形 q_arch_geom 调用点的供给——                          *)
+(*   N := uabS4b_arch_N (Qinv (2B))（Qfloor 指标，以 uabS4b_null_lt       *)
+(*   为前提），调和反演 Qinv_lt_contravar proj2；退化支（B ≤ 0）          *)
+(*   N := 0 平凡承接。标样取最浅调用点 sc_sin_partial_cauchy_bounded，    *)
+(*   其余四处同形照此模板。                                               *)
+(*                                                                *)
+(* 依赖：CW_ConstructiveWorld_219（S01–S15 全部 Export）＋                *)
+(*   UpAblAbsSumLeB2（S4B Qfloor 谱系件）。                               *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-Q 依赖池单根映射，      *)
+(*   输出落施工副本区，树内零写入。                                       *)
+(* ============================================================ *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qring.
@@ -124,7 +147,7 @@ Proof.
     + apply Qle_of_nat. apply NatLe_drop in Ht.
       rewrite PeanoNat.Nat.add_1_r.
       exact (proj1 (PeanoNat.Nat.succ_le_mono _ _) Ht).
-  - (* 情形 B ≤ 0：N := 0 平凡接续 *)
+  - (* 情形 B ≤ 0：N := 0 平凡承接 *)
     exists 0%nat.
     intros t Ht.
     apply Qle_to_QleT'.

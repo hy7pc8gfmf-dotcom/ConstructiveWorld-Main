@@ -1,25 +1,27 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ===================================================================== *)
+(* ===================================================================== *)
+(* ToyR 战役包I T248 台账席替换稿（全中文零承认面）                         *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名替换稿（消融50/fa56c_ext.v 基线名已在位，按规前缀落件）——      *)
 (*   声明序与语句逐字保留，仅换下列三处玩具证明体。                          *)
 (*   替换清单（本件三刀）：                                                *)
 (*    ①fa56c_le_mult_compat_l：换轨自足链路线——两处自反启动（le_refl 引擎  *)
 (*      把乘法交换律 Id 证升格为 le 证腿）＋双重 le_trans 显式中项链         *)
-(*      （原稿 le_id_l/le_id_r 目标侧迁移三明治）。结构性推导五实质步。      *)
-(*    ②fa56c_loss_structure_correlation：换轨脱钩独立重演——不再使用本件     *)
-(*      ①号帮件，显式具化两支中项原地重演同拓扑五步链（原稿单点引擎使用）。  *)
+(*      （原稿 le_id_l/le_id_r 目标侧搬运三明治）。结构性推导五实质步。      *)
+(*    ②fa56c_loss_structure_correlation：换轨脱钩独立重演——不再消费本件     *)
+(*      ①号帮件，显式具化两腿中项原地重演同拓扑五步链（原稿单点引擎消费）。  *)
 (*    ③fa56c_loss_structure_annealed：换轨直供引擎路线——退火标度正性件      *)
 (*      （fa56_prob_neg_entropy_pos）由经帮件中转改为直连右乘兼容字段，      *)
-(*      两支各携自反启动＋交换律换位（原稿单点中转使用）。六实质步。          *)
-(*   其余九条玩具经复核为定义性闭合/判别语义/接口字段直转发/单路唯一形       *)
-(*   （不可化四类），如实批量标注不强造，滚动留记。                          *)
+(*      两腿各携自反启动＋交换律换位（原稿单点中转消费）。六实质步。          *)
+(*   其余九条玩具经复核为定义性收口/判别语义/接口字段直转发/单路唯一形       *)
+(*   （不可化四类），如实批量标注不硬凑，滚动挂账。                          *)
 (*   全文件零禁词面；全真配平；零新增引用面。                                *)
 (* ===================================================================== *)
 
 (* ============================================================ *)
+(* fa56c_ext.v —— T40 消融50 战役 CWZ6 席（批次 E-STAGING-CWZ6b） *)
 (*                                                               *)
 (* 使命：Id 载体槽第三波——S04/S05 语言模型/温度/物理预测节的      *)
-(*       C 类槽沿引擎批量续做（使用 fa51 引擎出口件 fa56_id_carrier *)
+(*       C 类槽沿引擎批量续做（消费 fa51 引擎出口件 fa56_id_carrier *)
 (*       / fa56b_ext 同目录 .vo，均只 Require 零改）。vocab_nonempty *)
 (*       /sumd_cong/detailed_balance/stationary 已被 fa56/fa56b    *)
 (*       覆盖，本件零重复；只补 VA 对账 §3/§4 判 B 面中引擎可兑现  *)
@@ -39,12 +41,12 @@
 (*        loss_structure_correlation 槽：语法误差降 ⟹ 总损失降）    *)
 (*        ——total_loss 装法定义件（c>0 标度，诚实降级同 fa51 beta   *)
 (*        模式）+ le/lt 双伴件（le_mult_compat/lt_mult_compat）+    *)
-(*        退火特化件（c := fa56_prob_neg_entropy，使用 fa56 正性    *)
+(*        退火特化件（c := fa56_prob_neg_entropy，消费 fa56 正性    *)
 (*        伴件）。                                                  *)
 (*  槽XIII S05:5824-5827（Nonequilibrium 节 max_entropy_production   *)
 (*        槽：ExistsT 最大熵产通量见证）——见证装配件：占优前提      *)
 (*        降级入签名 + existT 直接装配；构造特化件（恒一权重核，    *)
-(*        le_refl 闭合）+ noneq_loss 同构件。                       *)
+(*        le_refl 收口）+ noneq_loss 镜像件。                       *)
 (*                                                               *)
 (* 新引擎件：fa56c_le_mult_compat_l（左乘 le 兼容；接口字段只给     *)
 (*        右乘 le_mult_compat，mult_comm 双重排拼装，槽XI/XIII      *)
@@ -109,7 +111,7 @@ Qed.
 (* 槽语句：Variable default_token : Token（ArgminCorrectness 节，    *)
 (* 与 vocab/vocab_nonempty 同组）。兑现：非空词表下 default_token    *)
 (* 由 vocab 头元构造，nil 分支由非空前提灭（S04:1589 槽先例形的      *)
-(* 构造侧闭合）。                                                   *)
+(* 构造侧收口）。                                                   *)
 
 Definition fa56c_default_token (Token : Set) (vocab : list Token)
                                (Hne : Not (Id vocab (@nil Token))) : Token :=
@@ -125,14 +127,14 @@ Theorem fa56c_default_token_head :
     Id (fa56c_default_token Token (t0 :: l) Hne) t0.
 Proof. intros Token t0 l Hne. reflexivity. Qed.
 
-(* 单点词表实例：非空见证由 fa56b 单点件直接供给（引擎使用位）。      *)
+(* 单点词表实例：非空见证由 fa56b 单点件直接供给（引擎消费位）。      *)
 Theorem fa56c_default_token_singleton :
   forall (Token : Set) (t0 : Token),
     Id (fa56c_default_token Token (t0 :: nil)
           (fa56b_singleton_nonempty Token t0)) t0.
 Proof. intros Token t0. reflexivity. Qed.
 
-(* 伴件：default_token 头插回词表保非空（fa56b 判别核使用位）。       *)
+(* 伴件：default_token 头插回词表保非空（fa56b 判别核消费位）。       *)
 Theorem fa56c_default_token_cons_preserves_nonempty :
   forall (Token : Set) (vocab : list Token)
          (Hne : Not (Id vocab (@nil Token))),
@@ -145,7 +147,7 @@ Qed.
 
 (* ============ 槽XI：S05:5942-5944 Landauer 槽（物理预测节）======== *)
 (* 槽语句：prediction_landauer : Id E_min (mult k_B (mult T_landauer  *)
-(*   (log (plus one one))))。E354 装法：E_min 定义件 + 同构 Id 件；   *)
+(*   (log (plus one one))))。E354 装法：E_min 定义件 + 镜像 Id 件；   *)
 (* 非平凡伴件为 Landauer 上界：ln 2 ≤ 1（log 切线界 log_le_linear +  *)
 (* two_pos + minus 环件）经左乘兼容件双层提升 ⟹ E_min ≤ k_B·T。      *)
 
@@ -182,7 +184,7 @@ Qed.
 (*   error (model (succ epoch))) -> le (total_loss (model epoch))     *)
 (*   (total_loss (model (succ epoch)))。兑现：total_loss 装法定义件   *)
 (* （正标度 c，诚实降级入签名）；le/lt 双伴件走 le/lt_mult_compat；   *)
-(* 退火特化件以 fa56_prob_neg_entropy 为 c（fa56 正性伴件使用位）。   *)
+(* 退火特化件以 fa56_prob_neg_entropy 为 c（fa56 正性伴件消费位）。   *)
 
 Definition fa56c_total_loss (Token : Set) (grammar_error : list Token -> R)
                             (c : R) (l : list Token) : R :=
@@ -237,6 +239,7 @@ Proof.
 Qed.
 
 (* 退火特化：c 取 fa56 涨落尺度件（温度载负标度），正性由 fa56 件    *)
+(* 无条件供给——跨席引擎（fa56_prob_neg_entropy_pos）真实消费位。      *)
 Theorem fa56c_loss_structure_annealed :
   forall (Token : Set) (model : nat -> list Token)
          (grammar_error : list Token -> R) (k_B : R)
@@ -293,7 +296,7 @@ Qed.
 (*   => forall J' : Flux, le (entropy_production_rate J X)              *)
 (*   (entropy_production_rate J' X))。兑现：产率装法定义件（权重×势）  *)
 (* + ExistsT 见证装配件（占优前提入签名，existT J0 一步装配）+ 恒一    *)
-(* 权重构造特化件（无前提，le_refl 闭合）+ noneq_loss 同构件。         *)
+(* 权重构造特化件（无前提，le_refl 收口）+ noneq_loss 镜像件。         *)
 
 Definition fa56c_entropy_production_rate (Flux TD : Set) (w : Flux -> R)
                                          (theta : TD -> R) (J : Flux)
@@ -316,7 +319,7 @@ Proof.
                         (Hdom J'))).
 Qed.
 
-(* 构造特化：恒一权重核下任取 J0 即见证（权重占优由 le_refl 闭合）。   *)
+(* 构造特化：恒一权重核下任取 J0 即见证（权重占优由 le_refl 收口）。   *)
 Theorem fa56c_max_entropy_production_const :
   forall (Flux TD : Set) (theta : TD -> R) (J0 : Flux) (X : TD),
     ExistsT (fun J : Flux => forall J' : Flux,
@@ -328,7 +331,7 @@ Proof.
   exact (existT _ J0 (fun J' => le_refl (mult one (theta X)))).
 Qed.
 
-(* noneq_loss 同构件（S05:5822 Definition noneq_loss 同构）。          *)
+(* noneq_loss 镜像件（S05:5822 Definition noneq_loss 同构）。          *)
 Definition fa56c_noneq_loss (Flux TD : Set) (w : Flux -> R)
                             (theta : TD -> R) (J : Flux) (X : TD) : R :=
   opp (fa56c_entropy_production_rate Flux TD w theta J X).
@@ -342,7 +345,7 @@ Proof. intros Flux TD w theta J X. reflexivity. Qed.
 
 End Fa56cExt.
 
-(* ============ 假设面闭合申报 ============ *)
+(* ============ 假设面收口申报 ============ *)
 
 Print Assumptions fa56c_le_mult_compat_l.
 Print Assumptions fa56c_lt_mult_compat_l.

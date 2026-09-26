@@ -23,7 +23,7 @@
 (* ============================================================ *)
 (* UpAblT4_RLHFkl.v —— 第⑥批 gibbs/KL 主消融件（T4a 施工席 20260919）      *)
 (*                                                              *)
-(* 组工单：_tt4a_｜辖区＝FA1 普查第⑥批 gibbs/KL 主定理（rows 1-40）：        *)
+(* 批次工单：_tt4a_｜辖区＝FA1 普查第⑥批 gibbs/KL 主定理（rows 1-40）：        *)
 (*   S08_RealMainlineDPO:2522 real_gibbs_sum_eps／2527 real_kl_decomp_full   *)
 (*   ｜UpRealLeB:215／227 同名位（RealRLHFLeB 供给参数位）                       *)
 (*   ｜S08:2501 real_boltzmann_log_decomp（T·零消费位，剪除即消融，不立件）   *)
@@ -62,7 +62,7 @@ From Stdlib Require Import Lists.List.
 Import ListNotations.
 
 (* ==================== 主件1：RLHF 最优性 eps 形 discharge（N2） ==================== *)
-(* 源文件依存位：S08 real_rlhf_optimal_eps（RealRLHFMain 节，出节全参十四位：  *)
+(* 母本依存位：S08 real_rlhf_optimal_eps（RealRLHFMain 节，出节全参十四位：  *)
 (*   S sumf base D Dp Z Zp ＋ gibbs 参数位 ＋ KL 参数位 ＋ pi Hpi Hnormpi eps Heps， *)
 (*   参序实测锚＝UpRealLeB:247 九参形喂法）。两参数位分别由 G05:1174 与          *)
 (*   RealKLDecomp:765 喂定，载体＝real_list_sum 列表折叠。                   *)
@@ -91,7 +91,7 @@ Proof.
 Qed.
 
 (* ==================== 主件2：RLHF 最优性 Bishop 形 discharge（N2） ==================== *)
-(* 源文件依存位：UpRealLeB real_rlhf_optimal_B（RealRLHFLeB 节，L235；        *)
+(* 母本依存位：UpRealLeB real_rlhf_optimal_B（RealRLHFLeB 节，L235；        *)
 (*   两侧取负的 real_le_b 升格形）。同款双参数位喂定——UpRealLeB:215／227        *)
 (*   同名供给参数位随本件一并销账。                                             *)
 Theorem uabt4_rlhf_B_realized :

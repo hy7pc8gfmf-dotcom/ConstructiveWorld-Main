@@ -1,25 +1,20 @@
-(* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
-   依赖：见原头注 Require 面与依赖段。
-   对标：见原头注来源/对标行。
-   构造性：纯构造性、零承认件（详见原头注红线自审段）。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
 (* ===================================================================== *)
+(* 【ToyR 战役包H·tier1 第三批·切片三补位席】本件为基准原件（Main 只读）的     *)
 (*   玩具证明体换轨稿：语句面/声明序/依赖面零改动，仅按玩具清单以异构构造性     *)
 (*   证明体替换标注定理。头注全中文；零承认件；纯构造性；Set 层零泄露；        *)
-(*   真闭合守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
+(*   真收口守恒；替换刀刀唯一命中断言；尾取证段原样保留。                     *)
 (* ===================================================================== *)
 (* ============================================================ *)
+(* P7BoundedSoftmaxDeep.v —— 席位P7C（E-STAGING-P7C）           *)
 (* 论文7《率即算法》BoundedSoftmax Section 接口假设深层消融：      *)
-(*   P7A 已证结论 19 Variable 三分类（A8/B11/C6）；本件对 B 类 11 条  *)
+(*   P7A 已定谳 19 Variable 三分类（A8/B11/C6）；本件对 B 类 11 条  *)
 (*   逐个判定「能否从库内更基本原则导出非平凡定理」，并施工。       *)
 (*                                                                *)
 (* B 类 11 条判定（详见文尾判定表注释）：                          *)
-(*   bs_swap(:472)   —— 可消融：由 sum_eq_list（A 类，已闭合槽）    *)
+(*   bs_swap(:472)   —— 可消融：由 sum_eq_list（A 类，已收口槽）    *)
 (*                       ＋纯 list 组合学（list-Fubini）导出；      *)
-(*                       字段面 19→18（主定理双定理 no-swap 重述）。  *)
-(*   enum_nonempty   —— 可深挖：与其使用产物 nR>0 逻辑等价          *)
+(*                       字段面 19→18（旗舰双定理 no-swap 重述）。  *)
+(*   enum_nonempty   —— 可深挖：与其消费产物 nR>0 逻辑等价          *)
 (*                       （反向由 lt_irrefl＋length 计算）。        *)
 (*   temp/temp_pos   —— 产物可加深：hi>1（P7A lo<1 的对偶补件，     *)
 (*                       夹逼 lo<1<hi）＋ 1≤hi²（softmax 展幅≥1）。 *)
@@ -30,9 +25,9 @@
 (*   enum(:453)      —— 结构性数据位（设计面）：list 值由实例供给，  *)
 (*                       无更基本原则可导出其存在。                 *)
 (*                                                                *)
-(* 使用基座件：AttnDoeblin（bs_nR_pos/bs_lo_hi_eq/bs_lo_lt_hi/      *)
+(* 消费基座件：AttnDoeblin（bs_nR_pos/bs_lo_hi_eq/bs_lo_lt_hi/      *)
 (*   bs_hi_pos/bs_inv_hi_lo/bs_Zrow_pos/bs_Zrow_ge/bs_factor_le_hi/ *)
-(*   bs_kernel/Zrow/nat_to_R/plus_exchange/两主定理定理）＋           *)
+(*   bs_kernel/Zrow/nat_to_R/plus_exchange/两旗舰定理）＋           *)
 (*   S01_BaseRing（lt_irrefl/mult_positive/inv_pos_le_compat/       *)
 (*   le_mult_compat_r/lt_le_iff/distrib/plus_* /id_*）。            *)
 (* 红线：零 公理/承认件/参数/猜想/弃证；Set 层语句；  *)
@@ -74,7 +69,7 @@ Proof.
                                      (g x) (AttnDoeblin.bs_list_sum g t)).
 Qed.
 
-(* 零函数列表和为零（使用基座 bs_list_const_sum ＋ mult 零元） *)
+(* 零函数列表和为零（消费基座 bs_list_const_sum ＋ mult 零元） *)
 Theorem p7d_lsum_zero : forall l : list S,
   Id zero (AttnDoeblin.bs_list_sum (fun _ : S => zero) l).
 Proof.
@@ -103,7 +98,7 @@ End P7DListSum.
 
 (* ################ 段二：bs_swap 消融主件 ################
    「诚实接口三件」之首 bs_swap 在 sum_eq_list（枚举求和规范化，
-   CWE5/CYD7/CZB8 已证结论的已闭合槽）下可整体导出——它不是独立接口位。 *)
+   CWE5/CYD7/CZB8 定谳的已收口槽）下可整体导出——它不是独立接口位。 *)
 
 Section P7DSwap.
 Context {RI : RealInterfaceEnhanced}.
@@ -135,7 +130,7 @@ Qed.
 
 End P7DSwap.
 
-(* ################ 段三：字段面 19→18——主定理双定理 no-swap 重述 ################ *)
+(* ################ 段三：字段面 19→18——旗舰双定理 no-swap 重述 ################ *)
 
 Section P7DNoSwap.
 Context {RI : RealInterfaceEnhanced}.
@@ -164,7 +159,7 @@ Variable sum_eq_list : forall g : S -> R,
   Id (sum_over_S g) (AttnDoeblin.bs_list_sum g enum).
 (* 注意：本 Section 不含 bs_swap —— 18 字段。 *)
 
-(* 主定理定理 1（单步 TV 收缩）在无 bs_swap 字段面下成立：
+(* 旗舰定理 1（单步 TV 收缩）在无 bs_swap 字段面下成立：
    swap 槽由 p7d_swap_of_sum_eq_list 补位。 *)
 Theorem p7d_tv_contraction_no_swap : forall mu nu : S -> R,
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
@@ -187,7 +182,7 @@ Proof.
            bs_abs bs_lpc sum_eq_list mu nu Hmu Hnu).
 Qed.
 
-(* 主定理定理 2（迭代几何率 (1−e^{−2Δ/T})ⁿ）同法 no-swap 重述。 *)
+(* 旗舰定理 2（迭代几何率 (1−e^{−2Δ/T})ⁿ）同法 no-swap 重述。 *)
 Theorem p7d_tv_iter_no_swap : forall (n : nat) (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
   le (tv_dist (@u_titer RI SS SO
@@ -220,7 +215,7 @@ Local Existing Instance RI_base.
 Context {SS : StateSpace RI}.
 Context {SO : SumOver RI SS}.
 
-(* 正向＝基座 bs_nR_pos 的使用包装（证书 ⟹ 产物） *)
+(* 正向＝基座 bs_nR_pos 的消费包装（证书 ⟹ 产物） *)
 Theorem p7d_enum_nonempty_gives_nR_pos :
   forall (enum : list S) (enum_nonempty : Not (Id enum nil))
          (sel : forall g : S -> R, Id (sum_over_S g) (AttnDoeblin.bs_list_sum g enum)),
@@ -274,7 +269,7 @@ Proof.
                     (inv_pos_pos temp temp_pos))))).
 Qed.
 
-(* 展幅定理：1 ≤ hi² = e^{2Δ/T}（hi≥lo>0 与 hi·lo=1 的双重使用） *)
+(* 展幅定理：1 ≤ hi² = e^{2Δ/T}（hi≥lo>0 与 hi·lo=1 的双重消费） *)
 Theorem p7d_one_le_hi_sq :
   forall (temp : R) (temp_pos : lt zero temp) (Delta : R) (Delta_pos : lt zero Delta)
          (expf : R -> R) (expf_pos : forall x : R, lt zero (expf x))
@@ -348,7 +343,7 @@ End P7DExpfShape.
 
 (* ################ 段七：z 界产物——核值独立上带定理 ################
    基座仅把下带 lo ≤ K ≤ … 内联在 bs_minorization 证明里；
-   本段导出独立的上带 K(s,s') ≤ hi/(nR·lo)（Zrow 下界使用）。 *)
+   本段导出独立的上带 K(s,s') ≤ hi/(nR·lo)（Zrow 下界消费）。 *)
 
 Section P7DKernelBand.
 Context {RI : RealInterfaceEnhanced}.
@@ -469,8 +464,8 @@ Print Assumptions p7d_kernel_le_hi_over_nRlo_pos.
    Delta_pos(:449)       证书位                     | 可深挖   | 段五（同上，Δ>0 进路）
    z(:450)               数据位                     | 设计面   | —
    z_lb(:451)            证书位                     | 可深挖   | 段七（下带 + 上带新证）
-   z_ub(:452)            证书位                     | 可深挖   | 段七（上带主使用）
-   expf(:464)            数据位（A 注：可满足性已实例化消解）| 可深挖  | 段六（因子-倒数恒等式）
+   z_ub(:452)            证书位                     | 可深挖   | 段七（上带主消费）
+   expf(:464)            数据位（A 注：可满足性已放电）| 可深挖  | 段六（因子-倒数恒等式）
    bs_swap(:472)         结构证书位                 | 可消融   | 段二+段三（sum_eq_list 槽导出，19→18）
    设计面合计 4：enum/temp/Delta/z（纯数据，须实例供给，非欠账）；
    可深挖/可消融 7：enum_nonempty、temp_pos、Delta_pos、z_lb、z_ub、expf、bs_swap。 *)

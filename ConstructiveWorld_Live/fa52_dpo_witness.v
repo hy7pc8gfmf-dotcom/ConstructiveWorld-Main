@@ -1,9 +1,9 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   fa52_dpo_reward_recovery_concrete（原 L75，2 句玩具证）              *)
 (*   fa52_dpo_bounded_both_concrete（原 L51，1 句玩具证）                 *)
@@ -11,6 +11,7 @@
 (* ============================================================ *)
 
 (* ===== fa52_dpo_witness.v ===== *)
+(* 席位 VB（E-STAGING-VB）· T40 消融50 · 2026-09-16 *)
 (* 消融对象：S08_RealMainlineDPO 节 DpoPairMain 全部 8 个 Variable 前提槽
    （ConstructiveWorld_Live/S08_RealMainlineDPO.v:1098-1105：
      S / reward / beta / beta_pos / pi_ref / pi_ref_pos / Z_align / Z_align_pos）。
@@ -19,10 +20,10 @@
      pi_ref := 恒 1；Z_align := 1。
    三处正性槽全由 real_lt_zero_one（S07:6937）兑现；
    reward 分档 1 < 1+1 由 real_lt_plus_compat_lt_le（S07:6118）自 0<1 复合。
-   使用基座件：End 后主件 real_dpo_loss_pi_star_bounded_both（S08:1512）
+   消费基座件：End 后主件 real_dpo_loss_pi_star_bounded_both（S08:1512）
    与 real_dpo_reward_recovers_up_to_baseline（S08:1558）全参特化——
-   该节 DPO 定理在具体见证下闭合为闭语句。
-   红线：零 公理/承认件；非平凡（前提实例化消解 + End 后定理全参特化）。
+   该节 DPO 定理在具体见证下收口为闭语句。
+   红线：零 公理/承认件；非平凡（前提放电 + End 后定理全参特化）。
    尾注：recovery 语句中 log 1 == 0 闭式化需 real_log_one 桥，列后续候选。 *)
 Require Import S02_CauchyComplete.
 Require Import S07_RealSetoidExpLog.
@@ -80,7 +81,7 @@ Proof.
   exact (real_dpo_loss_pi_star_bounded_both bool fa52_dpo_reward real_one           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos           real_one real_lt_zero_one true false fa52_dpo_reward_spread).
 Qed.
 
-(* ---------- 主件二：闭式奖励复用——见证特化（β:=1, Z:=1 分离出 log1 修正项） ---------- *)
+(* ---------- 主件二：闭式奖励回收——见证特化（β:=1, Z:=1 分离出 log1 修正项） ---------- *)
 Theorem fa52_dpo_reward_recovery_concrete : forall s : bool,
   real_eq
     (real_dpo_reward_explicit bool real_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos

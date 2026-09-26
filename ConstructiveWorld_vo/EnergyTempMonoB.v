@@ -1,30 +1,84 @@
-(* ============================================================
-   EnergyTempMonoB.v — 温度-能量单调性 Bishop 档（≤_B 形）。
-   使命：交付温度-能量单调性的 Real 层 Bishop 档——t1 < t2 ⟹
-     real_le_b (E(t1)) (E(t2))（Bishop 形非严格序，Real 层对位
-     Id energy_exp_temp_mono @S04_RealExpLogConv.v:3733 的构造性
-     最强免费档）。
-   路线（依存恒等档 + Bishop KL≥0 + leb3 序代数）：
-     ① 主恒等式 retm_energy_temp_kl_pair_ident：
-        KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2}) == (β1−β2)·(E2−E1)；
-     ② real_gibbs_inequality_B（Bishop 形 KL≥0：0 ≤_B Σ kl_term，
-        归一化前提由 retm_pB_norm 直供、逐点正性由 retm_pB_pos
-        语句面原生证书直供）；
-     ③ 两个合取肢相加得 0 ≤_B KL 对和；
-     ④ 恒等式换形得 0 ≤_B (β1−β2)·(E2−E1)（无条件件）；
-     ⑤ β 差正性：t1<t2 ⟹ 1/t2<1/t1 ⟹ 0<β1−β2；
-     ⑥ 负系数反变：正缩放乘 inv(β1−β2) 后代数链闭合得 0 ≤_B (E2−E1)；
-     ⑦ 终桥：0 ≤_B (E2−E1) ⟹ E1 ≤_B E2。
-   对标：UpReqTempDual.v:40-44（严格档需 KL 严格正接口，未建）；
-     UpRealLeB 结论 1（real_le_b → real_le 构造性不可证）；故本件
-     无条件闭合的最强免费档＝Bishop 形 ≤_B。
-   构造性：零承认件；语句面全 Set（real_le_b 为 Set 值 forall 型、
-     real_lt 为 sigT 见证型），零 Or 分支、零 Prop 前提位；全件
-     Qed 真证；可提取（Obj.magic=0）。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   依赖：CW_ConstructiveWorld_219（S01–S15）；UpRealLeB/
-     UpRealLeB2/UpRealLeB3；RealEnergyTempMono（retm_ 恒等档族）。
-   ============================================================ *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T278 台账席 散落遗留集中清偿（原 T265 刀体    *)
+(* 方向颠倒证伪回退，本席反序修正后复刀：real_inv_lt_contra 结论为      *)
+(* 1/t2 < 1/t1 严格反序，Hinv 见证型随之反置，余四句原样）。            *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   etm_beta_diff_pos（原 L106，5 句刀体）                              *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* EnergyTempMonoB.v — 温度-能量单调性 Bishop 档（≤_B 形）           *)
+(* 席位 CWE（批次 E-STAGING-CWE），2026-09-14                       *)
+(* ============================================================ *)
+(* 使命：交付温度-能量单调性的 Real 层 Bishop 档——t1 < t2 ⟹          *)
+(*   real_le_b (E(t1)) (E(t2))（Bishop 形非严格序，Real 层对位        *)
+(*   Id energy_exp_temp_mono @S04_RealExpLogConv.v:3733 的构造性     *)
+(*   最强免费档）。                                                  *)
+(*                                                                 *)
+(* 路线（依存 CWC 恒等档 + E.13 Bishop KL≥0 + leb3 序代数）：          *)
+(*   ① 主恒等式 retm_energy_temp_kl_pair_ident：                   *)
+(*      KL(p_{t2}‖p_{t1}) + KL(p_{t1}‖p_{t2}) == (β1−β2)·(E2−E1)；   *)
+(*   ② real_gibbs_inequality_B（UpRealLeB E.13，Bishop 形 KL≥0：     *)
+(*      0 ≤_B Σ kl_term，归一化前提由 retm_pB_norm 直供、逐点正性     *)
+(*      由 retm_pB_pos 语句面原生证书直供）；                         *)
+(*   ③ 两个合取肢相加（real_le_b_plus_compat + refl 运输）得 0 ≤_B KL 对和； *)
+(*   ④ 恒等式换形（leb3_le_b_eq_r）得 0 ≤_B (β1−β2)·(E2−E1)（无条件件）； *)
+(*   ⑤ β 差正性：t1<t2 ⟹ 1/t2<1/t1（real_inv_lt_contra，S07 严格    *)
+(*      逆反序）⟹ 0<β1−β2（real_lt_opp_plus 差正性桥）；              *)
+(*   ⑥ 负系数反变处理：正缩放 leb3_le_b_pos_scale（0<c 形）乘         *)
+(*      inv(β1−β2) 后代数链闭合（(c·D)·inv c == D 五步 real_eq_trans）， *)
+(*      得 0 ≤_B (E2−E1)；                                            *)
+(*   ⑦ 终桥：0 ≤_B (E2−E1) ⟹ E1 ≤_B E2——逐 eps 平移                 *)
+(*      （real_lt_plus_compat_lt_le 右加形）+ 两端 real_lt_id_l/r     *)
+(*      换形 + 纯加负代数 etm_alg 一步闭合。                          *)
+(*                                                                 *)
+(* 交付档位结论（≤_B 形即诚实交付档）：                                *)
+(*   Or 形 real_le E1 E2 需构造性分支见证（real_le = Or real_lt      *)
+(*   real_eq，S02:460；Or := A+B 为 Set 值和须交分支），由 ≤_B 闭合   *)
+(*   Or 形即 real_le_b → real_le 反向桥——UpRealLeB 结论 1 在案        *)
+(*   「real_le_b x y -> real_le x y 构造性不可证」（LPO 等价，同      *)
+(*   E-STAGING-DPOLip-StrongLeAbs 卡）；严格档需 KL 严格正接口        *)
+(*   （UpReqTempDual.v:40-44 台账：严格档与 4.3 严格界同源，批 2      *)
+(*   FEP 范围）。故本席无条件闭合的最强免费档 = Bishop 形 ≤_B，       *)
+(*   语句面全 Set（real_le_b 为 Set 值 forall 型、real_lt 为 sigT     *)
+(*   见证型），零 Or 分支零 Prop 泄露。                               *)
+(*                                                                 *)
+(* 交付件（etm_ 前缀，全库防撞 grep=0）：                             *)
+(*   etm_alg                代数恒等捷径 Ltac（real_eq_of_zero_diff   *)
+(*                          + proj 剥离 + ring；含 inv/log 桥接引理不可用， *)
+(*                          走 real_eq_trans 链——CWC 卡配方）          *)
+(*   etm_mult_zero_l        0·a == 0（real_mult_zero 是 x·0==0 形，   *)
+(*                          comm 桥补左乘形）                         *)
+(*   etm_beta_diff_pos      t1<t2 ⟹ 0<β1−β2（inv 严格反序 + 差正性）  *)
+(*   etm_le_b_scale_inv_zero  0<c、0 ≤_B c·D ⟹ 0 ≤_B D               *)
+(*                          （负系数反变核心件：正缩放 × inv 消系数）   *)
+(*   etm_kl_pair_nonneg_b   0 ≤_B KL(p_{t2}‖p_{t1})+KL(p_{t1}‖p_{t2}) *)
+(*                          （无条件，Bishop KL≥0 两个合取肢相加）           *)
+(*   etm_energy_scaled_nonneg_b  0 ≤_B (β1−β2)·(E2−E1)（无条件，      *)
+(*                          恒等档 × KL≥0 的直接合成）                 *)
+(*   etm_energy_temp_mono_b 主定理：t1<t2 ⟹ E(t1) ≤_B E(t2)           *)
+(*                                                                 *)
+(* 台账对位：UpReqTempDual.v:40-44（real_energy_exp_temp_mono 未建、  *)
+(*   严格档需 KL 严格正接口）；UpRealLeB 结论 1（le_b→le 反向不可证）； *)
+(*   G07_KLWall 结论 C；UpReqAlign3:1446（plain-le 序无消去）。        *)
+(*                                                                 *)
+(* 红线自审：① 零承认件（依赖全为库内 Closed 件：S01–S15 薄壳 +      *)
+(*   UpRealLeB/2/3 + RealEnergyTempMono）；② 语句面全 Set：           *)
+(*   real_lt（sigT 见证型）前提 + real_le_b（Set 值 forall 型）结论，  *)
+(*   零 Or 分支、零 Prop 前提位；③ 全件 Qed 真证（real_eq_trans 链    *)
+(*   term-mode 显式组装 + 闭合器依存），无降级占位；④ 可提取（G3      *)
+(*   检验独立文件实测 Obj.magic=0）。                                  *)
+(* 编译配方：source Live/toolchain/env.sh && cd Live/build &&        *)
+(*   rocq c -Q . '' EnergyTempMonoB.v（cpu_guard 包裹，-j2 上限）。    *)
+(* 依赖：CW_ConstructiveWorld_219（S01–S15，.vo 同轨 _364 幻数）；    *)
+(*   UpRealLeB（real_le_b/real_gibbs_inequality_B）；UpRealLeB2       *)
+(*   （real_le_b_plus_compat）；UpRealLeB3（leb3_ 运输/反序/正缩放）； *)
+(*   RealEnergyTempMono（retm_ 恒等档族，.vo 已在）。                 *)
+(* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.

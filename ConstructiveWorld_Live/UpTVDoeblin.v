@@ -406,7 +406,7 @@ Section TVRealWorld.
 (* 离散状态世界：状态为 list Real，枚举 states；求和一律沿枚举。
    （K : list Real -> list Real -> Real 为行随机核——状态类型
      list Real，故枚举为 list (list Real)；real_list_sum 的类型参数
-     为 (list Real)，即任务说明 real_list_sum (K i) states 之形。） *)
+     为 (list Real)，即任务书 real_list_sum (K i) states 之形。） *)
 Variable states : list (list Real).
 Variable n_pos : real_lt real_zero (real_of_nat (length states)).
 Variable K : list Real -> list Real -> Real.

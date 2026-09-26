@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：r_pow_nonneg／mult_one_minus_r／telescoping／               *)
 (* one_minus_kappa_pos／mult_swap_mid／mult_swap_outer／minus_pos／          *)
 (* mult_minus_distr_r（共 8 条）                                             *)
@@ -14,7 +14,7 @@
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
-     （tier1 次批·切片二）同名替换注记 —— S04_RealExpLogConv.v
+   T246 包G 台账席（tier1 次批·切片二）同名替换注记 —— S04_RealExpLogConv.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
    仅八条玩具证明体替换为定义层显式重演，语句面零改动：
    ① r_pow_nonneg：兄弟件 r_pow_pos 归纳正体就地内联（归纳骨架与两支
@@ -40,6 +40,8 @@
      gradient_diff_from_zero/dynamics_step_unfold，转发目标为节假设
      Variable 槽，无定义面可展）、深链转发三类（gradient_zero_neg_
      entropy_truth/dynamics_greedy_locally_optimal/elbo_lower_bound，
+     转发目标体为长链归纳件，移植超本切片预算）——均登记于 T246
+     台账，不动原文。
    ============================================================ *)
 
 (* ============================================================ *)
@@ -80,7 +82,7 @@ Variable real_log_mult : forall a b : R, lt zero a -> lt zero b ->
                            Id (real_log (mult a b)) (plus (real_log a) (real_log b)).
 Variable real_log_one : Id (real_log one) zero.
 Variable real_log_lt : forall a b : R, lt a b -> lt (real_log a) (real_log b).
-(* 前置引理：real_log_one 槽由兄弟字段（real_exp_zero+real_log_exp）推导—— 基座消融波 T1 终判位8；签名保持式三件套之 T；零承认件 *)
+(* 供给件：real_log_one 槽由兄弟字段（real_exp_zero+real_log_exp）推导——R120 基座消融波 T1 终判位8；签名保持式三件套之 T；零承认件 *)
 Lemma real_log_one_derived : Id (real_log one) zero.
 Proof.
   exact (id_trans (id_sym (id_cong real_log real_exp_zero))
@@ -351,7 +353,7 @@ Fixpoint r_pow (x : R) (n : nat) : R :=
 
 (* Step 4 新接口字段（诚实标准性质，E143-199 纪律） *)
 (* (3) 度量自反零：metric a a == zero（构造性度量标准性质，抽象层缺） *)
-(* 前置引理（原 Variable 换同名 Lemma， 基座消融波 T2 终判 B04）：由 metric_abs+minus 展开+plus_opp+abs_zero 导出；零承认件 *)
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B04）：由 metric_abs+minus 展开+plus_opp+abs_zero 导出；零承认件 *)
 Lemma metric_refl_zero : forall a : R, Id (metric a a) zero.
 Proof.
   intros a.
@@ -1122,7 +1124,7 @@ Qed.
 (* 组装：dynamics_converges（以 ConvergenceCauchy 条件集替换 ConvergenceTheorem 的 Variable）。
    前提：初始梯度非零（iterate_lim_exists 需要）+ 收敛步长条件（原 Variable 前提保留）。
    链：iterate_lim_exists 给 lim 存在 → grad_squeeze_zero 夹逼 g(E_star) == 0。
-   ⚠  T4.4 判据：`lt zero (minus (plus one one) (mult L eta))`（Hstep）已移除——
+   ⚠ 2026-09-02 T4.4 判据：`lt zero (minus (plus one one) (mult L eta))`（Hstep）已移除——
    证明体零引用（仅用 Hg0pos），收敛前提链 iterate_lim_exists / grad_squeeze_zero 均不含
    该形态前提，下游零引用（grep dynamics_converges 仅注释与定义处）。 *)
 Theorem dynamics_converges : forall (E_A : R),
@@ -1140,7 +1142,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   论文4 收敛缺口补强（κ 定理化方向， 并入）：
+   论文4 收敛缺口补强（κ 定理化方向，2026-09-01 并入）：
    从 μ-强凹 + Lipschitz + 步长约束推正分支梯度收缩
    核心：gradient_step_contraction（单步收缩）、
          gradient_step_abs_contraction（绝对值收缩 κ := 1−ημ）、
@@ -1384,7 +1386,7 @@ Proof.
 Qed.
 
 (* ================================================================
-   论文4 差距一闭合（gradient_zero → is_truth），排序 4，
+   论文4 差距一闭合（gradient_zero → is_truth），排序 4，2026-09-01
    诚实接口 entropy_tangent（凹函数切线不等式，一阶条件：
    f(y) ≤ f(x) + f'(x)·(y−x)，对所有 x y——标准优化假设，非经典公理）
    ⟹ gradient_zero_entropy_max：驻点（g(x)==0）是熵的全局最大点。
@@ -1433,7 +1435,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   论文4 收敛缺口补强（差距二闭合，，检验 _dbg_unique_attractor.v 验证）：
+   论文4 收敛缺口补强（差距二闭合，2026-09-01，检验 _dbg_unique_attractor.v 验证）：
    唯一吸引子 —— 任意两条轨道（任意初值）的极限相同。
    路线：弱三分（诚实接口 Variable，Real 层 real_weak_trich L32526 已证供给）
          + 严格递减（strict_concavity）⟹ 驻点唯一（gradient_zero_unique）
@@ -2005,7 +2007,7 @@ Qed.
 End BoltzmannSteadyState.
 
 (* ============================================================ *)
-(* 项 6 工具（，通用接口层）：正乘严格消去（lt 版）   *)
+(* 项 6 工具（2026-09-02，通用接口层）：正乘严格消去（lt 版）   *)
 (* ============================================================ *)
 Section TempStrictTools.
 Context {RI : RealInterfaceEnhanced}.
@@ -4096,7 +4098,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 项 6：温度-能量严格单调（，T2.2/A-3 严格化）       *)
+(* 项 6：温度-能量严格单调（2026-09-02，T2.2/A-3 严格化）       *)
 (*   陈述（差正形态）：t1 < t2 且 KL(p_t2 竖线竖线 p_t1) > 0     *)
 (*     ⟹ 0 < E(t2) − E(t1)。恒等：                              *)
 (*     (b1−b2)·(E2−E1) == KL1 + KL2（两温度 KL 分解相减）        *)

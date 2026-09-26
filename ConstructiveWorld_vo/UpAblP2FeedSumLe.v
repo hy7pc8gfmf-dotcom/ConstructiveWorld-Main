@@ -1,11 +1,51 @@
-(* ==========================================================================)
-   UpAblP2FeedSumLe.v — 序面原生折叠传输、拼接可加性与折叠和的三角不等式（单余量 ε 形）
-   使命: p2fl_lsum_app（拼接可加性）、p2fl_le_transport（序面两世界运输）、p2fl_abs_split_eps（主件）三全局件，加 Section 实例三件与 bool 具体层两件。
-   依赖: CW_ConstructiveWorld_219、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog、S08_RealMainlineDPO、UpReqSumD、UpAblEps66Sum、UpAblP2FeedMix、UpAblLeEqCompat、List、Extraction。
-   对标: 有限和三角不等式（|Σ f| ≤ Σ|f| + ε）与求和算子序传输。
-   构造性: 零承认词面、纯构造性（零经典逻辑）；全 Set 层语句；全 Qed 闭合；末段 Print Assumptions 审计全 Closed。
-   编译配方: coqc 9.1 直调，cpu_guard 包裹（-LoadLimit 85 -CoreN 2）；编译输出经 -o 写临时目录，树内 .vo 一律不动。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblP2FeedSumLe.v —— 论文2 消融件：序面原生折叠传输、拼接可加性与      *)
+(*   折叠和的三角不等式（单余量 ε 形）。                                   *)
+(*                                                                      *)
+(* 全局三件＋Section 实例三件＋bool 具体层两件：                           *)
+(* 其一 p2fl_lsum_app：原生折叠对表拼接的可加性（对 l1 归纳新证，          *)
+(*   为三角和主件的拼接前提）；                                            *)
+(* 其二 p2fl_le_transport：序面两世界运输——e66s_sumf（sumd 折叠）          *)
+(*   上的序关系经折叠桥 p2f_lsum_bridge（逐点等词）与兼容件                *)
+(*   lec_le_eq_eq 运到原生折叠 real_list_sum 世界；                        *)
+(* 其三 p2fl_abs_split_eps（主件）：拼接和的绝对值不超过两段绝对值和        *)
+(*   加单份余量 ε（ε > 0）——经 S07 逐项三角 real_abs_triangle_le_eps、     *)
+(*   面一可加性与 lec_le_eq_eq 三步合成。                                  *)
+(*                                                                      *)
+(* Section P2FeedSumLe 实例：p2fl_sumf（原生折叠算子特化）＋               *)
+(*   p2fl_le（逐点序不降⟹折叠和序不降，经 e66s_real_sum_over_S_le、        *)
+(*   p2f_lsum_bridge 与 lec_le_eq_eq 三步）＋ p2fl_le_native_direct        *)
+(*   （对照件：由 S08 原生件 real_list_sum_le 一步给出）＋                  *)
+(*   p2fl_abs_split_slot（主件的（S0, enum0）实例）。                       *)
+(*                                                                      *)
+(* bool 具体层两件：p2fl_flag_le 与 p2fl_flag_abs_split_eps                *)
+(*   （枚举 e66s_flag_enum＝true::false::nil，零残留抽象参数）。            *)
+(*                                                                      *)
+(* 【对照与诚实边界】                                                      *)
+(*   1. p2fl_le 与 p2fl_le_native_direct 语句形重合：前者经兼容家族        *)
+(*   介导（对任意具备序/等词桥的求和世界普适），后者由原生件直接给出；     *)
+(*   两路线并存，语句形本身无增量；本件增量在两世界运输与三角和主件。      *)
+(*   2. 单求和形「Σ 的绝对值不超过逐项绝对值之和加一份余量」的一般化：     *)
+(*   逐项绝对值面在库仅有余量形 real_abs_triangle_le_eps；逐项序面在       *)
+(*   Or 编码下需符号分支精确完成（构造性不可证，UpRealLeB 尾注载有         *)
+(*   同族否定性论证）——更弱前提下的推广留作后续工作。                      *)
+(*                                                                      *)
+(* 【依赖】CW_ConstructiveWorld_219；S02_CauchyComplete；S03_QExp；        *)
+(*   S07_RealSetoidExpLog；S08_RealMainlineDPO；UpReqSumD；                *)
+(*   UpAblEps66Sum（e66s_sumf、e66s_real_sum_over_S_le、e66s_flag_enum）； *)
+(*   UpAblP2FeedMix（p2f_lsum_bridge）；UpAblLeEqCompat（lec_le_eq_eq）。   *)
+(*                                                                      *)
+(* 【对标】无直接对应物；声明注释体例对齐 stdlib 可提取文档注释。          *)
+(*                                                                      *)
+(* 【构造性注记】零承认、纯构造性（零经典逻辑）；全 Set 层语句             *)
+(*   （real_eq/real_le/real_lt 全 Set 值载体），语句面无命题层泄露；        *)
+(*   全 Qed 闭合；末段 Print Assumptions 审计应全部 Closed。               *)
+(*                                                                      *)
+(* 【编译配方】coqc 9.1 直调，cpu_guard 包裹（-LoadLimit 85 -CoreN 2），    *)
+(*   编译输出经 -o 写临时目录，树内 .vo 一律不动；可计算件                  *)
+(*   p2fl_sumf／p2fl_lsum_app 提取，序谓词桥面件以审计替代。                *)
+(*                                                                      *)
+(* ============================================================ *)
 
 From Stdlib Require Import Extraction.
 Require Import CW_ConstructiveWorld_219.
@@ -22,7 +62,7 @@ Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* §1 拼接可加性 p2fl_lsum_app：表拼接情形下原生折叠的可加性（对 l1 归纳  *)
+(* §1 拼接可加性 p2fl_lsum_app：原生折叠对表拼接的可加性（对 l1 归纳      *)
 (*   新证——三角和主件的拼接前提，折叠核心体的等词见证面）                 *)
 (* ============================================================ *)
 Lemma p2fl_lsum_app :

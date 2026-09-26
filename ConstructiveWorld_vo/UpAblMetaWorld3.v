@@ -1,11 +1,50 @@
-(* ==========================================================================)
-   UpAblMetaWorld3.v — 三号亚稳世界的 TV 精确迭代
-   使命: mtw_tv_exact_iter/tv_step_exact（TV 距离的精确迭代公式）、mtw_no_mixing_below（低于阈值的非混合）、mtw_tv_lower（TV 下界）与 mtw_omd/ds 常数正性。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。
-   对标: 二态马尔可夫链总变差的精确可解性（混合时间下界反例世界）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ========================================================================= *)
+(* 证明结构注记（三处替换位的构造法，如实注记）：                              *)
+(*   一、mtw_row_t（位一·双断言）：单跳 mtw_minus_plus_r one mtw_quarter 就地     *)
+(*       重演——断言一 Hdef＝核行和 3/4＋1/4 换形至定义形 (1−1/4)＋1/4             *)
+(*      （mtw_threeq 经 req_minus 载体透明，req_refl 最短形）；断言二 Hasso＝      *)
+(*       结合换形（plus_assoc 对称）；闭合两段＝内项零消（plus_comm 换轨＋        *)
+(*       plus_opp 零消经 req_plus_compat 提级）＋外层 plus_zero；三段 req_trans    *)
+(*       复合。                                                                   *)
+(*   二、mtw_df_iter（位二·中间项显式命名）：原单点 exact 复合式拆位重演——        *)
+(*       副本支 Hmir（mtw_df_opp_dv n，补元副本）与取负支 Hneg（req_opp_compat      *)
+(*       运载 mtw_dv_iter n 幂律）两条中间 req 命名，req_trans 复合闭合。          *)
+(*   三、mtw_ds_pos（位三·引擎体整体内联）：mult_positive 投影位就地重演——        *)
+(*       模板＝S07_RealSetoidExpLog.v real_mult_positive（本件 lt/mult/zero 与     *)
+(*       柯西层 real_lt/real_mult/real_zero eq_refl 直通，检验在案）：             *)
+(*       0·h ≡ 0 换序桥（real_mult_comm＋real_mult_zero 两个合取肢）＋             *)
+(*       real_mult_lt_compat (0,h,h) 闭合，实例化 a:=mtw_half、b:=mtw_half。       *)
+(*   不可化批量注记 13 位：定义性闭合 4（mtw_K_tt/tf/ft/ff）；接口字段直引与       *)
+(*   同件单跳 7（mtw_half_pos／mtw_qq_half／mtw_oo_one_zero／mtw_mu0_mass／        *)
+(*   mtw_nu0_mass／mtw_tv0_pos／mtw_omd_pos）；复合一跳链 2（mtw_no_mixing_below／  *)
+(*   mtw_tv_lower）。依赖面零新增：Require 面与原件逐字一致。                      *)
+(* ========================================================================= *)
+(* ============================================================ *)
+(* UpAblMetaWorld3.v —— 非退化 2 元核世界（核行互异）+ TV 精确几何衰减            *)
+(*   + 混合时间下界（AID 在 cf2 上反驳的下界件在此世界为真）。                       *)
+(*                                                              *)
+(* 【世界构造】bool 载体，硬编码对称常数核（Q 可判定，全定义级）：                  *)
+(*     K(t,t) = 3/4   K(t,f) = 1/4   K(f,t) = 1/4   K(f,f) = 3/4               *)
+(*   常数经 half := inv(2) 的域运算嵌入（1/4 := (1/2)·(1/2)，3/4 := 1−1/4）。     *)
+(*   行随机：3/4 + 1/4 = 1（每行）；行互异：第 true 列 3/4 ≠ 1/4（mtw_rows_ne，    *)
+(*   经 one ≠ zero 的反证路——与 AID 的 mtl_kernel_val_{t,f}「核每行==inv_two」      *)
+(*   行全同病灶成对照：此处两行不等 = 非退化判据。                                 *)
+(* 【主结果】点质量对（mu0=[1;0]、nu0=[0;1]）在单步差分耦合下：                    *)
+(*     dv(n+1) = dv(n)·(K(t,t)−K(f,t)) = dv(n)·(1/2)，df = −dv（质量守恒+补元），  *)
+(*   故 TV(n) == (1/2)^n · TV₀ 精确（mtw_tv_exact_iter），步恒等                   *)
+(*   TV(S n) == (1/2)·TV(n)（mtw_tv_step_exact），下界                             *)
+(*   budget < (1/2)^n·TV₀ -> lt budget (TV(n))（mtw_no_mixing_below——AID 的        *)
+(*   mtl_no_mixing_refuted 同形语句在此世界为真），以及甲形正件                     *)
+(*   le ((1/2)^n·TV₀) (TV(n))（mtw_tv_lower——AID 的 mtl_refute_lower 同形在此为真）。*)
+(*   跨世界对照：cf2 = 一步即混退化世界（TV(1)==zero）vs 本世界 = 真几何衰减         *)
+(*   非退化世界（TV(n) == (1/2)^n ≠ 0）。                                          *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。        *)
+(* 对标：mathlib 有限马尔可夫链几何收敛率；stdlib 无同形。                            *)
+(* 【红线自审】零承认件；零经典逻辑；零新假设（前提位全显式证书/定理参数）；           *)
+(*   语句面全 Set 值（req/le/lt/Not 均基座 Set 层别名），无紫层泄露；                 *)
+(*   本件自含（不依赖 cf2 世界件），只读上游零改源模块。                               *)
+(* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，全量 coqc -Q . ""（cpu_guard 包裹）。 *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -755,7 +794,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* 公理面自审：全件 Closed（零新假设）                                             *)
+(* 四关自检：全件 Closed（零新假设）                                             *)
 (* ============================================================ *)
 
 Print Assumptions mtw_half_pos.

@@ -1,13 +1,30 @@
-(* ==========================================================================)
-   UpReqVajdaBound.v — 二点分布 Vajda 型显式分段下界
-   使命: vb_dp_kl_exact（二点 KL 闭形恒等式）、vb_vajda_lower（KL₂ ≥ v(V)，V=p−q∈[0,1)：v(v)=v²（≤17/20 近零段）、v(v)=18/25（饱和段））、vb_sharp_endpoint_zero（端点锐性）；辅助：vb_ln_engine、vb_kl2_complement、vb_ln2_upper_env。
-   依赖: CW_ConstructiveWorld_219、UpRealLeB、UpReqTVAbsEps、UpReqPinskerTransport、UpReqConstEnvelope、PinskerTwoPoint、UpReqPinskerCore；Stdlib List、QArith（Qring/QArith/Qabs/Qround）、Lqa、Lia、Arith。
-   对标: Vajda 型 TV–KL 下界（FHT 2003 经典界）的二点显式构造性段。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   注记: 本件语句面首条为 Set Printing Width 500（长公式排版宽度设置），置于头注之后。
-   ========================================================================== *)
 Set Printing Width 500.
+(* ============================================================ *)
+(* UpReqVajdaBound.v —— 构造性二点 Vajda 界                           *)
+(*                                                                *)
+(* 使命：本件形式化二点分布 Vajda 型显式分段下界的构造性段：            *)
+(*   T1 vb_dp_kl_exact：二点分布 KL 闭形恒等式（真公式）：              *)
+(*      KL₂(p‖q) == p·(−log(q/p)) + (1−p)·(−log((1−q)/(1−p)))，        *)
+(*      并给二点 list 形与闭形形的 real_eq 桥；                         *)
+(*   T2 vb_vajda_lower：KL₂(p‖q) ≥_B v(V)，V = p−q ∈ [0,1)，            *)
+(*      v(v) := v²（v ≤ 17/20，近零段）；v(v) := 18/25（饱和段）；      *)
+(*      结点 17/20 由 V² ≥ 18/25 ⟺ V ≥ 17/20 显式选定；                 *)
+(*      18/25 为 log 2 的显式上证书（c3e 包络 n=8）；                   *)
+(*   T3 vb_sharp_endpoint_zero：端点锐性显式见证（V=0 端界被取到）。    *)
+(* 依赖：Stdlib List、QArith.Qring、QArith.QArith、QArith.Qabs、        *)
+(*        QArith.Qround、Lqa、Lia、Arith；CW_ConstructiveWorld_219、    *)
+(*        UpRealLeB、UpReqTVAbsEps、UpReqPinskerTransport、             *)
+(*        UpReqConstEnvelope、PinskerTwoPoint、UpReqPinskerCore。       *)
+(* 对标：FHT 2003 Vajda 紧界（经典层测绘；其经典证明依赖紧性论证，      *)
+(*        非构造性；本件为该界 Q/Real 层可构造段的构造性对应物）。      *)
+(* 构造性注记：语句面全 Set（real_lt/real_eq/real_le_b/sigT/QleT'）；    *)
+(*        分段判定以 Qle_bool 承载；零假设位、零承认、可提取；           *)
+(*        Q 层分式序引理以显式 Q/Z 序引理链构造                          *)
+(*        （严格加法右增 Qplus_lt_r、乘法正性 Qmult_lt_0_compat、        *)
+(*        字面正性见证 Pos2Z.is_pos）；                                  *)
+(*        文尾 Print Assumptions 审计，公理面为空。                     *)
+(* 编译配方：Rocq 9.1 直调（coqc -q），cpu_guard 护航。                  *)
+(* ============================================================ *)
 
 From Stdlib Require Import List.
 Import ListNotations.
@@ -22,7 +39,7 @@ Require Import UpReqPinskerTransport.
 Require Import UpReqConstEnvelope.
 
 (* 受限消解：list 和展开为显式二项和后逐点 ring（禁全量 delta——
-   real_kl_term 的 dependent if 见证遇全量 cbn 即失效（既知脆弱形））。 *)
+   real_kl_term 的 dependent if 见证遇全量 cbn 即塌方，R83 族新坑）。 *)
 Ltac vb_list_ring :=
   apply real_eq_of_zero_diff; intro ttb;
   cbn [projT1 real_list_sum real_plus real_one] in *;
@@ -71,7 +88,7 @@ Qed.
 
 (* 闭形公式展开面（真公式，定义 vb_kl2 的逐字内容）：
    KL₂(p‖q) = p·(−log(q·inv p)) + (1−p)·(−log((1−q)·inv(1−p)))
-   —— real_kl_term 定义体（S08:493）经 unfold 即得，公理面自审在案。 *)
+   —— real_kl_term 定义体（S08:493）经 unfold 即得，四关在案。 *)
 
 (* ============================================================ *)
 (* S2 已绿核心：端点锐性（V=0 端）+ Gibbs 非负                       *)
@@ -84,7 +101,8 @@ Qed.
    未及闭合）——遗留申报，配方见交付报告。 *)
 
 (* ============================================================ *)
-(*   vb_eq_sym / vb_const_eq / vb_list_ring：运输齿轮（经修订     *)
+(* S3 遗留申报（红线③显式申报；续席配方见交付报告）                    *)
+(*   vb_eq_sym / vb_const_eq / vb_list_ring：运输齿轮（本轮被修订     *)
 (*     手术误删，已验证逻辑随报告配方复位）；                          *)
 (*   vb_kl2_complement：KL₂(p‖q) == KL₂(1−p‖1−q)（需 kl_term 实 eq    *)
 (*     合路 vb_kl_term_wd：real_log_wd + inv/mult 相容链已探明）；     *)
@@ -120,8 +138,8 @@ Print Assumptions vb_kl2_pos.
 Extraction "vb_ex_probe.ml" vb_dp_kl_exact vb_kl2_pos.
 
 (* ============================================================ *)
-(* WC 段（分段组装第二段，纯追加，不改既有行）                   *)
-(* 数学内容（Python fractions/sympy 前置复核通过）：           *)
+(* WC 续席段（分段组装第二棒，纯追加，不改前席任何行）                   *)
+(* 数学内容（Python fractions/sympy 前置复核 20260918 全绿）：           *)
 (*   引擎代数核：gap·(2−s)·40320 == s³·(3s⁶+2s⁵+40s⁴+224s³+1008s²        *)
 (*   +3360s+6720)（系数全正，2000 点扫描零违例）；                       *)
 (*   D ≥ V²/(p+q)（q≤p<p1 网格 min 余量 +1.8e-4）；289/400 ≥ 18/25。     *)
@@ -385,7 +403,7 @@ Proof.
 Qed.
 
 (* ---- §W3 vb_ln_engine：log(1+t) ≥ 2t/(2+t)（Bishop 形，t:Q 正域） ----
-   【WC2 段】既有注释稿启用（原稿三处组装伤点修复）：
+   【WC2 接管 20260918】前席注释稿复活（原 95% 稿三处组装伤点修复）：
    ① Hband 收尾 Qplus_le 组装缺口 → setoid_rewrite Hrn + lra 直收；
    ② Hlt0 严格步原 Qle_lt_trans 中段严格性过强（tail_n ≤ TAIL 仅非严格）
      → Qlt_le_trans（余量/2 < 余量 ≤ 目标）+ qeq_le 顶层桥（规避 Qle 内
@@ -529,7 +547,7 @@ Proof.
   exact (real_le_to_le_b _ _ Hres).
 Qed.
 
-(* ---- §W4 补集恒等（遗留件复位）与零端锐性 ---- *)
+(* ---- §W4 补集恒等（前席 S3 遗留件复位）与零端锐性 ---- *)
 
 Theorem vb_kl2_complement : forall (p q : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
@@ -564,7 +582,7 @@ Theorem vb_sharp_endpoint_zero : forall (p : Real) (Hp : real_lt real_zero p)
   real_eq (vb_kl2 p p Hp Hp H1p H1p) real_zero.
 Proof.
   intros p Hp H1p. unfold vb_kl2.
-  (* WC2 段：kl_term u u == 0 一般化（原稿只给了 p fiber，缺 (1−p) fiber）。 *)
+  (* WC2 接管：kl_term u u == 0 一般化（前席只给了 p fiber，缺 (1−p) fiber）。 *)
   assert (Hgen : forall (u : Real) (Hu : real_lt real_zero u),
     real_eq (real_kl_term u u Hu Hu) real_zero).
   { intros u Hu.
@@ -604,18 +622,18 @@ Print Assumptions vb_ln_engine.
 Extraction "vb_ex_probe2.ml" vb_kl2_complement vb_sharp_endpoint_zero vb_ln_engine.
 
 (* ============================================================ *)
-(* W2D 段（分段组装第三段，纯追加，不改既有行）       *)
-(* 数学内容（Python fractions 前置复核通过）：               *)
+(* W2D 续席段（分段组装第三棒·编译重相位，纯追加，不改前席任何行）       *)
+(* 数学内容（Python fractions 前置复核 20260918 全绿）：               *)
 (*   · 结点平方编码：(17/20)² = 289/400；18/25 ≤ 289/400               *)
 (*     （交叉积 7200 ≤ 7225）；V ≥ 0 时 V² ≥ 289/400 ⟺ V ≥ 17/20，      *)
 (*     新旧分段函数 [0,1] 两万点采样逐点相等。                          *)
 (*   · ln2 上包络 n=9：hi = Σ₉ + 1/20 = 33464927/46558512 ≈ 0.718771    *)
 (*     ≤ 18/25（交叉积 836623175 ≤ 838053216）；注意 n=8 的 hi≈0.7217    *)
-(*     不达 18/25（既有头注 n=8 计数与其 c3e_l2_sum 定义面不符，         *)
-(*     最终取 n=9）。                                              *)
+(*     不达 18/25（前席头注 n=8 计数与其 c3e_l2_sum 定义面不符，         *)
+(*     本席以 n=9 落地）。                                              *)
 (*   · 引擎面：库内 UpReqPinskerCore R9-PNSK 已备 Real 层常数 1 档       *)
 (*     Pinsker（pnk2_pinsker_one：1·TV² ≤ kl₂，fracsum 双箱统一形），    *)
-(*     此处直接使用——WC2 遗留的「Q 引擎→Real 层提升桥」由该现成件        *)
+(*     本席直接使用——WC2 遗留的「Q 引擎→Real 层提升桥」由该现成件        *)
 (*     替代（强于 ln 引擎链在箱内给出的 V²/(p+q) 形），零阿基米德桥。    *)
 (* 红线自审：公理面零禁用件（本头注为自审句，不引禁词字面量）；           *)
 (*   语句面全 Set（real_lt / real_le / real_le_b / Set-Or / sigT）。     *)

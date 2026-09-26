@@ -1,5 +1,5 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================
-    切片三同名替换注记（ToyR  · UpReq 浅链族续作）
+(* ============================================================
+   T239 切片三同名替换注记（ToyR 包A · UpReq 浅链族续作）
    本件为 UpReqAlign3.v 同名替换稿：原件全文保留（声明序/版记头注/
    其余定理逐字未动），仅五条玩具 w_sum_ptimes_const / w_sum_minus /
    w_sum_opp / w_sum_ptimes_scal / w_sum_ptimes_opp_scal 的证明体由
@@ -7,11 +7,11 @@
    sum_linear 逐环展开＋代数银行兼容桥显式实例化；w_sum_minus 与
    w_sum_ptimes_opp_scal 内联 opp-sum 子链消除对上游 req2_sum_opp 的
    槽参依赖）。语句面零改动。
-   验绿方式：Require 面语义语境检验（c_probe.v，池内）——按
+   验绿方式：Require 面语义语境探针（T239c_probe.v，池内）——按
    S07_RealSetoidExpLog.v:7915 类块与 UpReqAlgebra.v:104/230/255 真名
-   真签名复刻接口面，五条替改写证体逐字粘贴试编，rocq c EXIT=0。
-   整件连带编译遗留：本件 Require CW_ConstructiveWorld_219（16 行薄壳
-   =S01-S15 巨基），池内连带重编超 cpu_guard 时帽，留待基础模块预算批。
+   真签名复刻接口面，五条替换体逐字粘贴试编，rocq c EXIT=0。
+   整件连带编译挂账：本件 Require CW_ConstructiveWorld_219（16 行薄壳
+   =S01-S15 巨基），池内连带重编超 cpu_guard 时帽，留待底座预算批。
    ============================================================ *)
 
 (* ============================================================ *)
@@ -20,33 +20,34 @@
 (* 目的： 对齐族第三段：温度权 w 的归一化与自由能 KL 分解。 *)
 (* 主件： w_pi_next_normalized / w_pi_star_normalized 与 w_F_t_rel_decomp / w_F_t_simpl_next_kl。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqAlign2、UpReqAlign3 前段。 *)
-(* 备注： 温度权载体（pos3/nrm/KLE 等）以 Section 变量给出；KL 分解为逐 eps 接口形。 *)
+(* 备注： 温度权载体（pos3/nrm/KLE 等）以 Section 变量承接；KL 分解为逐 eps 接口形。 *)
 (* ============================================================ *)
 
-(* UpReqAlign3.v — 签名迁移批 3c：主定理链无条件化闭合
+(* UpReqAlign3.v — 签名迁移批 3c：旗舰链无条件化闭合
+   母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3c = 批 3b 文件尾挂起清单的放行批）
    上游：UpReqAlgebra.v（批 1 代数银行）+ UpReqAlign.v（批 3）+
-     UpReqAlign2.v（批 3b 求和-自由能深链机器 40 Qed）——全部 Require 使用；
+     UpReqAlign2.v（批 3b 求和-自由能深链机器 40 Qed）——全部 Require 消费；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
    本批结果（对照 UpReqAlign2.v 文件尾挂起清单逐项已证明）：
-   [] reward_expand/align_energy_expand/F_align_F_t_rel/
+   [T12] reward_expand/align_energy_expand/F_align_F_t_rel/
      align_objective_t12_decomp/J_pi_t/J_pi_next/surrogate_diff_identity
      req 化 + req2_policy_improvement_mono 定理化（批 3 桥位 3 放行）
      + req2_gap_diff/req2_gap_mono。
-   [] F_t_simpl_p/F_t_rel_decomp_p（归一化 p 泛化）/sum_grad_cross/
+   [T13] F_t_simpl_p/F_t_rel_decomp_p（归一化 p 泛化）/sum_grad_cross/
      grad_cross_identity/align_objective_explicit/rlhf_suboptimality_gap/
      rlhf_policy_improvement/sum_advance_gap/t13_hexp/
      backward_kl_step_beta/backward_kl_step（批 3 桥位
      req_backward_kl_identity 放行）/step_le/iter_le（step_kl_weighted
-     sigT 封装 + req2_r_pow 幂）。
-   [主定理无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
+     sigT 打包 + req2_r_pow 幂）。
+   [旗舰无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
      KL(pi_star‖pi_next) == (1−η)·KL(pi_star‖pi_t) − η·KL(pi_t‖pi_star)
        + KL(pi_t‖pi_next)
      为**无条件定理**——全链每一环均为 Qed 真证（无 B 类桥假设位）：
      桥位 req_backward_kl_identity 的语句由本文件 req2_backward_kl_step
-     以同位定理形态供给（批 3 假设位降为使用件）。
+     以同位定理形态供给（批 3 假设位降为消费件）。
    [dpo/preference 簇] dpo_reward 簇（is_implicit/recovers_up_to_baseline/
      relative_exact/diff_is_log_ratio_diff）+ preference 节（denom_pos/
      implicit_reward_diff/pair_loss_at_star）+ dpo_loss_at_pi_star +
@@ -59,11 +60,11 @@
    3. B 类桥（假设位保留，与 Id 同位；本批**新增放行**两条）：
      - req2_gibbs_inequality（Id gibbs_inequality@16629 的 req 同位）：
        KL ≥ 0 的 plain-le 形态不可由接口逐 eps 字段导出（序无消去），
-       保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为使用件；
+       保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为消费件；
      - req2_inv_pos_lt_contra / req2_log_lt_mono（Id Variable
-       L21013/21024 的 req 同位，sigmoid_strict_inc 使用）。
-     - req2_step_kl_eta_bound：**不在本批**（ B 类 Variable，
-       UpReqAlign 已给出假设位；其消解留待 req 求和实例批，不属深链）。
+       L21013/21024 的 req 同位，sigmoid_strict_inc 消费）。
+     - req2_step_kl_eta_bound：**不在本批**（Id @23114 B 类 Variable，
+       UpReqAlign 已承接假设位；其消解留待 req 求和实例批，不属深链）。
    4. (d) 冻结（沿批 3/3b）：ppo_gap_nonneg、fold_right_ext 与 list fold
      机器（nat/list 层 Id，双层并行）——dpo_total_loss_at_star/
      dpo_total_loss_monotone 因此冻结（fold 载体）。
@@ -76,7 +77,7 @@ Require Import UpReqAlign2.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Req3AlignCore：主定理链闭合节（节参数与批 3b Req2AlignCore 逐位对齐） *)
+(* Req3AlignCore：旗舰链闭合节（节参数与批 3b Req2AlignCore 逐位对齐） *)
 (* ============================================================ *)
 Section Req3AlignCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -150,7 +151,7 @@ Definition zrel_pos (pi_t : S -> R) (Hpi_t : pos3 pi_t) : lt zero (ZR pi_t Hpi_t
   @req2_Z_rel_pos R RIS S sumf sum_pos reward beta beta_pos pi_ref
                   pi_ref_pos eta pi_t Hpi_t.
 
-(* ---- 上游件使用包装（UpReqAlign2 Qed 件 → 本节参数；零重证） ---- *)
+(* ---- 上游件消费包装（UpReqAlign2 Qed 件 → 本节参数；零重证） ---- *)
 Lemma w_pi_next_normalized :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t), req (sumf (NPX pi_t Hpi_t)) one.
 Proof.
@@ -741,7 +742,7 @@ Proof.
                  (le_mult_compat_weak zero a b Hb Ha)).
 Qed.
 
-(* η ≤ 1 ⟹ 1 ≤ inv(η)（Id inv_pos_le_compat 使用形） *)
+(* η ≤ 1 ⟹ 1 ≤ inv(η)（Id inv_pos_le_compat 消费形） *)
 Lemma r2_inv_ge_one : le one (inv_pos eta eta_pos).
 Proof.
   apply (le_id_l one (mult eta (inv_pos eta eta_pos)) (inv_pos eta eta_pos)
@@ -782,7 +783,7 @@ Proof.
     + apply req_double_neg.
 Qed.
 
-(* ---- [] 件 1：reward_expand（ req 版） ---- *)
+(* ---- [T12] 件 1：reward_expand（Id @21473 req 版） ---- *)
 Lemma r2_reward_expand :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (s : S),
     req (reward s)
@@ -874,7 +875,7 @@ Proof.
                                (plus_comm (opp z) y)).
 Qed.
 
-(* ---- [] 件 2：align_energy_expand（ req 版） ---- *)
+(* ---- [T12] 件 2：align_energy_expand（Id @21875 req 版） ---- *)
 Lemma r2_align_energy_expand :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (s : S),
     req (AL s)
@@ -1002,7 +1003,7 @@ Lemma unfold_FE_eq :
         (FE energy D p Hp).
 Proof. intros energy D p Hp. apply req_refl. Qed.
 
-(* ---- [] 求和展开辅件 ---- *)
+(* ---- [T12] 求和展开辅件 ---- *)
 
 (* 点态：p·AL == p·ET + p·(κ·opp ADV) *)
 Lemma r2_pt_align_split :
@@ -1078,7 +1079,7 @@ Proof.
                                    (w_sum_opp (fun s => mult (p s) (ADV pi_t Hpi_t s)))))).
 Qed.
 
-(* ---- [] 件 3：F_align == F_t + κ·opp(Σ p·A)（Id F_align_F_t_rel @21949） ---- *)
+(* ---- [T12] 件 3：F_align == F_t + κ·opp(Σ p·A)（Id F_align_F_t_rel @21949） ---- *)
 Lemma r2_F_align_F_t_rel :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p),
     req (FA p Hp)
@@ -1128,7 +1129,7 @@ Proof.
                                         (req_refl (mult K (opp SA))))).
 Qed.
 
-(* ---- [] 件 4：对齐目标分解（Id align_objective_t12_decomp @21997） ---- *)
+(* ---- [T12] 件 4：对齐目标分解（Id align_objective_t12_decomp @21997） ---- *)
 Lemma r2_align_objective_t12_decomp :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p),
     req (JJ p Hp)
@@ -1162,7 +1163,7 @@ Proof.
                        (req_double_neg (mult K SA))).
 Qed.
 
-(* ---- [] 件 5：J(pi_t) == Σ pi_t·A（Id J_pi_t_t12 @22016） ---- *)
+(* ---- [T12] 件 5：J(pi_t) == Σ pi_t·A（Id J_pi_t_t12 @22016） ---- *)
 Lemma r2_J_pi_t :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (JJ pi_t Hpi_t)
@@ -1193,7 +1194,7 @@ Proof.
     + exact (req2_eta_absorb eta SAT).
 Qed.
 
-(* ---- [] 件 6：J(pi_next) == Σ pi_next·A − β·KL(pi_next‖pi_t)（） ---- *)
+(* ---- [T12] 件 6：J(pi_next) == Σ pi_next·A − β·KL(pi_next‖pi_t)（Id @22033） ---- *)
 Lemma r2_J_pi_next :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t),
     req (JJ (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t))
@@ -1286,7 +1287,7 @@ Proof.
         -- apply req_refl.
 Qed.
 
-(* ---- [] 件 7：代理-真实差异恒等式（Id surrogate_diff_identity @21744） ----
+(* ---- [T12] 件 7：代理-真实差异恒等式（Id surrogate_diff_identity @21744） ----
    eta·(Σ NPX·A − Σ pi_t·A) == beta·(KL(NPX‖pi_t) + KL(pi_t‖NPX)) ---- *)
 Lemma r2_surrogate_diff_identity :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
@@ -1418,7 +1419,7 @@ Proof.
                              (req_refl a) (plus_comm (opp b) (opp c))).
     + apply plus_assoc.
 Qed.
-(* ---- [] 件 8：gap 单步显式恒等式（Id policy_iter_gap_diff @23020） ---- *)
+(* ---- [T12] 件 8：gap 单步显式恒等式（Id policy_iter_gap_diff @23020） ---- *)
 Lemma r2_gap_diff :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (req_minus (JJ (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t))
@@ -1588,7 +1589,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* [] 主定理完成：策略改进单调性（Id policy_improvement_mono     *)
+(* [T12] 旗舰完成：策略改进单调性（Id policy_improvement_mono     *)
 (*   @22065 的 req 定理化；批 3 桥位 3 req_policy_improvement_mono *)
 (*   的 t12 链放行）                                              *)
 (* ============================================================ *)
@@ -1605,13 +1606,13 @@ Qed.
 (* ---- B 类桥（登记表 3，本批新增放行位）：req2_gibbs_inequality
    （Id gibbs_inequality @16629 的 req 同位）。KL ≥ 0 的 plain-le
    形态不可由接口逐 eps 字段导出（序无消去）；保留假设位，待
-   UpReqFreeEnergy（批 2 FEP）结果后降为使用件。req2 KLE 语句无
+   UpReqFreeEnergy（批 2 FEP）结果后降为消费件。req2 KLE 语句无
    归一化前提，桥取无 norm 的加强可用形。 ---- *)
 Hypothesis req2_gibbs_inequality :
   forall (p q : S -> R) (Hp : pos3 p) (Hq : pos3 q),
     le zero (KLE p q Hp Hq).
 
-(* ---- [] 件 9：J(pi_t) ≤ J(pi_next)（ req 定理化） ---- *)
+(* ---- [T12] 件 9：J(pi_t) ≤ J(pi_next)（Id @22065 req 定理化） ---- *)
 Theorem r2_policy_improvement_mono :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (JJ pi_t Hpi_t) (JJ (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t)).
@@ -1654,8 +1655,8 @@ Proof.
                  Hg).
 Qed.
 
-(* ---- [] 件 10：dpo_loss(pi_next) ≤ dpo_loss(pi_t)（
-   同位；使用 r2_policy_improvement_mono + opp 保序） ---- *)
+(* ---- [T12] 件 10：dpo_loss(pi_next) ≤ dpo_loss(pi_t)（Id @23244
+   同位；消费 r2_policy_improvement_mono + opp 保序） ---- *)
 Corollary r2_dpo_loss_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (AO (NPX pi_t Hpi_t) (npx_pos pi_t Hpi_t)) (AO pi_t Hpi_t).
@@ -1682,7 +1683,7 @@ Proof.
   exact (req2_log_exp_neg log_inv_exp_neg_req x).
 Qed.
 
-(* β·(η·(β⁻¹·A)) == η·A（使用上游 req2_beta_eta_inv_absorb） *)
+(* β·(η·(β⁻¹·A)) == η·A（消费上游 req2_beta_eta_inv_absorb） *)
 Lemma r2_beta_eta_iv_scal : forall A : R,
   req (mult beta (mult (mult eta (inv_pos beta beta_pos)) A)) (mult eta A).
 Proof.
@@ -1882,8 +1883,8 @@ Proof.
                      (plus_opp zero)).
 Qed.
 
-(* ---- 1) [ 完成] gap 单调不增（Id policy_iter_gap_mono @23086
-   的 req 定理化；使用 r2_policy_improvement_mono + opp 保序） ---- *)
+(* ---- 1) [T12 完成] gap 单调不增（Id policy_iter_gap_mono @23086
+   的 req 定理化；消费 r2_policy_improvement_mono + opp 保序） ---- *)
 Corollary req2_gap_mono :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (req_minus (JJ PSTR PSTR_pos)
@@ -1910,7 +1911,7 @@ Proof.
                                           pi_t Hpi_t Hn))).
 Qed.
 
-(* ---- 2) [] F_t_simpl_p req 版（ 同位；general p） ---- *)
+(* ---- 2) [T13] F_t_simpl_p req 版（Id @22218 同位；general p） ---- *)
 Lemma r2_F_t_simpl_p :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p),
     req (FE (ET pi_t Hpi_t) beta p Hp)
@@ -2015,7 +2016,7 @@ Proof.
                                (req_refl (opp (mult eta SAp))) Htail).
 Qed.
 
-(* ---- 3) [] F_t_beta_form 使用包装 ---- *)
+(* ---- 3) [T13] F_t_beta_form 消费包装 ---- *)
 Lemma w_F_t_beta_form :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p)
          (Hpn : nrm p),
@@ -2035,7 +2036,7 @@ Proof.
                              Hpn).
 Qed.
 
-(* ---- 4) [] F_t_decomp_p req 版（general 归一化 p；KL-diff 形） ---- *)
+(* ---- 4) [T13] F_t_decomp_p req 版（general 归一化 p；KL-diff 形） ---- *)
 Lemma r2_F_t_kl_diff :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (p : S -> R) (Hp : pos3 p)
          (Hpn : nrm p),
@@ -2511,7 +2512,7 @@ Proof.
                                              (mult beta lgZ)))).
 Qed.
 
-(* ---- 8) [] rlhf_suboptimality_gap req 版（ 同位） ---- *)
+(* ---- 8) [T13] rlhf_suboptimality_gap req 版（Id @20554 同位） ---- *)
 Lemma r2_rlhf_suboptimality_gap :
   forall (p : S -> R) (Hp : pos3 p) (Hn : nrm p),
     req (req_minus (JJ PSTR PSTR_pos) (JJ p Hp))
@@ -2612,7 +2613,7 @@ Proof.
                       Hmz))))).
 Qed.
 
-(* ---- 9) [] align_objective_explicit req 版（ 同位） ---- *)
+(* ---- 9) [T13] align_objective_explicit req 版（Id @20330 同位） ---- *)
 Lemma r2_align_objective_explicit :
   forall (p : S -> R) (Hp : pos3 p),
     req (JJ p Hp)
@@ -2790,7 +2791,7 @@ Proof.
 Qed.
 
 
-(* ---- 10) [] sum_grad_cross req 版（ 同位；
+(* ---- 10) [T13] sum_grad_cross req 版（Id @22312 同位；
    SUM(PI_NEXT-PI_T)*A == SUM PI_NEXT*A - SUM PI_T*A，纯求和代数） ---- *)
 Lemma r2_sum_grad_cross :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t),
@@ -2834,8 +2835,8 @@ Proof.
                                (ADV pi_t Hpi_t s))).
 Qed.
 
-(* ---- 11) [] grad_cross_identity req 版（ 同位；
-   使用 r2_surrogate_diff_identity + eta 逆吸收） ---- *)
+(* ---- 11) [T13] grad_cross_identity req 版（Id @22328 同位；
+   消费 r2_surrogate_diff_identity + eta 逆吸收） ---- *)
 Lemma r2_grad_cross_identity :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (sumf (fun s => mult (req_minus (NPX pi_t Hpi_t s) (pi_t s))
@@ -2955,7 +2956,7 @@ Proof.
       * apply req_refl.
 Qed.
 
-(* ---- 13) [] sum_advance_gap req 版（ 同位） ---- *)
+(* ---- 13) [T13] sum_advance_gap req 版（Id @22380 同位） ---- *)
 Lemma r2_sum_advance_gap :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (req_minus (sumf (fun s => mult (pi_t s) (ADV pi_t Hpi_t s)))
@@ -3116,7 +3117,7 @@ Proof.
 Qed.
 
 
-(* ---- 17) 主定理完成坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
+(* ---- 17) 旗舰完成坍缩引理（B1 抵消 + kappa 成形；纯代数） ---- *)
 Lemma r2_bksn_collapse2 :
   forall a b u v w : R,
     req (plus (plus (plus (plus a b) (opp u)) (opp v)) (plus w (opp a)))
@@ -3185,7 +3186,7 @@ Proof.
                                                      (plus b (opp u)))))).
 Qed.
 
-(* ---- 18) β·KSN == FE 星差 − FE 下一差（主定理 HA 首腿供件） ---- *)
+(* ---- 18) β·KSN == FE 星差 − FE 下一差（旗舰 HA 首腿供件） ---- *)
 Lemma r2_beta_KSN_Fdiff :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (mult beta (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos
@@ -3301,14 +3302,14 @@ Proof.
                  Hleg4))).
 Qed.
 (* ============================================================ *)
-(* [主定理无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
+(* [旗舰无条件化演示] req2_backward_kl_step：向后 KL 三点恒等式
    KL(PI_STAR||PI_NEXT) == (1-eta)*KL(PI_STAR||PI_T) - eta*KL(PI_T||PI_STAR)
       + KL(PI_T||PI_NEXT)
    无条件定理——全链每一环均为 Qed 真证（无 B 类桥假设位）：
    桥位 req_backward_kl_identity（UpReqAlign.v 假设位）的语句由本定理
    以同位定理形态供给。非平凡：FE-KL-diff（ET/对齐两侧）+
    surrogate 最优性 + 次优间隙 + collapse 坍缩 + beta 逆吸收。 *)
-(* ---- 19) 主定理：逐段组装（段1 骨架 + HA） ---- *)
+(* ---- 19) 旗舰：逐段组装（段1 骨架 + HA） ---- *)
 Theorem req2_backward_kl_step :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos (npx_pos pi_t Hpi_t))
@@ -3554,7 +3555,7 @@ Proof.
 Qed.
 
 
-(* ---- 20) [] step_le：主定理恒等式的 le 形（ 同位） ---- *)
+(* ---- 20) [T13] step_le：旗舰恒等式的 le 形（Id @22790 同位） ---- *)
 Corollary r2_backward_kl_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     le (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos (npx_pos pi_t Hpi_t))
@@ -3614,8 +3615,8 @@ Proof.
                                    (npx_pos pi_t Hpi_t))))))).
 Qed.
 
-(* ---- 21) [] rlhf_policy_improvement：KL 下降 ⟹ J 上升
-   （ 同位；使用 r2_rlhf_suboptimality_gap 双件 + β 保序） ---- *)
+(* ---- 21) [T13] rlhf_policy_improvement：KL 下降 ⟹ J 上升
+   （Id @20591 同位；消费 r2_rlhf_suboptimality_gap 双件 + β 保序） ---- *)
 Lemma r2_rlhf_policy_improvement :
   forall (p_old p_new : S -> R) (Hp_old : pos3 p_old) (Hp_new : pos3 p_new)
          (Hn_old : nrm p_old) (Hn_new : nrm p_new),
@@ -3705,7 +3706,7 @@ Proof.
                   Hb1).
 Qed.
 
-(* ---- 22) [] 加权步长 KL 和（ step_kl_weighted 同位） ---- *)
+(* ---- 22) [T13] 加权步长 KL 和（Id @22903 step_kl_weighted 同位） ---- *)
 Fixpoint r2_step_kl_weighted (t : nat) (pi : S -> R) (Hpi : pos3 pi) : R :=
   match t with
   | 0%nat => zero
@@ -3718,8 +3719,8 @@ Fixpoint r2_step_kl_weighted (t : nat) (pi : S -> R) (Hpi : pos3 pi) : R :=
            (mult (req_minus one eta) (r2_step_kl_weighted m pi Hpi))
   end.
 
-(* ---- 23) [] iter_le：向后 KL 迭代精确加权上界（ 同位；
-   使用 r2_backward_kl_step_le + η≤1（经 req_le_minus_nonneg）+ 归纳） ---- *)
+(* ---- 23) [T13] iter_le：向后 KL 迭代精确加权上界（Id @22915 同位；
+   消费 r2_backward_kl_step_le + η≤1（经 req_le_minus_nonneg）+ 归纳） ---- *)
 (* ---- 22a) 尾重排纯代数件（iter_le 终桥） ---- *)
 Lemma r2_step_kl_rearr :
   forall p q r s t : R,
@@ -3894,30 +3895,32 @@ Qed.
 End Req3AlignCore.
 
 (* ============================================================ *)
-(* 尾注显式假设（  复核）：头注承诺件实有核对 —
+(* 尾注显式假设（整合席 20260909 复核）：头注承诺件实有核对 —
    1. [dpo/preference 簇] 本文件未置：已由 UpReqAlignRestA.v ralt_ 系
      全数已证明（dpo_reward_recovers / relative_exact /
      diff_is_log_ratio_diff / implicit_reward_diff / dpo_pair_denom_pos /
      dpo_pair_loss_at_star / dpo_loss_pair / dpo_loss_at_pi_star /
      sigmoid_strict_inc）。
-   2. [] 链余件（sum_grad_cross / grad_cross_identity /
+   2. [T13] 链余件（sum_grad_cross / grad_cross_identity /
      align_objective_explicit / rlhf_suboptimality_gap /
      rlhf_policy_improvement / sum_advance_gap / t13_hexp /
      backward_kl_step_beta / backward_kl_step）：
+     已于 20260909 收官席全数落本文件（r2_ 前缀同位件）；
      step_le（r2_backward_kl_step_le）/ rlhf_policy_improvement
      （r2_rlhf_policy_improvement）/ iter_le（r2_backward_kl_iter_le，
      含 r2_step_kl_weighted Fixpoint + r2_step_kl_rearr 尾重排件）
-     全数落本文件， 头注承诺全已证明。
-   3. [主定理无条件化演示] req2_backward_kl_step 已落本文件（
-     ，五段逐段组装：HA β·KSN=FE差 / HB t13_hexp / HC·HK split /
+     亦于同日收官席全数落本文件，T13 头注承诺全已证明。
+   3. [旗舰无条件化演示] req2_backward_kl_step 已落本文件（20260909
+     收官席，五段逐段组装：HA β·KSN=FE差 / HB t13_hexp / HC·HK split /
      HD r2_bksn_collapse2 坍缩 / HE iv 成形 / β 逆吸收完成）；
-     语句由主定理同位供给，UpReqAlign.v 假设位可已证明。
-   （.vo magic 90001 同轨）；G3 提取检验 Obj.magic=0（主定理/保底六件
+     [T12] req2_gap_mono 亦已落本文件；桥位 req_backward_kl_identity
+     语句由旗舰同位供给，UpReqAlign.v 假设位可已证明。
+   （.vo magic 90001 同轨）；G3 提取探针 Obj.magic=0（旗舰/保底六件
    "Modules were successfully checked"。
    ============================================================ *)
 
 (* ============================================================
-    切片三 · 替换件尾部假设清查（整件连带编译遗留，五条一并清查）
+   T239 切片三 · 替换件尾部假设清查（整件连带编译挂账，五条一并清查）
    ============================================================ *)
 Print Assumptions w_sum_ptimes_const.
 Print Assumptions w_sum_minus.

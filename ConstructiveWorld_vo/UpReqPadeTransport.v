@@ -14,7 +14,7 @@
 (*        （见证 eps := (y^{n+1}/(n+1)!)/2、N := n+1）；            *)
 (*   G2  qtr_mult_eq_compat_l + qtr_pade_lower_real —— 运输引擎     *)
 (*        与 Padé 精度 Real 层下界首件（载体任取 w ≡ e^y，          *)
-(*        乘开免除法形，使用 cpl_lower_even）；                     *)
+(*        乘开免除法形，消费 cpl_lower_even）；                     *)
 (*   G2b qtr_pade_lower_extract —— Real→逐点证书反射：              *)
 (*        cpl 的 real_lt 见证解包为显式 N/eps 的逐点 QltT 形。       *)
 (*                                                               *)
@@ -42,7 +42,7 @@ Require Import UpReqPadeLower.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith Lia Setoid.
 
 (* ============================================================ *)
-(* B0 桥接引理：Q 层小组合件（自持零外部依赖）                          *)
+(* B0 桥件：Q 层小组合件（自持零外部依赖）                          *)
 (* ============================================================ *)
 
 (* a < b ⟹ 0 < b − a（QltT 面）。

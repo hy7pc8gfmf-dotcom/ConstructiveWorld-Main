@@ -1,11 +1,11 @@
 (* ===================================================================== *)
 (* 【工单面外扩展件标注】本件为工单面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
-(*   形态实例层消解），候合并方甄别确认；若属已补强保留区请退回。 *)
+(*   形态实例层消解），候融合方甄别确认；若属已补强保留区请退回。 *)
 (* A 区五字段（工单 §5.1）： *)
 (* ① 模块名+数学使命：UpAblP6_SecondLaw_two_state.v——SlqSecondLaw 节在 *)
-(* two_state 具体载体上的整节实例化依赖模块（热力学第二定律定量锚）。 *)
+(* two_state 具体载体上的整节实例化供给件（热力学第二定律定量锚）。 *)
 (* ② 依赖清单：CW_ConstructiveWorld_219、SecondLawQuantified、UpReqEntropyDeficitTemp、 *)
-(* UpReqTempDefs、Stdlib List；尾部插入供给段另 Require UpReqConcFin2（cf2_temp/ *)
+(* UpReqTempDefs、Stdlib List；尾插供给段另 Require UpReqConcFin2（cf2_temp/ *)
 (* cf2_temp_pos 见证锚）。 *)
 (* ③ 对标行：mathlib/stdlib 无同构物（库内自持 Real 载体装配件），省略。 *)
 (* ④ 构造性注记：Set 层承载；零承认零公理；全部定理 Qed 闭合，可提取。 *)
@@ -19,7 +19,7 @@
 (* ===================================================================== *)
 (* ===================================================================== *)
 (* UpAblP6_SecondLaw_two_state.v —— SecondLawQuantified SlqSecondLaw       *)
-(*   节的 two_state 整节实例化依赖模块（纯构造性；语句面全 Set 层）。          *)
+(*   节的 two_state 整节实例化供给件（纯构造性；语句面全 Set 层）。          *)
 (*                                                                        *)
 (* --------------------------------------------------------------------- *)
 (* 【使命】源模块 SecondLawQuantified.v Section SlqSecondLaw（九个接口参数    *)
@@ -266,7 +266,7 @@ Proof.
            uab23_ts_sumlinear T T_pos energy p Hnp).
 Qed.
 
-(* 确定理（lower）实例面：KL(当前‖p_T) − 熵亏 ≤ eps，                    *)
+(* 锚定理（lower）实例面：KL(当前‖p_T) − 熵亏 ≤ eps，                    *)
 (*   语义：一步 Gibbs 演化熵增 ≥ 熵亏 − eps（two_state 全参数实例化）。   *)
 Theorem uab23_ts_gain_kl_lower :
   forall (p : ts_state -> Real) (Hp : forall s : ts_state, real_lt real_zero (p s))
@@ -285,7 +285,7 @@ Proof.
            uab23_ts_sumlinear uab23_ts_sumadd T T_pos energy p Hp Hnp Henergy eps Heps).
 Qed.
 
-(* 确定理（upper）实例面：熵亏 − KL ≤ eps（互补向，two_state 全参数实例化）。 *)
+(* 锚定理（upper）实例面：熵亏 − KL ≤ eps（互补向，two_state 全参数实例化）。 *)
 Theorem uab23_ts_gain_kl_upper :
   forall (p : ts_state -> Real) (Hp : forall s : ts_state, real_lt real_zero (p s))
          (Hnp : real_eq (ts_sumf p) real_one)
@@ -437,7 +437,7 @@ Print Assumptions uab23_ts_anchor_closed_upper.
 (*   见证二 T:=cf2_temp（UpReqConcFin2，定义性等于 one）——引 cf2_temp_pos，      *)
 (*   其语句面为类字段形 lt zero cf2_temp，本件以规范名 real_lt real_zero 重述，    *)
 (*   类型转换核验即类字段 lt/zero 与 real_lt/real_zero 在 Real 载体上定义性       *)
-(*   一致的机器凭证；与 ConcFin2 载体族同源，供合并侧按载体族整取。              *)
+(*   一致的机器凭证；与 ConcFin2 载体族同源，供融合侧按载体族整取。              *)
 (* ============================================================ *)
 Require Import UpReqConcFin2.
 

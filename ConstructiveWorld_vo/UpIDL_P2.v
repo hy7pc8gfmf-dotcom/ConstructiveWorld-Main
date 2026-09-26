@@ -60,7 +60,7 @@
 (* 载体全程 Z/nat/bool 判定层（延续 Q4 Set 层路线：clq_tid/clq_nle/iffT/sigT）；      *)
 (* 语句零 Prop：等式 clq_tid、序 clq_nle、⟺ iffT、分支 bool/prod/sigT。              *)
 (* 纪律：纯构造性、零公理式出口、stdlib + G11_IDLFam、全链可提取。              *)
-(* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面衔接最紧」自定）：     *)
+(* 定稿决策（未定稿细节按「两段制结构最清晰 + 与 Q4 判定面咬合最紧」自定）：     *)
 (*   ① 六洞型 hole=k0 k1 kb kc ke kr 具象为六槽，假设位=Q4 dtab 指标 0..5，      *)
 (*      头元 k0 恒 0（gauge 规范），全部结论语义走头相对差 dsub d (hix h) 0。  *)
 (*   ② 结论 verd=洞型×向×Z 证据：pass(h,w) 立钉「值=w」；rej(h,e) 出差条款     *)
@@ -1231,7 +1231,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* 8. Q4 判定面衔接：织出件受 [内]类查询逐词复核                                *)
+(* 8. Q4 判定面咬合：织出件受 [内]类查询逐词复核                                *)
 (* ===================================================================== *)
 
 Lemma hix_nle : forall h : hole, clq_nle (hix h) hmax.
@@ -1246,7 +1246,7 @@ Proof.
 Qed.
 
 (* 主定理 5：织出件交给 Q4 问答机复核——[内]类差值查询的答案恰为结论钉值。
-   织机出生即证 + Q4 判定面独立复核，两件衔接。 *)
+   织机出生即证 + Q4 判定面独立复核，两件咬合。 *)
 Theorem recheck_pass : forall (s : list verd) (d : dtab) (h : hole) (w : Z),
   clq_tid weaveout (weave (melt s)) (wok d) ->
   clq_tid bool (vIn (mkVd h vpass w) s) true ->

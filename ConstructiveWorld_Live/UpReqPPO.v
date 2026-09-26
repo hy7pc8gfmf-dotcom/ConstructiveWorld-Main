@@ -1,8 +1,9 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   rppo_align_free_energy_pi_star（原 L1085，5 句玩具证）               *)
 (*   rppo_pi_star_objective_value（原 L992，1 句玩具证）                  *)
@@ -20,10 +21,10 @@
 (* 备注： 状态值、优势、KL 到参考策略为显式定义；求和接口三定律为前提。 *)
 (* ============================================================ *)
 
-(*
+(* UpReqPPO.v — 签名迁移批 3 收尾席：PPO/advantage 簇余件 + dpo_reward_is_implicit req 化
    上游：UpReqAlgebra.v（批 1 地基）+ UpReqAlign.v（批 3 主体：pos_dist/F_align_req/
      align_objective_req/relative_entropy_req/pi_star_req/req_pi_star_pos/
-     req_align_energy_exp/req_le_of_minus_nonneg/rkl_opp_zero——全部只使用不重建）；
+     req_align_energy_exp/req_le_of_minus_nonneg/rkl_opp_zero——全部只消费不重建）；
      纯 term-mode（req_trans 链 + compat 桥），零类型类重写层依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
@@ -37,6 +38,7 @@
      kl_penalty_sufficient（L19967）→ rppo_kl_penalty_sufficient（组装）。
    [区2 PPO gap / 目标分解 / 比率簇]
      ppo_gap_exact（L20008）→ rppo_ppo_gap_exact（真证；min/r_max 仅作符号载体
+       零 le 消费——与冻结件 ppo_gap_nonneg（L20083）裁决边界逐位守住，不越界）。
      rlhf_optimal_value（L20544）→ rppo_rlhf_optimal_value（组装）。
        真证 ~15 步 req_trans 链；注：Id 显式假设件 align_objective_explicit（L20330）的
        req 内容与本件在 req 系逐定义可换（state_value_req==E_r、kl_to_ref_req==
@@ -47,6 +49,7 @@
    [区3 FEP 显式 / Boltzmann / 外延簇]
      align_free_energy_explicit（L21108）→ rppo_align_free_energy_explicit（真证组装）。
      align_free_energy_pi_star（L21167）→ rppo_align_free_energy_pi_star（组装；
+       UpReqAlign 基建独立落位，双向互证）。
      pi_star_objective_value（L21186）→ rppo_pi_star_objective_value（组装；Id 与
        rlhf_optimal_value L20544 双件同形，req 保持双件同位不合并）。
      free_energy_ext_t12（L21425）→ rppo_free_energy_ext_gen（真证；**对位结论**：
@@ -89,7 +92,7 @@ Hypothesis sum_linear :
   forall (a : Real) (f : S -> Real),
     req (sumf (fun s => mult a (f s))) (mult a (sumf f)).
 
-(* T5 扩槽（ B39 后，T4R §⑤-A2 配方）：pi_star_req canonical 签名顶入
+(* T5 扩槽（R120 B39 后，T4R §⑤-A2 配方）：pi_star_req canonical 签名顶入
    sum_pos 位；Zap 槽闲置化保留（:1085/:1108 inv_pos 供给位仍在用）。 *)
 Hypothesis rppo_sum_pos :
   forall f : S -> Real, (forall s : S, lt zero (f s)) -> lt zero (sumf f).
@@ -219,7 +222,7 @@ Proof.
     + apply req_mult_one_r.
 Qed.
 
-(* 内机 6：x + opp(y + x) == opp y（收缩引擎；Id 内收缩步 req 泛化） *)
+(* 内机 6：x + opp(y + x) == opp y（塌缩引擎；Id 内塌缩步 req 泛化） *)
 Lemma rppo_plus_opp_plus_r : forall x y : Real,
   req (plus x (opp (plus y x))) (opp y).
 Proof.
@@ -335,11 +338,11 @@ Proof.
       * unfold req_minus. apply plus_opp.
 Qed.
 
-(* ============ 区2 前置机器：align_objective 显式分解（件8 主定理） ============ *)
+(* ============ 区2 前置机器：align_objective 显式分解（件8 旗舰） ============ *)
 
-(* ---- 件8 align_objective_decomp（基座 L20683；真证机器主定理） ----
+(* ---- 件8 align_objective_decomp（基座 L20683；真证机器旗舰） ----
    J(p) == V(p) − β·KL(p‖π_ref)。
-     → Σ p·log p = KL + Σ p·lgR → 内收缩 opp(β·KL) → req_minus 形。 *)
+     → Σ p·log p = KL + Σ p·lgR → 内塌缩 opp(β·KL) → req_minus 形。 *)
 Lemma rppo_align_objective_decomp :
   forall (p : S -> Real) (Hp : pos_dist S p),
     req (align_objective_req S sumf reward beta pi_ref pi_ref_pos p Hp)
@@ -477,7 +480,7 @@ Proof.
                                (sumf (fun s => mult (p s) (log (pi_ref s) (pi_ref_pos s))))
                                (req_refl (relative_entropy_req S sumf p pi_ref Hp pi_ref_pos))
                                (req_refl (sumf (fun s => mult (p s) (log (pi_ref s) (pi_ref_pos s)))))). }
-  (* 步F：合成配 *)
+  (* 步F：总装配 *)
   apply (req_trans (align_objective_req S sumf reward beta pi_ref pi_ref_pos p Hp)
                    (plus (plus (state_value_req p)
                                (sumf (fun s => mult (p s) (mult beta (log (pi_ref s) (pi_ref_pos s))))))
@@ -501,7 +504,7 @@ Proof.
                              (opp (mult beta (sumf (fun s => mult (p s) (log (p s) (Hp s))))))
                              (opp (mult beta (sumf (fun s => mult (p s) (log (p s) (Hp s))))))
                              HC (req_refl (opp (mult beta (sumf (fun s => mult (p s) (log (p s) (Hp s)))))))).
-  - (* 内收缩：W + opp(β·(KL + Lref)) == opp(β·KL)；收 req_minus 形 *)
+  - (* 内塌缩：W + opp(β·(KL + Lref)) == opp(β·KL)；收 req_minus 形 *)
     apply (req_trans (plus (plus (state_value_req p)
                                  (sumf (fun s => mult (p s) (mult beta (log (pi_ref s) (pi_ref_pos s))))))
                            (opp (mult beta (sumf (fun s => mult (p s) (log (p s) (Hp s)))))))
@@ -557,7 +560,7 @@ Proof.
                                        (opp (mult beta (sumf (fun s => mult (p s) (log (p s) (Hp s)))))))).
       * apply (req_plus_compat (state_value_req p) (state_value_req p) _ _
                                (req_refl (state_value_req p)) Hinner).
-    + (* x + opp(y + x) == opp(y)，x := β·Lref, y := β·KL（使用内机 6） *)
+    + (* x + opp(y + x) == opp(y)，x := β·Lref, y := β·KL（消费内机 6） *)
       assert (Hcol : req (plus (mult beta (sumf (fun s => mult (p s) (log (pi_ref s) (pi_ref_pos s)))))
                                (opp (plus (mult beta (relative_entropy_req S sumf p pi_ref Hp pi_ref_pos))
                                           (mult beta (sumf (fun s => mult (p s) (log (pi_ref s) (pi_ref_pos s))))))))
@@ -759,7 +762,7 @@ Definition rppo_ppo_objective : Real :=
 Definition rppo_is_objective : Real :=
   sumf (fun s => mult (pi_old s) (mult (rppo_star_old_ratio s) (advantage_fn s))).
 
-(* ---- 件6 ppo_gap_exact（基座 L20008；真证；min/r_max 零 le 使用） ---- *)
+(* ---- 件6 ppo_gap_exact（基座 L20008；真证；min/r_max 零 le 消费） ---- *)
 Lemma rppo_ppo_gap_exact :
   req (req_minus rppo_is_objective rppo_ppo_objective)
       (sumf (fun s => mult (pi_old s)
@@ -1051,7 +1054,7 @@ Proof.
 Qed.
 
 (* ---- 件15 free_energy_ext_t12（基座 L21425；真证；对位结论见头注） ----
-   泛化能量/温度自由能外延（req log 前提位：Id 免费事实的诚实桥承担）。 *)
+   泛化能量/温度自由能外延（req log 前提位：Id 免费事实的诚实桥承接）。 *)
 Definition F_gen_req (energy : S -> Real) (D : Real) (p : S -> Real) (Hp : pos_dist S p) : Real :=
   plus (sumf (fun s => mult (p s) (energy s)))
        (mult D (sumf (fun s => mult (p s) (log (p s) (Hp s))))).
@@ -1111,7 +1114,7 @@ Proof.
                          (mult (pi_ref s)
                                (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))))
                    (rppo_boltzmann s)).
-  - (* T4R2 桥（ B39 后）：canonical π*（UpReqAlign.Z_align_pos 内部前置引理
+  - (* T4R2 桥（R120 B39 后）：canonical π*（UpReqAlign.Z_align_pos 内部供给件
        实例）与 Zap 槽闭式仅差 inv_pos 正性证明参（canonical-vs-pinned 墙）；
        req_mult_cancel_l + inv_pos_correct 双折（Close uac_pstr_cross 同款）。 *)
     unfold rppo_pistar.
@@ -1143,20 +1146,22 @@ Qed.
           (plus (align_objective pi_ref)
                 (minus (sum_over_S (fun s => mult (pi s) (advantage pi_ref s)))
                        (mult beta (kl_to_ref pi)))).
+   req 组装链（全部消费本文件既有件，零新建桥假设）：
      件8 rppo_align_objective_decomp（J = V − βKL，π 与 π_ref 双实例）
        + rppo_KL_self_zero（KL 对角自零 → J(π_ref) = V(π_ref)）
        + 内机5 rppo_advantage_sum_ref（Σ π·A_ref = V(π) − V(π_ref)，归一化位）
          三步 + plus_opp/plus_zero 归零）。
    命名对位：state_value_req==V、advantage_req==A、relative_entropy_req==kl_to_ref
      （kl_to_ref_req 同形 δ 可换，沿件3 语句惯例直用 relative_entropy_req）。
-   封存改道（终验件）：原节内双 assert（收缩引理 / J(π_ref)==V(π_ref)）
+   封存改道（2026-09-09 终验席）：原节内双 assert（塌缩引理 / J(π_ref)==V(π_ref)）
      40min 无 .vo）；提级为独立件 rppo_b_collapse_minus（内机6）/
+   根因修复（同席，定位探针二轮）：装配层尾腿原为 req_sym 内机5 裸喂
      req_plus_compat H2 槽——槽型 req (req_minus (req_minus Vπ Vref) KL)
      (req_minus A_sum KL) 与内机5 对称型 req (req_minus Vπ Vref) A_sum 差一层
      req_minus 双参同态运输，apply 进 δ 展开搜索死旋（glob 停在语句行即此；
      40min 内存爬升后 worker 静默亡=根源非封存非热载）；补 req_plus_compat
      双 opp-KL 腿 + req_refl 运输（req_minus δ 透明 plus a (opp b) 可转换）。 *)
-(*
+(* 内机6（件16 提级伴件，2026-09-09 终验席封存改道）：塌缩引理
    b + ((a−b)−c) == a−c（Id 第4/5步 req 合并形）——原为件16 节内 assert，
    单件巨型封存在 .vo 期膨胀致死（四轮实证 EXIT=127 零输出），提级独立。 *)
 Lemma rppo_b_collapse_minus :
@@ -1247,7 +1252,7 @@ Lemma rppo_align_objective_advantage_decomp :
                          (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))).
 Proof.
   intros pi Hnorm Hpos.
-  (* 合成配：J(π) → Vπ−βKL → Vr+((Vπ−Vr)−βKL)[内机6 反向] → J(ref)+(ΣπA_ref−βKL) *)
+  (* 总装配：J(π) → Vπ−βKL → Vr+((Vπ−Vr)−βKL)[内机6 反向] → J(ref)+(ΣπA_ref−βKL) *)
   apply (req_trans (align_objective_req S sumf reward beta pi_ref pi_ref_pos pi Hpos)
                    (req_minus (state_value_req pi)
                               (mult beta (relative_entropy_req S sumf pi pi_ref Hpos pi_ref_pos)))

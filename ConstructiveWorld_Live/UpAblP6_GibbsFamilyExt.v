@@ -1,11 +1,42 @@
-(* ==========================================================================)
-   UpAblP6_GibbsFamilyExt.v — Gibbs 族的温度参数化扩展实例件
-   使命: uagfe_gibbs_temp_one_B/temp_two_eps（温度 1 与 ε 形 Gibbs）、le_b_mult_pos_two_temp_flat（双温度乘法正性）与 Jeffreys 对称熵两件（uagfe_jeffreys_sym_temp_B/list_temp_B）。
-   依赖: CW_ConstructiveWorld_219、UpRealLeB/2/3、UpReqKLStrictB、GibbsFamilyExt；Stdlib List。
-   对标: Gibbs 不等式与 Jeffreys 散度的温度参数化族（信息论）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpAblP6_GibbsFamilyExt.v —— Gibbs 族温度化扩展的对照供给件           *)
+(* 使命：形式化 KL 散度与对称 Jeffreys 散度的温度化（乘正系数 β）在       *)
+(*   Bishop 构造性实数上的五条逐点/有限和上界性质（uagfe_ 前缀五结论）。  *)
+(* 对标：无直接对应物（KL/Jeffreys 型不等式的 Bishop 构造性版本）。       *)
+(* ------------------------------------------------------------------ *)
+(* 五条结论（证明路径注真实标识符）：                                    *)
+(*   ① uagfe_gibbs_temp_one_B 单位温度 β=1 逐点 Bishop 实例：            *)
+(*      由 gfe_gibbs_core_temp_B 于 β:=real_one 实例化，温度前提由        *)
+(*      real_lt_zero_one 直接供给。                                      *)
+(*   ② uagfe_gibbs_temp_two_eps 双倍温度 β=2 逐点 eps 实例：             *)
+(*      由 gfe_gibbs_core_temp_eps 于 β:=1+1 实例化；其温度前提由         *)
+(*      real_plus_positive 与 real_lt_zero_one 合成，再经 gfe_le_of_lt    *)
+(*      由严格不等式降为非严格前提。                                      *)
+(*   ③ uagfe_le_b_mult_pos_two_temp_flat 两级温度复合平形式：             *)
+(*      (b1·b2)·x ≤_B (b1·b2)·y（x ≤_B y、0<b1、0<b2）；由                *)
+(*      gfe_le_b_mult_pos 两级复合，经 gfe_le_b_eq_r 与                   *)
+(*      leb3_le_b_eq_l 作左右元替换，real_mult_assoc 调整结合顺序。       *)
+(*   ④ uagfe_jeffreys_sym_temp_B 对称 Jeffreys 温度面（点态）：           *)
+(*      0 ≤_B β·(kl(p‖q)+kl(q‖p))。上游温度面仅有单 KL 间隙形式，        *)
+(*      Jeffreys 和形的温度化为本件新增；由 gfe_jeffreys_sym_B 供         *)
+(*      x ≤_B y，gfe_le_b_mult_pos 乘正温度，real_mult_zero 与            *)
+(*      leb3_le_b_eq_l 将左侧化为零。                                     *)
+(*   ⑤ uagfe_jeffreys_sym_list_temp_B 对称 Jeffreys 温度面（有限和）：    *)
+(*      0 ≤_B β·Σ_s (kl(p s‖q s)+kl(q s‖p s))；由                         *)
+(*      gfe_jeffreys_sym_list_B 供和形，乘正温度论证同④。                 *)
+(* ------------------------------------------------------------------ *)
+(* 上游件 GibbsFamilyExt 无节内声明与定义件，全部为引理与定理；本件同     *)
+(*   为纯引理/定理供给件。                                                *)
+(* 构造性注记：全部结论 Set 层承载（CW_ConstructiveWorld_219 自建 Or      *)
+(*   编码，real_le/real_lt/real_le_b/real_eq 皆 Set 值）；零公理零承认；   *)
+(*   文尾 Print Assumptions 五定理全 Closed；可提取。                     *)
+(* 依赖：CW_ConstructiveWorld_219（real_lt_zero_one、real_plus_positive   *)
+(*   出口）、UpRealLeB、UpRealLeB2、UpRealLeB3、UpReqKLStrictB、          *)
+(*   GibbsFamilyExt。                                                    *)
+(* 编译配方：coqc 9.1 直调，cpu_guard 温控，-o 临时目录，树内零写入。      *)
+(* ============================================================ *)
 
 From Stdlib Require Import List.
 Import ListNotations.

@@ -1,11 +1,79 @@
-(* ==========================================================================)
-   UpReqEntropyDeficitTemp.v — 温度化 KL 分解与熵亏损
-   使命: real_sum_neglog_boltzmann（负对数 Boltzmann 和恒等）、real_KL_temp、real_KL_temp_decomp（KL 分解为能量项与温度熵项）与 real_entropy_deficit_kl_temp（能量期望 == 自由能 − 温度·熵）。
-   依赖: CW_ConstructiveWorld_219、UpReqTempDefs
-   对标: 温度化相对熵分解（自由能 = 能量 − T·熵；熵亏损恒等式）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_KL_temp_kl_term_bridge（原 L495，4 句玩具证）                   *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T343 恒等守恒更正注记】2026-09-22 包AW十七 台账席（恒等头注收尾·AD 余六件闭合） *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
+(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
+(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341／T343 台账。 *)
+(* 附记：T277 判级全文恒等；AD 域余六件收尾收官（T317 六·1 方案①）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqEntropyDeficitTemp.v *)
+(* *)
+(* 目的： 定理 4.6a entropy_deficit_kl_temp 的 Real 层构造。 *)
+(* 主件： real_entropy_deficit_kl_temp：熵亏损的 KL 分解式与 real_KL_temp_decomp。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs。 *)
+(* 备注： 和泛函外延/线性/可加为显式 Variable 前提；温度族定义承定义件。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqEntropyDeficitTemp.v —— 席T6b：定理 4.6a entropy_deficit_kl_temp *)
+
+(* ------------------------------------------------------------------ *)
+(* 【使命】同约束能量 E(p) == E_T 下 S[p_T] − S[p] == KL(p‖p_T)        *)
+(*   （论文正式版 L317-319；Id 原件 S04 L3903 entropy_deficit_kl_temp） *)
+(*   等式档 real_eq 真复刻完成。                                       *)
+(* ------------------------------------------------------------------ *)
+
+
+
+(*   real_entropy_dist / real_boltzmann_dist_temp(_pos) / real_Z_temp  *)
+
+(*   L41696 规范形，拆分落点 S08 L482，经 _build_219 单体 .vo 在库，    *)
+(*   检验 Check 实证零 Section 抽象污染，直用零重建）+ Σ-opp /          *)
+
+(* ------------------------------------------------------------------ *)
+(* 【Id 层原件对位表（S04 L3903-3933 逐参数位实证）】                      *)
+(*   Id normalized p                     ↦ Hnp : real_eq (Σ p) one    *)
+(*      （Id S04 L1998 同义：Id (sum_over_S p) one）                   *)
+(*   Id positive_dist p                  ↦ Hp : forall s,             *)
+
+(*      正性证人，故 Hp 兼作 log 前提位——T6 real_entropy_dist 同位）    *)
+(*   Id (energy_expectation p)           ↦ Henergy LHS：              *)
+(*      real_sum_over_S (fun s => p s·e s)（Id S04 L3155 同构）        *)
+(*   Id (energy_exp_temp t Ht)           ↦ Henergy RHS：              *)
+(*      real_energy_exp_temp（T6 定义件 3）                            *)
+(*   Id minus (…) (…)                    ↦ real_minus_r（S12 L13224    *)
+(*      顶层件：real_plus a (real_opp b)，Id minus 同构展开）           *)
+(*   Id relative_entropy p p_T           ↦ real_KL_temp p Hp：        *)
+
+
+(*      为 plus+opp。另供 L41696 real_kl_term 规范形桥            *)
+(*      real_KL_temp_kl_term_bridge——双形态都在库，零缩水）             *)
+
+(*   Id entropy_temp_explicit            ↦ real_entropy_temp_explicit  *)
+(*      （T6 加做件，全 arity 9 参显式应用）                               *)
+(*   组装骨架：req 先例 UpReqTempEntropy 件 3/5（req_entropy_deficit_   *)
+(*   temp）同构移植 req → Real。                                       *)
+(* ------------------------------------------------------------------ *)
+(* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt）；     *)
+(*   前提位照 Id 层对位（归一化/逐点正/同能量三前提，不弱化不加码）；    *)
+(*   全 Qed 完成；零新承认件。                                         *)
+
+(*   -Q "../attn/_build_219" "" UpReqEntropyDeficitTemp.v（秒审后全量） *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.

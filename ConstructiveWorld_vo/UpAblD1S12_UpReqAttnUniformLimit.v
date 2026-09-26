@@ -1,5 +1,6 @@
 (* ============================================================ *)
 (* UpAblD1S12_UpReqAttnUniformLimit.v —— FA-D1S12 数据供给大打包第八梯 件①      *)
+(* 席位：FA-D1S12（论文域消融施工席·D1-⑦ 第八梯 ≤40 位·按模块聚合）              *)
 (*   ｜独立伴生件·原树零改｜零 Require 母本（防混代际 .vo 地雷，P3S1 坑1）        *)
 (*                                                              *)
 (* 辖区：UpReqAttnUniformLimit.v Section AlmUniform 全 10 位（本模块整体认领，    *)

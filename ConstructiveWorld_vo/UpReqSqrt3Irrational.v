@@ -1,11 +1,33 @@
-(* ==========================================================================)
-   UpReqSqrt3Irrational.v — √3 无理性与 Newton 迭代收敛率
-   使命: is3_no_sqrtZ/is3_no_sqrt3（模 3 论证无理性）、is3_x Newton 迭代序列、is3_delta/is3_e 误差递减链（is3_delta_step/is3_e_step）与 is3_x_lb/is3_x_ub/is3_mono 界族。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、SumInvFactEscape、UpReqBanachNormOpp、UpReqIrrationalCriterion等；Stdlib QArith、Lia、Setoid、Morphisms、Qfield等
-   对标: √3 的无理性初等证明（模 3 二次剩余论证）与 Newton 平方根迭代的误差收缩率。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpReqSqrt3Irrational.v                                        *)
+(*                                                               *)
+(* 目的：母定理 lic_irrational_criterion 的第三实例装配：             *)
+(*       is3_sqrt3_irrational_criterion —— √3 的构造性无理性          *)
+(*       （Q 层 Newton 迭代 x_{n+1} = (x_n + 3/x_n)/2，x_0 = 2，       *)
+(*         x_1 = 7/4；误差窗 d_n = (x_n²−3)/2，显式指数衰减：          *)
+(*         11·d_{n+1} ≤ d_n²（因 4x_n² ≥ 100/9 > 11）、d_n ≤ 1/16     *)
+(*         ⟹ d_{n+1} ≤ d_n/176；逃逸窗由 q² 对 3 的可判定比较 +        *)
+(*         1/den(q)² 型间隙供给：q²<3 走 is3_gap_lower（因子 2/7），    *)
+(*         3<q²≤(7/4)² 走 is3_gap_upper_small（窗 4/11，严格性来源      *)
+(*         11 < 12=4·3），q>(7/4)² 走 is3_gap_upper_big；vanish 复用    *)
+(*         lic_vanish 的 N=den(eps)+1 配方与 ir2_qp=2^n 列）。         *)
+(* 路线：ir2 √2 成活范式同构改参（2→3、3/2→7/4、下界 7/5→5/3）；        *)
+(*       主定理真走 exact 装配（lic_irrational_criterion               *)
+(*       is3_x is3_e is3_tail is3_escape is3_vanish q），零旁路。      *)
+(* 命名：is3_ 前缀（开工全树 grep 零撞名）。                            *)
+(* 公理面：本件纯构造性（零经典逻辑、零排中、零认授（未证断言））；         *)
+(*       语句面全 Set 层（sigT/And/real_lt/QltT 形，无 Prop 泄露位）；  *)
+(*       证内 Prop（Qlt/Qle）仅作 Q 层推理脚手架，不进结论面；           *)
+(*       判定一律 Qlt_bool 路线（Qle_lt_or_eq 类 Prop 消去零出现）。    *)
+(* 依赖：UpReqIrrationalCriterion（母定理件，只读）；                   *)
+(*       UpReqIrrationalInstances（√2 成活机械，Require 消费其导出面：   *)
+(*       ir2_qp/qp_pos/qp_pow/pow_ge/pow3sq/step_le 及通用 Q 层小件，    *)
+(*       只读禁改）；Stdlib QArith、ZArith、Arith、Lia、Lra、Qfield。    *)
+(* 泛化注记（√n 族雏形，仅注记不落码）：对任意非平方 n，Newton 列          *)
+(*       x_{k+1}=(x_k+n/x_k)/2 的误差窗恒满足 d_{k+1}·(4x_k²)=d_k²，     *)
+(*       衰减常数由 x_k 下界 L（L²<n）的 4L² 拆出；Z 层递降需 k|z²⟹k|z  *)
+(*       的素除子引理（本件 3 的情形以 mod-3 三支判定给出，Set 层合规）。  *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -1096,7 +1118,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* S7：主定理装配（真走母定理 exact 装配，零旁路）+ 提取检验 + 公理面自审 *)
+(* S7：主定理装配（真走母定理 exact 装配，零旁路）+ 提取探针 + 公理面自审 *)
 (* ============================================================ *)
 
 Theorem is3_sqrt3_irrational_criterion : forall q : Q,

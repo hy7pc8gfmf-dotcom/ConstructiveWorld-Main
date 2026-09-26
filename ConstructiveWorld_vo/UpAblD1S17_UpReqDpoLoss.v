@@ -1,11 +1,36 @@
-(* ==========================================================================)
-   UpAblD1S17_UpReqDpoLoss.v — DPO 对齐配分正性证书与前提封装
-   使命: uabd1s17_dpo_zap_pos（Z_align 正性供给证书）与 uabd1s17_dpo_pack13 十三项前提合取封装及其 supplied 见证。
-   依赖: CW_ConstructiveWorld_219、UpReqAlign
-   对标: DPO 对齐目标的配分函数正性前提（对齐分拆 Z 的供给证书）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblD1S17_UpReqDpoLoss.v —— 源模块 UpReqDpoLoss.v 的单点实例供给件 *)
+(*   数学使命：直接偏好优化损失接口的典范载体实例与对齐正性证书。   *)
+(* ============================================================ *)
+(* 【使命】源模块 UpReqDpoLoss 的 Section ReqDpoLossCore 以全体接口语句为 *)
+(*   节内前提；本件将这些前提在单点态空间上逐一给出见证，并装配为记录    *)
+(*   uabd1s17_dpo_pack13，共十三项字段：                                *)
+(*   R/RIS 实数载体、S 态空间载体、sumf 求和算子、reward（奖励函数）、    *)
+(*   beta/beta_pos（逆温度及其正性）、                                   *)
+(*   pi_ref/pi_ref_pos（参考策略及其逐点正性）、Z_align_pos（对齐配分    *)
+(*   和正性）、Preference（偏好类型）、pref_win/pref_lose（胜负偏好      *)
+(*   映射）、pref_dataset（偏好数据集）。                                *)
+(* 【实例选择】R:=Real；RIS:=RealEnhancedReal（具名 uabd1s17_ren，        *)
+(*   限定名引用 RealInterfaceEnhancedMod.RealEnhancedReal）；             *)
+(*   S:=unit（单点态空间）；sumf:=fun f => f tt；reward:=零函数；         *)
+(*   beta:=one，正性由 one_pos 给出；pi_ref:=常函数 one，逐点正性由       *)
+(*   one_pos 全称实例给出；Z_align_pos:=uabd1s17_dpo_zap_pos；            *)
+(*   Preference:=unit；pref_win/pref_lose:=fun _ => tt；                  *)
+(*   pref_dataset:=cons tt nil（单元素数据集）。                          *)
+(* 【依赖】CW_ConstructiveWorld_219／UpReqAlign（Z_align_req 定义件）；    *)
+(*   不 Require 源模块 UpReqDpoLoss.v 本体。mathlib/stdlib 无直接对应物。   *)
+(* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑；  *)
+(*   文末两条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证判据。 *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
+(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
+(* 【结构总览】§1 典范载体实例：uabd1s17_ren 的具名定义。§2 对齐正性证书  *)
+(*   uabd1s17_dpo_zap_pos：Z_align_req 展开后为逐点和                      *)
+(*   Σ_s pi_ref(s)·exp_neg(−inv_pos(beta)·reward(s))，单点实例上化为一项， *)
+(*   正性由 mult_positive 连同 one_pos 与 exp_neg_pos 直接给出。§3 接口    *)
+(*   封装记录 uabd1s17_dpo_pack13：十三项字段对应源模块 Section ReqDpoLossCore *)
+(*   的节内声明（逐字相同）；rdl_log_req_compat 与 rdl_log_inv_exp_neg_req *)
+(*   两项不在本记录中（供给见 UpAblD1S2_reqlog_UpReqDpoLoss）。§4 供给定理 *)
+(*   uabd1s17_dpo_pack13_supplied 一次性给出全部字段；§5 假设审计区。      *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlign.

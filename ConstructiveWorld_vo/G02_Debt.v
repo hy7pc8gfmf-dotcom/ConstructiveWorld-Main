@@ -1,16 +1,10 @@
-(* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
-   依赖：见原头注 Require 面与依赖段。
-   对标：见原头注来源/对标行。
-   构造性：纯构造性、零承认件（详见原头注红线自审段）。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
-(* 【ToyR ·· 记录件】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR  替换落件（原名落件）；落件时头部漏植标记，本块由  *)
-(*  补注记录于 补注：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：sqrt_premise_le_intro／real_partition_function_scaled_pos   *)
 (* ／real_partition_function_temp_param_pos／                                *)
 (* real_partition_function_temp_pos／                                        *)
@@ -44,7 +38,7 @@
 (*   （lt_le_iff），故前提取 Or 形态——这正是 real_le 的定义体    *)
 (*   （real_le x y := Or (real_lt x y) (real_eq x y)），与 Real  *)
 (*   层 real_sqrt_exists 的可依存前提逐字同构；le 形态前提在接口 *)
-(*   内无法分解（无 le→Or 字段），不特设构造。                       *)
+(*   内无法分解（无 le→Or 字段），不硬凑。                       *)
 (*                                                              *)
 (*   纪律：纯构造性、零承认；语句全 Set 层（lt/le/Id/sigT/And）；*)
 (*   全部 Qed 完成。                                             *)
@@ -284,9 +278,9 @@ Proof.
       * apply real_inv_pos_correct.
 Qed.
 
-(* ---- 温度参数化族：(, HT0) 显式版 ---- *)
+(* ---- 温度参数化族：(T0, HT0) 显式版 ---- *)
 
-(* 温度参数化配分函数：Z_T0(z) := Σ_s e^{z_s/} *)
+(* 温度参数化配分函数：Z_T0(z) := Σ_s e^{z_s/T0} *)
 Definition real_partition_function_temp_param
   (T0 : Real) (HT0 : real_lt real_zero T0) (z : S -> Real) : Real :=
   real_sum_over_S (fun s => real_exp_pos_fn (real_mult (real_inv_pos T0 HT0) (z s))).
@@ -303,7 +297,7 @@ Proof.
               real_exp_neg_pos (real_opp (real_mult (real_inv_pos T0 HT0) (z s))))).
 Qed.
 
-(* 温度参数化 softmax：e^{z_s/}·inv(Z_T0(z)) *)
+(* 温度参数化 softmax：e^{z_s/T0}·inv(Z_T0(z)) *)
 Definition real_softmax_temp_param
   (T0 : Real) (HT0 : real_lt real_zero T0) (z : S -> Real) (s : S) : Real :=
   real_mult (real_exp_pos_fn (real_mult (real_inv_pos T0 HT0) (z s)))

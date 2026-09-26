@@ -1,11 +1,18 @@
-(* ==========================================================================)
-   UpAblT9_UpReqFEPAttn.v — 配分正性的上下文重述
-   使命: uabT9_fep_ctx_Zf_pos、uabT9_row_ctx_Zrow_pos、uabT9_lz_ctx_Zf_pos 三件（正性核前提 ⟹ 配分/行配分严格正）。
-   依赖: CW_ConstructiveWorld_219、UpReqFEPAttn
-   对标: Boltzmann 配分函数正性（正权和原理的实例重述）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblT9_UpReqFEPAttn.v —— T9 批 Context 实例束·UpReqFEPAttn 辖区         *)
+(*   （log 三面=T2a 已毕，本件只收三节 Context 束三位，零重叠）             *)
+(* 被消融位（普查表 §2 UpReqFEPAttn 行）：                                 *)
+(*   位1 UpReqFEPAttn.v:71   Context（Section ReqFEPAttn）                 *)
+(*   位2 UpReqFEPAttn.v:259  Context（Section ReqRowView）                 *)
+(*   位3 UpReqFEPAttn.v:331  Context（Section ReqFEPLogZ）                 *)
+(* 代表定理（各节正性件，出节签名逐字实测自 _tt9a_sig 探针）：              *)
+(*   位1 ←Zf_pos@:121（sum_pos 接口位出节显式前提参）                      *)
+(*   位2 ←req_Zrow_pos@:280（sum_pos+expf_pos 双前提参）                   *)
+(*   位3 ←lz_Zf_pos@:366（sum_pos 前提参）                                 *)
+(* 分级：三位全 N1（库内件直连；接口位前提为显式供给参=T1b D1 同形，        *)
+(*   Context 位材料化独立于其供给面，不降档不隐藏）。                       *)
+(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqFEPAttn。     *)
+(* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqFEPAttn.
 Import RealInterfaceEnhancedMod.

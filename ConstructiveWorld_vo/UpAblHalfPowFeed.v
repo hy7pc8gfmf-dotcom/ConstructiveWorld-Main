@@ -1,9 +1,12 @@
+(* ============================================================ *)
 (* UpAblHalfPowFeed.v —— hpw_arch_decay_instT 于 S10 五位的实例化供给      *)
+(*                                                                *)
 (* 使命：UpAblHalfPow 的 hpw_arch_decay_instT（与 arch_decay 语句同形：    *)
 (*   sigT(t, QltT (C·(1/2)^{S t}) eps)）在 S10_KVQuantTrig 的五个使用位    *)
 (*   （sc_sin_partial_cauchy_bounded、sc_cos_partial_cauchy_bounded、      *)
 (*   sc_cs_sq_err_bound、sc_add_sin_err_bound、sc_add_cos_err_bound 的     *)
 (*   destruct 上下文）中的逐位实例化，以五个 Corollary 交付。              *)
+(*                                                                *)
 (* 五位对应（每件复原该位 destruct 前的局部上下文——q_arch_geom／          *)
 (*   exp_series_arch 展形、set C/P、非负性证明链——再以 hpw_arch_decay_instT  *)
 (*   按原式实例化并 destruct，最后以 sigT 封装见证 (N0, t)）：             *)
@@ -13,9 +16,11 @@
 (*   hpwf_slot4_add_sin——对应 sc_add_sin_err_bound 位（同件3 形）；        *)
 (*   hpwf_slot5_add_cos——对应 sc_add_cos_err_bound 位（P 换 13 系数式：    *)
 (*   13 = (1+1)·(1+1+1+1+1+1)+1，非负性经 q_pow_fact_nonneg 推得）。        *)
+(*                                                                *)
 (* 非平凡增量：各位的非负性证明链为新建——C 的 QleT' 0 C 与 P 的 Qle 0 P    *)
 (*   分别经 q_pow_fact2_nonneg／q_pow_fact_nonneg 与 Qmult_le_0_compat     *)
 (*   链推得；几何衰减见证 (N0, t) 本身由 hpw_arch_decay_instT 给出。        *)
+(*                                                                *)
 (* 构造性注记：全件 Qed 闭合、零承认词面、无经典逻辑；五语句面全 Set 层    *)
 (*   值（sigT/QltT/QleT'/NatLe）；语句面无裸命题（Qle 非负前提均为证明内   *)
 (*   assert，与 arch_decay 原位一致）；五件 Print Assumptions 全 Closed。   *)
@@ -25,6 +30,8 @@
 (* 编译配方：Rocq 9.1 coqc 直调，cpu_guard -LoadLimit 85 -CoreN 2 包裹，   *)
 (*   输出经 -o 临时目录，树内 .vo 不重写。                                 *)
 (* 范围注记：本件为独立新增件，只供上述五位语句形一致的实例化。            *)
+(*                                                                *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpAblHalfPow.

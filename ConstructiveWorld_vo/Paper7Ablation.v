@@ -1,29 +1,40 @@
 (* ============================================================
    Paper7Ablation —— 使命行：论文7《率即算法》§9.1 披露的 AttnDoeblin.v
-   Section BoundedSoftmax 全部 Variable 接口假设逐个三分类（A 已实例化
-   消解 / B 接口字段 / C 可由已证件导出），并对 C 类逐条给出非平凡定理。
-   依赖：S01_BaseRing、fa53_compat_abs。
+   Section BoundedSoftmax（vo_901 源码 L437–750）全部 Variable 接口
+   假设逐个三分类（A 已实例化消解 / B 接口字段 / C 可由已证件导出），
+   并对 C 类逐条给出非平凡定理。
    内容（本件六定理，前缀 p7a_ 全库防撞已核零命中）：
-   §1 expf 迷你接口两件——p7a_expf_wd：同余性从 {expf_plus, expf_zero,
-   expf_pos} 经 mult_cancel_l（S01:906）消去链导出（同余性无须独立假设）；
-   p7a_expf_mono_le_do：mono_le 从 mono_lt + DecidableOrder（S01:329 三分）
-   + p7a_expf_wd 导出——BoundedSoftmax 的 expf 字段面 6 → 5（AttnDoeblin:469
-   的 expf_mono_le 语句位在抽象接口层无单向消去，但可选扩展类
-   DecidableOrder 一桥闭合，与 fa53_compat_abs 同款闭合原理）；
-   §2 有界 softmax 上界件——p7a_lo_lt_one：lo = e^{−Δ/T} < 1 严格上界
-   （bs_lo_pos AttnDoeblin:550 的对偶补件；由 lt_zero_opp + expf_mono_lt +
-   expf_zero 三步链，字段面比 bs_delta_star_lt_one（:584）更细）；
-   p7a_lo_lt_one_instant：invT := inv_pos temp temp_pos 处的字面 lo < 1 形
-   （引用 inv_pos_pos）。
-   §3 κ := 1−δ* 选择器供给三件（论文 §6.3 闭合的 κ∈(0,1) 前件包，全部从
-   B 类接口证书 lo_pos 与 δ*<1 出发）——p7a_delta_star_pos：0 < δ* = lo²
-   （引用 mult_positive）；p7a_omd_pos：0 < 1−δ*（Part A u_omd_pos_next
-   AttnDoeblin:164 的 softmax 实例形，混合加法保序经
-   fa53_lt_plus_compat_lt_le_dec，A 类锚引用）；p7a_omd_lt_one：1−δ* < 1
-   （fa53_lt_plus_compat_le_lt_dec 对偶件引用）。
-   构造性注记：语句面全 Set 层（Id/Or/Not 用 S01:63-68 Set 层定义，零 Prop
-   泄露）；非平凡真证（消去链/三分分解/归谬/平移四段字段链）；原树零改
-   （本件新建，只 Require 引用零改）。
+(*   §1 expf 迷你接口两件——                                      *)
+(*     p7a_expf_wd：同余性从 {expf_plus, expf_zero, expf_pos}     *)
+(*       经 mult_cancel_l（S01:906）消去链导出——expf 五字段      *)
+(*       内部冗余第一步（同余性无须独立假设）；                   *)
+(*     p7a_expf_mono_le_do：mono_le 从 mono_lt + DecidableOrder  *)
+(*       （S01:329 三分）+ p7a_expf_wd 导出——BoundedSoftmax      *)
+(*       的 expf 字段面 6 → 5（AttnDoeblin:469 的 expf_mono_le   *)
+(*       语句位在抽象接口层无单向消去（le 原生字段、lt_le_iff 仅  *)
+(*       Or→le），但可选扩展类 DecidableOrder 一桥闭合，与        *)
+(*       fa53_compat_abs 同款闭合原理）；                         *)
+(*   §2 有界 softmax 上界件——                                    *)
+(*     p7a_lo_lt_one：lo = e^{−Δ/T} < 1 严格上界（bs_lo_pos     *)
+(*       AttnDoeblin:550 的对偶补件；由 lt_zero_opp +            *)
+(*       expf_mono_lt + expf_zero 三步链，字段面比               *)
+(*       bs_delta_star_lt_one（:584）更细）；                     *)
+(*     p7a_lo_lt_one_instant：invT := inv_pos temp temp_pos      *)
+(*       处的字面 lo < 1 形（引用 inv_pos_pos）。                 *)
+(*   §3 κ := 1−δ* 选择器供给三件（论文 §6.3 闭合的 κ∈(0,1)      *)
+(*       前件包，全部从 B 类接口证书 lo_pos 与 δ*<1 出发）——     *)
+(*     p7a_delta_star_pos：0 < δ* = lo²（引用 mult_positive）；  *)
+(*     p7a_omd_pos：0 < 1−δ*（Part A u_omd_pos_next             *)
+(*       AttnDoeblin:164 的 softmax 实例形，混合加法保序经       *)
+(*       fa53_lt_plus_compat_lt_le_dec，A 类锚引用）；            *)
+(*     p7a_omd_lt_one：1−δ* < 1（fa53_lt_plus_compat_le_lt_dec   *)
+(*       对偶件引用）。                                          *)
+(*                                                               *)
+(* 构造性注记：语句面全 Set 层（Id/Or/Not 用 S01:63-68 Set 层      *)
+(*   定义，零 Prop 泄露）；非平凡真证（消去链/                   *)
+(*   三分分解/归谬/平移四段字段链）；原树零改（本件新建，        *)
+(*   只 Require 引用 S01_BaseRing 与 fa53_compat_abs 零改）。 *)
+   依赖：S01_BaseRing、fa53_compat_abs。
    编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
    coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
    ============================================================ *)

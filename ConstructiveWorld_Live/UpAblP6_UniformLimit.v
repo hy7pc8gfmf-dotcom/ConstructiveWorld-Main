@@ -1,11 +1,43 @@
-(* ==========================================================================)
-   UpAblP6_UniformLimit.v — 一致收敛第一刀的单点供给实例
-   使命: pa6ul_strict_first_cut：词表非空、γ 正性与 gap 供给（pa6ul_gap_le_supply/gamma_pos_supply）组装的首个严格截断推论；定义件 vocab/z/gamma/eq_dec/m_in。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、S07_RealSetoidExpLog、CW_ConstructiveWorld_219、AttnHardLimit218、UpReqAttnUniformLimit；Stdlib List、Arith。
-   对标: 一致收敛论证中的首项截断（ε-一致逼近的标准手法）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpAblP6_UniformLimit.v —— alm_uniform_limit 严格档前提的具体实例供给 *)
+(* （纯构造性；语句面全 Set 层）。                                     *)
+(*                                                                    *)
+(* 使命：上游 UpReqAttnUniformLimit 严格档主定理 alm_uniform_limit 的    *)
+(*   两枚前提（gamma_pos/gap_le）在并列世界（UpAblAlmConsumption）只能   *)
+(*   以 γ=0 形实现，严格档 γ>0 在彼处被反例见证否定，链件只能以剩余      *)
+(*   前提形承载——本件以非并列具体世界完成严格档实例供给，三件全 Qed：    *)
+(*     ① pa6ul_gap_le_supply：带真间隙具体 z 的 gap_le 严格档供给        *)
+(*        （上游前提形逐字；z 两点分段定义形：                           *)
+(*         z true=real_one、z false=real_zero，非恒值平凡件；            *)
+(*         γ:=real_one；z false+γ=0+1=1=z true 取等紧界——               *)
+(*         gap_le 的 ≤ 面取等是最紧供给，间隙真值非 z:=任意平凡值）；     *)
+(*     ② pa6ul_gamma_pos_supply：γ>0 直接供给（上游前提形逐字；          *)
+(*         real_lt_zero_one 直接给出）；                                *)
+(*     ③ pa6ul_strict_first_cut：①②合成的前提包 Corollary——            *)
+(*         alm_uniform_limit 全实参直接实例化，严格档主定理在本世界闭合。 *)
+(*         对照 UpAblAlmConsumption 头注「剩余前提位                     *)
+(*         (n·decay+n·decay)≤k·eps」的 γ=0 档显式保留位：本件为         *)
+(*         该保留位的严格档首个实例（以具体世界实例为限，非本体          *)
+(*         全域闭合声明）。                                             *)
+(*                                                                    *)
+(* 载体：bool 双点实例（与 UpAblAlmConsumption 同形）；词表              *)
+(*   [true; false]；m:=true；z 分段两点；γ:=real_one。                  *)
+(*   非平凡性三点：非 m 副本 false 在表（pa6ul_m_in 真构造）；            *)
+(*   false≠true 构造性证书（构造子失配空匹配消解，pa6ul_eq_dec 异支）；   *)
+(*   gap_le 在真异点 x=false 实例化（非空泛支），且 γ>0 严格。           *)
+(*                                                                    *)
+(* 证明路线注记：gap_le 实例不用 minus 展开路（该路经语句级核验在        *)
+(*   gap_le 前提形上无适用面），取 real_plus_comm→real_plus_zero 右形→   *)
+(*   real_eq_trans→real_eq_le 的换形链，比 minus 展开路少一段；          *)
+(*   分段函数构造与库内 bool 两点分段先例同族。                          *)
+(* 纪律：全 Qed；前缀 pa6ul_（全库零撞名）；上游零改；                   *)
+(*   Print Assumptions 三件核验。                                       *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、 *)
+(*   S07_RealSetoidExpLog、CW_ConstructiveWorld_219、AttnHardLimit218、   *)
+(*   UpReqAttnUniformLimit。编译配方：coqc 9.1 直调 + cpu_guard。         *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

@@ -1,8 +1,9 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   altsum_ex_dec3（原 L685，1 句玩具证）                                *)
 (*   altsum_ex_1（原 L681，1 句玩具证）                                   *)
@@ -21,17 +22,19 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqAltSumPos.v —— 席PC2：Q 层有限交错和正性引擎（2026-09-12）  *)
 (*                                                                *)
 (* 使命：把「非负递减序列的有限交错和为正（Leibniz 有限形）」做成    *)
-(* 独立 Q 层引擎件，供路径 C（Padé [n/n] 误差符号）den_pos 直接使用： *)
+(* 独立 Q 层引擎件，供路径 C（Padé [n/n] 误差符号）den_pos 直接消费： *)
 (*   den(x) = Σ_{k=0}^{n} (−1)^k c_k x^k，0 ≤ x < 2 时各项          *)
 (*   (c_k x^k) 非负递减 ⟹ den(x) ≥ 0。                              *)
 (*                                                                *)
 (* 【S03 对接判定（实名侦察结论）】S03_QExp.v 的 altf 家族不是通用形： *)
-(*   altf_zero (S03:) : forall N, 1 <= N -> altf N == 0 ——      *)
+(*   altf_zero (S03:2001) : forall N, 1 <= N -> altf N == 0 ——      *)
 (*   是 (1−1)^N 展开系数==0 的【具体恒等式】（Pascal 归纳），序列项    *)
 (*   1/(u!(N−u)!) 无递减条件面、结论是无条件 ==0；vander_4m2/4m4     *)
 (*   (S03:4390/4596) 是 corr 家族的 Vandermonde 恒等。均不可承载      *)
+(*   「递减非负 → 交错和非负」，故按任务书预案自建本通用引擎。        *)
 (*                                                                *)
 (* 【S1 实现选择（二选一之「递归吸收符号」）】符号不由 (−1)^k 显式    *)
 (*   判定装配（避开 Z 指数与 Q 显式装配坑），而在递归中经 bool 累加器  *)
@@ -40,17 +43,19 @@
 (*   Σ_{k<n} (−1)^k·f(k)。sg=false 分支取 Qopp，全 Q 侧只用 Qplus/    *)
 (*   Qopp（零 Qminus，E313 规避）。符号-奇偶对齐由 sgp 盾引理固定。   *)
 (*                                                                *)
+(* 【语句面勘误（Set 层纪律）】结论面用库内 QleT'（S02:77，           *)
 (*   Id (Qle_bool x y) true，bool 反映健全形）而非 Or 形 QleT        *)
 (*   （S02:27）：Or 形右支 Id x y 受 Q 表示正规化墙（S02 头注已言     *)
 (*   Id 分支无法从 Prop 层 Qle 健全构造；反例 f≡(1#2), n:=2 时       *)
 (*   altsum == Qmake 0 4 表示上异于 0=Qmake 0 1，Or 形结论不可证）。  *)
+(*   假设面按任务书用 Or 形 QleT（altsum_nonneg），并附 QleT 假设面   *)
 (*   到 QleT' 假设面的换桥（QleT 的两支均可健全入 QleT'）。           *)
 (*   全文件语句面零 stdlib Prop Qlt/Qle；Qle/Qlt 仅在证明体内转译用。 *)
 (*                                                                *)
-(* 【den_pos 连接说明】使用者定义 den(x) := altsum (fun k => c_k x^k)  *)
+(* 【den_pos 接线说明】消费者定义 den(x) := altsum (fun k => c_k x^k)  *)
 (*   (n+1)，然后：递减条件面 forall k, QleT 0 (c_k x^k) +             *)
 (*   QleT (c_{k+1} x^{k+1}) (c_k x^k) ⟹ altsum_nonneg 直接给出        *)
-(*   QleT' 0 (den x)。奇偶分段使用用 altsum_nonneg_even/odd；        *)
+(*   QleT' 0 (den x)。奇偶分段消费用 altsum_nonneg_even/odd；        *)
 (*   展开方程用 altsum_skip2（步长 2）。                              *)
 (* ============================================================ *)
 
@@ -181,7 +186,7 @@ Proof.
     + exact H1.
 Qed.
 
-(*
+(* Or 形 QleT（任务书假设面）到 bool 反映形 QleT' 的换桥：
    左支 QltT 经 qltT_leT'；右支 Id 是表示相等，destruct 后 refl *)
 Lemma altsum_QleT_to_QleT' : forall x y : Q, QleT x y -> QleT' x y.
 Proof.
@@ -278,7 +283,7 @@ Lemma altsum_acc_0_eq : forall (sg : bool) (f : nat -> Q) (k : nat),
   altsum_acc sg f k 0%nat == 0.
 Proof. intros sg f k. exact (Qeq_refl 0). Qed.
 
-(* 使用者展开方程：步长 2 的重组（相邻配对面） *)
+(* 消费者展开方程：步长 2 的重组（相邻配对面） *)
 Lemma altsum_skip2 : forall (f : nat -> Q) (m : nat),
   altsum f (Datatypes.S (Datatypes.S m)) == (f 0%nat + Qopp (f 1%nat)) + altsum_acc true f 2%nat m.
 Proof. intros f m. unfold altsum. rewrite altsum_acc_T. rewrite altsum_acc_F. ring. Qed.
@@ -480,6 +485,7 @@ Proof.
   - rewrite (altsum_podd_eq n Ep). apply altsum_nonneg_odd; assumption.
 Qed.
 
+(* 任务书面（Or 形 QleT 假设）适配件：结论面 QleT'（见文件头勘误） *)
 Lemma altsum_nonneg : forall (f : nat -> Q) (n : nat),
   (forall k, QleT 0 (f k)) ->
   (forall k, QleT (f (Datatypes.S k)) (f k)) ->
@@ -635,7 +641,7 @@ Proof.
 Qed.
 
 (* 奇偶细化（真方向）：n ≥ 1 ⟹ f0 − f1 ≤ 交错和。
-   【规格「奇 n 时 altsum ≤ f0 − f1」修正】该方向数学上不成立：
+   【任务书「奇 n 时 altsum ≤ f0 − f1」勘误】该方向数学上不成立：
    反例 f ≡ 1（常数列满足非负递减）时 altsum f 3 = 1 > 0 = f0 − f1。
    真细化是下界：交错和 ≥ f0 − f1（对一切 n ≥ 1，含偶 n）。 *)
 Lemma altsum_ge_pair0 : forall (f : nat -> Q) (n : nat),

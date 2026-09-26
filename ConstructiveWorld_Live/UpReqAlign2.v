@@ -1,4 +1,4 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpReqAlign2.v *)
 (* *)
 (* 目的： 对齐族第二段：求和定律扩充与自由能分解准备。 *)
@@ -8,8 +8,10 @@
 (* ============================================================ *)
 
 (* UpReqAlign2.v — 签名迁移批 3b：对齐主体完成（t13/t12 深链伴件 +
-   源文件：docs/签名迁移规划书.md
+   dpo_pair/preference 簇 req 化 + 旗舰链闭合）
+   母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3b 节 = 批 3 附录 D.1（三）深链挂起清单的放行批）
+   上游：UpReqAlgebra.v（批 1 代数银行，直接消费）+
      req_kl_minus_split / req_le_of_minus_nonneg）；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
@@ -23,6 +25,7 @@
        两条深链共用的核心机器。
    [B] surrogate_diff_identity(@21744)/reward_expand(@21473) 的 req
        后按文件尾挂起清单平移 t12 余件与 t13 链。
+   [C] dpo_pair/preference 簇与旗舰链改挂：挂起（逐件坐标与依赖见
        文件尾清单；批 3 两桥位的放行条件已由 [A] 组机器就绪）。
    ----------------------------------------------------------------
    诚实签名变化登记表（规划书 §7.4；沿批 3 形态 + 本批新增）：
@@ -32,17 +35,20 @@
    3. T2① 桥位（与 Id 逐位同构/或挂起依赖，全表）：
       - log_inv_exp_neg_req：Id 接口字段 log_inv_exp_neg（L187）
         的 req 同位——setoid 接口缺对应字段（exp_neg 注入性不可由
-        （批 3 ReqAlignCore 未承担此桥，本批深链需要：π_next 对数
-        展开 log(e^x)==−x 恒等式使用之）。
+        字段导出）；UpReqAlgebra ReqLogBridge 同位桥，本节承接
+        （批 3 ReqAlignCore 未承接此桥，本批深链需要：π_next 对数
+        展开 log(e^x)==−x 恒等式消费之）。
       - req2_gibbs_inequality：Id 定理 gibbs_inequality（L16629，批 2 FEP 清单）的 req 同位挂起依赖——其 Id 证明
         侧 plain-le KL≥0 不可由接口逐 eps 字段导出（序无消去，
         与批 3 min plain-le 冻结同因）；UpReqFreeEnergy（批 2）
-        结果后降为使用件（批 3 bridge_min_free_energy 同先例）。
+        结果后降为消费件（批 3 bridge_min_free_energy 同先例）。
       - req2_step_kl_eta_bound：B 类 Variable（L23114）的 req
         同位——诚实红线要求保留显式假设位，不消解。
       - req2_inv_pos_lt_contra / req2_log_lt_mono /
         req2_lt_plus_compat_{le_lt,lt_le}：Id 诚实 Variable
         （L21013/21024/21018/21020）的 req 同位（批 1
+        ReqStrictOrderBridge 已结果 lt_le/le_lt 两式的消费件形态）。
+   4. (d) 冻结（沿批 3 + 本批新增）：ppo_gap_nonneg（消费
      ppo_conservative——min plain-le 冻结同因）、fold_right_ext 与
      list fold 机器（nat/list 层 Id，双层并行）。
    ---------------------------------------------------------------- *)
@@ -326,7 +332,7 @@ Qed.
 
 
 
-(* log(e^{-x}) == −x（使用批 3 交接件 rkl_log_inv_one_inv，桥 = 节内
+(* log(e^{-x}) == −x（消费批 3 交接件 rkl_log_inv_one_inv，桥 = 节内
    log_req_compat——同款交接形态） *)
 Lemma req2_log_inv_one_inv : forall (x : R) (Hx : lt zero x),
   req (log (inv_pos x Hx) (inv_pos_pos x Hx)) (opp (log x Hx)).
@@ -335,7 +341,7 @@ Proof.
   exact (rkl_log_inv_one_inv log_req_compat x Hx).
 Qed.
 
-(* log(e^{x}) == −x（Id 接口字段 log_inv_exp_neg @L187 的 req 同位使用；
+(* log(e^{x}) == −x（Id 接口字段 log_inv_exp_neg @L187 的 req 同位消费；
    桥 = log_inv_exp_neg_req + 字段 log_inv_log） *)
 Lemma req2_log_exp_neg : forall x : R,
   req (log (exp_neg x) (exp_neg_pos x)) (opp x).
@@ -488,7 +494,7 @@ Proof.
 Qed.
 
 (* le 0 ≤ b−a ⟹ a ≤ b（Id le_nonneg_minus L21805 req 版；
-   使用批 3 交接件 req_le_of_minus_nonneg 同形——本节自证 3 行链） *)
+   消费批 3 交接件 req_le_of_minus_nonneg 同形——本节自证 3 行链） *)
 Lemma req2_le_of_minus_nonneg : forall a b : R,
   le zero (req_minus b a) -> le a b.
 Proof.
@@ -498,7 +504,7 @@ Proof.
   exact (req_le_plus_nonneg_r a (req_minus b a) H).
 Qed.
 
-(* 迭代 Fixpoint req 化（Id policy_iterate L22879 同构；sigT 封装） *)
+(* 迭代 Fixpoint req 化（Id policy_iterate L22879 同构；sigT 打包） *)
 Fixpoint req2_iter (t : nat) (pi : S -> R) (Hpi : req2_pos_dist pi) :
   { pi' : S -> R & req2_pos_dist pi' } :=
   match t with
@@ -733,6 +739,7 @@ Proof.
                  --- apply plus_zero.
 Qed.
 
+(* ============ T12 组：策略改进深链（Id L21273-22065 req 化） ============ *)
 
 (* 引理 A：Boltzmann 因子桥（Id boltzmann_factor_bridge L21273 req 版） *)
 Lemma req2_boltzmann_factor_bridge :
@@ -953,6 +960,7 @@ Proof.
                                                                      (plus_comm (opp lgZ) X))))))).
 Qed.
 
+(* ============ T12 组 II：F_t 分解与单调性链 ============ *)
 
 
 Lemma req2_rel_ent_minus : forall (p q : S -> R) (Hp : req2_pos_dist p) (Hq : req2_pos_dist q),
@@ -1400,12 +1408,12 @@ Qed.
 (*   rlhf_suboptimality_gap@20554)→t13_hexp(@22494)→                *)
 (*   backward_kl_step_beta(@22575)→backward_kl_step(@22686，批 3     *)
 (*   req_backward_kl_identity 桥位)→step_le(@22790)→iter_le(@22915)  *)
-(*   →gap_mono(@23086)。step_kl_weighted 需 sigT 封装（req2_iter     *)
+(*   →gap_mono(@23086)。step_kl_weighted 需 sigT 打包（req2_iter     *)
 (*   模板）。surrogate_diff_identity(@21744)/reward_expand(@21473)   *)
 
 (* [B 类桥] req2_step_kl_eta_bound(@23114 同位)、req2_gibbs_inequality*)
 (*   （gibbs_inequality@16629，批 2 FEP 依赖）、log_req_compat /      *)
-(*   log_inv_exp_neg_req（接口缺口桥，本节已承担为 Hypothesis 位）。  *)
+(*   log_inv_exp_neg_req（接口缺口桥，本节已承接为 Hypothesis 位）。  *)
 (* [dpo_pair/preference 簇] @20115-20330 与 @20865-21200 全清单：     *)
 (*   preference 节（denom_pos/implicit_reward_diff/pair_loss_at_star/ *)
 (*   total_loss 簇/rel_ent_ext_r）、dpo_reward 簇（@19616-19850）、    *)

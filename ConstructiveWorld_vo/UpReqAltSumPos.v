@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -21,6 +22,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqAltSumPos.v —— 席PC2：Q 层有限交错和正性引擎（2026-09-12）  *)
 (*                                                                *)
 (* 使命：把「非负递减序列的有限交错和为正（Leibniz 有限形）」做成    *)
 (* 独立 Q 层引擎件，供路径 C（Padé [n/n] 误差符号）den_pos 直接消费： *)
@@ -32,6 +34,7 @@
 (*   是 (1−1)^N 展开系数==0 的【具体恒等式】（Pascal 归纳），序列项    *)
 (*   1/(u!(N−u)!) 无递减条件面、结论是无条件 ==0；vander_4m2/4m4     *)
 (*   (S03:4390/4596) 是 corr 家族的 Vandermonde 恒等。均不可承载      *)
+(*   「递减非负 → 交错和非负」，故按任务书预案自建本通用引擎。        *)
 (*                                                                *)
 (* 【S1 实现选择（二选一之「递归吸收符号」）】符号不由 (−1)^k 显式    *)
 (*   判定装配（避开 Z 指数与 Q 显式装配坑），而在递归中经 bool 累加器  *)
@@ -40,10 +43,12 @@
 (*   Σ_{k<n} (−1)^k·f(k)。sg=false 分支取 Qopp，全 Q 侧只用 Qplus/    *)
 (*   Qopp（零 Qminus，E313 规避）。符号-奇偶对齐由 sgp 盾引理固定。   *)
 (*                                                                *)
+(* 【语句面勘误（Set 层纪律）】结论面用库内 QleT'（S02:77，           *)
 (*   Id (Qle_bool x y) true，bool 反映健全形）而非 Or 形 QleT        *)
 (*   （S02:27）：Or 形右支 Id x y 受 Q 表示正规化墙（S02 头注已言     *)
 (*   Id 分支无法从 Prop 层 Qle 健全构造；反例 f≡(1#2), n:=2 时       *)
 (*   altsum == Qmake 0 4 表示上异于 0=Qmake 0 1，Or 形结论不可证）。  *)
+(*   假设面按任务书用 Or 形 QleT（altsum_nonneg），并附 QleT 假设面   *)
 (*   到 QleT' 假设面的换桥（QleT 的两支均可健全入 QleT'）。           *)
 (*   全文件语句面零 stdlib Prop Qlt/Qle；Qle/Qlt 仅在证明体内转译用。 *)
 (*                                                                *)
@@ -181,7 +186,7 @@ Proof.
     + exact H1.
 Qed.
 
-(*
+(* Or 形 QleT（任务书假设面）到 bool 反映形 QleT' 的换桥：
    左支 QltT 经 qltT_leT'；右支 Id 是表示相等，destruct 后 refl *)
 Lemma altsum_QleT_to_QleT' : forall x y : Q, QleT x y -> QleT' x y.
 Proof.
@@ -480,6 +485,7 @@ Proof.
   - rewrite (altsum_podd_eq n Ep). apply altsum_nonneg_odd; assumption.
 Qed.
 
+(* 任务书面（Or 形 QleT 假设）适配件：结论面 QleT'（见文件头勘误） *)
 Lemma altsum_nonneg : forall (f : nat -> Q) (n : nat),
   (forall k, QleT 0 (f k)) ->
   (forall k, QleT (f (Datatypes.S k)) (f k)) ->
@@ -635,7 +641,7 @@ Proof.
 Qed.
 
 (* 奇偶细化（真方向）：n ≥ 1 ⟹ f0 − f1 ≤ 交错和。
-   【规格「奇 n 时 altsum ≤ f0 − f1」修正】该方向数学上不成立：
+   【任务书「奇 n 时 altsum ≤ f0 − f1」勘误】该方向数学上不成立：
    反例 f ≡ 1（常数列满足非负递减）时 altsum f 3 = 1 > 0 = f0 − f1。
    真细化是下界：交错和 ≥ f0 − f1（对一切 n ≥ 1，含偶 n）。 *)
 Lemma altsum_ge_pair0 : forall (f : nat -> Q) (n : nat),

@@ -1,11 +1,27 @@
-(* ==========================================================================)
-   UpDPOLip.v — softplus 表示与 DPO 损失敏感性
-   使命: real_softplus（== −log σ(x) 恒等桥）、real_softplus_mono（递减）、real_softplus_lipschitz（1-Lipschitz）、real_dpo_loss_pair_eq_softplus（DPO 损失 == softplus(logit 差)）与 real_dpo_pair_loss_sensitivity。
-   依赖: CW_ConstructiveWorld_219
-   对标: DPO（直接偏好优化）损失的 softplus 表示与 1-Lipschitz 敏感性（logistic 损失经典性质）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpDPOLip.v *)
+(* *)
+(* 目的： DPO softplus 的 Lipschitz 敏感性界。 *)
+(* 主件： real_softplus_lipschitz：softplus 的 1-Lipschitz 界；real_softplus_mono / real_softplus_diff_le 单调与差分界。 *)
+(* 依赖： CW_ConstructiveWorld_219。 *)
+(* 备注： β > 0 与参考策略逐点正以显式 Variable 前提给出；序谓词为 Or(lt, eq) 强编码，abs 形态边界见正文。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpDPOLip.v —— A4/B5 升级：DPO softplus-Lipschitz 敏感性界     *)
+(* 日期：2026-09-07。源：热点扫描 A4/B5（分析-219平凡定理热点扫描） *)
+(* 件 1 real_softplus 定义 + 恒等桥 + 单调性                     *)
+(* 件 2 real_softplus_diff_le（序前提单侧核，Lipschitz 数学核）   *)
+(*      + real_softplus_lipschitz（Or 序前提 abs/metric 推论）   *)
+(* 件 3 real_dpo_pair_loss_sensitivity（DPO 损失敏感性装配）      *)
+(* 纪律：纯构造性 / Set 层 / 零 公理 / 零 承认件 / 零经典。    *)
+(* 诚实边界：库内 real_le := Or real_lt real_eq（强编码），abs 形  *)
+(*   态无条件全称版需序二分（LPO 等价，构造性不可达）；故 abs 版  *)
+(*   以 Or (real_le x y) (real_le y x) 为显式 Set 层前提          *)
+
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 

@@ -1,11 +1,80 @@
-(* ==========================================================================)
-   UpReqEntropyMaxTemp.v — 最大熵分布的温度参数刻画
-   使命: real_max_entropy_is_boltzmann_temp_eps：固定能量下最大熵分布为 Boltzmann 分布的 ε 形；支撑件 real_sum_le_list_carrier_instance/le_plus_nonneg_r/plus_neg_cancel_shift_eps。
-   依赖: CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp。
-   对标: 最大熵原理（变分刻画 Boltzmann-Gibbs 分布，统计力学经典）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   real_le_plus_nonneg_r（原 L79，3 句玩具证）                          *)
+(*   real_sum_le_list_carrier_instance（原 L65，1 句玩具证）              *)
+(* ============================================================ *)
+(* ============================================================ *)
+(* 【T339 恒等守恒更正注记】2026-09-22 包AW十四 台账席（恒等头注更正第四批） *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 2 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 2 参数位；本注记为追加块，上方原头注一字 *)
+(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
+(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339 台账。 *)
+(* 附记：T277 判级全文恒等；Y 域收尾＋AB 域收尾＋AD 域直推第四批（T317 六·1 方案①）。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqEntropyMaxTemp.v *)
+(* *)
+(* 目的： 定理 4.6b max_entropy_is_boltzmann_temp 的 Real 层（eps 档）。 *)
+(* 主件： real_max_entropy_is_boltzmann_temp_eps：最大熵分布的 Boltzmann 刻画（逐 eps）。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpReqTempDefs、UpReqEntropyDeficitTemp。 *)
+(* 备注： Id 层对应件为逐 eps 档（诚实标注）；求和上界接口为显式前提。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqEntropyMaxTemp.v —— 席T14：定理 4.6b max_entropy_is_boltzmann_temp *)
+
+(* ------------------------------------------------------------------ *)
+(* 【使命】同约束能量 E(p) == E_T 下 S[p] ≤ S[p_T]（论文正式版 L321-323；  *)
+(*   Id 原件 S04 L3935 max_entropy_is_boltzmann_temp）。档位：逐 eps 形。  *)
+(* ------------------------------------------------------------------ *)
+(* 【档位诚实标注】Id 层 gibbs_inequality 的 Real 层对应件为逐 eps 档：    *)
+(*   real_gibbs_core_eps / real_gibbs_inequality_eps 全系 eps 形     *)
+
+(*     E(p) == E_T ⟹ real_le (S[p]) (real_plus S[p_T] eps)（eps > 0）     *)
+(*   与库内 Gibbs 家族档位严格对齐，非缩水。                               *)
+(* ------------------------------------------------------------------ *)
+(* 【接口扩容（T6b 精确余留指认）】抽象求和面单调接口 real_sum_over_S_le： *)
+(*   逐点 real_le ⟹ 求和面 real_le。抽象面仅 eq 三接口（ext/linear/add）  *)
+(*   推不出单调提升，故按 G06_BForm L35 / UpRealLeB L268 同形先例以       *)
+(*   Section Variable 扩容（引理前提不动——归一化/逐点正/同能量三口照 Id， *)
+(*   仅求和面扩容，非加码）。具体载体实例已在库且非空：real_list_sum_le   *)
+
+(*   给出载体满足证。逐点核 real_gibbs_core_eps（S08 L199）零载体依赖     *)
+(*   直用（T6b 指认，Check 检验实证无 Section 残参）。                     *)
+(* ------------------------------------------------------------------ *)
+(* 【Id 层原件对位表（S04 L3935-3972 逐步实证）】                          *)
+(*   Id intros t Ht p Hnp Hpp Henergy    ↦ 同口（T 正性证人在 T_pos 位；  *)
+(*     Hp 前移为 real_entropy_dist 证人位，T6 real_entropy_dist 同位）    *)
+(*   Id Hdef := entropy_deficit_kl_temp  ↦ Hdef :=                        *)
+(*     real_entropy_deficit_kl_temp（T6b 主件全 arity 13 参显式应用；         *)
+(*     real_minus_r Spt Sp 定义性展开 real_plus Spt (real_opp Sp)）       *)
+(*   Id Hkl := gibbs_inequality p p_T    ↦ real_KL_temp_ge_zero_eps       *)
+(*     （本件件 2；Id gibbs 四前提 Real 对应：Hnp 前提位 + Hp 证人位 +    *)
+(*     real_boltzmann_dist_temp_normalized 库件 + real_boltzmann_dist_    *)
+(*     _temp_pos 库件；内部走 real_gibbs_core_eps + real_sum_over_S_le）  *)
+(*   Id Hnonneg := le_id_r Hdef Hkl      ↦ real_le_id_r + eq 兼容肢      *)
+(*     （real_eq_plus_compat_adapt Hdef换向 (refl eps)）                  *)
+(*   Id Hplus := minus_plus_cancel      ↦ real_plus_neg_cancel_shift_eps  *)
+
+(*   Id Hle := le_plus_nonneg_r         ↦ real_le_plus_nonneg_r           *)
+(*     （本件辅助引理 A：0 ≤ b ⟹ a ≤ a+b；le_plus_compat + plus_zero）     *)
+(*   Id le_id_r 完成                    ↦ real_le_id_r + 辅助引理 B eq 肢   *)
+(* ------------------------------------------------------------------ *)
+(* 【红线】纯构造性；Set 层零 Prop 泄露（语句全 real_eq/real_lt/real_le）；*)
+(*   前提位照 Id 层对位（eps > 0 为 Gibbs eps 档既有证人位），       *)
+(*   全 Qed 完成；零新承认件。                                            *)
+
+(*   -Q "../attn/_build_219" "" UpReqEntropyMaxTemp.v（秒审后全量）       *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.

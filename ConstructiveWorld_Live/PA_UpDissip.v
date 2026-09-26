@@ -1,11 +1,53 @@
-(* ==========================================================================)
-   PA_UpDissip.v — 耗散经济模型的形式化
-   使命: 券（bond）类型与校验器、兑换边（eps 仿射映射与斜率正性）、边复合律 edge_compound_affine、耗散守恒 diss_conservation 与路径可加/单调性、借据（iou）签发与再入闭合，及 vm_compute 自测链。
-   依赖: QArith、QArith.Qabs、Lia、List、CW_ConstructiveWorld_219、UpConstitution。
-   对标: 交易守恒核算与无套利条件的离散形式化（应用模型层，mathlib/stdlib 无直接对应物）。
-   构造性: 语句全 Set 层（QltT/QleT′/Id/sigT/And/Or，判定走 Qle_bool/Qlt_bool/Nat.eqb）；Prop 零出场；全部 Qed/Defined 闭合。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   edge_comp_legal（原 L238，3 句玩具证）                               *)
+(*   edge_comp_b（原 L225，2 句玩具证）                                   *)
+(*   edge_comp_slope（原 L221，2 句玩具证）                               *)
+(*   bond_exchange_pos（原 L203，3 句玩具证）                             *)
+(*   bond_exchange_eps（原 L190，2 句玩具证）                             *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpDissip.v *)
+(* *)
+(* 目的： 耗散经济模型的券/边/复合律与耗散核算（Set 层）。 *)
+(* 主件： bond_exchange（券交换守恒）与 edge_comp_slope / edge_comp_b（边复合单调）；edge_tame、edge_bi 判定面。 *)
+(* 依赖： CW_ConstructiveWorld_219、UpConstitution。 *)
+(* 备注： 券的 eps 假设位为严格性的量化资源；核算面全部为 Set 层显式构造。 *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpDissip.v —— BEA 2.0 耗散本位界汇经济：券/边/复合律/耗散核算/借据 *)
+(*                                                              *)
+(* 理论来源：ROUNDTABLE.md 席 3 终稿【BEA 2.0——耗散本位界汇经济】   *)
+(*   「不算数、只换界」——券的 eps 假设位 = 严格性量化资源；           *)
+(*   每条边 = 带 eps-重参数化的转化定理（入参 eps 仿射映射出参：      *)
+(*   eps_out = a·eps_in + b，a > 0）；                              *)
+(*   路径合法性 = 仿射复合恒正（沿路径线性可判定）；                 *)
+(*   借据 = 未命中签发的缺口义务（可再入）。                         *)
+(*                                                              *)
+(* 结果六件：                                                    *)
+(*   件 1  bond / bond_check   券类型（Set 层 Record）+ 券面校验器    *)
+(*   件 2  edge_spec / edge_map / edge_check                       *)
+(*                             兑换边：eps 仿射映射 + 斜率正性验证器  *)
+(*   件 3  edge_compound_affine 主件：边复合 = eps 仿射复合；        *)
+(*         path2_ok 线性可判定路径合法性 + edge_comp_legal          *)
+(*   件 4  diss_conservation（币制守恒恒等式）+                     *)
+(*         path_dissipation_additive（路径耗散可加）+               *)
+(*         path_dissipation_mono（耗散对入参 eps 单调）              *)
+(*   件 5  iou_issue 借据签发（查询未命中 → 缺口义务载荷的 inr）      *)
+(*         + redeem 借据再入 + redeem_closes（证成 ⟹ 图谱成长闭合）   *)
+(*   件 6  vm_compute 自测：3 边图谱 eps/2→eps/4→eps/8 链           *)
+(*                                                              *)
+(* 层位纪律：语句全 Set 层（QltT/QleT'/Id/sigT/And/Or，判定走        *)
+(*   Qle_bool/Qlt_bool/Nat.eqb）；Prop 零出场。依存 UpConstitution   *)
+(*   的 Q 层桥（uc_qeq_le 等）。全部 Qed/Defined 闭合。              *)
+(* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia.
@@ -753,6 +795,7 @@ Eval vm_compute in edge_diss ec123 1.
 Eval vm_compute in bond_check (mk_bond 1 (3#2) (1#4) 0).
 Eval vm_compute in edge_check e_good.
 
+(* PA 追印段（T254 核验副本件） *)
 Print Assumptions edge_comp_legal.
 Print Assumptions edge_comp_b.
 Print Assumptions edge_comp_slope.

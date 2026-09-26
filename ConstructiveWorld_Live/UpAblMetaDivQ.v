@@ -147,7 +147,7 @@ Proof.
            (QleT'_to_Qle 0 x Hx0) (QleT'_to_Qle x 1 Hx1)).
 Qed.
 
-(* 使用+桥接件：任务说明 (1−w)^k·(1+k·w) ≤ 1 形——直接使用库内            *)
+(* 消费+桥接件：任务书 (1−w)^k·(1+k·w) ≤ 1 形——直接消费库内            *)
 (* mixe_bern_sharp（UpReqMixLogE F1 锐化 Bernoulli 上形），T 化出口     *)
 Lemma mqd_bern_complement : forall (w : Q) (k : nat),
   QleT' 0 w -> QleT' w 1 ->

@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：mixd_leT_transport／mixd_qeqT_one_mul／mixd_const_proj／    *)
 (* mixd_zero_proj／mixd_one_proj（共 5 条）                                  *)
 (* 非平凡性口径：运输链与投影位显式直造，消除单跳转发；无一行拆分式假非平    *)
@@ -13,16 +13,16 @@
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================ *)
-(* UpReqMixLogD.v —— 赛马 D ：Path D 平方阶梯对数级选择器           *)
-(*   （A 裁决 5 / N5 ：κ₀^(2^i) 阶梯 + 二进制合成，           *)
+(* UpReqMixLogD.v —— 赛马 D 席：Path D 平方阶梯对数级选择器           *)
+(*   （AT11 裁决 5 / N5 实施席：κ₀^(2^i) 阶梯 + 二进制合成，           *)
 (*     Q 核证书直返（QleT'/NatLe 全 Set 层）+ Real 有理化归约壳）       *)
 (* 依赖坐标：CW_ConstructiveWorld_219 伞壳（S02 real_lt sigT 证书形     *)
 (*   :465-467 / QleT'·QeqT·L2 库 / S07 real_const_lt）、                 *)
 (*   UpTVDoeblin（tv_rpow）、UpReqIterGeomRate（igr_qpow:1490 复用，      *)
-(*   Q 层幂单调直证——勿走 Real powb↔rpow 桥，AT6/A 结论）、            *)
+(*   Q 层幂单调直证——勿走 Real powb↔rpow 桥，AT6/AT11 结论）、            *)
 (*   UpReqMixingTime（mix_k_select TV₀ 零支直接代入 + mix_const_zero）、      *)
 (*   KLWallClosed（klc_const_le:109 Q→Real 保序桥 + klc_le_id 族）。      *)
-(* 本件承载（前缀 mixd_，全树 grep 零撞名 ）：                *)
+(* 本件承载（前缀 mixd_，全树 grep 零撞名 2026-09-18）：                *)
 (*   ① Q 核 Defined 选择器 mixd_k_select_log_cert：                      *)
 (*      阶梯 mixd_ladder（κ₀^(2^i) 重复平方，每级 1 乘）+ 上扫            *)
 (*      mixd_scan_up（首个过线梯级，QleT' 证书直返）+ 二进制回退合成      *)
@@ -31,11 +31,11 @@
 (*   ② 账族（Qed）：scan/desc 败位保持 + 上界 + 成本 c ≤ 5·d+2            *)
 (*      （量级定理 nat 上界式：乘法次数=阶梯长度+扫描+回退合成）+        *)
 (*      主账（下方全败=最小通过站，igr_k_select_min 三账同形）。          *)
-(*   ③ 窗口（Q 层自算——A 裁决 3 陷阱处方）：mixd_qbern                 *)
+(*   ③ 窗口（Q 层自算——AT11 裁决 3 陷阱处方）：mixd_qbern                 *)
 (*      （Q-Bernoulli (1−w)^m·(1+m·w) ≤ 1 纯 Q 循环依赖清单）+                    *)
 (*      mixd_window_pass/top_pass（v ≤ N·(w·b₀) ⟹ 顶级梯级过线）。        *)
 (*   ④ Real 壳：κ₀:=Qmax(1−eps/2)(1/2)、b₀:=eps_b/2 提取件                *)
-(*      （real_lt sigT 证书 S02:465-467 定义面拆解，A 裁决 1）、        *)
+(*      （real_lt sigT 证书 S02:465-467 定义面拆解，AT11 裁决 1）、        *)
 (*      Q→Real 反映件、tv_rpow 幂桥（归纳直证零 conversion）、回传链。    *)
 (*   ⑤ 主件 mixd_k_select_log（±_le，Defined 可提取；TV₀==0 支            *)
 (*      mix_k_select 既有件直接代入——零重证）。                                *)
@@ -50,7 +50,7 @@
 (*   贪心败位账真数学）；                                *)
 (*   可提取（选择器族全 Defined，G3 检验在案）。                          *)
 (* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——WALL-2 坑）：               *)
-(*   .cmd 内 set COQLIB=C:/Rocq-Platform~9.1~.01/lib/coq              *)
+(*   .cmd 内 set COQLIB=C:/Rocq-Platform~9.1~2026.01/lib/coq              *)
 (*           set ROCQLIB=%COQLIB%；全量/vos 双轨 + coqchk + 提取检验。    *)
 (* ============================================================ *)
 
@@ -276,7 +276,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 1：幂单调（Q 层直证——igr_qpow 面，A 裁决 2 正选）              *)
+(* Part 1：幂单调（Q 层直证——igr_qpow 面，AT11 裁决 2 正选）              *)
 (* ============================================================ *)
 
 Lemma mixd_qpow_le1 : forall (q : Q) (Hq1 : q <= 1) (Hq0 : 0 <= q) (m : nat),
@@ -584,7 +584,7 @@ Fixpoint mixd_scan_up (k0 v b0 : Q) (d i : nat) (pacc acc : Q) (c : nat)
   end.
 
 (* 二进制回退合成（贪心加-败位）：j 号位权重 2^j；候选 k+2^j 败则加位 *)
-(* 重设计（D2 承担 ）：desc 增 k0 参、弃 p·p 传参（层级递减×升幂 rung
+(* 重设计（D2 接管 01:00）：desc 增 k0 参、弃 p·p 传参（层级递减×升幂 rung
    与 desc_spec 合同结构性矛盾——见 _tatd2_交付报告 §7.2），rung 由
    mixd_ladder k0 (S j') 现场算（ladder_spec 正确性随取）。 *)
 Fixpoint mixd_desc (k0 v b0 : Q) (j : nat) (k : nat) (val : Q) (c : nat)
@@ -640,8 +640,8 @@ Definition mixd_k_select_log_cert (k0 v b0 : Q) (h0 : QltT 0 k0)
 
 
 (* ============================================================ *)
-(* Part 5：Q-Bernoulli 与窗口（Q 层自算——A 裁决 3 陷阱处方）            *)
-(*   （D2 承担段：cont 稿移入；qbern 步进肢按 tathD 报告§4-① 重写——       *)
+(* Part 5：Q-Bernoulli 与窗口（Q 层自算——AT11 裁决 3 陷阱处方）            *)
+(*   （D2 接管段：cont 稿移入；qbern 步进肢按 tathD 报告§4-① 重写——       *)
 (*     Qle_trans 中段拆 (1−w)·(q^m·(1+M·w)) ≤ 1−w 与 q^(S m)·w ≤ w 双肢） *)
 (* ============================================================ *)
 
@@ -661,6 +661,7 @@ Proof.
 Qed.
 
 (* Q-Bernoulli 步进桥接引理：Qmake (Z.of_nat (S m)) 1 == 1 + Qmake (Z.of_nat m) 1
+   （zify/lia 原生归一——ring 对 Z.of_nat 原子拒动；D2 席 mixd2_qnat_succ
    同款，检验 _tatd2_p1 p2 已验） *)
 Lemma mixd_qnat_succ : forall m : nat,
   Qmake (Z.of_nat (Datatypes.S m)) 1 == (1 + Qmake (Z.of_nat m) 1)%Q.
@@ -845,7 +846,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part 6：选择器三账（sound / min / cost——igr_k_select_min 同形）        *)
-(*   （D2 承担段：三处 mixd_scan_up 部分施加补全 Hacc:=Qeq_refl k0；      *)
+(*   （D2 接管段：三处 mixd_scan_up 部分施加补全 Hacc:=Qeq_refl k0；      *)
 (*     scan_up_some 调用补 Hpa；cert_none 子弹 5→3）                      *)
 (* ============================================================ *)
 
@@ -992,7 +993,7 @@ Qed.
 
 (* 回退合成账：入口不变量（p ≡ κ₀^(2^j)、val ≡ κ₀^k·v、k 以下全败）⟹
    出口（kf 以下全败 ∧ S kf ≤ k + 2^(j+1) ∧ 成本 ≤ 3j+2）。 *)
-(* 重设计版回退合成账（D2 承担 ）：rung 由 mixd_ladder 现场算，
+(* 重设计版回退合成账（D2 接管 01:00）：rung 由 mixd_ladder 现场算，
    Hval 不变式 val == q^k·v 全程可保持（旧 p·p 传参在此断链——已证结论见
    _tatd2_交付报告 §7.2）。合同：kf 以下全败 ∧ S kf ≤ k + 2^(S j) ∧ 成本。 *)
 Lemma mixd_desc_spec : forall (k0 v b0 : Q) (Hq0 : 0 < k0) (Hq1 : k0 <= 1)
@@ -1097,7 +1098,7 @@ Proof.
     + lia.
   - cbn [mixd_k_select_log_cert] in Hrun.
     revert Hrun.
-    (* D3 实录：对停滞 fixpoint 应用的 destruct 产出 [Some-first, None-last]
+    (* D3 实录：对卡死 fixpoint 应用的 destruct 产出 [Some-first, None-last]
        分支序 + 自动命名 binder（嵌套模式 match 编译序所致），as-模式整体
        被无视（"Unused introduction pattern"）——故无 as + 分步 1 级解构。 *)
     destruct (mixd_scan_up k0 v b0 d 0%nat k0 k0 0%nat (Qeq_refl k0))
@@ -1177,7 +1178,7 @@ Qed.
 (* 量级定理（机器可陈述 nat 上界式——赛马卖点）：乘法次数 ≤ 5·d + 2， *)
 (* 其中 d = 阶梯深度（梯级数 ≈ log₂K）：阶梯构造 d 乘 + 上扫 ≤ d+1 乘   *)
 (* + 回退合成 ≤ 3d 乘，无重复计算（对照：线性代 k ≈ TV₀/(w·budget)）。  *)
-(* 【cost-model 诚实申报（D3 ，给出 D2 报告 §8.1）】：mixd_desc 重设计  *)
+(* 【cost-model 诚实申报（D3 席，承接 D2 报告 §8.1）】：mixd_desc 重设计  *)
 (* 后 rung 由 mixd_ladder k0 (S j') 现场计算（弃 p·p 传参），desc 内部    *)
 (* c-线程计数与实际 Q 乘法执行次数脱钩——mulcost 的 c ≤ 5d+2 对"证书线程" *)
 (* 成立，非逐乘法计数；与 N3 提取对比表并列时须注记此差异。彻底解 = scan  *)
@@ -1197,7 +1198,7 @@ Qed.
 
 (* 顶级主账·回退支（语义死支）：Some (inr (k, cert), c) ⟹ 答案证书     *)
 (*   （即顶级梯级直通）∧ c ≤ 5·d+2。最小性本支不申报（诚实降档——      *)
-(*   死支不可达性证明=W-证书直通改造，配方）。        *)
+(*   死支不可达性证明=W-证书直通改造，遗留见交付报告续席配方）。        *)
 Lemma mixd_k_select_log_cert_fb : forall (k0 v b0 : Q) (h0 : QltT 0 k0)
     (h1 : QleT' k0 1) (hv : QleT' 0 v) (d k c : nat)
     (Hcert : mixd_ans_cert k0 v b0 k),
@@ -1226,7 +1227,7 @@ Proof.
         cbn [mixd_k_select_log_cert] in Hrun.
         destruct d1 as [Hp1 | Hf1].
         -- discriminate Hrun.
-        -- (* jj=0 支 kfc=(0,0)：snd kfc=0（c2 未绑定位修正——D3 ） *)
+        -- (* jj=0 支 kfc=(0,0)：snd kfc=0（c2 未绑定位修正——D3 席） *)
            assert (Hs : mixd_scan_up k0 v b0 d 0%nat k0 k0 0%nat
                            (Qeq_refl k0)
                            = Some (existT _ 0%nat Htop, pacc, c1))
@@ -1318,9 +1319,9 @@ Qed.
 
 (* ============================================================ *)
 (* Part 7：Real 壳（Q→Real 反映 + κ₀/b₀ 提取 + 幂桥 + 回传链）             *)
-(*   （D2 承担段：real_const_proj 缺名→自建 mixd_const_proj；              *)
+(*   （D2 接管段：real_const_proj 缺名→自建 mixd_const_proj；              *)
 (*     split with→split/子弹；Qeq-改写→change+ring；                       *)
-(*     const_mult/rpow_const 采 A 绿件同款 cbn 白名单配方）              *)
+(*     const_mult/rpow_const 采 A 席绿件同款 cbn 白名单配方）              *)
 (* ============================================================ *)
 
 (* real_const 逐点脱壳（库内无 real_const_proj 专名——CW real_const        *)
@@ -1373,7 +1374,7 @@ Proof.
 Qed.
 
 (* const 乘法脱壳：real_const (a·b) ≡ real_const a · real_const b
-   （A  mixa_const_mult 同款 cbn 白名单配方） *)
+   （A 席 mixa_const_mult 同款 cbn 白名单配方） *)
 Lemma mixd_const_mult : forall a b : Q,
   real_eq (real_const (Qmult a b)) (real_mult (real_const a) (real_const b)).
 Proof.
@@ -1382,7 +1383,7 @@ Proof.
 Qed.
 
 (* Real 幂—Q 幂桥：tv_rpow (real_const q) m ≡ real_const (igr_qpow q m)
-   （A  mixa_rpow_const 同款配方） *)
+   （A 席 mixa_rpow_const 同款配方） *)
 Lemma mixd_rpow_const : forall (q : Q) (m : nat),
   real_eq (tv_rpow (real_const q) m) (real_const (igr_qpow q m)).
 Proof.
@@ -1573,7 +1574,7 @@ Proof.
 Qed.
 
 (* 回传链：Q 证书 ≤ ⟹ Real 严格 <（κ^k·TV₀ ≤ κ₀'^k·TV₀ ≤ κ₀'^k·v
-   ≡ κ₀^k·v ≤ b₀ < budget——A 裁决 3 尾链） *)
+   ≡ κ₀^k·v ≤ b₀ < budget——AT11 裁决 3 尾链） *)
 Lemma mixd_real_chain : forall (kappa TV0 budget : Real) (k0 v b0 : Q)
     (k : nat) (Hk1 : real_lt real_zero kappa) (Hk0p : QltT 0 k0)
     (Hkle : real_le kappa (real_const k0))

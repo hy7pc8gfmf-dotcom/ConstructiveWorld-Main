@@ -12,10 +12,10 @@
 (*   （C 路闭合主轨第二切片；独立于正尾恒等式主件，可独立结果）        *)
 (* 日期：2026-09-14                                                *)
 (*                                                                 *)
-(* 数学对象（席C-S3 侦察报告检验 4 实锤，fractions 精确验证）：         *)
+(* 数学对象（席C-S3 侦察报告探针 4 实锤，fractions 精确验证）：         *)
 (*   β_m = n!·(n+m)! / (2n+m+1)!                                   *)
 (*   = Padé 余项正尾级数 Σ_{m≥0} β_m·y^m/m! 的系数，严格全正。         *)
-(*   数值数值锚（n=1）：β_0..β_4 = 1/6, 1/12, 1/20, 1/30, 1/42。        *)
+(*   数值哨兵（n=1）：β_0..β_4 = 1/6, 1/12, 1/20, 1/30, 1/42。        *)
 (*                                                                 *)
 (* 分层：                                                           *)
 (*   S1 阶乘面：q_fact 恒 ≥ 1（具体自然数界面）+ 阶乘单调（a ≤ b        *)
@@ -36,10 +36,10 @@
 (*      语句面不变，零 Psatz。                                        *)
 (*   ③ 除法正性面：Qinv_lt_0_compat（stdlib QArith_base:1408 实名）+   *)
 (*      S03 q_le_div_le（同分母比较）；阶乘后继展开 q_fact_succ 的      *)
-(*      使用用 exact 转换面（fixpoint iota 折叠），零 setoid 依赖。     *)
+(*      消费用 exact 转换面（fixpoint iota 折叠），零 setoid 依赖。     *)
 (*                                                                 *)
 (* 红线自审基线：纯构造性、零外加假设（公理面 Print Assumptions        *)
-(*   Closed）；语句面零 Prop 判断（唯二 ~ 分母非零桥接引理为 Prop 面，      *)
+(*   Closed）；语句面零 Prop 判断（唯二 ~ 分母非零桥件为 Prop 面，      *)
 (*   按库内 q_neq_of_lt 同款定位标注）；nat 字面量带 %nat；             *)
 (*   后继写 Datatypes.S；注释不落禁词字面量。                          *)
 (* ============================================================ *)
@@ -106,7 +106,7 @@ Qed.
 
 (* ===== S2 主件：β_m 闭式与正性 ===== *)
 
-(* β_m：Padé 余项正尾级数系数（席C-S3 检验 4 闭式）。 *)
+(* β_m：Padé 余项正尾级数系数（席C-S3 探针 4 闭式）。 *)
 Definition pbp_beta (n m : nat) : Q :=
   (q_fact n * q_fact (n + m)) / q_fact (2 * n + m + 1).
 
@@ -161,7 +161,7 @@ Proof.
   - apply (QleT'_to_Qle (pbp_beta_lb n m) (pbp_beta n m)). apply pbp_beta_ge_lb.
 Qed.
 
-(* sigT 见证形（正性位升入见证，供下游逐位使用）：见证 = β_m 本值
+(* sigT 见证形（正性位升入见证，供下游逐位消费）：见证 = β_m 本值
    （Id 钉值）+ 其 QltT 正性证书。 *)
 Definition pbp_beta_pos_sigT (n m : nat) :
   sigT (fun b : Q => sigT (fun _ : Id b (pbp_beta n m) => QltT 0 b)) :=
@@ -194,15 +194,15 @@ Qed.
 Lemma pbp_den_posT : forall n m : nat, QltT 0 (q_fact (2 * n + m + 1)).
 Proof. intros n m. apply Qlt_to_QltT. apply q_fact_pos. Qed.
 
-(* 分母非零（Prop 面桥接引理定位：q_neq_of_lt 同款，供域法使用）。 *)
+(* 分母非零（Prop 面桥件定位：q_neq_of_lt 同款，供域法消费）。 *)
 Lemma pbp_den_neq0 : forall n m : nat, ~ (q_fact (2 * n + m + 1) == 0).
 Proof. intros n m. apply q_neq_of_lt. apply q_fact_pos. Qed.
 
 (* ===== S3 副件二：符号传送预备面（接口显式留白，不硬连 C-T1a） ===== *)
 
-(* Qeq 右换桥（本件最小传桥接引理）：a == b 时 0<a 传 0<b。
+(* Qeq 右换桥（本件最小传桥件）：a == b 时 0<a 传 0<b。
    AA12 腿化：一跳 UpReqPadeQLeg.pql_qlt0_eq_r（语句面不变，
-   原件 Require Psatz 的环境闭包公理三件随之不引入）。 *)
+   原件 Require Psatz 的环境闭包公理三件随之断根）。 *)
 Lemma pbp_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
   intros a b Hab Ha.
@@ -226,9 +226,9 @@ Proof.
     + apply QltT_to_Qlt. exact Hf.
 Qed.
 
-(* 附加面：β_m ≤ n!（阶乘单调的真使用：(2n+m+1)! ≥ (n+m)! ⟹
+(* 附加面：β_m ≤ n!（阶乘单调的真消费：(2n+m+1)! ≥ (n+m)! ⟹
    β_m = n!·(n+m)!/(2n+m+1)! ≤ n!·(n+m)!/(n+m)! = n!；
-   下游尾界使用形——n 对固定 n! 为具体常数）。 *)
+   下游尾界消费形——n 对固定 n! 为具体常数）。 *)
 Lemma pbp_beta_le_nfact : forall n m : nat, QleT' (pbp_beta n m) (q_fact n).
 Proof.
   intros n m.
@@ -260,7 +260,7 @@ Proof.
   - apply qeq_le. apply (Qdiv_mult_l (q_fact n) (q_fact (n + m)) Hneq).
 Qed.
 
-(* ===== 数值数值锚（检验核对：n=1 时 β_0..β_4 = 1/6,1/12,1/20,1/30,1/42） ===== *)
+(* ===== 数值哨兵（探针核对：n=1 时 β_0..β_4 = 1/6,1/12,1/20,1/30,1/42） ===== *)
 Lemma pbp_beta_1_0 : pbp_beta 1%nat 0%nat == (1#6)%Q.
 Proof. vm_compute. reflexivity. Qed.
 

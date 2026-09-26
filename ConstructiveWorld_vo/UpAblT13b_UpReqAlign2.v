@@ -20,7 +20,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT13b_UpReqAlign2.v —— 假设消融战役 T13b 给出席（批6 配分正性族）      *)
+(* UpAblT13b_UpReqAlign2.v —— 假设消融战役 T13b 承接席（批6 配分正性族）      *)
 (* 辖区：UpReqAlign2.v 一位（T13a 移交单 §6 批6 行点名，总账 §2.2 批6 余量）：  *)
 (*   位1 UpReqAlign2.v:106  Z_align_pos（Req2AlignCore 配分正性位）             *)
 (* 被消融位语句（现档逐字，:103-106 同节）：                                    *)
@@ -28,7 +28,7 @@
 (*     sumf (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) *)
 (*                                  (reward s))))).                            *)
 (*   Variable Z_align_pos : lt zero req2_Z_align.                              *)
-(* 实例化消解源文件：本节兄弟参数 sum_pos（:76 正和面，sumd_sum_pos@UpReqSumD:233 同族）   *)
+(* 实例化消解母本：本节兄弟参数 sum_pos（:76 正和面，sumd_sum_pos@UpReqSumD:233 同族）   *)
 (*   加逐点双正链（mult_positive/exp_neg_pos 接口字段直引）。                    *)
 (* 消融形（诚实登记）：同 UpAblT13b_UpReqAlign 位1——正和数据参数位显式参；           *)
 (*   载体取 S01 典范载体加装配桥 tsi_rie_setoid（T13a 先例桥形照抄）。           *)

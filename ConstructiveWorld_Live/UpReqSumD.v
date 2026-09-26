@@ -1,14 +1,19 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================
+(* ============================================================
+   T245 包F 台账席（ToyR 战役）同名非平凡替换件头注（全中文零承认）
    本件为基线原件的同名替换件：语句面、声明序、其余定理与版记头注
    逐字保留；仅九条玩具级单跳转发件的证明体在替换点重演：
    一、sumd_sum_ext／sumd_sum_linear／sumd_sum_add／sumd_sum_opp／
        sumd_sum_le 五条：具体和算子定义层展开后，把转发目标列表级
        归纳体整体内联到替换点（归纳直接走 enum，消除单跳转发）。
-   二、sumd_sum_pos：非空槽按列表结构判别展开，nil 腿显式 explos
+   二、sumd_sum_pos：非空槽位按列表结构判别展开，nil 腿显式 explos
+       消解，cons 腿内联正项剥离推导（传递链三段显式记账）。
    三、sumd_list_sum_pos_cons：非负尾段腿以命名中间件提级，主链在
        替换点按步重演。
    四、sumd_sum_zero_nonneg_in／sumd_sum_zero_nonneg_surj：成员谓词
-   定义性闭合／上游换轨直连），逐条中文标注见件内注记。
+       归纳体整体内联（头腿 eq_rect 换轨、尾腿命名剥离件接力），
+       满射形以全称归纳中间件＋成员位注入收口。
+   余下玩具条目按不可化四类批量登记（接口字段直引／判别收口／
+   定义性收口／上游换轨直连），逐条中文标注见件内注记。
    依赖面零新增：Require 面与原件逐字一致。
    ============================================================ *)
 (* ============================================================ *)
@@ -21,7 +26,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqSumD.v —— B- G1：sum_eq_list 钥匙桥实例化       *)
+(* UpReqSumD.v —— B-求和族消解席 G1：sum_eq_list 钥匙桥实例化       *)
 (*   + sum_ext/linear/add/opp/le/pos/zero_nonneg 一次性无条件消解    *)
 (*                                                                *)
 (* 钥匙：UpReqSampling.v L740 sum_eq_list（req 化，签名变化 7，      *)
@@ -46,7 +51,7 @@
 (*   zero_nonneg 完成为 sumd_in s enum 诚实形（Set 层成员谓词；enum     *)
 (*   无满射性数据，全称形不可证，见裁决注）。                          *)
 (*                                                                *)
-(* 使用面（全 Require 已认证 .vo，零改写上游）：                     *)
+(* 消费面（全 Require 已认证 .vo，零改写上游）：                     *)
 (*   CW_ConstructiveWorld_219：RealInterfaceEnhancedSetoid 字段       *)
 (*   （req_plus_compat / distrib / le_plus_compat / lt_le_trans /      *)
 (*   le_antisym / le_id_l / le_id_r / lt_le_iff / plus_zero 等）；     *)
@@ -62,7 +67,7 @@
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
-(* wb63 增量使用面：UpReqDist GRPO 节 req_list_sum_g_const/reqd_of_nat
+(* wb63 增量消费面：UpReqDist GRPO 节 req_list_sum_g_const/reqd_of_nat
    （同 Context 同语句，sum_const 换轨直连；导出名全 reqd_/req_/fsum_
    系，与本文件既有可见名零交，防撞已核）。 *)
 Require Import UpReqDist.
@@ -79,7 +84,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable enum : list S.
 
-(* 列表和机器（与 UpReqSampling bs_list_sum 同形自持，供本簇使用） *)
+(* 列表和机器（与 UpReqSampling bs_list_sum 同形自持，供本簇消费） *)
 Fixpoint sumd_list_sum (f : S -> R) (l : list S) : R :=
   match l with
   | nil => zero
@@ -91,7 +96,7 @@ Definition sumd_sumf (f : S -> R) : R := sumd_list_sum f enum.
 
 (* ============ 保底件 1：桥实例化定义件 ============ *)
 (* UpReqSampling L740 桥在具体实例下降为 req_refl：sumf 定义性即列表和 *)
-(* 不可化·定义性闭合：sumd_sumf 定义性即列表和，单点 req_refl 为最短形 *)
+(* 不可化·定义性收口：sumd_sumf 定义性即列表和，单点 req_refl 为最短形 *)
 Lemma sumd_sum_eq_list : forall g : S -> R,
   req (sumd_sumf g) (sumd_list_sum g enum).
 Proof. intro g. exact (req_refl (sumd_list_sum g enum)). Qed.
@@ -433,8 +438,8 @@ Qed.
 (*   （同 fold 形），1 步 exact 换轨直连。                          *)
 (*                                                                *)
 (* ③ zero_nonneg 全称形探索完成：无满射数据时全称形不可证（反模型：  *)
-(*   enum=[a]、s∉enum、f s>0 且和为零——57 结论维持）；本次结果    *)
-(*   两件升格面：(a) 满射数据显式参形（使用方携带覆盖数据即得       *)
+(*   enum=[a]、s∉enum、f s>0 且和为零——席57 结论维持）；本次结果    *)
+(*   两件升格面：(a) 满射数据显式参形（消费方携带覆盖数据即得       *)
 (*   全称形）；(b) 成员谓词单向桥 sumd_in→In（Set 沉降 Prop 合法    *)
 (*   方向，反向 In→sumd_in 被 Prop 消去限制阻断，不主张）。         *)
 (* ============================================================ *)

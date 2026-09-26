@@ -1,11 +1,31 @@
-(* ==========================================================================)
-   SupKLBound.v — 有限单纯形上 sup KL 的显式上界
-   使命: 若 m 为 q 的逐点下界且 0 < m，则 Σ_s kl(p_s‖q_s) ≤ log(1/m)（skb_sup_kl_log_inv_min）；补库内 le_b 乘法保序闭包所需的上界材料本体。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog、S08_RealMainlineDPO、G01_CoreMicro；Stdlib List、Extraction。
-   对标: 有限单纯形上 KL 散度的 log-sum 界（信息论经典不等式；顶点分布处取等）。
-   构造性: 全件 Qed 零承认词面；语句面全 Set（real_lt/real_eq 为 Set，real_le 为 Set 层 Or 编码）；证明为逐点四步链与求和保序。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* SupKLBound.v                                                 *)
+(*                                                              *)
+(* 目的：有限单纯形上 sup KL 的显式上界——若 m 为 q 的逐点下界且     *)
+(*       0 < m，则 Σ_s kl(p_s‖q_s) ≤ log(1/m)。                    *)
+(* 主件：skb_sup_kl_log_inv_min : forall (X : Type) (l : list X)     *)
+(*       (p q : X -> Real),（逐点 0 < p_s、0 < q_s、p_s ≤ 1、        *)
+(*       Σ p == 1，m 逐点 m ≤ q_s、0 < m）⟹                          *)
+(*       real_list_sum (kl_term) l ≤ real_log_inv m。               *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、                *)
+(*       S07_RealSetoidExpLog、S08_RealMainlineDPO、G01_CoreMicro；   *)
+(*       Stdlib List（ListNotations）、Extraction。                  *)
+(* 备注：本件补库内缺口（UpReqGeomIter.v:866-869 指出的缺口④：       *)
+(*       le_b 乘法保序闭包所需的 KL_0 上界即 sup KL 材料，库内原本    *)
+(*       无该上界件）；UpReqPowMonoBridge.v:330-337 已定理化「给定    *)
+(*       上界材料则逐 eps 闭合」，本件供给该上界材料本体。语句形      *)
+(*       判定（Real 载体、全 Set 层）：即 sup_p KL(p‖q) ≤            *)
+(*       log(1/min_s q_s)——顶点 p = δ_s 处取等的经典有限单纯形        *)
+(*       KL ≤ 常数界；q 侧归一化不进前提（证明只吃 m ≤ q_s、0 < m，   *)
+(*       前提更少、强度更真）。证明路线：逐点四步（① m·p_s ≤ m ≤      *)
+(*       q_s；② 乘 inv(p_s) > 0，左端恒等 m ⟹ m ≤ q_s·inv(p_s)；      *)
+(*       ③ log 单调 le 版 + opp 翻转 + 乘 p_s > 0 得逐点              *)
+(*       real_kl_term 界；④ real_list_sum_le 求和保序 +               *)
+(*       real_list_sum_linear_r 常数提出 + Hnormp 归一化）。全件      *)
+(*       Qed 零承认式；语句面全 Set（real_lt/real_eq 为 Set，        *)
+(*       real_le = 两者之 Set 层 Or 编码，零 Prop 泄露）；            *)
+(*       skb_ 前缀防撞。                                             *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -57,7 +77,7 @@ Proof.
     real_le (real_kl_term (p s) (q s) (Hp s) (Hq s))
             (real_mult (p s) (real_log_inv m Hmpos))).
   { intro s.
-    (* 9.1 全量适配：log 的证明参被 cw_log/log_seq 结构性使用——
+    (* 9.1 全量适配：log 的证明参被 cw_log/log_seq 结构性消费——
        assert 新变量与 real_kl_term 内联项不可转换；改 pose（let 绑定）使
        Hqpinv 依 zeta 折回 real_mult_positive 全形，与 real_kl_term δ 展开对齐 *)
     pose (Hpinv := real_inv_pos_pos (p s) (Hp s)).
@@ -164,7 +184,7 @@ Proof.
       * exact (real_mult_one (real_log_inv m Hmpos)).
 Qed.
 
-(* ============ 提取检验（Obj.magic 计数，配套 skb_g3.v） ============ *)
+(* ============ 提取探针（Obj.magic 计数，配套 skb_g3.v） ============ *)
 Extraction "skb_G3.ml" skb_sup_kl_log_inv_min skb_le_mult_compat_l.
 
 (* ============ 自证面：Print Assumptions 假设审计 ============ *)

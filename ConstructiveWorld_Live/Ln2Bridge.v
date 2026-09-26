@@ -1,11 +1,60 @@
-(* ==========================================================================)
-   Ln2Bridge.v — ln2 无理性证明的供给桥
-   使命: ln2i_pade_supply（五层存在型供给接口）、ln2b_delta_of_supply（δ 见证组装）、ln2b_escape_of_supply（逃逸条件形）、ln2b_irrational_from_supply（由供给闭合 ln2 无理性）；幂不等式/衰减链支撑件。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、SumInvFactEscape、UpReqBanachNormOpp、UpReqIrrationalCriterion、UpReqLn2Irrational；Stdlib QArith、ZArith、Lia、Setoid、Morphisms、Qfield、Extraction。
-   对标: Beukers 型 ln2 无理性证明的模块化接口层（有理逼近论）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   ln2b_irrational_from_supply（原 L671，2 句玩具证）                   *)
+(*   ln2b_X_proj（原 L68，2 句玩具证）                                    *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* Ln2Bridge.v —— ln2 无理数 supply 接口件：供给型 ln2i_pade_supply 与    *)
+(*   由其导出的 δ 提取、逃逸规格、无理性推论三件，另附平凡三元组反例      *)
+(*   ln2b_supply_trivial_hit。                                          *)
+(*                                                                     *)
+(* 基准对象：ln2b_X = ln2i_x 的柯西极限（存在性由母件 UpReqLn2Irrational *)
+(*   的尾控制 ln2i_tail 与消失条件 ln2i_vanish 供给）；整系数线性形式    *)
+(*   ln2b_line A B n = |A_n·X − B_n|，第 k 投影为 Q 层 |A_n·x_k − B_n|。 *)
+(*                                                                     *)
+(* ln2i_pade_supply（供给型，sigT 五层）：对整系数 A B : nat→Z、载体      *)
+(*   clo : nat→Q、底 θ : Q，合取五个组成条件：① QltT θ 1；              *)
+(*   ② ∀n, QltT 0 |A_n|（A_n ≠ 0 的 Q 层编码）；③ ∀n, QltT 0 (clo n)；   *)
+(*   ④⑤ 下/上界肢 ln2b_line_lower / ln2b_line_upper：                  *)
+(*   clo_n ≤ |A_n·X − B_n| ≤ θ^n（real_le 面承载）。                    *)
+(*                                                                     *)
+(* ln2b_delta_of_supply：由 supply 与有理数 q = u/v 提取显式正 δ 与阈值  *)
+(*   K，使 δ ≤ |q − x_k|（∀k ≥ K）。以 Z.eq_dec 对 u·A_{n₀} = v·B_{n₀}    *)
+(*   作可判定分叉（零 LPO），分两支各给显式 δ：                          *)
+(*   · 否支（u·A_{n₀} ≠ v·B_{n₀}）：δ := ((1/v − θ^{n₀})/2)·|A_{n₀}|⁻¹； *)
+(*   · 中支（u·A_{n₀} = v·B_{n₀}）：δ := (clo_{n₀}/2)·|A_{n₀}|⁻¹，正性   *)
+(*     由条件 ③ 供给。若 X = q，下界肢给出 clo_{n₀} ≤ |A_{n₀}·X − B_{n₀}| *)
+(*     = 0，与 ③ 矛盾——伪 supply 于中支自相矛盾                        *)
+(*     （反例 ln2b_supply_trivial_hit 实证其 δ ≤ 0）。                   *)
+(*                                                                     *)
+(* ln2b_escape_of_supply：supply ⟹ ln2i_escape_spec。取指标              *)
+(*   m := S(max K N)：ln2i_vanish 于 δ 给显式 N，与终归点式肢在 m 处      *)
+(*   合取：ln2i_e m < δ ≤ |q − x_m|。                                    *)
+(*                                                                     *)
+(* ln2b_irrational_from_supply：结论面直接应用母定理 lic_irrational_criterion。 *)
+(*                                                                     *)
+(* ln2b_supply_trivial_hit（反例见证）：平凡三元组 A:=1、B:=0、clo:=0    *)
+(*   于 q:=0 命中中支判据（0·A₀ = 1·B₀）而中支 δ ≤ 0——组成条件 ③ 对     *)
+(*   中支正性不可省。                                                   *)
+(*                                                                     *)
+(* 接口地位：ln2i_pade_supply 是 Hermite–Beukers 候选一构造的输出接口：   *)
+(*   其 (A_n, B_n, clo_n, θ) 一旦满足上述五个组成条件，δ 提取与逃逸      *)
+(*   两件即可应用。Ln2Escape.v 的 lne_B n = (n!)²/(2n+1)! 是 clo_n 与    *)
+(*   整性条件的候选实例（本件不 Require 之，仅记述）。                   *)
+(*                                                                     *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、SumInvFactEscape、  *)
+(*   UpReqBanachNormOpp、UpReqIrrationalCriterion、UpReqLn2Irrational；  *)
+(*   Stdlib QArith、ZArith、Arith、Lia、Setoid、Morphisms、Lra、Qfield。 *)
+(* 构造性注记：语句面全 Set（QltT/QleT'/QeqT/real_lt/real_le/sigT/       *)
+(*   S01.And）；证明内 Prop（Qlt/Qle）仅作 Q 层推理辅助；零承认；可提取。 *)
+(* 编译配方：coqc 9.1 直调无 -Q，cpu_guard 包裹，-o 临时目录（树内 .vo 不动）。 *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -263,7 +312,7 @@ Proof.
   lia.
 Qed.
 
-(* 幂不等式 nat → Z 提升（指数/底经 Nat2Z 单射移植） *)
+(* 幂不等式 nat → Z 提升（指数/底经 Nat2Z 单射搬运） *)
 Lemma ln2b_pow_lift : forall V' A' B' : nat,
   (1 <= V')%nat -> (1 <= A')%nat ->
   (V' * A' ^ (V' * A') < B' ^ (V' * A'))%nat ->
@@ -597,11 +646,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 ln2b_escape_of_supply：supply -> ln2i_escape_spec（条件形闭合） *)
+(* §5 ln2b_escape_of_supply：supply -> ln2i_escape_spec（条件形收口） *)
 (* ============================================================ *)
 
-(* 逃逸主件（与早期草案的构造差异：指标不取 2v+4，不用
-   ln2i_pow_ge 与反三角路径）：以 vanish 与 δ 点式两条件直接闭合——
+(* 逃逸主件（与 T97 §1.2 草案的构造差异：指标不取 2v+4，不用
+   ln2i_pow_ge 与反三角路径）：以 vanish 与 δ 点式两条件直接收口——
    ln2i_vanish 于 eps:=δ 给显式 N（n≥N ⟹ ln2i_e n < δ），与 δ 提取件的
    终归点式肢（δ ≤ |q−x_k|，k≥K）在 m := S(max K N) 处合取：
    ln2i_e m < δ ≤ |q−x_m|。指标 m 全显式，零 LPO。 *)
@@ -646,7 +695,7 @@ Qed.
 (* ============================================================ *)
 
 (* 平凡三元组 A:=1, B:=0, clo:=0：供给型五个组成条件之 ③(0<clo)
-   缺失，故非合法 supply。反例以全 Set 面实证两点：
+   缺席，故非合法 supply。反例以全 Set 面实证两点：
    ① q:=0（即 u:=0,v:=1，0·A₀ == 1·B₀）处中支判据成立——Z.eq_dec
       分叉取左支，δ 提取件取中支；
    ② 中支 δ 公式 (clo/2)·|A|⁻¹ 输出 0（QleT' 面 ≤0）——中支正性

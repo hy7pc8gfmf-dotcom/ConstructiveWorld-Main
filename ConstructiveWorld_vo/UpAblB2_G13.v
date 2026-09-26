@@ -1,11 +1,60 @@
-(* ==========================================================================)
-   UpAblB2_G13.v — Gibbs 不等式与等号面的抽象复核及剩余前提收窄
-   使命: b_gibbs_pos/b_gibbs_sum_eps/b_gibbs_eq 三语句在抽象接口载体上显式前提全参复核，两点 Real 载体上实例化并将剩余前提收窄为显式携带的定理（log-le/log-eq 前提的构造性边界注记在册）。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpSigMigrate2、UpStepKL、UpRealLeB、S08_RealMainlineDPO、G08_Gibbs、UpReqCEqDispersion（只读使用）。
-   对标: Gibbs 不等式（相对熵非负性）及等号情形（分布相等当且仅当相对熵为零）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；接口面为 Set 层序谓词；文末对十条结论逐一 Print Assumptions 全 Closed。
-   编译配方: Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹限载；输出一律 -o 临时目录，树内 .vo 不重写。
-   ========================================================================== *)
+(* ============================================================ *)
+(* 玩具证替换件 —— 先行消融波落件（九刀清单见下）                  *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   uabB2_gibbs_pos_Bform_list（原 L299，2 句玩具证）                    *)
+(*   uabB2_bgibbs_eq_res_logle_only（原 L284，2 句玩具证）                *)
+(*   uabB2_bgibbs_eq_resW4（原 L262，2 句玩具证）                         *)
+(*   uabB2_bgibbs_sumeps_resW4（原 L236，2 句玩具证）                     *)
+(*   uabB2_bgibbs_pos_resW4（原 L223，2 句玩具证）                        *)
+(*   uabB2_loginv_real（原 L210，2 句玩具证）                             *)
+(*   uabB2_bgibbs_eq_full（原 L113，2 句玩具证）                          *)
+(*   uabB2_bgibbs_sum_eps_full（原 L78，2 句玩具证）                      *)
+(*   uabB2_bgibbs_pos_full（原 L57，2 句玩具证）                          *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpAblB2_G13.v —— Gibbs 不等式与等号面的抽象复验及剩余前提收窄         *)
+(*   数学使命：b_gibbs_pos/b_gibbs_sum_eps/b_gibbs_eq 三语句的全参复验、  *)
+(*   两点 Real 载体实例化与未决前提的定理级定位。                        *)
+(* ============================================================ *)
+(* 【使命】对 UpSigMigrate2 之 b_gibbs_pos（KL 非负）、b_gibbs_sum_eps    *)
+(*   （逐 eps 形）、b_gibbs_eq（等号面：KL==0 ⟹ 逐点相等）三语句：       *)
+(*   其一在抽象接口载体（RealInterfaceEnhancedSetoid）上以显式前提全参    *)
+(*   复验；其二在两点 Real 载体（S:=bool，求和 uabB2_t2sum/hzlogd_aud_sum）*)
+(*   上实例化，并将剩余前提收窄为显式携带的定理（零隐藏前提）。           *)
+(* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / UpReqDist /          *)
+(*   UpSigMigrate2 / UpStepKL / UpRealLeB / S08_RealMainlineDPO /         *)
+(*   G08_Gibbs / UpReqCEqDispersion（只读使用）。                         *)
+(* 【对标】数学原型：Gibbs 不等式（相对熵非负性）及其等号情形            *)
+(*   （分布相等当且仅当相对熵为零）；mathlib 无此构造对应物。             *)
+(* 【剩余前提的构造性边界注记】le 前提面：B 形引擎 real_log_le_linear_B   *)
+(*   （UpRealLeB）输出 Bishop 序 real_le_b；逆向 real_le_b ⟹ real_le      *)
+(*   等价于等号点 x=1 处的分支判定（LPO 族），构造性不可证——故 log-le    *)
+(*   前提在 Or 编码序上不可无条件实例化，逐 eps 形与 B 形为在库替代。     *)
+(*   log-eq 前提需严格凹性的定量命题（x ≠ 1 的间隙）：抽象接口无此字段    *)
+(*   故维持为前提；具体 Real 载体由 t34_log_eq_linear_weak                *)
+(*   （UpReqCEqDispersion，实三分的双否定形，直觉主义有效）给出实例。     *)
+(* 【构造性注记】全件 Qed 闭合、零承认词面、无经典逻辑；接口面为 Set 层   *)
+(*   序谓词；文末对十条结论逐一 Print Assumptions，以全部 Closed 为零     *)
+(*   外部未证假设的判据。                                                *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
+(*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
+(* 【结构总览】§1 抽象载体全参复验（uabB2_bgibbs_pos_full/                *)
+(*   uabB2_bgibbs_sum_eps_full/uabB2_bgibbs_eq_full——ext/add/linear/     *)
+(*   〔le/znn〕/log-inv/log-le/log-eq 逐前提显式，直推 req_gibbs_inequality *)
+(*   与 req_gibbs_equality（UpReqDist））；§2 uabB2_t2sum 与 znn 前提的   *)
+(*   新构造 uabB2_znn_abs（逐点非负、和为零 ⟹ 逐点为零）；§3 log-inv    *)
+(*   前提的具体实例 uabB2_loginv_real（← kl_log_inv，UpStepKL）；§4      *)
+(*   两点 Real 载体的剩余前提定理：uabB2_bgibbs_pos_resW4 与              *)
+(*   uabB2_bgibbs_sumeps_resW4 剩 log-le 单前提，uabB2_bgibbs_eq_resW4   *)
+(*   剩 {log-le, log-eq}，uabB2_bgibbs_eq_res_logle_only 经              *)
+(*   t34_log_eq_linear_weak 实例化后剩 {log-le}；§5 pos 面 B 形替代       *)
+(*   uabB2_gibbs_pos_Bform_list ← gibbsd_gibbs_inequality）；§6 假设审计区。 *)
+(* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
@@ -17,12 +66,12 @@ Require Import G08_Gibbs.
 Require Import UpReqCEqDispersion.
 Import RealInterfaceEnhancedMod.
 
-(* ======== §1 · 抽象载体全参出节形复核（三语句逐一显式前提） ====== *)
+(* ======== §1 · 抽象载体全参出节形复验（三语句逐一显式前提） ====== *)
 Section UabB2Abs.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
-(* ---- b_gibbs_pos 复核：全参六前提 ext/add/linear/le/log-inv/log-le ---- *)
+(* ---- b_gibbs_pos 复验：全参六前提 ext/add/linear/le/log-inv/log-le ---- *)
 Theorem uabB2_bgibbs_pos_full :
   forall (S : Set) (sumf : (S -> R) -> R)
          (Hext : forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -42,7 +91,7 @@ Proof.
   exact (@req_gibbs_inequality R RIS S sumf Hext Hadd Hlin Hle Hloginv Hlogle                               p q Hp Hq Hnp Hnq).
 Qed.
 
-(* ---- b_gibbs_sum_eps 复核：前者加 le_plus_compat 链，零新增前提 ------ *)
+(* ---- b_gibbs_sum_eps 复验：前者加 le_plus_compat 链，零新增前提 ------ *)
 Theorem uabB2_bgibbs_sum_eps_full :
   forall (S : Set) (sumf : (S -> R) -> R)
          (Hext : forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -63,7 +112,7 @@ Proof.
   exact (le_trans zero eps (plus (kl_a S sumf p q Hp Hq) eps)                    (lt_le_iff zero eps (inl Heps))                    (le_id_l eps (plus zero eps)                               (plus (kl_a S sumf p q Hp Hq) eps)                               (req_sym (plus zero eps) eps                                          (req_trans (plus zero eps) (plus eps zero) eps                                                     (plus_comm zero eps)                                                     (plus_zero eps)))                               (le_plus_compat zero (kl_a S sumf p q Hp Hq)                                               eps eps                                               (uabB2_bgibbs_pos_full S sumf Hext Hadd                                                                      Hlin Hle Hloginv Hlogle                                                                      p q Hp Hq Hnp Hnq)                                               (le_refl eps)))).
 Qed.
 
-(* ---- b_gibbs_eq 复核（等号面本体：全参七前提，znn/log-eq 显式在列；     *)
+(* ---- b_gibbs_eq 复验（等号面本体：全参七前提，znn/log-eq 显式在列；     *)
 (*        log-le/log-eq 为构造性未决前提，随件显式携带不隐藏） -------------- *)
 Theorem uabB2_bgibbs_eq_full :
   forall (S : Set) (sumf : (S -> R) -> R)
@@ -89,7 +138,7 @@ Proof.
   exact (@req_gibbs_equality R RIS S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq                             p q Hp Hq Hnp Hnq Hkl0).
 Qed.
 
-(* ======== §2 · 抽象载体上的两点供给引理（znn 前提的构造） ========== *)
+(* ======== §2 · 抽象载体上的两点供给件（znn 前提的构造） ========== *)
 (* 两点和 uabB2_t2sum：与 hzlogd_aud_sum（G08_Gibbs）同形，展开均为 plus (f true) (f false) *)
 Definition uabB2_t2sum (f : bool -> R) : R := plus (f true) (f false).
 
@@ -103,7 +152,7 @@ Proof.
   - apply plus_opp.
 Qed.
 
-(* znn 前提（零和非负消去）的两点构造（新建供给引理）：                      *)
+(* znn 前提（零和非负消去）的两点构造（新建供给件）：                      *)
 (*   逐点非负 + 两点和为零 ⟹ 逐点为零（le_antisym 与左消去的纯代数链）。   *)
 Lemma uabB2_znn_abs :
   forall f : bool -> R,

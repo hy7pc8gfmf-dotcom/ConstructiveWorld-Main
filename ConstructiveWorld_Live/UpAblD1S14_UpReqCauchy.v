@@ -1,11 +1,38 @@
-(* ==========================================================================)
-   UpAblD1S14_UpReqCauchy.v — UpReqCauchy 八条待供给语句在具体 Real 实例上的显式供给
-   使命: strict/strong concavity、entropy_tangent、r_arch_pow、lim_metric_approx 五条无条件供给，metric_triangle_plain 与 le_all_eps_zero 两条条件形，weak_trich 具体实例供给。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、CW220_Extensions；Stdlib QArith、QArith.Qabs、Setoid、Morphisms、Arith、Lia、Lqa。
-   对标: 阿基米德性质、极限的距离刻画（ε-N）与熵函数凹性不等式。
-   构造性: 语句面全 Set 层（接口的 Or/Not 亦 Set 层）；全件 Qed 闭合、零承认词面；两条条件供给以全称前提显式承载，Print Assumptions 全 Closed。
-   编译配方: Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹限载；输出一律 -o 临时目录，树内 .vo 不重写。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblD1S14_UpReqCauchy.v —— UpReqCauchy 待供给语句的实例供给件        *)
+(*   数学使命：为源模块八条待供给语句在具体 Real 实例上给出显式供给。       *)
+(* ============================================================ *)
+(* 【使命】源模块 UpReqCauchy 以接口参数化方式陈述其语句；本件承接其中八条： *)
+(*   五条无条件供给——strict_concavity（熵梯度的严格单调反转）、           *)
+(*   strong_concavity（强凹性，取 mu:=one）、entropy_tangent（零函数的    *)
+(*   切线不等式）、r_arch_pow（几何衰减的阿基米德性质，kappa:=exp_neg     *)
+(*   half）、lim_metric_approx（极限的距离 ε-N 刻画，本件唯一含实质构造   *)
+(*   的供给）；两条条件形——metric_triangle_plain 与 le_all_eps_zero      *)
+(*   （结论为 plain Or 形序谓词，见 §B 注记）；weak_trich 附具体实例供给（见 §C 注记）。 *)
+(* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / CW220_Extensions；   *)
+(*   Stdlib：QArith / QArith.Qabs / Setoid / Morphisms / Arith / Lia /    *)
+(*   Lqa。源模块仅以接口参数只读引用，不 Require 其实现文件。               *)
+(* 【对标】数学原型：阿基米德性质、极限的距离刻画（ε-N）与熵函数的       *)
+(*   凹性不等式；mathlib/stdlib 无直接构造实数对应物。                    *)
+(* 【构造性注记】语句面全 Set 层（接口的 Or/Not 亦 Set 层）；全件 Qed     *)
+(*   闭合、零承认词面、零新增公理面；两条条件供给以全称前提显式承载，    *)
+(*   如实申报为条件形，Print Assumptions 仍全 Closed。文末对八条结论     *)
+(*   逐一 Print Assumptions，以全部 Closed 为零外部未证假设的判据。       *)
+(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
+(*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
+(* 【结构总览】供给基础辅件（uabd1s14_cau_opp_opp/uabd1s14_cau_half/       *)
+(*   uabd1s14_cau_kappa/uabd1s14_cau_rpow 等自持辅件）；                 *)
+(*   §A1 strict_concavity 供给（实例 entropy_gradient:=opp，由           *)
+(*   opp_lt_compat 直接推得）；§A2 strong_concavity 供给（实例 mu:=one，  *)
+(*   mult/plus 代数链）；§A3 entropy_tangent 供给（零函数实例，          *)
+(*   mult_zero 链）；§A4 r_arch_pow 供给（kappa:=exp_neg half，由        *)
+(*   r_arch_pow_real（CW220_Extensions）直接推得）；§A5 lim_metric_approx *)
+(*   供给（ε-N 论证链：Q 正性分割、real_lt_abs_bound 夹逼、metric 投影   *)
+(*   展开）；§B 条件形组（metric_triangle_plain/le_all_eps_zero：plain    *)
+(*   Or 形序谓词不可由逐 eps 形消去，以全称前提显式承载）；§C weak_trich  *)
+(*   具体实例供给（real_weak_trich 为已证引理，弱三分在 Real 实例上      *)
+(*   成立；抽象接口内不可导出，本节可独立移除）；假设审计区。             *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.

@@ -24,7 +24,7 @@
 (* 辖区：UpReqAlign2.v Req2AlignCore 节 L83 log_req_compat（相容面 1 位）。      *)
 (*   （同节 L86 log_inv_exp_neg_req 位经普查判 T（log_inv 接口字段供给面），     *)
 (*   不入本件；本件零重叠。）                                                   *)
-(* 源文件：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；                *)
+(* 母本：logd_log_compat_real@G05_LogSmall（零前提 Real 层参数形；                *)
 (*   副路：hzlogd_log_req_compat_real@G08_Gibbs:799=real_log_wd 直取）。        *)
 (* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 1426=现档         *)
 (*   行数 1426，21 位语句逐字双检通过）；语句逐字抽取后仅 R 换实例位 Real，        *)

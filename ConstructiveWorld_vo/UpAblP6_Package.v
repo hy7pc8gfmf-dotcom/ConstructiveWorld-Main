@@ -10,10 +10,10 @@
 (*      11 枚的覆盖——速记位 3 枚（#1 bt/#2 bt_pos/#3 kl 重建位，其前提面    *)
 (*      经 #7–#11 出节形使用，此处以速记位正性件作覆盖见证）＋定理面        *)
 (*      8 枚逐枚一行 Corollary，另以封装 completeness 句闭合。              *)
-(*   c 依赖模块族整合：S5SlotWire＋ZPosLowRef＋ConcMixSelFeed 三依赖模块面的    *)
+(*   c 供给件族整合：S5SlotWire＋ZPosLowRef＋ConcMixSelFeed 三供给件面的    *)
 (*      代表性实例总成句（抽象接口面 + 具体实例面两件）。                   *)
 (*   d 战役面总成 Corollary：论文6 五独占模块（GibbsFamilyExt / TempDefs /  *)
-(*      FepIdConsume 零参数位 / EntropyMonoSplitInst / 依赖模块族）假设供给闭合   *)
+(*      FepIdConsume 零参数位 / EntropyMonoSplitInst / 供给件族）假设供给闭合   *)
 (*      的一揽子陈述，每支引对应件真证（uapkg6_campaign_supply_closed）。   *)
 (*                                                                       *)
 (* 构造性注记：七件本体零改（只 Require）；传递 Require 不 Import 不透传，  *)
@@ -239,7 +239,7 @@ Proof.
 Qed.
 
 (* C10（覆盖 #10 inst_kl_right）：B 件证书位二 Hkl_right 装载（KL_v 前位， *)
-(*   禁倒置、序向与源文件一致）。                                            *)
+(*   禁倒置、序向与母本一致）。                                            *)
 Corollary uapkg6_ems_cov_inst_kl_right :
   forall (S : Type) (rsu : (S -> Real) -> Real)
          (rsp : forall f : S -> Real,
@@ -336,8 +336,8 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* c 面：依赖模块族整合（S5SlotWire＋ZPosLowRef＋ConcMixSelFeed）             *)
-(*   抽象接口面：任意 RealInterfaceEnhanced 载体上三依赖模块代表位（协方差正、*)
+(* c 面：供给件族整合（S5SlotWire＋ZPosLowRef＋ConcMixSelFeed）             *)
+(*   抽象接口面：任意 RealInterfaceEnhanced 载体上三供给件代表位（协方差正、*)
 (*   产率恒等、逆元加法链）；Section 面照 S5SlotWire/ZPosLowRef 源 preamble *)
 (*   对应而立，出节 {RI}{DO} 换名 Lets 与两件源节同构。                     *)
 (* ===================================================================== *)
@@ -413,7 +413,7 @@ Close Scope Q_scope.
 (*   支3 FepIdConsume 零参数位：具体柯西实例识别面 Gibbs==Boltzmann（该支零     *)
 (*      接口参数位——识别类实例 FepIdentificationReal 构造性在场，无供给缺口）。 *)
 (*   支4 EntropyMonoSplitInst：A+B 覆盖链组合主支（#5∘#6 独立复合）。       *)
-(*   支5 依赖模块族：具体实例面代表位（序前提）。                             *)
+(*   支5 供给件族：具体实例面代表位（序前提）。                             *)
 (* ===================================================================== *)
 Corollary uapkg6_campaign_supply_closed :
   {_ : (forall (p q b : Real) (Hp : real_lt real_zero p)
@@ -694,7 +694,7 @@ Qed.
 (* ④ 战役面总成 v2：九支供给闭合一揽子升级句（v1 五支→v2 九支）——         *)
 (*   支1 GibbsFamilyExt 对称 Jeffreys 温度面；支2 TempDefs 温度节参两枚；  *)
 (*   支3 FepIdConsume 零参数位 Gibbs==Boltzmann；支4 EMS A+B 覆盖链组合引理；  *)
-(*   支5 依赖模块族具体实例面；支6 EMS_C 覆盖验证零前提峰温对偶面；          *)
+(*   支5 供给件族具体实例面；支6 EMS_C 覆盖验证零前提峰温对偶面；          *)
 (*   支7 UniformLimit 严格档供给对（γ>0＋真间隙 gap_le）；                 *)
 (*   支8 two_state 零前提锚闭双向；支9 fka 装载面（本节载体面）。          *)
 (*   九支证明项齐指九件真证——任一支语句面错位即无法通过类型检查。          *)

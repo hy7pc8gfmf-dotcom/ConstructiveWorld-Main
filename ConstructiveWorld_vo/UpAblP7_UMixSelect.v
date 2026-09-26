@@ -4,6 +4,7 @@
 (* 显式构造（eq_refl）：uabm_half_pos／uabm_half_lt_one／           *)
 (* uabm_one_pos。语句面与引用面零改动，零新增 Require，证明         *)
 (* 结尾记号与原件逐件守恒，纯构造性闭合，文尾保留原件 Print         *)
+(* Assumptions 追印面。另录原消融清单（本席零触碰位）：             *)
 (*   uabm_k_select_half（原 L172）                                  *)
 (*   uabm_ums_pow_budget_slot_freeze（原 L69）                      *)
 (* ============================================================ *)

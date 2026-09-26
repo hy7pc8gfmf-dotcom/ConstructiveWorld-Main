@@ -1,12 +1,12 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* UpAblP3_UpReqAttnMixTime.v —— FA-P3S1 伴生实例化消解件    *)
-(* 工程：FA-P3 普查（attn/_tfap3_普查报告-.md）第③节        *)
-(*   UpReqAttnMixTime 22 位接口参数重述（N12//W0）。                  *)
-(* 原树零改：本件为独立配套模块，只读使用基座；源文件 UpReqAttnMixTime.v  *)
-(*   与全部依赖零改（E802 消融真形态已证结论）。                          *)
+(* ============================================================ *)
+(* UpAblP3_UpReqAttnMixTime.v —— FA-P3S1 论文域消融施工席伴生放电件    *)
+(* 战役：FA-P3 普查（attn/_tfap3_普查报告-20260919.md）第③节        *)
+(*   UpReqAttnMixTime 22 位槽位换装（N12/T10/W0）。                  *)
+(* 原树零改：本件为独立伴生件，只读消费基座；母本 UpReqAttnMixTime.v  *)
+(*   与全部依赖零改（E802 消融真形态定谳）。                          *)
 (*                                                              *)
-(* 源文件坐标（AA4 代际核验：Live_X 副本与 ConstructiveWorld-Main 树    *)
-(*    双实测一致，行数均 223）：                              *)
+(* 母本坐标（AA4 代际核验：Live_X 副本与 ConstructiveWorld-Main 树    *)
+(*   20260919 双实测一致，行数均 223）：                              *)
 (*   UpReqAttnMixTime.v L68  Section BoundedSoftmaxMixTime            *)
 (*     L70/L72/L73  Context RI/SS/SO（N·接口位×3）                    *)
 (*     L85-L93      enum..z_ub（T·数据/证书位×9）                     *)
@@ -16,30 +16,30 @@
 (*     L103         bs_abs（N1）                                      *)
 (*     L104         bs_lpc（N1＝lt 混合加法保序 fa53 广播同形）        *)
 (*     L105         sum_eq_list（N1）                                 *)
-(* 使用位判据（普查 §③）：19 位在两主定理出节全参使用                 *)
+(* 消费位判据（普查 §③）：19 位在两主定理出节全参消费                 *)
 (*   （L192-195/L216-219 对 bounded_softmax_tv_iter 21 参全显调用）。  *)
 (*                                                              *)
-(* 实例化消解源文件（逐字行号直取， 实测）：                           *)
-(*   fa53_compat_abs.v:103 件1 混合加法保序（N3/N1 直接代入）              *)
-(*   fa53_compat_abs.v:141 件3 le 版 abs 恒等（N1 直接代入）               *)
-(*   AttnDoeblin.v:758      real_expf_realizable（五字段封装实例化消解）     *)
-(*   IdSlotTranslate.v:130  idt_slot_attdoeblin（sum_eq_list 实例化消解读法  *)
+(* 放电母本（逐字行号直取，20260919 实测）：                           *)
+(*   fa53_compat_abs.v:103 件1 混合加法保序（N3/N1 直喂）              *)
+(*   fa53_compat_abs.v:141 件3 le 版 abs 恒等（N1 直喂）               *)
+(*   AttnDoeblin.v:758      real_expf_realizable（五字段打包放电）     *)
+(*   IdSlotTranslate.v:130  idt_slot_attdoeblin（sum_eq_list 放电读法  *)
 (*                          sum_over_S ↦ idt_sumf en；CYD7/CZB8/CWE5） *)
 (*   E752 段一/段二         bs_swap=sum_eq_list+列表 Fubini 整体导出   *)
 (*   先例件 UpAblT2b_fa53_lpc_broadcast.v（广播形）/                  *)
-(*   UpAblT1b_AttnDoeblin.v（段一基础模块内复刻形）照抄。                *)
+(*   UpAblT1b_AttnDoeblin.v（段一地基件内复刻形）照抄。                *)
 (*                                                              *)
-(* 非平凡性分级（详见 attn/_tfap3s1_施工报告-.md 分级表）：    *)
-(*   uabp3_amt_expf_bundle      ：N1（五字段封装，E750-A；禁按位注水）  *)
-(*   uabp3_amt_sum_eq_list_idt  ：N1（idt 实例化消解读法直接代入）               *)
-(*   uabp3_amt_bs_swap          ：N2（E752 导出链，槽对偶形）          *)
-(*   uabp3_amt_bs_abs           ：N1（fa53 件3 直接代入）                  *)
-(*   uabp3_amt_bs_lpc           ：N3（fa53 件1 广播直接代入）              *)
-(*   uabp3_lsum_ext/add/zero/fubini_gen：基础模块（E752 段一形复刻，      *)
+(* 非平凡性分级（详见 attn/_tfap3s1_施工报告-20260919.md 分级表）：    *)
+(*   uabp3_amt_expf_bundle      ：N1（五字段打包，E750-A；禁按位注水）  *)
+(*   uabp3_amt_sum_eq_list_idt  ：N1（idt 放电读法直喂）               *)
+(*   uabp3_amt_bs_swap          ：N2（E752 导出链，槽镜像形）          *)
+(*   uabp3_amt_bs_abs           ：N1（fa53 件3 直喂）                  *)
+(*   uabp3_amt_bs_lpc           ：N3（fa53 件1 广播直喂）              *)
+(*   uabp3_lsum_ext/add/zero/fubini_gen：地基件（E752 段一形复刻，      *)
 (*     不计入战果；P7BoundedSoftmaxDeep .vo 缺本树，地基照 T1b 先例     *)
 (*     件内复刻，导出链与 p7d_swap_of_sum_eq_list 同构）。              *)
-(*   （L85-L94）+ Context 位（L70/72/73）：数据/证书/接口实例供给    *)
-(*     位，合并申报零施工零计数（T 判据）；其中 SO 槽在 idt 实例化消解读法    *)
+(*   T10（L85-L94）+ Context 位（L70/72/73）：数据/证书/接口实例供给    *)
+(*     位，合并申报零施工零计数（T 判据）；其中 SO 槽在 idt 放电读法    *)
 (*     下由具体列表折叠机替换，RI 典范载体实例化形见本件 lpc/abs 件     *)
 (*     的 RI0 全参形（装配桥供给，T2b 节7 同款诚实登记）。              *)
 (*   W 位：普查本模块 W=0，本件零 W（兑现）。                           *)
@@ -48,9 +48,9 @@
 (*  [x] AA4 代际核验已做（上列行号双树实测一致）                        *)
 (*  [x] 逐字抽取：被消融槽语句自现档源码逐字拷入（参序/命名/隐式位同形）*)
 (*  [x] 头注全中文表述，禁词英文原词字面全文件计为零                    *)
-(*  [x] 语句面全 Set 层；零新增未证假设位；真件零承认式闭合             *)
+(*  [x] 语句面全 Set 层；零新增未证假设位；真件零承认式收口             *)
 (*  [x] 文尾逐件假设面打印全闭（G2 留痕）                               *)
-(*  [x] 提取检验一人一目录树外 ASCII 隔离（G3 留痕）                    *)
+(*  [x] 提取探针一人一目录树外 ASCII 隔离（G3 留痕）                    *)
 (*  [x] 模块核验后台长窗（G4 留痕）                                     *)
 (*  [x] 四关留痕：Live_X/attn/logs/g{1..4}-UpAblP3S1_UpReqAttnMixTime.* *)
 (* ============================================================ *)
@@ -60,10 +60,10 @@ Require Import CW_ConstructiveWorld_219.
 Require Import AttnDoeblin.
 Require Import fa53_compat_abs.
 
-(* ################ 段零：expf 五字段封装实例化消解（E750-A） ################
+(* ################ 段零：expf 五字段打包放电（E750-A） ################
    AttnDoeblin.v:758 real_expf_realizable 语句逐字（Part C 具体柯西
-   实数层；五 And 支＝源文件接口参数 L95-L99 逐字对应，封装形＝E750-A 已证结论
-   的一件实例化消解形；req 面 1:1 对偶已在于 UpReqConcMixSel.v:925）。 *)
+   实数层；五 And 支＝母本槽位 L95-L99 逐字对应，打包形＝E750-A 定谳
+   的一件放电形；req 面 1:1 镜像已在于 UpReqConcMixSel.v:925）。 *)
 Theorem uabp3_amt_expf_bundle :
   sigT (fun f : Real -> Real => And (forall x : Real, real_lt real_zero (f x))
         (And (real_eq (f real_zero) real_one)
@@ -76,8 +76,8 @@ Proof.
 Qed.
 
 (* ################ 段一：列表 Fubini 组合学（E752 段一形复刻） ################
-   出节机 AttnDoeblin.bs_list_sum 上的逐点同余/加法线性/零函数退化/
-   双重和交换。段一各件为基础模块，不单独计入战果。 *)
+   出节机 AttnDoeblin.bs_list_sum 上的逐点同余/加法线性/零函数塌缩/
+   双重和交换。段一各件为地基件，不单独计入战果。 *)
 
 Section UabP3AmtListSum.
 Context {RI : RealInterfaceEnhanced}.
@@ -134,9 +134,9 @@ Qed.
 
 End UabP3AmtListSum.
 
-(* ################ 段二：sum_eq_list 槽重述（idt 实例化消解读法直接代入） ########
-   槽 L105 语句逐字＝Id (sum_over_S g) (bs_list_sum g enum)。实例化消解读法
-   （CYD7/CZB8/CWE5 已证结论、IdSlotTranslate 槽语句级闭合）：抽象求和接口参数
+(* ################ 段二：sum_eq_list 槽换装（idt 放电读法直喂） ########
+   槽 L105 语句逐字＝Id (sum_over_S g) (bs_list_sum g enum)。放电读法
+   （CYD7/CZB8/CWE5 定谳、IdSlotTranslate 槽语句级收口）：抽象求和槽位
    实现为 RI 载体列表折叠机 idt_sumf en——本件照 T1b 先例把桥 1/桥 2
    件内复刻（IdSlotTranslate .vo 与现档 UpReqSumD 代际失配，见偏差账），
    桥语句形与 IdSlotTranslate.v:82/:130 一致。 *)
@@ -158,7 +158,7 @@ Definition uabp3_idt_sumf (en : list S) (f : S -> R) : R :=
 
 (* 桥 2：与宿主出节真机 AttnDoeblin.bs_list_sum 一致
    （IdSlotTranslate.v:130 idt_slot_attdoeblin 之语句型＝槽 L105 在
-   sum_over_S ↦ uabp3_idt_sumf en 实例化消解读法下的本体） *)
+   sum_over_S ↦ uabp3_idt_sumf en 放电读法下的本体） *)
 Theorem uabp3_amt_sum_eq_list_idt : forall (en : list S) (g : S -> R),
   Id (uabp3_idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
 Proof.
@@ -171,10 +171,10 @@ Qed.
 
 End UabP3AmtSumEqListIdt.
 
-(* ################ 段三：bs_swap 槽重述（E752 导出链·槽对偶形） ########
+(* ################ 段三：bs_swap 槽换装（E752 导出链·槽镜像形） ########
    槽 L100-L102 语句逐字。前提减薄＝仅需求和规范化槽（sum_eq_list，
    L105 逐字语句作节内显式位）：swap 位由其＋段一 Fubini 组合学整体
-   导出，非独立接口位（E752 翻案已证结论；链形与
+   导出，非独立接口位（E752 翻案定谳；链形与
    p7d_swap_of_sum_eq_list@P7BoundedSoftmaxDeep:107 同构）。 *)
 
 Section UabP3AmtSwap.
@@ -207,10 +207,10 @@ Qed.
 
 End UabP3AmtSwap.
 
-(* ################ 段四：bs_abs / bs_lpc 槽重述（fa53 直接代入广播） ########
-   槽 L103（N1：fa53 件3＝fa53_compat_abs.v:141 直接代入；AbsLeId.v:50
+(* ################ 段四：bs_abs / bs_lpc 槽换装（fa53 直喂广播） ########
+   槽 L103（N1：fa53 件3＝fa53_compat_abs.v:141 直喂；AbsLeId.v:50
    同形先例在库）与槽 L104（N3：fa53 件1＝fa53_compat_abs.v:103 同形
-   语句广播直接代入；出节使用形见源文件 L192-195/L216-219 全参调用）。
+   语句广播直喂；出节消费形见母本 L192-195/L216-219 全参调用）。
    可判定序数据槽＝T2b 广播形减薄登记（DecidableOrder 纯数据供给面）。 *)
 
 Section UabP3AmtAbsLpc.

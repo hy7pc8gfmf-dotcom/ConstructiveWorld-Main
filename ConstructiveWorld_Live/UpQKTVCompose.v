@@ -1,11 +1,55 @@
-(* ==========================================================================)
-   UpQKTVCompose.v — 注意力 Gibbs 核的 TV 迭代收缩
-   使命: qktv_gamma/qktv_dstar（显式率 e^(−2γ′/T)）、qktv_K（attn_logit 上的 Gibbs 核）与 qk_tv_iter_contraction（TV 距离几何收缩迭代界）。
-   依赖: CW_ConstructiveWorld_219、G10_LoebFam、UpTVDoeblin；Stdlib List、QArith、Lia、Lqa
-   对标: 马尔可夫核的总变差几何收敛（Dobrushin 型显式率）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpQKTVCompose.v —— 论文2 末端一步组合件：QKᵀ 界 × TV Doeblin 收缩  *)
+(* 依赖清单：CW_ConstructiveWorld_219、G10_LoebFam（qk_logits_bounded）、UpTVDoeblin（tvd_*） *)
+(*                                                                *)
+(* 目的：闭合论文2 §10.2-2 自陈开放项「仅余末端一步」——             *)
+(*   UpQKBound（G10）界转化输出与 UpTVDoeblin 前提的模块级组合       *)
+(*   证明未并单一定理。本件把 QK 端由范数界（Qb·Kb 数据）供给的      *)
+(*   上界量 γ 接入 TV 端 Doeblin 收缩的 logit 双界前提，产出        *)
+(*   两端件单独都不具备的合成陈述：                                 *)
+(*                                                                *)
+(*   范数界（root⟨q,q⟩ ≤ Qb、root⟨k,k⟩ ≤ Kb）＋ 温度 T>0             *)
+(*     ⟹ 注意力 Gibbs 核 Kⁿ 迭代 TV 收缩                           *)
+(*        TV(Kⁿμ, Kⁿν) ≤ (1 − e^{−2(Qb·Kb/√d+2)/T})ⁿ · TV(μ,ν)。     *)
+(*                                                                *)
+(* 两端实测签名（树上实名直引）：                                    *)
+(*   QK 端（G10_LoebFam，原 UpQKBound 并树件）：                    *)
+(*     qk_logits_bounded : 范数界前提取 And(Δ>0, ∀s s' |logit| ≤ Δ)，  *)
+(*       Δ := Qb·Kb·inv(√d)+1（QKLogitSection 出节，attn_logit d a b）。 *)
+(*   TV 端（UpTVDoeblin，TVDStar 出节）：                            *)
+(*     tvd_dstar_iter_contraction：z 双界（±γ）前提取                  *)
+(*       TV(Kⁿμ,Kⁿν) ≤ (1−e^{−2γ/T})ⁿ·TV(μ,ν)，γ 为自由变元。          *)
+(*                                                                *)
+(* 组合的非平凡接缝（本件新证，两端缺一不可）：                       *)
+(*   ①QK 端交出的 |logit| ≤ Δ 是 real_abs 形；TVDStar 需要的是        *)
+(*     −γ ≤ z ≤ γ 双 real_le 形。本库 real_le := Or(lt, eq) 分离      *)
+(*     编码下，eq 支使「|z| ≤ γ ⊢ z ≤ γ」**不可构造直推**            *)
+(*     （z ≈ −γ 反例堵死 eq 支）。接缝解法（构造性严格化）：           *)
+(*     以 γ′ := Δ + 1 为收缩率常数——real_le_lt_trans 把 abs 界       *)
+(*     升为 |logit| < γ′（严格），再逐点 Qabs 三角把严格界拆为        *)
+(*     −γ′ < logit < γ′ 双边（桥件 qktv_abs_lt_two_side）。           *)
+(*     +1 余量即分离编码下 abs→双边的构造性代价，如实入率。           *)
+(*   ②率常数 γ′ = Qb·Kb·inv(√d) + 2 由 QK 端范数数据具体给出          *)
+(*     （合成前是 TV 端自由变元），核 z := attn_logit d 由 QK 端      *)
+(*     给出（合成前 TV 端核未实例）——两端供给面正交，缺一即塌。       *)
+(*                                                                *)
+(* 非平凡性自审：合成陈述的率常数与核分别来自两端件各自输出，          *)
+(*   单独 QK 端无任何 TV/收缩语汇，单独 TV 端 γ、z 均为自由前提取     *)
+(*   ——非包装、非转述。桥件①为分离编码下的新构造性步。               *)
+(*                                                                *)
+(* 诚实边界：合成率的 +2（Δ 的 +1 与严格化的 +1）如实写进率常数，      *)
+(*   不冒充无余量形态；核逐行随机性由 TVDStar 出节件自带前提承担。     *)
+(*                                                                *)
+(* 红线自审：语句面量词全 Set/Type 载体（nat/Q/list Real/函数空间），  *)
+(*   比较全 real_lt/real_le/real_eq（Set 编码）；全件 Qed 闭合；      *)
+(*   零公理、零经典逻辑、零魔数直取、可提取。                       *)
+(*                                                                *)
+(* 编译配方（9.1 主轨直调；9.0 全路径不使用）：                       *)
+(*   unset COQLIB ROCQLIB;                                          *)
+(*   export COQLIB="C:/Rocq-Platform~9.1~2026.01/lib/coq" ROCQLIB="$COQLIB"; *)
+(*   cwd=Live_X: coqc.exe -q -native-compiler no -Q . "" UpQKTVCompose.v *)
+(*   cpu_guard 节流包裹，输出至临时目录，树内零写入。                  *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import G10_LoebFam.
@@ -13,11 +57,11 @@ Require Import UpTVDoeblin.
 From Stdlib Require Import List QArith.QArith QArith.Qabs QArith.Qring Arith.Arith.
 From Stdlib Require Import Lia Lqa.
 
-(* ################ 桥接引理：abs 严格界的构造性双边提取 ################ *)
+(* ################ 桥件：abs 严格界的构造性双边提取 ################ *)
 
 (* |x| < c ⟹ (−c < x ∧ x < c)。
    逐点走 real_abs_proj（|x|_n == Qabs x_n）+ Qle_abs_self（x_n ≤ |x_n|、
-   −x_n ≤ |x_n|），分离编码下 lt 支的逐点余量原样传递。本桥接引理即
+   −x_n ≤ |x_n|），分离编码下 lt 支的逐点余量原样传递。本桥件即
    「abs 界 → 双边界」的构造性代价具形处：仅严格（lt）形可行。 *)
 Lemma qktv_abs_lt_two_side : forall (x c : Real),
   real_lt (real_abs x) c ->
@@ -196,7 +240,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* G4 审计口（桥接引理 + 主定理，全 Closed 预期）                        *)
+(* G4 审计口（桥件 + 主定理，全 Closed 预期）                        *)
 (* ============================================================ *)
 Print Assumptions qktv_abs_lt_two_side.
 Print Assumptions qk_tv_iter_contraction.

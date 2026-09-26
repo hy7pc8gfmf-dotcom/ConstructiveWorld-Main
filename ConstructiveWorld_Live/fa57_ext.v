@@ -1,9 +1,9 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程（tier2 第五批）        *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   fa57_half_plus_half（原 L180，1 句玩具证）                           *)
 (*   fa57_half_pos（原 L175，1 句玩具证）                                 *)
@@ -14,28 +14,28 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* fa57_ext.v ——  消融50 工程 CYB7 （阶段 E-STAGING-CYB7）    *)
+(* fa57_ext.v —— T40 消融50 战役 CYB7 席（批次 E-STAGING-CYB7）    *)
 (*                                                              *)
 (* 使命：VD 辖区（G01/G02/G04/G11+UpAlignId…UpGRPO）夜间静默死亡    *)
-(*       施工件。对账=-CYB7-对账.md；本件四簇 C 类：         *)
+(*       补席施工件。对账=T40-CYB7-对账.md；本件四簇 C 类：         *)
 (*                                                              *)
 (* 簇一 G02_Debt.v:165-175 抽象载体三性质槽＋非空位一次兑现包      *)
 (*      （sigT 见证＝list 折叠 fa51_sumd；pos/ext/linear 三组件    *)
 (*      分别由 fa51_sumd_nonnil_pos/fa56b_sumd_cong/              *)
-(*      fa56_sumd_mult_const 直接给出）＋右因子线性新件（三步链）。     *)
-(* 簇二 UpFirewall.v:104 lt_minus_nonneg 槽双向实例化消解                *)
+(*      fa56_sumd_mult_const 直配）＋右因子线性新件（三步链）。     *)
+(* 簇二 UpFirewall.v:104 lt_minus_nonneg 槽双向放电                *)
 (*      （fa53_lt_plus_translate_r＋plus_opp＋lt_id_l/r＋          *)
 (*      plus_assoc 恒等运河；正向 1 段，逆向 assoc/opp/zero 四段）。*)
 (* 簇三 UpGRPO.v:66 G_pos 兑现链：group_cover（InT 见证）⟹        *)
 (*      enum 非空（InT 零构造子灭支）⟹ length 定义性 S k ⟹ 正性。   *)
-(*      nat_to_R_g/nat_to_R_g_pos 按 E346「节参不导出，本节    *)
+(*      nat_to_R_g/nat_to_R_g_pos 按 E346「节参不导出，消费席本节    *)
 (*      重声明同位」先例本地复刻（UpGRPO.v:51-65 证明体同构：        *)
 (*      plus_positive＋one_pos 两字段归纳），零公理面 PA 仍 Closed。  *)
 (* 簇四 G04_ProjFam.v:175-181/394-400 W2' 簇两点均匀投影族槽面     *)
 (*      兑现：f_norm（sumd 归一）＋f_pos（inv 正性）＋P_witness    *)
 (*      （sigT 装配 InT_here）三件全构造，And 包交付。              *)
 (*                                                              *)
-(* 使用：S01 基座＋fa51/fa53/fa56/fa56b（消融50 在盘 .v 侧编复刻）。
+(* 消费：S01 基座＋fa51/fa53/fa56/fa56b（消融50 在盘 .v 侧编复刻）。
        既有文件零改。前缀 fa57_ 全库防撞已核。                          *)
 (* 纪律：语句面全 Set 层（Id/lt/le/Or/And/sigT，And=S01:66 积）；   *)
 (*       纯构造性零承认位；尾 Print Assumptions 全 Closed。         *)
@@ -53,9 +53,9 @@ Section Fa57Ext.
 
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
-(* fa53 件使用位：单侧严格平移族需可判定序扩展（AbsLeId.v 先例：
+(* fa53 件消费位：单侧严格平移族需可判定序扩展（AbsLeId.v 先例：
    @ 全参显式喂 DO； discharge 后 DO 仅进簇二两件签名，与 fa53 件1
-   槽实例化消解口径同阶——UpFirewall:104/UpEntropyGain:86 槽的诚实消解形） *)
+   槽放电口径同阶——UpFirewall:104/UpEntropyGain:86 槽的诚实消解形） *)
 Context {DO : DecidableOrder RI}.
 
 Let R := @R RI.
@@ -229,7 +229,7 @@ Qed.
 
 End Fa57Ext.
 
-(* ============ 假设面闭合申报（G4 前置） ============ *)
+(* ============ 假设面收口申报（G4 前置） ============ *)
 
 Print Assumptions fa57_sum_carrier_realizes.
 Print Assumptions fa57_sumd_mult_const_r.

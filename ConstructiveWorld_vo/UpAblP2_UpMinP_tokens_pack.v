@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* UpAblP2_UpMinP_tokens_pack.v —— 假设消融战役 FA-P2 批3施工席 S1               *)
 (* 辖区：UpMinP.v MinPEntropy 节 7 个 T 槽（现档坐标 L631-641）＋1 W 墙登记        *)
 (*   L631 tokens / L632 tokens_ne / L633-634 tokens_pos / L635-636 tokens_sum    *)
 (*   L639 ratio / L640 ratio_pos / L641 ratio_le_one                            *)
@@ -11,6 +12,7 @@
 (*   → 剪除即消融，打包件不含该槽；                                             *)
 (*   tokens_pos（L633-634）=fail-loud 新发现：语句为无界 forall i＋nth 越界默认    *)
 (*   real_zero ⇒ 蕴含 real_lt real_zero real_zero ⇒ 空型（不可满足）——          *)
+(*   出空型见证证书一件＋有界变体可满足对照一件；勘误录报告（普查误记 T 级）。    *)
 (*                                                              *)
 (* 主件清单（前缀 uabp2_）：                                                     *)
 (*   M1 uabp2_um_pack5           ←5 槽合并申报（打包记录型，单点表实例直配）      *)
@@ -18,6 +20,7 @@
 (*   M3 uabp2_um_tokens_pos_bnd  ←有界变体可满足对照（数据面本体无碍，失配仅量词）*)
 (*                                                              *)
 (* 分级（如实申报）：M1=T 合并申报（供给件 reflexivity/一行直配级，不计非平凡战果）；*)
+(*   M2=N（空型见证=真内容：nth_overflow＋real_lt_irrefl 两步，勘误证书）；        *)
 (*   M3=T（real_lt_zero_one 一行直配）。                                         *)
 (*                                                              *)
 (* 依赖（全部只读消费，原树零改）：CW_ConstructiveWorld_219。                     *)
@@ -58,6 +61,7 @@ Proof.
            (inr (real_eq_refl real_one))).
 Qed.
 
+(* ============ M2 ←L633-634 tokens_pos 空型见证证书（fail-loud 勘误件） ============ *)
 (* 原槽语句：forall i : nat, real_lt real_zero (nth i tokens real_zero)。
    取 i := length tokens：nth 越界返回默认 real_zero ⇒ 需 real_lt zero zero，
    与 real_lt_irrefl 矛盾 ⇒ 该槽对任何有限表不可满足。 *)

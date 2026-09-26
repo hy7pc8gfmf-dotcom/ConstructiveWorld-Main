@@ -1,9 +1,11 @@
 (* ============================================================ *)
 (* UpAblD1S6_UpReqMinPKLChain.v —— FA-D1S6 数据供给大打包第三梯 件④              *)
+(* 席位：FA-D1S6（论文域消融施工席·D1-⑦ 第三梯 ≤40 位·按模块聚合）                 *)
 (*   ｜独立伴生件·原树零改｜零 Require 母本（防混代际 .vo 地雷，P3S1 坑1）          *)
 (*                                                              *)
 (* 辖区：UpReqMinPKLChain.v Section X1MinPKLChain 全 7 N 槽（另 1 W 墙登记）        *)
 (*   trich:49=W 三分墙（rLPO 族，墙登记不立件，普查 §③ W#6 同源）                 *)
+(*   tokens:50｜tokens_ne:51｜tokens_pos:52（→M2 勘误证书）｜tokens_sum:54-55｜    *)
 (*   ratio:56｜ratio_pos:57｜ratio_le_one:58                                     *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                         *)
 (*    实测同代，零代际漂移；零 Require 母本——NatLt/ListDef 经 CW_219 可见，        *)
@@ -14,6 +16,7 @@
 (*   M1 打包记录型 6 槽（Set 排序，无 Type 字段）：tokens/tokens_ne/tokens_sum/    *)
 (*     ratio/ratio_pos/ratio_le_one——单点概率表 real_one::nil 一次打包供给；       *)
 (*     ratio_pos 消费=1（普查实测）真消费，与 P2S1 母件零消费剪除情形不同，入包。   *)
+(*   M2 tokens_pos 空型见证证书（N·勘误件）：无界 forall i＋ListDef.nth 越界默认     *)
 (*     real_zero ⇒ 取 i:=length tokens 得 real_lt real_zero real_zero，            *)
 (*     与 real_lt_irrefl 矛盾 ⇒ 该槽对任何有限表不可满足（P2S1 M2 同判语）；        *)
 (*     有界变体可满足对照 M3（失配仅在量词无界，数据面本体无碍）。                  *)
@@ -23,6 +26,7 @@
 (*   ratio_pos:=real_lt_zero_one｜ratio_le_one:=inr（real_eq_refl real_one）。     *)
 (*                                                              *)
 (* 分级（禁注水如实申报）：M1=6 槽 T·供给级合并申报；                              *)
+(*   M2=N（空型见证=真内容：nth_overflow＋real_lt_irrefl 两步，勘误证书）；         *)
 (*   M3=T（real_lt_zero_one 一行直配）。W 位零施工。                               *)
 (* 依赖：CW_ConstructiveWorld_219（只读消费）；零 git、零注册面。                   *)
 (* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S6_*.{log,exit}                     *)
@@ -33,6 +37,7 @@ Import ListNotations.
 Require Import CW_ConstructiveWorld_219.
 
 (* ============ M1 打包记录型：6 槽语句逐字入包（对照母本 L50-58） ============ *)
+(* tokens_pos（L52-53）不入包：空型（M2 勘误证书另行）；trich（L49）W 墙不立件。    *)
 
 Inductive uabd1s6_mpk_pack6 : Set :=
 | uabd1s6_mpk_pack6_intro :
@@ -62,6 +67,7 @@ Proof.
            (inr (real_eq_refl real_one))).
 Qed.
 
+(* ============ M2 ←L52-53 tokens_pos 空型见证证书（勘误件） ============ *)
 (* 原槽语句：forall i : nat, real_lt real_zero (ListDef.nth i tokens real_zero)。
    取 i := length tokens：nth 越界返回默认 real_zero ⇒ 需 real_lt zero zero，
    与 real_lt_irrefl 矛盾 ⇒ 该槽对任何有限表不可满足（P2S1 M2 同判）。 *)

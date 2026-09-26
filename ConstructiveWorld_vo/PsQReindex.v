@@ -1,11 +1,40 @@
-(* ==========================================================================)
-   PsQReindex.v — Beukers 变体级数的换序与衰减引理
-   使命: rx_psQ_reindex（psQ 升幂与 bk_psd 降幂的换基，一般 n）、对角系数主件 rx_bv_c_diag（bv_c n n == q̃_n）、以及项比率十字衰减链 rx_bkC_ratio/rx_decay_nat/rx_term_decayQ——为部分和单调衰减给出 Q 层构造。
-   依赖: QArith、List、Arith、ZArith、Lia；S01_BaseRing、S02_CauchyComplete、S03_QExp、PadeErrorIntegral、BeukersLists、BeukersVariant。
-   对标: Delannoy 数与 Padé 逼近系数的恒等式（组合数学）。
-   构造性: 零承认词面（全件 Qed）；语句面 Set（主件 QeqT/QleT′/QltT），Qeq/Qle 支撑引理 Prop 面仅作推理；可提取（独立检验文件 Obj.magic 计数 0）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* PsQReindex.v —— 切片代理R（批次 E-STAGING-D030r，20260918）         *)
+(* P2 双小件清偿切片（rx_ 前缀；T121 §3(c)(b) 两件待补的清偿）：        *)
+(*                                                                 *)
+(* 【件1 rx_psQ_reindex：psQ 升幂 ↔ bk_psd 降幂 reindex 小引理】        *)
+(*   一般 n 的换基：Σ_{k<S n} g(n−k)·2^k == Σ_{k<S n} g(k)·2^{n−k}      *)
+(*   （bk_psQ 1 底面），消费件 rx_bv_c_diag：bv_c n n == q̃_n（QeqT）。  *)
+(*   证明机：rx_psQ_shift（首项剥离）+ rx_psQ_scale（公因子外提）        *)
+(*   + rx_psQ_ext_lt（限位点态 Qeq 换函数），归纳步两侧各归一到          *)
+(*   g(S n) + 2·IH 形。                                                *)
+(*                                                                 *)
+(* 【件2 rx_conv_bridge 判定：不同族——可证首件交付】                    *)
+(*   对照 T124 死亡证书口径定谳：部分和→I'_n 收敛桥的教科书逐点路线      *)
+(*   （尾多项式逐点放缩⟹积分尾界）确属 P1b 同族墙（沿 T124 证书判否，    *)
+(*   引用+1、清单+0），但精确性路线绕行可达：bv_carrier_value 已把       *)
+(*   截断积分==级数部分和化归为纯项代数，逐点-积分迁移机全程不需要。      *)
+(*   本席交付可证首件：项比率十字衰减链——                               *)
+(*     rx_bkC_ratio（C(j+1,k)·(j+1−k) == C(j,k)·(j+1)，经              *)
+(*     rx_bkC_absorb 吸收恒等 + rx_bkC_subdiag/row1 副件），            *)
+(*     rx_decay_nat（n ≤ m ⟹ C(n+m+1,n)·(n+2m+1)(n+2m+2)               *)
+(*     ≤ C(n+m,n)·(3n+2m+3)(3n+2m+4)，全正系数展开 ring 收口），        *)
+(*     rx_term_decayQ（n ≤ m ⟹ bv_term n (S m) ≤ bv_term n m，QleT'）， *)
+(*     rx_term_decay_anchor（数值严格分离见证）。                       *)
+(*   几何尾和机与实极限 I'_n 语句化（ln2 ∉ Q）留任下席：前者 Q 层纯项    *)
+(*   代数，后者 real 层装配另案（T121 (a) 同族，非 P1b 墙）。            *)
+(*                                                                 *)
+(* 红线自审：① 零承认面（全件 Qed，零禁词，依赖全在册）；               *)
+(*   ② 语句面 Set（主件 QeqT/QleT'/QltT；Qeq/Qle 支撑引理 Prop 面       *)
+(*      仅作推理脚手架，bk_half_psd/bv_ 先例同构）；                    *)
+(*   ③ 非平凡（限位换基归纳 + 吸收恒等双归纳 + 全正系数三次型展开）；    *)
+(*   ④ 可提取（G3 探针独立文件实测，Obj.magic 计数=0）。                *)
+(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（alignb_base 信任根） *)
+(*   + PadeErrorIntegral BeukersLists BeukersVariant（/tmp/e121_side）。 *)
+(* 零云端零 git；.vo 全留 /tmp 本地侧缓存不出本地不过卷。                *)
+(* 记号坑登记：nat_scope 下 Q-lambda 体必须整式 %Q 包裹（nat 减法写      *)
+(*   Nat.sub 或依赖期望类型；裸 * 会被 nat 乘吃掉），bv_c 先例同构。      *)
+(* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
@@ -130,7 +159,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C 主件①推论：bv_c n n == q̃_n（一般 n，QeqT Set 面）                 *)
+(* §C 主件①消费件：bv_c n n == q̃_n（一般 n，QeqT Set 面）                 *)
 (* ============================================================ *)
 
 Lemma rx_negpow_double : forall k : nat, bv_negpow (k + k) == 1%Q.
@@ -191,7 +220,7 @@ Proof.
     symmetry. apply bk_Qadd_nat.
 Qed.
 
-(* 主件①推论：Laurent 对角系数 bv_c n n == q̃_n（一般 n） *)
+(* 主件①消费件：Laurent 对角系数 bv_c n n == q̃_n（一般 n） *)
 Theorem rx_bv_c_diag : forall n : nat,
   QeqT (bv_c n n) ((Z.of_nat (bk_Qn_qtilde n) # 1)%Q).
 Proof.
@@ -222,7 +251,7 @@ Proof.
   assert (Hri := rx_psQ_reindex n
                    (fun i : nat => (Z.of_nat (bkC n i * bkC n (n - i)) # 1)%Q)).
   rewrite Hri.
-  (* 降幂 nat 和承载 + 对称归位 == q̃_n（与 bv_delannoy_eq_qtilde 同链） *)
+  (* 降幂 nat 和承载 + 对称归位 == q̃_n（T121 bv_delannoy_eq_qtilde 同链） *)
   transitivity (Z.of_nat (bk_psd (fun k : nat => bkC n k * bkC n (n - k))
                                   (Datatypes.S n)) # 1).
   { symmetry. apply (rx_psdQ_desc n (fun i : nat => bkC n i * bkC n (n - i))). }
@@ -237,7 +266,7 @@ Qed.
 Theorem rx_qtilde3_anchor : QeqT ((Z.of_nat (bk_Qn_qtilde 3) # 1)%Q) (63 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 对角数值锚：bv_c 3 3 == q̃_3（一般件的实例落地） *)
+(* 对角消费锚：bv_c 3 3 == q̃_3（一般件的实例落地） *)
 Theorem rx_c33_qtilde3 : QeqT (bv_c 3 3) ((Z.of_nat (bk_Qn_qtilde 3) # 1)%Q).
 Proof. apply rx_bv_c_diag. Qed.
 

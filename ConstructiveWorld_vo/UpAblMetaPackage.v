@@ -1,29 +1,29 @@
 (* ============================================================ *)
-(* UpAblMetaPackage.v —— W3PKG 席：温度-模量对应定理完整形·跨世界对照收束封装件        *)
-(*   2026-09-22 · 前缀 mpk_ · 自建前缀件（装配级实例化，零新数学承诺）                  *)
+(* UpAblMetaPackage.v —— W3PKG 席：温度-模量对应定理完整形·跨世界对照收束打包件        *)
+(*   2026-09-22 · 前缀 mpk_ · 自建前缀件（装配级接线，零新数学承诺）                  *)
 (*                                                              *)
 (* 【收束叙事】同一语句形在不同世界数据下的对照三联：                                *)
-(*   甲·退化侧：凡核行全同的行随机核，点质量对一步即被展开（TV == 0，窗退化）；        *)
-(*   甲'·退化实例：均匀核（行全同）世界一步展开精确零；                              *)
+(*   甲·退化侧：凡核行全同的行随机核，点质量对一步即被拍平（TV == 0，窗塌缩）；        *)
+(*   甲'·退化实例：均匀核（行全同）世界一步拍平精确零；                              *)
 (*   乙·非退化侧（World3，核行互异 3/4·1/4·1/4·3/4）：TV(n) == (1/2)^n·TV₀ 精确幂律； *)
 (*   乙'·预算下界：budget < (1/2)^n·TV₀ ⟹ budget < TV(n)（窗的真实下沿）；           *)
 (*   丙·温度-模量：∀参数，anchor(T) := V·inv(δ*(T)·b) 随 T→0 发散（∀M ∃T₀>0）。      *)
 (*   对照正件 mpk_world3_tv1_half：同一「一步后 TV」语句形，非退化世界精确等于 1/2，   *)
 (*   退化实例精确等于零——跨世界对照的值级钉子。                                     *)
 (*                                                              *)
-(* 【供体使用账（只读，零改）】                                                    *)
+(* 【供体消费账（只读，零改）】                                                    *)
 (*   UpAblMetaWorld3（N4 席，四关绿零公理）：mtw_tv_exact_iter / mtw_no_mixing_below *)
 (*     / mtw_tv_lower / mtw_step / mtw_titer / mtw_tv / mtw_mu0 / mtw_nu0 / mtw_half。 *)
-(*   UpAblMetaWindow（认证面）：mwi_collapse_row_equal /                  *)
+(*   UpAblMetaWindow（M4 席，R103 认证面）：mwi_collapse_row_equal /                  *)
 (*     mwi_degenerate_collapse_uniform / mtw_window_two_sided。                      *)
 (*   UpAblMetaTemp（M2R 席，四关绿定格）：mtp_anchor_divergence。                     *)
-(*   退化侧载体决断：不使用 cf2 链（UpReqConcFin2/UpAblMetaLow，闭包带经典公理面），    *)
-(*   沿 MetaWindow 头注既有设计以泛型退化情形（TV=0）+均匀核实例承载「退化世界一步展开」，        *)
-(*   保封装件 coqchk 闭包与三供体同级纯净。                                          *)
+(*   退化侧载体决断：不消费 cf2 链（UpReqConcFin2/UpAblMetaLow，闭包带经典公理面），    *)
+(*   沿 MetaWindow 头注既有设计以泛型塌缩腿+均匀核实例承载「退化世界一步拍平」，        *)
+(*   保打包件 coqchk 闭包与三供体同级纯净。                                          *)
 (*                                                              *)
 (* 【红线自审】零承认件；零新假设（前提位全显式定理参数）；语句面全 Set 值               *)
 (*   （And/Not 为 S01 基座 Set 层别名，sigT 见证形，req/lt/le 接口字段）；              *)
-(*   新证明仅装配级实例化（split / exact 供体真名 / 基座既有引理一跳链）；               *)
+(*   新证明仅装配级接线（split / exact 供体真名 / 基座既有引理一跳链）；               *)
 (*   全件 Defined 收束可提取。                                                      *)
 (* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，-Q . ""，cpu_guard 包裹。             *)
 (* ============================================================ *)
@@ -43,7 +43,7 @@ Require Import UpAblMetaTemp.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* §1 再出口别名（Definition 透明别名，供体真名直接匹配，零语句漂移）                     *)
+(* §1 再出口别名（Definition 透明别名，供体真名直配，零语句漂移）                     *)
 (* ============================================================ *)
 
 Definition mpk_window_two_sided := mtw_window_two_sided.
@@ -60,13 +60,13 @@ Definition mpk_temp_divergence := mtp_anchor_divergence.
 
 Theorem mpk_cross_world_triptych :
   And
-    (* 甲·退化侧（泛型）：凡核行全同的行随机核 ⟹ 一步展开 TV == 0 *)
+    (* 甲·退化侧（泛型）：凡核行全同的行随机核 ⟹ 一步拍平 TV == 0 *)
     (forall K : bool -> bool -> Real,
        (forall s : bool, req (plus (K s true) (K s false)) one) ->
        (forall s s' : bool, req (K s s') (K true s')) ->
        req (mtw_tv (mwi_step K mtw_mu0) (mwi_step K mtw_nu0)) zero)
     (And
-       (* 甲'·退化实例：均匀核（行全同）一步展开精确零 *)
+       (* 甲'·退化实例：均匀核（行全同）一步拍平精确零 *)
        (req (mtw_tv (mwi_step mwi_Kunif mtw_mu0) (mwi_step mwi_Kunif mtw_nu0)) zero)
        (And
           (* 乙·非退化侧：TV(n) == (1/2)^n·TV₀ 精确幂律 *)
@@ -102,8 +102,8 @@ Defined.
 (* ============================================================ *)
 (* §3 对照正件：非退化世界一步后 TV 精确等于 1/2                                      *)
 (*   与 §2 甲'（退化实例一步后 TV 精确等于零）并读：同形语句、异世界数据、               *)
-(*   半 vs 零——「世界数据非退化」是混合窗下沿语义的关键引理。                            *)
-(*   实例化链（全基座/供体既有引理，零新数学）：                                        *)
+(*   半 vs 零——「世界数据非退化」是混合窗下沿语义的承重墙。                            *)
+(*   接线链（全基座/供体既有引理，零新数学）：                                        *)
 (*   mtw_tv_step_exact 0（TV(1) == (1/2)·TV(0)）                                    *)
 (*   + mtw_tv0_one（TV(0) == one）经 req_mult_compat 升乘积                          *)
 (*   + mult_one（(1/2)·one == 1/2）。                                              *)
@@ -131,7 +131,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* §4 四关自检：封装件全件 + 三供体代表定理 Print Assumptions                          *)
+(* §4 四关自检：打包件全件 + 三供体代表定理 Print Assumptions                          *)
 (* ============================================================ *)
 
 Print Assumptions mpk_window_two_sided.

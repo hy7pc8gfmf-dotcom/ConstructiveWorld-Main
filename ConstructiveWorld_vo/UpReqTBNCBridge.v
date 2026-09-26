@@ -1,11 +1,32 @@
-(* ==========================================================================)
-   UpReqTBNCBridge.v — 二重卷积和的对角折分解
-   使命: tbg_ncvsum_bsum/tbg_row_dock/tbg_conv_bsum（ncv 面 == bsum 面桥）、tbg_fold_diagf、tbg_corner 定义与 tbg_diag_face/tbg_diag_seq（卷和对 == 对角折和 + 角块）。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、UpReqBanachProd、UpReqBanachDouble等；Stdlib QArith、Lia、Extraction
-   对标: 二重 Cauchy 卷积和的三角/对角折求和分解（级数乘积换序面）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpReqTBNCBridge.v —— TBNC 显式假设的对角逐项桥                       *)
+(*                                                                     *)
+(* 目的：柯西方块（矩形部分和 ncv_conv）↔ 三角/对角分块                  *)
+(*   （Σ_{i+j≤n}，bd2_diagf）的代数面重排桥，TBNC 显式假设② 依存形。     *)
+(*   双侧件：侧一（收敛面）ncv_conv_diag_cauchy @ UpReqNormConv.v:862；  *)
+(*   侧二（逐项面）bd2_diagf @ UpReqBanachDouble.v:63。                  *)
+(*   语句面适配披露：字面形 bd2_diagf B a b 0 n == ncv_conv B a b n n    *)
+(*   在实形下不真（ncv_conv 0 n = bzero，n=0 处即败，且三角形            *)
+(*   Σ_{i+j≤n} ≠ 方块 Σ_{i,j≤n}），按「以双侧件实形适配」取              *)
+(*   S n × S n 方块 == bd2_diagf + 显式角余 tbg_corner（bxcd_U 一般      *)
+(*   族化）；显式假设② 所需「bcauchy 出口 + 代数面重排对接」由此式       *)
+(*   承接。                                                             *)
+(* 主件：tbg_diag_face（+ 推论 tbg_diag_seq 对角命名形）；保底半边       *)
+(*   tbg_ncvsum_bsum / tbg_row_dock / tbg_conv_bsum（ncv 侧）与          *)
+(*   tbg_fold_diagf（bd2 侧）各自独立成件。                              *)
+(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、    *)
+(*   UpReqBanachProd、UpReqBanachDouble、UpReqNormConv、                 *)
+(*   UpReqBanachCauchyD；Stdlib QArith.QArith、Arith.Arith、Lia。        *)
+(*   依存件（全部只 Require，禁改既有件一行）：bxcd_bsum_pad_split      *)
+(*   （补零和拆分）、bd2_tfrom_rect / bd2_tri_eq_diag（三角↔对角↔       *)
+(*   矩形行化现成件）、bsum_ext / bsum_plus / bplus_wd_l（和式引擎）。   *)
+(* 对标：mathlib 二重级数三角求和与方块部分和的换算引理族。              *)
+(* 构造性注记：语句面全 Set 层（bae 承载等词，零 LPO 面）；零承认、      *)
+(*   公理面为空；证内无经典逻辑；工程注：bae/wd 系 class 字段投影——      *)
+(*   apply 一律全参显式（bae_trans 首参=目标左端、次参=中件）。          *)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" UpReqTBNCBridge.v，            *)
+(*   cpu_guard 包装；提取检验 Extraction 产物 Obj.magic=0。              *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

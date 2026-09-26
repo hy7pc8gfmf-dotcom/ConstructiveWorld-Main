@@ -1,4 +1,3 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S03_QExp.v                                                  *)
 (*                                                             *)
@@ -11,8 +10,10 @@
 (*       L6983-L13800，去头正文与原文区间逐字节同源。            *)
 (* ============================================================ *)
 (* ============================================================ *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
 (* 替换定理清单：Q2_nonneg / Qhalf_nonneg（共 2 条，语句不变）；   *)
 (*   其余 reflexive 族玩具（q_pow_succ 等）经复核为定义性等式，    *)
+(*   非平凡化无语义增益，如实遗留不硬编（详见台账 T242）。         *)
 (* 非平凡性说明：仅替换上列 2 条证明体；声明面、其余定理、原头注   *)
 (*   一律原样保留。替换口径：Qle 展开 = Z 层交叉积，字面归约后      *)
 (*   线性判定闭合——消除原 Qlt_le_weak 双跳转发，实质非平凡。       *)
@@ -4921,7 +4922,7 @@ Proof.
 Qed.
 
 End QExpEOSplit.
-(* ============ 配对论证（备份 92 并入，来自 _dbg_kdr.v 检验全部通过） ============
+(* ============ 配对论证（备份 92 并入，来自 _dbg_kdr.v 检验全绿） ============
    row_pair_main：行差分闭合（分层组装：a^{4m+6} 抵消 + vander_4m2/4m4 + 低层 refl）
    ksum_diff_row：corr 差分 == RHS（corr_diff_expand + 换元 + row_pair_main）——配对论证完结 *)
 Lemma esq_row_nat_eq2 : forall (N i1 i2 : nat) (a : Q),
@@ -5875,7 +5876,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ esq_eq_corr 论证（备份 93 并入，检验 _dbg_kdr.v 全部通过） ============
+(* ============ esq_eq_corr 论证（备份 93 并入，检验 _dbg_kdr.v 全绿） ============
    corr_diff_eq_sq_diff：corr 差分 == E/O 平方差分差（corr_succ_decomp → ksum_diff_row → ksum_diff_row_rhs）
    esq_eq_corr：E_m²−O_m² == 1 + corr m（主恒等式，base 0/1 + 归纳 step）——注释目标 L10664 达成 *)
 Lemma corr_diff_eq_sq_diff : forall (a : Q) (m : nat), (1 <= m)%nat ->
@@ -5928,7 +5929,7 @@ Proof.
       unfold Qminus. ring.
 Qed.
 
-(* ============ exp_even_neg_nonneg 论证（备份 94 并入，检验 _dbg_kdr.v 全部通过） ============
+(* ============ exp_even_neg_nonneg 论证（备份 94 并入，检验 _dbg_kdr.v 全绿） ============
    q_div_nonneg / e_sum_ge_one / o_sum_nonneg（辅助：E≥1、O≥0）
    exp_even_mul_eq：S_{2m}(−a)·S_{2m}(a) == 1 + corr m a（(E−O)(E+O) = E²−O²）
    exp_even_neg_nonneg：0 ≤ a ⟹ 0 ≤ exp_partial (2·m) (−a)（corr_nonneg + S(a)>0 + field 恒等） *)
@@ -6020,7 +6021,7 @@ Proof.
   setoid_rewrite <- Hfield in Hpos.
   apply (Qlt_le_weak 0 (exp_partial (2 * m) (- a))). exact Hpos.
 Qed.
-(* ============ exp_partial_tail_pos 论证（备份 95 并入，检验 _dbg_kdr.v 全部通过） ============
+(* ============ exp_partial_tail_pos 论证（备份 95 并入，检验 _dbg_kdr.v 全绿） ============
    exp_even_neg_pos：0 ≤ a ⟹ 0 < exp_partial (2·m) (−a)（严格正版，S(−a)·S(a) ≥ 1 + S(a) > 0）
    exp_partial_tail_pos：0 ≤ a ⟹ 0 < exp_partial (2m+2) (−a)（尾截断正，exp_even_neg_pos 的 S m 版）
    下轮：cauchy_real_exp_pos（real_lt zero (cauchy_real_exp x)，exp_neg_pos 字段实例化材料） *)
@@ -6856,5 +6857,6 @@ Proof.
       exfalso. lia.
 Qed.
 
+(* ToyR 替换席：替换定理假设面查证（预期：全局语境下封闭） *)
 Print Assumptions Q2_nonneg.
 Print Assumptions Qhalf_nonneg.

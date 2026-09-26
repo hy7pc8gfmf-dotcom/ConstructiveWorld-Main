@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 战役 · 包I · 切片六（T248 台账席 · 20260921）· 本件为替换稿        *)
 (*   正文系 Main/Live 基准件全文，仅换下列证明体；定理名/语句面/Require 面/  *)
 (*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
 (*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
@@ -36,10 +37,10 @@
 (* 备注： 奖励、温度、逐点正性以 Variable 前提给出；对数比差为显式构造。 *)
 (* ============================================================ *)
 
-(*
-   源文件：签名迁移规划书.md（组 3 余量清单）
+(* UpReqAlignRestA.v — 签名迁移批 3 余量 A 席：DPO/Preference/KL 投影簇余件 req 化
+   母本：签名迁移规划书-20260908.md（批 3 余量清单）
    上游：UpReqAlgebra.v（批 1 地基，直接消费）+ UpReqAlign.v（批 3 主体，消费其
-     pi_star_req/req_pi_star_pos/sigmoid_req 系成品——KLProjection 16 对位批 3 件已建，
+     pi_star_req/req_pi_star_pos/sigmoid_req 系成品——KLProjection 16 对位批 3 席已建，
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
    余件清单（grep 实证：UpReqAlign/2/3、UpReqAlgebra、UpReqDist、UpSigMigrate2
@@ -50,7 +51,7 @@
        ralt_lt_plus_compat_le_lt（B 桥导出，批 1 同款复刻）+ B 桥假设位 2
        （ralt_lt_plus_compat_lt_le/ralt_log_lt_mono，Id L21020/L21024 同位——
        UpReqAlgebra ReqStrictOrderBridge 的 Hypothesis 节闭后非常量不可消费，
-       各件自持假设位=既定纪律）；账面冻结 7（Q 层 5 件 log_seq_pair_bound/_r/
+       各席自持假设位=既定纪律）；账面冻结 7（Q 层 5 件 log_seq_pair_bound/_r/
        q_three_sum/q_lt_half_half/q_abs_diff_gt_neg 双层并行 + Real 锚点深链 2 件
        log_mid_sign/log_mid_diff 引用 log_seq/log_lower/log_upper 具体机，
        接口不可表达）；账面同位 1（real_mult_lt_compat 本体 = 接口字段
@@ -70,7 +71,7 @@
    [区5 KL 投影区合并块余件 L95420-95508：A2 Q↔Real 桥 6 件] req 系签名落位
        （instance RealEnhancedReal 的 req/lt/le 投影 = real_eq/real_lt/real_le，
        与升级包 1-3（seq_eqb/in_seq/count_true/sf_*）nat/list/Q 层冻结；
-       KLProjection Section 16 对位批 3 件已建（req_Z_aud_le_one 等，不重复）。
+       KLProjection Section 16 对位批 3 席已建（req_Z_aud_le_one 等，不重复）。
    ----------------------------------------------------------------
    诚实签名变化登记表（规划书 §7.4）：
      的 req 版携带分母正性显式位（区3 定义前置 denom 引理）。
@@ -110,6 +111,7 @@ Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable Z_align_pos : lt zero (Z_align_req S sumf reward beta beta_pos pi_ref).
 
+(* ---- B 类桥假设位（Id 同位；各席自持纪律） ---- *)
 Hypothesis ralt_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Hypothesis ralt_log_lt_mono :

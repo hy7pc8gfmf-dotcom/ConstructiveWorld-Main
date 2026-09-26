@@ -1,4 +1,4 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpStopTime.v *)
 (* *)
 (* 目的： 可证书化停时原语与 GuardedChain 守恒击穿链。 *)
@@ -10,11 +10,11 @@
 (* ============================================================ *)
 (* UpStopTime.v —— 可证书化停时原语 + GuardedChain 守恒击穿链        *)
 (*                                                              *)
-(* 理论来源：成果存档/圆桌会议/ROUNDTABLE-圆桌实验-.md    *)
-(*   头部候选「可证书化停时原语」—— 4 BDA 击穿反解 ×  6 SPC      *)
+(* 理论来源：成果存档/圆桌会议/ROUNDTABLE-六席圆桌实验-20260907.md    *)
+(*   头部候选「可证书化停时原语」——席 4 BDA 击穿反解 × 席 6 SPC      *)
 
 (*   方法论 §5：GuardedChain = 生产性非良基（CoInductive 每步        *)
-(*   携带预算见证）， 2 终稿的阈值策略双目标占优定理离散形态。       *)
+(*   携带预算见证），席 2 终稿的阈值策略双目标占优定理离散形态。       *)
 (*                                                              *)
 (* 五件结果：                                                    *)
 (*   件 1  GChain/grun      GuardedChain 守恒击穿链                 *)
@@ -46,7 +46,7 @@ Require Import UpConstitution.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §0 本地桥（nat 序 / bool 反映 / Q 换形；解法口径）          *)
+(* §0 本地桥（nat 序 / bool 反映 / Q 换形；宪法席解法口径）          *)
 (* ============================================================ *)
 
 (* NatLt 双向桥（NatLt = Id (Nat.ltb n m) true；       *)
@@ -94,7 +94,7 @@ apply (uc_qeq_lt_l y x z (Qeq_sym x y (sf_id_qeq x y Hq))).
 apply QltT_to_Qlt. exact Hlt.
 Qed.
 
-(* QltT ⟹ Qle（Prop 序前提位；Qlt_le_weak 已验证口径） *)
+(* QltT ⟹ Qle（Prop 序前提位；Qlt_le_weak 宪法席已验证口径） *)
 Lemma st_qle_of_ltT : forall x y : Q, QltT x y -> Qle x y.
 Proof. intros x y H. apply Qlt_le_weak. apply QltT_to_Qlt. exact H. Qed.
 
@@ -279,7 +279,7 @@ Qed.
 
 (* 触底检测单调：n 步内触底 ⟹ 后继步内仍触底 *)
 (*   修复记录：不动点观察 gbottom_at (S n) (gstep b ..) 里的 Nat.leb b 0   *)
-(*   是停滞项——直接 destruct b，令 leb (S b') 0 ≡ false 定义性归约。     *)
+(*   是卡死项——直接 destruct b，令 leb (S b') 0 ≡ false 定义性归约。     *)
 Lemma gbottom_mono : forall (n : nat) (ch : GChain),
   Id (gbottom_at n ch) true -> Id (gbottom_at (Datatypes.S n) ch) true.
 Proof.
@@ -304,7 +304,7 @@ Qed.
 
 (* 触底 ⟹ 后继深度预算清零（清零制口径；需全程递减前提
    排除「预算 0 仍续步」的空洞链——该前提即 GuardedChain 纪律本体） *)
-(*   修复记录：原稿 destruct (Nat.leb b 0) eqn: 留停滞 if，且 Hdec 多传   *)
+(*   修复记录：原稿 destruct (Nat.leb b 0) eqn: 留卡死 if，且 Hdec 多传   *)
 (*   实参；改为 destruct b + Hdec 单实参 + Id_eq 换形 nat 序后 lia。     *)
 Lemma gbottom_true_spend : forall (n : nat) (ch : GChain),
   (forall m : nat, NatLt (gbudget_at (Datatypes.S m) ch) (gbudget_at m ch)) ->
@@ -390,7 +390,7 @@ Lemma test_grun_running3 : Id (gbottom_at 3 (grun (1#2) 4 (8#10))) false.
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §2 件 2：生产性⟹健全性（使用 UpConstitution.q_decay_breaks）      *)
+(* §2 件 2：生产性⟹健全性（消费 UpConstitution.q_decay_breaks）      *)
 (*   生产性：CoFixpoint 生成器每步严格递减预算 ⟹ b 步内必触底；        *)
 (*   健全性：以 q_decay_breaks 解出的击穿预算 N 作链预算，             *)
 (*   链在深度 N 触底且终值 = c0·(1−κ)^N < eps——停时携带证书。         *)
@@ -472,7 +472,7 @@ Definition st_miss (P : nat -> bool) (U : nat) : Set :=
 Definition st_res (P : nat -> bool) (U : nat) : Set :=
   Or (st_hit P U) (st_miss P U).
 
-(* 搜索步（须 Defined：stsearch 是可执行判定器，提取检验要用其本体） *)
+(* 搜索步（须 Defined：stsearch 是可执行判定器，提取探针要用其本体） *)
 Lemma stsearch_step_0 (P : nat -> bool) : st_res P 0%nat.
 Proof.
 destruct (P 0%nat) eqn:E0.
@@ -833,7 +833,7 @@ pose proof (unguarded_budget_const c n) as H1.
 pose proof (id_trans (id_sym H0) H1) as Hcontra. inversion Hcontra.
 Qed.
 
-(* 平凡性装配（三联观察） *)
+(* 平凡性总装（三联观察） *)
 Theorem unguarded_trivial : forall (c : Q) (n : nat),
   And (Id (gbudget_at n (uloop c)) 1%nat)
       (And (Id (gbottom_at n (uloop c)) false)
@@ -879,7 +879,7 @@ Lemma test_waste_gap : Id (st_waste stpred_demo 6) 2%nat.
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §7 提取检验（G3：Obj.magic = 0）                                  *)
+(* §7 提取探针（G3：Obj.magic = 0）                                  *)
 (*   提取停时判定器全链：谓词 / 搜索 / 报告 / 无效服务计数 / 幂核。      *)
 (* ============================================================ *)
 

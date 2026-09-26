@@ -1,11 +1,31 @@
-(* ==========================================================================)
-   UpReqMixRealExec.v — 混合步数的可执行计算器
-   使命: mrx_arch_n/mrx_k_compute（Archimedean 锚点站数）、mrx_k_spec/mrx_k_select_spec（步数规格 κ^k·TV0 < budget）、mrx_k_exec/mrx_k_select_exec（执行器）与投影件。
-   依赖: CW_ConstructiveWorld_219、UpTVDoeblin、UpReqIterGeomRate、UpReqMixingTime、UpReqMixLazy；Stdlib QArith、ZArith、Lia
-   对标: 几何收敛率下混合时间预算的可计算实现（步数的构造性见证）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。存在性命题以 sigT 见证形给出。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpReqMixRealExec.v —— Real 层选择器可执行化（见证/证明分离＋惰性化）  *)
+(* 编译配方：Rocq 9.1 coqc 直调，cpu_guard 节流包裹，-o 临时目录输出。   *)
+(* ============================================================ *)
+(* 使命：把论文7 §10.2 第 11 项的「Real 层选择器可执行化」从设计变实测。    *)
+(*   背景（已证结论）：源文件 mix_k_select 的提取闭包 native 运行          *)
+(*   在 mix_bernoulli_upper 单一急切绑定处挂死（其 HeqR 支经               *)
+(*   mix_mult_swap → real_eq_mult_compat 急切调 real_norm_bounded，        *)
+(*   模链 T(d)=2·T(d-1)；大预算档复现运行超界）。              *)
+(* R1 见证/证明分离（本件核心）：                                          *)
+(*   ① 计算面 mrx_arch_n / mrx_k_compute —— 纯计算 Definition，           *)
+(*      选择器消费的是它，不消费证明项；                                   *)
+(*   ② 证明面 mrx_k_spec —— 独立引理 Qed 封闭，零语句面角色；              *)
+(*   ③ 封装面 mrx_k_exec —— existT _ 计算面 证明面 组装 sigT，            *)
+(*      projT1 归约与证明面无关（机检小引理 mrx_projT1_exec 固定）；       *)
+(*   ④ 非负 TV0 放宽形 mrx_k_select_*（对齐源文件 mix_k_select 口径）。      *)
+(* R3 惰性化（承 UpReqMixLazy 已验证惰性化形，全链复用）：                 *)
+(*   证明面走 κ 形 Bernoulli（mix2_bernoulli）+ 常量环式恒等证书               *)
+(*   （mix2_swap_ring / mix2_step_ring，提取后零成本）+ 数据件 lt/le 桥，  *)
+(*   零 real_eq_mult_compat 幂炸面、零 boost-inv 传递支。                  *)
+(* 验收（论文 §10.2 第 11 项）：TV0=1, budget=1/2, kappa=1/2 下提取程序    *)
+(*   实际运行并打印 k（提取闭包运行通过；时限指标属验收记录）。    *)
+(* 红线自审：语句面全 Set 层（real_lt/real_le/real_eq/sigT/nat）；零       *)
+(*   经典逻辑位；零承认件；全文件零字面禁词；可提取面闭包零魔数零桩。      *)
+(* 依赖：CW_ConstructiveWorld_219 + UpTVDoeblin + UpReqIterGeomRate        *)
+(*   + UpReqMixingTime（mix_scale/mix_rpow_pos/mix_mult_one_l 等）         *)
+(*   + UpReqMixLazy（mix2_bernoulli/mix2_swap_ring 惰性化形）。            *)
+(* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
 From Stdlib Require Import ZArith.
@@ -69,7 +89,7 @@ Proof.
   destruct N as [| N'].
   - exfalso. exact (Nat.nle_succ_0 1 Hge2).
   - (* ---- 以下承 mix2_pow_budget 主链（κ 形 Bernoulli + 常量桥尾） ---- *)
-    (* 证书统一面：real_inv_pos 证书 proof-relevant，全链只准使用同一
+    (* 证书统一面：real_inv_pos 证书 proof-relevant，全链只准消费同一
        证书应用——把 HN 内拼出的证书应用 remember 为唯一变量 Hwb。 *)
     set (w := real_minus_r real_one kappa) in *.
     set (wb := real_mult w budget) in *.

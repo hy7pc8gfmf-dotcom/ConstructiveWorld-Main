@@ -1,3 +1,4 @@
+(* czd12_g3.v — G3 提取探针（首行强制 Require Extraction，T40 四关口径） *)
 From Stdlib Require Import Extraction.
 Require Import DecBridge6.
 Require Import AbsSqClose.

@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：req_r_pow_nonneg／req_minus_pos／req_one_minus_kappa_pos    *)
 (* ／req_abs_minus_zero／req_gradient_zero_neg_entropy_truth（共 5 条）      *)
 (* 非平凡性口径：幂正体归纳内联与序界直造，消除单跳转发；无一行拆分式假非    *)
@@ -22,6 +22,9 @@
 (* ============================================================ *)
 
 (* UpReqCauchy.v — 签名迁移批 5 · 波 2：Section ConvergenceCauchy 机械平移（43 件 (b)）
+   权威工单：attn\批5基建层处置清单-20260909.md（§0 判据 + §2 逐件表 + §9.2 波2）
+   母本：CW_ConstructiveWorld_219.v Section ConvergenceCauchy（L14016-15235）
+   上游：基座 + UpReqAlgebra + UpReqSLM（波0 共享桥，波1 席已结果稳定——
    §0.5 ReqNonnegPlain 双参数 Require 换轨依存，节参挂实例、语句零变化；
    纯 term-mode（req_trans 链 + compat 字段桥），零 setoid 改写器依赖；
    Set 层语句（req/lt/le 全 Set 值，零 Prop 泄露；And/Not/Or/ExistsT 用 L66-73 Set 版）。
@@ -37,6 +40,7 @@
       - abs_nonneg_plain : forall a, le zero (abs a)
         （setoid abs_nonneg eps 形 @L40553；依存件：req_iterate_step_abs_diff_iter/
         req_iterate_metric_tail_bound/req_grad_bound_aux/req_grad_squeeze_zero——
+        波2 原节内自持 Variable 副本，波1 UpReqSLM ReqNonnegPlain 落地后换轨
         Require 依存其 Class 字段（节参挂实例），语句零变化）
       - metric_pos_plain : forall a b, le zero (metric a b)
         （setoid metric_pos eps 形 @L40585；依存件：req_grad_squeeze_zero 完成位——同上换轨）
@@ -51,9 +55,9 @@
       跨接口 Require 复用 原件（裸名），零重证——规划书 §3.4 路线；
       req_iterate_cauchy 结论位改 NatLe 形（cauchy_complete 字段 L40591 对接形），
       Id 的 (N <= m)%nat 前提由 natle_to_le 复用件在证内桥接。
-   5. §7.7 ConvergenceTheorem 3 助件节内自持（ 对位件，依存前置）：
+   5. §7.7 ConvergenceTheorem 3 助件节内自持（波3 对位件，依存前置）：
       req_iterate_step_diff / req_iterate_step_abs_diff / req_gradient_abs_mono
-      （Id @L13880/L13929/L13982）——仅依存本节 Variables， 可凭本文件已证明对位。
+      （Id @L13880/L13929/L13982）——仅依存本节 Variables，波3 席可凭本文件已证明对位。
    6. minus 非接口字段：全节语句以 req_minus（UpReqAlgebra）书写，证内 unfold；
       Id 接口字段 minus_plus_cancel/minus_plus_cancel_r/le_plus_nonneg_r/le_mult_compat_r/
       half_pos/half_twice/abs_minus_sym 依存位 → UpReqAlgebra req_minus_plus_cancel/
@@ -136,7 +140,8 @@ Variable lt_plus_compat_le_lt : forall a b c d : R, le a b -> lt c d -> lt (plus
 (* ============ A+. 判据 0.2-5 假设位（reqNonnegPlain 双参数 Require 换轨 + triangle 参数位自持，登记表 2） ============ *)
 (* Id 证明依存 plain 形 abs_nonneg/metric_pos/metric_triangle，setoid 接口对应字段
    已 Bishop eps 化（L40553/L40584/L40585），plain 形不可由 eps 形导出（序无消去）。
-   （ 原节内自持 Variable 副本已删）→ 节参挂 ReqNonnegPlain 实例依存其字段：
+   abs_nonneg_plain/metric_pos_plain：与波1 UpReqSLM Class ReqNonnegPlain 字段逐字对齐
+   （波2 原节内自持 Variable 副本已删）→ 节参挂 ReqNonnegPlain 实例依存其字段：
    投影 R/RIS/实例三位全隐式，裸名依存走类型类推断（本地实例 RN），证明体逐位零改动，
    实例位 discharged 为隐式参数（Print Assumptions 仍 Closed，零新增公理面）。
    Variable 先例同构）。 *)
@@ -153,7 +158,7 @@ Proof.
   - exact Ha.
 Qed.
 
-(* ============ B. §7.7 ConvergenceTheorem 3 助件（节内自持， 对位） ============ *)
+(* ============ B. §7.7 ConvergenceTheorem 3 助件（节内自持，波3 对位） ============ *)
 
 (* Id iterate_step_diff L13880：x_{n+1} − x_n == η·g(x_n) *)
 Lemma req_iterate_step_diff : forall (E_A : R) (n : nat),

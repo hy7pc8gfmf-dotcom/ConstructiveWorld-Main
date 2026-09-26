@@ -1,11 +1,4 @@
-(* ==========================================================================)
-   CW_ConstructiveWorld_219.v — 世界聚合出口（单一公共入口）
-   使命: 以 Require Export 聚合 S01–S14 十四段基座件，构成全树统一入口名 CW_ConstructiveWorld_219；本件无自有语句。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、S05_AlignmentGRPO、S06_DiffSamplingGibbs等
-   对标: 数学库的聚合出口层惯例（分组入口模块）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* CW_ConstructiveWorld_219 — 薄壳组合文件：Require Export 全部 15 模块（Export 传递名字空间给导入者）*)
 Require Export S01_BaseRing.
 Require Export S02_CauchyComplete.
 Require Export S03_QExp.

@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：reqd_le_of_req／reqd_minus_compat／reqd_opp_zero／          *)
 (* req_boltzmann_dist_pos（共 4 条）                                         *)
 (* 非平凡性口径：显式直造链就地重演，消除单跳转发；无一行拆分式假非平凡。    *)
@@ -12,6 +12,7 @@
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
+   T246 包G 台账席（tier1 次批）同名替换注记 —— UpReqDist.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
    仅四条玩具证明体替换为定义层显式重演，语句面零改动：
    ① reqd_le_of_req：lt_le_iff 桥的右支改显式构造子见证（Set 层和型
@@ -30,6 +31,7 @@
      irreversible，转发目标为节假设桥，无定义面可展）、同文件深链转发
      三类（req_elbo_lower_bound/req_kl 同族见上/reqd_scale_dual_sq_k）、
      轻量维持一类（req_free_energy_entropy 已为定义层双层 compat 链）——
+     均登记于 T246 台账，不动原文。
    ============================================================ *)
 
 (* ============================================================ *)
@@ -42,6 +44,7 @@
 (* ============================================================ *)
 
 (* UpReqDist.v — 签名迁移批 2：分布 / 自由能 / GRPO 簇的 req 系重述与实例化
+   母本：签名迁移规划书-20260908.md（批 2 清单，§5）；
    模板：UpSigMigrate.v（13 Qed 试点件）+ UpReqAlgebra.v（批 1 地基，直接依存）。
    纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）；
    纯 term-mode（req_trans 链 + compat 桥，零 Morphisms 依赖）；
@@ -563,7 +566,7 @@ Proof.
     + apply mult_zero.
 Qed.
 
-(* 组二阶矩 / 中心化二阶矩（/24069 同形） *)
+(* 组二阶矩 / 中心化二阶矩（Id @24065/24069 同形） *)
 Definition req_group_raw_second_moment : R :=
   reqd_list_sum_g (fun i => mult (reward_group i) (reward_group i)) group_enum.
 Definition req_group_centered_second_moment : R :=
@@ -1060,7 +1063,7 @@ Variable D_pos : lt zero D.
 Variable Z : R.
 Hypothesis partition_condition :
   req Z (sumf (fun s => exp_neg (mult (inv_pos D D_pos) (base_loss s)))).
-(* 前置引理（原 Variable 换同名 Lemma， 基座消融波 T2 终判 B43）：由 fsum_pos+逐点 exp_neg_pos+lt_id_r 运输 partition_condition 导出；零承认件（T4R 修刀：lt_id_l 参序反置红→lt_id_r+req_sym 正向运输） *)
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B43）：由 fsum_pos+逐点 exp_neg_pos+lt_id_r 运输 partition_condition 导出；零承认件（T4R 修刀：lt_id_l 参序反置红→lt_id_r+req_sym 正向运输） *)
 Lemma Z_pos : lt zero Z.
 Proof.
   exact (lt_id_r zero
@@ -2947,7 +2950,7 @@ End ReqTemp.
 
 (* ============================================================ *)
 (* 能量-交叉熵恒等式（Id energy_cross_entropy @L18162；    *)
-(*   FEM 清单件，  夜续建）                       *)
+(*   FEM 清单件，接管席 2026-09-08 夜续建）                       *)
 
 (*   逐点 req_energy_in_log_boltzmann 换形 + fsum 组装；          *)
 
@@ -3126,7 +3129,7 @@ End ReqFEP.
 (*   平方根见证）——各自独立 Section，Require 锚 = 基座 + 批 1   *)
 (* ============================================================ *)
 
-(* ---- BoltzmannSteadyState（；马尔可夫稳态） ---- *)
+(* ---- BoltzmannSteadyState（Id @15692；马尔可夫稳态） ---- *)
 Section ReqSteadyState.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
@@ -3176,7 +3179,7 @@ Proof.
 Qed.
 End ReqSteadyState.
 
-(* ---- ProbDistProperties（-24935） ---- *)
+(* ---- ProbDistProperties（Id @24896-24935） ---- *)
 Section ReqProbDist.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
@@ -3246,14 +3249,14 @@ Proof.
 Qed.
 End ReqProbDist.
 
-(* ---- SecondLaw（；签名变化：Not (Id ..) → Not (req ..)） ---- *)
+(* ---- SecondLaw（Id @27796；签名变化：Not (Id ..) → Not (req ..)） ---- *)
 Section ReqSecondLaw.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable entropy : R -> R.
 Variable dynamics : R -> R.
 Definition reqd_entropy_increases : Set :=
   forall x, le (entropy x) (entropy (dynamics x)).
-(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式，req 同构）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，核），接口层原样保留留记。 *)
+(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式，req 镜像）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，甄别席核），接口层原样保留记账。 *)
 Variable strict_entropy_increase :
   forall x, Not (req (dynamics x) x) -> lt (entropy x) (entropy (dynamics x)).
 Theorem req_second_law_irreversible :
@@ -3263,7 +3266,7 @@ Proof.
 Qed.
 End ReqSecondLaw.
 
-(* ---- U2FixedPoint 辅件（/23363；主体 7 件挂批 3 RLHF req 机器） ---- *)
+(* ---- U2FixedPoint 辅件（Id @23337/23363；主体 7 件挂批 3 RLHF req 机器） ---- *)
 Section ReqU2Aux.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 (* 辅助 A：两非负项之和为零 ⟹ 每项为零 *)
@@ -3303,7 +3306,7 @@ Proof.
 Qed.
 End ReqU2Aux.
 
-(* ---- SqrtWitnessGeneral（-96600；req 版自建 nat 嵌入） ---- *)
+(* ---- SqrtWitnessGeneral（Id @96548-96600；req 版自建 nat 嵌入） ---- *)
 Section ReqSqrtWitness.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Fixpoint reqd_nat_to_R (n : nat) : R :=
@@ -3370,12 +3373,12 @@ End ReqSqrtWitness.
 
 
 (* ============================================================ *)
-(* Section ReqAlgBridge2：批 2 余件续建（  夜）   *)
+(* Section ReqAlgBridge2：批 2 余件续建（接管席 2026-09-08 夜）   *)
 (*   (a) FEM 节内通用代数引理 4 件的 req 版（le 消去族/乘减右分配；*)
 (*       Id 原件 @L17126/L17146/L17162/L17178——批 1 地基    *)
 (*       无对应件（仅有 _l 版与正向 le_minus_nonneg），真证补齐）  *)
 (*   (b) softmax 缩放-温度对偶 req 形（SqrtWitnessGeneral 余 2    *)
-(*       件定位：req softmax 族定义 + 对偶 + 两实例；             *)
+(*       件落位：req softmax 族定义 + 对偶 + 两实例；             *)
 (*       Id 原件 scale_temp_duality@28590 scale_dual_sq_k@96603  *)
 (*       scale_dual_nat_sq_k@96623）                             *)
 (* ============================================================ *)
@@ -3555,7 +3558,7 @@ End ReqAlgBridge2.
 
 
 (* ============================================================ *)
-(* 批 2 清单逐条已证明（续建  晚； 52Qed） *)
+(* 批 2 清单逐条已证明（接管席续建 2026-09-08 晚；接续前任席 52Qed） *)
 (* -------------------------------------------------------------- *)
 (* 【SumLayer+公共机器】reqd_le_of_req reqd_minus_compat reqd_inv_pos_cancel *)
 (*   reqd_log_cancel reqd_le_mult_nonneg_t12 reqd_lt_mult_pos_cancel       *)
@@ -3596,38 +3599,38 @@ End ReqAlgBridge2.
 (* 【SqrtWitness 5/7】reqd_nat_to_R_plus_hom/mult_hom/pos                  *)
 (*   reqd_sqrt_witness_sq reqd_sqrt_witness_nat_sq                    [5]  *)
 (* -------------------------------------------------------------- *)
-(* 【三批续建  夜（温度熵 5                      *)
+(* 【接管席三批续建 2026-09-08 夜（温度熵 5 件由并行席                     *)
 
-(* 【ReqFEP 能量-交叉熵 1】req_energy_cross_entropy<-        [1]  *)
-(* 【ReqAlgBridge2 代数补件 4】req_le_plus_cancel_l<-             *)
-(*   req_le_minus_nonneg_rev<- req_le_mult_pos_cancel<-  *)
-(*   req_mult_minus_distr_r<-（批 1 地基无对应件：仅有 _l 版与    *)
+(* 【ReqFEP 能量-交叉熵 1】req_energy_cross_entropy<-Id @18162        [1]  *)
+(* 【ReqAlgBridge2 代数补件 4】req_le_plus_cancel_l<-Id @17126             *)
+(*   req_le_minus_nonneg_rev<-Id @17146 req_le_mult_pos_cancel<-Id @17162  *)
+(*   req_mult_minus_distr_r<-Id @17178（批 1 地基无对应件：仅有 _l 版与    *)
 (*   正向 req_le_minus_nonneg，本批真证补齐；依存 Setoid 接口 req 形       *)
 (*   le_id_l/le_id_r/le_plus_compat/le_mult_compat_weak 字段）        [4]  *)
 (* 【ReqSoftmaxDual 对偶 3】reqd_softmax_scaled/reqd_softmax_temp_param    *)
-(*   （req softmax 族定义）reqd_scale_temp_duality<-              *)
-(*   reqd_scale_dual_sq_k<- reqd_scale_dual_nat_sq_k<-   *)
-(*   （SqrtWitnessGeneral 余 2 件定位：幂等 δ 对偶 req_refl 闭合，         *)
+(*   （req softmax 族定义）reqd_scale_temp_duality<-Id @28590              *)
+(*   reqd_scale_dual_sq_k<-Id @96603 reqd_scale_dual_nat_sq_k<-Id @96623   *)
+(*   （SqrtWitnessGeneral 余 2 件落位：幂等 δ 对偶 req_refl 闭合，         *)
 (*   sq_k 见证核算 / nat_sq 见证经 reqd_sqrt_witness_nat_sq 真证）    [3]  *)
 (* -------------------------------------------------------------- *)
 (* 本文件合计：89 Qed + 2 Defined = 91 证明件（全部纯构造性）。            *)
-(* 加上 UpReqTempEntropy.v（ 5 件）：批 2 簇 req 结果总量 96 件。     *)
+(* 加上 UpReqTempEntropy.v（并行席 5 件）：批 2 簇 req 结果总量 96 件。     *)
 (* 余件（精确缺口，交接批 3/批 4；对照 批 2 各节逐条 grep 实证）：    *)
 (*  a) 温度严格层 5+1：variational_temp_bound(@17468) energy_exp_temp_mono *)
 (*     (@17521) temp_strict_A_chain2(@17825) temp_strict_ident2(@17879)    *)
 (*     energy_exp_temp_strict_mono(@18019) temp_energy_dual_closed(@17788  *)
 (*     sigT 形)——组装路线：Require UpReqTempEntropy 后依存件 1（熵显式）   *)
 (*     /件 2（KL 温度分解）+ 本文件 req_le_plus_cancel_l 移项链；因        *)
-(*     UpReqDist 是其上游（循环依赖禁止），定位=UpReqTempEntropy 增量节    *)
+(*     UpReqDist 是其上游（循环依赖禁止），落位=UpReqTempEntropy 增量节    *)
 (*     或批 3 文件。energy_exp_temp_mono/strict_mono 另需 inv_pos_lt_      *)
 (*     compat 的 req 桥（基座 Id 件在，req 形待批 3 ReqLogBridge 扩展）。   *)
 
-(*     接口未提供，随批 3 ReqLogBridge 扩展定位（批 2 结论维持）。          *)
+(*     接口未提供，随批 3 ReqLogBridge 扩展落位（批 2 结论维持）。          *)
 (*  c) U2 主体 7 件：依赖批 3 RLHF req 机器（pi_next/align_objective/      *)
 (*     free_energy_ext），维持批 3 显式假设。                                   *)
 (* -------------------------------------------------------------- *)
 
-(* ----   ：替换件收尾假设清查（逐件 Closed 判读） ---- *)
+(* ---- T246 包G 台账席：替换件收尾假设清查（逐件 Closed 判读） ---- *)
 Print Assumptions reqd_le_of_req.
 Print Assumptions reqd_minus_compat.
 Print Assumptions reqd_opp_zero.

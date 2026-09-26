@@ -1,11 +1,23 @@
-(* ==========================================================================)
-   UpAblMetaTemp.v — 亚稳标度线的温度-发散上界定理
-   使命: mtp_anchor_divergence：∀M ∃T₀>0 ∀T<T₀，M < anchor(T)（混合模量参考值随温度趋零发散）；支撑件 mtp_lo/delta_star 定义、mtp_ds_temp 与倒数/指数不等式链。
-   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog、UpAblMetaEngine；Stdlib QArith、Setoid、Morphisms、Lia、QArith.Qminmax。
-   对标: 亚稳标度（metastable scaling）中混合时间对温度的发散率下界。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* UpAblMetaTemp.v —— 亚稳标度线·上界侧整合主件
+   温度-δ* 链（件①）与 温度-模量发散定理（件②·见证形），mtp_ 前缀，裸 Real 层。
+   零承认件：本文件无任何承认式声明，全部构造性证明，Set 层见证（sigT/And）。
+   上游依赖件（Require 直用，零重造）：
+     UpAblMetaEngine：mte_nat_to_R / mte_rpow / mte_nat_const_eq /
+       mte_nat_to_R_S_pos / mte_lt_plus_one / mte_exp_pow_iter / mte_exp_divergence
+     S03：real_inv_pos / real_inv_pos_correct / real_inv_pos_pos
+     S07：cauchy_real_exp 族（pos/zero/plus/wd/gt_one/mono）+ real_arch
+   布景：Δ>0 能障、V=TV₀ 初值整体变差、b=budget 预算、T>0 温度。
+     lo(T)  := e^(−Δ/T)          （exp_neg 语义）
+     δ*(T)  := lo(T)·lo(T) = e^(−2Δ/T)
+     anchor(T) := V·inv(δ*(T)·b)  （mix_pow_budget 式混合模量参考值·实量形）
+   主件（温度趋零发散·显式模量）：∀M:nat, ∃T₀>0, ∀T∈(0,T₀), M < anchor(T)。
+   路线（骨架 rigorous 化，代数排布修正如实注记）：
+     T<T₀ ⟹ inv T₀ < inv T ⟹ 2Δ/T₀ < 2Δ/T ⟹ E₀:=e^{2Δ/T₀} < E(T):=e^{2Δ/T}；
+     选 T₀ := inv(n̄_{S N}) 使 w·invV < E₀（real_arch 选 n₀、mte_exp_divergence
+     于 a2=Δ+Δ 选 N，w := M·b）；δ*(T)=inv(E(T)) < inv(E₀) ⟹ w·inv(E(T)) <
+     w·inv(E₀) < V ⟹ M·(δ*(T)·b) < V ⟹ M < anchor(T)。
+   对标：mathlib 温度-发散率构造（metastable scaling）；stdlib 无同形。
+   编译配方：Rocq 9.1 直调 coqc + cpu_guard 包裹，输出至临时目录。 *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

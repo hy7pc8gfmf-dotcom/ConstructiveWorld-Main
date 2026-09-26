@@ -1,11 +1,50 @@
-(* ==========================================================================)
-   UpReqConcSoftmax.v — conc softmax 求和接口的绝对值界
-   使命: csm_sumf 定义与求和接口件（csm_sum_eq_list/ext/linear/add/le）、csm_abs_pointwise、csm_abs_list_le_eps（列表逐 eps 三角）、csm_abs_pair_tri_eps 与主件 csm_abs_sum_le_eps。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD；Stdlib List、QArith、Setoid、Morphisms、Lia。
-   对标: 有限和绝对值不等式的 softmax 求和接口版本。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
+(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
+(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
+(* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
+(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性收口，文尾  *)
+(* 保留原件假设面追印。清单：                                      *)
+(*   csm_sum_ext/csm_sum_linear/csm_sum_add/csm_sum_le/             *)
+(*       csm_sum_zero_nonneg（五槽委派改列表归纳就地重演，金标直取   *)
+(*       UpReqSumD sumd_list_sum 族体；csm_sumf 定义性展开入折叠形） *)
+(* ============================================================ *)
+
+(* ============================================================ *)
+(* UpReqConcSoftmax.v —— SO 具体实例首切片（req 镜像系·柯西 Real 面）   *)
+(*                                                              *)
+(* 目的：论文7 §10.2 第 7 项的无条件合龙路线①切片：在柯西 Real 上        *)
+(*   为 enum 列表折叠有限和机器 csm_sumf 无条件供给 8 项性质——          *)
+(*   即 req 镜像链（UpReqSampling rsq_bounded_softmax_tv_iter 签名）     *)
+(*   sumf 槽六件中的五件＋缺口核心件：                                   *)
+(*   csm_abs_sum_le_eps（绝对值和三角的 Bishop 逐 eps 形）。             *)
+(*                                                              *)
+(* 实测注记：                                              *)
+(*   ① plain 形 abs_sum_le（Or 编码 le）对混合号 f 无构造性路线——        *)
+(*      real_le = Or (real_lt) (real_eq)（S02 L469），|Σf| 与 Σ|f| 既     *)
+(*      无正间隙也非实等，Or 两支均不可达（真墙）。故本件供 Bishop        *)
+(*      逐 eps 形（+eps 余量后 Or 的 inl 支可达，S07                     *)
+(*      real_metric_triangle_eps 同款口径）；下游镜像消费槽若需 plain     *)
+(*      形须改槽为 eps 形（本件直供）——余切片清单为待续工作。            *)
+(*   ② Id 面 System A 实例墙实锤：S01 Id 为归纳内涵等价，req 面件        *)
+(*      exact 进 Id 槽型错（实测核对）。                                 *)
+(*                                                              *)
+(* 素材（全部只读消费）：UpReqSumD.v sumd_ 系（有限和八性质无条件化      *)
+(*   先例，逐槽委派）＋S07 real_metric_triangle_eps（三角逐 eps 认证机，  *)
+(*   metric 代换法）＋S07 real_abs_zero_req＋UpReqAlgebra                *)
+(*   req_plus_le_lt_pos（底件）。                                       *)
+(*                                                              *)
+(* 非平凡性分级：                                                      *)
+(*   A 自证核心（本件增量）：csm_abs_pair_tri_eps（metric 代换＋req      *)
+(*      缝合）、csm_abs_list_le_eps（列表归纳＋assoc 换形缝合）；        *)
+(*   B 素材消费桥（委派 sumd_ 系，非重证）：ext/linear/add/le/           *)
+(*      zero_nonneg 五槽；                                              *)
+(*   C 定义级保底：csm_sum_eq_list（折叠处方即列表和，req_refl）。       *)
+(*                                                              *)
+(* 备注：公理面自审：全件语句 Set 值（req/le/lt 均 Set 值面）；前提位     *)
+(*   全显式证书参数（eps 正性等），审计应 Closed；无未证断言；           *)
+(*   无非构造捷径；主件 Defined 收束。                                  *)
+(* ============================================================ *)
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Setoid Morphisms.
@@ -156,7 +195,7 @@ Proof.
       * exact (IH f n).
 Qed.
 
-(* 列表档：|Σ_l f| < (Σ_l |f|) + eps（0 < eps；real_lt 组合，逐点 eps 边际） *)
+(* 列表档：|Σ_l f| < (Σ_l |f|) + eps（0 < eps；real_lt 打包，逐点 eps 边际） *)
 Lemma csm_abs_list_le_eps : forall (l : list S) (f : S -> Real) (eps : Real),
   lt zero eps ->
   le (abs (sumd_list_sum S f l))
@@ -204,7 +243,7 @@ Qed.
 (* 逐对三角（Bishop 逐 eps 形）：|x+y| ≤ |x| + |y| + eps（0 < eps）
    metric 代换法：real_metric_triangle_eps (x+y) x zero eps 认证机直供
    le (|(x+y)−zero|) (|(x+y)−x| + |x−zero| + eps)，再将 metric 形
-   逐槽 req 衔接到 abs 形（|a−zero|==|a|、|(x+y)−x|==|y|、加法重排）。 *)
+   逐槽 req 缝合到 abs 形（|a−zero|==|a|、|(x+y)−x|==|y|、加法重排）。 *)
 Lemma csm_abs_pair_tri_eps : forall x y eps : Real,
   lt zero eps ->
   le (abs (plus x y)) (plus (abs x) (plus (abs y) eps)).
@@ -276,7 +315,7 @@ Proof.
                     (le_refl (plus (abs y) (plus (abs x) eps))))))).
 Qed.
 
-(* 主件：csm_sumf 处方的逐 eps 三角（rsq 对应副本 abs_sum_le 槽的 eps 形直供） *)
+(* 主件：csm_sumf 处方的逐 eps 三角（rsq 镜像 abs_sum_le 槽的 eps 形直供） *)
 Definition csm_abs_sum_le_eps : forall (f : S -> Real) (eps : Real),
   lt zero eps ->
   le (abs (csm_sumf f)) (plus (csm_sumf (fun s : S => abs (f s))) eps)

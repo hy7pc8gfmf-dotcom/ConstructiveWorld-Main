@@ -11,7 +11,7 @@
 (* 三、对标行：UpReqConcFin2.v cf2_abs_pt_one(L241)／cf2_tv_sum_one      *)
 (*     (L260)／cf2_tv_pos(L281)／cf2_tv_nonneg(L297) 三段模板逐跳换     *)
 (*     世界；逐点证书值域 {one, one, zero}（wC 点两点质量重合，差为零），*)
-(*     和＝1+1+0＝2，TV＝1/2·2＝1；wC 零点支由接口字段 abs_zero（req    *)
+(*     和＝1+1+0＝2，TV＝1/2·2＝1；wC 零点腿由接口字段 abs_zero（req    *)
 (*     形）直供。附 Fin2 求和机实例注记一件。                            *)
 (* 四、构造性注记：全件语句 Set 值；零承认件（无未证断言、无经典逻辑）   *)
 (*     ；三支 destruct 逐点证书＋嵌套 req_plus_compat 折叠＋             *)
@@ -84,7 +84,7 @@ Proof.
              abs_zero).
 Defined.
 
-(* 段二：逐点差和折叠：Σ |mu0 − nu0| = 1 + 1（1+1+0 合并，cf2_tv_sum_one  *)
+(* 段二：逐点差和折叠：Σ |mu0 − nu0| = 1 + 1（1+1+0 缝合，cf2_tv_sum_one  *)
 (* 同构） *)
 Lemma uc2t_tv3_sum_two : req
   (sumd_list_sum uc2t_w3

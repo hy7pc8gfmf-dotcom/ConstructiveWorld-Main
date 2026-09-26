@@ -1,15 +1,15 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===================================================================== *)
+(* RMaxSwap.v — E-STAGING-CXD7 席位V-F2 / T41 对账 C4                      *)
 (* r_max 左右参 plain 形对称交换桥 + rpl_clip_lower 回喂特化                  *)
 (*                                                                       *)
 (* 争议坐标（经验卡 E384）：                                              *)
 (*   · UpReqRDF.v ReqDiffPlain 类 r_max_ge_plain : le a (r_max a b)        *)
-(*     （左参 plain 槽，<- Id r_max_le_l 同构，T2① 零证明槽）；              *)
+(*     （左参 plain 槽，<- Id r_max_le_l 镜像，T2① 零证明槽）；              *)
 (*   · UpReqPPOPlain.v 节1 自持槽 r_max_le_r_plain : le b (r_max a b)      *)
-(*     （右参 plain 槽，<- Id r_max_le_r 同构）。                           *)
+(*     （右参 plain 槽，<- Id r_max_le_r 镜像）。                           *)
 (*   根因：req 层接口 RealInterfaceEnhancedSetoid 的 r_max le 方向仅有      *)
 (*   逐 eps 形（r_max_le_l/_r : le _ (plus (r_max a b) eps)），plain 形     *)
-(*   无接口支撑（「序无消去」，UpReqAlign3 裁定结论同因）；两槽单向重复占位，     *)
+(*   无接口支撑（「序无消去」，UpReqAlign3 判词同因）；两槽单向重复占位，     *)
 (*   库内无对称交换桥（E384 卡登记缺口）。                                  *)
 (* 本件：                                                                  *)
 (*   1. 交换槽 rms_r_max_comm（T2① 显式参非公理，实例化一次全桥解锁）；      *)
@@ -38,6 +38,7 @@ Variable epsilon : R.
 
 (* ---- T2① 对称交换槽（E384 卡缺口位；显式参非公理） ----
    实例化来源注记：plain 形 req (r_max a b) (r_max b a) 在抽象接口层
+   「序无消去」同因不可证（与两 plain 槽存在根因一致），故以槽位承接；
    具体模型侧若提供 r_max 交换见证（逐坐标 Qmax 对称），本节全桥一次解锁。 *)
 Hypothesis rms_r_max_comm : forall a b : R, req (r_max a b) (r_max b a).
 

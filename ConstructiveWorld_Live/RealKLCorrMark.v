@@ -1,33 +1,61 @@
 (* ============================================================ *)
-(* RealKLCorrMark.v                                                        *)
-(* 使命：登记 real_kl_decomp_full 两个上游假设位按字面为假的结论，         *)
-(*   并给出补入 p_b 侧归一化前提后的修正重述件（mend）。                   *)
-(* 主件：rkc_real_kl_decomp_full_mend——假设位A（UpRealLeB.v:218）         *)
-(*   语句逐字同构 + 新增前提 Hnormb : Σ p_b == 1 + ext/add/linear         *)
-(*   三桥显式升参，一步 exact 直取 rfep_real_kl_decomp_full               *)
-(*   （UpReqRealFEP.v:805 节闭全参形）。伴节 RkcSlotAMendInSitu 为        *)
-(*   上游 Section 接口的副本重述，新增归一化接口                          *)
-(*   real_boltzmann_normalized_rkc : Σ p_b == 1。                          *)
-(* 依赖：Stdlib Extraction、CW_ConstructiveWorld_219、UpReqRealFEP。      *)
-(* 备注（上游假设位为假的结论）：两假设位前提仅 Hp + Hnormp（对 p 的      *)
-(*   Σp == 1），结论却对任意正性证书 Z_align_r 断言  F(p) == F(p_b) + D·Σ kl_term，缺 p_b 侧归一化 Σ p_b == 1（Z 须为  配分函数）；一般 Z 下恒等式两边相差 D·log Z·(Σ p_b − 1)，其中  p_b(s) = inv(Z)·exp(−e(s)/D)。单点反例：S 为单点，e = 0，D = 1，  Z = 2，p = 1（Hnormp 成立），则 Σ p_b = 1/2 ≠ 1，LHS = 0， *)
-(*   RHS = (1/2)·log 2 ≠ 0。缺口在 p_b 侧归一化而非 Σp == 1：             *)
-(*   Hnormp/Hnormpi 是对 p 的，类型不同，不能移作修正前提；可用           *)
-(*   供给源为 S08 节内 real_boltzmann_normalized（:2494，声明后零         *)
-(*   依存）或 partition 前提消解件 rfep_boltzmann_normalized_real         *)
-(*   （UpReqRealFEP.v:331）。假设位B（S08_RealMainlineDPO.v:2516）        *)
-(*   与假设位A 同构同假（同一数学命题，仅载体内联度不同），其修正形       *)
-(*   即正典件 real_kl_decomp_full_canon（UpReqFEPCanon.v:48，结论面       *)
-(*   与 S08 位逐字同构），本文件不重复立件。正典件下游依存位              *)
-(*   （UpReqMinUniqueTight.v:159/341、UpReqELBOStrict.v:152、             *)
-(*   UpReqMinFreeEps.v:167/251）语句面已自备 Hnormb/Hpart 前提，          *)
-(*   换用正典件后签名不变零改动。上游依存位、修正实例化与增量桥的         *)
-(*   位址细节见下方各注释块。                                             *)
-(* 构造性注记：本文件为对接件（非新数学），零新公理、零未闭合证明、       *)
-(*   零猜想、零中止；语句面全 Set 值（real_eq/real_lt，零 Prop 面）；     *)
-(*   证明体一步 exact 依存在盘全 Qed 件；文末提取检验 + 假设闭包检查。    *)
-(* 编译配方：coqc 9.1 直调（vo 树内 -Q . "" 平面命名空间），信任缓存前置。 *)
+(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   rkc_slotA_kl_decomp_full_mend（原 L129，2 句玩具证）                 *)
+(*   rkc_real_kl_decomp_full_mend（原 L51，2 句玩具证）                   *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
+(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
+(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
+(* ============================================================ *)
+
+(* RealKLCorrMark.v
+   目的：登记 real_kl_decomp_full 两个上游假设位按字面为假的勘误结论，
+   并给出补入 p_b 侧归一化前提后的修正重述件（mend）。
+
+   主件：rkc_real_kl_decomp_full_mend——假设位A（UpRealLeB.v:218）
+   语句逐字同构 + 新增前提 Hnormb : Σ p_b == 1 + ext/add/linear
+   三桥显式升参，一步 exact 直取 rfep_real_kl_decomp_full
+   （UpReqRealFEP.v:805 节闭全参形）。伴节 RkcSlotAMendInSitu 为
+   上游 Section 接口的副本重述，新增归一化接口
+   real_boltzmann_normalized_rkc : Σ p_b == 1。
+
+   依赖：Stdlib Extraction、CW_ConstructiveWorld_219、UpReqRealFEP。
+
+   备注（勘误结论）：两假设位前提仅 Hp + Hnormp（对 p 的 Σp == 1），
+   结论却对任意正性证书 Z_align_r 断言
+   F(p) == F(p_b) + D·Σ kl_term，缺 p_b 侧归一化 Σ p_b == 1（Z 须为
+   配分函数）；一般 Z 下恒等式两边相差 D·log Z·(Σ p_b − 1)，其中
+   p_b(s) = inv(Z)·exp(−e(s)/D)。单点反例：S 为单点，e = 0，D = 1，
+   Z = 2，p = 1（Hnormp 成立），则 Σ p_b = 1/2 ≠ 1，LHS = 0，
+   RHS = (1/2)·log 2 ≠ 0。缺口在 p_b 侧归一化而非 Σp == 1：
+   Hnormp/Hnormpi 是对 p 的，类型不同，不能移作修正前提；可用
+   供给源为 S08 节内 real_boltzmann_normalized（:2494，声明后零
+   依存）或 partition 前提消解件 rfep_boltzmann_normalized_real
+   （UpReqRealFEP.v:331）。假设位B（S08_RealMainlineDPO.v:2516）
+   与假设位A 同构同假（同一数学命题，仅载体内联度不同），其修正形
+   即正典件 real_kl_decomp_full_canon（UpReqFEPCanon.v:48，结论面
+   与 S08 位逐字同构），本文件不重复立件。正典件下游依存位
+   （UpReqMinUniqueTight.v:159/341、UpReqELBOStrict.v:152、
+   UpReqMinFreeEps.v:167/251）语句面已自备 Hnormb/Hpart 前提，
+   换用正典件后签名不变零改动。上游依存位、修正实例化与增量桥的
+   位址细节见下方各注释块。
+
+   红线自检：本文件为对接件（非新数学），零新公理、零未闭合证明、
+   零猜想、零中止；语句面全 Set 值（real_eq/real_lt，零 Prop 面）；
+   证明体一步 exact 依存在盘全 Qed 件；文末提取检验 + 假设闭包检查。
+   ============================================================ *)
 
 From Stdlib Require Import Extraction.
 Require Import CW_ConstructiveWorld_219.
@@ -114,7 +142,7 @@ Variable real_sum_over_S_linear : forall (a : Real) (f : S -> Real),
 
 (* 假设位A 语句原位修正形：结论面与 UpRealLeB.v:218-231 逐字同构，     *)
 (* 依存位 :247-248 的 exact 由此件 + real_boltzmann_normalized_rkc    *)
-(* 给出（回灌时 :248 调用点 +1 实参，即本节接口位的传参方式）。        *)
+(* 承接（回灌时 :248 调用点 +1 实参，即本节接口位的传参方式）。        *)
 Theorem rkc_slotA_kl_decomp_full_mend :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s))
     (Hnormp : real_eq (real_sum_over_S p) real_one),

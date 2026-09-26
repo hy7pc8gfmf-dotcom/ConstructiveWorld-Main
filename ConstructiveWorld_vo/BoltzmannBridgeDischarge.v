@@ -1,11 +1,40 @@
-(* ==========================================================================)
-   BoltzmannBridgeDischarge.v — Boltzmann 分布与自由能桥的实数层消解件
-   使命: bbd_boltzmann_dist/bbd_free_energy 定义、正性件 bbd_boltzmann_positive、能量恒等式 bbd_energy_in_log_boltzmann_bridge 与自由能闭式 bbd_free_energy_boltzmann_bridge（F == −D·log Z）。
-   依赖: CW_ConstructiveWorld_219、UpReqLogCompD；Stdlib Extraction
-   对标: 统计力学 Boltzmann–Gibbs 分布的自由能闭式（F = −D·log Z 的能量-对数概率桥）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。正性件取 Defined 透明形（换算闭合所需），余为 Qed。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================ *)
+
+(* ===================================================================== *)
+(* BoltzmannBridgeDischarge.v                                            *)
+(*                                                                       *)
+(* 目的：为 UpSigMigrate.v:65-71 与 CW220_Extensions.v:209-215 的四个     *)
+(*       Boltzmann 自由能假设位提供构造性消解——能量入对数恒等式与        *)
+(*       自由能显式式各两份；宿主两文件零改动，假设位原样保留，消解      *)
+(*       由本文件定理陈述段 + bbd_ 逐字语句重申件（实例化桥）完成，      *)
+(*       形态与 UpReqAlign4.v:975 宿主注记段同构。                        *)
+(* 主件：Module BBDFepWriteoff——                                         *)
+(*       bbd_energy_in_log_boltzmann_bridge：                             *)
+(*         req (base_loss s)                                             *)
+(*             (opp (mult D (plus (log (bbd_boltzmann_dist s)             *)
+(*                                 (bbd_boltzmann_positive s))            *)
+(*                                 (log Z Z_pos))))；                     *)
+(*       bbd_free_energy_boltzmann_bridge：                               *)
+(*         req (bbd_free_energy bbd_boltzmann_dist                       *)
+(*                          bbd_boltzmann_positive)                      *)
+(*             (mult (opp D) (log Z Z_pos))。                             *)
+(* 依赖：CW_ConstructiveWorld_219、UpReqLogCompD（消解件                  *)
+(*       logc_energy_in_log_boltzmann @UpReqLogCompD.v:325、              *)
+(*       logc_free_energy_boltzmann @UpReqLogCompD.v:600，LogcFEP 节）；  *)
+(*       Stdlib Extraction。                                              *)
+(* 备注：证 = 消解件全参 exact 实例化（泛型层 @R RIS 显式，零 evar；     *)
+(*       末段 conversion 由三套同名件 delta-beta 同 body 闭合）。         *)
+(*       LogcFEP 节必需的 sup_compat / sup_log_exp_neg 二前提宿主节       *)
+(*       未开，本节新开口此二位（显式假设；Real 层闭合实例 = G05          *)
+(*       logd_log_compat_real / logd_log_exp_neg_real，见                 *)
+(*       UpReqLogCompD 头注）。LogcFEP 节 S : Type 与宿主节 S : Set       *)
+(*       由 cumulativity 兼容（Set ≤ Type，参数直传）。                   *)
+(*       语句全 Set 层（零 Prop 值）；全 Qed/Defined 闭合；               *)
+(*       提取 Obj.magic = 0；bbd_ 前缀全库零撞名。                        *)
+(* 对标：Boltzmann-Gibbs 分布自由能恒等式（能量入对数与自由能显式式）。*)
+(* 编译配方：Rocq 9.1 直调 rocq c -Q . "" BoltzmannBridgeDischarge.v，  *)
+(*   cpu_guard 包装；提取检验 Recursive Extraction 双件 Obj.magic=0。   *)
+(* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqLogCompD.
@@ -96,7 +125,7 @@ Definition bbd_rminus (a b : R) : R := plus a (opp b).
 
 (* 正性证人：证体逐字 = 宿主 req_boltzmann_positive（UpSigMigrate.v:56-60）
    与消解件 logc_boltz_pos（UpReqLogCompD.v:230-236）；Defined（透明）为
-   delta 闭合所必需（Qed 不透明则 conversion 停滞）。 *)
+   delta 闭合所必需（Qed 不透明则 conversion 卡死）。 *)
 Definition bbd_boltzmann_positive : bbd_positive_dist bbd_boltzmann_dist.
 Proof.
   intro s.

@@ -16,6 +16,7 @@
 (*   文件尾供给段为签名保持式消解（b3 §2.2.1）：求和面五证书位在 ConcMixSelFeed   *)
 (*   求和载体 csm_sumf（S:=bool，enum:=true::false::nil）上实例化为              *)
 (*   *_supply 定理（ext/le/linear/add 引 cms 系四件，pos 引 sumd_list_sum_pos     *)
+(*   非空清单链）。既往战役自述核实：无补强自述。                                *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.

@@ -27,7 +27,7 @@
 (*   （L131/137/144/147/153，普查第 3 批）归 T1c 席，本件零重叠；                  *)
 (*   L110 dist_log_le_linear 系 W 类阻隔位（普查 §3-W4），不入件表，落墙登记。       *)
 (*   （T1a 席 UpAblT1_UpFirewallReq.v 已收 sumf 五面+Z_temp_spec 面，零重叠。）    *)
-(* 源文件：logd_log_inv_one_inv_real@G05_LogSmall（零前提 Real 层参数形；G05 头注      *)
+(* 母本：logd_log_inv_one_inv_real@G05_LogSmall（零前提 Real 层参数形；G05 头注      *)
 (*   B3 族明列 dist_log_inv_one_inv 3 位含本位；同形 kl_log_inv@UpStepKL:583）。   *)
 (* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 587=现档            *)
 (*   行数 587，21 位语句逐字双检通过）；语句逐字抽取后仅 R 换实例位 Real，           *)

@@ -9,7 +9,7 @@
 
 (* UpReqAlign2.v — 签名迁移批 3b：对齐主体完成（t13/t12 深链伴件 +
    dpo_pair/preference 簇 req 化 + 旗舰链闭合）
-   源文件：docs/签名迁移规划书.md
+   母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md
      （批 3b 节 = 批 3 附录 D.1（三）深链挂起清单的放行批）
    上游：UpReqAlgebra.v（批 1 代数银行，直接消费）+
      req_kl_minus_split / req_le_of_minus_nonneg）；
@@ -739,6 +739,7 @@ Proof.
                  --- apply plus_zero.
 Qed.
 
+(* ============ T12 组：策略改进深链（Id L21273-22065 req 化） ============ *)
 
 (* 引理 A：Boltzmann 因子桥（Id boltzmann_factor_bridge L21273 req 版） *)
 Lemma req2_boltzmann_factor_bridge :
@@ -959,6 +960,7 @@ Proof.
                                                                      (plus_comm (opp lgZ) X))))))).
 Qed.
 
+(* ============ T12 组 II：F_t 分解与单调性链 ============ *)
 
 
 Lemma req2_rel_ent_minus : forall (p q : S -> R) (Hp : req2_pos_dist p) (Hq : req2_pos_dist q),

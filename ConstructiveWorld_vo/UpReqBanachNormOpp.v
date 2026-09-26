@@ -30,7 +30,7 @@
 (* 使命（AA8 分解报告 B5 工单）：件一 qred_unique——INS L45 遗留     *)
 (*   「保持 Id 余域不动，bnorm := Qred∘Qabs」的 Id-良定钥匙：       *)
 (*     bno_qred_unique : forall x y : Q, x == y -> Qred x = Qred y *)
-(*   （Leibniz 余域原形）；并定位 bnorm Opp/倒数面（件名对应）。    *)
+(*   （Leibniz 余域原形）；并落位 bnorm Opp/倒数面（件名对应）。    *)
 (* 现成肢复用（AA8 判定 B5 最大惊喜＝B1 在飞件已铺 Z.gcd 肢）：     *)
 (*   ① UpReqBanachInstB 规范形唯一机器（Zis_gcd_intro +            *)
 (*      rel_prime_cross_prod + Z.mul_reg_l 面，bxib_cross_unique   *)
@@ -58,7 +58,7 @@
 (*   本席闭合（bno_q_pow_one / bno_exp_series_succ_frac /             *)
 (*   bno_mul_div_self / bno_exp_scale_Z＝n!·s_n 整数化核心），        *)
 (*   逃逸主件（q==s_n 可判定分叉＋非零整数绝对值下界）仍遗留移交，     *)
-(*   语句面以 bno_sum_inv_fact_escape 固化（诚实遗留，零特设构造）。       *)
+(*   语句面以 bno_sum_inv_fact_escape 固化（诚实遗留，零硬凑）。       *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -143,7 +143,7 @@ Lemma bno_qred_unique_id : forall x y : Q, x == y -> Id (Qred x) (Qred y).
 Proof. intros x y H. exact (@bxra_id_of_eq Q (Qred x) (Qred y) (bno_qred_unique x y H)). Qed.
 
 (* ============================================================ *)
-(* S2：bnorm Opp/倒数面定位（INS L45 处方 bnorm := Qred∘Qabs 的     *)
+(* S2：bnorm Opp/倒数面落位（INS L45 处方 bnorm := Qred∘Qabs 的     *)
 (*     bnorm_opp 位 discharge ＋ InstReal 攻墙链依存转写）          *)
 (* ============================================================ *)
 
@@ -174,7 +174,7 @@ Proof. intro a. exact (bxra_f_norm_opp a). Qed.
 
 (* ============================================================ *)
 (* S3：件二遗留形（AA8 B5 工单指定语句面，证体移交——诚实遗留，      *)
-(*     零特设构造。原料清单见交付报告：q_fact_pos/exp_series 系         *)
+(*     零硬凑。原料清单见交付报告：q_fact_pos/exp_series 系         *)
 (*     （S03_QExp）、n!·s_n 整数化引擎、q==s_n 可判定分叉。）       *)
 (* ============================================================ *)
 
@@ -268,7 +268,7 @@ Print Assumptions bno_exp_scale_Z.
 
 (* ============================================================ *)
 (* S5：件二闭合段（席B5R，20260915）——AA8 B5 工单件二 sigT 显式     *)
-(*     逃逸形正式闭合：bno_sum_inv_fact_escape 主件定位。           *)
+(*     逃逸形正式闭合：bno_sum_inv_fact_escape 主件落位。           *)
 (* 证法（构造性，零 LPO 零分叉）：                                  *)
 (*   ① 引擎上探：bno_scale_q_int——任一 q=p/d 取 n≥d 使 n!·q 落 Z     *)
 (*     （bno_qfact_int：n! 本身为整数；bno_qfact_scale_d：d|n! 的    *)

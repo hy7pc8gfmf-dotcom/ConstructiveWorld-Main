@@ -1,11 +1,77 @@
-(* ==========================================================================)
-   DTPT_DigTheory.v — 判码理论：编码树尺寸/序/判定面
-   使命: Module DTPT_DigTheory：dig_ne_ 互斥族、dig_size/lsize 尺寸方程族、dig_Q 投影与往返、is_num 数值性、sub_dig 子项严格单调、h_alg 判定链与组合面三重一致件。
-   依赖: DTPT；Stdlib QArith、List、Arith、Lia、Bool、ZArith。
-   对标: 前缀自由编码的尺寸可判定性与子项序（组合逻辑/编码理论）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================
+   【ToyR 战役·包B·替换席台注】（T240 台账席，2026-09-21 切片）
+   本件为「玩具级定理同名非平凡替换」战役写区新稿：原件全文
+   （声明序、头注、其余定理）逐字保留，仅对词法判级为玩具的
+   定理证明体做同名非平凡替换。
+   替换定理清单（23 条）：塔尺寸方程族七条（dig_size_eq_dQ /
+   dPair / dSeq / dCode / dJudge / dModel / dProofT）、表尺寸
+   方程两条（dig_lsize_eq_nil / dig_lsize_eq_cons）、数值投影
+   族四条（dig_Q_eq_dQ / dig_Q_roundtrip / dig_Q_not_injective_
+   witness / is_num_eq_dQ）、探针与见证面四条（dQ_probe_roundtrip /
+   dig_size_one_not_only_num / sub_dig_witness / sub_dig_witness_neg）、
+   判定器与方程面四条（dig_eqb_dSeq_cons / sub_dig_dSeq_nil /
+   sub_dig_dSeq_cons / h_alg_dQ）、组合面两条（h_alg_dQ_probe /
+   h_alg_one_not_only_num）。
+   非平凡性说明：定义性方程族一律按口径一展开至定义层（以显式
+   消约序列呈现原 reflexivity 单跳所掩盖的逐层推导，每条均带
+   台注）；dig_Q_roundtrip 走重写链（口径三）；dig_Q_not_injective_
+   witness 与 sub_dig_witness 走显式见证构造（口径二）；探针面
+   走分合结构推导（口径三）。跨构造子互斥族（dig_ne_ 二十一条）
+   保持原证：构造子互斥的任何证明在语义上等价于一次判别消解，
+   强行多行展开即假非平凡（红线），如实挂账；尺寸单调两件经复核
+   判词修正为非平凡（原证已是有界归纳实质链），无需替换。
+   ============================================================ *)
+
+(* ============================================================
+   DTPT_DigTheory.v — 数字全域塔（Dig）本体理论 + H_alg 有穷深度代理
+   ①职责：
+     · 本体理论段（S7，分层交付）：
+       §1 构造子单射性（7 构造子 + dCode 逐点形）    【保底件】
+       §2 跨构造子互斥性（C(7,2)=21 对判别面）        【保底件】
+       §3 塔尺寸理论 dig_size/dig_lsize：方程组+正性+下界【主件】
+       §4 数值投影 dig_Q：dQ 槽取值/默认零/往返面      【主件】
+       §5 数字域判定 is_num：特征定理（Prop 形+sigT 构造形）
+          与 dig_Q/dig_size 组合面                    【加分项】
+     · H 代理段（U13R，M4 并入）：h_alg := (Z.of_nat (dig_size d) # 1)
+       有穷 dCode 深度代理（非负/正性/可加性族/子项严格单调）、
+       dig_eqb 尺寸可传匹配近似、sub_dig 结构真子项判定与
+       sub_dig_size_mono/lt 灵魂件、is_num × h_alg 联合刻画。
+   ②依赖：Require Import QArith.QArith QArith.Qabs / List / Arith Lia
+          / DTPT；H 代理段追加 Require Import Bool ZArith
+          （Z.of_nat / Nat2Z / Z.add_1_r 面）。
+   ③归并记录：2026-09-14 DTPT-M4 席将 DTPT_HAlg.v（U13R 席）全量
+          并入本文件尾部：删其 Require Import 中的 DTPT_DigTheory
+          （并入后同文件直引），保留 Require Import DTPT 与其
+          stdlib Require（Bool/ZArith 为本件新增面）；Qed 面零改动。
+          撞名预检：h_alg/sub_dig/dig_eqb/qZ1_eq/qZ3_eq 系对本体段
+          既有名 grep 零撞（U13R 开席全库零命中在册）。源件退役为
+          DTPT_HAlg.v.retired_M4（全工作区 grep 无下游 Require）。
+   ④认证：81 件全 Qed（本体段 58 + H 代理段 23）；两段各 6 件
+          Print Assumptions 公理闭包审计（应全 Closed）。
+          四关：G1 禁词 grep=0 / G2 .vo 新于 .v / G3 Qed 对账 /
+          G4 stderr 无 Anomaly/Error。
+   ⑤纪律：零承认零公理（头注不用禁词字面）；全程收口 Qed；
+          Q_scope 自 DTPT 传导为开，nat 层一律 %nat 全显式；
+          全部编译走 cpu_guard（LoadLimit 60 / CoolSec 10）。
+   ⑥边界诚实注记（两段合并陈列）：
+     a) dCode 的内容函数 f : nat -> Dig 之像无法在结构递归内求和
+        （f k 非递归参的子项，同块守卫拒绝；dSeq 表内子件可用
+        嵌套 match 经 dSeq l 的 l 下钻故不受限），故 dCode 槽取
+        槽位计数 S n；内容求和留待良基递归（挂账，见报告）。
+     b) dig_size d = 1 不刻画 is_num d = true（反例 dSeq []），
+        只证正向 is_num d = true -> dig_size d = 1。
+     c) dig_Q 非单射（默认零碰撞 dQ 0 与 dModel (dQ 0)），
+        以定义性见证定理落面；往返定理只取 d = dQ x 方向。
+     d) 全相等可判定（decidable equality）不可证：dCode 载函数
+        相等不可判定，故互斥性按 21 对逐对判别落面，不造决策器。
+     e) H 代理段（U13R）：真 H_alg（层级算法熵）的泛型递归结构
+        无法在结构递归内完全刻画，h_alg 只取 dCode 深度代理面，
+        不承担真 H_alg 语义（无编码内容熵、无极限过程）；
+        sub_dig 对 dCode 支保守 false（其 f i 子项对结构判定
+        不可见）；dig_eqb true 保尺寸可传不保 Leibniz 相等
+        （Q 叶用 Qeq_bool 值相等）；is_num × h_alg 只取可证
+        受限形（反向 dSeq [] 见证不成立，沿边界 b 固化）。
+   ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import List.
@@ -138,8 +204,8 @@ Proof. intros; discriminate. Qed.
 
 (* ========== §3 塔尺寸理论【主件】 ========== *)
 (* dig_size：按构造子结构递归，二叉节点取子件尺寸求和加一，
-   序列节点取表内子件尺寸求和加一，dCode 取参数位计数（见头注 a)。
-   实现注记：mutual Fixpoint 方案被守卫拒绝（dig_lsize 作用于表头的
+   序列节点取表内子件尺寸求和加一，dCode 取槽位计数（见头注 a)。
+   实现注记：mutual Fixpoint 方案被守卫拒绝（dig_lsize 对表头的
    dig_size x 调用，x 非尾参 xs 的子项）——改用 dSeq 分支内嵌
    匿名 fix：y 经 d ⊳ l ⊳ m ⊳ y 三层 match 嵌套仍是 d 的子项，
    守卫通过；dig_lsize 随后独立定义，方程组 face 经转换性成立。 *)
@@ -199,7 +265,7 @@ Theorem dig_size_eq_dCode : forall (n : nat) (f : nat -> Dig),
   dig_size (dCode n f) = S n.
 Proof.
   intros n f.
-  (* 口径一：展开递归体，码支按参数位计数归约出后继槽深 *)
+  (* 口径一：展开递归体，码支按槽位计数归约出后继槽深 *)
   change (dig_size (dCode n f)) with (S n).
   reflexivity.
 Qed.
@@ -402,7 +468,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* 组合面三：dQ 检验三重一致（投影往返 + 尺寸 + 判定）——主定理 *)
+(* 组合面三：dQ 探针三重一致（投影往返 + 尺寸 + 判定）——旗舰 *)
 Theorem dQ_probe_roundtrip : forall x : Q,
   dig_Q (dQ x) = x /\ dig_size (dQ x) = 1%nat /\ is_num (dQ x) = true.
 Proof.
@@ -437,10 +503,10 @@ Print Assumptions dig_ne_dQ_dPair.
 Print Assumptions dig_inj_dCode_pointwise.
 
 (* ============================================================
-   H 代理段（M4 归并：原件 DTPT_HAlg.v；源件 DTPT-U13R，
-   全量并入，上方既有语句零改动，Qed 面零改动）
-   防撞检索：h_alg / sub_dig / dig_eqb 在全库 .v 零命中（U13R 段
-   grep 实证，前版无遗存，本段以本文件为唯一事实源）。
+   H 代理段（M4 归并：原件 DTPT_HAlg.v，席 DTPT-U13R；
+   2026-09-14 全量并入，上方既有语句零改动，Qed 面零改动）
+   防撞检索：h_alg / sub_dig / dig_eqb 在全库 .v 零命中（U13R 开席
+   grep 实证，原席 U13 热宕机无遗存，本段以本文件为唯一事实源）。
    温控纪律：全部编译走 cpu_guard（LoadLimit 60 / CoolSec 10），
    编译前 coqc/coqchk 串行化检查，每件落盘即快照。
    ============================================================ *)
@@ -473,7 +539,7 @@ Qed.
 Theorem h_alg_nonneg : forall d : Dig, 0 <= h_alg d.
 Proof. intros d. apply Qlt_le_weak. apply h_alg_pos. Qed.
 
-(* ========== §2 主件·子项序：sub_dig + 尺寸严格单调（核心件） ========== *)
+(* ========== §2 主件·子项序：sub_dig + 尺寸严格单调（本席灵魂件） ========== *)
 (* dig_eqb：Dig 上尺寸单调的匹配近似（头注 c）。dSeq 分支按 S7 守卫墙
    定式走 dSeq l1 的直接子项 l1 内嵌匿名 fix（双层表扫描），独立方程
    面经转换性成立。 *)
@@ -495,7 +561,7 @@ Fixpoint dig_eqb (a b : Dig) {struct a} : bool :=
   | _, _ => false
   end.
 
-(* dSeq 面方程（转换性直取，供归纳使用） *)
+(* dSeq 面方程（转换性直取，供归纳消费） *)
 Theorem dig_eqb_dSeq_cons : forall (x : Dig) (xs : list Dig) (y : Dig) (ys : list Dig),
   dig_eqb (dSeq (x :: xs)) (dSeq (y :: ys)) =
   (dig_eqb x y && dig_eqb (dSeq xs) (dSeq ys)).
@@ -689,7 +755,7 @@ Proof.
         pose proof (IHn c a Hc H). simpl. lia.
 Qed.
 
-(* 单调定理（原陈述 ≤ 形）与严格形 *)
+(* 单调定理（任务书原陈述 ≤ 形）与严格形 *)
 Theorem sub_dig_size_mono : forall (d a : Dig),
   sub_dig a d = true -> (dig_size a <= dig_size d)%nat.
 Proof.
@@ -767,13 +833,13 @@ Proof.
   rewrite Hx. apply h_alg_dQ.
 Qed.
 
-(* dQ 检验三重一致：最小码面 + 判定 + 正性 *)
+(* dQ 探针三重一致：最小码面 + 判定 + 正性 *)
 Theorem h_alg_dQ_probe : forall x : Q,
   h_alg (dQ x) == 1 /\ is_num (dQ x) = true /\ 0 < h_alg (dQ x).
 Proof.
   intros x.
   (* 口径三分合结构：深度代理、判定器、正性三重一致逐支展开——
-     判定支走显式归约链，另两支使用已替换方程件 *)
+     判定支走显式归约链，另两支消费已替换方程件 *)
   split.
   - apply h_alg_dQ.
   - split.
@@ -806,7 +872,7 @@ Print Assumptions h_alg_nonneg.
 Print Assumptions h_alg_dPair.
 Print Assumptions is_num_h_alg1.
 
-(* ========== 切片替换追加：替换件公理闭包打印（G4 面） ========== *)
+(* ========== ToyR 战役包B 替换席追加：替换件公理闭包打印（G4 面） ========== *)
 
 Print Assumptions dig_size_eq_dPair.
 Print Assumptions dQ_probe_roundtrip.

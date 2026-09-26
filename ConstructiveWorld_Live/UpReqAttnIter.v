@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：agq_omd_lt_one（共 1 条；余 13 条批量注记结案）             *)
 (* 非平凡性口径：界链显式直造闭合，十四玩具全处置；无一行拆分式假非平凡。    *)
 (* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
@@ -16,19 +16,22 @@
 (* 目的： 注意力迭代算子的 req 层副本（核、TV、迭代步）。 *)
 (* 主件： attention_iter_i 迭代核与 q_kernel_i；agq_omd_pos / agq_p_norm 正性与范数族。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSampling。 *)
-(* 备注： 一温度族载体以 Section 变量给出；迭代正性与 TV 一步界为构造核。 *)
+(* 备注： 一温度族载体以 Section 变量承接；迭代正性与 TV 一步界为构造核。 *)
 (* ============================================================ *)
 
-(* UpReqAttnIter.v — 签名迁移批 4 ：AttentionGibbsBridge q_kernel/收缩迭代簇 req 化
+(* UpReqAttnIter.v — 签名迁移批 4 清账席：AttentionGibbsBridge q_kernel/收缩迭代簇 req 化
    Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L28817-29330
      （q_kernel 簇 + 段2 TV 收缩核心 + 段3 主定理 + 几何迭代收敛，25 Lemma/Theorem
       + 1 节参位；边界邻接件 one_minus_delta_pos @28793 顺带已证明）。
    ----------------------------------------------------------------
    核对三源核查结论（防重建，逐件判见头注核对表）：
+   1. 首席席 UpReqSampling.v（ReqUContraction 11 件）：领地为 L95737-96039
      Section UContraction——与本簇 Id 行号不同节，但数学同构（通用 u + delta +
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
-     全显提供实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
+     全显投喂实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、
      nu := 稳态处 δ 透明合一，主定理 agq_tv_contraction 一行 exact 闭合即脊柱
+   2. 余段席 UpReqAttnGibbs.v：冻结清单第 7 条自记“q_kernel/收缩迭代簇
+     批0 试点 UpSigMigrate.v 仅 req_attention_is_gibbs_temp（fixed-z 形），
      与本簇零交集。
    真缺件 = 单点对稳态特有件 + 独立辅件 + 收敛主定理，共 31 件（含节内补建
    新文件 UpReqAttnIter.v（UpReqAttnGibbs.v 已结果稳定，零触碰）。
@@ -44,7 +47,7 @@
        稳态目标端换轨（p_steady_i 参数位 + agq_tv_compat_r：step(p) ≡ p 逐点）；
        req 形删非负前提位——同 rsq_u_tv_contraction 判，收缩主界不依存非负位)
    【单点特有 9 件·真证/组装（UpReqSampling 两点机不产出）】
-     agq_p_norm<-28802(基带 setoid 件为 Id 结果；本节 sumf 自持重建)
+     agq_p_norm<-28802(基带 setoid 件为 Id 形另席结果；本节 sumf 自持重建)
      agq_p_pos<-29012 agq_p_kernel_fixed<-29040(稳态不变性 p·Q==p：
        依存 p_steady 参数位 + agq_step_decomp + agq_plus_cancel +
        agq_minus_scal_opp_cc + agq_absorb_inv)
@@ -97,7 +100,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* Section ReqAttnIter：q_kernel/收缩迭代簇 req 迁移（29 件）      *)
 (*   求和诚实接口 = Id SumOver 类字段（L1400-1441）req 副本，      *)
-(*   节内自持（假设申报不可依存纪律）。                    *)
+(*   节内自持（跨席假设申报不可依存纪律）。                    *)
 (* ============================================================ *)
 Section ReqAttnIter.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -126,7 +129,7 @@ Hypothesis abs_sum_le_h :
    eps 形，构造性序不可导，Real 实例可满足） *)
 Hypothesis abs_nonneg_h : forall a : R, le zero (abs a).
 
-(* ---- Boltzmann 侧（-28602 副本；e^{-E/T} 约定不换号） ---- *)
+(* ---- Boltzmann 侧（Id @28587-28602 副本；e^{-E/T} 约定不换号） ---- *)
 Variable D : R.
 Variable D_pos : lt zero D.
 Variable energy : S -> R.
@@ -141,7 +144,7 @@ Variable Z_thermo_i_pos : lt zero Z_thermo_i.
 Definition boltzmann_dist_i (s : S) : R :=
   mult (inv_pos Z_thermo_i Z_thermo_i_pos) (boltzmann_factor_i s).
 
-(* ---- Markov 侧（-28762 副本；le 层语句同形平迁） ---- *)
+(* ---- Markov 侧（Id @28709-28762 副本；le 层语句同形平迁） ---- *)
 Variable transition : S -> S -> R.
 (* 行归一（Id transition_normalization @28711；Id->req 出口换轨） *)
 Variable transition_row_i :
@@ -152,7 +155,7 @@ Variable delta_lt_one : lt delta one.
 (* Doeblin 下界（Id minorization @28759；le 层同形逐位） *)
 Variable minorization :
   forall s s' : S, le (mult delta (boltzmann_dist_i s')) (transition s s').
-(* 混合 plus 兼容双参数位（/@28762 同位） *)
+(* 混合 plus 兼容双参数位（Id @28761/@28762 同位） *)
 Variable lt_plus_compat_lt_le_i :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Variable lt_plus_compat_le_lt_i :

@@ -1,11 +1,17 @@
-(* ==========================================================================)
-   UpAblP6_S5SlotWire.v — S5 数据位的单点实例对接件
-   使命: Section UasswFeed：协方差正性（uassw_covariance_unit_pos）、涨落-耗散恒等（uassw_fluctuation_unit_id）、熵产率（uassw_entropy_production_unit）、nat→R 嵌入三件与宏损失单调/符号衰减/κ-半量评估五件。
-   依赖: S01_BaseRing、fa56_id_carrier、fa56c_ext、PhysPredAblation、p4a_GradSignQDec、S5SlotWire；Stdlib QArith、Lists.List。
-   对标: 涨落-耗散定理与熵产率的具体单点实例（统计物理）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ===================================================================== *)
+(* UpAblP6_S5SlotWire.v —— S5SlotWire 的具体实例供给件（PA6-05）          *)
+(* 对象：S5SlotWire.v（230 行 20 声明 0 伴生，全 Defined                  *)
+(*       提取面向＝可执行输入实例）。消融形态＝N3 代表性输入实例供给：     *)
+(*       四组具体数据构造输入，使转发件沿实例点真实求值出结论，非转发     *)
+(*       冒充——实例构造即消融实质（对照 FA3 消融三分类之实例供给类）。    *)
+(* 覆盖：字段4/5/6（fa56 双接口位点实例：单位点正性使用＋恒等求值）＋      *)
+(*       字段8（fa56c 单位权重实例）＋字段3（of_nat 三前提具体实现实例     *)
+(*       ＋轨道点）＋字段9a（Q 半半数值实例＋闭式有理数求值伴件）。        *)
+(* 纪律：零新数学；语句面全本库 Set 面位；全件 Qed 闭合；原树零改；        *)
+(*       .vo 只落临时工作根；零云端零 git；施工范围限于本件，其余文件零触碰。                *)
+(* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-Q 依赖池单根映射，       *)
+(*       输出落施工副本区，树内零写入。                                    *)
+(* ===================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import fa56_id_carrier.
@@ -34,7 +40,7 @@ Let lt   := @lt RI.
 
 (* ---- 输入实例一（字段4/5：协方差位单位点正性使用） -------------------
    输入数据：D := one、H_inv := one（接口单位点），正性证书
-   one_pos × one_pos 双供——被供给方 ssw_covariance_pos 在该具体点
+   one_pos × one_pos 双供——被供给件 ssw_covariance_pos 在该具体点
    实例化，结论 lt zero (fa56_covariance one one) 为单位点协方差正性
    实例。非平凡性：使用链经 fa56_covariance_pos（mult_positive）在
    实例点闭合，证书合成（单位点双正）为本件构造。 ---- *)
@@ -55,7 +61,7 @@ Qed.
 (* ---- 输入实例三（字段8：产率位单位权重实例） -------------------------
    输入数据：Flx := unit、TD := unit、w := 常一权重、theta := 常一势、
    J := tt、X := tt。fa56c 产率装配（权重×势）在实例点求值：
-   常一×常一＝mult one one，恒等经被供给方 ssw_entropy_production_rate
+   常一×常一＝mult one one，恒等经被供给件 ssw_entropy_production_rate
    实例化后按 β 规约闭合。 ---- *)
 Theorem uassw_entropy_production_unit :
   Id (fa56c_entropy_production_rate unit unit (fun _ => one) (fun _ => one) tt tt)
@@ -116,7 +122,7 @@ Open Scope Q_scope.
 
 (* ---- 输入实例五（字段9a：eta := 1/2、mu := 1/2、x0 := 1/2、n := 0、k := 1） --
    输入数据：ημ ＝ 1/4 ＜ 1（收缩系数 κ ＝ 3/4 落 (0,1)），三前提
-   逐件由 Q 层有序比较计算闭合；被供给方 ssw_full_sign_decay_instance_ref
+   逐件由 Q 层有序比较计算闭合；被供给件 ssw_full_sign_decay_instance_ref
    在该闭式点实例化出数值衰减不等式。 ---- *)
 Theorem uassw_full_sign_decay_half :
   Qle (Qabs (gsq_grad (1#2) (gsq_iter (1#2) (1#2) (O + Datatypes.S O) (1#2))))

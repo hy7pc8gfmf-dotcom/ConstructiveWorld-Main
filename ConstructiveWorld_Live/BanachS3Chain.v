@@ -1,31 +1,26 @@
 (* ============================================================ *)
-(*  BanachS3Chain.v —— Banach 路径 B S3 链核对与装配（纯装配层）      *)
-(*  使命: 补全 UpReqBanachExp.v:470 所留「交换 exp_add 装配＋           *)
-(*        (e^a)^{-1}=e^{-a} 可逆性」缺口。核对结论：上游已齐备——        *)
-(*        bnh_bpow_add（BanachNoHyp 二项式，hplus/hwd 双摘除）＋        *)
-(*        bxae 中段件（UpReqBanachExpAddEq plain B 级数重组链）＋       *)
-(*        bd2_diag/esp_prod_square（UpReqBanachDouble/CauchyD）。       *)
-(*        本件三处装配（全部使用已证件，不重写任何 bxae_/bnh_/binv_/    *)
-(*        bxoo_/bxcd_ 定理）：①E 载体无条件面（bxae_exp_add 携带显式    *)
-(*        hplus/hwd，基类 BanachAlg 已迁入 bcoef_plus/bcoef_wd 字段     *)
-(*        ——直接以字段供给消去显式假设）；                              *)
-(*   ② plain B 载体版 exp_add：bxadd_esp_prod_blim（左极限）+           *)
-(*      bxae_lim_shift（差小移位）+ bxae_diff_small（尾差估计，供给     *)
-(*      类字段）+ bxoo_uniq_shape（假设化唯一性，plain 无 sep 字段）    *)
-(*      四件合流。                                                      *)
-(*   ③ 可逆性合流：bxoo_exp_opp_one（e^a·e^{-a}==e^0，Ext 无条件）      *)
-(*      与 bxoo_bzero_eq_bone（e^0==bone）两件从未合流——补 bae_trans    *)
-(*      合流件 + plain 面两槽闭合（bxcd_prod_near_one 供给类字段        *)
-(*      + bxoo_bzero_eq_bone_assembly），得逆元见证 e^{-a}。            *)
-(*  依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、  *)
-(*        UpReqBanachExpDef、UpReqBanachProd、UpReqBanachAdd、           *)
-(*        UpReqBanachExpAdd、UpReqBanachDouble、UpReqBanachCauchyD、     *)
-(*        UpReqBanachLimUniq、UpReqBanachClassExt、BanachNoHyp、         *)
-(*        UpReqBanachExpAddEq、UpReqBanachExpOppOne、UpReqBanachInvPre； *)
-(*        Stdlib QArith、Qabs、Arith、Lia。                              *)
-(*  构造性: 全件 Qed 闭合、零承认语句；纯装配层零重证。                  *)
-(*  编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树  *)
-(*        同世界重编），COQLIB/ROCQLIB 全字面环境前缀。                  *)
+(* BanachS3Chain.v — T43 候选 C7（席位 CXC9，E-STAGING-CXC9）      *)
+(* Banach 路径 B S3 链对账收口 + 总装（纯装配层，零重证）          *)
+(* ============================================================ *)
+(* 使命：UpReqBanachExp.v:470 S3 挂账「交换 exp_add 总装 +        *)
+(*   (e^a)^{-1}=e^{-a} 可逆性」的真缺口收口。对账定谳：            *)
+(*   上游全绿——bnh_bpow_add（BanachNoHyp 二项式，hplus/hwd 双摘除）*)
+(*   + bxae 中段件（UpReqBanachExpAddEq plain B 级数重组链）        *)
+(*   + bd2_diag/esp_prod_square（UpReqBanachDouble/CauchyD）。      *)
+(*   真缺三处（本件施工面，全部消费已证件装配，不重写任何 bxae_/    *)
+(*   bnh_/binv_/bxoo_/bxcd_ 定理）：                                *)
+(*   ① E 载体无条件面：bxae_exp_add 钉着显式 hplus/hwd，而基类      *)
+(*      BanachAlg 已迁入 bcoef_plus/bcoef_wd 字段（bnh 锚一已定谳   *)
+(*      「字段形≡假设形」）——直接喂参消钉。                        *)
+(*   ② plain B 载体版 exp_add：bxadd_esp_prod_blim（左极限）+       *)
+(*      bxae_lim_shift（差小移位）+ bxae_diff_small（尾差估计，喂    *)
+(*      类字段）+ bxoo_uniq_shape（假设化唯一性，plain 无 sep 字段） *)
+(*      四件合流。                                                  *)
+(*   ③ 可逆性合流：bxoo_exp_opp_one（e^a·e^{-a}==e^0，Ext 无条件）  *)
+(*      与 bxoo_bzero_eq_bone（e^0==bone）两件在库但从未合流——补     *)
+(*      bae_trans 合流件（Ext 面无条件）+ plain 面两槽收口           *)
+(*      （bxcd_prod_near_one 喂类字段 + bxoo_bzero_eq_bone_assembly）*)
+(*      得 (e^a) 的逆元见证 e^{-a}：e^a·e^{-a}==bone。               *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -47,7 +42,7 @@ Require Import UpReqBanachInvPre.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Lia.
 
-(* 类字段→显式假设形供给锚（bnh 锚一同位：字段形≡假设形） *)
+(* 类字段→显式假设形喂参锚（bnh 锚一同位：字段形≡假设形） *)
 Definition s3c_hplus_of (B : BanachAlg)
   : forall q r : Q,
     @bae B (@bplus B (@bcoef B q) (@bcoef B r)) (@bcoef B (q + r)%Q)
@@ -75,7 +70,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* ② plain B 载体 exp_add 装配（六环合流：⑤左极限 + ④差小移位      *)
+(* ② plain B 载体 exp_add 总装（六环合流：⑤左极限 + ④差小移位      *)
 (*   + ⑥唯一性（假设化）；唯一性槽以 bxoo_uniq_shape 显式给出——     *)
 (*   plain 类无 sep 字段，与 bxoo_exp_opp_one_assembly 同口径）      *)
 (* ============================================================ *)
@@ -140,7 +135,7 @@ Proof.
   - exact (bxoo_bzero_eq_bone E).
 Qed.
 
-(*   ③b plain 载体：bxoo_exp_opp_one_assembly 的 Hnear 槽闭合——     *)
+(*   ③b plain 载体：bxoo_exp_opp_one_assembly 的 Hnear 槽收口——     *)
 (*   bxcd_prod_near_one 的 hplus/hwd 显式假设喂基类字段（S6 注记     *)
 (*   「plain 喂不进」系类迁移前旧账，bnh 锚一后即通）。               *)
 

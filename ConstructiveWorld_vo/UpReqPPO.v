@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -20,7 +21,7 @@
 (* 备注： 状态值、优势、KL 到参考策略为显式定义；求和接口三定律为前提。 *)
 (* ============================================================ *)
 
-(*
+(* UpReqPPO.v — 签名迁移批 3 收尾席：PPO/advantage 簇余件 + dpo_reward_is_implicit req 化
    上游：UpReqAlgebra.v（批 1 地基）+ UpReqAlign.v（批 3 主体：pos_dist/F_align_req/
      align_objective_req/relative_entropy_req/pi_star_req/req_pi_star_pos/
      req_align_energy_exp/req_le_of_minus_nonneg/rkl_opp_zero——全部只消费不重建）；
@@ -1152,15 +1153,15 @@ Qed.
          三步 + plus_opp/plus_zero 归零）。
    命名对位：state_value_req==V、advantage_req==A、relative_entropy_req==kl_to_ref
      （kl_to_ref_req 同形 δ 可换，沿件3 语句惯例直用 relative_entropy_req）。
-   封存改道（终验件）：原节内双 assert（塌缩引理 / J(π_ref)==V(π_ref)）
+   封存改道（2026-09-09 终验席）：原节内双 assert（塌缩引理 / J(π_ref)==V(π_ref)）
      40min 无 .vo）；提级为独立件 rppo_b_collapse_minus（内机6）/
-   根因修复（同件，定位探针二轮）：装配层尾腿原为 req_sym 内机5 裸喂
+   根因修复（同席，定位探针二轮）：装配层尾腿原为 req_sym 内机5 裸喂
      req_plus_compat H2 槽——槽型 req (req_minus (req_minus Vπ Vref) KL)
      (req_minus A_sum KL) 与内机5 对称型 req (req_minus Vπ Vref) A_sum 差一层
      req_minus 双参同态运输，apply 进 δ 展开搜索死旋（glob 停在语句行即此；
      40min 内存爬升后 worker 静默亡=根源非封存非热载）；补 req_plus_compat
      双 opp-KL 腿 + req_refl 运输（req_minus δ 透明 plus a (opp b) 可转换）。 *)
-(*
+(* 内机6（件16 提级伴件，2026-09-09 终验席封存改道）：塌缩引理
    b + ((a−b)−c) == a−c（Id 第4/5步 req 合并形）——原为件16 节内 assert，
    单件巨型封存在 .vo 期膨胀致死（四轮实证 EXIT=127 零输出），提级独立。 *)
 Lemma rppo_b_collapse_minus :

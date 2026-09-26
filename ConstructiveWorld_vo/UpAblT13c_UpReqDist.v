@@ -1,6 +1,9 @@
 (* ============================================================ *)
+(* UpAblT13c_UpReqDist.v —— 消融清欠席 T13c（批9）UpReqDist 两位              *)
+(* 辖区（T13a-2 勘误移交·现档坐标）：                                        *)
 (*   位1 UpReqDist.v:3091 transition_normalization（ReqSteadyState req 层）   *)
 (*        → 两点世界行归一核 supply（half+half==one 纯接口代数链；            *)
+(*          T13a-2 指认普查依据 req_minp_markov_kernel_normalized 为          *)
 (*          Token/vocab 世界专属非同语句，本件改走实例供给路线落地）           *)
 (*   位2 UpReqDist.v:3096 detailed_balance（ReqSteadyState req 层）           *)
 (*        → 源核缩放族 t(s,s')=p(s')·c supply（assoc-comm 纯代数；非循环——    *)
@@ -9,6 +12,7 @@
 (*   逐点代数不依赖载体大小，两点供给世界为最小可达面。                       *)
 (* 分级：位1 = N3（实例供给）；位2 = N3（实例供给·核族构造）。                *)
 (* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqDist。          *)
+(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblT13c_*                           *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqDist.

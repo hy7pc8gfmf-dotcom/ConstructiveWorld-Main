@@ -39,7 +39,7 @@
 (*   故无条件下双向等价不可达；条件化等价见 UpAblLogWallEq 的 lgwe_equivalence。 *)
 (*                                                              *)
 (* 构造性注记：纯构造性 Set 层承载，语句面全 sigT/自定义 And/Or，零承认，      *)
-(*   零 Prop 泄露；归约前提（选择器）以定理显式参给出（随语句面入出口         *)
+(*   零 Prop 泄露；归约前提（选择器）以定理显式参承接（随语句面入出口         *)
 (*   签名，非全局无据项）。                                                   *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、UpReqLpoEquiv（rLPO 谱系对照）。    *)
 (* 对标：stdlib QArith（Q 上序与线性算术）；mathlib 无构造性对应物。          *)

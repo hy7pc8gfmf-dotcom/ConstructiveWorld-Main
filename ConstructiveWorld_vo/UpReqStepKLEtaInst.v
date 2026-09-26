@@ -3,7 +3,7 @@
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   ske_step_kl_eta_bound_inst_B（原 L1051，3 句玩具证）                 *)
 (*   ske_geom_step_discharged_B（原 L998，3 句玩具证）                    *)
@@ -182,7 +182,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Section: S05 Alignment 的 Real 化形态（逐定义对偶）              *)
+(* Section: S05 Alignment 的 Real 化形态（逐定义镜像）              *)
 (*   状态载体: nat 的前驱段 seq 0 (S k)（k 给出非空诚实面）;         *)
 (*   reward/beta/pi_ref/eta/pit 全部 Section 变量（Set 值前提）。   *)
 (* ============================================================ *)
@@ -205,7 +205,7 @@ Variable piref : nat -> Real.
 Variable Hpref : forall i : nat, real_lt real_zero (piref i).
 
 (* 状态表非空（real_list_sum_pos 的非空前提的 Set 值供给） *)
-(* ---------- S05 定义对偶 ---------- *)
+(* ---------- S05 定义镜像 ---------- *)
 (* ib := beta^-1; ske_e1(i) := exp(-beta^-1 * r(i))                *)
 (* ske_Za := sum piref*e1   (S05 Z_align)                          *)
 (* ske_pist(i) := Za^-1 * piref(i)*e1(i)   (S05 pi_star 闭式)       *)
@@ -456,7 +456,7 @@ Qed.
 (* ============================================================ *)
 
 (* log(pit*E) == lp + (eta*ib*r + (opp(eta*lp) + eta*lqr))
-   （E := exp_neg(opp(eta*ib*adv))，ske_adv_exp 输入） *)
+   （E := exp_neg(opp(eta*ib*adv))，ske_adv_exp 喂入） *)
 Lemma ske_logM : forall i : nat,
   real_eq (cw_log
              (real_mult (pit i)
@@ -1012,7 +1012,7 @@ Proof.
 Qed.
 
 
-(* W5 B 形（Bishop 非严格序，UpRealLeB 闭合器） *)
+(* W5 B 形（Bishop 非严格序，UpRealLeB 收口器） *)
 Theorem ske_geom_step_discharged_B :
   real_le_b (real_list_sum nat
                (fun i => real_kl_term (ske_pist i) (ske_pnext i) (ske_Hpist i) (ske_Hpnext i))
@@ -1082,7 +1082,7 @@ Qed.
 
 
 (* ============================================================ *)
-(* PA 检验（零新增逻辑公理面自检）                                 *)
+(* PA 探针（零新增逻辑公理面自检）                                 *)
 (* ============================================================ *)
 Print Assumptions ske_step_kl_eta_bound_inst.
 Print Assumptions ske_step_kl_eta_bound_inst_B.

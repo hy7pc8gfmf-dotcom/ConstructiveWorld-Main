@@ -1,13 +1,15 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpReqGibbsD.v *)
 (* *)
 (* 目的： gibbs_inequality 槽的显式供给（UpReqDist 载体）。 *)
-(* 主件： gibbsd_le_b_mult_pos_r / gibbsd_p_mult_ratio 等 ≤_B 引理族，供 gibbs_inequality 使用。 *)
+(* 主件： gibbsd_le_b_mult_pos_r / gibbsd_p_mult_ratio 等 ≤_B 引理族，供 gibbs_inequality 消费。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB。 *)
-(* 备注： 使用链假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用（非公理面）。 *)
+(* 备注： 消费链假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用（非公理面）。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqGibbsD.v —— 槽消解战役 #1：gibbs_inequality（UpReqDist.v）      *)
+(*   Real 实例化消解件（皇冠执行席，2026-09-10）                        *)
 (* ------------------------------------------------------------------ *)
 (* 引擎形状核对结论（普查 §380 落点纪律执行记录）：                      *)
 (*   引擎 real_log_le_linear_B @UpRealLeB:535 输出 Bishop 形序          *)
@@ -18,15 +20,15 @@
 (*   UpReqLatticeB:87 / real_lt_le_bridge@UpLogMono:16 均单向           *)
 (*   （real_le / real_lt → real_le_b）；逆向 real_le_b → real_le 即     *)
 (*   Or 形精确完成，构造性不可证（UpRealLeB 尾注登记表明示）。            *)
-(*   结论：req 层槽不可由 B 形引擎无条件消解（序异向，缺逆向连接引理）；    *)
+(*   结论：req 层槽不可由 B 形引擎无条件消解（序异向，缺逆向桥件）；    *)
 (*   按普查 §380 纪律落点升格为「Real 实例化定理」——本文件以            *)
 (*   real_le_b 为序复演 req_gibbs_pointwise → req_gibbs_inequality      *)
-(*   使用链，假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用。     *)
+(*   消费链，假设位 dist_log_le_linear 由 real_log_le_linear_B 显式应用。     *)
 (*   模板：UpReqU2 log_req_compat_real（T2 模板 ②：显式实例显式应用）。     *)
 (* ------------------------------------------------------------------ *)
 (* 结果：                                                              *)
 (*   [保底] gibbsd_gibbs_pointwise_B —— 逐点槽消解位：与                *)
-(*     req_gibbs_pointwise 使用 dist_log_le_linear 逻辑同位，           *)
+(*     req_gibbs_pointwise 消费 dist_log_le_linear 逻辑同位，           *)
 (*     real_log_le_linear_B 一次喂定；                                  *)
 (*     gibbsd_gibbs_inequality —— KL ≥ 0 Bishop 形（与 E.13             *)
 (*     real_gibbs_inequality_B 语句同形；E.13 走 real_gibbs_inequality_ *)
@@ -34,7 +36,7 @@
 (*   [主件·级联首层] gibbsd_cross_entropy_decomp ——                    *)
 (*     H(p,q) == S[p] + KL(p‖q) Real 实例化（req_cross_entropy_decomp   *)
 (*     @UpReqDist:2431 对位），逐点恒等经 log 乘法分解向闭合，          *)
-(*     同法使用本文件 Bishop 序机。                                     *)
+(*     同法消费本文件 Bishop 序机。                                     *)
 
 
 (*   与之恒等需 log 逆消去（log(inv p) == −log p），未备该消去件、 *)
@@ -395,6 +397,7 @@ Qed.
 (* ============================================================ *)
 
 (* D0【槽消解位】：逐点 Gibbs 切线 p−q ≤_B p·(−log(q/p))。
+   与 req_gibbs_pointwise（UpReqDist:2066）逻辑同位——该处消费
    Hypothesis dist_log_le_linear（槽，10 下游）；此处显式应用
    real_log_le_linear_B（UpRealLeB:535）一次闭合，无条件。
    链：槽 log(q/p) ≤_B q/p−1 → opp 反向 → 1−q/p 换形 →
@@ -409,7 +412,7 @@ Proof.
   set (Rqp := real_mult (q s) (real_inv_pos (p s) Hps)).
   set (Hr := real_mult_positive (q s) (real_inv_pos (p s) Hps) Hqs
                (real_inv_pos_pos (p s) Hps)).
-  (* —— 槽消解位：req 层 dist_log_le_linear 使用位，B 形引擎显式应用 —— *)
+  (* —— 槽消解位：req 层 dist_log_le_linear 消费位，B 形引擎显式应用 —— *)
   assert (Hlin : real_le_b (real_log Rqp Hr)
                            (real_plus Rqp (real_opp real_one))).
   { exact (real_log_le_linear_B Rqp Hr). }
@@ -560,6 +563,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* 核对（槽消解战役 #1 结果清单）：                                     *)
 (*   gibbsd_lt_add_opp_r / gibbsd_le_b_opp / gibbsd_le_b_id_l /         *)
 (*   gibbsd_minus_flip / gibbsd_le_b_mult_pos_r —— Bishop 序代数 5 件    *)
 (*   （req 层 opp_le_compat / le_id_l / req_le_mult_compat_r 的          *)
@@ -571,9 +575,11 @@ Qed.
 (*   gibbsd_gibbs_pointwise_B —— 槽消解位（dist_log_le_linear 显式应用）。  *)
 
 (*   gibbsd_cross_entropy_decomp —— 级联首层主件。                      *)
+(* 沉淀卡（索引回填行见合规自查报告）：                                     *)
 (*   E-GIBBSD-1：B 形引擎消解 req 层 Hypothesis 槽，序异向不可显式应用——    *)
 (*   落点纪律 §380 fallback（Real 实例化定理）首次全链执行；缺口件=      *)
 (*   Bishop 序代数基元 5 件 + Bishop 和单调 1 件（本文件 Part A/C      *)
+(*   可跨战役复用：log_le_linear/log_lt_mono 族槽消解同构缺口）。       *)
 
 
 

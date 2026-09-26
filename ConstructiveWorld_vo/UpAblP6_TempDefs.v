@@ -1,10 +1,10 @@
 (* ===================================================================== *)
 (* 【工单面外扩展件标注】本件为工单面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
-(*   形态实例层消解），候合并方甄别确认；若属已补强保留区请退回。 *)
+(*   形态实例层消解），候融合方甄别确认；若属已补强保留区请退回。 *)
 (* A 区五字段（工单 §5.1）： *)
 (* ① 模块名+数学使命：UpAblP6_TempDefs.v——单点求和载体上温度化 *)
 (* Boltzmann 装配件：配分函数/温度化分布/能量期望/熵显式式全 Set 层形式化。 *)
-(* ② 依赖清单：CW_ConstructiveWorld_219；尾部插入供给段另 Require UpReqConcFin2 *)
+(* ② 依赖清单：CW_ConstructiveWorld_219；尾插供给段另 Require UpReqConcFin2 *)
 (* （cf2_temp/cf2_temp_pos 见证锚）。 *)
 (* ③ 对标行：mathlib/stdlib 无同构物（库内自持 Real 载体装配件），省略。 *)
 (* ④ 构造性注记：Set 层承载；零承认零公理；全部定理 Qed 闭合，可提取。 *)
@@ -27,7 +27,7 @@
 (* UpAblP6_TempDefs.v —— PA6-02 席位（论文6 独占件 UpReqTempDefs 消融施工件） *)
 (*                                                                       *)
 (* 盘面：UpReqTempDefs.v（468 行，Section RealTempDefs，12 声明＝5 定义件   *)
-(*   ＋7 全证件；文件级零承认、节参 9 位）。配套模块核验：全树三面           *)
+(*   ＋7 全证件；文件级零承认、节参 9 位）。伴生件核验：全树三面           *)
 (*   （ConstructiveWorld_vo／ConstructiveWorld_Live／ConstructiveWorld-Main） *)
 (*   ls UpAbl*UpReqTempDefs* 仅 2 件——UpAblD1S3_sum_pos（节参 sum_pos 扩参数位）  *)
 (*   与 UpAblD1S8（9 节参参数位封装供给）：伴生覆盖落在节参面，12 声明参数位零覆盖，  *)
@@ -45,7 +45,7 @@
 (*     ⑩log invZ 辅助＝log 乘法拆解＋群律闭合（独立链真证）；             *)
 (*     ⑪点态负 log 恒等＝⑩＋exp log 桥（独立链真证）；                    *)
 (*     ⑫熵显式主＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
-(*       源模块 E404 配方在自持载体上复核）。                               *)
+(*       源模块 E404 配方在自持载体上复验）。                               *)
 (*   纪律：零 Require UpReqTempDefs（防混代际）；纯构造性；语句面零 Prop    *)
 (*     泄露（全 real_eq/real_lt 值面）；全 Qed；尾 7 Print Assumptions。   *)
 (* ===================================================================== *)
@@ -291,7 +291,7 @@ Definition uap6t_entropy_dist
   uap6t_sum1 (fun s : unit => real_mult (p s) (real_opp (real_log (p s) (Hp s)))).
 
 (* 参数位⑫（A）：熵显式主——点态换形→distrib→分和→β/logZ 双提取
-   （源模块 E404 配方在自持载体上复核，独立链真证） *)
+   （源模块 E404 配方在自持载体上复验，独立链真证） *)
 Theorem uap6t_entropy_temp_explicit :
   real_eq (uap6t_entropy_dist uap6t_dist uap6t_dist_pos)
           (real_plus (real_mult (real_inv_pos T T_pos) uap6t_energy_exp)
@@ -420,7 +420,7 @@ Print Assumptions uap6t_entropy_temp_explicit.
 (*   见证二 T:=cf2_temp（UpReqConcFin2，定义性等于 one）——引 cf2_temp_pos，      *)
 (*   其语句面为类字段形 lt zero cf2_temp，本件以规范名 real_lt real_zero 重述，    *)
 (*   类型转换核验即类字段 lt/zero 与 real_lt/real_zero 在 Real 载体上定义性       *)
-(*   一致的机器凭证；与 ConcFin2 载体族同源，供合并侧按载体族整取。              *)
+(*   一致的机器凭证；与 ConcFin2 载体族同源，供融合侧按载体族整取。              *)
 (* ============================================================ *)
 Require Import UpReqConcFin2.
 

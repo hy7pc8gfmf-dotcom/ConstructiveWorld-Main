@@ -1,17 +1,10 @@
-(* ============================================================
-   使命：本件定理/引理声明面所述性质的形式化（原头注为历史注记块，
-         实质整编候后波；本块为五字段指针）。
-   依赖：件内 Require 声明面所列库件。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
-
 (* ============================================================ *)
 (* UpReqI4Witness.v *)
 (* *)
 (* 目的： 结论 I4 证书位的实例化（无条件形）。 *)
 (* 主件： i4b_policy_iter_kl_pow_mono_unconditional：经 t30 见证族去假设位化。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB、UpReqGeomIter、UpReqPowMonoBridge、UpReqI4Bridge。 *)
-(* 备注： 实例化件：t30_kl_term_eq_zero 等见证把桥接引理假设位落实为零前提形。 *)
+(* 备注： 实例化件：t30_kl_term_eq_zero 等见证把桥件假设位落实为零前提形。 *)
 (* 构造性注记：Set 层承载、零承认、可提取。 *)
 (* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
 (* ============================================================ *)
@@ -19,7 +12,7 @@
 (* ============================================================ *)
 (* UpReqI4Witness.v —— 结论 I4 证书位实例化件 *)
 (*   使命＝为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书，使结论 I4 的        *)
-(*   使用位（UpReqI4Bridge 主桥接引理2 的 Hkl0or 前提）从接口化降为          *)
+(*   使用位（UpReqI4Bridge 主桥件2 的 Hkl0or 前提）从接口化降为          *)
 (*   「证书内部构造」：调用方不再提供 KL_0 形态的任何前提，只需提供      *)
 
 (* ---------------------------------------------------------------- *)
@@ -52,9 +45,9 @@
 (*   件W6 i4b_policy_iter_kl_pow_mono_unconditional：无条件闭合主件——    *)
 (*       结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
 
-(*       内部合成（使用  主桥接引理2 一次直连）；                          *)
+(*       内部合成（使用 T20 主桥件2 一次直连）；                          *)
 (*   件W7/W8 i4bw_..._nonconst / i4bw_..._const：两支端到端实例——        *)
-(*       单支见证即全闭合的分布级演示（ 件3 的分布级升级版）。         *)
+(*       单支见证即全闭合的分布级演示（T20 件3 的分布级升级版）。         *)
 (* ---------------------------------------------------------------- *)
 (* 诚实边界（残差精确形状，承 T1 结论）：                                 *)
 (*   · 逐项可比前提 Or (real_le (r i) (p i)) (real_le (p i) (r i)) 的    *)
@@ -91,7 +84,7 @@ Require Import UpReqPowMonoBridge.
 Require Import UpReqI4Bridge.
 
 (* ============================================================ *)
-(* 〇、桥接引理：库内 Id 运输＋seq 分解（对接 G07 的 l1 ++ s0 :: l2 形）      *)
+(* 〇、桥件：库内 Id 运输＋seq 分解（对接 G07 的 l1 ++ s0 :: l2 形）      *)
 (* ============================================================ *)
 
 (* 件W0：Set 层等同运输双向件（Id 非可改写等号，destruct 完成后即定义性换元） *)
@@ -250,7 +243,7 @@ Definition t30_div_witness (n : nat) (r p : nat -> Real) : Set :=
       sigT (fun _ : Id n (Nat.succ (j + k)) =>
         Or (real_lt (r j) (p j)) (real_lt (p j) (r j))))).
 
-(* 件W5：组装件。左支（逐点相等）走  件0b；右支（分离见证）走  件0a。 *)
+(* 件W5：组装件。左支（逐点相等）走 T20 件0b；右支（分离见证）走 T20 件0a。 *)
 Lemma t30_kl0_or_of_case : forall (n : nat) (r p : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
     (Hp : forall i : nat, real_lt real_zero (p i))
@@ -345,7 +338,7 @@ Proof.
            t t1 Hle).
 Qed.
 
-(* 件W8：const 支端到端——逐点相等 ⟹ 结论 I4 目标形（ 件3 的分布级升级） *)
+(* 件W8：const 支端到端——逐点相等 ⟹ 结论 I4 目标形（T20 件3 的分布级升级） *)
 Lemma i4bw_policy_iter_kl_pow_mono_const :
   forall (n : nat) (r : nat -> Real)
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -394,7 +387,7 @@ Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表                                                        *)
-(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经       *)
+(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经 T20      *)
 
 (*   使用位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
 (*   同形，结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)

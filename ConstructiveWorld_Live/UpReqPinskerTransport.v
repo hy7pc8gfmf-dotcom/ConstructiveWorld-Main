@@ -1,13 +1,12 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 Set Printing Width 500.
 (* ============================================================ *)
-(* UpReqPinskerTransport.v ——  PNSKB：Pinsker 传递层（首轮落盘件）     *)
+(* UpReqPinskerTransport.v —— 席 PNSKB：Pinsker 传递层（首轮落盘件）     *)
 (*                                                                *)
-(* 此次交付（预算止损内必绿面）：                                     *)
-(*   ·传递装配着陆齿轮（全部通过）：                                       *)
+(* 本轮交付（预算止损内必绿面）：                                     *)
+(*   ·传递装配着陆齿轮（全绿）：                                       *)
 (*     Section 2 Bishop 组合件族（≤_B 自反/运输/传递/加法/正乘/求和升格/  *)
 (*       倒数唯一/abs 相容/log 相容/kl_term 双元运输/1−a 恒等）——        *)
-(*       G2 链式法则件与 G3 装配的全部 plumbing；                       *)
+(*       G2 链式法则件与 G3 总装的全部 plumbing；                       *)
 (*     Section 3 filter 拆分恒等式族（Σ_l == Σ_F + Σ_Fc 与逐点符号       *)
 (*       ite 沿主/副侧消解）——分组质量坐标的载体机制；                  *)
 (*   ·pnt_list_gibbs_b：list 形 Gibbs 非负（Bishop 形，case-free）       *)
@@ -15,21 +14,21 @@ Set Printing Width 500.
 (*       逐 fiber 加权步的引擎件；                                     *)
 (*   ·G1 恒等层 pnt_abs_tv_decomp：Σ(p+q+|p−q|) == 2 + 2·TV             *)
 (*       （real_eq，case-free 纯代数）。                                *)
-(* 未竟面（R4 实况登记，）：                                    *)
+(* 未竟面（R4 实况登记，20260917）：                                    *)
 (*   pnt_pinsker_abs_of_signcert 语句未落盘（R3 交接错记：仅本头注提名，  *)
 (*     无 Lemma）。条件主件档：符号证书（三分 Set 层 sum）+ 二点 Pinsker  *)
 (*     常数 2（PNSKA 接口槽）⟹ KL ≥_B 2·TV²，候 UpReqPinskerCore          *)
 (*     全量落盘后即插即用合成完全形。                                     *)
 (*   G1 全形 Vajda：P1（逐点 log 二阶下界/级数引擎，与 PNSKA 二点核缺口   *)
-(*     同源，独立定性）+ P2（list 加权 Engel–CS）双缺口定理化遗留。    *)
+(*     同源，两席独立定性）+ P2（list 加权 Engel–CS）双缺口定理化挂账。    *)
 (* 已竟面（R4）：毒环位点 11 处全清（显式项漏参/引擎件方向反/首位误填/     *)
-(*   remember 不透明四族，attn/_tpnskb_交付报告-.md R4 详录）；    *)
-(*   四关全部通过：vos 绿 / 全量绿（.vo 45593B）/ 提取零 magic（Obj.magic=0，  *)
+(*   remember 不透明四族，attn/_tpnskb_交付报告-20260916.md R4 详录）；    *)
+(*   四关全绿：vos 绿 / 全量绿（.vo 45593B）/ 提取零 magic（Obj.magic=0，  *)
 (*   18×Closed under the global context）/ coqchk 零公理。                *)
-(* 引擎链（全只读使用）：                                             *)
+(* 引擎链（全只读消费）：                                             *)
 (*   S08 real_gibbs_inequality_eps / real_kl_term；                    *)
 (*   UpRealLeB real_le_b/real_le_closure_b；UpReqTVAbsEps tv9_half；    *)
-(*   S02 real_eq_of_zero_diff（Q 环实例化消解）。                             *)
+(*   S02 real_eq_of_zero_diff（Q 环放电）。                             *)
 (* 红线自审：语句面全 Set；纯构造；全部 Qed（39/39）；公理面零 公理 零    *)
 (*   承认（coqchk 复证 公理清单为空(none)）；文尾 Print Assumptions 审计。    *)
 (* 编译：coqc（9.1 钉源 COQLIB/ROCQLIB）-q -vos -native-compiler no      *)
@@ -45,7 +44,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
 Require Import UpReqTVAbsEps.
 
-(* ---- 0. 逐点 Q 环实例化消解（PinskerTwoPoint p2_ring_eq 同族独立副本：
+(* ---- 0. 逐点 Q 环放电（PinskerTwoPoint p2_ring_eq 同族独立副本：
         real_eq 目标 → 逐点 Q 恒等（ring 消解）。
         real_inv_pos/real_abs/real_log 保持不透明（原子参与 ring）。 ---- *)
 Ltac pnt_ring_eq :=
@@ -1286,7 +1285,7 @@ Proof.
                                  (filter (fun x => negb (f x)) l)) real_one
                                  (real_kl_term Bp Bq HBp HBq) Hnormrc)
                               (real_mult_one (real_kl_term Bp Bq HBp HBq)))). }
-  (* 装配：Σ_l kl == (kl(A,B)+kl(Bp,Bq)) + (A·G + Bp·Gc)，后者 Bishop 非负 *)
+  (* 总装：Σ_l kl == (kl(A,B)+kl(Bp,Bq)) + (A·G + Bp·Gc)，后者 Bishop 非负 *)
   set (GF := real_list_sum X (fun s => real_kl_term
              (real_mult (p s) (real_inv_pos A HAp))
              (real_mult (q s) (real_inv_pos B HAq))
@@ -1358,7 +1357,7 @@ Proof.
   - apply (pnt_le_b_add_r MID MID NN Ngc (pnt_le_b_refl MID)).
 Qed.
 
-(* ---- 10. 文尾假设审计与提取检验 ---- *)
+(* ---- 10. 文尾假设审计与提取探针 ---- *)
 Print Assumptions pnt_le_b_mult_l.
 Print Assumptions pnt_inv_uniq.
 Print Assumptions pnt_log_compat.

@@ -13,7 +13,6 @@
 fail-loud：任何门失败非零退出，禁静默。
 """
 import argparse, hashlib, os, re, sys
-from pathlib import Path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TREES = [os.path.join(REPO, "ConstructiveWorld_Live"),
@@ -46,10 +45,10 @@ def load_map():
 
 
 def save_map(m):
-    buf = ["filename\tround\tcommit6\n"]
-    for fn in sorted(m):
-        buf.append(f"{fn}\t{m[fn][0]}\t{m[fn][1]}\n")
-    Path(MAP_FILE).resolve().write_bytes("".join(buf).encode("utf-8"))
+    with open(MAP_FILE, "w", encoding="utf-8", newline="\n") as f:
+        f.write("filename\tround\tcommit6\n")
+        for fn in sorted(m):
+            f.write(f"{fn}\t{m[fn][0]}\t{m[fn][1]}\n")
 
 
 def gates(orders_by_tree, live_tree):
@@ -110,7 +109,8 @@ def main():
         line = f"{fn}#{a.round}-{a.commit[:6]}"
         for t, o in orders.items():                # 尾插（禁重排）
             o.append(line)
-            Path(os.path.join(t, "order.txt")).resolve().write_bytes(("\n".join(o) + "\n").encode("utf-8"))
+            with open(os.path.join(t, "order.txt"), "w", encoding="utf-8", newline="\n") as f:
+                f.write("\n".join(o) + "\n")
         m = load_map(); m[fn] = (a.round, a.commit[:6]); save_map(m)
         print(f"appended: {line} -> 3 trees + map")
         return
@@ -138,7 +138,8 @@ def main():
                 fn = strip_id(l)
                 rnd, c6 = m.get(fn, ("R0", BASELINE6))
                 out.append(f"{fn}#{rnd}-{c6}")  # R0 亦带统一锚 #R0-d66910
-            Path(os.path.join(t, "order.txt")).resolve().write_bytes(("\n".join(out) + "\n").encode("utf-8"))
+            with open(os.path.join(t, "order.txt"), "w", encoding="utf-8", newline="\n") as f:
+                f.write("\n".join(out) + "\n")
         print(f"backfill done: {len(orders)} trees x {len(out)} lines")
         errs = gates({t: read_order(t)[1] for t in TREES}, TREES[0])
         for e in errs:

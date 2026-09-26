@@ -41,7 +41,7 @@
 (*    Id 映 real_eq）下，槽语句的载体形即 AbsLeId.v:91            *)
 (*    ali_real_abs_ge_zero_id（在库自证）——本件逐字引用两形：      *)
 (*    real 面一件 + RealEnhancedReal（S07:8566）实例投影 req 面    *)
-(*    一件（两语句经实例字段展开可转换同体，同源文件闭合）。          *)
+(*    一件（两语句经实例字段展开可转换同体，同母本闭合）。          *)
 (*    注：全树 Real 载体上无 Id 面接口束具体实例（唯 req 面一件）  *)
 (*    ——按 FA-D1S1 载体分层供给形登记，零重证。                   *)
 (*  ②DO 槽（N3，出节全参供给对）：ali_abs_ge_zero_id 语句          *)
@@ -49,7 +49,7 @@
 (*    (a) 节内副本形（AbsLeId L43-54 同款语境，出节 RI0/DO0 消为    *)
 (*        实例隐式参——与 AbsLeId 自身出节形同款，Check 实证）；     *)
 (*    (b) 显式全参形（T2b 节7 同款）：RI0/DO0/a 顶层 forall 显式    *)
-(*        全参，源文件 fa53_abs_ge_zero_id_dec（fa53:141）exact       *)
+(*        全参，母本 fa53_abs_ge_zero_id_dec（fa53:141）exact       *)
 (*        直接代入——任意 (RI0,DO0) 对喂即得。                          *)
 (*  ③DO 槽具体层（诚实分账）：                                    *)
 (*    - 可构造面：字段5（lt_le_iff_dec 载体形）一件，T 档显式       *)
@@ -61,7 +61,7 @@
 (*      E225 判定（G09_MiscSmall:566「可判定序=整体三分律=LPO      *)
 (*      等价、全库零实例」）+ S01 序三分律注记（构造性模型不可      *)
 (*      满足）+ AA15R SqWall 与 rLPO 等价判例。全树实例构造        *)
-(*      复核零命中（20260919：Build 解构仅 fa53:43/S06:5164        *)
+(*      复验零命中（20260919：Build 解构仅 fa53:43/S06:5164        *)
 (*      两处投影解构形）。邻接 N 坐标：fa53:141（抽象面供给）/      *)
 (*      AbsLeId.v:91（具体面供给）。定理化路线遗留：DO 类参数       *)
 (*      需 Id 面接口实例，全树该实例亦为零，墙语句面无法库内        *)
@@ -69,7 +69,7 @@
 (*                                                               *)
 (* 依赖（只读依存零改）：S01_BaseRing / fa53_compat_abs /          *)
 (*   S02_CauchyComplete / S03_QExp / S07_RealSetoidExpLog /        *)
-(*   AbsLeId（N1 源文件所在，仅引用 ali_real_abs_ge_zero_id）。       *)
+(*   AbsLeId（N1 母本所在，仅引用 ali_real_abs_ge_zero_id）。       *)
 (* 纪律：语句面全 Set 层（Or/Not/Id 均为 S01:67-70 Set 层定义）；   *)
 (*   公理面零新增；无禁用收尾词；前缀 uabd2_ 全库防撞已 grep 核    *)
 (*   （20260919 零命中）；原树零改；论文目录未触碰。               *)
@@ -118,7 +118,7 @@ Require Import S03_QExp.
 Require Import S07_RealSetoidExpLog.
 Require Import AbsLeId.
 
-(* real 面：槽语句字段映照载体形=N1 源文件 ali_real_abs_ge_zero_id   *)
+(* real 面：槽语句字段映照载体形=N1 母本 ali_real_abs_ge_zero_id   *)
 (* （AbsLeId.v:91，在库自证）逐字引用。                            *)
 Theorem uabd2_ri_real_abs_ge_zero_id :
   forall a : Real, real_le real_zero a -> real_eq (real_abs a) a.
@@ -129,7 +129,7 @@ Qed.
 (* req 面：RealEnhancedReal（S07:8566）实例投影形——投影常量居于     *)
 (* S07_RealSetoidExpLog.RealInterfaceEnhancedMod 模块（Locate 实证， *)
 (* T2b 节7 前缀同款）；le/zero/abs/req 四字段展开与 real_* 面       *)
-(* delta/iota 可转换同体，同源文件闭合。                              *)
+(* delta/iota 可转换同体，同母本闭合。                              *)
 Theorem uabd2_ri_reqface_abs_ge_zero_id :
   forall a : Real,
     @RealInterfaceEnhancedMod.le Real RealInterfaceEnhancedMod.RealEnhancedReal

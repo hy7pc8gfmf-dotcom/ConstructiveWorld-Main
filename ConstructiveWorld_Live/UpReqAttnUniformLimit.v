@@ -37,7 +37,7 @@ Proof.
   apply Hb in Hle. rewrite H in Hle. discriminate Hle.
 Qed.
 
-(* 实测核对：本安装 Qorder ——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
+(* 实测核对：本安装 Qorder 缺席——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
    全无；以 Qplus_le_l（iff 形右消去）+Qlt_irrefl+Qlt_le_trans 自建
    单侧严格单调桥，兼作 Qeq_lt 替代面（ witness 严格支用）。 *)
 Lemma alm_qlt_compat_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
@@ -326,7 +326,7 @@ Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
    非副本支用 plus 交换/结合。——蓝图已由下列 swg_ 两件落成。 *)
 
 (* —— 补编：m-开关求和恒等式蓝图落成（下两件 swg_）—— *)
-(* 头注所述待续部分自本节起由下列 swg_ 两件给出。 *)
+(* 头注所述待续部分自本节起由下列 swg_ 两件承接。 *)
 (* 对显式表 vl 归纳（不归纳 Section Variable：vocab 被 m_in_vocab 等钉死）。 *)
 (* 基座核对（全数对上零漂移）：real_list_sum/
    real_of_nat（S08，O↦0、S n↦1+of_nat n 定义折叠）、real_eq_refl/sym/trans、
@@ -1389,12 +1389,12 @@ End AluChain.
 
 (* ============================================================ *)
 (* Part 2.9：本体闭合——alm_uniform_limit                        *)
-(*   陈述（冻结形）：∀eps>0, sigT T₀(>0) ∧ ∀T(0<T<T₀),        *)
+(*   陈述（R85 冻结形）：∀eps>0, sigT T₀(>0) ∧ ∀T(0<T<T₀),        *)
 (*   L1(w_T,u) ≤ eps。装配路线：质量分裂链（Part 2.5 alu_ 链自承    *)
 (*   转录，因 MassSplit 为下游使用方不可反向 Require）给出          *)
 (*   L1 ≤ n·d + n·d（d = e^{−γ/T}）；间隙证书/副本计数/均匀目标/     *)
 (*   开关核为 Part 1-2 之 alm_ 件。阈值 T₀ := γ·δ、                 *)
-(*   δ := (eps·½)·(1/n)：cw_log 下的无 log 扁形替代——            *)
+(*   δ := (eps·½)·(1/n)：cw_log 缺席下的无 log 扁形替代——            *)
 (*   real_exp_ge_linear（e^t > 1+t）+ exp 单调 + δ·e^{γ/T} ≥        *)
 (*   δ·inv δ == 1 闭合，零嵌套 inv、零经典逻辑。                    *)
 (* ============================================================ *)

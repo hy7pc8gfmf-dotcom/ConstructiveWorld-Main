@@ -1,11 +1,38 @@
-(* ==========================================================================)
-   UpAblP6_EntropyMonoSplit_A.v — 熵单调分裂的 A 路线实例件
-   使命: uap63_pin_self_updirect/pin_at_peak_sym_assembly（峰值钉扎）、diff_ge_zero_indep（差非负独立形）、plus_eps_updirect/eps_one_assembly/diff_eps_combo_indep 六件。
-   依赖: CW_ConstructiveWorld_219、UpReqTempDefs。
-   对标: 熵函数单峰性（最大熵在均匀分布）的分裂论证路线 A。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblP6_EntropyMonoSplit_A.v —— 消融件甲：EntropyMonoSplitInst       *)
+(*   前三枚证明件的独立重证（按依赖序 #4/#5/#6）。                      *)
+(*                                                              *)
+(* 上游源模块：EntropyMonoSplitInst.v（上游定义件，出节常量 8 枚）。          *)
+(* 依赖清单：CW_ConstructiveWorld_219、UpReqTempDefs（Stdlib 零直引）。 *)
+(*                                                              *)
+(*   11 声明勘表：3 Let（emsi_bt/emsi_bt_pos/emsi_kl，无独立证明体）      *)
+(*   + 3 Lemma（三枚桥接引理）+ 1 Corollary（对称孪生形）+ 4 Theorem。  *)
+(*   本件消融前三枚含 Qed 的证明件：                                    *)
+(*     #4 emsi_energy_pin_self（能量自等桥接引理）                      *)
+(*     #5 emsi_le_diff_ge_zero（差分非负序引理）                        *)
+(*     #6 emsi_le_plus_eps（eps 松弛提升引理）                          *)
+(*   Let 三枚无独立证明体不设消融（出节内联消失）；#7–#11 属后续消融件。 *)
+(*                                                              *)
+(* 独立性注记：全部六枚定理证明项零引用上游件名                           *)
+(*   （emsi_* / inst_* 六枚全不出现），逐枚注明重证形态：                *)
+(*   消融一（对 #4）上游定义面直接重证 + 峰温对偶：剥上游 emsi_bt 换名层， *)
+(*     直接对上游 UpReqTempDefs.real_boltzmann_dist_temp /               *)
+(*     real_energy_exp_temp 定义面以 real_eq_refl 重立；第二定理给上游    *)
+(*     inst_pinned_at_peak 的 sym 对偶新形（上游未证方向）。             *)
+(*   消融二（对 #5）独立链：改走 RealSetoid.real_eq_le（eq 化 le 引理）   *)
+(*     造 0 ≤ a+(−a) 再 real_le_trans 复合——与上游「compat 双边         *)
+(*     同加 + id_l 换左」结构异链。                                     *)
+(*   消融三（对 #6）实例装配：泛形直接重立 + eps:=real_one 具体装配      *)
+(*     新形（real_one_pos 供给）+ #5∘#6 组合引理（使用本件消融件，       *)
+(*     验证引理链撤上游后仍自洽复合）。                                  *)
+(*                                                              *)
+(* 全部证明以 Qed 闭合零悬置；语句面全在 raw Real 层，无 req2 形混引。   *)
+(*   尾嵌 Print Assumptions 六连假设审计。                              *)
+(* 构造性注记：全链 Qed 闭合零悬置；语句面 Set 层；零公理、零承认、零经典逻辑 *)
+(*   （假设面审计见文尾六连 Print Assumptions）。 *)
+(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
+(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqTempDefs.

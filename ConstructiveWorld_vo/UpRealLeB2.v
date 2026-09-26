@@ -9,7 +9,7 @@
 
 (* ============================================================ *)
 (* UpRealLeB2.v —— Bishop 显式假设攻坚席：多 eps 组合链 4 件 + 广义完成器 *)
-(*   （UpRealLeB.v 引擎的续建层；Require 使用，零改写上游）          *)
+(*   （UpRealLeB.v 引擎的续建层；Require 消费，零改写上游）          *)
 (*                                                                *)
 (* 主结果（全部 Set 层、零 Prop 泄露、纯 term-mode 组装）：          *)
 (*   F.1 real_le_closure_b_nonneg：非负系数完成器（广义完成器之一）——  *)
@@ -47,7 +47,7 @@ Require Import CW_ConstructiveWorld_219.
 Require Import UpRealLeB.
 
 (* ============================================================ *)
-(* F.0 辅助：δ·inv(2) + δ·inv(2) == δ（eps/2 拆分换形基础模块）          *)
+(* F.0 辅助：δ·inv(2) + δ·inv(2) == δ（eps/2 拆分换形底座）          *)
 (* ============================================================ *)
 
 Lemma leb2_half_add : forall d : Real,
@@ -223,7 +223,7 @@ Proof.
              (real_mult d (real_inv_pos (real_plus real_one real_one) real_two_pos_local))
              (RealSetoid.real_le_id_l _ _ _ Heq1 (real_le_refl _))
              (RealSetoid.real_le_id_r _ _ _ Heq3 Hle2)). }
-  (* 使用假设（Or 编码两支分别闭合） *)
+  (* 消费假设（Or 编码两支分别闭合） *)
   destruct (H _
     (real_mult_positive
        (real_mult d (real_inv_pos (real_plus real_one real_one) real_two_pos_local))
@@ -458,7 +458,7 @@ Qed.
 (*   源件 eps 与 eps' 内嵌于 invZ·T·(exp·eps + eps') 复合系数；系数     *)
 (*   C := invZ·T·(exp+1) 仅非负（T ≥ 0 无正性证书），正走 F.1 器。      *)
 (*   完成后 eps 与 eps' 同时从界内消去：db ≤_B invZ·T·(exp·M)。        *)
-(*   节变量逐字对偶源件 discharged 前缀（15 参，检验实测）。           *)
+(*   节变量逐字镜像源件 discharged 前缀（15 参，探针实测）。           *)
 (* ============================================================ *)
 
 Section RealKVQuantLeB.
@@ -634,7 +634,7 @@ End RealKVQuantLeB.
 (*   尾带全称 eps 余量（|X| ≤ 2t²+(eps1+eps2)+eps），属 plain-eps 直连   *)
 (*   形：eps1/eps2 为前提位固定正量并入右端。one 特化完成单步 + 源件     *)
 (*   直连，零新增前提。盘点判 9(e) 的「证书链长」在升格面不成立——        *)
-(*   四分支证书链在源件内部已闭合，升格面只使用其出口语句。              *)
+(*   四分支证书链在源件内部已闭合，升格面只消费其出口语句。              *)
 (* 【结论 G4｜盘点 #25 real_quad_t_le_h_B】可升格（完整）——源件 eps'    *)
 (*   为全称求和余量（自带零小于前提位），one 完成后 eps' 从界内消去：    *)
 (*   2(h/x)² ≤_B (1/2)·eps·|h|。余量内嵌 |h| 因子随固定端并入右端。      *)
@@ -647,13 +647,13 @@ End RealKVQuantLeB.
 (*   exp>0（cauchy_real_exp_pos 既有）逐级组装；源件取 eps := eps' := ε  *)
 (*   后分配律换形 db ≤ y + C·ε，F.1 器单步完成。eps 与 eps' 同时消去：   *)
 (*   db ≤_B invZ·T·(exp·(L/D·m)·exp(L/D·m))。零新增前提（15 参 discharged *)
-(*   前缀照抄源件，节变量对偶声明）。                                    *)
+(*   前缀照抄源件，节变量镜像声明）。                                    *)
 (* 【核对】盘点清单显式假设 4 件（#24/25/28/32）全部升格落盘本文件。         *)
 
 (*   == 二十九件 Bishop 形；余七件为冻结族（结论 9(a)-(d)），形态不匹配 *)
 
 
-(*   Obj.magic 计数为零（检验验后删）；G4 认证 9.0 同平台通过。           *)
+(*   Obj.magic 计数为零（探针验后删）；G4 认证 9.0 同平台通过。           *)
 (*   全件 Print Assumptions Closed（见文末）。                           *)
 (* ============================================================ *)
 

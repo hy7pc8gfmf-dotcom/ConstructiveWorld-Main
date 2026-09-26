@@ -1,28 +1,49 @@
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   slc_gain_ge_kl_minus_eps（原 L261，2 句玩具证）                      *)
+(*   slc_gain_kl_two_sided_eps（原 L235，2 句玩具证）                     *)
+(*   slc_plus_comm_r_shift（原 L101，2 句玩具证）                         *)
+(*   slc_plus_r_assoc_cancel（原 L79，2 句玩具证）                        *)
+(*   slc_minus_r_plus_cancel（原 L50，2 句玩具证）                        *)
+(* ============================================================ *)
+
 (* ===================================================================== *)
-(* SecondLawConsume.v —— 使命：论文6 §7 第二定律的使用定理推导——从核心     *)
-(*   定理 real_entropy_deficit_kl_temp                                     *)
+(* SecondLawConsume.v —— 席位 P6D（批次 E-STAGING-P6D）：论文6 §7 第二定律  *)
+(*   的消费定理推导——从核心定理 real_entropy_deficit_kl_temp              *)
 (*   （S[p_T] − S[p] == KL(p‖p_T)，UpReqEntropyDeficitTemp 主件）出发，    *)
-(*   经 SecondLawQuantified 定量出口，导出四件新结论回喂基座。              *)
-(* 使用链（只读使用，零基座改动）：                                        *)
-(*   · real_entropy_deficit_kl_temp（13 参核心定理，检验 Check 实测）      *)
+(*   消费 SecondLawQuantified（C10 席）定量出口，导出四件新结论回喂基座。   *)
+(* --------------------------------------------------------------------- *)
+(* 【消费链（只读消费，零基座改动）】                                      *)
+(*   · real_entropy_deficit_kl_temp（13 参核心定理，探针 Check 实测）      *)
 (*   · slq_entropy_gain_kl_lower（15 参）：KL − 熵增 ≤ eps（逐 eps 下界）  *)
 (*   · slq_entropy_gain_kl_upper（15 参）：熵增 − KL ≤ eps（互补向）       *)
 (*   · slq_second_law_eps_list（list 机器全闭形）：S[p] ≤ S[p_T] + eps     *)
-(* 交付四定理（slc_ 前缀防撞，全库 grep 零实测撞名）：                      *)
+(* --------------------------------------------------------------------- *)
+(* 【交付四定理（slc_ 前缀防撞，全库 grep 零命中 2026-09-18 实测）】        *)
 (*   · slc_gain_kl_two_sided_eps：per-eps 双边定量（Set 层 slc_band 对；   *)
-(*     下界+上界同时使用，KL ≤ 增+eps 与 增 ≤ KL+eps 合成带状）            *)
+(*     下界+上界同时消费，KL ≤ 增+eps 与 增 ≤ KL+eps 合成带状）            *)
 (*   · slc_gain_ge_kl_minus_eps：熵增益 ≥ KL 缺陷 − eps 的显式形           *)
-(*     （real_le (KL − eps) 增；lower 经 plus 形再平移的扩展使用）          *)
+(*     （real_le (KL − eps) 增；lower 经 plus 形再平移的扩展消费）          *)
 (*   · slc_kl_boltz_self_zero：均衡点 p := p_T 处核心定理实例化 ⟹          *)
-(*     KL(p_T‖p_T) == 0（list 机器全闭；核心定理对基座使用位回喂）          *)
+(*     KL(p_T‖p_T) == 0（list 机器全闭；核心定理对基座消费位回喂）          *)
 (*   · slc_second_law_kl_floor_eps_list：Second Law eps 档 × 核心恒等式    *)
-(*     合流 ⟹ KL(p‖p_T) ≥ −eps（list 机器全闭的双使用下限件）             *)
-(* 依赖：CW_ConstructiveWorld_219 UpReqTempDefs UpReqEntropyDeficitTemp     *)
-(*   SecondLawQuantified。                                                 *)
-(* 构造性注记：纯构造性；结论面全 Set 层（real_eq/real_le/slc_band，        *)
+(*     合流 ⟹ KL(p‖p_T) ≥ −eps（list 机器全闭的双消费下限件）             *)
+(* --------------------------------------------------------------------- *)
+(* 【红线自审】纯构造性；结论面全 Set 层（real_eq/real_le/slc_band，        *)
 (*   real_le := Or lt eq 为 Set 型 sum）；前提位照供体对位不弱化不加码；    *)
-(*   全 Qed 闭合（语句面无承认式构造）；文末 PA×4 留痕。                    *)
-(* 编译配方：coqc 9.1 直调（vo 树内 -Q . "" 平面命名空间），信任缓存前置。  *)
+(*   全 Qed 收口；零新承认件；禁词面静态零命中（文末 PA×4 留痕）。           *)
+(* 编译配方（vorebuild 基座 + 私槽侧编 SLQ/TSI，基座零改）：                *)
+(*   rocq c -Q Live/vorebuild "" -Q /tmp/p6d_side "" -Q . ""               *)
+(*     SecondLawConsume.v                                                 *)
+(*   （vo_901 基座 2026-09-18 04:50 起被他席全链重编中 S01_BaseRing 已换，  *)
+(*    CW_ConstructiveWorld_219.vo 尚未刷 → 假设不一致；vorebuild 链经       *)
+(*    探针实测与当前 stdlib 一致，故取之。SLQ/TSI 侧编 /tmp/p6d_side，      *)
+(*    EXIT=0 且 Print Assumptions 全 Closed。）                            *)
 (* ===================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -37,7 +58,7 @@ Inductive slc_band (A B : Set) : Set :=
 | slc_band_intro : A -> B -> slc_band A B.
 
 (* ---------------------------------------------------------- *)
-(* 件 1–3：real 算术 choreography 三辅助引理（全 real_eq 档）        *)
+(* 件 1–3：real 算术 choreography 三工作马（全 real_eq 档）        *)
 (*   (a−b)+b == a ／ (a+b)+(−b) == a ＋ (x+y)+(−z) == (x+(−z))+y  *)
 (* ---------------------------------------------------------- *)
 Lemma slc_minus_r_plus_cancel :
@@ -66,7 +87,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 第一部分：任意和机器上的双边使用（Section 槽照 slq 同形同序）    *)
+(* 第一部分：任意和机器上的双边消费（Section 槽照 slq 同形同序）    *)
 (* ============================================================ *)
 
 Section SlcSecondLawConsume.
@@ -87,7 +108,7 @@ Variable T : Real.
 Hypothesis T_pos : real_lt real_zero T.
 Variable energy : S -> Real.
 
-(* 支路 1：KL ≤ 熵增 + eps（lower 之 plus 形；使用 slq_entropy_gain_kl_lower） *)
+(* 腿 1：KL ≤ 熵增 + eps（lower 之 plus 形；消费 slq_entropy_gain_kl_lower） *)
 Lemma slc_kl_le_gain_plus_leg :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
     real_eq (sumf p) real_one ->
@@ -129,7 +150,7 @@ Proof.
                  (real_le_refl (slq_entropy_gain S sumf sumpos T T_pos energy p Hp))))).
 Qed.
 
-(* 支路 2：熵增 ≤ KL + eps（upper 之 plus 形；使用 slq_entropy_gain_kl_upper） *)
+(* 腿 2：熵增 ≤ KL + eps（upper 之 plus 形；消费 slq_entropy_gain_kl_upper） *)
 Lemma slc_gain_le_kl_plus_leg :
   forall (p : S -> Real) (Hp : forall s : S, real_lt real_zero (p s)),
     real_eq (sumf p) real_one ->
@@ -193,7 +214,7 @@ Proof.
 Qed.
 
 (* ---------------------------------------------------------- *)
-(* 主件 2：熵增益 ≥ KL 缺陷 − eps（显式使用形；回喂基座使用位）      *)
+(* 主件 2：熵增益 ≥ KL 缺陷 − eps（显式消费形；回喂基座消费位）      *)
 (*   real_le (KL − eps) 增——lower 的 minus-r 地板形。               *)
 (* ---------------------------------------------------------- *)
 Theorem slc_gain_ge_kl_minus_eps :
@@ -212,7 +233,7 @@ Qed.
 End SlcSecondLawConsume.
 
 (* ============================================================ *)
-(* 第二部分：list 机器全闭双使用（核心定理 × eps_list 使用链）       *)
+(* 第二部分：list 机器全闭双消费（核心定理 × eps_list 消费链）       *)
 (* ============================================================ *)
 
 (* ---------------------------------------------------------- *)
@@ -270,7 +291,7 @@ Qed.
 
 (* ---------------------------------------------------------- *)
 (* 主件 4：Second Law eps 档 × 核心恒等式合流 ⟹ KL ≥ −eps            *)
-(*   使用 slq_second_law_eps_list（S[p] ≤ S[p_T]+eps）与核心定理      *)
+(*   消费 slq_second_law_eps_list（S[p] ≤ S[p_T]+eps）与核心定理      *)
 (*   （S[p_T]−S[p] == KL）双源：0 ≤ 增+eps 沿恒等式换载 ⟹ −eps ≤ KL。 *)
 (* ---------------------------------------------------------- *)
 Theorem slc_second_law_kl_floor_eps_list :
@@ -335,7 +356,7 @@ Proof.
   pose proof (real_le_plus_compat real_zero (real_plus K eps)
                  (real_opp eps) (real_opp eps)
                  Hstep3 (real_le_refl (real_opp eps))) as Hstep4.
-  (* 步 5：归零闭合 ⟹ −eps ≤ KL *)
+  (* 步 5：归零收口 ⟹ −eps ≤ KL *)
   exact (RealSetoid.real_le_id_r (real_opp eps)
            (real_plus (real_plus K eps) (real_opp eps))
            K

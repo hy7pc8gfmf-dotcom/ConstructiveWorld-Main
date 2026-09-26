@@ -1,5 +1,5 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程（tier2 头批）          *)
+(* ============================================================ *)
+(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -15,25 +15,25 @@
 (*   uabd1s5_doe_mult_one_l（原 L122，2 句玩具证）                        *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 【 恒等守恒修订注记】 包AW九 （恒等头注修订全量第一批）                     *)
+(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 （包AL）全量恒等核查已证结论、（包AV六）试点已证结论：本件实测                             *)
+(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
 (* 为恒等守恒——清单所列 8 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此修订。                                        *)
-(* 修订口径：真替换 0 槽＋恒等守恒 8 槽；本注记为追加块，上方原头                                  *)
+(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
+(* 更正口径：真替换 0 槽＋恒等守恒 8 槽；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；记录册承载见  附录／ 修正块／ 评估册／ 记录册。                        *)
-(* 附记： 判级全文恒等； 全量第一批整批直推（ 六·1 方案①）                           *)
+(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
+(* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
 (* ============================================================ *)
 
 (* ============================================================ *)
 (* UpAblD1S5_UpReqDoeblinEntropy.v —— FA-D1S5 数据供给大封装第二梯 件①            *)
-(* 位：FA-D1S5（普查批 D1-⑦ 第二梯 ≤40 位·按模块聚合）｜独立配套模块·原树零改        *)
+(* 席位：FA-D1S5（普查批 D1-⑦ 第二梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改        *)
 (*                                                              *)
 (* 辖区：UpReqDoeblinEntropy.v Section DoeblinEntropyList 全 18 个 N 位             *)
 (*   （Live_X 副本与 ConstructiveWorld_vo 正册 md5 同代                            *)
 (*    873fa3238ca63a5fcce0bbec3260aa20，零代际漂移）                              *)
-(*   接口参数行号锚（源文件实测）：states:827｜Hnil:828｜T:829｜Ht:830｜energy:831｜      *)
+(*   接口参数行号锚（母本实测）：states:827｜Hnil:828｜T:829｜Ht:830｜energy:831｜      *)
 (*     om:834｜Hom:835｜Hom1:836｜w:837｜Hwp:838｜Hwn:839｜Hew:840-848｜           *)
 (*     epss0:909｜p:929｜Hpp:930｜Heb:935-937｜r2:938｜Hsq:940-943                *)
 (*   另 4 个 T·零消费位（Hepss:910/Hpn:931/Hep:932/Hr2:939）按普查 §④ 剪除申报，    *)
@@ -44,8 +44,8 @@
 (* 形态：D1S4 封装记录型先例照抄（UpAblD1S4_UpReqStepKLEtaInst 同款，               *)
 (*   Inductive 单构造子逐槽语句入包）。本模块无 Type 字段，包落 Set 排序             *)
 (*   （G3 提取 magic=0 干净，D1S4 偏差2 对照）。                                   *)
-(* 源文件节内定义件 doe_sumf/doe_sumpos/doe_pb/doe_Hpb/doe_omd/doe_K/doe_h            *)
-(*   （源文件 L851-884）以显式参形实名副本（参形=接口参数显式参形，δ 展开同体，            *)
+(* 母本节内定义件 doe_sumf/doe_sumpos/doe_pb/doe_Hpb/doe_omd/doe_K/doe_h            *)
+(*   （母本 L851-884）以显式参形实名副本（参形=接口参数显式参形，δ 展开同体，            *)
 (*   P1S1 sfc_two δ 展开同款），件头登记。                                         *)
 (*                                                              *)
 (* 实例供给：states:=单点 [nil]（cons nil nil）｜T:=real_one｜energy:=零函数｜       *)
@@ -58,8 +58,8 @@
 (*   四步 trans 链 h==0 → 平方和归零 → le-inr 直接匹配，如实登记仍属机械供给）。          *)
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219（S02 序与环律/S03 逆元器/S07 Setoid 桥/            *)
-(*   S08 列表和与 log 器）＋UpReqTempDefs（温度族定义件——源文件自身依赖面，只读        *)
-(*   依存，非接口参数源文件）；零 Require 接口参数源文件（防 P3S1 坑1 混代际）。                 *)
+(*   S08 列表和与 log 器）＋UpReqTempDefs（温度族定义件——母本自身依赖面，只读        *)
+(*   依存，非接口参数母本）；零 Require 接口参数母本（防 P3S1 坑1 混代际）。                 *)
 (* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S5_*.{log,exit}                      *)
 (* ============================================================ *)
 
@@ -92,14 +92,14 @@ Definition uabd1s5_doe_p : list Real -> Real := fun _ : list Real => real_one.
 
 Definition uabd1s5_doe_r2 : Real := real_zero.
 
-(* ============ 源文件节内定义件显式参形副本（δ 展开同体） ============ *)
-(* doe_sumf (源文件 L851-852)：sumf g := real_list_sum (list Real) g states          *)
+(* ============ 母本节内定义件显式参形副本（δ 展开同体） ============ *)
+(* doe_sumf (母本 L851-852)：sumf g := real_list_sum (list Real) g states          *)
 
 Definition uabd1s5_doe_sumf (states : list (list Real))
   : (list Real -> Real) -> Real :=
   fun g : list Real -> Real => real_list_sum (list Real) g states.
 
-(* doe_sumpos (源文件 L853-859) *)
+(* doe_sumpos (母本 L853-859) *)
 
 Definition uabd1s5_doe_sumpos (states : list (list Real)) (Hnil : states <> nil)
   : forall f : list Real -> Real,
@@ -109,7 +109,7 @@ Definition uabd1s5_doe_sumpos (states : list (list Real)) (Hnil : states <> nil)
       (Hf : forall s : list Real, real_lt real_zero (f s)) =>
     real_list_sum_pos (list Real) f states Hf Hnil.
 
-(* doe_pb (源文件 L875-876)：real_boltzmann_dist_temp 载体化 *)
+(* doe_pb (母本 L875-876)：real_boltzmann_dist_temp 载体化 *)
 
 Definition uabd1s5_doe_pb (states : list (list Real)) (Hnil : states <> nil)
   (T : Real) (Ht : real_lt real_zero T) (energy : list Real -> Real)
@@ -117,7 +117,7 @@ Definition uabd1s5_doe_pb (states : list (list Real)) (Hnil : states <> nil)
   real_boltzmann_dist_temp (list Real)
     (uabd1s5_doe_sumf states) (uabd1s5_doe_sumpos states Hnil) T Ht energy s.
 
-(* doe_Hpb (源文件 L877-878) *)
+(* doe_Hpb (母本 L877-878) *)
 
 Definition uabd1s5_doe_Hpb (states : list (list Real)) (Hnil : states <> nil)
   (T : Real) (Ht : real_lt real_zero T) (energy : list Real -> Real)
@@ -125,11 +125,11 @@ Definition uabd1s5_doe_Hpb (states : list (list Real)) (Hnil : states <> nil)
   real_boltzmann_dist_temp_pos (list Real)
     (uabd1s5_doe_sumf states) (uabd1s5_doe_sumpos states Hnil) T Ht energy.
 
-(* doe_omd (源文件 L879)：omd := 1 − om *)
+(* doe_omd (母本 L879)：omd := 1 − om *)
 
 Definition uabd1s5_doe_omd (om : Real) : Real := real_minus_r real_one om.
 
-(* doe_K (源文件 L880-882)：K s := om·pb s + omd·w s *)
+(* doe_K (母本 L880-882)：K s := om·pb s + omd·w s *)
 
 Definition uabd1s5_doe_K (states : list (list Real)) (Hnil : states <> nil)
   (T : Real) (Ht : real_lt real_zero T) (energy : list Real -> Real)
@@ -137,7 +137,7 @@ Definition uabd1s5_doe_K (states : list (list Real)) (Hnil : states <> nil)
   real_plus (real_mult om (uabd1s5_doe_pb states Hnil T Ht energy s))
             (real_mult (uabd1s5_doe_omd om) (w s)).
 
-(* doe_h (源文件 L883-884)：h s := K s − pb s *)
+(* doe_h (母本 L883-884)：h s := K s − pb s *)
 
 Definition uabd1s5_doe_h (states : list (list Real)) (Hnil : states <> nil)
   (T : Real) (Ht : real_lt real_zero T) (energy : list Real -> Real)
@@ -487,7 +487,7 @@ Proof.
   exact (inr uabd1s5_doe_sumsq_zero).
 Qed.
 
-(* ============ 封装记录型：18 槽语句逐字入包（对照源文件 L827-943） ============ *)
+(* ============ 封装记录型：18 槽语句逐字入包（对照母本 L827-943） ============ *)
 
 Inductive uabd1s5_doe_pack18 : Set :=
 | uabd1s5_doe_pack18_intro :
@@ -608,7 +608,7 @@ Inductive uabd1s5_doe_pack18 : Set :=
                                       r2,
                                     uabd1s5_doe_pack18.
 
-(* ============ 依赖模块：单点实例一次喂定 18 槽 ============ *)
+(* ============ 供给件：单点实例一次喂定 18 槽 ============ *)
 
 Theorem uabd1s5_doe_pack18_supplied : uabd1s5_doe_pack18.
 Proof.

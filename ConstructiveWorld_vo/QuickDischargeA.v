@@ -1,6 +1,8 @@
 (* ===================================================================== *)
+(* QuickDischargeA.v — E-STAGING-CZA12 席位 / T62 零引用尾仓三枚一击放电    *)
 (* qd_ 前缀防撞（全库 grep 定名零冲突）；原树只读，本件纯转发收编登记。      *)
 (*                                                                       *)
+(* 三枚槽位坐标（T62 A 类表 #1/#17/#18）：                                 *)
 (*   A#1  UpReqPPOPlain.v:107 r_max_le_r_plain                            *)
 (*          forall a b : R, le b (r_max a b)                              *)
 (*        （节1 ReqPPOPlainObj 右参 plain 槽，Id r_max_le_r 镜像）；        *)
@@ -29,7 +31,9 @@
 (* 纪律：纯构造性；Set 层语句零 Prop 泄露（req/le/real_eq/real_lt 均 Set   *)
 (*   值）；零公理零承认挡板（禁词面全零）；转发件零新证（SumEqListMark.v    *)
 (*   CZB12 先例同型  *)
+(*   「核销转发」格式）；原树零触碰（UpReqPPOPlain/S11_TP3B5/UpReqRDF 只读）。 *)
 (* ===================================================================== *)
+(* CZJ14 签名漂移适配登记（T98，20260919）：alignb 波 S11_TP3B5 的          *)
 (*   b5b_hsc_theorem（:11795，B5B_Endpoint 节关闭后导出）由旧闭形漂移为     *)
 (*   「b5a 型端点方案前提位」形（节头注 :11664-11668 预告）：                *)
 (*     (forall x Hx, real_lt real_zero x -> real_lt x (real_const 1) ->    *)
@@ -64,6 +68,7 @@ Open Scope Q_scope.
 (* ===================================================================== *)
 (* 一、A#1 qd_r_max_le_r_plain —— r_max 右参 plain 槽一般转发出口            *)
 (* ===================================================================== *)
+(* 核销宣言（四要素）：                                                    *)
 (*   槽位坐标：UpReqPPOPlain.v:107 r_max_le_r_plain（节1 ReqPPOPlainObj）。  *)
 (*   原挂账：forall a b : R, le b (r_max a b) 零跨文件消费、零证明体，       *)
 (*     req 层接口 r_max_le_r 仅逐 eps 形（「序无消去」，E384 卡缺口）。      *)
@@ -85,10 +90,12 @@ Qed.
 (* ===================================================================== *)
 (* 二、A#17 qd_hsc_a3 —— Hsc 槽接线（证后忘接线型滞后槽已接线）              *)
 (* ===================================================================== *)
+(* 核销宣言（四要素）：                                                    *)
 (*   槽位坐标：S11_TP3B5.v:1598 HscA3（节 A3HscToF1 Hypothesis）。           *)
 (*   原挂账：real_eq (cauchy_real_sin arctan_one_real)                      *)
 (*     (cauchy_real_cos arctan_one_real) 零跨文件消费——同文件 :11795        *)
 (*     Lemma b5b_hsc_theorem（B5b 主链：b5b_hsc_main ∘ b5b_endpoint）已证   *)
+(*     逐字同语句，证后忘接线（T62 §4.1 定谳）。                             *)
 (*   放电路径：本件 Require S11_TP3B5 后 exact b5b_hsc_theorem 一击接线；    *)
 (*     S11 原树只读，接线以转发件形态落在消融50。                            *)
 (*   定理引用：qd_hsc_a3（本件），消费 S11_TP3B5.b5b_hsc_theorem（:11795）。 *)
@@ -103,6 +110,7 @@ Qed.
 (* ===================================================================== *)
 (* 三、A#18 qd_b5b_hsc_general —— 节假设泛化形平凡关闭                      *)
 (* ===================================================================== *)
+(* 核销宣言（四要素）：                                                    *)
 (*   槽位坐标：S11_TP3B5.v:11070 b5b_hsc_theorem（节 B5bEndpointBridge      *)
 (*     Hypothesis 泛化形）。                                                *)
 (*   原挂账：forall x Hx, real_lt real_zero x -> real_lt x (real_const 1)  *)
@@ -124,6 +132,7 @@ Proof.
   exact (b5b_hsc_theorem b5dS_E_zero_on_unit).
 Qed.
 
+(* ============ G4 证据：核销转发三件引用链（倒墙候基座收敛后核） ============ *)
 Print Assumptions qd_r_max_le_r_plain.
 Print Assumptions qd_hsc_a3.
 Print Assumptions qd_b5b_hsc_general.

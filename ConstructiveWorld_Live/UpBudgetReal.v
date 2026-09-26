@@ -1,4 +1,4 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpBudgetReal.v *)
 (* *)
 (* 目的： 几何击穿的迭代预算定理在具体柯西实数上的 Real 层构造。 *)
@@ -39,7 +39,7 @@
 (*                                                              *)
 (* 纪律：纯构造性（禁词零出现，见合规自查报告 G1）；                    *)
 (*       Set 层语句（real_lt/real_le/real_eq/sigT/And）；           *)
-(*       全部 Qed 闭合；使用根内已证机器不重证。                    *)
+(*       全部 Qed 闭合；消费根内已证机器不重证。                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -58,7 +58,7 @@ Fixpoint real_pow (x : Real) (n : nat) : Real :=
   | Datatypes.S m => real_mult x (real_pow x m)
   end.
 
-(* 与任务说明同名接口：r_pow kappa N 即 real_pow kappa N *)
+(* 与任务书同名接口：r_pow kappa N 即 real_pow kappa N *)
 Notation r_pow := real_pow (only parsing).
 
 (* 幂对 real_eq 的相容性 *)
@@ -133,7 +133,7 @@ Proof.
       * apply real_mult_one_l.
 Qed.
 
-(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接使用） *)
+(* 倒数唯一性补充：inv 1 == 1（根内 real_inv_one_local 已有，直接消费） *)
 (* （此处不重证；见 real_inv_one_local） *)
 
 (* 倒数正性专用：1 < 1/κ 的桥（real_inv_pos_lt_contra + inv 1 == 1） *)
@@ -717,7 +717,7 @@ Proof.
   exact (geo_tail_budget kappa a eps Hk1 Hk2 Ha Heps p q N Hpq HN).
 Qed.
 
-(* ============ 8. 提取检验（可执行 OCaml，G3 关卡） ============ *)
+(* ============ 8. 提取探针（可执行 OCaml，G3 关卡） ============ *)
 From Stdlib Require Import Extraction.
 Set Warnings "-extraction-opaque-accessed".
 Set Extraction Output Directory ".".

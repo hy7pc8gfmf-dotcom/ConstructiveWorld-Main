@@ -1,27 +1,49 @@
 (* ========================================================================= *)
-(*  DTPT_Entropy.v — 多熵函数族扩展 + 多熵评估套件                           *)
-(*                                                                            *)
-(*  使命：香农熵 Q 离散版（频域计数 H_devsum／H_freq）、条件熵 H_cond         *)
-(*    （原文附录三.4「上下文依赖度」）、λ-插值混合熵 H_lam 的 Q 载体          *)
-(*    构造与非负／单调／置换面定理族；多熵评估套件（Record                    *)
-(*    MultiEntropyEval 与 me_cert 联合相干证书）；熵族拼接卷积与             *)
-(*    数值锚。                                                                *)
-(*                                                                            *)
-(*  依赖：QArith（QArith/Qabs）、List、Arith、Lia、Permutation、DTPT。       *)
-(*    与 DTPT.v 的 xq_ 工具箱簇为双副本维持（同名同构，头注互指）。          *)
-(*                                                                            *)
-(*  对标：原典 §2.3 多熵族 ℋ = {H_alg, H_Sh, H_vN, H_str, H_Rényi,          *)
-(*    H_min, H_max, H_top, H_cond} + 附录三「多熵评估套件」。                *)
-(*                                                                            *)
-(*  构造性注记：零公理、零承认、无经典逻辑，Set 层零公理面，全程 Qed；       *)
-(*    B2 补证件 H_lam_mono／H_shannon_q_nonneg 已证；                         *)
-(*    H_shannon_q_perm_inv 经核查为假（H_devsum 取后缀最小值，置换改变       *)
-(*    后缀结构），以 H_shannon_q_perm_inv_counterex 构造性反例替代           *)
-(*    （见文内注）。                                                          *)
-(*                                                                            *)
-(*  编译配方：coqc -native-compiler no -q -Q . "" DTPT_Entropy.v                 *)
-(*    （先编依赖 DTPT.v）。文件内分节 §1-§A8，各节头注为该节要点索引。       *)
+(* 【ToyR 战役·包B·T240 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包B 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T240。       *)
+(* 替换定理清单：xq_Qle_bool_true／xq_Qle_bool_le／Pinf_eq_l／qlen_pos／     *)
+(* collide_zero／me2_weight_nonneg／me_total_eq／sqsum_app_cross_val／       *)
+(* sqsum_cross_sym_val／H_freq_app_assoc_set（共 9 刀，刀面以台账为权威）    *)
+(* 非平凡性口径：显式展开层重演与对称链就地重演，逐刀唯一性断言落刀；无一    *)
+(* 行拆分式假非平凡。                                                        *)
+(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
+(* ============================================================
+   DTPT_Entropy.v — 多熵函数族扩展 + 多熵评估套件
+   职责：香农熵 Q 离散版（频域计数）、条件熵 H_cond（原文附录三.4
+         「上下文依赖度」）、λ-插值混合熵的 Q 载体构造与
+         非负/单调/置换面定理族（B2 补证席收口）。
+   依赖：QArith（QArith/Qabs）、List、Arith、Lia、Permutation、DTPT。
+   归并记录：S3（2026-09-14）并入 DTPT_Entropy2.v（§A2）与
+             DTPT_EntFam2.v（§A3）；S4（2026-09-14）并入
+             DTPT_ME2.v（§A4）与 DTPT_ZeroLocus.v（§A5）；此前无
+             （原生成模块）；F2（2026-09-15）追加 §A6 频数拼接
+             单调族（sqsum_app 保底两件 + 交叉项精确分解 +
+             maxcount 极值面随行 + H_freq/collide 拼接无定向
+             构造反例钉界）；ADJ-4（2026-09-15）追加 §A7
+             align_lambda 真定义升级（双件共存：恒等占位
+             align_lambda 原名原义保留 + align_lambda_opt 最优
+             λ 选择器四件）；F5（2026-09-15）追加 §A8 拼接精确
+             卷积式（sqsum 交叉项对账 + 对称双和 + collide/H_freq
+             加权卷积旗舰 collide_app_eq / H_freq_app_eq + 三段
+             结合律值面 + vm_compute 数值锚）；与 DTPT.v 的 xq_
+             工具箱簇为双副本维持不归并，头注互指（融入执行方案
+             §1.4 簇②）。
+   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
+   纪律：纯构造性；四关收割；温控协议；全部 Q 载体；
+         H_Shannon 对齐库内熵模块族离散计数路线。
+   附注：原典映射 §2.3 多熵族 ℋ = {H_alg, H_Sh, H_vN, H_str,
+         H_Rényi, H_min, H_max, H_top, H_cond} + 附录三「多熵评估套件」；
+         B2 补证席已收口：H_lam_mono / H_shannon_q_nonneg 已 Qed；
+         H_shannon_q_perm_inv 经核查为假（H_devsum 取后缀最小值，
+         置换改变后缀结构），以 H_shannon_q_perm_inv_counterex
+         构造性反例替代（见文内注）。
+   ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import List Arith Lia.
@@ -41,13 +63,14 @@ Fixpoint count_val (x : Q) (l : list Q) : nat :=
   | y :: ys => if Qeq_bool x y then S (count_val x ys) else count_val x ys
   end.
 
+(* 香农熵 Q 离散版——「质心偏移」占位（补证席替换为真 ln 逼近） *)
 Fixpoint H_devsum (l : list Q) : Q :=
   match l with
   | [] => 0
   | x :: xs => Qabs (x - hd 0 (P0 l)) + H_devsum xs
   end.
 
-(* ADJ-1 适配层：旧名兼容（only parsing），语义零漂移；改名对账见 DTPT_ADJ1_改名报告.md *)
+(* ADJ-1 垫片：旧名兼容（only parsing），语义零漂移；改名对账见 DTPT_ADJ1_改名报告.md *)
 Notation H_shannon_q := H_devsum (only parsing).
 
 Definition H_cond (l : list Q) (ctx : list Q) : Q :=
@@ -82,9 +105,9 @@ Definition gate_low_entropy (H : Q) (threshold : Q) : bool :=
   Qle_bool H threshold.
 
 (* 启发4：对齐策略——λ 偏向 P0 的可验证知识 *)
-(*
+(* ADJ-4（2026-09-15）F4 注记：本件为恒等占位，保留原名原义零改动
    （DTPT_Rotation.v §S7 救活块四件 align_lambda_id/H_lam/
-   lam_opt_min_align/range 现役使用，签名不可变，双件共存裁决）；
+   lam_opt_min_align/range 现役消费，签名不可变，双件共存裁决）；
    真定义见文尾 §A7 align_lambda_opt（h0/h1 双熵输入的最优 λ
    选择器，与 Rotation §S7 lam_opt/lam_opt_cyc 同构语义）。 *)
 Definition align_lambda (lam : Q) : Q := lam.
@@ -129,7 +152,7 @@ Proof.
     + exact IH.
 Qed.
 
-(*
+(* 【补证席注】原命题「H_devsum 置换不变」经核查为假：
    H_devsum 沿列表递归取「后缀最小值」(hd 0 (P0 l))，
    置换会改变后缀结构。以下给出构造性反例替代原命题。 *)
 Theorem H_shannon_q_perm_inv_counterex :
@@ -145,7 +168,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   W9 跨相熵桥接定理件 · 补强区块（仅追加，不动上方既有内容）
+   W9 跨相熵桥接定理席 · 补强区块（仅追加，不动上方既有内容）
    目标：把本文件从「定义收集」升级为「定理体系」——
      (1) P0 最小化序列熵 H_adj (P0 l) <= H_adj l
          （配对-望远镜路线：有序表熵=max-min，任意配对距离<=序列熵；
@@ -157,7 +180,7 @@ Qed.
      (4) P0 相零化香农偏差熵 H_devsum (P0 l) == 0 及其最小化
      (5) 频域计数置换不变 + 频谱跨相不变（对照 N9 序列熵可分）
      (6) 条件熵：自条件零、反对称、守卫非负、可负反例（界定适用域）
-   注：规格原列「H_devsum 置换不变」「无条件 0 <= H_cond l ctx」
+   注：任务书原列「H_devsum 置换不变」「无条件 0 <= H_cond l ctx」
    「H_adj (P0 l) <= H_adj (Pmid l s lam)」三条经核查为假（第一条的
    反例即上方 H_shannon_q_perm_inv_counterex；另两条反例见补强报告），
    已按可证命题重新表述，全部构造性落地。
@@ -452,6 +475,7 @@ Qed.
 
 (* ========== W9 主定理 2：跨相下界（P∞ 侧） ========== *)
 
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Corollary Pinf_eq_l : forall (l : list Q) (s : nat), Pinf l s = l.
 Proof.
   intros l. unfold Pinf, rot.
@@ -464,6 +488,7 @@ Proof.
       rewrite IH. reflexivity.
 Qed.
 
+(* 【弃用注记 2026-09-14】本件在 rot=firstn++skipn 恒等底座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem H_adj_cross_phase_lb : forall (l : list Q) (s : nat),
   H_adj (P0 l) <= H_adj (Pinf l s).
 Proof.
@@ -595,9 +620,9 @@ Proof.
 Qed.
 
 (* ============================================================
-   DTPT-S2 分析+补强件 · 追加区块（只加末尾，不动上方任何既有行）
+   DTPT-S2 分析+补强席 · 追加区块（只加末尾，不动上方任何既有行）
    四族内容：
-   (1) 计数上界族【主定理】：count_val <= length（nat/Q 双形）
+   (1) 计数上界族【旗舰】：count_val <= length（nat/Q 双形）
        + H_devsum 计数上界（按定义实形适配：逐项 |x - 后缀最小|
          走配对界 <= H_adj，逐和 <= 长度系数 × H_adj，系数经 S 化归）
    (2) MultiEntropyEval 相干性：mkMEval 投影往返（eta 面）
@@ -635,7 +660,7 @@ Proof.
   unfold Qle; simpl. lia.
 Qed.
 
-(* ---------- 主定理 1a：频域计数的长度上界（nat 形） ---------- *)
+(* ---------- 旗舰 1a：频域计数的长度上界（nat 形） ---------- *)
 
 Lemma count_val_le_length : forall (x : Q) (l : list Q),
   (count_val x l <= length l)%nat.
@@ -645,7 +670,7 @@ Proof.
   - destruct (Qeq_bool x y); lia.
 Qed.
 
-(* 主定理 1b：同上界的 Q 域形式（长度系数口径一致） *)
+(* 旗舰 1b：同上界的 Q 域形式（长度系数口径一致） *)
 Lemma count_val_Zle_length : forall (x : Q) (l : list Q),
   ((Z.of_nat (count_val x l) # 1) <= (Z.of_nat (length l) # 1))%Q.
 Proof.
@@ -653,7 +678,7 @@ Proof.
   unfold Qle; simpl. lia.
 Qed.
 
-(* ---------- 主定理 1c：H_devsum 计数上界（按定义实形适配） ----------
+(* ---------- 旗舰 1c：H_devsum 计数上界（按定义实形适配） ----------
    H_devsum 的每项是 |x - 后缀最小值|：配对界给出
    逐项 <= H_adj，故总和 <= 长度系数 × H_adj。非平凡点：
    后缀单调（加头只增）+ 系数 S 化归 + 因子序统一。 ---------- *)
@@ -875,16 +900,16 @@ Proof.
 Qed.
 
 (* ============================================================
-   §A2 归并棒 S3：并入 DTPT_Entropy2.v —— 真频率香农熵
-   H_freq 定理族（qn/freq_q/nsum/sqsum 自包含定义面 + 置换不变主定理
+   §A2 归并棒 S3（2026-09-14）：并入 DTPT_Entropy2.v —— 真频率香农熵
+   H_freq 定理族（qn/freq_q/nsum/sqsum 自包含定义面 + 置换不变旗舰
    H_freq_perm + 简并双向刻画）与数据处理不等式族（M3 归并版 §7-§12
    整体随行）。
    仅剥去独立文件的 Require/Import 头与 Module 壳行（stdlib 与 DTPT
    由本文件头统一承载）——并入后位于 Module DTPT_Entropy 内，其对
-   DTPT 基础（qadd_le/qopp_le/Qle_0_sub' 等）的引用改同文件直引，
-   语义零变；其中 qn_nonneg 使用的 qadd_nonneg 由 DTPT 份换绑为本
+   DTPT 底座（qadd_le/qopp_le/Qle_0_sub' 等）的引用改同文件直引，
+   语义零变；其中 qn_nonneg 消费的 qadd_nonneg 由 DTPT 份换绑为本
    文件既有的同陈述件（逐字恒等，零漂移）；注释与全部证明体、Qed 面、
-   文尾 Print Assumptions 审计出口零改动逐字迁移（CRLF 归一）。
+   文尾 Print Assumptions 审计出口零改动逐字搬运（CRLF 归一）。
    ============================================================ *)
 
 (* ============================================================
@@ -901,19 +926,19 @@ Qed.
    · 数据处理不等式族（M3 并入段 §7-§12）：粗粒化观测 map f 不增熵
      ——计数形 freq_q_map、逐点支配 freq_q_map_ge（Qeq 形态假设
      进场）、碰撞和单调 sqsum_map_ge、补形反号 hfreq_core_anti、
-     主定理 H_freq_dpi、端点双例与迭代不衰减链。
+     旗舰 H_freq_dpi、端点双例与迭代不衰减链。
    【依赖】stdlib（QArith / Qabs / List / Arith / Lia / Permutation）
-     + 基础 DTPT（qopp_le / Qeq 环境等）。无其它外部依赖。
-   【归并记录】M3：U17 件「H_freq 数据处理不等式」件
+     + 底座 DTPT（qopp_le / Qeq 环境等）。无其它外部依赖。
+   【归并记录】M3（2026-09-14）：U17 席「H_freq 数据处理不等式」件
      整体并入本文件尾（其对本文件的 Require 行随之删除，变同文件
      直引，对 DTPT 的 Require 保留）；撞名预检 15 个并入顶层名
      全 0 撞（dpi_ 系命名天然区分，未加前缀）；全工作区无下游
      Require 该退役件，源已删、.retired_M3 快照留存；拓扑无新增
      依赖。
    【认证】文尾审计 15 件 Print Assumptions 全 "Closed under the
-     global context"（零公理）；.vo 于 M3 归并后重编全部通过。
-   【纪律】Set 层零公理、零承认、零中途放弃，全程 Qed 闭合；
-     nat 全显式 %nat；仅 Require DTPT 与 stdlib，禁 Require 外部件。
+     global context"（零公理）；.vo 于 M3 归并后重编全绿。
+   【纪律】Set 层零公理、零承认、零中途放弃，全程 Qed 收口；
+     nat 全显式 %nat；仅 Require DTPT 与 stdlib，禁 Require 在飞件。
    ============================================================ *)
 
 (* ========== §1 qn：nat → Q 嵌入（自包含，免 Z.of_nat 依赖面） ========== *)
@@ -1078,7 +1103,7 @@ Proof.
   - simpl. destruct (Qeq_bool x a); rewrite IH; lia.
 Qed.
 
-(* 主定理前置：频数置换不变（对 Permutation 构造子归纳；perm_swap
+(* 旗舰前置：频数置换不变（对 Permutation 构造子归纳；perm_swap
    分支因计数同一 x0 而只需四分支字面重排，无需 Qeq_bool 对称性） *)
 Theorem freq_q_perm : forall (x : Q) (l p : list Q),
   Permutation l p -> freq_q x l = freq_q x p.
@@ -1244,14 +1269,14 @@ Proof.
     + apply (Qeq_sym b x). apply Hall. exact Hb.
 Qed.
 
-(* ========== §6 H_freq：真频率香农熵的有理替代形与主定理定理 ========== *)
+(* ========== §6 H_freq：真频率香农熵的有理替代形与旗舰定理 ========== *)
 
 (* H_freq l = 1 − Σ_v p_v² = (n² − Σ_v c_v²)/n²（Q 域；n=0 时取 0） *)
 Definition H_freq (l : list Q) : Q :=
   (qn (length l) * qn (length l) - qn (sqsum l))
     / (qn (length l) * qn (length l)).
 
-(* 【主定理】置换不变——旧 H_devsum 因质心偏移形而造不出的定理 *)
+(* 【旗舰】置换不变——旧 H_devsum 因质心偏移形而造不出的定理 *)
 Theorem H_freq_perm : forall l p : list Q,
   Permutation l p -> H_freq l == H_freq p.
 Proof.
@@ -1326,7 +1351,7 @@ Qed.
    直引）、节号顺延 §7-§12、审计并档文尾。
    ############################################################ *)
 
-(* ========== §7 列表/求和迁移工具 ========== *)
+(* ========== §7 列表/求和搬运工具 ========== *)
 
 (* map 保长（stdlib 9.0 length_map 改名风险规避，自建） *)
 Lemma length_map_self : forall (f : Q -> Q) (l : list Q),
@@ -1361,7 +1386,7 @@ Qed.
 (* ========== §8 保底件：推前计数引理与逐点支配 ========== *)
 
 (* 【保底件·推前引理·计数形】map 后 y 的频数 = 原表中命中 f x == y 的票数
-*)
+   （Fixpoint 直接形；报告声明：任务书之 Σ freq_q l x 形重计票，弃用） *)
 Theorem freq_q_map : forall (f : Q -> Q) (y : Q) (l : list Q),
   freq_q y (map f l) = nsum (fun x : Q => if Qeq_bool y (f x) then 1%nat else 0%nat) l.
 Proof.
@@ -1442,13 +1467,13 @@ Proof.
     + exact HD.
 Qed.
 
-(* ========== §10 【主定理】数据处理不等式 DPI ========== *)
+(* ========== §10 【旗舰】数据处理不等式 DPI ========== *)
 
 (* 观测（粗粒化合并质量）不增 H_freq：H_freq (map f l) <= H_freq l。
    形态假设 = 等价类合并语义的 Qeq 诚实守恒（对任意裸函数 f 该命题
    为假——裸函数可观测 Q 的 Record 表示，如取分子；反例
    l = [1/2; 2/4]，H_freq l = 0 而 H_freq (map (取分子) l) = 1/2。
-   故主定理带形态假设 (forall x y : Q, x == y -> f x == f y)。 *)
+   故旗舰带形态假设 (forall x y : Q, x == y -> f x == f y)。 *)
 Theorem H_freq_dpi : forall (f : Q -> Q),
   (forall x y : Q, x == y -> f x == f y) ->
   forall l : list Q, H_freq (map f l) <= H_freq l.
@@ -1492,7 +1517,7 @@ Proof.
     + apply IH. exact H.
 Qed.
 
-(* 端点二【常数全坍缩】：最粗观测（全部并成一桶）H_freq 取 0
+(* 端点二【常数全塌缩】：最粗观测（全部并成一桶）H_freq 取 0
    （简并面；对空表亦真，空表 H_freq 本为 0）。 *)
 Theorem H_freq_map_const : forall (c : Q) (l : list Q),
   H_freq (map (fun _ : Q => c) l) == 0.
@@ -1528,46 +1553,46 @@ Proof.
 Qed.
 
 (* ============================================================
-   §A3 归并棒 S3：并入 DTPT_EntFam2.v —— 多熵族缺位
-   三成员（collide/maxfreq/H_min_q·H_max_q）+ Rényi 阶梯序链主定理
+   §A3 归并棒 S3（2026-09-14）：并入 DTPT_EntFam2.v —— 多熵族缺席
+   三成员（collide/maxfreq/H_min_q·H_max_q）+ Rényi 阶梯序链旗舰
    H_chain + H_freq 相干桥与置换不变收尾。
    仅剥去独立文件的 Require/Import 头与 Module 壳行；原对
-   DTPT_Entropy2 的 Require 随并入变同文件直引（§A2 先行定位，
-   引用面零改写），对 DTPT 基础引用经本文件头 Import 不变，语义
+   DTPT_Entropy2 的 Require 随并入变同文件直引（§A2 先行落位，
+   引用面零改写），对 DTPT 底座引用经本文件头 Import 不变，语义
    零变；注释与全部证明体、Qed 面、文尾 Print Assumptions 审计
-   出口零改动逐字迁移（CRLF 归一）。撞名预检：两源顶层名对宿主
+   出口零改动逐字搬运（CRLF 归一）。撞名预检：两源顶层名对宿主
    既有面 grep 全零命中（实测为准，纯追加零 uniquify）。
    ============================================================ *)
 
 (* ============================================================
-   DTPT_EntFam2.v — 多熵函数族缺位成员三件套（collide / maxfreq / H_min_q·H_max_q）
-   职责：补多熵族缺位三成员的 Q 域有理代理面并证其序链——
+   DTPT_EntFam2.v — 多熵函数族缺席成员三件套（collide / maxfreq / H_min_q·H_max_q）
+   职责：补多熵族缺席三成员的 Q 域有理代理面并证其序链——
          collide（Rényi 阶 2 碰撞熵内积面核 Σp_v²）、maxfreq（最大
-         频率归一化，序链主定理）、H_max_q = 1 − maxfreq、H_min_q = 1 −
-         collide（规格指定形）；Rényi 阶梯 1/n≤collide≤maxfreq≤1
+         频率归一化，序链旗舰）、H_max_q = 1 − maxfreq、H_min_q = 1 −
+         collide（任务书指定形）；Rényi 阶梯 1/n≤collide≤maxfreq≤1
          （非空 l，三成员一次入链）+ H_freq 相干桥 + 置换不变全套。
    依赖：QArith（QArith/Qabs）、List、Arith、Lia、Permutation、
          DTPT、DTPT_Entropy2。
-   归并记录：无（原生成模块；件 DTPT-U9 新建件，禁碰既有件）。
-   认证：零承认零公理；全树 coqchk EXIT=0。
-   纪律：纯构造性；温控协议；Set 层零公理面、全程 Qed。
+   归并记录：无（原生成模块；席 DTPT-U9 新建件，禁碰既有件）。
+   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
+   纪律：纯构造性；四关收割；温控协议；Set 层零公理面、全程 Qed。
    附注：选形声明（详见 DTPT_EntFam2_升级报告_U9.md）——
          1. collide l = qn (sqsum l) / (qn n · qn n)，复用 S6 泛求和
             路线（sqsum 免 dedup、天然置换不变）；
          2. maxfreq l = qn (maxcount l) / qn n，空表取 0；
          3. 对照口径：−log max p 文献常记 H_min、−log Σp² 为 Rényi₂/
             碰撞熵；Q 域无 log，取「熵补 1−x」有理代理，与 −log x
-            同为减函数 ⟹ 单调同向，序性质全部保真；命名遵规格，
+            同为减函数 ⟹ 单调同向，序性质全部保真；命名遵任务书，
             语义以「补形单调同向代理」自洽；
-         4. 主定理序链 1/qn n <= collide l <= maxfreq l <= 1
+         4. 旗舰序链 1/qn n <= collide l <= maxfreq l <= 1
             （Σp² >= 1/n 即 Cauchy-Schwarz 离散形；Σp² <= max p · Σ p
-            经典不等式的 nat 层归纳实现，nat 侧闭合后 Q 层除法桥接）；
+            经典不等式的 nat 层归纳实现，nat 侧收口后 Q 层除法桥接）；
          5. H_freq l == 1 − collide l（非空 l；S6 件直推——H_freq 即
             1 − collide 的别名面）。
          原典对照（数字全域—熵相三元论·基座）：L22 裁决表·熵行
          「采用多熵函数族 ℋ，不强行选单一熵」；L148-152 成员清单
          H_alg/H_Sh/H_vN/H_str + 可扩展 H_Rényi/H_min/H_max/H_top/
-         H_cond；盘面在册状态（B1 已证结论）：H_devsum（占位件）+
+         H_cond；盘面在册状态（B1 定谳）：H_devsum（占位件）+
          H_cond + H_freq（S6，算半个 H_Rényi₂ 面）——九成员仅 2.5 个
          在册，本件补三成员。语义面：collide/maxfreq ∈ [1/n, 1]
          （非空）、空表取 0；H_max_q/H_min_q ∈ [0, 1]；全同值面
@@ -1642,7 +1667,7 @@ Proof.
   apply qeq_le_l. apply Qmult_inv_r. exact (qpos_neq0 B HB).
 Qed.
 
-(* 归一化：1/P == P/(P·P)（field 除法侧条件为 Qeq 形，由上下文假设实例化消解） *)
+(* 归一化：1/P == P/(P·P)（field 除法侧条件为 Qeq 形，由上下文假设放电） *)
 Lemma qdiv_norm : forall P : Q, ~ (P == 0) -> ~ (P * P == 0) -> 1 / P == P / (P * P).
 Proof.
   intros P HP1 HP2. field; assumption.
@@ -1711,7 +1736,7 @@ Qed.
 
 (* ========== §3 频数补充件（保底件 nat 侧承重） ========== *)
 
-(* 成员频率至少 1（Qeq_bool 假分支经 S6 qeqb_false_neq 矛盾闭合） *)
+(* 成员频率至少 1（Qeq_bool 假分支经 S6 qeqb_false_neq 矛盾收口） *)
 Lemma freq_q_ge1 : forall (x : Q) (l : list Q), In x l -> (1 <= freq_q x l)%nat.
 Proof.
   intros x l. induction l as [| y ys IH]; intros Hin; simpl.
@@ -1804,15 +1829,15 @@ Proof.
   rewrite (sqsum_perm l p H). rewrite (Permutation_length H). reflexivity.
 Qed.
 
-(* ========== §5 maxfreq：最大频率归一化与序链闭环（主定理） ========== *)
+(* ========== §5 maxfreq：最大频率归一化与序链闭环（旗舰） ========== *)
 
 Definition maxcount (l : list Q) : nat := nmax (fun x => freq_q x l) l.
 
 Definition maxfreq (l : list Q) : Q := qn (maxcount l) / qn (length l).
 
-(* 【主定理序链】collide <= maxfreq：
+(* 【旗舰序链】collide <= maxfreq：
    nat 侧 sqsum <= n · maxcount（S6 nsum_bound + nmax_bound 逐点），
-   Q 侧同分母单调 + 场内归一（field 侧条件由上下文实例化消解） *)
+   Q 侧同分母单调 + 场内归一（field 侧条件由上下文放电） *)
 Theorem collide_le_maxfreq : forall l : list Q, collide l <= maxfreq l.
 Proof.
   intros l. destruct l as [| x xs].
@@ -1994,7 +2019,7 @@ Proof.
     rewrite Hz. apply Qle_refl.
 Qed.
 
-(* 熵族内部相干桥：H_freq == 1 − collide（非空；S6 件定义直推，field 闭合） *)
+(* 熵族内部相干桥：H_freq == 1 − collide（非空；S6 件定义直推，field 收口） *)
 Theorem H_freq_eq_bridge : forall l : list Q,
   (0 < length l)%nat -> H_freq l == H_min_q l.
 Proof.
@@ -2033,25 +2058,25 @@ Qed.
 
 
 (* ============================================================
-   §A4 归并棒 S4：并入 DTPT_ME2.v —— MultiEntropyEval
+   §A4 归并棒 S4（2026-09-14）：并入 DTPT_ME2.v —— MultiEntropyEval
    相干性二波（热点 X2-6）：第 0 节局部工具（abs 三角/聚合权/dedup
    计数）+ 第一节五字段定义方程族（复用 S2 mkMEval_eta 禁重证）+
-   第二节主定理 me_cert 九联合相干证书 + 第三节 X2-6 套件级 lifts
+   第二节旗舰 me_cert 九联合相干证书 + 第三节 X2-6 套件级 lifts
    与跨字段桥 + 第四节聚合面 me_total 三件。
    仅剥去独立文件的 Require/Import 头与 Module 壳行（stdlib 与
-   DTPT 基础由本文件头统一承载；并入后位于 Module DTPT_Entropy
+   DTPT 底座由本文件头统一承载；并入后位于 Module DTPT_Entropy
    内，对 mkMEval/H_devsum/H_cond 等本文件面的引用变同文件直引，
    语义零变）；注释与全部证明体、Qed 面、文尾 Print Assumptions
-   审计出口零改动逐字迁移（CRLF 归一）。撞名预检：23 个并入顶层
+   审计出口零改动逐字搬运（CRLF 归一）。撞名预检：23 个并入顶层
    名对宿主既有面整词 grep 全零命中（实测为准，纯追加零 uniquify）。
    ============================================================ *)
 
 (* ============================================================
    DTPT_ME2.v — MultiEntropyEval 相干性二波：从「数据束」升级为
-   「自证证书」（热点升级单 X2-6，扫描件 DTPT-U16）
+   「自证证书」（热点升级单 X2-6，扫描席 DTPT-U16）
    原典映射：附录三「多熵评估套件」+ DTPT_Entropy.v L46-58 定义面
    ------------------------------------------------------------
-   基础（只 Require DTPT / DTPT_Entropy / stdlib，零新前提）：
+   底座（只 Require DTPT / DTPT_Entropy / stdlib，零新前提）：
    - DTPT_Entropy.v：mkMEval/mkMEval_eta（S2 已证五投影，复用禁重证）、
      H_shannon_q_nonneg、xq_H_adj_nonneg、H_shannon_q_count_ub、
      H_adj_P0_min、H_cond_nonneg_guarded、mkMEval_Hms1_Hsh0、
@@ -2062,15 +2087,15 @@ Qed.
    ------------------------------------------------------------
    分层交付：
    - 保底（一档）：五字段逐一定义方程（组合复用 mkMEval_eta，零重证）
-   - 主定理（二档）：me_cert —— 载体一致 + 四熵等值 + Hadj/Hsh 非负 +
+   - 旗舰（二档）：me_cert —— 载体一致 + 四熵等值 + Hadj/Hsh 非负 +
      Hsh 计数上界 + Hcond 三角界，九联合相干合取面
      （me_coherent 证书谓词 + mkMEval 构造见证）
    - 主件（三档）：X2-6 六件套件级 lifts + H_ms1→Hsh0 逆否桥 +
      |me_Hcond| 三角界/计数面证书版 + gate 双门桥
-     （H_cond_abs_bound 在 ZeroLocus 盘面，按红线禁 Require，不使用）
+     （H_cond_abs_bound 在 ZeroLocus 盘面，按红线禁 Require，不消费）
    - 加分（四档）：me_total 等权聚合 + 守卫非负界 + 2 倍香农上界
    红线自查：承认件/中断件/经典排中面等禁词全零（字面自查见
-   升级报告 G1 行），全程 Qed 闭合；nat 全显式 %nat。
+   升级报告 G1 行），全程 Qed 收口；nat 全显式 %nat。
    ============================================================ *)
 
 (* ============================================================
@@ -2155,7 +2180,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   第二节 主定理：me_cert —— mkMEval 自证证书（九联合相干合取面）
+   第二节 旗舰：me_cert —— mkMEval 自证证书（九联合相干合取面）
    载体一致 + 四熵等值 + Hadj/Hsh 非负 + Hsh 计数上界 + Hcond 三角界
    ============================================================ *)
 
@@ -2177,7 +2202,7 @@ Proof.
   destruct (mkMEval_eta l ctx) as [Hc [Ha [Hm [Hs Hcond]]]].
   (* repeat split 直收前五个定义性合取面（载体 eq + 四 Qeq，
      Z.eq 为 Prop 级单构造子，投影 delta 归约后 eq_refl 可解），
-     余下四个 Qle 相干面逐条复用基础件 *)
+     余下四个 Qle 相干面逐条复用底座件 *)
   unfold me_coherent. repeat split.
   - rewrite Ha. apply xq_H_adj_nonneg.
   - rewrite Hs. apply H_shannon_q_nonneg.
@@ -2254,7 +2279,7 @@ Proof.
 Qed.
 
 (* 3.8 三角界证书版：|me_Hcond| <= me_Hsh + H_sh ctx（Entropy 内件组合；
-   H_cond_abs_bound 在 ZeroLocus 盘面按红线禁 Require，不使用） *)
+   H_cond_abs_bound 在 ZeroLocus 盘面按红线禁 Require，不消费） *)
 Theorem mkMEval_Hcond_abs_ub : forall (l ctx : list Q),
   (Qabs (me_Hcond (mkMEval l ctx))
     <= me_Hsh (mkMEval l ctx) + H_devsum ctx)%Q.
@@ -2365,29 +2390,29 @@ Proof.
 Qed.
 
 (* ============================================================
-   §A5 归并棒 S4：并入 DTPT_ZeroLocus.v —— 零点刻画
+   §A5 归并棒 S4（2026-09-14）：并入 DTPT_ZeroLocus.v —— 零点刻画
    （热点 X2-2）：占位熵 H_devsum 零点集结构刻画五节——工具面
-   （xqz_ 系 abs0/sub/plus_eq0）+ 主定理 H_shannon_q_zero_iff_sorted
+   （xqz_ 系 abs0/sub/plus_eq0）+ 旗舰 H_shannon_q_zero_iff_sorted
    （零点 ⟺ 升序表 SortedQ）+ 主件A H_ms1_all_eq/H_ms1_iff_const
    + 主件B H_cond_nonneg_iff/H_cond_abs_bound/H_cond_zero_iff +
    加分 H_shannon_q_perm_inv_if_sorted/zero_locus_joint/
    zero_locus_contrast_sorted_not_const。
    仅剥去独立文件的 Require/Import 头与 Module 壳行（stdlib 与
-   DTPT 基础由本文件头统一承载；并入后位于 Module DTPT_Entropy
+   DTPT 底座由本文件头统一承载；并入后位于 Module DTPT_Entropy
    内，对 H_devsum/xq_H_shannon_sortQ/xq_Zlen_inj1 等 S2 面的
    引用变同文件直引，语义零变）；ADJ-1 复合名保留件
    （H_shannon_q_* 系）整词对照零改名；注释与全部证明体、Qed 面、
-   文尾 Print Assumptions 审计出口零改动逐字迁移（CRLF 归一）。
+   文尾 Print Assumptions 审计出口零改动逐字搬运（CRLF 归一）。
    撞名预检：17 个并入顶层名对宿主既有面整词 grep 全零命中。
    ============================================================ *)
 
 (* ============================================================
-   DTPT_ZeroLocus.v — 零点刻画件 U4（热点升级单 X2-2，X2 扫描 Top-2）
+   DTPT_ZeroLocus.v — 零点刻画席 U4（热点升级单 X2-2，X2 扫描 Top-2）
    职责：占位「质心偏移」香农偏差熵 H_devsum（DTPT_Entropy.v，
          逐项 |x - 后缀 P0 最小| 之和）的零点集结构刻画：
          零点 ⟺ 升序表（SortedQ）；内容分级：
-         主定理  H_shannon_q_zero_iff_sorted（正向 = 盘上
-               xq_H_shannon_sortQ；反向本件新证：和零 + 双项非负
+         旗舰  H_shannon_q_zero_iff_sorted（正向 = 盘上
+               xq_H_shannon_sortQ；反向本席新证：和零 + 双项非负
                ⟹ 逐项零 ⟹ 首元 == 后缀 P0 最小 ⟹ 升序 cons，
                配 hd 最小性新引理 xqz_sorted_hd_min）
          主件A H_ms1_all_eq / H_ms1_iff_const（H_ms == 1 全同值
@@ -2406,10 +2431,10 @@ Qed.
          xq_Zlen_inj1、xq_len1_el、xq_dedup1_all_eq、
          H_shannon_q_const_zero、H_shannon_q_nonneg）。
    归并记录：无（原生成模块）。
-   认证：零承认零公理；全树 coqchk EXIT=0。
-   纪律：纯构造性；温控协议；新名一律 xqz_ 前缀防撞名；
-         nat 全显式 %nat；Qeq 口径显式迁移（Qeq_trans/Qeq_sym
-         值参显式位）；全部声明以 Qed 闭合。
+   认证：零承认零公理；全树 coqchk EXIT=0（2026-09-14）。
+   纪律：纯构造性；四关收割；温控协议；新名一律 xqz_ 前缀防撞名；
+         nat 全显式 %nat；Qeq 口径显式搬运（Qeq_trans/Qeq_sym
+         值参显式位）；全部声明以 Qed 封口。
    附注：与 S6 真频率熵的对照定位——占位熵 H_devsum 零点可含
          相异值（[1;2] 是零点但非常值），真频率熵 H_freq 零点必为
          常值表；对照锚 zero_locus_contrast_sorted_not_const 给出
@@ -2463,7 +2488,7 @@ Proof.
     apply (xqz_plus_eq0_le b a Hab Hb Ha).
 Qed.
 
-(* ========== §2 主定理：H_devsum 零点集 = 升序表 ========== *)
+(* ========== §2 旗舰：H_devsum 零点集 = 升序表 ========== *)
 
 (* hd 最小性：升序表的首元不超过表内任何成员 *)
 Lemma xqz_sorted_hd_min : forall (l : list Q) (z : Q),
@@ -2479,7 +2504,7 @@ Proof.
     + apply HFa. exact Hin.
 Qed.
 
-(* P0 规范形的首元是全表下界（经置换迁移成员性） *)
+(* P0 规范形的首元是全表下界（经置换搬运成员性） *)
 Lemma xqz_P0_hd_min_all : forall (l : list Q) (z : Q),
   In z l -> (hd 0 (P0 l) <= z)%Q.
 Proof.
@@ -2491,7 +2516,7 @@ Proof.
     + exact Hin.
 Qed.
 
-(* 主定理反向：占位熵零 ⟹ 升序（逐层剥 |首差| + 归纳） *)
+(* 旗舰反向：占位熵零 ⟹ 升序（逐层剥 |首差| + 归纳） *)
 Theorem H_shannon_q_zero_sorted : forall l : list Q,
   H_devsum l == 0 -> SortedQ l.
 Proof.
@@ -2512,7 +2537,7 @@ Proof.
       * apply xqz_P0_hd_min_all. simpl. right. exact Hz.
 Qed.
 
-(* 主定理：占位香农偏差熵的零点集 = 升序表
+(* 旗舰：占位香农偏差熵的零点集 = 升序表
    （正向 = 盘上 xq_H_shannon_sortQ；对照 S6 真频率熵零点 = 常值表） *)
 Theorem H_shannon_q_zero_iff_sorted : forall l : list Q,
   H_devsum l == 0 <-> SortedQ l.
@@ -2674,7 +2699,7 @@ Proof.
 Qed.
 
 (* ============================================================
-   §A6 果实件 F2：F6 频数拼接单调族
+   §A6 果实席 F2（2026-09-15）：F6 频数拼接单调族
    盘面现役件组合（零生造）：§3 freq_q_app（拼接频数可加）×
    §4 nsum / §5 sqsum / nmax 面。
    保底件两件：
@@ -2687,12 +2712,12 @@ Qed.
    随行面：
    · sqsum_app_ge_sum：质量面 sqsum l1 + sqsum l2 <= sqsum (l1++l2)；
    · maxcount_app_ge_l / _r：频数极值面（collide/maxfreq 共享分子）。
-   诚实障碍（构造反例钉界，禁特设构造）：H_freq/collide 的拼接单调
+   诚实障碍（构造反例钉界，禁硬凑）：H_freq/collide 的拼接单调
    「不成立」：H_freq ([0]++[1]) = 1/2 > 0 = H_freq [0]；collide [0]
    = 1 > 1/2 = collide ([0]++[1])。根因：sqsum 单调（分子增）的同时
    分母 n² 同步增大，归一化商无定向——任务卡条件句「H_freq
    (l1++l2) <= H_freq l1 型若 sqsum 单调成立即随行」之前件不蕴含
-   后件，如实以 H_freq_app_mono_false / collide_app_mono_false 闭合。
+   后件，如实以 H_freq_app_mono_false / collide_app_mono_false 收口。
    ============================================================ *)
 
 (* ---------- §A6.0 承重件：nsum 拼接可加 / 逐点可加 ---------- *)
@@ -2823,7 +2848,7 @@ Qed.
 
 (* ---------- §A6.4 诚实障碍：归一化商面拼接无定向（反例钉界） ---------- *)
 
-(* 具体值面（vm_compute 闭合，供反例改写使用） *)
+(* 具体值面（vm_compute 收口，供反例改写消费） *)
 Lemma H_freq_01_val : H_freq [0;1] == (1#2)%Q.
 Proof. unfold H_freq. vm_compute. reflexivity. Qed.
 
@@ -2860,16 +2885,17 @@ Proof.
   exact (Qlt_irrefl 1%Q (Qle_lt_trans 1%Q (1#2)%Q 1%Q H Hlt)).
 Qed.
 
-(* AUDIT-2 审计 A1/A2（F4）闭合：恒等占位 align_lambda（本文件 L86 区）
-   保留原名原义零改动（Rotation §S7 救活块四件现役使用，签名零波及，
-   调度件路径-steering 裁决＝双件共存）；本区新增真定义 align_lambda_opt
+(* ========== §A7 ADJ-4（2026-09-15）：align_lambda 真定义升级（双件共存） ========== *)
+(* AUDIT-2 审计 A1/A2（F4）收口：恒等占位 align_lambda（本文件 L86 区）
+   保留原名原义零改动（Rotation §S7 救活块四件现役消费，签名零波及，
+   调度席路径-steering 裁决＝双件共存）；本区新增真定义 align_lambda_opt
    —— h0/h1 双熵输入的最优 λ 选择器（if Qle_bool h0 h1 then 1 else 0）。
    跨文件对账注记（加分面）：与 DTPT_Rotation.v §S7 的 lam_opt（定义
    逐字同构）/§M3 归并段 lam_opt_cyc（lam_opt 的周期族别名，L1929：
    lam_opt_cyc h0 hk := lam_opt h0 hk）同构语义。Entropy 先于 Rotation
    编译（Rotation Require 本文件），不可反向 Require 复用 lam_opt，
    故本区独立给出同语义本体；定理面与 Rotation 侧 lam_opt_values /
-   lam_opt_range / lam_opt_min（H_lam 使用形＝H_lam_lam_opt_min）逐条
+   lam_opt_range / lam_opt_min（H_lam 消费形＝H_lam_lam_opt_min）逐条
    同型，陈述以盘面现役形为准。 *)
 
 Definition align_lambda_opt (h0 h1 : Q) : Q := if Qle_bool h0 h1 then 1 else 0.
@@ -2897,7 +2923,7 @@ Proof.
     + exact (xq_Qle_bool_le 0 1 eq_refl).
 Qed.
 
-(* 最优性（H_lam 使用形·主件）：端点选择器的混合熵不超过 [0,1] 内
+(* 最优性（H_lam 消费形·主件）：端点选择器的混合熵不超过 [0,1] 内
    任意 λ 的混合熵。两分支各化归一次乘法非负装配（仿射差分路线，
    与 Rotation §S7 lam_opt_min 同型）：
    h0 <= h1 分支取 λ* = 1，差 = (1-lam)·(h1-h0)；
@@ -2935,7 +2961,7 @@ Proof.
 Qed.
 
 (* 端点求值桥（随行加分）：选择器的混合熵取值恒为某一端的相熵
-   （使用「端点 3」H_lam_lam1 / H_lam_lam0）。 *)
+   （消费「端点 3」H_lam_lam1 / H_lam_lam0）。 *)
 Theorem align_lambda_opt_endpoint : forall (l : list Q) (s : nat),
   H_lam l s (align_lambda_opt (H_adj (P0 l)) (H_adj (Pinf l s))) == H_adj (P0 l)
   \/ H_lam l s (align_lambda_opt (H_adj (P0 l)) (H_adj (Pinf l s)))
@@ -2949,17 +2975,17 @@ Proof.
 Qed.
 
 (* ============================================================
-   §A8 果实件 F5：F6 深化——拼接精确卷积式
-   熵族拼接卷积的完整恒等式（论文 α §4 熵族节闭合定理位）。
-   使用（零生造）：§3 freq_q_app / §4 nsum 面 / §A6 sqsum_app_eq
-   （交叉项精确分解，对账使用）× §6 collide / H_freq 定义 +
+   §A8 果实席 F5（2026-09-15）：F6 深化——拼接精确卷积式
+   熵族拼接卷积的完整恒等式（论文 α §4 熵族节收口定理位）。
+   消费（零生造）：§3 freq_q_app / §4 nsum 面 / §A6 sqsum_app_eq
+   （交叉项精确分解，对账消费）× §6 collide / H_freq 定义 +
    H_freq_eq_bridge（H_freq == 1 − collide 桥面，field 路线先例）。
-   全件先 vm_compute 数值检验验真值再落笔（FRUIT-2 假命题教训），
-   检验以 *_val 件永久在册（§A8.4）。
+   全件先 vm_compute 数值探针验真值再落笔（FRUIT-2 假命题教训），
+   探针以 *_val 件永久在册（§A8.4）。
    诚实边界：collide/H_freq 卷积式取 n1、n2 双非空卫哨——field
    路线需全部商分母非零；n1=0/n2=0 退化面中 w=0 商恒零使恒等式
    仍真，但归一化拼接无定向已由 §A6 H_freq_app_mono_false /
-   collide_app_mono_false 反例钉界，本件不扩张卫哨外陈述。
+   collide_app_mono_false 反例钉界，本席不扩张卫哨外陈述。
    ============================================================ *)
 
 (* ---------- §A8.0 卷积代数小件 ---------- *)
@@ -3003,7 +3029,7 @@ Qed.
 
 (* 对账件：与 §A6 sqsum_app_eq 同形（freq_q_app 双侧展开 + nsum
    分配的精确交叉项分解），依调度令以 sqsum_app_cross 之名在册
-   （保底名位），本体使用 §A6 主定理零重证。 *)
+   （保底名位），本体消费 §A6 旗舰零重证。 *)
 Theorem sqsum_app_cross : forall l1 l2 : list Q,
   sqsum (l1 ++ l2) =
   (sqsum l1 + sqsum l2
@@ -3042,7 +3068,7 @@ Proof.
   rewrite (sqsum_cross_sym l1 l2). lia.
 Qed.
 
-(* ---------- §A8.2 主定理件：collide 拼接卷积（加权精确式） ---------- *)
+(* ---------- §A8.2 旗舰件：collide 拼接卷积（加权精确式） ---------- *)
 
 (* collide (l1++l2) = (n1/(n1+n2))²·collide l1 + (n2/(n1+n2))²·collide l2
    + (Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1)/(n1+n2)²。
@@ -3084,7 +3110,7 @@ Qed.
 
 (* H_freq (l1++l2) = w1²·H_freq l1 + w2²·H_freq l2 + 2·w1·w2
                      − (Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1)/(n1+n2)²。
-   使用 collide_app_eq + H_freq_eq_bridge（== 1 − collide）；
+   消费 collide_app_eq + H_freq_eq_bridge（== 1 − collide）；
    交叉修正项 2·w1·w2 − X/(n1+n2)² 非负有界（2(n1n2−X)/(n1+n2)² ≥ 0，
    X ≤ n1·n2 经 freq_q_le_length 逐点），熵族拼接卷积完整恒等式。 *)
 Theorem H_freq_app_eq : forall l1 l2 : list Q,
@@ -3123,7 +3149,7 @@ Qed.
 (* ---------- §A8.4 加分件：三段拼接结合律卷积一致性（值面） ---------- *)
 
 (* (l1++l2)++l3 与 l1++(l2++l3) 同表（app_assoc 定义性），故三个
-   卷积量在两种分组下逐点重合——卷积式对三段拼接的一致性闭合面。 *)
+   卷积量在两种分组下逐点重合——卷积式对三段拼接的一致性收口面。 *)
 Theorem sqsum_app_assoc : forall (l1 l2 l3 : list Q),
   sqsum ((l1 ++ l2) ++ l3) = sqsum (l1 ++ (l2 ++ l3)).
 Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
@@ -3136,11 +3162,11 @@ Theorem H_freq_app_assoc : forall (l1 l2 l3 : list Q),
   H_freq ((l1 ++ l2) ++ l3) == H_freq (l1 ++ (l2 ++ l3)).
 Proof. intros l1 l2 l3. rewrite <- app_assoc. reflexivity. Qed.
 
-(* ---------- §A8.5 数值锚（vm_compute 检验件；G3 对账表用） ---------- *)
+(* ---------- §A8.5 数值锚（vm_compute 探针件；G3 对账表用） ---------- *)
 
-(* 检验实例：l1 = [0;1]，l2 = [1;1]（含非平凡交叉项 X1 = X2 = 2）。
+(* 探针实例：l1 = [0;1]，l2 = [1;1]（含非平凡交叉项 X1 = X2 = 2）。
    实测：sqsum (l1++l2) = 10，collide = 5/8，H_freq = 3/8；
-   两主定理 RHS 加权式逐一求值同值——陈述形先验为真再落笔的记录件。 *)
+   两旗舰 RHS 加权式逐一求值同值——陈述形先验为真再落笔的记录件。 *)
 Lemma sqsum_app_cross_val : sqsum ([0;1] ++ [1;1]) = 10%nat.
 Proof.
   change (sqsum [0; 1; 1; 1] = 10%nat).
@@ -3243,6 +3269,7 @@ Print Assumptions H_ms1_iff_const.
 Print Assumptions H_cond_abs_bound.
 Print Assumptions zero_locus_joint.
 
+(* ========== 审计：F2 席 §A6 并入件零公理实证（F6 面 8 件） ========== *)
 
 Print Assumptions sqsum_app_ge_l.
 Print Assumptions sqsum_app_ge_r.
@@ -3253,12 +3280,14 @@ Print Assumptions maxcount_app_ge_r.
 Print Assumptions H_freq_app_mono_false.
 Print Assumptions collide_app_mono_false.
 
+(* ========== 审计：ADJ-4 席 §A7 新增件零公理实证（F4 面 4 件） ========== *)
 
 Print Assumptions align_lambda_opt_values.
 Print Assumptions align_lambda_opt_range.
 Print Assumptions align_lambda_opt_min.
 Print Assumptions align_lambda_opt_endpoint.
 
+(* ========== 审计：F5 席 §A8 新增件零公理实证（拼接卷积面 16 件） ========== *)
 
 Print Assumptions qmul_neq0.
 Print Assumptions nsum_freq_q_ind.
@@ -3278,24 +3307,25 @@ Print Assumptions H_freq_app_eq_val.
 Print Assumptions H_freq_app_eq_rhs_val.
 
 (* ============================================================
-   归并棒 S3退役记录：DTPT_EntFam2.v
-   —— 并入本文件 §A3 后退役；实测全工作区零使用者（对全部活体
+   归并棒 S3（2026-09-14）退役记录：DTPT_EntFam2.v
+   —— 并入本文件 §A3 后退役；实测全工作区零消费者（对全部活体
    .v grep Require/Import 零命中），源件五件产物以 .retired_S3
    前缀快照留存。
    同棒并入源 DTPT_Entropy2.v 保留不退役：下游 DTPT_RotSpec.v
    的 Require/Import 在册（任务卡预警的 DTPT_Cyc.v 经实测无
-   Entropy2 Require，Entropy2 下游仅 RotSpec 一件，如实说明），
+   Entropy2 Require，Entropy2 下游仅 RotSpec 一件，如实记账），
    随棒 5/6 并入 DTPT_Rotation 时自然消化，届时再退役。
    ============================================================ *)
 
 (* ============================================================
-   归并棒 S4退役记录：DTPT_ME2.v 与 DTPT_ZeroLocus.v
+   归并棒 S4（2026-09-14）退役记录：DTPT_ME2.v 与 DTPT_ZeroLocus.v
    —— 分别并入本文件 §A4/§A5 后退役；实测全工作区对两源
-   Require/Import 零使用者（对全部活体 .v grep 零命中，ME2/
+   Require/Import 零消费者（对全部活体 .v grep 零命中，ME2/
    ZeroLocus 处依赖叶），两源五件产物以 .retired_S4 前缀快照
    留存。
    ============================================================ *)
 
+(* ========== 切片三替换件闭包审计（T240·2026-09-21） ========== *)
 Print Assumptions DTPT_Entropy.DTPT_Entropy.xq_Qle_bool_true.
 Print Assumptions DTPT_Entropy.DTPT_Entropy.xq_Qle_bool_le.
 Print Assumptions DTPT_Entropy.DTPT_Entropy.Pinf_eq_l.

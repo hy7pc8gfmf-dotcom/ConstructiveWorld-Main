@@ -717,7 +717,7 @@ Lemma pie_real_lower_gen : forall (N : nat) (c lo : Q),
   real_lt (real_const lo) cauchy_real_pi_leibniz.
   (* 续接席注（挂起语义补全，唯此一处语句面触改）：原稿假设缺 + c，本件不可证
      （反例 lo:=4·S_{2N+2} 满足原假设而结论要求 1/2<0）；证明体 Hlo 实用于
-     lo+c<=4·S_{2N+2}，对偶上翼 pie_real_upper_gen 带 + c、全部调用点按
+     lo+c<=4·S_{2N+2}，镜像上翼 pie_real_upper_gen 带 + c、全部调用点按
      lo+c==v N 实例化——按作者显见意图补齐。 *)
 
 Proof.

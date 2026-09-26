@@ -1,11 +1,43 @@
-(* ==========================================================================)
-   UpAblP1T1_AlignCert.v — S05 对齐假设簇六束的供给实例件
-   使命: beta 正性（任意正有理 q 的 real_const 实例）、参考分布逐点正性与归一性（单点 SumOver 实例世界）、eta 参数的数据位/正性/不超过一见证族与端点补全。
-   依赖: CW_ConstructiveWorld_219、UpAbl 系 G13 单点 SumOver 实例世界件、stdlib QArith、Extraction。
-   对标: mathlib mul_lt_mul_of_pos_right（正数乘法保序；本件以 stdlib QArith 的 Qmult_lt_compat_r 表达）。
-   构造性: 纯构造性、零承认词面、全 Qed；语句面全 Set 层（Id/sigT/And/Or 别名形）；标识符前缀 p1t1_。
-   编译配方: Rocq 9.1 直调 coqc，cpu_guard 限核包裹；验证编译一律 -o 临时目录，树内 .vo 不重写。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblP1T1_AlignCert.v                                         *)
+(*                                                               *)
+(* 使命：本件形式化 S05_AlignmentGRPO 对齐假设簇六束的供给实例——      *)
+(*   beta 正性、参考分布逐点正性、分布归一性，以及 eta 参数的         *)
+(*   数据位、正性与不超过一。                                      *)
+(*                                                               *)
+(*   各束与假设位对应（母本 S05_AlignmentGRPO）：                     *)
+(*   beta_pos（S05 假设形 lt zero beta）：对任意正有理 q，                 *)
+(*     beta := real_const q 给出 Real 载体上的正性实例                *)
+(*     （p1t1_beta_pos_supply）；                                  *)
+(*   positive_dist（S05 假设形 forall s, lt zero (pi_ref s)）：于单点       *)
+(*     SumOver 实例世界（UpAblT13c_G13 的 uab_ssUnit 与 uab_soUnit）    *)
+(*     取常值一核，由接口字段 one_pos 直接推得                         *)
+(*     （p1t1_pi_ref_pos_supply）；                                  *)
+(*   normalized（S05 假设形 Id (sum_over_S pi_ref) one）：同一实例世界      *)
+(*     上和退化为核元素取值，故常值一核的求和即 one                     *)
+(*     （p1t1_pi_ref_norm_supply）；                                *)
+(*   eta 数据位、eta_pos、eta_le_one（S05 三条对应假设）：取           *)
+(*     (0,1) 内有理见证族 p1t1_eta_family q := real_const q，            *)
+(*     正性与 beta_pos 束共享证明，不超过一由 real_lt 的逐点展开          *)
+(*     与 Qmult_lt_compat_r 推得（p1t1_eta_pos_supply、                  *)
+(*     p1t1_eta_le_one_supply、p1t1_eta_supply）；                       *)
+(*   端点补全：eta := one 的正性与自反的不超过一                         *)
+(*     （p1t1_eta_one_pos、p1t1_eta_one_le_one）。                       *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219、UpAblT13c_G13（单点 SumOver 实例    *)
+(*   世界）、stdlib QArith。                                        *)
+(*                                                               *)
+(* 对标：mathlib mul_lt_mul_of_pos_right（正数乘法保序；本件以          *)
+(*   stdlib QArith 的 Qmult_lt_compat_r 表达）。                      *)
+(*                                                               *)
+(* 构造性：纯构造性、零承认、全 Qed；语句面全 Set 层（Id/sigT/And/Or    *)
+(*   别名形，裸命题不进入语句与前提位置）；标识符前缀 p1t1_。             *)
+(*                                                               *)
+(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律         *)
+(*   -o 临时目录，树内 .vo 不重写。                                  *)
+(*                                                               *)
+(*                                                               *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpAblT13c_G13.

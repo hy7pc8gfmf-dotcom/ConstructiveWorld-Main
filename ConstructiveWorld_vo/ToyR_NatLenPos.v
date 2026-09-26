@@ -17,11 +17,11 @@
 (* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
 (* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 组滚动）                        *)
+(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* NatLenPos.v —— T40 消融50 战役 CYC9 席（组 E-STAGING-CYC9）   *)
+(* NatLenPos.v —— T40 消融50 战役 CYC9 席（批次 E-STAGING-CYC9）   *)
 (*                                                              *)
 (* 使命：G01_CoreMicro.v:284 real_of_nat length 正性槽 C 类兑现。  *)
 (*   槽语句（G01_CoreMicro.v:284，Section RealVarNonNeg 内）：     *)
@@ -108,7 +108,7 @@ Proof.
   exact (real_lt_irrefl real_zero           (real_lt_eq_lt real_zero                          (real_of_nat (Datatypes.length enum))                          real_zero Hpos                          (real_eq_sym real_zero                             (real_of_nat (Datatypes.length enum)) H0))).
 Qed.
 
-(* ---- G01:284 接口参数确定形：组均值 mean2 的封闭装配
+(* ---- G01:284 接口参数锚定形：组均值 mean2 的封闭装配
         （G01:287-289 逐字同构：inv(|G|)·Σr，Hpos 由覆盖见证供给，
           零假设面剩余——槽依存全闭合示形） ---- *)
 Definition nlp_g01_mean2 (Grp2 : Set) (enum2 : list Grp2)

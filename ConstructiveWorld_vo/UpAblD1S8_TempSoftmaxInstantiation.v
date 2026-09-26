@@ -21,7 +21,7 @@
 
 (* ============================================================ *)
 (* UpAblD1S8_TempSoftmaxInstantiation.v —— FA-D1S8 数据供给大封装五梯 件②     *)
-(* 席位：FA-D1S8（普查批 D1-⑦ 五梯 ≤40 位·按模块聚合）｜独立配套模块·原树零改     *)
+(* 席位：FA-D1S8（普查批 D1-⑦ 五梯 ≤40 位·按模块聚合）｜独立伴生件·原树零改     *)
 (*                                                              *)
 (* 辖区：TempSoftmaxInstantiation.v Section TsiMains（L221 起）全 10 槽         *)
 (*   RI:222｜Token:223｜neg_log_prob:224｜temperature:225｜                     *)
@@ -31,20 +31,20 @@
 (*    dc0b8666224708b0f686f9817b1da254，零代际漂移）                             *)
 (* 扩槽登记：Hsum_pos（L239）属 E389/E703 sum_pos 槽家族（D1-⑤ 批同族），          *)
 (*   S3 已立同槽件 UpAblD1S3_sum_pos_TempSoftmaxInstantiation.v——                *)
-(*   本件按「扩槽不重立」处置，不另立源文件证；闭合账记                             *)
+(*   本件按「扩槽不重立」处置，不另立母本证；闭合账记                             *)
 (*   「S3 单槽＋本席封装 10 槽＝模块 10 位全闭合」。                              *)
 (* RI 接口位诚实申报：老层 RealInterfaceEnhanced（S01_BaseRing.v:215，Id 形）      *)
-(*   全树零具体实例（源文件头注自述「Id 形字段在具体 Real 上不可满足」，本席开工     *)
+(*   全树零具体实例（母本头注自述「Id 形字段在具体 Real 上不可满足」，本席开工     *)
 (*   grep 复核成立：唯一 Build 形依存者为 tsi_rie_setoid@TSI:71，无供给方）——      *)
 (*   本件供给为 RI 全称条件形：任意 RI 一件喂定余 9 槽（Token:=unit 单点、        *)
 (*   temperature:=one、temperature_pos:=one_pos 字段直接匹配、sumf:=单点求和、        *)
 (*   ext/pos 供给肢＝依存位直取 H tt、linear/add＝id_refl 一行）。                *)
-(* 零 Require 源文件（防 P3S1 坑1 混代际 .vo 地雷；tsi_rie_setoid 桥不引，           *)
+(* 零 Require 母本（防 P3S1 坑1 混代际 .vo 地雷；tsi_rie_setoid 桥不引，           *)
 (*   T2b 件1 槽11 之 Require TempSoftmaxInstantiation 形本件不复用）。             *)
-(* δ 同体转写登记（S4 件②「Z 槽语句按源文件定义 δ 内联同体」同款）：                *)
-(*   源文件 Hsum_* 槽语句的裸 req/mult/plus/lt/zero 经 tsi_rie_setoid 桥展开        *)
+(* δ 同体转写登记（S4 件②「Z 槽语句按母本定义 δ 内联同体」同款）：                *)
+(*   母本 Hsum_* 槽语句的裸 req/mult/plus/lt/zero 经 tsi_rie_setoid 桥展开        *)
 (*   ＝ Id / @S01_BaseRing.mult RI / @S01_BaseRing.plus RI /                      *)
-(*   @S01_BaseRing.lt RI（源文件头注自述「req := Id（S01 Set 层幺等）」「Id 形      *)
+(*   @S01_BaseRing.lt RI（母本头注自述「req := Id（S01 Set 层幺等）」「Id 形      *)
 (*   与 req 形逐字同一」，76 字段直引）——本件槽语句按该 δ 同体形逐字转写。         *)
 (*                                                              *)
 (* 形态：P2S1/S4/S7 封装记录型先例（槽语句入包）＋实例供给申报形。                 *)
@@ -60,7 +60,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 封装记录型：10 槽语句入包（对照源文件 L222-241，req 系按桥 δ 同体形） ============ *)
+(* ============ 封装记录型：10 槽语句入包（对照母本 L222-241，req 系按桥 δ 同体形） ============ *)
 
 Inductive uabd1s8_tsi_pack10 : Type :=
 | uabd1s8_tsi_pack10_intro :
@@ -84,7 +84,7 @@ Inductive uabd1s8_tsi_pack10 : Type :=
                 @S01_BaseRing.lt RI (@S01_BaseRing.zero RI) (sumf f)) ->
             uabd1s8_tsi_pack10.
 
-(* ============ 依赖模块：任意 RI 一件喂定余 9 槽（RI 全称条件形） ============ *)
+(* ============ 供给件：任意 RI 一件喂定余 9 槽（RI 全称条件形） ============ *)
 
 Theorem uabd1s8_tsi_pack10_supplied : forall RI : RealInterfaceEnhanced, uabd1s8_tsi_pack10.
 Proof.

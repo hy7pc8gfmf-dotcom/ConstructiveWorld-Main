@@ -1,5 +1,5 @@
 (* ═════════════════════════════════════════════════════════════════════ *
- * 组件E·切片三 同名替换件：UpReqBanachInstReal（记录 组 续作，切片三） *
+ * ToyR 包E·切片三 同名替换件：UpReqBanachInstReal（台账 T243 续作，切片三）   *
  * 本稿＝原件全文逐字保留，仅按玩具清单逐条换写下列证明体（同一陈述、          *
  * 同一符号、零新增 Require、零承认件、全中文头注）。                        *
  * 替换清单（11 件）：bxra_head_cR／bxra_head_bplus／bxra_head_bmult／       *
@@ -8,7 +8,7 @@
  *   bxra_inst_smoke_norm_wd                                               *
  * 三口径：①定义层受控展开（head→projT1 首项投影 iota、coef/zero/one→       *
  *   规范链 head_cR→qnorm_fix_id 两级回位、bnorm→Qabs 形）＋②显式见证        *
- * （smoke 件以 change 逐位把库类投影还原到实例字段原基，直接使用本件 *
+ *   （smoke 件以 change 逐位把库类投影还原到实例字段原基，直接消费本席       *
  *   具体证明 bxra_f_coef_one／bxra_norm_coef_qeqt／bxra_norm_wd_qeqt，     *
  *   消除 bxin_bcoef_one／bxin_bnorm_coef／bxin_bnorm_wd 类字段中转跳）      *
  *   ＋③结构性推导（实例投影 iota 回原基的三段 staged change 链）。           *
@@ -19,6 +19,8 @@
  * 纪律：纯构造性；Set 层零 Prop 泄露；Proof./Qed. 配平；真 Qed。            *
  * ═════════════════════════════════════════════════════════════════════ *)
 (* ============================================================ *)
+(* UpReqBanachInstReal.v —— 席AA3：B1 单第一期·候选 A 实例装配     *)
+(* （S02 Real 载体 → 库类 bxin_BanachAlgPre 全字段装配，20260914） *)
 (* ============================================================ *)
 (* 使命：AA1 普查定谳「实例非空性 0%→100%」——把 S02 Real 载体装配  *)
 (*   进库类 bxin_BanachAlgPre（UpReqBanachInst.v 39 字段弱化类），  *)
@@ -27,6 +29,9 @@
 (*   载体 := Real（sigT(序列,柯西见证)）；bae := 规范种型等价       *)
 (*   Id(qnorm(head a))(qnorm(head b))；运算＝首项有理运算规范化；   *)
 (*   范数 := Qabs ∘ qnorm ∘ head（bxib_qnorm 处方定形）。           *)
+(* 本席新增三刀：                                                  *)
+(*   ① bxra_qabs_opp_norm——INSTB/INST3/INST5 三席挂账的            *)
+(*      bnorm_opp Id 形墙，本席闭合：纯 iota 不达（Z.gcd 展开        *)
 (*      ggcd 机器符号参卡壳），Z 层引理链闭合（Z.gcd_opp_l +        *)
 (*      bxib_div_exact + Z.abs_opp，eq 桥回 Id）；                  *)
 (*   ② bxra_qltT_wd——QeqT 传递件（qleT'_ltT_ltT 组装），收割      *)
@@ -38,6 +43,7 @@
 (* 公理面自审：全件零 公理 零 参数 零 猜想 零 承认件  *)
 (*   零 Variable 零 Hypothesis；语句面零 Props 泄露（结论全 Set、   *)
 (*   Id、QeqT、QleT' 形）；主件出口 Print Assumptions Closed。      *)
+(* 领土纪律：仅新建本件（bxra_ 前缀全库零撞名）；冻结类与在飞席位   *)
 (*   文件未动一字；禁 git。                                        *)
 (* ============================================================ *)
 
@@ -135,6 +141,7 @@ Proof.
     apply Qle_to_QleT'; unfold Qle, Qabs, bxib_qnorm; cbn; lia.
 Qed.
 
+(* 本席新增②：QeqT 传递件（QltT 面沿 Qeq 换代表元） *)
 Lemma bxra_qltT_wd : forall a b c : Q, QeqT a b -> QltT a c -> QltT b c.
 Proof.
   intros a b c Hab H.
@@ -145,8 +152,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* S2：两堵墙的 Real 载体 discharge（保底件）＋ 本席新增①攻墙件     *)
 (* ============================================================ *)
 
+(* 本席新增①：INSTB/INST3/INST5 三席挂账墙——Qopp 与 qnorm 的       *)
 (* Qabs-范数不变（Id 形）。攻法定谳：纯 iota 不达（Z.gcd 展开 ggcd  *)
 (* 机器符号参卡壳），Z 层引理链闭合——Z.gcd_opp_l + bxib_div_exact  *)
 (* + Z.abs_opp；eq 桥回 Id。                                        *)

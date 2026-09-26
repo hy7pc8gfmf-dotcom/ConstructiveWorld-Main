@@ -27,7 +27,7 @@
 (*   （同节 sumf 六面+L75 Z_temp_spec 系他批辖区，本件零重叠；                     *)
 (*   L69/L71 dist_log_le_linear/dist_log_eq_linear 系 W 类阻隔位（普查 §3-W4），     *)
 (*   不入件表，落墙登记。）                                                       *)
-(* 源文件：logd_log_inv_one_inv_real / logd_log_exp_neg_real@G05_LogSmall           *)
+(* 母本：logd_log_inv_one_inv_real / logd_log_exp_neg_real@G05_LogSmall           *)
 (*   （零前提 Real 层参数形；倒数面同形 kl_log_inv@UpStepKL:583；负指面根供给        *)
 (*   real_log_exp_neg，CW 基座直取）。                                            *)
 (* 实态取证：FA2 普查表（20260919）行号与现档逐位一致（底册行数 1574=现档           *)

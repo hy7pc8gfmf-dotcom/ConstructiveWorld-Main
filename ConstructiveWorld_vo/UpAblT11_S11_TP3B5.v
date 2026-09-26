@@ -29,14 +29,14 @@
 (* ============================================================ *)
 (* UpAblT11_S11_TP3B5.v —— FA1 第⑩批 B5 解析件重施工消融件（T11a 席 20260919） *)
 (*                                                              *)
-(* 组工单：_tt11a_｜辖区＝FA1 普查第⑩批（rows 1-40 内 S11 B5 解析件族）：  *)
+(* 批次工单：_tt11a_｜辖区＝FA1 普查第⑩批（rows 1-40 内 S11 B5 解析件族）：  *)
 (*   S11_TP3B5 十个假设参数位（8 深度件位＋2 平凡位），坐标逐字直取自现档源码：  *)
 (*   L1296 H4｜L1300 Hsc｜L1598 HscA3｜L7544/L8571/L11830 三处              *)
 (*   解析导数参数位｜L7559/L7573 两处均匀模参数位｜L11070 端点桥参数位｜L11674           *)
 (*   端点零参数位（详见分级表）。                                              *)
 (*                                                              *)
 (* 消融路线（E-STAGING-FA3 三分级）：                                       *)
-(*   N1 源文件直连：H4←a3_h4_value_bridge:1559（库内闭证）；端点零参数位收窄形     *)
+(*   N1 母本直连：H4←a3_h4_value_bridge:1559（库内闭证）；端点零参数位收窄形     *)
 (*      ←b5dQ_E_rational_zero:S14:13456。                                  *)
 (*   N2 导出链：Hsc←b5b_hsc_main:6610∘b5dF_E_one_zero_of_rational:S14:6675  *)
 (*      喂 b5dQ（树内依存先例 S14 桥行：a3_closure_n5 ∘ b5b_hsc_main ∘      *)
@@ -49,7 +49,7 @@
 (*      real_arctan_deriv_linear:4538（半域形）与 b3rr:5476（r 参数域形），  *)
 (*      但逐字参数形需正性见证位数据迁移（inv_pos 取见证界的 N0 前缀差，       *)
 (*      柯西有限位迁移链库内无现成件）＋全域逐字覆盖需一致性 r 证书，        *)
-(*      本批 90 分钟预算内不特设构造，诚实遗留。                                *)
+(*      本批 90 分钟预算内不硬凑，诚实遗留。                                *)
 (*                                                              *)
 (* 依赖（只读依存，原树零改）：CW_ConstructiveWorld_219＋S11_TP3B5＋        *)
 (*   S14_B5BatchBlock（S14 内部依赖 S11，沙箱双侧源码 md5 同代已核）。       *)
@@ -64,9 +64,9 @@ Require Import S14_B5BatchBlock.
 From Stdlib Require Import QArith.
 From Stdlib Require Import Extraction.
 
-(* ==================== 件一：H4 参数位闭合（N1 源文件直连） ==================== *)
+(* ==================== 件一：H4 参数位闭合（N1 母本直连） ==================== *)
 (* 对照 S11_TP3B5.v:1296 参数位语句逐字（theta1 记法 = arctan_one_real:1254）。  *)
-(* 实例化消解源文件：a3_h4_value_bridge:1559（零假设闭证，同语句逐字）。            *)
+(* 实例化消解母本：a3_h4_value_bridge:1559（零假设闭证，同语句逐字）。            *)
 Theorem uabt11_h4_closed :
   real_eq (real_mult (real_const 4%Q) theta1) cauchy_real_pi_leibniz.
 Proof.
@@ -75,7 +75,7 @@ Qed.
 
 (* ==================== 件二：Hsc 参数位闭合（N2 导出链） ==================== *)
 (* 对照 S11_TP3B5.v:1300（Hsc）与 1598（HscA3）两参数位语句逐字（同一语句形）。  *)
-(* 实例化消解源文件：b5b_hsc_main:6610（E(1)==0 ⟹ sin θ == cos θ）出节全参喂        *)
+(* 实例化消解母本：b5b_hsc_main:6610（E(1)==0 ⟹ sin θ == cos θ）出节全参喂        *)
 (*   b5dF_E_one_zero_of_rational:S14:6675（有理点链升 E(1)==0）再喂          *)
 (*   b5dQ_E_rational_zero:S14:13456（有理点单点证书）；复合形即树内依存       *)
 (*   先例（S14 桥行 a3_closure_n5∘b5b_hsc_main∘b5dF∘b5dQ 同一装配）。       *)
@@ -127,7 +127,7 @@ Qed.
 (* ============ 件七：端点零参数位收窄形单点证书（N1 收窄申报） ============ *)
 (* 对照 S11_TP3B5.v:11674-11675 参数位语句（全实数 x ∈ (0,1) 形）。库内现档      *)
 (*   仅有理点收窄形 b5dQ_E_rational_zero:S14:13456（语句逐字直接代入）；全实数形  *)
-(*   需 E 连续性/极限迁移（E315 未确证项面），本批不特设构造——收窄申报，        *)
+(*   需 E 连续性/极限迁移（E315 未确证项面），本批不硬凑——收窄申报，        *)
 (*   余量遗留见报告偏差账。                                               *)
 Theorem uabt11_b5a_rational_single_point :
   forall (q : Q) (Hq0 : Qlt 0 q) (Hq1 : Qlt q 1)
@@ -138,7 +138,7 @@ Proof.
 Qed.
 
 (* ============ 件八：E(1)==0 全局无条件证书（N2） ============ *)
-(* b5b_endpoint:11681 的条件目标（须端点零参数位输入）今以有理点链全局无条件     *)
+(* b5b_endpoint:11681 的条件目标（须端点零参数位喂入）今以有理点链全局无条件     *)
 (*   兑现：b5dF_E_one_zero_of_rational:S14:6675 喂 b5dQ_E_rational_zero。   *)
 Theorem uabt11_E_one_zero_uncond :
   real_eq real_E_one real_zero.

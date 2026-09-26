@@ -9,12 +9,12 @@
 
 (* UpReqAlignRestB.v — 签名迁移批 3 余量 B 席：Top-k/Min-P/熵动力学/逐出四区
    抽象层定理的 req 系（setoid 层）req 化。
-   源文件：CW_ConstructiveWorld_219（行号 = 219 基座）四区：
+   母本：CW_ConstructiveWorld_219（行号 = 219 基座）四区：
      Min-P 区     Section MinPSampling      L30684-31866（Id 系抽象层）
      Top-k 区     Section TopPSampling      L31872-32542（Id 系抽象层）
      熵动力学区   Section EntropyDiffReal   L46821-51392（Real 层，interface-level 余件）
      逐出区       Section RealKVQuantMain   L53932-54965（Real 层，interface-level 余件）
-   模板：UpSigMigrate2.v（形态）+ UpReqAlgebra.v（消去引擎/req_minus 直接使用）。
+   模板：UpSigMigrate2.v（形态）+ UpReqAlgebra.v（消去引擎/req_minus 直接消费）。
    ----------------------------------------------------------------
    [Part 0 共享机器] rls_ext/rls_linear/rls_nonneg/rls_single_le/rls_pos/rls_le
      （基座 MinPSampling list_sum 簇 L30710-30768/31104 的 req 化——Id 系
@@ -46,27 +46,27 @@
    ----------------------------------------------------------------
    诚实边界登记表（逐件注明，红线 3 之「非平凡真实现」核对）：
    1. [桥假设位（T2①，假设位与基座同构）]
-      - req_le_dec：基座 DecidableOrder（DO 类 L331 ord_le_dec）的 req 对偶。
+      - req_le_dec：基座 DecidableOrder（DO 类 L331 ord_le_dec）的 req 镜像。
         setoid 类无序判定字段——假设位逐位对应，Real 实例侧由 Q 层可判定序
         消解（基座同源）。
-      - req_lt_dec：lt_dec_field_tk（L32385 三分支构造子解构）的 req 对偶，
+      - req_lt_dec：lt_dec_field_tk（L32385 三分支构造子解构）的 req 镜像，
         中支相等判据 Id→req（签名差异：req 世界 R 上相等 = req）。
-      - pick_max_in_vocab / topk_pickmax_head：argmin/list 机器 13 件冻结给出
+      - pick_max_in_vocab / topk_pickmax_head：argmin/list 机器 13 件冻结承接
         （规划书 §1.1 边界 2：nat/bool/list Id 机器不在迁移面）——基座 TopP
         自身即以 topk_pickmax_head 为诚实前提 Variable（L32346），同款。
       - boltzmann_diff_bridge（req_boltzmann_diff_bridge，ReqKVQuantWorld 节
-        Variable）：real_exp_neg_diff_bound（L53901）的 req 对偶。
+        Variable）：real_exp_neg_diff_bound（L53901）的 req 镜像。
         其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析（LogDiffPhase4
-        UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式）。P1 以桥假设给出，
+        UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式）。P1 以桥假设承接，
         其余 B3a/B3b/B3c/结构恒等/组装各件全部真证。
       - transition_nonneg（ReqKVQuantWorld 节 Variable，Or 分解形）：基座
         real_transition_nonneg（real_le zero T，real_le 实为 Or(real_lt,
-        real_eq) 形）的逐位 req 对偶——setoid 接口 le 字段抽象不可分解，
+        real_eq) 形）的逐位 req 镜像——setoid 接口 le 字段抽象不可分解，
         假设位取 Or 分解形逐位同构；需接口 le zero T 处以 lt_le_iff 消解
         （B4），需 |T|==T 处经 req_abs_nonneg_id_or 消解（B2c）。
       - 逐出区求和面：sum_over_S 仅作 req_evicted_partition 的 opaque 载体
-        （Variable，基座 real_sum_over_S 同位）；全部 8 件不使用其 ext/linear
-        字段，正性由 req_evicted_partition_pos 单独 Variable 给出（基座同位）。
+        （Variable，基座 real_sum_over_S 同位）；全部 8 件不消费其 ext/linear
+        字段，正性由 req_evicted_partition_pos 单独 Variable 承接（基座同位）。
    2. [冻结（双层并行，本批不迁，理由 = 基座自注）]
       - mp_of_nat_pos / markov_kernel_normalized_mp / minp_max_ge_inv_vocab_size /
         pick_best_optimal_mp（L31545-31834）：nat→R 嵌入（mp_of_nat）与 argmin
@@ -82,7 +82,7 @@
         UpReqAlgebra (d)3 冻结条款）。
    3. [签名变化] minp_dropped_mass 的 minus → req_minus（= plus a (opp b)，
       UpReqAlgebra 登记表 1 同形重建）；count_kernel_heavier 中支 Id → req；
-      Part 1+2 合并单节（基座 TopP 以 12 参闭包显式形式使用 MinP 机器，
+      Part 1+2 合并单节（基座 TopP 以 12 参闭包显式形式消费 MinP 机器，
       req 席同构合并避免调用噪音，定义/语句逐件对应）。
       Part 4 续：接口无 plain exp——e^{·} 全部以 req_epos（:= exp_neg∘opp，
       正指数幂 = exp_neg 逆的 req 重建）陈述，boltzmann_upper/abs_diff_prod_
@@ -93,7 +93,7 @@
       le_mult_compat/req_le_mult_compat_r 双段单调 + req_le_zero_mult_pos_l
       （le zero (p·x) 接口级导出：le 字段抽象不可分解下的非负积引理）——
       全部真证，无新增冻结件。
-   4. [承担席续建记录（20260909，原席死于系统盘写故障）]
+   4. [接管席续建记录（20260909，原席死于系统盘写故障）]
       断点修复 5 处（正向修复，零缩水零掉 Qed）：
       a. req_temp_factor_max_eq：mult_assoc 方向反（外层 req_sym 后需再翻回，
          显式 req_sym + mult_assoc）；
@@ -106,12 +106,12 @@
       续建：Part 3（熵动力学区 Section ReqEntropyWorld：req_exp_neg_ext_local
       + 4 对位件 + 熵定义组 3 件 + req_Omega_total_pos）与 Part 4（逐出区
       Section ReqKVQuantWorld：epos 定义组 + 环/abs 工具 4 件 + P1 桥位 +
-      B1/B2c/B3a/B3b/B3c/B3/B4 全链）由承担席按源文件逐件对位续建。
+      B1/B2c/B3a/B3b/B3c/B3/B4 全链）由接管席按母本逐件对位续建。
    ----------------------------------------------------------------
    纪律：纯构造性；Set 层语句（req/lt/le/req_minus 均接口 Set 值；Or/And/
    Id(list/nat)/Not 按 UpKVEv 先例）；核心件 Qed、判定件 Defined；
    纯 term-mode（req_trans 链 + compat 桥），零 rewrite 依赖。
-   G3 提取检验 upreqalignrestb_probe（验后删）。 *)
+   G3 提取探针 upreqalignrestb_probe（验后删）。 *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -119,7 +119,7 @@ From Stdlib Require Import List.
 Import ListNotations.
 Import RealInterfaceEnhancedMod.
 Require Import UpReqPropLiftShim.
-(* B6W 实例化（20260915，AA13 显式假设①首批）：pls_ 升面适配引理接入。 *)
+(* B6W 接线（20260915，AA13 显式假设①首批）：pls_ 升面垫片接入。 *)
 
 (* ============================================================ *)
 (* Part 0：req list-sum 机器（基座 MinPSampling L30710-30768/    *)
@@ -422,11 +422,11 @@ End ReqOrdTools.
 
 (* ============================================================ *)
 (* Part 1+2：采样世界（Min-P 区 L30684-31866 + Top-k 区          *)
-(*   L31872-32542）。基座 TopP 以「闭包显式参数形式」使用 MinP    *)
+(*   L31872-32542）。基座 TopP 以「闭包显式参数形式」消费 MinP    *)
 (*   机器（L31914 同款 12 参显式调用）；req 席合并单节同构重述，  *)
 (*   逐件定义/语句仍与基座一一对应。                              *)
 (*   top_p_keep（sort_kernel 成员形态，L31962）不迁：其排序/成员  *)
-(*   机器为 list-Id 域（规划书 §1.1 边界 2），基座定理全部使用     *)
+(*   机器为 list-Id 域（规划书 §1.1 边界 2），基座定理全部消费     *)
 (*   le 形态 topp_keep（L31990）。                                *)
 (* ============================================================ *)
 Section ReqSamplingWorld.
@@ -436,8 +436,8 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable Token : Set.
 Variable vocab : list Token.
 Variable vocab_nonempty : Not (Id vocab nil).
-(* B6W 实例化位（AA13 #10，20260915）：老否定形前提经 pls_ 适配引理升 sigT 见证形—— *)
-(* 深实例化使用位：pls_vocab_ne_lift 原地升形，下游可直取走 sigT 通路。旧语句保留。 *)
+(* B6W 接线位（AA13 #10，20260915）：老否定形前提经 pls_ 垫片升 sigT 见证形—— *)
+(* 深接线消费位：pls_vocab_ne_lift 原地升形，下游可直取走 sigT 通路。旧语句保留。 *)
 Definition alb_vocab_ne_witness_s1 : pls_vocab_ne vocab
   := pls_vocab_ne_lift vocab vocab_nonempty.
 Variable total_loss : list Token -> R.
@@ -449,15 +449,15 @@ Variable min_p : R.
 Variable min_p_pos : lt zero min_p.
 Variable min_p_lt_one : lt min_p one.
 
-(* ---- 桥假设位 1：DecidableOrder 的 req 对偶（ord_le_dec L331/332 同位；
+(* ---- 桥假设位 1：DecidableOrder 的 req 镜像（ord_le_dec L331/332 同位；
      setoid 类无序判定字段，T2① 假设位逐位对应） ---- *)
 Hypothesis req_le_dec : forall a b : R, Or (le a b) (Not (le a b)).
 
-(* ---- 桥假设位 2：三分判定（lt_dec_field_tk L32385 的 req 对偶；
+(* ---- 桥假设位 2：三分判定（lt_dec_field_tk L32385 的 req 镜像；
      中支相等判据 Id→req——req 世界 R 上相等 = req） ---- *)
 Hypothesis req_lt_dec : forall a b : R, Or (lt a b) (Or (req a b) (lt b a)).
 
-(* ---- 桥假设位 3：list 机器冻结给出（argmin 13 件不迁；仅给出顶层
+(* ---- 桥假设位 3：list 机器冻结承接（argmin 13 件不迁；仅承接顶层
      事实 pick_max ∈ vocab——UpKVEv 先例同款） ---- *)
 Variable pick_max_token : list Token -> Token.
 Hypothesis pick_max_in_vocab : forall prefix : list Token,
@@ -523,7 +523,7 @@ Definition alb_minp_temp_sum (prefix : list Token) : R :=
                        | inr _ => zero
                        end) vocab.
 
-(* 基座 pick_max_token_minp_keep L30954（使用 req_le_mult_le_one_r） *)
+(* 基座 pick_max_token_minp_keep L30954（消费 req_le_mult_le_one_r） *)
 Lemma req_pick_max_minp_keep : forall prefix : list Token,
   alb_minp_keep prefix (pick_max_token prefix).
 Proof.
@@ -631,7 +631,7 @@ Proof.
   - destruct (Hdrop Hkeep).
 Qed.
 
-(* ===== 基座 minp_markov_kernel_normalized L31050（定理 req 化主定理） =====
+(* ===== 基座 minp_markov_kernel_normalized L31050（定理 req 化旗舰） =====
    Id 系 rewrite Hext/Hlin/Hdef 三步替换；req 系 = rls_kernel_norm_gen
    （代数骨架一次真证）+ 本语句级实例（conversion 逐位对应：
    alb_minp_markov_kernel/alb_minp_temp_sum 定义 δ 展开）。 *)
@@ -911,7 +911,7 @@ Proof.
               (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
                     (alb_partition_temp prefix)))).
-      (* 盘故障断点修复（承担席 20260909）：外层 req_sym 已翻转目标，
+      (* 盘故障断点修复（接管席 20260909）：外层 req_sym 已翻转目标，
          assoc 步实为 mult_assoc 之对称——req_sym 显式翻回（正向修复）。 *)
       apply (req_sym
         (mult (alb_temp_factor prefix (pick_max_token prefix))
@@ -1066,7 +1066,7 @@ Definition alb_topp_temp_sum (p : R) (prefix : list Token) : R :=
                        | inr _ => zero
                        end) vocab.
 
-(* 基座 topp_temp_sum_pos L32014：pick_max 保留性由前提 le p max 给出
+(* 基座 topp_temp_sum_pos L32014：pick_max 保留性由前提 le p max 承接
    （alb_topp_keep p prefix pick_max ≡ le p (alb_max_markov_prob prefix) conversion） *)
 Lemma req_topp_temp_sum_pos : forall (p : R) (prefix : list Token),
   le p (alb_max_markov_prob prefix) -> lt zero (alb_topp_temp_sum p prefix).
@@ -1123,7 +1123,7 @@ Definition alb_topp_markov_kernel (p : R)
   | inr _ => zero
   end.
 
-(* ===== 基座 topp_markov_kernel_normalized L32084（定理 req 化主定理） ===== *)
+(* ===== 基座 topp_markov_kernel_normalized L32084（定理 req 化旗舰） ===== *)
 Theorem req_topp_markov_kernel_normalized : forall (p : R)
   (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token),
@@ -1212,7 +1212,7 @@ Definition alb_combined_markov_kernel (p : R)
   | inr _ => zero
   end.
 
-(* ===== 基座 combined_markov_kernel_normalized L32262（定理 req 化主定理） ===== *)
+(* ===== 基座 combined_markov_kernel_normalized L32262（定理 req 化旗舰） ===== *)
 Theorem req_combined_markov_kernel_normalized : forall (p : R)
   (Hpmax : forall prefix : list Token, le p (alb_max_markov_prob prefix))
   (prefix : list Token),
@@ -1338,7 +1338,7 @@ Definition alb_combined_topk_markov_kernel (K : nat)
   | inr _ => zero
   end.
 
-(* ===== 基座 combined_topk_markov_kernel_normalized L32481（定理 req 化主定理） ===== *)
+(* ===== 基座 combined_topk_markov_kernel_normalized L32481（定理 req 化旗舰） ===== *)
 Theorem req_combined_topk_markov_kernel_normalized :
   forall (K : nat) (HK : forall prefix : list Token, (1 <= K)%nat)
          (prefix : list Token),
@@ -1538,7 +1538,7 @@ Variable keep_dec : forall s : S, Or (keep s) (Not (keep s)).
 
 Variable transition : S -> S -> R.
 (* 基座 real_transition_nonneg（real_le zero T，real_le 实为 Or 形）的逐位
-   req 对偶：setoid 接口 le 字段抽象不可分解——假设位取 Or 分解形逐位同构；
+   req 镜像：setoid 接口 le 字段抽象不可分解——假设位取 Or 分解形逐位同构；
    需接口 le zero T 处以 lt_le_iff 消解（本区 B4） *)
 Variable transition_nonneg : forall s s' : S,
   Or (lt zero (transition s s')) (req zero (transition s s')).
@@ -1574,9 +1574,9 @@ Proof.
 Qed.
 
 (* ---- P1 桥假设位（诚实登记表 1 续）：基座 real_exp_neg_diff_bound L53901
-   的 req 对偶；其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析
-   （LogDiffPhase4 域），setoid 接口无 exp 线性 eps 字段——同主定理席
-   UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式。P1 给出为桥，
+   的 req 镜像；其引擎 real_exp_abs_minus_one_eps 为 Real/Q 层 exp 分析
+   （LogDiffPhase4 域），setoid 接口无 exp 线性 eps 字段——同旗舰席
+   UpSigMigrate2 唯一诚实缺口 req_log_exp_neg 模式。P1 承接为桥，
    其余 B2/B3a/B3b/B3c/B4 各件全部真证 ---- *)
 Variable req_boltzmann_diff_bridge : forall (u v eps : R),
   lt zero eps ->
@@ -2621,7 +2621,7 @@ Qed.
 End ReqKVQuantWorld.
 
 (* ============================================================ *)
-(* 文件尾清单注记（承担席核对登记表，20260909 结席）                *)
+(* 文件尾清单注记（接管席核对登记表，20260909 结席）                *)
 (* ============================================================ *)
 (*
    1. 结果核对（原席头注四区计划 vs 实建）：

@@ -2,6 +2,7 @@
 (* SqWallCorrMark.v                                             *)
 (*                                                              *)
 (* 目的：登记「平方非负全称」类前提位（forall a, le zero (mult a a)） *)
+(*       的结构性勘误结论：该接口面在 Real 实例下与「墙」SqWall 同面， *)
 (*       而 Or 编码的全称墙与受限 LPO 双向等价（UpReqLpoEquiv 机器检 *)
 (*       验），故全称供给不可达；本件给出消费位衔接件（接口投影面转 *)
 (*       换 / 双向指针 / 等价件镜像）与补 Bishop 逐 eps 前提的同构重 *)
@@ -49,7 +50,7 @@
    (swc_lpn_backward_slot Hdec) 即从受限 LPO 消解。 *)
 
 (* 位2 UpReqSqrtF.v:707（Section SqrtF 泛型 R 前提位，路线 a 诚实位）
-   结构性判定：同位1；§8 修正补注（:692-706）已实证 plain 形在
+   结构性判定：同位1；§8 勘误补注（:692-706）已实证 plain 形在
    Real 层不可供给——Or 编码两侧在 t_n^2 无一致正尾部时皆假
    （t := 1/n 序列形反例）；接口 abs 族不敷用（|t|·|t| 与 t·t
    无 req 桥：符号不可判定且接口无分解字段）。
@@ -68,7 +69,7 @@
    S06_DiffSamplingGibbs.v:1689 set_square_nonneg /
    UpReqSLM.v:735 req_set_square_nonneg：带前提条件形
    （le zero t -> le zero (mult t t)）——可证形（乘法非负闭包），
-   非墙位，无需修正。
+   非墙位，无需勘误。
    S11_TP3B5.v Q 层 Qsquare_nonneg：有理数可判定三分律——可证形，
    非墙位（墙仅在 Real/柯西层）。
    UpReqU2/UpReqRDF 等 le zero (mult a b) 双非负前提型：乘法保序
@@ -135,7 +136,7 @@ Proof.
 Qed.
 
 (* 衔接件四：等价件前提位面镜像（lpn_equivalence:429 的同构重申）。
-   语句面修正：原语句首元写作
+   语句面勘误（20260915）：原语句首元写作
    And (forall t : Real, real_le real_zero (real_mult t t) -> rLPO)，
    ∀ 作用域吞掉尾随「-> rLPO」，成逐点双前提形
    forall t, (real_le real_zero (real_mult t t) -> rLPO)——与前提位

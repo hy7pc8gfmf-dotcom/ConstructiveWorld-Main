@@ -8,8 +8,11 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqPadeDenPos.v —— 席C2G：路径 C 通用 n 分母正性               *)
 (*                  （den_pos 通项化：0 <= x <= 1 ⟹ 分母非负）       *)
+(* 日期：2026-09-12                                                *)
 (*                                                                 *)
+(* 任务定位：CS 席已证 n=0/n=1 特例（UpReqPadeSign.v 的              *)
 (*   pds_den0_pos / pds_den1_pos）。本件把分母正性通项化：           *)
 (*     pdp_den_pos : forall n x, QleT 0 x -> QleT x 1 ->            *)
 (*                              QleT' 0 (pade_den n x)              *)
@@ -35,6 +38,7 @@
 (* 显式假设（对称，禁硬凑）：                                            *)
 (*   a. 严格正版 QltT 0：引擎出口 altsum_pos_strict 需首对严格       *)
 (*      t_1 < t_0，即 x < 1/c_1 = 2/(2n-1)，n >= 2 时比 x < 1 细，   *)
+(*      需逐对配比细化（或尾段补偿估计），本轮不攻。                  *)
 (*   b. x ∈ (1,2) 段：系数比极小值实为 2（k=0 处），衰减对 x <= 2     *)
 (*      成立（分母真零点在 x = 2），但 x ∈ (1,2] 段递减装配需比式     *)
 (*      消元（乘 Qinv 正因子），待下轮。                              *)
@@ -508,6 +512,7 @@ Proof.
   - apply qeq_leT'. apply Qeq_sym. exact Hb.
 Qed.
 
+(* 任务书面形（x < 1 严格前提版）——由主件直接弱化前提得到 *)
 Corollary pdp_den_pos_lt : forall (n : nat) (x : Q),
   QleT 0 x -> QltT x 1 -> QleT' 0 (pade_den n x).
 Proof.

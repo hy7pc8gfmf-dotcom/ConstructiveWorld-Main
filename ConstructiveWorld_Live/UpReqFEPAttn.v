@@ -1,31 +1,33 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpReqFEPAttn.v *)
 (* *)
 (* 目的： 注意力自由能原理（FEP）的 req 层四件与行视图一件。 *)
 (* 主件： req_attention_minimizes_free_energy_unique 与 req_bs_kernel_row_is_softmax_temp 行视图。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
-(* 备注： 配分正性与 softmax 归一化为接口前提；签名变化以登记表申报（δ 留记）。 *)
+(* 备注： 配分正性与 softmax 归一化为接口前提；签名变化以登记表申报（δ 记账）。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqFEPAttn.v — 批4注意力席：FEPAttention 4 + RowView 1 +    *)
 
 (*                                                              *)
 (* Id 原件定位（grep 实证）：                                     *)
 (*   Section FEPAttention：L112164-112252 ≡ G01_CoreMicro.v Part1   *)
 (*     （fep_partition_condition L112193 / fep_align L112201 /    *)
-(*      fep_F_ext L112211 / 主定理 attention_minimizes_free_energy_ *)
+(*      fep_F_ext L112211 / 旗舰 attention_minimizes_free_energy_ *)
 (*      unique L112225）；                                        *)
 (*   Section RowView：L112256-112304 ≡ G01_CoreMicro.v Part2        *)
 (*     （bs_kernel_row_is_softmax_temp L112281）；                *)
 (*   Section FEPLogZ：Module UpExtras219 内 L114023-114099  *)
 (*     （fep_partition_condition L114054 / fep_align L114063 /    *)
-(*      fep_F_ext L114073 / 主定理 free_energy_softmax_eq_neg_T_    *)
+(*      fep_F_ext L114073 / 旗舰 free_energy_softmax_eq_neg_T_    *)
 (*      logZ L114089）——D.3 交接提到的「G01_CoreMicro.v 对位」经核验：    *)
 (*      FEPAttention/RowView 与 G01_CoreMicro.v 逐字同构，FEPLogZ 不在     *)
 (*      G01_CoreMicro.v，在基座 UpExtras219（fep_F_ext 较弱：无归一前提）。*)
 (*                                                              *)
+(* 解锁消费面（D.3.1：批2 FEP req 三件套结果后 bridge 降为消费件）*)
 
-(*     req_min_free_energy_is_boltzmann（无条件形态，检验签名      *)
+(*     req_min_free_energy_is_boltzmann（无条件形态，探针签名      *)
 
 
 
@@ -33,16 +35,16 @@
 (*   基座 Setoid 节 exp_neg_req_compat_setoid（L66223）为证明件，  *)
 
 (*                                                              *)
-(* 诚实签名变化登记表（δ 留记）：                                   *)
+(* 诚实签名变化登记表（δ 记账）：                                   *)
 (*   1. log 前提化：req 侧 log 带 lt zero 前提，自由能 F_attn 对    *)
 (*      逐点正性位 (forall s, lt zero (p s)) 显式收参（Id 系       *)
 (*      reqd_normalized 前提在 req_fep_F_ext 保留为 raw req 形          *)
-(*      req (sumf p) one 位，主定理按 Id 证明路径真实使用面收参）。   *)
+(*      req (sumf p) one 位，旗舰按 Id 证明路径真实消费面收参）。   *)
 (*   2. RowView 参数位剪除：Id bs_kernel 的 enum/enum_nonempty/    *)
 (*      Delta/z_lb/expf_mono_le/sum_eq_list 六位为其他引理服务，   *)
-(*      行等式证明路径仅使用 expf/expf_pos/expf_agree 三位；其中   *)
+(*      行等式证明路径仅消费 expf/expf_pos/expf_agree 三位；其中   *)
 
-(*      冲突，req 侧按真实使用面收参（expf_agree 换 req 签名）。    *)
+(*      冲突，req 侧按真实消费面收参（expf_agree 换 req 签名）。    *)
 
 
 (*      位——Real 实例由 real_log_wd（L42277）可满足，        *)
@@ -63,7 +65,7 @@ Require Import UpReqDist.
 Import RealInterfaceEnhancedMod.
 
 (* ################ Section ReqFEPAttn：FEPAttention 4 件 ################ *)
-(*   Id 原件 L112164-112252 逐位 req 同构；和接口 = 六性质位   *)
+(*   Id 原件 L112164-112252 逐位 req 镜像；和接口 = 六性质位   *)
 
 Section ReqFEPAttn.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -110,7 +112,7 @@ Variable z : S -> R.
 Variable T : R.
 Variable T_pos : lt zero T.
 
-(* ---- 节内定义（Id 节 Let base/invT/Zf/Zf_pos/F_attn 逐位同构） ---- *)
+(* ---- 节内定义（Id 节 Let base/invT/Zf/Zf_pos/F_attn 逐位镜像） ---- *)
 Definition base : S -> R := fun s : S => opp (z s).
 Definition invT : R := inv_pos T T_pos.
 Definition Zf : R :=
@@ -156,8 +158,8 @@ Proof.
       (req_refl (inv_pos Zf Zf_pos))).
 Qed.
 
-(* ---- 辅件：softmax 归一化（Id softmax_temp_normalized 使用位同构；*)
-(*      主定理 Hnorms 前提供给；线性提因子 + 配分折返 + 逆元完成） ---- *)
+(* ---- 辅件：softmax 归一化（Id softmax_temp_normalized 消费位镜像；*)
+(*      旗舰 Hnorms 前提供给；线性提因子 + 配分折返 + 逆元完成） ---- *)
 Lemma req_softmax_z_normalized : req (sumf softmax_z) one.
 Proof.
   unfold softmax_z.
@@ -202,7 +204,7 @@ Proof.
           (log_req_compat (p s) (q s) (Hp s) (Hq s) (Hpt s))))).
 Qed.
 
-(* ---- 辅件：softmax 逐点正性（主定理语句位直引） ---- *)
+(* ---- 辅件：softmax 逐点正性（旗舰语句位直引） ---- *)
 Lemma softmax_z_pos : forall s : S, lt zero (softmax_z s).
 Proof.
   intro s. unfold softmax_z, exp_pos_fn_setoid. apply mult_positive.
@@ -210,9 +212,9 @@ Proof.
   - apply inv_pos_pos.
 Qed.
 
-(* ---- 件 4/9 主定理：attention = 变分自由能的唯一最小点                *)
+(* ---- 件 4/9 旗舰：attention = 变分自由能的唯一最小点                *)
 (*   （Id attention_minimizes_free_energy_unique L112225）。          *)
-(*   使用链：req_fep_F_ext（softmax↔boltzmann 换形，Id HFsb 步）       *)
+(*   消费链：req_fep_F_ext（softmax↔boltzmann 换形，Id HFsb 步）       *)
 (*   → UpReqDist req_min_free_energy_is_boltzmann（≤ 腿）/            *)
 (*   req_free_energy_min_unique（唯一性腿）+ req_fep_align 完成。      *)
 Theorem req_attention_minimizes_free_energy_unique :
@@ -309,7 +311,7 @@ End ReqFEPAttn.
 
 (* ################ Section ReqRowView：RowView 1 件 ################ *)
 (*   Id 原件 L112256-112304（bs_kernel_row_is_softmax_temp     *)
-(*   L112281）req 同构。参数位剪除登记表见文件头注 2；expf 迷你接口     *)
+(*   L112281）req 镜像。参数位剪除登记表见文件头注 2；expf 迷你接口     *)
 (*   一致性前提换 req 签名（expf_agree）。                           *)
 Section ReqRowView.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -329,7 +331,7 @@ Variable expf : R -> R.
 Hypothesis expf_pos : forall x : R, lt zero (expf x).
 Hypothesis expf_agree : forall x : R, req (expf x) (exp_pos_fn_setoid x).
 
-(* ---- 行配分函数（Id Zrow 同构：Σ_s0 expf((1/T)·z2 s s0)） ---- *)
+(* ---- 行配分函数（Id Zrow 镜像：Σ_s0 expf((1/T)·z2 s s0)） ---- *)
 Definition req_Zrow (s : S) : R :=
   sumf (fun s0 : S => expf (mult (inv_pos temp temp_pos) (z2 s s0))).
 
@@ -339,7 +341,7 @@ Proof.
 Qed.
 
 (* ---- 单查询行 softmax 侧（Id partition_function_temp/softmax_temp  *)
-(*      对 (fun s0 => z2 s s0) 实例的同构） ---- *)
+(*      对 (fun s0 => z2 s s0) 实例的镜像） ---- *)
 Definition req_row_partition (s : S) : R :=
   sumf (fun s0 : S => exp_pos_fn_setoid (mult (inv_pos temp temp_pos) (z2 s s0))).
 
@@ -353,7 +355,7 @@ Definition req_row_softmax (s s' : S) : R :=
   mult (exp_pos_fn_setoid (mult (inv_pos temp temp_pos) (z2 s s')))
        (inv_pos (req_row_partition s) (req_row_partition_pos s)).
 
-(* ---- 行核（Id bs_kernel 使用面同构：分子 expf 行元 + 逆行配分） ---- *)
+(* ---- 行核（Id bs_kernel 消费面镜像：分子 expf 行元 + 逆行配分） ---- *)
 Definition req_bs_kernel (s s' : S) : R :=
   mult (expf (mult (inv_pos temp temp_pos) (z2 s s')))
        (inv_pos (req_Zrow s) (req_Zrow_pos s)).
@@ -380,8 +382,8 @@ End ReqRowView.
 
 (* ################ Section ReqFEPLogZ：FEPLogZ 4 件 ################ *)
 (*   Id 原件 Module UpExtras219 Section FEPLogZ L114023-114099  *)
-(*   req 同构（与 ReqFEPAttn 节同构；fep_F_ext 较弱：无归一前提位，    *)
-(*   主定理 free_energy_softmax_eq_neg_T_logZ 使用 req_free_energy_     *)
+(*   req 镜像（与 ReqFEPAttn 节同构；fep_F_ext 较弱：无归一前提位，    *)
+(*   旗舰 free_energy_softmax_eq_neg_T_logZ 消费 req_free_energy_     *)
 (*   boltzmann 完成）。节内定义 lz_ 前缀防跨节顶层遮蔽（登记表 4）。     *)
 Section ReqFEPLogZ.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -474,7 +476,7 @@ Proof.
           (log_req_compat (p s) (q s) (Hp s) (Hq s) (Hpt s))))).
 Qed.
 
-(* ---- 辅件：softmax 逐点正性（主定理语句位直引） ---- *)
+(* ---- 辅件：softmax 逐点正性（旗舰语句位直引） ---- *)
 Lemma lz_softmax_z_pos : forall s : S, lt zero (lz_softmax_z s).
 Proof.
   intro s. unfold lz_softmax_z, exp_pos_fn_setoid. apply mult_positive.
@@ -533,14 +535,14 @@ Qed.
 
 End ReqFEPLogZ.
 
-(*
+(* 覆盖核对总表（req 件名 -> Id 原件 @ 行号；9/9 显式假设清偿）：
    【FEPAttention】req_fep_partition_condition<-112193
      req_fep_align<-112201 req_fep_F_ext<-112211
-     req_attention_minimizes_free_energy_unique<-112225【主定理】
+     req_attention_minimizes_free_energy_unique<-112225【旗舰】
    【RowView】req_bs_kernel_row_is_softmax_temp<-112281
    【FEPLogZ】req_fep_partition_condition_logz<-114054
      req_fep_align_logz<-114063 req_fep_F_ext_logz<-114073
-     req_free_energy_softmax_eq_neg_T_logZ<-114089【主定理】
+     req_free_energy_softmax_eq_neg_T_logZ<-114089【旗舰】
    辅件（非显式假设，证明位供给）：Zf_pos softmax_z_pos
      req_softmax_z_normalized req_Zrow_pos req_row_partition_pos
      lz_Zf_pos lz_softmax_z_pos。 *)

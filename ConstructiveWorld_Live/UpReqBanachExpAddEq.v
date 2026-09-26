@@ -1,17 +1,19 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
+(* UpReqBanachExpAddEq.v —— 席EXPADD2：S3 exp_add 等式形总装       *)
+(* (20260913，路径 B；闸门 UNQ+CBR 双开 04:26 确认后直接总装)        *)
 (* ============================================================ *)
 (* 使命主件：bxae_exp_add                                         *)
 (*   bae (bxdef_emul (bxdef_exp a) (bxdef_exp b))                *)
 (*       (bxdef_exp (a+b))    （hab 交换面；零假设形见尾注）        *)
-(* 六环连接：                                                     *)
+(* 六环接线：                                                     *)
 (*   ① bnh_esp_term_binom（BanachNoHyp，(a+b)^k 项二项式形零假设）  *)
 (*   ② esp_as_bsum/bpa_bsum_mult_r（方块行形，UpReqBanachProd/Add） *)
 (*   ③ bxcb_term_split_binom（UpReqBanachBinomBridge 系数桥）      *)
+(*   ④ esp_diff_le_tail（UpReqBanachExp 尾界）+ 块和→0（本席新建）  *)
 (*   ⑤ bxadd_esp_prod_blim（UpReqBanachExpAdd 部分积序列极限）      *)
 (*   ⑥ bxuq_lim_uniq（UpReqBanachLimUniq 极限唯一性）              *)
 (* 工艺：行形三角 bxae_tri_row（自建归纳，免 bd2 转置）+ 差=块和     *)
-(*   分解 bxae_diff_block + 分窗 Q 留记 bxae_qblock_small。         *)
+(*   分解 bxae_diff_block + 分窗 Q 记账 bxae_qblock_small。         *)
 (* 红线自审：纯构造性（无公理/承认件/弃证面/经典逻辑）；语句面 Set   *)
 (*   层（bae/blim/sigT），Q 层 Prop 仅引擎内衬；禁词条口径含注释——   *)
 (*   本头注已用「公理/承认件/弃证面」字面。                          *)
@@ -34,7 +36,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Setoid Lia.
 
 (* ============================================================ *)
-(* S0：bxdef_emul——exp 元素乘法（主件左元连接位；普查全树无先名）    *)
+(* S0：bxdef_emul——exp 元素乘法（主件左元接线位；普查全树无先名）    *)
 (* ============================================================ *)
 
 Definition bxdef_emul (B : BanachAlg) (x y : (@BA B)) : (@BA B) :=
@@ -1113,7 +1115,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 六环合成：⑤ 左极限 + ④ 差小移位 + ⑥ 唯一性                      *)
+(* 主件：e^a·e^b == e^(a+b)（hab 交换面；20260915 席AA18 起零假设）  *)
+(* 六环总装：⑤ 左极限 + ④ 差小移位 + ⑥ 唯一性                      *)
 (* 迁移史注：bxae_ 族七件（term_reassoc/binom_row/tri_row/           *)
 (* diff_block/block_norm_le/diff_small/exp_add）签名收窄至零假设，   *)
 (* bnh_esp_term_binom 同位供给，hplus/hwd 形参全摘。                 *)

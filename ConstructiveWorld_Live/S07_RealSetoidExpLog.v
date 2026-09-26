@@ -1,4 +1,3 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S07_RealSetoidExpLog.v                                      *)
 (*                                                             *)
@@ -13,7 +12,7 @@
 (*       直觉主义可证，强三分（LPO）不可证。                     *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* ToyR（S 系下半）同名非平凡替换稿 · 检验记录号 S01+S02          *)
+(* ToyR 战役 包D（S 系下半）同名非平凡替换席 · 台账号 T242        *)
 (* 替换定理清单：real_eq_le / eq_Id / NatLe_to_le / le_to_NatLe    *)
 (*   （共 4 条，语句与声明序不变）                                 *)
 (* 非平凡性说明：仅替换上列 4 条证明体；声明面、其余定理、原头注   *)
@@ -22,7 +21,7 @@
 (*   魔法）；NatLe 两桥改 assert 两段组合投影链。全为实质非平凡     *)
 (*   构造性推导：零 公理、零 承认件、零经典逻辑，真证闭闭合。      *)
 (*   编译态：深依赖链（S01–S06 vo 摘要链断裂），整件遗留；         *)
-(*   替换证明体已经语境检验（S01+S02 语义面）G4 全部通过。       *)
+(*   替换证明体已经 T242 语境检验（S01+S02 语义面）G4 全绿。       *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -963,7 +962,7 @@ End RealSetoid.
 (* 结束：本块全部为构造性定义和可证明引理，无公理面与承认件   *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 阶段 2：exp 加法性 Q 层（并入，来自检验 _dbg_exp_plus.v，37 引理）
+(* 阶段 2：exp 加法性 Q 层（2026-08-29 并入，来自检验 _dbg_exp_plus.v，37 引理）
    目标：cauchy_real_exp_plus（exp_neg_plus 字段材料）
    内容：q_binom 二项式定理 + exp 层 Cauchy 积引理族（exp_cauchy_double / exp_trunc_decomp 等）
    依赖：q_fact/q_pow/sum_upto/exp_partial/exp_series 族（主文件已有）
@@ -1645,7 +1644,7 @@ Qed.
 End ExpPlusStage2.
 
 (* ============================================================ *)
-(* 阶段 2 续：exp 截断误差上界（并入，来自检验 _dbg_exp_plus.v 49 Qed）
+(* 阶段 2 续：exp 截断误差上界（2026-08-29 并入，来自检验 _dbg_exp_plus.v 49 Qed）
    内容：sum_upto_abs_le / sum_upto_le_ext / q_abs_pow_fact_le / exp_tail_abs_sum /
         exp_tail_abs_mono2 / exp_series_sum / exp_tail_abs_sum_inner / exp_tail_abs_inner_le /
         q_abs_prod_le / exp_trunc_abs_step / q_scale_series_le / exp_trunc_band_up
@@ -2342,7 +2341,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* log 论证第三阶段（并入主文件）：构造性 log 族  *)
+(* log 论证第三阶段（2026-08-29 并入主文件）：构造性 log 族  *)
 (* exp 值域 (0,∞) 二分逼近 → log_seq 柯西 → cw_log 定义 + 右逆  *)
 (* 检验 _dbg_exp_plus.v L1408-4692 合并（158 Qed 验证通过）        *)
 (* ============================================================ *)
@@ -2913,7 +2912,7 @@ Proof.
   - apply (cauchy_real_exp_gt_const n Hn1).
 Qed.
 (* ================================================================
-   log 论证第三阶段（后续会话）：exp 值域 (0,∞) + 构造性 log
+   log 论证第三阶段（2026-08-29 新会话）：exp 值域 (0,∞) + 构造性 log
    路线（E160-5 绕行定案）：Q 层近似测试二分（可判定）→ 近似根扫描
    （缺陷情形返回中点）→ Lipschitz 柯西族 → 极限 = log y
    ================================================================ *)
@@ -5998,7 +5997,7 @@ Proof.
       * apply real_eq_sym. exact HL.
 Qed.
 
-(* ============ DPO 有界三前置：Real 层闭合（并入，来自检验 _dbg_dpo_pre.v，14 引理）
+(* ============ DPO 有界三前置：Real 层闭合（2026-08-30 并入，来自检验 _dbg_dpo_pre.v，14 引理）
    结构性缺失.txt L475 缺口：real_log_lt_mono（log 严格递增，锚点法 E173-1）
    + real_inv_pos_lt_contra（inv 反单调）+ real_lt_plus_compat_le_lt/lt_le（混合加法保序）
    + real_mult_lt_compat（乘法保序）。验证：coqc+coqtop 双验 + BAD=0（E173） *)
@@ -6946,7 +6945,7 @@ Instance Real_RealInterfaceSetoid : RealSetoid.RealInterfaceSetoid Real := {
 }.
 
 End FullInstance.
-(* ============ RealInterfaceEnhancedSetoid 阶段 2 并入（来自检验 _dbg_riesetoid.v 39 Qed 全部通过） ============
+(* ============ RealInterfaceEnhancedSetoid 阶段 2 并入（2026-08-30，来自检验 _dbg_riesetoid.v 39 Qed 全绿） ============
    req 版 RealInterfaceEnhanced（L195）独立接口 + Real 层实现 + Instance RealEnhancedReal。
    - Real 层引理（segA）名字与主文件无冲突（real_log 系列是 Section 内 Variable，End 后释放），直接追加。
    - 独立接口（39 字段全显式，不继承）：字段名与 RealInterface / RealSetoid.RealInterfaceSetoid
@@ -8696,22 +8695,22 @@ Instance RealEnhancedReal : RealInterfaceEnhancedSetoid Real := {
   cauchy_complete := RealSetoid.real_cauchy_complete_metric_natle;
 }.
 End RealInterfaceEnhancedMod.
-(* ============ log_le_linear 论证并入（来自检验 _dbg_log_linear.v 11 Qed 全部通过） ============
+(* ============ log_le_linear 论证并入（2026-08-30，来自检验 _dbg_log_linear.v 11 Qed 全绿） ============
    Real 层核心：real_exp_ge_linear_eps（e^t ≥ 1+t，Bishop 逐 eps）
    + real_log_le_linear_eps（log x ≤ x−1+eps）。
    数学：t≥0 用 exp_partial_ge_plus_x；t≤0、0≤a≤1 用奇截断配对非负；
    t≤0、a≥1 用 exp_even_neg_nonneg（偶）+ exp_partial_odd_lower（奇，正下界）。
    逐点三分（Qlt_le_dec）+ 有界性（real_norm_bounded）+ 尾项衰减（exp_partial_tail_small）。
    log_eq_linear（e^t=1+t ⟹ t=0）需强三分/LPO，构造性不可证（诚实边界）。 *)
-(* ============ Real 层 opp-mult 恒等族并入（来自检验 _dbg_oppmult.v RC=0） ============
+(* ============ Real 层 opp-mult 恒等族并入（2026-08-30，来自检验 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
    逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
    Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
-(* ============ Real 层 opp-mult 恒等族并入（来自检验 _dbg_oppmult.v RC=0） ============
+(* ============ Real 层 opp-mult 恒等族并入（2026-08-30，来自检验 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
    逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
    Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
 
-(* ToyR 替换稿：替换定理假设面查证（Module 语境限定名） *)
+(* ToyR 替换席：替换定理假设面查证（Module 语境限定名） *)
 Print Assumptions RealSetoid.real_eq_le.
 Print Assumptions RealSetoid.le_to_NatLe.

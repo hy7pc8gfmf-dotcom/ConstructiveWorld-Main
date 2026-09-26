@@ -1,9 +1,3 @@
-(* g4p_probe_sig.v — G04_ProjFam 接口签名检验件。
-   使命: 以类型检查核对实数等式、序、倒数与分配律接口签名在位，零新数学内容。
-   依赖: CW_ConstructiveWorld_219、G04_ProjFam。
-   对标: real_eq_lt_lt、real_inv_pos_correct、real_distrib 等 Check 具名行。
-   构造性注记: 只含 Require 与 Check 语句，无新定义与证明，零公理引入。
-   编译配方: coqc -Q . "" ConstructiveWorld_Live/g4p_probe_sig.v。 *)
 Require Import CW_ConstructiveWorld_219.
 Require Import G04_ProjFam.
 Check real_eq_lt_lt.

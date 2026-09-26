@@ -1,10 +1,10 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
 (*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
 (* 替换定理清单：req_align_partition_condition／req_rlhf_optimal／           *)
 (* req_dpo_optimal／req_rlhf_optimal_unique／req_plus_opp_le_zero／          *)
 (* req_plusA_opp_cancel_le／req_dpo_loss_iter_step_le／req_Z_aud_le_one 等   *)
@@ -24,6 +24,7 @@
 (* ============================================================ *)
 
 (* UpReqAlign.v — 签名迁移批 3：对齐理论主体（Alignment 簇）req 系重述与实例化
+   母本：D:\ComplexAnalysis\ConstructiveWorld-Main\docs\签名迁移规划书-20260908.md（批 3 清单）
    模板：UpSigMigrate.v（试点）+ UpReqAlgebra.v（批 1 地基，直接依存）；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
@@ -91,6 +92,7 @@ Hypothesis sum_zero_nonneg :
     (forall s : S, le zero (f s)) -> req (sumf f) zero -> forall s : S, req (f s) zero.
 
 (* 接口缺口桥（登记表 3；UpReqAlgebra ReqLogBridge 同位，T2①）：
+   Id 系 destruct/eq_ind 免费事实在 req 世界以桥假设承接；
    Real 实例可满足（柯西 log 连续），实例化留待接口扩展批。 *)
 Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
@@ -111,7 +113,7 @@ Definition norm_one (p : S -> R) : Set := req (sumf p) one.
 (* 配分函数与闭式最优策略（Id Z_align/pi_star L18769-18780 同形） *)
 Definition Z_align_req : R :=
   sumf (fun s => mult (pi_ref s) (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))).
-(* 前置引理（原 Variable 换同名 Lemma， 基座消融波 T2 终判 B39）：由 sum_pos+pi_ref_pos+mult_positive/exp_neg_pos 导出；零承认件 *)
+(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B39）：由 sum_pos+pi_ref_pos+mult_positive/exp_neg_pos 导出；零承认件 *)
 Lemma Z_align_pos : lt zero Z_align_req.
 Proof.
   unfold Z_align_req. apply sum_pos. intros s. apply mult_positive.
@@ -303,7 +305,7 @@ Qed.
 
 (* ============ B 组：RLHF/DPO 核心（T2① FEP 桥 + 真证组装） ============ *)
 (* FEP req 三件套的 req 签名桥（Id min_free_energy_is_boltzmann /
-   free_energy_min_unique 的 req 同位承担；批 2 UpReqFreeEnergy 结果后
+   free_energy_min_unique 的 req 同位承接；批 2 UpReqFreeEnergy 结果后
    降为依存件。对位简化注记：Id 侧经 align_boltzmann_is_pi_star 把
    boltzmann_dist 逐点等同 pi_star，req 侧桥直接以 pi_star_req 为极小点
    载体，等价且免重复——登记表 3。） *)
@@ -349,7 +351,7 @@ Proof.
 Qed.
 
 (* ============ C 组：策略迭代主链（Id L21237-23272 req 化） ============ *)
-(* 节参数（Id L21238-21241 同位；sum_pos 已在节首同位承担 Id
+(* 节参数（Id L21238-21241 同位；sum_pos 已在节首同位承接 Id
    Variable sum_over_S_pos @L21245） *)
 Variable eta : R.
 Variable eta_pos : lt zero eta.

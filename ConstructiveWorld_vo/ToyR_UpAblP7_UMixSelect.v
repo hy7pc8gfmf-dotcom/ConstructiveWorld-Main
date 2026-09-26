@@ -26,7 +26,7 @@
 (* 使命：源模块 UpReqUMixSelect.v 以 lt_plus_compat_lt_le（lt＋le 相加保序）    *)
 (*   为唯一声明假设（接口层不可内证；omd 与 κ<1 两处依存点的 le_refl 槽       *)
 (*   构造性不可升级消去）；本件把其出节主定理 ums_pow_budget 的                *)
-(*   「输入该前提即得结论」形固定为具名定理                                  *)
+(*   「喂入该前提即得结论」形固定为具名定理                                  *)
 (*   uabm_ums_pow_budget_slot_freeze，并在 req 面（RealEnhancedReal，S07）    *)
 (*   给 κ:=real_const(1/2)、TV0:=budget:=one 的具体实例 uabm_k_select_half：  *)
 (*   见证存在 k 使 (1/2)^k·1 < 1。                                           *)
@@ -71,7 +71,7 @@ Require Import UpReqUMixSelect.
 (* §A Id 面：主声明前提的具名依存形（节前导与源模块一致；                    *)
 (*   本节必须先于 RealInterfaceEnhancedMod 裸名导入，见头部节序注记）        *)
 (*   ums_pow_budget 出节首参即声明前提 lt_plus_compat_lt_le；本件把          *)
-(*   「输入该前提即得主结论」的出节形固定为具名可依存定理                  *)
+(*   「喂入该前提即得主结论」的出节形固定为具名可依存定理                  *)
 (*   uabm_ums_pow_budget_slot_freeze，供直接依存。                          *)
 (* ============================================================ *)
 

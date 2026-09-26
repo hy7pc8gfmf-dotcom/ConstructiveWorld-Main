@@ -1,11 +1,42 @@
-(* ==========================================================================)
-   UpAblEps49Fam.v — Boltzmann 熵族的 KL 分解恒等式族
-   使命: e49f_boltzmann_log_decomp/boltzmann_normalized/kl_term_equiv/pi_star_align/gibbs_sum_eps：配分函数对数分解、归一化、KL 项等价、对齐分布与 Gibbs 求和 ε 形。
-   依赖: S01_BaseRing 至 S08_RealMainlineDPO；Stdlib Lists.List。
-   对标: Gibbs/Boltzmann 分布的 KL 分解恒等式族（统计力学）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblEps49Fam.v —— 论文 1 定理 4.9 诚实接口族的族面五件实例供给。                *)
+(*                                                               *)
+(* 目的：S08_RealMainlineDPO.v 节 RealRLHFMain 内五个接口假设逐件供给           *)
+(*   Real 层构造性实例；关键主件 real_kl_decomp_full 由配套件承担，                *)
+(*   本件不涉及。                                                      *)
+(*                                                               *)
+(* 五件清单（S08 接口假设 → 本件定理）：                                        *)
+(*   1. real_boltzmann_log_decomp → e49f_boltzmann_log_decomp；路线： *)
+(*      real_log_wd 同点异证兼容 + real_log_mult + log e^{-u} == −u    *)
+(*      （log_inv_exp_neg_thm）+ log inv == −log（自建：x·inv x == 1 锚点 *)
+(*      + real_log_mult + real_log_one + real_eq_plus_cancel_l）+ real_opp_plus。 *)
+(*   2. real_boltzmann_normalized → e49f_boltzmann_normalized；路线： *)
+(*      list 求和实例；real_list_sum_ext 换序（乘法交换）+                    *)
+(*      real_list_sum_linear_r 提出公因子 + real_eq_mult_compat       *)
+(*      （HZ 前提入位）+ real_inv_pos_correct。                         *)
+(*   3. real_kl_term_equiv → e49f_kl_term_equiv；路线：real_kl_term  *)
+(*      定义展开 + real_log_mult + log inv == −log（e49f_log_inv_pos）+ *)
+(*      real_opp_plus / real_opp_opp / real_plus_comm 代数。        *)
+(*   4. real_pi_star_align → e49f_pi_star_align；路线：实例取换序         *)
+(*      softmin 形（e49f_pi_star_r），对齐一步 real_mult_comm；该假设        *)
+(*      为无约束自由变元，实例供给即闭合；变分刻画（π* 为自由能极小）                         *)
+(*      接口不表达，列为升级方向。                                            *)
+(*   5. real_gibbs_sum_eps → e49f_gibbs_sum_eps；路线：直连 S08 已证     *)
+(*      real_gibbs_inequality_eps（出节形 q 任意），q := Boltzmann 分布，   *)
+(*      Σ q == 1 由件 2 实例供给；正性词项全程用 real_boltzmann_dist_r_pos。    *)
+(*                                                               *)
+(* 实例环境（逐字对齐 S08 接口实形，求和取具体 list 求和）：                            *)
+(*   S := X（任意类型）、real_sum_over_S := fun f => real_list_sum X f l、 *)
+(*   real_base_loss := e、D/D_pos、Z_align_r/Z_align_r_pos 同名对应、   *)
+(*   real_pi_star_r := e49f_pi_star_r。                           *)
+(*                                                               *)
+(* 显式前提（接口无 Z 定义式，故逐位保留）：HZ : real_eq (real_list_sum X           *)
+(*   (fun s => e^{-e(s)/D}) l) Z（件 2、件 5 依赖；件 1/件 3/件 4 无需）。     *)
+(* 依赖：S01–S08 全链（只读使用）；不改任何既有件。                                  *)
+(* 对标：mathlib Boltzmann 分布与 Gibbs 不等式的有限实例。                      *)
+(* 构造性注记：零承认；语句面全 Set 层；文末逐定理 Print Assumptions。                 *)
+(* 编译配方：Rocq 9.1 直调 + cpu_guard；编译输出 -o 临时目录，树内不动。               *)
+(* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.

@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T252 台账席 战役包M（tier2 批量面第三批）    *)
 (* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
 (* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
 (* 重演；逐刀金标准文本程序直取自母本体并断言同文），声明面与引用  *)
@@ -22,6 +23,7 @@
 (*                                                                           *)
 (* 分工（主会话钉死）：本文件承接方案四的后半——件 3（行 TV 界）与          *)
 (* 件 4（主定理·变动）；世界定义/K_ev/Z_keep 照抄契约在文件内重建（独立     *)
+(* Section，与新席 UpKVEv.v 各持一份同形定义，既定分工）。                  *)
 (*                                                                           *)
 (* 世界（list 词表，Real 层，副本 AttnHardLimit 瘦身形态）：                 *)
 (*   Tok : Set + states : list Tok（非空）+ 完整核 K（行归一 + 逐点正）     *)
@@ -34,6 +36,7 @@
 (*   因 invZ ≥ 1），drop 支 == K；分部求和                                   *)
 (*   Σ_keep(K·invZ − K) == (invZ−1)·Z_keep == 1 − Z_keep == tail_row，      *)
 (*   drop 支 == tail_row，合计 == 2·tail_row == 2·(1 − Z_keep)——精确最简   *)
+(*   形态（强于任务书预案的 ≤ 形态，以等式结果；≤ 形态与 1−Z 形态并列）。  *)
 (*                                                                           *)
 (* 件 4  kv_drift_bound（主定理·变动）：                                    *)
 (*   前提 Hrow : ∀s, tv_row(s) ≤ c（一致行误差常数，规避 sup），对任意      *)
@@ -218,6 +221,7 @@ Fixpoint k_iter (n : nat) (mu : Tok -> Real) : Tok -> Real :=
   | Datatypes.S m => lstep K (k_iter m mu)
   end.
 
+(* 逐和 TV（任务书许可的逐和形态） *)
 Definition Ddist (mu nu : Tok -> Real) : Real :=
   real_list_sum Tok (fun x : Tok => real_abs (real_minus_r (mu x) (nu x))) states.
 

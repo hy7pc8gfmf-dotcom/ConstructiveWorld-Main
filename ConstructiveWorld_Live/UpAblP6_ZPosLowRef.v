@@ -1,4 +1,3 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ===================================================================== *)
 (* UpAblP6_ZPosLowRef.v —— 玩具复检替换稿（历史自称 ToyR_UpAblP6_ZPosLowRef，落名无 ToyR_ 前缀，命名归属候裁定） *)
 (* 基准：Main/Live/UpAblP6_ZPosLowRef.v（565 注册面最新基线，只读零写）。  *)
@@ -9,13 +8,13 @@
 (* brp_b3／brp_b4 剔除配分×2），一件直取次层 zpi2_ 参数实例；                *)
 (* 其三，双层和交换件改具体 2×2 真值表定义层闭合（零引擎使用独立重演）；    *)
 (* 其四，复合传递件经勘面其根引擎在 fa53_compat_abs／InvPosLtCompat 模内，  *)
-(* 非本件依赖面（零新增依赖铁律）不可达，原 lf4 复合装配序如实保留不特设构造。 *)
+(* 非本件依赖面（零新增依赖铁律）不可达，原 lf4 复合装配序如实保留不硬凑。 *)
 (* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；     *)
 (* Main 整目录只读；本稿落消融50 写区。                                   *)
 (* ===================================================================== *)
 
 (* ===================================================================== *)
-(* UpAblP6_ZPosLowRef.v —— ZPosSlotFeed 与 LowRefFeed4 的具体实例依赖模块    *)
+(* UpAblP6_ZPosLowRef.v —— ZPosSlotFeed 与 LowRefFeed4 的具体实例供给件    *)
 (* 使命：把 ZPosSlotFeed 的五个正性结论（UpSigMigrate2.Z_align_a_sum、      *)
 (*   UpReqAttnIter.Z_thermo_i、UpReqAttnGibbs.Z_thermo_r、                  *)
 (*   UpReqBranchPos.brp_evicted_partition_r 及裸载体回接形）与 LowRefFeed4  *)
@@ -214,7 +213,7 @@ Qed.
 
 (* RI 面复合：S01_BaseRing RealInterface 环境（与 AttnDoeblin、             *)
 (* S05_AlignmentGRPO 的接口环境相同），将 lf4_inv_pos_lt_contra 与          *)
-(* lf4_lt_plus_compat_lt_le_h 的复合传递面：倒数交换 × 加法保序。 *)
+(* lf4_lt_plus_compat_lt_le_h 复合为库内缺席的复合传递面：倒数交换 × 加法保序。 *)
 Section UAZLRRIFace.
 
 Context {RI : RealInterfaceEnhanced}.

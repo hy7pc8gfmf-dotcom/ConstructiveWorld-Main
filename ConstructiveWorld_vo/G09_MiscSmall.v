@@ -1,30 +1,23 @@
-(* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
-   依赖：见原头注 Require 面与依赖段。
-   对标：见原头注来源/对标行。
-   构造性：纯构造性、零承认件（详见原头注红线自审段）。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
 (* ===================================================================== *)
-(* ToyR   记录件续作·切片三（全中文零承认面）                     *)
+(* ToyR 战役包I T248 台账席续作·切片三（全中文零承认面）                     *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名落件（消融50 零同名，按规原名落件）——声明序与语句逐字保留，  *)
 (*   仅换下列四处玩具证明体。                                              *)
 (*   替换清单（本件四刀）：                                                *)
-(*    ①bzdir_boltzmann_factor_pos：深层换轨——不再使用 Real 层包裹引擎       *)
+(*    ①bzdir_boltzmann_factor_pos：深层换轨——不再消费 Real 层包裹引擎       *)
 (*      real_exp_neg_pos，改 unfold 深达柯西逐 eps 构造层直落               *)
 (*      cauchy_real_exp_pos（与主件B 原路线互换）。                        *)
 (*    ②bzdir_boltzmann_factor_pos_cauchy：反向换轨——不再直落柯西构造层，    *)
-(*      改使用 Real 层包裹引擎 real_exp_neg_pos（与主件A 原路线互换）。     *)
-(*    ③bzdir_boltzmann_factor_one_pos：脱钩独立重演——不再单点使用主件A，   *)
+(*      改消费 Real 层包裹引擎 real_exp_neg_pos（与主件A 原路线互换）。     *)
+(*    ③bzdir_boltzmann_factor_one_pos：脱钩独立重演——不再单点消费主件A，   *)
 (*      unfold 后柯西构造层直落（零前件版自足）。                          *)
-(*    ④bzdir_boltzmann_factor_pos_le：脱钩升格——不再使用主件A，Real 层     *)
-(*      引擎内联直供＋inl 升格（原兄弟件单点使用解耦）。                    *)
+(*    ④bzdir_boltzmann_factor_pos_le：脱钩升格——不再消费主件A，Real 层     *)
+(*      引擎内联直供＋inl 升格（原兄弟件单点消费解耦）。                    *)
 (*   其余七条玩具经复核为透明转换桥恒等项（双向直插桥两件）/定义性对齐      *)
 (*   证书（reflexivity 即本体）/引擎单路唯一形（平方 eps 件：plain 层      *)
 (*   构造性阻塞在本件头注在案，CW219 引擎系唯一出口；费雪/组方差两件      *)
-(*   系上游引擎整体转发无第二入口；贪心最优件系定义展开＋唯一引擎单使用）  *)
-(*   （不可化四类），如实批量标注不强造，滚动留记。                         *)
+(*   系上游引擎整体转发无第二入口；贪心最优件系定义展开＋唯一引擎单消费）  *)
+(*   （不可化四类），如实批量标注不硬凑，滚动挂账。                         *)
 (*   全文件零禁词面；全真配平；零新增引用面。                                *)
 (* ===================================================================== *)
 
@@ -33,37 +26,37 @@
 (* ======== G09_MiscSmall 成员件：UpReqPCT（原样并入，自带 Require）======== *)
 (* UpReqPCT.v — 签名迁移批 5 波 4 桥模块 C3：reqRealSelfSS（req StateSpace 迷你类，
    clim:=lim 实例化）+ reqPCTDefs（PCT 定义层）+ PCTRealBridge 2 件 req 平移。
-   工作单：attn\基建层处置清单.md /(c) 桥C3（§0.3 / §7.4 / §8 / §9.2）。
-   源文件：CW_ConstructiveWorld_219：
+   工作单：attn\批5基建层处置清单.md 波4/(c) 桥C3（§0.3 / §7.4 / §8 / §9.2）。
+   母本：CW_ConstructiveWorld_219：
      Class StateSpace（收敛面 3 字段）        L1160-1187（clim L1183 / clim_unique L1184 /
                                               cauchy_complete_S L1186-1187）
      Definition RealSelfSS（clim:=lim 桥本体）L1219-1247（收敛面实例化 L1242-1244）
      Module PCC is_truth / is_attractor      L1581-1585
-     Section PCTRealBridge（Let SS_R 使用形） L1710-1780（2 件 L1742 / L1757）
+     Section PCTRealBridge（Let SS_R 消费形） L1710-1780（2 件 L1742 / L1757）
    上游：CW_ConstructiveWorld_219 基座（setoid 接口自带 lim/lim_unique/cauchy_complete 字段
-   L40589-40596——清单 §0.3 桥C3 判定的定位依据）；UpReqAlgebra 按需未使用故未
+   L40589-40596——清单 §0.3 桥C3 判定的落位依据）；UpReqAlgebra 按需未消费故未
    Require；其余 5 件零 Require。
    ----------------------------------------------------------------
    桥设计（逐字段核对）：
    1. reqRealSelfSS 迷你记录 = Id StateSpace（L1160-1187，21 字段）的**收敛面
-      3 字段** req 同构（清单 §8 行 C3「req StateSpace 迷你类（clim:=lim）」——
-      PCT 定义层使用面恰为收敛面；代数/度量面 18 字段属清单 §8 行 4
-      reqStateSpace+reqHilbertSpace 桥（抽象类转写，其他模块给出），本文件不越界不同名冲突）：
+      3 字段** req 镜像（清单 §8 行 C3「req StateSpace 迷你类（clim:=lim）」——
+      PCT 定义层消费面恰为收敛面；代数/度量面 18 字段属清单 §8 行 4
+      reqStateSpace+reqHilbertSpace 桥（抽象类转写，其他模块给出），本文件不越界不撞名）：
         clim              L1183 → rself_clim
         clim_unique       L1184 → rself_clim_unique（结论位 Id→req）
         cauchy_complete_S L1186 → rself_cauchy_complete（语句逐字同形，
                                      metric/lt/NatLe 全基座字段原样）
-   2. reqRealSelfSS_inst = Id RealSelfSS（L1219-1247）收敛面实例化的 req 同构：
+   2. reqRealSelfSS_inst = Id RealSelfSS（L1219-1247）收敛面实例化的 req 镜像：
         rself_clim := lim / rself_clim_unique := lim_unique /
         rself_cauchy_complete := cauchy_complete——即清单「clim:=lim 实例化」
         桥本体（Id L1242-1244 注记逐位对应）。
    3. reqPCTDefs 定义层：
         reqPCT_is_truth     ← Id is_truth     L1581-1582（语句逐字同形，le 直引）
         reqPCT_is_attractor ← Id is_attractor L1584-1585（clim 位 = rself_clim；
-              Id 桥 dynamics Variable 以 fun _ => dyn 闭名使用 L1738 区——req 形
+              Id 桥 dynamics Variable 以 fun _ => dyn 闭名消费 L1738 区——req 形
               把该 dynamics 位前移为显式参 dyn，签名差异注记：dyn 已代 dynamics）
    4. iterate 直接复用：CW_ConstructiveWorld_219 L1394 多态纯 nat Fixpoint（零 Id 内容；nat 层不
-      迁移口径同清单 §7.12 grpo_count_one 使用 count 机先例）。
+      迁移口径同清单 §7.12 grpo_count_one 消费 count 机先例）。
    ----------------------------------------------------------------
    给出核对（清单 §7.4 (c) 2 件）：
      req_pct_attractor_is_lim    ← pct_attractor_is_lim    L1742（语句同构，
@@ -73,14 +66,14 @@
                                     化简为 lim）
      req_pct_truth_is_global_min ← pct_truth_is_global_min L1757（同上）
    纪律：纯构造性；Set 层语句（le/req/乘积积全基座 Set 形）；纯 term-mode
-   （split/intro/exact）；核心件 Qed。G3 提取检验独立文件（验后删）。 *)
+   （split/intro/exact）；核心件 Qed。G3 提取探针独立文件（验后删）。 *)
 
 Require Import CW_ConstructiveWorld_219.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
 (* 桥 C3 本体 1：reqRealSelfSS——Id StateSpace 收敛面 3 字段的       *)
-(*   req 迷你同构（清单「迷你类」口径；全 Set 层）                  *)
+(*   req 迷你镜像（清单「迷你类」口径；全 Set 层）                  *)
 (* ============================================================ *)
 Record reqRealSelfSS (R : Set) (RIS : RealInterfaceEnhancedSetoid R) := {
   rself_clim : (nat -> R) -> R -> Set;
@@ -108,7 +101,7 @@ End ReqRealSelfSSInst.
 
 (* ============================================================ *)
 (* reqPCTDefs 定义层 + 2 件（Id PCTRealBridge L1710-1780 同构：      *)
-(*   Let RSS_R := 实例 的使用形）                                   *)
+(*   Let RSS_R := 实例 的消费形）                                   *)
 (* ============================================================ *)
 Section ReqPCTBridge.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -120,7 +113,7 @@ Definition reqPCT_is_truth (L : R -> R) (s : R) : Set :=
   forall s' : R, le (L s) (L s').
 
 (* Id PCC is_attractor L1584-1585 同构：clim 位 = rself_clim；Id 桥以
-   dynamics := fun _ => dyn 闭名使用，req 形把 dynamics 位前移为显式 dyn
+   dynamics := fun _ => dyn 闭名消费，req 形把 dynamics 位前移为显式 dyn
    （签名差异注记：dyn 已代 dynamics，见头注 3）。 *)
 Definition reqPCT_is_attractor (dyn : R -> R) (s : R) : Set :=
   forall s0 : R, @rself_clim R RIS RSS_R (fun n => iterate dyn n s0) s.
@@ -194,7 +187,7 @@ End ReqPCTBridge.
 (*           inv_pos_pos×主件，对应 StochasticLanguageModel.softmax_pos *)
 (*           与 boltzmann_prob_pos 的具体构造面）                  *)
 (*                                                              *)
-(* 校注（对侦察预判，以 sed/Check 现值为准）：                      *)
+(* 勘误（对侦察预判，以 sed/Check 现值为准）：                      *)
 (*  1. 侦察稿「current 陈述 forall {RI}」的精确形态实为节限定名：    *)
 (*     Rocq 9 节保留命名空间，短名 boltzmann_factor_pos 不在顶层，  *)
 (*     须写 PropositionConvergenceCore.boltzmann_factor_pos         *)
@@ -302,7 +295,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ 辅件 3：lt→le 升格（le 腿使用面直接提供形） ============ *)
+(* ============ 辅件 3：lt→le 升格（le 腿消费面直接提供形） ============ *)
 Theorem bzdir_boltzmann_factor_pos_le :
   forall (D : Real) (HD : real_lt real_zero D) (L : nat -> Real) (s : nat),
   real_le real_zero (bzdir_boltzmann_factor D HD L s).
@@ -344,11 +337,11 @@ Print Assumptions bzdir_boltzmann_factor_pos_le.
 Print Assumptions bzdir_softmax_pos.
 
 (* ======== G09_MiscSmall 成员件：UpReqSqPos（原样并入，自带 Require）======== *)
-(* UpReqSqPos.v — 假设位证明系列 #5：square_nonneg 一器双吃（Real 层具体实例化证明）
-   参数位（两处挂 T2① square_nonneg 槽的使用定理，实读定形）：
+(* UpReqSqPos.v — 假设位证明系列波1 #5：square_nonneg 一器双吃（Real 层具体实例化证明）
+   参数位（两处挂 T2① square_nonneg 槽的消费定理，实读定形）：
    ① UpReqAlign.v L1122（ReqNaturalGradient 节 Hypothesis 位）：
         req_square_nonneg : forall a : R, le zero (mult a a)
-      直接使用 = req_fisher_zero_implies_pointwise @L1140（逐点非负桥 + 零和分解）。
+      直接消费 = req_fisher_zero_implies_pointwise @L1140（逐点非负桥 + 零和分解）。
    ② UpReqDist.v L969（req_group_variance_le_raw_second_moment 定理首参显式位）：
         (forall a : R, le zero (mult a a)) ->
         le req_group_variance (mult (inv_pos …) req_group_raw_second_moment)
@@ -368,18 +361,18 @@ Print Assumptions bzdir_softmax_pos.
       real_le_b real_zero (t·t)（forall eps>0, real_lt zero (t²+eps) 弱序）；
       单向桥 real_le_to_le_b @UpRealLeB:78 方向为 real_le ⟹ real_le_b，
       反向不可导——故 plain 槽不可由在盘引擎直放（精确阻塞裁决见尾注）。
-   3. 本文件给出（使用件本体不動，证明实例件与之并存）：
+   3. 本文件给出（消费件本体不動，证明实例件与之并存）：
       [证明引理·保底] sqp_square_nonneg_eps —— 接口逐 eps Bishop 形
         （le/mult/plus/zero/lt 全接口投影，直连 CW_ConstructiveWorld_219 real_square_nonneg_eps，
-        δ 透明同形映射， 模板②手法 = UpReqU2 log_req_compat_real 同款）。
+        δ 透明同形映射，T2 模板②手法 = UpReqU2 log_req_compat_real 同款）。
       [辅件] sqp_opp_le_of_plus_nonneg —— le zero (a+eps) ⟹ opp a ≤ eps
         （Real 层；req_opp_plus 为 Real 层在盘件，抽象接口无 opp 对 plus
         分配字段，抽象层同形件不可导——次级发现，见尾注）。
       [主件·真证明] sqp_group_variance_le_raw_second_moment_eps_real ——
-        使用②的 Real 实例逐 eps 升级形：逐 eps 平方非负传入，得
+        消费②的 Real 实例逐 eps 升级形：逐 eps 平方非负传入，得
         var ≤ (1/G)·Σr² + eps（∀eps>0，Bishop 形），不经阻塞槽。
       [保底·参数位隔离实例化] sqp_fisher_zero_implies_pointwise_real /
-        sqp_group_variance_le_raw_second_moment_real —— 两使用定理的
+        sqp_group_variance_le_raw_second_moment_real —— 两消费定理的
         @ 全显节参数 Real 实例化形态，唯一余留前提即槽本身
         （forall a : Real, le zero (mult a a)）；柯西层 plain 件一旦在盘
         （口径决策后），证明 = 单参传入一行。
@@ -444,7 +437,7 @@ Proof.
            == plus (plus (opp a) (opp eps)) eps *)
         exact (plus_assoc (opp a) (opp eps) eps).
     + (* le (plus (plus (opp a) (opp eps)) eps) (plus zero eps)：
-         −(a+eps) ≤ −0 加 eps 保序，两端 req 转换 *)
+         −(a+eps) ≤ −0 加 eps 保序，两端 req 换装 *)
       apply (le_plus_compat (plus (opp a) (opp eps)) zero eps eps).
       * (* le (plus (opp a) (opp eps)) zero *)
         apply (le_id_l (plus (opp a) (opp eps)) (opp (plus a eps)) zero).
@@ -486,7 +479,7 @@ Proof.
                        eps)).
   - exact (req_group_variance_identity
              Group group_enum group_size_pos reward_group).
-  - (* X − μ² ≤ X + eps ⟸ μ ≤ 转换链 *)
+  - (* X − μ² ≤ X + eps ⟸ μ ≤ 换装链 *)
     unfold req_minus.
     apply (le_plus_compat (mult (inv_pos (reqd_of_nat (reqd_group_size Group group_enum))
                                       group_size_pos)
@@ -509,7 +502,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件3（保底·参数位隔离实例化）：fisher 使用件 req_fisher_zero_implies_ *)
+(* 件3（保底·参数位隔离实例化）：fisher 消费件 req_fisher_zero_implies_ *)
 (*   pointwise（UpReqAlign L1140）的 @ 全显节参数 Real 实例化形态。   *)
 (*   唯一余留前提 = 槽本身（forall a : Real, le zero (mult a a)）；   *)
 (*   柯西层 plain 件在盘后证明 = 该参数单喂一行。                    *)
@@ -538,7 +531,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 件4（保底·参数位隔离实例化）：group_variance 使用件                  *)
+(* 件4（保底·参数位隔离实例化）：group_variance 消费件                  *)
 (*   req_group_variance_le_raw_second_moment（UpReqDist L965）的      *)
 (*   @ 全显节参数 Real 实例化形态；余留前提同 = 槽本身。              *)
 (* ============================================================ *)
@@ -569,30 +562,30 @@ Qed.
 (*    的柯西序列上不可构造）；在盘最近件 = real_square_nonneg_eps       *)
 (*    （CW_ConstructiveWorld_219 L44842，逐 eps）/ real_square_nonneg_B（UpRealLeB L424，  *)
 (*    le_b 弱形）；real_le_to_le_b 桥单向（le⟹le_b），反向缺口。        *)
-(* 3. 解堵路线（归主会话口径决策，本文件不强造）：                        *)
+(* 3. 解堵路线（归主会话口径决策，本文件不硬凑）：                        *)
 (*    a. 槽语句逐 eps 化：square_nonneg ⟦forall eps, lt zero eps ->     *)
-(*       le zero (plus (mult a a) eps)⟧——件1 即证明引理，两使用件随      *)
-(*       逐 eps 改述全放（使用②的改述形态 = 件2 已示范）；              *)
+(*       le zero (plus (mult a a) eps)⟧——件1 即证明引理，两消费件随      *)
+(*       逐 eps 改述全放（消费②的改述形态 = 件2 已示范）；              *)
 (*    b. 槽语句 le_b 化（普查 L375 G06_BForm 路线）——               *)
 (*       UpRealLeB.real_square_nonneg_B 直接提供；                          *)
 (*    c. 维持诚实 Variable 位（与 Id 系 L24301 同判定）。               *)
-(* 本文件对两使用定理本体零改动（使用件本体不動）；件2 与件3/件4 并存。  *)
+(* 本文件对两消费定理本体零改动（消费件本体不動）；件2 与件3/件4 并存。  *)
 (* ============================================================ *)
 
 (* ======== G09_MiscSmall 成员件：UpReqOrderArgmin（原样并入，自带 Require）======== *)
 (* UpReqOrderArgmin.v — 签名迁移批 5 波 4 桥模块 C1：reqDecidableOrder 同构假设类
    + reqArgmin 归纳机 + argmin 簇 (c) 5 件 req 平移。
-   工作单：attn\基建层处置清单.md /(c) 桥C1（§0.3 / §7.3 / §7.9 / §8 / §9.2）。
-   源文件：CW_ConstructiveWorld_219：
+   工作单：attn\批5基建层处置清单.md 波4/(c) 桥C1（§0.3 / §7.3 / §7.9 / §8 / §9.2）。
+   母本：CW_ConstructiveWorld_219：
      Class DecidableOrder          L331-337（字段面 5 槽，: Set）
      Section ArgminCorrectness     L15288-15425（argmin_aux 系；节参数 Context {DO} L15290）
      SLM argmin 子节               L2426-2560（argmin_aux_token 系；Context {DO} L2426）
    上游：CW_ConstructiveWorld_219 基座（RealInterfaceEnhancedSetoid 接口字段直引：le/lt/req/le_trans/
    le_refl/lt_le_iff/req_le_compat）；UpReqAlgebra 按需——argmin 簇字段面全在基座
-   接口，本件未使用故未 Require。未使用的 5 件（UpReqSLM/UpReqCauchy/UpReqMisc5/
+   接口，本件未消费故未 Require。未消费的 5 件（UpReqSLM/UpReqCauchy/UpReqMisc5/
    UpEntropyGainReq/UpReqAlign3）零 Require；假设位组同类文字对齐自持。
    ----------------------------------------------------------------
-   桥设计（T2①：Class 参数位非公理——reqDecidableOrder 为 Class 定义，使用节以
+   桥设计（T2①：Class 参数位非公理——reqDecidableOrder 为 Class 定义，消费节以
    Context {DO : reqDecidableOrder R RIS} 引入，End 时作显式参入闭包签名，
    Print Assumptions 仍 Closed。E225 判定：DecidableOrder=整体三分律=LPO 等价、
    全库零 Instance——req 类同为永久假设类，不供 Instance，与 Id 同构）。
@@ -611,7 +604,7 @@ Qed.
      req_argmin_aux_correct               ← argmin_aux_correct          L15315（Argmin §7.9）
      req_pick_best_is_minimal             ← pick_best_is_minimal        L15377（Argmin §7.9）
      req_dynamics_greedy_locally_optimal  ← dynamics_greedy_locally_optimal L15407（§7.9）
-   机器 2 枚（清单 L144/L315 判定「随桥C1 定位可转定义级 (b)」兑现——snd 伴件
+   机器 2 枚（清单 L144/L315 判定「随桥C1 立项可转定义级 (b)」兑现——snd 伴件
    的 req 等词改述版归纳机，零 Leibniz 面逐字：Id 系逐处 Hsnd 等词换形 → req 系
    沿接口 Proper 字段 req_le_compat 运输 le 语句，纯 term）：
      req_argmin_aux_token_snd_req         ← argmin_aux_token_snd_correct L2517（改述）
@@ -623,7 +616,7 @@ Qed.
    argmin_aux_snd_correct L15352（同前）。
    纪律：纯构造性；Set 层语句（le/lt/req/Or/And 全基座 Set 形连接词 L65-70）；
    纯 term-mode（apply/exact/destruct/inversion/specialize/unfold），零依赖改写器；
-   核心件 Qed。G3 提取检验独立文件（验后删）。 *)
+   核心件 Qed。G3 提取探针独立文件（验后删）。 *)
 
 Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import List.
@@ -645,14 +638,14 @@ Class reqDecidableOrder (R : Set) (RIS : RealInterfaceEnhancedSetoid R) : Set :=
 
 (* ============================================================ *)
 (* reqArgmin 机·SLM 支（基座 SLM argmin 子节 L2426-2560 同构；      *)
-(*   只建 (c) 2 件与使用面机器，(d) 5 件冻结承担不触及）            *)
+(*   只建 (c) 2 件与消费面机器，(d) 5 件冻结承接不触及）            *)
 (* ============================================================ *)
 Section ReqArgminTokenWorld.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Context {DO : reqDecidableOrder R RIS}.
 
-(* ---- 接口假设（L2035 区同构子集：本 2 件使用面，vocab_nonempty
-     不入——pick_best 系两件零使用，诚实边界注记） ---- *)
+(* ---- 接口假设（L2035 区同构子集：本 2 件消费面，vocab_nonempty
+     不入——pick_best 系两件零消费，诚实边界注记） ---- *)
 Variable Token : Set.
 Variable vocab : list Token.
 Variable total_loss : list Token -> R.
@@ -684,7 +677,7 @@ Definition req_pick_best_token (prefix : list Token) : Token :=
 
 (* 基座 argmin_aux_token_min L2481（(c) 件 1）：遍历正确性——snd 不增
    （第二分量）+ 对 l 内逐项最小（第一分量）。归纳 + rord_le_dec 分支 +
-   rnot_le_lt/lt_le_iff 反向支，逐位同构 Id 机。 *)
+   rnot_le_lt/lt_le_iff 反向支，逐位镜像 Id 机。 *)
 Lemma req_argmin_aux_token_min : forall prefix l best_token best_loss,
   And (forall w : Token, InT w l ->
     le (snd (req_argmin_aux_token prefix l (best_token, best_loss)))
@@ -720,7 +713,7 @@ Proof.
 Qed.
 
 (* 机器：基座 argmin_aux_token_snd_correct L2517 的 req 等词改述版（清单 L144
-   「随桥C1 定位可转定义级 (b)」兑现）。基例与归纳步全为转换级：req_argmin_aux
+   「随桥C1 立项可转定义级 (b)」兑现）。基例与归纳步全为转换级：req_argmin_aux
    的递归分支两侧 fst/snd 同源， premise req 等词沿归纳原样传——零 Leibniz 面。 *)
 Lemma req_argmin_aux_token_snd_req : forall prefix l best_token best_loss,
   req best_loss (total_loss (prefix ++ [best_token])) ->
@@ -764,7 +757,7 @@ End ReqArgminTokenWorld.
 
 (* ============================================================ *)
 (* reqArgmin 机·ArgminCorrectness 支（基座 L15288-15425 同构；      *)
-(*   (c) 3 件 + 使用面机器，(d) 1 件冻结承担不触及）                *)
+(*   (c) 3 件 + 消费面机器，(d) 1 件冻结承接不触及）                *)
 (* ============================================================ *)
 Section ReqArgminWorld.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -825,7 +818,7 @@ Proof.
 Qed.
 
 (* 机器：基座 argmin_aux_snd_correct L15352 的 req 等词改述版（清单 L315
-   「随桥C1 定位可转定义级 (b)」兑现；同 token 支机，零 Leibniz 面）。 *)
+   「随桥C1 立项可转定义级 (b)」兑现；同 token 支机，零 Leibniz 面）。 *)
 Lemma req_argmin_aux_snd_req : forall prefix l best_token best_loss,
   req best_loss (total_loss (prefix ++ [best_token])) ->
   req (snd (req_argmin_aux prefix l (best_token, best_loss)))
@@ -850,9 +843,9 @@ Definition req_pick_best (prefix : list Token) : Token :=
       fst (req_argmin_aux prefix rest (w0, total_loss (prefix ++ [w0])))
   end.
 
-(* 基座 pick_best_is_minimal L15377（(c) 件 4）：使用 argmin_aux_correct +
+(* 基座 pick_best_is_minimal L15377（(c) 件 4）：消费 argmin_aux_correct +
    snd 机（Id 系在 snd 等词伴件上做目标换形一处，req 侧改走 req_le_compat
-   运输——清单 L316 判定的 req 落实）。 *)
+   运输——清单 L316 判定的 req 落地）。 *)
 Theorem req_pick_best_is_minimal :
   forall prefix w,
     InT w vocab ->
@@ -880,7 +873,7 @@ Definition req_dynamics (s : list Token) : list Token :=
   s ++ [req_pick_best s].
 
 (* 基座 dynamics_greedy_locally_optimal L15407（(c) 件 5，别名件）：
-   req_pick_best_is_minimal 经 req_dynamics 展开直接给出。 *)
+   req_pick_best_is_minimal 经 req_dynamics 展开直配。 *)
 Theorem req_dynamics_greedy_locally_optimal :
   forall prefix w,
     InT w vocab ->
@@ -899,6 +892,6 @@ End ReqArgminWorld.
    pick_best_in_vocab'（L2531）/ pick_best_in_vocab（L2575）/
    argmin_aux_token_snd_correct（L2517）/ argmin_aux_snd_correct（L15352）。
    前四件：list 载体 Id 机器（规划书 §1.1 边界 2；跨接口复用口径同清单 §7.12
-   grpo_count_one 使用 count 机先例）。后两件：Id 形不迁；其使用面由本件 req
+   grpo_count_one 消费 count 机先例）。后两件：Id 形不迁；其消费面由本件 req
    等词改述机 req_argmin_aux_token_snd_req / req_argmin_aux_snd_req（清单 L144/
-   L315「随桥C1 定位可转定义级 (b)」注记兑现）+ 接口字段 req_le_compat 运输承担。 *)
+   L315「随桥C1 立项可转定义级 (b)」注记兑现）+ 接口字段 req_le_compat 运输承担。 *)

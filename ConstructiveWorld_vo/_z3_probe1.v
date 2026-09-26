@@ -1,4 +1,4 @@
-(* _z3_probe1.v — 席Z3 批 B 前置检验：钉死节闭签名（-Full 跑，-vos 吞打印） *)
+(* _z3_probe1.v — 席Z3 批 B 前置探针：钉死节闭签名（-Full 跑，-vos 吞打印） *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqAlign.
@@ -7,12 +7,12 @@ Require Import UpReqAlign3.
 Require Import G05_LogSmall.
 Import RealInterfaceEnhancedMod.
 
-(* T12 依赖模块节闭签名（批 B 槽2 主使用件） *)
+(* T12 供给件节闭签名（批 B 槽2 主消费件） *)
 About r2_policy_improvement_mono.
 About r2_dpo_loss_step_le.
 (* KL≥0 假设位（req2_gibbs_inequality 为节 Hypothesis，不预期有全局；失败即证） *)
 About req2_gibbs_inequality.
-(* T12 使用面别名（δ 目标面核对） *)
+(* T12 消费面别名（δ 目标面核对） *)
 About KLE.
 About JJ.
 About NPX.

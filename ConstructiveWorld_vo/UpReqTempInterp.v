@@ -29,6 +29,7 @@
 (*   cauchy_real_exp_minus_one_pos / cauchy_real_exp_mono、       *)
 (*   cw_log_exp_right / real_log_lt_mono / log_inv_one_thm。      *)
 (* 增量节：低温端完成件 ti_hard_threshold——hard_attention_limit  *)
+(*   阈值完成属性的节外重放（依存面见该节横幅）。                 *)
 (* 纪律：纯构造性；语句全 Set 层（sigT/And/real_lt/real_le）；    *)
 (*   全部 Qed；零新假设位（Print Assumptions 须 Closed）。        *)
 (* ============================================================ *)

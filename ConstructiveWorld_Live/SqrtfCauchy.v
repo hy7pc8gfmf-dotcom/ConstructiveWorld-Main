@@ -1081,7 +1081,7 @@ Proof.
                  sfc_half_pos IH).
 Qed.
 
-(* ===== 单调下降：t_{n+2} ≤ t_{n+1}（引用未定义，补装；
+(* ===== 单调下降：t_{n+2} ≤ t_{n+1}（前席引用未定义，本席补装；
    指标同移一位——t 非负仅 n ≥ 1 有保证，sfc_t_nonneg 同界） ===== *)
 Lemma sfc_t_mono : forall n : nat,
   le (sfc_t (Datatypes.S (Datatypes.S n))) (sfc_t (Datatypes.S n)).
@@ -1359,7 +1359,7 @@ Extraction "sfc_G3.ml" sfc_newton_cauchy sfc_pick_K sfc_geom_tail_t.
 (* 阻隔面——全称平方非负的 Or 编码数据形等价逐实数符号判定器，抽象世界内   *)
 (* 不可供给（判定标注见 SqrtfCauchyDischarge §C）；锚件 AbsSqClose 在      *)
 (* RealInterfaceEnhanced 与 DecidableOrder 双 Context 世界内对同语句给出  *)
-(* 实证（asc_sq_nonneg，AbsSqClose:156，三分可判定序逐支构造）。本依赖模块   *)
+(* 实证（asc_sq_nonneg，AbsSqClose:156，三分可判定序逐支构造）。本供给件   *)
 (* 为锚语句的透明别名直引——语句形与原假设位逐字同型由锚语句自身携带，      *)
 (* 投影世界（le/zero/mult 所属接口类）随锚解析，规避本文件 Import 面的     *)
 (* RealInterfaceEnhancedSetoid 类投影错配。原假设位声明与既有定理签名      *)

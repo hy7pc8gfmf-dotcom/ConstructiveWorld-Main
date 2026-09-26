@@ -1,13 +1,9 @@
-(* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
-   依赖：见原头注 Require 面与依赖段。
-   对标：见原头注来源/对标行。
-   构造性：纯构造性、零承认件（详见原头注红线自审段）。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
 (* ============================================================ *)
-(*                    （UpReqPadeDenPos 留记 b，E-STAGING-CWA 任务 2）  *)
+(* PadeDenPosB12.v —— 席CWA：Padé [n/n] 分母正性 x∈(1,2] 段闭合        *)
+(*                    （UpReqPadeDenPos 挂账 b，E-STAGING-CWA 任务 2）  *)
+(* 日期：2026-09-14                                                *)
 (*                                                                 *)
+(* 使命（台账原文 UpReqPadeDenPos.v:33-34 挂账 b）：                   *)
 (*   「x ∈ (1,2) 段：系数比极小值实为 2（k=0 处），衰减对 x <= 2        *)
 (*   成立（分母真零点在 x = 2），但 x ∈ (1,2] 段递减装配需比式消元      *)
 (*   （乘 Qinv 正因子），待下轮。」——本件以递减装配真证闭合。           *)
@@ -16,6 +12,7 @@
 (*   系数比 R(n,k) = (2n-k)(k+1)/(n-k)（k < n，pdp_R 定义）。          *)
 (*   关键强化：R(n,k) ≥ 2（并非仅 ≥ 1）——Z 层恒等式                   *)
 (*     (2n-k)(k+1) - 2(n-k) = k(2n-k+1) ≥ 0（0 ≤ k < n），            *)
+(*   极小值在 k=0 处取 2，与台账「系数比极小值实为 2」对账。            *)
 (*   递减装配（比式消元）：x ≤ 2 ≤ R(n,k) ⟹                          *)
 (*     c_{k+1}·x^{k+1} = (c_{k+1}·x)·x^k ≤ (c_{k+1}·R)·x^k           *)
 (*       = c_k·x^k（中间步乘正因子 c_{k+1} 保序——即比式消元；          *)
@@ -23,7 +20,7 @@
 (*   免除真除法，右端消元以 Qeq 对账完成）。                           *)
 (*   随后沿用 PC2 引擎出口 altsum_nonneg_leT（非负递减有限交错和       *)
 (*   非负）经 pdp_den_altsum 桥回 pade_den，n=0/1/2/… 全通项覆盖。     *)
-(*   主件结论域 [0,2] 全段（含 (1,2] 留记段；x=2 处 n=1 分母取 0，     *)
+(*   主件结论域 [0,2] 全段（含 (1,2] 挂账段；x=2 处 n=1 分母取 0，     *)
 (*   故出口为非负 QleT' 而非严格正，与「真零点在 x = 2」对账）。        *)
 (*                                                                 *)
 (* 红线自审：                                                       *)
@@ -32,8 +29,8 @@
 (*      Prop 命题出场，无 -> False；(k < n)%nat 为 nat 层指标前提       *)
 (*      （UpReqPadeDenPos 同款通例）；Prop 序仅证内转译。               *)
 (*   —— 非平凡：Z 层 nia 二次比式 + 乘正因子比式消元装配 + PC2 引擎      *)
-(*      实例化消解，非平凡交付。                                            *)
-(*   —— G3 提取检验 Obj.magic=0（Recursive Extraction 主定理族）。     *)
+(*      放电，非平凡交付。                                            *)
+(*   —— G3 提取探针 Obj.magic=0（Recursive Extraction 主定理族）。     *)
 (*                                                                 *)
 (* 编译配方（cpu_guard 温控包装；依赖 UpReqPadeExp/UpReqAltSumPos/      *)
 (* UpReqPadeDenPos .vo 已先经同配方在 Live/build 就位）：              *)
@@ -46,7 +43,7 @@ Require Import UpReqPadeExp UpReqAltSumPos UpReqPadeDenPos.
 From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 From Stdlib Require Import Setoid.
 
-(* ===== 件 1：系数比下界强化 2 ≤ R(n,k)（留记 b 的代数核） =====
+(* ===== 件 1：系数比下界强化 2 ≤ R(n,k)（挂账 b 的代数核） =====
    (2n-k)(k+1) ≥ 2(n-k) ⟺ k(2n-k+1) ≥ 0（Z 层 nia；
    nat 截断减法经 S(·) 归一，zify + 显式 Z 上下文双保险）。 *)
 
@@ -139,7 +136,7 @@ Proof.
     + apply qeq_imp_qle. rewrite (pdp_coeff_ratio n k Hk). reflexivity.
 Qed.
 
-(* ===== 件 3：S2 主件——0 ≤ x ≤ 2 ⟹ 0 ≤ 分母（覆盖留记 (1,2] 段） ===== *)
+(* ===== 件 3：S2 主件——0 ≤ x ≤ 2 ⟹ 0 ≤ 分母（覆盖挂账 (1,2] 段） ===== *)
 
 Theorem pdpb_den_pos_le2 : forall (n : nat) (x : Q),
   QleT' 0 x -> QleT' x 2 -> QleT' 0 (pade_den n x).
@@ -170,6 +167,7 @@ Proof.
   - apply altsum_QleT_to_QleT'. exact Hx2.
 Qed.
 
+(* ===== 件 5：台账书面形——x ∈ (1,2] 段挂账 b 正式闭合 ===== *)
 
 Theorem pdpb_den_pos_b12 : forall (n : nat) (x : Q),
   QltT 1 x -> QleT x 2 -> QleT' 0 (pade_den n x).

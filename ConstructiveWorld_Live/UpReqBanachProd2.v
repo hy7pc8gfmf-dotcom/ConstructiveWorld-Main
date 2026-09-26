@@ -1,8 +1,8 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* UpReqBanachProd2.v —— B2Tv2：路径 B B   *)
-(* （，重启位； B2T 零足迹）                          *)
 (* ============================================================ *)
-(* 任务：使用 B3Sv2 映射表（attn/_tb3s_交付报告-.md S1）  *)
+(* UpReqBanachProd2.v —— 席B2Tv2：路径 B B 类引理第二批量移植席  *)
+(* （20260912，重启位；前席 B2T 零足迹）                          *)
+(* ============================================================ *)
+(* 任务：消费 B3Sv2 映射表（attn/_tb3s_交付报告-20260912.md S1）  *)
 (*   剩余 B 类引理——排除域（二项式/双和/卷积/尾界）之外：        *)
 (*   #23 sum_upto_div（除系数拉出）、#27 q_choose_div_fact       *)
 (*   （阶乘比分裂）、#29 exp_term_split（逐项系数分裂）。         *)
@@ -13,14 +13,14 @@
 (*     bcoef_mult 闭口；类无 Q 等值到 bae 的标量函子字段，        *)
 (*     故 B 面语句不走 bcoef 内部 Q 重写，只取可构方向）。        *)
 (* 附赠 wd 族两件：bmult_wd 四槽形的 l/r 便捷面（语句面新增      *)
-(*   结构引理；二项式配对清项链与对角折叠将反复使用）。           *)
+(*   结构引理；二项式配对清项链与对角折叠将反复消费）。           *)
 (* 依赖复用：S01/S02/S03（q_fact/q_pow/sum_upto/q_fact_pos/      *)
 (*   q_neq_of_lt）+ UpReqBanachExp（Class BanachAlg/bpow 出口）   *)
 (*   + UpReqBanachProd（bsum/bsum_scal，冻结只读 Require 复用，   *)
 (*   禁重定义其任何名）。                                        *)
 (* 红线自审：语句面全 Set 层（bae 面）或纯 Q 引擎面（Prop 仅      *)
 (*   ~c==0 前提位，Q 层引擎在案先例）；证内无经典逻辑；           *)
-(*   无遗留承认件（G1 grep 自审见交付报告）。                    *)
+(*   无挂账承认件（G1 grep 自审见交付报告）。                    *)
 (* 工程注（沿 UpReqBanachProd 同款）：类字段投影一律 @显式喂实例； *)
 (*   bae 面 Set 承载等词无 rewrite 实例——一律 change(定义形)/    *)
 (*   定义形闭合 + bae_trans 显式中件（中件在 y 槽第 3 参）；      *)
@@ -70,7 +70,7 @@ Proof.
   transitivity (Qinv (q_fact k * q_fact (Nat.sub n k))).
   - transitivity
       ((q_fact n * Qinv (q_fact n)) * Qinv (q_fact k * q_fact (Nat.sub n k))).
-    + (* 原子重排：Qinv 视为原子，交换/结合由 ring 闭合 *)
+    + (* 原子重排：Qinv 视为原子，交换/结合由 ring 收口 *)
       ring.
     + assert (Hn : ~ q_fact n == 0).
       { apply q_neq_of_lt. apply q_fact_pos. }
@@ -82,7 +82,7 @@ Qed.
 (* ---- #29 exp_term_split：逐项系数分裂 ---- *)
 (* C(k,j)·x^j·y^(k−j)/k! == (x^j/j!)·(y^(k−j)/(k−j)!)            *)
 (* 原文照抄（001 L33955 同款语句）；证法同源：先拉出 C/k!，       *)
-(* 再代入 #27 分裂式，ring 分配闭合。                            *)
+(* 再代入 #27 分裂式，ring 分配收口。                            *)
 Lemma bpr2_exp_term_split : forall (x y : Q) (k j : nat),
   bpr2_q_choose k j * q_pow x j * q_pow y (Nat.sub k j) / q_fact k ==
   (q_pow x j / q_fact j) * (q_pow y (Nat.sub k j) / q_fact (Nat.sub k j)).
@@ -98,7 +98,7 @@ Qed.
 (* 二、wd 族：bmult_wd 四槽形的 l/r 便捷面（语句面结构引理）      *)
 (* （UpReqBanachExp 类字段只有 bmult_wd 四槽形；加法侧已有        *)
 (*   bplus_wd_l/r，乘法侧为空缺——本件补齐。二项式配对清项链      *)
-(*   （ BA 交付①）与对角折叠反复使用。）                       *)
+(*   （席 BA 交付①）与对角折叠反复消费。）                       *)
 (* ============================================================ *)
 
 Lemma bpr2_bmult_wd_l : forall (B : BanachAlg) (a b c : (@BA B)),
@@ -119,7 +119,7 @@ Qed.
 
 (* ---- #23 Banach 面：Σ(f·bcoef(/c)) == (Σf)·bcoef(/c) ---- *)
 (* 语境改写：/c 换 bcoef(Qinv c)；右乘标量位与 bsum_scal 同形，   *)
-(* 即 bsum_scal 在 c := /c 处的对接实例（冻结件出口使用）。       *)
+(* 即 bsum_scal 在 c := /c 处的对接实例（冻结件出口消费）。       *)
 Lemma bpr2_bsum_div : forall (B : BanachAlg) (n : nat) (c : Q)
                              (f : nat -> (@BA B)),
   @bae B (bsum B n (fun j : nat => @bmult B (f j) (@bcoef B (Qinv c))))
@@ -134,7 +134,7 @@ Qed.
 (* → sym assoc → assoc → 闭口 bcoef_mult。全程 a^j 与 b^i 乘序    *)
 (* 不动（无乘法交换需求）；Q 恒等式只经 bcoef_mult 可构方向进      *)
 (* bae 面（类无 Q 等值标量函子字段，禁走 bcoef 内部重写）。       *)
-(* 使用位：交付①（ BA q_binom_S 蓝图）逐项二项式 + 方块→对角   *)
+(* 消费位：交付①（席 BA q_binom_S 蓝图）逐项二项式 + 方块→对角   *)
 (* 合并步（esp_prod_square 的第 j+i=k 对角线）。                  *)
 Lemma bpr2_bterm_split : forall (B : BanachAlg) (a b : (@BA B)) (k j : nat),
   @bae B
@@ -210,13 +210,13 @@ Qed.
 (* 对接注记（S3 加分层，详交付报告）：                            *)
 (*   bpr2_bsum_div ← UpReqBanachProd.bsum_scal（/c 位实例）；     *)
 (*   bpr2_q_choose_div_fact/bpr2_exp_term_split = exp_cauchy_    *)
-(*     double（ BA）对角收集步 C(k,j)/k! = 1/j!·1/(k−j)! 的     *)
+(*     double（席 BA）对角收集步 C(k,j)/k! = 1/j!·1/(k−j)! 的     *)
 (*     Q 引擎（注意 S07_RealSetoidExpLog 已有 Q 层同名件，        *)
 (*     Require 复用与 bpr2_ 自持二选一，混载时用 bpr2_ 名）；     *)
 (*   bpr2_bterm_split = 方块→对角折叠 Banach 面引理，交付①        *)
-(*     逐项使用；bpr2_bmult_wd_l/r = 乘法 wd 便捷面。            *)
-(* 遗留登记（对称遗留，不落承认件）：                             *)
-(*   #14–19/#28/#32 二项式与 e^(a+b) 主链 →  BA；               *)
-(*   #24/#25/#31 双和拆分/三角转置 →  BT 已闭合（bd2_ 族）；     *)
-(*   #34–36 带尾截断 → S3 装配批（esp_diff_le_tail 对接）。       *)
+(*     逐项消费；bpr2_bmult_wd_l/r = 乘法 wd 便捷面。            *)
+(* 挂账登记（对称挂账，不落承认件）：                             *)
+(*   #14–19/#28/#32 二项式与 e^(a+b) 主链 → 席 BA；               *)
+(*   #24/#25/#31 双和拆分/三角转置 → 席 BT 已收口（bd2_ 族）；     *)
+(*   #34–36 带尾截断 → S3 总装批（esp_diff_le_tail 对接）。       *)
 (* ============================================================ *)

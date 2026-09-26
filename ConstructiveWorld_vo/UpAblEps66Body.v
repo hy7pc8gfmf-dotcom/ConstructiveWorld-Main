@@ -1,11 +1,42 @@
-(* ==========================================================================)
-   UpAblEps66Body.v — S08 定理 6.6 本体 real_ppo_conservative_eps 的具体实例三件
-   使命: 任意载体枚举形 tx2_ppo66_enum、bool 二元载体形 tx2_ppo66_flag、及取定 Boltzmann 形 advantage 的无剩余假设闭合形 tx2_ppo66_flag_closed。
-   依赖: S01_BaseRing 至 S08_RealMainlineDPO（本体所在）、UpAblEps66Sum（求和接口实例）、UpAblEps66Pos（正性实例）、Extraction。
-   对标: PPO 界的有限状态实例化（强化学习保守策略迭代界）。
-   构造性: 纯构造性、零承认词面、全 Qed；语句面全 Set 层；标识符前缀 tx2_。
-   编译配方: Rocq 9.1 直调 coqc，cpu_guard 限核包裹；验证编译一律 -o 临时目录，树内 .vo 不重写。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblEps66Body.v                                              *)
+(*                                                               *)
+(* 使命：本件形式化 S08 定理 6.6 本体 real_ppo_conservative_eps 的    *)
+(*   具体实例——以已供给的求和接口实例（UpAblEps66Sum）与正性实例      *)
+(*   （UpAblEps66Pos）代入 Section RealPPOMain 的各假设位，           *)
+(*   产出下游直接可用的定理三件：                                   *)
+(*                                                               *)
+(*   ① tx2_ppo66_enum：任意 Set 载体与任意枚举表上的实例，            *)
+(*     剩余前提为 β·eps 边际前提（advantage 参数位的条件形）；             *)
+(*   ② tx2_ppo66_flag：bool 二元载体（枚举 true::false）上的实例，     *)
+(*     剩余前提同①；                                                *)
+(*   ③ tx2_ppo66_flag_closed：bool 载体上取定 adv 为 Boltzmann 形      *)
+(*     （e66p_pi_old_boltzmann），其逐点正性由 e66p_pi_old_pos        *)
+(*     无条件供给——无剩余假设位，前提仅余数据正性前提                 *)
+(*     （D、Z、D2、Z2、eps > 0 的见证形）。                           *)
+(*                                                               *)
+(*   各假设位的实例化对应：求和外延、保序、加法三参数位分别由             *)
+(*   e66s_flag_* 与 e66s_real_sum_over_S_* 供给，求和算子参数位由          *)
+(*   e66s_flag_sumf / e66s_sumf 供给，π_old 正性参数由                  *)
+(*   e66p_pi_old_pos 供给，advantage 正性参数由边际条件形                *)
+(*   e66p_real_advantage_pos_margin 供给（adv 的逐点严格正性对         *)
+(*   任意 adv 不成立，条件形为其构造性表述）。                         *)
+(*                                                               *)
+(*   结构注记：Section RealPPOMain 关闭后，real_ppo_conservative_eps  *)
+(*   的各假设位成为显式参数；本件以实例逐一代入，由 exact 一步        *)
+(*   完成，无重证。                                                  *)
+(*                                                               *)
+(* 依赖：S01_BaseRing – S08_RealMainlineDPO（本体所在）、              *)
+(*   UpAblEps66Sum（求和接口三件与 bool 载体实例）、                   *)
+(*   UpAblEps66Pos（正性两件）。                                     *)
+(*                                                               *)
+(* 构造性：纯构造性、零承认、全 Qed；语句面全 Set 层（real_lt 为      *)
+(*   见证和形、real_le 为 S01 的 Or 和型可解码形），无裸 Prop；        *)
+(*   标识符前缀 tx2_。                                              *)
+(*                                                               *)
+(* 编译：Rocq 9.1 直调 coqc，cpu_guard 限核包裹。验证编译一律         *)
+(*   -o 临时目录，树内 .vo 不重写。                                  *)
+(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

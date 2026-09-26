@@ -1,36 +1,36 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* UpReqRealLtShiftBridge.v                                      *)
 (*                                                              *)
-(* 目的： Real 载体层严格步实例化消解桥（lt 平移三件，DISCH1 独立件）。 *)
+(* 目的： Real 载体层严格步放电桥（lt 平移三件，DISCH1 席独立件）。 *)
 (*   ① 弱正性槽（real_le 0 1）经 real_le 的 Or 分解升温为 lt 0 1； *)
 (*   ② 0<1 经纯 lt 双侧平移（+one）的 1<2 桥（含弱槽全链形）；      *)
-(*   ③ lt_le 混合平移桥的 Real 载体实例实例化消解形——与库内先例          *)
+(*   ③ lt_le 混合平移桥的 Real 载体实例放电形——与库内先例          *)
 (*      UpReqCauchy.v:123 / UpEntropyGain.v:86 的 Variable         *)
 (*      lt_plus_compat_lt_le 语句逐字同构（real_* 面）。            *)
 (* 依赖： CW_ConstructiveWorld_219（S02/S07 导出面，全 9.1 绿在缓存； *)
 (*   不依赖 Sqrtf 三件与 SCFIX2 领地）。                           *)
-(* 背景： E-STAGING-SCFIX 已证结论——req 抽象接口的 le 无 Or 分解字段，  *)
+(* 背景： E-STAGING-SCFIX 定谳——req 抽象接口的 le 无 Or 分解字段，  *)
 (*   严格步（lt zero one / lt one two / 混合平移）在接口级不可内证； *)
 (*   Real 层 real_le = Or (real_lt) (real_eq)（S01:67 Set 层自定义   *)
-(*   Or := A + B；S02:465 装配）destruct 可分解 ⟹ 接口参数在 Real 层     *)
-(*   可消解。本件即该消解本身：证明自建自验，未使用 SCFIX 工作目录    *)
+(*   Or := A + B；S02:465 装配）destruct 可分解 ⟹ 槽位在 Real 层     *)
+(*   可消解。本件即该消解本身：证明自建自验，未消费 SCFIX 工作目录    *)
 (*   任何未验草稿（借鉴处仅为库内已验原语的组装次序）。               *)
 (* 命名： 前缀 rlsb_（Real Lt Shift Bridge），全库 grep 防撞零占用。 *)
 (* 清单（2 内机 + 4 件）：                                          *)
-(*   [内机] rlsb_zero_ne_one        ：零幺逐点矛盾（Q 层已证结论）        *)
+(*   [内机] rlsb_zero_ne_one        ：零幺逐点矛盾（Q 层定谳）        *)
 (*   [①]   rlsb_lt_zero_one_of_le  ：弱槽 ⟹ 0<1（前提承载零装饰，    *)
-(*     不使用库内强件 real_lt_zero_one）                             *)
+(*     不消费库内强件 real_lt_zero_one）                             *)
 (*   [内机] rlsb_lt_shift_rt        ：lt a b ⟹ lt (a+d) (b+d)        *)
 (*     （左平移原语 + comm 两跳换形）                                *)
 (*   [②]   rlsb_lt_one_two         ：1 < 1+1（two := one+one，       *)
-(*     同 sfc_two δ 展开形逐字；零 le 使用、零 Or 使用）              *)
+(*     同 sfc_two δ 展开形逐字；零 le 消费、零 Or 消费）              *)
 (*   [②弱] rlsb_lt_one_two_of_le   ：弱槽 ⟹ 1<2（①+左平移全链，     *)
 (*     即宿主槽5 的弱前提消解形）                                    *)
 (*   [③]   rlsb_lt_plus_compat_lt_le：两 translate+trans 处方落地，   *)
 (*     Or 分解两支各一条独立组装                                      *)
-(* 关卡账：G1 七禁词扫描 0（本件纯 Lemma/Theorem + Qed，无任何遗留    *)
+(* 关卡账：G1 七禁词扫描 0（本件纯 Lemma/Theorem + Qed，无任何挂账    *)
 (*   声明形）；G2 全量编译绿（cpu_guard 包裹、rc 直捕）；G3 本件全    *)
-(*   Set/Prop 桥面零计算内容，以说明替代提取；G4 Assumptions 检验     *)
+(*   Set/Prop 桥面零计算内容，以说明替代提取；G4 Assumptions 探针     *)
 (*   + coqchk 单件。                                                 *)
 (* ============================================================ *)
 
@@ -40,7 +40,7 @@ Require Import CW_ConstructiveWorld_219.
 (* ============ 内机：零幺不等（real_eq zero one 的逐点矛盾） ============ *)
 (* real_eq x y := forall eps, 0<eps -> sigT N, forall n>=N,           *)
 (*   Qabs (proj1 x n - proj1 y n) < eps（S02:396）。零=常0列、幺=常1列， *)
-(*   取 eps:=1 即得逐点 1<1 的 Q 层矛盾——构造性已证结论，零经典面。        *)
+(*   取 eps:=1 即得逐点 1<1 的 Q 层矛盾——构造性定谳，零经典面。        *)
 Lemma rlsb_zero_ne_one : Not (real_eq real_zero real_one).
 Proof.
   intro H.
@@ -56,7 +56,7 @@ Qed.
 
 (* ============ ① 弱槽升温：real_le zero one ⟹ lt zero one ============ *)
 (* req_two_pos 类弱正性槽（le 形）的 Real 载体层消解：real_le Or 分解   *)
-(* 两支——lt 支直接挤出即得；eq 支经零幺矛盾闭合（False 零构造大消去    *)
+(* 两支——lt 支直接挤出即得；eq 支经零幺矛盾收口（False 零构造大消去    *)
 (* 产出 Set 层 lt，S02:3172 同式 match-end 先例）。前提承载。           *)
 Theorem rlsb_lt_zero_one_of_le :
   real_le real_zero real_one -> real_lt real_zero real_one.
@@ -95,7 +95,7 @@ Proof.
   exact (real_lt_plus_translate real_one real_zero real_one real_lt_zero_one).
 Qed.
 
-(* ============ ②弱 全链实例化消解：弱槽 ⟹ 1 < 2（宿主槽5 消解形） ============ *)
+(* ============ ②弱 全链放电：弱槽 ⟹ 1 < 2（宿主槽5 消解形） ============ *)
 Theorem rlsb_lt_one_two_of_le :
   real_le real_zero real_one -> real_lt real_one (real_plus real_one real_one).
 Proof.
@@ -109,7 +109,7 @@ Proof.
            (rlsb_lt_zero_one_of_le Hle)).
 Qed.
 
-(* ============ ③ 混合平移桥 Real 载体实例实例化消解形 ============ *)
+(* ============ ③ 混合平移桥 Real 载体实例放电形 ============ *)
 (* 语句形与 UpReqCauchy.v:123 / UpEntropyGain.v:86 的 Variable         *)
 (*   lt_plus_compat_lt_le : forall a b c d, lt a b -> le c d ->        *)
 (*                          lt (plus a c) (plus b d).                  *)
@@ -131,7 +131,7 @@ Proof.
     + exact (rlsb_lt_shift_rt a b d Hab).
 Qed.
 
-(* ============ 关卡 G4：假设闭包检验（四件全 Closed 为过关判据） ============ *)
+(* ============ 关卡 G4：假设闭包探针（四件全 Closed 为过关判据） ============ *)
 Print Assumptions rlsb_lt_zero_one_of_le.
 Print Assumptions rlsb_lt_one_two.
 Print Assumptions rlsb_lt_one_two_of_le.

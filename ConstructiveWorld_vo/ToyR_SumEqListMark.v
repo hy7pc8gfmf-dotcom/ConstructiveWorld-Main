@@ -27,7 +27,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* SumEqListMark.v —— T41 候选 C3（组 E-STAGING-CWE5）          *)
+(* SumEqListMark.v —— T41 候选 C3（批次 E-STAGING-CWE5）          *)
 (* sum_eq_list 同型槽统一声明核销（零新机器）                      *)
 (*                                                               *)
 (* 钥匙桥：sumd_sum_eq_list@UpReqSumD.v:81（vorebuild 已注册件 .vo   *)
@@ -81,7 +81,7 @@ About sumd_sum_eq_list.
 
 (* ============ 实例化定理 1：桥直接代入（req 形槽 sumd 实例） ============ *)
 (* 槽语句 req (sumf g) (rsq_bs_list_sum g enum) 在 sumf := sumd_sumf、 *)
-(* 机器位 := sumd_list_sum 实例下，钥匙桥逐字输入。                    *)
+(* 机器位 := sumd_list_sum 实例下，钥匙桥逐字喂入。                    *)
 Theorem sem_sum_eq_list_req_slot :
   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R) (S : Set) (enum : list S)
          (g : S -> R),
@@ -99,7 +99,7 @@ Proof. intros R RIS S enum g. exact (req_refl (@sumd_list_sum R RIS S g enum)). 
 (* ============ 实例化定理 3：槽1 宿主真机桥直接代入（主交付） ============ *)
 (* 语句即 UpReqSampling:747 槽在 sumf := sumd_sumf 实例下的逐字形：     *)
 (* 机器位是宿主出节真机 rsq_bs_list_sum。桥的列表和肢经出节件互转        *)
-(* （同形同接口，req_refl 级 conversion）一步输入——槽1 核销实证，        *)
+(* （同形同接口，req_refl 级 conversion）一步喂入——槽1 核销实证，        *)
 (* 零新机器。依存位 :975/:985/:1040 的喂点均为此定理（或桥本体）逐字。  *)
 Theorem sem_slot1_witness_upreqsampling :
   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R) (S : Set) (enum : list S)
@@ -121,8 +121,8 @@ Print Assumptions sem_slot1_witness_upreqsampling.
 Print Assumptions sem_slot1_witness_collapse.
 
 (* ============================================================ *)
-(* ============ 组 E-STAGING-CZB12 核销声明段（T61b 尾工 C1） ============ *)
-(* 槽2-5「机器口径转换墙」遗留登记核销。本段为纯转发声明件（全 exact       *)
+(* ============ 批次 E-STAGING-CZB12 核销声明段（T61b 尾工 C1） ============ *)
+(* 槽2-5「机器口径转换墙」遗留回写核销。本段为纯转发声明件（全 exact       *)
 (* 转发 IdSlotTranslate 已证桥，零新机器零新数学），既有四定理零改动，      *)
 (* 槽1 实证面不变。对照先例：DenPosGeneralClose.v / EntropyUnsatMark.v。    *)
 (*                                                                        *)
@@ -133,7 +133,7 @@ Print Assumptions sem_slot1_witness_collapse.
 (*   不同头，桥对真宿主直接代入需接口翻译件（RI→Setoid），超出零新               *)
 (*   机器口径——遗留未决，不在本件虚报核销。」                                *)
 (*                                                                        *)
-(* 二、核销路径（遗留所索「接口翻译件」已建成，CYD7/CZB8 两棒接续）：        *)
+(* 二、核销路径（遗留所索「接口翻译件」已建成，CYD7/CZB8 两棒接力）：        *)
 (*   ① 翻译件本体 = 消融50/IdSlotTranslate.v：RI 载体列表折叠副本           *)
 (*   idt_list_sum:75（@plus RI 头，与宿主真机同接口，转换墙免疫设计）+       *)
 (*   宿主真机一致桥 idt_bs_list_sum_attn_agree:103 /                        *)
@@ -167,25 +167,25 @@ Context {RI : RealInterfaceEnhanced}.
 Context {SS : StateSpace RI}.
 Local Existing Instance RI_base.
 
-(* 槽 AttnDoeblin:485 核销转发（依存位 :622/:629/:673 由 SumEqListFeed §1 给出） *)
+(* 槽 AttnDoeblin:485 核销转发（依存位 :622/:629/:673 由 SumEqListFeed §1 承接） *)
 Theorem sem_czb12_slot_attdoeblin_writeoff :
   forall (en : list S) (g : S -> R),
     Id (idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
 Proof. intros en g. exact (idt_slot_attdoeblin en g). Qed.
 
-(* 槽 G01_CoreMicro:476 核销转发（依存位 :485/:500 由 SumEqListFeed §3 给出） *)
+(* 槽 G01_CoreMicro:476 核销转发（依存位 :485/:500 由 SumEqListFeed §3 承接） *)
 Theorem sem_czb12_slot_g01_writeoff :
   forall (en : list S) (g : S -> R),
     Id (idt_sumf en g) (AttnDoeblin.bs_list_sum g en).
 Proof. intros en g. exact (idt_slot_g01 en g). Qed.
 
-(* 槽 S13_NLiveAudit:2676 核销转发（依存位 :2813/:2820/:2864 由 SumEqListFeed §2 给出） *)
+(* 槽 S13_NLiveAudit:2676 核销转发（依存位 :2813/:2820/:2864 由 SumEqListFeed §2 承接） *)
 Theorem sem_czb12_slot_s13_writeoff :
   forall (en : list S) (g : S -> R),
     Id (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en).
 Proof. intros en g. exact (idt_slot_s13 en g). Qed.
 
-(* 槽 S15_TailFEPUp:147 核销转发（依存位 :156/:171 由 SumEqListFeed §3 给出） *)
+(* 槽 S15_TailFEPUp:147 核销转发（依存位 :156/:171 由 SumEqListFeed §3 承接） *)
 Theorem sem_czb12_slot_s15_writeoff :
   forall (en : list S) (g : S -> R),
     Id (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en).

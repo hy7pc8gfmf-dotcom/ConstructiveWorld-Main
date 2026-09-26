@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-闸④ 头注五字段机检守卫 · 扩展版 v2.1（GATE4-EXT 20260925｜词面族谱＋三域＋判定原则
-＋v2.1 vo 树盲区升级 GATE4-AUDIT 20260925）
+闸④ 头注五字段机检守卫 · 扩展版 v2.0（GATE4-EXT 20260925｜词面族谱＋三域＋判定原则）
 ====================================================================================
 承 v1.0（_tgate4_ws\\gate4_comment_guard.py，五检项）扩展，主会话清洗规则扩展令＋
 包装协议 v2 条款 I（注释卫生 v1.1 清洗规则扩展）的机械化。零编译零网络零树写。
@@ -30,14 +29,6 @@ v2.0 扩展 diff（对 v1.0）：
 v1.0 五检项照旧全保留：[1]头注五字段 [2]禁词(65 词面) [3]承认式英文词面
 [4]三类禁写(席次/战役/更新日志) [5]头注超标＋.(* 词法陷阱附检。
 
-v2.1 盲区升级（GATE4-AUDIT 20260925）：
-  [U1] --tree-recursive DIR（可多次）——递归深扫该树全部子目录内 .v（顶层
-       件与 --tree 同口径并入）。堵 vo 树子目录探针件盲区（实测 18 子目录
-       22 件 .v 逃出非递归扫描域，CI 同盲区）。默认行为零变：只用 --tree
-       时非递归平扫照旧、警示照旧、退出码语义不变（0/1/2）。跨来源路径
-       去重（同件只扫一次），逐树件数台账入 --json meta.trees_ledger。
-       与 gate1 双树先例对齐：多 --tree/--tree-recursive 显式传树，不做隐式递归。
-
 退出码：0=PASS；1=违规（硬命中）；2=无法判定（仅复核项〔含原则启发式〕/路径无效/IO 错误）。
 
 用法（v1.0 CLI 全兼容）：
@@ -45,7 +36,6 @@ v2.1 盲区升级（GATE4-AUDIT 20260925）：
   python gate4_comment_guard.py --tree DIR [--tree DIR2 ...] [--json OUT]
   python gate4_comment_guard.py --tree DIR --baseline _tcmtsurvey_phase1_result.json
   v2.0 新增：--no-principle（关判定原则启发式）
-  v2.1 新增：--tree-recursive DIR（递归深扫，堵子目录盲区）
 """
 import os, re, sys, json, argparse, datetime
 
@@ -544,31 +534,10 @@ def scan_tree(tree):
     subdirs = [n for n in names if os.path.isdir(os.path.join(tree, n))]
     if subdirs:
         print(f"[gate4ext] 警示(非递归)：树 {tree} 下有 {len(subdirs)} 个子目录未扫"
-              f"（gate1 三树教训——如需子目录请逐个 --tree 传入，"
-              f"v2.1 起可 --tree-recursive 深扫）: "
+              f"（gate1 三树教训——如需子目录请逐个 --tree 传入）: "
               f"{', '.join(subdirs[:8])}{'…' if len(subdirs) > 8 else ''}",
               file=sys.stderr)
     return [os.path.join(tree, n) for n in names if n.endswith(".v")], len(subdirs)
-
-
-def scan_tree_deep(tree):
-    """v2.1 [U1] 递归深扫：树顶层＋全部子目录内 .v（含嵌套层）。
-    返回 (相对层标记路径列表, 子目录内件数, 触及子目录数)。"""
-    if not os.path.isdir(tree):
-        return None, 0, 0
-    top = [os.path.join(tree, n) for n in sorted(os.listdir(tree))
-           if n.endswith(".v") and os.path.isfile(os.path.join(tree, n))]
-    deep, dirs_seen = [], set()
-    for root, dirs, files in os.walk(tree):
-        rel = os.path.relpath(root, tree)
-        if rel == ".":
-            continue
-        dirs_seen.add(rel.split(os.sep)[0])
-        for n in sorted(files):
-            if n.endswith(".v"):
-                deep.append(os.path.join(root, n))
-    deep.sort()
-    return top + deep, len(deep), len(dirs_seen)
 
 
 def baseline_compare(results, baseline_path):
@@ -609,11 +578,9 @@ def baseline_compare(results, baseline_path):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="gate4 头注五字段机检守卫 扩展版 v2.1")
+    ap = argparse.ArgumentParser(description="gate4 头注五字段机检守卫 扩展版 v2.0")
     ap.add_argument("--file", action="append", default=[], help="单件扫描（可多次）")
     ap.add_argument("--tree", action="append", default=[], help="树平扫（非递归，可多次）")
-    ap.add_argument("--tree-recursive", dest="tree_recursive", action="append", default=[],
-                    help="树深扫（递归含子目录 .v，v2.1 盲区升级，可多次）")
     ap.add_argument("--baseline", default=None, help="普查结果 JSON（对表模式）")
     ap.add_argument("--length-cap", type=int, default=30, help="头注行数上限（默认 30）")
     ap.add_argument("--length-fail", action="store_true", help="超标升格硬违规（默认复核级）")
@@ -623,38 +590,12 @@ def main():
     args = ap.parse_args()
 
     paths = list(args.file)
-    ledger = []          # v2.1 逐树件数台账（入 --json meta.trees_ledger）
     for t in args.tree:
         plist, _nsub = scan_tree(t)
         if plist is None:
             print(f"[gate4ext] FATAL: 树不存在: {t}", file=sys.stderr)
             return 2
         paths.extend(plist)
-        ledger.append({"tree": t, "mode": "flat", "files": len(plist),
-                       "subdir_files": 0, "subdirs": _nsub})
-    deep_count = 0
-    for t in args.tree_recursive:
-        plist, ndeep, ndir = scan_tree_deep(t)
-        if plist is None:
-            print(f"[gate4ext] FATAL: 树不存在: {t}", file=sys.stderr)
-            return 2
-        paths.extend(plist)
-        deep_count += ndeep
-        ledger.append({"tree": t, "mode": "recursive", "files": len(plist) - ndeep,
-                       "subdir_files": ndeep, "subdirs": ndir})
-        print(f"[gate4ext] v2.1 深扫 {t}: 顶层 {len(plist) - ndeep} ＋ 子目录 {ndeep} 件"
-              f"（{ndir} 个子目录）", file=sys.stderr)
-    # v2.1 跨来源去重：--tree 与 --tree-recursive 顶层重叠面同件只扫一次
-    seen, uniq = set(), []
-    for p in paths:
-        k = os.path.normcase(os.path.normpath(os.path.abspath(p)))
-        if k not in seen:
-            seen.add(k)
-            uniq.append(p)
-    if len(uniq) != len(paths):
-        print(f"[gate4ext] v2.1 去重 {len(paths) - len(uniq)} 件"
-              f"（双口径顶层重叠，避免同件双计）", file=sys.stderr)
-    paths = uniq
     if not paths:
         print("[gate4ext] FATAL: 未指定 --file/--tree", file=sys.stderr)
         return 2
@@ -669,12 +610,11 @@ def main():
     n_pass = sum(1 for r in results if r["verdict"] == "PASS")
     n_unread = sum(1 for r in results if r["verdict"] == "UNREADABLE")
 
-    print(f"[gate4ext] v2.1 扫描时点={now}  件数={len(results)}  "
+    print(f"[gate4ext] v2.0 扫描时点={now}  件数={len(results)}  "
           f"PASS={n_pass}  FAIL={n_fail}  REVIEW(人工复核)={n_rev}  "
           f"UNREADABLE={n_unread}  length_cap={args.length_cap}"
           f"{'(fail)' if args.length_fail else '(review)'}  "
-          f"principle={'on' if principle else 'off'}"
-          f"  deep_files={deep_count}")
+          f"principle={'on' if principle else 'off'}")
     for r in results:
         if r["verdict"] == "PASS" and not r["review"]:
             print(f"  PASS {r['file']}  头注{r['header_lines']}行 "
@@ -699,9 +639,8 @@ def main():
               f"{json.dumps(cmp_summary, ensure_ascii=False)}")
 
     if args.jsonout:
-        out = {"scan_time": now, "tool": "gate4_comment_guard.py v2.1 EXT",
+        out = {"scan_time": now, "tool": "gate4_comment_guard.py v2.0 EXT",
                "length_cap": args.length_cap, "principle": principle,
-               "trees_ledger": ledger, "deep_files": deep_count,
                "results": results, "baseline": cmp_summary}
         with open(args.jsonout, "w", encoding="utf-8") as f:
             json.dump(out, f, ensure_ascii=False, indent=1)

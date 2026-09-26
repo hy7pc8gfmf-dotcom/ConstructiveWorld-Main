@@ -1,4 +1,5 @@
 (* ===================================================================== *)
+(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
 (*   替换清单（本件）：对偶三件（温度／平方见证／半温标：定义面展开至公共规约基后自反闭合）＋平方见证件（两倍乘分配律闭项内联，消 req_two_mult 转发跳）＋零之相反数件与右零差件（加逆唯一性双层转发就地重演至加消去律闭项）。                                            *)
@@ -21,7 +22,7 @@
 (* ============================================================ *)
 
 (* UpReqAttnGibbs.v — 签名迁移批 4 主件：AttentionGibbsBridge 簇首段连贯子链 req 化
-   源文件：签名迁移规划书-.md 批 4 清单；
+   母本：签名迁移规划书-20260908.md 批 4 清单；
    Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L27929-30669
      （首段 = softmax 家 L27950-28600）。
    前置锚（规划书明示直接依存，零重建）：
@@ -49,18 +50,18 @@
    【冻结清单（规划书 (d) 关卡逐件理由回写）】
      1. softmax_gap_concentration<-28282：集中不等式需逐 eps 有界和机器
         （min/r_max 家 req 场未建）；密度低，留批 5。
-        ——组5扫尾件 解冻：机器三件 + 平移件结果（尾增量节）；
+        ——批5扫尾席 2026-09-09 解冻：机器三件 + 平移件结果（尾增量节）；
         Id 证明路径核读实为纯代数（relative + exp 单调 + mult 保序），
         机器缺口与语句可迁性解耦，对照见增量节头注。
      2. temperature_zero_limit<-28337：T→0 极限语义需 lim/metric 因果链
         （接口字段在而链长 >30 步）；留批 5。
-        ——组5扫尾件 解冻：lim 簇依存（UpReqCauchy req_r_pow 系
+        ——批5扫尾席 2026-09-09 解冻：lim 簇依存（UpReqCauchy req_r_pow 系
         + exp_neg_geo_break 假设位 r_arch_pow 同位平移）+
         ag_hard_attention_collapse_eps 逐 eps 完成结果（尾增量节）。
      3. list 机器 13 件：规划书 (d) 明示冻结复用（evicted/list 段，L29360 起）。
      4. boltzmann 块余件（attention_is_gibbs_temp<-28634 /
         scale_inv_T_eq_softmax_temp<-28679 / scaled_attention_is_gibbs_temp<-28694 /
-        eviction 簇<-29360 起）：已由中后段件 结果（见下核对）。
+        eviction 簇<-29360 起）：已由中后段席 2026-09-09 结果（见下核对）。
    【非平凡性分级】真证：ag_softmax_temp_relative（exp 加法同态 + 换位链）/
      aux_alpha_plus_omda / ag_softmax_temp_pos 家 / ag_softmax_scaled_pos 家 /
      ag_partition_function_*_pos；组装（Id 链 req_trans 重放）：
@@ -106,21 +107,21 @@
      sum_le<-L1415 abs_sum_le_r<-L1431 req_lt_plus_compat_lt_le_h<-
      ReqStrictOrderBridge L1468（req 集合oid类无混合 plus 兼容字段，
      构造性序无两侧消去；lt_minus_cc 符号步依存）。
-   【冻结清单（中后段件逐件理由登记）】
+   【冻结清单（中后段席逐件理由回写）】
      5. top_k_majorization<-30047 / top_k_swap_no_gain<-30073 /
         top_k_majorization_mem<-30264：证明引擎 = 计数/firstn/skipn/
         排序 list 机器 13 件（规划书 (d) 冻结复用，Id/nat 层），req 层
         无桥接引理，不迁；交换代数核已由三辅件 req 化铺好，引擎件解冻后
         一行组装。
      6. eviction_db_breaking_bound<-29385 / eviction_db_zero_full<-29573：
-        禁区（RestB ReqKVQuantWorld 领地，首件冻结清单明示）。
+        禁区（RestB ReqKVQuantWorld 领地，首席冻结清单明示）。
         req_db_breaking_bound_eps@UpReqAlignRestB.v 自述对位为 L54841
         real_db_breaking_bound_eps（Real 层 RealKVQuantMain 节），与
         @29385 语句级异形（能量积界 vs invZ·T·(E·(U·eU)+(E·eps+eps'))
         界；假设面 节 Variable vs keep/eps），对位已证明不立 →
         eviction_db_breaking_bound 维持冻结终态；eviction_db_zero_full
         引擎件（ag_eviction_transition_full/@29540 +
-     7. q_kernel/attention_step/收缩迭代簇<-28817-29330：他件领地，
+     7. q_kernel/attention_step/收缩迭代簇<-28817-29330：他席领地，
    【非平凡性分级（中后段）】真证：ag_attention_is_gibbs_temp（exp 兼容
      桥+换位+inv_pos_ext）/ ag_scale_inv_T_eq_softmax_temp（跨约定真桥）/
      ag_sum_opp ag_sum_minus ag_le_minus_le_zero ag_le_plus_zero_l
@@ -148,6 +149,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* Section ReqAttnGibbs：AttentionGibbsBridge 首段 req 迁移       *)
 (*   求和诚实接口 = Id SumOver/基座 Setoid 节同款三性质 + add，    *)
+(*   节内自持（跨席假设申报不可依存纪律）。                   *)
 (* ============================================================ *)
 Section ReqAttnGibbs.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -539,6 +541,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* 【中后段增量·boltzmann 块】（中后段席 2026-09-09 接力）        *)
 (*   Id 原件：@28586-28710（Variables D/D_pos/energy、      *)
 (*   boltzmann_factor/Z_thermo/boltzmann_dist_attn、              *)
 (*   attention_is_gibbs_temp @28634 / scale_inv_T_eq_softmax_temp *)
@@ -690,9 +693,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* 【中后段增量·eviction 簇】（中后段席 2026-09-09 接力）         *)
 (*   Id 原件：@29360-29626（KV 逐出：打破详细平衡/最优策略  *)
 (*   支撑/稳态偏差量化）。禁区扣除：eviction_db_breaking_bound    *)
 (*   @29385 / eviction_db_zero_full @29573 属 eviction_db 系      *)
+(*   （RestB ReqKVQuantWorld 领地，批4首席冻结清单），不迁。       *)
 (*   诚实接口新增（Id SumOver 字段 req 副本，先例 UpReqDist       *)
 (*   L206 sum_le / L1008 fsum_le，同为 Section 假设申报位）：     *)
 (*     sum_le<-L1415 副本、abs_sum_le_r<-L1431 副本。            *)
@@ -997,6 +1002,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* 【中后段增量·Top-K 尾部质量/交换引擎 R 结论件】（中后段席）    *)
 (*   Id 原件：@29719 top_k_tail_bound / @29732 tail_plus_kept_full/ *)
 (*   @29782-29818 代数三辅件 / @29820 top_k_exchange /             *)
 (*   @29845 eviction_tail_pointwise_le / @29872 top_k_tail_antitone/ *)
@@ -1837,6 +1843,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
+(* 【批5扫尾席增量节·min/r_max 逐 eps 有界和机器 + gap 集中/零温族】 *)
+(*   2026-09-09 扫尾席（三小块之一/之二；冻结清单件 1/2 解冻）。    *)
 (*   ---------------------------------------------------------------- *)
 (*   【A. 逐 eps 有界和机器（结论 1 机器缺口落地；三件真证）】        *)
 (*   依存接口 min/r_max 逐 eps 字段场（基座 L40529-40539：            *)
@@ -1846,6 +1854,7 @@ Qed.
 (*   与接口原生形式同构（log_le_linear_eps 同款口径）。               *)
 (*   【解冻对照（结论 1）】Id @28282 证明体核读 = 纯代数              *)
 (*   （softmax_temp_relative + exp_neg_le_decr + le_mult_compat_r）， *)
+(*   未依存任何有界和机器——首席结论的机器缺口真实存在（req 场此前     *)
 (*   确未建），但与该语句的可迁移性解耦。本节两者均结果：机器三件     *)
 (*   （A 组）独立成件，平移件（B 组）按 Id 纯代数路径组装。           *)
 (*   【B. gap 集中 + 零温极限（Id @28282 / @28337 平移；真证/组装）】  *)
@@ -2300,6 +2309,7 @@ Qed.
 (*       诚实假设申报位逐位副本（Id→req）；                        *)
 (*     - abs 消去：接口字段 abs_zero（req (abs zero) zero）经        *)
 (*       req_abs_compat 拉回，零新公理。                             *)
+(*   禁区注记更正：头注冻结清单6 / L662 禁区扣除注记由本节更正——     *)
 (*     行1（@29385）异形维持冻结；行2（@29573）解冻结果。            *)
 (* ============================================================ *)
 

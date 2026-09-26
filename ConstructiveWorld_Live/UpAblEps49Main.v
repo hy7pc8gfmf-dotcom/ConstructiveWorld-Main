@@ -1,11 +1,31 @@
-(* ==========================================================================)
-   UpAblEps49Main.v — KL 分解恒等式两形闭合在具体载体上的完全实例
-   使命: bool 二点状态空间与二点求和上把四结构前提（求和 ext/add/linear 与配分正性）全部内证，给出仅余 (Hp, Hnormp) 的完全实例化 e49m_real_kl_decomp_full_bool。
-   依赖: QArith.Qring、CW_ConstructiveWorld_219、UpAblEps49RKDBase、Extraction。
-   对标: 有限和上的 KL 分解恒等式（自由能与相对熵关系）。
-   构造性: 零承认词面；Set 层承载（语句面全 forall 型）；提取零魔术常量；未触碰任何既有文件。
-   编译配方: Rocq 9.1 直调与 cpu_guard；编译输出 -o 临时目录，树内不动。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpAblEps49Main.v —— KL 分解（定理 4.9）假设的两形闭合在具体载体上的               *)
+(* 完全实例。                                                         *)
+(*                                                               *)
+(* 对象：S08_RealMainlineDPO.v Section RealRLHFMain 内以节 Variable    *)
+(*   引入的假设 real_kl_decomp_full：区变量 S / real_sum_over_S(+ext/add) *)
+(*   / real_base_loss / D / D_pos / Z_align_r / Z_align_r_pos 全抽象， *)
+(*   语句 forall p Hp Hnormp, real_eq (real_free_energy p Hp)      *)
+(*   (real_plus (real_free_energy p_b p_b_pos) (real_mult D (sumf …)))； *)
+(*   使用处 real_rlhf_optimal_eps（exact (real_kl_decomp_full pi Hpi Hnormpi)）。 *)
+(*                                                               *)
+(* 数学事实：F(p)−F(p_b)−D·Σ kl = D·logZ·(Σ p_b − 1)，故 Z 抽象时          *)
+(*   该语句为假；诚实闭合仅两形——一般 Z 携数学前提 Hnormb（Σ p_b == 1），               *)
+(*   或 Z 取配分函数定义形内证归一化。本件两形并举。                                   *)
+(*                                                               *)
+(* 相对 UpAblEps49RKDBase 的增量：rkd_kl_decomp_full_partition 仍带四结构   *)
+(*   前提（求和 ext/add/linear + 配分正性 Zp）；本件在具体载体（bool 二点             *)
+(*   状态空间与二点求和 e49m_esum2）上把四前提全部内证，给出仅余假设                       *)
+(*   (Hp, Hnormp) 的完全实例化——接口族在 Real 层可实例化的首个逐字实例。                *)
+(*                                                               *)
+(* 构造性注记：零承认；Set 层承载（语句面全 forall 型，序谓词沿家族标准                      *)
+(*   Set 值位形）；提取零魔术常量；未触碰任何既有文件。                                 *)
+(*                                                               *)
+(*                                                               *)
+(* 依赖：CW_ConstructiveWorld_219、UpAblEps49RKDBase、Stdlib QArith.Qring。 *)
+(* 对标：mathlib 有限和上的 KL 分解恒等式实例。                                  *)
+(* 编译配方：Rocq 9.1 直调 + cpu_guard；编译输出 -o 临时目录，树内不动。               *)
+(* ============================================================ *)
 
 From Stdlib Require Import QArith.Qring.
 Require Import CW_ConstructiveWorld_219.

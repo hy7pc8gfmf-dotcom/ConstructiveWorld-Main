@@ -138,7 +138,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 公理面自审（文末八条 Print Assumptions）                            *)
+(* 四关证据（文末八连打）                                              *)
 (* ============================================================ *)
 Print Assumptions prc_powb_real_pow_id.
 Print Assumptions prc_powb_real_pow_req.

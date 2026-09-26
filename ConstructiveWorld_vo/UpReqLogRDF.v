@@ -46,7 +46,7 @@
 
 (*      reqRDF g 前提位（与 req_rdf_compose@UpReqRDF:1227 显式 dg 同族对照； *)
 (*      g 取无正则性正函数时结论无据，本构造性接口层不可证——判「修正消解」， *)
-(*      非特设构造原形）。                                                      *)
+(*      非硬凑原形）。                                                      *)
 (*    ②eps'-尾 slack 与精确形之关系：非 Or 编码固有间隙——req 层 le 为抽象    *)
 (*      非严格序（非 Or 编码），配合 ReqLogPlain.log_le_linear_plain 精确形   *)
 (*      参数位（UpReqSLM L143，批5 波0 资产），log(1+t) ≤ t 精确成立（           *)
@@ -101,7 +101,7 @@ From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part 0：节假设位组（三申报参数 S1-S3 + 三类参数位给出）                              *)
+(* Part 0：节假设位组（三申报参数 S1-S3 + 三类参数位承接）                              *)
 (* ============================================================ *)
 
 Section LRDF.

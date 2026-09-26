@@ -7,8 +7,8 @@
 (* 备注： 序谓词取 plain 形；裁剪误差非负为构造核。 *)
 (* ============================================================ *)
 
-(*
-   工单：组5裁决书-dpoTotalLoss解冻与min-plainle8件-.md 第二部分
+(* UpReqPPOPlain.v — min plain-le 建设席：ReqDiffPlain 槽实例版 PPO 保守簇 6 件
+   工单：批5裁决书-dpoTotalLoss解冻与min-plainle8件-20260909.md 第二部分
      本批在 UpReqRDF.v Part 0 增量登记，T2① 零证明槽，为后续解锁铺路）。
    ---------------------------------------------------------------------
    槽实例前提位设计（本批核心）：
@@ -39,7 +39,7 @@
      件7 clip_lower                L19518 -> rpl_clip_lower（r_max_le_r_plain
           自持右参槽直引——路线(a)，见登记表第 6 条）
      件8 ppo_clipped_improvement   L112439 -> rpl_ppo_clipped_improvement（节3，
-           扫尾件挂随簇解锁件：ppo_surrogate req 簇（件4 等）结果后
+          2026-09-09 扫尾席挂随簇解锁件：ppo_surrogate req 簇（件4 等）结果后
           解锁。Id E1+E2 路线（ppo_is_decomp + clip_error_nonneg + le_plus_
           nonneg_r 装配）由件4 保守件一步替代（le_trans Hsurr + rpl_ppo_
           surrogate_conservative 直得 is_objective_of ≥ 0）；深链伴件 B =
@@ -68,12 +68,12 @@
      L19502 同形；件4 用 policy_ratio 独立参数，与 Id 分工同位）。
    5. 近邻对位注：UpReqAlign L1216-1230 已有定义面近邻 ppo_clip_req/clip_error_req
      （PPO 簇 15 件批结果的 req 定义），但其引理面无本批 6 件保守件（原冻结）；
-   6. 件7 增建（ 件16终验件，路线(a)）：clip_lower 冻结解除——Id 原件
+   6. 件7 增建（2026-09-09 件16终验席，路线(a)）：clip_lower 冻结解除——Id 原件
      消费 r_max_le_r（右参形 le b (r_max a b)）；UpReqRDF.v ReqDiffPlain 已登记
      r_max_ge_plain 为左参形（le a (r_max a b)，Id r_max_le_l 镜像），方向不覆盖
      右参需求且 r_max 无对称交换桥——故 Id r_max_le_r 的 plain 镜像以本文件节1
      自持槽 r_max_le_r_plain 承接（T2① 零证明槽，与 RDP 槽组同款显式参非公理
-   7. 件8 增建（ 扫尾件，挂随簇解锁）：Id PPOClipDecomp 节参
+   7. 件8 增建（2026-09-09 扫尾席，挂随簇解锁）：Id PPOClipDecomp 节参
      Hpi:normalized pi 本件消费不削减——req 接口无 normalized 字段，同语义面 =
      req (sumf pi) one 节参 Hnorm 承接（rppo 系 Hnorm 位同形，归一化坍缩消费位）；
      （rpli_ratio_cancel 六步逐点消去 + rpli_sum_opp/rpli_sum_minus 内机 +
@@ -375,6 +375,7 @@ End ReqPPOPlainClipErr.
 
 (* ===================================================================== *)
 (* 节3 ReqPPOPlainImprove：Id PPOClipDecomp 节 E3 同位（件8 挂随簇解锁件）    *)
+(*   ppo_clipped_improvement L112439 req 版（2026-09-09 扫尾席）。            *)
 (*   消费：件4 rpl_ppo_surrogate_conservative（同文件节1）——Id E1+E2 路线     *)
 (*   （ppo_is_decomp + clip_error_nonneg + le_plus_nonneg_r 装配）由保守件    *)
 (*   一步替代（le_trans Hsurr + 件4 直得 is_objective_of ≥ 0；min_le_l_plain *)

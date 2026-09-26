@@ -31,7 +31,7 @@
 
 (* ============================================================ *)
 (* UpAblT1_UpReqDist.v —— 假设消融战役 T1 批·席 a（FA2 第 1 批前 25 位之 14 位） *)
-(* 辖区：UpReqDist.v sumf 接口面（求和假设位五节），实例化消解源文件 sumd_*@UpReqSumD *)
+(* 辖区：UpReqDist.v sumf 接口面（求和假设位五节），实例化消解母本 sumd_*@UpReqSumD *)
 (*                                                              *)
 (* 目的：对 UpReqDist 五节（ReqSumLayer/ReqFEP/ReqSteadyState/         *)
 (*   ReqProbDist/ReqSoftmaxDual）的 sumf 接口面假设位逐条兑现消融定理：    *)
@@ -75,7 +75,7 @@
 (*                                                              *)
 (* 依赖（全部只读依存，原树零改）：CW_ConstructiveWorld_219、           *)
 (*   UpReqSumD（经其传递 UpReqAlgebra/UpReqDist）。                    *)
-(*   语句面逐字抽取自现档 UpReqDist.v（2026-09-15  版，            *)
+(*   语句面逐字抽取自现档 UpReqDist.v（2026-09-15 23:31 版，            *)
 (*   与 FA2 普查表行号逐位核对一致），仅 sumf → sumd_sumf S enum        *)
 (*   换实例位。                                                        *)
 (*                                                              *)

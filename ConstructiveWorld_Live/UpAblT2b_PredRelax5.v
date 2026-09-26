@@ -1,11 +1,55 @@
-(* ==========================================================================)
-   UpAblT2b_PredRelax5.v — 预测面五区两载体层副本的实例化与导出件
-   使命: 热弛豫/涨落标度/跨域标度/Landauer/损失结构五区：G04 R 层副本与 req 载体层副本，每参数位两件——参数位语句在装法实例下成立的实例化形，与模块下游定理在假设位剪除后的导出形（真实构造链）。
-   依赖: CW_ConstructiveWorld_219、S01_BaseRing、fa51_sumpos_id、fa56_id_carrier、fa56b_ext、fa56c_ext、TempSoftmaxInstantiation；Stdlib List、Arith。
-   对标: 指数弛豫、涨落-耗散标度与 Landauer 原理的形式化（预测恒等式/预测保序假设的实例化）。
-   构造性: 语句面全集合层（Set 值谓词）；零新增假设面；前缀 uabt2b_；文尾逐件 Print Assumptions 收尾。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ========================================================================= *)
+(* 【ToyR 战役·包G·T246 台账席】玩具级定理同名非平凡替换稿（补标头注）       *)
+(*                                                                           *)
+(* 本稿系 ToyR 战役包G 替换落件（原名落件）；落件时头部漏植战役标记，本块由  *)
+(* T274 无头注补标专席于 2026-09-21 补植：仅加头注，语句面／证明体／         *)
+(* Require 面                                                                *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T246。       *)
+(* 替换定理清单：uabt2b_g04_heat_discharge／req_heat_discharge／             *)
+(* uabt2b_g04_fluctuation_discharge／req_fluctuation_discharge／             *)
+(* uabt2b_g04_landauer_discharge／req_landauer_discharge／                   *)
+(* uabt2b_cross_domain_sigT／uabt2b_g04_lm_discharge／req_lm_discharge（共   *)
+(*  9 条）                                                                   *)
+(* 非平凡性口径：实例化消解体跨域内联重演，桥接件与被桥接引理双面落刀；无一行拆分式    *)
+(* 假非平凡。                                                                *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
+(* 抽验编译均验零承认。                                                      *)
+(* ========================================================================= *)
+(* ============================================================ *)
+(* UpAblT2b_PredRelax5.v —— 假设消融战役 T2b 批·第④组                *)
+(*   预测面五区·实例化消解/导出逐一施工（G04 R 层副本 + req 载体层副本）      *)
+(*                                                              *)
+(* 五区实例化消解母本（检验实测闭名签名，2026-09-19）：                      *)
+(*   区1 热弛豫  fa56_heat_relaxation_exponential @fa56_id_carrier:233  *)
+(*   区2 涨落标度 fa56_fluctuation_scale @fa56_id_carrier:194           *)
+(*   区3 跨域标度 fa56b_cross_domain_scaling @fa56b_ext:241             *)
+(*   区4 Landauer fa56c_prediction_landauer @fa56c_ext:136              *)
+(*   区5 损失结构 fa56c_loss_structure_correlation @fa56c_ext:172       *)
+(*                                                              *)
+(* 副本依存位（FA1 普查表第④批 N 位，行号经现档逐字核对）：             *)
+(*   G04_ProjFam.v L1171 heat_relaxation_exponential（PredRelaxHeat 节） *)
+(*   G04_ProjFam.v L1230 fluctuation_scale（PredRelaxFluct 节）          *)
+(*   G04_ProjFam.v L1283 prediction_landauer（PredRelaxLandauer 节）     *)
+(*   G04_ProjFam.v L1367 loss_structure_correlation（PredRelaxLM 节）    *)
+(*   UpPredRelaxReq.v L82/L161/L233/L348 同位 req 副本                  *)
+(*   每参数位两件：实例化消解形（参数位语句在装法实例下成立）+ 导出形（模块下游定理     *)
+(*   在假设位剪除后仅凭数据参数位与母本重证——导出形即非平凡内容位）。        *)
+(*                                                              *)
+(* 区3 特记：G04/UpPredRelaxReq 均未设跨域节（G04:1141 头注自述不做），  *)
+(*   领地内跨域依存位 S01:1687/S05:5980 普查已证结论为 T（零消费，剪除即     *)
+(*   消融，零施工）；本件仅给 S05:5974-5980 参数位语句形的存在见证副本件     *)
+(*   供登记引用，不计非平凡战果。                                       *)
+(*                                                              *)
+(* 消融形态：各参数位假设位（预测恒等式/预测保序）被减薄为装法定义件+数据参数位   *)
+(*   （gamma/D0/k_B/T/正性标度 c 等纯数据供给面）——实例化消解形 N1（母本直接代入）， *)
+(*   导出形 N2（由实例化消解形+接口单调字段导出模块下游定理，真实构造链）。      *)
+(*                                                              *)
+(* 依赖（全部只读依存，原树零改）：S01_BaseRing、fa51_sumpos_id、        *)
+(*   fa56_id_carrier、fa56b_ext、fa56c_ext、TempSoftmaxInstantiation     *)
+(*   （req 层装配桥，仅取合格名不整装导入）。                            *)
+(* 纪律：语句面全集合层；零新增疑设面；前缀 uabt2b_；文尾逐件 PA 收尾。  *)
+(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT2b_PredRelax5.log          *)
+(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import S01_BaseRing.
@@ -272,7 +316,7 @@ End UabT2bG04LM.
 
 (* ============ req 载体层副本（UpPredRelaxReq.v 四节，装配桥实例化） ====== *)
 (* R 取典范载体、RIS 取装配桥实例（req 幺等）；集合体字段以合格名局部记号    *)
-(* 引用；实例化消解/导出形由 Id 世界同数据证明项经 conversion 整体代入。           *)
+(* 引用；实例化消解/导出形由 Id 世界同数据证明项经 conversion 整体喂入。           *)
 
 Section UabT2bReqZones.
 
@@ -326,7 +370,7 @@ Proof.
 Qed.
 
 (* —— 区1 导出形（←UpPredRelaxReq:89-137 同链，假设位剪除后重证；     *)
-(*    Id 世界导出件经 conversion 整体代入——装配桥逐字段幺等换算） —— *)
+(*    Id 世界导出件经 conversion 整体喂入——装配桥逐字段幺等换算） —— *)
 Theorem uabt2b_req_heat_decreasing_wo : forall t : nat,
   sle (fa56_temp_difference gamma of_nat_R temperature_difference0 (Nat.succ t))
       (fa56_temp_difference gamma of_nat_R temperature_difference0 t).

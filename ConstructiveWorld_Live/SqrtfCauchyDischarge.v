@@ -1,8 +1,8 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ============================================================ *)
 (* SqrtfCauchyDischarge.v                                        *)
 (*                                                               *)
 (* 目的：消解宿主 SqrtfCauchy.v 四个节参数假设中可消解的两位，      *)
-(*       宿主本体零改动，以同语句替换件 + 接口补装段给出。          *)
+(*       宿主本体零改动，以同语句替换件 + 接口补装段承接。          *)
 (* 主件：sfcx_abs_le_plus_eps_real——|t| ≤ t + eps（0 ≤ t、         *)
 (*       0 < eps，real_le 素颜面）；接口投影形                     *)
 (*       sfcx_abs_le_plus_eps_slot。sfcx_metric_abs_real——         *)
@@ -109,7 +109,7 @@ Proof.
     left. exact Habslt.
 Qed.
 
-(* 假设位4 替换桥（宿主位语句逐字，接口投影面；使用位 SqrtfCauchy.v:1143）
+(* 假设位4 替换桥（宿主位语句逐字，接口投影面；消费位 SqrtfCauchy.v:1143）
    ——素颜面到接口面的转换只走实例 delta/iota（同 swc_interface_slot_face
    式，exact 一行）。替换：sfc_abs_le_plus_eps 参数位 ← 本件。 *)
 Theorem sfcx_abs_le_plus_eps_slot :
@@ -134,7 +134,7 @@ Proof.
   exact (real_eq_refl (real_metric a b)).
 Qed.
 
-(* 假设位2 替换桥（宿主位语句逐字，使用位 SqrtfCauchy.v:1137）。 *)
+(* 假设位2 替换桥（宿主位语句逐字，消费位 SqrtfCauchy.v:1137）。 *)
 Theorem sfcx_metric_abs_slot :
   forall a b : Real,
   @req Real RealEnhancedReal (@metric Real RealEnhancedReal a b)
@@ -144,7 +144,7 @@ Proof. exact sfcx_metric_abs_real. Qed.
 
 (* 接口缺位补装：ReqMetricAbs mixin Class（样板 UpReqSLM:133
    ReqNonnegPlain 同形：R 显参 + 基接口 {RIS} 隐参）+ RealEnhancedReal
-   实例补装。下游泛型文件可 {RIS} 上挂本 mixin 使用 req_metric_abs 位。 *)
+   实例补装。下游泛型文件可 {RIS} 上挂本 mixin 消费 req_metric_abs 位。 *)
 Class ReqMetricAbs (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   req_metric_abs : forall a b : R, req (metric a b) (abs (req_minus a b))
 }.
@@ -157,7 +157,7 @@ Instance ReqMetricAbsReal : @ReqMetricAbs Real RealEnhancedReal := {
 (* §A3 假设位5 消解（1 < 2 严格档）：宿主假设位5 Hlt_one_two        *)
 (*   （lt one sfc_two，sfc_two δ 展开 = real_plus real_one            *)
 (*   real_one）实例面逐字。0 < 1（one_pos）经 real_lt_plus_translate  *)
-(*   单侧平移 +one，plus_zero 换形收 1 < 1+1（SCFIX ）。      *)
+(*   单侧平移 +one，plus_zero 换形收 1 < 1+1（SCFIX 20260916）。      *)
 (* ============================================================ *)
 Theorem sfcx_lt_one_two_slot :
   @lt Real RealEnhancedReal (@one Real RealEnhancedReal)
@@ -181,9 +181,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 自证面：提取检验（KLWallClosed.v:447 / SqWallCorrMark.v:210        *)
+(* 自证面：提取探针（KLWallClosed.v:447 / SqWallCorrMark.v:210        *)
 (* 同式，Obj.magic 计数应为 0）+ 假设闭包审计。两主件证明体全走        *)
-(* real_* 素颜顶层函数链，不触 RealEnhancedReal 类实例封装常量，       *)
+(* real_* 素颜顶层函数链，不触 RealEnhancedReal 类实例打包常量，       *)
 (* 预判 Obj.magic=0。                                                *)
 (* ============================================================ *)
 Extraction "sfcx_G3.ml" sfcx_abs_le_plus_eps_real sfcx_metric_abs_real.
@@ -208,7 +208,8 @@ Print Assumptions sfcx_lt_one_two_slot.
       供给面）。五指针（均已实扫）：
    ① UpReqLpoEquiv.v（机器判定）：SqWall:230 / rLPO:234 /
       lpn_forward:249 / lpn_backward:342 / lpn_equivalence:429。
-      同位升参形 sfc_square_nonneg 登记，使用位 :560/:827；
+   ② SqWallCorrMark.v:44-45（勘误接回件）：SqrtfCauchy.v:76
+      同位升参形 sfc_square_nonneg 登记，消费位 :560/:827；
       供给方式 = swc_lpn_backward_slot（rLPO 证书 → 位面，一行替换）。
    ③ S02:802（同源注记）：real_square_not_negative（:804）自注
       「信息性 real_le 的全称形式不可证（需判定 a 的符号）」。
@@ -226,5 +227,5 @@ Print Assumptions sfcx_lt_one_two_slot.
 (*   接口补装 ReqMetricAbs mixin Class + ReqMetricAbsReal 实例           *)
 (*   假设位3 未动（独立后续件，S07:2762 real_arch 种子已登记）           *)
 (*   假设位1 未动（本 §C 判定标注段）                                    *)
-(*   假设位5 sfcx_lt_one_two_slot（1 < 2 严格档，§A3，SCFIX ）   *)
+(*   假设位5 sfcx_lt_one_two_slot（1 < 2 严格档，§A3，SCFIX 20260916）   *)
 (* ============================================================ *)

@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -17,7 +18,9 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqLogCompD.v —— 广义主链 G5-S 复合族消解席（重启）：S 阻塞 7 参数位    *)
 
+(*   2026-09-10                                                            *)
 (* ------------------------------------------------------------------ *)
 
 (*  [参数位1] energy_in_log_boltzmann_bridge@UpSigMigrate:65 —— 消解           *)
@@ -65,7 +68,9 @@
 (*    B1/B2 在泛型 RIS 层非接口字段，以节假设申报显式位承接；Real 层    *)
 (*    闭合实例 = G5 logd_log_compat_real / logd_log_exp_neg_real（Part 3   *)
 
+(*    req_Z_temp_pos 产物位（批 2 席领地，未 Require，以假设位承接）。        *)
 (* 防撞：logc_ 前缀 + 全部新名 26 个，全库 attn/001 grep 零命中（建前       *)
+(*    2026-09-10 逐名实查；UpReqLogCompD 文件名零命中）。                   *)
 (* 双形并存：参数位4 双层（req minus 形 / Real kl_term 形）；参数位1/2 与           *)
 (*    UpSigMigrate 节假设申报同位（本件独立重建，既有文件零改）；       *)
 (*    参数位5/6/7 与 UpFirewallReq 显式假设参数位同位（logc_t_* 定义族 =               *)
@@ -1018,6 +1023,7 @@ Variable Z_temp : R -> R.
 (* req_Z_temp_spec（源模块 L93 同位假设参数位） *)
 Hypothesis zt_spec : forall (t : R) (Ht : lt zero t),
   req (Z_temp t) (sumf (fun s => exp_neg (mult (inv_pos t Ht) (energy s)))).
+(* zt_pos 参数位 = UpReqTempEntropy req_Z_temp_pos 产物位（批 2 席领地） *)
 Hypothesis zt_pos : forall (t : R) (Ht : lt zero t), lt zero (Z_temp t).
 (* B1/B2 供给参数位（同 LogcFEP） *)
 Hypothesis tsup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),

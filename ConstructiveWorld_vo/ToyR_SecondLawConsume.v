@@ -24,7 +24,7 @@
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* SecondLawConsume.v —— 席位 P6D（组 E-STAGING-P6D）：论文6 §7 第二定律  *)
+(* SecondLawConsume.v —— 席位 P6D（批次 E-STAGING-P6D）：论文6 §7 第二定律  *)
 (*   的依存定理推导——从核心定理 real_entropy_deficit_kl_temp              *)
 (*   （S[p_T] − S[p] == KL(p‖p_T)，UpReqEntropyDeficitTemp 主件）出发，    *)
 (*   依存 SecondLawQuantified（C10 席）定量出口，导出四件新结论回喂基座。   *)
@@ -51,7 +51,7 @@
 (* 编译配方（vorebuild 基座 + 私槽侧编 SLQ/TSI，基座零改）：                *)
 (*   rocq c -Q Live/vorebuild "" -Q /tmp/p6d_side "" -Q . ""               *)
 (*     SecondLawConsume.v                                                 *)
-(*   （vo_901 基座 2026-09-18  起被他席全链重编中 S01_BaseRing 已换，  *)
+(*   （vo_901 基座 2026-09-18 04:50 起被他席全链重编中 S01_BaseRing 已换，  *)
 (*    CW_ConstructiveWorld_219.vo 尚未刷 → 假设不一致；vorebuild 链经       *)
 (*    检验实测与当前 stdlib 一致，故取之。SLQ/TSI 侧编 /tmp/p6d_side，      *)
 (*    EXIT=0 且 Print Assumptions 全 Closed。）                            *)

@@ -1,4 +1,5 @@
 (* ============================================================ *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -7,8 +8,15 @@
 (*   rwl_s14_pointwise_to_tail（原 L382，4 句玩具证）                     *)
 (* ============================================================ *)
 (* ============================================================ *)
+(* 【T341 恒等守恒更正注记】2026-09-22 包AU十八 台账席（恒等头注更正第四批·M-Z 空缺面） *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
 (* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
+(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
+(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341 台账。 *)
+(* 附记：T277 判级全文恒等；AD 域收尾第四批（T317 六·1 方案①）。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -23,6 +31,8 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* UpReqResidWallEquiv.v —— 席 WALL-3：残墙清账（GEO1 边界曲面三段，     *)
+(*   20260917；前缀 rwl_，开工 grep 全库零撞名）                       *)
 (*                                                              *)
 (* 公理面：本件零公理、零假设负载。语句面全 Set 层（real_le/real_lt/    *)
 (*   real_eq/Or(sigT)/QleT'/NatLe 均 Set 值；Or = S01:67 A+B 真数据   *)
@@ -40,8 +50,10 @@
 (*    「逐项可比前提」：KL 严格和无条件化需逐点 Or (p s ≤ q s) (q s ≤   *)
 (*    p s) 的全称供给——其载体核（S := unit、常值函数实例化）即任意      *)
 (*    两实数可比性。定形 rwl_g07_cmp_wall。分类：符号类（比较判定，    *)
+(*    LLPO 级），强于 rLPO 零判定基座：本席证 cmp_wall ⟹ rLPO          *)
 (*    （四支 Or-in-Or 逐支供隙/供零见证，rwl_g07_cmp_to_rlpo）；反向    *)
 (*    （rLPO ⟹ 可比）不开（零-间隙二分不及符号，如实账）。故 G07 残    *)
+(*    墙不在 snw/g05w 双向等价类内，只单向供给判定器——本席核心分类     *)
 (*    结论，与 WALL-2「七 S 参数位类外」结论同型互补。                      *)
 (*                                                              *)
 (*  段二 S14_B5BatchBlock.v:6849（δ-D ⑤ S 上界）：逐点全 n 界不可证    *)
@@ -57,7 +69,10 @@
 (*    ② 参序倒置——件 6 前提/结论 LHS 为 NPX-先序（KLE (NPX…) PSTR），   *)
 (*    与已证桥 req2_backward_kl_step（PSTR-先序）反向；KL 数层面非对    *)
 (*    称（KLE p q 与 KLE q p 不同函数），构造性下两向不可互推。分类：   *)
+(*    钉定型·语句面勘误闭合（AA23 范式）：非逻辑强度墙、非 B/Or 缺口，   *)
+(*    无归约可言；勘误序已由同文件 aiu_backward_kl_exact_uncond         *)
 (*    （AlignIdUnclosed.v:157，Qed+Closed 三连打在案）闭合，残余        *)
+(*    NPX-先序语句为错序陈述非真定理。本席定形其参序面                   *)
 (*    rwl_aiu_swap_slot（二元泛形；依 AA15 先例「不证墙为假」——不供     *)
 (*    Swap 失败见证，只定形 + 分类账）。                                *)
 (*                                                              *)
@@ -67,6 +82,7 @@
 (*   cmp_wall ⟹ 劈裂缝（rwl_cmp_to_max_split：分支选择面由逐点可比供   *)
 (*   给，S07 real_r_max_l_iff/real_r_max_r_iff 两支塌缩件免费复合）；   *)
 (*   严格 Or 劈裂的 free 向（real_lt 支无前提可证：x < a ⟹ x < max）    *)
+(*   需逐点 Qmax ≤ 引擎，本窗预算内止缩，留后续席位（遗留如实）。       *)
 (*   同源检验结论：#8 劈裂缝 ≤ 可比墙（LLPO 级），亦不在 rLPO 双向类   *)
 (*   内——GEO1 #8 与 WALL-1/2 序隙轴的分野在此已证结论。                     *)
 (*                                                              *)
@@ -75,11 +91,14 @@
 (*   q_sq_nonneg 逐点矛盾、eq 支 real_eq_sym 直换）× cmp_wall ⟹        *)
 (*   max_split（#8 缝归约）× 段二自由向+重建通道对。                    *)
 (*                                                              *)
+(* 谱系：AA15（UpReqLpoEquiv，rLPO 基座+lpn 双肢，本席依存其            *)
 (*   q_sq_nonneg/q_abs_neg_eq/q_abs_congr）⟶ WALL-1（UpReqSquareWall   *)
 (*   Equiv 的 snw_wall——盘上 .vo 摘要不一致，按 WALL-2 退回方案本地    *)
+(*   内联定义性同构面 rwl_snw_wall_face，零触碰他席产物）⟶ WALL-2      *)
 (*   （UpReqG05WallClass 全基桥，未 Require——可比轴不在其等价类内，    *)
 (*   头注核验替代依存）⟶ 本件（残墙三段清账）。                         *)
 (* ------------------------------------------------------------ *)
+(* WALL-3（20260917）：新建。前缀 rwl_（开工 grep 零撞名）。            *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.
@@ -91,9 +110,9 @@ Require Import UpReqLpoEquiv.
 Import RealInterfaceEnhancedMod.
 Local Open Scope Q_scope.
 
-(*
+(* WALL-2 退回方案同款（20260917 实测复现）：盘上 UpReqSquareWallEquiv.vo
    对 UpReqLpoEquiv 摘要不一致（Require 报 inconsistent assumptions）——
-   按零触碰他件产物纪律，不重编他件 .vo，改直挂 UpReqLpoEquiv + 本地
+   按零触碰他席产物纪律，不重编他席 .vo，改直挂 UpReqLpoEquiv + 本地
    内联同构面：rwl_snw_wall_face 与 snw_wall（UpReqSquareWallEquiv:70）
    定义性同形（同一 CW219/S02 Real 层）。 *)
 Definition rwl_snw_wall_face : Set :=
@@ -411,7 +430,7 @@ Qed.
 
 (* 件 6 参序面（二元泛形；F 的 KLE 实例 = req2_rel_ent 参数序）。
    钉定：KL 数层面非对称（KLE p q ≠ KLE q p 一般成立），构造性下
-   swap 参数位两向不可互推；修正序闭合件 aiu_backward_kl_exact_uncond
+   swap 参数位两向不可互推；勘误序闭合件 aiu_backward_kl_exact_uncond
    （AlignIdUnclosed.v:157）已在盘。依 AA15 先例不证为假——只定形。 *)
 Definition rwl_aiu_swap_slot (F : Real -> Real -> Real) : Set :=
   forall p q : Real, real_eq (F p q) (F q p).
