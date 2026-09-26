@@ -402,7 +402,6 @@ Definition af_AttnHardLimit : AttnFace := MkAttnFace "AttnHardLimit.v" 40 202609
 Definition af_AttnHardLimit218 : AttnFace := MkAttnFace "AttnHardLimit218.v" 39 20260911.
 Definition af_AttnSqrt : AttnFace := MkAttnFace "AttnSqrt.v" 12 20260911.
 Definition af_CW220_Extensions : AttnFace := MkAttnFace "CW220_Extensions.v" 552 20260911.
-Definition af_CW_ConstructiveWorld_219 : AttnFace := MkAttnFace "CW_ConstructiveWorld_219.v" 3136 20260911.
 Definition af_CW_ConstructiveWorld_220 : AttnFace := MkAttnFace "CW_ConstructiveWorld_220.v" 3688 20260911.
 Definition af_ConstructiveWorld_215 : AttnFace := MkAttnFace "ConstructiveWorld-215.v" 2966 20260911.
 Definition af_ConstructiveWorld_217 : AttnFace := MkAttnFace "ConstructiveWorld-217.v" 3056 20260911.
@@ -531,7 +530,6 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_AttnHardLimit218
   (cons af_AttnSqrt
   (cons af_CW220_Extensions
-  (cons af_CW_ConstructiveWorld_219
   (cons af_CW_ConstructiveWorld_220
   (cons af_ConstructiveWorld_215
   (cons af_ConstructiveWorld_217
@@ -652,7 +650,7 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_UpStopTime
   (cons af_UpTVDoeblin
   (cons af_UpTVReal
-  (cons af_UpTempWindow nil)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
+  (cons af_UpTempWindow nil))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
 
 (* 主件面统计：127 主件 / 剥注释 token 级 Qed 和 25354（含自指件 UpReqIndex.v v2 终态 27）； *)
 (* 存档/快照/副本/检查点（_ 前缀与 probe 族）不入主件面，处置状态见层② 退役条目与交付报告。 *)
@@ -716,7 +714,6 @@ Definition lg_G12 : LiveGroup := MkLiveGroup "G12_ZPosFam.v" 2 5 "members: UpReq
 Definition lg_G13 : LiveGroup := MkLiveGroup "G13_EvictFam.v" 2 2 "members: UpEvictId,UpEvictIdReq".
 (* 组号缺位注记：G03 无组（G 系编号 01/02/04–13 共 12 组，缺位为合并史留痕，非漏登）。 *)
 
-Definition lg_Shell219 : LiveGroup := MkLiveGroup "CW_ConstructiveWorld_219.v" 3 15 "219 shell: Require S01-S15 chain; 17 lines 0 Qed tokens; downstream base aggregate (Live_X copy)".
 Definition lg_CW220Ext : LiveGroup := MkLiveGroup "CW220_Extensions.v" 3 1 "CW220 extensions piece; stripped-comment Qed 552".
 Definition lg_Ret214 : LiveGroup := MkLiveGroup "ConstructiveWorld-214" 0 0 "retired: CW214 name-level check 219 covers 214, 3943/3943 hit; dependents re-Require shell 219".
 Definition lg_RetUpTVReal : LiveGroup := MkLiveGroup "UpTVReal" 0 0 "retired: absent in Live_X; attn legacy 33 Qed, not migrated".
@@ -753,8 +750,6 @@ Definition GLiveList : list LiveGroup :=
   (cons lg_G12
   (cons lg_G13 nil))))))))))).
 
-(* S 面：15 组 / 剥注释 Qed 和 3136。结构不变量：和=attn 219 大库 CW_ConstructiveWorld_219.v
- token 级 Qed 实测同值——拆分无损在编译期机械可证（见 Split_lossless_219）。 *)
 Definition SLiveGroups : nat := 15.
 Definition SFaceQed     : nat := 3136.
 Lemma SLiveGroups_matches : SLiveGroups = cnt_lg SLiveList.
@@ -763,9 +758,6 @@ Proof. reflexivity. Qed.
 Lemma SFaceQed_matches : SFaceQed = sum_lg SLiveList.
 Proof. reflexivity. Qed.
 
-Lemma Split_lossless_219 : af_qed af_CW_ConstructiveWorld_219 = SFaceQed.
-(* attn 219 大库 3136 Qed = Live_X S01–S15 组和 3136 Qed（token 级 1:1）。 *)
-Proof. reflexivity. Qed.
 
 (* G 面：12 组 / README 旧名成员和 44 / G 组件剥注释 Qed 和 640。结构不变量：逐组成员旧名
  attn Qed 和 = Live_X G 组件 Qed（12 组全数 1:1，合并无损机械可证，见 G*_merge_lossless）。 *)
@@ -837,9 +829,6 @@ Definition LiveXIndFiles : nat := 70.
 Lemma LiveXSplits : LiveXFiles = plus (plus SLiveGroups GMergeGroups) (plus 2 LiveXIndFiles).
 Proof. reflexivity. Qed.
 
-Lemma Shell219_chain : lg_members lg_Shell219 = SLiveGroups.
-(* 219 壳聚合链 = S 系 15 组，壳链完整。 *)
-Proof. reflexivity. Qed.
 
 
 
@@ -3463,7 +3452,6 @@ Definition ng_UpAblP4_UpStopTime_PA : NewGreenFace :=
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-SUB built-at-registration 四项组绿后实测补记）。 *)
 
-(* ng_uabl_attn_full_instance —— uabl_attn_full_instance.v：R2-ABL S3 产单入口供给模块（BoundedSoftmax 接口十九字段的 Fin2 默认实例，135 行 2 Qed；单入口 Require Export 六件封装 CW_ConstructiveWorld_219/AttnDoeblin/UpReqConcFin2/UpReqConcB1/UpAblD1_expf_pack/UpReqSampling，下游 Require Import 一行即得 uabl_ 前缀全名空间；Part A-C 逐行语句面与上游源件逐字同面零换面税；PA Closed 四路 bs_abs_id/bs_lpc_id/expf_pos/bs_abs；G3 Separate Extraction Obj.magic=0（ml 10f2d638/mli 6afe7ea0 双锚）；built-at-registration 绿判四项组 EXIT=0+PA+vo 魔数 5ff4+vo 新于 v ；沙箱/Live/vo 三方 md5 恒等 c40c13a1 再测；fa53_compat_abs 内部 Require 零改） *)
 Definition ng_uabl_attn_full_instance : NewGreenFace :=
   MkNewGreenFace "uabl_attn_full_instance.v" 135 2 20260924
   "R124 single-entry supply module: BoundedSoftmax 19-field Fin2 default instance as uabl_-prefixed named rows; one Require Import line exposes full namespace via six Require Export; Part A-C rows verbatim-identical to upstream faces (zero face-conversion tax); PA Closed x4 (bs_abs_id/bs_lpc_id/expf_pos/bs_abs); G3 Separate Extraction Obj.magic=0 (ml 10f2d638 / mli 6afe7ea0 anchors); born-in-place four-gate green 20260924; sandbox/Live/vo triple md5 c40c13a1 pinned; fa53_compat_abs required internally unchanged" "L135:mc40c13".
@@ -3472,7 +3460,6 @@ Definition ng_uabl_attn_full_instance : NewGreenFace :=
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（ EB2 built-at-registration 四项验证实测补记；order 锚=SHA1 前 6 照 先例）。 *)
 
-(* ng_BBDBridgeSupply —— BBDBridgeSupply.v：组2 邻居成果甲尾部追加新伴随模块首例（W18 产，146 行 5 Qed； 复核 PASS 附 F1 缺证；供 Boltzmann 自由能桥求和接口三定理 sum_ext/linear/add（csm_ 系实现化读法）＋能量入对数桥/自由能桥两桥；built-at-registration 四项验证实测 EB2：G2 EXIT=0、PA×5 全 Closed、vo 魔数 436f712100015ff4、vo 新于 v；G3 自证块口径 0——-F1 _teb2_g3out 检查点补齐（Separate Extraction 三定理，BBD.ml 零魔数）；G4 coqchk axiom-free 四节全 none；依赖 CW_ConstructiveWorld_219/UpReqLogCompD/UpReqConcSoftmax/ConcMixSelFeed/BoltzmannBridgeDischarge 全在册现势兼容，末端件 order 尾部追加 L644 锚 -988a53=SHA1 前 6） *)
 Definition ng_BBDBridgeSupply : NewGreenFace :=
   MkNewGreenFace "BBDBridgeSupply.v" 146 5 20260924
   "Batch-2 Type-A tail-insert first companion piece (Boltzmann free-energy bridge sum-interface supply: three csm_-based theorems + two bridges); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 5/5 Closed vo magic 436f712100015ff4; G3 self-scope 0 (R19-F1 extraction evidence gap cured by EB2 probe in _teb2_g3out, Separate Extraction of the three theorems, BBD.ml zero magic); G4 coqchk Axioms none; deps all in-tree current, leaf at order L644 anchor R124-988a53 sha1-6" "L146:m9a4b5a".
