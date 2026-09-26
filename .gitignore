@@ -20,3 +20,4 @@ attn/
 __pycache__/
 run*.json
 _p3tmp_*
+.nra.cache
