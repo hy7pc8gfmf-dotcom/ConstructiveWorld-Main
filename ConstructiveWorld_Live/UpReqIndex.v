@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 127 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 468 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 471 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -3562,3 +3562,17 @@ Definition ng_UpAblMetaLow : NewGreenFace :=
 Definition ng_UpReqPaperAnchor : NewGreenFace :=
   MkNewGreenFace "UpReqPaperAnchor.v" 244 14 20260925
   "R114 ANCHOR-A paper-reference anchor mechanism: pan_anchor_list named anchors + pan_find_* retrievers + triple invariants (sym/file/md5_len/day), pure Ascii/String zero project deps, never-in-tree verified by git archaeology; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b49e12" "L244:mb49e12".
+(* ng_p2a_AttnClimClose —— p2a_AttnClimClose.v：消融落件·工程包AD tier2 末批二（164 行 4 Qed；原件全文逐字保留，仅将文末清单所列定理 p2a_attn_tv_seq_clim_zero（原 L112，2 句玩具证·定义层受控展开）之证明体替换，声明面与引用面零改动、零新增 Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留原件 Print Assumptions 追印面；Require QArith/CW_ConstructiveWorld_219/UpBudgetReal/UpArchAttn；R15 三候归册件之一，EX-BOX 裁定已贴补丁未注册→EX-REG 归册后编译；实测 md5 5dc9d1） *)
+Definition ng_p2a_AttnClimClose : NewGreenFace :=
+  MkNewGreenFace "p2a_AttnClimClose.v" 164 4 20260926
+  "Ablation drop piece, eng-package AD tier2 batch-2: original text kept verbatim, only p2a_attn_tv_seq_clim_zero (orig L112) proof body swapped to toy proof (2 sentences, definition-layer controlled unfolding); declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 5dc9d1" "L164:m5dc9d1".
+
+(* ng_p3a_TempDualBoolSlots —— p3a_TempDualBoolSlots.v：消融落件·B 可消融件（169 行 6 Qed；原件全文逐字保留，仅将文末清单所列定理 p3a_bsum_ext（原 L51，7 句刀体；坐标 L828 定理 10.13 四求和槽＝开放池 S05 三槽）之证明体替换为玩具证（实质非平凡三口径），声明面与引用面零改动、零新增 Require，纯构造性闭合，文尾保留原件 Print Assumptions 追印面；Require QArith/CW_ConstructiveWorld_219/UpReqTempDefs/UpReqEntropyDeficitTemp；R15 三候归册件之一，EX-BOX 裁定已贴补丁未注册→EX-REG 归册后编译；实测 md5 658d14） *)
+Definition ng_p3a_TempDualBoolSlots : NewGreenFace :=
+  MkNewGreenFace "p3a_TempDualBoolSlots.v" 169 6 20260926
+  "Ablation drop piece B-ablatable: original text kept verbatim, only p3a_bsum_ext (orig L51, 7-clause blade body; L828 Theorem 10.13 four-sum slots = open pool S05 three slots) proof body swapped to toy proof; declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 658d14" "L169:m658d14".
+
+(* ng_AbsLeIdReal53 —— AbsLeIdReal53.v：实数具体层 le 版绝对值恒等引理族（134 行 6 Qed；主件 r53_real_abs_ge_zero_id（le zero a -> Id (abs a) a 的 Real 层独立兑现），并交付 strict/eq/le 三种平移形扩展与乘法兼容引理 r53_real_abs_mult_id；与抽象层 fa53 件相互独立仅 Require 复用，依赖 S01_BaseRing/fa53_compat_abs/S02_CauchyComplete/S03_QExp/S07_RealSetoidExpLog 全在册；全件 Qed 闭合、零承认词面、无经典逻辑，语句面全 Set 层零 Prop 泄露，文末 Print Assumptions 审计全 Closed；R15 三候归册件之一；实测 md5 b69e18） *)
+Definition ng_AbsLeIdReal53 : NewGreenFace :=
+  MkNewGreenFace "AbsLeIdReal53.v" 134 6 20260926
+  "Real concrete-layer le-version absolute-value identity lemma family: main r53_real_abs_ge_zero_id (le zero a -> Id (abs a) a, Real-layer standalone), plus strict/eq/le shift extensions and multiplicative compat r53_real_abs_mult_id; independent of abstract fa53 piece, Require-reuse only; all Qed closed, zero admit literals, no classical logic, Set-layer statements zero Prop leak, Print Assumptions all Closed; R15 candidate trio; md5 b69e18" "L134:mb69e18".

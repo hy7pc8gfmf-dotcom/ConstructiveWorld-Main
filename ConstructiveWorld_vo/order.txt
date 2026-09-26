@@ -658,3 +658,6 @@ UpAblD1S13_UpReqAlignClose.v#R132-dd1670
 UpAblD1S13_AlignIdUnclosed.v#R132-45d9ae
 UpAblMetaLow.v#R132-3fb1d4
 UpReqPaperAnchor.v#R132-b49e12
+p2a_AttnClimClose.v#R0-5dc9d1
+p3a_TempDualBoolSlots.v#R0-658d14
+AbsLeIdReal53.v#R0-b69e18
