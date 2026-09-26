@@ -1,30 +1,11 @@
-(* ============================================================ *)
-(* DenPosGeneral.v                                               *)
-(*                                                               *)
-(* 目的：补齐 Pade 分母多项式 pade_den n x 在低段 0 ≤ x < 2、       *)
-(*       一般 n ≥ 1 上的严格正性（通用 n 版 den_pos 严格档）。      *)
-(* 主件：dpg_den_pos_strict : forall (n : nat) (x : Q),            *)
-(*       (1 <= n)%nat -> QleT' 0 x -> QltT x 2%Q ->                *)
-(*       QltT 0 (pade_den n x)。                                   *)
-(* 依赖：CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeDenPos、   *)
-(*       UpReqAltSumPos、PadeDenPosB12；                            *)
-(*       Stdlib QArith.QArith、Arith.Arith、Lia、Psatz、Setoid。     *)
-(* 备注：库内既有覆盖为非负档 pdp_den_pos（UpReqPadeDenPos.v:480，    *)
-(*       [0,1] QleT' 面）、弱前提版 pdpb_den_pos_le2                *)
-(*       （PadeDenPosB12.v:141，[0,2] QleT' 面）与 (1,2) 严格段      *)
-(*       pdq_den_pos_12_strict，均不含低段 [0,2) × 一般 n ≥ 1 的     *)
-(*       严格档——本件补齐。证明骨架同 pdpb_den_pos_le2：             *)
-(*       pdpb_R_ge_2 强化（x < 2 ≤ R_{n,k} 递减一跳）+ pdp_g 逐项    *)
-(*       非负与尾段递减 + altsum_pos_strict 引擎 + qeq_ltT 换面；    *)
-(*       首对严格由 dpg_g1_lt_g0 给出（将 pdq_g1_lt_g0 从 (1,2)      *)
-(*       段泛化至 [0,2)）。伴件：dpg_den_pos_strict_T（QleT 前提     *)
-(*       形）、dpg_den_pos_strict_le1（[0,1] 段推论）、              *)
-(*       dpg_den2_one / dpg_den3_quarter（低段严格 vm_compute       *)
-(*       哨兵，对照 pdp_den2_one / pdp_den3_one 仅 QleT' 面）。      *)
-(*       全件 Qed；无外加假设（出口件 Print Assumptions 全           *)
-(*       Closed）；语句面全 Set 层 QltT / QleT' / Qle（Prop 序       *)
-(*       仅证内作桥）。                                            *)
-(* ============================================================ *)
+(* ==========================================================================)
+   DenPosGeneral.v — Padé 分母严格正性件
+   使命: dpg_den_pos_strict 及其指标平移形 dpg_den_pos_strict_T、推论 dpg_den_pos_strict_le1：Padé 逼近分母 Q̃ 的严格正性（g0<g1 归纳核）；附 vm_compute 数值锚 dpg_den2_one/dpg_den3_quarter。
+   依赖: CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeDenPos、UpReqAltSumPos、PadeDenPosB12；Stdlib QArith、Arith、Lia、Setoid。
+   对标: Padé 逼近论中分母多项式的正性引理（Beukers/Apéry 型无理性证明的标准组件）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqPadeExp UpReqPadeDenPos UpReqAltSumPos.
@@ -115,7 +96,7 @@ Proof.
     + unfold Qlt. simpl. lia.
 Qed.
 
-(* ===== 件 5：低段严格 vm_compute 哨兵（对照：pdp_den2_one/            *)
+(* ===== 件 5：低段严格 vm_compute 守卫（对照：pdp_den2_one/            *)
 (*   pdp_den3_one @UpReqPadeDenPos.v:517/520 仅 QleT' 面） ===== *)
 
 Lemma dpg_den2_one : QltT 0 (pade_den 2%nat 1%Q).

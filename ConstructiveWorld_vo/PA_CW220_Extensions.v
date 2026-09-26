@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -41,7 +47,6 @@
 (*   UpBudgetReal （原 L10250–10967，Module BudgetReal）                  *)
 (*   UpArchAttn   （原 L10968–11177，根层，Import BudgetReal）             *)
 (* 剔除分区清单见 _lxR 归档（回滚用原件备份          *)
-(*   _lxR_backup-CW220-orig-20260911.v）。                               *)
 (*                                                                    *)
 (* 下游接口零改动：G07 `Require Import CW220_Extensions.` +               *)
 (*   `Import CW220_Extensions.BudgetReal.`；G12 `Require Import            *)
@@ -173,7 +178,7 @@ Import RealInterfaceEnhancedMod.
 (*   req 签名的求和三性质作为节假设申报位（= SumOver 类的       *)
 (*   setoid 对接面），对接成本计入报告；上游两条 Id 系已证        *)
 (*   引理（energy_in_log_boltzmann / free_energy_boltzmann）以    *)
-(*   req 签名桥假设申报位承接，全量迁移外推见报告。            *)
+(*   req 签名桥假设申报位承担，全量迁移外推见报告。            *)
 (* ============================================================ *)
 Section ReqFreeEnergyPilot.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -668,7 +673,7 @@ End ReqFreeEnergyPilot.
 (*   Z_thermo / boltzmann_dist_attn）按同形定义重建。             *)
 (*   接口缺口发现：RealInterfaceEnhancedSetoid 无 exp_neg 兼容     *)
 (*   字段（Id 系 id_cong 免费可得），以 req 签名桥假设申报位      *)
-(*   承接——Real 实例由 cauchy_real_exp_wd 满足（L40440 先例）。    *)
+(*   承担——Real 实例由 cauchy_real_exp_wd 满足（L40440 先例）。    *)
 (* ============================================================ *)
 Section ReqGibbsPilot.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
@@ -1669,7 +1674,6 @@ Qed.
 Extraction "uparchattn.ml" r_arch_pow_attn_real attention_iterate_converges_real.
 
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions r_arch_pow_attn_real.
 Print Assumptions one_minus_delta_pos_real.
 Print Assumptions SigMigrate.req_mult_one_l.

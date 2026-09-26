@@ -1,39 +1,11 @@
-(* ============================================================ *)
-(* R2BishopLogSel.v —— R2-BISHOP 席：Bishop 形全域单调无判定校验路线      *)
-(* （Real 层主定理对数级返回界的平行构造）2026-09-24                      *)
-(* ============================================================ *)
-(* 目的：以定理 4.3 klc_closed_powb_mono 的 Bishop 形全域单调               *)
-(*   ((1−η)^{t1} ≤_B (1−η)^t 在 0≤η≤1 全域成立，不需要序判定) 为引擎，      *)
-(*   构造 Real 层无判定的对数级 k 选择器：                                  *)
-(*   mix_k_select_bishop : 0<κ<1 → 0≤TV0 → 0<budget →                      *)
-(*     sigT k. (1−κ)^k·TV0 ≤_B budget （Bishop 余量形结论）。              *)
-(*                                                              *)
-(* 路线（与既有路线的平行差异点）：                                        *)
-(*   · UpReqMixingTime.mix_k_select：linear real_arch 枚举，严格形结论；    *)
-(*   · UpAblLogSelOracle.loso_k_select_log：带「逐站 bool 神谕前件」的     *)
-(*     对数选择器（N2 墙定理：无可判定测试前件的精确最小选择 ⟹ LPO）；     *)
-(*   · 本件（R2-B）：无神谕。可判定分支全部落在 Q/nat 见证层（Qle_bool/    *)
-(*     nat 二分——见证数据层可判定，非 Real 层精确序），Real 层零 Or 分支； *)
-(*     对数量级经 Q 余量代理谓词的二分搜索达成，与 MixLogE 封顶定谳相容     *)
-(*     （闭式代数解线性封顶，对数必经可判定搜索——本件搜索即 Q 代理层       *)
-(*     上的可判定二分）。                                                  *)
-(*                                                              *)
-(* 三层结构：                                                            *)
-(*   Part A（Q 引擎）：余量代理谓词 rb_cond（Qle_bool 形，可判定）、       *)
-(*     幂单调（指数减/底增）、Bernoulli 锐化上界（消费 mixe_bern_sharp）   *)
-(*     的二分搜索装配 rb_bishop_search + 正确性（站点由 Hqarch 前件供给）        *)
-(*     （通过站 + 以下全败 + 燃料 = log₂j0+2 的返回界）。                  *)
-(*   Part B（实层桥）：powb_pow 逐点投影、δ=1−κ 的逐点 Q 夹逼、            *)
-(*     rb_le_b_mult_r（≤_B 右乘保序——Bishop 组合器家族增员）、            *)
-(*     rb_valid_up（klc_closed_powb_mono 消费：有效站的向上谱系）。        *)
-(*   Part C（主定理）：mix_k_select_bishop——搜索核给站、逐点夹逼给         *)
-(*     严格形、real_lt_trans 给 Bishop 形结论；误差余量显式入证            *)
-(*     （T := eps_b/2，预算见证的半份余量）。                             *)
-(*                                                              *)
-(* 红线自检：零公理、零承认件、零经典逻辑、零 ln/ceil；对数来自         *)
-(*   可判定二分的燃料 log₂j0+2；结论面 real_le_b（Bishop 余量形，          *)
-(*   Set 层全称 eps 形）非降级；Q 层分支全部 bool/Nat 数据层合法判定。     *)
-(* ============================================================ *)
+(* ==========================================================================)
+   R2BishopLogSel.v — Bishop 对数搜索选择器
+   使命: rb_bishop_search_ok（燃料化搜索正确性）、rb_log_return_bound（对数回报界）、mix_k_select_bishop（k-选择主定理）与 B 载体投影族（rb_*_proj）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB/2、G07_KLWall、KLWallClosed、UpReqMixLogA、UpReqMixLogE；Stdlib PeanoNat、QArith.Qring、Qabs、Lia、Extraction。
+   对标: 构造性数学中的有界搜索（Bishop 式构造主义选择原理）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import PeanoNat.
 From Stdlib Require Import QArith.Qring.
@@ -314,8 +286,8 @@ Proof.
   repeat rewrite rb_mult_proj. ring.
 Qed.
 
-(* 【R2-B 挂账 20260924】≤_B 右乘保序（rb_le_b_mult_r）与 klc 向上谱系       *)
-(*   （rb_valid_up）两件本席未能在预算内闭合，留待下片。已探明的施工图：      *)
+(* 【R2-B 未竟项】≤_B 右乘保序（rb_le_b_mult_r）与 klc 向上谱系       *)
+(*   （rb_valid_up）两件未能在本段闭合，留待下片。已探明的路线：      *)
 (*   rb_le_b_mult_r 前件 real_le 0 c 两支：strict 支 e' := eps·real_inv_pos c，*)
 (*     real_mult_lt_compat 右乘 + rb_mult_plus_distr_r 分配 + klst_r_pqx_eq_q *)
 (*     (c·(eps·cinv)==eps) 回环换形；eq 支 real_eq_mult_compat 归零。        *)
@@ -326,7 +298,7 @@ Qed.
 (* ============================================================ *)
 
 (* Hqarch：Q 层收缩幂 Archimedean 站点前件（loso 诚实前件先例同型——
-   接口缺口以显式前件承载；其构造性闭合件=Bernoulli×Archimedes，挂账下片） *)
+   接口缺口以显式前件承载；其构造性闭合件=Bernoulli×Archimedes，留待下片） *)
 Theorem mix_k_select_bishop : forall (kappa TV0 budget : Real),
   real_lt real_zero kappa -> real_lt kappa real_one ->
   real_le real_zero TV0 -> real_lt real_zero budget ->
@@ -501,7 +473,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 探针审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                     *)
+(* 检验审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                     *)
 (* ============================================================ *)
 
 Extraction "r2b_G3.ml" mix_k_select_bishop rb_bishop_search rb_cond.

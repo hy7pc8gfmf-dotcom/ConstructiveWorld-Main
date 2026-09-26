@@ -1,9 +1,8 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   ppa_macro_entropy_scaled_nonneg（原 L254，2 句玩具证）               *)
 (*   ppa_attractor_transport（原 L178，2 句玩具证）                       *)
@@ -17,36 +16,28 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* PhysPredAblation.v —— 席位 CYD12（批次 E-STAGING-CYD12）        *)
 (*                                                               *)
-(* 使命：S05 剩余物理预测槽消融——CWZ6 留档三件（本席判定可沿      *)
 (*       fa56 系引擎兑现，全数施工）：                             *)
 (*                                                               *)
 (*  槽1  S05:5794 physical_force_is_gradient（PhysicalMechanics   *)
-(*        节，任务书 :5803 系漂移前坐标）——恒力场线性势装法兑现。  *)
 (*  槽2  S05:5845 differentiation_attractor（DevelopmentalBiology *)
-(*        节，任务书 :5854 漂移前坐标）——零点吸引子装法兑现；      *)
 (*        clim 收敛面按 fa56c max_entropy_production（S05:5824）  *)
 (*        先例「前提入签名」纪律处理。                             *)
-(*  槽3  S05:5893 macro_loss_monotone（TimeArrow 节，任务书        *)
 (*        :5902 漂移前坐标）——宏熵步进装法 + iterate 归纳 +        *)
 (*        opp 反变链兑现。                                        *)
 (*                                                               *)
-(* 判定依据（侦查 20260917 实测）：                                *)
 (*  - StateSpace 类与 Real 自状态空间实例 RealSelfSS（clim := lim）*)
 (*    在 S01_BaseRing:1160/:1230 基座在册；Enhanced 上下文经      *)
 (*    RI_base 投影提升（S01 PCTRealBridge :1744 先例逐字）。       *)
 (*  - 库内 Id 形 RealInterfaceEnhanced 零具体实例（P6A/CYD7 卡     *)
-(*    「tsi 席墙」定谳），故 clim/lim 收敛面无具体载体可证——      *)
 (*    槽2 收敛前提逐槽诚实列出，离散一步入零见证明 ppa_dev_iterate_ *)
 (*    step_zero（lim 黑箱的构造性补充见证）。                      *)
 (*                                                               *)
-(* 消费：S01_BaseRing（官方 vo_901 基座）+ fa51_sumpos_id /        *)
+(* 使用：S01_BaseRing（官方 vo_901 基座）+ fa51_sumpos_id /        *)
 (*       fa56_id_carrier / fa56b_ext / fa56c_ext（vo_901 官编在册， *)
-(*       Require 零改）；直接消费位 = fa51_lt_le（§A/§C）、        *)
+(*       Require 零改）；直接使用位 = fa51_lt_le（§A/§C）、        *)
 (*       fa56c_lt_mult_compat_l（§A）、fa56b_id_transport（§B）。  *)
 (* 红线：纯构造性零承认位；语句面全 Set 层；纯项式组装（exact/apply *)
-(*       链）；前缀 ppa_ 全库防撞已核（20260917 grep 零命中）。     *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -104,7 +95,7 @@ Proof.
   exact (le_plus_nonneg_r (ppa_potential q) p Hp).
 Qed.
 
-(* 标度势能严格单调伴件（fa56c 左乘严格兼容件直喂）。 *)
+(* 标度势能严格单调伴件（fa56c 左乘严格兼容件直接供给）。 *)
 Definition ppa_potential_scaled (k q : R) : R := mult k q.
 
 Theorem ppa_potential_scaled_strict_mono :
@@ -115,7 +106,7 @@ Proof.
   exact (fa56c_lt_mult_compat_l q1 q2 k Hk H).
 Qed.
 
-(* 标度势能弱单调伴件（fa51 lt→le 降档件消费）。 *)
+(* 标度势能弱单调伴件（fa51 lt→le 降档件使用）。 *)
 Theorem ppa_potential_scaled_mono :
   forall k q1 q2 : R, lt zero k -> lt q1 q2 ->
     le (ppa_potential_scaled k q1) (ppa_potential_scaled k q2).
@@ -134,7 +125,7 @@ Qed.
    plus_opp 两段链）：开发景观轨道一步落入零点。
    吸引子 x_star := zero：dev_is_truth zero = le zero zero（le_refl）。
    clim 收敛面 = 接口 lim 字段黑箱：库内 Id 形零具体实例
-   （P6A/CYD7 卡定谳），按 fa56c 先例前提入签名——收敛前提
+   （P6A/CYD7 卡已证结论），按 fa56c 先例前提入签名——收敛前提
    Hclim 为主定理显式参，逐槽诚实列出。 *)
 
 Definition ppa_waddington (x : R) : R := zero.
@@ -179,7 +170,7 @@ Proof.
   exact (existT _ zero (pair (fun s' => le_refl zero) Hcl)).
 Qed.
 
-(* 吸引子极限唯一伴件（StateSpace 字段 clim_unique 消费）。 *)
+(* 吸引子极限唯一伴件（StateSpace 字段 clim_unique 使用）。 *)
 Theorem ppa_attractor_lim_unique :
   forall (x l1 l2 : R),
     clim (ppa_dev_orbit x) l1 ->
@@ -190,7 +181,7 @@ Proof.
   exact (@clim_unique RI SSR (ppa_dev_orbit x) l1 l2 H1 H2).
 Qed.
 
-(* 吸引子起点传输伴件（fa56b J 消去器消费：Id x y 把收敛见证
+(* 吸引子起点传输伴件（fa56b J 消去器使用：Id x y 把收敛见证
    从起点 x 搬到起点 y——Q 以起点为参直接换，无需函数外延性）。 *)
 Theorem ppa_attractor_transport :
   forall (x y l : R),
@@ -265,7 +256,7 @@ Proof.
 Qed.
 
 (* 宏熵正标度非负伴件（fa51 lt→le 降档 + Enhanced 乘法保序 +
-   零元换装两段链）。 *)
+   零元转换两段链）。 *)
 Theorem ppa_macro_entropy_scaled_nonneg :
   forall (k m : R), lt zero k -> le zero m -> le zero (mult k m).
 Proof.
@@ -275,7 +266,7 @@ Qed.
 
 End PpaPhysPred.
 
-(* ============ 假设面收口申报（出节，G4 面） ============ *)
+(* ============ 假设面闭合申报（出节，G4 面） ============ *)
 
 Print Assumptions ppa_physical_force_is_gradient.
 Print Assumptions ppa_hamiltonian_dominates_potential.

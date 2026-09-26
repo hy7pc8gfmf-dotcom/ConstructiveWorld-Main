@@ -1,63 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T264 台账席 战役包Y（tier2 十五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   mixb_bsearch_S（原 L571，2 句玩具证）                                *)
-(*   mixb_gallop_S（原 L563，2 句玩具证）                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqMixLogB.v —— 席 tathB · Path B：倍增搜索（galloping）对数级选择器 *)
-(*（AT11《对数级选择器设计分析-AT11-20260918》裁决 4 落地：k←1 起倍增    *)
-(*  测试可判定 Q 谓词，末站区间二分定位精确最小 k；与 Path A（有理二分）  *)
-(*  同场竞马，结构差异点见 attn/_tathB_交付报告-20260918.md。）          *)
-(* ============================================================ *)
-(* 依赖（全绿盘件，零改既有件）：                                        *)
-(*   基座伞壳 CW_ConstructiveWorld_219（S01 And:66 Set 积型 /            *)
-(*     S02 real_lt:465 sigT(eps:Q) 证书形 / real_le:469 Or 编码 /        *)
-(*     real_arch S07:2772）；UpTVDoeblin（tv_rpow）；                    *)
-(*     UpReqIterGeomRate（igr_qpow:1490 可复用件 + igr_k_enum 三账       *)
-(*     sound/none/min 最小站扫描照抄消费）；Stdlib Lqa（lra Q 线性）。   *)
-(* 本件承载（前缀 mixb_，全树 grep 零撞名）：                            *)
-(*   ① Q 核：mixb_qtest / 幂单调四件 / mixb_qbernoulli（Q-Bernoulli      *)
-(*      复刻：κ0^(S m)·(1+m·(1−κ0)) ≤ 1，纯 Q 环账零 exp/log）/          *)
-(*      mixb_window_test_true（窗口命中账）。                            *)
-(*   ② 搜索核（全 total·Defined·零 Prop 消去）：mixb_gallop（倍增，       *)
-(*      尾差评支出合法站对）/ mixb_bsearch（区间二分）/ mixb_sel（复合）。*)
-(*   ③ 账（Qed·Prop 伴生，igr 三账形）：                                 *)
-(*      ★ mixb_sel_scale —— 量级定理（机器可陈述 nat 上界式）：双相       *)
-(*        fuel:=S(S(log2 K)) 供给时返回恰为可判定谓词最小通过站，且       *)
-(*        比较次数 c ≤ 2·log2 K + 5（「2·log₂K+O(1)」nat 形）；          *)
-(*        mixb_sel_count（结构计数 ≤ S(f1+f2)，无条件成立）。            *)
-(*   ④ Real 归约壳（AT11 裁决 1/2/3）：real_lt sigT 证书 → κ0:=1−μ       *)
-(*      有理内点提取（μ:=min(eps/2,1/2) 双支 Defined）/ b0:=eps_b/2      *)
-(*      提取 / TV0′ 显式证书前件 + 0≤TV0′ 桥 / 幂单调 Q 层直证 + Real    *)
-(*      侧 tv_rpow 一次性归纳桥 / 窗口 real_arch 兜底（裁决 1(b)，免疫   *)
-(*      Q 层上取整除法细节——裁决 3 窗端点陷阱排雷）。                    *)
-(*   ⑤ 主件：mixb_k_select_log（Defined sigT nat：κ^k·TV0 < budget）      *)
-(*      + mixb_k_select_log_le（Defined le 形）+ Q 引擎 mixb_qsel。      *)
-(* 公理面：本件零新增公理；全部前提为 Set 层显式证书（real_lt sigT /      *)
-(*   real_le Or / sigT TV0′ 证书），Print Assumptions 预期全 Closed。    *)
-(* 红线自审（AT11 §红线三险点逐条）：                                    *)
-(*   ①sigT 载荷只放 real_lt/real_le（Set）；最小性与计数为 Prop，一律     *)
-(*     Qed 伴生件不入提取签名（igr 分工照抄）。                          *)
-(*   ②Defined 体内零 Prop 消去：判据全 bool（Qle_bool/Nat.ltb）与        *)
-(*     Set 型结构（sigT/Or/And 均 S01/S02 Set 层）；Prop 只以             *)
-(*     「Qed 引理应用」形态进出（Prop→Set 箭头应用，非消去）。           *)
-(*   ③语句面量词全 nat/Q/Real，比较全 Qle_bool/real_lt/real_le。         *)
-(* 战术坑登记（本席探针定谳 _tathB_probe/_tathB_pA/_tathB_pC）：         *)
-(*   lia/nia 不吃 Q（Q zify 缺位）；Q 线性阶目标用 Lqa 的 lra；Qeq 恒等   *)
-(*   用 ring；replace-by-ring 撞 eq/Qeq 壁一律改 assert+rewrite；        *)
-(*   Qabs 消去走 Qabs_case（Q→Type）+lra；Qed 内 Id/bool 判据照旧。      *)
-(* 面界：Q 核零消费 Real 侧私有件；幂形统一 igr_qpow（Q）+ tv_rpow       *)
-(*   （Real 一次性桥），勿信跨件幂 conversion（AT6 判词）。              *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——WALL-2 坑）：              *)
-(*   cmd /c: set COQLIB=C:/Rocq-Platform~9.1~2026.01/lib/coq             *)
-(*           set ROCQLIB=%COQLIB% & coqc.exe -q -Q . "" UpReqMixLogB.v   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqMixLogB.v — Q 层混合率代数与 gallop/bsearch 选择器
+   使命: mixb_ 系：Q 算术小件（qmult_wd/qpow_le_one/qbernoulli）、可判定谓词 mono 与窗口测试、gallop/bsearch 两 Fixpoint 选择器及其步数账（mixb_gallop_account/bsearch_account/sel_count/sel_scale）。
+   依赖: CW_ConstructiveWorld_219、UpTVDoeblin、UpReqIterGeomRate；Stdlib QArith.Qring、QArith.Qabs、ZArith、Lia、Lqa。
+   对标: 可判定搜索的选择器步数界（伯努利不等式 + 几何级数的算法分析）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.Qring.
 From Stdlib Require Import QArith.Qabs.
@@ -71,7 +19,7 @@ Require Import UpReqIterGeomRate.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* Part 0：Q/nat 环账小件                                                 *)
+(* Part 0：Q/nat 环算术小件                                                 *)
 (* ============================================================ *)
 
 Lemma mixb_q_12_pos : 0 < (1 # 2).
@@ -105,7 +53,7 @@ Proof. intros x y z H1 H2. transitivity y. assumption. assumption. Qed.
 Lemma mixb_qsub_le_self : forall A D : Q, 0 <= D -> A - D <= A.
 Proof. intros A D HD. lra. Qed.
 
-(* Qeq 右替换保 ≤（环账桥通用件，禁裸 rewrite——探针 _tathB_pB 判词） *)
+(* Qeq 右替换保 ≤（环算术桥通用件，禁裸 rewrite——检验 _tathB_pB 判定） *)
 Lemma mixb_qle_eq_r : forall a b c : Q, b == c -> a <= b -> a <= c.
 Proof.
   intros a b c Hbc Hab. apply (Qle_trans a b c).
@@ -131,7 +79,7 @@ Proof.
     + apply qeq_le. ring.
 Qed.
 
-(* 右加保 Qeq（Qplus_le_compat 双向 + antisym；B2 席增补） *)
+(* 右加保 Qeq（Qplus_le_compat 双向 + antisym；后补增补） *)
 Lemma mixb_qplus_wd_r : forall a x y : Q, x == y -> a + x == a + y.
 Proof.
   intros a x y H. apply Qle_antisym.
@@ -143,7 +91,7 @@ Proof.
     + apply qeq_le. apply mixb_qeq_sym. exact H.
 Qed.
 
-(* Qeq 乘法保形（阶拆分 + lra 单项式归一；探针 _tathB_pD/_tathB_pG 判词： *)
+(* Qeq 乘法保形（阶拆分 + lra 单项式归一；检验 _tathB_pD/_tathB_pG 判定： *)
 (*   nia 不吃 Qeq 恒等目标/unfold-QDen 撞 Zpos 强转——此路线为替代正解）   *)
 Lemma mixb_qmult_wd_l : forall a x y : Q, x == y -> a * x == a * y.
 Proof.
@@ -367,7 +315,7 @@ Proof.
 Qed.
 
 (* 换底单调：x ≤ y ⟹ x^m ≤ y^m *)
-(* Q-Bernoulli 复刻：κ0^(S m)·(1 + m·(1−κ0)) ≤ 1（0<κ0≤1；纯 Q 环账） *)
+(* Q-Bernoulli 复刻：κ0^(S m)·(1 + m·(1−κ0)) ≤ 1（0<κ0≤1；纯 Q 环算术） *)
 Lemma mixb_qbernoulli : forall (q : Q) (m : nat),
   0 < q -> q <= 1 ->
   igr_qpow q (Datatypes.S m) * (1 + (Z.of_nat m # 1) * (1 - q)) <= 1.
@@ -452,7 +400,7 @@ Proof.
         -- exact IH.
 Qed.
 
-(* 可判定谓词：κ0^m·v ≤ b0（Qle_bool 哨兵） *)
+(* 可判定谓词：κ0^m·v ≤ b0（Qle_bool 守卫） *)
 Definition mixb_qtest (kappa0 v b0 : Q) (m : nat) : bool :=
   Qle_bool (Qmult (igr_qpow kappa0 m) v) b0.
 
@@ -570,7 +518,7 @@ Definition mixb_sel (test : nat -> bool) (f1 f2 : nat) : (nat * nat)%type :=
   let b := mixb_bsearch test f2 (fst (fst g)) (snd (fst g)) in
   (fst b, (snd g + snd b)%nat).
 
-(* —— B2 席加固三件：一步展开冻结 + 复合展开桥（防 cbn 过度下折/let 残留） —— *)
+(* —— 加固三件：一步展开冻结 + 复合展开桥（防 cbn 过度下折/let 残留） —— *)
 Lemma mixb_gallop_S : forall (test : nat -> bool) (f lo hi : nat),
   mixb_gallop test (Datatypes.S f) lo hi =
   (if test hi

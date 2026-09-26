@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqTempEntropy.v *)
 (* *)
 (* 目的： req 温度熵族：显式熵、相对熵分解与变分界。 *)
@@ -8,13 +8,12 @@
 (* ============================================================ *)
 
 (* UpReqTempEntropy.v — 温度熵层 5 件 req 化（批 2 余件完成，任务批 3 前置）
-   母本：签名迁移规划书-20260908.md 批 2 余件 (a)；基座 Id 原件：
      entropy_temp_explicit        <- L17271（熵显式 H(p_β)==β·E+logZ）
      relative_entropy_temp_decomp <- L17356（KL(q‖p_β)==−H(q)+β·E(q)+logZ）
      entropy_deficit_kl_temp      <- L17691（同能量 ⟹ S[p_β]−S[p]==KL）
      max_entropy_is_boltzmann_temp<- L17726（同能量 ⟹ S[p]≤S[p_β]）
      entropy_max_unique_temp      <- L17763（同能量同熵 ⟹ p==p_β 逐点）
-   依赖件（全部 UpReqDist.v ReqTemp/ReqFEP 节闭合形，-Q . "" 直接消费）：
+   依赖件（全部 UpReqDist.v ReqTemp/ReqFEP 节闭合形，-Q . "" 直接使用）：
      req_Z_temp_pos / reqd_boltzmann_dist_temp / reqd_energy_exp_temp /
      reqd_boltzmann_dist_temp_normalized / reqd_boltzmann_dist_temp_pos(Defined) /
      reqd_boltzmann_log_temp_decomp + FEP 求和面 fsum_ext/add/linear/pos/le/
@@ -36,7 +35,7 @@ Require Import UpReqDist.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Section ReqTempEntropy：温度熵层消费面                        *)
+(* Section ReqTempEntropy：温度熵层使用面                        *)
 (*   节参数 = ReqFEP 求和面/接口桥 + ReqTemp 的 Z_temp 接口      *)
 (*   （不含固定温度 D/Z/partition——温度层只依赖 Z_temp）。       *)
 (* ============================================================ *)
@@ -604,7 +603,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 温度严格层增量节（批 2 显式假设 5+1 件，第三席续建 2026-09-09）    *)
+(* 温度严格层增量节（批 2 显式假设 5+1 件，续建 ）    *)
 (*   基座坐标（Id 原件，ConstructiveWorld_Live 主副本）：   *)
 (*     variational_temp_bound         @L17468                    *)
 (*     energy_exp_temp_mono           @L17521                    *)
@@ -612,7 +611,7 @@ Qed.
 (*     temp_strict_A_chain2           @L17825                    *)
 (*     temp_strict_ident2             @L17879                    *)
 (*     energy_exp_temp_strict_mono    @L18019                    *)
-(*   组装路线（照 UpReqDist.v 尾注结论）：消费件 1（熵显式）+     *)
+(*   组装路线（照 UpReqDist.v 尾注结论）：使用件 1（熵显式）+     *)
 (*   件 2（KL 温度分解）+ UpReqDist.ReqAlgBridge2 移项链           *)
 (*   （req_le_plus_cancel_l 系/req_le_mult_pos_cancel/            *)
 (*   req_le_minus_nonneg_rev/req_mult_minus_distr_r/              *)
@@ -1428,7 +1427,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 严格层件 5/6：温度-能量严格单调（Id @18019 差正形态）          *)
+(* 严格层件 5/6：温度-能量严格单调（ 差正形态）          *)
 (*   t1 < t2 且 KL(p_{t2}‖p_{t1}) > 0 ⟹ 0 < E(t2) − E(t1)。       *)
 (*   非平凡性：组装（ident2 + req_gibbs_inequality +              *)
 (*   lt_le_trans/req_le_plus_nonneg_r + reqd_lt_mult_pos_cancel   *)
@@ -1533,12 +1532,12 @@ End ReqTempEntropy.
 (*   d) 接口 mult_assoc 方向反向（req (a·(b·c)) ((a·b)·c)），     *)
 (*     结合步以 req_sym 对齐；                                    *)
 (*   e) 件 3 的 Hpp（reqd_positive_dist p）与 Id 同为诚实现位（未用）。 *)
-(* 消费入口：Require Import UpReqTempEntropy.（依赖 +        *)
+(* 使用入口：Require Import UpReqTempEntropy.（依赖 +        *)
 (*   UpReqAlgebra + UpReqDist 三 .vo 已编译可载）。                *)
 (* -------------------------------------------------------------- *)
 
 (* ============================================================ *)
-(* 温度严格层增量节 6 件逐条已证明（第三席 2026-09-09，批 2 显式假设    *)
+(* 温度严格层增量节 6 件逐条已证明（ ，批 2 显式假设    *)
 (*   5+1 件完成；基座坐标 = ConstructiveWorld_Live 主副本）：*)
 (*   req_variational_temp_bound       <- Id variational_temp_    *)
 (*     bound @L17468（件 2 + req_gibbs_inequality + 移项链真证） [6] *)
@@ -1569,6 +1568,6 @@ End ReqTempEntropy.
 (* 本文件合计：14 Qed = 批 2 五件 [1]-[5] + 本批 3 助手 + 6 件      *)
 (*   [6]-[11]（全部纯构造性；Set 层语句零 Prop 泄露；纯 term-mode，  *)
 (*   零 Morphisms）。节参数不变（温度层只依赖 Z_temp 接口）。        *)
-(* 消费入口不变：Require Import UpReqTempEntropy.（+          *)
+(* 使用入口不变：Require Import UpReqTempEntropy.（+          *)
 (*   UpReqAlgebra + UpReqDist 三 .vo 已编译可载）。                 *)
 (* -------------------------------------------------------------- *)

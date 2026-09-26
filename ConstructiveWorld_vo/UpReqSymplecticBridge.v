@@ -1,15 +1,9 @@
-(* ============================================================ *)
-(* UpReqSymplecticBridge.v —— spec2x2 判别式框架 × 辛旋转特征刻画桥接件 *)
-(*                                                                *)
-(* 使命：桥接两座已注册模块——                                      *)
-(*   供体一 UpReqSpec2x2.v（M2(Q) 2×2 判别式/特征值率框架：          *)
-(*     sp2_qdisc / sp2_qgap / sp2_qnewton / sp2_sqrt_rate_core:692 / *)
-(*     sp2_sqrt_rate:864 / sp2_eig_gap:926）；                       *)
-(*   供体二 SymplecticRotationSpec.v（辛旋转特征刻画：               *)
-(*     srs_rot_characterization:43 / srs_power_rate:140 /            *)
-(*     srs_power_contract:190）。                                    *)
+(* UpReqSymplecticBridge.v —— spec2x2 判别式框架 × 辛旋转特征刻画桥接件 *) (* 依赖：S01_BaseRing、S02_CauchyComplete、S12_B5RecycleSF、S13_NLiveAudit、UpReqSpec2x2、SymplecticRotationSpec。 *)
+(* 编译配方：coqc -q -Q . "" UpReqSymplecticBridge.v（9.1 工具链）。 *) (* 使命：桥接两座已注册模块——                                      *)
+(*   供体一 UpReqSpec2x2.v（M2(Q) 2×2 判别式/特征值率框架：          *) (*     sp2_qdisc / sp2_qgap / sp2_qnewton / sp2_sqrt_rate_core:692 / *)
+(*     sp2_sqrt_rate:864 / sp2_eig_gap:926）；                       *) (*   供体二 SymplecticRotationSpec.v（辛旋转特征刻画：               *)
+(*     srs_rot_characterization:43 / srs_power_rate:140 /            *) (*     srs_power_contract:190）。                                    *)
 (*   两件各自成立但 A∘B 复合此前无人陈述——本件补足该组合。           *)
-(*                                                                *)
 (* 数学内容（全 Q 载体、分量展开形，避 M2(Q) 矩阵环实例；             *)
 (*   复数特征值不可在 Q 载体直接陈述——诚实形态=特征多项式层）：       *)
 (*   槽1 特征方程：rot(c,s)=[[c,-s],[s,c]] 的 char-poly 恒等式       *)
@@ -25,10 +19,8 @@
 (*     （srs_power_exact × 几何和恒等式 1-qⁿ==(1-q)·Σ 真组合）；      *)
 (*     等距经 qgap 槽归零复原 srs_power_rate（双向忠实性）；          *)
 (*     压缩档 0≤q≤1 ⟹ 亏损≥0（srs_power_contract 的 qgap 槽重述）。  *)
-(*                                                                *)
 (* 出口面：QId / And / QleT'（全 Set 层语句位）。内部支撑件允许      *)
 (*   Qle/Qeq 位（先例：供体 srs_qnpow_bnd Qle 前提件）。             *)
-(*                                                                *)
 (* 构造性注记：本件零公理、零承认件、零参数、零猜想、零弃证；         *)
 (*   零经典逻辑（无排中法）；纯构造性；                              *)
 (*   出口件无 Prop 层前提位；无 Obj.magic。                          *)
@@ -36,7 +28,6 @@
 (* 非平凡性：char-poly/几何和恒等式=环层真实现（非定义复读）；        *)
 (*   判别式对账与退化定理=Qmult_integral 两级+Qle_antisym 有序域论证；*)
 (*   亏损恒等式=双供体件 srs_power_exact × sp2_qgap 的真组合。        *)
-(* ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -84,7 +75,7 @@ Proof.
     rewrite Hexp, <- Hi. ring.
 Qed.
 
-(* q ≥ 0 ⟹ qⁿ ≥ 0（压缩档几何和正负性之腿）。 *)
+(* q ≥ 0 ⟹ qⁿ ≥ 0（压缩档几何和正负性之支）。 *)
 Lemma syb_qnpow_nn : forall (n : nat) (q : Q), Qle 0 q -> Qle 0 (srs_qnpow n q).
 Proof.
   intros n. induction n as [| k IH]; intros q H0.

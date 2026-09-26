@@ -1,16 +1,15 @@
 (* ===================================================================== *)
-(* 工单面外扩展件（C2 底册），按 b3 §2.2 可消解判定施工，候融合方甄别确认；若属已补强保留区请退回 *)
+(* 工单面外扩展件（C2 底册），按 b3 §2.2 可消解判定施工，候合并方甄别确认；若属已补强保留区请退回 *)
 (* ===================================================================== *)
 (* 模块名：UpAblMetaConjBridge.v——本件形式化 Part A 膨胀引擎从 S01/Id 世界 *)
 (*   到具体 Real/req 世界的字段替换运输桥（Section ConjBridge 八个同形小件 *)
-(*   与主件 mtdc_lo_inflation）。以下横幅与尾部消解块为本轮新增，Main 原件 *)
 (*   全文逐字保留（原件作为新增前缀与后缀之间的完整字节段，声明面零改；  *)
 (*   件内既存各注释块与原样保留块零触碰）。                                *)
 (* 依赖清单（本块新增，原件依赖面零改）：UpAblP7_UMixSelect（同批落件    *)
-(*   版，融合序须先于本件；该件以普通 Import 引入，uabm_ 前缀名零外泄，  *)
+(*   版，合并序须先于本件；该件以普通 Import 引入，uabm_ 前缀名零外泄，  *)
 (*   与原件头注对 UpReqUMixSelect 的禁引约定不冲突）。                     *)
 (* 对标：mathlib 阿基米德性质的 nat 尺度上界见证构造。                     *)
-(* 构造性注记：Set 层承载，零承认；供给件全由库内已证件以显式实参供给；  *)
+(* 构造性注记：Set 层承载，零承认；前置引理全由库内已证件以显式实参供给；  *)
 (*   新证明分判构造，零一键收敛；可提取面零 Prop 残留。                    *)
 (* 编译配方：Rocq 9.1 直调，cpu_guard 包裹；影子根单根 -Q 编译。           *)
 (* 三态甄别总表（Section ConjBridge 九声明位）：                           *)
@@ -28,15 +27,12 @@
 (*   ③ TV0/Htv0/budget/Hbudget/lo/Hlo0/Hds1 七位=抽象量正性与 Doeblin     *)
 (*     间隙证书（δ*<1），真前提保留为接口义务，禁硬证。                    *)
 (* 红线四条自检：①纯构造性零经典逻辑；②Set 层承载零 Prop 泄露；          *)
-(*   ③非平凡强制（供给件照消融战役 AB 系伴生供给件配方）；④可提取        *)
 (*  （新增证明项全 Closed，公理面为空）。                                  *)
 (* 三关凭证：原件字节段全保留（前缀+后缀逐字节不变）；新增面 LF 单字节   *)
 (*   换行；新增代码括号配平经编译门验证。                                  *)
 (* ===================================================================== *)
 
 (* ============================================================ *)
-(* UpAblMetaConjBridge.v —— CJS3 席（合取件解封装配席）G4 合取件 C 侧        *)
-(*   req 运输桥。按 CJS1 桥设计单 attn/_tcjs1_桥设计单-20260922.md 路线 (a)    *)
 (*   字段替换运输桥施工：把 UpAblA2_LoInflation Part A（S01 RI/Id 世界）      *)
 (*   沿字段替换运到具体 Real/req 世界（RealEnhancedReal 实例化消解），产出          *)
 (*   mtdc_lo_inflation 供 UpAblMetaDivThm mtd_unbounded_conj 解封实例化。       *)
@@ -434,21 +430,21 @@ End ConjBridge.
 
 Print Assumptions mtdc_lo_inflation.
 
-(* ################ R120 批 2 假设消解块（C2 底册 #10） #################### *)
+(* ################  批 2 假设消解块（C2 底册 #10） #################### *)
 (* Section ConjBridge 两接口字段（lt_plus_compat_lt_le 与 Harch）的供给：  *)
-(*   原 Section 与主件签名零改动；本块给出两字段的供给件与主件的无参数位       *)
-(*   精简版（签名保持式供给：原版保留参数位，精简版由供给件就位）。        *)
+(*   原 Section 与主件签名零改动；本块给出两字段的前置引理与主件的无参数位       *)
+(*   精简版（签名保持式供给：原版保留参数位，精简版由前置引理就位）。        *)
 
 Require Import UpAblP7_UMixSelect.
 
-(* lpc 位供给件：语句面与 UpAblMetaDivThm mtd_lpc 逐字同                   *)
+(* lpc 位前置引理：语句面与 UpAblMetaDivThm mtd_lpc 逐字同                   *)
 (*  （Main:1441 与批 2 落件版 :1491 两版查读同语句）；供给源=               *)
 (*   real_lt_plus_compat_lt_le（CW219 Real 层成品）。                       *)
 Definition mtdc_lpc_supply : forall a b c d : Real,
   lt a b -> le c d -> lt (plus a c) (plus b d) :=
   real_lt_plus_compat_lt_le.
 
-(* Arch 位供给件：语句面同 Section ConjBridge 的 Harch 位（le 前件分判）。 *)
+(* Arch 位前置引理：语句面同 Section ConjBridge 的 Harch 位（le 前件分判）。 *)
 (*   严格支由 uabm_arch_scale 供给（real_arch 的 const 形上界换形）；      *)
 (*   非严格支（x 与零同义）取 N := 0，结论经 cmk_boost_pos（1 + k·w > 0）  *)
 (*   与右端同义改写闭合。                                                  *)

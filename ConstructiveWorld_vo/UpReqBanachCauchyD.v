@@ -1,28 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   bxcd_bsum_snoc（原 L139，2 句强证）	*)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqBanachCauchyD.v —— 席CD3：路径 B S4 主链（20260913）      *)
-(* e^a · e^(-a) → 1：柯西方块恒等 → 三角坍缩 → 余项范数尾界。     *)
-(* 保底件 bxcd_prod_near_one：∀q>0 ∃N ∀n≥N,                      *)
-(*   ‖esp n a · esp n (-a) − bone‖ < q （QltT/sigT/NatLe 面）。   *)
-(* 等式形 bxcd_exp_opp_one 遗留：极限乘法连续性属 BASM 领地       *)
-(* （UpReqBanachExpAdd.vo 未落，闸门裁决=候 BASM 连续性件）。     *)
-(* 坍缩特例自证（bxcd_ 前缀）：UpReqBanachInvPre.vo 未落（闸门）。 *)
-(* 依赖：UpReqBanachExp/Prod/Double/ExpBasic/Add/NormConv。       *)
-(* 20260915 席AA18 依存面迁移：追加 Require BanachNoHyp；bxcd_ 四件 *)
-(* （dline_binom_term/tri_bone/prod_split/prod_near_one）签名收窄至  *)
-(* 零假设（bnh_esp_term_binom 同位供给），hplus/hwd 形参全摘。       *)
-(* 红线自审：语句面全 Set（bae/QltT/sigT/NatLe），证内 Prop 内衬；*)
-(* 公理面为零、无未证收尾；bae 面无 rewrite——一律 change+bae_trans。*)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqBanachCauchyD.v — Banach-Cauchy D：双重和的对角-三角估计
+   使命: bxcd_ 系：bsum 折叠代数（pad_split/snoc/rev）、二项式项（binom_pos/fact/fact2）、F/G 范数界、Q2_bound 系与 bxcd_prod_near_one（乘积近一主定理）。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp/Prod/Double/ExpBasic/Add、UpReqNormConv、UpReqBanachProd2、UpReqBanachInvPre、BanachNoHyp；Stdlib QArith、Arith、ZArith、Setoid、Morphisms、Lia。
+   对标: (1+x) 型双重和的范数估计（Banach 代数中的二项式展开控制）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

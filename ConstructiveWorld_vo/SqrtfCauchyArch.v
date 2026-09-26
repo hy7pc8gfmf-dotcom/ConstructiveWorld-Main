@@ -1,59 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   sfcy_arch_decay_slot（原 L434，1 句玩具证）                          *)
-(*   sfcy_half_pos（原 L76，1 句玩具证）                                  *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* SqrtfCauchyArch.v              *)
-(* SqrtfCauchy 四节参假设位证明 · §B：假设位3 阿基米德幂族实例化        *)
-(* 宿主                 *)
-(*   Live/build/SqrtfCauchy.v:80-81 假设位语句逐字（本体零改动）；           *)
-(*                                                              *)
-(* [语句核对]（宿主假设位 × real_arch 种子）                 *)
-(*   假设位3 sfc_arch_decay（宿主 :80-81）：                                 *)
-(*     forall c eps, le zero c -> lt zero eps ->                        *)
-(*       sigT (fun k : nat => lt (mult c (sfc_pow_half k)) eps)        *)
-(*   sfc_pow_half（宿主 :68-72 Fixpoint）：0 ↦ one，S k ↦ k ↦ k·half，  *)
-(*     half := inv_pos (one+one)（req_two_pos，UpReqAlgebra:298）。      *)
-(*   种子 real_arch（S07:2762）：forall B, sigT (fun n => And (2<=n)%nat *)
-(*     (real_lt B (real_const (Z.of_nat n # 1))))。                      *)
-(*                                                              *)
-(* [数学路线]（五步构造）① le zero c = Or(lt,eq)（S02:460，实例透明）    *)
-(*   前提位 destruct：eq 支 k:=0（mult_one + lt 传输）；② lt 支施        *)
-(*   real_arch 于 B := c·inv(eps) 得 B < const n（n≥2）；③ nat 面       *)
-(*   n < 2^n（自建 sfcy_npow2 归纳）；④ pow_half 归拢：req 逆恒等        *)
-(*   pow_half k · 2^k == one（归纳 + inv_pos_correct + 乘法代数），      *)
-(*   把 real_arch 输出经 const n < 2^n（real_const_lt + Qlt nat→Q 桥）  *)
-(*   传导到 2^n 面；⑤ 两次 lt_mult_compat 乘正完成：                    *)
-(*   (c·inv(eps)) < 2^n ⟹ ·half^n ⟹ ·eps ⟹ req 重排 c·half^n < eps。   *)
-(*                                                              *)
-(* [命名] 前缀 sfcy_（全库实扫零命中防撞，20260915）。                    *)
-(* [纪律] 纯构造性零承认；语句全 Set 层（real_le/real_lt/real_eq/sigT）；  *)
-(*   零 Prop 泄露（nat 分支 lia，无 bool 消去需求）；全 Qed 完成；        *)
-(*   引理依存走接口投影形（@lt_mult_compat 等，实例透明 δ 可归约，        *)
-(*   类型权威免疫参数序记忆错）；非字段独立引理         *)
-(*   （real_arch/real_const_lt/real_const_proj/real_plus_proj/          *)
-(*   real_mult_proj/real_eq_of_zero_diff）走 S02/S07 顶层裸名。          *)
-(*   宿主 sfc_pow_half 裸调（R:=Real 由语句类型 unify，RIS 由实例        *)
-(*   RealEnhancedReal 解析；备选形 @sfc_pow_half Real RealEnhancedReal）。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   SqrtfCauchyArch.v — 二幂半幂族与 Archimedean 衰减
+   使命: sfcy_pow2/sfcy_pow_half（2^k 与 2^(−k/2) 族）、sfcy_pow_half_inv_pow2（互逆恒等）、sfcy_const_* 有理常值嵌入桥与 sfcy_arch_decay_real/sfcy_arch_decay_slot（∀ c ε>0 ∃k，c·2^(−k/2) < ε）。
+   依赖: CW_ConstructiveWorld_219、S01_BaseRing、S02_CauchyComplete、S03_QExp、S07_RealSetoidExpLog、UpReqAlgebra等；Stdlib Extraction、QArith、ZArith、Lia
+   对标: Archimedean 性质的定量形（几何衰减尾项）与 2 的平方根半幂构造。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。存在性命题以 sigT 见证形给出。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import Extraction.
 Require Import CW_ConstructiveWorld_219.
@@ -463,7 +415,7 @@ Theorem sfcy_arch_decay_slot :
         (@mult Real RealEnhancedReal c (sfc_pow_half k)) eps).
 Proof. exact sfcy_arch_decay_real. Qed.
 
-(* ============ 四关自证面：G3 提取检验 + G4 假设审计口 ============ *)
+(* ============ 公理面自审：G3 提取检验 + G4 假设审计口 ============ *)
 (* 两主件证明体全走 real_* 素颜顶层函数链与接口投影 δ 面预判            *)
 (* Obj.magic = 0（与 sfcx_G3 同判据）。                              *)
 

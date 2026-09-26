@@ -1,19 +1,11 @@
-(* ============================================================ *)
-(* UpDebtSqrtAbsReq.v *)
-(* *)
-(* 目的： 抽象载体的平方根见证存在引理（req 接口层）。 *)
-(* 主件： req_sqrt_witness_exists_abstract 及其见证提取；req_sqrt_premise_le_intro 前提引入。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra。 *)
-(* 备注： 抽象 R 载体配 RealInterfaceEnhancedSetoid；辅助元 two_abs / half_abs 自足构造，零外加假设。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpDebtSqrtAbsReq.v — 签名迁移批 4 第二席：G02_Debt 的     *)
-(*   req 伴件（5 件 + 1 冻结扣除）                                *)
-(*   冻结扣除：母件 sqrt_witness @L35 req 同位件批 2 已结果       *)
-(*   （UpReqDist reqd_sqrt_witness），本件不重建。                *)
-(* 非平凡性分级：件 4/5/6 = A（req 链三分支全构造）；件 3 = B。   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpDebtSqrtAbsReq.v — 抽象 req 层平方根见证件
+   使命: Section SqrtAbsReq：req_sqrt_premise_le_intro（平方 ≥ a 前提的 le 引入形）与 req_sqrt_witness_exists_abstract（平方根见证存在性 sigT 形），two_abs/half_abs 支撑件；见证形态重述件 req_sqrt_witness_exists_abstract_witness/req_sqrt_one_abstract。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra。
+   对标: 构造性分析中平方根存在性的抽象接口版本（Bishop 构造主义）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -68,10 +60,10 @@ Proof.
   intros d H. apply lt_le_iff. exact H.
 Qed.
 
-(* ===== 件 4（旗舰）：抽象 req 层平方根见证 ===== *)
+(* ===== 件 4（主定理）：抽象 req 层平方根见证 ===== *)
 (* d > 0：r := e^{-(half·log_inv d)}，le 由 exp_neg_pos，
    r·r == d 由 exp_neg_plus(sym) + exp_neg_req_compat_setoid
-   （消费 Hinner : half·L + half·L == L）+ exp_neg_log_inv 三链；
+   （使用 Hinner : half·L + half·L == L）+ exp_neg_log_inv 三链；
    d == 0：r := zero，mult zero zero == zero 由接口字段 mult_zero。 *)
 Theorem req_sqrt_witness_exists_abstract :
   forall d : R,
@@ -136,7 +128,7 @@ Proof.
     + exact (req_trans (mult zero zero) zero d (mult_zero zero) Hdeq).
 Qed.
 
-(* ===== 件 5：见证形态重述（语义同件 4，供下游按名消费） ===== *)
+(* ===== 件 5：见证形态重述（语义同件 4，供下游按名使用） ===== *)
 Lemma req_sqrt_witness_exists_abstract_witness :
   forall d : R,
   Or (lt zero d) (req zero d) ->

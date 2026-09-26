@@ -1,59 +1,33 @@
-(* ============================================================ *)
-(* UpReqSquareWallEquiv.v *)
-(* *)
-(* 目的： 第四面墙定理化——平方非负 plain 墙的「B 形提升器」缺口封口。 *)
-(* 主件： snw_square_wall_lpo：墙/提升器/受限 LPO 三者双向归约四槽账。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpRealLeB。 *)
-(* 备注： 零公理、零假设负载；反向可达（与 AA23 降档不同），交付完整等价。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqSquareWallEquiv.v —— 席 WALL-1：第四面墙定理化                *)
-(*   （平方非负 plain 墙 × B 形提升器缺口 ⟺ 受限 LPO，20260916）      *)
-(*                                                              *)
-(* 公理面：本件零公理、零假设负载。墙坐标在案：                      *)
-(*   G09_MiscSmall.v:328（plain 形在柯西层构造性不可证——要求对任意   *)
-(*   t 给出 t·t 严格正或 t·t==0 的析取判定，等价零分离判定）；        *)
-(*   G09_MiscSmall.v:357（plain 槽在 Real 层不可证明：构造性判定性     *)
-(*   阻塞，非缺件可拼）。                                            *)
-(*                                                              *)
-(* 缺口的两侧（在盘事实）：                                          *)
-(*   B 侧可达：UpRealLeB:432 real_square_nonneg_B——Bishop 余量形      *)
-(*     （forall eps>0, 0 < 0+t·t+eps 的 real_le_b 编码）全称可证；    *)
-(*   Or 侧为墙：real_le real_zero (t·t)（real_le = Or (real_lt)       *)
-(*     (real_eq) 析取强序，CW219 L3521 编码）全称不可供给。           *)
-(*   单向桥 real_le_to_le_b（UpRealLeB:87）仅 Or⟹B；反向提升器        *)
-(*   （B⟹Or）恰为缺口的全部厚度——SqWallCorrMark 只登记未定理化。      *)
-(*                                                              *)
-(* 本席新数学（负形定理族，AA15/AA22/AA23 谱系）：                    *)
-(*   snw_b_lift : Set := 对一切 t 把 B 形证书抬为 Or 精确分支——       *)
-(*     「第四面墙」的语句本体（缺口的显形）。                          *)
-(*   snw_b_lift_to_rlpo（正向）：提升器 + 在盘全称 B 证书 ⟹ 素颜墙     *)
-(*     ⟹ lpn_forward ⟹ rLPO——缺口厚度恰好等于判定器。                *)
-(*   snw_rlpo_to_b_lift（反向·可达）：rLPO 逐点供分支，B 证书参数      *)
-(*     冗余丢弃——「提升器=判定器换皮」的机器表达。与 AA23 钉定墙的    *)
-(*     反向障碍降档不同，本墙反向可达，交付完整双向。                  *)
-(*   snw_square_wall_lpo（主件封口）：四槽账                           *)
-(*     And (wall->rLPO) (And (rLPO->wall) (And (lift->rLPO)           *)
-(*            (rLPO->lift)))——墙、提升器、rLPO 三者等价的循环账。     *)
+(* UpReqSquareWallEquiv.v *) (* 使命： 第四面墙定理化——平方非负 plain 墙的「B 形提升器」缺口闭合。 *)
+(* 主件： snw_square_wall_lpo：墙/提升器/受限 LPO 三者双向归约四槽账。 *) (* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpRealLeB。 *)
+(* 构造性注记： 零公理、零假设负载；反向可达（与 AA23 降档不同），交付完整等价。 *) (* 编译配方： Rocq 9.1 coqc -Q . "" UpReqSquareWallEquiv.v。 *)
+(* UpReqSquareWallEquiv.v —— 第四面墙定理化                          *) (*   （平方非负 plain 墙 × B 形提升器缺口 ⟺ 受限 LPO）                *)
+(* 公理面：本件零公理、零假设负载。墙坐标在案：                      *) (*   G09_MiscSmall.v:328（plain 形在柯西层构造性不可证——要求对任意   *)
+(*   t 给出 t·t 严格正或 t·t==0 的析取判定，等价零分离判定）；        *) (*   G09_MiscSmall.v:357（plain 槽在 Real 层不可证明：构造性判定性     *)
+(*   阻塞，非缺件可拼）。                                            *) (* 缺口的两侧（在盘事实）：                                          *)
+(*   B 侧可达：UpRealLeB:432 real_square_nonneg_B——Bishop 余量形      *) (*     （forall eps>0, 0 < 0+t·t+eps 的 real_le_b 编码）全称可证；    *)
+(*   Or 侧为墙：real_le real_zero (t·t)（real_le = Or (real_lt)       *) (*     (real_eq) 析取强序，CW219 L3521 编码）全称不可供给。           *)
+(*   单向桥 real_le_to_le_b（UpRealLeB:87）仅 Or⟹B；反向提升器        *) (*   （B⟹Or）恰为缺口的全部厚度——SqWallCorrMark 只登记未定理化。      *)
+(* 本件新数学（负形定理族，AA15/AA22/AA23 谱系）：                    *) (*   snw_b_lift : Set := 对一切 t 把 B 形证书抬为 Or 精确分支——       *)
+(*     「第四面墙」的语句本体（缺口的显形）。                          *) (*   snw_b_lift_to_rlpo（正向）：提升器 + 在盘全称 B 证书 ⟹ 素颜墙     *)
+(*     ⟹ lpn_forward ⟹ rLPO——缺口厚度恰好等于判定器。                *) (*   snw_rlpo_to_b_lift（反向·可达）：rLPO 逐点供分支，B 证书参数      *)
+(*     冗余丢弃——「提升器=判定器换皮」的机器表达。与 AA23 钉定墙的    *) (*     反向障碍降档不同，本墙反向可达，交付完整双向。                  *)
+(*   snw_square_wall_lpo（主件闭合）：四槽账                           *) (*     And (wall->rLPO) (And (rLPO->wall) (And (lift->rLPO)           *)
+(*            (rLPO->lift)))——墙、提升器、rLPO 三者等价的循环等价式。  *)
 (*   snw_wall_iff_lift（同构账）：墙 ⟺ 提升器——正向 B 证书免费复合，   *)
 (*     反向逐点直供：B/Or 缺口与墙同构，零厚度差。                     *)
 (*   snw_iface_slot_resolve（G3 泛型槽段·UpReqAlign:1122 位1 指针）：  *)
 (*     rLPO 证书消解接口泛型 req_square_nonneg 槽（RealEnhancedReal    *)
-(*     实例字段 le/zero/mult 的 delta 换形）——消费位升级参形           *)
+(*     实例字段 le/zero/mult 的 delta 换形）——使用位升级参形           *)
 (*     G09:490 sqp_fisher_zero_implies_pointwise_real 的 Hsq 参数位    *)
 (*     从此有判定器消解通道。                                          *)
-(*                                                              *)
 (* 谱系：AA15（UpReqLpoEquiv，SqWall⟺rLPO 首创面）⟶ AA22（Gibbs 泛型   *)
 (*   槽范式）⟶ AA23（PinWall 反向障碍账降档）⟶ 本件（第四面墙：缺口    *)
 (*   显形+完整双向）。与 UpReqLogZWallEquiv（EXPL2 领地，未 Require）  *)
 (*   的谱系关系：同以 UpReqLpoEquiv 的 rLPO 为判定基座，独立成件。      *)
-(*                                                              *)
 (* 纪律：纯构造性 Set 层、语句面全 Set/自定义 And/Or，零 Prop 泄露；    *)
 (*       墙语句作蕴含前件参数化，全程零经典逻辑；两面均机器检验完整。    *)
-(* ------------------------------------------------------------ *)
-(* WALL-1（20260916）：新建。前缀 snw_（开工 grep 零撞名）。           *)
-(* ============================================================ *)
+(* 前缀 snw_（全库 grep 零撞名）。                                    *)
 
 From Stdlib Require Import Extraction.
 Require Import CW_ConstructiveWorld_219.
@@ -92,7 +66,7 @@ Qed.
 (* ============================================================ *)
 (* Part 2：正向——提升器 ⟹ 受限 LPO（缺口厚度 = 判定器）            *)
 (*   证法：三段复合——在盘全称 B 证书（real_square_nonneg_B）        *)
-(*   × 提升器 ⟹ 素颜墙 ⟹ lpn_forward（AA15 正向腿）⟹ rLPO。        *)
+(*   × 提升器 ⟹ 素颜墙 ⟹ lpn_forward（AA15 正向支路）⟹ rLPO。        *)
 (*   非平凡账：B 侧免费 + 提升器恰补余下全部缺口，故提升器的供给     *)
 (*   力与「逐实数符号判定器」等价——缺口厚度的测量定理。              *)
 (* ============================================================ *)
@@ -107,8 +81,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：反向——受限 LPO ⟹ 提升器（可达性定理·本席关键新事实）     *)
-(*   证法：rLPO（经 AA15 反向腿 lpn_backward）逐点给出 Or 精确分支， *)
+(* Part 3：反向——受限 LPO ⟹ 提升器（可达性定理·本件关键新事实）     *)
+(*   证法：rLPO（经 AA15 反向支路 lpn_backward）逐点给出 Or 精确分支， *)
 (*   提升器的 B 证书参数整体冗余——直接丢弃。「提升器=判定器换皮」    *)
 (*   的机器表达：缺口不是独立障碍，只是判定器的另一种签名。           *)
 (*   对照 AA23：钉定墙反向撞障碍须降档，本墙反向可达——两面墙的       *)
@@ -122,7 +96,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 4：主件封口——四槽账（墙/提升器/rLPO 三者等价循环账）        *)
+(* Part 4：主件闭合——四槽账（墙/提升器/rLPO 三者等价循环）        *)
 (* ============================================================ *)
 
 Definition snw_square_wall_lpo :
@@ -177,17 +151,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 提取探针与假设审计面                                           *)
+(* 提取检验与假设审计面                                           *)
 (* ============================================================ *)
 
-(* 提取探针：主四件素颜面全量提取。本四件证明体均为纯组合子复合
+(* 提取检验：主四件素颜面全量提取。本四件证明体均为纯组合子复合
    （lpn 系纯 S01/S02/Q 层；B 形证书纯 real_* 顶层函数链），
    实证 Obj.magic 计数=0。
    提取面排除件账：snw_iface_slot_resolve 不入提取面——其返回类型
    为模块内类型别名（RealEnhancedReal 字段 le 的 delta 面），内核
    转换可达而 ML 提取的类型语法不可同一，提取器会插 Obj.magic 伪影
    （单点定位实证：magic 唯一落点即该件的类型别名返回位，非计算
-   内容）。处置与 SqWallCorrMark 同款：接口桥件不进提取面，其正确性
+   内容）。处置与 SqWallCorrMark 同款：接口转换件不进提取面，其正确性
    由 Print Assumptions Closed + coqchk 承载。 *)
 Extraction "_thv3twall1.ml" snw_square_wall_lpo
   snw_b_lift_to_rlpo snw_rlpo_to_b_lift snw_wall_iff_lift.

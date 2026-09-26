@@ -1,73 +1,11 @@
-(* ============================================================ *)
-(* ToyR 战役 · 包I · 切片六（T248 台账席 · 20260921）· 本件为替换稿        *)
-(*   正文系 Main/Live 基准件全文，仅换下列证明体；定理名/语句面/Require 面/  *)
-(*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
-(*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
-(*   一、nsq_two_pos：解耦直装——弃 req_two_pos 引擎单点，直取接口字段 *)
-(*       plus_positive 与 one_pos 双腿装配（引擎本体即此双腿，依赖面收窄）。 *)
-(*   二、sqrtf_sqrt_self_init：旗舰脱钩——弃 sqrtf_sqrt 定义中转，existT 三槽 *)
-(*       （值/正性见证/统一证书）显式装配，精度档全参显式具化。 *)
-(*   三、sqrtf_inv_le_self：骨干重排——弃 req_le_compat 前置骨架，改 le_trans *)
-(*       主干：le_mult_compat 升格腿前置，assoc 三段传输链后置收口。 *)
-(*   四、sqrtf_step_contract：骨干重排——le_trans 双段主干：delta 自反腿收口 *)
-(*       首段，单步差 le_mult_compat 直乘（comm 双腿一次运输），尾段经 *)
-(*       nsq_tail 供给之 req_le_compat 收口，弃原三层嵌套 trans/refl 对。 *)
-(*   挂账（如实登记不硬凑）： *)
-(*   nsq_half_pos/nsq_half_two_correct：inv_pos_pos/inv_pos_correct 系逆元 *)
-(*       面唯一见证，单路唯一形，不化。 *)
-(*   sqrtf_newton_zero：定义性收口（迭代零步 delta/ι 归约自反），不化。 *)
-(*   nsq_step_minus_slack/nsq_step_plus_slack：脱钩重演必经帮件 nsq_h_minus/ *)
-(*       nsq_h_plus 全体内联＝体复制注水（头尾引擎面唯一），挂账。 *)
-(*   sqrtf_iterate_sq_ge：中转件 sqrtf_sq_ge_a 解耦重演＝八步链体复制， *)
-(*       超本切片边界，挂账。 *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* UpReqSqrtF.v *)
-(* *)
-(* 目的： sqrt_witness 的函数式升级（不动点迭代平方根）。 *)
-(* 主件： sqrtf_sqrt 函数式平方根与 sqrtf_newton 迭代、nsq_polarization 极化恒等式。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra。 *)
-(* 备注： 牛顿迭代 g(y) = half·(y + a·(1/y)) 无需除法扩展；几何收敛/逐 eps Cauchy 证书为骨架显式假设；二分被否决（接口序不可判定）。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqSqrtF.v —— 槽消解战役 #6：sqrt_witness 函数式升级          *)
-(*   （U3 轴：见证式 → 函数式；为 1/√d 缩放绑定铺路）              *)
-(*                                                              *)
-(*   对位：L28552 sqrt_witness d r := Id (r·r) d（见证式，   *)
-(*   给定 r 验证 r·r == d）；UpReqDist reqd_sqrt_witness（req 伴  *)
-(*   件）；UpDebtSqrtAbsReq req_sqrt_witness_exists_abstract      *)
-
-(*   【函数式】：Newton 迭代 Fixpoint 逐点算出近似平方根，并带     *)
-(*   有限步近似正确性证书。                                       *)
-(*                                                              *)
-(*   路线裁决（侦察实测）：                                        *)
-(*   - 除法可用：增强集oid接口自带 inv_pos/inv_pos_correct/        *)
-(*     inv_pos_pos（L40509-40526），Newton 单步              *)
-(*     g(y) := half·(y + a·(1/y)) 无需除法扩展；                  *)
-(*   - 二分否决：接口序不可判定（le_lt_dec 已作为经典公理移除，    *)
-(*     L173-176 自述），区间套分支判定在接口层无构造；        *)
-(*   - 故 Newton 直取，正性经证明携带型依赖 Fixpoint 同构产出。     *)
-(*                                                              *)
-(*   段1（本批结果）件清单：                                       *)
-(*   - sqrtf_step / sqrtf_step_pos：Newton 单步 + 单步正性；      *)
-(*   - sqrtf_newton_dep：依赖 Fixpoint（值 + 正性 sigT 打包）；    *)
-(*   - sqrtf_newton / sqrtf_newton_pos：函数本体 + 正性不变量；    *)
-(*   - sqrtf_newton_zero / sqrtf_newton_succ：迭代展开健全性；     *)
-(*   - sqrtf_step_residual：单步残差方幕恒等式（Newton 核心        *)
-(*     代数结构：z·z == s·s + a，s := half·(y − a/y)）——          *)
-(*     有限步近似正确性件（近似平方关系形态）；                    *)
-(*   - sqrtf_newton_cert：全部 S n 步迭代的统一证书。              *)
-(*   段2（收敛证书）：极限正确件 sqrtf_fixed_point_correct 已完成    *)
-(*   （不动点 ⟹ 真平方根）；几何收敛/逐 eps Cauchy 证书为骨架显式假设，   *)
-(*   证明计划与阻塞裁决见文件尾注记（平方非负接口缺口，GRPO *)
-(*   square_nonneg 同位先例；两条消解路线已登记）。                *)
-(*                                                              *)
-(*   纪律：纯构造性零承认；语句全 Set 层（req/lt/le/sigT/And/Or）； *)
-(*   纯项式证明（req_trans 链 + 接口字段直引，零战术依赖）；        *)
-(*   前缀 sqrtf_（函数件）/ nsq_（Newton 常数件）防撞（全库实扫     *)
-(*   零命中）；既有文件零改动。                                   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqSqrtF.v — req 接口上的函数式平方根
+   使命: sqrtf_sqrt（Newton 迭代平方根，sigT 组装值与正性见证）、sqrtf_fixed_point_correct、收敛链件（sqrtf_sq_ge_a/iterate_sq_ge/step_contract/iterate_mono/lower/slack_contraction）与假设位诚实注记。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra。
+   对标: 构造性平方根迭代（Bishop 构造主义的接口化版本）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -131,7 +69,7 @@ Qed.
 
 (* ============================================================ *)
 (* §3 函数式 Newton 迭代（证明携带型依赖 Fixpoint）               *)
-(*   sigT 打包（值, 正性见证），递归逐步产出——正性不变量与       *)
+(*   sigT 组合（值, 正性见证），递归逐步产出——正性不变量与       *)
 (*   函数本体同构生成，Set 层零 Prop 出面。                       *)
 (* ============================================================ *)
 
@@ -153,7 +91,7 @@ Definition sqrtf_newton (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
 
 (* 正性不变量：任意步迭代严格正（依赖 Fixpoint 第二分量直引）。
    透明 Definition 而非引理：正性见证进入迭代值位（inv_pos 的
-   见证位是值位，proof-relevant——E352/E348 先例），规范见证必须
+   见证位是值位，proof-relevant——既有先例），规范见证必须
    delta 可导以与 Fixpoint 体内 witnesses conversion 对齐。 *)
 Definition sqrtf_newton_pos (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
            (n : nat) : lt zero (sqrtf_newton a Ha x Hx n) :=
@@ -415,7 +353,7 @@ Proof.
                                             (plus_zero (mult p p)))))).
 Qed.
 
-(* 交叉项：(a·(1/y))·y == a（inv_pos_correct 的换序消费） *)
+(* 交叉项：(a·(1/y))·y == a（inv_pos_correct 的换序使用） *)
 Lemma nsq_u_mult_y : forall (a y : R) (Ha : lt zero a) (Hy : lt zero y),
   req (mult (mult a (inv_pos y Hy)) y) a.
 Proof.
@@ -532,12 +470,12 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 迭代统一证书 + 函数式平方根（旗舰）                          *)
+(* §6 迭代统一证书 + 函数式平方根（主定理）                          *)
 (* ============================================================ *)
 
 (* 全步统一证书：第 S n 步迭代 z 满足 z·z == t·t + a（t 为残差项）。
    —— 有限步近似正确性：任意精度档位（n 越大残差越小，见段2骨架
-   注记）下输出都带显式方幕型余量账目。 *)
+   注记）下输出都带显式方幕型余量估计。 *)
 Lemma sqrtf_newton_cert : forall (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
                                 (n : nat),
   sigT (fun t : R =>
@@ -567,7 +505,7 @@ Proof.
   - exact Ht.
 Qed.
 
-(* 旗舰（函数式平方根，U3 轴对位陈述）：给定 a > 0、初值 x > 0 与
+(* 主定理（函数式平方根，U3 轴对位陈述）：给定 a > 0、初值 x > 0 与
    精度档 n，sqrtf_sqrt 产出三元组（值 r、正性见证、残差项 t），
    满足 r·r == t·t + a——与见证式 sqrt_witness（给定 r 验证 r·r == d）
    的对位：r 由 Fixpoint 构造性地算出，余量显式入账。
@@ -581,7 +519,7 @@ Definition sqrtf_sqrt (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x) (n : nat
     (existT _ (sqrtf_newton_pos a Ha x Hx (Datatypes.S n))
               (sqrtf_newton_cert a Ha x Hx n)).
 
-(* 旗舰自初值特化：x := a（a > 0 自充正性初值，签名收窄到 (a, Ha, n)） *)
+(* 主定理自初值特化：x := a（a > 0 自充正性初值，签名收窄到 (a, Ha, n)） *)
 Lemma sqrtf_sqrt_self_init : forall (a : R) (Ha : lt zero a) (n : nat),
   sigT (fun r : R =>
         sigT (fun _ : lt zero r =>
@@ -698,15 +636,15 @@ Qed.
 (*   le zero (mult t t)（平方非负）不是接口定理：库内 GRPO *)
 (*   square_nonneg 同位先例保持显式假设位（UpReqDist 头注登记表第 6   *)
 (*   条），接口无 le↔Or 分解字段亦无 lt 三分（经典公理已移除，      *)
-(*   L173-176 自述）。两条消解路线留后续战役：               *)
+(*   L173-176 自述）。两条消解路线留后续工作：               *)
 (*   (a) 假设位路线：节内立诚实 Hypothesis nsq_square_nonneg       *)
 (*       （le zero (mult t t)），Real 实例可消解；                  *)
 (*   (b) 具体层路线：real_abs 族（L13473 逐点 Qabs + 柯西）   *)
 (*       具体层证 |x|·|x| == x·x 且 abs ≥ 0，经实例化特化消解。     *)
 (* 本件已就位的段2 资产：sqrtf_fixed_point_correct（极限正确件，    *)
 (*   已完成）+ §5 残差方幕恒等式（压缩链代数核心，已完成）          *)
-(*   + §8 收敛链件（残差非负消费/平方下界/单调/一致下界/压缩比率     *)
-(*   恒等式——假设位诚实形，见 §8 头注勘误补注）。                    *)
+(*   + §8 收敛链件（残差非负使用/平方下界/单调/一致下界/压缩比率     *)
+(*   恒等式——假设位诚实形，见 §8 头注修正补注）。                    *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -716,7 +654,7 @@ Qed.
 (*  - nsq_square_nonneg：诚实槽（路线 (a)，GRPO square_nonneg  *)
 (*    同位先例 UpReqDist 登记表 6；节内立槽泛化为引理显式前提位，      *)
 (*    Print Assumptions 仍 Closed 零公理面）；                      *)
-(*  - sqrtf_sq_ge_a：残差非负消费件（槽 + §5 恒等式 ⟹ g(y)^2 ≥ a，  *)
+(*  - sqrtf_sq_ge_a：残差非负使用件（槽 + §5 恒等式 ⟹ g(y)^2 ≥ a，  *)
 
 (*  - sqrtf_iterate_sq_ge：全迭代平方下界 z_{S n}^2 ≥ a；           *)
 (*  - sqrtf_inv_le_self：平方下界换倒数上界 a·(1/z) ≤ z；           *)
@@ -726,24 +664,24 @@ Qed.
 (*  - nsq_two_slack + nsq_slack_contraction：压缩比率恒等式          *)
 (*    2·g(y)·s(g(y)) == s(y)·s(y)（证明计划步 (1) 比率形式完成）。   *)
 (*                                                              *)
-(* 假设位裁决勘误补注：plain 形 le zero (mult t t) 在 Real 层亦不可    *)
+(* 假设位裁决修正补注：plain 形 le zero (mult t t) 在 Real 层亦不可    *)
 (* 消解——RealEnhancedReal 的 le := real_le 为 Or (real_lt)          *)
 (* (real_eq) 编码（实例段），t_n^2 无一致正尾部时两支皆假      *)
 (* （t := 1/n 序列形反例）；接口 abs 族字段亦不敷用（|t|·|t| 与      *)
 (* t·t 无 req 桥：符号不可判定且接口无分解字段）。故该槽是收敛链     *)
 (* 的不可消去诚实前提位；路线 (b) 可行残形=具体层逐点重造（Q 层      *)
 (* Qsquare_nonneg 同位，L44850 real_square_nonneg_eps 即       *)
-(* Bishop eps 形同类件），留后续战役。                              *)
+(* Bishop eps 形同类件），留后续工作。                              *)
 (*                                                              *)
 (* 尾程显式假设（精确余量）：Cauchy 证书全件 = 压缩比率恒等式（本节       *)
 (* 已完成）+「存在 K: |s(z_K)| ≤ m0」（取档步，需阿基米德同位槽）     *)
 (* + 几何尾和逐 eps 上界（metric 尾和三角迭代，metric_abs 桥槽）     *)
-(* 三段组装；余段留下一席。                                        *)
+(* 三段组装；余段留待后续。                                        *)
 (* ============================================================ *)
 
 Hypothesis nsq_square_nonneg : forall t : R, le zero (mult t t).
 
-(* 残差非负消费件：s(y)^2 ≥ 0（槽）经 §5 恒等式 ⟹ g(y)^2 ≥ a。
+(* 残差非负使用件：s(y)^2 ≥ 0（槽）经 §5 恒等式 ⟹ g(y)^2 ≥ a。
    le_plus_compat（槽注入 a 侧）+ req 运输（plus zero a ~ a、
    g·g ~ s^2 + a）三项式组装。 *)
 Lemma sqrtf_sq_ge_a : forall (a y : R) (Ha : lt zero a) (Hy : lt zero y),
@@ -852,7 +790,7 @@ Proof.
                (le_refl (mult nsq_half (plus y y)))).
 Qed.
 
-(* 迭代单调（单步）：z_{S (S n)} ≤ z_{S n}（消费 z_{S n}^2 ≥ a） *)
+(* 迭代单调（单步）：z_{S (S n)} ≤ z_{S n}（使用 z_{S n}^2 ≥ a） *)
 Lemma sqrtf_iterate_mono_step : forall (a : R) (Ha : lt zero a) (x : R) (Hx : lt zero x)
                                        (n : nat),
   le (sqrtf_newton a Ha x Hx (Datatypes.S (Datatypes.S n)))
@@ -930,7 +868,7 @@ Proof.
 Qed.
 
 (* 尾件：nsq_two·s(u) == u − a/u（2·half == one 的 slack 形直推，
-   2·(half·w) ~ (2·half)·w ~ 1·w ~ w，delta 消费 sqrtf_slack 定义形） *)
+   2·(half·w) ~ (2·half)·w ~ 1·w ~ w，delta 使用 sqrtf_slack 定义形） *)
 Lemma nsq_two_slack : forall (a u : R) (Ha : lt zero a) (Hu : lt zero u),
   req (mult nsq_two (sqrtf_slack a u Ha Hu))
       (plus u (opp (mult a (inv_pos u Hu)))).
@@ -959,7 +897,7 @@ Proof.
     + exact (req_mult_one_l (plus u (opp (mult a (inv_pos u Hu))))).
 Qed.
 
-(* §5 恒等式的非 sigT 直述形（见证= sqrtf_slack 内联，供收敛链消费；
+(* §5 恒等式的非 sigT 直述形（见证= sqrtf_slack 内联，供收敛链使用；
    §5 原件的 req 链逐字副本） *)
 Lemma nsq_step_residual_req : forall (a y : R) (Ha : lt zero a) (Hy : lt zero y),
   req (mult (sqrtf_step a y Ha Hy) (sqrtf_step a y Ha Hy))
@@ -1011,7 +949,7 @@ Qed.
 (* 压缩比率恒等式（收敛链核心件，证明计划步 (1) 的比率形式）：
    2·g(y)·s(g(y)) == s(y)·s(y)。
    代数：2·u·s(u) == u·(u − a/u) == u·u + opp a（交叉项 u·(a/u) == a，
-   nsq_u_mult_y 换序消费）⟹ 2·u·s(u) + a == u·u == s(y)^2 + a
+   nsq_u_mult_y 换序使用）⟹ 2·u·s(u) + a == u·u == s(y)^2 + a
    （§5 恒等式）⟹ 加 a 抵消（req_plus_cancel_l）。 *)
 Lemma nsq_slack_contraction : forall (a y : R) (Ha : lt zero a) (Hy : lt zero y),
   req (mult (mult nsq_two (sqrtf_step a y Ha Hy))
@@ -1021,7 +959,7 @@ Proof.
   intros a y Ha Hy.
   pose proof (nsq_step_residual_req a y Ha Hy) as Hres.
   set (Hu := sqrtf_step_pos a y Ha Hy) in *.
-  (* 腿 A：2·u·s_u == u·u + opp a *)
+  (* 支路 A：2·u·s_u == u·u + opp a *)
   assert (HA : req (mult (mult nsq_two (sqrtf_step a y Ha Hy))
                          (sqrtf_slack a (sqrtf_step a y Ha Hy) Ha Hu))
                    (plus (mult (sqrtf_step a y Ha Hy) (sqrtf_step a y Ha Hy))
@@ -1152,8 +1090,8 @@ Qed.
 
 End SqrtF.
 
-(* （ToyR 增补·非原件改动）假设面收口申报节：玩具面逐件申报，
-    全 Closed 为定谳标识；基准对照件以同文申报节同法试编比对。 *)
+(* （ToyR 增补·非原件改动）假设面闭合申报节：玩具面逐件申报，
+    全 Closed 为结论标识；基准对照件以同文申报节同法试编比对。 *)
 Print Assumptions nsq_two_pos.
 Print Assumptions nsq_half_pos.
 Print Assumptions nsq_half_two_correct.

@@ -1,52 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T268 台账席 战役包AC（tier2 末段第一批）      *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   real_cauchy_schwarz（原 L285，2 句强证）	*)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpCS.v *)
-(* *)
-(* 目的： 有限和 Cauchy–Schwarz 不等式（Real 层，eps 版）。 *)
-(* 主件： real_cauchy_schwarz_lt：(AB)^2 < AA·BB + eps 严格形；real_cauchy_schwarz 为其 le 收敛形。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： Q 层核经逐项配方（Lagrange 形）构造，零除法零判别式；零公理面、全 Qed、可提取。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpCS.v —— 有限和 Cauchy–Schwarz 不等式（Real 层，eps 版）      *)
-(*                                                              *)
-(* 数学目标（eps 版有限和 C-S）：                                 *)
-(*   对 a b : list Real，记                                      *)
-(*     AB := dotp a b = Σ a_i·b_i（内积）                        *)
-(*     AA := sql a   = Σ a_i²,  BB := sql b = Σ b_i²（平方和）   *)
-(*   则对任意严格正 eps：                                        *)
-(*     (AB)² ≤ AA·BB + eps        （real_le，Or 编码）           *)
-(* 更强：real_lt (AB)² (AA·BB + eps)（逐项 gap ≥ 0 + eps 下界      *)
-(*   直接给出一致分离，无需分支）。                               *)
-(*                                                              *)
-(* 路线（Lagrange/逐项配方，构造性，零除法零判别式）：             *)
-(*   Q 层核：  (dotpQ a b)² ≤ (sqlQ a)·(sqlQ b)  （归纳 + 配方）   *)
-(*   逐点化：  real_plus/real_mult Defined 透明 → projT1 逐点      *)
-(*   Real 层：real_lt 见证 = (eps 见证, N1, 逐点 QltT)；           *)
-(*   关键观察：AA·BB − AB² 逐点 ≥ 0 对**每个**指标成立（纯 Q 计    *)
-(*   算），故 gap_n + eps_n > e1 一致成立——real_lt 一步构造。      *)
-(*                                                              *)
-(* 方向勘误（重要）：任务原稿目标                                 *)
-(*     real_le (AA·BB) (AB² + eps)（对任意 eps > 0）              *)
-(*   是**假命题**（反例 a=[1,0], b=[0,1]：AA·BB = 1 > eps 可取    *)
-(*   1/2，则 1 ≤ 0 + 1/2 不成立）；且与原稿自己的证明路线结论      *)
-(*   "即 (AB)² ≤ AA·BB" 相矛盾。本文件按 C-S 的真实方向结果        *)
-(*   real_le (AB²) (AA·BB + eps)，并在文末给出原方向的形式化反驳    *)
-(*   （Not (...)，非平凡反例构造）。                              *)
-(*                                                              *)
-(* 红线：纯构造性；Set 层语句（real_lt/real_le Or 编码/real_eq）；  *)
-(*   零公理、零搁置证明、零中止、零经典逻辑；全部 Qed 闭合；可提取。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpCS.v — Cauchy–Schwarz 的双层构造与反向否证
+   使命: dotp/sql/dotpQ/sqlQ 双层数据、cs_Q（Q 层主不等式）、sql_proj/dotp_proj 投影桥、real_cauchy_schwarz_lt/real_cauchy_schwarz（ε 严格/非严格形）与 real_cauchy_schwarz_reversed_false（反向全称命题否证）。
+   依赖: CW_ConstructiveWorld_219；Stdlib List、QArith
+   对标: Cauchy–Schwarz 不等式（内积形式）与 Lagrange 恒等式论证的逐坐标构造。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 Import ListNotations.
@@ -310,7 +269,7 @@ Proof.
   exact (inl (real_cauchy_schwarz_lt a b eps Heps)).
 Qed.
 
-(* ========== 方向勘误的形式化反驳 ==============================
+(*
    任务原稿字面目标 real_le (AA·BB) (AB² + eps)（任意 eps>0）是假命题：
    反例 a=[1,0], b=[0,1]：AA·BB = 1，AB = 0，取 eps = 1/2 得"1 ≤ 1/2"。
    以下构造性证明 Not (...)，杜绝任何对该方向的误用。 *)

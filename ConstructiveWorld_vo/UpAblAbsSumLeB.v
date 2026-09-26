@@ -1,40 +1,11 @@
-(* ============================================================ *)
-(* 版本注记（如实）：本件清单五位证明体经全量恒等核查与主注册树现版             *)
-(* 逐字同文（恒等守恒，真替换 0 位）；证明体、声明面、语句面、Require 面         *)
-(* 零改动。                                                                     *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* UpAblAbsSumLeB.v —— abs_sum_le 族（族 I plain Or 形）可达最强形供给件 *)
-(*                                                                *)
-(* 零承认件：无承认词面、无假设参数声明、无经典逻辑、全件 Qed 闭合。 *)
-(*   全部语句 Set 层值（real_le/real_lt/real_eq/real_le_b 均 Set），  *)
-(*   语句面无裸「命题层」；证明全构造（Or 逐支、sigT 见证直接构造）。 *)
-(*                                                                *)
-(* 结论（本件头注即结论正文）：                                      *)
-(*   abs_sum_le 族 I（plain Or 形，UpReqSampling 的族 I 接口）        *)
-(*   的可达最强形 = Bishop B 形（real_le_b，见 UpRealLeB）：          *)
-(*   ① B 形严格强于逐 eps 形（real_le_closure_b_one 单步闭包）；      *)
-(*   ② 逐 eps 形经 Or-inl 支直接给出（real_lt_le_iff_req 左注入）；   *)
-(*   ③ plain Or 形不可达（本件不触及该方向的构造）。                 *)
-(*                                                                *)
-(* 三件供给（全为独立构造）：                                        *)
-(*   A 两点核差形：|a−c| ≤ (|a−b|+|b−c|)+eps 逐 eps（Or-inl）        *)
-(*      ＋ B 形——差恒等式 eq 链（assoc/opp/zero 五步）＋三角实例；    *)
-(*   B list 折叠形：real_list_sum 折叠三角——归纳承载两点核＋         *)
-(*      误差分配（约定：单点引入=每步恰一整单位 e；常数加权=          *)
-(*      权函数 W(l)（W(nil)=1，W(cons)=W(rest)+1）线性加权）；        *)
-(*      末端=以 W(l) 显式正性证书经 real_le_closure_b 得 B 形），     *)
-(*      ＋B 形⟹逐 eps 形（Or-inl 注入）；                            *)
-(*   C 余量倍率 2 不可共存引理：余量倍率 2 时——                      *)
-(*      real_lt (Y+2e) X 与 real_le X (Y+e) 不可能共存（lt 支        *)
-(*      传递与 eq 支运输同归于 real_lt (Y+2e) (Y+e)，与 e < 2e        *)
-(*      的平移合取后撞 real_lt_irrefl）。                             *)
-(*                                                                *)
-(* 依赖：CW_ConstructiveWorld_219＋UpRealLeB＋                       *)
-(*   S08_RealMainlineDPO（real_list_sum）。                           *)
-(* 对标：mathlib 三角不等式折叠形（Bishop 余量形）；stdlib 无同形。     *)
-(* 编译配方：Rocq 9.1 直调 coqc + cpu_guard 包裹，输出至临时目录。      *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblAbsSumLeB.v — 列表绝对值和的 B 形上界族
+   使命: uabS4_abs_diff_triangle_le_B/abs_sum_le_B_pair、uabS4_abs_list_sum_le_B/le_eps（加权列表绝对值和上界）、uabS4_lt_double_margin_le_half_contr/diff_double_kill（双倍余量收缩）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB、S08_RealMainlineDPO；Stdlib List、QArith.Qring。
+   对标: 有限和三角不等式 |Σf| ≤ Σ|f| 的 B 谓词形式（实分析）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.Qring.

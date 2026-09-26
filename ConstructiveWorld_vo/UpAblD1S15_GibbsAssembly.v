@@ -1,43 +1,11 @@
-(* ============================================================ *)
-(* UpAblD1S15_GibbsAssembly.v —— 源模块 GibbsAssembly.v 的实例装配供给件   *)
-(*   数学使命：接口封装、导出链与 Gibbs 逐 eps 不等式的典范载体实例。     *)
-(* ============================================================ *)
-(* 【使命】为源模块 GibbsAssembly.v 的接口语句与导出语句供给具体实例，      *)
-(*   共十八项，分三组：A 组接口封装八项——R/RIS 载体、S 载体、sumf 求和、  *)
-(*   ext/add/linear/le 四条求和性质、log 相容性 ga2_log_req_compat        *)
-(*   （最后者由 uabd1s2_ga2_log_req_compat 供给，不重立）；B 组导出链      *)
-(*   七项——uabd1s15_ga2_rt/uabd1s15_ga2_le_id_l/uabd1s15_ga2_le_id_r/     *)
-(*   uabd1s15_ga2_mopp_one/uabd1s15_ga2_ptw_le/uabd1s15_ga2_gibbs_eps/    *)
-(*   uabd1s15_ga2_gibbs_eps_opps；C 组三条显式参数——Hnp/Hnq（两条归一化   *)
-(*   前提）与 Heps（正 eps 前提），作为主定理的全称前提显式承载。          *)
-(* 【依赖】CW_ConstructiveWorld_219 / UpReqAlgebra / UpReqAlign2 /        *)
-(*   G05_LogSmall / UpReqSumD / UpAblD1S2_reqlog_GibbsAssembly（S2 基础   *)
-(*   模块——接口封装的骨架来源）。不 Require 源模块 GibbsAssembly.v 本体。    *)
-(* 【对标】数学原型：Gibbs 不等式的逐 eps 形（相对熵非负性）在有限载体   *)
-(*   上的实例化；mathlib/stdlib 无直接构造对应物。                        *)
-(* 【构造性注记】语句面全 Set 层；全件 Qed 闭合、零承认词面、无经典逻辑； *)
-(*   点态切线核的 log 相容性以显式接口条件 LOGC 承载（如实申报为条件      *)
-(*   供给）；基础模块已剪除 log_inv_exp_neg_req（零消费），本件不重立。   *)
-(*   文末对四条主结论逐一 Print Assumptions，以全部 Closed 为零外部      *)
-(*   未证假设的判据。                                                    *)
-(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard       *)
-(*   包裹限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。  *)
-(* 【结构总览】§A 接口封装 uabd1s15_ga2_pack8：八项接口/前提的合取封装；   *)
-(*   供给件 uabd1s15_ga2_pack8_supplied——载体取 Real 与                    *)
-(*   uabd1s15_ren，求和取 sumd_sumf unit (tt::nil)；四条求和性质由         *)
-(*   UpReqSumD 相应引理（sumd_sum_ext/sumd_sum_add/sumd_sum_linear/        *)
-(*   sumd_sum_le）直接推得，log 相容性由 uabd1s2_ga2_log_req_compat 供给；  *)
-(*   §B 导出链：req 传递组合器 uabd1s15_ga2_rt、le 承接组合器对             *)
-(*   （uabd1s15_ga2_le_id_l/uabd1s15_ga2_le_id_r）、opp one 乘法归一        *)
-(*   uabd1s15_ga2_mopp_one；点态切线核 uabd1s15_ga2_ptw_le——log 相容性     *)
-(*   以节参数 LOGC 显式承载，证明经 log_le_linear_eps、log_mult、           *)
-(*   inv_pos_correct 归一与 req 加/乘代数链；§C 主件                        *)
-(*   uabd1s15_ga2_gibbs_eps（0 ≤ KL + eps 形；求和代数 ΣG ≡ −eps：         *)
-(*   归一化前提零和、线性、opp one 缩放）与伴随形式                         *)
-(*   uabd1s15_ga2_gibbs_eps_opps（−eps ≤ KL 形，供夹逼论证反向使用）；      *)
-(*   载体实例化 sumf ↦ sumd_sumf S0 en，求和性质由 UpReqSumD 给出；         *)
-(*   假设审计区。                                                           *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblD1S15_GibbsAssembly.v — Gibbs 不等式 ε 形的接口封装供给
+   使命: uabd1s15_ga2_pack8 八项接口合取封装及其 supplied 见证、req/le 组合器族、uabd1s15_ga2_gibbs_eps（Gibbs 不等式 ε 形）与 uabd1s15_ga2_gibbs_eps_opps 对偶件。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign2、G05_LogSmall、UpReqSumD、UpAblD1S2_reqlog_GibbsAssembly
+   对标: Gibbs 不等式（相对熵非负）的 ε 定量形与接口化供给。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -73,7 +41,7 @@ Inductive uabd1s15_ga2_pack8 : Type :=
                                           req x y -> req (log x Hx) (log y Hy)),
                   uabd1s15_ga2_pack8.
 
-(* 供给件：S2 基础模块的骨架实例（sumd_sumf 有限和，典范 Real 载体）——
+(* 依赖模块：S2 基础模块的骨架实例（sumd_sumf 有限和，典范 Real 载体）——
    四条求和性质由 UpReqSumD 相应引理直接推得，log 相容性由
    uabd1s2_ga2_log_req_compat 供给（不重立）。 *)
 Theorem uabd1s15_ga2_pack8_supplied : uabd1s15_ga2_pack8.
@@ -100,7 +68,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Definition uabd1s15_ga2_rt {x y z : R} (H1 : req x y) (H2 : req y z) : req x z :=
   req_trans x y z H1 H2.
 
-(* ---- le 承接组合器对（左/右置换） ---- *)
+(* ---- le 给出组合器对（左/右置换） ---- *)
 Definition uabd1s15_ga2_le_id_l {a b c : R} (H1 : req a b) (H2 : le b c) : le a c :=
   le_id_l a b c H1 H2.
 Definition uabd1s15_ga2_le_id_r {a b c : R} (H1 : req b c) (H2 : le a b) : le a c :=

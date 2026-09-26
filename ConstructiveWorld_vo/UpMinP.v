@@ -1,45 +1,11 @@
-(* ============================================================ *)
-(* UpMinP.v *)
-(* *)
-(* 目的： Min-P 截断质量的熵刻画（Real 层 list 离散世界）。 *)
-(* 主件： um_entropy / um_Hpmax：截断分布熵与最大概率熵的刻画；um_fmax / um_thr 阈值面。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 三分性探针以显式 Variable 随行；词表非空/逐点正/质量和为显式前提；纯构造性、无经典公理面。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpMinP.v —— Min-P 截断质量的熵刻画（Real 层 list 离散世界）    *)
-(*                                                              *)
-(* 主定理（统一根内两条已知界的熵版）：                          *)
-(*   件 1  entropy_ge_neg_log_p_max :                            *)
-(*         S ≥ −log(p_max)（熵 ≥ 最大概率的负对数）              *)
-(*   件 2  dropped_le_one_minus_exp_neg_S :                      *)
-(*         dropped ≤ 1 − e^−S（Min-P 截断质量的熵上界）          *)
-(*   件 3  dropped_le_one_minus_inv_n :                          *)
-(*         dropped ≤ 1 − 1/N（均匀特例，与根 L31849 对齐）       *)
-(*                                                              *)
-(* 证明链：dropped == 1 − kept（定义性）；kept ≥ p_max（pick_max *)
-(* 必被保留，见 um_kept_ge_pmax）；p_max ≥ e^−S：逐项 k ≤ p_max   *)
-(* ⟹ −log k ≥ −log p_max ⟹ S = Σ k·(−log k) ≥ −log p_max（权重  *)
-(* 非负加权 + 归一化 Σk = 1）⟹ e^−S ≤ p_max（exp antitone +      *)
-(* cw_log_exp_right）⟹ dropped ≤ 1 − e^−S。                     *)
-(*                                                              *)
-(* 简化世界：tokens : list Real（概率表，逐项正、和 = 1）；      *)
-(* p_max := fold real_max（逐点上界 um_fmax_ge_nth + 可达性       *)
-(* um_fmax_mem_nth 双引理）；熵/保留质量均以 seq 0 N 下标表求和， *)
-(* 下标界全用扫描库 Set 层编码 NatLt := Id (ltb) true——          *)
-(* 索引和引理（um_rls_le_N / um_rls_nonneg_N /                   *)
-(* um_rls_single_le_N）逐点假设为 NatLt 前提函数，无 Prop 解构、 *)
-(* 无递归 Set 谓词匹配，提取零 Obj.magic；Min-P 保留判定以三分    *)
-(* 判定元 um_trich_probe（a ≤ b ∨ b < a，镜像根内 ord_le_dec     *)
-(* 结构域字段）携带——纯构造性，无经典公理。                      *)
-(* 纪律：零公理、零搁置、零参数化声明、零经典逻辑（纯构造性）；*)
-(*       语句全 Set 层（real_lt/real_le/real_eq + Or/sigT/prod + *)
-(*       NatLt），无 Prop 前提；全部 Qed. 闭合；                 *)
-(*       Real 层顶层名（um_ 前缀防遮蔽）。                       *)
-(* 注意：CW_ConstructiveWorld_219 将 S 遮蔽为 Set，nat 模式一律               *)
-(* Datatypes.O / Datatypes.S。提取探针见 probe_minp_extract.v。  *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpMinP.v — min-p 采样的熵下界与丢弃率上界
+   使命: um_* 实数层代数件（le 加乘、序列和、um_fmax）、um_ent_term 熵项与 log 单调、entropy_ge_neg_log_p_max（熵 ≥ −log p_max）与 dropped_le_one_minus_exp_neg_S/dropped_le_one_minus_inv_n（丢弃率上界两形）。
+   依赖: CW_ConstructiveWorld_219；Stdlib List、Arith、Lia
+   对标: min-p 采样截断原理（语言模型解码的最小概率阈值法）与熵的极值不等式。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 From Stdlib Require Import List Arith Lia.
@@ -483,7 +449,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 4. 世界段：tokens / ratio + 三分判定元（镜像 ord_le_dec）      *)
+(* 4. 世界段：tokens / ratio + 三分判定元（对偶 ord_le_dec）      *)
 (* ============================================================ *)
 
 Section UpMinPWorld.

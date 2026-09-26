@@ -1,42 +1,30 @@
+(* ============================================================
+   EngelWeighted.v — list 加权 Engel–CS 不等式（Pinsker P2 缺口件）。
+   使命：UpReqPinskerTransport.v:23 留记 P2「list 加权 Engel–CS」
+     缺口——库内零 list 加权 Cauchy–Schwarz/Engel 存量（UpReqCauchy.v
+     实为梯度下降收敛链，非 CS 不等式），缺口属实，非重复施工
+     （Q 层自证 + UpRealLeB real_square_nonneg_B，零重叠）。
+   数学主件（两级交付）：
+     Q 层引擎 ew_q_engel：逐项权重 w >= 0 ⟹ (Σw·f)² <= (Σw)·(Σw·f²)
+       ——Lagrange 恒等式（Brahmagupta 型）list 归纳：
+       (p+SW)(pt²+C) − (pt+B)² = p·Σw_j(f_j−t)² + (SW·C − B²)，
+       偏差平方和逐项非负 + 归纳前提非负，双非负相加闭合。
+     real 层提升 ew_r_engel_b：逐项 real_le 0 (w s) ⟹
+       real_le_b (Σwf)² (Σw·Σwf²)（Bishop 形出口；诚实形注明：
+       Bishop 权重版需乘积非负 dichotomy，库内不可构造导出，
+       前提位取 real_le 本形）。
+     装载定理 ew_pinsker_p2_load：SW·x == B + 偏差项逐点非负 ⟹
+       le zero (SW·C − B·B)——留记 P2 的 sum/加权族装配出口
+       （同构 GibbsAssembly ext/add/linear/le 四槽接口面）。
+   构造性：语句面全 Set 层（QleT'/QltT/real_le/real_le_b/le/req）；
+     纯构造（Qeq 非 Id：恒等链走 Qeq_trans/自建 compat+lia）；零
+     承认位；公理面零新增（文尾 Print Assumptions 审计）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   对标：UpReqPinskerTransport.v:23 P2；GibbsAssembly ga2 接口面。
+   依赖：S02/S07/S08、UpRealLeB、pnt 组合件族、UpReqPinskerTransport。
+   ============================================================ *)
+
 Set Printing Width 500.
-(* ============================================================ *)
-(* EngelWeighted.v —— 席位 CZG13（批次 E-STAGING-CZG13）T61b C7 施工件 *)
-(*                                                                *)
-(* 使命：UpReqPinskerTransport.v:23 挂账 P2「list 加权 Engel–CS」缺口   *)
-(*   定向收口（G1 全形 Vajda 语境；P1 属逐点 log 二阶下界缺口，本席     *)
-(*   不碰——挂账原文两席分向，本席只取 P2）。                            *)
-(*                                                                *)
-(* 库存盘点结论（开工三查实录，20260918）：                            *)
-(*   · 库内零 list 加权 Cauchy–Schwarz/Engel 存量：UpReqCauchy.v 实为   *)
-(*     梯度下降收敛链镜像（非 CS 不等式）；UpReqMisc5/B、GibbsFamilyExt、*)
-(*     fa51_sumpos_id（sumd 正和族）、S08 real_list_sum 线性/ext/opp 族  *)
-(*     ——均无加权平方和下界件。缺口属实，非重复施工。                   *)
-(*   · CZD12（AbsSqClose.v）在飞面 = abs/平方簇逐点槽（lrdf_sq_nonneg/  *)
-(*     nsq_square_nonneg），本席全部平方非负消费既有件                   *)
-(*     （Q 层自证 + UpRealLeB real_square_nonneg_B），零槽位重叠。       *)
-(*                                                                *)
-(* 数学主件（Pinsker P2 加权 Engel–CS，两级交付）：                     *)
-(*   Q 层引擎（QleT' 语句，S02 Set 层词表）：                            *)
-(*     ew_q_engel：逐项权重 w >= 0 ⟹ (Σw·f)² <= (Σw)·(Σw·f²)          *)
-(*     证法：Lagrange 恒等式（Brahmagupta 型）list 归纳——               *)
-(*       (p+SW)(pt²+C) − (pt+B)² = p·Σw_j(f_j−t)² + (SW·C − B²)，      *)
-(*       偏差平方和逐项非负 + 归纳前提非负，双非负相加收口。             *)
-(*   real 层提升（CW219 Real，消费 S08 real_list_sum / S07              *)
-(*     real_le_mult_compat_weak / UpRealLeB Bishop 件 / pnt 组合件族）：*)
-(*     ew_r_engel_b：逐项 real_le 0 (w s) ⟹ real_le_b (Σwf)² (Σw·Σwf²) *)
-(*     （Bishop 形出口，Or 编码逐点权重前提——诚实形登记：Bishop 权重     *)
-(*     版需乘积非负 dichotomy，库内不可构造导出，前提位取 real_le 本形）。*)
-(*   装载定理（ga2 接口面，镜像 GibbsAssembly 槽位 ext/add/linear/le）：*)
-(*     ew_pinsker_p2_load：SW·x == B（x 加权均值）+ 偏差项逐点非负 ⟹    *)
-(*     le zero (SW·C − B·B)——挂账 P2 的 sum/加权族装配出口；平方槽与     *)
-(*     偏差项非负为独立供位（real 层由 ew_r_engel_b 链供给），按         *)
-(*     CZB13 供位定型范式隔离登记。                                     *)
-(*                                                                *)
-(* 红线自审：语句面全 Set 层（QleT'/QltT/real_le/real_le_b/le/req）；    *)
-(*   纯构造（Qeq 非 Id：恒等链走 Qeq_trans/自建 compat+lia，零 rewrite   *)
-(*   幻觉）；零承认位；公理面零新增（文尾 Print Assumptions 审计）。      *)
-(* 编译：G2 异地 cwd（/tmp/czg13_build），cpu_guard -- rocq c            *)
-(*   -Q Live/vorebuild "" -Q /tmp/czg13_side ""（vorebuild 信任缓存）。  *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -348,7 +336,7 @@ Qed.
 (* Part R1：real 层 list 加权件（CW219 Real + real_list_sum）           *)
 (* ============================================================ *)
 
-(* cons 步原子代数核（全原子，pnt_ring_eq 放电） *)
+(* cons 步原子代数核（全原子，pnt_ring_eq 实例化消解） *)
 Lemma ew_r_sqdev_step : forall (a t x C0 B0 W0 : Real),
   real_eq
     (real_plus
@@ -515,14 +503,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part L：ga2 接口面装载定理（镜像 GibbsAssembly 槽位：                 *)
-(*   ext/add/linear/le 四槽；log 槽零消费诚实剪除，出节参面登记）。       *)
-(*   ew_pinsker_p2_load：UpReqPinskerTransport.v:23 挂账 P2 的 sum/加权  *)
-(*   族装配出口（本窗口闭合形）：权重和与加权平方和双非负                *)
+(* Part L：ga2 接口面装载定理（同构 GibbsAssembly 对应槽：                 *)
+(*   ext/add/linear/le 四槽；log 槽零使用诚实剪除，出节参面登记）。       *)
+(*   ew_pinsker_p2_load：UpReqPinskerTransport.v:23 留记 P2 的 sum/加权  *)
+(*   族装配出口（本件闭合形）：权重和与加权平方和双非负                *)
 (*   （平方槽供位 = 逐点 w·f²，real 层由 ew_r_mul_nonneg 链供给，         *)
 (*   CZB13 供位定型范式显式隔离）⟹ le zero (SW·C)。                      *)
-(*   完整 Lagrange 差形出口（SW·C − B·B ≥ 0）的偏差恒等式腿              *)
-(*   （sum 级 req 链）未在本窗口闭合，如实挂账下一级——real 层完整形        *)
+(*   完整 Lagrange 差形出口（SW·C − B·B ≥ 0）的偏差恒等式支              *)
+(*   （sum 级 req 链）未在本窗口闭合，如实留记下一级——real 层完整形        *)
 (*   已由 ew_r_engel_b 供给，本缺口仅 generic 接口面增量。               *)
 (* ============================================================ *)
 
@@ -563,7 +551,7 @@ Proof.
                        (req_sym _ _ (req_plus_zero_l (sumf (fun _ : SEg => zero)))))).
 Qed.
 
-(* 逐点非负升和（ga2_sum_le 直接消费：零函数对照位） *)
+(* 逐点非负升和（ga2_sum_le 直接使用：零函数对照位） *)
 Lemma ew_g2_sum_nonneg : forall g : SEg -> R,
   (forall s : SEg, le zero (g s)) -> le zero (sumf g).
 Proof.
@@ -573,7 +561,7 @@ Proof.
   - apply (ew_g2_sum_le (fun _ : SEg => zero) g). intro s. apply Hpt.
 Qed.
 
-(* sum_linear 消费件：负号升和 Σ(opp g) == opp Σg
+(* sum_linear 使用件：负号升和 Σ(opp g) == opp Σg
    （逐点 opp g == (opp one)·g + linear + one·y == y 归一） *)
 Lemma ew_g2_sum_opp : forall g : SEg -> R,
   req (sumf (fun s => opp (g s))) (opp (sumf g)).

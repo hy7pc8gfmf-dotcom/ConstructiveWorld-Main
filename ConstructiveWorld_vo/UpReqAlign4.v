@@ -11,14 +11,14 @@
 (* ============================================================ *)
 
 (* UpReqAlign4.v — KLCvx 桥供给批 A（参数位 1）：req_backward_kl_identity 假设位降为使用件
-   施工图：席Y 两参数位消解预研（C 节转录）；施工席：席Z2（批 A = 参数位 1，独占批 A 预算）
+   施工图：件Y 两参数位消解预研（C 节转录）；施工件：件Z2（组 A = 参数位 1，独占组 A 配额）
    上游：UpReqAlgebra（批 1）+ UpReqAlign（批 3，桥宿主文件，只读）+
      UpReqAlign2（批 3b）+ UpReqAlign3（批 3c，参数位 1 同位无条件定理）+
      G05_LogSmall（Real 证人肢）——全部 Require 使用，零改写；
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   已证明坐标（本批收官形态）：
+   已证明坐标（本批完成形态）：
    [参数位 1 供给] UpReqAlign.v:434-442 桥假设位 req_backward_kl_identity
      （批 3 桥位 1/3，Id theorem policy_iter_backward_kl_step @L22686 同位）
      由本文件 kcxr_req_backward_kl_identity（N1）供给消解——语句逐字同位，
@@ -52,7 +52,7 @@
       + 环代数四步链真证重述，kcxr_pi_next_transport 完成载体位。
    3. N3 闭合范围：R/RIS/log 两假设位闭合；六条 sum 面 + 节参数脸仍是 UpReqAlign.v
    ----------------------------------------------------------------
-   批 C 收官（席T24，20260911）：宿主两桥假设位已证明定理 + 注册完成——
+   组 C 完成：宿主两桥假设位已证明定理 + 注册完成——
    UpReqAlign.v:434/:630 两桥假设位由本文件 kcxr_ 两件供给（已证明定理
    段 = 文件尾 Module KlcxAlignWriteoffC，逐字语句重申件两枚，节闭
    签名 About 钉死 _t24_probe1 实录），G07 头注阻塞裁决作废（参数位 1 与参数位 2
@@ -161,7 +161,6 @@ Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable pi_ref_norm : req (sumf pi_ref) one.
 
-(* ---- 节内批3同位别名（逐位照抄 UpReqAlign.v 对应行） ---- *)
 Definition pos_dist (p : S -> R) : Set := forall s : S, lt zero (p s).   (* :88 *)
 Definition norm_one (p : S -> R) : Set := req (sumf p) one.              (* :89 *)
 
@@ -326,7 +325,7 @@ Proof.
       apply Hq_leg.
 Qed.
 
-(* ============ N1：参数位 1 供给件（批 3 桥位 1/3 收官形态） ============
+(*
    语句 = UpReqAlign.v:434-442 req_backward_kl_identity 逐字同位；
    证 = req2_backward_kl_step（UpReqAlign3:3153，无条件）+ 证人重述三段。 *)
 Theorem kcxr_req_backward_kl_identity :
@@ -486,20 +485,15 @@ Definition kcxr_real_backward_kl_identity
 (* ---------------------------------------------------------------- *)
 (* 批 B 余留精确清单（参数位 2，本批不做）：                               *)
 (* 1. 供给参数位②开口：req_step_kl_eta_bound 同位（UpReqAlign:430，       *)
-(*    B 类桥不属深链——席Y 施工图 C 节明记本批不做；其 Real 种子        *)
 (*    real_step_kl_eta_bound_eps / real_interp_Z_le_one_eps 在根）。  *)
 (* 2. req_policy_improvement_mono（UpReqAlign:630，批 3 桥位 3/3）：   *)
-(*    同位供给件 = UpReqAlign3.req2_policy_improvement_mono（T12 放行）； *)
 (*    证法模板照抄本文件 N1（pose proof + kcxr_kl_witness_transport   *)
 (*    + 重组），G07 L653 结论同此作废路径。                           *)
-(* 3. N4 已证明演示：UpReqAlign.v 宿主假设位替换/减记属他席文件（本件     *)
 
 (* ---------------------------------------------------------------- *)
 
 (* ============================================================ *)
-(* 批 B（席Z3，20260911）：参数位② 供给 + eta_bound 评估 + N4 已证明演示  *)
-(*   施工图：席Y 报告 C 节 N2/N4 段 + _z2_合规自查报告 §四 精确清单；    *)
-(*   前件：批 A 全绿（参数位 1 kcxr_req_backward_kl_identity 在上段，     *)
+(*   前件：批 A 全部通过（参数位 1 kcxr_req_backward_kl_identity 在上段，     *)
 (*   其后 Real 实例与批 B 余留清单注记为批 A 原文，追加不改）。      *)
 (*   本段机制（节参面/别名/节内证人/N0 重述/N1 参数位 1 件）为批 A 段     *)
 (*   逐字节同复制，置于 Module 命名空间内——文件级批 A 同名全局件     *)
@@ -509,7 +503,6 @@ Definition kcxr_real_backward_kl_identity
 (*   [参数位② 供给] kcxr_req_policy_improvement_mono——UpReqAlign.v:630-633 *)
 (*     req_policy_improvement_mono 语句逐字同位（批 3 桥位 3/3，      *)
 (*     Id policy_improvement_mono @L22065 同位）。证 = UpReqAlign3.   *)
-(*     r2_policy_improvement_mono（L1456-1497，Qed 无条件定理，T12    *)
 (*     放行；节闭签名 About 钉死 _z3_probe1 实测：{R}{RIS} S sumf     *)
 (*     sum_ext sum_add sum_linear sum_pos log_req_compat              *)
 (*     log_inv_exp_neg_req reward beta beta_pos pi_ref pi_ref_pos eta *)
@@ -526,7 +519,6 @@ Definition kcxr_real_backward_kl_identity
 (*     序无消去，plain-le 不可由接口逐 eps 字段导出（UpReqAlign3       *)
 (*     L1446-1450 结论同位）；诚实假设位非欠账，照原位申报勿越；       *)
 (*     待 UpReqFreeEnergy（批 2 FEP）结果后降为使用件。                *)
-(*   [参数位② 评估项（只评估不强做，席Y 结论在案）]                        *)
 (*     req_step_kl_eta_bound（UpReqAlign.v:430-433）评估记录：         *)
 (*     两件签名对读——req 参数位语句：抽象 S 载体 + req 接口 sumf + plain   *)
 (*     le 精确形 + next=Gibbs 更新 pi_next_req；GeomD 接口形 eps 版    *)
@@ -534,13 +526,11 @@ Definition kcxr_real_backward_kl_identity
 (*     和载体 + real_eq 归一 + real_plus(…,eps) 松弛形 + next=几何     *)
 (*     插值 real_step_next。判定：非本批低成本顺带件，三重缺口——      *)
 (*     ① eps 松弛→精确 plain-le 需序消去，「序无消去」上游结论同因，   *)
-(*       plain-le 完成属 X 席红线不属本两参数位；                          *)
 (*     ② 载体缺口：nat→Real 有限和 vs 抽象 S+sumf 接口，需 Real 层     *)
 
 (*     ③ next 映射缺口：几何插值 vs Gibbs 归一化更新，GeomD 引擎       *)
 (*       契约不覆盖 req 参数位更新映射，喂定需另证映射契约（独立深件）。   *)
 (*     处置：假设位保留（sup_step_kl_eta_bound 显式参，诚实申报）。    *)
-(*   [N4 已证明演示·两件收官形态]                                        *)
 (*     · kcxr_req_policy_iter_kl_geom_step——UpReqAlign.v:466-471 语句  *)
 (*       逐字同位（Id policy_iter_kl_geom_step L23146 req 版同位）；   *)
 (*       桥1 = 批 A kcxr_req_backward_kl_identity（本 Module 内同复制  *)
@@ -606,7 +596,6 @@ Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable pi_ref_norm : req (sumf pi_ref) one.
 
-(* ---- 节内批3同位别名（逐位照抄 UpReqAlign.v 对应行） ---- *)
 Definition pos_dist (p : S -> R) : Set := forall s : S, lt zero (p s).   (* :88 *)
 Definition norm_one (p : S -> R) : Set := req (sumf p) one.              (* :89 *)
 
@@ -771,7 +760,7 @@ Proof.
       apply Hq_leg.
 Qed.
 
-(* ============ N1：参数位 1 供给件（批 3 桥位 1/3 收官形态） ============
+(*
    语句 = UpReqAlign.v:434-442 req_backward_kl_identity 逐字同位；
    证 = req2_backward_kl_step（UpReqAlign3:3153，无条件）+ 证人重述三段。 *)
 Theorem kcxr_req_backward_kl_identity :
@@ -901,7 +890,7 @@ Hypothesis sup_gibbs :
 
 (* ---- 桥2 显式参：req_step_kl_eta_bound（UpReqAlign.v:430-433 语句
    逐字同位；B 类桥保留假设位——评估记录见本文件批 B 头注；
-   N4 演示件以其为显式参收官） ---- *)
+*)
 Hypothesis sup_step_kl_eta_bound :
   forall (pi_t : S -> R) (Hpi_t : pos_dist pi_t),
     le (relative_entropy_req pi_t (pi_next_req pi_t Hpi_t) Hpi_t (req_pi_next_pos pi_t Hpi_t))
@@ -933,7 +922,7 @@ Proof.
         apply Hleg.
 Qed.
 
-(* ============ 参数位② 供给件（批 3 桥位 3/3 收官形态） ============
+(*
    语句 = UpReqAlign.v:630-633 req_policy_improvement_mono 逐字同位；
    证 = r2_policy_improvement_mono（UpReqAlign3:1456，无条件）+
    唯一非 δ 点 npx_pos↔req_pi_next_pos 证人重述（kcxr_pi_next_transport）
@@ -978,7 +967,7 @@ Proof.
     + exact H.
 Qed.
 
-(* ============ N4 已证明演示 1/2：单步真几何收缩（收官形态） ============
+(*
    语句 = UpReqAlign.v:466-471 req_policy_iter_kl_geom_step 逐字同位；
    桥1 = 批 A kcxr_req_backward_kl_identity（本 Module 同复制件）；
    桥2 = sup_step_kl_eta_bound 保留显式参；序代数肢 =
@@ -1011,9 +1000,9 @@ Proof.
              (sup_step_kl_eta_bound pi_t Hpi_t)).
 Qed.
 
-(* ============ N4 已证明演示 2/2：dpo_loss 单步不增（收官形态） ============
+(*
    语句 = UpReqAlign.v:636-639 req_dpo_loss_iter_step_le 逐字同位；
-   证 = 参数位② 供给件 + opp_le_compat（宿主 :640-646 同构）。 *)
+   证 = 参数位② 前置引理 + opp_le_compat（宿主 :640-646 同构）。 *)
 Theorem kcxr_req_dpo_loss_iter_step_le :
   forall (pi_t : S -> R) (Hpi_t : pos_dist pi_t) (Hnorm : norm_one pi_t),
     le (dpo_loss_req (pi_next_req pi_t Hpi_t) (req_pi_next_pos pi_t Hpi_t))
@@ -1030,7 +1019,6 @@ End KlcxAlignBridgeB.
 End KlcxAlignBridgeB.
 
 (* ============================================================ *)
-(* 批 C（席T24，20260911）：宿主两桥假设位已证明定理 + 构建注册收官    *)
 (* ============================================================ *)
 (* [依赖方向评估] 本文件 Require UpReqAlign（批 3 同位别名使用）→      *)
 (*   宿主不能反向 Require 本文件（循环依赖）→ 已证明形态 = 本文件尾部    *)
@@ -1095,7 +1083,6 @@ Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable pi_ref_norm : req (sumf pi_ref) one.
 
-(* ---- 节内批3同位别名（逐位照抄 UpReqAlign.v 对应行） ---- *)
 Definition pos_dist (p : S -> R) : Set := forall s : S, lt zero (p s).   (* :88 *)
 Definition norm_one (p : S -> R) : Set := req (sumf p) one.              (* :89 *)
 
@@ -1184,7 +1171,7 @@ Hypothesis sup_gibbs :
    跨面使用的证人位桥：inv_pos 载体证人万能重述 + KL 逐点全部重述 +
    align_objective 逐点重述。证词条位判据：_t24_probe2/_probe3 实测
    两枚同名 Qed 件应用不可转换（Qed 件不可 delta），conv 只通无证人
-   定义面（P0-P3/P5 全绿）——凡语句含 Qed 证人项位，一律以重述件完成。 *)
+   定义面（P0-P3/P5 全部通过）——凡语句含 Qed 证人项位，一律以重述件完成。 *)
 Lemma kcxr_inv_pos_witness :
   forall (x : R) (w w' : lt zero x), req (inv_pos x w) (inv_pos x w').
 Proof.

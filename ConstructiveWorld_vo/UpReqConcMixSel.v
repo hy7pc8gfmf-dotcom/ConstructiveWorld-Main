@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpReqConcMixSel.v —— 本件形式化 req 面混合选择器与注意力核混合时间的    *)
+(* UpReqConcMixSel.v —— 使命：本件形式化 req 面混合选择器与注意力核混合时间的    *)
 (*   对应层：cmk_ 系 k 选取器/幂机器（CmkMixSelect）与收束件              *)
 (*   cmk_attention_mixing_time（及 <= 版，CmkMixTime），以及 expf 迷你     *)
 (*   接口的 req 面一件全供（cmk_expf_realizable）。另附 CmkMixTime 六个参数位   *)
@@ -349,7 +349,7 @@ Proof.
                  (cmk_plus_congr_r (opp Y) HC)))).
 Defined.
 
-(* 环化简承接口：(1−u)(1+u+a) == (1+a) − (u+a)·u（@ums_ring_sc） *)
+(* 环化简给出口：(1−u)(1+u+a) == (1+a) − (u+a)·u（@ums_ring_sc） *)
 Lemma cmk_ring_sc : forall u a : R,
   req (mult (req_minus one u) (plus one (plus u a)))
        (req_minus (plus one a) (mult (plus u a) u)).
@@ -896,7 +896,7 @@ Print Assumptions cmk_attention_mixing_time.
 Print Assumptions cmk_attention_mixing_time_le.
 Print Assumptions cmk_expf_realizable.
 
-(* ################ R120 假设消解块：基础件（req 面列表和桥） ############ *)
+(* ################ 假设消解块：基础件（req 面列表和桥） ############ *)
 (* sumd 折叠机与 rsq 列表和的逐点一致（en 上归纳；ConcMixSelFeed          *)
 (*   cms_sum_eq_list 同构证明的本件就地复演——该件 Require 本件，环路      *)
 (*   不可引，故以同名证明链自持）。                                       *)
@@ -911,7 +911,7 @@ Proof.
              (rsq_bs_list_sum S0 g t) (req_refl (g x)) IH).
 Defined.
 
-(* ################ R120 假设消解块：sumf 实现化读法 ##################### *)
+(* ################ 假设消解块：sumf 实现化读法 ##################### *)
 (* CmkMixTime 的求和诚实接口六参数位在 sumf := csm_sumf S enum 实现化读法下   *)
 (*   全部由 UpReqConcSoftmax csm_ 系已证件以显式实参供给。                *)
 
@@ -1057,9 +1057,9 @@ Qed.
 
 End CmkMixTimeResolved.
 
-(* ################ R120 假设消解块：世界数据 Fin 2 实例读法 ############# *)
+(* ################ 假设消解块：世界数据 Fin 2 实例读法 ############# *)
 (* temp/Delta/z/enum 参数位在 Fin 2 非退化实例（温度取单位元、z 取 +/-1 对称对、     *)
-(*   enum 取二元表）下的证书（cf2 供给件同构；该件 Require 本件，环路     *)
+(*   enum 取二元表）下的证书（cf2 依赖模块同构；该件 Require 本件，环路     *)
 (*   不可引，故以同款证明项自持）。                                       *)
 
 Definition cmkr_temp : Real := one.

@@ -1,15 +1,20 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T265 台账席 战役包Z（tier2 十六批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   ga2_mopp_one（原 L70，8 句刀体）                                    *)
 (* ============================================================ *)
 
 (* ===================================================================== *)
-(* GibbsAssembly.v — E-STAGING-CXD7 席位V-F2 / T41 对账 C2                  *)
 (* req2_gibbs_inequality 组装件（norm 槽面 + eps 见证形出口）                 *)
 (*                                                                       *)
 (* 槽/供体坐标：                                                          *)
@@ -17,13 +22,12 @@
 (*     (Hq pos3 q), le zero (KLE p q Hp Hq)，KLE p q Hp Hq :=              *)
 (*     @req2_rel_ent R RIS S sumf p q Hp Hq（δ 透明，同 UpReqAlign3:1460）  *)
 (*     ——Id 同位 gibbs_inequality@CW219 L16629（拆分件 S04:2841）。         *)
-(* 消融对账结论（本役核心发现，修正 T41-C2 原判「E370 轻组装」）：            *)
 (*   差 1（norm 位）：槽语句无归一化前提，而无 norm 的 KL≥0 数学为假         *)
 (*     （反例 p = q/2：KL = Σ (q/2)·log(1/2) < 0）；S04 Id 供体证明实质       *)
-(*     消费 normalized（零和步 Σ(p−q) = 1−1 = 0）。故任何真放电必须           *)
-(*     带 norm 供给位——本件以显式节参承接（T2① 假设位非公理）。              *)
+(*     使用 normalized（零和步 Σ(p−q) = 1−1 = 0）。故任何真实例化消解必须           *)
+(*     带 norm 供给位——本件以显式节参承担（T2① 假设位非公理）。              *)
 (*   差 2（序无消去）：req 层接口切线引擎 log_le_linear_eps 为逐 eps 形，    *)
-(*     plain-le 不可由接口逐 eps 字段导出（UpReqAlign3 判词同因）——故        *)
+(*     plain-le 不可由接口逐 eps 字段导出（UpReqAlign3 裁定结论同因）——故        *)
 (*     出口取项目教义 eps 见证形（plain 墙三绕之一，交接文档 §4.2-11）：      *)
 (*     le zero (plus KL eps)。                                              *)
 (* 数学路线（S04 骨架的 req2 面重演，非平凡真证）：                           *)
@@ -31,7 +35,7 @@
 (*   eps ⟹ p·(log p − log q) ≥ p − q − p·eps（inv_pos_correct 约分）；      *)
 (*   求和：Σ ≥ Σp − Σq − eps·Σp = −eps（norm 零和 + sum 线性）⟹             *)
 (*   KL + eps ≥ 0。                                                        *)
-(* 放电路线登记：下游消费链（UpReqU2/UpReqAlign3/4 各槽消费点）其结论面       *)
+(* 实例化消解路线登记：下游使用链（UpReqU2/UpReqAlign3/4 各槽使用点）其结论面       *)
 (*   本身携带 norm 前提者，可喂本件并同步升级结论至 eps 形；plain 形待        *)
 (*   Real 层实例供给（UpReqAlign4「sup_gibbs 的 Real 供给属批 2」同路标）。   *)
 (* 纪律：纯构造性；Set 层语句零 Prop 泄露（req/lt/le 均 Set 值）；纯项模式    *)
@@ -49,9 +53,9 @@ Section GibbsAssembly.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- 求和对接面（UpReqAlign2 Req2AlignCore 同位；本件消费 ext/add/linear    *)
+(* ---- 求和对接面（UpReqAlign2 Req2AlignCore 同位；本件使用 ext/add/linear    *)
 (*   + le 单调槽 ga2_sum_le（UpReqPPOPlain rpl_sum_le 同形）。sum_pos 与       *)
-(*   log_inv_exp_neg_req 零消费，诚实剪除（出节参面登记）。                    *)
+(*   log_inv_exp_neg_req 零使用，诚实剪除（出节参面登记）。                    *)
 (*   注意：UpReqAlign2 原节无 le 单调槽——本件增补位，喂定时由实例侧供给）。      *)
 Variable sumf : (S -> R) -> R.
 Hypothesis ga2_sum_ext :
@@ -421,7 +425,7 @@ Proof.
             eps eps HD (le_refl eps)).
 Qed.
 
-(* ---- 出口孪生：le (opp eps) KL 形（消费侧夹逼常用向；req 群归一） ---- *)
+(* ---- 出口孪生：le (opp eps) KL 形（使用侧夹逼常用向；req 群归一） ---- *)
 Corollary ga2_gibbs_eps_opps :
   forall (p q : S -> R)
          (Hp : @req2_pos_dist R RIS S p) (Hq : @req2_pos_dist R RIS S q)

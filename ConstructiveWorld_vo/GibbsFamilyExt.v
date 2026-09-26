@@ -1,43 +1,11 @@
-(* ============================================================ *)
-(* GibbsFamilyExt.v —— 论文6 §4.3 Gibbs 不等式族扩展件                   *)
-(* 论文6 §4.3 Gibbs 不等式族扩展消融：两个真缺变体面的扩建件              *)
-(* ------------------------------------------------------------------ *)
-(* 既有面普查（全库 grep 实测）：                                        *)
-(*   已有四件正典形：real_gibbs_core_eps（S08）/ real_gibbs_core_B      *)
-(*   （UpRealLeB E.12）/ real_gibbs_inequality_eps（S08）/              *)
-(*   real_gibbs_inequality_B（UpRealLeB E.13）。同族扩展已有：          *)
-(*   klst_gibbs_core_strict / klst_gibbs_core_zero /                    *)
-(*   klst_gibbs_core_strict_neg（UpReqKLStrict·G07 严格/零/负支）、      *)
-(*   klstb_gibbs_core_shift_B / klstb_gibbs_core_zero_B（无条件 B 面）、 *)
-(*   gibbsd_gibbs_inequality / gibbsd_cross_entropy_decomp（交叉熵）、   *)
-(*   logd_gibbs_inequality_minus_B / _eps（G05 换形）、                  *)
-(*   gibbe2_gibbs_equality_bool（等号）、req_gibbs_*（UpReqDist）、      *)
-(*   GibbsWall ↔ rLPO（UpReqGibbsWallEquiv）。                          *)
-(*   真缺面（全库零命中实测的未证结论）：                                    *)
-(*   (A) 温度参数化形——β 加权 Gibbs 核（乘正数保序 × Gibbs 族）：        *)
-(*       逐点 eps / 逐点 Bishop / 有限和 eps / 有限和 Bishop /          *)
-(*       无条件 gap Bishop，全库无一件 β 加权出口。                     *)
-(*       构造性差异点：eps 形容许 β = 0（弱前提 real_le real_zero b），  *)
-(*       Bishop 闭合须 β > 0（D 证书 real_mult_positive b p）——同一     *)
-(*       变体两形前提强度不同，是 §4.3「形态选择」叙事的构造性延伸。     *)
-(*   (B) 对称 Jeffreys 形（非对称互补面）——kl(p‖q)+kl(q‖p) ≥ 0 的       *)
-(*       Bishop 形：逐点 + 有限和，全库零命中（klstb 两支各自在盘，      *)
-(*       其和在盘外）。                                                 *)
-(* ------------------------------------------------------------------ *)
-(* 依存（全在盘只读，零改上游）：CW_ConstructiveWorld_219（S08 之       *)
-(*   real_gibbs_core_eps / real_gibbs_inequality_eps / real_kl_term /   *)
-(*   real_distrib / real_mult_assoc / real_plus 系列 / real_eq 系列）、 *)
-(*   UpRealLeB（real_le_b / real_le_closure_b）、UpRealLeB2             *)
-(*   （real_le_b_plus_compat）、UpRealLeB3（leb3_le_b_eq_l）、           *)
-(*   UpReqKLStrictB（klstb_gibbs_core_shift_B / klstb_list_sum_le_b /   *)
-(*   klstb_list_sum_zero）、S07（real_le_mult_compat_r /                *)
-(*   real_lt_le_iff_req）。                                             *)
-(* 红线：全 Qed 闭合；real_le / real_lt / real_le_b / real_eq 全        *)
-(*   Set 值（CW219 S01 自建 Or := A + B），零 Prop 泄露；零公理。        *)
-(* 前缀：gfe_ 全库防撞（建前 grep 实测零命中）。                          *)
-(* 对标：mathlib 信息论 Gibbs 不等式族（Bishop 余量形）；stdlib 无同形。        *)
-(* 编译配方：cpu_guard 温控 + rocq c -Q Live/vorebuild "" -Q . ""       *)
-(* ============================================================ *)
+(* ==========================================================================)
+   GibbsFamilyExt.v — Gibbs 不等式族的温度扩展
+   使命: gfe_gibbs_core_temp_B/gibbs_inequality_temp_B（温度参数化 Gibbs）、gibbs_temp_gap_B 及 flat 形、le_b_mult_pos（正乘保序）、Jeffreys 对称熵两件（gfe_jeffreys_sym_B/sym_list_B）。
+   依赖: CW_ConstructiveWorld_219、UpRealLeB/2/3、UpReqKLStrictB；Stdlib List。
+   对标: Gibbs 不等式（相对熵非负性）与 Jeffreys 散度的族化。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 Import ListNotations.

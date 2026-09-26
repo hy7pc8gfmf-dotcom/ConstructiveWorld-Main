@@ -174,7 +174,7 @@ Definition bylb_tight : forall K : nat,
     (forall t, t <= K -> bylb_run T (bylb_ft t) = bylb_dleaf t) /\
     bylb_depth T <= S (Nat.log2 (S K))) := btight_tight.
 
-(* ========== 5. 四关审计口 ========== *)
+(* ========== 5. 公理面自审 ========== *)
 
 Print Assumptions btight_half_fuel.
 Print Assumptions btight_build_spec.

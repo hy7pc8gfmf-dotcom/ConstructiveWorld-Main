@@ -1,19 +1,13 @@
-(* ============================================================
-   UpReqPadeQLeg —— 使命行：Q 层序定律肢：有理层的序与自然数比值单调。
+(* ============================================================ UpReqPadeQLeg —— 使命行：Q 层序定律肢：有理层的序与自然数比值单调。
    主件：pql_pos_den_pos 与 pql_qlt0_eq_r / pql_nat_ratio_mono 有理序定律族。
    依赖：无显式 Require 面（自足件）。
    构造性注记：零 Require Psatz（Lia 即足）、零外加假设语句（公理面声明）。
    编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
    coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。
    ============================================================ *)
-
-(* ============================================================ *)
 (* 补充注记：Padé nia 战术位 → 自建 Q 单调肢                         *)
-(*                                                                  *)
 (* 公理面声明：本件零 Require Psatz（Lia 即足）、零外加假设语句；      *)
-
 (*   前缀 pql_ 全库防撞。                                            *)
-(*                                                                  *)
 (* 覆盖三族（实测 12 活位点）：              *)
 (*   族 A：Qeq→Qlt 传桥（7 位点）= Sign/Lower/BetaPos 的               *)
 (*     *_qlt0_eq_r（3 处同形）+ Lower cpl_qlt_eq_l/cpl_qlt_eq_sr +     *)
@@ -34,7 +28,6 @@
 (*   在 ZArith 命名空间（QArith 不透出，须显式 Require）。             *)
 (* 双先例：UpReqPadeTailPos.v（Lia Setoid 形零 nia 实证）+             *)
 (*   UpReqPadeBetaPos.v pbp_qfact_mono（自建单调先例）。               *)
-(* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Arith.Arith Lia ZArith.
 

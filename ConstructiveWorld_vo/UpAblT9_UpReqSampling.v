@@ -1,21 +1,11 @@
-(* ============================================================ *)
-(* UpAblT9_UpReqSampling.v —— T9 批 Context 束两位 + TV 面两位·             *)
-(*   UpReqSampling 辖区（sum/swap 面=T6a 已毕，零重叠）                     *)
-(* 被消融位（普查表 §2 UpReqSampling 行）：                                *)
-(*   位1 UpReqSampling.v:99   Context（Section ReqUContraction）           *)
-(*   位2 UpReqSampling.v:701  Context（Section ReqBoundedSoftmax）         *)
-(*   位3 UpReqSampling.v:126  delta_lt_one（TV 面，第⑦批坐标）             *)
-(*   位4 UpReqSampling.v:131  minorization（TV 面，第⑦批坐标）             *)
-(* 母本（零施工直喂，出节签名实测自 _tt9a_sig 探针）：                      *)
-(*   位1 ←aux_delta_plus_omd@:153（omd 出节即 req_minus one delta）        *)
-(*   位2 ←rsq_bs_list_const_sum@:790（纯 Context+list 数据位）             *)
-(*   位3 ←rsq_bs_delta_star_lt_one@:935（delta_star 实例面）               *)
-(*   位4 ←tvd_minorization@UpTVDoeblin:1933（跨模块实例面；req 层 le 在     *)
-(*       RealEnhancedReal 实例位定义性=real_le，逐字 exact 喂参）           *)
-(* 分级：四位全 N1。                                                       *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、     *)
-(*   UpReqSumD、UpTVDoeblin、UpReqSampling。                               *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblT9_UpReqSampling.v — Context 束两位与 TV 面两位之 UpReqSampling 辖区材料化件
+   使命: aux_delta_plus_omd、rsq_bs_list_const_sum、delta_star 实例面与跨模块 minorization（tvd_minorization 全参特化）四定理。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqSumD、UpTVDoeblin、UpReqSampling、List。
+   对标: 总变差收敛的 minorization 条件实例层。
+   构造性: 全 Qed 闭合、零承认词面；req 层 le 在 RealEnhancedReal 实例位定义性等于 real_le，逐字 exact 代入；只读依赖，原树零改。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.

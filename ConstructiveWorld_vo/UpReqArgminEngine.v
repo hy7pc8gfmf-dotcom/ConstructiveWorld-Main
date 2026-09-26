@@ -1,23 +1,22 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqArgminEngine.v *)
 (* *)
 (* 目的： argmin 选取引擎：有限枚举上的最小值选取与最优性。 *)
-(* 主件： rae_pick_mem / rae_pick_optimal：选取的成员性与最优性；mpd_argmin_engine_transport 域搬运。 *)
+(* 主件： rae_pick_mem / rae_pick_optimal：选取的成员性与最优性；mpd_argmin_engine_transport 域迁移。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqDist、UpReqAlignRestB、UpReqAlgebra、UpReqMpDomain。 *)
 (* 备注： 序可判定（le/lt 的 Or 形判定）为显式 Variable 前提；有限枚举载体。 *)
 (* ============================================================ *)
 
-(* UpReqArgminEngine.v — 席T36：通用 req-list argmin 引擎（20260911）
+(* UpReqArgminEngine.v — ：通用 req-list argmin 引擎（）
    ----------------------------------------------------------------
-   立论（席A4 深度分析实证，Top-5 候选 A1-3）：mp 域
    mpd_argmin_aux_token_min_mp（UpReqMpDomain.v L394-428）的证明全部
    序积木均为 RIES 接口字段（lt_le_iff / le_id_l / le_trans / le_refl
    皆字段），对任意 (R,RIS) 与任意元素类型通用。Min-P 专用部分仅：
      ① key 函数 total_loss (prefix ++ [w])
      ② vocab/default 挑选包装
-     ③ 节变量（vocab_nonempty / temperature 等，argmin 机器不消费）
+     ③ 节变量（vocab_nonempty / temperature 等，argmin 机器不使用）
    本件把 argmin 机器提升为任意 Set 载体 A + 任意 key : A -> R 的
-   通用引擎，并在尾段以 mp 域实例回收验证（转换级 transport +
+   通用引擎，并在尾段以 mp 域实例复原验证（转换级 transport +
    via_engine 三件）兑现「mp 域 argmin 可由泛化引擎实例化」。
 
    对位登记表（req 引擎件 <- mp 域原件 @ UpReqMpDomain.v 行号）：
@@ -25,7 +24,7 @@
      rae_argmin_aux                 <- mpd_argmin_aux_token（L358；
                                        total_loss (prefix++[w]) → key a）
      rae_argmin_aux_min             <- mpd_argmin_aux_token_min_mp（L394；
-                                       逐 tactic 同形，best 打包 (A*R)）
+                                       逐 tactic 同形，best 封装 (A*R)）
      rae_argmin_aux_snd_correct     <- mpd_argmin_aux_token_snd_correct_mp
                                        （L431）
      rae_argmin_aux_mem             <- mpd_argmin_aux_token_mem（L441）
@@ -33,7 +32,7 @@
                                        mpd_pick_best_in_vocab（L449）
      rae_pick_optimal               <- mpd_pick_best_optimal_mp（L469；
                                        等词伴件运输以 eq_rect 纯 term）
-   [回收验证段 MpRecycleProbe]
+   [复原验证段 MpRecycleProbe]
      mpd_argmin_engine_transport    （消解形定义级转换：mp 机器 = 引擎
                                        在 A:=Token, key:=fun w =>
                                        total_loss (prefix++[w]) 的实例）
@@ -67,7 +66,7 @@ Variable key : A -> R.
 
 (* 桥假设位 1：le 二分判定（RestB/MpDomain 位 1 同位） *)
 Hypothesis rae_le_dec : forall a b : R, Or (le a b) (Not (le a b)).
-(* 桥假设位 2：三分判定（仅 min 件 not_le 步消费） *)
+(* 桥假设位 2：三分判定（仅 min 件 not_le 步使用） *)
 Hypothesis rae_lt_dec : forall a b : R, Or (lt a b) (Or (req a b) (lt b a)).
 
 (* argmin 机器（mpd_argmin_aux_token 对位：key 打点化） *)
@@ -190,9 +189,9 @@ Qed.
 End ReqArgminEngine.
 
 (* ============================================================ *)
-(* 回收验证段 MpRecycleProbe：mp 域 argmin = 引擎实例            *)
+(* 复原验证段 MpRecycleProbe：mp 域 argmin = 引擎实例            *)
 (*（位形 = UpReqMpDomain Section ReqMpKernelWorld2 中 argmin 机器  *)
-(*  实际消费的假设位：Token / total_loss / 判定位 1+2；其余节变量    *)
+(*  实际使用的假设位：Token / total_loss / 判定位 1+2；其余节变量    *)
 (*  vocab_nonempty/temperature/default_token/min_p 不入机器闭包） *)
 (* ============================================================ *)
 Section MpRecycleProbe.
@@ -208,7 +207,7 @@ Definition mp_key (prefix : list Token) : Token -> R :=
 
 (* 定义级 transport：mp 域 argmin 机器与引擎实例逐点相等（归纳 +
    转换级：mp 机器递归多穿 prefix 参、引擎打点化 key，二者在
-   A:=Token, key:=mp_key prefix 假设位下逐支同形——回收结论的转换级
+   A:=Token, key:=mp_key prefix 假设位下逐支同形——复原结论的转换级
    证据：mp 机器就是引擎的特例） *)
 Lemma mpd_argmin_engine_transport : forall (prefix l : list Token)
          (best : (Token*R)%type),

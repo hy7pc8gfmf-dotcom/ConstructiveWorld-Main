@@ -1,30 +1,11 @@
-(* ============================================================ *)
-(* UpReqPinskerCore.v —— 二点常数 Pinsker 核引擎                      *)
-(*   （本件=批 2 版超代批 1 同名件：含批 1 全部 2 位+新增 2 位）      *)
-(*                                                                *)
-(* 使命：本件形式化二点（Bernoulli）层普适常数引擎：                  *)
-(*   ① pnk_core：锐化上切线核（二阶 log 引擎·上侧）——                  *)
-(*      (x+1)·2·log x ≤_B (x−1)(x+3)，对全体 x>0 无分支成立；          *)
-(*      证法＝切线自举：log x = log t1 + log t2（乘法法则），           *)
-(*      共轭对 t1 := 2x·inv(x+1)、t2 := (x+1)·inv(2)（t1·t2 == x），    *)
-(*      各施一阶切线 log t ≤ t−1（real_log_le_linear_B）后代数合并；    *)
-(*   ② pnk_gap_global_B：全局逐点平方下界：                            *)
-(*      2·(p+q)·(kl(p,q)+(q−p)) ≥_B (p−q)²，对全体 p,q>0 成立，        *)
-(*      由 pnk_core 于 X := q·inv p 实例化与 klst_gap_shape 换形装配。  *)
-(*   另含 Q 层交替截断族：log(1+x) ≥ P4(x) 的偶截断单调尾件、          *)
-(*   余项参数位非负件与常数正性件。                                    *)
-(* 依赖：Stdlib QArith.Qring、Setoid、Lia；CW_ConstructiveWorld_219、   *)
-(*        G07_KLWall、UpRealLeB、UpRealLeB2、UpRealLeB3、               *)
-(*        PinskerTwoPoint、UpReqTailResidual。                          *)
-(* 对标：mathlib Pinsker 不等式（信息论层）；本件为其二点常数核的       *)
-(*        构造性可提取对应物。                                          *)
-(* 构造性注记：语句面全 Set 值（real_le_b 为 forall 型，无 Prop 泄露）；  *)
-(*        证内 Or 分解仅显式两支消解，零排中形态；零假设位、零承认、     *)
-(*        可提取；Q 层序接口引理以显式 Z 序引理链构造；                  *)
-(*        文尾 Print Assumptions 审计，公理面为空。                     *)
-(* 编译配方：Rocq 9.1 直调（coqc -q -Q . ""），cpu_guard 护航。          *)
-(* ============================================================ *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqPinskerCore.v — Pinsker 常数核心：二点定量 Pinsker 界
+   使命: pnk_core（核心不等式）、pnk_gap_global_B（全局间隙）、pnk_kl2_ge_fracsum 与 pnk_pinsker_frac2（分数型 Pinsker）、pnk_conf4_branch/pnk2_pinsker_one（常数 2 档）、PNK2B 段（近支/对称件 d² ≤ 2p·KL₂ 型）。
+   依赖: CW_ConstructiveWorld_219、G07_KLWall、UpRealLeB/2/3、PinskerTwoPoint、UpReqTailResidual；Stdlib QArith.Qring、Setoid、Lia。
+   对标: Pinsker 不等式的定量常数版本（TV–KL 最优常数问题）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.Qring Setoid.
 Require Import CW_ConstructiveWorld_219.
@@ -968,7 +949,7 @@ Qed.
 
 
 (* ============================================================ *)
-(* R6 追加段（席 PNSKA-R6·级数残差引擎席·相位=编译重 20260917）          *)
+(* R6 追加段（级数残差引擎）          *)
 (*   ① 常数族 four/three_pos/nine/ten/nine_ten（9/10 := 9·inv 10）      *)
 (*   ② pnk_log_mirror_B：对称切线 log s ≥_B 1−1/s（s>0）                *)
 (*      链＝real_log_le_linear_B 于 inv s + log_mult 拆分 + opp_rev。    *)
@@ -987,7 +968,7 @@ Qed.
 (*      d²≤2aA / d²≤2bB）+ 正缩放消 inv（real_inv_pos_correct 因子级     *)
 (*      焊接，R5 配方）+ ±(q−p) 支内消去 + 常数步 1/(2a)+1/(2b)≥9/10     *)
 (*      （核心＝s(2−s)≤_B 1 ⟸ 4·s(2−s)+(2s−2)²==4 环恒等+平方非负）。    *)
-(*   诚实边界：S1 近支/S2（−log(1−y) ≥ y+y²/2）未落。本席实测：一阶      *)
+(*   诚实边界：S1 近支/S2（−log(1−y) ≥ y+y²/2）未落。实测：一阶      *)
 (*   三明治族（切线+对称+整数 k 嵌套 [1−(1+s)^{−k}]/k）的 s² 系数恒为     *)
 (*   −(k+1)/(2k) < −1/2，严格低于所需 −1/2（数值核 361 点同证），即      *)
 (*   首阶引擎无论怎样嵌套都不可能闭合 S2——需真二阶核（交替级数截断/     *)
@@ -1278,7 +1259,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R7 追加段（席 PNSKA-R7·0.9 档闭合席·相位=编译重 20260917）            *)
+(* R7 追加段（0.9 档闭合）            *)
 (*   10.1 pnk_kl2_ge_fracsum：kl₂ ≥ d²·(1/(2(p+q))+1/(2(2−p−q)))。      *)
 (*        装配＝pnk_gap_global_B×2 + leb3_le_b_pos_scale 消 inv           *)
 (*        （real_inv_pos_correct 因子级焊接）+ p2_one_minus_diff         *)
@@ -2265,7 +2246,7 @@ Print Assumptions pnk_kl2_ge_fracsum.
 Print Assumptions pnk_pinsker_frac2.
 
 (* ============================================================ *)
-(* R8 续建（席 PNSKA-R8，20260917·二阶核战役）：                     *)
+(* R8 续建（二阶核）：                     *)
 (*   ① Q 层交替截断族（G1-Q 件）：S1 核多项式参数位 P4 := x−x²/2+x³/3−x⁴/4  *)
 (*     + 偶截断单调尾步件（P4 ≥ P2、余项参数位 x⁵/5 非负）——R7 情报 7       *)
 (*     「Q 层有限和族基建」的首块。                                   *)
@@ -2490,10 +2471,10 @@ Qed.
 Print Assumptions pnk_amgm4_B.
 Print Assumptions pnk_conf4_branch.
 (* ============================================================ *)
-(* R9-PNSK 节（席 PNSK·Pinsker 常数 2 尖顶组装席，2026-09-18）         *)
+(* R9-PNSK 节（Pinsker 常数 2 尖顶组装）         *)
 (*   相位=编译重；纯追加（af_ 冻结纪律，不动上文 35 Qed 任何一行）。    *)
 (*                                                                *)
-(* R8 施工单三项对照（诚实口径，详见 attn/_tpnsk_交付报告-20260918.md）：*)
+(* 早期三项对照（诚实口径）：*)
 (*   第 6 项（G3 阶梯）本节执行闭合：常数 1 档显式主件 pnk2_pinsker_one。 *)
 (*     阶梯定位：9/10（pnk_pinsker_frac2）< 1（本节）< 2（待 W3）。    *)
 (*     「数值选形」已证结论：在盘引擎（pnk_core 二阶上切线 + fracsum 全局）  *)
@@ -2501,10 +2482,10 @@ Print Assumptions pnk_conf4_branch.
 (*     对角线仅到 2 的下确界靠高阶尾残差，属 W3 开放解析环）。          *)
 (*   第 5 项（常数 2 完整形 pnk_binary_pinsker2）本窗不落——前置缺口：   *)
 (*     W3 全局解析环（Σp·L*_5(u) ≥ 2d²，EXP-D1 报告明示开放项）未闭；   *)
-(*     且施工单第 5 项所引支内合流式 1/(2p)+1/(2(1−q)) ≥ 2 不成立      *)
-(*     （(p,q)=(0.9,0.1) 处实值≈1.11），按红线③显式申报禁硬凑。        *)
+(*     且清单第 5 项所引支内合流式 1/(2p)+1/(2(1−q)) ≥ 2 不成立      *)
+(*     （(p,q)=(0.9,0.1) 处实值≈1.11），按红线③显式申报禁硬性拼合。        *)
 (*   第 4 项（S1/S2 Real 层本体）本窗不落——exp 桥所需 Real 层级数尾     *)
-(*     控制基建（W2 pnk_qsum 族+几何尾）未在盘；施工单自估预算 ≥1 席。 *)
+(*     控制基建（W2 pnk_qsum 族+几何尾）未在盘；工作量自估 ≥1 个工作段。 *)
 (*   跨件组合使用：本节主件使用 pnk_kl2_ge_fracsum（本件）+             *)
 (*     p2_kl2/p2_tvsq（PinskerTwoPoint）+ UpRealLeB3 序代数族；         *)
 (*     cec_trunc_sup（UpReqEngineCeiling）为 Q 层常数算术层（天花板    *)
@@ -3066,7 +3047,7 @@ Print Assumptions pnk2_sprod_le_one.
 Print Assumptions pnk2_pinsker_one.
 
 (* ============================================================ *)
-(* R10-PNK2B 块（席 PNK2B·20260918·纯追加）—— Pinsker 常数 2 桥件层      *)
+(* PNK2B 块（纯追加）—— Pinsker 常数 2 桥接件层      *)
 (*                                                              *)
 (* 使命：头注「已知边界」测绘的常数 2 装配路径之支内二阶砖。            *)
 (*   数值已证结论（400² 网格，_tpnk2b_交付报告 §反例见证）：                    *)
@@ -3097,7 +3078,7 @@ Print Assumptions pnk2_pinsker_one.
 
 Require Import UpReqTailResidual.
 
-(* ---- R10-PNK2B.1 点级环消解与代数小件 ---- *)
+(* ---- PNK2B.1 点级环消解与代数小件 ---- *)
 
 Ltac pnk2_ring_eq :=
   apply real_eq_of_zero_diff; intro n0;
@@ -3409,7 +3390,7 @@ Proof.
     + pnk2_ring_eq.
 Qed.
 
-(* ---- R10-PNK2B.2 桥件（近支砖）：q<p ⟹ d² ≤ 2p·KL₂ ---- *)
+(* ---- PNK2B.2 桥接件（近支砖）：q<p ⟹ d² ≤ 2p·KL₂ ---- *)
 
 Theorem pnk2_pinsker_trunc5 : forall (p q : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
@@ -3603,7 +3584,7 @@ Proof.
     + exact (pnk2_ring_eq_lscale p (p2_kl2 p q Hp Hq Hp1 Hq1)).
 Qed.
 
-(* ---- R10-PNK2B.3 对称件：p<q ⟹ d² ≤ 2(1−p)·KL₂ ---- *)
+(* ---- PNK2B.3 对称件：p<q ⟹ d² ≤ 2(1−p)·KL₂ ---- *)
 (*   经二点 KL 原子反射恒等式 p2_kl2(1−p,1−q) == p2_kl2(p,q) 与        *)
 (*   TV² 反射 ((1−p)−(1−q))² == (p−q)² 归约到近支砖。                   *)
 
@@ -3652,6 +3633,6 @@ Proof.
                   (pnk2_kl2_reflect p q Hp Hq Hp1 Hq1 Hpp Hqq))).
 Qed.
 
-(* ---- R10-PNK2B 假设审计 ---- *)
+(* ---- PNK2B 假设审计 ---- *)
 Print Assumptions pnk2_pinsker_trunc5.
 Print Assumptions pnk2_pinsker_trunc5_mirror.

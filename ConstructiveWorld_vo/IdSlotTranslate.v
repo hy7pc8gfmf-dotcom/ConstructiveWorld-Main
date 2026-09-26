@@ -1,9 +1,15 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   idt_slot_s15（原 L157，2 句玩具证）                                  *)
 (*   idt_slot_s13（原 L148，2 句玩具证）                                  *)
@@ -13,25 +19,21 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* IdSlotTranslate.v —— 席位 CYD7（批次 E-STAGING-CYD7）            *)
-(* sum_eq_list 四 Id 形同型槽：RI→Setoid 接口翻译件 + 真宿主核销    *)
-(* 接 CWE5 未决事项（消融50/SumEqListMark.v 头注槽2-5 挂账）        *)
+(* 接 CWE5 未决事项（消融50/SumEqListMark.v 头注槽2-5 留记）        *)
 (*                                                               *)
-(* 侦查判词（真源 ConstructiveWorld_Live 逐字核对，行号四槽与      *)
-(* 任务书全吻合）：                                                *)
+(* 侦查裁定结论（真源 ConstructiveWorld_Live 逐字核对，行号四槽与      *)
 (* 1) 四槽语句逐字同构：                                           *)
 (*      Variable sum_eq_list : forall g : S -> R,                  *)
 (*        Id (sum_over_S g) (bs_list_sum g enum).                  *)
 (*    坐标：G01_CoreMicro:476（RowView 节）/ AttnDoeblin:485        *)
 (*    （BoundedSoftmax 节）/ S13_NLiveAudit:2676 / S15:147。        *)
-(*    宿主真机全库唯二定义点（grep 定谳）：                         *)
+(*    宿主真机全库唯二定义点（grep 已证结论）：                         *)
 (*      AttnDoeblin.v:478 Fixpoint bs_list_sum —— 供槽             *)
 (*        AttnDoeblin:485 + G01:476（G01:362 Require Import        *)
 (*        CW219 AttnDoeblin，裸名后 Import 者胜）；                 *)
 (*      S13_NLiveAudit.v:2669 Fixpoint bs_list_sum —— 供槽         *)
 (*        S13:2676 + S15:147（S15:26 Require Import S13，          *)
 (*        S15 自足不 Require AttnDoeblin，:1877 头注自证）。        *)
-(* 2) 两定义性桥同构判定（任务书侦查项）：                          *)
 (*    宿主机与钥匙桥侧 sumd_list_sum@UpReqSumD:61 字面同构——       *)
 (*    同一折叠（nil => zero | x :: t => plus (f x) rec），          *)
 (*    唯一差异 = 接口头：宿主机 zero/plus 投影跑                   *)
@@ -41,25 +43,23 @@
 (*    sum_over_S 位：全库皆抽象（Let := @sum_over_S RI SS SO       *)
 (*    缩写；Build_SumOver 全库零命中）：SumOver 八字段中           *)
 (*    sum_over_S_zero_nonneg 为全称形（∀s，不拘 enum 成员位），     *)
-(*    收口须 enum 满射数据（UpReqSumD:228 区同款诚实裁决），        *)
-(*    SumOver 实例构造不可行——故本件核销为槽语句级：               *)
-(*    sum_over_S := idt_sumf（定义性放电实例，CWE5 喂法             *)
-(*    sumf := sumd_sumf 之 RI 载体镜像）。                          *)
-(* 3) 谓词墙（第三坑，本件新定谳）：槽谓词 Id = S01_BaseRing:63    *)
+(*    闭合须 enum 满射数据（UpReqSumD:228 区同款诚实裁决），        *)
+(*    sum_over_S := idt_sumf（定义性实例化消解实例，CWE5 用法             *)
+(*    sumf := sumd_sumf 之 RI 载体同构）。                          *)
+(* 3) 谓词墙（第三坑，本件新已证结论）：槽谓词 Id = S01_BaseRing:63    *)
 (*    全局归纳恒等型（Set 值， polymorphic）；req = Setoid 字段。    *)
 (*    req 证明不可运输为 Id（两谓词无接口级联系）——req 钥匙桥      *)
 (*    sumd_sum_eq_list 留守槽1 不过河；Id 四槽走：定义性坍缩        *)
-(*    （sumd_sumf ≡ sumd_list_sum 同构之 RI 镜像，id_refl 级）      *)
+(*    （sumd_sumf ≡ sumd_list_sum 同构之 RI 同构，id_refl 级）      *)
 (*    + 宿主出节真机一致桥（列表归纳 id_cong2 同余，不押            *)
 (*    conversion——CWE5 转换墙（出节 fixpoint 与在写 fix 中性       *)
 (*    变元不互转）免疫设计）。                                      *)
 (*                                                               *)
 (* 交付：翻译桥 2 件（桥1 = idt_sum_eq_list 和侧；桥2 = 宿主真机    *)
-(* 一致桥两宿主机实例）+ 四宿主核销定理（每槽一个，宿主 S/R 实例    *)
 (* 位 @S RI SS / @R RI 逐字代入）+ G4 Print Assumptions 七件。      *)
 (*                                                               *)
 (* 红线：全 Set 层（Id 为 Set 值归纳型）；纯构造性零承认位；既有    *)
-(* 文件零改；前缀 idt_ 全库防撞已核（grep 唯一真命中=本件；         *)
+(* 文件零改；前缀 idt_ 全库防同名冲突已核（grep 唯一真命中=本件；         *)
 (* gram_schmi_dt_step 系为子串假阳性）。                            *)
 (* ============================================================ *)
 
@@ -81,9 +81,9 @@ Context {RI : RealInterfaceEnhanced}.
 Context {SS : StateSpace RI}.
 Local Existing Instance RI_base.
 
-(* ============ 桥 1：RI 载体列表折叠机 + 定义性放电实例 ============ *)
+(* ============ 桥 1：RI 载体列表折叠机 + 定义性实例化消解实例 ============ *)
 (* sumd_list_sum@UpReqSumD:61 与 sumd_sumf:68 之 RealInterface-     *)
-(* Enhanced 载体镜像（字面同构翻译）；裸 zero/plus = @zero RI /     *)
+(* Enhanced 载体同构（字面同构翻译）；裸 zero/plus = @zero RI /     *)
 (* @plus RI（宿主真机同接口）。                                     *)
 
 Fixpoint idt_list_sum (f : S -> R) (l : list S) : R :=
@@ -92,7 +92,7 @@ Fixpoint idt_list_sum (f : S -> R) (l : list S) : R :=
   | x :: t => @S01_BaseRing.plus RI (f x) (idt_list_sum f t)
   end.
 
-(* sum_over_S 槽位的定义性放电实例（sumd_sumf 同位镜像） *)
+(* sum_over_S 槽的定义性实例化消解实例（sumd_sumf 同位同构） *)
 Definition idt_sumf (enum : list S) (f : S -> R) : R :=
   idt_list_sum f enum.
 
@@ -132,13 +132,12 @@ Proof.
   - exact (id_cong2 (@S01_BaseRing.plus RI) id_refl IH).
 Qed.
 
-(* ============ 四宿主核销定理（每槽一个） =========== *)
-(* 语句 = 槽语句（sum_over_S := idt_sumf 放电实例）对宿主出节真机；  *)
-(* enum 由槽节 Variable 位升格为显式全称（更强诚实形）。喂法 =       *)
+(* 语句 = 槽语句（sum_over_S := idt_sumf 实例化消解实例）对宿主出节真机；  *)
+(* enum 由槽节 Variable 位升格为显式全称（更强诚实形）。用法 =       *)
 (* 桥 2 特化（idt_sumf 经 delta/beta 坍缩为 idt_list_sum，桥 1 同    *)
-(* 式）。四定理即四槽 sum_eq_list 之可实现 witnesses，四消费位       *)
+(* 式）。四定理即四槽 sum_eq_list 之可实现 witnesses，四使用位       *)
 (* （G01:485/:500、AttnDoeblin:622/:629/:673、S13:2813/:2820/:2864、 *)
-(* S15:156/:171）按此实例喂入。                                     *)
+(* S15:156/:171）按此实例输入。                                     *)
 
 (* 槽 AttnDoeblin:485（BoundedSoftmax 节） *)
 Theorem idt_slot_attdoeblin :

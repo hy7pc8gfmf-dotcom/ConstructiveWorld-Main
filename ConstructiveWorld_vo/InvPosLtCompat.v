@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* InvPosLtCompat.v —— T40 消融50 战役 CYC9 席（批次 E-STAGING-CYC9） *)
 (*                                                              *)
 (* 使命：UpFirewall.v:102 inv_pos_lt_compat 诚实接口槽 C 类兑现。  *)
 (*   槽语句（UpFirewall.v:102-103，根 L17119 同名 Variable 复刻）： *)
@@ -10,25 +16,25 @@
 (*     S01:249——严格版此前仅具体 Real 层 real_inv_pos_lt_contra  *)
 (*     S07:6040 在册，抽象层缺口本件补齐。）                     *)
 (*                                                              *)
-(* 收口原理：纯序-代数链，无需可判定序扩展（DecidableOrder 不     *)
+(* 闭合原理：纯序-代数链，无需可判定序扩展（DecidableOrder 不     *)
 (*   入依赖面，比 fa53/fa57 兄弟槽更干净）：                      *)
 (*     inv b == (inv a·a)·inv b < (inv a·b)·inv b == inv a       *)
 (*   ① 单侧严格左乘（lt_mult_compat 右乘形 + 两次 mult_comm      *)
 (*    运河，fa53_lt_plus_translate 同构运河法）；                 *)
-(*   ② 再右乘 inv b（lt_mult_compat 直配，正性由 inv_pos_pos）；  *)
+(*   ② 再右乘 inv b（lt_mult_compat 直接给出，正性由 inv_pos_pos）；  *)
 (*   ③ 左运河：(inv a·a) ≡ one（mult_comm + inv_pos_correct）    *)
 (*      叠 one 左乘归位（mult_comm + mult_one）；                 *)
 (*   ④ 右运河：(inv a·b)·inv b ≡ inv a（mult_assoc 重排 +        *)
 (*      inv_pos_correct + mult_one）；                           *)
-(*   ⑤ lt_id_l/lt_id_r 双端换装收口。                            *)
-(*   ——库内坐标实测：槽消费位 UpFirewall:102；Real 层佐证         *)
-(*     real_inv_pos_lt_contra S07:6040（消费 S07:6792、          *)
+(*   ⑤ lt_id_l/lt_id_r 双端转换闭合。                            *)
+(*   ——库内坐标实测：槽使用位 UpFirewall:102；Real 层佐证         *)
+(*     real_inv_pos_lt_contra S07:6040（使用 S07:6792、          *)
 (*     CW220:1044、S08:637、S09:1390、UpBudgetReal:322、          *)
 (*     UpRealLeB:134、S11:8059、UpReqMinPKLChain:949 等）。       *)
 (*                                                              *)
 (* 纪律：纯构造性 / 语句面全 Set 层（Id/lt，Not=S01:70            *)
 (*   Empty_set 函数形）/ 非平凡真证（四段字段链）/ 原树零改；     *)
-(*   前缀 ipl_ 全库防撞已核；尾嵌 Print Assumptions 自检段。      *)
+(*   前缀 ipl_ 全库防同名冲突已核；尾嵌 Print Assumptions 自检段。      *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -57,7 +63,7 @@ Proof.
   exact (lt_mult_compat a b c Hc Hab).
 Qed.
 
-(* ---- 主件：正倒数严格反变（UpFirewall:102 槽位消融主件） ----
+(* ---- 主件：正倒数严格反变（UpFirewall:102 槽消融主件） ----
    inv b == (inv a·a)·inv b < (inv a·b)·inv b == inv a。 *)
 Theorem ipl_inv_pos_lt_compat :
   forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
@@ -89,7 +95,7 @@ Proof.
                     (id_trans (id_cong (fun w => mult (inv_pos a Ha) w)
                                        (inv_pos_correct b Hb))
                               (mult_one (inv_pos a Ha)))). }
-  (* 双端换装收口 *)
+  (* 双端转换闭合 *)
   exact (lt_id_r (inv_pos b Hb)
                  (mult (mult (inv_pos a Ha) b) (inv_pos b Hb))
                  (inv_pos a Ha) Hr
@@ -99,7 +105,7 @@ Proof.
                           (id_sym Hl) Hstep)).
 Qed.
 
-(* ---- 槽位锚定形：与 UpFirewall.v:102 逐字同语句的改喂锚 ---- *)
+(* ---- 槽互核形：与 UpFirewall.v:102 逐字同语句的改喂锚 ---- *)
 Corollary ipl_upfirewall_102_shape :
   forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
     lt a b -> lt (inv_pos b Hb) (inv_pos a Ha).
@@ -108,7 +114,7 @@ Proof.
 Qed.
 
 (* ---- 对偶形：正倒数严格正变（lt (inv a) (inv b) 方向，
-        兄弟槽族 real_inv_pos_lt 形；由主件 + lt_id 双向换装） ---- *)
+        兄弟槽族 real_inv_pos_lt 形；由主件 + lt_id 双向转换） ---- *)
 Lemma ipl_lt_inv_pos_mono :
   forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
     lt b a -> lt (inv_pos a Ha) (inv_pos b Hb).

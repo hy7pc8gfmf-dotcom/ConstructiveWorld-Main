@@ -1,44 +1,22 @@
 (* ===================================================================== *)
-(* ToyR 战役包E 切片四替换席头注块（全中文零承认面）                       *)
-(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
-(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
-(*   替换清单（本件）：四项交换件（改道三枢纽右嵌新链：外和中枢＋分量交换同余枢纽＋尾中枢，原七跳链整链重排）＋指数和一件（断言拆题命名 logits 和桥，三枢纽装配）＋增量星一件（命名桥断言双件：和一闭链＋乘法保序闭项）。                                            *)
-(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
-(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
-(*   ②显式闭项 witness（加逆唯一性闭项逐腿直供／平方见证 distrib 闭项）＋  *)
-(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
-(*   换轨新链：三枢纽重组与断言拆题命名桥）。                              *)
-(*   挂账（本件不可化批量标注）：界面字段单跳族（指数位正性两件等为节变量位单点转发）、传输收缩两旗舰（引擎件单点消费即全部内容）、增量星下界三件（原链已最简，换序即注水），如实挂账。                                  *)
-(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
+(*  AttnDoeblin.v —— 有界 logits softmax 注意力核的显式 Doeblin 收缩      *)
+(*  使命: Part A（抽象层）u_tv_contraction：双点全变差收缩——参考分布 u     *)
+(*        仅需归一化（无需平稳性/详细平衡），收缩在任意两个归一化分布间    *)
+(*        成立；迭代版 u_tv_iter 给出几何率 (1−δ)ⁿ。Part B（主件）有界     *)
+(*        logits softmax 核：z 双显式界（−Δ ≤ z ≤ Δ）⟹ 核逐点 ≥ δ*·U，     *)
+(*        δ* := lo·lo（lo := e^{−Δ/T}）= e^{−2Δ/T}——温度与 logit 直径的    *)
+(*        显式函数；Part A 实例化 ⟹ 收缩率 (1 − e^{−2Δ/T})ⁿ。Part C：      *)
+(*        real_expf_realizable——cauchy_real_exp 满足 expf 迷你接口全部     *)
+(*        字段，Part B 假设类在具体柯西实数上非空。                        *)
+(*  依赖: CW_ConstructiveWorld_219；Stdlib List、Extraction。              *)
+(*  对标: attention_tv_contraction（库内 Doeblin 节）；显式接口三件与      *)
+(*        库内同款：sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat，         *)
+(*        另含 sum_eq_list（枚举求和规范化）。                             *)
+(*  构造性: 零承认语句；Set 层语句；全件 Qed 闭合；可提取（提取检验零      *)
+(*        Obj.magic）。求和交换与非负性以显式 Variable 前提声明。          *)
+(*  编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树     *)
+(*        同世界重编），COQLIB/ROCQLIB 全字面环境前缀。                    *)
 (* ===================================================================== *)
-
-(* ============================================================ *)
-(* AttnDoeblin.v *)
-(* *)
-(* 目的： 有界 logits softmax 注意力核的显式 Doeblin 收缩（Real/Set 层）。 *)
-(* 主件： u_tv_contraction：双点 TV 收缩，参考分布 u 仅需归一化；迭代版 u_tv_iter 给出几何率 (1-δ)^n；有界 logits 核逐点下界 δ*·U，δ* = e^(-2Δ/T)。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 参考分布无需平稳性与详细平衡；Part C 在具体柯西实数上实例化，使假设类非空；求和交换与非负性等以显式 Variable 前提（sum_swap_cc、abs_ge_zero_id_cc 等）声明。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* AttnDoeblin.v —— P1 旗舰包：有界 logits softmax 核的显式 Doeblin 收缩 *)
-(*                                                                *)
-(* Part A（抽象层）u_tv_contraction：双点 TV 收缩——相对库内           *)
-(*   attention_tv_contraction 的推广：参考分布 u 只需归一化（无需       *)
-(*   平稳性/详细平衡），收缩在任意两个归一化分布之间成立；迭代版         *)
-(*   u_tv_iter 给出几何率 (1−δ)ⁿ。                                 *)
-(* Part B（旗舰）有界 logits softmax 核：z 双显式界（−Δ ≤ z ≤ Δ）     *)
-(*   ⟹ 核逐点 ≥ δ*·U，δ* := e^{−Δ/T}·e^{+Δ/T}⁻¹ 形态 exact 化为       *)
-(*   δ* := lo·lo（lo := e^{−Δ/T}），即 e^{−2Δ/T}——温度与 logit        *)
-(*   直径的显式函数；Part A 原样实例化 ⟹ 收缩率 (1 − e^{−2Δ/T})ⁿ。     *)
-(* Part C（消解证据）：cauchy_real_exp 满足 expf 迷你接口全部字段——     *)
-(*   Part B 假设类在具体柯西实数上非空（real_eq 版语义消解）。          *)
-(* 诚实接口（Variable）：sum_swap_cc / abs_ge_zero_id_cc /              *)
-(*   lt_plus_compat（与库内 Doeblin 节同款）；sum_eq_list（枚举求和      *)
-(*   规范化 = 有限世界公理）；expf 迷你接口（Part C 消解）。             *)
-(* 红线：零 公理/承认件/值参声明；Set 层语句；全 Qed；可提取。      *)
-(* ============================================================ *)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
@@ -447,7 +425,7 @@ Qed.
 
 End UContraction.
 
-(* ################ Part B（旗舰）：有界 logits softmax 核 ################ *)
+(* ################ Part B（主件）：有界 logits softmax 核 ################ *)
 
 Section BoundedSoftmax.
 Context {RI : RealInterfaceEnhanced}.
@@ -483,7 +461,7 @@ Variable expf_plus : forall a b : R, Id (expf (plus a b)) (mult (expf a) (expf b
 Variable expf_mono_lt : forall a b : R, lt a b -> lt (expf a) (expf b).
 Variable expf_mono_le : forall a b : R, le a b -> le (expf a) (expf b).
 
-(* 诚实接口三件（与 Part A 同款，供旗舰实例化） *)
+(* 显式接口三件（与 Part A 同款，供 Part B 实例化） *)
 Variable bs_swap : forall f : S -> S -> R,
   Id (sum_over_S (fun s : S => sum_over_S (fun s' : S => f s s')))
      (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
@@ -696,7 +674,7 @@ Proof.
   exact (inv_pos_correct nR bs_nR_pos).
 Qed.
 
-(* ===== 旗舰核心：显式 Doeblin 下界 =====
+(* ===== 主件核心：显式 Doeblin 下界 =====
    P(s,s') ≥ δ*·U(s')，δ* := lo·lo = e^{−2Δ/T}（精确，无损耗） *)
 Lemma bs_minorization : forall s s' : S,
   le (mult delta_star (Unif s')) (bs_kernel s s').
@@ -741,7 +719,7 @@ Proof.
 exact (le_id_l _ _ _ Heq Hchain).
 Qed.
 
-(* ===== 旗舰定理 1：有界 softmax 核的双点 TV 收缩 =====
+(* ===== 主定理 1：有界 softmax 核的双点 TV 收缩 =====
    收缩率显式：1 − e^{−2Δ/T} *)
 Theorem bounded_softmax_tv_contraction : forall (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
@@ -755,7 +733,7 @@ Proof.
            bs_swap bs_abs bs_lpc mu nu Hmu Hnu).
 Qed.
 
-(* ===== 旗舰定理 2：迭代收缩，显式几何率 (1 − e^{−2Δ/T})ⁿ ===== *)
+(* ===== 主定理 2：迭代收缩，显式几何率 (1 − e^{−2Δ/T})ⁿ ===== *)
 Theorem bounded_softmax_tv_iter : forall (n : nat) (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
   le (tv (@u_titer RI SS SO bs_kernel n mu) (@u_titer RI SS SO bs_kernel n nu))
@@ -795,7 +773,7 @@ Proof.
                         end)))))).
 Qed.
 
-(* 提取探针：实层指数构造可提取为 OCaml（零 Obj.magic） *)
+(* 提取检验：实层指数构造可提取为 OCaml（零 Obj.magic） *)
 From Stdlib Require Import Extraction.
 Extraction "attn_doeblin.ml" cauchy_real_exp cauchy_real_exp_plus.
 

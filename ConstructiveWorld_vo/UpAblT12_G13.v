@@ -1,33 +1,27 @@
-(* ToyR 消融刀位注记（T259 台账席·包T·tier2十批）：本件三玩具位（sumd 族单 exact 直喂）
-   按结构性推导口径落刀重证：unfold sumd_sumf 定义层展开＋enum 列表归纳＋simpl 定义层化简，
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
+(*
    接口引理显式项装配（req_refl/req_plus_compat/req_plus_exchange/plus_zero/mult_zero/
    distrib/req_sym/req_trans 复合链）。语句面逐字未动；零新增 Require；其余位逐字保留。 *)
 (* ============================================================ *)
-(* UpAblT12_G13.v —— 假设消融战役 T12 扫尾席（sumf 零头 5 位之 G13 3 位）        *)
 (* 辖区：G13_EvictFam.v EvictIdReq 节 sumf 接口面（L435/438/441 三位）            *)
-(* 放电母本：sumd_*@UpReqSumD                                                   *)
+(* 实例化消解源版本：sumd_*@UpReqSumD                                                   *)
 (*                                                              *)
 (* 目的：对 G13_EvictFam EvictIdReq 节的 req 求和接口面假设位逐条兑现消融定理：    *)
 (*   假设位在具体有限和实例 sumf := sumd_sumf S enum 上全部无条件成立——          *)
 (*   前提减薄为纯数据槽（枚举清单），假设位逐条消除。                            *)
 (*                                                              *)
-(* 主件清单（3 件，前缀 uabT12_，逐件标注被消融位坐标与放电件）：                 *)
-(*    A1 uabT12_g13_sum_linear ←L435 sum_linear 放电 sumd_sum_linear@UpReqSumD:135 *)
-(*    A2 uabT12_g13_sum_add    ←L438 sum_add    放电 sumd_sum_add@:161          *)
-(*    A3 uabT12_g13_sum_ext    ←L441 sum_ext    放电 sumd_sum_ext@:112          *)
 (*                                                              *)
-(* 分级：3 件全 N1（库内放电件直连；证明体非平凡内容在放电件本体——               *)
+(* 分级：3 件全 N1（库内实例化消解件直连；证明体非平凡内容在实例化消解件本体——               *)
 (*   列表归纳链 sumd_list_sum_*@UpReqSumD，本件直连不注水）。                    *)
 (*   本批辖区无 pos/zero_nonneg 面（节内仅 linear/add/ext 三槽，源注自证）。      *)
 (*                                                              *)
-(* 依赖（全部只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。          *)
+(* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。          *)
 (*   语句面逐字抽取自现档 G13_EvictFam.v（两树逐字节同验：Main/Live_X           *)
 (*   md5 同 fa1cbb4f，917 行；L435/438/441 三位 sed 直取），                    *)
 (*   仅 sumf → sumd_sumf S enum 换实例位。原节 Let 别名（zero/plus/mult 等为    *)
 (*   接口投影 @R RIS 位）在出节全参形下经实例消解同轨。                          *)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾逐件 Print Assumptions 收尾。          *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT12_G13.log。                      *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.

@@ -1,64 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   quad_cost_descent_eps_bound（原 L197，2 句玩具证）                   *)
-(*   trajectory_eps_optimal_reach（原 L175，2 句玩具证）                  *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T329 恒等守恒更正注记】2026-09-22 包AV八 台账席（恒等头注更正全量第二批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 2 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 槽＋恒等守恒 2 槽；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321／T329 台账。                   *)
-(* 附记：T277 判级全文恒等；包V 起批直推（第二批；承 T321 §五·1 批次滚动）                        *)
-(* ============================================================ *)
-
-(* EpsOptimalReach.v — 席C7：有限轨迹上的 ε-最优可达见证（A2 组合榜组 4，20260916）
-   ------------------------------------------------------------------------
-   合成主件：对下降轨迹的有限采样表 l = [x₀, x₁, …, x_n]
-   （x_{i+1} = sf_grad_step h t x_i，sf_grad_descent 的前 n+1 个迭代点），
-   argmin 引擎（UpReqArgminEngine rae_pick_optimal，A 件）给出
-   x* = rae_pick l x₀ 且：
-     (a) x* ∈ l（rae_pick_mem）；
-     (b) 对全部 w ∈ l：key x* ≤ key w（真支配见证，非恒真壳）；
-     (c) 对全部 w ∈ l：key x* ≤ key w + eps（ε-松化形，任给 eps ≥ 0）。
-   出口全部 Set 层：sigT + And(积) + InT + RIS le / QleT'，零 Prop 语句面。
-
-   对位台账：
-     finite_table_eps_optimal_witness  <- A 件 rae_pick_optimal @ UpReqArgminEngine.v:160
-                                          + rae_pick_mem（支配证书 sigT 封装）
-     eps_loosen                        <- 支撑：支配 + eps≥0 ⟹ ε-支配
-                                          （RIS 字段 le_trans/le_plus_compat/
-                                            lt_le_iff/req_sym/plus_zero 装配）
-     traj_table / _nonempty / _iterate_mem
-                                       <- 支撑：轨迹表构造与逐点遍历（B 件链侧）
-     trajectory_eps_optimal_reach      <- 合成主件：A 引擎 × B 轨迹表
-     quad_cost_descent_eps_bound       <- B 件对接（一档）：
-                                          sf_grad_descent_convergence
-                                          @ S12_B5RecycleSF.v:13024 + ε-松化
-
-   空壳审计结论（本席动笔前实测）：
-     - sf_quad_cost_decreases（12908）：非空壳。完整三分支代数证明
-       （1<h<2 / h<1 / h=1），核心 sf_q_cw_sq_le + Qmult_le_l，真 QleT' 出口。
-     - sf_grad_descent_convergence（13024）：非空壳。归约到精确等式件
-       sf_grad_descent_cost_eq（sf_quad_cost t (descent n) == qpow2 (1-h)² n
-       * sf_quad_cost t x，归纳 + ring），经 sf_qeq_le 转 QleT'，非占位。
-     故两件均按原样采用，无需退邻居件。
-
-   接口实况（实例图谱）：全库 RealInterfaceEnhancedSetoid 唯一实例为
-   RealEnhancedReal（Bishop 逐 eps le，不可判定）；Q 无 RIS 实例。故引擎
-   侧保持抽象 (R,RIS,key) + 可判定桥假设（与引擎文件自身 MpRecycleProbe
-   同风格），Q 侧以 QleT' 链对接 quad_cost 一档——即任务书预置的
-   「B 件接口不匹配退为纯 A 件定理 + quad_cost 实例化一档」路线。
-
-   纪律：纯构造性；八禁词零命中；核心件全 Qed；文末 Print Assumptions ≥1。 *)
+(* ==========================================================================)
+   EpsOptimalReach.v — 有限表上的 ε-最优选取与梯度下降可达界
+   使命: traj_table 迭代表与其成员/非空/迭代命中引理、finite_table_eps_optimal_witness（有限非空表 ε-最优见证）、trajectory_eps_optimal_reach 与 quad_cost_descent_eps_bound（二次代价下降 ε-界）。
+   依赖: CW_ConstructiveWorld_219、S01_BaseRing、S02_CauchyComplete、S07_RealSetoidExpLog、S12_B5RecycleSF、UpReqArgminEngine；Stdlib List、QArith、Lia
+   对标: 有限点集 ε-最优选取（argmin 的构造性 ε 松弛形）与梯度下降法的二次函数收敛界。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。存在性命题以 sigT 见证形给出。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import S01_BaseRing.

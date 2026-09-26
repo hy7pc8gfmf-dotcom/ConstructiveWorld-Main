@@ -1,16 +1,16 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ToyR 玩具证替换件 ——   工程包AD（tier2 末批二）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   p2a_attn_tv_seq_clim_zero（原 L112，2 句玩具证）                     *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* p2a_AttnClimClose.v —— 席 CZC10（E-STAGING-CZC10）              *)
-(*   论文2《自由能原理与注意力Gibbs桥》假设消融施工：T56 普查档条 2-8   *)
+(* p2a_AttnClimClose.v ——  CZC10（E-STAGING-CZC10）              *)
+(*   论文2《自由能原理与注意力Gibbs桥》假设消融施工： 普查档条 2-8   *)
 (*   （B 可消融，坐标 L978；§9.4 开放项 5 的 clim 半边）。            *)
 (*                                                                *)
 (*   槽语句：注意力核迭代收敛已有 attention_tv_iter_contraction        *)
@@ -20,7 +20,7 @@
 (*   n ↦ TV(iterate attention_step n μ₀, p_b) 对极限零点的 real_lim     *)
 (*   收敛无库内定理。                                                  *)
 (*                                                                *)
-(*   施工：clim 收敛引擎——消费基座件四绿：                             *)
+(*   施工：clim 收敛引擎——使用基座件四绿：                             *)
 (*     ① real_lim + real_const（S02_CauchyComplete.v:883/860，          *)
 (*        "∀eps>0 ∃N ∀n≥N 双向夹逼"的构造性 clim 谓词）；              *)
 (*     ② r_arch_pow_real（UpBudgetReal.v:310，几何击穿显式 N 预算）；   *)
@@ -31,12 +31,12 @@
 (*   引擎 p2a_attn_clim_zero：逐步几何收缩 + 非负 + 初值正 ⟹ real_lim   *)
 (*        u real_zero（收敛到零点的 clim 全谓词，双向夹逼）；            *)
 (*   注意力镜面 p2a_attn_tv_seq_clim_zero：κ := 1−δ 特化形，             *)
-(*        单步收缩前提对位 attention_tv_contraction 的 Real 镜像口        *)
+(*        单步收缩前提对位 attention_tv_contraction 的 Real 对偶口        *)
 (*        （UpArchAttn 件2 同款 Hstep 显式前提纪律）；                   *)
 (*   预算伴件 p2a_attn_clim_budget：clim 的单向 Q-eps 预算形。           *)
 (*                                                                *)
 (*   纪律：纯构造性；Set 层语句（real_lim 值居 Set、sigT 见证）；        *)
-(*   全部 Qed 闭合；只消费库内已证机器；G1-G4 四关候跑。                 *)
+(*   全部 Qed 闭合；只使用库内已证机器；G1-G4 四关候跑。                 *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith.
@@ -78,7 +78,7 @@ Proof.
               (real_const_pos eps Heps)) as [N HN].
   exists N. intros n Hn.
   split.
-  - (* 上侧：u n ≤ κ^n·u0 ≤ κ^N·u0 < eps；再换装 0+eps 形 *)
+  - (* 上侧：u n ≤ κ^n·u0 ≤ κ^N·u0 < eps；再重述 0+eps 形 *)
     apply (real_lt_eq_lt (u n) (real_const eps)
              (real_plus real_zero (real_const eps))).
     + apply (real_le_lt_trans (u n)
@@ -115,7 +115,7 @@ Proof.
 Qed.
 
 (* ============ 注意力镜面：κ := 1−δ 特化形（论文2 §5.5/§9.4 口） ============ *)
-(*   单步收缩前提 Hstep 对位 attention_tv_contraction 的 Real 镜像口         *)
+(*   单步收缩前提 Hstep 对位 attention_tv_contraction 的 Real 对偶口         *)
 (*   （S06 几何率 (1−δ) 的实例面；UpArchAttn 件2 同款显式前提纪律——          *)
 (*   抽象 Section 世界的 TV/iterate 对象整体实例化属天级工程，不属本件）。     *)
 
@@ -152,7 +152,7 @@ Proof.
   exact Hup.
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取探针 ---- *)
+(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions p2a_geo_iter_le.
 Print Assumptions p2a_attn_clim_zero.

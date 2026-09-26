@@ -1,35 +1,11 @@
-(* ============================================================ *)
-(* ExpNegPos.v —— 席CWG：exp_neg 符号交错级数正性面（Q 标量层闭合）  *)
-(* （20260914/15；主对话直执席，批次 E-STAGING-CWG）                 *)
-(* ============================================================ *)
-(* 使命：清偿 UpReqBanachExpNeg.v 挂账②「符号交错级数的正性面：      *)
-(*   非本席」（UpReqBanachExpNeg.v:286-294，BanachExpNeg 侧最后一笔   *)
-(*   挂账）。                                                       *)
-(*                                                                *)
-(* 【正性面落点判定（本席侦查定谳）】BanachAlg 类无序接口（bae 为     *)
-(*   Set 承载等词，无 ≤_B 位），符号交错级数的「正性」在 Banach 层    *)
-(*   无语句面——其诚实落点是 Q 标量层：exp(−x) 的部分和（交错级数）    *)
-(*   在 0 ≤ x ≤ 1 全段非负、0 ≤ x < 1 严格正、且恒有下界 1−x。       *)
-(*   与「Class 无 bneg 字段」同款口径：Banach 侧 (−1)^k 载体面由      *)
-(*   bxn_series_mone_even/odd（UpReqBanachExpNeg.v 定形件）承载，    *)
-(*   本件交付其标量供给面。全 x ≥ 0 档需 exp_add 型乘积恒等式（S03    *)
-(*   e/o 配对战役在飞），按分层保底纪律不在本件硬攻，登记为升级方向。  *)
-(*                                                                *)
-(* 【方法（自足两引理，零 altsum 引擎依赖）】t_k := x^k/k! 满足       *)
-(*   t_{k+1} ≤ t_k（x ≤ 1，pow_fact_mono_int + q_le_div_le）；       *)
-(*   奇和 S_{2m+3} = S_{2m+1} + (t_{2m+2} − t_{2m+3}) 递增 ⟹         *)
-(*   S_{2m+1} ≥ 1−x；偶和 S_{2m+2} = S_{2m+1} + t_{2m+2} ≥ 奇和。    *)
-(*   故一切 n：1−x ≤ S_n 且 0 ≤ S_n；x < 1 时严格正。语句面全         *)
-(*   QleT'/QltT（S02 bool 反映形）；Qle/Qlt 仅证内转译。              *)
-(*                                                                *)
-(* 红线自审：公理面七项禁词扫描零命中（逐项记录见交付报告）；  *)
-(*   语句面零 Prop 泄露（QleT'/QltT 全 Set）；全件 Qed 真证；         *)
-(*   G3 提取探针 Obj.magic=0（配方沿 E-STAGING-CWA 卡）；            *)
-(*   checker = rocqchk（沿 E-STAGING-CWF 卡）。                     *)
-(* 编译配方（cpu_guard 包装零裸调）：                                *)
-(*   bash Live/tools/cpu_guard.sh 包 source Live/toolchain/env.sh   *)
-(*   与 cd Live/build 后 rocq c -Q 点空名 ExpNegPos.v。              *)
-(* ============================================================ *)
+(* ==========================================================================)
+   ExpNegPos.v — 指数部分和的正性下界族
+   使命: enp_exp_partial_ge/nonneg/pos 三主件：e^x 部分和对奇数指标的严格正下界；支撑件 enp_one_le_succ/enp_decr/enp_term_nonneg/enp_odd_ge/enp_even_ge_odd/enp_ge_all 与数值例 enp_eval_example1/2。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib QArith、QArith.Qabs、Arith、Lia。
+   对标: 指数函数幂级数部分和的符号与下界（交错级数估计的构造性对应）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -143,7 +119,7 @@ Proof.
   assert (Hstep := enp_two_step_odd x m).
   assert (Hd := enp_decr x (2 * m + 2) H0 H1).
   pose proof (Qopp_le_compat _ _ Hd) as Hopp.
-  (* AA21 第3轮修：Hopp 内 nat 指标归一 S(2m+2)==2m+3（HV2 续接配方照方） *)
+  (* AA21 修正：Hopp 内 nat 指标归一 S(2m+2)==2m+3（HV2 续接配方照方） *)
   replace (Datatypes.S (2 * m + 2))%nat with (2 * m + 3)%nat in Hopp by lia.
   (* Hopp : Qopp t_{2m+3} ≤ Qopp t_{2m+2} *)
   assert (HAB : Qle 0 (q_pow x (2 * m + 2) / q_fact (2 * m + 2)
@@ -163,7 +139,7 @@ Proof.
      + (q_pow x (2 * m + 2) / q_fact (2 * m + 2)
         + Qopp (q_pow x (2 * m + 3) / q_fact (2 * m + 3))))
     (exp_partial (Datatypes.S (Datatypes.S (2 * m + 1))) (Qopp x))).
-  - (* AA21 第3轮修②：LHS 原子形不能与 Qplus_le_compat 的 x+z 统一，中转 A+0 归位 *)
+  - (* AA21 修正②：LHS 原子形不能与 Qplus_le_compat 的 x+z 统一，中转 A+0 归位 *)
     apply (Qle_trans (exp_partial (2 * m + 1) (Qopp x))
       (exp_partial (2 * m + 1) (Qopp x) + 0)
       (exp_partial (2 * m + 1) (Qopp x)
@@ -262,14 +238,14 @@ Proof.
         (exp_partial (2 * m' + 1) (Qopp x))
         (exp_partial (Datatypes.S (2 * m' + 1)) (Qopp x))).
       * apply enp_odd_ge; assumption.
-      * (* AA21 修⑦：nat 指标归一 S(2m'+1)==2m'+2 供 enp_even_ge_odd 消费位统一 *)
+      * (* AA21 修⑦：nat 指标归一 S(2m'+1)==2m'+2 供 enp_even_ge_odd 使用位统一 *)
         replace (Datatypes.S (2 * m' + 1))%nat with (2 * m' + 2)%nat by lia.
         apply enp_even_ge_odd; assumption.
   - subst n. apply enp_odd_ge; assumption.
 Qed.
 
 (* ============================================================ *)
-(* 件 3：Set 语句面出口（挂账②清偿三件）                              *)
+(* 件 3：Set 语句面出口（未竟项②清结三件）                              *)
 (* ============================================================ *)
 
 (* 主件 A（下界面）：0 ≤ x ≤ 1 ⟹ ∀n, 1−x ≤ exp_partial n (−x) *)

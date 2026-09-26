@@ -1,8 +1,5 @@
-(* ============================================================ *)
-(* UpAblT10_S04RealExpLogConv.v —— 假设消融战役 T10a 批·翻案验证席      *)
-(* 辖区：T8a 勘误表 E-3 指认坐标 S04_RealExpLogConv.v:1388 weak_trich 槽 *)
-(* 消融母本：real_weak_trich@S07_RealSetoidExpLog.v:5719（全绿 Qed 收口  *)
-(*   L5866；本轮探针后 Check 实测签名零参直给，见 g1 留痕）              *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* 消融源版本：real_weak_trich@S07_RealSetoidExpLog.v:5719（全部通过 Qed 闭合  *)
 (*                                                                      *)
 (* 目的：普查对 S04:1388 weak_trich 判 W（三分律墙=rLPO 族）与源注       *)
 (*   L1386-87「Real 层 real_weak_trich 已证供给，非 LPO」冲突。本件实测  *)
@@ -13,26 +10,25 @@
 (*   抽象接口面（R/lt/Id 无解码器）W 注记维持；实例供给面翻 N。           *)
 (*                                                                      *)
 (* 主件清单（4 件，前缀 uabt10_）：                                      *)
-(*   件1 uabt10_weak_trich_real ←槽形 Real 实例放电（E654 直给式；       *)
-(*       母件一步直喂；分级 N1 零施工——库内已有等价件，登记坐标即        *)
+(*   件1 uabt10_weak_trich_real ←槽形 Real 实例实例化消解（E654 直给式；       *)
+(*       源定理一步直接供给；分级 N1 零施工——库内已有等价件，登记坐标即        *)
 (*       S07:5719，本件为翻案登记形）                                    *)
 (*   件2 uabt10_eq_not_lt_l     ←反向紧致左向：real_eq x y -> ¬real_lt   *)
 (*       x y；导出链 real_eq_sym→real_lt_id_r→real_lt_irrefl 三步        *)
 (*       （分级 N2 有限消去链）                                          *)
 (*   件3 uabt10_eq_not_lt_r     ←反向紧致右向（id_l 运河，对称形）       *)
-(*   件4 uabt10_weak_trich_iff  ←双向同义打包：槽形 ⟺ real_eq（Set 层    *)
+(*   件4 uabt10_weak_trich_iff  ←双向同义封装：槽形 ⟺ real_eq（Set 层    *)
 (*       prod 积）；此件证明槽结论在实例面恰为 setoid 等式，非弱化降档   *)
 (*                                                                      *)
 (* 分级表：件1 N1（零施工直给）；件2/3 N2（导出链三步）；件4 N2（组装）  *)
 (*   全件非 T：件2/3/4 为库内原无的等式-双非lt 同义刻画（全库 grep       *)
 (*   real_eq 与双 Not 合取刻画件零命中）。                               *)
 (*                                                                      *)
-(* 依赖（全部只读消费，原树零改）：S02_CauchyComplete（real_lt_irrefl    *)
+(* 依赖（全部只读使用，原树零改）：S02_CauchyComplete（real_lt_irrefl    *)
 (*   L2400、real_eq_sym L2238）、S07_RealSetoidExpLog（绿件 L5719、      *)
 (*   RealSetoid.real_lt_id_l/r L449/L456）。                             *)
 (* 语句面全 Set 层（real_lt/real_eq : Real -> Real -> Set 实测；Not 用   *)
 (*   S01 基座层）；公理面零新增；文尾逐件 Print Assumptions 收尾。        *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblT10_S04RealExpLogConv.*      *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -63,7 +59,7 @@ Proof.
   exact (real_lt_irrefl x (RealSetoid.real_lt_id_l x y x Hxy Hyx)).
 Qed.
 
-(* 件4 ←双向同义打包：弱三分槽形 ⟺ setoid 等式（Set 层 prod 积） *)
+(* 件4 ←双向同义封装：弱三分槽形 ⟺ setoid 等式（Set 层 prod 积） *)
 Theorem uabt10_weak_trich_iff : forall x y : Real,
   prod
     (Not (real_lt x y) -> Not (real_lt y x) -> real_eq x y)

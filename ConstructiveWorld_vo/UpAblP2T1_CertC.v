@@ -1,31 +1,11 @@
-(* ============================================================ *)
-(* UpAblP2T1_CertC.v —— 结论 9(e)/(f) 无余量供给证书件（CertC·独立核验）  *)
-(*   数学使命：结论 9(e) 三条的自源件独立重建与 9(f) 一条的并存类型互证。  *)
-(* ============================================================ *)
-(* 【使命】本件为 UpAblP2T1_CertB.v 的并存互证件：结论 9(e) 三条不等式自   *)
-(*   上游源件（real_abs_le_quad_eps、real_quad_t_le_h_eps、                *)
-(*   real_abs_h_sq_le_eps）与 plain-eps 闭包引理 real_le_closure_b_one     *)
-(*   独立重建（不经 UpRealLeB2 的 B 系引理、不经 CertB 路线）；结论 9(f)   *)
-(*   之 db 破界上界以 p2t1c_T2_db_breaking_bound_reg 作语句面逐字重述，并  *)
-(*   赋值 p2t1b_T2_db_breaking_bound_supply——类型装配即逐字互证。         *)
-(* 【依赖】Stdlib（List／QArith.QArith／Extraction）／CW_ConstructiveWorld_219 *)
-(*   ／UpRealLeB（real_abs_le_quad_eps、real_quad_t_le_h_eps、             *)
-(*   real_abs_h_sq_le_eps、real_le_closure_b_one）／UpAblP2T1_CertB        *)
-(*   （p2t1b_T2_*_supply 四具名件，类型互证对象）。                        *)
-(* 【对标】数学原型：分析学中 abs-平方与破界估计的显式余量形式；           *)
-(*   mathlib/stdlib 无直接构造对应物。                                     *)
-(* 【构造性注记】语句面全 Set 层（Id/Not/Or 别名、real_lt/real_le/         *)
-(*   real_le_b/real_eq 面）；全件 Qed 闭合、零承认词面、无经典逻辑。       *)
-(*   文尾对八条主结论逐一 Print Assumptions，以全部 Closed 为零外部未证    *)
-(*   假设的判据。                                                          *)
-(* 【编译配方】Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹   *)
-(*   限载；输出一律 -o 临时目录，树内 .vo 不重写，信任缓存分毫不动。       *)
-(* 【结构总览】§1 结论 9(e) 三条独立重建——证明链为源件 eps 形结论         *)
-(*   ＋real_le_closure_b_one 单步收拢全称 eps（多 eps 组合闭包单步：       *)
-(*   尾自由 eps 收拢，eps1/eps2/内嵌 |h| 因子随固定端并入右端）。          *)
-(*   §2 结论 9(f) 语句的独立重述，赋值 CertB 具名件完成类型装配。          *)
-(*   §3 交叉核验：四条 Check 以重述语句为型检 CertB 具名件；§4 提取核验    *)
-(*   （Q 层纯函数 p2t1c_g3_pick）与假设审计区。                            *)
+(* ==========================================================================)
+   UpAblP2T1_CertC.v — 结论 9(e)/(f) 无余量供给证书件
+   使命: 三条不等式自上游源件独立重建（不经 B 系引理路线），结论 9(f) 之破界上界以语句面逐字重述与具名件赋值完成类型互证。
+   依赖: Stdlib List、QArith、Extraction；CW_ConstructiveWorld_219、UpRealLeB、UpAblP2T1_CertB。
+   对标: abs-平方与破界估计的显式余量形式（分析学）。
+   构造性: 语句面全 Set 层（Id/Not/Or 别名、real_lt/real_le/real_le_b/real_eq 面）；全件 Qed 闭合、零承认词面、无经典逻辑；文尾对八条主结论逐一 Print Assumptions 全 Closed。
+   编译配方: Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹限载；输出一律 -o 临时目录，树内 .vo 不重写。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith.

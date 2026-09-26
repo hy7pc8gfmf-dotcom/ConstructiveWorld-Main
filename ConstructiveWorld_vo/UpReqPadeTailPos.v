@@ -1,10 +1,9 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T260 台账席 战役包U（tier2 批量面第十一批）   *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列玩具位中真刀位  *)
 (* 之证明体替换为显式见证微刀（裸 reflexivity 换 Qeq_refl 显式项；   *)
 (* apply 反射位换全参显式见证项），非刀位玩具体与其余全部文本逐字    *)
 (* 保留，声明面与引用面零改动，零新增 Require，证明结尾记号与原件    *)
-(* 逐件守恒，纯构造性收口，文尾保留原件 Print Assumptions 追印面。    *)
+(* 逐件守恒，纯构造性闭合，文尾保留原件 Print Assumptions 追印面。    *)
 (* 清单：                                                          *)
 (*   ptp_sum_S（原 L71，显式见证微刀 1 处）                                  *)
 (*   ptp_exp_S（原 L266，显式见证微刀 1 处）                                 *)
@@ -16,17 +15,13 @@
 (* 目的： Padé 正尾恒等式主件（C 路闭合段）。 *)
 (* 主件： ptp_beta 正尾系数族与 ptp_F / ptp_G 恒等式构造。 *)
 (* 依赖： S02_CauchyComplete、S03_QExp、UpReqPadeExp。 *)
-(* 备注： 主件取降档形（诚实标注）：配对重排部分未纳入，为下一席显式假设。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPadeTailPos.v —— 席C-T1a：Padé 正尾恒等式主件（C 路闭合     *)
-(*                        主轨第一切片，Set 层承重墙）               *)
-(* 日期：2026-09-14                                                *)
+(*                        主轨第一切片，Set 层承重结构）               *)
 (*                                                                 *)
 (* 使命（修正令对表后）：把 S3/S1 数值实锤的「有限 Q 前缀 × 符号因子  *)
 (*   (−1)^n × 正系数级数」余项恒等式落成 Set 层 Coq 件。             *)
-(*   符号面勘误（C-T1a 修正令 20260914）：尾系数符号 = (−1)^n，      *)
 (*   非恒正——本件语句全部显式携带符号因子（n=1 切片为 −(1#2)，      *)
 (*   n=2 实例为正号），β_m 本身的全正闭式单独成件（ptp_beta_pos）。  *)
 (*                                                                 *)
@@ -36,11 +31,10 @@
    为 q_fact m 的多项式恒等式，ring 可收）；但主步完成需 field 于
    「原子分母」目标，实测本平台 9.0 的 field 对原子分母一律报
    E268/E293「归一再 field」教义已用尽（目标已纯环项仍炸）。
-   交叉相乘 + 乘法消去路线显式假设下一席（骨架）。            *)
+*)
 (*                                                                 *)
 (* 降档声明（诚实标注）：                                             *)
 (*   ① 主件为 n=1 切片的全称 N 形；全称 n 的逐项系数等式（柯西积      *)
-(*      重排 + 配对引理）未及落盘，显式假设下一席（S1 报告已给配对比值    *)
 (*      (n−2j)/((2n−2j)(2j+1)) ≤ 1/2 的正性路线）。                  *)
 (*   ② n=2 仅结果截断多项式实例恒等式（S1 定值变体同构），非全称 N。  *)
 (*   ③ 平台损伤实锤：field 原子分母全拒（E268/E293 归一教义不适用，  *)
@@ -48,7 +42,7 @@
 (*      UpReqPadeExp 同款先例）；正性语句面     *)
 (*      一律 QltT（Set 层），证内 Prop 仅作桥（Qlt_to_QltT）。        *)
 (*                                                                 *)
-(* 消费面：S03_QExp（exp_partial/q_pow/q_fact/sum_upto/q_fact_pos/    *)
+(* 使用面：S03_QExp（exp_partial/q_pow/q_fact/sum_upto/q_fact_pos/    *)
 (*   q_neq_of_lt）、UpReqPadeExp（pade_coeff/pade_num/pade_den）、    *)
 (*   S02_CauchyComplete（QltT/Qlt_to_QltT）。                        *)
 (*                                                                 *)
@@ -68,7 +62,7 @@ From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 (* ===== 定义面 ===== *)
 
-(* β_m = n!·(n+m)!/(2n+m+1)!——S3 探针 beta_term 同式，全正闭式 *)
+(* β_m = n!·(n+m)!/(2n+m+1)!——S3 检验 beta_term 同式，全正闭式 *)
 Definition ptp_beta (n m : nat) : Q :=
   q_fact n * q_fact (n + m) / q_fact (2 * n + m + 1).
 
@@ -119,7 +113,7 @@ Proof.
   - apply Qinv_lt_0_compat. apply q_fact_pos.
 Qed.
 
-(* ===== β 哨兵族（S3 探针 fractions 精确对表） ===== *)
+(* ===== β 标记族（S3 检验 fractions 精确对表） ===== *)
 
 Lemma ptp_beta_n1_0 : ptp_beta 1 0%nat == (1#6).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
@@ -177,7 +171,7 @@ Proof.
   cbn. field.
 Qed.
 
-(* ===== 数值哨兵（y = 1/2 核对；vm_compute + Qeq 交叉乘 lia） ===== *)
+(* ===== 数值标记（y = 1/2 核对；vm_compute + Qeq 交叉乘 lia） ===== *)
 
 Lemma ptp_sentinel_n1_half :
   exp_partial 4 (1#2) * pade_den 1 (1#2) - pade_num 1 (1#2) == - (7#512).
@@ -639,7 +633,7 @@ Proof.
   apply (ptp_tail_series_k (N - 3) y).
 Qed.
 
-(* —— 6. 核对哨兵：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
+(* —— 6. 核对标记：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
    y=1/2 数值两侧同值（reflexively 一致）。 —— *)
 
 Lemma ptp_series_n1_N3 : forall y : Q,

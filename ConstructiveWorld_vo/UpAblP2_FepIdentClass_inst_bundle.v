@@ -1,5 +1,4 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -16,19 +15,12 @@
 (*   uabp2_fic_ctx_core（原 L80，1 句玩具证）                             *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* 【T321 恒等守恒更正注记】2026-09-22 包AW九 台账席（恒等头注更正全量第一批）                     *)
 (* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测                             *)
 (* 为恒等守恒——清单所列 9 参数位证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。                                        *)
-(* 更正口径：真替换 0 参数位＋恒等守恒 9 参数位；本注记为追加块，上方原头                                  *)
 (* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册／T321 台账。                        *)
-(* 附记：T277 判级全文恒等；包K 全量第一批整批直推（T317 六·1 方案①）                           *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblP2_FepIdentClass_inst_bundle.v —— 假设消融战役 FA-P2 批2施工席 S1        *)
 (* 辖区：FepIdentClass.v 16 位（2 Context＋14 类字段，现档坐标如下）               *)
 (*   L59  Context (R){RIS}（FepIdentCore 节）                                    *)
 (*   L81-101 Class FepIdentification 14 字段：                                   *)
@@ -38,7 +30,7 @@
 (*     证书 3：fic_T_pos:86 / fic_D_pos:88 / fic_Z_thermo_pos:92                  *)
 (*     识别 3：fic_temp_match:94 / fic_energy_neg:96 / fic_partition_match:98-101 *)
 (*   L112 Context (R){RIS}{I : FepIdentification R}（FepIdentConsumer 节）        *)
-(* 实例化消解母本：实例锚 FepIdentificationReal:312（三识别构造性可满足见证）＋          *)
+(* 实例化消解源版本：实例锚 FepIdentificationReal:312（三识别构造性可满足见证）＋          *)
 (*   fic_opp_mult_r:154＋fic_real_exp_neg_compat:294（识别③桥接引理）                *)
 (*                                                              *)
 (* 目的：N3 实例供给整包实例化消解——两 Context 以 R:=Real、RIS:=RealEnhancedReal、      *)
@@ -51,9 +43,8 @@
 (*     T 合并申报：透明定义体即机器检验的数据面供给，id_refl 级）；                *)
 (*   · PC=依存节 L112 消解成品：识别三条件齐 ⟹ 注意力=Boltzmann（零类前提）。     *)
 (*                                                              *)
-(* 实证注记（fail-loud 勘误，详见施工报告 §坑）：库实例 FepIdentificationReal      *)
 (*   的投影在定义检查层不可展开（u1/u2/u3 检验实测），故数据面与性质面改由          *)
-(*   件内自建透明实例承载（字段值与库锚逐字同源），C0 仍直接匹配库锚作对照锚定。        *)
+(*   件内自建透明实例承载（字段值与库锚逐字同源），C0 仍直接匹配库锚作对照互核。        *)
 (*                                                              *)
 (* 主件清单（前缀 uabp2_）：                                                     *)
 (*   C0 uabp2_fic_ctx_core ←L59（库锚直接匹配）                                      *)
@@ -85,7 +76,7 @@ Require Import FepIdentClass.
 Import RealInterfaceEnhancedMod.
 From Stdlib Require Import List.
 
-(* 接口投影记号（全显式 @，防 elaborator 隐参歧义；母本 L62-68 同款形） *)
+(* 接口投影记号（全显式 @，防 elaborator 隐参歧义；源版本 L62-68 同款形） *)
 Notation ubreq x y := (@RealInterfaceEnhancedMod.req Real RealEnhancedReal x y).
 Notation ublt x y := (@RealInterfaceEnhancedMod.lt Real RealEnhancedReal x y).
 Notation ubzero := (@RealInterfaceEnhancedMod.zero Real RealEnhancedReal).

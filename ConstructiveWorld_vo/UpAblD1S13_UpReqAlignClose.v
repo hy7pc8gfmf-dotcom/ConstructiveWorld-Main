@@ -1,19 +1,19 @@
-(* ============================================================ *)
-(* UpAblD1S13_UpReqAlignClose.v —— FA-D1S13 数据供给大打包七梯 件①   *)
-(* 席位：FA-D1S13（普查批 D1-⑦ 第七梯 ≤40 位·按模块聚合）｜独立伴生件  *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* UpAblD1S13_UpReqAlignClose.v —— FA-D1S13 数据供给大封装七梯 件①   *)
+(* 位：FA-D1S13（普查批 D1-⑦ 第七梯 ≤40 位·按模块聚合）｜独立配套模块  *)
 (* ·原树零改                                                      *)
 (*                                                              *)
-(* 领地认领（防撞协议快照 20260919 实测，报告+在飞件双口径）：        *)
+(* 领地认领（防撞协议快照  实测，报告+进行中件双口径）：        *)
 (*   S1＝fa53_lpc 九槽＋expf 六槽；S2＝E752 净新二槽＋req log 桥十槽； *)
 (*   S3＝sum_pos 十二槽＋fep 五槽；S4＝StepKLEtaInst＋TopKTVChain；   *)
 (*   S5＝DoeblinEntropy＋EntropyMonoSplit；S6＝RealFEP＋SLQ＋        *)
 (*   SteadyThermo＋MinPKLChain；S7＝Entropy 簇四件；S8＝TempDefs＋    *)
 (*   TSI＋PPOPlain 拆前 20；S9＝UpReqAttnIter 余量 22（PPO 弃领）；   *)
-(*   S10＝UpReqConcMixSel 19 行＋PPOPlain 节2余3＋节3全11（在飞已落盘）； *)
-(*   S11＝PPOPlain 节2余3＋节3全11（在飞已落盘，与 S10 同槽双认领，    *)
+(*   S10＝UpReqConcMixSel 19 行＋PPOPlain 节2余3＋节3全11（进行中已落盘）； *)
+(*   S11＝PPOPlain 节2余3＋节3全11（进行中已落盘，与 S10 同槽双认领，    *)
 (*   双口径并账——PPOPlain 全模块 35 槽已无净新面）。                 *)
-(*   本席认领＝⑦池未认领模块中 UpReqAlignClose 余量 16 槽＋           *)
-(*   AlignIdUnclosed 余量 14 槽＝30 位 ≤40（按模块聚合，两模块全收口）。 *)
+(*   认领＝⑦池未认领模块中 UpReqAlignClose 余量 16 槽＋           *)
+(*   AlignIdUnclosed 余量 14 槽＝30 位 ≤40（按模块聚合，两模块全闭合）。 *)
 (*                                                              *)
 (* 本件辖区：UpReqAlignClose.v 节 UacClose 余量 16 槽：              *)
 (*   L29(R,RIS)｜L30(S)｜L33(sumf)｜L34-35(sum_ext)｜L36-38(sum_add)｜ *)
@@ -24,29 +24,29 @@
 (*   UpAblD1S3_sum_pos_UpReqAlignClose.v）；L48-50 log_req_compat 与   *)
 (*   L51-52 log_inv_exp_neg_req＝S2 已收（UpAblD1S2_reqlog_           *)
 (*   UpReqAlignClose.v）。                                            *)
-(* 母本代际核验：Live_X 副本与 ConstructiveWorld-Main 两副本 md5 同代   *)
+(* 源文件代际核验：Live_X 副本与 ConstructiveWorld-Main 两副本 md5 同代   *)
 (*   4147620b51e405c2a4dd00e9576bd924（开工实测，收工复核）。           *)
 (*                                                              *)
-(* 形态：P2S1/S4/S7/S8/S11 打包记录型先例（槽语句逐字入包）＋实例供给    *)
-(*   申报形。uac_gibbs_le_zero 槽＝B 类桥槽（母本 L66-67 头注自述       *)
-(*   「KL≥0 plain-le 形＝序无消去墙，诚实保留」）——按 S9 墙位显式参     *)
-(*   承接先例入包为显式前提位，供给件全称量化承接，不计供给战果。        *)
+(* 形态：P2S1/S4/S7/S8/S11 封装记录型先例（槽语句逐字入包）＋实例供给    *)
+(*   申报形。uac_gibbs_le_zero 槽＝B 类桥槽（源文件 L66-67 头注自述       *)
+(*   「KL≥0 plain-le 形＝序无消去墙，诚实保留」）——按 S9 阻隔位显式参     *)
+(*   给出先例入包为显式前提位，依赖模块全称量化给出，不计供给战果。        *)
 (* 实例供给：R:=Real｜RIS:=RealEnhancedReal（S07_RealSetoidExpLog.v    *)
 (*   :8566，Module RealInterfaceEnhancedMod 内，限定名引用——S4 坑卡②）｜ *)
-(*   S:=unit（单点态空间）｜sumf:=fun f => f tt｜sum_ext＝消费位直取    *)
+(*   S:=unit（单点态空间）｜sumf:=fun f => f tt｜sum_ext＝使用位直取    *)
 (*   H tt｜sum_add/linear＝单点两侧归一逐字同体 req_refl 一行｜        *)
 (*   reward:=零函数｜beta:=eta:=one｜beta_pos/eta_pos/pi_ref_pos:=     *)
-(*   one_pos 字段直配｜pi_ref:=常函数 one｜eta_le_one＝le_refl 一行｜   *)
+(*   one_pos 字段直接匹配｜pi_ref:=常函数 one｜eta_le_one＝le_refl 一行｜   *)
 (*   Z_align_pos＝uabd1s13_uac_zap_pos 证书（unfold Z_align_req 后     *)
-(*   mult_positive×one_pos×exp_neg_pos 三字段直配——S8 zap 证书同款）。 *)
+(*   mult_positive×one_pos×exp_neg_pos 三字段直接匹配——S8 zap 证书同款）。 *)
 (* 分级（禁注水如实申报）：16 槽全 T·数据/接口供给级（15 槽无条件机械    *)
-(*   供给＋1 槽 uac_gibbs_le_zero 显式参承接），按模块合并申报，不逐槽  *)
-(*   计战果（S4-S11 先例同口径）；普查 N/N2 分类实测供给腿全为一步直配/  *)
-(*   单点重合/字段直配。零 W 墙新立（gibbs 槽按母本自述显式参承接非墙   *)
+(*   供给＋1 槽 uac_gibbs_le_zero 显式参给出），按模块合并申报，不逐槽  *)
+(*   计战果（S4-S11 先例同口径）；普查 N/N2 分类实测供给腿全为一步直接匹配/  *)
+(*   单点重合/字段直接匹配。零 W 墙新立（gibbs 槽按源文件自述显式参给出非墙   *)
 (*   新登记）。                                                        *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219／UpReqAlign     *)
+(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219／UpReqAlign     *)
 (*   （Z_align_req/pos_dist/relative_entropy_req 定义件）。零 Require   *)
-(*   槽位母本（防 P3S1 坑1 混代际 .vo 地雷）。                          *)
+(*   接口参数源文件（防 P3S1 坑1 混代际 .vo 地雷）。                          *)
 (* 纪律：零 git、零注册面增量、attn 论文域源档/论文目录零触碰；fail-loud。 *)
 (* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S13_*.{log,exit}          *)
 (* ============================================================ *)
@@ -60,7 +60,7 @@ Import RealInterfaceEnhancedMod.
 Definition uabd1s13_ren : RealInterfaceEnhancedSetoid Real :=
   RealInterfaceEnhancedMod.RealEnhancedReal.
 
-(* ============ Z_align_pos 供给证书（S8 zap 证书同款：三字段直配） ============ *)
+(* ============ Z_align_pos 供给证书（S8 zap 证书同款：三字段直接匹配） ============ *)
 
 Lemma uabd1s13_uac_zap_pos :
   lt zero (@Z_align_req Real uabd1s13_ren unit
@@ -85,8 +85,8 @@ Proof.
                     zero)))).
 Qed.
 
-(* ============ 打包记录型：对照母本 L29-70（槽语句逐字入包） ============ *)
-(* 槽序＝供给序；sum_pos(L42)/log 两槽(L48-52) 他席已收不入包（件头排除登记）。 *)
+(* ============ 封装记录型：对照源文件 L29-70（槽语句逐字入包） ============ *)
+(* 槽序＝供给序；sum_pos(L42)/log 两槽(L48-52) 已收不入包（件头排除登记）。 *)
 
 Inductive uabd1s13_uac_pack16 : Type :=
 | uabd1s13_uac_pack16_intro :
@@ -116,7 +116,7 @@ Inductive uabd1s13_uac_pack16 : Type :=
                                              p q Hp Hq)),
                         uabd1s13_uac_pack16.
 
-(* ============ 供给件：单点实例一次喂定 15 槽＋gibbs 槽显式参承接 ============ *)
+(* ============ 依赖模块：单点实例一次喂定 15 槽＋gibbs 槽显式参给出 ============ *)
 
 Theorem uabd1s13_uac_pack16_supplied :
   forall (GIBBS : forall (p q : unit -> Real)
@@ -148,7 +148,7 @@ Proof.
            GIBBS).
 Qed.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设面闭合申报 ============ *)
 
 Print Assumptions uabd1s13_uac_zap_pos.
 Print Assumptions uabd1s13_uac_pack16_supplied.

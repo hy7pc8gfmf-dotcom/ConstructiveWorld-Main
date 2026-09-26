@@ -1,9 +1,16 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* G 组：G05_LogSmall — 有限合并组（S/G 双系新命名，成员原样并入）
    成员：UpReqLogPrimD + UpReqLogLinD + UpReqLogD（同组旧名 Require 已剥；库内旧名已消融，下游直接 Require 本组）*)
 (* ======== G05_LogSmall 成员件：UpReqLogPrimD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpReqLogPrimD.v —— 假设位证明系列 G5：log/exp 基元证明引理（C 档 26 族/43 槽） *)
-(*   广义旗舰链 G5 执行模块                              *)
+(*   广义主定理链 G5 执行模块                              *)
 (* ------------------------------------------------------------------ *)
 (* 引擎坐标实读（普查 G5 节 + §四落点纪律执行记录）：                  *)
 (*   ① 接口字段（CW_ConstructiveWorld_219 L40464 起 RealInterfaceEnhancedSetoid，req 版）：*)
@@ -39,7 +46,7 @@
 (*        log_inv_exp_neg —— {log∘exp_neg, log_inv∘exp_neg} 双向互归约  *)
 (*        （log_inv_log + opp 对合；对内互推，对外需一根基元供给）       *)
 (* ------------------------------------------------------------------ *)
-(* Real 层无条件闭合（T2 模板②，槽形语句；CW_ConstructiveWorld_219 根基元直接提供）：          *)
+(* Real 层无条件闭合（ 模板②，槽形语句；CW_ConstructiveWorld_219 根基元直接提供）：          *)
 (*   [B1] logd_log_compat_real（双形 a=mono 链 / b=real_log_wd 直接提供）    *)
 (*        证明族：log_req_compat(9)/b_log_compat/req_log_compat/         *)
 (*        req_log_compat_slot/ralt_log_req_compat/rdl_log_req_compat/    *)
@@ -55,7 +62,6 @@
 (*   [B5] logd_log_witness_real（log 见证无关 req 形；real_log_proof_    *)
 (*        irrel 的 req 槽形双形）；[B6] logd_exp_neg_ext_real（P1 实例化）*)
 (* ------------------------------------------------------------------ *)
-(* 判定表（43 槽全清偿分类；35 证明 / 7 S 阻塞 / 1 N）：                 *)
 (*   证明 35 槽 = B1(15)+B2(6)+B3(5)+B4(7)+expf_pos(1)+req_exp_neg_ext(1) *)
 (*   S 阻塞 7 槽（复合恒等式/微分记录，基元供给链已明，超出本文件范围）：  *)
 (*    - energy_in_log_boltzmann_bridge@UpSigMigrate:65 /                 *)
@@ -70,7 +76,7 @@
 (*      热力学/KL 温度分解复合；供给=B1+B2+sumf 代数，复合重建另模块。     *)
 (*   N 1 槽：expf_agree@UpReqFEPAttn:265 —— expf 抽象算子的规格本身，    *)
 (*    不可证明；收窄路线=以 exp_pos_fn_setoid 直替换 expf（签名变化）。  *)
-(* 防撞：logd_ 前缀全库 grep 实测零命中（hzlogd_/gibbsd_ 异前缀在案）。  *)
+(* 防同名冲突：logd_ 前缀全库 grep 实测零命中（hzlogd_/gibbsd_ 异前缀在案）。  *)
 (* 双形并存：B1 双形（mono 链/real_log_wd 直接提供）；B3 与 UpStepKL         *)
 (*   kl_log_inv@574 同形（cw_log 形先例，本件 req 槽形独立组装）；       *)
 (*   P2 compat 归约与 UpReqU2 log_req_compat 同位（logd_ 独立版）。      *)
@@ -294,7 +300,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 2：Real 层无条件闭合（T2 模板②槽形；CW_ConstructiveWorld_219 根基元直接提供）           *)
+(* Part 2：Real 层无条件闭合（ 模板②槽形；CW_ConstructiveWorld_219 根基元直接提供）           *)
 (* ============================================================ *)
 
 (* B1-a：log 参数 req 兼容（mono 链形：real_log_le_mono@CW_ConstructiveWorld_219:112106 直接提供
@@ -350,7 +356,7 @@ Proof.
   exact (logd_log_exp_neg_real u).
 Qed.
 
-(* B5：log 见证无关（同点双正性见证换装 req 形；UpReqU2
+(* B5：log 见证无关（同点双正性见证转换 req 形；UpReqU2
    log_req_witness_compat 同位双形；Real 层根 = real_log_proof_irrel@42291） *)
 Lemma logd_log_witness_real : forall (x : Real) (Hx Hx' : lt zero x),
   req (log x Hx) (log x Hx').
@@ -389,14 +395,12 @@ Print Assumptions logd_exp_neg_ext_real.
 (* UpReqLogLinD.v —— 假设位证明系列 #2：log_le_linear 四站点同构族扫清      *)
 (*   （承 E-GIBBSD-1：上游会话 G08_Gibbs.v Part A/C 缺口件跨模块复用）    *)
 (* ------------------------------------------------------------------ *)
-(* 四站点坐标（E-GIBBSD-1 卡；逐站 源码实读勘误后确认同构）：            *)
 (*   站点 1  UpReqU2.v         L313  Hypothesis log_le_linear          *)
 (*   站点 2  UpReqFEPAttn.v    L90   Hypothesis log_le_linear          *)
 (*   站点 3  UpReqTempEntropy.v L60  Hypothesis dist_log_le_linear     *)
 (*   站点 4  UpFirewallReq.v   L101  Variable  dist_log_le_linear      *)
 (*   四槽语句逐字同形：forall x Hx, le (log x Hx) (req_minus x one)。   *)
 (* ------------------------------------------------------------------ *)
-(* 形状勘误（E-GIBBSD-1 判定四站全同，逐站确认无出入）：                 *)
 (*   槽输出序为接口 le（RealEnhancedReal 实例 le 字段 := real_le，      *)
 (*   CW_ConstructiveWorld_219:41130 Or 编码）；B 形引擎 real_log_le_linear_B               *)
 (*   （UpRealLeB:535）输出 real_le_b（Bishop 形）。逆向桥              *)
@@ -406,15 +410,14 @@ Print Assumptions logd_exp_neg_ext_real.
 (*   给出，参数位由引擎直接提供；若接口扩展批补 le_b 形参数位，本文件四件     *)
 (*   给定形直连（零改动）。                                             *)
 (* ------------------------------------------------------------------ *)
-(* 下游消费位实读（槽被给定的下游族，逐站勘误）：                        *)
 (*   站点 1：w2_gibbs_eq @UpReqU2:477 → req_gibbs_equality              *)
 (*           @UpReqDist:2148（槽+log_eq_linear 双参数位）。              *)
 (*   站点 2：req_attention_minimizes_free_energy_unique @UpReqFEPAttn:  *)
 (*           211 → req_min_free_energy_is_boltzmann（≤ 腿，参数位）+      *)
 (*           req_free_energy_min_unique（唯一腿，槽+eq_linear 双位）。   *)
-(*   站点 3：件 2/件 4（L554/L592）消费 req_gibbs_inequality（参数位）；  *)
-(*           件 5（L593）消费 req_gibbs_equality（槽+eq_linear 双位）。  *)
-(*   站点 4：件 5/件 6（L312/L378）消费 @req_gibbs_inequality（参数位，   *)
+(*   站点 3：件 2/件 4（L554/L592）使用 req_gibbs_inequality（参数位）；  *)
+(*           件 5（L593）使用 req_gibbs_equality（槽+eq_linear 双位）。  *)
+(*   站点 4：件 5/件 6（L312/L378）使用 @req_gibbs_inequality（参数位，   *)
 (*           (fw_bt t1, fw_bt t2) 温度对）。                             *)
 (* 阻塞裁决（兜底，逐站如实报）：                                        *)
 (*   a. 四站点下游终局件（gibbs_equality / min_energy_unique）全量       *)
@@ -442,22 +445,21 @@ Print Assumptions logd_exp_neg_ext_real.
 (*     （Hd_nonneg：0 ≤ d(s) 逐点）Bishop 形，gibbsd_gibbs_pointwise_B  *)
 (*     一次给定。                                                        *)
 (*   [站点 2] FEPReal 节：softmax/boltzmann 载体对 Real 具体形          *)
-(*     （base/invT/Zf/softmax/boltz 五 Definition 逐位镜像站点参数位，  *)
+(*     （base/invT/Zf/softmax/boltz 五 Definition 逐位同构站点参数位，  *)
 (*     datum 形）+ 逐点正性 3 件 + lld_fep_softmax_boltz_pointwise_B    *)
-(*     （件 4 旗舰载体对的范式实例位）。                                 *)
+(*     （件 4 主定理载体对的范式实例位）。                                 *)
 (*   [站点 3] BTReal 节温度 Boltzmann 族（lld_btz/lld_bt 具体形 +       *)
 (*     正性/归一化）+ lld_tempent_kl_nonneg_B（L554 腿 Bishop 形）+     *)
-(*     lld_tempent_entropy_neg_sum_B（req_entropy_neg_sum 消费位        *)
+(*     lld_tempent_entropy_neg_sum_B（req_entropy_neg_sum 使用位        *)
 (*     eq 伴随件，实_list_sum 层）。                                     *)
 (*   [站点 4] lld_fw_kl_boltz_pair_nonneg_B——件 5/件 6 Hkl/Hkl21 腿    *)
 (*     （req_gibbs_inequality 温度对）Bishop 形。                        *)
-(* 复用确认（E-GIBBSD-1 卡回填）：Part A 五件（lt_add_opp_r / le_b_opp   *)
 (*   / le_b_id_l / minus_flip / le_b_mult_pos_r）+ Part C 和层机六件    *)
 (*   经本系列工作下游裁决面全数消解可复用性；Part D 范本 D0 直接提供形于四站点   *)
 (*   给定件逐字复演。                                                    *)
 (* 红线：Set 层零 Prop（real_le_b / real_eq / real_lt 全 Set 值； datum  *)
 (*   前提为 zposd 先例口径单列）；全 Qed 闭合；零公理；既有文件零改；    *)
-(*   lld_ 前缀全库防撞（建前 grep 实测零命中）。                         *)
+(*   lld_ 前缀全库防同名冲突（建前 grep 实测零命中）。                         *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -530,7 +532,6 @@ Qed.
 (* ============================================================ *)
 (* Part S：四站点给定件（槽的 Real 实例化 Bishop 形，同构四连）           *)
 (*   四槽语句逐字同形（E-GIBBSD-1 坐标 源码实读），给定形同构——          *)
-(*   逐站独立命名钉死 provenance，勘误口径见头注。                       *)
 (* ============================================================ *)
 
 (* 站点 1（UpReqU2.v L313 log_le_linear）给定形 *)
@@ -564,7 +565,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part U2：站点 1（UpReqU2.v L313）下游首步腿                           *)
-(*   槽消费位 w2_gibbs_eq（UpReqU2:477）→ req_gibbs_equality            *)
+(*   槽使用位 w2_gibbs_eq（UpReqU2:477）→ req_gibbs_equality            *)
 (*   （UpReqDist:2148）首步 Hd_nonneg：0 ≤ d(s) 逐点（req le 形）——     *)
 (*   Bishop 形由 gibbsd_gibbs_pointwise_B（Part D 范本 D0）+ H2 升格。   *)
 (*   终局复演阻塞裁决见头注 a(i)(ii)。                                   *)
@@ -584,7 +585,7 @@ Qed.
 (* ============================================================ *)
 (* Part FEP：站点 2（UpReqFEPAttn.v L90）载体对具体形                     *)
 (*   站点节参数（base/invT/Zf/softmax_z/boltz_z，UpReqFEPAttn:107-121）  *)
-(*   逐位 Real 镜像；sumf := real_list_sum（datum 形，zposd 先例口径）； *)
+(*   逐位 Real 同构；sumf := real_list_sum（datum 形，zposd 先例口径）； *)
 (*   exp_pos_fn_setoid y == exp_neg (opp y)（CW_ConstructiveWorld_219:66191）——站点        *)
 (*   softmax 的 exp 项经 base := opp z 逐位归位（δ 透明）。              *)
 (* ============================================================ *)
@@ -618,7 +619,7 @@ Proof.
            lld_fep_boltz_factor_pos lX_ne).
 Qed.
 
-(* softmax_z / boltz_z 逐位镜像（站点 UpReqFEPAttn:118/120） *)
+(* softmax_z / boltz_z 逐位同构（站点 UpReqFEPAttn:118/120） *)
 Definition lld_fep_softmax (s : X) : Real :=
   real_mult (real_exp_neg (real_mult lld_fep_invT (lld_fep_base s)))
             (real_inv_pos lld_fep_Zf lld_fep_Zf_pos).
@@ -646,7 +647,7 @@ Proof.
            (real_exp_neg_pos (real_mult lld_fep_invT (lld_fep_base s)))).
 Qed.
 
-(* 旗舰载体对范式实例位：件 4（req_attention_minimizes_free_energy_     *)
+(* 主定理载体对范式实例位：件 4（req_attention_minimizes_free_energy_     *)
 (* unique 的 softmax/boltz 对）逐点 Gibbs 切线 Bishop 形——Part D 范本   *)
 (* D0 在站点 2 载体上的 @ 全显装配。≤ 腿/唯一腿全量复演阻塞见头注 a。    *)
 Lemma lld_fep_softmax_boltz_pointwise_B : forall s : X,
@@ -745,8 +746,8 @@ Qed.
 
 (* ============================================================ *)
 (* 站点 3 件：L554 腿（req_gibbs_inequality p (tB t)，UpReqTempEntropy   *)
-(*   件 2/件 4 槽消费位）的 Real 实例化 Bishop 形——Part D 范本 D1 在     *)
-(*   站点 3 消费对 (p, lld_bt t) 上的 @ 全显装配。                       *)
+(*   件 2/件 4 槽使用位）的 Real 实例化 Bishop 形——Part D 范本 D1 在     *)
+(*   站点 3 使用对 (p, lld_bt t) 上的 @ 全显装配。                       *)
 (* ============================================================ *)
 
 Lemma lld_tempent_kl_nonneg_B : forall (t : Real) (Ht : real_lt real_zero t)
@@ -763,7 +764,7 @@ Proof.
 Qed.
 
 (* 站点 3 eq 伴随件：req_entropy_neg_sum（UpReqDist:1947，站点熵链      *)
-(*   消费位）的 real_list_sum 层对位——Σ p·log p == −Σ p·(−log p)。      *)
+(*   使用位）的 real_list_sum 层对位——Σ p·log p == −Σ p·(−log p)。      *)
 Lemma lld_tempent_entropy_neg_sum_B : forall (p : X -> Real)
   (Hp : forall s : X, real_lt real_zero (p s)),
   real_eq (real_list_sum X (fun s : X => real_mult (p s) (real_log (p s) (Hp s))) lX)
@@ -796,7 +797,7 @@ Qed.
 
 (* ============================================================ *)
 (* 站点 4 件：L312/L378 腿（@req_gibbs_inequality (fw_bt t1) (fw_bt t2)，*)
-(*   件 5 Hkl / 件 6 Hkl21 槽消费位）的 Real 实例化 Bishop 形——Part D    *)
+(*   件 5 Hkl / 件 6 Hkl21 槽使用位）的 Real 实例化 Bishop 形——Part D    *)
 (*   范本 D1 在站点 4 温度对上的 @ 全显装配。                            *)
 (* ============================================================ *)
 
@@ -820,15 +821,13 @@ End BTReal.
 (*   共享地基 2 件：lld_lt_zero_sub_r / lld_le_b_zero_sub（Part A       *)
 (*   缺口延伸：lt 减形正性 + Bishop 序减形升格）。                       *)
 (*   四站点给定件 4 件：lld_{u2,fep,tempent,fw}_log_le_linear_B          *)
-(*   （四槽同构，引擎直接提供；勘误口径见头注）。                            *)
 (*   站点 1：lld_u2_gibbs_eq_step1_B（gibbs_equality 首步腿 Bishop 形）。*)
 (*   站点 2：FEPReal 节 5 Qed（boltz_factor_pos / Zf_pos / softmax_pos / *)
-(*   boltz_pos / softmax_boltz_pointwise_B）+ 5 Definition 载体镜像。    *)
+(*   boltz_pos / softmax_boltz_pointwise_B）+ 5 Definition 载体同构。    *)
 (*   站点 3：BTReal 节内 lld_tempent_kl_nonneg_B +                       *)
 (*   lld_tempent_entropy_neg_sum_B；BT 族 3 件（btz_pos/bt_pos/bt_norm） *)
 (*   为站点 3/4 共用。                                                   *)
 (*   站点 4：lld_fw_kl_boltz_pair_nonneg_B。                             *)
-(* 沉淀卡（索引回填行见技术报告）：                                      *)
 (*   E-LOGLIN-1：log_le_linear 四站点同构槽证明——Part A/C 复用确认       *)
 (*   （E-GIBBSD-1 预言全数消解）；下游终局共同阻塞双缺件：log 逆消去     *)
 (*   （E-GIBBSD-2 边界再证，p·(log p−log q) 形四站全同）+ Bishop         *)
@@ -842,7 +841,7 @@ End BTReal.
 (* ======== G05_LogSmall 成员件：UpReqLogD（原样并入，自带 Require）======== *)
 (* ============================================================ *)
 (* UpReqLogD.v —— 假设位证明系列 G6：log 不等式族证明（S 族 17 槽）          *)
-(*   广义旗舰链 G6 执行模块                                   *)
+(*   广义主定理链 G6 执行模块                                   *)
 (* ------------------------------------------------------------------ *)
 (* 引擎坐标实读（普查 G6 节 L85-101 + §四 L380 落点纪律执行记录）：      *)
 (*   ① Real 层 B 形引擎（UpRealLeB）：real_log_le_linear_B@535 /        *)
@@ -850,7 +849,6 @@ End BTReal.
 (*      real_log_one_plus_le_B@543 / real_exp_ge_linear_B@526。         *)
 (*   ② 根件（CW_ConstructiveWorld_219 源码实读）：real_log_le_linear_eps@41058（Or 形逐    *)
 (*      eps，接口字段 log_le_linear_eps@41134 在案——E354 旧判定「接口  *)
-(*      无此字段」勘误）/ real_log_lt_mono@39059（log 严格递增）/        *)
 (*      real_log_mult@40403 / real_log_one / real_two_pos@41807 /       *)
 (*      real_gibbs_inequality_eps@41704 / real_kl_term@41696 /          *)
 (*      real_boltzmann_dist_r@43686（Section RealRLHFMain 出口）。       *)
@@ -862,7 +860,7 @@ End BTReal.
 (*      Or 形无条件槽（log_le_linear 全字面形）据此不证明，改逐 eps /    *)
 (*      le_b 语言给出（§380 纪律 fallback，落点=Real 实例化定理）。      *)
 (* ------------------------------------------------------------------ *)
-(* 给出（槽证明件 = 槽被引擎填充的具体实例，T2 模板 ② 形态）：            *)
+(* 给出（槽证明件 = 槽被引擎填充的具体实例， 模板 ② 形态）：            *)
 (*   [槽族 1：log_le_linear / dist_log_le_linear 双形，5 参数位]           *)
 (*    logd_log_le_linear_eps —— 逐 eps Or 形（req 槽语句最近可达形；     *)
 (*      real_log_le_linear_eps 直接提供）；                                  *)
@@ -871,21 +869,19 @@ End BTReal.
 (*      log_lt_mono_cc / UpReqAlignRestA:80 ralt_log_lt_mono 字面形；    *)
 (*      real_log_lt_mono 直接提供）；logd_log_two_pos_real（UpPredRelaxReq:  *)
 (*      221 字面形；1<2 平移 + real_log_lt_mono + real_log_one 组装）。  *)
-(*   [槽族 3：KL 字面形桥——G6 旗舰] logd_kl_term_minus_form：            *)
+(*   [槽族 3：KL 字面形桥——G6 主定理] logd_kl_term_minus_form：            *)
 (*      real_kl_term p q ≡ p·(log p − log q)（real_log_mult 分解 + G5    *)
 (*      log 逆消去）；b_gibbs_pos/b_gibbs_sum_eps（UpSigMigrate2 kl_a    *)
 (*      = Σ p·(log p − log q) 字面形）与 req2_gibbs_inequality 的 Real   *)
-(*      实例化供给件：logd_list_sum_kl_minus_form /                      *)
+(*      实例化供给组件：logd_list_sum_kl_minus_form /                      *)
 (*      logd_gibbs_inequality_minus_B（0 ≤_B Σ 字面形）/                 *)
 (*      logd_gibbs_inequality_minus_eps（0 ≤ Σ 字面形 + eps）。          *)
-(*      勘误：G08_Gibbs 登记表 E-GIBBSD-2「log 逆消去 CW_ConstructiveWorld_219 未备、       *)
 (*      字面形桥接留待」——本文件经 G5 件闭合，字面形全通。                 *)
 (*   [槽族 4：real_gibbs_sum_eps@UpRealLeB:206 槽]                       *)
 (*      logd_gibbs_sum_eps_boltzmann_list —— real_sum_over_S :=          *)
 (*      real_list_sum 实例化填件（q := real_boltzmann_dist_r；供给槽     *)
 (*      Hnormb=Σp_b==1 显式位——诚实条件证明，G5 logd_pos_of_agree 同型； *)
 (*      real_rlhf_optimal_B 供给链到此闭合）。                           *)
-(* 判定表（17 槽清偿/精确阻塞；逐槽明细见尾注核对）：                    *)
 (*   证明（Real 实例化）：log_le_linear / dist_log_le_linear /           *)
 (*    log_lt_mono_cc / ralt_log_lt_mono / log_two_pos / real_gibbs_sum_  *)
 (*    eps（条件）= 6；字面形供给（gibbs 族补强）：b_gibbs_pos /           *)
@@ -899,7 +895,7 @@ End BTReal.
 (*    temp_explicit 槽本身 S 阻塞，G5 判定表）/ bridge_min_free_energy    *)
 (*    （Real 实例化已在盘=real_rlhf_optimal_B@UpRealLeB:237，req Or 形    *)
 (*    阻塞=序桥红线）= 4。                                               *)
-(* 防撞：logd_ 前缀与 G5 UpReqLogPrimD 同族；本文件 10 个新名 + 文件名     *)
+(* 防同名冲突：logd_ 前缀与 G5 UpReqLogPrimD 同族；本文件 10 个新名 + 文件名     *)
 (*    全库 grep 实测零命中（建前 逐名实查）。                  *)
 (* 红线：Set 层零 Prop（real_le/real_lt/real_eq/real_le_b 全 Set 值，    *)
 (*    语句与证明零 Prop 泄露）；全 Qed 闭合；零公理；既有文件零改；      *)
@@ -937,7 +933,6 @@ Qed.
 (* ============================================================ *)
 
 (* B1：逐 eps Or 形（req 槽语句最近可达形；real_log_le_linear_eps        *)
-(*     @CW_ConstructiveWorld_219:41058 直接提供——接口字段 log_le_linear_eps 的根件，E354 勘误） *)
 Lemma logd_log_le_linear_eps : forall (x eps : Real)
     (Hx : real_lt real_zero x),
   real_lt real_zero eps ->
@@ -1004,12 +999,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part D：槽族 3（旗舰）——KL 字面形桥                                   *)
+(* Part D：槽族 3（主定理）——KL 字面形桥                                   *)
 (*   real_kl_term p q（CW_ConstructiveWorld_219 规范形 p·(−log(q/p))）≡ p·(log p − log q)   *)
 (*   （b_gibbs_* / req2_gibbs_inequality / fe_a 字面形）。链：            *)
 (*   log(q/p) == log q + log(1/p)（real_log_mult）+ log(1/p) == −log p    *)
 (*   （G5 logd_log_inv_one_inv_real——E-GIBBSD-2 记名缺口件到位）→        *)
-(*   取负换序闭合。零 log 逆消去阻塞，E-GIBBSD-2 就此勘误闭合。           *)
 (* ============================================================ *)
 
 (* D1【槽证明位】：real_kl_term 与字面形逐点恒等（req_kl_term_equiv 型    *)
@@ -1215,8 +1209,8 @@ Print Assumptions logd_gibbs_sum_eps_boltzmann_list.
 
 From Stdlib Require Import Extraction.
 (* G3 全量提取面（10 件；magic 普查=73，全部位于 coq_RealEnhancedReal    *)
-(*    类实例打包常量与 G5 UpReqLogPrimD 类投影链——本文件 10 件自身证明体   *)
-(*    零 magic，唯一触点=D1 消费 G5 logd_log_inv_one_inv_real 的强制     *)
+(*    类实例封装常量与 G5 UpReqLogPrimD 类投影链——本文件 10 件自身证明体   *)
+(*    零 magic，唯一触点=D1 使用 G5 logd_log_inv_one_inv_real 的强制     *)
 (*    转型一处；见技术报告 G3 节） *)
 Extraction "_logd_g3_extract.ml" logd_le_b_id_r logd_log_le_linear_eps
   logd_log_le_linear_B logd_log_lt_mono_real logd_log_two_pos_real
@@ -1228,7 +1222,6 @@ Extraction "_logd_g3_pure.ml" logd_le_b_id_r logd_log_le_linear_eps
   logd_log_le_linear_B logd_log_lt_mono_real logd_log_two_pos_real.
 
 (* ============================================================ *)
-(* 核对（G6 结果清单，17 槽逐槽判定；索引回填行见技术报告卡尾）：         *)
 (*   槽族 1（log_le_linear 双形，5 参数位）：                              *)
 (*    - log_le_linear@UpReqU2:313 / @UpReqFEPAttn:90 —— Real 实例化证明  *)
 (*      （B1/B2 双形）；req 层 Or 全字面形 = 逆向桥红线不越（§380）。    *)
@@ -1262,10 +1255,7 @@ Extraction "_logd_g3_pure.ml" logd_le_b_id_r logd_log_le_linear_eps
 (*      Part E 闭合到唯一解析件 Σp_b==1）；req 层 Or 形=红线阻塞。        *)
 (*   槽族 4：real_gibbs_sum_eps@UpRealLeB:206 —— 条件证明（Part E；      *)
 (*      供给槽 Σ p_b == 1 的解析实例化留档）。                            *)
-(* 沉淀卡（索引回填行见技术报告卡尾）：                                  *)
-(*   E-LOGD-1：E354 勘误落地——接口字段 log_le_linear_eps@41134 /         *)
 (*   log_mult / exp_neg_plus 在案，req 逐 eps 形直接提供成立；E-GIBBSD-2     *)
-(*   勘误落地——log 逆消去经 G5 logd_log_inv_one_inv_real 到位，          *)
 (*   real_kl_term ↔ p·(log p − log q) 字面形桥全通（Part D），           *)
 (*   Section RealRLHFMain 诚实接口 real_kl_term_equiv 槽自此可填。        *)
 (*   E-LOGD-2：Bishop 序右端换形件 logd_le_b_id_r 为 gibbsd_le_b_id_l    *)

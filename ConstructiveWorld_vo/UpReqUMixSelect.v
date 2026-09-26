@@ -1,34 +1,34 @@
-(* ===================================================================== *)
-(* ToyR 战役包H T247 台账席替换稿（全中文零承认面）                         *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ===================================================================== *)
+(* ToyR 工程  替换稿（全中文零承认面）                         *)
 (*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
 (*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列两条玩具证明体，  *)
-(*   并按战役判绿口径补尾 Print Assumptions 证据段（语句面零改）。          *)
+(*   并按工程判绿口径补尾 Print Assumptions 证据段（语句面零改）。          *)
 (*   替换清单（本件两条）：                                                *)
 (*    ①ums_mult_opp_r：换轨三步路线——先乘法交换律出左负因子位，经          *)
 (*      opp_mult_r（左因子负形）换形，再 opp 同余内交换律回位（原稿为      *)
 (*      opp_mult_l 右因子负形单点直连），结构性重演三实质步。               *)
 (*    ②ums_minus_plus_cancel：换轨长路消去路线——外槽交换出 b 首位，        *)
 (*      结伴右结合换形、内交换回位、对称结合拆出（a+b)+(−b)、plus_opp      *)
-(*      消伴、零元收口，六步结构性重演（原稿为 assoc 直拆＋伴元就地消）。   *)
-(*   其余十条玩具经复核为单点序事实/定义性收口/单路引擎直供（不可化四类），  *)
-(*   如实批量标注不硬凑，滚动挂账。                                        *)
+(*      消伴、零元闭合，六步结构性重演（原稿为 assoc 直拆＋伴元就地消）。   *)
+(*   其余十条玩具经复核为单点序事实/定义性闭合/单路引擎直供（不可化四类），  *)
+(*   如实批量标注不特设构造，滚动遗留。                                        *)
 (*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
 (* ===================================================================== *)
 
 (* ============================================================ *)
-(* UpReqUMixSelect.v —— 席 AT1：混合时间选择器的接口层移植            *)
+(* UpReqUMixSelect.v ——  AT1：混合时间选择器的接口层移植            *)
 (*（把具体柯西实数层 UpReqMixingTime.v 的显式 k 选取机器移植到         *)
-(*  RealInterface 抽象接口层：论文7 §6.3 合龙定理                       *)
-(*  attention_mixing_time 的承重引擎）2026-09-17                    *)
+(*  RealInterface 抽象接口层：论文7 §6.3 闭合定理                       *)
+(*  attention_mixing_time 的承重引擎）                    *)
 (* ============================================================ *)
 (* 移植坐标（对照 concrete 源 UpReqMixingTime.v，全件 Defined 可提取）： *)
 (*   mix_scale            → ums_scale（nat-尺度部分和累加器，接口 plus）  *)
-(*   mix_rpow_pos         → ums_rpow_pos（接口 r_pow，S04:293 消费）      *)
+(*   mix_rpow_pos         → ums_rpow_pos（接口 r_pow，S04:293 使用）      *)
 (*   mix_omd_lt_one       → ums_omd_lt_one（0<w<1 ⟹ 0<1−w）              *)
 (*   mix_ring_sc/cancel   → ums_ring_sc / ums_bernoulli_cancel /         *)
 (*                            ums_minus_plus_cancel / ums_minus_le        *)
-(*                            （抽象环账：id 链 + 重写，无逐点 ring）      *)
-(*   mix_bernoulli_upper  → ums_bernoulli_upper（数学承重墙，证明结构      *)
+(*                            （抽象循环记录：id 链 + 重写，无逐点 ring）      *)
+(*   mix_bernoulli_upper  → ums_bernoulli_upper（数学关键引理，证明结构      *)
 (*                            逐步同构移植：环主件 + 减法≤本体 + 幂正腿    *)
 (*                            + le_mult_compat + IH 换位）                *)
 (*   mix_le_inv           → ums_le_inv（逆元腿）                         *)
@@ -43,20 +43,20 @@
 (*   分量与 N=0 矛盾支在 (S N) 形下整体消去。                             *)
 (* 诚实接口（Variable，S04 ConvergenceCauchy L285 / UpEntropyGain L86     *)
 (* 同名先例）：lt_plus_compat_lt_le——接口 le 侧无正性提取，混合加法        *)
-(* 保序在抽象层不可内证（E-STAGING-Firewall-TempEntMono 定谳），本席       *)
-(* 全部严格升温处（scale 正性 / boost 正性 / omd 双向）仅消费此一件。      *)
+(* 保序在抽象层不可内证（E-STAGING-Firewall-TempEntMono 已证结论），       *)
+(* 全部严格升温处（scale 正性 / boost 正性 / omd 双向）仅使用此一件。      *)
 (* 可判定墙申报（红线③）：目标书原形「le zero TV0 + lt 形 Arch」在接口层   *)
 (* 不可证——接口 le 为不透明 Set 字段（非 Or 编码），TV₀ 的                *)
-(* 零/正分叉无从展开（E-STAGING-C10 定谳同源）。处方：ums_k_select 取      *)
+(* 零/正分叉无从展开（E-STAGING-C10 已证结论同源）。处方：ums_k_select 取      *)
 (* le 形 Arch 前件直给（forall x, le zero x -> ...，具体层由 real_arch +  *)
 (* Or 逐支即刻实例化：lt 支直用、Id 支取 k:=0）；另有 ums_pow_budget       *)
-(* 保严格前件全形。Bernoulli 承重墙本体零降档完整移植。                    *)
+(* 保严格前件全形。Bernoulli 关键引理本体零降档完整移植。                    *)
 (* 公理面：本件零新增公理；全部前提为 Set 层显式证书参数（lt/le 值、       *)
 (*   sigT、Set 层混合保序函数），Print Assumptions 预期全 Closed。         *)
 (* 红线自审：语句面全 Set 层（量词 R/nat；比较全接口 lt/le Set 字段；      *)
 (*   sigT 第二分量 lt : Set）；签名零 Prop 泄露；零经典逻辑；全部证明      *)
 (*   Defined 收束可提取；ums_ 前缀全树 grep 零撞名。                      *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——R83 坑）：                 *)
+(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设）：                 *)
 (*   cpu_guard → _tat1_run.cmd（coqc -q -native-compiler no -Q . ""）     *)
 (* 依赖：S01_BaseRing（接口 + RingLemmas）；S04_RealExpLogConv（r_pow）。   *)
 (* ============================================================ *)
@@ -128,7 +128,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 2：抽象环账小件（具体层逐点 ring 的接口层替身：                   *)
+(* Part 2：抽象循环记录小件（具体层逐点 ring 的接口层替身：                   *)
 (*   全部走 id 链 / 重写，无 destruct——R 为抽象字段）                   *)
 (* ============================================================ *)
 
@@ -188,7 +188,7 @@ Proof.
   exact (plus_zero a).
 Defined.
 
-(* 减法 ≤ 本体：0 ≤ d ⟹ X − d ≤ X（ums_le_plus_r + 可逆换形；对照 igr_le_plus_r 消费形） *)
+(* 减法 ≤ 本体：0 ≤ d ⟹ X − d ≤ X（ums_le_plus_r + 可逆换形；对照 igr_le_plus_r 使用形） *)
 Lemma ums_minus_le : forall X d : R, le zero d -> le (minus X d) X.
 Proof.
   intros X d Hd.
@@ -259,12 +259,12 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 4：Bernoulli 上形式（零 exp/log 的幂收缩核）——数学承重墙        *)
+(* Part 4：Bernoulli 上形式（零 exp/log 的幂收缩核）——数学关键引理        *)
 (*   (1−w)^k · (1 + k·w) ≤ 1（0 < w < 1；对照 mix_bernoulli_upper       *)
-(*   证明结构逐步移植；环账承接口 ums_ring_sc）                          *)
+(*   证明结构逐步移植；循环记录给出口 ums_ring_sc）                          *)
 (* ============================================================ *)
 
-(* 泛型环主件（cancel-ready 形，供减法≤本体直消费）：
+(* 泛型环主件（cancel-ready 形，供减法≤本体直使用）：
    (1−w)(1+w+s) + (w+s)·w == 1+s；id 链式（Let 解包下 rewrite 不可用） *)
 Lemma ums_bernoulli_cancel : forall w s : R,
   Id (plus (mult (minus one w) (plus one (plus w s))) (mult (plus w s) w))
@@ -319,7 +319,7 @@ Proof.
   apply (id_cong (fun z => plus one z) (plus_zero s)).
 Defined.
 
-(* 消去转减法形：X + Y == Z ⟹ X == Z − Y（环账承接口的通用桥） *)
+(* 消去转减法形：X + Y == Z ⟹ X == Z − Y（循环记录给出口的通用桥） *)
 Lemma ums_cancel_to_minus : forall X Y Z : R,
   Id (plus X Y) Z -> Id X (minus Z Y).
 Proof.
@@ -331,7 +331,7 @@ Proof.
                  (id_cong (fun z => plus z (opp Y)) HC)))).
 Defined.
 
-(* 环账承接口（对照 mix_ring_sc 原形）：
+(* 循环记录给出口（对照 mix_ring_sc 原形）：
    (1−u)(1+u+a) == (1+a) − (u+a)·u *)
 Lemma ums_ring_sc : forall u a : R,
   Id (mult (minus one u) (plus one (plus u a)))
@@ -358,7 +358,7 @@ Proof.
                           (plus_zero one)))
              (le_refl one)).
   - (* 归纳步（对照 concrete L364-444 同构）：
-       环账 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w ≤ 1+kw；
+       循环记录 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w ≤ 1+kw；
        再乘幂正腿接 IH 换位 *)
     assert (Hbpos : lt zero (minus one w))
       by exact (ums_omd_lt_one w Hwp Hwlt).
@@ -442,7 +442,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 6：k 选取旗舰（G1）——尾链核（对照 mix_pow_budget 主链）          *)
+(* Part 6：k 选取主定理（G1）——尾链核（对照 mix_pow_budget 主链）          *)
 (*   Arch 见证（nat-尺度上界）与 omd 证书收拢为前件，双头共用            *)
 (* ============================================================ *)
 
@@ -525,7 +525,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 7：选择器双头（G1 旗舰）                                        *)
+(* Part 7：选择器双头（G1 主定理）                                        *)
 (* ============================================================ *)
 
 (* 件5 主形：le 前件 + le 形 Arch 直给（接口层诚实形，见头注申报） *)
@@ -636,7 +636,7 @@ Defined.
 
 End UMixSelect.
 
-(* ToyR 台账席补：判绿证据段（尾 Print Assumptions，全 Closed 预期） *)
+(* ToyR 补：判绿证据段（尾 Print Assumptions，全 Closed 预期） *)
 Print Assumptions UpReqUMixSelect.ums_scale_S_pos.
 Print Assumptions UpReqUMixSelect.ums_boost_pos.
 Print Assumptions UpReqUMixSelect.ums_mult_one_l.

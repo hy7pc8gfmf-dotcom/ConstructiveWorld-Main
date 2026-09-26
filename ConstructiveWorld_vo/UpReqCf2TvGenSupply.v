@@ -1,35 +1,31 @@
-(* UpReqCf2TvGenSupply — Fin2 总变差 general 位非负消解边界机检件：
+(* UpReqCf2TvGenSupply — 使命：Fin2 总变差 general 位非负消解边界检验件：
    供给半边以显式假设位承载 plain 形逐点绝对值非负字段 Habs : forall x, le zero (abs x)，
    构造性推出零归一前件强形 general 位 TV₀≥0；反向半边以归一对见证（nu ≡ half、
    mu := half±x 摆动对）由 general 位消解复原 plain 字段。两半边合成真等价：
    「general 位 TV₀≥0 消解 ⟺ plain abs_nonneg 字段供给」。 *)
-
 (* 依赖清单：全部只 Require 不改。CW_ConstructiveWorld_219（S01-S15 聚合 Export 链）、
    UpReqAlgebra（req_le_mult_compat_r / req_two_pos / req_plus_zero_r / req_plus_opp_r /
    req_mult_one_l / req_two_mult / req_mult_plus_distr_r / req_plus_swap_mid /
    req_minus_plus_cancel_r）、UpReqSumD（sumd_list_sum_nonneg / sumd_lt_le）、UpReqDist、
    UpReqConcSoftmax（csm_sumf）、UpReqSampling、UpReqConcMixSel、UpReqConcB1、UpReqConcB2、
    AttnDoeblin、UpReqConcFin2（cf2_tv / cf2_sumf / cf2_inv_two）。
-   Import 不传递，故按消费位惯例补 Import RealInterfaceEnhancedMod 与 Import ListNotations；
+   Import 不传递，故按使用位惯例补 Import RealInterfaceEnhancedMod 与 Import ListNotations；
    导入后 le_id_l / le_id_r / mult_zero / plus_zero / distrib / abs_opp / inv_pos_correct /
    inv_pos_pos 等名一律绑定 RealInterfaceEnhancedSetoid（req 层）投影。 *)
-
 (* 对标行：
    cf2_tv       ≜ mult cf2_inv_two (cf2_sumf (fun s => abs (req_minus (mu s) (nu s))))
    cf2_inv_two  ≜ inv_pos (plus one one) req_two_pos
    cf2_sumf f   ≜ sumd_list_sum bool f [true; false]（定义性即列表和）
    已证结论对照：cf2_tv_nonneg（点质量位 concrete 形）为本件 general 位两半边的点位特例参照；
    本件零触碰上游任何接口与语句。 *)
-
 (* 构造性注记：零承认件。全部语句落在 Set 层（le/lt/req/abs 均 Set 族接口面），
    无 Prop 泄露位、无经典逻辑。供给向全链：逐项消解（Habs 逐点）→ 列表和保持
-   （sumd_list_sum_nonneg）→ 正系数乘 le 保持（req_le_mult_compat_r）→ 换轨收口
+   （sumd_list_sum_nonneg）→ 正系数乘 le 保持（req_le_mult_compat_r）→ 换轨闭合
    （le_id_l + mult_zero）。反向全链：归一对见证 → 归一前件以 req 代数链闭合
    （req_two_mult / inv_pos_correct）→ 逐项差实例化消解
    （req_minus_plus_cancel_r：req_minus (plus a b) a ≡ b）→ abs 字段回提
-   （req_abs_compat / abs_opp）→ 半倍和收口（distrib / req_mult_plus_distr_r /
+   （req_abs_compat / abs_opp）→ 半倍和闭合（distrib / req_mult_plus_distr_r /
    req_mult_one_l）→ le_id_r 换轨。 *)
-
 (* 编译配方：Rocq 9.1，-Q . "" 空根映射；
    coqc -Q . "" UpReqCf2TvGenSupply.v *)
 
@@ -129,7 +125,7 @@ Proof.
                                                                           (req_two_mult cf2_inv_two))
                                                                  (inv_pos_correct (plus one one) req_two_pos)))))). }
   (* 逐项差：(half+x)−half = x、(half−x)−half = −x（req_minus_plus_cancel_r）；
-     abs 字段回提后 −x 支经 abs_opp 同归 abs x；半倍和 half·(|x|+|x|) = |x| 收口 *)
+     abs 字段回提后 −x 支经 abs_opp 同归 abs x；半倍和 half·(|x|+|x|) = |x| 闭合 *)
   assert (Htv : req (cf2_tv (fun s : bool => if s then plus cf2_inv_two x else plus cf2_inv_two (opp x)) (fun _ : bool => cf2_inv_two)) (abs x)).
   { exact (req_trans
              (mult cf2_inv_two

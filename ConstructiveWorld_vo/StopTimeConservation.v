@@ -1,44 +1,31 @@
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   path2_conservation_T（原 L250，3 句玩具证）                          *)
-(*   honest_stop_le（原 L71，3 句玩具证）                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* StopTimeConservation.v —— C5 可选停时守恒记账（A2 组合榜组 5）      *)
-(*                                                              *)
-(* 装配来源：                                                    *)
-(*   A 件（UpStopTime.v）                                        *)
-(*     A1 :208 grun_budget      生成器头投影：链头预算 = 初始预算 b   *)
-(*     A2 :221 grun_budget_at   守卫链在停时处（深度 n ≤ b）预算恒等：*)
-(*                              gbudget_at n (grun k b c) = b - n   *)
-(*   B 件（UpDissip.v）                                           *)
-(*     B1 :186 bond_exchange_conservation 每边交换守恒：             *)
-(*                              eps_in = eps_out + edge_diss         *)
-(*     B2 :297 path_dissipation_additive  路径耗散可加：             *)
-(*                              复合边耗散 = 段1耗散 + 段2耗散        *)
-(*                                                              *)
-(* 主件（可选停时型守恒记账）stoptime_conservation_master：          *)
-(*   同一诚实停时 τ 处，两本账同时封平：                             *)
+(* StopTimeConservation.v —— 使命：可选停时型守恒核算（A2 组合榜组 5）：  *)
+(*   同一诚实停时 τ 处，两本账同时封平：                                   *)
 (*   nat 预算账：停时剩余 gbudget_at τ + 累计耗散 gdiss_at τ = 初始 b；*)
 (*              （即击破时刻总量分解：初始 = 剩余 + 累计耗散，        *)
 (*                停时剩余 = b − τ、前缀累计耗散 = τ，见推论）         *)
 (*   Q  eps 账 ：初始 eps = τ 步兑换后剩余 + τ 步累计耗散（复合边）。  *)
 (*   honest_stop τ ch ≜ τ 不越过链头预算（观测不超出生产窗口），       *)
 (*   经 A1 换形为 NatLe τ b，在 nat 账中实质使用。                   *)
-(*                                                              *)
+(* 装配来源：                                                    *)
+(*   A 件（UpStopTime.v）                                        *)
+(*     A1 :208 grun_budget      生成器头投影：链头预算 = 初始预算 b   *)
+(*     A2 :221 grun_budget_at   守卫链在停时处（深度 n ≤ b）预算恒等：*)
+(*   B 件（UpDissip.v）                                           *)
+(*     B1 :186 bond_exchange_conservation 每边交换守恒：             *)
+(*                              eps_in = eps_out + edge_diss         *)
+(*     B2 :297 path_dissipation_additive  路径耗散可加：             *)
+(*                              复合边耗散 = 段1耗散 + 段2耗散        *)
 (* 语义：把 A2「停时处的预算恒等」与 B2「路径耗散可加」拼成完整        *)
-(*   记账守恒：B1 逐边守恒沿迭代闭合成有限步显式守恒（n 步归纳形        *)
+(*   核算守恒：B1 逐边守恒沿迭代闭合成有限步显式守恒（n 步归纳形        *)
 (*   diss_iter_conservation），S5 给出停时前缀可加（账本无重计）。     *)
-(*                                                              *)
 (* 层位纪律：nat 侧出口 Id/NatLe/And（Set 层）；Q 侧与 B 件同口径（==） *)
 (*   另给 T 化出口 path2_conservation_T（Qeq_bool→Id）。             *)
-(*   纯构造性，全部 Qed，文末 Print Assumptions 留痕。               *)
+(* 依赖：CW_ConstructiveWorld_219 UpBudgetReal UpConstitution UpStopTime  *)
+(*   UpDissip；Stdlib QArith.QArith QArith.Qabs Lia Arith.PeanoNat。      *)
+(* 构造性注记：纯构造性，全部 Qed（语句面无承认式构造），文末 Print      *)
+(*   Assumptions 留痕。                                                 *)
+(* 编译配方：coqc 9.1 直调（vo 树内 -Q . ""），信任缓存前置。            *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -53,7 +40,7 @@ Require Import UpDissip.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §0 记账对象：诚实停时 + 链侧累计耗散                              *)
+(* §0 核算对象：诚实停时 + 链侧累计耗散                              *)
 (* ============================================================ *)
 
 (* 诚实停时：停时 τ 对链 ch 诚实 = 观测深度不越过链头预算            *)
@@ -62,7 +49,7 @@ Definition honest_stop (tau : nat) (ch : GChain) : Set :=
   NatLe tau (gchain_budget ch).
 
 (* 链侧累计耗散：每步耗散 = 本节点头预算 − 下一节点头预算，            *)
-(*   触底节点（gstop）清偿完毕、耗散记零（清零制口径，与 gbudget_at 同）。 *)
+(*   触底节点（gstop）计数归零、耗散记零（清零制口径，与 gbudget_at 同）。 *)
 Fixpoint gdiss_at (n : nat) (ch : GChain) : nat :=
   match n with
   | O => 0%nat
@@ -124,7 +111,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 nat 记账主件：停时处预算守恒                                   *)
+(* §2 nat 核算主件：停时处预算守恒                                   *)
 (* ============================================================ *)
 
 (* 主件（nat 账）：诚实停时 τ 处，剩余 + 累计耗散 = 初始预算。          *)
@@ -243,7 +230,7 @@ Definition exch2 (e1 e2 : edge_spec) (x : Q) : Q :=
 Definition path_diss2 (e1 e2 : edge_spec) (x : Q) : Q :=
   edge_diss e1 x + edge_diss e2 (edge_map e1 x).
 
-(* B 装配件：两段路径上的记账守恒 = B1（复合边一次记账）× B2（耗散分解）   *)
+(* B 装配件：两段路径上的核算守恒 = B1（复合边一次核算）× B2（耗散分解）   *)
 (*   初始 eps = 两段兑换后余量 + 段1耗散 + 段2耗散。                    *)
 Theorem path2_conservation : forall (e1 e2 : edge_spec) (x : Q),
   x == exch2 e1 e2 x + path_diss2 e1 e2 x.
@@ -268,14 +255,14 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 合成主件：可选停时型守恒记账（A×B 同一停时双账封平）               *)
+(* §4 合成主件：可选停时型守恒核算（A×B 同一停时双账封平）               *)
 (* ============================================================ *)
 
 (* 合成主件：给定诚实停时 τ（GuardedChain 停时，A1/A2 口径），           *)
 (*   nat 预算账：停时剩余 + 累计耗散 = 初始预算 b（击破时刻总量守恒）；    *)
 (*   Q  eps  账：初始 eps = τ 步复合边兑换后余量 + τ 步累计耗散          *)
 (*              （B1 逐边守恒沿 τ 步迭代闭合）。                        *)
-(*   同一 τ 同时封平两本账——可选停时守恒记账的完整形态。                 *)
+(*   同一 τ 同时封平两本账——可选停时守恒核算的完整形态。                 *)
 Theorem stoptime_conservation_master :
   forall (k : Q) (e1 e2 : edge_spec) (bd : bond) (tau b : nat) (c : Q),
   honest_stop tau (grun k b c) ->

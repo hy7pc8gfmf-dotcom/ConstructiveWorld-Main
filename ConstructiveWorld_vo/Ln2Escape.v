@@ -1,11 +1,15 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* Ln2Escape.v — 席位 CZW13（批次 E-STAGING-CZW13，20260918）      *)
 (*                                                               *)
-(* 使命：T84 压轴真靶 ln2i_escape_spec 攻歼。路线判定定谳：          *)
 (*   积分面路线不可达——库内 pint_ 机器只覆盖多项式被积函数，           *)
 (*   有理型 t^n(1−t)^n/(1+t)^{n+1} 超出一期面；逐点界               *)
 (*   (t(1−t))^n ≤ 4^{-n} 需「逐点单调⟹积分单调」机器，              *)
-(*   PolyIntegral 头注明言留二期。故按任务书退路走                   *)
 (*   【离散化/多项式系数序列路线】：载体取 Padé 积分分子多项式          *)
 (*   t^n(1−t)^n 的系数列表积分（Beta 载体）：                        *)
 (*     lne_B n := ∫₀¹ t^n(1−t)^n dt = (n!)^2/(2n+1)!               *)
@@ -19,23 +23,21 @@
 (* 配方来源（诚实溯源）：lne_list/lne_beta_value 及 §A 引擎移植自        *)
 (*   消融50/PadeErrorIntegral.v（CYE10 交付件，pei_ 前缀）同构换名，     *)
 (*   因其 Require 链（UpReqB4TwoStage⟵219 壳⟵UpReqPadeExp）在          *)
-(*   vo_901 信任根缺 .vo 无法本地消费，按配方移植免 Psatz 装环境。       *)
-(* 消费装配：UpReqLn2Irrational 条件形母定理消费，零旁路：              *)
+(*   vo_901 信任根缺 .vo 无法本地使用，按配方移植免 Psatz 装环境。       *)
+(* 使用装配：UpReqLn2Irrational 条件形母定理使用，零旁路：              *)
 (*   lne_ln2_irrational_cond : ln2i_escape_spec -> forall q, ...       *)
 (*   （exact ln2i_irrational_criterion_cond 真走母定理）；             *)
 (*   lne_B_in_window：载体严格落入 ln2 判定窗 ln2i_e n = 2^{-n} 内。     *)
 (* 残面诚实登记（对照 GEOM-B 先例）：                                  *)
-(*   无条件形收口（ln2i_escape_spec 见证本体）本轮不虚报。机制：          *)
 (*   escape 需对每个 q 找 n 使 2^{-n} < |q − x_n|；n!·2^n 整递推        *)
-(*   d_{n+1}=2(n+1)d_n−n! 只给间隙 1/(n!·2^n)≪2^{-n}（T84 勘账          *)
 (*   「窗放不进」）；Beta 载体三件套 + 窗匹配件是 Padé 路线的首步          *)
 (*   承重面，d_n^2 档间隙步（Hermite 机制：载体×分母方幂与 ln2 级数        *)
 (*   部分和的耦合）留续作，首步路线=以 lne_B 整性面 × 递推 d_n 做          *)
 (*   窗内/窗外二分。本件全部Qed/Defined，零公理声明词、零认授。           *)
-(* 语句面纪律：装配/消费面全 Set（QltT/QleT'/QeqT/sigT/S01.And:=A*B）；  *)
+(* 语句面纪律：装配/使用面全 Set（QltT/QleT'/QeqT/sigT/S01.And:=A*B）；  *)
 (*   支撑引理 nat/Z/Q 层 Prop 面仅作推理脚手架（UpReq 系先例同构）。     *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、PolyIntegral、      *)
-(*   SumInvFactEscape（sif_qfact_Z）、UpReqLn2Irrational（母件消费）；    *)
+(*   SumInvFactEscape（sif_qfact_Z）、UpReqLn2Irrational（源定理使用）；    *)
 (*   前 5 件 vo_901 信任根在册，UpReqLn2Irrational 按 CZE13 配方         *)
 (*   side 根现编（源=ConstructiveWorld_Live 只读原件）。                 *)
 (* ============================================================ *)
@@ -420,7 +422,7 @@ Proof.
     + exact IH.
 Qed.
 
-(* 除法右乘逆比较器：0<y, 0<w, x·w ≤ y ⟹ x/y ≤ 1/w（全 Q 层，免展开簿记） *)
+(* 除法右乘逆比较器：0<y, 0<w, x·w ≤ y ⟹ x/y ≤ 1/w（全 Q 层，免展开说明） *)
 Lemma lne_div_le_inv : forall x y w : Q,
   Qlt 0 y -> Qlt 0 w -> Qle (x * w) y -> Qle (x / y) (Qinv w).
 Proof.
@@ -543,7 +545,7 @@ Proof.
     exact (proj1 (Qinv_lt_contravar (ln2i_p2 n) (lne_p4 n) Hu0 Hp4) Huv).
 Qed.
 
-(* 消费件：载体严格落入 UpReqLn2Irrational 判定窗 ln2i_e n = 2^{-n} *)
+(* 使用件：载体严格落入 UpReqLn2Irrational 判定窗 ln2i_e n = 2^{-n} *)
 Theorem lne_B_in_window : forall n : nat, (1 <= n)%nat ->
   QltT (lne_B n) (ln2i_e n).
 Proof.
@@ -551,7 +553,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §F 条件形收口消费（真走母定理，零旁路）                                *)
+(* §F 条件形闭合使用（真走母定理，零旁路）                                *)
 (* ============================================================ *)
 
 Theorem lne_ln2_irrational_cond : forall (Hesc : ln2i_escape_spec) (q : Q),
@@ -566,7 +568,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §G 提取探针 + 公理面自审                                              *)
+(* §G 提取检验 + 公理面自审                                              *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

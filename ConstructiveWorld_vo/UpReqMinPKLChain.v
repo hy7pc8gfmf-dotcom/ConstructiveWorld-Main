@@ -1,44 +1,32 @@
-(* ============================================================ *)
 (* UpReqMinPKLChain.v *)
-(* *)
-(* 目的： 复合熵链的一步拼装（Min-P KL 链）。 *)
+(* 使命： 复合熵链的一步拼装（Min-P KL 链）。 *)
 (* 主件： x1_KL 与 x1_minp_kernel / x1_Zaud_pos_cert：KL 链的显式组装件。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpMinP。 *)
 (* 备注： 三分性判定器显式随行；零公理面、零经典逻辑（纯构造）。 *)
 (* 构造性注记：Set 层承载、零承认、可提取。 *)
 (* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
 (* UpReqMinPKLChain.v —— 复合熵链一步拼装 *)
 (*   KL(minp‖full) ≤ S ≤ log|S|   （论文 2 正式版 §10.2 第 6 项）  *)
-(*                                                              *)
 (* 拼装件（全在盘，只读使用）：                                   *)
-
 (*                   real_Z_aud_is_kept_mass（Z_aud == 保留质量）  *)
 (*   UpMinP        : dropped_le_one_minus_exp_neg_S（dropped ≤ 1−e^−S）*)
 (*                   um_log_le_mono / um_fmax 族 / um_rls 族 / um_seq 族 *)
 (*   根   : real_gibbs_inequality_eps（Gibbs ≥ 0 逐 eps） *)
 (*                   real_log_mult / real_inv_unique / real_le_antisym *)
-(*                                                              *)
 (* 链结构（各步引用件名）：                                       *)
-
 (*   [2] real_Z_aud_is_kept_mass + x1_sum_list_seq + x1_seq_ext   *)
 (*       + x1_inv_of_Zfull ⟹ Z_aud == um_kept                    *)
 (*   [3] dropped_le_one_minus_exp_neg_S + x1_plus_opp_cancel      *)
 (*       ⟹ e^−S ≤ kept（kept == 1 − dropped 互补恒等）            *)
 (*   [4] um_log_le_mono + log_inv_exp_neg_thm ⟹ KL ≤ S            *)
-
 (*       ⟹ S ≤ log N + eps（逐 eps 形）                           *)
 (*   [6] 三分判定器 + 半隙完成 ⟹ S ≤ log N（闭形）                  *)
 (*   [7] real_le_trans ⟹ KL ≤ log N 与合取形复合链                 *)
-(*                                                              *)
 (* 世界：UpMinP 概率表世界（tokens : list Real，逐项正、和 == 1，   *)
 (* ratio ∈ (0,1]，三分判定器 trich 随行）；UpAuditBridge 抽象 Min-P   *)
 (* 机器在 (Real, tokens, x1_tf, x1_keep, x1_keep_dec) 上实例化。    *)
 (* 纪律：零公理、零搁置、零经典（纯构造，三分判定器显式随行）；        *)
 (*       语句全 Set 层；全 Qed 闭合；um_/x1_ 前缀防遮蔽。           *)
-(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpMinP UpAuditBridge.
@@ -890,7 +878,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* R4（席X1c）：闭形 + 复合件（照单施工 X1b 合规自查报告 R4 节）          *)
+(* R4：闭形 + 复合件                                                    *)
 (*   消解剖面：0<d（d:=S+(−LN)）→ inv2<1（real_inv_pos_lt_contra）  *)
 (*     → d·inv2<d（real_lt_mult_compat）→ LN+d·inv2<LN+d            *)
 (*     （real_lt_plus_compat_le_lt）→ real_lt_trans（S02 L463）完成  *)

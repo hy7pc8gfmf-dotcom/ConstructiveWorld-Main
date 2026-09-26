@@ -1,31 +1,11 @@
-(* ============================================================ *)
-(* UpReqBanachInstEMult.v —— ConstructiveWorld 路径 B             *)
-(*   E-载体乘法群件                                               *)
-(* ============================================================ *)
-(* 使命：使用 UpReqBanachInstB 的 E-载体正件（bxib_E 自由项树 +    *)
-(*   bxib_ev 求值 + bxib_bae 规范形 Leibniz 判据），补齐 INSTB     *)
-(*   未消解项①的乘法群：                                          *)
-(*   保底三件 = bxem_mult（定义）+ bxem_mult_wd（bae-良定义）      *)
-(*            + bxem_mult_assoc（结合律，R2L 向对齐类字段）。      *)
-(*   主件     = bxem_one + 单位律 l/r + 分配律 l/r + 交换律        *)
-(*            + bxem_mult_zero（类字段 bmult_zero 位）。           *)
-(*   附带供给 = bxem_bplus_wd / bxem_bopp_wd（INSTB 未消解项        *)
-(*   ⓪′/⓪ 的 wd 位——同款双 qnorm 塌缩技术即可闭合）。             *)
-(* 选型账：乘法定义取载体既有构造子位 bxib_emult（E 是自由项树，   *)
-(*   ev 在 emult 位已按 qnorm∘Qmult 复合，零新算术）；全部代数律    *)
-(*   = stdlib Qmult 引擎（Qmult_assoc/1_l/1_r/0_r/comm/plus_distr）*)
-(*   + bxib_qnorm_fix（换心）+ bxib_qnorm_fix_id（双 qnorm 塌缩）  *)
-(*   + bxib_qnorm_id_of_qeqT（Id 闭合）三件套，与 INSTB bplus 同款。*)
-(* 铁律自审：公理面零命中；语句面全 Set（bae/Id/QeqT）；冻结件与   *)
-(*   Pre/ExpAddEq/CauchyD 零改动（仅 Require 使用）；前缀 bxem_    *)
-(*   零撞名。                                                     *)
-(* 工程注：目标内含 bxib_qnorm（Z.gcd/Z.div）的子项一律禁 simpl，   *)
-(*   走 change 显式 iota + 引理改写；Qeq 改写面与 INSTB 同款。      *)
-(* 构造性注记：全链 Qed 收束，公理面零命中，零承认、零经典逻辑；语句面全 *)
-(*   Set 层（bae/Id/QeqT 承载）。 *)
-(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
-(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqBanachInstEMult.v — Banach 代数乘法的构造性实现
+   使命: bxem_mult/bxem_one 定义、bxem_qeqT_cong_mult（QeqT 乘法外推）与 bxem_mult_assoc/one_l/one_r/distrib_l/distrib_r/comm/zero（bae 语义全律）。
+   依赖: S01_BaseRing、S02_CauchyComplete、UpReqBanachInstB；Stdlib QArith、ZArith、Lia、Extraction
+   对标: Banach 代数公理体系（结合、幺、交换、分配、零化）的商语义实现。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -67,7 +47,7 @@ Qed.
 
 (* ============================================================ *)
 (* E1：保底件②——bxem_mult_wd（bae-良定义）                        *)
-(*   双 qnorm 塌缩（fix_id）+ 求值像 Q 层 cong_mult + id_of_qeqT。  *)
+(*   双 qnorm 退化（fix_id）+ 求值像 Q 层 cong_mult + id_of_qeqT。  *)
 (* ============================================================ *)
 
 Lemma bxem_mult_wd : forall a b c d : bxib_E,
@@ -238,7 +218,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* E4：附带供给——INSTB 未消解项 ⓪′/⓪ 的 wd 位（同款塌缩技术顺带闭合）*)
+(* E4：附带供给——INSTB 未消解项 ⓪′/⓪ 的 wd 位（同款退化技术顺带闭合）*)
 (*   （bxem_bplus_wd / bxem_bopp_wd：装配位与类字段 bplus_wd/       *)
 (*    bopp_wd 逐字同形，W6 可直取。）                              *)
 (* ============================================================ *)

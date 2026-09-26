@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S09_EntropyReal.v                                           *)
 (*                                                             *)
@@ -2538,7 +2539,7 @@ apply (real_plus_assoc (real_plus (real_plus (real_abs T1) (real_abs T2)) marg) 
 ++ exact HT2.
 -- apply real_le_refl.
 * apply real_le_refl.
-}    (* ============ 最终：|D| ≤ eps|h| + eps'（份额逐点 Q 层，E152-5：real_le=Or 无法表达通用非严格 ≤） ============       结构：Hsum_bnd（已证）→ HT3a 替换 |T3| → T3 展开（ring）→ HDen_sq 替换 Den·|h|²             → ring 重排 == eps|h| + ShareSum → 份额 ≤ c_total·eps'（c_total := 889/2048 < 1）       份额逐点精确（E179-2：real_inv_pos 投影 n ≥ N0 时 == Qinv(u n)，βK ≤ eps'、β ≤ 1 无滑移）：         Mfβγ ≤ 3eps'/128（Mf ≤ K/64、βγ == 3β/2、βK ≤ eps'）、Mg 对称         Lin ≤ 97eps'/256（(Lf+Lg)|h| ≤ K/4、B == 97β/64、βK ≤ eps'）         BB ≤ 9409eps'/(4096·320) ≤ eps'/128（β ≤ 1 ⟹ β² ≤ β、K ≥ 320）         6marg ≤ 3eps'/10240 ≤ eps'/2048（marg == β/64）       见证 eps0q := e0'/4；Hsum_bnd/HT3a/HDen_sq 逐点化各容差 e0'/128（real_le_pointwise_eps）       余量：1 − 889/2048 − 4/128 − 1/4 == 583/2048 > 0 ✓ *)    set (A1 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mf beta_gamma)).
+}    (* ============ 最终：|D| ≤ eps|h| + eps'（份额逐点 Q 层，E152-5：real_le=Or 无法表达通用非严格 ≤） ============       结构：Hsum_bnd（已证）→ HT3a 替换 |T3| → T3 展开（ring）→ HDen_sq 替换 Den·|h|²             → ring 重排 == eps|h| + ShareSum → 份额 ≤ c_total·eps'（c_total := 889/ < 1）       份额逐点精确（E179-2：real_inv_pos 投影 n ≥ N0 时 == Qinv(u n)，βK ≤ eps'、β ≤ 1 无滑移）：         Mfβγ ≤ 3eps'/128（Mf ≤ K/64、βγ == 3β/2、βK ≤ eps'）、Mg 对称         Lin ≤ 97eps'/256（(Lf+Lg)|h| ≤ K/4、B == 97β/64、βK ≤ eps'）         BB ≤ 9409eps'/(4096·320) ≤ eps'/128（β ≤ 1 ⟹ β² ≤ β、K ≥ 320）         6marg ≤ 3eps'/10240 ≤ eps'/（marg == β/64）       见证 eps0q := e0'/4；Hsum_bnd/HT3a/HDen_sq 逐点化各容差 e0'/128（real_le_pointwise_eps）       余量：1 − 889/ − 4/128 − 1/4 == 583/ > 0 ✓ *)    set (A1 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mf beta_gamma)).
 set (A2 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mg beta_gamma)).
 set (Prod := real_mult (real_plus (real_mult Lf (real_abs h)) B)                           (real_plus (real_mult Lg (real_abs h)) B)).
 set (Den_h2 := real_mult Den (real_mult (real_abs h) (real_abs h))).
@@ -3374,8 +3375,8 @@ ring [Hc].
 -- exact Hc9409b.
 -- apply Qlt_le_weak.
 exact Hen'pos.
-}      (* 6marg ≤ eps'/2048（marg == β·Qinv(64)、β ≤ en'·Qinv(320)） *)      assert (Hmarg6 : Qle (margn + (margn + (margn + (margn + (margn + margn))))) ((Qmake 1 2048) * en')).
-{ (* 6marg == 6·β·Qinv(64) == (3/32)·β ≤ (3/32)·en'·Qinv(320) == (3/10240)·en' ≤ (1/2048)·en' *)        rewrite Hprojmarg.
+}      (* 6marg ≤ eps'/（marg == β·Qinv(64)、β ≤ en'·Qinv(320)） *)      assert (Hmarg6 : Qle (margn + (margn + (margn + (margn + (margn + margn))))) ((Qmake 1 2048) * en')).
+{ (* 6marg == 6·β·Qinv(64) == (3/32)·β ≤ (3/32)·en'·Qinv(320) == (3/10240)·en' ≤ (1/)·en' *)        rewrite Hprojmarg.
 rewrite Hinv64'.
 apply (Qle_trans _ (betan * (Qmake 3 32)) _).
 - apply qeq_le.
@@ -3394,7 +3395,7 @@ ring [Hc].
 -- exact Hc3_10240.
 -- apply Qlt_le_weak.
 exact Hen'pos.
-}      (* 份额汇总：ShareSum == S12 + Lin + BB + 6marg ≤ (3/64+97/256+1/128+1/2048)·en' == (889/2048)·en' *)      assert (HShare : Qle ShareSumn ((Qmake 889 2048) * en')).
+}      (* 份额汇总：ShareSum == S12 + Lin + BB + 6marg ≤ (3/64+97/256+1/128+1/)·en' == (889/)·en' *)      assert (HShare : Qle ShareSumn ((Qmake 889 2048) * en')).
 { rewrite HprojShare.
 apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128) * en') + (Qmake 1 2048) * en') _).
 - apply (Qplus_le_compat (S12n + Linn + BBn) (((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128) * en')                                 (margn + (margn + (margn + (margn + (margn + margn))))) ((Qmake 1 2048) * en')).
@@ -3402,7 +3403,7 @@ apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128)
 * apply (Qplus_le_compat S12n ((Qmake 3 64) * en') Linn ((Qmake 97 256) * en')); [exact HS12 | exact HLin_bound].
 * exact HBB_bound.
 + exact Hmarg6.
-- apply qeq_le. ring.   (* (3/64+97/256+1/128+1/2048)·en' == (889/2048)·en'：裸 ring（勿 vm_compute——含变量 en' 展开 projT1 挂死，E197-12） *)
+- apply qeq_le. ring.   (* (3/64+97/256+1/128+1/)·en' == (889/)·en'：裸 ring（勿 vm_compute——含变量 en' 展开 projT1 挂死，E197-12） *)
 }      (* 链：A_n == Qabs(D_n) ≤ HsumRn + s ≤ Hsum1n + 2s ≤ Hsum2n + 3s == en·hn + ShareSumn + 3s *)      assert (Hchain : Qle (projT1 (real_abs D) n) (en * hn + ShareSumn + 3 * (Qdiv e0' 128))).
 { (* 保持 projT1 (real_abs D) n 形态（HNsum 逐点结论同形；勿 rewrite HprojD，E197-4） *)        apply (Qle_trans _ (HsumRn + Qdiv e0' 128) _).
 - exact (HNsum n Hnsum).
@@ -3461,7 +3462,7 @@ apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128)
                rewrite HprojS12.
                ring.
             ** apply Qle_refl.
-}      (* 最终：B_n − A_n ≥ en' − ShareSumn − 3s ≥ (1−889/2048)·en' − 3s > eps0q
+}      (* 最终：B_n − A_n ≥ en' − ShareSumn − 3s ≥ (1−889/)·en' − 3s > eps0q
         E197-13 重写：原 L7763 Qmult_le_0_compat 直打 (1−c−3/128−1/4)e0' ≤ (1−c)(en'−e0')
         不可证（en'−e0' 无下界）；改差分链 0 < (1−c−3/128−1/4)·e0' ≤ (1−c)·en'−3s−e0'/4，
         差分 == (1−c)(en'−e0') ≥ 0（Qle_minus_iff 差分 + field 恒等，E197-13） *)
@@ -3485,7 +3486,7 @@ apply (Qlt_le_trans _ ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) 
     * apply qeq_le. unfold Qdiv, Qminus. field.   (* (1−c)(en'−e0') == 差分：含 Qinv 用 field（E149） *)
 - (* sub2：(1−c)·en' − 3s ≤ B_n − A_n：HShare + Hchain 差分链 *)
   apply (Qle_trans _ (en' - ShareSumn - 3 * (Qdiv e0' 128)) _).
-  + (* (1−c)·en' − 3s ≤ en' − ShareSumn − 3s ⟺ ShareSumn ≤ (889/2048)·en'（HShare） *)
+  + (* (1−c)·en' − 3s ≤ en' − ShareSumn − 3s ⟺ ShareSumn ≤ (889/)·en'（HShare） *)
     apply (proj2 (Qle_minus_iff ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) (en' - ShareSumn - 3 * (Qdiv e0' 128)))).
     apply (Qle_trans _ ((Qmake 889 2048) * en' - ShareSumn) _).
     * apply (proj1 (Qle_minus_iff ShareSumn ((Qmake 889 2048) * en'))). exact HShare.
@@ -4600,7 +4601,7 @@ Qed.
 End EntropyDiffReal.
 
 (* ================================================================
-   论文4 差距一 Real 层复刻（gradient_zero → is_truth），排序 4，2026-09-01
+   论文4 差距一 Real 层复刻（gradient_zero → is_truth），排序 4
    诚实接口 real_entropy_tangent（Real 层凹函数切线不等式，一阶条件）
    ⟹ real_gradient_zero_entropy_max：驻点（g(x)==0）是熵的全局最大点
    ⟹ real_gradient_zero_neg_entropy_truth：is_truth 桥（损失=负熵）。
@@ -4682,8 +4683,7 @@ Qed.
 End RealGapOne.
 
 (* ================================================================
-   论文4 κ 收缩 Real 层复刻（正分支），排序 5，2026-09-01
-   探针 _dbg_kappa_real.v（8 Qed / 0 承认）平移并入。
+   论文4 κ 收缩 Real 层复刻（正分支），排序 5
    接口：real_dynamics_gradient_step（动力学=梯度上升步进）、
          real_strong_concavity（μ-强凹，标准优化假设，非经典公理）。
    产出：real_dynamics_step_unfold（K0）、real_gradient_step_contraction
@@ -5089,7 +5089,7 @@ Variable real_gradient_lipschitz : forall x y : Real,
 (* 新增：符号保持步长条件 η < 1/L（数学必需，E223 判据） *)
 Variable eta_lt_inv_L : real_lt (real_mult L eta) real_one.
 
-(* ===== ① real_abs_neg_req：a < 0 ⟹ |a| == −a（逐点 Qabs_neg，real_abs_pos_req 镜像） ===== *)
+(* ===== ① real_abs_neg_req：a < 0 ⟹ |a| == −a（逐点 Qabs_neg，real_abs_pos_req 同构） ===== *)
 Lemma real_abs_neg_req : forall a : Real,
   real_lt a real_zero -> real_eq (real_abs a) (real_opp a).
 Proof.
@@ -5358,7 +5358,7 @@ Proof.
           * exact Hlo.
         + apply qeq_le. ring.
     }
-    (* 目标：Qlt c ((g dyn)_n − projT1 real_zero n)（探针环境 `<` 解析为 std Qlt）——
+    (* 目标：Qlt c ((g dyn)_n − projT1 real_zero n)（检验环境 `<` 解析为 std Qlt）——
        先证 Qlt 层 Hq，再 exact *)
     assert (Hq : Qlt c (projT1 (real_entropy_gradient (real_dynamics x)) n - projT1 real_zero n)).
     {
@@ -5371,7 +5371,7 @@ Proof.
     }
     exact Hq.
 Qed.
-(* 保号负分支：g(x) < 0 ∧ η<1/L ⟹ g(dyn) < 0（镜像，逐 eps）
+(* 保号负分支：g(x) < 0 ∧ η<1/L ⟹ g(dyn) < 0（同构，逐 eps）
    推导：g(dyn)_n ≤ (gx)_n + ((Lη)_n·|(gx)_n| + c)（Hhi 上界）
          ≤ (1−(Lη)_n)(gx)_n + c（|gx|==−gx）
          < (1−(Lη)_n)(−epsx) + c ≤ −epsL·epsx + c == −c < 0
@@ -5401,7 +5401,7 @@ Proof.
   - exact Hc.
   - exists N. intros n Hn.
     apply NatLe_drop in Hn.
-    (* 目标：Qlt c (0 − (gdyn)_n)（探针环境 `<` 为 std Qlt） *)
+    (* 目标：Qlt c (0 − (gdyn)_n)（检验环境 `<` 为 std Qlt） *)
     assert (Hn1 : (Nx <= n)%nat) by (unfold N in Hn; lia).
     assert (Hn2 : (NL <= n)%nat) by (unfold N in Hn; lia).
     assert (Hn3 : (Nc <= n)%nat) by (unfold N in Hn; lia).
@@ -5582,7 +5582,7 @@ Proof.
     exact (Qlt_to_QltT c (projT1 real_zero n - projT1 (real_entropy_gradient (real_dynamics x)) n) Hq').
 Qed.
 
-(* ===== 步骤 1 追加：负分支镜像（_dbg_kappa_real_neg.v 复制，改名） ===== *)
+(* ===== 步骤 1 追加：负分支同构（_dbg_kappa_real_neg.v 复制，改名） ===== *)
 Lemma real_dynamics_step_unfold_sign : forall x : Real,
   real_eq (real_dynamics x)
           (real_plus x (real_mult eta (real_entropy_gradient x))).
@@ -6093,7 +6093,7 @@ Proof.
                                  Hneg).
 Qed.
 
-(* ===== 步骤 4：全轨道负镜像迭代（K2/K3 负版） ===== *)
+(* ===== 步骤 4：全轨道负同构迭代（K2/K3 负版） ===== *)
 
 (* K2 负版：全轨道负 ⟹ |g(x_{n+1})| ≤ κ·|g(x_n)|（步骤 3 负实例化，不需 g(dyn)<0 前提） *)
 Theorem real_gradient_iterate_abs_decay_neg : forall (E_A : Real) (n : nat),
@@ -6286,16 +6286,16 @@ Qed.
 End RealKappaSignReal.
 
 (* ================================================================ *)
-(* T3.2（论文3 次旗舰，2026-09-02 并入）：exp-log 有序群同构组装      *)
+(* T3.2（论文3 次主定理，并入）：exp-log 有序群同构组装      *)
 (* 新内容：值域刻画（sigT 双向）+ 序同构像侧完备性（逆序保持）        *)
 (* 纪律：Set 层（real_lt/real_eq 均 Set 值）、sigT 信息性、           *)
-(*       零经典（无三分律）、零 承认；探针 _dbg_t32_20260902.v 全绿  *)
+(*       零经典（无三分律）、零 承认；检验 _dbg_t32_20260902.v 全部通过  *)
 (* 依赖：log_inv_exp_neg_thm（左逆）/ cw_log_exp_right（右逆）/       *)
 (*       real_log_lt_mono（log 严格递增）/ cauchy_real_exp_* 族        *)
 (* ================================================================ *)
 Section ExpLogGroupIso.
 
-(* K1（旗舰）：序逆保持 exp x < exp y ⟹ x < y
+(* K1（主定理）：序逆保持 exp x < exp y ⟹ x < y
    左逆（log_inv_exp_neg_thm）+ log 严格递增（real_log_lt_mono）+ 外延链
    ——e^x < e^y ⟹ log(e^x) < log(e^y) ⟹ x < y *)
 Lemma exp_reflects_lt : forall x y : Real,
@@ -6365,12 +6365,12 @@ Qed.
 
 End ExpLogGroupIso.
 (* ================================================================ *)
-(* T3.3（论文3，2026-09-02 并入）：exp 不等式族（回应 S4）            *)
+(* T3.3（论文3，并入）：exp 不等式族（回应 S4）            *)
 (* ① real_exp_ge_linear：0 < t ⟹ 1 + t < e^t（非 eps，升级 eps 版）   *)
 (* ② real_exp_le_inv_one_minus：0 < x ⟹ x < 1 ⟹ e^x ≤ 1/(1−x)        *)
 (* ③ real_exp_abs_minus_one_eps：|e^x − 1| ≤ |x|·e^{|x|} + eps       *)
 (*    （非 eps 版需三分律判定 gap 正/零——E196 边界，eps 余量形式）    *)
-(* 纪律：Set 层、纯构造性、零经典、零 承认；探针 _dbg_t33 全绿        *)
+(* 纪律：Set 层、纯构造性、零经典、零 承认；检验 _dbg_t33 全部通过        *)
 (* 依赖：exp_partial/q_pow/q_fact（QExpPartial）、real_abs/real_inv_pos *)
 (* ================================================================ *)
 Section ExpInequalities.
@@ -6708,7 +6708,7 @@ Qed.
 
 (* ==================== Real 层：exp 不等式族 ==================== *)
 
-(* T3.3-①（旗舰）：0 < t ⟹ 1 + t < e^t
+(* T3.3-①（主定理）：0 < t ⟹ 1 + t < e^t
    见证 eps' := eps0²/2：逐点 exp_partial n (u n) − 1 − u n ≥ (u n)²/2 > eps0²/2 *)
 Lemma real_exp_ge_linear : forall t : Real, real_lt real_zero t ->
   real_lt (real_plus real_one t) (cauchy_real_exp t).
@@ -6908,12 +6908,12 @@ Proof.
         { apply qeq_le. ring. }
 Qed.
 
-(* 三验探针：Print Assumptions 应 Closed under the global context *)
+(* 三验检验：Print Assumptions 应 Closed under the global context *)
 End ExpInequalities.
 
 
 (* ============================================================ *)
-(* T2.3 KV 逐出定量界（2026-09-02 并入，探针 _dbg_t23.v +       *)
+(* T2.3 KV 逐出定量界（并入，检验 _dbg_t23.v +       *)
 (* _dbg_t23b.v 平移；评审 S2 回应：db_breaking 与温度 D、能量界  *)
 (* E_max、Lipschitz L 的显式定量联系）                          *)
 (* 结构：P1 exp_neg 差界（全局，T3.3 材料 real_exp_abs_minus_   *)

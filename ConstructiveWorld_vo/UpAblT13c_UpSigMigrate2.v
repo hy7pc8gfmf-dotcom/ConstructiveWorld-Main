@@ -1,27 +1,28 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* UpAblT13c_UpSigMigrate2.v —— 消融清欠席 T13c（批9）b_gibbs 三位出节件      *)
-(* 辖区（T13a-2/T13b D3 深施工单列移交·现档坐标）：                           *)
+(* UpAblc_UpSigMigrate2.v ——  c（）b_gibbs 三位出节件      *)
+(* 辖区（a-2/b D3 深施工单列移交·现档坐标）：                           *)
 (*   位1 UpSigMigrate2.v:913 b_gibbs_pos     （ReqAlignCore）                 *)
 (*   位2 UpSigMigrate2.v:916 b_gibbs_sum_eps （ReqAlignCore）                 *)
 (*   位3 UpSigMigrate2.v:921 b_gibbs_eq      （ReqAlignCore）                 *)
 (* 出节 discharge 形（诚实申报）：asum 三槽世界缺 le/pos 面与 log 桥面——      *)
 (*   逐槽显式参兑现：                                                         *)
-(*   位1 ← req_gibbs_inequality@UpReqDist:2128 全参直喂（槽=ext/add/linear/   *)
+(*   位1 ← req_gibbs_inequality@UpReqDist:2128 全参直接代入（槽=ext/add/linear/   *)
 (*        sum-le/log-inv/log-le-linear 六件；kl_a≡req_relative_entropy、      *)
 (*        pdist_a≡reqd_positive_dist、nrm_a≡reqd_normalized 定义展开同一）；   *)
 (*   位2 ← 位1 + le_plus_compat 链（零新增槽）；                              *)
-(*   位3 ← req_gibbs_equality@UpReqDist:2154 全参直喂（另带 zero-nonneg 与    *)
+(*   位3 ← req_gibbs_equality@UpReqDist:2154 全参直接代入（另带 zero-nonneg 与    *)
 (*        log-eq-linear 槽）。                                                *)
-(* 槽位可满足性分级（防注水）：sum-le 槽在 Real 载体可实例化                  *)
+(* 接口参数可满足性分级（防注水）：sum-le 槽在 Real 载体可实例化                  *)
 (*   （real_list_sum_le@S08:432 先例）；log 三槽=T2① 接口桥/W4 族——           *)
 (*   log-le-linear 与 log-eq-linear 为 W4 墙本体（普查 §3-W4），任何具体       *)
 (*   载体不可实例化：位1/位3 为条件 discharge（W4 族槽随件显式携带），         *)
-(*   等号面真欠账=W4 邻接挂账，如实登记不降档。位2 的逐 eps 形另有 Real 层     *)
+(*   等号面真欠账=W4 邻接遗留，如实登记不降档。位2 的逐 eps 形另有 Real 层     *)
 (*   real_gibbs_inequality_eps 绕法（R3）为独立可达路线。                     *)
 (* 分级：位1/位3 = 条件 discharge（出节形·W4 族槽携带）；位2 = N3（位1 链）。  *)
-(* 依赖（只读消费，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、        *)
+(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqAlgebra、        *)
 (*   UpReqDist、UpSigMigrate2。                                               *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblT13c_*                            *)
+(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblc_*                            *)
 (* ============================================================ *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
@@ -33,7 +34,7 @@ Section UabT13cGibbs.
 
 Context {R0 : Set} {RIS0 : RealInterfaceEnhancedSetoid R0}.
 
-(* ---- 位1 ←:913（b_gibbs_pos 出节 discharge：六槽显式参，母本全参直喂） ---- *)
+(* ---- 位1 ←:913（b_gibbs_pos 出节 discharge：六槽显式参，源文件全参直接代入） ---- *)
 Theorem uabT13c_bgibbs_pos :
   forall (S : Set) (sumf : (S -> R0) -> R0)
          (Hext : forall f g : S -> R0, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
@@ -86,7 +87,7 @@ Proof.
                                                (le_refl eps)))).
 Qed.
 
-(* ---- 位3 ←:921（b_gibbs_eq 条件 discharge：八槽显式参，母本全参直喂；     *)
+(* ---- 位3 ←:921（b_gibbs_eq 条件 discharge：八槽显式参，源文件全参直接代入；     *)
 (*        log-eq-linear 槽=W4 墙本体，任何具体载体不可实例化，等号面真欠账    *)
 (*        如实随件携带不隐藏） ---- *)
 Theorem uabT13c_bgibbs_eq :

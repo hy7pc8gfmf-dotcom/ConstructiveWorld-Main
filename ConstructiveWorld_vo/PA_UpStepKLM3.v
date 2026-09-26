@@ -1,48 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   real_iter_step_geom_eps（原 L432，2 句玩具证）                       *)
-(*   m3_step_next_norm（原 L279，2 句玩具证）                             *)
-(*   m3_interp_Z_pos3（原 L249，2 句玩具证）                              *)
-(*   m3_kappa_pos（原 L135，3 句玩具证）                                  *)
-(*   m3_half_pos（原 L84，3 句玩具证）                                    *)
-(*   m3_two_pos（原 L70，1 句玩具证）                                     *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpStepKLM3.v *)
-(* *)
-(* 目的： step_kl 的 M3 迭代版 Real 层副本。 *)
-(* 主件： m3_iterate 迭代包与 m3_kappa_le_one、m3_le_kappa_mul 几何率定律。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 备注： 零公理零搁置、Set 层语句、全 Qed、可提取；几何率取 kappa < 1 显式前提。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpStepKLM3.v —— step_kl 消解的 M3 迭代版 Real 层副本            *)
-(* 论文 1 定理 4.5/4.8（策略迭代向后 KL 递推 + 真几何率收缩）的      *)
-(* Real 层 list 离散状态世界对应物。                               *)
-(*   M3.0 基础定义：离散状态表 m3_states、list 版 KL（m3_kl_list，   *)
-(*         逐项 real_kl_term 折叠）、几何插值策略迭代序列 m3_pi_seq   *)
-(*         （π_{t+1}(i) := π*(i)^η·π_t(i)^{1−η}/Z，sigT 封装迭代：   *)
-(*         策略 + 逐点正性 + 配分函数正性 + 归一化四件套同步携带）、  *)
-(*         几何率底幂 m3_rpow (1−η)^t、误差 nat 累积 m3_nmul。       *)
-(*   M3.1 单步向后 KL 递推 real_iter_kl_step：                      *)
-(*         KL(π*‖π_{t+1}) ≤ (1−η)·KL(π*‖π_t) + KL(π_t‖π_{t+1}) + eps *)
-(*         （根内 policy_iter_backward_kl_step_le 的 eps 化副本：    *)
-(*           M2 换向实例 + Gibbs 下界 + eps 对半吸收）。             *)
-(*   M3.2 真几何率迭代 real_iter_kl_geom：                          *)
-(*         KL(π*‖π_t) ≤ (1−η)^t·KL(π*‖π_0) + t·eps                 *)
-(*         （根内 policy_iter_kl_geom_step / policy_iter_kl_geom_iter *)
-(*           的 eps 化副本：M2 单步 + nat 归纳）。                   *)
-(* 全部 Real 层顶层名（real_kl_term/real_list_sum/real_step_next），  *)
-(* Or 编码 le。                                                    *)
-(* 红线：零 公理/搁置；Set 层语句；全 Qed；可提取。             *)
-(* ============================================================ *)
+(* ==========================================================================)
+   PA_UpStepKLM3.v — 策略链 KL 一步收缩与几何衰减
+   使命: m3_states/m3_kl_list（KL 列表化）、m3_kappa（κ = 1−η）幂族与 m3_kappa_pos/m3_le_kappa_mul、real_iter_kl_step/real_iter_kl_geom/real_iter_step_geom_eps（一步 KL 收缩与几何-ε 衰减）与 real_interp_Z 正性桥。
+   依赖: CW_ConstructiveWorld_219；Stdlib List、QArith
+   对标: 策略迭代的 KL 信任域收缩（η-步长下单调几何衰减，TRPO 型论证的实数层化）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 Import ListNotations.
@@ -304,9 +267,9 @@ Definition m3_pkg_type (n : nat) (r : nat -> Real) (eta : Real)
 
 (* π_{t+1}(i) := real_step_next n r π_t (1−η)：几何插值策略更新
    π_{t+1}(i) := π*(i)^η·π_t(i)^{1−η}/Z_t。
-   单 Fixpoint（对 t 结构递归），O 情形携带初值四件套，
+   单 Fixpoint（对 t 结构递归），O 情形携带初值四元组，
    S 情形经 m3_step_pos_pt / m3_interp_Z_pos2 / m3_step_next_norm
-   同步重建四件套。 *)
+   同步重建四元组。 *)
 Fixpoint m3_pi_pkg (n : nat) (p0 r : nat -> Real) (eta : Real) (Hn : n <> 0)
     (Hp0 : forall i : nat, real_lt real_zero (p0 i))
     (Hr : forall i : nat, real_lt real_zero (r i))
@@ -656,7 +619,6 @@ Proof.
                    (real_plus_comm Y eps))).
 Qed.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions real_iter_step_geom_eps.
 Print Assumptions m3_step_next_norm.
 Print Assumptions m3_interp_Z_pos3.

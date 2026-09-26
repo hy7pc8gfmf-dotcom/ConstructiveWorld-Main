@@ -549,7 +549,11 @@ def check_file(path, length_cap=30, length_fail=False, principle=True):
 
 
 def scan_tree(tree):
-    """非递归平扫（gate1 同款）——子目录存在即响亮警示。"""
+    """非递归平扫（gate1 同款）——子目录存在即响亮警示。
+    v2.2 [U2] `_*` 下划线守卫：下划线前缀件（沙箱/探针/临时件，素不在
+    build/coqchk 认证面——cw_build/cw_chk 依 order 拓扑消费注册名）同样
+    素不在注释卫生认证面；扫描域与认证面口径对齐（20260926，R134RB 判例：
+    vo 树 15 件 `_*` 探针把闸拖入与认证面无关的红）。"""
     if not os.path.isdir(tree):
         return None, 0
     names = sorted(os.listdir(tree))
@@ -560,7 +564,8 @@ def scan_tree(tree):
               f"v2.1 起可 --tree-recursive 深扫）: "
               f"{', '.join(subdirs[:8])}{'…' if len(subdirs) > 8 else ''}",
               file=sys.stderr)
-    return [os.path.join(tree, n) for n in names if n.endswith(".v")], len(subdirs)
+    return [os.path.join(tree, n) for n in names
+            if n.endswith(".v") and not n.startswith("_")], len(subdirs)
 
 
 def scan_tree_deep(tree):
@@ -569,7 +574,8 @@ def scan_tree_deep(tree):
     if not os.path.isdir(tree):
         return None, 0, 0
     top = [os.path.join(tree, n) for n in sorted(os.listdir(tree))
-           if n.endswith(".v") and os.path.isfile(os.path.join(tree, n))]
+           if n.endswith(".v") and not n.startswith("_")
+           and os.path.isfile(os.path.join(tree, n))]
     deep, dirs_seen = [], set()
     for root, dirs, files in os.walk(tree):
         rel = os.path.relpath(root, tree)
@@ -577,7 +583,7 @@ def scan_tree_deep(tree):
             continue
         dirs_seen.add(rel.split(os.sep)[0])
         for n in sorted(files):
-            if n.endswith(".v"):
+            if n.endswith(".v") and not n.startswith("_"):
                 deep.append(os.path.join(root, n))
     deep.sort()
     return top + deep, len(deep), len(dirs_seen)
