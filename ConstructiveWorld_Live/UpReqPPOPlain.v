@@ -79,7 +79,21 @@
    纪律：纯构造性；Set 层语句零 Prop 泄露（req/lt/le/Or 均 Set 值）；纯项模式
      （req/le 组合器逐段直引，零Ltac重写层）；假设位 = T2① 显式参非公理；全链可提取。 *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqAlign.
 Require Import UpReqRDF.

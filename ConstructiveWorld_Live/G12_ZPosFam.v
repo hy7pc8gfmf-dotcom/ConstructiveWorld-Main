@@ -81,7 +81,21 @@
 (*   全库防同名冲突已核（grep 零命中）。                                   *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.
 From Stdlib Require Import List.
@@ -360,7 +374,21 @@ Print Assumptions zposd_partition.
 (* 前缀登记表：zauto_ 前缀全库 grep 零重名（本文件首用）。                *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import CW220_Extensions.
 Import RealInterfaceEnhancedMod.
 
@@ -678,7 +706,21 @@ Print Assumptions zauto_id_Z_eq.
 (*   Closed；前缀 zpi_ 全库防同名冲突已核（grep 零命中）。                *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.
 
@@ -933,7 +975,21 @@ Print Assumptions zpi_fw_bt_pos.
 (*   Assumptions 新件全 Closed；既有文件零改。                *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.
 
@@ -1702,7 +1758,21 @@ Print Assumptions zpi2_sigmig_partition_function_temp_pos.
 (*   。                                                        *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqSumD.
 

@@ -84,7 +84,21 @@
 (*   零公理；既有文件零改。     *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Import RealInterfaceEnhancedMod.
 
@@ -462,7 +476,21 @@ Print Assumptions logd_exp_neg_ext_real.
 (*   lld_ 前缀全库防同名冲突（建前 grep 实测零命中）。                         *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Require Import G08_Gibbs.
 Require Import UpReqU2.
@@ -902,7 +930,21 @@ End BTReal.
 (*    双形并存（le_b/逐 eps 双形 + kl_term/字面形双形）；        *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Require Import G08_Gibbs.
 

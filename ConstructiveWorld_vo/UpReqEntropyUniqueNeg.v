@@ -29,7 +29,21 @@
 (*   real_sum_over_S、real_sum_pos_preserved、real_sum_over_S_ext、      *) (*   real_sum_over_S_linear、real_sum_over_S_add、T、T_pos、energy）      *)
 (*   为求和结构参数化义务，全部被节内定理语句面全 arity 使用；           *) (*   具体实例化将收窄语句签名，按签名不动纪律保留为显式接口前提。        *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqTempDefs.
 Require Import UpReqEntropyDeficitTemp.
 Require Import UpReqEntropyUniqueTemp.

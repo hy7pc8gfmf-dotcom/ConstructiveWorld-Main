@@ -28,7 +28,21 @@
 (*   余七位全部被节内定理语句面使用，实例化将收窄语句签名，按签名不动       *)
 (*   纪律保留为显式接口前提。温度正性 T0_pos 与表非空由 t34_app_cons_nonnil *)
 (*   结构位消解。                                                           *)
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Require Import G08_Gibbs.
 Require Import UpReqTempDefs.
