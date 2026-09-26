@@ -9,7 +9,7 @@
 (* 构造性：纯构造性（零承认；零经典逻辑；纯 term-mode，零                 *)
 (*   setoid-rewrite 依赖）；Set 层语句零 Prop 泄露（req/lt/le/Id/         *)
 (*   And:=A*B 均 Set 值）；B 类 Variable 假设位逐位保留。                 *)
-(* 编译配方：Rocq 9.1 直调，cpu_guard，-Q . "" -native-compiler no。          *)
+(* 编译：Rocq 9.1 直调，cpu_guard，-Q . "" -native-compiler no。          *)
 (* ============================================================ *)
 
 (* ===================================================================== *)
@@ -86,10 +86,10 @@ Class ReqNonnegPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   metric_pos_plain : forall a b : R, le zero (metric a b)
 }.
 
-(* log 族假设位组（gibbs_inequality 同参数位家族）：
+(* log 族假设位组（T2①；批2 gibbs_inequality 同参数位家族；波 0 裁定主道）：
    log_le_linear_plain（Id log_le_linear 字段逐位副本）+ log_req_compat_plain
    （UpReqAlgebra ReqLogBridge log_req_compat 参数位同构 L1492——req_log_inv_one_inv
-   依存所需；LogDiff3 下界件必需） *)
+   依存所需；清单结论未列此参数位，实测 LogDiff3 下界件必需，逐位核对登记） *)
 Class ReqLogPlain (R : Set) {RIS : RealInterfaceEnhancedSetoid R} := {
   log_le_linear_plain : forall (x : R) (Hx : lt zero x),
     le (log x Hx) (req_minus x one);

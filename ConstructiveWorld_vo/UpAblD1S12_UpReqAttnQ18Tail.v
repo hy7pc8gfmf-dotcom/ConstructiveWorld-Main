@@ -1,24 +1,21 @@
 (* ============================================================ *)
-(* UpAblD1S12_UpReqAttnQ18Tail.v —— AqtTail 8 参数位供给模块           *)
-(*   ｜独立模块·原树零改｜零 Require 上游源件（防混代际 .vo 冲突）        *)
-(* 使命：AqtTail 八参数位接口的实例供给（辖区见下）。 *)
-(* 构造性注记：零承认语句，纯构造证明，全字段 Set 层。 *)
-(* 编译配方：coqc -q -Q . "" UpAblD1S12_UpReqAttnQ18Tail.v（9.1 工具链）。 *)
+(* UpAblD1S12_UpReqAttnQ18Tail.v —— AqtTail 8 参数位供给件           *)
+(*   ｜独立伴生件·原树零改｜零 Require 上游源件（防混代际 .vo 冲突）        *)
 (*                                                              *)
 (* 辖区：UpReqAttnQ18Tail.v Section AqtTail 全 9 位（本模块整体认领）。             *)
 (*   供给 8 参数位：Token:393｜vocab:394｜vocab_nonempty:395｜z:397｜m:398｜          *)
 (*     m_in_vocab:399｜gamma:400｜gap_le:401-402                                 *)
 (*   阻隔清单 1 位（可判等墙·不入包·接口内不导出）：                    *)
-(*     token_eq_dec:396 —— 本件供给支以 Token:=bool 具体有限集实例绕行，          *)
+(*     token_eq_dec:396 —— 本件供给腿以 Token:=bool 具体有限集实例绕行，          *)
 (*     直接取其分讨效果（if x then/else 直取），该阻隔前提本体不导入。          *)
 (*                                                              *)
 (* 形态：供给记录型（参数位语句逐字对照源文件）；Set 排序（Real:Set@S02:394，bool:Set，     *)
 (*   全字段 Set 层）。与同族件同实例族（bool 两点/单元素表）。                    *)
 (* 实例供给：Token:=bool｜vocab:=cons true nil｜vocab_nonempty:=cons/nil 构造子头 *)
 (*   不相交（inversion 一行）｜z:=fun x => if x then real_one else real_zero｜   *)
-(*   m:=true｜gamma:=real_one；gap_le 供给支＝bool 分讨：真支 Set 层 Not（A->Empty_set）以 id_refl 爆 Empty_set 零构造          *)
+(*   m:=true｜gamma:=real_one；gap_le 供给腿＝bool 分讨：真支 Set 层 Not（A->Empty_set）以 id_refl 爆 Empty_set 零构造          *)
 (*   False_rect，假支 0+1≤1＝comm+zero 两段 trans 链。                           *)
-(* Fixpoint 折叠发散坑兑现：供给支全钉具体实例常量级，无符号表归纳面。            *)
+(* Fixpoint 折叠发散坑兑现：供给腿全钉具体实例常量级，无符号表归纳面。            *)
 (* 供给级：入包 8 参数位均为机械供给级                    *)
 (*   （aqt_pack8_supplied 一件统一供给）。                              *)
 (* 依赖：CW_ConstructiveWorld_219（S01 Id:61/InT:97｜S02 环律｜S07 序桥，         *)
@@ -28,7 +25,7 @@
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.
 
-(* ============ 供给支基础（机械直接匹配，与源文件零耦合） ============ *)
+(* ============ 供给腿底座（机械直配，与源文件零耦合） ============ *)
 
 (* 表非空：cons/nil 构造子头不相交 *)
 Lemma uabd1s12_aqt_vocabne : Not (Id (cons true (@nil bool)) (@nil bool)).
@@ -43,7 +40,7 @@ Proof.
   - apply real_plus_zero.
 Qed.
 
-(* m_in_vocab 基础引理：InT_here（tactic 形对参数显隐免疫） *)
+(* m_in_vocab 底座：InT_here（tactic 形对参数显隐免疫） *)
 Lemma uabd1s12_aqt_mvin : InT true (cons true (@nil bool)).
 Proof. apply InT_here. Qed.
 
@@ -64,7 +61,7 @@ Inductive uabd1s12_aqt_pack8 (Token : Set) : Set :=
               uabd1s12_aqt_pack8 Token.
 (* Token 参数位语句＝参数形（源文件 L393，词面入参注记） *)
 
-(* ============ 实例供给：bool 两点实例一次喂定 8 槽 ============ *)
+(* ============ 供给件：bool 两点实例一次喂定 8 槽 ============ *)
 
 Theorem uabd1s12_aqt_pack8_supplied : uabd1s12_aqt_pack8 bool.
 Proof.
@@ -79,6 +76,6 @@ Proof.
     exact uabd1s12_aqt_gap_zero_one.
 Qed.
 
-(* ============ 假设面闭合申报 ============ *)
+(* ============ 假设面收口申报 ============ *)
 
 Print Assumptions uabd1s12_aqt_pack8_supplied.

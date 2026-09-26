@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-闸④ 头注五字段机检守卫 · 扩展版 v2.0（GATE4-EXT 20260925｜词面族谱＋三域＋判定原则）
+闸④ 头注五字段机检守卫 · 扩展版 v2.1（GATE4-EXT 20260925｜词面族谱＋三域＋判定原则
+＋v2.1 vo 树盲区升级 GATE4-AUDIT 20260925）
 ====================================================================================
 承 v1.0（_tgate4_ws\\gate4_comment_guard.py，五检项）扩展，主会话清洗规则扩展令＋
 包装协议 v2 条款 I（注释卫生 v1.1 清洗规则扩展）的机械化。零编译零网络零树写。
@@ -29,6 +30,26 @@ v2.0 扩展 diff（对 v1.0）：
 v1.0 五检项照旧全保留：[1]头注五字段 [2]禁词(65 词面) [3]承认式英文词面
 [4]三类禁写(席次/战役/更新日志) [5]头注超标＋.(* 词法陷阱附检。
 
+v2.1 盲区升级（GATE4-AUDIT 20260925）：
+  [U1] --tree-recursive DIR（可多次）——递归深扫该树全部子目录内 .v（顶层
+       件与 --tree 同口径并入）。堵 vo 树子目录探针件盲区（实测 18 子目录
+       22 件 .v 逃出非递归扫描域，CI 同盲区）。默认行为零变：只用 --tree
+       时非递归平扫照旧、警示照旧、退出码语义不变（0/1/2）。跨来源路径
+       去重（同件只扫一次），逐树件数台账入 --json meta.trees_ledger。
+       与 gate1 双树先例对齐：多 --tree/--tree-recursive 显式传树，不做隐式递归。
+
+v2.2 台账机读化（GATE4-LEDGER 20260926｜承 YELLOW-CALIBER 黄面口径对表报告 §三
+机读化建议）：
+  [L1] --emit-ledger PATH——扫描时同步出机读豁免台账 JSON（gate4_exempt_ledger
+       schema v1：语境双义复核桶逐项 file/line/domain/rule/word/reason/
+       exemption_status/first_registry/verdict_impact/suggested_action/
+       file_verdict/detail，附 attested_by〔scan_time/tool_md5/ledger_tsv_md5〕）。
+       豁免状态=命中权威台账 TSV（--ledger-tsv 显式传；默认找本脚本同目录
+       carrier_exemption_ledger_final.tsv——缺席即 FATAL exit 2，禁静默降级）。
+       纯附加：不带参时输出与 v2.1 逐字节一致（运行时版本串冻结「v2.1 EXT」
+       承字节兼容铁律；v2.2 标识由台账 JSON schema 字段自证），不改
+       verdict/退出码语义。
+
 退出码：0=PASS；1=违规（硬命中）；2=无法判定（仅复核项〔含原则启发式〕/路径无效/IO 错误）。
 
 用法（v1.0 CLI 全兼容）：
@@ -36,6 +57,7 @@ v1.0 五检项照旧全保留：[1]头注五字段 [2]禁词(65 词面) [3]承�
   python gate4_comment_guard.py --tree DIR [--tree DIR2 ...] [--json OUT]
   python gate4_comment_guard.py --tree DIR --baseline _tcmtsurvey_phase1_result.json
   v2.0 新增：--no-principle（关判定原则启发式）
+  v2.1 新增：--tree-recursive DIR（递归深扫，堵子目录盲区）
 """
 import os, re, sys, json, argparse, datetime
 
@@ -534,10 +556,31 @@ def scan_tree(tree):
     subdirs = [n for n in names if os.path.isdir(os.path.join(tree, n))]
     if subdirs:
         print(f"[gate4ext] 警示(非递归)：树 {tree} 下有 {len(subdirs)} 个子目录未扫"
-              f"（gate1 三树教训——如需子目录请逐个 --tree 传入）: "
+              f"（gate1 三树教训——如需子目录请逐个 --tree 传入，"
+              f"v2.1 起可 --tree-recursive 深扫）: "
               f"{', '.join(subdirs[:8])}{'…' if len(subdirs) > 8 else ''}",
               file=sys.stderr)
     return [os.path.join(tree, n) for n in names if n.endswith(".v")], len(subdirs)
+
+
+def scan_tree_deep(tree):
+    """v2.1 [U1] 递归深扫：树顶层＋全部子目录内 .v（含嵌套层）。
+    返回 (相对层标记路径列表, 子目录内件数, 触及子目录数)。"""
+    if not os.path.isdir(tree):
+        return None, 0, 0
+    top = [os.path.join(tree, n) for n in sorted(os.listdir(tree))
+           if n.endswith(".v") and os.path.isfile(os.path.join(tree, n))]
+    deep, dirs_seen = [], set()
+    for root, dirs, files in os.walk(tree):
+        rel = os.path.relpath(root, tree)
+        if rel == ".":
+            continue
+        dirs_seen.add(rel.split(os.sep)[0])
+        for n in sorted(files):
+            if n.endswith(".v"):
+                deep.append(os.path.join(root, n))
+    deep.sort()
+    return top + deep, len(deep), len(dirs_seen)
 
 
 def baseline_compare(results, baseline_path):
@@ -577,25 +620,154 @@ def baseline_compare(results, baseline_path):
     return summary, per
 
 
+def _md5_of_file(path):
+    import hashlib
+    with open(path, "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()
+
+
+def load_exempt_tsv(tsv_path):
+    """v2.2 [L1] 权威豁免台账 TSV 加载（黄面口径终稿，只读）。返回
+    (in_force{(file, line): row}, hist{file: row})。行解析失锐（line 列非整数，
+    含历史清偿账的「-」与列错位态）一律归 hist 文件级账——容错不静默：
+    计数入台账 JSON meta，供人工对表。"""
+    in_force, hist = {}, {}
+    with open(tsv_path, encoding="utf-8") as f:
+        header = f.readline().rstrip("\r\n").split("\t")
+        for row in f:
+            if not row.strip():
+                continue
+            cols = row.rstrip("\r\n").split("\t")
+            if len(cols) < len(header):
+                cols += [""] * (len(header) - len(cols))
+            rec = dict(zip(header, cols))
+            fname = rec.get("file", "")
+            try:
+                ln = int(rec.get("line", ""))
+            except ValueError:
+                reg = rec.get("first_registry", "") or rec.get("word", "")
+                if not reg:
+                    reg = "?"
+                rec["_registry_fallback"] = reg
+                hist.setdefault(fname, rec)
+                continue
+            in_force[(fname, ln)] = rec
+    return in_force, hist
+
+
+def emit_exempt_ledger(results, out_path, tsv_path, scan_time):
+    """v2.2 [L1] --emit-ledger：扫描时同步出机读豁免台账 JSON。只消费
+    review 桶「语境双义复核」项（CONTEXT_REVIEW_WORDS 桶，现盘=载体一词），
+    纯附加零干预：不改 verdict/硬命中/退出码/stdout 既有行。"""
+    in_force, hist = load_exempt_tsv(tsv_path)
+    entries = []
+    n_force = n_hist = n_new = 0
+    for r in results:
+        base = os.path.basename(r["file"].replace("\\", "/"))
+        for item in r["review"]:
+            ln, dom, typ, det = item[0], item[1], item[2], item[3]
+            if typ != "语境双义复核":
+                continue
+            word = det.split("（", 1)[0]
+            if (base, ln) in in_force:
+                rec = in_force[(base, ln)]
+                status, reg = "在册", rec.get("first_registry", "")
+                action = "豁免有效——维持 REVIEW 不降档（豁免≠降档，黄面口径§三）"
+                n_force += 1
+            elif base in hist:
+                rec = hist[base]
+                status = "已清偿/词面重排"
+                reg = rec.get("_registry_fallback", "")
+                action = "历史在册已清偿——人工确认词面重排后豁免归档"
+                n_hist += 1
+            else:
+                status, reg = "未登", ""
+                action = "候选新登——人工复核后回填豁免台账 TSV"
+                n_new += 1
+            entries.append({
+                "file": base, "line": ln, "domain": dom, "rule": typ,
+                "word": word,
+                "reason": "数学carrier；" + CONTEXT_REVIEW_WORDS.get(word, "语境双义"),
+                "exemption_status": status, "first_registry": reg,
+                "verdict_impact": "REVIEW(豁免≠降档)",
+                "suggested_action": action,
+                "file_verdict": r["verdict"], "detail": det,
+                "source_path": r["file"],
+            })
+    out = {
+        "schema": "gate4_exempt_ledger v1",
+        "generated_by": "gate4_comment_guard.py --emit-ledger (运行时串 v2.1 EXT)",
+        "scan_time": scan_time,
+        "attested_by": {
+            "scan_time": scan_time,
+            "tool_md5": _md5_of_file(os.path.abspath(__file__)),
+            "ledger_tsv": tsv_path,
+            "ledger_tsv_md5": _md5_of_file(tsv_path),
+        },
+        "counts": {"entries": len(entries), "在册": n_force,
+                   "已清偿/词面重排": n_hist, "未登": n_new,
+                   "tsv_in_force_rows": len(in_force), "tsv_hist_files": len(hist)},
+        "entries": entries,
+    }
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=1)
+    print(f"[gate4ext] LEDGER 已写 {out_path}: 共 {len(entries)} 项"
+          f"（在册 {n_force}／已清偿 {n_hist}／未登 {n_new}）；"
+          f"台账 TSV={tsv_path}")
+
+
 def main():
-    ap = argparse.ArgumentParser(description="gate4 头注五字段机检守卫 扩展版 v2.0")
+    ap = argparse.ArgumentParser(description="gate4 头注五字段机检守卫 扩展版 v2.1")
     ap.add_argument("--file", action="append", default=[], help="单件扫描（可多次）")
     ap.add_argument("--tree", action="append", default=[], help="树平扫（非递归，可多次）")
+    ap.add_argument("--tree-recursive", dest="tree_recursive", action="append", default=[],
+                    help="树深扫（递归含子目录 .v，v2.1 盲区升级，可多次）")
     ap.add_argument("--baseline", default=None, help="普查结果 JSON（对表模式）")
     ap.add_argument("--length-cap", type=int, default=30, help="头注行数上限（默认 30）")
     ap.add_argument("--length-fail", action="store_true", help="超标升格硬违规（默认复核级）")
     ap.add_argument("--no-principle", action="store_true",
                     help="关闭判定原则启发式（默认开——review 级不硬红）")
     ap.add_argument("--json", dest="jsonout", default=None)
+    ap.add_argument("--emit-ledger", dest="emit_ledger", metavar="PATH", default=None,
+                    help="v2.2：同步出机读豁免台账 JSON（语境双义复核桶；默认关，零变）")
+    ap.add_argument("--ledger-tsv", dest="ledger_tsv", metavar="PATH", default=None,
+                    help="v2.2：权威豁免台账 TSV（默认=本脚本同目录 "
+                         "carrier_exemption_ledger_final.tsv）")
     args = ap.parse_args()
 
     paths = list(args.file)
+    ledger = []          # v2.1 逐树件数台账（入 --json meta.trees_ledger）
     for t in args.tree:
         plist, _nsub = scan_tree(t)
         if plist is None:
             print(f"[gate4ext] FATAL: 树不存在: {t}", file=sys.stderr)
             return 2
         paths.extend(plist)
+        ledger.append({"tree": t, "mode": "flat", "files": len(plist),
+                       "subdir_files": 0, "subdirs": _nsub})
+    deep_count = 0
+    for t in args.tree_recursive:
+        plist, ndeep, ndir = scan_tree_deep(t)
+        if plist is None:
+            print(f"[gate4ext] FATAL: 树不存在: {t}", file=sys.stderr)
+            return 2
+        paths.extend(plist)
+        deep_count += ndeep
+        ledger.append({"tree": t, "mode": "recursive", "files": len(plist) - ndeep,
+                       "subdir_files": ndeep, "subdirs": ndir})
+        print(f"[gate4ext] v2.1 深扫 {t}: 顶层 {len(plist) - ndeep} ＋ 子目录 {ndeep} 件"
+              f"（{ndir} 个子目录）", file=sys.stderr)
+    # v2.1 跨来源去重：--tree 与 --tree-recursive 顶层重叠面同件只扫一次
+    seen, uniq = set(), []
+    for p in paths:
+        k = os.path.normcase(os.path.normpath(os.path.abspath(p)))
+        if k not in seen:
+            seen.add(k)
+            uniq.append(p)
+    if len(uniq) != len(paths):
+        print(f"[gate4ext] v2.1 去重 {len(paths) - len(uniq)} 件"
+              f"（双口径顶层重叠，避免同件双计）", file=sys.stderr)
+    paths = uniq
     if not paths:
         print("[gate4ext] FATAL: 未指定 --file/--tree", file=sys.stderr)
         return 2
@@ -610,11 +782,12 @@ def main():
     n_pass = sum(1 for r in results if r["verdict"] == "PASS")
     n_unread = sum(1 for r in results if r["verdict"] == "UNREADABLE")
 
-    print(f"[gate4ext] v2.0 扫描时点={now}  件数={len(results)}  "
+    print(f"[gate4ext] v2.1 扫描时点={now}  件数={len(results)}  "
           f"PASS={n_pass}  FAIL={n_fail}  REVIEW(人工复核)={n_rev}  "
           f"UNREADABLE={n_unread}  length_cap={args.length_cap}"
           f"{'(fail)' if args.length_fail else '(review)'}  "
-          f"principle={'on' if principle else 'off'}")
+          f"principle={'on' if principle else 'off'}"
+          f"  deep_files={deep_count}")
     for r in results:
         if r["verdict"] == "PASS" and not r["review"]:
             print(f"  PASS {r['file']}  头注{r['header_lines']}行 "
@@ -639,12 +812,28 @@ def main():
               f"{json.dumps(cmp_summary, ensure_ascii=False)}")
 
     if args.jsonout:
-        out = {"scan_time": now, "tool": "gate4_comment_guard.py v2.0 EXT",
+        out = {"scan_time": now, "tool": "gate4_comment_guard.py v2.1 EXT",
                "length_cap": args.length_cap, "principle": principle,
+               "trees_ledger": ledger, "deep_files": deep_count,
                "results": results, "baseline": cmp_summary}
         with open(args.jsonout, "w", encoding="utf-8") as f:
             json.dump(out, f, ensure_ascii=False, indent=1)
         print(f"[gate4ext] JSON 已写 {args.jsonout}")
+
+    if args.emit_ledger:
+        tsv = args.ledger_tsv or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "carrier_exemption_ledger_final.tsv")
+        if not os.path.isfile(tsv):
+            print(f"[gate4ext] FATAL: 豁免台账 TSV 不存在: {tsv} —— --emit-ledger "
+                  f"需权威台账对表（--ledger-tsv 显式传入，或将 TSV 置于 "
+                  f"scripts/gates/ 同目录）；禁静默降级", file=sys.stderr)
+            return 2
+        try:
+            emit_exempt_ledger(results, args.emit_ledger, tsv, now)
+        except OSError as e:
+            print(f"[gate4ext] FATAL: 豁免台账 JSON 写出失败: {e}", file=sys.stderr)
+            return 2
 
     if n_fail:
         return 1

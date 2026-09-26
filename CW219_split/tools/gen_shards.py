@@ -74,7 +74,8 @@ def build():
             if idx >= 4:   # S05+（原文 L15519 < 本片起始）
                 hl.append("Import PropositionConvergenceCore.")
             if idx >= 11:  # S12+（原文 L78208 < 本片起始 79153）
-                hl.append("From Stdlib Require Import Psatz.")
+                # 公理卫生：出种用 Lqa 替代原文 Psatz（Psatz 拉经典公理链；重生成件与原文差此一行）
+                hl.append("From Stdlib Require Import Lqa.")
             if idx >= 14:  # S15（原文 L95607 < 本片起始）
                 hl.append("From Stdlib Require Import ZArith.Znat.")
             if idx >= 7:   # S08+（原文 L33494 < 本片起始）

@@ -10,15 +10,15 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPadeConstUnify.v —— 数值几何·隐藏恒等式定理化        *)
-(*   构造性注记：零承认语句，纯构造证明，全 Qed。                                                *)
+(* UpReqPadeConstUnify.v —— 席Q2（数值几何·隐藏恒等式定理化席）        *)
+(*   日期：2026-09-17                                                *)
 (*                                                                   *)
 (* 使命：把 GEO1 常数对撞发现的首果定理化——1/720 跨四文件精确撞车        *)
 (*   = Padé n=2 残差首系数的跨模块统一恒等式。数学背景（TCS1 侦察在案）： *)
 (*   残差首系数 c₀(n) = (n!)²/((2n)!(2n+1)!)，n=2 时 (2!)²/(4!·5!)      *)
 (*   = 4/2880 = 1/720 = 1/6!——撞车不是巧合，是同一闭式在不同模块的化身。 *)
 (*                                                                 *)
-(* 六位点实读比对（python fractions 逐点复核，全部语义同构，零剔除）：    *)
+(* 六位点实读对表（python fractions 逐点复核，全部语义同构，零剔除）：    *)
 (*   位点① UpReqPadeFinale.v:200  cpf_witness_n2 x := q_pow x 5*(1#720) *)
 (*          ——主件见证 x⁵·c₀（乘法形）。                                *)
 (*   位点② UpReqPadeLower.v:288   cpl_lower_even 见证 q_pow y 5/720      *)
@@ -43,7 +43,7 @@
 (*   S5 站点桥：每站点一处定义性实例——桥语句一律指向站点真定义项          *)
 (*      （unfold 直转/直 apply/库件 rewrite），禁自造 1#720 冒充；        *)
 (*      pcu_c0 2 == 1/720 只出现在闭式评估件（S2）。                     *)
-(*   S7 数值锚链：½⁵·c₀(2) = ½⁵/720 = 1/23040，与 Lower 数值锚    *)
+(*   S7 哨兵链（G3 加餐）：½⁵·c₀(2) = ½⁵/720 = 1/23040，与 Lower 数值锚    *)
 (*      cpl_sent_witness_half 核验合流；TailPos 数值锚统一形。            *)
 (*   S6 主件（G1）：pcu_beta2_unify 七项 And 账（每站点一处实例化）+      *)
 (*      pcu_beta1_unify（n=1 孪生 1/12 账）。                            *)
@@ -140,7 +140,7 @@ Qed.
 (* 成对件（Set 面 sigT 依值对——BetaPos pbp_beta_pos_sigT 同款承载；
    Qeq 属 Prop 不与 Set 混 /\——分面纪律）：β(n,0) 正性（pbp_beta_pos
    在盘）为见证位，c₀ 正性（今构）为承载位；闭式桥见上 pcu_c0_eq_pbp
-   ——「正性已证（BetaPos）、闭式今统（本件）」三件成对。 *)
+   ——「正性已证（BetaPos）、闭式今统（本席）」三件成对。 *)
 Corollary pcu_first_coef_pair : forall n : nat,
   sigT (fun _ : QltT 0 (pbp_beta n 0) => QltT 0 (pcu_c0 n)).
 Proof.
@@ -166,7 +166,7 @@ Proof. unfold psx_coef. apply (pcu_site_ptp_gen 2). Qed.
 Lemma pcu_site_psx_coef1 : psx_coef 1 == pcu_c0 1.
 Proof. unfold psx_coef. apply (pcu_site_ptp_gen 1). Qed.
 
-(* 位点①：Finale 主件见证（乘法形 x⁵·(1#720)）真形直使用 *)
+(* 位点①：Finale 主件见证（乘法形 x⁵·(1#720)）真形直消费 *)
 Lemma pcu_site_cpf : forall x : Q,
   cpf_witness_n2 x == q_pow x 5%nat * pcu_c0 2.
 Proof.
@@ -206,7 +206,7 @@ Proof.
   - exact cpl_sent_witness_half.
 Qed.
 
-(* 位点⑥：TailPos 数值锚统一形（残差在 y=½ 精确值，首项 = c₀·½⁵） *)
+(* 位点⑥：TailPos 数值哨兵统一形（残差在 y=½ 精确值，首项 = c₀·½⁵） *)
 Lemma pcu_sentinel_n2_half_unified :
   exp_partial 6 (1#2) * pade_den 2 (1#2) - pade_num 2 (1#2)
   == pcu_c0 2 * (1#32) + (1#1440)*(1#64) + (1#8640)*(1#256).

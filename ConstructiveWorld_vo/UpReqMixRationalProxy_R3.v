@@ -156,7 +156,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 Real 层胶合（修复族：change-转换形，零 rewrite-under-QltT）        *)
+(* §2 Real 层胶合（续席修复族：change-转换形，零 rewrite-under-QltT）        *)
 (* ============================================================ *)
 
 (* x < y ⟹ ∃e:Q, 0 < e ∧ x + const e ≤ y（分离量提取，Defined——见证面用）
@@ -233,7 +233,7 @@ Proof.
 Qed.
 
 (* 1·x == x（免 UpReqMixingTime 依赖边）；
-   注意 real_mult 体内 match 对变量 Real 停滞——须先拆序列再投影坍缩 *)
+   注意 real_mult 体内 match 对变量 Real 卡死——须先拆序列再投影坍缩 *)
 Lemma rp_mult_one_l : forall x : Real, real_eq (real_mult real_one x) x.
 Proof.
   intros [u Hu]. apply real_eq_of_zero_diff. intro n.
@@ -436,7 +436,7 @@ Qed.
 (* 最小性/双夹界（预算内闭合形）：r ∈ [lo, hi] 与通过站 t ≤ r。
    收敛宽形 r ≤ t + (hi−lo)/2^fuel 已定型未闭合：field 对原子分母
    rp_qpow (2#1) f 生成 ≠0 旁证链（需 2^f ≠ 0 + Qopp 反单调两助件），
-   两助件补齐后即可闭合此形。 *)
+   预算内不硬凑——fail loud 留账下席，施工图见切片账。 *)
 
 (* 半点双界（字面分母 2，field 零旁证） *)
 Lemma rp_half_le_r : forall lo hi : Q, Qle lo hi -> Qle ((lo + hi) / 2) hi.
@@ -722,7 +722,7 @@ Proof.
   - exact Harch.
 Qed.
 
-(* 常值实幂 == 常值 Q 幂（④ 实层桥支） *)
+(* 常值实幂 == 常值 Q 幂（④ 实层桥腿） *)
 Lemma rp_const_rpow_eq : forall (a : Q) (k : nat),
   real_eq (tv_rpow (real_const a) k) (real_const (mixe_qpow a k)).
 Proof.
@@ -740,11 +740,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 使命件④：mix_k_select_r2 主定理封装                                   *)
-(*   组合 ③rp_bsearch（搜索引擎）+ ②桥（代理余量三支）+ ceil 站              *)
+(* §6 使命件④：mix_k_select_r2 主定理打包                                   *)
+(*   组合 ③rp_bsearch（搜索引擎）+ ②桥（代理余量三腿）+ ceil 站              *)
 (*   J := S(Z.to_nat(Qfloor t))——qarch_ceil 形 = Qceiling 等形（RBB 六坑    *)
 (*   处方照用），mixe_qfloor_lt 直给严格 ceil 见证。见证/证明分离：           *)
-(*   mix_k_compute_r2 透明可提取 / mix_k_spec_r2 不透明 / existT 封装。      *)
+(*   mix_k_compute_r2 透明可提取 / mix_k_spec_r2 不透明 / existT 打包。      *)
 (* ============================================================ *)
 
 Definition rp_qceil_nat (t : Q) : nat := Datatypes.S (Z.to_nat (Qfloor t)).

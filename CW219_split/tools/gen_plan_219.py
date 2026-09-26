@@ -80,7 +80,7 @@ A("3. **状态重放**（普通 `Import`/`Opaque`/选项不跨 Require 传播，
 A("   - 所有分片头部：外部 Require 块（原文 L54-58 的 QArith/List/Bool/Arith/Setoid/Morphisms/Lia/Qminmax）+ `Import ListNotations.`")
 A("   - S05 起头部：`Import PropositionConvergenceCore.`（复现原文 L15519 的普通 Import 语义）")
 A("   - S08 起头部：`Opaque Qred.`（复现原文 L33494/L46819 的透明度状态，该状态不跨文件传播）")
-A("   - S13 起头部：`From Stdlib Require Import Psatz.`（复现原文 L78208）")
+A("   - S13 起头部：`From Stdlib Require Import Lqa.`（原文此位为 Psatz@L78208，公理卫生替代）")
 A("   - S15 头部：`From Stdlib Require Import ZArith.Znat.`（复现原文 L95607）")
 A("4. **纯切割可机械验证**：分片文件去掉头部 N 行（N 按片记录于头部注释）后按序拼接 ≡ 原文逐字节（含 CRLF 行尾）；验收脚本 `tools/verify_split.py`。")
 A("")

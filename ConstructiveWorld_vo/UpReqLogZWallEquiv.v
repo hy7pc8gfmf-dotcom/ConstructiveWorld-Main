@@ -1,17 +1,15 @@
 (* ============================================================ *)
-(* 使命：文末清单所列定理证明体替换为实质非平凡玩具证          *)
+(* ToyR 玩具证替换件 —— T255 台账席 战役包P（tier2 六批）          *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   lgz_log_z_wall_lpo（原 L540，2 句玩具证）                            *)
 (*   lgz_half_eq（原 L254，1 句玩具证）                                   *)
 (*   lgz_q_pos_quarterT（原 L100，2 句玩具证）                            *)
 (*   lgz_q_pos_quarter（原 L94，2 句玩具证）                              *)
 (*   lgz_q_pos_half（原 L88，2 句玩具证）                                 *)
-(* 构造性注记：零承认语句，纯构造证明，全程零经典逻辑。 *)
-(* 编译配方：coqc -q -Q . "" UpReqLogZWallEquiv.v（9.1 工具链）。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -25,7 +23,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqLogZWallEquiv.v —— C1 LogZWall 第四面墙定理化        *)
+(* UpReqLogZWallEquiv.v —— 席EXPL2：C1 LogZWall 第四面墙定理化        *)
 (*                    （LogZ 墙 ⟶ 受限 LPO 归约谱系件）               *)
 (*                                                              *)
 (* 公理面：本件零公理、零假设负载。墙坐标在案：UpGeomB.v:17-21——      *)
@@ -41,7 +39,7 @@
 (*                                                              *)
 (*   lgz_log_z_wall_lpo（主件·AA22 GibbMechanism 范式）：任一配分函数族  *)
 (*     ZWf 带两参数位——参数位A 族内逐点正（配分语义）+ 参数位B 载体编码（任意 x 的   *)
-(*     1−x² 形可经某取位点 real_eq 编码进 ZWf 值域）——则其 plain-le 形   *)
+(*     1−x² 形可经某落位点 real_eq 编码进 ZWf 值域）——则其 plain-le 形   *)
 (*     给出 SqWall，经 lpn_forward 升为受限 LPO。解码双侧透明：         *)
 (*     eq 支经 |1−x²−1| 链 ⟹ x² 逐点归零（Q 环 + 容差半分）；lt 支取     *)
 (*     δ:=ε/2 经载体 real_eq 兼容（供隙 ε、余量 ε/2 拼接）⟹ x² 有隙。   *)
@@ -76,7 +74,7 @@
 (*     此证精确形归约强度）。                                          *)
 (*                                                              *)
 (* 纪律：纯构造性 Set 层、语句面全 Type/sigT/自定义 And/Or/QltT，       *)
-(*       零 Prop 泄露、零特设构造；墙语句为假设形参数化，全程零经典逻辑。    *)
+(*       零 Prop 泄露、零硬凑；墙语句为假设形参数化，全程零经典逻辑。    *)
 (* 依赖：S01_BaseRing（And/Or/NatLe）+ S02_CauchyComplete（Real/序）     *)
 (*       + CW/UpRealLeB/UpReqGeomD（interp-Z 求和面）+ UpReqLpoEquiv     *)
 (*       （rLPO/lpn_forward/Q 层桥）。                                 *)
@@ -119,7 +117,7 @@ Proof.
 Qed.
 
 
-(* 位移三件与 Qabs 界拆分（lra 闭合；非线性单项式按原子抽象） *)
+(* 位移三件与 Qabs 界拆分（lra 封口；非线性单项式按原子抽象） *)
 Lemma lgz_q_lt_add_l : forall a b c : Q, a + b < c -> a < c - b.
 Proof.
   intros a b c H.
@@ -211,7 +209,7 @@ Proof.
     exact Huu.
 Qed.
 
-(* 解码闭合（lt 支）：ε>0 ∧ ε < 1−a ∧ |a−(1−b)| < ε/2 ⟹ ε/2 < b *)
+(* 解码封口（lt 支）：ε>0 ∧ ε < 1−a ∧ |a−(1−b)| < ε/2 ⟹ ε/2 < b *)
 Lemma lgz_q_decode_lt : forall eps a b : Q,
   0 < eps -> Qlt eps (1 - a) ->
   Qlt (Qabs (a - (1 - b))) (eps * (1#2)) ->
@@ -225,7 +223,7 @@ Proof.
     lra.
 Qed.
 
-(* 解码闭合（eq 支）：|a−(1−b)| < δ/2 ∧ |a−1| < δ/2 ⟹ |0−b| < δ *)
+(* 解码封口（eq 支）：|a−(1−b)| < δ/2 ∧ |a−1| < δ/2 ⟹ |0−b| < δ *)
 Lemma lgz_q_decode_eq : forall del a b : Q,
   Qlt (Qabs (a - (1 - b))) (del * (1#2)) ->
   Qlt (Qabs (a - 1)) (del * (1#2)) ->
@@ -396,8 +394,8 @@ Section LogZMechanism.
 Variable ZWf : Real -> Real.
 
 (* 槽：载体编码——任意 x 的 1−x² 形可编码进 ZWf 值域。
-   注：族内逐点正（配分语义位）在 Z-形正向中不被使用（log 形接口才需要），
-   故不入段（段封闭会丢弃未使用槽），如实移除。 *)
+   注：族内逐点正（配分语义位）在 Z-形正向中不被消费（log 形接口才需要），
+   故不入段（段封闭会丢弃未消费槽），如实移除。 *)
 Hypothesis lgmech_carr : forall x : Real,
   sigT (fun xi : Real =>
     real_eq (ZWf xi) (real_plus real_one (real_opp (real_mult x x)))).
@@ -640,7 +638,7 @@ Proof.
   * exact (cw_log_exp_right y Hy).
 Qed.
 
-(* 对角单位槽：r := p ⟹ Z == 1（AA22 gwe_diag_zero 的 LogZ 对偶形） *)
+(* 对角单位槽：r := p ⟹ Z == 1（AA22 gwe_diag_zero 的 LogZ 镜像） *)
 Lemma lgz_diag_one : forall (n : nat) (p : nat -> Real) (eta : Real)
     (Hp : forall i : nat, real_lt real_zero (p i))
     (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one),
@@ -662,7 +660,7 @@ Proof.
   - exact Hnp.
 Qed.
 
-(* 对角左支灭绝：r := p 时 real_lt Z 1 驳斥（AA22 gwe_diag_no_gap 对偶形） *)
+(* 对角左支灭绝：r := p 时 real_lt Z 1 驳斥（AA22 gwe_diag_no_gap 镜像） *)
 Lemma lgz_diag_no_gap : forall (n : nat) (p : nat -> Real) (eta : Real)
     (Hp : forall i : nat, real_lt real_zero (p i))
     (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one),

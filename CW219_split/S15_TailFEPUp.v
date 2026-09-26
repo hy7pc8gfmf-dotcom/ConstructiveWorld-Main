@@ -21,7 +21,6 @@ Import ListNotations.
 From Stdlib Require Import Setoid Morphisms.
 From Stdlib Require Import Lia QArith.Qminmax.
 Import PropositionConvergenceCore.
-From Stdlib Require Import Psatz.
 From Stdlib Require Import ZArith.Znat.
 Opaque Qred.
 

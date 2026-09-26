@@ -1,8 +1,5 @@
 (* ============================================================ *)
 (* UpReqMixRationalProxy.v —— 柯西代理对数级 Real 层选取器             *)
-(* 构造性注记：零承认语句，纯构造证明，Real 层零序分支。 *)
-(* 依赖：CW_ConstructiveWorld_219、UpTVDoeblin、QArith 系。 *)
-(* 编译配方：coqc -q -Q . "" UpReqMixRationalProxy.v（9.1 工具链）。 *)
 (*                                                                *)
 (* 使命：使 Real 层主定理 mix_k_select 的返回步数从线性级（real_arch *)
 (*   保守上界 Datatypes.S N'）提升至对数级——在 Q 层对 [0, hi] 做二分，        *)

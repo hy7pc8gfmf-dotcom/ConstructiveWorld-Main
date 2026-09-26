@@ -6,7 +6,7 @@
 (*   本件亦为 GibbsAttractor 诚实边界「率件齐备只缺 ln/ceil」缺口的   *)
 (*   构造性闭合：ln/ceil 的 Nat-枚举+Archimedean 显式替身。            *)
 (* ============================================================ *)
-(* 依赖（只 Require 三件授权绿盘件 + 基座伞壳）：                      *)
+(* 依赖坐标（只 Require 三件授权绿盘件 + 基座伞壳）：                  *)
 (*   基座 CW_ConstructiveWorld_219（S01-S15 Export 伞壳）：            *)
 (*     real_arch（S07:2772 Real 层 Archimedean，显式 nat 见证）、        *)
 (*     real_mult_div（S08:79）、real_distrib（S02:2384）、               *)

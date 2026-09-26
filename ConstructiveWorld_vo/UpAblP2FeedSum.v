@@ -1,9 +1,5 @@
 (* ============================================================ *)
-(* UpAblP2FeedSum.v —— 论文2 消融件的求和正性供给模块（实数层与接口层双路）：  *)
-(* 使命：为三处求和正性接口供给显式实例（分四组，见下）。 *)
-(* 依赖：S01_BaseRing 等库内在册件（全列见 Require 面）。 *)
-(* 构造性注记：零承认语句，纯构造证明。 *)
-(* 编译配方：coqc -q -Q . "" UpAblP2FeedSum.v（9.1 工具链）。 *)
+(* UpAblP2FeedSum.v —— 论文2 消融件的求和正性供给件（实数层与接口层双路）：  *)
 (*   以已证件 spd_ 系（UpAblSposDirect）与 zabr 系（UpAblZposReal）为       *)
 (*   实参来源，为三处求和正性接口供给显式实例。全件分四组。                 *)
 (*                                                                        *)
@@ -23,7 +19,7 @@
 (*   （该实例字段逐位等于实数层名，转换即恒等）。                            *)
 (*                                                                        *)
 (* 二、Id 系 SumOver 语句形实例 p2f_S04_S06_slot_sum_over_S_pos：在         *)
-(*   最小世界（uab_ssUnit／uab_soUnit）上实例化，态空间取 unit          *)
+(*   T13c 最小世界（uab_ssUnit／uab_soUnit）上实例化，态空间取 unit          *)
 (*   （最小可证非空），接口参量全称保留。                                    *)
 (*                                                                        *)
 (* 三、req 六前提语句形在库实例上的装配：p2f_req_sum_ext／add／linear／      *)
@@ -47,7 +43,7 @@
 (* 【依赖】S01_BaseRing；S02_CauchyComplete；S03_QExp；                      *)
 (*   S04_RealExpLogConv；S05_AlignmentGRPO；S06_DiffSamplingGibbs；          *)
 (*   S07_RealSetoidExpLog；S08_RealMainlineDPO；UpAblZposReal；              *)
-(*   最小世界实例件（uab_ssUnit／uab_soUnit）；UpAblSposDirect（spd_ 系）。    *)
+(*   UpAblT13c_G13（uab_ssUnit／uab_soUnit）；UpAblSposDirect（spd_ 系）。    *)
 (*                                                                        *)
 (* 【对标】无直接对应物；声明注释体例对齐 stdlib 可提取文档注释。            *)
 (*                                                                        *)
@@ -87,7 +83,7 @@ Qed.
 
 (* 【批量登记·甲】接口投影直通六件（本件至 p2f_real_eq_of_proj）：RealEnhancedReal 字段   *)
 (* lt/le/req 与柯西层 real_lt/real_le/real_eq 逐位恒等（定义级换轨），体 exact H 为       *)
-(* 最短定义性闭合，体不可再分。                                                          *)
+(* 最短定义性收口，体不可再分。                                                          *)
 (* 类投影与实数层序/等词的双向转换：库实例 RealEnhancedReal 字段逐位＝实数层名，转换即恒等 *)
 Lemma p2f_proj_lt_of_real :
   forall x y : Real,
@@ -146,7 +142,7 @@ Qed.
 (* ===== §2 Id 系 SumOver 语句形实例 =====
    语句形为 S04/S06 接口的令名展开形（R:=@R RI、S:=@S RI SS、zero:=@zero RI、
    lt:=@lt RI、sum_over_S:=@sum_over_S RI SS SO；S06 同表）；态空间与求和
-   实例取最小世界 uab_ssUnit／uab_soUnit，接口参量全称保留。
+   实例取 T13c 最小世界 uab_ssUnit／uab_soUnit，接口参量全称保留。
    证明：由 spd_slot_direct_unit 一步给出。 *)
 Theorem p2f_S04_S06_slot_sum_over_S_pos :
   forall REI : RealInterfaceEnhanced,

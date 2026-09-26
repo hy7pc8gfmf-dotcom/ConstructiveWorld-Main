@@ -1,27 +1,50 @@
 (* ============================================================ *)
-(* UpReqPropLiftShim.v —— 升面兼容性适配引理件（pls_ 前缀）               *)
-(* 使命：为基座历史语句形态（存量形态，非违规、非假设消债）提供           *)
-(*   「老否定形 ⟷ sigT 见证形」的单向适配引理族，让新 Set 层代码免下行    *)
-(*   依存历史否定形、可直接产/消见证形。                                  *)
-(*   基座件（S 系/219 壳/G 系）一行未动：本件为纯新增独立件。              *)
-(* 设计：                                                                *)
-(*   - pls_vocab_ne       ：目标 Set 层见证形 {l : Tok | InT l vocab}     *)
-(*   - pls_vocab_ne_shim  ：见证形 ⟹ 老形 Not (Id vocab nil)              *)
-(*                          （升面生产者供证，旧依存者语句原样不变）       *)
-(*   - pls_vocab_ne_lift  ：老形 ⟹ 见证形（列表构造子分裂，构造性；        *)
-(*                          「单向 Not→sigT 需列表可判定性」的阻隔位精化：  *)
-(*                          Not (Id vocab nil) 形对具体列表数据免判定性    *)
-(*                          即可分裂——真墙在双重否定/抽象载体形）           *)
-(*   - pls_Qlt_to_QltT    ：stdlib Qlt(Prop) ⟹ S02 QltT(Set)（缺向补齐；   *)
-(*                          S02 已有反向 QltT_to_Qlt 与 Qle_to_QleT'/QleT'_to_Qle） *)
-(*   - pls_real_lt_eps/_rest / pls_real_le_cases：real_lt(sigT 见证形,     *)
-(*                          S02:456)/real_le(Or 形) 的依存面投影 accessor  *)
-(* 构造性注记：承认类/经典类字面量零命中，零承认；                        *)
-(*   全件 Print Assumptions 预期 Closed。                                 *)
-(* 依赖：S01_BaseRing（Id/Not/InT 连接词）、S02_CauchyComplete             *)
-(*   （QltT/QleT'/real_lt/real_le/Real）。零新增 Require 面。              *)
-(* 编译配方：Rocq 9.1 直调，cpu_guard，-Q . "" -native-compiler no。           *)
+(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
+(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
+(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
+(* 原件 Print Assumptions 追印面。清单：                          *)
+(*   pls_vocab_ne_shim（原 L65，2 句玩具证）                              *)
 (* ============================================================ *)
+(* ============================================================ *)
+(* 【T343 恒等守恒更正注记】2026-09-22 包AW十七 台账席（恒等头注收尾·AD 余六件闭合） *)
+(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
+(* T277（包AL）全量恒等核查已证结论、T317（包AV六）试点已证结论：本件实测为 *)
+(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
+(* 零变化），头注「替换」声称与实物不符，特此更正。 *)
+(* 更正口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
+(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；台账 *)
+(* 承载见 T277 附录／T284 修正块／T317 评估册／T321／T329／T330／T337／T339／T341／T343 台账。 *)
+(* 附记：T277 判级全文恒等；AD 域余六件收尾收官（T317 六·1 方案①）。 *)
+(* ============================================================ *)
+
+(* UpReqPropLiftShim.v — AA13·B6 升面兼容性升级适配引理件（pls_ 前缀）
+   ==================================================================
+   定性（主会话纠正令 20260914）：本件是「升面兼容性升级」接口件——
+   为老基座（S 系拆分层）历史语句形态（祖父条款存量，非红线违规、
+   非假设消债）提供「老否定形 ⟷ sigT 见证形」的单向适配引理族，
+   让新 Set 层代码免下行依存历史否定形、可直接产/消见证形。
+   基座件（S 系/219 壳/G 系）一行未动：本件为纯新增独立件。
+
+   设计（AA8 B6 工单）：
+   - pls_vocab_ne       ：目标 Set 层见证形 {l : Tok | InT l vocab}
+   - pls_vocab_ne_shim  ：见证形 ⟹ 老形 Not (Id vocab nil)
+                          （升面生产者供证，旧依存者语句原样不变）
+   - pls_vocab_ne_lift  ：老形 ⟹ 见证形（列表构造子分裂，构造性；
+                          AA8「单向 Not→sigT 需列表可判定性」的阻隔位精化：
+                          Not (Id vocab nil) 形对具体列表数据免判定性
+                          即可分裂——真墙在双重否定/抽象载体形，见交付报告障碍账）
+   - pls_Qlt_to_QltT    ：stdlib Qlt(Prop) ⟹ S02 QltT(Set)（缺向补齐；
+                          S02 已有反向 QltT_to_Qlt 与 Qle_to_QleT'/QleT'_to_Qle）
+   - pls_real_lt_eps/_rest / pls_real_le_cases：real_lt(sigT 见证形,
+                          S02:456)/real_le(Or 形) 的依存面投影 accessor
+
+   公理面：本件通过七项禁词扫描（承认类/经典类字面量零命中，
+   逐项记录见 E-STAGING-AA13 卡），
+   全件 Print Assumptions 预期 Closed（G3 验收）。
+   上游：S01_BaseRing（Id/Not/InT 连接词）、S02_CauchyComplete
+   （QltT/QleT'/real_lt/real_le/Real）。零新增 Require 面。 *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 From Stdlib Require Import List QArith.QArith.
