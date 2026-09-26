@@ -29,7 +29,21 @@
 (* 对标：mathlib RLHF 目标的最优性上界（KL 惩罚形式）有限实例。                        *)
 (* 编译配方：Rocq 9.1 直调 + cpu_guard；编译输出 -o 临时目录，树内不动。               *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpAblEps49List.
 Require Import UpAblEps49Fam.
 From Stdlib Require Import Lists.List.

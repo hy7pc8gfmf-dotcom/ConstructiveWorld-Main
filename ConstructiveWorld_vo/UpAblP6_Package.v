@@ -26,8 +26,21 @@
 (* ===================================================================== *)
 
 (* ---------- 依赖面（显式点名；⑨：Import 载荷不透传） ---------- *)
-Require Import CW_ConstructiveWorld_219.
 Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Require Import UpReqKLStrictB.
 Require Import UpReqTempDefs.
@@ -39,7 +52,6 @@ Require Import fa56_id_carrier.
 Require Import fa56c_ext.
 Require Import p4a_GradSignQDec.
 Require Import FepIdentClass.
-Require Import S07_RealSetoidExpLog.
 From Stdlib Require Import QArith_base Qring Qabs.
 Import RealInterfaceEnhancedMod.
 

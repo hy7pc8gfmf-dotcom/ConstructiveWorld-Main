@@ -6,13 +6,26 @@
    构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；接口面为 Set 层序谓词；文末对十条结论逐一 Print Assumptions 全 Closed。
    编译配方: Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹限载；输出一律 -o 临时目录，树内 .vo 不重写。
    ========================================================================== *)
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
 Require Import UpSigMigrate2.
 Require Import UpStepKL.
 Require Import UpRealLeB.
-Require Import S08_RealMainlineDPO.
 Require Import G08_Gibbs.
 Require Import UpReqCEqDispersion.
 Import RealInterfaceEnhancedMod.
