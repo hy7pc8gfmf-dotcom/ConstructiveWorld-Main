@@ -1,9 +1,9 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ToyR 玩具证替换件 ——   工程（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   edge_comp_legal（原 L238，3 句玩具证）                               *)
 (*   edge_comp_b（原 L225，2 句玩具证）                                   *)
@@ -15,16 +15,16 @@
 (* ============================================================ *)
 (* UpDissip.v *)
 (* *)
-(* 目的： 耗散经济模型的券/边/复合律与耗散记账（Set 层）。 *)
+(* 目的： 耗散经济模型的券/边/复合律与耗散核算（Set 层）。 *)
 (* 主件： bond_exchange（券交换守恒）与 edge_comp_slope / edge_comp_b（边复合单调）；edge_tame、edge_bi 判定面。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpConstitution。 *)
-(* 备注： 券的 eps 假设位为严格性的量化资源；记账面全部为 Set 层显式构造。 *)
+(* 备注： 券的 eps 假设位为严格性的量化资源；核算面全部为 Set 层显式构造。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpDissip.v —— BEA 2.0 耗散本位界汇经济：券/边/复合律/耗散记账/借据 *)
+(* UpDissip.v —— BEA 2.0 耗散本位界汇经济：券/边/复合律/耗散核算/借据 *)
 (*                                                              *)
-(* 理论来源：ROUNDTABLE.md 席 3 终稿【BEA 2.0——耗散本位界汇经济】   *)
+(* 理论来源：ROUNDTABLE.md  3 终稿【BEA 2.0——耗散本位界汇经济】   *)
 (*   「不算数、只换界」——券的 eps 假设位 = 严格性量化资源；           *)
 (*   每条边 = 带 eps-重参数化的转化定理（入参 eps 仿射映射出参：      *)
 (*   eps_out = a·eps_in + b，a > 0）；                              *)
@@ -45,7 +45,7 @@
 (*   件 6  vm_compute 自测：3 边图谱 eps/2→eps/4→eps/8 链           *)
 (*                                                              *)
 (* 层位纪律：语句全 Set 层（QltT/QleT'/Id/sigT/And/Or，判定走        *)
-(*   Qle_bool/Qlt_bool/Nat.eqb）；Prop 零出场。消费 UpConstitution   *)
+(*   Qle_bool/Qlt_bool/Nat.eqb）；Prop 零出场。使用 UpConstitution   *)
 (*   的 Q 层桥（uc_qeq_le 等）。全部 Qed/Defined 闭合。              *)
 (* ============================================================ *)
 
@@ -58,7 +58,7 @@ Require Import UpConstitution.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §1 Q 层微件（消费 UpConstitution 桥；补右加法弱不等式）            *)
+(* §1 Q 层微件（使用 UpConstitution 桥；补右加法弱不等式）            *)
 (* ============================================================ *)
 
 Lemma ud_le_add_r : forall z w : Q, Qle 0 w -> Qle z (z + w).
@@ -277,7 +277,7 @@ Proof.
   - apply RealSetoid.eq_Id. exact E2.
 Qed.
 
-(* 温和边的复合仍温和（斜率乘积 ≤ 1）——耗散记账沿路径封闭 *)
+(* 温和边的复合仍温和（斜率乘积 ≤ 1）——耗散核算沿路径封闭 *)
 Theorem edge_tame_comp : forall e1 e2 : edge_spec,
   Id (edge_tame e1) true -> Id (edge_tame e2) true ->
   Id (edge_tame (edge_comp e2 e1)) true.
@@ -307,9 +307,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 件 4：耗散记账 path_dissipation                                *)
+(* §5 件 4：耗散核算 path_dissipation                                *)
 (*   币制语义：eps 是守恒量——每次兑换 eps_in = eps_out + 耗散；        *)
-(*   耗散沿路径可加（簿记无重计/无凭空铸造）；                        *)
+(*   耗散沿路径可加（记录无重计/无凭空铸造）；                        *)
 (*   温和边（a≤1）的耗散对入参 eps 单调（大额兑换耗散更大）。          *)
 (* ============================================================ *)
 
@@ -730,7 +730,7 @@ Definition q_tight : query := mk_query 9 0 3 1 (1#2).
 Theorem demo_chain_hit : Id (resolve_report atlas3 q_chain) (rv_hit ec123 (1#8)).
 Proof. vm_compute. reflexivity. Qed.
 
-(* 路径耗散值：1 − 1/8 = 7/8（可加记账：1/2 + (3/4) 段耗散之和） *)
+(* 路径耗散值：1 − 1/8 = 7/8（可加核算：1/2 + (3/4) 段耗散之和） *)
 Theorem demo_diss_total : Id (Qred (edge_diss ec123 1)) (7#8).
 Proof. vm_compute. reflexivity. Qed.
 

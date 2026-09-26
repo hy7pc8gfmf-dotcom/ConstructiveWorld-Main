@@ -1,45 +1,11 @@
-(* ============================================================ *)
-(* BeukersLists.v —— 席位 CZU14（批次 E-STAGING-CZU14，20260918）      *)
-(* P2 第一阶段施工：Beukers/Hermite Padé [n/n] 的构造前置面             *)
-(*   （T97 预研 §1.1 机制总纲 / §4 P2 条目落盘）。                     *)
-(*                                                                 *)
-(* 目标恒等式（本席只建其构造前置，本体不在本席窗口，登记为 P2 后续      *)
-(*   席位接口）：                                                    *)
-(*     ln2 − x'_n == 2^{−(2n+1)} · I_n / Q_n(1/2)²                   *)
-(*   其中 Q_n(z) = Σ_k C(n,k)² z^k ∈ Z[z]，x'_n = P_n(1/2)/(2 Q_n(1/2))，*)
-(*   P_n 同族（谐和系数 H_k = Σ_{j≤k} 1/j）。本席交付：                *)
-(*   ① bk_Qn_list / bk_Qn_eval：Q_n 系数列表（第 k 项 = C(n,k)²，      *)
-(*      nat 层 Pascal 二项式系数 bkC + 平方）与求值面（Horner 折叠）；   *)
-(*   ② bk_Qn_int：q̃_n := 2^n·Q_n(1/2) ∈ Z 的 sigT 整性见证            *)
-(*      （= Σ_k C(n,k)²·2^{n−k}，nat 降幂和 bk_psd 转 Z，QeqT 闭合）；  *)
-(*   ③ bk_Qn_ge_3pow：q̃_n ≥ 3^n（C(n,k)² ≥ C(n,k) 逐项 +              *)
-(*      Σ_k C(n,k)·2^{n−k} = 3^n 降幂二项定理，QleT' Set 面）；         *)
-(*   ④ bk_Pn_list / bk_Pn_eval：P_n 谐和系数列表（H_k 的 Q 层承载——    *)
-(*      整化（lcm 整化）留给 P3 闭合席，本件只建 Q 层列表与求值面）；    *)
-(*   ⑤ bk_Qn_sym：C(n,k) = C(n,n−k) 对称引理（后续恒等式归纳用）。      *)
-(*                                                                 *)
-(* 库存勘定（开工三查③）：Rocq 9.1 stdlib 无 nat 层二项式系数/二项定理   *)
-(*   （Numbers/Natural/Abstract 无 NBinomial、全库 grep binomial=0），   *)
-(*   故 bkC（Pascal 递归）与 bk_psd_binom（(1+2)^n 二项定理降幂形）      *)
-(*   全自建。配方先例：PadeErrorIntegral.v 的 pei_list 列表多项式族      *)
-(*   引擎 + Ln2Escape.v 的 lne_nat_core nat 归纳（E075 的 C 遮蔽坑       *)
-(*   规避：系数名取 bkC）。                                            *)
-(*                                                                 *)
-(* 设计注记（诚实登记）：bk_Qn_list 的系数装配取 map 合成型              *)
-(*   （bk_idx 列表 Fixpoint 索引核 + bkQ/bk_psQ/bk_psd Fixpoint 计算核），*)
-(*   因平方行 C(n,k)² 无单步列表递归（Pascal 步进平方行需三项交叉项），   *)
-(*   「列表 Fixpoint」字母由 bk_idx/bkQ/bk_psQ/bk_psd 承担；            *)
-(*   bk_half_psd（2^n·Σf(k)/2^k == Σf(k)2^{n−k} 的构造性换基）为本件    *)
-(*   非平凡核心，免对称重排（对称性 bk_Qn_sym 独立交付供后续恒等式）。    *)
-(*                                                                 *)
-(* 红线自审：① 零承认面（全件 Qed/Defined，零承认词，依赖全在册）；      *)
-(*   ② 语句面 Set（主件 sigT/QeqT/QleT'；nat/Z/Q 层支撑引理 Prop 面     *)
-(*      仅作推理脚手架，Ln2Escape lne_nat_core 先例同构）；              *)
-(*   ③ 非平凡（bk_half_psd 换基归纳 + bk_psd_binom 二项定理 + Pascal    *)
-(*      对称归纳）；④ 可提取（G3 检验独立文件实测，Obj.magic=0）。       *)
-(* 依赖：S01_BaseRing S02_CauchyComplete S03_QExp（vo_901 信任根在册，  *)
-(*   按 CZU13/CZY13 并集根配方 side 现编）。零云端零 git。               *)
-(* ============================================================ *)
+(* ==========================================================================)
+   BeukersLists.v — Beukers 系数的列表化
+   使命: bkC/bk_psd/bkQ/bk_psQ 系 Fixpoint 定义、Pascal 移位与二项式恒等（bkC_pascal_shift/bk_psd_binom）、bk_Qn_int（Q̃ₙ 整性）、bk_Qn_ge_3pow、bk_Qn_eval_sem、bk_H 调和系数与 bk_Pn_list 评估。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib QArith、Lists.List、Arith、ZArith、Lia。
+   对标: Beukers 型 Padé 逼近的系数组合恒等式（Delannoy 数与整性）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
@@ -51,7 +17,7 @@ Open Scope nat_scope.
 (* §A nat 层二项式系数（Pascal 递归）与对称引理                          *)
 (* ============================================================ *)
 
-(* Pascal 递归二项式系数 C(n,k)（名字 bkC 避 E075 的 C 遮蔽坑） *)
+(* Pascal 递归二项式系数 C(n,k)（名字 bkC 避免与 C 遮蔽冲突） *)
 Fixpoint bkC (n k : nat) : nat :=
   match n with
   | 0 => match k with
@@ -503,7 +469,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §E P_n 谐和系数列表（Q 层承载；整化留给 P3 闭合席）                    *)
+(* §E P_n 谐和系数列表（Q 层承载；整化留待后续闭合段）                    *)
 (* ============================================================ *)
 
 (* 谐和数 H_k = Σ_{j=1}^{k} 1/j（Q 层 Fixpoint） *)

@@ -1,32 +1,25 @@
-(* ============================================================ *)
-(* DecBridge6.v — 席位 CZD12（批次 E-STAGING-CZD12）P2 施工件     *)
-(* DO 判定桥六槽件：T62 C 类 #34-39 一件收口                     *)
-(*                                                               *)
-(* 对账坐标（消融50/T62-零引用47枚triage.md §2-C 表）：           *)
-(*   #34 UpReqArgminEngine.v:69  rae_le_dec（Or(le)(Not le)）     *)
-(*   #35 UpReqArgminEngine.v:71  rae_lt_dec（三分，eq 腿 req 形） *)
-(*   #36 UpReqArgminEngine.v:202 probe_le_dec（#34 同位复制）     *)
-(*   #37 UpReqArgminEngine.v:203 probe_lt_dec（#35 同位复制）     *)
-(*   #38 UpReqAlgebra.v:1474  req_lt_plus_compat_lt_le            *)
-(*   #39 UpReqAlignRestA.v:80 ralt_lt_plus_compat_lt_le           *)
-(*                                                               *)
-(* 收口原理（T62 §3-P2 路线）：六槽宿主节皆为 RIS 世界抽象假设位； *)
-(*   全抽象 R 的整体三分 = LPO 墙（E225 定谳，零 Instance），故    *)
-(*   消融定谳 = "DO 强化层"收口：节增 RI+DO 双 Context（fa53      *)
-(*   同款），R 取 S01 具体载体，RIS 结构经 TempSoftmaxInstantiation *)
-(*   的装配桥 tsi_rie_setoid 供给（req 腿 := Id，le/lt/plus 等    *)
-(*   字段 = S01 同名投影，纯 delta/iota 可逆换装）。              *)
-(*                                                               *)
-(* 本件唯一新数学点（须真证）：req-Id 判定腿换装桥 db6_id_req ——  *)
-(*   fa53 判定引擎三分产出 Id 腿，六槽语句面要 req 腿，本桥在     *)
-(*   tsi 桥 req:=Id 定义面上把 Id 判定证书换装为 req 判定证书。   *)
-(*   #38/#39 与 fa53_lt_plus_compat_lt_le_dec 逐字同语句，        *)
-(*   exact 一击收口。                                             *)
-(*                                                               *)
-(* 纪律：语句面全 Set 层（Or/Not/Empty_set 皆 S01 Set 层定义），   *)
-(*   零 Prop 泄露；禁词面零命中；非平凡真证（投影别名 + 三腿换装  *)
-(*   重排 + 平移件转换收口）。原树零改；验证=本地信任缓存侧编。    *)
-(* ============================================================ *)
+(* ============================================================
+   DecBridge6.v — fa53 判定引擎证书到六槽语句面的桥接件。
+   使命：fa53 判定引擎三分产出 Id 分支，六槽语句面要 req 分支——
+         本件在 tsi 桥 req:=Id 定义面上给出 Id 判定证书到 req
+         判定证书的转换桥 db6_id_req（本件新数学点），并提供
+         le 二分判定／三分判定／加法保序的对应位形件（#34-#39
+         位形）。全抽象 R 的整体三分在纯构造性下不可得，
+         故取 DO 强化层路径：节增 RI+DO 双 Context（fa53 同款），
+         R 取 S01 具体实例，RIS 结构经 TempSoftmaxInstantiation
+         的装配桥 tsi_rie_setoid 供给（req 分支 := Id，le/lt/plus
+         等字段 = S01 同名投影，纯 delta/iota 可逆转换）。
+   依赖：S01_BaseRing / S07_RealSetoidExpLog /
+         TempSoftmaxInstantiation / fa53_compat_abs。
+   对标：UpReqArgminEngine.v:69-203（rae_le_dec/rae_lt_dec/
+         probe_le_dec/probe_lt_dec）；UpReqAlgebra.v:1474
+         req_lt_plus_compat_lt_le；UpReqAlignRestA.v:80
+         ralt_lt_plus_compat_lt_le。
+   构造性：语句面全 Set 层（Or/Not/Empty_set 皆 S01 Set 层
+         定义），零 Prop 泄露；非平凡真证（投影别名 + 三支
+         转换重排 + 平移件转换闭合）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 
 Require Import S01_BaseRing.
 Require Import S07_RealSetoidExpLog.
@@ -72,10 +65,10 @@ Definition db6_lt_dec_id :
   end.
 
 (* ============================================================ *)
-(* 新数学点：req-Id 判定腿换装桥                                  *)
+(* 新数学点：req-Id 判定腿转换桥                                  *)
 (*   fa53 引擎三分中腿是 Id 证书；六槽语句面中腿是 req 证书。     *)
 (*   tsi 装配桥的 req 字段定义性为 Id（fun x y => Id x y），故    *)
-(*   换装 = 纯转换级运输；本桥显式成件以承载换装语义并供消费。    *)
+(*   转换 = 纯转换级运输；本桥显式成件以承载转换语义并供使用。    *)
 (* ============================================================ *)
 Theorem db6_id_req :
   forall (a b : @S01_BaseRing.R RI),
@@ -84,31 +77,31 @@ Proof.
   intros a b H. exact H.
 Qed.
 
-(* ---- 槽 #34/#36 形：le 二分判定（DO 字段 ord_le_dec 直配） ---- *)
+(* ---- 槽 #34/#36 形：le 二分判定（DO 字段 ord_le_dec 直接给出） ---- *)
 Theorem db6_rae_le_dec :
   forall a b : @S01_BaseRing.R RI, Or (rle a b) (Not (rle a b)).
 Proof.
   intros a b. exact (db6_ord_le_dec a b).
 Qed.
 
-(* ---- 槽 #35/#37 形：三分判定（fa53_lt_dec 直配 + eq 腿换装） ----
-   inl/inr-inr 两腿与引擎产出同形直配；inr-inl 腿 = db6_id_req
-   换装桥把 Id 判定证书换装为 req 判定证书（本件新数学点）。 *)
+(* ---- 槽 #35/#37 形：三分判定（fa53_lt_dec 直接给出 + eq 腿转换） ----
+   inl/inr-inr 两支与引擎产出同形直接给出；inr-inl 腿 = db6_id_req
+   转换桥把 Id 判定证书转换为 req 判定证书（本件新数学点）。 *)
 Theorem db6_rae_lt_dec :
   forall a b : @S01_BaseRing.R RI,
     Or (rlt a b) (Or (rreq a b) (rlt b a)).
 Proof.
   intros a b.
   destruct (db6_lt_dec_id a b) as [Hlt | [Heq | Hgt]].
-  - (* a < b：严格腿直配 *)
+  - (* a < b：严格腿直接给出 *)
     exact (inl Hlt).
-  - (* a == b：Id 证书换装为 req 证书 *)
+  - (* a == b：Id 证书转换为 req 证书 *)
     exact (inr (inl (db6_id_req a b Heq))).
-  - (* b < a：反侧严格腿直配 *)
+  - (* b < a：反侧严格腿直接给出 *)
     exact (inr (inr Hgt)).
 Qed.
 
-(* ---- 槽 #36/#37：probe 位（与 rae 位同语句；独立成件对账锚定） ---- *)
+(* ---- 槽 #36/#37：probe 位（与 rae 位同语句；独立成件互核） ---- *)
 Theorem db6_probe_le_dec :
   forall a b : @S01_BaseRing.R RI, Or (rle a b) (Not (rle a b)).
 Proof.
@@ -125,7 +118,7 @@ Qed.
 (* ---- 槽 #38/#39 形：严格×非严加法保序 ----
    与 fa53_compat_abs.v:103 fa53_lt_plus_compat_lt_le_dec 逐字同
    语句（le/lt/plus 经 tsi 桥 = S01 同名投影，转换级同一关系），
-   exact 一击收口；#39 为 #38 的 ralt 位独立成件。 *)
+   exact 一击闭合；#39 为 #38 的 ralt 位独立成件。 *)
 Theorem db6_req_lt_plus_compat_lt_le :
   forall a b c d : @S01_BaseRing.R RI,
     @S01_BaseRing.lt RI a b -> rle c d -> rlt (rplus a c) (rplus b d).

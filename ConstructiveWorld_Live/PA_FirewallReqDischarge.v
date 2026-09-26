@@ -1,5 +1,11 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -19,7 +25,7 @@
 (*       （:122 req_entropy_temp_explicit / :128                  *)
 (*       req_relative_entropy_temp_decomp / :144                  *)
 (*       req_temp_strict_ident2），宿主文件本体零改动，以逐字语句   *)
-(*       重申件 + 下游依存承接。                                   *)
+(*       重申件 + 下游依存给出。                                   *)
 (* 主件：frd_req_entropy_temp_explicit——                         *)
 (*         H(p_t) ≡ (1/t)·E(p_t) + log Z_t；                       *)
 (*       frd_req_relative_entropy_temp_decomp——                  *)
@@ -79,13 +85,13 @@
 (*     槽C 参位 ← frd_req_temp_strict_ident2                           *)
 (*   末二演示件 frd_recovery_entropy_gain / _alt 即替换实证（A/B/C      *)
 (*   三槽全部实喂，宿主两主件从此零假设位依赖可达）。                 *)
-(* [出节签名实测 20260915] 主路三件出节签名（Check 检验）：             *)
+(* [出节签名实测 ] 主路三件出节签名（Check 检验）：             *)
 (*   explicit/decomp/ident2 三件均 11 显式参 = S sumf sum_ext/add/linear   *)
 (*   sum_pos base_loss dist_log_inv_one_inv dist_log_exp_neg Z_temp        *)
 (*   Z_temp_spec；fsum_le/fsum_zero_nonneg/dist_log_le_linear/             *)
 (*   dist_log_eq_linear 四槽不进签名（证明体未依存）→ 三调用点各删         *)
 (*   le_linear/eq_linear 二实参适配，语句零改。decomp 尾段 t/Ht 在 q/Hq/   *)
-(*   Hnorm 之前；fw_norm 签名含 sum_linear（现行喂法已含）。下游两演示件：宿主出节件 R/RIS 为隐式槽，无 @ 时须删 R RIS 二参（否则 R 滑入 S 槽、RIS 撞 sumf 槽）。                 *)
+(*   Hnorm 之前；fw_norm 签名含 sum_linear（现行用法已含）。下游两演示件：宿主出节件 R/RIS 为隐式槽，无 @ 时须删 R RIS 二参（否则 R 滑入 S 槽、RIS 撞 sumf 槽）。                 *)
 (* [纪律] 纯项式组装（零 rewrite）；语句全 Set 层（req/lt/le 接口值）； *)
 (*   全 Qed 闭合；宿主与只读树零改；本件 Require UpReqTempEntropy 与    *)
 (*   UpFirewallReq 均无被反向依赖（无环）。                             *)
@@ -288,7 +294,7 @@ Print Assumptions frd_req_temp_strict_ident2.
 Print Assumptions frd_recovery_entropy_gain.
 Print Assumptions frd_recovery_entropy_gain_alt.
 
-(* PA 追印段（T254 核验副本件） *)
+(* PA 追印段（ 核验副本件） *)
 Print Assumptions frd_recovery_entropy_gain_alt.
 Print Assumptions frd_recovery_entropy_gain.
 Print Assumptions frd_req_temp_strict_ident2.

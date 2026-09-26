@@ -1,11 +1,9 @@
-(* ============================================================ *)
 (* UpAblD1S13_AlignIdUnclosed.v —— AiuBackwardKL 节数据供给模块（件②）   *)
 (* 使命：AiuBackwardKL 节余量 14 参数位的实例供给（辖区见下）。 *)
 (* 构造性注记：零承认语句，纯构造证明，供给级无条件机械供给。 *)
 (* 编译配方：coqc -q -Q . "" UpAblD1S13_AlignIdUnclosed.v（9.1 工具链）。 *)
 (* 独立模块  *)
 (* ·原树零改                                                      *)
-(*                                                              *)
 (* 辖区：AlignIdUnclosed.v 节 AiuBackwardKL 余量 14 槽：              *)
 (*   L74(R)｜L75(RIS)｜L76(S)｜L78(sumf)｜L79-80(sum_ext)｜           *)
 (*   L81-83(sum_add)｜L84-86(sum_linear)｜L95(reward)｜L96(beta)｜    *)
@@ -15,7 +13,6 @@
 (*   UpAblD1S3_sum_pos_AlignIdUnclosed.v 供给；L89-93 log_req_compat 与                       *)
 (*   log_inv_exp_neg_req 已由 UpAblD1S2_reqlog_AlignIdUnclosed.v 供给。                       *)
 (*   合计 14＋1＋2＝17，模块完备。                                                           *)
-(*                                                              *)
 (* 形态：供给记录型（参数位语句逐字入件）＋实例供给申报形；与同族件                           *)
 (*   同构（无 eta_pos/eta_le_one 位——源文件节头注自述「pi_ref_norm/eta_le_one               *)
 (*   未进 discharge 集，节内不设」）                                                         *)
@@ -29,7 +26,6 @@
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219／UpReqAlign2    *)
 (*   （req2_Z_align 定义件）。零 Require 上游源件。                     *)
 (* 纪律：零注册面增量；fail-loud。 *)
-(* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlign2.

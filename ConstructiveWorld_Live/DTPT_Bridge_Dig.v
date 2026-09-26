@@ -1,46 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T256 台账席 战役包Q（tier2 批量面第七批）  *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   dig_Q_roundtrip_set（Qeq_refl 显式见证项，1 刀）                      *)
-(* ============================================================ *)
-
-(* ============================================================
-   DTPT_Bridge_Dig.v — P3 桥接层第四棒（席 P3-B4，2026-09-14）
-   职责：塔论（DTPT_DigTheory.v 711 行冻结）+ 提取门控
-         （DTPT_Extract.v 185 行冻结）的 Set 形桥接——
-     §1 本地信息性类型族 dQleT/dQeqT（d 前缀零撞名；构造子携
-        Prop 证明参＝提取擦除惯例 B1 同款；以 Arguments 显式
-        声明取代全局 Set Implicit Arguments——B3 坑3 根除）
-     §2 保底件：is_num 可执行判定桥（sumbool 直构）+
-        is_num=true 时尺寸 1 的 sigT 见证面（消费盘上 is_num_size1
-        L372 正向形；头注 b 反向边界沿用，禁硬凑）
-     §3 旗舰件：塔尺寸单调的信息性面（精化 sumbool 比较器，右支
-        改载「严格递减」bool 见证——B3 trLevel_geq_mono_set 同款
-        定式，零 False_rect 入提取位）+ dig_eqb/dig_Q 消费桥
-     §4 主件：提取门控全链 Set 面（DTPT_Extract.v u12_gate_chain
-        L139 的 sumbool 判定器 + 双门分解对 + QleT 证书链）
-     §5 加分件：dig_dec 形状+尺寸双判可判定子面（S7 边界 d：
-        全等可判定不可证——本件只做 Leibniz 相等的可靠下近似，
-        完备性反例见证在案，不造全等决策器）
-     §6 提取探针：逐件独立提取，验收 Obj.magic=0 实测
-   依赖（全部冻结只读）：DTPT / DTPT_DigTheory / DTPT_Extract
-         （其传递依赖 DTPT_Entropy / DTPT_Truth 随 .vo 装载；
-         本文件不 Import 二者——Level/Evidence 双份定义零暴露，
-         U12 卡坑1 预防）。
-   与 DTPT_Bridge.v 关系：完全分离（B3 席正追加后者，零竞争）——
-         本件不 Require DTPT_Bridge（防并发重编竞态，依赖面隔离），
-         QleT/QeqT 族以 d 前缀本地镜像（惯例同构，B1 §1 同款形）。
-   命名：桥件名沿任务书指定（is_num_spec/dig_dec 等，开席全库
-         grep 撞名零命中在案）；提取产物 b4_ 前缀；模块
-         DTPT_Bridge_Dig 限名隔离。
-   认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
-   纪律：温控协议 v2（coqc 全机 ≤3 先查后编）；禁碰一切既有 .v；
-         禁 git；nat 字面量全显式 %nat；Q_scope 自开。
-   ============================================================ *)
+(* ==========================================================================)
+   DTPT_Bridge_Dig.v — DTPT 判码理论的桥接与门链套件
+   使命: is_num_spec/is_num_size1_set（数值见证）、尺寸单调可判定（sub_dig_size_mono_set/dig_eqb_size_dec_true）、dig_Q 投影往返、门链 u12_gate_chain_spec 与 QleT 证书（gate_pass_QleT）、判定器 dig_dec_sound/shape/size。
+   依赖: DTPT、DTPT_DigTheory、DTPT_Extract；Stdlib QArith、List、Bool、ZArith、Arith、Lia、Extraction。
+   对标: 数字编码树的尺寸单调性与可判定桥（组合编码理论）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import List.
@@ -58,7 +23,7 @@ Import DTPT_Extract.DTPT_Extract.
 
 Module DTPT_Bridge_Dig.
 
-(* ========== §1 本地信息性类型族（QleT/QeqT 惯例 d 前缀镜像） ========== *)
+(* ========== §1 本地信息性类型族（QleT/QeqT 惯例 d 前缀对应副本） ========== *)
 
 Inductive dQleT (x y : Q) : Type :=
 | dqleT_intro : (x <= y)%Q -> dQleT x y.
@@ -81,8 +46,8 @@ Proof.
     [left | right | right | right | right | right | right]; reflexivity.
 Defined.
 
-(* 特征定理消费面：is_num=true 时尺寸见证 1（sigT 信息性携带；
-   消费盘上 is_num_size1 L372 正向形——头注 b：尺寸 1 不反演
+(* 特征定理使用面：is_num=true 时尺寸见证 1（sigT 信息性携带；
+   使用盘上 is_num_size1 L372 正向形——头注 b：尺寸 1 不反演
    is_num=true，dSeq [] 反例盘上 dig_size_one_not_only_num 在案，
    本件不桥反向假命题） *)
 Theorem is_num_size1_set : forall d : Dig,
@@ -92,7 +57,7 @@ Proof.
   intros d H. exists 1%nat. split; [reflexivity | exact (is_num_size1 d H)].
 Defined.
 
-(* ========== §3 旗舰件：塔尺寸单调的信息性面 ========== *)
+(* ========== §3 主定理件：塔尺寸单调的信息性面 ========== *)
 
 (* 可执行尺寸比较器：对任意两码，Nat.leb 计算面分派 sumbool *)
 Definition dig_size_le_dec (a d : Dig) :
@@ -103,7 +68,7 @@ Proof.
     [left | right]; reflexivity.
 Defined.
 
-(* 消费桥·sub_dig 尺寸单调（HAlg 并入件 sub_dig_size_mono L616 的
+(* 使用桥·sub_dig 尺寸单调（HAlg 并入件 sub_dig_size_mono L616 的
    信息性面）：sub_dig a d = true 时比较器必落左支——右支改载
    「d 尺寸严格小于 a」的 nat 判定见证（leb false 的等值换算面，
    B3 trLevel_geq_mono_set 同款定式：右支计算面直构，零
@@ -119,8 +84,8 @@ Proof.
   - right. apply Nat.leb_gt. exact E.
 Defined.
 
-(* 消费桥·相干面（Prop，不提取）：sub_dig 前提下比较器恒左支
-   ——直接消费盘上 sub_dig_size_mono L616 *)
+(* 使用桥·相干面（Prop，不提取）：sub_dig 前提下比较器恒左支
+   ——直接使用盘上 sub_dig_size_mono L616 *)
 Theorem sub_dig_size_dec_true : forall d a : Dig,
   sub_dig a d = true -> Nat.leb (dig_size a) (dig_size d) = true.
 Proof.
@@ -129,7 +94,7 @@ Proof.
                 (sub_dig_size_mono d a Hsub)).
 Qed.
 
-(* 消费桥·dig_eqb 尺寸可传（盘上 dig_eqb_size_bound L458 的判定面
+(* 使用桥·dig_eqb 尺寸可传（盘上 dig_eqb_size_bound L458 的判定面
    ——n := dig_size a 自实例） *)
 Theorem dig_eqb_size_dec_true : forall a b : Dig,
   dig_eqb a b = true -> Nat.leb (dig_size a) (dig_size b) = true.
@@ -140,7 +105,7 @@ Proof.
                                     (le_n (dig_size a)) Hab)).
 Qed.
 
-(* 消费桥·dig_Q 投影往返信息性面（盘上 dig_Q_roundtrip L319 的
+(* 使用桥·dig_Q 投影往返信息性面（盘上 dig_Q_roundtrip L319 的
    QeqT 面——头注 c：dig_Q 非单射（默认零碰撞），往返只取
    d = dQ x 方向，禁桥反向假命题） *)
 Theorem dig_Q_roundtrip_set : forall (d : Dig) (x : Q),
@@ -186,7 +151,7 @@ Proof.
   apply Z.leb_le. exact E.
 Defined.
 
-(* 旗舰·全链 QleT 证书：u12_gate_chain l t = true 时双门各交
+(* 主定理·全链 QleT 证书：u12_gate_chain l t = true 时双门各交
    QleT 证书——阈值门 H_adj l <= t（门语义：H 不超阈值，金标准
    gate_pass 1 0 = true 同向）、相位门 H_adj (P0 l) <=
    H_adj (Pinf l 0)（证书 Type 值交付，bool 前提 Prop 擦除；
@@ -264,7 +229,7 @@ Proof.
   split; [reflexivity | intros H; congruence].
 Qed.
 
-(* ========== §6 提取探针（U12 配方：逐件独立提取，
+(* ========== §6 提取检验（U12 配方：逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Set Extraction Output Directory ".".

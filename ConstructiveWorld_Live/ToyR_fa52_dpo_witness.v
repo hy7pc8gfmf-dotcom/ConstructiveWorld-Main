@@ -1,41 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T261 台账席 战役包V（tier2 十二批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   fa52_dpo_reward_recovery_concrete（原 L75，2 句玩具证）              *)
-(*   fa52_dpo_bounded_both_concrete（原 L51，1 句玩具证）                 *)
-(*   fa52_dpo_reward_spread（原 L42，3 句玩具证）                         *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【T317 恒等守恒更正注记】2026-09-21 包AV六 台账席（头注更正试点件） *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，   *)
-(* 经 T277（包AL）全量恒等核查已证结论、T287（包AV）抽验复核：本件实测   *)
-(* 为恒等守恒——清单所列 3 槽证明体与 Main 现版原件逐字同文（刀体  *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此更正。          *)
-(* 更正口径：真替换 0 槽＋恒等守恒 3 槽；本注记为追加块，上方原头  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面   *)
-(* 零改动；台账承载见 T277 附录／T284 修正块／T317 评估册。         *)
-(* 附记：T277 人工锚件；T287 抽验 3 槽守恒  *)
-(* ============================================================ *)
-
-(* ===== fa52_dpo_witness.v ===== *)
-(* 席位 VB（E-STAGING-VB）· T40 消融50 · 2026-09-16 *)
-(* 消融对象：S08_RealMainlineDPO 节 DpoPairMain 全部 8 个 Variable 前提槽
-   （ConstructiveWorld_Live/S08_RealMainlineDPO.v:1098-1105：
-     S / reward / beta / beta_pos / pi_ref / pi_ref_pos / Z_align / Z_align_pos）。
-   见证（全显式构造，零剩余前提）：
-     S := bool；reward := if s then 2 else 1；beta := 1；
-     pi_ref := 恒 1；Z_align := 1。
-   三处正性槽全由 real_lt_zero_one（S07:6937）兑现；
-   reward 分档 1 < 1+1 由 real_lt_plus_compat_lt_le（S07:6118）自 0<1 复合。
-   依存基座件：End 后主件 real_dpo_loss_pi_star_bounded_both（S08:1512）
-   与 real_dpo_reward_recovers_up_to_baseline（S08:1558）全参特化——
-   该节 DPO 定理在具体见证下闭合为闭语句。
-   红线：零 公理/承认件；非平凡（前提实例化消解 + End 后定理全参特化）。
-   尾注：recovery 语句中 log 1 == 0 闭式化需 real_log_one 桥，列后续候选。 *)
+(* ==========================================================================)
+   ToyR_fa52_dpo_witness.v — DpoPairMain 节八项前提槽的显式见证件
+   使命: S:=bool、reward 分档常值、beta:=1、pi_ref:=恒 1、Z_align:=1 的全显式见证；三处正性槽由 real_lt_zero_one 兑现；两件见证下闭合的全参特化定理（fa52_dpo_bounded_both_concrete 等）。
+   依赖: S02_CauchyComplete、S07_RealSetoidExpLog、S08_RealMainlineDPO。
+   对标: DPO 目标函数的有限状态实例化（强化学习对偶策略优化的极小模型）。
+   构造性: 零承认词面；全显式见证构造、零剩余前提；非平凡（前提实例化与出节定理全参特化）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 Require Import S02_CauchyComplete.
 Require Import S07_RealSetoidExpLog.
 Require Import S08_RealMainlineDPO.

@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqBanachExpNeg.v —— 路径 B exp_neg 元素化件                  *)
 (* ============================================================ *)
 (* ============================================================ *)
@@ -68,7 +68,7 @@ Qed.
 (* ============================================================ *)
 (* S1 系列面：bopp a 处级数的形态定形                              *)
 (* （Class 无 bneg 类字段——(−1)^k 载体取 bmult (bopp bone) 路线：  *)
-(*   偶次 bae bone、奇次 bae (bopp bone)，符号交错落位。）         *)
+(*   偶次 bae bone、奇次 bae (bopp bone)，符号交错定位。）         *)
 (* ============================================================ *)
 
 (* 负单位平方：bmult (bopp bone) (bopp bone) bae bone。            *)
@@ -220,7 +220,7 @@ Proof.
     exact (@bmult_zero B (@bzero B)).
 Qed.
 
-(* 负零级数项塌缩：负零幂 × 系数 bae bzero。                       *)
+(* 负零级数项退化：负零幂 × 系数 bae bzero。                       *)
 Lemma bxn_esp_term_opp_zero : forall (B : BanachAlg) (k : nat) (q : Q),
   @bae B (@bmult B (bpow B (@bopp B (@bzero B)) (Datatypes.S k))
                    (@bcoef B q))
@@ -239,7 +239,7 @@ Proof.
 Qed.
 
 (* exp_neg(0) 部分和恒一：esp (bopp bzero) n bae bone。            *)
-(* （对接 BXB 的 bxb_series_zero 同族面：负零处级数列同塌缩。）     *)
+(* （对接 BXB 的 bxb_series_zero 同族面：负零处级数列同退化。）     *)
 Lemma bxn_series_opp_zero : forall (B : BanachAlg) (n : nat),
   @bae B (exp_series_partial B (@bopp B (@bzero B)) n) (@bone B).
 Proof.
@@ -287,7 +287,7 @@ Qed.
 (* ============================================================ *)
 (* 未消解项申报（对称，不落承认件）：                              *)
 (*   ① S4 可逆性本体（(e^a)^{-1}=e^{-a}）：需 exp_add 装配         *)
-(*      （BA/BT/BNC 产出后另席）；本件已备齐其前置引用面：          *)
+(*      （BA/BT/BNC ）；本件已备齐其前置引用面：          *)
 (*      bxn_exp_neg（元素）+ bxn_exp_neg_spec(_eps)（收敛规格）     *)
 (*      + bxn_bnorm_opp/bxn_bnorm_bpow_opp（范数面）                *)
 (*      + bxn_series_mone_even/odd（符号交错定形）。                *)

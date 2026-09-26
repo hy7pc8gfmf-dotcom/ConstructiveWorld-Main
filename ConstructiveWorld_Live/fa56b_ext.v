@@ -1,9 +1,8 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T250 台账席 战役包K（tier2 头批）          *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   fa56b_cross_domain_linear（原 L245，3 句玩具证）                     *)
 (*   fa56b_cross_domain_scaling（原 L232，2 句玩具证）                    *)
@@ -17,27 +16,24 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* fa56b_ext.v —— T40 消融50 战役 CWD6 席（批次 E-STAGING-CWD6）  *)
 (*                                                               *)
-(* 使命：fa56_id_carrier.v（VF 席交付，本件只 Require 消费零改）   *)
-(*       收尾后按 T40-VA-对账.md 的 B 面槽位清单续挖 **未覆盖**    *)
 (*       的 S04/S05 Id 载体槽，补四簇非平凡真证。                 *)
 (*                                                               *)
 (* 选槽清单（语句原文坐标，全经 grep 核对；VA 对账 §3/§4 判 B，    *)
 (* fa51/fa56 均未覆盖）：                                         *)
 (*  槽VI  S04_RealExpLogConv.v:1588-1589（LM 节 vocab/vocab_       *)
 (*        nonempty，先例形 Not (Id vocab nil)）——fa51/fa56 引擎    *)
-(*        一直把「enum 非空」当诚实降级**前提**消费，从未证明该     *)
+(*        一直把「enum 非空」当诚实降级**前提**使用，从未证明该     *)
 (*        谓词类的居民性与闭包。本件首次构造兑现：J 消去器 +       *)
 (*        list 判别核 + singleton/cons/append 非空族（槽语句实例   *)
 (*        化：任取 t0，vocab := [t0] 即满足 vocab_nonempty）。     *)
 (*  槽VII 引擎扩展：逐点 Id ⟹ 和 Id（fa51 引擎没有和相合方向；    *)
-(*        S04:1921 steady_state_boltzmann 证明内消费 sum_over_S_   *)
-(*        ext 的对应位，fa51_sumd 列表载体侧镜像）。               *)
+(*        S04:1921 steady_state_boltzmann 证明内使用 sum_over_S_   *)
+(*        ext 的对应位，fa51_sumd 列表载体侧同构）。               *)
 (*  槽VIII S04:1905-1907 detailed_balance 槽（fa56 槽II 只做        *)
 (*        transition_nonneg/normalization，平衡槽未盖）+           *)
 (*        S04:1913 steady_state_boltzmann 之 Id 载体（fa51_sumd    *)
-(*        列表折叠）镜像——独立于 transfer 槽的平稳分布定理：       *)
+(*        列表折叠）同构——独立于 transfer 槽的平稳分布定理：       *)
 (*        逐点平衡 + 行归一 ⟹ Σ_s π(s)k(s,s') = π(s)。            *)
 (*  槽IX  S05_AlignmentGRPO.v:5968-5983（Prediction5 节            *)
 (*        cross_domain_scaling 槽）——sigT 形：槽注记原话「谓词     *)
@@ -46,14 +42,14 @@
 (*        one、power:=mult 特化伴件走 mult_one 归一链（非平凡）。  *)
 (*                                                               *)
 (* 对账口径：同 fa56——抽象 SumOver 类载体无列表结构（G12 头注      *)
-(* 「Id 系载体……留 real 镜像模块」），本件即镜像；语句面 Set 层    *)
+(* 「Id 系载体……留 real 同构模块」），本件即同构；语句面 Set 层    *)
 (* （Not 为 S01:68 Set 层定义 A -> Empty_set；lt/le/Id 均 Set 值）， *)
 (* 零 Prop 泄露。S04:1913 steady_state_boltzmann 为抽象 SumOver     *)
-(* 载体在库正件（如实登记 A 邻接），本件做列表载体镜像，同 fa56_    *)
+(* 载体在库正件（如实登记 A 邻接），本件做列表载体同构，同 fa56_    *)
 (* markov_kernel_normalized 之于 S04 boltzmann_dist_temp_normalized *)
 (* 先例口径。                                                     *)
 (*                                                               *)
-(* 消费：S01_BaseRing（vo 基座）+ fa51_sumpos_id + fa56_id_carrier  *)
+(* 使用：S01_BaseRing（vo 基座）+ fa51_sumpos_id + fa56_id_carrier  *)
 (* （消融50 侧，均只 Require 不改）。既有文件零改。前缀 fa56b_ 全库 *)
 (* 防撞已核。                                                     *)
 (* 红线：纯构造性零承认位；语句面 Set 层；尾 Print Assumptions 全   *)
@@ -160,8 +156,8 @@ Proof.
 Qed.
 
 (* ============ 槽VII：引擎扩展——逐点 Id ⟹ 和 Id ==================== *)
-(* S04 steady_state_boltzmann（L1921）消费的 sum_over_S_ext 之       *)
-(* fa51_sumd 列表载体镜像；为槽VIII 稳态镜像的关键件。               *)
+(* S04 steady_state_boltzmann（L1921）使用的 sum_over_S_ext 之       *)
+(* fa51_sumd 列表载体同构；为槽VIII 稳态同构的关键件。               *)
 
 Theorem fa56b_sumd_cong :
   forall (f g : S -> R) (l : list S),
@@ -184,9 +180,9 @@ Proof.
 Qed.
 
 (* ============ 槽VIII：S04:1905-1907 detailed_balance 槽 + ========= *)
-(*              S04:1913 steady_state_boltzmann 列表载体镜像 ========== *)
+(*              S04:1913 steady_state_boltzmann 列表载体同构 ========== *)
 (* 兑现：转移取独立提议核 k(s,s') := π(s')（Boltzmann-Gibbs 稳态分布  *)
-(* 自身），平衡槽由 mult_comm 收口；稳态件为旗舰非平凡件（sumd_cong  *)
+(* 自身），平衡槽由 mult_comm 闭合；稳态件为主定理非平凡件（sumd_cong  *)
 (* + fa56 线性件 + 行归一 + mult_one 四段链）。π 取 fa56_markov_kernel *)
 (* 同项（正性/非负/归一化三伴件由 fa56 已证件直接继承，零重复施工）。 *)
 
@@ -213,7 +209,7 @@ Proof.
   exact (mult_comm (fa56b_boltzmann_prob base_loss D D_pos Hne s)                   (fa56b_boltzmann_prob base_loss D D_pos Hne s')).
 Qed.
 
-(* S04:1913 steady_state_boltzmann 之 fa51_sumd 列表载体镜像：        *)
+(* S04:1913 steady_state_boltzmann 之 fa51_sumd 列表载体同构：        *)
 (* 逐点平衡 + 行归一 ⟹ π 是平稳分布（Σ_{s'} π(s')k(s',s) = π(s)）。  *)
 Theorem fa56b_boltzmann_stationary :
   forall (pi : S -> R) (k : S -> S -> R),
@@ -263,7 +259,7 @@ Qed.
 
 End Fa56bExt.
 
-(* ============ 假设面收口申报 ============ *)
+(* ============ 假设面闭合申报 ============ *)
 
 Print Assumptions fa56b_id_transport.
 Print Assumptions fa56b_cons_nil_id_contra.

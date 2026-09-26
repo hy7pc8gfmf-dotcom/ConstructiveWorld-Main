@@ -1,3 +1,4 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S06_DiffSamplingGibbs.v                                     *)
 (*                                                             *)
@@ -12,7 +13,7 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* ToyR 战役包C 替换席（T241 台账席）——同名非平凡替换交付稿       *)
+(* ToyR 工程 （ ）——同名非平凡替换交付稿       *)
 (* 替换定理清单：partition_function_pos（原逐句转发 → 定义层展开＋逐点正性断言单列＋求和保正接口显式实例化装配）。                                          *)
 (* 非平凡性说明：消除单跳/逐句转发，展开至定义层，逐点正性单列      *)
 (*   为显式命题后对求和保正接口显式实例化装配（断言组合＋显式项）。 *)
@@ -21,10 +22,10 @@
 (* 编译态：本件语法自检通过；全链编译待验（S 系深依赖链未建）。     *)
 (* ============================================================ *)
 
-(* —— T241 续作·切片二追加替换：partition_function_temp_pos /                *)
+(* ——  续作·切片二追加替换：partition_function_temp_pos /                *)
 (*   partition_function_scaled_pos / partition_function_temp_param_pos       *)
 (*   （同族样板复用：定义层展开＋逐点正性断言单列＋求和保正接口显式实例化）。 *)
-(*   文件尾增假设面打印锚三条，余见台账续作节。                               *)
+(*   文件尾增假设面打印锚三条，余见记录册续作节。                               *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -3013,7 +3014,7 @@ Variable dynamics : R -> R.
 Definition entropy_increases : Set :=
   forall x, le (entropy x) (entropy (dynamics x)).
 
-(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，甄别席核），接口层原样保留记账。 *)
+(* [墙族登记·RW-LAW2 熵增公设] 模型公设（第二定律动力学形式）：dynamics/entropy 抽象场无表征兄弟，本位不可导，禁硬证；Not 前件=Prop 红线对象——Set 重述候选（argmax/间隙具体层构造，核），接口层原样保留留记。 *)
 Variable strict_entropy_increase :
   forall x, Not (Id (dynamics x) x) ->
     lt (entropy x) (entropy (dynamics x)).
@@ -3662,7 +3663,7 @@ Qed.
 (* + id_refl 恒等证明，零新公理）。                              *)
 (* (b) 平方维数 d = k² 以见证式 sqrt_witness d r := r·r == d 表述 *)
 (* （无 sqrt 函数符号）：d = 4/r = 2 实例 + 通用 (d, r) 见证引理。*)
-(* (c) 非平方 d 的一般 √d 需构造性平方根（单独立项，不在本块）。 *)
+(* (c) 非平方 d 的一般 √d 需构造性平方根（单独设立，不在本块）。 *)
 (* ============================================================ *)
 
 (* 缩放配分函数：Z_c(z) := Σ_s e^{c·z_s}（c 任意实，无需正性） *)
@@ -3821,7 +3822,7 @@ Definition boltzmann_factor (s : S) : R :=
 
 Definition Z_thermo : R := sum_over_S boltzmann_factor.
 
-(* 供给件（原 Variable 换同名 Lemma，R120 基座消融波 T2 终判 B21）：由 sum_pos_preserved+逐点 exp_neg_pos 导出；零承认件 *)
+(* 前置引理（原 Variable 换同名 Lemma， 基座消融波 T2 终判 B21）：由 sum_pos_preserved+逐点 exp_neg_pos 导出；零承认件 *)
 Lemma Z_thermo_pos : lt zero Z_thermo.
 Proof.
   unfold Z_thermo. apply sum_pos_preserved. intros s. unfold boltzmann_factor.
@@ -6798,7 +6799,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* T2.4-2（2026-09-02）：Min-P 截断质量与词表大小挂钩（回应 S4）*)
+(* T2.4-2（）：Min-P 截断质量与词表大小挂钩（回应 S4）*)
 (*   dropped ≤ 1 − 1/|S|（截断质量 ≤ 1 − 词表大小倒数）：        *)
 (*   链① p_max ≥ 1/|S|：Σp = 1（完整核归一化）+ 逐项 p_w ≤ p_max *)
 (*     （argmin 遍历最小性重述）+ 和 ≤ 势·最大 + 除以正数；       *)
@@ -7039,7 +7040,7 @@ End MinPSampling.
 
 (* ============================================================
    Section TopPSampling：top-p（nucleus）采样构造性形式化
-   （论文2 §10.2 #5，2026-09-01 并入：概率降序排序 + 保留判定）
+   （论文2 §10.2 #5， 并入：概率降序排序 + 保留判定）
    ============================================================ *)
 Section TopPSampling.
 
@@ -7493,7 +7494,6 @@ Proof.
 Qed.
 
 (* ================================================================
-   Top-k+Min-P 联合核（组合策略，排序 3，2026-09-01）
    计数形式：严格更重者计数 < K（主文件 keep_top_k 模式，绕开排序
    正确性 E215 与 InT 成员判定）；非空性用诚实前提 topk_pickmax_head
    （pick_max 在前 K 个中，同 E211 κ 正分支 g>0 前提模式）。
@@ -7510,7 +7510,7 @@ Definition lt_dec_field_tk : forall a b : R, Or (lt a b) (Or (Id a b) (lt b a)) 
 (* 严格小于（nat 版） *)
 Definition NatLt_tk (n m : nat) : Set := Id (Nat.ltb n m) true.
 
-(* AB2-T2 孪生合并（20260925 席 D1）：id_false_true_tk 与上游 id_false_true
+(* AB2-T2 孪生合并（  D1）：id_false_true_tk 与上游 id_false_true
    （AttentionGibbsBridge，本文件 5134 行，keep_top_k_dec 同款直引）语句与证明
    100% 重合（forall H : Id false true, Empty_set / intro. inversion.）。
    _tk 改名族中仅 lt_dec_field_tk/NatLt_tk 系 Stdlib 遮蔽改名所必需，
@@ -7735,7 +7735,6 @@ End TopPSampling.
 (* ============================================================ *)
 
 (* ============================================================
-   RealInterfaceSetoid 阶段 3 并入（2026-08-29，来自检验 _dbg_kdr.v）
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
    metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），
@@ -7748,7 +7747,7 @@ End TopPSampling.
    阶段 2 补 exp/log 后再组装完整版。
    注：Core 类字段与完整类同名（req 等），Class 投影全局唯一——用 Module 隔离。 *)
 
-(* ToyR 包C 替换席：替换定理假设面打印（零新增依赖验证锚） *)
+(* ToyR  ：替换定理假设面打印（零新增依赖验证锚） *)
 Print Assumptions partition_function_pos.
 Print Assumptions partition_function_temp_pos.
 Print Assumptions partition_function_scaled_pos.

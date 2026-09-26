@@ -1,23 +1,26 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR_G04ProjHook.v —— 玩具复检替换稿（ToyR 战役包I tier1 第四批切片四） *)
 (* 基准：Main/Live/G04ProjHook.v（565 注册面最新基线，只读零写）。      *)
-(* 语句面/声明名序/依赖面/自检面与基准逐字一致。勘面定谳：本件系闭名    *)
+(* 语句面/声明名序/依赖面/自检面与基准逐字一致。勘面已证结论：本件系闭名    *)
 (* 喂定钩（CYC11 使命），Proj/Z_P 语句含 inv Z 因子阻断转换层重演，      *)
-(* 独立重演须内联母定理 Z≡1 归一链＝引擎体重演，故仅换一处可独立收口的   *)
+(* 独立重演须内联母定理 Z≡1 归一链＝引擎体重演，故仅换一处可独立闭合的   *)
 (* 证明体：逐出支归零件不再把荒谬前提转发进 proj_drop_zero 引擎槽，      *)
 (* 改在定义层直灭——g4p_P 恒真（beta/delta 透明），Id (g4p_P i) false     *)
-(* 前提为构造子不相等式，判别引擎当场消解任意目标，零引擎消费。          *)
-(* 其余十件如实标注不硬凑（见台账切片四节）。                            *)
+(* 前提为构造子不相等式，判别引擎当场消解任意目标，零引擎使用。          *)
 (* 红线自审：零公理零承认；零新增依赖；纯构造性 Set 层零泄露；真 Qed；   *)
 (* Main 整目录只读；本稿落消融50 写区。                                 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* G04ProjHook.v —— 消融50 战役 CYC11 席（批次 E-STAGING-CYC11）    *)
 (*                                                              *)
 (* 使命：CYB7 未决事项——G04 W2' 簇母定理回接实例化。fa57_ext.v      *)
 (*       簇四（fa57_W2p_uniform_two_realized）已在 S01 接口R 世界  *)
-(*       兑现两点均匀族；本席把该族换装到 CW219 柯西 Real 世界，    *)
 (*       喂定 G04_ProjFam.v 投影母定理（ZP/proj 闭名），产出        *)
 (*       「母定理在具体族上成立」的实例化定理九件。                 *)
 (*                                                              *)
@@ -26,10 +29,10 @@
 (*      世界（Id／fa51_sumd）；母定理闭名走 S02 柯西 Real 具体层    *)
 (*      （real_eq／real_list_sum）。两载体不同构，全库亦无         *)
 (*      RealInterface 在 Real 上的实例可作接口桥——故相容桥取       *)
-(*      「Real 层同构换装」：two := 1+1、half := inv(two)、         *)
-(*      half+half==one 归一链逐段镜像 fa57 簇四蓝图                 *)
+(*      「Real 层同构转换」：two := 1+1、half := inv(two)、         *)
+(*      half+half==one 归一链逐段同构 fa57 簇四蓝图                 *)
 (*      （mult_one×2 → distrib → mult_comm → inv_pos_correct）。    *)
-(*   面 2 参序差（E346「用了谁泛化谁」，g4p_probe_sig 探针打表      *)
+(*   面 2 参序差（E346「用了谁泛化谁」，g4p_probe_sig 检验打表      *)
 (*      实证）：ZP_pos 六参无 f_norm；ZP_le_one 六参无 P_witness；  *)
 (*      proj_keep_ge／proj_minor_uncond 七参带 f_norm；             *)
 (*      proj_kl_cost 六节参无 f_norm；KLqf 连 P／P_witness 都不收   *)
@@ -38,8 +41,8 @@
 (*      保持母形——荒谬前提 Id true false 只入签名不消去（零空匹配，  *)
 (*      提取零魔力位），与 proj_kl_cost 的 Hq_fail 槽同法自喂。      *)
 (*                                                              *)
-(* 宿主零改动：只读消费 vorebuild_901 基座＋G04_ProjFam，           *)
-(*   前缀 g4p_ 全库防撞；语句全 Set 层；纯构造性零承认位。          *)
+(* 宿主零改动：只读使用 vorebuild_901 基座＋G04_ProjFam，           *)
+(*   前缀 g4p_ 全库防同名冲突；语句全 Set 层；纯构造性零承认位。          *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
@@ -48,7 +51,7 @@ From Stdlib Require Import Lists.List.
 Import ListNotations.
 
 (* ==================== 第一步：Real 层两点族补给件 ==================== *)
-(* fa57 簇四蓝图的 Real 层换装：two := 1+1、half := inv(two)。       *)
+(* fa57 簇四蓝图的 Real 层转换：two := 1+1、half := inv(two)。       *)
 
 Definition g4p_two : Real := real_plus real_one real_one.
 
@@ -70,7 +73,7 @@ Qed.
 
 (* 归一链：half+(half+0) == half+half == half·1+half·1
    == half·(1+1) == half·two == two·half == one（六段 real_eq 运河，
-   与 fa57_half_plus_half 的 Id 四段链同构换装）。 *)
+   与 fa57_half_plus_half 的 Id 四段链同构转换）。 *)
 Lemma g4p_half_norm :
   real_eq (real_list_sum bool (fun _ : bool => g4p_half) [true; false]) real_one.
 Proof.
@@ -96,7 +99,7 @@ Definition g4p_witness :
   := existT (fun i : bool => And (Id ((fun _ : bool => true) i) true) (InT i [true; false]))
             true (id_refl, @InT_here bool true [false]).
 
-(* ==================== 第二步：相容桥（W2' 七槽面 Real 层换装包） ==================== *)
+(* ==================== 第二步：相容桥（W2' 七槽面 Real 层转换包） ==================== *)
 (* fa57_W2p_uniform_two_realized 的 Real 层同构件：f_norm∧f_pos∧     *)
 (* P_witness 三槽一次兑现包——母定理闭名只认此层面，故为喂定入口。      *)
 
@@ -112,7 +115,7 @@ Qed.
 
 (* ==================== 第三步：母定理闭名实例化主件 ==================== *)
 (* 实例：I := bool、f ≡ half、P ≡ true、idx := [true; false]。        *)
-(* 缩写（透明定义，语句面可读；消费位全经 delta/β/ι 转换回母形）。      *)
+(* 缩写（透明定义，语句面可读；使用位全经 delta/β/ι 转换回母形）。      *)
 
 Definition g4p_f : bool -> Real := fun _ : bool => g4p_half.
 Definition g4p_P : bool -> bool := fun _ : bool => true.
@@ -178,7 +181,7 @@ Proof.
 Qed.
 
 (* 件 5：minorization 传送（取 u := f、delta := 1；
-   前提 1·half == half 由 b4_one_mult 经 real_eq_le 换装）。 *)
+   前提 1·half == half 由 b4_one_mult 经 real_eq_le 转换）。 *)
 Theorem g4p_proj_minor_uncond_two :
   forall i : bool, real_le (real_mult real_one (g4p_f i)) (g4p_Proj i).
 Proof.
@@ -195,7 +198,7 @@ Qed.
 
 (* 件 4（母定理主件·代价恒等）：KL(q‖f) == KL(q‖Proj) + (−log Z)，
    q := Proj 自喂（归一＝件 1、逐点正＝keepK_pos 证书随身、
-   逐出归零＝件 3 转发——母定理自消费闭环）。 *)
+   逐出归零＝件 3 转发——母定理自使用闭环）。 *)
 Definition g4p_kl_q : bool -> Real := g4p_Proj.
 
 Definition g4p_kl_q_pos :
@@ -225,7 +228,7 @@ Proof.
                       g4p_kl_q_pos g4p_proj_drop_zero_two).
 Qed.
 
-(* ============ 假设面收口申报（G4 前置，九件全查） ============ *)
+(* ============ 假设面闭合申报（G4 前置，九件全查） ============ *)
 
 Print Assumptions g4p_two_pos.
 Print Assumptions g4p_half_pos.

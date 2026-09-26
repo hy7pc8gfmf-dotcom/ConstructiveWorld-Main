@@ -1,39 +1,11 @@
-(* ============================================================ *)
-(* UpAblKVEpsHalf.v —— KV 链 ε/2 分摊普适化供给件（独立件）              *)
-(*   （keh_ 前缀）                                                       *)
-(* ============================================================ *)
-(* 使命：UpKVDrift_P2 的 kv_abs_triangle_list_eps 归纳 cons 臂内联的      *)
-(*   ε/2 分摊三段实形——Hhalf 半量正性、Hinv2one inv(1+1) 倍元恒等式、     *)
-(*   Hhh 两半份重构 ε——普适化为可复用供给引理。独立件：                  *)
-(*   与 UpKVDrift_P2/UpAblAbsSumLeB 系既有文件零改动；KV 原语句回接       *)
-(*   Corollary 落本件内（原内联位点语句的等价重述形）。                   *)
-(*                                                                *)
-(* 普适化结构（keh_ 前缀）：                                              *)
-(*   0 局部代数包：keh_plus_zero_l / keh_one_mult_l / keh_distrib_r /     *)
-(*     keh_two_pos / keh_self_two——基座只给左形，此为对应右形            *)
-(*     （照 UpKVDrift_P2 各件自持同形定义的体例），本件仅依赖             *)
-(*     CW_ConstructiveWorld_219。                                        *)
-(*   1 普适供给引理（本件主增量）：                                       *)
-(*     · keh_split_reconst：任意半量系数 c（c+c==1 即可，不问构造路线）   *)
-(*       ⟹ (c·ε)+(c·ε)==ε——半量重构恒等式的系数参数化形（内联版为       *)
-(*       inv(1+1) 专用特例）。                                            *)
-(*     · keh_eps_half_amort：两点核差形 ε/2 前后分摊普适引理——           *)
-(*       三角余量 c·ε 与归纳余量 c·ε 两处半份，经重构恒等式合并为整 ε；   *)
-(*       a b B 全称参量（内联位点仅 f w / Σ rest / Σ rest|f| 一处特例）。 *)
-(*   2 规范半量供给包：keh_half := inv(1+1)（以 keh_two_pos 为正性前提）  *)
-(*     ＋ keh_half_pos / keh_half_double / keh_half_share_pos /           *)
-(*     keh_half_share_reconst——内联三段实形的命名供给形。                *)
-(*   3 KV 原语句回接 Corollary：keh_kv_abs_triangle_list_eps——原内联     *)
-(*     位点语句的等价重述形，cons 归纳步全程经 keh_eps_half_amort 供给，  *)
-(*     分摊不再内联（UpKVDrift_P2 本体零改动）。                          *)
-(*                                                                *)
-(* 增量定性：①半量系数参数化（c+c==1 即可，非 inv(1+1) 专用）、           *)
-(*   ②适用面全称化（a b B 参量）、③供给命名化（可跨件复用）；回接        *)
-(*   Corollary 语句面与 UpKVDrift_P2 原件同构，非新数学语句，如实注记。   *)
-(* 对标：mathlib 置顶使命注释惯例；stdlib 文档注释惯例。                  *)
-(* 构造性注记：零承认；纯构造性；语句面全 Set 层（real_eq/real_lt/real_le），全部 Qed。 *)
-(* 编译配方：Rocq 9.1 coqc 直调＋cpu_guard 包裹，输出经 -o 临时目录，树内 .vo 不重写。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblKVEpsHalf.v — KV 链 ε/2 分摊的普适化供给引理
+   使命: 半量重构恒等式的系数参数化形 keh_split_reconst（c+c==1 即可）、两点核差 ε/2 前后分摊普适引理 keh_eps_half_amort、规范半量供给包 keh_half 系，及 KV 原语句回接 Corollary keh_kv_abs_triangle_list_eps。
+   依赖: CW_ConstructiveWorld_219。
+   对标: 三角不等式证明中的 ε/2 分摊技巧（数学分析标准手法）的参数化形式。
+   构造性: 零承认词面；纯构造性；语句面全 Set 层（real_eq/real_lt/real_le），全部 Qed。
+   编译配方: Rocq 9.1 coqc 直调与 cpu_guard 包裹，输出经 -o 临时目录，树内 .vo 不重写。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 

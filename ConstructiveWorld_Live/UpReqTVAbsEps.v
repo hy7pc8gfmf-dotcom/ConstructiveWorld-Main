@@ -1,5 +1,5 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* ToyR 玩具证替换件 ——   工程包AD（tier2 末批二）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -18,9 +18,9 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqTVAbsEps.v — 席T9：定理 5.10 伴随件 tvd_abs_sum_le_list_eps *)
+(* UpReqTVAbsEps.v — T9：定理 5.10 伴随件 tvd_abs_sum_le_list_eps *)
 (*                                                               *)
-(* 使命（席T8 施工图 C2 执行版）：Or 编码下零接口 eps 余量伴随件      *)
+(* 使命（T8 施工图 C2 执行版）：Or 编码下零接口 eps 余量伴随件      *)
 (*   forall (l : list (list Real)) (f : list Real -> Real) (eps),  *)
 (*     real_lt real_zero eps ->                                    *)
 (*     real_le (real_abs (real_list_sum (list Real) f l))          *)
@@ -29,7 +29,7 @@
 (* 铁律：UpTVDoeblin.v L1971-1975 的 Or 形前提位禁动——Or 形精确版    *)
 (* 与 LPO 等价，构造性不可证；本伴随件是唯一合法产出（禁碰本体）。    *)
 (* 载体：归纳变元 = list 本身（real_list_sum 三参形态与 real_plus   *)
-(* 直接咬合）。半量取 h := (1/(1+1))·eps，三角形件与归纳前提各吃 h，  *)
+(* 直接衔接）。半量取 h := (1/(1+1))·eps，三角形件与归纳前提各吃 h，  *)
 (* h+h == eps 倍半归一收尾。                                        *)
 (* 环境：monolith （-Q ../attn/_build_219 ""，Live_X 树零 vo）； *)
 (* QArith.Qring 供逐点 ring（UpTVDoeblin 头部同款）。全部名字可见性  *)
@@ -176,7 +176,7 @@ Proof.
              (real_plus real_zero eps)).
     + exact real_abs_zero_req.
     + exact (tv9_lt_plus_r_zero real_zero eps Heps).
-  - (* 步例 w::rest：cbn 咬合 real_plus 后，三角形件与归纳前提
+  - (* 步例 w::rest：cbn 衔接 real_plus 后，三角形件与归纳前提
        各吃半量 h := tv9_half·eps（正性 real_mult_pos_compat），
        倍半归一 h+h==eps（tv9_double_inv + real_inv_pos_correct）
        交 tv9_abs_triangle_ih 一步完成。 *)

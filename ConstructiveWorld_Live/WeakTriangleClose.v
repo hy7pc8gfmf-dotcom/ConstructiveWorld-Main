@@ -1,54 +1,11 @@
-(* ============================================================ *)
-(* WeakTriangleClose.v — 席位 CZH13（批次 E-STAGING-CZH13）      *)
-(* T61b C6 收口件：UpReqWeakTriangle G3 CS 权渡真形（挂账实形：  *)
-(*   UpReqWeakTriangle.v:28-29 注释位「G3 CS 权渡形/unique-max    *)
-(*   特例：挂账（需 Real 平方族引擎）」——槽位为纯注释挂账，无    *)
-(*   逐字 .v 语句；EXPD3 报告已离树（attn 仅 _taa7_bak），故按    *)
-(*   任务书授权取「(Σab)² ≤ Σa²·Σb² 库内对应形」二元 Gram 核      *)
-(*   定向，如实登记选择。                                        *)
-(*                                                               *)
-(* 【引擎链（全只读消费，签名逐一实读核验）】                     *)
-(*   Q 层：Stdlib QArith/Qring——Qmult_le_0_compat / Qplus_le_     *)
-(*   compat / Qle_trans / Qle_refl / Qle_bool_iff / Qnot_le_lt /  *)
-(*   Qopp_le_compat / Qlt_le_weak + Qring 的 ring（真证 tactic，  *)
-(*   Qeq setoid）；real 层：S01_BaseRing 字段与全局件——distrib   *)
-(*   （S01:150）/mult_comm/assoc/zero、plus_comm/assoc/zero/opp、 *)
-(*   opp_mult_r（S01:399）/opp_mult_l（S01:413）、le_refl/le_id_l/*)
-(*   le_id_r/le_trans/le_plus_compat、le_mult_compat_weak、       *)
-(*   plus_inv_unique、fa53_compat_abs 的 DO 三分投影定式           *)
-(*   （fa53_lt_dec：Id 中腿三分，wtc_sq_nonneg 负支消费）。        *)
-(*                                                               *)
-(* 【倒墙定格（候闸登记）】T61b 建议的 AbsSqClose（asc_ 平方/abs  *)
-(*   族）消费路线在本席窗口倒墙：AbsSqClose Require 链经          *)
-(*   TempSoftmaxInstantiation/UpReqSumD 指向聚合件                *)
-(*   CW_ConstructiveWorld_219（= S01..S10 全链 Export），vo_901   *)
-(*   新纪元正本 57/256 缺 S05+/TSI/SumD 座；侧编试探四件全断       *)
-(*   （S07 缺 S05_AlignmentGRPO、TSI/SumD 缺 219、AbsSqClose 缺    *)
-(*   TSI，日志 /tmp/czh13_side/log_*.txt 四份定格）；全链自编 =    *)
-(*   自建基座，触信任缓存红线禁。故平方非负引擎按 AbsSqClose #42  *)
-(*   （asc_sq_nonneg）与其环小件（asc_opp_opp/asc_sq_opp）逐件    *)
-(*   同型在 DO 强化层以 wtc_ 前缀自证为候闸换装形（零语句弱化；   *)
-(*   候闸后可逐件 exact 换装 asc_ 件）。                          *)
-(*                                                               *)
-(* 【四要素逐件核销宣言】                                        *)
-(*   G1①  wtc_qle_of_qeq       Q 层 Qeq→Qle 换装    [机械运河]    *)
-(*   G1①  wtc_q_sq_nonneg     Q 层平方非负          [非平凡低]    *)
-(*   G1②  wtc_cs2_q            Q 层二元 CS 核        [非平凡中]    *)
-(*   G1①  wtc_sq4/sq_plus/plus4/opp_opp/K1/K2/sq_opp              *)
-(*                             real 层环运河模板族 [运河+对合小件] *)
-(*   G1③  wtc_sq_nonneg       real 平方非负（asc 换装形）[非平凡中] *)
-(*   G2    wtc_gram_id         Gram 恒等式（八项展开 K 双消）       *)
-(*                                                [非平凡高]     *)
-(*   G2    wtc_cs2_real        real 层二元 CS 装载    [非平凡中]    *)
-(*   G2    wtc_weak_triangle_load 主收口定理（库内诚实变体直给形）  *)
-(*   G2    wtc_family          sigT 两级封口账       [装配]        *)
-(*                                                               *)
-(* 纪律：主收口语句面全 Set 层（le/Id 载 Set；Q 层引擎级 Qle 载    *)
-(*   Prop 与库内 wtl_ 件 Qlt 前提位同口径先例，主账 real 腿全     *)
-(*   Set）；零 公理/承认件/弃证/Hypothesis；文尾 Print        *)
-(*   Assumptions 审计。wtc_ 前缀全库零撞名（与 CZG13 席           *)
-(*   EngelWeighted 加权 sum 路线零交叠：本席无加权 sum 件）。      *)
-(* ============================================================ *)
+(* ==========================================================================)
+   WeakTriangleClose.v — 弱三角不等式的闭合件
+   使命: wtc_cs2_q（Q 层 CS 核）、wtc_weak_triangle_load（库内诚实变体的直给形主件）、wtc_gram_id（Gram 恒等式）、wtc_family（族化 sigT 两级证书）。
+   依赖: S01_BaseRing、fa53_compat_abs；Stdlib QArith、QArith.Qring。
+   对标: Cauchy–Schwarz 与弱三角不等式（内积空间经典不等式）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qring.
 Require Import S01_BaseRing.
@@ -58,7 +15,7 @@ Require Import fa53_compat_abs.
 (* Q 层引擎（第一级：Q 平方族 + 二元 CS 核）                          *)
 (* ================================================================ *)
 
-(* ---- Qeq→Qle 换装：Qeq/Qle 均展开 Z 层（Qnum 交叉积），Z.le_refl。 *)
+(* ---- Qeq→Qle 重述：Qeq/Qle 均展开 Z 层（Qnum 交叉积），Z.le_refl。 *)
 Lemma wtc_qle_of_qeq : forall x y : Q, x == y -> x <= y.
 Proof.
   intros x y H. unfold Qle, Qeq in *.
@@ -68,7 +25,7 @@ Qed.
 (* ---- Q 平方非负（AbsSqClose #42 asc_sq_nonneg 的 Q 层同型）：      *)
 (*      Qle_bool 三分 0?q——正支 Qmult_le_0_compat 直给；负支          *)
 (*      Qnot_le_lt 翻严格 + Qopp_le_compat 升 le，(−q)²==q² ring      *)
-(*      换装 + Qle_trans。 ---- *)
+(*      重述 + Qle_trans。 ---- *)
 Lemma wtc_q_sq_nonneg : forall q : Q, 0 <= q * q.
 Proof.
   intro q.
@@ -86,9 +43,9 @@ Proof.
     apply wtc_qle_of_qeq. ring.
 Qed.
 
-(* ---- Q 层二元 CS 核（挂账「Σa²·Σb² ≥ (Σab)²」Q 引擎级）：          *)
+(* ---- Q 层二元 CS 核（未竟项「Σa²·Σb² ≥ (Σab)²」Q 引擎级）：          *)
 (*      Lagrange 二元恒等式 (a²+b²)(c²+d²) == (ac+bd)²+(ad−bc)²       *)
-(*      ring 一击展开，平方非负双腿 + 加法保序收口。 ---- *)
+(*      ring 一击展开，平方非负两支 + 加法保序闭合。 ---- *)
 Theorem wtc_cs2_q : forall a b c d : Q,
   (a * c + b * d) * (a * c + b * d) <= (a * a + b * b) * (c * c + d * d).
 Proof.
@@ -164,7 +121,7 @@ Proof.
 Qed.
 
 (* ---- 运河模板④：opp 对合 −−a == a（AbsSqClose asc_opp_opp          *)
-(*      候闸换装形：plus_inv_unique 两侧右逆对齐）。 ---- *)
+(*      候闸重述形：plus_inv_unique 两侧右逆对齐）。 ---- *)
 Lemma wtc_opp_opp : forall a : R, Id (opp (opp a)) a.
 Proof.
   intro a.
@@ -173,7 +130,7 @@ Proof.
            (id_trans (id_sym (plus_comm a (opp a))) (plus_opp a))).
 Qed.
 
-(* ---- 运河模板⑤：(−t)² == t²（AbsSqClose asc_sq_opp 候闸换装形：    *)
+(* ---- 运河模板⑤：(−t)² == t²（AbsSqClose asc_sq_opp 候闸重述形：    *)
 (*      opp_mult_r/l 移 opp + opp 对合收尾）。 ---- *)
 Lemma wtc_sq_opp : forall t : R, Id (mult t t) (mult (opp t) (opp t)).
 Proof.
@@ -183,7 +140,7 @@ Proof.
                             (wtc_opp_opp (mult t t))))).
 Qed.
 
-(* ---- 运河模板⑥：K 统一形换装——(a·c)(b·d) == (a·b)(c·d)            *)
+(* ---- 运河模板⑥：K 统一形重述——(a·c)(b·d) == (a·b)(c·d)            *)
 (*      （assoc/comm 五步；bd·ac、bc·ad 由 comm 一击先归此形）。 ---- *)
 Lemma wtc_K1 : forall a b c d : R,
   Id (mult (mult a c) (mult b d)) (mult (mult a b) (mult c d)).
@@ -216,9 +173,9 @@ Proof.
   exact (id_trans H1 (id_trans H2 (id_trans H3 (id_trans H4 (id_trans H5 H6))))).
 Qed.
 
-(* ---- G1③：real 平方非负（AbsSqClose #42 asc_sq_nonneg 候闸换装形，  *)
+(* ---- G1③：real 平方非负（AbsSqClose #42 asc_sq_nonneg 候闸重述形，  *)
 (*      逐件同型三分：正支零乘链 + le_mult_compat_weak；零支平方归零；  *)
-(*      负支 −t>0 支 + (−t)²==t² 环换装。 ---- *)
+(*      负支 −t>0 支 + (−t)²==t² 环重述。 ---- *)
 Theorem wtc_sq_nonneg : forall t : R, le zero (mult t t).
 Proof.
   intro t.
@@ -233,7 +190,7 @@ Proof.
     { exact (id_trans (id_cong (fun w => mult w t) (id_sym H0eq))
                       (id_trans (mult_comm zero t) (mult_zero t))). }
     exact (le_id_r zero zero (mult t t) (id_sym Htz) (le_refl zero)).
-  - (* t < 0：−t > 0 支 + (−t)²==t² 换装 *)
+  - (* t < 0：−t > 0 支 + (−t)²==t² 重述 *)
     assert (Ht0 : lt zero (opp t)).
     { exact (lt_id_l zero (opp zero) (opp t)
                (id_sym (plus_inv_unique zero (opp zero) zero
@@ -467,7 +424,7 @@ Proof.
 Qed.
 
 (* ---- G2：real 层二元 CS 装载——(ac+bd)² ≤ (a²+b²)(c²+d²)。          *)
-(*      Gram 恒等式换装 + 平方非负腿 + 加法保序。 ---- *)
+(*      Gram 恒等式重述 + 平方非负支 + 加法保序。 ---- *)
 Theorem wtc_cs2_real : forall a b c d : R,
   le (mult (plus (mult a c) (mult b d)) (plus (mult a c) (mult b d)))
      (mult (plus (mult a a) (mult b b)) (plus (mult c c) (mult d d))).
@@ -492,7 +449,7 @@ Proof.
                         Hsq).
 Qed.
 
-(* ---- 主收口定理（挂账 :28 库内诚实变体直给形，对账锚定照            *)
+(* ---- 主闭合定理（未竟项 :28 库内诚实变体直给形，对账基准照            *)
 (*      fa53_bs_abs_shape 模式）：结论面 = wtc_cs2_real 逐字。 ---- *)
 Theorem wtc_weak_triangle_load : forall a b c d : R,
   le (mult (plus (mult a c) (mult b d)) (plus (mult a c) (mult b d)))
@@ -501,7 +458,7 @@ Proof.
   exact wtc_cs2_real.
 Qed.
 
-(* ---- G2 封口件：wtc 族 sigT 两级账（Q 引擎腿 + real 装载腿，        *)
+(* ---- G2 闭合件：wtc 族 sigT 两级账（Q 引擎支路 + real 装载支路，        *)
 (*      照 wtl_family 模式）。 ---- *)
 Definition wtc_leg_q_cs2 : Type :=
   forall a b c d : Q,

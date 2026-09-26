@@ -1,66 +1,24 @@
 (* ============================================================ *)
-(* BanachNoHyp.v —— 席位CWB：Banach 代数 hplus/hwd 显式假设族摘除席  *)
-(* （批次 E-STAGING-CWB，20260914）                                  *)
-(* ============================================================ *)
-(* 立项（上游挂账定位）：                                            *)
-(*   台账 UpReqBanachAdd.v:746-752 挂账①「接口缺口：BanachAlg 类缺   *)
-(*   bcoef 加法同调/Qeq 同调字段——本件以显式假设（hplus/hwd）承载，   *)
-(*   上游扩类后即消」；UpReqBanachClassExt.v 尾注（:197-200）         *)
-(*   「下游 18 件摘除 hplus/hwd 携带（bpa_scal_plus/bpa_pair_mid/     *)
-(*   bpa_pair_tail/bpa_bpow_add/bpa_esp_term_binom/bpa_esp_binom     *)
-(*   及其消费链）」——本件即该挂账的执行席。                           *)
-(* 20260913 类手术（CLSPREP/CLSR 波次）已把两字段迁入冻结类：          *)
-(*   bcoef_plus : forall q r, bae (bplus (bcoef q) (bcoef r))        *)
-(*                                (bcoef (q + r))  （Exp.v:89）      *)
-(*   bcoef_wd   : forall q r, q == r -> bae (bcoef q) (bcoef r)      *)
-(*                                                 （Exp.v:90）      *)
-(*   bnorm_wd 余域同日 Id→QeqT（Exp.v:80）。                          *)
-(* 本件承载（前缀 bnh_，全库零撞名：grep "bnh_|BanachNoHyp"           *)
-(*   20260914 于 Live/build、ConstructiveWorld_Live、CW219_split      *)
-(*   三树零命中）：                                                  *)
-(*   S0 形状机器锚两件：类字段 ≡ BA 件显式假设形（类型即证明，        *)
-(*      BCE 卡 bxce_hplus_shape 同款技法）；                          *)
-(*   S1 标量面：bnh_scal_plus（消 hplus）/ bnh_mult_coef_wd（消 hwd    *)
-(*      乘法下拉形）；                                                *)
-(*   S2 配对件：bnh_pair_mid（消 hplus）/ bnh_pair_tail（消 hwd）；    *)
-(*   S3 主件：bnh_bpow_add（二项式恒等，hab 数学前提保留，             *)
-(*      hplus/hwd 双假设摘除）；                                      *)
-(*   S4 E 级数：bnh_esp_term_binom / bnh_esp_binom（二项式重组）。     *)
-(* 同位对账（原假设 → 新字段消费）：                                   *)
-(*   bpa_scal_plus  的 hplus → @bcoef_plus B q r                     *)
-(*   bpa_pair_mid   的 hplus → bnh_scal_plus（底座=bcoef_plus 字段）  *)
-(*   bpa_pair_tail  的 hwd   → @bcoef_wd  B q r H                    *)
-(*   bpa_bpow_add   的 hplus/hwd → S1/S2 件级联（根=bcoef 两字段）    *)
-(*   bpa_esp_term_binom / bpa_esp_binom 同上；                        *)
-(*   hab : bae (a·b) (b·a) 系数学前提（非交换代数二项式必需），        *)
-(*   同位保留，非接口假设。                                           *)
-(* 依赖复用（Require，禁重定义）：                                    *)
-(*   UpReqBanachExp（手术后类 BanachAlg/bpow/exp_series_partial）；    *)
-(*   UpReqBanachProd（bsum 引擎：bsum/bsum_ext/bsum_plus/bsum_rot/    *)
-(*     bsum_scal/bplus_swap4/esp_as_bsum）；                          *)
-(*   UpReqBanachAdd（零假设件白名单复用：Q 层 bpa_binom 系            *)
-(*     bpa_binom/bpa_binom_out + bae 助件 bpa_bmult_zero_l/           *)
-(*     bpa_bsum_mult_r/bpa_term_A/bpa_term_B/bpa_pair_head/           *)
-(*     bpa_scal_repack——该八件本不带 hplus/hwd，逐字复用不重证）。     *)
-(* 红线自审：                                                        *)
-(*   —— 禁词全零（按全文件计含头注：承认件/半途弃证/自由变元声明/      *)
-(*      中途弃证六类字面零命中）；                                    *)
-(*   —— 语句面全 Set 层：bae:BA→BA→Set 承载等词、Qeq 仅既有假设       *)
-(*      面形、QltT/QleT'/sigT 承载序与存在，零 Prop 泄露；            *)
-(*      bae 面一律 change（定义形）+ bae_trans 显式中件链，            *)
-(*      无 rewrite 于 bae（Q 层 Qeq 的 setoid 改写除外，库内先例）；   *)
-(*   —— 全件 Qed 真证，term-mode 显式组装，无降级占位；                *)
-(*   —— 提取探针 Obj.magic=0（独立小探针，验后删，证据在日志）；       *)
-(*   —— Print Assumptions 全件 Closed（文末八连打，证据在编译日志）。  *)
-(* 工程注（沿 B3Sv2/BINV3/PB 三卡）：                                 *)
-(*   类字段/字段引理一律 @显式喂实例（Rocq 9 类投影实例参隐式，        *)
-(*   「先槽后证」）；bmult_wd 源对 (a,b) 在前、目标对 (c,d) 在后        *)
-(*   （左固定 X T Y T）；bae_trans 中件在 y 槽第 3 显式参；            *)
-(*   主链 L1..L13 分段 assert + 末尾 @bae_trans 项式嵌套组链           *)
-(*   （沿 UpReqBanachAdd.v 原骨架逐段同位）。                          *)
-(* 编译配方（温控内，Rocq 9.1 同轨）：                                *)
-(*   source Live/toolchain/env.sh && cd Live/build                    *)
-(*   cpu_guard.sh -c "rocq compile -Q . '' BanachNoHyp.v"             *)
+(*  BanachNoHyp.v —— Banach 代数二项式与指数级数的零假设重证          *)
+(*  使命: 在无 hplus/hwd 显式假设的 Banach 代数上重证二项式恒等式族——  *)
+(*        形状机器锚 bnh_hplus_shape/bnh_hwd_shape（类字段 ≡ 显式      *)
+(*        假设形，类型即证明）；标量面 bnh_scal_plus/bnh_mult_coef_wd； *)
+(*        配对件 bnh_pair_mid/bnh_pair_tail；主件 bnh_bpow_add         *)
+(*        （二项式恒等，hab : bae (a·b) (b·a) 数学前提保留）；          *)
+(*        E 级数 bnh_esp_term_binom/bnh_esp_binom（二项式重组）。       *)
+(*  依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、UpReqBanachExp、  *)
+(*        UpReqBanachProd、UpReqBanachAdd；Stdlib QArith、Qabs、        *)
+(*        Arith、Lia。                                                  *)
+(*  对标: UpReqBanachClassExt 尾注所载六件 hplus/hwd 携带件              *)
+(*        （bpa_scal_plus/bpa_pair_mid/bpa_pair_tail/bpa_bpow_add/      *)
+(*        bpa_esp_term_binom/bpa_esp_binom）的同位零假设重证；          *)
+(*        另逐字复用 UpReqBanachAdd 零假设助件八件（不重证）。          *)
+(*  构造性: 全件 Qed 真证、零承认语句；语句面全 Set 层（bae 承载等词、   *)
+(*        QltT/QleT'/sigT 承载序与存在，零 Prop 泄露）；bae 面一律      *)
+(*        change（定义形）＋bae_trans 显式中件链；Print Assumptions     *)
+(*        全件 Closed。                                                 *)
+(*  编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树  *)
+(*        同世界重编），COQLIB/ROCQLIB 全字面环境前缀。                  *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -75,7 +33,7 @@ From Stdlib Require Import Lia.
 (* ============================================================ *)
 (* S0：形状机器锚 —— 类字段 ≡ BA 件显式假设形（类型即证明）           *)
 (* （BCE 卡技法：Definition 体注旧假设形，类型检查即机器验证；        *)
-(*   提取实形 e.bcoef_plus q r 为字段消费铁证。）                     *)
+(*   提取实形 e.bcoef_plus q r 为字段使用的机器验证。）               *)
 (* ============================================================ *)
 
 (* 锚一：bcoef_plus 字段形 ≡ hplus 假设形（bcoef 加法同调） *)
@@ -94,7 +52,7 @@ Definition bnh_hwd_shape (B : BanachAlg) (q r : Q) :
 
 (* 件一（↔ bpa_scal_plus，hplus 摘除）：标量配对合并
    bcoef q·T + bcoef r·T == bcoef (q+r)·T
-   （消费类字段 bcoef_plus：bdistrib_r 对称向 + bmult_wd 右槽换形） *)
+   （使用类字段 bcoef_plus：bdistrib_r 对称向 + bmult_wd 右槽换形） *)
 Lemma bnh_scal_plus : forall (B : BanachAlg) (q r : Q) (T : (@BA B)),
   @bae B (@bplus B (@bmult B (@bcoef B q) T) (@bmult B (@bcoef B r) T))
          (@bmult B (@bcoef B (q + r)%Q) T).
@@ -109,7 +67,7 @@ Proof.
 Qed.
 
 (* 件二（hwd 乘法下拉形，↔ ClassExt bxce_mult_coef_wd 在普通类上的同位）：
-   q == r ⟹ bcoef q·X == bcoef r·X（消费类字段 bcoef_wd） *)
+   q == r ⟹ bcoef q·X == bcoef r·X（使用类字段 bcoef_wd） *)
 Lemma bnh_mult_coef_wd : forall (B : BanachAlg) (q r : Q) (X : (@BA B)),
   q == r ->
   @bae B (@bmult B (@bcoef B q) X) (@bmult B (@bcoef B r) X).
@@ -128,7 +86,7 @@ Qed.
    gA i + gB (S i) == h (S i)（i < n'）
    系数 C(n',i)+C(n',S i) 恰为 C(S n',S i) 定义形（Pascal 递归
    配对序）；b 幂 S(n'−S i)=n'−i（lia 桥）与 S n'−S i（iota）归一；
-   合并步消费 bnh_scal_plus（底座=bcoef_plus 类字段） *)
+   合并步使用 bnh_scal_plus（基础=bcoef_plus 类字段） *)
 Lemma bnh_pair_mid : forall (B : BanachAlg) (a b : (@BA B)) (n' i : nat),
   (i < n')%nat ->
   @bae B (@bplus B
@@ -193,7 +151,7 @@ Qed.
 (* bpow_add 二项式恒等：ab=ba ⟹
    bpow (a+b) n == Σ_{k≤n} C(n,k)·a^k·b^(n−k)
    （Pascal 归纳 L1..L13 显式中件链，骨架与 UpReqBanachAdd.v 逐段同位；
-     ①④②③⑤..⑨ 各步消费面：bsum 引擎（Prod）+ 零假设助件（Add 白名单）
+     ①④②③⑤..⑨ 各步使用：bsum 引擎（Prod）+ 零假设助件（Add 许可清单）
      + 配对件 bnh_pair_mid/bnh_pair_tail（本件 S2，根=类字段）。） *)
 Lemma bnh_bpow_add : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
@@ -238,7 +196,7 @@ Proof.
     + apply (@bae_sym B). exact (@bplus_zero_l B (@bone B)).
     + apply (@bplus_wd_r B).
       apply (@bae_sym B). exact HX.
-  - (* 归纳步：Pascal 配对组装（蓝图 E152-13 降层） *)
+  - (* 归纳步：Pascal 配对组装（蓝图降层） *)
     set (g := fun k : nat =>
                 @bmult B (@bcoef B (bpa_binom n' k))
                          (@bmult B (bpow B a k)
@@ -365,7 +323,7 @@ Proof.
         exact (@bplus_assoc B (bsum B n' gA)
                  (bsum B n' (fun i : nat => gB (Datatypes.S i)))
                  (gA n')). }
-    (* ⑧ Pascal 中段并段 + 逐项配对合并（消费 bnh_pair_mid）+ 首尾对位 *)
+    (* ⑧ Pascal 中段并段 + 逐项配对合并（使用 bnh_pair_mid）+ 首尾对位 *)
     assert (L9 : @bae B (@bplus B (gB 0%nat)
                                   (@bplus B (@bplus B (bsum B n' gA)
                                                        (bsum B n'
@@ -488,7 +446,7 @@ Qed.
 
 (* 项级（↔ bpa_esp_term_binom，hab 保留 + hplus/hwd 摘除）：
    bpow (a+b) k·(1/k!) == Σ_{j≤k} (C(k,j)/k!)·a^j·b^(k−j)
-   （bnh_bpow_add 喂 bmult_wd 左槽 + bsum_scal 拉出 + 重打包
+   （bnh_bpow_add 喂 bmult_wd 左槽 + bsum_scal 拉出 + 重新组合
      bpa_scal_repack（bcoef_mult/comm 类字段链，零假设）） *)
 Lemma bnh_esp_term_binom : forall (B : BanachAlg) (a b : (@BA B)),
   @bae B (@bmult B a b) (@bmult B b a) ->
@@ -559,15 +517,11 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 台账（对称登记，不落承认件面）：                                    *)
-(*   ① 本件即 UpReqBanachAdd.v 挂账① 的执行：六件 hplus/hwd 携带件     *)
-(*     已在普通 BanachAlg 类（含 20260913 手术新字段）上零假设重证，    *)
-(*     下游新消费面一律 Require 本件取 bnh_ 系；冻结件 bpa_ 系维持      *)
+(*   ① 本件移除 UpReqBanachAdd.v 所留六件 hplus/hwd 携带假设     *)
+(*     下游新使用面一律 Require 本件取 bnh_ 系；既有 bpa_ 系维持      *)
 (*     原状只读不回改（双轨并存，禁互替）。                            *)
 (*   ② hab : bae (a·b) (b·a) 为非交换代数二项式恒等的数学前提，         *)
 (*     同位保留（bpa_ 件同款），非接口假设。                           *)
-(*   ③ exp_add 总装（S3 三角转置+极限乘法连续性）不属本席（挂账②）。   *)
-(*   ④ 系数桥 Pascal 形↔阶乘比形（挂账③）不属本席。                    *)
 (* ============================================================ *)
 
 Print Assumptions bnh_hplus_shape.

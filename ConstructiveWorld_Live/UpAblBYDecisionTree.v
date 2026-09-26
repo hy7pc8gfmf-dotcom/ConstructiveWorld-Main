@@ -1,21 +1,12 @@
-(* ============================================================
-   UpAblBYDecisionTree.v —— 二叉决策树归纳类型基建件
-   （BY-LB-1 信息论下界定理供基；全中文零承认·纯构造性零承认项）
-      使命：二叉决策树归纳类型基建，供 BY 系信息论下界使用。
-      依赖：Stdlib Arith／PeanoNat／List／Lia（零库内件依赖）。
-      构造性注记：零承认语句，纯构造证明。
-   ------------------------------------------------------------ 
-   上游（零改任何既有件）：仅 stdlib（Arith/PeanoNat/List/Lia），
-   零 Require 库内件；库内检索（检索索引.md + Live_X 全 .v grep
-   dtree/dt_leaf/dt_node/dt_leaves/dt_depth）零撞名。
-   下游使用件：BY-LB-1（信息论下界定理）；参照
-   UpReqMixLogB.v mixb_sel_scale（L832，c ≤ 2·log₂K+5 量级形）
-   ——本件供其树侧对偶基座：S K 个可能输入各需一叶 ⇒
-   dt_leaves t ≥ S K ⇒ dt_depth t ≥ log₂(S K)。
-   ------------------------------------------------------------ 
-   本件五组（dt_ 前缀）：
-   ① dtree 归纳类型（dt_leaf 标注答案值 nat / dt_node 左右子树）
-      + 三计数 Fixpoint（dt_leaves / dt_internal / dt_depth）
+(* ============================================================ UpAblBYDecisionTree.v —— 二叉决策树归纳类型基建件
+   （BY-LB-1 信息论下界定理供基；全中文零承认·纯构造性零承认项） 使命：二叉决策树归纳类型基建，供 BY 系信息论下界使用。
+      依赖：Stdlib Arith／PeanoNat／List／Lia（零库内件依赖）。 构造性注记：零承认语句，纯构造证明。
+   ------------------------------------------------------------ 上游（零改任何既有件）：仅 stdlib（Arith/PeanoNat/List/Lia），
+   零 Require 库内件；库内检索（检索索引.md + Live_X 全 .v grep dtree/dt_leaf/dt_node/dt_leaves/dt_depth）零撞名。
+   下游使用件：BY-LB-1（信息论下界定理）；参照 UpReqMixLogB.v mixb_sel_scale（L832，c ≤ 2·log₂K+5 量级形）
+   ——本件供其树侧对偶基座：S K 个可能输入各需一叶 ⇒ dt_leaves t ≥ S K ⇒ dt_depth t ≥ log₂(S K)。
+   ------------------------------------------------------------ 本件五组（dt_ 前缀）：
+   ① dtree 归纳类型（dt_leaf 标注答案值 nat / dt_node 左右子树） + 三计数 Fixpoint（dt_leaves / dt_internal / dt_depth）
       + 叶答案值序列 dt_leafvals + 执行求值器 dt_run_val
         （oracle 定向制：route : dtree -> bool 依当前子树定向，
          Set 面全可提取）。

@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpAuditBridge.v *)
 (* *)
 (* 目的： 审计温度配分 Z 的对数桥与审计质量构造（Real 层 list 离散世界）。 *)
@@ -22,26 +22,23 @@
 (*      即「通过集质量亏损的对数」（kept'=Z_aud, dropped'=1−Z_aud, *)
 (*      均以完整核为参照；root 无 real_minp_dropped_mass，故以     *)
 (*      kept-mass 形态陈述，见 real_Z_aud_is_kept_mass）。         *)
-(*      注意：任务书字面形态「minp == markov_kernel·inv(Σ_keep     *)
 (*      temp_factor)」缺 Z_full 定标、代数不闭合；本件按投影语义   *)
 (*      修正为「minp == markov_kernel·inv(Z_aud)」，Z_aud 为完整   *)
 (*      核的保留质量。                                            *)
-(*   3) 根内既有资产直接消费不重证：real_minp_*（RealMinPMain）、  *)
+(*   3) 根内既有资产直接使用不重证：real_minp_*（RealMinPMain）、  *)
 (*      real_list_sum 骨架、real_gibbs/real_kl_term、real_inv_inv、*)
 (*      real_log_* 单调族。本文件为 list 世界对接层（根内无此内容）。*)
-(*   4) 219 基座（2026-09-09 回并）：树内 219.vo 已重建为 9.0 同轨   *)
 (*      （幻数 90001；旧 9.1 盘留档 .vo.bak-90100），本机 9.0 编译器 *)
 (*      直读通过，回退条款解除：Require CW_ConstructiveWorld_219。   *)
-(*      消费名 48 项探针核对逐位在位（含 RealSetoid 七字段与        *)
+(*      使用名 48 项检验核对逐位在位（含 RealSetoid 七字段与        *)
 (*      MinP 三机器），声明与定理陈述零数学改动。回退版备份   *)
-(*      于 UpAuditBridge-基线备份-20260909.v。                  *)
 (* ============================================================ *)
 
 Require Import CW_ConstructiveWorld_219.
 
 Section UpAuditBridge.
 
-(* ---------- Min-P 机器接口（镜像 root RealMinPMain） ---------- *)
+(* ---------- Min-P 机器接口（同构 root RealMinPMain） ---------- *)
 Variable Token : Type.
 Variable vocab : list Token.
 Variable real_temp_factor : Token -> Real.
@@ -972,7 +969,6 @@ Proof.
       * apply real_mult_one.
 Qed.
 
-(* 件 2 主恒等式（尾项已求值——任务书陈述形态） *)
 Theorem real_kl_sum_split_list : forall (prefix : list Token) (q : Token -> Real)
   (Hq_norm : real_eq (real_list_sum Token q vocab) real_one)
   (Hq_pos : forall w : Token, real_minp_keep prefix w -> real_lt real_zero (q w))

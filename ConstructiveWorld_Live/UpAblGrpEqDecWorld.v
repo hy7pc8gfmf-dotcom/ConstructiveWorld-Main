@@ -1,36 +1,11 @@
-(* ============================================================ *)
-(* UpAblGrpEqDecWorld.v —— 族A grp_eq_dec 可判等前提的载体世界装配件      *)
-(* 源文件前提位置：S15_TailFEPUp.v                                  *)
-(*   （Module UpGRPO219 · Section GRPONoDup） *)
-(*   Variable grp_eq_dec : forall i j : Group, Or (Id i j) (Not (Id i j)) *)
-(* 本件使命：仿照既有 keep_dec:=@inl unit 的实例化先例，                  *)
-(*   装配具体 Group 载体世界（bool 二元组群）并供给该前提的可判等实例，    *)
-(*   逐项供给该节前提组（覆盖表/规模正性/无重复表/零奖励），收束为        *)
-(*   「抽象前提在具体载体上的实例化消解」定理形。                        *)
-(*                                                              *)
-(* 本件为零承认件：纯构造性；零公理、零承认、零新设前提、零经典逻辑；    *)
-(*   语句面全 Set 层（Id/Or/Not/InT/prod 均为 S01 Set 层形）；全 Qed/    *)
-(*   Defined 收尾；Print Assumptions 全 Closed 核验于件尾。              *)
-(*                                                              *)
-(* 事实注记：GRPONoDup 节 Group 为抽象 Set 参量，库内           *)
-(*   无既有具体形态；节前提组＝group_enum/group_cover/     *)
-(*   grp_eq_dec（本前提位置）/reward_group/G_pos（实名，  *)
-(*   group_size_pos 此名在库内不存在）/Hnd_g。S01 系实数接口       *)
-(*   RealInterfaceEnhanced 全库无具体实例（S02 明言完整实例属大    *)
-(*   工程），故实层轴以抽象参量入包（forall RI                            *)
-(*   泛量化），本件覆盖范围＝Group 载体轴，实层前提不在本件范围。        *)
-(*                                                              *)
-(* 非平凡承载点：Id 构造子判别（Id true/false 构造子冲突的 J 依赖消去，  *)
-(*   内核模式匹配判别——非 Corelib or_introl，Or 为 S01 Set 层别名        *)
-(*   Or:=A+B，@inl/@inr 直用）；四支判定逐支构造性见证；InT 判别         *)
-(*   （inversion 冲突消解）；nodup_g 项式装配；源模块 B2/B3 主定理 bool 世界实例化消解。 *)
-(*                                                              *)
-(* 所用上游出口（限定名引用）：UpGRPO219.nat_to_R_g/nodup_g/list_sum_g/  *)
-(*   grpo_indicator_sum_one/grpo_uniform_mass——Module 限定名避撞名；    *)
-(*   源文件零改动。                                                    *)
-(* 对标行：无直接对应物（可判等前提的具体载体实例层）。                  *)
-(* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblGrpEqDecWorld.v — grp_eq_dec 可判等前提的载体世界装配件
+   使命: bool 二元组群载体（枚举/覆盖/规模正性/无重复表/零奖励）逐项供给该节前提组，收束为抽象前提在具体载体上的实例化定理 gqc_supplied 与两件 bool 世界结论。
+   依赖: List、CW_ConstructiveWorld_219。
+   对标: 无直接对应物（可判等前提的具体载体实例层）；有限群枚举的可判定恒等实例。
+   构造性: 本件为零承认词面件：纯构造性；语句面全 Set 层（Id/Or/Not/InT/prod 均为 S01 Set 层形）；全 Qed/Defined 收尾；Print Assumptions 全 Closed 核验于件尾。
+   编译配方: Rocq 9.1 直调 coqc（无 -Q），cpu_guard 包裹，-o 输出临时目录。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 Require Import CW_ConstructiveWorld_219.

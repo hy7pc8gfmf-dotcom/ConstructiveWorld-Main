@@ -1,13 +1,13 @@
-(* uac_probe1.v — 席位CYC6 探针：闭名 @ 全显签名打表（E370 定型三步之一） *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 Require Import CW_ConstructiveWorld_219.
 Require Import UpReqAlgebra.
 Require Import UpReqAlign.
 Require Import UpReqAlign2.
 Require Import UpReqAlign3.
 Require Import UpReqU2.
-(* CZD10 勘误 20260918: 原 `Require UpReqU2.`（无 Import）导致
+(*
    Check @log_req_witness_compat 报 reference not found——名字未进环境；
-   补 Import 即绿（仅探针打表层，零证明面改动）。 *)
+   补 Import 即绿（仅检验打表层，零证明面改动）。 *)
 Import RealInterfaceEnhancedMod.
 
 Check @req2_backward_kl_step.

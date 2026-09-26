@@ -1,66 +1,68 @@
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 —— T278 台账席 散落挂账集中清偿（原 T265 刀体    *)
-(* 原样复验；本席连带编 P7BoundedSoftmaxDeep 入池补齐依赖链后编译判绿）*)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性收口，文尾保留    *)
+(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
 (* 原件 Print Assumptions 追印面。清单：                          *)
 (*   lhs_lo_lt_hi（原 L96，5 句刀体）                                    *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* LoHiSqueeze.v —— 席位P7D（批次 E-STAGING-P7D）合璧包装定理     *)
 (*                                                                *)
 (* 使命：论文7《率即算法》夹逼包装——P7A 已证 lo=e^{−Δ/T}<1        *)
 (*   （Paper7Ablation.p7a_lo_lt_one），P7C 已证对偶 hi=e^{Δ/T}>1  *)
 (*   （P7BoundedSoftmaxDeep.p7d_hi_gt_one）。本件把两件合璧为单    *)
 (*   件陈述 lt lo one ∧ lt one hi（Set 层 And = prod，S01:66），   *)
-(*   再以 lt_trans 一步导出夹逼推论 lt lo hi，最终消费             *)
+(*   再以 lt_trans 一步导出夹逼推论 lt lo hi，最终使用             *)
 (*   p7a_delta_star_pos（δ*=lo²>0）导出 δ* ∈ (0,1) 完整包装，     *)
-(*   并以 p7a_omd_pos＋p7a_omd_lt_one 合龙 κ:=1−δ*∈(0,1) 前件包   *)
-(*   （P7A 卡所记论文 §6.3「开放工作第1项」的收口件）。            *)
+(*   并以 p7a_omd_pos＋p7a_omd_lt_one 接合 κ:=1−δ*∈(0,1) 前件包   *)
+(*   （P7A 卡所记论文 §6.3「开放工作第1项」的闭合件）。            *)
 (*                                                                *)
-(* 侦查对账（两组前提兼容性，探针 Check 实测定谳）：               *)
+(* 侦查对账（两组前提兼容性，检验 Check 实测已证结论）：               *)
 (*   p7a_lo_lt_one 出节形（Section P7aSoftBound；Rocq 9 出节剪枝  *)
-(*   未用变量 temp/temp_pos——语句与证明体均不消费它们）：          *)
+(*   未用变量 temp/temp_pos——语句与证明体均不使用它们）：          *)
 (*     forall Delta (Delta_pos : lt zero Delta) expf expf_zero    *)
 (*            expf_mono_lt invT, lt zero invT ->                 *)
 (*            lt (expf (mult invT (opp Delta))) one  (RI 隐式)    *)
 (*     ——通用 invT 形，invT := inv_pos temp temp_pos 处经          *)
-(*     inv_pos_pos temp temp_pos 放电；                            *)
+(*     inv_pos_pos temp temp_pos 实例化消解；                            *)
 (*   p7d_hi_gt_one 全称形（无 Section，8 参齐不剪枝）：            *)
 (*     forall temp temp_pos Delta Delta_pos expf expf_pos          *)
 (*            expf_zero expf_mono_lt,                             *)
 (*            lt one (expf (mult (inv_pos temp temp_pos) Delta)). *)
 (*   并集 = 8 变量 {temp,temp_pos,Delta,Delta_pos,expf,expf_pos,  *)
 (*   expf_zero,expf_mono_lt}，零冲突零冗余——同一 softmax 实例     *)
-(*   上下文同时放电两件，兼容 ✔。剪枝差异（p7a 少 temp 面、       *)
+(*   上下文同时实例化消解两件，兼容 ✔。剪枝差异（p7a 少 temp 面、       *)
 (*   p7d 少 invT 自由度）在包装层互相补齐，正合璧之趣。            *)
 (*                                                                *)
-(* δ*<1 支的出处：任务书所指 p7a_omd_lt_one 实为 1−δ*<1（κ<1，    *)
-(*   不含 δ*<1 信息，探针签名核实在案）；δ*<1 在件 c 从合璧件左支  *)
+(*   不含 δ*<1 信息，检验签名核实在案）；δ*<1 在件 c 从合璧件左支  *)
 (*   lo<1 与 lo>0 经 lt_mult_compat＋lt_id_r＋lt_trans 新导（语句  *)
 (*   与基座 AttnDoeblin.bs_delta_star_lt_one:584 对齐，进路更短——  *)
-(*   不经 lo·hi=1 恒等式，纯序论三步）。κ 件（段二）消费            *)
+(*   不经 lo·hi=1 恒等式，纯序论三步）。κ 件（段二）使用            *)
 (*   p7a_omd_pos（δ*<1 ⟹ 0<κ）＋p7a_omd_lt_one（lo_pos ⟹ κ<1），  *)
-(*   出节携带 Context {DO : DecidableOrder RI}（fa53 消费链所致，  *)
-(*   隐式不可反推，@ 全参形喂参——P7A 卡消费法先例）。             *)
+(*   出节携带 Context {DO : DecidableOrder RI}（fa53 使用链所致，  *)
+(*   隐式不可反推，@ 全参形供给——P7A 卡使用法先例）。             *)
 (*                                                                *)
 (* 编译根：基座 ConstructiveWorld_vo_901/ 内 fa53_compat_abs.vo   *)
-(*   （Sep17 05:04）、AttnDoeblin/CW_219 vo（Sep17 03:16）对       *)
-(*   S01_BaseRing.vo（Sep18 04:50 重编）digest 漂移——基座原生      *)
+(*   （Sep17 ）、AttnDoeblin/CW_219 vo（Sep17 ）对       *)
+(*   S01_BaseRing.vo（Sep18  重编）digest 漂移——基座原生      *)
 (*   Paper7Ablation.vo 单根加载同样报 inconsistent assumptions    *)
-(*   （探针实证），故按 CYA7b/CZC10 处置定式走复制盘 /tmp/p7droot  *)
-(*   单根：以 /tmp/czc10_base 一致层（S01/AttnDoeblin/CW_219 探针  *)
+(*   （检验实证），故按 CYA7b/CZC10 处置定式走复制盘 /tmp/p7droot  *)
+(*   单根：以 /tmp/czc10_base 一致层（S01/AttnDoeblin/CW_219 检验  *)
 (*   全 OK）覆盖基座骨架，fa53/Paper7Ablation/P7BoundedSoftmaxDeep *)
 (*   单源对齐重编（各 EXIT=0、PA 全 Closed）。vo_901 正本零碰；    *)
 (*   消融50/ 的 fa53 编译副产物已移 /tmp/p7d_stale 隔离（防        *)
-(*   CYA7b 双根撞名墙姊妹坑）。                                    *)
+(*   CYA7b 双根同名冲突墙姊妹坑）。                                    *)
 (*                                                                *)
 (* 红线自审：语句面全 Set 层（合取用 S01 And=prod，零 Prop 泄露）； *)
-(*   五禁词零出现；非平凡性＝两席异构出口（含剪枝形）的合璧规范化  *)
-(*   ＋序论链新导；原 vo_901 正本零改；前缀 lhs_ 全库防撞           *)
+(*   ＋序论链新导；原 vo_901 正本零改；前缀 lhs_ 全库防同名冲突           *)
 (*   （grep 零命中）。                                             *)
 (* ============================================================ *)
 
@@ -90,9 +92,9 @@ Let lo := expf (mult invT (opp Delta)).
 Let hi := expf (mult invT Delta).
 
 (* 件 a：合璧包装——lt lo one ∧ lt one hi（Set 层 And = prod）。
-   左支消费 p7a_lo_lt_one（剪枝形：Delta/Delta_pos/expf/expf_zero/
-   expf_mono_lt 五参＋invT；inv_pos_pos 放电 lt zero invT）；
-   右支消费 p7d_hi_gt_one（全称 8 参形，temp 面齐全）。 *)
+   左支使用 p7a_lo_lt_one（剪枝形：Delta/Delta_pos/expf/expf_zero/
+   expf_mono_lt 五参＋invT；inv_pos_pos 实例化消解 lt zero invT）；
+   右支使用 p7d_hi_gt_one（全称 8 参形，temp 面齐全）。 *)
 Theorem lhs_lo_lt_one_hi : And (lt lo one) (lt one hi).
 Proof.
   split.
@@ -114,11 +116,11 @@ Proof.
 Qed.
 
 (* 件 c：0 < δ* < 1 完整包装（Set 层 And）。
-   左支：p7a_delta_star_pos（探针签名 forall lo, lt zero lo -> …；
-   DO/temp 面均已被出节剪枝，lo_pos := expf_pos(invT·oppΔ) 直喂）。
+   左支：p7a_delta_star_pos（检验签名 forall lo, lt zero lo -> …；
+   DO/temp 面均已被出节剪枝，lo_pos := expf_pos(invT·oppΔ) 直接供给）。
    右支（δ*<1 新导）：lo<1（合璧件左支）＋lo>0 ⟹ lo·lo < lo·1
    （lt_mult_compat 右乘 lo 保严格序）＝lo（mult_one 右单位律经
-   lt_id_r 降形）<1（再消费 lo<1）——lt_trans 合龙。 *)
+   lt_id_r 降形）<1（再使用 lo<1）——lt_trans 接合。 *)
 Theorem lhs_delta_star_bounded :
   And (lt zero (mult lo lo)) (lt (mult lo lo) one).
 Proof.
@@ -136,9 +138,9 @@ Qed.
 
 End LhsPair.
 
-(* ############ 段二：κ := 1−δ* ∈ (0,1) 前件包合龙（DO 节） ######## *)
-(* p7a_omd_pos/p7a_omd_lt_one 出节保留 DO（fa53 消费链），其隐式参
-   不可由结论反推，须 @ RI DO 全参形喂参（P7A 卡消费法先例）。 *)
+(* ############ 段二：κ := 1−δ* ∈ (0,1) 前件包接合（DO 节） ######## *)
+(* p7a_omd_pos/p7a_omd_lt_one 出节保留 DO（fa53 使用链），其隐式参
+   不可由结论反推，须 @ RI DO 全参形供给（P7A 卡使用法先例）。 *)
 
 Section LhsStar.
 
@@ -159,10 +161,10 @@ Let invT := inv_pos temp temp_pos.
 Let lo := expf (mult invT (opp Delta)).
 
 (* 件 d：0 < 1−δ* < 1 完整包装（论文 §6.3 的 κ∈(0,1) 前件包）。
-   左支：p7a_omd_pos 消费件 c 右支（δ*<1 ⟹ 0<κ）；
-   右支：p7a_omd_lt_one 消费 lo_pos（0<δ* ⟹ κ<1）。
+   左支：p7a_omd_pos 使用件 c 右支（δ*<1 ⟹ 0<κ）；
+   右支：p7a_omd_lt_one 使用 lo_pos（0<δ* ⟹ κ<1）。
    两支出节前件（δ*<1 前件／lo_pos 前件）分别由段一件 c 与
-   expf_pos 字段证书放电。 *)
+   expf_pos 字段证书实例化消解。 *)
 Theorem lhs_omd_bounded :
   And (lt zero (minus one (mult lo lo)))
       (lt (minus one (mult lo lo)) one).

@@ -1,49 +1,11 @@
-(* ===================================================================== *)
-(* FepIdConsume.v —— E-STAGING-P6B 席位（论文6 定理 6.1–6.3 的消费定理推导） *)
-(*                                                                       *)
-(* 论文坐标：论文6-自由能变分原理的构造性同一性-正式版.md §6              *)
-(*   三条识别（§6 原语句面，C3/§6.5 原文）：                               *)
-(*     ① 温度匹配      Id (inv_pos T T_pos) (inv_pos D D_pos)             *)
-(*     ② 能量为负logits forall s, Id (energy s) (opp (z s))               *)
-(*     ③ 配分函数匹配  Id Z_thermo (partition_function_temp z)            *)
-(*   定理 6.2（attention_is_gibbs_temp@S06）/ 定理 6.3（fep_align@S15）    *)
-(*   为已证基座；本席使命=从 P6A 的 FepIdentClass.v（fic_ 类＋Real 实例）  *)
-(*   出发推导消费定理，使「识别条件库内化」接回论文同一性语句面。         *)
-(*                                                                       *)
-(* 本件交付（fic2_ 前缀全库防撞）：                                        *)
-(*   T1 fic2_attention_is_gibbs_temp_id_consume —— 三条件齐备 ⟹ 定理 6.2  *)
-(*      Id 等式重证（消费 FepIdentClass 的字段提取闭环件                   *)
-(*      fic_attention_is_gibbs_temp_via_id：识别数据→类对象→同一性）。     *)
-(*   T2a fic2_identified_boltzmann_dual —— 三条件齐备 ⟹ 识别后参数面      *)
-(*      Boltzmann（能量:=opp·z、配分:=温度配分）与热力学面                 *)
-(*      boltzmann_dist_attn 的逐点 Id 桥（①②③ 全部真实进场：mult 兼容    *)
-(*      两腿用①②、inv_pos_ext 用③；本席手证非平凡件）。                 *)
-(*   T2b fic2_fep_align_face_consume —— 定理 6.3 fep_align 对偶面消费     *)
-(*      （Boltzmann 在左、softmax 在右的对偶取向；识别②已由 FEP 段        *)
-(*      参数化 base:=opp·z 内建，①③由 T2a 在热力学面兑现）。             *)
-(*   T3 fic2_rlhf_gap_identified_consume —— rlhf_suboptimality_gap 消费位 *)
-(*      （识别类实例在场的同一载体上，对齐递减恒等式的 gap==β·KL 面；      *)
-(*      识别为语义挂接：KL 正则最优策略=Boltzmann 理性即识别①②的 RLHF    *)
-(*      面——温度 β、奖励=负能量；恒等式本身无条件，诚实注记）。           *)
-(*   T4 fic2_real_instance_gibbs_consume —— FepIdentClass 两半会师：      *)
-(*      在具体柯西实例 FepIdentificationReal（fic_T:=fic_D:=one，三条件    *)
-(*      构造性可满足）上兑现类层 req 面同一性 fic_attention_is_gibbs_temp  *)
-(*      （exp 兼容供体=fic_real_exp_neg_compat）。                        *)
-(* 墙面诚实声明：                                                          *)
-(*   · P6A 转换墙遵守——类层定理结论 exact 回 S06 Id 语句面不可行           *)
-(*     （partition_function_temp_pos Qed 不透明），Id 面一律走字段提取     *)
-(*     闭环/hand-term，不做结论面转换（P6A 卡坑4）。                       *)
-(*   · 基座迁移实录：ConstructiveWorld_vo_901 的 S01_BaseRing.vo 于       *)
-(*     09-18 04:50 被换新而 CW_ConstructiveWorld_219.vo 未重编（digest 墙）； *)
-(*     Live/vorebuild_901 撞 stdlib 重装漂移墙——本件按交接文档 §3.5        *)
-(*     未登记录消费法：基座=Live/vorebuild（246 件，试载 EXIT=0），        *)
-(*     TempSoftmaxInstantiation 侧编 /tmp/fic2_side，FepIdentClass         *)
-(*     原地侧编（只编译消费，源零改）。                                    *)
-(* 纪律：纯构造性；语句面零 Prop 泄露（lt/Id 均 Set 值面）；非平凡          *)
-(*   （T2a 为七步 Id 群律真证；其余消费定理的非平凡性居于被消费链）；      *)
-(*   零假设位命令——识别簇均为显式定理参（T2① 形）；尾部 Print            *)
-(*   Assumptions 全 Closed。                                              *)
-(* ===================================================================== *)
+(* ==========================================================================)
+   FepIdConsume.v — FEP 识别类接口的实例化消解面
+   使命: fic2_ 系五定理：识别类 Gibbs 温度恒等（fic2_attention_is_gibbs_temp_id_consume）、识别化 Boltzmann 对偶（fic2_identified_boltzmann_dual）、fep_align 对偶面（fic2_fep_align_face_consume）、rlhf 间隙识别位（fic2_rlhf_gap_identified_consume）与实实例闭合（fic2_real_instance_gibbs_consume）。
+   依赖: CW_ConstructiveWorld_219、TempSoftmaxInstantiation、FepIdentClass。
+   对标: 自由能原理（FEP）识别等价类的温度/Gibbs 结构实例层。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import CW_ConstructiveWorld_219.
 Require Import TempSoftmaxInstantiation.
@@ -51,7 +13,7 @@ Require Import FepIdentClass.
 
 (* ===================================================================== *)
 (* T1：三条件齐备 ⟹ 定理 6.2（attention_is_gibbs_temp）Id 等式重证         *)
-(*     消费形：FepIdentClass 的 fic_attention_is_gibbs_temp_via_id         *)
+(*     使用形：FepIdentClass 的 fic_attention_is_gibbs_temp_via_id         *)
 (*     （fic_id_data 装载 + 三字段提取 + S06 基座，P6A 闭环件）。           *)
 (* ===================================================================== *)
 Theorem fic2_attention_is_gibbs_temp_id_consume :
@@ -136,7 +98,7 @@ Proof.
                      (id_sym (H2 s)))
                   (id_cong2 (@S01_BaseRing.mult RI) H1
                      id_refl))).
-  (* 交换＋兼容提升＋交换收口：inv(Zf)·e^{invT·(−z)} == inv(Z)·e^{invD·E} *)
+  (* 交换＋兼容提升＋交换闭合：inv(Zf)·e^{invT·(−z)} == inv(Z)·e^{invD·E} *)
   exact (id_trans
            (mult_comm (@S01_BaseRing.inv_pos RI
                           (@partition_function_temp RI SS SO T T_pos z0)
@@ -162,7 +124,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* T2b：定理 6.3 fep_align 对偶面消费（Boltzmann 在左、softmax 在右）。     *)
+(* T2b：定理 6.3 fep_align 对偶面使用（Boltzmann 在左、softmax 在右）。     *)
 (*   识别②（能量=负 logits）已由 FEP 段参数化 base:=opp·z 内建；          *)
 (*   识别①③由 T2a 在热力学面兑现——对偶面本身无条件（诚实注记）。          *)
 (* ===================================================================== *)
@@ -187,7 +149,7 @@ Proof.
 Qed.
 
 (* ===================================================================== *)
-(* T3：rlhf_suboptimality_gap 消费位——识别类实例在场（三条件齐备的世界）   *)
+(* T3：rlhf_suboptimality_gap 使用位——识别类实例在场（三条件齐备的世界）   *)
 (*   的同一载体上，对齐递减恒等式 gap==β·KL(p‖pi_star) 照常兑现。          *)
 (*   语义挂接（诚实注记）：KL 正则最优策略=Boltzmann 理性，即识别①②的    *)
 (*   RLHF 面（温度 β 匹配、奖励=负能量）；gap 恒等式本身无条件成立，        *)

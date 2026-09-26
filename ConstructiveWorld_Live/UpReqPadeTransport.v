@@ -1,7 +1,7 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqPadeTransport.v                                          *)
 (*                                                               *)
-(* 席Q8：GEO1 轨道缺·Padé Q→Real 运输席（相位=分析重转编译重）。    *)
+(* Q8：GEO1 轨道缺·Padé Q→Real （相位=分析重转编译重）。    *)
 (* 目的：Q→Real 运输桥族——把 Q 层 Padé 界运到 Real 层              *)
 (*   cauchy_real_exp 的 eps/Bishop 形，Real 层首获 Padé 精度 exp 界。 *)
 (*                                                               *)
@@ -14,7 +14,7 @@
 (*        （见证 eps := (y^{n+1}/(n+1)!)/2、N := n+1）；            *)
 (*   G2  qtr_mult_eq_compat_l + qtr_pade_lower_real —— 运输引擎     *)
 (*        与 Padé 精度 Real 层下界首件（载体任取 w ≡ e^y，          *)
-(*        乘开免除法形，消费 cpl_lower_even）；                     *)
+(*        乘开免除法形，使用 cpl_lower_even）；                     *)
 (*   G2b qtr_pade_lower_extract —— Real→逐点证书反射：              *)
 (*        cpl 的 real_lt 见证解包为显式 N/eps 的逐点 QltT 形。       *)
 (*                                                               *)
@@ -24,8 +24,8 @@
 (*   UpReqPadeLower（cpl_lower_even + cpl_qpow_pos/cpl_ep_ext/     *)
 (*   cpl_qlt_le）。只 Require 不改源。                              *)
 (*                                                               *)
-(* 分工互引：Q4 席 UpReqEnvelopeDual.v 做粗包络对偶（在飞，本席     *)
-(*   零触碰）；本席做 Padé 精度运输，精度层级不同。                 *)
+(* 分工互引：Q4  UpReqEnvelopeDual.v 做粗包络对偶（进行中，     *)
+(*   零触碰）；做 Padé 精度运输，精度层级不同。                 *)
 (*                                                               *)
 (* 公理面：全员 Print Assumptions 预期 Closed（无公理依赖）；       *)
 (*   纯构造性、零 LPO、零经典极限/积分性质；Set 层 Hypothesis 位     *)
@@ -42,7 +42,7 @@ Require Import UpReqPadeLower.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith Lia Setoid.
 
 (* ============================================================ *)
-(* B0 桥件：Q 层小组合件（自持零外部依赖）                          *)
+(* B0 桥接引理：Q 层小组合件（自持零外部依赖）                          *)
 (* ============================================================ *)
 
 (* a < b ⟹ 0 < b − a（QltT 面）。

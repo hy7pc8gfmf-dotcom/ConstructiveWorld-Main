@@ -1,46 +1,52 @@
-(* ========================================================================= *)
-(* 【ToyR 战役·包AR·T283 台账席】玩具级定理同名非平凡替换稿（补标头注）      *)
+(* ============================================================
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   依赖：见原头注 Require 面与依赖段。
+   对标：见原头注来源/对标行。
+   构造性：纯构造性、零承认件（详见原头注红线自审段）。
+   编译配方：coqc -native-compiler no -q -Q . ""。
+   ============================================================ *)
+(* 【ToyR ·包AR· 记录件】玩具级定理同名非平凡替换稿（补标头注）      *)
 (*                                                                           *)
-(* 本稿系 ToyR 战役包AR 替换落件（原名落件）；落件时头部漏植战役标记，       *)
-(* 本块由 T326 异常修复席于 2026-09-22 补植：仅加头注，语句面／证明体／      *)
+(* 本稿系 ToyR 包AR 替换落件（原名落件）；落件时头部漏植标记，       *)
+(* 本块由  异常修复记录于 补注：仅加头注，语句面／证明体／      *)
 (* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/T283。       *)
-(* 替换定理清单：ga_boltzmann_fixed（共 1 刀，刀面以台账为权威）             *)
+(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
+(* 替换定理清单：ga_boltzmann_fixed（共 1 刀，刀面以记录为权威）             *)
 (* 非平凡性口径：五段命名见证链于 list 载体原地重演，十三参 mega-exact       *)
-(* 直取收口，段段唯一性断言落刀，无行拆分式假非平凡。                        *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；补标零改动不触        *)
-(* 证明面，落件录判绿承来源台账。                                            *)
+(* 直取闭合，段段唯一性断言落件，无行拆分式假非平凡。                        *)
+(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；补标零改动不触        *)
+(* 证明面，落件录判绿承来源记录。                                            *)
 (* ========================================================================= *)
 (* ============================================================ *)
-(* GibbsAttractor.v —— 施工席位 B1：Gibbs/Boltzmann 平稳分布的      *)
-(* 指数吸引性（A2 组合榜 组 1 + 组 2 对接件）2026-09-16             *)
+(* GibbsAttractor.v —— 施工位位 B1：Gibbs/Boltzmann 平稳分布的      *)
+(* 指数吸引性（A2 组合榜 组 1 + 组 2 对接件）             *)
 (* ============================================================ *)
 (* 依赖坐标（全部为 215 件 90001 基座内已编译库件，只读复用）：      *)
 (*   A 件 UpTVDoeblin.v:1564  tv_doeblin_iter                     *)
 (*        TV(Kⁿ·μ, Kⁿ·ν) ≤ (1−δ)ⁿ·TV(μ,ν)（Section TVRealWorld）； *)
 (*        :1970 tvd_dstar_iter_contraction——δ 接口被显式常数        *)
-(*        δ* := e^{−2γ/T} 满足后的旗舰迭代件（Section TVDStar），    *)
+(*        δ* := e^{−2γ/T} 满足后的主定理迭代件（Section TVDStar），    *)
 (*        率 ω := tv_omd 应用于 δ-star，即 1 − e^{−2γ/T}。          *)
 (*   B 件 UpReqSteadyThermo.v:100 real_steady_state_boltzmann      *)
 (*        Σ_{s'} π(s')·T(s',s) == π(s)（detailed balance ⟹ 稳态，   *)
 (*        抽象 S 载体 Section RealThermoSteady）。                  *)
-(* 本件承载（前缀 ga_，基座与全树 grep 零撞名）：                    *)
+(* 本件承载（前缀 ga_，基座与全树 grep 零同名冲突）：                    *)
 (*   ① ga_pi_boltzmann_norm —— B 件载体实例化（π :=                 *)
 (*        real_boltzmann_prob 于离散枚举世界）后 partition 条件      *)
-(*        放电 Σπ == 1（real_list_sum_linear + inv_pos 收口）。      *)
-(*   ② ga_boltzmann_fixed —— 小连接件（任务书所指「A 的不动点形 =    *)
+(*        实例化消解 Σπ == 1（real_list_sum_linear + inv_pos 闭合）。      *)
+(*   ② ga_boltzmann_fixed —— 小连接件（规格文件所指「A 的不动点形 =    *)
 (*        B 的 tv_dstar 实例对接」）：沿 real_steady_state_boltzmann *)
 (*        于 S := list Real、sum := real_list_sum(枚举)、           *)
 (*        transition := tvd_K（Gibbs 核）五步链重演，闭出            *)
 (*        tv_step(gK, π) == π 逐点形（A 件迭代器的不动点形）。        *)
 (*   ③ ga_titer_fixed —— 不动点沿 tv_titer 传播：K·π==π ⟹          *)
 (*        Kⁿ·π == π（逐点；real_list_sum_ext + 归纳）。              *)
-(*   ④ ga_attractor_contraction —— 旗舰（任务书「≤ ω^k·TV(μ,π) 形」*)
+(*   ④ ga_attractor_contraction —— 主定理（规格文件「≤ ω^k·TV(μ,π) 形」*)
 (*        支）：对一切 n，TV(Kⁿ·μ, π) ≤ (1−e^{−2γ/T})ⁿ·TV(μ,π)。    *)
-(*        证明 = A 件旗舰于 ν := π 放电 + ③不动点传播 + TV 泛函      *)
+(*        证明 = A 件主定理于 ν := π 实例化消解 + ③不动点传播 + TV 泛函      *)
 (*        逐点外延运输（tvd_eq_minus_compat + real_eq_abs_compat    *)
 (*        + real_list_sum_ext）。率显式：δ* = e^{−2γ/T}。           *)
-(* 显式混合时间注记（任务书「显式 k 上界公式」面）：率件④对一切 n     *)
+(* 显式混合时间注记（规格文件「显式 k 上界公式」面）：率件④对一切 n     *)
 (*   成立且 ④ 的率 ωⁿ 随 n 单调不增，故论文级混合步数               *)
 (*   k = ⌈ln(ε/TV₀)/ln(1−δstar)⌉ 的可计算上界选取所需两要素（每 n   *)
 (*   的显式率 + ε-选择）在本件形式化边界内齐备；库内 Real 层无        *)
@@ -55,9 +61,9 @@
 (*   —— 诚实接口沿基座口径显式入位：Labs（|Σf| ≤ Σ|f|，A 件同位      *)
 (*      前提）、part_cond / dbalance（B 件同位前提），零隐藏假设；    *)
 (*   —— 文末 Print Assumptions 审计口 3 条（②③④ 主件），全 Closed。 *)
-(* T283 注记（拆步清偿）：② 原十三参 mega-exact 直取改为五段命名见证链   *)
+(*  注记（拆步完成）：② 原十三参 mega-exact 直取改为五段命名见证链   *)
 (*   （①逐点 detailed balance 换轴 ②real_list_sum_ext 求和外延 ③线性提取  *)
-(*   ④tvd_K_row 核行归一化 ⑤mult_compat 对角+real_mult_one 收口），在     *)
+(*   ④tvd_K_row 核行归一化 ⑤mult_compat 对角+real_mult_one 闭合），在     *)
 (*   list 载体原地重演 B 件稳态五步链，不再整件转发引擎；语句面/Require    *)
 (*   面/声明名序零改动。                                                  *)
 (* 编译配方（9.0.1 临时轨，VO_BASE_901 = ConstructiveWorld_vo）：    *)
@@ -124,7 +130,7 @@ Variable dbalance : forall s s' : list Real,
           (real_mult (pi_boltzmann s') (gK s' s)).
 
 (* ============================================================ *)
-(* ① π 是分布：Σπ == 1（partition 条件放电；B 件归一化闭合件）       *)
+(* ① π 是分布：Σπ == 1（partition 条件实例化消解；B 件归一化闭合件）       *)
 (* ============================================================ *)
 Lemma ga_pi_boltzmann_norm :
   real_eq (real_list_sum (list Real) pi_boltzmann states) real_one.
@@ -185,7 +191,7 @@ Proof.
            real_eq (real_mult (pi_boltzmann w) (gK w s))
                    (real_mult (pi_boltzmann s) (gK s w))).
   { intro w. exact (dbalance w s). }
-  (* 段②：求和外延壳（real_list_sum_ext 搬运段①逐点形） *)
+  (* 段②：求和外延壳（real_list_sum_ext 迁移段①逐点形） *)
   assert (Hext : real_eq
            (real_list_sum (list Real)
               (fun w : list Real => real_mult (pi_boltzmann w) (gK w s)) states)
@@ -208,7 +214,7 @@ Proof.
            (real_list_sum (list Real) (fun w : list Real => gK s w) states)
            real_one).
   { exact (tvd_K_row states n_pos Ttemp Ttemp_pos z s). }
-  (* 段⑤：ext/linear 链接 + π(s)·1 == π(s)（mult_compat 对角收口） *)
+  (* 段⑤：ext/linear 链接 + π(s)·1 == π(s)（mult_compat 对角闭合） *)
   apply (real_eq_trans
            (real_list_sum (list Real)
               (fun w : list Real => real_mult (pi_boltzmann w) (gK w s)) states)
@@ -246,7 +252,7 @@ Proof.
   - (* n = 0：tv_titer 0 π ≡ π *)
     apply real_eq_refl.
   - (* n+1：tv_titer(S n) π ≡ tv_step(K, tv_titer n π)；
-       求和外延（逐点 IH）+ 不动点假设两步链收口 *)
+       求和外延（逐点 IH）+ 不动点假设两步链闭合 *)
     apply (real_eq_trans
              (tv_step states gK (tv_titer states gK n pi_boltzmann) s)
              (tv_step states gK pi_boltzmann s)
@@ -266,7 +272,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* ④ 旗舰：Gibbs/Boltzmann 吸引性（任务书「≤ ω^k·TV(μ,π) 形」支）     *)
+(* ④ 主定理：Gibbs/Boltzmann 吸引性（规格文件「≤ ω^k·TV(μ,π) 形」支）     *)
 (*   对一切 n：TV(Kⁿ·μ, π) ≤ (1 − e^{−2γ/T})ⁿ·TV(μ,π)               *)
 (*   证明 = A 件 tvd_dstar_iter_contraction（ν := π）+ ③ 不动点       *)
 (*   传播 + TV 泛函逐点外延运输。                                    *)
@@ -322,7 +328,7 @@ Proof.
                         (tv_titer states gK n pi_boltzmann s)
                         (real_eq_refl (tv_titer states gK n mu s))
                         (real_eq_sym _ _ (ga_titer_fixed n s)))))). }
-  (* 步 2：A 件旗舰于 ν := π 放电，步 1 之链接之 *)
+  (* 步 2：A 件主定理于 ν := π 实例化消解，步 1 之链接之 *)
   apply (real_le_trans
            (tv_doeblin states (tv_titer states gK n mu) pi_boltzmann)
            (tv_doeblin states (tv_titer states gK n mu)

@@ -1,8 +1,9 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* UpReqCauchyLogBound.v —— R2-RCL 席：柯西侧显式对数返回界               *)
-(* （fuel 结构递归二分搜索本体的对数界显式化）2026-09-24                  *)
+(* UpReqCauchyLogBound.v —— R2-RCL ：柯西侧显式对数返回界               *)
+(* （fuel 结构递归二分搜索本体的对数界显式化）                  *)
 (* ============================================================ *)
-(* RBC 对账席定谳：Bishop 路线的对数返回界已闭合                          *)
+(* RBC 已证结论：Bishop 路线的对数返回界已闭合                          *)
 (*   （R2BishopLogSel.rb_log_return_bound: S j0 <= 2^(log2 j0 + 2)），     *)
 (*   而柯西侧的"对数性寄存于二分 Fixpoint 本体"=设计形未显式化。          *)
 (*   本件补缺口：自带 cl_bsearch（Q 区间 [lo,hi] 上 Qle_bool 驱动的       *)
@@ -25,7 +26,7 @@
 (*                                                              *)
 (* 红线自检：全文零公理承认参数猜想中止；经典逻辑零引入；                 *)
 (*   搜索判定全在 Q 层（Qle_bool）；fuel 结构性递归；                     *)
-(*   提取探针 Obj.magic = 0（G3 实测）。                                  *)
+(*   提取检验 Obj.magic = 0（G3 实测）。                                  *)
 (* ============================================================ *)
 
 From Stdlib Require Import PeanoNat.
@@ -42,7 +43,7 @@ Open Scope nat_scope.
 (* §0 Q 层搜索谓词内核：幂 + Qle_bool 桥 + 单调                          *)
 (* ============================================================ *)
 
-(* Q 幂（nat 指数，透明可计算——搜索谓词的计算内核，本席自带） *)
+(* Q 幂（nat 指数，透明可计算——搜索谓词的计算内核，自带） *)
 Fixpoint cl_qpow (a : Q) (k : nat) {struct k} : Q :=
   match k with
   | Datatypes.O => (1#1)
@@ -77,7 +78,7 @@ Proof.
     + apply cl_qeq_le. apply Qmult_comm.
 Qed.
 
-(* Qle_bool 双桥（本版 Qle_bool 终形 = Z 层 Qnum/QDen <=?，实测定谳；
+(* Qle_bool 双桥（本版 Qle_bool 终形 = Z 层 Qnum/QDen <=?，实测已证结论；
    Z.leb_le / Z.leb_gt 直桥，零内部形赌运气） *)
 Lemma cl_qle_bool_true : forall x y : Q, Qle_bool x y = true -> Qle x y.
 Proof.
@@ -234,7 +235,7 @@ Proof.
                           (Datatypes.S (Nat.div (Nat.add lo hi) 2))))
                         (Nat.pow 2 f)) by lia.
         destruct (cond hi) eqn:Hc.
-        -- (* hi 通过：右区间递归回左支；below 账与 IH 最小账缝合 *)
+        -- (* hi 通过：右区间递归回左支；below 账与 IH 最小账拼接 *)
            destruct (IH (Datatypes.S (Nat.div (Nat.add lo hi) 2)) hi
                        ltac:(lia) Hf2)
              as [[Htop [Hok Hmin]] | [Hg1 [Hg2 Hg3]]];
@@ -366,7 +367,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 探针审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                     *)
+(* 检验审计：提取 Obj.magic 计数应为 0 + 语句假设闭包                     *)
 (* ============================================================ *)
 
 Separate Extraction cl_qpow cl_cond cl_bsearch cl_bsearch_log cl_find_qpow.

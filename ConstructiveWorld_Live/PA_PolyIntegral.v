@@ -1,48 +1,11 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T254 台账席 战役包O（tier2 第五批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   pint_integral_mono（原 L309，3 句玩具证）                            *)
-(*   pint_integral_nonneg（原 L301，4 句玩具证）                          *)
-(*   pint_integral_add（原 L241，5 句玩具证）                             *)
-(*   pint_integral_scale（原 L234，4 句玩具证）                           *)
-(*   pint_zero_div（原 L105，3 句玩具证）                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* PolyIntegral.v                                                *)
-(*                                                               *)
-(* 目的：建立 [0,1] 上多项式（Q 系数列表）的构造性定积分基建        *)
-(*       （一期，Q 载体层、纯 Set）——解锁 UpReqPadeExp    *)
-(*       所需的「[0,1] 上多项式型被积函数的构造性积分」。           *)
-(* 主件：pint_integral（定积分主定义）；正确性锚                    *)
-(*       pint_integral_pow_poly : QeqT (pint_integral               *)
-(*       (pint_pow_poly k)) (1 / (Z.of_nat (S k) # 1))，即          *)
-(*       ∫_0^1 x^k dx == 1/(k+1)；pint_eval_pow_poly（求值与         *)
-(*       S03 q_pow 幂引擎一致）；线性性 pint_integral_scale /        *)
-(*       pint_integral_add；逐项单调性 pint_integral_nonneg /        *)
-(*       pint_integral_mono。                                       *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；                *)
-(*       Stdlib QArith.QArith、QArith.Qabs、Lists.List、Arith.Arith、 *)
-(*       ZArith.ZArith、Lia、Extraction。                            *)
-(* 备注：库内无现成积分基建——grep          *)
-(*       integral/定积分 命中仅三类：Qmult_integral（Q 代数引理，     *)
-(*       与积分无关）、S12_B5RecycleSF.v:13465 SFPathIntegral（路径   *)
-(*       作用量注记，非定积分）、UpReqPadeExp 注记本体      *)
-(*       （即本件要解锁的对象）。数学内容：多项式以系数列表表示       *)
-(*       （头 = 常数项），pint_eval 为 Horner 求值；定积分按幂函数    *)
-(*       逐项定义 pint_integral p = Σ_k a_k/(k+1)（Q 除法全定义，     *)
-(*       无需良法定义前提）。线性性以等长列表为显式前提——不等长      *)
-(*       列表在 pint_add 尾接语义下线性性不真，前提诚实。逐点单调     *)
-(*       版本（0 ≤ p(x) ≤ 1 ⟹ 0 ≤ ∫p ≤ ∫1 == 1）需连续性/黎曼和      *)
-(*       极限机器，与柯西极限同留二期，本件不虚报强度。语句面纪律：   *)
-(*       全部主定理 QeqT/QleT' Set 面（S02_CauchyComplete），Qle/Qeq  *)
-(*       仅证内与内部支撑引理；pint_ 前缀避免命名冲突（S03 的 9.1 副本 *)
-(*       由私有构建目录供给，源与只读树一致）。                        *)
-(* ============================================================ *)
+(* ==========================================================================)
+   PA_PolyIntegral.v — 多项式定积分的 Q 层构造
+   使命: pint_eval/pint_integral_from（逐项积分）、pint_pow_poly 编码、pint_integral_pow_poly（∫x^k = 1/(k+1)）、pint_integral_scale/pint_integral_add 线性性与 pint_integral_from_nonneg 非负性。
+   依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib Extraction、QArith
+   对标: 幂函数定积分公式与积分的线性性、非负性（初等积分学）。
+   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
+   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   ========================================================================== *)
 
 From Stdlib Require Import Extraction.
 From Stdlib Require Import QArith.QArith QArith.Qabs Lists.List Arith.Arith
@@ -349,7 +312,6 @@ Print Assumptions pint_integral_add.
 Print Assumptions pint_integral_nonneg.
 Print Assumptions pint_integral_mono.
 
-(* PA 追印段（T254 核验副本件） *)
 Print Assumptions pint_integral_mono.
 Print Assumptions pint_integral_nonneg.
 Print Assumptions pint_integral_add.

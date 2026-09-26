@@ -1,23 +1,14 @@
-(* ============================================================ *)
-(* SymplecticRotationSpec.v —— 施工席位 C15                       *)
-(*   辛旋转特征刻画 + 幂速率（A4 移植榜 T8 的 Q 层着陆核）          *)
-(*                                                                *)
-(* 受体：S13_NLiveAudit.v §NSymplectic（rot:27 / 保范:40 /          *)
-(*   合成:60 / 保辛:74，经薄壳 Require Import 直达）。              *)
-(* 供体：UpReqSpec2x2.v sp2_sqrt_rate 引擎（683/855/917；           *)
-(*   原 file 不在 order.txt 未编译 → /tmp/spec_side 侧编通路，      *)
-(*   此处 Require Import UpReqSpec2x2 引其 Qle 级核件）。           *)
-(*                                                                *)
-(* 出口面：QId / Id / QleT' / And / PairId（零 Prop 语句面）；      *)
-(*   语句风格照 NSymplectic（Qeq_bool 判定的 Set 层 QId）。          *)
-(* 红线：零 公理/承认件/参数/猜想/弃证/经典逻辑/    *)
-(*   排中/承认；零经典逻辑；非平凡（真特征刻画：        *)
-(*   正向=受体三件组装，逆向=单位辛对本征对论证，非定义复读）；      *)
-(*   文末 Print Assumptions 全表 ≥1。                              *)
-(* ============================================================ *)
+(* ==========================================================================)
+   SymplecticRotationSpec.v — 辛旋转的幂速率精确律
+   使命: srs_rot_characterization（旋转安全刻画）、srs_power_exact/power_exact_gen/power_rate（幂的精确与速率律）、srs_power_contract（压缩）、PairId 对称/传递/同余三件与 srs_pow_closed/pow_norm_transfer/renorm_rate。
+   依赖: S01_BaseRing、S02_CauchyComplete、S12_B5RecycleSF、S13_NLiveAudit、UpReqSpec2x2；Stdlib QArith、QArith.Qabs、Arith。
+   对标: 辛矩阵旋转的幂收敛速率（数值线性代数中 Givens 旋转的经典估计）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
-Require Import S02_CauchyComplete.  (* 续接席注：QleT'/QleT'_to_Qle/Qle_to_QleT' 家在 S02，S13 Require 不传递 Import —— 名对位补引 *)
+Require Import S02_CauchyComplete.  (* 注：QleT'/QleT'_to_Qle/Qle_to_QleT' 家在 S02，S13 Require 不传递 Import —— 名对位补引 *)
 Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import UpReqSpec2x2.
@@ -117,7 +108,7 @@ Proof.
     rewrite Hamp, Hi. ring.
 Qed.
 
-(* 幂速率精确律的推广底座：放大因子入口 q 任意（QId 桥入）。 *)
+(* 幂速率精确律的推广基座：放大因子入口 q 任意（QId 桥入）。 *)
 Lemma srs_power_exact_gen :
   forall (n : nat) (c s q : Q) (p : (Q * Q)%type),
     QId (c * c + s * s) q ->
@@ -180,7 +171,7 @@ Proof.
   induction n as [| k IH]; intros q H0 H1.
   - cbn [srs_qnpow]. apply Qle_refl.
   - cbn [srs_qnpow].
-    (* 续接席注：9.1 Qmult_le_compat_r 双前提（x<=y -> 0<=z），补 qⁿ 非负腿
+    (* 注：9.1 Qmult_le_compat_r 双前提（x<=y -> 0<=z），补 qⁿ 非负支
        （stdlib 前提显式化税族，QArith_base:1279 Qmult_le_0_compat）。 *)
     assert (Hz : Qle 0 (srs_qnpow k q)).
     { clear IH.  (* 外层 IH 钉 k 会劫持内层归纳泛化（assumption 找不到 0≤qʲ 形） *)
@@ -211,7 +202,7 @@ Proof.
   assert (Hb : Qle (srs_qnpow n (c * c + s * s) * norms2 p) (1 * norms2 p)).
   { apply Qmult_le_compat_r.
     - exact (srs_qnpow_bnd n (c * c + s * s) Hq0 Hq1).
-    - apply srs_norms2_nonneg.  (* 续接席注：compat_r 腿2 实为 0≤z 前提（非自反） *) }
+    - apply srs_norms2_nonneg.  (* 注：compat_r 分支2 实为 0≤z 前提（非自反） *) }
   rewrite Qmult_1_l in Hb. rewrite Hid.
   exact Hb.
 Qed.
@@ -220,7 +211,7 @@ Qed.
 (* C. 支撑件：rotⁿ 闭式（cos/sin 倍角递推）+ 合成传递             *)
 (* ============================================================ *)
 
-(* PairId 对称 / 传递 / rot 同余（QId 逐腰搬运）。 *)
+(* PairId 对称 / 传递 / rot 同余（QId 逐腰移植）。 *)
 Lemma srs_pair_sym : forall a b : (Q * Q)%type, PairId a b -> PairId b a.
 Proof.
   intros a b [Hx Hy]. split; apply qid_intro.
@@ -331,7 +322,7 @@ Proof.
   assert (Hne : ~ ((x * x) == 0)%Q).
   { intro Hz. apply Qmult_integral in Hz.
     destruct Hz as [Hc | Hc]; exact (Hx0 Hc). }
-  field. exact Hx0.  (* 续接席注：field 伴随前提经 x² 自消后为 ~ x == 0，非 x²≠0 *)
+  field. exact Hx0.  (* 注：field 伴随前提经 x² 自消后为 ~ x == 0，非 x²≠0 *)
 Qed.
 
 End SymplecticRotationSpec.

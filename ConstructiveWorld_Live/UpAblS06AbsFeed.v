@@ -1,14 +1,8 @@
-(* ============================================================ *)
-(* UpAblS06AbsFeed.v —— S06 abs_sum_le 语句形的 B 层供给件         *)
-(*                                                                *)
-(* 使命：S06 经典 R 世界中两处求和语句（abs_kernel_bound 与        *)
-(*   eviction_steady_deviation 形）的结论属 SumOver 类字段 abs_sum_le； *)
-(*   本件给出其在具体 Real 载体上的 B 形（real_le_b）供给：其一由  *)
+(* UpAblS06AbsFeed.v —— S06 abs_sum_le 语句形的 B 层依赖模块         *) (* 使命：S06 经典 R 世界中两处求和语句（abs_kernel_bound 与        *)
+(*   eviction_steady_deviation 形）的结论属 SumOver 类字段 abs_sum_le； *) (*   本件给出其在具体 Real 载体上的 B 形（real_le_b）供给：其一由  *)
 (*   s6f_abs_kernel_bound_slot 全称给出，其二由供体本名定理覆盖。  *)
-(*                                                                *)
 (* 构造性注记：全件 Qed 闭合、零承认词面、零经典逻辑；语句面仅     *)
 (*   real_le_b/real_eq 集合层谓词，无裸命题；六件 Print Assumptions Closed。 *)
-(*                                                                *)
 (* 形态差四维（供体 uabS4c_abs_sum_le_B_slot 为任意 S:Set＋抽象    *)
 (*   sumf 的 B 形供给定理，值域为具体 Real——柯西序列 sigT 形）：   *)
 (*   ①载体维：S06 语句以接口投影 @R RI 为载体（RealInterfaceEnhanced *)
@@ -21,7 +15,6 @@
 (*   ③相等维：Id（接口）vs real_eq（逐 eps）——转换经 real_eq 运输； *)
 (*   ④求和维：sum_over_S 类字段 vs 抽象 sumf——此维同构（算子形    *)
 (*     一致、供体三前提对应 sum_over_S_ext/add/le），三前提显式量化。 *)
-(*                                                                *)
 (* 两处使用位处置：其一（abs_kernel_bound 形）全供给——            *)
 (*   s6f_abs_kernel_bound_slot：供体在 g := f·q 上直接应用＋点态   *)
 (*   转换（|x·q| ≡ |x|·q，q ≥_B 0：|q| ≡ q 逐 eps 尾部推进＋      *)
@@ -35,7 +28,6 @@
 (*   ＋UpRealLeB（real_le_b）＋S08_RealMainlineDPO。               *)
 (* 对标：Bishop 构造性分析的求和算子与绝对值恒等（stdlib 无直接对应物）。 *)
 (* 编译配方：Rocq 9.1 coqc 直调＋cpu_guard 包裹，输出经 -o 临时目录。 *)
-(* ============================================================ *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.Qring QArith.Qabs QArith.Qminmax.

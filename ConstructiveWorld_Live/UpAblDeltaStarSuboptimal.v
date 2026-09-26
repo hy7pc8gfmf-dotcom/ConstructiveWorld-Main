@@ -1,26 +1,11 @@
-(* ============================================================
-   使命行：2 态 softmax 核 Q 层反例件——证明 Doeblin 常数 δ* = lo²（普查反推件，候融合方确认）
-   （论文 §6.1 定义）严格次优：最优常数 δ*_opt = 2·lo²/(1+lo²) > lo²，
-   显式正间隙 δ*_opt − δ* = lo²·(1−lo²)/(1+lo²) > 0（前件 0<lo<1）。
-   依赖：Stdlib QArith/Lia；S02_CauchyComplete（Set 层 QltT 见证形
-   Id(Qlt_bool,true) 与 Qlt_to_QltT 桥，源码 S02_CauchyComplete.v:47/59）。
-   对标：论文7 §6.1「δ* := lo·lo 设计理由」段；§10.2 开放工作第 4 项
-   （δ 接口实例面）。数学内核：n=2、logit 对称端点 z=(−Δ,+Δ)、
-   lo := e^{−Δ/T} ∈ (0,1)；行随机核矩阵
-     K(−Δ,−Δ)=lo/(1+lo)    K(−Δ,+Δ)=1/(1+lo)
-     K(+Δ,−Δ)=lo²/(1+lo²)  K(+Δ,+Δ)=1/(1+lo²)
-   核最小元 = lo²/(1+lo²)；均匀参考 U=1/2 下 Doeblin 条件 δ·U≤K 等价
-   δ≤2K，故最优常数 = min_{s,s'} 2·K(s,s') = 2·lo²/(1+lo²)。
-   构造性注记：语句层 Set 值见证形 QltT；无承认项、无经典逻辑、
-   无排中律；定义位全部纯 Q 算术 Defined，透明可提取（独立目录提取
-   验证，Obj 魔数计数=0）。
-   注（如实申报）：若按「对角 K(s,s)=lo/(1+lo)」两行同取则行和
-   ≠1，与归一化验证矛盾；按行随机一致形取 K(+Δ,+Δ)=1/(1+lo²)。
-   四元集合不变，min_{s,s'} 2K 不变，主定理不受影响。
-   编译配方：Rocq 9.1 直调，钉 COQLIB/ROCQLIB 至 9.1 库根
-   （双装环境未钉会报 .vo 版本号不匹配），
-   再 coqc -q -Q . "" UpAblDeltaStarSuboptimal.v，cpu_guard 分档。
-   ============================================================*)
+(* ==========================================================================)
+   UpAblDeltaStarSuboptimal.v — 二态 softmax 核 Doeblin 常数的严格次优性
+   使命: mdsopt_main：δ* = lo² 严格小于最优常数 δ*_opt = 2·lo²/(1+lo²)，显式正间隙 mdsopt_gap_pos；支撑件行随机归一 mdsopt_row0_norm/row1_norm 与 Q 层算术链。
+   依赖: S02_CauchyComplete；Stdlib QArith、Lia、Extraction。
+   对标: Doeblin（小增益）常数的极小化：二态行随机核上 min 2K(s,s′) 的显式解。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Lia.

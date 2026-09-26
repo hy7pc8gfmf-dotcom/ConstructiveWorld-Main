@@ -1,5 +1,6 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* Paper1Ablation.v —— 席位 CZD11（批次 E-STAGING-CZD11）        *)
+(* Paper1Ablation.v —— 位 CZD11（组 E-STAGING-CZD11）        *)
 (* 论文1《构造性ML对齐统一形式化》可消融 C 类槽施工              *)
 (*                                                              *)
 (* 前缀 pa1_（防撞 grep）；基座 ConstructiveWorld_vo_901（268）  *)
@@ -8,16 +9,16 @@
 (*     「单位矩全装配 (1/G)·Σ(A_i/σ)² == 1」population 形。      *)
 (*     库内 UpGRPO.real_grpo_standardized_unit_moment 为未归一形 *)
 (*     Σ(A_i/σ)²==1；论文表2 自认 population 形未装配。本件装配： *)
-(*     消费 real_list_sum_g_linear/ext、real_mult_exchange、     *)
+(*     使用 real_list_sum_g_linear/ext、real_mult_exchange、     *)
 (*     real_inv_pos_correct，零新增接口前提。                    *)
 (* 槽2 pa1_dpo_reward_relative_exact：论文 §9.2 开口清单         *)
-(*     「DPO 相对精确 5.5/5.6 尚未有 Real 层版本」之 5.6 镜像：   *)
-(*     π★ 处隐式奖励差分 == 真实奖励差分。消费 S08 的 5.9 件     *)
+(*     「DPO 相对精确 5.5/5.6 尚未有 Real 层版本」之 5.6 对偶：   *)
+(*     π★ 处隐式奖励差分 == 真实奖励差分。使用 S08 的 5.9 件     *)
 (*     real_dpo_reward_recovers_up_to_baseline（已证 Closed）。  *)
 (* 槽3 pa1_raw_second_moment_decomp：论文 §9.2 阻碍分析          *)
-(*     「GRPO 方差族 7.4/7.5 尚未有 Real 层版本」之 7.4 恒等镜像：*)
+(*     「GRPO 方差族 7.4/7.5 尚未有 Real 层版本」之 7.4 恒等对偶：*)
 (*     Σ r_i² == Σ A_i² + G·μ²（未归一中心二阶矩分解；A 为组内   *)
-(*     中心化优势）。消费 S08 real_grpo_advantage_zero_mean +    *)
+(*     中心化优势）。使用 S08 real_grpo_advantage_zero_mean +    *)
 (*     real_list_sum_g_linear/add/const。                        *)
 (*                                                              *)
 (* 红线：纯构造性零公理、Set 层零 Prop 泄露、全 Qed 非平凡真证。 *)
@@ -65,7 +66,7 @@ Proof.
 Qed.
 
 (* ############ 第0.5件：乘法四因子交换（自足内联，卸 UpGRPO 依赖） ############ *)
-(* 与 UpGRPO.real_mult_exchange 同构；为使本稿只依赖 czc10 批1+2 件集，   *)
+(* 与 UpGRPO.real_mult_exchange 同构；为使本稿只依赖 czc10 +2 件集，   *)
 (* 以 monolith/S02 基元代数自证内联。 *)
 Lemma pa1_mult_exchange : forall a b c d : Real,
   real_eq (real_mult (real_mult a c) (real_mult b d))
@@ -94,7 +95,7 @@ Proof.
         (real_mult_assoc a b (real_mult c d))).
 Qed.
 
-(* ############ 槽1 + 槽3：GRPO population 单位矩 与 7.4 恒等镜像 ############ *)
+(* ############ 槽1 + 槽3：GRPO population 单位矩 与 7.4 恒等对偶 ############ *)
 Section PA1Grpo.
 
 Variable Grp : Set.
@@ -193,17 +194,17 @@ Proof.
   - exact Hscal.
 Qed.
 
-(* ---------- 槽3 主定理：7.4 恒等 Real 镜像（未归一形） ---------- *)
+(* ---------- 槽3 主定理：7.4 恒等 Real 对偶（未归一形） ---------- *)
 (* Σ r_i² == Σ A_i² + G·μ²；G := 组大小，μ := 组均值，A := r − μ。 *)
 (* 装配：逐点平方展开（distrib_r + distrib）+ 求和三分 +          *)
-(*       零均值（消费 S08 real_grpo_advantage_zero_mean）+ 常数和。 *)
+(*       零均值（使用 S08 real_grpo_advantage_zero_mean）+ 常数和。 *)
 Theorem pa1_raw_second_moment_decomp :
   real_eq
     (real_list_sum_g Grp
        (fun i : Grp => real_mult (reward_grp i) (reward_grp i)) grp_enum)
     (real_plus Var (real_mult sizeR (real_mult mean mean))).
 Proof.
-  (* 零均值：Σ A == 0（S08 旗舰件 + mult_one 运送） *)
+  (* 零均值：Σ A == 0（S08 主定理件 + mult_one 运送） *)
   assert (Hz : real_eq (real_list_sum_g Grp A grp_enum) real_zero).
   { pose proof (S08_RealMainlineDPO.real_grpo_advantage_zero_mean
                   Grp grp_enum real_size_pos reward_grp real_one) as Hz1.
@@ -372,7 +373,7 @@ Qed.
 
 End PA1Grpo.
 
-(* ############ 槽2：DPO 相对精确 5.6 Real 镜像 ############ *)
+(* ############ 槽2：DPO 相对精确 5.6 Real 对偶 ############ *)
 Section PA1Dpo.
 
 Variable S : Type.

@@ -1,38 +1,11 @@
-(* ============================================================ *)
-(* UpConstitution.v *)
-(* *)
-(* 目的： 资源宪法的改进声明 Set 层类型与可判定验证器。 *)
-(* 主件： check_claim：claim_pass 连同资本、数据、预算、可达各可判定位的总验证器；uc_qeq_le 序判定族。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpBudgetReal。 *)
-(* 备注： 全部判定面为 Set 层 bool/sigT 编码；阈值为显式参数位。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpConstitution.v —— ASI 资源宪法：改进声明的 Set 层类型与可判定验证器 *)
-(*                                                              *)
-(* 理论来源：成果存档/新算法.txt 推导 3「无见证的无限承诺不合法」    *)
-(*   ——自我改进系统的每一次改进声明必须输出 (κ, N, 击穿见证) 三元组；  *)
-(*   这不是软约束：本文件给出可机器检查的宪法执行器。               *)
-(*                                                              *)
-(* 五件结果：                                                    *)
-(*   件 1  claim_decl        改进声明的 Set 层 Record 类型          *)
-(*   件 2  check_claim       可判定验证器（Defined 可执行，四门六证）  *)
-(*   件 3  valid_claim_yields_breakthrough                        *)
-(*                          验证器通过 ⟹ 击穿见证存在（健全性）      *)
-(*   件 4  invalid_claim_counter_*                               *)
-(*                          具体反例精确判定（可反驳性·E 模式）      *)
-(*   件 5  claim_chain       两条有效声明的复合仍有效（宪法闭合）     *)
-(*                                                              *)
-(* 数学核心（nat/Q 层自足，不依赖 Real 层）：                       *)
-(*   uc_bernoulli        (1+c)^n ≥ 1 + n·c 的 Q 形 Bernoulli       *)
-(*   uc_growth_breaks    Q 层阿基米德击穿（Qarchimedean + 正 nat 预算）*)
-(*   q_decay_breaks      Q 层几何衰减击穿 = r_arch_pow_real 的       *)
-(*                       Q 层自足对应件（κ∈(0,1) ⟹ 有限预算存在）    *)
-(*                                                              *)
-(* 层位纪律：宪法面语句全 Set 层（QleT'/QltT/NatLe/Id/sigT/And/Or）；*)
-(*   内部代数微件沿 LCAudit 先例口径（Qle/== 前提位）；  *)
-(*   纯构造性：禁词零出现（见合规自查报告 G1）；全部 Qed 闭合。           *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpConstitution.v — 预算宪法：增长破界声明的可判定校验
+   使命: q_decay_breaks（几何衰减破界定理）、claim_pass/check_claim/check_report 可判定校验器、constitution_nonvacuous（非空洞性）、四反例 invalid_claim_counter_*、claim_chain 链式复合与 real_budget_witness 演示。
+   依赖: CW_ConstructiveWorld_219、UpBudgetReal；Stdlib QArith、Lia。
+   对标: 资源预算声明的一致性校验（几何级数增长约束的形式化）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia.
@@ -45,7 +18,7 @@ Local Open Scope Q_scope.
 (* ============================================================ *)
 (* §0 件 1：改进声明的 Set 层类型                                 *)
 (* ============================================================ *)
-(* 形态裁决：任务书草案把 QleT/QltT 证挤进 sigT 类型，使 κ≥1 的声明   *)
+(* 形态裁决：早期草案把 QleT/QltT 证挤进 sigT 类型，使 κ≥1 的声明   *)
 (* 不可构造——与件 4「构造具体反例声明」直接冲突（反例必须可构造才能   *)
 (* 被验证器拒收）。故裁决为：无约束 Record + 验证器判定。            *)
 (* 语义：每步按 (1−κ) 收缩基线 c0，声明 N 步内严格跨过阈值 eps。      *)
@@ -180,7 +153,7 @@ destruct (Q_dec a b) as [[H1 | H2] | H3].
 Qed.
 
 (* ============================================================ *)
-(* §2 q_pow 幂代数（消费 q_pow）                      *)
+(* §2 q_pow 幂代数（使用 q_pow）                      *)
 (* ============================================================ *)
 
 Lemma uc_pow_eq_compat : forall (x y : Q) (n : nat), x == y -> q_pow x n == q_pow y n.
@@ -861,7 +834,7 @@ Lemma test_demo_ok_pass : Id (check_report demo_ok) v_pass.
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §12 提取探针（G3：Obj.magic = 0）                                *)
+(* §12 提取检验（G3：Obj.magic = 0）                                *)
 (* ============================================================ *)
 
 Set Warnings "-extraction-opaque-accessed".

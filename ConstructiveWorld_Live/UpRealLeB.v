@@ -1,4 +1,4 @@
-(* ============================================================ *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpRealLeB.v *)
 (* *)
 (* 目的： Real 层 Bishop 形非严格序谓词 real_le_b 与完成引理族。 *)
@@ -9,7 +9,7 @@
 
 (* ============================================================ *)
 (* UpRealLeB.v —— Real 层 Bishop 形非严格序谓词与完成引理族        *)
-(*   （M2 完成引理席 · §9.4 例二(iv) / §10.2 第10项(g) 落地件）     *)
+(*   （M2  · §9.4 例二(iv) / §10.2 第10项(g) 落地件）     *)
 (*                                                                *)
 (* 主结果（全部 Set 层、零 Prop 泄露、零新公理）：                  *)
 (*   1. real_le_b x y := forall eps>0, real_lt x (y + eps)         *)
@@ -34,7 +34,7 @@
 (*        （RealAttnSteady 同名件逐字复刻）；无证书情形              *)
 (*        维持 eps 形 real_ppo_conservative_eps 不变——冻结结论       *)
 (*        见尾注登记表）                                              *)
-(*   6. Part D（升级席增量）：逐 eps 余量族的 Bishop 形完成件族——     *)
+(*   6. Part D（增量）：逐 eps 余量族的 Bishop 形完成件族——     *)
 (*      real_le_closure_b_one（D:=real_one 特化完成；1·eps 换形经     *)
 (*      real_le_id_r 右端运输；one 的正性证书 real_lt_zero_one 为      *)
 (*      闭合既有件）＋四件 D:=one 实例（min_l_B / min_r_B /      *)
@@ -42,7 +42,7 @@
 (*      单步直连）＋ real_step_kl_eta_bound_B（步进 KL 收缩 Bishop 形， *)
 (*      eta 缩放复合右端、plain-eps 余量、原件前提位照抄）。            *)
 (*      结论与冻结登记表见尾注（结论 6 至 9）。                          *)
-(*   7. Part E（第二席续建）：盘点清单判「可升」18 件 Bishop 形完成——    *)
+(*   7. Part E（续建）：盘点清单判「可升」18 件 Bishop 形完成——    *)
 (*      17 件 plain-eps（metric_pos / metric_triangle / abs_nonneg_le /  *)
 (*      r_max 双件 / pos_part / exp_ge_linear / log_le_linear /          *)
 (*      log_one_plus 双件 / quad_div_le_two / gibbs_inequality /         *)
@@ -61,9 +61,9 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* ToyR 战役包E 替换席（T243 台账席）·玩具级定理同名非平凡替换稿      *)
+(* ToyR 工程 （ ）·玩具级定理同名非平凡替换稿      *)
 (* ============================================================ *)
-(* 本件为 ToyR 战役第一波切片产物：原稿全文保留（声明序/原头注/其余   *)
+(* 本件为 ToyR 工程第一波切片产物：原稿全文保留（声明序/原头注/其余   *)
 (*   定理原样），仅对下述玩具级定理的证明体做同名非平凡替换。         *)
 (* 替换定理清单（23/24 件）：real_min_le_l_B／real_min_le_r_B／      *)
 (*   real_abs_triangle_le_B／real_square_nonneg_B／real_step_kl_eta_  *)
@@ -72,7 +72,7 @@
 (*   real_pos_part_nonneg_B／real_exp_ge_linear_B／real_log_le_       *)
 (*   linear_B／real_log_one_plus_le_B／real_log_one_plus_ge_B 等      *)
 (*   22 件 D:=壹 完成件族＋1 件 D 形 real_rlhf_optimal_B。            *)
-(* 挂账 1 件：real_gibbs_core_le_B（源件余量系数为一般 D:=p 形，壹    *)
+(* 留记 1 件：real_gibbs_core_le_B（源件余量系数为一般 D:=p 形，壹    *)
 (*   捷径不适用，需 HC1 重排路线，本切片时限内未实施，未硬编）。      *)
 (* 非平凡性口径（①展开至定义层＋③结构性推导链）：                    *)
 (*   原证明均为「完成引理单跳转发」（real_le_closure_b_one 一跳＋源件  *)
@@ -85,7 +85,7 @@
 (*   real_rlhf_optimal_B 同法内联一般 D 形闭包构造（e₀:=eps'·inv(2D)） *)
 (*   并在 e₀ 处实例化源件，消除 real_le_closure_b 单跳。              *)
 (* 红线：纯构造性；Set 层零 Prop 泄露（析取支分判取 sum 构造子，见证  *)
-(*   为 sigT 编码）；全部替换证明真 Qed 收口；文件尾 Print Assumptions *)
+(*   为 sigT 编码）；全部替换证明真 Qed 闭合；文件尾 Print Assumptions *)
 (*   验证。原头注与全部原有声明照录于后，语义零改动。                 *)
 (* ============================================================ *)
 
@@ -227,7 +227,7 @@ Qed.
 
 (* ============================================================ *)
 (* Part B：定理 4.9 对应物——J(π) ≤_B J(π★)（D_pos 证书接口既有）   *)
-(*   节变量逐字复刻 RealRLHFMain 完成实际消费面（9 件，签名探针     *)
+(*   节变量逐字复刻 RealRLHFMain 完成实际使用面（9 件，签名检验     *)
 (*   实测 discharge 序），零新增前提——完整升格。                    *)
 (* ============================================================ *)
 
@@ -462,8 +462,8 @@ Qed.
 End RealPPOLeB.
 
 (* ============================================================ *)
-(* Part D：升级席增量——逐 eps 余量族的 Bishop 形完成件族             *)
-(*   （全部消费 Part A 完成引理；D:=one 特化与 D·eps 原生形实例；     *)
+(* Part D：增量——逐 eps 余量族的 Bishop 形完成件族             *)
+(*   （全部使用 Part A 完成引理；D:=one 特化与 D·eps 原生形实例；     *)
 (*     证书供给链逐件注记见各件头注，结论见尾注登记表）                 *)
 (* ============================================================ *)
 
@@ -734,7 +734,7 @@ Qed.
    证书供给链：real_le_closure_b_one 单步（D:=one，证书
    real_lt_zero_one 既有）+ real_step_kl_eta_bound_eps 直连；
    原件前提位 eta>0 / eta≤1 照抄，零新增前提。原件为顶层闭合
-   定理（签名全显位，探针实测）。 *)
+   定理（签名全显位，检验实测）。 *)
 Theorem real_step_kl_eta_bound_B :
   forall (n : nat) (p r : nat -> Real) (eta : Real)
     (Hp : forall i : nat, real_lt real_zero (p i))
@@ -810,13 +810,13 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part E：第二席续建——可升级未建 18 件 Bishop 形完成（盘点清单      *)
-(*   「Bishop 扫描-20260909.md」判「可升」族逐件落地）。              *)
+(* Part E：续建——可升级未建 18 件 Bishop 形完成（盘点清单      *)
+(*   「Bishop 扫描-.md」判「可升」族逐件落地）。              *)
 (*   证书供给两型：①17 件 plain-eps 余量 → real_le_closure_b_one      *)
 (*   单步 + 源件直连（同 D.1 至 D.4 型）；②1 件 D·eps 字面余量        *)
 (*   （gibbs_core，D:=p、证书 Hp 前提位既有）→ real_le_closure_b      *)
 (*   直接实例（结论 4 同型，照 real_rlhf_optimal_B 供给手法）。        *)
-(*   源件签名面经 Check 探针实测（RealSetoid / RealInterfaceEnhanced  *)
+(*   源件签名面经 Check 检验实测（RealSetoid / RealInterfaceEnhanced  *)
 (*   模块前缀 4 件，其余出节平名；gibbs_inequality 节变量 X 首参显式）。 *)
 (* ============================================================ *)
 
@@ -993,7 +993,7 @@ Proof.
 Qed.
 
 (* E.4 度量正性 Bishop 形：0 ≤_B metric(a,b)（源件：Or 编码下逐 eps
-   余量形；源件在 RealSetoid 模块内，前缀消费）。 *)
+   余量形；源件在 RealSetoid 模块内，前缀使用）。 *)
 Lemma real_metric_pos_B : forall a b : Real,
   real_le_b real_zero (real_metric a b).
 
@@ -1171,7 +1171,7 @@ Proof.
 Qed.
 
 (* E.7 指数线性下界 Bishop 形：1+t ≤_B e^t（源件在
-   RealInterfaceEnhancedMod 模块内，前缀消费；plain-eps 直连）。 *)
+   RealInterfaceEnhancedMod 模块内，前缀使用；plain-eps 直连）。 *)
 Lemma real_exp_ge_linear_B : forall t : Real,
   real_le_b (real_plus real_one t) (cauchy_real_exp t).
 
@@ -1230,7 +1230,7 @@ Proof.
 Qed.
 
 (* E.8 log 线性上界 Bishop 形：log(x) ≤_B x+(−1)（x>0 前提位照抄源件；
-   源件在 RealInterfaceEnhancedMod 模块内，前缀消费）。 *)
+   源件在 RealInterfaceEnhancedMod 模块内，前缀使用）。 *)
 Lemma real_log_le_linear_B : forall (x : Real) (Hx : real_lt real_zero x),
   real_le_b (real_log x Hx) (real_plus x (real_opp real_one)).
 
@@ -1486,7 +1486,6 @@ Proof.
 Qed.
 
 (* E.13 Gibbs 不等式 Bishop 形：0 ≤_B Σ_s kl(p s‖q s)（KL 非负的
-   Bishop 对应物；节变量 X 为源件出口首参显式，探针实测；
    Hnormp/Hnormq 归一化前提位照抄）。 *)
 Theorem real_gibbs_inequality_B :
   forall (X : Type) (l : list X) (p q : X -> Real)
@@ -1802,7 +1801,7 @@ Qed.
 
 (* E.18 插值不等式 Bishop 形：Σ_i π_t(i)^{1−η}·π*(i)^η ≤_B 1
    （M1 求和版；逐点正性 ×2 + 归一化 ×2 + η>0、η≤1 前提位照抄源件；
-   List.seq 消费面与 D.5 一致）。 *)
+   List.seq 使用面与 D.5 一致）。 *)
 Theorem real_interp_Z_le_one_B :
   forall (n : nat) (pit pist : nat -> Real) (eta : Real)
     (Hpit : forall i : nat, real_lt real_zero (pit i))
@@ -1873,14 +1872,14 @@ Qed.
 
 (* ============================================================ *)
 (* 尾注：诚实登记表（可升格/不可升格逐件结论；供论文 §9.4 例二(iv)    *)
-(* 与 §10.2 第10项(g) 回写引用）                                   *)
+(* 与 §10.2 第10项(g) 写回引用）                                   *)
 (*                                                                *)
 (* 【结论 1｜谓词】real_le_b：Set 层 forall 型（∀eps>0, x<y+eps），  *)
 (*   无 Prop 泄露；与 Or 编码 real_le 的关系仅经单向桥承载。         *)
 (* 【结论 2｜单向桥】real_le_to_le_b：可证（lt 支：x<y<y+eps 传递；  *)
 (*   eq 支：real_lt_compat 双侧换形）。单向——逆向                   *)
 (*   real_le_b x y -> real_le x y 即 Or 形精确完成，构造性不可证，   *)
-(*   论证（Or 形不可证，回写 §9.4 例二(i)/(iv)）：若逆向可证，取     *)
+(*   论证（Or 形不可证，写回 §9.4 例二(i)/(iv)）：若逆向可证，取     *)
 (*   (x, y, D) := (real_min a b, a, 1)（1 的正性证书                *)
 (*   real_lt_zero_one 既有），配 real_min_le_l_eps（eps 形逐点界）   *)
 (*   与完成引理立得精确 real_min_le_l（min(a,b) ≤ a 的单 Or 见证）—— *)
@@ -1893,11 +1892,11 @@ Qed.
 (*   （D < D+D ⟹ inv(2D) < inv(D) 反单调 ⟹ inv(2D)·D < inv(D)·D；  *)
 (*   inv(D)·D == D·inv(D) == 1）；故 D·e₀ < eps'·1 == eps'；        *)
 (*   Or 两支：lt 支 real_lt_plus_translate 平移 + real_lt_trans；    *)
-(*   eq 支 real_lt_id_l 换形。零稠密性消费。                        *)
+(*   eq 支 real_lt_id_l 换形。零稠密性使用。                        *)
 (* 【结论 4｜定理 4.9 对应物】real_rlhf_optimal_B：可升格（完整）——  *)
 (*   证书供给链核查：残差权系数 D 的正性证书 D_pos 为 RealRLHFMain   *)
 (*   节内既有接口变量，零新增前提；eps 形残差恰为 mult D eps 字面    *)
-(*   对齐（签名探针实测 discharge 序 9 件直连消费）， Bishop 形       *)
+(*   对齐（签名检验实测 discharge 序 9 件直连使用）， Bishop 形       *)
 (*   J(π) ≤_B J(π★) 即完成引理单步实例。                            *)
 (* 【结论 5｜定理 6.6 对应物】real_ppo_conservative_B：有条件升格——  *)
 (*   证书供给链核查：残差权系数 E := Σ π_old·adv 的正性在 RealPPOMain *)
@@ -1925,11 +1924,11 @@ Qed.
 (*   Bishop 形 Σ kl(p‖step) ≤_B eta·Σ kl(p‖r)：余量形为 plain-eps       *)
 (*   （eta 缩放因子在复合右端内部、非 D·eps 字面），故走 D:=one 特化    *)
 (*   完成单步 + 原件直连；原件前提位 eta>0 / eta≤1 照抄，零新增前提；   *)
-(*   原件为顶层闭合定理（全显位签名，探针实测）。盘点注：Real     *)
+(*   原件为顶层闭合定理（全显位签名，检验实测）。盘点注：Real     *)
 (*   层 33 件 eps 族中，D·eps 字面余量形仅 real_rlhf_optimal_eps 一件   *)
 (*   （结论 4 已升格），其余全为 plain-eps（D:=one 统一完成覆盖）或     *)
 (*   复合/多 eps 形（结论 9(e)/(f)）。                                  *)
-(* 【结论 9｜盘点冻结结论（本轮全语料扫描，供论文侧引用）】             *)
+(* 【结论 9｜盘点冻结结论（此次全语料扫描，供论文侧引用）】             *)
 (*   (a) real_dpo_loss_pi_star_bounded_eps：命名残留 eps 而语句为      *)
 
 (*       谓词不适用（严格界自足），冻结（形态不匹配）。                 *)
@@ -1943,7 +1942,7 @@ Qed.
 (*   (e) real_abs_le_quad_eps / real_abs_h_sq_le_eps /                  *)
 (*       real_quad_t_le_h_eps：多 eps 前提组合形（eps1/eps2/eps' 链、   *)
 (*       余量内嵌 |h| 因子），可升格但证书链长且语句须前提位改造——      *)
-(*       显式假设未建（非冻结，留后续席）。                                 *)
+(*       显式假设未建（非冻结，）。                                 *)
 (*   (f) real_db_breaking_bound_eps：复合 D 形（inv(分区)·T·(exp(…)·     *)
 (*       (eps+eps'))），D 显式 eps 无关但正性证书链长（inv_pos 证书 +   *)
 (*       exp 正性 + 逐 eps 面拆分）——显式假设未建（非冻结）。               *)
@@ -1965,7 +1964,7 @@ Qed.
 (*       plain-eps）同入本清单；real_gibbs_core_eps 为第二件 D·eps      *)
 (*       字面余量形（p-q ≤ p·(-log(q/p)) + p·eps，D:=p eps 无关、       *)
 (*       正性证书 Hp 前提位既有）——升格路径=real_le_closure_b 直接     *)
-(*       实例（结论 4 同型）。【第二席核对注】本清单 16+2 件已全部       *)
+(*       实例（结论 4 同型）。【核对注】本清单 16+2 件已全部       *)
 (*       于 Part E 升格落盘，逐件结论见结论 10。                        *)
 (* 【结论 10｜Part E 十八件续建】盘点清单判「可升」18 件全部升格落盘——   *)
 (*   (i) 17 件 plain-eps 余量形：real_metric_pos_B /                      *)
@@ -1981,8 +1980,8 @@ Qed.
 (*       前提位件（log_le_linear 之 Hx、log_one_plus 之 Hs/Ht、            *)
 (*       quad_div 之 Hs/Hs12、abs_prod 之 |a|≤M/|b|≤B、cvx/amgm/interp     *)
 (*       之 eta 双前提、gibbs_inequality 之归一化 ×2）逐字照抄源件，        *)
-(*       零新增前提；源件模块归属经 Check 探针实测（RealSetoid 双件、      *)
-(*       RealInterfaceEnhancedMod 双件前缀消费，余者出节平名）。            *)
+(*       零新增前提；源件模块归属经 Check 检验实测（RealSetoid 双件、      *)
+(*       RealInterfaceEnhancedMod 双件前缀使用，余者出节平名）。            *)
 (*   (ii) real_gibbs_core_B：D·eps 字面余量第二件（余量 p·eps 乘在         *)
 (*       显式系数 p 上、p 为量且 Hp 前提位既有）——real_le_closure_b        *)
 (*       直接实例（D:=p），结论 4 同型完成、real_rlhf_optimal_B 供给        *)
@@ -2026,7 +2025,7 @@ Print Assumptions real_exp_two_point_cvx_B.
 Print Assumptions real_amgm_pointwise_B.
 Print Assumptions real_interp_Z_le_one_B.
 
-(* ToyR 替换席验证位：对替换代表件做假设面核验（零承认件句式自证） *)
+(* ToyR 验证位：对替换代表件做假设面核验（零承认件句式自证） *)
 Print Assumptions real_le_closure_b_one.
 Print Assumptions real_min_le_l_B.
 Print Assumptions real_rlhf_optimal_B.

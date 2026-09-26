@@ -1,10 +1,10 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* UpReqBanachExp.v —— 席PB：路径 B Banach 代数指数席（20260912） *)
 (* ============================================================ *)
 (* 评审003 路径 B：把 0<e^x 推广到 Banach 代数层。             *)
 (* 分层交付：S1 = Class BanachAlg（Set 层最小面）；             *)
 (*           S2 = exp 级数部分和 Fixpoint + 尾界 + 柯西性；     *)
-(*           S3 = 交换 exp_add：挂账（依赖闭包见文件尾+交付报告）*)
+(*           S3 = 交换 exp_add：留记（依赖闭包见文件尾+交付报告）*)
 (*                                                             *)
 (* 红线自审（文档 B.3.1 草图 req : A -> A -> Prop 系 Prop 泄露，*)
 (* 禁照抄）：本文件语句面全 Set 层——                           *)
@@ -15,7 +15,6 @@
 (*   存在   ex             ->  sigT（S02 cauchy_complete 同构）；*)
 (*   序比较 Qle (Prop)     ->  QleT'（= Id (Qle_bool x y) true，*)
 (*         库内 QleT 比较面的 Qle_bool 反映形；S02 L64-93 在案：*)
-(*         Or 形 QleT 无法从 Qle 侧构造回填，QleT' 双向桥       *)
 (*         Qle_to_QleT'/QleT'_to_Qle 齐备，为库内正选比较面）。 *)
 (* 证内 Prop 层 Qle/Qlt 仅作引擎内衬，不落语句面。             *)
 (* 工程注：Rocq 9 类投影实例参为隐式（Check 投影形如            *)
@@ -32,7 +31,6 @@ From Stdlib Require Import Lia.
 
 (* ============================================================ *)
 (* S1：Class BanachAlg —— Banach 代数 Set 层接口最小面          *)
-(* （全库无撞名：grep "Class Banach|BanachAlg" 20260912 零命中； *)
 (*   bpow/bnorm/bae/bcoef/bcauchy/blim 均为库内首用名。）       *)
 (* ============================================================ *)
 
@@ -85,12 +83,10 @@ Class BanachAlg := {
   bcoef_mult : forall q r : Q, bae (bcoef (q * r)%Q) (bmult (bcoef q) (bcoef r));
   bcoef_comm : forall (q : Q) (a : BA), bae (bmult a (bcoef q)) (bmult (bcoef q) a);
 
-  (* ---- Q 标量嵌入加法/同调律（BCE 二字段 20260913 迁入原类，形状=BA 件 hplus/hwd 逐字对齐）---- *)
   bcoef_plus : forall q r : Q, bae (bplus (bcoef q) (bcoef r)) (bcoef (q + r)%Q);
   bcoef_wd   : forall q r : Q, q == r -> bae (bcoef q) (bcoef r);
 
   (* ---- 范数律（QleT' 比较面）---- *)
-  (* 20260913 类手术（INS ②6-2 处方）：bnorm_wd/coef 余域 Id→QeqT；公理面零新增。 *)
   bnorm_zero : Id (bnorm bzero) 0%Q;
   bnorm_one  : Id (bnorm bone) 1%Q;
   bnorm_opp  : forall a : BA, Id (bnorm (bopp a)) (bnorm a);
@@ -113,7 +109,6 @@ Class BanachAlg := {
           NatLe N n -> QltT (bnorm (bplus (u n) (bopp l))) eps));
 }.
 
-(* ---- 20260913 类手术垫片（CLS-R 沙箱演练；公理面自审：零新增承认件，仅签名弱化+同余桥） ---- *)
 (* 下游 Id 改写位点改走布尔观察者同余三件（迁移包 §2.4 配方）。 *)
 
 Lemma qeqT_sym_hw : forall x y : Q, QeqT x y -> QeqT y x.
@@ -147,12 +142,12 @@ Proof.
   - apply qeq_le. apply qeqT_imp_qeq. exact Hxy.
 Qed.
 
-(* Qeq 改写桥（Qle/Qeq 面位点：stdlib Qle 已注册 Qeq 同伦实例，一线换装） *)
+(* Qeq 改写桥（Qle/Qeq 面位点：stdlib Qle 已注册 Qeq 同伦实例，一线转换） *)
 Lemma bnorm_wd_qeq : forall (B : BanachAlg) (a b : (@BA B)),
   bae a b -> @bnorm B a == @bnorm B b.
 Proof. intros B a b H. apply qeqT_imp_qeq. apply (@bnorm_wd B a b H). Qed.
 
-(* Qeq 目标面位点专用桥（Qle/Qeq 改写族同关系面直改，免同余件；垫片配方具象件） *)
+(* Qeq 目标面位点专用桥（Qle/Qeq 改写族同关系面直改，免同余件；适配层配方具象件） *)
 Lemma bnorm_coef_qeq : forall (B : BanachAlg) (q : Q),
   @bnorm B (@bcoef B q) == Qabs q.
 Proof. intros B q. apply qeqT_imp_qeq. apply (@bnorm_coef B q). Qed.
@@ -467,7 +462,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S3 挂账（对称登记，不落承认件）：                           *)
+(* S3 留记（对称登记，不落承认件）：                           *)
 (*   exp_add（交换情形 e^{a+b}=e^a·e^b）与 exp 可逆性           *)
 (*   (e^a)^{-1}=e^{-a} 依赖闭包：                               *)
 (*   ① S2 尾界（本件 esp_diff_le_tail + exp_series_cauchy 已交） *)
@@ -478,6 +473,5 @@ Qed.
 (*      bplus_middle_swap/bplus_opp_swap 同族放大）；           *)
 (*      极限乘法连续性 + ‖·‖ 次可乘界收尾                       *)
 (*   ④ C* 层正性/Löwner：构造性谱定理=已知开放难题，禁攻，      *)
-(*      对称挂账（评审003 判定原文）。                          *)
-(*   已清账：见 BanachS3Chain.v（注册面在册）· 注记日期 20260922  *)
+(*      对称留记（评审003 判定原文）。                          *)
 (* ============================================================ *)

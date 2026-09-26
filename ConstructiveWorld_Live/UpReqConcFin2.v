@@ -1,65 +1,11 @@
-(* ANCHOR-BLOCK REIN-A1 20260922 · 头注锚注记 · 本件基线 md5 852d27ee570b086e20b91f6841da339d · 权威定位=主键内容级唯一命中（行号仅辅助快照，投树后随本块插行平移） *)
-(* ANCHOR: FILE_LEVEL（件级锚·全件 1644 行） | 现势行号 全件 L1-L1644 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
-(* ANCHOR: cf2_mixing_time（旗舰） | 现势行号 L1393 | 基线 commit 7aeac352e24bc8b4cf9ef5f3d616182052ed7127 | 自检日期 2026-09-22 *)
-(* ============================================================
-   T245 包F 台账席（ToyR 战役）同名非平凡替换件头注（全中文零承认）
-   行数冻结基线＝1719a2d（R113）· 自检日期 20260922
-   本件为基线原件的同名替换件：语句面、声明序、其余定理与版记头注
-   逐字保留；仅八条玩具级收口件的证明体在替换点重演：
-   一、cf2_temp_pos／cf2_Delta_pos：单位定义层展开＋接口严格序字段
-       应用＋Or 构造子显式左支注入（四步重演，S01 用位同款）。
-   二、cf2_tv_nonneg／cf2_omd_nonneg／cf2_kernel_nonneg：严格支单跳
-       展开为字段应用＋构造子注入＋证书位三步。
-   三、cf2_mult_one_l／cf2_omd_form：换轨中间项显式命名，两腿分立。
-   四、cf2_mixing_time：同件旗舰前件的就地展开，严格性提升腿显式
-       走接口字段与左支注入。
-   余下玩具条目按不可化四类批量登记（判别收口／定义性收口／接口
-   字段直引／上游单跳直引），逐条中文标注见件内注记。
-   依赖面零新增：Require 面与原件逐字一致。
-   ============================================================ *)
-(* ============================================================ *)
-(* UpReqConcFin2.v —— 席 F21：Fin 2 非退化实例第一棒                             *)
-(*   （T2 世界数据 + T3 TV 非平凡演示；_tax2_ 侦察报告 T1 探针实录照抄施工）      *)
-(*   2026-09-18                                                            *)
-(*                                                              *)
-(* 上游（零改八母本）：CW219（RealEnhancedReal 实例）、UpReqAlgebra、          *)
-(*   UpReqSumD（sumd 折叠）、UpReqDist（reqd_nat_to_R/reqd_opp_zero）、        *)
-(*   UpReqConcSoftmax（csm_sumf 折叠机 + csm_abs_sum_le_eps 逐 eps 形）、      *)
-(*   UpReqSampling（rsq_ 泛型 softmax 链：Zrow 三证 + rsq_bs_kernel +         *)
-(*   k_titer + Unif 同构自持）、UpReqConcMixSel（cmk_tv 同形 TV 口径）、       *)
-(*   UpReqConcB1（cb1_bs_abs 具体层消解）。                                   *)
-(*                                                              *)
-(* 本件三组（cf2_ 前缀；全树 grep 零撞名 20260918 实测）：                     *)
-(*   T2 世界数据：world:=bool（T1 探针定谳：Fin.t 2 dependent-match 不可用，   *)
-(*       bool 零新 import、destruct 二支、if 归约直通；论文「Fin n」措辞改注   *)
-(*       bool 同构——交付注记声明）、enum2:=[true;false]、enum2_nonempty       *)
-(*       （红线②强化项：Not-Prop 只许 False 消去落 Set——discriminate 一发，   *)
-(*       与 cbt_enum_ne/T1 探针同形，零入 Set 槽）、Delta:=one+one_pos、       *)
-(*       z:=±1 对称对（行间相异——核行真不同的结构前提）、z_lb/z_ub destruct    *)
-(*       二支（inl rsq_bs_opp_lt＋le_refl 各 3 行，T1 实录照抄）、sumf:=       *)
-(*       csm_sumf 2 元实例、sum_eq_list:=req_refl 一行（T1 断言 2）、Unif:=    *)
-(*       1/2 均匀分布（rsq Unif 同构自持）、kernel:=rsq_bs_kernel 10+2 参全显   *)
-(*       （槽序雷点：temp/temp_pos 后必跟 Delta 再 z）、Zrow_pos 证书、        *)
-(*       kernel_row（行归一，泛型件直喂）、titer（10+2 全显）。               *)
-(*   T3 TV 非平凡演示：点质量对 mu0=[1;0]/nu0=[0;1]（req 归一化双前提）下      *)
-(*       cf2_tv_pos : lt zero (cf2_tv mu0 nu0)——B2 单点退化（cbt 档 TV≡0）    *)
-(*       的反面，「非退化」的机器判据（inl 严格支 + req_two_pos）；le 一跳      *)
-(*       cf2_tv_nonneg（合龙 Htv0 槽 concrete 形零前件供件）。                *)
-(*   T4 前置件：cf2_abs_row_eps（|Sigma f·r| ≤ Sigma|f|·r + eps 逐 eps 形，     *)
-(*       直消费 csm_abs_sum_le_eps；rsq_u_abs_row 消费位 plain 槽的 eps 绕行   *)
-(*       第一段——AT6 报告 §五配方轨）。                                       *)
-(*                                                              *)
-(* 红线自审：①real_arch 的 And-Prop 支本件零触碰（本件不进合龙终装）；        *)
-(*   ②enum_nonempty（Not-Prop）仅作证书直喂 rsq_ 泛型件（其内部 False 消去    *)
-(*   落 Set 形已经 UpReqSampling 认证），本件零新增 Not 消去入 Set；           *)
-(*   ③面-面逐字：语句层全用实例字段名（req/le/lt/zero/one/plus/mult/opp/abs），*)
-(*   proof 内 exact 项式转换同体喂入（AT7 卡③最稳轨），零 cbn 后 apply。      *)
-(* 公理面自审：全件语句 Set 值；前提位全显式证书参数；无未证断言、无经典逻辑、  *)
-(*   无排中律；主件 Defined 收束可提取。                                    *)
-(* 编译配方（9.1 直调轨，COQLIB/ROCQLIB 必设——E-STAGING-AT5 卡①）：             *)
-(*   _taf21_ 前缀自建件，full 后 -vos 重跑生成实体（AT8 卡⑧）；full/vos 双证   *)
-(*   为 G2 真关（tathA 卡：vos 不查 opaque 证明）；慢磨判活勿过早杀。           *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqConcFin2.v — 二态 bool 世界上的 TV 收缩与显式混合时间
+   使命: Fin2World 节：bool 载体世界、TV 距离（cf2_tv_pos/nonneg）、核正性与 bs_swap、Doeblin 分解（cf2_minorization）、单步/迭代 TV 收缩逐 eps 形，至主定理 cf2_mixing_time_le（显式混合时间上界）及其 general 形（任意归一化分布对）。
+   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSumD、UpReqDist、UpReqConcSoftmax、UpReqSampling、UpReqConcMixSel、UpReqConcB1、UpReqConcB2、AttnDoeblin；Stdlib List、QArith、Lia。
+   对标: 二态马尔可夫链的总变差收缩率与混合时间显式界（经典 Doeblin 理论）。
+   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
+   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import List.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -83,13 +29,13 @@ Import ListNotations.
 
 Section Fin2World.
 
-(* 世界载体：bool（T1 探针定谳；论文「Fin n」措辞改注 bool 同构） *)
+(* 世界载体：bool（T1 检验结论；论文「Fin n」措辞改注 bool 同构） *)
 Definition cf2_world : Set := bool.
 Definition cf2_enum2 : list bool := [true; false].
 
 (* 红线②强化项：Not-Prop 的 enum 非空证书——False 消去落 Set 仅此认证形        *)
-(* （discriminate 一发；与 cbt_enum_ne 同形，消费面仅 rsq_ 泛型件证书直喂位）   *)
-(* 不可化·判别收口：discriminate 一发即最短形（Not 非空证书认证形） *)
+(* （discriminate 一发；与 cbt_enum_ne 同形，使用面仅 rsq_ 泛型件证书直接代入位）   *)
+(* 不可化·判别闭合：discriminate 一发即最短形（Not 非空证书认证形） *)
 Lemma cf2_enum_ne : Not ([true; false] = (@nil bool)).
 Proof. intro H. discriminate H. Qed.
 
@@ -134,7 +80,7 @@ Defined.
 
 Definition cf2_sumf (f : bool -> Real) : Real := @csm_sumf bool [true; false] f.
 
-(* 不可化·定义性收口：rsq_bs_list_sum 展开即 req_refl 最短形 *)
+(* 不可化·定义性闭合：rsq_bs_list_sum 展开即 req_refl 最短形 *)
 Lemma cf2_sum_eq_list : forall g : bool -> Real,
   req (cf2_sumf g) (rsq_bs_list_sum bool g [true; false]).
 Proof. intro g. exact (req_refl (rsq_bs_list_sum bool g [true; false])). Defined.
@@ -182,7 +128,7 @@ Proof.
             cf2_sum_eq_list s).
 Defined.
 
-(* 核行归一（行和 = one——随机阵面；泛型 rsq_bs_kernel_row 直喂） *)
+(* 核行归一（行和 = one——随机阵面；泛型 rsq_bs_kernel_row 直接代入） *)
 (* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_kernel_row : forall s : bool,
   req (cf2_sumf (fun s' : bool => cf2_kernel s s')) one.
@@ -255,7 +201,7 @@ Proof.
              (req_trans _ _ _ (abs_opp one) (abs_pos one one_pos))).
 Defined.
 
-(* 逐点差和归一：Sigma |mu0 − nu0| = 1 + 1（求和折叠 + plus_zero 缝合） *)
+(* 逐点差和归一：Sigma |mu0 − nu0| = 1 + 1（求和折叠 + plus_zero 衔接） *)
 (* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_tv_sum_one : req
   (cf2_sumf (fun s : bool => abs (req_minus (cf2_mu0 s) (cf2_nu0 s))))
@@ -293,7 +239,7 @@ Proof.
              (inv_pos_pos (plus one one) req_two_pos) req_two_pos).
 Defined.
 
-(* le 一跳（合龙 Htv0 槽 concrete 形——零前件供件） *)
+(* le 一跳（闭合 Htv0 槽 concrete 形——零前件供件） *)
 Lemma cf2_tv_nonneg : le zero (cf2_tv cf2_mu0 cf2_nu0).
 Proof.
   apply (lt_le_iff zero (cf2_tv cf2_mu0 cf2_nu0)).
@@ -303,13 +249,13 @@ Defined.
 
 (* ============================================================ *)
 (* T4 前置件：eps 链重述第一段——|Sigma f·r| ≤ Sigma|f|·r + eps（逐 eps 形）      *)
-(*   直消费 csm_abs_sum_le_eps；r ≥ 0 前件经 cf2_bs_abs 消解 abs r = r。        *)
-(*   （rsq_u_abs_row 消费位 plain 冻结槽的 eps 绕行第一段，AT6 报告 §五轨）      *)
+(*   直使用 csm_abs_sum_le_eps；r ≥ 0 前件经 cf2_bs_abs 消解 abs r = r。        *)
+(*   （rsq_u_abs_row 使用位 plain 冻结槽的 eps 绕行第一段，AT6 报告 §五轨）      *)
 (* ============================================================ *)
 
-(* 字段面 bs_abs 桥（cb1_bs_abs 的语句面同体转换；本件语句全字段名，消费位     *)
+(* 字段面 bs_abs 桥（cb1_bs_abs 的语句面同体转换；本件语句全字段名，使用位     *)
 (*  零 real_* 面混写——F21 新坑：裸写泛型件头隐实例参成未解 evar 时，real_*      *)
-(*  面项转换检查失败，字段面桥件消解） *)
+(*  面项转换检查失败，字段面桥接件消解） *)
 (* 不可化·上游件直引（cb1_bs_abs） *)
 Lemma cf2_bs_abs : forall a : Real, le zero a -> req (abs a) a.
 Proof. exact cb1_bs_abs. Defined.
@@ -358,15 +304,15 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* 自检哨兵：±1 对称 z 的数值可见性（G3 辅证；reflexivity 级）                   *)
+(* 自检守卫：±1 对称 z 的数值可见性（G3 辅证；reflexivity 级）                   *)
 (*   z(true,·) = +1 ≠ z(false,·) = −1——行间相异，核行真不同的冒烟。             *)
 (* ============================================================ *)
 
-(* 不可化·定义性收口：reflexivity 计算最短形 *)
+(* 不可化·定义性闭合：reflexivity 计算最短形 *)
 Lemma cf2_smoke_z_true : projT1 (cf2_z true false) 5%nat == 1%Q.
 Proof. reflexivity. Qed.
 
-(* 不可化·定义性收口：reflexivity 计算最短形 *)
+(* 不可化·定义性闭合：reflexivity 计算最短形 *)
 Lemma cf2_smoke_z_false : projT1 (cf2_z false true) 5%nat == (-1)%Q.
 Proof. reflexivity. Qed.
 
@@ -389,16 +335,16 @@ Print Assumptions cf2_bs_abs.
 Print Assumptions cf2_abs_row_eps.
 
 (* ============================================================ *)
-(* 席 F22 续作（20260918）：T4 第二段 + T5 eps 链重述                           *)
+(* F22 段：T4 第二段 + T5 eps 链重述                           *)
 (*                                                              *)
-(* 目标：abs_sum_le plain 槽 ≥2 元 Or 墙（AT5/AT6/AT8 定谳）下的                  *)
-(*   cmk_attention_mixing_time 消费前置全供给——全链走 csm_abs_sum_le_eps        *)
-(*   逐 eps 通路。abs_sum_le 消费位清单逐槽对照（侦察报告 ③风险1）：             *)
+(* 目标：abs_sum_le plain 槽 ≥2 元 Or 墙（AT5/AT6/AT8 结论）下的                  *)
+(*   cmk_attention_mixing_time 使用前置全供给——全链走 csm_abs_sum_le_eps        *)
+(*   逐 eps 通路。abs_sum_le 使用位清单逐槽对照（侦察报告 ③风险1）：             *)
 (*     ① rsq_u_abs_row        (UpReqSampling L488)  → cf2_abs_row_kernel_eps   *)
 (*     ② rsq_bounded_softmax_tv_contraction (L1153) → cf2_tv_contraction_eps    *)
 (*     ③ rsq_bounded_softmax_tv_iter        (L1166) → cf2_tv_iter_eps           *)
-(*   机器面（rsq_u_* 节件非 abs_sum_le 消费者）全部 @ 全显实例化直供——           *)
-(*   「五族主件零改动直消费」判词的逐件验证（T6 前置侦察）。                      *)
+(*   机器面（rsq_u_* 节件非 abs_sum_le 使用者）全部 @ 全显实例化直供——           *)
+(*   「五族主件零改动直使用」判定的逐件验证（T6 前置侦察）。                      *)
 (*   F21 卡坑位对照：rsq_ 系 @ 全显（症状一）、req_trans 五参（症状二）、         *)
 (*   语句面桥 cf2_bs_abs（症状三）、六层项式逐层配平（症状五）。                  *)
 (* ============================================================ *)
@@ -410,7 +356,7 @@ Definition cf2_lo : Real := rsq_exp_pos_fn (mult cf2_invT (opp cf2_Delta)).
 Definition cf2_delta_star : Real := mult cf2_lo cf2_lo.
 Definition cf2_omd : Real := req_minus one cf2_delta_star.
 
-(* 不可化·接口字段族直引：exp_neg_pos＝S07:8014 字段族（T239 定谳） *)
+(* 不可化·接口字段族直引：exp_neg_pos＝S07:8014 字段族（已判定） *)
 Lemma cf2_lo_pos : lt zero cf2_lo.
 Proof. exact (exp_neg_pos (opp (mult cf2_invT (opp cf2_Delta)))). Defined.
 
@@ -454,7 +400,7 @@ Proof.
                (le_refl cf2_omd)).
 Defined.
 
-(* c ≤ 1 与 e ≥ 0 下的 omd·e ≤ e 族用尾件（本段三处消费） *)
+(* c ≤ 1 与 e ≥ 0 下的 omd·e ≤ e 族用尾件（本段三处使用） *)
 Lemma cf2_mult_one_l : forall a : Real, req (mult one a) a.
 Proof.
   intro a.
@@ -509,14 +455,14 @@ Proof.
   - exact (inv_pos_correct cf2_nR cf2_nR_pos).
 Defined.
 
-(* Σ(f−g) = Σf − Σg（Hd 链消费；reqd_sum_minus 的 bool 2 元实例） *)
+(* Σ(f−g) = Σf − Σg（Hd 链使用；reqd_sum_minus 的 bool 2 元实例） *)
 Definition cf2_sum_minus : forall f g : bool -> Real,
   req (cf2_sumf (fun s : bool => req_minus (f s) (g s)))
       (req_minus (cf2_sumf f) (cf2_sumf g)) :=
   reqd_sum_minus bool cf2_sumf (csm_sum_ext bool [true; false])
     (csm_sum_add bool [true; false]) (csm_sum_linear bool [true; false]).
 
-(* ---- F22·T4-2a：核正性/非负 + abs_row 消费位①的核行 eps 供给 ---- *)
+(* ---- F22·T4-2a：核正性/非负 + abs_row 使用位①的核行 eps 供给 ---- *)
 
 (* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Lemma cf2_kernel_pos : forall s s' : bool, lt zero (cf2_kernel s s').
@@ -535,7 +481,7 @@ Proof.
   exact (cf2_kernel_pos s s').
 Defined.
 
-(* 消费位①（rsq_u_abs_row L488 同位）eps 形：核行内 r 不提出（与 rsq_u_abs_row *)
+(* 使用位①（rsq_u_abs_row L488 同位）eps 形：核行内 r 不提出（与 rsq_u_abs_row *)
 (*  RHS 同构，Hsum 交换链直用）；直抄 cf2_abs_row_eps 模板前半（AT6 §五轨）。    *)
 Lemma cf2_abs_row_kernel_eps : forall (f : bool -> Real) (s' : bool) (eps : Real),
   lt zero eps ->
@@ -565,7 +511,7 @@ Proof.
               (fun s : bool => mult (f s) (cf2_kernel s s')) eps Heps).
 Defined.
 
-(* ---- F22·T4-2b：bs_swap 槽供给（2 元四项和的直接换序；req_plus_exchange 收口） ---- *)
+(* ---- F22·T4-2b：bs_swap 槽供给（2 元四项和的直接换序；req_plus_exchange 闭合） ---- *)
 
 (* 不可化·上游件直引（cb1_swap_lists） *)
 Lemma cf2_bs_swap : forall f : bool -> bool -> Real,
@@ -576,7 +522,7 @@ Proof.
   exact (cb1_swap_lists bool f [true; false] [true; false]).
 Defined.
 
-(* ---- F22·T5 机器面：Doeblin 分解机器 @ 全显实例化（五族主件直消费验证） ---- *)
+(* ---- F22·T5 机器面：Doeblin 分解机器 @ 全显实例化（五族主件直使用验证） ---- *)
 
 Definition cf2_k_step (mu : bool -> Real) (s' : bool) : Real :=
   cf2_sumf (fun s : bool => mult (mu s) (cf2_kernel s s')).
@@ -674,8 +620,8 @@ Proof.
 Defined.
 
 
-(* ---- F22·T4-2 追加：abs_row 供给件按权重函数泛型化——消费位的核/Р 核各一行 ----
-   （hang 根因坑：按 kernel 实例化的供给件喂 r_kernel 槽，单化器在双核塔间
+(* ---- F22·T4-2 追加：abs_row 供给引理按权重函数泛型化——使用位的核/Р 核各一行 ----
+   （hang 根因坑：按 kernel 实例化的供给引理喂 r_kernel 槽，单化器在双核塔间
      转换下潜循环爆炸；泛型化后逐位钉死，零下潜。） *)
 Lemma cf2_abs_row_gen_eps : forall (K : bool -> bool -> Real) (f : bool -> Real)
     (s' : bool) (eps : Real),
@@ -716,7 +662,7 @@ Proof.
   exact (cf2_abs_row_gen_eps cf2_r_kernel f s' eps
            (fun s : bool => cf2_r_nonneg s s') Heps).
 Defined.
-(* ---- F22·T5a：消费位②——单步 TV 收缩逐 eps 形（L499-650 同构重走） ---- *)
+(* ---- F22·T5a：使用位②——单步 TV 收缩逐 eps 形（L499-650 同构重走） ---- *)
 (*   e₀ := inv_two·eps 预算制：Hpt 逐点 slack e₀，外和 2·e₀ =req= eps 精确找零；
      omd·e₀ ≤ e₀ 走 le_mult_compat_weak（omd ≤ 1）。 *)
 
@@ -919,7 +865,7 @@ Proof.
                     (lt_le_iff zero eps (inl Heps)) cf2_inv2_le_one)).
 Defined.
 
-(* ---- F22·T5b：消费位③——迭代 TV 收缩逐 eps 形（slack 线性累积 + 尾预算） ---- *)
+(* ---- F22·T5b：使用位③——迭代 TV 收缩逐 eps 形（slack 线性累积 + 尾预算） ---- *)
 
 Lemma cf2_titer_norm : forall (n : nat) (mu : bool -> Real),
   req (cf2_sumf mu) one -> req (cf2_sumf (cf2_titer n mu)) one.
@@ -1104,9 +1050,9 @@ Print Assumptions cf2_tv_contraction_eps.
 Print Assumptions cf2_tv_iter_eps.
 
 (* ============================================================ *)
-(* 席 F67 续作（20260919）：T6 混合链 + T7 显式混合时间定理（旗舰）        *)
+(* F67 段：T6 混合链 + T7 显式混合时间定理（主定理）        *)
 (*                                                              *)
-(* 消费面：T4 常数族（cf2_omd=1−δ*、cf2_ds_pos、cf2_omd_le_one）+        *)
+(* 使用面：T4 常数族（cf2_omd=1−δ*、cf2_ds_pos、cf2_omd_le_one）+        *)
 (*   T5 逐 eps 收缩/迭代件（cf2_tv_contraction_eps/cf2_tv_iter_eps）。   *)
 (* T6：点质量对（cf2_mu0/cf2_nu0）n 步 TV 界——TV_k ≤ （1−δ*）^n·TV₀ +      *)
 (*   n·eps（照 T5 iter 形）；δ* > 0 证书链 = cf2_kernel_pos/nonneg →       *)
@@ -1256,7 +1202,7 @@ Proof.
   exact (cf2_tv_iter_eps n cf2_mu0 cf2_nu0 eps cf2_mu0_mass cf2_nu0_mass Heps).
 Defined.
 
-(* ---- F67·T7 旗舰（_le 形）：显式混合时间定理 ----
+(* ---- F67·T7 主定理（_le 形）：显式混合时间定理 ----
    前件（诚实申报）：①lt zero budget；②几何衰减前提（显式参）
    omd^{k0}·TV₀ ≤ B/2。见证 k := S k0，eps := (1/nR_{S k0})·(B/4)：
    TV_k ≤ omd^{S k0}·TV₀ + B/4 ≤ B/2 + B/4 < B/2 + B/2 = B。 *)
@@ -1392,7 +1338,7 @@ Proof.
               Hiter Hfinal)).
 Defined.
 
-(* ---- F67·T7 旗舰（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
+(* ---- F67·T7 主定理（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
 
 Theorem cf2_mixing_time : forall (budget : Real) (k0 : nat),
   lt zero budget ->
@@ -1422,23 +1368,23 @@ Print Assumptions cf2_tv_iter_mu0.
 Print Assumptions cf2_mixing_time_le.
 Print Assumptions cf2_mixing_time.
 (* ============================================================ *)
-(* 席 T67b 续作（20260919）：T7 general——任意归一化分布对的混合时间           *)
+(* T7 general 续作——任意归一化分布对的混合时间           *)
 (*                                                              *)
-(* 消费面：T5 iter 件（cf2_tv_iter_eps 本就 general 于 mu/nu，归一化双槽显式）  *)
-(*   + T67 旗舰 cf2_mixing_time_le 的装配配方（常数族/找零链全 generic）。     *)
-(* 泛化口径（照 T67 诚实申报，逐条列、禁藏）：                                *)
+(* 使用面：T5 iter 件（cf2_tv_iter_eps 本就 general 于 mu/nu，归一化双槽显式）  *)
+(*   + 主定理 cf2_mixing_time_le 的装配配方（常数族/找零链全 generic）。     *)
+(* 泛化口径（同泛化前件口径，逐条列明）：                                *)
 (*   ① 归一化前提：req (cf2_sumf mu) one 与 req (cf2_sumf nu) one 显式双槽，   *)
 (*      点质量对实例位由 cf2_mu0_mass/cf2_nu0_mass 供给；                     *)
 (*   ② TV₀ 非负槽：le zero (cf2_tv mu nu) 显式前件——setoid 接口 abs_nonneg    *)
 (*      已 eps 化（UpReqAlgebra L920 注记：plain 形不设），不可凭空构造，      *)
 (*      照实携带；点质量对实例位由已绿 cf2_tv_nonneg 供给。2 元世界非退化性    *)
 (*      由 cf2_tv_pos（点质量对）分列陈述，本 general 件不重复申报；           *)
-(*   ③ 预算为正 + 几何衰减前提（显式参 k0）：照 T67 同口径。                   *)
+(*   ③ 预算为正 + 几何衰减前提（显式参 k0）：同上件口径。                   *)
 (* 见证：k := S k0；eps := （1/nR_{S k0}）·（B/4）；链：                        *)
 (*   TV_{S k0} ≤ omd^{S k0}·TV₀ + B/4 ≤ B/2 + B/4 < B/2 + B/2 = B。          *)
 (* ============================================================ *)
 
-(* ---- T67b·帮件：omd 幂·TV₀ ≥ 0 泛化形（TV₀ 非负槽显式前件，逐级归纳同 T67） ---- *)
+(* ---- 泛化帮件：omd 幂·TV₀ ≥ 0 泛化形（TV₀ 非负槽显式前件，逐级归纳同前件） ---- *)
 
 Lemma cf2_pow_tv_nonneg_gen : forall (n : nat) (mu nu : bool -> Real),
   le zero (cf2_tv mu nu) ->
@@ -1465,7 +1411,7 @@ Proof.
                    cf2_omd_nonneg IH))).
 Defined.
 
-(* ---- T67b·T7 general（_le 形）：任意归一化对的显式混合时间定理 ----
+(* ---- T7 general（_le 形）续：任意归一化对的显式混合时间定理 ----
    前件（诚实申报）：归一化双槽 + TV₀ 非负槽 + ①lt zero budget；
    ②几何衰减前提（显式参）omd^{k0}·TV₀ ≤ B/2。见证 k := S k0，
    eps := （1/nR_{S k0}）·（B/4）：
@@ -1605,7 +1551,7 @@ Proof.
               Hiter Hfinal)).
 Defined.
 
-(* ---- T67b·T7 general（plain 形）：衰减前提取严格形，_le 形一跳直推 ---- *)
+(* ---- T7 general（plain 形）续：衰减前提取严格形，_le 形一跳直推 ---- *)
 
 (* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Theorem cf2_mixing_time_gen : forall (mu nu : bool -> Real) (budget : Real) (k0 : nat),
@@ -1623,9 +1569,9 @@ Proof.
            (lt_le_iff _ _ (inl Hgeo))).
 Defined.
 
-(* ---- T67b·收口件：点质量对旗舰 = general 件实例（泛化装配自证封闭） ----
+(* ---- 收尾件：点质量对主定理 = general 件实例（泛化装配自证封闭） ----
    cf2_tv_pos 非退化判据分列在案：本件仅证 general 装配在点质量对位退化回
-   T67 旗舰 cf2_mixing_time_le 同结论。 *)
+   同主定理 cf2_mixing_time_le 结论。 *)
 
 (* 不可化·单跳直引：上游 @-call／同件已证件转发，内联须整体迁移上游归纳体，另批评估 *)
 Theorem cf2_mixing_time_le_ptmass : forall (budget : Real) (k0 : nat),
@@ -1640,7 +1586,7 @@ Proof.
            cf2_mu0_mass cf2_nu0_mass cf2_tv_nonneg HB Hgeo).
 Defined.
 
-(* ============ T67b·G4 证据：新件全 Closed（前提=显式证书参） ============ *)
+(* ============ G4 证据：新件全 Closed（前提=显式证书参） ============ *)
 
 Print Assumptions cf2_pow_tv_nonneg_gen.
 Print Assumptions cf2_mixing_time_le_gen.

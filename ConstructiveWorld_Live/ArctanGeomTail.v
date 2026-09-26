@@ -1,39 +1,20 @@
 (* ================================================================== *)
-(*  ArctanGeomTail.v —— 席位 C3（arctan 几何尾封口，20260916）          *)
-(*                                                                    *)
-(*  使命：现库 arctan 尾界只有调和级慢界 atan_tail_bound_le            *)
-(*        （≤ 1/(2m+3)，S11）；本件把几何信息（单步比值恒等式          *)
-(*        atan_mag_succ_geom）真正用起来，封口为几何尾界：             *)
-(*                                                                    *)
-(*    atg_tail_geom : |x| < 1（QltT 严格）⟹ m ≤ n ⟹                    *)
-(*        |S_n − S_m| ≤ c_{m+1} · 1/(1−x²)                            *)
-(*                                                                    *)
-(*    其中 c_k := atan_mag k x = |x|^{2k+1}/(2k+1)，r := x·x。          *)
-(*    （任务书的 (1 # (1−x*x)) 为 Z-字面写法、对 x:Q 不合型；           *)
-(*      实测封口取其有理数形 1/(1−x*x)（Qdiv）。）                     *)
-(*                                                                    *)
-(*  模板对照坐标：                                                     *)
-(*    atan_mag_succ_geom @S11_TP3B5  单步比值恒等式（本件引擎一）       *)
-(*    atan_sq_le_one     @S11_TP3B5  |x|≤1 ⟹ x²≤1（主件入帮）          *)
-(*    atan_pow_le_one    @S11_TP3B5  0≤y≤1 ⟹ y^p≤1（备用件，本件未引用） *)
-(*    arctan_term_abs    @S11_TP3B5  |t_k| == c_k（主链入帮）           *)
-(*    atan_mag_nonneg    @S11_TP3B5  c_k ≥ 0（收官入帮）               *)
-(*    geo_sum_closed     @S03_QExp    几何和闭式模板（1/2 基泛化为      *)
-(*                                    任意基 r：atg_geo_fin_closed）    *)
-(*    q_le_div_le        @S03_QExp    分式保序                         *)
-(*    sc_qmult_le_l      @S10_KVQuantTrig 左乘保序（项序手动归一）      *)
-(*    qltT_*/qleT'_*     @S02_CauchyComplete QltT/QleT' 载体件          *)
-(*                                                                    *)
-(*  支撑件（本件新建，≥2）：                                            *)
-(*    atg_mag_ratio       单步比值控制：c_{k+1} ≤ r·c_k（r ≥ 0 即可）   *)
-(*    atg_mag_pow         比值迭代：c_{m+j} ≤ r^j·c_m                   *)
-(*    atg_geo_fin_closed  任意基几何和闭式：g_d·(1−r) == 1−r^d          *)
-(*    atg_geo_fin_le_div  几何和尾界：0≤r ∧ 0<1−r ⟹ g_d ≤ 1/(1−r)       *)
-(*    atg_tail_aux        三角+几何和主链：|S_{m+d}−S_m| ≤ c_{m+1}·g_d  *)
-(*                                                                    *)
-(*  非平凡性声明：真几何比值链（ratio → 迭代 → 几何和闭式 → 分式尾界）， *)
-(*  不借道 Leibniz 慢界 atan_tail_bound/atan_tail_bound_le。            *)
-(*  全 Q 层，公理面零假设（零公理类禁词），出口 QleT'，零极限。          *)
+(*  ArctanGeomTail.v —— arctan 部分和的几何尾界                         *)
+(*  使命: 建立 arctan 部分和几何尾界 atg_tail_geom：|x|<1（QltT 严格）   *)
+(*        且 m ≤ n ⟹ |S_n − S_m| ≤ c_{m+1} · 1/(1−x²)，                  *)
+(*        其中 c_k := atan_mag k x = |x|^{2k+1}/(2k+1)，r := x·x。       *)
+(*        现库仅有调和级慢界 atan_tail_bound_le（≤1/(2m+3)）；本件经     *)
+(*        单步比值恒等式 atan_mag_succ_geom 构造真几何比值链。           *)
+(*  依赖: S01_BaseRing、S02_CauchyComplete、S03_QExp、S10_KVQuantTrig、   *)
+(*        S11_TP3B5；Stdlib QArith、Qabs、Setoid、Lia                    *)
+(*  对标: atan_mag_succ_geom/atan_sq_le_one/atan_mag_nonneg              *)
+(*        （S11_TP3B5）、geo_sum_closed/q_le_div_le（S03_QExp）、          *)
+(*        sc_qmult_le_l（S10_KVQuantTrig）、qltT_*/qleT'_*（S02）。        *)
+(*  构造性: 全件 Qed 闭合、零承认语句；真几何比值链（比值控制→比值迭代→   *)
+(*        几何和闭式→分式尾界），不借道 Leibniz 慢界；全 Q 层，           *)
+(*        出口 QleT'，零极限。                                            *)
+(*  编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树    *)
+(*        同世界重编），COQLIB/ROCQLIB 全字面环境前缀。                   *)
 (* ================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -272,7 +253,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(*  五、主件：几何尾界（A5 席数值果 2 封口；QltT 进 / QleT' 出）   *)
+(*  五、主件：几何尾界（A5 数值结果 2 之证明；QltT 进 / QleT' 出） *)
 (* ============================================================ *)
 
 Lemma atg_tail_geom : forall (x : Q) (m n : nat), QltT (Qabs x) 1 -> (m <= n)%nat ->
@@ -292,7 +273,7 @@ Proof.
     assert (E : (m + d)%nat = n) by lia.
     rewrite <- E.
     apply atg_tail_aux. exact Hr0.
-  - (* 几何和尾界收官：g_{n−m} ≤ 1/(1−r) ⟹ c_{m+1}·g ≤ c_{m+1}/(1−r) *)
+  - (* 几何和尾界传递：g_{n−m} ≤ 1/(1−r) ⟹ c_{m+1}·g ≤ c_{m+1}/(1−r) *)
     apply (sc_qmult_le_l (atg_geo_fin (x * x) (n - m)%nat) (1 / (1 - x * x))
                          (atan_mag (Datatypes.S m) x)).
     + apply (atg_geo_fin_le_div (x * x) (n - m)%nat Hr0 Hr1).

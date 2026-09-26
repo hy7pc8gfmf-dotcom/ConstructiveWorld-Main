@@ -1,5 +1,4 @@
-(* ============================================================ *)
-(* ToyR 玩具证替换件 —— T269 台账席 战役包AD（tier2 末批二）        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -11,16 +10,13 @@
 (* ============================================================ *)
 (* UpReqPadeSign.v *)
 (* *)
-(* 目的： 路径 C 符号席：n=1 分母正性首证。 *)
 (* 主件： pds_den1_pos / pds_den1_half：n=1 分母正性与半形。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqPadeExp、UpReqPadeQLeg。 *)
 (* 备注： 结论面未触及 Q 表示墙（全为严格不等式）；注释不含禁词字面量；零外加假设。 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqPadeSign.v —— 席CS：路径 C 符号席，n=1 分母正性首证          *)
 (*                  （den_pos 家族第一块可构造闭合砖，分层 S1/S2/S3）  *)
-(* 日期：2026-09-12                                                *)
 (*                                                                 *)
 (* 任务定位（§15.5 二轮梯队候选）：Padé [n/n] 分母                   *)
 (*   den(x) = sum_upto (Datatypes.S n)                              *)
@@ -102,7 +98,7 @@ Qed.
 (* Qeq 右换桥（本件最小传桥接引理）：a == b 时 0<a 传 0<b。
    AA12 肢化：语句面不变，证明体退化为自建 Q 单调肢一跳
    （UpReqPadeQLeg.pql_qlt0_eq_r，Z 乘法单调显式装配 + lia，
-   断根 Psatz/micromega 环境闭包）。 *)
+   根除 Psatz/micromega 环境闭包）。 *)
 Lemma pds_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
   intros a b Hab Ha.
@@ -112,7 +108,7 @@ Qed.
 (* 主件：0 < x < 2 ⟹ 0 < Q_1(x) = 1 − x/2。
    证法：传桥到显式乘积形 (1/2)·(2−x)——双正乘 Qmult_lt_0_compat，
    0<2−x 由 Qlt_minus_iff（p<q ↔ 0<q+−p，stdlib:1127 实名）从 x<2
-   直得；H0（0<x）对本件数学非必需，语句面按任务书保留。 *)
+*)
 Lemma pds_den1_pos : forall x : Q,
   QltT 0 x -> QltT x (2#1) -> QltT 0 (pade_den 1 x).
 Proof.
@@ -135,7 +131,7 @@ Qed.
 Lemma pds_den1_half : QltT 0 (pade_den 1 (1#2)).
 Proof. unfold QltT. vm_compute. reflexivity. Qed.
 
-(* ===== 显式假设登记（通用 n 版 den_pos，禁硬凑） =====
+(* ===== 显式假设登记（通用 n 版 den_pos，禁强造） =====
    通用 n 的 den_pos 实例化图（下一批，30 分钟预算内诚实显式假设）：
      den(x) := altsum (fun k => pade_coeff n k * q_pow x k) (n+1)
      （PC2 引擎出口，UpReqAltSumPos.v）；

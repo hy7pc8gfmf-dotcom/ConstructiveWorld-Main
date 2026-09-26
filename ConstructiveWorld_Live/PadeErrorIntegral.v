@@ -1,48 +1,31 @@
-(* ========================================================================= *)
-(* 【ToyR 战役·包AW三·T300 台账席】玩具级定理同名非平凡替换稿（补标头注）    *)
-(*                                                                           *)
-(* 本稿系 ToyR 战役包AW三 替换稿以 Main 现版为底重放落件（T326 异常修复席    *)
-(* 2026-09-22 施工）：重放保留既有刀体并吸收 Main 现版语句面（含             *)
-(* pei_div_mul_shift 整块），Require 面照 Main 规范化（去 Psatz）；本块系    *)
-(* 同席补植战役标记。替换定理清单：pei_error_lead_integral（T300 落册刀）    *)
-(* ／pei_beta_integral_pos（0922 04:44 并席在飞刀，席位候核）共 2 刀，刀面   *)
-(* 以台账与并席在飞件快照为权威。                                            *)
-(* 非平凡性口径：双层 Qeq_refl 项并 apply 尾链并项直取；Qlt_to_QltT 传输     *)
-(* 全显项化直取，无行拆分式假非平凡。                                        *)
-(* 本稿零公理、零承认件、全封口、纯构造性、无经典逻辑；重放件本席判绿        *)
-(* 四证编译验零承认在册。                                                    *)
-(* ========================================================================= *)
 (* ============================================================ *)
-(* PadeErrorIntegral.v —— 席位 CYE10（批次 E-STAGING-CYE10）          *)
-(* 全库最后一笔真挂账收官：Padé [n/n] 误差余项积分表示四件               *)
-(*   （UpReqPadeExp.v:193 显式假设四件 + PadeDenPosA.v:26 挂账 c）。   *)
-(*                                                                 *)
-(* 原阻塞 = 构造性积分基建缺位；现 PolyIntegral.v 已在 vorebuild_901    *)
-(* 基座在册（[0,1] 多项式 Q 系数构造性定积分），阻塞解除。              *)
-(*                                                                 *)
-(* 语句形判定（侦查结论）：被积函数 tⁿ(1−t)ⁿ·e^{tx} 中 e^{tx} 非多项式，  *)
-(*   库内构造性载体为 exp_partial M (x·t) = Σ_{k≤M} (x·t)^k/k!          *)
-(*   （S03:39 在册）。故四件落地为「截断指数被积函数」构造性有限核：      *)
-(*   pei_eb_list n x M := Σ_{k=0}^{M} (x^k/k!)·list(t^{n+k}(1−t)ⁿ)      *)
+(* PadeErrorIntegral.v —— 使命：Padé [n/n] 误差余项积分表示四件构造性落地  *)
+(*   （UpReqPadeExp.v:193 显式假设四件 + PadeDenPosA.v:26 遗留 c 的       *)
+(*   消解）。原阻塞 = 构造性积分基建缺位；现 PolyIntegral.v 已在册        *)
+(*   （[0,1] 多项式 Q 系数构造性定积分），阻塞解除。                     *)
+(* 语句形判定：被积函数 tⁿ(1−t)ⁿ·e^{tx} 中 e^{tx} 非多项式，库内构造性    *)
+(*   载体为 exp_partial M (x·t) = Σ_{k≤M} (x·t)^k/k!（S03:39 在册）。     *)
+(*   故四件落地为「截断指数被积函数」构造性有限核：                       *)
+(*   pei_eb_list n x M := Σ_{k=0}^{M} (x^k/k!)·list(t^{n+k}(1−t)ⁿ)       *)
 (*   ——其逐点语义恰为 tⁿ(1−t)ⁿ·exp_partial M (x·t)。                    *)
-(*   ① pei_integral_pos：0 ≤ x ⟹ ∫₀¹ > 0（k=0 项 Beta 严格正接力）；   *)
-(*   ② pei_eb_value：∫ 闭式 = Σ x^k/k!·Beta(n+k+1,n+1)——余项积分表示   *)
+(*   ① pei_integral_pos：0 ≤ x ⟹ ∫₀¹ > 0（k=0 项 Beta 严格正接续）；    *)
+(*   ② pei_eb_value：∫ 闭式 = Σ x^k/k!·Beta(n+k+1,n+1)——余项积分表示    *)
 (*      的构造性泰勒系数对接件（精确全形 e^x−P/Q=… 需极限交换，          *)
 (*      B4TwoStage 已判 LPO 墙，显式假设维持，本件交付其有限核）；        *)
 (*   ③ pei_error_mag_pos + pei_error_lead_integral：符号 =(−1)^n 的      *)
 (*      模长正性 + 首项因式分解（(−1)^n·x^{2n+1}/(2n)!·∫ 形）；         *)
 (*   ④ pei_eb_le：显式界 ∫ ≤ exp_partial M x（exp 截断一致控制）。      *)
-(*                                                                 *)
 (* 数学核心：Beta 族闭式 ∫₀¹ t^a(1−t)^b dt == a!·b!/(a+b+1)!，          *)
 (*   经 (1−t)^{b+1} = (1−t)^b − t·(1−t)^b 的系数列表递归                 *)
 (*   pei_list a (S b) = ztail(L a b) ⊕ (−1)·L (S a) b（等长垫零）        *)
 (*   两参数归纳直取，无 Pascal/二项式系数需求。                          *)
-(*                                                                 *)
-(* 红线自审：① 零承认面（全件 Qed 真证，依赖全为在册 Closed 件）；       *)
+(* 依赖：Stdlib QArith/Lists/Arith/ZArith/Lia Setoid；S01_BaseRing        *)
+(*   S02_CauchyComplete S03_QExp PolyIntegral UpReqB4TwoStage。           *)
+(* 构造性注记：① 零承认面（全件 Qed 真证，依赖全为在册 Closed 件）；     *)
 (*   ② 语句面 Set（主件 Qeq/QltT/QleT'；Qle/Qlt 仅支撑件内面）；         *)
 (*   ③ 非平凡（Beta 闭式两参数归纳 + 有理域交叉相消引擎）；               *)
-(*   ④ 可提取（G3 探针独立文件实测）。前缀 pei_ 全库防撞 grep=0。         *)
-(* 编译：vorebuild_901 单根（PolyIntegral 同库直接可见）。               *)
+(*   ④ 可提取（G3 检验独立文件实测）。前缀 pei_ 全库防撞 grep=0。         *)
+(* 编译配方：coqc 9.1 直调（vo 树内 -Q . "" 平面命名空间），信任缓存前置。 *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -141,7 +124,7 @@ Proof.
   - apply qeq_le. exact Hab.
 Qed.
 
-(* REV-R1 20260918 新增：除法-乘法换位（Qdiv 为 ring 原子，跨原子恒等
+(* REV-R1 新增：除法-乘法换位（Qdiv 为 ring 原子，跨原子恒等
    须显式归位——pei_eb_eval 步项两侧 /-原子形不同时所需）。 *)
 Lemma pei_div_mul_shift : forall X Y Z : Q, X * Z / Y == (X / Y) * Z.
 Proof.
@@ -391,7 +374,7 @@ Proof.
            ++ apply Qmult_lt_0_compat.
               ** unfold Qlt. cbn [Qnum Qden Qplus]. lia.
               ** apply q_fact_pos.
-        (* REV-R1 20260918：原块系块 1 复制，但 s 因子次序相反
+        (* REV-R1：原块系块 1 复制，但 s 因子次序相反
            （(S a#1 + S b'#1) 在前、q_fact 在后），apply q_fact_pos
            打在加和项上失配（TRI-V1 L374 首错，实测环境 b'/IH 即此处）。
            REV-R1 定点手术：加和项 lia 支、q_fact 支换序。 *)
@@ -432,7 +415,7 @@ Proof.
   intros n k. induction n as [| m IH].
   - replace (0 + k)%nat with k%nat by lia.
     rewrite (q_fact_succ k). cbn [q_fact].
-    (* REV-R1 20260918：原 apply (Qmult_le_compat_l 1 (Z.of_nat (S k) # 1)
+    (* REV-R1：原 apply (Qmult_le_compat_l 1 (Z.of_nat (S k) # 1)
        (q_fact k)) 死名（9.1 stdlib 无 _l/Qmult_le_compat）。实测目标
        （q_fact 0 cbn 后）= 1*q_fact k <= (S k#1)*q_fact k，恰为
        Qmult_le_compat_r 1 (S k#1) (q_fact k) 结论形，单步直合。 *)
@@ -448,16 +431,16 @@ Proof.
     assert (Ej1 : q_fact (Datatypes.S (2 * m + k))
                   == (Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
       by apply q_fact_succ.
-    (* REV-R1 20260918：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
+    (* REV-R1：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
        2*S m+k=2m+k+2，lia "Cannot find witness"）；下方 q_fact_succ
-       重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形定谳改回
+       重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形已证结论改回
        两层 S。 *)
     replace (2 * Datatypes.S m + k)%nat
       with (Datatypes.S (Datatypes.S (2 * m + k)))%nat by lia.
     rewrite (q_fact_succ (Datatypes.S (Datatypes.S (2 * m + k)))).
     rewrite (q_fact_succ (Datatypes.S (2 * m + k))).
     rewrite Esm, Esmk, Ej1.
-    (* REV-R1 20260918 重写归纳步链（原链三重真伤：①replace 多一层 S；
+    (* REV-R1 重写归纳步链（原链三重真伤：①replace 多一层 S；
        ②A # 1 * B # 1 同级左结合被 Qmake 吞参——positive 型错；
        ③qeq_le+ring 误用于真不等式 P*A ≤ q_fact(S(2m+k))*A——非恒等式）。
        本构四步右嵌套：
@@ -709,7 +692,7 @@ Proof.
     { apply (Qle_trans _ (q_fact n * q_fact (n + Datatypes.S m)) _).
       - apply qeq_le. ring.
       - exact Hf2. }
-    (* REV-R1 20260918：原步项链三处错序——①外链中间点误写 exp_partial m x
+    (* REV-R1：原步项链三处错序——①外链中间点误写 exp_partial m x
        （应为 Hstep 右侧的 pint_integral (pei_eb_list n x m) 项）；
        ②两条 + bullet 顺序颠倒（Hstep 传输须先于 Qplus_le_compat 拆分）；
        ③内层中点 c*1 应为 1*c（Qmult_le_compat_r 结论形 x*z ≤ y*z）。

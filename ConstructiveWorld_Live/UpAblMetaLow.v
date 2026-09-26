@@ -1,16 +1,14 @@
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* UpAblMetaLow.v —— AID 席：件③ Fin2 载体混合时间下界件（机器反驳形交付）        *)
-(*   2026-09-20                                                 *)
 (*                                                              *)
-(* 【交付形态变更·响亮上报】任务书目标两件（点质量对 cf2_mu0/cf2_nu0）：           *)
 (*   甲 mtl_tv_lower       : forall n, le (omd^n·TV0) (TV(n))                   *)
 (*   乙 mtl_no_mixing_below: lt B (omd^n·TV0) -> lt B (TV(n))                   *)
-(* 精读步分解族实形后定谳：两件在现 cf2 载体上为【可反驳假命题】，本件交付            *)
+(* 精读步分解族实形后已证结论：两件在现 cf2 载体上为【可反驳假命题】，本件交付            *)
 (* 全链机器反驳（零新假设，四关绿）：                                            *)
 (*   根因：cf2_z 只依赖当前态（z s s' = if s then one else opp one），            *)
 (*   softmax 核行内 logit 恒定，归一化后每行恰为均匀分布——核行全同：              *)
 (*     mtl_kernel_val_t/f : cf2_kernel true/false s' == cf2_inv_two（全 s'）     *)
-(*   于是单步把点质量对拍平：cf2_titer 1 cf2_mu0 与 cf2_titer 1 cf2_nu0 逐点        *)
+(*   于是单步把点质量对压平：cf2_titer 1 cf2_mu0 与 cf2_titer 1 cf2_nu0 逐点        *)
 (*   同值，TV(1) == zero（mtl_tv_one_zero），而 omd·TV0 == omd > 0 严格。         *)
 (*   甲在 n:=1 处被 mtl_refute_lower 反驳（le 分裂 inl/inr 双支皆导               *)
 (*   lt zero zero）；乙被 mtl_no_mixing_refuted 反驳（取 n:=1、                  *)
@@ -18,11 +16,11 @@
 (*   真构造，后件运输后与 B>0 相撞）。                                            *)
 (* 结论：现载体真实混合时间为 1 步（核每行=均匀），「混合窗 Θ(omd^{-n}) 两侧」      *)
 (*   叙事对现 Fin2 世界数据不成立；上界件（cf2_tv_iter_eps 等）不受影响。          *)
-(* 升级方向（挂账 M2/主会话）：世界数据需核行真异——z 须同依赖两态（如对角 ±1 形）；  *)
+(* 升级方向（留记 M2/主会话）：世界数据需核行真异——z 须同依赖两态（如对角 ±1 形）；  *)
 (*   或残核取置换形（K = delta·U + omd·Id），此时 TV(n) == omd^n·TV0 精确成立，    *)
 (*   甲乙两件按原语句即为真，本件帮件一~六全部直接复用。                           *)
 (* 红线自审：全件语句 Set 值（req/le/lt/Not 均基座 Set 层别名）；零新假设；          *)
-(*   零承认件；零经典逻辑；前提位全显式证书参数；本件只读上游零改母本。              *)
+(*   零承认件；零经典逻辑；前提位全显式证书参数；本件只读上游零改源版本。              *)
 (* 编译配方：9.1 直调轨，unset COQLIB/ROCQLIB，全量 coqc -Q . ""（cpu_guard 包裹）。 *)
 (* ============================================================ *)
 
@@ -155,7 +153,7 @@ Proof.
   - exact (mtl_row_alg mtl_fac_f mtl_fac_f_pos).
 Defined.
 
-(* ---- 帮件四：单步拍平——点质量对一步后逐点同值 == inv_two ---- *)
+(* ---- 帮件四：单步压平——点质量对一步后逐点同值 == inv_two ---- *)
 
 Lemma mtl_pt_t : forall s' : bool, req (cf2_k_step cf2_mu0 s') cf2_inv_two.
 Proof.

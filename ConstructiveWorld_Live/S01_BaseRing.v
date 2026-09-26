@@ -1,10 +1,10 @@
-(* ============================================================ *)
-(* 【ToyR 包F 切片七·信任根本体替换稿】S01_BaseRing.v —— 基于 Main 基线           *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
+(* 【ToyR 切片七·信任根本体替换稿】S01_BaseRing.v —— 基于 Main 基线           *)
 (*   （md5 f931121e…）同名替换：全文保留，仅换三枚 reflexivity 核验微刀＋尾嵌       *)
 (*   假设审计三连。                                                               *)
 (*   信任根警示：本件为全役信任根本体（全下游件依赖）。本稿为谨慎位微刀稿：          *)
 (*   仅挑三枚 reflexivity 正体位（@id_refl 命名恒等元），零深水区动刀。              *)
-(*   并入时下游全链摘要失效须全链重编，建议单独批次并入。                           *)
+(*   并入时下游全链摘要失效须全链重编，建议单独阶段并入。                           *)
 (*   三微刀：core_claim5_holds(normalized_prob 位)／core_claim3_holds             *)
 (*   (entropy_gradient 位)／core_claim5_holds(boltzmann_prob 位)——                 *)
 (*   各 reflexivity 战术改为 @id_refl 命名恒等元显式正体，语句面零动。              *)
@@ -65,7 +65,7 @@ From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
 Import ListNotations.
 From Stdlib Require Import Setoid Morphisms.
-From Stdlib Require Import Lia QArith.Qminmax.   (* 2026-08-31 entropy Real 层并入所需 *)
+From Stdlib Require Import Lia QArith.Qminmax.   (* entropy Real 层并入所需 *)
 (* ============================================================ *)
 (* 基础：构造性逻辑连接词与等同类型（Set 层）                 *)
 (* ============================================================ *)
@@ -1824,8 +1824,8 @@ Proof.
   unfold CoreClaim5, normalized_prob.
   intros prefix w.
   exact (@id_refl _ _).
-Qed.
-Print Assumptions core_claim5_holds.  (* ToyR 微刀位即席假设审计 *)
+Qed.
+Print Assumptions core_claim5_holds.  (* ToyR 假设审计 *)
 
 Variable grammar_error : Sequence -> R.
 
@@ -2885,16 +2885,16 @@ Proof.
   unfold CoreClaim3, entropy_gradient.
   intro E_A.
   exact (@id_refl _ _).
-Qed.
-Print Assumptions core_claim3_holds.  (* ToyR 微刀位即席假设审计 *)
+Qed.
+Print Assumptions core_claim3_holds.  (* ToyR 假设审计 *)
 
 Theorem core_claim5_holds : CoreClaim5.
 Proof.
   unfold CoreClaim5, boltzmann_prob.
   intro x.
   exact (@id_refl _ _).
-Qed.
-Print Assumptions core_claim5_holds.  (* ToyR 微刀位即席假设审计 *)
+Qed.
+Print Assumptions core_claim5_holds.  (* ToyR 假设审计 *)
 
 Variable prediction_fourier_heat_conduction :
   forall E_A,

@@ -1,46 +1,22 @@
-(* ============================================================ *)
-(* AbsSqClose.v — 席位 CZD12（批次 E-STAGING-CZD12）P3 施工件     *)
-(* abs/平方簇收口件：T62 C 类 #40-46 + 顺手件 #47 一件收口        *)
-(*                                                               *)
-(* 对账坐标（消融50/T62-零引用47枚triage.md §2-C 表）：           *)
-(*   #40 UpReqLogRDF.v:95   lrdf_abs_lower_pos（|a|<c ⟹ 0<c+a）   *)
-(*   #41 UpReqLogRDF.v:99   lrdf_abs_le_intro（|u|≤w 引入律）     *)
-(*   #42 UpReqLogRDF.v:103  lrdf_sq_nonneg（0≤t²）                *)
-(*   #43 UpReqLogRDF.v:106  lrdf_sq_le_abs_sq（t²≤|t|²）          *)
-(*   #44 UpReqSqrtF.v:716   nsq_square_nonneg（#42 同语句形）     *)
-(*   #45 UpReqAttnIter.v:118 abs_nonneg_h（0≤|a| 平形）           *)
-(*   #46 UpReqAttnGibbs.v:690 abs_sum_le_r（abs 和三角）           *)
-(*   #47 UpReqLogCompD.v:225 fep_partition（配分函数定义钉扎）     *)
-(*                                                               *)
-(* 收口原理（T62 §3-P3 路线）：fa53_lt_dec 三分引擎；abs 恒等      *)
-(*   双向桥——a≥0 支 = fa53_abs_ge_zero_id_dec 现成（fa53:141），   *)
-(*   a<0 支 = 本件新小件 asc_abs_neg_id（abs_opp 字段回转 +       *)
-(*   abs_pos 反号，~6 行）；(−t)²==t² 环小件 asc_sq_opp 由        *)
-(*   S01 opp_mult_l/r（RingLemmas:399/413）+ opp 对合新件拼装。   *)
-(*   #46：S01 接口自带 abs_triangle 平形字段（S01:284；RIS 面     *)
-(*   仅 eps 形不可用），宿主抽象 sumf 位无归纳数据，按 T62 #46    *)
-(*   路线"逐层特化"诚实收口——sumd 具体有限和层列表归纳成件。      *)
-(*   #47：定义钉扎（fa51:158 fa51_Z_temp_spec_def / G12 同型），   *)
-(*   Z := sumd_sumf 具体化，partition 槽 req_refl 定义性闭，      *)
-(*   Z_pos = 头非空列表和归纳 + exp_neg_pos 逐项正。              *)
-(*                                                               *)
-(* 纪律：语句面全 Set 层；零 Prop 泄露（Z_pos 前提取 fa51 同款     *)
-(*   Id 形非 nil，归纳件零空支匹配）；禁词面零命中；原树零改。     *)
-(*                                                               *)
-(* CZJ14 可见性桥适配登记（T98，20260919）：尾节 Import            *)
-(*   RealInterfaceEnhancedMod 所需模块定义于 S07_RealSetoidExpLog   *)
-(*   （:7904-8668），原稿 Require 闭包（S01/fa53_compat_abs/TSI/     *)
-(*   UpReqSumD）无一可见该模块（全链无 Export 桥，T89 §3.2 定格     *)
-(*   行 266 Cannot find module）。适配：Import 前补                 *)
-(*   Require S07_RealSetoidExpLog.（裸 Require 不 Import 库面，      *)
-(*   零新增顶层名遮蔽），Import 改全限定                            *)
-(*   S07_RealSetoidExpLog.RealInterfaceEnhancedMod——尾节名解析面    *)
-(*   与原稿意图逐字同（RIS 类字段投影经 Context 实例解析）。         *)
-(*   另一处引用形适配：czd12_list_sum_pos_cons nil 支对称腿          *)
-(*   id_sym → req_sym（S01 id_sym 为 Id 层，尾节 RIS 世界 req 层     *)
-(*   对称即类字段 req_sym；被喂参数 plus_zero 输出与结论要求零变）。 *)
-(*   全部定理语句面（#40-47 槽形 + czd12 三件）逐字零改动。          *)
-(* ============================================================ *)
+(* ================================================================== *)
+(*  AbsSqClose.v —— 绝对值不等式族与配分函数定义钉扎                    *)
+(*  使命: 绝对值基本不等式族——asc_abs_lower_pos（|a|<c ⟹ 0<c+a）、       *)
+(*        asc_abs_le_intro（|u|≤w 引入律）、asc_sq_nonneg（0≤t²）、       *)
+(*        asc_sq_le_abs_sq（t²≤|t|²）、asc_nsq_square_nonneg、            *)
+(*        asc_abs_nonneg、asc_abs_sum_le_r（有限和三角不等式），及         *)
+(*        配分函数定义钉扎组 czd12_fep_partition/czd12_fep_Z_pos          *)
+(*        （Z 取具体有限和 sumd_sumf；正性经头非空列表归纳＋exp_neg_pos）。*)
+(*  依赖: S01_BaseRing、fa53_compat_abs、TempSoftmaxInstantiation、       *)
+(*        UpReqSumD、S07_RealSetoidExpLog；Stdlib List                    *)
+(*  对标: UpReqLogRDF（lrdf_abs_lower_pos/lrdf_abs_le_intro/              *)
+(*        lrdf_sq_nonneg/lrdf_sq_le_abs_sq）、UpReqSqrtF                  *)
+(*        （nsq_square_nonneg）、UpReqAttnIter（abs_nonneg_h）、           *)
+(*        UpReqAttnGibbs（abs_sum_le_r）、UpReqLogCompD（fep_partition）。 *)
+(*  构造性: 全件 Qed 闭合、零承认语句；语句面全 Set 层、零 Prop 泄露；      *)
+(*        czd12_fep_Z_pos 前提取 Id 形非 nil，归纳件零空支匹配。           *)
+(*  编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树     *)
+(*        同世界重编），COQLIB/ROCQLIB 全字面环境前缀。                    *)
+(* ================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import fa53_compat_abs.
@@ -81,7 +57,7 @@ Proof.
            (id_trans (id_sym (plus_comm a (opp a))) (plus_opp a))).
 Qed.
 
-(* ---- 小件③：(−t)² == t² 环小件（#43 环腿；opp_mult_l/r 拼装） ---- *)
+(* ---- 小件③：(−t)² == t² 环小件（#43 环等式支路；opp_mult_l/r 拼装） ---- *)
 Lemma asc_sq_opp : forall t : R, Id (mult t t) (mult (opp t) (opp t)).
 Proof.
   intro t.
@@ -91,7 +67,7 @@ Proof.
 Qed.
 
 (* ---- 小件④（本件新数学点·abs_neg 桥）：a < 0 ⟹ |a| == −a ----
-   a<0 ⟹ −a>0（opp_lt_compat + −0==0 换装）⟹ abs_pos 反号支，
+   a<0 ⟹ −a>0（opp_lt_compat + −0==0 变形）⟹ abs_pos 反号支，
    再经 abs_opp 字段回转到 |a|；与 fa53 件3（a≥0 支）合成
    abs 恒等双向桥。 *)
 Lemma asc_abs_neg_id : forall a : R, lt a zero -> Id (abs a) (opp a).
@@ -133,7 +109,7 @@ Qed.
 
 (* ---- #41：u ≤ w ∧ −u ≤ w ⟹ |u| ≤ w（abs_le 引入律槽形） ----
    三分 0? u：正支 |u|==u 直给；零支 |u|==0==u 归一；负支
-   |u|==−u 桥换装第二前提。 *)
+   |u|==−u 桥变形第二前提。 *)
 Theorem asc_abs_le_intro :
   forall u w : R, le u w -> le (opp u) w -> le (abs u) w.
 Proof.
@@ -146,13 +122,13 @@ Proof.
              (id_trans (id_trans (id_cong abs (id_sym H0eq)) abs_zero)
                        H0eq)
              Huw).
-  - (* u < 0：|u|==−u 桥换装 *)
+  - (* u < 0：|u|==−u 桥变形 *)
     exact (le_id_l (abs u) (opp u) w (asc_abs_neg_id u Hult) Hou).
 Qed.
 
 (* ---- #42：0 ≤ t²（Qsquare_nonneg 逐点事实槽形） ----
    三分 0? t：正支零乘链 le_mult_compat_weak；零支平方归零；
-   负支 (−t)²==t² 环小件换装归正支。 *)
+   负支 (−t)²==t² 环小件变形归正支。 *)
 Theorem asc_sq_nonneg : forall t : R, le zero (mult t t).
 Proof.
   intro t.
@@ -167,7 +143,7 @@ Proof.
     { exact (id_trans (id_cong (fun w => mult w t) (id_sym H0eq))
                       (id_trans (mult_comm zero t) (mult_zero t))). }
     exact (le_id_r zero zero (mult t t) (id_sym Htz) (le_refl zero)).
-  - (* t < 0：−t > 0 支 + (−t)²==t² 换装 *)
+  - (* t < 0：−t > 0 支 + (−t)²==t² 变形 *)
     assert (Ht0 : lt zero (opp t)).
     { exact (lt_id_l zero (opp zero) (opp t) (id_sym asc_opp_zero_id)
                (opp_lt_compat t zero Htl)). }
@@ -182,8 +158,8 @@ Proof.
 Qed.
 
 (* ---- #43：t² ≤ |t|²（q_sq_abs 槽形） ----
-   三分 0? t：非负支 |t|==t（fa53 件3 覆盖 lt/eq 双腿）目标即
-   le_refl 换装；负支 |t|==−t 桥 + (−t)²==t² 小件串联换装。 *)
+   三分 0? t：非负支 |t|==t（fa53 件3 覆盖 lt/eq 双支）目标即
+   le_refl 变形；负支 |t|==−t 桥 + (−t)²==t² 小件串联变形。 *)
 Theorem asc_sq_le_abs_sq :
   forall t : R, le (mult t t) (mult (abs t) (abs t)).
 Proof.
@@ -207,7 +183,7 @@ Proof.
              (le_refl (mult t t))).
 Qed.
 
-(* ---- #44：nsq 位（与 #42 语句逐字同形；对账锚定独立成件） ---- *)
+(* ---- #44：nsq 位（与 #42 语句逐字同形；核对用独立成件） ---- *)
 Theorem asc_nsq_square_nonneg : forall t : R, le zero (mult t t).
 Proof.
   exact asc_sq_nonneg.
@@ -235,12 +211,12 @@ Proof.
              (lt_le_iff zero (opp a) (inl Ht0))).
 Qed.
 
-(* ---- #46：abs 和三角（逐层特化收口，T62 #46 路线） ----
+(*
    宿主槽为抽象 sumf 位（无消解/归纳数据，类字段 rabs_sum_le
    同形但为假设位）；S01 接口自带 abs_triangle 平形字段
    （S01:284；RIS 面仅 eps 形），故在 sumd 具体有限和层
    （G1 钥匙 UpReqSumD；RIS 结构经 tsi 桥 = S01 同名投影）
-   列表归纳收口——特化层完整定理，抽象层槽保持诚实登记。 *)
+   列表归纳完成证明——特化层为完整定理，抽象层槽保持一般陈述。 *)
 Lemma asc_sumd_list_abs_triangle :
   forall (S : Set) (f : S -> R) (l : list S),
     le (abs (sumd_list_sum S f l))
@@ -250,7 +226,7 @@ Proof.
   - (* nil：|0| == 0 ≤ 0 *)
     exact (le_id_l (abs (sumd_list_sum S f nil)) zero zero
              abs_zero (le_refl zero)).
-  - (* cons：abs_triangle + le_plus_compat 双腿（逐项 abs 恒等反射） *)
+  - (* cons：abs_triangle + le_plus_compat 双支（逐项 abs 恒等反射） *)
     exact (le_trans (abs (plus (f x) (sumd_list_sum S f t)))
              (plus (abs (f x)) (abs (sumd_list_sum S f t)))
              (plus (abs (f x)) (sumd_list_sum S (fun s => abs (f s)) t))
@@ -273,7 +249,7 @@ Qed.
 End AbsSqCloseMain.
 
 (* ============================================================ *)
-(* 尾节：#47 顺手件——fep_partition 定义钉扎（RIS 世界）           *)
+(* 尾节：#47 配分函数定义钉扎伴随件（RIS 世界）                   *)
 (*   先例：消融50/fa51_sumpos_id.v:158 fa51_Z_temp_spec_def、     *)
 (*   G12_ZPosFam zposd_Z（Z 由 Variable 改 Definition 钉扎法）。   *)
 (* ============================================================ *)
@@ -334,7 +310,7 @@ Qed.
 
 End FepPartitionPin.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（公理面自审前置：文件内显式 PA 声明） ---- *)
 Print Assumptions asc_opp_zero_id.
 Print Assumptions asc_opp_opp.
 Print Assumptions asc_sq_opp.

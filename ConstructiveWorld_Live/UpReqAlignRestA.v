@@ -1,32 +1,31 @@
-(* ============================================================ *)
-(* ToyR 战役 · 包I · 切片六（T248 台账席 · 20260921）· 本件为替换稿        *)
+(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (*   正文系 Main/Live 基准件全文，仅换下列证明体；定理名/语句面/Require 面/  *)
 (*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
 (*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
 (*   一、ralt_lt_plus_translate：同族导出件换轨——弃 B 桥直连加双 comm 运输， *)
-(*       改消费先落之 1.4 导出件 ralt_lt_plus_compat_le_lt（le_refl b 填腿）， *)
+(*       改使用先落之 1.4 导出件 ralt_lt_plus_compat_le_lt（le_refl b 填腿）， *)
 (*       零交换律运输直达（单路引擎面收窄至同族件单点）。 *)
 (*   二、ralt_minus_plus_common：脱钩独立重演——弃 req_minus_plus_congr 单点， *)
 (*       req_minus 载体展开后四引擎链原地重演：req_opp_plus 负号分配、 *)
-(*       req_plus_swap_mid 中项换序、plus_opp 对消、req_plus_zero_l 零元收口。 *)
+(*       req_plus_swap_mid 中项换序、plus_opp 对消、req_plus_zero_l 零元闭合。 *)
 (*   三、ralt_log_exp_neg：对数桥脱钩——弃 req_log_exp_neg 引擎单点，经本节 *)
 (*       自持假设位 ralt_log_inv_exp_neg_req 与 log_inv_log 桥面对接： *)
-(*       req_opp_compat 双腿运输、req_double_neg 双负收口、req_trans 双段链。 *)
-(*   挂账（如实登记不硬凑）： *)
+(*       req_opp_compat 双腿运输、req_double_neg 双负闭合、req_trans 双段链。 *)
+(*   留记（如实登记不强造）： *)
 (*   ralt_mult_lt_compat_l：lt_mult_compat 系严格乘法唯一引擎，comm 运输 *)
 (*       位置唯一（左形必经双 comm），单路唯一形，不化。 *)
 (*   ralt_lt_plus_compat_le_lt：B 桥 le_lt 导出复刻本体（comm 运输即导出 *)
 (*       路线全体，单桥假设位无第二引信），不化。 *)
 (*   ralt_dpo_reward_diff_is_log_ratio_diff：delta 透明件（ralt_dir 定义即 *)
-(*       beta·log_ratio，req_minus 自反即装法定义镜像），不化。 *)
+(*       beta·log_ratio，req_minus 自反即装法定义同构），不化。 *)
 (*   ralt_dpo_pair_denom_pos：req_sigmoid_denom_pos 系分母正性唯一见证， *)
 (*       单路唯一形，不化。 *)
 (*   ralt_pi_star_implicit_reward_diff：ralt_dpo_reward_relative_exact 单点 *)
-(*       喂定，独立重演＝其 15 步链体复制注水，挂账。 *)
+(*       喂定，独立重演＝其 15 步链体复制注水，留记。 *)
 (*   ralt_sigmoid_strict_inc：exp_neg_decr＋B 桥 le_lt＋区1 消解件三段装配 *)
-(*       序唯一（内行严格化仅 le_lt 单桥），挂账。 *)
+(*       序唯一（内行严格化仅 le_lt 单桥），留记。 *)
 (*   ralt_real_const_req_qleT/ralt_real_const_req_eq_bool：区5 接口投影喂 *)
-(*       定，桥件唯一（QleT_to_Qle/Qeq_bool_iff 单入口），不化。 *)
+(*       定，连接引理唯一（QleT_to_Qle/Qeq_bool_iff 单入口），不化。 *)
 (* ============================================================ *)
 (* ============================================================ *)
 (* UpReqAlignRestA.v *)
@@ -37,21 +36,18 @@
 (* 备注： 奖励、温度、逐点正性以 Variable 前提给出；对数比差为显式构造。 *)
 (* ============================================================ *)
 
-(* UpReqAlignRestA.v — 签名迁移批 3 余量 A 席：DPO/Preference/KL 投影簇余件 req 化
-   母本：签名迁移规划书-20260908.md（批 3 余量清单）
-   上游：UpReqAlgebra.v（批 1 地基，直接消费）+ UpReqAlign.v（批 3 主体，消费其
-     pi_star_req/req_pi_star_pos/sigmoid_req 系成品——KLProjection 16 对位批 3 席已建，
+(*
+   源文件：签名迁移规划书.md（组 3 余量清单）
+     pi_star_req/req_pi_star_pos/sigmoid_req 系成品——KLProjection 16 对位批 3 件已建，
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
    余件清单（grep 实证：UpReqAlign/2/3、UpReqAlgebra、UpReqDist、UpSigMigrate2
    全部 decl 扫描后扣除已结果件；基座坐标 = ）：
    [区1 DPO Real 闭合块 L38524-39193（DpoPreludeMain/DpoPrelude+LogMono 14 件）]
        Id 层 L21013 诚实 Variable，req 接口有 lt_mult_compat/inv_pos_correct 字段，
-       链式真证关闭假设位）+ ralt_lt_plus_translate（真证，消费 B 桥 lt_le 形）+
        ralt_lt_plus_compat_le_lt（B 桥导出，批 1 同款复刻）+ B 桥假设位 2
        （ralt_lt_plus_compat_lt_le/ralt_log_lt_mono，Id L21020/L21024 同位——
-       UpReqAlgebra ReqStrictOrderBridge 的 Hypothesis 节闭后非常量不可消费，
-       各席自持假设位=既定纪律）；账面冻结 7（Q 层 5 件 log_seq_pair_bound/_r/
+       各件自持假设位=既定纪律）；账面冻结 7（Q 层 5 件 log_seq_pair_bound/_r/
        q_three_sum/q_lt_half_half/q_abs_diff_gt_neg 双层并行 + Real 锚点深链 2 件
        log_mid_sign/log_mid_diff 引用 log_seq/log_lower/log_upper 具体机，
        接口不可表达）；账面同位 1（real_mult_lt_compat 本体 = 接口字段
@@ -61,17 +57,15 @@
        ralt_dpo_reward_diff_is_log_ratio_diff（δ 透明件）。
    [区3 preference 節 L20101-20258] ralt_implicit_reward_diff/dpo_pair_loss/_star
        定义 3 + denom_pos（平凡直引批 3 req_sigmoid_denom_pos）+
-       pi_star_implicit_reward_diff（消费 relative_exact）+ dpo_pair_loss_at_star
        total_loss 簇冻结（fold_right_ext 载体，批 3 登记表 4 双层并行）。
    [区4 sigmoid/DPO 损失簇 L20880-21059] ralt_log_ratio/dpo_loss_pair 定义 +
        dpo_loss_at_pi_star（真证：log_pi_star 消去 Z/π_ref + β·(1/β)=1 吸收）+
-       sigmoid_strict_inc（真证：**消费区1消解件**）+ dpo_loss_pi_star_bounded
-       （真证：log_lt_mono B 桥消费）；sigmoid_denom_pos/sigmoid_pos/
-       sigmoid_zero_half 批 3 已建（UpReqAlign ReqSigmoidQuick，消费不重建）。
-   [区5 KL 投影区合并块余件 L95420-95508：A2 Q↔Real 桥 6 件] req 系签名落位
+       sigmoid_strict_inc（真证：**使用区1消解件**）+ dpo_loss_pi_star_bounded
+       （真证：log_lt_mono B 桥使用）；sigmoid_denom_pos/sigmoid_pos/
+   [区5 KL 投影区合并块余件 L95420-95508：A2 Q↔Real 桥 6 件] req 系签名定位
        （instance RealEnhancedReal 的 req/lt/le 投影 = real_eq/real_lt/real_le，
        与升级包 1-3（seq_eqb/in_seq/count_true/sf_*）nat/list/Q 层冻结；
-       KLProjection Section 16 对位批 3 席已建（req_Z_aud_le_one 等，不重复）。
+       KLProjection Section 16 对位批 3 件已建（req_Z_aud_le_one 等，不重复）。
    ----------------------------------------------------------------
    诚实签名变化登记表（规划书 §7.4）：
      的 req 版携带分母正性显式位（区3 定义前置 denom 引理）。
@@ -99,7 +93,7 @@ Variable S : Set.
 Variable sumf : (S -> R) -> R.
 Hypothesis ralt_sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
-(* T5 扩槽（R120 B39 后，T4R §⑤-A1 配方）：pi_star_req canonical 签名顶入
+(* T5 扩槽（ B39 后，T4R §⑤-A1 配方）：pi_star_req canonical 签名顶入
    sum_pos 位——本节原无此槽，仿 G12 W 方增补；Z_align_pos 槽闲置保留
   （log/inv_pos 内部供给位仍在用，防下游语句面引用断裂）。 *)
 Hypothesis ralt_sum_pos :
@@ -111,7 +105,6 @@ Variable pi_ref : S -> R.
 Variable pi_ref_pos : forall s : S, lt zero (pi_ref s).
 Variable Z_align_pos : lt zero (Z_align_req S sumf reward beta beta_pos pi_ref).
 
-(* ---- B 类桥假设位（Id 同位；各席自持纪律） ---- *)
 Hypothesis ralt_lt_plus_compat_lt_le :
   forall a b c d : R, lt a b -> le c d -> lt (plus a c) (plus b d).
 Hypothesis ralt_log_lt_mono :
@@ -256,7 +249,7 @@ Definition ralt_log_ratio (pi : S -> R) (Hpi : forall s : S, lt zero (pi s)) (s 
 Definition ralt_dir (pi : S -> R) (Hpi : forall s : S, lt zero (pi s)) (s : S) : R :=
   mult beta (ralt_log_ratio pi Hpi s).
 
-(* π* 逐点正性（消费批 3 成品；见证固定形态） *)
+(* π* 逐点正性（使用批 3 成品；见证固定形态） *)
 Definition ralt_pistar_pos (s : S)
   : lt zero (pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s) :=
   req_pi_star_pos S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos s.
@@ -265,7 +258,7 @@ Definition ralt_pistar_pos (s : S)
 Definition ralt_pistar : S -> R :=
   pi_star_req S sumf ralt_sum_pos reward beta beta_pos pi_ref pi_ref_pos.
 
-(* T4R2 桥（R120 B39 后）：canonical π* 闭式（UpReqAlign.Z_align_pos 内部供给件
+(* T4R2 桥（ B39 后）：canonical π* 闭式（UpReqAlign.Z_align_pos 内部前置引理
    实例）与本节 Z_align_pos 槽闭式的逐点 req——两者仅差 inv_pos 的正性证明参，
    非转换面（T4R 经验卡 canonical-vs-pinned 墙）；Close uac_pstr_cross 同款：
    req_mult_cancel_l + inv_pos_correct 双折运输。 *)
@@ -523,7 +516,7 @@ Definition ralt_dpo_pair_loss_star (pref : Preference) : R :=
       (ralt_pair_denom_pos_star pref).
 
 (* 3.1 pi_star_implicit_reward_diff 同位（基座 L20126）：
-   π* 处隐式奖励差分 ≡ 真实奖励差分（消费 2.3；真证在彼处） *)
+   π* 处隐式奖励差分 ≡ 真实奖励差分（使用 2.3；真证在彼处） *)
 Theorem ralt_pi_star_implicit_reward_diff : forall pref : Preference,
   req (ralt_implicit_reward_diff ralt_pistar ralt_pistar_pos pref)
       (req_minus (reward (pref_win pref)) (reward (pref_lose pref))).
@@ -581,7 +574,7 @@ Qed.
 (* ============ 区4：sigmoid/DPO 损失簇 req 化（基座 L20880-21059） ============ *)
 (* sigmoid_denom_pos/sigmoid_pos/sigmoid_zero_half 三件批 3 已建
    （UpReqAlign ReqSigmoidQuick：req_sigmoid_denom_pos/sigmoid_req/
-   req_sigmoid_pos/req_sigmoid_zero_half），消费不重建。 ---- *)
+   req_sigmoid_pos/req_sigmoid_zero_half），使用不重建。 ---- *)
 
 (* 4.1 成对 DPO 损失（基座 dpo_loss_pair L20885 req 同形；
    sigmoid_req 批 3 成品 + req_minus 载体 + log 见证显式位） *)
@@ -646,7 +639,7 @@ Proof.
 Qed.
 
 (* 4.4 dpo_loss_pi_star_bounded 同位（基座 L21059）：
-   真证：4.2 + 4.3 + ralt_log_lt_mono（B 类桥消费）+ opp_lt_compat +
+   真证：4.2 + 4.3 + ralt_log_lt_mono（B 类桥使用）+ opp_lt_compat +
    log(1/2) = -log 2（req_log_inv_one_inv + double_neg） *)
 Theorem ralt_dpo_loss_pi_star_bounded : forall s_w s_l : S,
   lt (reward s_l) (reward s_w) ->
@@ -706,11 +699,11 @@ Qed.
 End ReqRestACore.
 
 (* ============================================================ *)
-(* 区5：KL 投影区合并块余件 —— A2 Q↔Real 桥 req 系签名落位          *)
+(* 区5：KL 投影区合并块余件 —— A2 Q↔Real 桥 req 系签名定位          *)
 (*   （基座 仅存 real_const_pos(L36290)/real_const_lt(L37095)  *)
 (*     两件；合并块 L95422-95508 的 eq/le/qleT/eq_bool 四件    *)
 
-(*     将全部六件以接口投影 req 形态落位。instance RealEnhancedReal  *)
+(*     将全部六件以接口投影 req 形态定位。instance RealEnhancedReal  *)
 (*     的 req/lt/le 逐位 = real_eq/real_lt/real_le：change 暴露具体  *)
 (*     形态后全显式 exact/逐字证明——具体层禁 apply 类字段投影，       *)
 
@@ -719,7 +712,7 @@ End ReqRestACore.
 (*     （规划书 §1.1 边界 2）。                                       *)
 (* ============================================================ *)
 
-(* 5.1 嵌入相等（L95422 补件 + 落位） *)
+(* 5.1 嵌入相等（L95422 补件 + 定位） *)
 Lemma ralt_real_const_req_eq : forall x y : Q, x == y -> req (real_const x) (real_const y).
 Proof.
   intros x y Hxy.
@@ -745,7 +738,7 @@ Proof.
   rewrite Hcmp. reflexivity.
 Qed.
 
-(* 5.2 严格序嵌入（L37095 现成件落位） *)
+(* 5.2 严格序嵌入（L37095 现成件定位） *)
 Lemma ralt_real_const_req_lt : forall c d : Q,
   Qlt c d -> lt (real_const c) (real_const d).
 Proof.
@@ -754,7 +747,7 @@ Proof.
   exact (real_const_lt c d Hcd).
 Qed.
 
-(* 5.3 弱序嵌入（L95447 补件 + 落位；Q 三分装配：左严格/中矛盾/右相等） *)
+(* 5.3 弱序嵌入（L95447 补件 + 定位；Q 三分装配：左严格/中矛盾/右相等） *)
 Lemma ralt_real_const_req_le : forall x y : Q,
   Qle x y -> le (real_const x) (real_const y).
 Proof.
@@ -766,7 +759,7 @@ Proof.
   - right. exact (ralt_real_const_req_eq x y Heq).
 Qed.
 
-(* 5.4 Set 层推论 QleT' 版（L95478 补件 + 落位） *)
+(* 5.4 Set 层推论 QleT' 版（L95478 补件 + 定位） *)
 Lemma ralt_real_const_req_qleT : forall x y : Q,
   QleT' x y -> le (real_const x) (real_const y).
 Proof.
@@ -774,7 +767,7 @@ Proof.
   exact (ralt_real_const_req_le x y (QleT'_to_Qle x y H)).
 Qed.
 
-(* 5.5 Set 层推论 Qeq_bool 判定版（L95484 补件 + 落位） *)
+(* 5.5 Set 层推论 Qeq_bool 判定版（L95484 补件 + 定位） *)
 Lemma ralt_real_const_req_eq_bool : forall x y : Q,
   Id (Qeq_bool x y) true -> req (real_const x) (real_const y).
 Proof.
@@ -783,7 +776,7 @@ Proof.
            (proj1 (Qeq_bool_iff x y) (RealSetoid.Id_eq (Qeq_bool x y) true H))).
 Qed.
 
-(* 5.6 正性嵌入（L36290 现成件落位） *)
+(* 5.6 正性嵌入（L36290 现成件定位） *)
 Lemma ralt_real_const_req_pos : forall c : Q,
   QltT 0 c -> lt zero (real_const c).
 Proof.
@@ -794,8 +787,8 @@ Qed.
 
 
 
-(* （ToyR 增补·非原件改动）假设面收口申报节：玩具面逐件申报，
-    全 Closed 为定谳标识；基准对照件以同文申报节同法试编比对。 *)
+(* （ToyR 增补·非原件改动）假设面闭合申报节：玩具面逐件申报，
+    全 Closed 为已证结论标识；基准对照件以同文申报节同法试编比对。 *)
 Print Assumptions ralt_log_exp_neg.
 Print Assumptions ralt_mult_lt_compat_l.
 Print Assumptions ralt_lt_plus_compat_le_lt.

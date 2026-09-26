@@ -1,45 +1,27 @@
 (* ============================================================
-   T241 · ToyR 战役包B 补位席切片二（DTPT_Bridge.v 同名非平凡替换稿）
-   本片口径：Set 形桥接件中「包装构造子 + Prop 母件转发」的十九条
-   循主会话转发件挂账口径如实挂账（母件皆他件非玩具归纳/代数链，
-   内联即整链搬运超切片预算）；tarski_set 与 layered_network_liar_set
-   复判为非玩具——Prop 存在消除入 sigT 为禁（Type 目标下该消除
-   非法），existT 直构即唯一合法 Set 通道；H_min_q_anti_set 复判为
-   非玩具（证明体已是定义面展开＋反变桥＋前提抽取三步直构，无
-   转发跳可消）；其余六条按口径三内联母件骨架（布尔三律/双副本
-   守恒归纳×2/H_max_q 反变定义面/nat 提升桥×2）替换；台账：
-   消融50/T240-ToyR-包B-DTPT族替换.md 切片二节。
-   ============================================================ *)
-(* ============================================================
-   DTPT_Bridge.v — P3 桥接层首件（席 P3-B1，2026-09-14）
-   职责：DTPT 冻结旗舰的 Set 层信息性桥接——
+   DTPT_Bridge.v — DTPT 层的 Set 层信息性桥接。
+   使命：为 DTPT／DTPT_Entropy／DTPT_Truth 的 Prop 版定理给出
+         Set 层信息性重述与提取面：
          §1 信息性比较类型族 Type 版（QleT/QltT/QeqT，单构造子
             携 Prop 证明参数＝提取擦除惯例）+ Qle 双向桥 + 传播引理
-         §2 主库惯例镜像件（And := A*B、ExistsT := sigT 本地同构
+         §2 主库惯例同构件（And := A*B、ExistsT := sigT 本地同构
             Type 版；DTPT 隔离区不 Require 主库）
-         §3 旗舰桥三件：C_sorted_min_adj_set / C_gen_set /
+         §3 桥接主定理三件：C_sorted_min_adj_set / C_gen_set /
             H_devsum_nonneg_set（陈述 QleT 面，证明＝Prop 版直构包装）
-         §4 Extraction 探针：对桥件本身提取，验收 Obj.magic=0 实测
-   依赖：DTPT（冻结旗舰，只读 Require）、DTPT_Entropy（H_devsum
-         所在件，只读消费——ADJ-1 改名点 L42、非负件
-         H_shannon_q_nonneg L116；只读 Require 先例＝DTPT_Extract.v
-         L33）、stdlib（QArith/List/Permutation/Extraction）。
-   主库惯例对应（详见 DTPT_P3B1_桥接报告.md）：
-         ConstructiveWorld_Live 不 Require（DTPT 隔离区纪律），本地
-         同名同构 Type 版——
-         S02 L26 QltT := Id (Qlt_bool x y) true
-         S02 L27 QleT := Or (QltT x y) (Id x y)
-         S02 L77 QleT' := Id (Qle_bool x y) true
-         S01 L68 And (A B : Set) := A * B
-         S01 L73 ExistsT P := sigT P
-         本件比较族改取「单构造子归纳＋Prop 证明参数」形（任务书
-         指定）：信息角色与提取行为同构（Prop 参提取即擦除），
-         并避开主库 Or/Id 形在隔离区缺 Id 底座的依赖。
-   命名：沿用任务书指定名；模块 DTPT_Bridge 限名隔离防撞。
-   认证目标：零承认零公理；Error=0 Warning=0；Obj.magic=0 实测。
-   纪律：温控协议 v2（coqc 全机 ≤3 先查后编）；禁碰既有 .v；
-         H_freq/Entropy 族桥留待后续棒（Entropy 置换不变命题经
-         DTPT_Entropy.v L125 在案核查为假命题，禁桥假命题）。
+         §4 起各段 Extraction 检验：对桥接件本身提取，验收
+            Obj.magic=0 实测；真理网/审查器段给可执行 Set 面
+            （existT 直构即合法 Set 通道）；H_min_q_anti_set 依
+            定义面展开＋反变桥＋前提抽取三步直构。
+   依赖：DTPT、DTPT_Entropy、DTPT_Truth（均只读 Require）；
+         stdlib（QArith/List/Permutation/Lia/Extraction）。
+   对标：S02 L26-L77 QltT/QleT/QleT'；S01 L68 And := A * B；
+         S01 L73 ExistsT P := sigT P（本件比较族改取单构造子
+         归纳＋Prop 证明参数形，信息角色与提取行为同构）。
+   构造性：零承认零公理；语句取 Set/Type 层，Prop 证明参随
+         提取擦除；H_freq/Entropy 族置换不变命题经 DTPT_Entropy.v
+         L125 核查为假命题，不桥接假命题，故不留该桥。
+   编译配方：coqc -native-compiler no -q -Q . ""（全机 ≤3 道先查
+         后编）；Extraction 产物 .ml 验收后清除。
    ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
@@ -55,17 +37,16 @@ Set Implicit Arguments.
 
 Require DTPT.
 Require DTPT_Entropy.
-(* P3-B3 追加：真理网/审查器冻结终态（835 行）只读消费；
-   只 Require 不 Import（Import 置于 §7 内，防对 B1/B2 段遮蔽）。
-   注：Module 内 Require 实测触发 require-in-module fragile 警告，
-   破零警告关，故置文件头——B1/B2 段零改动，仅此一行插入。 *)
+(* 真理网/审查器层（DTPT_Truth）只读使用：只 Require 不 Import
+   （Import 置于 §7 内，防对前段遮蔽）；Require 行置文件头以避开
+   Module 内 Require 的 require-in-module fragile 警告，前段零改动。 *)
 Require DTPT_Truth.
 Import DTPT.DTPT.
 Import DTPT_Entropy.DTPT_Entropy.
 
 Module DTPT_Bridge.
 
-(* ========== §1 信息性比较类型族（Type 版，主库 S02 同构镜像） ========== *)
+(* ========== §1 信息性比较类型族（Type 版，主库 S02 同构） ========== *)
 
 Inductive QleT (x y : Q) : Type :=
 | qleT_intro : (x <= y)%Q -> QleT x y.
@@ -83,7 +64,7 @@ Definition QleT_of_Qle {x y : Q} (H : (x <= y)%Q) : QleT x y :=
 Definition QleT_to_Qle {x y : Q} (Hq : QleT x y) : (x <= y)%Q :=
   match Hq with qleT_intro Hp => Hp end.
 
-(* Qlt/Qeq 同族双向桥（同构镜像同形） *)
+(* Qlt/Qeq 同族双向桥（同构同形） *)
 Definition QltT_of_Qlt {x y : Q} (H : (x < y)%Q) : QltT x y :=
   qltT_intro H.
 
@@ -96,36 +77,36 @@ Definition QeqT_of_Qeq {x y : Q} (H : (x == y)%Q) : QeqT x y :=
 Definition QeqT_to_Qeq {x y : Q} (Hq : QeqT x y) : (x == y)%Q :=
   match Hq with qeqT_intro Hp => Hp end.
 
-(* 传播引理：QltT 传 QleT——stdlib QArith 本环境无 Qlt_le（CS1 卡
-   第 4 条实测口径），按在案处方 unfold Qlt/Qle 后 lia 收口 *)
+(* 传播引理：QltT 传 QleT——stdlib QArith 本环境无 Qlt_le，
+   unfold Qlt/Qle 后 lia 闭合 *)
 Definition QltT_QleT {x y : Q} (Hq : QltT x y) : QleT x y.
 Proof.
   destruct Hq as [Hlt]. apply qleT_intro. unfold Qle. unfold Qlt in Hlt. lia.
 Defined.
 
-(* ========== §2 主库惯例镜像件（S01 本地同构 Type 版） ========== *)
+(* ========== §2 主库惯例同构件（S01 本地同构 Type 版） ========== *)
 
 Definition And (A B : Type) : Type := A * B.
 Definition ExistsT {A : Type} (P : A -> Type) : Type := sigT P.
 
-(* ========== §3 旗舰桥三件（陈述 QleT 面，证明＝Prop 版包装；
-     提取面消费件故取 Defined——避免 opaque-accessed 提取警告） ========== *)
+(* ========== §3 桥接主定理三件（陈述 QleT 面，证明＝Prop 版包装；
+     提取面使用件故取 Defined——避免 opaque-accessed 提取警告） ========== *)
 
-(* 旗舰一：排序最小化——DTPT.v L729 C_sorted_min_adj 的 Set 形重述 *)
+(* 主定理一：排序最小化——DTPT.v L729 C_sorted_min_adj 的 Set 形重述 *)
 Theorem C_sorted_min_adj_set : forall l : list Q,
   QleT (H_adj (P0 l)) (H_adj l).
 Proof.
   intro l. apply qleT_intro. exact (C_sorted_min_adj l).
 Defined.
 
-(* 旗舰二：置换泛化——DTPT.v L968 C_gen（M1 并入件）的 Set 形重述 *)
+(* 主定理二：置换泛化——DTPT.v L968 C_gen 的 Set 形重述 *)
 Theorem C_gen_set : forall l p : list Q,
   Permutation l p -> QleT (H_adj (P0 l)) (H_adj p).
 Proof.
   intros l p Hp. apply qleT_intro. exact (C_gen l p Hp).
 Defined.
 
-(* 旗舰三：H_devsum 非负——ADJ-1 改名现名（DTPT_Entropy.v L42 定义点），
+(* 主定理三：H_devsum 非负（DTPT_Entropy.v L42 定义点），
    Prop 版＝DTPT_Entropy.v L116 H_shannon_q_nonneg 的 Set 形重述 *)
 Theorem H_devsum_nonneg_set : forall l : list Q,
   QleT 0 (H_devsum l).
@@ -133,7 +114,7 @@ Proof.
   intro l. apply qleT_intro. exact (H_shannon_q_nonneg l).
 Defined.
 
-(* ========== §4 Extraction 探针（U12 配方：逐件独立提取，
+(* ========== §4 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 (* 产物落工作区显式化（消 extraction-default-directory 警告） *)
@@ -147,34 +128,31 @@ Extraction "b1_C_sorted_min_adj_set_ext.ml" C_sorted_min_adj_set.
 Extraction "b1_C_gen_set_ext.ml" C_gen_set.
 Extraction "b1_H_devsum_nonneg_set_ext.ml" H_devsum_nonneg_set.
 
-(* ========== §5 P3-B2 追加：熵族旗舰 Set 形桥接（2026-09-14） ==========
-   前置核查裁决（详见 DTPT_P3B2_桥接报告.md §1）：
-   DTPT_Entropy.v L125 注记所指命题＝「H_devsum 置换不变」（质心偏移
-   占位形；盘上 H_shannon_q_perm_inv_counterex 已构造性证伪，反例
-   [3;1;2] vs [2;1;3] 机检在案），与 §A2 H_freq_perm（真频率形
-   1−Σp_v²，真）为不同载体、不同命题——裁决＝②不同命题且确为假
-   （B1 标记无误，注记零改动）。本节桥 H_freq 面不触碰 H_devsum
-   置换面，无假命题入桥。
-   消费盘上已证件（全部只读）：
+(*
+   命题甄别注记：DTPT_Entropy.v L125 注记所指命题＝「H_devsum
+   置换不变」（质心偏移占位形；盘上 H_shannon_q_perm_inv_counterex
+   已构造性证伪，反例 [3;1;2] vs [2;1;3]），与 §A2 H_freq_perm
+   （真频率形 1−Σp_v²，真）为不同命题——前者确为假。本节桥
+   H_freq 面不触碰 H_devsum 置换面，无假命题入桥。
+   所用盘上已证引理（全部只读）：
      H_freq_perm（DTPT_Entropy.v L1239）；collide_lower L1757 /
      collide_le_maxfreq L1794 / maxfreq_upper L1849（即 H_chain
      L1903 三成员）；H_shannon_q_zero_iff_sorted L2484 与 stdlib
      Qeq_bool_iff；freq_perm（DTPT.v L1974）；
      mu_total_mass（DTPT.v L2094）。
-   类型注记：任务书草式「1 # Z.of_nat (length l)」的 # 分母须
-   positive 实参（Measure 卡同族坑：# 不可吃 Z），盘上类型正确形
-   ＝ 1 / qn (length l)（collide_lower / maxfreq_lower 同面），
-   从盘面。 *)
+   类型注记：「1 # Z.of_nat (length l)」的 # 分母须 positive
+   实参（# 不可吃 Z），类型正确形＝ 1 / qn (length l)
+   （collide_lower / maxfreq_lower 同面）。 *)
 
-(* 保底件：H_freq 置换不变 Set 形（消费 DTPT_Entropy.v L1239 旗舰） *)
+(* 保底件：H_freq 置换不变 Set 形（所用 DTPT_Entropy.v L1239 主定理） *)
 Theorem H_freq_perm_set : forall l p : list Q,
   Permutation l p -> QeqT (H_freq l) (H_freq p).
 Proof.
   intros l p Hp. apply qeqT_intro. exact (H_freq_perm l p Hp).
 Defined.
 
-(* 旗舰：Rényi 阶梯 Set 形——非空表 1/n <= collide <= maxfreq <= 1
-   一次入链（合取用 B1 §2 基建 And := A*B 信息性 Type 版） *)
+(* 主定理：Rényi 阶梯 Set 形——非空表 1/n <= collide <= maxfreq <= 1
+   一次入链（合取用 §2 基建 And := A*B 信息性 Type 版） *)
 Theorem H_chain_set : forall l : list Q, (0 < length l)%nat ->
   And (QleT (1 / qn (length l)) (collide l))
       (And (QleT (collide l) (maxfreq l)) (QleT (maxfreq l) 1)).
@@ -187,7 +165,7 @@ Proof.
 Defined.
 
 (* 主件：H_devsum 零点对照 Set 面——Qeq_bool 判定零点，经盘上
-   iff 定理给出升序性的信息性载体（sumbool 形；判真支消费 iff
+   iff 定理给出升序性的信息性载体（sumbool 形；判真支使用 iff
    正向，判假支经 qeqb_false_neq 反证非升序） *)
 Definition H_devsum_zero_iff_sorted_set (l : list Q) :
   {SortedQ l} + {~ SortedQ l}.
@@ -204,7 +182,7 @@ Defined.
 
 (* 加分一：freq 置换不变 Set 形——freq 为 nat 值，Q 域信息载体取
    mu l x 的分子面 (Z.of_nat (freq l x) # 1)%Q（# 须 positive 实参，
-   故 # 1 归一，同 DTPT.v §12 mu 定义面）；消费 DTPT.v L1974 *)
+   故 # 1 归一，同 DTPT.v §12 mu 定义面）；所用 DTPT.v L1974 *)
 Theorem freq_perm_set : forall (l p : list Q) (x : Q),
   Permutation l p ->
   QeqT ((Z.of_nat (freq l x) # 1)%Q) ((Z.of_nat (freq p x) # 1)%Q).
@@ -213,14 +191,14 @@ Proof.
   rewrite (freq_perm l p x Hp). apply Qeq_refl.
 Defined.
 
-(* 加分二：均匀测度总质量一 Set 形（消费 DTPT.v L2094） *)
+(* 加分二：均匀测度总质量一 Set 形（所用 DTPT.v L2094） *)
 Theorem mu_total_mass_set : forall l : list Q, l <> [] ->
   QeqT (qsum (map (mu l) (dedup l))) 1.
 Proof.
   intro l. intro Hne. apply qeqT_intro. exact (mu_total_mass l Hne).
 Defined.
 
-(* ========== §6 P3-B2 提取探针（U12 配方：逐件独立提取，
+(* ========== §6 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Extraction "b2_H_freq_perm_set_ext.ml" H_freq_perm_set.
@@ -229,23 +207,23 @@ Extraction "b2_H_devsum_zero_iff_sorted_set_ext.ml" H_devsum_zero_iff_sorted_set
 Extraction "b2_freq_perm_set_ext.ml" freq_perm_set.
 Extraction "b2_mu_total_mass_set_ext.ml" mu_total_mass_set.
 
-(* ========== §7 P3-B3 追加：真理网/审查器旗舰 Set 形桥接（2026-09-15） ==========
-   消费盘上已证件（DTPT_Truth.v 835 行冻结终态，全部只读）：
+(*
+   所用盘上已证引理（DTPT_Truth.v，全部只读）：
      level_le L89 / level_le_total L468 / trLevel_geq_trans L480 /
      audit_node L700 / diag_closed L247（对角化引理＝显式前提，
      参数形照盘上现役陈述 diag_closed Code diag truth 三参显式）/
      bool_neq_negb L252 / layered_network_liar_each_layer L368 /
      cv_size_preservation_T L574 / cv_size_preservation_D L588 /
      cv_lv L599 / dt_ev_size L584。
-   基建：沿用 B1 §1 QleT/QeqT 族与 §2 And/sigT 信息性 Type 惯例；
-     全部 Defined（提取消费件惯例，B1 坑④）；sumbool/sigT 直构。
+   基建：沿用 §1 QleT/QeqT 族与 §2 And/sigT 信息性 Type 惯例；
+     全部 Defined（提取使用件惯例）；sumbool/sigT 直构。
    Tarski 语义边界声明（随行）：对角化引理＝显式前提 diag_closed
-     ——与盘上塔斯基段同口径，本棒不证对角化引理本身（盘面无句法
+     ——与盘上塔斯基段同口径，本件不证对角化引理本身（盘面无句法
      编码器，diag_closed 恰是其公理化形状）；tarski_set 的升级点＝
      盘上 tarski（L261）Prop 形 exists 的 Set 形重述，说谎句见证以
      sigT 信息性携带（见证码可计算交付，真值方程证明为 Prop 参随
      提取擦除）。liar_diag 为可执行码面对角构造器，其「闭包」语义
-     由 diag_closed 前提承担（本棒不证 liar_diag closed——对任意
+     由 diag_closed 前提承担（本件不证 liar_diag closed——对任意
      具体闭包对角子 no_uniform_truth 即假，故诚实立场是不证）；
      liar_diag_point 为反面互补＝bool 三律下无码点满足对角方程
      （Prop 面，不提取）。
@@ -260,7 +238,7 @@ Import DTPT_Truth.DTPT_Truth.
 
 (* 判定器完整性：audit_node 对任意节点可执行判定（sumbool 直构，
    bool 计算分支即判定；盘上双向行为定理 audit_node_iff L706 的
-   判定面底座） *)
+   判定面基础） *)
 Theorem audit_node_spec_set : forall t : TrNode,
   {audit_node t = true} + {audit_node t = false}.
 Proof.
@@ -279,7 +257,7 @@ Proof.
 Defined.
 
 (* 层升单调 Set 形：节点对 a 层过审时对不升要求 b 的判定转移——
-   左支消费盘上 trLevel_geq_trans（L480），右支以 bool 判定见证
+   左支使用盘上 trLevel_geq_trans（L480），右支以 bool 判定见证
    「要求未降」（level_le b a = false，level_le L89 计算面） *)
 Theorem trLevel_geq_mono_set : forall (t : TrNode) (a b : Level),
   trLevel_geq t a = true ->
@@ -292,7 +270,7 @@ Defined.
 
 (* 全序 Set 面：level_le 判定器双向往复的信息性形——与盘上
    level_le_total（L468）同真值面；Prop \/ 不可消除入 Set，本件
-   为 Level 三层九格穷举直构（判定器计算面，诚实声明非 Prop 消费） *)
+   为 Level 三层九格穷举直构（判定器计算面，非 Prop 消除） *)
 Theorem level_le_total_set : forall a b : Level,
   {level_le a b = true} + {level_le b a = true}.
 Proof.
@@ -300,15 +278,15 @@ Proof.
     first [ left; reflexivity | right; reflexivity ].
 Defined.
 
-(* ---------- 7.2 旗舰：塔斯基可判定面（sigT 信息性说谎句见证） ---------- *)
+(* ---------- 7.2 主定理：塔斯基可判定面（sigT 信息性说谎句见证） ---------- *)
 
-(* 对角构造器（可执行码面）：把码 c 与其自身真值的 negb 反射打包为
+(* 对角构造器（可执行码面）：把码 c 与其自身真值的 negb 反射封装为
    说谎码——truth c = true 时码内嵌 0、false 时内嵌 1（Q 编码走
    if 计算面）。闭包语义由 diag_closed 前提承担（边界声明见 §7 头注） *)
 Definition liar_diag (truth : Dig -> bool) (c : Dig) : Dig :=
   dPair c (dQ (if negb (truth c) then 1%Q else 0%Q)).
 
-(* 旗舰·塔斯基 Set 形：diag_closed 照盘上现役三参陈述，见证
+(* 主定理·塔斯基 Set 形：diag_closed 照盘上现役三参陈述，见证
    s := diag (fun c => negb (truth c)) 以 sigT 信息性携带——对照盘上
    tarski（L261）Prop 形 exists，Set 形升级点＝说谎句见证可计算交付 *)
 Theorem tarski_set : forall (truth : Dig -> bool)
@@ -321,30 +299,30 @@ Proof.
                   (Hcl (fun c => negb (truth c)))).
 Defined.
 
-(* 对角方程的 bool 三律互补面：无任何码点满足对角方程（消费盘上
+(* 对角方程的 bool 三律互补面：无任何码点满足对角方程（使用盘上
    bool_neq_negb L252）——与 tarski_set 合读即 no_uniform_truth
    的两面：闭包前提造见证，三律封死解。Prop 面，不提取 *)
 Theorem liar_diag_point : forall (truth : Dig -> bool) (c : Dig),
   truth (liar_diag truth c) = negb (truth (liar_diag truth c)) -> False.
 Proof.
   intros truth c H.
-  (* 口径三：内联布尔三律母件骨架——真值对说谎码的取值二支
-     开析，每支方程经 negb 归约出布尔自反矛盾，判别剪枝收口 *)
+  (* 内联布尔三律源定理骨架——真值对说谎码的取值二支
+     开析，每支方程经 negb 归约出布尔自反矛盾，判别剪枝闭合 *)
   destruct (truth (liar_diag truth c)); simpl in H; discriminate H.
 Defined.
 
 (* ---------- 7.3 主件：双副本相干桥 Set 形（守恒值见证携带） ---------- *)
 
 (* T 侧守恒的信息性面：桥往返后尺寸守恒值 ev_size e 作为 nat 见证
-   信息性携带（消费盘上 cv_size_preservation_T L574；方程证明为
+   信息性携带（使用盘上 cv_size_preservation_T L574；方程证明为
    sigT 第二分量证明参，提取擦除） *)
 Theorem cv_size_preservation_T_set : forall e : Evidence,
   {n : nat & ev_size (cv_ev (cv_ev_inv e)) = n}.
 Proof.
   intro e.
-  (* 口径三：内联母件 cv_size_preservation_T 归纳骨架——三构造
+  (* 内联源定理 cv_size_preservation_T 归纳骨架——三构造
      子逐支：叶支双侧 iota 归一反射，Pair 支双归纳假设改写后
-     构造子同余收口；守恒值 ev_size e 仍作 sigT 见证携带 *)
+     构造子同余闭合；守恒值 ev_size e 仍作 sigT 见证携带 *)
   assert (Heq : ev_size (cv_ev (cv_ev_inv e)) = ev_size e).
   { induction e as [q | l | a IH1 b IH2]; simpl.
     - reflexivity.
@@ -353,15 +331,15 @@ Proof.
   exact (existT _ (ev_size e) Heq).
 Defined.
 
-(* D 侧守恒的信息性面：桥测度 dt_ev_size 守恒值作为见证（消费盘上
+(* D 侧守恒的信息性面：桥测度 dt_ev_size 守恒值作为见证（使用盘上
    cv_size_preservation_D L588） *)
 Theorem cv_size_preservation_D_set : forall e : DTPT.DTPT.Evidence,
   {n : nat & dt_ev_size (cv_ev_inv (cv_ev e)) = n}.
 Proof.
   intro e.
-  (* 口径三：内联母件 cv_size_preservation_D 归纳骨架——桥测度
+  (* 内联源定理 cv_size_preservation_D 归纳骨架——桥测度
      delta 展开后三构造子逐支：叶支双侧归一反射，Pair 支双归纳
-     假设改写收口；守恒值 dt_ev_size e 仍作 sigT 见证携带 *)
+     假设改写闭合；守恒值 dt_ev_size e 仍作 sigT 见证携带 *)
   assert (Heq : dt_ev_size (cv_ev_inv (cv_ev e)) = dt_ev_size e).
   { unfold dt_ev_size. induction e as [q | l | a IH1 b IH2]; simpl.
     - reflexivity.
@@ -384,7 +362,7 @@ Defined.
 
 (* 盘上 layered_network_liar_each_layer（L368）的 Set 形重述：
    每层闭包下每层产出说谎句见证（逐层实例化 tarski_set 同款直构，
-   见证 sigT 信息性携带——与旗舰同一升级点） *)
+   见证 sigT 信息性携带——与主定理同一升级点） *)
 Theorem layered_network_liar_set : forall
     (truth : Level -> Dig -> bool)
     (diag_lv : Level -> (Dig -> bool) -> Dig),
@@ -396,7 +374,7 @@ Proof.
                   (Hcl lv (fun c => negb (truth lv c)))).
 Defined.
 
-(* ========== §8 P3-B3 提取探针（U12 配方：逐件独立提取，
+(* ========== §8 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除；liar_diag_point 为
      Prop/False 面不提取，随行声明） ========== *)
 
@@ -411,17 +389,16 @@ Extraction "b3_cv_size_preservation_D_set_ext.ml" cv_size_preservation_D_set.
 Extraction "b3_cv_lv_total_set_ext.ml" cv_lv_total_set.
 Extraction "b3_layered_network_liar_set_ext.ml" layered_network_liar_set.
 
-(* ========== §9 P3-B5 追加：熵族剩余旗舰 Set 形桥接（2026-09-15） ==========
-   消费盘面现役名 grep 实测表（DTPT_Entropy.v 2,708 行冻结终态，
-   全部只读；棒 6a 在飞 Cyc/RotSpec/Lam 无交叠——DTPT_Lam.v 未
-   Require 未消费，H_lam_anti_mono 禁消费在飞件照办）：
+(*
+   所用盘面现役名表（DTPT_Entropy.v，全部只读；DTPT_Lam.v 未
+   Require 未使用，H_lam_anti_mono 不使用外部件）：
      collide_upper        L1743  forall l, collide l <= 1
      collide_lower        L1757  forall l, (0 < length l)%nat ->
                                    1 / qn (length l) <= collide l
      H_shannon_q_count_ub L664   forall l, H_devsum l <= H_adj l *
                                    (Z.of_nat (length l) # 1)
-                                   （盘面现名实测＝原名未改，桥件名按
-                                   B1 H_devsum 载体命名惯例取
+                                   （盘面现名＝原名未改，桥接件名按
+                                   H_devsum 载体命名惯例取
                                    H_devsum_count_ub_set）
      H_max_q_anti         L1920  forall l p, maxfreq l <= maxfreq p ->
                                    H_max_q p <= H_max_q l
@@ -429,25 +406,25 @@ Extraction "b3_layered_network_liar_set_ext.ml" layered_network_liar_set.
      H_min_q_nonneg       L1956  forall l, 0 <= H_min_q l
    主件二择一裁决：取 H_max_q_anti 反变单调面（QleT 前提经 §1
      QleT_to_Qle 抽取、结论经 qleT_intro 包装——双向桥同件串接，
-     消费深度高于 collide_perm 直构形）；collide_perm 实测在册
-     （L1778，EntFam2 归并区），按任务书二择一让位，如实记账。
-   H_lam 面声明：H_lam_mono（L94）现役但不在本棒任务清单，让位
-     后续棒；H_lam_anti_mono 在 DTPT_Lam.v 棒 6a 归并中，禁消费。
-   惯例：全部 Defined（B1 坑④提取消费件惯例）；# 分母 positive
-     实参形照盘面（B2 坑②）；非空卫哨 (0 < length l)%nat 照
-     collide_lower 原面（B2 H_chain_set 同款）。 *)
+     使用深度高于 collide_perm 直构形）；collide_perm 在册
+     （L1778），按规格二择一让位，如实记录。
+   H_lam 面声明：H_lam_mono（L94）现役但不在本件任务清单，让位
+     后续件；H_lam_anti_mono 在 DTPT_Lam.v 归并中，不使用。
+   惯例：全部 Defined（提取使用件惯例）；# 分母 positive
+     实参形照盘面；非空卫哨 (0 < length l)%nat 照
+     collide_lower 原面（H_chain_set 同款）。 *)
 (* ============================================================ *)
 
 (* ---------- 9.1 保底件：collide 界双 Set 形 ---------- *)
 
-(* collide 上界 Set 形：Σp² <= 1 全表无卫哨（消费 L1743 collide_upper） *)
+(* collide 上界 Set 形：Σp² <= 1 全表无卫哨（所用 L1743 collide_upper） *)
 Theorem collide_upper_set : forall l : list Q,
   QleT (collide l) 1.
 Proof.
   intro l. apply qleT_intro. exact (collide_upper l).
 Defined.
 
-(* collide 下界 Set 形：1/n <= collide，非空信息性卫哨形（消费
+(* collide 下界 Set 形：1/n <= collide，非空信息性卫哨形（所用
    L1757 collide_lower；卫哨照原面 nat 侧 (0 < length l)%nat） *)
 Theorem collide_lower_set : forall l : list Q,
   (0 < length l)%nat -> QleT (1 / qn (length l)) (collide l).
@@ -455,10 +432,10 @@ Proof.
   intros l Hl. apply qleT_intro. exact (collide_lower l Hl).
 Defined.
 
-(* ---------- 9.2 旗舰：H_devsum 计数上界 Set 形 ---------- *)
+(* ---------- 9.2 主定理：H_devsum 计数上界 Set 形 ---------- *)
 
-(* 计数上界 QleT 面：H_devsum l <= H_adj l × 长度系数（消费
-   L664 H_shannon_q_count_ub，盘面现名 grep 实测；桥件名按 B1
+(* 计数上界 QleT 面：H_devsum l <= H_adj l × 长度系数（所用
+   L664 H_shannon_q_count_ub，盘面现名核验；桥接件名按
    H_devsum 载体命名惯例——对照 H_shannon_q_nonneg→
    H_devsum_nonneg_set 同款） *)
 Theorem H_devsum_count_ub_set : forall l : list Q,
@@ -471,34 +448,34 @@ Defined.
 
 (* 反变单调：maxfreq l <= maxfreq p 导出 H_max_q p <= H_max_q l——
    前提 QleT 经 QleT_to_Qle 抽取为 Prop、结论经 qleT_intro 包装
-   回 QleT（§1 双向桥串接；消费 L1920 H_max_q_anti） *)
+   回 QleT（§1 双向桥串接；所用 L1920 H_max_q_anti） *)
 Theorem H_max_q_anti_set : forall l p : list Q,
   QleT (maxfreq l) (maxfreq p) -> QleT (H_max_q p) (H_max_q l).
 Proof.
   intros l p Hq. apply qleT_intro.
-  (* 口径三：内联母件 H_max_q_anti 骨架——H_max_q 定义面
+  (* 内联源定理 H_max_q_anti 骨架——H_max_q 定义面
      （1 - maxfreq）展开后直构 qsub_le 反变桥，前提经 QleT_to_Qle
-     模式匹配抽取，零母件转发跳 *)
+     模式匹配抽取，零转发跳 *)
   unfold H_max_q. apply qsub_le. exact (QleT_to_Qle Hq).
 Defined.
 
 (* ---------- 9.4 加分：H_min_q/H_max_q 界面 Set 形各一件 ---------- *)
 
-(* H_max_q 非负界面 Set 形（消费 L1926 H_max_q_nonneg） *)
+(* H_max_q 非负界面 Set 形（所用 L1926 H_max_q_nonneg） *)
 Theorem H_max_q_nonneg_set : forall l : list Q,
   QleT 0 (H_max_q l).
 Proof.
   intro l. apply qleT_intro. exact (H_max_q_nonneg l).
 Defined.
 
-(* H_min_q 非负界面 Set 形（消费 L1956 H_min_q_nonneg） *)
+(* H_min_q 非负界面 Set 形（所用 L1956 H_min_q_nonneg） *)
 Theorem H_min_q_nonneg_set : forall l : list Q,
   QleT 0 (H_min_q l).
 Proof.
   intro l. apply qleT_intro. exact (H_min_q_nonneg l).
 Defined.
 
-(* ========== §10 P3-B5 提取探针（U12 配方：逐件独立提取，
+(* ========== §10 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Extraction "b5_collide_upper_set_ext.ml" collide_upper_set.
@@ -508,34 +485,33 @@ Extraction "b5_H_max_q_anti_set_ext.ml" H_max_q_anti_set.
 Extraction "b5_H_max_q_nonneg_set_ext.ml" H_max_q_nonneg_set.
 Extraction "b5_H_min_q_nonneg_set_ext.ml" H_min_q_nonneg_set.
 
-(* ========== §11 P3-B8 追加：DPI 旗舰 Set 形桥接 + 熵族补充桥件（2026-09-15） ==========
-   消费盘面现役名实测表（全部只读；FRUIT-2 在飞改 DTPT.v/DTPT_Entropy.v，
-   本节名面经冻结 .vo 的 coqtop Check 探针逐一实测解析成立后才落笔；
-   DTPT_Entropy2.v / DTPT_Rotation §S8 零 Require——禁消费在飞件照办）：
+(*
+   所用盘面现役名表（全部只读；名面解析经冻结 .vo 逐一核验成立；
+   DTPT_Entropy2.v / DTPT_Rotation §S8 零 Require——不使用外部件）：
      H_freq_dpi           L1439  forall f, (forall x y : Q, x == y ->
                                  f x == f y) -> forall l,
                                  H_freq (map f l) <= H_freq l
                                  （形态假设照盘面逐字；Prop 卫哨随提取擦除）
-     H_freq_map_twice     L1497  两步复合不增（盘面在册，grep 实测）
-     H_freq_map_chain     L1506  链式不增（盘面在册，grep 实测）
+     H_freq_map_twice     L1497  两步复合不增（盘面在册）
+     H_freq_map_chain     L1506  链式不增（盘面在册）
      H_freq_eq0_all_same  L1291  H_freq l == 0 -> all_same l
                                  （简并刻画反向；all_same 为 Prop 面 L1182）
-     H_freq_all_same_zero L1268  简并刻画正向（判假支矛盾腿消费）
+     H_freq_all_same_zero L1268  简并刻画正向（判假支所用）
      qsub_le              L1637  forall x y z : Q, x <= y -> z - y <= z - x
                                  （盘面反变桥；盘上 H_max_q_anti 证明体同款）
      H_min_q              L1920  1 - collide l（定义面）
-   惯例：全部 Defined（B1 坑④提取消费件惯例）；本节零分式无 # 面
-     （B2 坑②不触发）；QleT/QeqT/And 基建沿用 §1/§2。
+   惯例：全部 Defined（提取使用件惯例）；本节零分式无 # 面；
+     QleT/QeqT/And 基建沿用 §1/§2。
    诚实声明（11.3 主件）：盘面无 Prop 版 H_min_q_anti（grep 零命中）
      ——H_min_q_anti_set 照盘上 H_max_q_anti 证明体（unfold 后
      apply qsub_le）同款直构：前提 QleT 经 QleT_to_Qle 抽取、结论
-     qleT_intro 包装，消费件＝qsub_le + H_min_q 定义面，零生造。
+     qleT_intro 包装，所用件＝qsub_le + H_min_q 定义面，零生造。
    ============================================================ *)
 
-(* ---------- 11.1 旗舰：DPI 数据处理不等式 Set 形 ---------- *)
+(* ---------- 11.1 主定理：DPI 数据处理不等式 Set 形 ---------- *)
 
-(* 观测（粗粒化合并质量）不增 H_freq 的信息性面——B1 配方：盘上
-   Prop 件消费 + qleT_intro 直构包装；形态假设 Prop 卫哨照盘面逐字 *)
+(* 观测（粗粒化合并质量）不增 H_freq 的信息性面——配方：盘上
+   Prop 件使用 + qleT_intro 直构包装；形态假设 Prop 卫哨照盘面逐字 *)
 Theorem H_freq_dpi_set : forall (f : Q -> Q),
   (forall x y : Q, x == y -> f x == f y) ->
   forall l : list Q, QleT (H_freq (map f l)) (H_freq l).
@@ -545,7 +521,7 @@ Defined.
 
 (* ---------- 11.2 主件：DPI 链式面（盘面在册双件 grep 实测在册） ---------- *)
 
-(* 两步复合不增 Set 形：第二次观测仍不增（消费 L1497 H_freq_map_twice） *)
+(* 两步复合不增 Set 形：第二次观测仍不增（所用 L1497 H_freq_map_twice） *)
 Theorem H_freq_map_twice_set : forall (f g : Q -> Q),
   (forall x y : Q, x == y -> f x == f y) ->
   (forall x y : Q, x == y -> g x == g y) ->
@@ -555,7 +531,7 @@ Proof.
   exact (H_freq_map_twice f g Hf Hg l).
 Defined.
 
-(* 链式不增 Set 形：map g ∘ map f 一次到底（消费 L1506 H_freq_map_chain） *)
+(* 链式不增 Set 形：map g ∘ map f 一次到底（所用 L1506 H_freq_map_chain） *)
 Theorem H_freq_map_chain_set : forall (f g : Q -> Q),
   (forall x y : Q, x == y -> f x == f y) ->
   (forall x y : Q, x == y -> g x == g y) ->
@@ -568,7 +544,7 @@ Defined.
 (* ---------- 11.3 主件：H_min_q 反变单调 Set 形 ---------- *)
 
 (* 反变单调：collide l <= collide p 导出 H_min_q p <= H_min_q l——
-   结论两侧翻转照 B5 H_max_q_anti_set 同款配方镜像；前提 QleT 经
+   结论两侧翻转照 H_max_q_anti_set 同款配方；前提 QleT 经
    QleT_to_Qle 抽取为 Prop、结论经 qleT_intro 包装回 QleT（§1 双向
    桥串接；盘上 H_max_q_anti 证明体同款：unfold 后 apply qsub_le） *)
 Theorem H_min_q_anti_set : forall l p : list Q,
@@ -581,9 +557,9 @@ Defined.
 (* ---------- 11.4 加分：简并判定器（H_freq 零点对照面另一侧） ---------- *)
 
 (* 简并刻画双向闭合的可执行判定器：Qeq_bool (H_freq l) 0 判定全同值
-   ——判真支消费 H_freq_eq0_all_same（零点 ⟹ 全同值）、判假支以
-   H_freq_all_same_zero（全同值 ⟹ 零点）+ Qeq_bool_iff 矛盾收口
-   （B2 H_devsum_zero_iff_sorted_set 同款配方；all_same 为 Prop 面，
+   ——判真支使用 H_freq_eq0_all_same（零点 ⟹ 全同值）、判假支以
+   H_freq_all_same_zero（全同值 ⟹ 零点）+ Qeq_bool_iff 矛盾闭合
+   （H_devsum_zero_iff_sorted_set 同款配方；all_same 为 Prop 面，
    sumbool 分支携 Prop 参随提取擦除，零 Prop 消除入 Type） *)
 Definition H_freq_eq0_all_same_set (l : list Q) :
   {all_same l} + {~ all_same l}.
@@ -598,7 +574,7 @@ Proof.
     congruence.
 Defined.
 
-(* ========== §12 P3-B8 提取探针（U12 配方：逐件独立提取，
+(* ========== §12 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Extraction "b8_H_freq_dpi_set_ext.ml" H_freq_dpi_set.
@@ -607,10 +583,9 @@ Extraction "b8_H_freq_map_chain_set_ext.ml" H_freq_map_chain_set.
 Extraction "b8_H_min_q_anti_set_ext.ml" H_min_q_anti_set.
 Extraction "b8_H_freq_eq0_all_same_set_ext.ml" H_freq_eq0_all_same_set.
 
-(* ========== §13 P3-B11 追加：FRUIT-2 新定理 Set 形桥接（2026-09-15） ==========
-   消费盘面现役名实测表（全部只读；双实测＝grep 在飞 .v + coqtop Check
-   冻结 .vo（DTPT.vo 07:11 / DTPT_Entropy.vo 07:11，FRUIT-2 收口版），
-   七名签名逐项吻合后才落笔，探针日志 _p3b11_probe.log 在案）：
+(*
+   所用盘面现役名表（全部只读；双核验＝grep 工作树 .v + Check 冻结
+   .vo，七名签名逐项吻合）：
      sqsum_app_ge_l   DTPT_Entropy.v L2696  forall l1 l2,
                         (sqsum l1 <= sqsum (l1 ++ l2))%nat
      sqsum_app_ge_r   DTPT_Entropy.v L2706  forall l1 l2,
@@ -624,22 +599,20 @@ Extraction "b8_H_freq_eq0_all_same_set_ext.ml" H_freq_eq0_all_same_set.
                         (|fiber|/|w|) <= qsum (map (mu w) (dedup (fiber)))
      mu_fiber_mass_eq DTPT.v L3560  forall f w, w <> [] -> φ 外延卫哨 ->
                         qsum (map (mu w) (dedup (fiber))) == |fiber|/|w|
-   让窗声明（本棒特记）：ADJ-4 在飞改 DTPT_Entropy.v §A7（.v 07:39
-     新于 .vo 07:11）——本席零消费 §A7，消费名经冻结 .vo Check 实测
-     解析成立；FRUIT-3 在飞 Rotation §S9 与本席零交集。ADJ-4 收口重编
-     Entropy.vo 后本席重验 Bridge.vo 一轮（消费名面按上表核销）。
-   nat → Q 提升惯例（B2 freq_perm_set 同款）：sqsum/freq_q/nsum 族为
-     nat 值，信息性面取 (Z.of_nat · # 1)%Q 归一提升（# 分母 positive
-     实参形照盘面，B2 坑②）；nat ≤/＝ 经 Znat.Nat2Z.inj_le/_add
-     搬入 Z 面（DTPT.v §15 盘面同款配方）。
-   惯例：全部 Defined（B1 坑④提取消费件惯例）；QleT/QeqT/QltT 基建
+   交叠声明：本件零使用 DTPT_Entropy.v §A7；Rotation §S9 与本件
+     零交集（使用名面按上表复核）。
+   nat → Q 提升惯例（freq_perm_set 同款）：sqsum/freq_q/nsum 族为
+     nat 值，信息性面取 (Z.of_nat · # 1)%Q 归一提升（# 分母
+     positive 实参形照盘面）；nat ≤/＝ 经 Znat.Nat2Z.inj_le/_add
+     移入 Z 面（DTPT.v §15 盘面同款配方）。
+   惯例：全部 Defined（提取使用件惯例）；QleT/QeqT/QltT 基建
      沿用 §1。
    ============================================================ *)
 
 (* ---------- 13.1 保底件：sqsum 拼接单调双件（QleT 面） ---------- *)
 
 (* 左拼接单调 Set 形：sqsum l1 <= sqsum (l1 ++ l2) 的信息性面——
-   nat 不等经 (Z.of_nat · # 1) 提升入 QleT（消费 L2696 sqsum_app_ge_l） *)
+   nat 不等经 (Z.of_nat · # 1) 提升入 QleT（所用 L2696 sqsum_app_ge_l） *)
 Theorem sqsum_app_ge_l_set : forall l1 l2 : list Q,
   QleT ((Z.of_nat (sqsum l1) # 1)%Q) ((Z.of_nat (sqsum (l1 ++ l2)) # 1)%Q).
 Proof.
@@ -650,7 +623,7 @@ Proof.
 Defined.
 
 (* 右拼接单调 Set 形：sqsum l2 <= sqsum (l1 ++ l2) 的信息性面
-   （消费 L2706 sqsum_app_ge_r；左件镜像） *)
+   （所用 L2706 sqsum_app_ge_r；左件同构） *)
 Theorem sqsum_app_ge_r_set : forall l1 l2 : list Q,
   QleT ((Z.of_nat (sqsum l2) # 1)%Q) ((Z.of_nat (sqsum (l1 ++ l2)) # 1)%Q).
 Proof.
@@ -660,10 +633,10 @@ Proof.
   apply sqsum_app_ge_r.
 Defined.
 
-(* ---------- 13.2 旗舰：纤维测度质量下界 Set 形（+ 随行正性面） ---------- *)
+(* ---------- 13.2 主定理：纤维测度质量下界 Set 形（+ 随行正性面） ---------- *)
 
-(* 旗舰·主桥 Set 形：非空世界表上零点经验频率 |fiber φ w|/|w| <= 纤维
-   支撑的 w-测度质量——P_φ(0) 经验频率下界的 QleT 信息性面（消费
+(* 主桥 Set 形：非空世界表上零点经验频率 |fiber φ w|/|w| <= 纤维
+   支撑的 w-测度质量——P_φ(0) 经验频率下界的 QleT 信息性面（所用
    L3452 mu_fiber_mass_lb，陈述面 QleT 化照盘面逐字，非空卫哨照原面） *)
 Theorem mu_fiber_mass_lb_set : forall (f : Q -> Q) (w : list Q),
   w <> [] ->
@@ -674,7 +647,7 @@ Proof.
 Defined.
 
 (* 随行件·判零会员测度正性 Set 形：0 < mu w x 的严格正面取 QltT
-   （§1 基建；消费 L3427 mu_fiber_pos——桥接对象点名件的诚实信息面） *)
+   （§1 基建；所用 L3427 mu_fiber_pos——桥接对象点名件的诚实信息面） *)
 Theorem mu_fiber_pos_set : forall (f : Q -> Q) (w : list Q) (x : Q),
   In x (fiber f w) -> QltT 0 (mu w x).
 Proof.
@@ -693,7 +666,7 @@ Defined.
 
 (* 精确交叉项分解 Set 形：sqsum (l1++l2) 的 Q 载值恒等于两段平方和加
    双交叉项 Σ_{x∈l1} freq_q x l2 与 Σ_{x∈l2} freq_q x l1——信息性面
-   （消费 L2718 sqsum_app_eq；nat 恒等式重写 + Nat2Z.inj_add 展开） *)
+   （所用 L2718 sqsum_app_eq；nat 恒等式重写 + Nat2Z.inj_add 展开） *)
 Theorem sqsum_app_eq_set : forall l1 l2 : list Q,
   QeqT ((Z.of_nat (sqsum (l1 ++ l2)) # 1)%Q)
        (((Z.of_nat (sqsum l1) # 1) + (Z.of_nat (sqsum l2) # 1)
@@ -710,7 +683,7 @@ Defined.
 
 (* 质量守恒显式形 Set 面：φ 沿支撑 Qeq-外延卫哨（照盘面逐字 Prop
    卫哨，随提取擦除）下取等——P_φ(0) 经验频率恰为纤维 w-测度质量
-   （消费 L3560 mu_fiber_mass_eq；f := 常零退化为 B2 mu_total_mass_set
+   （所用 L3560 mu_fiber_mass_eq；f := 常零退化为 mu_total_mass_set
    相容核对） *)
 Theorem mu_fiber_mass_eq_set : forall (f : Q -> Q) (w : list Q),
   w <> [] ->
@@ -721,7 +694,7 @@ Proof.
   intros f w Hne Hf. apply qeqT_intro. exact (mu_fiber_mass_eq f w Hne Hf).
 Defined.
 
-(* ========== §14 P3-B11 提取探针（U12 配方：逐件独立提取，
+(* ========== §14 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Extraction "b11_sqsum_app_ge_l_set_ext.ml" sqsum_app_ge_l_set.
@@ -732,14 +705,13 @@ Extraction "b11_QeqT_of_nat_eq_ext.ml" QeqT_of_nat_eq.
 Extraction "b11_sqsum_app_eq_set_ext.ml" sqsum_app_eq_set.
 Extraction "b11_mu_fiber_mass_eq_set_ext.ml" mu_fiber_mass_eq_set.
 
-(* ========== §15 P3-B13 追加：FRUIT-5 §A8 新定理 Set 形桥接——拼接精确卷积式（2026-09-15） ==========
-   消费盘面现役名实测表（全部只读；FRUIT-5 已收口冻结面＝DTPT_Entropy.vo
-   08:38:12 > .v 08:37:55，六名 grep .v 实测 + 探针编译链接冻结 .vo 实测
-   双证在案（_p3b13_probe.log），签名逐项吻合后才落笔）：
+(*
+   所用盘面现役名表（全部只读；六名 grep .v 核验 + 编译链接冻结 .vo
+   核验双证，签名逐项吻合）：
      sqsum_app_cross   DTPT_Entropy.v L2990  sqsum (l1++l2) = sqsum l1 +
                         sqsum l2 + Σ_{x∈l1} freq_q x l2 + Σ_{x∈l2} freq_q x l1
-                        （交叉项显式四项形；盘面证明体 exact 消费 §A6
-                        sqsum_app_eq，本席照盘面名位件消费）
+                        （交叉项显式四项形；盘面证明体 exact 使用 §A6
+                        sqsum_app_eq，本件照盘面名位件使用）
      sqsum_cross_sym   DTPT_Entropy.v L2999  Σ_{x∈l1} freq_q x l2 =
                         Σ_{x∈l2} freq_q x l1（对称双和，2X 标准形承重面）
      sqsum_app_eq2     DTPT_Entropy.v L3020  sqsum (l1++l2) = sqsum l1 +
@@ -750,35 +722,35 @@ Extraction "b11_mu_fiber_mass_eq_set_ext.ml" mu_fiber_mass_eq_set.
                         (0 < length l1/l2)%nat 照盘逐字）
      H_freq_app_eq     DTPT_Entropy.v L3073  H_freq (l1++l2) == w1²·H_freq l1
                         + w2²·H_freq l2 + 2·w1·w2 − X/n²（熵族拼接卷积完整
-                        恒等式；其盘面证明即消费 H_freq_eq_bridge L1993
-                        「H_freq == 1 − collide」桥面——本席随链继承）
+                        恒等式；其盘面证明即使用 H_freq_eq_bridge L1993
+                        「H_freq == 1 − collide」桥面——本件随链继承）
      H_freq_app_assoc  DTPT_Entropy.v L3118  H_freq ((l1++l2)++l3) ==
                         H_freq (l1++(l2++l3))（三段结合律一致性值面）
-   基建与惯例：QeqT/Defined 沿 §1（B1）/§13（B11）；nat 面经 §13.3
+   基建与惯例：QeqT/Defined 沿 §1/§13；nat 面经 §13.3
      QeqT_of_nat_eq 一跳提升（(Z.of_nat · # 1) 归一，# 分母 positive，
      B2 坑②；注意 Set Implicit Arguments 下其 nat 二参为隐式，应用
-     形＝单方程实参）；展开四项形照 B11 sqsum_app_eq_set 同款配方
+     形＝单方程实参）；展开四项形照 sqsum_app_eq_set 同款配方
      （rewrite + unfold Qeq + simpl + Z.mul_1_r + Nat2Z.inj_add +
-     reflexivity）；卫哨照盘面原形 (0 < length l)%nat（B2 H_chain_set
-     同款）；Prop 证明参随提取擦除（B1 构造子惯例）。
-   数值探针先行（FRUIT-5 教训，_p3b13_probe.log 在案）：l1=[0;1]、
+     reflexivity）；卫哨照盘面原形 (0 < length l)%nat（H_chain_set
+     同款）；Prop 证明参随提取擦除（构造子惯例）。
+   数值核验先行：l1=[0;1]、
      l2=[1;1]（X1=X2=2 非平凡交叉）逐一 Qeq_bool/vm_compute 验真值
      ——四项面/对称双和/2X 面/collide 卷积（实例值 5/8）/H_freq 卷积
-     （实例值 3/8）/assoc 同值，八探针全 true 后落笔；六件 Theorem
-     形探针 Print Assumptions 全 Closed（6/6 实测）。
-   诚实记账（eq2 面形裁决）：sqsum_app_eq2_set 取 nat 整式提升形
-     （2X 系数在 Z.of_nat 内可见）——Q 域 2·X 展开面探针两轮未达
+     （实例值 3/8）/assoc 同值，八项数值全 true；六件 Theorem
+     陈述 Print Assumptions 全 Closed（6/6）。
+   诚实说明（eq2 面形裁决）：sqsum_app_eq2_set 取 nat 整式提升形
+     （2X 系数在 Z.of_nat 内可见）——Q 域 2·X 展开面两轮构造未达
      （naked simpl 把 Z 侧 2·nx 归约为 match 倍形致 lia/zify 失明；
-     cbn 白名单路线 Rocq 9 名面 Qmult 不可 coerce），依禁硬凑条款
-     不强凑，展开视角由 §13.3 sqsum_app_eq_set（四项面）承担。
+     cbn 白名单路线 Rocq 9 名面 Qmult 不可 coerce），依禁强造条款
+     不强造，展开视角由 §13.3 sqsum_app_eq_set（四项面）承担。
    ============================================================ *)
 
 (* ---------- 15.1 保底件：交叉项显式形 Set 面（QeqT 面） ---------- *)
 
 (* 交叉项显式四项形 Set 面：sqsum (l1++l2) 的 Q 载值恒等于两段平方和加
    双交叉项 Σ_{x∈l1} freq_q x l2 与 Σ_{x∈l2} freq_q x l1——逐加数独立
-   Q 载值（消费 L2990 sqsum_app_cross；与 §13.3 sqsum_app_eq_set 同形
-   对账，本件消费 §A8 保底名位件） *)
+   Q 载值（所用 L2990 sqsum_app_cross；与 §13.3 sqsum_app_eq_set 同形
+   互核，本件用 §A8 保底名位件） *)
 Theorem sqsum_app_cross_set : forall l1 l2 : list Q,
   QeqT ((Z.of_nat (sqsum (l1 ++ l2)) # 1)%Q)
        (((Z.of_nat (sqsum l1) # 1) + (Z.of_nat (sqsum l2) # 1)
@@ -794,15 +766,15 @@ Defined.
 (* ---------- 15.2 保底件：对称双和 Set 面 ---------- *)
 
 (* 对称双和 Set 面：两交叉项相等（同计配对集 {(p,q)∈l1×l2 : p==q}）的
-   Q 载值信息性面——nat 恒等式经 QeqT_of_nat_eq 一跳提升（消费 L2999
+   Q 载值信息性面——nat 恒等式经 QeqT_of_nat_eq 一跳提升（所用 L2999
    sqsum_cross_sym） *)
 Theorem sqsum_cross_sym_set : forall l1 l2 : list Q,
   QeqT ((Z.of_nat (nsum (fun x => freq_q x l2) l1) # 1)%Q)
        ((Z.of_nat (nsum (fun x => freq_q x l1) l2) # 1)%Q).
 Proof.
   intros l1 l2.
-  (* 口径三：内联 nat 等式提升桥母体——qeqT 直构后对称双和
-     恒等式改写，Qeq 自反收口，零转发跳 *)
+  (* 内联 nat 等式提升桥源式——qeqT 直构后对称双和
+     恒等式改写，Qeq 自反闭合，零转发跳 *)
   apply qeqT_intro.
   rewrite (sqsum_cross_sym l1 l2). apply Qeq_refl.
 Defined.
@@ -810,25 +782,25 @@ Defined.
 (* ---------- 15.3 保底随行件：2X 标准形 Set 面 ---------- *)
 
 (* 2X 标准形 Set 面：交叉项以对称双和归并（sqsum l1 + sqsum l2 + 2·X）
-   的 Q 载值恒等式——nat 整式提升通道（消费 L3020 sqsum_app_eq2；
-   §15.1/§15.2 双件的归并面，面形裁决记账见 §15 头注） *)
+   的 Q 载值恒等式——nat 整式提升通道（所用 L3020 sqsum_app_eq2；
+   §15.1/§15.2 双件的归并面，面形裁决说明见 §15 头注） *)
 Theorem sqsum_app_eq2_set : forall l1 l2 : list Q,
   QeqT ((Z.of_nat (sqsum (l1 ++ l2)) # 1)%Q)
        ((Z.of_nat (sqsum l1 + sqsum l2 + 2 * nsum (fun x => freq_q x l2) l1)
          # 1)%Q).
 Proof.
   intros l1 l2.
-  (* 口径三：内联 nat 等式提升桥母体——qeqT 直构后 2X 标准形
-     恒等式改写，Qeq 自反收口，零转发跳 *)
+  (* 内联 nat 等式提升桥源式——qeqT 直构后 2X 标准形
+     恒等式改写，Qeq 自反闭合，零转发跳 *)
   apply qeqT_intro.
   rewrite (sqsum_app_eq2 l1 l2). apply Qeq_refl.
 Defined.
 
-(* ---------- 15.4 旗舰：collide 拼接卷积 Set 面 ---------- *)
+(* ---------- 15.4 主定理：collide 拼接卷积 Set 面 ---------- *)
 
 (* 加权精确卷积 Set 面：collide (l1++l2) == (n1/n)²·collide l1 +
    (n2/n)²·collide l2 + X/n²——权重平方型加权组合 + 交叉修正逐项 QeqT
-   信息性面；双非空卫哨照盘面逐字（Prop 卫哨随提取擦除；消费 L3033
+   信息性面；双非空卫哨照盘面逐字（Prop 卫哨随提取擦除；所用 L3033
    collide_app_eq） *)
 Theorem collide_app_eq_set : forall l1 l2 : list Q,
   (0 < length l1)%nat -> (0 < length l2)%nat ->
@@ -847,8 +819,8 @@ Defined.
 (* ---------- 15.5 主件：H_freq 拼接卷积 Set 面 ---------- *)
 
 (* 熵族拼接卷积完整恒等式 Set 面：H_freq (l1++l2) == w1²·H_freq l1 +
-   w2²·H_freq l2 + 2·w1·w2 − X/n²（消费 L3073 H_freq_app_eq——其盘面
-   证明即消费 H_freq_eq_bridge L1993「H_freq == 1 − collide」桥面，
+   w2²·H_freq l2 + 2·w1·w2 − X/n²（所用 L3073 H_freq_app_eq——其盘面
+   证明即使用 H_freq_eq_bridge L1993「H_freq == 1 − collide」桥面，
    本件随链继承；双非空卫哨照盘面逐字） *)
 Theorem H_freq_app_eq_set : forall l1 l2 : list Q,
   (0 < length l1)%nat -> (0 < length l2)%nat ->
@@ -870,17 +842,17 @@ Defined.
 
 (* 三段拼接结合律卷积一致性 Set 面：(l1++l2)++l3 与 l1++(l2++l3) 同表
    （app_assoc 定义性），熵族卷积量在两种分组下逐点 QeqT 重合——择
-   H_freq 面（Q 域恒等式信息量高于 sqsum nat 面；消费 L3118
+   H_freq 面（Q 域恒等式信息量高于 sqsum nat 面；所用 L3118
    H_freq_app_assoc） *)
 Theorem H_freq_app_assoc_set : forall (l1 l2 l3 : list Q),
   QeqT (H_freq ((l1 ++ l2) ++ l3)) (H_freq (l1 ++ (l2 ++ l3))).
 Proof.
   intros l1 l2 l3. apply qeqT_intro.
-  (* 母件 H_freq_app_assoc 骨架内联：app_assoc 定义性改写一步归一同表 *)
+  (* 源定理 H_freq_app_assoc 骨架内联：app_assoc 定义性改写一步归一同表 *)
   rewrite <- app_assoc. reflexivity.
 Defined.
 
-(* ========== §16 P3-B13 提取探针（U12 配方：逐件独立提取，
+(* ========== §16 Extraction 检验（逐件独立提取，
      验收指标＝Obj.magic 计数 0，验后产物清除） ========== *)
 
 Extraction "b13_sqsum_app_cross_set_ext.ml" sqsum_app_cross_set.
@@ -892,7 +864,6 @@ Extraction "b13_H_freq_app_assoc_set_ext.ml" H_freq_app_assoc_set.
 
 End DTPT_Bridge.
 
-(* —— 切片二替换件闭包打印（T241 补位席追加，四关 G4 附件） —— *)
 Import DTPT_Bridge.
 Print Assumptions liar_diag_point.
 Print Assumptions cv_size_preservation_T_set.

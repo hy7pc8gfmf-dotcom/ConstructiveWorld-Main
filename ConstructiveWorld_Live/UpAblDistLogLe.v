@@ -1,26 +1,11 @@
-(* ============================================================ *)
-(* UpAblDistLogLe.v *)
-(* *)
-(* 目的： 族E log-le 具体载体剩余部分的闭合——实现已证结论明示的未竟      *)
-(*        通道：dist_log_le_linear 前提（UpReqDist，Section        *)
-(*        ReqFEP 内）的 Regular-Real 具体载体实例供给。                    *)
-(* 主件： ydll_lpo_barrier——前提实例 ⟹ 实数零等判定 Or (¬(u==0)) (u==0)   *)
-(*        （real-LPO 族，S07 头注同级不可证参照类）的定理级归约。          *)
-(*        载体分层结论再精化：此前估计的「30-60 行代数链通道」经核验降格—— *)
-(*        反向严格支（eps 间隙矛盾）确可达并已于本件闭合                   *)
-(*        （ydll_le_b_not_gt + ydll_log_tangent_not_gt，两者此前库内缺失）； *)
-(*        正向分支判定（log x 与 x−1 的 Or 分支产出）不可达，本件以归约定形此结论。 *)
-(* 前提对齐：该语句在实例面 RealEnhancedReal（S07，le:=real_le、 *)
-(*        log:=real_log、lt:=real_lt、plus:=real_plus、opp:=real_opp；     *)
-(*        req_minus x one 形态等同于 real_plus x (real_opp real_one)）下与本件语句面 *)
-(*        逐字等同（双向形态互验）。语句面取 plain real_* 口径：与 UpRealLeB 三十六件 plain 族、t34 Part B 使用处同参——      *)
-(*        接口投影名零出现，提取层零转换残留。                             *)
-(* 依赖： CW_ConstructiveWorld_219、G07_KLWall、UpReqKLSTangent、          *)
-(*        UpRealLeB。                                                      *)
-(* 备注： 零承认件：纯构造性，语句面全 Set 值（Or/Not 为 S01 Set 层别名）； *)
-(*        无 公理/承认/参数位/中止；四件逐条 Print Assumptions 全闭合。    *)
-(* 编译配方：9.1 直调（coqc 无 -Q），cpu_guard 包裹，-o 输出临时目录。     *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblDistLogLe.v — log-le 前提具体载体剩余部分的闭合
+   使命: ydll_lpo_barrier——前提实例到实数零等判定 Or 形的定理级归约；反向严格支（eps 间隙矛盾）已闭合（ydll_le_b_not_gt 等），正向分支判定不可达并以归约定形此结论。
+   依赖: QArith、Arith.PeanoNat、CW_ConstructiveWorld_219、G07_KLWall、UpReqKLSTangent、UpRealLeB。
+   对标: 对数切线不等式 log x ≤ x−1 的 le 形前提；实数上 LPO 型不可证性的参照。
+   构造性: 零承认词面件：纯构造性，语句面全 Set 值（Or/Not 为 S01 Set 层别名）；四件逐条 Print Assumptions 全闭合。
+   编译配方: Rocq 9.1 直调 coqc（无 -Q），cpu_guard 包裹，-o 输出临时目录。
+   ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Arith.PeanoNat.
