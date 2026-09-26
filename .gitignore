@@ -14,3 +14,9 @@ upkvdrift_probe.*
 _new_build.sh
 _test_*
 *.nra.cache
+
+# R2 tree-thaw wave-C additions (EX-1 20260926, R17 D5): repo-spread attn workspace, pycache, run outputs, p3tmp scratch
+attn/
+__pycache__/
+run*.json
+_p3tmp_*
