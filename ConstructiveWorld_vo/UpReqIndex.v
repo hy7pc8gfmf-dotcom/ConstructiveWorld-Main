@@ -652,10 +652,10 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_UpTVReal
   (cons af_UpTempWindow nil))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
 
-(* 主件面统计：127 主件 / 剥注释 token 级 Qed 和 25354（含自指件 UpReqIndex.v v2 终态 27）； *)
+(* 主件面统计：126 主件 / 剥注释 token 级 Qed 和 22218（含自指件 UpReqIndex.v v2 终态 27）； *)
 (* 存档/快照/副本/检查点（_ 前缀与 probe 族）不入主件面，处置状态见层② 退役条目与交付报告。 *)
-Definition AttnFaceModules : nat := 127.
-Definition AttnFaceItems   : nat := 25354.
+Definition AttnFaceModules : nat := 126.
+Definition AttnFaceItems   : nat := 22218.
 
 Lemma AttnFaceModules_matches : AttnFaceModules = cnt_af AttnFaceList.
 Proof. reflexivity. Qed.
