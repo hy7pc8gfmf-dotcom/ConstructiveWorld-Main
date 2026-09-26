@@ -9,7 +9,21 @@ Import ListNotations.
 
 (* 单入口 Export 面：下游 Require Import uabl_attn_full_instance 一行， *)
 (* 即得下列全部名字空间与十九字段具名定义行。                          *)
-Require Export CW_ConstructiveWorld_219.
+Require Export S01_BaseRing.
+Require Export S02_CauchyComplete.
+Require Export S03_QExp.
+Require Export S04_RealExpLogConv.
+Require Export S05_AlignmentGRPO.
+Require Export S06_DiffSamplingGibbs.
+Require Export S07_RealSetoidExpLog.
+Require Export S08_RealMainlineDPO.
+Require Export S09_EntropyReal.
+Require Export S10_KVQuantTrig.
+Require Export S11_TP3B5.
+Require Export S12_B5RecycleSF.
+Require Export S13_NLiveAudit.
+Require Export S14_B5BatchBlock.
+Require Export S15_TailFEPUp.
 Require Export AttnDoeblin.
 Require Export UpReqConcFin2.
 Require Export UpReqConcB1.
