@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 127 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 471 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 464 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -907,9 +907,6 @@ Definition ng_UpReqFEPCanon : NewGreenFace :=
 Definition ng_UpReqMinFreeEps : NewGreenFace :=
   MkNewGreenFace "UpReqMinFreeEps.v" 268 3 20260911 "4.4 min-free-eps order-gate three theorems" "L277:mcc9731".
 
-(* ng_UpReqCSB —— UpReqCSB.v：C-S 不等式 B 形对照件 *)
-Definition ng_UpReqCSB : NewGreenFace :=
-  MkNewGreenFace "UpReqCSB.v" 43 1 20260911 "Cauchy-Schwarz B-form contrast piece" "L52:mf3c37b".
 
 (* ng_UpReqMpDomain —— UpReqMpDomain.v：mp 域引擎+12 件全清 *)
 Definition ng_UpReqMpDomain : NewGreenFace :=
@@ -954,7 +951,6 @@ Definition NewGreenList : list NewGreenFace :=
   (cons ng_UpReqSteadyThermo
   (cons ng_UpReqFEPCanon
   (cons ng_UpReqMinFreeEps
-  (cons ng_UpReqCSB
   (cons ng_UpReqMpDomain
   (cons ng_UpReqTempDefs
   (cons ng_UpReqEntropyDeficitTemp
@@ -963,13 +959,13 @@ Definition NewGreenList : list NewGreenFace :=
   (cons ng_UpReqTrainingEquiv
   (cons ng_UpReqTVAbsEps
   (cons ng_UpReqPowMonoBridge
-  (cons ng_UpReqAlign4 nil))))))))))))).
+  (cons ng_UpReqAlign4 nil)))))))))))).
 
-(* 今日新绿面统计：14 件 / 行数和 5937 / Qed 和 111（字面值；一致性由下方等式引理编译期核对； *)
+(* 今日新绿面统计：13 件 / 行数和 5894 / Qed 和 110（字面值；一致性由下方等式引理编译期核对； *)
 (* 改账后口径，改账前原值 5474/101，见文末 改账段）。 *)
-Definition NewGreenPieces  : nat := 14.
-Definition NewGreenLineSum : nat := 5937.
-Definition NewGreenQedSum  : nat := 111.
+Definition NewGreenPieces  : nat := 13.
+Definition NewGreenLineSum : nat := 5894.
+Definition NewGreenQedSum  : nat := 110.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenPieces_matches : NewGreenPieces = cnt_ng NewGreenList.
@@ -1145,10 +1141,10 @@ Proof. reflexivity. Qed.
 Lemma Align4AmendQed : 28 = plus 18 10.
 Proof. reflexivity. Qed.
 
-Lemma Align4AmendLineSum : NewGreenLineSum = plus 5474 463.
+Lemma Align4AmendLineSum : NewGreenLineSum = plus 5474 420.
 Proof. reflexivity. Qed.
 
-Lemma Align4AmendQedSum : NewGreenQedSum = plus 101 10.
+Lemma Align4AmendQedSum : NewGreenQedSum = plus 101 9.
 Proof. reflexivity. Qed.
 
 
@@ -2648,15 +2644,6 @@ Definition ng_UpAblT7b_real_two_point_pack : NewGreenFace :=
 (* ng_UpAblT9_G09_MiscSmall —— UpAblT9_G09_MiscSmall.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
 Definition ng_UpAblT9_G09_MiscSmall : NewGreenFace :=
   MkNewGreenFace "UpAblT9_G09_MiscSmall.v" 42 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L42:m5d6b2f".
-(* ng_UpAblT9_UpDebtSqrtAbsReq —— UpAblT9_UpDebtSqrtAbsReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
-Definition ng_UpAblT9_UpDebtSqrtAbsReq : NewGreenFace :=
-  MkNewGreenFace "UpAblT9_UpDebtSqrtAbsReq.v" 38 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L38:mb1c5d9".
-(* ng_UpAblT9_UpEntropyGainReq —— UpAblT9_UpEntropyGainReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
-Definition ng_UpAblT9_UpEntropyGainReq : NewGreenFace :=
-  MkNewGreenFace "UpAblT9_UpEntropyGainReq.v" 36 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L36:m4c8e62".
-(* ng_UpAblT9_UpFirewallReq —— UpAblT9_UpFirewallReq.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
-Definition ng_UpAblT9_UpFirewallReq : NewGreenFace :=
-  MkNewGreenFace "UpAblT9_UpFirewallReq.v" 39 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L39:m6fabde".
 (* ng_UpAblT9_UpReqDist —— UpAblT9_UpReqDist.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
 Definition ng_UpAblT9_UpReqDist : NewGreenFace :=
   MkNewGreenFace "UpAblT9_UpReqDist.v" 64 3 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L64:m73bbc3".
@@ -2666,15 +2653,9 @@ Definition ng_UpAblT9_UpReqFEPAttn : NewGreenFace :=
 (* ng_UpAblT9_UpReqSampling —— UpAblT9_UpReqSampling.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
 Definition ng_UpAblT9_UpReqSampling : NewGreenFace :=
   MkNewGreenFace "UpAblT9_UpReqSampling.v" 77 4 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L77:m0ccd2f".
-(* ng_UpAblT9_UpReqSumD —— UpAblT9_UpReqSumD.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
-Definition ng_UpAblT9_UpReqSumD : NewGreenFace :=
-  MkNewGreenFace "UpAblT9_UpReqSumD.v" 29 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L29:mecd03e".
 (* ng_UpAblT9_UpSigMigrate —— UpAblT9_UpSigMigrate.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
 Definition ng_UpAblT9_UpSigMigrate : NewGreenFace :=
   MkNewGreenFace "UpAblT9_UpSigMigrate.v" 34 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L34:m831da3".
-(* ng_UpAblT9_UpSigMigrate2 —— UpAblT9_UpSigMigrate2.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
-Definition ng_UpAblT9_UpSigMigrate2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT9_UpSigMigrate2.v" 26 1 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L26:mba9031".
 (* ng_UpAblT9_UpTVDoeblin —— UpAblT9_UpTVDoeblin.v：v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green () *)
 Definition ng_UpAblT9_UpTVDoeblin : NewGreenFace :=
   MkNewGreenFace "UpAblT9_UpTVDoeblin.v" 49 2 20260919 "v1 T9 batch (T9a), N1 x21 + T x1 (G09:72 downgrade), four-gate green (_tt9a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L49:m9073b3".
@@ -3424,10 +3405,6 @@ Definition ng_ToyR_fa57_ext : NewGreenFace :=
   MkNewGreenFace "ToyR_fa57_ext.v" 251 11 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 809125, L251); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L251:m809125".
 
-(* ng_ToyR_fka_weak_triangle_ref —— ToyR_fka_weak_triangle_ref.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_fka_weak_triangle_ref : NewGreenFace :=
-  MkNewGreenFace "ToyR_fka_weak_triangle_ref.v" 42 1 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f1e63, L42); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L42:m3f1e63".
 
 
 
