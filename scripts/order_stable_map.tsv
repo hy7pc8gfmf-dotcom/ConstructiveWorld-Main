@@ -108,7 +108,6 @@ UpReqLatticeB.v	R0	d66910
 UpReqGibbsD.v	R0	d66910
 UpReqGibbsE2.v	R0	d66910
 UpReqKLStrict.v	R0	d66910
-UpReqCSB.v	R0	d66910
 UpReqELBOEps.v	R0	d66910
 UpReqExpPos.v	R0	d66910
 UpReqFEPCanon.v	R0	d66910
@@ -455,15 +454,10 @@ UpAblT6_UpSigMigrate2.v	R0	d66910
 UpAblT7_two_point_pack.v	R0	d66910
 UpAblT7b_real_two_point_pack.v	R0	d66910
 UpAblT9_G09_MiscSmall.v	R0	d66910
-UpAblT9_UpDebtSqrtAbsReq.v	R0	d66910
-UpAblT9_UpEntropyGainReq.v	R0	d66910
-UpAblT9_UpFirewallReq.v	R0	d66910
 UpAblT9_UpReqDist.v	R0	d66910
 UpAblT9_UpReqFEPAttn.v	R0	d66910
 UpAblT9_UpReqSampling.v	R0	d66910
-UpAblT9_UpReqSumD.v	R0	d66910
 UpAblT9_UpSigMigrate.v	R0	d66910
-UpAblT9_UpSigMigrate2.v	R0	d66910
 UpAblT9_UpTVDoeblin.v	R0	d66910
 PadeErrorIntegral.v	R112	7aeac3
 Ln2Bridge.v	R0	d66910

@@ -21,3 +21,7 @@ __pycache__/
 run*.json
 _p3tmp_*
 .nra.cache
+
+# R130 tail sweep (EX-FIN 20260927): E956-family extraction/g3out scratch dirs stay out of tree
+_*_extract/
+_*_g3out/
