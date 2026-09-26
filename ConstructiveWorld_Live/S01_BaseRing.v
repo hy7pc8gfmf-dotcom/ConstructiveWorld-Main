@@ -1824,7 +1824,7 @@ Proof.
   unfold CoreClaim5, normalized_prob.
   intros prefix w.
   exact (@id_refl _ _).
-Qed.
+Qed.
 Print Assumptions core_claim5_holds.  (* ToyR 假设审计 *)
 
 Variable grammar_error : Sequence -> R.
@@ -2885,7 +2885,7 @@ Proof.
   unfold CoreClaim3, entropy_gradient.
   intro E_A.
   exact (@id_refl _ _).
-Qed.
+Qed.
 Print Assumptions core_claim3_holds.  (* ToyR 假设审计 *)
 
 Theorem core_claim5_holds : CoreClaim5.
@@ -2893,7 +2893,7 @@ Proof.
   unfold CoreClaim5, boltzmann_prob.
   intro x.
   exact (@id_refl _ _).
-Qed.
+Qed.
 Print Assumptions core_claim5_holds.  (* ToyR 假设审计 *)
 
 Variable prediction_fourier_heat_conduction :
