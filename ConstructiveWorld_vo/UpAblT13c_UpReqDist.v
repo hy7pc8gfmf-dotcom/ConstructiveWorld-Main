@@ -11,7 +11,21 @@
 (* 分级：位1 = N3（实例供给）；位2 = N3（实例供给·核族构造）。                *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqDist。          *)
 (* ============================================================ *)
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqDist.
 Import RealInterfaceEnhancedMod.
 
