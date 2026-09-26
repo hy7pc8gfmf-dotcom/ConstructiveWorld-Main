@@ -60,7 +60,21 @@
 (*   全库防撞已核（grep 零命中）。                                    *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 Require Import UpReqAlgebra.
 (* wb63 增量使用面：UpReqDist GRPO 节 req_list_sum_g_const/reqd_of_nat
    （同 Context 同语句，sum_const 换轨直连；导出名全 reqd_/req_/fsum_
