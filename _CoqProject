@@ -3,7 +3,6 @@
 # 依赖链编译顺序由 scripts/order.txt 驱动（Makefile modules 目标）；本清单供编辑器/coq_makefile 使用
 -Q ConstructiveWorld_vo ""
 
-ConstructiveWorld_vo/CW_ConstructiveWorld_219.v
 ConstructiveWorld_vo/UpCS.v
 ConstructiveWorld_vo/UpHlogZ.v
 ConstructiveWorld_vo/UpDebtSqrtAbs.v
