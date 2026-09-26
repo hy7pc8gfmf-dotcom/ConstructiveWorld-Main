@@ -55,7 +55,21 @@
 (*   （对齐根内 bs_minorization 的 Unif = inv_pos nR nR_pos）。  *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 
 (* ---------- 助推：非空有限表势的正性（states_ne 的直用形态） ---------- *)
 (* 根内 vocab_len_pos 被无关段变量污染（token_eq_dec/count_token）， *)

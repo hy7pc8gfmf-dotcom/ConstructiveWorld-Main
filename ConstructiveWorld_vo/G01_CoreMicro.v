@@ -7,7 +7,21 @@
    编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
    ========================================================================== *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 
 (* ================================================================ *)
 (* 主结果 1：HlogZ 证明（log 单调 le 版直推）                          *)
@@ -115,7 +129,21 @@ Set Warnings "-extraction-opaque-accessed".
 From Stdlib Require Import List.
 From Stdlib Require Import PeanoNat.
 Import ListNotations.
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 
 (* ################ 件1（P5b）：log-sum-exp = 负自由能 ################ *)
 
@@ -335,7 +363,22 @@ Extraction "upextras.ml" softmax_temp partition_function_temp free_energy
 (* 红线：零 公理/承认件；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219 AttnDoeblin.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import AttnDoeblin.
 
 (* ################ Part 1：P5 FEP 闭环 ################ *)
 
@@ -495,7 +538,21 @@ Extraction "upfep.ml" softmax_temp partition_function_temp free_energy.
 (* 红线：零 公理/承认件；Set 层语句；全 Qed；可提取。             *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 
 (* lt → le 桥（real_le = Or (real_lt) (real_eq)，inl 直取） *)
 Lemma real_lt_le_bridge : forall a b : Real, real_lt a b -> real_le a b.
@@ -553,7 +610,21 @@ Extraction "uplogmono.ml" real_log cw_log.
 (* 红线：零 公理/承认件；Set 层语句；全 Qed。                    *)
 (* ============================================================ *)
 
-Require Import CW_ConstructiveWorld_219.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
 
 Section PPOClipDecomp.
 Context {RI : RealInterfaceEnhanced}.
