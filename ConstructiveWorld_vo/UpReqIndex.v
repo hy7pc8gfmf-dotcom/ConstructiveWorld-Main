@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 387 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 385 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -1250,13 +1250,6 @@ Definition ng_UpReqBanachExpBasic : NewGreenFace :=
 Definition ng_UpReqBanachExpDef : NewGreenFace :=
   MkNewGreenFace "UpReqBanachExpDef.v" 178 7 20260912 "exp element via completeness field witness pair, route A" "L196:m561fb2".
 
-(* ng_UpReqBanachExpNeg —— UpReqBanachExpNeg.v：BXN，exp 负点元素化件（今日刚完成，14,580B： *)
-(* 主件 bxn_exp_neg := bxdef_exp B (bopp a) 一行直构（零新证）+ spec 同位转引 + *)
-(* (−1)^k 偶奇定形两件（双步归纳自建 bxn_double）+ 范数族两件 + 负零族折叠链； *)
-(* S4 可逆性前置引用面备齐，本体留待 exp_add 上游；G1–G4 全部通过，G3 提取 Obj.magic 计数 0） *)
-Definition ng_UpReqBanachExpNeg : NewGreenFace :=
-  MkNewGreenFace "UpReqBanachExpNeg.v" 296 12 20260912 "exp at negated point, element with limit spec and norm faces" "L295:md5412e".
-
 (* ng_UpReqBanachProd2 —— UpReqBanachProd2.v：B2Tv2，B 类引理第二组量移植件（7 闭合，12,038B： *)
 (* #23 sum_upto_div/bsum_div 除系数拉出 + #27 q_choose_div_fact 阶乘比 + *)
 (* #29 exp_term_split/bterm_split 逐项系数分裂（Banach 面主件）+ wd 族两件附赠； *)
@@ -1285,15 +1278,14 @@ Definition NewGreenListV28 : list NewGreenFace :=
   (cons ng_UpReqBanachDouble
   (cons ng_UpReqBanachExpBasic
   (cons ng_UpReqBanachExpDef
-  (cons ng_UpReqBanachExpNeg
-  (cons ng_UpReqBanachProd2
+  ((cons ng_UpReqBanachProd2
   (cons ng_UpReqPadeSign
   (cons ng_UpReqQExpTail nil))))))).
 
-(* 续写统计：8 件 / 行数和 2575 / 闭合和 98（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV28Pieces  : nat := 8.
-Definition NewGreenV28LineSum : nat := 2575.
-Definition NewGreenV28QedSum  : nat := 98.
+(* 续写统计：7 件 / 行数和 2279 / 闭合和 86（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV28Pieces : nat := 7.
+Definition NewGreenV28LineSum : nat := 2279.
+Definition NewGreenV28QedSum : nat := 86.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV28Pieces_matches : NewGreenV28Pieces = cnt_ng NewGreenListV28.
@@ -1475,10 +1467,6 @@ Definition ng_UpReqBanachNormOpp : NewGreenFace :=
 Definition ng_UpReqB4TwoStage : NewGreenFace :=
   MkNewGreenFace "UpReqB4TwoStage.v" 351 19 20260915 "B4 two stage downgrade closure of Pade remainder coefficient identity and witness eps transfer" "L360:ma4aebf".
 
-(* ng_UpReqBanachSepThm —— UpReqBanachSepThm.v：bxce_sep 论证包（AA7，B7 首单） *)
-Definition ng_UpReqBanachSepThm : NewGreenFace :=
-  MkNewGreenFace "UpReqBanachSepThm.v" 193 6 20260915 "bxce_sep argument package for B25 exp zero full equality face" "L193:ma93ecd".
-
 (* ng_UpReqLpoEquiv —— UpReqLpoEquiv.v：平方非负全称 ⟺ 受限 LPO 双向归约（AA15，新数学，零公理） *)
 Definition ng_UpReqLpoEquiv : NewGreenFace :=
   MkNewGreenFace "UpReqLpoEquiv.v" 434 12 20260915 "square nonneg forall iff bounded LPO two way reduction theorem, zero axioms" "L443:m54b91c".
@@ -1497,14 +1485,13 @@ Definition NewGreenListV32 : list NewGreenFace :=
   (cons ng_AlignIdUnclosed
   (cons ng_UpReqBanachNormOpp
   (cons ng_UpReqB4TwoStage
-  (cons ng_UpReqBanachSepThm
-  (cons ng_UpReqLpoEquiv
+  ((cons ng_UpReqLpoEquiv
   (cons ng_UpReqBanachInstReal nil))))))))))).
 
-(* 续写统计：13 件 / 行数和 4262 / 闭合和 155（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV32Pieces  : nat := 12.
-Definition NewGreenV32LineSum : nat := 4067.
-Definition NewGreenV32QedSum  : nat := 143.
+(* 续写统计：11 件 / 行数和 3874 / 闭合和 137（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV32Pieces : nat := 11.
+Definition NewGreenV32LineSum : nat := 3874.
+Definition NewGreenV32QedSum : nat := 137.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV32Pieces_matches : NewGreenV32Pieces = cnt_ng NewGreenListV32.

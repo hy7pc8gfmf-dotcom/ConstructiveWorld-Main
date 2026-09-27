@@ -122,7 +122,6 @@ UpReqBanachProd.v#R0-d66910
 UpReqBanachDouble.v#R0-d66910
 UpReqBanachExpDef.v#R0-d66910
 UpReqBanachExpBasic.v#R0-d66910
-UpReqBanachExpNeg.v#R0-d66910
 UpReqPadeQLeg.v#R0-d66910
 UpReqPadeSign.v#R0-d66910
 UpReqQExpTail.v#R0-d66910
@@ -138,9 +137,7 @@ UpReqBanachClassExt.v#R0-d66910
 UpReqBanachLimUniq.v#R0-d66910
 UpReqBanachInst.v#R0-d66910
 UpReqBanachInstB.v#R0-d66910
-UpReqBanachInstPre.v#R0-d66910
-UpReqBanachInstEMult.v#R0-d66910
-UpReqBanachStrong.v#R0-d66910
+UpReqBanachInstPre.v#R0-b56555
 UpReqPadeBetaPos.v#R0-d66910
 UpReqPadeTailPos.v#R0-d66910
 UpReqPadeLower.v#R0-d66910
@@ -158,7 +155,6 @@ UpReqGibbsWallEquiv.v#R0-d66910
 UpReqPinWallEquiv.v#R0-d66910
 UpReqBanachInstReal.v#R0-d66910
 UpReqBanachNormOpp.v#R0-d66910
-UpReqBanachSepThm.v#R0-d66910
 DTPT.v#R0-d66910
 DTPT_Entropy.v#R0-d66910
 DTPT_Truth.v#R0-d66910
