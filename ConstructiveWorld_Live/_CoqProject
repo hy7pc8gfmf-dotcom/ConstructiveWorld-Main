@@ -500,7 +500,6 @@ R2BishopLogSel.v
 UpReqMixRationalProxy.v
 UpReqQArchSite.v
 UpReqBishopLedger1.v
-UpReqBishopFull.v
 UpReqMixRationalProxy_R2.v
 UpReqMixRationalProxy_R3.v
 UpReqCauchyLogBound.v

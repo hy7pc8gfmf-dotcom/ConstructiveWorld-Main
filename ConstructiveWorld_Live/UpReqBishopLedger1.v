@@ -1,12 +1,15 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
-(* ============================================================ *)
-(*   1) rb_le_b_mult_r：<=_B 右乘保序（Bishop 组合器家族增员）            *)
-(*   2) rb_valid_up：klc 向上谱系（使用 klc_closed_powb_mono）            *)
-(* 使用已云认证 .vo（库树只读禁改）；路线全为机检非猜想。                 *)
-(* 红线自检：零公理/零承认件/零经典逻辑/语句面全 Set 层（real_le_b/     *)
-(*   real_lt/real_le/NatLe 均本项目 Set 版，Or := A + B）/Real 层零序分支  *)
-(*   （real_le 0 c 的两支为 Set-sum 构造消去，非经典分裂）/可提取。       *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqBishopLedger1.v —— Bishop 组合器族与 k-选择 Bishop 主定理（无显式前提版）
+   使命：本件形式化 Bishop 组合器库的两翼：其一，组合器族与谱系面——
+     <=_B 右乘保序 rb_le_b_mult_r 与 klc 向上谱系 rb_valid_up（用 klc_closed_powb_mono）；
+     其二，k-选择 Bishop 主定理 mix_k_select_bishop_full——在 mix_k_select_bishop
+     与 qarch_site 之上，将显式前提 Hqarch 经实例化消解，得主定理的无显式前提闭合形式。
+   依赖：Extraction；S01_BaseRing 至 S15_TailFEPUp 基座链；UpRealLeB、UpRealLeB2、
+     G07_KLWall、KLWallClosed、UpReqMixLogA、UpReqMixLogE、UpReqQArchSite、
+     R2BishopLogSel；Stdlib PeanoNat、QArith.Qring、QArith.Qabs、Lia。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import Extraction.
 Require Import S01_BaseRing.
@@ -130,3 +133,44 @@ Qed.
 
 (* G3 提取检验：终末构造面 Separate Extraction，Obj.magic 计数=0 为绿 *)
 Separate Extraction rb_valid_up rb_le_b_mult_r.
+
+(* ============================ §1 BF ：Bishop 主定理无显式版 ============================ *)
+From Stdlib Require Import PeanoNat.
+From Stdlib Require Import QArith.Qring.
+From Stdlib Require Import Qabs.
+From Stdlib Require Import Lia.
+From Stdlib Require Import Extraction.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpRealLeB.
+Require Import UpRealLeB2.
+Require Import G07_KLWall.
+Require Import KLWallClosed.
+Require Import UpReqMixLogA.
+Require Import UpReqMixLogE.
+Require Import R2BishopLogSel.
+Require Import UpReqQArchSite.
+
+Open Scope nat_scope.
+
+Theorem mix_k_select_bishop_full : forall (kappa TV0 budget : Real),
+  real_lt real_zero kappa -> real_lt kappa real_one ->
+  real_le real_zero TV0 -> real_lt real_zero budget ->
+  sigT (fun k : nat => real_le_b (rb_gval kappa TV0 k) budget).
+Proof.
+  intros kappa TV0 budget Hk0 Hk1 Ha0 Hb0.
+  exact (mix_k_select_bishop kappa TV0 budget Hk0 Hk1 Ha0 Hb0 qarch_site).
+Qed.
