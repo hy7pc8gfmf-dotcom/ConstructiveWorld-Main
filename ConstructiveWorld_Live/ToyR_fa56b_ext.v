@@ -1,11 +1,164 @@
 (* ==========================================================================)
-   ToyR_fa56b_ext.v — Id 载体槽的补件四簇
-   使命: singleton/cons/append 非空族（enum 非空谓词的居民性与闭包构造）、逐点 Id 到和 Id 的引擎扩展、detailed_balance 槽与平稳分布定理（列表折叠载体）、cross_domain_scaling 的 sigT 见证形（幂律损失）。
-   依赖: S01_BaseRing、fa51_sumpos_id、fa56_id_carrier、List。
-   对标: 马尔可夫链平稳分布与细节平衡方程的构造性形式化（列表载体副本）。
-   构造性: 纯构造性零承认词面；语句面 Set 层（Not 为 S01 Set 层定义 A -> Empty_set；lt/le/Id 均 Set 值）；尾 Print Assumptions 全 Closed。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   ToyR_fa56b_ext —— singleton/cons/append 非空族（enum 非空谓词的居民性与闭包构造）、逐点 Id 到和 Id 的引擎扩展、detailed_bal；同域语句面
+   使命：本件形式化singleton/cons/append 非空族（enum 非空谓词的居民性与闭包构造）、逐点 Id 到和 Id 的引擎扩展、detailed_bal。
+   本件并载：S:=bool、reward 分档常值、beta:=1、pi_ref:=恒 1、Z_align:=1 的全显式见证；三处正性由 real_lt_zero；fa52_EDP_E_B_pos_unsat（能量全正支 ⟹ False）与 fa52_EntropyDiffReal_premises_unsat（熵。
+   依赖：S02_CauchyComplete, S07_RealSetoidExpLog, S08_RealMainlineDPO, S09_EntropyReal, S01_BaseRing, fa51_sumpos_id, fa56_id_carrier, Lists.List
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
+
+(* ============================ §1 S:=bool、reward 分档常值、beta:=1、pi_ref:=恒 1、Z_align:=1 的全显式见证；三处正性由 real_lt_zero ============================ *)
+Require Import S02_CauchyComplete.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+
+(* ---------- 具体见证 ---------- *)
+Definition fa52_dpo_S : Type := bool.
+Definition fa52_dpo_reward : bool -> Real :=
+  fun s : bool => if s then real_plus real_one real_one else real_one.
+Definition fa52_dpo_pi_ref : bool -> Real := fun _ : bool => real_one.
+Definition fa52_dpo_pi_ref_pos : forall s : bool, real_lt real_zero (fa52_dpo_pi_ref s) :=
+  fun _ : bool => real_lt_zero_one.
+
+(* ---------- 1 < 2（0<1 复合 + 代数归位） ---------- *)
+Lemma fa52_one_two_lt : real_lt real_one (real_plus real_one real_one).
+Proof.
+  assert (HL : real_eq (real_plus real_zero real_one) real_one).
+  { apply (real_eq_trans _ (real_plus real_one real_zero)).
+    - apply (real_plus_comm real_zero real_one).
+    - apply (real_plus_zero real_one). }
+  assert (Hstep : real_lt (real_plus real_zero real_one)
+                          (real_plus real_one real_one)).
+  { exact (real_lt_plus_compat_lt_le real_zero real_one real_one real_one
+             real_lt_zero_one (real_le_refl real_one)). }
+  exact (real_eq_lt_lt _ _ _ (real_eq_sym _ _ HL) Hstep).
+Qed.
+
+Lemma fa52_dpo_reward_spread :
+  real_lt (fa52_dpo_reward false) (fa52_dpo_reward true).
+Proof.
+  unfold fa52_dpo_reward.
+  simpl.
+  exact fa52_one_two_lt.
+Qed.
+
+(* ---------- 主件一：DPO 损失在 π* 处 (0, ln2) 有界——见证特化闭语句 ---------- *)
+Theorem fa52_dpo_bounded_both_concrete :
+  S01_BaseRing.And
+    (real_lt real_zero
+       (real_dpo_loss_pair bool real_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos
+          (real_pi_star bool fa52_dpo_reward real_one real_lt_zero_one
+             fa52_dpo_pi_ref real_one real_lt_zero_one)
+          (real_pi_star_pos bool fa52_dpo_reward real_one real_lt_zero_one
+             fa52_dpo_pi_ref fa52_dpo_pi_ref_pos real_one real_lt_zero_one)
+          true false))
+    (real_lt
+       (real_dpo_loss_pair bool real_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos
+          (real_pi_star bool fa52_dpo_reward real_one real_lt_zero_one
+             fa52_dpo_pi_ref real_one real_lt_zero_one)
+          (real_pi_star_pos bool fa52_dpo_reward real_one real_lt_zero_one
+             fa52_dpo_pi_ref fa52_dpo_pi_ref_pos real_one real_lt_zero_one)
+          true false)
+       (real_log (real_plus real_one real_one) real_two_pos)).
+Proof.
+  exact (real_dpo_loss_pi_star_bounded_both bool fa52_dpo_reward real_one           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos           real_one real_lt_zero_one true false fa52_dpo_reward_spread).
+Qed.
+
+(* ---------- 主件二：闭式奖励复原——见证特化（β:=1, Z:=1 分离出 log1 修正项） ---------- *)
+Theorem fa52_dpo_reward_recovery_concrete : forall s : bool,
+  real_eq
+    (real_dpo_reward_explicit bool real_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos
+       (real_pi_star bool fa52_dpo_reward real_one real_lt_zero_one
+          fa52_dpo_pi_ref real_one real_lt_zero_one)
+       (real_pi_star_pos bool fa52_dpo_reward real_one real_lt_zero_one
+          fa52_dpo_pi_ref fa52_dpo_pi_ref_pos real_one real_lt_zero_one)
+       s)
+    (real_plus (fa52_dpo_reward s)
+                (real_opp (real_mult real_one
+                            (real_log real_one real_lt_zero_one)))).
+Proof.
+  intro s.
+  exact (real_dpo_reward_recovers_up_to_baseline bool fa52_dpo_reward real_one           real_lt_zero_one fa52_dpo_pi_ref fa52_dpo_pi_ref_pos           real_one real_lt_zero_one s).
+Qed.
+
+Print Assumptions fa52_dpo_bounded_both_concrete.
+Print Assumptions fa52_dpo_reward_recovery_concrete.
+
+(* ============================ §2 fa52_EDP_E_B_pos_unsat（能量全正支 ⟹ False）与 fa52_EntropyDiffReal_premises_unsat（熵 ============================ *)
+Require Import S02_CauchyComplete.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+
+(* ---------- 核心：E_B_pos 单槽不可满足 ---------- *)
+Theorem fa52_EDP_E_B_pos_unsat :
+  forall E_total : Real,
+    (forall E : Real, real_lt real_zero E ->
+       real_lt real_zero (real_plus E_total (real_opp E))) -> False.
+Proof.
+  intros E_total eB.
+  (* 第一步：eB 1：0 < E_total - 1 *)
+  pose proof (eB real_one real_lt_zero_one) as H1.
+  (* 第二步：混合加保序 0+1 < (E_total-1)+1 *)
+  assert (Hstep : real_lt (real_plus real_zero real_one)
+                          (real_plus (real_plus E_total (real_opp real_one)) real_one)).
+  { exact (real_lt_plus_compat_lt_le real_zero
+             (real_plus E_total (real_opp real_one)) real_one real_one H1
+             (real_le_refl real_one)). }
+  (* 0+1 == 1 *)
+  assert (HL : real_eq (real_plus real_zero real_one) real_one).
+  { apply (real_eq_trans _ (real_plus real_one real_zero)).
+    - apply (real_plus_comm real_zero real_one).
+    - apply (real_plus_zero real_one). }
+  (* (E_total-1)+1 == E_total *)
+  assert (HR : real_eq (real_plus (real_plus E_total (real_opp real_one)) real_one)
+                       E_total).
+  { apply (real_eq_trans _ (real_plus E_total (real_plus (real_opp real_one) real_one))).
+    - apply real_eq_sym.
+      apply (real_plus_assoc E_total (real_opp real_one) real_one).
+    - apply (real_eq_trans _ (real_plus E_total real_zero)).
+      + apply (RealSetoid.real_eq_plus_compat E_total
+                 (real_plus (real_opp real_one) real_one) E_total real_zero).
+        * apply (real_eq_refl E_total).
+        * apply (real_eq_trans _ (real_plus real_one (real_opp real_one))).
+          -- apply (real_plus_comm (real_opp real_one) real_one).
+          -- apply (real_plus_opp real_one).
+      + apply (real_plus_zero E_total). }
+  (* 得 1 < E_total，再降 0 < E_total *)
+  assert (H1ET : real_lt real_one E_total).
+  { exact (real_eq_lt_lt _ _ _ (real_eq_sym _ _ HL) (real_lt_eq_lt _ _ _ Hstep HR)). }
+  assert (H2 : real_lt real_zero E_total).
+  { exact (real_lt_le_trans real_zero real_one E_total real_lt_zero_one (inl H1ET)). }
+  (* 第三步：eB E_total：0 < E_total - E_total == 0，矛盾 *)
+  pose proof (real_lt_eq_lt real_zero (real_plus E_total (real_opp E_total)) real_zero
+                (eB E_total H2) (real_plus_opp E_total)) as Hcon.
+  (* Empty_set（S01_BaseRing.Not 的结论型）无构造子，destruct 即清任意目标 *)
+  destruct (real_lt_irrefl real_zero Hcon).
+Qed.
+
+(* ---------- 包装：EntropyDiffReal 全 10 槽空虚真 ---------- *)
+Theorem fa52_EntropyDiffReal_premises_unsat :
+  forall (Omega_A : forall E_A : Real, real_lt real_zero E_A -> Real)
+         (Omega_B : forall E_B : Real, real_lt real_zero E_B -> Real)
+         (dA : RealDifferentiable Omega_A)
+         (dB : RealDifferentiable Omega_B)
+         (pA : forall (E_A : Real) (H : real_lt real_zero E_A),
+                real_lt real_zero (Omega_A E_A H))
+         (pB : forall (E_B : Real) (H : real_lt real_zero E_B),
+                real_lt real_zero (Omega_B E_B H))
+         (wdB : forall (a b : Real) (Ha : real_lt real_zero a) (Hb : real_lt real_zero b),
+                real_eq a b -> real_eq (Omega_B a Ha) (Omega_B b Hb))
+         (E_total k_B : Real)
+         (eB : forall (E_A : Real) (H : real_lt real_zero E_A),
+                real_lt real_zero (real_plus E_total (real_opp E_A))),
+    False.
+Proof.
+  intros Omega_A Omega_B dA dB pA pB wdB E_total k_B eB.
+  exact (fa52_EDP_E_B_pos_unsat E_total eB).
+Qed.
+
+Print Assumptions fa52_EDP_E_B_pos_unsat.
+Print Assumptions fa52_EntropyDiffReal_premises_unsat.
 
 Require Import S01_BaseRing.
 Require Import fa51_sumpos_id.

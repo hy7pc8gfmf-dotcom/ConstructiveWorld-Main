@@ -493,8 +493,6 @@ ToyR_UpAblP7_LoHiSqueeze.v
 ToyR_UpAblP7_Paper7Ablation_S1inst.v
 ToyR_UpAblP7_UMixSelect.v
 ToyR_ZPosSlotFeed.v
-ToyR_fa52_dpo_witness.v
-ToyR_fa52_entropy_diff_unsat.v
 ToyR_fa56b_ext.v
 R2BishopLogSel.v
 UpReqMixRationalProxy.v

@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 426 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 424 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -3039,16 +3039,6 @@ Definition ng_ToyR_UpAblP7_UMixSelect : NewGreenFace :=
 Definition ng_ToyR_ZPosSlotFeed : NewGreenFace :=
   MkNewGreenFace "ToyR_ZPosSlotFeed.v" 179 5 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d912ad, L179); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L179:md912ad".
-
-(* ng_ToyR_fa52_dpo_witness —— ToyR_fa52_dpo_witness.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_fa52_dpo_witness : NewGreenFace :=
-  MkNewGreenFace "ToyR_fa52_dpo_witness.v" 113 4 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 2c5f33, L113); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L113:m2c5f33".
-
-(* ng_ToyR_fa52_entropy_diff_unsat —— ToyR_fa52_entropy_diff_unsat.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_fa52_entropy_diff_unsat : NewGreenFace :=
-  MkNewGreenFace "ToyR_fa52_entropy_diff_unsat.v" 99 2 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d11c00, L99); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L99:md11c00".
 
 (* ng_ToyR_fa56b_ext —— ToyR_fa56b_ext.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_fa56b_ext : NewGreenFace :=
