@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 407 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 399 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2103,36 +2103,12 @@ Definition ng_UpAblD1S3_sum_pos_AlignIdUnclosed : NewGreenFace :=
 (* ng_UpAblD1S3_sum_pos_SecondLawQuantified —— UpAblD1S3_sum_pos_SecondLawQuantified.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
 Definition ng_UpAblD1S3_sum_pos_SecondLawQuantified : NewGreenFace :=
   MkNewGreenFace "UpAblD1S3_sum_pos_SecondLawQuantified.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:md95a37".
-(* ng_UpAblD1S3_sum_pos_TempSoftmaxInstantiation —— UpAblD1S3_sum_pos_TempSoftmaxInstantiation.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_TempSoftmaxInstantiation : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_TempSoftmaxInstantiation.v" 47 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L47:mf84377".
-(* ng_UpAblD1S3_sum_pos_UpReqAlign3 —— UpAblD1S3_sum_pos_UpReqAlign3.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqAlign3 : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAlign3.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L53:mdf1434".
-(* ng_UpAblD1S3_sum_pos_UpReqAlignClose —— UpAblD1S3_sum_pos_UpReqAlignClose.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqAlignClose : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAlignClose.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L53:m76d4dc".
-(* ng_UpAblD1S3_sum_pos_UpReqAttnGibbs —— UpAblD1S3_sum_pos_UpReqAttnGibbs.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqAttnGibbs : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqAttnGibbs.v" 53 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L53:m38b3d2".
-(* ng_UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp —— UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyDeficitTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m8ba153".
 (* ng_UpAblD1S3_sum_pos_UpReqEntropyMaxTemp —— UpAblD1S3_sum_pos_UpReqEntropyMaxTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
 Definition ng_UpAblD1S3_sum_pos_UpReqEntropyMaxTemp : NewGreenFace :=
   MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyMaxTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:maef005".
-(* ng_UpAblD1S3_sum_pos_UpReqEntropyMonoSplit —— UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqEntropyMonoSplit : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:mdc252b".
 (* ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg —— UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
 Definition ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg : NewGreenFace :=
   MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyUniqueNeg.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m950571".
-(* ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp —— UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqEntropyUniqueTemp.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:mb32714".
-(* ng_UpAblD1S3_sum_pos_UpReqTempDefs —— UpAblD1S3_sum_pos_UpReqTempDefs.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
-Definition ng_UpAblD1S3_sum_pos_UpReqTempDefs : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S3_sum_pos_UpReqTempDefs.v" 43 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m9cc0f6".
 (* ng_UpAblD1S4_UpReqStepKLEtaInst —— UpAblD1S4_UpReqStepKLEtaInst.v：FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green () *)
 Definition ng_UpAblD1S4_UpReqStepKLEtaInst : NewGreenFace :=
   MkNewGreenFace "UpAblD1S4_UpReqStepKLEtaInst.v" 137 5 20260919 "FA-D1S4, T-supply level (SKE 12 + TopKTV 18, census-N honestly downgraded), four-gate green (_tfad1s4_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L111:m720e91".
