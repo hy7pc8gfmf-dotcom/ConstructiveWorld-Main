@@ -179,15 +179,13 @@ BoltzmannBridgeDischarge.v#R0-d66910
 DenPosGeneral.v#R0-d66910
 ExpNegFinale.v#R0-d66910
 ExpNegPosUp.v#R0-d66910
-FirewallReqDischarge.v#R0-d66910
-InstBWdClose.v#R0-d66910
 KLWallClosed.v#R0-d66910
 PolyIntegral.v#R0-d66910
 RealKLCorrMark.v#R0-d66910
 SqWallCorrMark.v#R0-d66910
 SqrtfCauchy.v#R0-d66910
 SqrtfCauchyArch.v#R0-d66910
-SqrtfCauchyDischarge.v#R0-d66910
+SqrtfCauchyDischarge.v#R0-080294
 SumInvFactEscape.v#R0-d66910
 SupKLBound.v#R0-d66910
 SupKLMonoCompose.v#R0-d66910
@@ -280,7 +278,6 @@ MixTimeChain.v#R0-d66910
 MixTimeChainIface.v#R0-d66910
 MixingTimeG2.v#R0-d66910
 PintMono.v#R0-d66910
-QuickDischargeA.v#R0-d66910
 S5SlotWire.v#R0-d66910
 SumDCarrierFeed.v#R0-d66910
 VajdaClose2.v#R0-d66910

@@ -171,8 +171,6 @@ BoltzmannBridgeDischarge.v
 DenPosGeneral.v
 ExpNegFinale.v
 ExpNegPosUp.v
-FirewallReqDischarge.v
-InstBWdClose.v
 KLWallClosed.v
 PolyIntegral.v
 RealKLCorrMark.v
@@ -281,7 +279,6 @@ MixTimeChain.v
 MixTimeChainIface.v
 MixingTimeG2.v
 PintMono.v
-QuickDischargeA.v
 S5SlotWire.v
 SumDCarrierFeed.v
 VajdaClose2.v
