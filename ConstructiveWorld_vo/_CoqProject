@@ -70,7 +70,6 @@ UpReqAlign2.v
 UpReqAlignRestA.v
 UpReqFEPAttn.v
 UpReqMinPAntitone.v
-UpReqMisc5.v
 UpReqPPO.v
 UpReqSampling.v
 UpReqSumD.v
@@ -104,9 +103,7 @@ UpReqSumB.v
 UpReqLatticeB.v
 UpReqGibbsE2.v
 UpReqKLStrict.v
-UpReqELBOEps.v
 UpReqExpPos.v
-UpReqFEPCanon.v
 UpReqI4Bridge.v
 UpReqI4Witness.v
 UpReqKLSTangent.v
@@ -124,16 +121,11 @@ UpReqTopKTVChain.v
 UpReqTrainingEquiv.v
 UpReqArgminEngine.v
 UpReqCEqDispersion.v
-UpReqELBOStrict.v
-UpReqELBOTight.v
 UpReqEntropyDeficitTemp.v
-UpReqMinFreeEps.v
 UpReqMinUniqueTight.v
 UpReqNegFactorB.v
 UpReqEntropyMaxTemp.v
-UpReqEntropyUniqueTemp.v
 UpReqTempDual.v
-UpReqCDispersion.v
 UpReqEntropyUniqueNeg.v
 UpReqTempDualList.v
 UpReqExpPosWitness.v
@@ -141,7 +133,6 @@ UpReqExpPosQBound.v
 UpReqBanachExp.v
 UpReqPadeExp.v
 UpReqAltSumPos.v
-UpReqGibbsD.v
 UpReqBanachProd.v
 UpReqBanachDouble.v
 UpReqBanachExpDef.v

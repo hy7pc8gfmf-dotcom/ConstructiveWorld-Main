@@ -13,9 +13,9 @@
 (*           coqchk 校验通过；导出面为各 idx_/af_/ng_/lg_ 条目与统计常量。  *)
 (*                                                                          *)
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
-(*       二、活动面计数（af_ 127 条）                                       *)
+(*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 463 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 456 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -377,7 +377,7 @@ Qed.
 (* TLC 口径并行不悖、互不覆盖）+ Live_X 终态结构（S/G 双系 + 旧名消融 + 219 壳）。宇宙行与 39 件 *)
 (* idx_ 注册表承 全量不动（append-only）；本节纯新增两层登记面，数值面与 无交集。 *)
 
-(* ---------- 层①：attn 活动区主件面（127 主件，剥注释 token 级 Qed 口径） ---------- *)
+(* ---------- 层①：attn 活动区主件面（124 主件，剥注释 token 级 Qed 口径） ---------- *)
 
 Record AttnFace : Set := MkAttnFace
   { af_name : string   (* 主件文件名 *)
@@ -471,7 +471,6 @@ Definition af_UpReqDpoLoss : AttnFace := MkAttnFace "UpReqDpoLoss.v" 6 20260911.
 Definition af_UpReqFEPAttn : AttnFace := MkAttnFace "UpReqFEPAttn.v" 16 20260911.
 Definition af_UpReqGeomD : AttnFace := MkAttnFace "UpReqGeomD.v" 19 20260911.
 Definition af_UpReqGeomIter : AttnFace := MkAttnFace "UpReqGeomIter.v" 16 20260911.
-Definition af_UpReqGibbsD : AttnFace := MkAttnFace "UpReqGibbsD.v" 15 20260911.
 Definition af_UpReqGibbsE : AttnFace := MkAttnFace "UpReqGibbsE.v" 15 20260911.
 Definition af_UpReqGibbsE2 : AttnFace := MkAttnFace "UpReqGibbsE2.v" 13 20260911.
 Definition af_UpReqHlogZD : AttnFace := MkAttnFace "UpReqHlogZD.v" 11 20260911.
@@ -489,7 +488,6 @@ Definition af_UpReqLogPrimD : AttnFace := MkAttnFace "UpReqLogPrimD.v" 18 202609
 Definition af_UpReqLogRDF : AttnFace := MkAttnFace "UpReqLogRDF.v" 17 20260911.
 Definition af_UpReqMinPAntitone : AttnFace := MkAttnFace "UpReqMinPAntitone.v" 5 20260911.
 Definition af_UpReqMinPProjB : AttnFace := MkAttnFace "UpReqMinPProjB.v" 7 20260911.
-Definition af_UpReqMisc5 : AttnFace := MkAttnFace "UpReqMisc5.v" 35 20260911.
 Definition af_UpReqMisc5B : AttnFace := MkAttnFace "UpReqMisc5B.v" 20 20260911.
 Definition af_UpReqOrderArgmin : AttnFace := MkAttnFace "UpReqOrderArgmin.v" 7 20260911.
 Definition af_UpReqPCT : AttnFace := MkAttnFace "UpReqPCT.v" 2 20260911.
@@ -599,7 +597,6 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_UpReqFEPAttn
   (cons af_UpReqGeomD
   (cons af_UpReqGeomIter
-  (cons af_UpReqGibbsD
   (cons af_UpReqGibbsE
   (cons af_UpReqGibbsE2
   (cons af_UpReqHlogZD
@@ -617,7 +614,6 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_UpReqLogRDF
   (cons af_UpReqMinPAntitone
   (cons af_UpReqMinPProjB
-  (cons af_UpReqMisc5
   (cons af_UpReqMisc5B
   (cons af_UpReqOrderArgmin
   (cons af_UpReqPCT
@@ -650,12 +646,12 @@ Definition AttnFaceList : list AttnFace :=
   (cons af_UpStopTime
   (cons af_UpTVDoeblin
   (cons af_UpTVReal
-  (cons af_UpTempWindow nil))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
+  (cons af_UpTempWindow nil))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).
 
-(* 主件面统计：126 主件 / 剥注释 token 级 Qed 和 22218（含自指件 UpReqIndex.v v2 终态 27）； *)
+(* 主件面统计：124 主件 / 剥注释 token 级 Qed 和 22168（含自指件 UpReqIndex.v v2 终态 27）； *)
 (* 存档/快照/副本/检查点（_ 前缀与 probe 族）不入主件面，处置状态见层② 退役条目与交付报告。 *)
-Definition AttnFaceModules : nat := 126.
-Definition AttnFaceItems   : nat := 22218.
+Definition AttnFaceModules : nat := 124.
+Definition AttnFaceItems   : nat := 22168.
 
 Lemma AttnFaceModules_matches : AttnFaceModules = cnt_af AttnFaceList.
 Proof. reflexivity. Qed.
@@ -763,7 +759,7 @@ Proof. reflexivity. Qed.
  attn Qed 和 = Live_X G 组件 Qed（12 组全数 1:1，合并无损机械可证，见 G*_merge_lossless）。 *)
 Definition GMergeGroups  : nat := 12.
 Definition GMergeMembers : nat := 44.
-Definition GMergeQed     : nat := 640.
+Definition GMergeQed     : nat := 625.
 
 Definition gqed_G01 : nat := 26.  (* G01_CoreMicro.v 剥注释 Qed 实测 *)
 Definition gqed_G02 : nat := 21.  (* G02_Debt.v 剥注释 Qed 实测 *)
@@ -771,7 +767,7 @@ Definition gqed_G04 : nat := 71.  (* G04_ProjFam.v 剥注释 Qed 实测 *)
 Definition gqed_G05 : nat := 46.  (* G05_LogSmall.v 剥注释 Qed 实测 *)
 Definition gqed_G06 : nat := 25.  (* G06_BForm.v 剥注释 Qed 实测 *)
 Definition gqed_G07 : nat := 66.  (* G07_KLWall.v 剥注释 Qed 实测 *)
-Definition gqed_G08 : nat := 39.  (* G08_Gibbs.v 剥注释 Qed 实测 *)
+Definition gqed_G08 : nat := 24.  (* G08_Gibbs.v 剥注释 Qed 实测 *)
 Definition gqed_G09 : nat := 22.  (* G09_MiscSmall.v 剥注释 Qed 实测 *)
 Definition gqed_G10 : nat := 167.  (* G10_LoebFam.v 剥注释 Qed 实测 *)
 Definition gqed_G11 : nat := 86.  (* G11_IDLFam.v 剥注释 Qed 实测 *)
@@ -805,7 +801,7 @@ Proof. reflexivity. Qed.
 Lemma G07_merge_lossless : gqed_G07 = plus (af_qed af_UpReqKLCvx) (plus (af_qed af_UpReqPowB) (plus (af_qed af_UpReqJensen) (plus (af_qed af_UpReqKLStrict) (af_qed af_UpReqKLEnergy)))).
 Proof. reflexivity. Qed.
 
-Lemma G08_merge_lossless : gqed_G08 = plus (af_qed af_UpReqHlogZD) (plus (af_qed af_UpReqGibbsD) (af_qed af_UpReqGibbsE2)).
+Lemma G08_merge_lossless : gqed_G08 = plus (af_qed af_UpReqHlogZD) (af_qed af_UpReqGibbsE2).
 Proof. reflexivity. Qed.
 
 Lemma G09_merge_lossless : gqed_G09 = plus (af_qed af_UpReqPCT) (plus (af_qed af_UpReqBoltzDirect) (plus (af_qed af_UpReqSqPos) (af_qed af_UpReqOrderArgmin))).
@@ -899,13 +895,7 @@ Definition ng_UpReqKLSTangent : NewGreenFace :=
 Definition ng_UpReqSteadyThermo : NewGreenFace :=
   MkNewGreenFace "UpReqSteadyThermo.v" 129 1 20260911 "4.9 steady-state thermo replica" "L138:m5a7ba5".
 
-(* ng_UpReqFEPCanon —— UpReqFEPCanon.v：4.1 正典化双引理 *)
-Definition ng_UpReqFEPCanon : NewGreenFace :=
-  MkNewGreenFace "UpReqFEPCanon.v" 135 2 20260911 "4.1 FEP canon dual lemmas" "L143:m1dffd6".
 
-(* ng_UpReqMinFreeEps —— UpReqMinFreeEps.v：4.4 序档三定理 *)
-Definition ng_UpReqMinFreeEps : NewGreenFace :=
-  MkNewGreenFace "UpReqMinFreeEps.v" 268 3 20260911 "4.4 min-free-eps order-gate three theorems" "L277:mcc9731".
 
 
 (* ng_UpReqMpDomain —— UpReqMpDomain.v：mp 域引擎+12 件全清 *)
@@ -920,13 +910,7 @@ Definition ng_UpReqTempDefs : NewGreenFace :=
 Definition ng_UpReqEntropyDeficitTemp : NewGreenFace :=
   MkNewGreenFace "UpReqEntropyDeficitTemp.v" 582 8 20260911 "4.6a entropy deficit under temperature" "L600:mbf3580".
 
-(* ng_UpReqELBOEps —— UpReqELBOEps.v：4.7 ELBO 逐 eps *)
-Definition ng_UpReqELBOEps : NewGreenFace :=
-  MkNewGreenFace "UpReqELBOEps.v" 400 6 20260911 "4.7 ELBO pointwise in eps" "L428:m660e12".
 
-(* ng_UpReqELBOTight —— UpReqELBOTight.v：4.8 紧性可达形 *)
-Definition ng_UpReqELBOTight : NewGreenFace :=
-  MkNewGreenFace "UpReqELBOTight.v" 420 6 20260911 "4.8 ELBO tightness reachable form" "L420:m9be260".
 
 (* ng_UpReqTrainingEquiv —— UpReqTrainingEquiv.v：4.10 组装 *)
 Definition ng_UpReqTrainingEquiv : NewGreenFace :=
@@ -949,23 +933,19 @@ Definition ng_UpReqAlign4 : NewGreenFace :=
 Definition NewGreenList : list NewGreenFace :=
   cons ng_UpReqKLSTangent
   (cons ng_UpReqSteadyThermo
-  (cons ng_UpReqFEPCanon
-  (cons ng_UpReqMinFreeEps
   (cons ng_UpReqMpDomain
   (cons ng_UpReqTempDefs
   (cons ng_UpReqEntropyDeficitTemp
-  (cons ng_UpReqELBOEps
-  (cons ng_UpReqELBOTight
   (cons ng_UpReqTrainingEquiv
   (cons ng_UpReqTVAbsEps
   (cons ng_UpReqPowMonoBridge
-  (cons ng_UpReqAlign4 nil)))))))))))).
+  (cons ng_UpReqAlign4 nil)))))))).
 
-(* 今日新绿面统计：13 件 / 行数和 5894 / Qed 和 110（字面值；一致性由下方等式引理编译期核对； *)
+(* 今日新绿面统计：9 件 / 行数和 4671 / Qed 和 93（字面值；一致性由下方等式引理编译期核对； *)
 (* 改账后口径，改账前原值 5474/101，见文末 改账段）。 *)
-Definition NewGreenPieces  : nat := 13.
-Definition NewGreenLineSum : nat := 5894.
-Definition NewGreenQedSum  : nat := 110.
+Definition NewGreenPieces  : nat := 9.
+Definition NewGreenLineSum : nat := 4671.
+Definition NewGreenQedSum  : nat := 93.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenPieces_matches : NewGreenPieces = cnt_ng NewGreenList.
@@ -1001,21 +981,16 @@ Definition ng_UpReqMinUniqueTight : NewGreenFace :=
 Definition ng_UpReqI4Bridge : NewGreenFace :=
   MkNewGreenFace "UpReqI4Bridge.v" 215 5 20260911 "I4 consumer-slot bridge, i4b formalized" "L224:meea336".
 
-(* ng_UpReqEntropyUniqueTemp —— UpReqEntropyUniqueTemp.v：，定理 4.6c entropy_max_unique_temp *)
-(* （同能量同熵下逐点相等可达形；四树 md5 三树一致 94037b09） *)
-Definition ng_UpReqEntropyUniqueTemp : NewGreenFace :=
-  MkNewGreenFace "UpReqEntropyUniqueTemp.v" 378 8 20260911 "4.6c entropy max unique under temperature" "L406:m6497f1".
 
 Definition NewGreenListV22 : list NewGreenFace :=
   cons ng_UpReqEntropyMaxTemp
   (cons ng_UpReqMinUniqueTight
-  (cons ng_UpReqI4Bridge
-  (cons ng_UpReqEntropyUniqueTemp nil))).
+  (cons ng_UpReqI4Bridge nil)).
 
-(* 续写统计：4 件 / 行数和 1532 / 闭合和 26（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV22Pieces  : nat := 4.
-Definition NewGreenV22LineSum : nat := 1532.
-Definition NewGreenV22QedSum  : nat := 26.
+(* 续写统计：3 件 / 行数和 1154 / 闭合和 18（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV22Pieces  : nat := 3.
+Definition NewGreenV22LineSum : nat := 1154.
+Definition NewGreenV22QedSum  : nat := 18.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV22Pieces_matches : NewGreenV22Pieces = cnt_ng NewGreenListV22.
@@ -1141,10 +1116,10 @@ Proof. reflexivity. Qed.
 Lemma Align4AmendQed : 28 = plus 18 10.
 Proof. reflexivity. Qed.
 
-Lemma Align4AmendLineSum : NewGreenLineSum = plus 5474 420.
+Lemma Align4AmendLineSum : NewGreenLineSum = plus 4251 420.
 Proof. reflexivity. Qed.
 
-Lemma Align4AmendQedSum : NewGreenQedSum = plus 101 9.
+Lemma Align4AmendQedSum : NewGreenQedSum = plus 84 9.
 Proof. reflexivity. Qed.
 
 
@@ -1190,11 +1165,7 @@ Definition ng_UpReqLatbMaxList : NewGreenFace :=
 Definition ng_UpReqMinPKLChain : NewGreenFace :=
   MkNewGreenFace "UpReqMinPKLChain.v" 1038 27 20260911 "minP-full KL chain one-step assembly, paper2 s10.2 item 6" "L1045:m57c28a".
 
-(* ng_UpReqCDispersion —— UpReqCDispersion.v：，C （log_req_compat 9 实例打头） *)
 
-(* 467/22 同 md5 a2b68524，补绑单件编译 EXIT=0，G1 表九词全零） *)
-Definition ng_UpReqCDispersion : NewGreenFace :=
-  MkNewGreenFace "UpReqCDispersion.v" 467 22 20260911 "C-tier residual slots batch discharge, nine instances" "L476:m65e274".
 
 (* ng_UpReqCEqDispersion —— UpReqCEqDispersion.v：，CDispersion S *)
 
@@ -1202,11 +1173,8 @@ Definition ng_UpReqCDispersion : NewGreenFace :=
 Definition ng_UpReqCEqDispersion : NewGreenFace :=
   MkNewGreenFace "UpReqCEqDispersion.v" 180 3 20260911 "CDispersion S-tier equality-slot strict discharge" "L189:mbc716e".
 
-(* ng_UpReqELBOStrict —— UpReqELBOStrict.v：，定理 4.8 ELBO 紧性补齐严格逆否支 *)
 (* （(b) 严格逆否支 Real 层可达形：显式分歧见证（q 与 p_b 在某点 Set 层 Or (real_lt) 双向见证）； *)
 
-Definition ng_UpReqELBOStrict : NewGreenFace :=
-  MkNewGreenFace "UpReqELBOStrict.v" 393 7 20260911 "4.8 ELBO tightness strict contrapositive leg" "L395:m756682".
 
 (* ng_UpReqTempDualList —— UpReqTempDualList.v：，温度族 sigT 对偶·通用 list 记录集成 *)
 
@@ -1226,16 +1194,14 @@ Definition NewGreenListV25 : list NewGreenFace :=
   cons ng_UpReqKLStrictB
   (cons ng_UpReqLatbMaxList
   (cons ng_UpReqMinPKLChain
-  (cons ng_UpReqCDispersion
   (cons ng_UpReqCEqDispersion
-  (cons ng_UpReqELBOStrict
   (cons ng_UpReqTempDualList
-  (cons ng_UpReqI4Witness nil))))))).
+  (cons ng_UpReqI4Witness nil))))).
 
-(* 续写统计：8 件 / 行数和 3510 / 闭合和 97（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV25Pieces  : nat := 8.
-Definition NewGreenV25LineSum : nat := 3510.
-Definition NewGreenV25QedSum  : nat := 97.
+(* 续写统计：6 件 / 行数和 2650 / 闭合和 68（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV25Pieces  : nat := 6.
+Definition NewGreenV25LineSum : nat := 2650.
+Definition NewGreenV25QedSum  : nat := 68.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV25Pieces_matches : NewGreenV25Pieces = cnt_ng NewGreenListV25.
