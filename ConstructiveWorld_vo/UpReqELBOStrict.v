@@ -1,111 +1,384 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* 玩具证替换件（消融落件）——替换面清单见下 *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   t33_elbo_strict_divergence_bool（原 L304，2 句玩具证）               *)
-(*   t33_elbo_strict_divergence（原 L263，3 句玩具证）                    *)
-(*   t33_elbo_strict_divergence_le（原 L227，3 句玩具证）                 *)
-(*   t33_elbo_strict_of_kl_pos（原 L194，3 句玩具证）                     *)
-(*   t33_elbo_strict_of_fe_strict（原 L99，3 句玩具证）                   *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【恒等守恒修订注记】 *)
-(* 上方头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经全量 *)
-(* 恒等核查与试点复核：本件实测为恒等守恒——清单所列 5 参数位证明体与 *)
-(* Main 现版原件逐字同文（刀体＝原体，零变化），头注「替换」声称与实物 *)
-(* 不符，特此修订。 *)
-(* 修订口径：真替换 0 参数位＋恒等守恒 5 参数位；证明体、声明面、语句面、 *)
-(* Require 面零改动；头注过程流水词面已作中性化处理。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqELBOStrict.v —— ELBO 下界 eps 档组装、紧性与严格逆否肢族
+   使命：本件形式化变分证据下界（ELBO）的 Real 层三段。其一，证据与 ELBO 的
+     显式定义（real_evidence_def / real_elbo_def）与 elbo_lower_bound 的逐 eps
+     档组装 real_elbo_lower_bound_eps 及其配分形
+     real_elbo_lower_bound_eps_partition。其二，ELBO 紧性：切面等式
+     t12_tangent_eq、双向紧性 t12_elbo_tight_forward / t12_elbo_tight_backward /
+     t12_elbo_tight（KL 零 当且仅当 ELBO 紧）及其两点 bool 实例
+     t12_elbo_tight_bool / t12_elbo_tight_forward_bool。其三，紧性的严格
+     逆否肢 t33_elbo_strict_of_fe_strict / t33_elbo_strict_of_kl_pos /
+     t33_elbo_strict_divergence 系（bool 编码形与 Or 形并存）。
+   依赖：S01_BaseRing 至 S15_TailFEPUp 基座链（十五件顺序直调）、UpReqRealFEP、
+     G07_KLWall、UpReqFEPCanon、UpReqKLSTangent、G08_Gibbs；Stdlib List。
+   对标：变分推断 ELBO 紧性（KL(q‖p)=0 当且仅当 q 达后验；自由能变分原理）。
+   构造性：全件 Qed 闭合、零承认词面、零公理；证体不引入额外公理前提；
+     全链结论面 real_lt/real_eq 为 Set 值，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqRealFEP.
 
-(* ============================================================ *)
-(* UpReqELBOStrict.v *)
-(* *)
-(* 目的： 定理 4.8 ELBO 紧性的严格逆否肢补齐。 *)
-(* 主件： t33_elbo_strict_of_fe_strict / t33_elbo_strict_of_kl_pos 严格肢族与 bool 编码形。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqRealFEP、UpReqELBOEps、G07_KLWall、UpReqFEPCanon。 *)
-(* 备注： 逆否肢经 KL 墙件给出；bool 形与 Or 形双编码并存。 *)
-(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
-(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
+(* ---------------------------------------------------------- *)
+(* 件 0：定义件（ELBO/evidence 的 Real 层具名形）                       *)
+(*   ELBO(q) := real_opp (F q)；evidence := real_opp (F p_b)。          *)
+(*   对位 S04 L4563 elbo / L4565 evidence（Set 层 opp 自由能抽象）。     *)
+(* ---------------------------------------------------------- *)
 
-(* ============================================================ *)
-(* UpReqELBOStrict.v —— 定理 4.8 ELBO 紧性补齐严格逆否肢 *)
+Definition real_elbo (S : Type) (real_sum_over_S : (S -> Real) -> Real)
+  (real_base_loss : S -> Real) (D : Real)
+  (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)) : Real :=
+  real_opp (real_free_energy S real_sum_over_S real_base_loss D q Hq).
 
-(* ------------------------------------------------------------------ *)
-(* 【使命】候选 A-2：4.8 的 (b) 严格逆否肢 Real 层可达形——          *)
-(*   显式分歧见证（q 与 p_b 在某 s₀ 处 Set 层 Or (real_lt) 双向见证）    *)
-(*   ⟹ KL(q‖p_b)>0 ⟹ ELBO(q) < evidence（严格）。                      *)
-(*   三步组装链（全部在盘复用，零新数学）：                              *)
-(*     第 1 步 分歧见证 ⟹ KL 严格：G07 klst_kl_sum_strict（单向可比版）  *)
-(*       / klst_kl_energy_nonconst（双向 Or 见证版），p := q 同向显式应用；  *)
-(*     第 2 步 KL 严格 ⟹ F 严格差：正典分解 real_kl_decomp_full_canon    *)
-(*       （UpReqFEPCanon）给 F[q] − F[p_b] = D·KL 清单 +                 *)
-(*       real_mult_pos_compat（D>0 × KL>0）+ real_lt_plus_translate +    *)
-(*       RealSetoid.real_lt_compat 两跳运输（在库件同链同件重组）； *)
-(*     第 3 步 F 严格差 ⟹ ELBO 严格：ELBO = −F 一跳取负换向              *)
-(*       （S07 real_opp_lt_compat）。                                    *)
-(* ------------------------------------------------------------------ *)
+Definition real_evidence (S : Type) (real_sum_over_S : (S -> Real) -> Real)
+  (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+  (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r) : Real :=
+  real_opp
+    (real_free_energy S real_sum_over_S real_base_loss D
+       (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+       (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r
+          Z_align_r_pos)).
 
-(*   本件两跳重组不依赖 t12_elbo_tight_backward 成品 .vo 产物， *)
+(* 桥引理（reflexivity 级）：定义展开面，供下游对位 S04 Set 术语 *)
+Lemma real_elbo_def :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real)
+    (real_base_loss : S -> Real) (D : Real)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+          (real_opp (real_free_energy S real_sum_over_S real_base_loss D q Hq)).
+Proof.
+  intros S real_sum_over_S real_base_loss D q Hq.
+  unfold real_elbo.
+  exact (real_eq_refl
+           (real_opp (real_free_energy S real_sum_over_S real_base_loss D q Hq))).
+Qed.
 
+Lemma real_evidence_def :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real)
+    (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r),
+  real_eq (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+          (real_opp
+             (real_free_energy S real_sum_over_S real_base_loss D
+                (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r
+                   Z_align_r_pos))).
+Proof.
+  intros S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos.
+  unfold real_evidence.
+  exact (real_eq_refl
+           (real_opp
+              (real_free_energy S real_sum_over_S real_base_loss D
+                 (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+                 (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r
+                    Z_align_r_pos)))).
+Qed.
 
-(*   改在其上游全数可装载件面（CW/RealFEP/ *)
-(*   ELBOEps/G07/FEPCanon）上按同链同件逐字重组   *)
-(*   这两跳——引用件名不变、清单不变（D 因子逐字保留），数学零新增。      *)
+(* ---------------------------------------------------------- *)
+(* 件 1：等值核 real_evidence_kl_decomp（S04 L4586 的 Real 对位）       *)
+(*   evidence ≡ ELBO(q) + D·Σ kl_term(q, p_b)（real_eq 载体）。         *)
+(*   组装：rfep_rlhf_free_energy_kl（任意 π* 版，π* := p_b 实例）给      *)
+(*   F 形分解，取负代数链桥到 ELBO/evidence 术语。                       *)
+(* ---------------------------------------------------------- *)
 
-(* ------------------------------------------------------------------ *)
-(* 【术语映射表（承 / 结果件，逐字沿用）】                         *)
-(*   ELBO(q) := −F[q]        ↔ real_elbo（UpReqELBOEps 件 0）           *)
+Lemma real_evidence_kl_decomp :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, real_eq (f s) (g s)) ->
+    real_eq (real_sum_over_S f) (real_sum_over_S g)) ->
+  (forall f g : S -> Real,
+    real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+            (real_plus (real_sum_over_S f) (real_sum_over_S g))) ->
+  (forall (a : Real) (f : S -> Real),
+    real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+            (real_mult a (real_sum_over_S f))) ->
+  forall (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  real_eq (real_sum_over_S q) real_one ->
+  real_eq (real_sum_over_S
+             (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
+          real_one ->
+  real_eq
+    (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+    (real_plus
+       (real_elbo S real_sum_over_S real_base_loss D q Hq)
+       (real_mult D
+          (real_sum_over_S
+             (fun s : S => real_kl_term (q s)
+                (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                (Hq s)
+                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s))))).
+Proof.
+  intros S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
+         real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
+         q Hq Hnormq Hnormb.
+  set (pb := real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  set (pbpos := real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  set (KLsum := real_sum_over_S (fun s : S => real_kl_term (q s) (pb s) (Hq s) (pbpos s))).
+  set (Fq := real_free_energy S real_sum_over_S real_base_loss D q Hq).
+  set (Fb := real_free_energy S real_sum_over_S real_base_loss D pb pbpos).
+  (* 第 1 腿：rlhf 任意 π* 版分解件（π* := p_b 实例，对齐取逐点自反） *)
+  assert (Hrlhf : real_eq Fq (real_plus Fb (real_mult D KLsum))).
+  { exact (rfep_rlhf_free_energy_kl
+             S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
+             real_sum_over_S_linear real_base_loss D D_pos Z_align_r Z_align_r_pos
+             pb pbpos
+             (fun s : S => real_eq_refl (pb s))
+             q Hq Hnormq Hnormb). }
+  (* 第 2 腿：取负代数链（F 形 ↝ ELBO/evidence 术语桥） *)
+  unfold real_evidence, real_elbo.
+  set (DK := real_mult D KLsum).
+  (* 桥：opp Fq ≡ opp Fb + opp DK *)
+  assert (Hbridge : real_eq (real_opp Fq) (real_plus (real_opp Fb) (real_opp DK))).
+  { apply (real_eq_trans (real_opp Fq) (real_opp (real_plus Fb DK))
+                         (real_plus (real_opp Fb) (real_opp DK))).
+    - exact (RealSetoid.real_eq_opp_compat Fq (real_plus Fb DK) Hrlhf).
+    - exact (real_opp_plus Fb DK). }
+  (* 目标：opp Fb ≡ opp Fq + DK（四步环链） *)
+  assert (Hdk0 : real_eq (real_plus (real_opp DK) DK) real_zero).
+  { apply (real_eq_trans (real_plus (real_opp DK) DK)
+                         (real_plus DK (real_opp DK)) real_zero).
+    - exact (real_plus_comm (real_opp DK) DK).
+    - exact (real_plus_opp DK). }
+  apply (real_eq_trans (real_opp Fb)
+                       (real_plus (real_opp Fb) (real_plus (real_opp DK) DK))
+                       (real_plus (real_opp Fq) DK)).
+  - (* opp Fb ≡ opp Fb + (opp DK + DK)：去零腿 + 兼容腿 *)
+    apply (real_eq_trans (real_opp Fb) (real_plus (real_opp Fb) real_zero)
+                         (real_plus (real_opp Fb) (real_plus (real_opp DK) DK))).
+    + exact (real_eq_sym (real_plus (real_opp Fb) real_zero) (real_opp Fb)
+                         (real_plus_zero (real_opp Fb))).
+    + exact (RealSetoid.real_eq_plus_compat (real_opp Fb) real_zero
+               (real_opp Fb) (real_plus (real_opp DK) DK)
+               (real_eq_refl (real_opp Fb)) (real_eq_sym _ _ Hdk0)).
+  - (* 结合重排后沿桥运输 *)
+    apply (real_eq_trans (real_plus (real_opp Fb) (real_plus (real_opp DK) DK))
+                         (real_plus (real_plus (real_opp Fb) (real_opp DK)) DK)
+                         (real_plus (real_opp Fq) DK)).
+    + exact (real_plus_assoc (real_opp Fb) (real_opp DK) DK).
+    + exact (RealSetoid.real_eq_plus_compat
+               (real_plus (real_opp Fb) (real_opp DK)) DK
+               (real_opp Fq) DK
+               (real_eq_sym _ _ Hbridge) (real_eq_refl DK)).
+Qed.
 
-(*   真实后验/输出分布       ↔ real_boltzmann_dist_r                     *)
-(*   KL(q‖p_b) 逐项和        ↔ Σ real_kl_term(q s, p_b s)                *)
-(*   严格                    ↔ real_lt（Set 层）                         *)
-(*   分歧见证                ↔ Set 层 Or 承载的 real_lt (q s₀) (p_b s₀)  *)
-(*                             与 real_lt (p_b s₀) (q s₀) 之双向和型     *)
-(* ------------------------------------------------------------------ *)
-(* 【组装链结构图（件 1→7，各步引用件名）】                              *)
-(*   件 1 取负换向跳 t33_elbo_strict_of_fe_strict：F[p_b] < F[q] ⟹      *)
-(*     ELBO(q) < evidence（unfold + S07 real_opp_lt_compat 一跳）。      *)
-(*   件 2 严格尾链 t33_fe_strict_of_kl_pos（list 载体）：KL>0 ⟹          *)
-(*     F[p_b] < F[q]。五步：正典分解 ⟹ D·KL>0（real_mult_pos_compat）   *)
-(*     ⟹ 加法平移（real_lt_plus_translate）⟹ 零右端化简                 *)
-(*     （real_lt_compat 第一跳）⟹ 沿分解运输（real_lt_compat 第二跳）。  *)
-(*   件 3 严格入 ELBO 口 t33_elbo_strict_of_kl_pos：件 2 + 件 1。        *)
-(*   件 4 单向可比版 t33_elbo_strict_divergence_le：逐项 q ≤ p_b（Set    *)
-(*     层两支弱序）+ s₀ 处严格分离 ⟹ G07 klst_kl_sum_strict ⟹ 件 3。     *)
-(*   件 5 主件（双向 Or 见证版）t33_elbo_strict_divergence：逐项双向     *)
-(*     可比（诚实接口位）+ s₀ 处 Or 见证 ⟹ G07 klst_kl_energy_nonconst  *)
-(*     ⟹ 件 3。                                                          *)
-(*   件 6 bool 载体完成 t33_elbo_strict_divergence_bool                  *)
-(*     （[true; false]，s₀ := true，l₁ := []，l₂ := [false]）。          *)
-(*   件 7 边界组装件 t33_elbo_boundary_bool（prod 双函数记录，Set 层     *)
-(*     合取形，零 Prop 载体）：(a) 肢 = 逐点等 ⟹ 紧致（ 件 3 同链：  *)
-(*     rfep_free_energy_ext_r + real_eq_opp_compat 一跳）× (b) 肢 =      *)
-(*     分歧见证 ⟹ 严格（本件件 6）——定理 4.8 构造性边界两个合取肢。           *)
-(* ------------------------------------------------------------------ *)
-(* 【可达强度如实标注】                                                 *)
-(*   ① 逐项双向可比前提为诚实接口位：去除逐项 Or (real_le) 等价于对     *)
-(*     任意实对给三分判定见证（LLPO 形），非直觉主义可证（在库结论；  *)
+(* ---------------------------------------------------------- *)
+(* 件 2（通用逐 eps 完成机，组装链第 3+4 步，序代数纯拼装）              *)
+(*   0 < D ∧ 0 < eps ∧ evidence ≡ ELBO + D·KL ∧ 0 ≤ KL + eps ⟹         *)
+(*   ELBO ≤ evidence + D·eps。                                          *)
+(*   证明：0 ≤ KL+eps 经 D>0 放缩得 0 ≤ D·KL + D·eps；再把              *)
+(*   evidence+D·eps 沿等值核运输到 ELBO+D·(KL+eps)，加法保序后去零项。   *)
+(* ---------------------------------------------------------- *)
 
-(*     承载（实序不可判定，显式见证输入）。                              *)
-(*   ② F[q] − F[p_b] = D·KL 清单由正典分解逐字保留（D 因子不吸收、不     *)
-(*     缩水），严格肢 = D>0 × KL>0；物理前提零缩水。                     *)
-(*   ③ 全链结论面 real_lt/real_eq（Set 层），组装载体 prod 双函数记录，  *)
-(*     零 Prop 泄露；全 Qed 闭合。                                        *)
-(* ------------------------------------------------------------------ *)
-(* 【红线】Set 层零 Prop；全 Qed 闭合；G1 表条目零命中（头注以中文转述， *)
-(*   不引英文原词，指称式声明——禁词字面永不入文）；real_eq 非 Id 禁改写， *)
-(*   全链 real_eq_trans / RealSetoid 运输；D 因子逐字保留。禁改红线：    *)
-(*   UpReqELBOTight.v / UpReqMinUniqueTight.v / UpReqEntropyUniqueNeg.v  *)
-(*   / G07 组 / UpReqFEPCanon.v / UpReqRealFEP.v / UpReqELBOEps.v /      *)
-(*   S 模块全程只读（只依存 .vo）。                                      *)
+Lemma elbo_lower_bound_close_eps :
+  forall (D KLsum Elbo Evidence eps : Real),
+  real_lt real_zero D ->
+  real_lt real_zero eps ->
+  real_eq Evidence (real_plus Elbo (real_mult D KLsum)) ->
+  real_le real_zero (real_plus KLsum eps) ->
+  real_le Elbo (real_plus Evidence (real_mult D eps)).
+Proof.
+  intros D KLsum Elbo Evidence eps D_pos Heps Hdec Hgibbs.
+  (* 第 3 步：D>0 消去（lt 先过弱化桥，S09 real_r_pow_nonneg 同惯形） *)
+  assert (Hdle : real_le real_zero D).
+  { apply (RealSetoid.real_lt_le_iff_req real_zero D). left. exact D_pos. }
+  assert (Hm0 : real_le (real_mult D real_zero)
+                        (real_mult D (real_plus KLsum eps))).
+  { exact (real_le_mult_compat_r D real_zero (real_plus KLsum eps)
+             Hdle Hgibbs). }
+  assert (Hm1 : real_le real_zero (real_mult D (real_plus KLsum eps))).
+  { exact (RealSetoid.real_le_id_l real_zero (real_mult D real_zero)
+             (real_mult D (real_plus KLsum eps))
+             (real_eq_sym (real_mult D real_zero) real_zero
+                (real_mult_zero D)) Hm0). }
+  assert (Hscale : real_le real_zero
+                     (real_plus (real_mult D KLsum) (real_mult D eps))).
+  { exact (RealSetoid.real_le_id_r real_zero
+             (real_mult D (real_plus KLsum eps))
+             (real_plus (real_mult D KLsum) (real_mult D eps))
+             (real_distrib D KLsum eps) Hm1). }
+  (* 第 4 步：逐 eps 完成 *)
+  apply (RealSetoid.real_le_id_r Elbo
+           (real_plus Elbo (real_plus (real_mult D KLsum) (real_mult D eps)))
+           (real_plus Evidence (real_mult D eps))).
+  - (* 等值面：ELBO+D·(KL+eps) ≡ evidence+D·eps（沿等值核两步运输） *)
+    apply (real_eq_trans
+             (real_plus Elbo (real_plus (real_mult D KLsum) (real_mult D eps)))
+             (real_plus (real_plus Elbo (real_mult D KLsum)) (real_mult D eps))
+             (real_plus Evidence (real_mult D eps))).
+    + exact (real_plus_assoc Elbo (real_mult D KLsum) (real_mult D eps)).
+    + exact (RealSetoid.real_eq_plus_compat
+               (real_plus Elbo (real_mult D KLsum)) (real_mult D eps)
+               Evidence (real_mult D eps)
+               (real_eq_sym Evidence (real_plus Elbo (real_mult D KLsum)) Hdec)
+               (real_eq_refl (real_mult D eps))).
+  - (* 序面：ELBO ≤ ELBO+(D·KL+D·eps)（自反 + 加法保序 + 去零） *)
+    apply (RealSetoid.real_le_id_l Elbo (real_plus Elbo real_zero)
+             (real_plus Elbo (real_plus (real_mult D KLsum) (real_mult D eps)))
+             (real_eq_sym (real_plus Elbo real_zero) Elbo
+                (real_plus_zero Elbo))).
+    exact (real_le_plus_compat Elbo Elbo real_zero
+             (real_plus (real_mult D KLsum) (real_mult D eps))
+             (real_le_refl Elbo) Hscale).
+Qed.
 
-(*   全量 -Q vo 树；前置 .vo 在 ConstructiveWorld_vo/ 与 Live_X。        *)
-(* ============================================================ *)
+(* ---------------------------------------------------------- *)
+(* 主件：real_elbo_lower_bound_eps（定理 4.7 Real 层第三档）             *)
+(*   载体 = list X 具体状态空间（T7 同型实例化）；前提全显式：           *)
+(*   Hnormq（Σq ≡ 1）+ Hnormb（Σp_b ≡ 1，由使用方或分件供给）。          *)
+(*   组装：件 1 等值核（rlhf 件实例化）+ 件 2 非负腿（S08 L490）         *)
+(*   + 件 3 完成机。                                                     *)
+(* ---------------------------------------------------------- *)
+
+Theorem real_elbo_lower_bound_eps :
+  forall (X : Type) (l : list X) (real_base_loss : X -> Real)
+    (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : X -> Real) (Hq : forall s : X, real_lt real_zero (q s)),
+  real_eq (real_list_sum X q l) real_one ->
+  real_eq
+    (real_list_sum X
+       (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r Z_align_r_pos)
+       l) real_one ->
+  forall eps : Real,
+  real_lt real_zero eps ->
+  real_le
+    (real_elbo X (fun f : X -> Real => real_list_sum X f l)
+       real_base_loss D q Hq)
+    (real_plus
+       (real_evidence X (fun f : X -> Real => real_list_sum X f l)
+          real_base_loss D D_pos Z_align_r Z_align_r_pos)
+       (real_mult D eps)).
+Proof.
+  intros X l real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq
+         Hnormb eps Heps.
+  apply (elbo_lower_bound_close_eps D
+           (real_list_sum X
+              (fun s : X =>
+                 real_kl_term (q s)
+                   (real_boltzmann_dist_r X real_base_loss D D_pos
+                      Z_align_r Z_align_r_pos s)
+                   (Hq s)
+                   (real_boltzmann_dist_r_pos X real_base_loss D D_pos
+                      Z_align_r Z_align_r_pos s))
+              l)
+           (real_elbo X (fun f : X -> Real => real_list_sum X f l)
+              real_base_loss D q Hq)
+           (real_evidence X (fun f : X -> Real => real_list_sum X f l)
+              real_base_loss D D_pos Z_align_r Z_align_r_pos)
+           eps D_pos Heps).
+  - (* 件 1：等值核（rlhf 任意 π* 件实例化到 list 载体） *)
+    exact (real_evidence_kl_decomp X
+             (fun f : X -> Real => real_list_sum X f l)
+             (fun (f g : X -> Real)
+                  (Hfg : forall s : X, real_eq (f s) (g s)) =>
+                real_list_sum_ext X f g l Hfg)
+             (fun f g : X -> Real => real_list_sum_add X f g l)
+             (fun (a : Real) (f : X -> Real) =>
+                real_list_sum_linear X a f l)
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq
+             Hnormq Hnormb).
+  - (* 件 2：实 Gibbs 不等式逐 eps 形（S08 L490 在盘） *)
+    exact (real_gibbs_inequality_eps X l q
+             (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r
+                Z_align_r_pos)
+             Hq
+             (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r
+                Z_align_r_pos)
+             Hnormq Hnormb eps Heps).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 分件：real_elbo_lower_bound_eps_partition（前提消解小链版）           *)
+(*   与主件同结论面；Hnormb 换为 partition 条件 Hpart                    *)
+(*   （Σ exp(−e/D) ≡ Z，物理配分函数记录项），经                           *)
+(*   rfep_boltzmann_normalized_real（UpReqRealFEP L331）一步消解补齐     *)
+(*   Hnormb，与 T7/X2 分件同型。                                         *)
+(* ---------------------------------------------------------- *)
+
+Theorem real_elbo_lower_bound_eps_partition :
+  forall (X : Type) (l : list X) (real_base_loss : X -> Real)
+    (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : X -> Real) (Hq : forall s : X, real_lt real_zero (q s)),
+  real_eq (real_list_sum X q l) real_one ->
+  real_eq
+    (real_list_sum X
+       (fun s : X =>
+          real_exp_neg (real_mult (real_inv_pos D D_pos) (real_base_loss s)))
+       l) Z_align_r ->
+  forall eps : Real,
+  real_lt real_zero eps ->
+  real_le
+    (real_elbo X (fun f : X -> Real => real_list_sum X f l)
+       real_base_loss D q Hq)
+    (real_plus
+       (real_evidence X (fun f : X -> Real => real_list_sum X f l)
+          real_base_loss D D_pos Z_align_r Z_align_r_pos)
+       (real_mult D eps)).
+Proof.
+  intros X l real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq
+         Hpart eps Heps.
+  assert (Hnormb : real_eq
+                     (real_list_sum X
+                        (real_boltzmann_dist_r X real_base_loss D D_pos
+                           Z_align_r Z_align_r_pos) l) real_one).
+  { exact (rfep_boltzmann_normalized_real X
+             (fun f : X -> Real => real_list_sum X f l)
+             (fun (f g : X -> Real)
+                  (Hfg : forall s : X, real_eq (f s) (g s)) =>
+                real_list_sum_ext X f g l Hfg)
+             (fun (a : Real) (f : X -> Real) =>
+                real_list_sum_linear X a f l)
+             real_base_loss D D_pos Z_align_r Z_align_r_pos Hpart). }
+  apply (elbo_lower_bound_close_eps D
+           (real_list_sum X
+              (fun s : X =>
+                 real_kl_term (q s)
+                   (real_boltzmann_dist_r X real_base_loss D D_pos
+                      Z_align_r Z_align_r_pos s)
+                   (Hq s)
+                   (real_boltzmann_dist_r_pos X real_base_loss D D_pos
+                      Z_align_r Z_align_r_pos s))
+              l)
+           (real_elbo X (fun f : X -> Real => real_list_sum X f l)
+              real_base_loss D q Hq)
+           (real_evidence X (fun f : X -> Real => real_list_sum X f l)
+              real_base_loss D D_pos Z_align_r Z_align_r_pos)
+           eps D_pos Heps).
+  - exact (real_evidence_kl_decomp X
+             (fun f : X -> Real => real_list_sum X f l)
+             (fun (f g : X -> Real)
+                  (Hfg : forall s : X, real_eq (f s) (g s)) =>
+                real_list_sum_ext X f g l Hfg)
+             (fun f g : X -> Real => real_list_sum_add X f g l)
+             (fun (a : Real) (f : X -> Real) =>
+                real_list_sum_linear X a f l)
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq
+             Hnormq Hnormb).
+  - exact (real_gibbs_inequality_eps X l q
+             (real_boltzmann_dist_r X real_base_loss D D_pos Z_align_r
+                Z_align_r_pos)
+             Hq
+             (real_boltzmann_dist_r_pos X real_base_loss D D_pos Z_align_r
+                Z_align_r_pos)
+             Hnormq Hnormb eps Heps).
+Qed.
 
 From Stdlib Require Import List.
 Require Import S01_BaseRing.
@@ -124,7 +397,355 @@ Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 Require Import UpReqRealFEP.
-Require Import UpReqELBOEps.
+Require Import UpReqKLSTangent.
+Require Import G08_Gibbs.
+Import ListNotations.
+
+(* ---------------------------------------------------------- *)
+(* 件 0：切点式谓词（显式前提形的逐点结论面，Set 层）                    *)
+(*   对位 G08 gibbe2_kl_zero_tangent_eq 的逐点结论：                    *)
+
+(* ---------------------------------------------------------- *)
+
+Definition t12_tangent_eq
+  (S : Type) (real_base_loss : S -> Real) (D : Real)
+  (D_pos : real_lt real_zero D) (Z_align_r : Real)
+  (Z_align_r_pos : real_lt real_zero Z_align_r)
+  (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s))
+  (s : S) :=
+  real_eq
+    (real_log
+       (real_mult (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                  (real_inv_pos (q s) (Hq s)))
+       (real_mult_positive
+          (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+          (real_inv_pos (q s) (Hq s))
+          (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+          (real_inv_pos_pos (q s) (Hq s))))
+    (real_plus
+       (real_mult (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                  (real_inv_pos (q s) (Hq s)))
+       (real_opp real_one)).
+
+(* ---------------------------------------------------------- *)
+(* 件 1：紧致核——紧致假设 ⟹ KL ≡ 0（抽象载体）                          *)
+(*   ⟹ ELBO ≡ ELBO + D·KL ⟹ 加法消去 ⟹ D·KL ≡ 0 ⟹ D>0 右因子消去      *)
+(*   ⟹ KL ≡ 0。                                                         *)
+(* ---------------------------------------------------------- *)
+
+Lemma t12_tight_kl_zero :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, real_eq (f s) (g s)) ->
+    real_eq (real_sum_over_S f) (real_sum_over_S g)) ->
+  (forall f g : S -> Real,
+    real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+            (real_plus (real_sum_over_S f) (real_sum_over_S g))) ->
+  (forall (a : Real) (f : S -> Real),
+    real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+            (real_mult a (real_sum_over_S f))) ->
+  forall (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  real_eq (real_sum_over_S q) real_one ->
+  real_eq (real_sum_over_S
+             (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
+          real_one ->
+  real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+          (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos) ->
+  real_eq (real_sum_over_S
+             (fun s : S => real_kl_term (q s)
+                (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                (Hq s)
+                (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)))
+          real_zero.
+Proof.
+  intros S real_sum_over_S sumf_ext sumf_add sumf_linear
+         real_base_loss D D_pos Z_align_r Z_align_r_pos
+         q Hq Hnormq Hnormb Htight.
+  set (pb := real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  set (pbpos := real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  set (KLsum := real_sum_over_S (fun s : S => real_kl_term (q s) (pb s) (Hq s) (pbpos s))).
+  assert (Hdec : real_eq (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+                         (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                                    (real_mult D KLsum))).
+  { exact (real_evidence_kl_decomp S real_sum_over_S sumf_ext sumf_add sumf_linear
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb). }
+  (* 第 2 步：紧致假设沿等值核运输：ELBO ≡ ELBO + D·KL *)
+  assert (Hloop : real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                          (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                                     (real_mult D KLsum))).
+  { exact (real_eq_trans (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                         (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+                         (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                                    (real_mult D KLsum))
+                         Htight Hdec). }
+  (* 第 3 步：加法消去：D·KL ≡ 0（S08 real_eq_plus_cancel_l） *)
+  assert (Hdk : real_eq (real_mult D KLsum) real_zero).
+  { apply (real_eq_plus_cancel_l (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                                 (real_mult D KLsum) real_zero).
+    apply (real_eq_trans
+             (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                        (real_mult D KLsum))
+             (real_elbo S real_sum_over_S real_base_loss D q Hq)
+             (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq) real_zero)).
+    - exact (real_eq_sym (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                         (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                                    (real_mult D KLsum))
+                         Hloop).
+    - exact (real_eq_sym (real_plus (real_elbo S real_sum_over_S real_base_loss D q Hq) real_zero)
+                         (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                         (real_plus_zero (real_elbo S real_sum_over_S real_base_loss D q Hq))). }
+  (* 第 4 步：D>0 消去：KL ≡ 0（comm 两次 + S08 右因子消去） *)
+  apply (real_eq_mult_cancel_r KLsum real_zero D D_pos).
+  apply (real_eq_trans (real_mult KLsum D) real_zero (real_mult real_zero D)).
+  - apply (real_eq_trans (real_mult KLsum D) (real_mult D KLsum) real_zero).
+    + exact (real_mult_comm KLsum D).
+    + exact Hdk.
+  - exact (real_eq_trans real_zero (real_mult D real_zero) (real_mult real_zero D)
+             (real_eq_sym (real_mult D real_zero) real_zero (real_mult_zero D))
+             (real_mult_comm D real_zero)).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 2：正向半边（抽象载体，显式前提形）——定理 4.8 的 ⟹ 半边           *)
+(*   紧致（ELBO ≡ evidence）+ 显式接口前提（KL≡0 ⟹ 逐点切点式）         *)
+(*   ⟹ 逐点 q s ≡ p_b s。                                               *)
+(*   逐点消去链：切点式 + t1_log_eq_linear_inject（切点⟹一，       *)
+(*   无条件）⟹ 比值一 ⟹ gibbe2 主件尾链同款消去 ⟹ q s ≡ p_b s。        *)
+(* ---------------------------------------------------------- *)
+
+Theorem t12_elbo_tight_forward :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, real_eq (f s) (g s)) ->
+    real_eq (real_sum_over_S f) (real_sum_over_S g)) ->
+  (forall f g : S -> Real,
+    real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+            (real_plus (real_sum_over_S f) (real_sum_over_S g))) ->
+  (forall (a : Real) (f : S -> Real),
+    real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+            (real_mult a (real_sum_over_S f))) ->
+  forall (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  real_eq (real_sum_over_S q) real_one ->
+  real_eq (real_sum_over_S
+             (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
+          real_one ->
+  (* 显式接口前提位（载体诚实接口）：KL ≡ 0 ⟹ 逐点切点式；
+     bool 载体上由件 5 整链消解（整链件直达），零残留。 *)
+  (real_eq (real_sum_over_S
+              (fun s : S => real_kl_term (q s)
+                 (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                 (Hq s)
+                 (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)))
+           real_zero ->
+   forall s : S,
+     t12_tangent_eq S real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq s) ->
+  real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+          (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos) ->
+  forall s : S,
+    real_eq (q s)
+            (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s).
+Proof.
+  intros S real_sum_over_S sumf_ext sumf_add sumf_linear
+         real_base_loss D D_pos Z_align_r Z_align_r_pos
+         q Hq Hnormq Hnormb Htan0 Htight s.
+  set (pb := real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  set (pbpos := real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+  (* 第 1 步：紧致核（件 1）：KL ≡ 0 *)
+  assert (Hkl0 : real_eq (real_sum_over_S
+                            (fun s0 : S => real_kl_term (q s0) (pb s0) (Hq s0) (pbpos s0)))
+                         real_zero).
+  { exact (t12_tight_kl_zero S real_sum_over_S sumf_ext sumf_add sumf_linear
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight). }
+  (* 第 2 步：切点式 + 「切点⟹一」（无条件消解）⟹ 比值一 *)
+  assert (Hu1 : real_eq (real_mult (pb s) (real_inv_pos (q s) (Hq s))) real_one).
+  { apply (t1_log_eq_linear_inject (real_mult (pb s) (real_inv_pos (q s) (Hq s)))
+             (real_mult_positive (pb s) (real_inv_pos (q s) (Hq s))
+                (pbpos s) (real_inv_pos_pos (q s) (Hq s)))).
+    exact (Htan0 Hkl0 s). }
+  (* 第 3 步：比值一 ⟹ q s ≡ p_b s（gibbe2 主件尾链同款） *)
+  apply (real_eq_trans (q s)
+           (real_mult (q s) (real_mult (pb s) (real_inv_pos (q s) (Hq s))))
+           (pb s)).
+  - apply (real_eq_trans (q s) (real_mult (q s) real_one)
+             (real_mult (q s) (real_mult (pb s) (real_inv_pos (q s) (Hq s))))).
+    + exact (real_eq_sym (real_mult (q s) real_one) (q s) (real_mult_one (q s))).
+    + exact (RealSetoid.real_eq_mult_compat (q s) real_one (q s)
+               (real_mult (pb s) (real_inv_pos (q s) (Hq s)))
+               (real_eq_refl (q s))
+               (real_eq_sym (real_mult (pb s) (real_inv_pos (q s) (Hq s))) real_one Hu1)).
+  - exact (gibbsd_p_mult_ratio (q s) (pb s) (Hq s)).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 3：逆向半边（抽象载体，零接口前提）——定理 4.8 的 ⟸ 半边           *)
+(*   逐点 q s ≡ p_b s ⟹ 自由能等（rfep_free_energy_ext_r，仅 ext 接口） *)
+(*   ⟹ real_opp 兼容 ⟹ ELBO(q) ≡ evidence。                            *)
+(* ---------------------------------------------------------- *)
+
+Theorem t12_elbo_tight_backward :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, real_eq (f s) (g s)) ->
+    real_eq (real_sum_over_S f) (real_sum_over_S g)) ->
+  forall (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  (forall s : S,
+     real_eq (q s)
+             (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)) ->
+  real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+          (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos).
+Proof.
+  intros S real_sum_over_S sumf_ext real_base_loss D D_pos Z_align_r Z_align_r_pos         q Hq Hpoint.
+  unfold real_elbo, real_evidence.
+  apply (RealSetoid.real_eq_opp_compat           (real_free_energy S real_sum_over_S real_base_loss D q Hq)           (real_free_energy S real_sum_over_S real_base_loss D              (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)              (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos))).
+  exact (rfep_free_energy_ext_r S real_sum_over_S sumf_ext real_base_loss D q           (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hpoint).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 4：组装件（抽象载体，prod 双函数记录——Set 层 And 形，零 Prop）     *)
+(*   (紧致 ⟹ 逐点 q≡p_b) × (逐点 q≡p_b ⟹ 紧致)。                       *)
+(*   即定理 4.8「当且仅当」的 Real 层可达形（显式前提形）。              *)
+(* ---------------------------------------------------------- *)
+
+Theorem t12_elbo_tight :
+  forall (S : Type) (real_sum_over_S : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, real_eq (f s) (g s)) ->
+    real_eq (real_sum_over_S f) (real_sum_over_S g)) ->
+  (forall f g : S -> Real,
+    real_eq (real_sum_over_S (fun s : S => real_plus (f s) (g s)))
+            (real_plus (real_sum_over_S f) (real_sum_over_S g))) ->
+  (forall (a : Real) (f : S -> Real),
+    real_eq (real_sum_over_S (fun s : S => real_mult a (f s)))
+            (real_mult a (real_sum_over_S f))) ->
+  forall (real_base_loss : S -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : S -> Real) (Hq : forall s : S, real_lt real_zero (q s)),
+  real_eq (real_sum_over_S q) real_one ->
+  real_eq (real_sum_over_S
+             (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos))
+          real_one ->
+  (real_eq (real_sum_over_S
+              (fun s : S => real_kl_term (q s)
+                 (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s)
+                 (Hq s)
+                 (real_boltzmann_dist_r_pos S real_base_loss D D_pos Z_align_r Z_align_r_pos s)))
+           real_zero ->
+   forall s : S,
+     t12_tangent_eq S real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq s) ->
+  prod (real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)
+        -> forall s : S,
+             real_eq (q s)
+                     (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s))
+       ((forall s : S,
+           real_eq (q s)
+                   (real_boltzmann_dist_r S real_base_loss D D_pos Z_align_r Z_align_r_pos s))
+        -> real_eq (real_elbo S real_sum_over_S real_base_loss D q Hq)
+                   (real_evidence S real_sum_over_S real_base_loss D D_pos Z_align_r Z_align_r_pos)).
+Proof.
+  intros S real_sum_over_S sumf_ext sumf_add sumf_linear
+         real_base_loss D D_pos Z_align_r Z_align_r_pos
+         q Hq Hnormq Hnormb Htan0.
+  split.
+  - exact (t12_elbo_tight_forward S real_sum_over_S sumf_ext sumf_add sumf_linear
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htan0).
+  - exact (t12_elbo_tight_backward S real_sum_over_S sumf_ext
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 5：bool 载体完成——显式接口前提整链消解的正向形                     *)
+(*   显式前提位由t1_gibbe2_gibbs_equality_bool 整链消解             *)
+(*   （KL≡0 ⟹ 逐点 q≡p_b 直达，注入位由 t1_log_eq_linear_inject          *)
+(*   无条件供给）：bool 载体上正向半边零接口前提（除物理前提）。         *)
+(* ---------------------------------------------------------- *)
+
+Theorem t12_elbo_tight_forward_bool :
+  forall (real_base_loss : bool -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : bool -> Real) (Hq : forall s : bool, real_lt real_zero (q s)),
+  real_eq (real_list_sum bool q [true; false]) real_one ->
+  real_eq (real_list_sum bool
+             (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos)
+             [true; false]) real_one ->
+  real_eq (real_elbo bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+             real_base_loss D q Hq)
+          (real_evidence bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+             real_base_loss D D_pos Z_align_r Z_align_r_pos) ->
+  forall s : bool,
+    real_eq (q s)
+            (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos s).
+Proof.
+  intros real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight s.
+  apply (t1_gibbe2_gibbs_equality_bool q           (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hq           (real_boltzmann_dist_r_pos bool real_base_loss D D_pos Z_align_r Z_align_r_pos)           Hnormq Hnormb).
+  exact (t12_tight_kl_zero bool           (fun f : bool -> Real => real_list_sum bool f [true; false])           (fun (f g : bool -> Real)                (Hfg : forall s : bool, real_eq (f s) (g s)) =>              real_list_sum_ext bool f g [true; false] Hfg)           (fun f g : bool -> Real => real_list_sum_add bool f g [true; false])           (fun (a : Real) (f : bool -> Real) =>              real_list_sum_linear bool a f [true; false])           real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb Htight).
+Qed.
+
+(* ---------------------------------------------------------- *)
+(* 件 6：bool 组装件（prod 双函数记录，零接口前提版）                    *)
+(*   定理 4.8 在 gibbe2 样板载体上的全消解形：前提面仅剩                 *)
+(*   「q 逐点正 + 双归一化」的显式物理前提。                              *)
+(* ---------------------------------------------------------- *)
+
+Theorem t12_elbo_tight_bool :
+  forall (real_base_loss : bool -> Real) (D : Real) (D_pos : real_lt real_zero D)
+    (Z_align_r : Real) (Z_align_r_pos : real_lt real_zero Z_align_r)
+    (q : bool -> Real) (Hq : forall s : bool, real_lt real_zero (q s)),
+  real_eq (real_list_sum bool q [true; false]) real_one ->
+  real_eq (real_list_sum bool
+             (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos)
+             [true; false]) real_one ->
+  prod (real_eq (real_elbo bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+                  real_base_loss D q Hq)
+                (real_evidence bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+                   real_base_loss D D_pos Z_align_r Z_align_r_pos)
+        -> forall s : bool,
+             real_eq (q s)
+                     (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos s))
+       ((forall s : bool,
+           real_eq (q s)
+                   (real_boltzmann_dist_r bool real_base_loss D D_pos Z_align_r Z_align_r_pos s))
+        -> real_eq (real_elbo bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+                      real_base_loss D q Hq)
+                   (real_evidence bool (fun f : bool -> Real => real_list_sum bool f [true; false])
+                      real_base_loss D D_pos Z_align_r Z_align_r_pos)).
+Proof.
+  intros real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hnormq Hnormb.
+  split.
+  - exact (t12_elbo_tight_forward_bool real_base_loss D D_pos Z_align_r Z_align_r_pos
+             q Hq Hnormq Hnormb).
+  - intros Hpoint.
+    exact (t12_elbo_tight_backward bool
+             (fun f : bool -> Real => real_list_sum bool f [true; false])
+             (fun (f g : bool -> Real)
+                  (Hfg : forall s : bool, real_eq (f s) (g s)) =>
+                real_list_sum_ext bool f g [true; false] Hfg)
+             real_base_loss D D_pos Z_align_r Z_align_r_pos q Hq Hpoint).
+Qed.
+
+From Stdlib Require Import List.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqRealFEP.
 Require Import G07_KLWall.
 Require Import UpReqFEPCanon.
 Import ListNotations.
