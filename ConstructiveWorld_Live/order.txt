@@ -351,13 +351,7 @@ UpAblT1b_S06_DiffSamplingGibbs.v#R0-d66910
 UpAblT1b_S13_NLiveAudit.v#R0-d66910
 Arch_UpAbl_01.v#R0-d66910
 UpAblT1c_UpFirewallReq.v#R0-d66910
-UpAblT2a_UpReqAlign.v#R0-d66910
-UpAblT2a_UpReqAlign2.v#R0-d66910
-UpAblT2a_UpReqDist.v#R0-d66910
-UpAblT2a_UpReqFEPAttn.v#R0-d66910
-UpAblT2a_UpReqMisc5.v#R0-d66910
-UpAblT2a_UpReqTempEntropy.v#R0-d66910
-UpAblT2a_UpSigMigrate2.v#R0-d66910
+UpAblT2a_UpReqTempEntropy.v#R0-78b59a
 UpAblT2b_PredRelax5.v#R0-d66910
 UpAblT2b_fa53_lpc_broadcast.v#R0-d66910
 UpAblT3_UpReqAlign.v#R0-d66910

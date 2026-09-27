@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 414 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 408 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2300,33 +2300,15 @@ Definition ng_UpAblT1c_UpFirewallReq : NewGreenFace :=
 (* ng_UpAblT2a_UpFirewallReq —— UpAblT2a_UpFirewallReq.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
 Definition ng_UpAblT2a_UpFirewallReq : NewGreenFace :=
   MkNewGreenFace "UpAblT2a_UpFirewallReq.v" 32 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L32:m962b43".
-(* ng_UpAblT2a_UpReqAlign —— UpAblT2a_UpReqAlign.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpReqAlign : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpReqAlign.v" 39 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L39:m40d723".
-(* ng_UpAblT2a_UpReqAlign2 —— UpAblT2a_UpReqAlign2.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpReqAlign2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpReqAlign2.v" 29 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L29:mbcf5b6".
 (* ng_UpAblT2a_UpReqAlignRestA —— UpAblT2a_UpReqAlignRestA.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
 Definition ng_UpAblT2a_UpReqAlignRestA : NewGreenFace :=
   MkNewGreenFace "UpAblT2a_UpReqAlignRestA.v" 30 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L30:m933719".
-(* ng_UpAblT2a_UpReqDist —— UpAblT2a_UpReqDist.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpReqDist : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpReqDist.v" 39 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L39:ma683a3".
-(* ng_UpAblT2a_UpReqFEPAttn —— UpAblT2a_UpReqFEPAttn.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpReqFEPAttn : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpReqFEPAttn.v" 87 6 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L87:m427aad".
-(* ng_UpAblT2a_UpReqMisc5 —— UpAblT2a_UpReqMisc5.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpReqMisc5 : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpReqMisc5.v" 27 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L27:m7bc4ee".
 (* ng_UpAblT2a_UpReqPPO —— UpAblT2a_UpReqPPO.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
 Definition ng_UpAblT2a_UpReqPPO : NewGreenFace :=
   MkNewGreenFace "UpAblT2a_UpReqPPO.v" 29 1 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L29:m6615c4".
 (* ng_UpAblT2a_UpReqTempEntropy —— UpAblT2a_UpReqTempEntropy.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
 Definition ng_UpAblT2a_UpReqTempEntropy : NewGreenFace :=
   MkNewGreenFace "UpAblT2a_UpReqTempEntropy.v" 41 2 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L41:m7ed002".
-(* ng_UpAblT2a_UpSigMigrate2 —— UpAblT2a_UpSigMigrate2.v：v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green ( per v1 LEDGER) *)
-Definition ng_UpAblT2a_UpSigMigrate2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT2a_UpSigMigrate2.v" 64 4 20260919 "v1 T2a batch, N1 x21 log triple-face 10 modules, four-gate green (_tt2a_ per v1 LEDGER); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L64:me1d591".
 (* ng_UpAblT2b_PredRelax5 —— UpAblT2b_PredRelax5.v：v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green () *)
 Definition ng_UpAblT2b_PredRelax5 : NewGreenFace :=
   MkNewGreenFace "UpAblT2b_PredRelax5.v" 440 17 20260919 "v1 T2b batch, N1 x19 + N2 x8 item-level, four-gate green (_tt2b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L456:m8d1dba".
