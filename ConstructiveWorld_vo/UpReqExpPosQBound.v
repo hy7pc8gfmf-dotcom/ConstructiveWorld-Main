@@ -1,29 +1,88 @@
-(* ============================================================
-   UpReqExpPosQBound —— 使命行：本件形式化 Q 层偶阶截断和的正
-(* 下界显式见证：S_{2m}(−a) 有可计算正下界 1/(1+B)，见证为 sigT  *)
-(* 存在形。          *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp。            *)
-(* 对标：Stdlib QArith 序引理（Qlt/Qle 层）；本库 S02 见证桥。   *)
-(* 构造性注记：Set 层承载、零假设位、可提取。                    *)
-(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
-   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
-   ============================================================*)
-(* UpReqExpPosQBound.v *)
-(* 目的： Q 层偶阶截断正下界的显式见证（1/(1+B) 形）。 *)
-(* 主件： upqb_exp_partial_eq 与 upqb_witness_m0 / upqb_witness_m1_a1 见证构造。 *)
-(* 依赖： S01_BaseRing、S02_CauchyComplete、S03_QExp。 *)
-(* 备注： 截断指数的有理层下界经显式见证给出；QleT 到 Qle 换桥随行。 *)
-(* ===== UpReqExpPosQBound.v —— 路线说明：Q 层偶阶截断正下界显式见证（1/(1+B) 形） =====
-   路线（与库内 1/C 形不同源，本件独立走 1/(1+B) 形）：
-     S_{2m}(−a)·S_{2m}(a) == 1 + corr m a（S03 实名 exp_even_mul_eq）
-     + S_{2m}(a) 构造性上界 B(m,a) := (2m+1)·(1+a)^{2m}（upqb 自建保守界，S03 无现成单侧和上界引擎）
-     ⟹ S_{2m}(−a) ≥ 1/B 且 1/(1+B) < 1/B ⟹ q := 1/(1+B) > 0 可计算。
-   纯基座路线：不 Require UpReqExpPosWitness（1/C 形件）。
-   语句面全 Set 层：QltT/QleT（S02），存在 sigT，合取 prod（%type 标注）；
-   Prop 版 Qle/Qlt 仅用于证明体内部，出口经 Qlt_to_QltT 桥（S02 先例）。
-   复用（禁重定义）：exp_partial/q_pow/q_fact/q_pow_mono/q_fact_pos/corr/corr_nonneg/
-   exp_even_mul_eq/exp_even_neg_pos（S03）；QltT/QleT/QleT'/Qlt_to_QltT/QltT_to_Qlt/
-   qeq_imp_qle/qeq_le（S02/S03）；Id/id_refl（S01）。G1 禁词零命中、纯构造。 *)
+(* ==========================================================================)
+   UpReqExpPosQBound —— 路线说明：Q 层偶阶截断正下界显式见证（1/(1+B) 形）；同域语句面
+   使命：本件形式化路线说明：Q 层偶阶截断正下界显式见证（1/(1+B) 形）。
+   本件并载：路径 A 显式见证提取件。
+   依赖：S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog, S08_RealMainlineDPO
+     S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp, QArith.QArith,
+     QArith.Qabs, Arith.Arith, Lists.List, Bool.Bool, Lia。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
+
+(* ============================ §1 路径 A 显式见证提取件 ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
+
+(* ============================================================ *)
+(* 件 1（S1 主件）：0 < e^x 的显式 ε-见证                             *)
+(*   将 real_exp_neg_pos（S07:7766，其 ε 由 S03:6412 cauchy_real_    *)
+(*   exp_pos 的幂级数构造给出）的 sigT 拆包重组：第一见证位 eps 直接   *)
+(*   浮出为本函数的显式有理数输出，第二分量（N 界 + 逐点分离）原位     *)
+(*   转译。整个定理体是一个可提取的函数项：输入 x，输出 (q, 正性, 界)。 *)
+(* ============================================================ *)
+Theorem upreq_exp_pos_witness :
+  forall x : Real,
+    sigT (fun q : Q =>
+            And (QltT 0%Q q)
+                (sigT (fun N : nat =>
+                          forall n : nat, NatLe N n ->
+                            QltT q ((projT1 (real_exp_neg (real_opp x)) n
+                                     - projT1 real_zero n)%Q)))).
+Proof.
+  intro x.
+  destruct (real_exp_neg_pos (real_opp x)) as [q [Hq [N HN]]].
+  exists q.
+  split.
+  - exact Hq.
+  - exists N. exact HN.
+Qed.
+
+(* ============================================================ *)
+(* 件 2（A.3.1 形）：偶截断显式有理下界的见证形        *)
+(*   S03 exp_partial_even_lower（6172：|y| <= M ⟹ 1/C <= exp_partial *)
+(*   (2m) y；由 exp_even_mul_eq(5937) + corr_nonneg(1636) + 上界引擎   *)
+(*   exp_series_arch(1094) 组装）结论是 Qle（Prop 面）；本件重铸为     *)
+(*   sigT 见证形：显式有理下界 q := 1/C 作为函数输出浮出，正性位        *)
+(*   QltT 0 q 独立结果。Qle 到 QleT' 换桥用库件 Qle_to_QleT'          *)
+(*   （S02:93，经 Qle_bool 可判定性的构造换桥）。上界引擎库内现名为    *)
+(*   exp_series_arch（exp_series_bounded 库内无此名）。 *)
+(* ============================================================ *)
+Theorem upreq_exp_partial_even_lower_witness :
+  forall (M C y : Q) (m : nat),
+    QleT' 0%Q M -> QleT' 1%Q C ->
+    (forall n : nat, QleT' (exp_series n M) C) ->
+    QleT' (Qabs y) M ->
+    sigT (fun q : Q =>
+            And (QltT 0%Q q) (QleT' q (exp_partial (2 * m)%nat y))).
+Proof.
+  intros M C y m HM HC HCser Hy.
+  exists (1 / C)%Q.
+  split.
+  - apply (qltT_div_pos 1%Q C).
+    + exact qltT_0_1.
+    + apply (qltT_leT'_ltT 0%Q 1%Q C).
+      * exact qltT_0_1.
+      * exact HC.
+  - apply Qle_to_QleT'.
+    exact (exp_partial_even_lower M C y m HM HC HCser Hy).
+Qed.
+
+Print Assumptions upreq_exp_pos_witness.
+Print Assumptions upreq_exp_partial_even_lower_witness.
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

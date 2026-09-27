@@ -113,7 +113,6 @@ UpReqEntropyMaxTemp.v
 UpReqTempDual.v
 UpReqEntropyUniqueNeg.v
 UpReqTempDualList.v
-UpReqExpPosWitness.v
 UpReqExpPosQBound.v
 UpReqBanachExp.v
 UpReqPadeExp.v
