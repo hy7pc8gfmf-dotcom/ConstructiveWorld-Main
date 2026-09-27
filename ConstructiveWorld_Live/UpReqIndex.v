@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 392 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 387 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2850,11 +2850,6 @@ Definition ng_PA_UpStepKLM3 : NewGreenFace :=
   MkNewGreenFace "PA_UpStepKLM3.v" 665 18 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 494c15, L665); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L665:m494c15".
 
-(* ng_ToyR_AbsLeId —— ToyR_AbsLeId.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_AbsLeId : NewGreenFace :=
-  MkNewGreenFace "ToyR_AbsLeId.v" 137 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 c9e06c, L137); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L137:mc9e06c".
-
 (* ng_ToyR_BeukersLists —— ToyR_BeukersLists.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_BeukersLists : NewGreenFace :=
   MkNewGreenFace "ToyR_BeukersLists.v" 576 29 20260923
@@ -2885,16 +2880,6 @@ Definition ng_ToyR_NatLenPos : NewGreenFace :=
   MkNewGreenFace "ToyR_NatLenPos.v" 128 4 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 475527, L128); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L128:m475527".
 
-(* ng_ToyR_Paper12345Sample —— ToyR_Paper12345Sample.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_Paper12345Sample : NewGreenFace :=
-  MkNewGreenFace "ToyR_Paper12345Sample.v" 165 6 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5d0b29, L165); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L165:m5d0b29".
-
-(* ng_ToyR_PhysPredAblation —— ToyR_PhysPredAblation.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_PhysPredAblation : NewGreenFace :=
-  MkNewGreenFace "ToyR_PhysPredAblation.v" 303 13 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3393f5, L303); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L303:m3393f5".
-
 (* ng_ToyR_RateTheoryAblation —— ToyR_RateTheoryAblation.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_RateTheoryAblation : NewGreenFace :=
   MkNewGreenFace "ToyR_RateTheoryAblation.v" 233 5 20260923
@@ -2909,11 +2894,6 @@ Definition ng_ToyR_SecondLawConsume : NewGreenFace :=
 Definition ng_ToyR_SumEqListFeed : NewGreenFace :=
   MkNewGreenFace "ToyR_SumEqListFeed.v" 198 8 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 39fb1a, L198); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L198:m39fb1a".
-
-(* ng_ToyR_SumEqListMark —— ToyR_SumEqListMark.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_SumEqListMark : NewGreenFace :=
-  MkNewGreenFace "ToyR_SumEqListMark.v" 200 8 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 948434, L200); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L200:m948434".
 
 (* ng_ToyR_SupplyAssembly —— ToyR_SupplyAssembly.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_SupplyAssembly : NewGreenFace :=
@@ -2954,11 +2934,6 @@ Definition ng_ToyR_UpAblP7_Paper7Ablation_S1inst : NewGreenFace :=
 Definition ng_ToyR_UpAblP7_UMixSelect : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_UMixSelect.v" 209 4 20260923
   "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e31c5b, L209); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L209:me31c5b".
-
-(* ng_ToyR_ZPosSlotFeed —— ToyR_ZPosSlotFeed.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
-Definition ng_ToyR_ZPosSlotFeed : NewGreenFace :=
-  MkNewGreenFace "ToyR_ZPosSlotFeed.v" 179 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d912ad, L179); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L179:md912ad".
 
 (* ng_ToyR_fa56b_ext —— ToyR_fa56b_ext.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_fa56b_ext : NewGreenFace :=
