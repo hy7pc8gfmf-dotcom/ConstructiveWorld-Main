@@ -2,6 +2,7 @@
    Arch_UpAbl_01.v -- 命题族集注与实例化承载
    使命：本件形式化以下命题族：uabT2a_rppo_log_req_compat、abl_S12_sf_log_antitone_le、uabT2a_ralt_log_req_compat、uabT13b_tv_delta_le_one、uabT13_sigm2_b_mult_cancel、uabT9_sigm_pft_pos。
    依赖：件内 Require 声明面所列库件。
+   对标：域归档合成件（无单一直接对标）。
    构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
    编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
