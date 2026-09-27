@@ -1609,3 +1609,7 @@ Print Assumptions s3c_exp_add_base.
 Print Assumptions s3c_exp_add_plain.
 Print Assumptions s3c_exp_inv_base.
 Print Assumptions s3c_exp_inv_plain.
+
+(* ---- S14 终验探针（born-in-place 2026-09-27）：Require + Print Assumptions ---- *)
+Require Import S14_B5BatchBlock.
+Print Assumptions S14_B5BatchBlock.b5d1_d4_lb.
