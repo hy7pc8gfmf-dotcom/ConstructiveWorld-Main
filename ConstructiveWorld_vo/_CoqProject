@@ -179,7 +179,6 @@ SqrtfCauchy.v
 SqrtfCauchyArch.v
 SqrtfCauchyDischarge.v
 SumInvFactEscape.v
-SupKLBound.v
 SupKLMonoCompose.v
 UpReqPropLiftShim.v
 DTPT_Bridge_Dep.v

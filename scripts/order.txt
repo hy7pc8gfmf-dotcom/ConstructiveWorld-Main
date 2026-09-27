@@ -187,8 +187,7 @@ SqrtfCauchy.v#R0-d66910
 SqrtfCauchyArch.v#R0-d66910
 SqrtfCauchyDischarge.v#R0-080294
 SumInvFactEscape.v#R0-d66910
-SupKLBound.v#R0-d66910
-SupKLMonoCompose.v#R0-d66910
+SupKLMonoCompose.v#R0-836d18
 LogTwoEnvelope.v#R0-d66910
 FreeEnergyKLGap.v#R0-d66910
 ArctanGeomTail.v#R0-d66910
