@@ -1,6 +1,6 @@
 (* ==========================================================================)
    Arch_UpAbl_01.v -- 命题族集注与实例化承载
-   使命：本件形式化以下命题族：uabT2a_rppo_log_req_compat、abl_S12_sf_log_antitone_le、uabT2a_ralt_log_req_compat、uabT13b_tv_delta_le_one、uabT13_sigm2_b_mult_cancel、uabT9_sigm_pft_pos。
+   使命：本件形式化以下命题族：uabT2a_rppo_log_req_compat、abl_S12_sf_log_antitone_le、uabT2a_ralt_log_req_compat、minorization 行和约束下 delta ≤ 1（承载 rta_delta_le_one_of_minorization）、正元左乘消去（承载 mult_cancel_l）、uabT9_sigm_pft_pos。
    依赖：件内 Require 声明面所列库件。
    对标：域归档合成件（无单一直接对标）。
    构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
@@ -72,7 +72,7 @@ Qed.
 
 (* ---- PA 收尾段（逐件 Closed 判读） ---- *)
 Print Assumptions uabT2a_ralt_log_req_compat.
-(* ================= §4 uabT13b_tv_delta_le_one 族 ================= *)
+(* ================= §4 delta ≤ 1 族（minorization 行和约束；承载 rta_delta_le_one_of_minorization） ================= *)
 Theorem uabT13b_tv_delta_le_one :
   forall (states : list (list Real)) (K : list Real -> list Real -> Real)
          (u : list Real -> Real) (delta : Real),
@@ -88,7 +88,7 @@ Qed.
 
 (* ---- 收尾段 ---- *)
 Print Assumptions uabT13b_tv_delta_le_one.
-(* ================= §5 uabT13_sigm2_b_mult_cancel 族 ================= *)
+(* ================= §5 正元左乘消去族（a > 0、a·x = 0 蕴含 x = 0；承载 mult_cancel_l） ================= *)
 Import RealInterfaceEnhancedMod.
 
 Section UabT13Sigm2.

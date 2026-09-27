@@ -1,6 +1,6 @@
 (* ==========================================================================)
    Arch_UpAbl_02.v -- 命题族集注与实例化承载
-   使命：本件形式化以下命题族：uabT2a_m5_req_log_compat_slot、uabT2a_a2_log_req_compat、uabp1_sfc_arch_decay_slot、abl_UpFirewall_inv_pos_lt_compat、uabT13_fw_lpc、uabT2a_align_log_req_compat_core、uabT2a_align_log_req_compat_klproj。
+   使命：本件形式化以下命题族：uabT2a_m5_req_log_compat_slot、uabT2a_a2_log_req_compat、uabp1_sfc_arch_decay_slot、abl_UpFirewall_inv_pos_lt_compat、左加法严格单调（lt a b、le c d 蕴含 lt (a+c) (b+d)；承载 fa53_lt_plus_compat_lt_le_dec）、uabT2a_align_log_req_compat_core、uabT2a_align_log_req_compat_klproj。
    依赖：件内 Require 声明面所列库件。
    对标：域归档合成件（无单一直接对标）。
    构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
@@ -108,7 +108,7 @@ End AblUpFirewall.
 
 (* ---- PA 自检段（文尾逐件留痕） ---- *)
 Print Assumptions abl_UpFirewall_inv_pos_lt_compat.
-(* ================= §5 uabT13_fw_lpc 族 ================= *)
+(* ================= §5 左加法严格单调族（lt a b、le c d 蕴含 lt (a+c) (b+d)；承载 fa53_lt_plus_compat_lt_le_dec） ================= *)
 Import RealInterfaceEnhancedMod.
 
 Section UabT13FwLpc.
