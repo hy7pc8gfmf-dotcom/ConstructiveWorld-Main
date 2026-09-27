@@ -191,14 +191,13 @@ SqrtfCauchyDischarge.v#R0-d66910
 SumInvFactEscape.v#R0-d66910
 SupKLBound.v#R0-d66910
 SupKLMonoCompose.v#R0-d66910
-TempMonoW2Mark.v#R0-d66910
 LogTwoEnvelope.v#R0-d66910
 FreeEnergyKLGap.v#R0-d66910
 ArctanGeomTail.v#R0-d66910
 TempSoftmaxInstantiation.v#R0-d66910
 SecondLawQuantified.v#R0-d66910
 VandermondePartial.v#R0-d66910
-TempUnimodalMax.v#R0-d66910
+TempUnimodalMax.v#R0-3d75ec
 ExpOneEnvelope.v#R0-d66910
 ExpLinearLower.v#R0-d66910
 AttnLogSumExpBound.v#R0-d66910

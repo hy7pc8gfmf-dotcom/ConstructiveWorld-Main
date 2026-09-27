@@ -183,7 +183,6 @@ SqrtfCauchyDischarge.v
 SumInvFactEscape.v
 SupKLBound.v
 SupKLMonoCompose.v
-TempMonoW2Mark.v
 UpReqPropLiftShim.v
 DTPT_Bridge_Dep.v
 DTPT_Bridge_All.v
