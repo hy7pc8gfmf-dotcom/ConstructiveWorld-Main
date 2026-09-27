@@ -86,7 +86,6 @@ UpReqPPOPlain.v#R0-d66910
 G12_ZPosFam.v#R0-d66910
 UpReqLogCompD.v#R0-d66910
 UpReqRealFEP.v#R0-d66910
-UpReqLogCompD2.v#R0-d66910
 UpReqRealLtShiftBridge.v#R0-d66910
 UpReqStrictStepGen.v#R0-d66910
 UpReqAlign4.v#R0-d66910
@@ -100,7 +99,7 @@ UpReqPowMonoBridge.v#R0-d66910
 UpReqKLSTangent.v#R0-d66910
 UpReqKLStrictB.v#R0-d66910
 UpReqLatbMaxList.v#R0-d66910
-UpReqLogRDF.v#R0-d66910
+UpReqLogRDF.v#R0-13f0d3
 UpReqRealHalf.v#R0-d66910
 UpReqSteadyThermo.v#R0-d66910
 UpReqTVAbsEps.v#R0-d66910
@@ -179,7 +178,6 @@ SqrtfCauchyArch.v#R0-d66910
 SqrtfCauchyDischarge.v#R0-080294
 SumInvFactEscape.v#R0-d66910
 SupKLMonoCompose.v#R0-836d18
-LogTwoEnvelope.v#R0-d66910
 FreeEnergyKLGap.v#R0-d66910
 ArctanGeomTail.v#R0-d66910
 TempSoftmaxInstantiation.v#R0-d66910
@@ -213,7 +211,6 @@ UpReqSqrtOptimal.v#R0-d66910
 UpReqG05WallClass.v#R0-d66910
 UpReqSquareWallEquiv.v#R0-d66910
 UpReqResidWallEquiv.v#R0-d66910
-UpReqLogZWallEquiv.v#R0-d66910
 UpReqStepKLEtaInst.v#R0-d66910
 UpReqIterGeomRate.v#R0-d66910
 UpReqMixingTime.v#R0-d66910
@@ -260,7 +257,6 @@ EngelWeighted.v#R0-d66910
 EntropyMonoSplitInst.v#R0-d66910
 HansonLcm.v#R0-d66910
 Ln2Escape.v#R0-d66910
-LogTwoBridge.v#R0-d66910
 LowRefFeed4.v#R0-d66910
 MixTimeChain.v#R0-d66910
 MixTimeChainIface.v#R0-d66910

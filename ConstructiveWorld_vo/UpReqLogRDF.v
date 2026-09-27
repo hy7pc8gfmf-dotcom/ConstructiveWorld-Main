@@ -1,97 +1,466 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* 玩具证替换件（消融落件）——替换面清单见下 *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   lrdf_mul_h_inv（原 L370，2 句玩具证）                                *)
-(*   lrdf_req_minus_unfold（原 L114，2 句玩具证）                         *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【恒等守恒修订注记】 *)
-(* 上方头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经全量 *)
-(* 恒等核查与试点复核：本件实测为恒等守恒——清单所列 2 参数位证明体与 *)
-(* Main 现版原件逐字同文（刀体＝原体，零变化），头注「替换」声称与实物 *)
-(* 不符，特此修订。 *)
-(* 修订口径：真替换 0 参数位＋恒等守恒 2 参数位；证明体、声明面、语句面、 *)
-(* Require 面零改动；头注过程流水词面已作中性化处理。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpReqLogRDF —— lrdf_req_minus_unfold / lrdf_inv_le_of_one_le_mul / lrdf_mult_opp_r 语句面；同域语句面
+   使命：本件形式化lrdf_req_minus_unfold / lrdf_inv_le_of_one_le_mul / lrdf_mult_opp_r 语句面。
+   本件并载：严格恒等式 2 的复合重建件；QltT / QltT / Qlt_to_QltT 语句面；C1 LogZWall 第四面墙定理化；件位 CZB12（组 E-STAGING-CZB12）。
+   依赖：S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog, S08_RealMainlineDPO
+     S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp, UpRealLeB,
+     G05_LogSmall, UpReqLogCompD, UpReqAlgebra, List, UpReqSLM, UpReqRDF, Setoid, Morphisms,
+     Lia, QArith.Qminmax, QArith.QArith, QArith.Qabs, Lqa, UpReqGeomD, UpReqLpoEquiv, UpReqEnvelopeDual,
+     UpReqConstEnvelope, UpReqDyadicLog, Arith.PeanoNat。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
+
+(* ============================ §1 严格恒等式 2 的复合重建件 ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpRealLeB.
+Require Import G05_LogSmall.
+Require Import G05_LogSmall.
+Require Import UpReqLogCompD.
+Require Import UpReqAlgebra.
+From Stdlib Require Import List.
+Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* UpReqLogRDF.v *)
-(* *)
-(* 目的： 对数与实数差分面（ReqDiffPlain 载体）的对数定律族。 *)
-(* 主件： lrdf_t_abs_eq / lrdf_xh_eq 等对数差分定律与 lrdf_cancel_l_opp。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqSLM、UpReqRDF。 *)
-(* 备注： 非负/差分/对数三 plain 接口为显式 Variable 前提；对数下界前提显式申报。 *)
+(* Part 0：置换助件（泛型 RIS；纯 req 代数，零供给前提）                         *)
 (* ============================================================ *)
 
+Section LogcAlg2.
+Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
+
+(* P1：中项换位 (a+b)+c ≡ (a+c)+b *)
+Lemma logc2_plus_swap_mid : forall a b c : R,
+  req (plus (plus a b) c) (plus (plus a c) b).
+Proof.
+  intros a b c.
+  apply (req_trans (plus (plus a b) c) (plus a (plus b c)) (plus (plus a c) b)).
+  - exact (req_sym (plus a (plus b c)) (plus (plus a b) c) (plus_assoc a b c)).
+  - apply (req_trans (plus a (plus b c)) (plus a (plus c b)) (plus (plus a c) b)).
+    + apply (req_plus_compat a a (plus b c) (plus c b)).
+      * apply req_refl.
+      * exact (plus_comm b c).
+    + exact (plus_assoc a c b).
+Qed.
+
+(* P2：四项交叉置换 ((a+b)+(c+d)) ≡ ((a+c)+(b+d)) *)
+Lemma logc2_plus_exchange : forall a b c d : R,
+  req (plus (plus a b) (plus c d)) (plus (plus a c) (plus b d)).
+Proof.
+  intros a b c d.
+  apply (req_trans (plus (plus a b) (plus c d))
+                   (plus a (plus b (plus c d)))
+                   (plus (plus a c) (plus b d))).
+  - exact (req_sym (plus a (plus b (plus c d))) (plus (plus a b) (plus c d))
+             (plus_assoc a b (plus c d))).
+  - apply (req_trans (plus a (plus b (plus c d)))
+                     (plus a (plus (plus b c) d))
+                     (plus (plus a c) (plus b d))).
+    + apply (req_plus_compat a a (plus b (plus c d)) (plus (plus b c) d)).
+      * apply req_refl.
+      * exact (plus_assoc b c d).
+    + apply (req_trans (plus a (plus (plus b c) d))
+                       (plus a (plus (plus c b) d))
+                       (plus (plus a c) (plus b d))).
+      * apply (req_plus_compat a a (plus (plus b c) d) (plus (plus c b) d)).
+        -- apply req_refl.
+        -- apply (req_plus_compat (plus b c) (plus c b) d d
+                     (plus_comm b c) (req_refl d)).
+      * apply (req_trans (plus a (plus (plus c b) d))
+                         (plus a (plus c (plus b d)))
+                         (plus (plus a c) (plus b d))).
+        -- apply (req_plus_compat a a (plus (plus c b) d) (plus c (plus b d))).
+           ++ apply req_refl.
+           ++ exact (req_sym (plus c (plus b d)) (plus (plus c b) d)
+                       (plus_assoc c b d)).
+        -- exact (plus_assoc a c (plus b d)).
+Qed.
+
+(* P3：对消零件 (x-y)+(y-x) ≡ 0（logZ 双抵消核） *)
+Lemma logc2_logpair_zero : forall x y : R,
+  req (plus (plus x (opp y)) (plus y (opp x))) zero.
+Proof.
+  intros x y.
+  apply (req_trans (plus (plus x (opp y)) (plus y (opp x)))
+                   (plus x (plus (opp y) (plus y (opp x)))) zero).
+  - exact (req_sym (plus x (plus (opp y) (plus y (opp x))))
+             (plus (plus x (opp y)) (plus y (opp x)))
+             (plus_assoc x (opp y) (plus y (opp x)))).
+  - apply (req_trans (plus x (plus (opp y) (plus y (opp x))))
+                     (plus x (opp x)) zero).
+    + apply (req_plus_compat x x (plus (opp y) (plus y (opp x))) (opp x)).
+      * apply req_refl.
+      * apply (req_trans (plus (opp y) (plus y (opp x)))
+                         (plus (plus (opp y) y) (opp x)) (opp x)).
+        -- exact (plus_assoc (opp y) y (opp x)).
+        -- apply (req_trans (plus (plus (opp y) y) (opp x))
+                            (plus zero (opp x)) (opp x)).
+           ++ apply (req_plus_compat (plus (opp y) y) zero (opp x) (opp x)).
+              ** exact (req_trans (plus (opp y) y) (plus y (opp y)) zero
+                                    (plus_comm (opp y) y) (plus_opp y)).
+              ** apply req_refl.
+           ++ exact (logd_req_plus_zero_l R RIS (opp x)).
+    + exact (plus_opp x).
+Qed.
+
+End LogcAlg2.
+
+(* ============================================================ *)
+(* Part 1：温度节（供给前提与 UpReqLogCompD LogcTemp 节同位，零新增）            *)
 (* ============================================================ *)
 
-(*   参数位 3 = rdf_log_diff@UpReqRDF:1704 S 阻塞 → 缺件 A/B 建设 + 修正消解        *)
-(*                                                               *)
-(* ------------------------------------------------------------------ *)
+Section LogcTemp2.
+Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
+Variable S : Set.
+
+Variable sumf : (S -> R) -> R.
+Hypothesis tsum_ext :
+  forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
+Hypothesis tsum_add :
+  forall f g : S -> R,
+    req (sumf (fun s => plus (f s) (g s))) (plus (sumf f) (sumf g)).
+Hypothesis tsum_linear :
+  forall (a : R) (f : S -> R),
+    req (sumf (fun s => mult a (f s))) (mult a (sumf f)).
+
+Variable energy : S -> R.
+Variable Z_temp : R -> R.
+(* req_Z_temp_spec 前提（UpFirewallReq 同位） *)
+Hypothesis zt_spec : forall (t : R) (Ht : lt zero t),
+  req (Z_temp t) (sumf (fun s => exp_neg (mult (inv_pos t Ht) (energy s)))).
+(* zt_pos 前提 = UpReqTempEntropy req_Z_temp_pos 产物位 *)
+Hypothesis zt_pos : forall (t : R) (Ht : lt zero t), lt zero (Z_temp t).
+(* B1/B2 供给前提（同 UpReqLogCompD LogcTemp） *)
+Hypothesis tsup_compat : forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
+  req x y -> req (log x Hx) (log y Hy).
+Hypothesis tsup_log_exp_neg : forall u : R,
+  req (log (exp_neg u) (exp_neg_pos u)) (opp u).
 
 
-(*    real_log_differentiable@:46386 在盘但为域前提记录形              *)
-(*    （RealDifferentiable L44447：f : forall x, 0<x -> Real）+ 尾 slack     *)
-(*    （|D| ≤ eps|h|+eps'，Bishop 逐 eps）；reqRDF 形 = 纯函数 f : R -> R    *)
-(*    + 精确形 |D| ≤ eps|h|。本件重述完成 = lrdf_log_root（Part 2）。        *)
+Lemma logc2_opp_h_temp : forall (t : R) (Ht : lt zero t),
+  req (opp (logc_t_h S sumf energy Z_temp zt_pos t Ht))
+      (plus (opp (mult (inv_pos t Ht) (logc_t_et S sumf energy Z_temp zt_pos t Ht)))
+            (opp (log (Z_temp t) (zt_pos t Ht)))).
+Proof.
+  intros t Ht.
+  apply (req_trans (opp (logc_t_h S sumf energy Z_temp zt_pos t Ht))
+                   (opp (plus (mult (inv_pos t Ht)
+                                       (logc_t_et S sumf energy Z_temp zt_pos t Ht))
+                              (log (Z_temp t) (zt_pos t Ht))))
+                   (plus (opp (mult (inv_pos t Ht)
+                                        (logc_t_et S sumf energy Z_temp zt_pos t Ht)))
+                         (opp (log (Z_temp t) (zt_pos t Ht))))).
+  - apply req_opp_compat.
+    exact (logc_entropy_temp_explicit S sumf tsum_ext tsum_add tsum_linear
+             energy Z_temp zt_spec zt_pos tsup_compat tsup_log_exp_neg t Ht).
+  - exact (logc_opp_plus (mult (inv_pos t Ht)
+                                 (logc_t_et S sumf energy Z_temp zt_pos t Ht))
+            (log (Z_temp t) (zt_pos t Ht))).
+Qed.
 
+(* Q2【T6 例一 + T5 换形 + 置换】：                                           *)
 
-(*    forall g Hg (dg : reqRDF g), reqRDF (fun z => log (g z) (Hg z))，      *)
-(*    df z := inv(g z)·dg z（正性见证型复合求导规则/见证迁移封装）。         *)
+Lemma logc2_kl21_temp_swap :
+  forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
+  req (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+      (plus (plus (mult (inv_pos t1 Ht1)
+                        (logc_t_et S sumf energy Z_temp zt_pos t2 Ht2))
+                  (opp (mult (inv_pos t2 Ht2)
+                             (logc_t_et S sumf energy Z_temp zt_pos t2 Ht2))))
+            (plus (log (Z_temp t1) (zt_pos t1 Ht1))
+                  (opp (log (Z_temp t2) (zt_pos t2 Ht2))))).
+Proof.
+  intros t1 t2 Ht1 Ht2.
+  set (A := inv_pos t1 Ht1).
+  set (B := inv_pos t2 Ht2).
+  set (E2 := logc_t_et S sumf energy Z_temp zt_pos t2 Ht2).
+  set (L1 := log (Z_temp t1) (zt_pos t1 Ht1)).
+  set (L2 := log (Z_temp t2) (zt_pos t2 Ht2)).
+  set (Hh2 := logc_t_h S sumf energy Z_temp zt_pos t2 Ht2).
+  apply (req_trans (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+                   (plus (plus (opp Hh2) (mult A E2)) L1)
+                   (plus (plus (mult A E2) (opp (mult B E2)))
+                         (plus L1 (opp L2)))).
+  - 
+    exact (logc_relative_entropy_temp_decomp S sumf tsum_ext tsum_add tsum_linear
+              energy Z_temp zt_spec zt_pos tsup_compat tsup_log_exp_neg
+              t1 Ht1 t2 Ht2).
+  - 
+    apply (req_trans (plus (plus (opp Hh2) (mult A E2)) L1)
+                     (plus (plus (plus (opp (mult B E2)) (opp L2)) (mult A E2)) L1)
+                     (plus (plus (mult A E2) (opp (mult B E2)))
+                           (plus L1 (opp L2)))).
+    + apply (req_plus_compat (plus (opp Hh2) (mult A E2))
+                (plus (plus (opp (mult B E2)) (opp L2)) (mult A E2)) L1 L1).
+      * apply (req_plus_compat (opp Hh2) (plus (opp (mult B E2)) (opp L2))
+                  (mult A E2) (mult A E2)).
+        -- exact (logc2_opp_h_temp t2 Ht2).
+        -- apply req_refl.
+      * apply req_refl.
+    + apply (req_trans (plus (plus (plus (opp (mult B E2)) (opp L2)) (mult A E2)) L1)
+                       (plus (plus (plus (opp (mult B E2)) (mult A E2)) (opp L2)) L1)
+                       (plus (plus (mult A E2) (opp (mult B E2)))
+                             (plus L1 (opp L2)))).
+      * apply (req_plus_compat (plus (plus (opp (mult B E2)) (opp L2)) (mult A E2))
+                  (plus (plus (opp (mult B E2)) (mult A E2)) (opp L2)) L1 L1).
+        -- exact (logc2_plus_swap_mid (opp (mult B E2)) (opp L2) (mult A E2)).
+        -- apply req_refl.
+      * apply (req_trans (plus (plus (plus (opp (mult B E2)) (mult A E2)) (opp L2)) L1)
+                         (plus (plus (opp (mult B E2)) (mult A E2)) (plus (opp L2) L1))
+                         (plus (plus (mult A E2) (opp (mult B E2)))
+                               (plus L1 (opp L2)))).
+        -- exact (req_sym (plus (plus (opp (mult B E2)) (mult A E2))
+                                   (plus (opp L2) L1))
+                             (plus (plus (plus (opp (mult B E2)) (mult A E2))
+                                        (opp L2)) L1)
+                             (plus_assoc (plus (opp (mult B E2)) (mult A E2))
+                               (opp L2) L1)).
+        -- apply (req_trans (plus (plus (opp (mult B E2)) (mult A E2))
+                                   (plus (opp L2) L1))
+                            (plus (plus (mult A E2) (opp (mult B E2)))
+                                  (plus (opp L2) L1))
+                            (plus (plus (mult A E2) (opp (mult B E2)))
+                                  (plus L1 (opp L2)))).
+           ++ apply (req_plus_compat (plus (opp (mult B E2)) (mult A E2))
+                        (plus (mult A E2) (opp (mult B E2)))
+                        (plus (opp L2) L1) (plus (opp L2) L1)).
+              ** exact (plus_comm (opp (mult B E2)) (mult A E2)).
+              ** apply req_refl.
+           ++ apply (req_plus_compat (plus (mult A E2) (opp (mult B E2)))
+                        (plus (mult A E2) (opp (mult B E2)))
+                        (plus (opp L2) L1) (plus L1 (opp L2))).
+              ** apply req_refl.
+              ** exact (plus_comm (opp L2) L1).
+Qed.
 
+(* Q3【T6 例二 + T5 换形 + 置换】：                                           *)
 
-(*      reqRDF g 前提位（与 req_rdf_compose@UpReqRDF:1227 显式 dg 同族对照； *)
-(*      g 取无正则性正函数时结论无据，本构造性接口层不可证——判「修正消解」， *)
-(*      非特设构造原形）。                                                      *)
-(*    ②eps'-尾 slack 与精确形之关系：非 Or 编码固有间隙——req 层 le 为抽象    *)
-(*      非严格序（非 Or 编码），配合 ReqLogPlain.log_le_linear_plain 精确形   *)
-(*      参数位（UpReqSLM L143，  资产），log(1+t) ≤ t 精确成立（           *)
-(*      req_log_one_plus_le@UpReqSLM），尾 slack 消解；精确完成余缺仅为      *)
-(*      三个 Or 编码系内点引理的 req 参数形副本（本件三假设申报位）。   *)
-(*    ③依存链消解：rdf_log_diff 唯一依存位 = req_entropy_differentiable      *)
+Lemma logc2_kl12_temp_swap :
+  forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
+  req (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2)
+      (plus (plus (mult (inv_pos t2 Ht2)
+                        (logc_t_et S sumf energy Z_temp zt_pos t1 Ht1))
+                  (opp (mult (inv_pos t1 Ht1)
+                             (logc_t_et S sumf energy Z_temp zt_pos t1 Ht1))))
+            (plus (log (Z_temp t2) (zt_pos t2 Ht2))
+                  (opp (log (Z_temp t1) (zt_pos t1 Ht1))))).
+Proof.
+  intros t1 t2 Ht1 Ht2.
+  set (A := inv_pos t1 Ht1).
+  set (B := inv_pos t2 Ht2).
+  set (E1 := logc_t_et S sumf energy Z_temp zt_pos t1 Ht1).
+  set (L1 := log (Z_temp t1) (zt_pos t1 Ht1)).
+  set (L2 := log (Z_temp t2) (zt_pos t2 Ht2)).
+  set (Hh1 := logc_t_h S sumf energy Z_temp zt_pos t1 Ht1).
+  apply (req_trans (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2)
+                   (plus (plus (opp Hh1) (mult B E1)) L2)
+                   (plus (plus (mult B E1) (opp (mult A E1)))
+                         (plus L2 (opp L1)))).
+  - 
+    exact (logc_relative_entropy_temp_decomp S sumf tsum_ext tsum_add tsum_linear
+              energy Z_temp zt_spec zt_pos tsup_compat tsup_log_exp_neg
+              t2 Ht2 t1 Ht1).
+  - 
+    apply (req_trans (plus (plus (opp Hh1) (mult B E1)) L2)
+                     (plus (plus (plus (opp (mult A E1)) (opp L1)) (mult B E1)) L2)
+                     (plus (plus (mult B E1) (opp (mult A E1)))
+                           (plus L2 (opp L1)))).
+    + apply (req_plus_compat (plus (opp Hh1) (mult B E1))
+                (plus (plus (opp (mult A E1)) (opp L1)) (mult B E1)) L2 L2).
+      * apply (req_plus_compat (opp Hh1) (plus (opp (mult A E1)) (opp L1))
+                  (mult B E1) (mult B E1)).
+        -- exact (logc2_opp_h_temp t1 Ht1).
+        -- apply req_refl.
+      * apply req_refl.
+    + apply (req_trans (plus (plus (plus (opp (mult A E1)) (opp L1)) (mult B E1)) L2)
+                       (plus (plus (plus (opp (mult A E1)) (mult B E1)) (opp L1)) L2)
+                       (plus (plus (mult B E1) (opp (mult A E1)))
+                             (plus L2 (opp L1)))).
+      * apply (req_plus_compat (plus (plus (opp (mult A E1)) (opp L1)) (mult B E1))
+                  (plus (plus (opp (mult A E1)) (mult B E1)) (opp L1)) L2 L2).
+        -- exact (logc2_plus_swap_mid (opp (mult A E1)) (opp L1) (mult B E1)).
+        -- apply req_refl.
+      * apply (req_trans (plus (plus (plus (opp (mult A E1)) (mult B E1)) (opp L1)) L2)
+                         (plus (plus (opp (mult A E1)) (mult B E1)) (plus (opp L1) L2))
+                         (plus (plus (mult B E1) (opp (mult A E1)))
+                               (plus L2 (opp L1)))).
+        -- exact (req_sym (plus (plus (opp (mult A E1)) (mult B E1))
+                                   (plus (opp L1) L2))
+                             (plus (plus (plus (opp (mult A E1)) (mult B E1))
+                                        (opp L1)) L2)
+                             (plus_assoc (plus (opp (mult A E1)) (mult B E1))
+                               (opp L1) L2)).
+        -- apply (req_trans (plus (plus (opp (mult A E1)) (mult B E1))
+                                   (plus (opp L1) L2))
+                            (plus (plus (mult B E1) (opp (mult A E1)))
+                                  (plus (opp L1) L2))
+                            (plus (plus (mult B E1) (opp (mult A E1)))
+                                  (plus L2 (opp L1)))).
+           ++ apply (req_plus_compat (plus (opp (mult A E1)) (mult B E1))
+                        (plus (mult B E1) (opp (mult A E1)))
+                        (plus (opp L1) L2) (plus (opp L1) L2)).
+              ** exact (plus_comm (opp (mult A E1)) (mult B E1)).
+              ** apply req_refl.
+           ++ apply (req_plus_compat (plus (mult B E1) (opp (mult A E1)))
+                        (plus (mult B E1) (opp (mult A E1)))
+                        (plus (opp L1) L2) (plus L2 (opp L1))).
+              ** apply req_refl.
+              ** exact (plus_comm (opp L1) L2).
+Qed.
 
-(*      以 lrdf_entropy_differentiable 同链重建（零 rdf_log_diff 变元，      *)
-(*      dg 位由 HOmega = req_rdf_mult 产物供给——原节本就有此件，结论：       *)
-(*      参数位实为「可自供的漏装位」）。                                        *)
+(* Q4【参数位 7 消解件】：KL(t2‖t1)+KL(t1‖t2) ≡ (1/t1-1/t2)·(E2-E1)              *)
+(*   （req_temp_strict_ident2@UpFirewallReq:144 复合重建；req_minus δ 透明，   *)
+(*   证内 unfold 换 plus/opp 形后 8 项置换坍缩 + distrib 完成）                *)
+Lemma logc_temp_strict_ident2 :
+  forall (t1 t2 : R) (Ht1 : lt zero t1) (Ht2 : lt zero t2),
+  req (plus (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+            (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2))
+      (mult (req_minus (inv_pos t1 Ht1) (inv_pos t2 Ht2))
+            (req_minus (logc_t_et S sumf energy Z_temp zt_pos t2 Ht2)
+                       (logc_t_et S sumf energy Z_temp zt_pos t1 Ht1))).
+Proof.
+  intros t1 t2 Ht1 Ht2.
+  unfold req_minus.
+  set (A := inv_pos t1 Ht1).
+  set (B := inv_pos t2 Ht2).
+  set (E1 := logc_t_et S sumf energy Z_temp zt_pos t1 Ht1).
+  set (E2 := logc_t_et S sumf energy Z_temp zt_pos t2 Ht2).
+  set (L1 := log (Z_temp t1) (zt_pos t1 Ht1)).
+  set (L2 := log (Z_temp t2) (zt_pos t2 Ht2)).
+  (* 主链：KL 和 → 4 项数缩形 → X·(E2-E1)，X = 1/t1 - 1/t2 *)
+  apply (req_trans (plus (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+                         (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2))
+                   (plus (plus (mult A E2) (opp (mult B E2)))
+                         (plus (mult B E1) (opp (mult A E1))))
+                   (mult (plus A (opp B)) (plus E2 (opp E1)))).
+  - (* 8 项置换坍缩：两翼并置 → logZ 双抵消 → 4 项数缩形 *)
+    apply (req_trans (plus (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+                           (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2))
+                     (plus (plus (plus (mult A E2) (opp (mult B E2)))
+                                 (plus L1 (opp L2)))
+                           (plus (plus (mult B E1) (opp (mult A E1)))
+                                 (plus L2 (opp L1))))
+                     (plus (plus (mult A E2) (opp (mult B E2)))
+                           (plus (mult B E1) (opp (mult A E1))))).
+    + apply (req_plus_compat (logc_t_kl S sumf energy Z_temp zt_pos t2 t1 Ht2 Ht1)
+               (plus (plus (mult A E2) (opp (mult B E2))) (plus L1 (opp L2)))
+               (logc_t_kl S sumf energy Z_temp zt_pos t1 t2 Ht1 Ht2)
+               (plus (plus (mult B E1) (opp (mult A E1))) (plus L2 (opp L1)))).
+      * exact (logc2_kl21_temp_swap t1 t2 Ht1 Ht2).
+      * exact (logc2_kl12_temp_swap t1 t2 Ht1 Ht2).
+    + apply (req_trans (plus (plus (plus (mult A E2) (opp (mult B E2)))
+                                   (plus L1 (opp L2)))
+                             (plus (plus (mult B E1) (opp (mult A E1)))
+                                   (plus L2 (opp L1))))
+                       (plus (plus (plus (mult A E2) (opp (mult B E2)))
+                                   (plus (mult B E1) (opp (mult A E1))))
+                             (plus (plus L1 (opp L2)) (plus L2 (opp L1))))
+                       (plus (plus (mult A E2) (opp (mult B E2)))
+                             (plus (mult B E1) (opp (mult A E1))))).
+      * exact (logc2_plus_exchange (plus (mult A E2) (opp (mult B E2)))
+                     (plus L1 (opp L2))
+                     (plus (mult B E1) (opp (mult A E1)))
+                     (plus L2 (opp L1))).
+      * apply (req_trans (plus (plus (plus (mult A E2) (opp (mult B E2)))
+                                       (plus (mult B E1) (opp (mult A E1))))
+                                 (plus (plus L1 (opp L2)) (plus L2 (opp L1))))
+                         (plus (plus (plus (mult A E2) (opp (mult B E2)))
+                                     (plus (mult B E1) (opp (mult A E1))))
+                               zero)
+                         (plus (plus (mult A E2) (opp (mult B E2)))
+                               (plus (mult B E1) (opp (mult A E1))))).
+        -- apply (req_plus_compat
+                     (plus (plus (mult A E2) (opp (mult B E2)))
+                           (plus (mult B E1) (opp (mult A E1))))
+                     (plus (plus (mult A E2) (opp (mult B E2)))
+                           (plus (mult B E1) (opp (mult A E1))))
+                     (plus (plus L1 (opp L2)) (plus L2 (opp L1))) zero).
+           ++ apply req_refl.
+           ++ exact (logc2_logpair_zero L1 L2).
+        -- exact (plus_zero (plus (plus (mult A E2) (opp (mult B E2)))
+                    (plus (mult B E1) (opp (mult A E1))))).
+  - (* distrib 完成：X·(E2-E1) ≡ X·E2 + X·(-E1) ≡ 4 项数缩形（反向链） *)
+    apply req_sym.
+    assert (HXE : forall E : R,
+              req (mult (plus A (opp B)) E) (plus (mult A E) (opp (mult B E)))).
+    { intro E.
+      apply (req_trans (mult (plus A (opp B)) E)
+                       (mult E (plus A (opp B)))
+                       (plus (mult A E) (opp (mult B E)))).
+      - exact (mult_comm (plus A (opp B)) E).
+      - apply (req_trans (mult E (plus A (opp B)))
+                         (plus (mult E A) (mult E (opp B)))
+                         (plus (mult A E) (opp (mult B E)))).
+        + exact (distrib E A (opp B)).
+        + apply (req_plus_compat (mult E A) (mult A E)
+                    (mult E (opp B)) (opp (mult B E))).
+          * exact (mult_comm E A).
+          * apply (req_trans (mult E (opp B)) (opp (mult E B))
+                     (opp (mult B E))).
+            -- exact (logc_mult_opp_l E B).
+            -- apply req_opp_compat. exact (mult_comm E B). }
+    apply (req_trans (mult (plus A (opp B)) (plus E2 (opp E1)))
+                     (plus (mult (plus A (opp B)) E2)
+                           (mult (plus A (opp B)) (opp E1)))
+                     (plus (plus (mult A E2) (opp (mult B E2)))
+                           (plus (mult B E1) (opp (mult A E1))))).
+    + exact (distrib (plus A (opp B)) E2 (opp E1)).
+    + apply (req_plus_compat (mult (plus A (opp B)) E2)
+               (plus (mult A E2) (opp (mult B E2)))
+               (mult (plus A (opp B)) (opp E1))
+               (plus (mult B E1) (opp (mult A E1)))).
+      * exact (HXE E2).
+      * apply (req_trans (mult (plus A (opp B)) (opp E1))
+                         (opp (mult (plus A (opp B)) E1))
+                         (plus (mult B E1) (opp (mult A E1)))).
+        -- exact (logc_mult_opp_l (plus A (opp B)) E1).
+        -- apply (req_trans (opp (mult (plus A (opp B)) E1))
+                            (opp (plus (mult A E1) (opp (mult B E1))))
+                            (plus (mult B E1) (opp (mult A E1)))).
+           ++ apply req_opp_compat. exact (HXE E1).
+           ++ apply (req_trans (opp (plus (mult A E1) (opp (mult B E1))))
+                               (plus (opp (mult A E1)) (opp (opp (mult B E1))))
+                               (plus (mult B E1) (opp (mult A E1)))).
+              ** exact (logc_opp_plus (mult A E1) (opp (mult B E1))).
+              ** apply (req_trans (plus (opp (mult A E1)) (opp (opp (mult B E1))))
+                                  (plus (mult B E1) (opp (mult A E1)))
+                                  (plus (mult B E1) (opp (mult A E1)))).
+                 --- apply (req_trans (plus (opp (mult A E1)) (opp (opp (mult B E1))))
+                                      (plus (opp (mult A E1)) (mult B E1))
+                                      (plus (mult B E1) (opp (mult A E1)))).
+                     +++ apply (req_plus_compat (opp (mult A E1)) (opp (mult A E1))
+                                   (opp (opp (mult B E1))) (mult B E1)).
+                         *** apply req_refl.
+                         *** exact (logd_req_opp_opp R RIS (mult B E1)).
+                     +++ exact (plus_comm (opp (mult A E1)) (mult B E1)).
+                 --- apply req_refl.
+Qed.
 
-(*  [S1] lrdf_abs_lower_pos : lt (abs a) c -> lt zero (plus c a)             *)
-(*       —— real_abs_lt_lower@44527（Or 编码系内证）req 参数形副本；      *)
-(*       抽象接口无「双侧加法」lt 原语，正和形为依存可用形。                  *)
-(*  [S2] lrdf_abs_le_intro : le u w -> le (opp u) w -> le (abs u) w          *)
-(*       —— real_abs_le_quad_eps@46104 四分叉核（Or 编码 |X| 桥）      *)
-(*       req 参数形副本（双侧绝对值引入）。                                    *)
-(*  [S3] lrdf_sq_nonneg / lrdf_sq_le_abs_sq : le zero (t·t) /                *)
-(*       le (t·t) (|t|·|t|) —— Qsquare_nonneg/q_sq_abs@46130 逐点      *)
-(*       Q 层事实 req 参数形副本（UpReqSLM L20-25 M2 墙结论同族：plain 形需    *)
-(*       符号判定，抽象接口不可导）。                                       *)
-
-(*  （UpReqSLM）/ReqLogPlain（UpReqSLM L143，log_le_linear_plain 精确形 +    *)
-(*  log_req_compat_plain）。Real 消解随 Real 层同族显式假设（UpReqSLM 头注同判）。*)
-(* 路线（核心估计，对标 L46386 主定理结构，req 层重排）：                *)
-
-(*   上界：log(1+t) ≤ t 精确（req_log_one_plus_le）⟹ D ≤ 0 ≤ eps|h|。        *)
-(*   下界：t − log(1+t) ≡ t + log inv(1+t) ≤ t + (inv(1+t)−1) ≡ t²·inv(1+t)  *)
-(*     （req_log_inv_one_inv + log_le_linear_plain + lrdf_t_plus_inv_minus_  *)
-(*     one 环恒等，对标 real_t_minus_log_bound@45024 无 eps 化）             *)
-(*     ≤ 2t²（inv(1+t) ≤ 2 ⟸ 1/2 ≤ 1+t）≤ eps·|h|（|t| ≤ min(1/2, eps·x/2)）*)
-(*     其中 2t² ≤ eps·|h| 走 |t| ≤ eps·x/2：t² ≤ |t|² ≤ |t|·(eps·x/2)。      *)
-(*   δ := min(x/2, (eps·x/2)·x)（对标 δ := min(x/2, eps·x²/4)）。      *)
-(*   缺件 B 引擎以同核（lrdf_core_abs_bound 于 t := (g(z+h)−g z)·inv(g z)）   *)
-(*   + 误差分解 tt ≡ inv·ds·h + err·inv 组装（budget: |X|≤(eps/2)|h|、       *)
-(*   |err·inv|≤(eps/2)|h|）。                                              *)
-(* 防撞：lrdf_ 前缀 + 全部新名 21 个，attn 目录全 .v grep 零命中（建前实测    *)
-(*    ；UpReqLogRDF 文件名零命中）。                              *)
-(* 红线：Set 层零 Prop（结论全 req/lt/le/sigT+Set-And 值；Rocq 9 排序多态    *)
-(*    Or 仅作 lt_le_iff 入参，零泄露）；全 Qed 闭合；零 公理/承认件/      *)
-
-(* 编译配方：_lrdf_g2.cmd + guard 包装                                       *)
-
+End LogcTemp2.
 
 (* ============================================================ *)
+(* 闭合性审计（G2 关：Print Assumptions 全 Closed）                           *)
+(* ============================================================ *)
+Print Assumptions logc_temp_strict_ident2.
+Print Assumptions logc2_kl21_temp_swap.
+Print Assumptions logc2_kl12_temp_swap.
+Print Assumptions logc2_opp_h_temp.
+Print Assumptions logc2_plus_swap_mid.
+Print Assumptions logc2_plus_exchange.
+Print Assumptions logc2_logpair_zero.
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -1664,3 +2033,1547 @@ Proof.
 Qed.
 
 End LRDF.
+
+(* ============================ §2 QltT / QltT / Qlt_to_QltT 语句面 ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
+               ZArith.ZArith Arith.Arith Bool.Bool Lists.List.
+From Stdlib Require Import Setoid Morphisms.
+From Stdlib Require Import Lia QArith.Qminmax.
+
+(* ============================================================ *)
+(* §0 Set 层出口件：QltT'（Qlt_bool 反映形，Id-of-bool，同 QltT） *)
+(* ============================================================ *)
+(* 库内已有 QltT/QleT'（S02）；本件按同形语句面命名补 QltT'。      *)
+
+Definition QltT' (x y : Q) : Set := Id (Qlt_bool x y) true.
+
+Lemma QltT'_to_Qlt : forall x y : Q, QltT' x y -> Qlt x y.
+Proof. intros x y H. apply (QltT_to_Qlt x y). exact H. Qed.
+
+Lemma Qlt_to_QltT' : forall x y : Q, Qlt x y -> QltT' x y.
+Proof. intros x y H. exact (Qlt_to_QltT x y H). Qed.
+
+Lemma qleT'_weaken : forall a b c : Q, Qle a b -> b == c -> QleT' a c.
+Proof.
+  intros a b c H Hbc.
+  apply Qle_to_QleT'.
+  apply (Qle_trans a b c H).
+  apply qeq_le.
+  exact Hbc.
+Qed.
+
+(* ============================================================ *)
+(* §1 定义（四段式之一：定义）                                    *)
+(* ============================================================ *)
+
+(* ---- 项 t_k := (−1)^k/(k+1) ---- *)
+Definition l2e_term (k : nat) : Q :=
+  q_pow (-1) k / (Z.of_nat (Datatypes.S k) # 1).
+
+(* ---- 部分和 S_n := Σ_{k=0}^{n−1} t_k（n 项） ---- *)
+Fixpoint l2e_alt_partial (n : nat) : Q :=
+  match n with
+  | 0%nat => 0
+  | Datatypes.S m => l2e_alt_partial m + l2e_term m
+  end.
+
+(* ---- 项模量 m_k := 1/(k+1)（|t_k| 的闭式；对照 atan_mag） ---- *)
+Definition l2e_mag (k : nat) : Q := 1 / (Z.of_nat (Datatypes.S k) # 1).
+
+(* ---- 一步差：S_{n+1} − S_n == t_n；两步差 S_{n+2} − S_n == t_n + t_{n+1} ---- *)
+Lemma l2e_gap1 : forall n : nat,
+  l2e_alt_partial (Datatypes.S n) - l2e_alt_partial n == l2e_term n.
+Proof. intro n. simpl. ring. Qed.
+
+Lemma l2e_gap2 : forall n : nat,
+  l2e_alt_partial (Datatypes.S (Datatypes.S n)) - l2e_alt_partial n ==
+  l2e_term n + l2e_term (Datatypes.S n).
+Proof. intro n. simpl. ring. Qed.
+
+(* ============================================================ *)
+(* §2 模量序结构（四段式之二/之三：恒等 + 单调）                   *)
+(* ============================================================ *)
+
+Lemma l2e_den_pos : forall k : nat, Qlt 0 (Z.of_nat (Datatypes.S k) # 1).
+Proof.
+  intro k. unfold Qlt. cbn [Qnum Qden].
+  (* Z 层化：乘积归约后 Z.of_nat (S k) 依定义化为 Z.pos (Pos.of_succ_nat *)
+  (* k)，取正性见证 Pos2Z.pos_is_pos                                    *)
+  rewrite Z.mul_0_l, Z.mul_1_r.
+  change (Z.of_nat (Datatypes.S k)) with (Z.pos (Pos.of_succ_nat k)).
+  apply Pos2Z.pos_is_pos.
+Qed.
+
+Lemma l2e_den_neq : forall k : nat, ~ ((Z.of_nat (Datatypes.S k) # 1) == 0).
+Proof. intro k. apply q_neq_of_lt. apply l2e_den_pos. Qed.
+
+(* ---- 1/d == /d 桥（Qdiv 展平） ---- *)
+Lemma l2e_mag_inv : forall k : nat, l2e_mag k == / (Z.of_nat (Datatypes.S k) # 1).
+Proof. intro k. unfold l2e_mag, Qdiv. apply Qmult_1_l. Qed.
+
+Lemma l2e_mag_pos : forall k : nat, Qlt 0 (l2e_mag k).
+Proof.
+  intro k.
+  setoid_replace (l2e_mag k) with (/ (Z.of_nat (Datatypes.S k) # 1))
+    by (apply (l2e_mag_inv k)).
+  apply Qinv_lt_0_compat.
+  apply l2e_den_pos.
+Qed.
+
+Lemma l2e_mag_nonneg : forall k : nat, Qle 0 (l2e_mag k).
+Proof.
+  intro k.
+  apply (Qlt_le_weak 0 (l2e_mag k)).
+  apply l2e_mag_pos.
+Qed.
+
+(* ---- 严格递减：m_{k+1} < m_k（倒数反序；对照 atan_mag_decr 证明芯） ---- *)
+Lemma l2e_mag_lt : forall k : nat, Qlt (l2e_mag (Datatypes.S k)) (l2e_mag k).
+Proof.
+  intro k.
+  setoid_replace (l2e_mag (Datatypes.S k)) with (/ (Z.of_nat (Datatypes.S (Datatypes.S k)) # 1))
+    by (apply (l2e_mag_inv (Datatypes.S k))).
+  setoid_replace (l2e_mag k) with (/ (Z.of_nat (Datatypes.S k) # 1))
+    by (apply (l2e_mag_inv k)).
+  apply (proj1 (Qinv_lt_contravar (Z.of_nat (Datatypes.S k) # 1)
+                                  (Z.of_nat (Datatypes.S (Datatypes.S k)) # 1)
+                                  (l2e_den_pos k) (l2e_den_pos (Datatypes.S k)))).
+  (* 收束：倒数反序的核=S k < S (S k)，Z 层由 inj_succ 化为后继一步严格序 *)
+  unfold Qlt. cbn [Qnum Qden].
+  rewrite (Znat.Nat2Z.inj_succ (Datatypes.S k)), !Z.mul_1_r.
+  exact (Z.lt_succ_diag_r (Z.of_nat (Datatypes.S k))).
+Qed.
+
+(* ---- 模量差为正：m_k − m_{k+1} > 0 ---- *)
+Lemma l2e_pair_diff_pos : forall k : nat,
+  Qlt 0 (l2e_mag k - l2e_mag (Datatypes.S k)).
+Proof.
+  intro k.
+  apply (proj1 (Qlt_minus_iff (l2e_mag (Datatypes.S k)) (l2e_mag k))).
+  apply l2e_mag_lt.
+Qed.
+
+(* ---- 模量反序（N ≤ M ⟹ m_M ≤ m_N；对照 atan_inv_chain） ---- *)
+Lemma l2e_mag_antitone : forall a b : nat, (a <= b)%nat -> Qle (l2e_mag b) (l2e_mag a).
+Proof.
+  intros a b Hab.
+  destruct (Nat.eq_dec a b) as [Heq | Hne].
+  - subst b. apply Qle_refl.
+  - assert (Hlt : (a < b)%nat) by lia.
+    apply (Qle_trans _ (/ (Z.of_nat (Datatypes.S b) # 1)) _).
+    + apply qeq_le. apply (l2e_mag_inv b).
+    + apply Qlt_le_weak.
+      setoid_replace (l2e_mag a) with (/ (Z.of_nat (Datatypes.S a) # 1))
+        by (apply (l2e_mag_inv a)).
+      apply (proj1 (Qinv_lt_contravar (Z.of_nat (Datatypes.S a) # 1)
+                                      (Z.of_nat (Datatypes.S b) # 1)
+                                      (l2e_den_pos a) (l2e_den_pos b))).
+      (* 收束：a < b 经后继单调（Z.succ_lt_mono）平移到 Z 层分母序 *)
+      unfold Qlt. cbn [Qnum Qden]. rewrite !Znat.Nat2Z.inj_succ, !Z.mul_1_r.
+      exact (proj1 (Z.succ_lt_mono (Z.of_nat a) (Z.of_nat b))
+                   (proj1 (Znat.Nat2Z.inj_lt a b) Hlt)).
+Qed.
+
+(* ---- 单调：m_{k+1} ≤ m_k（对照 atan_mag_decr） ---- *)
+Lemma l2e_mag_decr : forall k : nat, Qle (l2e_mag (Datatypes.S k)) (l2e_mag k).
+Proof. intro k. apply l2e_mag_antitone. lia. Qed.
+
+Lemma l2e_mag_decr_pos_step : forall n : nat, Qle 0 (l2e_mag n - l2e_mag (Datatypes.S n)).
+Proof.
+  intro n.
+  apply (proj1 (Qle_minus_iff (l2e_mag (Datatypes.S n)) (l2e_mag n))).
+  apply l2e_mag_decr.
+Qed.
+
+(* ============================================================ *)
+(* §3 项恒等（|t_k|==m_k；成对项 |t_k+t_{k+1}|==m_k−m_{k+1}）      *)
+(* ============================================================ *)
+
+(* ---- |t_k| == m_k（对照 arctan_term_abs） ---- *)
+Lemma l2e_term_abs : forall k : nat, Qabs (l2e_term k) == l2e_mag k.
+Proof.
+  intro k.
+  unfold l2e_term, Qdiv.
+  setoid_rewrite Qabs_Qmult.
+  setoid_rewrite sc_abs_sign.
+  setoid_rewrite Qabs_Qinv.
+  assert (Hd : Qabs (Z.of_nat (Datatypes.S k) # 1) ==
+               (Z.of_nat (Datatypes.S k) # 1)).
+  { apply Qabs_pos. apply Qlt_le_weak. apply l2e_den_pos. }
+  setoid_rewrite Hd.
+  unfold l2e_mag, Qdiv.
+  ring.
+Qed.
+
+(* ---- 成对项代数分解（对照 atan_pair_factor） ---- *)
+Lemma l2e_pair_factor : forall k : nat,
+  l2e_term k + l2e_term (Datatypes.S k) ==
+  q_pow (-1) k * (l2e_mag k - l2e_mag (Datatypes.S k)).
+Proof.
+  intro k.
+  unfold l2e_term, l2e_mag, Qdiv.
+  rewrite (q_pow_succ (-1) k).
+  ring.
+Qed.
+
+(* ---- 成对项界：|t_k + t_{k+1}| == m_k − m_{k+1}（对照 atan_pair_abs） ---- *)
+Lemma l2e_pair_abs : forall k : nat,
+  Qabs (l2e_term k + l2e_term (Datatypes.S k)) ==
+  l2e_mag k - l2e_mag (Datatypes.S k).
+Proof.
+  intro k.
+  apply (Qeq_trans _ (Qabs (q_pow (-1) k * (l2e_mag k - l2e_mag (Datatypes.S k)))) _).
+  - apply (Qabs_wd (l2e_term k + l2e_term (Datatypes.S k))
+                   (q_pow (-1) k * (l2e_mag k - l2e_mag (Datatypes.S k)))).
+    apply l2e_pair_factor.
+  - setoid_rewrite Qabs_Qmult.
+    setoid_rewrite sc_abs_sign.
+    assert (Hd : Qabs (l2e_mag k - l2e_mag (Datatypes.S k)) ==
+                 l2e_mag k - l2e_mag (Datatypes.S k)).
+    { apply Qabs_pos.
+      apply (Qlt_le_weak 0 (l2e_mag k - l2e_mag (Datatypes.S k))).
+      apply l2e_pair_diff_pos. }
+    setoid_rewrite Hd.
+    ring.
+Qed.
+
+(* ============================================================ *)
+(* §4 奇偶双边夹逼（对照 atan_sign_even/odd）                     *)
+(*   两翼：偶列不减（l2e_even_mono）、奇列不增（l2e_odd_mono）；   *)
+(*   夹口：任一偶部分和 ≤ 任一奇部分和（l2e_even_le_odd），        *)
+(*   隙宽显式：S_{2m+1} − S_{2m} == 1/(2m+1)（l2e_parity_gap）。   *)
+(* ============================================================ *)
+
+(* ---- 界步：S_{2j} ≤ S_{2j+1}（差 == t_{2j} == m_{2j} > 0） ---- *)
+Lemma l2e_boundary : forall j : nat, Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * j + 1)).
+Proof.
+  intro j.
+  assert (H1 : (2 * j + 1)%nat = Datatypes.S (2 * j)) by (exact (Nat.add_1_r (2 * j))).
+  rewrite H1.
+  assert (Hpos : Qle 0 (l2e_alt_partial (Datatypes.S (2 * j)) - l2e_alt_partial (2 * j))).
+  { rewrite (l2e_gap1 (2 * j)).
+    apply (Qle_trans _ (l2e_mag (2 * j)) _).
+    - apply (Qlt_le_weak 0 (l2e_mag (2 * j))). apply l2e_mag_pos.
+    - apply qeq_le.
+      unfold l2e_term.
+      rewrite (atan_sign_even j).
+      unfold l2e_mag, Qdiv.
+      ring. }
+  apply (proj2 (Qle_minus_iff (l2e_alt_partial (2 * j))
+                              (l2e_alt_partial (Datatypes.S (2 * j))))).
+  exact Hpos.
+Qed.
+
+(* ---- 反向界步：S_{2j} ≤ S_{2j−1}（j=0 时 nat 截断为平凡） ---- *)
+Lemma l2e_boundary_rev : forall j : nat,
+  Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * j - 1)).
+Proof.
+  intro j. destruct j as [| j'].
+  - apply Qle_refl.
+  - replace (2 * Datatypes.S j')%nat with (2 * j' + 2)%nat by (exact (eq_sym (Nat.mul_succ_r 2 j'))).
+    replace (2 * j' + 2 - 1)%nat with (2 * j' + 1)%nat by lia.
+    replace (2 * j' + 2)%nat with (Datatypes.S (2 * j' + 1)) by (exact (eq_sym (Nat.add_succ_r (2 * j') 1))).
+    assert (Hpos : Qle 0 (l2e_alt_partial (2 * j' + 1) -
+                          l2e_alt_partial (Datatypes.S (2 * j' + 1)))).
+    { assert (Hd : l2e_alt_partial (2 * j' + 1) -
+                   l2e_alt_partial (Datatypes.S (2 * j' + 1)) ==
+                   l2e_mag (2 * j' + 1)).
+      { apply (Qeq_trans _ (- (l2e_term (2 * j' + 1))) _).
+        - pose proof (l2e_gap1 (2 * j' + 1)) as Hg.
+          rewrite <- Hg. ring.
+        - unfold l2e_term.
+          rewrite (atan_sign_odd j').
+          unfold l2e_mag, Qdiv.
+          ring. }
+      rewrite Hd. apply l2e_mag_nonneg. }
+    apply (proj2 (Qle_minus_iff (l2e_alt_partial (Datatypes.S (2 * j' + 1)))
+                                (l2e_alt_partial (2 * j' + 1)))).
+    exact Hpos.
+Qed.
+
+(* ---- 偶步：S_{2j} ≤ S_{2j+2}（差 == 成对项 == m_{2j}−m_{2j+1} ≥ 0） ---- *)
+(* ---- 偶对恒等（纯代数）：t_{2j}+t_{2j+1} == m_{2j}−m_{2j+1} ---- *)
+Lemma l2e_even_pair_factor : forall j : nat,
+  l2e_mag (2 * j) - l2e_mag (Datatypes.S (2 * j)) ==
+  l2e_term (2 * j) + l2e_term (Datatypes.S (2 * j)).
+Proof.
+  intro j.
+  unfold l2e_term, l2e_mag, Qdiv.
+  rewrite (q_pow_succ (-1) (2 * j)).
+  rewrite (atan_sign_even j).
+  ring.
+Qed.
+
+Lemma l2e_even_step : forall j : nat, Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * j + 2)).
+Proof.
+  intro j.
+  assert (H2 : (2 * j + 2)%nat = Datatypes.S (Datatypes.S (2 * j))) by lia.
+  rewrite H2.
+  assert (Hpos : Qle 0 (l2e_alt_partial (Datatypes.S (Datatypes.S (2 * j))) -
+                        l2e_alt_partial (2 * j))).
+  { rewrite (l2e_gap2 (2 * j)).
+    apply (Qle_trans _ (l2e_mag (2 * j) - l2e_mag (Datatypes.S (2 * j))) _).
+    - apply l2e_mag_decr_pos_step.
+    - apply qeq_le. apply l2e_even_pair_factor. }
+  apply (proj2 (Qle_minus_iff (l2e_alt_partial (2 * j))
+                              (l2e_alt_partial (Datatypes.S (Datatypes.S (2 * j)))))).
+  exact Hpos.
+Qed.
+
+(* ---- 奇步：S_{2j+3} ≤ S_{2j+1}（差反向：−成对项 == m_{2j+1}−m_{2j+2} ≥ 0） ---- *)
+Lemma l2e_odd_step : forall j : nat, Qle (l2e_alt_partial (2 * j + 3)) (l2e_alt_partial (2 * j + 1)).
+Proof.
+  intro j.
+  assert (H3 : (2 * j + 3)%nat = Datatypes.S (Datatypes.S (2 * j + 1))) by lia.
+  rewrite H3.
+  assert (Hpos : Qle 0 (l2e_alt_partial (2 * j + 1) -
+                        l2e_alt_partial (Datatypes.S (Datatypes.S (2 * j + 1))))).
+  { assert (Hg : l2e_alt_partial (2 * j + 1) -
+                 l2e_alt_partial (Datatypes.S (Datatypes.S (2 * j + 1))) ==
+                 l2e_mag (2 * j + 1) - l2e_mag (Datatypes.S (2 * j + 1))).
+    { pose proof (l2e_gap2 (2 * j + 1)) as Hfwd.
+      assert (Hpf : l2e_term (2 * j + 1) + l2e_term (Datatypes.S (2 * j + 1)) ==
+                    - (l2e_mag (2 * j + 1) - l2e_mag (Datatypes.S (2 * j + 1)))).
+      { unfold l2e_term, l2e_mag, Qdiv.
+        rewrite (q_pow_succ (-1) (2 * j + 1)).
+        rewrite (atan_sign_odd j).
+        ring. }
+      apply (Qeq_trans _ (- (l2e_term (2 * j + 1) + l2e_term (Datatypes.S (2 * j + 1)))) _).
+      - rewrite <- (l2e_gap2 (2 * j + 1)). ring.
+      - rewrite Hpf. ring. }
+    rewrite Hg.
+    apply (l2e_mag_decr_pos_step (2 * j + 1)). }
+  apply (proj2 (Qle_minus_iff (l2e_alt_partial (Datatypes.S (Datatypes.S (2 * j + 1))))
+                              (l2e_alt_partial (2 * j + 1)))).
+  exact Hpos.
+Qed.
+
+(* ---- 偶列单调（沿 d 不减） ---- *)
+Lemma l2e_even_mono : forall d j : nat,
+  Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * (j + d))).
+Proof.
+  intros d j. induction d as [| d IH].
+  - replace (2 * (j + 0))%nat with (2 * j)%nat by ring. apply Qle_refl.
+  - replace (2 * (j + Datatypes.S d))%nat with (2 * (j + d) + 2)%nat by (rewrite (Nat.add_succ_r j d); symmetry; apply Nat.mul_succ_r).
+    apply (Qle_trans _ (l2e_alt_partial (2 * (j + d))) _).
+    + exact IH.
+    + exact (l2e_even_step (j + d)).
+Qed.
+
+(* ---- 奇列单调（沿 d 不增） ---- *)
+Lemma l2e_odd_mono : forall d k : nat,
+  Qle (l2e_alt_partial (2 * (k + d) + 1)) (l2e_alt_partial (2 * k + 1)).
+Proof.
+  intros d k. induction d as [| d IH].
+  - replace (2 * (k + 0) + 1)%nat with (2 * k + 1)%nat by ring. apply Qle_refl.
+  - replace (2 * (k + Datatypes.S d) + 1)%nat with (2 * (k + d) + 3)%nat by lia.
+    apply (Qle_trans _ (l2e_alt_partial (2 * (k + d) + 1)) _).
+    + exact (l2e_odd_step (k + d)).
+    + exact IH.
+Qed.
+
+(* ---- 夹逼核心：任一偶部分和 ≤ 任一奇部分和 ---- *)
+Lemma l2e_even_le_odd : forall j k : nat,
+  Qle (l2e_alt_partial (2 * j)) (l2e_alt_partial (2 * k + 1)).
+Proof.
+  intros j k.
+  destruct (le_lt_dec j k) as [Hjk | Hkj].
+  - (* j ≤ k：S_{2j} ≤_{偶列} S_{2k} ≤_{界步} S_{2k+1} *)
+    replace (2 * k + 1)%nat with (2 * (j + (k - j)) + 1)%nat by lia.
+    apply (Qle_trans _ (l2e_alt_partial (2 * (j + (k - j)))) _).
+    + exact (l2e_even_mono (k - j) j).
+    + exact (l2e_boundary (j + (k - j))).
+  - (* k < j：S_{2j} ≤_{反向界步} S_{2j−1} ≤_{奇列} S_{2k+1} *)
+    apply (Qle_trans _ (l2e_alt_partial (2 * j - 1)) _).
+    + exact (l2e_boundary_rev j).
+    + replace (2 * j - 1)%nat with (2 * (k + (j - k - 1)) + 1)%nat by lia.
+      exact (l2e_odd_mono (j - k - 1) k).
+Qed.
+
+(* ---- 隙宽显式：S_{2m+1} − S_{2m} == 1/(2m+1) ---- *)
+Lemma l2e_parity_gap : forall m : nat,
+  l2e_alt_partial (2 * m + 1) - l2e_alt_partial (2 * m) == l2e_mag (2 * m).
+Proof.
+  intro m.
+  assert (H1 : (2 * m + 1)%nat = Datatypes.S (2 * m)) by (exact (Nat.add_1_r (2 * m))).
+  rewrite H1.
+  rewrite (l2e_gap1 (2 * m)).
+  unfold l2e_term.
+  rewrite (atan_sign_even m).
+  unfold l2e_mag, Qdiv.
+  ring.
+Qed.
+
+(* ============================================================ *)
+(* §5 尾界（四段式之四：Leibniz 余项；对照 atan_tail_bound）       *)
+(*   m ≤ n ⟹ |S_n − S_m| ≤ m_m == 1/(m+1)（显式公式）            *)
+(* ============================================================ *)
+
+Lemma l2e_tail_bound : forall m n : nat, (m <= n)%nat ->
+  Qle (Qabs (l2e_alt_partial n - l2e_alt_partial m)) (l2e_mag m).
+Proof.
+  assert (Hgen : forall (d m n : nat), (m <= n)%nat -> (n - m)%nat = d ->
+    Qle (Qabs (l2e_alt_partial n - l2e_alt_partial m)) (l2e_mag m)).
+  { induction d as [d IH] using lt_wf_ind.
+    intros m n Hmn Hd.
+    destruct (Nat.leb (Datatypes.S (Datatypes.S m)) n) eqn:E2.
+    - (* m + 2 ≤ n：三角拆分 + 成对项 + 归纳（下界 m+2） *)
+      apply Nat.leb_le in E2.
+      apply (Qle_trans _ (Qabs ((l2e_alt_partial n - l2e_alt_partial (Datatypes.S (Datatypes.S m))) +
+                                (l2e_alt_partial (Datatypes.S (Datatypes.S m)) - l2e_alt_partial m))) _).
+      + apply qeq_le.
+        apply (Qabs_wd (l2e_alt_partial n - l2e_alt_partial m)
+                       ((l2e_alt_partial n - l2e_alt_partial (Datatypes.S (Datatypes.S m))) +
+                        (l2e_alt_partial (Datatypes.S (Datatypes.S m)) - l2e_alt_partial m))).
+        ring.
+      + apply (Qle_trans _ (Qabs (l2e_alt_partial n - l2e_alt_partial (Datatypes.S (Datatypes.S m))) +
+                            Qabs (l2e_alt_partial (Datatypes.S (Datatypes.S m)) - l2e_alt_partial m)) _).
+        * apply Qabs_triangle.
+        * apply (Qle_trans _ (l2e_mag (Datatypes.S (Datatypes.S m)) +
+                              (l2e_mag m - l2e_mag (Datatypes.S m))) _).
+          -- apply Qplus_le_compat.
+             ++ (* |S_n − S_{m+2}| ≤ m_{m+2}（IH，下界 m+2） *)
+                apply (IH (n - Datatypes.S (Datatypes.S m))%nat).
+                ** lia.
+                ** lia.
+                ** reflexivity.
+             ++ (* |S_{m+2} − S_m| == |t_m + t_{m+1}| == m_m − m_{m+1} *)
+                apply qeq_le.
+                apply (Qeq_trans _ (Qabs (l2e_term m + l2e_term (Datatypes.S m))) _).
+                ** apply (Qabs_wd (l2e_alt_partial (Datatypes.S (Datatypes.S m)) -
+                                   l2e_alt_partial m)
+                                  (l2e_term m + l2e_term (Datatypes.S m))).
+                   exact (l2e_gap2 m).
+                ** apply l2e_pair_abs.
+          -- (* m_{m+2} ≤ m_{m+1} ⟹ 和 ≤ m_{m+1} + (m_m − m_{m+1}) == m_m *)
+             apply (Qle_trans _ (l2e_mag (Datatypes.S m) +
+                                 (l2e_mag m - l2e_mag (Datatypes.S m))) _).
+             ++ apply Qplus_le_compat.
+                ** apply l2e_mag_decr.
+                ** apply Qle_refl.
+             ++ apply qeq_le. ring.
+    - (* n ≤ S m：n = m 或 n = S m *)
+      apply Nat.leb_gt in E2.
+      destruct (Nat.eq_dec m n) as [Heq | Hne].
+      + (* n = m：差 0 ≤ m_m *)
+        subst n.
+        apply (Qle_trans _ 0 _).
+        * apply qeq_le.
+          apply (Qabs_wd (l2e_alt_partial m - l2e_alt_partial m) 0).
+          ring.
+        * apply l2e_mag_nonneg.
+      + (* n = S m：差 == |t_m| == m_m *)
+        assert (Hn : n = Datatypes.S m) by lia.
+        subst n.
+        apply qeq_le.
+        apply (Qeq_trans _ (Qabs (l2e_term m)) _).
+        * apply (Qabs_wd (l2e_alt_partial (Datatypes.S m) - l2e_alt_partial m) (l2e_term m)).
+          exact (l2e_gap1 m).
+        * apply l2e_term_abs.
+  }
+  intros m n Hmn.
+  apply (Hgen (n - m)%nat m n Hmn). reflexivity.
+Qed.
+
+(* ============================================================ *)
+(* §6 出口二（QleT' 化）：l2e_alt_two_sided                       *)
+(* ============================================================ *)
+
+Theorem l2e_alt_two_sided : forall m n : nat, (m <= n)%nat ->
+  QleT' (Qabs (l2e_alt_partial n - l2e_alt_partial m)) (1 / ((Z.of_nat m + 1) # 1)).
+Proof.
+  intros m n Hmn.
+  apply (qleT'_weaken _ (l2e_mag m) _).
+  - apply l2e_tail_bound. exact Hmn.
+  - assert (Hb : (Z.of_nat m + 1)%Z = Z.of_nat (Datatypes.S m)) by (exact (eq_trans (Z.add_1_r (Z.of_nat m)) (eq_sym (Znat.Nat2Z.inj_succ m)))).
+    unfold l2e_mag. rewrite Hb. reflexivity.
+Qed.
+
+(* ============================================================ *)
+(* §7 出口三：显式模量 N := S(ceil(1/eps))（Qceiling）+ sigT 柯西件 *)
+(*   （对照 arctan_partial_cauchy；见证 N 由 Qround 的            *)
+(*   Qceiling 显式给出，可抽取）                                  *)
+(* ============================================================ *)
+
+Definition l2e_modulus (eps : Q) : nat :=
+  Datatypes.S (Z.to_nat (Qceiling (Qinv eps))).
+
+Lemma l2e_modulus_bound : forall eps : Q, Qlt 0 eps ->
+  Qlt (l2e_mag (l2e_modulus eps)) eps.
+Proof.
+  intros eps Heps.
+  assert (Hx0 : Qlt 0 (Qinv eps)) by (apply Qinv_lt_0_compat; exact Heps).
+  assert (Hcq : Qle 0 (Qceiling (Qinv eps) # 1)).
+  { apply (Qle_trans 0 (Qinv eps) (Qceiling (Qinv eps) # 1)).
+    - apply (Qlt_le_weak 0 (Qinv eps)). exact Hx0.
+    - apply Qle_ceiling. }
+  assert (Hcpos : (0 <= Qceiling (Qinv eps))%Z).
+  { unfold Qle in Hcq. cbn [Qnum Qden] in Hcq.
+    rewrite Z.mul_0_l, Z.mul_1_r in Hcq. exact Hcq. }
+  assert (Hstep : Qlt (Qinv eps) ((Z.succ (Qceiling (Qinv eps))) # 1)).
+  { apply (Qle_lt_trans (Qinv eps) (Qceiling (Qinv eps) # 1)
+                        ((Z.succ (Qceiling (Qinv eps))) # 1)).
+    - apply Qle_ceiling.
+    - unfold Qlt, Qle. cbn [Qnum Qden]. rewrite !Z.mul_1_r.
+      exact (Z.lt_succ_diag_r (Qceiling (Qinv eps))). }
+  assert (Hz : (Z.succ (Qceiling (Qinv eps)) = Z.of_nat (l2e_modulus eps))%Z)
+    by (unfold l2e_modulus; lia).
+  assert (Hmul : Qlt (Qinv eps * eps) ((Z.of_nat (l2e_modulus eps) # 1) * eps)).
+  { apply (Qmult_lt_compat_r (Qinv eps) (Z.of_nat (l2e_modulus eps) # 1) eps Heps).
+    rewrite <- Hz. exact Hstep. }
+  setoid_replace (Qinv eps * eps) with 1%Q in Hmul.
+  2: { field. intro Hzz. apply (Qlt_not_eq 0 eps Heps). exact (Qeq_sym _ _ Hzz). }
+  setoid_replace ((Z.of_nat (l2e_modulus eps) # 1) * eps)
+    with (eps * (Z.of_nat (l2e_modulus eps) # 1)) in Hmul by ring.
+  assert (Hd1 : Qlt 0 (Z.of_nat (l2e_modulus eps) # 1)).
+  { unfold Qlt. cbn [Qnum Qden]. rewrite Z.mul_0_l, Z.mul_1_r.
+    assert (Hge : (1 <= Z.of_nat (l2e_modulus eps))%Z).
+    { (* 模量=S(Z.to_nat _)：非负性（Nat2Z.is_nonneg）经后继单调前向给出 1<=_ *)
+      unfold l2e_modulus. rewrite Znat.Nat2Z.inj_succ.
+      exact (proj1 (Z.succ_le_mono 0 (Z.of_nat (Z.to_nat (Qceiling (Qinv eps)))))
+                   (Znat.Nat2Z.is_nonneg (Z.to_nat (Qceiling (Qinv eps))))). }
+    apply (Z.lt_le_trans 0 1 (Z.of_nat (l2e_modulus eps)) (Pos2Z.pos_is_pos 1) Hge). }
+  assert (Hd2 : Qlt 0 (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
+    by (apply (l2e_den_pos (l2e_modulus eps))).
+  assert (Hlt2 : Qlt (Z.of_nat (l2e_modulus eps) # 1)
+                     (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
+    by (unfold Qlt; cbn [Qnum Qden];
+        rewrite Znat.Nat2Z.inj_succ, !Z.mul_1_r;
+        exact (Z.lt_succ_diag_r (Z.of_nat (l2e_modulus eps)))).
+  setoid_replace (l2e_mag (l2e_modulus eps))
+    with (/ (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1))
+    by (apply (l2e_mag_inv (l2e_modulus eps))).
+  apply (Qle_lt_trans _ (/ (Z.of_nat (l2e_modulus eps) # 1)) _).
+  - apply Qlt_le_weak.
+    apply (proj1 (Qinv_lt_contravar (Z.of_nat (l2e_modulus eps) # 1)
+                                    (Z.of_nat (Datatypes.S (l2e_modulus eps)) # 1)
+                                    Hd1 Hd2)).
+    exact Hlt2.
+  - apply Qlt_shift_inv_r.
+    + exact Hd1.
+    + exact Hmul.
+Qed.
+
+(* ---- 出口三：sigT 柯西模量（N 显式：ceil(1/eps)+1，可抽取） ---- *)
+Theorem l2e_cauchy_modulus : forall eps : Q, QltT' 0 eps ->
+  sigT (fun N : nat => forall m n : nat, NatLe N m -> NatLe N n ->
+    QltT' (Qabs (l2e_alt_partial n - l2e_alt_partial m)) eps).
+Proof.
+  intros eps Heps.
+  assert (Hlt : Qlt 0 eps) by (apply (QltT'_to_Qlt 0 eps Heps)).
+  exists (l2e_modulus eps).
+  intros m n HNm HNn.
+  apply Qlt_to_QltT'.
+  destruct (Nat.leb m n) eqn:E.
+  - (* m ≤ n：|S_n − S_m| ≤ m_m ≤ m_N < eps *)
+    apply Nat.leb_le in E.
+    apply (Qle_lt_trans _ (l2e_mag (l2e_modulus eps)) _).
+    + apply (Qle_trans _ (l2e_mag m) _).
+      * apply l2e_tail_bound. exact E.
+      * apply l2e_mag_antitone.
+        apply NatLe_drop in HNm. exact HNm.
+    + exact (l2e_modulus_bound eps Hlt).
+  - (* n < m：Qabs_Qminus 对折后同链（用 n） *)
+    apply Nat.leb_gt in E.
+    apply (Qle_lt_trans _ (l2e_mag (l2e_modulus eps)) _).
+    + apply (Qle_trans _ (l2e_mag n) _).
+      * rewrite Qabs_Qminus. apply (l2e_tail_bound n m). lia.
+      * apply l2e_mag_antitone.
+        apply NatLe_drop in HNn. lia.
+    + exact (l2e_modulus_bound eps Hlt).
+Qed.
+
+(* ============================================================ *)
+(* §8 审计注记（文末 Print Assumptions 追印）                     *)
+(* ============================================================ *)
+
+Print Assumptions l2e_alt_two_sided.
+Print Assumptions l2e_cauchy_modulus.
+Print Assumptions l2e_parity_gap.
+Print Assumptions l2e_even_le_odd.
+
+(* ============================ §3 C1 LogZWall 第四面墙定理化 ============================ *)
+From Stdlib Require Import QArith.QArith QArith.Qabs.
+From Stdlib Require Import Lia.
+From Stdlib Require Import Lqa.
+From Stdlib Require Import List.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpRealLeB.
+Require Import UpReqGeomD.
+Require Import UpReqLpoEquiv.
+
+Local Open Scope Q_scope.
+
+(* ============================================================ *)
+(* Part 1：Q 层小桥（Qlt_alt 破形 + 位移 helper + Qabs 界）          *)
+(* ============================================================ *)
+
+Lemma lgz_q_pos_half : Qlt 0 (1#2).
+Proof.
+  apply (proj2 (Qlt_alt 0 (1#2))).
+  exact (@eq_refl comparison Lt).
+Qed.
+
+Lemma lgz_q_pos_quarter : Qlt 0 (1#4).
+Proof.
+  apply (proj2 (Qlt_alt 0 (1#4))).
+  exact (@eq_refl comparison Lt).
+Qed.
+
+Lemma lgz_q_pos_quarterT : QltT 0 (1#4).
+Proof.
+  exact (Qlt_to_QltT 0 (1#4) lgz_q_pos_quarter).
+Qed.
+
+
+(* 位移三件与 Qabs 界拆分（lra 闭合；非线性单项式按原子抽象） *)
+Lemma lgz_q_lt_add_l : forall a b c : Q, a + b < c -> a < c - b.
+Proof.
+  intros a b c H.
+  lra.
+Qed.
+
+Lemma lgz_q_lt_add_r : forall a b c : Q, a + b < c -> b < c - a.
+Proof.
+  intros a b c H.
+  lra.
+Qed.
+
+Lemma lgz_q_plus_lt_r : forall u v w : Q, u < v -> u + w < v + w.
+Proof.
+  intros u v w H.
+  lra.
+Qed.
+
+Lemma lgz_q_plus_lt_l : forall u v w : Q, u < v -> w + u < w + v.
+Proof.
+  intros u v w H.
+  lra.
+Qed.
+
+(* Qabs 界拆分：0 < b ∧ |a| < b ⟹ a < b（上界）/ −b < a（下界） *)
+Lemma lgz_q_abs_lt_bounds_ub : forall a b : Q,
+  0 < b -> Qabs a < b -> a < b.
+Proof.
+  intros a b Hb0 H.
+  destruct (Qlt_le_dec 0 a) as [Hpos | Hneg].
+  - rewrite (Qabs_pos a (Qlt_le_weak _ _ Hpos)) in H.
+    exact H.
+  - rewrite (Qabs_neg a Hneg) in H.
+    lra.
+Qed.
+
+Lemma lgz_q_abs_lt_bounds_lb : forall a b : Q,
+  0 < b -> Qabs a < b -> - b < a.
+Proof.
+  intros a b Hb0 H.
+  destruct (Qlt_le_dec 0 a) as [Hpos | Hneg].
+  - rewrite (Qabs_pos a (Qlt_le_weak _ _ Hpos)) in H.
+    lra.
+  - rewrite (Qabs_neg a Hneg) in H.
+    lra.
+Qed.
+
+(* Qeq 位移四件：Qlt/Qabs 位换形（q_eq_le/q_abs_congr 桥）——
+   Qeq 集合重写只在 Qeq-目标内可用（AA22 先例），Qlt/Id 位经此四件迁移 *)
+Lemma lgz_qlt_shift : forall u u' w : Q, u == u' -> Qlt u w -> Qlt u' w.
+Proof.
+  intros u u' w Huu H.
+  apply (Qle_lt_trans u' u w).
+  - apply q_eq_le.
+    apply Qeq_sym.
+    exact Huu.
+  - exact H.
+Qed.
+
+Lemma lgz_qlt_shift2_r : forall w u u' : Q, u == u' -> Qlt w u -> Qlt w u'.
+Proof.
+  intros w u u' Huu H.
+  apply (Qlt_le_trans w u u').
+  - exact H.
+  - apply q_eq_le.
+    exact Huu.
+Qed.
+
+Lemma lgz_qlt_abs_shift : forall a a' w : Q,
+  a == a' -> Qlt (Qabs a) w -> Qlt (Qabs a') w.
+Proof.
+  intros a a' w Haa H.
+  apply (Qle_lt_trans (Qabs a') (Qabs a) w).
+  - apply q_eq_le.
+    apply q_abs_congr.
+    apply Qeq_sym.
+    exact Haa.
+  - exact H.
+Qed.
+
+Lemma lgz_qlt_shift_r : forall w u u' : Q,
+  u == u' -> Qlt w (Qabs u) -> Qlt w (Qabs u').
+Proof.
+  intros w u u' Huu H.
+  apply (Qlt_le_trans w (Qabs u) (Qabs u')).
+  - exact H.
+  - apply q_eq_le.
+    apply q_abs_congr.
+    exact Huu.
+Qed.
+
+(* 解码闭合（lt 支）：ε>0 ∧ ε < 1−a ∧ |a−(1−b)| < ε/2 ⟹ ε/2 < b *)
+Lemma lgz_q_decode_lt : forall eps a b : Q,
+  0 < eps -> Qlt eps (1 - a) ->
+  Qlt (Qabs (a - (1 - b))) (eps * (1#2)) ->
+  Qlt (eps * (1#2)) b.
+Proof.
+  intros eps a b Heps H1 H2.
+  destruct (Qlt_le_dec 0 (a - (1 - b))) as [Hp | Hn].
+  - rewrite (Qabs_pos _ (Qlt_le_weak _ _ Hp)) in H2.
+    lra.
+  - rewrite (Qabs_neg _ Hn) in H2.
+    lra.
+Qed.
+
+(* 解码闭合（eq 支）：|a−(1−b)| < δ/2 ∧ |a−1| < δ/2 ⟹ |0−b| < δ *)
+Lemma lgz_q_decode_eq : forall del a b : Q,
+  Qlt (Qabs (a - (1 - b))) (del * (1#2)) ->
+  Qlt (Qabs (a - 1)) (del * (1#2)) ->
+  Qlt (Qabs (0 - b)) del.
+Proof.
+  intros del a b H1 H2.
+  apply (lgz_qlt_abs_shift (((1 - b) + (- a)) + (a - 1)) (0 - b) del).
+  - ring.
+  - apply (Qle_lt_trans (Qabs (((1 - b) + (- a)) + (a - 1)))
+             (Qabs ((1 - b) + (- a)) + Qabs (a - 1)) del).
+    + apply Qabs_triangle.
+    + assert (H1' : Qlt (Qabs ((1 - b) + (- a))) (del * (1#2))).
+      { apply (Qle_lt_trans (Qabs ((1 - b) + (- a)))
+                 (Qabs (a - (1 - b))) (del * (1#2))).
+        - apply q_eq_le.
+          rewrite <- (Qabs_opp (a - (1 - b))).
+          apply q_abs_congr.
+          ring.
+        - exact H1. }
+      lra.
+Qed.
+
+(* ============================================================ *)
+(* Part 2：Real 层小桥 + 半量机 lgz_half                             *)
+(* ============================================================ *)
+
+(* le + lt 拼接（geod_b_le_lt_trans 同体） *)
+Lemma lgz_le_lt_trans : forall x y z : Real,
+  real_le x y -> real_lt y z -> real_lt x z.
+Proof.
+  intros x y z Hle Hlt.
+  destruct Hle as [Hlt' | Heq].
+  - exact (real_lt_trans x y z Hlt' Hlt).
+  - exact (real_eq_lt_lt x y z Heq Hlt).
+Qed.
+
+(* 半量：inv2 := 1/(1+1)（正性证书内嵌） *)
+Definition lgz_half : Real :=
+  real_inv_pos (real_plus real_one real_one)
+    (real_plus_positive real_one real_one real_lt_zero_one real_lt_zero_one).
+
+Lemma lgz_half_eq :
+  real_eq (real_mult (real_plus real_one real_one) lgz_half) real_one.
+Proof.
+  exact (real_inv_pos_correct (real_plus real_one real_one)           (real_plus_positive real_one real_one real_lt_zero_one real_lt_zero_one)).
+Qed.
+
+(* half < 1：隙 3/8 *)
+Lemma lgz_half_lt_one : real_lt lgz_half real_one.
+Proof.
+  exists (3#8). split.
+  - apply Qlt_to_QltT.
+    apply (proj2 (Qlt_alt 0 (3#8))).
+    reflexivity.
+  - destruct (lgz_half_eq (1#4) lgz_q_pos_quarterT) as [N HN].
+    exists N. intros m Hm.
+    pose proof (HN m Hm) as HNb.
+    apply QltT_to_Qlt in HNb.
+    assert (Hpj : projT1 (real_mult (real_plus real_one real_one) lgz_half) m
+                  == (1 + 1) * projT1 lgz_half m).
+    { rewrite (real_mult_proj (real_plus real_one real_one) lgz_half m).
+      reflexivity. }
+    rewrite Hpj in HNb.
+    assert (Hone : projT1 real_one m == 1) by reflexivity.
+    rewrite Hone in HNb.
+    pose proof (lgz_q_abs_lt_bounds_ub ((1 + 1) * projT1 lgz_half m - 1)
+                  (1#4) lgz_q_pos_quarter HNb) as Hub.
+    assert (Hb2 : (1 + 1) * projT1 lgz_half m < (5#4)) by lra.
+    assert (Hb3 : projT1 lgz_half m < (5#8)).
+    { assert (Hm1 : ((1 + 1) * projT1 lgz_half m) * (1#2) < (5#4) * (1#2))
+        by (apply (Qmult_lt_compat_r _ _ (1#2));
+            [apply (proj2 (Qlt_alt 0 (1#2))); reflexivity | exact Hb2]).
+      assert (Hm2 : ((1 + 1) * projT1 lgz_half m) * (1#2)
+                    == projT1 lgz_half m) by ring.
+      rewrite Hm2 in Hm1.
+      assert (Hm3 : (5#4) * (1#2) == (5#8)) by ring.
+      rewrite Hm3 in Hm1.
+      exact Hm1. }
+    apply Qlt_to_QltT.
+    apply (lgz_qlt_shift2_r (3#8) (1 - projT1 lgz_half m)
+             (projT1 real_one m - projT1 lgz_half m)).
+    + rewrite Hone.
+      ring.
+    + apply (lgz_q_lt_add_l (3#8) (projT1 lgz_half m) 1).
+      assert (Hg : (3#8) + projT1 lgz_half m < (3#8) + (5#8))
+        by (apply (lgz_q_plus_lt_l _ _ (3#8)); exact Hb3).
+      assert (Hg2 : (3#8) + (5#8) == 1) by ring.
+      rewrite Hg2 in Hg.
+      exact Hg.
+Qed.
+
+(* half 投影的一致 5/8 上界（事件形，供反向解码） *)
+Lemma lgz_half_eventual_ub :
+  sigT (fun N : nat => forall m : nat, NatLe N m ->
+    Qlt (projT1 lgz_half m) (5#8)).
+Proof.
+  destruct (lgz_half_eq (1#4) lgz_q_pos_quarterT) as [Nv HNv].
+  exists Nv. intros m Hm.
+  pose proof (HNv m Hm) as Hb.
+  apply QltT_to_Qlt in Hb.
+  assert (Hpj : projT1 (real_mult (real_plus real_one real_one) lgz_half) m
+                == (1 + 1) * projT1 lgz_half m).
+  { rewrite (real_mult_proj (real_plus real_one real_one) lgz_half m).
+    reflexivity. }
+  rewrite Hpj in Hb.
+  assert (Hone : projT1 real_one m == 1) by reflexivity.
+  rewrite Hone in Hb.
+  pose proof (lgz_q_abs_lt_bounds_ub ((1 + 1) * projT1 lgz_half m - 1)
+                (1#4) lgz_q_pos_quarter Hb) as Hub.
+  assert (H1 : (1 + 1) * projT1 lgz_half m < (5#4)) by lra.
+  assert (H1b : ((1 + 1) * projT1 lgz_half m) * (1#2) < (5#4) * (1#2)).
+  { apply (Qmult_lt_compat_r ((1 + 1) * projT1 lgz_half m) (5#4) (1#2)).
+    - apply (proj2 (Qlt_alt 0 (1#2))).
+      reflexivity.
+    - exact H1. }
+  assert (H2 : ((1 + 1) * projT1 lgz_half m) * (1#2)
+               == projT1 lgz_half m) by ring.
+  rewrite H2 in H1b.
+  assert (H3 : (5#4) * (1#2) == (5#8)) by ring.
+  rewrite H3 in H1b.
+  exact H1b.
+Qed.
+
+(* ε/2 < ε（严格，ε>0） *)
+Lemma lgz_half_lt_eps : forall eps : Real,
+  real_lt real_zero eps -> real_lt (real_mult eps lgz_half) eps.
+Proof.
+  intros eps Heps.
+  apply (real_lt_eq_lt (real_mult eps lgz_half) (real_mult eps real_one) eps).
+  - exact (real_mult_lt_compat_l lgz_half real_one eps lgz_half_lt_one Heps).
+  - exact (real_mult_one eps).
+Qed.
+
+(* (1 + ε/2) < (1 + ε) *)
+Lemma lgz_one_half_lt_one : forall eps : Real,
+  real_lt real_zero eps ->
+  real_lt (real_plus real_one (real_mult eps lgz_half)) (real_plus real_one eps).
+Proof.
+  intros eps Heps.
+  apply (real_eq_lt_lt _ (real_plus (real_mult eps lgz_half) real_one)
+           (real_plus real_one eps)).
+  - exact (real_eq_sym _ _ (real_plus_comm (real_mult eps lgz_half) real_one)).
+  - apply (real_lt_eq_lt _ (real_plus eps real_one) _).
+    + exact (real_lt_plus_compat_lt_le (real_mult eps lgz_half) eps real_one
+               real_one (lgz_half_lt_eps eps Heps) (real_le_refl real_one)).
+    + exact (real_plus_comm eps real_one).
+Qed.
+
+(* ============================================================ *)
+(* Part 3：具体墙语句面（Z ≤ 1 精确判定形）                          *)
+(* ============================================================ *)
+
+Definition lgz_LogZWall : Set :=
+  forall (n : nat) (p r : nat -> Real) (eta : Real)
+    (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hr : forall i : nat, real_lt real_zero (r i))
+    (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one)
+    (Hnr : real_eq (real_list_sum nat r (List.seq 0 n)) real_one)
+    (Heta : real_lt real_zero eta) (Hetale : real_le eta real_one),
+  real_le (real_interp_Z n p r eta Hp Hr) real_one.
+
+(* ============================================================ *)
+(* Part 4：泛型槽段（AA22 GibbMechanism 范式）——主件                 *)
+(* ============================================================ *)
+
+Section LogZMechanism.
+
+Variable ZWf : Real -> Real.
+
+(* 槽：载体编码——任意 x 的 1−x² 形可编码进 ZWf 值域。
+   注：族内逐点正（配分语义位）在 Z-形正向中不被使用（log 形接口才需要），
+   故不入段（段封闭会丢弃未使用槽），如实移除。 *)
+Hypothesis lgmech_carr : forall x : Real,
+  sigT (fun xi : Real =>
+    real_eq (ZWf xi) (real_plus real_one (real_opp (real_mult x x)))).
+
+(* 泛型墙 plain-le 形 ⟹ SqWall（解码双侧透明） *)
+Theorem lgmech_wall_zle :
+  (forall x : Real, real_le (ZWf x) real_one) -> SqWall.
+Proof.
+  intros Hwall x.
+  destruct (lgmech_carr x) as [xi Heq].
+  destruct (Hwall xi) as [Hlt | Heq1].
+  - (* 左支：ZWf ξ < 1 带隙 ε ⟹ x·x 有隙（δ := ε/2） *)
+    apply inl.
+    destruct Hlt as [eps [Heps [N HN]]].
+    assert (Hq2 : QltT 0 (eps * (1#2))).
+    { apply Qlt_to_QltT.
+      assert (H0 : 0 * (1#2) < eps * (1#2))
+        by (apply Qmult_lt_compat_r;
+            [exact lgz_q_pos_half | apply QltT_to_Qlt; exact Heps]).
+      rewrite Qmult_0_l in H0.
+      exact H0. }
+    destruct (Heq (eps * (1#2)) Hq2) as [N2 HN2].
+    exists (eps * (1#2)). split.
+    + exact Hq2.
+    + exists (Nat.max N N2). intros n Hn.
+      assert (Hmn : NatLe N n).
+      { apply NatLe_lift.
+        pose proof (NatLe_drop _ _ Hn) as Hdn.
+        lia. }
+      assert (Hmn2 : NatLe N2 n).
+      { apply NatLe_lift.
+        pose proof (NatLe_drop _ _ Hn) as Hdn.
+        lia. }
+      assert (Hone : projT1 real_one n == 1) by reflexivity.
+      (* H1 换形：eps < 1 − a（Qeq 位移桥） *)
+      assert (H1 : Qlt eps (1 - projT1 (ZWf xi) n)).
+      { pose proof (HN n Hmn) as HNn.
+        pose proof (QltT_to_Qlt eps
+                      (projT1 real_one n - projT1 (ZWf xi) n) HNn) as HNn'.
+        apply (lgz_qlt_shift2_r eps (projT1 real_one n - projT1 (ZWf xi) n)
+                 (1 - projT1 (ZWf xi) n)).
+        - rewrite Hone.
+          ring.
+        - exact HNn'. }
+      (* H2 换形：|a − (1−b)| < ε/2（Qeq 位移桥） *)
+      assert (H2 : Qlt (Qabs (projT1 (ZWf xi) n
+                                - (1 - projT1 x n * projT1 x n)))
+                       (eps * (1#2))).
+      { pose proof (HN2 n Hmn2) as HN2n.
+        pose proof (QltT_to_Qlt
+                      (Qabs
+                         (projT1 (ZWf xi) n
+                            - (projT1 (real_plus real_one
+                                         (real_opp (real_mult x x))) n)))
+                      (eps * (1#2)) HN2n) as HN2n'.
+        apply (lgz_qlt_abs_shift
+                 (projT1 (ZWf xi) n
+                    - (projT1 (real_plus real_one
+                                 (real_opp (real_mult x x))) n))
+                 (projT1 (ZWf xi) n
+                    - (1 - projT1 x n * projT1 x n))
+                 (eps * (1#2))).
+        - rewrite (real_plus_proj real_one (real_opp (real_mult x x)) n).
+          rewrite (real_opp_proj (real_mult x x) n).
+          rewrite (real_mult_proj x x n).
+          rewrite Hone.
+          ring.
+        - exact HN2n'. }
+      assert (HepsQ : Qlt 0 eps) by (apply QltT_to_Qlt; exact Heps).
+      assert (Hfin : Qlt (eps * (1#2)) (projT1 x n * projT1 x n))
+        by (apply (lgz_q_decode_lt eps (projT1 (ZWf xi) n)
+                     (projT1 x n * projT1 x n) HepsQ H1 H2)).
+      (* 终局迁移：目标位 projT1 (real_mult x x) n − projT1 real_zero n *)
+      apply Qlt_to_QltT.
+      apply (lgz_qlt_shift2_r (eps * (1#2))
+               (projT1 x n * projT1 x n)
+               (projT1 (real_mult x x) n - projT1 real_zero n)).
+      * rewrite (real_mult_proj x x n).
+        assert (Hz0 : projT1 real_zero n == 0) by reflexivity.
+        rewrite Hz0.
+        ring.
+      * exact Hfin.
+  - (* 右支：ZWf ξ == 1 ⟹ x·x 逐点归零（容差半分 + 三角不等式） *)
+    apply inr.
+    intros del Hdel.
+    assert (Hq2 : QltT 0 (del * (1#2))).
+    { apply Qlt_to_QltT.
+      assert (H0 : 0 * (1#2) < del * (1#2))
+        by (apply Qmult_lt_compat_r;
+            [exact lgz_q_pos_half | apply QltT_to_Qlt; exact Hdel]).
+      rewrite Qmult_0_l in H0.
+      exact H0. }
+    destruct (Heq (del * (1#2)) Hq2) as [N1 HN1].
+    destruct (Heq1 (del * (1#2)) Hq2) as [N2 HN2].
+    exists (Nat.max N1 N2). intros n Hn.
+    assert (Hmn1 : NatLe N1 n).
+    { apply NatLe_lift.
+      pose proof (NatLe_drop _ _ Hn) as Hdn.
+      lia. }
+    assert (Hmn2 : NatLe N2 n).
+    { apply NatLe_lift.
+      pose proof (NatLe_drop _ _ Hn) as Hdn.
+      lia. }
+    assert (Hone : projT1 real_one n == 1) by reflexivity.
+    (* H1r 换形：|a − (1−b)| < δ/2 *)
+    assert (H1r : Qlt (Qabs (projT1 (ZWf xi) n
+                                - (1 - projT1 x n * projT1 x n)))
+                       (del * (1#2))).
+    { pose proof (HN1 n Hmn1) as HN1n.
+      pose proof (QltT_to_Qlt
+                    (Qabs
+                       (projT1 (ZWf xi) n
+                          - (projT1 (real_plus real_one
+                                       (real_opp (real_mult x x))) n)))
+                    (del * (1#2)) HN1n) as HN1n'.
+      apply (lgz_qlt_abs_shift
+               (projT1 (ZWf xi) n
+                  - (projT1 (real_plus real_one
+                               (real_opp (real_mult x x))) n))
+               (projT1 (ZWf xi) n
+                  - (1 - projT1 x n * projT1 x n))
+               (del * (1#2))).
+      - rewrite (real_plus_proj real_one (real_opp (real_mult x x)) n).
+        rewrite (real_opp_proj (real_mult x x) n).
+        rewrite (real_mult_proj x x n).
+        rewrite Hone.
+        ring.
+      - exact HN1n'. }
+    (* H2r 换形：|a − 1| < δ/2 *)
+    assert (H2r : Qlt (Qabs (projT1 (ZWf xi) n - 1)) (del * (1#2))).
+    { pose proof (HN2 n Hmn2) as HN2n.
+      pose proof (QltT_to_Qlt
+                    (Qabs (projT1 (ZWf xi) n - projT1 real_one n))
+                    (del * (1#2)) HN2n) as HN2n'.
+      apply (lgz_qlt_abs_shift
+               (projT1 (ZWf xi) n - projT1 real_one n)
+               (projT1 (ZWf xi) n - 1)
+               (del * (1#2))).
+      - rewrite Hone.
+        ring.
+      - exact HN2n'. }
+    (* 终局迁移 *)
+    apply Qlt_to_QltT.
+    apply (lgz_qlt_abs_shift (0 - projT1 x n * projT1 x n)
+             (projT1 real_zero n - projT1 (real_mult x x) n) del).
+    * rewrite (real_mult_proj x x n).
+      assert (Hz0 : projT1 real_zero n == 0) by reflexivity.
+      rewrite Hz0.
+      ring.
+    * exact (lgz_q_decode_eq del (projT1 (ZWf xi) n)
+               (projT1 x n * projT1 x n) H1r H2r).
+Qed.
+
+(* 主件：泛型墙 plain-le 形 ⟹ 受限 LPO（lpn_forward 升维） *)
+Theorem lgz_log_z_wall_lpo :
+  (forall x : Real, real_le (ZWf x) real_one) -> rLPO.
+Proof.
+  intros Hwall.
+  exact (lpn_forward (lgmech_wall_zle Hwall)).
+Qed.
+
+End LogZMechanism.
+
+(* ============================================================ *)
+(* Part 5：对角双参数位（具体内容位）——r := p ⟹ Z == 1 与左支灭绝         *)
+(* ============================================================ *)
+
+(* 逐点幂拆：p^{1−η}·p^η == p（exp 加法性 + exp-wd + 分布律环链） *)
+Lemma lgz_pow_split : forall (y : Real) (Hy : real_lt real_zero y) (eta : Real),
+  real_eq (real_mult (real_pow_pos y (real_plus real_one (real_opp eta)) Hy)
+                     (real_pow_pos y eta Hy))
+            y.
+Proof.
+  intros y Hy eta.
+  unfold real_pow_pos.
+  apply (real_eq_trans
+           (real_mult (cauchy_real_exp
+                          (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy)))
+                      (cauchy_real_exp (real_mult eta (cw_log y Hy))))
+           (cauchy_real_exp
+              (real_plus
+                 (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy))
+                 (real_mult eta (cw_log y Hy))))
+           y).
+  - apply real_eq_sym.
+    exact (cauchy_real_exp_plus
+             (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy))
+             (real_mult eta (cw_log y Hy))).
+  - apply (real_eq_trans
+             (cauchy_real_exp
+                (real_plus
+                   (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy))
+                   (real_mult eta (cw_log y Hy))))
+             (cauchy_real_exp
+                (real_mult (cw_log y Hy)
+                   (real_plus (real_plus real_one (real_opp eta)) eta)))
+             y).
+    + apply cauchy_real_exp_wd.
+      apply (real_eq_trans
+               (real_plus
+                  (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy))
+                  (real_mult eta (cw_log y Hy)))
+               (real_plus
+                  (real_mult (cw_log y Hy) (real_plus real_one (real_opp eta)))
+                  (real_mult (cw_log y Hy) eta))
+               (real_mult (cw_log y Hy)
+                  (real_plus (real_plus real_one (real_opp eta)) eta))).
+      * apply (RealSetoid.real_eq_plus_compat
+                 (real_mult (real_plus real_one (real_opp eta)) (cw_log y Hy))
+                 (real_mult eta (cw_log y Hy))
+                 (real_mult (cw_log y Hy) (real_plus real_one (real_opp eta)))
+                 (real_mult (cw_log y Hy) eta)).
+        -- exact (real_mult_comm (real_plus real_one (real_opp eta)) (cw_log y Hy)).
+        -- exact (real_mult_comm eta (cw_log y Hy)).
+      * exact (real_eq_sym _ _ (real_distrib (cw_log y Hy)
+                    (real_plus real_one (real_opp eta)) eta)).
++ apply (real_eq_trans
+               (cauchy_real_exp
+                  (real_mult (cw_log y Hy)
+                     (real_plus (real_plus real_one (real_opp eta)) eta)))
+               (cauchy_real_exp (cw_log y Hy))
+               y).
+  * apply cauchy_real_exp_wd.
+    apply (real_eq_trans
+             (real_mult (cw_log y Hy)
+                (real_plus (real_plus real_one (real_opp eta)) eta))
+             (real_mult (cw_log y Hy) real_one)
+             (cw_log y Hy)).
+    -- apply (RealSetoid.real_eq_mult_compat
+               (cw_log y Hy)
+               (real_plus (real_plus real_one (real_opp eta)) eta)
+               (cw_log y Hy) real_one).
+      ++ exact (real_eq_refl (cw_log y Hy)).
+      ++ destruct eta as [e He].
+         apply real_eq_of_zero_diff.
+         intro k.
+         simpl.
+         ring.
+    -- exact (real_mult_one (cw_log y Hy)).
+  * exact (cw_log_exp_right y Hy).
+Qed.
+
+(* 对角单位槽：r := p ⟹ Z == 1（AA22 gwe_diag_zero 的 LogZ 对偶形） *)
+Lemma lgz_diag_one : forall (n : nat) (p : nat -> Real) (eta : Real)
+    (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one),
+  real_eq (real_interp_Z n p p eta Hp Hp) real_one.
+Proof.
+  intros n p eta Hp Hnp.
+  unfold real_interp_Z.
+  apply (real_eq_trans
+           (real_list_sum nat
+              (fun i : nat => real_mult
+                 (real_pow_pos (p i) (real_plus real_one (real_opp eta)) (Hp i))
+                 (real_pow_pos (p i) eta (Hp i)))
+              (List.seq 0 n))
+           (real_list_sum nat p (List.seq 0 n))
+           real_one).
+  - apply real_list_sum_ext.
+    intro i.
+    exact (lgz_pow_split (p i) (Hp i) eta).
+  - exact Hnp.
+Qed.
+
+(* 对角左支灭绝：r := p 时 real_lt Z 1 驳斥（AA22 gwe_diag_no_gap 对偶形） *)
+Lemma lgz_diag_no_gap : forall (n : nat) (p : nat -> Real) (eta : Real)
+    (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one),
+  real_lt (real_interp_Z n p p eta Hp Hp) real_one -> forall A : Set, A.
+Proof.
+  intros n p eta Hp Hnp Hlt A.
+  destruct (real_lt_not_eq (real_interp_Z n p p eta Hp Hp) real_one
+              Hlt (lgz_diag_one n p eta Hp Hnp)).
+Qed.
+
+(* ============================================================ *)
+(* Part 6：弱严格上界 + 具体反向（rLPO ⟹ 墙）                        *)
+(* ============================================================ *)
+
+(* 弱严格上界：∀eps>0, Z < 1+eps（real_interp_Z_le_one_eps 的 Or 两支各通） *)
+Lemma lgz_zle_weak_lt :
+  forall (n : nat) (p r : nat -> Real) (eta : Real)
+    (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hr : forall i : nat, real_lt real_zero (r i))
+    (Hnp : real_eq (real_list_sum nat p (List.seq 0 n)) real_one)
+    (Hnr : real_eq (real_list_sum nat r (List.seq 0 n)) real_one)
+    (Heta : real_lt real_zero eta) (Hetale : real_le eta real_one)
+    (eps : Real), real_lt real_zero eps ->
+  real_lt (real_interp_Z n p r eta Hp Hr) (real_plus real_one eps).
+Proof.
+  intros n p r eta Hp Hr Hnp Hnr Heta Hetale eps Heps.
+  assert (Hstep : real_lt (real_plus real_one (real_mult eps lgz_half))
+                          (real_plus real_one eps))
+    by (apply (lgz_one_half_lt_one eps Heps)).
+  destruct (real_interp_Z_le_one_eps n p r eta Hp Hr Hnp Hnr Heta Hetale
+              (real_mult eps lgz_half)
+              (real_mult_positive eps lgz_half Heps
+                 (real_inv_pos_pos (real_plus real_one real_one)
+                    (real_plus_positive real_one real_one
+                       real_lt_zero_one real_lt_zero_one)))) as [Hlt | Heq].
+  - exact (real_lt_trans (real_interp_Z n p r eta Hp Hr)
+             (real_plus real_one (real_mult eps lgz_half))
+             (real_plus real_one eps) Hlt Hstep).
+  - exact (lgz_le_lt_trans (real_interp_Z n p r eta Hp Hr)
+             (real_plus real_one (real_mult eps lgz_half))
+             (real_plus real_one eps) (RealSetoid.real_eq_le _ _ Heq) Hstep).
+Qed.
+
+(* 具体反向：受限 LPO ⟹ LogZ 墙（Z ≤ 1 精确判定形） *)
+Theorem lgz_lpo_zle : rLPO -> lgz_LogZWall.
+Proof.
+  intros Hdec n p r eta Hp Hr Hnp Hnr Heta Hetale.
+  assert (Hhalfpos : real_lt real_zero lgz_half)
+    by exact (real_inv_pos_pos (real_plus real_one real_one)
+                (real_plus_positive real_one real_one
+                   real_lt_zero_one real_lt_zero_one)).
+  destruct (lgz_half_eventual_ub) as [Nv HNv].
+  destruct (Hdec (real_plus real_one
+                    (real_opp (real_interp_Z n p r eta Hp Hr))))
+    as [[c [Hc [N HN]]] | Hz].
+  - (* |1−Z| ≥ c ⟹ Z < 1（Q 层两分消去 ≥1 支） *)
+    apply inl.
+    assert (Hcpos : Qlt 0 c) by (apply QltT_to_Qlt; exact Hc).
+    assert (Hcp : real_lt real_zero (real_const c)).
+    { unfold real_lt.
+      exists (c * (1#2)). split.
+      - apply Qlt_to_QltT.
+        assert (H0 : 0 * (1#2) < c * (1#2))
+          by (apply (Qmult_lt_compat_r 0 c (1#2));
+              [exact lgz_q_pos_half | exact Hcpos]).
+        rewrite Qmult_0_l in H0.
+        exact H0.
+      - exists O. intros n0 _. apply Qlt_to_QltT.
+        assert (Hcz : projT1 (real_const c) n0 == c) by reflexivity.
+        rewrite Hcz.
+        assert (Hz0 : projT1 real_zero n0 == 0) by reflexivity.
+        rewrite Hz0.
+        lra. }
+    destruct (lgz_zle_weak_lt n p r eta Hp Hr Hnp Hnr Heta Hetale
+                (real_mult (real_const c) lgz_half)
+                (real_mult_positive (real_const c) lgz_half Hcp Hhalfpos))
+      as [eps2 [Heps2 [N2 HN2]]].
+    exists c. split.
+    + exact Hc.
+    + exists (Nat.max N (Nat.max N2 Nv)). intros m Hm.
+      assert (HmN : NatLe N m).
+      { apply NatLe_lift.
+        pose proof (NatLe_drop _ _ Hm) as Hdn.
+        lia. }
+      assert (HmN2 : NatLe N2 m).
+      { apply NatLe_lift.
+        pose proof (NatLe_drop _ _ Hm) as Hdn.
+        lia. }
+      assert (HmNv : NatLe Nv m).
+      { apply NatLe_lift.
+        pose proof (NatLe_drop _ _ Hm) as Hdn.
+        lia. }
+      assert (Hone : projT1 real_one m == 1) by reflexivity.
+      assert (Hcz : projT1 (real_const c) m == c) by reflexivity.
+      set (Zm := projT1 (real_interp_Z n p r eta Hp Hr) m) in *.
+      (* HN 换形：c < |1 − Zm|（Qeq 位移桥） *)
+      assert (Habs1 : Qlt c (Qabs (1 - Zm))).
+      { pose proof (HN m HmN) as HNn.
+        pose proof (QltT_to_Qlt c
+                      (Qabs
+                         (projT1 (real_plus real_one
+                                    (real_opp (real_interp_Z n p r eta Hp Hr))) m)) HNn) as HNn'.
+        apply (lgz_qlt_shift_r c
+                 (projT1 (real_plus real_one
+                            (real_opp (real_interp_Z n p r eta Hp Hr))) m)
+                 (1 - Zm)).
+        - unfold Zm.
+          rewrite (real_plus_proj real_one
+                     (real_opp (real_interp_Z n p r eta Hp Hr)) m).
+          rewrite (real_opp_proj (real_interp_Z n p r eta Hp Hr) m).
+          lra.
+        - exact HNn'. }
+      pose proof (HN2 m HmN2) as H2r.
+      pose proof (HNv m HmNv) as H58.
+      (* H2r 换形：eps2 < 1 + c·half_m − Zm *)
+      assert (H2r' : Qlt eps2 (1 + c * projT1 lgz_half m - Zm)).
+      { pose proof (QltT_to_Qlt eps2
+                      (projT1 (real_plus real_one
+                                 (real_mult (real_const c) lgz_half)) m -
+                       projT1 (real_interp_Z n p r eta Hp Hr) m) H2r) as H2r'.
+        apply (lgz_qlt_shift2_r eps2
+                 (projT1 (real_plus real_one
+                            (real_mult (real_const c) lgz_half)) m -
+                  projT1 (real_interp_Z n p r eta Hp Hr) m)
+                 (1 + c * projT1 lgz_half m - Zm)).
+        - unfold Zm.
+          rewrite (real_plus_proj real_one
+                     (real_mult (real_const c) lgz_half) m).
+          rewrite (real_mult_proj (real_const c) lgz_half m).
+          rewrite Hcz.
+          rewrite Hone.
+          lra.
+        - exact H2r'. }
+      (* 半量桥：c·half_m < c *)
+      assert (Hchc : Qlt (c * projT1 lgz_half m) c).
+      { assert (H1 : Qlt (projT1 lgz_half m * c) ((5#8) * c))
+          by (apply (Qmult_lt_compat_r (projT1 lgz_half m) (5#8) c);
+              [exact Hcpos | exact H58]).
+        assert (H2 : Qlt ((5#8) * c) (1 * c))
+          by (apply (Qmult_lt_compat_r (5#8) 1 c);
+              [exact Hcpos | apply (proj2 (Qlt_alt (5#8) 1)); reflexivity]).
+        assert (H3 : 1 * c == c) by ring.
+        rewrite H3 in H2.
+        assert (Hr4 : projT1 lgz_half m * c == c * projT1 lgz_half m) by ring.
+        apply (lgz_qlt_shift (projT1 lgz_half m * c)
+                 (c * projT1 lgz_half m) c).
+        - exact Hr4.
+        - exact (Qlt_trans _ _ _ H1 H2). }
+      (* Zm < 1 + c·half_m（弱严格上界的直接读出） *)
+      assert (Hs1 : Qlt Zm (1 + c * projT1 lgz_half m)).
+      { assert (Hpos2 : Qlt 0 eps2) by (apply QltT_to_Qlt; exact Heps2).
+        lra. }
+      assert (Hs3 : Qlt Zm (1 + c)).
+      { apply (Qlt_trans Zm (1 + c * projT1 lgz_half m) (1 + c)).
+        - exact Hs1.
+        - apply (lgz_q_plus_lt_l (c * projT1 lgz_half m) c 1).
+          exact Hchc. }
+      destruct (Qlt_le_dec Zm 1) as [Hlt1 | Hge1].
+      { (* Z_m < 1：c < 1 − Z_m 直得 *)
+        apply Qlt_to_QltT.
+        assert (Habsp : Qabs (1 - Zm) == 1 - Zm)
+          by (apply Qabs_pos; lra).
+        apply (lgz_qlt_shift2_r c (1 - Zm) (projT1 real_one m - Zm)).
+        { rewrite Hone.
+          ring. }
+        { exact (lgz_qlt_shift2_r c (Qabs (1 - Zm)) (1 - Zm) Habsp Habs1). } }
+      { (* Z_m ≥ 1：与 HN 矛盾，消去 *)
+        exfalso.
+        assert (Hle : Qle (1 - Zm) 0) by lra.
+        assert (Habsp : Qabs (1 - Zm) == - (1 - Zm))
+          by (apply q_abs_neg_eq; exact Hle).
+        assert (HN2c : Qlt c (- (1 - Zm)))
+          by (apply (lgz_qlt_shift2_r c (Qabs (1 - Zm)) (- (1 - Zm)));
+              [ exact Habsp | exact Habs1 ]).
+        apply (Qlt_irrefl c).
+        apply (Qlt_le_trans c (Zm - 1) c).
+        { apply (lgz_qlt_shift2_r c (- (1 - Zm)) (Zm - 1)).
+          - ring.
+          - exact HN2c. }
+        { lra. } }
+  - (* 1−Z 逐点归零 ⟹ Z == 1（右支） *)
+    apply inr.
+    intros del Hdel.
+    destruct (Hz del Hdel) as [N HN].
+    exists N. intros m Hm.
+    assert (Hone : projT1 real_one m == 1) by reflexivity.
+    apply Qlt_to_QltT.
+    apply (Qle_lt_trans (Qabs (projT1 (real_interp_Z n p r eta Hp Hr) m - projT1 real_one m))
+             (Qabs (projT1 real_one m - projT1 (real_interp_Z n p r eta Hp Hr) m)) del).
+    + apply q_eq_le.
+      rewrite <- (Qabs_opp (projT1 real_one m - projT1 (real_interp_Z n p r eta Hp Hr) m)).
+      apply q_abs_congr.
+      ring.
+    + pose proof (HN m Hm) as HNn.
+      pose proof (QltT_to_Qlt
+                    (Qabs
+                       (projT1 (real_plus real_one
+                                  (real_opp (real_interp_Z n p r eta Hp Hr))) m)) del HNn) as HNn'.
+      apply (lgz_qlt_abs_shift
+               (projT1 (real_plus real_one
+                          (real_opp (real_interp_Z n p r eta Hp Hr))) m)
+               (projT1 real_one m - projT1 (real_interp_Z n p r eta Hp Hr) m) del).
+      { rewrite (real_plus_proj real_one
+                   (real_opp (real_interp_Z n p r eta Hp Hr)) m).
+        rewrite (real_opp_proj (real_interp_Z n p r eta Hp Hr) m).
+        rewrite Hone.
+        ring. }
+      { exact HNn'. }
+Qed.
+
+(* ============================================================ *)
+(* Part 7：判定件——合账（泛型正向 + 具体反向）                        *)
+(* ============================================================ *)
+
+Definition lgz_equivalence :
+  And (forall (ZWf : Real -> Real),
+         (forall x : Real,
+             sigT (fun xi : Real =>
+               real_eq (ZWf xi)
+                 (real_plus real_one (real_opp (real_mult x x))))) ->
+         (forall x : Real, real_le (ZWf x) real_one) -> rLPO)
+      (rLPO -> lgz_LogZWall) :=
+  (lgz_log_z_wall_lpo, lgz_lpo_zle).
+
+(* ============================================================ *)
+(* 判定打印                                                         *)
+(* ============================================================ *)
+
+Print Assumptions lgz_log_z_wall_lpo.
+Print Assumptions lgz_lpo_zle.
+Print Assumptions lgz_equivalence.
+Print Assumptions lgz_diag_one.
+Print Assumptions lgz_diag_no_gap.
+
+(* ============================ §4 件位 CZB12（组 E-STAGING-CZB12） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpRealLeB UpReqEnvelopeDual UpReqConstEnvelope UpReqDyadicLog.
+From Stdlib Require Import QArith.QArith QArith.Qabs Arith.PeanoNat Lia.
+
+(* ============================================================ *)
+(* §1 log 2 载体：−log(1/2) = −(1·(−ln2))，二进制有理点 1/2 轴的取反    *)
+(* ============================================================ *)
+Definition ltb_log_two : Real := real_opp (dyd_axis_neg 0).
+
+(* ============================================================ *)
+(* §2 相容性：与既有 inline 常数面（c3e_ln2_real，交错调和柯西实数）      *)
+(*    逐点同一（real_eq），即 dyd_ln2 的取反翻转让两面相容。              *)
+(* ============================================================ *)
+Theorem ltb_log_two_eq_ln2 : real_eq ltb_log_two dyd_ln2.
+Proof.
+  apply real_eq_of_zero_diff. intro n.
+  unfold ltb_log_two, dyd_axis_neg.
+  repeat rewrite real_opp_proj.
+  repeat rewrite real_mult_proj.
+  repeat rewrite real_const_proj.
+  repeat rewrite real_opp_proj.
+  assert (Hz1 : (Z.of_nat (Nat.succ 0) # 1) == (1#1)%Q) by reflexivity.
+  rewrite Hz1.
+  ring.
+Qed.
+
+(* ============================================================ *)
+(* §3 log 2 闭式双边包络（ln(1/2) 上/下包络取反翻转装载；宽 2·t2 n）      *)
+(* ============================================================ *)
+Theorem ltb_log_two_env : forall n : nat,
+  sigT (fun lo : Q => sigT (fun hi : Q =>
+    And (real_le_b (real_const lo) ltb_log_two)
+        (And (real_le_b ltb_log_two (real_const hi))
+             (QeqT (hi - lo) (2 * t2 n))))).
+Proof.
+  intro n.
+  destruct (dyd_ln_env_neg 0 n) as [lo0 [hi0 [Hlo [Hhi Hw]]]].
+  exists ((- hi0)%Q). exists ((- lo0)%Q).
+  unfold ltb_log_two.
+  split.
+  - (* 下端 −hi0：Hhi 取反翻转 + const 负号归一 *)
+    apply (dyd_le_b_eq_l _ _ _
+             (dyd_le_b_opp_flip _ _ Hhi)
+             (real_eq_sym _ _ (dyd_opp_const_eq hi0))).
+  - split.
+    + (* 上端 −lo0：Hlo 取反翻转 + const 负号归一 *)
+      apply (dyd_le_b_eq_r _ _ _
+               (dyd_le_b_opp_flip _ _ Hlo)
+               (dyd_opp_const_eq lo0)).
+    + (* 宽：(−lo0)−(−hi0) == hi0−lo0 == 2·(1·t2 n) == 2·t2 n *)
+      apply qeq_imp_qeqT. apply qeqT_imp_qeq in Hw.
+      setoid_replace ((- lo0) - (- hi0))%Q with (hi0 - lo0)%Q by ring.
+      rewrite Hw.
+      assert (Hz1 : (Z.of_nat (Nat.succ 0) # 1) == (1#1)%Q) by reflexivity.
+      rewrite Hz1. ring.
+Qed.
+
+(* ============================================================ *)
+(* §4 Q 层速率：包络宽 2·t2 n = 1/(n+1) 构造性收敛（c3e_env_rate_ln2      *)
+(*    逐字实例；t2 为定义性同项）。                                       *)
+(* ============================================================ *)
+Theorem ltb_log_two_rate : forall eps : Q, Qlt 0 eps ->
+  sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
+    Qlt (2 * t2 n) eps).
+Proof. intros eps Heps. exact (c3e_env_rate_ln2 eps Heps). Qed.
+
+(* ============================================================ *)
+(* §5 机面：real_log 2（dyd_const_pos 正性见证位）闭式夹逼 [1/2, 1]。      *)
+(*    下件 = evd_log_ge_inv_one_B（1 − 1/m 形，端点经 real_inv_pos        *)
+(*    常数投影归一）；上件 = real_log_le_linear_B（m − 1 形）。            *)
+(* ============================================================ *)
+Lemma ltb_two_Qpos : Qlt 0 (2#1)%Q.
+Proof. unfold Qlt, Qlt_bool. exact eq_refl. Qed.
+
+Theorem ltb_log_two_machine_bounds :
+  sigT (fun lo : Q => sigT (fun hi : Q =>
+    And (real_le_b (real_const lo)
+                    (real_log (real_const (2#1)%Q)
+                              (dyd_const_pos (2#1)%Q ltb_two_Qpos)))
+        (And (real_le_b (real_log (real_const (2#1)%Q)
+                                   (dyd_const_pos (2#1)%Q ltb_two_Qpos))
+                        (real_const hi))
+             (QeqT (hi - lo) ((1#1)%Q - (1#2)%Q))))).
+Proof.
+  assert (Hnorm_lo :
+    real_eq (real_plus real_one
+               (real_opp (real_inv_pos (real_const (2#1)%Q)
+                          (dyd_const_pos (2#1)%Q ltb_two_Qpos))))
+            (real_const (1#2)%Q)).
+  { apply real_eq_of_zero_diff. intro n.
+    repeat rewrite real_plus_proj.
+    repeat rewrite real_opp_proj.
+    rewrite dyd_one_proj.
+    rewrite (dyd_const_inv_proj (2#1)%Q ltb_two_Qpos n).
+    repeat rewrite real_const_proj.
+    assert (Hhalf : (1 / (2#1)%Q) == (1#2)%Q) by reflexivity.
+    rewrite Hhalf. ring. }
+  assert (Hnorm_hi :
+    real_eq (real_plus (real_const (2#1)%Q) (real_opp real_one))
+            (real_const (1#1)%Q)).
+  { apply real_eq_of_zero_diff. intro n.
+    repeat rewrite real_plus_proj.
+    repeat rewrite real_opp_proj.
+    repeat rewrite real_const_proj.
+    rewrite dyd_one_proj. ring. }
+  exists ((1#2)%Q). exists ((1#1)%Q). split.
+  - (* 下：1 − 1/2 = 1/2 *)
+    apply (dyd_le_b_eq_l _ _ _
+             (evd_log_ge_inv_one_B (real_const (2#1)%Q)
+                (dyd_const_pos (2#1)%Q ltb_two_Qpos))
+             Hnorm_lo).
+  - split.
+    + (* 上：2 − 1 = 1 *)
+      apply (dyd_le_b_eq_r _ _ _
+               (real_log_le_linear_B (real_const (2#1)%Q)
+                  (dyd_const_pos (2#1)%Q ltb_two_Qpos))
+               Hnorm_hi).
+    + (* 宽：1 − 1/2 自证 *)
+      apply qeq_imp_qeqT. apply Qeq_refl.
+Qed.
+
+(* ============================================================ *)
+(* §6 公理面留痕（Print Assumptions 全主件核验 Closed）                    *)
+(* ============================================================ *)
+Print Assumptions ltb_log_two_eq_ln2.
+Print Assumptions ltb_log_two_env.
+Print Assumptions ltb_log_two_rate.
+Print Assumptions ltb_log_two_machine_bounds.
+Print Assumptions ltb_two_Qpos.

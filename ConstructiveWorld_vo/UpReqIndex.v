@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 376 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 374 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -1675,10 +1675,6 @@ Definition ng_UpReqTBNCBridge : NewGreenFace :=
 (* 口径：ng_lines=wc -l 实测；ng_qed=剥块注释 token 级 Qed 实测（头注「全 Qed」伪命中按 剥除）。 *)
 (* 沙箱再验产物判据全过：size>0、md5≠d41d8cd9、magic=436f712100015ff4（90100=9.1.0）。 *)
 
-(* ng_LogTwoEnvelope —— LogTwoEnvelope.v：log2 上界包络（柯西模量 ceil(1/eps)） *)
-Definition ng_LogTwoEnvelope : NewGreenFace :=
-  MkNewGreenFace "LogTwoEnvelope.v" 570 31 20260916 "log2 envelope, cauchy modulus ceil(1/eps) ceiling ladder" "L590:m3b175f".
-
 (* ng_FreeEnergyKLGap —— FreeEnergyKLGap.v：自由能 KL 缺口分解 *)
 Definition ng_FreeEnergyKLGap : NewGreenFace :=
   MkNewGreenFace "FreeEnergyKLGap.v" 578 14 20260916 "free-energy KL gap decomposition on RealKL decomp face" "L682:mdb5635".
@@ -1842,10 +1838,6 @@ Definition ng_UpReqSquareWallEquiv : NewGreenFace :=
 (* ng_UpReqResidWallEquiv —— UpReqResidWallEquiv.v：residual wall three-segment taxonomy, wall family *)
 Definition ng_UpReqResidWallEquiv : NewGreenFace :=
   MkNewGreenFace "UpReqResidWallEquiv.v" 452 7 20260917 "residual wall three-segment taxonomy, wall family" "L464:m0a31a2".
-
-(* ng_UpReqLogZWallEquiv —— UpReqLogZWallEquiv.v：logZ wall equivalence, wall family *)
-Definition ng_UpReqLogZWallEquiv : NewGreenFace :=
-  MkNewGreenFace "UpReqLogZWallEquiv.v" 883 28 20260917 "logZ wall equivalence, wall family" "L896:m0b57be".
 
 (* ng_UpReqStepKLEtaInst —— UpReqStepKLEtaInst.v：step_kl_eta_bound interface instance resolution, GEOM-A *)
 Definition ng_UpReqStepKLEtaInst : NewGreenFace :=
