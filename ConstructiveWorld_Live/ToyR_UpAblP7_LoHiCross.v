@@ -31,8 +31,8 @@
 Require Import S01_BaseRing.
 Require Import Paper7Ablation.
 Require Import P7BoundedSoftmaxDeep.
-Require Import UpAblP7_LoHiSqueeze.
-Require Import LoHiSqueeze.
+Require Import  UpAblP7_LoHiSqueeze.
+Require Import  UpAblP7_LoHiSqueeze.
 
 (* ############ LoHi 实例定理与完整夹逼链 ################## *)
 (* Section 参数面＝源模块两节参数之并（RI/DO 束＋指数族四件），温度:=1、利差:=1   *)

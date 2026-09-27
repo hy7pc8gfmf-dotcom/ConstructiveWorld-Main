@@ -9,7 +9,7 @@
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
-Require Import PadeErrorIntegral BeukersLists BeukersVariant.
+Require Import  PadeErrorIntegral BeukersLists BeukersVariant.
 
 Open Scope nat_scope.
 

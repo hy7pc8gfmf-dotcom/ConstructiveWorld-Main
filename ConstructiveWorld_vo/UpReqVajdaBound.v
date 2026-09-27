@@ -636,7 +636,7 @@ Extraction "vb_ex_probe2.ml" vb_kl2_complement vb_sharp_endpoint_zero vb_ln_engi
 (* ============================================================ *)
 
 Require Import PinskerTwoPoint.
-Require Import UpReqPinskerCore.
+Require Import  UpReqPinskerCore.
 
 (* ---- §W5 Real 层常值序齿轮（Q 字面量提升） ---- *)
 

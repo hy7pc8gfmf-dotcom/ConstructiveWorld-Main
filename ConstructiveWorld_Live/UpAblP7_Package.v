@@ -34,10 +34,10 @@ Require Import S02_CauchyComplete.
 Require Import S03_QExp.
 Require Import S07_RealSetoidExpLog.
 Require Import Paper7Ablation.
-Require Import LoHiSqueeze.
+Require Import  UpAblP7_LoHiSqueeze.
 Require Import P7BoundedSoftmaxDeep.
 Require Import UpAblP7_Paper7Ablation.
-Require Import UpAblP7_LoHiSqueeze.
+Require Import  UpAblP7_LoHiSqueeze.
 Require Import UpAblP7_LoHiCross.
 Require Import UpAblP7_Paper7Ablation_S1inst.
 Require Import UpAblP7_P7KappaFlagship.

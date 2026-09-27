@@ -32,7 +32,7 @@
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
 Require Import PolyIntegral.
-Require Import PadeErrorIntegral BeukersLists PintMono.
+Require Import  PadeErrorIntegral BeukersLists PintMono.
 
 Open Scope nat_scope.
 

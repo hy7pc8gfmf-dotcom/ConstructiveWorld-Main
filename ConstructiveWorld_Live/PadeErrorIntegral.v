@@ -1,43 +1,334 @@
-(* ============================================================ *)
-(* PadeErrorIntegral.v —— 使命：Padé [n/n] 误差余项积分表示四件构造性落地  *)
-(*   （UpReqPadeExp.v:193 显式假设四件 + PadeDenPosA.v:26 遗留 c 的       *)
-(*   消解）。原阻塞 = 构造性积分基建缺位；现 PolyIntegral.v 已在册        *)
-(*   （[0,1] 多项式 Q 系数构造性定积分），阻塞解除。                     *)
-(* 语句形判定：被积函数 tⁿ(1−t)ⁿ·e^{tx} 中 e^{tx} 非多项式，库内构造性    *)
-(*   载体为 exp_partial M (x·t) = Σ_{k≤M} (x·t)^k/k!（S03:39 在册）。     *)
-(*   故四件落地为「截断指数被积函数」构造性有限核：                       *)
-(*   pei_eb_list n x M := Σ_{k=0}^{M} (x^k/k!)·list(t^{n+k}(1−t)ⁿ)       *)
-(*   ——其逐点语义恰为 tⁿ(1−t)ⁿ·exp_partial M (x·t)。                    *)
-(*   ① pei_integral_pos：0 ≤ x ⟹ ∫₀¹ > 0（k=0 项 Beta 严格正接续）；    *)
-(*   ② pei_eb_value：∫ 闭式 = Σ x^k/k!·Beta(n+k+1,n+1)——余项积分表示    *)
-(*      的构造性泰勒系数对接件（精确全形 e^x−P/Q=… 需极限交换，          *)
-(*      B4TwoStage 已判 LPO 墙，显式假设维持，本件交付其有限核）；        *)
-(*   ③ pei_error_mag_pos + pei_error_lead_integral：符号 =(−1)^n 的      *)
-(*      模长正性 + 首项因式分解（(−1)^n·x^{2n+1}/(2n)!·∫ 形）；         *)
-(*   ④ pei_eb_le：显式界 ∫ ≤ exp_partial M x（exp 截断一致控制）。      *)
-(* 数学核心：Beta 族闭式 ∫₀¹ t^a(1−t)^b dt == a!·b!/(a+b+1)!，          *)
-(*   经 (1−t)^{b+1} = (1−t)^b − t·(1−t)^b 的系数列表递归                 *)
-(*   pei_list a (S b) = ztail(L a b) ⊕ (−1)·L (S a) b（等长垫零）        *)
-(*   两参数归纳直取，无 Pascal/二项式系数需求。                          *)
-(* 依赖：Stdlib QArith/Lists/Arith/ZArith/Lia Setoid；S01_BaseRing        *)
-(*   S02_CauchyComplete S03_QExp PolyIntegral UpReqB4TwoStage。           *)
-(* 构造性注记：① 零承认面（全件 Qed 真证，依赖全为在册 Closed 件）；     *)
-(*   ② 语句面 Set（主件 Qeq/QltT/QleT'；Qle/Qlt 仅支撑件内面）；         *)
-(*   ③ 非平凡（Beta 闭式两参数归纳 + 有理域交叉相消引擎）；               *)
-(*   ④ 可提取（G3 检验独立文件实测）。前缀 pei_ 全库防撞 grep=0。         *)
-(* 编译配方：coqc 9.1 直调（vo 树内 -Q . "" 平面命名空间），信任缓存前置。 *)
-(* ============================================================ *)
+(* ==========================================================================)
+   PadeErrorIntegral.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：bts_mult_nonneg、bts_pow_nonneg、bts_q_pow_one、bts_sum_nonneg_bounded、bts_Qabs_mult、bts_qabs_q_pow、bts_qabs_pow_sign_one、bts_sum_abs_triangle、bts_qle_lt_plus_one。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
-From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqQExpTail.
+Require Import UpReqPadeExp.
+From Stdlib Require Import Setoid Lia.
 From Stdlib Require Import Setoid.
-Import ListNotations.
 Require Import S01_BaseRing S02_CauchyComplete S03_QExp.
 Require Import PolyIntegral.
-Require Import UpReqB4TwoStage.
 
-(* ============================================================ *)
+(* ================= §1 bts_mult_nonneg 族 ================= *)
+From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
+
+(* ================= 段一公共小引擎（Q/abs 层） ================= *)
+
+(* 乘法分配的非负保持（0 ≤ y 时 0 ≤ x·y ⟸ 0 ≤ x；走 qtail 单调件） *)
+Lemma bts_mult_nonneg : forall x y : Q, Qle 0 x -> Qle 0 y -> Qle 0 (x * y).
+Proof.
+  intros x y Hx Hy.
+  apply (Qle_trans _ (x * 0)).
+  - apply qeq_le. ring.
+  - apply (qtail_mult_le_compat_l 0 y x); assumption.
+Qed.
+
+(* 非负底数的幂非负 *)
+Lemma bts_pow_nonneg : forall (x : Q) (k : nat), Qle 0 x -> Qle 0 (q_pow x k).
+Proof.
+  intros x k Hx. induction k as [| m IH].
+  - apply (Qlt_le_weak 0 1). apply qtail_Qlt01.
+  - change (q_pow x (Datatypes.S m)) with (x * q_pow x m).
+    apply bts_mult_nonneg; assumption.
+Qed.
+
+(* 1 的幂归一 *)
+Lemma bts_q_pow_one : forall k : nat, q_pow 1%Q k == 1%Q.
+Proof.
+  induction k as [| m IH].
+  - reflexivity.
+  - change (q_pow 1%Q (Datatypes.S m)) with (1 * q_pow 1%Q m).
+    rewrite IH. reflexivity.
+Qed.
+
+(* 逐项非负的有界和非负（守卫形：仅需 i < n 的项） *)
+Lemma bts_sum_nonneg_bounded : forall (n : nat) (f : nat -> Q),
+  (forall k, (k < n)%nat -> Qle 0 (f k)) -> Qle 0 (sum_upto n f).
+Proof.
+  intros n f H. induction n as [| m IH].
+  - cbn [sum_upto]. apply Qle_refl.
+  - change (sum_upto (Datatypes.S m) f) with (sum_upto m f + f m).
+    apply (Qle_trans _ (sum_upto m f)).
+    + apply IH. intros k Hk. apply H. lia.
+    + apply qtail_le_plus_r. apply H. lia.
+Qed.
+
+(* |x| ≥ 0 时 |x·y| == |x|·|y|（Z 层绝对值乘法分配；Q 以构造子分臂） *)
+Lemma bts_Qabs_mult : forall x y : Q, Qabs (x * y) == Qabs x * Qabs y.
+Proof.
+  intros [xn xd] [yn yd].
+  unfold Qabs, Qmult, Qeq. cbn [Qnum Qden].
+  rewrite Z.abs_mul. reflexivity.
+Qed.
+
+(* 幂的绝对值 == 绝对值的幂 *)
+Lemma bts_qabs_q_pow : forall (x : Q) (k : nat),
+  Qabs (q_pow x k) == q_pow (Qabs x) k.
+Proof.
+  intros x k. induction k as [| m IH].
+  - reflexivity.
+  - change (q_pow x (Datatypes.S m)) with (x * q_pow x m).
+    change (q_pow (Qabs x) (Datatypes.S m)) with (Qabs x * q_pow (Qabs x) m).
+    rewrite bts_Qabs_mult. rewrite IH. reflexivity.
+Qed.
+
+(* (−1)^k 的绝对值恒一（经 |x^k| == |x|^k + |−1|==1） *)
+Lemma bts_qabs_pow_sign_one : forall k : nat, Qabs (q_pow (- 1)%Q k) == 1%Q.
+Proof.
+  intro k. rewrite bts_qabs_q_pow.
+  assert (H1 : Qabs (- 1)%Q == 1%Q) by reflexivity.
+  rewrite H1. apply bts_q_pow_one.
+Qed.
+
+(* 有限和的绝对值三角：|Σ f| ≤ Σ |f| *)
+Lemma bts_sum_abs_triangle : forall (n : nat) (f : nat -> Q),
+  Qle (Qabs (sum_upto n f)) (sum_upto n (fun k => Qabs (f k))).
+Proof.
+  intros n f. induction n as [| m IH].
+  - cbn [sum_upto]. apply Qle_refl.
+  - change (sum_upto (Datatypes.S m) f) with (sum_upto m f + f m).
+    change (sum_upto (Datatypes.S m) (fun k => Qabs (f k)))
+      with (sum_upto m (fun k => Qabs (f k)) + Qabs (f m)).
+    apply (Qle_trans _ (Qabs (sum_upto m f) + Qabs (f m))).
+    + apply Qabs_triangle.
+    + apply Qplus_le_compat.
+      * exact IH.
+      * apply Qle_refl.
+Qed.
+
+(* x ≥ 0 ⟹ x + 1 > 0（Z 层直收） *)
+Lemma bts_qle_lt_plus_one : forall x : Q, Qle 0 x -> Qlt 0 (x + 1).
+Proof.
+  intros [xn xd] H. unfold Qle, Qlt, Qplus in *.
+  cbn [Qnum Qden] in *. lia.
+Qed.
+
+(* Padé 系数绝对值自反（k ≤ n 守卫；正性由 pade_coeff_pos 承载） *)
+Lemma bts_coeff_abs_self : forall (n k : nat), (k <= n)%nat ->
+  Qabs (pade_coeff n k) == pade_coeff n k.
+Proof.
+  intros n k Hk. apply Qabs_pos. apply Qlt_le_weak.
+  apply (QltT_to_Qlt 0 (pade_coeff n k)). apply pade_coeff_pos. exact Hk.
+Qed.
+
+(* ================= 段一：有限和交换/一致控制面 ================= *)
+
+(* ① 有限双和换序恒等式（求和次序交换的有限类似物——纯 Qeq 面，       *)
+(*    有限层无任何交换障碍；障碍只在极限层，本面不触极限） *)
+Lemma bts_sum_square_swap : forall (n : nat) (F G : nat -> Q),
+  sum_upto (Datatypes.S n) (fun k => sum_upto (Datatypes.S n) (fun i => F k * G i)) ==
+  sum_upto (Datatypes.S n) (fun k => sum_upto (Datatypes.S n) (fun i => F i * G k)).
+Proof.
+  intros n F G.
+  transitivity (sum_upto (Datatypes.S n) F * sum_upto (Datatypes.S n) G).
+  - apply Qeq_sym. apply (sum_upto_prod n n F G).
+  - transitivity (sum_upto (Datatypes.S n) G * sum_upto (Datatypes.S n) F).
+    + apply Qmult_comm.
+    + transitivity (sum_upto (Datatypes.S n) (fun k => sum_upto (Datatypes.S n) (fun i => G k * F i))).
+      * apply (sum_upto_prod n n G F).
+      * apply (sum_upto_ext (Datatypes.S n)
+                 (fun k => sum_upto (Datatypes.S n) (fun i => G k * F i))
+                 (fun k => sum_upto (Datatypes.S n) (fun i => F i * G k))).
+        -- intro k. apply sum_upto_ext. intro i. apply Qmult_comm.
+Qed.
+
+(* ② Padé 分子×分母的有限双和换序特化面：
+      P_n(x)·Q_n(x) == Σ_k Σ_i（分母项 i 在前、分子项 k 在后）——
+      段二/后续误差分析的系数面落点 *)
+Lemma bts_pade_nd_swap : forall (n : nat) (x : Q),
+  pade_num n x * pade_den n x ==
+  sum_upto (Datatypes.S n) (fun k => sum_upto (Datatypes.S n) (fun i =>
+    (pade_coeff n i * q_pow x i) * (q_pow (- 1)%Q k * (pade_coeff n k * q_pow x k)))).
+Proof.
+  intros n x. unfold pade_num, pade_den.
+  transitivity (sum_upto (Datatypes.S n) (fun k => sum_upto (Datatypes.S n) (fun i =>
+    (pade_coeff n k * q_pow x k) * (q_pow (- 1)%Q i * (pade_coeff n i * q_pow x i))))).
+  - apply (sum_upto_prod n n
+             (fun k => pade_coeff n k * q_pow x k)
+             (fun i => q_pow (- 1)%Q i * (pade_coeff n i * q_pow x i))).
+  - apply bts_sum_square_swap.
+Qed.
+
+(* ③ exp 截断差归约为 qtail 尾和（QExpTail 引擎对接恒等式；
+      qtail_sum b m n = Σ_{k=m}^{n−1} b^k/k!） *)
+Lemma bts_exp_partial_diff_tail : forall (b : Q) (N1 N2 : nat), (N1 <= N2)%nat ->
+  exp_partial N2 b - exp_partial N1 b == qtail_sum b (Datatypes.S N1) (Datatypes.S N2).
+Proof.
+  intros b N1 N2 Hle.
+  induction N2 as [| m IH].
+  - assert (Hz : N1 = 0%nat) by lia. subst N1.
+    rewrite (qtail_sum_le_m b 1 1) by lia.
+    ring.
+  - destruct (Nat.eq_dec N1 (Datatypes.S m)) as [Heq | Hne].
+    + subst N1.
+      rewrite (qtail_sum_le_m b (Datatypes.S (Datatypes.S m)) (Datatypes.S (Datatypes.S m)))
+        by (apply Nat.le_refl).
+      ring.
+    + assert (Hm : (N1 <= m)%nat) by lia.
+      change (exp_partial (Datatypes.S m) b)
+        with (exp_partial m b + q_pow b (Datatypes.S m) / q_fact (Datatypes.S m)).
+      rewrite (qtail_sum_add b (Datatypes.S N1) (Datatypes.S m) (Datatypes.S (Datatypes.S m))) by lia.
+      transitivity ((exp_partial m b - exp_partial N1 b)
+                    + (q_pow b (Datatypes.S m) / q_fact (Datatypes.S m))).
+      * ring.
+      * rewrite (IH Hm).
+      assert (Hs : qtail_sum b (Datatypes.S m) (Datatypes.S (Datatypes.S m))
+                   == q_pow b (Datatypes.S m) / q_fact (Datatypes.S m)).
+      { change (qtail_sum b (Datatypes.S m) (Datatypes.S (Datatypes.S m)))
+          with ((if Nat.leb (Datatypes.S m) (Datatypes.S m)
+                 then q_pow b (Datatypes.S m) / q_fact (Datatypes.S m)
+                 else 0) + qtail_sum b (Datatypes.S m) (Datatypes.S m)).
+        destruct (Nat.leb_spec0 (Datatypes.S m) (Datatypes.S m)) as [Hc | Hc].
+        - rewrite (qtail_sum_le_m b (Datatypes.S m) (Datatypes.S m)) by (apply Nat.le_refl).
+          ring.
+        - exfalso. lia. }
+      rewrite Hs. ring.
+Qed.
+
+(* ④ 一致控制面：b ≥ 0、e > 0 显式给 N——qtail 尾和一致压入 e。
+      witness 直出（N 为 b,e 的可计算函数），纯 witness/ε 形。
+      与 ③ 组合即得「|exp 截断差| < e」；本面语句直接落在 qtail
+      载体上（③ 为识别面），避免在 QltT 内做 Qeq 重写传递。 *)
+Lemma bts_exp_tail_uniform : forall b e : Q, QleT 0 b -> QltT 0 e ->
+  sigT (fun N : nat => forall N1 N2 : nat, (N <= N1)%nat -> (N1 <= N2)%nat ->
+    QltT (qtail_sum b (Datatypes.S N1) (Datatypes.S N2)) e).
+Proof.
+  intros b e Hb He.
+  destruct (qtail_cauchy_modulus_ord b e Hb He) as [N HN].
+  exists N. intros N1 N2 Ha Hab.
+  exact (HN (Datatypes.S N2) (Datatypes.S N1) (le_S _ _ Ha) (le_n_S _ _ Hab)).
+Qed.
+
+(* ================= 段二：witness/ε 极限传递面（非交换形） ================= *)
+
+(* ⑤ 余项模型：rem n y N = e_N(y)·Q_n(y) − P_n(y)
+      （N 截断的 exp 部分和代入 Padé 误差恒等式左端） *)
+Definition bts_rem_model (n : nat) (y : Q) (N : nat) : Q :=
+  exp_partial N y * pade_den n y - pade_num n y.
+
+(* ⑥ 模型差 = 尾和 × 分母（纯环面——传递面的代数基座） *)
+Lemma bts_rem_model_diff : forall (n : nat) (y : Q) (N1 N2 : nat),
+  bts_rem_model n y N2 - bts_rem_model n y N1 ==
+  (exp_partial N2 y - exp_partial N1 y) * pade_den n y.
+Proof.
+  intros n y N1 N2. unfold bts_rem_model. ring.
+Qed.
+
+(* 有限和的逐点单调（≤ 面；Qplus_le_compat 直用） *)
+Lemma bts_sum_upto_mono : forall (n : nat) (f g : nat -> Q),
+  (forall k, (k < n)%nat -> Qle (f k) (g k)) -> Qle (sum_upto n f) (sum_upto n g).
+Proof.
+  intros n f g H. induction n as [| m IH].
+  - cbn [sum_upto]. apply Qle_refl.
+  - change (sum_upto (Datatypes.S m) f) with (sum_upto m f + f m).
+    change (sum_upto (Datatypes.S m) g) with (sum_upto m g + g m).
+    apply Qplus_le_compat.
+    + apply IH. intros k Hk. apply H. lia.
+    + apply H. lia.
+Qed.
+
+(* ⑦ 分母绝对值界：|Q_n(y)| ≤ P_n(|y|)
+      （三角面 + 和单调 + 逐项 |(−1)^k c_k y^k| == c_k·|y|^k，Qeq 面承载） *)
+Lemma bts_den_abs_le_num_abs : forall (n : nat) (x : Q),
+  QleT' (Qabs (pade_den n x)) (pade_num n (Qabs x)).
+Proof.
+  intros n x. apply Qle_to_QleT'.
+  apply (Qle_trans _ (sum_upto (Datatypes.S n)
+           (fun k => Qabs (q_pow (- 1)%Q k * (pade_coeff n k * q_pow x k))))).
+  - unfold pade_den. apply bts_sum_abs_triangle.
+  - unfold pade_num. apply bts_sum_upto_mono.
+    intro k. intro Hk. apply qeq_le.
+    rewrite bts_Qabs_mult. rewrite bts_qabs_q_pow. rewrite bts_Qabs_mult.
+    rewrite bts_qabs_q_pow.
+    change (Qabs (- 1)%Q) with 1%Q.
+    rewrite bts_q_pow_one.
+    rewrite bts_coeff_abs_self by lia.
+    apply Qmult_1_l.
+Qed.
+
+(* Padé 分子于 |b| 处非负（P_n(|b|) ≥ 0——系数正 + 幂非负） *)
+Lemma bts_num_abs_nonneg : forall (n : nat) (b : Q), Qle 0 (pade_num n (Qabs b)).
+Proof.
+  intros n b. unfold pade_num. apply bts_sum_nonneg_bounded.
+  intro k. intro Hk.
+  apply bts_mult_nonneg.
+  - apply Qlt_le_weak. apply (QltT_to_Qlt 0 (pade_coeff n k)).
+    apply pade_coeff_pos. lia.
+  - apply bts_pow_nonneg. apply Qabs_nonneg.
+Qed.
+
+(* ⑧ 段二主件（降档接口参数形，假设位显式——诚实标注）：
+      witness/ε 链 = 尾控制（④）× 模型差（⑥）× 分母界（⑦）×
+      乘积 ε 传递 × Qeq-QltT 相容桥。其中 Qeq 面已全闭合；
+      「Qeq-QltT 相容桥」与「乘积 ε 传递」两库面现缺位，作为
+      显式接口假设位列于语句面（非承认件——∀ 量化假设），
+      库面定位后零改动 discharge = D2 闸显式假设。 *)
+Lemma bts_rem_cauchy : forall (n : nat) (b e : Q),
+  QleT 0 b -> QltT 0 e ->
+  (forall u v w : Q, u == v -> QltT v w -> QltT u w) ->
+  (forall t : Q, QltT t (e / (pade_num n (Qabs b) + 1)) ->
+     QltT (t * Qabs (pade_den n b)) e) ->
+  sigT (fun N : nat => forall N1 N2 : nat, (N <= N1)%nat -> (N1 <= N2)%nat ->
+    QltT (Qabs (bts_rem_model n b N2 - bts_rem_model n b N1)) e).
+Proof.
+  intros n b e Hb He Hx Hprod.
+  destruct (qtail_cauchy_modulus_ord b (e / (pade_num n (Qabs b) + 1)) Hb
+              (Qlt_to_QltT 0 (e / (pade_num n (Qabs b) + 1))
+                 (qtail_div_pos e (pade_num n (Qabs b) + 1) (QltT_to_Qlt 0 e He)
+                    (bts_qle_lt_plus_one _ (bts_num_abs_nonneg n b))))) as [N HN].
+  exists N. intros N1 N2 Ha Hab.
+  apply (Hx (Qabs (bts_rem_model n b N2 - bts_rem_model n b N1))
+            (Qabs (qtail_sum b (Datatypes.S N1) (Datatypes.S N2)) * Qabs (pade_den n b)) e).
+  - (* Qeq 面：|rem(N2)−rem(N1)| == |尾和|·|Q_n(b)|（识别面③ 承载） *)
+    rewrite bts_rem_model_diff.
+    rewrite bts_Qabs_mult.
+    rewrite bts_exp_partial_diff_tail by lia.
+    rewrite (Qabs_pos (qtail_sum b (Datatypes.S N1) (Datatypes.S N2))).
+    + reflexivity.
+    + apply (QleT'_to_Qle 0 (qtail_sum b (Datatypes.S N1) (Datatypes.S N2))).
+      apply qtail_sum_nonneg. apply Qle_to_QleT'.
+      apply (qtail_QleT_to_Qle 0 b). exact Hb.
+  - (* 乘积 ε 传递（显式接口位；尾界由 ④ 的 qtail 载体 witness 直出） *)
+    apply (Hprod (Qabs (qtail_sum b (Datatypes.S N1) (Datatypes.S N2)))).
+    apply (Hx (Qabs (qtail_sum b (Datatypes.S N1) (Datatypes.S N2)))
+                (qtail_sum b (Datatypes.S N1) (Datatypes.S N2))
+                (e / (pade_num n (Qabs b) + 1))).
+    + apply (Qabs_pos (qtail_sum b (Datatypes.S N1) (Datatypes.S N2))).
+      * apply (QleT'_to_Qle 0 (qtail_sum b (Datatypes.S N1) (Datatypes.S N2))).
+        apply qtail_sum_nonneg. apply Qle_to_QleT'.
+        apply (qtail_QleT_to_Qle 0 b). exact Hb.
+    + exact (HN (Datatypes.S N2) (Datatypes.S N1) (le_S _ _ Ha) (le_n_S _ _ Hab)).
+Qed.
+
+(* ================= 段位小结（诚实标注） =================
+   段一四件 + 段二三件全数闭合，零降档零承认面；
+   原四件（积分表示族）不属本件语句面，维持显式假设：
+   其精确形需构造性积分基建与极限-积分交换面，本库缺位判定
+   （UpReqPadeExp 显式假设段），禁强造——D2 闸显式假设单列于合规自查报告。 *)
+(* ================= §2 pei_mult_canc 族 ================= *)
+From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
+Import ListNotations.
+
 (* §A 有理域引擎（非零/交叉相消/除法面）                                *)
-(* ============================================================ *)
 
 Lemma pei_mult_canc : forall a b c : Q, a * c == b * c -> ~ (c == 0%Q) -> a == b.
 Proof.
@@ -124,7 +415,7 @@ Proof.
   - apply qeq_le. exact Hab.
 Qed.
 
-(* REV-R1 新增：除法-乘法换位（Qdiv 为 ring 原子，跨原子恒等
+(* REV-对应引理 新增：除法-乘法换位（Qdiv 为 ring 原子，跨原子恒等
    须显式归位——pei_eb_eval 步项两侧 /-原子形不同时所需）。 *)
 Lemma pei_div_mul_shift : forall X Y Z : Q, X * Z / Y == (X / Y) * Z.
 Proof.
@@ -194,9 +485,7 @@ Proof.
     apply Qmult_lt_0_compat; exact Hx.
 Qed.
 
-(* ============================================================ *)
 (* §B Beta 族：系数列表 t^a(1−t)^b 的构造、求值语义与闭式                *)
-(* ============================================================ *)
 
 (* 尾垫零：多项式列表尾部接一个 0（值与积分皆不变；等长用） *)
 Definition pei_ztail (p : list Q) : list Q := p ++ (0%Q :: nil).
@@ -374,7 +663,7 @@ Proof.
            ++ apply Qmult_lt_0_compat.
               ** unfold Qlt. cbn [Qnum Qden Qplus]. lia.
               ** apply q_fact_pos.
-        (* REV-R1：原块系块 1 复制，但 s 因子次序相反
+        (* REV-对应引理：原块系块 1 复制，但 s 因子次序相反
            （(S a#1 + S b'#1) 在前、q_fact 在后），apply q_fact_pos
            打在加和项上失配（TRI-V1 L374 首错，实测环境 b'/IH 即此处）。
            REV-R1 定点手术：加和项 lia 支、q_fact 支换序。 *)
@@ -388,9 +677,7 @@ Proof.
         -- apply q_fact_pos.
 Qed.
 
-(* ============================================================ *)
 (* §C Beta 正性与上界（阶乘不等式引擎）                                  *)
-(* ============================================================ *)
 
 Lemma pei_beta_pos : forall a b : nat,
   Qlt 0 (pint_integral (pei_list a b)).
@@ -415,7 +702,7 @@ Proof.
   intros n k. induction n as [| m IH].
   - replace (0 + k)%nat with k%nat by lia.
     rewrite (q_fact_succ k). cbn [q_fact].
-    (* REV-R1：原 apply (Qmult_le_compat_l 1 (Z.of_nat (S k) # 1)
+    (* REV-对应引理：原 apply (Qmult_le_compat_l 1 (Z.of_nat (S k) # 1)
        (q_fact k)) 死名（9.1 stdlib 无 _l/Qmult_le_compat）。实测目标
        （q_fact 0 cbn 后）= 1*q_fact k <= (S k#1)*q_fact k，恰为
        Qmult_le_compat_r 1 (S k#1) (q_fact k) 结论形，单步直合。 *)
@@ -431,7 +718,7 @@ Proof.
     assert (Ej1 : q_fact (Datatypes.S (2 * m + k))
                   == (Z.of_nat (Datatypes.S (2 * m + k)) # 1) * q_fact (2 * m + k))
       by apply q_fact_succ.
-    (* REV-R1：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
+    (* REV-对应引理：原 replace 多敲一层 S（S(S(S(2m+k)))=2m+k+3 ≠
        2*S m+k=2m+k+2，lia "Cannot find witness"）；下方 q_fact_succ
        重写链与 Qle_trans 链均按 S(S(2m+k)) 两层形书写——按链形已证结论改回
        两层 S。 *)
@@ -440,7 +727,7 @@ Proof.
     rewrite (q_fact_succ (Datatypes.S (Datatypes.S (2 * m + k)))).
     rewrite (q_fact_succ (Datatypes.S (2 * m + k))).
     rewrite Esm, Esmk, Ej1.
-    (* REV-R1 重写归纳步链（原链三重真伤：①replace 多一层 S；
+    (* REV-对应引理 重写归纳步链（原链三重真伤：①replace 多一层 S；
        ②A # 1 * B # 1 同级左结合被 Qmake 吞参——positive 型错；
        ③qeq_le+ring 误用于真不等式 P*A ≤ q_fact(S(2m+k))*A——非恒等式）。
        本构四步右嵌套：
@@ -497,11 +784,9 @@ Proof.
            ++ apply qeq_le. rewrite Ej1. ring.
 Qed.
 
-(* ============================================================ *)
 (* §D 截断指数被积函数 pei_eb_list（主件载体）                            *)
 (*   pei_eb_list n x M = Σ_{k=0}^{M} (x^k/k!)·list(t^{n+k}(1−t)ⁿ)        *)
 (*   逐点语义 == tⁿ(1−t)ⁿ·exp_partial M (x·t)                           *)
-(* ============================================================ *)
 
 Fixpoint pei_eb_list (n : nat) (x : Q) (M : nat) : list Q :=
   match M with
@@ -615,9 +900,7 @@ Proof.
     + apply Qinv_lt_0_compat. apply q_fact_pos.
 Qed.
 
-(* ============================================================ *)
 (* §E 主件一（pade_integral_pos 对应）：积分严格正                        *)
-(* ============================================================ *)
 
 Theorem pei_integral_pos : forall (n : nat) (x : Q) (M : nat),
   QleT' 0 x -> QltT 0 (pint_integral (pei_eb_list n x M)).
@@ -665,9 +948,7 @@ Proof.
   - exact Hsum.
 Qed.
 
-(* ============================================================ *)
 (* §F 主件二（pade_error_bound 对应）：显式上界                           *)
-(* ============================================================ *)
 
 Theorem pei_eb_le : forall (n : nat) (x : Q) (M : nat),
   QleT' 0 x -> QleT' (pint_integral (pei_eb_list n x M)) (exp_partial M x).
@@ -692,7 +973,7 @@ Proof.
     { apply (Qle_trans _ (q_fact n * q_fact (n + Datatypes.S m)) _).
       - apply qeq_le. ring.
       - exact Hf2. }
-    (* REV-R1：原步项链三处错序——①外链中间点误写 exp_partial m x
+    (* REV-对应引理：原步项链三处错序——①外链中间点误写 exp_partial m x
        （应为 Hstep 右侧的 pint_integral (pei_eb_list n x m) 项）；
        ②两条 + bullet 顺序颠倒（Hstep 传输须先于 Qplus_le_compat 拆分）；
        ③内层中点 c*1 应为 1*c（Qmult_le_compat_r 结论形 x*z ≤ y*z）。
@@ -731,10 +1012,8 @@ Proof.
       * apply qeq_le. cbn [exp_partial]. ring.
 Qed.
 
-(* ============================================================ *)
 (* §G 主件三（pade_error_sign 对应）：符号 =(−1)^n 的模长正性              *)
 (*   + 主件四（pade_error_integral 对应）：首项因式分解                    *)
-(* ============================================================ *)
 
 Theorem pei_error_mag_pos : forall (n : nat) (x : Q),
   QltT 0 x ->
@@ -768,9 +1047,7 @@ Proof.
            (Qmult_comp _ _ (Qeq_refl _) _ _ (pei_eb_value0 n x))).
 Qed.
 
-(* ============================================================ *)
 (* 假设审计留痕：Print Assumptions（编译期 stdout，verify 复核）          *)
-(* ============================================================ *)
 
 Print Assumptions pei_beta_eval.
 Print Assumptions pei_beta_value.

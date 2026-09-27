@@ -37,8 +37,8 @@ Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 Require Import UpReqTempDefs.
 Require Import UpReqEntropyDeficitTemp.
-Require Import UpAblP6_EntropyMonoSplit_A.
-Require Import UpAblP6_EntropyMonoSplit_B.
+Require Import  UpAblP6_EntropyMonoSplit_B.
+Require Import  UpAblP6_EntropyMonoSplit_B.
 
 (* ============================================================ *)
 (* Section UpAblP6EmsC：接口面照源文件 Section EntropyMonoSplitInst 同名同序         *)

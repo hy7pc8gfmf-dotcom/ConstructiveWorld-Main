@@ -58,8 +58,8 @@ Import RealInterfaceEnhancedMod.
 (* ---------- 七件消融件（显式 Require） ---------- *)
 Require Import UpAblP6_GibbsFamilyExt.
 Require Import UpAblP6_TempDefs.
-Require Import UpAblP6_EntropyMonoSplit_A.
-Require Import UpAblP6_EntropyMonoSplit_B.
+Require Import  UpAblP6_EntropyMonoSplit_B.
+Require Import  UpAblP6_EntropyMonoSplit_B.
 Require Import UpAblP6_S5SlotWire.
 Require Import UpAblP6_ZPosLowRef.
 Require Import UpAblP6_ConcMixSelFeed.
