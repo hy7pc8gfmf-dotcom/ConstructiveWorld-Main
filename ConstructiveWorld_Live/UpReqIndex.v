@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 385 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 382 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -1368,10 +1368,6 @@ Proof. reflexivity. Qed.
 (* 口径同 –：ng_lines = wc -l 实测；ng_qed = 剥块注释 token 级 \bQed\. 实测； *)
 (* 五件均已 vo 树预验证双段绿（coqc 单件 EXIT=0 + coqchk -o 闭包抽查 EXIT=0）。 *)
 
-(* ng_UpReqPadeBetaPos —— UpReqPadeBetaPos.v：β_m 正性链（②号件，插入位 169） *)
-Definition ng_UpReqPadeBetaPos : NewGreenFace :=
-  MkNewGreenFace "UpReqPadeBetaPos.v" 284 15 20260914 "beta_m positivity pbp_beta_pos via factorial lower bound pbp_beta_lb" "L293:m54308a".
-
 (* ng_UpReqPadeTailPos —— UpReqPadeTailPos.v：Padé 尾项 n=1/2 定值（①号件，插入位 170） *)
 Definition ng_UpReqPadeTailPos : NewGreenFace :=
   MkNewGreenFace "UpReqPadeTailPos.v" 179 19 20260914 "Pade tail term identity at n=1/2 fixed-point evaluation ptp_beta_pos" "L690:m73e362".
@@ -1380,21 +1376,15 @@ Definition ng_UpReqPadeTailPos : NewGreenFace :=
 Definition ng_UpReqPadeLower : NewGreenFace :=
   MkNewGreenFace "UpReqPadeLower.v" 385 24 20260914 "lower error bound cpl_lower_even for the even convergent partial fraction" "L405:m1cae6f".
 
-(* ng_UpReqPadeDenPos12 —— UpReqPadeDenPos12.v：(1,2) 分母正性（④号件，插入位 172） *)
-Definition ng_UpReqPadeDenPos12 : NewGreenFace :=
-  MkNewGreenFace "UpReqPadeDenPos12.v" 275 8 20260914 "(1,2) Pade denominator positivity pdq_den_pos_12 with strict variant" "L287:m9a84a5".
-
 Definition NewGreenListV30 : list NewGreenFace :=
-  cons ng_UpReqPadeBetaPos
   (cons ng_UpReqPadeTailPos
   (cons ng_UpReqPadeLower
-  (cons ng_UpReqPadeDenPos12
-  nil))).
+  nil)).
 
-(* 续写统计：5 件 / 行数和 1544 / 闭合和 94（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV30Pieces  : nat := 4.
-Definition NewGreenV30LineSum : nat := 1123.
-Definition NewGreenV30QedSum  : nat := 66.
+(* 续写统计：2 件 / 行数和 564 / 闭合和 43（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV30Pieces : nat := 2.
+Definition NewGreenV30LineSum : nat := 564.
+Definition NewGreenV30QedSum : nat := 43.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV30Pieces_matches : NewGreenV30Pieces = cnt_ng NewGreenListV30.
@@ -1884,10 +1874,6 @@ Definition ng_UpReqWeakTriangle : NewGreenFace :=
 (* ng_UpReqPadeConstUnify —— UpReqPadeConstUnify.v：pade constant unify *)
 Definition ng_UpReqPadeConstUnify : NewGreenFace :=
   MkNewGreenFace "UpReqPadeConstUnify.v" 271 21 20260917 "pade constant unify" "L271:m704ce0".
-
-(* ng_UpReqPadeTransport —— UpReqPadeTransport.v：pade transport *)
-Definition ng_UpReqPadeTransport : NewGreenFace :=
-  MkNewGreenFace "UpReqPadeTransport.v" 409 13 20260917 "pade transport" "L409:m897e58".
 
 (* ng_UpReqConstEnvelope —— UpReqConstEnvelope.v：constant envelope *)
 Definition ng_UpReqConstEnvelope : NewGreenFace :=

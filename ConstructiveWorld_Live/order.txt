@@ -138,10 +138,8 @@ UpReqBanachLimUniq.v#R0-d66910
 UpReqBanachInst.v#R0-d66910
 UpReqBanachInstB.v#R0-d66910
 UpReqBanachInstPre.v#R0-b56555
-UpReqPadeBetaPos.v#R0-d66910
-UpReqPadeTailPos.v#R0-d66910
+UpReqPadeTailPos.v#R0-9452c9
 UpReqPadeLower.v#R0-d66910
-UpReqPadeDenPos12.v#R0-d66910
 QTailBridge.v#R0-d66910
 PadeDenPosB12.v#R0-d66910
 Arch_Banach_01.v#R0-d66910
@@ -222,7 +220,6 @@ UpReqMixingTime.v#R0-d66910
 UpReqDoeblinEntropy.v#R0-d66910
 UpReqEngineCeiling.v#R0-d66910
 UpReqPinskerTransport.v#R0-d66910
-UpReqPadeTransport.v#R0-d66910
 UpReqConstEnvelope.v#R0-d66910
 UpReqEntropyMonoSplit.v#R0-d66910
 UpReqAlignClose.v#R0-d66910

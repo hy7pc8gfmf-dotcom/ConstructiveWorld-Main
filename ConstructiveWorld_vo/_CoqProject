@@ -134,10 +134,8 @@ UpReqBanachLimUniq.v
 UpReqBanachInst.v
 UpReqBanachInstB.v
 UpReqBanachInstPre.v
-UpReqPadeBetaPos.v
 UpReqPadeTailPos.v
 UpReqPadeLower.v
-UpReqPadeDenPos12.v
 UpReqPadeQLeg.v
 QTailBridge.v
 PadeDenPosB12.v
@@ -223,7 +221,6 @@ UpReqMixingTime.v
 UpReqDoeblinEntropy.v
 UpReqEngineCeiling.v
 UpReqPinskerTransport.v
-UpReqPadeTransport.v
 UpReqConstEnvelope.v
 UpReqEntropyMonoSplit.v
 UpReqAlignClose.v
