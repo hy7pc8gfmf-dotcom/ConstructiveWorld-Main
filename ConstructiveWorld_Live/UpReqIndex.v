@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 418 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 417 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2282,8 +2282,6 @@ Definition ng_UpAblT13c_G13 : NewGreenFace :=
 Definition ng_UpAblT13c_UpReqDist : NewGreenFace :=
   MkNewGreenFace "UpAblT13c_UpReqDist.v" 119 4 20260919 "T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L119:mca9cee".
 (* ng_UpAblc_UpSigMigrate2 —— UpAblc_UpSigMigrate2.v：c batch9, N3 x8 + conditional discharge x3, four-gate green () *)
-Definition ng_UpAblT13c_UpSigMigrate2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT13c_UpSigMigrate2.v" 122 3 20260919 "T13c batch9, N3 x8 + conditional discharge x3, four-gate green (_tt13c_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L122:m7ede80".
 (* ng_UpAblT1_UpFirewallReq —— UpAblT1_UpFirewallReq.v：v1 T1 batch (T1a), N1x25 across 3 files, four-gate green () *)
 Definition ng_UpAblT1_UpFirewallReq : NewGreenFace :=
   MkNewGreenFace "UpAblT1_UpFirewallReq.v" 97 5 20260919 "v1 T1 batch (T1a), N1x25 across 3 files, four-gate green (_tt1a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L97:mc00df6".

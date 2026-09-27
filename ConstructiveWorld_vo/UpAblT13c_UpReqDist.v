@@ -1,16 +1,14 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
-(* ============================================================ *)
-(*   位1 UpReqDist.v:3091 transition_normalization（ReqSteadyState req 层）   *)
-(*        → 两点世界行归一核 supply（half+half==one 纯接口代数链；            *)
-(*          Token/vocab 世界专属非同语句，本件改走实例供给路线落地）           *)
-(*   位2 UpReqDist.v:3096 detailed_balance（ReqSteadyState req 层）           *)
-(*        → 源核缩放族 t(s,s')=p(s')·c supply（assoc-comm 纯代数；非循环——    *)
-(*          普查依据 G13:120/:528 使用节内 Variable 本体，禁直接供给已已证结论）       *)
-(* 消融形（诚实申报）：全参 {R}{RIS} 抽象载体，零桥零具体实例零数据槽隐藏；    *)
-(*   逐点代数不依赖载体大小，两点供给世界为最小可达面。                       *)
-(* 分级：位1 = N3（实例供给）；位2 = N3（实例供给·核族构造）。                *)
-(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqDist。          *)
-(* ============================================================ *)
+(* ==========================================================================)
+   uab_t2sum / uab_half 语句面；同域语句面
+   使命：本件形式化uab_t2sum / uab_half 语句面。
+   本件并载：同域语句面。
+   依赖：S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog, S08_RealMainlineDPO
+     S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp, UpReqDist,
+     UpReqAlgebra, UpSigMigrate2。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
+
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -128,3 +126,116 @@ End UabT13cDist.
 (* ---- 收尾段 ---- *)
 Print Assumptions uabT13c_dist_norm3091.
 Print Assumptions uabT13c_dist_db3096.
+
+(* ============================ §1 同域语句面 ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqAlgebra.
+Require Import UpReqDist.
+Require Import UpSigMigrate2.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13cGibbs.
+
+Context {R0 : Set} {RIS0 : RealInterfaceEnhancedSetoid R0}.
+
+(* ---- 位1 ←:913（b_gibbs_pos 出节 discharge：六槽显式参，源文件全参直接代入） ---- *)
+Theorem uabT13c_bgibbs_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hext : forall f g : S -> R0, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
+         (Hadd : forall f g : S -> R0,
+                   req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)))
+         (Hlin : forall (a : R0) (f : S -> R0),
+                   req (sumf (fun s : S => mult a (f s))) (mult a (sumf f)))
+         (Hle : forall f g : S -> R0, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g))
+         (Hloginv : forall (x : R0) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
+                      req (log (inv_pos x Hx) Hi) (opp (log x Hx)))
+         (Hlogle : forall (x : R0) (Hx : lt zero x), le (log x Hx) (req_minus x one))
+         (p q : S -> R0) (Hp : pdist_a S p) (Hq : pdist_a S q),
+    nrm_a S sumf p -> nrm_a S sumf q ->
+    le zero (@kl_a R0 RIS0 S sumf p q Hp Hq).
+Proof.
+  intros S sumf Hext Hadd Hlin Hle Hloginv Hlogle p q Hp Hq Hnp Hnq.
+  exact (@req_gibbs_inequality R0 RIS0 S sumf Hext Hadd Hlin Hle Hloginv Hlogle
+                               p q Hp Hq Hnp Hnq).
+Qed.
+
+(* ---- 位2 ←:916（b_gibbs_sum_eps：位1+le_plus_compat 链，零新增槽） ------- *)
+Theorem uabT13c_bgibbs_sum_eps :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hext : forall f g : S -> R0, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
+         (Hadd : forall f g : S -> R0,
+                   req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)))
+         (Hlin : forall (a : R0) (f : S -> R0),
+                   req (sumf (fun s : S => mult a (f s))) (mult a (sumf f)))
+         (Hle : forall f g : S -> R0, (forall s : S, le (f s) (g s)) -> le (sumf f) (sumf g))
+         (Hloginv : forall (x : R0) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
+                      req (log (inv_pos x Hx) Hi) (opp (log x Hx)))
+         (Hlogle : forall (x : R0) (Hx : lt zero x), le (log x Hx) (req_minus x one))
+         (p q : S -> R0) (Hp : pdist_a S p) (Hq : pdist_a S q)
+         (eps : R0) (Heps : lt zero eps),
+    nrm_a S sumf p -> nrm_a S sumf q ->
+    le zero (plus (@kl_a R0 RIS0 S sumf p q Hp Hq) eps).
+Proof.
+  intros S sumf Hext Hadd Hlin Hle Hloginv Hlogle p q Hp Hq eps Heps Hnp Hnq.
+  exact (le_trans zero eps (plus (@kl_a R0 RIS0 S sumf p q Hp Hq) eps)
+                    (lt_le_iff zero eps (inl Heps))
+                    (le_id_l eps (plus zero eps)
+                               (plus (@kl_a R0 RIS0 S sumf p q Hp Hq) eps)
+                               (req_sym (plus zero eps) eps
+                                          (req_trans (plus zero eps) (plus eps zero) eps
+                                                     (plus_comm zero eps) (plus_zero eps)))
+                               (le_plus_compat zero (@kl_a R0 RIS0 S sumf p q Hp Hq)
+                                               eps eps
+                                               (uabT13c_bgibbs_pos S sumf Hext Hadd Hlin Hle
+                                                                   Hloginv Hlogle p q Hp Hq Hnp Hnq)
+                                               (le_refl eps)))).
+Qed.
+
+(* ---- 位3 ←:921（b_gibbs_eq 条件 discharge：八槽显式参，源文件全参直接代入；     *)
+(*        log-eq-linear 槽=W4 墙本体，任何具体载体不可实例化，等号面真欠账    *)
+(*        如实随件携带不隐藏） ---- *)
+Theorem uabT13c_bgibbs_eq :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hext : forall f g : S -> R0, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g))
+         (Hadd : forall f g : S -> R0,
+                   req (sumf (fun s : S => plus (f s) (g s))) (plus (sumf f) (sumf g)))
+         (Hlin : forall (a : R0) (f : S -> R0),
+                   req (sumf (fun s : S => mult a (f s))) (mult a (sumf f)))
+         (Hznn : forall f : S -> R0,
+                   (forall s : S, le zero (f s)) -> req (sumf f) zero ->
+                   forall s : S, req (f s) zero)
+         (Hloginv : forall (x : R0) (Hx : lt zero x) (Hi : lt zero (inv_pos x Hx)),
+                      req (log (inv_pos x Hx) Hi) (opp (log x Hx)))
+         (Hlogle : forall (x : R0) (Hx : lt zero x), le (log x Hx) (req_minus x one))
+         (Hlogeq : forall (x : R0) (Hx : lt zero x),
+                     req (log x Hx) (req_minus x one) -> req x one)
+         (p q : S -> R0) (Hp : pdist_a S p) (Hq : pdist_a S q),
+    nrm_a S sumf p -> nrm_a S sumf q ->
+    req (@kl_a R0 RIS0 S sumf p q Hp Hq) zero ->
+    forall s : S, req (p s) (q s).
+Proof.
+  intros S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq p q Hp Hq Hnp Hnq Hkl0.
+  exact (@req_gibbs_equality R0 RIS0 S sumf Hext Hadd Hlin Hznn Hloginv Hlogle Hlogeq
+                             p q Hp Hq Hnp Hnq Hkl0).
+Qed.
+
+End UabT13cGibbs.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13c_bgibbs_pos.
+Print Assumptions uabT13c_bgibbs_sum_eps.
+Print Assumptions uabT13c_bgibbs_eq.
