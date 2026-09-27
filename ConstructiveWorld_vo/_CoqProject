@@ -322,13 +322,6 @@ UpAblT12_UpRealLeB2.v
 UpAblT12_UpReqAlignRestA.v
 UpAblT13_UpEntropyGainReq.v
 UpAblT13b_G06_BForm.v
-UpAblT13b_G13.v
-UpAblT13b_UpReqAlign.v
-UpAblT13b_UpReqAlign2.v
-UpAblT13b_UpReqAlignRestA.v
-UpAblT13b_UpReqDist.v
-UpAblT13b_UpSigMigrate.v
-UpAblT13b_UpSigMigrate2.v
 UpAblT13c_G13.v
 UpAblT13c_UpReqDist.v
 Arch_UpAbl_03.v

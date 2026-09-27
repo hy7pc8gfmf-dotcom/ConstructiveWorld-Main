@@ -320,14 +320,7 @@ UpAblT12_G13.v#R0-d66910
 UpAblT12_UpRealLeB2.v#R0-d66910
 UpAblT12_UpReqAlignRestA.v#R0-d66910
 UpAblT13_UpEntropyGainReq.v#R0-45226b
-UpAblT13b_G06_BForm.v#R0-d66910
-UpAblT13b_G13.v#R0-d66910
-UpAblT13b_UpReqAlign.v#R0-d66910
-UpAblT13b_UpReqAlign2.v#R0-d66910
-UpAblT13b_UpReqAlignRestA.v#R0-d66910
-UpAblT13b_UpReqDist.v#R0-d66910
-UpAblT13b_UpSigMigrate.v#R0-d66910
-UpAblT13b_UpSigMigrate2.v#R0-d66910
+UpAblT13b_G06_BForm.v#R0-e33cf5
 UpAblT13c_G13.v#R0-d66910
 UpAblT13c_UpReqDist.v#R0-46f00c
 Arch_UpAbl_03.v#R0-d66910

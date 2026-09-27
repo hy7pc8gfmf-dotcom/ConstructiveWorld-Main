@@ -1,33 +1,15 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* 本件为消融落件：原件全文逐字保留，仅将下列定理之证明体替换为    *)
-(* 玩具证（实质非平凡三口径：定义层受控展开、显式见证直取、结构性  *)
-(* 重演；逐刀金标准文本程序直取自源版本体并断言同文），声明面与引用  *)
-(* 面零改动，零新增 Require，证尾记号逐件守恒，纯构造性闭合，文尾  *)
-(* 保留原件假设面追印。清单：                                      *)
-(*       列表归纳 nil/cons 分判就地重演，金标直取 S08_RealMainlineDPO） *)
-(*       体就地重演：展开＋rplb_sum_pos_discharged 实例化）          *)
-(*       S08 real_list_sum_pos 归纳体重演；非空矛盾支 eq_refl 直击） *)
-(* ============================================================ *)
+(* ==========================================================================)
+   同域语句面；同域语句面
+   使命：本件形式化同域语句面。
+   本件并载：同域语句面；同域语句面；同域语句面；同域语句面；同域语句面；同域语句面；同域语句面。
+   依赖：QArith.Qring, S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog
+     S08_RealMainlineDPO, S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp,
+     UpAuditBridge, G06_BForm, List, G13_EvictFam, TempSoftmaxInstantiation, UpReqAlign, UpReqAlign2, UpSigMigrate2,
+     UpSigMigrate。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
-(* ============================================================ *)
-(*   位1 :32  real_sum_over_S_ext（RealPPOLeBFull 求和外延槽）                   *)
-(*   位2 :34  real_sum_over_S_le（求和单调槽）                                   *)
-(*   位3 :36  real_sum_over_S_add（求和可加槽）                                  *)
-(*   位4 :40  real_sum_over_S_linear（求和线性槽）                               *)
-(*   位5 :59  lebR_res_weight_pos（残差权聚合正位）                              *)
-(*   位6 :464 uab_temp_sum_pos（UpReqMinPProjB 截断质量正位）                     *)
-(*   位7 :470 uab_Z_full_pos（完整配分正位）                                     *)
-(* 实例化消解源版本：位1-4 ←real_list_sum_ext/le/add/linear/pos@S08_RealMainlineDPO       *)
-(*   （:295/:432/:340/:362；求和槽实和实例 real_list_sum 材料化实例化消解）；           *)
-(*   位5 ←rplb_res_weight_pos_uncond@G06_BForm:155（无条件实例化消解件直接供给）；          *)
-(*   位6/7 ←real_list_sum_pos@S08:463 正和族（词表非空+逐项正前提显式参；         *)
-(*   位6 另带保留判定全保留实例供形，分支归约后与位7 同链）。                     *)
-(* 消融形（诚实登记）：实载体语句面自足（Real 层，零装配桥）；位6 具体实例        *)
-(*   供形（保留判定全保留）加逐项正/非空前提显式参。                              *)
-(* 分级：位1-5/位7 N1（库内实例化消解件直接供给）；位6 N3（实例供给+正和族直接供给）。          *)
-(* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、S08_RealMainlineDPO、    *)
-(*   UpAuditBridge、G06_BForm。                                                  *)
-(* ============================================================ *)
 From Stdlib Require Import QArith.Qring.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -189,3 +171,371 @@ Print Assumptions uabT13b_g06_ros_linear.
 Print Assumptions uabT13b_g06_lebR_weight_pos.
 Print Assumptions uabT13b_g06_uabtemp_sum_pos.
 Print Assumptions uabT13b_g06_Zfull_pos.
+
+(* ============================ §1 同域语句面（G13 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import G13_EvictFam.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bEvq.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:455（正和面加逐点正；正和参数位显式参） *)
+Theorem uabT13b_evq_Zthermo_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (D : R0) (D_pos : lt zero D) (energy : S -> R0),
+    lt zero (@evq_Z_thermo R0 (tsi_rie_setoid RI0) S sumf D D_pos energy).
+Proof.
+  intros S sumf Hpos D D_pos energy.
+  unfold evq_Z_thermo, evq_boltzmann_factor.
+  apply Hpos.
+  intros s.
+  exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
+Qed.
+
+(* 位2 ←:484（保留判定具体实例全保留供入+正和面逐点正） *)
+Theorem uabT13b_evq_evicted_partition_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (D : R0) (D_pos : lt zero D) (energy : S -> R0),
+    lt zero (@evq_evicted_partition R0 (tsi_rie_setoid RI0) S sumf D D_pos energy
+               (fun (_ : S) => unit)
+               (fun (_ : S) => inl tt : Or unit (Not unit))).
+Proof.
+  intros S sumf Hpos D D_pos energy.
+  unfold evq_evicted_partition, evq_boltzmann_factor.
+  apply Hpos.
+  intros s.
+  exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
+Qed.
+
+End UabT13bEvq.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_evq_Zthermo_pos.
+Print Assumptions uabT13b_evq_evicted_partition_pos.
+
+(* ============================ §2 同域语句面（UpReqAlign 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqAlign.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bAlign.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:100（正和面加逐点双正链实例化消解；正和数据参数位显式参） *)
+Theorem uabT13b_align_Zalign_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (reward : S -> R0) (beta : R0) (beta_pos : lt zero beta)
+         (pi_ref : S -> R0) (Hpi : forall s : S, lt zero (pi_ref s)),
+    lt zero (@Z_align_req R0 (tsi_rie_setoid RI0) S sumf reward beta beta_pos pi_ref).
+Proof.
+  intros S sumf Hpos reward beta beta_pos pi_ref Hpi.
+  unfold Z_align_req.
+  apply Hpos. intros s.
+  exact (mult_positive (pi_ref s)
+           (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
+           (Hpi s) (exp_neg_pos _)).
+Qed.
+
+End UabT13bAlign.
+
+(* ---- 收尾段（逐件假设面打印，判读全闭） ---- *)
+Print Assumptions uabT13b_align_Zalign_pos.
+
+(* ============================ §3 同域语句面（UpReqAlign2 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqAlign2.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bAlign2.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:106（正和面加逐点双正链实例化消解；正和数据参数位显式参） *)
+Theorem uabT13b_align2_Zalign_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (reward : S -> R0) (beta : R0) (beta_pos : lt zero beta)
+         (pi_ref : S -> R0) (Hpi : forall s : S, lt zero (pi_ref s)),
+    lt zero (@req2_Z_align R0 (tsi_rie_setoid RI0) S sumf reward beta beta_pos pi_ref).
+Proof.
+  intros S sumf Hpos reward beta beta_pos pi_ref Hpi.
+  unfold req2_Z_align.
+  apply Hpos. intros s.
+  exact (mult_positive (pi_ref s)
+           (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
+           (Hpi s) (exp_neg_pos _)).
+Qed.
+
+End UabT13bAlign2.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_align2_Zalign_pos.
+
+(* ============================ §4 同域语句面（UpReqAlignRestA 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpReqAlign.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bRestA.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:77（正和面加逐点双正链实例化消解；正和数据参数位显式参） *)
+Theorem uabT13b_ralt_Zalign_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (reward : S -> R0) (beta : R0) (beta_pos : lt zero beta)
+         (pi_ref : S -> R0) (Hpi : forall s : S, lt zero (pi_ref s)),
+    lt zero (@Z_align_req R0 (tsi_rie_setoid RI0) S sumf reward beta beta_pos pi_ref).
+Proof.
+  intros S sumf Hpos reward beta beta_pos pi_ref Hpi.
+  unfold Z_align_req.
+  apply Hpos. intros s.
+  exact (mult_positive (pi_ref s)
+           (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
+           (Hpi s) (exp_neg_pos _)).
+Qed.
+
+End UabT13bRestA.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_ralt_Zalign_pos.
+
+(* ============================ §5 同域语句面（UpReqDist 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpSigMigrate2.
+Import RealInterfaceEnhancedMod.
+
+(* 位1 ←:1026（两状态实例装配；Z:=two_state_Z、sumf:=bsum、D:=real_one、          *)
+(*   base_loss:=two_state_loss，配分条件实形=c_partition 语句转换同一） *)
+Theorem uabT13b_dist_partition_cond :
+  req two_state_Z
+      (bsum (fun s : bool =>
+               exp_neg (mult (inv_pos real_one real_lt_zero_one)
+                             (two_state_loss s)))).
+Proof.
+  exact c_partition.
+Qed.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_dist_partition_cond.
+
+(* ============================ §6 同域语句面（UpSigMigrate 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpSigMigrate.
+Require Import UpSigMigrate2.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bSigm.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:49（配分条件迁移正和正性；正和参数位与配分参数位显式参） *)
+Theorem uabT13b_sigm_Zpos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (base_loss : S -> R0) (D : R0) (D_pos : lt zero D) (Z : R0),
+    req Z (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) ->
+    lt zero Z.
+Proof.
+  intros S sumf Hpos base_loss D D_pos Z Hpc.
+  apply (@lt_id_r R0 (tsi_rie_setoid RI0) zero
+           (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) Z).
+  - apply req_sym. exact Hpc.
+  - apply Hpos. intros s.
+    exact (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s))).
+Qed.
+
+(* 位3 ←:549（正和面加逐点正；正和参数位显式参） *)
+Theorem uabT13b_sigm_Zthermo_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (D : R0) (D_pos : lt zero D) (energy : S -> R0),
+    lt zero (@sigm_Z_thermo R0 (tsi_rie_setoid RI0) S sumf D D_pos energy).
+Proof.
+  intros S sumf Hpos D D_pos energy.
+  unfold sigm_Z_thermo, sigm_boltzmann_factor.
+  apply Hpos.
+  intros s.
+  exact (exp_neg_pos (mult (inv_pos D D_pos) (energy s))).
+Qed.
+
+End UabT13bSigm.
+
+(* 位2 ←:50（两状态具体实例供给；实载体 Real 载体面，全局实例消解） *)
+Theorem uabT13b_sigm_partition_cond :
+  req two_state_Z
+      (bsum (fun s : bool =>
+               exp_neg (mult (inv_pos real_one real_lt_zero_one)
+                             (two_state_loss s)))).
+Proof.
+  exact c_partition.
+Qed.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_sigm_Zpos.
+Print Assumptions uabT13b_sigm_Zthermo_pos.
+Print Assumptions uabT13b_sigm_partition_cond.
+
+(* ============================ §7 同域语句面（UpSigMigrate2 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import UpSigMigrate2.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13bSigm2.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Let R0 : Set := @S01_BaseRing.R RI0.
+
+(* 位1 ←:111（配分条件迁移正和正性；正和参数位与配分参数位显式参） *)
+Theorem uabT13b_sigm2_Zpos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (base_loss : S -> R0) (D : R0) (D_pos : lt zero D) (Z : R0),
+    req Z (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) ->
+    lt zero Z.
+Proof.
+  intros S sumf Hpos base_loss D D_pos Z Hpc.
+  apply (@lt_id_r R0 (tsi_rie_setoid RI0) zero
+           (sumf (fun s : S => exp_neg (mult (inv_pos D D_pos) (base_loss s)))) Z).
+  - apply req_sym. exact Hpc.
+  - apply Hpos. intros s.
+    exact (exp_neg_pos (mult (inv_pos D D_pos) (base_loss s))).
+Qed.
+
+(* 位2 ←:891（正和面加逐点双正链；正和参数位显式参） *)
+Theorem uabT13b_sigm2_Zalign_a_pos :
+  forall (S : Set) (sumf : (S -> R0) -> R0)
+         (Hpos : forall f : S -> R0, (forall s : S, lt zero (f s)) -> lt zero (sumf f))
+         (reward : S -> R0) (beta : R0) (beta_pos : lt zero beta)
+         (pi_ref : S -> R0) (Hpi : forall s : S, lt zero (pi_ref s)),
+    lt zero (@Z_align_a_sum R0 (tsi_rie_setoid RI0) S sumf reward beta beta_pos pi_ref).
+Proof.
+  intros S sumf Hpos reward beta beta_pos pi_ref Hpi.
+  unfold Z_align_a_sum.
+  apply Hpos. intros s.
+  exact (mult_positive (pi_ref s)
+           (exp_neg (opp (mult (inv_pos beta beta_pos) (reward s))))
+           (Hpi s) (exp_neg_pos _)).
+Qed.
+
+End UabT13bSigm2.
+
+(* ---- 收尾段 ---- *)
+Print Assumptions uabT13b_sigm2_Zpos.
+Print Assumptions uabT13b_sigm2_Zalign_a_pos.

@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 399 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 392 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2218,26 +2218,12 @@ Definition ng_UpAblT13_UpSigMigrate2 : NewGreenFace :=
 Definition ng_UpAblT13b_G06_BForm : NewGreenFace :=
   MkNewGreenFace "UpAblT13b_G06_BForm.v" 113 7 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L185:mb9d88c".
 (* ng_UpAblb_G13 —— UpAblb_G13.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_G13 : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_G13.v" 69 2 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L82:md33cc2".
 (* ng_UpAblb_UpReqAlign —— UpAblb_UpReqAlign.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpReqAlign : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpReqAlign.v" 49 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L49:me3c4b7".
 (* ng_UpAblb_UpReqAlign2 —— UpAblb_UpReqAlign2.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpReqAlign2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpReqAlign2.v" 48 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L48:m578601".
 (* ng_UpAblb_UpReqAlignRestA —— UpAblb_UpReqAlignRestA.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpReqAlignRestA : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpReqAlignRestA.v" 48 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L48:m4a3986".
 (* ng_UpAblb_UpReqDist —— UpAblb_UpReqDist.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpReqDist : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpReqDist.v" 34 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L34:mca4955".
 (* ng_UpAblb_UpSigMigrate —— UpAblb_UpSigMigrate.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpSigMigrate : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpSigMigrate.v" 84 3 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L96:m530d32".
 (* ng_UpAblb_UpSigMigrate2 —— UpAblb_UpSigMigrate2.v：v1 b batch, N x19, four-gate green () *)
-Definition ng_UpAblT13b_UpSigMigrate2 : NewGreenFace :=
-  MkNewGreenFace "UpAblT13b_UpSigMigrate2.v" 71 2 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L71:m465cb8".
 (* ng_UpAblb_UpTVDoeblin —— UpAblb_UpTVDoeblin.v：v1 b batch, N x19, four-gate green () *)
 Definition ng_UpAblT13b_UpTVDoeblin : NewGreenFace :=
   MkNewGreenFace "UpAblT13b_UpTVDoeblin.v" 39 1 20260919 "v1 T13b batch, N x19, four-gate green (_tt13b_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L39:mceb0e2".
