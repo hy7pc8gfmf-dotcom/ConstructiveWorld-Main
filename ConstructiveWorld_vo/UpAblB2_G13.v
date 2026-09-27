@@ -1,11 +1,11 @@
 (* ==========================================================================)
-   UpAblB2_G13.v — Gibbs 不等式与等号面的抽象复核及剩余前提收窄
-   使命: b_gibbs_pos/b_gibbs_sum_eps/b_gibbs_eq 三语句在抽象接口载体上显式前提全参复核，两点 Real 载体上实例化并将剩余前提收窄为显式携带的定理（log-le/log-eq 前提的构造性边界注记在册）。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpSigMigrate2、UpStepKL、UpRealLeB、S08_RealMainlineDPO、G08_Gibbs、UpReqCEqDispersion（只读使用）。
-   对标: Gibbs 不等式（相对熵非负性）及等号情形（分布相等当且仅当相对熵为零）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；接口面为 Set 层序谓词；文末对十条结论逐一 Print Assumptions 全 Closed。
-   编译配方: Rocq 9.1 直调 coqc 编译（不带 -Q 包映射），cpu_guard 包裹限载；输出一律 -o 临时目录，树内 .vo 不重写。
+   UpAblB2_G13.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：t34_log_eq_linear_weak、t34_s6_w2_gibbs_eq、t34_s6_req_u2_fixed_point_unique、uabB2_bgibbs_pos_full、uabB2_bgibbs_sum_eps_full、uabB2_bgibbs_eq_full、uabB2_t2sum、uabB2_opp_zero、uabB2_znn_abs。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
+
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -21,13 +21,133 @@ Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
+Require Import UpReqKLSTangent.
+Require Import G05_LogSmall.
 Require Import UpReqAlgebra.
+Require Import UpReqU2.
 Require Import UpReqDist.
 Require Import UpSigMigrate2.
 Require Import UpStepKL.
 Require Import UpRealLeB.
 Require Import G08_Gibbs.
-Require Import UpReqCEqDispersion.
+
+(* ================= §1 t34_log_eq_linear_weak 族 ================= *)
+Import RealInterfaceEnhancedMod.
+
+(* Part A：桥接引理——「切点⟹一」的 eq 槽接口形重曝                             *)
+(*   槽形（UpReqU2 L315-316 出节形）：                                     *)
+(*     forall x Hx, req (log x Hx) (req_minus x one) -> req x one          *)
+
+
+(*   (opp b)），桥接引理零重证、零新假设。                                     *)
+
+Lemma t34_log_eq_linear_weak : forall (u : Real) (Hu : lt zero u),
+  req (log u Hu) (req_minus u one) -> req u one.
+Proof.
+  intros u Hu Heqlin.
+  exact (t1_log_eq_linear_inject u Hu Heqlin).
+Qed.
+
+(* Part B：s6 位使用件 Real 实例化                                         *)
+(*   签名照检验打表 post-End used-subset 转录（w2_gibbs_eq 不吃 sum_pos、   *)
+(*   req_u2_fixed_point_unique 不吃 eta_le_one——出节已剪除）；              *)
+(*   S 与 sumf 保持全称（比 bool 两点载体更强的 Real 层形）。               *)
+
+(* ---- 使用位 1：w2_gibbs_eq（UpReqU2 L477；普查 s6 ReqU2FixedPoint 位） ---- *)
+
+Theorem t34_s6_w2_gibbs_eq :
+  forall (S : Set) (sumf : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g)) ->
+  (forall f g : S -> Real,
+    req (sumf (fun s => plus (f s) (g s))) (plus (sumf f) (sumf g))) ->
+  (forall (a : Real) (f : S -> Real),
+    req (sumf (fun s => mult a (f s))) (mult a (sumf f))) ->
+  (forall f : S -> Real,
+    (forall s : S, le zero (f s)) -> req (sumf f) zero ->
+    forall s : S, req (f s) zero) ->
+  (* log_le_linear 槽：plain-le Or 编码逆向桥不可及——诚实接口参数位 *)
+  (forall (x : Real) (Hx : lt zero x),
+    le (log x Hx) (req_minus x one)) ->
+  forall (p q : S -> Real)
+    (Hp : @UpReqU2.pos3 Real RealEnhancedReal S p)
+    (Hq : @UpReqU2.pos3 Real RealEnhancedReal S q),
+    @UpReqU2.nrm Real RealEnhancedReal S sumf p ->
+    @UpReqU2.nrm Real RealEnhancedReal S sumf q ->
+    req (@UpReqU2.KLE Real RealEnhancedReal S sumf p q Hp Hq) zero ->
+    forall s : S, req (p s) (q s).
+Proof.
+  intros S sumf sum_ext sum_add sum_linear sum_zero_nonneg
+         log_le_linear p q Hp Hq Hnp Hnq Hkl0 s.
+  exact (@UpReqU2.w2_gibbs_eq Real RealEnhancedReal S sumf
+           sum_ext sum_add sum_linear sum_zero_nonneg
+           logd_log_compat_real
+           log_le_linear
+           t34_log_eq_linear_weak
+           p q Hp Hq Hnp Hnq Hkl0 s).
+Qed.
+
+(* ---- 使用位 2：req_u2_fixed_point_unique（UpReqU2 L739；w2_gibbs_eq ---- *)
+(*      下游——pi_t 不动点唯一性 ⟹ pi_t == PSTR 逐点） -------------------- *)
+
+Theorem t34_s6_req_u2_fixed_point_unique :
+  forall (S : Set) (sumf : (S -> Real) -> Real),
+  (forall f g : S -> Real,
+    (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g)) ->
+  (forall f g : S -> Real,
+    req (sumf (fun s => plus (f s) (g s))) (plus (sumf f) (sumf g))) ->
+  (forall (a : Real) (f : S -> Real),
+    req (sumf (fun s => mult a (f s))) (mult a (sumf f))) ->
+  forall (sum_pos : forall f : S -> Real,
+            (forall s : S, lt zero (f s)) -> lt zero (sumf f)),
+  (forall f : S -> Real,
+    (forall s : S, le zero (f s)) -> req (sumf f) zero ->
+    forall s : S, req (f s) zero) ->
+  
+  (forall x : Real,
+    req (log_inv (exp_neg x) (exp_neg_pos x)) x) ->
+  (forall (x : Real) (Hx : lt zero x),
+    le (log x Hx) (req_minus x one)) ->
+  forall (reward : S -> Real) (beta : Real) (beta_pos : lt zero beta)
+    (pi_ref : S -> Real) (pi_ref_pos : forall s : S, lt zero (pi_ref s))
+    (eta : Real) (eta_pos : lt zero eta)
+    (ZAL_pos : lt zero (@UpReqU2.ZAL Real RealEnhancedReal S sumf
+                          reward beta beta_pos pi_ref))
+    (req2_gibbs_inequality : forall (p q : S -> Real)
+                               (Hp : @UpReqU2.pos3 Real RealEnhancedReal S p)
+                               (Hq : @UpReqU2.pos3 Real RealEnhancedReal S q),
+                             le zero (@UpReqU2.KLE Real RealEnhancedReal S sumf
+                                        p q Hp Hq))
+    (pi_t : S -> Real) (Hpi_t : @UpReqU2.pos3 Real RealEnhancedReal S pi_t),
+    @UpReqU2.nrm Real RealEnhancedReal S sumf pi_t ->
+    (forall s : S,
+      req (@UpReqU2.NPX Real RealEnhancedReal S sumf sum_pos reward beta
+             beta_pos pi_ref pi_ref_pos eta pi_t Hpi_t s)
+           (pi_t s)) ->
+    forall s : S,
+      req (pi_t s)
+          (@UpReqU2.PSTR Real RealEnhancedReal S sumf reward beta beta_pos
+             pi_ref ZAL_pos s).
+Proof.
+  intros S sumf sum_ext sum_add sum_linear sum_pos sum_zero_nonneg
+         log_inv_exp_neg_req log_le_linear
+         reward beta beta_pos pi_ref pi_ref_pos eta eta_pos
+         ZAL_pos req2_gibbs_inequality pi_t Hpi_t Hn Hfix s.
+  exact (@UpReqU2.req_u2_fixed_point_unique Real RealEnhancedReal S sumf
+           sum_ext sum_add sum_linear sum_pos sum_zero_nonneg
+           logd_log_compat_real
+           logd_log_inv_exp_neg_real
+           log_le_linear
+           t34_log_eq_linear_weak
+           reward beta beta_pos pi_ref pi_ref_pos eta eta_pos
+           ZAL_pos req2_gibbs_inequality pi_t Hpi_t Hn Hfix s).
+Qed.
+
+(* 尾核：Print Assumptions（G3 零外假设见证）                              *)
+Print Assumptions t34_log_eq_linear_weak.
+Print Assumptions t34_s6_w2_gibbs_eq.
+Print Assumptions t34_s6_req_u2_fixed_point_unique.
+(* ================= §2 uabB2_bgibbs_pos_full 族 ================= *)
 Import RealInterfaceEnhancedMod.
 
 (* ======== §1 · 抽象载体全参出节形复核（三语句逐一显式前提） ====== *)

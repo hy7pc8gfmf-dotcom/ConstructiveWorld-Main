@@ -1,13 +1,11 @@
 (* ==========================================================================)
-   UpAblP1_SqrtfCauchy_four_slots.v — 宿主 SqrtfCauchy 四假设位的逐字语句实例化件
-   使命: metric_abs 桥接位、abs 锐化 eps 形位、1<1+1 严格档、严格加法混合保序位四位的实例化定理：证明体全部 exact 一行代入库内已证实例件，零新数学；附提取检验（Obj.magic=0）与假设闭包审计（Print Assumptions 全 Closed）。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、SqrtfCauchyDischarge、UpReqRealLtShiftBridge、UpReqStrictBridgeD、Extraction。
-   对标: 序谓词/等词桥面的逐字语句实例化（宿主声明行的 R:=Real 实例投影形）。
-   构造性: 全 Set 层语句（req/le/lt 接口 Set 值谓词）；零新增假设声明形；全 Qed；宿主与只读树零改；前缀 uabp1_ 全库零撞名。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树原地重编），cpu_guard 包裹限载。
+   UpAblP1_SqrtfCauchy_four_slots.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：sbd_req_lt_plus_compat_lt_le、sbd_log_req_compat、sbd_log_inv_exp_neg_req、sbd_req_lt_plus_compat_le_lt、uabp1_sfc_metric_abs_slot、uabp1_sfc_abs_le_plus_eps_slot、uabp1_sfc_lt_one_two_slot、uabp1_sfc_lt_plus_compat_lt_le_slot。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
 
-From Stdlib Require Import Extraction.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -23,20 +21,90 @@ Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
-Require Import UpReqAlgebra.
-Require Import SqrtfCauchyDischarge.
 Require Import UpReqRealLtShiftBridge.
-Require Import UpReqStrictBridgeD.
+Require Import UpReqAlgebra.
+From Stdlib Require Import Extraction.
+Require Import SqrtfCauchyDischarge.
+
+(* ================= §1 sbd_req_lt_plus_compat_lt_le 族 ================= *)
+From Stdlib Require Import QArith.QArith QArith.Qabs.
 Import RealInterfaceEnhancedMod.
 
-(* ============ 位2 重述：metric_abs 桥接位（宿主 :56 逐字） ============ *)
+(* ============ ① 槽1 实例化消解：严格序加法混合保序（lt_le 混合形） ============ *)
+(* 参数位语句（UpReqAlgebra ，RealInterfaceEnhancedSetoid Real 字段面）：
+   forall a b c d, lt a b -> le c d -> lt (plus a c) (plus b d)。
+   种子 rlsb_lt_plus_compat_lt_le（UpReqRealLtShiftBridge ③）语句逐字同构
+   （lt:=real_lt、le:=real_le、plus:=real_plus，Instance RealEnhancedReal
+   字段装配 S07:8577/8578/8573），δ 一步重述代入。 *)
+Definition sbd_req_lt_plus_compat_lt_le :
+  forall a b c d : Real, lt a b -> le c d -> lt (plus a c) (plus b d)
+  := @rlsb_lt_plus_compat_lt_le.
+
+(* ============ ② 槽2 实例化消解：log 参数 req 兼容 ============ *)
+(* 参数位语句（UpReqAlgebra ）：forall x y (Hx : lt zero x) (Hy : lt zero y),
+   req x y -> req (log x Hx) (log y Hy)。
+   判定路线：real_log_wd（S08:1074，锚点法已验件）语句与槽语句在
+   Real 实例面逐字同构（zero:=real_zero、log:=real_log、req:=real_eq），
+   直接代入一步，零重述零组装。 *)
+Definition sbd_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy)
+  := @real_log_wd.
+
+(* ============ ③ 槽3 实例化消解：log 对 exp_neg 左逆 ============ *)
+(* 参数位语句（UpReqAlgebra ）：forall x, req (log_inv (exp_neg x)
+   (exp_neg_pos x)) x。字段装配（Instance RealEnhancedReal）：
+   log_inv:=real_log_inv（S07:8656）、exp_neg:=real_exp_neg（S07:8646）、
+   exp_neg_pos:=real_exp_neg_pos（S07:8647）。
+   链：log_inv y == opp (log y)（real_log_inv_log，S07:7875）
+       → opp 换形（RealSetoid.real_eq_opp_compat，S07:255）吃
+         real_log_exp_neg（S08:1028：log(e^{-x}) == −x）
+       → opp(opp x) == x（real_opp_opp，S08:106）闭合。 *)
+Theorem sbd_log_inv_exp_neg_req : forall x : Real,
+  req (log_inv (exp_neg x) (exp_neg_pos x)) x.
+Proof.
+  intro x.
+  apply (real_eq_trans
+           (real_log_inv (real_exp_neg x) (real_exp_neg_pos x))
+           (real_opp (real_opp x))
+           x).
+  - apply (real_eq_trans
+             (real_log_inv (real_exp_neg x) (real_exp_neg_pos x))
+             (real_opp (real_log (real_exp_neg x) (real_exp_neg_pos x)))
+             (real_opp (real_opp x))).
+    + exact (real_log_inv_log (real_exp_neg x) (real_exp_neg_pos x)).
+    + exact (RealSetoid.real_eq_opp_compat
+               (real_log (real_exp_neg x) (real_exp_neg_pos x))
+               (real_opp x) (real_log_exp_neg x)).
+  - exact (real_opp_opp x).
+Qed.
+
+(* ============ ④ 家族闭合伴件：le_lt 形随槽1 实例化消解体闭合 ============ *)
+(* UpReqAlgebra.req_lt_plus_compat_le_lt（）出节签名（检验捕获）：
+   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R),
+     (forall a b c d, lt a b -> le c d -> lt (plus a c) (plus b d)) ->
+     forall a b c d, le a b -> lt c d -> lt (plus a c) (plus b d)。
+   槽1 实例化消解体喂出节首参（discharged 首参位），le_lt 形在 Real 实例上
+   无新假设闭合——ReqStrictOrderBridge 族两形式至此全闭。 *)
+Definition sbd_req_lt_plus_compat_le_lt :
+  forall a b c d : Real, le a b -> lt c d -> lt (plus a c) (plus b d)
+  := @req_lt_plus_compat_le_lt Real RealEnhancedReal
+       sbd_req_lt_plus_compat_lt_le.
+
+(* ============ 关卡 G4：假设闭包检验（四件全 Closed 为过关判据） ============ *)
+Print Assumptions sbd_req_lt_plus_compat_lt_le.
+Print Assumptions sbd_log_req_compat.
+Print Assumptions sbd_log_inv_exp_neg_req.
+Print Assumptions sbd_req_lt_plus_compat_le_lt.
+(* ================= §2 uabp1_sfc_metric_abs_slot 族 ================= *)
+Import RealInterfaceEnhancedMod.
+
 Theorem uabp1_sfc_metric_abs_slot :
   forall a b : Real,
   @req Real RealEnhancedReal (@metric Real RealEnhancedReal a b)
        (@abs Real RealEnhancedReal (@req_minus Real RealEnhancedReal a b)).
 Proof. exact sfcx_metric_abs_slot. Qed.
 
-(* ============ 位4 重述：abs 锐化 eps 形位（宿主 :61-62 逐字） ============ *)
 Theorem uabp1_sfc_abs_le_plus_eps_slot :
   forall t : Real,
   @le Real RealEnhancedReal (@zero Real RealEnhancedReal) t ->
@@ -46,14 +114,12 @@ Theorem uabp1_sfc_abs_le_plus_eps_slot :
       (@plus Real RealEnhancedReal t eps).
 Proof. exact sfcx_abs_le_plus_eps_slot. Qed.
 
-(* ============ 位5 重述：1 < 1+1 严格档（宿主 :68 逐字） ============ *)
 Theorem uabp1_sfc_lt_one_two_slot :
   @lt Real RealEnhancedReal (@one Real RealEnhancedReal)
       (@plus Real RealEnhancedReal (@one Real RealEnhancedReal)
              (@one Real RealEnhancedReal)).
 Proof. exact sfcx_lt_one_two_slot. Qed.
 
-(* ============ 位6 重述：严格加法混合保序 lt_le 形（宿主 :73-74 逐字） ==== *)
 Theorem uabp1_sfc_lt_plus_compat_lt_le_slot :
   forall a b c d : Real,
   @lt Real RealEnhancedReal a b ->

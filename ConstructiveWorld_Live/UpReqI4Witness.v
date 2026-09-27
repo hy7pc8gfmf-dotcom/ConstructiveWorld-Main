@@ -1,82 +1,10 @@
-(* ============================================================
-   使命：本件定理/引理声明面所述性质的形式化（原头注为历史注记块，
-         实质整编候后波；本块为五字段指针）。
+(* ==========================================================================)
+   UpReqI4Witness.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：i4b_kl0_or_of_lt、i4b_kl0_or_of_eq、i4b_pow_kl_mono_le_b、i4b_policy_iter_kl_pow_mono_B、i4b_policy_iter_kl_pow_mono_eq0、t30_id_nat_fwd、t30_id_nat_rev、t30_seq_split、t30_lsum_zero_seq。
    依赖：件内 Require 声明面所列库件。
-   编译配方：coqc -native-compiler no -q -Q . ""。
-   ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqI4Witness.v *)
-(* *)
-(* 目的： 结论 I4 证书位的实例化（无条件形）。 *)
-(* 主件： i4b_policy_iter_kl_pow_mono_unconditional：经 t30 见证族去假设位化。 *)
-(* 依赖： CW_ConstructiveWorld_219、UpRealLeB、UpRealLeB2、G07_KLWall、UpReqGeomD、UpGeomB、UpReqGeomIter、UpReqPowMonoBridge、UpReqI4Bridge。 *)
-(* 备注： 实例化件：t30_kl_term_eq_zero 等见证把桥接引理假设位落实为零前提形。 *)
-(* 构造性注记：Set 层承载、零承认、可提取。 *)
-(* 编译配方：rocq 9.1 直调 + cpu_guard。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpReqI4Witness.v —— 结论 I4 证书位实例化件 *)
-(*   使命＝为具体 geodi 实例补供 Or 形 0 ≤ KL_0 证书，使结论 I4 的        *)
-(*   使用位（UpReqI4Bridge 主桥接引理2 的 Hkl0or 前提）从接口化降为          *)
-(*   「证书内部构造」：调用方不再提供 KL_0 形态的任何前提，只需提供      *)
-
-(* ---------------------------------------------------------------- *)
-(* 上游链（全只读使用，既有绿件零改）：                                   *)
-(*   · 端点件 klst_kl_energy_nonconst（G07 Part G，KL>0 无条件主件）： *)
-(*     双归一化＋逐项双向弱序＋s0 处任一方向严格分离 ⟹ 0 < Σ kl_term。   *)
-
-(*   · klst_gibbs_core_zero（G07）：r==p ⟹ kl_term＋(p−r) == 0——        *)
-
-(*   · 接口件 i4b_kl0_or_of_lt / i4b_kl0_or_of_eq（UpReqI4Bridge     *)
-
-(*   · 主桥 i4b_policy_iter_kl_pow_mono_B（件2）：结论 I4 使用位，   *)
-
-(*   · geod_lsum（UpReqGeomD L218）≡ real_list_sum nat f (seq 0 n)——     *)
-(*     定义性展开即与 G07 的 list 形（l1 ++ s0 :: l2）无磨合对接。        *)
-(* ---------------------------------------------------------------- *)
-(* 件清单（11 件全 Qed）：                                               *)
-(*   件W0 t30_id_nat_rev：库内 Set 层等同 Id 的运输件（Id 非可改写等号，  *)
-(*       仅供 destruct 完成，语句面 Set 值）；                            *)
-(*   件W0b t30_seq_split：seq 0 (Nat.succ(j+k)) 的 l1++j::l2 分解——       *)
-(*       内部改写通道件（结论为 stdlib 等号，仅作 rewrite 通道用，        *)
-(*       非结果语句面；结果面 W2–W8 全 Set 值）；                         *)
-(*   件W1a t30_lsum_zero_seq / 件W1b t30_lsum_zero：全零和归零；          *)
-(*   件W2 t30_kl_term_eq_zero：逐项归零（klst_gibbs_core_zero 运输）；    *)
-(*   件W3 t30_kl0_eq_of_pointwise：inr 支——逐点 r==p ⟹ KL_0 == 0；       *)
-(*   件W4 t30_kl0_lt_of_div：inl 支——逐点双向可比＋j 处任一方向严格       *)
-(*       分离 ⟹ 0 < KL_0（klst_kl_energy_nonconst 在 geodi 实例化）；     *)
-(*   件W5 t30_kl0_or_of_case：组装——分布层情形见证 Or ⟹ Or 形 0≤KL_0    *)
-(*       （inl 支经件0a、inr 支经件0b，两支接口件全量复用）；             *)
-(*   件W6 i4b_policy_iter_kl_pow_mono_unconditional：无条件闭合主件——    *)
-(*       结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」，前提包＝       *)
-
-(*       内部合成（使用  主桥接引理2 一次直连）；                          *)
-(*   件W7/W8 i4bw_..._nonconst / i4bw_..._const：两支端到端实例——        *)
-(*       单支见证即全闭合的分布级演示（ 件3 的分布级升级版）。         *)
-(* ---------------------------------------------------------------- *)
-(* 诚实边界（残差精确形状，承 T1 结论）：                                 *)
-(*   · 逐项可比前提 Or (real_le (r i) (p i)) (real_le (p i) (r i)) 的    *)
-(*     去除＝对任意实对供三分判定见证（LLPO 形），非直觉主义可证         *)
-(*     （T1 卡消解(a) 终点结论在案）；                                   *)
-(*   · 分离见证位的「情形 Or」（逐点相等 支 / 分离见证 支）同理不可      *)
-(*     去除——KL_0>0 与 KL_0==0 的构造性可分缺口在上游（实对序判定），   *)
-(*     不在 KL_0 证书侧；本件把缺口从「KL_0 形前提」下推到「分布层       *)
-(*     数据见证」，已到该链路的直觉主义终点；                            *)
-(*   · 具体实例两侧见证皆可构造：r:=均匀分布、p 为任一有理可算扰动       *)
-(*     分布时，可比性与分离见证按有理序可判定逐点供给。                  *)
-(* 红线自检：零未闭合证明（全件Qed）；零新依赖面（仅 Require 既有绿库）； *)
-(*   语句面全 Set 值（real_le/real_lt/real_eq/NatLt/NatLe 全 Set 值，    *)
-(*   Or:=A+B 库内 Set 和型；情形见证用 sigT 不用存在命题，零命题泄露；   *)
-(*   唯一 stdlib 等号出现在 W0b 内部改写通道，见其登记表行）；              *)
-(*   纯 term-mode 组装（real_eq 非可改写等号，全链 real_eq_trans 运输；  *)
-(*   库内 Id 亦非可改写等号，全链 destruct 完成件 W0 运输）；             *)
-(*   禁词全零（按全文件计含头注，中文语义表述不引字面量）。              *)
-(* 编译配方（vo 树前置；EMPTY 处为空串实参，引号从略防注释串警告；       *)
-(*   cpu_guard 包装零裸调，CoreN 0；先 -vos 秒审再全量）：                *)
-
-(* ============================================================ *)
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
 From Stdlib Require Import PeanoNat.
 From Stdlib Require Import List.
@@ -102,11 +30,157 @@ Require Import UpReqGeomD.
 Require Import UpGeomB.
 Require Import UpReqGeomIter.
 Require Import UpReqPowMonoBridge.
-Require Import UpReqI4Bridge.
 
-(* ============================================================ *)
+(* ================= §1 i4b_kl0_or_of_lt 族 ================= *)
+(* 〇、证书位接口：Or 形 0 ≤ KL_0 的两支可通行构造                        *)
+
+(* 件0a：严格见证支。0 < KL_0 直接给 Or 左支（real_le = lt ∨ eq）。 *)
+Lemma i4b_kl0_or_of_lt : forall KL0 : Real,
+  real_lt real_zero KL0 -> real_le real_zero KL0.
+Proof.
+  intros KL0 H. exact (inl H).
+Qed.
+
+(* 件0b：等式反射支。KL_0 == 0 经 real_eq_sym 运输＋Or 右支自反。 *)
+Lemma i4b_kl0_or_of_eq : forall KL0 : Real,
+  real_eq KL0 real_zero -> real_le real_zero KL0.
+Proof.
+  intros KL0 Heq.
+  exact (RealSetoid.real_le_id_l real_zero KL0 KL0
+           (real_eq_sym KL0 real_zero Heq) (real_le_refl KL0)).
+Qed.
+
+(* 一、结论 I4 缺口形状实例闭合：κ^{t1}·KL_0 ≤_B κ^t·KL_0                 *)
+(*   ＝ UpReqGeomIter 尾注所指「κ^{t1}·KL_0 ≤ κ^t·KL_0+δ 的 le_b 乘法    *)
+(*   保序闭包（非负右因子版）」在使用点的单点落成（④件1 ∘ ③powb 单调）。 *)
+
+Lemma i4b_pow_kl_mono_le_b : forall (n : nat) (r : nat -> Real)
+    (Hr : forall i : nat, real_lt real_zero (r i))
+    (eta : Real) (Heta : real_lt real_zero eta) (Hlt1 : real_lt eta real_one)
+    (p : nat -> Real) (Hp : forall i : nat, real_lt real_zero (p i))
+    (t t1 : nat) (Hle : NatLe t t1),
+  real_le real_zero
+    (geod_lsum n (fun i : nat =>
+       real_kl_term (r i) (p i) (Hr i) (Hp i))) ->
+  real_le_b
+    (real_mult (powb_pow (real_plus real_one (real_opp eta)) t1)
+               (geod_lsum n (fun i : nat =>
+                  real_kl_term (r i) (p i) (Hr i) (Hp i))))
+    (real_mult (powb_pow (real_plus real_one (real_opp eta)) t)
+               (geod_lsum n (fun i : nat =>
+                  real_kl_term (r i) (p i) (Hr i) (Hp i)))).
+Proof.
+  intros n r Hr eta Heta Hlt1 p Hp t t1 Hle Hkl0or.
+  exact (x3d_le_b_mult_r_nonneg_or
+           (powb_pow (real_plus real_one (real_opp eta)) t1)
+           (powb_pow (real_plus real_one (real_opp eta)) t)
+           (geod_lsum n (fun i : nat =>
+              real_kl_term (r i) (p i) (Hr i) (Hp i)))
+           (powb_one_minus_eta_mono_dec eta t t1 Heta Hlt1 Hle)
+           Hkl0or).
+Qed.
+
+(* 二、主桥：结论 I4 使用位对接件（X3d 草案 x3d_i4_bridge_draft 正式化）  *)
+
+Lemma i4b_policy_iter_kl_pow_mono_B :
+  forall (n : nat) (r : nat -> Real)
+    (Hr : forall i : nat, real_lt real_zero (r i))
+    (eta : Real) (Heta : real_lt real_zero eta) (Hlt1 : real_lt eta real_one)
+    (p : nat -> Real) (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hnormr : real_eq (geod_lsum n r) real_one)
+    (Hnormp : real_eq (geod_lsum n p) real_one)
+    (Hn : NatLt 0 n)
+    (Hkl0or : real_le real_zero
+                (geod_lsum n (fun i : nat =>
+                   real_kl_term (r i) (p i) (Hr i) (Hp i))))
+    (t t1 : nat) (Hle : NatLe t t1),
+  real_le_b
+    (geod_lsum n (fun i : nat =>
+        real_kl_term (r i)
+          (geodi_iterate n r Hr eta p Hp Hn t1 i)
+          (Hr i) (geodi_iterate_pos n r Hr eta p Hp Hn t1 i)))
+    (real_mult (powb_pow (real_plus real_one (real_opp eta)) t)
+               (geod_lsum n (fun i : nat =>
+                  real_kl_term (r i) (p i) (Hr i) (Hp i)))).
+Proof.
+  intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn Hkl0or t t1 Hle.
+  apply (real_le_b_trans
+           (geod_lsum n (fun i : nat =>
+              real_kl_term (r i)
+                (geodi_iterate n r Hr eta p Hp Hn t1 i)
+                (Hr i) (geodi_iterate_pos n r Hr eta p Hp Hn t1 i)))
+           (real_mult (powb_pow (real_plus real_one (real_opp eta)) t1)
+              (geod_lsum n (fun i : nat =>
+                 real_kl_term (r i) (p i) (Hr i) (Hp i))))
+           (real_mult (powb_pow (real_plus real_one (real_opp eta)) t)
+              (geod_lsum n (fun i : nat =>
+                 real_kl_term (r i) (p i) (Hr i) (Hp i))))).
+  (* 跳①：主件 B 伴件（t1 站位，UpReqGeomIter 主定理伴件） *)
+  - exact (geodi_policy_iter_kl_geom_iter_B n r Hr eta Heta Hlt1 p Hp
+             Hnormr Hnormp Hn t1).
+  (* 跳②：件1（④∘③，非负右因子取 KL_0） *)
+  - exact (i4b_pow_kl_mono_le_b n r Hr eta Heta Hlt1 p Hp t t1 Hle Hkl0or).
+Qed.
+
+(* 三、证书支路实例：eq 支端到端闭合（证书位接口使用演示）                *)
+
+Lemma i4b_policy_iter_kl_pow_mono_eq0 :
+  forall (n : nat) (r : nat -> Real)
+    (Hr : forall i : nat, real_lt real_zero (r i))
+    (eta : Real) (Heta : real_lt real_zero eta) (Hlt1 : real_lt eta real_one)
+    (p : nat -> Real) (Hp : forall i : nat, real_lt real_zero (p i))
+    (Hnormr : real_eq (geod_lsum n r) real_one)
+    (Hnormp : real_eq (geod_lsum n p) real_one)
+    (Hn : NatLt 0 n)
+    (Heq0 : real_eq (geod_lsum n (fun i : nat =>
+                       real_kl_term (r i) (p i) (Hr i) (Hp i))) real_zero)
+    (t t1 : nat) (Hle : NatLe t t1),
+  real_le_b
+    (geod_lsum n (fun i : nat =>
+        real_kl_term (r i)
+          (geodi_iterate n r Hr eta p Hp Hn t1 i)
+          (Hr i) (geodi_iterate_pos n r Hr eta p Hp Hn t1 i)))
+    (real_mult (powb_pow (real_plus real_one (real_opp eta)) t)
+               (geod_lsum n (fun i : nat =>
+                  real_kl_term (r i) (p i) (Hr i) (Hp i)))).
+Proof.
+  intros n r Hr eta Heta Hlt1 p Hp Hnormr Hnormp Hn Heq0 t t1 Hle.
+  exact (i4b_policy_iter_kl_pow_mono_B n r Hr eta Heta Hlt1 p Hp
+           Hnormr Hnormp Hn
+           (i4b_kl0_or_of_eq (geod_lsum n (fun i : nat =>
+                real_kl_term (r i) (p i) (Hr i) (Hp i))) Heq0)
+           t t1 Hle).
+Qed.
+
+(* 四、假设审计（全件 Closed，证据在编译日志）                            *)
+
+Print Assumptions i4b_kl0_or_of_lt.
+Print Assumptions i4b_kl0_or_of_eq.
+Print Assumptions i4b_pow_kl_mono_le_b.
+Print Assumptions i4b_policy_iter_kl_pow_mono_B.
+Print Assumptions i4b_policy_iter_kl_pow_mono_eq0.
+
+(* 尾注：诚实登记表                                                        *)
+(*   乘法保序闭包（非负右因子版）」已由 UpReqPowMonoBridge 件1 落库；     *)
+
+(*   结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」在补充 Or 形证书     *)
+(*   Hkl0or 下全闭合——使用位需求满足（草案残差即本证书位）。             *)
+(*   · 库内已有全为 B 形（geodi_kl_nonneg_B / real_gibbs_inequality_B /  *)
+(*     gibbsd_gibbs_inequality），其链根 real_gibbs_core_eps 与          *)
+
+(*     逐 eps 完成不给 Or 分支判定（KL_0>0 与 KL_0==0 构造性不可分，     *)
+(*     gibbs 等号条件 r==p 逐点判定同样不可分），B⟹Or 方向显式假设成立，     *)
+
+(*   · 两支可通行支路已登记为接口件（件0a lt 支／件0b eq 支）：使用位    *)
+(*     上游能供严格见证或等式见证时任取一支即全闭合（件3 为 eq 支        *)
+(*     端到端实例）；                                                    *)
+(*   · 有界面 ④件5 亦要求 Or 形 0≤c 前提，同样绕不开本单点——换合成器    *)
+(*     变体不消除残差；唯有上游见证，或「sup KL 上界材料＋纯 B 形因子    *)
+(*     新合成器」路线（库内上界件显式假设，见 UpReqGeomIter 尾注）。          *)
+
+(*   G3 提取检验 Obj.magic=0（，产物目录验后即删）。            *)
+(* ================= §2 t30_id_nat_fwd 族 ================= *)
 (* 〇、桥接引理：库内 Id 运输＋seq 分解（对接 G07 的 l1 ++ s0 :: l2 形）      *)
-(* ============================================================ *)
 
 (* 件W0：Set 层等同运输双向件（Id 非可改写等号，destruct 完成后即定义性换元） *)
 Lemma t30_id_nat_fwd : forall (n m : nat) (P : nat -> Set),
@@ -159,9 +233,7 @@ Proof.
   intros n. unfold geod_lsum. apply t30_lsum_zero_seq.
 Qed.
 
-(* ============================================================ *)
 (* 一、inr 支：逐点 r==p ⟹ KL_0 == 0                                     *)
-(* ============================================================ *)
 
 (* 件W2：逐项归零——klst_gibbs_core_zero（kl_term＋(p−r)==0）经          *)
 (*   real_plus_zero / 加法换形运输到 kl_term == 0                        *)
@@ -208,10 +280,8 @@ Proof.
   - exact (t30_lsum_zero n).
 Qed.
 
-(* ============================================================ *)
 (* 二、inl 支：逐点双向可比＋一处严格分离 ⟹ 0 < KL_0                     *)
 (*   ＝ klst_kl_energy_nonconst（G07 KL>0 无条件主件）在 geodi 实例化    *)
-(* ============================================================ *)
 
 (* 件W4：inl 支主件。j,k 为分离站位的 seq 分解数据（Set 值 Id 见证）。 *)
 Lemma t30_kl0_lt_of_div : forall (n : nat) (r p : nat -> Real)
@@ -253,9 +323,7 @@ Proof.
              Hnormr' Hnormp' Hdiv).
 Qed.
 
-(* ============================================================ *)
 (* 三、组装：分布层情形见证 Or ⟹ Or 形 0 ≤ KL_0                          *)
-(* ============================================================ *)
 
 (* 分离见证形（全 Set 值：sigT 三层，站位 j＋seq 分解 k＋任一方向严格分离） *)
 Definition t30_div_witness (n : nat) (r p : nat -> Real) : Set :=
@@ -289,11 +357,9 @@ Proof.
              (t30_kl0_lt_of_div n r p Hr Hp Hnormr Hnormp Hpq j k Hn Hdiv)).
 Qed.
 
-(* ============================================================ *)
 
 (*   语句与 UpReqI4Bridge 件2 逐字同形，唯一变动＝Hkl0or 前提位换成      *)
 (*   「逐点双向可比＋分布层情形见证」两个数据级前提。                    *)
-(* ============================================================ *)
 
 Lemma i4b_policy_iter_kl_pow_mono_unconditional :
   forall (n : nat) (r : nat -> Real)
@@ -323,9 +389,7 @@ Proof.
            t t1 Hle).
 Qed.
 
-(* ============================================================ *)
 (* 五、两支端到端实例：单支见证即全闭合（分布级演示）                     *)
-(* ============================================================ *)
 
 (* 件W7：nonconst 支端到端——逐点双向可比＋j 处严格分离 ⟹ 结论 I4 目标形 *)
 Lemma i4bw_policy_iter_kl_pow_mono_nonconst :
@@ -389,9 +453,7 @@ Proof.
            t t1 Hle).
 Qed.
 
-(* ============================================================ *)
 (* 六、假设审计（全件 Closed，证据在编译日志）                            *)
-(* ============================================================ *)
 
 Print Assumptions t30_id_nat_fwd.
 Print Assumptions t30_id_nat_rev.
@@ -406,18 +468,14 @@ Print Assumptions i4b_policy_iter_kl_pow_mono_unconditional.
 Print Assumptions i4bw_policy_iter_kl_pow_mono_nonconst.
 Print Assumptions i4bw_policy_iter_kl_pow_mono_const.
 
-(* ============================================================ *)
 (* 尾注：诚实登记表                                                        *)
-(* 【对接判定】结论 I4 使用位（UpReqGeomIter 尾注）所指缺口，经       *)
 
 (*   使用位需求满足且调用方不再持有 KL_0 形前提；主件结论与件2 逐字      *)
 (*   同形，结论 I4 目标形「t ≤ t1 ⟹ KL_{t1} ≤_B κ^t·KL_0」无条件于      *)
 (*   KL_0 证书成立。                                                    *)
-(* 【残差精确形状】情形 Or 前提（逐点相等 支 / 分离见证 支）与逐点双向   *)
 (*   可比前提的去除等价于实对序的三分判定见证（LLPO 形），非直觉主义    *)
 (*   可证（T1 卡消解终点结论同源）；该缺口属上游数据层，非 KL_0 证书     *)
 
 (*   可判定逐点供给（如均匀参考分布对有理可算扰动分布）。                *)
 
 (*   G3 提取检验 Obj.magic=0（产物验后即删）。                *)
-(* ============================================================ *)

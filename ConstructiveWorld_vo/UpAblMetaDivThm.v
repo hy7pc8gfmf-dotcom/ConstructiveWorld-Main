@@ -1,28 +1,10 @@
-(* ============================================================
-   UpAblMetaDivThm —— 使命行：参数化两态核的 lo→0 非混合性无界定理件（mtd_ 前缀）
-(*                                                              *)
-(* 使命：本件形式化给定点态核 K_lo（偏移 lo²/2，行随机，收缩因子 1−lo²）  *)
-(*   的三重结论：①mtd_unbounded——混合时间无界（nat 见证形）：           *)
-(*   forall N budget, 0<budget<1 -> sigT lo, 0<lo ∧ lo<1 ∧              *)
-(*   budget < TV(K_lo 迭代 N 步)，见证 lo:=(1−budget)·inv(reqd_nat_to_R *)
-(*   (S N))（零开方路线），Real 层 Bernoulli plus-形归纳闭合；           *)
-(*   ②mtd_q_doeblin_unbounded——Q 层 Doeblin 界无界性（QltT 见证形，      *)
-(*   见证按 Qle_bool 可判定分裂取 q 与 l02 的较小者）；                  *)
-(*   ③mtd_unbounded_conj——B 侧下界与 C 侧膨胀律（桥接引理               *)
-(*   mtdc_lo_inflation）在共享见证 lo 上的合取。                        *)
-(* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、            *)
-(*   UpReqSampling、UpReqUMixSelect、UpAblMetaWorld3（mtw_mu0/nu0/half/ *)
-(*   sumf/tv/dv/df、mtw_compl/mtw_minus_plus_r/mtw_hh_one）、AttnDoeblin、*)
-(*   UpAblA2_LoInflation、UpAblMetaConjBridge（mtdc_lo_inflation）、     *)
-(*   UpAblMetaEngine（mte_lt_plus_r/mte_lt_le_trans/mte_le_* 等）。     *)
-(* 对标：mathlib bernoulli_inequality（幂下界形）；stdlib QArith 序引理族。*)
-(* 构造性注记：零承认件；零经典逻辑；结论/见证面全 Set 层（sigT+And+lt/ *)
-(*   req/QltT），前件显式证书值参；分式序 Q 嵌入小件以显式 Z 序引理链   *)
-(*   构造（逐位显式归约与正性见证，不经一键算术自动战术）；主件         *)
-(*   mtd_unbounded 以 Defined 收束（见证 lo 可提取可计算）。            *)
-(* 编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
-   coqc -q -Q . "" <件名>.v，cpu_guard 分档执行。 *)
-   ============================================================*)
+(* ==========================================================================)
+   UpAblMetaDivThm.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：mtdc_mult_distr_r、mtdc_two、mtdc_inv2、mtdc_four、mtdc_le_one_four、mtdc_inv2_two、mtdc_inv2_four_two、mtdc_inv_wd、mtdc_ds2_scale。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -39,6 +21,9 @@ Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
+Require Export UpReqAlgebra.
+Require Export UpReqConcMixSel.
+Require Import UpAblP7_UMixSelect.
 Require Import UpReqAlgebra.
 Require Import UpReqDist.
 Require Import UpReqSampling.
@@ -46,18 +31,398 @@ Require Import UpReqUMixSelect.
 Require Import UpAblMetaWorld3.
 Require Import AttnDoeblin.
 Require Import UpAblA2_LoInflation.
-Require Import UpAblMetaConjBridge.
 Require Import UpAblMetaEngine.
+From Stdlib Require Import Setoid Morphisms.
+From Stdlib Require Import Lia.
+
+(* ================= §1 mtdc_mult_distr_r 族 ================= *)
+Import RealInterfaceEnhancedMod.
+
+(* ===== §0 实例化消解与环形簿册桥 ===== *)
+(* mtdc_mult_distr_r：Setoid distrib 字段一跳（comm+congr），                *)
+
+Lemma mtdc_mult_distr_r : forall a b c : Real,
+  req (mult (plus a b) c) (plus (mult a c) (mult b c)).
+Proof.
+  intros a b c.
+  apply (req_trans _ (mult c (plus a b))).
+  { exact (mult_comm (plus a b) c). }
+  apply (req_trans _ (plus (mult c a) (mult c b))).
+  { exact (distrib c a b). }
+  exact (req_plus_compat (mult c a) (mult a c) (mult c b) (mult b c)
+           (mult_comm c a) (mult_comm c b)).
+Defined.
+
+(* mtdc_inv2 证书统一取 req_two_pos（见头注证书同源注）。                     *)
+
+Definition mtdc_two : Real := plus one one.
+Definition mtdc_inv2 : Real := inv_pos mtdc_two req_two_pos.
+Definition mtdc_four : Real := plus mtdc_two mtdc_two.
+
+(* 出节签名（对照 LoInflation 变参序，与封存块 L1503 使用位同形）：           *)
+(*   mtdc_lo_inflation lt_plus_compat_lt_le TV0 Htv0 budget Hbudget          *)
+(*                     lo Hlo0 Hds1 Harch                                     *)
+
+Section ConjBridge.
+
+Variable lt_plus_compat_lt_le : forall a b c d : Real,
+  lt a b -> le c d -> lt (plus a c) (plus b d).
+
+Variable TV0 : Real.
+Variable Htv0 : le zero TV0.
+Variable budget : Real.
+Variable Hbudget : lt zero budget.
+
+Variable lo : Real.
+Variable Hlo0 : lt zero lo.
+Variable Hds1 : lt (mult lo lo) one.   (* δ* < 1：Doeblin 证书 *)
+
+Variable Harch : forall x : Real, le zero x ->
+  sigT (fun N : nat => lt x (cmk_scale (Datatypes.S N) one)).
+
+Let Htwopos : lt zero mtdc_two := plus_positive one one one_pos one_pos.
+Let Hfourpos : lt zero mtdc_four :=
+  plus_positive mtdc_two mtdc_two Htwopos Htwopos.
+Let inv4 := inv_pos mtdc_four Hfourpos.
+
+Let loh := mult lo mtdc_inv2.
+Let ds := mult lo lo.
+Let ds2 := mult loh loh.
+Let kap := req_minus one ds.
+Let kap2 := req_minus one ds2.
+
+Let Hds0 : lt zero ds := mult_positive lo lo Hlo0 Hlo0.
+Let Hwb : lt zero (mult ds budget) :=
+  mult_positive ds budget Hds0 Hbudget.
+Let ub := mult TV0 (inv_pos (mult ds budget) Hwb).
+(* 证书同源：inv_pos_pos 参数位取 req_two_pos（封存块 L1486-1490 同源，纯 δ） *)
+Let Hlohalf0 : lt zero loh :=
+  mult_positive lo mtdc_inv2 Hlo0 (inv_pos_pos mtdc_two req_two_pos).
+Let Hds2_0 : lt zero ds2 := mult_positive loh loh Hlohalf0 Hlohalf0.
+Let Hwb2 : lt zero (mult ds2 budget) :=
+  mult_positive ds2 budget Hds2_0 Hbudget.
+Let ub2 := mult TV0 (inv_pos (mult ds2 budget) Hwb2).
+
+
+Lemma mtdc_le_one_four : le one mtdc_four.
+Proof.
+  apply (le_trans one (plus one one) mtdc_four).
+  - exact (cmk_le_plus_r one one (lt_le_iff zero one (inl one_pos))).
+  - exact (cmk_le_plus_r mtdc_two mtdc_two
+             (le_id_l zero (plus zero zero) mtdc_two
+                (req_sym _ _ (plus_zero zero))
+                (le_plus_compat zero one zero one
+                   (lt_le_iff zero one (inl one_pos))
+                   (lt_le_iff zero one (inl one_pos))))).
+Qed.
+
+
+Lemma mtdc_inv2_two : req (mult mtdc_two mtdc_inv2) one.
+Proof.
+  exact (inv_pos_correct mtdc_two req_two_pos).
+Qed.
+
+Lemma mtdc_inv2_four_two : req (mult mtdc_inv2 mtdc_four) mtdc_two.
+Proof.
+  apply (req_trans _ (mult mtdc_four mtdc_inv2)).
+  { exact (mult_comm mtdc_inv2 mtdc_four). }
+  apply (req_trans _ (plus (mult mtdc_two mtdc_inv2)
+                           (mult mtdc_two mtdc_inv2))).
+  { exact (mtdc_mult_distr_r mtdc_two mtdc_two mtdc_inv2). }
+  apply (req_trans _ (plus one one)).
+  { exact (req_plus_compat (mult mtdc_two mtdc_inv2) one
+                           (mult mtdc_two mtdc_inv2) one
+             (inv_pos_correct mtdc_two req_two_pos)
+             (inv_pos_correct mtdc_two req_two_pos)). }
+  exact (req_refl (plus one one)).
+Qed.
+
+(*    mult_cancel_l→req_mult_cancel_l，id 链→req_trans＋cmk_mult_congr）---- *)
+
+Lemma mtdc_inv_wd : forall (a b : Real) (Ha : lt zero a) (Hb : lt zero b),
+  req a b -> req (inv_pos a Ha) (inv_pos b Hb).
+Proof.
+  intros a b Ha Hb Hab.
+  apply (req_mult_cancel_l b (inv_pos a Ha) (inv_pos b Hb) Hb).
+  exact (req_trans _ _ _
+           (req_trans _ _ _
+              (cmk_mult_congr_r (inv_pos a Ha) b a (req_sym _ _ Hab))
+              (inv_pos_correct a Ha))
+           (req_sym _ _ (inv_pos_correct b Hb))).
+Qed.
+
+(*    loi_ds2_scale 全链 H1-H6，id→req 机械换名，约 35 行零数学新内容） ---- *)
+
+Lemma mtdc_ds2_scale : req (mult mtdc_four ds2) ds.
+Proof.
+  assert (H1 : req (mult mtdc_four loh) (mult lo mtdc_two)).
+  { exact (req_trans _ _ _
+             (mult_assoc mtdc_four lo mtdc_inv2)
+             (req_trans _ _ _
+                (req_mult_compat (mult mtdc_four lo) (mult lo mtdc_four)
+                                 mtdc_inv2 mtdc_inv2
+                   (mult_comm mtdc_four lo) (req_refl mtdc_inv2))
+                (req_trans _ _ _
+                   (req_sym _ _ (mult_assoc lo mtdc_four mtdc_inv2))
+                   (cmk_mult_congr_l lo (mult mtdc_four mtdc_inv2) mtdc_two
+                      (req_trans _ _ _ (mult_comm mtdc_four mtdc_inv2)
+                                       mtdc_inv2_four_two))))). }
+  assert (H2 : req (mult mtdc_four (mult loh loh))
+                  (mult (mult mtdc_four loh) loh)).
+  { exact (mult_assoc mtdc_four loh loh). }
+  assert (H3 : req (mult (mult mtdc_four loh) loh)
+                  (mult (mult lo mtdc_two) loh)).
+  { exact (req_mult_compat (mult mtdc_four loh) (mult lo mtdc_two)
+                           loh loh H1 (req_refl loh)). }
+  assert (H4 : req (mult (mult lo mtdc_two) loh)
+                  (mult (mult (mult lo mtdc_two) lo) mtdc_inv2)).
+  { exact (mult_assoc (mult lo mtdc_two) lo mtdc_inv2). }
+  assert (H5 : req (mult (mult (mult lo mtdc_two) lo) mtdc_inv2)
+                  (mult (mult (mult lo lo) mtdc_two) mtdc_inv2)).
+  { exact (req_trans _ _ _
+             (req_mult_compat (mult (mult lo mtdc_two) lo)
+                              (mult lo (mult mtdc_two lo))
+                              mtdc_inv2 mtdc_inv2
+                (req_sym _ _ (mult_assoc lo mtdc_two lo))
+                (req_refl mtdc_inv2))
+             (req_mult_compat (mult lo (mult mtdc_two lo))
+                              (mult (mult lo lo) mtdc_two)
+                              mtdc_inv2 mtdc_inv2
+                (req_trans _ _ _
+                   (cmk_mult_congr_l lo (mult mtdc_two lo) (mult lo mtdc_two)
+                      (mult_comm mtdc_two lo))
+                   (mult_assoc lo lo mtdc_two))
+                (req_refl mtdc_inv2))). }
+  assert (H6 : req (mult (mult (mult lo lo) mtdc_two) mtdc_inv2) ds).
+  { exact (req_trans _ _ _
+             (req_sym _ _ (mult_assoc (mult lo lo) mtdc_two mtdc_inv2))
+             (req_trans _ _ _
+                (cmk_mult_congr_l (mult lo lo) (mult mtdc_two mtdc_inv2) one
+                   mtdc_inv2_two)
+                (mult_one (mult lo lo)))). }
+  exact (req_trans _ _ _ (req_trans _ _ _ (req_trans _ _ _ H2 H3) H4)
+           (req_trans _ _ _ H5 H6)).
+Qed.
+
+(*    le_mult_compat_r→req_le_mult_compat_r） ---------- *)
+
+Lemma mtdc_ds2_le_ds : le ds2 ds.
+Proof.
+  apply (le_trans ds2 (mult ds2 one) ds).
+  - exact (le_id_r ds2 ds2 (mult ds2 one)
+             (req_sym _ _ (mult_one ds2)) (le_refl ds2)).
+  - apply (le_trans (mult ds2 one) (mult ds2 mtdc_four) ds).
+    + exact (req_le_mult_compat_r ds2 one mtdc_four
+               (lt_le_iff zero ds2 (inl Hds2_0)) mtdc_le_one_four).
+    + exact (le_id_l (mult ds2 mtdc_four) ds ds
+               (req_trans _ _ _ (mult_comm ds2 mtdc_four) mtdc_ds2_scale)
+               (le_refl ds)).
+Qed.
+
+
+Lemma mtdc_ds2_lt_one : lt ds2 one.
+Proof.
+  exact (le_lt_trans ds2 ds one mtdc_ds2_le_ds Hds1).
+Qed.
+
+(*    inv_pos_mult_distr→req_inv_pos_mult_distr、loi_inv_wd→桩5、            *)
+(*    ums_mult_one_l→cmk_mult_one_l，其余 Setoid 同名，约 40 行） ---------- *)
+
+Lemma mtdc_ub2_quad : req ub2 (mult mtdc_four ub).
+Proof.
+  assert (Hsplit : req (mult ds budget)
+                       (mult mtdc_four (mult ds2 budget))).
+  { exact (req_trans _ _ _
+             (req_mult_compat ds (mult mtdc_four ds2) budget budget
+                (req_sym _ _ mtdc_ds2_scale) (req_refl budget))
+             (req_sym _ _ (mult_assoc mtdc_four ds2 budget))). }
+  assert (Hbinv : req (inv_pos (mult ds budget) Hwb)
+                      (mult inv4 (inv_pos (mult ds2 budget) Hwb2))).
+  { exact (req_trans _ _ _
+             (mtdc_inv_wd (mult ds budget)
+                          (mult mtdc_four (mult ds2 budget))
+                          Hwb
+                          (mult_positive mtdc_four (mult ds2 budget)
+                             Hfourpos Hwb2)
+                          Hsplit)
+             (req_inv_pos_mult_distr mtdc_four (mult ds2 budget)
+                                     Hfourpos Hwb2)). }
+  assert (Hub' : req ub (mult inv4 ub2)).
+  { exact (req_trans _ _ _
+             (cmk_mult_congr_l TV0 (inv_pos (mult ds budget) Hwb)
+                (mult inv4 (inv_pos (mult ds2 budget) Hwb2)) Hbinv)
+             (req_trans _ _ _
+                (mult_assoc TV0 inv4 (inv_pos (mult ds2 budget) Hwb2))
+                (req_trans _ _ _
+                   (req_mult_compat (mult TV0 inv4) (mult inv4 TV0)
+                      (inv_pos (mult ds2 budget) Hwb2)
+                      (inv_pos (mult ds2 budget) Hwb2)
+                      (mult_comm TV0 inv4) (req_refl _))
+                   (req_sym _ _ (mult_assoc inv4 TV0
+                                   (inv_pos (mult ds2 budget) Hwb2)))))). }
+  assert (Hfin : req (mult mtdc_four (mult inv4 ub2)) ub2).
+  { exact (req_trans _ _ _
+             (mult_assoc mtdc_four inv4 ub2)
+             (req_trans _ _ _
+                (req_mult_compat (mult mtdc_four inv4) one ub2 ub2
+                   (inv_pos_correct mtdc_four Hfourpos) (req_refl ub2))
+                (cmk_mult_one_l ub2))). }
+  exact (req_sym _ _ (req_trans _ _ _
+           (cmk_mult_congr_l mtdc_four ub (mult inv4 ub2) Hub') Hfin)).
+Qed.
+
+(* ---------- 桩10 主定理：膨胀律（G4 归一形：结论 leg3 取 ub2 归一形，          *)
+(*    pow_tail 双实例化消解 cmk_pow_tail（Heqk 参数位 req 形：kap 定义性 req_refl）--- *)
+
+Theorem mtdc_lo_inflation :
+  sigT (fun k1 : nat =>
+    sigT (fun k2 : nat =>
+      And (lt (mult (cmk_r_pow kap k1) TV0) budget)
+        (And (lt (mult (cmk_r_pow kap2 k2) TV0) budget)
+             (lt (mult mtdc_four ub2) (cmk_scale k2 one))))).
+Proof.
+  assert (Hub : le zero ub).
+  { exact (le_id_l zero
+             (mult zero (inv_pos (mult ds budget) Hwb))
+             (mult TV0 (inv_pos (mult ds budget) Hwb))
+             (req_sym _ _ (req_trans _ _ _
+                (mult_comm zero (inv_pos (mult ds budget) Hwb))
+                (mult_zero (inv_pos (mult ds budget) Hwb))))
+             (le_mult_compat_weak zero TV0
+                (inv_pos (mult ds budget) Hwb)
+                (lt_le_iff zero (inv_pos (mult ds budget) Hwb)
+                             (inl (inv_pos_pos (mult ds budget) Hwb)))
+                Htv0)). }
+  assert (Hub2 : le zero ub2).
+  { exact (le_id_l zero
+             (mult zero (inv_pos (mult ds2 budget) Hwb2))
+             (mult TV0 (inv_pos (mult ds2 budget) Hwb2))
+             (req_sym _ _ (req_trans _ _ _
+                (mult_comm zero (inv_pos (mult ds2 budget) Hwb2))
+                (mult_zero (inv_pos (mult ds2 budget) Hwb2))))
+             (le_mult_compat_weak zero TV0
+                (inv_pos (mult ds2 budget) Hwb2)
+                (lt_le_iff zero (inv_pos (mult ds2 budget) Hwb2)
+                             (inl (inv_pos_pos (mult ds2 budget) Hwb2)))
+                Htv0)). }
+  (* 归一形非负肢：0 ≤ 4·ub2（4·ub2 ≡ TV0·(4·inv(ds2·budget)) 换形后同模） *)
+  assert (Hub4 : le zero (mult mtdc_four ub2)).
+  { assert (HX2p : lt zero (inv_pos (mult ds2 budget) Hwb2))
+      by exact (inv_pos_pos (mult ds2 budget) Hwb2).
+    assert (Hchain : req (mult mtdc_four ub2)
+                         (mult TV0 (mult mtdc_four
+                                       (inv_pos (mult ds2 budget) Hwb2)))).
+    { exact (req_trans _ _ _
+               (mult_assoc mtdc_four TV0
+                  (inv_pos (mult ds2 budget) Hwb2))
+               (req_trans _ _ _
+                  (cmk_mult_congr_r (inv_pos (mult ds2 budget) Hwb2)
+                     (mult mtdc_four TV0) (mult TV0 mtdc_four)
+                     (mult_comm mtdc_four TV0))
+                  (req_sym _ _ (mult_assoc TV0 mtdc_four
+                                  (inv_pos (mult ds2 budget) Hwb2))))). }
+    assert (Hub4' : le zero
+               (mult TV0 (mult mtdc_four
+                             (inv_pos (mult ds2 budget) Hwb2)))).
+    { exact (le_id_l zero
+               (mult zero (mult mtdc_four
+                              (inv_pos (mult ds2 budget) Hwb2)))
+               (mult TV0 (mult mtdc_four
+                             (inv_pos (mult ds2 budget) Hwb2)))
+               (req_sym _ _ (req_trans _ _ _
+                  (mult_comm zero
+                     (mult mtdc_four (inv_pos (mult ds2 budget) Hwb2)))
+                  (mult_zero
+                     (mult mtdc_four (inv_pos (mult ds2 budget) Hwb2)))))
+               (le_mult_compat_weak zero TV0
+                  (mult mtdc_four (inv_pos (mult ds2 budget) Hwb2))
+                  (lt_le_iff zero
+                     (mult mtdc_four (inv_pos (mult ds2 budget) Hwb2))
+                     (inl (mult_positive mtdc_four
+                            (inv_pos (mult ds2 budget) Hwb2)
+                            Hfourpos HX2p)))
+                  Htv0)). }
+    exact (le_id_r zero
+             (mult TV0 (mult mtdc_four (inv_pos (mult ds2 budget) Hwb2)))
+             (mult mtdc_four ub2)
+             (req_sym _ _ Hchain) Hub4'). }
+  (* ub2 ≤ 4·ub2（1 ≤ 4 桩2 ＋ 弱乘单调） *)
+  assert (Hub2le : le ub2 (mult mtdc_four ub2)).
+  { exact (le_id_l ub2 (mult one ub2) (mult mtdc_four ub2)
+             (req_sym _ _ (cmk_mult_one_l ub2))
+             (le_mult_compat_weak one mtdc_four ub2 Hub2
+                mtdc_le_one_four)). }
+  destruct (Harch ub Hub) as [N1 HN1].
+  destruct (Harch (mult mtdc_four ub2) Hub4) as [N2 HN2].
+  destruct (cmk_pow_tail lt_plus_compat_lt_le kap TV0 budget ds N1 Hwb
+              Hds0 Hds1 (req_refl kap) Htv0
+              (lt_le_iff zero budget (inl Hbudget)) HN1) as [k1 Hk1].
+  pose (Hp2 := cmk_pow_tail lt_plus_compat_lt_le kap2 TV0 budget ds2 N2
+                 Hwb2 Hds2_0 mtdc_ds2_lt_one (req_refl kap2) Htv0
+                 (lt_le_iff zero budget (inl Hbudget))
+                 (le_lt_trans ub2 (mult mtdc_four ub2)
+                    (cmk_scale (Datatypes.S N2) one) Hub2le HN2)).
+  exists k1. exists (projT1 Hp2). split.
+  - exact Hk1.
+  - split.
+    + exact (projT2 Hp2).
+    + exact HN2.
+Defined.
+
+End ConjBridge.
+
+(* G2/G3 审计口：PA 预期 Closed（公理面为空、全 Set 层证书）                      *)
+
+Print Assumptions mtdc_lo_inflation.
+
+(* ################  批 2 假设消解块（C2 底册 #10） #################### *)
+(* Section ConjBridge 两接口字段（lt_plus_compat_lt_le 与 Harch）的供给：  *)
+(*   原 Section 与主件签名零改动；本块给出两字段的前置引理与主件的无参数位       *)
+(*   精简版（签名保持式供给：原版保留参数位，精简版由前置引理就位）。        *)
+
+
+(* lpc 位前置引理：语句面与 UpAblMetaDivThm mtd_lpc 逐字同                   *)
+(*   real_lt_plus_compat_lt_le（CW219 Real 层成品）。                       *)
+Definition mtdc_lpc_supply : forall a b c d : Real,
+  lt a b -> le c d -> lt (plus a c) (plus b d) :=
+  real_lt_plus_compat_lt_le.
+
+(* Arch 位前置引理：语句面同 Section ConjBridge 的 Harch 位（le 前件分判）。 *)
+(*   严格支由 uabm_arch_scale 供给（real_arch 的 const 形上界换形）；      *)
+(*   非严格支（x 与零同义）取 N := 0，结论经 cmk_boost_pos（1 + k·w > 0）  *)
+(*   与右端同义改写闭合。                                                  *)
+Theorem mtdc_harch_supply : forall x : Real, le zero x ->
+  sigT (fun N : nat => lt x (cmk_scale (Datatypes.S N) one)).
+Proof.
+  intros x Hx.
+  destruct Hx as [Hlt | Heq].
+  - exact (uabm_arch_scale x Hlt).
+  - exists (Datatypes.O).
+    exact (lt_id_l x zero (cmk_scale (Datatypes.S Datatypes.O) one)
+             (req_sym zero x Heq)
+             (cmk_scale_S_pos mtdc_lpc_supply one Datatypes.O one_pos)).
+Qed.
+
+(* 签名保持式精简版：主件 mtdc_lo_inflation 的无参数位形式——lpc 位与 Arch 位  *)
+(*   分别由 mtdc_lpc_supply 与 mtdc_harch_supply 就位，其余七参显式保留。  *)
+(*   （类型即出节主件结论；由定义项直接推出，避免结论面二次誊写。）        *)
+Definition mtdc_lo_inflation_supplied (TV0 : Real) (Htv0 : le zero TV0)
+           (budget : Real) (Hbudget : lt zero budget)
+           (lo : Real) (Hlo0 : lt zero lo) (Hds1 : lt (mult lo lo) one) :=
+  mtdc_lo_inflation mtdc_lpc_supply TV0 Htv0 budget Hbudget lo Hlo0 Hds1
+                    mtdc_harch_supply.
+
+(* ================= 消解块假设面核验（预期全 Closed） ==================== *)
+Print Assumptions mtdc_lpc_supply.
+Print Assumptions mtdc_harch_supply.
+Print Assumptions mtdc_lo_inflation_supplied.
+(* ================= §2 mtd_natR_nonneg 族 ================= *)
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qround
                Lists.List Bool.Bool Arith.Arith.
 Import ListNotations.
-From Stdlib Require Import Setoid Morphisms.
-From Stdlib Require Import Lia.
 Import RealInterfaceEnhancedMod.
 
-(* ============================================================ *)
 (* §0 通用小件：nat 嵌入非负、Q 层运输 kit                                     *)
-(* ============================================================ *)
 
 Lemma mtd_natR_nonneg : forall n : nat, le zero (reqd_nat_to_R n).
 Proof.
@@ -120,10 +485,8 @@ Proof.
   - exact (Qmult_lt_compat_r 0 a b Hb Ha).
 Qed.
 
-(* ============================================================ *)
 (* §0b Q 层换算小件：lia 对 Q 目标零支持（9.1 micromega 无 ZifyQ）——
    序小件一律 unfold 后落显式 Z 序引理链或 stdlib 项级组合。Q 层小件：          *)
-(* ============================================================ *)
 
 Lemma mtd_Qof_nat_0 : forall n : nat, (0 <= mtd_Qof_nat n)%Q.
 Proof.
@@ -221,9 +584,7 @@ Proof.
     + exact H.
 Qed.
 
-(* ============================================================ *)
 (* §1 G1：Q 层 Bernoulli 件（传递形）与定理 A（Q 层 Doeblin 界无界性）          *)
-(* ============================================================ *)
 
 (* nat 指数 Q 幂（局部载体；stdlib Qpower 为 positive 形，nat 形自备并申报） *)
 Fixpoint mtd_qpow (x : Q) (n : nat) : Q :=
@@ -454,9 +815,7 @@ Proof.
                              (Qle_refl l02) Hl02lt)).
 Defined.
 
-(* ============================================================ *)
 (* §2 Real 层序小件（严格性运输 + Bernoulli plus-形）                          *)
-(* ============================================================ *)
 
 (* 类场（req/le/lt，RealEnhancedReal 实例）与具体 real_eq/real_le
    /real_lt 的 definitional 互转（实例 req:=real_eq / le:=real_le / lt:=real_lt）。
@@ -574,7 +933,7 @@ Proof.
          (mult_one x) (mult_comm x (reqd_nat_to_R n))))).
 Defined.
 
-(* 幂非负（(1−x) 载体；语句面修正：前件=0≤1−x（原 0≤x 使命题为假——
+(* 幂非负（(1−x) 载体；语句面修正：前提=0≤1−x（原 0≤x 使命题为假——
    x>1 时 (1−x)^1<0），自洽形且调用面零改） *)
 Lemma mtd_rpow_nonneg : forall (n : nat) (x : Real),
   le zero (req_minus one x) -> le zero (req_r_pow (req_minus one x) n).
@@ -827,9 +1186,7 @@ Proof.
      (mtd_rbern_plus n x Hx0 Hx1)).
 Defined.
 
-(* ============================================================ *)
 (* §3 G2+G3：参数化两态核（偏移 lo²/2）+ 精确幂律 + 预算下界                    *)
-(* ============================================================ *)
 
 Section mtd_param.
 
@@ -1352,9 +1709,7 @@ Defined.
 
 End mtd_param.
 
-(* ============================================================ *)
 (* §4 主件：mtd_unbounded（lo→0 混合时间无界，nat 见证形）                      *)
-(* ============================================================ *)
 
 Theorem mtd_unbounded :
   forall (N : nat) (budget : Real),
@@ -1497,9 +1852,7 @@ Proof.
     + exact (mtd_no_mixing_below lw Hw0 Hw1 N budget Hbelow).
 Defined.
 
-(* ============================================================ *)
 (* §5 G4：合取收尾（B 侧下界 × C 侧 LoInflation 膨胀律，共享见证 lo）           *)
-(* ============================================================ *)
 
 (* lpc 件内自证（复用 mte_lt_plus_r；零接口参数位） *)
 Definition mtd_lpc : forall a b c d : Real,
@@ -1516,15 +1869,12 @@ Definition mtd_inv2 : Real := inv_pos (plus one one) req_two_pos.
 Definition mtd_four : Real := plus (plus one one) (plus one one).
 Definition mtd_loh (l : Real) : Real := mult l mtd_inv2.
 
-(* ============================================================ *)
-(* 【G4 合取件】——B 侧下界（本件 mtd_unbounded）与 C 侧膨胀律               *)
 (*   （桥接引理 mtdc_lo_inflation，居 UpAblMetaConjBridge）在共享见证 lo      *)
 (*   上的合取：3 族 6 处载体换名                                             *)
 (*   （ums_scale→cmk_scale ×2、r_pow→cmk_r_pow ×2、minus→req_minus ×2）       *)
 (*   语句面最小换名，语义零形变；两主件                                     *)
 (*   mtd_unbounded/mtd_q_doeblin_unbounded 语句面                           *)
 (*   零触碰。                                                               *)
-(* ============================================================ *)
 Theorem mtd_unbounded_conj :
   forall (N : nat) (TV0 : Real) (Htv0 : le zero TV0)
          (budget : Real) (Hbudget : lt zero budget) (Hb1 : lt budget one)
@@ -1569,9 +1919,7 @@ Proof.
                   lw Hlo0 Hds1 Harch).
 Defined.
 
-(* ============================================================ *)
 (* 公理面自检：主件 Closed（零新假设）审计面                                      *)
-(* ============================================================ *)
 
 Print Assumptions mtd_qbernoulli.
 Print Assumptions mtd_q_doeblin_unbounded.

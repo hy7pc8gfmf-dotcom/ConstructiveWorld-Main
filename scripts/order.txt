@@ -61,7 +61,6 @@ G07_KLWall.v#R0-d66910
 G08_Gibbs.v#R0-d66910
 G09_MiscSmall.v#R0-d66910
 G13_EvictFam.v#R0-d66910
-UpArchAttn.v#R0-d66910
 UpConstitution.v#R0-d66910
 UpEntropyGainReq.v#R0-d66910
 UpFirewallReq.v#R0-d66910
@@ -99,7 +98,6 @@ UpReqRealFEP.v#R0-d66910
 UpReqLogCompD2.v#R0-d66910
 UpReqRealLtShiftBridge.v#R0-d66910
 UpReqStrictStepGen.v#R0-d66910
-UpReqStrictBridgeD.v#R0-d66910
 UpReqAlign4.v#R0-d66910
 UpReqPPOB.v#R0-d66910
 UpReqSumB.v#R0-d66910
@@ -108,7 +106,6 @@ UpReqGibbsE2.v#R0-d66910
 UpReqKLStrict.v#R0-d66910
 UpReqExpPos.v#R0-d66910
 UpReqPowMonoBridge.v#R0-d66910
-UpReqI4Bridge.v#R0-d66910
 UpReqI4Witness.v#R0-d66910
 UpReqKLSTangent.v#R0-d66910
 UpReqKLStrictB.v#R0-d66910
@@ -123,7 +120,6 @@ UpReqTempDefs.v#R0-d66910
 UpReqTopKTVChain.v#R0-d66910
 UpReqTrainingEquiv.v#R0-d66910
 UpReqArgminEngine.v#R0-d66910
-UpReqCEqDispersion.v#R0-d66910
 UpReqEntropyDeficitTemp.v#R0-d66910
 UpReqMinUniqueTight.v#R0-d66910
 UpReqNegFactorB.v#R0-d66910
@@ -156,7 +152,6 @@ UpReqBanachClassExt.v#R0-d66910
 UpReqBanachLimUniq.v#R0-d66910
 UpReqBanachBinomBridge.v#R0-d66910
 UpReqBanachInst.v#R0-d66910
-UpReqBanachExpOppOne.v#R0-d66910
 UpReqBanachInstB.v#R0-d66910
 UpReqBanachExpAddEq.v#R0-d66910
 UpReqBanachInstPre.v#R0-d66910
@@ -166,7 +161,6 @@ UpReqPadeBetaPos.v#R0-d66910
 UpReqPadeTailPos.v#R0-d66910
 UpReqPadeLower.v#R0-d66910
 UpReqPadeDenPos12.v#R0-d66910
-UpReqPadeFinale.v#R0-d66910
 QTailBridge.v#R0-d66910
 PadeDenPosB12.v#R0-d66910
 BanachNoHypNorm.v#R0-d66910
@@ -179,7 +173,6 @@ UpReqTBNCBridge.v#R0-d66910
 UpReqGibbsWallEquiv.v#R0-d66910
 UpReqPinWallEquiv.v#R0-d66910
 UpReqB4TwoStage.v#R0-d66910
-UpReqPadeSignXfer.v#R0-d66910
 UpReqBanachInstReal.v#R0-d66910
 UpReqBanachNormOpp.v#R0-d66910
 UpReqBanachSepThm.v#R0-d66910
@@ -197,7 +190,6 @@ DTPT_Bridge_Rot.v#R0-d66910
 DTPT_Bridge_All.v#R0-d66910
 UpReqSpec2x2.v#R0-d66910
 EnergyTempMonoB.v#R0-d66910
-PadeDenPosA.v#R0-d66910
 RealKLDecomp.v#R0-d66910
 BoltzmannBridgeDischarge.v#R0-d66910
 DenPosGeneral.v#R0-d66910
@@ -233,7 +225,6 @@ CurriculumOptTemp.v#R0-d66910
 GibbsAttractor.v#R0-d66910
 PiEnvelope.v#R0-d66910
 PinskerTwoPoint.v#R0-d66910
-SymplecticRotationSpec.v#R0-d66910
 fa53_compat_abs.v#R0-d66910
 AbsLeId.v#R0-d66910
 fa51_sumpos_id.v#R0-d66910
@@ -241,7 +232,6 @@ fa56_id_carrier.v#R0-d66910
 fa56b_ext.v#R0-d66910
 fa56c_ext.v#R0-d66910
 fa52_dpo_witness.v#R0-d66910
-fa52_entropy_diff_unsat.v#R0-d66910
 EntropyUnsatMark.v#R0-d66910
 IdSlotTranslate.v#R0-d66910
 SumEqListFeed.v#R0-d66910
@@ -265,7 +255,6 @@ UpReqMixingTime.v#R0-d66910
 UpReqDoeblinEntropy.v#R0-d66910
 UpReqEngineCeiling.v#R0-d66910
 UpReqPinskerTransport.v#R0-d66910
-UpReqForwardKLFamily.v#R0-d66910
 UpReqWeakTriangle.v#R0-d66910
 UpReqPadeConstUnify.v#R0-d66910
 UpReqPadeTransport.v#R0-d66910
@@ -336,7 +325,6 @@ UpAblD1S10_UpReqPPOPlain.v#R0-d66910
 UpAblD1S11_UpReqPPOPlain.v#R0-d66910
 UpAblD1S2_e752_UpReqAttnIter.v#R0-d66910
 UpAblD1S2_reqlog_AlignIdUnclosed.v#R0-d66910
-UpAblD1S2_reqlog_GibbsAssembly.v#R0-d66910
 UpAblD1S2_reqlog_UpReqAlign3.v#R0-d66910
 UpAblD1S2_reqlog_UpReqAlignClose.v#R0-d66910
 UpAblD1S2_reqlog_UpReqCauchy.v#R0-d66910
@@ -378,7 +366,6 @@ UpAblP1_SecondLawQuantified_sumd.v#R0-d66910
 UpAblP1_SqrtfCauchyArch_arch.v#R0-d66910
 UpAblP1_SqrtfCauchy_four_slots.v#R0-d66910
 UpAblP2_FepIdentClass_inst_bundle.v#R0-d66910
-SecondLawConsume.v#R112-7aeac3
 UpAblP2_SecondLawConsume_sumdis.v#R0-d66910
 UpAblP2_UpMinP_tokens_pack.v#R0-d66910
 UpAblP3_UpReqAttnMixTime.v#R0-d66910
@@ -462,14 +449,11 @@ BetaLower.v#R0-d66910
 UpAblZpos.v#R0-d66910
 UpAblZposReal.v#R0-d66910
 UpAblZposDirect.v#R0-d66910
-UpAblSposDirect.v#R0-d66910
 UpAblEps49RKDBase.v#R0-d66910
 UpAblEps49Main.v#R0-d66910
 UpAblEps49List.v#R0-d66910
-UpAblEps49Fam.v#R0-d66910
 UpAblEps49Body.v#R0-d66910
 UpAblEps66Sum.v#R0-d66910
-UpAblEps66Pos.v#R0-d66910
 UpAblEps66Body.v#R0-d66910
 UpAblP1T1_AlignCert.v#R0-d66910
 UpAblP1T2_GrpoAuditCert.v#R0-d66910
@@ -484,9 +468,6 @@ UpAblP7_Paper7Ablation_S1inst.v#R0-d66910
 UpAblP7_UMixSelect.v#R0-d66910
 UpAblP7_WallEpsChain_B.v#R0-d66910
 UpAblP7_WallEps_CB2.v#R0-d66910
-UpAblP7_WallEps_CSM.v#R0-d66910
-UpAblP7_LoHiCross.v#R0-d66910
-UpAblP7_P7KappaFlagship.v#R0-d66910
 UpAblP7_WallEpsChain_A.v#R0-d66910
 UpAblP7_Package.v#R0-d66910
 UpAblAlmConsumption.v#R0-d66910
@@ -496,7 +477,6 @@ UpAblGrpEqDecWorld.v#R0-d66910
 UpAblGrpEqDischarge.v#R0-d66910
 UpAblP2FeedMix.v#R0-d66910
 UpAblP2FeedSum.v#R0-d66910
-UpAblLeEqCompat.v#R0-d66910
 UpAblP2FeedSumLe.v#R0-d66910
 UpAblP2T1_Cert.v#R0-d66910
 UpAblP2WByPass.v#R0-d66910
@@ -504,7 +484,6 @@ UpAblA2_LoInflation.v#R0-d66910
 UpAblAbsSumLeB.v#R0-d66910
 UpAblAbsSumLeB2.v#R0-d66910
 UpAblAbsSumLeB3.v#R0-d66910
-UpAblAbsSumLeEps.v#R0-d66910
 UpAblAbsTwoPtAbs.v#R0-d66910
 UpAblAbsFeed.v#R0-d66910
 UpAblB1_MonoSplit.v#R0-d66910
@@ -515,18 +494,14 @@ UpAblD1S15_UpReqAlign3.v#R0-d66910
 UpAblD1S16_UpReqMixTime.v#R0-d66910
 UpAblD1S17_UpReqAttnGibbs.v#R0-d66910
 UpAblD1S17_UpReqDpoLoss.v#R0-d66910
-UpAblDeltaStarSuboptimal.v#R117-94b0dc
 UpAblDeltaStarGeneral.v#R117-94b0dc
-UpAblP2T1_CertB.v#R0-d66910
 UpAblP2T1_CertC.v#R0-d66910
 UpAblAbsQFeed.v#R0-d66910
 UpAblTwLeFeed.v#R0-d66910
 UpAblSlotB0Merge.v#R0-d66910
 UpAblCauchyMod.v#R0-d66910
 UpAblKVEpsHalf.v#R0-d66910
-UpAblHalfPow.v#R0-d66910
 UpAblAbsQFeedB2.v#R0-d66910
-UpAblQeqBridge.v#R0-d66910
 UpAblQfloorDepth.v#R0-d66910
 UpAblS06AbsFeed.v#R0-d66910
 UpAblArchGeomBatch.v#R0-d66910
@@ -534,18 +509,13 @@ UpAblCauchyLim.v#R100-5ed44e
 UpAblHalfPowFeed.v#R100-5ed44e
 UpAblP6_TempDefs.v#R101-0fe093
 GibbsFamilyExt.v#R112-7aeac3
-UpAblP6_GibbsFamilyExt.v#R101-0fe093
-UpAblP6_S5SlotWire.v#R101-0fe093
 UpAblP6_ZPosLowRef.v#R101-0fe093
 UpAblP6_ConcMixSelFeed.v#R101-0fe093
-UpAblP6_UniformLimit.v#R101-0fe093
 UpAblP6_SecondLaw_two_state.v#R101-0fe093
 UpAblP6_StateSpace_inst.v#R101-0fe093
 UpAblP6_EntropyMonoSplit_A.v#R101-0fe093
 UpAblP6_EntropyMonoSplit_B.v#R101-0fe093
-fka_weak_triangle_ref.v#R101-0fe093
 UpAblP6_EntropyMonoSplit_C.v#R101-0fe093
-FepIdConsume.v#R112-7aeac3
 UpAblP6_Package.v#R101-0fe093
 UpAblLogWall.v#R101-0fe093
 UpAblLogWallEq.v#R101-0fe093
@@ -554,11 +524,9 @@ UpAblRateAlgPkg.v#R101-0fe093
 UpAblSlackMix.v#R101-0fe093
 UpAblMetaWorld3.v#R103-a1622d
 UpAblMetaWindow.v#R103-a1622d
-UpReqMixLazy.v#R109-0d3c86
 UpReqMixRealExec.v#R109-0d3c86
 UpAblMetaDivQ.v#R109-0d3c86
 UpAblMetaTemp.v#R109-0d3c86
-UpAblMetaConjBridge.v#R110-64f9b7
 UpAblMetaDivThm.v#R110-64f9b7
 UpAblB2WindowTie.v#R113-1719a2
 UpReqInvPosLazy.v#R113-1719a2
@@ -627,7 +595,6 @@ UpReqCf2TvGenSupply.v#R126-bcac27
 UpReqCf2TvGenWorld.v#R126-6b0d5c
 UpReqCf2TvW3.v#R126-6b186f
 UpAblBYDecisionTree.v#R132-594c6e
-UpAblBYLowerBound.v#R132-3136b2
 UpAblBYUpperTight.v#R132-4f4990
 UpAblMixACount.v#R132-53bf04
 UpAblMixBSharp.v#R132-9300a0

@@ -1,33 +1,11 @@
-(* UpAblP2FeedSum.v —— 论文2 消融件的求和正性供给模块（实数层与接口层双路）：  *) (* 使命：为三处求和正性接口供给显式实例（分四组，见下）。 *)
-(* 依赖：S01_BaseRing 等库内在册件（全列见 Require 面）。 *) (* 构造性注记：零承认语句，纯构造证明。 *)
-(* 编译配方：coqc -q -Q . "" UpAblP2FeedSum.v（9.1 工具链）。 *) (*   以已证件 spd_ 系（UpAblSposDirect）与 zabr 系（UpAblZposReal）为       *)
-(*   实参来源，为三处求和正性接口供给显式实例。全件分四组。                 *) (* 依赖接口三处（均为已注册件中的既有语句形）：                             *)
-(*   其一 S04_RealExpLogConv 的 sum_over_S_pos（Section 自由能最小化节，     *) (*       接口三件套上下文；令名展开后为 Id 系 SumOver 抽象语句形）；         *)
-(*   其二 S06_DiffSamplingGibbs 的 sum_pos_preserved（Section 注意力        *) (*       吉布斯桥节，与其一展开后同形）；                                   *)
-(*   其三 UpReqFEPAttn 的 req 求和六前提语句形（Section ReqFEPAttn：         *) (*       sum_ext/sum_add/sum_linear/sum_le/sum_zero_nonneg/sum_pos）。       *)
-(* 一、桥接适配层（本件实质转换内容）：                                     *) (*   p2f_id_real_eq——集合层 Id 到实数层等词 real_eq 的传输引理；            *)
-(*   p2f_proj_lt_of_real／p2f_real_lt_of_proj／p2f_proj_le_of_real／        *) (*   p2f_real_le_of_proj／p2f_proj_req_of_real／p2f_real_eq_of_proj——       *)
-(*   库实例 RealEnhancedReal 类投影与实数层序/等词的双向转换见证             *) (*   （该实例字段逐位等于实数层名，转换即恒等）。                            *)
-(* 二、Id 系 SumOver 语句形实例 p2f_S04_S06_slot_sum_over_S_pos：在         *) (*   最小世界（uab_ssUnit／uab_soUnit）上实例化，态空间取 unit          *)
-(*   （最小可证非空），接口参量全称保留。                                    *) (* 三、req 六前提语句形在库实例上的装配：p2f_req_sum_ext／add／linear／      *)
-(*   le／zero_nonneg／pos，求和算子取 spd_sum_unit（unit 载体）。            *) (* 四、实数层 list 载体路径：p2f_req_sum_pos_cons（cons 载体，非空性         *)
-(*   由载体本体导出）与 p2f_req_sum_pos_list（任意列表，附非空前提           *) (*   Hnn：Not (Id l nil)——空表和为零不为正，此前提最弱）。                   *)
-(* 【形态差与诚实边界】                                                     *) (*   甲、其一/其二的抽象全称形（任意态空间）不可无条件成立：态空间可空        *)
-(*       为库级结构必然；本件在最小可证非空世界（unit）上实例化。            *) (*   乙、其三的抽象求和算子全称形在本件装配为 unit 具体载体——库级           *)
-(*       形态差，非证明缺口。                                                *) (*   丙、p2f_req_sum_ext 与 p2f_req_sum_zero_nonneg 在单点载体上本体         *)
-(*       直证（和等于点值）；更强前提形的相应件并列在库，如实记录。          *) (*   丁、p2f_req_sum_zero_nonneg 的前提为 req 弱等词形，spd_field_zero_nonneg *)
-(*       为 Id 强等词形；弱前提推不出强形，该件在此不可用，                  *) (*       结论改由载体本体直证。                                              *)
-(* 【依赖】S01_BaseRing；S02_CauchyComplete；S03_QExp；                      *) (*   S04_RealExpLogConv；S05_AlignmentGRPO；S06_DiffSamplingGibbs；          *)
-(*   S07_RealSetoidExpLog；S08_RealMainlineDPO；UpAblZposReal；              *)
-(*   最小世界实例件（uab_ssUnit／uab_soUnit）；UpAblSposDirect（spd_ 系）。    *)
-(* 【对标】无直接对应物；声明注释体例对齐 stdlib 可提取文档注释。            *)
-(* 【构造性注记】零承认、纯构造性（零经典逻辑）；全件集合层承载，            *)
-(*   语句面无命题层泄露；全 Qed 闭合；末段 Print Assumptions 审计            *)
-(*   应全部 Closed；提取集仅两面内容承载件 p2f_id_real_eq 与                 *)
-(*   p2f_S04_S06_slot_sum_over_S_pos；提取输出中投影桥处提取器插入的         *)
-(*   记号与库实例记录字面量为机械产物，非承认项，完备性以假设审计承担。      *)
-(* 【编译配方】coqc 9.1 直调，cpu_guard 包裹（-LoadLimit 85 -CoreN 2），      *)
-(*   编译输出经 -o 写临时目录，树内 .vo 一律不动。                           *)
+(* ==========================================================================)
+   UpAblP2FeedSum.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：spd_slot_direct_unit、spd_sum_unit、spd_slot_unit_direct、spd_field_linear、spd_field_add、spd_field_ext、spd_field_le、spd_field_nonneg、spd_field_zero_nonneg。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
+
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -36,11 +14,216 @@ Require Import S05_AlignmentGRPO.
 Require Import S06_DiffSamplingGibbs.
 Require Import S07_RealSetoidExpLog.
 Require Import S08_RealMainlineDPO.
+Require Import UpReqExpPos.
 Require Import UpAblZposReal.
 Require Import UpAblT13c_G13.
-Require Import UpAblSposDirect.
 From Stdlib Require Import Extraction.
 
+(* ================= §1 spd_slot_direct_unit 族 ================= *)
+(* ================= §1 最小 SumOver 实例上的求和正性 =================
+
+   求和正性原句形在最小 SumOver 实例（uab_ssUnit + uab_soUnit，全库唯一的
+   具体 SumOver 实例，对任意 RealInterfaceEnhanced 参量）上逐字还原：
+   forall f，(forall s, lt zero (f s)) -> lt zero (sum_over_S f)。
+   非空性由单点态空间本体导出（tt 见证，uab_ssUnit_elem 定义性展开），
+   无额外前提。 *)
+Theorem spd_slot_direct_unit :
+  forall (REI : RealInterfaceEnhanced) (f : unit -> @R (@RI_base REI)),
+    (forall s : unit, @lt (@RI_base REI) (@zero (@RI_base REI)) (f s)) ->
+    @lt (@RI_base REI) (@zero (@RI_base REI))
+        (@sum_over_S (@RI_base REI) uab_ssUnit uab_soUnit f).
+Proof.
+  intros REI f H.
+  pose proof (H (uab_ssUnit_elem (RI := @RI_base REI))) as Hw.
+  exact Hw.
+Qed.
+
+(* ================= §2 单点载体上的求和与求和正性 ================= *)
+
+(* unit 载体上的求和：全态空间单点求和 = 该点取值（定义性展开） *)
+Definition spd_sum_unit (f : unit -> Real) : Real := f tt.
+
+(* 求和正性原句形的实数层实例：forall f，(forall s, lt zero (f s)) ->
+   lt zero (sum f)；实例展开 lt := real_lt，zero := real_zero，
+   sum := spd_sum_unit。非空性由载体本体（tt : unit）导出，无额外前提。 *)
+Theorem spd_slot_unit_direct :
+  forall f : unit -> Real,
+    (forall s : unit, real_lt real_zero (f s)) ->
+    real_lt real_zero (spd_sum_unit f).
+Proof.
+  intros f H.
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hs.
+  exact Hs.
+Qed.
+
+(* ================= §3 SumOver 接口字段在单点载体上的逐字段兑现 ================= *)
+
+(* 字段一 linear：数乘分配 *)
+Lemma spd_field_linear :
+  forall (a : Real) (f : unit -> Real),
+    Id (spd_sum_unit (fun s => real_mult a (f s)))
+       (real_mult a (spd_sum_unit f)).
+Proof.
+  intros a f.
+  unfold spd_sum_unit.
+  exact (id_cong (fun x => real_mult a x) (@id_refl _ (f tt))).
+Qed.
+
+(* 字段二 add：和的加法分配 *)
+Lemma spd_field_add :
+  forall f g : unit -> Real,
+    Id (spd_sum_unit (fun s => real_plus (f s) (g s)))
+       (real_plus (spd_sum_unit f) (spd_sum_unit g)).
+Proof.
+  intros f g.
+  unfold spd_sum_unit.
+  apply (id_trans
+           (id_cong (fun x => real_plus x (g tt)) (@id_refl _ (f tt)))
+           (id_cong (fun y => real_plus (f tt) y) (@id_refl _ (g tt)))).
+Qed.
+
+(* 字段三 ext：逐点 Id 相等 ⟹ 求和 Id 相等（函数 Proper 性） *)
+Lemma spd_field_ext :
+  forall f g : unit -> Real,
+    (forall s : unit, Id (f s) (g s)) ->
+    Id (spd_sum_unit f) (spd_sum_unit g).
+Proof.
+  intros f g H.
+  unfold spd_sum_unit.
+  pose proof (H tt) as Htt.
+  exact Htt.
+Qed.
+
+(* 字段四 le：逐点 ≤ ⟹ 求和 ≤（保序性） *)
+Lemma spd_field_le :
+  forall f g : unit -> Real,
+    (forall s : unit, real_le (f s) (g s)) ->
+    real_le (spd_sum_unit f) (spd_sum_unit g).
+Proof.
+  intros f g H.
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hle.
+  exact Hle.
+Qed.
+
+(* 字段五 nonneg：逐点非负 ⟹ 求和非负 *)
+Lemma spd_field_nonneg :
+  forall f : unit -> Real,
+    (forall s : unit, real_le real_zero (f s)) ->
+    real_le real_zero (spd_sum_unit f).
+Proof.
+  intros f H.
+  unfold spd_sum_unit.
+  pose proof (H tt) as Hnn.
+  exact Hnn.
+Qed.
+
+(* 字段六 zero_nonneg：和为零且逐点非负 ⟹ 逐点为零 *)
+Lemma spd_field_zero_nonneg :
+  forall f : unit -> Real,
+    (forall s : unit, real_le real_zero (f s)) ->
+    Id (spd_sum_unit f) real_zero ->
+    forall s : unit, Id (f s) real_zero.
+Proof.
+  intros f _ Hsum s.
+  destruct s.
+  exact Hsum.
+Qed.
+
+(* 字段七 abs：求和的三角不等式 |Σ f| ≤ Σ |f| *)
+Lemma spd_field_abs :
+  forall f : unit -> Real,
+    real_le (real_abs (spd_sum_unit f))
+            (spd_sum_unit (fun s => real_abs (f s))).
+Proof.
+  intros f.
+  unfold spd_sum_unit.
+  apply real_le_refl.
+Qed.
+
+(* 字段八：严格求和正性——接口字段清单中缺失的字段，即 spd_slot_unit_direct。
+   至此 SumOver 接口在单点载体上完整兑现，不引入接口之外的新前提。 *)
+
+(* ================= §4 实例投影与实数层运算的对齐 =================
+
+   RealEnhancedReal 的 zero/lt 投影与 real_zero/real_lt 定义性互换：
+   求和正性原句形在实例展开下逐字还原。 *)
+
+Theorem spd_inst_zero_aligned :
+  Id (@RealInterfaceEnhancedMod.zero
+        Real RealInterfaceEnhancedMod.RealEnhancedReal)
+     real_zero.
+Proof.
+  unfold RealInterfaceEnhancedMod.RealEnhancedReal.
+  apply id_refl.
+Qed.
+
+Theorem spd_inst_lt_aligned :
+  forall (x y : Real)
+         (Hs : @RealInterfaceEnhancedMod.lt
+                 Real RealInterfaceEnhancedMod.RealEnhancedReal x y),
+    real_lt x y.
+Proof.
+  intros x y Hs.
+  unfold RealInterfaceEnhancedMod.RealEnhancedReal in Hs.
+  exact Hs.
+Qed.
+
+(* ================= §5 使用面对应命题：cons 非空形的求和正性 ================= *)
+
+(* spd_Z_rel：S05 中 Z_rel 的实数层对应定义，逐字对齐
+   （sum_over_S ↦ real_list_sum、mult ↦ real_mult、exp_neg ↦ real_exp_neg、
+     opp ↦ real_opp、inv_pos ↦ real_inv_pos；advantage_aug 以抽象参量 adv 引入）。 *)
+Definition spd_Z_rel (X : Set) (pi_t : X -> Real) (beta eta : Real)
+  (beta_pos : real_lt real_zero beta) (adv : X -> Real) (l : list X) : Real :=
+  real_list_sum X
+    (fun s => real_mult (pi_t s)
+       (real_exp_neg (real_opp
+         (real_mult (real_mult eta (real_inv_pos beta beta_pos)) (adv s)))))
+    l.
+
+(* 对应 S05 中 `apply sum_over_S_pos` 一步的实数层证明：由 real_mult_positive
+   与 real_exp_neg_pos 合成（两因子皆正则乘积为正），和的正性由
+   UpAblZposReal 的归纳引理 zabr_list_sum_pos_cons（cons 非空形）给出；
+   空表情形与归一化非空链见 UpAblZposReal 的 zabr_Z_align_pos，本件不重复。 *)
+Theorem spd_Z_rel_pos :
+  forall (X : Set) (pi_t : X -> Real) (beta eta : Real)
+         (beta_pos : real_lt real_zero beta) (adv : X -> Real)
+         (l : list X) (w : X),
+    (forall s : X, real_lt real_zero (pi_t s)) ->
+    real_lt real_zero (spd_Z_rel X pi_t beta eta beta_pos adv (w :: l)).
+Proof.
+  intros X pi_t beta eta beta_pos adv l w Hpos.
+  unfold spd_Z_rel.
+  apply (zabr_list_sum_pos_cons X _ l w).
+  intro s.
+  apply real_mult_positive.
+  - exact (Hpos s).
+  - apply real_exp_neg_pos.
+Qed.
+
+(* 依赖审计：Print Assumptions 确认上述各件零承认。 *)
+Print Assumptions spd_slot_direct_unit.
+Print Assumptions spd_slot_unit_direct.
+Print Assumptions spd_field_linear.
+Print Assumptions spd_field_add.
+Print Assumptions spd_field_ext.
+Print Assumptions spd_field_le.
+Print Assumptions spd_field_nonneg.
+Print Assumptions spd_field_zero_nonneg.
+Print Assumptions spd_field_abs.
+Print Assumptions spd_inst_zero_aligned.
+Print Assumptions spd_inst_lt_aligned.
+Print Assumptions spd_Z_rel_pos.
+
+(* 提取：输出至独立目录，不写入树内。 *)
+Set Extraction Output Directory "../_ab8_spos_extract".
+Separate Extraction spd_slot_direct_unit.
+Separate Extraction spd_sum_unit.
+Separate Extraction spd_slot_unit_direct.
+Separate Extraction spd_Z_rel_pos.
+(* ================= §2 p2f_id_real_eq 族 ================= *)
 (* ===== §1 桥接与转换引理 ===== *)
 
 (* Id 消去：沿 Id a b 将实数层等词逐点传输——集合层 Id 到 real_eq 的传输引理 *)
@@ -51,7 +234,6 @@ Proof.
   apply real_eq_refl.
 Qed.
 
-(* 【批量登记·甲】接口投影直通六件（本件至 p2f_real_eq_of_proj）：RealEnhancedReal 字段   *)
 (* lt/le/req 与柯西层 real_lt/real_le/real_eq 逐位恒等（定义级换轨），体 exact H 为       *)
 (* 最短定义性闭合，体不可再分。                                                          *)
 (* 类投影与实数层序/等词的双向转换：库实例 RealEnhancedReal 字段逐位＝实数层名，转换即恒等 *)

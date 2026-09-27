@@ -1,12 +1,12 @@
 (* ==========================================================================)
-   UpAblD1S15_GibbsAssembly.v — Gibbs 不等式 ε 形的接口封装供给
-   使命: uabd1s15_ga2_pack8 八项接口合取封装及其 supplied 见证、req/le 组合器族、uabd1s15_ga2_gibbs_eps（Gibbs 不等式 ε 形）与 uabd1s15_ga2_gibbs_eps_opps 对偶件。
-   依赖: CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign2、G05_LogSmall、UpReqSumD、UpAblD1S2_reqlog_GibbsAssembly
-   对标: Gibbs 不等式（相对熵非负）的 ε 定量形与接口化供给。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
+   UpAblD1S15_GibbsAssembly.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：uabd1s2_ga2_log_req_compat、uabd1s2_ga2_base_real_bundle、uabd1s15_ren、uabd1s15_ga2_pack8_supplied、uabd1s15_ga2_rt、uabd1s15_ga2_le_id_l、uabd1s15_ga2_le_id_r、uabd1s15_ga2_mopp_one、uabd1s15_ga2_ptw_le。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
 
+From Stdlib Require Import List.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -22,11 +22,57 @@ Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
-Require Import UpReqAlgebra.
-Require Import UpReqAlign2.
 Require Import G05_LogSmall.
 Require Import UpReqSumD.
-Require Import UpAblD1S2_reqlog_GibbsAssembly.
+Require Import UpReqAlgebra.
+Require Import UpReqAlign2.
+
+(* ================= §1 uabd1s2_ga2_log_req_compat 族 ================= *)
+Import RealInterfaceEnhancedMod.
+
+(* ---- 参数位1 ←  ga2_log_req_compat（逐字，R:=Real） ---- *)
+Theorem uabd1s2_ga2_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
+Qed.
+
+(* ---- 导出链：ga2_ 基底接口五件封装（典范 Real 载体实例供给形） -------- *)
+(*   装配基底可满足性实证：sumf ↦ sumd_sumf S0 en（具体有限和实例），    *)
+(*   求和四腿＝UpReqSumD 直接供给，log 腿＝G05 直接供给——一件实例化消解（E750-A        *)
+(*   封装口径，禁按位注水）。使用位 ga2_ptw_le/ga2_log_req_compat 节内   *)
+(*   取用即此骨架。                                                      *)
+Theorem uabd1s2_ga2_base_real_bundle : forall (S0 : Set) (en : list S0),
+  sigT (fun sumf : (S0 -> Real) -> Real =>
+    And (forall f g : S0 -> Real,
+           (forall s : S0, req (f s) (g s)) -> req (sumf f) (sumf g))
+    (And (forall f g : S0 -> Real,
+           req (sumf (fun s : S0 => plus (f s) (g s))) (plus (sumf f) (sumf g)))
+    (And (forall (a : Real) (f : S0 -> Real),
+           req (sumf (fun s : S0 => mult a (f s))) (mult a (sumf f)))
+    (And (forall f g : S0 -> Real,
+           (forall s : S0, le (f s) (g s)) -> le (sumf f) (sumf g))
+         (forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+             req x y -> req (log x Hx) (log y Hy)))))).
+Proof.
+  intros S0 en.
+  exact (existT _ (sumd_sumf S0 en)
+          (pair (sumd_sum_ext S0 en)
+          (pair (sumd_sum_add S0 en)
+          (pair (sumd_sum_linear S0 en)
+          (pair (sumd_sum_le S0 en) logd_log_compat_real))))).
+Qed.
+
+(* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
+Print Assumptions uabd1s2_ga2_log_req_compat.
+Print Assumptions uabd1s2_ga2_base_real_bundle.
+(* ================= §2 uabd1s15_ren 族 ================= *)
 Import RealInterfaceEnhancedMod.
 
 Definition uabd1s15_ren : RealInterfaceEnhancedSetoid Real :=

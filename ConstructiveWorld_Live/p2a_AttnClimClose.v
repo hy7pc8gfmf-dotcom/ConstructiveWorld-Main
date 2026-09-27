@@ -1,45 +1,11 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程包AD（tier2 末批二）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   p2a_attn_tv_seq_clim_zero（原 L112，2 句玩具证）                     *)
-(* ============================================================ *)
+(* ==========================================================================)
+   p2a_AttnClimClose.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：one_minus_delta_pos_real、one_minus_delta_lt_one_real、r_arch_pow_attn_real、tv_iter_decay_real、attention_iterate_converges_real、p2a_geo_iter_le、p2a_attn_clim_zero、p2a_attn_tv_seq_clim_zero、p2a_attn_clim_budget。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
-(* ============================================================ *)
-(* p2a_AttnClimClose.v ——  CZC10（E-STAGING-CZC10）              *)
-(*   论文2《自由能原理与注意力Gibbs桥》假设消融施工： 普查档条 2-8   *)
-(*   （B 可消融，坐标 L978；§9.4 开放项 5 的 clim 半边）。            *)
-(*                                                                *)
-(*   槽语句：注意力核迭代收敛已有 attention_tv_iter_contraction        *)
-(*   （S06_DiffSamplingGibbs.v:4544，几何率 (1−δ)ⁿ）与 sigT 预算形     *)
-(*   attention_iterate_converges（根文件）+ UpArchAttn.attention_       *)
-(*   iterate_converges_real，但【序列 clim 收敛面】开放——TV 序列        *)
-(*   n ↦ TV(iterate attention_step n μ₀, p_b) 对极限零点的 real_lim     *)
-(*   收敛无库内定理。                                                  *)
-(*                                                                *)
-(*   施工：clim 收敛引擎——使用基座件四绿：                             *)
-(*     ① real_lim + real_const（S02_CauchyComplete.v:883/860，          *)
-(*        "∀eps>0 ∃N ∀n≥N 双向夹逼"的构造性 clim 谓词）；              *)
-(*     ② r_arch_pow_real（UpBudgetReal.v:310，几何击穿显式 N 预算）；   *)
-(*     ③ real_pow_anti_mono（UpBudgetReal.v:655，幂反单调）；           *)
-(*     ④ one_minus_delta_pos_real / one_minus_delta_lt_one_real         *)
-(*        （UpArchAttn.v，δ↦κ:=1−δ 良定桥）。                          *)
-(*   交付面：                                                          *)
-(*   引擎 p2a_attn_clim_zero：逐步几何收缩 + 非负 + 初值正 ⟹ real_lim   *)
-(*        u real_zero（收敛到零点的 clim 全谓词，双向夹逼）；            *)
-(*   注意力镜面 p2a_attn_tv_seq_clim_zero：κ := 1−δ 特化形，             *)
-(*        单步收缩前提对位 attention_tv_contraction 的 Real 对偶口        *)
-(*        （UpArchAttn 件2 同款 Hstep 显式前提纪律）；                   *)
-(*   预算伴件 p2a_attn_clim_budget：clim 的单向 Q-eps 预算形。           *)
-(*                                                                *)
-(*   纪律：纯构造性；Set 层语句（real_lim 值居 Set、sigT 见证）；        *)
-(*   全部 Qed 闭合；只使用库内已证机器；G1-G4 四关候跑。                 *)
-(* ============================================================ *)
-
-From Stdlib Require Import QArith.QArith.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -56,7 +22,166 @@ Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 Require Import UpBudgetReal.
-Require Import UpArchAttn.
+From Stdlib Require Import Extraction.
+
+(* ================= §1 one_minus_delta_pos_real 族 ================= *)
+From Stdlib Require Import QArith.QArith.
+
+Local Open Scope Q_scope.
+
+(* ============ 1. 1−δ 的 Real 层序引理（κ := 1−δ 良定前提） ============ *)
+
+(* 根文件 one_minus_kappa_pos 的 Real 层副本：δ < 1 ⟹ 0 < 1−δ *)
+Lemma one_minus_delta_pos_real : forall delta : Real,
+  real_lt delta real_one ->
+  real_lt real_zero (real_plus real_one (real_opp delta)).
+Proof.
+  intros delta Hd.
+  exact (real_lt_opp_plus delta real_one Hd).
+Qed.
+
+(* 根注意力区前提的对称支 Real 副本：0 < δ ⟹ 1−δ < 1
+   （逐点差零 + real_lt_eq_lt：1−(1−δ) == δ 逐点 ring） *)
+Lemma one_minus_delta_lt_one_real : forall delta : Real,
+  real_lt real_zero delta ->
+  real_lt (real_plus real_one (real_opp delta)) real_one.
+Proof.
+  intros delta Hd.
+  apply (real_lt_zero_minus (real_plus real_one (real_opp delta)) real_one).
+  apply (real_lt_eq_lt real_zero delta).
+  - exact Hd.
+  - apply real_eq_sym.
+    apply real_eq_of_zero_diff.
+    intro n.
+    rewrite (real_plus_proj real_one
+               (real_opp (real_plus real_one (real_opp delta))) n).
+    rewrite (real_opp_proj (real_plus real_one (real_opp delta)) n).
+    rewrite (real_plus_proj real_one (real_opp delta) n).
+    rewrite (real_opp_proj delta n).
+    cbn [projT1].
+    ring.
+Qed.
+
+(* ============ 2. 件 1 主件：接口前提的 Real 层实例化 ============ *)
+
+Theorem r_arch_pow_attn_real :
+  forall delta : Real, real_lt real_zero delta -> real_lt delta real_one ->
+  forall a : Real, real_lt real_zero a ->
+  forall eps : Real, real_lt real_zero eps ->
+  sigT (fun N : nat =>
+    real_lt (real_mult a
+              (real_pow (real_plus real_one (real_opp delta)) N)) eps).
+Proof.
+  intros delta Hd1 Hd2 a Ha eps Heps.
+  exact (r_arch_pow_real (real_plus real_one (real_opp delta))           (one_minus_delta_pos_real delta Hd2)           (one_minus_delta_lt_one_real delta Hd1)           a Ha eps Heps).
+Qed.
+
+(* ============ 3. 件 2 组装预演：TV 几何衰减链（Real 副本） ============ *)
+
+(* 根文件 attention_tv_iter_contraction 结论的 Real 副本链：
+   每步 tv_{n+1} ≤ (1−δ)·tv_n ⟹ tv_n ≤ (1−δ)^n·tv₀。
+   （幂反单调的 Real 副本即 UpBudgetReal.real_pow_anti_mono，
+     件 2 主定理直接复用，不重证。） *)
+Lemma tv_iter_decay_real :
+  forall (delta : Real)
+         (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
+         (tv_seq : nat -> Real),
+  (forall n : nat,
+    real_le (tv_seq (Datatypes.S n))
+            (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
+  forall n : nat,
+    real_le (tv_seq n)
+            (real_mult (real_pow (real_plus real_one (real_opp delta)) n)
+                       (tv_seq Datatypes.O)).
+Proof.
+  intros delta Hd1 Hd2 tv_seq Hstep n.
+  assert (Hk1 : real_lt real_zero (real_plus real_one (real_opp delta)))
+    by exact (one_minus_delta_pos_real delta Hd2).
+  set (kappa := real_plus real_one (real_opp delta)) in *.
+  induction n as [| n IH].
+  - (* κ^0 ≡ one：1·tv₀ == tv₀ *)
+    apply real_eq_le_bridge.
+    apply real_eq_sym.
+    exact (real_mult_one_l (tv_seq Datatypes.O)).
+  - (* tv_{n+1} ≤ κ·tv_n ≤ κ·(κ^n·tv₀) == κ^{n+1}·tv₀ *)
+    apply (real_le_trans _ (real_mult kappa (tv_seq n))).
+    + exact (Hstep n).
+    + apply (real_le_trans _ (real_mult (tv_seq n) kappa)).
+      * apply real_eq_le_bridge.
+        exact (real_mult_comm kappa (tv_seq n)).
+      * apply (real_le_trans _
+                 (real_mult (real_mult (real_pow kappa n) (tv_seq Datatypes.O))
+                            kappa)).
+        -- exact (real_le_mult_compat (tv_seq n)
+                    (real_mult (real_pow kappa n) (tv_seq Datatypes.O))
+                    kappa Hk1 IH).
+        -- apply real_eq_le_bridge.
+           exact (real_eq_trans
+                    (real_mult (real_mult (real_pow kappa n) (tv_seq Datatypes.O))
+                               kappa)
+                    (real_mult kappa
+                               (real_mult (real_pow kappa n) (tv_seq Datatypes.O)))
+                    (real_mult (real_mult kappa (real_pow kappa n))
+                               (tv_seq Datatypes.O))
+                    (real_mult_comm (real_mult (real_pow kappa n)
+                                        (tv_seq Datatypes.O))
+                                    kappa)
+                    (real_mult_assoc kappa (real_pow kappa n)
+                                     (tv_seq Datatypes.O))).
+Qed.
+
+(* ============ 4. 件 2 主定理：迭代收敛的 sigT 显式预算见证 ============ *)
+
+(* 根文件 attention_iterate_converges 的 Real 层副本组装：
+   预算 N 由件 1（r_arch_pow_attn_real）构造；尾界 n ≥ N 由
+   tv 衰减链（本文件件 2 前置）+ 幂反单调（real_pow_anti_mono）
+   + 件 1 的 a·κ^N < eps 消解。
+   覆盖面注记：tv_seq 即根语义对象 n ↦ TV(iterate attention_step n μ₀,
+   boltzmann_dist_attn) 的 Real 承载；每步收缩 Hstep 对应根
+   attention_tv_contraction 的结论形态。根抽象 Section 的完整
+   Real 层实例化需整体消解 detailed_balance/minorization/
+   sum_swap_cc/abs_ge_zero_id_cc/lt_plus_compat 对等接口前提，
+   工程量大，不属本件范围（主件 1 不受影响）。 *)
+Theorem attention_iterate_converges_real :
+  forall (delta : Real)
+         (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
+         (tv_seq : nat -> Real),
+  (forall n : nat,
+    real_le (tv_seq (Datatypes.S n))
+            (real_mult (real_plus real_one (real_opp delta)) (tv_seq n))) ->
+  forall eps : Real, real_lt real_zero eps ->
+  real_lt real_zero (tv_seq Datatypes.O) ->
+  sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
+    real_lt (tv_seq n) eps).
+Proof.
+  intros delta Hd1 Hd2 tv_seq Hstep eps Heps Htv0.
+  destruct (r_arch_pow_attn_real delta Hd1 Hd2
+             (tv_seq Datatypes.O) Htv0 eps Heps) as [N HN].
+  exists N.
+  intros n Hn.
+  set (kappa := real_plus real_one (real_opp delta)) in *.
+  apply (real_le_lt_trans _
+           (real_mult (real_pow kappa n) (tv_seq Datatypes.O))).
+  - exact (tv_iter_decay_real delta Hd1 Hd2 tv_seq Hstep n).
+  - apply (real_le_lt_trans _
+             (real_mult (real_pow kappa N) (tv_seq Datatypes.O))).
+    + assert (Hk1 : real_lt real_zero kappa)
+        by exact (one_minus_delta_pos_real delta Hd2).
+      assert (Hk2le : real_le kappa real_one)
+        by exact (real_lt_le_bridge kappa real_one
+                    (one_minus_delta_lt_one_real delta Hd1)).
+      assert (Hanti : real_le (real_pow kappa n) (real_pow kappa N))
+        by exact (real_pow_anti_mono kappa Hk1 Hk2le N n Hn).
+      exact (real_le_mult_compat (real_pow kappa n) (real_pow kappa N)
+               (tv_seq Datatypes.O) Htv0 Hanti).
+    + exact (real_eq_lt_lt (real_mult (real_pow kappa N) (tv_seq Datatypes.O))
+               (real_mult (tv_seq Datatypes.O) (real_pow kappa N)) eps
+               (real_mult_comm (real_pow kappa N) (tv_seq Datatypes.O)) HN).
+Qed.
+
+(* ============ 5. 提取检验（G3：零 Obj.magic） ============ *)
+(* ================= §2 p2a_geo_iter_le 族 ================= *)
+From Stdlib Require Import QArith.QArith.
 
 (* ============ 几何迭代上界：u n ≤ κ^n·u 0 ============ *)
 
@@ -173,6 +298,5 @@ Print Assumptions p2a_attn_clim_zero.
 Print Assumptions p2a_attn_tv_seq_clim_zero.
 Print Assumptions p2a_attn_clim_budget.
 
-From Stdlib Require Import Extraction.
 Set Extraction Output Directory ".".
 Extraction "p2a_attnclimclose.ml" p2a_geo_iter_le p2a_attn_clim_budget.

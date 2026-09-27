@@ -61,7 +61,6 @@ G07_KLWall.v
 G08_Gibbs.v
 G09_MiscSmall.v
 G13_EvictFam.v
-UpArchAttn.v
 UpConstitution.v
 UpEntropyGainReq.v
 UpFirewallReq.v
@@ -104,7 +103,6 @@ UpReqLatticeB.v
 UpReqGibbsE2.v
 UpReqKLStrict.v
 UpReqExpPos.v
-UpReqI4Bridge.v
 UpReqI4Witness.v
 UpReqKLSTangent.v
 UpReqKLStrictB.v
@@ -120,7 +118,6 @@ UpReqTempDefs.v
 UpReqTopKTVChain.v
 UpReqTrainingEquiv.v
 UpReqArgminEngine.v
-UpReqCEqDispersion.v
 UpReqEntropyDeficitTemp.v
 UpReqMinUniqueTight.v
 UpReqNegFactorB.v
@@ -151,7 +148,6 @@ UpReqBanachClassExt.v
 UpReqBanachLimUniq.v
 UpReqBanachBinomBridge.v
 UpReqBanachInst.v
-UpReqBanachExpOppOne.v
 UpReqBanachInstB.v
 UpReqBanachExpAddEq.v
 UpReqBanachInstPre.v
@@ -161,7 +157,6 @@ UpReqPadeBetaPos.v
 UpReqPadeTailPos.v
 UpReqPadeLower.v
 UpReqPadeDenPos12.v
-UpReqPadeFinale.v
 UpReqPadeQLeg.v
 QTailBridge.v
 PadeDenPosB12.v
@@ -172,7 +167,6 @@ PowRealCompat.v
 AlignIdUnclosed.v
 UpReqLpoEquiv.v
 UpReqB4TwoStage.v
-UpReqPadeSignXfer.v
 UpReqBanachInstReal.v
 UpReqBanachNormOpp.v
 UpReqBanachSepThm.v
@@ -188,7 +182,6 @@ DTPT_Bridge_Rot.v
 ExpNegPos.v
 UpReqSpec2x2.v
 EnergyTempMonoB.v
-PadeDenPosA.v
 RealKLDecomp.v
 BoltzmannBridgeDischarge.v
 DenPosGeneral.v
@@ -212,7 +205,6 @@ DTPT_Bridge_Dep.v
 DTPT_Bridge_All.v
 UpReqRealLtShiftBridge.v
 UpReqStrictStepGen.v
-UpReqStrictBridgeD.v
 UpReqCStarDef.v
 UpReqTBNCBridge.v
 UpReqGibbsWallEquiv.v
@@ -234,7 +226,6 @@ CurriculumOptTemp.v
 GibbsAttractor.v
 PiEnvelope.v
 PinskerTwoPoint.v
-SymplecticRotationSpec.v
 fa53_compat_abs.v
 AbsLeId.v
 fa51_sumpos_id.v
@@ -242,7 +233,6 @@ fa56_id_carrier.v
 fa56b_ext.v
 fa56c_ext.v
 fa52_dpo_witness.v
-fa52_entropy_diff_unsat.v
 EntropyUnsatMark.v
 IdSlotTranslate.v
 SumEqListFeed.v
@@ -266,7 +256,6 @@ UpReqMixingTime.v
 UpReqDoeblinEntropy.v
 UpReqEngineCeiling.v
 UpReqPinskerTransport.v
-UpReqForwardKLFamily.v
 UpReqWeakTriangle.v
 UpReqPadeConstUnify.v
 UpReqPadeTransport.v
@@ -337,7 +326,6 @@ UpAblD1S10_UpReqPPOPlain.v
 UpAblD1S11_UpReqPPOPlain.v
 UpAblD1S2_e752_UpReqAttnIter.v
 UpAblD1S2_reqlog_AlignIdUnclosed.v
-UpAblD1S2_reqlog_GibbsAssembly.v
 UpAblD1S2_reqlog_UpReqAlign3.v
 UpAblD1S2_reqlog_UpReqAlignClose.v
 UpAblD1S2_reqlog_UpReqCauchy.v
@@ -379,7 +367,6 @@ UpAblP1_SecondLawQuantified_sumd.v
 UpAblP1_SqrtfCauchyArch_arch.v
 UpAblP1_SqrtfCauchy_four_slots.v
 UpAblP2_FepIdentClass_inst_bundle.v
-SecondLawConsume.v
 UpAblP2_SecondLawConsume_sumdis.v
 UpAblP2_UpMinP_tokens_pack.v
 UpAblP3_UpReqAttnMixTime.v
@@ -462,14 +449,11 @@ BetaLower.v
 UpAblZpos.v
 UpAblZposReal.v
 UpAblZposDirect.v
-UpAblSposDirect.v
 UpAblEps49RKDBase.v
 UpAblEps49Main.v
 UpAblEps49List.v
-UpAblEps49Fam.v
 UpAblEps49Body.v
 UpAblEps66Sum.v
-UpAblEps66Pos.v
 UpAblEps66Body.v
 UpAblP1T1_AlignCert.v
 UpAblP1T2_GrpoAuditCert.v
@@ -484,9 +468,6 @@ UpAblP7_Paper7Ablation_S1inst.v
 UpAblP7_UMixSelect.v
 UpAblP7_WallEpsChain_B.v
 UpAblP7_WallEps_CB2.v
-UpAblP7_WallEps_CSM.v
-UpAblP7_LoHiCross.v
-UpAblP7_P7KappaFlagship.v
 UpAblP7_WallEpsChain_A.v
 UpAblP7_Package.v
 UpAblAlmConsumption.v
@@ -496,7 +477,6 @@ UpAblGrpEqDecWorld.v
 UpAblGrpEqDischarge.v
 UpAblP2FeedMix.v
 UpAblP2FeedSum.v
-UpAblLeEqCompat.v
 UpAblP2FeedSumLe.v
 UpAblP2T1_Cert.v
 UpAblP2WByPass.v
@@ -504,7 +484,6 @@ UpAblA2_LoInflation.v
 UpAblAbsSumLeB.v
 UpAblAbsSumLeB2.v
 UpAblAbsSumLeB3.v
-UpAblAbsSumLeEps.v
 UpAblAbsTwoPtAbs.v
 UpAblAbsFeed.v
 UpAblB1_MonoSplit.v
@@ -515,18 +494,14 @@ UpAblD1S15_UpReqAlign3.v
 UpAblD1S16_UpReqMixTime.v
 UpAblD1S17_UpReqAttnGibbs.v
 UpAblD1S17_UpReqDpoLoss.v
-UpAblDeltaStarSuboptimal.v
 UpAblDeltaStarGeneral.v
-UpAblP2T1_CertB.v
 UpAblP2T1_CertC.v
 UpAblAbsQFeed.v
 UpAblTwLeFeed.v
 UpAblSlotB0Merge.v
 UpAblCauchyMod.v
 UpAblKVEpsHalf.v
-UpAblHalfPow.v
 UpAblAbsQFeedB2.v
-UpAblQeqBridge.v
 UpAblQfloorDepth.v
 UpAblS06AbsFeed.v
 UpAblArchGeomBatch.v
@@ -534,18 +509,13 @@ UpAblCauchyLim.v
 UpAblHalfPowFeed.v
 UpAblP6_TempDefs.v
 GibbsFamilyExt.v
-UpAblP6_GibbsFamilyExt.v
-UpAblP6_S5SlotWire.v
 UpAblP6_ZPosLowRef.v
 UpAblP6_ConcMixSelFeed.v
-UpAblP6_UniformLimit.v
 UpAblP6_SecondLaw_two_state.v
 UpAblP6_StateSpace_inst.v
 UpAblP6_EntropyMonoSplit_A.v
 UpAblP6_EntropyMonoSplit_B.v
-fka_weak_triangle_ref.v
 UpAblP6_EntropyMonoSplit_C.v
-FepIdConsume.v
 UpAblP6_Package.v
 UpAblLogWall.v
 UpAblLogWallEq.v
@@ -554,11 +524,9 @@ UpAblRateAlgPkg.v
 UpAblSlackMix.v
 UpAblMetaWorld3.v
 UpAblMetaWindow.v
-UpReqMixLazy.v
 UpReqMixRealExec.v
 UpAblMetaDivQ.v
 UpAblMetaTemp.v
-UpAblMetaConjBridge.v
 UpAblMetaDivThm.v
 PsQReindex.v
 UpAblB2WindowTie.v
@@ -628,7 +596,6 @@ UpReqCf2TvGenSupply.v
 UpReqCf2TvGenWorld.v
 UpReqCf2TvW3.v
 UpAblBYDecisionTree.v
-UpAblBYLowerBound.v
 UpAblBYUpperTight.v
 UpAblMixACount.v
 UpAblMixBSharp.v

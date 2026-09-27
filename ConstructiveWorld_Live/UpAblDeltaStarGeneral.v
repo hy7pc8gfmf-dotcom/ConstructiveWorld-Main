@@ -1,40 +1,168 @@
-(* ============================================================
-   使命行：Doeblin 常数 δ* = lo² 次优性从 2 态核到一般 nR≥2 态行随机
-   核的构造性推广——显式 nR 态核族 dsgen_k（2 态 softmax 块的凸组合
-   嵌入：K := (1−β)·块 + β·均匀，β := (1+lo²)/2），对一切 nR≥2 证：
-   行随机性、δ* = lo² 是可行 Doeblin 常数、β 也是可行常数且
-   lo² < β = (1+lo²)/2（QltT Set 层见证）；nR≥3 时进一步证 β 是最优
-   常数（可行 + 极大，极大性由泄漏列条目 β/nR 的可达性经 Qmult_le_r
-   消去回推）。显式间隙 dsgen_gap = (1−lo²)/2 > 0，且 ≥ 2 态核间隙
-   mdsopt_gap = lo²(1−lo²)/(1+lo²)（常数倍 (1+lo²)/(2lo²) ≥ 1，
-   dsgen_gap_ratio/dsgen_gap_ratio_ge1 给出闭式）。
-   依赖：Stdlib QArith/Lia/List；S02_CauchyComplete（QltT 见证形
-   Qlt_to_QltT）；UpAblDeltaStarSuboptimal（2 态核块 mdsopt_k* 与
-   归一化 mdsopt_row*_norm、间隙闭式 mdsopt_gap，签名零改使用）。
-   对标：论文7 §6.1 δ* 设计理由段（lo/hi = lo² 为比值界产物，非
-   min，故一般 nR 下仍次优）；§10.2 开放工作第 4 项。
-   数学内核：nR 态 s,j ∈ {0,…,nR−1}；参考分布均匀 U=1/nR，Doeblin
-   条件 d·(1/nR) ≤ K(s,j)。核矩阵：
-     行 0/1、列 0/1：(1−β)·mdsopt 块 + β/nR（凸组合，行和保持 1）
-     行 0/1、列 ≥2：β/nR（泄漏列，核最小元所在）
-     行 ≥2：1/nR（均匀行）
-   核最小元 = β/nR（nR≥3 时由列 ≥2 取到），最优常数 = nR·(β/nR) = β；
-   β > lo² ⟺ lo² < 1。nR=2 时无泄漏列，最优常数 ≥ β 仍 > lo²，
-   2 态最优闭式 2lo²/(1+lo²) 见 UpAblDeltaStarSuboptimal（mdsopt_main）。
-   构造性注记：语句层 Set 值见证形 QltT；无承认项、无经典逻辑；
-   定义位全部纯 Q/nat 算术 Defined，透明可提取。Q 序链全部走
-   Qlt_trans/Qplus_lt_r/Qmult_le_r/unfold+lia，零 Psatz（Psatz 属
-   micromega 闭包经典公理隐性载体）。
-   编译配方：Rocq 9.1 直调（COQLIB/ROCQLIB 钉 9.1 库根），
-   coqc -q -Q . "" UpAblDeltaStarGeneral.v，cpu_guard 分档执行。
-   ============================================================*)
+(* ==========================================================================)
+   UpAblDeltaStarGeneral.v -- 命题族集注与实例化承载
+   使命：本件形式化以下命题族：mdsopt_sq0、mdsopt_lt1、mdsopt_01、mdsopt_den_pos、mdsopt_den_ne、mdsopt_cancel、mdsopt_k00、mdsopt_k01、mdsopt_k10。
+   依赖：件内 Require 声明面所列库件。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载，零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
-From Stdlib Require Import QArith.QArith.
 From Stdlib Require Import Lia.
+Require Import S02_CauchyComplete.
+From Stdlib Require Import Extraction.
 From Stdlib Require Import ZArith.
 From Stdlib Require Import List.
-Require Import S02_CauchyComplete.
-Require Import UpAblDeltaStarSuboptimal.
+
+(* ================= §1 mdsopt_sq0 族 ================= *)
+From Stdlib Require Import QArith.QArith.
+
+(* ========== §1 Q 算术基件 ========== *)
+
+Lemma mdsopt_sq0 : forall lo : Q, (0 < lo)%Q -> (0 < lo*lo)%Q.
+Proof.
+  intros lo H0. pose proof (Qmult_lt_compat_r 0 lo lo H0 H0) as H.
+  rewrite Qmult_0_l in H. exact H.
+Qed.
+
+Lemma mdsopt_lt1 : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q -> (lo*lo < 1)%Q.
+Proof.
+  intros lo H0 H1. pose proof (Qmult_lt_compat_r lo 1 lo H0 H1) as H.
+  rewrite Qmult_1_l in H. exact (Qlt_trans (lo*lo) lo 1 H H1).
+Qed.
+
+Lemma mdsopt_01 : (0 < 1)%Q.
+Proof. unfold Qlt, Qnum, Qden; cbn. exact eq_refl. Qed.
+
+Lemma mdsopt_den_pos : forall lo : Q, (0 < lo)%Q -> (0 < 1 + lo*lo)%Q.
+Proof.
+  intros lo H0.
+  pose proof (mdsopt_sq0 lo H0) as H.
+  pose proof (proj2 (Qplus_lt_r 0 (lo*lo) 1) H) as H2.
+  rewrite Qplus_0_r in H2.
+  exact (Qlt_trans 0 1 (1+lo*lo) mdsopt_01 H2).
+Qed.
+
+Lemma mdsopt_den_ne : forall lo : Q, (0 < lo)%Q -> ~ ((1 + lo*lo) == 0)%Q.
+Proof.
+  intros lo H0 Hz. pose proof (mdsopt_den_pos lo H0) as Hd.
+  rewrite Hz in Hd. exact (Qlt_irrefl 0 Hd).
+Qed.
+
+Lemma mdsopt_cancel : forall lo a : Q, ~ ((1 + lo*lo) == 0)%Q ->
+  (a/(1+lo*lo)*(1+lo*lo) == a)%Q.
+Proof. intros lo a Hd. field. exact Hd. Qed.
+
+(* ========== §2 两态 softmax 核（Q 层，行随机） ========== *)
+
+Definition mdsopt_k00 (lo : Q) : Q := lo/(1+lo).
+Definition mdsopt_k01 (lo : Q) : Q := 1/(1+lo).
+Definition mdsopt_k10 (lo : Q) : Q := (lo*lo)/(1+lo*lo).
+Definition mdsopt_k11 (lo : Q) : Q := 1/(1+lo*lo).
+
+(* 归一化验证：两行各和为 1 *)
+Lemma mdsopt_row0_norm : forall lo : Q, (0 < lo)%Q ->
+  (mdsopt_k00 lo + mdsopt_k01 lo == 1)%Q.
+Proof.
+  intros lo H0. unfold mdsopt_k00, mdsopt_k01.
+  assert (Hx : (lo < lo + 1)%Q).
+  { pose proof (proj2 (Qplus_lt_r 0 1 lo) mdsopt_01) as H.
+    rewrite Qplus_0_r in H. exact H. }
+  assert (Hd : (0 < 1 + lo)%Q).
+  { rewrite (Qplus_comm 1 lo). exact (Qlt_trans 0 lo (lo+1) H0 Hx). }
+  assert (Hdn : ~ ((1+lo) == 0)%Q).
+  { intro Hz. rewrite Hz in Hd. exact (Qlt_irrefl 0 Hd). }
+  field. exact Hdn.
+Qed.
+
+Lemma mdsopt_row1_norm : forall lo : Q, (0 < lo)%Q ->
+  (mdsopt_k10 lo + mdsopt_k11 lo == 1)%Q.
+Proof.
+  intros lo H0. unfold mdsopt_k10, mdsopt_k11.
+  assert (Hdn := mdsopt_den_ne lo H0).
+  field. exact Hdn.
+Qed.
+
+(* ========== §3 δ*、最优常数与间隙（显式闭式定义） ========== *)
+
+Definition mdsopt_dstar (lo : Q) : Q := lo*lo.
+Definition mdsopt_dstar_opt (lo : Q) : Q := 2*(lo*lo)/(1+lo*lo).
+Definition mdsopt_gap (lo : Q) : Q := (lo*lo)*(1-lo*lo)/(1+lo*lo).
+
+(* ========== §4 主定理：δ* = lo² 严格次优（QltT Set 层见证形） ========== *)
+
+Lemma mdsopt_main_strict : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q ->
+  (mdsopt_dstar lo < mdsopt_dstar_opt lo)%Q.
+Proof.
+  intros lo H0 H1. unfold mdsopt_dstar, mdsopt_dstar_opt.
+  assert (Hsq0 := mdsopt_sq0 lo H0).
+  assert (Hs1 := mdsopt_lt1 lo H0 H1).
+  assert (Hden := mdsopt_den_pos lo H0).
+  assert (Hs2 : (1 + lo*lo < 2)%Q).
+  { pose proof (proj2 (Qplus_lt_r (lo*lo) 1 1) Hs1) as H.
+    assert (Heq : (1+1 == 2)%Q) by reflexivity.
+    rewrite Heq in H. exact H. }
+  (* 两端同乘正数 1+lo²（Qmult_lt_r 的 iff 可逆乘法），并消去右端
+     分母（mdsopt_cancel），归结为 (1+lo²)·lo² < 2·lo²，即
+     1+lo² < 2 与 lo² > 0 的 Qmult_lt_compat_r 直接推论。 *)
+  apply (proj1 (Qmult_lt_r (lo*lo) (2*(lo*lo)/(1+lo*lo)) (1+lo*lo) Hden)).
+  rewrite (mdsopt_cancel lo (2*(lo*lo)) (mdsopt_den_ne lo H0)).
+  rewrite (Qmult_comm (lo*lo) (1+lo*lo)).
+  apply (Qmult_lt_compat_r (1+lo*lo) 2 (lo*lo) Hsq0 Hs2).
+Qed.
+
+Theorem mdsopt_main : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q ->
+  QltT (mdsopt_dstar lo) (mdsopt_dstar_opt lo).
+Proof.
+  intros lo H0 H1. apply Qlt_to_QltT. apply mdsopt_main_strict; assumption.
+Qed.
+
+(* δ* 是可行 Doeblin 常数（δ* ≤ δ*_opt），主定理给出严格性 *)
+Corollary mdsopt_dstar_le_opt : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q ->
+  (mdsopt_dstar lo <= mdsopt_dstar_opt lo)%Q.
+Proof.
+  intros lo H0 H1. apply Qlt_le_weak. apply mdsopt_main_strict; assumption.
+Qed.
+
+(* ========== §5 间隙件：闭式与严格正 ========== *)
+
+Lemma mdsopt_gap_eq : forall lo : Q, (0 < lo)%Q ->
+  (mdsopt_dstar_opt lo - mdsopt_dstar lo == mdsopt_gap lo)%Q.
+Proof.
+  intros lo H0. unfold mdsopt_dstar_opt, mdsopt_dstar, mdsopt_gap.
+  assert (Hd := mdsopt_den_ne lo H0). field. exact Hd.
+Qed.
+
+Lemma mdsopt_gap_pos : forall lo : Q, (0 < lo)%Q -> (lo < 1)%Q ->
+  (0 < mdsopt_gap lo)%Q.
+Proof.
+  intros lo H0 H1.
+  assert (Hsq0 := mdsopt_sq0 lo H0).
+  assert (Hs1 := mdsopt_lt1 lo H0 H1).
+  assert (Hden := mdsopt_den_pos lo H0).
+  assert (Hnd := mdsopt_den_ne lo H0).
+  assert (Hn1 : (0 < 1 - lo*lo)%Q).
+  { pose proof (Qopp_lt_compat (lo*lo) 1 Hs1) as Ho.
+    pose proof (proj2 (Qplus_lt_r (-1) (-(lo*lo)) 1) Ho) as Hm.
+    rewrite Qplus_opp_r in Hm.
+    exact Hm. }
+  pose proof (Qmult_lt_compat_r 0 (1 - lo*lo) (lo*lo) Hsq0 Hn1) as Hp.
+  rewrite Qmult_0_l in Hp.
+  rewrite (Qmult_comm (1 - lo*lo) (lo*lo)) in Hp.
+  unfold mdsopt_gap.
+  (* 分母 1+lo² > 0，两端同乘归结为分子正性：
+     lo²>0 与 1−lo²>0（由 lo²<1 经 Qopp_lt_compat 移项）之积。 *)
+  apply (proj1 (Qmult_lt_r 0 ((lo*lo)*(1 - lo*lo)/(1+lo*lo)) (1+lo*lo) Hden)).
+  rewrite Qmult_0_l.
+  rewrite (mdsopt_cancel lo ((lo*lo)*(1 - lo*lo)) Hnd).
+  exact Hp.
+Qed.
+
+(* ========== §6 提取出口（G3：独立目录，魔数=0 判据） ========== *)
+
+Set Extraction Output Directory "../_tdsopt_g3out".
+Separate Extraction mdsopt_k00 mdsopt_k01 mdsopt_k10 mdsopt_k11
+  mdsopt_dstar mdsopt_dstar_opt mdsopt_gap.
+(* ================= §2 dsgen_2pos 族 ================= *)
+From Stdlib Require Import QArith.QArith.
 Import ListNotations.
 
 (* ========== §1 Q 算术基件（正性、非零、除法、加法单调） ========== *)
@@ -572,6 +700,5 @@ Qed.
 
 (* ========== §11 提取出口（G3：独立目录，魔数=0 判据） ========== *)
 
-From Stdlib Require Import Extraction.
 Set Extraction Output Directory "../_dsnr_g3out".
 Separate Extraction dsgen_qN dsgen_beta dsgen_k dsgen_rowsum dsgen_gap.
