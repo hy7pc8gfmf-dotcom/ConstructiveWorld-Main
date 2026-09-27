@@ -177,8 +177,6 @@ EnergyTempMonoB.v#R0-d66910
 RealKLDecomp.v#R0-d66910
 BoltzmannBridgeDischarge.v#R0-d66910
 DenPosGeneral.v#R0-d66910
-ExpNegFinale.v#R0-d66910
-ExpNegPosUp.v#R0-d66910
 KLWallClosed.v#R0-d66910
 PolyIntegral.v#R0-d66910
 RealKLCorrMark.v#R0-d66910
@@ -195,8 +193,7 @@ TempSoftmaxInstantiation.v#R0-d66910
 SecondLawQuantified.v#R0-d66910
 VandermondePartial.v#R0-d66910
 TempUnimodalMax.v#R0-3d75ec
-ExpOneEnvelope.v#R0-d66910
-ExpLinearLower.v#R0-d66910
+ExpOneEnvelope.v#R0-937eaf
 AttnLogSumExpBound.v#R0-d66910
 Arch_GibbsA_01.v#R0-d66910
 QstepConvergenceBound.v#R0-d66910

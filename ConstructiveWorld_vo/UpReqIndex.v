@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 408 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 407 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -1737,10 +1737,6 @@ Definition ng_TempUnimodalMax : NewGreenFace :=
 (* ng_ExpOneEnvelope —— ExpOneEnvelope.v：exp(±x) 单侧包络 *)
 Definition ng_ExpOneEnvelope : NewGreenFace :=
   MkNewGreenFace "ExpOneEnvelope.v" 505 29 20260916 "exp(+/-x) one-sided envelopes, Q rounding ladder" "L531:m365f05".
-
-(* ng_ExpLinearLower —— ExpLinearLower.v：exp 线性下界包络 *)
-Definition ng_ExpLinearLower : NewGreenFace :=
-  MkNewGreenFace "ExpLinearLower.v" 293 10 20260916 "exp linear lower envelope, exp-neg-pos face" "L304:mbf3925".
 
 (* ng_AttnLogSumExpBound —— AttnLogSumExpBound.v：注意力 log-sum-exp 界 *)
 Definition ng_AttnLogSumExpBound : NewGreenFace :=

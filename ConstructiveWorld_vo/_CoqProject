@@ -169,8 +169,6 @@ EnergyTempMonoB.v
 RealKLDecomp.v
 BoltzmannBridgeDischarge.v
 DenPosGeneral.v
-ExpNegFinale.v
-ExpNegPosUp.v
 KLWallClosed.v
 PolyIntegral.v
 RealKLCorrMark.v
@@ -197,7 +195,6 @@ SecondLawQuantified.v
 VandermondePartial.v
 TempUnimodalMax.v
 ExpOneEnvelope.v
-ExpLinearLower.v
 AttnLogSumExpBound.v
 Arch_GibbsA_01.v
 QstepConvergenceBound.v
