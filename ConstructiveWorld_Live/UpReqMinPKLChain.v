@@ -22,7 +22,7 @@ Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 From Stdlib Require Import List Arith Lia.
-Require Import  UpReqMinPKLChain UpAuditBridge.
+Require Import UpAuditBridge.
 
 (* ================= §1 um_lt_le 族 ================= *)
 (* 0. 通用桥（Real 层，Section 外，全局可复用）                  *)
