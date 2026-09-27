@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 127 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 464 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 463 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2095,9 +2095,6 @@ Definition ng_UpReqMixingTime : NewGreenFace :=
 Definition ng_UpReqDoeblinEntropy : NewGreenFace :=
   MkNewGreenFace "UpReqDoeblinEntropy.v" 1064 26 20260917 "doeblin entropy production face" "L1070:m954cba".
 
-(* ng_UpReqEngineCeiling —— UpReqEngineCeiling.v：engine family constant ceiling c*(k)=min(H_k-1/(k+1),2), first-order infeasibility fingerprint, EXP-D2B *)
-Definition ng_UpReqEngineCeiling : NewGreenFace :=
-  MkNewGreenFace "UpReqEngineCeiling.v" 448 33 20260917 "engine family constant ceiling c*(k)=min(H_k-1/(k+1),2), first-order infeasibility fingerprint, EXP-D2B" "L471:mb0e296".
 
 (* ng_UpReqPinskerTransport —— UpReqPinskerTransport.v：two-point pinsker transport dp_two_point, full-distribution *)
 Definition ng_UpReqPinskerTransport : NewGreenFace :=

@@ -323,9 +323,7 @@ BeukersLists.v#R0-d66910
 ConcMixSelFeed.v#R0-d66910
 DecBridge6.v#R0-d66910
 EngelWeighted.v#R0-d66910
-EngineCeilingK.v#R0-d66910
 EntropyMonoSplitInst.v#R0-d66910
-EpsTrichotomy.v#R0-d66910
 HansonLcm.v#R0-d66910
 Ln2Escape.v#R0-d66910
 LogTwoBridge.v#R0-d66910
@@ -340,7 +338,6 @@ SumDCarrierFeed.v#R0-d66910
 VajdaClose2.v#R0-d66910
 WeakTriangleClose.v#R0-d66910
 ZPosSlotFeed.v#R0-d66910
-PinskerCoreClose.v#R0-d66910
 ForwardKLAdjudication.v#R0-d66910
 UpAblD1PPO_UpReqPPOPlain.v#R0-d66910
 UpAblD1S10_UpReqConcMixSel.v#R0-d66910

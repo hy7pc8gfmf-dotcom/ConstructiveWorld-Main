@@ -324,9 +324,7 @@ BeukersLists.v
 ConcMixSelFeed.v
 DecBridge6.v
 EngelWeighted.v
-EngineCeilingK.v
 EntropyMonoSplitInst.v
-EpsTrichotomy.v
 HansonLcm.v
 Ln2Escape.v
 LogTwoBridge.v
@@ -341,7 +339,6 @@ SumDCarrierFeed.v
 VajdaClose2.v
 WeakTriangleClose.v
 ZPosSlotFeed.v
-PinskerCoreClose.v
 ForwardKLAdjudication.v
 UpAblD1PPO_UpReqPPOPlain.v
 UpAblD1S10_UpReqConcMixSel.v
