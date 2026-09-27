@@ -159,10 +159,9 @@ DTPT_Extract.v#R0-d66910
 DTPT_Rotation.v#R0-d66910
 DTPT_Bridge.v#R0-d66910
 DTPT_Bridge_Dig.v#R0-d66910
-DTPT_Bridge_Dep.v#R0-d66910
+DTPT_Bridge_Dep.v#R0-a7823b
 ExpNegPos.v#R0-d66910
 DTPT_Bridge_Rot.v#R0-d66910
-DTPT_Bridge_All.v#R0-d66910
 UpReqSpec2x2.v#R0-d66910
 EnergyTempMonoB.v#R0-d66910
 RealKLDecomp.v#R0-d66910
