@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 382 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 376 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2392,33 +2392,13 @@ Definition ng_UpAblP1T1_AlignCert : NewGreenFace :=
 Definition ng_UpAblP1T2_GrpoAuditCert : NewGreenFace :=
   MkNewGreenFace "UpAblP1T2_GrpoAuditCert.v" 259 9 20260920 "R95 paper-1 ablation (T2R2): GRPO/audit/FE-constant cluster 9 bundles supply theorems, predecessor pieces re-verified four-gate green" "L284:mcb01d9".
 
-(* ng_UpAblP7_AbsNonNeg —— UpAblP7_AbsNonNeg.v：colleague paper-7 ablation campaign (PA7/): AbsNonNeg residue, first unconditional form in library, eps-to-unconditional equivalence direction viable, four-gate green; built-at-registration verified in vo tree *)
-Definition ng_UpAblP7_AbsNonNeg : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_AbsNonNeg.v" 364 13 20260920 "colleague paper-7 ablation campaign (PA7/R93): AbsNonNeg residue, first unconditional form in library, eps-to-unconditional equivalence direction viable, four-gate green; born-in-place verified in vo tree" "L364:m7e3206".
-
-(* ng_UpAblP7_LoHiBridge —— UpAblP7_LoHiBridge.v：colleague PA7: LoHi bridge pieces, four-gate green *)
-Definition ng_UpAblP7_LoHiBridge : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_LoHiBridge.v" 209 5 20260920 "colleague PA7: LoHi bridge pieces, four-gate green" "L209:mc3f122".
-
 (* ng_UpAblP7_LoHiSqueeze —— UpAblP7_LoHiSqueeze.v：colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green *)
 Definition ng_UpAblP7_LoHiSqueeze : NewGreenFace :=
   MkNewGreenFace "UpAblP7_LoHiSqueeze.v" 269 7 20260920 "colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green" "L276:m0c319c".
 
-(* ng_UpAblP7_P7FlagshipTail —— UpAblP7_P7FlagshipTail.v：colleague PA7: flagship tail pieces, four-gate green *)
-Definition ng_UpAblP7_P7FlagshipTail : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_P7FlagshipTail.v" 268 9 20260920 "colleague PA7: flagship tail pieces, four-gate green" "L268:m7bb845".
-
 (* ng_UpAblP7_Package —— UpAblP7_Package.v：colleague PA7: package assembly consuming six sibling pieces, four-gate green *)
 Definition ng_UpAblP7_Package : NewGreenFace :=
   MkNewGreenFace "UpAblP7_Package.v" 237 4 20260920 "colleague PA7: package assembly consuming six sibling pieces, four-gate green" "L237:m64f3fe".
-
-(* ng_UpAblP7_Paper7Ablation —— UpAblP7_Paper7Ablation.v：colleague PA7: Paper7Ablation 14-slot ablation + D5 instance supply, four-gate green *)
-Definition ng_UpAblP7_Paper7Ablation : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_Paper7Ablation.v" 281 18 20260920 "colleague PA7: Paper7Ablation 14-slot ablation + D5 instance supply, four-gate green" "L332:m682382".
-
-(* ng_UpAblP7_Paper7Ablation_S1inst —— UpAblP7_Paper7Ablation_S1inst.v：colleague PA7: Paper7Ablation S1 instance supply, four-gate green *)
-Definition ng_UpAblP7_Paper7Ablation_S1inst : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_Paper7Ablation_S1inst.v" 282 6 20260920 "colleague PA7: Paper7Ablation S1 instance supply, four-gate green" "L282:m001899".
 
 (* ng_UpAblP7_UMixSelect —— UpAblP7_UMixSelect.v：colleague PA7: UMixSelect W-wall verdict + discharge surrogate + kappa=1/2 Closed witness, four-gate green *)
 Definition ng_UpAblP7_UMixSelect : NewGreenFace :=
@@ -2431,10 +2411,6 @@ Definition ng_UpAblP7_WallEpsChain_A : NewGreenFace :=
 (* ng_UpAblP7_WallEpsChain_B —— UpAblP7_WallEpsChain_B.v：colleague PA7: wall W2 chain-B, four-gate green *)
 Definition ng_UpAblP7_WallEpsChain_B : NewGreenFace :=
   MkNewGreenFace "UpAblP7_WallEpsChain_B.v" 468 11 20260920 "colleague PA7: wall W2 chain-B, four-gate green" "L468:m40973b".
-
-(* ng_UpAblP7_WallEps_CB2 —— UpAblP7_WallEps_CB2.v：colleague PA7: CB2 eps consumption face, four-gate green *)
-Definition ng_UpAblP7_WallEps_CB2 : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_WallEps_CB2.v" 343 13 20260920 "colleague PA7: CB2 eps consumption face, four-gate green" "L381:mc449ea".
 
 (* ng_UpAblDistLogLe —— UpAblDistLogLe.v：Y1 seat (W4 family-E log-le): dist_log_le_linear slot (UpReqDist.v:1035, Section ReqFEP) concrete Regular-Real carrier instance supply + residual closure, four-gate green (); built-at-registration verified in vo tree *)
 Definition ng_UpAblDistLogLe : NewGreenFace :=

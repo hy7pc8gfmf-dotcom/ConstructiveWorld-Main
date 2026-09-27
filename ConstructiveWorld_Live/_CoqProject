@@ -366,15 +366,9 @@ UpAblEps49List.v
 UpAblEps66Sum.v
 UpAblP1T1_AlignCert.v
 UpAblP1T2_GrpoAuditCert.v
-UpAblP7_AbsNonNeg.v
-UpAblP7_LoHiBridge.v
 P7BoundedSoftmaxDeep.v
-UpAblP7_P7FlagshipTail.v
-UpAblP7_Paper7Ablation.v
-UpAblP7_Paper7Ablation_S1inst.v
 UpAblP7_UMixSelect.v
 UpAblP7_WallEpsChain_B.v
-UpAblP7_WallEps_CB2.v
 UpAblDistLogEq.v
 UpAblDistLogLe.v
 UpAblGrpEqDecWorld.v
