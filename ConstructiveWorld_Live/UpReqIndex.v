@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 420 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 418 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -3074,16 +3074,6 @@ Definition ng_UpReqSamplingFeed : NewGreenFace :=
 Definition ng_UpReqCf2TvGenSupply : NewGreenFace :=
   MkNewGreenFace "UpReqCf2TvGenSupply.v" 192 3 20260925
   "P7FIN2 piece-1+2 supply: cf2-TV nonneg strong+normalized forms and reverse true-equivalence (plain-form restoration, in-piece normalization, both directions machine-checked; V-C1 upgraded); PA 3/3 Closed; G3 single-command three-constant extraction Obj.magic=0; G4 coqchk 3 transitive axioms CONTAINMENT-EQUAL zero-new; born-in-place four-gate green 20260925; triple md5 bcac27f1" "L192:mbcac27".
-
-(* ng_UpReqCf2TvGenWorld —— UpReqCf2TvGenWorld.v：C2 产泛型件（144 行 6 Qed；8 语句 uc2t_gen_tv/eq_list/nonneg_habs/sum_const/gen_nR/gen_nR_pos/gen_unif_norm/gen_enum_ne；Require CW219/Algebra/SumD/Dist 最小面与 R121x 16 件零交集；PA×6 全 Closed；G3 主 ml Obj.magic=0；G4 同款 3 条传递环境；订正① lt zero inv2 前件经 V-C2 反例验立） *)
-Definition ng_UpReqCf2TvGenWorld : NewGreenFace :=
-  MkNewGreenFace "UpReqCf2TvGenWorld.v" 144 6 20260925
-  "P7FIN2 piece-3 generic supply: 8 uc2t_gen_* statements over minimal CW219/Algebra/SumD/Dist face (zero intersection with R121x wave); PA 6/6 Closed; extraction Obj.magic=0; erratum-1 lt zero inv2 premise verified by counterexample; born-in-place four-gate green 20260925; triple md5 6b0d5cd3" "L144:m6b0d5c".
-
-(* ng_UpReqCf2TvW3 —— UpReqCf2TvW3.v：C2 产 Fin3 检查点件（161 行 0 Qed＝Definition 面交付·非降档：11 语句全定义型 uc2t_w3/enum3/mu0w3/nu0w3/pt3/tv3＋abs_pt_w3/tv3_sum_two/tv3_pos/tv3_nonneg/fin2_sumf_gen_instance，PA×5 全 Closed；订正② wC 支值域 {one,one,zero} 修正经 V-C2 验立（照抄模板即静默假语句反例在案）；Require CW219/Algebra/SumD/Dist/ConcFin2；G3 主 ml Obj.magic=0） *)
-Definition ng_UpReqCf2TvW3 : NewGreenFace :=
-  MkNewGreenFace "UpReqCf2TvW3.v" 161 0 20260925
-  "P7FIN2 piece-4 Fin3 probe: 11 definition-form statements (zero Qed by design, PA 5/5 Closed, non-trivial per redline-3 registered); erratum-2 wC-branch value range corrected (silent-false-statement counterexample archived); extraction Obj.magic=0; born-in-place four-gate green 20260925; triple md5 6b186fbf" "L161:m6b186f".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-EXEC built-at-registration 四项验证实测补记；order 锚=md5 前 6 照 尾块统一口径；源=Live_X 逐字拷贝；两红件 UpAblD1S11_UpReqCauchy（头注注释失衡）/UpReqBregmanBase（L119 证明体伤）。 *)
 

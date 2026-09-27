@@ -499,8 +499,6 @@ uabl_attn_full_instance.v
 BBDBridgeSupply.v
 UpReqSamplingFeed.v
 UpReqCf2TvGenSupply.v
-UpReqCf2TvGenWorld.v
-UpReqCf2TvW3.v
 UpAblBYDecisionTree.v
 UpAblMixACount.v
 UpAblMixBSharp.v
