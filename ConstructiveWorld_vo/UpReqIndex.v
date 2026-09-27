@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 374 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 364 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2131,30 +2131,12 @@ Definition ng_UpAblD1_fa53_lpc_broadcast : NewGreenFace :=
 (* ng_UpAblD2_AbsLeId_RI_DO —— UpAblD2_AbsLeId_RI_DO.v：FA-D2S1, N3 x2 supply-pair + N1 x2 RI-face + T x1 (W register DO carrier noted), four-gate green () *)
 Definition ng_UpAblD2_AbsLeId_RI_DO : NewGreenFace :=
   MkNewGreenFace "UpAblD2_AbsLeId_RI_DO.v" 136 5 20260919 "FA-D2S1, N3 x2 supply-pair + N1 x2 RI-face + T x1 (W register DO carrier noted), four-gate green (_tfad2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L136:mb8d671".
-(* ng_UpAblP1_SecondLawQuantified_sumd —— UpAblP1_SecondLawQuantified_sumd.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green () *)
-Definition ng_UpAblP1_SecondLawQuantified_sumd : NewGreenFace :=
-  MkNewGreenFace "UpAblP1_SecondLawQuantified_sumd.v" 101 4 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L101:m030bcf".
-(* ng_UpAblP1_SqrtfCauchyArch_arch —— UpAblP1_SqrtfCauchyArch_arch.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green () *)
-Definition ng_UpAblP1_SqrtfCauchyArch_arch : NewGreenFace :=
-  MkNewGreenFace "UpAblP1_SqrtfCauchyArch_arch.v" 54 0 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L54:mc779e8".
 (* ng_UpAblP1_SqrtfCauchy_four_slots —— UpAblP1_SqrtfCauchy_four_slots.v：FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green () *)
 Definition ng_UpAblP1_SqrtfCauchy_four_slots : NewGreenFace :=
   MkNewGreenFace "UpAblP1_SqrtfCauchy_four_slots.v" 89 0 20260919 "FA-P1S1 batch, 9 slots all N1 (SqrtfCauchy 5 + SLQ 4), four-gate green (_tfap1s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L89:m4a0b0c".
-(* ng_UpAblP2_FepIdentClass_inst_bundle —— UpAblP2_FepIdentClass_inst_bundle.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green () *)
-Definition ng_UpAblP2_FepIdentClass_inst_bundle : NewGreenFace :=
-  MkNewGreenFace "UpAblP2_FepIdentClass_inst_bundle.v" 214 9 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L207:ma84569".
 (* ng_UpAblP2_SecondLawConsume_sumdis —— UpAblP2_SecondLawConsume_sumdis.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green () *)
 Definition ng_UpAblP2_SecondLawConsume_sumdis : NewGreenFace :=
   MkNewGreenFace "UpAblP2_SecondLawConsume_sumdis.v" 179 6 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L179:m1901c0".
-(* ng_UpAblP2_UpMinP_tokens_pack —— UpAblP2_UpMinP_tokens_pack.v：FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green () *)
-Definition ng_UpAblP2_UpMinP_tokens_pack : NewGreenFace :=
-  MkNewGreenFace "UpAblP2_UpMinP_tokens_pack.v" 90 3 20260919 "FA-P2S1 three-pack, batch split N8 + N3 supply3 + T7 merged + 1 pruned, four-gate green (_tfap2s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L90:m04b533".
-(* ng_UpAblP3_UpReqAttnMixTime —— UpAblP3_UpReqAttnMixTime.v：FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25//W1 batch), four-gate green () *)
-Definition ng_UpAblP3_UpReqAttnMixTime : NewGreenFace :=
-  MkNewGreenFace "UpAblP3_UpReqAttnMixTime.v" 247 9 20260919 "FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L247:mcca60f".
-(* ng_UpAblP3_UpReqConcMixSel —— UpAblP3_UpReqConcMixSel.v：FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25//W1 batch), four-gate green () *)
-Definition ng_UpAblP3_UpReqConcMixSel : NewGreenFace :=
-  MkNewGreenFace "UpAblP3_UpReqConcMixSel.v" 229 8 20260919 "FA-P3S1 batch, AMT 22 + MixSel 25 slot-face (N25/T21/W1 batch), four-gate green (_tfap3s1_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L229:mc9d824".
 (* ng_UpAbl_S04RealExpLogConv —— UpAbl_S04RealExpLogConv.v：v1 batch (a), N1 x1 + N2 x3, four-gate green () *)
 Definition ng_UpAblT10_S04RealExpLogConv : NewGreenFace :=
   MkNewGreenFace "UpAblT10_S04RealExpLogConv.v" 85 4 20260919 "v1 T10 batch (T10a), N1 x1 + N2 x3, four-gate green (_tt10a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L85:m2e0cd9".
@@ -2376,14 +2358,6 @@ Definition ng_UpAblEps66Sum : NewGreenFace :=
 Definition ng_UpAblEps66Body : NewGreenFace :=
   MkNewGreenFace "UpAblEps66Body.v" 213 3 20260920 "R95 paper-1 ablation (X2): theorem 6.6 body 11-slot swap, flag_closed zero-honest-interface version, four-gate green" "L213:m678c4c".
 
-(* ng_UpAblP1T1_AlignCert —— UpAblP1T1_AlignCert.v： paper-1 ablation (T1R2): alignment certificate cluster 6 bundles supply theorems, all T-grade honest declaration, four-gate green *)
-Definition ng_UpAblP1T1_AlignCert : NewGreenFace :=
-  MkNewGreenFace "UpAblP1T1_AlignCert.v" 168 8 20260920 "R95 paper-1 ablation (T1R2): alignment certificate cluster 6 bundles supply theorems, all T-grade honest declaration, four-gate green" "L168:m8cd5bf".
-
-(* ng_UpAblP1T2_GrpoAuditCert —— UpAblP1T2_GrpoAuditCert.v： paper-1 ablation (T2R2): GRPO/audit/FE-constant cluster 9 bundles supply theorems, predecessor pieces re-verified four-gate green *)
-Definition ng_UpAblP1T2_GrpoAuditCert : NewGreenFace :=
-  MkNewGreenFace "UpAblP1T2_GrpoAuditCert.v" 259 9 20260920 "R95 paper-1 ablation (T2R2): GRPO/audit/FE-constant cluster 9 bundles supply theorems, predecessor pieces re-verified four-gate green" "L284:mcb01d9".
-
 (* ng_UpAblP7_LoHiSqueeze —— UpAblP7_LoHiSqueeze.v：colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green *)
 Definition ng_UpAblP7_LoHiSqueeze : NewGreenFace :=
   MkNewGreenFace "UpAblP7_LoHiSqueeze.v" 269 7 20260920 "colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green" "L276:m0c319c".
@@ -2423,10 +2397,6 @@ Definition ng_UpAblGrpEqDischarge : NewGreenFace :=
 (* ng_UpAblP2FeedSum —— UpAblP2FeedSum.v：Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (); built-at-registration verified in vo tree *)
 Definition ng_UpAblP2FeedSum : NewGreenFace :=
   MkNewGreenFace "UpAblP2FeedSum.v" 314 16 20260920 "Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (_tz2a_); born-in-place verified in vo tree" "L346:mc18fc2".
-
-(* ng_UpAblP2FeedMix —— UpAblP2FeedMix.v：Z2b seat (paper-2 mix-face donor direct-config): steady/minp Real chain + partition positivity face interfaced with e66s (AB5) and e49l_partition_pos donors, four-gate green (); built-at-registration verified in vo tree *)
-Definition ng_UpAblP2FeedMix : NewGreenFace :=
-  MkNewGreenFace "UpAblP2FeedMix.v" 322 12 20260920 "Z2b seat (paper-2 mix-face donor direct-config): steady/minp Real chain + partition positivity face interfaced with e66s (AB5) and e49l_partition_pos donors, four-gate green (_tz2b_); born-in-place verified in vo tree" "L344:m1fe3e5".
 
 (* ng_UpAblAlmConsumption —— UpAblAlmConsumption.v：Z1b seat (alm-chain remaining-antecedent-form consumption demonstrator): minimal parallel-replica dual-max world (binary vocabulary [true; false], constant logit), consumes only registered chain pieces, admission-free purely constructive, four-gate green (); built-at-registration verified in vo tree *)
 Definition ng_UpAblAlmConsumption : NewGreenFace :=
@@ -2893,11 +2863,6 @@ Definition ng_ToyR_fa57_ext : NewGreenFace :=
 Definition ng_UpAblDeltaStarGeneral : NewGreenFace :=
   MkNewGreenFace "UpAblDeltaStarGeneral.v" 577 40 20260923
   "DSNR seat: dsgen_ generalization family (PA 4-route Closed: dsgen_main/rowstoch/feasible/optimal_ge3; G3 separate-extraction Obj.magic=0; G4 Axioms none; ng_qed token-level re-measured 40 (PREP 33 was line-start grep face, VERIFY [N-1] corrected); requires UpAblDeltaStarSuboptimal same-wave registration; WangWW self-trap lexicon exemption noted)" "L577:m032f49".
-
-(* ng_UpAblP4_UpStopTime_PA —— UpAblP4_UpStopTime_PA.v：九批 C-纯新（UpStopTime 的 PA 驱动件，81 行 3 Qed（三个行内闭合定理 minimal_stoptime/st_thresh_dominance/unguarded_no_stoptime；PREP 草案「0-Qed=PA 驱动件面」定性失实，二验 [N-1] 修正删句）；VET9B 四面机械绿 ；Require Import UpStopTime. 源 L36 实证→order 尾部追加按依赖先行性插于 UpStopTime 后；ng_qed 按 口径 token 级实测补记） *)
-Definition ng_UpAblP4_UpStopTime_PA : NewGreenFace :=
-  MkNewGreenFace "UpAblP4_UpStopTime_PA.v" 81 3 20260923
-  "VET9B C-pure-new: UpStopTime PA driver (four-face green; three inline Qed closures; driver-face registry; requires UpStopTime, order insert-after per dependency precedence; ng_qed token-level 3 per VERIFY [N-1])" "L81:m1ae55c".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-SUB built-at-registration 四项组绿后实测补记）。 *)
 
