@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 364 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 340 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2330,17 +2330,9 @@ Definition ng_UpAblZpos : NewGreenFace :=
 Definition ng_UpAblZposReal : NewGreenFace :=
   MkNewGreenFace "UpAblZposReal.v" 138 3 20260920 "R95 paper-1 ablation (AB2): Z_align_pos Real-layer unconditional discharge + finite-sum positivity carrier, three theorems all N-grade, four-gate green" "L139:m8b5e5c".
 
-(* ng_UpAblZposDirect —— UpAblZposDirect.v： paper-1 ablation (AB7): B4 slot direct-config on RealEnhancedReal, Id-line slot original form structurally unreachable verdict per sec 9.5, four-gate green *)
-Definition ng_UpAblZposDirect : NewGreenFace :=
-  MkNewGreenFace "UpAblZposDirect.v" 162 4 20260920 "R95 paper-1 ablation (AB7): B4 slot direct-config on RealEnhancedReal, Id-line slot original form structurally unreachable verdict per sec 9.5, four-gate green" "L162:mc15b50".
-
 (* ng_UpAblEps49RKDBase —— UpAblEps49RKDBase.v： paper-1 ablation (AB3 companion): RKD private-byte-snapshot base for 4.9 slot alignment, content-identical to RealKLDecomp body, four-gate green; parallel replica coexists per merge-replica discipline *)
 Definition ng_UpAblEps49RKDBase : NewGreenFace :=
   MkNewGreenFace "UpAblEps49RKDBase.v" 912 11 20260920 "R95 paper-1 ablation (AB3 companion): RKD private-byte-snapshot base for 4.9 slot alignment, content-identical to RealKLDecomp body, four-gate green; parallel replica coexists per merge-replica discipline" "L914:m7e643f".
-
-(* ng_UpAblEps49Main —— UpAblEps49Main.v： paper-1 ablation (AB3): 4.9 load-bearing slot real_kl_decomp_full discharge (bool two-point instance), four-gate green *)
-Definition ng_UpAblEps49Main : NewGreenFace :=
-  MkNewGreenFace "UpAblEps49Main.v" 205 8 20260920 "R95 paper-1 ablation (AB3): 4.9 load-bearing slot real_kl_decomp_full discharge (bool two-point instance), four-gate green" "L205:mb01340".
 
 (* ng_UpAblEps49List —— UpAblEps49List.v： paper-1 ablation (e49l): 4.9 slot list-carrier true-premise-shape complete discharge, zero gap with S08 global form, four-gate green *)
 Definition ng_UpAblEps49List : NewGreenFace :=
@@ -2378,22 +2370,6 @@ Definition ng_UpAblP7_WallEpsChain_A : NewGreenFace :=
 Definition ng_UpAblP7_WallEpsChain_B : NewGreenFace :=
   MkNewGreenFace "UpAblP7_WallEpsChain_B.v" 468 11 20260920 "colleague PA7: wall W2 chain-B, four-gate green" "L468:m40973b".
 
-(* ng_UpAblDistLogLe —— UpAblDistLogLe.v：Y1 seat (W4 family-E log-le): dist_log_le_linear slot (UpReqDist.v:1035, Section ReqFEP) concrete Regular-Real carrier instance supply + residual closure, four-gate green (); built-at-registration verified in vo tree *)
-Definition ng_UpAblDistLogLe : NewGreenFace :=
-  MkNewGreenFace "UpAblDistLogLe.v" 239 4 20260920 "Y1 seat (W4 family-E log-le): dist_log_le_linear slot (UpReqDist.v:1035, Section ReqFEP) concrete Regular-Real carrier instance supply + residual closure, four-gate green (_ty1_); born-in-place verified in vo tree" "L239:meee82c".
-
-(* ng_UpAblDistLogEq —— UpAblDistLogEq.v：Y2 seat (W4 family-E log-eq): dist_log_eq_linear slot (UpReqDist.v:1037) concrete Regular-Real carrier instance supply (c-2 verdict redemption), four-gate green (); built-at-registration verified in vo tree *)
-Definition ng_UpAblDistLogEq : NewGreenFace :=
-  MkNewGreenFace "UpAblDistLogEq.v" 177 5 20260920 "Y2 seat (W4 family-E log-eq): dist_log_eq_linear slot (UpReqDist.v:1037) concrete Regular-Real carrier instance supply (T13c-2 verdict redemption), four-gate green (_ty2_); born-in-place verified in vo tree" "L177:me097c6".
-
-(* ng_UpAblGrpEqDecWorld —— UpAblGrpEqDecWorld.v：Y5 seat (family-A decision wall B28): grp_eq_dec slot (S15_TailFEPUp.v:1419) carrier-world assembly on bool two-element enumeration world, four-gate green (); built-at-registration verified in vo tree *)
-Definition ng_UpAblGrpEqDecWorld : NewGreenFace :=
-  MkNewGreenFace "UpAblGrpEqDecWorld.v" 164 10 20260920 "Y5 seat (family-A decision wall B28): grp_eq_dec slot (S15_TailFEPUp.v:1419) carrier-world assembly on bool two-element enumeration world, four-gate green (_ty5_); born-in-place verified in vo tree" "L164:m18143a".
-
-(* ng_UpAblGrpEqDischarge —— UpAblGrpEqDischarge.v：Y5 seat (family-A): grp_eq_dec slot concrete-carrier discharge pathway demonstrator, Group:=bool / R:=nat minimal Set-level carrier, admission-free all-Qed-closed extractable, four-gate green (); built-at-registration verified in vo tree *)
-Definition ng_UpAblGrpEqDischarge : NewGreenFace :=
-  MkNewGreenFace "UpAblGrpEqDischarge.v" 442 19 20260920 "Y5 seat (family-A): grp_eq_dec slot concrete-carrier discharge pathway demonstrator, Group:=bool / R:=nat minimal Set-level carrier, zero-admit all-Qed extractable, four-gate green (_ty5_); born-in-place verified in vo tree" "L442:m7b98b3".
-
 (* ng_UpAblP2FeedSum —— UpAblP2FeedSum.v：Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (); built-at-registration verified in vo tree *)
 Definition ng_UpAblP2FeedSum : NewGreenFace :=
   MkNewGreenFace "UpAblP2FeedSum.v" 314 16 20260920 "Z2a seat (paper-2 sum-face donor direct-config): paper-1 finisher donors (AB8 spd_ series + AB2 zabr series) interfaced to paper-2 sum face, four-gate green (_tz2a_); born-in-place verified in vo tree" "L346:mc18fc2".
@@ -2430,17 +2406,9 @@ Definition ng_UpAblAbsSumLeB2 : NewGreenFace :=
 Definition ng_UpAblAbsSumLeB3 : NewGreenFace :=
   MkNewGreenFace "UpAblAbsSumLeB3.v" 594 19 20260920 "abs-family B3 deep chain: abs list-sum B/eps full family + slot forms, J4 re-verified (_tj4_)" "L594:md6d184".
 
-(* ng_UpAblAbsTwoPtAbs —— UpAblAbsTwoPtAbs.v：abs 族两点槽形（ 四项验证补全）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblAbsTwoPtAbs : NewGreenFace :=
-  MkNewGreenFace "UpAblAbsTwoPtAbs.v" 161 4 20260920 "abs-family two-point slot form, four-gate completion (_tm4r_)" "L161:mb3367d".
-
 (* ng_UpAblAbsFeed —— UpAblAbsFeed.v：abs 族馈线件（使用 B/B2/Eps 三件合流）（/）；四项验证绿；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblAbsFeed : NewGreenFace :=
   MkNewGreenFace "UpAblAbsFeed.v" 107 3 20260920 "abs-family feed piece consuming B/B2/Eps, four-gate (_tm4r_/_tm3_)" "L107:mba3fb2".
-
-(* ng_UpAblB1_MonoSplit —— UpAblB1_MonoSplit.v：B1 （MonoSplit 三证书位真实算链 N 升格，替 S5 零能量捷径支）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblB1_MonoSplit : NewGreenFace :=
-  MkNewGreenFace "UpAblB1_MonoSplit.v" 516 12 20260920 "B1 seat: MonoSplit three-certificate real-computation chain (N-upgrade replacing S5 zero-energy shortcut legs), four-gate (_tb1_)" "L553:m89f006".
 
 (* ng_UpAblB2_G13 —— UpAblB2_G13.v：B2 （b_gibbs 障碍通道件＋W4 记录分层判定：log-eq 具体记录可实例化 t34 输入）；四项验证绿；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblB2_G13 : NewGreenFace :=
@@ -2478,31 +2446,7 @@ Definition ng_UpAblP2T1_CertC : NewGreenFace :=
 Definition ng_UpAblAbsQFeed : NewGreenFace :=
   MkNewGreenFace "UpAblAbsQFeed.v" 158 7 20260920 "N4R seat (Q-world Qabs slot x9 direct-fit): self-sufficient Q-layer supply for six S10_KVQuantTrig slots + three S08 Qabs slots (8 real consumption points + 1 lineage note per the N4R verdict table) - seven uaq_ pieces (triangle plus/minus/reverse A.1/A.2/A.3 and nonneg C.2 at adaptation-consumption level, honestly marked; double-layer Qabs closure B.1, its strict variant B.2, and the Qfloor Archimedean certificate through the Qabs gate C.1 as real implementations), genuinely consuming the S4B Qfloor lineage donor UpAblAbsSumLeB2; four-gate green (_tn4r_); born-in-place pending in vo tree" "L158:m1cb875".
 
-(* ng_UpAblTwLeFeed —— UpAblTwLeFeed.v：N3R （UpTempWindow tw_h_le 槽两点核差 B ）：tw_h_le 槽（|w_T(x)−1/N| ≤ (e^{2Δ/T}−1)·(1/N)，Section TempWindow 卸载 8 参世界接口）B 形直接配置主件 ntl_tw_h_le_b_feed（语句逐字对齐、外层谓词升 real_le_b）＋plain 收回件 ntl_tw_h_le_feed（与槽实形逐字同形、臂式重组零调槽本体）＋单向桥/臂基×2/转换层×2 共 7 件全 Closed；eps 两臂经 S4 供体 uabS4_le_add_r 正余量右吸收真使用；形态差三条显式申报（三角增改差 2·(1−E2L)·u≥0、B/plain 形态差、前提使用同位， §4）；四项验证绿；vo 树 built-at-registration 候铺 *)
-Definition ng_UpAblTwLeFeed : NewGreenFace :=
-  MkNewGreenFace "UpAblTwLeFeed.v" 368 7 20260920 "N3R seat (UpTempWindow tw_h_le slot two-point kernel-difference Bishop-form direct-fit): main piece ntl_tw_h_le_b_feed (statement verbatim-aligned to the Section-unloaded 8-parameter world interface, outer predicate lifted to real_le_b) + plain recovery piece ntl_tw_h_le_feed (verbatim-same-shape as the slot, arm-based independent reconstruction, zero calls into the slot body) + one-way bridge / two arm bases / two conversion pieces, 7 pieces all Closed; eps arms genuinely consume the S4 donor uabS4_le_add_r positive-margin right-absorption; three shape differences explicitly declared (triangle thinning gap 2*(1-E2L)*u >= 0, B/plain form gap, premise-consumption parity, _tn3r_ section 4); four-gate green (_tn3r_); born-in-place pending in vo tree" "L368:m703b81".
-
 (* 刷新注记：UpAblAbsSumLeB（341/11）与 UpAblAbsTwoPtAbs（161/4）为 已注册件内容刷新版（Live_X 权威版同步，built-at-registration 重编+下游愈合闭包 build.sh 全量重编背书），ng_ 计数沿用，愈合重编经 cpu_guard 包裹 build.sh 拓扑序执行。 *)
-
-(* ng_UpAblSlotB0Merge —— UpAblSlotB0Merge.v：TP5 （B0 并轨）：SlotB0 双世界并轨供给模块；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblSlotB0Merge : NewGreenFace :=
-  MkNewGreenFace "UpAblSlotB0Merge.v" 104 2 20260920 "TP5 seat: SlotB0 dual-world merge supply piece, four-gate (_tp5_)" "L104:m9d70c8".
-
-(* ng_UpAblCauchyMod —— UpAblCauchyMod.v：TP6 （Cauchy 模位）：CauchyMod 模位供给模块（ 侦察线）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblCauchyMod : NewGreenFace :=
-  MkNewGreenFace "UpAblCauchyMod.v" 132 4 20260920 "TP6 seat: CauchyMod modulus-position supply piece (recon line _tp6_), four-gate" "L132:ma92b14".
-
-(* ng_UpAblKVEpsHalf —— UpAblKVEpsHalf.v：KV eps 半量族供给模块（H 线）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblKVEpsHalf : NewGreenFace :=
-  MkNewGreenFace "UpAblKVEpsHalf.v" 266 13 20260920 "KV eps-half family supply piece (H-seat residual line), four-gate" "L266:m68118d".
-
-(* ng_UpAblAbsQFeedB2 —— UpAblAbsQFeedB2.v：QFeed B2 变体（使用 AbsQFeed）（abs 族线）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblAbsQFeedB2 : NewGreenFace :=
-  MkNewGreenFace "UpAblAbsQFeedB2.v" 140 15 20260920 "QFeed B2 variant consuming AbsQFeed (abs-family line), four-gate" "L188:m1c92f4".
-
-(* ng_UpAblQfloorDepth —— UpAblQfloorDepth.v：Qfloor 深度件（使用 AbsSumLeB2+AbsQFeed）（abs 族线）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblQfloorDepth : NewGreenFace :=
-  MkNewGreenFace "UpAblQfloorDepth.v" 178 4 20260920 "Qfloor depth piece consuming AbsSumLeB2+AbsQFeed (abs-family line), four-gate" "L190:m2707be".
 
 (* ng_UpAblS06AbsFeed —— UpAblS06AbsFeed.v：S06 abs 馈线（使用 AbsSumLeB3）（abs 族线）；四项验证绿；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblS06AbsFeed : NewGreenFace :=
@@ -2511,10 +2455,6 @@ Definition ng_UpAblS06AbsFeed : NewGreenFace :=
 (* ng_UpAblArchGeomBatch —— UpAblArchGeomBatch.v：Arch 几何批件（使用 QeqBridge）（ 线）；四项验证绿；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblArchGeomBatch : NewGreenFace :=
   MkNewGreenFace "UpAblArchGeomBatch.v" 111 4 20260920 "Arch geometry batch piece consuming QeqBridge (_tq1_ line), four-gate" "L111:m4440f3".
-
-(* ng_UpAblCauchyLim —— UpAblCauchyLim.v：TP6 （CauchyLim 完成）：CauchyLim 模位完成件（ 侦察线转正）；四项验证绿；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblCauchyLim : NewGreenFace :=
-  MkNewGreenFace "UpAblCauchyLim.v" 250 8 20260920 "TP6 seat: CauchyLim closure piece (recon line _tp6_ promoted), four-gate" "L250:m3a1a8a".
 
 (* ng_UpAblHalfPowFeed —— UpAblHalfPowFeed.v：HalfPow 馈线件（使用 HalfPow）（TP3 线）；四项验证绿；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblHalfPowFeed : NewGreenFace :=
@@ -2568,14 +2508,6 @@ Definition ng_UpAblLogWallEq : NewGreenFace :=
 Definition ng_UpAblMetaEngine : NewGreenFace :=
   MkNewGreenFace "UpAblMetaEngine.v" 830 22 20260920 "paper-7 update line: MetaEngine engine 22 pieces (_tn series)" "L830:m9a9fa9".
 
-(* ng_UpAblRateAlgPkg —— UpAblRateAlgPkg.v：论文7 更新线（率代数成组 4 件）；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblRateAlgPkg : NewGreenFace :=
-  MkNewGreenFace "UpAblRateAlgPkg.v" 326 4 20260920 "paper-7 update line: rate-algebra package 4 pieces (_taid3_)" "L326:m2389d1".
-
-(* ng_UpAblSlackMix —— UpAblSlackMix.v：论文7 更新线（N1 松弛形算法化定义面 slm_ 三件）；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblSlackMix : NewGreenFace :=
-  MkNewGreenFace "UpAblSlackMix.v" 291 0 20260920 "paper-7 update line: N1 seat slack-form algorithmization definition face slm_ three pieces (_tn1_)" "L297:m9976e9".
-
 (* ng_UpAblMetaWorld3 —— UpAblMetaWorld3.v：N4 非退化核世界机器面（TV 算子/点质量对/精确幂律+预算下界双分支，34 件）；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblMetaWorld3 : NewGreenFace :=
   MkNewGreenFace "UpAblMetaWorld3.v" 753 34 20260921 "N4 seat: non-degenerate kernel world machine face (TV operator, point-mass pair, exact power law + budget lower bound legs, 34 pieces)" "L833:m5ce18d".
@@ -2587,10 +2519,6 @@ Definition ng_UpAblMetaWindow : NewGreenFace :=
 (* ng_UpReqMixRealExec —— UpReqMixRealExec.v：R1EXE Real 层选择器可执行化（R1 见证/证明分离+R3 惰性链，mrx_ 七面，native k=15@173ms）；vo 树 built-at-registration 复证 *)
 Definition ng_UpReqMixRealExec : NewGreenFace :=
   MkNewGreenFace "UpReqMixRealExec.v" 272 4 20260922 "R1EXE seat: Real-layer selector executification (R1 witness/proof separation + R3 lazy chain, mrx_ seven faces PA Closed, native k=15 at 173ms)" "L272:mf31fc2".
-
-(* ng_UpAblMetaDivQ —— UpAblMetaDivQ.v：AID1 定理 A Q 层侧独立件（mqd_ 十二面 PA Closed，Bernoulli 下界+无界 Doeblin 见证 Defined 出口）；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblMetaDivQ : NewGreenFace :=
-  MkNewGreenFace "UpAblMetaDivQ.v" 370 9 20260922 "AID1 seat: Q-layer independent piece for theorem A (mqd_ twelve faces PA Closed, Bernoulli lower bound + unbounded Doeblin witness with Defined witness exit)" "L370:m495528".
 
 (* ng_UpAblMetaTemp —— UpAblMetaTemp.v：M2R2 温度-模量发散（mtp_ 十二面 PA Closed，主件 mtp_anchor_divergence 零公理）；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblMetaTemp : NewGreenFace :=
@@ -2624,14 +2552,6 @@ Definition ng_UpReqInvPosLazy : NewGreenFace :=
 (* ng_UpQKTVCompose —— UpQKTVCompose.v：P2COMP QK→TV 一步合成（构造性严格化 +1 裕度；qktv_abs_lt_two_side/qk_tv_iter_contraction PA Closed，G4 三遍 12 模块闭包 axiom-free）；vo 树 built-at-registration 复证 *)
 Definition ng_UpQKTVCompose : NewGreenFace :=
   MkNewGreenFace "UpQKTVCompose.v" 245 2 20260922 "P2COMP seat: QK-to-TV one-step composition, constructive strictification +1 margin (qktv_abs_lt_two_side/qk_tv_iter_contraction PA Closed, G4 3-pass)" "L245:me1efd5".
-
-(* ng_UpAblLogWallFinal —— UpAblLogWallFinal.v：N3 墙八终形 lgwd_ 族（PA 9/9，G3 magic 0/0，G4 axiom-free；11 Qed 含 1 条行内一行式；预备单注 2：N3 报告未钉 md5——实测 4a3b2943，执行波 G2 复证补钉后方可 commit）；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblLogWallFinal : NewGreenFace :=
-  MkNewGreenFace "UpAblLogWallFinal.v" 447 11 20260922 "N3 seat: wall-eight final form lgwd_ family (PA 9/9, G3 magic 0/0, G4 Axioms none; md5 4a3b2943 re-pin at landing G2)" "L447:m4a3b29".
-
-(* ng_UpAblLogSelOracle —— UpAblLogSelOracle.v：LSO-FIX log-选择子 oracle，L176 旧源伤经 Z.compare_*_iff 三分支退役（14 定理型 decl 全 Qed 封+2 Definition Defined 终=16 出口，PA 17 路 Closed；Live_X/vo 树/沙箱三副本 md5 统一 00c03d2b 实测复核）；vo 树 built-at-registration 复证 *)
-Definition ng_UpAblLogSelOracle : NewGreenFace :=
-  MkNewGreenFace "UpAblLogSelOracle.v" 535 14 20260922 "LSO-FIX seat: log-selector oracle, L176 old-source wound retired via Z.compare_*_iff tri-branch (PA 17 Closed, three-copy md5 unified 00c03d2b)" "L535:m00c03d".
 
 (* ng_UpAblMetaPackage —— UpAblMetaPackage.v：W3PKG meta-package mpk_（跨世界三联画+world3 tv1 半幅，两主定理 Defined 终+7 再出口别名，三绿供体成组；PA 14，G3 自面 magic=0；硬依赖 UpAblMetaTemp 已于 在册，前置闸满足）；vo 树 built-at-registration 复证 *)
 Definition ng_UpAblMetaPackage : NewGreenFace :=
@@ -2890,26 +2810,10 @@ Definition ng_UpReqCf2TvGenSupply : NewGreenFace :=
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-EXEC built-at-registration 四项验证实测补记；order 锚=md5 前 6 照 尾块统一口径；源=Live_X 逐字拷贝；两红件 UpAblD1S11_UpReqCauchy（头注注释失衡）/UpReqBregmanBase（L119 证明体伤）。 *)
 
-(* ng_UpAblBYDecisionTree —— UpAblBYDecisionTree.v：DS 工程 BY 项链基建件（218 行 8 Qed；dt_ 前缀决策树叶位正值/叶数守恒及树清点八定理；纯 stdlib Require Arith/PeanoNat/List/Lia 零项目依赖； 纳入波 built-at-registration 四项验证绿 ：G2 EXIT=0 PA Closed、vo 魔数 436f712100015ff4、G3 提取 own ml Obj.magic=0 闭包 0、G4 coqchk axiom-free；与 J7 七件联合核定稿版 md5 同代 594c6e） *)
-Definition ng_UpAblBYDecisionTree : NewGreenFace :=
-  MkNewGreenFace "UpAblBYDecisionTree.v" 218 8 20260925
-  "BY necklace infrastructure: dt_ leaf positivity/equality and tree inventory, eight theorems, pure stdlib; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 594c6e (J7-identical)" "L218:m594c6e".
-
-
 (* ng_UpAblBYUpperTight —— UpAblBYUpperTight.v：BY 上紧化件（189 行 5 Qed；btight_ 前缀半燃料紧界；Require Arith/Lia＋UpAblBYLowerBound 包内依赖＝本项链内拓扑序 LB→UT；四项验证绿同上口径 ；md5 4f4990=J7 同代） *)
 Definition ng_UpAblBYUpperTight : NewGreenFace :=
   MkNewGreenFace "UpAblBYUpperTight.v" 189 5 20260925
   "BY upper-tightening: btight_ half-fuel tight bound, five theorems, requires UpAblBYLowerBound (intra-set topo order); four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 4f4990 (J7-identical)" "L189:m4f4990".
-
-(* ng_UpAblMixACount —— UpAblMixACount.v：混合选择器计数件（144 行 6 Qed；macnt_ 前缀二分选择计数；Require PeanoNat/Lia/QArith＋UpReqMixLogA（在册）；四项验证绿同上口径 ；md5 53bf04=J7 同代） *)
-Definition ng_UpAblMixACount : NewGreenFace :=
-  MkNewGreenFace "UpAblMixACount.v" 144 6 20260925
-  "Mix selector counting: macnt_ binary-search choice counting over UpReqMixLogA, six theorems; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 53bf04 (J7-identical)" "L144:m53bf04".
-
-(* ng_UpAblMixBSharp —— UpAblMixBSharp.v：混合计数界紧化件（222 行 4 Qed；msharp_ 前缀计数界 5→4 紧化；Require PeanoNat/Lia＋UpReqMixLogB（在册）；四项验证绿同上口径 ；md5 9300a0=J7 同代） *)
-Definition ng_UpAblMixBSharp : NewGreenFace :=
-  MkNewGreenFace "UpAblMixBSharp.v" 222 4 20260925
-  "Mix counting bound sharpening 5->4: msharp_ over UpReqMixLogB, four theorems; four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 9300a0 (J7-identical)" "L222:m9300a0".
 
 (* ng_UpAblD1S12_UpReqAttnUniformLimit —— UpAblD1S12_UpReqAttnUniformLimit.v：FA-D1S12 供给包件①（90 行 4 Qed；原件 UpReqAttnUniformLimit Section AlmUniform 7 数据槽的 Token:=bool 具体有限集实例供给（uabd1s12_ul_ 前缀）；独立伴随模块零 Require 原件（P3S1 工艺）；原件现势槽对账 PASS（-SCREEN 抽检＋EXEC 全槽实扫）；四项验证绿 ：G3 own magic=0 闭包 0；md5 042868） *)
 Definition ng_UpAblD1S12_UpReqAttnUniformLimit : NewGreenFace :=
@@ -2935,11 +2839,6 @@ Definition ng_UpAblD1S13_UpReqAlignClose : NewGreenFace :=
 Definition ng_UpAblD1S13_AlignIdUnclosed : NewGreenFace :=
   MkNewGreenFace "UpAblD1S13_AlignIdUnclosed.v" 117 2 20260925
   "FA-D1S13 supply pack 2: AiuBackwardKL residual 14 slots (S2/S3-claimed slots excluded per header ledger), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 45d9ae" "L117:m45d9ae".
-
-(* ng_UpAblMetaLow —— UpAblMetaLow.v：AID 机器反驳形下界件（396 行 0 Qed＝构造项定义面交付·非降档：21 语句 mtl_ 前缀（核行全同⟹TV(1)=0 一步混同，cf2 下界反驳），Set 层 Not/Empty_set 构造性否定形（S12 件族先例同款）；Require CW219/UpReqAlgebra/UpReqDist/UpReqSampling/UpReqConcFin2 全在册；0921 窗十件名册唯一漏收件（-SCREEN 差集考古判定）；四项验证绿 ：G3 own magic=0 闭包 71 既档伪影；md5 3fb1d4） *)
-Definition ng_UpAblMetaLow : NewGreenFace :=
-  MkNewGreenFace "UpAblMetaLow.v" 396 0 20260925
-  "AID machine-refutation lower bound: identical core rows imply TV(1)=0, 21 mtl_ statements Definition-form zero-Qed delivery (non-trivial per redline-3, Set-layer constructive negation S12-family precedent), sole survivor of 0921 ten-piece window per差集考古; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 3fb1d4" "L396:m3fb1d4".
 
 (* ng_UpReqPaperAnchor —— UpReqPaperAnchor.v： ANCHOR-A 论文引用锚机制件（244 行 14 Qed；pan_ 前缀具名锚记录 pan_anchor_list＋pan_find_* 检索函数＋三重不变式（sym_ck/file_ck/md5_len/day_uniform）——论文引用行号漂移痛点的在册机制化解法；纯 Ascii/String 零项目依赖；-SCREEN git 考古=从未入库非被移除；四项验证绿 ：G3 own magic=0 闭包 0；md5 b49e12） *)
 Definition ng_UpReqPaperAnchor : NewGreenFace :=
