@@ -71,7 +71,6 @@ UpReqAlign2.v	R0	d66910
 UpReqAlignRestA.v	R0	d66910
 UpReqFEPAttn.v	R0	d66910
 UpReqMinPAntitone.v	R0	d66910
-UpReqMisc5.v	R0	d66910
 UpReqPPO.v	R0	d66910
 UpReqSampling.v	R0	d66910
 UpReqSumD.v	R0	d66910
@@ -105,12 +104,9 @@ UpReqAlign4.v	R0	d66910
 UpReqPPOB.v	R0	d66910
 UpReqSumB.v	R0	d66910
 UpReqLatticeB.v	R0	d66910
-UpReqGibbsD.v	R0	d66910
 UpReqGibbsE2.v	R0	d66910
 UpReqKLStrict.v	R0	d66910
-UpReqELBOEps.v	R0	d66910
 UpReqExpPos.v	R0	d66910
-UpReqFEPCanon.v	R0	d66910
 UpReqPowMonoBridge.v	R0	d66910
 UpReqI4Bridge.v	R0	d66910
 UpReqI4Witness.v	R0	d66910
@@ -128,16 +124,11 @@ UpReqTopKTVChain.v	R0	d66910
 UpReqTrainingEquiv.v	R0	d66910
 UpReqArgminEngine.v	R0	d66910
 UpReqCEqDispersion.v	R0	d66910
-UpReqELBOStrict.v	R0	d66910
-UpReqELBOTight.v	R0	d66910
 UpReqEntropyDeficitTemp.v	R0	d66910
-UpReqMinFreeEps.v	R0	d66910
 UpReqMinUniqueTight.v	R0	d66910
 UpReqNegFactorB.v	R0	d66910
 UpReqEntropyMaxTemp.v	R0	d66910
-UpReqEntropyUniqueTemp.v	R0	d66910
 UpReqTempDual.v	R0	d66910
-UpReqCDispersion.v	R0	d66910
 UpReqEntropyUniqueNeg.v	R0	d66910
 UpReqTempDualList.v	R0	d66910
 UpReqExpPosWitness.v	R0	d66910
@@ -323,9 +314,7 @@ BeukersLists.v	R0	d66910
 ConcMixSelFeed.v	R0	d66910
 DecBridge6.v	R0	d66910
 EngelWeighted.v	R0	d66910
-EngineCeilingK.v	R0	d66910
 EntropyMonoSplitInst.v	R0	d66910
-EpsTrichotomy.v	R0	d66910
 HansonLcm.v	R0	d66910
 Ln2Escape.v	R0	d66910
 LogTwoBridge.v	R0	d66910
@@ -340,7 +329,6 @@ SumDCarrierFeed.v	R0	d66910
 VajdaClose2.v	R0	d66910
 WeakTriangleClose.v	R0	d66910
 ZPosSlotFeed.v	R0	d66910
-PinskerCoreClose.v	R0	d66910
 ForwardKLAdjudication.v	R0	d66910
 UpAblD1PPO_UpReqPPOPlain.v	R0	d66910
 UpAblD1S10_UpReqConcMixSel.v	R0	d66910
