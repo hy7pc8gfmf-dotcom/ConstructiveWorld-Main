@@ -333,9 +333,6 @@ UpAblT12_G13.v
 UpAblT12_UpRealLeB2.v
 UpAblT12_UpReqAlignRestA.v
 UpAblT13_UpEntropyGainReq.v
-UpAblT13_UpFirewallReq.v
-UpAblT13_UpReqAlignRestA.v
-UpAblT13_UpReqSampling.v
 UpAblT13b_G06_BForm.v
 UpAblT13b_G13.v
 UpAblT13b_UpReqAlign.v

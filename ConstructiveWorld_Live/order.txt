@@ -331,10 +331,7 @@ UpAblT11_S11_TP3B5.v#R0-d66910
 UpAblT12_G13.v#R0-d66910
 UpAblT12_UpRealLeB2.v#R0-d66910
 UpAblT12_UpReqAlignRestA.v#R0-d66910
-UpAblT13_UpEntropyGainReq.v#R0-d66910
-UpAblT13_UpFirewallReq.v#R0-d66910
-UpAblT13_UpReqAlignRestA.v#R0-d66910
-UpAblT13_UpReqSampling.v#R0-d66910
+UpAblT13_UpEntropyGainReq.v#R0-45226b
 UpAblT13b_G06_BForm.v#R0-d66910
 UpAblT13b_G13.v#R0-d66910
 UpAblT13b_UpReqAlign.v#R0-d66910

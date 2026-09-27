@@ -1,42 +1,13 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程包AC（tier2 末段第一批）      *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   uab_egreq_lpc（原 L32，2 句强证）	*)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【 恒等守恒修订注记】 包AU十八 （恒等头注修订第四批·M-Z 空缺面） *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，经 *)
-(* （包AL）全量恒等核查已证结论、（包AV六）试点已证结论：本件实测为 *)
-(* 恒等守恒——清单所列 1 参数位证明体与 Main 现版原件逐字同文（刀体＝原体， *)
-(* 零变化），头注「替换」声称与实物不符，特此修订。 *)
-(* 修订口径：真替换 0 参数位＋恒等守恒 1 参数位；本注记为追加块，上方原头注一字 *)
-(* 未改（历史证据保全）；证明体、声明面、语句面、Require 面零改动；记录册 *)
-(* 承载见  附录／ 修正块／ 评估册／／／／／／ 记录册。 *)
-(* 附记： 判级全文恒等；AC 域整包直推第四批（ 六·1 方案①）。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpAbl_UpEntropyGainReq.v —— 假设消融工程 a （ fa53 面余量位） *)
-(* 辖区：UpEntropyGainReq.v L91 lt_plus_compat_lt_le（FA2 普查〔无批给出〕余量， *)
-(*   总账 §2.2  行点名；T1c 偏差 4 移交后无批认领位）。                        *)
-(* 被消融位语句（现档逐字，L103-104）：                                            *)
-(*   Variable lt_plus_compat_lt_le : forall a b c d : R,                          *)
-(*     lt a b -> le c d -> lt (plus a c) (plus b d).                              *)
-(* 实例化消解源文件：fa53_lt_plus_compat_lt_le_dec@fa53_compat_abs.v:103（独立顶层件，      *)
-(*   三分分解+严格平移+归谬三段构造链在源文件内，本件直接代入零施工）。                    *)
-(* 消融形（诚实登记）：原参数 RIS 接口级不可导（E-STAGING-Firewall-3 位注：           *)
-(*   消融须带包），本件减薄为可判定序数据参数位——RI0 典范载体 + DO0 可判定序            *)
-(*   数据参数位（纯供给面），req 经装配桥 tsi_rie_setoid（req 取 Id 幺等）；            *)
-(*   载体实例供给形态：抽象载体上不实例化消解，典范载体上成立（T2b 节7 同形先例）。        *)
-(* 分级：N1（库内实例化消解件直接代入）。                                                    *)
-(* 依赖（只读依存，原树零改）：CW_ConstructiveWorld_219、fa53_compat_abs、          *)
-(*   AbsLeId、TempSoftmaxInstantiation。                                           *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAbl_UpEntropyGainReq.log                   *)
-(* ============================================================ *)
+(* ==========================================================================)
+   同域语句面；同域语句面
+   使命：本件形式化同域语句面。
+   本件并载：同域语句面；同域语句面；同域语句面。
+   依赖：S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog, S08_RealMainlineDPO
+     S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp, fa53_compat_abs,
+     AbsLeId, TempSoftmaxInstantiation。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -76,3 +47,149 @@ End UabT13FwLpc.
 
 (* ---- 收尾段（逐件假设面打印，判读全闭） ---- *)
 Print Assumptions uabT13_egreq_lpc.
+
+(* ============================ §1 同域语句面（pFirewallReq 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import fa53_compat_abs.
+Require Import AbsLeId.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13FwLpc.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Context {DO0 : DecidableOrder RI0}.
+
+(* ←UpFirewallReq.v:103（语句逐字，名换前缀；载体取典范域） *)
+Theorem uabT13_fw_lpc :
+  forall a b c d : @S01_BaseRing.R RI0,
+    lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  intros a b c d Hab Hcd.
+  exact (@fa53_lt_plus_compat_lt_le_dec RI0 DO0 a b c d Hab Hcd).
+Qed.
+
+End UabT13FwLpc.
+
+(* ---- 收尾段（逐件假设面打印，判读全闭） ---- *)
+Print Assumptions uabT13_fw_lpc.
+
+(* ============================ §2 同域语句面（pReqAlignRestA 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import fa53_compat_abs.
+Require Import AbsLeId.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13FwLpc.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Context {DO0 : DecidableOrder RI0}.
+
+(* ←UpFirewallReq.v:103（语句逐字，名换前缀；载体取典范域） *)
+Theorem uabT13_ralt_lpc :
+  forall a b c d : @S01_BaseRing.R RI0,
+    lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  intros a b c d Hab Hcd.
+  exact (@fa53_lt_plus_compat_lt_le_dec RI0 DO0 a b c d Hab Hcd).
+Qed.
+
+End UabT13FwLpc.
+
+(* ---- 收尾段（逐件假设面打印，判读全闭） ---- *)
+Print Assumptions uabT13_ralt_lpc.
+
+(* ============================ §3 同域语句面（pReqSampling 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import fa53_compat_abs.
+Require Import AbsLeId.
+Require Import TempSoftmaxInstantiation.
+Import RealInterfaceEnhancedMod.
+
+Section UabT13Usamp.
+
+Context {RI0 : RealInterfaceEnhanced}.
+Context {DO0 : DecidableOrder RI0}.
+
+(* 位1 ←L135 abs_ge_zero_req（语句逐字，名换前缀） *)
+Theorem uabT13_usamp_abs_ge_zero_req :
+  forall a : @S01_BaseRing.R RI0, le zero a -> req (abs a) a.
+Proof.
+  intros a Ha.
+  exact (@ali_abs_ge_zero_id RI0 DO0 a Ha).
+Qed.
+
+(* 位2 ←L136 lt_plus_compat_lt_le_h（语句逐字，名换前缀） *)
+Theorem uabT13_usamp_lpc_h :
+  forall a b c d : @S01_BaseRing.R RI0,
+    lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  intros a b c d Hab Hcd.
+  exact (@fa53_lt_plus_compat_lt_le_dec RI0 DO0 a b c d Hab Hcd).
+Qed.
+
+(* 位3 ←L737 bs_abs（=L135 同语句双槽同构，本件 Corollary 同构禁双计数） *)
+Corollary uabT13_usamp_bs_abs :
+  forall a : @S01_BaseRing.R RI0, le zero a -> req (abs a) a.
+Proof.
+  exact uabT13_usamp_abs_ge_zero_req.
+Qed.
+
+(* 位4 ←L738 bs_lpc（=L136 同语句双槽同构） *)
+Corollary uabT13_usamp_bs_lpc :
+  forall a b c d : @S01_BaseRing.R RI0,
+    lt a b -> le c d -> lt (plus a c) (plus b d).
+Proof.
+  exact uabT13_usamp_lpc_h.
+Qed.
+
+End UabT13Usamp.
+
+(* ---- 收尾段（逐件假设面打印，判读全闭） ---- *)
+Print Assumptions uabT13_usamp_abs_ge_zero_req.
+Print Assumptions uabT13_usamp_lpc_h.
+Print Assumptions uabT13_usamp_bs_abs.
+Print Assumptions uabT13_usamp_bs_lpc.

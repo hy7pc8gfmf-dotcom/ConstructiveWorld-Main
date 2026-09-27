@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 417 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 414 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2237,14 +2237,8 @@ Definition ng_UpAblT12_UpReqAlignRestA : NewGreenFace :=
 Definition ng_UpAblT13_UpEntropyGainReq : NewGreenFace :=
   MkNewGreenFace "UpAblT13_UpEntropyGainReq.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m637407".
 (* ng_UpAbl_UpFirewallReq —— UpAbl_UpFirewallReq.v：v1 a batch, N x8, four-gate green () *)
-Definition ng_UpAblT13_UpFirewallReq : NewGreenFace :=
-  MkNewGreenFace "UpAblT13_UpFirewallReq.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m440385".
 (* ng_UpAbl_UpReqAlignRestA —— UpAbl_UpReqAlignRestA.v：v1 a batch, N x8, four-gate green () *)
-Definition ng_UpAblT13_UpReqAlignRestA : NewGreenFace :=
-  MkNewGreenFace "UpAblT13_UpReqAlignRestA.v" 43 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L43:m8d2c9e".
 (* ng_UpAbl_UpReqSampling —— UpAbl_UpReqSampling.v：v1 a batch, N x8, four-gate green () *)
-Definition ng_UpAblT13_UpReqSampling : NewGreenFace :=
-  MkNewGreenFace "UpAblT13_UpReqSampling.v" 76 4 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L76:m8bd515".
 (* ng_UpAbl_UpSigMigrate2 —— UpAbl_UpSigMigrate2.v：v1 a batch, N x8, four-gate green () *)
 Definition ng_UpAblT13_UpSigMigrate2 : NewGreenFace :=
   MkNewGreenFace "UpAblT13_UpSigMigrate2.v" 45 1 20260919 "v1 T13a batch, N x8, four-gate green (_tt13a_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L45:m3d3f78".
