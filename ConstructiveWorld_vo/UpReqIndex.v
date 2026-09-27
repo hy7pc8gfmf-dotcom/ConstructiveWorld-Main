@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 424 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 420 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -2092,21 +2092,9 @@ Definition ng_UpAblD1S11_UpReqPPOPlain : NewGreenFace :=
 (* ng_UpAblD1S2_e752_UpReqAttnIter —— UpAblD1S2_e752_UpReqAttnIter.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
 Definition ng_UpAblD1S2_e752_UpReqAttnIter : NewGreenFace :=
   MkNewGreenFace "UpAblD1S2_e752_UpReqAttnIter.v" 92 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L92:m747e7d".
-(* ng_UpAblD1S2_reqlog_AlignIdUnclosed —— UpAblD1S2_reqlog_AlignIdUnclosed.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
-Definition ng_UpAblD1S2_reqlog_AlignIdUnclosed : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S2_reqlog_AlignIdUnclosed.v" 52 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L67:mbf278b".
-(* ng_UpAblD1S2_reqlog_UpReqAlign3 —— UpAblD1S2_reqlog_UpReqAlign3.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
-Definition ng_UpAblD1S2_reqlog_UpReqAlign3 : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S2_reqlog_UpReqAlign3.v" 57 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L72:mbb4cdc".
-(* ng_UpAblD1S2_reqlog_UpReqAlignClose —— UpAblD1S2_reqlog_UpReqAlignClose.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
-Definition ng_UpAblD1S2_reqlog_UpReqAlignClose : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S2_reqlog_UpReqAlignClose.v" 55 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L70:m6ad7cd".
 (* ng_UpAblD1S2_reqlog_UpReqCauchy —— UpAblD1S2_reqlog_UpReqCauchy.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
 Definition ng_UpAblD1S2_reqlog_UpReqCauchy : NewGreenFace :=
   MkNewGreenFace "UpAblD1S2_reqlog_UpReqCauchy.v" 48 1 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L48:m7bf6ba".
-(* ng_UpAblD1S2_reqlog_UpReqDpoLoss —— UpAblD1S2_reqlog_UpReqDpoLoss.v：FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green () *)
-Definition ng_UpAblD1S2_reqlog_UpReqDpoLoss : NewGreenFace :=
-  MkNewGreenFace "UpAblD1S2_reqlog_UpReqDpoLoss.v" 54 2 20260919 "FA-D1S2, 12 net-new slots N1 log-bridge, four-gate green (_tfad1s2_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L69:m718dd8".
 (* ng_UpAblD1S3_fep_UpReqAttnGibbs —— UpAblD1S3_fep_UpReqAttnGibbs.v：FA-D1S3, slots N1 (17 batch), four-gate green () *)
 Definition ng_UpAblD1S3_fep_UpReqAttnGibbs : NewGreenFace :=
   MkNewGreenFace "UpAblD1S3_fep_UpReqAttnGibbs.v" 69 1 20260919 "FA-D1S3, slots N1 (17 batch), four-gate green (_tfad1s3_); enrolled R91ENROLL option-B full wave, zero new assumptions, PA closed" "L69:m3abace".

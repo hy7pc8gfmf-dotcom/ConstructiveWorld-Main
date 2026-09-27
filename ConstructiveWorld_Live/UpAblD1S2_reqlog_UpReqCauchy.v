@@ -1,56 +1,144 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程包AA（tier2 十七批）        *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   uabd1s2_cauchy_log_lt_mono_cc（原 L39，2 句玩具证）                  *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 【 恒等守恒修订注记】 包AW十 （恒等头注修订全量第三批）                     *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 经 （包AL）全量恒等核查已证结论、（包AV六）试点已证结论：本件实测                             *)
-(* 为恒等守恒——清单所列 1 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* ＝原体，零变化），头注「替换」声称与实物不符，特此修订。                                        *)
-(* 修订口径：真替换 0 槽＋恒等守恒 1 槽；本注记为追加块，上方原头                                  *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* 零改动；记录册承载见  附录／ 修正块／ 评估册／／ 记录册。                   *)
-(* 附记： 判级全文恒等；包AA A-L 包域（AA/AB/AC/AD）第三批整批直推（ 六·1 方案①）         *)
-(* ============================================================ *)
+(* ==========================================================================)
+   UpAblD1S2_reqlog_UpReqCauchy —— FA-D1 D1-④ E403 log 桥；同域语句面
+   使命：本件形式化FA-D1 D1-④ E403 log 桥。
+   本件并载：FA-D1 D1-④ E403 log 桥；FA-D1 D1-④ E403 log 桥；FA-D1 D1-④ E403 log 桥；FA-D1 D1-④ E403 log 桥。
+   依赖：S01_BaseRing, S02_CauchyComplete, S03_QExp, S04_RealExpLogConv, S05_AlignmentGRPO, S06_DiffSamplingGibbs, S07_RealSetoidExpLog, S08_RealMainlineDPO
+     S09_EntropyReal, S10_KVQuantTrig, S11_TP3B5, S12_B5RecycleSF, S13_NLiveAudit, S14_B5BatchBlock, S15_TailFEPUp, G05_LogSmall。
+   构造性：零公理、零承认式语句；语句面 Set 层承载，Print Assumptions 全 Closed。
+   编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 包裹限载。
+   ========================================================================== *)
 
-(* ============================================================ *)
-(* UpAblD1S2_reqlog_UpReqCauchy.v —— FA-D1 批 D1-④ E403 log 桥批        *)
-(*   req 载体层 log 严格单调槽·引用性消融件                              *)
-(*                                                              *)
-(* 辖区（FA-D1 普查报告 attn/_tfad1_普查报告-.md §④ D1-④ 批，   *)
-(*   行号经现档 Live_X 逐字核对， 实测）：                     *)
-(*   槽1 UpReqCauchy.v L821-822 log_lt_mono_cc（req 载体层，双行语句     *)
-(*       逐字；L 族「log 前提化，登记表 3」唯一接口参数）                    *)
-(*                                                              *)
-(* 防重复认领先查（ 实测）：UpReqCauchy 已认领接口参数仅 L123/124  *)
-(*   （FA-D1 批 D1-①  fa53-lpc 保序双槽，UpAblD1_fa53_lpc_broadcast.v） *)
-(*   ——与本槽零交集，本槽净新。                                         *)
-(*                                                              *)
-(* 实例化消解源文件（逐字行号直取， 实测；E403 log 桥 G05_LogSmall     *)
-(*   Part C 槽族 2 本位在案——其头注自述「logd_log_lt_mono_real          *)
-(*   （UpReqCauchy:819 log_lt_mono_cc …字面形；real_log_lt_mono 直接     *)
-(*   提供）」，即本槽预造源文件）：                                        *)
-(*   logd_log_lt_mono_real@G05_LogSmall.v:966（Real 层字面形；根供给     *)
-(*   real_log_lt_mono@CW_ConstructiveWorld_219:39059）。                 *)
-(*                                                              *)
-(* 载体分层（诚实降级，T2a 同款）：R 换实例位 Real、RIS 取典范实例       *)
-(*   RealEnhancedReal（@S07:8559；其 lt/zero/log 字段逐字＝real_lt／     *)
-(*   real_zero／real_log，接口面与源文件 Real 层字面形经换算同坍缩）——     *)
-(*   抽象 R 上不消解，典范实例上成立，诚实登记。                         *)
-(*                                                              *)
-(* 依赖（全部只读依存，原树零改）：CW_ConstructiveWorld_219、            *)
-(*   G05_LogSmall。                                                      *)
-(* 纪律：语句面全集合层；零新增未证假设位；逐槽一条引用性消融定理；      *)
-(*   前缀 uabd1s2_（全树检索零撞名  实测）；                   *)
-(*   文尾逐件假设面打印收尾。                                            *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S2_reqlog_UpReqCauchy.*  *)
-(* ============================================================ *)
+(* ============================ §1 FA-D1 D1-④ E403 log 桥（reqlog_AlignIdUnclosed 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import G05_LogSmall.
+Import RealInterfaceEnhancedMod.
+
+(* ---- 槽1 ←AlignIdUnclosed.v L89 log_req_compat（逐字，R:=Real） ---- *)
+Theorem uabd1s2_aiu_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
+Qed.
+
+(* ---- 槽2 ←AlignIdUnclosed.v L92 log_inv_exp_neg_req（逐字，R:=Real） ---- *)
+Theorem uabd1s2_aiu_log_inv_exp_neg_req :
+  forall x : Real, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
+Proof.
+  intro x.
+  exact (logd_log_inv_exp_neg_real x).
+Qed.
+
+(* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
+Print Assumptions uabd1s2_aiu_log_req_compat.
+Print Assumptions uabd1s2_aiu_log_inv_exp_neg_req.
+
+(* ============================ §2 FA-D1 D1-④ E403 log 桥（reqlog_UpReqAlign3 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import G05_LogSmall.
+Import RealInterfaceEnhancedMod.
+
+(* ---- 槽1 ←UpReqAlign3.v L81 log_req_compat（逐字，R:=Real） ---- *)
+Theorem uabd1s2_align3_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
+Qed.
+
+(* ---- 槽2 ←UpReqAlign3.v L84 log_inv_exp_neg_req（逐字，R:=Real） ---- *)
+Theorem uabd1s2_align3_log_inv_exp_neg_req :
+  forall x : Real, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
+Proof.
+  intro x.
+  exact (logd_log_inv_exp_neg_real x).
+Qed.
+
+(* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
+Print Assumptions uabd1s2_align3_log_req_compat.
+Print Assumptions uabd1s2_align3_log_inv_exp_neg_req.
+
+(* ============================ §3 FA-D1 D1-④ E403 log 桥（reqlog_UpReqAlignClose 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import G05_LogSmall.
+Import RealInterfaceEnhancedMod.
+
+(* ---- 槽1 ←UpReqAlignClose.v L48 log_req_compat（逐字，R:=Real） ---- *)
+Theorem uabd1s2_aclose_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
+Qed.
+
+(* ---- 槽2 ←UpReqAlignClose.v L51 log_inv_exp_neg_req（逐字，R:=Real） ---- *)
+Theorem uabd1s2_aclose_log_inv_exp_neg_req :
+  forall x : Real, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
+Proof.
+  intro x.
+  exact (logd_log_inv_exp_neg_real x).
+Qed.
+
+(* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
+Print Assumptions uabd1s2_aclose_log_req_compat.
+Print Assumptions uabd1s2_aclose_log_inv_exp_neg_req.
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -81,3 +169,47 @@ Qed.
 
 (* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
 Print Assumptions uabd1s2_cauchy_log_lt_mono_cc.
+
+(* ============================ §4 FA-D1 D1-④ E403 log 桥（reqlog_UpReqDpoLoss 支） ============================ *)
+Require Import S01_BaseRing.
+Require Import S02_CauchyComplete.
+Require Import S03_QExp.
+Require Import S04_RealExpLogConv.
+Require Import S05_AlignmentGRPO.
+Require Import S06_DiffSamplingGibbs.
+Require Import S07_RealSetoidExpLog.
+Require Import S08_RealMainlineDPO.
+Require Import S09_EntropyReal.
+Require Import S10_KVQuantTrig.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S13_NLiveAudit.
+Require Import S14_B5BatchBlock.
+Require Import S15_TailFEPUp.
+Require Import G05_LogSmall.
+Import RealInterfaceEnhancedMod.
+
+(* ---- 槽1 ←UpReqDpoLoss.v L64 rdl_log_req_compat（逐字，R:=Real） ---- *)
+Theorem uabd1s2_dpo_log_req_compat :
+  forall (x y : Real) (Hx : lt zero x) (Hy : lt zero y),
+    req x y -> req (log x Hx) (log y Hy).
+Proof.
+  intros x y Hx Hy Hxy.
+  apply (@RealInterfaceEnhancedMod.le_antisym Real RealInterfaceEnhancedMod.RealEnhancedReal (log x Hx) (log y Hy)).
+  apply (real_log_le_mono x y Hx Hy).
+  right; exact Hxy.
+  apply (real_log_le_mono y x Hy Hx).
+  right; exact (req_sym _ _ Hxy).
+Qed.
+
+(* ---- 槽2 ←UpReqDpoLoss.v L67 rdl_log_inv_exp_neg_req（逐字，R:=Real） ---- *)
+Theorem uabd1s2_dpo_log_inv_exp_neg_req :
+  forall x : Real, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
+Proof.
+  intro x.
+  exact (logd_log_inv_exp_neg_real x).
+Qed.
+
+(* ---- 收尾：文尾逐件假设面打印（G2 留痕） ---- *)
+Print Assumptions uabd1s2_dpo_log_req_compat.
+Print Assumptions uabd1s2_dpo_log_inv_exp_neg_req.
