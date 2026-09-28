@@ -2948,3 +2948,7 @@ Definition ng_CertSnap643 : NewGreenFace :=
 Definition ng_CalSnap468 : NewGreenFace :=
   MkNewGreenFace "CalSnap468.v" 154 0 20260928
   "K-calibration data module: delete-193 add-18 dual-list counts verified against the 468 tree, 10 spot checks all hit; zero Require, zero consumers; distinct tree gauge from CertSnap643 (468 vs 643), header self-declared, do not conflate; md5 10533a" "L154:m10533a".
+(* ng_abl_arctan_diff_20 —— abl_arctan_diff_20.v：arctan 差公式件续片·斜率合成精确恒等 abl9_slope_id＋小跨度常值判据 abl9_const_crit（含逐点终近上界 abl9_real_tail_bnd）；主定理 abl9_atan_diff_formula 登记未竟；基 437 行；Require S01–S11＋abl_arctan_diff_19，零消费者 *)
+Definition ng_abl_arctan_diff_20 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_20.v" 437 10 20260929
+  "arctan difference formula continuation piece: composite slope exact identity abl9_slope_id, small-span constancy criterion abl9_const_crit with pointwise tail bound abl9_real_tail_bnd; main theorem abl9_atan_diff_formula registered as open; requires S01-S11 and abl_arctan_diff_19, zero consumers; md5 e3b7bc" "L437:me3b7bc".
