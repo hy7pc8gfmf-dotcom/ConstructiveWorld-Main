@@ -12792,6 +12792,142 @@ Qed.
 
 End B5A_Item1B.
 
+(* ============================================================ *)
+(* pi_three_vertex_samples —— π 三构造表示的收敛采样器。           *)
+(* 数学使命：π 的三个构造性表示——Leibniz 级数部分和投影            *)
+(*   lp_four * lp_odd、余弦零点序列 cos_zero_seq、反正切级数部分和   *)
+(*   arctan_partial n 1——装配为单个可计算函数：输入步数 n，输出     *)
+(*   三表示第 n 项 Q 值三元组；配套显式步数模量 pi_modulus_steps：   *)
+(*   目标精度 log_eps k = (1/2)^(k+1) 对应步数 k，构成               *)
+(*   「精度 → 步数 → 第 n 项数值」的可执行链条。                    *)
+(* 依赖：S07_RealSetoidExpLog（log_eps、log_eps_pos、               *)
+(*   q_pow_half_mono）；S10_KVQuantTrig（lp_four、lp_odd、lp_a、      *)
+(*   sc_lp_odd_diff2、sc_lp_four_pos、cos_zero_seq、cos_zero_lower、  *)
+(*   cos_zero_upper、cos_seq_cauchyT、cauchy_real_pi_leibniz）；       *)
+(*   本件上游（arctan_partial、arctan_one_real、arctan_one_proj）；   *)
+(*   S01_BaseRing/S02_CauchyComplete（QltT、And、NatLe 系、Qlt 桥）。 *)
+(* 对标：数值分析中柯西模量与收敛率的经典关系；本件为三表示第 n 项  *)
+(*   的显式收敛梯（Leibniz 逐项界 a_(2m+2)、余弦零点窗 (3/2,5/3)、   *)
+(*   几何模量 (1/2)^(k+1)）。                                       *)
+(* 构造性注记：两件计算器 Defined（Set 层，可提取）；证书六件 Qed     *)
+(*   （窗夹逼肢为 Set 层 And 合取；模量肢/率肢/逐项界肢沿用上游      *)
+(*   Qlt/Qle 语句形；柯西一致肢为三见证 sigT 组装）；辅助引理一件    *)
+(*   （NatLe 最大值拆分，Set 层）；零公理。                         *)
+(* 编译配方：coqc -native-compiler no -q -Q . ""。                  *)
+(* ============================================================ *)
+(* 证明策略：窗夹逼肢逐点代入 cos_zero_lower/upper 后过 Qlt_to_QltT； *)
+(*   率肢由 q_pow_half_mono 于后继 nat 单调化；逐项界肢先环等式换形   *)
+(*   为 lp_four 因子右置形，再实例化 sc_lp_odd_diff2 与 sc_lp_four_pos； *)
+(*   arctan 柯西见证由 arctan_one_proj 经 Qeq 集合体改写搬运；        *)
+(*   三顶点柯西一致肢取三见证步数（cauchy_real_pi_leibniz 投影、      *)
+(*   cos_seq_cauchyT、搬运后 arctan 见证）之三元最大值后成对组装。    *)
+(* ============================================================ *)
+
+(* 计算器：三顶点第 n 项采样（率即算法的执行面） *)
+Definition pi_three_vertex_samples (n : nat) : Q * Q * Q :=
+  (lp_four * lp_odd n, cos_zero_seq n, arctan_partial n 1).
+
+(* 计算器：显式步数模量——目标精度 log_eps k 的步数即 k（离散几何梯之逆） *)
+Definition pi_modulus_steps (k : nat) : nat := k.
+
+(* 证书一（窗夹逼肢）：余弦零点顶点恒在 (3/2, 5/3) 窗内（Set 层合取） *)
+Lemma pi_demo_cos_window : forall n : nat,
+  And (QltT (3 / 2) (cos_zero_seq n)) (QltT (cos_zero_seq n) (5 / 3)).
+Proof.
+  intro n.
+  exact (Qlt_to_QltT (3 / 2) (cos_zero_seq n) (cos_zero_lower n),
+         Qlt_to_QltT (cos_zero_seq n) (5 / 3) (cos_zero_upper n)).
+Qed.
+
+(* 证书二（模量肢）：k 步后的精度目标 log_eps k 严格为正 *)
+Lemma pi_demo_modulus : forall k : nat, Qlt 0 (log_eps k).
+Proof. intro k. exact (log_eps_pos k). Qed.
+
+(* 证书三（率肢）：步数不减则精度目标不减（几何模量单调） *)
+Lemma pi_demo_modulus_rate : forall k n : nat, (k <= n)%nat ->
+  Qle (log_eps n) (log_eps k).
+Proof.
+  intros k n Hkn. unfold log_eps.
+  apply (q_pow_half_mono (Datatypes.S k) (Datatypes.S n)). lia.
+Qed.
+
+(* 证书四（逐项界肢）：π_L 投影序列两两差被 lp_four 乘首项界显式控制 *)
+Lemma pi_demo_lp_pairwise : forall m n : nat, (m <= n)%nat ->
+  Qle (lp_four * lp_odd n - lp_four * lp_odd m)
+      (lp_four * (lp_a (2 * m + 2) - lp_a (2 * n + 2))).
+Proof.
+  intros m n Hmn.
+  apply (Qle_trans _ ((lp_odd n - lp_odd m) * lp_four) _).
+  - apply qeq_le. ring.
+  - apply (Qle_trans _ ((lp_a (2 * m + 2) - lp_a (2 * n + 2)) * lp_four) _).
+    + apply (Qmult_le_compat_r (lp_odd n - lp_odd m)
+               (lp_a (2 * m + 2) - lp_a (2 * n + 2)) lp_four).
+      * exact (sc_lp_odd_diff2 m n Hmn).
+      * apply Qlt_le_weak. exact sc_lp_four_pos.
+    + apply qeq_le. ring.
+Qed.
+
+(* 辅助引理（Set 层）：步数三元最大值控制三个分步数 *)
+Lemma pi_demo_natle_max_split : forall N1 N2 N3 m : nat,
+  NatLe (Nat.max (Nat.max N1 N2) N3) m ->
+  And (NatLe N1 m) (And (NatLe N2 m) (NatLe N3 m)).
+Proof.
+  intros N1 N2 N3 m H. unfold And. split.
+  - apply NatLe_lift. apply (Nat.le_trans N1 (Nat.max N1 N2) m).
+    + apply Nat.le_max_l.
+    + apply (Nat.le_trans (Nat.max N1 N2) (Nat.max (Nat.max N1 N2) N3) m).
+      * apply Nat.le_max_l.
+      * exact (NatLe_drop _ _ H).
+  - split.
+    + apply NatLe_lift. apply (Nat.le_trans N2 (Nat.max N1 N2) m).
+      * apply Nat.le_max_r.
+      * apply (Nat.le_trans (Nat.max N1 N2) (Nat.max (Nat.max N1 N2) N3) m).
+        -- apply Nat.le_max_l.
+        -- exact (NatLe_drop _ _ H).
+    + apply NatLe_lift. apply (Nat.le_trans N3 (Nat.max (Nat.max N1 N2) N3) m).
+      * apply Nat.le_max_r.
+      * exact (NatLe_drop _ _ H).
+Qed.
+
+(* 证书五（arctan 见证搬运）：arctan 部分和序列的柯西见证            *)
+(*   （实值对象 arctan_one_real 的逐项投影经 arctan_one_proj 换形而得） *)
+Lemma pi_demo_arctan_cauchy : forall eps : Q, QltT 0 eps ->
+  sigT (fun N : nat => forall m n : nat, NatLe N m -> NatLe N n ->
+    QltT (Qabs (arctan_partial m 1 - arctan_partial n 1)) eps).
+Proof.
+  intros eps Heps.
+  destruct (projT2 arctan_one_real eps Heps) as [N HN].
+  exists N. intros m n Hm Hn.
+  apply Qlt_to_QltT.
+  assert (Hab : Qabs (arctan_partial m 1 - arctan_partial n 1) ==
+                Qabs (projT1 arctan_one_real m - projT1 arctan_one_real n)).
+  { apply Qabs_wd.
+    rewrite (arctan_one_proj m), (arctan_one_proj n). ring. }
+  rewrite Hab.
+  apply QltT_to_Qlt. exact (HN m n Hm Hn).
+Qed.
+
+(* 证书六（柯西一致肢）：三顶点序列同时柯西——单一公共步数 N          *)
+(*   控制三表示两两差的 QltT 界（三见证 sigT 成对组装）               *)
+Lemma pi_demo_cauchy_uniform : forall eps : Q, QltT 0 eps ->
+  sigT (fun N : nat => forall m n : nat, NatLe N m -> NatLe N n ->
+    And (QltT (Qabs (lp_four * lp_odd m - lp_four * lp_odd n)) eps)
+        (And (QltT (Qabs (cos_zero_seq m - cos_zero_seq n)) eps)
+             (QltT (Qabs (arctan_partial m 1 - arctan_partial n 1)) eps))).
+Proof.
+  intros eps Heps.
+  destruct (projT2 cauchy_real_pi_leibniz eps Heps) as [N1 HN1].
+  destruct (cos_seq_cauchyT eps Heps) as [N2 HN2].
+  destruct (pi_demo_arctan_cauchy eps Heps) as [N3 HN3].
+  exists (Nat.max (Nat.max N1 N2) N3).
+  intros m n Hm Hn.
+  destruct (pi_demo_natle_max_split N1 N2 N3 m Hm) as [Hm1 [Hm2 Hm3]].
+  destruct (pi_demo_natle_max_split N1 N2 N3 n Hn) as [Hn1 [Hn2 Hn3]].
+  exact ((HN1 m n Hm1 Hn1),
+         ((HN2 m n Hm2 Hn2),
+          (HN3 m n Hm3 Hn3))).
+Qed.
+
 Print Assumptions b3_one_minus_q_pos.
 
 Print Assumptions atan_odd_nonneg.
