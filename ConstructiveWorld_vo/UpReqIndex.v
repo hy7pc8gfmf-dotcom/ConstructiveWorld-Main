@@ -2010,10 +2010,10 @@ Definition ng_UpReqSentinelMother : NewGreenFace :=
 Definition ng_UpReqLn2Irrational : NewGreenFace :=
   MkNewGreenFace "UpReqLn2Irrational.v" 370 21 20260918 "ln2 irrational conditional-form assembly truly via mother criterion, escape window honestly open, IR4" "L379:m989ebf".
 
-(* ng_UpReqSqrt3Irrational —— UpReqSqrt3Irrational.v：sqrt3 无理性第三实例、mod-3 下降 + 4/11 逃逸窗再参数化，IR5 *)
+(* ng_UpReqSqrt3Irrational —— UpReqSqrt3Irrational.v：sqrt3 无理性第三实例（IR5，mod-3 下降 + 4/11 逃逸窗再参数化）；在树老件首注册（R75P 连座同期注册：零在册取用方，被入包件10 abl_W9_slice57_10 硬依赖，order L423→件10 L424）；Require 面全在册零新暗件；账块自 L1141:mba9a54（旧快照，后经大改版账实分裂）原位刷新，以 AB9 报告 L2013 实形为基（基 2365 行 77 Qed md5 e957f0） *)
 Definition ng_UpReqSqrt3Irrational : NewGreenFace :=
-  MkNewGreenFace "UpReqSqrt3Irrational.v" 1141 27 20260918 "sqrt3 irrational third instance, mod-3 descent + 4/11 escape window re-parameterization, IR5" "L1141:mba9a54".
-
+  MkNewGreenFace "UpReqSqrt3Irrational.v" 2365 73 20260928
+  "sqrt3 irrational third instance (IR5): mod-3 descent + 4/11 escape window re-parameterization; in-tree legacy piece first registered via R75P co-enrollment, hard-required by enrolled abl_W9_slice57_10; Require face all registered, zero new dark pieces, zero in-registry consumers; ledger refreshed from stale snapshot L1141:mba9a54 day 20260918, AB9 base 2365 lines 77 Qed md5 e957f0; md5 e957f0" "L2365:me957f0".
 (* 1 件尾部追加 order L317；零 CW 基座依赖纯 Q 层；封顶定理=闭式族量级封顶（affine 可反解族，诚实限定）。 *)
 
 (* ng_UpReqMixLogE —— UpReqMixLogE.v：closed-form cap theorems for bernoulli-family selectors (sharpened F1/F2/F3 + mixe_cf_cap/_gen/_div/_select_cap), pure Q-layer zero CW-base dependency, race E *)
@@ -2858,3 +2858,93 @@ Definition ng_p3a_TempDualBoolSlots : NewGreenFace :=
 Definition ng_AbsLeIdReal53 : NewGreenFace :=
   MkNewGreenFace "AbsLeIdReal53.v" 134 6 20260926
   "Real concrete-layer le-version absolute-value identity lemma family: main r53_real_abs_ge_zero_id (le zero a -> Id (abs a) a, Real-layer standalone), plus strict/eq/le shift extensions and multiplicative compat r53_real_abs_mult_id; independent of abstract fa53 piece, Require-reuse only; all Qed closed, zero admit literals, no classical logic, Set-layer statements zero Prop leak, Print Assumptions all Closed; R15 candidate trio; md5 b69e18" "L134:mb69e18".
+
+(* ng_abl_W9_slice57_10 —— abl_W9_slice57_10.v：消融落件·S10/S12 零消费九槽 800 行窗复核已证结论（真零 5＋订正 4＋Context 2 禁删）＋SFRicciBlock 整节单元退役方案＋fisher 数值实例化（SqWall⟺rLPO 等价墙已证结论）；基 268 行 20 Qed；R2'' 查3a PASS（Closed=20 三账零差）；硬依赖 UpReqSqrt3Irrational（R75P 连座，order L424） *)
+Definition ng_abl_W9_slice57_10 : NewGreenFace :=
+  MkNewGreenFace "abl_W9_slice57_10.v" 236 1 20260928
+  "Ablation drop piece: S10/S12 zero-consumer nine-slot 800-line window re-audit verdict (true-zero 5 + erratum 4 + Context 2 no-delete) + SFRicciBlock whole-section unit retirement plan + fisher numeric instance discharge (SqWall iff rLPO equivalence wall verdict); R2'' 3a PASS Closed=20 three-ledger zero diff; hard-requires UpReqSqrt3Irrational (R75P co-enrollment, order L424); md5 0d7105" "L236:m0d7105".
+
+(* ng_abl_Hqarch_bernoulli_04 —— abl_Hqarch_bernoulli_04.v：消融落件·Q 层 Bernoulli 下界 (1+q)ⁿ≥1+n·q 独立重证＋Hqarch 站点形状接口引理（全站闭合切片 1/2）；基 375 行 23 Qed；零 Require 自包含件；R1' PASS→R2'' 维持；纯构造性闭合、PA Closed、G3 Obj.magic=0、G4 coqchk 零假设位 *)
+Definition ng_abl_Hqarch_bernoulli_04 : NewGreenFace :=
+  MkNewGreenFace "abl_Hqarch_bernoulli_04.v" 370 22 20260928
+  "Ablation drop piece: Q-layer Bernoulli lower bound (1+q)^n >= 1+n*q independent reproof + Hqarch site-shape interface lemma (closure slice 1/2); zero Require self-contained; verdict chain R1' PASS -> R2'' maintained; four-gate green, PA Closed, extraction Obj.magic=0, coqchk Axioms none; md5 bedb9d" "L370:mbedb9d".
+
+(* ng_abl_Hqarch_bridge_06 —— abl_Hqarch_bridge_06.v：消融落件·Q 层 Archimedean nat 见证核（Z_lt_le_dec 双支构造）＋末前件 n 见证生产＋Hqarch 全站完成（2/2 桥接件，取用件04）；基 179 行；R1' PASS→R2'' 维持 *)
+Definition ng_abl_Hqarch_bridge_06 : NewGreenFace :=
+  MkNewGreenFace "abl_Hqarch_bridge_06.v" 176 5 20260928
+  "Ablation drop piece: Q-layer Archimedean nat witness core (Z_lt_le_dec two-branch construction) + last-predecessor n witness production + Hqarch full-site closure (bridge 2/2, consumes piece 04); R1' PASS -> R2'' maintained; md5 c2f617" "L176:mc2f617".
+
+(* ng_abl_arctan_diff_16 —— abl_arctan_diff_16.v：消融落件·工单 9a-乙首片：HasIncr eps-线性近似谓词＋和差规则真构造＋b3rr 内点衔接；主定理 abl9_atan_diff_formula 断点登记（首片，续作见件19）；基 470 行；裁决三计入终态 *)
+Definition ng_abl_arctan_diff_16 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_16.v" 442 7 20260928
+  "Ablation drop piece: workorder 9a-yi first slice - HasIncr eps-linear approximation predicate + sum-difference rules true construction + b3rr interior wiring; main theorem abl9_atan_diff_formula breakpoint registered (first slice, continuation in piece 19); ruled into final state per verdict 3; md5 43a97b" "L442:m43a97b".
+
+(* ng_abl_arctan_diff_19 —— abl_arctan_diff_19.v：消融落件·工单 9a-乙续片：断点①内点一致 delta 闭合（条件化步界引理＋Region-relativized 一致实例，delta 与 u 无关）＋断点②链式规则 Q 核四件；主公式仍未闭合（余②③④断点登记）；基 490 行；R 轮独立复核候下轮（响亮注记，候裁-3 选项 a 随车形态） *)
+Definition ng_abl_arctan_diff_19 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_19.v" 488 4 20260928
+  "Ablation drop piece: workorder 9a-yi continuation slice - breakpoint-1 interior-consistency delta closure (conditional step-bound lemma + Region-relativized consistency instance, delta independent of u) + breakpoint-2 chained-rule Q core four pieces; main formula still open (breakpoints 2/3/4 registered); R-round independent review pending next wave (loud note); md5 8b6108" "L488:m8b6108".
+
+(* ng_abl_R2Bishop_unfinished_01 —— abl_R2Bishop_unfinished_01.v：消融落件·消解 R2BishopLogSel 头注【R2-B 未竟项】两件：rb_le_b_mult_r（≤_B 右乘保序，strict 支 e':=eps·real_inv_pos c 真构造）＋rb_valid_up（向上谱系/有效站向上闭合）；基 149 行；R1' WITH-NOTES→R2'' 维持 *)
+Definition ng_abl_R2Bishop_unfinished_01 : NewGreenFace :=
+  MkNewGreenFace "abl_R2Bishop_unfinished_01.v" 148 2 20260928
+  "Ablation drop piece: resolves two R2BishopLogSel header open items - rb_le_b_mult_r (le_B right-multiplication order preservation, strict branch via e' := eps * real_inv_pos c true construction) and rb_valid_up (upward lineage / valid-site upward closure); R1' WITH-NOTES -> R2'' maintained; md5 803538" "L148:m803538".
+
+(* ng_abl_MixLogAB_htv_free_02 —— abl_MixLogAB_htv_free_02.v：消融落件·MixLogA/MixLogB k_select 的 Htv 槽减除消融（调用方证书内化 real_arch→Qmake(Z.of_nat Nv) 1→inl，域严格扩大）；基 167 行；X17 代笔登记表（授权链三环）→R2'' 查1 PASS＋反伪勘验维持 *)
+Definition ng_abl_MixLogAB_htv_free_02 : NewGreenFace :=
+  MkNewGreenFace "abl_MixLogAB_htv_free_02.v" 167 0 20260928
+  "Ablation drop piece: Htv-slot elimination ablation for MixLogA/MixLogB k_select (caller certificate internalizes real_arch -> Qmake(Z.of_nat Nv) 1 -> inl, domain strictly enlarged); X17 ghost-written ledger (three-link authorization chain) -> R2'' check-1 PASS + anti-forgery re-audit maintained; md5 67a768" "L167:m67a768".
+
+(* ng_abl_Ln2_native_escape_03 —— abl_Ln2_native_escape_03.v：消融落件·ln2 原生逃逸窗件：d_n 递推母线真 Fixpoint＋显式商见证＋Z 层 scaling 链；「窗放不进」负证书＋条件逃逸接口（如实 B 类禁冒充 A）；基 325 行；九处修复后 R2'' 查2 独立复现 PASS（Closed=5、Obj.magic=0、Extraction 产物与遗产逐字节 SAME）维持 *)
+Definition ng_abl_Ln2_native_escape_03 : NewGreenFace :=
+  MkNewGreenFace "abl_Ln2_native_escape_03.v" 315 11 20260928
+  "Ablation drop piece: ln2 native escape window - d_n recursion mother line as true Fixpoint + explicit quotient witness + Z-layer scaling chain; cannot-fit negative certificate + conditional escape interface (honest B-class, no A-grade impersonation); after nine fixes R2'' check-2 independent reproduction PASS (Closed=5, Obj.magic=0, extraction output byte-SAME with legacy) maintained; md5 fef3da" "L315:mfef3da".
+
+(* ng_abl_SupplyRemRefuted_07 —— abl_SupplyRemRefuted_07.v：消融落件·sa_supply_rem 不可满足机检反驳 t0_supply_rem_refuted : sa_supply_rem -> False（规格级战果，Print Assumptions Closed under global context；库固定档 sa_A/sa_theta=1/2/sa_clo=lne_B 下成立）；基 185 行；R1' PASS→R2'' 维持 *)
+Definition ng_abl_SupplyRemRefuted_07 : NewGreenFace :=
+  MkNewGreenFace "abl_SupplyRemRefuted_07.v" 187 3 20260928
+  "Ablation drop piece: machine-checked refutation of sa_supply_rem, t0_supply_rem_refuted : sa_supply_rem -> False (spec-level result, Print Assumptions Closed under the global context; holds under library fixed gears sa_A / sa_theta=1/2 / sa_clo=lne_B); R1' PASS -> R2'' maintained; md5 a44e66" "L187:ma44e66".
+
+(* ng_abl_W9_Afamily_08 —— abl_W9_Afamily_08.v：消融落件·S10 A 族数值下标界 34 槽批量数值实例化（工单 §3.1 A36 口径余 2 槽如实登记不硬消；原证体全量承袭含 93 行代表件）；基 403 行；R1' WITH-NOTES（A 类装配形态三处如实申报）→R2'' 维持 *)
+Definition ng_abl_W9_Afamily_08 : NewGreenFace :=
+  MkNewGreenFace "abl_W9_Afamily_08.v" 401 34 20260928
+  "Ablation drop piece: S10 A-family numeric index-bound 34-slot batch instantiation discharge (workorder 3.1 A36 gauge remainder 2 slots honestly registered, not force-closed; original proof bodies carried verbatim incl. 93-line representative piece); R1' WITH-NOTES -> R2'' maintained; md5 09536b" "L401:m09536b".
+
+(* ng_abl_W9_slice34_09 —— abl_W9_slice34_09.v：消融落件·S11 死规格处置：登记退役 4 槽＋死规格形状经 witness 桥在两子域构造性落地；arctan-prime 活位取用面精测（W-A 21 取用勘正为 1 直接+1 传递）＋评估登记；基 289 行；R1' PASS→R2'' 维持 *)
+Definition ng_abl_W9_slice34_09 : NewGreenFace :=
+  MkNewGreenFace "abl_W9_slice34_09.v" 254 5 20260928
+  "Ablation drop piece: S11 dead-spec disposal - 4 slots registered retired + dead-spec shape constructively landed in two subdomains via witness bridge; arctan-prime live-slot consumption face precisely measured (W-A 21-consumption corrected to 1 direct + 1 transitive) + assessment registered; R1' PASS -> R2'' maintained; md5 d2bfb9" "L254:md2bfb9".
+
+(* ng_abl_SecondLaw_inst_11 —— abl_SecondLaw_inst_11.v：消融落件·SecondLawQuantified 五节假设 list-sum 数值实例化（sumpos 独立构造链＋sumext/sumlinear/sumadd 库件闭合＋T_pos:=2 数值实例化＋节形状机器锚五枚＋填充件五枚）；基 263 行；R2'' 终态预检覆盖矩阵计入（如实注记） *)
+Definition ng_abl_SecondLaw_inst_11 : NewGreenFace :=
+  MkNewGreenFace "abl_SecondLaw_inst_11.v" 226 7 20260928
+  "Ablation drop piece: SecondLawQuantified five-section hypothesis list-sum instantiation discharge (sumpos independent construction chain + sumext/sumlinear/sumadd library closure + T_pos:=2 numeric discharge + five section-shape machine anchors + five filler pieces); covered by R2'' final-state pre-check matrix (honest note); md5 8fc051" "L226:m8fc051".
+
+(* ng_abl_W9_pi_widen_13 —— abl_W9_pi_widen_13.v：消融落件·cos_pi_half_unique 扩域 widened2（3/2<w<7/2 ∧ cos w==0 ⟹ w==cos_pi_half）＋数学内核三件套（尾偶配对归纳／S4 锚／eps 装配双分支）；基 904 行；R2'' 查3b PASS（源锚 7/7＋S4 锚数值独立验算逐位吻合）→反伪勘验维持 *)
+Definition ng_abl_W9_pi_widen_13 : NewGreenFace :=
+  MkNewGreenFace "abl_W9_pi_widen_13.v" 897 26 20260928
+  "Ablation drop piece: cos_pi_half_unique widened-domain widened2 (3/2 < w < 7/2 with cos w == 0 implies w == cos_pi_half) + math kernel trio (tail-even pairing induction / S4 anchor / eps assembly two branches); R2'' check-3b PASS (source anchors 7/7, S4 anchor numeric independent verification bit-exact) -> anti-forgery re-audit maintained; md5 c246d6" "L897:mc246d6".
+
+(* ng_abl_arctan_smallincr_15 —— abl_arctan_smallincr_15.v：消融落件·工单 9a-甲小增量精化件 abl_atan_small_incr（b3rr 基点 r:=0 实例化＋零传输五步；S12 出锥已证结论执行）——9b 第 4 步供给就绪；基 188 行；R2'' 终态预检覆盖矩阵计入（如实注记） *)
+Definition ng_abl_arctan_smallincr_15 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_smallincr_15.v" 175 1 20260928
+  "Ablation drop piece: workorder 9a-jia small-increment refinement abl_atan_small_incr (b3rr basepoint r:=0 instantiation + zero-transfer five steps; S12 cone-exit verdict executed) - step-4 supply ready; covered by R2'' final-state pre-check matrix (honest note); md5 ed8aa2" "L175:med8aa2".
+
+(* ng_PAReanchor643 —— PAReanchor643.v：K1 联合重锚数据模块·1533 锚 643 树重测；468 现势以 K-校准附册（CalSnap468）为准；基 1612 行；零 Require（唯一依赖 Stdlib String）零消费者，拓扑最轻；包随 .vo 跨机不采信，born-in-place 重编取证 *)
+Definition ng_PAReanchor643 : NewGreenFace :=
+  MkNewGreenFace "PAReanchor643.v" 1617 0 20260928
+  "K1 joint re-anchor data module: 1533 anchors retested on the 643 tree; 468 current tree governed by K-calibration supplement (CalSnap468); zero Require (Stdlib String only), zero consumers, lightest topology; bundled cross-machine .vo not trusted, born-in-place recompile for evidence; md5 96bc6e" "L1617:m96bc6e".
+
+(* ng_DeletedLineage643 —— DeletedLineage643.v：K2 删件谱系数据模块·48 删件 216 声明四分类；基 386 行；零 Require 零消费者 *)
+Definition ng_DeletedLineage643 : NewGreenFace :=
+  MkNewGreenFace "DeletedLineage643.v" 391 0 20260928
+  "K2 deletion-lineage data module: 48 deleted pieces, 216 declarations four-way classified; zero Require, zero consumers; md5 e2a34e" "L391:me2a34e".
+
+(* ng_CertSnap643 —— CertSnap643.v：K3 认证快照数据模块·643 树指纹；468 现势以 CalSnap468 为准；基 809 行；零 Require 零消费者；包随 .vo 跨机不采信 *)
+Definition ng_CertSnap643 : NewGreenFace :=
+  MkNewGreenFace "CertSnap643.v" 810 0 20260928
+  "K3 certification snapshot data module: 643 tree fingerprint; 468 current tree governed by CalSnap468; zero Require, zero consumers; bundled cross-machine .vo not trusted; md5 826593" "L810:m826593".
+
+(* ng_CalSnap468 —— CalSnap468.v：K-校准数据模块·删 193 增 18 双名单计数对 468 树实测吻合、抽验 10 项全中；基 153 行；零 Require 零消费者；与 CertSnap643 数据口径不同树（468 vs 643），头注已自申明勿混写 *)
+Definition ng_CalSnap468 : NewGreenFace :=
+  MkNewGreenFace "CalSnap468.v" 154 0 20260928
+  "K-calibration data module: delete-193 add-18 dual-list counts verified against the 468 tree, 10 spot checks all hit; zero Require, zero consumers; distinct tree gauge from CertSnap643 (468 vs 643), header self-declared, do not conflate; md5 10533a" "L154:m10533a".
