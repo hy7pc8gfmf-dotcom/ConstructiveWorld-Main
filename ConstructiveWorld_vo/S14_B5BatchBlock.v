@@ -14126,6 +14126,43 @@ Qed.
 (* ============================================================ *)
 
 (* ============================================================ *)
+(* pi_triangle_direct_edge —— cos_pi_half == 2·arctan_one_real 闭式等式。 *)
+(* 数学使命：cos_pi_half 为余弦在区间 (3/2,2) 内的唯一零点（即 π/2 的   *)
+(*   构造性表示，见 cos_pi_half_unique_widened）；本件给出它与反正切    *)
+(*   终值 2·arctan_one_real 的单条零前提等式，与 real_pi_geom ==        *)
+(*   2·cos_pi_half 及 4·arctan_one_real == cauchy_real_pi_leibniz       *)
+(*   相配，构成三量互连三角形的直接边。                                 *)
+(* 依赖：S10_KVQuantTrig（cos_pi_half、cauchy_real_pi_leibniz）；       *)
+(*   S11_TP3B5（arctan_one_real、a3_h4_value_bridge、                   *)
+(*   channel_w_eq_two_theta、channel_w_eq_cos_pi_half、                 *)
+(*   b5b_hsc_theorem）；本件段 C（b5dS_E_zero_on_unit）。               *)
+(* 对标：mathlib Real.arctan_one_eq_pi_div_four 与 Real.cos_pi_two      *)
+(*   的组合事实；本件为单条闭式引理。                                   *)
+(* 构造性注记：零前提、零公理；Set 层承载（real_eq 为 sigT 上的逐项     *)
+(*   收敛等价）；可提取。                                               *)
+(* 编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""，cpu_guard 限载。 *)
+(* ============================================================ *)
+(* 证明策略：由 a3_h4_value_bridge（4·arctan_one_real ==                *)
+(*   cauchy_real_pi_leibniz）代入 N10Channel 节两件：                   *)
+(*   channel_w_eq_cos_pi_half（另需 sin(arctan_one_real) ==             *)
+(*   cos(arctan_one_real)，由 b5b_hsc_theorem b5dS_E_zero_on_unit       *)
+(*   实例化）得 π_L/2 == cos_pi_half；channel_w_eq_two_theta 得         *)
+(*   π_L/2 == 2·arctan_one_real；对称后传递合成。                       *)
+Lemma pi_triangle_direct_edge :
+  real_eq cos_pi_half (real_mult (real_const 2) arctan_one_real).
+Proof.
+  exact (real_eq_trans cos_pi_half
+           (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+           (real_mult (real_const 2) arctan_one_real)
+           (real_eq_sym
+              (real_mult cauchy_real_pi_leibniz (real_const (1 / 2)))
+              cos_pi_half
+              (channel_w_eq_cos_pi_half a3_h4_value_bridge
+                 (b5b_hsc_theorem b5dS_E_zero_on_unit)))
+           (channel_w_eq_two_theta a3_h4_value_bridge)).
+Qed.
+
+(* ============================================================ *)
 (* 块 item30（前缀 b5dT_——主件 b5dT_f1_pi_geom_eq_leibniz_univ）——来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item30.v。 *)
 (* ============================================================ *)
 
