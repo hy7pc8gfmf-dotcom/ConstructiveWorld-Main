@@ -12818,9 +12818,9 @@ End B5A_Item1B.
 (* 证明策略：窗夹逼肢逐点代入 cos_zero_lower/upper 后过 Qlt_to_QltT； *)
 (*   率肢由 q_pow_half_mono 于后继 nat 单调化；逐项界肢先环等式换形   *)
 (*   为 lp_four 因子右置形，再实例化 sc_lp_odd_diff2 与 sc_lp_four_pos； *)
-(*   arctan 柯西见证由 arctan_one_proj 经 Qeq 集合体改写搬运；        *)
+(*   arctan 柯西见证由 arctan_one_proj 经 Qeq 集合体改写移植；        *)
 (*   三顶点柯西一致肢取三见证步数（cauchy_real_pi_leibniz 投影、      *)
-(*   cos_seq_cauchyT、搬运后 arctan 见证）之三元最大值后成对组装。    *)
+(*   cos_seq_cauchyT、移植后 arctan 见证）之三元最大值后成对组装。    *)
 (* ============================================================ *)
 
 (* 计算器：三顶点第 n 项采样（率即算法的执行面） *)
@@ -12889,7 +12889,7 @@ Proof.
       * exact (NatLe_drop _ _ H).
 Qed.
 
-(* 证书五（arctan 见证搬运）：arctan 部分和序列的柯西见证            *)
+(* 证书五（arctan 见证移植）：arctan 部分和序列的柯西见证            *)
 (*   （实值对象 arctan_one_real 的逐项投影经 arctan_one_proj 换形而得） *)
 Lemma pi_demo_arctan_cauchy : forall eps : Q, QltT 0 eps ->
   sigT (fun N : nat => forall m n : nat, NatLe N m -> NatLe N n ->
