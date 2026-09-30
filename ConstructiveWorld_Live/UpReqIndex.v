@@ -2948,7 +2948,75 @@ Definition ng_CertSnap643 : NewGreenFace :=
 Definition ng_CalSnap468 : NewGreenFace :=
   MkNewGreenFace "CalSnap468.v" 154 0 20260928
   "K-calibration data module: delete-193 add-18 dual-list counts verified against the 468 tree, 10 spot checks all hit; zero Require, zero consumers; distinct tree gauge from CertSnap643 (468 vs 643), header self-declared, do not conflate; md5 10533a" "L154:m10533a".
-(* ng_abl_arctan_diff_20 —— abl_arctan_diff_20.v：arctan 差公式件续片·斜率合成精确恒等 abl9_slope_id＋小跨度常值判据 abl9_const_crit（含逐点终近上界 abl9_real_tail_bnd）；主定理 abl9_atan_diff_formula 登记未竟；基 437 行；Require S01–S11＋abl_arctan_diff_19，零消费者 *)
+(* ng_abl_arctan_diff_20 —— abl_arctan_diff_20.v：arctan 差公式件续片·斜率合成精确恒等 abl9_slope_id＋小跨度常值判据 abl9_const_crit（含逐点终近上界 abl9_real_tail_bnd）＋纯增七引理（abl9_q_path_den／abl9_Qabs_le_self／abl9_arctan_wd_real／abl9_arctan_zero_pt／abl9_q_abs_two_sided_le 等，件40/件45 共同前置）；主定理 abl9_atan_diff_formula 登记未竟；基 674 行；17 闭合已核对；Require S01–S11＋abl_arctan_diff_19，零消费者 *)
 Definition ng_abl_arctan_diff_20 : NewGreenFace :=
-  MkNewGreenFace "abl_arctan_diff_20.v" 437 10 20260929
-  "arctan difference formula continuation piece: composite slope exact identity abl9_slope_id, small-span constancy criterion abl9_const_crit with pointwise tail bound abl9_real_tail_bnd; main theorem abl9_atan_diff_formula registered as open; requires S01-S11 and abl_arctan_diff_19, zero consumers; md5 e3b7bc" "L437:me3b7bc".
+  MkNewGreenFace "abl_arctan_diff_20.v" 674 17 20260930
+  "arctan difference formula continuation piece: composite slope exact identity abl9_slope_id, small-span constancy criterion abl9_const_crit with pointwise tail bound abl9_real_tail_bnd, plus seven pure-addition lemmas (abl9_q_path_den, abl9_Qabs_le_self, abl9_arctan_wd_real, abl9_arctan_zero_pt, abl9_q_abs_two_sided_le etc.; joint prerequisite of pieces 40/45); main theorem abl9_atan_diff_formula registered as open; requires S01-S11 and abl_arctan_diff_19, zero consumers; md5 c1828a" "L674:mc1828a".
+(* ng_abl9b_rho_chain_53 —— abl9b_rho_chain_53.v：消融落件·A2B3 批层1三组：件51 望远镜引擎 ρ 参数化（签名保持式）＋缩放域证书＋w 侧 clamp-3/4 代表元，主公式内点版链供给构造；Require S01–S11＋abl_arctan_diff_19/20＋abl9b_skeleton_30＋abl_arctan_diff_51/60，批内零依赖；基 1066 行；41 闭合已核对 *)
+Definition ng_abl9b_rho_chain_53 : NewGreenFace :=
+  MkNewGreenFace "abl9b_rho_chain_53.v" 1066 41 20260930
+  "A2B3 batch layer-1 three groups: rho-parameterized telescope over the piece-51 engine (signature-preserving), scaled-domain certificate, clamp-3/4 representative on the w side; supply construction for the interior-point main-formula chain; zero batch-internal dependencies; 41 closures verified Closed; md5 6eff3e" "L1066:m6eff3e".
+
+(* ng_abl9b_ext_chain_54 —— abl9b_ext_chain_54.v：消融落件·A2B3 批层2 LHS 半边装配件：Q 侧四块＋Hconv 参数位供给构造＋real_eq↔(M1,M2) 互译包装；Require S01–S11＋abl9b_skeleton_30＋abl_arctan_diff_20，批内零依赖；基 1499 行；32 闭合已核对（另含 9 个 Definition） *)
+Definition ng_abl9b_ext_chain_54 : NewGreenFace :=
+  MkNewGreenFace "abl9b_ext_chain_54.v" 1499 32 20260930
+  "A2B3 batch layer-2 LHS-half assembly: four Q-side blocks, Hconv parameter-slot supply construction, real_eq <-> (M1,M2) translation wrappers; zero batch-internal dependencies; 32 closures verified Closed (plus 9 Definitions); md5 cb7ca7" "L1499:mcb7ca7".
+
+(* ng_abl9b_int_prep_57 —— abl9b_int_prep_57.v：消融落件·A2B3 批集成预备三块十二件：件52 桥退役迁移＋装配链 clamp 化对齐＋9b-4 骨架（A2_formula 等接口面）；Require S01–S11＋abl_arctan_diff_20/45＋abl9b_skeleton_30＋abl9b_rho_chain_53；基 506 行；12 闭合已核对 *)
+Definition ng_abl9b_int_prep_57 : NewGreenFace :=
+  MkNewGreenFace "abl9b_int_prep_57.v" 506 12 20260930
+  "A2B3 batch integration-preparation three blocks, twelve pieces: piece-52 bridge retirement migration, assembly-chain clamp alignment, 9b-4 skeleton (interface face incl. A2_formula); 12 closures verified Closed; md5 446f36" "L506:m446f36".
+
+(* ng_abl9b_rhs_chain_59 —— abl9b_rhs_chain_59.v：消融落件·A2B3 批层2 丙肢四块：clamp 1-Lipschitz＋arctan 序列项级合同＋Qinv 连续辅助件＋RHS_m→RHS 闭合骨架；Require S01–S11＋abl_arctan_diff_20/45＋abl9b_skeleton_30＋abl9b_rho_chain_53；基 463 行；16 闭合已核对 *)
+Definition ng_abl9b_rhs_chain_59 : NewGreenFace :=
+  MkNewGreenFace "abl9b_rhs_chain_59.v" 463 16 20260930
+  "A2B3 batch layer-2 leg-c four blocks: clamp 1-Lipschitz, arctan sequence term-level congruence, Qinv continuity auxiliaries, RHS_m -> RHS closure skeleton; 16 closures verified Closed; md5 04a02a" "L463:m04a02a".
+
+(* ng_abl9_atan_diff_a2_56 —— abl9_atan_diff_a2_56.v：消融落件·A2B3 批主公式 A2 形闭合终式（量词序 x Hx 前置形；Hd 证明项逐字形；抽象骨架前件槽对接形；已证结论=abl9_atan_diff_formula）；Require S01–S11＋19/20/41/45/47/30＋53/54/59；基 2420 行；29 闭合已核对（29=29=29 三联同值） *)
+Definition ng_abl9_atan_diff_a2_56 : NewGreenFace :=
+  MkNewGreenFace "abl9_atan_diff_a2_56.v" 2420 29 20260930
+  "A2B3 batch main-formula A2-shape closure final form (quantifier order x Hx leading, Hd proof-term verbatim, abstract-skeleton front-slot docking; proved result abl9_atan_diff_formula); 29 closures verified (29=29=29 triple-equal); md5 6572a2" "L2420:m6572a2".
+
+(* ng_abl9b_land_58 —— abl9b_land_58.v：消融落件·A2B3 批 9b-4 落地两块：等价承载五件＋inhabitation 六件（A2 形接口代理承载）；Require S01–S11＋abl_arctan_diff_45＋abl9b_skeleton_30＋abl9_atan_diff_a2_56；基 321 行；6 闭合已核对（另含 7 个 Definition＋1 Record） *)
+Definition ng_abl9b_land_58 : NewGreenFace :=
+  MkNewGreenFace "abl9b_land_58.v" 321 6 20260930
+  "A2B3 batch 9b-4 landing two blocks: five equivalence-carrier pieces, six inhabitation pieces (A2-shape interface proxy carriers); 6 closures verified Closed (plus 7 Definitions and 1 Record); md5 3fa0d9" "L321:m3fa0d9".
+(* ng_abl9b_skeleton_30 —— abl9b_skeleton_30.v：消融链基补投件·9b-1 装配骨架：域界 abl9b_dom_pos＋w 界 abl9b_w_bounds（|w_n| ≤ (4/3)|h_n|，Hw 证书原料）＋主装配骨架（9a-乙 差公式槽以显式假设位 Hdiff 承载，δ 配方含 (1/2) 收缩因子）；Require S01–S11＋abl_arctan_smallincr_15＋abl_arctan_diff_16，批内零依赖；基 853 行；12 闭合已核对 *)
+Definition ng_abl9b_skeleton_30 : NewGreenFace :=
+  MkNewGreenFace "abl9b_skeleton_30.v" 853 12 20260930
+  "9b-1 assembly skeleton: domain bound abl9b_dom_pos, w bound abl9b_w_bounds (|w| <= (4/3)|h|, Hw certificate material), and the main assembly skeleton carrying the 9a-yi difference-formula slot as explicit hypothesis Hdiff with the (1/2) contraction factor in the delta recipe; zero batch-internal dependencies; 12 closures verified Closed; md5 22df62" "L853:m22df62".
+
+(* ng_abl_arctan_cert_bridge_21 —— abl_arctan_cert_bridge_21.v：消融链基补投件·X24' Real 层证书桥预制：w Real 构造 abl9_brg_w_real＋终近逐点投影 abl9_brg_w_proj＋证书无关对齐 abl9_brg_w_ext＋1+w² 恒等桥两形（除法形＋核形）＋w 增量恒等桥两形（除法形＋核形）＋|w|<1 全 n 域证书（8/15 界）；Require S01–S11＋abl_arctan_diff_19，批内零依赖；基 689 行；14 闭合已核对 *)
+Definition ng_abl_arctan_cert_bridge_21 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_cert_bridge_21.v" 689 14 20260930
+  "X24' real-layer certificate bridge precast: w real construction abl9_brg_w_real, pointwise asymptotic projection abl9_brg_w_proj, certificate-independent alignment abl9_brg_w_ext, one-plus-w-squared identity bridges in division and kernel shapes, w-increment identity bridges in division and kernel shapes, and the |w|<1 all-n domain certificate (8/15 bound); zero batch-internal dependencies; 14 closures verified Closed; md5 05553e" "L689:m05553e".
+
+(* ng_abl_arctan_diff_40 —— abl_arctan_diff_40.v：消融链基补投件·链式规则斜率合成恒等式 Real 升层：abl9_slope_id_real（件20 Q 层恒等式经终近逐点相等闭合器 abl9_brg_pt_eq＋real_inv_proj 逐点投影链升 real 层 real_eq）＋D1 路线域证书 abl9_wpath_pt_bnd/abl9_brg_wpath_dom（件20 新代 abl9_q_path_den 使用位）；Require S01–S11＋abl_arctan_diff_19/20＋abl_arctan_cert_bridge_21；基 382 行；4 闭合已核对 *)
+Definition ng_abl_arctan_diff_40 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_40.v" 382 4 20260930
+  "real lifting of the chain-rule composite slope identity abl9_slope_id_real: the piece-20 Q-layer identity raised to real_eq via the pointwise asymptotic-equality closer abl9_brg_pt_eq and the real_inv_proj projection chain, plus the D1-route domain certificates abl9_wpath_pt_bnd and abl9_brg_wpath_dom at the new-generation abl9_q_path_den use site; 4 closures verified Closed; md5 fc1821" "L382:mfc1821".
+
+(* ng_abl_arctan_diff_41 —— abl_arctan_diff_41.v：消融链基补投件·9a-乙 ③N 等步链：Q 层剖分算术（qs 等距递推＋qs_pos 正性＋qs_Z 桥＋eps/(2N) 预算保正 abl9_eps_2N_pos）＋Real 层剖分拓扑＋链式组合件 abl9_walk/abl9_nchain_eq/abl9_nchain_walk/abl9_nchain_crit（单步一致增量估计升 N 步链 real_eq）；Require S01–S11＋abl_arctan_diff_19/20；基 384 行；12 闭合已核对 *)
+Definition ng_abl_arctan_diff_41 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_41.v" 384 12 20260930
+  "9a-yi part-3 N equal-step chain: Q-layer subdivision arithmetic (qs recurrence, positivity qs_pos, Z bridge qs_Z, eps/(2N) budget positivity abl9_eps_2N_pos), real-layer subdivision topology, and chain composition pieces abl9_walk, abl9_nchain_eq, abl9_nchain_walk, abl9_nchain_crit raising a uniform single-step increment estimate to the N-step chain real_eq; 12 closures verified Closed; md5 b1735c" "L384:mb1735c".
+
+(* ng_abl_arctan_diff_45 —— abl_arctan_diff_45.v：消融链基补投件·9a-乙 主公式闭合推进：arctan 实参良定性 abl9_arctan_arg_wd＋遗留① Real 层单发包装 abl9_Hcert_real＋定量链引擎 abl9_const_chain（N 随 eps 取号，Σ 余项=(8/3)|h|²/N→0）；Require S01–S11＋abl_arctan_diff_20＋abl_arctan_cert_bridge_21；基 192 行；3 闭合已核对 *)
+Definition ng_abl_arctan_diff_45 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_45.v" 192 3 20260930
+  "9a-yi main-formula closure advance: arctan argument well-definedness abl9_arctan_arg_wd, legacy item-1 real-layer single-shot wrapper abl9_Hcert_real, and the quantitative chain engine abl9_const_chain with N chosen by eps and remainder sum (8/3)|h|^2/N tending to zero; 3 closures verified Closed; md5 9eb679" "L192:m9eb679".
+
+(* ng_abl_arctan_diff_47 —— abl_arctan_diff_47.v：消融链基补投件·9a-乙 主定理装配推进：件40（Real 桥）与件41（N 等步链）两前件的装配衔接，装配版主定理 abl9_atan_diff_formula_asem＋inv 形 abl9_atan_diff_formula_inv（件20 B 使用位），装配域 Hh4 收紧为逐点 ∀n|h_n|≤1/4；Require S01–S11＋abl_arctan_diff_19/20/21/40/41；基 1056 行；18 闭合已核对 *)
+Definition ng_abl_arctan_diff_47 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_47.v" 1056 18 20260930
+  "9a-yi main-theorem assembly advance: assembly joining of piece-40 (real bridge) and piece-41 (N equal-step chain), yielding the assembly-form main theorem abl9_atan_diff_formula_asem and the inv form abl9_atan_diff_formula_inv (piece-20 B use site), with the assembly domain Hh4 tightened to pointwise |h_n| <= 1/4 for all n; 18 closures verified Closed; md5 3083a5" "L1056:m3083a5".
+
+(* ng_abl_arctan_diff_51 —— abl_arctan_diff_51.v：消融链基补投件·9a-乙 主公式闭合续作：real_le 逐点投影器 abl9_real_le_proj_sl＋定量望远镜自建（件41/45 链引擎纯组合使用，见证随 eps 取号＋eps 松弛逐层传播）＋残项判定（单步 |Δphi| ≤ c·|s|＋余项 (8/3)|s|²，N 等步不可省）；Require S01–S11＋abl_arctan_diff_19/20/21/40/45；基 269 行；3 闭合已核对 *)
+Definition ng_abl_arctan_diff_51 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_51.v" 269 3 20260930
+  "9a-yi main-formula closure continuation: the real_le pointwise projector abl9_real_le_proj_sl, a self-built quantitative telescope (the piece-41/45 chain engines used purely compositionally, witnesses chosen by eps with eps relaxation propagated layer by layer), and the remainder verdict (single step |delta phi| <= c|s| plus remainder (8/3)|s|^2; N equal steps cannot be omitted); 3 closures verified Closed; md5 dabb92" "L269:mdabb92".
+
+(* ng_abl_arctan_diff_60 —— abl_arctan_diff_60.v：消融链基补投件·9a-乙 主公式续作（X60 形）：②桥闭合＋GAP 判定件组（GAP-1 首判：拟文 RHS 槽域证书在拟文假设下不可满足，与拟文假设修订决策耦合）；Require S01–S11＋abl_arctan_diff_19/20/21；基 615 行；9 闭合已核对 *)
+Definition ng_abl_arctan_diff_60 : NewGreenFace :=
+  MkNewGreenFace "abl_arctan_diff_60.v" 615 9 20260930
+  "9a-yi main-formula continuation (X60 shape): bridge closure plus the GAP verdict piece group (GAP-1 first verdict: the draft RHS slot domain certificate is unsatisfiable under the draft hypotheses, coupled with the draft hypothesis revision decision); 9 closures verified Closed; md5 2b3a4d" "L615:m2b3a4d".
