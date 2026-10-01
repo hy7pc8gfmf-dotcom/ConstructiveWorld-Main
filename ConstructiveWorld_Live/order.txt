@@ -472,3 +472,4 @@ LW3ExpNegLB.v#R137-4de8e8
 LW3GenFill.v#R137-8ef136
 LW3CondSep.v#R137-35e400
 LW0LicAdapt.v#R137-fe82af
+LW6CosZeroQuant.v#R137-e1116b

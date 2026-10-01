@@ -3110,3 +3110,8 @@ Definition ng_LW3CondSep : NewGreenFace :=
 Definition ng_LW0LicAdapt : NewGreenFace :=
   MkNewGreenFace "LW0LicAdapt.v" 135 3 20261001
   "single-premise export piece: conditional lic instantiation of pi and escape-at-condition with pack congruence; slot-3 merge of the alpha chain, annotation-cleaned, in-place registration only" "L135:mfe82af".
+
+(* ng_LW6CosZeroQuant —— LW6CosZeroQuant.v：cos 零点定量单纯性核（零点包非退化形＋分离模量推论·已在位仅注册；PA=4 Closed；注释清洗毕 gate4=0；558 改铸形·终验 GO 在卷） *)
+Definition ng_LW6CosZeroQuant : NewGreenFace :=
+  MkNewGreenFace "LW6CosZeroQuant.v" 229 4 20261001
+  "quantitative simplicity of the cos zero point: nondegenerate zero pack with explicit inverse-bound constant two and a separation modulus corollary; erratum-re-cast, annotation-cleaned, in-place registration only" "L229:me1116b".

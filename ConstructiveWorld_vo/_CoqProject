@@ -473,3 +473,4 @@ LW3ExpNegLB.v
 LW3GenFill.v
 LW3CondSep.v
 LW0LicAdapt.v
+LW6CosZeroQuant.v
