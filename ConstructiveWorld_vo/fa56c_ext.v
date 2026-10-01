@@ -4,7 +4,7 @@
 (*   声明序与语句逐字保留，仅换下列三处玩具证明体。                          *)
 (*   替换清单（本件三刀）：                                                *)
 (*    ①fa56c_le_mult_compat_l：换轨自足链路线——两处自反启动（le_refl 引擎  *)
-(*      把乘法交换律 Id 证升格为 le 证腿）＋双重 le_trans 显式中项链         *)
+(*      把乘法交换律 Id 证升格为 le 证肢）＋双重 le_trans 显式中项链         *)
 (*      （原稿 le_id_l/le_id_r 目标侧迁移三明治）。结构性推导五实质步。      *)
 (*    ②fa56c_loss_structure_correlation：换轨脱钩独立重演——不再使用本件     *)
 (*      ①号帮件，显式具化两支中项原地重演同拓扑五步链（原稿单点引擎使用）。  *)
@@ -18,7 +18,7 @@
 
 (* ============================================================ *)
 (*                                                               *)
-(* 使命：Id 载体槽第三波——S04/S05 语言模型/温度/物理预测节的      *)
+(* 使命：Id 载体槽三段——S04/S05 语言模型/温度/物理预测节的      *)
 (*       C 类槽沿引擎批量续做（使用 fa51 引擎出口件 fa56_id_carrier *)
 (*       / fa56b_ext 同目录 .vo，均只 Require 零改）。vocab_nonempty *)
 (*       /sumd_cong/detailed_balance/stationary 已被 fa56/fa56b    *)
@@ -32,7 +32,7 @@
 (*        vocab_nonempty 前提灭（fa56b 单点非空件直接供居民）。    *)
 (*  槽XI  S05_AlignmentGRPO.v:5942-5944（Prediction3Landauer 节     *)
 (*        prediction_landauer 槽：Id E_min (mult k_B (mult          *)
-(*        T_landauer (log (plus one one)))))——E354 定义件 +         *)
+(*        T_landauer (log (plus one one)))))——既有判例定义件 +         *)
 (*        Landauer 上界伴件（log x ≤ x-1 切线 + minus 环件 +        *)
 (*        le 双重排六段链，非平凡）。                               *)
 (*  槽XII S05:6016-6019（Prediction7LMStructure 节                   *)
@@ -145,7 +145,7 @@ Qed.
 
 (* ============ 槽XI：S05:5942-5944 Landauer 槽（物理预测节）======== *)
 (* 槽语句：prediction_landauer : Id E_min (mult k_B (mult T_landauer  *)
-(*   (log (plus one one))))。E354 装法：E_min 定义件 + 同构 Id 件；   *)
+(*   (log (plus one one))))。既有判例装法：E_min 定义件 + 同构 Id 件；   *)
 (* 非平凡伴件为 Landauer 上界：ln 2 ≤ 1（log 切线界 log_le_linear +  *)
 (* two_pos + minus 环件）经左乘兼容件双层提升 ⟹ E_min ≤ k_B·T。      *)
 

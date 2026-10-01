@@ -14,7 +14,7 @@
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   本批实结果（时间盒结算，全件真证零 承认件；余件见文件尾挂起清单）：
+   本件实结果（时间盒结算，全件真证零 承认件；余件见文件尾挂起清单）：
        + 批 3 支撑件姊妹重建 12 + 纯环代数辅件 8 + boltzmann 因子桥
        energy_log_pt/sum_E_beta/F_t_beta_form/F_t_simpl_next/
        F_t_rel_decomp/F_t_simpl_t/F_t_simpl_next_kl——其中
@@ -25,14 +25,14 @@
        后按文件尾挂起清单平移 t12 余件与 t13 链。
        文件尾清单；批 3 两桥位的放行条件已由 [A] 组机器就绪）。
    ----------------------------------------------------------------
-   诚实签名变化登记表（规划书 §7.4；沿批 3 形态 + 本批新增）：
+   诚实签名变化登记表（规划书 §7.4；沿批 3 形态 + 本件新增）：
    1. log 前提化：req2_rel_ent / req2_F_align / req2_free_energy /
      req2_dpo_pair_loss 全部携带逐点正性参数（批 3 同款）。
    2. minus 载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
    3. T2① 桥位（与 Id 逐位同构/或挂起依赖，全表）：
       - log_inv_exp_neg_req：Id 接口字段 log_inv_exp_neg（L187）
         的 req 同位——setoid 接口缺对应字段（exp_neg 注入性不可由
-        （批 3 ReqAlignCore 未承担此桥，本批深链需要：π_next 对数
+        （批 3 ReqAlignCore 未承担此桥，本件深链需要：π_next 对数
         展开 log(e^x)==−x 恒等式使用之）。
       - req2_gibbs_inequality：Id 定理 gibbs_inequality（L16629，批 2 FEP 清单）的 req 同位挂起依赖——其 Id 证明
         侧 plain-le KL≥0 不可由接口逐 eps 字段导出（序无消去，
@@ -74,7 +74,7 @@ Section Req2AlignCore.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 
-(* ---- 求和对接面（批 3 同位；本批深链仅需 ext/add/linear/pos） ---- *)
+(* ---- 求和对接面（批 3 同位；本件深链仅需 ext/add/linear/pos） ---- *)
 Variable sumf : (S -> R) -> R.
 Hypothesis sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).

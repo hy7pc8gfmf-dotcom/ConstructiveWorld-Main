@@ -6699,7 +6699,7 @@ Proof.
            mtl_B_pos (lt_id_r _ _ zero mtl_tv_one_zero Hc)).
 Defined.
 
-(* ============ 四关自检：全件 Closed（零新假设） ============ *)
+(* ============ 四项自检：全件 Closed（零新假设） ============ *)
 
 Print Assumptions mtl_sum2.
 Print Assumptions mtl_row_alg.

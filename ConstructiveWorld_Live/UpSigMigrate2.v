@@ -54,7 +54,7 @@
    c_mult_cancel_l = (c.2) 左乘消去引擎实例。G3 提取检验
    upsigmigrate2_probe（Obj.magic=0，验后删）。
    ------------------------------------------------------------------
-   [断点已证明] 幸存稿 Part C 三处实例-evar 易碎位（apply 类字段投影
+   [分段点已证明] 幸存稿 Part C 三处实例-evar 易碎位（apply 类字段投影
    于具体 Real 层统一失败：c_partition L1355 / c_mult_cancel_l /
    c_pu_normalized）→ 全显式参数 exact 形态已证明（c_exp_neg_zero 先例）。
    [卸载元数实证] 主定理使用件 13/16 元 exact 调用经依赖闭包分析确证：
@@ -440,7 +440,7 @@ Proof.
                     (plus (opp (log Z Z_pos))
                           (opp (mult (inv_pos D D_pos) (base_loss s)))))
     by exact (req_boltzmann_log_decomp s Hpb).
-  (* 腿 1：lgb + lgZ == opp m，m := E/D *)
+  (* 肢 1：lgb + lgZ == opp m，m := E/D *)
   assert (H1 : req (plus (log (boltzmann_dist_m2 s) Hpb) (log Z Z_pos))
                    (opp (mult (inv_pos D D_pos) (base_loss s)))).
   { apply (req_trans (plus (log (boltzmann_dist_m2 s) Hpb) (log Z Z_pos))
@@ -494,7 +494,7 @@ Proof.
                                             (plus_comm (opp (log Z Z_pos)) (log Z Z_pos))
                                             (plus_opp (log Z Z_pos)))).
         * apply plus_zero. }
-  (* 腿 2/3：D·(lgb + lgZ) == D·(opp m) == opp(D·m) == opp(loss) *)
+  (* 肢 2/3：D·(lgb + lgZ) == D·(opp m) == opp(D·m) == opp(loss) *)
   assert (Hchain : req (mult D (plus (log (boltzmann_dist_m2 s) Hpb) (log Z Z_pos)))
                        (opp (base_loss s))).
   { apply (req_trans (mult D (plus (log (boltzmann_dist_m2 s) Hpb) (log Z Z_pos)))

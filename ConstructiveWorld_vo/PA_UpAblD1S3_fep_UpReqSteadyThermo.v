@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -42,19 +42,19 @@
 (*     槽2 ← fa56_markov_kernel_nonneg@fa56_id_carrier.v:129 之 Real 面   *)
 (*       同构件 real_boltzmann_dist_r_pos@S08_RealMainlineDPO.v:2488 直接代入 *)
 (*       （Id 面源文件不可达 Real 载体：无 RealInterfaceEnhanced 实例，      *)
-(*       FA-D1S1 偏差 4 同款复核；E751-A 同阶）。                         *)
+(*       FA-D1S1 偏差 4 同款复核；判例 A 同阶）。                         *)
 (*     槽3 ← fa56_markov_kernel_normalized@fa56_id_carrier.v:139 之       *)
 (*       Real 面副本 rfep_boltzmann_normalized_real@UpReqRealFEP.v:340     *)
 (*       直接代入（单条 partition 前提由本件槽1 链显式供给；独立核轴向）。    *)
 (*     槽4 ← fa56b_detailed_balance@fa56b_ext.v:195 之 Real 面副本：      *)
 (*       独立提议核 k(s,s'):=π(s')，mult_comm 闭合同构直接代入。              *)
-(*   兑现装载（E354 装法同族）：转移核取独立提议核（与首参无关）；        *)
+(*   兑现装载（判例装法同族）：转移核取独立提议核（与首参无关）；        *)
 (*     Z 取定义为 boltzmann 非正规和实例（sumd 引擎），partition 前提     *)
 (*     链显式承载。                                                       *)
 (*     UpAblP3S1_* 认领件；本四槽 Live_X 无既有同槽实例化消解件。             *)
 (*   纪律：零 git、原树零改、前缀 uabd1s3_ 全树零同名冲突；                  *)
 (*     文尾 Print Assumptions 收尾；G3 提取检验内嵌一人一目录            *)
-(*     _tuabd1s3_g3out（验后判读）。四关留痕 attn/logs/g1..4-UpAblD1S3_* *)
+(*     _tuabd1s3_g3out（验后判读）。四检留痕 attn/logs/g1..4-UpAblD1S3_* *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

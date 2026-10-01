@@ -24,12 +24,12 @@
 (*   Hpos:=one_pos 字段直接给出；节3 pi:=p_old:=壹函数｜sum_le/ext＝使用位直取 H tt｜  *)
 (*   sum_add/linear＝两侧归一逐字同体 req_refl 一行｜Hnorm＝req one one。          *)
 (* 分级（禁注水如实申报）：14 行全 T·数据/接口供给级（按模块合并申报，不逐槽计     *)
-(*   战果；普查 N/N2/N3 分类实测供给腿全为一步直接给出/单点重合，降标 T 与 S4-S8 先例  *)
+(*   战果；普查 N/N2/N3 分类实测供给肢全为一步直接给出/单点重合，降标 T 与 S4-S8 先例  *)
 (*   同口径）。                                                                  *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219／UpReqRDF（ReqDiffPlain   *)
 (*   类定义件）。零 Require 槽源版本（防 P3S1 坑1 混代际）。                       *)
 (* 纪律：零 git、零注册面增量、attn 论文域源档/论文目录零触碰；fail-loud。         *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S10_*.{log,exit}                    *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1S10_*.{log,exit}                    *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

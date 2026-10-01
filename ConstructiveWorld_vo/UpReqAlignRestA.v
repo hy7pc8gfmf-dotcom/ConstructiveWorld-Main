@@ -3,14 +3,14 @@
 (*   声明名序与原件零改动，头注与本节为增补。纪律：全中文零承认件（承认     *)
 (*   命令四类与弃证字面零出现），纯构造性 Set 层，真 Qed，零新增 Require。   *)
 (*   一、ralt_lt_plus_translate：同族导出件换轨——弃 B 桥直连加双 comm 运输， *)
-(*       改使用先落之 1.4 导出件 ralt_lt_plus_compat_le_lt（le_refl b 填腿）， *)
+(*       改使用先落之 1.4 导出件 ralt_lt_plus_compat_le_lt（le_refl b 填肢）， *)
 (*       零交换律运输直达（单路引擎面收窄至同族件单点）。 *)
 (*   二、ralt_minus_plus_common：脱钩独立重演——弃 req_minus_plus_congr 单点， *)
 (*       req_minus 载体展开后四引擎链原地重演：req_opp_plus 负号分配、 *)
 (*       req_plus_swap_mid 中项换序、plus_opp 对消、req_plus_zero_l 零元闭合。 *)
 (*   三、ralt_log_exp_neg：对数桥脱钩——弃 req_log_exp_neg 引擎单点，经本节 *)
 (*       自持假设位 ralt_log_inv_exp_neg_req 与 log_inv_log 桥面对接： *)
-(*       req_opp_compat 双腿运输、req_double_neg 双负闭合、req_trans 双段链。 *)
+(*       req_opp_compat 双肢运输、req_double_neg 双负闭合、req_trans 双段链。 *)
 (*   留记（如实登记不强造）： *)
 (*   ralt_mult_lt_compat_l：lt_mult_compat 系严格乘法唯一引擎，comm 运输 *)
 (*       位置唯一（左形必经双 comm），单路唯一形，不化。 *)
@@ -641,7 +641,7 @@ Qed.
 
 (* 4.3 sigmoid_strict_inc 同位（基座 L21030）：sigmoid 严格递增。
    真证：exp_neg_decr + ralt_lt_plus_compat_le_lt + **区1 消解件
-   ralt_inv_pos_lt_contra**（Id 层 Variable 位在本批关闭） *)
+   ralt_inv_pos_lt_contra**（Id 层 Variable 位在本件关闭） *)
 Theorem ralt_sigmoid_strict_inc : forall x y : R,
   lt x y -> lt (sigmoid_req x) (sigmoid_req y).
 Proof.

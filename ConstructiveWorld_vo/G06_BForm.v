@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -129,7 +129,7 @@ Print Assumptions lebR_res_weight.
 (*   载体勘定：CW_ConstructiveWorld_219 RealListSumMain 节 real_list_sum（list Fixpoint， *)
 (*   X 泛型，nil 支 real_zero）。语句形态按空支路裁决：空表支 sum 实为  *)
 (*   real_zero，严格正不真——语句必带非空前提 Not (Id l nil)             *)
-(*   （CW_ConstructiveWorld_219 sum_temp_positive 同款；E385 闭合组合器空支路判据同源）。      *)
+(*   （CW_ConstructiveWorld_219 sum_temp_positive 同款；判例 闭合组合器空支路判据同源）。      *)
 (*   先件=求和正性语句的 list 载体实例（归纳真理两支：nil 矛盾直击、     *)
 (*   cons real_plus_positive 两喂）；伴件以固定非空 vocab 无条件重构     *)
 (*   E>0 载体面（π_old/adv 取常 real_one，证书 real_lt_zero_one，        *)
@@ -383,7 +383,7 @@ Qed.
 (*   不主张 Or 形逐点前提升格。                                          *)
 (* 【核对】原始任务表述目标 3 规格四件（lenR/lenR_nonneg/sum_const/主件）      *)
 (*   全部落盘本文件；前缀 sumb_ 全库零占用（leb3_ 系  领地已用，        *)
-(*   本文件分区避让）。E360 判定 G2「组合器止步二元」自此补齐 n 元面。      *)
+(*   本文件分区避让）。判例判定 G2「组合器止步二元」自此补齐 n 元面。      *)
 (* 【检查记录】四项关卡卡：G1 禁词全零（含头注注记位）；G2 重编 EXIT=0；      *)
 (*   G3 提取检验 Obj.magic 计数为零（检验验后删）；G4 coqchk 认证         *)
 (*   9.0 同平台长窗通过。全件 Print Assumptions Closed（见文末）。        *)
@@ -404,7 +404,7 @@ Print Assumptions sumb_list_sum_le_b.
 (*   1. real_minp_projection_eps_B（主件）：                          *)
 (*      KL_list(q‖minp) ≤_B KL_list(q‖full)，eps 余量全称消去。        *)
 (*      路线 = real_le_closure_b_one 单步闭合 + 基座 eps 形原件直连     *)
-(*      （E358 判定3：plain-eps 余量族统一 Bishop 闭合；min 反例在案，   *)
+(*      （判例判定3：plain-eps 余量族统一 Bishop 闭合；min 反例在案，   *)
 (*        经典析取精确形不可证——本件即该裁决的 Bishop 形正解落实）。      *)
 (*   2. real_minp_tail_nonneg_B（伴件 A）：尾项非负的 B 形              *)
 (*      0 ≤_B Σ kl_tail；链 = uab_kl_tail_eval 等式换形（real_eq_sym）  *)
@@ -417,14 +417,14 @@ Print Assumptions sumb_list_sum_le_b.
 (*      左端等式运输 / 右端等式运输 / 非负右加单调。                     *)
 (*                                                                *)
 (* 红线自检口径：                                                      *)
-(*   —— 禁词全零（按全文件计含头注，E346 坑6）；                        *)
+(*   —— 禁词全零（按全文件计含头注，判例坑6）；                        *)
 (*   —— 全件 Qed 真证（term-mode 显式组装，real_eq 非 Id 禁改写，        *)
 (*      全链 real_eq_trans/sym/compat 族），无任何降级占位；             *)
 (*   —— 结论位全 Set 层：real_le_b 为 Set 值 forall 型，零 Prop 泄露；   *)
-(*   —— 前提位逐字照抄基座证明面（E358/E359 判定：前提位照抄即升）；      *)
+(*   —— 前提位逐字照抄基座证明面（判例组 判定：前提位照抄即升）；      *)
 (*      keep 判定的析取/否定前提面为 root MinP 机器接口继承面            *)
 (*      （基座同形），本文件零新增逻辑前提；                             *)
-(*   —— 节变量逐字复刻基座证明面八参（E345 症状3：Check 检验打表对齐，   *)
+(*   —— 节变量逐字复刻基座证明面八参（判例症状3：Check 检验打表对齐，   *)
 (*      检验日志 _w2__w2probe_sig.v.compile.log 在案）；                 *)
 (*   —— 提取检验 Obj.magic=0（独立小检验，验后删）；                     *)
 (*   —— Print Assumptions 全件 Closed under the global context          *)

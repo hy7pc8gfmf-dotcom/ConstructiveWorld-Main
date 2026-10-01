@@ -57,7 +57,7 @@
    source Live/toolchain/env.sh && unset COQLIB ROCQLIB
    cd abl_a2b3_WASH2_pool && ulimit -s 65532
    nice -19 rocq c -native-compiler no -Q "$PWD" "" "$PWD/abl9b_land_58.v"
-   （单道顺序，发起前进程计数合规；绿判四件套：EXIT=0 真取／真错行计 0 且
+   （单道顺序，发起前进程计数合规；绿判四要素：EXIT=0 真取／真错行计 0 且
    主定理 Closed／vo 头 8 字节 436f712100015ff4／vo 新于 v。）
    ── 交付声明 ──────────────────────────────────────────────────────────────
    本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、零参数占位、

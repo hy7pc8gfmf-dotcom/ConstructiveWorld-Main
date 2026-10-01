@@ -9,11 +9,11 @@
 (*   AttnDoeblin.v L472 bs_swap（诚实接口三件之首）                   *)
 (*   AttnDoeblin.v L475 bs_abs（诚实接口三件之二）                    *)
 (*   同节已闭合槽：L444 enum、L485 sum_eq_list（枚举求和规范化）        *)
-(* 使用位判据（E752 翻案形）：swap 槽=sum_eq_list 槽+列表 Fubini        *)
+(* 使用位判据（判例 翻案形）：swap 槽=sum_eq_list 槽+列表 Fubini        *)
 (*   组合学整体导出，非独立接口位；abs 槽=AbsLeId 直接代入。                *)
 (*                                                              *)
 (* 非平凡性分级（详见 attn/_tt1b_消融报告-.md 分级表）：        *)
-(*   abl_AtnDoeblin_sum_swap_cc ：N2（E752 段一+段二导出链复刻）        *)
+(*   abl_AtnDoeblin_sum_swap_cc ：N2（判例 段一+段二导出链复刻）        *)
 (*   abl_AtnDoeblin_bs_swap     ：N1（同语句双槽对偶，L472=L154 同形）   *)
 (*   abl_AtnDoeblin_abs_ge_zero_id_cc ：N1（AbsLeId L50 直接代入）         *)
 (*   abl_AtnDoeblin_bs_abs      ：N1（同语句双槽对偶，L475=L157 同形）   *)
@@ -21,13 +21,13 @@
 (* 红线自审（全部打勾）：                                             *)
 (*  [x] 现档实态取证已做：Live_X 与 Main 树 L154/157/472/475 行号齐      *)
 (*  [x] 逐字抽取：被消融槽语句自现档源码逐字拷入（参序/命名/隐式位同形）  *)
-(*  [x] 使用位实证：E752 卡 bs_swap 可消融结论+P7D 件在库为先例坐标      *)
+(*  [x] 使用位实证：判例卡 bs_swap 可消融结论+P7D 件在库为先例坐标      *)
 (*  [x] 分级 N/T 已逐件标注（W 件不发本件；本件零 W）                   *)
 (*  [x] 禁词双轨零：头注全中文表述（含英文原词字面亦零）                 *)
 (*  [x] 编译闭合+文尾逐件假设面打印全闭                                 *)
 (*  [x] 提取检验 Obj.magic=0：输出目录树外隔离（attn/logs/g3 留痕）      *)
 (*  [x] 模块核验 EXIT=0：attn/logs/g4 留痕（后台长窗）                  *)
-(*  [x] 四关留痕：attn/logs/g{1..4}-UpAblT1b_AttnDoeblin.log            *)
+(*  [x] 四检留痕：attn/logs/g{1..4}-UpAblT1b_AttnDoeblin.log            *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -49,7 +49,7 @@ Require Import S15_TailFEPUp.
 Require Import AttnDoeblin.
 Require Import AbsLeId.
 
-(* ################ 段一：列表 Fubini 组合学（E752 段一形复刻） ################
+(* ################ 段一：列表 Fubini 组合学（判例 段一形复刻） ################
    出节机 AttnDoeblin.bs_list_sum（顶层定档）上的逐点同余/加法线性/
    零函数退化/双重和交换。段一各件为基础模块，不单独计入战果。 *)
 
@@ -108,7 +108,7 @@ Qed.
 
 End AblListSum.
 
-(* ################ 段二：swap 族消融主件（E752 段二形） ################
+(* ################ 段二：swap 族消融主件（判例 段二形） ################
    sum_swap_cc 槽（L154）/bs_swap 槽（L472）在 sum_eq_list 槽（L485，
    已闭合槽）+段一组合学下整体导出——swap 位非独立接口位。 *)
 

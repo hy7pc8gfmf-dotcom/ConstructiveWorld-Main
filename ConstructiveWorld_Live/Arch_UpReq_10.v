@@ -1116,7 +1116,7 @@ Qed.
      (req_minus A_sum KL) 与内机5 对称型 req (req_minus Vπ Vref) A_sum 差一层
      req_minus 双参同态运输，apply 进 δ 展开搜索死旋（glob 停在语句行即此；
      40min 内存爬升后 worker 静默亡=根源非封存非热载）；补 req_plus_compat
-     双 opp-KL 腿 + req_refl 运输（req_minus δ 透明 plus a (opp b) 可转换）。 *)
+     双 opp-KL 肢 + req_refl 运输（req_minus δ 透明 plus a (opp b) 可转换）。 *)
 (*
    b + ((a−b)−c) == a−c（Id 第4/5步 req 合并形）——原为件16 节内 assert，
    单件巨型封存在 .vo 期膨胀致死（四轮实证 EXIT=127 零输出），提级独立。 *)
@@ -2485,7 +2485,7 @@ Qed.
 (* Part 7：Real 壳（Q→Real 反映 + κ₀/b₀ 提取 + 幂桥 + 回传链）             *)
 (*   （D2 承担段：real_const_proj 缺名→自建 mixd_const_proj；              *)
 (*     split with→split/子弹；Qeq-改写→change+ring；                       *)
-(*     const_mult/rpow_const 采 A 绿件同款 cbn 白名单配方）              *)
+(*     const_mult/rpow_const 采 A 绿件同款 cbn 许用集配方）              *)
 
 (* real_const 逐点脱壳（库内无 real_const_proj 专名——CW real_const        *)
 (*   定义面直读：常值序列 projT1 恒 c） *)
@@ -2537,7 +2537,7 @@ Proof.
 Qed.
 
 (* const 乘法脱壳：real_const (a·b) ≡ real_const a · real_const b
-   （A  mixa_const_mult 同款 cbn 白名单配方） *)
+   （A  mixa_const_mult 同款 cbn 许用集配方） *)
 Lemma mixd_const_mult : forall a b : Q,
   real_eq (real_const (Qmult a b)) (real_mult (real_const a) (real_const b)).
 Proof.

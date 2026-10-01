@@ -5,7 +5,7 @@
 (* 依赖：LW2UpperBound 骨架三件（只读承用零覆写，其均匀 T 形为本件变 T 形   *)
 (*       的常项特例推论）；LW2Hermite 的 lw2_qsum0／lw2_lambda 面；S02 界   *)
 (*       桥接位。                                                             *)
-(* 对标：E-STAGING-LW3-PROBEPIN（透明归约工艺）；378 回执缺供2 目标形。     *)
+(* 对标：E-STAGING-LW3-PROBEPIN（透明归约工艺）；378 记录缺供2 目标形。     *)
 (* 构造性：语句面全 Set（QleT' 界形），前提位仅 nat le/lt 数据判定形，     *)
 (*       零新增 Prop 语句面；本件纯引理件无数据名提取面。                   *)
 (* 编译配方：coqc 全路径 -q -Q . "" -Q ConstructiveWorld-Main/             *)

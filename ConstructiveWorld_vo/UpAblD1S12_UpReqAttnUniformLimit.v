@@ -9,27 +9,27 @@
 (*   剪除申报 2 位（普查§④口径，零消费位：剪除即消融·零施工·不入包）：           *)
 (*     vocab_nonempty:277｜gamma_pos:285                                        *)
 (*   墙登记 1 位（普查§③ W#3 可判等墙·不入包·接口内不导出）：                    *)
-(*     token_eq_dec:278 —— 本包供给腿以 Token:=bool 具体有限集实例绕行形         *)
+(*     token_eq_dec:278 —— 本包供给肢以 Token:=bool 具体有限集实例绕行形         *)
 (*     使用其分讨效果（if x then/else 直取），W 墙本体仍按墙登记簇处置。         *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                        *)
-(*    408c0f6cf10dda9a0db057f659670335，开工/收工双查零代际漂移）                *)
+(*    登记册登记值，开工/收工双查零代际漂移）                *)
 (*                                                              *)
 (* 形态：P2S1 封装记录型（UpAblP2_UpMinP_tokens_pack.v）＋ S6 件形同款            *)
 (*   （UpAblD1S6_UpReqRealFEP.v）；Set 排序（Real:Set@S02:394，bool:Set，         *)
 (*   全字段 Set 层）。                                                           *)
 (* 实例供给：Token:=bool（具体有限集，两点）｜vocab:=cons true nil（单元素表）｜  *)
 (*   z:=fun x => if x then real_one else real_zero｜m:=true｜gamma:=real_one。   *)
-(*   gap_le 供给腿＝bool 分讨：真支 Not(Id true true)＝Set 层 Not（A->Empty_set），以 id_refl 爆 Empty_set 零构造 elimination；  *)
+(*   gap_le 供给肢＝bool 分讨：真支 Not(Id true true)＝Set 层 Not（A->Empty_set），以 id_refl 爆 Empty_set 零构造 elimination；  *)
 (*   假支 0+1≤1＝comm+zero 两段 trans 链（real_plus_comm@S02:2336｜               *)
 (*   real_plus_zero@S02:2348｜RealSetoid.real_eq_le@S07:108）。                  *)
-(* Fixpoint 折叠发散坑兑现：供给腿全钉具体实例常量级（bool 两点/单元素表），       *)
+(* Fixpoint 折叠发散坑兑现：供给肢全钉具体实例常量级（bool 两点/单元素表），       *)
 (*   无符号表归纳面、无 Fixpoint 折叠维度。                                      *)
 (* 分级（禁注水如实申报）：入包 7 槽全部 T·机械供给级合并申报                    *)
 (*   （ul_pack7_supplied 一件喂定，不逐槽计战果；普查 N 注记自述                  *)
 (*   「实例供给即平凡成立」，施工实测兑现）。                                     *)
 (* 依赖：CW_ConstructiveWorld_219（S01 Id:61/InT:97｜S02 环律｜S07 序桥，         *)
 (*   只读使用）；零 git、零注册面、论文目录不碰。                                 *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S12_*.{log,exit}                    *)
+(* 四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S12_*.{log,exit}                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -49,7 +49,7 @@ Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 
-(* ============ 供给腿基底（机械直接给出，与源版本零耦合） ============ *)
+(* ============ 供给肢基底（机械直接给出，与源版本零耦合） ============ *)
 
 (* 单元素表非空：cons/nil 构造子头不相交（源版本 L277 剪除位的实例绕行基底） *)
 Lemma uabd1s12_ul_vocabne : Not (Id (cons true (@nil bool)) (@nil bool)).

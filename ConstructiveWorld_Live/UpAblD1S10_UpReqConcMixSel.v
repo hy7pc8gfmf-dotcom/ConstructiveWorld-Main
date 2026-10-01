@@ -5,7 +5,7 @@
 (* 领地认领（防撞协议快照  实测）：UpReqConcMixSel 为净新余量模块——      *)
 (*   D1-① 已切 L79/L736 lt_plus_compat_lt_le 双槽＋L771 bs_lpc（T2b 广播扩槽）； *)
 (*   D1-③ 面六槽 L767 bs_swap｜L770 bs_abs｜L772 sum_eq_list 已由 FA-P3S1      *)
-(*   实例化消解极（UpAblP3_UpReqConcMixSel.v，四关全部通过在盘；S2 件头对账同录）；         *)
+(*   实例化消解极（UpAblP3_UpReqConcMixSel.v，四检全部通过在盘；S2 件头对账同录）；         *)
 (*   S9＝UpReqAttnIter 余量（施工中进行中，与本模块零交集）。                       *)
 (*                                                              *)
 (* 辖区（census 行口径 19 行）：                                                 *)
@@ -29,12 +29,12 @@
 (*   z_ub＝real_lt_zero_one 直接匹配（le＝Or(lt,eq) 的 lt 支，S5 先例 inl/inr 同族）。 *)
 (* 本模块无 RDP Context（源文件节签名实测），依赖模块为无条件形。                     *)
 (* 分级（禁注水如实申报）：19 行全 T·数据/接口供给级（按模块合并申报；普查         *)
-(*   N/N2/N3 分类实测供给腿全为一步直接匹配/单点重合/字段直接匹配，降标 T 与 S4-S9 先例    *)
+(*   N/N2/N3 分类实测供给肢全为一步直接匹配/单点重合/字段直接匹配，降标 T 与 S4-S9 先例    *)
 (*   同口径）。                                                                  *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219。零 Require 接口参数源文件      *)
 (*   （防 P3S1 坑1 混代际）。                                                    *)
 (* 纪律：零 git、零注册面增量、attn 论文域源档/论文目录零触碰；fail-loud。         *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S10_*.{log,exit}                    *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1S10_*.{log,exit}                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -95,7 +95,7 @@ Inductive uabd1s10_cmk_pack17 : Type :=
                 (forall s s' : S, le (z s s') Delta) ->
                 uabd1s10_cmk_pack17.
 
-(* ---- 枚举非空供给腿（独立证书形：单点枚举构造元不交） ---- *)
+(* ---- 枚举非空供给肢（独立证书形：单点枚举构造元不交） ---- *)
 
 Lemma uabd1s10_cmk_enum_ne : Not (tt :: nil = nil).
 Proof. intro H. discriminate H. Qed.

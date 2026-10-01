@@ -25,7 +25,7 @@
 (*   有理 gap（S02:456），p==q 点 KL==0 无 gap、real_eq 分支不可判定 *)
 (*   ⟹ plain KL≥0 实 LPO 等价（同 E-STAGING-DPOLip-StrongLeAbs 卡）  *)
 (*   ；Id 层能证只因 Id 接口带 lt_dec 三分律字段（S01:333），req     *)
-(*   接口刻意降逐 eps（E152-5）后无消去。逐 eps 件可证机理：eps 松   *)
+(*   接口刻意降逐 eps（既有判例）后无消去。逐 eps 件可证机理：eps 松   *)
 (*   弛使左支严格（real_exp_ge_linear_eps S07:8404 unfold real_le;   *)
 (*   left 实证）。故恒等档（real_eq 链，零 le 使用）为本位无条件闭  *)
 (*   合的最强免费形；单调性档需使用 KL≥0，留待批 2 FEP/Bishop 桥。   *)
@@ -422,7 +422,7 @@ Proof.
                     (real_list_sum X (fun s => real_mult (p1 s) C) (s0 :: l))
                     (real_mult k E1)
                     C).
-           ++ (* 腿 1：Σ(p1·(k·u)) == k·Σ(p1·u)：逐点换形 + linear_r *)
+           ++ (* 肢 1：Σ(p1·(k·u)) == k·Σ(p1·u)：逐点换形 + linear_r *)
               apply (real_eq_trans
                        (real_list_sum X (fun s => real_mult (p1 s) (real_mult k (u s))) (s0 :: l))
                        (real_list_sum X (fun s => real_mult (real_mult (p1 s) (u s)) k) (s0 :: l)) _).
@@ -430,7 +430,7 @@ Proof.
                           (fun s => real_mult (real_mult (p1 s) (u s)) k) (s0 :: l)).
                  intro w. retm_alg.
               ** exact (real_list_sum_linear_r X k (fun s => real_mult (p1 s) (u s)) (s0 :: l)).
-           ++ (* 腿 2：Σ(p1·C) == C·Σp1 == C·1 == C *)
+           ++ (* 肢 2：Σ(p1·C) == C·Σp1 == C·1 == C *)
               apply (real_eq_trans (real_list_sum X (fun s => real_mult (p1 s) C) (s0 :: l))
                                    (real_mult C (real_list_sum X p1 (s0 :: l))) _).
               ** exact (real_list_sum_linear_r X C p1 (s0 :: l)).

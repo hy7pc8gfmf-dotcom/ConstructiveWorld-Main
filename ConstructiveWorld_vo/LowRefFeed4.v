@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -36,7 +36,7 @@
 (*           (fun s => f s s')))（宿主 sumf 为抽象 Variable）              *)
 (*   连接引用：UpReqSumD.v:352 sumd_list_sum_swap（其 :383 槽形闭合件      *)
 (*   sumd_sum_swap 头自注「sum_swap_i@AttnIter151 三槽同形一次消解」）      *)
-(*   核对裁定结论：配，载体键填充并入——宿主抽象求和位按 E354 装法取具体键       *)
+(*   核对裁定结论：配，载体键填充并入——宿主抽象求和位按 判例装法取具体键       *)
 (*   sumd_sumf（G12 ⑤⑥⑦ 同装法），双层和交换语句逐位同构，                 *)
 (*   exact (@sumd_list_sum_swap R RIS S f enum enum) 一击，               *)
 (*   出转发定理 lf4_sum_swap_i。                                          *)
@@ -45,7 +45,7 @@
 (*   原语句：forall (a b : R) (Ha : lt zero a) (Hb : lt zero b),          *)
 (*           lt a b -> lt (inv_pos b Hb) (inv_pos a Ha)                   *)
 (*   （宿主 Alignment 节 Context RI 为 S01 面）                           *)
-(*   四关全过；其槽互核形 ipl_upfirewall_102_shape 即 UpFirewall:102    *)
+(*   四检全过；其槽互核形 ipl_upfirewall_102_shape 即 UpFirewall:102    *)
 (*   逐字同语句改喂锚，与本槽语句逐字同形）                                *)
 (*   裁定结论：exact 一击并入，出转发定理 lf4_inv_pos_lt_contra。               *)
 (*                                                                       *)
@@ -115,7 +115,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable enum : list S.
 
-(* ---- 槽③ UpReqAttnIter.v:152 sum_swap_i 转发（E354 键填充装法） ---- *)
+(* ---- 槽③ UpReqAttnIter.v:152 sum_swap_i 转发（判例 键填充装法） ---- *)
 Theorem lf4_sum_swap_i :
   forall f : S -> S -> R,
     req (@sumd_sumf R RIS S enum

@@ -19,7 +19,7 @@
    格式对照：消融50/EntropyUnsatMark.v（CYE11 批C 形态复核声明段）；
 *)
 (*
-   【件形自判】本件为纯裁定结论件：零 Require      零新定理零声明—— 裁定件可以零新定理（规格 C8 授权位），引用面逐一 grep/sed 实核防引虚件（§二/§四）； 语句面 Set 层：无声明即无泄露面。转发并入位 UpAblP6_Package 候闸登记（§四）， 按转发并入先例纪律（EntropyUnsatMark 对照：fa52 主件四关全过入 vo_901 后方装 eum_ 转发件） 被引主件未过闸不并入。 【验证口径】G1 官方扫描器禁词=0（实测，--min-pa 0）； G2 = N/A（零 Require 零定理），另实测裸编译 EXIT=0（零依赖解析面，日志 Live/logs/czj13-g2-fka.log）。
+   【件形自判】本件为纯裁定结论件：零 Require      零新定理零声明—— 裁定件可以零新定理（规格 C8 授权位），引用面逐一 grep/sed 实核防引虚件（§二/§四）； 语句面 Set 层：无声明即无泄露面。转发并入位 UpAblP6_Package 候闸登记（§四）， 按转发并入先例纪律（EntropyUnsatMark 对照：fa52 主件四检全过入 vo_901 后方装 eum_ 转发件） 被引主件未过闸不并入。 【验证口径】G1 官方扫描器禁词=0（实测，--min-pa 0）； G2 = N/A（零 Require 零定理），另实测裸编译 EXIT=0（零依赖解析面，日志 Live/logs/czj13-g2-fka.log）。
 *)
 
 (* ========== 一、留记原文：三账逐条四要素裁定声明 ========== *)
@@ -60,7 +60,7 @@
    要素 2 原叙事：无条件前向三角不等式
      KL(p,r) ≤_B f(KL(p,q), KL(q,r))（无证书强三角叙事）。
    要素 3 结构性不达根因：残差无上界引擎——反向 Pinsker 不存在（:44-:45 原裁定结论），
-     链式恒等第三腿 E_p[log q − log r] 无定号（:34 同源裁定结论），无条件 ≤ 形不闭合；
+     链式恒等第三肢 E_p[log q − log r] 无定号（:34 同源裁定结论），无条件 ≤ 形不闭合；
      实证面：EXP-D3 解析反例 Q=(1/2,1/2), R=(9/10,1/10), P=(0,1) 使
      RHS−LHS = ln(3/5) < 0（UpReqWeakTriangle.v:12-14 记载，近退化违反 77/3000）。
    要素 4 替代真形引证：wtl_cond_triangle（UpReqWeakTriangle.v:158，组 清点
@@ -81,7 +81,7 @@
      sed 实读）——与 组 triage #29（:55）「Real 层仅 eps/B 形可达」已证结论互证。
    件 3 残差显式恒等形：UpReqForwardKLFamily.v:228 fkl_path_split_pt /
      :258 fkl_path_split_sum（KL(p‖r) == KL(p‖q) + E_p[log q − log r]，
-     残差显式不隐藏；源件全文精读，四关面以其 vo 交付态为准）。 *)
+     残差显式不隐藏；源件全文精读，四检面以其 vo 交付态为准）。 *)
 
 (* 账 1 裁定词：前向 β 加权迭代步恒等=叙事降级而非证明欠账——翻转方向可证面
    已由 fkl_pt_split_flip 同构诚实形覆盖，几何率叙事永久槽登记不入排程。
@@ -102,7 +102,7 @@
    ① 已落盘 ✓：WeakTriangleClose.v（闭合件，391 行）件形完整：主件
      wtc_weak_triangle_load / sigT 闭合 wtc_family / 四要素复核声明头注 /
      文尾 Print Assumptions 审计位齐备。
-     注意其内容为弱三角领地 G3 CS 权渡腿闭合（二元 Gram 核 (Σab)^2 ≤ Σa^2·Σb^2），
+     注意其内容为弱三角领地 G3 CS 权渡肢闭合（二元 Gram 核 (Σab)^2 ≤ Σa^2·Σb^2），
      非 KL 弱三角真形本体（真形=§二 件 1 wtl_cond_triangle），并入时引证须分工如实。
    ② 可 Require ✗：本地双信任根实测均不可用（本机 vo 根与 vorebuild_901
      基座的 S01_BaseRing.vo / UpReqWeakTriangle.vo 皆报 inconsistent

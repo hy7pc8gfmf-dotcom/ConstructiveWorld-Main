@@ -224,7 +224,7 @@ Definition nlp_g01_mean2 (Grp2 : Set) (enum2 : list Grp2)
 
 End NatLenPos.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（四检前置：文件内显式 PA 声明） ---- *)
 Print Assumptions nlp_ofnat_nonneg.
 Print Assumptions nlp_ofnat_S_pos.
 Print Assumptions nlp_len_pos_cover.

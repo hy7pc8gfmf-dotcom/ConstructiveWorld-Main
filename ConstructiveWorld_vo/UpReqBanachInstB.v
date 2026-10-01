@@ -51,7 +51,7 @@
 (*   pos/pos 定义级还原；Z.abs 在 Zpos/Zneg 构造子上 iota 还原；  *)
 (*   positive→Z 桥一律 lia；Z.compare 结论位走 compare_lt_iff；  *)
 (*   含 Z.gcd/Z.div 的目标禁 simpl（过度约简断匹配），走 shape    *)
-(*   引理改写 + cbn 白名单。                                     *)
+(*   引理改写 + cbn 显式清单。                                     *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

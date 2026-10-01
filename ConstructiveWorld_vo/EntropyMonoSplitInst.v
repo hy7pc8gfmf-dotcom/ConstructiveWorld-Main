@@ -254,7 +254,7 @@ Qed.
 
 End EntropyMonoSplitInst.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（四检前置：文件内显式 PA 声明） ---- *)
 Print Assumptions emsi_energy_pin_self.
 Print Assumptions emsi_le_diff_ge_zero.
 Print Assumptions emsi_le_plus_eps.

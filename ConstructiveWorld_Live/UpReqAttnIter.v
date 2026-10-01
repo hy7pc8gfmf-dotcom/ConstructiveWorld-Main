@@ -24,7 +24,7 @@
      （q_kernel 簇 + 段2 TV 收缩核心 + 段3 主定理 + 几何迭代收敛，25 Lemma/Theorem
       + 1 节参位；边界邻接件 one_minus_delta_pos @28793 顺带已证明）。
    ----------------------------------------------------------------
-   核对三源核查结论（防重建，逐件判见头注核对表）：
+   核对三源核查结论（防重建，逐件判见头注核对清单）：
      Section UContraction——与本簇 Id 行号不同节，但数学同构（通用 u + delta +
      transition + minorization 的两点 TV 收缩机）。本簇收缩脊柱 10 件以出节
      全显提供实证覆盖：q_kernel_i 等定义件在 u := boltzmann_dist_i、

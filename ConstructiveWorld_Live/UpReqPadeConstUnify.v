@@ -33,10 +33,10 @@ From Stdlib Require Import QArith.QArith Arith.Arith Lia.
 
 Section CpfFinale.
 
-(* ===== §0 Q 层连接引理（AA12 腿化：一跳 UpReqPadeQLeg 自建单调腿） ===== *)
+(* ===== §0 Q 层连接引理（AA12 肢化：一跳 UpReqPadeQLeg 自建单调肢） ===== *)
 
 (* Qeq 穿透墙桥：== 不可 rewrite 进 Qlt/QltT 目标（CS 卡），
-   AA12 实测：四元合证曾 nia 拒拆两步组合；现双腿直达，零 nia。 *)
+   AA12 实测：四元合证曾 nia 拒拆两步组合；现双肢直达，零 nia。 *)
 Lemma cpf_qlt_eq_l : forall a b c : Q, a == b -> Qlt a c -> Qlt b c.
 Proof.
   intros a b c Hab Hlt.
@@ -56,7 +56,7 @@ Proof.
   apply (cpf_qlt_eq_r c d _ Hcd). apply (cpf_qlt_eq_l a b c Hab Hlt).
 Qed.
 
-(* 三元算术小桥（AA12 腿化：一跳族 B 加法腿） *)
+(* 三元算术小桥（AA12 肢化：一跳族 B 加法肢） *)
 Lemma cpf_qlt_add_r : forall a b : Q, Qlt 0 b -> Qlt a (a + b)%Q.
 Proof.
   intros a b Hb. exact (pql_qlt_add_r a b Hb).
@@ -189,7 +189,7 @@ Qed.
 (* ===== §4 免除法传送引理（保底件三，real_lt sigT 见证组合形） ===== *)
 
 (* Real 层减法 = plus + opp 组合形（S02 无 real_minus 原语；
-   工单 §1.3 real_minus 面以本组合形承载，落盘件若异形走 wd 换桥） *)
+   总纲 §1.3 real_minus 面以本组合形承载，落盘件若异形走 wd 换桥） *)
 Definition cpf_rminus (a b : Real) : Real := real_plus a (real_opp b).
 
 Lemma cpf_rminus_proj : forall (a b : Real) (n : nat),
@@ -509,7 +509,7 @@ Proof.
   - apply Qinv_lt_0_compat. apply q_fact_pos.
 Qed.
 
-(* 定值对表（TailPos 定值件直取）：coef 1 = 1/12，coef 2 = 1/720 *)
+(* 定值对照（TailPos 定值件直取）：coef 1 = 1/12，coef 2 = 1/720 *)
 Lemma psx_coef_vals :
   psx_coef 1%nat == (1#12)%Q /\ psx_coef 2%nat == (1#720)%Q.
 Proof. split; [exact ptp_beta_n1_first | exact ptp_beta_n2_first]. Qed.

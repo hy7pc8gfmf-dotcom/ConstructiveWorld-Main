@@ -29,9 +29,9 @@
 (*                            ums_minus_plus_cancel / ums_minus_le        *)
 (*                            （抽象循环记录：id 链 + 重写，无逐点 ring）      *)
 (*   mix_bernoulli_upper  → ums_bernoulli_upper（数学关键引理，证明结构      *)
-(*                            逐步同构移植：环主件 + 减法≤本体 + 幂正腿    *)
+(*                            逐步同构移植：环主件 + 减法≤本体 + 幂正肢    *)
 (*                            + le_mult_compat + IH 换位）                *)
-(*   mix_le_inv           → ums_le_inv（逆元腿）                         *)
+(*   mix_le_inv           → ums_le_inv（逆元肢）                         *)
 (*   mix_pow_budget       → ums_pow_budget（严格版：lt 前件 + lt 形 Arch）*)
 (*   mix_k_select         → ums_k_select（le 前件 + le 形 Arch 直给）     *)
 (*   mix_k_select_le      → ums_k_select_le（≤ 版）                      *)
@@ -359,7 +359,7 @@ Proof.
              (le_refl one)).
   - (* 归纳步（对照 concrete L364-444 同构）：
        循环记录 (1−w)(1+(k+1)w) == (1+kw) − ((k+1)w)·w ≤ 1+kw；
-       再乘幂正腿接 IH 换位 *)
+       再乘幂正肢接 IH 换位 *)
     assert (Hbpos : lt zero (minus one w))
       by exact (ums_omd_lt_one w Hwp Hwlt).
     assert (HPk : lt zero (r_pow (minus one w) k))
@@ -419,7 +419,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* Part 5：逆元腿（A·B ≤ 1 ∧ 0 < B ⟹ A ≤ 1/B；对照 mix_le_inv）        *)
+(* Part 5：逆元肢（A·B ≤ 1 ∧ 0 < B ⟹ A ≤ 1/B；对照 mix_le_inv）        *)
 (* ============================================================ *)
 
 Lemma ums_le_inv : forall (A B : R) (HB : lt zero B),
@@ -465,7 +465,7 @@ Proof.
     by exact (ums_boost_pos w (Datatypes.S N) Hwle).
   set (invB := inv_pos boost Hboost0).
   assert (HinvB : lt zero invB) by exact (inv_pos_pos boost Hboost0).
-  (* ---- 预算腿：TV0 < Ms·budget ---- *)
+  (* ---- 预算肢：TV0 < Ms·budget ---- *)
   assert (Hstep : lt (mult (mult TV0 invwb) wb)
                      (mult (ums_scale (Datatypes.S N) one) wb))
     by exact (lt_mult_compat (mult TV0 invwb)

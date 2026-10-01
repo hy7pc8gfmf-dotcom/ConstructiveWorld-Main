@@ -1026,7 +1026,7 @@ Proof.
 Qed.
 
 (* ============ E. 序 / abs / exp 侧（Id 原件 L549-597、625-649） ============ *)
-(* 注：Id abs_plus_one_pos（L549，|a|+1 > 0）不在本批迁移——其 Id 证明依存
+(* 注：Id abs_plus_one_pos（L549，|a|+1 > 0）不在本件迁移——其 Id 证明依存
    plain 形 abs_nonneg : le zero (abs a)，而 setoid 接口已 eps 化
    （abs_nonneg : forall eps, lt zero eps -> le zero (plus (abs a) eps)），
    plain 形不可由 eps 形导出（无序消去）。归入文件尾 (d)/签名差异冻结清单。 *)
@@ -1753,7 +1753,7 @@ End ReqLogBridge.
 (* 1. attn_nat_to_R_pos（Id @L95724，随 Fixpoint attn_nat_to_R *)
 (*    L95718）：nat 归纳件，载体为 nat->R 嵌入函数；req 世界如需    *)
 (*    使用须以 setoid 运算重定义 Fixpoint（跨接口不可复用——R 为不   *)
-(*    同类型族）。本批不迁，双层并行，批 4 注意力采样依存时再裁。   *)
+(*    同类型族）。本件不迁，双层并行，后续注意力采样依存时再裁。   *)
 (* 2. id_ring_demo_double_neg / id_ring_demo_plus_opp /            *)
 (*    id_ring_demo_mult_one（Id @L1142/1146/1150）：Ltac      *)
 (*    id_ring 演示件，语句与接口字段逐一相同（Id 系亦为平凡件）；   *)

@@ -1,5 +1,5 @@
 (* LW3KnzValue.v                                                         *)
-(* 使命：Niven 辅助族 K 非零判据腿首砖——锚例上 K 面（lw3_Kinst）可判定    *)
+(* 使命：Niven 辅助族 K 非零判据肢首砖——锚例上 K 面（lw3_Kinst）可判定    *)
 (*       非零见证由 λ 面透明计算钉与 lw3_Kinst_spec 桥回传闭合；首项      *)
 (*       系数面经生产件 lw3_niven_lc_nz 实例化闭合。                      *)
 (* 依赖：LW3ETranscendental（只读正本）及其 Require 闭包 S02/S03/LW0/     *)

@@ -17,7 +17,7 @@
 (*         (n≥1)、(ii) 每个有理数 q 有 n≥1 使 e_n < |q−x_n|、             *)
 (*         (iii) e_n→0（Q 层显式），则 X := lim x_n 满足                    *)
 (*         ∀q:Q，存在 Q 层正分离常数 c 使 real_const c < |X−q|            *)
-(*         （real_lt sigT 见证形，E232 先例语句面）。                    *)
+(*         （real_lt sigT 见证形，先例判例语句面）。                    *)
 (* 主件：lic_irrational_criterion；伴件 lic_seq_cauchy（柯西性推导）、     *)
 (*       lic_e_irrational_criterion（e 实例回验：真走母定理）。          *)
 (* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、                  *)

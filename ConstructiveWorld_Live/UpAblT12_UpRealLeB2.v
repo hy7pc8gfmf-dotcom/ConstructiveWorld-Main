@@ -12,13 +12,13 @@
 (*                                                              *)
 (* 主件清单（1 件，前缀 uab_）：                                             *)
 (*    A1 uab_rl2_evicted_partition_pos ←L482-483                             *)
-(*        实例化消解：正和族同构自持机械（本节 uab_rsum_pos，逐腿同                 *)
+(*        实例化消解：正和族同构自持机械（本节 uab_rsum_pos，逐肢同                 *)
 (*        sumd_list_sum_pos_cons@UpReqSumD 款式）× real_exp_neg_pos 直接代入。       *)
 (*                                                              *)
 (* 升层申报（诚实口径，非降档）：                                               *)
 (*   ① 被消融位所在节 S : Type（UpRealLeB2 L466 逐字），而 sumd_list_sum/in      *)
 (*     机械钉 S : Set（UpReqSumD 出节签名 Check 实测）——照搬即隐性降档。        *)
-(*     本件同构自持本节机械于 S : Type 层，零降格零窄化；归纳链逐腿复刻           *)
+(*     本件同构自持本节机械于 S : Type 层，零降格零窄化；归纳链逐肢复刻           *)
 (*     sumd_list_sum_pos_cons/nonneg 款式（纯接口字段组装）。                   *)
 (*   ② 数据槽显式参（移交单预告「列表级 pos 形，非 sumf 槽形」实测核实）：        *)
 (*     被消融函数对非保留元取值 real_zero（非严格正），全列表逐项严格正不可得——  *)
@@ -30,12 +30,12 @@
 (*                                                              *)
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219（real_evicted_      *)
 (*   partition/real_kv_boltzmann_factor/real_exp_neg_pos 经其 Export 链供给）、  *)
-(*   UpReqSumD（sumd_lt_le 抬升腿）。                                           *)
+(*   UpReqSumD（sumd_lt_le 抬升肢）。                                           *)
 (*   语句面逐字抽取自现档 UpRealLeB2.v L482-483（两树逐字节同验：Main/Live_X    *)
 (*   md5 同 3655bc7f，667 行）；real_evicted_partition 七参形经 Check 轮实测。   *)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾 Print Assumptions 收尾。              *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAbl_UpRealLeB2.log。               *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAbl_UpRealLeB2.log。               *)
 (*   G3 预期：Real 载体树拉入 S07_RealSetoidExpLog，inherent 伪影按 T6a 登记口径  *)
 (*   放行（T6a 同形先例 71 处，实例记录字段封装位，与被消融语句零涉）。          *)
 (* ============================================================ *)
@@ -83,7 +83,7 @@ Fixpoint uabT12_find_kept (l : list S) : Set :=
   | y :: t => (keep y) + (uabT12_find_kept t)
   end.
 
-(* 非负腿（sumd_list_sum_nonneg 同构） *)
+(* 非负肢（sumd_list_sum_nonneg 同构） *)
 Lemma uabT12_rsum_nonneg : forall (f : S -> R) (l : list S),
   (forall s : S, le zero (f s)) -> le zero (uabT12_rsum f l).
 Proof.
@@ -95,7 +95,7 @@ Proof.
                 (Hnn y) IH)).
 Qed.
 
-(* 正和腿（保留元证书形；归纳链逐腿同 sumd_list_sum_pos_cons 款式） *)
+(* 正和肢（保留元证书形；归纳链逐肢同 sumd_list_sum_pos_cons 款式） *)
 Lemma uabT12_rsum_pos : forall (f : S -> R) (l : list S),
   (forall s : S, le zero (f s)) ->
   (forall s : S, keep s -> lt zero (f s)) ->

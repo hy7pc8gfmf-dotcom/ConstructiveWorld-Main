@@ -1,7 +1,7 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpReqConcB1.v ——  AT7：S5 具体件（bs_swap 双折归纳 + bs_abs req 自证）  *)
 (*   + S6 · B1 最小档装配 = 无条件闭合定理成文（第三棒完成）。              *)
-(* 论文7 §10.2 第 7 项 · 无条件闭合路线①（AT4 侦察切片工单 S5/S6，           *)
+(* 论文7 §10.2 第 7 项 · 无条件闭合路线①（AT4 侦察切片清单 S5/S6，           *)
 (*   AT5/AT6 交付报告余切片清单）                                 *)
 (*                                                              *)
 (* 上游（零改四源文件）：UpReqConcSoftmax（csm_ 六槽五件委派）、                *)
@@ -95,7 +95,7 @@ Import ListNotations.
 Section Cb1Swap.
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
-(* 零和腿：逐点 ≡ zero 则列表和 ≡ zero（bs_swap 之 a = nil 支） *)
+(* 零和肢：逐点 ≡ zero 则列表和 ≡ zero（bs_swap 之 a = nil 支） *)
 Lemma cb1_list_sum_zero : forall (S : Set) (g : S -> R) (l : list S),
   (forall x : S, req (g x) zero) -> req (sumd_list_sum S g l) zero.
 Proof.
@@ -112,12 +112,12 @@ Lemma cb1_swap_lists : forall (S : Set) (f : S -> S -> R) (a b : list S),
       (sumd_list_sum S (fun y : S => sumd_list_sum S (fun x : S => f x y) a) b).
 Proof.
   intros S f a. induction a as [| x a' IH]; intro b.
-  - (* a = nil：LHS ≡ zero；RHS = Σ_b(Σ_nil ·) 逐点归零腿回拉 *)
+  - (* a = nil：LHS ≡ zero；RHS = Σ_b(Σ_nil ·) 逐点归零肢回拉 *)
     apply req_sym.
     exact (cb1_list_sum_zero S
              (fun y : S => sumd_list_sum S (fun x : S => f x y) nil) b
              (fun y : S => req_refl zero)).
-  - (* a = x·a'：sum_add 拆内层 + IH 尾缝（req 对称腿）；链向 RHS→LHS 故 req_sym *)
+  - (* a = x·a'：sum_add 拆内层 + IH 尾缝（req 对称肢）；链向 RHS→LHS 故 req_sym *)
     exact (req_sym _ _
              (req_trans _ _ _
              (sumd_list_sum_add S (fun y : S => f x y)

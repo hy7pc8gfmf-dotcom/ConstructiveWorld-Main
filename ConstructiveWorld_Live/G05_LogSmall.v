@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -15,7 +15,7 @@
 (* 引擎坐标实读（普查 G5 节 + §四落点纪律执行记录）：                  *)
 (*   ① 接口字段（CW_ConstructiveWorld_219 L40464 起 RealInterfaceEnhancedSetoid，req 版）：*)
 (*    log/log_inv 带正性参；log_mult/log_one/log_inv_log/exp_neg_log_inv *)
-(*    req 形在盘；log_le_linear_eps 仅逐 eps 形（E152-5 先例）。        *)
+(*    req 形在盘；log_le_linear_eps 仅逐 eps 形（先例）。        *)
 (*    接口无 log 相容字段、无 log_inv∘exp_neg 字段、无 exp_neg 外延字段。*)
 (*   ② 根基元（CW_ConstructiveWorld_219 具体 Real 层，锚点法已证，本文件 源码实读）：        *)
 (*    real_log_exp_neg@42231（log(e^{-x})==-x）/ real_log_wd@42277      *)
@@ -427,8 +427,8 @@ Print Assumptions logd_exp_neg_ext_real.
 (*   站点 1：w2_gibbs_eq @UpReqU2:477 → req_gibbs_equality              *)
 (*           @UpReqDist:2148（槽+log_eq_linear 双参数位）。              *)
 (*   站点 2：req_attention_minimizes_free_energy_unique @UpReqFEPAttn:  *)
-(*           211 → req_min_free_energy_is_boltzmann（≤ 腿，参数位）+      *)
-(*           req_free_energy_min_unique（唯一腿，槽+eq_linear 双位）。   *)
+(*           211 → req_min_free_energy_is_boltzmann（≤ 肢，参数位）+      *)
+(*           req_free_energy_min_unique（唯一肢，槽+eq_linear 双位）。   *)
 (*   站点 3：件 2/件 4（L554/L592）使用 req_gibbs_inequality（参数位）；  *)
 (*           件 5（L593）使用 req_gibbs_equality（槽+eq_linear 双位）。  *)
 (*   站点 4：件 5/件 6（L312/L378）使用 @req_gibbs_inequality（参数位，   *)
@@ -445,7 +445,7 @@ Print Assumptions logd_exp_neg_ext_real.
 (*   b. 抽象 sumf 下游定理 @ 实例化路同判 ZPosD 档：real_list_sum_pos   *)
 (*      携非空 datum 前提（CW_ConstructiveWorld_219:41666），无法喂抽象 fsum_pos 参数位    *)
 (*      （δ 前提形不匹配）——故站点 3/4 温度对以本文件 BTReal 节具体     *)
-(*      重放（E354 装法先例）。                                          *)
+(*      重放（判例装法先例）。                                          *)
 (*   c. datum 非空前提为既有先例签名形（zposd_Z_pos @G12_ZPosFam:82      *)
 (*      「Not (enum = nil) 基座 Set 版 Not」，CW_ConstructiveWorld_219 real_list_sum_pos    *)
 (*      同位），零放大主张。                                             *)
@@ -455,7 +455,7 @@ Print Assumptions logd_exp_neg_ext_real.
 (*     lt 减形正性 + Bishop 序减形升格（Part A 缺口延伸 2 件）。         *)
 (*   [四站点给定件] lld_{u2,fep,tempent,fw}_log_le_linear_B——四站点    *)
 (*     槽的 Real 实例化 Bishop 形（引擎直接提供，同构四连）。                *)
-(*   [站点 1] lld_u2_gibbs_eq_step1_B——req_gibbs_equality 首步腿       *)
+(*   [站点 1] lld_u2_gibbs_eq_step1_B——req_gibbs_equality 首步肢       *)
 (*     （Hd_nonneg：0 ≤ d(s) 逐点）Bishop 形，gibbsd_gibbs_pointwise_B  *)
 (*     一次给定。                                                        *)
 (*   [站点 2] FEPReal 节：softmax/boltzmann 载体对 Real 具体形          *)
@@ -463,10 +463,10 @@ Print Assumptions logd_exp_neg_ext_real.
 (*     datum 形）+ 逐点正性 3 件 + lld_fep_softmax_boltz_pointwise_B    *)
 (*     （件 4 主定理载体对的范式实例位）。                                 *)
 (*   [站点 3] BTReal 节温度 Boltzmann 族（lld_btz/lld_bt 具体形 +       *)
-(*     正性/归一化）+ lld_tempent_kl_nonneg_B（L554 腿 Bishop 形）+     *)
+(*     正性/归一化）+ lld_tempent_kl_nonneg_B（L554 肢 Bishop 形）+     *)
 (*     lld_tempent_entropy_neg_sum_B（req_entropy_neg_sum 使用位        *)
 (*     eq 伴随件，实_list_sum 层）。                                     *)
-(*   [站点 4] lld_fw_kl_boltz_pair_nonneg_B——件 5/件 6 Hkl/Hkl21 腿    *)
+(*   [站点 4] lld_fw_kl_boltz_pair_nonneg_B——件 5/件 6 Hkl/Hkl21 肢    *)
 (*     （req_gibbs_inequality 温度对）Bishop 形。                        *)
 (*   / le_b_id_l / minus_flip / le_b_mult_pos_r）+ Part C 和层机六件    *)
 (*   经本系列工作下游裁决面全数消解可复用性；Part D 范本 D0 直接提供形于四站点   *)
@@ -521,7 +521,7 @@ Proof.
 Qed.
 
 (* H2：Bishop 序减形升格：a ≤_B b ⟹ 0 ≤_B b − a                          *)
-(*   （站点 1 step1 腿的引擎位；swap_mid + plus_zero 换形闭合）           *)
+(*   （站点 1 step1 肢的引擎位；swap_mid + plus_zero 换形闭合）           *)
 Lemma lld_le_b_zero_sub : forall a b : Real,
   real_le_b a b -> real_le_b real_zero (real_plus b (real_opp a)).
 Proof.
@@ -592,7 +592,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part U2：站点 1（UpReqU2.v L313）下游首步腿                           *)
+(* Part U2：站点 1（UpReqU2.v L313）下游首步肢                           *)
 (*   槽使用位 w2_gibbs_eq（UpReqU2:477）→ req_gibbs_equality            *)
 (*   （UpReqDist:2148）首步 Hd_nonneg：0 ≤ d(s) 逐点（req le 形）——     *)
 (*   Bishop 形由 gibbsd_gibbs_pointwise_B（Part D 范本 D0）+ H2 升格。   *)
@@ -632,7 +632,7 @@ Definition lld_fep_invT : Real := real_inv_pos TT TT_pos.
 Definition lld_fep_Zf : Real :=
   real_list_sum X (fun s : X => real_exp_neg (real_mult lld_fep_invT (zz s))) lX.
 
-(* 辅件 1：Boltzmann 因子逐项正性（站点 Zf_pos 的 sum_pos 腿） *)
+(* 辅件 1：Boltzmann 因子逐项正性（站点 Zf_pos 的 sum_pos 肢） *)
 Lemma lld_fep_boltz_factor_pos : forall s : X,
   real_lt real_zero (real_exp_neg (real_mult lld_fep_invT (zz s))).
 Proof.
@@ -677,7 +677,7 @@ Qed.
 
 (* 主定理载体对范式实例位：件 4（req_attention_minimizes_free_energy_     *)
 (* unique 的 softmax/boltz 对）逐点 Gibbs 切线 Bishop 形——Part D 范本   *)
-(* D0 在站点 2 载体上的 @ 全显装配。≤ 腿/唯一腿全量复演阻塞见头注 a。    *)
+(* D0 在站点 2 载体上的 @ 全显装配。≤ 肢/唯一肢全量复演阻塞见头注 a。    *)
 Lemma lld_fep_softmax_boltz_pointwise_B : forall s : X,
   real_le_b (real_plus (lld_fep_softmax s) (real_opp (lld_fep_boltz s)))
             (real_kl_term (lld_fep_softmax s) (lld_fep_boltz s)
@@ -694,7 +694,7 @@ End FEPReal.
 (* Part BT：站点 3/4 共用温度 Boltzmann 族（Real 具体形）                 *)
 (*   站点 3 tB（UpReqTempEntropy:71）/站点 4 fw_bt（UpFirewallReq:105）  *)
 (*   的 real_list_sum 具体形（reqd_boltzmann_dist_temp 的 Real 重放，   *)
-(*   E354 装法：抽象 fsum_pos 参数位 δ 不匹配，沿 ZPosD 先例具体重放）。 *)
+(*   判例装法：抽象 fsum_pos 参数位 δ 不匹配，沿 ZPosD 先例具体重放）。 *)
 (* ============================================================ *)
 
 Section BTReal.
@@ -773,7 +773,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 站点 3 件：L554 腿（req_gibbs_inequality p (tB t)，UpReqTempEntropy   *)
+(* 站点 3 件：L554 肢（req_gibbs_inequality p (tB t)，UpReqTempEntropy   *)
 (*   件 2/件 4 槽使用位）的 Real 实例化 Bishop 形——Part D 范本 D1 在     *)
 (*   站点 3 使用对 (p, lld_bt t) 上的 @ 全显装配。                       *)
 (* ============================================================ *)
@@ -824,7 +824,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 站点 4 件：L312/L378 腿（@req_gibbs_inequality (fw_bt t1) (fw_bt t2)，*)
+(* 站点 4 件：L312/L378 肢（@req_gibbs_inequality (fw_bt t1) (fw_bt t2)，*)
 (*   件 5 Hkl / 件 6 Hkl21 槽使用位）的 Real 实例化 Bishop 形——Part D    *)
 (*   范本 D1 在站点 4 温度对上的 @ 全显装配。                            *)
 (* ============================================================ *)
@@ -849,7 +849,7 @@ End BTReal.
 (*   共享地基 2 件：lld_lt_zero_sub_r / lld_le_b_zero_sub（Part A       *)
 (*   缺口延伸：lt 减形正性 + Bishop 序减形升格）。                       *)
 (*   四站点给定件 4 件：lld_{u2,fep,tempent,fw}_log_le_linear_B          *)
-(*   站点 1：lld_u2_gibbs_eq_step1_B（gibbs_equality 首步腿 Bishop 形）。*)
+(*   站点 1：lld_u2_gibbs_eq_step1_B（gibbs_equality 首步肢 Bishop 形）。*)
 (*   站点 2：FEPReal 节 5 Qed（boltz_factor_pos / Zf_pos / softmax_pos / *)
 (*   boltz_pos / softmax_boltz_pointwise_B）+ 5 Definition 载体同构。    *)
 (*   站点 3：BTReal 节内 lld_tempent_kl_nonneg_B +                       *)
@@ -860,7 +860,7 @@ End BTReal.
 (*   （E-GIBBSD-1 预言全数消解）；下游终局共同阻塞双缺件：log 逆消去     *)
 (*   （E-GIBBSD-2 边界再证，p·(log p−log q) 形四站全同）+ Bishop         *)
 (*   fsum_zero_nonneg（In-machinery 部分和机）；抽象 fsum_pos @ 实例化   *)
-(*   δ 判定沿 ZPosD/E354 装法先例（datum 非空前提单列口径）。            *)
+(*   δ 判定沿 ZPosD 系判例装法先例（datum 非空前提单列口径）。            *)
 (*   E-LOGLIN-2：Bishop 减形升格器 lld_le_b_zero_sub（a ≤_B b ⟹         *)
 (*   0 ≤_B b−a）——槽证明族通用入轨件，实_lt_zero_sub_r + swap_mid        *)
 (*   闭合，建议入 Part A 复用清单。                                      *)
@@ -876,7 +876,7 @@ End BTReal.
 (*      real_gibbs_inequality_B@592 / real_le_to_le_b@78 /              *)
 (*      real_log_one_plus_le_B@543 / real_exp_ge_linear_B@526。         *)
 (*   ② 根件（CW_ConstructiveWorld_219 源码实读）：real_log_le_linear_eps@41058（Or 形逐    *)
-(*      eps，接口字段 log_le_linear_eps@41134 在案——E354 旧判定「接口  *)
+(*      eps，接口字段 log_le_linear_eps@41134 在案——判例旧判定「接口  *)
 (*      real_log_mult@40403 / real_log_one / real_two_pos@41807 /       *)
 (*      real_gibbs_inequality_eps@41704 / real_kl_term@41696 /          *)
 (*      real_boltzmann_dist_r@43686（Section RealRLHFMain 出口）。       *)

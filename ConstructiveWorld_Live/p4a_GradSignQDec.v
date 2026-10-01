@@ -35,7 +35,7 @@
 (*                                                                *)
 (*   纪律：纯构造性（Q_dec 为和类型构造判定，零经典逻辑）；              *)
 (*   前提全显式前件化（论文5"零接口 Variable"纪律）；                  *)
-(*   自足零库依赖（仅 stdlib Q 算术）；G1-G4 四关候跑。                *)
+(*   自足零库依赖（仅 stdlib Q 算术）；G1-G4 四检候跑。                *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith_base Qring Qabs Lia.
@@ -258,7 +258,7 @@ Proof.
   - exact Hbudget.
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
+(* ---- 四检备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions gsq_grad_step_abs_contraction_full.
 Print Assumptions gsq_grad_decay_full_sign_iter.

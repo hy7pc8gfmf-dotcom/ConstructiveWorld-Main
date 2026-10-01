@@ -67,7 +67,7 @@
       - 逐出区求和面：sum_over_S 仅作 req_evicted_partition 的 opaque 载体
         （Variable，基座 real_sum_over_S 同位）；全部 8 件不使用其 ext/linear
         字段，正性由 req_evicted_partition_pos 单独 Variable 给出（基座同位）。
-   2. [冻结（双层并行，本批不迁，理由 = 基座自注）]
+   2. [冻结（双层并行，本件不迁，理由 = 基座自注）]
       - mp_of_nat_pos / markov_kernel_normalized_mp / minp_max_ge_inv_vocab_size /
         pick_best_optimal_mp（L31545-31834）：nat→R 嵌入（mp_of_nat）与 argmin
         list 机器依赖件——UpReqAlgebra (d)1 冻结条款同款（nat 嵌入跨接口不可
@@ -77,7 +77,7 @@
         RealDifferentiable 为 Real 层 Record（L44447），非接口字段——实例层
         地基（规划书 §1.1 边界 1「对岸」）；其 interface-level 代数/序余件
         （Part 3）已迁，Q 逐点件（real_abs_le_extract/real_le_pointwise_eps 及
-        real_abs_prod_le_eps 的 Q 逐点上游）随 E196 绕行条款冻结（基座 L47116
+        real_abs_prod_le_eps 的 Q 逐点上游）随 判例绕行条款冻结（基座 L47116
         自注：Real 层无 0 ≤ |a|，乘积界走逐点——setoid plain 形不可导出，同
         UpReqAlgebra (d)3 冻结条款）。
    3. [签名变化] minp_dropped_mass 的 minus → req_minus（= plus a (opp b)，
@@ -89,11 +89,11 @@
       bound/boltzmann_diff_bound/bound_eps 的 e^{E_max/D}、e^{|u−v|}、e^{Ulips}
       逐位对应（req_Emax_exp/req_eulips 缩写定义 δ 透明）；real_abs_nonneg_req
       （基座 工具 D，le Or 分解）→ req_abs_nonneg_id_or（Or 形前提）；基座
-      real_abs_prod_le_eps（Q 逐点乘积界，E196 冻结）的 B3c 乘积段改走
+      real_abs_prod_le_eps（Q 逐点乘积界，依判例冻结）的 B3c 乘积段改走
       le_mult_compat/req_le_mult_compat_r 双段单调 + req_le_zero_mult_pos_l
       （le zero (p·x) 接口级导出：le 字段抽象不可分解下的非负积引理）——
       全部真证，无新增冻结件。
-      断点修复 5 处（正向修复，零缩水零掉 Qed）：
+      中断修复 5 处（正向修复，零缩水零掉 Qed）：
       a. req_temp_factor_max_eq：mult_assoc 方向反（外层 req_sym 后需再翻回，
          显式 req_sym + mult_assoc）；
       b. req_minp_scaled_sum_ge_max：assert Hk 块尾多一枚 `}`（盘故障重复写）；
@@ -546,7 +546,7 @@ Proof.
   - apply (lt_le_iff min_p one). left. exact min_p_lt_one.
 Qed.
 
-(* pick_max 的 tf 单项 ≤ alb_minp_temp_sum（temp_factor_max_le_sum L31328 核心腿；
+(* pick_max 的 tf 单项 ≤ alb_minp_temp_sum（temp_factor_max_le_sum L31328 核心肢；
    req_minp_temp_sum_pos 与 scaled_sum_ge_max 共用） *)
 Lemma req_pick_max_tf_le_minp_sum : forall prefix : list Token,
   le (alb_temp_factor prefix (pick_max_token prefix)) (alb_minp_temp_sum prefix).
@@ -922,7 +922,7 @@ Proof.
               (mult (inv_pos (alb_partition_temp prefix)
                              (req_partition_temp_pos prefix))
                     (alb_partition_temp prefix)))).
-      (* 盘故障断点修复（ ）：外层 req_sym 已翻转目标，
+      (* 盘故障中断修复（ ）：外层 req_sym 已翻转目标，
          assoc 步实为 mult_assoc 之对称——req_sym 显式翻回（正向修复）。 *)
       apply (req_sym
         (mult (alb_temp_factor prefix (pick_max_token prefix))
@@ -1264,7 +1264,7 @@ Definition alb_topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
   | false => inr (fun H => urb_id_false_true H)
   end.
 
-(* 诚实前提（基座 L32346 同位 Variable：排序正确性弱化 E211/E215 绕行） *)
+(* 诚实前提（基座 L32346 同位 Variable：排序正确性弱化 判例组绕行） *)
 Variable topk_pickmax_head : forall (K : nat) (prefix : list Token),
   (1 <= K)%nat -> alb_topk_keep K prefix (pick_max_token prefix).
 
@@ -2659,5 +2659,5 @@ End ReqKVQuantWorld.
    3. 登记表 2（nat 嵌入/argmin list 机器/RealDifferentiable 族/
       Q 逐点乘积界），续建未新增冻结件；新增诚实假设位 2 枚（bridge、
       transition_nonneg Or 形）均已逐位核对（头注登记表 1）。
-   4. 断点事故与修复：见头注登记表 4（5 处正向修复，快照链
+   4. 中断事故与修复：见头注登记表 4（5 处正向修复，快照链
 *)

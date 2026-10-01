@@ -26,7 +26,7 @@
 (*    B1(sup_compat)/B2(sup_log_exp_neg) 供给参数位（Real 层闭合件 =           *)
 (*    logd_log_compat_real / logd_log_exp_neg_real，G5）+ log_mult/        *)
 (*    log_inv_one_inv 接口分解。Id 原件 energy_in_log_boltzmann@:     *)
-(*    16116 的 req 签名独立组装（E387 双名异型：Id rewrite 链不可直连）。   *)
+(*    16116 的 req 签名独立组装（判例 双名异型：Id rewrite 链不可直连）。   *)
 (*  [参数位2] free_energy_boltzmann_bridge@UpSigMigrate:70 —— 消解             *)
 
 (*    参数位1 逐点恒等 → 逐点 p·e 两项分解（F6）→ sum_ext/sum_opp/sum_add/     *)

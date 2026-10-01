@@ -14,9 +14,9 @@
 (* ============================================================ *)
 (* UpReqResidWallEquiv.v *)
 (* *)
-(* 目的： GEO1 残墙三段定理化收账——G07 逐项可比墙 / S14 逐点界墙 /        *)
+(* 目的： GEO1 残墙三段定理化收束——G07 逐项可比墙 / S14 逐点界墙 /        *)
 (*        AlignIdUnclosed 参序钉定账，沿「B→Or 提升器 ⟺ rLPO」等价类范式。 *)
-(* 主件： rwl_resid_walls_lpo（残墙收账四参数位账）。 *)
+(* 主件： rwl_resid_walls_lpo（残墙收束四参数位账）。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpReqSquareWallEquiv。 *)
 (* 备注： 零公理、零假设负载；段一可比墙单向归约 rLPO（符号类强于判定     *)
 (*        基座，双向不开），与 snw/g05w 双向类分野如实入账。 *)
@@ -34,7 +34,7 @@
 (* 三段残墙实读定形与分类（WALL-1 结构性分野口径）：                    *)
 (*                                                              *)
 (*  段一 G07_KLWall.v:627（判定 2/3 负支链）：判定 2 所记「四项交错     *)
-(*    部分和下界」单引理缺口已由 E401 在盘闭合（klst_ep_four_terms /    *)
+(*    部分和下界」单引理缺口已由 判例 在盘闭合（klst_ep_four_terms /    *)
 (*    klst_exp_tangent_neg / klst_gibbs_core_strict_neg 全链，G07 内    *)
 (*    UpReqKLEnergy 成员；UpReqKLSTangent 头注核验在案）。残余墙 =      *)
 (*    「逐项可比前提」：KL 严格和无条件化需逐点 Or (p s ≤ q s) (q s ≤   *)
@@ -431,7 +431,7 @@ Definition rwl_aiu_swap_slot (F : Real -> Real -> Real) : Set :=
   forall p q : Real, real_eq (F p q) (F q p).
 
 (* ============================================================ *)
-(* Part 7：主件闭合——rwl_resid_walls_lpo（残墙收账四参数位账）            *)
+(* Part 7：主件闭合——rwl_resid_walls_lpo（残墙收束四参数位账）            *)
 (* ============================================================ *)
 
 Definition rwl_resid_walls_lpo :

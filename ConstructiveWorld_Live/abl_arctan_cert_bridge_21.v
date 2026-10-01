@@ -1,9 +1,9 @@
 (* ==========================================================================)
    abl_arctan_cert_bridge_21.v — X24' Real 证书桥预制（arctan' 轴一支援件）      
-   消融批 · 断点②判定接刀：Q 供给 4 件 → Real 层证书桥（独立新件）         
+   消融批 · 分段点②判定接刀：Q 供给 4 件 → Real 层证书桥（独立新件）         
    ── 件名 ──────────────────────────────────────────────────────────────────
    abl_arctan_cert_bridge_21 · X24' 预制 · 消融批          
-   ── 本片范围·数学使命（切片规格 ≤1h；X19' 登记册 §四·断点②「接续首刀」预制）：─────
+   ── 本片范围·数学使命（切片规格 ≤1h；X19' 登记册 §四·分段点②「接续首刀」预制）：─────
    依赖：Q 供给 4 件（abl_arctan_diff_19：无除法多项式核 abl9_wsq_ring_id /
    abl9_wincr_ring_id ＋分母非零除法形 abl9_wsq_div_id / abl9_wincr_div_id）。
    输出=Real 层证书桥——把 Q 层恒等式经 cauchy Real 承载件（real_inv_pos /
@@ -19,13 +19,13 @@
         8/15 界；早尾两支实算：real_inv_pos 早项=Qinv(D_N0) 同受 15/16 界，
         承 S03:L6685 定义形）——cauchy_real_arctan 域证书 b3rr_dom_r1 配形。
    构造性注记：桥止于「Q恒等式→real 层 real_eq 陈述」；主公式
-   abl9_atan_diff_formula 装配（phi 步界/常值判据/端点）仍属 9a-乙 主线断点，
+   abl9_atan_diff_formula 装配（phi 步界/常值判据/端点）仍属 9a-乙 主线分段点，
    本件不越界（供主公式装配直接Require 闭合）。
    ── 编译配方：──────────────────────────────────────────────────────────────
    source Live/toolchain/env.sh && bash cpu_guard.sh --
      rocq c -q -native-compiler no -Q /tmp/x24pool "" /tmp/x24pool/abl_arctan_cert_bridge_21.v
    （隔离池 /tmp/x24pool=x19pool 现势链真拷：S01–S11+abl_arctan_diff_16+
-   abl_arctan_diff_19 born-in-place 绿 .vo 共 15；S11 md5 d571b0c0 与
+   abl_arctan_diff_19 就地成段 绿 .vo 共 15；S11 md5 d571b0c0 与
    X19'/X19''登记册登记SAME（Live现势已漂，池以登记册认证值为准，保证与施工中
    件 19/20 同链）；abl_arctan_diff_20不入池（X19'' 施工中辖区，禁触）。
    Require 链退回 S11 单链，S12 出锥——承 X15''/X16/X19' 判定。）

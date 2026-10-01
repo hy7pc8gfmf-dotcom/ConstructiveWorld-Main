@@ -1,9 +1,9 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(*   阶段：FA2 第 3 批 Firewall 五桥（order 第 41-80 行面，        *)
+(*   阶段：FA2 三段 Firewall 五桥（order 第 41-80 行面，        *)
 (*   领地=Firewall 面；勿动 sumf 面=T1a、勿动 rows 1-40=T1b）      *)
 (*                                                              *)
 (* 消融对象：使用面 UpFirewallReq.v（587 行）Section FirewallReq   *)
-(*   五条温度严格层假设槽（FA2 判 N×5，坐标实测与工单一致）：        *)
+(*   五条温度严格层假设槽（FA2 判 N×5，坐标实测与总纲一致）：        *)
 (*     槽 1  req_entropy_temp_explicit        @ 使用面 L131-136   *)
 (*     槽 2  req_relative_entropy_temp_decomp @ 使用面 L137-143   *)
 (*     槽 3  req_energy_exp_temp_mono         @ 使用面 L144-146   *)
@@ -45,7 +45,7 @@
 (* 纪律：全 Set 层（req/Or/Not 用基座 Set 层定义，零 Prop 泄露）；   *)
 (*   公理面零新增；全 Qed 闭合；前缀 uabt1c_；语句全自现档源码       *)
 (*   逐字抽取（参序/命名/隐式位保持）。                              *)
-(* 四关留痕：attn/logs/g{1..4}-UpAblT1c_UpFirewallReq.log           *)
+(* 四检留痕：attn/logs/g{1..4}-UpAblT1c_UpFirewallReq.log           *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

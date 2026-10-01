@@ -8,8 +8,8 @@
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* UpReqGeomIter.v —— 第二轮非平凡补强 ①：策略迭代族 Real   *)
-(*   任务说明源＝第二轮非平凡补强-前十分析-.md R2-1（L9/L96）：    *)
+(* UpReqGeomIter.v —— 二段非平凡补强 ①：策略迭代族 Real   *)
+(*   任务说明源＝二段非平凡补强-前十分析-.md R2-1（L9/L96）：    *)
 (*   定理 4.8 的抽象层迭代收缩 KL(π*‖π_t) 以 (1−η)^t 几何收缩，        *)
 (*   在 Real 层按「单步消解件＋幂载体」归纳闭合（eps 形）。             *)
 (* ---------------------------------------------------------------- *)
@@ -548,7 +548,7 @@ Proof.
                     (geod_lsum n (fun i : nat => real_kl_term (r i) (p i) (Hr i) (Hp i))))
                  eps).
         + apply real_eq_refl.
-        + (* κ·eps + η·eps == (κ+η)·eps == 1·eps == eps（distrib 翻面，E406） *)
+        + (* κ·eps + η·eps == (κ+η)·eps == 1·eps == eps（distrib 翻面） *)
           apply (real_eq_trans _
                      (real_plus (real_mult eps (real_plus real_one (real_opp eta)))
                                 (real_mult eps eta))).

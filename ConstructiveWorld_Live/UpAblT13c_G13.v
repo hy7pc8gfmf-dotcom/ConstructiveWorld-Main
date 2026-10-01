@@ -31,7 +31,7 @@
 (*        → 两点世界行归一核 supply（half+half==one 纯接口代数链）          *)
 (*   位6 G13_EvictFam.v:468 detailed_balance（EvictIdReq req 层）           *)
 (*        → 源核缩放族 supply（配分正性由两点正和 discharge，零数据槽）     *)
-(* 最小 SumOver 实例构造（b D4 遗留工单兑现；照 T7b 两点包先例最小化）： *)
+(* 最小 SumOver 实例构造（b D4 遗留事项兑现；照 T7b 两点包先例最小化）： *)
 (*   全库 SumOver Class@S01:1398 零具体 Instance，abs_sum_le 字段系 W1 墙   *)
 (*   在两点/任意多点载体不可满足；单点状态空间上八字段全退化可构造          *)
 (*   （abs_sum_le 退化为 le_refl）——uab_ssUnit+uab_soUnit 即最小 SumOver   *)
@@ -41,7 +41,7 @@
 (*   由两点正和 discharge（plus_positive+exp_neg_pos），非显式参。          *)
 (* 分级：位1/2/4/5 = N3（实例供给）；位3/6 = N3（实例供给·核族构造）。      *)
 (* 依赖（只读使用，原树零改）：CW_ConstructiveWorld_219、G13_EvictFam。    *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblc_*                         *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblc_*                         *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -207,7 +207,7 @@ Lemma uabT13c_swap_req_gen :
     req (mult (p s) (mult (p s') c)) (mult (p s') (mult (p s) c)).
 Proof.
   intros p c s s'.
-  (* 命名见证拆解：左结合 → 交换兼容位（comm+refl 双腿）→ 右结合逆，
+  (* 命名见证拆解：左结合 → 交换兼容位（comm+refl 双肢）→ 右结合逆，
      req_trans 中项逐位显式闭合 *)
   pose proof (mult_assoc (p s) (p s') c) as Hassoc_l.
   pose proof (req_mult_compat (mult (p s) (p s')) (mult (p s') (p s)) c c

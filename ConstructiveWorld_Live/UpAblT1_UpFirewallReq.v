@@ -45,7 +45,7 @@
 (*                                                              *)
 (* 备注：语句面全集合层（req/le/lt 均集合值谓词；非空前提之 Not 位             *)
 (*   与 UpReqSumD 同形同阶）；公理面零新增；文尾逐件 Print Assumptions         *)
-(*   收尾。四关留痕：Live_X/attn/logs/g{1..4}-UpAblT1_UpFirewallReq.log。       *)
+(*   收尾。四检留痕：Live_X/attn/logs/g{1..4}-UpAblT1_UpFirewallReq.log。       *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

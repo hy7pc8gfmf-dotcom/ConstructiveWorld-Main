@@ -1,140 +1,33 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ===================================================================== *)
-(*   基准：ConstructiveWorld-Main/ConstructiveWorld_Live 565 注册面（只读）。 *)
-(*   性质：同名非平凡替换稿——声明序与语句逐字保留，仅换下列玩具证明体。     *)
-(*   替换清单（本件）：对偶三件（温度／平方见证／半温标：定义面展开至公共规约基后自反闭合）＋平方见证件（两倍乘分配律闭项内联，消 req_two_mult 转发跳）＋零之相反数件与右零差件（加逆唯一性双层转发就地重演至加消去律闭项）。                                            *)
-(*   非平凡性口径：①定义层受控展开（对偶定义面 unfold 至公共 Boltzmann    *)
-(*   规约基／req_minus 定义面展开／积对运算 unfold 至分量基）＋            *)
-(*   ②显式闭项 witness（加逆唯一性闭项逐肢直供／平方见证 distrib 闭项）＋  *)
-(*   ③结构性推导（构造子分判 iotas 折叠／加消去律双层转发就地重演／        *)
-(*   换轨新链：三中心节点重组与断言拆题命名桥）。                              *)
-(*   遗留（本件不可化批量标注）：分区/软最大正性族与逐出分区族（转发对象为节假设位/在件引理，改写即同项转述或需整链重演，如实遗留不硬编）。                                  *)
-(*   全文件零禁词面（承认／弃权／参数化悬置／猜想／中止均零）；全真配平。   *)
-(* ===================================================================== *)
-
-(* ============================================================ *)
+(* 同名非平凡替换稿（基准：Live 565 注册面，只读）——声明序与语句逐字保留，仅换   *)
+(*   玩具证明体。替换清单：对偶三件（温度/平方见证/半温标：定义面展开至公共规约   *)
+(*   基后自反闭合）＋平方见证件（两倍乘分配律闭项内联）＋零之相反数件与右零差件   *)
+(*   （加逆唯一性双层转发就地重演至加消去律闭项）。非平凡性口径：①定义层受控     *)
+(*   展开＋②显式闭项 witness＋③结构性推导。遗留（如实）：分区/软最大正性族与    *)
+(*   逐出分区族（转发对象为节假设位/在件引理，如实遗留不硬编）。全文件零禁词面。  *)
+(* ========================================================================== *)
 (* UpReqAttnGibbs.v *)
-(* *)
 (* 目的： 注意力 Gibbs/softmax 族的 req 层构造与温度正性。 *)
 (* 主件： ag_softmax_mix_normalized / ag_softmax_is_prob 归一化族与 ag_partition_function_temp_pos。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist、UpReqCauchy。 *)
 (* 备注： 配分函数温度正性为接口前提；softmax 混合归一化经求和接口三定律承担。 *)
-(* ============================================================ *)
-
-(* UpReqAttnGibbs.v — 签名迁移批 4 主件：AttentionGibbsBridge 簇首段连贯子链 req 化
-   源文件：签名迁移规划书-.md 批 4 清单；
-   Id 原件：CW_ConstructiveWorld_219.v Section AttentionGibbsBridge L27929-30669
-     （首段 = softmax 家 L27950-28600）。
-   前置锚（规划书明示直接依存，零重建）：
-     基座 Setoid 节已迁 7 件（L66137-66414）：exp_pos_fn_setoid /
-       partition_function_setoid / partition_function_pos_setoid / softmax_setoid /
-       softmax_pos_setoid / softmax_normalized_setoid / exp_neg_req_compat_setoid；
-     UpReqDist ReqSoftmaxDual req softmax 族：reqd_softmax_scaled /
-       reqd_softmax_temp_param / reqd_scale_temp_duality / reqd_sqrt_witness。
-   ----------------------------------------------------------------
-   纪律：纯构造性；Set 层语句；纯 term-mode（req_trans 链 + compat 桥，
-   零 Morphisms）；诚实接口假设位逐位保留；全部 coqc/coqchk 经 cpu_guard。
-   ----------------------------------------------------------------
-   覆盖核对（req 件名 -> Id 原件 @ 行号）：
-   【首段 14】ag_softmax_mix_normalized<-28023 ag_softmax_is_prob<-28073
-     ag_partition_function_temp_pos<-28094 ag_softmax_temp_pos<-28109
-     ag_softmax_temp_normalized<-28119 ag_softmax_temp_mix_normalized<-28147
-     ag_softmax_temp_relative<-28196（Boltzmann 约定对位，因子换 exp_neg） ag_partition_function_scaled_pos<-28444
-     ag_softmax_scaled_pos<-28460 ag_softmax_scaled_normalized<-28471
-     ag_temp_is_scale_duality<-28537 ag_sq_witness_4<-28555
-     ag_scale_sqrt_witness_dual<-28565 ag_half_scale_is_temp_two<-28577
-   【已迁 7（基座 Setoid 节，直接依存不重迁）】
-     partition_function_pos<-27962 softmax_pos<-27980 softmax_normalized<-27991
-     attention_is_gibbs<-28606 steady_state_boltzmann_attn<-28722
-     boltzmann_normalized_attn<-28802 exp_neg_req_compat_setoid<-66223。
-     1. softmax_gap_concentration<-28282：集中不等式需逐 eps 有界和机器
-        （min/r_max 家 req 场未建）；密度低，留批 5。
-        ——组5扫尾件 解冻：机器三件 + 平移件结果（尾增量节）；
-        Id 证明路径核读实为纯代数（relative + exp 单调 + mult 保序），
-        机器缺口与语句可迁性解耦，对照见增量节头注。
-     2. temperature_zero_limit<-28337：T→0 极限语义需 lim/metric 因果链
-        （接口字段在而链长 >30 步）；留批 5。
-        ——组5扫尾件 解冻：lim 簇依存（UpReqCauchy req_r_pow 系
-        + exp_neg_geo_break 假设位 r_arch_pow 同位平移）+
-        ag_hard_attention_collapse_eps 逐 eps 完成结果（尾增量节）。
-     3. list 机器 13 件：规划书 (d) 明示冻结复用（evicted/list 段，L29360 起）。
-     4. boltzmann 块余件（attention_is_gibbs_temp<-28634 /
-        scale_inv_T_eq_softmax_temp<-28679 / scaled_attention_is_gibbs_temp<-28694 /
-        eviction 簇<-29360 起）：已由中后段件 结果（见下核对）。
-   【非平凡性分级】真证：ag_softmax_temp_relative（exp 加法同态 + 换位链）/
-     aux_alpha_plus_omda / ag_softmax_temp_pos 家 / ag_softmax_scaled_pos 家 /
-     ag_partition_function_*_pos；组装（Id 链 req_trans 重放）：
-     ag_softmax_mix_normalized / ag_softmax_temp_normalized /
-     ag_softmax_scaled_normalized / ag_softmax_temp_mix_normalized /
-     ag_softmax_is_prob；幂等δ对偶：ag_temp_is_scale_duality /
-     ag_half_scale_is_temp_two（req_refl 级，依存 reqd_scale_temp_duality）；
-     对位验证（见证核算）：ag_scale_sqrt_witness_dual（Hw 仅语句核算，
-     证明路径 = reqd_scale_temp_duality，与  同构）。
-   ----------------------------------------------------------------
-   【boltzmann 块 3】ag_attention_is_gibbs_temp<-28634（节内参数化
-     softmax_temp_r 形；e^{+z/T} 约定副本保留，因子不换号；撞车核对：
-     UpSigMigrate.v req_attention_is_gibbs_temp 为批 0 试点 fixed-z 形
-     + exp_neg 兼容桥假设申报位，本节件为 scaled 合成子链组件，
-     ag_ 前缀并存不覆盖）
-     ag_scale_inv_T_eq_softmax_temp<-28679（约定换位登记表：Id 两侧同
-     e^{+} 字面闭合，req 侧跨 reqd_softmax_scaled 引擎须真桥，缩放
-     系数换号 c := opp(1/T)；真证）ag_scaled_attention_is_gibbs_temp<-28694（组装）。
-   【eviction 簇 11】ag_sum_opp<-15820 ag_sum_minus<-15830（节内重建）
-     ag_eviction_if_linear<-29405 ag_eviction_pointwise_le<-29420
-     ag_evicted_boltzmann_normalized<-29452 ag_eviction_partition_monotone<-29485
-     ag_eviction_if_le<-29509 ag_eviction_partition_le_full<-29526
-     ag_eviction_transition_full<-29540 ag_eviction_boltzmann_full<-29555
-     ag_eviction_steady_deviation<-29626。
-   【topk R 结论件 25】代数三辅件 ag_le_minus_le_zero<-29782
-     ag_le_plus_zero_l<-29793 ag_minus_plus_swap<-29804；
-     尾部家族 ag_top_k_tail_bound<-29719 ag_tail_plus_kept_full<-29732
-     ag_top_k_exchange<-29820 ag_eviction_tail_pointwise_le<-29845
-     ag_top_k_tail_antitone<-29872；kept 家 ag_boltzmann_factor_pos_attn<-30306
-     ag_kept_term_nonneg<-30312 ag_kept_term_le_factor<-30321
-     ag_inv_Z_le_inv_kept<-30363；TV 链 ag_inv_one_cc<-30372
-     ag_opp_zero_cc<-30380 ag_lt_minus_cc<-30389 ag_abs_neg_cc<-30399
-     ag_minus_zero_cc<-30410 ag_tv_pointwise_keep<-30419
-     ag_tv_pointwise_evict<-30477 ag_tv_if_split<-30494
-     ag_eviction_if_linear_else<-30505 ag_tv_pointwise<-30516
-     ag_tv_sum_decomp<-30532 ag_tv_sum_collapse<-30592
-     ag_topk_tv_identity_strict<-30638（主定理，Print Assumptions Closed）。
-   【参数化归一登记表】Id 固定 keep_dec 的 tail_mass/evicted_partition 与
-     keep_top_k 实例统一为 (k : S -> Set)+kd 可判定参数：故
-     ag_eviction_partition_le_full 一件覆盖 @29526+topk_kept_le_Zthermo<@30355，
-     ag_tail_plus_kept_full 一件覆盖 @29732+topk_kept_plus_tail_full<@30330。
-   【诚实接口新增（Id SumOver 字段副本，先例 UpReqDist L206/L1008）】
-     sum_le<-L1415 abs_sum_le_r<-L1431 req_lt_plus_compat_lt_le_h<-
-     ReqStrictOrderBridge L1468（req 集合oid类无混合 plus 兼容字段，
-     构造性序无两侧消去；lt_minus_cc 符号步依存）。
-   【冻结清单（中后段件逐件理由登记）】
-     5. top_k_majorization<-30047 / top_k_swap_no_gain<-30073 /
-        top_k_majorization_mem<-30264：证明引擎 = 计数/firstn/skipn/
-        排序 list 机器 13 件（规划书 (d) 冻结复用，Id/nat 层），req 层
-        无桥接引理，不迁；交换代数核已由三辅件 req 化铺好，引擎件解冻后
-        一行组装。
-     6. eviction_db_breaking_bound<-29385 / eviction_db_zero_full<-29573：
-        禁区（RestB ReqKVQuantWorld 领地，首件冻结清单明示）。
-        req_db_breaking_bound_eps@UpReqAlignRestB.v 自述对位为 L54841
-        real_db_breaking_bound_eps（Real 层 RealKVQuantMain 节），与
-        @29385 语句级异形（能量积界 vs invZ·T·(E·(U·eU)+(E·eps+eps'))
-        界；假设面 节 Variable vs keep/eps），对位已证明不立 →
-        eviction_db_breaking_bound 维持冻结终态；eviction_db_zero_full
-        引擎件（ag_eviction_transition_full/@29540 +
-     7. q_kernel/attention_step/收缩迭代簇<-28817-29330：他件领地，
-   【非平凡性分级（中后段）】真证：ag_attention_is_gibbs_temp（exp 兼容
-     桥+换位+inv_pos_ext）/ ag_scale_inv_T_eq_softmax_temp（跨约定真桥）/
-     ag_sum_opp ag_sum_minus ag_le_minus_le_zero ag_le_plus_zero_l
-     ag_minus_plus_swap ag_eviction_if_linear ag_eviction_pointwise_le
-     ag_eviction_if_le ag_eviction_transition_full ag_eviction_boltzmann_full
-     ag_eviction_steady_deviation ag_eviction_tail_pointwise_le
-     ag_boltzmann_factor_pos_attn ag_kept_term_* ag_inv_one_cc ag_lt_minus_cc
-     ag_abs_neg_cc ag_minus_zero_cc ag_tv_pointwise_* ag_tv_if_split
-     ag_eviction_if_linear_else ag_inv_Z_le_inv_kept（接口字段直引）；
-     组装（Id 链 req_trans 重放）：ag_evicted_boltzmann_normalized
-     ag_eviction_partition_monotone ag_eviction_partition_le_full
-     ag_top_k_tail_bound ag_tail_plus_kept_full ag_top_k_exchange
-     ag_top_k_tail_antitone ag_tv_sum_decomp ag_tv_sum_collapse；
-     合成：ag_scaled_attention_is_gibbs_temp ag_topk_tv_identity_strict。
-   ---------------------------------------------------------------- *)
+(* ========================================================================== *)
+(* 签名迁移批 4 主件：AttentionGibbsBridge 簇首段连贯子链 req 化（源：签名迁移    *)
+(*   规划书批 4 清单；Id 原件 CW_ConstructiveWorld_219.v Section                  *)
+(*   AttentionGibbsBridge L27929-30669，首段 = softmax 家 L27950-28600）。前置锚    *)
+(*   （规划书明示直接依存，零重建）：基座 Setoid 节已迁 7 件（L66137-66414：        *)
+(*   exp_pos_fn_setoid/partition_function_setoid 家/softmax_setoid 家/             *)
+(*   exp_neg_req_compat_setoid）；UpReqDist ReqSoftmaxDual（reqd_softmax_scaled/    *)
+(*   reqd_softmax_temp_param/reqd_scale_temp_duality/reqd_sqrt_witness）。纪律：    *)
+(*   纯构造性；Set 层语句；纯 term-mode（req_trans 链 + compat 桥，零 Morphisms）；  *)
+(*   诚实接口假设位逐位保留；全部 coqc/coqchk 经 cpu_guard。覆盖核对：首段 14 件    *)
+(*   ＋boltzmann 块 3 件（ag_attention_is_gibbs_temp 系，scaled 合成子链）＋        *)
+(*   eviction 簇 11 件＋topk R 结论件 25 件（主定理 ag_topk_tv_identity_strict，    *)
+(*   Print Assumptions Closed）；非平凡性分级：真证/组装（Id 链 req_trans 重放）/    *)
+(*   幂等δ对偶/见证核算四级；诚实接口新增三件（sum_le<-L1415/abs_sum_le_r<-L1431/   *)
+(*   req_lt_plus_compat_lt_le_h<-L1468，先例 UpReqDist L206/L1008）；冻结：list      *)
+(*   机器 13 件（规划书 (d) 冻结复用）、top_k_majorization 系（list 引擎未迁）、     *)
+(*   eviction_db 系（RestB 领地）、q_kernel/attention_step/收缩迭代簇（他件领地）。  *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

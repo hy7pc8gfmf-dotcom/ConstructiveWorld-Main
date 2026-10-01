@@ -28,7 +28,7 @@
 (*   ② Qeq 方程不 rewrite 进 Id-of-bool 语句面目标——Qeq 桥经        *)
 (*      qeq_imp_qle / qeq_leT' / qleT'_trans 组装（PC2 卡⑤生路）。   *)
 (*   ③ 系数比恒等式用 field 完成：分母非零副目标 q_neq_of_lt +       *)
-(*      q_fact_pos / Z 层 lia；Z 不等式 AA12 腿化（pql_nat_ratio_mono， *)
+(*      q_fact_pos / Z 层 lia；Z 不等式 AA12 肢化（pql_nat_ratio_mono， *)
 (*      乘法单调显式装配，零 Psatz）。                                *)
 (*   ④ 语句面全 Set 层（QltT/QleT/QleT'）；Prop 序仅证内转译。        *)
 (*                                                                 *)
@@ -338,7 +338,7 @@ Qed.
 (* ===== 件 5：系数比与相邻递减（S1 引擎） =====
 
    核心代数：c_k / c_{k+1} = (2n-k)(k+1)/(n-k) >= 1（k < n）
-   （Z 层：(n-k) <= (2n-k)(k+1)，AA12 腿 pql_nat_ratio_mono）。
+   （Z 层：(n-k) <= (2n-k)(k+1)，AA12 肢 pql_nat_ratio_mono）。
    系数比恒等式 field 完成。 *)
 
 Definition pdp_R (n k : nat) : Q :=

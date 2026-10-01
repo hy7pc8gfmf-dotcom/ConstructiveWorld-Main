@@ -38,7 +38,7 @@
    source Live/toolchain/env.sh && bash cpu_guard.sh --
      rocq c -q -native-compiler no -Q /tmp/x41pool "" /tmp/x41pool/abl_arctan_diff_41.v
    （cwd=/tmp/x41w 异地空目录——承 X19'' 殁因勘定：cwd 残留 vo 与池 -Q 单根
-   二义。绿判四件套：EXIT=0/零 Error/vo 魔数 436f7121 00015ff4/vo 新于 v。）
+   二义。绿判四要素：EXIT=0/零 Error/vo 魔数 436f7121 00015ff4/vo 新于 v。）
    ========================================================================== *)
 
 Require Import S01_BaseRing.

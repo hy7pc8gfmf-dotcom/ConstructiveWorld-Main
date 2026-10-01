@@ -1,7 +1,7 @@
 (* ===================================================================== *)
-(* 【工单面外扩展件标注】本件为工单面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
+(* 【面外扩展件标注】本件为面外扩展件（C4 #13 T_pos 族，已证结论沿 W12 *)
 (*   形态实例层消解），候合并方甄别确认；若属已补强保留区请退回。 *)
-(* A 区五字段（工单 §5.1）： *)
+(* A 区五字段（总纲 §5.1）： *)
 (* ① 模块名+数学使命：UpAblP6_TempDefs.v——单点求和载体上温度化 *)
 (* Boltzmann 装配件：配分函数/温度化分布/能量期望/熵显式式全 Set 层形式化。 *)
 (* ② 依赖清单：CW_ConstructiveWorld_219；尾部插入供给段另 Require UpReqConcFin2 *)
@@ -45,7 +45,7 @@
 (*     ⑩log invZ 辅助＝log 乘法拆解＋群律闭合（独立链真证）；             *)
 (*     ⑪点态负 log 恒等＝⑩＋exp log 桥（独立链真证）；                    *)
 (*     ⑫熵显式主＝点态换形→distrib→分和→β/logZ 双提取（独立链真证，     *)
-(*       源模块 E404 配方在自持载体上复核）。                               *)
+(*       源模块 判例配方在自持载体上复核）。                               *)
 (*   纪律：零 Require UpReqTempDefs（防混代际）；纯构造性；语句面零 Prop    *)
 (*     泄露（全 real_eq/real_lt 值面）；全 Qed；尾 7 Print Assumptions。   *)
 (* ===================================================================== *)
@@ -305,7 +305,7 @@ Definition uap6t_entropy_dist
   uap6t_sum1 (fun s : unit => real_mult (p s) (real_opp (real_log (p s) (Hp s)))).
 
 (* 参数位⑫（A）：熵显式主——点态换形→distrib→分和→β/logZ 双提取
-   （源模块 E404 配方在自持载体上复核，独立链真证） *)
+   （源模块 判例配方在自持载体上复核，独立链真证） *)
 Theorem uap6t_entropy_temp_explicit :
   real_eq (uap6t_entropy_dist uap6t_dist uap6t_dist_pos)
           (real_plus (real_mult (real_inv_pos T T_pos) uap6t_energy_exp)

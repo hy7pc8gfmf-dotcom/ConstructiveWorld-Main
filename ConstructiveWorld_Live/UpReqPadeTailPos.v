@@ -20,7 +20,7 @@ From Stdlib Require Import Setoid Morphisms.
 
 (* ===== S1 阶乘面 ===== *)
 
-(* 任一阶乘 ≥ 1（具体自然数界面：归纳于指标，后继步双腿 r 型乘法）。 *)
+(* 任一阶乘 ≥ 1（具体自然数界面：归纳于指标，后继步双肢 r 型乘法）。 *)
 Lemma pbp_qfact_ge1 : forall k : nat, QleT' 1%Q (q_fact k).
 Proof.
   induction k as [| j IH].
@@ -40,7 +40,7 @@ Qed.
 
 (* 阶乘单调（Set 层 ≤ 面）：a ≤ b ⟹ a! ≤ b!。
    路线：Nat 桥 lia（i ≤ j）→ q_fact 后继展开（exact 转换面折叠）
-   → 双腿 Qmult_le_compat_r（先换序成右因子位，ring 归一两端）。 *)
+   → 双肢 Qmult_le_compat_r（先换序成右因子位，ring 归一两端）。 *)
 Lemma pbp_qfact_mono : forall a b : nat, (a <= b)%nat -> QleT' (q_fact a) (q_fact b).
 Proof.
   intros a b. revert a.
@@ -90,7 +90,7 @@ Proof.
   - apply Qinv_lt_0_compat. apply q_fact_pos.
 Qed.
 
-(* β_m ≥ 下界见证：分子 ≥ 1·1（双腿阶乘 ≥ 1），同除正分母
+(* β_m ≥ 下界见证：分子 ≥ 1·1（双肢阶乘 ≥ 1），同除正分母
    （S03 q_le_div_le 同分母比较面）。 *)
 Lemma pbp_beta_ge_lb : forall n m : nat, QleT' (pbp_beta_lb n m) (pbp_beta n m).
 Proof.
@@ -168,7 +168,7 @@ Proof. intros n m. apply q_neq_of_lt. apply q_fact_pos. Qed.
 (* ===== S3 副件二：符号传送预备面（接口显式留白，不硬连 C-T1a） ===== *)
 
 (* Qeq 右换桥（本件最小传桥接引理）：a == b 时 0<a 传 0<b。
-   AA12 腿化：一跳 UpReqPadeQLeg.pql_qlt0_eq_r（语句面不变，
+   AA12 肢化：一跳 UpReqPadeQLeg.pql_qlt0_eq_r（语句面不变，
    原件 Require Psatz 的环境闭包公理三件随之不引入）。 *)
 Lemma pbp_qlt0_eq_r : forall a b : Q, a == b -> Qlt 0 a -> Qlt 0 b.
 Proof.
@@ -317,7 +317,7 @@ Proof.
   - apply Qinv_lt_0_compat. apply q_fact_pos.
 Qed.
 
-(* ===== β 标记族（S3 检验 fractions 精确对表） ===== *)
+(* ===== β 标记族（S3 检验 fractions 精确对照） ===== *)
 
 Lemma ptp_beta_n1_0 : ptp_beta 1 0%nat == (1#6).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
@@ -344,7 +344,7 @@ Lemma ptp_beta_n2_2 : ptp_beta 2 2%nat == (1#105).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
 
 (* 首项闭式实例：(n!)^2/((2n)!(2n+1)!)——n=1 得 1/12（y^3 位首系数
-   带 (−1)^1 符号），n=2 得 1/720（y^5 位首系数偶号正），与修正令②对表 *)
+   带 (−1)^1 符号），n=2 得 1/720（y^5 位首系数偶号正），与修正令②对照 *)
 Lemma ptp_beta_n1_first : ptp_beta 1 0%nat / q_fact 2 == (1#12).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
 
@@ -352,7 +352,7 @@ Lemma ptp_beta_n2_first : ptp_beta 2 0%nat / q_fact 4 == (1#720).
 Proof. vm_compute. unfold Qeq. simpl. lia. Qed.
 
 (* ===== 保底件一：n=1 截断多项式恒等式（全称 y） =====
-   系数 −1/12, −1/24 与全级数 −β_m/(2!·m!) 精确对表（m=0,1），
+   系数 −1/12, −1/24 与全级数 −β_m/(2!·m!) 精确对照（m=0,1），
    y^5 项 −1/48 为 exp_partial 4 的截断窄条。 *)
 Lemma ptp_n1_poly : forall y : Q,
   exp_partial 4 y * pade_den 1 y - pade_num 1 y
@@ -403,7 +403,7 @@ Separate Extraction ptp_beta_pos ptp_beta ptp_beta_prefix
 (*       == −((1#2)·prefix_1 k y) − ((1#2)·y^{S(3+k)}/(3+k)!)     *)
 (*   两处 (−1#2) 即 (−1)^1 符号面显式（奇 n 负尾）；偶 n 对偶形由    *)
 (*   ptp_n2_poly 正号实例承贴。N=3/N=4 闭式与 ptp_n1_poly 逐系数    *)
-(*   对表（ptp_series_n1_N3/N4 + recheck + y=1/2 数值核对）。       *)
+(*   对照（ptp_series_n1_N3/N4 + recheck + y=1/2 数值核对）。       *)
 
 (*   merge 乘法形（纯变元 field）→ ptp_div_clear_r 交叉乘消去       *)
 (*   （Qmult_inj_r + q_fact_pos 正性）→ 清分母后 field 完成。       *)
@@ -837,7 +837,7 @@ Proof.
   apply (ptp_tail_series_k (N - 3) y).
 Qed.
 
-(* —— 6. 核对标记：N=3/N=4 闭式与 ptp_n1_poly 逐系数对表；
+(* —— 6. 核对标记：N=3/N=4 闭式与 ptp_n1_poly 逐系数对照；
    y=1/2 数值两侧同值（reflexively 一致）。 —— *)
 
 Lemma ptp_series_n1_N3 : forall y : Q,
@@ -1290,7 +1290,7 @@ Proof.
   - replace (Datatypes.S n + 0)%nat with (Datatypes.S n)%nat by lia.
     change (exp_partial (Datatypes.S n) y) with
       (exp_partial n y + q_pow y (Datatypes.S n) / q_fact (Datatypes.S n)).
-    (* 除法原子化：ring 不吃 Qdiv 原子（E232 同款坑） *)
+    (* 除法原子化：ring 不吃 Qdiv 原子（判例 同款坑） *)
     set (T := q_pow y (Datatypes.S n) / q_fact (Datatypes.S n)).
     apply qeq_imp_qle. ring.
   - replace (Datatypes.S n + Datatypes.S d)%nat

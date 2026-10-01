@@ -1579,7 +1579,7 @@ End ReqTempEntropy.
 (*     （Hpb）：req 系 reqd_entropy_dist 的正性位 proof-relevant，抽象   *)
 (*     pb 无见证不可类型化——信息与 Id 逐位等价（正性即数据）。     *)
 (*   3. dual_closed 各约束口结论改 req/le 形（Id 系 Id→req 常规）。 *)
-(* 本文件合计：14 Qed = 批 2 五件 [1]-[5] + 本批 3 助手 + 6 件      *)
+(* 本文件合计：14 Qed = 批 2 五件 [1]-[5] + 本件 3 助手 + 6 件      *)
 (*   [6]-[11]（全部纯构造性；Set 层语句零 Prop 泄露；纯 term-mode，  *)
 (*   零 Morphisms）。节参数不变（温度层只依赖 Z_temp 接口）。        *)
 (* 使用入口不变：Require Import UpReqTempEntropy.（+          *)

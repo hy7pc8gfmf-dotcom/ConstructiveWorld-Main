@@ -26,7 +26,7 @@
 (* 分级（禁注水如实申报）：M1=6 槽 T·供给级合并申报；                              *)
 (*   M3=T（real_lt_zero_one 一行直接给出）。W 位零施工。                               *)
 (* 依赖：CW_ConstructiveWorld_219（只读使用）；零 git、零注册面。                   *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S6_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1S6_*.{log,exit}                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

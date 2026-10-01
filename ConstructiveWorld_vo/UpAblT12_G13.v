@@ -13,7 +13,7 @@
 (*                                                              *)
 (* 分级：3 件全 N1（库内实例化消解件直连；证明体非平凡内容在实例化消解件本体——               *)
 (*   列表归纳链 sumd_list_sum_*@UpReqSumD，本件直连不注水）。                    *)
-(*   本批辖区无 pos/zero_nonneg 面（节内仅 linear/add/ext 三槽，源注自证）。      *)
+(*   本件辖区无 pos/zero_nonneg 面（节内仅 linear/add/ext 三槽，源注自证）。      *)
 (*                                                              *)
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。          *)
 (*   语句面逐字抽取自现档 G13_EvictFam.v（两树逐字节同验：Main/Live_X           *)

@@ -114,7 +114,7 @@ Definition rdl_pistar_pos : forall s : S, lt zero (rdl_pistar s) :=
 (* ============ 主件 1：fold 外延 req 载体（(b) 化逐点改述） ============ *)
 
 (* InT 限制形：逐元素 req 前提 ⟹ fold 全体 req。真证：list 归纳 +
-   req_plus_compat 双腿链（头元素换形 + 尾栈归纳运输），零函数外延性。
+   req_plus_compat 双肢链（头元素换形 + 尾栈归纳运输），零函数外延性。
    （Id 泛型 fold_right_ext L20160 的 DPO 实例 req 同位；先例 u2_kl_arg2_ext） *)
 Lemma rdl_fold_plus_ext_on :
   forall (f g : Preference -> R) (l : list Preference),

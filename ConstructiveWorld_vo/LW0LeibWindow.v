@@ -1001,7 +1001,7 @@ Proof.
   repeat split; vm_compute; reflexivity.
 Qed.
 
-(* Set 交付面提取（G3 关：提取面魔数计数须为零；E887 卡：9.1 须前置 Require） *)
+(* Set 交付面提取（G3 关：提取面魔数计数须为零；判例卡：9.1 须前置 Require） *)
 From Stdlib Require Import Extraction.
 Separate Extraction leiblw_dist_set leiblw_natwin leiblw_gap leiblw_nivwin.
 
@@ -1772,7 +1772,7 @@ Eval vm_compute in (projT1 leiblw_x0 6, projT1 leiblw_x0 7).
 Eval vm_compute in (Qabs (leiblw_t 20), (leiblw_env_hi 20 - leiblw_env_lo 20)%Q,
                     Qeq_bool (Qabs (leiblw_t 20)) ((leiblw_env_hi 20 - leiblw_env_lo 20)%Q)).
 
-(* G3 增强：真极限本体可提取（E979 判例：Real＝(Qseq,cauchy) sigT 提取零伪影） *)
+(* G3 增强：真极限本体可提取（既有判例：Real＝(Qseq,cauchy) sigT 提取零伪影） *)
 Separate Extraction leiblw_x0.
 
 (* 尾 Print Assumptions（§11 面：G4 关，PA 只增不破——承 219 二十一×Closed） *)

@@ -10,7 +10,7 @@
 (* 对标：E-STAGING-LW0-GAPASUME（缺口即后续段目标形，逐字承载）；            *)
 (*      E-STAGING-LW3-PROBEPIN（锚例值级 pin 走透明 exp_partial 面）；       *)
 (*      E-STAGING-LW0-NOEVALIFT（桥全走库件引理，零 eval 级拼接）；          *)
-(*      _tlw379 回执 §八尾款（本件使命源）。                                *)
+(*      _tlw379 记录 §八尾款（本件使命源）。                                *)
 (* 构造性：语句面全 Set（QltT/QleT' Id-bool 形、real_lt/real_eq 数据形、     *)
 (*      sigT/And 数据组合）；语句与前提位零 Prop；等词面仅证明体内；         *)
 (*      禁引六族零命中；提取并集数据名。                                    *)
@@ -198,7 +198,7 @@ Qed.
 
 (* ===== 7. E-槽组装（kills 缺口位显式前提承载） ===== *)
 
-(* kills 缺口位（E-槽余程施工单目标形，逐字）：
+(* kills 缺口位（E-槽余程施工目标形，逐字）：
    ∃M, 2|X| ≤ M+1 ∧ B_M < eps —— 阶乘压制的 eps-实例化，
    后续段闭合后本组装前提位减一。 *)
 Theorem tlw383_eslot_carrier : forall (X : Q) (eps : Q),

@@ -19,7 +19,7 @@
 (*   S7＝UpReqEntropy{MaxTemp,UniqueTemp,DeficitTemp,UniqueNeg}；             *)
 (*   S8＝UpReqPPOPlain＋UpReqTempDefs＋TempSoftmaxInstantiation（施工中落件，   *)
 (*   （L147/L149 lt_plus_compat_{lt,le}_i，T2b 广播件扩槽）与 D1-③ 已切 2 位     *)
-(*   （L152 sum_swap_i／L156 abs_ge_zero_i，E752 批），余 22 位按模块整体认领。    *)
+(*   （L152 sum_swap_i／L156 abs_ge_zero_i，判例系），余 22 位按模块整体认领。    *)
 (*                                                              *)
 (* 辖区：UpReqAttnIter.v Section ReqAttnIter（L93 起）22 槽：                    *)
 (*   R,RIS:94｜S:96｜sumf:97｜sum_ext:100｜sum_linear:102｜sum_add:105｜        *)
@@ -56,7 +56,7 @@
 (*   S08 real_two_pos:603+real_inv_one_local:1474／CW220_Extensions:777,1537）；    *)
 (*   UpReqAlgebra（req_plus_zero_l:81）；UpReqAlign（req_r_pow:512）；UpReqRDF 零涉。 *)
 (*   零 git、零注册面增量。                                                       *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S9_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1S9_*.{log,exit}                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

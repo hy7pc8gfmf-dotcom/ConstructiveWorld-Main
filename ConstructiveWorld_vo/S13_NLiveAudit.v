@@ -371,7 +371,7 @@ Fixpoint drho_dy (x y : Q) (srcs : list BumpSrc) : Q :=
   end.
 
 (* 确定性伪随机流（线性同余；构造性诚实：Coq 无真随机）。 *)
-(* 小常数 LCG：避开超大 nat 字面量的展开黑洞（E081 同源教训）。 *)
+(* 小常数 LCG：避开超大 nat 字面量的展开黑洞（判例同源教训）。 *)
 Definition lcg_next (s : nat) : nat := Nat.modulo (89 * s + 31) 97.
 
 Fixpoint prng (s : nat) (n : nat) : Q :=
@@ -664,7 +664,7 @@ Close Scope Q_scope.  (* _p9 全 nat/bool 层；解除 NCA 段引入的 Q_scope 
 (*   A. 监督调度器：卡点检测（尾部连续失败 ≥ 阈值）→ 强制子任务    *)
 (*      分解（复杂度严格下降）；焦点节奏 → 强制代理更替（焦点归一）；   *)
 (*      进度单调（已闭合计数不减）。                                *)
-(*   B. 诚信管线：零公理前提下"AI 生成内容可核验"四件套——           *)
+(*   B. 诚信管线：零公理前提下"AI 生成内容可核验"四要素——           *)
 (*      内容哈希锚（变化可检测）、三验一致（一票否决）、            *)
 (*      规格-实现逐字同步、禁语扫描（消灭夸大）；                   *)
 (*      递归自强化：验证产物经同一验证门入库（能力自举，           *)
@@ -737,7 +737,7 @@ Fixpoint sf_consec_fail (l : SFLog) : nat :=
     end
   end.
 
-(* E306 实录：b5j 连卡两代理 ⟹ 阈值取 2 触发强制分解。 *)
+(* 判例实录：b5j 连卡两代理 ⟹ 阈值取 2 触发强制分解。 *)
 Definition sf_is_stuck (k : nat) (l : SFLog) : bool := Nat.leb k (sf_consec_fail l).
 
 (* 卡点检测的活性：一次新失败让计数严格 +1（失败可被监督器感知）。 *)
@@ -803,7 +803,7 @@ Fixpoint sf_decompose (t : SFTask) (f : nat) : list SFTask :=
     :: sf_decompose t f'
   end.
 
-(* 分解破解的核心：子复杂度严格下降（E306：强制子引理分解破解连卡）。 *)
+(* 分解破解的核心：子复杂度严格下降（判例：强制子引理分解破解连卡）。 *)
 Theorem sf_sub_cx_descent :
   forall c f : nat, NatLe 1 c -> NatLe 1 f -> NatLt (sf_sub_cx c f) c.
 Proof.
@@ -1262,7 +1262,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1 Q 层工具（E307：Q 禁 lia，显式引理装配）                     *)
+(* §1 Q 层工具（判例：Q 禁 lia，显式引理装配）                     *)
 (* ============================================================ *)
 
 Lemma qleT_refl : forall x : Q, QleT' x x.
@@ -1308,7 +1308,7 @@ Fixpoint qsum_w (w : nat -> Q) (l : list nat) : Q :=
   | x :: rest => w x + qsum_w w rest
   end.
 
-(* 和的除法分配（E313：除法不经 Q-ring 的 Qminus 项；此处无 Qminus，field 安全） *)
+(* 和的除法分配（判例：除法不经 Q-ring 的 Qminus 项；此处无 Qminus，field 安全） *)
 Lemma qsum_w_div : forall (w : nat -> Q) (Z : Q) (l : list nat),
   (~ (Z == 0))%Q -> qsum_w (fun t => w t / Z) l == qsum_w w l / Z.
 Proof.
@@ -1343,7 +1343,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 选择核（best-携带扫描；不变式骨架＝E311-7；三分反映＝E311-6）   *)
+(* §2 选择核（best-携带扫描；不变式骨架＝判例7；三分反映＝判例6）   *)
 (* ============================================================ *)
 
 Fixpoint q_pick_aux {A : Set} (w : A -> Q) (l : list A) (best : A) : A :=
@@ -2778,7 +2778,7 @@ Proof.
 Qed.
 
 (* ====  基座消融波 T1 终判位49 前置引理组：bs_swap 槽由兄弟字段 enum+sum_eq_list 整体导出 ==== *)
-(* （照 P7BoundedSoftmaxDeep.v 同款归纳链 born-in-place 移植；禁 import 该件——order 反序）。零承认件 ==== *)
+(* （照 P7BoundedSoftmaxDeep.v 同款归纳链移植；禁 import 该件——order 反序）。零承认件 ==== *)
 Lemma bs_lsum_zero : forall l : list S, Id zero (bs_list_sum (fun _ : S => zero) l).
 Proof.
   intro l.

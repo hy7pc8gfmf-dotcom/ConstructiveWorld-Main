@@ -1,103 +1,32 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ========================================================================= *)
-(* 【ToyR 工程·· 】玩具级定理同名非平凡替换稿（补标头注）       *)
-(*                                                                           *)
-(* 本稿系 ToyR 工程 替换落件（原名落件）；落件时头部漏植工程标记，本块由  *)
-(*  于  补设：仅加头注，语句面／证明体／         *)
-(* Require 面                                                                *)
-(* 零改动；原头注紧随本块之后原样保留。来源刀面权威记录：消融50/。       *)
-(* 替换定理清单：rsq_bs_inv_hi_lo（共 1 刀）                                 *)
-(* 非平凡性口径：消去引擎体同款模板内联重演，消除单跳转发；无一行拆分式假    *)
-(* 非平凡。                                                                  *)
-(* 本稿零公理、零承认件、全闭合、纯构造性、无经典逻辑；落件时与本次补标      *)
-(* 抽验编译均验零承认。                                                      *)
-(* ========================================================================= *)
-(* ============================================================
-      切片二 ·  尾巴完成清理件二（UpReqSampling 同名替换，全中文零承认）
-   本件为基线原件的同名替换件：语句面、声明序、其余定理与版记头注逐字
-   保留；仅一条玩具级证明体在替换点重演：
-   rsq_bs_inv_hi_lo：req_mult_cancel_l 单跳引擎调用整体内联——取消引擎
-   在替换点具体化（首参 hi，被消左元为 inv_pos hi rsq_bs_hi_pos，右元
-   lo）：双锚断言（Hlb＝inv 与 hi·inv 之积回 inv、Hrc＝inv 与 hi·lo 之
-   积回 lo，各经 mult_assoc、req_mult_compat（inv_pos_correct 桥）与
-   req_mult_one_l 两步）＋取消假设 Hcancel（inv_pos_correct 与
-   rsq_bs_lo_hi_eq 的交换/对称桥）前置，三段闭合 req_trans 复合（中段
-   req_mult_compat 直接匹配取消假设，无交换桥——本方向输入形与乘积形同向）。
-   点名候选）；依存位语句面不变，依赖面零新增，Require 面与原件逐字一致。
-   ============================================================ *)
-(* ============================================================ *)
+(* 【ToyR 替换稿】同名非平凡替换落件：语句面/Require 面零改动；替换定理清单：     *)
+(*   rsq_bs_inv_hi_lo（req_mult_cancel_l 单跳引擎内联重演，非平凡）；零公理、      *)
+(*   零承认件、全闭合、纯构造性、无经典逻辑。                                     *)
+(* ========================================================================== *)
 (* UpReqSampling.v *)
-(* *)
 (* 目的： 采样核的 req 层副本：Doeblin 收缩与迭代预算面。 *)
 (* 主件： rsq_u_titer / rsq_bs_kernel 迭代核与 rsq_u_tr_decomp 分解。 *)
 (* 依赖： CW_ConstructiveWorld_219、UpReqAlgebra、UpReqDist。 *)
 (* 备注： 参考分布归一化与正性为 Variable 前提；一步分解为构造核。 *)
-(* ============================================================ *)
-
-(* UpReqSampling.v — 签名迁移批 4 保底件：UContraction + BoundedSoftmax 的 req 系重述
-   源版本：签名迁移规划书-.md 批 4 清单（BoundedSoftmax 23 + UContraction 11 = 保底 34 件）；
-   Id 原件：CW_ConstructiveWorld_219.v
-     Section UContraction     L95737-96039（11 件：Lemma/Theorem 计数，定义件另计）；
-     Section BoundedSoftmax   L96043-96356（23 件：21 Lemma + 2 Theorem，定义件另计）。
-     UpReqAlgebra（批 1 地基）：req_minus / req_minus_plus_congr_l / req_minus_factor /
-       req_minus_factor_pt / req_le_minus_nonneg / req_mult_cancel_l /
-       req_lt_id_r_loc / req_two_pos / req_le_mult_compat_r；
-     UpReqDist（批 2）：reqd_sum_minus / reqd_nat_to_R / reqd_nat_to_R_pos /
-       reqd_minus_compat / reqd_opp_zero / reqd_softmax_scaled / reqd_softmax_temp_param
-       （ReqSoftmaxDual 节 = 本文件 BoundedSoftmax 前置锚，规划书明示直接依存）；
-     基座：exp_neg_req_compat_setoid（L66223，规划书明示直接依存不再自建桥）。
-   ----------------------------------------------------------------
-   纪律：纯构造性；Set 层语句（req/lt/le 均 Set 值）；纯 term-mode
-   （req_trans 链 + compat 桥，零 Morphisms / 零 rewrite）；诚实接口假设位
-   ----------------------------------------------------------------
-   诚实签名变化登记表（Id -> req，逐件差异真证非抄写）：
-   1. minus：接口无字段，全文件用 UpReqAlgebra req_minus（δ 透明，req_minus a b
-     定义性 = plus a (opp b)）——Id 语句中 minus 一处不落。
-   2. u_norm / transition_row / 行归一：Id (sum ...) one -> req (sumf ...) one。
-   3. abs_ge_zero_id_cc（Id Variable，Id (abs a) a）-> abs_ge_zero_req
-     （le zero a -> req (abs a) a）：假设位保留，出口 Id 换 req。
-   4. lt_plus_compat_lt_le_h / sum_swap_cc：语句无 Id，逐字同位迁移。
-   5. attn_nat_to_R（绑定 Id 接口 plus/one）-> reqd_nat_to_R（绑定 setoid
-     运算，UpReqDist 真证件）：nat 到 R 换轨非抄写（UpReqDist 有 plus_hom/
-     mult_hom 真证）。
-   6. r_pow（Id L14071，绑定 Id 接口 mult/one）-> req_r_pow（本文件头，
-     setoid mult/one 同构 Fixpoint 重绑）。
-   7. sum_eq_list（req 化）+ enum_nonempty：Not (Id enum nil) -> Not (enum = nil)
-     ——req 仅定义在 R 上，list 层恒等走 Stdlib eq（构造性，Prop 位与 Id 原件
-     同阶）。
-   8. expf 迷你接口（Id 5 假设：pos/zero/plus/mono_lt/mono_le，Part C 消解其
-     可满足性）-> 本文件以 setoid exp_neg 具体化 exp_pos_fn := exp_neg (opp x)，
-     5 性质全部由接口字段 + exp_neg_req_compat_setoid 真证导出（epp_* 辅件）——
-     抽象假设位闭合为接口实例，零新假设（与基内 softmax_setoid 同锚）。
-   9. u_titer / u_r_kernel / Zrow / bs_kernel / Unif / delta_star / factor：
-     定义件 δ 同构迁移（minus -> req_minus，attn_nat_to_R -> reqd_nat_to_R）。
-   ----------------------------------------------------------------
-   覆盖核对（req 件名 -> Id 原件 @ 行号）：
-   【ReqUContraction 11】u_omd_pos_next<-95773 u_r_nonneg<-95787
-     u_r_norm<-95796 u_tr_decomp<-95813 delta_absorb_u<-95833
-     u_step_decomp<-95852 u_step_norm<-95991 u_abs_row<-96018
-     u_tv_contraction<-96034 u_titer_norm<-96014 u_tv_iter<-96022
-   【ReqBoundedSoftmax 23】bs_list_const_sum<-96085 bs_list_le_const<-96104
-     bs_list_ge_const<-96121 bs_nR_pos<-96140 bs_lo_pos<-96153 bs_hi_pos<-96156
-     bs_opp_lt<-96160 bs_lo_lt_hi<-96168 bs_lo_hi_eq<-96178
-     bs_delta_star_lt_one<-96187 bs_inv_hi_lo<-96194 bs_factor_ge_lo<-96202
-     bs_factor_le_hi<-96211 bs_Zrow_ge<-96221 bs_Zrow_le<-96229
-     bs_Zrow_pos<-96236 bs_kernel_pos<-96247 bs_kernel_nonneg<-96255
-     bs_kernel_row<-96260 bs_Unif_norm<-96274 bs_minorization<-96283
-     bounded_softmax_tv_contraction<-96328 bounded_softmax_tv_iter<-96341
-   【非平凡性分级】真证：u_tv_contraction / u_tv_iter / bs_minorization /
-     bs_lo_hi_eq / bs_lo_lt_hi / epp_* 家 / aux_le_mult_nonneg_t12 /
-     aux_delta_plus_omd / bs_kernel_eq_reqd_scaled（见证位桥）；
-     组装（Id 链 req_trans 逐段重放）：u_r_norm / u_tr_decomp / delta_absorb_u /
-     u_step_decomp / u_step_norm / u_abs_row / u_titer_norm / bs_list_* 家 /
-     bs_Zrow_* / bs_kernel_row / bs_Unif_norm / bs_factor_* / bs_opp_lt /
-     bs_inv_hi_lo / bs_delta_star_lt_one / bs_Zrow_pos / bs_kernel_pos /
-     bs_kernel_nonneg / bs_nR_pos；
-     幂等δ对偶：u_omd_pos_next 首段（omd δ 展开 req_refl 支路）；
-     对位验证（主依存）：bounded_softmax_tv_contraction / bounded_softmax_tv_iter
-   【冻结清单】本两节 34 件零冻结（Id 原件全部可 req 重述，无深链缺口）。
-     结论留档：Id expf 抽象接口不迁移（由 8 项具体化替代，Part C 消解位
-     随之退役，非冻结）。
-   ---------------------------------------------------------------- *)
+(* ========================================================================== *)
+(* 签名迁移批 4 保底件：UContraction + BoundedSoftmax 的 req 系重述（源：签名迁移   *)
+(*   规划书批 4 清单；Id 原件 CW_ConstructiveWorld_219.v Section UContraction       *)
+(*   L95737-96039（11 件）/ BoundedSoftmax L96043-96356（23 件）；前置锚：           *)
+(*   UpReqAlgebra（req_minus 族地基）、UpReqDist（ReqSoftmaxDual 节）、               *)
+(*   exp_neg_req_compat_setoid（L66223）。纪律：纯构造性；Set 层语句（req/lt/le      *)
+(*   均 Set 值）；纯 term-mode（req_trans 链 + compat 桥，零 Morphisms / 零 rewrite）； *)
+(*   诚实接口假设位逐位保留。诚实签名变化（Id -> req）：minus 全走 UpReqAlgebra       *)
+(*   req_minus；u_norm/transition_row/行归一 Id (sum …) one -> req (sumf …) one；      *)
+(*   abs_ge_zero_id_cc -> abs_ge_zero_req；lt_plus_compat_lt_le_h/sum_swap_cc 逐字    *)
+(*   同位迁移；attn_nat_to_R -> reqd_nat_to_R；r_pow -> req_r_pow；sum_eq_list/        *)
+(*   enum_nonempty 走 Stdlib eq；expf 迷你接口五性质由 setoid exp_neg 具体化真证       *)
+(*   导出（epp_* 辅件，零新假设）；u_titer/u_r_kernel/Zrow/bs_kernel/Unif/             *)
+(*   delta_star/factor 定义件 δ 同构迁移。覆盖核对：ReqUContraction 11 件与            *)
+(*   ReqBoundedSoftmax 23 件逐件对位 Id 原件行号在卷；真证件：u_tv_contraction/        *)
+(*   u_tv_iter/bs_minorization/bs_lo_hi_eq/bs_lo_lt_hi/epp_* 家/                       *)
+(*   aux_le_mult_nonneg_t12/aux_delta_plus_omd/bs_kernel_eq_reqd_scaled，余为 Id       *)
+(*   链 req_trans 逐段重放组装；本两节 34 件零冻结（Id expf 抽象接口不迁移，           *)
+(*   由 8 项具体化替代）。                                                            *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

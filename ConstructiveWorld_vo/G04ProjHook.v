@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -32,7 +32,7 @@
 (*      「Real 层同构转换」：two := 1+1、half := inv(two)、         *)
 (*      half+half==one 归一链逐段同构 fa57 簇四蓝图                 *)
 (*      （mult_one×2 → distrib → mult_comm → inv_pos_correct）。    *)
-(*   面 2 参序差（E346「用了谁泛化谁」，g4p_probe_sig 检验打表      *)
+(*   面 2 参序差（判例「用了谁泛化谁」，g4p_probe_sig 检验打表      *)
 (*      实证）：ZP_pos 六参无 f_norm；ZP_le_one 六参无 P_witness；  *)
 (*      proj_keep_ge／proj_minor_uncond 七参带 f_norm；             *)
 (*      proj_kl_cost 六节参无 f_norm；KLqf 连 P／P_witness 都不收   *)

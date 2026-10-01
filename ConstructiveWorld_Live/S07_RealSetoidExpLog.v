@@ -209,7 +209,7 @@ Class RealInterfaceSetoid (R : Set) := {
   log_inv_mult : forall a b Ha Hb Hm,
     req (log_inv (mult a b) Hm) (plus (log_inv a Ha) (log_inv b Hb));
 
-  (* metric 族（逐 eps 上界形式：Or 编码 le 无法表达"非严格且不趋近"，E152-5；
+  (* metric 族（逐 eps 上界形式：Or 编码 le 无法表达"非严格且不趋近"；
      metric_pos/metric_triangle 需加 eps 余量才可证） *)
   metric : R -> R -> R;
   metric_sym : forall a b, req (metric a b) (metric b a);
@@ -547,7 +547,7 @@ Proof.
         apply (Qabs_pos (Qabs (projT1 a k - projT1 b k)) (Qabs_nonneg (projT1 a k - projT1 b k))).
       * apply (Qabs_wd (Qabs (projT1 a k - projT1 b k)) (projT1 (real_metric a b) k)).
         apply Qeq_sym. exact Hproj.
-    + (* |metric_k| == |metric_k − 0|：Hzero 归约 real_zero 后 ring（E150-11：勿整目标 cbn） *)
+    + (* |metric_k| == |metric_k − 0|：Hzero 归约 real_zero 后 ring（判例：勿整目标 cbn） *)
       apply (Qabs_wd (projT1 (real_metric a b) k) (projT1 (real_metric a b) k - projT1 real_zero k)).
       assert (Hzero : projT1 real_zero k == 0) by (cbn [projT1]; reflexivity).
       rewrite Hzero. ring.
@@ -687,7 +687,7 @@ Proof.
         assert (Hc' : projT1 (real_const e) k == e) by (apply real_const_proj).
         assert (Hz' : projT1 real_zero k == 0) by (cbn [projT1]; reflexivity).
         rewrite Hc'. rewrite Hz'.
-        (* e/2 + e/2 == e − 0：Qopp 0 的 Qred 卡 ring（E149）→ Qeq_trans + Qred_correct *)
+        (* e/2 + e/2 == e − 0：Qopp 0 的 Qred 卡 ring（判例）→ Qeq_trans + Qred_correct *)
         transitivity e.
         * field.
         * unfold Qminus.
@@ -703,7 +703,7 @@ Proof.
   - apply (real_metric_lt_const_to_minus_comm u m n e (HN m n Hm Hn)).
 Qed.
 
-(* ============ Core 组装前置：metric 逐 eps 形式（接口字段已改，E152-5） ============ *)
+(* ============ Core 组装前置：metric 逐 eps 形式（接口字段已改） ============ *)
 
 (* metric_pos 逐 eps 形式：0 < eps ⟹ 0 ≤ metric a b + eps
    （Or 编码下 |u−v| ≥ 0 无法一致分离；加 eps 余量后可证：e < eps_n − 0 ≤ |u n−v n| + eps_n − 0） *)
@@ -787,7 +787,7 @@ Proof.
       * (* eps_n − 0 ≤ (A + eps_n) − A：两边 == eps_n *)
         apply qeq_le.
         transitivity (projT1 eps n).
-        -- (* eps_n − 0 == eps_n：E152-2（Qopp 0 的 Qred 卡 ring） *)
+        -- (* eps_n − 0 == eps_n（判例：Qopp 0 的 Qred 卡 ring） *)
            unfold Qminus.
            assert (Hopp0 : Qopp 0%Q == 0%Q).
            { transitivity (Qred (Qmake 0 1)).
@@ -907,7 +907,7 @@ Proof.
 Qed.
 (* ============ Core 实例组装：Real 满足 RealSetoidCore.RealInterfaceSetoidCore ============
    req := real_eq；缺口（exp_neg_plus / log_inv 族）属阶段 2，完整 RealInterfaceSetoid 届时组装。
-   metric_pos / metric_triangle 用逐 eps 形式（E152-5，Or 编码不可证）。 *)
+   metric_pos / metric_triangle 用逐 eps 形式（判例，Or 编码不可证）。 *)
 Instance Real_RealInterfaceSetoidCore : RealSetoidCore.RealInterfaceSetoidCore Real := {
   RealSetoidCore.req := real_eq;
   RealSetoidCore.req_refl := real_eq_refl;
@@ -968,7 +968,7 @@ End RealSetoid.
    内容：q_binom 二项式定理 + exp 层 Cauchy 积引理族（exp_cauchy_double / exp_trunc_decomp 等）
    依赖：q_fact/q_pow/sum_upto/exp_partial/exp_series 族（主文件已有）
    验证：coqc+coqtop 双验 + BAD=0（备份 100） *)
-(* Qred 透明（含 Z.ggcd 约分）卡 conversion——设为不透明，Qred 作原子处理（E160-12） *)
+(* Qred 透明（含 Z.ggcd 约分）卡 conversion——设为不透明，Qred 作原子处理（判例） *)
 Opaque Qred.
 
 Section ExpPlusStage2.
@@ -979,7 +979,7 @@ Section ExpPlusStage2.
 Definition q_choose (n k : nat) : Q :=
   q_fact n / (q_fact k * q_fact (n - k)).
 
-(* 边界：q_choose n 0 == 1（field 对 q_fact Fixpoint 原子失败（E149），手工链） *)
+(* 边界：q_choose n 0 == 1（field 对 q_fact Fixpoint 原子失败（判例），手工链） *)
 Lemma q_choose_0 : forall n : nat, q_choose n 0 == 1.
 Proof.
   intros n.
@@ -987,7 +987,7 @@ Proof.
   assert (Hsub : (n - 0)%nat = n) by lia.  (* n - 0 == n（lia 桥，%nat 防 Q 劫持） *)
   rewrite Hsub.
   simpl.  (* q_fact 0 == 1 计算归约 *)
-  (* q_fact n / (1 * q_fact n) == 1：Qinv_comp 换形分母 + Qmult_inv_r（field/rewrite 均遇 Qred，E149/E152-1） *)
+  (* q_fact n / (1 * q_fact n) == 1：Qinv_comp 换形分母 + Qmult_inv_r（field/rewrite 均遇 Qred） *)
   unfold Qdiv.
   transitivity (q_fact n * / q_fact n).
   - setoid_rewrite (Qmult_1_l (q_fact n)). reflexivity.
@@ -1147,7 +1147,7 @@ Proof.
            ++ setoid_rewrite <- (Qmult_assoc F (Z.of_nat (n + 1) # 1) (N * L)).
               setoid_rewrite (Qmult_comm (Z.of_nat (n + 1) # 1) (N * L)).
               reflexivity.
-        -- (* 段B2：分子分母换形链（setoid_rewrite，E152-11） *)
+        -- (* 段B2：分子分母换形链（setoid_rewrite） *)
            setoid_rewrite <- HZ.
            setoid_rewrite (q_mix_ring N L (Z.of_nat (n + 1 - k) # 1) (Z.of_nat k # 1)).
            setoid_rewrite <- (Qmult_assoc L (Z.of_nat (n + 1 - k) # 1) N).
@@ -1227,7 +1227,7 @@ Qed.
    g2 (S i) := C(n',S i)·a^(S i)·b^(S n'−S i)
    h (S i) := C(S n',S i)·a^(S i)·b^(S n'−S i)
    配对：C(n',i)+C(n',S i) == C(S n',S i)（q_choose_succ，S i − 1 == i）+ b 指数 lia 桥
-   （E152-13：q_pow 参数 nat 换形用 q_pow_comp_proper） *)
+   （判例：q_pow 参数 nat 换形用 q_pow_comp_proper） *)
 Lemma q_binom_pair_mid : forall (a b : Q) (n' i : nat),
   (i < n')%nat ->
   (q_choose n' i * q_pow a (Datatypes.S i) * q_pow b (Nat.sub n' i)) +
@@ -1275,7 +1275,7 @@ Proof.
 Qed.
 
 (* ===== q_binom_S：归纳步（前 4 步 + 第一小步 + 第二小步 Pascal 合并配对） =====
-   配对蓝图（E152-13）：LHS == Σ_{j≤n'+1} g1(j−1) + (Σ g2 − g1 0) == Σ_{j=1}^{n'+1} g1(j−1) + Σ_{j=0}^{n'} g2 j
+   配对蓝图（判例）：LHS == Σ_{j≤n'+1} g1(j−1) + (Σ g2 − g1 0) == Σ_{j=1}^{n'+1} g1(j−1) + Σ_{j=0}^{n'} g2 j
    配对：j=0（g2 0 == h 0，q_binom_pair_head）；j=1..n'（g1(j−1)+g2 j == h j，q_binom_pair_mid）；
         j=n'+1（g1 n' == h(S n')，q_binom_pair_tail）
    实现：LHS 重组 sum_upto_rot → 中间项 g2 0 + Σ_{i<n'} (g1 i + g2 (S i)) + g1 n'；
@@ -1652,7 +1652,7 @@ End ExpPlusStage2.
    验证：coqc+coqtop 双验 + BAD=0（备份 101） *)
 Section ExpPlusStage2b.
 
-(* ===== 截断误差上界：|三角 − 方块| ≤ 尾项控制（E161-6 追加） ===== *)
+(* ===== 截断误差上界：|三角 − 方块| ≤ 尾项控制（判例追加） ===== *)
 
 (* T1：求和绝对值三角不等式——|Σ f| ≤ Σ |f|（归纳于 n） *)
 Lemma sum_upto_abs_le : forall (n : nat) (f : nat -> Q),
@@ -2914,7 +2914,7 @@ Proof.
 Qed.
 (* ================================================================
    log 论证第三阶段（后续会话）：exp 值域 (0,∞) + 构造性 log
-   路线（E160-5 绕行定案）：Q 层近似测试二分（可判定）→ 近似根扫描
+   路线（判例绕行定案）：Q 层近似测试二分（可判定）→ 近似根扫描
    （缺陷情形返回中点）→ Lipschitz 柯西族 → 极限 = log y
    ================================================================ *)
 
@@ -3594,7 +3594,7 @@ Proof.
   - apply (real_mult_minus_factor (cauchy_real_exp s) (cauchy_real_exp (real_plus u (real_opp s)))).
 Qed.
 
-(* 实层松弛 ≥：a ≥ b（逐点差 < eps 对任意 eps）——Or 障碍绕行（E160-5） *)
+(* 实层松弛 ≥：a ≥ b（逐点差 < eps 对任意 eps）——Or 障碍绕行（判例） *)
 Definition real_ge_relax (a b : Real) : Set :=
   forall eps : Q, QltT 0 eps -> sigT (fun N : nat => forall n : nat, (N <= n)%nat ->
     QltT (projT1 b n - projT1 a n) eps).
@@ -5821,7 +5821,7 @@ Proof.
                                         eps (projT1 y n - projT1 x n)).
               - exact S1.
               - exact Heps_le. }
-            (* 换形到目标：eps/3 < y m - x m（S2 两侧恒等；含 Qinv 3 用 field，E149） *)
+            (* 换形到目标：eps/3 < y m - x m（S2 两侧恒等；含 Qinv 3 用 field） *)
             assert (Hleft : eps / 3 == (- (eps / 3)) + (- (eps / 3)) + eps).
             { unfold Qdiv. field. }
             assert (Hright : projT1 y m - projT1 x m ==
@@ -5877,7 +5877,7 @@ Proof.
                                       eps (projT1 x n - projT1 y n)).
             - exact S1.
             - exact Heps_le. }
-          (* 换形到目标：eps/3 < x m - y m（S2 两侧恒等；含 Qinv 3 用 field，E149） *)
+          (* 换形到目标：eps/3 < x m - y m（S2 两侧恒等；含 Qinv 3 用 field） *)
           assert (Hleft : eps / 3 == (- (eps / 3)) + (- (eps / 3)) + eps).
           { unfold Qdiv. field. }
           assert (Hright : projT1 x m - projT1 y m ==
@@ -5898,7 +5898,7 @@ Qed.
 (* 左逆：log(e^x) == x。路线：右逆 cw_log_exp_right 给 e^{log(e^x)} == e^x，
    cauchy_real_exp_mono 给 e 严格单调（x<y → e^x<e^y），
    结合 real_lt_not_eq（序 vs 相等不相容）得 ¬(u<x) ∧ ¬(x<u)，
-   最后由 real_weak_trich 得 u == x。绕开 E170"需弱三分不可证"的旧定案。 *)
+   最后由 real_weak_trich 得 u == x。绕开 判例"需弱三分不可证"的旧定案。 *)
 Lemma log_inv_exp_neg_thm : forall (x : Real) (H : real_lt real_zero (cauchy_real_exp x)),
   real_eq (cw_log (cauchy_real_exp x) H) x.
 Proof.
@@ -5999,9 +5999,9 @@ Proof.
 Qed.
 
 (* ============ DPO 有界三前置：Real 层闭合（并入，来自检验 _dbg_dpo_pre.v，14 引理）
-   结构性缺失.txt L475 缺口：real_log_lt_mono（log 严格递增，锚点法 E173-1）
+   结构性缺失.txt L475 缺口：real_log_lt_mono（log 严格递增，锚点法 判例）
    + real_inv_pos_lt_contra（inv 反单调）+ real_lt_plus_compat_le_lt/lt_le（混合加法保序）
-   + real_mult_lt_compat（乘法保序）。验证：coqc+coqtop 双验 + BAD=0（E173） *)
+   + real_mult_lt_compat（乘法保序）。验证：coqc+coqtop 双验 + BAD=0（判例） *)
 Section DpoPreludeMain.
 Section DpoPrelude.
 
@@ -6166,7 +6166,7 @@ End DpoPrelude.
 Section LogMono.
 
 (* ============ 4. real_log_lt_mono（log 严格递增） ============ *)
-(* 路线（锚点法，E170-10 同款）：
+(* 路线（锚点法；判例同款）：
    u := cw_log a Ha、v := cw_log b Hb。目标 real_lt u v（eps-N 直构）。
    a < b 给 eps0, N0：∀n≥N0, b_n − a_n > eps0。
    固定锚点 n0（log_eps n0 < eps0/8）。la0 := log_seq a Ha n0、lb0 := log_seq b Hb n0。
@@ -6950,7 +6950,7 @@ End FullInstance.
    req 版 RealInterfaceEnhanced（L195）独立接口 + Real 层实现 + Instance RealEnhancedReal。
    - Real 层引理（segA）名字与主文件无冲突（real_log 系列是 Section 内 Variable，End 后释放），直接追加。
    - 独立接口（39 字段全显式，不继承）：字段名与 RealInterface / RealSetoid.RealInterfaceSetoid
-     同名（zero/one/plus/req/...），Coq 顶层 Class 同名字段全局冲突（"zero already exists"，E175），
+     同名（zero/one/plus/req/...），Coq 顶层 Class 同名字段全局冲突（"zero already exists"），
      故接口 + 实例用 Module RealInterfaceEnhancedMod 隔离（模块内外记录字段名互不冲突，实验验证 RC=0）。
      Module 不能放 Section 内（Coq 限制），故接口段在 Section 外。
    - exp_neg 语义 = e^{-x}（Boltzmann）；log/log_inv 带正性前提；log_inv = -ln。 *)
@@ -7940,7 +7940,7 @@ Existing Instance Real_RealInterfaceSetoid.
    - 基类字段（环/序/inv/metric/lim/cauchy_complete，来自 RealInterfaceSetoid 同款）
    - exp_neg 语义 = e^{-x}（Boltzmann，与 RealInterfaceEnhanced L275-280 一致）
    - log/log_inv 带正性前提（构造性 log 需 x>0）；log_inv := -log
-   - 非严格 le 输出字段用 Bishop 逐 eps 形式（E152-5）
+   - 非严格 le 输出字段用 Bishop 逐 eps 形式（判例）
    - log_le_linear/log_eq_linear：深水区，后续论证 *)
 Class RealInterfaceEnhancedSetoid (R : Set) := {
   (* setoid 核心 *)
@@ -8052,8 +8052,8 @@ Class RealInterfaceEnhancedSetoid (R : Set) := {
   log_mult : forall a b Ha Hb, req (log (mult a b) (mult_positive a b Ha Hb)) (plus (log a Ha) (log b Hb));
   log_one : forall H, req (log one H) zero;
   (* log 凹性切线（Bishop 逐 eps）：log x ≤ x−1+eps（x>0, eps>0）。
-     非严格 le 输出用逐 eps 形式（E152-5 先例：real_le = Or lt eq 无法表达
-     等号点 x=1 的"不趋近"；E177 论证 Real 层 real_log_le_linear_eps 已证）。 *)
+     非严格 le 输出用逐 eps 形式（先例：real_le = Or lt eq 无法表达
+     等号点 x=1 的"不趋近"；判例论证 Real 层 real_log_le_linear_eps 已证）。 *)
   log_le_linear_eps : forall x (Hx : lt zero x) (eps : R), lt zero eps ->
     le (log x Hx) (plus (plus x (opp one)) eps);
   log_inv : forall x, lt zero x -> R;
@@ -8705,12 +8705,12 @@ End RealInterfaceEnhancedMod.
    log_eq_linear（e^t=1+t ⟹ t=0）需强三分/LPO，构造性不可证（诚实边界）。 *)
 (* ============ Real 层 opp-mult 恒等族并入（来自检验 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
-   逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
-   Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
+   逐点 ring（判例 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
+   Gibbs 逐 eps 论证（判例）所需基础恒等。 *)
 (* ============ Real 层 opp-mult 恒等族并入（来自检验 _dbg_oppmult.v RC=0） ============
    opp (mult a b) == mult a (opp b) / mult (opp a) b；mult a (opp b) == opp (mult a b)。
-   逐点 ring（E143 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
-   Gibbs 逐 eps 论证（E179）所需基础恒等。 *)
+   逐点 ring（判例 #76 模式：real_eq_of_zero_diff + destruct + simpl + ring）。
+   Gibbs 逐 eps 论证（判例）所需基础恒等。 *)
 
 (* ToyR 替换稿：替换定理假设面查证（Module 语境限定名） *)
 Print Assumptions RealSetoid.real_eq_le.

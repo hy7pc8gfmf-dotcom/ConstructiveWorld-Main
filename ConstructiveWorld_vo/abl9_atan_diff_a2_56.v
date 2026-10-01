@@ -47,23 +47,23 @@
      && unset COQLIB ROCQLIB
    cd /Users/apple/Desktop/ConstructiveWorld/abl_a2b3_MF_pool && ulimit -s 65532
    nice -19 rocq c -native-compiler no -Q "$PWD" "" "$PWD/abl9_atan_diff_a2_56.v"
-   （单道顺序 born-in-place；绿判四件套：EXIT=0／真错行计 0 且主定理
+   （单道顺序 原位建成；绿判四要素：EXIT=0／真错行计 0 且主定理
    Closed under the global context／vo 头 8 字节 436f712100015ff4／vo 新于 v；
    起编前道闸 ps 计 rocq ≤1。）
-   ── 断点登记（主件无剩余断点，无遗留事项）──────────────────────
+   ── 续点登记（主件无剩余续点，无遗留事项）──────────────────────
    S1–S4 全出口闭合：S1 Htel=abl9b2_tel／S2 预算=abl9b2_totbnd_eq+
    gap_final+gap_eps（已核验通过）；S3 出口件       
    abl9b2_inpoint_formula（§D内点版主件：§B skel证书前件位直接匹配
    abl9b2_scaled_gap_conv，rho 参数化域加强）；S4 正名终式
    abl9_atan_diff_formula（§E1，案A 序契约面=件61
    abl9b_rehearse2_merge_check_61 参数型逐字，零前件全闭合）——
-   路线=案一缩放三角合拢（X61 道一乙+道二坐标）：左腿=件54 lhs_conv
-   （cv_to_tail 互译）；右腿=件59 rhs_close 前件槽（案一抽象槽，X61
-   钉定）代入件54 ws_conv 真实证书；中腿=§D 内点主件@缩放对
+   路线=案一缩放三角合拢（X61 道一乙+道二坐标）：左肢=件54 lhs_conv
+   （cv_to_tail 互译）；右肢=件59 rhs_close 前件槽（案一抽象槽，X61
+   钉定）代入件54 ws_conv 真实证书；中肢=§D 内点主件@缩放对
    (xsc m0 x, xsc m0 h)（k:=km(S m0)∈(0,1)，req_to_tail 互译+§E0 桥
    abl9b2_ws_dom_eq 收 dom_pos/sca_Hd 双证书形 Representative 差）；
-   m0:=max(ML,MR,1) 固定，Qabs_triangle 三腿拼装，严格腿=右腿
-   （Qplus_assoc+Qplus_lt_r 闭合）。Require 新增件54+件59（依赖清单补记：件54 abl9b_ext_chain_54 实使用在案——abl9b_ext_ws/abl9b_ext_ws_conv/abl9b_ext_km_cwu/abl9b_ext_xsc/abl9b_ext_cv_to_tail/abl9b_ext_req_to_tail/abl9b_ext_lhs_conv 全家，左腿/右腿取号带 L1888-1893、§E0/§E1 缩放对逐位；件59 abl9b_rhs_chain_59 实使用在案——abl9b_rhs_close 案一抽象前提位 L1890 直接代入 abl9b_ext_ws_conv 证书，abl9b_rhs_dom1/abl9b_rhs_clamp1_proj/abl9b_rhs_wc_clamp1 收束位）。
+   m0:=max(ML,MR,1) 固定，Qabs_triangle 三肢拼装，严格肢=右肢
+   （Qplus_assoc+Qplus_lt_r 闭合）。Require 新增件54+件59（依赖清单补记：件54 abl9b_ext_chain_54 实使用在案——abl9b_ext_ws/abl9b_ext_ws_conv/abl9b_ext_km_cwu/abl9b_ext_xsc/abl9b_ext_cv_to_tail/abl9b_ext_req_to_tail/abl9b_ext_lhs_conv 全家，左肢/右肢取号带 L1888-1893、§E0/§E1 缩放对逐位；件59 abl9b_rhs_chain_59 实使用在案——abl9b_rhs_close 案一抽象前提位 L1890 直接代入 abl9b_ext_ws_conv 证书，abl9b_rhs_dom1/abl9b_rhs_clamp1_proj/abl9b_rhs_wc_clamp1 收束位）。
    终验：PA 28+1 条全 Closed（零公理残留）；提取安全位检验 tel+gap_eps
    Obj.magic 计 0；正名位 witness 形提取沿件54/59 前例豁免（prod 实例
    化硬错，fail-loud 登记）。合流位=合流池一行终验
@@ -1797,7 +1797,7 @@ Proof.
   exists Nd. intros n Hn.
   assert (Hn4 : NatLe N4 n) by (apply NatLe_lift; lia).
   assert (Hnd : (Nd <= n)%nat) by lia.
-  (* 左腿：dom_pos 形 w_n == k_m·h_n · inv(D_n)（real_inv_proj 直拆） *)
+  (* 左肢：dom_pos 形 w_n == k_m·h_n · inv(D_n)（real_inv_proj 直拆） *)
   assert (HL : projT1 (abl9b_w (abl9b_ext_xsc m x) (abl9b_ext_xsc m h)
                           (abl9b_dom_pos (abl9b_ext_xsc m x) (abl9b_ext_xsc m h)
                              (abl9b_ext_km_cwu m x Hx) Hh4s)) n
@@ -1834,7 +1834,7 @@ Proof.
     rewrite (abl9b_ext_xsc_proj m x n). rewrite (abl9b_ext_xsc_proj m h n).
     rewrite (b3r_one_proj n). cbn [projT1 real_one]. ring. }
   rewrite HL. rewrite HDp.
-  (* 右腿：件54 ws_proj 直拆（ witness N4 均匀）；Qinv 内界 ring 恒等闭合 *)
+  (* 右肢：件54 ws_proj 直拆（ witness N4 均匀）；Qinv 内界 ring 恒等闭合 *)
   rewrite (abl9b_ext_ws_proj m x h N4 HN4 Hx Hxh n Hn4).
   assert (HD2 : 1 + (abl9b_ext_km (Datatypes.S m) * projT1 x n
                      + abl9b_ext_km (Datatypes.S m) * projT1 h n)
@@ -1859,13 +1859,13 @@ Proof. intros a b. ring. Qed.
 (*   （案A 序契约面=件61 abl9b_rehearse2_merge_check_61 参数型逐字，    *)
 (*   Hd 证明项逐字 abl9b_dom_pos x h Hx Hh4——R-T2 铁律），零前件全     *)
 (*   闭合。路线=案一缩放三角合拢（X61 道一乙+道二坐标）：               *)
-(*   |L−Z| ≤ |L−S| + |S−W| + |W−Z| 三腿——                              *)
-(*   左腿=件54 lhs_conv（cv_to_tail 互译）；右腿=件59 rhs_close 前件槽  *)
+(*   |L−Z| ≤ |L−S| + |S−W| + |W−Z| 三肢——                              *)
+(*   左肢=件54 lhs_conv（cv_to_tail 互译）；右肢=件59 rhs_close 前件槽  *)
 (*   （案一抽象槽，X61 钉定）直接代入件54 ws_conv 真实证书（54→59 对接面 *)
-(*   终裁形）；中腿=§D 内点主件@缩放对 (xsc m0 x, xsc m0 h)（k:=km     *)
+(*   终裁形）；中肢=§D 内点主件@缩放对 (xsc m0 x, xsc m0 h)（k:=km     *)
 (*   (S m0)∈(0,1) 点式界，req_to_tail 互译+§E0 桥收 dom_pos/sca_Hd 双  *)
-(*   证书形 Representative 差）。m0:=max(ML,MR,1) 固定后中腿见证与 m   *)
-(*   无关，三角链在 n 尾域纯三腿拼装（L:=主公式左侧，S:=缩放左侧，     *)
+(*   证书形 Representative 差）。m0:=max(ML,MR,1) 固定后中肢见证与 m   *)
+(*   无关，三角链在 n 尾域纯三肢拼装（L:=主公式左侧，S:=缩放左侧，     *)
 (*   W:=缩放对 clamp 右侧，Z:=主公式右侧）。                            *)
 (* ============================================================ *)
 Lemma abl9_atan_diff_formula :
@@ -1883,7 +1883,7 @@ Proof.
   intros eps Heps.
   assert (Ht : QltT 0 (eps / 3)) by (apply (qltT_div_pos eps 3 Heps qltT_0_3)).
   assert (Htq : Qlt 0 (eps / 3)) by (apply QltT_to_Qlt; exact Ht).
-  (* —— 案一三腿取号（左=cv_to_tail；右=rhs_close 案一槽直接代入 ws_conv）——*)
+  (* —— 案一三肢取号（左=cv_to_tail；右=rhs_close 案一槽直接代入 ws_conv）——*)
   destruct (abl9b_ext_cv_to_tail (abl9b_ext_lhs_pt x h Hx Hxh)
               (fun m : nat => abl9b_ext_lhs_sm m x h Hx Hxh)
               (abl9b_ext_lhs_conv x h Hx Hxh) (eps / 3) Htq) as [ML [NL HML]].
@@ -2096,7 +2096,7 @@ Proof.
           rewrite (real_plus_proj x h n) in Hxx. exact Hxx.
       + apply qeq_imp_qle. ring.
     - exact Hk1. }
-  (* —— 中腿：内点主件@缩放对 → real_eq → (M1,Nv) 尾形 —— *)
+  (* —— 中肢：内点主件@缩放对 → real_eq → (M1,Nv) 尾形 —— *)
   assert (Hreq : real_eq
             (real_plus
                (cauchy_real_arctan
@@ -2137,7 +2137,7 @@ Proof.
   assert (HnN4 : (N4 <= n)%nat) by lia.
   assert (HnNd : (Nd <= n)%nat) by lia.
   assert (Hnmax : (Nat.max N4 Nd <= n)%nat) by lia.
-  (* —— 四个投影恒等（中腿传输原料；arctan_real_proj 定义性） —— *)
+  (* —— 四个投影恒等（中肢传输原料；arctan_real_proj 定义性） —— *)
   assert (HSM : projT1 (abl9b_ext_lhs_sm (Nat.max (Nat.max ML MR) 1) x h Hx Hxh) n
                 == arctan_partial n
                      (abl9b_ext_km (Datatypes.S (Nat.max (Nat.max ML MR) 1))
@@ -2265,14 +2265,14 @@ Proof.
     rewrite (abl9b_ext_xsc_proj (Nat.max (Nat.max ML MR) 1) x n).
     rewrite (abl9b_ext_xsc_proj (Nat.max (Nat.max ML MR) 1) h n).
     reflexivity. }
-  (* —— 三腿原形直取（a=|S−L|、b=|S−W|、c=|W−Z|） —— *)
+  (* —— 三肢原形直取（a=|S−L|、b=|S−W|、c=|W−Z|） —— *)
   pose proof (HML (Nat.max (Nat.max ML MR) 1) HML0 n HnNL) as HMLleg.
   pose proof (HMR (Nat.max (Nat.max ML MR) 1) HMR0 n
                 (NatLe_lift NR n HnNR)) as HMRlegT.
   pose proof (QltT_to_Qlt _ _ HMRlegT) as HMRleg.
   assert (HmM : (MM <= MM)%nat) by (apply Nat.le_refl).
   pose proof (HMmid MM HmM n HnNM) as HMleg.
-  (* —— b 腿传输：|LHS_k − RHS_k| ≤ t 沿投影恒等改写为 |S − W| ≤ t —— *)
+  (* —— b 肢传输：|LHS_k − RHS_k| ≤ t 沿投影恒等改写为 |S − W| ≤ t —— *)
   assert (Hble : Qle (Qabs (projT1 (abl9b_ext_lhs_sm (Nat.max (Nat.max ML MR) 1) x h Hx Hxh) n
                               - projT1 (cauchy_real_arctan
                                           (abl9b_rhs_clamp1
@@ -2321,7 +2321,7 @@ Proof.
       rewrite (b5c_arctan_partial_wd n _ _ Harg). reflexivity.
     - exact HMleg. }
   (* —— 终局拼装：Hsplit2拆解+Qabs_triangle 直接匹配 + 严格数值闭合 ——  *)
-  (* —— 四腿名折叠（短形装配） —— *)
+  (* —— 四肢名折叠（短形装配） —— *)
   set (La := projT1 (real_plus (cauchy_real_arctan (real_plus x h) Hxh) (real_opp (cauchy_real_arctan x Hx))) n).
   set (Za := projT1 (cauchy_real_arctan (abl9b_wc x h (abl9b_dom_pos x h Hx Hh4)) (abl9b_w_clamp_dom (abl9b_w x h (abl9b_dom_pos x h Hx Hh4)))) n).
   set (Sa := projT1 (abl9b_ext_lhs_sm (Nat.max (Nat.max ML MR) 1) x h Hx Hxh) n).

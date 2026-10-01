@@ -608,7 +608,7 @@ Proof.
     + exact mtw_no_mixing_below.
 Defined.
 
-(* 四关自检：全件 Closed（零新假设）                                              *)
+(* 四项自检：全件 Closed（零新假设）                                              *)
 
 Print Assumptions mwi_step.
 Print Assumptions mwi_mult_zero_l.

@@ -8,7 +8,7 @@
  *  ② uab7b_minp_temp_sum_singleton_pos：混合加法保序装配（零<半 ∧
  *     零≤零 ⟹ 零+零 < 半+零）＋左端零站退化（原稿为右端换端单跳）。
  *  ③ uab7b_list_sum_two_point_pos：三站自足链——混合保序装配（以半正
- *     性的左内嵌 Witness 作 ≤ 腿）→左端零站退化→右腿零元重整（双内
+ *     性的左内嵌 Witness 作 ≤ 肢）→左端零站退化→右肢零元重整（双内
  *     项实等价 compat 拼装），全程不借道归一包件（原稿借 pack 归一
  *     件的对称换端单跳）。
  *  ④ uab7b_of_nat_one_pos_aux：混合加法保序装配＋左端零站退化（原稿
@@ -34,7 +34,7 @@
 (*   件（fa57/fa56b/fa56c 零消费），纯 Real 层词汇施工。                *)
 (*                                                              *)
 (* 封装原理（照 T7a uab7 骨架·Real 层重述）：                           *)
-(*   一份实例构造=uab7b_two_point_pack（归一/逐点正/实化见证三腿 And 包，  *)
+(*   一份实例构造=uab7b_two_point_pack（归一/逐点正/实化见证三肢 And 包，  *)
 (*   语句=fa57_W2p_uniform_two_realized 的 Real 层同构重述：fa51_sumd    *)
 (*   ↦ real_list_sum、Id↦real_eq、lt↦real_lt）；half ↦ real_const (1/2)  *)
 (*   （S10:9799 real_half_pos 直接代入，免除法构造）；two ↦                  *)
@@ -54,7 +54,7 @@
 (*   real_lt/real_eq/real_le 均为 S02 Set 层定义，零 Prop 泄露）；        *)
 (*   零新增疑设面；前缀 uab7b_；文尾逐件 Print Assumptions 收尾。        *)
 (*   本件零空匹配（提取魔力面规避，fa57 簇三先例同款纪律）。              *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT7b_real_two_point_pack.*  *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAblT7b_real_two_point_pack.*  *)
 (* 分级注记：封装件本体=N1/N2（Real 层零差重述+新构造链逐件坐标登记）；    *)
 (*   覆盖位逐位标注见报告分级表——纯数据供给面如实标 T，禁注水。          *)
 (* ============================================================ *)
@@ -109,8 +109,8 @@ Proof.
   field.
 Qed.
 
-(* ============ 一、封装本体：Real 层 W2p 三腿 And 包 ============ *)
-(* —— 腿①归一：两点表求和=壹（real_list_sum 展开＋plus 恒等运河＋件〇） —— *)
+(* ============ 一、封装本体：Real 层 W2p 三肢 And 包 ============ *)
+(* —— 肢①归一：两点表求和=壹（real_list_sum 展开＋plus 恒等运河＋件〇） —— *)
 Theorem uab7b_pack_norm_leg :
   real_eq (real_list_sum bool (fun _ : bool => uab7b_half) [true; false]) real_one.
 Proof.

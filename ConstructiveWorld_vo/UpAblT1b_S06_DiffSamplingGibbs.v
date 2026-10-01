@@ -28,19 +28,19 @@
 (*   RateTheoryAblation 同款纪律），消融结论不变——swap 位独立于整个      *)
 (*   接口，只需求和规范化+列表组合学。                                   *)
 (*                                                              *)
-(*   abl_S06_sum_swap_cc        ：N2（E752 段一+段二导出链复刻，显式前提形） *)
+(*   abl_S06_sum_swap_cc        ：N2（判例 段一+段二导出链复刻，显式前提形） *)
 (*   abl_S06_abs_ge_zero_id_cc  ：N1（AbsLeId L50 直接代入）               *)
 (*                                                              *)
 (* 红线自审（全部打勾）：                                             *)
 (*  [x] 现档实态取证已做：Live_X 与 Main 树 L4021/4035 行号齐            *)
 (*  [x] 逐字抽取：被消融参数位语句自现档源码逐字拷入（参序/命名/隐式位同形）  *)
-(*  [x] 依存位实证：普查表 N 判+E752 卡翻案形+AbsLeId 卡依存位坐标       *)
+(*  [x] 依存位实证：普查表 N 判+判例卡翻案形+AbsLeId 卡依存位坐标       *)
 (*  [x] 分级 N/T 已逐件标注（W 件不发本件；本件零 W）                   *)
 (*  [x] 禁词双轨零：头注全中文表述（含英文原词字面亦零）                 *)
 (*  [x] 编译闭合+文尾逐件假设面打印全闭                                 *)
 (*  [x] 提取检验 Obj.magic=0：输出目录树外隔离（attn/logs/g3 留痕）      *)
 (*  [x] 模块核验 EXIT=0：attn/logs/g4 留痕（后台长窗）                  *)
-(*  [x] 四关留痕：attn/logs/g{1..4}-UpAblT1b_S06_DiffSamplingGibbs.log  *)
+(*  [x] 四检留痕：attn/logs/g{1..4}-UpAblT1b_S06_DiffSamplingGibbs.log  *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -62,7 +62,7 @@ Require Import S15_TailFEPUp.
 Require Import AttnDoeblin.
 Require Import AbsLeId.
 
-(* ################ 段一：列表 Fubini 组合学（E752 段一形复刻） ################ *)
+(* ################ 段一：列表 Fubini 组合学（判例 段一形复刻） ################ *)
 
 Section AblListSum.
 Context {RI : RealInterfaceEnhanced}.
@@ -114,7 +114,7 @@ Qed.
 
 End AblListSum.
 
-(* ################ 段二：swap 族消融主件（E752 段二形·显式前提全参式） ############ *)
+(* ################ 段二：swap 族消融主件（判例 段二形·显式前提全参式） ############ *)
 (* S06 无 sum_eq_list 参数位——枚举+求和规范化以语句内 forall 前提显式给出，     *)
 (* 出节全参依存（偏差账已记）。结论=S06 L4021 sum_swap_cc 参数位语句逐字形。      *)
 

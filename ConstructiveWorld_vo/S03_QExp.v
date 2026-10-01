@@ -349,7 +349,7 @@ Proof.
     + unfold Qle; simpl; lia.
 Qed.
 
-(* (1/2)·(1/(n+1)#1) == 1/(2·(n+1)#1)（field 恒等式独立引理，E143-184） *)
+(* (1/2)·(1/(n+1)#1) == 1/(2·(n+1)#1)（field 恒等式独立引理） *)
 Lemma half_inv_shift : forall n : nat,
   (1 / 2)%Q * (1 / (Z.of_nat (n + 1) # 1)) ==
   1 / ((1 + 1)%Q * (Z.of_nat (n + 1) # 1)).
@@ -557,7 +557,7 @@ Proof.
       rewrite (IH Hn'). ring.
 Qed.
 
-(* 差恒等式：m ≤ n ⟹ ep n - ep m == tail m n x（归纳组装，E143-180） *)
+(* 差恒等式：m ≤ n ⟹ ep n - ep m == tail m n x（归纳组装） *)
 Lemma exp_partial_diff_tail : forall m n x, (m <= n)%nat ->
   exp_partial n x - exp_partial m x == exp_tail m n x.
 Proof.
@@ -1743,7 +1743,7 @@ Qed.
    重排（第一和 = −altf_aux (N−1) (N−1)、第二和 = altf_aux (N−1) (N−1) − 1/(N−1)!）
    + 边界项（u=0 的 N#1/N! 与第二和边界 1/(N−1)!、u=N 的 (−1)^N/(N−1)!、符号相消
    (−1)^{N−1}+(−1)^N=0）抵消；再用 Qmult_integral（N#1·altf N == 0 且 N#1≠0）收尾。
-   骨架见 E149 卡。 *)
+   骨架见判例卡。 *)
 
 (* pascal_split 两边乘 c 的版本（altf 逐项分解用） *)
 Lemma pascal_split_mul : forall (N u : nat) (c : Q),
@@ -2512,7 +2512,7 @@ Qed.
 
 (* ============ corr 论证基础设施：有界和 + 行匹配（备份 83 并入，来自 _dbg_kdr.v） ============ *)
 
-(* 有界和：sum_upto n f = Σ_{i=0}^{n−1} f i（斜对角和的基础设施，E143-237 封闭和推广） *)
+(* 有界和：sum_upto n f = Σ_{i=0}^{n−1} f i（斜对角和的基础设施；封闭和推广判例） *)
 Fixpoint sum_upto (n : nat) (f : nat -> Q) : Q :=
   match n with
   | 0%nat => 0
@@ -4116,7 +4116,7 @@ Proof.
 Qed.
 
 (* Qeq 移项通用引理：SE + Em - SO - Om == 0 ⟹ SO - SE == Em - Om
-   （Qopp_comp 取反 + transitivity + ring——免 Hz 句法匹配，E143-265 模式） *)
+   （Qopp_comp 取反 + transitivity + ring——免 Hz 句法匹配之判例模式） *)
 Lemma qeq_moved : forall (SE SO Em Om : Q),
   SE + Em - SO - Om == 0 -> SO - SE == Em - Om.
 Proof.
@@ -4337,7 +4337,7 @@ Proof.
 Qed.
 
 (* 和分割（通用版，无范围前提）：Σ_{i=0}^{a+b−1} f i == Σ_{i=0}^{a−1} f i + Σ_{i=0}^{b−1} f (a+i)
-   证明：归纳于 a；归纳步两侧都 sum_upto_rot 移出首项 f 0，IH 于 g = f∘S（E143-243 g∘S 模式） *)
+   证明：归纳于 a；归纳步两侧都 sum_upto_rot 移出首项 f 0，IH 于 g = f∘S（判例 g∘S 模式） *)
 Lemma sum_upto_split_gen : forall (a b : nat) (f : nat -> Q),
   sum_upto (a + b)%nat f == sum_upto a f + sum_upto b (fun i => f (a + i)%nat).
 Proof.
@@ -6248,7 +6248,7 @@ Proof.
     apply (Qle_trans _ (exp_partial (2 * m) (- (- y))) _).
     { (* 1/C ≤ S(-(-y))：链 1/C ≤ 1/S(-y) ≤ S(-(-y)) *)
       apply (Qle_trans _ (1 / exp_partial (2 * m) (- y)) _).
-      { (* 1/C ≤ 1/S(-y)：先消 1·（Qdiv 1 x 与 Qinv x 形态不同，E143-1228⑥），
+      { (* 1/C ≤ 1/S(-y)：先消 1·（Qdiv 1 x 与 Qinv x 形态不同），
          再 q_inv_le_contravar（Qinv C ≤ Qinv S），最后补回 1· *)
         apply (Qle_trans _ (Qinv C) _).
         - (* 1/C ≤ Qinv C：1·Qinv C == Qinv C *)

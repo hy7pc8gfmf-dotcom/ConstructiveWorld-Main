@@ -21,12 +21,12 @@
 (*   real_sum_over_S_linear:70-72｜energy:75｜D:76｜D_pos:77｜Z_r:78｜            *)
 (*   Z_r_pos:79｜real_transition:94                                              *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                         *)
-(*    5a7ba5d8eed8c874520f285be46452e7，零代际漂移）                             *)
+(*    登记册登记值，零代际漂移）                             *)
 (* 本模块遗留（零触碰，防重复立件）：real_partition_condition:82 与                *)
 (*   real_transition_nonneg:95/real_transition_normalization:97/                  *)
 (*   real_detailed_balance:99 四槽已由 D1-⑥（S3）                                 *)
 (*   仅作核验登记。源版本 boltzmann 载体 real_boltzmann_unnorm/prob（L83-88 定义）    *)
-(*   与本批槽语句无引用耦合，零 δ 内联需求（对比 S4 件② Z 槽）。                   *)
+(*   与本件槽语句无引用耦合，零 δ 内联需求（对比 S4 件② Z 槽）。                   *)
 (*                                                              *)
 (* 形态：P2S1 封装记录型＋S4 件② TopKTV 同款（Type 排序单点实例供给）。            *)
 (* 实例供给：S:=unit（单点态空间）｜求和载体:=fun f => f tt（单点求和）｜           *)
@@ -38,7 +38,7 @@
 (* 分级（禁注水如实申报）：10 槽全部 T·数据/接口供给级合并申报                     *)
 (*   （rst_pack10_supplied 一件喂定），不逐槽计战果。                              *)
 (* 依赖：CW_ConstructiveWorld_219（S02 环律/S03 逆元器，只读依存）；零 git、零注册面。 *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1S6_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1S6_*.{log,exit}                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

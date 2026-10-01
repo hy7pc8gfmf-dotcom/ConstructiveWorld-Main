@@ -1449,7 +1449,7 @@ End ReqSigmoidQuick.
 (*    surrogate_diff_identity 等 ~15 件），挂起批 3b。                *)
 (* 3. 上述两桥放行后，本文件主件（req_policy_iter_kl_geom_step/    *)
 (*    _iter/req_dpo_loss_iter_mono）即全链闭合为无条件 req 定理——    *)
-(*    本批已真证其全部 req 侧运输与序代数内容。                       *)
+(*    本件已真证其全部 req 侧运输与序代数内容。                       *)
 (* 4. Alignment 其余 Id 件（对齐恒等式簇 L19180-21240 的             *)
 (*    align_objective_advantage_decomp / dpo_reward 簇 / t12 环代数  *)
 (*    副本件 ~60 件）：req 对应件多已被 UpReqAlgebra（批 1）与        *)

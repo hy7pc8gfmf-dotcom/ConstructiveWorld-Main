@@ -5358,7 +5358,7 @@ Qed.
 (*   + 平方非负（μ² ≥ 0）——形式化 GRPO 核心动机"减均值降低二阶矩"； *)
 (*   gap = μ²，等号当且仅当组均值零（square_zero 双向夹另行落地）。  *)
 (*   诚实 Variable square_nonneg：构造性有序域无三分律，通用平方非负  *)
-(*   需接口字段（E143-122；同 NaturalGradient）。                    *)
+(*   需接口字段（判例；同 NaturalGradient）。                    *)
 (* ============================================================ *)
 Variable square_nonneg : forall a : R, le zero (mult a a).
 

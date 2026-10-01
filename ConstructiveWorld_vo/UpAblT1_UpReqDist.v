@@ -28,7 +28,7 @@
    ============================================================ *)
 
 (* ============================================================ *)
-(* UpAblT1_UpReqDist.v —— 假设消融工程 T1 批· a（FA2 第 1 批前 25 位之 14 位） *)
+(* UpAblT1_UpReqDist.v —— 假设消融工程 T1 批· a（FA2 首段前 25 位之 14 位） *)
 (* 辖区：UpReqDist.v sumf 接口面（求和假设位五节），实例化消解源文件 sumd_*@UpReqSumD *)
 (*                                                              *)
 (* 目的：对 UpReqDist 五节（ReqSumLayer/ReqFEP/ReqSteadyState/         *)
@@ -79,7 +79,7 @@
 (*                                                              *)
 (* 备注：语句面全集合层（req/le/lt 均集合值谓词；非空前提之             *)
 (*   Not 位与 UpReqSumD 同形同阶）；公理面零新增；文尾逐件              *)
-(*   Print Assumptions 收尾。四关留痕：Live_X/attn/logs/               *)
+(*   Print Assumptions 收尾。四检留痕：Live_X/attn/logs/               *)
 (*   g{1..4}-UpAblT1_UpReqDist.log。                                   *)
 (* ============================================================ *)
 

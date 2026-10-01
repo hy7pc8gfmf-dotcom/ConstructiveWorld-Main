@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* UpReqAlign4.v —— 本件形式化 softmax 对齐策略向后 KL 恒等式的 *)
+(* UpReqAlign4.v —— 使命：形式化 softmax 对齐策略向后 KL 恒等式的 *)
 (*   req 接口层供给：kcxr_req_backward_kl_identity 经柯西实数实例 *)
 (*   落实向后 KL 恒等式，并供给三节共用 sum 接口的实例层证书。 *)
 (* 依赖：CW_ConstructiveWorld_219、UpReqAlgebra、UpReqAlign、UpReqAlign2、 *)
@@ -10,56 +10,23 @@
 (* 编译配方：Rocq 9.1 直调 coqc，cpu_guard 单道守护。 *)
 (* ============================================================ *)
 
-(* UpReqAlign4.v — KLCvx 桥供给批 A（参数位 1）：req_backward_kl_identity 假设位降为使用件
-   施工图：件Y 两参数位消解预研（C 节转录）；施工件：件Z2（组 A = 参数位 1，独占组 A 配额）
-   上游：UpReqAlgebra（批 1）+ UpReqAlign（批 3，桥宿主文件，只读）+
-     UpReqAlign2（批 3b）+ UpReqAlign3（批 3c，参数位 1 同位无条件定理）+
-     G05_LogSmall（Real 证人肢）——全部 Require 使用，零改写；
-   纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
-   Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
-   ----------------------------------------------------------------
-   已证明坐标（本批完成形态）：
-   [参数位 1 供给] UpReqAlign.v:434-442 桥假设位 req_backward_kl_identity
-     （批 3 桥位 1/3，Id theorem policy_iter_backward_kl_step @L22686 同位）
-     由本文件 kcxr_req_backward_kl_identity（N1）供给消解——语句逐字同位，
-     证 = UpReqAlign3.req2_backward_kl_step（L3153-3395，Qed 无条件定理，
-     头注「全链每一环均为 Qed 真证」）+ N0 证人重述（req_pi_star_pos↔PSTR_pos、
-     req_pi_next_pos↔npx_pos 两个合取肢 + RHS 三处 relative_entropy 证人位重组）。
-     G07_KLWall.v L652「阻塞裁决」结论仅对 GeomD 接口 scope 成立，对参数位 1 作废
-     （本件不走 log-mult 接口字段路径，走同位定理供给路径）。
-   [N0 证人开门件] kcxr_log_witness（log_req_compat 一行开门）+
+(* UpReqAlign4.v — KLCvx 桥供给（参数位 1）：req_backward_kl_identity 假设位降为使用件
+   供给路径：UpReqAlign.v:434-442 桥假设位 req_backward_kl_identity 由本文件
+     kcxr_req_backward_kl_identity 供给消解——语句逐字同位，证 =
+     UpReqAlign3.req2_backward_kl_step（无条件定理）+ N0 证人重述
+     （req_pi_star_pos↔PSTR_pos、req_pi_next_pos↔npx_pos 两个合取肢 + RHS
+     三处 relative_entropy 证人位重组）。G07_KLWall.v L652 阻塞结论仅对
+     GeomD 接口 scope 成立，对参数位 1 不适用（本件走同位定理供给路径）。
+   N0 证人开门件：kcxr_log_witness（log_req_compat 一行开门）+
      kcxr_kl_witness_transport（relative_entropy_req 证人位全部重述；
-     先例：UpReqAlign2:891 注记「Qed 件不可 delta；先经 log_req_compat 开门」
-     + UpReqAlign3 L120-121 透明证人结论）。
-   [N3 Real 层闭合实例] kcxr_real_backward_kl_identity：全参显式
+     先例：UpReqAlign2:891 注记与 UpReqAlign3 L120-121 透明证人结论）。
+   N3 Real 层闭合实例：kcxr_real_backward_kl_identity 全参显式
      @Real RealEnhancedReal，log_inv_exp_neg_req := logd_log_inv_exp_neg_real
      （G05_LogSmall:347）、log_req_compat := logd_log_compat_real
-     （G05_LogSmall:305）——两假设位在 Real 层全无条件闭合（G05 两件皆 Qed）。
-   [本批不做（批 B 余留，精确清单见文件尾）] 参数位 2（req_step_kl_eta_bound
-     UpReqAlign:430 + req_policy_improvement_mono UpReqAlign:630 消解链）、
-   ----------------------------------------------------------------
-   诚实边界登记表：
-   1. 节闭后签名（About 检验实测，UpReqAlign3.req2_backward_kl_step）：
-      {R}{RIS} S sumf sum_ext sum_add sum_linear sum_pos log_req_compat
-      log_inv_exp_neg_req reward beta beta_pos pi_ref pi_ref_pos eta ZAL_pos
-      pi_t Hpi_t Hn —— pi_ref_norm/eta_pos/eta_le_one 不入参数位 1（未使用）；
-      Z_align_pos（ZAL_pos 位）必入。本文件节参面照抄 UpReqAlign.v 全脸
-      （含六条 sum 面 + pi_ref_norm/eta_pos/eta_le_one），未使用位留作批 B 参数位 2 脸。
-      req_pi_next_pos 为 Qed 件 vs PSTR_pos/npx_pos Definition 包装）——
-      log_req_compat 一行重述；其二 inv_pos 载体证人位（inv_pos 为接口
-      字段、携带 lt zero 证人数据；pi_next_req 内嵌本地 req_Z_rel_pos、
-      req2_pi_next 内嵌 Qed 件 req2_Z_rel_pos，两类 opaque 应用不可转换，
-      + 环代数四步链真证重述，kcxr_pi_next_transport 完成载体位。
-   3. N3 闭合范围：R/RIS/log 两假设位闭合；六条 sum 面 + 节参数脸仍是 UpReqAlign.v
-   ----------------------------------------------------------------
-   组 C 完成：宿主两桥假设位已证明定理 + 注册完成——
-   UpReqAlign.v:434/:630 两桥假设位由本文件 kcxr_ 两件供给（已证明定理
-   段 = 文件尾 Module KlcxAlignWriteoffC，逐字语句重申件两枚，节闭
-   签名 About 钉死 _t24_probe1 实录），G07 头注阻塞裁决作废（参数位 1 与参数位 2
-   分见批 A/B 段头注）；UpReqAlign4.v 已入 order.txt/_CoqProject 双树
-   注册（宿主使用链）。宿主文件本体零改动（依赖方向：本文件已
-   Require 宿主，宿主不能反向 Require 本文件，已证明由定理段 + 下游
-   使用完成，两桥假设位原样保留 = 最 honest 形态）。
+     （G05_LogSmall:305）——两假设位在 Real 层全无条件闭合。
+   宿主两桥假设位供给面：UpReqAlign.v:434/:630 两桥假设位由本文件 kcxr_
+     两件供给（定理段 = 文件尾 Module KlcxAlignWriteoffC，逐字语句重申件
+     两枚），G07 头注阻塞结论作废（参数位 1 与参数位 2 分见段头注）。
    ---------------------------------------------------------------- *)
 
 Require Import S01_BaseRing.
@@ -162,7 +129,7 @@ Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
 
-(* ---- 供给参数位①（本批新开口；Real 层证人 = G05_LogSmall:347） ----
+(* ---- 供给参数位①（本件新开口；Real 层证人 = G05_LogSmall:347） ----
    同位先例：UpReqAlign3.v:75-76（Req3AlignCore 同名参数位）。 *)
 Hypothesis log_inv_exp_neg_req :
   forall x : R, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
@@ -497,7 +464,7 @@ Definition kcxr_real_backward_kl_identity
     reward beta beta_pos pi_ref pi_ref_pos Z_align_pos eta.
 
 (* ---------------------------------------------------------------- *)
-(* 批 B 余留精确清单（参数位 2，本批不做）：                               *)
+(* 批 B 余留精确清单（参数位 2，本件不做）：                               *)
 (* 1. 供给参数位②开口：req_step_kl_eta_bound 同位（UpReqAlign:430，       *)
 (*    real_step_kl_eta_bound_eps / real_interp_Z_le_one_eps 在根）。  *)
 (* 2. req_policy_improvement_mono（UpReqAlign:630，批 3 桥位 3/3）：   *)
@@ -538,7 +505,7 @@ Definition kcxr_real_backward_kl_identity
 (*     le 精确形 + next=Gibbs 更新 pi_next_req；GeomD 接口形 eps 版    *)
 (*     （UpReqGeomD.v:422 geod_step_kl_eta_bound_eps）：nat→Real 有限  *)
 (*     和载体 + real_eq 归一 + real_plus(…,eps) 松弛形 + next=几何     *)
-(*     插值 real_step_next。判定：非本批低成本顺带件，三重缺口——      *)
+(*     插值 real_step_next。判定：非本件低成本顺带件，三重缺口——      *)
 (*     ① eps 松弛→精确 plain-le 需序消去，「序无消去」上游结论同因，   *)
 (*     ② 载体缺口：nat→Real 有限和 vs 抽象 S+sumf 接口，需 Real 层     *)
 
@@ -562,7 +529,7 @@ Definition kcxr_real_backward_kl_identity
 (*      kcxr_req_policy_iter_kl_geom_step 节闭签名含                    *)
 (*      sup_step_kl_eta_bound 位；「假设位降为使用件」对桥1（backward  *)
 
-(*   2. 节参使用面：eta_pos/eta_le_one 自本批起纳入使用（r2 主件两假设位）；  *)
+(*   2. 节参使用面：eta_pos/eta_le_one 自本供给组起纳入使用（r2 主件两假设位）；  *)
 (*      sum_le/sum_zero_nonneg/pi_ref_norm 仍纯脸（未使用；宿主桥节    *)
 (*      同位 face 保留，供宿主假设位 1:1 移植）。                       *)
 (*   3. Real 层闭合实例：参数位 2/N4 无（sup_gibbs 的 Real 供给 = Real 层   *)
@@ -597,7 +564,7 @@ Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
 
-(* ---- 供给参数位①（本批新开口；Real 层证人 = G05_LogSmall:347） ----
+(* ---- 供给参数位①（本件新开口；Real 层证人 = G05_LogSmall:347） ----
    同位先例：UpReqAlign3.v:75-76（Req3AlignCore 同名参数位）。 *)
 Hypothesis log_inv_exp_neg_req :
   forall x : R, req (log_inv (exp_neg x) (exp_neg_pos x)) x.
@@ -1084,7 +1051,7 @@ Hypothesis log_req_compat :
   forall (x y : R) (Hx : lt zero x) (Hy : lt zero y),
     req x y -> req (log x Hx) (log y Hy).
 
-(* ---- 供给参数位①（本批新开口；Real 层证人 = G05_LogSmall:347） ----
+(* ---- 供给参数位①（本件新开口；Real 层证人 = G05_LogSmall:347） ----
    同位先例：UpReqAlign3.v:75-76（Req3AlignCore 同名参数位）。 *)
 Hypothesis log_inv_exp_neg_req :
   forall x : R, req (log_inv (exp_neg x) (exp_neg_pos x)) x.

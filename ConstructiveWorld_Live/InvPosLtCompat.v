@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -136,7 +136,7 @@ Qed.
 
 End InvPosLtCompat.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（四道核验前置：文件内显式 PA 声明） ---- *)
 Print Assumptions ipl_lt_mult_compat_l.
 Print Assumptions ipl_inv_pos_lt_compat.
 Print Assumptions ipl_upfirewall_102_shape.

@@ -252,7 +252,7 @@ Proof.
                  (fun s : S => Habs (req_minus (mu s) (nu s)))))).
 Qed.
 
-(* ---- 常数列表和泛型封装（均匀归一的归纳腿；reqd_nat_to_R 加法结构）---- *)
+(* ---- 常数列表和泛型封装（均匀归一的归纳肢；reqd_nat_to_R 加法结构）---- *)
 
 Lemma uc2t_gen_sum_const :
   forall (c : R) (l : list S),

@@ -4,8 +4,8 @@
    一、sumd_sum_ext／sumd_sum_linear／sumd_sum_add／sumd_sum_opp／
        sumd_sum_le 五条：具体和算子定义层展开后，把转发目标列表级
        归纳体整体内联到替换点（归纳直接走 enum，消除单跳转发）。
-   二、sumd_sum_pos：非空槽按列表结构判别展开，nil 腿显式 explos
-   三、sumd_list_sum_pos_cons：非负尾段腿以命名中间件提级，主链在
+   二、sumd_sum_pos：非空槽按列表结构判别展开，nil 肢显式 explos
+   三、sumd_list_sum_pos_cons：非负尾段肢以命名中间件提级，主链在
        替换点按步重演。
    四、sumd_sum_zero_nonneg_in／sumd_sum_zero_nonneg_surj：成员谓词
    定义性闭合／上游换轨直连），逐条中文标注见件内注记。
@@ -41,7 +41,7 @@
 (* 分级（逐件）：保底件 3：sumd_sum_eq_list / sumd_sum_ext /          *)
 (*   sumd_sum_linear；主件 6：sumd_sum_add / sumd_sum_opp /           *)
 (*   sumd_sum_le / sumd_sum_pos / sumd_list_sum_zero_nonneg_in /       *)
-(*   sumd_sum_zero_nonneg_in（另附 head/tail 剥离腿两件）。诚实完成：   *)
+(*   sumd_sum_zero_nonneg_in（另附 head/tail 剥离肢两件）。诚实完成：   *)
 (*   sum_pos 以列表头 witness 形（cons 形）+ 槽形（非空前提显式参）；    *)
 (*   zero_nonneg 完成为 sumd_in s enum 诚实形（Set 层成员谓词；enum     *)
 (*   无满射性数据，全称形不可证，见裁决注）。                          *)
@@ -50,8 +50,8 @@
 (*   CW_ConstructiveWorld_219：RealInterfaceEnhancedSetoid 字段       *)
 (*   （req_plus_compat / distrib / le_plus_compat / lt_le_trans /      *)
 (*   le_antisym / le_id_l / le_id_r / lt_le_iff / plus_zero 等）；     *)
-(*   UpReqAlgebra：req_plus_exchange@1005（sum_add 换位腿）、          *)
-(*   req_opp_plus@167（sum_opp 换轨腿）。                             *)
+(*   UpReqAlgebra：req_plus_exchange@1005（sum_add 换位肢）、          *)
+(*   req_opp_plus@167（sum_opp 换轨肢）。                             *)
 (*                                                                *)
 (* 红线：Set 层语句（req/le/lt 均 Set 值谓词；非空前提之 Not 位与      *)
 (*   UpReqSampling 签名变化 7 同形同阶，不放大主张）；纯项式组装       *)
@@ -110,14 +110,14 @@ Lemma sumd_sum_eq_list : forall g : S -> R,
   req (sumd_sumf g) (sumd_list_sum g enum).
 Proof. intro g. exact (req_refl (sumd_list_sum g enum)). Qed.
 
-(* ============ 辅件家（消解件公共腿） ============ *)
+(* ============ 辅件家（消解件公共肢） ============ *)
 
 (* lt 到 le 的单向提升（接口 lt_le_iff 的严格支；UpReqAlgebra L933 同款） *)
 (* 不可化·接口字段直引：lt_le_iff 为 S01_BaseRing 接口类字段（行 160），无体可内联 *)
 Lemma sumd_lt_le : forall a : R, lt zero a -> le zero a.
 Proof. intros a H. exact (lt_le_iff zero a (inl H)). Qed.
 
-(* 非负和：逐点非负则和非负（sum_pos 与 zero_nonneg 的公共腿） *)
+(* 非负和：逐点非负则和非负（sum_pos 与 zero_nonneg 的公共肢） *)
 Lemma sumd_list_sum_nonneg : forall (f : S -> R) (l : list S),
   (forall s : S, le zero (f s)) -> le zero (sumd_list_sum f l).
 Proof.
@@ -356,7 +356,7 @@ Fixpoint sumd_in (s : S) (l : list S) : Set :=
   | x :: t => (x = s) + (sumd_in s t)
   end.
 
-(* 剥离腿 a（头项零化）：f x 非负、f x ≤ 和 = 0、0 ≤ f x ⇒ req (f x) zero *)
+(* 剥离肢 a（头项零化）：f x 非负、f x ≤ 和 = 0、0 ≤ f x ⇒ req (f x) zero *)
 Lemma sumd_list_sum_zero_nonneg_head : forall (f : S -> R) (x : S) (l : list S),
   (forall s : S, le zero (f s)) -> req (sumd_list_sum f (x :: l)) zero ->
   req (f x) zero.
@@ -375,7 +375,7 @@ Proof.
            (Hnn x)).
 Qed.
 
-(* 剥离腿 b（尾段和零化）：全和为零 ⇒ 余段和为零（项位换轨后同法） *)
+(* 剥离肢 b（尾段和零化）：全和为零 ⇒ 余段和为零（项位换轨后同法） *)
 Lemma sumd_list_sum_zero_nonneg_tail : forall (f : S -> R) (x : S) (l : list S),
   (forall s : S, le zero (f s)) -> req (sumd_list_sum f (x :: l)) zero ->
   req (sumd_list_sum f l) zero.
@@ -441,7 +441,7 @@ Qed.
 (* ② sum_const（Σc == of_nat(len)·c）：换轨实读裁决——              *)
 (*   G06_BForm sumb_sum_const 系 Real 层（real_eq/real_list_sum/    *)
 (*   real_mult/sumb_lenR），与本文件泛型接口层（R:Set）双名异型，    *)
-(*   直连不可行（E387 判据），仅作证明结构模板；UpReqDist GRPO 节   *)
+(*   直连不可行（判例判据），仅作证明结构模板；UpReqDist GRPO 节   *)
 (*   req_list_sum_g_const 同 Context 同语句（reqd_of_nat 即         *)
 (*   of_nat），且 reqd_list_sum_g 与 sumd_list_sum 定义性同构       *)
 (*   （同 fold 形），1 步 exact 换轨直连。                          *)

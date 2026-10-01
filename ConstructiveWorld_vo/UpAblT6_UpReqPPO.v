@@ -24,14 +24,14 @@
 (*   Real 载体实例（RealInterfaceEnhancedSetoid Real，库内全局实例供给）上       *)
 (*   解释。故本件消融形不携带 R/RIS 形参，R 钉 Real，sumd 族隐式 {R}{RIS}        *)
 (*   经全局实例消解直连（实例化消解机械对抽象 R 成立，Real 实例为其特例）。            *)
-(*   本批辖区无 pos/zero_nonneg 面；W 面：本模块无（FA2 表 UpReqPPO 无 W 位）。   *)
+(*   本件辖区无 pos/zero_nonneg 面；W 面：本模块无（FA2 表 UpReqPPO 无 W 位）。   *)
 (*                                                              *)
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。         *)
 (*   语句面逐字抽取自现档 UpReqPPO.v（两树逐字节同验：Main/Live_X               *)
 (*   仅 sumf → sumd_sumf S enum 换实例位（源语句面 fun s => 无类型注形逐字保留）。*)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾逐件 Print Assumptions 收尾。          *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT6_UpReqPPO.log。                  *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAblT6_UpReqPPO.log。                  *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

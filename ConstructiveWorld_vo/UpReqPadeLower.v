@@ -30,7 +30,7 @@
 (* 日期：                                                *)
 (*                                                                 *)
 (* 任务定位：侦察报告 attn/_tcs1_侦察报告-.md 结论【直通】的   *)
-(*   执行件。工单 attn/_tcs4_误差界工单.md 依赖闸门实测：             *)
+(*   执行件。施工依据 attn/_tcs4_ 误差界卷 依赖闸门实测：             *)
 (*   UpReqPadeTailPos / UpReqPadeBetaPos 未落盘（闸门0不过）——        *)
 
 (*                                                                 *)
@@ -39,12 +39,12 @@
 (*   E₆·Q₂ − P₂ == y⁵/720 + y⁶/1440 + y⁸/8640（Q 层符号 y 恒等式），   *)
 (*   尾项全非负且 y⁶/1440 > 0（y>0）⟹ e^y·Q₂ − P₂ > y⁵/720。          *)
 (*   见证：eps := y⁵/720（=β₀·y^(2n+1)，β₀=(2!)²/(4!·5!)=1/720，      *)
-(*   与 S1 检验经典式同值；工单 §1.3 的额外 /(2n)! 因子系笔误，   *)
+(*   与 S1 检验经典式同值；总纲 §1.3 的额外 /(2n)! 因子系笔误，   *)
 (*   以 S1 实测为准）。N := 6（截断指数安全位：M=5 时 y⁶ 系数 −1/1440  *)
 (*   为负、M=6 起无损伤——S1 报告②-4 截断损伤警示）。                  *)
 (*                                                                 *)
 (* 语句面：real_lt sigT 见证形（S02:455），免除法（乘积面），          *)
-(*   正性全走 QltT/Qlt 见证形——LPO 墙规避（E225 逐点可判定口径），     *)
+(*   正性全走 QltT/Qlt 见证形——LPO 墙规避（判例 逐点可判定口径），     *)
 (*   零经典极限/积分性质。奇 n 对偶（上界）对称显式假设，禁特设构造。          *)
 (*                                                                 *)
 (* 使用面：CW_ConstructiveWorld_219（S01 NatLe_drop/S02 real_lt       *)
@@ -52,10 +52,10 @@
 (*   S03 exp_partial q_pow q_fact q_fact_pos）；UpReqPadeExp          *)
 (*   （pade_num/pade_den/pade_coeff）；UpReqQExpTail（qtail_le_plus_r）。*)
 
-(*   -Q . "" UpReqPadeLower.v（PC 卡实测配方；工单草方 ../001 无       *)
+(*   -Q . "" UpReqPadeLower.v（PC 卡实测配方；总纲草方 ../001 无       *)
 
 (* 公理面：主件 Print Assumptions 预期 Closed（无公理依赖）。          *)
-(* 数值锚值（核对工单 §1.4，S1 检验实测）：                            *)
+(* 数值锚值（核对总纲 §1.4，S1 检验实测）：                            *)
 (*   S-b: pade_num 1 (1#2)==5#4、pade_den 1 (1#2)==3#4（直引 PC 数值锚）； *)
 (*   G6 恒等式 y=1/2: 121/2211840、y=1: 19/8640（fractions 精确）；    *)
 (*   见证 y=1/2: (1#2)^5/720 == 1#23040；n=0 退化: exp_partial 0 == 1， *)
@@ -84,7 +84,7 @@ From Stdlib Require Import QArith.QArith Arith.Arith Lia Setoid.
 
 Section PadeLower.
 
-(* ===== B0 桥接引理（Qeq→Qlt 传桥；AA12 腿化：自建 Q 单调腿一跳，
+(* ===== B0 桥接引理（Qeq→Qlt 传桥；AA12 肢化：自建 Q 单调肢一跳，
    不引入 Psatz/micromega 环境闭包；语句面全不变） ===== *)
 
 (* 等值右传桥：a==b 时 0<a 传给 0<b（pds_qlt0_eq_r 同款证法，自持零依赖）。 *)
@@ -113,7 +113,7 @@ Lemma cpl_qmult_comp : forall w x y z : Q, w == x -> y == z -> w * y == x * z.
 Proof. intros w x y z H1 H2. apply Qmult_comp; assumption. Qed.
 
 (* 严格右传桥（x 起点）：a==b ⟹ Qlt x a -> Qlt x b。
-   AA12 腿化：一跳 pql_qlt_eq_r（原注记「零 nia」目标至此真兑现）。 *)
+   AA12 肢化：一跳 pql_qlt_eq_r（原注记「零 nia」目标至此真兑现）。 *)
 Lemma cpl_qlt_eq_sr : forall (x a b : Q), a == b -> Qlt x a -> Qlt x b.
 Proof.
   intros x a b Hab Ha.
@@ -162,7 +162,7 @@ Proof.
     + apply qeq_le. ring.
 Qed.
 
-(* ===== B1 数值锚件（工单 §1.4 核对；字面量点 vm_compute——CS 卡数值锚纪律） ===== *)
+(* ===== B1 数值锚件（总纲 §1.4 核对；字面量点 vm_compute——CS 卡数值锚纪律） ===== *)
 
 (* S-b：PC 数值锚直引（系数公式+有界和+交错符号端到端）。 *)
 Lemma cpl_sent_s_b1 : pade_num 1%nat (1#2) == (5#4).
@@ -191,7 +191,7 @@ Proof. intro y. exact (Qeq_refl 1%Q). Qed.
 
 (* ===== B2 Q 层主代数 ===== *)
 
-(* 分母 n=2 闭式展开（工单接口缺口件一：pdp_den_pos 只覆盖 [0,1]， *)
+(* 分母 n=2 闭式展开（接口缺口件一：pdp_den_pos 只覆盖 [0,1]， *)
 (* 本件配方实例给全 y>0——Q₂(y)=1−y/2+y²/12=((y−3)²+3)/12>0）。 *)
 Lemma cpl_den2_expl : forall y : Q,
   pade_den 2%nat y == 1%Q + (- (1#2)%Q) * y + (1#12)%Q * (y * y).
@@ -260,7 +260,7 @@ Proof.
       * apply (cpl_ep_step_le y b' Hy).
 Qed.
 
-(* 核心恒等式（工单接口缺口件二：E₆·Q₂−P₂ 免积分正尾多项式； *)
+(* 核心恒等式（接口缺口件二：E₆·Q₂−P₂ 免积分正尾多项式； *)
 (* S1 检验 500 随机 Q 点 fractions 全验 + 数值锚 B1 双点交叉）。 *)
 Lemma cpl_g6_identity : forall y : Q,
   exp_partial 6%nat y * pade_den 2%nat y - pade_num 2%nat y ==
@@ -311,7 +311,7 @@ Proof.
   intros y Hy.
   assert (Hylt : Qlt 0 y) by (apply QltT_to_Qlt; exact Hy).
   assert (Hy0 : Qle 0 y) by (apply cpl_qlt_le; exact Hylt).
-  (* E232 先例：逐 eps 直构——real_const 打开、投影逐点归约 *)
+  (* 先例：逐 eps 直构——real_const 打开、投影逐点归约 *)
   assert (Hc : forall k, projT1 (real_const y) k == y) by (intro k; apply real_const_proj).
   destruct (real_const y) as [u Hu] eqn:Eu.
   (* destruct 已连带重写 Hc 中的 real_const y——直接投影归约 *)

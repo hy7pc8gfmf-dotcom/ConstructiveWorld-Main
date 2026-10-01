@@ -21,7 +21,7 @@
 (* 依赖： CW_ConstructiveWorld_219、UpReqLpoEquiv、UpRealLeB。          *)
 (*   WALL-1 复用面采取退回方案：不 Require UpReqSquareWallEquiv（其 vo   *)
 (*   与盘上 UpReqLpoEquiv.vo 摘要不一致，构建产物），而直挂  *)
-(*   UpReqLpoEquiv 本地内联同构事实（lpn_forward/lpn_backward 双腿 +    *)
+(*   UpReqLpoEquiv 本地内联同构事实（lpn_forward/lpn_backward 双肢 +    *)
 (*   平方实例 + real_square_nonneg_B 免费证书），语义与 WALL-1 等价类    *)
 (*   完全同面（snw_b_lift 即 g05w_sq_b_lift 定义性同形）。              *)
 (* 备注： 零公理、零假设负载；纯构造性 Set 层，墙语句作蕴含前件参数化；  *)
@@ -47,7 +47,7 @@
 (*       站槽与站槽 B 形提升器零厚度互证（g05w_loglin_iff），且判定器    *)
 (*       一步消解站槽（g05w_rlpo_to_loglin_slot，:419 兜底站的消解通道）。*)
 (*     - WALL-1 平方墙（snw_b_lift 同形面 g05w_sq_b_lift）：经实例化入   *)
-(*       同一类（g05w_b_lift_to_sq_b_lift），双腿经 lpn_forward/        *)
+(*       同一类（g05w_b_lift_to_sq_b_lift），双肢经 lpn_forward/        *)
 (*       lpn_backward 直挂（WALL-1 等价类的定义性同形复用）。           *)
 (*   【复合重建类】（S 阻塞七槽；序隙类外，AA23 障碍账）：               *)
 (*     七槽结论面全为 req/real_eq 等式或 reqRDF 微分记录，语句面无      *)
@@ -97,7 +97,7 @@
 (*     real_eq——B 形在、Or 形缺类缺口的全部厚度恰为判定器（与 WALL-1    *)
 (*     平方墙同构，且为全基推广：WALL-1 的 snw_rlpo_to_b_lift 是        *)
 (*     本件 a:=0、y:=t·t 的实例位）。                                   *)
-(*   g05w_b_lift0_to_rlpo（正向）：零基桥 + 平方实例 + WALL-1 正向腿。   *)
+(*   g05w_b_lift0_to_rlpo（正向）：零基桥 + 平方实例 + WALL-1 正向肢。   *)
 (*   g05w_loglin_iff：站槽 ⟺ 站槽提升器（B 证书免费复合/弃参双向）。     *)
 (*   g05w_rlpo_to_loglin_slot：判定器消解四站槽（:419 兜底站消解通道）。 *)
 (*   g05w_wall_class_lpo（主件闭合）：序隙类八槽账循环闭环。             *)
@@ -164,7 +164,7 @@ Definition g05w_b_lift0 : Set :=
 
 (* ============================================================ *)
 (* Part 3：正向——两桥 ⟹ rLPO（缺口厚度 = 判定器）                    *)
-(*   证法：零基桥取平方实例得 snw_b_lift，经 WALL-1 正向腿到 rLPO；    *)
+(*   证法：零基桥取平方实例得 snw_b_lift，经 WALL-1 正向肢到 rLPO；    *)
 (*   全基桥同链（实例位 a:=0, t:=x·x）。                              *)
 (* ============================================================ *)
 
@@ -329,13 +329,13 @@ Proof.
       (real_log_le_linear_B x Hx)).
 Qed.
 
-(* 判定器消解四站槽（:419 兜底站的消解通道；经全基反向腿一步复合） *)
+(* 判定器消解四站槽（:419 兜底站的消解通道；经全基反向肢一步复合） *)
 Theorem g05w_rlpo_to_loglin_slot : rLPO -> g05w_loglin_slot.
 Proof.
   exact (fun H x Hx => g05w_b_lift_to_loglin_slot (g05w_rlpo_to_b_lift H) x Hx).
 Qed.
 
-(* 判定器消解平方墙提升器（WALL-1 反向腿 lpn_backward 同形复用） *)
+(* 判定器消解平方墙提升器（WALL-1 反向肢 lpn_backward 同形复用） *)
 Theorem g05w_rlpo_to_sq_b_lift : rLPO -> g05w_sq_b_lift.
 Proof.
   exact (fun Hdec t _HB => lpn_backward Hdec t).

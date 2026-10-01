@@ -676,7 +676,7 @@ Proof.
     - apply qeq_imp_qle. ring. }
   (* 终装配：目标 LHS 是 C·(1/(m#1))（m 相关），走 Hs1→Hs2→比值锚三段；
      eps/(C+1) 与 eps·Qinv(C+1) 定义性可换，由 qeq_imp_qle+unfold Qdiv+ring
-     闭合（前稿把终装配目标误立为 C·(eps/(C+1))——与其断点目标错位）。 *)
+     闭合（前稿把终装配目标误立为 C·(eps/(C+1))——与其续作目标错位）。 *)
   apply Qle_to_QleT'.
   apply (Qle_trans _ (C * (1 / (Z.of_nat (N + 2) # 1))) _).
   - exact Hs1.

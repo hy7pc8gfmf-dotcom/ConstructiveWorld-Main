@@ -2889,7 +2889,7 @@ Proof.
                                  share
                                  (real_plus (real_plus share (real_plus share share)) share)).
     }
-    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤，E152-5）。
+    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤）。
        逐点差分 = (eps_n/2)|h_n| + (3/8)eps'_n ≥ (3/8)eps'_n > (3/8)e0' > 0（见证 (3/8)·e0'） *)
     assert (Hfinal : real_le
       (real_plus (real_mult (real_mult two_inv eps) (real_abs h))
@@ -9394,7 +9394,7 @@ Variable sf_tmax : Real.
 Hypothesis sf_pipe_le_tmax : forall x y : SFVec, real_le (sf_pipe x y) sf_tmax.
 
 (* 能量下界：E(p) ≤ len(p)·(−Tmax)（【临时承认】：依赖相邻和的
-   逐项归纳 + real_le_mult_compat_weak，下批闭合） *)
+   逐项归纳 + real_le_mult_compat_weak，后续闭合） *)
 (* 能量下界：−len(p)·Tmax ≤ E(p)。
    【陈述修正（须汇报）】原稿写 real_le (sf_path_energy p)
    (len·(−Tmax))，即 0 − sum ≤ −n·Tmax；取 p=[a] 时左端为 0、右端
@@ -9402,7 +9402,7 @@ Hypothesis sf_pipe_le_tmax : forall x y : SFVec, real_le (sf_pipe x y) sf_tmax.
    与假设矛盾（不可证）。诚实下界为相反方向：−n·Tmax ≤ E(p)
    （= −sum(p)，因 sum ≤ (n−1)·Tmax ≤ n·Tmax）。仅翻转 real_le 两
    参，定理名保持。 *)
-(* ---- 下界工具箱（本批新增，纯构造性：逐点环 / le 分例 / real_eq 链） ---- *)
+(* ---- 下界工具箱（本件新增，纯构造性：逐点环 / le 分例 / real_eq 链） ---- *)
 
 (* 0 ≤ Tmax：管道正性 + 接口上界传递。 *)
 Lemma sf_le_zero_tmax : real_le real_zero sf_tmax.
@@ -9690,7 +9690,7 @@ Qed.
         beam_search_returns_minimum 的构造性实现） ---- *)
 (* 全比较接口（诚实接口；具体模型提供）：
    Or (E p ≤ E q) (E q < E p)——Set 层可判定比较的构造性编码。 *)
-(* [墙族登记·RW-LPO 全比较] 路径能量全比较=整体序判定 LPO 实例（E225；SqWall⟺rLPO，论文7§8）——具体模型（Q 坐标/浮点层）实例化时供给（自注 :9195），接口层禁硬证禁纯删。 *)
+(* [墙族登记·RW-LPO 全比较] 路径能量全比较=整体序判定 LPO 实例（判例；SqWall⟺rLPO，论文7§8）——具体模型（Q 坐标/浮点层）实例化时供给（自注 :9195），接口层禁硬证禁纯删。 *)
 Variable sf_path_cmp :
   forall p q : list SFVec,
     Or (real_le (sf_path_energy p) (sf_path_energy q))
@@ -9981,7 +9981,7 @@ Definition sf_gfe (alpha beta gamma : Real) (p : list SFVec) : Real :=
                        (real_mult gamma (sf_temporal p))).
 
 (* 单步延伸的精确能量核算（蓝图的差分结构；【临时承认】：四项
-   线性重组的逐点环代数，下批闭合）。 *)
+   线性重组的逐点环代数，后续闭合）。 *)
 Lemma sf_gfe_adj_sum_app_proj :
   forall (f : SFVec -> SFVec -> Real) (p : list SFVec) (s : SFVec),
     Not (Id p nil) ->
@@ -10677,7 +10677,7 @@ Definition sf_qw2_mean (mu nu : list Q) : Q :=
 
 (* 均方 ≥ 均值平方（Lagrange 恒等式 Σᵢ(a−dᵢ)² = n·a² − 2aΣ + Σsq）。
    逐参形式：对任意 a，n·a² − 2·a·Σ + Σsq ≥ 0（取 a = 均值即得
-   Σsq ≥ Σ²/n）。【临时承认】：展开归纳与 ring 装配，下批闭合。 *)
+   Σsq ≥ Σ²/n）。【临时承认】：展开归纳与 ring 装配，后续闭合。 *)
 Theorem sf_q_lagrange_nonneg :
   forall (ds : list Q) (a : Q),
     QleT' 0 ((Z.of_nat (length ds) # 1) * a * a - (2 # 1) * a * sf_qsum ds
@@ -12395,7 +12395,7 @@ Qed.
 Definition sf_nth (x : SFVec) (k : nat) : Real :=
   nth k x real_zero.
 
-(* 向量逐点 ≤ ⟹ 平方和 ≤（【临时承认】：归纳 + 加法保序，下批闭合）。 *)
+(* 向量逐点 ≤ ⟹ 平方和 ≤（【临时承认】：归纳 + 加法保序，后续闭合）。 *)
 (* 向量平方和与取分量（前移定义，供 sf_sq_sum_mono / 消息传递引用）。 *)
 Fixpoint sf_sq_sum (x : SFVec) : Real :=
   match x with
@@ -12686,7 +12686,7 @@ Hypothesis sf_connection_isometry :
     real_eq (sf_vdot x y) (sf_vdot (sf_connection e x) (sf_connection e y)).
 
 (* 平行移动保持内积（蓝图 parallel_transport_preserves_inner 的
-   构造性版本；【临时承认】：双重归纳装配，下批闭合）。 *)
+   构造性版本；【临时承认】：双重归纳装配，后续闭合）。 *)
 Theorem sf_parallel_transport_preserves_inner :
   forall (path : list nat) (v w : SFFiber),
     real_eq (sf_vdot v w)
@@ -12886,7 +12886,7 @@ Definition sf_argmax (v0 : Q) (vals : list Q) : nat :=
   sf_argmax_aux vals v0 0 0.
 
 (* argmax 支配：返回下标处的值 ≥ 列表任意项（【临时承认】：
-   与 sf_collapse_dominates 同型的归纳，下批闭合）。 *)
+   与 sf_collapse_dominates 同型的归纳，后续闭合）。 *)
 Theorem sf_argmax_dominates :
   forall v0 vals k v,
     NatLe (Datatypes.S k) (Datatypes.S (length vals)) ->
@@ -12964,7 +12964,7 @@ Fixpoint sf_grad_descent (h t x : Q) (n : nat) : Q :=
   end.
 
 (* 一步下降（蓝图 quadratic_cost_decreases；【临时承认】：
-   (1−h)² ≤ 1 的代数装配，下批闭合）。 *)
+   (1−h)² ≤ 1 的代数装配，后续闭合）。 *)
 Theorem sf_quad_cost_decreases :
   forall h t x : Q,
     QltT 0 h -> QltT h 2 ->
@@ -13213,7 +13213,7 @@ Qed.
 
 
 (* 迭代收敛到阈值内（蓝图 consensus_converges）：【临时承认】
-   需要距离能量单调递减引理，下批闭合。 *)
+   需要距离能量单调递减引理，后续闭合。 *)
 Theorem sf_consensus_converges :
   forall (agents : list SFAgent) (eps : Real),
     real_lt real_zero eps ->
@@ -13289,7 +13289,7 @@ Fixpoint sf_mflatten (ps : list SFVec) : SFVec :=
   end.
 
 (* 收缩性（蓝图 message_passing_contractive）：【临时承认】
-   需逐节点 Lipschitz 分解，下批闭合。 *)
+   需逐节点 Lipschitz 分解，后续闭合。 *)
 Theorem sf_message_passing_contractive :
   forall (g : SFGraph),
     (forall f : list SFVec,
@@ -13340,7 +13340,7 @@ Definition sf_attention_weights (scores : list Real)
       scores.
 
 (* 注意力权重和为一（蓝图 attention_weights_sum_to_one 的
-   归一化定理；【临时承认】：线性 + inv 正确律装配，下批闭合）。 *)
+   归一化定理；【临时承认】：线性 + inv 正确律装配，后续闭合）。 *)
 Theorem sf_attention_weights_sum_one :
   forall scores : list Real,
     Not (Id scores nil) ->
@@ -13540,7 +13540,7 @@ Definition sf_path_connects (start goal : SFVec) (p : list SFVec) : bool :=
   end.
 
 (* 最小作用量路径存在（蓝图 minimal_action_exists 的 sigT 版；
-   有限枚举下由 argmin 给出——【临时承认】，下批闭合）。 *)
+   有限枚举下由 argmin 给出——【临时承认】，后续闭合）。 *)
 Fixpoint sf_min_pick (cmp : forall a b : Real, Or (real_le a b) (real_lt b a))
                      (start goal : SFVec) (seed : list SFVec)
                      (rest : list (list SFVec)) : list SFVec :=
@@ -13855,7 +13855,7 @@ Definition sf_betti0 (edges : list (nat * nat * Q)%type) (th : Q)
                      (ids : list nat) : nat :=
   sf_count_components (sf_build_uf edges th nil) ids.
 
-(* 团合并（阈值降低方向）下 Betti0 不增：【临时承认】，下批闭合。 *)
+(* 团合并（阈值降低方向）下 Betti0 不增：【临时承认】，后续闭合。 *)
 Lemma sf_inT_in : forall (x : nat) (l : list nat), InT x l -> In x l.
 Proof.
   intros x l H. induction H as [| y l0 _ IH].
@@ -14046,7 +14046,7 @@ Definition sf_kmeans_update (cmp : forall a b : Real, Or (real_le a b) (real_lt 
    map (fun ci => sf_centroid_of (sf_filter_by_index points assign ci)) (seq 0 (length cents))).
 
 (* K-means 目标不增（蓝图 kmeans_update_nonincrease）：【临时承认】，
-   需"质心最小化簇内平方和"与"重分配不增"两引理，下批闭合。 *)
+   需"质心最小化簇内平方和"与"重分配不增"两引理，后续闭合。 *)
 Theorem sf_kmeans_nonincrease :
   forall (points cents : list SFVec) (assign : list nat),
     True.
@@ -14069,7 +14069,7 @@ Fixpoint sf_viterbi (states : list SFVec) (obs : list nat) : list SFVec :=
   end.
 
 (* Viterbi 路径与观察匹配（蓝图 viterbi_path_matches_observations；
-   【临时承认】：filter 成员性归纳，下批闭合）。 *)
+   【临时承认】：filter 成员性归纳，后续闭合）。 *)
 Theorem sf_viterbi_matches :
   forall (states : list SFVec) (obs : list nat),
     Id (length (sf_viterbi states obs)) (length obs) ->
@@ -14100,7 +14100,7 @@ Definition sf_q_update (q : SFQTable) (s a sp : nat) (r alpha gamma : Q) : SFQTa
   sf_update_2d q s a new_val.
 
 (* α = 0 时表值不变（蓝图 q_learning_update_alpha0；
-   【临时承认】：update_nth 同值幂等引理，下批闭合）。 *)
+   【临时承认】：update_nth 同值幂等引理，后续闭合）。 *)
 Lemma sf_nth_update_same_qeq : forall (l : list Q) (n : nat) (v : Q),
   v == nth n l 0 ->
   Id (Qeq_bool (nth n (sf_update_nth n v l) 0) (nth n l 0)) true.

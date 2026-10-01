@@ -128,7 +128,7 @@ Qed.
 (*   lt_plus_compat_lt_le : forall a b c d, lt a b -> le c d ->        *)
 (*                          lt (plus a c) (plus b d).                  *)
 (* 逐字同构（req→real 载体实例化）。real_le Or 分解两支：               *)
-(*   lt 支 = 左平移 a 腿 + 右平移机 b 腿 + trans；                      *)
+(*   lt 支 = 左平移 a 肢 + 右平移机 b 肢 + trans；                      *)
 (*   eq 支 = eq_plus_compat 运输（c==d）+ 右平移机。                    *)
 Theorem rlsb_lt_plus_compat_lt_le : forall a b c d : Real,
   real_lt a b -> real_le c d -> real_lt (real_plus a c) (real_plus b d).

@@ -48,7 +48,7 @@
 (* 依赖：CW_ConstructiveWorld_219／UpReqAlign／UpReqRDF，只读依存；                *)
 (*   零 Require 源版本 UpReqPPOPlain（防混代际 .vo 地雷，S8 同款）；                 *)
 (*   零 git、零注册面增量。                                                      *)
-(* 四关留痕：Live_X/attn/logs/g{0..4}-UpAblD1PPO_*.{log,exit}                    *)
+(* 四检留痕：Live_X/attn/logs/g{0..4}-UpAblD1PPO_*.{log,exit}                    *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

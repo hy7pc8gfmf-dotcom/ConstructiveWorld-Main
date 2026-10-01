@@ -232,7 +232,7 @@ Proof.
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
                  (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
-                 (p2_diff p q)).  (* 注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
+                 (p2_diff p q)).  (* 注：S07 实签交叉肢序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
         + apply real_eq_refl.
         + exact (p2_one_minus_diff q p).
       - exact (p2_gibbs_core_strict_pgtq (p2_one_minus p) (p2_one_minus q)
@@ -266,7 +266,7 @@ Proof.
       * apply (RealSetoid.real_eq_plus_compat
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_plus (p2_diff q p) (p2_diff p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉腿序重排（同前） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉肢序重排（同前） *)
       -- p2_ring_eq.
       -- apply real_eq_sym. p2_ring_eq.
       * apply real_plus_zero.
@@ -313,7 +313,7 @@ Proof.
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
                  (real_plus (p2_one_minus q) (real_opp (p2_one_minus p)))
                  (real_kl_term (p2_one_minus p) (p2_one_minus q) Hp1 Hq1)
-                 (p2_diff p q)).  (* 注：S07 实签交叉腿序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
+                 (p2_diff p q)).  (* 注：S07 实签交叉肢序 (a≈c)(b≈d)，成对序误排（9.1 适配税#2） *)
         + apply real_eq_refl.
         + exact (p2_one_minus_diff q p).
       - exact (klst_gibbs_core_strict (p2_one_minus p) (p2_one_minus q)
@@ -347,7 +347,7 @@ Proof.
       * apply (RealSetoid.real_eq_plus_compat
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_plus (p2_diff q p) (p2_diff p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉腿序重排（同前） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_zero).  (* 注：交叉肢序重排（同前） *)
       -- p2_ring_eq.
       -- apply real_eq_sym. p2_ring_eq.
       * apply real_plus_zero.
@@ -426,7 +426,7 @@ Proof.
                  (p2_kl2 p q Hp Hq Hp1 Hq1)
                  (real_mult (real_inv_pos (p2_tvsq p q) Htv)
                             (p2_tvsq p q))
-                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_one).  (* 注：交叉腿序重排（9.1 适配税#2 同族） *)
+                 (p2_kl2 p q Hp Hq Hp1 Hq1) real_one).  (* 注：交叉肢序重排（9.1 适配税#2 同族） *)
         * apply real_eq_refl.
         * apply (real_eq_trans
                    _ (real_mult (p2_tvsq p q)

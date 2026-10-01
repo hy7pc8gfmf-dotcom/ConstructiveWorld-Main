@@ -227,8 +227,8 @@ Qed.
 (* ---- 件 4/9 主定理：attention = 变分自由能的唯一最小点                *)
 (*   （Id attention_minimizes_free_energy_unique L112225）。          *)
 (*   使用链：req_fep_F_ext（softmax↔boltzmann 换形，Id HFsb 步）       *)
-(*   → UpReqDist req_min_free_energy_is_boltzmann（≤ 腿）/            *)
-(*   req_free_energy_min_unique（唯一性腿）+ req_fep_align 完成。      *)
+(*   → UpReqDist req_min_free_energy_is_boltzmann（≤ 肢）/            *)
+(*   req_free_energy_min_unique（唯一性肢）+ req_fep_align 完成。      *)
 Theorem req_attention_minimizes_free_energy_unique :
   forall (p : S -> R) (Hp : forall s : S, lt zero (p s)),
     req (sumf p) one ->

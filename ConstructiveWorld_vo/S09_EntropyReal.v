@@ -322,7 +322,7 @@ apply (RealSetoid.real_eq_plus_compat                             (real_plus (re
 ** apply real_eq_refl.
 -- apply (real_half_plus_half eps').
 }
-Qed. (* ============ 3. mult 辅助引理族（E196：Real 层无 0 ≤ |a|，乘积界走逐点） ============   Real 层 real_le = Or lt eq 无法表达 0 ≤ |a|（E152-5）⟹ real_le_mult_compat(_weak)   在 |f|·|A_g| ≤ Mf·(eps_g|h|+β_g) 型乘积界处不可用。绕行：Q 层逐点（Qabs_nonneg 可判定），   三个新引理：real_abs_plus_one_pos（0 < 1+|a|，Mf/Mg 正性）、real_abs_le_plus_one   （|a| ≤ 1+|a|，|f| ≤ Mf）、real_abs_prod_le_eps（|a| ≤ M → |b| ≤ B →   |a|·|b| ≤ M·B + eps，margin 吸收 eq 分支柯西余量）。 *)(* 3a：0 < 1 + |a|（逐点 1 + Qabs(a_n) ≥ 1 > 1/2） *)
+Qed. (* ============ 3. mult 辅助引理族（判例：Real 层无 0 ≤ |a|，乘积界走逐点） ============   Real 层 real_le = Or lt eq 无法表达 0 ≤ |a|（判例）⟹ real_le_mult_compat(_weak)   在 |f|·|A_g| ≤ Mf·(eps_g|h|+β_g) 型乘积界处不可用。绕行：Q 层逐点（Qabs_nonneg 可判定），   三个新引理：real_abs_plus_one_pos（0 < 1+|a|，Mf/Mg 正性）、real_abs_le_plus_one   （|a| ≤ 1+|a|，|f| ≤ Mf）、real_abs_prod_le_eps（|a| ≤ M → |b| ≤ B →   |a|·|b| ≤ M·B + eps，margin 吸收 eq 分支柯西余量）。 *)(* 3a：0 < 1 + |a|（逐点 1 + Qabs(a_n) ≥ 1 > 1/2） *)
 Lemma real_abs_plus_one_pos : forall a : Real,  real_lt real_zero (real_plus real_one (real_abs a)).
 Proof.
 intro a.
@@ -1399,7 +1399,7 @@ apply (real_mult_one K).
 -- exact HK.
 + exact Heps'.
 - apply real_le_refl.
-Qed. (* ============ 6b0：real_le 逐点化（Or 编码的 eq 分支容差） ============   real_le x y = Or (real_lt x y) (real_eq x y)（E191-1：real_eq 柯西形式非逐点，   无法提取 projT1 X n == projT1 Y n）。逐点使用统一走容差形态：x_n ≤ y_n + eps   （lt 分支严格 x_n < y_n − c ≤ y_n ≤ y_n + eps；eq 分支 |x_n−y_n| < eps ⟹ x_n < y_n + eps）。   用途：mult 最终份额逐点把 Hsum_bnd/HT3a/HDen_sq 的 real_le 逐点化（各容差 e0'/128，   3·容差合计 3e0'/128 << 份额余量 0.54·e0'）。 *)
+Qed. (* ============ 6b0：real_le 逐点化（Or 编码的 eq 分支容差） ============   real_le x y = Or (real_lt x y) (real_eq x y)（判例：real_eq 柯西形式非逐点，   无法提取 projT1 X n == projT1 Y n）。逐点使用统一走容差形态：x_n ≤ y_n + eps   （lt 分支严格 x_n < y_n − c ≤ y_n ≤ y_n + eps；eq 分支 |x_n−y_n| < eps ⟹ x_n < y_n + eps）。   用途：mult 最终份额逐点把 Hsum_bnd/HT3a/HDen_sq 的 real_le 逐点化（各容差 e0'/128，   3·容差合计 3e0'/128 << 份额余量 0.54·e0'）。 *)
 Lemma real_le_pointwise_eps : forall (x y : Real) (eps : Q),  real_le x y -> QltT 0 eps ->  sigT (fun N : nat => forall n : nat, (N <= n)%nat ->        Qle (projT1 x n) (projT1 y n + eps)).
 Proof.
 intros x y eps Hxy Heps.
@@ -1438,11 +1438,11 @@ apply (Qle_lt_trans _ (projT1 y n + (projT1 x n - projT1 y n)) (projT1 y n + eps
 ring.
 + apply (proj2 (Qplus_lt_r (projT1 x n - projT1 y n) eps (projT1 y n))).
 apply (proj2 (proj1 (Qabs_Qlt_condition (projT1 x n - projT1 y n) eps)                          (QltT_to_Qlt _ _ (HN n (NatLe_lift _ _ Hn))))).
-Qed. (* ============ 6b：real_differentiable_mult（E196：乘积可微性主定理） ============
-   本引理后的 mult 证明见下；先补 real_inv_proj（E197：real_inv_pos 投影在 n ≥ witness 率处
+Qed. (* ============ 6b：real_differentiable_mult（判例：乘积可微性主定理） ============
+   本引理后的 mult 证明见下；先补 real_inv_proj（判例：real_inv_pos 投影在 n ≥ witness 率处
    精确等于 Qinv(u n)——避免 cbn 展开 witness 构造的死路） *)
 (* real_inv_pos 投影引理：n ≥ N0（Hx 的 witness 率）⟹ projT1 (real_inv_pos x Hx) n == Qinv (projT1 x n)
-   E179-2 形态的通用化——一次写就，Hinv64/HinvK1/HdKfn/HdKgn 全部复用 *)
+   判例形态的通用化——一次写就，Hinv64/HinvK1/HdKfn/HdKgn 全部复用 *)
 Lemma real_inv_proj : forall (x : Real) (Hx : real_lt real_zero x),
   sigT (fun N : nat => forall n : nat, (N <= n)%nat -> projT1 (real_inv_pos x Hx) n == Qinv (projT1 x n)).
 Proof.
@@ -1788,7 +1788,7 @@ Proof.
 Qed.
 
 (* C3. 最终缩放：|a|·(eps·inv(1+|a|)·|h| + eps'·inv(1+|a|)) ≤ eps·|h| + eps'
-   Q 层逐点（E196：Real 层无 0 ≤ |a|，乘积界走逐点）；
+   Q 层逐点（判例：Real 层无 0 ≤ |a|，乘积界走逐点）；
    统一下界 eps1'·inv(M+2)，M 为 |a| 的柯西范数上界（real_norm_bounded） *)
 Lemma real_abs_scaling_le : forall (a eps eps' h : Real),
   real_lt real_zero eps -> real_lt real_zero eps' ->
@@ -2222,7 +2222,7 @@ assert (Hc64 : real_lt real_zero (real_const (Z.of_nat 64 # 1))).
 { apply real_const_pos.
 vm_compute.
 reflexivity.
-}    (* marg := β·inv64（β-based：marg² == β²/4096 ≤ β/4096 线性于 eps'；       旧 marg := eps'·inv(64K) 的 marg² 二次于 eps'，份额逐点不可控 —— E197 教训） *)    set (marg := real_mult beta                    (real_inv_pos (real_const (Z.of_nat 64 # 1)) Hc64)).
+}    (* marg := β·inv64（β-based：marg² == β²/4096 ≤ β/4096 线性于 eps'；       旧 marg := eps'·inv(64K) 的 marg² 二次于 eps'，份额逐点不可控 —— 判例教训） *)    set (marg := real_mult beta                    (real_inv_pos (real_const (Z.of_nat 64 # 1)) Hc64)).
 assert (Hbeta : real_lt real_zero beta).
 { unfold beta.
 apply real_mult_positive.
@@ -2500,7 +2500,7 @@ apply (RealSetoid.real_eq_mult_compat (real_mult Den eps3) (real_abs h) eps2 (re
 + apply real_le_refl.
 }    (* T3 展开：(Lf|h|+B)(Lg|h|+B) == Den|h|² + B·(Lf+Lg)·|h| + B²，B := β_gamma+marg       展开链：左分配两次 → comm 重组 → Den := Lf·Lg *)    set (B := real_plus beta_gamma marg).
 assert (HB : real_lt real_zero B) by (unfold B; apply real_plus_positive; [exact Hbg | exact Hmarg]).
-(* (Lf|h|+B)(Lg|h|+B) == Lf·Lg·|h|² + (Lf+Lg)·B·|h| + B²       先证较弱形式：≤ (Lf|h|+B)(Lg|h|+B) == 展开（逐点 Q 层做份额）       直接走逐点：|T3| ≤ (Lf|h|+B)(Lg|h|+B) + marg 已得（HT3a），       现证 (Lf|h|+B)(Lg|h|+B) 的展开上界用逐点 Q 层（E152-5 先例）。       组装：|D| ≤ |T1|+|T2|+|T3| + 2marg（三角两次）              ≤ (eps4+eps4+eps2)|h| + [Mf·β_gamma + Mg·β_gamma + 份额_T3] + 5marg       其中份额_T3 逐点 ≤ eps'（Q 层：Mf·β_gamma ≤ 3eps'/128 等）。 *)    (* |D| == |T1+T2+T3| 换形桥（HD）+ 三角 *)    set (TSum := real_plus (real_plus T1 T2) T3).
+(* (Lf|h|+B)(Lg|h|+B) == Lf·Lg·|h|² + (Lf+Lg)·B·|h| + B²       先证较弱形式：≤ (Lf|h|+B)(Lg|h|+B) == 展开（逐点 Q 层做份额）       直接走逐点：|T3| ≤ (Lf|h|+B)(Lg|h|+B) + marg 已得（HT3a），       现证 (Lf|h|+B)(Lg|h|+B) 的展开上界用逐点 Q 层（先例）。       组装：|D| ≤ |T1|+|T2|+|T3| + 2marg（三角两次）              ≤ (eps4+eps4+eps2)|h| + [Mf·β_gamma + Mg·β_gamma + 份额_T3] + 5marg       其中份额_T3 逐点 ≤ eps'（Q 层：Mf·β_gamma ≤ 3eps'/128 等）。 *)    (* |D| == |T1+T2+T3| 换形桥（HD）+ 三角 *)    set (TSum := real_plus (real_plus T1 T2) T3).
 assert (HD_TSum : real_eq D TSum).
 { unfold TSum, T1, T2, T3.
 apply (real_eq_trans D        (real_plus (real_plus (real_mult Fx Ag) (real_mult Gx Af)) (real_mult Df Dg))        (real_plus (real_plus T1 T2) T3)).
@@ -2539,7 +2539,7 @@ apply (real_plus_assoc (real_plus (real_plus (real_abs T1) (real_abs T2)) marg) 
 ++ exact HT2.
 -- apply real_le_refl.
 * apply real_le_refl.
-}    (* ============ 最终：|D| ≤ eps|h| + eps'（份额逐点 Q 层，E152-5：real_le=Or 无法表达通用非严格 ≤） ============       结构：Hsum_bnd（已证）→ HT3a 替换 |T3| → T3 展开（ring）→ HDen_sq 替换 Den·|h|²             → ring 重排 == eps|h| + ShareSum → 份额 ≤ c_total·eps'（c_total := 889/ < 1）       份额逐点精确（E179-2：real_inv_pos 投影 n ≥ N0 时 == Qinv(u n)，βK ≤ eps'、β ≤ 1 无滑移）：         Mfβγ ≤ 3eps'/128（Mf ≤ K/64、βγ == 3β/2、βK ≤ eps'）、Mg 对称         Lin ≤ 97eps'/256（(Lf+Lg)|h| ≤ K/4、B == 97β/64、βK ≤ eps'）         BB ≤ 9409eps'/(4096·320) ≤ eps'/128（β ≤ 1 ⟹ β² ≤ β、K ≥ 320）         6marg ≤ 3eps'/10240 ≤ eps'/（marg == β/64）       见证 eps0q := e0'/4；Hsum_bnd/HT3a/HDen_sq 逐点化各容差 e0'/128（real_le_pointwise_eps）       余量：1 − 889/ − 4/128 − 1/4 == 583/ > 0 ✓ *)    set (A1 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mf beta_gamma)).
+}    (* ============ 最终：|D| ≤ eps|h| + eps'（份额逐点 Q 层，判例：real_le=Or 无法表达通用非严格 ≤） ============       结构：Hsum_bnd（已证）→ HT3a 替换 |T3| → T3 展开（ring）→ HDen_sq 替换 Den·|h|²             → ring 重排 == eps|h| + ShareSum → 份额 ≤ c_total·eps'（c_total := 889/ < 1）       份额逐点精确（判例：real_inv_pos 投影 n ≥ N0 时 == Qinv(u n)，βK ≤ eps'、β ≤ 1 无滑移）：         Mfβγ ≤ 3eps'/128（Mf ≤ K/64、βγ == 3β/2、βK ≤ eps'）、Mg 对称         Lin ≤ 97eps'/256（(Lf+Lg)|h| ≤ K/4、B == 97β/64、βK ≤ eps'）         BB ≤ 9409eps'/(4096·320) ≤ eps'/128（β ≤ 1 ⟹ β² ≤ β、K ≥ 320）         6marg ≤ 3eps'/10240 ≤ eps'/（marg == β/64）       见证 eps0q := e0'/4；Hsum_bnd/HT3a/HDen_sq 逐点化各容差 e0'/128（real_le_pointwise_eps）       余量：1 − 889/ − 4/128 − 1/4 == 583/ > 0 ✓ *)    set (A1 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mf beta_gamma)).
 set (A2 := real_plus (real_mult eps4 (real_abs h)) (real_mult Mg beta_gamma)).
 set (Prod := real_mult (real_plus (real_mult Lf (real_abs h)) B)                           (real_plus (real_mult Lg (real_abs h)) B)).
 set (Den_h2 := real_mult Den (real_mult (real_abs h) (real_abs h))).
@@ -2553,19 +2553,19 @@ assert (Hfinal : real_le (real_abs D) (real_plus (real_mult eps (real_abs h)) ep
 {      (* 见证与率（先 destruct 引用 Heps'/HK/HLf/HLg 的复合见证，再 destruct 本体） *)      destruct real_two_pos_local as [e2 [He2 [N2 HN2]]].
 pose proof Hc64 as Hc64_orig.
 pose proof Hc64 as Hc64_save.
-(* E197：destruct 假设会 generalize 改写 marg 的 set 体（marg 引用 Hc64）——
+(* 判例：destruct 假设会 generalize 改写 marg 的 set 体（marg 引用 Hc64）——
    改 destruct 副本 Hc64_x，让 Hc64 存活，marg ≡ margp（都用 Hc64）后所有投影断言 reflexivity 闭合 *)
 pose proof Hc64 as Hc64_x.
 set (margp := real_mult beta (real_inv_pos (real_const (Z.of_nat 64 # 1)) Hc64)).
 destruct Hc64_x as [c64 [Hc64pos [N64 HN64]]].
 destruct Hbeta as [b0 [Hb0 [Nb HNb]]].
-(* E197：destruct(项) generalize 改写上下文 set 体（dKf/dKg 引用这些证明项）——
+(* 判例：destruct(项) generalize 改写上下文 set 体（dKf/dKg 引用这些证明项）——
    先 pose 副本再 destruct 副本，保留 dKf/dKg 体内原证明项（同 HK1_pos/Hc64_save 模式） *)
 pose proof (real_mult_positive e8 Lf He8 HLf) as H8Lf_pos.
 destruct H8Lf_pos as [e8Lf [He8Lf [N8Lf HN8Lf]]].
 pose proof (real_mult_positive e8 Lg He8 HLg) as H8Lg_pos.
 destruct H8Lg_pos as [e8Lg [He8Lg [N8Lg HN8Lg]]].
-(* E197：destruct(项) 会把证明项在上下文 set 体内 generalize 替换（beta 体引用该证明项）——
+(* 判例：destruct(项) 会把证明项在上下文 set 体内 generalize 替换（beta 体引用该证明项）——
    先 pose 副本 HK1_pos，destruct 副本，保留 beta 体内原证明项（margp/Hc64_save 同款教训） *)
 pose proof (real_mult_positive K (real_plus real_one eps') HK (real_one_plus_pos eps' Heps')) as HK1_pos.
 destruct HK1_pos as [k10 [Hk10 [Nk1 HNk1]]].
@@ -2602,7 +2602,7 @@ exact He0'.
 - apply Qinv_lt_0_compat.
 vm_compute.
 reflexivity.
-}      (* 初始：real_le → real_lt（E152-5：Or 编码无法直接表达通用非严格 ≤，走见证） *)      apply (RealSetoid.real_lt_le_iff_req (real_abs D) (real_plus (real_mult eps (real_abs h)) eps')).
+}      (* 初始：real_le → real_lt（判例：Or 编码无法直接表达通用非严格 ≤，走见证） *)      apply (RealSetoid.real_lt_le_iff_req (real_abs D) (real_plus (real_mult eps (real_abs h)) eps')).
 left.
 unfold real_lt.
 exists eps0q.
@@ -2611,7 +2611,7 @@ split.
 - (* 逐点 Q 层 *)        (* 三个 real_le 链逐点化（各容差 e0'/128；Or 编码 eq 分支由 real_le_pointwise_eps 统一处理） *)        destruct (real_le_pointwise_eps (real_abs D) HsumRHS (Qdiv e0' 128) Hsum_bnd Hs0) as [Nsum HNsum].
 destruct (real_le_pointwise_eps (real_abs T3) (real_plus Prod marg) (Qdiv e0' 128) HT3a Hs0) as [Nt3 HNt3].
 destruct (real_le_pointwise_eps Den_h2 (real_plus (real_mult eps2 (real_abs h)) marg) (Qdiv e0' 128) HDen_sq Hs0) as [Nden HNden].
-(* real_inv_proj 率（E197：real_inv_pos 投影引理——返回率加入 N_max 保证 n 足够大） *)
+(* real_inv_proj 率（判例：real_inv_pos 投影引理——返回率加入 N_max 保证 n 足够大） *)
 destruct (real_inv_proj (real_const (Z.of_nat 64 # 1)) Hc64) as [N64p HN64p].
 destruct (real_inv_proj (real_mult K (real_plus real_one eps'))
            (real_mult_positive K (real_plus real_one eps') HK (real_one_plus_pos eps' Heps')))
@@ -2619,7 +2619,7 @@ destruct (real_inv_proj (real_mult K (real_plus real_one eps'))
 destruct (real_inv_proj (real_mult e8 Lf) (real_mult_positive e8 Lf He8 HLf)) as [N8Lfp HN8Lfp].
 destruct (real_inv_proj (real_mult e8 Lg) (real_mult_positive e8 Lg He8 HLg)) as [N8Lgp HN8Lgp].
 set (N_extra := Nat.max N64p (Nat.max NK1p (Nat.max N8Lfp N8Lgp))).
-(* N_max 二叉 let 树（E080：lia 对 max 展开 2^15 case 指数爆炸内存 4.9GB——禁 lia，           改确定性 le_max_l/r 链，毫秒级；unify 自动展开 let 使 apply Nat.le_max_l 直接命中） *)        set (N_a := Nat.max N0' N2).
+(* N_max 二叉 let 树（判例：lia 对 max 展开 2^15 case 指数爆炸内存 4.9GB——禁 lia，           改确定性 le_max_l/r 链，毫秒级；unify 自动展开 let 使 apply Nat.le_max_l 直接命中） *)        set (N_a := Nat.max N0' N2).
 set (N_b := Nat.max N64 Nb).
 set (N_c := Nat.max NK NLf).
 set (N_d := Nat.max NLg NB).
@@ -2719,7 +2719,7 @@ apply (Nat.le_trans _ N_gh _); [apply Nat.le_max_r | ].
 apply (Nat.le_trans _ N_efgh _); [apply Nat.le_max_r | ].
 apply (Nat.le_trans _ N_max _); [apply Nat.le_max_r | exact Hn_max].
 }
-      (* real_inv_proj 率 ≤ n（N_extra 4 层链；禁 lia——E080） *)
+      (* real_inv_proj 率 ≤ n（N_extra 4 层链；禁 lia——判例） *)
       assert (HN64p_le : (N64p <= n)%nat).
       { apply (Nat.le_trans _ N_extra _); [apply Nat.le_max_l | ].
         apply (Nat.le_trans _ (Nat.max N_max N_extra) _); [apply Nat.le_max_r | exact (NatLe_drop _ _ Hn)]. }
@@ -2984,7 +2984,7 @@ setoid_rewrite (real_plus_proj (real_plus (real_plus Mf Mg) Mfp) Mgp n).
 setoid_rewrite (real_plus_proj (real_plus Mf Mg) Mfp n).
 setoid_rewrite (real_plus_proj Mf Mg n).
 assert (Hc : Qeq (Z.of_nat 64 # 1) (Qmake 64 1)) by (vm_compute; reflexivity).
-(* E197-3：rewrite Hc 会把 Qeq 展开成 Qnum/Qden 交叉积形态，目标里是字面 Q 匹配不上——改 change *)
+(* 判例：rewrite Hc 会把 Qeq 展开成 Qnum/Qden 交叉积形态，目标里是字面 Q 匹配不上——改 change *)
 change (Z.of_nat 64 # 1) with (Qmake 64 1).
 reflexivity.
 }      assert (HKn_ge : Qle (Qmake 320 1) Kn).
@@ -2992,9 +2992,9 @@ reflexivity.
 apply (Qle_trans _ (Qmake 64 1 * (Qmake 1 1 + Qmake 1 1 + Qmake 1 1 + Qmake 1 1 + 1)) _).
 - apply qeq_le.
 ring.
-- (* 目标 64·5 ≤ 64·(Mfn+...)：Qmult_le_compat_nonneg 直接匹配（无需 comm；E197-4） *)        apply (Qmult_le_compat_nonneg (Qmake 64 1) (Qmake 64 1)
+- (* 目标 64·5 ≤ 64·(Mfn+...)：Qmult_le_compat_nonneg 直接匹配（无需 comm） *)        apply (Qmult_le_compat_nonneg (Qmake 64 1) (Qmake 64 1)
                  (Qmake 1 1 + Qmake 1 1 + Qmake 1 1 + Qmake 1 1 + 1) (Mfn + Mgn + Mfpn + Mgpn + 1)).
-  + split; [vm_compute; discriminate | vm_compute; discriminate].   (* 0 ≤ 64 ≤ 64（Qle 归约为 Lt<>Gt，discriminate 闭合；E197-4） *)
+  + split; [vm_compute; discriminate | vm_compute; discriminate].   (* 0 ≤ 64 ≤ 64（Qle 归约为 Lt<>Gt，discriminate 闭合） *)
   + split; [vm_compute; discriminate | apply (Qplus_le_compat (Qmake 1 1 + Qmake 1 1 + Qmake 1 1 + Qmake 1 1) (Mfn + Mgn + Mfpn + Mgpn) 1 1)].
 * apply (Qplus_le_compat (Qmake 1 1 + Qmake 1 1 + Qmake 1 1) (Mfn + Mgn + Mfpn) 1 Mgpn).
 -- apply (Qplus_le_compat (Qmake 1 1 + Qmake 1 1) (Mfn + Mgn) 1 Mfpn).
@@ -3087,7 +3087,7 @@ exact HK1pos.
 { rewrite Hprojbeta.
 rewrite HinvK1.
 apply (Qle_trans _ (en' * 1) _).
-- (* en'·Qinv(K1n)·Kn ≤ en'·1：先 assoc 桥成 en'·(Qinv·Kn) 再 nonneg（E197-4） *)          apply (Qle_trans _ (en' * (Qinv (Kn * (1 + en')) * Kn)) _).
+- (* en'·Qinv(K1n)·Kn ≤ en'·1：先 assoc 桥成 en'·(Qinv·Kn) 再 nonneg（判例） *)          apply (Qle_trans _ (en' * (Qinv (Kn * (1 + en')) * Kn)) _).
   + apply qeq_le. ring.
   + apply (Qmult_le_compat_nonneg en' en' (Qinv (Kn * (1 + en')) * Kn) 1).
 * split; [apply Qlt_le_weak; exact Hen'pos | apply Qle_refl].
@@ -3174,7 +3174,7 @@ assert (Hinv : projT1 (real_inv_pos (real_mult e8 Lg) (real_mult_positive e8 Lg 
 reflexivity.
 }      assert (HhdKfn : Qlt hn (Kn * Qinv (Qmake 8 1 * Lfn))).
 { apply (Qlt_le_trans _ (projT1 dKf n - cdf) _).
-- (* hn < dKfn − cdf：由 cdf < dKfn − hn（HNdf）经 Qlt_minus_iff 链 + ring 桥（E197-4） *)        apply (proj2 (Qlt_minus_iff hn (projT1 dKf n - cdf))).
+- (* hn < dKfn − cdf：由 cdf < dKfn − hn（HNdf）经 Qlt_minus_iff 链 + ring 桥（判例） *)        apply (proj2 (Qlt_minus_iff hn (projT1 dKf n - cdf))).
   apply (Qlt_le_trans _ ((projT1 dKf n - hn) - cdf) _).
   + apply (proj1 (Qlt_minus_iff cdf (projT1 dKf n - hn))).
     apply QltT_to_Qlt.
@@ -3186,7 +3186,7 @@ reflexivity.
   + apply qeq_le. rewrite HdKfn. ring.
 }      assert (HhdKgn : Qlt hn (Kn * Qinv (Qmake 8 1 * Lgn))).
 { apply (Qlt_le_trans _ (projT1 dKg n - cdg) _).
-- (* hg < dKgn − cdg：由 cdg < dKgn − hn（HNdg）经 Qlt_minus_iff 链 + ring 桥（E197-4） *)        apply (proj2 (Qlt_minus_iff hn (projT1 dKg n - cdg))).
+- (* hg < dKgn − cdg：由 cdg < dKgn − hn（HNdg）经 Qlt_minus_iff 链 + ring 桥（判例） *)        apply (proj2 (Qlt_minus_iff hn (projT1 dKg n - cdg))).
   apply (Qlt_le_trans _ ((projT1 dKg n - hn) - cdg) _).
   + apply (proj1 (Qlt_minus_iff cdg (projT1 dKg n - hn))).
     apply QltT_to_Qlt.
@@ -3198,7 +3198,7 @@ reflexivity.
   + apply qeq_le. rewrite HdKgn. ring.
 }      assert (HdKf_pt : Qle (Qmake 8 1 * Lfn * hn) Kn).
 { apply (Qle_trans _ (hn * (Qmake 8 1 * Lfn)) _).
-  - apply qeq_le. ring.   (* 8·Lfn·hn == hn·(8·Lfn)（E197-4：Qle 链，qeq_le 不能用于 Qlt 目标） *)
+  - apply qeq_le. ring.   (* 8·Lfn·hn == hn·(8·Lfn)（判例：Qle 链，qeq_le 不能用于 Qlt 目标） *)
   - apply (Qle_trans _ ((Kn * Qinv (Qmake 8 1 * Lfn)) * (Qmake 8 1 * Lfn)) _).
     + apply (Qmult_le_compat_r hn (Kn * Qinv (Qmake 8 1 * Lfn)) (Qmake 8 1 * Lfn)).
       * apply Qlt_le_weak. exact HhdKfn.
@@ -3241,7 +3241,7 @@ reflexivity.
 rewrite HinvK1.
 (* β == en'·Qinv(K1n) ≤ en'·Qinv(Kn)（Kn≤K1n 反单调）≤ en'·Qinv(320)（320≤Kn 反单调） *)        apply (Qle_trans _ (en' * Qinv Kn) _).
 - apply (Qmult_le_compat_nonneg en' en' (Qinv (Kn * (1 + en'))) (Qinv Kn)).
-  + split; [apply Qlt_le_weak; exact Hen'pos | apply Qle_refl].   (* 0 ≤ en' ≤ en'（E197-4：nonneg 匹配 en' 在前形态） *)
+  + split; [apply Qlt_le_weak; exact Hen'pos | apply Qle_refl].   (* 0 ≤ en' ≤ en'（判例：nonneg 匹配 en' 在前形态） *)
   + split; [exact HinvK1pos | apply (q_inv_le_contravar (Kn * (1 + en')) Kn); [exact HK1pos | exact HKn_pos | apply (proj2 (Qle_minus_iff Kn (Kn * (1 + en')))); apply (Qle_trans _ (Kn * en') _); [apply (Qmult_le_0_compat Kn en'); [apply Qlt_le_weak; exact HKn_pos | apply Qlt_le_weak; exact Hen'pos] | apply qeq_le; ring]]].   (* 0 ≤ Qinv(K1n) ≤ Qinv(Kn) *)
 - apply (Qmult_le_compat_nonneg en' en' (Qinv Kn) (Qinv (Qmake 320 1))).
   + split; [apply Qlt_le_weak; exact Hen'pos | apply Qle_refl].
@@ -3296,12 +3296,12 @@ discriminate.
 * split; [apply (Qle_trans _ (Qmake 1 1) _); [vm_compute; discriminate | exact HMf1] | exact HMf_le].
 * split; [exact Hb32pos | apply Qle_refl].
 + apply (Qle_trans _ ((Qmake 3 128) * (betan * Kn)) _).
-  * (* (Kn·Qinv64)·(β·3/2) == (3/128)·(β·Kn)（E197-4：中间项应为 β·Kn，en' 在最后一步） *)              apply qeq_le.
+  * (* (Kn·Qinv64)·(β·3/2) == (3/128)·(β·Kn)（判例：中间项应为 β·Kn，en' 在最后一步） *)              apply qeq_le.
     assert (Hc : Qeq (Qinv (Qmake 64 1) * (Qmake 3 2)) (Qmake 3 128)) by (vm_compute; reflexivity).
     ring [Hc].
   * apply (Qmult_le_compat_nonneg (Qmake 3 128) (Qmake 3 128) (betan * Kn) en').
     -- split; [vm_compute; discriminate | vm_compute; discriminate].   (* 0 ≤ 3/128 ≤ 3/128 *)
-    -- split; [apply (Qmult_le_0_compat betan Kn); [apply Qlt_le_weak; exact Hbetapos | apply Qlt_le_weak; exact HKn_pos] | exact HbetaK].   (* 0 ≤ β·Kn ≤ en'（E197-4：nonneg 匹配 3/128 在前的目标） *)
+    -- split; [apply (Qmult_le_0_compat betan Kn); [apply Qlt_le_weak; exact Hbetapos | apply Qlt_le_weak; exact HKn_pos] | exact HbetaK].   (* 0 ≤ β·Kn ≤ en'（判例：nonneg 匹配 3/128 在前的目标） *)
 }      assert (HMgbeta : Qle (Mgn * bgamman) ((Qmake 3 128) * en')).
 { apply (Qle_trans _ (Mgn * (betan * (Qmake 3 2))) _).
 - apply (Qmult_le_compat_nonneg Mgn Mgn bgamman (betan * (Qmake 3 2))).
@@ -3312,12 +3312,12 @@ discriminate.
 * split; [apply (Qle_trans _ (Qmake 1 1) _); [vm_compute; discriminate | exact HMg1] | exact HMg_le].
 * split; [exact Hb32pos | apply Qle_refl].
 + apply (Qle_trans _ ((Qmake 3 128) * (betan * Kn)) _).
-  * (* (Kn·Qinv64)·(β·3/2) == (3/128)·(β·Kn)（E197-4：中间项应为 β·Kn，en' 在最后一步） *)              apply qeq_le.
+  * (* (Kn·Qinv64)·(β·3/2) == (3/128)·(β·Kn)（判例：中间项应为 β·Kn，en' 在最后一步） *)              apply qeq_le.
     assert (Hc : Qeq (Qinv (Qmake 64 1) * (Qmake 3 2)) (Qmake 3 128)) by (vm_compute; reflexivity).
     ring [Hc].
   * apply (Qmult_le_compat_nonneg (Qmake 3 128) (Qmake 3 128) (betan * Kn) en').
     -- split; [vm_compute; discriminate | vm_compute; discriminate].   (* 0 ≤ 3/128 ≤ 3/128 *)
-    -- split; [apply (Qmult_le_0_compat betan Kn); [apply Qlt_le_weak; exact Hbetapos | apply Qlt_le_weak; exact HKn_pos] | exact HbetaK].   (* 0 ≤ β·Kn ≤ en'（E197-4：nonneg 匹配 3/128 在前的目标） *)
+    -- split; [apply (Qmult_le_0_compat betan Kn); [apply Qlt_le_weak; exact Hbetapos | apply Qlt_le_weak; exact HKn_pos] | exact HbetaK].   (* 0 ≤ β·Kn ≤ en'（判例：nonneg 匹配 3/128 在前的目标） *)
 }      assert (HS12 : Qle S12n ((Qmake 3 64) * en')).
 { rewrite HprojS12.
 apply (Qle_trans _ ((Qmake 3 128) * en' + (Qmake 3 128) * en') _).
@@ -3354,7 +3354,7 @@ ring.
 rewrite HB_form.
 apply (Qle_trans _ (betan * (Qmake 9409 4096)) _).
 - apply (Qle_trans _ ((betan * betan) * (Qmake 9409 4096)) _).
-  + apply qeq_le. ring.   (* (β·(97/64))·(β·(97/64)) == (β·β)·(9409/4096)：裸 ring（Qmake 常量视为有理数）；勿 ring [Hc]——Hc 证明项含 Opaque Qred 闭项挂死（E197-12） *)
+  + apply qeq_le. ring.   (* (β·(97/64))·(β·(97/64)) == (β·β)·(9409/4096)：裸 ring（Qmake 常量视为有理数）；勿 ring [Hc]——Hc 证明项含 Opaque Qred 闭项挂死（判例） *)
   + apply (Qmult_le_compat_nonneg (betan * betan) betan (Qmake 9409 4096) (Qmake 9409 4096)).
     * split.
       -- apply (Qmult_le_0_compat betan betan); apply Qlt_le_weak; exact Hbetapos.
@@ -3403,15 +3403,15 @@ apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128)
 * apply (Qplus_le_compat S12n ((Qmake 3 64) * en') Linn ((Qmake 97 256) * en')); [exact HS12 | exact HLin_bound].
 * exact HBB_bound.
 + exact Hmarg6.
-- apply qeq_le. ring.   (* (3/64+97/256+1/128+1/)·en' == (889/)·en'：裸 ring（勿 vm_compute——含变量 en' 展开 projT1 挂死，E197-12） *)
+- apply qeq_le. ring.   (* (3/64+97/256+1/128+1/)·en' == (889/)·en'：裸 ring（勿 vm_compute——含变量 en' 展开 projT1 挂死） *)
 }      (* 链：A_n == Qabs(D_n) ≤ HsumRn + s ≤ Hsum1n + 2s ≤ Hsum2n + 3s == en·hn + ShareSumn + 3s *)      assert (Hchain : Qle (projT1 (real_abs D) n) (en * hn + ShareSumn + 3 * (Qdiv e0' 128))).
-{ (* 保持 projT1 (real_abs D) n 形态（HNsum 逐点结论同形；勿 rewrite HprojD，E197-4） *)        apply (Qle_trans _ (HsumRn + Qdiv e0' 128) _).
+{ (* 保持 projT1 (real_abs D) n 形态（HNsum 逐点结论同形；勿 rewrite HprojD） *)        apply (Qle_trans _ (HsumRn + Qdiv e0' 128) _).
 - exact (HNsum n Hnsum).
-- apply (Qle_trans _ (Hsum1n + Qdiv e0' 128 + Qdiv e0' 128) _).   (* E197-4：中间项加法形态，匹配 Qplus_le_compat 结论 *)
+- apply (Qle_trans _ (Hsum1n + Qdiv e0' 128 + Qdiv e0' 128) _).   (* 判例：中间项加法形态，匹配 Qplus_le_compat 结论 *)
   + apply (Qplus_le_compat HsumRn (Hsum1n + Qdiv e0' 128) (Qdiv e0' 128) (Qdiv e0' 128)).
     * (* HsumRn ≤ Hsum1n + s：差分 == (Prodn+margn+s) − T3n ≥ 0（HNt3） *)              apply (proj2 (Qle_minus_iff HsumRn (Hsum1n + Qdiv e0' 128))).
       apply (Qle_trans _ ((Prodn + margn + Qdiv e0' 128) - T3n) _).
-      -- apply (proj1 (Qle_minus_iff T3n (Prodn + margn + Qdiv e0' 128))).   (* sub1：0 ≤ X−T3n 来自 HNt3（E197-4：正性在前 + 投影桥） *)
+      -- apply (proj1 (Qle_minus_iff T3n (Prodn + margn + Qdiv e0' 128))).   (* sub1：0 ≤ X−T3n 来自 HNt3（判例：正性在前 + 投影桥） *)
          apply (Qle_trans _ (projT1 (real_plus Prod marg) n + Qdiv e0' 128) _).
          ++ change (projT1 (real_abs T3) n <= projT1 (real_plus Prod marg) n + Qdiv e0' 128).
             exact (HNt3 n Hnt3).
@@ -3429,7 +3429,7 @@ apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128)
       -- apply (Qplus_le_compat Hsum1n (Hsum2n + Qdiv e0' 128) (2 * (Qdiv e0' 128)) (2 * (Qdiv e0' 128))).
          ++ (* Hsum1n ≤ Hsum2n + s：差分 == s + (eps2n·hn+margn) − Denh2n ≥ 0（HNden） *)                 apply (proj2 (Qle_minus_iff Hsum1n (Hsum2n + Qdiv e0' 128))).
             apply (Qle_trans _ ((eps2n * hn + margn) + (Qdiv e0' 128) - Denh2n) _).
-             +++ apply (proj1 (Qle_minus_iff Denh2n (eps2n * hn + margn + Qdiv e0' 128))).   (* sub1：来自 HNden（E197-4 + 投影桥） *)
+             +++ apply (proj1 (Qle_minus_iff Denh2n (eps2n * hn + margn + Qdiv e0' 128))).   (* sub1：来自 HNden（判例 + 投影桥） *)
                  apply (Qle_trans _ (projT1 (real_plus (real_mult eps2 (real_abs h)) marg) n + Qdiv e0' 128) _).
                  ++++ change (projT1 Den_h2 n <= projT1 (real_plus (real_mult eps2 (real_abs h)) marg) n + Qdiv e0' 128).
                       exact (HNden n Hnden).
@@ -3463,9 +3463,9 @@ apply (Qle_trans _ ((((Qmake 3 64) * en' + (Qmake 97 256) * en') + (Qmake 1 128)
                ring.
             ** apply Qle_refl.
 }      (* 最终：B_n − A_n ≥ en' − ShareSumn − 3s ≥ (1−889/)·en' − 3s > eps0q
-        E197-13 重写：原 L7763 Qmult_le_0_compat 直打 (1−c−3/128−1/4)e0' ≤ (1−c)(en'−e0')
+        判例重写：原 L7763 Qmult_le_0_compat 直打 (1−c−3/128−1/4)e0' ≤ (1−c)(en'−e0')
         不可证（en'−e0' 无下界）；改差分链 0 < (1−c−3/128−1/4)·e0' ≤ (1−c)·en'−3s−e0'/4，
-        差分 == (1−c)(en'−e0') ≥ 0（Qle_minus_iff 差分 + field 恒等，E197-13） *)
+        差分 == (1−c)(en'−e0') ≥ 0（Qle_minus_iff 差分 + field 恒等） *)
         { apply Qlt_to_QltT.
 rewrite HprojBterm.
 apply (Qlt_le_trans _ ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) _).
@@ -3481,9 +3481,9 @@ apply (Qlt_le_trans _ ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) 
     apply (proj2 (Qle_minus_iff ((Qmake 1 1 - Qmake 889 2048 - Qmake 3 128 - Qmake 1 4) * e0') ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128) - (Qmake 1 4) * e0'))).
     apply (Qle_trans _ ((Qmake 1 1 - Qmake 889 2048) * (en' - e0')) _).
     * apply (Qmult_le_0_compat (Qmake 1 1 - Qmake 889 2048) (en' - e0')).
-      -- vm_compute. discriminate.   (* 0 ≤ 1−c，Qle 常量归约 Lt<>Gt（E197-10） *)
+      -- vm_compute. discriminate.   (* 0 ≤ 1−c，Qle 常量归约 Lt<>Gt（判例） *)
       -- apply Qlt_le_weak. apply (proj1 (Qlt_minus_iff e0' en')). exact Heps0'n.   (* 0 ≤ en'−e0' *)
-    * apply qeq_le. unfold Qdiv, Qminus. field.   (* (1−c)(en'−e0') == 差分：含 Qinv 用 field（E149） *)
+    * apply qeq_le. unfold Qdiv, Qminus. field.   (* (1−c)(en'−e0') == 差分：含 Qinv 用 field（判例） *)
 - (* sub2：(1−c)·en' − 3s ≤ B_n − A_n：HShare + Hchain 差分链 *)
   apply (Qle_trans _ (en' - ShareSumn - 3 * (Qdiv e0' 128)) _).
   + (* (1−c)·en' − 3s ≤ en' − ShareSumn − 3s ⟺ ShareSumn ≤ (889/)·en'（HShare） *)
@@ -3500,12 +3500,12 @@ apply (Qlt_le_trans _ ((Qmake 1 1 - Qmake 889 2048) * en' - 3 * (Qdiv e0' 128)) 
 }    exact Hfinal.
 
 Qed.
-(* ============ 6c：compose 误差分解（D == T1 + T2，E198 论证） ============
+(* ============ 6c：compose 误差分解（D == T1 + T2，判例 论证） ============
    D := Fh − (Fx + (df·dg)·h)、T1 := Fh − (Fx + df·Dg)（f 在 Dg 处误差）、
    T2 := df·(Dg − dg·h)（df 缩放 g 的误差），Dg := Gh − Gx。
-   纯 real_eq 环代数链（E198-1：real_eq_sym 显式第一=目标RHS；E198-2：
-   real_eq_plus_compat (a,b,c,d) 结论 a+b==c+d 前提 a==c b==d；E198-3：
-   real_opp_mult opp(a·b)==a·opp(b) 反向需 sym；E198-4：real_plus_assoc
+   纯 real_eq 环代数链（判例：real_eq_sym 显式第一=目标RHS；判例：
+   real_eq_plus_compat (a,b,c,d) 结论 a+b==c+d 前提 a==c b==d；判例：
+   real_opp_mult opp(a·b)==a·opp(b) 反向需 sym；判例：real_plus_assoc
    x+(y+z)==(x+y)+z 反向需 sym） *)
 Lemma real_compose_diff_decomp : forall (Fh Fx df dg Gh Gx h : Real),
   real_eq (real_plus Fh (real_opp (real_plus Fx (real_mult (real_mult df dg) h))))
@@ -3631,7 +3631,7 @@ Proof.
               ** apply (real_plus_assoc (real_opp Xp) Xp (real_opp Yp)).
 Qed.
 
-(* ============ 6d2：inv 吸收的 comm 变体（(inv_M·x)·M == x，E198-7） ============
+(* ============ 6d2：inv 吸收的 comm 变体（(inv_M·x)·M == x） ============
    real_M_inv_absorb 给 M·(inv_M·x) == x；comm (inv_M·x) M 后即得。eps_f·Lp == eps2
    的 2 步证明（eps_f := inv_Lp·eps2 ⟹ (inv_Lp·eps2)·Lp == eps2）。 *)
 Lemma real_inv_absorb_comm : forall (M x : Real) (HM : real_lt real_zero M),
@@ -3645,10 +3645,10 @@ Proof.
   - apply (real_M_inv_absorb M x HM).
 Qed.
 
-(* ============ 6d：抽象 |Dg| 界（HDg1/HDg2 共用，E198 论证） ============
+(* ============ 6d：抽象 |Dg| 界（HDg1/HDg2 共用，判例 论证） ============
    Dg == Gerr + rdfg·h、|Gerr| ≤ eps_g|h|+epsq、|rdfg·h| == |rdfg||h|、
    线性项 ≤ Lp|h| ⟹ |Dg| ≤ Lp|h| + epsq + ept（三角 real_abs_triangle_le_eps
-   需 0<ept 前提——E198-6：apply 漏 0<eps 前提导致 bullet "not finished" 假象）。
+   需 0<ept 前提——判例：apply 漏 0<eps 前提导致 bullet "not finished" 假象）。
    E198-6：real_abs_triangle_le_eps : forall a b eps, 0<eps -> |a+b| ≤ |a|+|b|+eps
    ——第 4 参数 0<eps 必给；漏给则 apply 留子目标，任何后续 bullet 报 not finished。 *)
 Lemma real_dg_bound_g : forall (Dg Gerr rdfg h eps_g epsq_g1 Lp ept1 : Real)
@@ -3704,15 +3704,15 @@ Proof.
       * apply real_le_refl.
 Qed.
 
-(* ============ 6d2：compose 主项合并重排引理（E199 新增，MCP 最小复现验证） ============
+(* ============ 6d2：compose 主项合并重排引理（判例新增，MCP 最小复现验证） ============
    L8481/L8483 目标泛化：A:=eps2|h| B:=eps_f·epsq_g2 C:=eps_f·eps_tri_g2 D:=epsq_f
    F:=M·epsq_g2 G:=marg2 H:=eps_tri
    LHS = (((A+(B+C))+D) + ((A+F)+G)) + H == MID1 = (((A+A)+(B+F))+C) + (D+(G+H))
    MID1 == MID = (A+A) + ((B+F) + (C + (D + (G+H))))
    链：LHS → assoc 反向×2 → swap → reorder 核心（A+(B+C))+(A+F) == ((A+A)+(B+F))+C）
-   E199-1：assoc 反向 = real_eq_sym（第一=目标RHS、第二=目标LHS）+ real_plus_assoc；
-   E199-2：real_plus_swap a b c d : (a+b)+(c+d) == (a+c)+(b+d)，swap 前目标必须是
-   (a+b)+(c+d) 形态；E199-3：assoc 正向 x+(y+z)==(x+y)+z 直接 apply 不需 sym。 *)
+   判例：assoc 反向 = real_eq_sym（第一=目标RHS、第二=目标LHS）+ real_plus_assoc；
+   判例：real_plus_swap a b c d : (a+b)+(c+d) == (a+c)+(b+d)，swap 前目标必须是
+   (a+b)+(c+d) 形态；判例：assoc 正向 x+(y+z)==(x+y)+z 直接 apply 不需 sym。 *)
 Lemma real_reorder_main : forall A B C D F G H : Real,
   real_eq
     (real_plus (real_plus (real_plus (real_plus A (real_plus B C)) D) (real_plus (real_plus A F) G)) H)
@@ -3818,10 +3818,10 @@ Proof.
     apply (real_plus_assoc (real_plus A A) (real_plus B F) (real_plus C (real_plus D (real_plus G H)))).
 Qed.
 
-(* ============ 6e：real_differentiable_compose（E198 论证，Set 层 L21343 模板） ============
+(* ============ 6e：real_differentiable_compose（判例论证，Set 层 L21343 模板） ============
    rdf := rdf_f(gx)·rdf_g(x)；g 正性前提 Hgpos（f 的输入需 0<g x）、f 实值外延 Hfwd
    （f(g(x+h)) == f(gx+Dg) 换形，RealDifferentiable 无 wd 字段）。
-   预算（Bishop 逐 eps，全 == 精确拼 eps'，E198-5）：
+   预算（Bishop 逐 eps，全 == 精确拼 eps'）：
      eps2 := half·eps；M := 1+|rdf_f(gx)|；eps_g := inv_M·eps2（M·eps_g == eps2）
      Lp := |rdf_g(x)|+eps_g；eps_f := inv_Lp·eps2（eps_f·Lp == eps2）
      Dg := g(x+h)−gx；|Dg| ≤ Lp|h| + epsq_g1 + eps_tri_g1（|Dg|<dfd 论证，
@@ -3831,9 +3831,9 @@ Qed.
         eps_tri_g2 := inv_eps_f·(eps'/8)、eps_f·eps_tri_g2 == eps'/8）
      T2 ≤ eps2|h| + M·epsq_g2 + marg2（real_prod_abs_le_two）
      余量 == eps'/2 + eps'/8 + eps'/8 + eps'/8 + eps'/8 == eps' ✓
-   E198-1：real_eq_sym 显式（第一=目标RHS）；E198-2：real_eq_plus_compat (a,b,c,d)
-   结论 a+b==c+d 前提 a==c b==d；E198-3：real_opp_mult opp(a·b)==a·opp(b) 反向需 sym；
-   E198-4：real_plus_assoc x+(y+z)==(x+y)+z 反向需 sym；E198-5：系数比较走
+   判例：real_eq_sym 显式（第一=目标RHS）；判例：real_eq_plus_compat (a,b,c,d)
+   结论 a+b==c+d 前提 a==c b==d；判例：real_opp_mult opp(a·b)==a·opp(b) 反向需 sym；
+   判例：real_plus_assoc x+(y+z)==(x+y)+z 反向需 sym；判例：系数比较走
    real_half_lt_self + real_half_plus_half（== 精确拼 eps'，避免 le_mult 于 |h|）。 *)
 Lemma real_differentiable_compose :
   forall (f g : forall x : Real, real_lt real_zero x -> Real)
@@ -4528,7 +4528,7 @@ Proof.
     }
 Qed.
 
-(* ============ 6f：Real 层 entropy 泛型组装（E200 论证，Set 层 L21950 模板平移） ============
+(* ============ 6f：Real 层 entropy 泛型组装（判例论证，Set 层 L21950 模板平移） ============
    real_entropy_ent E_A := k_B · log(real_Omega_total_ent E_A)
    real_Omega_total_ent E_A := Omega_A E_A · Omega_B (real_E_B_ent E_A)，real_E_B_ent E_A := E_total − E_A
    组装：const/minus/id/mult/compose + real_log_differentiable（df:=1/x，L38049）。
@@ -4537,8 +4537,8 @@ Qed.
    ② compose 需外层 wd（Hfwd）⟹ 诚实前提 Omega_B_wd（Set 层纯函数自带 wd 免声明）；
    ③ compose 需内层值正性（Hgpos）⟹ 诚实前提 E_B_pos（E_total−E_A > 0，物理 E_A<E_total）；
    ④ log 外层 wd = real_log_wd（L35226 已有，不需新前提）。
-   E200-1：compose 组装 = real_differentiable_compose f g Hf Hg Hgpos Hfwd 五参数全给；
-   E200-2：minus 组装 = real_differentiable_minus (fun _ _ => E_total) (fun x Hx => x)。 *)
+   判例：compose 组装 = real_differentiable_compose f g Hf Hg Hgpos Hfwd 五参数全给；
+   判例：minus 组装 = real_differentiable_minus (fun _ _ => E_total) (fun x Hx => x)。 *)
 Variable Omega_A : forall (E_A : Real), real_lt real_zero E_A -> Real.
 Variable Omega_B : forall (E_B : Real), real_lt real_zero E_B -> Real.
 Variable dOmega_A : RealDifferentiable Omega_A.
@@ -4607,7 +4607,7 @@ End EntropyDiffReal.
    ⟹ real_gradient_zero_neg_entropy_truth：is_truth 桥（损失=负熵）。
    差异 vs Set 层（L14572 同款）：Real 层无 real_minus（x−y := x+(−y)），
    全部 real_eq/real_le 引理显式（RealSetoid.real_le_id_r 为 Module 包裹名）。
-   绕开三分律（E216）与积分（Real 层无 RInt/FTC）。
+   绕开三分律（判例）与积分（Real 层无 RInt/FTC）。
    纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 Section RealGapOne.
@@ -4690,9 +4690,9 @@ End RealGapOne.
    （K1a 单步非绝对值）、real_gradient_step_abs_contraction（K1c 绝对值）、
    real_gradient_iterate_abs_decay（K2 单步迭代）、
    real_grad_decay_positive_iter（K3 κ 幂衰减 |g(x_{n+k})| ≤ κ^k·|g(x_n)|）。
-   Real 层差异 vs Set 层（E211）：无 minus（x−y := x+(−y)）、无 r_pow
+   Real 层差异 vs Set 层（判例）：无 minus（x−y := x+(−y)）、无 r_pow
    （自建 real_r_pow + 幂正/非负引理）、无 le_mult_compat_r（自建，公共
-   因子在左，weak + comm 桥）。全符号版仍受三分律障碍（E211/E216）。
+   因子在左，weak + comm 桥）。全符号版仍受三分律障碍（判例组）。
    纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 Section RealKappa.
@@ -5086,7 +5086,7 @@ Variable real_gradient_lipschitz : forall x y : Real,
   real_le (real_abs (real_plus (real_entropy_gradient x) (real_opp (real_entropy_gradient y))))
           (real_mult L (real_abs (real_plus x (real_opp y)))).
 
-(* 新增：符号保持步长条件 η < 1/L（数学必需，E223 判据） *)
+(* 新增：符号保持步长条件 η < 1/L（数学必需，判例判据） *)
 Variable eta_lt_inv_L : real_lt (real_mult L eta) real_one.
 
 (* ===== ① real_abs_neg_req：a < 0 ⟹ |a| == −a（逐点 Qabs_neg，real_abs_pos_req 同构） ===== *)
@@ -6163,7 +6163,7 @@ Qed.
 (*     real_sign_dec            —— 梯度三分律（Set 层 Or）      *)
 (*     real_entropy_gradient_wd —— 梯度 req 外延性（零分支）    *)
 (* ============================================================ *)
-(* [墙族登记·RW-LPO 三分实例] 梯度值三分=整体序判定 LPO 实例（E225；lpn_equivalence）——对可判定梯度（有理值/可计算实例）成立=实例层供给候选（模块自注 ：6163），接口层禁硬证禁纯删。 *)
+(* [墙族登记·RW-LPO 三分实例] 梯度值三分=整体序判定 LPO 实例（判例；lpn_equivalence）——对可判定梯度（有理值/可计算实例）成立=实例层供给候选（模块自注 ：6163），接口层禁硬证禁纯删。 *)
 Variable real_sign_dec : forall x : Real,
   Or (real_lt real_zero (real_entropy_gradient x))
      (Or (real_eq (real_entropy_gradient x) real_zero)
@@ -6369,7 +6369,7 @@ End ExpLogGroupIso.
 (* ① real_exp_ge_linear：0 < t ⟹ 1 + t < e^t（非 eps，升级 eps 版）   *)
 (* ② real_exp_le_inv_one_minus：0 < x ⟹ x < 1 ⟹ e^x ≤ 1/(1−x)        *)
 (* ③ real_exp_abs_minus_one_eps：|e^x − 1| ≤ |x|·e^{|x|} + eps       *)
-(*    （非 eps 版需三分律判定 gap 正/零——E196 边界，eps 余量形式）    *)
+(*    （非 eps 版需三分律判定 gap 正/零——判例边界，eps 余量形式）    *)
 (* 纪律：Set 层、纯构造性、零经典、零 承认；检验 _dbg_t33 全部通过        *)
 (* 依赖：exp_partial/q_pow/q_fact（QExpPartial）、real_abs/real_inv_pos *)
 (* ================================================================ *)
@@ -6697,7 +6697,7 @@ Proof.
 Qed.
 
 (* 乘正数严格保序（交换右因子形态）：a < b ⟹ 0 < c ⟹ a·c < c·b
-   （Qmult_lt_compat_r 给 a·c < b·c，comm 换 RHS——E173 无 Qmult_lt_compat_l） *)
+   （Qmult_lt_compat_r 给 a·c < b·c，comm 换 RHS——判例：无 Qmult_lt_compat_l） *)
 Lemma q_lt_mult_comm_r : forall (a b c : Q), Qlt a b -> Qlt 0 c -> Qlt (Qmult a c) (Qmult c b).
 Proof.
   intros a b c Hab Hc.
@@ -6847,7 +6847,7 @@ Qed.
 
 (* T3.3-③（eps 余量形式）：|e^x − 1| ≤ |x|·e^{|x|} + eps
    非 eps 版 gap = |x|·e^{|x|} − |e^x − 1| 在 x = 0 处为零、x ≠ 0 处为正，
-   需三分律判定（E196 边界）——eps 余量形式逐点闭合 *)
+   需三分律判定（判例边界）——eps 余量形式逐点闭合 *)
 Lemma real_exp_abs_minus_one_eps : forall (x eps : Real), real_lt real_zero eps ->
   real_le (real_abs (real_plus (cauchy_real_exp x) (real_opp real_one)))
           (real_plus (real_mult (real_abs x) (cauchy_real_exp (real_abs x))) eps).

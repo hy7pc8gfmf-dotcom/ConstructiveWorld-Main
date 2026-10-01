@@ -9,7 +9,7 @@
 (*     real_sum_over_S_ext:370｜real_sum_over_S_add:373｜                         *)
 (*     real_sum_over_S_linear:376｜D:381｜D_pos:382｜energy:383｜rtk2_Zpos:391    *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                          *)
-(*    572890186da738dd9113f3322e0fdf0d，零代际漂移）                              *)
+(*    登记册登记值，零代际漂移）                              *)
 (* 主锚注记：节一 Z 槽载体＝rtk_boltzmann_factor/rtk_Z_thermo（源版本 L112-116），    *)
 (*   节二 Z 槽载体＝rtk2_bfactor/rtk2_Z（源版本 L385-388，即节一全局形回引）；        *)
 (*   两 Z 槽语句在包内按源版本定义 δ 内联同体（P1S1 sfc_two δ 展开同款），逐字对账。  *)
@@ -20,7 +20,7 @@
 (* 实例供给：S:=unit（单点态空间）｜求和载体:=fun f => f tt（单点求和）｜           *)
 (*   D:=real_one（D_pos 一行直接给出）｜energy:=零函数｜两 Z 槽:=exp 正性一行直接给出       *)
 (*   （real_exp_neg_pos@S07:7774——exp_neg 任意点正性，零计算链）。                  *)
-(*   单点载体下 ext/le 供给腿＝使用位直取（H tt）；add/linear 供给腿＝              *)
+(*   单点载体下 ext/le 供给肢＝使用位直取（H tt）；add/linear 供给肢＝              *)
 (*   两侧 β 归一后逐项重合（real_eq_refl 一行）——机械位平凡性实测兑现。            *)
 (*                                                              *)
 (* 分级（禁注水如实申报）：18 槽全部 T·数据/接口供给级——普查注记「接口实例位/      *)
@@ -30,7 +30,7 @@
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219（S02 序与环律／S03 逆元器／S07 指零器，           *)
 (*   只读使用）；零 git、零注册面增量。                                            *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S4_*.{log,exit}                      *)
+(* 四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S4_*.{log,exit}                      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

@@ -1,5 +1,5 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* UpAblD1S2_e752_UpReqAttnIter.v —— FA-D1 批 D1-③ E752 族扩槽批        *)
+(* UpAblD1S2_e752_UpReqAttnIter.v —— FA-D1 批 D1-③ 判例族扩槽批        *)
 (*   求和交换／绝对值幂等·Δ1 域扩槽引用性消融件（扩槽不重立）            *)
 (*                                                              *)
 (*   槽1 UpReqAttnIter.v L152 sum_swap_i（req 载体层，双行语句逐字）     *)
@@ -11,7 +11,7 @@
 (*                                                              *)
 (*   槽1：sumd_sum_swap@UpReqSumD.v:384（req 面列表 Fubini；其头注自述   *)
 (*     「sum_swap_i@AttnIter151 三槽同形一次消解」——源版本为本槽预造，      *)
-(*     逐字直接供给；E752 p7d_swap_of_sum_eq_list@P7BoundedSoftmaxDeep:107   *)
+(*     逐字直接供给；判例 p7d_swap_of_sum_eq_list@P7BoundedSoftmaxDeep:107   *)
 (*   槽2：fa53_abs_ge_zero_id_dec@fa53_compat_abs.v:141（件3 绝对值幂等）*)
 (*     经装配桥（tsi_rie_setoid，req 取集合层幺等）实例供给直接供给；        *)
 (*     AbsLeId.v:50 ali_abs_ge_zero_id 同形先例在库。                    *)
@@ -26,7 +26,7 @@
 (*   UpReqSumD、fa53_compat_abs、TempSoftmaxInstantiation。              *)
 (* 纪律：语句面全集合层；零新增未证假设位；逐槽一条引用性消融定理；      *)
 (*   文尾逐件假设面打印收尾。                                            *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S2_e752_UpReqAttnIter.*  *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S2_e752_UpReqAttnIter.*  *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

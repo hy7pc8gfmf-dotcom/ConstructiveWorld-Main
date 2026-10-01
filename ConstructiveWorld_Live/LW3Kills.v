@@ -18,7 +18,7 @@
 (* 编译配方：SW2 双 export COQLIB/ROCQLIB 全字面；coqc -q -Q . '""'          *)
 (*      -Q Main_vo '""'；cpu_guard 包裹（390 配方承继）。                    *)
 (* 依赖：Stdlib QArith/Lia/Arith/ZArith/List/QArith_base/QArith.Qabs/Extraction＋S01_BaseRing/S02_CauchyComplete/S03_QExp＋LW0QPoly/LW0FactGrowth/LW2Hermite＋LW3ESlot。 *)
-(* 对标：kills 前提位机械兑现件（E-槽桥位零改动；carrier 第二前提位逐字对表）。 *)
+(* 对标：kills 前提位机械兑现件（E-槽桥位零改动；carrier 第二前提位逐字对照）。 *)
 
 Require Import QArith Lia Arith ZArith List.
 From Stdlib Require Import QArith_base.
@@ -97,7 +97,7 @@ Definition tlw398_kills_M (X eps : Q) (Heps0 : QltT 0 eps) : nat :=
 (* carrier 前提位减一：原 carrier 取 (QltT 0 eps, kills 形) 两前提出
    real_lt 面结论；本件以 QltT 0 eps 单前提直接产出同款结论——
    tlw383_eslot_carrier 零改动（390 §6.2 消环记录的机械兑现，
-   使用接口＝LW3Kills 逐字对表 carrier 第二前提位）。 *)
+   使用接口＝LW3Kills 逐字对照 carrier 第二前提位）。 *)
 Theorem tlw398_carrier_discharge : forall (X eps : Q),
   QltT 0 eps ->
   sigT (fun M : nat =>

@@ -74,7 +74,7 @@ End OppMultMain.
    real_mult_div（p·(q/p) == q，inv_correct 抽象链）、real_opp_opp（opp 对合）、
    real_hpq1（p−q == p·(−(q/p−1))）、real_hpq2（p·(−X) == p·(−(X+eps)) + p·eps）、
    real_gibbs_core_eps（p−q ≤ p·(−log(q/p)) + p·eps——Gibbs 逐点核心）。
-   paper-2 §9.2/§10.2 Gibbs 不等式 Real 层逐 eps 版的核心块（E179/E180）。 *)
+   paper-2 §9.2/§10.2 Gibbs 不等式 Real 层逐 eps 版的核心块（判例组）。 *)
 Section GibbsCoreMain.
 (* ============ 1. p·(q/p) == q（inv_correct 抽象链） ============ *)
 Lemma real_mult_div : forall (p q : Real) (Hp : real_lt real_zero p),
@@ -1434,7 +1434,7 @@ Lemma real_dpo_loss_pi_star_bounded_eps :
             (real_log (real_plus real_one real_one) real_two_pos).
 Proof.
   intros s_w s_l Hrw.
-  (* 核心：−log σ(r_w−r_l) < log 2（E184 real_dpo_sigmoid_loss_bounded） *)
+  (* 核心：−log σ(r_w−r_l) < log 2（判例 real_dpo_sigmoid_loss_bounded） *)
   assert (Hcore : real_lt
         (real_opp (real_log (real_sigmoid (real_plus (reward s_w) (real_opp (reward s_l))))
                             (real_sigmoid_pos (real_plus (reward s_w) (real_opp (reward s_l))))))
@@ -2264,10 +2264,10 @@ Variable K : nat.
 Variable real_boltzmann_factor_ : S -> Real.
 
 (* 诚实接口：线序判定（Real 层可实例化） *)
-(* [墙族登记·RW-LPO 线序判定] 整体实序可判定=LPO 不可实例化（E225；SqWall⟺rLPO 双向类=UpReqLpoEquiv.v:258/351/438 lpn_equivalence；论文7§8）——基座墙密度最高单点，禁硬证禁纯删；Q 层逐点可判定（Qlt_le_dec，E225 下半）不升级本位；Top-K 使用链（:2266-）以本位为线序判定源，实例层仅可计算模型可供给。 *)
+(* [墙族登记·RW-LPO 线序判定] 整体实序可判定=LPO 不可实例化（判例；SqWall⟺rLPO 双向类=UpReqLpoEquiv.v:258/351/438 lpn_equivalence；论文7§8）——基座墙密度最高单点，禁硬证禁纯删；Q 层逐点可判定（Qlt_le_dec，判例下半）不升级本位；Top-K 使用链（:2266-）以本位为线序判定源，实例层仅可计算模型可供给。 *)
 Variable real_le_dec : forall a b : Real, Or (real_le a b) (Not (real_le a b)).
 (* 诚实接口：线序——Not (le a b) ⟹ lt b a（柯西实数线序，可实例化） *)
-(* [墙族登记·RW-NOTLT 线序负转正] real_le=Or(lt,eq)（S02_CauchyComplete.v:471）定义形下，¬(a≤b)→b<a 需从负陈述提取正分离见证——Markov/LPO 族邻域（E225/E226；PA_UpAblD2_AbsLeId_RI_DO.v:49 在案）；库内零已证实例（G09_MiscSmall.v:635 rnot_le_lt 同形亦假设位）——禁硬证；locatedness 供给候选（UpReqCauchy 系具体层，核）。 *)
+(* [墙族登记·RW-NOTLT 线序负转正] real_le=Or(lt,eq)（S02_CauchyComplete.v:471）定义形下，¬(a≤b)→b<a 需从负陈述提取正分离见证——Markov/LPO 族邻域（判例组；PA_UpAblD2_AbsLeId_RI_DO.v:49 在案）；库内零已证实例（G09_MiscSmall.v:635 rnot_le_lt 同形亦假设位）——禁硬证；locatedness 供给候选（UpReqCauchy 系具体层，核）。 *)
 Variable real_not_le_lt : forall a b : Real, Not (real_le a b) -> real_lt b a.
 (* 诚实接口：比 f s 更重的计数（枚举计数，语义由 real_le_dec 实例化保证） *)
 Variable real_count_heavier : S -> nat.
@@ -2739,8 +2739,8 @@ End RealRLHFMain.
 Section LogDiffPhase4.
 Section LogDiffPhase2.
 
-(* Q 层：0 ≤ t ≤ 1/2 ⟹ t/(1+t) ≥ t − t²（field 于 Q 原子，E143-215） *)
-(* Q 层：0 ≤ t ≤ 1/2 ⟹ t−t² ≤ t/(1+t)（E143-215 field/Qle_shift_div_l） *)
+(* Q 层：0 ≤ t ≤ 1/2 ⟹ t/(1+t) ≥ t − t²（field 于 Q 原子） *)
+(* Q 层：0 ≤ t ≤ 1/2 ⟹ t−t² ≤ t/(1+t)（判例 field/Qle_shift_div_l） *)
 Lemma q_div_linear_ge_quad : forall t : Q, Qle 0 t -> Qle t (1 / 2) ->
   Qle (t - t * t) (t / (1 + t)).
 Proof.
@@ -2815,7 +2815,7 @@ Qed.
 
 (* 子引理 B1：−t·(inv s) == inv s − 1（s == 1+t；inv_correct：s·inv s == 1）
    代数级链（Real 层非 setoid，全部显式 real_eq_trans + RealSetoid.compat 组装，
-   仿 real_hpq1；real_inv_pos 含 Qinv，投影级 ring 不可用——E149）：
+   仿 real_hpq1；real_inv_pos 含 Qinv，投影级 ring 不可用——判例）：
      −t·inv == −(s−1)·inv          [t == s+(−1)，real_succ_minus_one]
             == −(inv·(s−1))         [mult_comm]
             == −(inv·s + inv·(−1))  [distrib]
@@ -2893,8 +2893,8 @@ Qed.
 End LogDiffPhase2.
 
 (* ============ Phase 2b：Real 层 log 线性界（Bishop 逐 eps） ============
-   Set 层（RealInterfaceEnhanced Id 版）线性界不可实例化到 Real 层（E182 判 Id 版不可实例化，
-   Real 层是 req 版 RealInterfaceEnhancedSetoid）——Real 层线性界必须重证（E187 论证延续）。
+   Set 层（RealInterfaceEnhanced Id 版）线性界不可实例化到 Real 层（判例：Id 版不可实例化，
+   Real 层是 req 版 RealInterfaceEnhancedSetoid）——Real 层线性界必须重证（判例论证延续）。
    目标：real_log_one_plus_le_eps（log(1+t) ≤ t+eps）+ real_log_one_plus_ge_eps（t−t² ≤ log(1+t)+eps）。
    数学：上界 = real_log_le_linear_eps 于 (1+t)；下界 = log(1+t)==−log(1/(1+t))（real_log_inv_one_inv
    反向）+ real_log_le_linear_eps 于 inv s + real_inv_minus_one_opp + t−t²≤t·inv s（Q 层已有 q_div）。 *)
@@ -3240,10 +3240,10 @@ Qed.
 
 (* ============ 8. Real 层可微性记录（Bishop 逐 eps，rdf 带正性前提） ============
    与 Set 层 Differentiable（L1369，df_correct 全称 x）不同——Real 层 log 带正性前提，
-   可微性只对正 x 要求（E187 判定：全称 x 在抽象接口不可证；Real 层逐 eps 复刻 E182 路线 c）。
-   Bishop 形式（E152-5 先例：real_le = Or lt eq 无法表达"非严格且不趋近"）：误差 ≤ eps·|h| + eps'
+   可微性只对正 x 要求（判例判定：全称 x 在抽象接口不可证；Real 层逐 eps 复刻判例路线 c）。
+   Bishop 形式（先例：real_le = Or lt eq 无法表达"非严格且不趋近"）：误差 ≤ eps·|h| + eps'
    对任意 eps' > 0（主界 eps 之外再留 Bishop 余量 eps'）。这使主定理组装可用 Bishop 线性界
-   （E188 判定的"非 Bishop 必要性"针对精确形式；Bishop 化后不再需要深水区非 Bishop 论证）。 *)
+   （判例判定的"非 Bishop 必要性"针对精确形式；Bishop 化后不再需要深水区非 Bishop 论证）。 *)
 Record RealDifferentiable (f : forall x : Real, real_lt real_zero x -> Real) : Set := {
   rdf : forall x : Real, real_lt real_zero x -> Real;
   rdf_correct : forall (x : Real) (Hx : real_lt real_zero x),
@@ -3638,7 +3638,7 @@ Qed.
 
 (* ============ 16. t² ≥ 0（逐点 Qmult_le_0_compat；主定理 quad_bound 等需要） ============ *)
 
-(* Bishop 版：0 ≤ t² + eps（任意 eps > 0；E152-5 非严格不趋近 → Bishop） *)
+(* Bishop 版：0 ≤ t² + eps（任意 eps > 0；判例：非严格不趋近 → Bishop） *)
 Lemma real_square_nonneg_eps : forall (t eps : Real),
   real_lt real_zero eps ->
   real_le real_zero (real_plus (real_mult t t) eps).
@@ -3664,7 +3664,7 @@ Proof.
     { apply (Qlt_le_trans _ (projT1 eps n - projT1 real_zero n) _).
       - apply QltT_to_Qlt. exact (HN0 n Hn).
       - apply qeq_le. rewrite Hz. ring. }
-    (* 目标：QltT eps0 (P − 0)，P := projT1 (real_plus (real_mult t t) eps) n；纯 Qeq 链（E158-1） *)
+    (* 目标：QltT eps0 (P − 0)，P := projT1 (real_plus (real_mult t t) eps) n；纯 Qeq 链（判例） *)
     apply Qlt_to_QltT.
     apply (Qlt_le_trans _ (projT1 (real_mult t t) n + projT1 eps n) _).
     { (* eps0 < projT1(real_mult t t) n + eps_n *)
@@ -3864,7 +3864,7 @@ Qed.
 
 (* ============ 18. 放缩：t²·inv s ≤ t²·2 + eps（需 1/2 < s；逐点 Q 层） ============
    主定理下界链收尾：t²/(1+t) ≤ 2t²。
-   Real 层：real_inv_pos (real_plus real_one real_one) (real_two_pos_local) < s ⟹ inv s < inv real_inv_pos (real_plus real_one real_one) (real_two_pos_local) == 2（strict，避开 real_le eq 分支逐点停滞 E191-1）
+   Real 层：real_inv_pos (real_plus real_one real_one) (real_two_pos_local) < s ⟹ inv s < inv real_inv_pos (real_plus real_one real_one) (real_two_pos_local) == 2（strict，避开 real_le eq 分支逐点停滞（判例）
    逐点：t²·inv s ≤ t²·2 + eps（invs ≤ 2 逐点 + t² ≥ 0 Qsquare_nonneg + 见证 eps0） *)
 Lemma real_quad_div_le_two_eps : forall (t s eps : Real)
   (Hs : real_lt real_zero s)
@@ -5170,7 +5170,7 @@ Proof.
   - apply QltT_to_Qlt. exact (HN n Hn).
 Qed.
 
-(* ============ 24. 主定理 real_log_differentiable（Bishop 逐 eps，E191/192/193 新路线） ============
+(* ============ 24. 主定理 real_log_differentiable（Bishop 逐 eps，判例组新路线） ============
    rdf x Hx := inv_pos x Hx。
    δ := min (x/2) (eps·x²/4)。份额 5×inv8·eps'（合计 5eps'/8 ≤ eps'）。
    结构：
@@ -5461,7 +5461,7 @@ Proof.
                                  share
                                  (real_plus (real_plus share (real_plus share share)) share)).
     }
-    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤，E152-5）。
+    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤）。
        逐点差分 = (eps_n/2)|h_n| + (3/8)eps'_n ≥ (3/8)eps'_n > (3/8)e0' > 0（见证 (3/8)·e0'） *)
     assert (Hfinal : real_le
       (real_plus (real_mult (real_mult two_inv eps) (real_abs h))
@@ -5609,7 +5609,7 @@ Qed.
 End LogDiffPhase4.
 
 (* ============================================================ *)
-(* entropy Real 层：RealDifferentiable 组合引理族（E194 后续）  *)
+(* entropy Real 层：RealDifferentiable 组合引理族（判例后续）  *)
 (* + mult 份额（real_differentiable_mult）检验并入    *)
 (* 依赖：上面 LogDiffPhase4 的 RealDifferentiable 记录          *)
 (* ============================================================ *)

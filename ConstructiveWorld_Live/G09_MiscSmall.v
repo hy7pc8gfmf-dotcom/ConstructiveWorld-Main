@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -330,7 +330,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* ============ 辅件 3：lt→le 升格（le 腿使用面直接提供形） ============ *)
+(* ============ 辅件 3：lt→le 升格（le 肢使用面直接提供形） ============ *)
 Theorem bzdir_boltzmann_factor_pos_le :
   forall (D : Real) (HD : real_lt real_zero D) (L : nat -> Real) (s : nat),
   real_le real_zero (bzdir_boltzmann_factor D HD L s).
@@ -389,7 +389,7 @@ Print Assumptions bzdir_softmax_pos.
       零分离判定；对收敛速率未知的柯西序列不可构造（普查 L375 GX 判定
       「实数序判定性不可证；只能保留显式参或改 eps 近似形」同款）。
       先例：CW_ConstructiveWorld_219 接口全部非严格非负字段 abs_nonneg / pos_part_nonneg /
-      metric_pos / log_le_linear_eps 均取逐 eps Bishop 形（E152-5：
+      metric_pos / log_le_linear_eps 均取逐 eps Bishop 形（判例：
       real_le 析取形无法表达「不趋近」等号点）；real_square_nonneg_eps
       @L44842 也只给出逐 eps 形。
    2. 普查 G2 引擎 UpRealLeB.real_square_nonneg_B@424 形状 =
@@ -636,7 +636,7 @@ Qed.
    ----------------------------------------------------------------
    桥设计（T2①：Class 参数位非公理——reqDecidableOrder 为 Class 定义，使用节以
    Context {DO : reqDecidableOrder R RIS} 引入，End 时作显式参入闭包签名，
-   Print Assumptions 仍 Closed。E225 判定：DecidableOrder=整体三分律=LPO 等价、
+   Print Assumptions 仍 Closed。判例判定：DecidableOrder=整体三分律=LPO 等价、
    全库零 Instance——req 类同为永久假设类，不供 Instance，与 Id 同构）。
    字段面逐字段核对（Id L331-337 → 本类；等词位 Id→req）：
      ord_le_dec    L332  Or (le a b) (Not (le a b))    → rord_le_dec    （逐字同形）
@@ -689,7 +689,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* 桥 C1 本体 1：reqDecidableOrder——Id DecidableOrder L331-337     *)
 (*   的 req 同构假设类（T2① Class 参数位非公理；全库零 Instance      *)
-(*   与 Id 同判——E225 LPO 判定随桥注记）                          *)
+(*   与 Id 同判——判例 LPO 判定随桥注记）                          *)
 (* ============================================================ *)
 Class reqDecidableOrder (R : Set) (RIS : RealInterfaceEnhancedSetoid R) : Set := {
   rord_le_dec : forall a b : R, Or (le a b) (Not (le a b));
@@ -757,7 +757,7 @@ Proof.
     exact (pair Hempty (le_refl _)).
   - simpl.
     destruct (rord_le_dec (total_loss (prefix ++ [a])) best_loss) as [Hle | Hnot].
-    + (* 换 a：IH 于新 best (a, loss a)；snd ≤ loss a（IH 左腿），传 le_trans 配 Hle *)
+    + (* 换 a：IH 于新 best (a, loss a)；snd ≤ loss a（IH 左肢），传 le_trans 配 Hle *)
       destruct (IH a (total_loss (prefix ++ [a]))) as [IH_min IH_le].
       split.
       * intros w HIn. inversion HIn as [Hw_eq | y0 l0 Hw]; subst.

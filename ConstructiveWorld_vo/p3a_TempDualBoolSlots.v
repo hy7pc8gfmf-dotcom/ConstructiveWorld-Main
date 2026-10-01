@@ -27,7 +27,7 @@
 (*        list 载体已闭面。                                             *)
 (*                                                                *)
 (*   纪律：纯构造性；Set 层语句（real_lt/real_eq）；零经典逻辑；          *)
-(*   全部 Qed 闭合；G1-G4 四关候跑。                                    *)
+(*   全部 Qed 闭合；G1-G4 四检候跑。                                    *)
 (* ============================================================ *)
 
 From Stdlib Require Import QArith.QArith.
@@ -172,7 +172,7 @@ Proof.
            T Ht energy p Hp Hnormp Henergy).
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
+(* ---- 四检备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions p3a_bsum_add.
 Print Assumptions p3a_two_state_entropy_deficit_kl_zero.

@@ -348,7 +348,7 @@ Qed.
    思路：误差 |Δ(f+g) - (df+dg)·h| ≤ |Δf - df·h| + |Δg - dg·h| ≤ (eps/2+eps/2)|h| = eps|h|。
    δ = min δf δg（min_pos 保正）；eps/2 = inv_2·eps（half_pos/half_twice）；
    代数分解用 minus_plus_distr / plus_swap_mid / mult_plus_distr_r（RingLemmas）；
-   各引理在 Let 层使用需 pose + change（见 E143）。 *)
+   各引理在 Let 层使用需 pose + change（见判例）。 *)
 Theorem differentiable_plus : forall (f g : R -> R),
   Differentiable f -> Differentiable g ->
   Differentiable (fun x => plus (f x) (g x)).
@@ -365,7 +365,7 @@ Proof.
   - (* lt zero (min dfdelta dgdelta) *)
     apply min_pos; [exact Hdf1 | exact Hdg1].
   - intros h Hh.
-    (* 目标换到 Let 层（df_correct 陈述为投影级，Let 层便于 rewrite，见 E143） *)
+    (* 目标换到 Let 层（df_correct 陈述为投影级，Let 层便于 rewrite，见判例） *)
     change (le (abs (minus (plus (f (plus x h)) (g (plus x h)))
                             (plus (plus (f x) (g x)) (mult (plus (df x) (dg x)) h))))
               (mult eps (abs h))).
@@ -755,7 +755,7 @@ Proof.
   - apply one_pos.
   - intros h Hh.
     (* 误差恒为零：minus (a·(x+h)+b) (a·x+b+a·h) = 0。
-       先证折叠形态（目标中 minus 保持折叠，rewrite 不跨 δ 层，见 E143） *)
+       先证折叠形态（目标中 minus 保持折叠，rewrite 不跨 δ 层，见判例） *)
     assert (Hd : Id (mult a (plus x h)) (plus (mult a x) (mult a h)))
       by exact (distrib a x h).
     assert (Hzero : Id (minus (plus (mult a (plus x h)) b) (plus (plus (mult a x) b) (mult a h))) zero).
@@ -778,7 +778,7 @@ Proof.
         by exact (id_cong (fun z => plus z (opp (plus (plus (mult a x) b) (mult a h)))) Hre).
       exact (id_trans (id_trans Hnum Hn2) (plus_opp (plus (plus (mult a x) b) (mult a h)))).
     }
-    (* 目标含 Let/投影混合拼写（E143），弃 rewrite：le_id_l + id_cong（内核转换） *)
+    (* 目标含 Let/投影混合拼写（判例），弃 rewrite：le_id_l + id_cong（内核转换） *)
     apply (le_id_l (abs (minus (plus (mult a (plus x h)) b) (plus (plus (mult a x) b) (mult a h))))
                    (abs zero) (mult eps (abs h))).
     + exact (id_cong abs Hzero).
@@ -1836,7 +1836,7 @@ Proof.
 Qed.
 
 (* ============ 4. Set 层恒等：t·inv(1+t) == opp (minus (inv(1+t)) one)
-   （E186 Real 层链的 Set 层翻译；1/x 导数核心恒等）
+   （判例 Real 层链的 Set 层翻译；1/x 导数核心恒等）
    链：t·inv s == (s−1)·inv s == inv s·(s−1) == inv s·s − inv s·1
               == one − inv s·one == one − inv s == opp (inv s − 1)
    其中 s == plus one t，s−1 == t（minus_one_plus_t 反向） *)
@@ -4682,7 +4682,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* KV 逐出最优策略（第三批支撑定理）                           *)
+(* KV 逐出最优策略（配套支撑定理）                           *)
 (* ============================================================ *)
 (*   (c) 逐出配分函数以全配分函数为上界：任意保留集的         *)
 (*       evicted_partition ≤ Z_thermo（保留越多质量越多 ⟹     *)
@@ -5602,7 +5602,7 @@ Qed.
 
 (* 逐点恒等（keep 分支，条件化）：|b/Z − b/Z_keep| == b·(1/Z_keep − 1/Z)
    前提 lt (invZ) (invKeep)（严格逐出，Real 层由 T > 0 实例化）——抽象层 le 不可
-   析取（E196 边界），精确符号走显式 lt 前提（T4.3 条件定理模式） *)
+   析取（判例 边界），精确符号走显式 lt 前提（T4.3 条件定理模式） *)
 Lemma topk_tv_pointwise_keep : forall s,
   keep_top_k s ->
   lt (inv_pos Z_thermo Z_thermo_pos) (inv_pos topk_kept_partition topk_kept_partition_pos) ->
@@ -7495,8 +7495,8 @@ Qed.
 
 (* ================================================================
    计数形式：严格更重者计数 < K（主文件 keep_top_k 模式，绕开排序
-   正确性 E215 与 InT 成员判定）；非空性用诚实前提 topk_pickmax_head
-   （pick_max 在前 K 个中，同 E211 κ 正分支 g>0 前提模式）。
+   排序正确性判例与 InT 成员判定）；非空性用诚实前提 topk_pickmax_head
+   （pick_max 在前 K 个中，同判例 κ 正分支 g>0 前提模式）。
    纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
    ================================================================ *)
 
@@ -7541,7 +7541,7 @@ Definition topk_keep_dec (K : nat) (prefix : list Token) (w : Token) :
   | false => inr (fun H => id_false_true H)
   end.
 
-(* 诚实前提（排序正确性弱化，E215 障碍绕行）：pick_max 在前 K 个中（K ≥ 1） *)
+(* 诚实前提（排序正确性弱化，判例障碍绕行）：pick_max 在前 K 个中（K ≥ 1） *)
 Variable topk_pickmax_head : forall (K : nat) (prefix : list Token),
   (1 <= K)%nat ->
   topk_keep K prefix (pick_max_token Token vocab total_loss default_token prefix).
@@ -7736,9 +7736,9 @@ End TopPSampling.
 
 (* ============================================================
    Core 版：RealSetoidCore.RealInterfaceSetoidCore 实例组装（req := real_eq）
-   metric_pos/metric_triangle 用逐 eps 形式（E152-5）；缺口：exp_neg_plus/log_inv（阶段 2）
+   metric_pos/metric_triangle 用逐 eps 形式（判例）；缺口：exp_neg_plus/log_inv（阶段 2）
    注：RealInterfaceSetoid 类字段与 RealInterface 全局投影同名（zero/one/plus...），
-       同文件全局冲突（检验不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（E152-7）。
+       同文件全局冲突（检验不冲突因 CW 是导入名可遮蔽）→ 包 Module 隔离（判例）。
    ============================================================ *)
 
 (* ============ Core 版接口（阶段 3 组装目标）：无 exp/log 字段 ============

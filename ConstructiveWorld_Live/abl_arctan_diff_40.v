@@ -2,7 +2,7 @@
    abl_arctan_diff_40.v — arctan 差公式Real 桥构造：abl9_slope_id 升层
    消融批 · 落件形态：新件 Require 件19/件20/件21（禁触 abl_arctan_diff_20.v）         
    ── 模块名与数学使命：──────────────────────────────────────────────────────
-   链式规则斜率合成恒等式的Real 升层（登记册-abl_arctan_diff_20 §四·1 断点②
+   链式规则斜率合成恒等式的Real 升层（登记册-abl_arctan_diff_20 §四·1 续点②
    本体）。设 w(u,v):=(u−v)·inv(1+uv)（由件21 abl9_brg_w_real 承载），Q 层
    恒等式 abl9_slope_id（件20）：h/(1+u²) − (w(u+h,v)−w(u,v))·(1+uv)²/
    ((1+u²)(1+v²)) == h²v/((1+(u+h)v)(1+u²))。本件升为 real 层 real_eq：

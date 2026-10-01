@@ -2,8 +2,8 @@
 (* UpReqBanachExpBasic.v —— BXB：路径 B exp(0)=one     *)
 (* （；位，CoreN 2）                           *)
 (* ============================================================ *)
-(* 使命：S4 可逆性 (e^a)⁻¹=e^(−a) 的终结腿是 e^0=1（对照      *)
-(* Real 层件 2 单位元腿同构）。Banach 设定下这条现在就可证：     *)
+(* 使命：S4 可逆性 (e^a)⁻¹=e^(−a) 的终结肢是 e^0=1（对照      *)
+(* Real 层件 2 单位元肢同构）。Banach 设定下这条现在就可证：     *)
 (*   exp_series_partial m bzero ≡ bone（k≥1 项因 bpow bzero k    *)
 (*   = bzero 退化，只留首项）。本件把该块 + 范数上界落独立件。   *)
 (*                                                             *)
@@ -49,8 +49,8 @@ From Stdlib Require Import Lia.
 (* ============================================================ *)
 
 (* bpow 递归展开：n≥1 时 bzero^n ≡ bzero                        *)
-(* （0 次项 = bone 由 n≥1 前提排除；S 0 腿 bmult_one_l 直连，     *)
-(*   S (S j) 腿 bmult_wd 传 IH + bmult_zero 闭合。）             *)
+(* （0 次项 = bone 由 n≥1 前提排除；S 0 肢 bmult_one_l 直连，     *)
+(*   S (S j) 肢 bmult_wd 传 IH + bmult_zero 闭合。）             *)
 Lemma bxb_bpow_zero : forall (B : BanachAlg) (n : nat),
   (1 <= n)%nat -> @bae B (bpow B (@bzero B) n) (@bzero B).
 Proof.
@@ -177,7 +177,7 @@ Fixpoint bxb_qsum (x : Q) (n : nat) : Q :=
   end.
 
 (* 主加分：‖esp B a m‖ ≤T Σ_{k≤m} ‖a‖^k/k!                      *)
-(* （归纳：bnorm_plus 三角拆项，IH + bnorm_esp_term 双腿经        *)
+(* （归纳：bnorm_plus 三角拆项，IH + bnorm_esp_term 双肢经        *)
 (*   qleT'_plus_compat 合流。）                                  *)
 Lemma bxb_norm_bound : forall (B : BanachAlg) (a : (@BA B)) (m : nat),
   QleT' (@bnorm B (exp_series_partial B a m)) (bxb_qsum (@bnorm B a) m).
@@ -251,9 +251,9 @@ Qed.
 
 (* ============================================================ *)
 (* 对接注记（S4 可逆性链位置，不落承认件）：                     *)
-(*   S4 终结腿 e^0=1 在 Banach 层的本件形态：                    *)
+(*   S4 终结肢 e^0=1 在 Banach 层的本件形态：                    *)
 (*   ① 全量部分和等式 bxb_series_zero（元素面 bae 完全等式）；   *)
-(*   ② 范数面 bxb_norm_series_zero（Id 面， 单位元腿同构）；  *)
+(*   ② 范数面 bxb_norm_series_zero（Id 面， 单位元肢同构）；  *)
 (*   ③ 平凡柯西证书 bxb_series_zero_bcauchy（N=0 显式闭式）；    *)
 (*   ④ 范数上界 bxb_norm_bound（Σ_{k≤m} ‖a‖^k/k! Q 值面）；      *)
 (*   ⑤ 元素面 ④→S4：bxb_expdef_exp_zero_close（与 B25 出口      *)

@@ -58,7 +58,7 @@ Set Printing Width 500.
 (*   G3    fkl_dp_group_b           pnt_dp_two_point×链式依存  [非平凡中]   *)
 (*   G2    fkl_family               sigT 四件闭合账                        *)
 (*   real_list_sum 系）；UpRealLeB real_le_b；UpReqPinskerTransport      *)
-(*   （pnt_kl_pt_split/pnt_dp_two_point/pnt 组合件+pnt_ring_eq，四关绿    *)
+(*   （pnt_kl_pt_split/pnt_dp_two_point/pnt 组合件+pnt_ring_eq，四检绿    *)
 (*   在盘）。禁碰件未 Require：UpReqIrrationalCriterion/UpReqMixingTime/  *)
 (*   UpReqEnvelopeDual/UpReqIterGeomRate。                              *)
 (* 编译：coqc（9.1 钉源 COQLIB=ROCQLIB=C:/Rocq-Platform~9.1~.01/     *)

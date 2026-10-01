@@ -2,7 +2,7 @@
 (* ===================================================================== *)
 (* r_max 左右参 plain 形对称交换桥 + rpl_clip_lower 回喂特化                  *)
 (*                                                                       *)
-(* 争议坐标（经验卡 E384）：                                              *)
+(* 争议坐标（经验判例）：                                              *)
 (*   · UpReqRDF.v ReqDiffPlain 类 r_max_ge_plain : le a (r_max a b)        *)
 (*     （左参 plain 槽，<- Id r_max_le_l 同构，T2① 零证明槽）；              *)
 (*   · UpReqPPOPlain.v 节1 自持槽 r_max_le_r_plain : le b (r_max a b)      *)
@@ -10,7 +10,7 @@
 (*   根因：req 层接口 RealInterfaceEnhancedSetoid 的 r_max le 方向仅有      *)
 (*   逐 eps 形（r_max_le_l/_r : le _ (plus (r_max a b) eps)），plain 形     *)
 (*   无接口支撑（「序无消去」，UpReqAlign3 裁定结论同因）；两槽单向重复占位，     *)
-(*   库内无对称交换桥（E384 卡登记缺口）。                                  *)
+(*   库内无对称交换桥（判例卡登记缺口）。                                  *)
 (* 本件：                                                                  *)
 (*   1. 交换槽 rms_r_max_comm（T2① 显式参非公理，实例化一次全桥解锁）；      *)
 (*   2. 双向桥 rms_le_r_of_ge / rms_ge_of_le_r（req_le_compat 运输，        *)
@@ -50,13 +50,13 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Context {RDP : ReqDiffPlain R}.
 Variable epsilon : R.
 
-(* ---- T2① 对称交换槽（E384 卡缺口位；显式参非公理） ----
+(* ---- T2① 对称交换槽（判例卡缺口位；显式参非公理） ----
    实例化来源注记：plain 形 req (r_max a b) (r_max b a) 在抽象接口层
    具体模型侧若提供 r_max 交换见证（逐坐标 Qmax 对称），本节全桥一次解锁。 *)
 Hypothesis rms_r_max_comm : forall a b : R, req (r_max a b) (r_max b a).
 
 (* ---- 桥 B（回喂方向）：左参 plain 槽 ⟹ 右参 plain 形 ----
-   le b (r_max b a)（左参槽实例 Hge b a）经 req 运输 y 腿（交换）得
+   le b (r_max b a)（左参槽实例 Hge b a）经 req 运输 y 肢（交换）得
    le b (r_max a b)。 *)
 Lemma rms_le_r_of_ge :
   forall (Hge : forall a b : R, le a (r_max a b)) (a b : R),

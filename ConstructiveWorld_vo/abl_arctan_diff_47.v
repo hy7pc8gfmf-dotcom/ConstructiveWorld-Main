@@ -1,11 +1,11 @@
 (* ==========================================================================)
    abl_arctan_diff_47.v — 9a-乙 主定理装配推进（X47 形：         
-   ②Real 桥（X40'' 辖区）+③N 等步链（X41'' 辖区）两断点件的装配衔接）
+   ②Real 桥（X40'' 辖区）+③N 等步链（X41'' 辖区）两续作件的装配衔接）
    消融批 · 落件形态：新件 Require 件19/20/21/40/41（选型说明：         
    件40/41 皆 Require 件20——原地续写件20 将成环 20→40/41→20，故取新件；
    ②产出=件40 abl9_brg_wpath_dom/abl9_wpath_pt_bnd 直耗，③产出=件41
    qs/abl9_walk/abl9_hN_step/abl9_qs_pos 直耗，端点三件=件20 C/A/B/D1 直供）
-   ── 本片范围·数学使命（装配推进，≤1h 断点纪律）：──────────────────────────────
+   ── 本片范围·数学使命（装配推进，≤1h 续作纪律）：──────────────────────────────
    主定理 abl9_atan_diff_formula（件16 拟文）证明链装配：
    phi 逐节点表达式（证书随节点携带）→ 端点 phi(x)==0（件20 C 同构链）→
    N 等步 indexed telescoping（③ 节点族 abl9_walk+qs 剖分）→ 项级转移
@@ -24,7 +24,7 @@
    （件41 nchain_crit/件20 const_crit 系 phi:Real→Real 抽象形）与「证书随
    节点携带」不相容（E12 判定：cauchy_real_arctan 证书槽依赖实参，无全域
    total 化），装配链走内联 indexed telescoping；le 形单步判据（const_crit
-   之 phi-free 化）留②产出片，登记断点。
+   之 phi-free 化）留②产出片，登记续点。
    ── 依赖清单：──────────────────────────────────────────────────────────────
    S01–S11 全链 + abl_arctan_diff_19 + abl_arctan_diff_20（q_path_den/
    Qabs_wd/arctan_wd_real 等）+ abl_arctan_cert_bridge_21（w 承载）+

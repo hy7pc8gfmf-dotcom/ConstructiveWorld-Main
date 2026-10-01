@@ -403,7 +403,7 @@ Proof.
     by exact (opp_le_compat (plus (log (q s) Hqs) (opp (log (p s) Hps)))
                             (plus (plus (mult (q s) (inv_pos (p s) Hps)) (opp one)) eps)
                             H4).
-  (* 右腿形归一：opp (plus (log q) (opp (log p))) ≡ req_minus (log p) (log q) *)
+  (* 右肢形归一：opp (plus (log q) (opp (log p))) ≡ req_minus (log p) (log q) *)
   assert (H6 : req (opp (plus (log (q s) Hqs) (opp (log (p s) Hps))))
                    (req_minus (log (p s) Hps) (log (q s) Hqs))).
   { assert (r1 : req (opp (plus (log (q s) Hqs) (opp (log (p s) Hps))))
@@ -425,7 +425,7 @@ Proof.
   assert (H8 : le (mult (p s) (opp (plus (plus (mult (q s) (inv_pos (p s) Hps)) (opp one)) eps)))
                   (mult (p s) (req_minus (log (p s) Hps) (log (q s) Hqs))))
     by exact (req_le_mult_compat_r (p s) _ _ Hle0 H7).
-  (* 左腿值归一：p·opp(1 − q/p + eps) ≡ plus p (opp (plus q (p·eps)))
+  (* 左肢值归一：p·opp(1 − q/p + eps) ≡ plus p (opp (plus q (p·eps)))
      （inv_pos_correct 约分 q/p·p = q + distrib/opp 分配律，req 代数链） *)
   assert (H9 : req (mult (p s) (opp (plus (plus (mult (q s) (inv_pos (p s) Hps)) (opp one)) eps)))
                    (plus (p s) (opp (plus (q s) (mult (p s) eps))))).

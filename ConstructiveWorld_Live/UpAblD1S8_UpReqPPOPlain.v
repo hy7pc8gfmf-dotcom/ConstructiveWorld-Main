@@ -8,7 +8,7 @@
 (*     pi_old_pos:119｜advantage_fn:120｜advantage_nonneg:121｜epsilon:122        *)
 (*   节2：R,RIS:296｜RDP:297｜S:298｜sumf:299｜rpl_sum_nonneg:303-304             *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                         *)
-(*    f4b6f04be90d3b0f5451369f01817948，零代际漂移）                             *)
+(*    登记册登记值，零代际漂移）                             *)
 (*                                                              *)
 (* 留记登记（禁注水，逐条如实）：                                                *)
 (*  1. r_max_le_r_plain（L107）不入包：eps-free plain 面（le b (r_max a b)）      *)
@@ -38,7 +38,7 @@
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219／UpReqAlign（Z_align_req 定义件）／              *)
 (*   UpReqRDF（ReqDiffPlain 类定义件），只读使用；零 git、零注册面增量。          *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S8_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S8_*.{log,exit}                     *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.
@@ -91,7 +91,7 @@ Inductive uabd1s8_ppo2_pack5 : Type :=
               (forall s : S, le zero (f s)) -> le zero (sumf f)) ->
           uabd1s8_ppo2_pack5.
 
-(* ============ Zap 供给腿（独立证书形：单点实例下配分函数正性） ============ *)
+(* ============ Zap 供给肢（独立证书形：单点实例下配分函数正性） ============ *)
 
 Lemma uabd1s8_ppo1_zap_pos :
   forall RDP : @ReqDiffPlain Real RealInterfaceEnhancedMod.RealEnhancedReal,

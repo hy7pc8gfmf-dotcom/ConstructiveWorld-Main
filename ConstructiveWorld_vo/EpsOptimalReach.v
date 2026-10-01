@@ -1172,7 +1172,7 @@ Variable total_loss : list Token -> R.
 Hypothesis probe_le_dec : forall a b : R, Or (le a b) (Not (le a b)).
 Hypothesis probe_lt_dec : forall a b : R, Or (lt a b) (Or (req a b) (lt b a)).
 
-(* mp 专用腿①：key 函数 = total_loss (prefix ++ [w]) *)
+(* mp 专用肢①：key 函数 = total_loss (prefix ++ [w]) *)
 Definition mp_key (prefix : list Token) : Token -> R :=
   fun w => total_loss (prefix ++ [w]).
 
@@ -1194,7 +1194,7 @@ Proof.
     + exact (IH best).
 Qed.
 
-(* 挑选包装 transport（vocab/default 腿②：nil → default 同位） *)
+(* 挑选包装 transport（vocab/default 肢②：nil → default 同位） *)
 Lemma mpd_pick_engine_transport : forall (vocab : list Token)
          (default_token : Token) (prefix : list Token),
   mpd_pick_best_token Token vocab total_loss default_token probe_le_dec prefix =
@@ -1293,7 +1293,7 @@ Proof.
            (eq_sym T)).
 Qed.
 
-(* mp 域件 3（pick 最优性）由引擎直供（腿①②经 transport 换算） *)
+(* mp 域件 3（pick 最优性）由引擎直供（肢①②经 transport 换算） *)
 Theorem mpd_pick_best_optimal_via_engine :
   forall (vocab : list Token) (default_token : Token)
          (prefix : list Token) (w : Token),

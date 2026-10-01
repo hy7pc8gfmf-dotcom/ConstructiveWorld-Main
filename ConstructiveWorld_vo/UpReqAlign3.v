@@ -30,7 +30,7 @@
    纯 term-mode（req_trans 链 + compat 桥），零 Morphisms 依赖；
    Set 层语句（req/lt/le 均 Set 值，零 Prop 泄露）。
    ----------------------------------------------------------------
-   本批结果（对照 UpReqAlign2.v 文件尾挂起清单逐项已证明）：
+   本件结果（对照 UpReqAlign2.v 文件尾挂起清单逐项已证明）：
    [] reward_expand/align_energy_expand/F_align_F_t_rel/
      align_objective_t12_decomp/J_pi_t/J_pi_next/surrogate_diff_identity
      req 化 + req2_policy_improvement_mono 定理化（批 3 桥位 3 放行）
@@ -56,13 +56,13 @@
    1. log 前提化：req2 系 log 全部携带逐点正性参数（批 3/3b 同款）；
      dpo_pair_loss/dpo_loss_pair 的 req 版因此携带分母正性显式位。
    2. minus 载体 = UpReqAlgebra.req_minus（δ 透明同形 Id minus）。
-   3. B 类桥（假设位保留，与 Id 同位；本批**新增放行**两条）：
+   3. B 类桥（假设位保留，与 Id 同位；本件**新增放行**两条）：
      - req2_gibbs_inequality（Id gibbs_inequality@16629 的 req 同位）：
        KL ≥ 0 的 plain-le 形态不可由接口逐 eps 字段导出（序无消去），
        保留假设位——UpReqFreeEnergy（批 2 FEP）结果后降为使用件；
      - req2_inv_pos_lt_contra / req2_log_lt_mono（Id Variable
        L21013/21024 的 req 同位，sigmoid_strict_inc 使用）。
-     - req2_step_kl_eta_bound：**不在本批**（ B 类 Variable，
+     - req2_step_kl_eta_bound：**不在本件**（ B 类 Variable，
        UpReqAlign 已给出假设位；其消解留待 req 求和实例批，不属深链）。
    4. (d) 冻结（沿批 3/3b）：ppo_gap_nonneg、fold_right_ext 与 list fold
      机器（nat/list 层 Id，双层并行）——dpo_total_loss_at_star/
@@ -1616,7 +1616,7 @@ Proof.
                  (req_opp_plus u (opp v))).
 Qed.
 
-(* ---- B 类桥（登记表 3，本批新增放行位）：req2_gibbs_inequality
+(* ---- B 类桥（登记表 3，本件新增放行位）：req2_gibbs_inequality
    （Id gibbs_inequality @16629 的 req 同位）。KL ≥ 0 的 plain-le
    形态不可由接口逐 eps 字段导出（序无消去）；保留假设位，待
    UpReqFreeEnergy（批 2 FEP）结果后降为使用件。req2 KLE 语句无
@@ -3199,7 +3199,7 @@ Proof.
                                                      (plus b (opp u)))))).
 Qed.
 
-(* ---- 18) β·KSN == FE 星差 − FE 下一差（主定理 HA 首腿供件） ---- *)
+(* ---- 18) β·KSN == FE 星差 − FE 下一差（主定理 HA 首肢供件） ---- *)
 Lemma r2_beta_KSN_Fdiff :
   forall (pi_t : S -> R) (Hpi_t : pos3 pi_t) (Hn : nrm pi_t),
     req (mult beta (KLE PSTR (NPX pi_t Hpi_t) PSTR_pos

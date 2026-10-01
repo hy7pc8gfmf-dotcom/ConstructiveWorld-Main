@@ -115,7 +115,7 @@ Qed.
 (* ===== 4. 锚例钉：X := -node 2 处零前提产出实距 < e^{-2}/2 之界 ===== *)
 
 (* 非空洞性机械钉：全清件在锚例上零前提直接产出 M 见证与实距离被显式正量    *)
-(* 压制（eps 选取全自动，与 398 锚例的手选 eps := 1 位对表）。              *)
+(* 压制（eps 选取全自动，与 398 锚例的手选 eps := 1 位对照）。              *)
 Theorem tlw408_anchor_fulldischarge :
   sigT (fun M : nat =>
     real_lt (real_metric

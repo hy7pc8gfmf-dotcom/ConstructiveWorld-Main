@@ -660,7 +660,7 @@ Definition mpk_world3_budget_lower := mtw_no_mixing_below.
 Definition mpk_world3_tv_lower := mtw_tv_lower.
 Definition mpk_temp_divergence := mtp_anchor_divergence.
 
-(* §2 跨世界对照单一合取收束（五腿嵌套 And，各腿 exact 供体真名）                     *)
+(* §2 跨世界对照单一合取收束（五肢嵌套 And，各肢 exact 供体真名）                     *)
 
 Theorem mpk_cross_world_triptych :
   And
@@ -732,7 +732,7 @@ Proof.
     + exact (mult_one mtw_half).
 Defined.
 
-(* §4 四关自检：封装件全件 + 三供体代表定理 Print Assumptions                          *)
+(* §4 四项自检：封装件全件 + 三供体代表定理 Print Assumptions                          *)
 
 Print Assumptions mpk_window_two_sided.
 Print Assumptions mpk_collapse_generic.

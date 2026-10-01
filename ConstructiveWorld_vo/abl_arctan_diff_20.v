@@ -1,7 +1,7 @@
 (* ==========================================================================)
-   abl_arctan_diff_20.v — X19'' 施工段（消融交付·9a-乙 三片：接 X19' 断点）  
+   abl_arctan_diff_20.v — X19'' 施工段（消融交付·9a-乙 三片：接 X19' 分段点）  
    消融批 · arctan 差公式件三片（依赖：自包含新件 Require 件 19）           
-   ── 本片范围·数学使命（切片规格 ≤1h，②③推进+主定理，1h到点即停断点登记）：───────
+   ── 本片范围·数学使命（切片规格 ≤1h，②③推进+主定理，1h到点即停分段点登记）：───────
    ②Real 证书桥【推进】：斜率合成精确恒等 abl9_slope_id——链式规则复合斜率的
    除法形 Q 层恒等式（=X19'登记册 §四·4 点名「斜率合成精确恒等=wsq_ring_id 的
    除法形」）：w:=（u−v)/(1+uv) 的 (u+s) 处增量乘 (1+uv)²/((1+u²)(1+v²))
@@ -15,13 +15,13 @@
    c:=eps/(8(B+1))，real_le 双分支（real_lt/real_eq）各产逐点界（real_eq
    分支以 abs_shift三角收敛），单步 3eps/4<eps 闭合。构造性注记：③本片系
    小跨度版（|s|<delta）；N 等步链版（跨 [0,h] 多步+Q→nat ceiling+min/max
-   折叠）登记册断点，构造分析随登记。 
-   主定理 abl9_atan_diff_formula【断点登记，拟文逐字不动】（X16 件头注）：
+   折叠）登记册分段点，构造分析随登记。 
+   主定理 abl9_atan_diff_formula【分段点登记，拟文逐字不动】（X16 件头注）：
    装配剩余=phi 步界件（①b 两次应用+②桥+三角复合）、arctan 合同
    （b5c_arctan_partial_wd 升 real 层）、端点值 phi(0)==0、W(x+h) 与
    h·inv(1+x(x+h)) 的 real_inv_pos_ext对齐；另勘定内点域缺口（见登记册）。
-   ── X19'''' 续作登记（第二轮断点推进）─────────────────────────────────
-   断点态验定（E12 实文判定）：池副本 414 行版【红】于 abl9_const_crit·
+   ── X19'''' 续作登记（二段分段点推进）─────────────────────────────────
+   分段点态验定（E12 实文判定）：池副本 414 行版【红】于 abl9_const_crit·
    Htri——unfold AB 全位展开致 Qle_trans 中项缺外层 Qabs（前任停刀点，
    与落件 394 行版差异=本件+Hden+HcB 除法形重证，池版为最新迭代）。
    此番修复 Htri（三角链改走 ||Δ|−MID|+|MID|：abl9_Qabs_wd 配平+
@@ -35,7 +35,7 @@
    B abl9_w_align（w 复合实参==拟文 RHS 实参：eq_mult_compat+mult_comm
    对齐链，(x+h)+(−x)==h 逐点）/
    C2 abl9_wx_zero（w(x)==0，端点件 phi(0) 之 w 侧）。
-   主定理断点【续登记】：剩余=phi 步界件（①b×2+②桥 Real 升层——
+   主定理分段点【续登记】：剩余=phi 步界件（①b×2+②桥 Real 升层——
    real_inv_pos 近似倒数误差项吸收为真难点——+三角复合）→③ N 等步链
    （h/N 剖分+eps/(2N) 预算）→装配。接续首刀建议=②桥 Real 升层件
    （real_inv_pos_ext 对齐 1+w² 恒等，Q 层输入形 abl9_slope_id 已备）；
@@ -46,8 +46,8 @@
      rocq c -q -native-compiler no -Q /tmp/x19pool "" /tmp/x19pool/abl_arctan_diff_20.v
    （cwd=/tmp/x19w4 异地空目录——X19'' 末轮殁因勘定：cwd x19work 残留
    19.vo 与池 -Q 单根二义「matches several files in path」；隔离池
-   /tmp/x19pool S01–S11+件16+件19 born-in-place 在链，vo 新鲜度逐一验）。
-   绿判四件套：①EXIT=0；②Error 计 0；③vo 魔数=436f7121 00015ff4
+   /tmp/x19pool S01–S11+件16+件19 就地成段 在链，vo 新鲜度逐一验）。
+   绿判四要素：①EXIT=0；②Error 计 0；③vo 魔数=436f7121 00015ff4
    （xxd 实读）；④vo 新于 v。红线四证：PA 语句 17→Closed under the
    global context ×17；Recursive Extraction 输出 Obj.magic 计 0；禁词面
    零 Admitted/Axiom 命中；对账三联 Lemma 17=Qed 17=PA 17 零差。      
@@ -61,7 +61,7 @@
    source Live/toolchain/env.sh && bash cpu_guard.sh --
      rocq c -q -native-compiler no -Q /tmp/x19pool "" /tmp/x19pool/abl_arctan_diff_20.v
    （隔离池 /tmp/x19pool：S01–S11+abl_arctan_diff_16+abl_arctan_diff_19
-   born-in-place 绿验（EXIT=0/Closed×6/魔数 436f7121 0001 5ff4/vo 新于 v，
+   就地成段 绿验（EXIT=0/Closed×6/魔数 436f7121 0001 5ff4/vo 新于 v，
    S11 md5 d571b0c0抽查与登记册 SAME）；Require 链退回 S11 单链，S12 出锥
    ——承 X15''/X16 判定。）
    ========================================================================== *)

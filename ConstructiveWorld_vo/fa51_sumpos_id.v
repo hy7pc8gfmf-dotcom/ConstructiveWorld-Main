@@ -159,7 +159,7 @@ Qed.
 
 (* ============ 实例化消解主件二：温度配分函数族（S04:3415-3416 槽同构） ===== *)
 (* 槽语句：Z_temp_spec : forall t Ht, Id (Z_temp t) (Σ_s e^{-e_s/t})      *)
-(* 兑现：fa51_Z_temp 取定义性即有限和（E354 装法），spec 槽降为定义件，   *)
+(* 兑现：fa51_Z_temp 取定义性即有限和（既有判例装法），spec 槽降为定义件，   *)
 (*       正性槽由引擎④无条件化（zposd_Z_temp_pos 之 Id 同构）。           *)
 
 Definition fa51_Z_temp (base_loss : S -> R) (t : R) (Ht : lt zero t) : R :=

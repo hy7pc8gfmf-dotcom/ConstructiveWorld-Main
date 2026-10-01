@@ -1,6 +1,6 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程包AC（tier2 末段第一批）      *)
+(* ToyR 玩具证替换件 ——   工程包AC（tier2 末段之一）      *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -45,7 +45,7 @@ Import RealInterfaceEnhancedMod.
 (* ============================================================ *)
 (* UacClose：同位装载节（节参数与 ReqAlignCore/Req2AlignCore 逐位对齐）  *)
 (*   证人面：posd/nrm1/KLR/PSTRR/NPXR/... 全部为上游闭名 δ 透明包装      *)
-(*   （E346/E370 定型三步： δ 透明包装一次喂定，语句层逐位同位）。    *)
+(*   （判例组 定型三步： δ 透明包装一次喂定，语句层逐位同位）。    *)
 (* ============================================================ *)
 Section UacClose.
 
@@ -606,7 +606,7 @@ End UacClose.
 (* 二、UpReqAlign.v 尾清单对账（深链挂起清单第 1/2/3 条）：
    第 1 条 req_backward_kl_identity（本文件 :434 假设位）→ 本件
    uac_req_backward_kl_identity 同位装载（槽语句逐位同形，δ 透明包装
-   E370 语句层转换判据）；
+   判例 语句层转换判据）；
    第 2 条 req_policy_improvement_mono（本文件 :630 假设位）→ 本件
    uac_req_policy_improvement_mono 同位装载；
    第 3 条主定理链（req_policy_iter_kl_geom_step / _iter /
@@ -622,7 +622,7 @@ End UacClose.
    uac_req_policy_improvement_mono —— 同上 + uac_gibbs_le_zero
      （B 类 KL≥0 plain-le 槽，Align3:1451 req2_gibbs_inequality 同位运输；
      序无消去=LPO 家族墙，与 UpReqAlign 冻结清单第 1 条同因，诚实保留）。
-   四关状态：本件 G1/G2 自验；G3 提取检验与 G4 rocqchk 留待四关组。        *)
+   四检状态：本件 G1/G2 自验；G3 提取检验与 G4 rocqchk 留待四检组。        *)
 (* 四、界外件声明：G07:648-654 [跳过] req_step_kl_eta_bound 不在本件 scope
    （GeomD eps 形已实例化消解，plain-le 闭合属 Or 形=X 红线，防重复不重建）；
    既有文件零改（本件为纯新建 shim，V-F2/CWD6/CWE5 领地未触碰）。            *)

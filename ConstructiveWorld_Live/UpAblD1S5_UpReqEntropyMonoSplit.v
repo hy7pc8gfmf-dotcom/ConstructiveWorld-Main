@@ -1,35 +1,31 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
 (* UpAblD1S5_UpReqEntropyMonoSplit.v —— FA-D1S5 数据供给大封装第二梯 件②           *)
-(*                                                              *)
+(*                                                                              *)
 (* 辖区：UpReqEntropyMonoSplit.v Section EmsEntropyMonoSplit 净新 12 槽             *)
-(*   （Live_X 副本与 ConstructiveWorld_vo 正册 md5 同代                            *)
-(*    911646f880b85cf77cc890c3c7563e8c，零代际漂移）                              *)
+(*   （副本与正册同代，零代际漂移）                                              *)
 (*   槽行号锚（源版本实测）：S:90｜real_sum_over_S:91｜ext:95｜le:97｜              *)
 (*     linear:99｜add:102｜T_star:105｜T_star_pos:106｜energy:107｜                *)
 (*     Hpinned:137-140｜Hkl_right:146-152｜Hkl_left:153-159                       *)
-(*     UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v，fa57_sum_carrier_realizes        *)
-(*     源版本速记件（bt/et/kl）传递引用该槽，包按载体完备性携带之（不另立              *)
-(*     实例化消解定理、不计位），供给腿＝单点实例 Hf tt。                                 *)
-(*                                                              *)
-(* 形态：D1S4 封装记录型先例照抄；含 forall S : Type 字段——按 D1S4 偏差2/           *)
-(*   坑卡① 提升为 Type 排序（Set 排序实测编译拒绝先例），G3 提取在 S 应用位          *)
-(*   预期出现 Obj.magic 擦除族，按 AA3/E888 口径登记。                            *)
-(* 源版本速记件 ems_bt/ems_bt_pos/ems_et/ems_kl_peak（源版本 L112-131 Section          *)
+(*     UpAblD1S3_sum_pos_UpReqEntropyMonoSplit.v，fa57_sum_carrier_realizes       *)
+(*     源版本速记件（bt/et/kl）传递引用该槽，包按载体完备性携带之（不另立            *)
+(*     实例化消解定理、不计位），供给肢＝单点实例 Hf tt。                                *)
+(*                                                                              *)
+(* 形态：D1S4 封装记录型先例照抄；含 forall S : Type 字段——按 D1S4 实测偏差          *)
+(*   提升为 Type 排序（Set 排序实测编译拒绝先例），G3 提取在 S 应用位              *)
+(*   预期出现 Obj.magic 擦除族，按 AA3 口径登记。                                *)
+(* 源版本速记件 ems_bt/ems_bt_pos/ems_et/ems_kl_peak（源版本 L112-131 Section      *)
 (*   Let，源版本自述 discharge 时内联）以显式参形实名同构（δ 展开同体，件头登记）。      *)
-(*                                                              *)
-(* 实例供给：S:=unit（单点态空间）｜求和载体:=fun f => f tt｜sumpos:=Hf tt｜         *)
+(*                                                                              *)
+(* 实例供给：S:=unit（单点态空间）｜求和载体:=fun f => f tt｜sumpos:=Hf tt｜        *)
 (*   T_star:=real_one｜energy:=零函数。                                            *)
-(*   单点载体下：ext/le 供给腿＝使用位直取（H tt）；linear/add＝两侧归一逐项         *)
+(*   单点载体下：ext/le 供给肢＝使用位直取（H tt）；linear/add＝两侧归一逐项         *)
 (*   重合（real_eq_refl 一行）；Hpinned＝两侧各自 mult_zero 一步归零；              *)
-(*   Hkl_right/Hkl_left＝kl 单点归零链（bt 归一 inv_pos_correct→log_one→           *)
+(*   Hkl_right/Hkl_left＝kl 单点归零链（bt 归一 inv_pos_correct→log_one→          *)
 (*   plus/opp 群律）＋real_lt_compat 序迁移——机械供给级。                           *)
-(*                                                              *)
-(* 分级（禁注水如实申报）：12 净新槽全部 T·接口/数据/证书供给级合并申报。             *)
-(*                                                              *)
-(* 依赖：CW_ConstructiveWorld_219（S02 环律/S03 逆元器/S07 Setoid 桥/S08 log 器）     *)
-(*   ＋UpReqTempDefs＋UpReqEntropyDeficitTemp（温度族/KL 定义件——源版本自身依赖面，     *)
-(*   只读使用，非槽源版本）；零 Require 槽源版本（防 P3S1 坑1 混代际）。              *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S5_*.{log,exit}                      *)
+(* 分级（禁注水如实申报）：12 净新槽全部 T·接口/数据/证书供给级合并申报。            *)
+(* 依赖：CW_ConstructiveWorld_219（S02 环律/S03 逆元器/S07 Setoid 桥/S08 log 器）    *)
+(*   ＋UpReqTempDefs＋UpReqEntropyDeficitTemp（温度族/KL 定义件——源版本自身依赖面，    *)
+(*   只读使用，非槽源版本）；零 Require 槽源版本（防混代际）。                      *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.
@@ -103,7 +99,7 @@ Definition uabd1s5_ems_kl (S : Type)
     (uabd1s5_ems_bt S sumf SUP energy u Hu)
     (uabd1s5_ems_btpos S sumf SUP energy u Hu).
 
-(* ============ 机械供给腿（一步直接给出/短 trans 链） ============ *)
+(* ============ 机械供给肢（一步直接给出/短 trans 链） ============ *)
 
 Lemma uabd1s5_ems_mult_one_l : forall x : Real,
   real_eq (real_mult real_one x) x.
@@ -149,7 +145,7 @@ Proof.
 Qed.
 
 (* 单点载体下峰温 KL 逐点归零：kl(t,u) == 0
-   （bt_one → log_wd/log_one 双腿 → plus/opp 群律 → mult_one） *)
+   （bt_one → log_wd/log_one 双肢 → plus/opp 群律 → mult_one） *)
 Lemma uabd1s5_ems_kl_zero :
   forall (t u : Real) (Ht : real_lt real_zero t) (Hu : real_lt real_zero u),
     real_eq
@@ -314,7 +310,7 @@ Proof.
                 (uabd1s5_ems_mult_one_l real_zero))).
 Qed.
 
-(* Hpinned 供给腿：单点载体下两侧各自 mult_zero 一步归零 *)
+(* Hpinned 供给肢：单点载体下两侧各自 mult_zero 一步归零 *)
 Lemma uabd1s5_ems_Hpinned_leg :
   forall (u : Real) (Hu : real_lt real_zero u),
     real_eq
@@ -350,7 +346,7 @@ Proof.
                     uabd1s5_ems_energy real_one real_lt_zero_one tt)))).
 Qed.
 
-(* Hkl_right/Hkl_left 供给腿：kl 归零 → 表达式归一为 eps → real_lt_compat 序迁移 *)
+(* Hkl_right/Hkl_left 供给肢：kl 归零 → 表达式归一为 eps → real_lt_compat 序迁移 *)
 Lemma uabd1s5_ems_Hkl_right_leg :
   forall (u v : Real) (Hu : real_lt real_zero u) (Hv : real_lt real_zero v),
     real_le real_one u ->

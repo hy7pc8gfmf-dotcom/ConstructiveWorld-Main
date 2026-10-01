@@ -38,7 +38,7 @@
    ── 编译配方：──────────────────────────────────────────────────────────────
    source Live/toolchain/env.sh && unset COQLIB ROCQLIB && cd abl_a2b3_WASH_pool
    nice -19 rocq c -native-compiler no -Q "$PWD" "" "$PWD/abl9b_rho_chain_53.v"
-   （单道顺序；绿判四件套：EXIT=0／日志 Closed 无 Error／vo 头 8 字节
+   （单道顺序；绿判四要素：EXIT=0／日志 Closed 无 Error／vo 头 8 字节
    436f7121 00015ff4／vo 新于 v。）
    ── 交付声明 ──────────────────────────────────────────────────────────────
    本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、零经典逻辑，

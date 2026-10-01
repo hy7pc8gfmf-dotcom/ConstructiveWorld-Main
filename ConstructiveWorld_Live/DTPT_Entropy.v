@@ -568,7 +568,7 @@ Proof.
   - rewrite <- (count_val_perm x l (Pinf l s) (D5_Pinf_perm l s)). reflexivity.
 Qed.
 
-(* ========== W9 主定理 6：条件熵四件套（守卫非负 + 反例界定） ========== *)
+(* ========== W9 主定理 6：条件熵四要素（守卫非负 + 反例界定） ========== *)
 
 Theorem H_cond_self : forall l : list Q, H_cond l l == 0.
 Proof.

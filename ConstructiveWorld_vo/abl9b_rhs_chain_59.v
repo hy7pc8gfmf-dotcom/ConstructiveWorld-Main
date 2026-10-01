@@ -17,7 +17,7 @@
        连续证书」为前件参数，组装 m→∞ 项级闭合（与 LHS 侧接口对称；
        本件自成 RHS 半边闭环，合流时与甲/乙任一支的 LHS 半边拼装）。
    ── 依赖清单：──────────────────────────────────────────────────────────────
-   S01–S11（基础模块，born-in-place vo 在链）；件20 abl_arctan_diff_20
+   S01–S11（基础模块，原位建成 vo 在链）；件20 abl_arctan_diff_20
    （abl9_QltT_transfer_l／abl9_Qabs_wd）；件30 abl9b_skeleton_30（abl9b_w、
    abl9b_w_bounds 尾形、abl9b_wc／w_clamp_dom／wc_id_pt clamp 构造正本）；
    件45 abl_arctan_diff_45（abl9_arctan_arg_wd 重锚再出口）；件53
@@ -50,7 +50,7 @@
    source /Users/apple/Desktop/ConstructiveWorld/Live/toolchain/env.sh &&
    unset COQLIB ROCQLIB && cd abl_a2b3_WASH2_pool && ulimit -s 65532 &&
    nice -19 rocq c -native-compiler no -Q "$PWD" "" "$PWD/abl9b_rhs_chain_59.v"
-   （单道顺序；绿判四件套：EXIT=0（无管道真取）／日志真错行计 0+主定理
+   （单道顺序；绿判四要素：EXIT=0（无管道真取）／日志真错行计 0+主定理
    Closed／vo 头 8 字节 436f712100015ff4／vo 新于 v。道闸：起编前
    ps -axo comm 查 rocq 计 ≤1。）
    ── 交付声明 ──────────────────────────────────────────────────────────────

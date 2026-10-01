@@ -18,7 +18,7 @@
 (*                                                              *)
 (* 分级：3 件全 N1（库内实例化消解件直连；证明体非平凡内容在实例化消解件本体——               *)
 (*   列表归纳链 sumd_list_sum_*@UpReqSumD，本件直连不注水）。                    *)
-(*   本批辖区无 pos/zero_nonneg 面（L93/96 sumf/L107-111 数据位与 L109 D_pos     *)
+(*   本件辖区无 pos/zero_nonneg 面（L93/96 sumf/L107-111 数据位与 L109 D_pos     *)
 (*   属 T 批辖区，FA2 表判 T，未纳入）；W 面：本模块无。                          *)
 (*                                                              *)
 (* 依赖（全部只读使用，原树零改）：CW_ConstructiveWorld_219、UpReqSumD。         *)
@@ -27,7 +27,7 @@
 (*   仅 sumf → sumd_sumf S enum 换实例位（源语句面 fun s => 无类型注形逐字保留）。*)
 (*                                                              *)
 (* 备注：语句面全集合层；公理面零新增；文尾逐件 Print Assumptions 收尾。          *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT6_UpSigMigrate2.log。             *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAblT6_UpSigMigrate2.log。             *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

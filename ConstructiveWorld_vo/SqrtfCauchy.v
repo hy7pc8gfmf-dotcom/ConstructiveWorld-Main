@@ -1,5 +1,5 @@
 (* ============================================================ *)
-(* SqrtfCauchy.v —— 本件形式化 Newton 迭代残差序列的柯西性质：            *)
+(* SqrtfCauchy.v —— 使命：形式化 Newton 迭代残差序列的柯西性质：          *)
 (*   残差 sfc_t n = s(z_n) 满足逐 eps 柯西判据（主件 sfc_newton_cauchy，   *)
 (*   Bishop 逐 eps 形；辅件 sfc_pick_K 与 sfc_geom_tail_t）。             *)
 (*                                                              *)
@@ -64,7 +64,7 @@ Variable sfc_abs_le_plus_eps : forall (t : R), le zero t -> forall (eps : R),
 (* 假设位5（1 < 2 严格档假设位。抽象接口无 le 分解/三分律字段，one_pos+
    lt_plus_compat 双严格形只达 0 < 2，混合平移不可导出（ReqStrictOrderBridge
    闭节后假设位不独立导出：沙箱检验 not found + UpReqAlgebra:1466 注释双证）；
-   Firewall-TempEntMono / E347 区 Variable 诚实前置先例同位。Real 层经
+   Firewall-TempEntMono 的 Variable 诚实前置先例同位。Real 层经
    real_lt_plus_translate 消解，见 SqrtfCauchyDischarge §A3 sfcx_lt_one_two_slot。） *)
 Hypothesis Hlt_one_two : lt one sfc_two.
 (* 假设位6（严格加法混合保序 lt_le 形。接口仅双严格 lt_plus_compat，混合形

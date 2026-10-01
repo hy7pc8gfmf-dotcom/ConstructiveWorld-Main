@@ -398,7 +398,7 @@ Proof.
     + apply (@bae_sym B). exact (@bplus_zero_l B (@bone B)).
     + apply (@bplus_wd_r B).
       apply (@bae_sym B). exact HX.
-  - (* 归纳步：Pascal 配对组装（蓝图 E152-13 降层） *)
+  - (* 归纳步：Pascal 配对组装（蓝图 判例降层） *)
     set (g := fun k : nat =>
                 @bmult B (@bcoef B (bpa_binom n' k))
                          (@bmult B (bpow B a k)

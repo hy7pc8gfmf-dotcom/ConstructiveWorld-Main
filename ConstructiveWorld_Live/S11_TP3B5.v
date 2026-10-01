@@ -1063,7 +1063,7 @@ Proof.
 Qed.
 (* ================================================================== *)
 (*  sT2_tan / p_atan1_bounds.v   N9b 核心二：arctan(1) 域正性         *)
-(*  依赖：CW.ConstructiveWorld（迭代 203）+ 前批 p_tan_def.v           *)
+(*  依赖：CW.ConstructiveWorld（迭代 203）+ 先行件 p_tan_def.v           *)
 (*  内容：                                                             *)
 (*    - θ := cauchy_real_arctan (real_const 1) Hone（x=1 处的 arctan） *)
 (*    - 点态界 |S_n(1) − S_0(1)| ≤ 1/3（atan_tail_bound m=0）          *)
@@ -1317,7 +1317,7 @@ Section N10Channel.
 (* 输入 1（B3-3 值桥）：4·arctan(1) == π_L *)
 Hypothesis H4 : real_eq (real_mult (real_const 4) theta1) cauchy_real_pi_leibniz.
 
-(* 输入 2（N9b 核心，本批精确定义为唯一解析输入）：
+(* 输入 2（N9b 核心，本件精确定义为唯一解析输入）：
    sin(arctan(1)) == cos(arctan(1))（等价 tan(arctan(1)) == 1） *)
 Hypothesis Hsc : real_eq (cauchy_real_sin theta1) (cauchy_real_cos theta1).
 
@@ -1607,7 +1607,7 @@ Proof.
     + exact HN.
 Qed.
 
-(* ============ 7. 可选加分：H4（本批闭证）+ Section 变量 Hsc ⟹ F1 ============ *)
+(* ============ 7. 可选加分：H4（本件闭证）+ Section 变量 Hsc ⟹ F1 ============ *)
 (* F1（real_pi_geom == π_L）本体等 N9b 批的 Hsc；Hsc 作 Section 变量不实例化。
    n10_closure_f1（主库 L67256）已备好同一 glue：此处仅把 H4 从假设换成真证。 *)
 Section A3HscToF1.

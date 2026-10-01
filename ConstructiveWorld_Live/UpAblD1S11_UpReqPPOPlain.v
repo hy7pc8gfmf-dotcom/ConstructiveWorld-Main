@@ -11,7 +11,7 @@
 (*     rpli_sum_le:392｜rpli_sum_ext:394｜rpli_sum_add:396｜rpli_sum_linear:399   *)
 (*     ｜pi,p_old:404｜Hpos:405｜Hnorm:408                                        *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                         *)
-(*    f4b6f04be90d3b0f5451369f01817948，开工/收工双查，零代际漂移）                *)
+(*    登记册登记值，开工/收工双查，零代际漂移）                *)
 (*                                                              *)
 (* 遗留登记（禁注水，逐条如实）：                                                *)
 (*  1. r_max_le_r_plain（L107，S8 已遗留）不入包：eps-free plain 面，库内深水区    *)
@@ -30,7 +30,7 @@
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219／UpReqAlign（Z_align_req 定义件，S8 同 Require   *)
 (*   面）／UpReqRDF（ReqDiffPlain 类定义件），只读使用；零 git、零注册面增量。      *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S11_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S11_*.{log,exit}                     *)
 (* ============================================================ *)
 
 Require Import S01_BaseRing.

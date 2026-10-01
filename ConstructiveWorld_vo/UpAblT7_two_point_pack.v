@@ -42,7 +42,7 @@
 (*   引擎、CW_ConstructiveWorld_219 基座。                               *)
 (* 纪律：语句面全集合层（Id/Or/Not/InT 用基座集合层定义，零 Prop 泄露）；  *)
 (*   零新增疑设面；前缀 uab7_；文尾逐件 Print Assumptions 收尾。          *)
-(*   四关留痕：Live_X/attn/logs/g{1..4}-UpAblT7_two_point_pack.log       *)
+(*   四检留痕：Live_X/attn/logs/g{1..4}-UpAblT7_two_point_pack.log       *)
 (* 分级注记：封装件本体=N1（三母直接代入装配）；覆盖位逐位标注——证书面         *)
 (*   N1/N2（坐标随报告覆盖表），纯数据供给面按平凡依存如实标 T，           *)
 (* ============================================================ *)

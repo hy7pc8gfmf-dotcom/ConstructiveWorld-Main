@@ -32,7 +32,7 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
 
-(* tsi 装配桥实例缩写：S01 载体上的 RIS 结构（req 腿 := Id） *)
+(* tsi 装配桥实例缩写：S01 载体上的 RIS 结构（req 肢 := Id） *)
 Let TSI : RealInterfaceEnhancedMod.RealInterfaceEnhancedSetoid
             (@S01_BaseRing.R RI) :=
   tsi_rie_setoid RI.
@@ -65,8 +65,8 @@ Definition db6_lt_dec_id :
   end.
 
 (* ============================================================ *)
-(* 新数学点：req-Id 判定腿转换桥                                  *)
-(*   fa53 引擎三分中腿是 Id 证书；六槽语句面中腿是 req 证书。     *)
+(* 新数学点：req-Id 判定肢转换桥                                  *)
+(*   fa53 引擎三分中肢是 Id 证书；六槽语句面中肢是 req 证书。     *)
 (*   tsi 装配桥的 req 字段定义性为 Id（fun x y => Id x y），故    *)
 (*   转换 = 纯转换级运输；本桥显式成件以承载转换语义并供使用。    *)
 (* ============================================================ *)
@@ -84,8 +84,8 @@ Proof.
   intros a b. exact (db6_ord_le_dec a b).
 Qed.
 
-(* ---- 槽 #35/#37 形：三分判定（fa53_lt_dec 直接给出 + eq 腿转换） ----
-   inl/inr-inr 两支与引擎产出同形直接给出；inr-inl 腿 = db6_id_req
+(* ---- 槽 #35/#37 形：三分判定（fa53_lt_dec 直接给出 + eq 肢转换） ----
+   inl/inr-inr 两支与引擎产出同形直接给出；inr-inl 肢 = db6_id_req
    转换桥把 Id 判定证书转换为 req 判定证书（本件新数学点）。 *)
 Theorem db6_rae_lt_dec :
   forall a b : @S01_BaseRing.R RI,
@@ -93,11 +93,11 @@ Theorem db6_rae_lt_dec :
 Proof.
   intros a b.
   destruct (db6_lt_dec_id a b) as [Hlt | [Heq | Hgt]].
-  - (* a < b：严格腿直接给出 *)
+  - (* a < b：严格肢直接给出 *)
     exact (inl Hlt).
   - (* a == b：Id 证书转换为 req 证书 *)
     exact (inr (inl (db6_id_req a b Heq))).
-  - (* b < a：反侧严格腿直接给出 *)
+  - (* b < a：反侧严格肢直接给出 *)
     exact (inr (inr Hgt)).
 Qed.
 
@@ -136,7 +136,7 @@ Qed.
 
 End DecBridge6.
 
-(* ---- G1 内嵌自检段（四关前置：文件内显式 PA 声明） ---- *)
+(* ---- G1 内嵌自检段（四检前置：文件内显式 PA 声明） ---- *)
 Print Assumptions db6_id_req.
 Print Assumptions db6_rae_le_dec.
 Print Assumptions db6_rae_lt_dec.

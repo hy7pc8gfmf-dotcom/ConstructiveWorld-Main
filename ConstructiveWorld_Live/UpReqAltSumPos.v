@@ -38,7 +38,7 @@
 (*   sg 逐层 negb 吸收：altacc sg f k n = 从指标 k 起共 n 项、首项    *)
 (*   符号为 sg 的交错尾和；altsum f n := altacc true f 0%nat n 即        *)
 (*   Σ_{k<n} (−1)^k·f(k)。sg=false 分支取 Qopp，全 Q 侧只用 Qplus/    *)
-(*   Qopp（零 Qminus，E313 规避）。符号-奇偶对齐由 sgp 盾引理固定。   *)
+(*   Qopp（零 Qminus，判例 规避）。符号-奇偶对齐由 sgp 盾引理固定。   *)
 (*                                                                *)
 (*   Id (Qle_bool x y) true，bool 反映健全形）而非 Or 形 QleT        *)
 (*   （S02:27）：Or 形右支 Id x y 受 Q 表示正规化墙（S02 头注已言     *)

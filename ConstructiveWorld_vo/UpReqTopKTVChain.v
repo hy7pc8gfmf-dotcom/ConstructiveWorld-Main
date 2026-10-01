@@ -76,7 +76,7 @@
 (* 【红线】纯构造性；Set 层零 Prop 泄露（real_eq/real_lt/real_le 全     *)
 (*   Set 载体，kd 的 Or/Not 为 Stdlib Set 级析取，req 对位同构）；      *)
 (*   real_eq 非 Id 禁改写——全链 real_eq_trans + RealSetoid 运输        *)
-(*   （E393 纪律）；全件 Qed 闭合。                                    *)
+(*   （判例 纪律）；全件 Qed 闭合。                                    *)
 (* 编译配方：_t16_run.ps1 + cpu_guard（CoreN 3，LoadLimit 65）          *)
 
 
@@ -104,7 +104,7 @@ Require Import S15_TailFEPUp.
 Section RealTopKTVChain.
 
 (* 世界：状态类型（ Context 位副本；Id 经 RealInterface 取 S， *)
-(*   Real 层直取 Type 形参——求和载体三位同取抽象位，E246 坑2 同款）。 *)
+(*   Real 层直取 Type 形参——求和载体三位同取抽象位，判例坑2 同款）。 *)
 Variable S : Type.
 
 
@@ -177,7 +177,7 @@ Qed.
 
 (* ---- 件4（）：守恒 kept + tail == Z_thermo ---- *)
 (* Id 证明链：逐点 plus 消零（plus_zero 两向）→ 求和外延 → 求和可加；   *)
-(* Real 层同构重放（real_eq_trans 链 + ext/add 双肢；E393 纪律）。      *)
+(* Real 层同构重放（real_eq_trans 链 + ext/add 双肢；判例 纪律）。      *)
 Lemma rtk_kept_plus_tail_full :
   forall (k : S -> Set) (kd : forall s : S, Or (k s) (Not (k s))),
     real_eq (real_plus (rtk_kept_partition k kd) (rtk_tail_mass k kd))

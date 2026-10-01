@@ -291,7 +291,7 @@ Proof.
   exact Hup.
 Qed.
 
-(* ---- 四关备件：PA 口径 + G3 提取检验 ---- *)
+(* ---- 四检备件：PA 口径 + G3 提取检验 ---- *)
 
 Print Assumptions p2a_geo_iter_le.
 Print Assumptions p2a_attn_clim_zero.

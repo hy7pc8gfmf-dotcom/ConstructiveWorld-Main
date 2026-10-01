@@ -273,8 +273,8 @@ Qed.
 (* §F 单调性加分件（逐项版；QleT' 面，Qle 仅证内）                     *)
 (* ============================================================ *)
 
-(* 逐项非负 ⟹ 偏移积分非负（Qplus_le_compat 双腿：单项式非负腿 +        *)
-(*   归纳腿；系数索引偏移由 pint_coeff 的 S 分支定义性对齐）             *)
+(* 逐项非负 ⟹ 偏移积分非负（Qplus_le_compat 双肢：单项式非负肢 +        *)
+(*   归纳肢；系数索引偏移由 pint_coeff 的 S 分支定义性对齐）             *)
 Lemma pint_integral_from_nonneg : forall (p : list Q) (k : nat),
   (forall i : nat, QleT' 0 (pint_coeff p i)) ->
   QleT' 0 (pint_integral_from p k).
@@ -292,8 +292,8 @@ Proof.
       cbn [pint_coeff] in Hcoeff. exact Hcoeff.
 Qed.
 
-(* 逐项 ≤（等长）⟹ 偏移积分 ≤：双腿 Qmult_le_compat_r（右因子 = 1/(k+1) *)
-(*   严格正腿经 pint_invS_pos）+ 归纳腿                                  *)
+(* 逐项 ≤（等长）⟹ 偏移积分 ≤：双肢 Qmult_le_compat_r（右因子 = 1/(k+1) *)
+(*   严格正肢经 pint_invS_pos）+ 归纳肢                                  *)
 Lemma pint_integral_from_mono : forall (p q : list Q) (k : nat),
   length p = length q ->
   (forall i : nat, QleT' (pint_coeff p i) (pint_coeff q i)) ->

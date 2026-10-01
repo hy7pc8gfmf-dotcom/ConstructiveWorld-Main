@@ -1,5 +1,5 @@
 (* ============================================================
-   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编候后波）。
+   使命：本件数学使命叙述见下方原头注首段（既有件注记型头注整编尚待后续）。
    依赖：见原头注 Require 面与依赖段。
    对标：见原头注来源/对标行。
    构造性：纯构造性、零承认件（详见原头注红线自审段）。
@@ -12,17 +12,17 @@
    五刀均结构性换轨，本件逐条独立勘验、未照抄 结论（假设位正性族结论不适用于
    G08 其余条目；12 条中 7 条经勘验维持不可化标注，见记录切片五节）。
    刀① gibbsd_two_pos：原 real_plus_positive 一步直供；换轨 real_lt_plus_compat_
-   lt_le（0<1 ∧ 0≤1 ⟹ 0+0<1+1，le 腿 inl 装载 real_lt_zero_one 严证人）＋
+   lt_le（0<1 ∧ 0≤1 ⟹ 0+0<1+1，le 肢 inl 装载 real_lt_zero_one 严证人）＋
    real_eq_lt_lt 左端转移沿 sym(real_plus_zero 0) 退化零站（0=0+0），原引擎全退役。
    刀② hzlogd_discharge_real：原使用在file 保底件 hzlogd_log_le_zero_of_le_one；
    换轨抽象骨架 Real 层就地直拼：@le_id_r 中停站 log one ＋ log_one 换右端 ＋
-   real_log_le_mono 单调腿，零借道保底件。
+   real_log_le_mono 单调肢，零借道保底件。
    刀③ hzlogd_proj_min_kl_hlogzfree：原 HlogZ 槽使用保底件；换轨槽内就地直拼
-   同一站形，Z_aud≤one 尾腿内联进单调腿第 5 参，零借道保底件。
+   同一站形，Z_aud≤one 尾肢内联进单调肢第 5 参，零借道保底件。
    刀④ hzlogd_proj_min_kl_bool：原 HlogZ 槽使用 hzlogd_discharge_real；换轨槽内
-   Real 层就地直拼同 ③ 站形，单调腿 real_log_le_mono 直接代入，零借道 discharge 件。
+   Real 层就地直拼同 ③ 站形，单调肢 real_log_le_mono 直接代入，零借道 discharge 件。
    刀⑤ gibbe2_le_b_id_r：原 RealSetoid.real_lt_compat 四元等式兼容拼装；换轨
-   real_lt_eq_lt 右端转移（中停站 b+eps，eq 腿 RealSetoid.real_eq_plus_compat 原样），
+   real_lt_eq_lt 右端转移（中停站 b+eps，eq 肢 RealSetoid.real_eq_plus_compat 原样），
    等式转移引擎换轨且原 6 参拼装全退役。
    纪律：纯构造性；Set 层零 Prop 泄露；真 Qed；零新增 Require；零承认件；
    原件尾 11 处 Print Assumptions 逐字保留（编译证据 11/11 全 Closed）。 *)
@@ -761,8 +761,8 @@ Proof.
          post_aud p Hp_norm Hp_pos HZ Hmono q Hq Hqn Hqz.
   apply (@req_projected_distribution_minimizes_kl R RIS S sumf sum_ext sum_add
            sum_linear log_req_compat post_aud p Hp_pos HZ q Hq Hqn Hqz).
-  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one 换右端 ＋ Hmono 单调腿，
-     Z_aud≤one 尾腿内联进单调腿第 5 参（零借道保底件） *)
+  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one 换右端 ＋ Hmono 单调肢，
+     Z_aud≤one 尾肢内联进单调肢第 5 参（零借道保底件） *)
   apply (@le_id_r R RIS (log (@Z_aud_req R RIS S sumf post_aud p) HZ)
            (log one one_pos) zero).
   - exact (log_one one_pos).
@@ -925,8 +925,8 @@ Proof.
            hzlogd_aud_sum hzlogd_sum2_ext hzlogd_sum2_add hzlogd_sum2_linear
            hzlogd_log_req_compat_real (fun b : bool => b) p Hp_pos
            (hzlogd_HZ_bool p (Hp_pos true)) q Hq Hqn Hqz).
-  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one ＋ real_log_le_mono 单调腿，
-     Z_aud≤one 尾腿内联进单调腿第 5 参（零借道 discharge 件） *)
+  (* HlogZ 槽就地直拼：@le_id_r 中停站 log one ＋ log_one ＋ real_log_le_mono 单调肢，
+     Z_aud≤one 尾肢内联进单调肢第 5 参（零借道 discharge 件） *)
   apply (@le_id_r Real RealEnhancedReal
            (log (@Z_aud_req Real RealEnhancedReal bool hzlogd_aud_sum
                   (fun b : bool => b) p)

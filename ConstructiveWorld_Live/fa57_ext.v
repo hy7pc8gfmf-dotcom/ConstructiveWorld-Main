@@ -1,5 +1,5 @@
 (* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* ToyR 玩具证替换件 ——   工程（tier2 第五批）        *)
+(* ToyR 玩具证替换件 ——   工程（tier2 五段）        *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -28,7 +28,7 @@
 (*      plus_assoc 恒等运河；正向 1 段，逆向 assoc/opp/zero 四段）。*)
 (* 簇三 UpGRPO.v:66 G_pos 兑现链：group_cover（InT 见证）⟹        *)
 (*      enum 非空（InT 零构造子灭支）⟹ length 定义性 S k ⟹ 正性。   *)
-(*      nat_to_R_g/nat_to_R_g_pos 按 E346「节参不导出，本节    *)
+(*      nat_to_R_g/nat_to_R_g_pos 按 判例「节参不导出，本节    *)
 (*      重声明同位」先例本地复刻（UpGRPO.v:51-65 证明体同构：        *)
 (*      plus_positive＋one_pos 两字段归纳），零公理面 PA 仍 Closed。  *)
 (* 簇四 G04_ProjFam.v:175-181/394-400 W2' 簇两点均匀投影族槽面     *)
@@ -130,7 +130,7 @@ Qed.
 (* ==================== 簇三：UpGRPO:66 G_pos 兑现链 ==================== *)
 (* 槽：G := nat_to_R_g (length group_enum)；G_pos : lt zero G 原为 Variable。
    兑现＝cover（全称 InT 见证）＋任点 g0 ⟹ enum 非空（nil 支由 InT 零
-   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按 E346 先例本地
+   构造子灭）⟹ length 定义性 S k ⟹ 正性归纳件。载体按 既有判例本地
    重声明（UpGRPO.v:51-65 同构：S 位 plus one 递归＋plus_positive/
    one_pos 归纳，证体逐字同构）。 *)
 

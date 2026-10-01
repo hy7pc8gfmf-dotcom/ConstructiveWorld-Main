@@ -1,38 +1,32 @@
 (* ==========================================================================
-   abl_Hqarch_bridge_06.v — R2BishopLogSel Hqarch 构造性闭合切片 2/2（桥接件）：
+   abl_Hqarch_bridge_06.v — R2BishopLogSel Hqarch 构造性闭合切片 2/2（桥接件）:
    Q 层 Archimedean nat 见证生产 + Hqarch 全站闭合（独立消融件）
    使命: 接续 X4 落件 abl_Hqarch_bernoulli_04.v（切片 1/2）的接续点——以 Q 层
      Archimedean 性质生产末前件 Qle v (b * (1 + n·(/p−1))) 的 nat 见证 n，
      再由 X4 件内已证的 abl_hqarch_via_bern 一步闭合 Hqarch 全站。
-   交付三件：
+   交付三件:
      ① abl_arch / abl_q_arch_sig——Q 层 Archimedean nat 见证核：任 q:Q 取
-        n := Z.to_nat (Qnum q)，则 q ≤ abl_qofnat n（Q 层序 nat 尺度）。构造：
-        QDen 正性（Q 记录 Qden:positive，Pos2Z.is_pos）+ Z2Nat.id /
-        Nat2Z.is_nonneg 双支二分（Z_lt_le_dec，sumbool 纯构造）+
-        Zmult_le_compat_r 归一（num≥0 支 num ≤ num·den；num<0 支 0 ≤ witness 封顶）。
+        n := Z.to_nat (Qnum q)，则 q ≤ abl_qofnat n（QDen 正性 + Z2Nat.id /
+        Nat2Z.is_nonneg 双支二分（Z_lt_le_dec，sumbool 纯构造）+ Zmult_le_compat_r 归一）。
      ② abl_bridge_step / abl_hqarch_witness_site——末前件 n 见证生产：
-        t := (v−b)·/(b·w)（w := /p−1，正性由 X4 件 abl_canon_w_pos 供给），
-        Arch 取 n := Z.to_nat (Qnum t)，由 t ≤ n 右乘 b·w>0 得 v−b ≤ n·(b·w)，
-        加 b 归一得 v ≤ b·(1+n·w)。见证为 v,b,p 的闭式计算项（abl_hqarch_nat）。
+        t := (v−b)·/(b·w)（w := /p−1，正性由 X4 件 abl_canon_w_pos 供给），Arch 取
+        n := Z.to_nat (Qnum t)，由 t ≤ n 右乘 b·w>0 得 v−b ≤ n·(b·w)，加 b 归一得
+        v ≤ b·(1+n·w)。见证为 v,b,p 的闭式计算项（abl_hqarch_nat）。
      ③ abl_hqarch_site_closed——Hqarch 全站闭合定理（本片核心交付）。
-   站点形状逐项对应（对照 R2BishopLogSel.v L316-321）：源件 L319-320 前件位
-     forall (p v b : Q), Qlt 0 p -> Qlt p 1 -> Qlt 0 v -> Qlt 0 b ->
-       sigT (fun j : nat => Qle (mixe_qpow p j * v) b)；
-     本件（幂件 abl_qpow，同体更名，对应说明承 X4 件头注接口对应条目）：
-     四前提逐项同形（Qlt 0 p / Qlt p 1 / Qlt 0 v / Qlt 0 b），见证形式同为
-     sigT (fun j : nat => ...)（Set/Type 层），谓词体同构（幂件更名）。
-   接口引用（零重做）：X4 件 abl_Hqarch_bernoulli_04 之 abl_hqarch_via_bern
-     （四前提+末前件 → sigT 闭合，X4 件内 Qed 闭合）、abl_canon_w_pos
-     （w:=/p−1 正性）、abl_qpow（幂件）、abl_qlt_neq0 / abl_qle_eq_l /
-     abl_qle_eq_r（传输小件）。
+   站点形状逐项对应（对照 R2BishopLogSel.v L316-321，源件 L319-320 前件位）：
+     四前提（Qlt 0 p / Qlt p 1 / Qlt 0 v / Qlt 0 b）-> sigT (fun j : nat =>
+     Qle (mixe_qpow p j * v) b)；本件（幂件 abl_qpow，同体更名，对应说明承 X4 件
+     头注接口对应条目）四前提逐项同形，见证形式同为 sigT（Set/Type 层），谓词体同构。
+   接口引用（零重做）：X4 件 abl_hqarch_via_bern（四前提+末前件 -> sigT 闭合）、
+     abl_canon_w_pos、abl_qpow、abl_qlt_neq0 / abl_qle_eq_l / abl_qle_eq_r。
    依赖: 纯 Stdlib（QArith、ZArith、ZArith_dec、Lia、Extraction）+ X4 落件
      （同池真拷编译）；本件零新公理、零承认词面。
    构造性: 全件 Qed 闭合；见证以 sigT（Set/Type 层）承载——
      n := Z.to_nat (Qnum ((v−b)·/(b·(/p−1)))) 闭式可计算，提取审计
-     abl_hqarch_bridge_06_G3.ml 实测 Obj.magic=0；序谓词沿站点口径用
-     stdlib Qle/Qlt（Hqarch 前件同款，承 X4 件先例）。
+     abl_hqarch_bridge_06_G3.ml 实测 Obj.magic=0；序谓词沿站点口径用 stdlib
+     Qle/Qlt（Hqarch 前件同款，承 X4 件先例）。
    编译配方: 隔离池 /tmp/x6pool 真拷 X4 件+本件，cwd=池，cpu_guard 包裹
-     rocq c -Q /tmp/x6pool "" （先编 X4 件出 .vo，再编本件）。
+     rocq c -Q /tmp/x6pool ""（先编 X4 件出 .vo，再编本件）。
    ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith.

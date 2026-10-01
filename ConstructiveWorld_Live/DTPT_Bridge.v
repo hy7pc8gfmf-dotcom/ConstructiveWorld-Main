@@ -741,7 +741,7 @@ Extraction "b11_mu_fiber_mass_eq_set_ext.ml" mu_fiber_mass_eq_set.
    诚实说明（eq2 面形裁决）：sqsum_app_eq2_set 取 nat 整式提升形
      （2X 系数在 Z.of_nat 内可见）——Q 域 2·X 展开面两轮构造未达
      （naked simpl 把 Z 侧 2·nx 归约为 match 倍形致 lia/zify 失明；
-     cbn 白名单路线 Rocq 9 名面 Qmult 不可 coerce），依禁强造条款
+     cbn 许用集路线 Rocq 9 名面 Qmult 不可 coerce），依禁强造条款
      不强造，展开视角由 §13.3 sqsum_app_eq_set（四项面）承担。
    ============================================================ *)
 

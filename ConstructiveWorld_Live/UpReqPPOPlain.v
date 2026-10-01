@@ -8,20 +8,20 @@
 (* ============================================================ *)
 
 (*
-   工单：组5裁决书-dpoTotalLoss解冻与min-plainle8件-.md 第二部分
-     本批在 UpReqRDF.v Part 0 增量登记，T2① 零证明槽，为后续解锁铺路）。
+   施工依据：组5裁决书-dpoTotalLoss解冻与min-plainle8件-.md 第二部分
+     本件在 UpReqRDF.v Part 0 增量登记，T2① 零证明槽，为后续解锁铺路）。
    ---------------------------------------------------------------------
-   槽实例前提位设计（本批核心）：
+   槽实例前提位设计（本件核心）：
    - 各节 Context {RDP : ReqDiffPlain R}（UpReqRDF.v Part 0 槽组）——槽实例前提
      = T2① 显式参：随节消解进入各件出口签名，非公理（C1 reqDecidableOrder 先例；
      Print Assumptions 不受影响，全件 Closed）。
    - min 使用位逐件换槽：Id min_le_l/min_le_r（Id 接口 plain 字段）->
      min_le_l_plain/min_le_r_plain（req 槽；req 接口 min_le_l 逐 eps 形
-     le (min a b) (plus a eps)，plain 形不可导——冻结根因，本批由槽承担）。
+     le (min a b) (plus a eps)，plain 形不可导——冻结根因，本件由槽承担）。
    - 求和槽 rpl_sum_le/rpl_sum_nonneg：节内 Hypothesis 位（UpReqDist L206/
      UpReqAlign L65 sum_le 同位；nonneg 同构见下方核对注记）。
    ---------------------------------------------------------------------
-   逐件核对表（Id 原件 @ CW_ConstructiveWorld_219.v 行号 -> 本文件 req 件）：
+   逐件核对清单（Id 原件 @ CW_ConstructiveWorld_219.v 行号 -> 本文件 req 件）：
      件1 ppo_conservative          L19526 -> rpl_ppo_conservative（min_le_l_plain
           + le_mult_compat_weak 接口字段 + req_le_mult_compat_r@UpReqAlgebra
           L465 + rpl_sum_le 槽；advantage_nonneg 前提位与 Id 同位）
@@ -64,7 +64,7 @@
    4. rpl_importance_ratio 携带 pi_star 链（reward/beta/pi_ref/Zap 前提位，Id
      L19502 同形；件4 用 policy_ratio 独立参数，与 Id 分工同位）。
    5. 近邻对位注：UpReqAlign L1216-1230 已有定义面近邻 ppo_clip_req/clip_error_req
-     （PPO 簇 15 件批结果的 req 定义），但其引理面无本批 6 件保守件（原冻结）；
+     （PPO 簇 15 件批结果的 req 定义），但其引理面无本组 6 件保守件（原冻结）；
    6. 件7 增建（ 件16终验件，路线(a)）：clip_lower 冻结解除——Id 原件
      使用 r_max_le_r（右参形 le b (r_max a b)）；UpReqRDF.v ReqDiffPlain 已登记
      r_max_ge_plain 为左参形（le a (r_max a b)，Id r_max_le_l 同构），方向不覆盖
@@ -206,7 +206,7 @@ Qed.
 
 (* ===================================================================== *)
 (* 件1 rpl_ppo_conservative（Id L19526）：ppo_objective <= is_objective      *)
-(*   槽使用：min_le_l_plain；腿：接口字段 le_mult_compat_weak（逐点内积）+    *)
+(*   槽使用：min_le_l_plain；肢：接口字段 le_mult_compat_weak（逐点内积）+    *)
 (*   req_le_mult_compat_r（乘 pi_old 非负因子）+ rpl_sum_le 槽（求和提升）    *)
 (* ===================================================================== *)
 Lemma rpl_ppo_conservative :
@@ -233,7 +233,7 @@ Qed.
 
 (* ===================================================================== *)
 (* 件2 rpl_std_ppo_conservative（Id L19559）：标准形态保守性，无 adv 符号前提  *)
-(*   槽使用：min_le_l_plain 直接给出双积（min (r·A) (clip(r)·A) <= r·A 定义性腿） *)
+(*   槽使用：min_le_l_plain 直接给出双积（min (r·A) (clip(r)·A) <= r·A 定义性肢） *)
 (* ===================================================================== *)
 Lemma rpl_std_ppo_conservative :
   le rpl_std_ppo_objective rpl_is_objective.
@@ -359,7 +359,7 @@ Qed.
 
 (* ===================================================================== *)
 (* 件6 rpl_clip_error_nonneg（Id L112408）：clip 误差非负（无 adv 符号前提）   *)
-(*   槽使用：min_le_l_plain（req_le_minus_nonneg 喂腿）+ rpl_sum_nonneg 槽     *)
+(*   槽使用：min_le_l_plain（req_le_minus_nonneg 供给肢）+ rpl_sum_nonneg 槽     *)
 (*   （伴件1 喂左因子 p_old s 非负）                                          *)
 (* ===================================================================== *)
 Lemma rpl_clip_error_nonneg : forall adv : S -> R, le zero (rpl_clip_error adv).

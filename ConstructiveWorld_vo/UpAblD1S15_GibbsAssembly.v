@@ -45,7 +45,7 @@ Qed.
 
 (* ---- 导出链：ga2_ 基底接口五件封装（典范 Real 载体实例供给形） -------- *)
 (*   装配基底可满足性实证：sumf ↦ sumd_sumf S0 en（具体有限和实例），    *)
-(*   求和四腿＝UpReqSumD 直接供给，log 腿＝G05 直接供给——一件实例化消解（E750-A        *)
+(*   求和四肢＝UpReqSumD 直接供给，log 肢＝G05 直接供给——一件实例化消解（判例        *)
 (*   封装口径，禁按位注水）。使用位 ga2_ptw_le/ga2_log_req_compat 节内   *)
 (*   取用即此骨架。                                                      *)
 Theorem uabd1s2_ga2_base_real_bundle : forall (S0 : Set) (en : list S0),

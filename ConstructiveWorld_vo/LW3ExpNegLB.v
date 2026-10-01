@@ -3,7 +3,7 @@
 (*       eps 选取位的 QltT 0 eps 槽供给）：对任意非负整数点 node，显式产出   *)
 (*       正有理数 r := 1/(4C)（C 为 exp 级数在 a := node 处的一致界，        *)
 (*       exp_series_arch 构造产出）使得 real_const r < e^{−node} 严格成立    *)
-(*       （real_lt 数据形逐字对表 383 链 realcarrier 的节点使用形            *)
+(*       （real_lt 数据形逐字对照 383 链 realcarrier 的节点使用形            *)
 (*       cauchy_real_exp (real_const (- lw2_node node))）。                  *)
 (* 依赖：S01_BaseRing/S02_CauchyComplete/S03_QExp/LW0QPoly/LW2Hermite        *)
 (*       （deps 五件自 Live_X 与主库/399 谱系只读拷贝，digest 三侧实测全等）。*)
@@ -21,7 +21,7 @@
 (* 编译配方：SW2 双 export COQLIB/ROCQLIB="C:/Rocq-Platform~9.1~2026.01/    *)
 (*       lib/coq" 全字面；coqc -q -Q . ""；cpu_guard 包裹。                  *)
 (* 406 解冻出处（1001）：承 401 冻结件（md5 769a467e）解冻收束。红点   *)
-(* L141 出口段按 401 回执 §七径甲核心（Hdiff 全桥，投影桥 Qeq 面内实测工作）   *)
+(* L141 出口段按 401 记录 §七径甲核心（Hdiff 全桥，投影桥 Qeq 面内实测工作）   *)
 (* ＋病灶谱诊修正尾段（qltT_eq_compat_r 差项移写；Qplus_lt_r 系左移位 iff      *)
 (* z+x<z+y<->x<y，取 proj1；2r=1/(2·C) 由 ring/field 双桥闭合）一次发射闭合。  *)
 

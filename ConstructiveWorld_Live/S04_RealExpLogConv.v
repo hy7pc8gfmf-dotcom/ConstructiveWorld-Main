@@ -14,7 +14,7 @@
 (* 抽验编译均验零承认。                                                      *)
 (* ========================================================================= *)
 (* ============================================================
-     （tier1 次批·切片二）同名替换注记 —— S04_RealExpLogConv.v
+     （tier1 二段·切片二）同名替换注记 —— S04_RealExpLogConv.v
    本件为同名替换稿：原件全文保留（声明序/原头注/其余引理逐字未动），
    仅八条玩具证明体替换为定义层显式重演，语句面零改动：
    ① r_pow_nonneg：兄弟件 r_pow_pos 归纳正体就地内联（归纳骨架与两支
@@ -321,7 +321,7 @@ Variable gradient_lipschitz :
 Variable S_max : R.
 Variable entropy_upper_bound : forall E_A, le (entropy E_A) S_max.
 
-(* 新接口字段（诚实标准性质，E143-199 纪律） *)
+(* 新接口字段（诚实标准性质，先例纪律） *)
 (* (0) metric 由范数诱导（同 smetric_snorm 先例） *)
 Variable metric_abs : forall a b : R, Id (metric a b) (abs (minus a b)).
 (* (1) 梯度绝对值几何衰减（强凹收缩 content，诚实接口假设） *)
@@ -349,7 +349,7 @@ Fixpoint r_pow (x : R) (n : nat) : R :=
   | Datatypes.S m => mult x (r_pow x m)
   end.
 
-(* Step 4 新接口字段（诚实标准性质，E143-199 纪律） *)
+(* Step 4 新接口字段（诚实标准性质，先例纪律） *)
 (* (3) 度量自反零：metric a a == zero（构造性度量标准性质，抽象层缺） *)
 (* 前置引理（原 Variable 换同名 Lemma， 基座消融波 T2 终判 B04）：由 metric_abs+minus 展开+plus_opp+abs_zero 导出；零承认件 *)
 Lemma metric_refl_zero : forall a : R, Id (metric a a) zero.
@@ -999,7 +999,7 @@ Qed.
 
 (* ===== P1-2 收尾：lim 夹逼核心 + dynamics_converges 组装（备份 80 后） ===== *)
 
-(* 新增诚实接口字段（E143-199 纪律：标准性质先例） *)
+(* 新增诚实接口字段（先例纪律：标准性质先例） *)
 (* (5) lim 的 eps-N 语义：收敛序列在度量下逼近极限（构造性收敛标准性质，
        Real 实例 real_lim 即 eps-N 定义；抽象 R 层接口仅 lim_unique 缺此） *)
 Variable lim_metric_approx : forall (u : nat -> R) (l : R),
@@ -1388,7 +1388,7 @@ Qed.
    诚实接口 entropy_tangent（凹函数切线不等式，一阶条件：
    f(y) ≤ f(x) + f'(x)·(y−x)，对所有 x y——标准优化假设，非经典公理）
    ⟹ gradient_zero_entropy_max：驻点（g(x)==0）是熵的全局最大点。
-   绕开三分律（E216 障碍：Set 层无三分律，Real 层 Qlt_le_dec 三分
+   绕开三分律（判例 障碍：Set 层无三分律，Real 层 Qlt_le_dec 三分
    可判定但需数百行 ε-δ）与积分（Real 层无 RInt/FTC）。
    is_truth 桥：以 L := −entropy（损失=负熵）则 is_truth (−entropy) x 成立。
    纪律：纯构造性 / Set 层 / 零 承认 / 零经典。
@@ -1972,7 +1972,7 @@ Variable detailed_balance :
 (* 非平凡实现：详细平衡 ⟹ 稳态（马尔可夫链基本定理）。
    纯构造性：逐点详细平衡 + 求和线性（sum_over_S_linear） + 转移归一化。
    注意：本 section 有 Let 解包（Let sum_over_S/mult 等），接口字段陈述为投影级，
-   需 change 到 Let 层再 rewrite（见 E143）。 *)
+   需 change 到 Let 层再 rewrite（见判例）。 *)
 Theorem steady_state_boltzmann :
   forall s,
     Id (sum_over_S (fun s' => mult (boltzmann_prob s') (transition s' s)))
@@ -2231,7 +2231,7 @@ Theorem free_energy_boltzmann :
 Proof.
   unfold free_energy.
   set (Eavg := sum_over_S (fun s => mult (boltzmann_dist s) (base_loss s))).
-  (* Let 层桥接：字段引理 → 节内定义（E143 模式：exact 走转换，rewrite 需同层断言） *)
+  (* Let 层桥接：字段引理 → 节内定义（判例 模式：exact 走转换，rewrite 需同层断言） *)
   assert (Hdist : forall a b c : R, Id (mult a (plus b c)) (plus (mult a b) (mult a c)))
     by exact (distrib).
   assert (Hoppl : forall a b : R, Id (mult a (opp b)) (opp (mult a b)))

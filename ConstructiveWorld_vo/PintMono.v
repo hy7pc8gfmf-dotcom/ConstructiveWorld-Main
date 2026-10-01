@@ -12,7 +12,7 @@
 (*  §3 pm_monomial_int_nonpos / pm_integral_from_nonpos /           *)
 (*     pm_pointwise_le_integral：语句面 QleT'（Set）；免等长前提     *)
 (*     （越界系数 0 语义下四分支归纳，强于一期等长版）；证明面       *)
-(*     Qplus_le_compat 双腿；提取面积分型纯函数。                   *)
+(*     Qplus_le_compat 双肢；提取面积分型纯函数。                   *)
 (*  §4 pm_monomial_int_pos / pm_integral_from_pos_strict /          *)
 (*     pm_integral_pos_strict / pm_integral_from_pos /              *)
 (*     pm_integral_pos：语句面 QltT（Set）；严格性见证 sigT         *)
@@ -219,7 +219,7 @@ Proof.
   - rewrite Qmult_0_l. apply Qle_refl.
 Qed.
 
-(* 全系数 ≤ 0 ⟹ 偏移积分 ≤ 0（归纳双腿） *)
+(* 全系数 ≤ 0 ⟹ 偏移积分 ≤ 0（归纳双肢） *)
 Lemma pm_integral_from_nonpos : forall (p : list Q) (k : nat),
   (forall i : nat, QleT' (pint_coeff p i) 0) ->
   QleT' (pint_integral_from p k) 0.

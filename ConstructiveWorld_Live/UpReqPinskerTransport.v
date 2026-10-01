@@ -24,7 +24,7 @@ Set Printing Width 500.
 (*     同源，独立定性）+ P2（list 加权 Engel–CS）双缺口定理化遗留。    *)
 (* 已竟面（R4）：毒环位点 11 处全清（显式项漏参/引擎件方向反/首位误填/     *)
 (*   remember 不透明四族，attn/_tpnskb_交付报告-.md R4 详录）；    *)
-(*   四关全部通过：vos 绿 / 全量绿（.vo 45593B）/ 提取零 magic（Obj.magic=0，  *)
+(*   四道核验全部通过：vos 绿 / 全量绿（.vo 45593B）/ 提取零 magic（Obj.magic=0，  *)
 (*   18×Closed under the global context）/ coqchk 零公理。                *)
 (* 引擎链（全只读使用）：                                             *)
 (*   S08 real_gibbs_inequality_eps / real_kl_term；                    *)
@@ -910,7 +910,7 @@ Proof.
              (real_log_mult (real_mult (real_mult q ivb) ivW) (real_mult b iva)
                 (real_mult_positive (real_mult q ivb) ivW HWc' (real_inv_pos_pos (real_mult p (real_inv_pos a Ha)) HWc)) (real_mult_positive b iva Hb (real_inv_pos_pos a Ha))))
           (pnt_opp_plus_distr (real_log (real_mult (real_mult q ivb) ivW) (real_mult_positive (real_mult q ivb) ivW HWc' (real_inv_pos_pos (real_mult p (real_inv_pos a Ha)) HWc))) (real_log (real_mult b iva) (real_mult_positive b iva Hb (real_inv_pos_pos a Ha))))). }
-  (* 因子腿：a·(W·LWx) == p·LWp 与 W·(a·LWy) == p·LWp *)
+  (* 因子肢：a·(W·LWx) == p·LWp 与 W·(a·LWy) == p·LWp *)
   assert (EaW : real_eq (real_mult a (real_mult p iva)) p).
   { apply (real_eq_trans (real_mult a (real_mult p iva))
              (real_mult (real_mult a iva) p) p).

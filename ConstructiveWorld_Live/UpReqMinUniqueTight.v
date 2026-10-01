@@ -237,7 +237,7 @@ Proof.
   set (KLsum := real_sum_over_S (fun s : S => real_kl_term (q s) (pb s) (Hq s) (pbpos s))).
   set (Fq := real_free_energy S real_sum_over_S real_base_loss D q Hq).
   set (Fb := real_free_energy S real_sum_over_S real_base_loss D pb pbpos).
-  (* 第 1 腿：rlhf 任意 π* 版分解件（π* := p_b 实例，对齐取逐点自反） *)
+  (* 第 1 肢：rlhf 任意 π* 版分解件（π* := p_b 实例，对齐取逐点自反） *)
   assert (Hrlhf : real_eq Fq (real_plus Fb (real_mult D KLsum))).
   { exact (rfep_rlhf_free_energy_kl
              S real_sum_over_S real_sum_over_S_ext real_sum_over_S_add
@@ -245,7 +245,7 @@ Proof.
              pb pbpos
              (fun s : S => real_eq_refl (pb s))
              q Hq Hnormq Hnormb). }
-  (* 第 2 腿：取负代数链（F 形 ↝ ELBO/evidence 术语桥） *)
+  (* 第 2 肢：取负代数链（F 形 ↝ ELBO/evidence 术语桥） *)
   unfold real_evidence, real_elbo.
   set (DK := real_mult D KLsum).
   (* 桥：opp Fq ≡ opp Fb + opp DK *)
@@ -263,7 +263,7 @@ Proof.
   apply (real_eq_trans (real_opp Fb)
                        (real_plus (real_opp Fb) (real_plus (real_opp DK) DK))
                        (real_plus (real_opp Fq) DK)).
-  - (* opp Fb ≡ opp Fb + (opp DK + DK)：去零腿 + 兼容腿 *)
+  - (* opp Fb ≡ opp Fb + (opp DK + DK)：去零肢 + 兼容肢 *)
     apply (real_eq_trans (real_opp Fb) (real_plus (real_opp Fb) real_zero)
                          (real_plus (real_opp Fb) (real_plus (real_opp DK) DK))).
     + exact (real_eq_sym (real_plus (real_opp Fb) real_zero) (real_opp Fb)
@@ -346,7 +346,7 @@ Qed.
 (* 主件：real_elbo_lower_bound_eps（定理 4.7 Real 层第三档）             *)
 (*   载体 = list X 具体状态空间（T7 同型实例化）；前提全显式：           *)
 (*   Hnormq（Σq ≡ 1）+ Hnormb（Σp_b ≡ 1，由使用方或分件供给）。          *)
-(*   组装：件 1 等值核（rlhf 件实例化）+ 件 2 非负腿（S08 L490）         *)
+(*   组装：件 1 等值核（rlhf 件实例化）+ 件 2 非负肢（S08 L490）         *)
 (*   + 件 3 完成机。                                                     *)
 (* ---------------------------------------------------------- *)
 

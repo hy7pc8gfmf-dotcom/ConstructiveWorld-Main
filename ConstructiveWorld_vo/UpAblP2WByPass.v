@@ -461,9 +461,9 @@ Require Import S15_TailFEPUp.
 Require Import AttnDoeblin.
 Require Import fa53_compat_abs.
 
-(* ################ 段零：expf 五字段封装实例化消解（E750-A） ################
+(* ################ 段零：expf 五字段封装实例化消解（判例 A 形） ################
    AttnDoeblin.v:758 real_expf_realizable 语句逐字（Part C 具体柯西
-   实数层；五 And 支＝源文件接口参数 L95-L99 逐字对应，封装形＝E750-A 已证结论
+   实数层；五 And 支＝源文件接口参数 L95-L99 逐字对应，封装形＝判例 A 形 已证结论
    的一件实例化消解形；req 面 1:1 对偶已在于 UpReqConcMixSel.v:925）。 *)
 Theorem uabp3_amt_expf_bundle :
   sigT (fun f : Real -> Real => And (forall x : Real, real_lt real_zero (f x))
@@ -476,7 +476,7 @@ Proof.
   exact real_expf_realizable.
 Qed.
 
-(* ################ 段一：列表 Fubini 组合学（E752 段一形复刻） ################
+(* ################ 段一：列表 Fubini 组合学（判例 段一形复刻） ################
    出节机 AttnDoeblin.bs_list_sum 上的逐点同余/加法线性/零函数退化/
    双重和交换。段一各件为基础模块，不单独计入战果。 *)
 
@@ -572,10 +572,10 @@ Qed.
 
 End UabP3AmtSumEqListIdt.
 
-(* ################ 段三：bs_swap 槽重述（E752 导出链·槽对偶形） ########
+(* ################ 段三：bs_swap 槽重述（判例 导出链·槽对偶形） ########
    槽 L100-L102 语句逐字。前提减薄＝仅需求和规范化槽（sum_eq_list，
    L105 逐字语句作节内显式位）：swap 位由其＋段一 Fubini 组合学整体
-   导出，非独立接口位（E752 翻案已证结论；链形与
+   导出，非独立接口位（判例 翻案已证结论；链形与
    p7d_swap_of_sum_eq_list@P7BoundedSoftmaxDeep:107 同构）。 *)
 
 Section UabP3AmtSwap.
@@ -728,7 +728,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S0 : Set.
 Variable enum0 : list S0.
 
-(* 四槽封装件（sum_ext/linear/add/le 一件实例化消解形，E750-A 封装口径） *)
+(* 四槽封装件（sum_ext/linear/add/le 一件实例化消解形，判例 A 形 封装口径） *)
 Theorem uabp3_cmk_sumf_bundle :
   sigT (fun sumf : (S0 -> R) -> R =>
     And (forall f g : S0 -> R,
@@ -747,7 +747,7 @@ Proof.
 Qed.
 
 (* 槽 L772 语句逐字（sumf ↦ sumd_sumf 读法）：sumd 折叠机与 rsq 机同形 *)
-(*   自持，两步定义级胶（cons 支 req_plus_compat＋归纳腿）闭合。        *)
+(*   自持，两步定义级胶（cons 支 req_plus_compat＋归纳肢）闭合。        *)
 Lemma uabp3_sumd_rsq_agree : forall (en : list S0) (g : S0 -> R),
   req (sumd_sumf S0 en g) (rsq_bs_list_sum S0 g en).
 Proof.
@@ -767,7 +767,7 @@ Proof.
 Qed.
 
 (* 槽 L767 语句逐字（sumf ↦ sumd_sumf 读法）：sumd_sum_swap 直接供给        *)
-(*   （UpReqSumD:384 req 面列表 Fubini；E752 同判，p7d:107 为 Id 面     *)
+(*   （UpReqSumD:384 req 面列表 Fubini；判例 同判，p7d:107 为 Id 面     *)
 (*   同构坐标）。                                                       *)
 Theorem uabp3_cmk_bs_swap : forall f : S0 -> S0 -> R,
   req (sumd_sumf S0 enum0 (fun s : S0 => sumd_sumf S0 enum0 (fun s' : S0 => f s s')))

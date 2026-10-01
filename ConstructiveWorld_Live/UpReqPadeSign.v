@@ -95,7 +95,7 @@ Proof. vm_compute. reflexivity. Qed.
 
 (* 显式形：Q_1(x) == 1 + (−1)·(1/2)·x——两项交错和的语义面。
    分裂 + q_pow 指标位 change + 系数锚改写 + ring 完成
-   （Qopp 原子挂乘积结构，ring 直绿不触 E313）。 *)
+   （Qopp 原子挂乘积结构，ring 直绿不触 判例）。 *)
 Lemma pds_den1_expl : forall x : Q, pade_den 1 x == 1%Q + (- (1#2)%Q) * x.
 Proof.
   intro x. unfold pade_den.

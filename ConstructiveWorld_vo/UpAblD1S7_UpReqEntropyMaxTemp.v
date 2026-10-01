@@ -21,8 +21,8 @@
 (*   real_sum_over_S_linear:181｜real_sum_over_S_add:184｜                      *)
 (*   T:187｜T_pos:188｜energy:189                                                *)
 (*   （Live_X 副本与 ConstructiveWorld-Main 正册 md5 同代                         *)
-(*    153e1eded52fb902e5f73a4f130dc72a，零代际漂移）                             *)
-(* 扩槽登记：real_sum_pos_preserved（L172）属 E389/E703 sum_pos 槽家族            *)
+(*    登记册登记值，零代际漂移）                             *)
+(* 扩槽登记：real_sum_pos_preserved（L172）属 判例组 sum_pos 槽家族            *)
 (*   （fa57_sum_carrier_realizes@fa57_ext:63 直接匹配先例，D1-⑤ S3 批同族），        *)
 (*   本件按「扩槽不重立」处置——单点载体直取形供给，不另立源版本证。                 *)
 (*   零 Require 源版本（防 P3S1 坑1 混代际 .vo 地雷）。                             *)
@@ -38,7 +38,7 @@
 (*                                                              *)
 (* 依赖：CW_ConstructiveWorld_219（S02 序与环律／S07 指零器，只读依存）；          *)
 (*   零 git、零注册面增量。                                                      *)
-(* 四关留痕：Live_X/attn/logs/g{1..4}-UpAblD1S7_*.{log,exit}                     *)
+(* 四检留痕：Live_X/attn/logs/g{1..4}-UpAblD1S7_*.{log,exit}                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import List.

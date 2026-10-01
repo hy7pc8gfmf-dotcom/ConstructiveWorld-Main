@@ -63,7 +63,7 @@
    6. square_nonneg（GRPO ）：保持 Id 出口假设位（显式 forall 参数，
      T2 形态①；Id 系 L24301 同为诚实 Variable）。
    7. (a) 类依存：req_free_energy_kl_decomp @ UpSigMigrate 同构重述于本文件
-     （依存形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在核对表标注）。
+     （依存形态需 UpSigMigrate.vo 锚；attn 树无该 .vo，重述并在核对清单标注）。
    ----------------------------------------------------------------
    覆盖核对（req 件名 -> Id 原件 @ 行号；批 2 清单逐条已证明见文件尾）：
    【SumLayer（FEP 前 2 件）】reqd_sum_opp<-15801 reqd_sum_minus<-15830
@@ -3616,7 +3616,7 @@ End ReqAlgBridge2.
 (* 【ReqAlgBridge2 代数补件 4】req_le_plus_cancel_l<-             *)
 (*   req_le_minus_nonneg_rev<- req_le_mult_pos_cancel<-  *)
 (*   req_mult_minus_distr_r<-（批 1 地基无对应件：仅有 _l 版与    *)
-(*   正向 req_le_minus_nonneg，本批真证补齐；依存 Setoid 接口 req 形       *)
+(*   正向 req_le_minus_nonneg，本件真证补齐；依存 Setoid 接口 req 形       *)
 (*   le_id_l/le_id_r/le_plus_compat/le_mult_compat_weak 字段）        [4]  *)
 (* 【ReqSoftmaxDual 对偶 3】reqd_softmax_scaled/reqd_softmax_temp_param    *)
 (*   （req softmax 族定义）reqd_scale_temp_duality<-              *)
