@@ -473,3 +473,10 @@ LW3GenFill.v#R137-8ef136
 LW3CondSep.v#R137-35e400
 LW0LicAdapt.v#R137-fe82af
 LW6CosZeroQuant.v#R137-e1116b
+abl_tail_deep_slots.v#R138-d629c9
+abl_tail_def_instance.v#R138-34c7dc
+abl_tail_novel_supply.v#R138-3d40a5
+abl_tail_pos_certs.v#R138-020079
+abl_tail_slot_upgrade.v#R138-496458
+abl_tail_sum_pos_bridge.v#R138-35e2ff
+abl_tail_world_certs.v#R138-e8edda

@@ -3115,3 +3115,38 @@ Definition ng_LW0LicAdapt : NewGreenFace :=
 Definition ng_LW6CosZeroQuant : NewGreenFace :=
   MkNewGreenFace "LW6CosZeroQuant.v" 229 4 20261001
   "quantitative simplicity of the cos zero point: nondegenerate zero pack with explicit inverse-bound constant two and a separation modulus corollary; erratum-re-cast, annotation-cleaned, in-place registration only" "L229:me1116b".
+
+(* ng_abl_tail_deep_slots —— abl_tail_deep_slots.v：深水杂槽现勘桥两件＋RI 面证书六件＋RL 节直供两件合件（尾百第四批包③·十供给定理＋一机判不可构造负裁决登记；R138 尾百七件合流波新件落位；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_deep_slots : NewGreenFace :=
+  MkNewGreenFace "abl_tail_deep_slots.v" 236 10 20261001
+  "deep misc slots after survey: two exp_neg bridge closed forms, six one-instantiation positivity certificates for RI and P7D slots, two RL direct-supply pieces, one non-constructive negative adjudication registered" "L236:md629c9".
+
+(* ng_abl_tail_def_instance —— abl_tail_def_instance.v：配分定义性实例化件族统一件＋可达槽具名闭形（尾百七件合流波新件；Z_temp 裸槽路线不可达如实判读登记于卷；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_def_instance : NewGreenFace :=
+  MkNewGreenFace "abl_tail_def_instance.v" 161 4 20261001
+  "unified definitional instantiation family for partition interface assumptions with named closed forms for reachable slots; bare Z_temp route judged unreachable and honestly registered" "L161:m34c7dc".
+
+(* ng_abl_tail_novel_supply —— abl_tail_novel_supply.v：StateSpace 平方律槽＋KVEv 均匀核最小世界正性/优超槽闭合形（尾百七件合流波新件；世界数据槽首次伴随闭合；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_novel_supply : NewGreenFace :=
+  MkNewGreenFace "abl_tail_novel_supply.v" 230 7 20261001
+  "first-closure companion theorems for world-data slots: StateSpace pointwise square law on the unit world and KVEv uniform-kernel minimal-world positivity and majorization closed forms" "L230:m3d40a5".
+
+(* ng_abl_tail_pos_certs —— abl_tail_pos_certs.v：正性证书族 one 实例化合件（尾百第四批包①·Real 面六闭形＋RI 面一闭形＋温度/配分/步长类证书槽供给；尾百七件合流波新件；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_pos_certs : NewGreenFace :=
+  MkNewGreenFace "abl_tail_pos_certs.v" 316 14 20261001
+  "positivity certificate package: lt-face T/T_star/D/Z one-instantiation closed forms with G3 zeroing translation slots across Real, RI, temperature, partition and stepsize families" "L316:m020079".
+
+(* ng_abl_tail_slot_upgrade —— abl_tail_slot_upgrade.v：独立槽批部分供形升级件（尾百七件合流波新件；四类升级配方六槽＋使用面喂形三位；Set 面归属机判在卷；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_slot_upgrade : NewGreenFace :=
+  MkNewGreenFace "abl_tail_slot_upgrade.v" 397 12 20261001
+  "partial-supply to full-slot upgrade pieces over six selected slots by four upgrade recipes plus three user-side feed forms; Set-face membership machine-checked" "L397:m496458".
+
+(* ng_abl_tail_sum_pos_bridge —— abl_tail_sum_pos_bridge.v：G1 sum_pos 类槽统一桥族槽形传入延伸件（尾百七件合流波新件；四定理四面零重述；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_sum_pos_bridge : NewGreenFace :=
+  MkNewGreenFace "abl_tail_sum_pos_bridge.v" 194 4 20261001
+  "slot-passing extension of the 64-piece sumd sigT-witness bridge engine: abstract operator, EMS, TSI and slc readings in four theorem faces with zero restatement" "L194:m35e2ff".
+
+(* ng_abl_tail_world_certs —— abl_tail_world_certs.v：world_certs 世界证书族合件（尾百第四批包②·KVEv 逐出核四槽最小世界闭合＋接口面 lt 证书八槽 one 实例化；尾百七件合流波新件；注释清稿毕 gate4=0） *)
+Definition ng_abl_tail_world_certs : NewGreenFace :=
+  MkNewGreenFace "abl_tail_world_certs.v" 347 12 20261001
+  "world certificate layer: KVEv exit-kernel four-slot minimal-world closure plus eight lt-face certificate one-instantiation closed forms for RL and P7D temperature slots" "L347:me8edda".

@@ -474,3 +474,10 @@ LW3GenFill.v
 LW3CondSep.v
 LW0LicAdapt.v
 LW6CosZeroQuant.v
+abl_tail_deep_slots.v
+abl_tail_def_instance.v
+abl_tail_novel_supply.v
+abl_tail_pos_certs.v
+abl_tail_slot_upgrade.v
+abl_tail_sum_pos_bridge.v
+abl_tail_world_certs.v
