@@ -3020,3 +3020,88 @@ Definition ng_abl_arctan_diff_51 : NewGreenFace :=
 Definition ng_abl_arctan_diff_60 : NewGreenFace :=
   MkNewGreenFace "abl_arctan_diff_60.v" 615 9 20260930
   "9a-yi main-formula continuation (X60 shape): bridge closure plus the GAP verdict piece group (GAP-1 first verdict: the draft RHS slot domain certificate is unsatisfiable under the draft hypotheses, coupled with the draft hypothesis revision decision); 9 closures verified Closed; md5 2b3a4d" "L615:m2b3a4d".
+
+(* ng_LW0LeibWindow —— LW0LeibWindow.v：莱布尼茨窗族极限分离件（本批行1·原位在册仅注册；PA=30 Closed；四关＋第五证在卷） *)
+Definition ng_LW0LeibWindow : NewGreenFace :=
+  MkNewGreenFace "LW0LeibWindow.v" 1888 115 20261001
+  "Leibniz window family: alternating-series limit separation, escape obstacles and family separation; in-place, registration only" "L1888:md6552a".
+
+(* ng_LW3ETranscendental —— LW3ETranscendental.v：M3-C1 正本 e 超越分离件（本批行2·原位在册；PA=45 全 Closed；终装认证账在卷；全组上游） *)
+Definition ng_LW3ETranscendental : NewGreenFace :=
+  MkNewGreenFace "LW3ETranscendental.v" 1174 58 20261001
+  "M3-C1 chief: transcendence of e as explicit nonzero separation witness, four Set-level premises; PA=45 all Closed" "L1174:m68c059".
+
+(* ng_LW3KnzValue —— LW3KnzValue.v：K 面非零见证锚例值钉件（本批行3·独立；372 砖四关在卷） *)
+Definition ng_LW3KnzValue : NewGreenFace :=
+  MkNewGreenFace "LW3KnzValue.v" 83 3 20261001
+  "K-face nonzero witness anchor (p372): lam/Kinst/lc three pins via lw3_Kinst_spec bridge" "L83:m46cc1b".
+
+(* ng_LW3CountEBound —— LW3CountEBound.v：count*E<1 数值实例化件（本批行4·独立；E caller-chosen 诚实边界在卷） *)
+Definition ng_LW3CountEBound : NewGreenFace :=
+  MkNewGreenFace "LW3CountEBound.v" 134 3 20261001
+  "count*E<1 anchor instantiation (p374, N=1, m=3, E=lw3_decay_E 3) with transparent value pins" "L134:m04069f".
+
+(* ng_LW3KLegProbe —— LW3KLegProbe.v：K 非零判据一般形勘形证伪件（本批行5·素材级 CANDZERO 账面注册零装；先例在案） *)
+Definition ng_LW3KLegProbe : NewGreenFace :=
+  MkNewGreenFace "LW3KLegProbe.v" 92 1 20261001
+  "K-leg general-shape falsification: witness-type empties on zero-example polynomial; material-grade, registered not installed (CANDZERO)" "L92:m8e6cb0".
+
+(* ng_LW3FamScale —— LW3FamScale.v：家族面缩放定义＋锚例反转判定件（本批行6·独立；381 组供件面先行；案甲唯一定义源） *)
+Definition ng_LW3FamScale : NewGreenFace :=
+  MkNewGreenFace "LW3FamScale.v" 276 10 20261001
+  "family-scale fbuild variant with factorial scaling and two-scale reversal verdicts on variant family (anchor)" "L276:m11df37".
+
+(* ng_LW3VarTSumBound —— LW3VarTSumBound.v：变 T 三角和界引理族件（本批行7·独立·零 LW3E 依赖） *)
+Definition ng_LW3VarTSumBound : NewGreenFace :=
+  MkNewGreenFace "LW3VarTSumBound.v" 138 6 20261001
+  "variable-T triangle-sum bound family: per-node lambda upper bound, abs-sum triangle kernel, const/scale linears" "L138:m7a09b2".
+
+(* ng_LW3JointFill —— LW3JointFill.v：锚例两尺度联合填装件（本批行8·案甲改形并册；副本前缀已归一） *)
+Definition ng_LW3JointFill : NewGreenFace :=
+  MkNewGreenFace "LW3JointFill.v" 351 15 20261001
+  "joint two-scale sigT fill for the anchor family target with per-node total-sum bound witnesses (case-A reshaped)" "L351:mc58b54".
+
+(* ng_LW3DualBridge —— LW3DualBridge.v：变体线对偶引理＋缩放桥接件（本批行9·案甲改形并册；副本前缀已归一） *)
+Definition ng_LW3DualBridge : NewGreenFace :=
+  MkNewGreenFace "LW3DualBridge.v" 245 6 20261001
+  "variant-line dual lemma and scaled-family bridge over replicated family-scale surface (case-A reshaped)" "L245:m1d0326".
+
+(* ng_LW3ESlot —— LW3ESlot.v：E 槽 Real 半边接载完成件（本批行10·取 60abca04 代非 25b77c1d 旧代；kills 缺口位显式前提承载） *)
+Definition ng_LW3ESlot : NewGreenFace :=
+  MkNewGreenFace "LW3ESlot.v" 314 11 20261001
+  "E-slot real-half closing: strict main theorem via realconst/realexp projections and geometric bound chain; kills slot explicit premise" "L314:md38af9".
+
+(* ng_LW3P2Prod —— LW3P2Prod.v：端点泛函求值式桥（Q 层半边）定义件（本批行11·229 正名随批并册；头注更新 f6dd9099 转历史值） *)
+Definition ng_LW3P2Prod : NewGreenFace :=
+  MkNewGreenFace "LW3P2Prod.v" 113 3 20261001
+  "endpoint functional evaluation bridge (229 renamed per decision point 10); cross-line read-only consumption upstream of P2Carrier" "L113:m223815".
+
+(* ng_LW3P2Carrier —— LW3P2Carrier.v：p^2 载体条件承载形件（本批行12·候 LW3P2Prod 先行；依赖行随正名更新一行） *)
+Definition ng_LW3P2Carrier : NewGreenFace :=
+  MkNewGreenFace "LW3P2Carrier.v" 129 4 20261001
+  "p-square carrier conditional form with Q transport; Real half carried as explicit GAPASUME premise slot (condition (c) permanent)" "L129:m097ddc".
+
+(* ng_LW3Kills —— LW3Kills.v：环 6 kills 引理本体件（本批行13·新件·硬候 LW3ESlot 先行；M 显式门槛 sigT 见证形） *)
+Definition ng_LW3Kills : NewGreenFace :=
+  MkNewGreenFace "LW3Kills.v" 133 3 20261001
+  "ring-6 kills lemma body: explicit-M-threshold sigT witness for geometric bound, carrier-gap and anchor discharges" "L133:m2dd145".
+
+(* ng_LW3CarrierFull —— LW3CarrierFull.v：Real 半边全清承载件（本批行14·新件·硬候 LW3Kills 先行；X 泛型零前提主定理） *)
+Definition ng_LW3CarrierFull : NewGreenFace :=
+  MkNewGreenFace "LW3CarrierFull.v" 140 4 20261001
+  "Real-half full-clear carrier: premise-free main theorem with explicit eps pick via cauchy_real_exp_pos projection" "L140:m2d801c".
+
+(* ng_LW3ExpNegLB —— LW3ExpNegLB.v：e^(-node) 显式正有理下界件（本批行15·新件·独立拓扑零约束；取件在案） *)
+Definition ng_LW3ExpNegLB : NewGreenFace :=
+  MkNewGreenFace "LW3ExpNegLB.v" 174 4 20261001
+  "explicit positive rational lower bound for exp(-node): r=1/(4C) with uniform series bound; GAPASUME slot-3 supply closure" "L174:m4de8e8".
+
+(* ng_LW3GenFill —— LW3GenFill.v：joint_target 一般 p 填装件（本批行16·391 第六候补件·随批并册已裁；硬候 FamScale/VarTSumBound/JointFill/DualBridge 先行） *)
+Definition ng_LW3GenFill : NewGreenFace :=
+  MkNewGreenFace "LW3GenFill.v" 292 13 20261001
+  "general-p joint_target fill (391), hard Require upstream of CondSep; consumes famscale/dual/fill/vtsum surfaces" "L292:m8ef136".
+
+(* ng_LW3CondSep —— LW3CondSep.v：案丙条件分离族 C2+C4 组装件（本批行17·新件·全组拓扑末位；七跨件依赖全备始可） *)
+Definition ng_LW3CondSep : NewGreenFace :=
+  MkNewGreenFace "LW3CondSep.v" 134 2 20261001
+  "case-C conditional separation assembly: C2 lambda<1 condition and C4 full composition with explicit anchor growth pin" "L134:m35e400".
