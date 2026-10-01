@@ -726,7 +726,6 @@ Proof.
 Qed.
 
 (* ---- 下翼生成器：v n ≥ lo（n ≥ N，lo ≤ 4·S_{2N+2}，余量 c） ---- *)
-(* ---- 下翼生成器：v n ≥ lo（n ≥ N，lo ≤ 4·S_{2N+2}，余量 c） ---- *)
 Lemma pie_real_lower_gen : forall (N : nat) (c lo : Q),
   Qlt 0 c -> Qle (lo + c) (4 * pie_partial (2 * N + 2)) ->
   real_lt (real_const lo) cauchy_real_pi_leibniz.
