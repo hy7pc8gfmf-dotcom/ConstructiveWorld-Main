@@ -3105,3 +3105,8 @@ Definition ng_LW3GenFill : NewGreenFace :=
 Definition ng_LW3CondSep : NewGreenFace :=
   MkNewGreenFace "LW3CondSep.v" 134 2 20261001
   "case-C conditional separation assembly: C2 lambda<1 condition and C4 full composition with explicit anchor growth pin" "L134:m35e400".
+
+(* ng_LW0LicAdapt —— LW0LicAdapt.v：π 传输单前提出口件（批 2 附行·M0+ α 链槽 3 合入件·已在位仅注册；PA=3 Closed；509 注释清洗毕 gate4=0；500 铸型＋502 复走＋503 终验 GO 在卷） *)
+Definition ng_LW0LicAdapt : NewGreenFace :=
+  MkNewGreenFace "LW0LicAdapt.v" 135 3 20261001
+  "single-premise export piece: conditional lic instantiation of pi and escape-at-condition with pack congruence; slot-3 merge of the alpha chain, annotation-cleaned, in-place registration only" "L135:mfe82af".
