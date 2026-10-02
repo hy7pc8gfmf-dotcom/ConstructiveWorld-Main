@@ -104,7 +104,7 @@ Proof.
   exact (sumd_sum_le S enum f g H).
 Qed.
 
-(* F6 ←L59 fsum_zero_nonneg（满射数据槽显式参，sumd_sum_zero_nonneg_surj@400 同形） *)
+(* F6 ←L59 fsum_zero_nonneg（满射数据槽显式参，sumd_sum_zero_nonneg_surj@:519 同形） *)
 Theorem uabT1_rte_fsum_zero_nonneg :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S),
     (forall s : S, sumd_in S s enum) ->

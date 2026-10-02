@@ -6,6 +6,9 @@
    编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""，cpu_guard 包裹限载。
    ========================================================================== *)
 
+(* 【双代同文明认】本件 UahlStar 段与 ToyR_UpAblP7_LoHiSqueeze.v 同名段逐字同文 *)
+(* （diff 为空）。平行位明认记录：旧位退役属使用面切换另案裁决范围，     *)
+(* 本注不改语句面。 *)
 Require Import S01_BaseRing.
 Require Import Paper7Ablation.
 Require Import P7BoundedSoftmaxDeep.

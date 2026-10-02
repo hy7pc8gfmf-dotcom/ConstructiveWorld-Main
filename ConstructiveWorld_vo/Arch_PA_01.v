@@ -284,7 +284,9 @@ Print Assumptions idt_slot_g01.
 Print Assumptions idt_slot_attdoeblin.
 Print Assumptions idt_sum_eq_list.
 (* ================= §4 uabd2_ali_abs_ge_zero_id_pai 族 ================= *)
-(* 与 AbsLeId L43-54 同款语境（RI_base 实例解析投影裸名）；出节后  *)
+(* 【快照位明认】本 §4 段（:286-364）系正本 UpAblD2_AbsLeId_RI_DO.v 之内联 *)
+(* 快照拷贝（零 Require 引用）；维护随正本，本段不再单独维护。 *)
+(* 与 AbsLeId :35-46 同款语境（RI_base 实例解析投影裸名）；出节后  *)
 (* RI0/DO0 消为显式头参（全参形，节后 Check 实证）。               *)
 Section UabD2PairWorld.
 

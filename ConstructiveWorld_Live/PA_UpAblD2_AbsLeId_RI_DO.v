@@ -6,6 +6,10 @@
    编译配方：coqc -native-compiler no -q -Q . ""。
    ============================================================ *)
 (* ============================================================ *)
+(* 【正本裁注】UpAblD2_AbsLeId_RI_DO.v（原代，md5 9289ea61）为唯一正本：   *)
+(* 本件系其头注改版记录件——语句面/证明体与正本逐字同文（diff 39 行       *)
+(* ＝33 注释级＋6 行 Print 验证行），全库 Require 引用为零；本件不作      *)
+(* 施工引用面，引用一律上正本。 *)
 (* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
 (* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
 (* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
@@ -21,28 +25,28 @@
 (* ============================================================ *)
 (* （FA-D2 唯一施工项：AbsLeId 两 Context 槽 N3 实例供给）         *)
 (*                                                               *)
-(*   AbsLeId.v（P7）Section AbsLeIdAbstract（L43-81）两接口槽：    *)
-(*     L45 Context {RI : RealInterfaceEnhanced}（接口束槽）        *)
-(*     L47 Context {DO : DecidableOrder RI}（可判定序扩展槽，      *)
+(*   AbsLeId.v（P7）Section AbsLeIdAbstract（:35-73）两接口槽：    *)
+(*     :37 Context {RI : RealInterfaceEnhanced}（接口束槽）        *)
+(*     :39 Context {DO : DecidableOrder RI}（可判定序扩展槽，      *)
 (*          类本体 S01_BaseRing:329 五字段全 Set 层）             *)
-(*   槽语句主件 ali_abs_ge_zero_id（AbsLeId.v:50，被 AMT:103/     *)
-(*   MixSel:770 等依存），本体证明 fa53:141 直接代入零循环。           *)
+(*   槽语句主件 ali_abs_ge_zero_id（AbsLeId.v:42，被 AMT:103/     *)
+(*   MixSel:770 等依存），本体证明 fa53:147 直接代入零循环。           *)
 (*                                                               *)
 (* 交付三面（逐位对普查表）：                                      *)
 (*  ①RI 槽（N1，库内实例化消解件直接代入）：具体 Real 载体字段映照          *)
 (*    （le 映 real_le / zero 映 real_zero / abs 映 real_abs /      *)
-(*    Id 映 real_eq）下，槽语句的载体形即 AbsLeId.v:91            *)
+(*    Id 映 real_eq）下，槽语句的载体形即 AbsLeId.v:83            *)
 (*    ali_real_abs_ge_zero_id（在库自证）——本件逐字引用两形：      *)
 (*    real 面一件 + RealEnhancedReal（S07:8566）实例投影 req 面    *)
 (*    一件（两语句经实例字段展开可转换同体，同源文件闭合）。          *)
 (*    注：全树 Real 载体上无 Id 面接口束具体实例（唯 req 面一件）  *)
 (*    ——按 FA-D1S1 载体分层供给形登记，零重证。                   *)
 (*  ②DO 槽（N3，出节全参供给对）：ali_abs_ge_zero_id 语句          *)
-(*    （AbsLeId.v:50 逐字）复现两形：                              *)
-(*    (a) 节内副本形（AbsLeId L43-54 同款语境，出节 RI0/DO0 消为    *)
+(*    （AbsLeId.v:42 逐字）复现两形：                              *)
+(*    (a) 节内副本形（AbsLeId :35-46 同款语境，出节 RI0/DO0 消为    *)
 (*        实例隐式参——与 AbsLeId 自身出节形同款，Check 实证）；     *)
 (*    (b) 显式全参形（ 节7 同款）：RI0/DO0/a 顶层 forall 显式    *)
-(*        全参，源文件 fa53_abs_ge_zero_id_dec（fa53:141）exact       *)
+(*        全参，源文件 fa53_abs_ge_zero_id_dec（fa53:147）exact       *)
 (*        直接代入——任意 (RI0,DO0) 对喂即得。                          *)
 (*  ③DO 槽具体层（诚实分账）：                                    *)
 (*    - 可构造面：字段5（lt_le_iff_dec 载体形）一件，T 档显式       *)
@@ -54,8 +58,8 @@
 (*      判例判定（G09_MiscSmall:566「可判定序=整体三分律=LPO      *)
 (*      等价、全库零实例」）+ S01 序三分律注记（构造性模型不可      *)
 (*      满足）+ AA15R SqWall 与 rLPO 等价判例。全树实例构造        *)
-(*      两处投影解构形）。邻接 N 坐标：fa53:141（抽象面供给）/      *)
-(*      AbsLeId.v:91（具体面供给）。定理化路线遗留：DO 类参数       *)
+(*      两处投影解构形）。邻接 N 坐标：fa53:147（抽象面供给）/      *)
+(*      AbsLeId.v:83（具体面供给）。定理化路线遗留：DO 类参数       *)
 (*      需 Id 面接口实例，全树该实例亦为零，墙语句面无法库内        *)
 (*      内化——登记不施工（FA3 墙件处置三要素齐备）。               *)
 (*                                                               *)
@@ -69,8 +73,8 @@
 Require Import S01_BaseRing.
 Require Import fa53_compat_abs.
 
-(* ============ ② DO 槽：出节全参供给对（N3，fa53:141 直接代入） ====== *)
-(* 与 AbsLeId L43-54 同款语境（RI_base 实例解析投影裸名）；出节后  *)
+(* ============ ② DO 槽：出节全参供给对（N3，fa53:147 直接代入） ====== *)
+(* 与 AbsLeId :35-46 同款语境（RI_base 实例解析投影裸名）；出节后  *)
 (* RI0/DO0 消为显式头参（全参形，节后 Check 实证）。               *)
 Section UabD2PairWorld.
 
@@ -78,7 +82,7 @@ Context {RI0 : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO0 : DecidableOrder RI0}.
 
-(* 槽语句逐字（AbsLeId.v:50）：主件 ali_abs_ge_zero_id 复现形 *)
+(* 槽语句逐字（AbsLeId.v:42）：主件 ali_abs_ge_zero_id 复现形 *)
 Theorem uabd2_ali_abs_ge_zero_id_pair :
   forall a : R, le zero a -> Id (abs a) a.
 Proof.
@@ -91,7 +95,7 @@ End UabD2PairWorld.
 (* 出节形实证（FA3 纪律6：节参消失不对称 Check 实证） *)
 Check uabd2_ali_abs_ge_zero_id_pair.
 
-(* —— 出节显式全参形（ 节7 同款；检验 t1 形逐字，fa53:141 直接代入） —— *)
+(* —— 出节显式全参形（ 节7 同款；检验 t1 形逐字，fa53:147 直接代入） —— *)
 Theorem uabd2_ali_abs_ge_zero_id_explicit :
   forall (RI1 : RealInterfaceEnhanced) (DO1 : DecidableOrder RI1)
          (a : @S01_BaseRing.R RI1),
@@ -110,7 +114,7 @@ Require Import S07_RealSetoidExpLog.
 Require Import AbsLeId.
 
 (* real 面：槽语句字段映照载体形=N1 源文件 ali_real_abs_ge_zero_id   *)
-(* （AbsLeId.v:91，在库自证）逐字引用。                            *)
+(* （AbsLeId.v:83，在库自证）逐字引用。                            *)
 Theorem uabd2_ri_real_abs_ge_zero_id :
   forall a : Real, real_le real_zero a -> real_eq (real_abs a) a.
 Proof.

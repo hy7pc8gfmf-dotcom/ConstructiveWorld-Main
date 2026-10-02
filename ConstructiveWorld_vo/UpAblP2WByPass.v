@@ -609,8 +609,8 @@ Qed.
 End UabP3AmtSwap.
 
 (* ################ 段四：bs_abs / bs_lpc 槽重述（fa53 直接代入广播） ########
-   槽 L103（N1：fa53 件3＝fa53_compat_abs.v:141 直接代入；AbsLeId.v:50
-   同形先例在库）与槽 L104（N3：fa53 件1＝fa53_compat_abs.v:103 同形
+   槽 L103（N1：fa53 件3＝fa53_compat_abs.v:147 直接代入；AbsLeId.v:42
+   同形先例在库）与槽 L104（N3：fa53 件1＝fa53_compat_abs.v:109 同形
    语句广播直接代入；出节使用形见源文件 L192-195/L216-219 全参调用）。
    可判定序数据槽＝T2b 广播形减薄登记（DecidableOrder 纯数据供给面）。 *)
 

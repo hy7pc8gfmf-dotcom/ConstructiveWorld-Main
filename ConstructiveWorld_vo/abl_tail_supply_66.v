@@ -27,8 +27,7 @@
       Real 实例字段实现形=S07_RealSetoidExpLog:8596 Instance RealEnhancedReal
       （req := real_eq、exp_neg := real_exp_neg、req_opp_compat :=
       real_eq_opp_compat），real_exp_neg = cauchy_real_exp ∘ real_opp
-      （S07:7801）；出节喂形先例=63 件 tsp_bbridge_energy_in_log_
-      boltzmann_bridge_wo／tsp_ems_kl_ge_zero_eps_mirror_wo；实现形 Check
+      （S07:7801）；本件出节喂形以正文定理自证；实现形 Check
       实测=本池 _log/probe_pa04_66.log（About 六名＋Check 三式）。
    ── 构造性注记：全件 Qed 真构造，零承认式声明、零悬置前提、零经典逻辑；
       语句面承载位全 Set 形（req／lt 皆 Set 值，零 Prop 泄露）；供给定理只

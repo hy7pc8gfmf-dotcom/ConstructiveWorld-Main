@@ -255,7 +255,7 @@ Proof.  intros R RIS S enum f g H.
              (H x) IH).
 Qed.
 
-(* B6 ←L1016 fsum_zero_nonneg（满射数据参数位显式参，sumd_sum_zero_nonneg_surj@400 同形；FA2 依据即 ：400） *)
+(* B6 ←L1016 fsum_zero_nonneg（满射数据参数位显式参，sumd_sum_zero_nonneg_surj@:519 同形；FA2 依据即 ：519） *)
 Theorem uabT1_reqfep_fsum_zero_nonneg :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set) (enum : list S),
     (forall s : S, sumd_in S s enum) ->

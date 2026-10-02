@@ -7,6 +7,9 @@
    编译配方: Rocq 9.1 直调 coqc，cpu_guard 包裹，-o 临时目录。
    ========================================================================== *)
 
+(* 【双代同文明认】本件 UahlStar 段与 UpAblP7_LoHiSqueeze.v 同名段逐字同文 *)
+(* （diff 为空）。平行位明认记录：旧位退役属使用面切换另案裁决范围，     *)
+(* 本注不改语句面。 *)
 Require Import S01_BaseRing.
 Require Import Paper7Ablation.
 Require Import P7BoundedSoftmaxDeep.

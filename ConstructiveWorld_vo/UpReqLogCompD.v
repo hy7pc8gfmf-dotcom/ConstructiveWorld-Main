@@ -95,7 +95,6 @@ Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
 Require Import UpRealLeB.
 Require Import G05_LogSmall.
-Require Import G05_LogSmall.
 From Stdlib Require Import List.
 Import RealInterfaceEnhancedMod.
 
