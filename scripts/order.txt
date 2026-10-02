@@ -480,8 +480,8 @@ abl_tail_pos_certs.v#R138-020079
 abl_tail_slot_upgrade.v#R138-496458
 abl_tail_sum_pos_bridge.v#R138-35e2ff
 abl_tail_world_certs.v#R138-e8edda
-LW2SepTransport.v
-LW5SepComplexity.v
+LW2SepTransport.v#R139-68170f
+LW5SepComplexity.v#R140-7dcdc6
 abl_tail_supply_65.v#R141-c92101
 abl_tail_supply_66.v#R141-9f5195
 abl_tail_supply_67.v#R141-6c147c
@@ -504,3 +504,6 @@ abl_tbase_tempsum.v#R142-0483d7
 abl_tbase_tempsum_feed.v#R142-8368f3
 abl_tbase_zapfeed.v#R142-c50271
 abl_tbase_t1c_expneg_feed.v#R142-5bdc7ec
+LW3ExclusionCalc.v#R143-5f987c
+LW4EPiContrast.v#R144-d29296
+LW1PiMeasure.v#R145-e54845

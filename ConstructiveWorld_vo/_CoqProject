@@ -505,3 +505,6 @@ abl_tbase_t1c_expneg_feed.v
 abl_tbase_tempsum.v
 abl_tbase_tempsum_feed.v
 abl_tbase_zapfeed.v
+LW3ExclusionCalc.v
+LW4EPiContrast.v
+LW1PiMeasure.v
