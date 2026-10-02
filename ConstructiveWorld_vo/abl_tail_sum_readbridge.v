@@ -1,5 +1,5 @@
 (* ==========================================================================)
-   abl_tail_sum_readbridge.v — 批 5-1 施工席（基座区第五批·求和读法桥分件）
+   abl_tail_sum_readbridge.v — 批 5-1 施工组（基座区第五批·求和读法桥分件）
    ── 使命：基座区 12 宿主 46 槽（求和四性质 44 槽＋逐项零化 2 槽）之
       csm_sumf 实现化读法统一供给桥（下编册 §三批 5-1 施工令；卡 1 求和
       四槽族＋卡 2 逐项零化槽）。件内三段：
@@ -26,8 +26,8 @@
       成员谓词）、UpReqConcSoftmax（csm_sumf 载体）、ConcMixSelFeed
       （cms 四供给根件）、UpAblT1_UpReqTempEntropy（零化泛型件）、
       Stdlib List、Stdlib Extraction——全部只读引用；既有件零字节不动、
-      零级联；12 宿主目标件本件零 Require（通用桥出节全参形，消费面
-      下游读法接线经 Require 本件即取）。
+      零级联；12 宿主目标件本件零 Require（通用桥出节全参形，使用面
+      下游读法对接经 Require 本件即取）。
    ── 对标行：读法配方正本＝BBDBridgeSupply.v:58-90（节参 :60-61＋
       Let sumf :64＋bbridge_sum_ext/linear/add_supply :69-90）；cms 四根件
       ＝ConcMixSelFeed.v:79-88（cms_sum_ext）／:90-117（cms_sum_linear）／
@@ -35,7 +35,7 @@
       UpAblT1_UpReqTempEntropy.v:108-117（uabT1_rte_fsum_zero_nonneg），
       根件＝sumd_sum_zero_nonneg_surj@UpReqSumD.v:520-525、成员谓词
       sumd_in@UpReqSumD.v:353-357；槽面现档＝下编册卡 1 十二宿主逐槽行号
-      （本席 20261001 逐件复测零漂移）。
+      （本文件  逐件复核零漂移）。
    ── 查重登记块（禁重复供给声明，R1 先例照办；开工前分工先勘实测）：
       在役重叠件四组逐条列坐标——①BBDBridgeSupply.v:69-90 bbridge_sum_
       ext/linear/add_supply（req 面 ext/linear/add 三件泛型在役，无 le）；
@@ -48,27 +48,27 @@
       四件全齐（le 件为库内首件泛型全件之一）＋real 面四件全齐＋零化
       csm_sumf 读法槽面装配（④件为 sumd 算子面，本件按卡 2 配方取
       csm_sumf 槽面，两载体定义性同一：csm_sumf S en f 与 sumd_sumf S en
-      f 均展开为 sumd_list_sum S f en）——重叠面逐条登记如上，下游消费
-      面亦可直引在役件；非重复立项申报：施工令明文令建本批统一桥＋
+      f 均展开为 sumd_list_sum S f en）——重叠面逐条登记如上，下游使用
+      面亦可直引在役件；非重复设立申报：施工令明文令建本批统一桥＋
       le/零化装配/real 面全齐为净新增，四步复核与蓝估 ~10 Qed 一致。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载
       位全 Set 形（req/le/real_eq/real_le 皆 Set 值谓词，零 Prop 泄露）；
-      供给定理只消费在役已证根件，零接口外新前提；分级申报＝十件全 N1
+      供给定理只使用在役已证根件，零接口外新前提；分级申报＝十件全 N1
       （库内实例化消解件直连：证明体非平凡内容在 cms 四件／uabT1 零化
       泛型件本体——列表归纳链与逐项零化链，本件直连不注水）；逐件
       Print Assumptions 取全 Closed 判据（名清单＝Qed 计数＝语句数，零
-      差）；提取探针取库层转写与本件引入分开计数如实登记（对照实验口径）。
+      差）；提取探查件取库层转写与本件引入分开计数如实登记（对照实验口径）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532；道闸核 rocq 进程数 ≤1 方起编；单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tail_sum_readbridge.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
+      绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
       vo 新于 v；rocqchk -o 环境摘要公理位 <none> 第五证。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前
       提、零经典逻辑，全部结论 Qed 真构造闭合。
    ========================================================================== *)
 
-(* ── Require 面：基座链库序＋本件直接消费件并集（去重；顺序＝依赖序） *)
+(* ── Require 面：基座链库序＋本件直接使用件并集（去重；顺序＝依赖序） *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -231,7 +231,7 @@ Print Assumptions tspbr_sum_zero_nonneg_bool.
 
 (* ============================================================ *)
 (* 终段提取检验区（判据＝输出 Obj.magic 分段归桶如实登记；输出目录为    *)
-(*   本池检验区；对照实验＝树外探针件单抽 cms_sum_ext 库件，库层转写    *)
+(*   本池检验区；对照实验＝树外探查件单抽 cms_sum_ext 库件，库层转写    *)
 (*   段同源复现即闭包固有，本件引入段分开计数）                        *)
 (* ============================================================ *)
 Set Extraction Output Directory "_log/extraction".

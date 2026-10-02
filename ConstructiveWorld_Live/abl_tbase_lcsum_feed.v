@@ -1,12 +1,12 @@
 (* ==========================================================================)
-   abl_tbase_lcsum_feed.v — 基座区上编假设消解战役·上编批 13 施工席（UB13）
-   （LogComp 域 sum 接口六槽喂形供给件·UpReqLogCompD 两节＋UpSigMigrate
+   abl_tbase_lcsum_feed.v — 基座区上编假设消解专项·上编批 13 施工组（UB13）
+   （LogComp 域 sum 接口六槽喂形供给文件·UpReqLogCompD 两节＋UpSigMigrate
      ReqGibbsPilot 一槽，七槽；核心＝S : Type 全泛型有限和机器自建三根，
      LogcFEP 载体（F13 Type 位）与 LogcTemp 载体（Set 位）一次施工双覆盖）
-   ── 使命：上编三态定谳册（attn/_tbase100_三态定谳册-上编-20261001.md，含
-      20261002 二审补遗＋施工回填最新态）§二卡 1（F1 sumf 六性质族）卡 8
+   ── 使命：上编三态定论册（attn/_tbase100_三态定论册-上编.md，含
+       二审补遗＋施工补录最新态）§二卡 1（F1 sumf 六性质族）卡 8
       （F8）之 LogComp 域余段＝UB9 交付报告 §七下批接口注记②明载候批
-      「BBDBridgeSupply/UpReqLogCompD sum 双节」（BBD 节经本席现档实勘＝
+      「BBDBridgeSupply/UpReqLogCompD sum 双节」（BBD 节经本文件现档实核＝
       bbridge_sum_*_supply 件内自持已供划出，余 UpReqLogCompD 两节六槽）
       ＋UB1 未及清单同款配方之 UpSigMigrate ReqGibbsPilot sum_pos 单槽，
       共 7 槽：
@@ -15,7 +15,7 @@
         :234-236）——段一。载体实拍：Context {R : Set}{RIS}＋Variable
         S : Type（F13 Type 载体位，二审册①「施工不受阻（供给定理按现档
         : Type 逐字抄）」条款适用）——sumd 五根（UpReqSumD SumDischarge
-        节 Variable S : Set）不可直喂，故本件自建 S : Type 全泛型有限和
+        节 Variable S : Set）不可直接传入，故本件自建 S : Type 全泛型有限和
         机器 tblc_ltsum（Fixpoint 列表折叠，:Set/:Type 两载体同面）三根真构造；
       （二）UpReqLogCompD.v Section LogcTemp（:1016 起）tsum 三槽（现档
         :1021-1032 逐字实拍：tsum_ext :1021-1022／tsum_add :1023-1025／
@@ -32,16 +32,16 @@
       在役逐字同语句已供免重复（勘 8 同款，Real 特化闭形读法）、:60-66
       ReqFreeEnergyPilot 三槽＝uabT6_sigmig_sum_*@UpAblT6_UpSigMigrate.v
       在役已供——全数不入本件。
-      候选方向排除登记（防重复三闸②升级版对拍矩阵，全量实勘在交付报告
+      候选方向排除登记（防重复三闸②升级版对拍矩阵，全量实核在交付报告
       §对拍矩阵表）：UpReqFEPAttn 三节 sum 十二槽＝uabT3_reqfepattn/
       reqrowview/reqfeplogz 系@UpAblT3_UpReqFEPAttn.v 在役已供；
       UpReqPPOPlain 全模块 35 槽＝UpAblD1PPO/S8/S10/S11 波「已无净新面」
       （UpAblD1S13_UpReqAlignClose.v:13-14 件内自证在档）；UpReqAlignClose
       ＝uabd1s13_uac_pack16 在役；UpReqConcMixSel＝uabd1s10_cmk_pack17
       在役；UpReqTempEntropy fsum 六槽＝uabT1_rte_fsum_* 在役（UB5/UB6
-      两席同判）；G13/BBD＝uabT1 泛型同形覆盖（UB5 在档）；G02/G06/
+      两组同判）；G13/BBD＝uabT1 泛型同形覆盖（UB5 在档）；G02/G06/
       UpRealLeB（Real 面）＝tspt_ 桥已供；UpReqAttnIter＝UB1 判 SumDCarrier
-      Feed 槽组五在役已供永不重复立项；UpReqSampling＝usrq_ 22 件专辖；
+      Feed 槽组五在役已供永不重复设立；UpReqSampling＝usrq_ 22 件专辖；
       UpReqBanach 系/UpReqVajdaBound＝覆盖图行 116-153/240 全 0 列零槽；
       下编余 16 槽＝他编辖区不越界；W 槽/存疑槽/冻结件语义位（S04 八槽
       候专批、b_gibbs_sum_eps W-GIBBSNORM-01、卡 2/3/4/5/6-W/12 全族）
@@ -58,12 +58,12 @@
       同款证明形 S:Type 抬升）；cons 正性根＝sumd_list_sum_pos_cons
       @UpReqSumD.v:306；配方先例＝tspps_ 段一至七/tbaf_ 段三至五（喂形
       句式）、tbkx_（一定理多槽覆盖口径）；RealInterfaceEnhancedSetoid
-      字段名实拍＝S07:7945-8025（本席 sed 逐行实拍）。
+      字段名实拍＝S07:7945-8025（本文件 sed 逐行实拍）。
    ── 构造性注记：全件 Qed 真构造（段一泛型三根＝归纳真实现非转发；段
       一/段二六喂形＝泛型根签名保持式直引；段三＝在役根直引），零承认式
       声明、零悬置前提、零经典逻辑；语句面承载位全 Set 形（req/lt/le/
       plus/mult 皆 RealInterfaceEnhancedSetoid Set 值字段，正性前提 H 为
-      Set 值谓词位，全文件零 Prop 位、零 Not 否定形）；供给定理只消费
+      Set 值谓词位，全文件零 Prop 位、零 Not 否定形）；供给定理只使用
       在役根与本件自建泛型根已导出内容，零接口外新前提；sum_pos 喂形
       非空前提增补申报位见段三注记；绑定名逐槽照抄宿主现档（坑 4 三面
       对拍：绑定名/语句面/隐式参）；逐定理 Print Assumptions 取全 Closed
@@ -73,7 +73,7 @@
       ulimit -s 65532；道闸 rocq 进程数 ≤2 单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_lcsum_feed.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行（^Error|Error:）0／vo 头 8 字节
+      绿判四要素：EXIT=0／日志真错行（^Error|Error:）0／vo 头 8 字节
       436f7121 00015ff4／vo 新于 v；rocqchk -o 环境摘要公理位 <none>
       第五证；编完 rm 产物（.vo/.vok/.vos/.glob/.aux 池内零残留）。
    ========================================================================== *)
@@ -223,7 +223,7 @@ Qed.
 
 (* ============================================================ *)
 (* 段二：UpReqLogCompD LogcTemp tsum 三槽喂形（宿主槽 :1021-1028 现档    *)
-(*   逐字；S : Set 实例＝Set⊂Type 直用泛型根，一定理一槽具名落位）      *)
+(*   逐字；S : Set 实例＝Set⊂Type 直用泛型根，一定理一槽具名落点）      *)
 (* ============================================================ *)
 
 Theorem tblc_lctemp_tsum_ext :
@@ -258,7 +258,7 @@ Qed.
 (* 段三：UpSigMigrate ReqGibbsPilot sum_pos 单槽喂形（宿主槽 :561 现档   *)
 (*   逐字；cons 头见证 B 喂形申报位——宿主槽面无非空前提位，非空性以     *)
 (*   w :: rest 数据承载（tspps_/tbaf_/tbkx_ pos 系同款申报位，禁静默     *)
-(*   增补条款对应：喂入形增补前提在此显式申报，消费按需取 w 见证）       *)
+(*   增补条款对应：输入形增补前提在此显式申报，使用按需取 w 见证）       *)
 (* ============================================================ *)
 
 Theorem tblc_sigmig_sum_pos_cons :
@@ -271,7 +271,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 提取检验区：PA 全 Closed 判据＋提取探针（G3 归桶口径）               *)
+(* 提取检验区：PA 全 Closed 判据＋提取探查件（G3 归桶口径）               *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

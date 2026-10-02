@@ -1,9 +1,9 @@
 (* ==========================================================================)
-   abl_tbase_logbridge.v — 基座区上编假设消解战役·上编批 2 施工席
-   （F6 log 桥族三形根喂形供给件：compat／exp_neg／inv_one_inv／
+   abl_tbase_logbridge.v — 基座区上编假设消解专项·上编批 2 施工组
+   （F6 log 桥族三形根喂形供给文件：compat／exp_neg／inv_one_inv／
    log_inv_exp_neg_req 四形，八宿主二十槽）
-   ── 使命：上编三态定谳册（attn/_tbase100_三态定谳册-20261001.md）§三批 2
-      行＋§二卡 6（F6 log 桥族可消解肢）逐落位具名供给，B 形 Real 特化
+   ── 使命：上编三态定论册（attn/_tbase100_三态定论册.md）§三批 2
+      行＋§二卡 6（F6 log 桥族可消解肢）逐落点具名供给，B 形 Real 特化
       闭形（R:=Real、RIS:=RealEnhancedReal 装配，G05 三根同名展开即合），
       共 20 槽：
       （一）UpReqDist.v 接口缺口桥双槽（dist_log_inv_one_inv 现档 :1090-1092／
@@ -16,8 +16,8 @@
       （四）UpSigMigrate2.v 四槽（req_log_exp_neg :128-129／req_log_compat
         :131-133／b_log_exp_neg :919-920／b_log_compat :921-923）——段四；
       （五）BBDBridgeSupply.v sup 系双槽（sup_compat :100-101／
-        sup_log_exp_neg :102-103；定谳册卡 6 记 BBD:96 系行号漂移，
-        本席现档实拍 :100 勘正在案）——段五；
+        sup_log_exp_neg :102-103；定论册卡 6 记 BBD:96 系行号漂移，
+        本文件现档实拍 :100 勘正在案）——段五；
       （六）BoltzmannBridgeDischarge.v sup 系双槽（sup_compat :96-97／
         sup_log_exp_neg :98-99）——段六；
       （七）UpReqLogCompD.v LogcFEP 节 sup 系双槽（sup_compat :249-250／
@@ -28,9 +28,9 @@
       dist_log_le_linear、UpReqFEPAttn:112 log_le_linear（g05w_loglin_slot
       墙形）、UpSigMigrate2:931 b_gibbs_eq（行 10 特征化族）全不入本件。
    ── 依赖：S01_BaseRing 至 S07_RealSetoidExpLog 基座链＋G05_LogSmall
-      （三根供给件）——全部只读引用；八宿主目标件零 Require、零字节不动、
-      零级联（UB1 先例：基座域外置供给，槽消费按语句面 RIS:=Real 装配
-      定义工合，上游读法接线经 Require 本件即取）。
+      （三根供给文件）——全部只读引用；八宿主目标件零 Require、零字节不动、
+      零级联（UB1 先例：基座域外置供给，槽使用按语句面 RIS:=Real 装配
+      定义工合，上游读法对接经 Require 本件即取）。
    ── 对标行：三根＝logd_log_compat_real@G05_LogSmall.v:322（双形 _wd
       :333）／logd_log_exp_neg_real@:343（其注记自证
       real_log_exp_neg@CW_ConstructiveWorld_219:42231 逐字同形）／
@@ -39,12 +39,12 @@
       Real RealEnhancedReal 同款先例@G05:368）；Real 特化闭形先例＝
       tsp_log_inv_one_inv_real@abl_tail_supply_65.v:218-224＋
       tspy_tmw_log_exp_neg_real@abl_tail_deep_slots.v:170-175（tmw/frd
-      面，本件八宿主落位均不在其辖区）；查重登记块见下；配方细节＝
-      沙箱/现役/abl_tail_supply_pool/_log/供给件配方笔记-20260930.md。
+      面，本件八宿主落点均不在其辖区）；查重登记块见下；配方细节＝
+      沙箱/现役/abl_tail_supply_pool/_log/供给文件配方笔记.md。
    ── 构造性注记：全件 Qed 真构造，零承认式声明、零悬置前提、零经典
       逻辑；语句面承载位全 Set 形（req/lt/log/log_inv/exp_neg/inv_pos/
       opp 皆 RealInterfaceEnhancedMod Set 值字段，正性前提 Hx/Hi 为
-      Set 值谓词位，全文件零 Prop 位）；供给定理只消费 G05 根件已导出
+      Set 值谓词位，全文件零 Prop 位）；供给定理只使用 G05 根件已导出
       内容，零接口外新前提；绑定名逐槽照抄宿主现档（坑 4 三面对拍：
       绑定名／语句面／零隐式参）；逐件 Print Assumptions 取全 Closed
       判据；件尾提取检验区取 Obj.magic 分段归桶如实登记（G3 对照＝
@@ -53,7 +53,7 @@
       ulimit -s 65532；道闸 rocq 进程数 ≤2 单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_logbridge.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
+      绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
       vo 新于 v；rocqchk -o 环境摘要公理位 <none> 第五证。
    ========================================================================== *)
 
@@ -71,7 +71,7 @@ Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
 (* 查重登记块（禁重复供给声明，R1 先例照办）：                          *)
-(*   （一）战役已供四件辖区零交集：abl_s01_supply（abls_ 系＝S01 域      *)
+(*   （一）专项已供四件辖区零交集：abl_s01_supply（abls_ 系＝S01 域      *)
 (*   vocab/token/温证书 14 Qed）、abl_attn_doeblin_supply（abla_ 系＝   *)
 (*   AttnDoeblin 平滑/Tv 收缩族）、abl_tail_pos_supply_sum（tspps_ 系＝  *)
 (*   F1 sum 六性质喂形 26 Qed）、abl_tail_sum_readbridge（tspbr_ 系＝   *)
@@ -82,7 +82,7 @@ Import RealInterfaceEnhancedMod.
 (*   abl_tail_deep_slots.v:170/:178（辖区＝TempUnimodalMax/SqrtfCauchy  *)
 (*   exp_neg 桥槽）——本件八宿主（UpReqDist/UpReqTempEntropy/            *)
 (*   UpReqFEPAttn/UpSigMigrate2/BBDBridgeSupply/BoltzmannBridgeDischarge*)
-(*   /UpReqLogCompD/UpReqAlgebra）落位均不在上列辖区，零重复。          *)
+(*   /UpReqLogCompD/UpReqAlgebra）落点均不在上列辖区，零重复。          *)
 (*   （三）勘 8 在役件 abl_tail_exp_certs tsp_pa04_req_exp_neg_ext＝    *)
 (*   req_exp_neg_ext 面（扩展名 ext 形），与本件 exp_neg 消去形零重叠。 *)
 (*   （四）本件不发 W 槽供给：inv_one_inv 形余量 UpFirewallReq:118／    *)
@@ -132,7 +132,7 @@ Qed.
 
 (* ============================================================ *)
 (* 段三：UpReqFEPAttn.v 第一节双槽（:106-110）＋第二节三槽              *)
-(*   （:418-425；两节槽面逐字同形，逐节落位具名防合并撞名）             *)
+(*   （:418-425；两节槽面逐字同形，逐节落点具名防合并撞名）             *)
 (* ============================================================ *)
 
 Theorem tblb_ufepa1_log_inv_one_inv :

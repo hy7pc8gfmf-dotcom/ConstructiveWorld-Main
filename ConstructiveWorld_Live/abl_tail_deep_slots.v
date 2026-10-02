@@ -1,11 +1,11 @@
 (* ==========================================================================)
-   abl_tail_deep_slots.v — 施工席C（第四批·包③ 深水杂槽：现勘桥两件＋RI 面证书
+   abl_tail_deep_slots.v — 施工组C（第四批·包③ 深水杂槽：现勘桥两件＋RI 面证书
    六件＋RL 节直供两件，计 10 供给定理；G10 两装载位现勘后登记零施工；RI 载体
-   附属件机判不可构造负裁决登记）
-   ── 使命：蓝图包③ 12 落位逐槽现档实拍后施工——（一）候审③现勘协议先行：
+   附属件机检不可构造负裁决登记）
+   ── 使命：蓝图包③ 12 落点逐槽现档实拍后施工——（一）候审③现勘协议先行：
       tmw:65-66／frd:912-913 两 exp_neg 桥槽经两步现勘（G05:341-346
       logd_log_exp_neg_real 语句面三面对拍绿＋65 件 tsp_log_inv_one_inv_real
-      同节供给体结构核对绿）后按 Real 特化闭形施工，落位具名两件；（二）
+      同节供给体结构核对绿）后按 Real 特化闭形施工，落点具名两件；（二）
       WallEps:887/:889 temp_pos/Delta_pos 与 P7D:167/:379 z_lb、:168/:380
       z_ub 六位 one/zero 实例化证书，S01 类面纯类字段导出（one_pos／
       lt_zero_opp＋lt_le_iff 取 Set 层和型左支），零接口外前提、零判定序依赖；
@@ -16,8 +16,8 @@
       （算子 csm_sumf@UpReqConcSoftmax.v:41 已导出＋63 件四性质槽全参在役
       ＋71 件 pos 槽在役），按蓝图既定分支登记零施工、零新增语句。（五）
       附属申报件 abl_tail_ri_carrier.v 判负不施工：载体字段义务之首（S01 类
-      plus_assoc 的 Id 面环律）在柯西实数现役表示下机判不可成证（正控臂绿／
-      负探针臂 cannot unify 机判原文在 _log/probe_tspy_ri_carrier-20261001.log；
+      plus_assoc 的 Id 面环律）在柯西实数现役表示下机检不可成证（正控臂绿／
+      负探查件臂 cannot unify 机检原文在 _log/probe_tspy_ri_carrier.log；
       S02:2295-2299 结构件注记同证：接口 Id 系单构造子定义性相等、柯西实数
       非典范表示，完整实例需先改接口等式或作商；全库 plain 类实例缺口 0），
       LoHi 证书 4 位与挂起 8 维持现状候域面迁移，如实申报解锁器未落地。
@@ -25,31 +25,31 @@
       logd_log_exp_neg_real）、ToyR_fa56b_ext（fa52_dpo_pi_ref_pos／fa52_dpo_S
       见证件）、受益五件 PA_TempMonoW2Mark／Arch_PA_02／UpAblP7_WallEpsChain_B
       ／P7BoundedSoftmaxDeep／Arch_Up_01——全部只读引用；受益件零字节不动、
-      零级联（本件 Require 五受益件为名义性签名保持引，零消费其导出名，据
+      零级联（本件 Require 五受益件为名义性签名保持引，零使用其导出名，据
       件 53 先例登记备查；不 Require 任何批件，G5 根件与 fa52 见证件均系
       统一缓存在役库件）。
    ── 对标行：exp_neg 桥根＝logd_log_exp_neg_real@G05_LogSmall.v:341-346（其
       注记自证 real_log_exp_neg@CW_ConstructiveWorld_219:42231 逐字同形）；
       同节供给体先例＝tsp_log_inv_one_inv_real@abl_tail_supply_65.v:218-224
       （RIS 面抽象槽×Real 面供给，语句面取槽面、证明体 exact 直引根件）；
-      S01 类面槽面机读原文＝_log/probe_tspy_face-20261001.log（P7D 面 S01
+      S01 类面槽面机读原文＝_log/probe_tspy_face.log（P7D 面 S01
       投影直解、WallEps 面经 tsi_rie_setoid 总实例@PA_TempSoftmaxInstantiation
       .v:52 字段直引落 S01 投影同面）；RL 节 A 型先例＝fa52_dpo_pi_ref_pos@
       ToyR_fa56b_ext.v:20-21（fa52_dpo_pi_ref:=fun _=>real_one、
       real_lt_zero_one 逐字）；le 面和型左支构造同族先例＝67 件批五段面分拣
       cf2 系（real_lt/real_le 面）；配方细节＝沙箱/现役/abl_tail_supply_pool/
-      _log/供给件配方笔记-20260930.md。
+      _log/供给文件配方笔记.md。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载位全
       Set 形（req/lt/le/real_lt 皆 Set 值谓词，Or 取 S01:80 Set 层和型）；供给
-      定理只消费在役已证根件与类字段（one_pos／lt_zero_opp／lt_le_iff），零
+      定理只使用在役已证根件与类字段（one_pos／lt_zero_opp／lt_le_iff），零
       接口外新前提；面分拣双区施工——区一（S01 类面）先于区二（模块导入后
-      RIS 面与 Real 面），裸名解析态逐区与目标件原态一致（探针机读留痕）；
-      全部结论 Qed 真构造闭合；Print Assumptions 全 Closed 判据；提取探针
+      RIS 面与 Real 面），裸名解析态逐区与目标件原态一致（探查件机读留痕）；
+      全部结论 Qed 真构造闭合；Print Assumptions 全 Closed 判据；提取探查件
       Obj.magic 分段计数如实登记（G3 对照实验口径：G05 根件单独提取对照）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532 && cd 本池；道闸核 rocq 进程数 ≤1 后单道执行
       nice -19 rocq c -native-compiler no -Q <统一缓存根> "" abl_tail_deep_slots.v；
-      绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
+      绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
       vo 新于 v；G4 第五证 rocqchk -o 参数=模块名 abl_tail_deep_slots。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、
       零经典逻辑，全部结论 Qed 真构造闭合。
@@ -95,7 +95,7 @@ Require Import Arch_Up_01.
 (* ============================================================ *)
 (* 区一：S01 类面槽（本区先于 S07 模块导入——裸名＝S01 类投影，与        *)
 (*   P7BoundedSoftmaxDeep 原件解析态一致；WallEps 原件态经 tsi 桥总     *)
-(*   实例字段直引落同一 S01 投影面，探针机读留痕见 _log）。              *)
+(*   实例字段直引落同一 S01 投影面，探查件机读留痕见 _log）。              *)
 (* ============================================================ *)
 
 Section TspyWallEpsFaces.
@@ -111,7 +111,7 @@ Proof.
 Qed.
 
 (* ---- 供给二：WallEps Delta_pos 槽 :889 实例闭形（Delta:=one；     ---- *)
-(* ----      落位具名，与供给一同面）                                ---- *)
+(* ----      落点具名，与供给一同面）                                ---- *)
 Theorem tspy_walleps_delta_pos_one : lt zero one.
 Proof.
   exact one_pos.
@@ -142,14 +142,14 @@ Proof.
   exact (lt_le_iff zero one (inl one_pos)).
 Qed.
 
-(* ---- 供给五：P7D 段七 z_lb 槽 :379（两节语句同形，落位具名）      ---- *)
+(* ---- 供给五：P7D 段七 z_lb 槽 :379（两节语句同形，落点具名）      ---- *)
 Theorem tspy_p7d_z_lb_zero_band : forall s s' : S, le (opp one) zero.
 Proof.
   intros s s'.
   exact (lt_le_iff (opp one) zero (inl (lt_zero_opp one one_pos))).
 Qed.
 
-(* ---- 供给六：P7D 段七 z_ub 槽 :380（落位具名）                    ---- *)
+(* ---- 供给六：P7D 段七 z_ub 槽 :380（落点具名）                    ---- *)
 Theorem tspy_p7d_z_ub_zero_band : forall s s' : S, le zero one.
 Proof.
   intros s s'.
@@ -174,7 +174,7 @@ Proof.
   exact (logd_log_exp_neg_real u).
 Qed.
 
-(* ---- 供给八：frd exp_neg 桥槽 :912-913（逐字双落，落位具名）      ---- *)
+(* ---- 供给八：frd exp_neg 桥槽 :912-913（逐字双落，落点具名）      ---- *)
 Theorem tspy_frd_log_exp_neg_real :
   forall u : Real, req (log (exp_neg u) (exp_neg_pos u)) (opp u).
 Proof.

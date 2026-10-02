@@ -1,25 +1,25 @@
 (* ==========================================================================)
-   abl_tbase_expf_bs_feed.v — 基座区下编批 5-3 施工席（expf B 型喂入＋RSQ bs
+   abl_tbase_expf_bs_feed.v — 基座区下编批 5-3 施工组（expf B 型输入＋RSQ bs
    三槽 cms 直引＋T1b sum_eq_list 桥，11 Qed）
-   ── 使命：基座区存疑二审与施工单（attn/_tbase100_存疑二审与施工单-20261002.md
-      §二 施工单 5-3）逐行施工。段一 expf 组 7 件：Paper7Ablation §1（:43
+   ── 使命：基座区存疑二审与施工说明（attn/_tbase100_存疑二审与施工说明.md
+      §二 施工说明 5-3）逐行施工。段一 expf 组 7 件：Paper7Ablation §1（:43
       expf_pos／:46 expf_mono_lt）＋§2（:97 expf_mono_lt）、MixTimeChain §1
       （:76 expf_pos／:79 expf_mono_lt）、MixTimeChainIface（:67 expf_pos／
-      :70 expf_mono_lt）七槽的 Real 特化闭形 B 型喂入（层位注记沿上编卡 2
-      定谳口径：七宿主槽为 RI 类字段抽象位，消解形＝R:=Real 全参喂，消费位
+      :70 expf_mono_lt）七槽的 Real 特化闭形 B 型输入（层位注记沿上编卡 2
+      定论口径：七宿主槽为 RI 类字段抽象位，消解形＝R:=Real 全参喂，使用位
       以实例充任接口字段，AMT amtr 形 :229-262 同款先例）；W 排除 6 位
       （P7A:44/:45/:96、MTC:77/:78、MTI:68/:69 的 Id 面 expf zero/plus 槽）
-      零喂入零触碰。段二 RSQ bs 组 3 件：UpReqConcMixSel ReqRowView 前节
+      零输入零触碰。段二 RSQ bs 组 3 件：UpReqConcMixSel ReqRowView 前节
       （:704-743，节自持 enum+enum_nonempty :729-730）的 bs_swap（:738-740）／
       bs_abs（:741）／sum_eq_list（:743）三槽，读法 sumf := csm_sumf S en
       （下编卡 1 同款），ConcMixSelFeed cms_ 系三根 exact 直引。段三 T1b
       sum_eq_list 组 1 件施工：UpAblT1b_AttnDoeblin AblSwap 节（:115-123）
       sum_eq_list 槽，idt_slot_attdoeblin 一步直引（SO 实例读法＝
-      sum_over_S := idt_sumf enum，消费侧 idt 读法装载）；UpAblT1b_S13 同槽
-      在件已供（ablq_sum_eq_list@UpAblT1b_S13_NLiveAudit.v:195-200），接线
+      sum_over_S := idt_sumf enum，使用侧 idt 读法装载）；UpAblT1b_S13 同槽
+      在件已供（ablq_sum_eq_list@UpAblT1b_S13_NLiveAudit.v:195-200），对接
       申报零新增。AMT 在件已供 4 位（amtr_expf_pos／amtr_expf_mono_lt／
-      amtr_expf_mono_le／amtr_bs_swap）接线申报零新增。合计 11 Qed。
-   ── 锚复拍登记（20261002 本席 Live 现档实拍，施工单行号零漂移零勘正）：
+      amtr_expf_mono_le／amtr_bs_swap）对接申报零新增。合计 11 Qed。
+   ── 锚复拍登记（ 本文件 Live 现档实拍，施工说明行号零漂移零勘正）：
       P7A:43/:46/:97、MTC:76/:79、MTI:67/:70、UpReqConcMixSel:729-730/
       :738-740/:741/:743、UpAblT1b_AttnDoeblin:121-123、UpAblT1b_S13:111-112
       ＋ablq_sum_eq_list:195-200；根件锚＝uabd1x_expf@UpAblD1_expf_pack.v:28／
@@ -38,18 +38,18 @@
       （Paper7Ablation／MixTimeChain／MixTimeChainIface／UpReqConcMixSel／
       UpAblT1b_AttnDoeblin／UpAblT1b_S13_NLiveAudit）零 Require、零字节不动、
       零级联。
-   ── 对标行：模板＝本池 abl_tail_supply_67.v（段〇换名不换体＋exact 一击
+   ── 对标行：模板＝本池 abl_tail_supply_67.v（段〇换名不换形＋exact 一击
       工艺＋PA/提取收尾段式）；Id 面全限定坑 5 处方与 @S RI SS 出节形＝
       本池 abl_tail_supply_68.v:85-94/:111-113；段三同槽既供先例＝
       ablq_sum_eq_list@UpAblT1b_S13_NLiveAudit.v:195-200（Live 在件）；
       查重登记（R1 条款）：四已供件（abls_/abla_/tspps_/tspbr_）与本件
-      tspex_/tspbs_ 前缀全池 grep 零重叠（本席实测），tspbl_（批 5-2 log 桥）
+      tspex_/tspbs_ 前缀全池 grep 零重叠（本文件实测），tspbl_（批 5-2 log 桥）
       与 abl_tbase_logbridge（上编批 2 log 桥）辖区＝log 域零交叠。
    ── 构造性注记：全件 Qed 真构造，零承认式声明、零悬置前提、零经典逻辑；
       语句面承载位全 Set 形（real_lt/real_le/req/le/Id 皆 Set 值，零 Prop
-      泄露；W 排除 6 位 Id 面槽零喂入）；供给定理只消费已编在役内容
+      泄露；W 排除 6 位 Id 面槽零输入）；供给定理只使用已编在役内容
       （exact 直引），零接口外新前提；11 件 Print Assumptions 全 Closed
-      判据；文件尾提取探针三代表件取 Obj.magic 计 0 判据＋对照命令并排
+      判据；文件尾提取探查件三代表件取 Obj.magic 计 0 判据＋对照命令并排
       提取比对（G3 口径，如实登记禁虚报；若触提取器硬错，照池内豁免先例
       处置并逐条登记）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
@@ -57,7 +57,7 @@
       ≤2 方起编；单道顺序；先写后编；
       nice -19 rocq c -native-compiler no -Q /Users/apple/Desktop/
       ConstructiveWorld/vo_local_world_unified_0930 "" abl_tbase_expf_bs_feed.v
-      （统一缓存只读指向，输出 .vo 落本池 cwd；绿判四件套：EXIT=0／日志真
+      （统一缓存只读指向，输出 .vo 落本池 cwd；绿判四要素：EXIT=0／日志真
       错行 0／vo 头 8 字节 436f7121 00015ff4／vo 新于 v；rocqchk 第五证）。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、
       零经典逻辑，全部结论 Qed 真构造闭合。
@@ -75,7 +75,7 @@ Require Import AttnDoeblin.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 段〇 前置：函数实例（模板 67 换名不换体；                          *)
+(* 段〇 前置：函数实例（模板 67 换名不换形；                          *)
 (*   uabd1x_expf@UpAblD1_expf_pack:28 定义性转写）                   *)
 (* ============================================================ *)
 Definition tspex_fn : Real -> Real := uabd1x_expf.
@@ -120,7 +120,7 @@ Proof. exact uabd1x_expf_mono_lt. Qed.
 (* ============================================================ *)
 (* 段二 RSQ bs 组（3 行，B 型 cms 读法；读法＝sumf := csm_sumf S en，   *)
 (*   下编卡 1 同款；宿主＝UpReqConcMixSel ReqRowView 前节 :704-743，   *)
-(*   节自持 enum+enum_nonempty :729-730（bs 三槽消费面本持非空 datum，  *)
+(*   节自持 enum+enum_nonempty :729-730（bs 三槽使用面本持非空 datum，  *)
 (*   喂形零额外前提——勘 D）；三根＝ConcMixSelFeed cms_ 系 exact 直引） *)
 (* ============================================================ *)
 
@@ -146,16 +146,16 @@ Theorem tspbs_rsq_sum_eq_list :
 Proof. exact cms_sum_eq_list. Qed.
 
 (* ============================================================ *)
-(* 段三 T1b sum_eq_list 组（1 行施工＋1 行接线申报）                  *)
+(* 段三 T1b sum_eq_list 组（1 行施工＋1 行对接申报）                  *)
 (*   3.1 施工件：UpAblT1b_AttnDoeblin AblSwap 节（:115-123）          *)
 (*   sum_eq_list 槽——槽语句面 forall g, Id (sum_over_S g)             *)
 (*   (AttnDoeblin.bs_list_sum g enum)，SO 实例读法＝                  *)
-(*   sum_over_S := idt_sumf enum（消费侧 idt 读法装载）；本件取       *)
+(*   sum_over_S := idt_sumf enum（使用侧 idt 读法装载）；本件取       *)
 (*   enum 升格显式全称的更强诚实形（IdSlotTranslate :150-155 件内     *)
 (*   用法注记同款），idt_slot_attdoeblin（:156-162）一步直引。        *)
-(*   3.2 接线申报（零新增 Qed）：UpAblT1b_S13_NLiveAudit 同槽         *)
+(*   3.2 对接申报（零新增 Qed）：UpAblT1b_S13_NLiveAudit 同槽         *)
 (*   已在件自供 ablq_sum_eq_list（:195-200，语句同形，                *)
-(*   exact (idt_slot_attdoeblin enum g) 一步），消费接线即清。        *)
+(*   exact (idt_slot_attdoeblin enum g) 一步），使用对接即清。        *)
 (*   Id 面全限定＝坑 5 处方（abl_tail_supply_68.v:85-94 先例）。      *)
 (* ============================================================ *)
 Theorem tspbs_t1b_sum_eq_list :
@@ -196,14 +196,14 @@ Recursive Extraction tspbs_rsq_bs_swap.
 Recursive Extraction tspbs_t1b_sum_eq_list.
 Recursive Extraction uabd1x_expf_pos cms_bs_swap idt_slot_attdoeblin.
 
-(* 终验实测登记（20261002 本席如实登记禁虚报）：
+(* 终验实测登记（ 本文件如实登记禁虚报）：
    编译 EXIT=0；日志真错行计 0（禁词锚 ^Error|Error: 计 0）；11 件 Print
    Assumptions 全 Closed（计 11＝Qed 计数零差）；.vo 头 8 字节
    436f7121 00015ff4 在案；rocqchk 第五证 EXIT=0。
    提取 Obj.magic 分解归桶（G3 对照实验口径，§4）：全日志计 142 处，分段
-   ＝探针一 tspex_fn（cauchy 闭包）0 处＋探针二 tspbs_rsq_bs_swap（swap
-   闭包）71 处＋探针三 tspbs_t1b_sum_eq_list（idt 闭包）0 处＋对照命令
-   （三根复提）71 处；独立对照探针 probe_b53_g3ctrl（roots-only 三根原身
+   ＝探查件一 tspex_fn（cauchy 闭包）0 处＋探查件二 tspbs_rsq_bs_swap（swap
+   闭包）71 处＋探查件三 tspbs_t1b_sum_eq_list（idt 闭包）0 处＋对照命令
+   （三根复提）71 处；独立对照探查件 probe_b53_g3ctrl（roots-only 三根原身
    单抽）实测 71 处，与池内在役判例数（cms_sum_ext 提取复现 71 处）精确
    同数——71 处＝在役根闭包（swap 证明体 Q/regularize 机器）固有位点，
    本日志 142＝该 71 位点经四条提取命令对同闭包两轮重复印刷，零新增位点；

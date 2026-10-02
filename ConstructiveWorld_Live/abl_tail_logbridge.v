@@ -1,5 +1,5 @@
 (* ==========================================================================)
-   abl_tail_logbridge.v — 批 5-2 施工席（基座区第五批·log 桥分件）
+   abl_tail_logbridge.v — 批 5-2 施工组（基座区第五批·log 桥分件）
    ── 使命：基座区下编可消解 84 槽中 log 桥族与同宿主代数直供槽之
       Real 特化闭形统一供给桥（下编册 §三批 5-2 施工令＋§二卡 4／卡 10／
       卡 11 推导路径实锤；批 5-4 A 直供形同宿主槽顺带）。件内六供给：
@@ -13,7 +13,7 @@
         lt_minus_nonneg 槽，req_minus 与 minus 两载体 δ 同形）；
       tspbl_log_two_pos_real（服务 UpAblT2b_PredRelax5:176 Landauer 区与
         :320-322 rq 副本区 log_two_pos 双槽，one_pos 实例字段＝
-        real_lt_zero_one 定义性同一，G05 见证项逐位落位）；
+        real_lt_zero_one 定义性同一，G05 见证项逐位落点）；
       tspbl_of_nat_le_succ_real（服务 UpAblT2b_PredRelax5:51 与 :315 rq
         副本区 of_nat_mono 双槽，of_nat_R:=real_of_nat 嵌入读法）。
    ── 依赖：S01_BaseRing 至 S15_TailFEPUp 基座链、UpReqAlgebra（req_minus
@@ -26,19 +26,19 @@
       Stdlib List/Arith/Extraction——全部只读引用；既有件零字节不动、
       零级联；6 宿主目标件（UpReqAlignClose／Arch_GibbsA_01／
       UpAblT1c_UpFirewallReq／UpAblT2b_PredRelax5）本件零 Require
-      （通用桥 Real 特化闭形，消费面下游读法接线经 Require 本件即取）。
+      （通用桥 Real 特化闭形，使用面下游读法对接经 Require 本件即取）。
    ── 对标行：根供给三件＝G05_LogSmall.v:322-323（logd_log_compat_real，
       件头自证「证明族 log_req_compat 等 15 槽」）／:364-365
       （logd_log_inv_exp_neg_real，「证明族 log_inv_exp_neg_req(5)=7 槽」）/
       :1013-1016（logd_log_two_pos_real，「UpPredRelaxReq:221 槽形字面
       直接提供；2>0 见证位＝real_plus_positive one one」）；inv 反单调
       根件＝S07_RealSetoidExpLog.v:6070-6089 real_inv_pos_lt_contra
-      （real_mult 组合链本体，:6822 消费形旁证）；严格减正＝
+      （real_mult 组合链本体，:6822 使用形旁证）；严格减正＝
       UpReqCauchy.v:1325-1332 req_minus_pos（Id minus_pos L15007 同形，
       泛型全称形在役——本件 Real 特化闭形同构重述，查重登记⑥式注记）；
       单调嵌入＝
       S13_NLiveAudit.v:3539-3540 real_of_nat_le_mono_aux；槽面现档＝
-      下编册卡 4/卡 10/卡 11 逐槽行号（本席 20261001 逐件实拍：UAC:71-75
+      下编册卡 4/卡 10/卡 11 逐槽行号（本文件  逐件实拍：UAC:71-75
       ／GA2:313-315／T1C:110-112／T2b:47/:51/:176/:315/:320-322）。
    ── 查重登记块（禁重复供给声明，开工前分工先勘实测；四件已供位
       ＝abl_s01_supply/abl_attn_doeblin_supply/abl_tail_pos_supply_sum/
@@ -63,12 +63,12 @@
       ⑥T1C:110 槽抽象层改喂锚 ipl_upfirewall_102_shape（InvPosLtCompat.v:
         109-115，{RI : RealInterfaceEnhanced} 抽象面在役）——本件取
         Real 特化闭形另路（real_inv_pos_lt_contra 根件直引），两路并存
-        零冲突，下游消费面按读法择引。
+        零冲突，下游使用面按读法择引。
       本件净新增＝上列六供给（log 桥二件＋T1C 代数二件＋T2b 二件），
       与下编册批 5-2/5-4 蓝图一致，无注水。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载
       位全 Set 形（req/lt/le/real_eq/real_lt/real_le 皆 Set 值谓词，零
-      Prop 泄露、零 Hypothesis 位）；供给定理只消费在役已证根件，零接口
+      Prop 泄露、零 Hypothesis 位）；供给定理只使用在役已证根件，零接口
       外新前提；req_minus b a 与 minus b a 两载体 δ 同形（均展开
       plus b (opp a)，UpReqAlgebra:103-104 与 S01_BaseRing:189 实拍）；
       one_pos 实例字段＝real_lt_zero_one（S07:8638 装配实拍），T2b rq
@@ -77,19 +77,19 @@
       mono 链组装件／InvPosLtCompat 链式 lt_mult_compat 双运河／S04 严格
       减正 lt_id_l 链／S13 自然数单调归纳链本体，本件直连不注水）；逐件
       Print Assumptions 取全 Closed 判据（名清单＝Qed 计数＝语句数＝6，
-      零差）；提取探针取库层转写与本件引入分开计数如实登记（对照实验
-      口径，树外探针件单抽 G05/S04/S13 根件对照）。
+      零差）；提取探查件取库层转写与本件引入分开计数如实登记（对照实验
+      口径，树外探查件单抽 G05/S04/S13 根件对照）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532；道闸核 rocq 进程数 ≤2 方起编；单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tail_logbridge.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行（^Error|Error:）0／vo 头 8 字节
+      绿判四要素：EXIT=0／日志真错行（^Error|Error:）0／vo 头 8 字节
       436f7121 00015ff4／vo 新于 v。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前
       提、零经典逻辑，全部结论 Qed 真构造闭合。
    ========================================================================== *)
 
-(* ── Require 面：基座链库序＋本件直接消费件并集（去重；顺序＝依赖序） *)
+(* ── Require 面：基座链库序＋本件直接使用件并集（去重；顺序＝依赖序） *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -214,7 +214,7 @@ Print Assumptions tspbl_of_nat_le_succ_real.
 
 (* ============================================================ *)
 (* 终段提取检验区（判据＝输出 Obj.magic 分段归桶如实登记；输出目录为    *)
-(*   本池检验区；对照实验＝树外探针件单抽 logd_log_compat_real／       *)
+(*   本池检验区；对照实验＝树外探查件单抽 logd_log_compat_real／       *)
 (*   minus_pos／real_of_nat_le_mono_aux 库根件，库层转写段同源复现即    *)
 (*   闭包固有，本件引入段分开计数）                                    *)
 (* ============================================================ *)

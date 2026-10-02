@@ -1,20 +1,20 @@
 (* ==========================================================================)
-   abl_tbase_klcx_rppo_sum.v — 基座区上编假设消解战役·上编批 11 施工席（UB11）
-   （「可」槽聚集组·req 面求和接口喂形供给件：UpReqAlign4 三节 sum 六槽组
+   abl_tbase_klcx_rppo_sum.v — 基座区上编假设消解专项·上编批 11 施工组（UB11）
+   （「可」槽聚集组·req 面求和接口喂形供给文件：UpReqAlign4 三节 sum 六槽组
      ＋Arch_UpReq_10 ReqPPOAdvantage 五槽，两宿主二十三槽十一供给定理）
-   ── 使命：上编三态定谳册（attn/_tbase100_三态定谳册-上编-20261001.md，含
-      20261002 二审补遗最新态）§二卡 1（F1 sumf 六性质族 90 槽）余段＋卡 6
+   ── 使命：上编三态定论册（attn/_tbase100_三态定论册-上编.md，含
+       二审补遗最新态）§二卡 1（F1 sumf 六性质族 90 槽）余段＋卡 6
       A 形（log_req_compat 形）之未认领聚集组建档。候选方向防撞勘验留痕
-      （任务书六方向 20261002 现档实勘，池内 mtime 最新两件头注＝在飞
+      （任务说明六方向  现档实核，池内 mtime 最新两件头注＝进行中
       UB9/UB10 辖区实拍）：UpReqBanach 系 26 件/UpReqVajdaBound＝零声明
       零槽（覆盖图行 116-153/240 全 0 列）；UpReqSampling sum 接口＝尾百
       UpReqSamplingFeed usrq_ 22 件在役已供（UB9 头注勘 1 同判）；UpRealLeB
       RealPPOLeB 四 sum 槽＝UB5 tspt_ 已闭、RealRLHFLeB 余位＝UB9 usrf_
-      已建（在飞）；UpReqRealFEP RFEPMain 三槽＝UB5 tspt_ 已闭；Attn 系
+      已建（进行中）；UpReqRealFEP RFEPMain 三槽＝UB5 tspt_ 已闭；Attn 系
       AttnDoeblin＝abla_ 在役＋余位 W/数据（:161/:165 DO 双态、:472-476
-      expf Id 面四位＝W-IDPIN 族禁碰、余四位 tbex_ 已建）。故本席聚集组
+      expf Id 面四位＝W-IDPIN 族禁碰、余四位 tbex_ 已建）。故本文件聚集组
       转向 F1 余段同未认领两宿主（tbaf_ 头注「UpReqGeomD/Arch_UpReq_10
-      余槽留延线」之 Arch10 肢由本席收口；UpReqAlign4 为 tbaf_ 辖区外
+      余槽留延线」之 Arch10 肢由本文件收束；UpReqAlign4 为 tbaf_ 辖区外
       零触碰位）：
       〔宿主一 UpReqAlign4.v 三节（Context {R}{RIS}＋S : Set＋sumf 抽象，
         件内注「SumOver 的 req 签名对接面（逐位照抄 UpReqAlign.v:54-69）」
@@ -23,15 +23,15 @@
         sum_zero_nonneg :123-125；KlcxAlignBridgeB（:540）：:546-547/
         :548-550/:551-553/:554-555/:556-557/:558-560；KlcxAlignWriteoffC
         （:1027）：:1033-1034/:1035-1037/:1038-1040/:1041-1042/:1043-1044/
-        :1045-1047——三节六槽组 diff 实拍零差（本席 sed 抽三段 diff 空
+        :1045-1047——三节六槽组 diff 实拍零差（本文件 sed 抽三段 diff 空
         输出留痕交付报告）＝tbzap_「三节同名局部定义体逐字同＝一次施工
-        三槽覆盖」先例同款，本席六泛型桥一次施工覆盖三节 18 槽；
+        三槽覆盖」先例同款，本文件六泛型桥一次施工覆盖三节 18 槽；
       〔宿主二 Arch_UpReq_10.v Section ReqPPOAdvantage（:38）〕sum_ext
         :44-45／sum_add :46-48／sum_linear :49-51／rppo_sum_pos :55-56／
         rppo_log_req_compat :58-61——五槽。注意该节载体混排实拍：Context
         {R : Set}{RIS : RealInterfaceEnhancedSetoid R}（:39）而 sumf :
         (S -> Real) -> Real（:43）、槽体变量全 Real 面（件内定理
-        rppo_opp_one_mult : forall x : Real, req … 探针实证 req 经
+        rppo_opp_one_mult : forall x : Real, req … 探查件实证 req 经
         Instance RealEnhancedReal@S07:8596 类型类解析承载）——供给定理
         按 Real 载体实例化读法陈述（R:=Real＋RIS:=RealEnhancedReal 全局
         实例解析，UB5 tspt_ Real 面桥先例同款）。
@@ -46,27 +46,27 @@
       Z_align_pos :151/:586/:1073＝tbzap_ 已建，全数绕行；Arch10 Zap 槽
       :69＝tbzap_ 已建、pi_old_pos/advantage 位＝真-数据证书位不涉）。
    ── 对标行：sumd 五根＝@sumd_sum_ext 等 @ 全参一步 exact 直引（UB1 段
-      一至七同款流程，本席与 tbaf_ 同机根非同宿主＝零重复供给）；cons 头
+      一至七同款流程，本文件与 tbaf_ 同机根非同宿主＝零重复供给）；cons 头
       正性见证＝sumd_list_sum_pos_cons@UpReqSumD:306（枚举非空性以 w::rest
       数据承载，65 件先例同款，非空前提增补**申报位非静默增补**）；
-      zero_nonneg 槽＝满射数据显式参喂入（sumd_sum_zero_nonneg_surj:519，
+      zero_nonneg 槽＝满射数据显式参输入（sumd_sum_zero_nonneg_surj:519，
       UpReqSumD 头注裁决注＝无满射数据不可证反模型在案，sumd_in 成员谓词
       Set 层自持零 Prop 位，申报位同款）；log 桥根＝logd_log_compat_real@
       G05_LogSmall.v:322（逐字同语句 A 形直合，tblb_usigm_req_log_compat
       同款流程先例）。配方先例＝tspps_ 段一@abl_tail_pos_supply_sum.v
-      ＋tbaf_ 段一至五@abl_tbase_alignsum_feed.v（两件五宿主均不在本席
+      ＋tbaf_ 段一至五@abl_tbase_alignsum_feed.v（两件五宿主均不在本文件
       两宿主辖区，池内 grep 实证零撞）。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载
       位全 Set 形（req/le/lt 皆 Set 值谓词，零 Prop 位、零 Not 否定形、
-      零 Id 面入语句面）；供给定理只消费在役已证根件（sumd 五根＋G05
+      零 Id 面入语句面）；供给定理只使用在役已证根件（sumd 五根＋G05
       logd 根），零接口外新前提；全部结论 Qed 真构造闭合；逐件 Print
-      Assumptions 取全 Closed 判据；件尾提取探针取 Obj.magic 计数如实
+      Assumptions 取全 Closed 判据；件尾提取探查件取 Obj.magic 计数如实
       登记口径。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532；道闸 rocq 进程数 ≤2 单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_klcx_rppo_sum.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行（^Error|Error: 口径）0／vo 头 8 字节
+      绿判四要素：EXIT=0／日志真错行（^Error|Error: 口径）0／vo 头 8 字节
       436f7121 00015ff4／vo 新于 v。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置
       前提、零经典逻辑，全部结论 Qed 真构造闭合。
@@ -161,7 +161,7 @@ Qed.
 
 (* ---- 槽 sum_zero_nonneg（三节 :123-125/:558-560/:1045-1047 逐字＋
         满射显式参申报位：宿主槽为全称形，UpReqSumD 头注裁决注＝无满射
-        数据不可证（反模型在案），喂入形取 sumd_sum_zero_nonneg_surj
+        数据不可证（反模型在案），输入形取 sumd_sum_zero_nonneg_surj
         槽形同位，sumd_in 成员谓词为 Set 层自持，零 Prop 位） ---- *)
 Theorem tbkx_klcx_sum_zero_nonneg_surj :
   forall (R : Set) {RIS : RealInterfaceEnhancedSetoid R} (S : Set)
@@ -180,7 +180,7 @@ Qed.
 (* 段二：Arch_UpReq_10.v ReqPPOAdvantage 节五槽（现档 :44-61 实拍：      *)
 (*   sumf :43 为 (S -> Real) -> Real 载体混排位＝Real 面实例化读法，     *)
 (*   req/lt/log 经 Instance RealEnhancedReal@S07:8596 类型类解析承载，   *)
-(*   本席探针 probe_tbs4_arch10.v 实证；tbkx_arch10_ 前缀具名）。        *)
+(*   本文件探查件 probe_tbs4_arch10.v 实证；tbkx_arch10_ 前缀具名）。        *)
 (* ============================================================ *)
 
 (* ---- 槽 sum_ext（:44-45 逐字） ---- *)
@@ -233,7 +233,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 提取检验区：PA 全 Closed 判据＋Obj.magic 提取探针                     *)
+(* 提取检验区：PA 全 Closed 判据＋Obj.magic 提取探查件                     *)
 (* ============================================================ *)
 
 Print Assumptions tbkx_klcx_sum_ext.

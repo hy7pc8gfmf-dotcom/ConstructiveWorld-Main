@@ -1,14 +1,14 @@
 (* ==========================================================================)
-   abl_tbase_zapfeed.v — 基座区上编假设消解战役·上编批 7 施工席（UB7）
-   （F10 Z_align_pos 族喂形供给件：配分函数正性槽，十三槽十一供给定理）
-   ── 使命：上编三态定谳册（attn/_tbase100_三态定谳册-上编-20261001.md，含
-      20261002 二审补遗最新态）§二卡 10（F10 Z_align_pos 族，可消解 B 形，
-      定谳册 §三批 4 行 zapfeed 配方——原批 4 席经施工单改派 expf_spec，
-      本主题域未施工，本席全新落件）逐落位具名供给。S05:63〔冻〕＝外部
-      供给件本征形态（冻结件本体禁改，唯一合法路径＝外供），余十二槽宿主
-      件零 Require 面（仅读取）、零字节不动。十三槽清单（现档 20261002
+   abl_tbase_zapfeed.v — 基座区上编假设消解专项·上编批 7 施工组（UB7）
+   （F10 Z_align_pos 族喂形供给文件：配分函数正性槽，十三槽十一供给定理）
+   ── 使命：上编三态定论册（attn/_tbase100_三态定论册-上编.md，含
+       二审补遗最新态）§二卡 10（F10 Z_align_pos 族，可消解 B 形，
+      定论册 §三批 4 行 zapfeed 配方——原批 4 组经施工说明改派 expf_spec，
+      本主题域未施工，本文件全新落件）逐落点具名供给。S05:63〔冻〕＝外部
+      供给文件本征形态（冻结件本体禁改，唯一合法路径＝外供），余十二槽宿主
+      件零 Require 面（仅读取）、零字节不动。十三槽清单（现档 
       grep 实拍行号，勘 12 同款行号漂移逐条留痕：UpReqAlign4 三槽
-      定谳册 :184/:619/:1106 → 现档 :151/:586/:1073）：
+      定论册 :184/:619/:1106 → 现档 :151/:586/:1073）：
       〔Id 面·RealInterfaceEnhanced〕
         S05_AlignmentGRPO.v:63  Variable Z_align_pos : lt zero Z_align.
           （Z_align 定义体 :60-61，sum_over_S 求和，pi_ref_norm 为 Id 形）；
@@ -30,10 +30,10 @@
         Arch_UpReq_10.v:69（四宿主槽名异文 Z_align_pos/ZAL_pos/Zap，
         语句面同形）——消解＝@UpReqAlign.Z_align_pos（基座消融波 T2 终判
         B39「原 Variable 换同名 Lemma，零承认件」UpReqAlign.v:128-136 在
-        役实拍；消费先例＝Arch_UpReq_10.v:1081-1086 全参应用在档）N1
+        役实拍；使用先例＝Arch_UpReq_10.v:1081-1086 全参应用在档）N1
         exact 直引，各宿主以自持求和正性假设名（rdl_sum_pos/ralt_sum_pos/
         rpl_sum_pos/rppo_sum_pos）实例化。
-   ── 锚复拍登记（20261002 UB7 席 Live 现档实拍，
+   ── 锚复拍登记（ UB7 组 Live 现档实拍，
       /Users/apple/Desktop/ConstructiveWorld/ConstructiveWorld_Live/）：
       十三槽全数在位零勘正（行号漂移如上已注）；Z 定义体四式
       （Z_align/req2_Z_align/Z_align_req/Z_align_a_sum）体逐字同形＝
@@ -50,7 +50,7 @@
       UpSigMigrate2）与四应用形宿主（UpReqDpoLoss/UpReqAlignRestA/
       UpReqPPOPlain/Arch_UpReq_10）零字节不动、零级联（Require≠改写；
       冻结域外置供给零级联合法）。禁碰专项核对：b_gibbs_sum_eps@
-      UpSigMigrate2:926（二审改判席在飞）≠本件 :902 槽，零触碰；S04 接口
+      UpSigMigrate2:926（复核改判组进行中）≠本件 :902 槽，零触碰；S04 接口
       八槽／Misc5B:991／W 槽／存疑槽／冻结件语义位全数不入本件。
    ── 对标行：B39＝UpReqAlign.v:128-136 Lemma Z_align_pos（apply sum_pos/
       mult_positive/exp_neg_pos 三步）；条件形根＝UpAblZpos.v:73-84
@@ -59,26 +59,26 @@
       无条件形根＝UpAblZposReal.v:70-92 zabr_Z_align_pos；换名通路先例＝
       UpAblMetaEngine.v:93 zpd_Z_align_pos_slot（Print Assumptions 全
       Closed，尾百上编卡 3 实锚）。查重登记＝池内 tspps_/tspbr_/tblb_/
-      tspbl_/tblr_/tbex_/tspex_/tspbs_/tspt_ 系全语句名 20261002 实拍对表
+      tspbl_/tblr_/tbex_/tspex_/tspbs_/tspt_ 系全语句名  实拍对照
       零交集（Z_align_pos 族全树首攻，前六批与 UB5 温度族 Real 面求和、
-      UB6 在飞辖区零交叠）；在役 zab_/zabr_/zpd_ 系为根件非槽喂形件，
+      UB6 进行中辖区零交叠）；在役 zab_/zabr_/zpd_ 系为根件非槽喂形件，
       本件为卡 10 所指「喂形件」（批 4 草案 zapfeed 未执行位）。
    ── 构造性注记：全件 Qed 真构造（req 面核心三步＝B39 同款：节求和正性
       前提＋mult_positive（pi_ref 逐点正 × exp_neg 恒正）；Id 面＝zab 根
       exact 直引；应用形四槽＝B39 在役引理 N1 exact 直引——非平凡性由
       B39 构造体承载（zero-admission 零承认件，Print Assumptions Closed
-      在役实拍），本件逐槽锚定非占位）；语句面承载位全 Set 形（lt/le/req
+      在役实拍），本件逐槽固定非占位）；语句面承载位全 Set 形（lt/le/req
       为接口 Set 值谓词，Hsum_pos 前提类型 Set 值，全文件零 Prop 位、零
       Not（…<>…）形）；S05 面与 UpSigMigrate2 面之 Hsum_pos 显式前提＝
       条件形申报位（zab 条件形同款，非静默增补；升级方向＝接口补 strict
       求和正性字段或 Real 层实例化后消去，zab 件内注原文承袭）；
-      逐件 Print Assumptions 取全 Closed 判据；段内提取探针取 Obj.magic
+      逐件 Print Assumptions 取全 Closed 判据；段内提取探查件取 Obj.magic
       分段归位如实登记口径（G3 对照：库层转写与本件引入分开计数）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532；道闸 rocq 进程数 ≤2 方起编，单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_zapfeed.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行 0（锚 `^Error|Error:`，坑 1 口径）／
+      绿判四要素：EXIT=0／日志真错行 0（锚 `^Error|Error:`，坑 1 口径）／
       vo 头 8 字节 436f7121 00015ff4／vo 新于 v。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置
       前提、零经典逻辑，全部结论 Qed 真构造闭合。
@@ -214,7 +214,7 @@ Qed.
 (* 段二〔应用形四槽〕：UpReqAlign.Z_align_req 函数应用形                *)
 (* （UpReqDpoLoss:79／UpReqAlignRestA:120／UpReqPPOPlain:135／          *)
 (* Arch_UpReq_10:69）。消解＝B39 在役引理 N1 exact 直引，各宿主以       *)
-(* 自持求和正性假设名实例化（Arch 消费先例 :1081-1086 同式）。          *)
+(* 自持求和正性假设名实例化（Arch 使用先例 :1081-1086 同式）。          *)
 (* ============================================================ *)
 
 Theorem tbzap_udpo_zap :
@@ -303,7 +303,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 假设面自检（Print Assumptions）＋提取探针（G3 归位口径）              *)
+(* 假设面自检（Print Assumptions）＋提取探查件（G3 归位口径）              *)
 (* ============================================================ *)
 
 Print Assumptions tbzap_ualign2_zap.

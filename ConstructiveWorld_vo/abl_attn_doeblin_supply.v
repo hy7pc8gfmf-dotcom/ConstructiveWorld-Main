@@ -1,44 +1,44 @@
 (* ==========================================================================)
-   abl_attn_doeblin_supply.v — AT1 AttnDoeblin 试点席（第五批·非冻结最优起点
-   外置供给件：Doeblin 收缩数据槽见证与平滑核构造族，计 8 供给定理）
+   abl_attn_doeblin_supply.v — AT1 AttnDoeblin 试点组（第五批·非冻结最优起点
+   外置供给文件：Doeblin 收缩数据槽见证与平滑核构造族，计 8 供给定理）
    ── 使命：基座区覆盖图 AttnDoeblin 行（order L16，37 槽＝构7/绿2/黄14/白14）
-      试点供给——37 槽逐槽速判四步分拣（步0 层位/步1 形态对表/步2 实例供给/
+      试点供给——37 槽逐槽速判四步分拣（步0 层位/步1 形态对照/步2 实例供给/
       步3 双态，全表入交付报告）后，白命题槽 7 全数选中（现档行 :154 u_norm/
       :156 delta_lt_one/:158 transition_nonneg/:159 transition_row/:160
       minorization/:467 z_lb/:468 z_ub），另以构造值伴随覆盖参数位 5（:153 u/
       :155 delta/:157 transition/:466 z/:460 enum），合计选槽 12。供给形分两型：
       A 直供见证形（sigT 装箱：② delta one 实例见证／① 均匀分布归一见证／⑥
       零带 z 见证）与 B 全参喂形（③④⑤ 平滑核三证书——非负/行随机/次要化对
-      构造核成立；⑧ 旗件以构造核喂入 u_tv_contraction 得 1−δ 收缩，minorization
+      构造核成立；⑧ 标记件以构造核输入 u_tv_contraction 得 1−δ 收缩，minorization
       槽在前提面消除；⑦ Part A 接口数据总见证，对标件内 real_expf_realizable
       之 Part C 角色）。temp(:462)/expf(:471) 两参数位不施工；:161/:165 两黄槽
       与 :472-476 expf 五槽等黄面邻接坐标登记不重复供给（uabl_attn_full_instance
-      十九字段实例面在役已覆盖，零重复立项）。
+      十九字段实例面在役已覆盖，零重复设立）。
    ── 依赖：S01_BaseRing 至 S15_TailFEPUp 基座链＋AttnDoeblin（全部只读引用，
-      原件零字节不动、零级联；本件实消费 AttnDoeblin 导出面 nat_to_R/
+      原件零字节不动、零级联；本件实使用 AttnDoeblin 导出面 nat_to_R/
       nat_to_R_pos/delta_absorb_u/u_tv_contraction 四名，Require 非名义性）。
-   ── 对标行：供给句式＝沙箱/现役/abl_tail_supply_pool/_log/供给件配方笔记
-      -20260930.md §2.1/§2.2；见证形先例＝tspb_ems_sum_pos_preserved_witness@
+   ── 对标行：供给句式＝沙箱/现役/abl_tail_supply_pool/_log/供给文件配方笔记
+      .md §2.1/§2.2；见证形先例＝tspb_ems_sum_pos_preserved_witness@
       abl_tail_sum_pos_bridge.v:122（generic S/en sigT 非空形）＋
       tspu_p7b3_enum_nonempty@abl_tail_slot_upgrade.v:149（cons 形非空闭形）；
       one 实例证书先例＝tspp 系@abl_tail_pos_certs.v:131-224；总见证先例＝
       real_expf_realizable@AttnDoeblin.v:771（sigT 五字段）；零带 z 先例＝
       tspy_p7d_z_lb_zero@abl_tail_deep_slots.v:131（one 钉定形，本件泛 Delta
       形强之）；平滑核代数链同构＝AttnDoeblin.v:171-192（u_omd_pos_next/
-      u_r_nonneg）；出节全参签名机读＝本池 _log/probe_abla_attn-20261001.log
+      u_r_nonneg）；出节全参签名机读＝本池 _log/probe_abla_attn.log
       （u_tv_contraction 十一参 discharge 序，transition_nonneg 不入其签名）。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载位全
       Set 形（Id/le/lt/Or/And/Not 皆 S01 Set 值定义，sigT/And 装箱同
       real_expf_realizable 体例）；平滑核族前提＝u_norm/u_nonneg/delta_nonneg/
       delta_lt_one/transition_nonneg/transition_row 六件，皆为槽族泛形数据义务
-      的显式保持（禁硬证，如实申报）；旗件另取 :161/:164/:165 三接口件为显式
+      的显式保持（禁硬证，如实申报）；标记件另取 :161/:164/:165 三接口件为显式
       前提位（槽面逐字）；全部结论 Qed 真构造闭合；Print Assumptions 十一名
-      全 Closed 判据（名清单=Qed 计数=11 零差）；提取探针 Obj.magic 分段计数
+      全 Closed 判据（名清单=Qed 计数=11 零差）；提取探查件 Obj.magic 分段计数
       如实登记（G3 对照实验口径：u_tv_contraction 单独提取＝库层闭包对照臂）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532 && cd 本池；道闸核 rocq 进程数 ≤1 后单道执行
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
-      abl_attn_doeblin_supply.v；绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节
+      abl_attn_doeblin_supply.v；绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节
       436f7121 00015ff4／vo 新于 v；G4 第五证 rocqchk -o 参数=模块名
       abl_attn_doeblin_supply。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、
@@ -95,9 +95,9 @@ End AblaDeltaSlot.
 
 (* ============================================================ *)
 (* 区二：u_norm 槽（:154）均匀分布归一见证——generic S 形（cons 形非空，  *)
-(*   tspu_p7b3 配方）；列表和自持重演（abla_list_sum，66 件池规：不消费  *)
-(*   件内 Section 局部 Fixpoint，如实双登记）；nat_to_R/nat_to_R_pos 消费 *)
-(*   AttnDoeblin 导出面（签名经探针机读钉定）。                         *)
+(*   tspu_p7b3 配方）；列表和自持重演（abla_list_sum，66 件池规：不使用  *)
+(*   件内 Section 局部 Fixpoint，如实双登记）；nat_to_R/nat_to_R_pos 使用 *)
+(*   AttnDoeblin 导出面（签名经探查件机读钉定）。                         *)
 (* ============================================================ *)
 
 Section AblaUnifWitness.
@@ -147,11 +147,11 @@ Qed.
 End AblaUnifWitness.
 
 (* ============================================================ *)
-(* 区三：transition 三槽（:158/:159/:160）平滑核构造族＋旗件——Doeblin    *)
+(* 区三：transition 三槽（:158/:159/:160）平滑核构造族＋标记件——Doeblin    *)
 (*   平滑：T_δ := (1−δ)·T + δ·u。前提六件=泛形数据义务显式保持（含       *)
 (*   delta_nonneg 为 δ·u 非负之需，如实申报）；结论=构造核对三槽逐槽成立； *)
-(*   旗件以构造核喂入 u_tv_contraction（出节全参，探针机读序），         *)
-(*   minorization 槽在旗件前提面消除（B 全参喂形精简版先例 rta_ 系）。   *)
+(*   标记件以构造核输入 u_tv_contraction（出节全参，探查件机读序），         *)
+(*   minorization 槽在标记件前提面消除（B 全参喂形精简版先例 rta_ 系）。   *)
 (* ============================================================ *)
 
 Section AblaSmoothFamily.
@@ -244,9 +244,9 @@ Proof.
                    (le_refl (mult delta (u s'))))).
 Qed.
 
-(* 供给⑧（旗件）：B 全参喂形——以平滑核实例化 u_tv_contraction，前提面
-   不含 minorization（由供给⑤喂入）；u_norm/delta_lt_one 与三接口件保持
-   显式前提位。目标件导出面实消费（非名义性 Require）。 *)
+(* 供给⑧（标记件）：B 全参喂形——以平滑核实例化 u_tv_contraction，前提面
+   不含 minorization（由供给⑤输入）；u_norm/delta_lt_one 与三接口件保持
+   显式前提位。目标件导出面实使用（非名义性 Require）。 *)
 Theorem abla_smooth_tv_contraction : forall (mu nu : S -> R),
   Id (sum_over_S mu) one -> Id (sum_over_S nu) one ->
   le (tv_dist (@attention_step RI SS SO abla_smooth_kernel mu)

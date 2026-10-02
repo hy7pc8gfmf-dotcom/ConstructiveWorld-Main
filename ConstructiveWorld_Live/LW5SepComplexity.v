@@ -596,7 +596,7 @@ Proof. unfold lw5n_k1. left. apply Qlt_to_QltT. unfold Qlt. simpl. lia. Qed.
 Lemma lw5n_QleT_k2 : QleT 2 lw5n_k2.
 Proof. unfold lw5n_k2. left. apply Qlt_to_QltT. unfold Qlt. simpl. lia. Qed.
 
-(* leiblw_Qleb 双向桥（S1 :302 只含 false 向，本席补 true 向与逆真向） *)
+(* leiblw_Qleb 双向桥（S1 :302 只含 false 向，本文件补 true 向与逆真向） *)
 Lemma lw5n_Qle_Qleb_true : forall x y : Q, Qle x y -> leiblw_Qleb x y = true.
 Proof.
   intros x y H. unfold leiblw_Qleb. destruct (Qcompare_spec x y) as [Heq|Hlt|Hgt].
@@ -614,11 +614,11 @@ Proof.
 Qed.
 
 (* 模量反单调砖：半径缩 ⟹ 阶预算不缩（pie_modulus PiEnvelope :575 本体一手）。
-   【607 落刀改判登记】601 图 §四.一代码块方向（mod c' ≤ mod c）与其步骤序定谳形
+   【607 定形改判登记】601 图 §四.一代码块方向（mod c' ≤ mod c）与其步骤序定论形
    （mod c ≤ mod c'）互相矛盾，且两形均缺 c' 正性前提（反例 c'=-5, c=1：Qle c' c
    真而 pie_modulus 1 = 5 > 1 = pie_modulus (-5) 假）——按 TLW1028-FALSEPROP
-   「前提位参数化」处方补 QltT' 0 c'，方向取步骤序定谳形；施工席禁回退。
-   消费方 bnd_caliber 两侧正性自有。Qinv_le_mu 实测不存在（探针发0红），
+   「前提位参数化」处方补 QltT' 0 c'，方向取步骤序定论形；施工组禁回退。
+   使用方 bnd_caliber 两侧正性自有。Qinv_le_mu 实测不存在（探查件发0红），
    Qinv 反单调改 num/den 直算。 *)
 Lemma lw5n_modulus_antitone : forall c c' : Q, QltT' 0 c -> QltT' 0 c' -> Qle c' c ->
   (pie_modulus c <= pie_modulus c')%nat.
@@ -693,7 +693,7 @@ Qed.
 
 (* §6.2 反演性带形：预算内分离判定与 n_sep 序完全对偶。
    【601 改判】分量二无条件形被证伪（燃料耗尽反例），存在分离阶 n0 提为
-   定理级假设位承载（590 §五.1 诚实边界一的落刀形态；施工席禁回退）。 *)
+   定理级假设位承载（590 §五.1 诚实边界一的定形形态；施工组禁回退）。 *)
 Theorem lw5n_shape_inversion : forall (q : Q) (n n0 : nat),
   (n0 <= lw5n_bnd q)%nat -> leiblw_Id (lw5n_sep_dec q n0) true ->
   And ((n <= lw5n_bnd q)%nat ->
@@ -758,7 +758,7 @@ Proof.
   unfold lw5n_sep_dec. rewrite Hin. reflexivity.
 Qed.
 
-(* 下界律：预算内存在分离阶 n0 则格序被压在 8·n0+9 之下（obstacle 逆否＋lia 收口） *)
+(* 下界律：预算内存在分离阶 n0 则格序被压在 8·n0+9 之下（obstacle 逆否＋lia 收束） *)
 Theorem lw5n_shape_lower : forall (q : Q) (m n0 : nat),
   (n0 <= lw5n_bnd q)%nat -> leiblw_Id (lw5n_sep_dec q n0) true ->
   Qle (lw5n_cell_lo m) q -> Qle q (lw5n_cell_hi m) ->
@@ -789,9 +789,9 @@ Proof.
     + exact (lw5n_nsep_hit q n0 Hb Hs).
 Qed.
 
-(* §6.4 eps_n 联动常数链（§五 定谳规程：vm_compute 四发实测冻结后回填——
+(* §6.4 eps_n 联动常数链（§五 定论规程：vm_compute 四发实测冻结后补录——
    C1=(17,17) C2=(65,65) C3=(33,33) C4=(129,129)，16n+17/32n+33 与实测全符，
-   禁硬凑律满足；k=2 口 8n+9＝直引 lw5n_modulus_val :113，零新行零重证） *)
+   禁拼凑律满足；k=2 口 8n+9＝直引 lw5n_modulus_val :113，零新行零重证） *)
 Lemma lw5n_four_div_quarter : forall n : nat,
   (4 / (lw5n_eps n / 4))%Q == (Z.of_nat (16 * n + 16) # 1)%Q.
 Proof.
@@ -811,7 +811,7 @@ Proof.
     symmetry. apply Nat2Z.inj_mul.
 Qed.
 
-(* 模量显式链第二口：pie_modulus(eps_n/4) = 16n+17（vm_compute 定谳回填） *)
+(* 模量显式链第二口：pie_modulus(eps_n/4) = 16n+17（vm_compute 定论补录） *)
 Lemma lw5n_modulus_div4_val : forall n : nat,
   pie_modulus (lw5n_eps n / 4) = (16 * n + 17)%nat.
 Proof.
@@ -859,7 +859,7 @@ Proof.
     symmetry. apply Nat2Z.inj_mul.
 Qed.
 
-(* 模量显式链第三口：pie_modulus(eps_n/8) = 32n+33（vm_compute 定谳回填） *)
+(* 模量显式链第三口：pie_modulus(eps_n/8) = 32n+33（vm_compute 定论补录） *)
 Lemma lw5n_modulus_div8_val : forall n : nat,
   pie_modulus (lw5n_eps n / 8) = (32 * n + 33)%nat.
 Proof.
@@ -893,8 +893,8 @@ Qed.
 (* ============================================================ *)
 
 (* 出窗=分离证书（实层升格；分离距由 win_pi 自带松量零折半承载）。
-   【607 落刀改判】出窗二择一弃 andb_false_iff＋or 分裂——or 非 singleton
-   eliminable，Set 目标下 Prop 消去被拒（本席 r10 红案同款）；改 bool 级
+   【607 定形改判】出窗二择一弃 andb_false_iff＋or 分裂——or 非 singleton
+   eliminable，Set 目标下 Prop 消去被拒（本文件 r10 红案同款）；改 bool 级
    eqn 二分（mono 同款先例），零 Prop 消去。 *)
 Theorem lw5n_outwin_sepdist : forall (q : Q) (n : nat),
   leiblw_Id (lw5n_sep_dec q n) true ->

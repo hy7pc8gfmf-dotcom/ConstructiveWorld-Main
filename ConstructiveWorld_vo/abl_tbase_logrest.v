@@ -1,9 +1,9 @@
 (* ==========================================================================)
-   abl_tbase_logrest.v — 基座区上编假设消解战役·上编批 3 施工席
-   （F6 log 桥族余量收尾供给件：inv_one_inv 余双槽／compat 余单槽／
+   abl_tbase_logrest.v — 基座区上编假设消解专项·上编批 3 施工组
+   （F6 log 桥族余量收尾供给文件：inv_one_inv 余双槽／compat 余单槽／
    tsup 系双槽／S12 log 单调槽，六宿主六槽）
-   ── 使命：上编三态定谳册（attn/_tbase100_三态定谳册-上编-20261001.md）
-      §二卡 6（勘 4／B 形肢）＋UB2 交付报告 §五余量清单逐落位具名供给，
+   ── 使命：上编三态定论册（attn/_tbase100_三态定论册-上编.md）
+      §二卡 6（勘 4／B 形肢）＋UB2 交付报告 §五余量清单逐落点具名供给，
       A 形根引（G05 根件同名展开即合）＋B 形种子直引（G01 mono 根），
       共 6 槽：
       （一）UpFirewallReq.v dist_log_inv_one_inv（现档 :118-120 逐字实拍；
@@ -13,7 +13,7 @@
         逐字实拍；同形余量肢；W 邻槽 :117-118 dist_log_le_linear 零触碰）
         ——段二；
       （三）UpReqFEPAttn.v 第一节 log_req_compat（现档 :118-120 逐字实拍；
-        UB2 勘 2 新勘槽位，compat 形 ×8 末肢；W 邻槽 :112 log_le_linear／
+        UB2 勘 2 新勘槽，compat 形 ×8 末肢；W 邻槽 :112 log_le_linear／
         :113-115 log_eq_linear 零触碰）——段三；
       （四）UpReqLogCompD.v LogcTemp 节 tsup_log_exp_neg（现档 :1039-1040
         逐字实拍；tsup 系双槽之一，同节 W 邻槽零触碰）——段四；
@@ -21,20 +21,20 @@
         系双槽之二；宿主 lrdf 区 W/存疑槽〔:498/:502/:506/:509〕逐槽分拣
         全不入本件，坑 7 分拣纪律）——段五；
       （六）S12_B5RecycleSF.v sf_log_antitone_le（现档 :12111-12113 逐字
-        实拍；定谳册勘 4：陈述修正后单调形＝real_log_le_mono 同形，件内
+        实拍；定论册勘 4：陈述修正后单调形＝real_log_le_mono 同形，件内
         自证「可由具体 log 模型实例化」）——段六。
-      勘误不入件（响亮登记）：UpSigMigrate2.v b_gibbs_sum_eps（:927-928）
-      卡 6 记「可消解·B 形免费档」——本席实勘：槽语句无归一化前提
+      订正不入件（响亮登记）：UpSigMigrate2.v b_gibbs_sum_eps（:927-928）
+      卡 6 记「可消解·B 形免费档」——本文件实核：槽语句无归一化前提
       （pdist_a 仅逐点正性），逐字闭合形在 Real 层可反驳（两状态实例
       p=(1/2,1/2)、q=c·p、c 大则 kl_a→−∞，le zero (plus kl_a eps) 不成立），
       供给根 real_gibbs_inequality_eps@S08_RealMainlineDPO.v:502 带有
       Hnormp/Hnormq 归一化前提——签名保持式供给不可能，候二审改判
-      （消费位带归一化实例化波或 W 类），本件零触碰。
+      （使用位带归一化实例化波或 W 类），本件零触碰。
    ── 依赖：S01_BaseRing 至 S07_RealSetoidExpLog 基座链＋G05_LogSmall
-      （三根供给件）＋G01_CoreMicro（real_log_le_mono@:566 种子）——
+      （三根供给文件）＋G01_CoreMicro（real_log_le_mono@:566 种子）——
       全部只读引用；六宿主目标件零 Require、零字节不动、零级联（UB1/UB2
-      先例：基座域外置供给，槽消费按语句面 RIS:=Real 装配定义工合，
-      上游读法接线经 Require 本件即取）。
+      先例：基座域外置供给，槽使用按语句面 RIS:=Real 装配定义工合，
+      上游读法对接经 Require 本件即取）。
    ── 对标行：inv_one_inv 根＝logd_log_inv_one_inv_real@G05_LogSmall.v:353
       （UB2 同款先例 abl_tbase_logbridge.v:99-105）；compat 根＝
       logd_log_compat_real@G05:322（同款先例@abl_tbase_logbridge.v:168-174）；
@@ -48,7 +48,7 @@
    ── 构造性注记：全件 Qed 真构造，零承认式声明、零悬置前提、零经典
       逻辑；语句面承载位全 Set 形（req/lt/log/exp_neg/inv_pos/opp/real_lt/
       real_le/real_log 皆 Set 值字段或 Set 值谓词位，正性前提 Hx/Hi/Ha/Hb
-      为 Set 值谓词位，全文件零 Prop 位）；供给定理只消费 G05/G01 根件
+      为 Set 值谓词位，全文件零 Prop 位）；供给定理只使用 G05/G01 根件
       已导出内容，零接口外新前提；绑定名逐槽照抄宿主现档（坑 4 三面对
       拍：绑定名／语句面／零隐式参）；逐件 Print Assumptions 取全 Closed
       判据；件尾提取检验区取 Obj.magic 分段归桶如实登记（G3 对照＝
@@ -57,7 +57,7 @@
       ulimit -s 65532；道闸 rocq 进程数 ≤2 单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_logrest.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
+      绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
       vo 新于 v；rocqchk -o 环境摘要公理位 <none> 第五证。
    ========================================================================== *)
 
@@ -141,7 +141,7 @@ Qed.
 
 (* ============================================================ *)
 (* 段六：S12_B5RecycleSF.v sf_log_antitone_le（现档 :12111-12113 逐字   *)
-(*   实拍；定谳册勘 4 单调修正形；绑定名 a/b/Ha/Hb 照抄宿主现档；       *)
+(*   实拍；定论册勘 4 单调修正形；绑定名 a/b/Ha/Hb 照抄宿主现档；       *)
 (*   种子 real_log_le_mono@G01:566 语句面逐字同形，一直引闭合）         *)
 (* ============================================================ *)
 

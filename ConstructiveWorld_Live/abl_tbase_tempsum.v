@@ -1,7 +1,7 @@
 (* ==========================================================================)
-   abl_tbase_tempsum.v — 基座区上编假设消解战役·上编批 5 施工席（UB5）
-   （Real 面抽象求和接口族喂形供给件·温度族首攻＋同形宿主顺带）
-   ── 使命：上编三态定谳册（20261001，attn/_tbase100_ 系）§二卡 1 F1
+   abl_tbase_tempsum.v — 基座区上编假设消解专项·上编批 5 施工组（UB5）
+   （Real 面抽象求和接口族喂形供给文件·温度族首攻＋同形宿主顺带）
+   ── 使命：上编三态定论册（attn/_tbase100_ 系）§二卡 1 F1
       sumf 六性质族「可消解」槽之 Real 面余段（覆盖图 §增补·第五批 ④
       余量算式「上编余 133（F1 余 64…）」辖区），抽象求和载体
       real_sum_over_S 取 S08_RealListSumMain 节 real_list_sum X f l
@@ -39,7 +39,7 @@
       real_list_sum_le@:433／real_list_sum_pos@:464（X : Type 载体
       与温度宿主 S : Type 逐字同面，Set 降格问题不发生）；读法先例＝
       G06_BForm.v:129-160（件内自证「载体勘定：RealListSumMain 节
-      real_list_sum」＋:146 直接消费 real_list_sum_pos）＋
+      real_list_sum」＋:146 直接使用 real_list_sum_pos）＋
       UpReqRealFEP.v:126（宿主件内自证「real_list_sum_linear（在案），
       具体实例可显式应用」）；载体代换喂形先例＝UpReqSteadyThermo.v
       SteadyThermoSumSlotsSupply:118-141（「语句与原假设位逐字同型
@@ -49,9 +49,9 @@
       查重登记＝池内 tspps_（req 面 UpReqAlign/UpReqDist/UpFirewall/
       AlignRestA 七段）/tspbr_（req+real 面 SCD/TUM/TSI/GA2/EW/UAC/
       T1C/URCM/RKC/SLQ/EMSI 十二宿主）/tblb_/tspbl_/tblr_/tbex_ 系全
-      语句名清单 20261002 实拍对表零交集（real_list_sum X 读法位与
+      语句名清单  实拍对照零交集（real_list_sum X 读法位与
       csm_sumf S0 读法位宿主面不相交）；配方细节＝沙箱/现役/
-      abl_tail_supply_pool/_log/供给件配方笔记-20260930.md。
+      abl_tail_supply_pool/_log/供给文件配方笔记.md。
    ── 构造性注记：全件 Qed 真构造（S08 五根为列表归纳真证，本件
       exact 直引零注水）；语句面承载位全 Set 形（real_eq/real_le/
       real_lt 为 Real 接口 Set 值谓词，列表 cons 数据形承载，全文件
@@ -60,14 +60,14 @@
       pos 槽无前提位：非空见证以枚举 w::rest 数据形承载（申报位，
       非静默增补）；F13 Type 载体位照现档 `S : Type` 逐字抄（二审
       册①条款：供给定理按现档逐字，施工不受阻）；逐件 Print
-      Assumptions 取全 Closed 判据；段内提取探针取 Obj.magic 分段归
+      Assumptions 取全 Closed 判据；段内提取探查件取 Obj.magic 分段归
       位如实登记口径（库层转写与本件引入分开计数）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532；道闸 rocq 进程数 ≤2 方起编（主会话 rocqchk
-      全树在飞时 sleep 60 等窗），单道顺序；
+      全树进行中时 sleep 60 等窗），单道顺序；
       nice -19 rocq c -native-compiler no -Q <统一缓存根> ""
       abl_tbase_tempsum.v（统一缓存只读指向，输出 .vo 落本池 cwd）；
-      绿判四件套：EXIT=0／日志真错行 0（锚 `^Error|Error:`，坑 1
+      绿判四要素：EXIT=0／日志真错行 0（锚 `^Error|Error:`，坑 1
       口径）／vo 头 8 字节 436f7121 00015ff4／vo 新于 v；rocqchk
       环境摘要公理位 <none> 第五证。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬
@@ -75,7 +75,7 @@
    ========================================================================== *)
 
 (* ── Require 面：基座链库序（顺序＝依赖序）。十三宿主目标件零
-   Require（槽级供给定理只对表槽语句面，不经宿主模块——目标件零字节
+   Require（槽级供给定理只对照槽语句面，不经宿主模块——目标件零字节
    不动承诺的直接实现）。 *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -97,7 +97,7 @@ Import ListNotations.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* 分级申报（全件六件同一判词）：N1——库内实例化消解件直连            *)
+(* 分级申报（全件六件同一结论）：N1——库内实例化消解件直连            *)
 (* （real_list_sum 五根@S08_RealListSumMain 在役，本件逐桥具名喂位，  *)
 (* exact 一步直引）；逐桥语句面＝宿主槽现档逐字抽取（含参序／命名／   *)
 (* 隐式位；G02 两节 `fun s =>` 省略注记与宿主他节 `fun s : S =>` 为   *)

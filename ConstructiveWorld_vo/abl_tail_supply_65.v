@@ -1,6 +1,6 @@
 (* ==========================================================================)
-   abl_tail_supply_65.v — 尾百供给施工席（第二批·批 1：tsp_sum6 求和六性质件）
-   ── 使命：F1 求和六性质 28 槽实例闭形（六性质供给定理＋消费件槽喂入形）
+   abl_tail_supply_65.v — 尾百供给施工组（第二批·批 1：tsp_sum6 求和六性质件）
+   ── 使命：F1 求和六性质 28 槽实例闭形（六性质供给定理＋使用件槽输入形）
       ＋F9 inv_one_inv 双槽＋F12 fold 两方程＋PA 审计段。受益六件：
       PA_TempMonoW2Mark（tmw 六槽 :42-57）、Arch_PA_02（frd 六槽 :890-905，
       与 tmw 逐字双落）、PA_TempSoftmaxInstantiation（tsi 四槽 :211-221）、
@@ -11,12 +11,12 @@
       闭形在役已备——UpAblT1_UpReqTempEntropy.v:56-113 fsum 六件（RIS 泛型
       sumd_sumf 面）＋UpAblP6_EntropyMonoSplit_C.v:453-503 uabp6c 五件
       （bool 载体）＋abl_tail_supply_64.v sigT 正性衔接形与 bool 零化全形；
-      本件不再复写该十六槽面，新增供给＝（一）tsi 四槽喂入形（RI 桥面，
-      sumf := sumd_sumf，库内无此面）；（二）slc 双件八槽喂入形（Real 层
-      S:Type，sumf := real_list_sum，库内仅有件内联名直喂无独立供给定理）；
+      本件不再复写该十六槽面，新增供给＝（一）tsi 四槽输入形（RI 桥面，
+      sumf := sumd_sumf，库内无此面）；（二）slc 双件八槽输入形（Real 层
+      S:Type，sumf := real_list_sum，库内仅有件内联名直接传入无独立供给定理）；
       （三）F9 inv_one_inv Real 特化一击（一件服务 tmw/frd 双槽）；（四）
       F12 fold 两方程（sumL := real_list_sum 实例，nil/cons 定义性）；
-      （五）PA 审计段（Check 对照＋Print Assumptions 逐件＋提取探针）。
+      （五）PA 审计段（Check 对照＋Print Assumptions 逐件＋提取探查件）。
    ── 依赖：S01_BaseRing 至 S15_TailFEPUp 基座链、UpReqSumD（sumd 列表和
       机）、受益六件 PA_TempMonoW2Mark／Arch_PA_02／PA_TempSoftmaxInstantiation
       ／PA_ToyR_SecondLawConsume／Arch_ToyR_04／Arch_PA_04／UpAblAbsSumLeB2、
@@ -31,22 +31,22 @@
       linear:363/pos:464）；inv_one_inv 根＝
       real_log_inv_one_inv@S08_RealMainlineDPO.v:999（tmw/frd 槽 Real 特化
       逐字同语句；甄别册上编卡 7 所引 S07:7905 real_log_inv_log 为 log_inv 面
-      邻接根，本件现档复测改引 S08 直根——登记勘误）；RIS 类面＝
+      邻接根，本件现档复核改引 S08 直根——登记订正）；RIS 类面＝
       RealInterfaceEnhancedSetoid@S07_RealSetoidExpLog.v:7945，Real 实例
       装配＝RealEnhancedReal@:8596（req:=real_eq/lt:=real_lt/log:=real_log/
       inv_pos:=real_inv_pos）；tsi RI→RIS 桥实例＝tsi_rie_setoid@
       PA_TempSoftmaxInstantiation.v（req:=Id，字段定义性直引 S01）；配方
-      细节＝沙箱/现役/abl_tail_supply_pool/_log/供给件配方笔记-20260930.md。
+      细节＝沙箱/现役/abl_tail_supply_pool/_log/供给文件配方笔记.md。
    ── 构造性注记：全件零承认式声明、零悬置前提、零经典逻辑；语句面承载位
       全 Set 形（req/lt/le/real_eq/real_lt/real_le 皆 Set 值谓词）；非空性
       数据参取 cons 头见证形（Not 形不入语句面，证明体内 discriminate 一
-      步为证明位非承载位）；供给定理只消费在役已证根件，零接口外新前提；
-      全部结论 Qed 真构造闭合；Print Assumptions 全 Closed 判据；提取探针
+      步为证明位非承载位）；供给定理只使用在役已证根件，零接口外新前提；
+      全部结论 Qed 真构造闭合；Print Assumptions 全 Closed 判据；提取探查件
       取库层转写与本件引入分开计数如实登记口径（G3 对照实验）。
    ── 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
       ulimit -s 65532 && cd 本池；道闸核 rocq 进程数 ≤1 后单道执行
       nice -19 rocq c -native-compiler no -Q <统一缓存根> "" abl_tail_supply_65.v；
-      绿判四件套：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
+      绿判四要素：EXIT=0／日志真错行 0／vo 头 8 字节 436f7121 00015ff4／
       vo 新于 v。
    ── 交付声明：本件为中文声明的零承认件：全文件零承认式声明、零悬置前提、
       零经典逻辑，全部结论 Qed 真构造闭合。
@@ -85,12 +85,12 @@ Import RealInterfaceEnhancedMod.
 (*   之实例闭形＝UpAblT1_UpReqTempEntropy.v:56-113 fsum 六件在役同语句  *)
 (*   （sumd_sumf 面，RIS 泛型）；bool 载体 Real 层五件＝uabp6c 系       *)
 (*   （UpAblP6_EntropyMonoSplit_C.v:453-503）；sigT 正性衔接形与 bool   *)
-(*   零化全形＝abl_tail_supply_64.v。以上十六槽本件零新增语句，消费面   *)
+(*   零化全形＝abl_tail_supply_64.v。以上十六槽本件零新增语句，使用面   *)
 (*   经 Require 引在役件即取。                                          *)
 (* ============================================================ *)
 
 (* ============================================================ *)
-(* 一、tsi 四槽喂入形（PA_TempSoftmaxInstantiation Section TsiMains    *)
+(* 一、tsi 四槽输入形（PA_TempSoftmaxInstantiation Section TsiMains    *)
 (*     槽面 :211-221；RI 桥读法下 sumf := sumd_sumf，req/lt/zero/      *)
 (*     mult/plus 经 tsi_rie_setoid 实例解析，定义性直引 S01 字段）。   *)
 (* ============================================================ *)
@@ -135,7 +135,7 @@ Qed.
 
 End TspTsiSumFeed.
 
-(* ---- 供给四：求和正性 cons 头见证形（tsi Hsum_pos 槽 :220-221 喂入  *)
+(* ---- 供给四：求和正性 cons 头见证形（tsi Hsum_pos 槽 :220-221 输入  *)
 (*      形；枚举呈 w::rest 数据形承载非空，N2：                        *)
 (*      sumd_list_sum_pos_cons@UpReqSumD.v:306 头尾分解直引） ---- *)
 Theorem tsp_tsi_sum_pos_cons : forall (RI : RealInterfaceEnhanced)
@@ -149,9 +149,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 二、slc 双件八槽喂入形（PA_ToyR_SecondLawConsume.v:117-126 ↔        *)
+(* 二、slc 双件八槽输入形（PA_ToyR_SecondLawConsume.v:117-126 ↔        *)
 (*     Arch_ToyR_04.v:79-88 逐字双落；Real 层 S:Type，sumf :=          *)
-(*     real_list_sum；Arch_ToyR_04.v:228-281 件内联名直喂之独立供给    *)
+(*     real_list_sum；Arch_ToyR_04.v:228-281 件内联名直接传入之独立供给    *)
 (*     定理化，库内无独立面）。                                        *)
 (* ============================================================ *)
 
@@ -194,7 +194,7 @@ Qed.
 End TspSlcSumFeed.
 
 (* ---- 供给八：求和正性 cons 头见证形（slc sumpos 槽 :117-119/:79-81  *)
-(*      喂入形；枚举呈 w::rest 数据形承载非空，N2：                    *)
+(*      输入形；枚举呈 w::rest 数据形承载非空，N2：                    *)
 (*      real_list_sum_pos@S08_RealMainlineDPO.v:464 直引＋证明体内      *)
 (*      discriminate 关非空支） ---- *)
 Theorem tsp_slc_sum_pos_cons : forall (S : Type) (f : S -> Real)
@@ -225,8 +225,8 @@ Qed.
 
 (* ============================================================ *)
 (* 四、F12 fold 两方程（UpAblAbsSumLeB2.v:350-352 槽面逐字同形；       *)
-(*     sumL := real_list_sum X 实例——nil 腿折叠定义性落 real_zero，    *)
-(*     cons 腿折叠定义性落头尾分解，real_eq_refl 一击；X:Type 与槽同    *)
+(*     sumL := real_list_sum X 实例——nil 肢折叠定义性落 real_zero，    *)
+(*     cons 肢折叠定义性落头尾分解，real_eq_refl 一击；X:Type 与槽同    *)
 (*     Universe，零特化代价）。                                        *)
 (* ============================================================ *)
 
@@ -279,7 +279,7 @@ Set Extraction Output Directory "_log/extraction".
 Recursive Extraction tsp_sumL_nil_eq tsp_sumL_cons_eq tsp_slc_sum_ext
   tsp_tsi_sum_ext tsp_log_inv_one_inv_real.
 
-(* 终验实测登记（20261001 实测回填，禁虚报）：
+(* 终验实测登记（ 实测补录，禁虚报）：
    ① 提取命令 EXIT=0 绿、零硬错（bypass opacity 提示为库层不透明体披露
      警告面，非错误）；提取对象五件。
    ② Obj.magic 计 50，分段归因（对照实验口径）：
