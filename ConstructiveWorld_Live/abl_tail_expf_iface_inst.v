@@ -1,28 +1,24 @@
-(* ========================================================================== *)
-(* abl_tail_expf_iface_inst.v — C1 一期 LoHi 17 位解锁唯一新增供给文件            *)
-(* ========================================================================== *)
-(* 1【使命】: expf 接口实例化（uabd1x 五槽直引）＋RIS 面副本二件＋LoHi 两宿主    *)
-(*   九定理 @RealInterfaceEnhancedMod.RealEnhancedReal 具名实例化——17 位翻色落点（键控批一期）。 *)
-(* 2【依赖】: S01_BaseRing、S02_CauchyComplete（Real/real_* 载体面）、          *)
-(*   S07_RealSetoidExpLog（RIS 类＋RealInterfaceEnhancedMod.RealEnhancedReal＋real_lt_plus_compat_lt_le）、 *)
-(*   UpAblD1_expf_pack（uabd1x_ 根五槽）、UpReqConcFin2（cf2_* 世界数据）、      *)
-(*   ToyR_UpAblP7_LoHiSqueeze、ToyR_UpAblP7_LoHiCross（迁移后宿主，实例化面）。  *)
-(* 3【构造性】: 语句面全 Set 层（And=prod；零 Prop 泄露）；零承认词面；零新增    *)
-(*   公理面（条款 H）；Part 0 副本纯 RIS 类字段重演、零 DO 零新前提。          *)
-(* 4【编译配方】: Rocq 9.1 直调 coqc，cpu_guard 包裹，-native-compiler no，      *)
-(*   born-in-place 先写后编（沙箱 31 件 .vo 闭包单向 -Q，落点后 vo 树原地重编）。 *)
-(* 5【对标】: uabl_attn_full_instance.v Part A 体例＋UpReqAttnMixTime:233-262    *)
-(*   amtr 五件第二先例；ri_carrier 判负边界在册——本件不建载体不碰接口本体。      *)
-(* -------------------------------------------------------------------------- *)
-(* 依赖方向注记: 本件 Require 两迁移宿主（Part C 实例化面）；宿主零 Require 本件  *)
-(* （其 p7a/p7d 上游使用以 Part 0 同体证明内联，单向无环——一期施工说明 §1.1        *)
-(* 「宿主调用 tpei_ 副本」与 §四「本件 Require 宿主」双向并立系环，编译器仲裁    *)
-(* 取单向，处置全录于组位 attn 交割文书 fail-loud 登记）。                              *)
-(* 提取检验区（Obj.magic=0 五证位，承 cw-ci-sop 工法预留）:                       *)
-(*   ① tpei_expf ② tpei_p7a_lo_lt_one_req ③ tpei_p7d_hi_gt_one_req              *)
-(*   ④ tpei_uahl_lo_lt_one_hi ⑤ tpei_uahlc_lo_one_hi_full                       *)
-(* ========================================================================== *)
-
+(* ==========================================================================
+   abl_tail_expf_iface_inst.v — C1 一期 LoHi 17 位解锁唯一新增供给文件
+   ── 使命：expf 接口实例化（uabd1x 五槽直引）＋RIS 面副本二件＋LoHi 两宿主九定理
+      @RealInterfaceEnhancedMod.RealEnhancedReal 具名实例化——17 位翻色落点（键控批一期）。
+   ── 依赖：S01_BaseRing、S02_CauchyComplete（Real/real_* 载体面）、S07_RealSetoidExpLog
+      （RIS 类＋RealInterfaceEnhancedMod.RealEnhancedReal＋real_lt_plus_compat_lt_le）、
+      UpAblD1_expf_pack（uabd1x_ 根五槽）、UpReqConcFin2（cf2_* 世界数据）、
+      ToyR_UpAblP7_LoHiSqueeze、ToyR_UpAblP7_LoHiCross（迁移后宿主，实例化面）。
+   ── 对标：uabd1x_expf_pack 五槽根（UpAblD1_expf_pack:48-67 供给形）、
+      uabl_attn_full_instance:41-60 具名槽体例与 :73-76 lpc 同款、Paper7Ablation:101
+      ／P7BoundedSoftmaxDeep:272 对应源出件、UpReqAttnMixTime:79 bs_lpc 逐字体例。
+   ── 构造性：语句面全 Set 层（And=prod；零 Prop 泄露）；零承认词面；零新增公理面
+      （条款 H）；Part 0 副本纯 RIS 类字段重演、零 DO 零新前提。
+   ── 编译配方：Rocq 9.1 直调 coqc，cpu_guard 包裹，-native-compiler no，
+      born-in-place 先写后编（沙箱 31 件 .vo 闭包单向 -Q，落点后 vo 树原地重编）。
+   ── 依赖方向注记：本件单向 Require 两迁移宿主（Part C 实例化面）；宿主零 Require
+      本件（其 p7a/p7d 上游使用以 Part 0 同体证明内联，单向无环）。
+   ── 提取检验区（Obj.magic=0 五证位预留）：语句面提取零 magic，① tpei_expf
+      ② tpei_p7a_lo_lt_one_req ③ tpei_p7d_hi_gt_one_req ④ tpei_uahl_lo_lt_one_hi
+      ⑤ tpei_uahlc_lo_one_hi_full 等全数 Closed。
+   ========================================================================== *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S07_RealSetoidExpLog.
