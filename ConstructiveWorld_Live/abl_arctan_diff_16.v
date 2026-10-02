@@ -28,6 +28,7 @@
      rocq c -q -native-compiler no -Q /tmp/x16pool "" abl_arctan_diff_16.v
      （隔离池 /tmp/x16pool=真拷 x15pool 现势链，S01–S11 .vo 在链。）
    ========================================================================== *)
+(* 【陈旧申报勘注（abl9 陈旧申报勘注补录组）】主式 abl9_atan_diff_formula 已由 abl9_atan_diff_a2_56.v L1871–2364 A2 形零前件闭合（闭合日期见注册册字段行；PA 全 Closed、件58 L231–232 活码使用、A2B3 决议136 在役）；本处系闭合当日之前陈旧申报，照录留痕禁删除；定论=abl9 主式深勘报告 §一。本片 L12–13 系拟文描述形（从未落码，禁承认式），勿据本文书对拟文原形硬证——墙归属候选 W-ABL9-GAP1。 *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.

@@ -444,6 +444,7 @@ Record abl9b_int_land_pack_57 : Type := mk_abl9b_int_land_pack_57 {
 (* —— 装配主件：仅由进行中供给（A2 形主公式）构造骨架包。主公式件证得后单点 *)
 (*   代入形：                                                            *)
 (*   abl9b_int_land_pack_mk_57 (fun x Hx => abl9_atan_diff_formula x Hx) *)
+(* 【陈旧申报勘注（abl9 陈旧申报勘注补录组）】上注『闭合后』条件已满足：主式已由 a2_56 L1871 A2 形闭合，代入位已由 abl9b_land_58.v L231–232 活码使用（abl9b_land_pack_installed_58）。本处条件登记旧文照录。 *)
 (*   land_deriv 字段经块一③迁移形直接使用骨架 abl9b 产出（无桥无假设束）。 *)
 Lemma abl9b_int_land_pack_mk_57 :
   forall (Ha2 : forall (x : Real)
