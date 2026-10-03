@@ -2524,9 +2524,10 @@ Definition ng_UpReqMixRealExec : NewGreenFace :=
 Definition ng_UpAblMetaTemp : NewGreenFace :=
   MkNewGreenFace "UpAblMetaTemp.v" 642 12 20260922 "M2R2 relay seat: temperature-modulus divergence (mtp_ twelve faces PA Closed, anchor divergence zero axioms)" "L642:m9816ce".
 
-(* ng_UpAblMetaDivThm —— UpAblMetaDivThm.v：CJS3 解封件（mtd_unbounded 主件+定理 A+第 8 条 mtd_unbounded_conj 合取件恢复，PA 8/8 Closed，Require 桥接模块 1 行）；vo 树 built-at-registration 复证 *)
+(* ng_UpAblMetaDivThm —— UpAblMetaDivThm.v：mtdc_ 命题族集注与实例化承载宿主件（总清册⑨三步转正落册：ConjBridge 首字段槽 A 型直供正本 mtdc_lpc_supply 件内 :386-388 机检绿＝绑定面裸 lt/le/plus ≡ real_lt/real_le/real_plus；快测成证=可消位快测卷（库外 attn 归档）；依赖 UpAblA2_LoInflation 瘦身代单件归位即闭包、CW219 薄壳归位免＝形态分歧候追认；〔CJS3 旧代条目 L1520:m88e5e4 由本条原位刷新取代〕；PA=12 Closed；coqchk 五证候全树证） *)
 Definition ng_UpAblMetaDivThm : NewGreenFace :=
-  MkNewGreenFace "UpAblMetaDivThm.v" 1520 17 20260922 "CJS3 seat: unsealed divergence theorem (mtd_unbounded main + theorem A + restored eighth face mtd_unbounded_conj conjunction, PA 8/8 Closed, one-line bridge Require)" "L1520:m88e5e4".
+  MkNewGreenFace "UpAblMetaDivThm.v" 1931 26 20261002
+  "meta-division proposition family collection and instantiation host: nine mtdc theorems over the bare lt le plus binding face with the ConjBridge first-field slot carried by the in-piece definition mtdc_lpc_supply resolved at real_lt_plus_compat_lt_le, twenty-six Qed in total" "L1931:m67d1fd".
 
 (* 1 件尾部追加 order L471（BeukersVariant 之后；拓扑位：S01_BaseRing/S02_CauchyComplete/S03_QExp+PadeErrorIntegral+BeukersLists+BeukersVariant 全在前）；_CoqProject×2 尾部追加同步；ng_ 条目 wc/grep 实测。 *)
 (* ng_PsQReindex —— PsQReindex.v：E-STAGING-D030r 切片 rx_ 前缀双小件（psQ↔bk_psd reindex 引理+十字衰减链可证首件；行首 decl grep 实测 19：Lemma rx_psQ_ext_lt/rx_psQ_shift/rx_psQ_scale、Theorem rx_psQ_reindex/rx_bv_c_diag/rx_qtilde3_anchor 等）；vo 树 built-at-registration 复证 *)
@@ -3262,9 +3263,9 @@ Definition ng_abl_tbase_tempsum : NewGreenFace :=
   "F1 sum family Real-face abstract summation interface feed, temperature-family first assault: tspt_ five supplies closing forty-eight slots across thirteen sections in ten files plus same-form host incidental coverage; host files byte-identical with zero Require" "L195:mfc5074".
 
 (* ng_abl_tbase_tempsum_feed —— abl_tbase_tempsum_feed.v：F1 温度族 Real 面 per-宿主具名喂形件（上编批 6·UpReqTempDefs／UpReqEntropyDeficitTemp／UpReqEntropyMaxTemp／UpReqTempDual 四宿主 pos/ext/linear/add＋EMT le 扩槽·17 槽；基座区供给第一批·同事侧 #决议141 波在档） *)
-Definition ng_abl_tbase_tempsum_feed : NewGreenFace :=
-  MkNewGreenFace "abl_tbase_tempsum_feed.v" 312 17 20261002
-  "F1 temperature family Real-face per-host named feed: UpReqTempDefs, UpReqEntropyDeficitTemp, UpReqEntropyMaxTemp and UpReqTempDual four hosts with pos, ext, linear and add forms plus the EMT le extension slots, seventeen slots" "L312:mbb22c8".
+(* 〔B1 退役〕tbtf_ 17 槽全 ⊂ tspt_ 48 槽零净增量（条线58 §二查⑥机械凭证追认）、归一波整件退役，17 槽覆盖权归 tspt_ 泛型桥 48 槽辖区；回退锚=attn/_tcw_归一B案备份（存档 m1a0b5e）。原条目照录（唯 Mk 行退役日位卫生化）：Definition ng_abl_tbase_tempsum_feed : NewGreenFace :=
+  MkNewGreenFace "abl_tbase_tempsum_feed.v" 312 17 〔退役日位卫生化〕
+  "F1 temperature family Real-face per-host named feed: UpReqTempDefs, UpReqEntropyDeficitTemp, UpReqEntropyMaxTemp and UpReqTempDual four hosts with pos, ext, linear and add forms plus the EMT le extension slots, seventeen slots" "L312:mbb22c8". *)
 
 (* ng_abl_tbase_zapfeed —— abl_tbase_zapfeed.v：F10 Z_align_pos 族喂形供给文件（上编批 7·配分函数正性槽十三槽十一供给；宿主件零 Require 面仅读取零字节不动；基座区供给第一批·同事侧 #决议141 波在档） *)
 Definition ng_abl_tbase_zapfeed : NewGreenFace :=
@@ -3278,8 +3279,8 @@ Definition ng_LW3ExclusionCalc : NewGreenFace :=
 
 (* ng_LW4EPiContrast —— LW4EPiContrast.v：e-π 模量对照层（e 侧逃逸供给 lw4c_e_escape_supply＝lic_witness_e 实供〔exp_series 与 1/q_fact 之上·UpReq lic_escape_window/lw0m 接口面〕；π 侧零伪造三护栏：π 逃逸供给槽唯 lic_face 条件形 lw4c_pi_escape_of_lic、提取九件零 π 侧供件名、无前提 π 逃逸供给零落；对照面 lw4c_contrast_face 经 lw4c_contrast_param 成对承载；tactic 面 intro/destruct/exists/exact/split 零自动化；PA=2 Closed；提取 .ml/.mli Obj.magic=0/0；绿证＝606 记录四关全部通过在卷） *)
 Definition ng_LW4EPiContrast : NewGreenFace :=
-  MkNewGreenFace "LW4EPiContrast.v" 134 12 20261002
-  "e versus pi modulus contrast layer: the e side carries an unconditional escape supply lw4c_e_escape_supply built on the lic witness over exp_series and 1/q_fact, while the pi side yields escapes only conditionally on the lic face lw4c_pi_lic_face via lw4c_pi_escape_of_lic, so the paired contrast face lw4c_contrast_face assembled by lw4c_contrast_param keeps the pi side zero-forged with no unconditional pi escape supply" "L134:md29296".
+  MkNewGreenFace "LW4EPiContrast.v" 378 24 20261002
+  "e versus pi modulus contrast layer: the e side carries an unconditional escape supply lw4c_e_escape_supply built on the lic witness over exp_series and 1/q_fact, while the pi side yields escapes only conditionally on the lic face lw4c_pi_lic_face via lw4c_pi_escape_of_lic, so the paired contrast face lw4c_contrast_face assembled by lw4c_contrast_param keeps the pi side zero-forged with no unconditional pi escape supply" "L378:m15ab1a".
 
 (* ng_LW1PiMeasure —— LW1PiMeasure.v：π 距离率互译层：lw1m_dist_pt/lw1m_dist_face 点面距离、lw1m_dist_order 率阶-窗宽衔接三态判定（阈的倒数取整阶处阶距小于阈）、lw1m_dom_face 供给域面、lw1m_measure_main 双前提主形（lw1m_b_cert_face 与 lw1m_dom_face，μ₀=2/C=2 显式选取）；tactic 面 intro/destruct/exists/exact/split 显式链零 solver 收尾；PA=6 Closed；提取 34 件 Obj.magic=0/0；绿证＝616 记录四关全部通过在卷 *)
 Definition ng_LW1PiMeasure : NewGreenFace :=

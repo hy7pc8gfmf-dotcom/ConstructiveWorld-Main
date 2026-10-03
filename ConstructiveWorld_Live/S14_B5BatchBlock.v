@@ -1,19 +1,21 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。 *)
 (* ============================================================ *)
 (* S14_B5BatchBlock.v                                          *)
 (*                                                             *)
-(* 目的：B5 批块装配：arctan/指数/log 透明链复刻件、有理点零值    *)
+(* 使命：B5 批块装配：arctan/指数/log 透明链复刻件、有理点零值    *)
 (*       契约件与 δ 链预算（构造性 Set 层）。                    *)
 (* 主件：b5dQ_E_rational_zero（0<q<1 ⟹ real_E (real_const q) == 0）； *)
 (*       b5dQ_Hmod/b5dQ_Hstep 步界证书族；b5dS_E_zero_on_unit。   *)
 (* 依赖：S01–S13；Stdlib（QArith、List、Bool、Arith、Setoid、    *)
 (*       Morphisms、Lia）。                                      *)
-(* 备注：本件为 CW_ConstructiveWorld_219.v 拆分模块之一，原文区间 *)
+(* 构造性：全 Set 层；零公理、零承认件、零经典逻辑；语句与证书面    *)
+(*       均显式封闭。                                             *)
+(* 编译配方：Rocq 9.1 coqc -native-compiler no -Q . ""。          *)
+(* 备注：本件为 .v 拆分模块之一，原文区间 *)
 (*       L97867-L112163，去头正文与原文区间逐字节同源；尾段部分  *)
-(*       上游合并件定位后方 可整体编译验证。                     *)
+(*       上游合并件就位后方可整体编译验证。                     *)
 (* ============================================================ *)
 (* ============================================================ *)
-(* ToyR 工程 （S 系下半） · 记录册号         *)
+(* S 系下半同名非平凡替换记录块        *)
 (* 替换定理清单：b5d1_Heps4 / b5d1_Heps8 / b5d1_Heps16 /           *)
 (*   b5dE_zero_le_one（共 4 条，语句与声明序不变）                 *)
 (* 非平凡性说明：仅替换上列 4 条证明体；声明面、其余定理、原头注   *)
@@ -22,10 +24,10 @@
 (*   转发，Qle 展开 Z 层直构。实质非平凡：零 公理、零 承认件、      *)
 (*   零经典逻辑。编译态（切片四分档明示）：替换四体旁证绿——整件    *)
 (*   句级计时编 14317 句零 Error 零 Anomaly、替换四体各             *)
-(*   0.000–0.001 秒完成；整件闭合受阻于原件固有 conv 墙：热点       *)
+(*   0.000–0.001 秒完成；整件验证受阻于原件固有 conv 墙：热点       *)
 (*   b5dQ_p4g_J_tail_lb_var 末支 exact（原件 L13261–13263，本稿      *)
 (*   L13294–13296，与原件逐字同源未动），两轮独立编译同卡、          *)
-(*   Main 原件对照编同卡实锤（ 记录册切片四章）。                 *)
+(*   Main 原件对照编同卡实锤（替换记录附件四章）。                 *)
 (* ============================================================ *)
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -709,7 +711,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* end sc2_b5a_item14.v · δ-D1a C8 透明基座 ·  *)
+(* end sc2_b5a_item14.v · δ-D1a C8 透明基座 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -941,9 +943,9 @@ Proof.
         { exact HC4. }
         { exact HC40. }
         { exact (HNc n HnNc). }
-        { exact Hhδn. }
-        { exact Hh12n. }
-        { exact Hhqn. }
+        { exact (QleT'_to_Qle _ _ Hhδn). }
+        { exact (QleT'_to_Qle _ _ Hh12n). }
+        { exact (QleT'_to_Qle _ _ Hhqn). }
         { exact (HNw n HnNw). }
         { unfold b5i_dn. exact (Hd n HnNd). }
         { exact Hen0. }
@@ -1207,9 +1209,9 @@ Proof.
         { exact HC4. }
         { exact HC40. }
         { exact (HNc n HnNc). }
-        { exact Hhδn. }
-        { exact Hh12n. }
-        { exact Hhqn. }
+        { exact (QleT'_to_Qle _ _ Hhδn). }
+        { exact (QleT'_to_Qle _ _ Hh12n). }
+        { exact (QleT'_to_Qle _ _ Hhqn). }
         { exact (HNw n HnNw). }
         { unfold b5i_dn. exact (Hd n HnNd). }
         { exact Hen0. }
@@ -1249,7 +1251,7 @@ Proof.
       { apply qeq_imp_qle. apply Qeq_sym. exact Hrepl. } } }
 Defined.
 (* ============================================================ *)
-(* end sc2_b5a_item17.v · δ-D1b sin/cos-atan expl 透明层 ·  *)
+(* end sc2_b5a_item17.v · δ-D1b sin/cos-atan expl 透明层 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -1262,7 +1264,15 @@ Defined.
 (*   L36291–36314）。语句逐字；体近逐字（体内零根 Qed 见证       *)
 (*   destruct——纯 Q 层推理 + qeq_le/ring/field，透明）；收尾     *)
 (*   Defined。见证首分量 = c/2（显式），N := 0（显式）⟹ 值路径   *)
-(*   可算（检验 ①：(1#4) → (1#8)）。                            *)
+(*   可算（实例核算 ①：(1#4) → (1#8)）。                            *)
+(* —— D3 消融裁定（AB2 判据4-P3）：本件与 S07 根件        *)
+(*   real_const_pos 语句逐字同、体逐字同（唯一差=本件 Defined/      *)
+(*   根件 Qed＋根件体多一行目标注释）；但透明性=语义承载面：        *)
+(*   b5dQ_margin 链 cbn δ 列表（本文件 L9445/9486/9546）显式        *)
+(*   unfolding 本件以暴露见证 c/2 ⟹ redirect 至 Qed 根件即值       *)
+(*   路径停滞（E317 判例同型：不透明证书内嵌值路径 ⟹ stuck、        *)
+(*   换源 rc=1）。结论=保留双件：本件为透明证书正典，S07 根件为     *)
+(*   命题面正典，互不替代；后继 AB 扫描禁再标红为可 redirect 件。   *)
 (* ============================================================ *)
 Lemma b5dM_real_const_pos : forall (c : Q), QltT 0 c -> real_lt real_zero (real_const c).
 Proof.
@@ -1315,7 +1325,7 @@ Defined.
 (*   destruct 输入 Heps——合法，实例化后具体化；见证已显式        *)
 (*   exists (1#2)，N := 输入 N1）；收尾 Defined。               *)
 (* 值路径：projT1 (本件 eps k2 Heps Hk2) = (1#2)（与输入无关，   *)
-(*   检验 ③ 实证）；N1 来自输入 Heps destruct——输入为透明链时   *)
+(*   实例核算 ③ 实证）；N1 来自输入 Heps destruct——输入为透明链时   *)
 (*   （如件 1 拷贝）整链可归约。                                *)
 (* ============================================================ *)
 Lemma b5dM_b5i_one_plus_eps2_pos : forall (eps : Real) (k2 : Q),
@@ -1366,7 +1376,7 @@ Defined.
 (*   destruct 输入 Heps；e := 输入 eps1、N := 输入 N 透传）；     *)
 (*   收尾 Defined。                                             *)
 (* 值路径：e := projT1 输入见证——输入为件 1 拷贝（Defined）时    *)
-(*   (real_const (1#4)) → e = (1#8)（检验 ④ 实证）。            *)
+(*   (real_const (1#4)) → e = (1#8)（实例核算 ④ 实证）。            *)
 (* ============================================================ *)
 Lemma b5dM_b5n_eps_proj_lt : forall (eps : Real), real_lt real_zero eps ->
   sigT (fun e : Q => And (QltT 0 e) (sigT (fun N : nat =>
@@ -1491,8 +1501,9 @@ Proof.
 Defined.
 
 (* v3 helper（§4 预案 (a)）：real_mult_positive 根 Qed（L39518→Qed L39529）——
+    E-diff 三 assert 站（HepsS/HepsC/Hepskδ）供入 C1t/C2t 叶调用，其见证在值路径
    被 b5dM_b5i_one_plus_eps2_pos / real_inv_pos 逐层 destruct ⟹ 根 opaque 使 match
-   stuck。透明重证件：语句逐字 = 根 L39518；体同构根 real_mult_pos_compat
+    stuck。透明重证件：语句逐字 = 根 L39518；体复刻根 real_mult_pos_compat
    （L34988–35040，同语句）直构显式见证（destruct 输入 Ha/Hb 取 e := e1·e2、
    N := Nat.max N1 N2；去根体 real_norm_bounded 死依赖；Q 层 Qmult_lt_compat_nonneg
    桥），Defined 收尾。 *)
@@ -1771,9 +1782,9 @@ Proof.
         { exact HC4. }
         { exact HC40. }
         { exact (HNc n HnNc). }
-        { exact Hhδn. }
-        { exact Hh12n. }
-        { exact Hhqn. }
+        { exact (QleT'_to_Qle _ _ Hhδn). }
+        { exact (QleT'_to_Qle _ _ Hh12n). }
+        { exact (QleT'_to_Qle _ _ Hhqn). }
         { exact (HNw n HnNw). }
         { unfold b5i_dn. exact (Hd n HnNd). }
         { exact Hen0. }
@@ -2044,9 +2055,9 @@ Proof.
         { exact HC4. }
         { exact HC40. }
         { exact (HNc n HnNc). }
-        { exact Hhδn. }
-        { exact Hh12n. }
-        { exact Hhqn. }
+        { exact (QleT'_to_Qle _ _ Hhδn). }
+        { exact (QleT'_to_Qle _ _ Hh12n). }
+        { exact (QleT'_to_Qle _ _ Hhqn). }
         { exact (HNw n HnNw). }
         { unfold b5i_dn. exact (Hd n HnNd). }
         { exact Hen0. }
@@ -2389,7 +2400,7 @@ Defined.
 (*   按证书 destruct 出 N0 ⟹ 不透明证书使 vm_compute 停滞。      *)
 (* J0 = 显式见证 eps = 1/2、N = 0 的闭式证明（零根引用），       *)
 (*   Defined 收尾 ⟹ projT1 (real_inv_pos (1+1) J0) n 全 n 可算   *)
-(*   = Qinv 2（检验实证 = 1#2）。                                *)
+(*   = Qinv 2（实例核算实证 = 1#2）。                                *)
 (* ============================================================ *)
 Lemma b5dJ_two_pos_exp : real_lt real_zero (real_plus real_one real_one).
 Proof.
@@ -2746,7 +2757,7 @@ Proof.
                                  share
                                  (real_plus (real_plus share (real_plus share share)) share)).
     }
-    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤）。
+    (* 汇总 3：最终 (eps/2)|h| + 5share ≤ eps|h| + eps'——Bishop 逐点（Or 编码无法表达通用非严格 ≤，E152-5）。
        逐点差分 = (eps_n/2)|h_n| + (3/8)eps'_n ≥ (3/8)eps'_n > (3/8)e0' > 0（见证 (3/8)·e0'） *)
     assert (Hfinal : real_le
       (real_plus (real_mult (real_mult two_inv eps) (real_abs h))
@@ -2995,8 +3006,8 @@ Qed.
 (*   C := exp_series 11 4 + 2·(4^11/11!)                          *)
 (* 尾条件：exp_tail_abs_geom2 A m n 需 ∀t≥m, 2A ≤ t+1 ——          *)
 (*   A := 4、m := 11：8 ≤ t+1（t ≥ 11）由 lia 逐点验证。          *)
-(* 证明同构根 exp_series_arch（L8067–8106）换显式 N0 := 11。      *)
-(* ⚠️ 数值修订记录：报告建议 N0 := 7 闭值 es 7 4 + 2·(4^7/7!)     *)
+(* 证明复刻根 exp_series_arch（L8067–8106）换显式 N0 := 11。      *)
+(* 数值校正记录：报告建议 N0 := 7 闭值 es 7 4 + 2·(4^7/7!)     *)
 (*   ≈ 58.31 > 55（报告 ≈54.8 系笔误——es 7 4 ≈ 51.81、           *)
 (*   (4^7/7!)·2 ≈ 6.50）⇒ 55 分量不可用 N0 := 7；本件取 N0 := 11  *)
 (*   （es 11 4 ≈ 54.55、(4^11/11!)·2 ≈ 0.210 ⇒ C ≈ 54.76 ≤ 55 ✓）。*)
@@ -3330,7 +3341,7 @@ Qed.
 (* ============================================================ *)
 (* §3 δB-3：b5d3_S0_pts_bound —— 前置核验结论（见设计记录 §2）   *)
 (* ============================================================ *)
-(* 核验（，read/grep 实测）：                           *)
+(* 核验（read/grep 实测）：                           *)
 (*  - approx_root 根 L37483 Lemma + L37595 Qed ⇒ 不透明；         *)
 (*    log_seq y Hy n = projT1 (approx_root y Hy (log_eps n) …)   *)
 (*    （L37642–37643）逐点不可归约。                              *)
@@ -3652,7 +3663,7 @@ Qed.
 (*   b5d3_Hq_half/Hq_four）内联直证；Qed→Defined。              *)
 (* 值路径：exists delta，delta := real_min (real_const (1#2))   *)
 (*   (real_mult eps (real_const (1#4)))——全透明 ⟹ δlin 首投影    *)
-(*   可算（检验：eps := real_const (1#2) → (1#8)）。            *)
+(*   可算（实例核算：eps := real_const (1#2) → (1#8)）。            *)
 (* ============================================================ *)
 
 
@@ -3854,7 +3865,7 @@ Defined.
 (* 主件 ① b5dK_gdiff_pts_r_exp（Defined 透明）                  *)
 (* 拷贝源：213 根 b5f_gdiff_pts_r（ConstructiveWorld.v L82826–    *)
 (*   L83231，406 行切片机器抽取零手抄）；语句逐字。            *)
-(* 变更注记：① Lemma 头改名 ② 体内 LogErr   *)
+(* 涉及面：① Lemma 头改名 ② 体内 LogErr   *)
 (*   叶 b5f_LogErr_delta → 上游 item20 b5dJ_LogErr_delta_exp      *)
 (*   （同参调用 x epsL HepsL）③ real_mult_positive → 本文件    *)
 (*   b5dK_real_mult_positive_exp（含供入 J2 的 HepsL 构造链——  *)
@@ -4279,7 +4290,7 @@ Defined.
 (* 拷贝源：213 根 b5a_S_exp_part_bound_closed_r（Constructive-  *)
 (*   World.v L84306–84653，348 行切片机器抽取零手抄；⚠️ L83581  *)
 (*   为注释草案语句，真定义 L84306 起）；语句逐字。            *)
-(* 变更注记：① Lemma 头改名 ② LogErr 叶                          *)
+(* 涉及面：① Lemma 头改名 ② LogErr 叶                          *)
 (*   b5f_LogErr_delta → 上游 item20 b5dJ_LogErr_delta_exp（同参  *)
 (*   调用 x (real_const b5j_kL) HkLpos）③ δlin 源               *)
 (*   exp_minus_one_linear → 本文件 H3 b5dK_exp_minus_one_linear *)
@@ -4648,7 +4659,7 @@ Proof.
 Defined.
 
 (* ============================================================ *)
-(* end sc2_b5a_item21.v · F1-δD2 item21 gdiff+exp-part 透明 Defined 拷贝 ·  *)
+(* end sc2_b5a_item21.v · F1-δD2 item21 gdiff+exp-part 透明 Defined 拷贝 *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -4916,16 +4927,16 @@ Qed.
 
 (* ---- 夹逼：x ∈ [0,1] ⟹ 0 ≤ S_n(x) ∧ S_n(x) ≤ x ---- *)
 Lemma b5d2_ap_sandwich : forall (x : Q) (n : nat), Qle 0 x -> Qle x 1 ->
-  And (Qle 0 (arctan_partial n x)) (Qle (arctan_partial n x) x).
+  And (QleT' 0 (arctan_partial n x)) (QleT' (arctan_partial n x) x).
 Proof.
   intros x n Hx0 Hx1.
   destruct (sc_nat_split n) as [m Hm | m Hm].
   - rewrite Hm. split.
-    + apply b5d2_ap_even_pos. exact Hx0. exact Hx1.
-    + apply b5d2_ap_even_ub. exact Hx0. exact Hx1.
+    + apply Qle_to_QleT'. apply b5d2_ap_even_pos. exact Hx0. exact Hx1.
+    + apply Qle_to_QleT'. apply b5d2_ap_even_ub. exact Hx0. exact Hx1.
   - rewrite Hm. split.
-    + apply b5d2_ap_odd_pos. exact Hx0. exact Hx1.
-    + apply (Qle_trans _ (arctan_partial (2 * m) x) _).
+    + apply Qle_to_QleT'. apply b5d2_ap_odd_pos. exact Hx0. exact Hx1.
+    + apply Qle_to_QleT'. apply (Qle_trans _ (arctan_partial (2 * m) x) _).
       * apply b5d2_ap_mix_le. exact Hx0.
       * apply b5d2_ap_even_ub. exact Hx0. exact Hx1.
 Qed.
@@ -4937,8 +4948,8 @@ Proof.
   intros x n Hx0 Hx1.
   destruct (b5d2_ap_sandwich x n Hx0 Hx1) as [Hs0 Hsx].
   apply (Qle_trans _ (arctan_partial n x) _).
-  - apply qeq_imp_qle. apply Qabs_pos. exact Hs0.
-  - apply (Qle_trans _ x _). exact Hsx. exact Hx1.
+  - apply qeq_imp_qle. apply Qabs_pos. exact (QleT'_to_Qle _ _ Hs0).
+  - apply (Qle_trans _ x _). exact (QleT'_to_Qle _ _ Hsx). exact Hx1.
 Qed.
 
 (* ============================================================ *)
@@ -6330,7 +6341,7 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma b5dE_zero_le_one : Qle 0 1.
 Proof.
   (* ToyR 替换：Z 层直构（消 Qlt_le_weak→b5dE_zero_lt_one 两跳转发）：
-     Qle 展开 = 交叉积 Z.le，字面归约后线性判定闭合 *)
+      Qle 展开 = 交叉积 Z.le，字面归约后线性判定完成 *)
   unfold Qle.
   simpl.
   lia.
@@ -6605,11 +6616,11 @@ Qed.
 (*   复刻内 g = Qmin (1/2) a 满足 0 < g（Hg0）且 g ≤ 1/2          *)
 (*   （Hg_le_half）⟹ 需 Qlt 0 (1−g)（g ≤ 1/2 侧）与               *)
 (*   Qlt (1−g) 1（0 < g 侧）。根只有实层版 b5b_ep_xg_pos/lt_one   *)
-(*   （L78030/L78041），Q 层版根内无同名 ⟹ 本文件自建（同构根证   *)
+(*   （L78030/L78041），Q 层版根内无同名 ⟹ 本文件自建（复刻根证   *)
 (*   法）。                                                     *)
 (* ============================================================ *)
 
-(* Q 层：g ≤ 1/2 ⟹ 0 < 1 − g（同构根 b5b_ep_xg_pos L78030 的 Q 层版；
+(* Q 层：g ≤ 1/2 ⟹ 0 < 1 − g（复刻根 b5b_ep_xg_pos L78030 的 Q 层版；
    b5b_endpoint 体上下文 Hg_le_half : Qle g (1/2) 直接供给）。
    语义核实（规范 ⚠️）：1−g > 0 需 g < 1，非仅 0 < g——端点体给
    的是 g ≤ 1/2（g := Qmin (1/2) a），故本件取 Qle g (1/2) 为假设。 *)
@@ -6621,7 +6632,7 @@ Proof.
   - apply (b5b_ep_half_le_1mg g). exact Hg12.
 Qed.
 
-(* Q 层：0 < g ⟹ 1 − g < 1（同构根 b5b_ep_xg_lt_one L78041 的 Q 层版；
+(* Q 层：0 < g ⟹ 1 − g < 1（复刻根 b5b_ep_xg_lt_one L78041 的 Q 层版；
    b5b_endpoint 体上下文 Hg0 : Qlt 0 g 直接供给） *)
 Lemma b5dF_q_1mg_lt1 : forall (g : Q), Qlt 0 g -> Qlt (1 - g) 1.
 Proof.
@@ -6646,7 +6657,8 @@ Proof.
   - apply (Qle_trans _ (1 / 2) _); [ exact Hg12 | exact b5b_ep_half_le_one ].
 Qed.
 
-(* xg 实层下开：real_lt 0 xg（同构根 b5b_ep_xg_pos L78030；束形合并。
+(* xg 实层下开：real_lt 0 xg（复刻根 b5b_ep_xg_pos L78030；束形合并。
+   注：主件 b5dF_E_one_zero_of_rational 内不需要本件（有理点件使用
    Q 证书 b5dF_q_1mg_*，非实层开区间序）——保留为本族完整域证书，
    供后续 E_rational_zero 侧/实层组装取用。 *)
 Lemma b5dF_xg_pos : forall (g : Q), Qlt 0 g -> Qle g (1 / 2) ->
@@ -6656,7 +6668,7 @@ Proof.
   exact (b5b_ep_xg_pos g Hg12).
 Qed.
 
-(* xg 实层上开：real_lt xg (real_const 1)（同构根 b5b_ep_xg_lt_one
+(* xg 实层上开：real_lt xg (real_const 1)（复刻根 b5b_ep_xg_lt_one
    L78041；束形合并；使用情况同 b5dF_xg_pos 注） *)
 Lemma b5dF_xg_lt1 : forall (g : Q), Qlt 0 g -> Qle g (1 / 2) ->
   real_lt (real_const (1 - g)) (real_const 1).
@@ -6674,6 +6686,7 @@ Qed.
    real_eq (real_E (real_const (1 - g)) Hunit) real_zero。
    输入 = 主件复刻上下文现成物：Hunit（cw_unit 证书，b5dF_xg_unit/
    b5b_unit_const 给）+ Q 开区间证书 Hg0q/Hg1q（b5dF_q_1mg_* 给）。
+   与根 b5b_endpoint L78098 的 Section 假设使用点同构：彼处
    b5a_E_zero_on_unit xg Hxg Hxg0 Hxg1（∀x 实例化），此处
    Hrat (1−g) Hg0q Hg1q Hunit（有理点件实例化）。 *)
 Lemma b5dF_rational_at_xg : forall (g : Q) (Hunit : cw_unit (real_const (1 - g))),
@@ -6717,7 +6730,7 @@ Proof.
   (* b5b_E_close_q (epsQ/2)：∃N0 g0>0：n≥N0、0<g≤g0 ⟹ |E_n(1−g)−E_n(1)| < epsQ/2 *)
   destruct (b5b_E_close_q (epsQ / 2) HhalfQ) as [N0 [g0 [Hg0pos Hclose]]].
   (* q_arch_inv g0 取 K：a := 1/(K+2) < g0；g := Qmin (1/2) a *)
-  destruct (q_arch_inv g0 Hg0pos) as [K HK].
+  destruct (q_arch_inv g0 (QltT_to_Qlt 0 g0 Hg0pos)) as [K HK].
   set (a := 1 / (Z.of_nat (K + 2) # 1)).
   set (g := Qmin (1 / 2) a).
   assert (Ha0 : Qlt 0 a).
@@ -6857,7 +6870,7 @@ Qed.
 (*    b4_arch_step L72844 / b4_chain_bound_eps0 L76930 /           *)
 (*    b4_deriv_zero_eq_endpoints L77111 /                          *)
 (*    b4_const_on_interval_pair L77173。                          *)
-(* ② 连接引理（item4r2 B1–B4 同款；item4r2 .vo 基于 212 根不可        *)
+(* ② 桥接件（item4r2 B1–B4 同款；item4r2 .vo 基于 212 根不可        *)
 (*    Require——等价件根内自建，禁 Require item4r2）：             *)
 (*    b5c_const_unit L74348（0≤q≤1 ⟹ cw_unit (real_const q)，     *)
 (*    网格点域证书）/ b5p2_E_zero_of_J_zero L86865 /              *)
@@ -6964,7 +6977,7 @@ Qed.
 (* 段 A §4：网格点域证书（t_k := q·(k/M) ∈ [0,1] 有理 → cw_unit；*)
 (*   0≤x≤1 的 cw_unit (real_const x) = 根 b5c_const_unit L74348  *)
 (*   直接应用，无需新件；此处补 0<x<1 ⟹ Qle 0 x 与 Qle x 1 的 Q 层  *)
-(*   辅助小件（同构 b5dF_q_1mg_* 模式，Q 层纯代数））            *)
+(*   辅助小件（复刻 b5dF_q_1mg_* 模式，Q 层纯代数））            *)
 (* ============================================================ *)
 
 (* 0 < x < 1 ⟹ 0 ≤ x（Qlt_le_weak 直收） *)
@@ -7036,7 +7049,7 @@ Qed.
 (*   段 A Definitions：                                         *)
 (*     b5dL_tkq   : t_k := q·(Z.of_nat k # 1)/(Z.of_nat M # 1)  *)
 (*     b5dL_qdiv  : 步长 q/M                                     *)
-(*     b5dL_Qnsum : Q 层 Σ_{k<N}（同构 b4_nsum 左折）            *)
+(*     b5dL_Qnsum : Q 层 Σ_{k<N}（复刻 b4_nsum 左折）            *)
 (*   段 A 网格点域证书族（Q 层 13 件 + cw_unit 证书）：           *)
 (*     0 ≤ t_k / t_k ≤ q(k≤M) / t_k < 1(q<1) / t_k > 0(k≥1) /   *)
 (*     t_0 == 0 / t_M == q / t_{S k} == t_k + q/M /              *)
@@ -7074,7 +7087,7 @@ Definition b5dL_tkq (q : Q) (M : nat) (k : nat) : Q :=
 Definition b5dL_qdiv (q : Q) (M : nat) : Q :=
   q / (Z.of_nat M # 1).
 
-(* Q 层 Σ_{k<N}（同构根 b4_nsum 左折；b4_nsum 是 Real 层） *)
+(* Q 层 Σ_{k<N}（复刻根 b4_nsum 左折；b4_nsum 是 Real 层） *)
 Fixpoint b5dL_Qnsum (b : nat -> Q) (N : nat) : Q :=
   match N with
   | 0%nat => 0
@@ -7082,7 +7095,7 @@ Fixpoint b5dL_Qnsum (b : nat -> Q) (N : nat) : Q :=
   end.
 
 (* ============================================================ *)
-(* 段 A §2：nat 提升 Q 小件（模式 = 检验定稿：                   *)
+(* 段 A §2：nat 提升 Q 小件（模式 = 实例核算定稿：                   *)
 (*   unfold Qlt/Qeq; simpl; lia）                                *)
 (* ============================================================ *)
 
@@ -7731,13 +7744,13 @@ Qed.
    证法：destruct e 的正性见证（e_n > eps0 尾部）⟹ c := eps0/2 严格低于 e
    （lt 分支见证 eps0/2；qltT_eq_compat_l/r 作坐标重写） *)
 Lemma b5dL_eps_real_lower : forall (e : Real), real_lt real_zero e ->
-  sigT (fun c : Q => And (Qlt 0 c) (real_le (real_const c) e)).
+  sigT (fun c : Q => And (QltT 0 c) (real_le (real_const c) e)).
 Proof.
   intros e He.
   destruct He as [eps0 [Heps0 [N0 HN0]]].
   exists (eps0 / 2)%Q.
   split.
-  - apply (q_half_pos eps0). apply QltT_to_Qlt. exact Heps0.
+  - apply Qlt_to_QltT. apply (q_half_pos eps0). apply QltT_to_Qlt. exact Heps0.
   - apply (RealSetoid.real_lt_le_iff_req (real_const (eps0 / 2)) e). left.
     unfold real_lt.
     exists (eps0 / 2)%Q.
@@ -7862,7 +7875,7 @@ Qed.
    = b5dL_eps_real_lower）+ J_zero_on_grid @ (epsQ := c, M) + J(0)==0 桥（b5dH_J_zero0） *)
 Lemma b5dL_E_rational_zero_premise : forall (q : Q) (Hq0 : Qlt 0 q) (Hq1 : Qlt q 1),
   (forall (epsQ : Q), Qlt 0 epsQ ->
-     sigT (fun M : nat => And (0 < M)%nat
+     sigT (fun M : nat => And (NatLe 1 M)
        (forall (k : nat), (k < M)%nat ->
           forall (Hk : cw_unit (real_const (b5dL_tkq q M k)))
                  (Hk1 : cw_unit (real_const (b5dL_tkq q M (Datatypes.S k)))),
@@ -7878,13 +7891,13 @@ Proof.
   intros e He.
   (* Q 下界：∃c > 0：real_le (real_const c) e *)
   destruct (b5dL_eps_real_lower e He) as [c [Hc0 Hcle]].
-  destruct (Hmod c Hc0) as [M [HMpos Hstep]].
+  destruct (Hmod c (QltT_to_Qlt _ _ Hc0)) as [M [HMpos Hstep]].
   (* |J(q)Hq − J(0)bz| ≤ real_const c（网格实例） *)
   assert (Hle_c : real_le
              (real_abs (real_plus (b5c_J (real_const q) Hq)
                                   (real_opp (b5c_J (real_const 0) b5c_unit_zero))))
              (real_const c)).
-  { exact (b5dL_J_zero_on_grid_premise q Hq0 Hq1 M HMpos c Hc0 Hstep Hq). }
+  { exact (b5dL_J_zero_on_grid_premise q Hq0 Hq1 M (NatLe_drop 1 M HMpos) c (QltT_to_Qlt _ _ Hc0) Hstep Hq). }
   (* J(0) == 0 桥：|J(q) − 0| == |J(q) − J(0)bz| *)
   assert (Hj0 : real_eq (b5c_J (real_const 0) b5c_unit_zero) real_zero)
     by exact b5dH_J_zero0.
@@ -8949,7 +8962,7 @@ Proof.
         ring. } }
 Defined.
 (* ============================================================ *)
-(* 完成标记：已编译；kernel 检验 5/5 全部通过（段 A r:=0 1#36864 /  *)
+(* 完成标记：已编译；kernel 核验 5/5 通过（段 A r:=0 1#36864 /  *)
 (*    δS1-c 1#5898240 / δS2-c 1#9216 / 主件 X = 49#10896801792 = *)
 (*    δE-c——min 链极小者；尾形证书已验证）。                      *)
 (* ============================================================ *)
@@ -9560,7 +9573,7 @@ Proof.
 
 (* ============================================================ *)
 (* helper 1：Qinv ≤ 单调（x ≤ y 正 ⟹ Qinv y ≤ Qinv x）          *)
-(* 检验 p_qinv_le_mono 逐字移植（改名 b5dQ_ 前缀）。             *)
+(* 检验件 p_qinv_le_mono 逐字移植（改名 b5dQ_ 前缀）。             *)
 (* ============================================================ *)
 Lemma b5dQ_p_qinv_le_mono : forall (x y : Q),
   Qlt 0 x -> Qlt 0 y -> Qle x y -> Qle (Qinv y) (Qinv x).
@@ -9577,7 +9590,7 @@ Qed.
 
 (* ============================================================ *)
 (* helper 2：invM 坐标件（S 原子保原子）                         *)
-(* 检验 p_inv_coord0 逐字移植（改名 b5dQ_p_invM_coord——段内      *)
+(* 检验件 p_inv_coord0 逐字移植（改名 b5dQ_p_invM_coord——段内      *)
 (* 唯一命名，进度 §1.2 注登记）。                                *)
 (* ============================================================ *)
 Lemma b5dQ_p_invM_coord : forall (x : Real) (n : nat),
@@ -10498,7 +10511,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* end sc2_b5a_item27_p2_lbLog.v · P2 批 ·            *)
+(* end sc2_b5a_item27_p2_lbLog.v · P2 批           *)
 (* ============================================================ *)
 
 (* ===== 段 P3（证书族 C1-C5 + glue G1-G9 + Q 层小件，17 Lemma）===== *)
@@ -10539,7 +10552,7 @@ Qed.
 
 (* ============================================================ *)
 (* Q 层内核：p == 1 ∧ |x − p| < 1/4 ⟹ Qle (1#2) x               *)
-(*   （C1 尾界：同构 item8 b5d4_q_lb_half 结构，eps := 1/4， *)
+(*   （C1 尾界：复刻 item8 b5d4_q_lb_half 结构，eps := 1/4， *)
 (*     先经 Qlt_minus_iff 得 3/4 < x 再 Qle (1#2) ≤ 3/4 传递）    *)
 (* ============================================================ *)
 Lemma b5dQ_q_close_one_lb : forall (x p : Q),
@@ -10655,7 +10668,7 @@ Qed.
 
 (* ============================================================ *)
 (* C5 b5dQ_sincos_all_k：sin/cos 界全 n 证书（HMs_all/HMc_all   *)
-(*   实例，Ms := Mc := 1）——进度 §4.1 草案（cos 同构并入 And） *)
+(*   实例，Ms := Mc := 1）——进度 §4.1 草案（cos 对应件并入 And） *)
 (*   语句：0<q ∧ q<1 ∧ 0<M ∧ k≤M ⟹                             *)
 (*     And (∀n Qle |sin_partial n (arctan_partial n t_k_n)| 1)  *)
 (*         (∀n Qle |cos_partial n (arctan_partial n t_k_n)| 1)  *)
@@ -10665,20 +10678,20 @@ Qed.
 Lemma b5dQ_sincos_all_k : forall (q : Q) (Hq0 : Qlt 0 q) (Hq1 : Qlt q 1)
   (M : nat) (k : nat), (0 < M)%nat -> (k <= M)%nat ->
   And (forall n : nat,
-         Qle (Qabs (sin_partial n (arctan_partial n
+         QleT' (Qabs (sin_partial n (arctan_partial n
                 (projT1 (real_const (b5dL_tkq q M k)) n)))) 1)
       (forall n : nat,
-         Qle (Qabs (cos_partial n (arctan_partial n
+         QleT' (Qabs (cos_partial n (arctan_partial n
                 (projT1 (real_const (b5dL_tkq q M k)) n)))) 1).
 Proof.
   intros q Hq0 Hq1 M k HM Hk.
   split.
   - intro n.
-    exact (b5d2_sinA_abs_le1 (real_const (b5dL_tkq q M k))
-                             (b5dL_tkC q Hq0 Hq1 M k HM Hk) n).
+    exact (Qle_to_QleT' _ _ (b5d2_sinA_abs_le1 (real_const (b5dL_tkq q M k))
+                              (b5dL_tkC q Hq0 Hq1 M k HM Hk) n)).
   - intro n.
-    exact (b5d2_cosA_abs_le1 (real_const (b5dL_tkq q M k))
-                             (b5dL_tkC q Hq0 Hq1 M k HM Hk) n).
+    exact (Qle_to_QleT' _ _ (b5d2_cosA_abs_le1 (real_const (b5dL_tkq q M k))
+                              (b5dL_tkC q Hq0 Hq1 M k HM Hk) n)).
 Qed.
 
 (* ============================================================ *)
@@ -10736,20 +10749,20 @@ Qed.
 (*   (epsQ1 M epsQ) 侧）——设计 §4 G4 行（Qlt 对；QltT 变体与    *)
 (*   real_lt real_zero (real_const ·) 证书为使用侧 1 行派生：     *)
 (*   Qlt_to_QltT + 根 real_const_pos（或 real_const_pos_f1）。   *)
-(*   证法：Qmult/Qinv 正性（item22 b5dL_two_q_pos 同构）+        *)
+(*   证法：Qmult/Qinv 正性（item22 b5dL_two_q_pos 复刻）+        *)
 (*     直接应用 item22 b5dL_epsQ1_pos。                             *)
 (* ============================================================ *)
 Lemma b5dQ_eps_shares_pos : forall (q epsQ : Q) (M : nat),
   Qlt 0 q -> Qlt 0 epsQ -> (0 < M)%nat ->
-  And (Qlt 0 (epsQ / (2 * q))) (Qlt 0 (b5dL_epsQ1 M epsQ)).
+  And (QltT 0 (epsQ / (2 * q))) (QltT 0 (b5dL_epsQ1 M epsQ)).
 Proof.
   intros q epsQ M Hq0 Heps HM.
   split.
-  - unfold Qdiv.
+  - apply Qlt_to_QltT. unfold Qdiv.
     apply (Qmult_lt_0_compat epsQ (Qinv (2 * q))).
     + exact Heps.
     + apply Qinv_lt_0_compat. exact (b5dL_two_q_pos q Hq0).
-  - exact (b5dL_epsQ1_pos epsQ M Heps HM).
+  - exact (Qlt_to_QltT _ _ (b5dL_epsQ1_pos epsQ M Heps HM)).
 Qed.
 
 (* ============================================================ *)
@@ -10821,7 +10834,7 @@ Qed.
 (*   ——P1 段文件已占二元 b5dQ_min_lb（跨段名不重叠纪律 ⟹ 本段    *)
 (*   只含三元版；二元版由 P1 段文件提供）。                 *)
 (*   语句：real_lt lb X/Y/Z ⟹ real_lt lb (real_min (real_min X Y) *)
-(*     Z)。证法 = 检验 p_min_lb 坐标 margin 组合直移植（e :=      *)
+(*     Z)。证法 = 检验件 p_min_lb 坐标 margin 组合直移植（e :=      *)
 (*     Qmin (Qmin e1 e2) e3 + Q.min_glb_lt 双层应用）。          *)
 (* ============================================================ *)
 Lemma b5dQ_min_lb_3 : forall (lb A B C : Real),
@@ -10946,7 +10959,7 @@ Qed.
 (* P3 段终。                                                      *)
 (* ============================================================ *)
 
-(* ===== 段 P4a（连接引理：J_tk_succ_bridge / J_cert_wd / step_inst，3 Lemma）===== *)
+(* ===== 段 P4a（桥接件：J_tk_succ_bridge / J_cert_wd / step_inst，3 Lemma）===== *)
 
 (* ============================================================ *)
 (* 件 1 b5dQ_J_tk_succ_bridge：t_k + η ↔ t_{k+1} 桥（J Proper）   *)
@@ -11080,7 +11093,7 @@ Proof.
 Qed.
 
 (* exp 支地板树（δexp-支：floorA/floorB/C 之 min；坐标件 RHS 的
-   exp 支同构——P2 lb_exp_part 地板以 (a·(1#2)) 代 a） *)
+   exp 支复刻——P2 lb_exp_part 地板以 (a·(1#2)) 代 a） *)
 Definition b5dQ_lbSdiff_cE (q a : Q) : Q :=
   Qmin (Qmin
     (Qmult (Qmin (1 # 2)
@@ -11092,7 +11105,7 @@ Definition b5dQ_lbSdiff_cE (q a : Q) : Q :=
   (1 # 2).
 
 (* g 支地板树（δg-支：floorA2/floorB2/C 之 min；坐标件 RHS 的
-   g 支同构——P2 lb_gdiff 地板以 (a·(1#4)) 代 a、k2 := k2t 闭式） *)
+   g 支复刻——P2 lb_gdiff 地板以 (a·(1#4)) 代 a、k2 := k2t 闭式） *)
 Definition b5dQ_lbSdiff_cG (q a : Q) : Q :=
   Qmin (Qmin
     (Qmult (Qmin (1 # 2)
@@ -13284,21 +13297,62 @@ Proof.
         setoid_rewrite (real_abs_proj (b5m_J_err x Hx h Hxh) n).
         unfold en, en', hn, Dn.
         ring. } }
-    { (* lb 证书：real_lt (real_const δ0) delta——树展开 + Part 2 泛 tree_lb
-         直接应用（叶 = 本件 canonical app（构造子形）——与 b5dQ_p4g_tree_lb
-         结论 conv；零坐标暴露零 conv 墙） *)
-      pose proof (b5dQ_p4g_tree_lb q Hq0 Hq1 epsQ HepsQ x Hxr NM HMall
-               HMs_all HMc_all) as Hlb_thv3fix5.
-      unfold delta, δE, δS1, δS2, epsE, epsS, tau, eps, kS, K1, invM1,
-        kE, ME, cB, cA, a, r, M, Ms, Mc.
-      exact Hlb_thv3fix5. }
+    { (* lb 证书：real_lt (real_const δ0) delta——逐叶 real_lt 下界
+         （b5dQ_p4g_qlt_* 之 Q 界 + b5dQ_p4g_leaf_* 之叶证书）经
+         real_lt_trans 提升，再以 b5dQ_min_lb 三层组合（conv 分步付清） *)
+      assert (HqE : real_lt (real_const (b5dQ_delta0 q epsQ))
+                            (real_const (Qmult (b5dQ_vE q (epsQ / (2 * q))) (1 # 2)))).
+      { apply real_const_lt. exact (b5dQ_p4g_qlt_E q epsQ Hq0 Hq1 HepsQ). }
+      assert (HlbE : real_lt (real_const (Qmult (b5dQ_vE q (epsQ / (2 * q))) (1 # 2))) δE).
+      { unfold δE.
+        exact (b5dQ_p4g_leaf_E q Hq0 Hq1 x Hxr HMs_all HMc_all
+                 (epsQ / (2 * q)) Ha). }
+      assert (HdE : real_lt (real_const (b5dQ_delta0 q epsQ)) δE).
+      { apply (real_lt_trans (real_const (b5dQ_delta0 q epsQ))
+                             (real_const (Qmult (b5dQ_vE q (epsQ / (2 * q))) (1 # 2)))
+                             δE HqE HlbE). }
+      assert (HqS1 : real_lt (real_const (b5dQ_delta0 q epsQ))
+                             (real_const (b5dQ_lbSdiff_val q
+                                (Qmult (epsQ / (2 * q)) (b5dQ_kS q))))).
+      { apply real_const_lt. exact (b5dQ_p4g_qlt_S1 q epsQ Hq0 Hq1 HepsQ). }
+      assert (HlbS1 : real_lt (real_const (b5dQ_lbSdiff_val q
+                                (Qmult (epsQ / (2 * q)) (b5dQ_kS q)))) δS1).
+      { unfold δS1.
+        exact (b5dQ_p4g_leaf_S q (Qlt_le_weak 0 q Hq0) Hq1 x Hxr
+                 (Qmult (epsQ / (2 * q)) (b5dQ_kS q)) Ha1 NM HMall). }
+      assert (HdS1 : real_lt (real_const (b5dQ_delta0 q epsQ)) δS1).
+      { apply (real_lt_trans (real_const (b5dQ_delta0 q epsQ))
+                             (real_const (b5dQ_lbSdiff_val q
+                                (Qmult (epsQ / (2 * q)) (b5dQ_kS q))))
+                             δS1 HqS1 HlbS1). }
+      assert (HqS2 : real_lt (real_const (b5dQ_delta0 q epsQ))
+                             (real_const (b5dQ_lbSdiff_val q 1))).
+      { apply real_const_lt. exact (b5dQ_p4g_qlt_S2 q epsQ Hq0 Hq1 HepsQ). }
+      assert (HlbS2 : real_lt (real_const (b5dQ_lbSdiff_val q 1)) δS2).
+      { unfold δS2.
+        exact (b5dQ_p4g_leaf_S q (Qlt_le_weak 0 q Hq0) Hq1 x Hxr
+                 1 b5dQ_H1pos NM HMall). }
+      assert (HdS2 : real_lt (real_const (b5dQ_delta0 q epsQ)) δS2).
+      { apply (real_lt_trans (real_const (b5dQ_delta0 q epsQ))
+                             (real_const (b5dQ_lbSdiff_val q 1))
+                             δS2 HqS2 HlbS2). }
+      apply (b5dQ_min_lb (real_const (b5dQ_delta0 q epsQ))
+                         (real_min (real_min δE δS1) δS2)
+                         (real_const tau)).
+      - apply (b5dQ_min_lb (real_const (b5dQ_delta0 q epsQ))
+                           (real_min δE δS1) δS2).
+        + apply (b5dQ_min_lb (real_const (b5dQ_delta0 q epsQ)) δE δS1).
+          * exact HdE.
+          * exact HdS1.
+        + exact HdS2.
+      - apply real_const_lt. exact (b5dQ_p4g_qlt_tau q epsQ Hq0 Hq1 HepsQ). }
   }
 Defined.
 
 (* ============================================================ *)
 (* end sc2_b5a_item27_p4g.v（Part 0–2 + Part 3 主件全落——终验后定稿） *)
 
-(* ===== 段 P4b（Hmod/主件换真：去桩去同构 + 改名 canonical，3 Lemma/Def） ===== *)
+(* ===== 段 P4b（Hmod/主件换真：去桩去复制 + 改名 canonical，3 Lemma/Def） ===== *)
 
 (* ============================================================ *)
 (* §C M4：Hstep 逐 k 步证书 + Hmod（q_arch_inv M := K+2 + 逐 k） *)
@@ -13422,7 +13476,7 @@ Qed.
 (* ============================================================ *)
 Lemma b5dQ_Hmod : forall (q : Q) (Hq0 : Qlt 0 q) (Hq1 : Qlt q 1),
   forall (epsQ : Q), Qlt 0 epsQ ->
-  sigT (fun M : nat => And (0 < M)%nat
+  sigT (fun M : nat => And (NatLe 1 M)
     (forall (k : nat), (k < M)%nat ->
        forall (Hk : cw_unit (real_const (b5dL_tkq q M k)))
               (Hk1 : cw_unit (real_const (b5dL_tkq q M (Datatypes.S k)))),
@@ -13450,7 +13504,7 @@ Proof.
     exact HK. }
   exists M.
   split.
-  - exact HMpos.
+  - exact (NatLe_lift 1 M HMpos).
   - intros k HkM.
     destruct k as [| k'].
     + (* k = 0 支：C1/C3 证书（S(real_const (tkq q M 0)) 尾界） *)
@@ -13461,7 +13515,8 @@ Proof.
       intros Hk Hk1.
       exact (b5dQ_Hstep q Hq0 Hq1 epsQ HepsQ M HMpos 0 HkM Hqdiv
                (b5dQ_tkq_Hxr q M 0 (b5dH_q_pos_le q Hq0) HMpos HkleM)
-               NA HNA NM HMall Hs Hc Hk Hk1).
+               NA HNA NM HMall (fun n => QleT'_to_Qle _ _ (Hs n))
+                    (fun n => QleT'_to_Qle _ _ (Hc n)) Hk Hk1).
     + (* k = S k' 支：C2/C4 证书（b5a_S_ge_one/item15 @ tkq (S k')） *)
       assert (Hk0s : (0 < Datatypes.S k')%nat) by lia.
       assert (HkleM : (Datatypes.S k' <= M)%nat) by lia.
@@ -13476,13 +13531,14 @@ Proof.
                HkM Hqdiv
                (b5dQ_tkq_Hxr q M (Datatypes.S k') (b5dH_q_pos_le q Hq0)
                   HMpos HkleM)
-               NA HNA NM HMall Hs Hc Hk Hk1).
+               NA HNA NM HMall (fun n => QleT'_to_Qle _ _ (Hs n))
+                    (fun n => QleT'_to_Qle _ _ (Hc n)) Hk Hk1).
 Qed.
 
 (* ============================================================ *)
 (* §D M5 主件：b5dQ_E_rational_zero（语句 = 契约逐字）          *)
 (*   证法 = exact (b5dL_E_rational_zero_premise …) 级直接引用        *)
-(*   （item22 L885 已闭：Hmod 输入即得）                         *)
+(*   （item22 L885 已闭：Hmod 代入即得）                         *)
 (* ============================================================ *)
 Lemma b5dQ_E_rational_zero : forall (q : Q), Qlt 0 q -> Qlt q 1 ->
   forall (Hq : cw_unit (real_const q)),
@@ -13503,7 +13559,7 @@ Qed.
 
 (* ============================================================ *)
 (* 段 A：pair 形 gap（b5dS_E_pair_gap）                           *)
-(* 同构源：根 b5b_E_gap L73729–73853（体 L73738–73853）。         *)
+(* 复刻源：根 b5b_E_gap L73729–73853（体 L73738–73853）。         *)
 (* 通用化改动（审查 §6.1 M1 行数估：ring/abs 小件 2–3 通用化）：  *)
 (*   ① ring 恒等：b5b_ring_Ediff（(1−g,1) 特例）→ b5dS_ring_Ediff *)
 (*     （∀a b pair 形——a := 1−g、b := 1 时逐字退化）；            *)
@@ -13552,7 +13608,7 @@ Qed.
 (* ---- 主件：pair 形 gap（|E_n(a) − E_n(b)| ≤ 4cT +              *)
 (*        |a−b|·(2c·(S M)#1 + 2c + 1)）                            *)
 (*        语句 = 审查 §4.1 逐字；体 = b5b_E_gap 体 L73738–73853    *)
-(*        同构：(1−g,1) ↦ (a,b)、g ↦ Qabs (a−b)、域前提 ↦         *)
+(*        映射：(1−g,1) ↦ (a,b)、g ↦ Qabs (a−b)、域前提 ↦         *)
 (*        QleT' (Qabs a) 1 ∧ QleT' (Qabs b) 1） ---- *)
 Lemma b5dS_E_pair_gap : forall (n M : nat) (a b c : Q),
   Qle 0 c ->
@@ -13686,19 +13742,19 @@ Qed.
 
 (* ============================================================ *)
 (* 段 B：pair 形等度连续（b5dS_E_pair_close）                     *)
-(* 同构源：根 b5b_E_close_q L77321–77408（体 L77326–77408）。     *)
+(* 复刻源：根 b5b_E_close_q L77321–77408（体 L77326–77408）。     *)
 (* 改动：窗前提 (Qlt 0 g / Qle g g0) ↦ (QleT' (Qabs a) 1 /         *)
 (*   QleT' (Qabs b) 1 / Qle (Qabs (a−b)) d0)；输出 N := M（arch）、 *)
 (*   d0 := X（= (2·(eps/3))/K——pair 版窗不需 min(1,X) 帽：         *)
 (*   域前提独立于窗，gap 不需 |a−b| ≤ 1 侧）；eps 预算体           *)
 (*   （4cT < eps/3；|a−b|·K ≤ X·K == 2·(eps/3)；third_sum）    *)
-(*   逐字同构。b5b_ecl_* 族全直引（div_pos/arch_in/arch_cancel/   *)
+(*   逐字复刻。b5b_ecl_* 族全直引（div_pos/arch_in/arch_cancel/   *)
 (*   third_sum/third_pos/mult_lt_l/K_ge1/XK_cancel）。             *)
 (* 语句 = 审查 §4.1 逐字（sigT 输出 [Nc, d0]，纯 Q 层、与 x 无关）。*)
 (* ============================================================ *)
 
 Lemma b5dS_E_pair_close : forall (eps : Q), Qlt 0 eps ->
-  sigT (fun N : nat => sigT (fun d0 : Q => And (Qlt 0 d0)
+  sigT (fun N : nat => sigT (fun d0 : Q => And (QltT 0 d0)
     (forall (n : nat) (a b : Q), NatLe N n ->
       QleT' (Qabs a) 1 -> QleT' (Qabs b) 1 ->
       Qle (Qabs (a - b)) d0 ->
@@ -13738,7 +13794,7 @@ Proof.
   { unfold X. apply (b5b_ecl_XK_cancel eps K Hkneq). }
   (* 返回 N := M、d0 := X *)
   exists M. exists X. split.
-  - exact HXpos.
+  - exact (Qlt_to_QltT 0 X HXpos).
   - intros n a b Hn Ha Hb Hab.
     (* 域前提直供（pair gap 前提逐字：QleT' (Qabs a) 1 / QleT' (Qabs b) 1） *)
     (* b5dS_E_pair_gap：|Δ| ≤ 4cT + |a−b|·K *)
@@ -13782,7 +13838,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 段 C 占位（本件不写——待 item27 .vo 定位后另派）：              *)
+(* 段 C 占位（本件不写——待 item27 .vo 就位后另派）：              *)
 (* 段 C 主件 = F1 目标语句逐字（= T4 §4 = b5b_f1_closure' L78187   *)
 (*   前提逐字）：                                                 *)
 (*   Lemma b5dS_E_zero_on_unit : forall (x : Real) (Hx : cw_unit x), *)
@@ -13801,14 +13857,14 @@ Qed.
 (* ============================================================ *)
 (* 段 C：b5dS_E_zero_on_unit（主件）+ 证书族小件——文本预置       *)
 (* （预置先行模式：item24/25 先例——不编译，如实标注）            *)
-(* 设立契约：F1 扩展分支 A item29 段 C 预置。                    *)
+(* 预置契约：F1 扩展分支 A item29 段 C 预置。                    *)
 (*   （权威设计 = 密度闭合审查 §4.1     *)
 (*     装配骨架逐条落实，见下方代码注释分步标记）。              *)
 (* 本段取代 L336-344 占位注释（占位 = 段 A/B 会话所留——只增不改   *)
 (*   纪律：本段全部为新追加文本，段 A/B 正文与既有注释零改动）。  *)
 (* ------------------------------------------------------------ *)
-(* 状态标注：本段依赖上游合并件 sc2_b5a_item27.v，该件定位前     *)
-(*   本段不编译；下述 Require 行为其占位标注，定位后仅需编译     *)
+(* 状态标注：本段依赖上游合并件 sc2_b5a_item27.v，该件就位前     *)
+(*   本段不编译；下述 Require 行为其占位标注，就位后仅需编译     *)
 (*   验证。                                                      *)
 (* ------------------------------------------------------------ *)
 (* 主件语句 = T4 §4 逐字 = 根 b5b_f1_closure'（L78187-78191）    *)
@@ -13854,7 +13910,7 @@ Qed.
 (*      - 第二项 < epsQ/2（n ≥ Nz）；两项和 < epsQ                 *)
 (*        （Qplus_lt_compat + b5b_ep_half_sum）⟹ real_eq 定义     *)
 (*        （L3448）直接闭合。                                     *)
-(*   结论形逐句同构根 b5b_endpoint（L78062-78177，已闭样板）。    *)
+(*   结论形逐句复刻根 b5b_endpoint（L78062-78177，已闭样板）。    *)
 (* 端点说明：x ∈ (0,1) 由两 real_lt 前提给正分离度（e0、e1），    *)
 (*   q := x_Nq 对 Nq ≥ max(N0s, N1s) 严格落入 (0,1)——x 贴 0/贴 1  *)
 (*   情形由前提自动排除（端点不在量化域）——无拼接件（审查 R3）。  *)
@@ -13866,7 +13922,7 @@ Qed.
 (* 收尾形：全 Qed 正常收尾（前提式使用 + real_eq 尾证书闭合——     *)
 (*   段 C 不产出值路径见证，与 item16/18 同型）。                  *)
 (* ============================================================ *)
-(* 注：上游 sc2_b5a_item27 定位后本 Require 行方可编译；         *)
+(* 注：上游 sc2_b5a_item27 就位后本 Require 行方可编译；         *)
 (*   本段其余文本与其无文本依赖。                                 *)
 
 (* ============================================================ *)
@@ -13961,7 +14017,7 @@ Qed.
 (* 段 C 主件：b5dS_E_zero_on_unit                                *)
 (* 语句 = T4 §4 = b5b_f1_closure' 前提逐字（六源 panel 零漂移，   *)
 (*   见段头注）；体 = 设计 §4.1 骨架步骤 1–5（段头注逐条）+ 结论   *)
-(*   形同构根 b5b_endpoint（L78062–78177）。                      *)
+(*   形复刻根 b5b_endpoint（L78062–78177）。                      *)
 (* ============================================================ *)
 Lemma b5dS_E_zero_on_unit : forall (x : Real) (Hx : cw_unit x),
   real_lt real_zero x -> real_lt x (real_const 1) ->
@@ -13979,7 +14035,7 @@ Proof.
   (* 步骤 2：坐标分离（e0/N0s、e1/N1s）+ Cauchy @ d0 取 Nτ        *)
   destruct Hx0 as [e0 [He0pos [N0s HN0s]]].
   destruct Hx1 as [e1 [He1pos [N1s HN1s]]].
-  assert (Hd0T : QltT 0 d0) by (apply Qlt_to_QltT; exact Hd0pos).
+  assert (Hd0T : QltT 0 d0) by exact Hd0pos.
   destruct (projT2 x d0 Hd0T) as [Ntau HNtau].
   (* Nq := max(max N0s N1s) Nτ；q := x_Nq（Cauchy 直给坐标逼近）   *)
   set (Nq := Nat.max (Nat.max N0s N1s) Ntau).
@@ -14120,7 +14176,7 @@ Qed.
 (*   新增 Lemma 6（证书族小件 5 + 主件 1，全 Qed 收尾意图）；      *)
 (*   Lemma 计数预期：11（段 A/B 5 + 段 C 6）；前缀 b5dS_ 独占；    *)
 (*   只增不改（段 A/B 零触碰——仅追加本段 + Require 行）；         *)
-(*   上游 item27 定位后需真编译验证。                             *)
+(*   上游 item27 就位后需真编译验证。                             *)
 (*   预验证（scratch 副本内以契约语句占位后全件编译通过）：        *)
 (*   语法 + 段 C 全证明体类型级闭合已实证；占位件未入本文件。      *)
 (* ============================================================ *)
@@ -14161,7 +14217,6 @@ Proof.
                  (b5b_hsc_theorem b5dS_E_zero_on_unit)))
            (channel_w_eq_two_theta a3_h4_value_bridge)).
 Qed.
-
 (* ============================================================ *)
 (* 块 item30（前缀 b5dT_——主件 b5dT_f1_pi_geom_eq_leibniz_univ）——来源：演变/.ablation/sc2_parallel/sc2_b5a_ode/sc2_b5a_item30.v。 *)
 (* ============================================================ *)
@@ -14199,13 +14254,13 @@ Qed.
 
 (* ============================================================ *)
 (* 验证记录（预置时点 = 未编译——如实）：                         *)
-(*   上游依赖（item27/item29 段 C）定位后需编译验证；              *)
+(*   上游依赖（item27/item29 段 C）就位后需编译验证；              *)
 (*   Lemma 计数预期：2 Lemma = 2 Qed；前缀 b5dT_ 独占；            *)
 (*   语句核对：件 1/件 2 结论 = 终件 B 目标                        *)
 (*     real_eq real_pi_geom cauchy_real_pi_leibniz 逐字；          *)
 (*     体内引用五源件名/类型 = 头注契约逐字。                      *)
 (* 终件 B 衔接：终件 B = real_pi_geom_eq_leibniz（论文点名名）——   *)
-(*   两件已给实质闭式；论文名别名待终件 B 定位（与根件名零冲突）。   *)
+(*   两件已给实质闭式；论文名别名待终件 B 就位（与根件名零冲突）。   *)
 (* ============================================================ *)
 
 (* ============================================================ *)
@@ -14276,7 +14331,7 @@ Qed.
 (* ============================================================ *)
 (* 块 25 · UpLogMono（Real 层 log 单调 le 版）  *)
 (*   real_log_le_mono + real_log_le_zero_of_le_one    *)
-(*   （HlogZ 前提直接应用形态）+ 连接引理 real_lt_le_bridge/        *)
+(*   （HlogZ 前提直接应用形态）+ 桥接件 real_lt_le_bridge/        *)
 (*   real_eq_le_bridge；源：UpLogMono.v（上游）；零公理面、零承认件；4 Qed         *)
 (* ============================================================ *)
 (* ============================================================ *)
@@ -14341,7 +14396,7 @@ Qed.
 (* UpFEP.v —— 二轮增量批·P5：attention = 变分自由能的唯一最小点      *)
 (*            + 行视图引理（bs_kernel 行 = 单查询 softmax_temp）      *)
 (*                                                                *)
-(* P5（FEP × Gibbs 桥闭合，纯组装）：以 base_loss := −z、D := T      *)
+(* P5（FEP × Gibbs 桥汇合，纯组装）：以 base_loss := −z、D := T      *)
 (*   实例化自由能-KL 分解三件套（free_energy_kl_decomp/             *)
 (*   min_free_energy_is_boltzmann/free_energy_min_unique，对        *)
 (*   base_loss/D/Z 全泛化），配对齐引理（boltzmann 因子 = softmax    *)
@@ -14358,6 +14413,6 @@ Qed.
 
 (* ################ Part 1：P5 FEP 闭环 ################ *)
 
-(* ToyR ：替换定理假设面查证 *)
+(* ToyR 替换件：替换定理假设面查证 *)
 Print Assumptions b5d1_Heps4.
 Print Assumptions b5dE_zero_le_one.

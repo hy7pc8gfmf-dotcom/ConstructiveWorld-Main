@@ -1001,7 +1001,7 @@ Proof.
   repeat split; vm_compute; reflexivity.
 Qed.
 
-(* Set 交付面提取（G3 关：提取面魔数计数须为零；判例卡：9.1 须前置 Require） *)
+(* Set 交付面提取（G3 关：提取面魔数计数须为零；E887 卡：9.1 须前置 Require） *)
 From Stdlib Require Import Extraction.
 Separate Extraction leiblw_dist_set leiblw_natwin leiblw_gap leiblw_nivwin.
 
@@ -1772,7 +1772,7 @@ Eval vm_compute in (projT1 leiblw_x0 6, projT1 leiblw_x0 7).
 Eval vm_compute in (Qabs (leiblw_t 20), (leiblw_env_hi 20 - leiblw_env_lo 20)%Q,
                     Qeq_bool (Qabs (leiblw_t 20)) ((leiblw_env_hi 20 - leiblw_env_lo 20)%Q)).
 
-(* G3 增强：真极限本体可提取（既有判例：Real＝(Qseq,cauchy) sigT 提取零伪影） *)
+(* G3 增强：真极限本体可提取（E979 判例：Real＝(Qseq,cauchy) sigT 提取零伪影） *)
 Separate Extraction leiblw_x0.
 
 (* 尾 Print Assumptions（§11 面：G4 关，PA 只增不破——承 219 二十一×Closed） *)
@@ -1809,14 +1809,14 @@ Proof.
     assert (H0 : Qlt 0 eps) by (apply QltT_to_Qlt; exact Heps).
     lra. }
   destruct (leiblw_S_cauchy ((1 # 2) * eps)%Q Hw0) as [Nc Hc].
-  assert (Habs2 : forall x e : Q, QltT (Qabs x) e -> And (Qlt (- e) x) (Qlt x e)).
+  assert (Habs2 : forall x e : Q, QltT (Qabs x) e -> And (QltT (- e) x) (QltT x e)).
   { intros x e H.
     assert (Hl : Qlt (Qabs x) e) by (apply QltT_to_Qlt; exact H).
     destruct (Qlt_le_dec x 0) as [Hx0 | Hx0].
     - assert (Habs : Qabs x == - x) by (apply Qabs_neg; apply Qlt_le_weak; exact Hx0).
-      rewrite Habs in Hl. split; lra.
+      rewrite Habs in Hl. split; apply Qlt_to_QltT; lra.
     - assert (Habs : Qabs x == x) by (apply Qabs_pos; exact Hx0).
-      rewrite Habs in Hl. split; lra. }
+      rewrite Habs in Hl. split; apply Qlt_to_QltT; lra. }
   exists Nc. intros n k Hn Hk.
   destruct (leiblw_par_decomp Nc) as [[j Hj]|[j Hj]]; subst Nc.
   - (* Nc ＝ 2j（偶窗：S_{2j} ≤ S_k ≤ S_{2j+1}） *)
@@ -1832,8 +1832,12 @@ Proof.
     apply QleT'_to_Qle in A. apply QleT'_to_Qle in B.
     pose proof (Habs2 (leiblw_S (2 * j) - leiblw_S n)%Q ((1 # 2) * eps)%Q Hcn)
       as [Hlo1 Hhi1].
+    apply QltT_to_Qlt in Hlo1.
+    apply QltT_to_Qlt in Hhi1.
     pose proof (Habs2 (leiblw_S (2 * j + 1) - leiblw_S n)%Q ((1 # 2) * eps)%Q Hcn1)
       as [Hlo2 Hhi2].
+    apply QltT_to_Qlt in Hlo2.
+    apply QltT_to_Qlt in Hhi2.
     split.
     + apply Qlt_to_QltT. lra.
     + apply Qlt_to_QltT. lra.
@@ -1850,8 +1854,12 @@ Proof.
     apply QleT'_to_Qle in A. apply QleT'_to_Qle in B.
     pose proof (Habs2 (leiblw_S (2 * j + 1) - leiblw_S n)%Q ((1 # 2) * eps)%Q Hcn)
       as [Hlo1 Hhi1].
+    apply QltT_to_Qlt in Hlo1.
+    apply QltT_to_Qlt in Hhi1.
     pose proof (Habs2 (leiblw_S (2 * j + 2) - leiblw_S n)%Q ((1 # 2) * eps)%Q Hcn0)
       as [Hlo2 Hhi2].
+    apply QltT_to_Qlt in Hlo2.
+    apply QltT_to_Qlt in Hhi2.
     split.
     + apply Qlt_to_QltT. lra.
     + apply Qlt_to_QltT. lra.

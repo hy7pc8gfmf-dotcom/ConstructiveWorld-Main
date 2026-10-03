@@ -8,21 +8,30 @@
    端点带宽度严格小于分离半径且 lo <= q 时，逐点夹逼与分离下界不相容，
    迫使 hi < q——排除证据在左右两支中恰居其一。主定理 lw3x_calc 以参数 c
    前提位承载分离假设（无前提位版本在 q 落入包络带内时两支同时为假，
-   故前提位为语句面的必要成分）。
+   故前提位为语句面的必要成分）。定理 lw3x_pi_geom_seal_slot 把圆周率
+   几何表示 real_pi_geom 处的分离假设经两表示等价桥 channel_f1 传输到
+   Leibniz 级数表示 cauchy_real_pi_leibniz（半径按传递定理减半），并以
+   主定理 lw3x_calc 装成排除见证包。供给定理 lw3x_env_supply 对任意正
+   eps 给出显式端点对 (lw3x_env_lo eps, lw3x_env_hi eps) 的透明承载：
+   pi < hi、lo < pi 与带宽 hi - lo < eps 三位见证数据全显式。
    依赖：S01_BaseRing（Set 层 Id/And/NatLe）、S02_CauchyComplete（Real/real_lt/
    real_const/QltT/QltT_to_Qlt/Qlt_to_QltT/real_const_proj/NatLe_lift）、
    S03_QExp（real_metric/q_abs_abs_triangle）、S10_KVQuantTrig
    （cauchy_real_pi_leibniz）、UpReqIrrationalCriterion（lic_metric_proj 逐点
    投影归约）、PiEnvelope（QltT'/QltT'_to_Qlt/pie_partial/pie_modulus/
    pi_rational_envelope）、LW0LeibWindow（leiblw_Qltb/leiblw_Qltb_true/
-   leiblw_Qltb_inv）。
+   leiblw_Qltb_inv）、LW2SepTransport（lw2t_sep_transport：分离半径沿柯西
+   等价减半）、S11_TP3B5（channel_f1：圆周率两表示的柯西等价，及其装配
+   见证 a3_h4_value_bridge/b5b_hsc_theorem）、S14_B5BatchBlock
+   （b5dS_E_zero_on_unit）。
    对标：Bishop 构造分析中否定命题的计算器化——对每个 q 给出显式 [lo, hi]
    排除见证包；端点算式的唯一来源为 PiEnvelope 的包络见证算式，布尔判定器
    的唯一来源为 LW0LeibWindow 的 leiblw_Qltb；逐点投影归约的唯一来源为
    UpReqIrrationalCriterion 的 lic_metric_proj；Q 层线性算术段使用 Lia/Lqa。
    构造性：语句面全 Set 层（QltT/QltT'/real_lt/sigT/And:=prod/sumbool），主定理
    证明为显式装配链，零承认、零经典逻辑、Require 面不引公理模块；计算层
-   lw3x_sideb/lw3x_env_lo/lw3x_env_hi 全 Defined 且上游透明（可提取值域），
+   lw3x_sideb/lw3x_env_lo/lw3x_env_hi/lw3x_env_supply 全 Defined 且上游透明
+   （可提取值域），
    文件尾 Separate Extraction 提取并以 Obj.magic 零命中为检验判据；证书面
    lw3x_band_excl/lw3x_calc 为Qed件，不入提取并集（其端点使用 Qed 包络
    pi_rational_envelope）。
@@ -41,6 +50,9 @@ Require Import S10_KVQuantTrig.
 Require Import UpReqIrrationalCriterion.
 Require Import PiEnvelope.
 Require Import LW0LeibWindow.
+Require Import LW2SepTransport.
+Require Import S11_TP3B5.
+Require Import S14_B5BatchBlock.
 
 (* §1 计算核：外侧判定位与包络端点选择器（全 Defined，可提取） *)
 
@@ -162,10 +174,126 @@ Proof.
         -- exact (left (lw3x_band_excl q c lo hi Hc Hsep Hlo Hhi Hw Hge)).
 Qed.
 
+(* §5 圆周率两表示的桥与几何表示下的分离定理 *)
+
+(* 两表示等价桥的零前提闭式：节导出形 channel_f1 的闭实例，
+   由库内等式 a3_h4_value_bridge 与 b5b_hsc_theorem b5dS_E_zero_on_unit
+   装配而得。 *)
+Definition lw3x_channel_f1_closed : real_eq real_pi_geom cauchy_real_pi_leibniz :=
+  channel_f1 a3_h4_value_bridge (b5b_hsc_theorem b5dS_E_zero_on_unit).
+
+(* c/2 的正性：Q 除法算术，与 PiEnvelope 中 eps/4 正性段同一证法。 *)
+Lemma lw3x_c2_pos : forall c : Q, QltT 0 c -> QltT 0 (c / 2)%Q.
+Proof.
+  intros c Hc. apply Qlt_to_QltT. unfold Qdiv.
+  apply (Qmult_lt_0_compat c (/ (2 # 1))).
+  - apply QltT_to_Qlt. exact Hc.
+  - apply Qinv_lt_0_compat. unfold Qlt; simpl; lia.
+Qed.
+
+(* 分离假设的传输与装包：给定 0 < c 与几何表示 real_pi_geom 到有理点
+   a/b 的点态分离，经传递定理 lw2t_sep_transport 与两表示等价桥
+   lw3x_channel_f1_closed，半径减半后得 Leibniz 级数表示到 a/b 的分离，
+   再由主定理 lw3x_calc 装成排除见证包。 *)
+Theorem lw3x_pi_geom_seal_slot :
+  forall (a b c : Q),
+    QltT 0 c ->
+    real_lt (real_const c) (real_metric real_pi_geom (real_const (a / b))) ->
+    lw3x_seal (a / b) (c / 2)%Q.
+Proof.
+  intros a b c Hc Hsep.
+  apply (lw3x_calc (a / b) (c / 2)%Q).
+  - exact (lw3x_c2_pos c Hc).
+  - exact (lw2t_sep_transport real_pi_geom cauchy_real_pi_leibniz
+             (a / b) c Hc lw3x_channel_f1_closed Hsep).
+Qed.
+
+(* §6 Leibniz 端点包络的透明供给定理 *)
+
+(* 包络供给定理：对任意正 eps，端点对 (lo, hi) = (lw3x_env_lo eps,
+   lw3x_env_hi eps) 满足 lo < pi < hi 且带宽 hi - lo < eps。证明为
+   pi_rational_envelope 同一装配的透明化重述：端点数据面全显式
+   （Defined），供下游语句直接取用端点见证。 *)
+Definition lw3x_env_supply (eps : Q) (Heps : QltT' 0 eps) :
+  sigT (fun lo : Q => sigT (fun hi : Q =>
+    And (real_lt (real_const lo) cauchy_real_pi_leibniz)
+        (And (real_lt cauchy_real_pi_leibniz (real_const hi))
+             (QltT' (hi - lo) eps)))).
+Proof.
+  assert (HepsQ : Qlt 0 eps) by (apply (QltT'_to_Qlt 0 eps Heps)).
+  assert (Hc4 : Qlt 0 (eps / 4)).
+  { unfold Qdiv. apply (Qmult_lt_0_compat eps (/ (4 # 1))).
+    - exact HepsQ.
+    - apply Qinv_lt_0_compat. unfold Qlt; simpl; lia. }
+  assert (Hc2 : Qlt 0 (eps / 2)).
+  { unfold Qdiv. apply (Qmult_lt_0_compat eps (/ (2 # 1))).
+    - exact HepsQ.
+    - apply Qinv_lt_0_compat. unfold Qlt; simpl; lia. }
+  assert (Hb : Qlt (4 * pie_mag (2 * pie_modulus (eps / 2) + 1)) (eps / 2)).
+  { apply (Qle_lt_trans _ (4 * pie_mag (pie_modulus (eps / 2))) _).
+    - apply pie_mult4_le. apply pie_mag_antitone. lia.
+    - apply (pie_modulus_bound (eps / 2) Hc2). }
+  exists (lw3x_env_lo eps).
+  exists (lw3x_env_hi eps).
+  unfold lw3x_env_lo, lw3x_env_hi.
+  split.
+  - apply (pie_real_lower_gen (pie_modulus (eps / 2)) (eps / 4)
+            (4 * pie_partial (2 * pie_modulus (eps / 2) + 2) - eps / 4)).
+    + exact Hc4.
+    + apply qeq_le. ring.
+  - split.
+    + apply (pie_real_upper_gen (pie_modulus (eps / 2)) (eps / 4)
+              (4 * pie_partial (2 * pie_modulus (eps / 2) + 1) + eps / 4)).
+      * exact Hc4.
+      * apply Qle_refl.
+    + apply Qlt_to_QltT'.
+      replace (2 * pie_modulus (eps / 2) + 2)%nat
+        with (Datatypes.S (2 * pie_modulus (eps / 2) + 1))%nat by lia.
+      assert (Hgap : 4 * pie_partial (2 * pie_modulus (eps / 2) + 1)
+                     - 4 * pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1))
+                     == 4 * pie_mag (2 * pie_modulus (eps / 2) + 1)).
+      { assert (Hg := pie_gap1 (2 * pie_modulus (eps / 2) + 1)).
+        assert (Hs : pie_term (2 * pie_modulus (eps / 2) + 1)
+                     == - pie_mag (2 * pie_modulus (eps / 2) + 1)).
+        { unfold pie_term, pie_mag, Qdiv.
+          rewrite (atan_sign_odd (pie_modulus (eps / 2))). ring. }
+        setoid_replace (4 * pie_partial (2 * pie_modulus (eps / 2) + 1)
+                        - 4 * pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1)))
+          with (- (4 * (pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1))
+                     - pie_partial (2 * pie_modulus (eps / 2) + 1))))
+          by ring.
+        rewrite Hg. rewrite Hs. ring. }
+      setoid_replace ((4 * pie_partial (2 * pie_modulus (eps / 2) + 1) + eps / 4)
+                      - (4 * pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1))
+                         - eps / 4))
+        with ((4 * pie_partial (2 * pie_modulus (eps / 2) + 1)
+               - 4 * pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1)))
+              + (eps / 4 + eps / 4)) by ring.
+      setoid_replace (4 * pie_partial (2 * pie_modulus (eps / 2) + 1)
+                      - 4 * pie_partial (Datatypes.S (2 * pie_modulus (eps / 2) + 1)))
+        with (4 * pie_mag (2 * pie_modulus (eps / 2) + 1)) by exact Hgap.
+      setoid_replace (eps / 4 + eps / 4) with (eps / 2)
+        by apply pie_q_add_halves.
+      apply (proj2 (Qlt_minus_iff (4 * pie_mag (2 * pie_modulus (eps / 2) + 1)
+                                   + eps / 2) eps)).
+      setoid_replace (eps - (4 * pie_mag (2 * pie_modulus (eps / 2) + 1) + eps / 2))
+        with ((eps - eps / 2) - 4 * pie_mag (2 * pie_modulus (eps / 2) + 1))
+        by ring.
+      setoid_replace (eps - eps / 2) with (eps / 2)
+        by (unfold Qdiv; field).
+      apply (proj1 (Qlt_minus_iff (4 * pie_mag (2 * pie_modulus (eps / 2) + 1))
+                                  (eps / 2))).
+      exact Hb.
+Defined.
+
 Print Assumptions lw3x_sideb_spec.
 Print Assumptions lw3x_band_excl.
 Print Assumptions lw3x_calc.
 Print Assumptions lw3x_seal.
+Print Assumptions lw3x_channel_f1_closed.
+Print Assumptions lw3x_c2_pos.
+Print Assumptions lw3x_pi_geom_seal_slot.
+Print Assumptions lw3x_env_supply.
 
-Set Extraction Output Directory "Y:/attn/_tlw609_sbx/extract".
-Separate Extraction lw3x_sideb lw3x_env_lo lw3x_env_hi.
+Set Extraction Output Directory "Y:/attn/_tlw648_sbx/extract".
+Separate Extraction lw3x_sideb lw3x_env_lo lw3x_env_hi lw3x_env_supply.

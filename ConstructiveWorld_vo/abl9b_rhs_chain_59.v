@@ -166,7 +166,7 @@ Lemma abl9b_rhs_arctan_contract : forall (eps : Q), Qlt 0 eps ->
 Proof.
   intros eps Heps.
   destruct (b5b_ap_uniform eps Heps) as [M [d0 [Hd0 Hcore]]].
-  exists M. exists d0. exists Hd0.
+  exists M. exists d0. exists (QltT_to_Qlt 0 d0 Hd0).
   intros u v Hu Hv Hclose n Hn.
   rewrite (arctan_real_proj u Hu n).
   rewrite (arctan_real_proj v Hv n).
@@ -340,7 +340,7 @@ Proof.
   intros u v Hu Hv Hconv eps Heps.
   assert (Hepsq : Qlt 0 eps) by (apply QltT_to_Qlt; exact Heps).
   destruct (b5b_ap_uniform eps Hepsq) as [M2 [d0 [Hd0 Hcore]]].
-  destruct (Hconv d0 Hd0) as [M1 [Nv HM1]].
+  destruct (Hconv d0 (QltT_to_Qlt 0 d0 Hd0)) as [M1 [Nv HM1]].
   exists M1. exists (Nat.max M2 Nv).
   intros m Hm n Hn.
   apply NatLe_drop in Hn.

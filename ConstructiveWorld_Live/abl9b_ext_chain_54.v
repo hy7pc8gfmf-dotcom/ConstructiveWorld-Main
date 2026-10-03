@@ -770,7 +770,7 @@ Proof.
     - apply QltT_to_Qlt. exact Heps.
     - apply Qinv_lt_0_compat. unfold Qlt. simpl. lia. }
   destruct (b5b_ap_uniform (eps / 2) H2q) as [M [d0 [Hd0 Hcore]]].
-  assert (Hd0q : Qlt 0 d0) by exact Hd0.
+  assert (Hd0q : Qlt 0 d0) by exact (QltT_to_Qlt 0 d0 Hd0).
   destruct (q_arch_inv d0 Hd0q) as [Nq HNq].
   exists (Nq + 2)%nat. exists M.
   intros m n Hm0 Hn.
