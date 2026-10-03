@@ -474,6 +474,7 @@ LW3ExpNegLB.v
 LW3GenFill.v
 LW3CondSep.v
 LW0LicAdapt.v
+LW0PiIrrational.v
 LW6CosZeroQuant.v
 abl_tail_deep_slots.v
 abl_tail_def_instance.v

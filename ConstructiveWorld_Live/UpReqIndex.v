@@ -3287,6 +3287,11 @@ Definition ng_LW1PiMeasure : NewGreenFace :=
   MkNewGreenFace "LW1PiMeasure.v" 546 34 20261002
   "pi distance-rate translation layer: lw1m_dist_pt and lw1m_dist_face carry the point and face distances, lw1m_dist_order decides the three-way distance order through the rate-tier to window-width link at the ceiling of one over the threshold, lw1m_dom_face supplies the domain face, and lw1m_measure_main assembles the two-premise measure face from lw1m_b_cert_face and lw1m_dom_face with mu0=2 and C=2 selected explicitly" "L834:m16657a".
 
+(* ng_LW0PiIrrational —— LW0PiIrrational.v：圆周率无理性的构造性证明（Niven 路线：Q[t] 多项式微分代数＋圆周率处三角端点值＋端点泛函整数性＋下界见证装配）；主语句 lw0_pi_irrational（任设有理数，恒可给出圆周率与其相离的显式正分离见证证书）；PA=313 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_LW0PiIrrational : NewGreenFace :=
+  MkNewGreenFace "LW0PiIrrational.v" 13955 583 20261004
+  "constructive proof that pi is irrational by the Niven route: q-polynomial differential algebra, trigonometric endpoint values at pi, integrality of the endpoint functionals, and an explicit positive separation witness for every rational approximation" "L13955:m40656c".
+
 (* ng_ablt9_rhscc_scinst —— ablt9_rhscc_scinst.v：第九批新增域普查批·abl9 域 B5 缺口外置供给模块（abl9b_rhs_chain_59 L416 abl9b_rhs_sc_close Hconv 参数位·件54 abl9b_ext_ws_conv 缩放对适配）：①Q 侧缩放常量桥 ablt9_rhscc_km_ksc（件54 ext_km(S m) 与件53 ksc m 同值·两族坐标系合流中间件）②逐点桥 ablt9_rhscc_ws_pt_eq（件59 rhs_ws 族与件54 ext_ws 族逐点尾等价）③B 型全参喂 ablt9_rhscc_sc_close_feed（Hconv 位经逐点桥 Hpt 显式前提适配·供给形态=适配引理形；宿主件53 sca_Hd Qed 不透明致 Hpt 无条件均匀形本批不可构＝B5-B6 耦合新见·B6 手术候用户令）④伴生具名件 ablt9_rhscc_ext_close（件56 a2 L1890 案一槽具名实例闭合）；三宿主零 Require 增量零字节动；PA=4 Closed；coqchk -o 单件零公理（Axioms: none）；注释面已按现役注释词典完成卫生处理（gate4 hard 0/review 5） *)
 Definition ng_ablt9_rhscc_scinst : NewGreenFace :=
   MkNewGreenFace "ablt9_rhscc_scinst.v" 190 4 20261002
