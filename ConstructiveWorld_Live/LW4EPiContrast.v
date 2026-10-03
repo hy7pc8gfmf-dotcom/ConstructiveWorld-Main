@@ -132,3 +132,247 @@ Print Assumptions lw4c_e_escape_supply.
 Print Assumptions lw4c_contrast_param.
 (* 目标：提取零 Obj.magic；PA 双发均 Closed under the global context。
    π 侧供件不存在（占位），不进提取值域、不进 PA 面。 *)
+
+
+From Stdlib Require Import Lia.  (* nat/Z 域辅助算术；Q 域走显式链 *)
+
+(* ============================================================ *)
+(* §8 窗宽对照（S2；全 Set 层；零 (b)）                            *)
+(* ============================================================ *)
+
+(* A1a 阶乘恒 ≥ 1（归纳基座） *)
+Lemma lw4c_qfact_ge_1 : forall n : nat, QleT' 1%Q (q_fact n).
+Proof.
+  intro n. apply Qle_to_QleT'. induction n as [| m IH]; simpl.
+  - unfold Qle. simpl. lia.
+  - apply (Qle_trans _ (1%Q * q_fact m)).
+    + setoid_rewrite (Qmult_1_l (q_fact m)). exact IH.
+    + apply (Qmult_le_compat_r 1%Q (Z.of_nat (Datatypes.S m) # 1)%Q (q_fact m)).
+      * apply (Qle_of_nat 1 (Datatypes.S m)). lia.
+      * apply (Qlt_le_weak 0%Q (q_fact m)). apply q_fact_pos.
+Qed.
+
+(* A1b 阶乘不小于序号：n ≥ 1 蕴含 n ≤ n!（A2/A3 的公共链砖） *)
+Lemma lw4c_qfact_ge_nat : forall n : nat, (1 <= n)%nat ->
+  QleT' ((Z.of_nat n) # 1)%Q (q_fact n).
+Proof.
+  intro n. induction n as [| m IH]; intro Hn; apply Qle_to_QleT'.
+  - unfold Qle. simpl. lia.
+  - setoid_rewrite (q_fact_succ m).
+    setoid_rewrite (Qmult_comm (Z.of_nat (Datatypes.S m) # 1)%Q (q_fact m)).
+    apply (Qle_trans _ (1%Q * (Z.of_nat (Datatypes.S m) # 1)%Q)).
+    + apply qeq_le. symmetry. apply Qmult_1_l.
+    + apply (Qmult_le_compat_r 1%Q (q_fact m) (Z.of_nat (Datatypes.S m) # 1)%Q).
+      * exact (QleT'_to_Qle 1%Q (q_fact m) (lw4c_qfact_ge_1 m)).
+      * apply (Qle_of_nat 0 (Datatypes.S m)). lia.
+Qed.
+
+(* A2 逐点非严对照：n ≥ 1 蕴含 1/n! ≤ 5/(2n+1) *)
+Lemma lw4c_e_win_le_pi_win : forall n : nat, (1 <= n)%nat ->
+  QleT' (lw4c_e_win n) (lw4c_pi_win n).
+Proof.
+  intros n Hn. apply Qle_to_QleT'.
+  unfold lw4c_e_win, lw4c_pi_win.
+  setoid_replace (lw0m_e n) with ((5 # 1)%Q / (Z.of_nat (2 * n + 1) # 1)%Q).
+  2: { unfold lw0m_e, pie_mag, Qdiv. ring. }
+  apply (q_le_div_le 1%Q (q_fact n) (5 # 1)%Q (Z.of_nat (2 * n + 1) # 1)%Q).
+  - apply q_fact_pos.
+  - unfold Qlt. simpl. lia.
+  - apply (Qle_trans _ ((5 # 1)%Q * (Z.of_nat n # 1))).
+    + unfold Qle. cbn [Qnum Qden Qmult]. lia.
+    + apply (Qle_trans _ ((Z.of_nat n # 1) * (5 # 1)%Q)).
+      * apply qeq_le. ring.
+      * apply (Qle_trans _ (q_fact n * (5 # 1)%Q)).
+        -- apply (Qmult_le_compat_r (Z.of_nat n # 1) (q_fact n) (5 # 1)%Q).
+           ++ exact (QleT'_to_Qle (Z.of_nat n # 1) (q_fact n) (lw4c_qfact_ge_nat n Hn)).
+           ++ apply (Qle_of_nat 0 5). lia.
+        -- apply qeq_le. ring.
+Qed.
+
+(* A3 逐点严对照：n ≥ 2 蕴含 1/n! < 5/(2n+1)（阶乘压制强于调和率的逐点形）
+   ——箭头位 Prop 前提＝leiblw_natwin_unbounded 认证先例形 *)
+Lemma lw4c_e_win_lt_pi_win : forall n : nat, (2 <= n)%nat ->
+  QltT (lw4c_e_win n) (lw4c_pi_win n).
+Proof.
+  intros n Hn. apply Qlt_to_QltT.
+  assert (H1 : (1 <= n)%nat) by lia.
+  unfold lw4c_e_win, lw4c_pi_win.
+  setoid_replace (lw0m_e n) with ((5 # 1)%Q / (Z.of_nat (2 * n + 1) # 1)%Q).
+  2: { unfold lw0m_e, pie_mag, Qdiv. ring. }
+  apply (Qle_lt_trans _ ((4 # 1)%Q / (Z.of_nat (2 * n + 1) # 1)%Q)).
+  - apply (q_le_div_le 1%Q (q_fact n) (4 # 1)%Q (Z.of_nat (2 * n + 1) # 1)%Q).
+    + apply q_fact_pos.
+    + unfold Qlt. simpl. lia.
+    + apply (Qle_trans _ ((4 # 1)%Q * (Z.of_nat n # 1))).
+      * unfold Qle. cbn [Qnum Qden Qmult]. lia.
+      * apply (Qle_trans _ ((Z.of_nat n # 1) * (4 # 1)%Q)).
+        -- apply qeq_le. ring.
+        -- apply (Qle_trans _ (q_fact n * (4 # 1)%Q)).
+           ++ apply (Qmult_le_compat_r (Z.of_nat n # 1) (q_fact n) (4 # 1)%Q).
+              ** exact (QleT'_to_Qle (Z.of_nat n # 1) (q_fact n) (lw4c_qfact_ge_nat n H1)).
+              ** apply (Qle_of_nat 0 4). lia.
+           ++ apply qeq_le. ring.
+  - unfold Qdiv.
+    apply (Qmult_lt_compat_r _ _ (Qinv (Z.of_nat (2 * n + 1) # 1)%Q)).
+    + apply (Qinv_lt_0_compat (Z.of_nat (2 * n + 1) # 1)%Q).
+      unfold Qlt. simpl. lia.
+    + apply (Qlt_of_nat_lt 4 5). lia.
+Qed.
+
+(* A4 π 窗高于一切固定幂率窗：k ≥ 1, n ≥ 1 蕴含 1/(n+1)^k < 5/(2n+1)
+   ——「π 窗幂率级压制」的构造性逐点反驳 *)
+Definition lw4c_powwin (k n : nat) : Q :=
+  1%Q / q_pow ((Z.of_nat (Datatypes.S n)) # 1)%Q k.
+Lemma lw4c_pi_win_gt_powwin : forall k n : nat, (1 <= k)%nat -> (1 <= n)%nat ->
+  QltT (lw4c_powwin k n) (lw4c_pi_win n).
+Proof.
+  intro k. intro n. intro Hk. intro Hn. apply Qlt_to_QltT.
+  unfold lw4c_powwin, lw4c_pi_win.
+  setoid_replace (lw0m_e n) with ((5 # 1)%Q / (Z.of_nat (2 * n + 1) # 1)%Q).
+  2: { unfold lw0m_e, pie_mag, Qdiv. ring. }
+  assert (Hpowpos : forall j : nat, Qlt 0 (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q j)).
+  { intro j. induction j as [| j IHj]; simpl.
+    - unfold Qlt. simpl. lia.
+    - apply (Qmult_lt_0_compat (Z.of_nat (Datatypes.S n) # 1)%Q
+               (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q j)).
+      + apply (Qlt_of_nat_lt 0 (Datatypes.S n)). lia.
+      + exact IHj. }
+  assert (Hpowge : forall j : nat, (1 <= j)%nat ->
+    Qle (Z.of_nat (Datatypes.S n) # 1)%Q (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q j)).
+  { intro j. induction j as [| j IHj]; intro Hj.
+    - exfalso. lia.
+    - destruct j as [| j'].
+      + setoid_rewrite (q_pow_succ (Z.of_nat (Datatypes.S n) # 1)%Q 0).
+        assert (H0 : q_pow (Z.of_nat (Datatypes.S n) # 1)%Q 0 == 1%Q)
+          by (simpl; reflexivity).
+        rewrite H0. apply qeq_le. ring.
+      + setoid_rewrite (q_pow_succ (Z.of_nat (Datatypes.S n) # 1)%Q (Datatypes.S j')).
+        apply (Qle_trans _ ((Z.of_nat (Datatypes.S n) # 1)%Q * 1)%Q).
+        * apply qeq_le. ring.
+        * apply (Qle_trans _ (1%Q * q_pow (Z.of_nat (Datatypes.S n) # 1)%Q (Datatypes.S j'))).
+          -- setoid_rewrite (Qmult_1_r (Z.of_nat (Datatypes.S n) # 1)%Q).
+             setoid_rewrite (Qmult_1_l (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q (Datatypes.S j'))).
+             assert (H1 : (1 <= Datatypes.S j')%nat) by lia.
+             exact (IHj H1).
+          -- apply (Qmult_le_compat_r 1%Q (Z.of_nat (Datatypes.S n) # 1)%Q
+                     (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q (Datatypes.S j'))).
+             ++ apply (Qle_of_nat 1 (Datatypes.S n)). lia.
+             ++ apply (Qlt_le_weak 0%Q
+                        (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q (Datatypes.S j'))).
+                apply (Hpowpos (Datatypes.S j')). }
+  apply (Qle_lt_trans _ ((4 # 1)%Q / (Z.of_nat (2 * n + 1) # 1)%Q)).
+  - apply (q_le_div_le 1%Q (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q k) (4 # 1)%Q
+             (Z.of_nat (2 * n + 1) # 1)%Q).
+    + apply (Hpowpos k).
+    + apply (Qlt_of_nat_lt 0 (2 * n + 1)). lia.
+    + apply (Qle_trans _ ((4 # 1)%Q * (Z.of_nat (Datatypes.S n) # 1)%Q)).
+      * unfold Qle. cbn [Qnum Qden Qmult]. lia.
+      * apply (Qle_trans _ ((Z.of_nat (Datatypes.S n) # 1)%Q * (4 # 1)%Q)).
+        -- apply qeq_le. ring.
+        -- apply (Qle_trans _ (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q k * (4 # 1)%Q)).
+           ++ apply (Qmult_le_compat_r (Z.of_nat (Datatypes.S n) # 1)%Q
+                       (q_pow (Z.of_nat (Datatypes.S n) # 1)%Q k) (4 # 1)%Q).
+              ** apply (Hpowge k). exact Hk.
+              ** apply (Qle_of_nat 0 4). lia.
+           ++ apply qeq_le. ring.
+  - unfold Qdiv.
+    apply (Qmult_lt_compat_r _ _ (Qinv (Z.of_nat (2 * n + 1) # 1)%Q)).
+    + apply (Qinv_lt_0_compat (Z.of_nat (2 * n + 1) # 1)%Q).
+      apply (Qlt_of_nat_lt 0 (2 * n + 1)). lia.
+    + apply (Qlt_of_nat_lt 4 5). lia.
+Qed.
+
+(* A5 阶乘窗不超指数率窗：∀m, 1/(S m)! ≤ 2^{-m}（nat 减法零出现形） *)
+Lemma lw4c_e_win_le_expwin : forall m : nat,
+  QleT' (lw4c_e_win (Datatypes.S m)) (1%Q / q_pow (2 # 1)%Q m).
+Proof.
+  intro m. apply Qle_to_QleT'. unfold lw4c_e_win.
+  assert (Hpowpos : Qlt 0 (q_pow (2 # 1)%Q m)).
+  { induction m as [| m IHm]; simpl.
+    - unfold Qlt. simpl. lia.
+    - apply (Qmult_lt_0_compat (2 # 1)%Q (q_pow (2 # 1)%Q m)).
+      + exact Q2_pos.
+      + exact IHm. }
+  assert (Hfact : Qle (q_pow (2 # 1)%Q m) (q_fact (Datatypes.S m))).
+  { clear Hpowpos. induction m as [| m IHm].
+    - simpl. unfold Qle. simpl. lia.
+    - setoid_rewrite (q_pow_succ (2 # 1)%Q m).
+      setoid_rewrite (q_fact_succ (Datatypes.S m)).
+      setoid_rewrite (Qmult_comm (2 # 1)%Q (q_pow (2 # 1)%Q m)).
+      setoid_rewrite (Qmult_comm (Z.of_nat (Datatypes.S (Datatypes.S m)) # 1)%Q
+                       (q_fact (Datatypes.S m))).
+      apply (Qle_trans _ (q_fact (Datatypes.S m) * (2 # 1)%Q)).
+      + apply (Qmult_le_compat_r (q_pow (2 # 1)%Q m) (q_fact (Datatypes.S m))
+                 (2 # 1)%Q).
+        * exact IHm.
+        * apply (Qle_of_nat 0 2). lia.
+      + setoid_rewrite (Qmult_comm (q_fact (Datatypes.S m)) (2 # 1)%Q).
+        setoid_rewrite (Qmult_comm (q_fact (Datatypes.S m))
+                         (Z.of_nat (Datatypes.S (Datatypes.S m)) # 1)%Q).
+        apply (Qmult_le_compat_r (2 # 1)%Q
+                   (Z.of_nat (Datatypes.S (Datatypes.S m)) # 1)%Q
+                   (q_fact (Datatypes.S m))).
+        * apply (Qle_of_nat 2 (Datatypes.S (Datatypes.S m))). lia.
+        * apply (Qlt_le_weak 0%Q (q_fact (Datatypes.S m))). apply q_fact_pos. }
+  apply (q_le_div_le 1%Q (q_fact (Datatypes.S m)) 1%Q (q_pow (2 # 1)%Q m)).
+  - apply q_fact_pos.
+  - exact Hpowpos.
+  - apply (Qle_trans _ (1%Q * q_pow (2 # 1)%Q m)).
+    + apply qeq_le. ring.
+    + setoid_rewrite (Qmult_1_l (q_pow (2 # 1)%Q m)).
+      setoid_rewrite (Qmult_1_l (q_fact (Datatypes.S m))).
+      exact Hfact.
+Qed.
+
+(* A6 形态分离主句（S1 §6 注记区预留名启用；sigT 守卫＝:941 认证同形，
+   箭头位 Prop 前提＝:894 认证先例形；And＝S01 A×B 逐字；零 Prop 位） *)
+Definition lw4c_shape_separation : Set :=
+  And (forall n : nat, (2 <= n)%nat ->
+         sigT (fun _ : (2 <= n)%nat =>
+           QltT (lw4c_e_win n) (lw4c_pi_win n)))
+      (forall k n : nat, (1 <= k)%nat -> (1 <= n)%nat ->
+         sigT (fun _ : (1 <= k)%nat =>
+           sigT (fun _ : (1 <= n)%nat =>
+             QltT (lw4c_powwin k n) (lw4c_pi_win n)))).
+Theorem lw4c_shape_separation_intro : lw4c_shape_separation.
+Proof.
+  split.
+  - intro n. intro H. exists H. exact (lw4c_e_win_lt_pi_win n H).
+  - intro k. intro n. intro Hk. intro Hn.
+    exists Hk. exists Hn. exact (lw4c_pi_win_gt_powwin k n Hk Hn).
+Qed.
+
+(* ============================================================ *)
+(* §9 数值区（Set 面闭项表；id_refl 承收；vm_compute 判例随件）      *)
+(* ============================================================ *)
+
+(* T1 窗宽对照闭项表：1/6 < 5/7、1/120 < 5/11、1/16 < 5/7 *)
+Lemma lw4c_win_tbl :
+  And (QltT (lw4c_e_win 3) (lw4c_pi_win 3))
+      (And (QltT (lw4c_e_win 5) (lw4c_pi_win 5))
+           (QltT (lw4c_powwin 2 3) (lw4c_pi_win 3))).
+Proof. repeat split; exact id_refl. Qed.
+
+(* e 侧见证数值表位（预置 T2）：lic_witness_e 的计算面在 vm_compute 下不终止，
+   本位暂缺；窗宽对照表 T1 在位。 *)
+
+(* ============================================================ *)
+(* §10 高度坐标预建区（定义件 (b)-独立；证书面候 (b) 上游）          *)
+(* ============================================================ *)
+
+(* A7 高度函数：S (Pos.to_nat (Qden (Qred q))) 形 *)
+Definition lw4c_height (q : Q) : nat := Datatypes.S (Pos.to_nat (Qden (Qred q))).
+
+(* A8 幂率窗的 q 坐标版（纯算术定义，(b)-独立） *)
+Definition lw4c_powwin_q (mu0 : nat) (C : Q) (q : Q) : Q :=
+  C / q_pow ((Z.of_nat (lw4c_height q)) # 1)%Q mu0.
+
+(* ============================================================ *)
+(* §11 提取＋PA 扩面（五块七名；T2 位暂缺；红线④）                  *)
+(* ============================================================ *)
+Separate Extraction lw4c_powwin lw4c_pi_win_gt_powwin
+  lw4c_shape_separation lw4c_shape_separation_intro
+  lw4c_height lw4c_powwin_q lw4c_win_tbl.
+Print Assumptions lw4c_e_win_lt_pi_win.
+Print Assumptions lw4c_shape_separation_intro.
+Print Assumptions lw4c_win_tbl.

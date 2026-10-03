@@ -670,7 +670,7 @@ Definition lg_S10KVQuantTrig : LiveGroup := MkLiveGroup "S10_KVQuantTrig.v" 1 43
 Definition lg_S11TP3B5 : LiveGroup := MkLiveGroup "S11_TP3B5.v" 1 410 "TP3B5 / 219 split group; member cnt = stripped-comment Qed tokens".
 Definition lg_S12B5RecycleSF : LiveGroup := MkLiveGroup "S12_B5RecycleSF.v" 1 331 "B5RecycleSF / 219 split group; member cnt = stripped-comment Qed tokens".
 Definition lg_S13NLiveAudit : LiveGroup := MkLiveGroup "S13_NLiveAudit.v" 1 192 "NLiveAudit / 219 split group; member cnt = stripped-comment Qed tokens".
-Definition lg_S14B5BatchBlock : LiveGroup := MkLiveGroup "S14_B5BatchBlock.v" 1 258 "B5BatchBlock / 219 split group; member cnt = stripped-comment Qed tokens".
+Definition lg_S14B5BatchBlock : LiveGroup := MkLiveGroup "S14_B5BatchBlock.v" 1 259 "B5BatchBlock / 219 split group; member cnt = stripped-comment Qed tokens".
 Definition lg_S15TailFEPUp : LiveGroup := MkLiveGroup "S15_TailFEPUp.v" 1 73 "TailFEPUp / 219 split group; member cnt = stripped-comment Qed tokens".
 
 Definition lg_G01 : LiveGroup := MkLiveGroup "G01_CoreMicro.v" 2 5 "members: UpHlogZ,UpExtras,UpFEP,UpLogMono,UpPPO".
@@ -724,7 +724,7 @@ Definition GLiveList : list LiveGroup :=
   (cons lg_G13 nil))))))))))).
 
 Definition SLiveGroups : nat := 15.
-Definition SFaceQed     : nat := 3136.
+Definition SFaceQed     : nat := 3137.
 Lemma SLiveGroups_matches : SLiveGroups = cnt_lg SLiveList.
 Proof. reflexivity. Qed.
 
@@ -2560,7 +2560,7 @@ Definition ng_UpAblMetaPackage : NewGreenFace :=
 
 Definition ng_P7BoundedSoftmaxDeep : NewGreenFace :=
   MkNewGreenFace "P7BoundedSoftmaxDeep.v" 471 15 20260922
-  "R112 six-row topo fix enrollment (7aeac35, order L496 over 578-line baseline, md5 4614b0b2); 18 decls / 15 traced exits all Closed; born-in-place three-gate green" "L471:m4614b0".
+  "R112 six-row topo fix enrollment (7aeac35, order L496 over 578-line baseline, md5 4614b0b2); 18 decls / 15 traced exits all Closed; born-in-place three-gate green" "L490:mf2a25e".
 
 (* ng_LoHiSqueeze —— LoHiSqueeze.v： 入册（7aeac35，order L497/578 行基线，紧随依赖 P7BoundedSoftmaxDeep L496，拓扑验证通过；md5 345b5868 双树实测）；
  4 声明 4 出口全覆盖，零撞名零红线；vo 树 built-at-registration 复证 *)
@@ -2572,7 +2572,7 @@ Definition ng_LoHiSqueeze : NewGreenFace :=
  R3 壳级联担忧解除；13 声明 13 出口全覆盖；vo 树 built-at-registration 复证 *)
 Definition ng_GibbsFamilyExt : NewGreenFace :=
   MkNewGreenFace "GibbsFamilyExt.v" 443 13 20260922
-  "R112 topo fix enrollment (7aeac35, order L552/578-line baseline, md5 d6750177); cascade face cleared (base stub 631B, no S-series edge); 13/13 exits Closed; three-gate green" "L443:md67501".
+  "R112 topo fix enrollment (7aeac35, order L552/578-line baseline, md5 d6750177); cascade face cleared (base stub 631B, no S-series edge); 13/13 exits Closed; three-gate green" "L417:m89b225".
 
 (* ng_FepIdConsume —— FepIdConsume.v： 入册（7aeac35，order L564/578 行基线；md5 ec7152e6 双树实测）；5 声明 5 出口全覆盖；
  未注册检查点 fic2_g3(_ext) 依赖本件（H1 留待，不影响本件在册态）；vo 树 built-at-registration 复证 *)
@@ -2595,12 +2595,12 @@ Definition ng_PA_CW220_Extensions : NewGreenFace :=
 (* ng_PA_DTPT_Bridge_Dep —— PA_DTPT_Bridge_Dep.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_DTPT_Bridge_Dep : NewGreenFace :=
   MkNewGreenFace "PA_DTPT_Bridge_Dep.v" 317 0 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 124ee5, L317); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L317:m124ee5".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 124ee5, L317); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L323:mfbb269".
 
 (* ng_PA_ExpOneEnvelope —— PA_ExpOneEnvelope.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_ExpOneEnvelope : NewGreenFace :=
   MkNewGreenFace "PA_ExpOneEnvelope.v" 527 29 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e2cbe6, L527); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L527:me2cbe6".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e2cbe6, L527); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L491:m97cd65".
 
 (* ng_PA_FirewallReqDischarge —— PA_FirewallReqDischarge.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_FirewallReqDischarge : NewGreenFace :=
@@ -2615,22 +2615,22 @@ Definition ng_PA_PolyIntegral : NewGreenFace :=
 (* ng_PA_TempMonoW2Mark —— PA_TempMonoW2Mark.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_TempMonoW2Mark : NewGreenFace :=
   MkNewGreenFace "PA_TempMonoW2Mark.v" 277 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 1b8f64, L277); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L277:m1b8f64".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 1b8f64, L277); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L204:mca2410".
 
 (* ng_PA_TempSoftmaxInstantiation —— PA_TempSoftmaxInstantiation.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_TempSoftmaxInstantiation : NewGreenFace :=
   MkNewGreenFace "PA_TempSoftmaxInstantiation.v" 420 6 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 349ea1, L420); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L420:m349ea1".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 349ea1, L420); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L386:m98bc57".
 
 (* ng_PA_ToyR_IdSlotTranslate —— PA_ToyR_IdSlotTranslate.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_ToyR_IdSlotTranslate : NewGreenFace :=
   MkNewGreenFace "PA_ToyR_IdSlotTranslate.v" 195 7 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f064f, L195); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L195:m3f064f".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 3f064f, L195); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L151:m603a36".
 
 (* ng_PA_ToyR_SecondLawConsume —— PA_ToyR_SecondLawConsume.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_ToyR_SecondLawConsume : NewGreenFace :=
   MkNewGreenFace "PA_ToyR_SecondLawConsume.v" 389 9 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 2e8c46, L389); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L389:m2e8c46".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 2e8c46, L389); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L409:mc6abd2".
 
 (* ng_PA_ToyR_SupplyAssembly —— PA_ToyR_SupplyAssembly.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_ToyR_SupplyAssembly : NewGreenFace :=
@@ -2645,22 +2645,22 @@ Definition ng_PA_ToyR_fa57_ext : NewGreenFace :=
 (* ng_PA_UpAblAbsSumLeB —— PA_UpAblAbsSumLeB.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblAbsSumLeB : NewGreenFace :=
   MkNewGreenFace "PA_UpAblAbsSumLeB.v" 364 11 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 9a7fdb, L364); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L364:m9a7fdb".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 9a7fdb, L364); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L383:mfcafa7".
 
 (* ng_PA_UpAblD1S3_fep_UpReqSteadyThermo —— PA_UpAblD1S3_fep_UpReqSteadyThermo.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblD1S3_fep_UpReqSteadyThermo : NewGreenFace :=
   MkNewGreenFace "PA_UpAblD1S3_fep_UpReqSteadyThermo.v" 165 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6b64c1, L165); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L165:m6b64c1".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6b64c1, L165); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L182:m6843c3".
 
 (* ng_PA_UpAblD1S4_UpReqStepKLEtaInst —— PA_UpAblD1S4_UpReqStepKLEtaInst.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblD1S4_UpReqStepKLEtaInst : NewGreenFace :=
   MkNewGreenFace "PA_UpAblD1S4_UpReqStepKLEtaInst.v" 118 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 b7106e, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L118:mb7106e".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 b7106e, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L138:m895f40".
 
 (* ng_PA_UpAblD2_AbsLeId_RI_DO —— PA_UpAblD2_AbsLeId_RI_DO.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblD2_AbsLeId_RI_DO : NewGreenFace :=
   MkNewGreenFace "PA_UpAblD2_AbsLeId_RI_DO.v" 157 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 7e3991, L157); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L157:m7e3991".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 7e3991, L157); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L162:mb47060".
 
 (* ng_PA_UpAblMetaWindow —— PA_UpAblMetaWindow.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblMetaWindow : NewGreenFace :=
@@ -2670,7 +2670,7 @@ Definition ng_PA_UpAblMetaWindow : NewGreenFace :=
 (* ng_PA_UpAblT1_UpFirewallReq —— PA_UpAblT1_UpFirewallReq.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpAblT1_UpFirewallReq : NewGreenFace :=
   MkNewGreenFace "PA_UpAblT1_UpFirewallReq.v" 118 5 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 206e3b, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L118:m206e3b".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 206e3b, L118); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L136:m0cceb9".
 
 (* ng_PA_UpDissip —— PA_UpDissip.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpDissip : NewGreenFace :=
@@ -2680,7 +2680,7 @@ Definition ng_PA_UpDissip : NewGreenFace :=
 (* ng_PA_UpStepKLM3 —— PA_UpStepKLM3.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_PA_UpStepKLM3 : NewGreenFace :=
   MkNewGreenFace "PA_UpStepKLM3.v" 665 18 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 494c15, L665); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L665:m494c15".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 494c15, L665); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L641:m9d5cd3".
 
 (* ng_ToyR_BeukersLists —— ToyR_BeukersLists.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_BeukersLists : NewGreenFace :=
@@ -2695,7 +2695,7 @@ Definition ng_ToyR_BeukersVariant : NewGreenFace :=
 (* ng_ToyR_EntropyMonoSplitInst —— ToyR_EntropyMonoSplitInst.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_EntropyMonoSplitInst : NewGreenFace :=
   MkNewGreenFace "ToyR_EntropyMonoSplitInst.v" 298 8 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 40f3d9, L298); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L298:m40f3d9".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 40f3d9, L298); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L943:m01b7c3".
 
 (* ng_ToyR_GibbsFamilyExt —— ToyR_GibbsFamilyExt.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_GibbsFamilyExt : NewGreenFace :=
@@ -2730,7 +2730,7 @@ Definition ng_ToyR_SumEqListFeed : NewGreenFace :=
 (* ng_ToyR_SupplyAssembly —— ToyR_SupplyAssembly.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_SupplyAssembly : NewGreenFace :=
   MkNewGreenFace "ToyR_SupplyAssembly.v" 351 21 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 8e7e36, L351); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L351:m8e7e36".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 8e7e36, L351); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L298:mdb72cc".
 
 (* ng_ToyR_UpAblP6_GibbsFamilyExt —— ToyR_UpAblP6_GibbsFamilyExt.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP6_GibbsFamilyExt : NewGreenFace :=
@@ -2745,32 +2745,32 @@ Definition ng_ToyR_UpAblP6_UniformLimit : NewGreenFace :=
 (* ng_ToyR_UpAblP7_AbsNonNeg —— ToyR_UpAblP7_AbsNonNeg.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP7_AbsNonNeg : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_AbsNonNeg.v" 374 13 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6d95b2, L374); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L374:m6d95b2".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6d95b2, L374); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L354:mbedc67".
 
 (* ng_ToyR_UpAblP7_LoHiCross —— ToyR_UpAblP7_LoHiCross.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP7_LoHiCross : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_LoHiCross.v" 126 3 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6164aa, L126); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L126:m6164aa".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 6164aa, L126); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L139:mb04f9d".
 
 (* ng_ToyR_UpAblP7_LoHiSqueeze —— ToyR_UpAblP7_LoHiSqueeze.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP7_LoHiSqueeze : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_LoHiSqueeze.v" 287 7 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d8d6c8, L287); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L287:md8d6c8".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 d8d6c8, L287); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L439:m10caa0".
 
 (* ng_ToyR_UpAblP7_Paper7Ablation_S1inst —— ToyR_UpAblP7_Paper7Ablation_S1inst.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP7_Paper7Ablation_S1inst : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_Paper7Ablation_S1inst.v" 292 6 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 bdfade, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L292:mbdfade".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 bdfade, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L260:mfe2c8f".
 
 (* ng_ToyR_UpAblP7_UMixSelect —— ToyR_UpAblP7_UMixSelect.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_UpAblP7_UMixSelect : NewGreenFace :=
   MkNewGreenFace "ToyR_UpAblP7_UMixSelect.v" 209 4 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e31c5b, L209); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L209:me31c5b".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 e31c5b, L209); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L221:mdfa24d".
 
 (* ng_ToyR_fa56b_ext —— ToyR_fa56b_ext.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_fa56b_ext : NewGreenFace :=
   MkNewGreenFace "ToyR_fa56b_ext.v" 292 12 20260923
-  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5d4f38, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L292:m5d4f38".
+  "R116 piece-A tail-insert wave (VET8A C-pure-new; tree md5 5d4f38, L292); zero interdependency, deps order/stdlib-resolved; four-gate executed R116b" "L381:mb23975".
 
 (* ng_ToyR_fa57_ext —— ToyR_fa57_ext.v： 片A 尾部追加波（VET8A 四态 C-纯新，47 件之一；零 interdep，依赖全落 order.txt 已有件/stdlib（Qfield/Qring 有 HEAD CI-green 先例）； 草案登记，四门实测补记 ） *)
 Definition ng_ToyR_fa57_ext : NewGreenFace :=
@@ -2783,77 +2783,77 @@ Definition ng_ToyR_fa57_ext : NewGreenFace :=
 (* ng_UpAblDeltaStarGeneral —— UpAblDeltaStarGeneral.v：DSNR 主件（dsgen_ 推广族，577 行 48 声明面 40 Qed（token 级实测；PREP 草案 33 系行首 grep 口径，二验 [N-1] 修正）；PA 四路 Closed＝dsgen_main/rowstoch/feasible/optimal_ge3 逐件 Closed under global context；G3 独立目录 Separate Extraction Obj.magic=0；G4 axiom-free>；头注 L24-27 自引词面按 WangWW 零承认自陷卡豁免注记在案；Require 依赖 UpAblDeltaStarSuboptimal 同批注册） *)
 Definition ng_UpAblDeltaStarGeneral : NewGreenFace :=
   MkNewGreenFace "UpAblDeltaStarGeneral.v" 577 40 20260923
-  "DSNR seat: dsgen_ generalization family (PA 4-route Closed: dsgen_main/rowstoch/feasible/optimal_ge3; G3 separate-extraction Obj.magic=0; G4 Axioms none; ng_qed token-level re-measured 40 (PREP 33 was line-start grep face, VERIFY [N-1] corrected); requires UpAblDeltaStarSuboptimal same-wave registration; WangWW self-trap lexicon exemption noted)" "L577:m032f49".
+  "DSNR seat: dsgen_ generalization family (PA 4-route Closed: dsgen_main/rowstoch/feasible/optimal_ge3; G3 separate-extraction Obj.magic=0; G4 Axioms none; ng_qed token-level re-measured 40 (PREP 33 was line-start grep face, VERIFY [N-1] corrected); requires UpAblDeltaStarSuboptimal same-wave registration; WangWW self-trap lexicon exemption noted)" "L704:m0ba7d2".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-SUB built-at-registration 四项组绿后实测补记）。 *)
 
 Definition ng_uabl_attn_full_instance : NewGreenFace :=
   MkNewGreenFace "uabl_attn_full_instance.v" 135 2 20260924
-  "R124 single-entry supply module: BoundedSoftmax 19-field Fin2 default instance as uabl_-prefixed named rows; one Require Import line exposes full namespace via six Require Export; Part A-C rows verbatim-identical to upstream faces (zero face-conversion tax); PA Closed x4 (bs_abs_id/bs_lpc_id/expf_pos/bs_abs); G3 Separate Extraction Obj.magic=0 (ml 10f2d638 / mli 6afe7ea0 anchors); born-in-place four-gate green 20260924; sandbox/Live/vo triple md5 c40c13a1 pinned; fa53_compat_abs required internally unchanged" "L135:mc40c13".
+  "R124 single-entry supply module: BoundedSoftmax 19-field Fin2 default instance as uabl_-prefixed named rows; one Require Import line exposes full namespace via six Require Export; Part A-C rows verbatim-identical to upstream faces (zero face-conversion tax); PA Closed x4 (bs_abs_id/bs_lpc_id/expf_pos/bs_abs); G3 Separate Extraction Obj.magic=0 (ml 10f2d638 / mli 6afe7ea0 anchors); born-in-place four-gate green 20260924; sandbox/Live/vo triple md5 c40c13a1 pinned; fa53_compat_abs required internally unchanged" "L149:m70bfa8".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（ EB2 built-at-registration 四项验证实测补记；order 锚=SHA1 前 6 照 先例）。 *)
 
 Definition ng_BBDBridgeSupply : NewGreenFace :=
   MkNewGreenFace "BBDBridgeSupply.v" 146 5 20260924
-  "Batch-2 Type-A tail-insert first companion piece (Boltzmann free-energy bridge sum-interface supply: three csm_-based theorems + two bridges); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 5/5 Closed vo magic 436f712100015ff4; G3 self-scope 0 (R19-F1 extraction evidence gap cured by EB2 probe in _teb2_g3out, Separate Extraction of the three theorems, BBD.ml zero magic); G4 coqchk Axioms none; deps all in-tree current, leaf at order L644 anchor R124-988a53 sha1-6" "L146:m9a4b5a".
+  "Batch-2 Type-A tail-insert first companion piece (Boltzmann free-energy bridge sum-interface supply: three csm_-based theorems + two bridges); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 5/5 Closed vo magic 436f712100015ff4; G3 self-scope 0 (R19-F1 extraction evidence gap cured by EB2 probe in _teb2_g3out, Separate Extraction of the three theorems, BBD.ml zero magic); G4 coqchk Axioms none; deps all in-tree current, leaf at order L644 anchor R124-988a53 sha1-6" "L159:m7c8e63".
 
 (* ng_UpReqSamplingFeed —— UpReqSamplingFeed.v：组2/组3 邻居成果伴生供给模块（W23 产 usrq_ 前缀 22 供给定理，293 行 22 Qed； 复核 PASS；ReqUContraction 两节求和诚实接口实现化供给；built-at-registration 四项验证实测 EB2：G2 EXIT=0、PA×22 全 Closed、vo 魔数 436f712100015ff4、vo 新于 v；G3 自证块口径 10 处已申报残留＝D 形 6（usrq_abs_ge_zero_req_supply/usrq_bs_abs_supply 抽象 le 前提破坏性读取，X1 #30 mtdc 同款槽号冻结）＋B 形 2（usrq_bs_sum_pos_supply sigT/InT 见证装箱，p2wb 同类）＋抽象关系构造 2（usrq_z_lb/ub_supply Coq_inl 装箱），零 E/L/T 形＝配方③ 无适用位，与已入树 mtdc/p2wb 已申报残留同类判 P2 另案留待——W23 清册 L99 自申「提取检查点未另设」，再验代申报防分裂；G4 coqchk axiom-free；依赖 CW_219/UpReqAlgebra/UpReqSumD/UpReqConcSoftmax/UpReqSampling/ConcMixSelFeed 全在册现势兼容，末端件 order 尾部追加 L645 锚 -7ccbe2=SHA1 前 6） *)
 Definition ng_UpReqSamplingFeed : NewGreenFace :=
   MkNewGreenFace "UpReqSamplingFeed.v" 293 22 20260924
-  "Batch-2/3 companion supply piece (usrq_ 22 supply theorems for ReqUContraction two-section sum honest-premise interfaces); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 22/22 Closed vo magic 436f712100015ff4; G3 self-scope 10 DECLARED residuals (6 D-form abs-twin abstract-le destructive reads X1-#30-slot-frozen class, 2 B-form sum_pos sigT/InT witness boxing p2wb class, 2 abstract-relation Coq_inl boxings z-twin; zero E/L/T sites so fix-3 not applicable; same class as in-tree mtdc/p2wb declared residuals, P2 deferred; W23 ledger L99 declared no probe, EB2 re-verify declares on its behalf); G4 coqchk Axioms none; deps all in-tree current, leaf at order L645 anchor R124-7ccbe2 sha1-6" "L293:mf918e5".
+  "Batch-2/3 companion supply piece (usrq_ 22 supply theorems for ReqUContraction two-section sum honest-premise interfaces); born-in-place four-gate 20260924 by seat EB2: G2 EXIT=0 PA 22/22 Closed vo magic 436f712100015ff4; G3 self-scope 10 DECLARED residuals (6 D-form abs-twin abstract-le destructive reads X1-#30-slot-frozen class, 2 B-form sum_pos sigT/InT witness boxing p2wb class, 2 abstract-relation Coq_inl boxings z-twin; zero E/L/T sites so fix-3 not applicable; same class as in-tree mtdc/p2wb declared residuals, P2 deferred; W23 ledger L99 declared no probe, EB2 re-verify declares on its behalf); G4 coqchk Axioms none; deps all in-tree current, leaf at order L645 anchor R124-7ccbe2 sha1-6" "L306:m94fb98".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-EXEC built-at-registration 四项验证实测补记；order 锚=md5 前 6 照 E1 §四①处方—— 现测判定：c40c13=md5 前 6、988a53/7ccbe2=文件 SHA1 前 6，两口径历史混用在案，本次统一 md5 前 6 与 ng_meta 自洽）。 *)
 
 (* ng_UpReqCf2TvGenSupply —— UpReqCf2TvGenSupply.v：C1 产一件双定理供给模块（192 行 3 Qed；件一 uc2t_habs_cf2tv_nonneg 强形＋uc2t_habs_cf2tv_nonneg_norm 规格形，件二 uc2t_cf2tv_nonneg_habs_rev 反向真等价（V-C1 判「真等价·无降档·升格成立」：plain 形复原＋归一性件内已证＋合成结论三查全过）；PA×3 全 Closed；G3 单命令三常数提取主 ml Obj.magic=0；G4 coqchk 传递环境公理 3 条＋CONTAINMENT-EQUAL 新增=0；built-at-registration 绿判四项组 ；沙箱/Live/vo 三方 md5 恒等 bcac27f1；Require CW219/Algebra/SumD/Dist/ConcSoftmax/Sampling/ConcMixSel/ConcB1/ConcB2/AttnDoeblin/ConcFin2 全在册） *)
 Definition ng_UpReqCf2TvGenSupply : NewGreenFace :=
   MkNewGreenFace "UpReqCf2TvGenSupply.v" 192 3 20260925
-  "P7FIN2 piece-1+2 supply: cf2-TV nonneg strong+normalized forms and reverse true-equivalence (plain-form restoration, in-piece normalization, both directions machine-checked; V-C1 upgraded); PA 3/3 Closed; G3 single-command three-constant extraction Obj.magic=0; G4 coqchk 3 transitive axioms CONTAINMENT-EQUAL zero-new; born-in-place four-gate green 20260925; triple md5 bcac27f1" "L192:mbcac27".
+  "P7FIN2 piece-1+2 supply: cf2-TV nonneg strong+normalized forms and reverse true-equivalence (plain-form restoration, in-piece normalization, both directions machine-checked; V-C1 upgraded); PA 3/3 Closed; G3 single-command three-constant extraction Obj.magic=0; G4 coqchk 3 transitive axioms CONTAINMENT-EQUAL zero-new; born-in-place four-gate green 20260925; triple md5 bcac27f1" "L467:maf4a9a".
 
 (* ng_meta 口径："L<wc -l 实测>:m<md5 前 6>"（ 扩列口径）；本块行数/md5=就位树实测（-EXEC built-at-registration 四项验证实测补记；order 锚=md5 前 6 照 尾块统一口径；源=Live_X 逐字拷贝；两红件 UpAblD1S11_UpReqCauchy（头注注释失衡）/UpReqBregmanBase（L119 证明体伤）。 *)
 
 (* ng_UpAblBYUpperTight —— UpAblBYUpperTight.v：BY 上紧化件（189 行 5 Qed；btight_ 前缀半燃料紧界；Require Arith/Lia＋UpAblBYLowerBound 包内依赖＝本项链内拓扑序 LB→UT；四项验证绿同上口径 ；md5 4f4990=J7 同代） *)
 Definition ng_UpAblBYUpperTight : NewGreenFace :=
   MkNewGreenFace "UpAblBYUpperTight.v" 189 5 20260925
-  "BY upper-tightening: btight_ half-fuel tight bound, five theorems, requires UpAblBYLowerBound (intra-set topo order); four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 4f4990 (J7-identical)" "L189:m4f4990".
+  "BY upper-tightening: btight_ half-fuel tight bound, five theorems, requires UpAblBYLowerBound (intra-set topo order); four-gate green on current HEAD 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 4f4990 (J7-identical)" "L423:mc9a025".
 
 (* ng_UpAblD1S12_UpReqAttnUniformLimit —— UpAblD1S12_UpReqAttnUniformLimit.v：FA-D1S12 供给包件①（90 行 4 Qed；原件 UpReqAttnUniformLimit Section AlmUniform 7 数据槽的 Token:=bool 具体有限集实例供给（uabd1s12_ul_ 前缀）；独立伴随模块零 Require 原件（P3S1 工艺）；原件现势槽对账 PASS（-SCREEN 抽检＋EXEC 全槽实扫）；四项验证绿 ：G3 own magic=0 闭包 0；md5 042868） *)
 Definition ng_UpAblD1S12_UpReqAttnUniformLimit : NewGreenFace :=
   MkNewGreenFace "UpAblD1S12_UpReqAttnUniformLimit.v" 90 4 20260925
-  "FA-D1S12 supply pack 1: AlmUniform 7 data slots as bool finite-set instances (uabd1s12_ul_), zero Require on mother P3S1, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 042868" "L90:m042868".
+  "FA-D1S12 supply pack 1: AlmUniform 7 data slots as bool finite-set instances (uabd1s12_ul_), zero Require on mother P3S1, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 042868" "L103:m0a601c".
 
 (* ng_UpAblD1S12_UpReqAttnMassSplit —— UpAblD1S12_UpReqAttnMassSplit.v：FA-D1S12 供给包件②（86 行 4 Qed；AmsMassSplit 8 数据槽 bool 实例供给（uabd1s12_ams_）；独立伴随模块零 Require 原件；槽对账 PASS；四项验证绿 ：G3 own magic=0 闭包 0；md5 b9a01d） *)
 Definition ng_UpAblD1S12_UpReqAttnMassSplit : NewGreenFace :=
   MkNewGreenFace "UpAblD1S12_UpReqAttnMassSplit.v" 86 4 20260925
-  "FA-D1S12 supply pack 2: AmsMassSplit 8 data slots bool instances (uabd1s12_ams_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b9a01d" "L86:mb9a01d".
+  "FA-D1S12 supply pack 2: AmsMassSplit 8 data slots bool instances (uabd1s12_ams_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b9a01d" "L98:me560a7".
 
 (* ng_UpAblD1S12_UpReqAttnQ18Tail —— UpAblD1S12_UpReqAttnQ18Tail.v：FA-D1S12 供给包件③（86 行 4 Qed；AqtTail 8 数据槽 bool 实例供给（uabd1s12_aqt_）；独立伴随模块零 Require 原件；槽对账 PASS；四项验证绿 ：G3 own magic=0 闭包 0；md5 03a40f） *)
 Definition ng_UpAblD1S12_UpReqAttnQ18Tail : NewGreenFace :=
   MkNewGreenFace "UpAblD1S12_UpReqAttnQ18Tail.v" 86 4 20260925
-  "FA-D1S12 supply pack 3: AqtTail 8 data slots bool instances (uabd1s12_aqt_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 03a40f" "L86:m03a40f".
+  "FA-D1S12 supply pack 3: AqtTail 8 data slots bool instances (uabd1s12_aqt_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 03a40f" "L98:m3ce6ec".
 
 (* ng_UpAblD1S13_UpReqAlignClose —— UpAblD1S13_UpReqAlignClose.v：FA-D1S13 供给包件①（154 行 2 Qed；原件 UpReqAlignClose UacClose 节余量 16 槽供给（uabd1s13_ 前缀）；独立伴随模块零 Require 原件；槽对账 PASS；四项验证绿 ：G3 own magic=0 闭包 71 全落 S07 既档伪影轨；md5 dd1670） *)
 Definition ng_UpAblD1S13_UpReqAlignClose : NewGreenFace :=
   MkNewGreenFace "UpAblD1S13_UpReqAlignClose.v" 154 2 20260925
-  "FA-D1S13 supply pack 1: UacClose residual 16 slots (uabd1s13_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 on documented S07 artifact trail), coqchk Axioms none; md5 dd1670" "L154:mdd1670".
+  "FA-D1S13 supply pack 1: UacClose residual 16 slots (uabd1s13_), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 on documented S07 artifact trail), coqchk Axioms none; md5 dd1670" "L168:ma2a261".
 
 (* ng_UpAblD1S13_AlignIdUnclosed —— UpAblD1S13_AlignIdUnclosed.v：FA-D1S13 供给包件②（117 行 2 Qed；原件 AlignIdUnclosed 节 AiuBackwardKL 余量 14 槽供给（R/RIS/sumf/sum_ext/sum_add/sum_linear/reward/beta/beta_pos/pi_ref/pi_ref_pos/eta/ZAL_pos）；S2/S3 已收槽排除登记在头注；独立伴随模块零 Require 原件；槽对账 PASS；四项验证绿 ：G3 own magic=0 闭包 71 同款既档伪影；md5 45d9ae） *)
 Definition ng_UpAblD1S13_AlignIdUnclosed : NewGreenFace :=
   MkNewGreenFace "UpAblD1S13_AlignIdUnclosed.v" 117 2 20260925
-  "FA-D1S13 supply pack 2: AiuBackwardKL residual 14 slots (S2/S3-claimed slots excluded per header ledger), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 45d9ae" "L117:m45d9ae".
+  "FA-D1S13 supply pack 2: AiuBackwardKL residual 14 slots (S2/S3-claimed slots excluded per header ledger), zero Require on mother, slot reconciliation PASS; four-gate green 20260925, extraction own ml Obj.magic=0 (closure 71 documented S07 trail), coqchk Axioms none; md5 45d9ae" "L126:me099dc".
 
 (* ng_UpReqPaperAnchor —— UpReqPaperAnchor.v： ANCHOR-A 论文引用锚机制件（244 行 14 Qed；pan_ 前缀具名锚记录 pan_anchor_list＋pan_find_* 检索函数＋三重不变式（sym_ck/file_ck/md5_len/day_uniform）——论文引用行号漂移痛点的在册机制化解法；纯 Ascii/String 零项目依赖；-SCREEN git 考古=从未入库非被移除；四项验证绿 ：G3 own magic=0 闭包 0；md5 b49e12） *)
 Definition ng_UpReqPaperAnchor : NewGreenFace :=
   MkNewGreenFace "UpReqPaperAnchor.v" 244 14 20260925
-  "R114 ANCHOR-A paper-reference anchor mechanism: pan_anchor_list named anchors + pan_find_* retrievers + triple invariants (sym/file/md5_len/day), pure Ascii/String zero project deps, never-in-tree verified by git archaeology; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b49e12" "L244:mb49e12".
+  "R114 ANCHOR-A paper-reference anchor mechanism: pan_anchor_list named anchors + pan_find_* retrievers + triple invariants (sym/file/md5_len/day), pure Ascii/String zero project deps, never-in-tree verified by git archaeology; four-gate green 20260925, extraction Obj.magic=0, coqchk Axioms none; md5 b49e12" "L235:m4a7890".
 (* ng_p2a_AttnClimClose —— p2a_AttnClimClose.v：消融落件·工程包AD tier2 末批二（164 行 4 Qed；原件全文逐字保留，仅将文末清单所列定理 p2a_attn_tv_seq_clim_zero（原 L112，2 句玩具证·定义层受控展开）之证明体替换，声明面与引用面零改动、零新增 Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留原件 Print Assumptions 追印面；Require QArith/CW_ConstructiveWorld_219/UpBudgetReal/UpArchAttn；本期归册三候件之一，EX-BOX 裁定已贴补丁未注册→EX-REG 归册后编译；实测 md5 5dc9d1） *)
 Definition ng_p2a_AttnClimClose : NewGreenFace :=
   MkNewGreenFace "p2a_AttnClimClose.v" 164 4 20260926
-  "Ablation drop piece, eng-package AD tier2 batch-2: original text kept verbatim, only p2a_attn_tv_seq_clim_zero (orig L112) proof body swapped to toy proof (2 sentences, definition-layer controlled unfolding); declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 5dc9d1" "L164:m5dc9d1".
+  "Ablation drop piece, eng-package AD tier2 batch-2: original text kept verbatim, only p2a_attn_tv_seq_clim_zero (orig L112) proof body swapped to toy proof (2 sentences, definition-layer controlled unfolding); declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 5dc9d1" "L302:m579621".
 
 (* ng_p3a_TempDualBoolSlots —— p3a_TempDualBoolSlots.v：消融落件·B 可消融件（169 行 6 Qed；原件全文逐字保留，仅将文末清单所列定理 p3a_bsum_ext（原 L51，7 句刀体；坐标 L828 定理 10.13 四求和槽＝开放池 S05 三槽）之证明体替换为玩具证（实质非平凡三口径），声明面与引用面零改动、零新增 Require，纯构造性闭合，文尾保留原件 Print Assumptions 追印面；Require QArith/CW_ConstructiveWorld_219/UpReqTempDefs/UpReqEntropyDeficitTemp；本期归册三候件之一，EX-BOX 裁定已贴补丁未注册→EX-REG 归册后编译；实测 md5 658d14） *)
 Definition ng_p3a_TempDualBoolSlots : NewGreenFace :=
   MkNewGreenFace "p3a_TempDualBoolSlots.v" 169 6 20260926
-  "Ablation drop piece B-ablatable: original text kept verbatim, only p3a_bsum_ext (orig L51, 7-clause blade body; L828 Theorem 10.13 four-sum slots = open pool S05 three slots) proof body swapped to toy proof; declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 658d14" "L169:m658d14".
+  "Ablation drop piece B-ablatable: original text kept verbatim, only p3a_bsum_ext (orig L51, 7-clause blade body; L828 Theorem 10.13 four-sum slots = open pool S05 three slots) proof body swapped to toy proof; declarations and references unchanged, zero new Require; R15 candidate trio, EX-BOX ruled patched-but-unregistered, compile after EX-REG enrollment; md5 658d14" "L183:ma9da9c".
 
 (* ng_AbsLeIdReal53 —— AbsLeIdReal53.v：实数具体层 le 版绝对值恒等引理族（134 行 6 Qed；主件 r53_real_abs_ge_zero_id（le zero a -> Id (abs a) a 的 Real 层独立兑现），并交付 strict/eq/le 三种平移形扩展与乘法兼容引理 r53_real_abs_mult_id；与抽象层 fa53 件相互独立仅 Require 复用，依赖 S01_BaseRing/fa53_compat_abs/S02_CauchyComplete/S03_QExp/S07_RealSetoidExpLog 全在册；全件 Qed 闭合、零承认词面、无经典逻辑，语句面全 Set 层零 Prop 泄露，文末 Print Assumptions 审计全 Closed；本期归册三候件之一；实测 md5 b69e18） *)
 Definition ng_AbsLeIdReal53 : NewGreenFace :=
@@ -2873,7 +2873,7 @@ Definition ng_abl_Hqarch_bernoulli_04 : NewGreenFace :=
 (* ng_abl_Hqarch_bridge_06 —— abl_Hqarch_bridge_06.v：消融落件·Q 层 Archimedean nat 见证核（Z_lt_le_dec 双支构造）＋末前件 n 见证生产＋Hqarch 全站完成（2/2 桥接件，取用件04）；基 179 行；R1' PASS→R2'' 维持 *)
 Definition ng_abl_Hqarch_bridge_06 : NewGreenFace :=
   MkNewGreenFace "abl_Hqarch_bridge_06.v" 176 5 20260928
-  "Ablation drop piece: Q-layer Archimedean nat witness core (Z_lt_le_dec two-branch construction) + last-predecessor n witness production + Hqarch full-site closure (bridge 2/2, consumes piece 04); R1' PASS -> R2'' maintained; md5 c2f617" "L176:mc2f617".
+  "Ablation drop piece: Q-layer Archimedean nat witness core (Z_lt_le_dec two-branch construction) + last-predecessor n witness production + Hqarch full-site closure (bridge 2/2, consumes piece 04); R1' PASS -> R2'' maintained; md5 c2f617" "L170:m9782a5".
 
 (* ng_abl_arctan_diff_16 —— abl_arctan_diff_16.v：消融落件·工作说明 9a-乙首片：HasIncr eps-线性近似谓词＋和差规则真构造＋b3rr 内点衔接；主定理 abl9_atan_diff_formula 续作点登记（首片，续作见件19）；基 470 行；裁决三计入终态；【陈旧申报勘注：主式已闭（a2_56 L1871 A2 形），本条登记文系闭合前旧文照录；md5/行数锚以勘注波后实拍为准】 *)
 Definition ng_abl_arctan_diff_16 : NewGreenFace :=
@@ -2898,7 +2898,7 @@ Definition ng_abl_MixLogAB_htv_free_02 : NewGreenFace :=
 (* ng_abl_Ln2_native_escape_03 —— abl_Ln2_native_escape_03.v：消融落件·ln2 原生逃逸窗件：d_n 递推母线真 Fixpoint＋显式商见证＋Z 层 scaling 链；「窗放不进」负证书＋条件逃逸接口（如实 B 类禁冒充 A）；基 325 行；九处修复后 R2'' 查2 独立复现 PASS（Closed=5、Obj.magic=0、Extraction 产物与遗产逐字节 SAME）维持 *)
 Definition ng_abl_Ln2_native_escape_03 : NewGreenFace :=
   MkNewGreenFace "abl_Ln2_native_escape_03.v" 315 11 20260928
-  "Ablation drop piece: ln2 native escape window - d_n recursion mother line as true Fixpoint + explicit quotient witness + Z-layer scaling chain; cannot-fit negative certificate + conditional escape interface (honest B-class, no A-grade impersonation); after nine fixes R2'' check-2 independent reproduction PASS (Closed=5, Obj.magic=0, extraction output byte-SAME with legacy) maintained; md5 fef3da" "L315:mfef3da".
+  "Ablation drop piece: ln2 native escape window - d_n recursion mother line as true Fixpoint + explicit quotient witness + Z-layer scaling chain; cannot-fit negative certificate + conditional escape interface (honest B-class, no A-grade impersonation); after nine fixes R2'' check-2 independent reproduction PASS (Closed=5, Obj.magic=0, extraction output byte-SAME with legacy) maintained; md5 fef3da" "L308:m1a4a01".
 
 (* ng_abl_SupplyRemRefuted_07 —— abl_SupplyRemRefuted_07.v：消融落件·sa_supply_rem 不可满足机检反驳 t0_supply_rem_refuted : sa_supply_rem -> False（规格级战果，Print Assumptions Closed under global context；库固定档 sa_A/sa_theta=1/2/sa_clo=lne_B 下成立）；基 185 行；R1' PASS→R2'' 维持 *)
 Definition ng_abl_SupplyRemRefuted_07 : NewGreenFace :=
@@ -2956,12 +2956,12 @@ Definition ng_abl_arctan_diff_20 : NewGreenFace :=
 (* ng_abl9b_rho_chain_53 —— abl9b_rho_chain_53.v：消融落件·A2B3 批层1三组：件51 望远镜引擎 ρ 参数化（签名保持式）＋缩放域证书＋w 侧 clamp-3/4 代表元，主公式内点版链供给构造；Require S01–S11＋abl_arctan_diff_19/20＋abl9b_skeleton_30＋abl_arctan_diff_51/60，批内零依赖；基 1066 行；41 闭合已核对 *)
 Definition ng_abl9b_rho_chain_53 : NewGreenFace :=
   MkNewGreenFace "abl9b_rho_chain_53.v" 1066 41 20260930
-  "A2B3 batch layer-1 three groups: rho-parameterized telescope over the piece-51 engine (signature-preserving), scaled-domain certificate, clamp-3/4 representative on the w side; supply construction for the interior-point main-formula chain; zero batch-internal dependencies; 41 closures verified Closed; md5 6eff3e" "L1066:m6eff3e".
+  "A2B3 batch layer-1 three groups: rho-parameterized telescope over the piece-51 engine (signature-preserving), scaled-domain certificate, clamp-3/4 representative on the w side; supply construction for the interior-point main-formula chain; zero batch-internal dependencies; 41 closures verified Closed; md5 6eff3e" "L1066:m1d5855".
 
 (* ng_abl9b_ext_chain_54 —— abl9b_ext_chain_54.v：消融落件·A2B3 批层2 LHS 半边装配件：Q 侧四块＋Hconv 参数位供给构造＋real_eq↔(M1,M2) 互译包装；Require S01–S11＋abl9b_skeleton_30＋abl_arctan_diff_20，批内零依赖；基 1499 行；32 闭合已核对（另含 9 个 Definition） *)
 Definition ng_abl9b_ext_chain_54 : NewGreenFace :=
   MkNewGreenFace "abl9b_ext_chain_54.v" 1499 32 20260930
-  "A2B3 batch layer-2 LHS-half assembly: four Q-side blocks, Hconv parameter-slot supply construction, real_eq <-> (M1,M2) translation wrappers; zero batch-internal dependencies; 32 closures verified Closed (plus 9 Definitions); md5 cb7ca7" "L1499:mcb7ca7".
+  "A2B3 batch layer-2 LHS-half assembly: four Q-side blocks, Hconv parameter-slot supply construction, real_eq <-> (M1,M2) translation wrappers; zero batch-internal dependencies; 32 closures verified Closed (plus 9 Definitions); md5 cb7ca7" "L1499:ma0a7c3".
 
 (* ng_abl9b_int_prep_57 —— abl9b_int_prep_57.v：消融落件·A2B3 批集成预备三块十二件：件52 桥退役迁移＋装配链 clamp 化对齐＋9b-4 骨架（A2_formula 等接口面）；Require S01–S11＋abl_arctan_diff_20/45＋abl9b_skeleton_30＋abl9b_rho_chain_53；基 506 行；12 闭合已核对 *)
 Definition ng_abl9b_int_prep_57 : NewGreenFace :=
@@ -2971,12 +2971,12 @@ Definition ng_abl9b_int_prep_57 : NewGreenFace :=
 (* ng_abl9b_rhs_chain_59 —— abl9b_rhs_chain_59.v：消融落件·A2B3 批层2 丙肢四块：clamp 1-Lipschitz＋arctan 序列项级合同＋Qinv 连续辅助件＋RHS_m→RHS 闭合骨架；Require S01–S11＋abl_arctan_diff_20/45＋abl9b_skeleton_30＋abl9b_rho_chain_53；基 463 行；16 闭合已核对 *)
 Definition ng_abl9b_rhs_chain_59 : NewGreenFace :=
   MkNewGreenFace "abl9b_rhs_chain_59.v" 463 16 20260930
-  "A2B3 batch layer-2 leg-c four blocks: clamp 1-Lipschitz, arctan sequence term-level congruence, Qinv continuity auxiliaries, RHS_m -> RHS closure skeleton; 16 closures verified Closed; md5 04a02a" "L463:m04a02a".
+  "A2B3 batch layer-2 leg-c four blocks: clamp 1-Lipschitz, arctan sequence term-level congruence, Qinv continuity auxiliaries, RHS_m -> RHS closure skeleton; 16 closures verified Closed; md5 04a02a" "L463:ma16c30".
 
 (* ng_abl9_atan_diff_a2_56 —— abl9_atan_diff_a2_56.v：消融落件·A2B3 批主公式 A2 形闭合终式（量词序 x Hx 前置形；Hd 证明项逐字形；抽象骨架前件槽对接形；已证结论=abl9_atan_diff_formula）；Require S01–S11＋19/20/41/45/47/30＋53/54/59；基 2420 行；29 闭合已核对（29=29=29 三联同值） *)
 Definition ng_abl9_atan_diff_a2_56 : NewGreenFace :=
   MkNewGreenFace "abl9_atan_diff_a2_56.v" 2420 29 20260930
-  "A2B3 batch main-formula A2-shape closure final form (quantifier order x Hx leading, Hd proof-term verbatim, abstract-skeleton front-slot docking; proved result abl9_atan_diff_formula); 29 closures verified (29=29=29 triple-equal); md5 6572a2" "L2420:m6572a2".
+  "A2B3 batch main-formula A2-shape closure final form (quantifier order x Hx leading, Hd proof-term verbatim, abstract-skeleton front-slot docking; proved result abl9_atan_diff_formula); 29 closures verified (29=29=29 triple-equal); md5 6572a2" "L2420:m6cc63c".
 
 (* ng_abl9b_land_58 —— abl9b_land_58.v：消融落件·A2B3 批 9b-4 落地两块：等价承载五件＋inhabitation 六件（A2 形接口代理承载）；Require S01–S11＋abl_arctan_diff_45＋abl9b_skeleton_30＋abl9_atan_diff_a2_56；基 321 行；6 闭合已核对（另含 7 个 Definition＋1 Record） *)
 Definition ng_abl9b_land_58 : NewGreenFace :=
@@ -2985,7 +2985,7 @@ Definition ng_abl9b_land_58 : NewGreenFace :=
 (* ng_abl9b_skeleton_30 —— abl9b_skeleton_30.v：消融链基补投件·9b-1 装配骨架：域界 abl9b_dom_pos＋w 界 abl9b_w_bounds（|w_n| ≤ (4/3)|h_n|，Hw 证书原料）＋主装配骨架（9a-乙 差公式槽以显式假设位 Hdiff 承载，δ 配方含 (1/2) 收缩因子）；Require S01–S11＋abl_arctan_smallincr_15＋abl_arctan_diff_16，批内零依赖；基 853 行；12 闭合已核对 *)
 Definition ng_abl9b_skeleton_30 : NewGreenFace :=
   MkNewGreenFace "abl9b_skeleton_30.v" 853 12 20260930
-  "9b-1 assembly skeleton: domain bound abl9b_dom_pos, w bound abl9b_w_bounds (|w| <= (4/3)|h|, Hw certificate material), and the main assembly skeleton carrying the 9a-yi difference-formula slot as explicit hypothesis Hdiff with the (1/2) contraction factor in the delta recipe; zero batch-internal dependencies; 12 closures verified Closed; md5 22df62" "L853:m22df62".
+  "9b-1 assembly skeleton: domain bound abl9b_dom_pos, w bound abl9b_w_bounds (|w| <= (4/3)|h|, Hw certificate material), and the main assembly skeleton carrying the 9a-yi difference-formula slot as explicit hypothesis Hdiff with the (1/2) contraction factor in the delta recipe; zero batch-internal dependencies; 12 closures verified Closed; md5 22df62" "L853:me06698".
 
 (* ng_abl_arctan_cert_bridge_21 —— abl_arctan_cert_bridge_21.v：消融链基补投件·X24' Real 层证书桥预制：w Real 构造 abl9_brg_w_real＋终近逐点投影 abl9_brg_w_proj＋证书无关对齐 abl9_brg_w_ext＋1+w² 恒等桥两形（除法形＋核形）＋w 增量恒等桥两形（除法形＋核形）＋|w|<1 全 n 域证书（8/15 界）；Require S01–S11＋abl_arctan_diff_19，批内零依赖；基 689 行；14 闭合已核对 *)
 Definition ng_abl_arctan_cert_bridge_21 : NewGreenFace :=
@@ -2995,17 +2995,17 @@ Definition ng_abl_arctan_cert_bridge_21 : NewGreenFace :=
 (* ng_abl_arctan_diff_40 —— abl_arctan_diff_40.v：消融链基补投件·链式规则斜率合成恒等式 Real 升层：abl9_slope_id_real（件20 Q 层恒等式经终近逐点相等闭合器 abl9_brg_pt_eq＋real_inv_proj 逐点投影链升 real 层 real_eq）＋D1 路线域证书 abl9_wpath_pt_bnd/abl9_brg_wpath_dom（件20 新代 abl9_q_path_den 使用位）；Require S01–S11＋abl_arctan_diff_19/20＋abl_arctan_cert_bridge_21；基 382 行；4 闭合已核对 *)
 Definition ng_abl_arctan_diff_40 : NewGreenFace :=
   MkNewGreenFace "abl_arctan_diff_40.v" 382 4 20260930
-  "real lifting of the chain-rule composite slope identity abl9_slope_id_real: the piece-20 Q-layer identity raised to real_eq via the pointwise asymptotic-equality closer abl9_brg_pt_eq and the real_inv_proj projection chain, plus the D1-route domain certificates abl9_wpath_pt_bnd and abl9_brg_wpath_dom at the new-generation abl9_q_path_den use site; 4 closures verified Closed; md5 fc1821" "L382:mfc1821".
+  "real lifting of the chain-rule composite slope identity abl9_slope_id_real: the piece-20 Q-layer identity raised to real_eq via the pointwise asymptotic-equality closer abl9_brg_pt_eq and the real_inv_proj projection chain, plus the D1-route domain certificates abl9_wpath_pt_bnd and abl9_brg_wpath_dom at the new-generation abl9_q_path_den use site; 4 closures verified Closed; md5 fc1821" "L382:m3bf2ae".
 
 (* ng_abl_arctan_diff_41 —— abl_arctan_diff_41.v：消融链基补投件·9a-乙 ③N 等步链：Q 层剖分算术（qs 等距递推＋qs_pos 正性＋qs_Z 桥＋eps/(2N) 预算保正 abl9_eps_2N_pos）＋Real 层剖分拓扑＋链式组合件 abl9_walk/abl9_nchain_eq/abl9_nchain_walk/abl9_nchain_crit（单步一致增量估计升 N 步链 real_eq）；Require S01–S11＋abl_arctan_diff_19/20；基 384 行；12 闭合已核对 *)
 Definition ng_abl_arctan_diff_41 : NewGreenFace :=
   MkNewGreenFace "abl_arctan_diff_41.v" 384 12 20260930
-  "9a-yi part-3 N equal-step chain: Q-layer subdivision arithmetic (qs recurrence, positivity qs_pos, Z bridge qs_Z, eps/(2N) budget positivity abl9_eps_2N_pos), real-layer subdivision topology, and chain composition pieces abl9_walk, abl9_nchain_eq, abl9_nchain_walk, abl9_nchain_crit raising a uniform single-step increment estimate to the N-step chain real_eq; 12 closures verified Closed; md5 b1735c" "L384:mb1735c".
+  "9a-yi part-3 N equal-step chain: Q-layer subdivision arithmetic (qs recurrence, positivity qs_pos, Z bridge qs_Z, eps/(2N) budget positivity abl9_eps_2N_pos), real-layer subdivision topology, and chain composition pieces abl9_walk, abl9_nchain_eq, abl9_nchain_walk, abl9_nchain_crit raising a uniform single-step increment estimate to the N-step chain real_eq; 12 closures verified Closed; md5 b1735c" "L384:m121006".
 
 (* ng_abl_arctan_diff_45 —— abl_arctan_diff_45.v：消融链基补投件·9a-乙 主公式闭合推进：arctan 实参良定性 abl9_arctan_arg_wd＋遗留① Real 层单发包装 abl9_Hcert_real＋定量链引擎 abl9_const_chain（N 随 eps 取号，Σ 余项=(8/3)|h|²/N→0）；Require S01–S11＋abl_arctan_diff_20＋abl_arctan_cert_bridge_21；基 192 行；3 闭合已核对 *)
 Definition ng_abl_arctan_diff_45 : NewGreenFace :=
   MkNewGreenFace "abl_arctan_diff_45.v" 192 3 20260930
-  "9a-yi main-formula closure advance: arctan argument well-definedness abl9_arctan_arg_wd, legacy item-1 real-layer single-shot wrapper abl9_Hcert_real, and the quantitative chain engine abl9_const_chain with N chosen by eps and remainder sum (8/3)|h|^2/N tending to zero; 3 closures verified Closed; md5 9eb679" "L192:m9eb679".
+  "9a-yi main-formula closure advance: arctan argument well-definedness abl9_arctan_arg_wd, legacy item-1 real-layer single-shot wrapper abl9_Hcert_real, and the quantitative chain engine abl9_const_chain with N chosen by eps and remainder sum (8/3)|h|^2/N tending to zero; 3 closures verified Closed; md5 9eb679" "L192:m8d491e".
 
 (* ng_abl_arctan_diff_47 —— abl_arctan_diff_47.v：消融链基补投件·9a-乙 主定理装配推进：件40（Real 桥）与件41（N 等步链）两前件的装配衔接，装配版主定理 abl9_atan_diff_formula_asem＋inv 形 abl9_atan_diff_formula_inv（件20 B 使用位），装配域 Hh4 收紧为逐点 ∀n|h_n|≤1/4；Require S01–S11＋abl_arctan_diff_19/20/21/40/41；基 1056 行；18 闭合已核对 *)
 Definition ng_abl_arctan_diff_47 : NewGreenFace :=
@@ -3015,7 +3015,7 @@ Definition ng_abl_arctan_diff_47 : NewGreenFace :=
 (* ng_abl_arctan_diff_51 —— abl_arctan_diff_51.v：消融链基补投件·9a-乙 主公式闭合续作：real_le 逐点投影器 abl9_real_le_proj_sl＋定量望远镜自建（件41/45 链引擎纯组合使用，见证随 eps 取号＋eps 松弛逐层传播）＋残项判定（单步 |Δphi| ≤ c·|s|＋余项 (8/3)|s|²，N 等步不可省）；Require S01–S11＋abl_arctan_diff_19/20/21/40/45；基 269 行；3 闭合已核对 *)
 Definition ng_abl_arctan_diff_51 : NewGreenFace :=
   MkNewGreenFace "abl_arctan_diff_51.v" 269 3 20260930
-  "9a-yi main-formula closure continuation: the real_le pointwise projector abl9_real_le_proj_sl, a self-built quantitative telescope (the piece-41/45 chain engines used purely compositionally, witnesses chosen by eps with eps relaxation propagated layer by layer), and the remainder verdict (single step |delta phi| <= c|s| plus remainder (8/3)|s|^2; N equal steps cannot be omitted); 3 closures verified Closed; md5 dabb92" "L269:mdabb92".
+  "9a-yi main-formula closure continuation: the real_le pointwise projector abl9_real_le_proj_sl, a self-built quantitative telescope (the piece-41/45 chain engines used purely compositionally, witnesses chosen by eps with eps relaxation propagated layer by layer), and the remainder verdict (single step |delta phi| <= c|s| plus remainder (8/3)|s|^2; N equal steps cannot be omitted); 3 closures verified Closed; md5 dabb92" "L269:ma6419d".
 
 (* ng_abl_arctan_diff_60 —— abl_arctan_diff_60.v：消融链基补投件·9a-乙 主公式续作（X60 形）：②桥闭合＋GAP 判定件组（GAP-1 首判：拟文 RHS 槽域证书在拟文假设下不可满足，与拟文假设修订决策耦合）；Require S01–S11＋abl_arctan_diff_19/20/21；基 615 行；9 闭合已核对 *)
 Definition ng_abl_arctan_diff_60 : NewGreenFace :=
@@ -3024,8 +3024,8 @@ Definition ng_abl_arctan_diff_60 : NewGreenFace :=
 
 (* ng_LW0LeibWindow —— LW0LeibWindow.v：莱布尼茨窗族极限分离件（本批行1·原位在册仅注册；PA=30 Closed；四关＋第五证在卷） *)
 Definition ng_LW0LeibWindow : NewGreenFace :=
-  MkNewGreenFace "LW0LeibWindow.v" 1888 115 20261001
-  "Leibniz window family: alternating-series limit separation, escape obstacles and family separation; in-place, registration only" "L1888:md6552a".
+  MkNewGreenFace "LW0LeibWindow.v" 1896 115 20261003
+  "Leibniz window family: alternating-series limit separation, escape obstacles and family separation; in-place, registration only" "L1896:me425ae".
 
 (* ng_LW3ETranscendental —— LW3ETranscendental.v：M3-C1 正本 e 超越分离件（本批行2·原位在册；PA=45 全 Closed；终装认证账在卷；全组上游） *)
 Definition ng_LW3ETranscendental : NewGreenFace :=
@@ -3035,7 +3035,7 @@ Definition ng_LW3ETranscendental : NewGreenFace :=
 (* ng_LW3KnzValue —— LW3KnzValue.v：K 面非零见证锚例值钉件（本批行3·独立；372 砖四关在卷） *)
 Definition ng_LW3KnzValue : NewGreenFace :=
   MkNewGreenFace "LW3KnzValue.v" 83 3 20261001
-  "K-face nonzero witness anchor (p372): lam/Kinst/lc three pins via lw3_Kinst_spec bridge" "L83:m46cc1b".
+  "K-face nonzero witness anchor (p372): lam/Kinst/lc three pins via lw3_Kinst_spec bridge" "L83:mbfe3a8".
 
 (* ng_LW3CountEBound —— LW3CountEBound.v：count*E<1 数值实例化件（本批行4·独立；E caller-chosen 诚实边界在卷） *)
 Definition ng_LW3CountEBound : NewGreenFace :=
@@ -3055,7 +3055,7 @@ Definition ng_LW3FamScale : NewGreenFace :=
 (* ng_LW3VarTSumBound —— LW3VarTSumBound.v：变 T 三角和界引理族件（本批行7·独立·零 LW3E 依赖） *)
 Definition ng_LW3VarTSumBound : NewGreenFace :=
   MkNewGreenFace "LW3VarTSumBound.v" 138 6 20261001
-  "variable-T triangle-sum bound family: per-node lambda upper bound, abs-sum triangle kernel, const/scale linears" "L138:m7a09b2".
+  "variable-T triangle-sum bound family: per-node lambda upper bound, abs-sum triangle kernel, const/scale linears" "L138:m0ed2ef".
 
 (* ng_LW3JointFill —— LW3JointFill.v：锚例两尺度联合填装件（本批行8·案甲改形并册；副本前缀已归一） *)
 Definition ng_LW3JointFill : NewGreenFace :=
@@ -3065,17 +3065,17 @@ Definition ng_LW3JointFill : NewGreenFace :=
 (* ng_LW3DualBridge —— LW3DualBridge.v：变体线对偶引理＋缩放桥接件（本批行9·案甲改形并册；副本前缀已归一） *)
 Definition ng_LW3DualBridge : NewGreenFace :=
   MkNewGreenFace "LW3DualBridge.v" 245 6 20261001
-  "variant-line dual lemma and scaled-family bridge over replicated family-scale surface (case-A reshaped)" "L245:m1d0326".
+  "variant-line dual lemma and scaled-family bridge over replicated family-scale surface (case-A reshaped)" "L245:mae43bb".
 
 (* ng_LW3ESlot —— LW3ESlot.v：E 槽 Real 半边接载完成件（本批行10·取 60abca04 代非 25b77c1d 旧代；kills 缺口位显式前提承载） *)
 Definition ng_LW3ESlot : NewGreenFace :=
   MkNewGreenFace "LW3ESlot.v" 314 11 20261001
-  "E-slot real-half closing: strict main theorem via realconst/realexp projections and geometric bound chain; kills slot explicit premise" "L314:md38af9".
+  "E-slot real-half closing: strict main theorem via realconst/realexp projections and geometric bound chain; kills slot explicit premise" "L314:m4cd525".
 
 (* ng_LW3P2Prod —— LW3P2Prod.v：端点泛函求值式桥（Q 层半边）定义件（本批行11·229 正名随批并册；头注更新 f6dd9099 转历史值） *)
 Definition ng_LW3P2Prod : NewGreenFace :=
   MkNewGreenFace "LW3P2Prod.v" 113 3 20261001
-  "endpoint functional evaluation bridge (229 renamed per decision point 10); cross-line read-only consumption upstream of P2Carrier" "L113:m223815".
+  "endpoint functional evaluation bridge (229 renamed per decision point 10); cross-line read-only consumption upstream of P2Carrier" "L113:mfb6d8c".
 
 (* ng_LW3P2Carrier —— LW3P2Carrier.v：p^2 载体条件承载形件（本批行12·候 LW3P2Prod 先行；依赖行随正名更新一行） *)
 Definition ng_LW3P2Carrier : NewGreenFace :=
@@ -3085,27 +3085,27 @@ Definition ng_LW3P2Carrier : NewGreenFace :=
 (* ng_LW3Kills —— LW3Kills.v：环 6 kills 引理本体件（本批行13·新件·硬候 LW3ESlot 先行；M 显式门槛 sigT 见证形） *)
 Definition ng_LW3Kills : NewGreenFace :=
   MkNewGreenFace "LW3Kills.v" 133 3 20261001
-  "ring-6 kills lemma body: explicit-M-threshold sigT witness for geometric bound, carrier-gap and anchor discharges" "L133:m2dd145".
+  "ring-6 kills lemma body: explicit-M-threshold sigT witness for geometric bound, carrier-gap and anchor discharges" "L133:md1b906".
 
 (* ng_LW3CarrierFull —— LW3CarrierFull.v：Real 半边全清承载件（本批行14·新件·硬候 LW3Kills 先行；X 泛型零前提主定理） *)
 Definition ng_LW3CarrierFull : NewGreenFace :=
   MkNewGreenFace "LW3CarrierFull.v" 140 4 20261001
-  "Real-half full-clear carrier: premise-free main theorem with explicit eps pick via cauchy_real_exp_pos projection" "L140:m2d801c".
+  "Real-half full-clear carrier: premise-free main theorem with explicit eps pick via cauchy_real_exp_pos projection" "L140:m1a35ac".
 
 (* ng_LW3ExpNegLB —— LW3ExpNegLB.v：e^(-node) 显式正有理下界件（本批行15·新件·独立拓扑零约束；取件在案） *)
 Definition ng_LW3ExpNegLB : NewGreenFace :=
   MkNewGreenFace "LW3ExpNegLB.v" 174 4 20261001
-  "explicit positive rational lower bound for exp(-node): r=1/(4C) with uniform series bound; GAPASUME slot-3 supply closure" "L174:m4de8e8".
+  "explicit positive rational lower bound for exp(-node): r=1/(4C) with uniform series bound; GAPASUME slot-3 supply closure" "L174:m582e6b".
 
 (* ng_LW3GenFill —— LW3GenFill.v：joint_target 一般 p 填装件（本批行16·391 第六候补件·随批并册已裁；硬候 FamScale/VarTSumBound/JointFill/DualBridge 先行） *)
 Definition ng_LW3GenFill : NewGreenFace :=
   MkNewGreenFace "LW3GenFill.v" 292 13 20261001
-  "general-p joint_target fill (391), hard Require upstream of CondSep; consumes famscale/dual/fill/vtsum surfaces" "L292:m8ef136".
+  "general-p joint_target fill (391), hard Require upstream of CondSep; consumes famscale/dual/fill/vtsum surfaces" "L292:m1a14a9".
 
 (* ng_LW3CondSep —— LW3CondSep.v：案丙条件分离族 C2+C4 组装件（本批行17·新件·全组拓扑末位；七跨件依赖全备始可） *)
 Definition ng_LW3CondSep : NewGreenFace :=
   MkNewGreenFace "LW3CondSep.v" 134 2 20261001
-  "case-C conditional separation assembly: C2 lambda<1 condition and C4 full composition with explicit anchor growth pin" "L134:m35e400".
+  "case-C conditional separation assembly: C2 lambda<1 condition and C4 full composition with explicit anchor growth pin" "L134:m1fccda".
 
 (* ng_LW0LicAdapt —— LW0LicAdapt.v：π 传输单前提出口件（批 2 附行·M0+ α 链槽 3 合入件·已在位仅注册；PA=3 Closed；509 注释清洗毕 gate4=0；500 铸型＋502 复走＋503 终验 GO 在卷） *)
 Definition ng_LW0LicAdapt : NewGreenFace :=
@@ -3114,13 +3114,13 @@ Definition ng_LW0LicAdapt : NewGreenFace :=
 
 (* ng_LW6CosZeroQuant —— LW6CosZeroQuant.v：cos 零点定量单纯性核（零点包非退化形＋分离模量推论·已在位仅注册；PA=4 Closed；注释清洗毕 gate4=0；558 改铸形·终验 GO 在卷） *)
 Definition ng_LW6CosZeroQuant : NewGreenFace :=
-  MkNewGreenFace "LW6CosZeroQuant.v" 229 4 20261001
-  "quantitative simplicity of the cos zero point: nondegenerate zero pack with explicit inverse-bound constant two and a separation modulus corollary; erratum-re-cast, annotation-cleaned, in-place registration only" "L229:me1116b".
+  MkNewGreenFace "LW6CosZeroQuant.v" 238 4 20261001
+  "quantitative simplicity of the cos zero point: nondegenerate zero pack with explicit inverse-bound constant two and a separation modulus corollary; erratum-re-cast, annotation-cleaned, in-place registration only" "L238:m5c4cb7".
 
 (* ng_abl_tail_deep_slots —— abl_tail_deep_slots.v：深水杂槽现勘桥两件＋RI 面证书六件＋RL 节直供两件合件（尾百第四批包③·十供给定理＋一机检不可构造负裁决登记；决议138 尾百七件合流之新件落点；注释清稿毕 gate4=0） *)
 Definition ng_abl_tail_deep_slots : NewGreenFace :=
   MkNewGreenFace "abl_tail_deep_slots.v" 236 10 20261001
-  "deep misc slots after survey: two exp_neg bridge closed forms, six one-instantiation positivity certificates for RI and P7D slots, two RL direct-supply pieces, one non-constructive negative adjudication registered" "L236:md629c9".
+  "deep misc slots after survey: two exp_neg bridge closed forms, six one-instantiation positivity certificates for RI and P7D slots, two RL direct-supply pieces, one non-constructive negative adjudication registered" "L236:mbd35d7".
 
 (* ng_abl_tail_def_instance —— abl_tail_def_instance.v：配分定义性实例化件族统一件＋可达槽具名闭形（尾百七件合流波新件；Z_temp 裸槽路线不可达如实判读登记于卷；注释清稿毕 gate4=0） *)
 Definition ng_abl_tail_def_instance : NewGreenFace :=
@@ -3135,7 +3135,7 @@ Definition ng_abl_tail_novel_supply : NewGreenFace :=
 (* ng_abl_tail_pos_certs —— abl_tail_pos_certs.v：正性证书族 one 实例化合件（尾百第四批包①·Real 面六闭形＋RI 面一闭形＋温度/配分/步长类证书槽供给；尾百七件合流波新件；注释清稿毕 gate4=0） *)
 Definition ng_abl_tail_pos_certs : NewGreenFace :=
   MkNewGreenFace "abl_tail_pos_certs.v" 316 14 20261001
-  "positivity certificate package: lt-face T/T_star/D/Z one-instantiation closed forms with G3 zeroing translation slots across Real, RI, temperature, partition and stepsize families" "L316:m020079".
+  "positivity certificate package: lt-face T/T_star/D/Z one-instantiation closed forms with G3 zeroing translation slots across Real, RI, temperature, partition and stepsize families" "L316:m6ebb70".
 
 (* ng_abl_tail_slot_upgrade —— abl_tail_slot_upgrade.v：独立槽批部分供形升级件（尾百七件合流波新件；四类升级配方六槽＋使用面喂形三位；Set 面归属机检在卷；注释清稿毕 gate4=0） *)
 Definition ng_abl_tail_slot_upgrade : NewGreenFace :=
@@ -3150,7 +3150,7 @@ Definition ng_abl_tail_sum_pos_bridge : NewGreenFace :=
 (* ng_abl_tail_world_certs —— abl_tail_world_certs.v：world_certs 世界证书族合件（尾百第四批包②·KVEv 逐出核四槽最小世界闭合＋接口面 lt 证书八槽 one 实例化；尾百七件合流波新件；注释清稿毕 gate4=0） *)
 Definition ng_abl_tail_world_certs : NewGreenFace :=
   MkNewGreenFace "abl_tail_world_certs.v" 347 12 20261001
-  "world certificate layer: KVEv exit-kernel four-slot minimal-world closure plus eight lt-face certificate one-instantiation closed forms for RL and P7D temperature slots" "L347:me8edda".
+  "world certificate layer: KVEv exit-kernel four-slot minimal-world closure plus eight lt-face certificate one-instantiation closed forms for RL and P7D temperature slots" "L347:m81cc07".
 
 (* ng_LW2SepTransport —— LW2SepTransport.v：通用分离传递核（real_eq 桥当黑盒模量源调用下 real_lt 的显式预算传递·k 退化因子桥内禀只进注记不进语句面〔设计文档 §2.2:155＋588 §四步4 定论〕；辅助件 lw2t_k_inv2_le L41 结论位 stdlib Qle:Prop 仅证内 L64 pose proof 使用不外泄主链，已申报挂起〔§三丙案〕；PA=3 Closed；绿判三证在卷 575 记录＋588 幻影红结案预诊） *)
 Definition ng_LW2SepTransport : NewGreenFace :=
@@ -3160,107 +3160,107 @@ Definition ng_LW2SepTransport : NewGreenFace :=
 (* ng_LW5SepComplexity —— LW5SepComplexity.v：分离复杂度层（pi 有理包络列窗族 eps_n:=1/(n+1)·M_n:=2*pie_modulus(eps_n/2)+1 上 bool 分离判定器 lw5n_sep_dec＋最小分离窗阶 lw5n_nsep：结构递归有界搜索 lw5n_find＋显式预算 lw5n_bnd〔足用性不主张如实注记〕＋最小性特征 lw5n_nsep_minimal；窗族合法性＋入窗近距正确性＋搜索机件包在卷；增长律三档语句面以注记承载闭证属后续；结论位 nat 序四件（nsep_bound/nsep_least 上界＋shape_lower/shape_band 之 m<8·n0+9 下界序）照头注「特此如实注记」内嵌申报·候验证挂起；辅助 Qle/Qlt 语句仅脚手架；绿证＝607 记录 EXIT=0＋PA 双发 50/50 Closed＋coqchk -o 公理位 none，608 十三补丁属 219 面零碰本件，.vo 0f9e8a68 魔数 436f7121 0001 5ff4 在盘） *)
 Definition ng_LW5SepComplexity : NewGreenFace :=
   MkNewGreenFace "LW5SepComplexity.v" 1083 58 20261002
-  "separation complexity layer: rational envelope window family of pi (eps_n := 1/(n+1), M_n := 2*pie_modulus(eps_n/2)+1) carrying bool separation decider lw5n_sep_dec and minimal window rank lw5n_nsep via structurally recursive bounded search lw5n_find and explicit budget lw5n_bnd with minimality characterized by lw5n_nsep_minimal; window legality, near-boundary correctness and search machinery included; growth-law three-tier statements stay in annotations with closed proofs as future work; four conclusion-position nat-order bounds (nsep_bound, nsep_least upper bounds plus shape_lower/shape_band lower order m < 8*n0+9) honestly declared per the module header annotation as pending-verification ledger, auxiliary Qle/Qlt statements scaffolding only" "L1083:m7dcdc6".
+  "separation complexity layer: rational envelope window family of pi (eps_n := 1/(n+1), M_n := 2*pie_modulus(eps_n/2)+1) carrying bool separation decider lw5n_sep_dec and minimal window rank lw5n_nsep via structurally recursive bounded search lw5n_find and explicit budget lw5n_bnd with minimality characterized by lw5n_nsep_minimal; window legality, near-boundary correctness and search machinery included; growth-law three-tier statements stay in annotations with closed proofs as future work; four conclusion-position nat-order bounds (nsep_bound, nsep_least upper bounds plus shape_lower/shape_band lower order m < 8*n0+9) honestly declared per the module header annotation as pending-verification ledger, auxiliary Qle/Qlt statements scaffolding only" "L1083:me505e5".
 
 (* ng_abl_tail_supply_65 —— abl_tail_supply_65.v：tsp_sum6 求和六性质件（尾百供给第二批·F1 六性质 28 槽实例闭形＋F9 inv_one_inv 双槽＋F12 fold 两方程＋PA 审计段；tmw/frd/tsi/slc/PA_04/sumL 六族使用喂形；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_65 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_65.v" 301 11 20261002
-  "sum-six-properties piece: instance closed forms for the F1 six-property 28 slots as six supply theorems plus consumer slot feed forms across the tmw, frd, tsi, slc, PA_04 and sumL families, with F9 inv_one_inv two slots, F12 fold two equations and a PA audit section" "L301:mc92101".
+  "sum-six-properties piece: instance closed forms for the F1 six-property 28 slots as six supply theorems plus consumer slot feed forms across the tmw, frd, tsi, slc, PA_04 and sumL families, with F9 inv_one_inv two slots, F12 fold two equations and a PA audit section" "L301:m604c99".
 
 (* ng_abl_tail_supply_66 —— abl_tail_supply_66.v：PA_04 余槽收尾件（尾百供给第二批·Arch_PA_04 一线推导第三槽 req_exp_neg_ext 的 Real 特化闭形 exact 一击供给＋出节全参喂形精简版·两正性槽保留显式前提位；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_66 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_66.v" 130 2 20261002
-  "closing piece for the Arch_PA_04 line-deduction trio: the remaining third slot req_exp_neg_ext supplied as a Real-specialization closed form in one exact stroke via req_opp_compat lifting plus cauchy_real_exp_wd, with a simplified full-parameter feed form keeping the two positivity slots as explicit premises" "L130:m9f5195".
+  "closing piece for the Arch_PA_04 line-deduction trio: the remaining third slot req_exp_neg_ext supplied as a Real-specialization closed form in one exact stroke via req_opp_compat lifting plus cauchy_real_exp_wd, with a simplified full-parameter feed form keeping the two positivity slots as explicit premises" "L129:m659bf4".
 
 (* ng_abl_tail_supply_67 —— abl_tail_supply_67.v：F4 指数族 17 槽分拣件（尾百供给第二批·real 面八槽 Real 特化闭形供给〔lt 类 6＋le 类 2〕＋Id 面五钉定槽零输入＋参数位四槽不施工；函数实例一件＋投影转写五件＋使用组封四件＝九 Qed；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_67 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_67.v" 188 9 20261002
-  "F4 exponential family 17-slot triage piece: eight real-face slots (six lt-class plus two le-class) supplied as Real-specialization closed forms through the expf_pack unpacking via one function instance, five projection transcriptions and four per-section consumer closures, five Id-pinned slots fed zero and four parameter slots left unconstructed" "L188:m6c147c".
+  "F4 exponential family 17-slot triage piece: eight real-face slots (six lt-class plus two le-class) supplied as Real-specialization closed forms through the expf_pack unpacking via one function instance, five projection transcriptions and four per-section consumer closures, five Id-pinned slots fed zero and four parameter slots left unconstructed" "L188:mddfea4".
 
 (* ng_abl_tail_supply_68 —— abl_tail_supply_68.v：sum_eq_list 四槽 SO 实例闭形供给文件（尾百供给第二批·最小可行实例世界＝单点状态空间〔uab_ssUnit＋uab_soUnit〕·单点枚举规范形＋槽逐字闭形·四落点具名供给 P7B 段二/段三/段七＋P2W UabP3AmtSwap；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_68 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_68.v" 198 6 20261002
-  "four sum_eq_list slots supplied as SO-instance closed forms over the minimal single-point state-space instance world with singleton enumeration: one canonical bs_list_sum form plus the verbatim slot closure, landed as four named supplies across P7BoundedSoftmaxDeep sections two, three and seven and UpAblP2WByPass UabP3AmtSwap" "L198:mceea2c".
+  "four sum_eq_list slots supplied as SO-instance closed forms over the minimal single-point state-space instance world with singleton enumeration: one canonical bs_list_sum form plus the verbatim slot closure, landed as four named supplies across P7BoundedSoftmaxDeep sections two, three and seven and UpAblP2WByPass UabP3AmtSwap" "L198:md03f2f".
 
 (* ng_abl_tail_supply_69 —— abl_tail_supply_69.v：W 类响亮记录件（尾百供给第二批·F8 去 DO 保序族两供给定理经机检对照实验核验在抽象接口层不可成证·两槽改归 W 类真前提；本件不发伪供给，改载机检对照边界形 2 条〔条款 G：失败要响、禁静默降级、禁占位〕；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_69 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_69.v" 134 2 20261002
-  "loud W-class registration piece: the two DO-free supply theorems bs_abs and bs_lpc are machine-checked unprovable at the abstract interface layer via a contrast experiment and the two slots are reclassified as genuine premises; the module ships two machine-adjudicated boundary forms instead of fake supplies, per the fail-loud clause" "L134:mef5ec2".
+  "loud W-class registration piece: the two DO-free supply theorems bs_abs and bs_lpc are machine-checked unprovable at the abstract interface layer via a contrast experiment and the two slots are reclassified as genuine premises; the module ships two machine-adjudicated boundary forms instead of fake supplies, per the fail-loud clause" "L134:m8c99ef".
 
 (* ng_abl_tail_supply_70 —— abl_tail_supply_70.v：Arch_Up_01 Z_align_pos 槽换名输入＋sum_over_S_pos 实例闭形×2（尾百供给第二批·S05 出节常量 Z_align 与 UpAblZpos 消解体展开后同一项恒等换名·AlignIdWorld 与 FirewallLoop 两落点；:797-798/:1175-1176 两槽随 69 改判保持假设身份不发供给·本件零 Require 69；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_70 : NewGreenFace :=
   MkNewGreenFace "abl_tail_supply_70.v" 203 6 20261002
-  "Arch_Up_01 Z_align_pos slot fed via identity renaming (the S05 section constant Z_align equals the UpAblZpos resolved body after unfolding) plus two sum_over_S_pos instance closed forms landed at AlignIdWorld and FirewallLoop; the two slots re-judged alongside supply_69 keep hypothesis identity with zero Require on supply_69" "L203:m3df9f6".
+  "Arch_Up_01 Z_align_pos slot fed via identity renaming (the S05 section constant Z_align equals the UpAblZpos resolved body after unfolding) plus two sum_over_S_pos instance closed forms landed at AlignIdWorld and FirewallLoop; the two slots re-judged alongside supply_69 keep hypothesis identity with zero Require on supply_69" "L203:mcb6c1f".
 
 (* ng_abl_attn_doeblin_supply —— abl_attn_doeblin_supply.v：AT1 AttnDoeblin 试点供给文件（Doeblin 收缩数据槽见证与平滑核构造族·37 槽逐槽速判试点供给；方法丙外置新件 born-in-place，上游本体零字节不动；基座区供给第一批·同事侧 #决议138 波入库六波零红在档） *)
 Definition ng_abl_attn_doeblin_supply : NewGreenFace :=
   MkNewGreenFace "abl_attn_doeblin_supply.v" 384 11 20261002
-  "AT1 AttnDoeblin pilot supply: Doeblin contraction data-slot witnesses and smoothing-kernel construction family for thirty-seven slots with per-slot fast adjudication; external born-in-place piece, upstream bodies untouched" "L384:ma27ad5".
+  "AT1 AttnDoeblin pilot supply: Doeblin contraction data-slot witnesses and smoothing-kernel construction family for thirty-seven slots with per-slot fast adjudication; external born-in-place piece, upstream bodies untouched" "L384:m3ebd1e".
 
 (* ng_abl_s01_supply —— abl_s01_supply.v：S01_BaseRing 缺口首攻供给文件（物理世界接口族可达上限 14 槽供给·冻结域方法丙外置新件；槽闭形经 Require 引用＋具名供给定理输入，S01 本体零字节不动；基座区供给第一批·同事侧 #决议138 波在档） *)
 Definition ng_abl_s01_supply : NewGreenFace :=
   MkNewGreenFace "abl_s01_supply.v" 307 14 20261002
-  "S01_BaseRing gap first assault: fourteen reachable physical-world interface slots supplied as named closed forms from an external frozen-domain piece; the S01 body stays byte-identical, consumption is via Require plus named supply theorems" "L307:mef3e7a".
+  "S01_BaseRing gap first assault: fourteen reachable physical-world interface slots supplied as named closed forms from an external frozen-domain piece; the S01 body stays byte-identical, consumption is via Require plus named supply theorems" "L307:mbf8148".
 
 (* ng_abl_tail_logbridge —— abl_tail_logbridge.v：log 桥分件（下编 log 桥族 Real 特化闭形统一供给桥·件内六供给；零 Require 通用桥闭形，使用面下游读法对接经 Require 本件即取；基座区供给第一批·同事侧 #决议139 波在档） *)
 Definition ng_abl_tail_logbridge : NewGreenFace :=
   MkNewGreenFace "abl_tail_logbridge.v" 223 6 20261002
-  "log bridge split piece: unified supply bridge of Real-specialized closed forms for the lower-volume log bridge family with six in-piece supplies; host-free generic bridge, downstream consumption via Require" "L223:m78a32f".
+  "log bridge split piece: unified supply bridge of Real-specialized closed forms for the lower-volume log bridge family with six in-piece supplies; host-free generic bridge, downstream consumption via Require" "L223:m2262a3".
 
 (* ng_abl_tail_pos_supply_sum —— abl_tail_pos_supply_sum.v：F1 sum 族六性质槽组喂形供给文件（上编批 1·SumDCarrierFeed 槽组延线·七宿主逐落点；七宿主目标件零 Require 零字节不动；基座区供给第一批·同事侧 #决议138 波在档） *)
 Definition ng_abl_tail_pos_supply_sum : NewGreenFace :=
   MkNewGreenFace "abl_tail_pos_supply_sum.v" 483 26 20261002
-  "F1 sum family six-property slot-group feed-form supply: SumDCarrierFeed slot-group extension placed host by host across seven hosts; target host files stay byte-identical with zero Require" "L483:m81fe7c".
+  "F1 sum family six-property slot-group feed-form supply: SumDCarrierFeed slot-group extension placed host by host across seven hosts; target host files stay byte-identical with zero Require" "L483:mf26eca".
 
 (* ng_abl_tail_sum_readbridge —— abl_tail_sum_readbridge.v：求和读法桥接件（12 宿主 46 槽 csm_sumf 实现化读法统一供给桥·求和四性质＋逐项零化；出节全参形通用桥，宿主零字节不动；基座区供给第一批·同事侧 #决议138 波在档） *)
 Definition ng_abl_tail_sum_readbridge : NewGreenFace :=
   MkNewGreenFace "abl_tail_sum_readbridge.v" 239 10 20261002
-  "summation reading bridge: unified supply bridge giving the csm_sumf implemented reading to forty-six slots across twelve hosts, with four summation properties and per-term zeroing; fully parameterized out-of-section generic bridge" "L239:mb2c582".
+  "summation reading bridge: unified supply bridge giving the csm_sumf implemented reading to forty-six slots across twelve hosts, with four summation properties and per-term zeroing; fully parameterized out-of-section generic bridge" "L239:ma28df2".
 
 (* ng_abl_tbase_expf_bs_feed —— abl_tbase_expf_bs_feed.v：expf B 型输入件（下编批 5-3·expf B 型输入＋RSQ bs 三槽 cms 直引＋T1b sum_eq_list 桥；Import RealInterfaceEnhancedMod 非传递内联留痕，UpReqSampling 在役只读；基座区供给第一批·同事侧 #决议142 波在档） *)
 Definition ng_abl_tbase_expf_bs_feed : NewGreenFace :=
   MkNewGreenFace "abl_tbase_expf_bs_feed.v" 215 11 20261002
-  "expf B-type feed piece: B-form expf feeds plus three RSQ bs slots consuming cms by direct reference and a T1b sum_eq_list bridge; non-propagating inner-scope import recorded, upstream requirements read-only" "L215:ma49570".
+  "expf B-type feed piece: B-form expf feeds plus three RSQ bs slots consuming cms by direct reference and a T1b sum_eq_list bridge; non-propagating inner-scope import recorded, upstream requirements read-only" "L215:mc7efaa".
 
 (* ng_abl_tbase_expf_spec —— abl_tbase_expf_spec.v：F7 expf 套族 Real 特化闭形 A 形直供件（上编批 4·S13／AttnDoeblin／S15／G01／UpReqFEPAttn 五宿主 11 必行；UpAblD1_expf_pack 只读引用含 AttnDoeblin 组合件；基座区供给第一批·同事侧 #决议142 波在档） *)
 Definition ng_abl_tbase_expf_spec : NewGreenFace :=
   MkNewGreenFace "abl_tbase_expf_spec.v" 216 11 20261002
-  "F7 expf family Real-specialized closed-form A-shape direct supply for five hosts (S13, AttnDoeblin, S15, G01, UpReqFEPAttn) with eleven mandatory slots; read-only reference into UpAblD1_expf_pack including the AttnDoeblin composition" "L216:m8b2207".
+  "F7 expf family Real-specialized closed-form A-shape direct supply for five hosts (S13, AttnDoeblin, S15, G01, UpReqFEPAttn) with eleven mandatory slots; read-only reference into UpAblD1_expf_pack including the AttnDoeblin composition" "L216:m28a769".
 
 (* ng_abl_tbase_klcx_rppo_sum —— abl_tbase_klcx_rppo_sum.v：「可」槽聚集组 req 面求和接口喂形件（上编批 11·UpReqAlign4 三节 sum 六槽组＋Arch_UpReq_10 ReqPPOAdvantage 五槽·两宿主二十三槽；W 槽/存疑槽/冻结件零侵入；基座区供给第一批·同事侧 #决议142 波在档） *)
 Definition ng_abl_tbase_klcx_rppo_sum : NewGreenFace :=
   MkNewGreenFace "abl_tbase_klcx_rppo_sum.v" 254 11 20261002
-  "reachable-slot aggregation req-face summation interface feed: UpReqAlign4 three-section sum six-slot groups plus Arch_UpReq_10 ReqPPOAdvantage five slots across two hosts and twenty-three slots; W and doubtful and frozen slots untouched" "L254:m8e176c".
+  "reachable-slot aggregation req-face summation interface feed: UpReqAlign4 three-section sum six-slot groups plus Arch_UpReq_10 ReqPPOAdvantage five slots across two hosts and twenty-three slots; W and doubtful and frozen slots untouched" "L254:m139465".
 
 (* ng_abl_tbase_lcsum_feed —— abl_tbase_lcsum_feed.v：有限和 ltsum Type 抬升喂形件（上编批 13·tblc_ 族 10 供给 Qed＋内部件 tblc_plus_shuffle 1＝全文 grep 11·三宿主节 7 槽两宿主文件·自建 S:Type 全泛型有限和机器 ltsum 根·G3 双臂 0 强口径；#决议144 发车闸4 首拦截裸泛名 ltsum→词边界改名 tblc_ltsum 45 引用零误伤后终态 md5 eee127a1；Qed 位双口径候裁：供给口径 10/全文口径 11，本处取 grep 实拍 11） *)
 Definition ng_abl_tbase_lcsum_feed : NewGreenFace :=
   MkNewGreenFace "abl_tbase_lcsum_feed.v" 292 11 20261002
-  "finite-sum ltsum Type-lifted feed piece: tblc_ family ten supply theorems plus one internal shuffle lemma, seven slots across three host sections in two host files, self-built S:Type fully generic finite-sum machine ltsum root, double-arm G3 zero-strong criterion; bare generic name ltsum renamed tblc_ltsum by the registration dup-gate with forty-five references intact" "L292:meee127".
+  "finite-sum ltsum Type-lifted feed piece: tblc_ family ten supply theorems plus one internal shuffle lemma, seven slots across three host sections in two host files, self-built S:Type fully generic finite-sum machine ltsum root, double-arm G3 zero-strong criterion; bare generic name ltsum renamed tblc_ltsum by the registration dup-gate with forty-five references intact" "L292:m809e84".
 
 (* ng_abl_tbase_logbridge —— abl_tbase_logbridge.v：F6 log 桥族四形根喂形件（上编批 2·compat／exp_neg／inv_one_inv／log_inv_exp_neg_req 四形·八宿主二十槽；三根供给文件只读引用；基座区供给第一批·同事侧 #决议139 波在档） *)
 Definition ng_abl_tbase_logbridge : NewGreenFace :=
   MkNewGreenFace "abl_tbase_logbridge.v" 316 20 20261002
-  "F6 log bridge family four-form root feed: compat, exp_neg, inv_one_inv and log_inv_exp_neg_req forms across eight hosts and twenty slots; read-only reference into three root supply pieces" "L316:m9774a5".
+  "F6 log bridge family four-form root feed: compat, exp_neg, inv_one_inv and log_inv_exp_neg_req forms across eight hosts and twenty slots; read-only reference into three root supply pieces" "L316:m3aac04".
 
 (* ng_abl_tbase_logrest —— abl_tbase_logrest.v：F6 log 桥族余量收尾件（上编批 3·inv_one_inv 余双槽／compat 余单槽／tsup 系双槽／S12 log 单调槽·六宿主六槽；G01 mono 根件＋G05 根件只读引用；基座区供给第一批·同事侧 #决议142 波在档） *)
 Definition ng_abl_tbase_logrest : NewGreenFace :=
   MkNewGreenFace "abl_tbase_logrest.v" 174 6 20261002
-  "F6 log bridge family remainder closeout: inv_one_inv remaining two slots, compat remaining single slot, tsup family two slots and the S12 log monotone slot across six hosts; read-only reference into G01 mono root and G05 root" "L174:ma4d668".
+  "F6 log bridge family remainder closeout: inv_one_inv remaining two slots, compat remaining single slot, tsup family two slots and the S12 log monotone slot across six hosts; read-only reference into G01 mono root and G05 root" "L174:m96faaf".
 
 (* ng_abl_tbase_sumpos_spp —— abl_tbase_sumpos_spp.v：F8 求和正性 spp 系喂形供给文件（上编批 12·tbsp_ 十供给·cons 头十槽六宿主·fa51_sumd_pos_cons 根直引；基座区供给第一批·同事侧 #决议143 波在档） *)
 Definition ng_abl_tbase_sumpos_spp : NewGreenFace :=
   MkNewGreenFace "abl_tbase_sumpos_spp.v" 277 10 20261002
-  "F8 summation positivity spp-family feed supply: tbsp_ ten supplies for cons-head ten slots across six hosts with fa51_sumd_pos_cons root direct reference" "L277:m5bd781".
+  "F8 summation positivity spp-family feed supply: tbsp_ ten supplies for cons-head ten slots across six hosts with fa51_sumd_pos_cons root direct reference" "L277:m8ff8d8".
 
 (* ng_abl_tbase_t1c_expneg_feed —— abl_tbase_t1c_expneg_feed.v：T1C exp_neg 槽补位完成件（下编 B54 余槽完成·tbne_ 1 Qed·T1C:121 槽补位·体 exact 直引 G05 根 logd_log_exp_neg_real 指针别名·双臂 G3 各 1 同值＝语句面新增 Obj.magic 0；基座区供给第一批·同事侧 #决议144 波在档） *)
 Definition ng_abl_tbase_t1c_expneg_feed : NewGreenFace :=
   MkNewGreenFace "abl_tbase_t1c_expneg_feed.v" 100 1 20261002
-  "T1C exp_neg slot fill closeout piece: single tbne_ theorem filling the T1C slot by exact reference to the G05 root logd_log_exp_neg_real as a pure pointer alias; double-arm G3 equal at one, zero new Obj.magic on the statement face" "L100:m5bdc7e".
+  "T1C exp_neg slot fill closeout piece: single tbne_ theorem filling the T1C slot by exact reference to the G05 root logd_log_exp_neg_real as a pure pointer alias; double-arm G3 equal at one, zero new Obj.magic on the statement face" "L100:mcbb7a7".
 
 (* ng_abl_tbase_tempsum —— abl_tbase_tempsum.v：F1 sum 族 Real 面抽象求和接口喂形·温度族首攻件（上编批 5·tspt_ 五供给·闭十文件十三节 48 槽＋同形宿主顺带；十三宿主目标件零 Require 零字节不动；基座区供给第一批·同事侧 #决议141 波在档） *)
 Definition ng_abl_tbase_tempsum : NewGreenFace :=
   MkNewGreenFace "abl_tbase_tempsum.v" 195 5 20261002
-  "F1 sum family Real-face abstract summation interface feed, temperature-family first assault: tspt_ five supplies closing forty-eight slots across thirteen sections in ten files plus same-form host incidental coverage; host files byte-identical with zero Require" "L195:mfc5074".
+  "F1 sum family Real-face abstract summation interface feed, temperature-family first assault: tspt_ five supplies closing forty-eight slots across thirteen sections in ten files plus same-form host incidental coverage; host files byte-identical with zero Require" "L195:m53b027".
 
 (* ng_abl_tbase_tempsum_feed —— abl_tbase_tempsum_feed.v：F1 温度族 Real 面 per-宿主具名喂形件（上编批 6·UpReqTempDefs／UpReqEntropyDeficitTemp／UpReqEntropyMaxTemp／UpReqTempDual 四宿主 pos/ext/linear/add＋EMT le 扩槽·17 槽；基座区供给第一批·同事侧 #决议141 波在档） *)
 (* 〔B1 退役〕tbtf_ 17 槽全 ⊂ tspt_ 48 槽零净增量（条线58 §二查⑥机械凭证追认）、归一波整件退役，17 槽覆盖权归 tspt_ 泛型桥 48 槽辖区；回退锚=attn/_tcw_归一B案备份（存档 m1a0b5e）。原条目照录（唯 Mk 行退役日位卫生化）：Definition ng_abl_tbase_tempsum_feed : NewGreenFace :=
@@ -3270,22 +3270,22 @@ Definition ng_abl_tbase_tempsum : NewGreenFace :=
 (* ng_abl_tbase_zapfeed —— abl_tbase_zapfeed.v：F10 Z_align_pos 族喂形供给文件（上编批 7·配分函数正性槽十三槽十一供给；宿主件零 Require 面仅读取零字节不动；基座区供给第一批·同事侧 #决议141 波在档） *)
 Definition ng_abl_tbase_zapfeed : NewGreenFace :=
   MkNewGreenFace "abl_tbase_zapfeed.v" 321 11 20261002
-  "F10 Z_align_pos family feed supply: thirteen partition-function positivity slots closed by eleven supplies; host files read-only with zero Require and byte-identical bodies" "L321:maa694a".
+  "F10 Z_align_pos family feed supply: thirteen partition-function positivity slots closed by eleven supplies; host files read-only with zero Require and byte-identical bodies" "L321:m571b8d".
 
 (* ng_LW3ExclusionCalc —— LW3ExclusionCalc.v：排除计算器（Track A 三件 Defined 计算核 lw3x_sideb/lw3x_env_lo/lw3x_env_hi——sideb=leiblw_Qltb 直连、env_lo/hi 端点算式与 PiEnvelope 同源——经 lw3x_seal 六层 sigT Set 面封装＋带不相容性定理 lw3x_band_excl〔逐 eps 三模量 max 拼装＋Qabs 符号两支＋线性收束，Hc/Hsep/Hlo/Hhi/Hw 四供件全使用；两条线性收束支 lra 系 592 §四.一 红线①纪律放行位·LW2 绿件同位先例〕＋主语句 lw3x_calc 参数 c 前提位「q 进见证出」可执行；PA=4 Closed；提取 12.ml Obj.magic=0 逐字验证；coqchk -o 全闭包 234 库 公理位 none 满贯；绿证＝609 记录四关全部通过在卷） *)
 Definition ng_LW3ExclusionCalc : NewGreenFace :=
   MkNewGreenFace "LW3ExclusionCalc.v" 299 11 20261002
-  "exclusion calculator: three Defined computable kernels lw3x_sideb, lw3x_env_lo and lw3x_env_hi over the Leibniz window envelope, sealed by lw3x_seal into a six-layer sigT Set face, with the incompatibility band theorem lw3x_band_excl consuming all four supply witnesses via per-eps three-modulus max assembly and Qabs sign branches, and main statement lw3x_calc carrying premise parameter c so that a rational q with witnesses yields the exclusion band as executable code" "L299:m81a329".
+  "exclusion calculator: three Defined computable kernels lw3x_sideb, lw3x_env_lo and lw3x_env_hi over the Leibniz window envelope, sealed by lw3x_seal into a six-layer sigT Set face, with the incompatibility band theorem lw3x_band_excl consuming all four supply witnesses via per-eps three-modulus max assembly and Qabs sign branches, and main statement lw3x_calc carrying premise parameter c so that a rational q with witnesses yields the exclusion band as executable code" "L299:m9edef5".
 
 (* ng_LW4EPiContrast —— LW4EPiContrast.v：e-π 模量对照层（e 侧逃逸供给 lw4c_e_escape_supply＝lic_witness_e 实供〔exp_series 与 1/q_fact 之上·UpReq lic_escape_window/lw0m 接口面〕；π 侧零伪造三护栏：π 逃逸供给槽唯 lic_face 条件形 lw4c_pi_escape_of_lic、提取九件零 π 侧供件名、无前提 π 逃逸供给零落；对照面 lw4c_contrast_face 经 lw4c_contrast_param 成对承载；tactic 面 intro/destruct/exists/exact/split 零自动化；PA=2 Closed；提取 .ml/.mli Obj.magic=0/0；绿证＝606 记录四关全部通过在卷） *)
 Definition ng_LW4EPiContrast : NewGreenFace :=
-  MkNewGreenFace "LW4EPiContrast.v" 378 24 20261002
-  "e versus pi modulus contrast layer: the e side carries an unconditional escape supply lw4c_e_escape_supply built on the lic witness over exp_series and 1/q_fact, while the pi side yields escapes only conditionally on the lic face lw4c_pi_lic_face via lw4c_pi_escape_of_lic, so the paired contrast face lw4c_contrast_face assembled by lw4c_contrast_param keeps the pi side zero-forged with no unconditional pi escape supply" "L378:m15ab1a".
+  MkNewGreenFace "LW4EPiContrast.v" 457 28 20261003
+  "e versus pi modulus contrast layer: the e side carries an unconditional escape supply lw4c_e_escape_supply built on the lic witness over exp_series and 1/q_fact, while the pi side yields escapes only conditionally on the lic face lw4c_pi_lic_face via lw4c_pi_escape_of_lic, so the paired contrast face lw4c_contrast_face assembled by lw4c_contrast_param keeps the pi side zero-forged with no unconditional pi escape supply" "L457:mbc5feb".
 
 (* ng_LW1PiMeasure —— LW1PiMeasure.v：π 距离率互译层：lw1m_dist_pt/lw1m_dist_face 点面距离、lw1m_dist_order 率阶-窗宽衔接三态判定（阈的倒数取整阶处阶距小于阈）、lw1m_dom_face 供给域面、lw1m_measure_main 双前提主形（lw1m_b_cert_face 与 lw1m_dom_face，μ₀=2/C=2 显式选取）；tactic 面 intro/destruct/exists/exact/split 显式链零 solver 收尾；PA=6 Closed；提取 34 件 Obj.magic=0/0；绿证＝616 记录四关全部通过在卷 *)
 Definition ng_LW1PiMeasure : NewGreenFace :=
   MkNewGreenFace "LW1PiMeasure.v" 546 34 20261002
-  "pi distance-rate translation layer: lw1m_dist_pt and lw1m_dist_face carry the point and face distances, lw1m_dist_order decides the three-way distance order through the rate-tier to window-width link at the ceiling of one over the threshold, lw1m_dom_face supplies the domain face, and lw1m_measure_main assembles the two-premise measure face from lw1m_b_cert_face and lw1m_dom_face with mu0=2 and C=2 selected explicitly" "L546:me54845".
+  "pi distance-rate translation layer: lw1m_dist_pt and lw1m_dist_face carry the point and face distances, lw1m_dist_order decides the three-way distance order through the rate-tier to window-width link at the ceiling of one over the threshold, lw1m_dom_face supplies the domain face, and lw1m_measure_main assembles the two-premise measure face from lw1m_b_cert_face and lw1m_dom_face with mu0=2 and C=2 selected explicitly" "L834:m16657a".
 
 (* ng_ablt9_rhscc_scinst —— ablt9_rhscc_scinst.v：第九批新增域普查批·abl9 域 B5 缺口外置供给模块（abl9b_rhs_chain_59 L416 abl9b_rhs_sc_close Hconv 参数位·件54 abl9b_ext_ws_conv 缩放对适配）：①Q 侧缩放常量桥 ablt9_rhscc_km_ksc（件54 ext_km(S m) 与件53 ksc m 同值·两族坐标系合流中间件）②逐点桥 ablt9_rhscc_ws_pt_eq（件59 rhs_ws 族与件54 ext_ws 族逐点尾等价）③B 型全参喂 ablt9_rhscc_sc_close_feed（Hconv 位经逐点桥 Hpt 显式前提适配·供给形态=适配引理形；宿主件53 sca_Hd Qed 不透明致 Hpt 无条件均匀形本批不可构＝B5-B6 耦合新见·B6 手术候用户令）④伴生具名件 ablt9_rhscc_ext_close（件56 a2 L1890 案一槽具名实例闭合）；三宿主零 Require 增量零字节动；PA=4 Closed；coqchk -o 单件零公理（Axioms: none）；注释面已按现役注释词典完成卫生处理（gate4 hard 0/review 5） *)
 Definition ng_ablt9_rhscc_scinst : NewGreenFace :=
@@ -3300,4 +3300,4 @@ Definition ng_ablt9_s06abs_sum_feed : NewGreenFace :=
 (* ng_abl_tail_expf_iface_inst —— abl_tail_expf_iface_inst.v：C1 键控批一期（LoHi 17 位）唯一新增供给文件（born-in-place）：Part A 具名 expf 族六槽（tpei_expf/tpei_expf_pos/tpei_expf_zero/tpei_expf_plus/tpei_expf_mono_lt/tpei_expf_mono_le，uabd1x_ 根直引·uabl:41-60 体例）＋具体层无条件供件 tpei_lpc（real_lt_plus_compat_lt_le 直引·uabl:73-76 同款）；Part B 世界数据四件（tpei_temp/tpei_temp_pos/tpei_Delta/tpei_Delta_pos，cf2 系直引·最小上游 UpReqConcFin2 按 uabl 文头裁定）；Part 0 RIS 面副本二件（tpei_p7a_lo_lt_one_req 七参出节形/tpei_p7d_hi_gt_one_req 八参全显——语句面承 Paper7Ablation:101/P7B:272 逐字同形，唯 expf_zero 槽面 Id→req，p7d 一步直证式样）；Part C LoHi 九定理 @RealEnhancedReal 全参显式实例化＝17 位翻色落点（Squeeze 六件 uahl_lo_lt_one_hi/uahl_lo_lt_hi/uahl_delta_star_bounded/uahl_omd_bounded＋lpc:=tpei_lpc/uahl_omd_bounded_one＋lpc/uahl_lo_lt_hi_one＋Cross 三件 uahlc_lo_lt_one_hi_one/uahlc_omd_bounded_one＋lpc/uahlc_lo_one_hi_full；出节最小泛化参表实测——expf_pos 零消费件不入 uahl_lo_lt_one_hi/uahl_lo_lt_hi_one/uahlc 系导出形）；依赖方向＝本件单向 Require 两迁移宿主（宿主零 Require 本件，其 p7a/p7d 调用以 Part 0 同体证明内联——单向环消解）；PA=11 Closed；coqchk -o 单件零公理（Axioms: none）；注释面按现役词典卫生处理（gate4 三件 hard 0） *)
 Definition ng_abl_tail_expf_iface_inst : NewGreenFace :=
   MkNewGreenFace "abl_tail_expf_iface_inst.v" 261 11 20261002
-  "the sole new supply piece of the C1 phase-one LoHi unlock: Part A names the six expf family slots over the uabd1x root with the concrete-layer lpc provider, Part B aliases the cf2 world data, Part 0 restates the p7a_lo_lt_one and p7d_hi_gt_one mirrors on the req face with the expf_zero slot at real_eq and a one-step direct proof for the hi-side mirror, and Part C instantiates the nine migrated LoHi theorems of both hosts at the canonical RealEnhancedReal instance with the lpc argument supplied at the three omd witnesses, eleven Qed in total, one-way require over the migrated hosts whose p7a and p7d upstream consumption is inlined with the Part 0 bodies" "L261:m9c96b72a".
+  "the sole new supply piece of the C1 phase-one LoHi unlock: Part A names the six expf family slots over the uabd1x root with the concrete-layer lpc provider, Part B aliases the cf2 world data, Part 0 restates the p7a_lo_lt_one and p7d_hi_gt_one mirrors on the req face with the expf_zero slot at real_eq and a one-step direct proof for the hi-side mirror, and Part C instantiates the nine migrated LoHi theorems of both hosts at the canonical RealEnhancedReal instance with the lpc argument supplied at the three omd witnesses, eleven Qed in total, one-way require over the migrated hosts whose p7a and p7d upstream consumption is inlined with the Part 0 bodies" "L257:mbfef29".
