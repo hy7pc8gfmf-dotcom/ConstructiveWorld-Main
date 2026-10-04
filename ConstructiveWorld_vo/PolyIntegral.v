@@ -1,52 +1,31 @@
-(* 五字段指针｜使命：本件定理／引理声明面所述性质的形式化。 依赖：件内 Require 声明面所列库件。 构造性：零承认式语句（机械核验）。 编译配方：coqc -native-compiler no -q -Q . ""。  ============================================================ *)
-(* 本件为消融落件：原件全文逐字保留，仅将文末清单所列定理之证明体  *)
-(* 替换为玩具证（实质非平凡三口径：定义层受控展开／显式见证直取／  *)
-(* 结构性重演，直取既勘引擎位），声明面与引用面零改动，零新增      *)
-(* Require，证明结尾记号与原件逐件守恒，纯构造性闭合，文尾保留    *)
-(* 原件 Print Assumptions 追印面。清单：                          *)
-(*   pint_integral_mono（原 L309，3 句玩具证）                            *)
-(*   pint_integral_nonneg（原 L301，4 句玩具证）                          *)
-(*   pint_integral_add（原 L241，5 句玩具证）                             *)
-(*   pint_integral_scale（原 L234，4 句玩具证）                           *)
-(*   pint_zero_div（原 L105，3 句玩具证）                                 *)
-(* ============================================================ *)
-(* ============================================================ *)
-(* 上方 ToyR 头注所记「仅将文末清单所列定理之证明体替换为玩具证」，                                 *)
-(* 为恒等守恒——清单所列 5 槽证明体与 Main 现版原件逐字同文（刀体                                *)
-(* 注一字未改（历史证据保全）；证明体、声明面、语句面、Require 面                                 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* PolyIntegral.v                                                *)
-(*                                                               *)
-(* 目的：建立 [0,1] 上多项式（Q 系数列表）的构造性定积分基建        *)
-(*       （一期，Q 载体层、纯 Set）——解锁 UpReqPadeExp    *)
-(*       所需的「[0,1] 上多项式型被积函数的构造性积分」。           *)
-(* 主件：pint_integral（定积分主定义）；正确性锚                    *)
-(*       pint_integral_pow_poly : QeqT (pint_integral               *)
-(*       (pint_pow_poly k)) (1 / (Z.of_nat (S k) # 1))，即          *)
-(*       ∫_0^1 x^k dx == 1/(k+1)；pint_eval_pow_poly（求值与         *)
-(*       S03 q_pow 幂引擎一致）；线性性 pint_integral_scale /        *)
-(*       pint_integral_add；逐项单调性 pint_integral_nonneg /        *)
-(*       pint_integral_mono。                                       *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；                *)
-(*       Stdlib QArith.QArith、QArith.Qabs、Lists.List、Arith.Arith、 *)
-(*       ZArith.ZArith、Lia、Extraction。                            *)
-(* 备注：库内无现成积分基建——grep          *)
-(*       integral/定积分 命中仅三类：Qmult_integral（Q 代数引理，     *)
-(*       与积分无关）、S12_B5RecycleSF.v:13465 SFPathIntegral（路径   *)
-(*       作用量注记，非定积分）、UpReqPadeExp 注记本体      *)
-(*       （即本件要解锁的对象）。数学内容：多项式以系数列表表示       *)
-(*       （头 = 常数项），pint_eval 为 Horner 求值；定积分按幂函数    *)
-(*       逐项定义 pint_integral p = Σ_k a_k/(k+1)（Q 除法全定义，     *)
-(*       无需良法定义前提）。线性性以等长列表为显式前提——不等长      *)
-(*       列表在 pint_add 尾接语义下线性性不真，前提诚实。逐点单调     *)
-(*       版本（0 ≤ p(x) ≤ 1 ⟹ 0 ≤ ∫p ≤ ∫1 == 1）需连续性/黎曼和      *)
-(*       极限机器，与柯西极限同留二期，本件不虚报强度。语句面纪律：   *)
-(*       全部主定理 QeqT/QleT' Set 面（S02_CauchyComplete），Qle/Qeq  *)
-(*       仅证内与内部支撑引理；pint_ 前缀避免命名冲突（S03 的 9.1 副本 *)
-(*       由私有构建目录供给，源与只读树一致）。                        *)
-(* ============================================================ *)
+(* ============================================================
+   PolyIntegral.v —— [0,1] 上多项式（Q 系数列表）的构造性定积分
+   基建（一期，Q 承载层、纯 Set）——解锁 UpReqPadeExp 所需的
+   「[0,1] 上多项式型被积函数的构造性积分」。
+   ── 使命：pint_integral 定积分主定义与正确性锚
+   pint_integral_pow_poly : QeqT (pint_integral (pint_pow_poly k))
+   (1/(Z.of_nat (S k) # 1))，即 ∫_0^1 x^k dx == 1/(k+1)；
+   pint_eval_pow_poly（求值与 S03 q_pow 幂引擎一致）；线性性
+   pint_integral_scale／pint_integral_add；逐项单调性
+   pint_integral_nonneg／pint_integral_mono。
+   ── 数学要点：多项式以系数列表表示（头＝常数项），pint_eval 为
+   Horner 求值；定积分逐项定义 pint_integral p = Σ_k a_k/(k+1)
+   （Q 除法全定义，无需良法定义前提）。线性性以等长列表为显式
+   前提——不等长列表在 pint_add 尾接语义下线性性不真，前提诚实。
+   逐点单调版本（0 ≤ p(x) ≤ 1 ⟹ 0 ≤ ∫p ≤ ∫1 == 1）需连续性／
+   黎曼和极限机器，与柯西极限同留二期，本件不虚报强度。
+   ── 替换声明：pint_integral_mono／pint_integral_nonneg／
+   pint_integral_add／pint_integral_scale／pint_zero_div 五槽证明体
+   经全量恒等核查与原版逐字同文（真替换 0 槽＋恒等守恒 5 槽）；
+   语句面与引用面零改动。
+   ── 依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp；Stdlib
+   QArith.QArith、QArith.Qabs、Lists.List、Arith.Arith、
+   ZArith.ZArith、Lia、Extraction。
+   ── 构造性注记：主定理 QeqT/QleT' Set 面（S02_CauchyComplete），
+   Qle/Qeq 仅证内与内部支撑引理；pint_ 前缀避免命名冲突；纯构造性、
+   零承认件、全 Qed 闭合。
+   ── 编译配方：coqc -q -Q "D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo" "" PolyIntegral.v。
+   ============================================================ *)
 
 From Stdlib Require Import Extraction.
 From Stdlib Require Import QArith.QArith QArith.Qabs Lists.List Arith.Arith
@@ -57,7 +36,7 @@ Require Import S02_CauchyComplete.
 Require Import S03_QExp.
 
 (* ============================================================ *)
-(* §A 定义（全 Set 面；载体 Q；多项式 = 系数列表，头为常数项）         *)
+(* §A 定义（全 Set 面；承载集 Q；多项式 = 系数列表，头为常数项）         *)
 (* ============================================================ *)
 
 (* 求值（Horner 复现）：pint_eval p x = a_0 + x·(a_1 + x·(…)) = Σ a_k x^k *)
@@ -273,8 +252,8 @@ Qed.
 (* §F 单调性加分件（逐项版；QleT' 面，Qle 仅证内）                     *)
 (* ============================================================ *)
 
-(* 逐项非负 ⟹ 偏移积分非负（Qplus_le_compat 双肢：单项式非负肢 +        *)
-(*   归纳肢；系数索引偏移由 pint_coeff 的 S 分支定义性对齐）             *)
+(* 逐项非负 ⟹ 偏移积分非负（Qplus_le_compat 双支：单项式非负支＋        *)
+(*   归纳支；系数索引偏移由 pint_coeff 的 S 分支定义性对齐）             *)
 Lemma pint_integral_from_nonneg : forall (p : list Q) (k : nat),
   (forall i : nat, QleT' 0 (pint_coeff p i)) ->
   QleT' 0 (pint_integral_from p k).
@@ -292,8 +271,8 @@ Proof.
       cbn [pint_coeff] in Hcoeff. exact Hcoeff.
 Qed.
 
-(* 逐项 ≤（等长）⟹ 偏移积分 ≤：双肢 Qmult_le_compat_r（右因子 = 1/(k+1) *)
-(*   严格正肢经 pint_invS_pos）+ 归纳肢                                  *)
+(* 逐项 ≤（等长）⟹ 偏移积分 ≤：双支 Qmult_le_compat_r（右因子 = 1/(k+1) *)
+(*   严格正支经 pint_invS_pos）＋归纳支                                  *)
 Lemma pint_integral_from_mono : forall (p q : list Q) (k : nat),
   length p = length q ->
   (forall i : nat, QleT' (pint_coeff p i) (pint_coeff q i)) ->

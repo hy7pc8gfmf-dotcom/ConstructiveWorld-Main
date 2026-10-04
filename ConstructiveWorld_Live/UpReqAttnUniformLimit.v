@@ -1,17 +1,36 @@
 (* ============================================================ *)
-(* UpReqAttnUniformLimit.v —— 使命：形式化并列最大值注意力温度极限的      *)
-(*   L1 收敛性质：对任意 eps>0 存在 T₀>0，使任意 T(0<T<T₀) 满足           *)
-(*   L1(w_T, u) ≤ eps，其中 u 为副本上的均匀分布。                       *)
+(* UpReqAttnUniformLimit.v —— 并列最大值注意力极限定理                *)
 (*                                                              *)
-(* 依赖清单：CW_ConstructiveWorld_219（伞壳）、AttnHardLimit218。         *)
-(*                                                              *)
-(* 构造性注记：Set 层承载/零承认/可提取；Q 层并列间隙证书、副本均匀       *)
-(*   目标分布与 m-开关求和恒等式全构造性；词表非空位与 token 可判定       *)
-(*   相等位的 Set 重述与具体层供给见文尾节。                             *)
-(*                                                              *)
-(* 编译配方：Rocq 9.1 直调、cpu_guard 节流。                             *)
+(* ── 使命：闭合 AttnHardLimit218 头注接口①注记的待补缺口（:23-30）：   *)
+(*   「若 m 有并列副本，w_T 的 T→0 极限是副本上的均匀分布」。           *)
+(*   前缀 alm_（避免与库内既有名冲突）。                                *)
+(*   ① alm_gap_witness——Q 层并列间隙证书：非空 Q 表上极大值             *)
+(*      （可判定枚举 alm_max_ne）＋多重数 k≥1＋逐点上界＋两档之一：      *)
+(*      (i) 全表同值（均匀退化档）或 (ii) 并列间隙 g>0 且逐点            *)
+(*      等于 qmax 或加 g 后不超过 qmax。谓词全取 Set 层承载。            *)
+(*   ② 定义面——副本多重数 alm_k := count_token m vocab（不要求         *)
+(*      唯一）、副本均匀目标 alm_uniform、m-开关 alm_switch：            *)
+(*      并列副本→均匀的计算核，Defined 可提取。                         *)
+(*   ③ m-开关求和恒等式 swg_switch_sum_gen / swg_switch_sum。          *)
+(* 主定理 alm_uniform_limit——∀eps>0, ∃T₀>0, ∀T(0<T<T₀),              *)
+(*   L1(w_T,u) ≤ eps。装配：质量分裂四件链以 alu_ 前缀全文转录自承       *)
+(*   （因 UpReqAttnMassSplit 为下游使用方不可反向 Require）；阈值 T₀     *)
+(*   扁形构造 T₀ := γ·(eps·½)·(1/n)（real_exp_ge_linear e^t>1+t 承载，  *)
+(*   免 cw_log 有理上界包装；率形 L1 ≤ 2n·e^{−γ/T} 不变）。跨 token     *)
+(*   同值情形由并列副本显式入模覆盖（u 在副本支恒 1/k）；T₀ 有理化       *)
+(*   由扁形 inv 构造承载。                                              *)
+(* ── 依赖：AttnHardLimit218（只读引用）。                              *)
+(* ── 构造性注记：纯构造性、零承认件、零经典逻辑；文末 Print           *)
+(*   Assumptions 核验 Closed；全量机器检查通过（PA 全 Closed、提取      *)
+(*   Obj.magic 零、公理面 <none>）。                                    *)
+(* ── 编译配方：全字面 COQLIB/ROCQLIB 双 export 后 coqc -Q             *)
+(*   ../../Live_X "" -Q . "" UpReqAttnUniformLimit.v。                  *)
 (* ============================================================ *)
 
+Require Import AttnHardLimit218.
+From Stdlib Require Import List Arith Lia.
+From Stdlib Require Import micromega.Lqa.
+From Stdlib Require Import QArith.QArith QArith.Qring.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
@@ -27,10 +46,12 @@ Require Import S12_B5RecycleSF.
 Require Import S13_NLiveAudit.
 Require Import S14_B5BatchBlock.
 Require Import S15_TailFEPUp.
-Require Import AttnHardLimit218.
-From Stdlib Require Import List Arith Lia.
-From Stdlib Require Import micromega.Lqa.
-From Stdlib Require Import QArith.QArith QArith.Qring.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S14_B5BatchBlock.
+Require Import S11_TP3B5.
+Require Import S12_B5RecycleSF.
+Require Import S14_B5BatchBlock.
 Import ListNotations.
 
 (* ============================================================ *)
@@ -46,12 +67,12 @@ Qed.
 
 Lemma alm_qleb_false : forall a b : Q, Qle_bool a b = false -> Qlt b a.
 Proof.
-  intros a b H. apply Qnot_le_lt.
-  destruct (Qle_bool_iff a b) as [_ Hb]. intro Hle.
-  apply Hb in Hle. rewrite H in Hle. discriminate Hle.
+  intros a b H. apply Qnot_le_lt. intro Hle.
+  assert (Hb : Qle_bool a b = true) by exact (proj2 (Qle_bool_iff a b) Hle).
+  rewrite H in Hb. discriminate Hb.
 Qed.
 
-(* 实测核对：本安装 Qorder ——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
+(* 实测核对：本安装 Qorder 未提供——Qplus_lt_compat_r/Qeq_lt/Qlt_refl
    全无；以 Qplus_le_l（iff 形右消去）+Qlt_irrefl+Qlt_le_trans 自建
    单侧严格单调桥，兼作 Qeq_lt 替代面（ witness 严格支用）。 *)
 Lemma alm_qlt_compat_r : forall x y z : Q, Qlt x y -> Qlt (x + z) (y + z).
@@ -104,6 +125,19 @@ Proof.
     + apply in_eq.
 Qed.
 
+(** 可判定极大值的 Set 层表成员证书：与 alm_max_ne_in 平行的
+    InT 形，逐支由 InT_here / InT_next 直接构造。 *)
+Lemma alm_max_ne_inT : forall (tab : list Q) (q : Q),
+  InT (alm_max_ne q tab) (q :: tab).
+Proof.
+  intros tab. induction tab as [| y rest IH]; intro q.
+  - cbn [alm_max_ne]. apply InT_here.
+  - cbn [alm_max_ne].
+    destruct (Qle_bool q (alm_max_ne y rest)).
+    + apply InT_next. exact (IH y).
+    + apply InT_here.
+Qed.
+
 Lemma alm_qeqb_false : forall a b : Q, Qeq_bool a b = false -> ~ (a == b).
 Proof.
   intros a b H Heq.
@@ -145,7 +179,7 @@ Qed.
 (* P1a：下滤极大 = Some m ⟹ m 在表中且 m ≠ qmax *)
 Lemma alm_below_max_in : forall tab qmax m,
   alm_below_max qmax tab = Some m ->
-  And (In m tab) (~ (m == qmax)).
+  In m tab /\ (~ (m == qmax)).
 Proof.
   intros tab. induction tab as [| y rest IH]; intros qmax m H.
   - discriminate H.
@@ -208,24 +242,57 @@ Proof.
 Qed.
 
 
-(* 主件：并列间隙证书（Q 层可判定枚举，全构造性） *)
+(* ================= §1a Q 表二元择一与两档间隙证书 ================= *)
+
+(** Set 层二元择一：对两个 Set 载荷给出构造性分叉，提取为普通
+    变体类型，不引入投影算子。 *)
+Inductive alm_pick2 (A B : Set) : Set :=
+| alm_pick2_l : A -> alm_pick2 A B
+| alm_pick2_r : B -> alm_pick2 A B.
+
+(** 表成员证书回译：InT 换译为 List.In，供命题层引理复用。 *)
+Lemma alm_inT_in : forall (x : Q) (l : list Q), InT x l -> In x l.
+Proof.
+  intros x l H. induction H as [l0 | y l0 HinT IH].
+  - apply in_eq.
+  - apply in_cons. exact IH.
+Qed.
+
+(** 并列间隙两档证书：uniform 档载荷全表与 qmax 相等的逐点等词；
+    gap 档载荷正间隙与逐点二元择一（等于 qmax，或加 g 不超过
+    qmax）。全部载荷取 Set 层（QeqT / QltT / QleT'），正性自明。 *)
+Inductive alm_gap_cert (tab : list Q) (qmax g : Q) : Set :=
+| alm_cert_uniform : (forall q : Q, InT q tab -> QeqT q qmax) ->
+    alm_gap_cert tab qmax g
+| alm_cert_gap : QltT 0%Q g ->
+    (forall q : Q, InT q tab ->
+       alm_pick2 (QeqT q qmax) (QleT' (q + g) qmax)) ->
+    alm_gap_cert tab qmax g.
+
+(** 并列间隙证书：非空 Q 表上存在极大值 qmax、满足 k ≥ 1 的自然数 k
+    与间隙 g，使得 qmax 属于该表、全表以 qmax 为上界，且两档之一成立：
+    全表元素与 qmax 相等，或 g > 0 且每个元素或等于 qmax 或加 g 后
+    不超过 qmax。全部谓词取 Set 层承载，两档分支由 alm_gap_cert
+    构造子表达。证法：以可判定枚举 alm_max_ne 取极大值，按
+    alm_below_max 的枚举结果分派两档；各谓词经 S02 单向桥自库内
+    命题版引理转为 Set 层承载。 *)
 Theorem alm_gap_witness : forall (q0 : Q) (rest : list Q),
   sigT (fun qmax => sigT (fun k => sigT (fun g =>
-    And (In qmax (q0 :: rest))
-    (And ((1 <= k)%nat)
-    (And (forall q : Q, In q (q0 :: rest) -> Qle q qmax)
-         (sum (forall q : Q, In q (q0 :: rest) -> q == qmax)
-              (And (Qlt 0%Q g)
-                   (forall q : Q, In q (q0 :: rest) ->
-                     Or (q == qmax) (Qle (q + g) qmax))))))))).
+    And (InT qmax (q0 :: rest))
+    (And (NatLe 1 k)
+    (And (forall q : Q, InT q (q0 :: rest) -> QleT' q qmax)
+         (alm_gap_cert (q0 :: rest) qmax g)))))).
 Proof.
   intros q0 rest.
-  assert (Hqmaxin : In (alm_max_ne q0 rest) (q0 :: rest))
-    by exact (alm_max_ne_in rest q0).
   assert (Hqmaxub : forall q : Q, In q (q0 :: rest) -> Qle q (alm_max_ne q0 rest))
     by exact (alm_max_ne_ub rest q0).
+  assert (HqmaxinT : InT (alm_max_ne q0 rest) (q0 :: rest))
+    by exact (alm_max_ne_inT rest q0).
+  assert (HqmaxubT : forall q : Q, InT q (q0 :: rest) -> QleT' q (alm_max_ne q0 rest)).
+  { intros q HinT. apply Qle_to_QleT'.
+    exact (Hqmaxub q (alm_inT_in q (q0 :: rest) HinT)). }
   destruct (alm_below_max (alm_max_ne q0 rest) (q0 :: rest)) as [mb |] eqn:Hbm.
-  + (* 并列间隙支：g := qmax −（下滤极大） *)
+  + (* 并列间隙档：g := qmax −（下滤极大） *)
     destruct (alm_below_max_in _ _ _ Hbm) as [Hmbin Hmbne].
     assert (Hltmb : Qlt mb (alm_max_ne q0 rest)).
     { destruct (Qle_lt_or_eq _ _ (Hqmaxub _ Hmbin)) as [Hlt | Heqq].
@@ -234,28 +301,31 @@ Proof.
     exists (alm_max_ne q0 rest).
     exists (Datatypes.S (length (q0 :: rest))).
     exists (alm_max_ne q0 rest - mb)%Q.
-    split; [exact Hqmaxin | ].
-    split; [apply le_n_S; apply Nat.le_0_l | ].
-    split; [exact Hqmaxub | ].
-    right. split.
-    * rewrite <- (Qplus_opp_r mb) at 1.
+    split; [exact HqmaxinT | ].
+    split; [apply NatLe_lift; apply le_n_S; apply Nat.le_0_l | ].
+    split; [exact HqmaxubT | ].
+    apply alm_cert_gap.
+    * apply Qlt_to_QltT.
+      rewrite <- (Qplus_opp_r mb) at 1.
       apply (alm_qlt_compat_r mb (alm_max_ne q0 rest) (- mb)%Q).
       exact Hltmb.
-    * intros q Hin. destruct (Qeq_dec q (alm_max_ne q0 rest)) as [Heqq | Hneqq].
-      -- left. exact Heqq.
-      -- right.
+    * intros q HinT. destruct (Qeq_dec q (alm_max_ne q0 rest)) as [Heqq | Hneqq].
+      -- apply alm_pick2_l. apply qeq_imp_qeqT. exact Heqq.
+      -- apply alm_pick2_r. apply Qle_to_QleT'.
          assert (Hqle : Qle q mb)
-           by exact (alm_below_max_ub _ _ _ q Hin Hbm Hneqq).
+           by exact (alm_below_max_ub _ _ _ q
+                       (alm_inT_in q (q0 :: rest) HinT) Hbm Hneqq).
          unfold Qminus. lra.
-  + (* 全表同值支（均匀退化档） *)
+  + (* 全表同值档（均匀退化） *)
     exists (alm_max_ne q0 rest).
     exists (Datatypes.S (length (q0 :: rest))).
     exists 0%Q.
-    split; [exact Hqmaxin | ].
-    split; [apply le_n_S; apply Nat.le_0_l | ].
-    split; [exact Hqmaxub | ].
-    left. intros q Hin.
-    exact (alm_below_max_none _ _ _ Hin Hbm).
+    split; [exact HqmaxinT | ].
+    split; [apply NatLe_lift; apply le_n_S; apply Nat.le_0_l | ].
+    split; [exact HqmaxubT | ].
+    apply alm_cert_uniform.
+    intros q HinT. apply qeq_imp_qeqT.
+    exact (alm_below_max_none _ _ _ (alm_inT_in q (q0 :: rest) HinT) Hbm).
 Qed.
 
 (* ============================================================ *)
@@ -327,7 +397,7 @@ Definition alm_uniform (x : Token) : Real :=
   | inr _ => real_zero
   end.
 
-(* m-开关函数：副本支 c1，非副本支 c2（求和恒等式的辅助引理） *)
+(* m-开关函数：副本支 c1，非副本支 c2（求和恒等式的辅助构造） *)
 Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
   match token_eq_dec x m with
   | inl _ => c1
@@ -340,7 +410,7 @@ Definition alm_switch (c1 c2 : Real) (x : Token) : Real :=
    非副本支用 plus 交换/结合。——蓝图已由下列 swg_ 两件落成。 *)
 
 (* —— 补编：m-开关求和恒等式蓝图落成（下两件 swg_）—— *)
-(* 头注所述待续部分自本节起由下列 swg_ 两件给出。 *)
+(* 头注所述待续部分自本节起由下列 swg_ 两件补全。 *)
 (* 对显式表 vl 归纳（不归纳 Section Variable：vocab 被 m_in_vocab 等钉死）。 *)
 (* 基座核对（全数对上零漂移）：real_list_sum/
    real_of_nat（S08，O↦0、S n↦1+of_nat n 定义折叠）、real_eq_refl/sym/trans、
@@ -605,8 +675,8 @@ Variable gap_le : forall x : Token, Not (Id x m) ->
 Definition alu_w (T : Real) (Ht : real_lt real_zero T) (x : Token) : Real :=
   w_T Token vocab vocab_nonempty z T Ht x.
 
-(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量参数位 +  *)
-(* g : Token -> Real 函数参数位——上游 alm_switch 双常量参数位的函数形补全） *)
+(* 函数形 m-开关：副本支取常量 c，非副本支取 g x（c : Real 常量槽 +  *)
+(* g : Token -> Real 函数槽——上游 alm_switch 双常量槽的函数形补全） *)
 Definition alu_mswitch (c : Real) (g : Token -> Real) (x : Token) : Real :=
   match token_eq_dec x m with
   | inl _ => c
@@ -620,7 +690,7 @@ Definition alu_M (T : Real) (Ht : real_lt real_zero T) : Real :=
 (* ---------- 函数形 m-开关求和恒等式（上游原证明骨架逐行转录） ---------- *)
 (* Σ alu_mswitch c g == count(m)·c + Σ alu_mswitch 0 g（对显式表 vl 归纳： *)
 (* 空表零元代数 / 副本支 of_nat(S) 定义折叠+右分配+左幺元交换桥 /          *)
-(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形参补全）。         *)
+(* 非副本支中项交换。g 为函数形（对上游常量 g 版的形槽补全）。         *)
 
 Lemma alu_switch_sum_fun : forall (c : Real) (g : Token -> Real) (vl : list Token),
   real_eq (real_list_sum Token (alu_mswitch c g) vl)
@@ -1100,7 +1170,7 @@ Proof.
                                     (alu_w T Ht m))
                          (alm_invk Token vocab token_eq_dec m m_in_vocab))
     by exact (alu_minus_r_plus _ _).
-  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子参数位） *)
+  (* k·(D + w(m)) == k·D + k·w(m)（分配，左因子槽） *)
   assert (Hdist : real_eq (real_mult (real_of_nat (alm_k Token vocab token_eq_dec m))
                               (real_plus (real_minus_r
                                             (alm_invk Token vocab token_eq_dec m m_in_vocab)
@@ -1408,7 +1478,7 @@ End AluChain.
 (*   转录，因 MassSplit 为下游使用方不可反向 Require）给出          *)
 (*   L1 ≤ n·d + n·d（d = e^{−γ/T}）；间隙证书/副本计数/均匀目标/     *)
 (*   开关核为 Part 1-2 之 alm_ 件。阈值 T₀ := γ·δ、                 *)
-(*   δ := (eps·½)·(1/n)：cw_log 下的无 log 扁形替代——            *)
+(*   δ := (eps·½)·(1/n)：cw_log 未提供下的无 log 扁形替代——            *)
 (*   real_exp_ge_linear（e^t > 1+t）+ exp 单调 + δ·e^{γ/T} ≥        *)
 (*   δ·inv δ == 1 闭合，零嵌套 inv、零经典逻辑。                    *)
 (* ============================================================ *)
@@ -1767,51 +1837,3 @@ Print Assumptions alm_uniform.
 (* 新增主件审计口：m-开关求和恒等式两件（swg_switch_sum_gen/swg_switch_sum） *)
 Print Assumptions swg_switch_sum_gen.
 Print Assumptions swg_switch_sum.
-(* ============================================================ *)
-(* 词表非空位 vocab_nonempty 与 token 可判定相等位 token_eq_dec 的        *)
-(* Set 重述位与具体层供给                                                *)
-(*                                                                     *)
-(* 原两位为 Prop 形（Not (Id vocab nil) 与 forall a b, Or (Id a b)        *)
-(* (Not (Id a b))）；本节将其重述为 Set 层形并给出具体层供给：非空取      *)
-(* sigT 见证形 sigT (fun t => InT t vocab)（见证更强：可提取出具体元素），  *)
-(* 可判定相等取 sigT bool 形——正支给出 Id 相等见证，负支给出              *)
-(* Id a b -> Empty_set 函数（Set 层否定见证，可提取）。二点清单（bool      *)
-(* 载体）上，非空见证由 InT_here 构造子直接给出，可判定相等由构造子四分    *)
-(* 逐一给出（正支 id_refl，负支构造子分裂消去）。原 Prop 形假设位声明与    *)
-(* 既有定理签名零改动。                                                  *)
-(* ============================================================ *)
-Definition alm_vocab_nonempty_set (X : Set) (vocab : list X) : Set :=
-  sigT (fun t : X => InT t vocab).
-Definition alm_token_eq_dec_set (X : Set) : Set :=
-  forall a b : X,
-    sigT (fun d : bool =>
-      match d with
-      | true => Id a b
-      | false => Id a b -> Empty_set
-      end).
-
-Theorem alm_vocab_nonempty_supply :
-  alm_vocab_nonempty_set bool (cons true (cons false nil)).
-Proof. exact (existT _ true (@InT_here bool true (cons false nil))). Qed.
-
-Theorem alm_token_eq_dec_supply : alm_token_eq_dec_set bool.
-Proof.
-  intros a b.
-  destruct a; destruct b.
-  - exact (existT _ true (@id_refl bool true)).
-  - refine (existT _ false _).
-    intro H.
-    (* 构造子分裂：Id true false 无构造元，J 形索引匹配消去 *)
-    exact (match H in Id _ y return
-             match y with true => unit | false => Empty_set end with
-           id_refl => tt end).
-  - refine (existT _ false _).
-    intro H.
-    exact (match H in Id _ y return
-             match y with false => unit | true => Empty_set end with
-           id_refl => tt end).
-  - exact (existT _ true (@id_refl bool false)).
-Qed.
-
-Print Assumptions alm_vocab_nonempty_supply.
-Print Assumptions alm_token_eq_dec_supply.

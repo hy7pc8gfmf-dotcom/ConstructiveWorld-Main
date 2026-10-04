@@ -1,31 +1,37 @@
-(* ==========================================================================)
-   UpReqRealHalf.v — 实数半运算与指数平方恒等
-   使命: upreq_half（½·x）定义、upreq_half_proj（逐点投影）、upreq_half_plus（½x+½x == x）、upreq_half_opp 与 upreq_exp_half_sq/upreq_exp_neg_half_sq（exp x == exp(x/2)^2）。
-   依赖: CW_ConstructiveWorld_219、AttnSqrt；Stdlib QArith、Setoid、Morphisms
-   对标: 实数域的半运算与指数函数平方恒等式 exp(x) = exp(x/2)^2（S02 半件直拼）。
-   构造性: 全件 Qed 闭合、零承认词面；证体不引入额外公理前提。
-   编译配方: Rocq 9.1 直调 coqc -native-compiler no -q -Q . ""（vo 树同世界重编），COQLIB/ROCQLIB 全字面环境前缀。
-   ========================================================================== *)
+(* ============================================================
+   UpReqRealHalf.v —— Real 层 halving 基建件（前缀 upreq_half 系）。
+   ── 使命：eˣ>0 五步链步骤3（eˣ=(eˣᐟ²)²）的缺位补建——Real 层半元
+   函数形。UpReqExpPos.v 头注步骤3 标注「halving 件库内缺位」，本件
+   补建；步骤4（平方≥0 的 Or 形）属 LPO 等价面，本件零触碰：只做
+   等式面（real_eq），不做 real_lt/real_le 面的平方非负陈述。
+   ── 主定理：upreq_half_plus : forall x : Real,
+   real_eq (real_plus (upreq_half x) (upreq_half x)) x。
+   ── 路线：upreq_half x := real_mult (real_const (1#2)) x——
+   real_mult 对 cauchy 序列封闭（S02 real_mult Defined 级收敛装配），
+   良定义性直接继承；逐点投影 projT1 (upreq_half x) n == (1#2)·x_n；
+   与原 Real 相等（real_eq 逐 eps）即主定理，取用 AttnSqrt 现成件
+   sqrt_real_plus_half_half 一跳 exact（逐点 ½x_n+½x_n−x_n==0 经
+   ring 判定，N:=0 全域生效）。库内另有 S08 real_half_plus_half
+   （inv2 形），与本件 const(½) 形互为换位，不重复取用。
+   ── 加餐（等式面）：upreq_exp_half_sq：eᶻ == (eᶻᐟ²)²；
+   upreq_exp_neg_half_sq：e⁻ˣ == (e⁻ˣᐟ²)²（五步链步骤3 取用面：
+   eˣ 项取 z := real_opp x 级联可达）；支撑件 upreq_half_opp、
+   upreq_real_opp_opp（库内缺位补建）——均逐点 Q 环恒等 ring 判定。
+   ── 依赖：AttnSqrt（sqrt_real_plus_half_half）；S02_CauchyComplete
+   （Real/real_eq/real_plus/real_mult/real_const/real_opp 定义与投影
+   件、real_eq_trans）；S03_QExp（cauchy_real_exp_plus／wd、
+   real_exp_neg）；S07_RealSetoidExpLog（real_eq_mult_compat）；
+   Stdlib QArith（QArith/Qabs）、Arith、Setoid、Morphisms。
+   ── 构造性注记：Set 层语句（real_eq 为 Set 值；本件零 real_lt/
+   real_le 面）；全 Qed 闭合；前缀 upreq_half 系防撞零占用；宿主件
+   零改。
+   ── 编译配方：coqc -q -Q "D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo" "" UpReqRealHalf.v。
+   ============================================================ *)
 
-
-Require Import S01_BaseRing.
-Require Import S02_CauchyComplete.
-Require Import S03_QExp.
-Require Import S04_RealExpLogConv.
-Require Import S05_AlignmentGRPO.
-Require Import S06_DiffSamplingGibbs.
-Require Import S07_RealSetoidExpLog.
-Require Import S08_RealMainlineDPO.
-Require Import S09_EntropyReal.
-Require Import S10_KVQuantTrig.
-Require Import S11_TP3B5.
-Require Import S12_B5RecycleSF.
-Require Import S13_NLiveAudit.
-Require Import S14_B5BatchBlock.
-Require Import S15_TailFEPUp.
 Require Import AttnSqrt.
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
 From Stdlib Require Import Setoid Morphisms.
+Require Import S02_CauchyComplete S03_QExp S07_RealSetoidExpLog.
 
 Local Open Scope Q_scope.
 
@@ -37,7 +43,7 @@ Definition upreq_half (x : Real) : Real := real_mult (real_const (1#2)) x.
 
 (* ============================================================ *)
 (* 件 1：逐点投影 projT1 (upreq_half x) n == ½·x_n                  *)
-(*   （S02 三投影件直拼；供后续 ε 预算/界估计论证依存的独立锚）     *)
+(*   （S02 三投影件直拼；供后续 ε 预算/界估计论证取用的独立锚）     *)
 (* ============================================================ *)
 Lemma upreq_half_proj : forall (x : Real) (n : nat),
   projT1 (upreq_half x) n == (1#2) * projT1 x n.
@@ -46,12 +52,12 @@ Proof.
   unfold upreq_half.
   rewrite (real_mult_const_proj (1#2) x n).
   rewrite (real_const_proj (1#2) n).
-  exact (Qeq_refl ((1#2) * projT1 x n)).
+  reflexivity.
 Qed.
 
 (* ============================================================ *)
 (* 件 2（主定理）：加倍恒等 half x + half x == x                    *)
-(*   依存 AttnSqrt sqrt_real_plus_half_half 一跳 exact（函数定义    *)
+(*   取用 AttnSqrt sqrt_real_plus_half_half 一跳 exact（函数定义    *)
 (*   delta 可折换）；证态为 real_eq 逐 eps 形，N:=0 全域生效。      *)
 (* ============================================================ *)
 Theorem upreq_half_plus : forall x : Real,
@@ -82,7 +88,7 @@ Proof.
                         - projT1 (real_opp (upreq_half x)) n) == 0%Q).
   { apply Qeq_trans with (Qabs 0%Q).
     - apply Qabs_wd. exact Hd.
-    - exact (Qeq_refl 0%Q). }
+    - reflexivity. }
   apply Qlt_to_QltT.
   setoid_rewrite Habs0.
   apply QltT_to_Qlt. exact Heps.
@@ -91,7 +97,7 @@ Qed.
 (* ============================================================ *)
 (* 件 4：双重取反消去 real_opp (real_opp x) == x（库内缺位补建）    *)
 (*   逐点：−(−x_n) − x_n == 0，ring 判定；N:=0 全域生效。           *)
-(*   （eˣ 原生形 real_exp_neg (real_opp x) 与加餐件级联的运输基础模块）  *)
+(*   （eˣ 原生形 real_exp_neg (real_opp x) 与加餐件级联的运输基础）  *)
 (* ============================================================ *)
 Lemma upreq_real_opp_opp : forall x : Real,
   real_eq (real_opp (real_opp x)) x.
@@ -107,7 +113,7 @@ Proof.
                         - projT1 x n) == 0%Q).
   { apply Qeq_trans with (Qabs 0%Q).
     - apply Qabs_wd. exact Hd.
-    - exact (Qeq_refl 0%Q). }
+    - reflexivity. }
   apply Qlt_to_QltT.
   setoid_rewrite Habs0.
   apply QltT_to_Qlt. exact Heps.
@@ -141,8 +147,9 @@ Qed.
 (*   链：e⁻ˣ = exp(−x) == (exp(−xᐟ²))²（件 5 于 real_opp x 实例化，  *)
 (*   LHS 经 real_exp_neg 定义 delta 折换）；右因子换位 exp(−xᐟ²) ==  *)
 (*   e^{−(xᐟ²)}（wd 于件 3），双因子经 real_eq_mult_compat 合流。    *)
-(*   五步链步骤3 依存位：eˣ := real_exp_neg (real_opp x) 项，再经    *)
+(*   五步链步骤3 取用位：eˣ := real_exp_neg (real_opp x) 项，再经    *)
 (*   件 4 于参位 x 级联即得 eˣ == (eˣᐟ²)² 原生形（本件不代做，       *)
+(*   留给后续件按其链位自行拼接）。                                   *)
 (* ============================================================ *)
 Theorem upreq_exp_neg_half_sq : forall x : Real,
   real_eq (real_exp_neg x)
@@ -167,5 +174,3 @@ Proof.
     + exact (cauchy_real_exp_wd (upreq_half (real_opp x))
                (real_opp (upreq_half x)) (upreq_half_opp x)).
 Qed.
-
-Print Assumptions upreq_half_plus.

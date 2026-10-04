@@ -1,31 +1,28 @@
-(* ==========================================================================)
-   UpReqSpec2x2.v — 二谱二态矩阵的 Newton 平方根速率
-   使命: sp2_sqrt_rate_core/sp2_sqrt_rate：Newton 迭代求平方根的收敛速率（谱间隙 δ 的 Q 层量化）、sp2_qnewton/q4pow/qgap 迭代链与 disc 正性（sp2_disc_sqpos/pos_gen）、特征上下界（sp2_eig_up/dn）。
-   依赖: CW_ConstructiveWorld_219、AttnSqrt；Stdlib QArith、Lia、Arith、Extraction。
-   对标: Newton 平方根迭代的二次收敛速率（数值分析经典）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================ *)
+(* UpReqSpec2x2.v —— 2x2 谱面：二次型的谱与 Newton 步（首切片）      *)
+(*                                                              *)
+(* ── 使命：2×2 自伴判别式平方和定理 + √D 显式率（sp2_ 前缀）：        *)
+(*   sp2_qnewton Newton 步、sp2_qgap 谱隙、sp2_q4pow 幂面。设计判定：   *)
+(*   D := (a−d)² + (2b)² 平方和；非负面走逐点 Q 层平方非负，完全避开     *)
+(*   real_le:=Or 编码符号判定墙；严格正走 real_lt 见证形（Or 左支直供）； *)
+(*   √D 率走 Q 层 Newton：x₀=2、归一化档 D∈[1,4]、模量 gapₙ·4ⁿ ≤ 3      *)
+(*   （gapₙ := xₙ²−D ≥ 0，残差方幕恒等式 gapₙ₊₁ == gapₙ²/(4xₙ²) 逐点    *)
+(*   代数，无 sqrt）；主件 eig_gap 复用 AttnSqrt.real_sqrt_exists        *)
+(*   （禁重写）＋逐点代数 λ₊−λ₋ == √D。逐点表示：real_mult/real_plus/   *)
+(*   real_opp 均逐点形、real_const 常值形。                              *)
+(* ── 依赖：AttnSqrt。                                                  *)
+(* ── 构造性注记：零承认件、零经典逻辑、零外部假设；出口件语句位全       *)
+(*   Set/Type 层（real_lt/real_eq/sigT/And/Or/QltT/QleT'/QeqT）。        *)
+(* ── 编译配方：全字面 COQLIB/ROCQLIB 双 export 后 coqc -Q             *)
+(*   ../../Live_X "" -Q . "" UpReqSpec2x2.v。                            *)
+(* ============================================================ *)
 
-Require Import S01_BaseRing.
-Require Import S02_CauchyComplete.
-Require Import S03_QExp.
-Require Import S04_RealExpLogConv.
-Require Import S05_AlignmentGRPO.
-Require Import S06_DiffSamplingGibbs.
-Require Import S07_RealSetoidExpLog.
-Require Import S08_RealMainlineDPO.
-Require Import S09_EntropyReal.
-Require Import S10_KVQuantTrig.
-Require Import S11_TP3B5.
-Require Import S12_B5RecycleSF.
-Require Import S13_NLiveAudit.
-Require Import S14_B5BatchBlock.
-Require Import S15_TailFEPUp.
 Require Import AttnSqrt.
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import Lia.
 From Stdlib Require Import Arith.
+Require Import S02_CauchyComplete.
+Require Import S01_BaseRing.
 
 (* ============================================================ *)
 (* §0 逐点表示引擎（已写就，未编译验证）                           *)
@@ -88,7 +85,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1R Q 层工具余留（AA16R 续建；本地复制 S02 两件避免增依赖）*)
+(* §1R Q 层工具余留（续建段；本地复制 S02 两件避免增依赖）*)
 (* ============================================================ *)
 
 Lemma sp2_qle_eq_l : forall x y z : Q, y == x -> Qle x z -> Qle y z.
@@ -451,19 +448,19 @@ Qed.
 (* L2：x₀=2 归一化档的归纳有界：0<xₙ ∧ 1≤xₙ ∧ D≤xₙ² *)
 Lemma sp2_qnewton_bnd : forall D : Q, Qle 1 D -> Qle D 4 ->
   forall n : nat,
-    And (Qlt 0 (sp2_qnewton D 2 n))
-        (And (Qle 1 (sp2_qnewton D 2 n))
-             (Qle D (sp2_qnewton D 2 n * sp2_qnewton D 2 n))).
+    And (QltT 0 (sp2_qnewton D 2 n))
+        (And (QleT' 1 (sp2_qnewton D 2 n))
+             (QleT' D (sp2_qnewton D 2 n * sp2_qnewton D 2 n))).
 Proof.
   intros D HD1 HD4 n.
   induction n as [| m IHm].
-  - split; [exact sp2_qlt_lit2 | split].
-    + unfold Qle. cbn. lia.
-    + exact HD4.
+  - split; [exact (Qlt_to_QltT _ _ sp2_qlt_lit2) | split].
+    + apply Qle_to_QleT'. unfold Qle. cbn. lia.
+    + exact (Qle_to_QleT' _ _ HD4).
   - destruct IHm as [Hpos [H1le HDle]].
-    assert (Hx0 := sp2_qle1_neq0 (sp2_qnewton D 2 m) H1le).
+    assert (Hx0 := sp2_qle1_neq0 (sp2_qnewton D 2 m) (QleT'_to_Qle _ _ H1le)).
     assert (H1xx : Qle 1%Q (sp2_qnewton D 2 m * sp2_qnewton D 2 m)%Q).
-    { exact (Qle_trans 1%Q D%Q (sp2_qnewton D 2 m * sp2_qnewton D 2 m)%Q HD1 HDle). }
+    { exact (Qle_trans 1%Q D%Q (sp2_qnewton D 2 m * sp2_qnewton D 2 m)%Q HD1 (QleT'_to_Qle _ _ HDle)). }
     assert (H4pos : Qlt 0 (4 * sp2_qnewton D 2 m * sp2_qnewton D 2 m)%Q).
     { apply (sp2_qlt_wd (0 * 4)%Q (sp2_qnewton D 2 m * sp2_qnewton D 2 m * 4)%Q
                         0%Q (4 * sp2_qnewton D 2 m * sp2_qnewton D 2 m)%Q).
@@ -481,7 +478,7 @@ Proof.
       - ring.
       - reflexivity.
       - exact (Qmult_lt_compat_r 0%Q D%Q (/ sp2_qnewton D 2 m)%Q
-                 (Qinv_lt_0_compat (sp2_qnewton D 2 m) Hpos) HDpos). }
+                 (Qinv_lt_0_compat (sp2_qnewton D 2 m) (QltT_to_Qlt _ _ Hpos)) HDpos). }
     assert (Hspos : Qlt 0 (sp2_qnewton_step D (sp2_qnewton D 2 m))).
     { apply (sp2_qlt_wd (0 * (1#2))%Q
                         ((sp2_qnewton D 2 m + D / sp2_qnewton D 2 m) * (1#2))%Q
@@ -493,7 +490,7 @@ Proof.
                  (sp2_qlt_wd (0 + 0)%Q (sp2_qnewton D 2 m + D / sp2_qnewton D 2 m)%Q
                              0%Q (sp2_qnewton D 2 m + D / sp2_qnewton D 2 m)%Q
                              (Qplus_0_l 0) (Qeq_refl _)
-                             (Qplus_lt_compat _ _ _ _ Hpos Hdx))). }
+                             (Qplus_lt_compat _ _ _ _ (QltT_to_Qlt _ _ Hpos) Hdx))). }
     assert (Hgap' : Qle 0 (sp2_qgap D (sp2_qnewton_step D (sp2_qnewton D 2 m)))).
     { destruct (Qlt_le_dec (sp2_qgap D (sp2_qnewton_step D (sp2_qnewton D 2 m))) 0%Q)
         as [Hc | Hc].
@@ -555,7 +552,7 @@ Proof.
                            * sp2_qnewton_step D (sp2_qnewton D 2 m))).
       * exact Hxxlt.
       * exact H1xx'.
-    + split; [exact Hspos | split; [exact H1le' | exact HDle']].
+    + split; [exact (Qlt_to_QltT _ _ Hspos) | split; [exact (Qle_to_QleT' _ _ H1le') | exact (Qle_to_QleT' _ _ HDle')]].
 Qed.
 
 
@@ -666,11 +663,11 @@ Proof.
   induction n as [| m IHm].
   - exact (sp2_qgap1_le1 D HD1 HD4).
   - destruct (sp2_qnewton_bnd D HD1 HD4 (Datatypes.S m)) as [Hpos [H1le HDle]].
-    exact (sp2_qgap_le1_S D (sp2_qnewton D 2 (Datatypes.S m)) H1le Hpos HDle IHm).
+    exact (sp2_qgap_le1_S D (sp2_qnewton D 2 (Datatypes.S m)) (QleT'_to_Qle _ _ H1le) (QltT_to_Qlt _ _ Hpos) (QleT'_to_Qle _ _ HDle) IHm).
 Qed.
 
 (* L5 主率（乘法不变量）：gapₙ·4ⁿ ≤ 3 —— 除法自由、无 Or 分派 *)
-(*【AA16S】率出口两件绿：主链 B≤3 肢改真不等式链               *)
+(*【完成注记】率出口两件绿：主链 B≤3 肢改真不等式链               *)
 (*  （Hid 环换形 → (gap·4^m)·g ≤ 3·g ≤ 3），全链 sp2_qle_eq_l/r 传输；      *)
 
 Theorem sp2_sqrt_rate_core : forall D : Q, Qle 1 D -> Qle D 4 ->
@@ -750,17 +747,17 @@ Proof.
       destruct (sp2_qnewton_bnd D HD1 HD4 (Datatypes.S (Datatypes.S m')))
         as [_ [_ HDle2]].
       pose proof (sp2_qgap_le1 D HD1 HD4 m') as Hg1.
-      assert (Hx0 := sp2_qle1_neq0 (sp2_qnewton D 2 (Datatypes.S m')) H1le).
+      assert (Hx0 := sp2_qle1_neq0 (sp2_qnewton D 2 (Datatypes.S m')) (QleT'_to_Qle _ _ H1le)).
       pose proof (sp2_qstep_gap D (sp2_qnewton D 2 (Datatypes.S m')) Hx0) as Hid.
       assert (Hgx0 : Qle 0 (sp2_qgap D (sp2_qnewton D 2 (Datatypes.S m'))))
-        by (apply sp2_qgap_ge0; exact HDle).
+        by (apply sp2_qgap_ge0; exact (QleT'_to_Qle _ _ HDle)).
       assert (Hgw0 : Qle 0 (sp2_qgap D (sp2_qnewton_step D (sp2_qnewton D 2 (Datatypes.S m')))))
-        by (apply sp2_qgap_ge0; exact HDle2).
+        by (apply sp2_qgap_ge0; exact (QleT'_to_Qle _ _ HDle2)).
       assert (Hxx : Qle 1%Q
                  (sp2_qnewton D 2 (Datatypes.S m') * sp2_qnewton D 2 (Datatypes.S m'))%Q).
       { exact (Qle_trans 1%Q D%Q
                  (sp2_qnewton D 2 (Datatypes.S m') * sp2_qnewton D 2 (Datatypes.S m'))%Q
-                 HD1 HDle). }
+                 HD1 (QleT'_to_Qle _ _ HDle)). }
       assert (H4le : Qle 4%Q
                  (4 * sp2_qnewton D 2 (Datatypes.S m') * sp2_qnewton D 2 (Datatypes.S m'))%Q).
       { assert (Hr4 : (sp2_qnewton D 2 (Datatypes.S m') * sp2_qnewton D 2 (Datatypes.S m') * 4
@@ -842,7 +839,7 @@ Proof.
                  3%Q HeqBC Hce).
 Qed.
 
-(* L5 出口件：Set 层 QleT' 面（出口位）。                              *)
+(* L5 出口件：Set 层 QleT' 面（设计出口位）。                              *)
 (*  QleT 右支 Id 分支 destruct 消解；QleT' 入参经 QleT'_to_Qle 桥进 Q 层      *)
 
 Theorem sp2_sqrt_rate : forall D : Q, QleT 1 D -> QleT' D 4 -> forall n : nat,
@@ -859,7 +856,7 @@ Proof.
   - apply Qle_to_QleT'.
     apply sp2_qgap_ge0.
     destruct (sp2_qnewton_bnd D Hq1 Hq4 n) as [_ [_ HDle]].
-    exact HDle.
+    exact (QleT'_to_Qle _ _ HDle).
   - apply Qle_to_QleT'.
     exact (sp2_sqrt_rate_core D Hq1 Hq4 n).
 Qed.
@@ -925,7 +922,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2E 副件两小件（AA16S）：D=0 简并 ε-一致版 + s 严格正 corollary *)
+(* §2E 副件两小件：D=0 简并 ε-一致版 + s 严格正 corollary *)
 (*   Q 引擎：η := ε/(4+ε) 档（0<η ∧ η≤1 ∧ 2η<ε），免 epsfrac 平方档。      *)
 (* ============================================================ *)
 
@@ -951,8 +948,8 @@ Qed.
 
 (* η := ε/(4+ε) 档：0<η ∧ η≤1 ∧ 2η<ε（2<4+ε 严格、无平方正性案分） *)
 Lemma sp2_q_eta_kit : forall e : Q, Qlt 0 e ->
-  And (Qlt 0 (e/(4+e)))
-      (And (Qle (e/(4+e)) 1) (Qlt (2*(e/(4+e))) e)).
+  And (QltT 0 (e/(4+e)))
+      (And (QleT' (e/(4+e)) 1) (QltT (2*(e/(4+e))) e)).
 Proof.
   intros e He.
   assert (H0e : Qle 0 e) by (apply Qlt_le_weak; exact He).
@@ -992,7 +989,7 @@ Proof.
     exact (sp2_qlt_wd (2 * (e/(4+e)))%Q ((4+e) * (e/(4+e)))%Q
              (2 * (e/(4+e)))%Q e%Q (Qeq_refl _) Hr2
              (Qmult_lt_compat_r 2%Q (4+e)%Q (e/(4+e))%Q Hηpos H2lt)). }
-  split; [exact Hηpos | split; [exact Hηle1 | exact Hη2lt]].
+  split; [exact (Qlt_to_QltT _ _ Hηpos) | split; [exact (Qle_to_QleT' _ _ Hηle1) | exact (Qlt_to_QltT _ _ Hη2lt)]].
 Qed.
 
 (* 副件一（degen ε-一致版）：a−d ≡ 0 ∧ 2b ≡ 0 ⟹ D ≡ 0（|D_n| < ε 一致界） *)
@@ -1003,8 +1000,8 @@ Corollary sp2_disc_eq_zero_of_degen : forall a d b : Real,
 Proof.
   intros a d b Hu Hb eps Heps.
   pose proof (sp2_q_eta_kit eps (QltT_to_Qlt _ _ Heps)) as [Hη0 [Hη1 Hη2]].
-  destruct (Hu (eps/(4+eps))%Q (Qlt_to_QltT _ _ Hη0)) as [N1 HN1].
-  destruct (Hb (eps/(4+eps))%Q (Qlt_to_QltT _ _ Hη0)) as [N2 HN2].
+  destruct (Hu (eps/(4+eps))%Q Hη0) as [N1 HN1].
+  destruct (Hb (eps/(4+eps))%Q Hη0) as [N2 HN2].
   exists (max N1 N2).
   intros n Hn.
   assert (K1 : NatLe N1 n).
@@ -1054,7 +1051,7 @@ Proof.
     setoid_rewrite (sp2_pt_zero n). ring. }
   apply Qlt_to_QltT.
   setoid_rewrite HDn.
-  assert (Hη0le : Qle 0 (eps/(4+eps))) by (apply Qlt_le_weak; exact Hη0).
+  assert (Hη0le : Qle 0 (eps/(4+eps))) by (apply Qlt_le_weak; exact (QltT_to_Qlt _ _ Hη0)).
   assert (Hb1 : Qle (Qabs (projT1 a n - projT1 d n)) (eps/(4+eps)))
     by exact (Qlt_le_weak _ _ H1').
   assert (Hb2 : Qle (Qabs (projT1 b n + projT1 b n)) (eps/(4+eps)))
@@ -1063,15 +1060,15 @@ Proof.
                     ((eps/(4+eps)) * (eps/(4+eps))))
     by exact (sp2_qle_eq_l _ _ _
                (Qeq_sym _ _ (sp2_qsq_abs_id (projT1 a n - projT1 d n)))
-               (sp2_qsq_le_eta (projT1 a n - projT1 d n) (eps/(4+eps)) Hη0le Hη1 Hb1)).
+               (sp2_qsq_le_eta (projT1 a n - projT1 d n) (eps/(4+eps)) Hη0le (QleT'_to_Qle _ _ Hη1) Hb1)).
   assert (Hs2 : Qle (Qabs (projT1 b n + projT1 b n) * Qabs (projT1 b n + projT1 b n))
                     ((eps/(4+eps)) * (eps/(4+eps))))
     by exact (sp2_qle_eq_l _ _ _
                (Qeq_sym _ _ (sp2_qsq_abs_id (projT1 b n + projT1 b n)))
-               (sp2_qsq_le_eta (projT1 b n + projT1 b n) (eps/(4+eps)) Hη0le Hη1 Hb2)).
+               (sp2_qsq_le_eta (projT1 b n + projT1 b n) (eps/(4+eps)) Hη0le (QleT'_to_Qle _ _ Hη1) Hb2)).
   assert (Hr1 : (eps/(4+eps) == 1 * (eps/(4+eps)))%Q) by ring.
   assert (Hηsqle : Qle ((eps/(4+eps)) * (eps/(4+eps))) (eps/(4+eps)))
-    by exact (sp2_qle_eq_r _ _ _ Hr1 (Qmult_le_compat_r (eps/(4+eps)) 1%Q (eps/(4+eps)) Hη1 Hη0le)).
+    by exact (sp2_qle_eq_r _ _ _ Hr1 (Qmult_le_compat_r (eps/(4+eps)) 1%Q (eps/(4+eps)) (QleT'_to_Qle _ _ Hη1) Hη0le)).
   apply (Qle_lt_trans (Qabs ((projT1 a n - projT1 d n) * (projT1 a n - projT1 d n)
                              + (projT1 b n + projT1 b n) * (projT1 b n + projT1 b n)))
                       (Qabs ((projT1 a n - projT1 d n) * (projT1 a n - projT1 d n))
@@ -1089,7 +1086,7 @@ Proof.
       * apply (Qle_trans _ ((eps/(4+eps)) + (eps/(4+eps)))%Q (2 * (eps/(4+eps)))%Q).
         -- exact (Qplus_le_compat _ _ _ _ Hηsqle Hηsqle).
         -- apply sp2_qeq_le. ring.
-    + exact Hη2.
+    + exact (QltT_to_Qlt _ _ Hη2).
 Qed.
 
 (* 副件二（s 严格正 corollary）：0<D 严格 ⟹ eig_gap 见证 s 严格正。
@@ -1110,7 +1107,7 @@ Proof.
     assert (Hss0 : real_eq (real_mult s s) real_zero).
     { intros eps2 Heps2.
       pose proof (sp2_q_eta_kit eps2 (QltT_to_Qlt _ _ Heps2)) as [Hη0 [Hη1 Hη2]].
-      destruct (Hseq (eps2/(4+eps2))%Q (Qlt_to_QltT _ _ Hη0)) as [M HM].
+      destruct (Hseq (eps2/(4+eps2))%Q Hη0) as [M HM].
       exists M. intros m Hm.
       pose proof (QltT_to_Qlt _ _ (HM m Hm)) as Habs0.
       assert (Hxs : Qabs (projT1 real_zero m - projT1 s m) == Qabs (- projT1 s m)%Q).
@@ -1121,7 +1118,7 @@ Proof.
       { exact (sp2_qlt_wd (Qabs (- projT1 s m))%Q (eps2/(4+eps2))%Q
                  (Qabs (projT1 s m))%Q (eps2/(4+eps2))%Q
                  (Qabs_opp (projT1 s m)) (Qeq_refl _) Habs). }
-      assert (Hη0le : Qle 0 (eps2/(4+eps2))) by (apply Qlt_le_weak; exact Hη0).
+      assert (Hη0le : Qle 0 (eps2/(4+eps2))) by (apply Qlt_le_weak; exact (QltT_to_Qlt _ _ Hη0)).
       assert (Hb1 : Qle (Qabs (projT1 s m)) (eps2/(4+eps2)))
         by exact (Qlt_le_weak _ _ Habs').
       assert (Hpt : projT1 (real_mult s s) m - projT1 real_zero m
@@ -1144,17 +1141,17 @@ Proof.
             exact (Qle_trans (projT1 s m * projT1 s m)
                      ((eps2/(4+eps2)) * (eps2/(4+eps2)))
                      (eps2/(4+eps2))
-                     (sp2_qsq_le_eta (projT1 s m) (eps2/(4+eps2)) Hη0le Hη1 Hb1)
+                     (sp2_qsq_le_eta (projT1 s m) (eps2/(4+eps2)) Hη0le (QleT'_to_Qle _ _ Hη1) Hb1)
                      (sp2_qle_eq_r _ _ _ Hr1b
                         (Qmult_le_compat_r (eps2/(4+eps2)) 1%Q (eps2/(4+eps2))
-                           Hη1 Hη0le))).
+                           (QleT'_to_Qle _ _ Hη1) Hη0le))).
         + assert (Hr2 : (2 * (eps2/(4+eps2)) == (eps2/(4+eps2)) * 2)%Q) by ring.
           assert (Hr3 : ((eps2/(4+eps2)) == (eps2/(4+eps2)) * 1)%Q) by ring.
           exact (sp2_qle_eq_l ((eps2/(4+eps2)) * 1)%Q (eps2/(4+eps2))%Q
                    (2 * (eps2/(4+eps2)))%Q Hr3
                    (sp2_qle_eq_r _ _ _ Hr2
                       (sp2_qmult_le_compat_l 1%Q 2%Q (eps2/(4+eps2)) H12 Hη0le))).
-      - exact Hη2. }
+      - exact (QltT_to_Qlt _ _ Hη2). }
     assert (HD0 : real_eq (sp2_disc a d b) real_zero).
     { exact (real_eq_trans (sp2_disc a d b) (real_mult s s) real_zero
                (real_eq_sym (real_mult s s) (sp2_disc a d b) Hsq) Hss0). }
@@ -1208,7 +1205,7 @@ Print Assumptions sp2_eig_s_pos.
 (* sp2_lower0_plus：lower0 y ⟹ lower0 z ⟹ lower0 (y+z)——           *)
 (*   H1 at ε/2 得 δ1,N1，H2 at ε/2 得 δ2,N2；δ:=δ1+δ2（正性        *)
 (*   Qplus_lt_compat），N:=max N1 N2（S02 real_lt_trans 的          *)
-(*   NatLe_lift + Nat.le_trans + NatLe_drop 依存模式照抄）；        *)
+(*   NatLe_lift + Nat.le_trans + NatLe_drop 使用模式照抄）；        *)
 (*   点态 δ1+δ2 < ε+y_n+z_n = Qplus_lt_compat + field 换形。        *)
 (* sp2_lower0_sq：∀x, lower0 (x·x) —— sp2_lower0_intro +            *)
 (*   sp2_qsq_nonneg 逐点（sp2_pt_mult 换 projT1 后直接喂）。         *)

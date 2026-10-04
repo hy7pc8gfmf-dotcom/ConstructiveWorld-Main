@@ -1922,7 +1922,7 @@ Definition ng_UpReqRatioTail : NewGreenFace :=
 
 (* ng_UpReqAttnUniformLimit —— UpReqAttnUniformLimit.v：attn uniform limit + switch_gen family, R9B/SWG *)
 Definition ng_UpReqAttnUniformLimit : NewGreenFace :=
-  MkNewGreenFace "UpReqAttnUniformLimit.v" 618 15 20260918 "attn uniform limit + switch_gen family, R9B/SWG" "L1777:m2e9daa".
+  MkNewGreenFace "UpReqAttnUniformLimit.v" 618 15 20260918 "attn uniform limit + switch_gen family, R9B/SWG" "L1839:m7ddcdd".
 
 (* ng_UpReqAttnMassSplit —— UpReqAttnMassSplit.v：Q18 mass-split chain ams_, Q18C *)
 Definition ng_UpReqAttnMassSplit : NewGreenFace :=
@@ -3275,7 +3275,7 @@ Definition ng_abl_tbase_zapfeed : NewGreenFace :=
 (* ng_LW3ExclusionCalc —— LW3ExclusionCalc.v：排除计算器（Track A 三件 Defined 计算核 lw3x_sideb/lw3x_env_lo/lw3x_env_hi——sideb=leiblw_Qltb 直连、env_lo/hi 端点算式与 PiEnvelope 同源——经 lw3x_seal 六层 sigT Set 面封装＋带不相容性定理 lw3x_band_excl〔逐 eps 三模量 max 拼装＋Qabs 符号两支＋线性收束，Hc/Hsep/Hlo/Hhi/Hw 四供件全使用；两条线性收束支 lra 系 592 §四.一 红线①纪律放行位·LW2 绿件同位先例〕＋主语句 lw3x_calc 参数 c 前提位「q 进见证出」可执行；PA=4 Closed；提取 12.ml Obj.magic=0 逐字验证；coqchk -o 全闭包 234 库 公理位 none 满贯；绿证＝609 记录四关全部通过在卷） *)
 Definition ng_LW3ExclusionCalc : NewGreenFace :=
   MkNewGreenFace "LW3ExclusionCalc.v" 299 11 20261002
-  "exclusion calculator: three Defined computable kernels lw3x_sideb, lw3x_env_lo and lw3x_env_hi over the Leibniz window envelope, sealed by lw3x_seal into a six-layer sigT Set face, with the incompatibility band theorem lw3x_band_excl consuming all four supply witnesses via per-eps three-modulus max assembly and Qabs sign branches, and main statement lw3x_calc carrying premise parameter c so that a rational q with witnesses yields the exclusion band as executable code" "L299:m9edef5".
+  "exclusion calculator: three Defined computable kernels lw3x_sideb, lw3x_env_lo and lw3x_env_hi over the Leibniz window envelope, sealed by lw3x_seal into a six-layer sigT Set face, with the incompatibility band theorem lw3x_band_excl consuming all four supply witnesses via per-eps three-modulus max assembly and Qabs sign branches, and main statement lw3x_calc carrying premise parameter c so that a rational q with witnesses yields the exclusion band as executable code" "L284:mc79f54".
 
 (* ng_LW4EPiContrast —— LW4EPiContrast.v：e-π 模量对照层（e 侧逃逸供给 lw4c_e_escape_supply＝lic_witness_e 实供〔exp_series 与 1/q_fact 之上·UpReq lic_escape_window/lw0m 接口面〕；π 侧零伪造三护栏：π 逃逸供给槽唯 lic_face 条件形 lw4c_pi_escape_of_lic、提取九件零 π 侧供件名、无前提 π 逃逸供给零落；对照面 lw4c_contrast_face 经 lw4c_contrast_param 成对承载；tactic 面 intro/destruct/exists/exact/split 零自动化；PA=2 Closed；提取 .ml/.mli Obj.magic=0/0；绿证＝606 记录四关全部通过在卷） *)
 Definition ng_LW4EPiContrast : NewGreenFace :=
@@ -3300,7 +3300,7 @@ Definition ng_LW2TrigBridge : NewGreenFace :=
 (* ng_LW0LeibSeparation —— LW0LeibSeparation.v：Leibniz 级数 π 的有理层构造性分离界库（岸界与半量弹药链＋端点帽复合传输；主语句 leibsep_q_kernel_gate_carrier：显式端点帽 s t 前提＋P1/P2 具体端点形，双岸矛盾件 leibsep_false_branch_contra 显参传递装配分离证书）；PA=59 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW0LeibSeparation : NewGreenFace :=
   MkNewGreenFace "LW0LeibSeparation.v" 4025 108 20261004
-  "constructive rational-layer separation bounds for the Leibniz series of pi: shore bounds with the half-quantity arsenal, and the kernel gate carrier lemma taking explicit endpoint caps s and t as premises together with concrete P1 and P2 endpoint forms, assembling the two-sided separation certificate by direct argument passing into the contradiction lemma" "L4025:m654d54".
+  "constructive rational-layer separation bounds for the Leibniz series of pi: shore bounds with the half-quantity arsenal, and the kernel gate carrier lemma taking explicit endpoint caps s and t as premises together with concrete P1 and P2 endpoint forms, assembling the two-sided separation certificate by direct argument passing into the contradiction lemma" "L4025:m473267".
 
 (* ng_LW2Binom —— LW2Binom.v：nat 面二项式系数工具组与 Z 桥（主件 lw2_binom：Pascal 递归构造的非负二项式系数，三条定义方程 reflexivity 可验；配套非负性布尔形 lw2_binom_nonneg、正性引理 lw2_fact_pos、零支 lw2_binom_above、对角 lw2_binom_diag、加法交换承载 lw2_mul_left_comm、阶乘刻画 lw2_binom_fact；Z 面符号因子方程 lw2_zsign_even/lw2_zsign_odd 与 Z 因子取用方程 lw2_binom_Z）；主语句 lw2_binom；PA=9 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW2Binom : NewGreenFace :=
@@ -3321,3 +3321,63 @@ Definition ng_ablt9_s06abs_sum_feed : NewGreenFace :=
 Definition ng_abl_tail_expf_iface_inst : NewGreenFace :=
   MkNewGreenFace "abl_tail_expf_iface_inst.v" 261 11 20261002
   "the sole new supply piece of the C1 phase-one LoHi unlock: Part A names the six expf family slots over the uabd1x root with the concrete-layer lpc provider, Part B aliases the cf2 world data, Part 0 restates the p7a_lo_lt_one and p7d_hi_gt_one mirrors on the req face with the expf_zero slot at real_eq and a one-step direct proof for the hi-side mirror, and Part C instantiates the nine migrated LoHi theorems of both hosts at the canonical RealEnhancedReal instance with the lpc argument supplied at the three omd witnesses, eleven Qed in total, one-way require over the migrated hosts whose p7a and p7d upstream consumption is inlined with the Part 0 bodies" "L257:mbfef29".
+(* ng_abl_dte_core3 —— abl_dte_core3.v：DTPT_Entropy.v 前件参数消解供给卡三 *)
+Definition ng_abl_dte_core3 : NewGreenFace :=
+  MkNewGreenFace "abl_dte_core3.v" 450 37 20261005
+  "[abl_dte_core3.v: DTPT_Entropy.v preface discharge supply card 3]" "L450:m9880aa87".
+(* ng_abl_dte_core4 —— abl_dte_core4.v：DTPT_Entropy.v 前件参数消解供给卡四 *)
+Definition ng_abl_dte_core4 : NewGreenFace :=
+  MkNewGreenFace "abl_dte_core4.v" 902 57 20261005
+  "[abl_dte_core4.v: DTPT_Entropy.v preface discharge supply card 4]" "L902:mbe905a70".
+(* ng_abl_dte_core1 —— abl_dte_core1.v：DTPT_Entropy.v 前件参数消解供给卡一 *)
+Definition ng_abl_dte_core1 : NewGreenFace :=
+  MkNewGreenFace "abl_dte_core1.v" 459 40 20261005
+  "[abl_dte_core1.v: DTPT_Entropy.v preface discharge supply card 1]" "L459:m6cac57d2".
+(* ng_abl_dtr_core3 —— abl_dtr_core3.v：DTPT_Rotation.v 登记序卡三 *)
+Definition ng_abl_dtr_core3 : NewGreenFace :=
+  MkNewGreenFace "abl_dtr_core3.v" 411 32 20261005
+  "[abl_dtr_core3.v: DTPT_Rotation.v registration sequence card 3]" "L411:m687e42d0".
+(* ng_abl_dte_core2 —— abl_dte_core2.v：DTPT_Entropy.v 前件参数消解供给卡二 *)
+Definition ng_abl_dte_core2 : NewGreenFace :=
+  MkNewGreenFace "abl_dte_core2.v" 659 47 20261005
+  "[abl_dte_core2.v: DTPT_Entropy.v preface discharge supply card 2]" "L659:m5a9e04c4".
+(* ng_abl_dtd_core3 —— abl_dtd_core3.v：DTPT.v 登记序卡三 *)
+Definition ng_abl_dtd_core3 : NewGreenFace :=
+  MkNewGreenFace "abl_dtd_core3.v" 502 38 20261005
+  "[abl_dtd_core3.v: DTPT.v registration sequence card 3]" "L502:m4bbe455a".
+(* ng_abl_dtr_core2 —— abl_dtr_core2.v：DTPT_Rotation.v 登记序卡二 *)
+Definition ng_abl_dtr_core2 : NewGreenFace :=
+  MkNewGreenFace "abl_dtr_core2.v" 544 41 20261005
+  "[abl_dtr_core2.v: DTPT_Rotation.v registration sequence card 2]" "L544:mfdda085f".
+(* ng_abl_dtr_core1 —— abl_dtr_core1.v：DTPT_Rotation.v 登记序卡一 *)
+Definition ng_abl_dtr_core1 : NewGreenFace :=
+  MkNewGreenFace "abl_dtr_core1.v" 718 44 20261005
+  "[abl_dtr_core1.v: DTPT_Rotation.v registration sequence card 1]" "L718:m45663a01".
+(* ng_abl_dtd_core4 —— abl_dtd_core4.v：DTPT.v 登记序卡四 *)
+Definition ng_abl_dtd_core4 : NewGreenFace :=
+  MkNewGreenFace "abl_dtd_core4.v" 603 40 20261005
+  "[abl_dtd_core4.v: DTPT.v registration sequence card 4]" "L603:me760825a".
+(* ng_abl_dtd_core1 —— abl_dtd_core1.v：DTPT.v 登记序卡一 *)
+Definition ng_abl_dtd_core1 : NewGreenFace :=
+  MkNewGreenFace "abl_dtd_core1.v" 637 35 20261005
+  "[abl_dtd_core1.v: DTPT.v registration sequence card 1]" "L637:m5caba4d7".
+(* ng_abl_dtd_core2 —— abl_dtd_core2.v：DTPT.v 登记序卡二 *)
+Definition ng_abl_dtd_core2 : NewGreenFace :=
+  MkNewGreenFace "abl_dtd_core2.v" 495 37 20261005
+  "[abl_dtd_core2.v: DTPT.v registration sequence card 2]" "L495:m96422d63".
+(* ng_abl_dtb_bridge —— abl_dtb_bridge.v：DTPT_Bridge 带前件 21 条语句 26 参数 *)
+Definition ng_abl_dtb_bridge : NewGreenFace :=
+  MkNewGreenFace "abl_dtb_bridge.v" 551 32 20261005
+  "[abl_dtb_bridge.v: DTPT_Bridge 21 statements with premises over 26 parameters]" "L551:m7ecdc4c1".
+(* ng_abl_tbase_tempsum_feed —— abl_tbase_tempsum_feed.v：温度族四宿主 Real 面具名供给 *)
+Definition ng_abl_tbase_tempsum_feed : NewGreenFace :=
+  MkNewGreenFace "abl_tbase_tempsum_feed.v" 271 17 20261005
+  "[abl_tbase_tempsum_feed.v: Real mask names supply for four thermal-family hosts]" "L271:m8a6de302".
+(* ng_abl_tbe_invpos —— abl_tbe_invpos.v：两宿主六处反正性前件 *)
+Definition ng_abl_tbe_invpos : NewGreenFace :=
+  MkNewGreenFace "abl_tbe_invpos.v" 151 7 20261005
+  "[abl_tbe_invpos.v: six anti-positivity premises across two hosts]" "L151:mbad97475".
+(* ng_abl_c1_lohi —— abl_c1_lohi.v：UpAblP7_LoHiSqueeze 键控 23 待解参数逐参数消解 *)
+Definition ng_abl_c1_lohi : NewGreenFace :=
+  MkNewGreenFace "abl_c1_lohi.v" 354 41 20261005
+  "[abl_c1_lohi.v: UpAblP7_LoHiSqueeze keyed 23 pending parameters discharged one by one]" "L354:me5247e56".

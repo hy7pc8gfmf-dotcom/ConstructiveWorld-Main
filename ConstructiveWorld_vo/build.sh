@@ -21,6 +21,7 @@ while IFS= read -r f; do
   # -native-compiler no：规避本机 Rocq 9.0 实测 coqnative 子进程挂死（E-STAGING-WangWW-native 卡）；
   # 9.1 换装后沿用保守旗标（PROBE91 全绿实证），不改变逻辑 digest，coqchk 认证不受影响。
   # 仅影响运行时 Compute 原生加速，不改变逻辑 digest，coqchk 认证不受影响。
+  mkdir -p "$(dirname "_${f%.v}.build.log")"
   "$C" -native-compiler no -Q . "" "$f" > "_${f%.v}.build.log" 2>&1
   e=$?
   echo "$f EXIT=$e"

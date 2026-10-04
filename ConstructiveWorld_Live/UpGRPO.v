@@ -1,48 +1,31 @@
-(* ============================================================ *)
-(* UpGRPO.v *)
-(* *)
-(* 使命： GRPO 的 NoDup 均匀化与标准化优势二阶矩（Real 层）。 *)
-(* 主件： list_sum_g 线性族与 InT 迁移族；proj_sigma 标准化优势二阶矩。 *)
-(* 依赖： CW_ConstructiveWorld_219。 *)
-(* 构造性注记： NoDup 前提不可去：双副本枚举给质量 2/G（反例仅注释陈述）；纯构造性、零公理面、全 Qed。 *)
-(* 编译配方：SW2 全字面环境（COQLIB/ROCQLIB/OCAMLLIB/COQPATH 置空）， *)
-(*   Rocq 9.1 coqc -q -native-compiler no，-Q 单根。 *)
-(* ============================================================ *)
-
-(* ============================================================ *)
-(* UpGRPO.v —— GRPO NoDup 均匀化 + 标准化优势二阶矩                    *)
-(*                                                                *)
-(* B（抽象 R 层）：计数机器（count_g/removeT_g，grp_eq_dec 驱动）       *)
-(*   + nodup_g（Set 层无重复谓词，计数刻画）⟹                        *)
-(*   B1 覆盖 + 无重复 ⟹ 每元素恰计一次；                              *)
-(*   B2 indicator 求和 == 1；                                        *)
-(*   B3 真均匀质量：组均值对每个 delta_j 的质量恰为 1/G。              *)
-(*   诚实注记：NoDup 不可去——双副本枚举给质量 2/G（反例只注释不证）。  *)
-(* C（Real 层）：标准化优势二阶矩——real_sqrt_exists 的 Or 前提形态     *)
-(*   与「σ > 0 需证书」的构造性语义衔接：sigT 封装 σ（0 < σ ∧ σ²==Var） *)
-(*   且 Σ(A_i/σ)² == 1（Var 为未归一化中心二阶矩，与论文 1 §7.2 口径   *)
-(*   一致；population 版由重新缩放立得，注记说明）。                   *)
-(* 红线：纯构造性（零公理、零弃证声明）；Set 层语句；全 Qed；可提取。 *)
-(* ============================================================ *)
+(* ============================================================
+   UpGRPO.v —— GRPO 的 NoDup 均匀化与标准化优势二阶矩（Real 层）。
+   ── 使命：B（抽象 R 层）计数机器（count_g/removeT_g，grp_eq_dec
+   驱动）＋nodup_g（Set 层无重复谓词，计数刻画）：B1 覆盖＋无重复
+   ⟹ 每元素恰计一次；B2 indicator 求和 == 1；B3 真均匀质量：组均值
+   对每个 delta_j 的质量恰为 1/G。C（Real 层）：标准化优势二阶矩——
+   real_sqrt_exists 的 Or 前提形态与「σ > 0 需证书」的构造性语义
+   衔接：sigT 封装 σ（0 < σ ∧ σ²==Var）且 Σ(A_i/σ)² == 1（Var 为
+   未归一化中心二阶矩，与论文 1 §7.2 口径一致；population 版由重新
+   缩放立得，注记说明）。
+   ── 诚实注记：NoDup 前提不可去——双副本枚举给质量 2/G（反例仅
+   注释陈述）。
+   ── 替换声明：upgrpo_sigma_sq_eq（原 L597）／real_mult_exchange
+   （原 L371）两槽证明体替换为直接构造证（定义层受控展开／显式见证
+   直取／结构性重演）；声明面与引用面零改动、零新增 Require，证明
+   结尾记号与原版逐件守恒，文尾保留原版 Print Assumptions 追印面。
+   ── 依赖：AttnDoeblin、AttnSqrt、S01_BaseRing、S02_CauchyComplete、
+   S03_QExp、S07_RealSetoidExpLog、S08_RealMainlineDPO；Stdlib
+   List、Extraction。
+   ── 构造性注记：纯构造性（零公理、零承认式声明）；Set 层语句；
+   全 Qed；可提取。
+   ── 编译配方：coqc -q -Q "D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo" "" UpGRPO.v。
+   ============================================================ *)
 
 From Stdlib Require Import List.
 Import ListNotations.
-Require Import S01_BaseRing.
-Require Import S02_CauchyComplete.
-Require Import S03_QExp.
-Require Import S04_RealExpLogConv.
-Require Import S05_AlignmentGRPO.
-Require Import S06_DiffSamplingGibbs.
-Require Import S07_RealSetoidExpLog.
-Require Import S08_RealMainlineDPO.
-Require Import S09_EntropyReal.
-Require Import S10_KVQuantTrig.
-Require Import S11_TP3B5.
-Require Import S12_B5RecycleSF.
-Require Import S13_NLiveAudit.
-Require Import S14_B5BatchBlock.
-Require Import S15_TailFEPUp.
 Require Import AttnDoeblin AttnSqrt.
+Require Import S01_BaseRing S02_CauchyComplete S03_QExp S07_RealSetoidExpLog S08_RealMainlineDPO.
 
 (* ################ Part B：抽象层 NoDup 均匀化 ################ *)
 

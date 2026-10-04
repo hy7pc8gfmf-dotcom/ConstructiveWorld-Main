@@ -1,11 +1,28 @@
-(* ==========================================================================)
-   DTPT_Extract.v — 提取面门控套件
-   使命: §1 提取检验（核心件 Extraction，Obj.magic=0 验收）；§2 计算行为锚（vm_compute 级数值正确性回归面）；§3 可执行审查链（gate_chain bool 面 + phase 判定 bool 化等值 + 行为定理）；§4 质量回归与 phase_side 退化可执行化（u12_ 前缀全套）。
-   依赖: DTPT、DTPT_Entropy、DTPT_Truth；Stdlib QArith、List、Arith、Permutation、Extraction。
-   对标: 可提取性验收与计算行为回归（形式化软件工程方法层）。
-   构造性: 全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（序谓词与等词为 Set 值，零 Prop 泄露）。
-   编译配方: Rocq 9.1 直调 coqc -Q . "" -native-compiler no（vo 影子树同世界重编），cpu_guard 包裹限载。
-   ========================================================================== *)
+(* ============================================================
+   DTPT_Extract.v — X2-5 提取面门控套件（DTPT-U12 新建面）
+   使命：提取面门控套件（工程非平凡）——§1 提取检验：对核心计算件
+         做 Extraction（产物 *_ext.ml，验收指标：Obj.magic 计数 = 0；
+         验收后产物清除，报告留数）；§2 计算行为钉死：vm_compute 级
+         数值正确性面（金标准回归锚：任一后续基础改动使本节定理
+         变红即报警）；§3 可执行审查链：gate_chain（无 Prop 前提、
+         全 bool 面）+ phase 判定 bool 化等值定理 + 行为定理；
+         §4 加分：mu 总质量数值回归件 + phase_side 退化实证可执行化。
+   依赖：DTPT / DTPT_Measure / DTPT_LLM（任务单指定三个基础组件，均稳定）、
+         DTPT_Entropy / DTPT_Truth（同为已落盘稳定件：phase_side 在
+         Entropy、level_le/ev_size/trLevel_geq 在 Truth，皆为任务单
+         点名目标件，不得 Require 则无法触达；进行中件（D8Ext 等）零接触）、
+         QArith（QArith/Qabs）、List、Arith、Permutation、Extraction。
+   归并记录：无（原生成模块）。
+   认证：零承认零公理；全树 coqchk EXIT=0（）；
+         Obj.magic=0×18 文件实证。
+   构造性注记：纯构造性；机检收束；全程 Qed；nat 字面量全显式
+         %nat；Q 是 Record，行为定理走 vm_compute 闭式。
+   附注：防撞纪律——本文件新定义/新定理一律 u12_ 限名前缀；提取
+         产物用「名_ext.ml」型命名；DTPT 与 DTPT_Truth 各自定义了
+         Level/Evidence 同名 induction（同名重复陷阱），Truth 侧引用
+         一律 DTPT_Truth. 全限定。
+   编译配方：coqc -q -Q "D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo" "" DTPT_Extract.v。
+   ============================================================ *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
 From Stdlib Require Import List.
@@ -38,7 +55,7 @@ Extraction "ev_size_ext.ml" DTPT_Truth.DTPT_Truth.ev_size.
 Extraction "trLevel_geq_ext.ml" DTPT_Truth.DTPT_Truth.trLevel_geq.
 Extraction "phase_side_ext.ml" phase_side.
 
-(* ========== §2 计算行为钉死（主定理·金标准回归面） ========== *)
+(* ========== §2 计算行为钉死（核心·金标准回归面） ========== *)
 
 (* gate_pass 样例表：阈值 1/2 下 0/1/2 的三行真值（六格逐格钉死）。
    注意 gate_pass 形参序为 (threshold H)，阈值在前。 *)
@@ -87,7 +104,7 @@ Proof. vm_compute. reflexivity. Qed.
 Theorem u12_trLevel_geq_lv2 : DTPT_Truth.DTPT_Truth.trLevel_geq u12_trn1 DTPT_Truth.DTPT_Truth.Lv2 = false.
 Proof. vm_compute. reflexivity. Qed.
 
-(* phase_side 具体列判定（X2-1 退化实证可执行化：基座 rot 为恒等退化，
+(* phase_side 具体列判定（X2-1 退化实证可执行化：基础 rot 为恒等退化，
    Pinf = l，故相位判定恒落 0 侧；三实例钉死） *)
 Theorem u12_phase_side_301_s0 : phase_side [3;0;1] 0 = 0%nat.
 Proof. vm_compute. reflexivity. Qed.
@@ -123,10 +140,10 @@ Qed.
 Definition u12_gate_chain (l : list Q) (threshold : Q) : bool :=
   gate_pass threshold (H_adj l) && u12_phase_side_bool l 0%nat.
 
-(* 链上新定义亦可提取（与基座件同链，Obj.magic 面一并验收） *)
+(* 链上新定义亦可提取（与基础件同链，Obj.magic 面一并验收） *)
 Extraction "gate_chain_ext.ml" u12_gate_chain u12_phase_side_bool.
 
-(* 行为定理两件：拒真（阈值截断）与放行（双门同开）各一 *)
+(* 行为定理两件：拒真（阈值受阻）与放行（双门同开）各一 *)
 Theorem u12_gate_chain_301_t1 : u12_gate_chain [3;0;1] 1 = false.
 Proof. vm_compute. reflexivity. Qed.
 
@@ -155,10 +172,10 @@ Proof. vm_compute. reflexivity. Qed.
 Theorem u12_freq_1223_5 : freq [1;2;2;3] 5 = 0%nat.
 Proof. vm_compute. reflexivity. Qed.
 
-(* phase_side 退化实证的可执行全称化：基座 rot = firstn ++ skipn 恒等，
+(* phase_side 退化实证的可执行全称化：基础 rot = firstn ++ skipn 恒等，
    Pinf l s = l，判定归约为 C_sorted_min_adj（P0 侧 H_adj 恒不增）。
    本件为 Prop 面文档件，不进提取链；具体值行为已由 §2 三实例钉死。 *)
-(* 【弃用注记】本件在 rot=firstn++skipn 恒等基座下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
+(* 【弃用注记 】本件在 rot=firstn++skipn 恒等基础下为恒等推论伪装；操作语义以 DTPT_ROTC/DTPT_Cyc/DTPT_RotSpec 真化层为准。 *)
 Theorem u12_phase_side_always_zero : forall (l : list Q) (s : nat),
   phase_side l s = 0%nat.
 Proof.
@@ -176,4 +193,4 @@ End DTPT_Extract.
      level_le_ext.ml / ev_size_ext.ml / trLevel_geq_ext.ml /
      phase_side_ext.ml / gate_chain_ext.ml
    金标准回归面 = §2 + §3 全部 vm_compute 闭式定理：
-     基座任何改动若使这些定理变红，即为行为漂移报警。 *)
+     基础任何改动若使这些定理变红，即为行为漂移报警。 *)
