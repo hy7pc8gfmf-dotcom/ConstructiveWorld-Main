@@ -3292,6 +3292,11 @@ Definition ng_LW0PiIrrational : NewGreenFace :=
   MkNewGreenFace "LW0PiIrrational.v" 13955 583 20261004
   "constructive proof that pi is irrational by the Niven route: q-polynomial differential algebra, trigonometric endpoint values at pi, integrality of the endpoint functionals, and an explicit positive separation witness for every rational approximation" "L13955:m40656c".
 
+(* ng_LW2Binom —— LW2Binom.v：nat 面二项式系数工具组与 Z 桥（主件 lw2_binom：Pascal 递归构造的非负二项式系数，三条定义方程 reflexivity 可验；配套非负性布尔形 lw2_binom_nonneg、正性引理 lw2_fact_pos、零支 lw2_binom_above、对角 lw2_binom_diag、加法交换承载 lw2_mul_left_comm、阶乘刻画 lw2_binom_fact；Z 面符号因子方程 lw2_zsign_even/lw2_zsign_odd 与 Z 因子取用方程 lw2_binom_Z）；主语句 lw2_binom；PA=9 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_LW2Binom : NewGreenFace :=
+  MkNewGreenFace "LW2Binom.v" 171 11 20261004
+  "nat-level binomial coefficient tools with a Z bridge: the Pascal-recursion coefficient lw2_binom characterized by three definitional equations, with nonnegativity, positivity, zero branches, the factorial characterization, and Z-side sign-factor and coefficient equations" "L171:mc34892".
+
 (* ng_ablt9_rhscc_scinst —— ablt9_rhscc_scinst.v：第九批新增域普查批·abl9 域 B5 缺口外置供给模块（abl9b_rhs_chain_59 L416 abl9b_rhs_sc_close Hconv 参数位·件54 abl9b_ext_ws_conv 缩放对适配）：①Q 侧缩放常量桥 ablt9_rhscc_km_ksc（件54 ext_km(S m) 与件53 ksc m 同值·两族坐标系合流中间件）②逐点桥 ablt9_rhscc_ws_pt_eq（件59 rhs_ws 族与件54 ext_ws 族逐点尾等价）③B 型全参喂 ablt9_rhscc_sc_close_feed（Hconv 位经逐点桥 Hpt 显式前提适配·供给形态=适配引理形；宿主件53 sca_Hd Qed 不透明致 Hpt 无条件均匀形本批不可构＝B5-B6 耦合新见·B6 手术候用户令）④伴生具名件 ablt9_rhscc_ext_close（件56 a2 L1890 案一槽具名实例闭合）；三宿主零 Require 增量零字节动；PA=4 Closed；coqchk -o 单件零公理（Axioms: none）；注释面已按现役注释词典完成卫生处理（gate4 hard 0/review 5） *)
 Definition ng_ablt9_rhscc_scinst : NewGreenFace :=
   MkNewGreenFace "ablt9_rhscc_scinst.v" 190 4 20261002
