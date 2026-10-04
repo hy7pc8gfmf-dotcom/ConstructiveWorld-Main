@@ -474,6 +474,8 @@ LW3GenFill.v#R137-8ef136
 LW3CondSep.v#R137-35e400
 LW0LicAdapt.v#R137-fe82af
 LW0PiIrrational.v#R150-40656c
+LW2TrigBridge.v#R152-TBR880
+LW0LeibSeparation.v#R152-654d54
 LW6CosZeroQuant.v#R137-5c4cb7
 abl_tail_deep_slots.v#R138-d629c9
 abl_tail_def_instance.v#R138-34c7dc

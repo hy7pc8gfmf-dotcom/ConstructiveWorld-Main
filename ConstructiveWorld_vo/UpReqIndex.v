@@ -3282,15 +3282,25 @@ Definition ng_LW4EPiContrast : NewGreenFace :=
   MkNewGreenFace "LW4EPiContrast.v" 457 28 20261003
   "e versus pi modulus contrast layer: the e side carries an unconditional escape supply lw4c_e_escape_supply built on the lic witness over exp_series and 1/q_fact, while the pi side yields escapes only conditionally on the lic face lw4c_pi_lic_face via lw4c_pi_escape_of_lic, so the paired contrast face lw4c_contrast_face assembled by lw4c_contrast_param keeps the pi side zero-forged with no unconditional pi escape supply" "L457:mbc5feb".
 
-(* ng_LW1PiMeasure —— LW1PiMeasure.v：π 距离率互译层：lw1m_dist_pt/lw1m_dist_face 点面距离、lw1m_dist_order 率阶-窗宽衔接三态判定（阈的倒数取整阶处阶距小于阈）、lw1m_dom_face 供给域面、lw1m_measure_main 双前提主形（lw1m_b_cert_face 与 lw1m_dom_face，μ₀=2/C=2 显式选取）；tactic 面 intro/destruct/exists/exact/split 显式链零 solver 收尾；PA=6 Closed；提取 34 件 Obj.magic=0/0；绿证＝616 记录四关全部通过在卷 *)
+(* ng_LW1PiMeasure —— LW1PiMeasure.v：π 距离率互译层：lw1m_dist_pt/lw1m_dist_face 点面距离、lw1m_dist_order 率阶-窗宽衔接三态判定（阈的倒数取整阶处阶距小于阈）、lw1m_dom_face 供给域面、lw1m_measure_main 双前提主形（lw1m_b_cert_face 与 lw1m_dom_face，μ₀=2/C=2 显式选取）；tactic 面 intro/destruct/exists/exact/split 显式链零 solver 收尾；PA=13 Closed；提取 30 件 Obj.magic=0/0；绿证＝145 记录四关＋使用链重烙在卷（主件新代 654d54fc 定向 coqchk -o 模块复核 Axioms: none） *)
 Definition ng_LW1PiMeasure : NewGreenFace :=
-  MkNewGreenFace "LW1PiMeasure.v" 546 34 20261002
+  MkNewGreenFace "LW1PiMeasure.v" 834 46 20261004
   "pi distance-rate translation layer: lw1m_dist_pt and lw1m_dist_face carry the point and face distances, lw1m_dist_order decides the three-way distance order through the rate-tier to window-width link at the ceiling of one over the threshold, lw1m_dom_face supplies the domain face, and lw1m_measure_main assembles the two-premise measure face from lw1m_b_cert_face and lw1m_dom_face with mu0=2 and C=2 selected explicitly" "L834:m16657a".
 
 (* ng_LW0PiIrrational —— LW0PiIrrational.v：圆周率无理性的构造性证明（Niven 路线：Q[t] 多项式微分代数＋圆周率处三角端点值＋端点泛函整数性＋下界见证装配）；主语句 lw0_pi_irrational（任设有理数，恒可给出圆周率与其相离的显式正分离见证证书）；PA=313 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW0PiIrrational : NewGreenFace :=
   MkNewGreenFace "LW0PiIrrational.v" 13955 583 20261004
   "constructive proof that pi is irrational by the Niven route: q-polynomial differential algebra, trigonometric endpoint values at pi, integrality of the endpoint functionals, and an explicit positive separation witness for every rational approximation" "L13955:m40656c".
+
+(* ng_LW2TrigBridge —— LW2TrigBridge.v：π 两构造表示（几何零点表示 real_pi_geom 与 Leibniz 级数和 cauchy_real_pi_leibniz）在三角端点值面上的互译桥（端点值跨表示转写／实层二倍角点值／半角零点-反正切-Leibniz 值单语句互联）；主语句 lw2_pi_L_trig_values；PA=0 行（行首统计口径·闭包见证＝coqchk -o 模块复核）；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_LW2TrigBridge : NewGreenFace :=
+  MkNewGreenFace "LW2TrigBridge.v" 254 12 20261004
+  "interchange between the two constructive representations of pi, the geometric zero representation and the Leibniz series sum, over the trigonometric endpoint values: transcription of the endpoint values across the two representations, the real-level double-angle identities for sine and cosine, and a single zero-premise statement linking the half-angle zero, the arctangent of one, and the Leibniz value of pi" "L254:m1b84e1".
+
+(* ng_LW0LeibSeparation —— LW0LeibSeparation.v：Leibniz 级数 π 的有理层构造性分离界库（岸界与半量弹药链＋端点帽复合传输；主语句 leibsep_q_kernel_gate_carrier：显式端点帽 s t 前提＋P1/P2 具体端点形，双岸矛盾件 leibsep_false_branch_contra 显参传递装配分离证书）；PA=59 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_LW0LeibSeparation : NewGreenFace :=
+  MkNewGreenFace "LW0LeibSeparation.v" 4025 108 20261004
+  "constructive rational-layer separation bounds for the Leibniz series of pi: shore bounds with the half-quantity arsenal, and the kernel gate carrier lemma taking explicit endpoint caps s and t as premises together with concrete P1 and P2 endpoint forms, assembling the two-sided separation certificate by direct argument passing into the contradiction lemma" "L4025:m654d54".
 
 (* ng_LW2Binom —— LW2Binom.v：nat 面二项式系数工具组与 Z 桥（主件 lw2_binom：Pascal 递归构造的非负二项式系数，三条定义方程 reflexivity 可验；配套非负性布尔形 lw2_binom_nonneg、正性引理 lw2_fact_pos、零支 lw2_binom_above、对角 lw2_binom_diag、加法交换承载 lw2_mul_left_comm、阶乘刻画 lw2_binom_fact；Z 面符号因子方程 lw2_zsign_even/lw2_zsign_odd 与 Z 因子取用方程 lw2_binom_Z）；主语句 lw2_binom；PA=9 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW2Binom : NewGreenFace :=
