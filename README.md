@@ -56,7 +56,7 @@ coqchk -silent -Q . "" <逻辑库名>.<件名>
 | `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（532 行，`-Q . ""`） |
 | `ConstructiveWorld_vo/` | 产物树：与源树同构，另含 `.vo`/`.glob`/`.vos`/`.vok` 编译产物 |
 | `order.txt` | 注册序（两树及 `scripts/` 各一份，内容一致），权威引用面 |
-| `_CoqProject` | 根级清单，供 `coq_makefile` 与编辑器使用 |
+| `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（532 行，`-Q . ""`） |
 | `scripts/` | 注册序维护脚本与 `scripts/gates/` 哨兵（毒 token 守卫、公理解析、跨树 diff、注释哨兵、vo 依赖检疫） |
 | `.github/workflows/coq.yml` | CI 全树驱动（编译＋`coqchk`＋哨兵） |
 | `docs/` | 设计与规划文档 |
