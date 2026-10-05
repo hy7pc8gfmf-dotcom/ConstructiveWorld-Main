@@ -3513,8 +3513,8 @@ Definition ng_abl_attniter_step_calc : NewGreenFace :=
 
 (* ng_abl_concfin_step_calc —— abl_concfin_step_calc.v：concfin 步进计算器 *)
 Definition ng_abl_concfin_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_concfin_step_calc.v" 961 33 20261005
-  "[abl_concfin_step_calc.v: concfin step calculator]" "L961:m1b8b9815".
+  MkNewGreenFace "abl_concfin_step_calc.v" 971 33 20261005
+  "[abl_concfin_step_calc.v: concfin step calculator]" "L971:m5eba68a3".
 
 (* ng_abl_cw220_step_calc —— abl_cw220_step_calc.v：cw220 步进计算器 *)
 Definition ng_abl_cw220_step_calc : NewGreenFace :=

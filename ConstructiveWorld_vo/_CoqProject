@@ -556,6 +556,7 @@ abl_mixlog_switch.v
 abl_anneal_mono.v
 abl_archpa04_step_calc.v
 abl_attniter_step_calc.v
+abl_concfin_step_calc.v
 abl_cw220_step_calc.v
 abl_mixchain_step_calc.v
 p2a_AttnClimClose.v
