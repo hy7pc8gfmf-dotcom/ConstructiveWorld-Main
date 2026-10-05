@@ -22,10 +22,11 @@
    排除见证包；Q 层线性算术段使用 Lia/Lqa。
    ── 构造性注记：语句面全 Set 层（QltT/QltT'/real_lt/sigT/And:=prod/
    sumbool）；计算层 lw3x_sideb/lw3x_env_lo/lw3x_env_hi/lw3x_env_supply 全
-   Defined 可提取，文件尾 Separate Extraction 以 Obj.magic 零命中为判据；
-   证书面 lw3x_band_excl/lw3x_calc 为 Qed 件，不入提取并集。
+   Defined 可提取（Obj.magic 零命中判据经独立提取件验证，提取语句不驻
+   本件——防深栈提取红，见 #179 治理账）；证书面 lw3x_band_excl/
+   lw3x_calc 为 Qed 件，不入提取并集。
    ── 编译配方：coqc -q -Q . "" LW3ExclusionCalc.v，工作目录 Live_X；
-   COQLIB 与 ROCQLIB 环境变量同值指向 Rocq 9.1 库根；提取产物落独立目录。
+   COQLIB 与 ROCQLIB 环境变量同值指向 Rocq 9.1 库根。
 *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith.
