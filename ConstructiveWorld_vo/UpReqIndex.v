@@ -3401,7 +3401,7 @@ Definition ng_abl_Pr_euclid_03 : NewGreenFace :=
   MkNewGreenFace "abl_Pr_euclid_03.v" 182 21 20261005
   "[abl_Pr_euclid_03.v: Euclid-type statements]" "L182:m46a32b17".
 
-(* ng_abl_redischarge_pr01_sb —— abl_redischarge_pr01_sb.v：Pr_core_01 消费端再消解桥 sb *)
+(* ng_abl_redischarge_pr01_sb —— abl_redischarge_pr01_sb.v：Pr_core_01 使用端再消解桥 sb *)
 Definition ng_abl_redischarge_pr01_sb : NewGreenFace :=
   MkNewGreenFace "abl_redischarge_pr01_sb.v" 104 12 20261005
   "[abl_redischarge_pr01_sb.v: redischarge bridge consuming Pr_core_01]" "L104:m02c19831".
@@ -3586,12 +3586,12 @@ Definition ng_abl_ln2_sharp_weight : NewGreenFace :=
   MkNewGreenFace "abl_ln2_sharp_weight.v" 394 23 20261005
   "[abl_ln2_sharp_weight.v: sharp weights for ln 2]" "L394:mcb5729c2".
 
-(* ng_abl_ln2_assembly —— abl_ln2_assembly.v：ln2 总装面 *)
+(* ng_abl_ln2_assembly —— abl_ln2_assembly.v：ln2 合成面 *)
 Definition ng_abl_ln2_assembly : NewGreenFace :=
   MkNewGreenFace "abl_ln2_assembly.v" 299 22 20261005
   "[abl_ln2_assembly.v: assembly face for ln 2]" "L299:mf6826204".
 
-(* ng_abl_ln2_qpoly_consume —— abl_ln2_qpoly_consume.v：ln2 多项式链消费端 *)
+(* ng_abl_ln2_qpoly_consume —— abl_ln2_qpoly_consume.v：ln2 多项式链使用端 *)
 Definition ng_abl_ln2_qpoly_consume : NewGreenFace :=
   MkNewGreenFace "abl_ln2_qpoly_consume.v" 504 62 20261005
   "[abl_ln2_qpoly_consume.v: polynomial-chain consumer for ln 2]" "L504:md52bed26".
