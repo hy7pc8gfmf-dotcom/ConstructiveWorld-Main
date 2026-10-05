@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions real_sin_pos_lt_two.

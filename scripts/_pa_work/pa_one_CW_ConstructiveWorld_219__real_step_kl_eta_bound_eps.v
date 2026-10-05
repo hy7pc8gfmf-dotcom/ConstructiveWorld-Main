@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions real_step_kl_eta_bound_eps.

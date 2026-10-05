@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions relative_entropy_temp_decomp.

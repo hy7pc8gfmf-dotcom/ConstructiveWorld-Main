@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions topk_tv_identity_strict.

@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions gradient_zero_unique.

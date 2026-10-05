@@ -1,2 +1,0 @@
-Require Import CW_ConstructiveWorld_219.
-Print Assumptions minp_dropped_mass_le_inv_vocab_size.
