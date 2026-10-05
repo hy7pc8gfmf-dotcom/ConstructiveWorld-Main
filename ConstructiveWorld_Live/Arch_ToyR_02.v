@@ -140,7 +140,7 @@ Corollary pa6ul_strict_first_cut :
                   real_abs (real_minus_r
                     (alm_uniform bool pa6ul_vocab pa6ul_eq_dec true
                        pa6ul_m_in x)
-                    (w_T bool pa6ul_vocab pa6ul_vocab_ne pa6ul_z T Ht x)))
+                    (S13_NLiveAudit.w_T bool pa6ul_vocab pa6ul_vocab_ne pa6ul_z T Ht x)))
                pa6ul_vocab)
             eps)).
 Proof.
