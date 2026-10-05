@@ -98,6 +98,9 @@ jobs:
           # 改为镜像删除语义：先清空再播种，保证 _work vo 树 = 本地信任缓存的真镜像。
           rm -f ConstructiveWorld_vo/*.vo 2>/dev/null || true
           cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
+          mkdir -p ConstructiveWorld_vo/Local
+          rm -f ConstructiveWorld_vo/Local/*.vo 2>/dev/null || true
+          cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)

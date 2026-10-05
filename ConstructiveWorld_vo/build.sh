@@ -1,7 +1,7 @@
 #!/bin/bash
 # ConstructiveWorld-Main 增量构建：.vo 比 .v 新则跳过（指纹信任缓存语义）
 cd "$(dirname "$0")"
-C="${COQC:-coqc}"
+C="${COQC:-C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe}"
 # SW2 换装（2026-09-15）：机器级【用户环境变量】COQLIB/ROCQLIB 钉在 9.0 lib，
 # 会压过 9.1 版 coq_environment.txt → 9.1 coqc 暗载 9.0 stdlib，产物魔数 90001
 # 被 9.1 coqchk 拒（bad version，期望 90100）。故随 COQC 路径推导导出，保证 bin/lib 同源
