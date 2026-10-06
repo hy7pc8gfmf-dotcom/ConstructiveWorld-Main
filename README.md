@@ -1,23 +1,27 @@
 # ConstructiveWorld — 构造性数学库（Rocq/Coq）
 
+[![Coq CI](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml/badge.svg?branch=main)](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 本仓库是论文《π 的构造性三表示定理》（Constructive three representations of π）配套的构造性数学库：全库在 Set 层以 `sigT` 显式见证给出存在型结论，不引入任何公理，且整链可提取。
 
 ## 1. 库概述
 
-- **规模**：531 个在册模块（注册序 `order.txt`，531 行）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
+- **规模**：662 个在册模块（注册序 `order.txt`，662 行）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
 - **纯构造性**：全库不使用 `Axiom`/`Admitted`/经典逻辑；内核级 `coqchk -o` 复核口径为 `Axioms: <none>`。
 - **Set 层 `sigT` 显式见证**：存在型结论一律给出可计算见证（有理数端点、近似根等），不停留于命题层。
 - **可提取**：以 `Separate Extraction` 生成目标语言代码并机械检查 `Obj.magic` 计数为零（计数非零即示 Prop 层内容泄入提取面）。
 - **「率即算法」范式**：可执行件（`Defined` 计算器）与其正确性证书（`Qed` 证明）同体共存——定理与程序是同一件东西的两面。
+- **双支柱现状**：第一支柱为 π 的构造性强无理闭合（主件 `LW0PiIrrational.v`）；第二支柱为五常数族——√2、√3、e、ln 2、ζ(2) 的构造性无理性分离件已批量在册（#R164 起，`u5c_*`／`abl_ln2_*`／`abl_z2_*` 件族）。其通用逃逸窗判据引擎已提交上游标准库 rocq-prover/stdlib（Issue #312／PR #313，新增 `ConstructiveCauchyRealsSep.v`），现处维护者评审阶段。
 
 ## 2. 版本与认证记录
 
 | 项 | 值 |
 |---|---|
-| 库版本 | `2d99329`（`main` 分支） |
-| CI 认证 | run #178（554 模块共享闭包 COQCHK_ALL_PASS） |
+| 库版本 | `bb7d52e1`（`main` 分支） |
+| CI 认证 | run #208（head `bb7d52e1`，全树编译＋`coqchk` 全树内核复核通过） |
 | 公理审计 | `coqchk -o` 全库复核，`Axioms: <none>` |
-| 注册序 | `order.txt` 531 行；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
+| 注册序 | `order.txt` 662 行；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
 | 许可 | Apache-2.0（见 `LICENSE`） |
 
 持续集成（`.github/workflows/coq.yml`）在每次推送时执行：gate1 毒 token 守卫 → gate4 注释哨兵 → gate3 跨树 diff → 全树编译 → gate5 vo 二进制检疫 → `coqchk` 全树内核复核 → gate2 公理哨兵（解析 `coqchk` 日志判定 `Axioms: <none>`）。哨兵脚本位于 `scripts/gates/`。
@@ -34,7 +38,7 @@
 ```sh
 # ① 全量编译：按 order.txt 注册序逐件（本机直调；全树 driver 见库 README）
 rocq compile -Q . "" S01_BaseRing.v
-# ② 公理审计：**审计语句即源件内逐字书写的 `Print Assumptions <语句名>.` 命令**（例：S14_B5BatchBlock.v:14417-14418 对 `b5dT` 两件各一条；主件 LW0PiIrrational.v :13925 对 `lw0_pi_irrational`），随编译自动复验，预期输出 Closed under the global context
+# ② 公理审计：**审计语句即源件内逐字书写的 `Print Assumptions <语句名>.` 命令**（例：S14_B5BatchBlock.v:14401-14402 对 `b5d1_Heps4` 与 `b5dE_zero_le_one` 各一条；主件 LW0PiIrrational.v :13925 对 `lw0_pi_irrational`），随编译自动复验，预期输出 Closed under the global context
 #    （载体件 Arch_Banach_01.v 等的载体处 Print Assumptions 语句）
 # ③ 提取审计：Separate Extraction 产出的 .ml 中 Obj.magic 计数应为零
 coqtop -q -Q . "" <件>.v            # 内执行 Separate Extraction <语句>.
@@ -53,10 +57,10 @@ coqchk -silent -Q . "" <逻辑库名>.<件名>
 
 | 路径 | 内容 |
 |---|---|
-| `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（532 行，`-Q . ""`） |
+| `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（663 行，`-Q . ""`） |
 | `ConstructiveWorld_vo/` | 产物树：与源树同构，另含 `.vo`/`.glob`/`.vos`/`.vok` 编译产物 |
 | `order.txt` | 注册序（两树及 `scripts/` 各一份，内容一致），权威引用面 |
-| `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（532 行，`-Q . ""`） |
+| `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（663 行，`-Q . ""`） |
 | `scripts/` | 注册序维护脚本与 `scripts/gates/` 哨兵（毒 token 守卫、公理解析、跨树 diff、注释哨兵、vo 依赖检疫） |
 | `.github/workflows/coq.yml` | CI 全树驱动（编译＋`coqchk`＋哨兵） |
 | `docs/` | 设计与规划文档 |
@@ -71,8 +75,8 @@ coqchk -silent -Q . "" <逻辑库名>.<件名>
 
 引用面所在件全量公开。显式例外仅两类：
 
-1. **31 件 `*_g3/probe` 未在册件**：不在注册序内，维持禁止引用口径，不参与配套论文引用面。
-2. **在册外差集件**：树内存在而未列入 `order.txt` 的源件；其去留随仓库公开前置批次的裁定结果在此登记。当前注册序（531 行）为唯一权威引用面，未在册件不构成库的引用承诺。
+1. **1 件下划线探针件 `_twc_probe.v`**：不在注册序内，维持禁止引用口径，不参与配套论文引用面。
+2. **在册外差集件**：树内存在而未列入 `order.txt` 的源件（现 45 件，不含前述探针件）；其去留随仓库公开前置批次的裁定结果在此登记。当前注册序（662 行）为唯一权威引用面，未在册件不构成库的引用承诺。
 
 ## 附录：220 版历史说明（2026-09-07/08）
 
