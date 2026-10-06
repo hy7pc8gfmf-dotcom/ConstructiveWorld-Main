@@ -652,3 +652,6 @@ abl_ln2_conv_core.v
 abl_ln2_conv_mesh.v
 abl_ln2_final.v
 abl_Pr_euler_prod.v
+abl_e_irrational.v
+abl_Pr_sigma_mul.v
+abl_Pr_val_inj.v

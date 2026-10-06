@@ -3983,3 +3983,18 @@ Definition ng_ALn2Final : NewGreenFace :=
 Definition ng_APrEulerProd : NewGreenFace :=
   MkNewGreenFace "abl_Pr_euler_prod.v" 982 15 20261006
   "full closure of the finite Euler product formula in the prime domain: the upper squeeze bounding sigma(L) times the product of (p-1) by L times the product of primes, the Euler-Harmonic transfer certifying that the product of (p-1) dominates the harmonic number, an extractable Set-layer gap witness, and machine-verified numerals for n = 1..12 through the extraction face" "L982:md43580".
+
+(* ng_AblEIrrational —— abl_e_irrational.v：e 的构造性无理性（Fourier 1815 论证构造化：q 与部分和之距的分子 W_n·b − a·F_n 取显式 Z 见证（递归 W_{n+1} = (n+1)W_n+1），三分判定在每一分支给出显式逃逸指标与正分离常数 eps；配套显式模度 Cauchy 性与布尔等式否定面，级数极限无理而不构造实数集）；PA=5 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblEIrrational : NewGreenFace :=
+  MkNewGreenFace "abl_e_irrational.v" 1371 5 20261006
+  "constructive irrationality of e via the exponential series: for every rational q an explicit index and a positive rational eps keep all partial sums from that index at distance above eps (Fourier numerator witness over Z with a decidable three-way split), with an explicit Cauchy modulus and boolean no-equality companions as Set-level sigT statements" "L1371:m69dd8e".
+
+(* ng_AblPrSigmaMul —— abl_Pr_sigma_mul.v：除子和函数 σ 的互素乘性（双定向）：互素二数之积的除子和等于各自除子和之积（除子的裂解 d = d1·d2 由最小素因子递降与 gcd 判别式给出，两侧和经单点质量收敛与次序交换对齐）；配套公因子消去与有限和支撑截断接口；PA=7 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblPrSigmaMul : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_sigma_mul.v" 656 7 20261006
+  "multiplicativity of the divisor-sum function over coprime factors in both orientations: a divisor of the product splits into factors dividing each part via minimal-prime descent and a gcd criterion, with divisor-index cancellation and finite-sum truncation companions, all carried on nat with extractable bounded sums" "L656:me73fe4".
+
+(* ng_AblPrValInj —— abl_Pr_val_inj.v：素因子指数向量的单射性（折积分解）：素数幂整除两两互异素数幂之折积当且仅当该素数在表中且指数不超过其配值；强形核心由互素高斯消去完成，配套表隶属与整除的运输件；PA=11 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblPrValInj : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_val_inj.v" 291 11 20261006
+  "injectivity certificate for prime exponent vectors: a prime power divides a product of distinct prime powers only if the prime occurs in the list with at least that exponent, with a coprime gaussian elimination core and list-membership transport companions" "L291:m8874ae".

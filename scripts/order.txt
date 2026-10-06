@@ -651,3 +651,6 @@ abl_ln2_conv_core.v#R165-561a19
 abl_ln2_conv_mesh.v#R165-c53845
 abl_ln2_final.v#R165-bde319
 abl_Pr_euler_prod.v#R165-d43580
+abl_e_irrational.v#R166-69dd8e
+abl_Pr_sigma_mul.v#R166-e73fe4
+abl_Pr_val_inj.v#R166-8874ae
