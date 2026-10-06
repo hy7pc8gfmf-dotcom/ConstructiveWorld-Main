@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 576 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 578 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4024,3 +4024,11 @@ Definition ng_AblZ2Valbridge : NewGreenFace :=
   MkNewGreenFace "abl_z2_valbridge.v" 710 29 20261006
   "valuation bridge B(n) | C(n) of the Hanson chain: for C(n) := n!/prod_i floor(n/a_i)! the Legendre-sum identity, nested division and layer-wise comparison prove lcm(1..n) divides C(n) in both the Prop face (z2v_lcm_dvd_C) and the Set face (z2v_lcm_dvd_C_t), with executable valuation machines z2v_leg/z2v_cnt/z2v_pc/z2v_den/z2v_lsum/z2v_C" "L710:me81cc9".
 
+(* ng_NsepFindGeneric —— NsepFindGeneric.v：判定器参数化的通用最小分离索引搜索（nsep_find 自 n 起逐阶试 bool 判定器 dec、燃料尽返回预算端点 n；特征定理三件 ub/hit/min＋预算化运行 nsep_first 之 bound/hit/least/minimal 四推论，对任意判定器与任意预算成立，与具体窗族解耦；π 侧实例=lw5n_sep_dec，√2 Newton 序列实例 ir2_sep_dec 内置）；PA=7 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_NsepFindGeneric : NewGreenFace :=
+  MkNewGreenFace "NsepFindGeneric.v" 216 7 20261007
+  "decoder-parameterized generic minimal separation-index search: nsep_find probes dec from n upward under fuel returning the budget endpoint, with the ub/hit/min characteristic theorem triple and the budgeted runner nsep_first giving bound/hit/least/minimal corollaries valid for any boolean separation decider and any budget; pi-side instance lw5n_sep_dec and a sqrt(2) Newton instance built in" "L216:ma226ef".
+(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件（级数项 1/(k+1)²、部分和族 z2s_ps M = Σ_{k<M} 1/(k+1)²、零权 Beta 项恒等 z2s_term k == zb2_term 0 k、部分和与闭式项和桥 z2s_ps (S M) == zb2_Isum 0 M、t:=xy 双变量截断展开实例与余项分离序面、有理数值例 49/36·与 abl_z2_truncfam 同族参数化）；PA=12 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2sPs : NewGreenFace :=
+  MkNewGreenFace "abl_z2s_ps.v" 238 17 20261007
+  "zeta(2) partial-sum series carrier: term 1/(k+1)^2, partial-sum family z2s_ps M = sum over k<M of 1/(k+1)^2, zero-weight Beta term identity z2s_term k == zb2_term 0 k, bridge z2s_ps (S M) == zb2_Isum 0 M from partial sums to the closed-form term sum, truncated expansion two-variable instance at t:=xy with rim separation order face, rational instance 49/36; same-family parameterization with abl_z2_truncfam" "L238:me98d42".
