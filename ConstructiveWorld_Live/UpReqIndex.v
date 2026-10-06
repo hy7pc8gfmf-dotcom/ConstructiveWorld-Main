@@ -3919,7 +3919,7 @@ Definition ng_Arch_ToyR_03 : NewGreenFace :=
   MkNewGreenFace "Arch_ToyR_03.v" 1488 61 20261006
   "sem_sum_eq_list full slot family and Uahl independent re-proofs with fa56b transport" "L1488:mda9a2fa2".
 
-(* ng_LW0MLicBridge —— LW0MLicBridge.v：M0+ 母判据适配三槽供给件（槽 1 tail 供给 lw0m_tail_bounded_pi＝lic_tail_bounded 实例＋槽 2 vanish 供给 lw0m_vanish_pi＝lic_vanish 实例＋real_metric 同余件 lw0m_metric_congr；统一窗 lw0m_e n := 5 * pie_mag n 三槽共享·lw0m_xL n := lp_four * lp_odd n 为窗距守卫形采样点）；PA=3 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+(* ng_LW0MLicBridge —— LW0MLicBridge.v：M0+ 母判据适配三槽适配件（槽 1 tail 供给 lw0m_tail_bounded_pi＝lic_tail_bounded 实例＋槽 2 vanish 供给 lw0m_vanish_pi＝lic_vanish 实例＋real_metric 同余件 lw0m_metric_congr；统一窗 lw0m_e n := 5 * pie_mag n 三槽共享·lw0m_xL n := lp_four * lp_odd n 为窗距守卫形采样点）；PA=3 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW0MLicBridge : NewGreenFace :=
   MkNewGreenFace "LW0MLicBridge.v" 87 3 20261006
   "three-slot supply piece adapting the M0+ master-criterion interfaces: the tail slot lw0m_tail_bounded_pi instantiates lic_tail_bounded, the vanish slot lw0m_vanish_pi instantiates lic_vanish, and lw0m_metric_congr carries the real_metric congruence, with the shared uniform window lw0m_e n = 5 * pie_mag n and the sample point lw0m_xL n = lp_four * lp_odd n" "L87:mc214b9".
