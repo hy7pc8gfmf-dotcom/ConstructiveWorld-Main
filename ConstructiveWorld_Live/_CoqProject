@@ -623,3 +623,11 @@ abl_ln2_theta_total.v
 abl_Pr_factgrowth_bridge.v
 abl_loeb_d3_nofix.v
 abl_loeb_d3_spec.v
+uabd_supply_S05_Z_align_pos.v
+uabd_supply_S05_Z_align_pos_unit.v
+uabd_supply_UpReqDist_group_size_pos.v
+uabd_supply_S08_kl_term_equiv.v
+uabd_supply_S13_expf_plus.v
+uabd_supply_S13_expf_mono_le.v
+uabda_g13_evict_discharge.v
+uabda_up01_discharge.v

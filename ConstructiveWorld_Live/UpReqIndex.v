@@ -3849,7 +3849,7 @@ Definition ng_uabd_supply_S05_Z_align_pos : NewGreenFace :=
 (* ng_uabd_supply_S05_Z_align_pos_unit —— uabd_supply_S05_Z_align_pos_unit.v：单点实例闭合形 Z_align 正性（双定理） *)
 Definition ng_uabd_supply_S05_Z_align_pos_unit : NewGreenFace :=
   MkNewGreenFace "uabd_supply_S05_Z_align_pos_unit.v" 53 2 20261006
-  "unit-instance closed Z_align positivity pair" "L53:mc26a507c".
+  "unit-instance closed Z_align positivity pair" "L53:m5643b71b".
 
 (* ng_uabd_supply_UpReqDist_group_size_pos —— uabd_supply_UpReqDist_group_size_pos.v：req 域组长正性与 InT 覆盖见证（双定理） *)
 Definition ng_uabd_supply_UpReqDist_group_size_pos : NewGreenFace :=
@@ -3873,11 +3873,11 @@ Definition ng_uabd_supply_S13_expf_mono_le : NewGreenFace :=
 
 (* ng_uabda_g13_evict_discharge —— uabda_g13_evict_discharge.v：G13 逐出族实例世界消解（四定理，含 req 层两点世界无条件形） *)
 Definition ng_uabda_g13_evict_discharge : NewGreenFace :=
-  MkNewGreenFace "uabda_g13_evict_discharge.v" 102 4 20261006
-  "G13 eviction-family instance-world discharge, four theorems" "L102:m0c975b77".
+  MkNewGreenFace "uabda_g13_evict_discharge.v" 101 4 20261006
+  "G13 eviction-family instance-world discharge, four theorems" "L101:m0c733f4d".
 
 (* ng_uabda_up01_discharge —— uabda_up01_discharge.v：Arch_Up_01 接口假设消解形对拍件（四定理） *)
 Definition ng_uabda_up01_discharge : NewGreenFace :=
   MkNewGreenFace "uabda_up01_discharge.v" 111 4 20261006
-  "Arch_Up_01 assumption discharge cross-check, four theorems" "L111:m2978a29b".
+  "Arch_Up_01 assumption discharge cross-check, four theorems" "L111:m87030a62".
 

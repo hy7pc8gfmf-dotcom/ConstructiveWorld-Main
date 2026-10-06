@@ -622,3 +622,11 @@ abl_ln2_theta_total.v#R158-223b09
 abl_Pr_factgrowth_bridge.v#R158-4f902b
 abl_loeb_d3_nofix.v#R158-6723b2
 abl_loeb_d3_spec.v#R158-ee10c4
+uabd_supply_S05_Z_align_pos.v#R159-37fa37
+uabd_supply_UpReqDist_group_size_pos.v#R159-ea5ad1
+uabd_supply_S08_kl_term_equiv.v#R159-29bcb8
+uabd_supply_S05_Z_align_pos_unit.v#R159-5643b7
+uabda_g13_evict_discharge.v#R159-0c733f
+uabda_up01_discharge.v#R159-87030a
+uabd_supply_S13_expf_plus.v#R159-7f4eca
+uabd_supply_S13_expf_mono_le.v#R159-70f608
