@@ -609,3 +609,11 @@ abl_ln2_bsum_cauchy.v
 abl_ln2_assembly2.v
 abl_loeb_d3_prf2.v
 abl_loeb_d3_prf2b.v
+abl_audit_base_v9.v
+abl_audit_base_v10.v
+abl_e_irrational2.v
+abl_ln2_integmachine_bridge.v
+abl_Pr_erdos_core.v
+abl_Pr_erdos_theta.v
+abl_Pr_recip_sum.v
+abl_niven_isomorphism.v

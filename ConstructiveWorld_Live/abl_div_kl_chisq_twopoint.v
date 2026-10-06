@@ -5,7 +5,7 @@
 (*   p2_kl2 ≤_B div2_cs（Bishop 形出口，单 log 引擎 log_le_linear、  *)
 (*   零 Or 分支）；配套逐点 gap 恒等（kl+(q−p)==χ项−p·E，E 为切距    *)
 (*   超额）、gap 非负（klst_gap_shape 供弹）、等号侧（χ==0⟹KL₂==0，  *)
-(*   gibbe2 反对称闭合）、eps 形出口、pnt 运输互认、差异⟹χ>0 供给位    *)
+(*   gibbe2 反对称闭合）、eps 形出口、pnt 运输互认、差异⟹χ>0 供弹位    *)
 (*   （KL>0 生产器=在树 p2_kl2_pos，本件不重列；件 1c 与在树           *)
 (*     pnk2_pinsker_one 为阶梯对照位，本件不重列）。                  *)
 (* 依赖清单：件 1 abl_div_chisq_twopoint（div2_cs/d2 缩放与环件）、   *)
@@ -17,7 +17,7 @@
 (*   基座）、UpRealLeB/B2/B3（real_le_b 工具族+log_le_linear_B）。    *)
 (* 构造性注记：全件 Set 层出口；非严格序一律 Bishop 形 real_le_b；     *)
 (*   kl 原子环闭走 remember+destruct+ring（点式 ring 仅用于无 log     *)
-(*   展开的纯多项式恒等）；inv 证书项逐点穿线（沿用件 1 同款坑位）；   *)
+(*   展开的纯多项式恒等）；inv 证书项逐点穿线（使用件 1 同款坑位）；   *)
 (*   零承认式语句、零经典公理、全部 Qed 闭合。                        *)
 (* 编译配方：                                                       *)
 (*   source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&        *)
@@ -707,7 +707,7 @@ Proof.
 Qed.
 
 (* ---- 12. 推论 C（KL>0 供弹位·χ 侧）：差异 ⟹ 0 < χ² ---- *)
-(*   KL>0 生产器=在树 p2_kl2_pos（Or 前提形），本件不重列不另建；        *)
+(*   KL>0 生产器=在树 p2_kl2_pos（Or 前提形），本件不重列不另立；        *)
 (*   此处新供给同证书下的 χ>0 侧，并给 sigT 配对形供 deficit 面转接。    *)
 
 Theorem dkc_cs_pos_of_ne : forall (p q : Real)

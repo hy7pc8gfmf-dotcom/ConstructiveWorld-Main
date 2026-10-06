@@ -1,32 +1,87 @@
 (* ============================================================ *)
 (* abl_div_fdiv2_skeleton.v                                       *)
 (* 模块名：abl_div_fdiv2_skeleton                                  *)
-(* 数学使命：两点 f-散度 Section 泛型骨架（统摄手法消化件）——不参数化    *)
-(*   凸 f 函数本体（W-KLTEMP-01 禁入守约），参数化「基底比值数据+三点 f   *)
-(*   显式数据+线性照管差分正性证书」，一个 Section 统摄 χ²/Hellinger/KL   *)
-(*   三实例。泛型定理 df2_j_nonneg（J_f ≥ 0，Bishop 形出口）与            *)
-(*   df2_j_le_cs（J_f−照管 ≤_B χ²-比值形）；实例核对节（陈述级对照，      *)
-(*   实例定理不重证）：χ² 实例（df2_cs_inst==div2_cs）、KL₂ 实例（excess *)
-(*   形数据，双面经骨架复现件 2 主件 dkc_kl2_le_cs）、Hellinger 实例      *)
-(*   （见证平方形，双面经骨架闭合）；TV 下界=开放申报接口（见尾注）。     *)
-(* 依赖清单：S01/S02/S03/S07/S08 基座、PinskerTwoPoint、UpRealLeB/B2/B3、 *)
-(*   UpReqTrainingEquiv、G07_KLWall、G08_Gibbs、UpReqPinskerTransport、   *)
-(*   件 1 abl_div_chisq_twopoint、件 2 abl_div_kl_chisq_twopoint、        *)
-(*   件 3 abl_div_hellinger_twopoint（所用引理随正文引用）。              *)
-(* 构造性注记：骨架层=Real 层（三实例口径核实均 Real 层；件 1 Q 面为      *)
-(*   附录分期档）；非严格序一律 Bishop 形 real_le_b（零 Or 形平方非负位）；*)
-(*   凸性类条件取「线性照管差分正性」可构造形态（禁经典二阶导）：         *)
-(*   f ≥ cdown·(u−1) 于两点比值处（Bishop 形证书）；f(1)=0（Hf1）为散度   *)
-(*   对角零条件面，不入 df2_j_nonneg 证明体（照管和经归一化对消自动       *)
-(*   成立）；三实例照管斜率均取零；inv/log 证书逐点显式穿线；              *)
-(*   零承认式语句、零经典公理、全部 Qed 闭合。                            *)
+(* 数学使命：两点 f-散度 Section 泛型骨架（统摄手法消化件）——      *)
+(*   不参数化凸 f 函数本体（W-KLTEMP-01 禁入守约），参数化「载体比值    *)
+(*   数据+三点 f 显式数据+线性照管差分正性证书」：一个 Section 统摄      *)
+(*   χ²/Hellinger/KL 三实例。泛型定理：df2_j_nonneg（J_f ≥ 0——照管    *)
+(*   和经归一化恒等 q·s+(1−q)·s'==1 对消，Bishop 形出口）与              *)
+(*   df2_j_le_cs（逐项超额上界证书直取：J_f−照管 ≤_B χ²-比值形，        *)
+(*   一步 plus_compat，P 草案 Part A 容器）。实例核对节（陈述级对照，    *)
+(*   实例定理不重证）：χ² 实例（f(u)=(u−1)²；替换恒等                    *)
+(*   df2_cs_inst==div2_cs + 非负闭合复现件 1b 面）、KL₂ 实例（excess 形  *)
+(*   数据 s·log s−(s−1)，镜照管证书 E(1/s)≥0 供弹——非负与 ≤χ² 双面      *)
+(*   经骨架复现件 2 主件 dkc_kl2_le_cs）、Hellinger 实例（见证平方形，    *)
+(*   依赖件 3——件 3 已落盘（p3_hellinger 池，本池拷贝编译绿），双面经    *)
+(*   骨架闭合：非负复现 dhe_h2_nonneg 面，≤χ² 面为骨架泛型容器新增产出）。*)
+(*   TV 泛型下界=开放申报接口（逐实例曲率常数证书位，见尾注）。           *)
+(* 依赖清单：S01_BaseRing、S02_CauchyComplete、S03_QExp、               *)
+(*   S07_RealSetoidExpLog、S08_RealMainlineDPO、PinskerTwoPoint、        *)
+(*   UpRealLeB、UpRealLeB2、UpRealLeB3、UpReqTrainingEquiv、             *)
+(*   G07_KLWall、G08_Gibbs、UpReqPinskerTransport、                      *)
+(*   件 1 abl_div_chisq_twopoint（div2_cs/d2_ring_eq 环件族）、           *)
+(*   件 2 abl_div_kl_chisq_twopoint（dkc_log_split/dkc_E_nonneg/         *)
+(*   dkc_gap_le_term）、件 3 abl_div_hellinger_twopoint（dhe_h2/          *)
+(*   dhe_gap_ge_h2term）。                                                *)
+(* 构造性注记：骨架层=Real 层（三实例口径核验：件 1 主面、件 2 全件、      *)
+(*   件 3 草案均 Real 层；件 1 Q 面为附录分期档——Q 层骨架留分期申报位）；  *)
+(*   非严格序一律 Bishop 形 real_le_b（零 Or 形平方非负位）；凸性类条件    *)
+(*   取「线性照管差分正性」可构造形态（禁经典二阶导）：f ≥ cdown·(u−1)    *)
+(*   于两点比值处（Bishop 形证书）；f(1)=0（Hf1）为散度对角零条件面，      *)
+(*   不入 df2_j_nonneg 证明体（照管和经归一化对消自动成立），如实申报；    *)
+(*   三实例的照管斜率均取零（excess/平方形数据在 f(1)=0 归一化点的真切    *)
+(*   距斜率即零）；原始 KL 数据（cdown:=1 切距引理）留接口申报位。         *)
+(*   inv/log 证书逐点显式穿线（AL 勘正②-2、AR 坑卡同款）；零承认式语句、   *)
+(*   零经典公理、全部 Qed 闭合。                                          *)
 (* 编译配方（四件按序，同池）：                                            *)
-(*   source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s     *)
-(*   65532 && nice -19 rocq c -native-compiler no -Q <缓存根> ""，依序：   *)
-(*   件 1 abl_div_chisq_twopoint → 件 2 abl_div_kl_chisq_twopoint →        *)
-(*   件 3 abl_div_hellinger_twopoint → 本件。                              *)
+(*   source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&              *)
+(*   ulimit -s 65532 && cd <池> && nice -19 rocq c -native-compiler no    *)
+(*   -Q <缓存根> "" abl_div_chisq_twopoint.v（先）                        *)
+(*   && 同配方 abl_div_kl_chisq_twopoint.v（次）                          *)
+(*   && 同配方 abl_div_hellinger_twopoint.v（再次；本池拷贝自 p3_hellinger）*)
+(*   && 同配方 abl_div_fdiv2_skeleton.v（本件）                           *)
 (* ============================================================ *)
-(* ============================================================ *)
+(* 后续增量（原中断处续写）：                 *)
+(*   遗产验尸勘正：564 行件=本骨架主件（非旧代）；795 行=件 2、821 行=件 1。 *)
+(*   旧稿四处 latent bug 修正式续建（旧稿从未过编译，先写后编缺位）：        *)
+(*   ① EC/EC1 环闭原走 real_eq_of_zero_diff+ring，但 q·inv q==1 型         *)
+(*     unit 事实不入点式环——改走 helper（real_inv_pos_correct 兼容链）；    *)
+(*   ② remember 变量不透明（clearbody 语义，微测判定），原稿                *)
+(*     df2_unit_scale_sq q iq …(real_inv_pos_correct q Hq) 证书位错配——    *)
+(*     全稿去 remember，real_inv_pos 项直取；                              *)
+(*   ③ df2_inst_chisq_hlow/df2_inst_chisq_nonneg 的 leb3_le_b_eq_l         *)
+(*     方向倒置——按 x1==x2 → x1≤y → x2≤y 语义重排（eq_r 链）；              *)
+(*   ④ df2_j 节消去只收 q fa fb 三元（s s' 不入 df2_j 体），原稿五元        *)
+(*     调用错——实例 J 形改三元。                                           *)
+(*   新增：§2.0b 比值平移 helper 对、df2_sub_zero_r；§3 KL₂ 实例块          *)
+(*   （镜面 E 非负 df2_E_mirror_nonneg=dkc_E_nonneg 的 inv 处逐字换元       *)
+(*   复制 + 正缩放重组 + 替换恒等 df2_inst_kl_eq + cup 证书 + 双面复现）；   *)
+(*   §4 Hellinger 实例块（见证平方形，件 3 落盘闭合，双面）；§5 TV 泛型     *)
+(*   下界=开放申报接口（逐实例曲率常数证书位，只声明不出承认式语句）。        *)
+(* 后续增量二（原中断处续写）：            *)
+(*   上轮编译中断留 .glob 无 .vo；其后五红全数定位修复，born-green：  *)
+(*   ⑤ df2_log_split_mirror 第二腿 real_eq_opp_compat 两实参装反（结论      *)
+(*     opp a==opp b 与目标对应形）——换序 + real_eq_sym 三显式实参补全         *)
+(*     （AS 坑卡 trans 三实参同族）；全稿其余 opp_compat 用点逐一核对无恙； *)
+(*   ⑥ df2_inst_kl_term1_eq 语句后首 trans 少一右括号（句尾 5 闭→6 闭）；   *)
+(*   ⑦ df2_inst_kl_up/up1 的 kl 项恒等腿：remember S+X+d2_ring_eq 拒闭     *)
+(*     ——微测检验（V1 双 remember 红/V2 单 remember 红/V3    *)
+(*     泛型 helper 绿）判定真因：df2_inst_kl_Ls（log 定义）不透明应用       *)
+(*     留在 projT1 下成 match 结构，非纯多项式，ring 报 not a valid ring   *)
+(*     equation——治法立 §3.0c 全变量形独立纯环小件 df2_fanout_ring         *)
+(*     （q S P 哑变量整体 destruct；同 dtv_swap_scale 先例），         *)
+(*     两调用位直取代参；                                                   *)
+(*   ⑧ df2_inst_kl_le_cs_raw / df2_inst_hel_le_cs_raw：leb3_le_b_eq_l      *)
+(*     的 eq 腿（plus_compat+df2_sub_zero_r 链）与 le 腿（df2_j_le_cs）    *)
+(*     两 bullet 装反——互换即绿（eq 在前 le 在后）；                        *)
+(*   ⑨ df2_inst_hel_up1 eq 腿终靶 p2_tvsq(1−p)(1−q) 为假恒等                *)
+(*     （(√a−√b)²≠(a−b)²，p=0.25,q=0.5 数值反例在案）——按已绿 p 臂同构     *)
+(*     改靶 p2_tvsq sp1 sq1（leb3 首参/trans 终靶/le_trans 首参三处；       *)
+(*     MIDDLE 与外层 ratio-square eq 腿不动）——真数学修复，非机械换形。    *)
+(*   终验四关全过（EXIT=0、日志零 Error、魔数 436f712100015ff4、§99 尾舱    *)
+(*   17 件 Print Assumptions 全 Closed under the global context）；        *)
+(*   承认式词面实文零命中（仅存于      *)
+(*   纪律性注释字面）。                                                     *)
 
 From Stdlib Require Import QArith.Qring QArith.Qfield.
 Require Import S01_BaseRing.
@@ -46,7 +101,7 @@ Require Import abl_div_chisq_twopoint.
 Require Import abl_div_kl_chisq_twopoint.
 Require Import abl_div_hellinger_twopoint.
 
-(* 环闭卫生：含 inv/log 内联原子的环闭位一律 remember 化
+(* 复活续建·环闭卫生：含 inv/log 内联原子的环闭位一律 remember 化
    （实测判定：cbn 经 projT1 投影 delta-展开其 cauchy 证书机件会令
    ring 拒闭；Opaque 反使 cbn 重折叠空转，弃用） *)
 
@@ -100,9 +155,9 @@ Proof.
 Qed.
 
 (* ---- 0.5 照管和零恒等（归一化消耗；节外 4 变量形） ---- *)
-(*   AL 勘正吸收：节内 7 Real 变量的 destruct+ring 指数爆炸
-   （Timeout 实测判定）——按测试件
-   结论改节外泛型件：destruct+ring 只碰 4 变量，Hnorm 经
+(*   复活续建·AL 勘正吸收：节内 7 Real 变量的 destruct+ring 指数爆炸
+（Timeout 实测判定；微测件无 .vo 即当年撞坑实录）——按微测
+检验结论改节外泛型件：destruct+ring 只碰 4 变量，Hnorm 经
    RealSetoid 兼容链在环外消耗。 *)
 
 Lemma df2_care_sum_zero : forall (q s s' cdown : Real),
@@ -164,7 +219,7 @@ Qed.
 
 Section FDivTwoPoint.
 
-(* 承载数据：权重 q 与两比值 s s'（归一化 q·s+(1−q)·s'==1；
+(* 载体数据：权重 q 与两比值 s s'（归一化 q·s+(1−q)·s'==1；
    实例位 s := p/q、s' := (1−p)/(1−q) 的抽象化） *)
 Variable q s s' : Real.
 Variable Hq  : real_lt real_zero q.
@@ -591,9 +646,9 @@ Proof.
 Qed.
 
 (* ---- 3.0c 扇出纯环件：q·(P−(S−1)) == q·P + (q−q·S) ---- *)
-(*   全变量形独立纯环小件（沿用 dtv_swap_scale 先例同款：复合项不拆解，
+(*   全变量形独立纯环小件（同 dtv_swap_scale 先例：复合项不拆解，
    q S P 作哑变量整体 destruct，点式环闭不遇不透明 log/inv 定义原子——
-   kl 上臂两处的 remember+d2_ring_eq 受阻位（df2_inst_kl_Ls·df2_inst_kl_Ls1
+   kl 上臂两处的 remember+d2_ring_eq 阻滞位（df2_inst_kl_Ls·df2_inst_kl_Ls1
    不透明应用留在 projT1 下成 match 结构，ring 拒闭）由此直取代参闭合） *)
 Lemma df2_fanout_ring : forall (q S P : Real),
   real_eq (real_mult q (real_plus P (real_opp (real_plus S (real_opp real_one)))))
@@ -610,7 +665,7 @@ Qed.
 (* ---- 3.0 镜面 E 非负：0 ≤_B (inv x − 1) − log(inv x) ---- *)
 (*   dkc_E_nonneg 于 (p·inv q) 处给出 0 ≤_B (s−1)−log s；KL excess 形
    f 数据的非负需对偶不等式（log x ≥ 1−inv x，即镜面 E(1/x) ≥ 0）：
-   于 inv x 处逐字重跑同一 eps 推理步（real_log_le_linear_B 单引擎，
+   于 inv x 处逐字重跑同一 eps 步骤（real_log_le_linear_B 单引擎，
    real_lt_id_l/real_lt_id_r/平移对消；证书 real_inv_pos_pos 全程匹配）。 *)
 
 Lemma df2_E_mirror_nonneg : forall (x : Real) (Hx : real_lt real_zero x),
@@ -907,7 +962,7 @@ Qed.
 (*   核：环原子换位 + df2_unit_scale（q·inv q==1）+ dkc_log_split
    + real_kl_term_expand（镜回 −log(q·inv p) 形）。 *)
 
-(* 因子级 log 镜面恒等：(log x − log y) == −log(y·inv x)（dkc_log_split 反向
+(* 因子级 log 对应形：(log x − log y) == −log(y·inv x)（dkc_log_split 反向
    + opp_compat；供 kl 项恒等对的 mult_compat 因子槽） *)
 Lemma df2_log_split_mirror : forall (p q : Real) (Hp : real_lt real_zero p)
   (Hq : real_lt real_zero q),
@@ -1875,15 +1930,15 @@ Qed.
 (* ============================================================ *)
 (* ---- 5. TV 泛型下界=开放申报接口（逐实例曲率常数证书位） ----        *)
 (* ============================================================ *)
-(*   模板契约（本件不落定理——逐实例曲率常数证书未建，如实申报，
-   不留未证语句）：目标形态 TV² ≤_B c·J_f（c 为实例曲率常数），泛型容器
+(*   模板契约（本件不落定理——逐实例曲率常数证书未建，fail-loud 申报，
+   禁承认式语句）：目标形态 TV² ≤_B c·J_f（c 为实例曲率常数），泛型容器
    需逐实例逐点证书 c·(u−1) 类差 ≤_B f(u)（Bishop 形）+ 两点拼接件：
      · χ² 实例：c := 1，逐点 (u−1)² ≤_B f(u) 即 f 自身（平方形恒等位）；
      · KL₂ 实例：c := 2（Pinsker 常数口径），逐点 2·E(s) 形证书位
        （dkc_E_nonneg 已供 0 ≤_B E，系数 2 缩放位留申报）；
      · Hellinger 实例：c := 2，见证平方形逐点证书位
        （dhe_gap_ge_h2term 已供 H 项 ≤ gap，TV² 拼接位留申报）。
-   两点拼接件（p2_tvsq 口径的 TV² ≤ c·J_f 桥）为后续申报位；
+   两点拼接件（p2_tvsq 口径的 TV² ≤ c·J_f 桥）为后续增量申报位；
    本件仅固定接口形状与证书位命名。 *)
 
 (* ---- 99. 尾检（复活续建全量） ---- *)

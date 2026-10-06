@@ -1,31 +1,62 @@
 (* ==========================================================================)
-   abl_attn_step_calc.v — AttnDoeblin 收缩面的步数见证件（asc_ 前缀）
-   使命：把 AttnDoeblin.v 收缩收敛面的纯率性陈述升级为 mtg_k_calc 式可提取步数见证。率材料：
-      bs_minorization（现档 :693，δ-star := lo·lo = e^{−2Δ/T}）＋相邻收缩迭代件 bounded_softmax_tv_iter
-      （:751，率 (1−δ)ⁿ 显式在案，δ 即 delta_star）。
-   五件主陈述：①asc_step_calc——mtg_k_calc 同构 Defined 计算器：初值 TV₀ 精度 eps → 步数 nat（omd_arch 证书）。
-      ②asc_step_calc_budget／asc_step_calc_correct——正确性两半：预算半 lt (TV₀·omd^N) eps＋TV 迭代半
-      ∀n≥N tv(iterⁿ) < eps（omd := 1−δ；u_tv_iter 闭包＋r_pow_dec_iter 幂单调桥；delta_pos 供 n≥N 单调支）。
-      ③asc_mixing_modulus_sigT——混合模量 {N | ∀n≥N ∀mu nu, ...< eps} 的 sigT 居住（Defined）。
-      ④asc_k_enum——nat 定点枚举解算器（真 Fixpoint，Nat.ltb「首次跌破」严格停机；strict_correct／ltface
-      两正确性＝x·p^N < e·q^N 严格 nat 形）。⑤Part 3 实面桥：幂定律 4 件＋asc_nat_le_embed＋
-      asc_enum_real_correct＋asc_omd_enum_budget（omd == p/q 读数满足实面 le (A·omd^N) E）。
-   已知边界：库内 log→nat ceil 构造性桥仍缺——nat 计算器以定点枚举承载（提取 Obj.magic=0）；实形严格档
-      依赖「单侧严格平移」（库内唯 fa53/fa57 供给且需 DecidableOrder 证书）；本件 lt 形经 omd_arch 证书承载，
-      Part 3 计算器读数为 le 形（S04 r_arch_pow／S06 r_arch_pow_attn 在役模式同款）。
-   依赖清单：S01_BaseRing–S04_RealExpLogConv（le_mult_compat/_r、lt_mult_compat、le/lt_id_l/_r、
-      le_lt_trans/lt_le_trans、le_plus_compat、plus_assoc/comm/zero/opp、opp_plus/plus_opp）；AttnDoeblin
-      （u_tv_iter/u_titer 闭包——Require 不 Import，防其 AlgHelpers 局部 nat_to_R 遮蔽 S04 同名件）；
-      Arch_PA_02（nat_to_R_mult_hom）；S06_DiffSamplingGibbs（tv_dist 限定名）；Stdlib Arith/Lia。
-   构造性注记：纯构造性/Set 层零 Prop 语句面（步数见证 nat 面 sigT；误差谓词 le/lt Set 层）；非平凡
-      （asc_k_enum 为真 Fixpoint）；可提取（Separate Extraction Obj.magic=0 附加证）；零公理（尾 Print
-      Assumptions 全 Closed 预期）。工艺红线：零 not/~/<> 书写；term-mode 全显式实参；Eval 烟测定装；
-      Id 代数全走 term-mode id_trans 链；nat≤/nat< Prop 不消入 Set（Nat.leb/Nat.ltb＋destruct＋lia replace）。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c
-      -native-compiler no -Q vo_local_world_unified_0930 "" abl_attn_step_calc.v（池内执行）；验证＝
-      EXIT=0＋Print Assumptions 全 Closed。
-   查重登记：顶层名全 asc_ 新前缀，防撞在册编译树 vo_local_world_unified_0930 零命中；在册外同前缀为
-      Q 层平方/abs 件，本件件名集与其零交。
+   abl_attn_step_calc.v — BW·AttnDoeblin 收缩面的步数见证件（asc_ 前缀）
+   卷次: ConstructiveWorld BW 卷（tmine04，45 分钟切片，born-green 交付）
+   使命: 按 K 头号矿脉 K8（九文件表第 2 处）——把 AttnDoeblin.v 收缩收敛面的
+     纯率性陈述升级为 mtg_k_calc 式可提取步数见证。率材料比 S04 的 log 模量更
+     直接：bs_minorization（现档 :693，δ-star := lo·lo = e^{−2Δ/T}）＋相邻收缩迭代件
+     bounded_softmax_tv_iter（:751，率 (1−δ)ⁿ 显式在案，δ 即 delta_star）——K8 勘定
+     「率全在证明体第二行，缺的只是提升动作」。
+   件名与前缀: abl_attn_step_calc.v，asc_ 前缀（施工前 grep 防撞：在册编译树
+     vo_local_world_unified_0930 零命中；消融50 在册外同前缀为 Q 层平方/abs 件，
+     不在编译配方面内，本件件名集（asc_step_calc/asc_k_enum 等）与其零交）。
+   五件陈述（本片闭合）:
+     1. asc_step_calc —— mtg_k_calc 同构 Defined 计算器：初值 TV₀ 精度 eps →
+        步数 nat（K8 升格面；使用 omd_arch 证书，S06 r_arch_pow_attn 同款）。
+     2. asc_step_calc_budget / asc_step_calc_correct —— 正确性两半：几何率预算半
+        （lt (TV₀·omd^N) eps，omd := 1−δ）＋TV 迭代半（∀n≥N、∀归一化对
+        mu,nu：tv(mu,nu) ≤ TV₀ ⟹ tv(iterⁿ) < eps——使用 AttnDoeblin u_tv_iter
+        闭包定理＋r_pow_dec_iter 幂单调桥；delta_pos 证书为 S06
+        one_minus_delta_pos 同款，供 n≥N 单调腿）。
+     3. asc_mixing_modulus_sigT —— sigT 封装 {N | ∀n≥N ∀mu nu, ...< eps}（K8
+        混合时间模量的 Set 形居住，Defined）。
+     4. Part 2 nat 面：几何衰减的定点枚举解算器（真 Fixpoint/ceil 形）——
+        本件增量＝严格档：asc_k_enum 以 Nat.ltb「首次跌破」停机，两正确性
+        （asc_k_enum_strict_correct 严格面 / asc_k_enum_ltface 精确面＝
+        x·p^N < e·q^N 严格 nat 形）——BQ 首件诚实边界②「严格版定点档」
+        之兑现；le 档由 Nat.lt_le_incl 覆盖。
+     5. Part 3 实面桥：幂定律（asc_r_pow_mult/asc_nat_r_pow/asc_r_pow_inv/
+        asc_inv_unique）＋nat≤ → 实面 le 嵌入桥（asc_nat_le_embed 沿 BQ）
+        ＋asc_enum_real_correct（BQ 同款有理数据实面正确性）＋
+        asc_omd_enum_budget（omd 直连版：omd == p/q 证书下枚举读数满足
+        实面 le (A·omd^N) E——K8 步数见证的实形）。
+   fail-loud 记录: 库内实数 log→nat ceil 的构造性桥仍缺（K 报告 fail-loud 预判，
+     BQ 首件实锤）——沿用有界精度档预案：nat 计算器以定点枚举承载（真
+     Fixpoint，提取 Obj.magic=0）；实形严格档（nat< → 实面 lt 嵌入）依赖
+     「单侧严格平移」，库内唯 fa53/fa57 供给且需 DecidableOrder 可选证书
+     （fa53 件头自注「缺单侧严格平移」实锤）——本件 lt 形由 Part 1 经
+     omd_arch 证书承载，Part 3 计算器读数为 le 形，严格实形留界登记；
+     Part 1 的 N 经 omd_arch 证书（构造性而非计算性，与 S04 r_arch_pow/
+     S06 r_arch_pow_attn 在役模式同款），诚实边界登记于 attn 报告。
+   依赖: S01_BaseRing–S04_RealExpLogConv（le_mult_compat/le_mult_compat_r/
+     lt_mult_compat/le_id_l/le_id_r/lt_id_l/lt_id_r/le_lt_trans/lt_le_trans/
+     le_plus_compat/plus_assoc/plus_comm/plus_zero/plus_opp/opp_plus/
+     plus_opp 均在役）；AttnDoeblin（u_tv_iter/u_titer 闭包——
+     Require 不 Import，防其 AlgHelpers 局部 nat_to_R 遮蔽 S04 同名件）；
+     Arch_PA_02（nat_to_R_mult_hom）；S06_DiffSamplingGibbs（tv_dist 限定名）；
+     Stdlib Arith/Lia。Require-only 零改动。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；误差谓词 le/lt
+     Set 层）；非平凡（asc_k_enum 为真 Fixpoint，严格档枚举非平凡归纳）；
+     可提取（Separate Extraction Obj.magic=0 附加证，照 BF/BQ 模式）；零公理
+     （尾 Print Assumptions 全 Closed 预期）。
+   工艺红线: 零 not/~/<> 书写；Qeq 面（本件 nat 面不用 Q，零 Qeq 坑）；term-
+     mode 全显式实参（BN 坑卡）；数值定装（BB 坑卡：Eval 烟测入日志）；
+     Id 面 rewrite 回避（BQ 坑卡五——Id 代数全走 term-mode id_trans 链，
+     nat_to_R_plus_hom/minus_plus_cancel_r 经 lt_id_r 的 Id 槽改写）；
+     nat≤/nat< Prop 不消入 Set（BQ 坑卡六——Nat.leb/Nat.ltb 判定＋Nat 变量
+     destruct＋lia 等式 replace，False_rect 容许入 Set）。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no
+     -Q vo_local_world_unified_0930 "" abl_attn_step_calc.v（池内执行）。
    ========================================================================== *)
 
 Require Import S01_BaseRing.
@@ -41,7 +72,7 @@ From Stdlib Require Import Lia.
 (* Part 2：几何衰减的 nat 定点枚举解算器（真 Fixpoint/严格档）        *)
 (*   收缩率 omd := 1−δ 以 κ := p/q（0<p<q）、初值 A、预算 E 的公共    *)
 (*   尺度定点表示，枚举首次跌破（x < e 严格停机）的步数。              *)
-(*   严格档（Nat.ltb 停机面）——le 档之升级。                          *)
+(*   本件增量：严格档（Nat.ltb 停机面）——BQ 首件 le 档之升级。        *)
 (* ============================================================ *)
 
 (* ceil 整除：⌈a/q⌉ := (a+q−1)/q（q ≥ 1），上取整保上界方向 *)
@@ -148,7 +179,7 @@ Proof.
 Qed.
 
 (* log 模量方程的严格 nat 形：枚举终止 ⟹ x·p^N < e·q^N（log 单调下等价面；
-   本件严格升级） *)
+   本件增量——BQ 首件 le 档之严格升级） *)
 Theorem asc_k_enum_ltface : forall fuel p q x e,
   (0 < p)%nat -> (0 < q)%nat ->
   (exists k : nat, (k <= fuel)%nat /\ (asc_pow_iter p q x k < e)%nat) ->
@@ -164,12 +195,12 @@ Proof.
   - exact (proj1 (Nat.mul_lt_mono_pos_r (q ^ N) (asc_pow_iter p q x N) e HqN) H1).
 Qed.
 
-(* 定点档烟测：κ=7/10、A=1000、E=10 的严格档首破枚举 *)
+(* 定点档烟测（BB 数值定装）：κ=7/10、A=1000、E=10 的严格档首破枚举 *)
 Eval vm_compute in (asc_k_enum 50 7 10 1000 10).
 
 (* ============================================================ *)
 (* Part 1 + Part 3：实面（RI 泛型 Section，AttnDoeblin UContraction    *)
-(* 证书子集逐形对应）——mtg_k_calc 同构计算器＋混合模量＋实面桥。       *)
+(* 证书子集对应形）——mtg_k_calc 同构计算器＋K8 混合模量＋实面桥。        *)
 (* ============================================================ *)
 
 Section AscAttnStepCalc.
@@ -193,8 +224,8 @@ Let S := @S RI SS.
 Let sum_over_S := @sum_over_S RI SS SO.
 Let tv := @S06_DiffSamplingGibbs.tv_dist RI SS SO.
 
-(* 诚实接口证书（AttnDoeblin UContraction u_tv_iter 证书子集逐形对应，
-   签名经 @u_tv_iter 直接对齐；transition_nonneg 被闭包裁剪故不携带） *)
+(* 诚实接口证书（AttnDoeblin UContraction u_tv_iter 证书子集对应形，
+   签名经检验 @u_tv_iter 实拍对齐；transition_nonneg 被闭包裁剪故不携带） *)
 Variable u : S -> R.
 Variable u_norm : Id (sum_over_S u) one.
 Variable delta : R.
@@ -230,7 +261,7 @@ Proof.
                                          delta_lt_one (le_refl (opp delta)))).
 Qed.
 
-(* 1−δ < 1（δ > 0 供能；乘法单调走 lt_plus_compat_lt_le_h 混合支——
+(* 1−δ < 1（δ > 0 供能；乘法单调走 lt_plus_compat_lt_le_h 混合腿——
    u_omd_pos_next 同款技法；吸收律 Id 面走 S01 assoc/comm/opp 运河，
    不用 fa57 严格平移，免 DecidableOrder 证书） *)
 Lemma asc_omd_lt_one : lt omd one.
@@ -268,7 +299,7 @@ Qed.
 
 (* 正确性半 2：TV 迭代面——∀n≥N、∀归一化对 mu nu：tv(mu,nu) ≤ TV₀ ⟹
    tv(iterⁿ) < eps（使用 AttnDoeblin u_tv_iter＋r_pow_dec_iter 单调桥；
-   乘法单调走 le_mult_compat 因右字段——同款形） *)
+   乘法单调走 le_mult_compat 因右字段——BQ H3 同款形） *)
 Theorem asc_step_calc_correct : forall (TV0 : R)
   (HTV0 : lt zero TV0)
   (eps : R) (Heps : lt zero eps)
@@ -302,7 +333,7 @@ Proof.
     + exact Hbud.
 Qed.
 
-(* sigT 封装：混合时间模量 {N | ∀n≥N ∀归一化对, tv(iterⁿ) < eps}（Defined） *)
+(* sigT 封装：K8 混合时间模量 {N | ∀n≥N ∀归一化对, tv(iterⁿ) < eps}（Defined） *)
 Theorem asc_mixing_modulus_sigT : forall (TV0 : R)
   (HTV0 : lt zero TV0)
   (eps : R) (Heps : lt zero eps),
@@ -368,7 +399,7 @@ Proof.
 Qed.
 
 (* 幂对逆的分裂：r_pow(inv x,n) == inv(r_pow x,n)（逆唯一性归纳；
-   逆的正性证书 Hp 作显式槽——防 Qed 不透明常数上的换形） *)
+   逆的正性证书 Hp 作显式槽——防 Qed 不透明常数上的换形，BQ 坑卡七） *)
 Lemma asc_r_pow_inv : forall (x : R) (Hx : lt zero x) (n : nat) (Hp : lt zero (r_pow x n)),
   Id (r_pow (inv_pos x Hx) n) (inv_pos (r_pow x n) Hp).
 Proof.

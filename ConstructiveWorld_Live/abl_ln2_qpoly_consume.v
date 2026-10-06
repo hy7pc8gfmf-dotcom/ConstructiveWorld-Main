@@ -1,10 +1,36 @@
 (* ===================================================================== *)
-(*  abl_ln2_qpoly_consume.v —— ln2 无理性链·除法使用件 *)
-(*  使命: 使用已闭合除法引擎（线性特例 abl_qpoly_divmod＋一般形 abl_qpoly_divmod_gen）于 Beukers 承载恒等式除法位: 被除式 t^n(1-t)^n（QPoly 稠密编码 lnc_bk_num）÷ 除式 (1-t/2)^(n+1)（编码 lnc_bk_den = 幂底 1 + t·(-(1#2)) 之 lnc_pow；真首项非零，qpg_divisor_ok 良态成立），产出链级三肢: (a) 分解恒等式 lnc_consume_id_*（qpd_divmod_gen_pred 双肢投影，QeqT/Id Set 面）；(b) 极点残值 lnc_residue_pole_*: 余式 R 在极点 t=2 处 R(2)=(−2)^n（QeqT Set 面；u=1−t/2 坐标下即尾系数 d_{n+1}=(−2)^n）；(c) 残数整性 lnc_d1_int_*: d_1 := [u^n]R（lnc_comp2 坐标代入后 nth n）满足 d_1 == 2^n·q̃_n（bk_Qn_qtilde，BeukersLists 树内定值），sigT z + QeqT 交付——与前件 lni_bvp_lcm_int 同型（Z 面衔接），数值核对: d_1: 6/52/504（n=1/2/3），q̃_n: 3/13/63，A_3=2·504=1008 与 I_3=1008·ln2−2096/3 残数核对衔接。 *)
-(*  依赖: Stdlib QArith.QArith/QArith.Qring/QArith.Qfield/List/Arith/ZArith/Lia/Extraction；S01_BaseRing S02_CauchyComplete S03_QExp PolyIntegral BeukersLists；前件 abl_qpoly_divmod、abl_qpoly_divmod_gen（链序先编）。 *)
-(*  对标: abl_qpoly_divmod_gen 除法引擎使用面；lni_bvp_lcm_int 整性面同型对接（abl_ln2_numer_int）。 *)
-(*  构造性: 零公理零承认零放弃零经典（禁词面零命中）；交付定理面 sigT/QeqT/Id（Set 层）；数值核对（lnc_pin_* 之 eq/Qeq_bool 形）沿烟测既定形态；工具引理 Qeq 面为证内脚手架（恒等式闭合一律抽纯变量 ring 引理独立 Qed）；计算定装一律 Qeq_bool 可计算相等桥，不以 Qmake 字面硬统一；文尾 Separate Extraction + Print Assumptions 全 Closed 取证。边界: 一般 n 的良态/分解/残数三肢登记接口（lnc_den_ok_type / lnc_div_gen_type / lnc_d1_gen_type）不施工；数值定装 n=0,1,2,3 四实例（含线性因式 n=1÷(1−t/2) 通链实例）；唯一性肢/一般 u 展开声音性已由 lnc_comp2_eval 闭合，指数衰减上界与 Ireal 装配不在本件面。 *)
-(*  编译配方: source <toolchain>/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930 "" 本件；起编前确认无其他编译进程在运行；编译目录 ln2_consume/（引擎双件＋前件 abl_ln2_numer_int.v 拷入，链序编译）。 *)
+(*  abl_ln2_qpoly_consume.v —— ln2 无理性链路线③·除法使用件（CO·ln2）    *)
+(*                                                                        *)
+(*  ①使命: 使用已闭合除法引擎（CC 线性特例 abl_qpoly_divmod + CK 一般形     *)
+(*     abl_qpoly_divmod_gen）于 AE 报告路线③ Beukers 载体恒等式除法位:     *)
+(*     被除式 t^n(1-t)^n（QPoly 稠密编码 lnc_bk_num）÷ 除式 (1-t/2)^(n+1)   *)
+(*     （编码 lnc_bk_den = 幂底 1 + t·(-(1#2)) 之 lnc_pow；真首项非零，     *)
+(*     qpg_divisor_ok 良态成立），产出链级三肢:                             *)
+(*     (a) 分解恒等式 lnc_consume_id_*（qpd_divmod_gen_pred 双肢投影，      *)
+(*         QeqT/Id Set 面）；                                              *)
+(*     (b) 极点残值 lnc_residue_pole_*: 余式 R 在极点 t=2 处 R(2)=(−2)^n    *)
+(*         （QeqT Set 面；u=1−t/2 坐标下即尾系数 d_{n+1}=(−2)^n）；          *)
+(*     (c) 残数整性 lnc_d1_int_*: d_1 := [u^n]R（lnc_comp2 坐标代入后       *)
+(*         nth n）满足 d_1 == 2^n·q̃_n（bk_Qn_qtilde，BeukersLists 在树锚），*)
+(*         sigT z + QeqT 交付——与 BD 前件 lni_bvp_lcm_int 同型（Z 面衔接）， *)
+(*         数值锚: d_1: 6/52/504（n=1/2/3），q̃_n: 3/13/63，A_3=2·504=1008   *)
+(*         与 AE 报告 I_3=1008·ln2−2096/3 残数锚衔接。                      *)
+(*  ②依赖: abl_tmine04_pool/ln2_consume/（独占自建；引擎双件    *)
+(*     + ln2_numer 前件 abl_ln2_numer_int.v 拷入，链序编译）。              *)
+(*  ③编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&         *)
+(*     ulimit -s 65532 && nice -19 rocq c -native-compiler no              *)
+(*     -Q vo_local_world_unified_0930 "" 本件；起编前道闸 ps rocq 计 0。    *)
+(*  ④构造性: 零公理零承认零放弃零经典（G1 禁词面零命中）；交付定理面         *)
+(*     sigT/QeqT/Id（Set 层）；数值锚（lnc_pin_* 之 eq/Qeq_bool 形）沿 CC    *)
+(*     BF 烟测既定形态；工具引理 Qeq 面为证内脚手架（E236 工艺: 闭合恒等式   *)
+(*     一律抽纯变量 ring 引理独立 Qed）；经验卡 FRACDIVSHAPE 工艺: 计算定装  *)
+(*     一律 Qeq_bool 可计算相等桥，不以 Qmake 字面硬统一；文尾 Separate     *)
+(*     Extraction + PA 全 Closed 取证（红线四条）。                          *)
+(*  ⑤边界: 一般 n 的良态/分解/残数三肢登记接口（lnc_den_ok_type /          *)
+(*     lnc_div_gen_type / lnc_d1_gen_type）不施工（首件策略 45 分钟切片）； *)
+(*     数值定装 n=0,1,2,3 四实例（含线性因式 n=1÷(1−t/2) 通链实例）；       *)
+(*     唯一性肢/一般 u 展开声音性已由 lnc_comp2_eval 闭合，指数衰减上界    *)
+(*     与 Ireal 装配不在本件面（AE 路线③(ⅲ) 后续件）。                     *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qring QArith.Qfield.
@@ -18,7 +44,8 @@ Open Scope Q_scope.
 
 (* ============================================================ *)
 (* §0 QPoly 运算件（稠密表头=常数项，PolyIntegral 惯例）           *)
-(*    卷积定义形即归纳母题；恒等式闭合抽纯变量 ring 引理独立 Qed。          *)
+(*    经验卡 COEFSTRUCT: 卷积定义形即归纳母题；                    *)
+(*    经验卡 E236: 闭合恒等式抽纯变量 ring 引理独立 Qed。          *)
 (* ============================================================ *)
 
 Definition lnc_scale (a : Q) (p : list Q) : list Q :=
@@ -37,7 +64,7 @@ Fixpoint lnc_pow (p : list Q) (k : nat) : list Q :=
   | Datatypes.S k' => lnc_mul p (lnc_pow p k')
   end.
 
-(* 纯变量 ring 闭合引理 *)
+(* 纯变量 ring 闭合引理（E236 工艺） *)
 Lemma lnc_ring_scale_step : forall a b e x : Q,
   a * b + x * (a * e) == a * (b + x * e).
 Proof. intros a b e x. ring. Qed.
@@ -151,7 +178,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 除子良态实证（vm_compute 面；qpg_ok_xp1 同款工艺）        *)
+(* §2 除子良态实证（vm_compute 面；CK qpg_ok_xp1 同款工艺）        *)
 (* ============================================================ *)
 
 Lemma lnc_den_ok0 : qpg_divisor_ok (lnc_bk_den 0).
@@ -226,7 +253,7 @@ Lemma lnc_pin_w1lin :
   Qeq_bool (nth 0%nat (snd lnc_w1lin) 0) (-2) = true.
 Proof. vm_compute. repeat split; reflexivity. Qed.
 
-(* 实例三（n=1）：t(1−t) ÷ (1−t/2)^2 ⟹ 商 −4 余 4−3t *)
+(* 实例三（路线③形 n=1）：t(1−t) ÷ (1−t/2)^2 ⟹ 商 −4 余 4−3t *)
 Definition lnc_w1 : list Q * list Q :=
   projT1 (qpg_divmod_gen (lnc_bk_num 1) (lnc_bk_den 1) lnc_den_ok1).
 
@@ -253,7 +280,7 @@ Lemma lnc_pin_w1 :
   Qeq_bool (nth 1%nat (snd lnc_w1) 0) (-3) = true.
 Proof. vm_compute. repeat split; reflexivity. Qed.
 
-(* 实例四（n=2）：t²(1−t)² ÷ (1−t/2)^3 ⟹ 商 −32−8t 余 32−40t+13t² *)
+(* 实例四（路线③形 n=2）：t²(1−t)² ÷ (1−t/2)^3 ⟹ 商 −32−8t 余 32−40t+13t² *)
 Definition lnc_w2 : list Q * list Q :=
   projT1 (qpg_divmod_gen (lnc_bk_num 2) (lnc_bk_den 2) lnc_den_ok2).
 
@@ -282,8 +309,8 @@ Lemma lnc_pin_w2 :
   Qeq_bool (nth 2%nat (snd lnc_w2) 0) 13 = true.
 Proof. vm_compute. repeat split; reflexivity. Qed.
 
-(* 实例五（n=3）：t³(1−t)³ ÷ (1−t/2)^4 ⟹ 商 −304−80t−16t²
-   余 304−528t+312t²−63t³；A_3 = 2·d_1(3) = 1008 与 I_3 残数核对衔接 *)
+(* 实例五（路线③形 n=3）：t³(1−t)³ ÷ (1−t/2)^4 ⟹ 商 −304−80t−16t²
+   余 304−528t+312t²−63t³；A_3 = 2·d_1(3) = 1008 与 AE 报告残数锚衔接 *)
 Definition lnc_w3 : list Q * list Q :=
   projT1 (qpg_divmod_gen (lnc_bk_num 3) (lnc_bk_den 3) lnc_den_ok3).
 
@@ -374,10 +401,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 残数 d_1 整性肢: d_1 == 2^n·q̃_n              *)
+(* §5 残数 d_1 整性肢（AE 路线③(ii)）: d_1 == 2^n·q̃_n              *)
 (*    d_1 := [u^n]R = nth n (lnc_comp2 R)（lnc_comp2_eval 声音）；   *)
-(*    q̃_n := bk_Qn_qtilde（BeukersLists 树内定值）。                  *)
-(*    数值核对: d_1 = 6/52/504；u 展开表 [−2;6]/[4;−24;52]/           *)
+(*    q̃_n := bk_Qn_qtilde（BeukersLists 在树锚）。                  *)
+(*    数值锚: d_1 = 6/52/504；u 展开表 [−2;6]/[4;−24;52]/           *)
 (*    [−8;72;−264;504]（首项即极点残值 (−2)^n，与 §4 互证）。        *)
 (* ============================================================ *)
 
@@ -408,7 +435,7 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma lnc_qtilde_pin_3 : bk_Qn_qtilde 3 = 63%nat.
 Proof. vm_compute. reflexivity. Qed.
 
-(* 整性见证（lni_bvp_lcm_int 同型：sigT z + QeqT (… == z#1)，Set 面）
+(* 整性见证（BD lni_bvp_lcm_int 同型：sigT z + QeqT (… == z#1)，Set 面）
    见证取 2^n·q̃_n 的 Z 像——链级形（q̃_n 衔接）直书于见证项。 *)
 Theorem lnc_d1_int_n1 : sigT (fun z : Z => QeqT (lnc_d1 1 (snd lnc_w1))
                                                 ((z # 1))).
@@ -437,9 +464,9 @@ Proof.
   vm_compute. reflexivity.
 Qed.
 
-(* 前件衔接位：lni_bvp_lcm_int（真分子族 L_n·bv_p n ∈ Z 主件）
-   在 n=2 处的直接使用——两整性面（本件 d_1 面 × 前件 L_n·p_n 面）
-   于同一 sigT/QeqT 承载形并置，链面焊接。 *)
+(* BD 前件衔接位：lni_bvp_lcm_int（BD 真分子族 L_n·bv_p n ∈ Z 主件）
+   在 n=2 处的本池直使用——两整性面（本件 d_1 面 × BD L_n·p_n 面）
+   于同一 sigT/QeqT 载体形并置，链面焊接留痕。 *)
 Definition lnc_bd_face_n2 : sigT (fun z : Z => QeqT (lni_lbvp 2) (z # 1)) :=
   lni_bvp_lcm_int 2.
 
@@ -451,7 +478,7 @@ Definition lnc_bd_face_n2 : sigT (fun z : Z => QeqT (lni_lbvp 2) (z # 1)) :=
 Definition lnc_div_gen_type (n : nat) : Set :=
   sigT (qpd_divmod_gen_pred (lnc_bk_num n) (lnc_bk_den n)).
 
-(* 一般 n 的除子良态前提（诚实扩题面：deg ≥ 1 ∧ 真首项非零） *)
+(* 一般 n 的除子良态前提（CK 诚实扩题面：deg ≥ 1 ∧ 真首项非零） *)
 Definition lnc_den_ok_type (n : nat) : Set := qpg_divisor_ok (lnc_bk_den n).
 
 (* 一般残数肢：分解正确性前提 ⟹ d_1 == 2^n·q̃_n 的整性见证 *)
@@ -463,7 +490,7 @@ Definition lnc_d1_gen_type (n : nat) : Set :=
                  ((Z.of_nat (Nat.pow 2 n * bk_Qn_qtilde n)%nat # 1))).
 
 (* ============================================================ *)
-(* §7 提取面 + Print Assumptions（逐条 PA 取证）          *)
+(* §7 闭合：提取面 + Print Assumptions（红线四条逐条 PA）          *)
 (* ============================================================ *)
 
 Separate Extraction lnc_scale lnc_mul lnc_pow lnc_comp2 lnc_d1

@@ -1,32 +1,32 @@
 (* ==========================================================================)
    abl_mixlog_switch.v — vm_compute 数值档散布件的通用切换档泛化首件
-   使命：把 UpReqMixLogE.v 的 91/22 锐化差距面（mixe_smoke_select_cert_91／
-      mixe_smoke_true_min_22，L726-740）接入通用切换档定理 igr_k_enum_min
-      （UpReqIterGeomRate.v:1576 现档；:1537 为四件之首 igr_k_enum_sound）：
-      立「接受站计算器 msw_min_station＝igr_k_enum 泛型枚举 × mixe_qlt_bool
-      真值测试」，交付健全／最小／无解三支正确性账、Q 层单调步进切换面
-      （对 k 无上界全通过段）、族形状总件 msw_switch_tier，及 91/22 实例
-      回核——22 档经通用接口重证、91 档接受面由 22 档＋切换面导出（非直算），
-      仿射闭式档 91 本身化作枚举窗口（mixe_cf_select 直供 H）。
-   依赖清单：Stdlib QArith/ZArith/Lia/Extraction；本库 UpReqIterGeomRate
-      （igr_k_enum/sound/none/min 泛用切换档件，经 -Q 世界树使用）、
-      UpReqMixLogE（mixe_qlt_bool/mixe_qpow/mixe_cf_select/mixe_qle_01 及序账
-      传输件）。两层差异如实记录：igr 四件为 nat/bool/option 层（与 Q 无关的
-      纯枚举形），mixe 面为 Q 层序谓词——桥由 msw_mix_test 一处承担（Q 层测试
-      交由 nat 层枚举按 test : nat -> bool 接口调用）。
-   对标行：UpReqMixLogE L722-740 坐标（mixe_cf_select／mixe_smoke_* 两实例）；
-      UpReqIterGeomRate :1516/:1537/:1554/:1576 坐标（igr 切换档四件）。
-   构造性注记：计算器面全 Set 型（bool/option/Fixpoint/Defined，可提取）；
-      账面等式与 igr 族同形（Id bool）；Qlt/Qle 释读件与 mixe 族同层（stdlib
-      Q 序谓词）。零承认词面、零经典逻辑、零新增公理；全件无否定记号词，
-      前提一律 forall 显式。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s
-      65532 && nice -19 rocq c -native-compiler no -Q
-      /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_0930 ""
-      abl_mixlog_switch.v（池内平铺，并发 1＝单进程串行）；验证＝EXIT=0＋
-      Print Assumptions 全 Closed。
-   查重登记：顶层名 28 枚全 msw_ 新前缀，与库内既占前缀零撞零别名转发；
-      91/22 实例回核三 Example 一窗两站零重复。
+   使命: 兑现 I 报告隐彜族1指认——把 UpReqMixLogE.v 的 91/22 锐化差距面
+     （mixe_smoke_select_cert_91 / mixe_smoke_true_min_22，L726-740）接入
+     通用切换档定理 igr_k_enum_min（UpReqIterGeomRate.v:1576 现档实拍；
+     I 报告记 :1537 实为四件之首 igr_k_enum_sound）：立「接受站计算器
+     msw_min_station＝igr_k_enum 泛型枚举 × mixe_qlt_bool 真值测试」，
+     交付健全/最小/无解三肢正确性账、Q 层单调步进切换面（对 k 无上界
+     全通过段）、族形状总件 msw_switch_tier，及 91/22 实例回核——
+     22 档经通用接口重证、91 档接受面由 22 档＋切换面导出（非直算），
+     仿射闭式档 91 本身化作枚举窗口（mixe_cf_select 直供 H）。
+   依赖: Stdlib QArith/ZArith/Lia/Extraction；本库 UpReqIterGeomRate
+     （igr_k_enum/sound/none/min 泛用切换档件，经 -Q 世界树使用）、
+     UpReqMixLogE（mixe_qlt_bool/mixe_qpow/mixe_cf_select/mixe_qle_01
+     及序账传输件）。两面层差异如实记录：igr 四件为 nat/bool/option
+     层（与 Q 无关的纯枚举形），mixe 面为 Q 层序谓词——桥由
+     msw_mix_test 一处承担（Q 层测试喂给 nat 层枚举，接口恰为
+     test : nat -> bool）。
+   语出: I 引擎族解剖 §④隐彜族1（79 件
+     vm_compute 数值档散布、通用定理在库未使用）；主会话首件令
+     「91 档 ⟸ 通用切换档定理」。
+   构造性: 计算器面全 Set 型（bool/option/Fixpoint/Defined，可提取）；
+     账面等式与 igr 族同形（Id bool）；Qlt/Qle 释读件与 mixe 族同层
+     （stdlib Q 序谓词）。零承认词面、零经典逻辑、零新增公理；
+     全件无否定记号词（AQ 卡），前提一律 forall 显式。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB
+     && ulimit -s 65532 && nice -19 rocq c -native-compiler no
+     -Q /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_0930 ""
+     abl_mixlog_switch.v（池内平铺，道闸 1＝单进程串行）。
    ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith.
@@ -50,7 +50,7 @@ Definition msw_mix_test (w tv0 b0 : Q) (k : nat) : bool :=
 Definition msw_min_station (w tv0 b0 : Q) (H : nat) : option nat :=
   igr_k_enum (msw_mix_test w tv0 b0) H.
 
-(* 健全支：返回站必通过（直取使用 igr_k_enum_sound:1537） *)
+(* 健全肢：返回站必通过（直取使用 igr_k_enum_sound:1537） *)
 Lemma msw_station_sound : forall (w tv0 b0 : Q) (H k : nat),
   msw_min_station w tv0 b0 H = Some k -> msw_mix_test w tv0 b0 k = true.
 Proof.
@@ -58,7 +58,7 @@ Proof.
   exact (igr_k_enum_sound (msw_mix_test w tv0 b0) H k Hsel).
 Qed.
 
-(* 最小支：返回站以下全不通过（直取使用 igr_k_enum_min:1576） *)
+(* 最小肢：返回站以下全不通过（直取使用 igr_k_enum_min:1576） *)
 Lemma msw_station_min : forall (w tv0 b0 : Q) (H k j : nat),
   msw_min_station w tv0 b0 H = Some k -> (j < k)%nat ->
   msw_mix_test w tv0 b0 j = false.
@@ -67,7 +67,7 @@ Proof.
   exact (igr_k_enum_min (msw_mix_test w tv0 b0) H k Hsel j Hjk).
 Qed.
 
-(* 无解支：窗内全不通过（直取使用 igr_k_enum_none:1554） *)
+(* 无解肢：窗内全不通过（直取使用 igr_k_enum_none:1554） *)
 Lemma msw_station_none : forall (w tv0 b0 : Q) (H j : nat),
   msw_min_station w tv0 b0 H = None -> (j <= H)%nat ->
   msw_mix_test w tv0 b0 j = false.
@@ -99,9 +99,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* Part 3：单调步进与切换面（统一陈述的「∀k≥k* 段成立」支）            *)
-(*   igr 接口自身不含单调输入；此支是接入 mixe 数值档的增量成本        *)
-(*   （诚实边界注记）。                                                *)
+(* Part 3：单调步进与切换面（隐彜族1统一陈述的「∀k≥k* 段成立」肢）     *)
+(*   igr 接口自身不含单调输入；此肢是接入 mixe 数值档的增量成本        *)
+(*   （I「成本零」判的诚实边界，见报告 diff）。                        *)
 (* ============================================================ *)
 
 Lemma msw_qpow_step_le : forall (w tv0 : Q) (k : nat),
@@ -150,7 +150,7 @@ Proof.
     + exact (IH k Hw0 Hw1 Htv0 Hk).
 Qed.
 
-(* 切换面：返回站 k* 起、对 k 无上界全通过——切换档语义的完成支 *)
+(* 切换面：返回站 k* 起、对 k 无上界全通过——切换档语义的完成肢 *)
 Theorem msw_station_switch : forall (w tv0 b0 : Q) (H k j : nat),
   Qle 0 w -> Qle w 1 -> Qle 0 tv0 ->
   msw_min_station w tv0 b0 H = Some k -> (k <= j)%nat ->
@@ -162,7 +162,7 @@ Proof.
   exact (msw_station_sound w tv0 b0 H k Hsel).
 Qed.
 
-(* 族形状总件（统一陈述的落地形；三支全 Set 承载账面） *)
+(* 族形状总件（隐彜族1统一陈述草案的落地形；三支全 Set 承载账面） *)
 Theorem msw_switch_tier : forall (w tv0 b0 : Q) (H : nat),
   Qle 0 w -> Qle w 1 -> Qle 0 tv0 ->
   match msw_min_station w tv0 b0 H with
@@ -251,7 +251,7 @@ Lemma msw_eq_91 :
   mixe_qpow (1 - (1 # 10)) 91 * 1 == mixe_qpow (9 # 10) 91 * 1.
 Proof. vm_compute. reflexivity. Qed.
 
-(* 22 档真值证书：经通用接口（枚举健全支）重证 mixe_smoke_true_min_22 语义 *)
+(* 22 档真值证书：经通用接口（枚举健全肢）重证 mixe_smoke_true_min_22 语义 *)
 Theorem msw_true_min_22 : Qlt (mixe_qpow (9 # 10) 22 * 1) (1 # 10).
 Proof.
   apply (mixe_qlt_eq_l (mixe_qpow (9 # 10) 22 * 1)
@@ -263,7 +263,7 @@ Proof.
              msw_smoke_station_in_affine_window).
 Qed.
 
-(* 21 档下界账：经通用接口（igr_k_enum_min 最小支）——锐化差距的反面证实 *)
+(* 21 档下界账：经通用接口（igr_k_enum_min 最小肢）——锐化差距的反面证实 *)
 Theorem msw_below_21_not_accept : Qle (1 # 10) (mixe_qpow (9 # 10) 21 * 1).
 Proof.
   apply (mixe_qle_eq_r (1 # 10) (mixe_qpow (1 - (1 # 10)) 21 * 1)
@@ -276,7 +276,7 @@ Proof.
   - exact msw_eq_21.
 Qed.
 
-(* 21 窗无解账：None 支的使用面 *)
+(* 21 窗无解账：None 肢的使用面 *)
 Theorem msw_below_21_all_fail : forall j : nat,
   (j <= 21)%nat -> msw_mix_test (1 # 10) 1 (1 # 10) j = false.
 Proof.
@@ -305,7 +305,7 @@ Example msw_select_cert_91_bool_switched :
 Proof. apply mixe_qlt_bool_true. exact msw_affine_cert_91. Qed.
 
 (* ============================================================ *)
-(* 审计口（全 Closed 预期：零新增公理；并审计核心件 igr_k_enum_min）    *)
+(* G4 审计口（全 Closed 预期：零新增公理；并审计枢件 igr_k_enum_min）    *)
 (* ============================================================ *)
 
 Print Assumptions msw_station_sound.
@@ -329,6 +329,6 @@ Print Assumptions igr_k_enum_min.
 Print Assumptions igr_k_enum_sound.
 Print Assumptions igr_k_enum_none.
 
-(* 提取面：计算器本体（可提取强证；Obj.magic 计数由壳层核对） *)
+(* G3 提取面：计算器本体（可提取强证；Obj.magic 计数由壳层核对） *)
 From Stdlib Require Extraction.
 Separate Extraction msw_min_station.

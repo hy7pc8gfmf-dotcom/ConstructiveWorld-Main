@@ -1,14 +1,22 @@
 (* ========================================================================== *)
-(* abl_sqrtf_tail.v — SqrtF 收敛链尾程三段（Q 层实例闭合） *)
-(* 模块名：abl_sqrtf_tail *)
-(* 数学使命：UpReqSqrtF §8 尾程三段以供给定理闭合： *)
-(*   ① 取档步：Q 层 sqrt2 Newton 具体实例显式 K:=1（s(z_1) == 1/12 ≤ m0:=1，数值定装零公设）＋阿基米德同位槽 Q 供给定理 sft_arch_le/sft_arch_hits（显式见证 K:=Z.to_nat(Qnum c)，2^K ≥ c）； *)
-(*   ② 几何尾和逐 eps 上界：单步差=残差（望远镜）＋半化衰减＋几何级数和，显式 N 见证；主件 sft_q2_newton_cauchy（Qabs(·−·) 作 metric 同位，对应 UpReqSqrtF §2 被注释的 sqrtf_newton_cauchy 目标语形，严格 lt 出口）； *)
-(*   ③ 方形非负位：接口层 nsq 假设位保持原样、不在此闭合（依原文判定）；Q 层同位件即 S02 Qsquare_nonneg 在册（本件 sft_q_square_nonneg 定名转发）。 *)
-(* 依赖：S01_BaseRing、S02_CauchyComplete（Qsquare_nonneg/QleT'/桥）、S13_NLiveAudit（qle_congr_l/r）、QstepConvergenceBound（QltT'/序小件）、UpReqSqrtF（宿主链）。 *)
-(* 对标：UpReqSqrtF §2 sqrtf_newton_cauchy 语形／§5 恒等式 g(y)² == 2 + s(y)²／§8 尾程三段结构；S02 Qsquare_nonneg 同位转发源。 *)
-(* 构造性：全件 Qed 闭合、零承认词面、无经典逻辑；出口 QleT'/QltT'/sigT Set 面；中间层 Prop(Qle/Qlt) 仅供内部，出口零 Prop 泄露。 *)
-(* 编译配方：source <toolchain>/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && cd <编译目录> && 并发限 1：rocq c -native-compiler no -q -Q <缓存根> "" abl_sqrtf_tail.v *)
+(* abl_sqrtf_tail.v — SqrtF 收敛链尾程三段（A7 未竟前沿·Q 层实例闭合）           *)
+(* 模块名：abl_sqrtf_tail                                                      *)
+(* 数学使命：UpReqSqrtF §8 尾程三段以供给定理闭合（A 报告 Top5·A7 路线照办）：     *)
+(*   ① 取档步：Q 层 sqrt2 Newton 具体实例显式 K:=1（s(z_1) == 1/12 ≤ m0:=1，      *)
+(*      数值定装零公设）＋阿基米德同位槽 Q 供给卷 sft_arch_hits（显式见证          *)
+(*      K:=Z.to_nat(Qnum c)，2^K ≥ c）；                                       *)
+(*   ② 几何尾和逐 eps 上界：单步差=残差（望远镜）＋半化衰减＋几何级数和，           *)
+(*      显式 N 见证；主件 sft_q2_newton_cauchy（Qabs(·−·) 作 metric 同位，        *)
+(*      对应 UpReqSqrtF §2 被注释的 sqrtf_newton_cauchy 目标语形，严格 lt 出口）； *)
+(*   ③ 方形阻隔位：接口层 nsq 槽禁攻（照 A 报告判定保持显式假设位原样）；             *)
+(*      Q 层同位件即 S02 Qsquare_nonneg 在册（本件 sft_q_square_nonneg 定名转发）。*)
+(* 依赖：S01_BaseRing、S02_CauchyComplete（Qsquare_nonneg/QleT'/桥）、S13_NLiveAudit *)
+(*   （qle_congr_l/r）、QstepConvergenceBound（QltT'/序小件）、UpReqSqrtF（宿主链）。 *)
+(* 构造性：全件 Qed 闭合、零承认词面、无经典逻辑；出口 QleT'/QltT'/sigT Set 面；    *)
+(*   中间腿 Prop(Qle/Qlt) 仅供内部，出口零 Prop 泄露。                           *)
+(* 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&              *)
+(*   ulimit -s 65532 && cd <池> && cpu_guard 包裹：                                *)
+(*   rocq c -native-compiler no -q -Q <缓存根> "" abl_sqrtf_tail.v                *)
 (* ========================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith ZArith.ZArith Lia.
@@ -128,7 +136,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1 阿基米德同位槽 Q 供给定理（取档步配方位）：显式见证 2^K ≥ c       *)
+(* §1 阿基米德同位槽 Q 供给卷（取档步配方位）：显式见证 2^K ≥ c       *)
 (* ============================================================ *)
 
 Fixpoint sft_p2 (k : nat) : Q :=
@@ -236,7 +244,7 @@ Qed.
 
 Definition sft_arch_witness (c : Q) : nat := Z.to_nat (Qnum c).
 
-(* 阿基米德同位槽 Q 供给定理：显式见证 K := Z.to_nat (Qnum c)，2^K ≥ c。
+(* 阿基米德同位槽 Q 供给卷：显式见证 K := Z.to_nat (Qnum c)，2^K ≥ c。
    （接口层取档步所缺的阿基米德公设位，在 Q 层构造性供给。） *)
 Lemma sft_arch_le : forall c : Q, Qlt 0 c -> Qle c (sft_p2 (sft_arch_witness c)).
 Proof.
@@ -399,7 +407,7 @@ Qed.
 (* ============================================================ *)
 (* §3 Q 层 sqrt2 Newton 实例与取档步（显式 K:=1）                   *)
 (*    方形墙 Q 同位件（S02 Qsquare_nonneg 定名转发）置首——§4 压缩链    *)
-(*    的 t² ≥ 0 由它供给（接口层 nsq 假设位不闭合的可行残形）。             *)
+(*    的 t² ≥ 0 由它供给（接口层 nsq 槽禁攻的可行残形）。             *)
 (* ============================================================ *)
 
 Lemma sft_q_square_nonneg : forall q : Q, Qle 0 (q * q).
@@ -490,7 +498,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 压缩链：§5 恒等式同位 + 平方下界（非负性事实在此引入）+ 半化衰减       *)
+(* §4 压缩链：§5 恒等式同位 + 平方下界（阻隔位在此接入）+ 半化衰减       *)
 (* ============================================================ *)
 
 Lemma sft_q2_step_eq : forall y : Q, ~ (y == 0) -> Qeq (sft_q2_step y) ((y * y + 2) / (2 * y)).
@@ -563,7 +571,7 @@ Proof.
   - exact Hm.
 Qed.
 
-(* 平方下界：z_n² ≥ 2（n ≥ 1）——逐步 = 2 + s(z_n)²，非负性事实 s² ≥ 0 供给 *)
+(* 平方下界：z_n² ≥ 2（n ≥ 1）——逐步 = 2 + s(z_n)²，阻隔位 s² ≥ 0 供给 *)
 Lemma sft_q2_z_sq_ge : forall n : nat, (1 <= n)%nat -> Qle 2 (sft_q2_newton n * sft_q2_newton n).
 Proof.
   induction n as [| n IH]; intro Hn.
@@ -587,7 +595,7 @@ Proof.
         -- apply sft_q_square_nonneg.
 Qed.
 
-(* s(step y) ≥ 0：由压缩恒等式 s(g) == s(y)²/(2g) 与非负性事实 *)
+(* s(step y) ≥ 0：由压缩恒等式 s(g) == s(y)²/(2g) 与阻隔位 *)
 Lemma sft_q2_slack_step_nonneg : forall y : Q, Qlt 0 y -> Qle 0 (sft_q2_slack (sft_q2_step y)).
 Proof.
   intros y Hy.
@@ -938,8 +946,8 @@ Proof.
   - exact Hfin.
 Qed.
 
-(* 方形非负位定格：接口层 nsq_square_nonneg 假设位（UpReqSqrtF.v:693，
-   le zero (mult t t)）保持显式假设位原样——本件不闭合该位；其可行残形即
+(* 方形阻隔位定格：接口层 nsq_square_nonneg 槽（UpReqSqrtF.v:693，
+   le zero (mult t t)）保持显式假设位原样——本件禁攻；其可行残形即
    Q 层同位件 sft_q_square_nonneg（S02 Qsquare_nonneg 定名转发，
    §4 压缩链的 s² ≥ 0 与 (y-1)² ≥ 0 均由它供给）。 *)
 

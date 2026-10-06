@@ -1,32 +1,78 @@
 (* ==========================================================================)
    abl_mixchain_step_calc.v — 收敛计算器系列第四件（MixTimeChain 面，mtc2_ 前缀）
-   使命：MixTimeChain.v 的 mtc_ 链（率双证书在案、主件 mtc_attention_mixing_time_local 吃通用选择器
-      mix_k_select、端到端推论 mtc_mixing_time_cauchy_exp）缺「精度到步数」Defined 计算器。本件补齐
-      三段：率抽取（kappa := tv_omd delta_star := tv_omd(lo·lo)、lo := expf(invT·opp Delta) 柯西面形）直
-      使用宿主出节双证书；通用率面计算器两代＋具体率计算器与 sigT 模量见证＋宿主主件双投影＋零
-      expf 前件柯西实例端到端读数三件＋nat 定点档十七件与 RI 泛型实面桥。
-   对标行：mathlib 马尔可夫链混合时间界（geometric drift）的构造性 Set 层对应物；MixTimeChain.v §2 MtcCauchySoftmax 证书面；同系列 mtg_k_calc/mti_amt_attention_mixing_time 体例。
-   三段主面：Part 2 nat 定点档（定点枚举与 correct/logface 两正确性、严格衰减三件、燃料充足性三件）；
-      Part 3 实面桥（幂分裂三件、逆唯一两件、nat 单调嵌入桥两件、有理数据实面正确性）；Part 1 具体面
-      逐形对应（率抽取双证书、通用率面计算器两代、具体率计算器三件、宿主主件双投影、柯西实例三件）。
-   Set 形纪律：语句面零 Prop——存在以 sigT、合取以 prod、nat 序界以 NatLe（NatLe_drop/NatLe_lift 双向桥）；
-      严格序界以 NatLe (S ·) 表达；实面比较以 real_lt/real_le（Set 层）；步数见证以 sigT nat；假设位零
-      Prop 型（real_lt/real_eq/NatLe 均 Set 值）；零 not/~/<> 书写面；零 Qeq 坑。
-   已知边界：mix_k_select 出节七参无 Arch 槽（实拍），mix_k_compute 仅需 budget 正性；实数 log 到 nat
-      ceil 的构造性桥库内确缺，实面正确性以有理数据 kappa:=p/q 闭合（有界精度档）；燃料充足性见证限
-      衰减域（half 域 2·p ≤ q 任意 E ≥ 1，qbound 域 E ≥ q−1 任意 p<q；p/q 逼近 1 且 E<q−1 时走步可
-      停滞）；nat 面 kappa=1/2 烟测读数 8、3/4 读数 10（手核逐行一致）。
-   依赖清单：S01_BaseRing–S04_RealExpLogConv（RealInterfaceEnhanced 面/le_mult_compat/r_pow_pos/
-      lt_le_iff/le_id_l/le_id_r/NatLe/NatLe_drop/NatLe_lift 等在役）；S03_QExp（cauchy_real_exp 实例族）；
-      Arch_PA_02（nat_to_R/nat_to_R_mult_hom）；UpTVDoeblin（tv_omd/tv_rpow）；UpReqMixingTime
-      （mix_k_select/mix_k_compute/mix_k_spec）；MixTimeChain（mtc_kappa_pos/mtc_kappa_lt_one/
-      mtc_attention_mixing_time_local/mtc_mixing_time_cauchy_exp）。Require-only 零改动。
-   构造性注记：纯构造性/Set 层零 Prop 语句面（步数见证 nat 面 sigT；误差谓词 real_lt/real_le 为 Set 层
-      值；nat 面算术不消入实面目标）；非平凡（mtc2_k_enum 为真 Fixpoint 上取整枚举）；可提取（Obj.magic=0
-      附加证）；零公理（尾 PA 全 Closed 预期）。工艺红线：term-mode 全显式实参（Id 面）；Eval vm_compute
-      烟测入日志；注释内禁右括号星杠字面。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930 "" abl_mixchain_step_calc.v（池内执行）。
-   查重登记：顶层名 40 枚全 mtc2_ 新前缀（宿主 MixTimeChain.v 在役 mtc_ 前缀；mtc2_ 全库 grep 零命中）。
+   使命: 按定量完备性矿脉表 K11/W7——MixTimeChain.v 的 mtc_ 链（率双证书
+     mtc_kappa_pos/mtc_kappa_lt_one 在案、主件 mtc_attention_mixing_time_local
+     吃通用选择器 mix_k_select、端到端推论 mtc_mixing_time_cauchy_exp）缺
+     「精度到步数」Defined 计算器。本件补齐三段:
+     率抽取（kappa := tv_omd delta_star、delta_star := lo·lo、
+     lo := expf(invT·opp Delta) 即 e^(-Delta/T) 柯西面形）直使用宿主出节双证书；
+     通用率面计算器两代（mtg_k_calc 同构 mix_k_select 形 + mix_k_compute
+     见证/证明分离提取形）；具体率上的计算器与 sigT 模量见证；宿主主件
+     projT1/projT2 双投影；零 expf 前件柯西实例（cauchy_real_exp 载体）
+     端到端读数三件；nat 定点档十七件（含燃料充足性见证）与 RI 泛型实面桥。
+   件名与前缀: abl_mixchain_step_calc.v，mtc2_ 前缀（施工前全库 grep 防撞:
+     mtc_ 为宿主 MixTimeChain.v 在役前缀，mtc2_ 零命中）。
+   覆盖核验: mtg 系（MixingTimeG2 的 mtg_k_calc 系 kappa 显式参数的泛型
+     模板，未实例化本面率）与 mti 系（MixTimeChainIface 的 mti_amt_
+     attention_mixing_time 走 ums_k_select 参数面适配桥，接口 Id 面单层
+     自洽）均不覆盖本面计算器位——矿脉表 K11「sigT k 裸见证明，无计算器」
+     结论现档复核仍成立，本件就地闭合，无转位。
+   本件陈述（三段，40 个 mtc2_ 常数）:
+     Part 2 nat 定点档（真 Fixpoint）: mtc2_ceil_div/mtc2_iter/mtc2_pow_iter/
+       mtc2_k_enum（有界燃料上取整衰减枚举）＋正确性两半
+       （mtc2_k_enum_correct 上取整面 / mtc2_k_enum_logface 精确面
+       x·p^N ≤ E·q^N，即 log 模量方程 nat 形）＋严格衰减三件
+       （mtc2_iter_lt_decay/lt_half/lt_q）＋燃料充足性见证三件
+       （mtc2_fuel_sufficient_gen/half/qbound，调用侧 Hterm 自动供给）
+       ＋mtc2_k_enum_auto_half。
+     Part 3 实面桥（RI 泛型 Section）: 幂分裂定律三件（mtc2_rpow_mult/
+       mtc2_nat_r_pow/mtc2_rpow_inv）＋逆唯一两件（mtc2_mult_one_l/
+       mtc2_inv_unique）＋nat 单调嵌入桥两件（mtc2_nat_le_plus_aux/
+       mtc2_nat_le_embed）＋mtc2_enum_real_correct（有理数据 kappa:=p/q
+       上枚举读数的实面 le 正确性，零 arch 依赖）。
+     Part 1 具体面对应形（MixTimeChain §2 证书子集对应形）: 率抽取双证书
+       （mtc2_rate_pos/mtc2_rate_lt_one，exact 直使用宿主出节件，出节实参
+       序经检验钉死: mtc_kappa_pos 八参/mtc_kappa_lt_one 四参）＋通用率面
+       计算器四件（mtc2_rate_step_calc/_correct 走 mix_k_select；
+       mtc2_rate_step_compute/_correct 走 mix_k_compute+mix_k_spec）＋
+       具体率计算器三件（mtc2_kappa_step_compute/_correct/
+       mtc2_kappa_modulus_sigT）＋宿主主件双投影三件（mtc2_mix_step_calc/
+       mtc2_mix_step_correct/mtc2_mixing_modulus_sigT）；文尾端到端柯西
+       实例三件（mtc2_cauchy_exp_step_calc/_correct/_modulus_sigT，
+       projT1/projT2 双投影 mtc_mixing_time_cauchy_exp，仅温度倒数与
+       logit 直径正性即可返回步数）。
+   Set 载体纪律（语句面零 Prop）: 存在以 sigT、合取以 prod、nat 序界以
+     NatLe（S01 的 leb 判定型 Set 载体，NatLe_drop/NatLe_lift 双向桥）；
+     严格序界以 NatLe (S ·) 表达；实面比较以 real_lt/real_le（Set 层）；
+     步数见证以 sigT nat。语句面零 Prop 版存在/合取/比较；假设位零 Prop 型
+     （real_lt/real_eq/NatLe 均 Set 值）；零 not/~/<> 书写面；零 Qeq 坑。
+   fail-loud 记录: 通用率面计算器的 Arch 型证书面在本面不受需——
+     mix_k_select 出节七参无 Arch 槽（检验实拍），mix_k_compute 仅需
+     budget 正性；实数 log 到 nat ceil 的构造性桥库内确缺（系列结论），
+     实面正确性以有理数据 kappa:=p/q 闭合（有界精度档）；燃料充足性
+     见证限衰减域（half 域 2·p ≤ q 任意 E ≥ 1，qbound 域 E ≥ q−1 任意
+     p<q；p/q 逼近 1 且 E < q−1 时上取整走步可停滞，属定点档固有边界）；
+     nat 面 kappa=1/2 烟测读数 8、kappa=3/4 读数 10（手核逐行一致）。
+   依赖: S01_BaseRing–S04_RealExpLogConv（RealInterfaceEnhanced 面/
+     le_mult_compat/r_pow_pos/lt_le_iff/le_id_l/le_id_r/NatLe/NatLe_drop/
+     NatLe_lift 等在役）；S03_QExp（cauchy_real_exp 载体族）；
+     Arch_PA_02（nat_to_R/nat_to_R_mult_hom）；UpTVDoeblin（tv_omd/
+     tv_rpow）；UpReqMixingTime（mix_k_select/mix_k_compute/mix_k_spec）；
+     MixTimeChain（mtc_kappa_pos/mtc_kappa_lt_one/mtc_attention_mixing_
+     time_local/mtc_mixing_time_cauchy_exp）。全部 Require-only 零改动，
+     Live/注册面/缓存根零触碰。
+   对标: mathlib 马尔可夫链混合时间界（geometric drift）的构造性 Set 层
+     对应物；同系列 mtg_k_calc/mti_amt_attention_mixing_time 的 MixTimeChain
+     面补全。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；误差谓词
+     real_lt/real_le 为 Set 层值；nat 面算术不消入实面目标）；非平凡
+     （mtc2_k_enum 为真 Fixpoint 上取整枚举）；可提取（Separate Extraction
+     Obj.magic=0 附加证）；零公理（尾 Print Assumptions 全 Closed 预期）。
+   工艺红线: term-mode 全显式实参（Id 面）；数值定装（Eval vm_compute
+     烟测入日志）；注释内禁右括号星杠字面。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q
+     vo_local_world_unified_0930 "" abl_mixchain_step_calc.v（池内执行）。
    ========================================================================== *)
 
 From Stdlib Require Import List.
@@ -47,7 +93,7 @@ From Stdlib Require Import Lia.
 (*   模量方程 log(a·kappa^N) ≤ log eps 的 nat 面：以 kappa=p/q（0<p<q）、 *)
 (*   初值 a=A、预算 eps=E 的公共尺度定点表示，枚举 N 使 A·p^N ≤ E·q^N。  *)
 (*   枚举器用上取整衰减步（ceil 除法保上界方向）。序界全走 NatLe         *)
-(*   Set 形（leb 判定型），严格序界以 NatLe (S ·) 表达。本段含严格        *)
+(*   Set 载体（leb 判定型），严格序界以 NatLe (S ·) 表达。本段含严格      *)
 (*   衰减与燃料充足性见证六件（调用侧 Hterm 供给面闭合）。               *)
 (* ============================================================ *)
 
@@ -99,7 +145,7 @@ Fixpoint mtc2_k_enum (fuel p q x e : nat) : nat :=
   end.
 
 (* 正确性（上取整面）：燃料内可达，枚举返回的 N 步处上取整值 ≤ e。
-   可达见证为 sigT＋prod＋NatLe 全 Set 形。 *)
+   可达见证为 sigT＋prod＋NatLe 全 Set 载体。 *)
 Theorem mtc2_k_enum_correct : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (mtc2_pow_iter p q x k) e))) ->
@@ -239,7 +285,7 @@ Proof.
 Qed.
 
 (* 燃料充足性（泛形）：凡预算以上走步严格递降，则 A 步燃料必达预算内。
-   结构归纳（燃料单调），见证 sigT＋prod＋NatLe 全 Set 形。 *)
+   结构归纳（燃料单调），见证 sigT＋prod＋NatLe 全 Set 载体。 *)
 Lemma mtc2_fuel_sufficient_gen : forall fuel p q x E,
   NatLe 1 q -> NatLe 1 E -> NatLe x fuel ->
   (forall y : nat, NatLe (Datatypes.S E) y ->
@@ -338,7 +384,7 @@ Eval vm_compute in (mtc2_k_enum 30 3 4 50 4).
 
 (* ============================================================ *)
 (* Part 3：实面桥——定点档计算器在具体有理数据上的实面正确性            *)
-(*   （RI 泛型 Section；nat 序界面以 NatLe Set 形承载，不消入实面        *)
+(*   （RI 泛型 Section；nat 序界面以 NatLe Set 载体承载，不消入实面      *)
 (*   目标——leb 判定＋差值等式 replace 的嵌入桥照系列模板滚转）          *)
 (* ============================================================ *)
 
@@ -443,7 +489,7 @@ Proof.
 Qed.
 
 (* nat 序界到实面 le 嵌入单调桥（库缺，系列滚转件）。
-   消除纪律：NatLe 形不消入实面目标——leb 判定分支＋差值等式
+   消除纪律：NatLe 载体不消入实面目标——leb 判定分支＋差值等式
    replace，nat 归纳走 Set 层加法辅助件，零 Prop 消除。 *)
 Lemma mtc2_nat_le_plus_aux : forall n m : nat, le (nat_to_R m) (nat_to_R (n + m)%nat).
 Proof.
@@ -556,7 +602,7 @@ Qed.
 End Mtc2EnumReal.
 
 (* ============================================================ *)
-(* Part 1：具体面逐形对应（MixTimeChain §2 MtcCauchySoftmax 证书子集）——   *)
+(* Part 1：具体面对应形（MixTimeChain §2 MtcCauchySoftmax 证书子集）——    *)
 (*   kappa := tv_omd delta_star、delta_star := lo·lo、                  *)
 (*   lo := expf(invT·opp Delta)。率双证书 exact 直使用宿主出节件；       *)
 (*   通用率面计算器两代（mix_k_select 形 + mix_k_compute 提取形）；      *)
@@ -578,7 +624,7 @@ Let lo := expf (real_mult invT (real_opp Delta)).
 Let delta_star := real_mult lo lo.
 Let kappa := tv_omd delta_star.
 
-(* ===== 率抽取双证书（exact 直使用宿主出节件；出节实参序经直接钉死：     *)
+(* ===== 率抽取双证书（exact 直使用宿主出节件；出节实参序经检验钉死：     *)
 (*   mtc_kappa_pos 八参、mtc_kappa_lt_one 出节最小化仅四参） ============ *)
 
 Lemma mtc2_rate_pos : real_lt real_zero kappa.
@@ -650,7 +696,7 @@ Proof.
   exact (mix_k_spec kappa TV0 budget mtc2_rate_pos mtc2_rate_lt_one Ha Hb).
 Qed.
 
-(* sigT 封装（率面）：精度预算到步数的见证型（mix_k_select_r1 同构：      *)
+(* sigT 封装（率面）：精度预算到步数的见证型（mix_k_select_r1 同构封装：  *)
 (*   witness=计算器读数、proof=正确性证书，projT1 归约固定） *)
 Theorem mtc2_kappa_modulus_sigT : forall (TV0 : Real)
   (Ha : real_lt real_zero TV0) (budget : Real) (Hb : real_lt real_zero budget),
@@ -693,7 +739,7 @@ Defined.
 End Mtc2FaceCalc.
 
 (* ===== 端到端柯西实例：零 expf 前件的计算器读数（宿主推论双投影） ======
-   以 cauchy_real_exp 实例消解 expf 迷你接口（宿主 mtc_mixing_time_cauchy_exp
+   以 cauchy_real_exp 载体消解 expf 迷你接口（宿主 mtc_mixing_time_cauchy_exp
    同款）：只需温度倒数与 logit 直径为正，计算器即返回步数。 *)
 
 Definition mtc2_cauchy_exp_step_calc (invT : Real)

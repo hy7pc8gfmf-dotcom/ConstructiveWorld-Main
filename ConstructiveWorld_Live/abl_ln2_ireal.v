@@ -1,10 +1,43 @@
 (* ===================================================================== *)
-(*  abl_ln2_ireal.v —— ln2 无理性链·Ireal_n 的 Real 包装本体 *)
-(*  使命: 链段 S6 主缺口「Ireal_n 本体」——Beukers 通道极点级数承载（lnt_ 接口）的 Real 层构造性包装：① 定义件 lnr_Ireal（nat -> Real，lnr_Ireal_pack 通用包装点）；② Cauchy 模量本体 lnr_cauchy（使用 lnt_gap_geo 几何尾界＋(3/4)^K Bernoulli 直界消失引擎 lnr_vanish；p=0 分支走 lnt_pterm_gap 的 4·u 形＋Archimedean 消失）；③ 正性/非负 Bishop 两形（lnr_Ireal_pos 严格正 / _notneg 否定形）；④ 相容闭合两件：existT 证明位异构 seal（lnr_Ireal_compat，real_eq_of_zero_diff 支）与 ri_identity_leg 迁移件（lnr_identity_leg_transfer，real_eq_trans 三实参两支）；⑤ supply 对接挂点（lni_supply_pair 改型 A_n:=L_n·q̃_n、B_n:=L_n·p_n 的线对象 lnr_lineL 与 Z 对 seal/scale 两件）。ri_identity_leg 本证（有限 M 换序恒等式）不在本件，以 lnr_identity_leg_transfer 留陈述级挂点（对接面后续施工）。§0′ 增工器件五件（预乘除正消元/除整分数 Qlt 交叉化与反单调/Qeq 传送）服务 vanish/cauchy/compat/transfer 各肢。 *)
-(*  依赖: Stdlib QArith/Qabs/Arith/ZArith/Lia；S01_BaseRing S02_CauchyComplete S03_QExp；HansonLcm BeukersLists BeukersVariant RealIdentity（ri_real/ri_lineabs/ri_identity_leg 面）PsQReindex（rx_Qlt_Z1）；池内拷贝件 abl_ln2_tail_bound（lnt_pterm/lnt_gap_geo/lnt_pterm_gap——同池编译副本）。 *)
-(*  对标: RealIdentity ri_Iface/ri_identity_assembly（输入面一经供给即实例化的装配件——本件即其 Ireal 输入面的首个构造性供体）；「Ireal_n 本体（I_n 的 Real 承载＋ri_identity_leg）」前半；「Ireal_n 的 Real 包装所需 Cauchy 模量＋vanish 的 Q 层输入」使用面；UpReqLn2Irrational ln2i_vanish 的消失配方。 *)
-(*  构造性: 全件 Qed、零承认；语句面全 Set（cauchy/real_eq/real_lt/sigT/QeqT/QltT/QleT'），Qle/Qlt 支撑引理仅 Prop 面作推理；vanish 见证为显式 nat（N := 2p + 3·2^{p+1}·den(eps) 配方）；可提取（文尾 Separate Extraction）；文尾 Print Assumptions 全 Closed。 *)
-(*  编译配方: source <toolchain>/env.sh && rocq c -native-compiler no -Q vo_local_world_unified_0930 ""（编译目录 ln2_ireal/，并发限 1；同池先编 abl_ln2_tail_bound.v）。 *)
+(*  abl_ln2_ireal.v —— ln2 无理性链·Ireal_n 的 Real 包装本体                *)
+(*  使命: 链段图 S6 主缺口「Ireal_n 本体」的首件——Beukers 通道         *)
+(*        极点级数载体（lnt_ 接口）的 Real 层构造性包装：              *)
+(*        ① 定义件 lnr_Ireal（nat -> Real，lnr_Ireal_pack 通用包装点）；    *)
+(*        ② Cauchy 模量本体 lnr_cauchy（使用 lnt_gap_geo 几何尾界 +         *)
+(*           (3/4)^K Bernoulli 直界消失引擎 lnr_vanish；p=0 分支走          *)
+(*           lnt_pterm_gap 的 4·u 形 + Archimedean 消失）；                 *)
+(*        ③ 正性/非负 Bishop 两形（lnr_Ireal_pos 严格正 / _notneg 否定形）； *)
+(*        ④ 相容闭合两件：existT 证明位异构 seal（lnr_Ireal_compat，        *)
+(*           real_eq_of_zero_diff 肢）与 ri_identity_leg 迁移件             *)
+(*           （lnr_identity_leg_transfer，real_eq_trans 三实参两肢——        *)
+(*           整分恒等 ∫1 读法同型）；                                        *)
+(*        ⑤ supply 对接挂点（lni_supply_pair 改型 A_n:=L_n·q̃_n、            *)
+(*           B_n:=L_n·p_n 的线对象 lnr_lineL 与 Z 对 seal/scale 两件）。    *)
+(*        ri_identity_leg 本证（有限 M 换序恒等式，路线③(ⅲ)）不在本件，     *)
+(*        以 lnr_identity_leg_transfer 留陈述级挂点给对接件。               *)
+(*  后续增量（原中断处按零损失协议续写）：断点 154 行     *)
+(*        （Qinv 对符号 Z 分子 match 阻滞→lia 无见证）起修复；§0′ 增工器件     *)
+(*        五件（预乘除正消元/除整分数 Qlt 交叉化与反单调/Qeq 传送），vanish/  *)
+(*        cauchy p=0/compat/transfer（语句形修正为 ri_Iface 族）/hlcm 六处   *)
+(*        修复，订正与修复记录见卷内注记。      *)
+(*  依赖: Stdlib QArith/Qabs/Arith/ZArith/Lia；S01_BaseRing S02_Cauchy-    *)
+(*        Complete S03_QExp；HansonLcm BeukersLists BeukersVariant          *)
+(*        RealIdentity（ri_real/ri_lineabs/ri_identity_leg 面）PsQReindex   *)
+(*        （rx_Qlt_Z1）；池内拷贝件 abl_ln2_tail_bound（lnt_pterm/          *)
+(*        lnt_gap_geo/lnt_pterm_gap——池内件的同池编译副本，并 入波须      *)
+(*        同收，见依赖件 diff 节）。                                      *)
+(*  对标: RealIdentity ri_Iface/ri_identity_assembly（输入面一经供给即      *)
+(*        实例化的装配件——本件即其 Ireal 输入面的首个构造性供体）；链段图   *)
+(*        S6 段「Ireal_n 本体（I_n 的 Real 承载＋ri_identity_leg）」前半；   *)
+(*        接口图「Ireal_n 的 Real 包装所需 Cauchy 模量＋vanish   *)
+(*        的 Q 层输入」使用面；UpReqLn2Irrational ln2i_vanish 的消失配方。   *)
+(*  构造性: 全件 Qed、零承认；语句面全 Set（cauchy/real_eq/real_lt/sigT/    *)
+(*        QeqT/QltT/QleT'），Qle/Qlt 支撑引理仅 Prop 面作推理；vanish 见证  *)
+(*        为显式 nat（N := 2p + 3·2^{p+1}·den(eps) 配方）；可提取           *)
+(*        （文尾 Separate Extraction）；文尾 Print Assumptions 全 Closed。   *)
+(*  编译配方: <Live>/toolchain/env.sh && rocq c -native-compiler no -Q      *)
+(*        vo_local_world_unified_0930 ""（独占沙箱池 ln2_ireal/，道闸≤1；    *)
+(*        同池先编 abl_ln2_tail_bound.v）。                                 *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith ZArith.ZArith Lia.
@@ -62,9 +95,9 @@ Proof.
 Qed.
 
 (* ------------------------------------------------------------------ *)
-(* §0′ 工器件： *)
-(*   成因：Qinv 对符号 Z 分子受阻（match (Z.of_nat _ + _) 不归约），          *)
-(*   直排 lia/nia 面对不归约 match 即「Cannot find witness」。                  *)
+(* §0′ 后续增量工器件（原中断修复后新增）：                              *)
+(*   矿因：Qinv 对符号 Z 分子阻滞（match (Z.of_nat _ + _) 不归约），          *)
+(*   直排 lia/nia 面对阻滞 match 即「Cannot find witness」。                  *)
 (*   对策两类：                                                              *)
 (*   ① 除正消元（lnr_qdiv_lt_intro_pre）：Qinv 经 lnt_qinv_mul_cancel        *)
 (*      与 dv 自身对消，全程免 Qinv 归一化；                                  *)
@@ -88,7 +121,7 @@ Proof.
   - apply qeq_le. exact Hyz.
 Qed.
 
-(* QltT 左端传送（QltT 为 Id 面无 Proper 实例：
+(* QltT 左端传送（QltT 为 Id 面无 Proper 实例——AU 坑卡#1 同款：
    Qeq 不得 rewrite 进 QltT 目标，一律以传送件代之） *)
 Lemma lnr_qltT_transfer_l : forall x y z : Q, Qeq x y -> QltT y z -> QltT x z.
 Proof.
@@ -106,7 +139,7 @@ Proof.
 Qed.
 
 (* 预乘形除正消元：0 < dv 且 a·b < eps·dv ⟹ a·(b·dv⁻¹) < eps。
-   （Qinv 不归一化：dv⁻¹·dv 对消经 lnt_qinv_mul_cancel，两支 Qeq 传送） *)
+   （Qinv 不归一化：dv⁻¹·dv 对消经 lnt_qinv_mul_cancel，两肢 Qeq 传送） *)
 Lemma lnr_qdiv_lt_intro_pre : forall a b eps dv : Q,
   Qlt 0 dv -> Qlt (a * b) (eps * dv) -> Qlt (a * (b * Qinv dv)) eps.
 Proof.
@@ -154,13 +187,13 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §A Q 层承载：极点级数部分和                                             *)
+(* §A Q 层载体：极点级数部分和                                             *)
 (* ============================================================ *)
 
-(* 承载序列：lnr_psum p M := Σ_{k<S M} u(p,k)，u = lnt_pterm *)
+(* 载体序列：lnr_psum p M := Σ_{k<S M} u(p,k)，u = lnt_pterm（lnt_ 对象） *)
 Definition lnr_psum (p M : nat) : Q := sum_upto (Datatypes.S M) (lnt_pterm p).
 
-(* 首项读出：S_0 = u(p,0)（严格正下界基例） *)
+(* 首项读出：S_0 = u(p,0)（严格正下界锚） *)
 Lemma lnr_psum_head : forall p : nat, lnr_psum p 0 == lnt_pterm p 0.
 Proof.
   intro p. unfold lnr_psum. cbn [sum_upto]. ring.
@@ -317,7 +350,7 @@ Proof.
   - apply qeq_le. ring.
 Qed.
 
-(* ★ 本体①：承载序列的 Cauchy 性（p ≥ 1 几何档 / p = 0 Archimedean 档） *)
+(* ★ 本体①：载体序列的 Cauchy 性（p ≥ 1 几何档 / p = 0 Archimedean 档） *)
 Theorem lnr_cauchy : forall p : nat, cauchy (lnr_psum p).
 Proof.
   intro p. destruct p as [| p'].
@@ -476,18 +509,18 @@ Proof.
       * apply QltT_to_Qlt. apply Hv. lia.
 Qed.
 
-(* 通用包装点：任意柯西有理序列的 Real 包装（existT 证明位自由） *)
+(* 通用包装点：任意柯西有理序列的 Real 包装（AU 坑卡：existT 证明位自由） *)
 Definition lnr_Ireal_pack (u : Qseq) (Hu : cauchy u) : Real :=
   existT (fun u : Qseq => cauchy u) u Hu.
 
-(* ★ 本体②：Ireal_n 定义件——极点级数承载的 Real 包装 *)
+(* ★ 本体②：Ireal_n 定义件——极点级数载体的 Real 包装 *)
 Definition lnr_Ireal (p : nat) : Real := lnr_Ireal_pack (lnr_psum p) (lnr_cauchy p).
 
 (* 投影读出：包装不改变逐点读数 *)
 Lemma lnr_Ireal_proj : forall (p k : nat), projT1 (lnr_Ireal p) k == lnr_psum p k.
 Proof. intros p k. reflexivity. Qed.
 
-(* ★ 相容闭合（第一支，real_eq_of_zero_diff）：任何以同一 Q 层承载为读数、
+(* ★ 相容闭合（第一肢，real_eq_of_zero_diff）：任何以同一 Q 层载体为读数、
    自备 Cauchy 见证的再包装，与 lnr_Ireal p 实数相等——existT 证明位异构的 seal *)
 Lemma lnr_Ireal_compat : forall (p : nat) (u : Qseq) (Hu : cauchy u),
   (forall k : nat, u k == lnr_psum p k) ->
@@ -531,10 +564,10 @@ Proof.
   exact (real_lt_trans (lnr_Ireal p) real_zero (lnr_Ireal p) Hlt (lnr_Ireal_pos p)).
 Qed.
 
-(* ★ 相容闭合（第二支，real_eq_trans 三实参两支）：
+(* ★ 相容闭合（第二肢，real_eq_trans 三实参两肢——整分恒等 ∫1 读法同型）：
    ri_identity_leg 沿 real_eq 迁移——任何与 lnr_Ireal p 实数相等的再包装，
-   只要在 lnr_Ireal p 上证得恒等式支，即得自身上的恒等式支（S6 对接主挂点：
-   有限 M 换序证明于 lnr_Ireal 面的 ri_identity_leg 后，合成面任意取形） *)
+   只要在 lnr_Ireal p 上证得恒等式腿，即得自身上的恒等式腿（S6 对接主挂点：
+   有限 M 换序证 lnr_Ireal 面的 ri_identity_leg 后，装配面任意取形） *)
 Theorem lnr_identity_leg_transfer : forall (I : ri_Iface),
   (forall p : nat, real_eq (I p) (lnr_Ireal p)) ->
   ri_identity_leg lnr_Ireal -> ri_identity_leg I.
@@ -549,7 +582,7 @@ Qed.
 (* §E supply 对接挂点（lni_supply_pair 改型 A_n := L_n·q̃_n、B_n := L_n·p_n） *)
 (* ============================================================ *)
 
-(* 改型分子对（Q 面，与前件 lni_supply_pair 见证 z#1/w#1 的 QeqT 对形） *)
+(* 改型分子对（Q 面，与 lni_supply_pair 见证 z#1/w#1 的 QeqT 对形） *)
 Definition lnr_lA (n : nat) : Q :=
   (Z.of_nat (hl_lcm_upto n) # 1)%Q * (Z.of_nat (bk_Qn_qtilde n) # 1)%Q.
 Definition lnr_lB (n : nat) : Q :=
@@ -608,7 +641,7 @@ Proof.
 Qed.
 
 (* ★ supply 挂点一（Z 对 seal）：lni_supply_pair 见证 (z,w) 经 QeqT 对形后，
-   线对象逐点等于整数系数线——合成面可用 z,w 直读 *)
+   线对象逐点等于整数系数线——装配面可用 z,w 直读 *)
 Lemma lnr_supply_pair_hook : forall (n : nat) (z w : Z),
   QeqT (lnr_lA n) ((z # 1)%Q) -> QeqT (lnr_lB n) ((w # 1)%Q) ->
   real_eq (lnr_lineL n)
@@ -629,7 +662,7 @@ Proof.
 Qed.
 
 (* ★ supply 挂点二（L 线缩放）：|L·q̃·X − L·p| == L·|q̃·X − p|
-   （L := lcm(1..n) > 0；θ 档预算与 clo 下界的归一基线） *)
+   （L := lcm(1..n) > 0；θ 档预算与 clo 下界对接件的归一基线） *)
 Lemma lnr_lineL_scale : forall n : nat,
   real_eq (lnr_lineL n)
           (real_mult (real_const ((Z.of_nat (hl_lcm_upto n) # 1)%Q)) (lnr_lineq n)).
@@ -661,24 +694,24 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §F 数值判定组（vm_compute 经投影精确判定）                                 *)
+(* §F 数值锚组（vm_compute 经投影精确判定）                                 *)
 (* ============================================================ *)
 
-(* 承载判定（p=1 几何档首四项 1/2+1/4+1/8+1/16 = 15/16） *)
+(* 载体锚（p=1 几何档首四项 1/2+1/4+1/8+1/16 = 15/16） *)
 Theorem lnr_psum1_anchor : QeqT (lnr_psum 1 3) (15 # 16)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 承载判定（p=0 前三项 1/2+1/8+1/24 = 2/3） *)
+(* 载体锚（p=0 前三项 1/2+1/8+1/24 = 2/3） *)
 Theorem lnr_psum0_anchor : QeqT (lnr_psum 0 2) (2 # 3)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 尾界判定（g(1,1) = 2²·(3/4)⁰ = 4） *)
+(* 尾界锚（g(1,1) = 2²·(3/4)⁰ = 4） *)
 Theorem lnr_gapbound1_anchor : QeqT (lnr_gapbound 1 1) (4 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(* 改型分子对判定（实算定装：L_1=hl_lcm_upto 1=1, q̃_1=3, p_1=bv_p 1=4#2
+(* 改型分子对锚（实算定装：L_1=hl_lcm_upto 1=1, q̃_1=3, p_1=bv_p 1=4#2
    ⟹ A_1=3、B_1=4#2）——QeqT 面 Set 级，不得入 Prop 合取（Set/Prop 混层），
-   拆为两件；前稿 A_1=6/B_1=4 系 L_n 错位编号的臆值，本件实算勘正 *)
+   拆为两件；前稿 A_1=6/B_1=4 系沿 BD 报告 L_n 错位编号的臆值，本派实算勘正 *)
 Theorem lnr_lA1_anchor : QeqT (lnr_lA 1) (3 # 1)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
@@ -686,7 +719,7 @@ Theorem lnr_lB1_anchor : QeqT (lnr_lB 1) (4 # 2)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* 可提取验证（Set 层 witness 面）                                          *)
+(* 可提取闭合（Set 层 witness 面）                                          *)
 (* ============================================================ *)
 
 Separate Extraction lnr_psum lnr_gapbound lnr_lA lnr_lB.

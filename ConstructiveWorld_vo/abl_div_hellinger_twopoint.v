@@ -1,7 +1,7 @@
 (* ============================================================ *)
 (* abl_div_hellinger_twopoint.v                                   *)
 (* 模块名：abl_div_hellinger_twopoint                              *)
-(* 数学使命：两点分布 Hellinger² ≤ KL₂ 见证形（f-散度海峡成桥系列     *)
+(* 数学使命：两点分布 Hellinger² ≤ KL₂ 见证形（f-散度海峡成桥接件单     *)
 (*   第 3 件）——H² := (√p−√q)²+(√(1−p)−√(1−q))² 以四正 witness      *)
 (*   (sp,sq,sp1,sq1)（平方方程+正性证书随件）承载，亲核 Σ√(pᵢqᵢ)      *)
 (*   用 sp·sq 多项式形（见证乘法免二次开方：√(pq) 直接取 sp·sq，     *)
@@ -11,15 +11,17 @@
 (*   log 方根替换桥（real_log_wd）、见证乘法闭合（real_inv_unique）、  *)
 (*   kl 的二倍根比分 liar 恒等、pnt 运输互认、eps 形出口、Bishop 非负、  *)
 (*   等号侧（KL₂==0⟹H²==0）、sqrt 见证提取供弹位（AttnSqrt）与        *)
-(*   四见证合并推论。                                                *)
+(*   四见证封装推论。                                                *)
 (* 依赖清单：件 1 abl_div_chisq_twopoint（d2_two/d2_two_pos/d2_ring_eq）*)
 (*   +件 2 abl_div_kl_chisq_twopoint（dkc_kl2_eq_gaps/dkc_kl2_pnt_eq）, *)
 (*   PinskerTwoPoint（p2_tvsq/p2_diff/p2_one_minus/p2_kl2）、        *)
-(*   S03/S07/S08（inv/log 基座）、UpRealLeB（real_le_b/               *)
+(*   S03/S07/S08（inv/log 基座：real_log_mult/real_log_wd/           *)
+(*   real_inv_unique/real_inv_pos_correct）、UpRealLeB（real_le_b/    *)
 (*   real_log_le_linear_B/real_square_nonneg_B）、UpRealLeB2（和兼容）、  *)
 (*   UpRealLeB3（leb3_eq_l/eq_r/opp_rev/pos_scale_l）、G08_Gibbs       *)
 (*   （gibbe2_le_b_antisym 等号侧）、UpReqPinskerTransport（pnt_kl2）、   *)
-(*   UpReqTrainingEquiv（real_log_inv_pos_opp）、AttnSqrt（见证提取）。   *)
+(*   UpReqTrainingEquiv（real_log_inv_pos_opp）、AttnSqrt              *)
+(*   （real_sqrt_exists 见证提取）。                                  *)
 (* 构造性注记：全件 Set 层出口；非严格序一律 Bishop 形 real_le_b（零 Or  *)
 (*   形出口）；inv 证书逐点穿线（real_inv_pos 证书位显式随行）；        *)
 (*   零承认式语句、零经典公理、全部 Qed 闭合。                        *)
@@ -883,9 +885,9 @@ Proof.
 Qed.
 
 (* ---- 9. 主件：H² ≤_B KL₂（两点，Bishop 形出口，零 Or 分支） ---- *)
-(*   双支逐点核（件 8）plus_compat 合流 + dkc_kl2_eq_gaps（引用件 2）    *)
+(*   双肢逐点核（件 8）plus_compat 合流 + dkc_kl2_eq_gaps（件 2 使用）    *)
 (*   回代闭合。kl₂ == gap1+gap2 与 H² == H项1+H项2 的归一化对消都在       *)
-(*   各支内部完成，主件纯组装。                                          *)
+(*   各腿内部完成，主件纯组装。                                          *)
 
 Theorem dhe_h2_le_kl2 : forall (p q sp sq sp1 sq1 : Real)
   (Hp : real_lt real_zero p) (Hq : real_lt real_zero q)
@@ -1009,9 +1011,9 @@ Proof.
            (dhe_h2_nonneg p q sp sq sp1 sq1)).
 Qed.
 
-(* ---- 14. sqrt 见证提取供给位（AttnSqrt 使用）：0<d ⟹ 正 witness ---- *)
+(* ---- 14. sqrt 见证提取供弹位（AttnSqrt 使用）：0<d ⟹ 正 witness ---- *)
 (*   real_sqrt_exists 给 (r, 0≤r ∧ r·r==d)；r==0 情形经 d==0 与        *)
-(*   real_lt_irrefl 矛盾排除，得 0<r。                                  *)
+(*   real_lt_irrefl 矛盾排除，闭合为 0<r。                              *)
 
 Theorem dhe_sqrt_witness : forall (d : Real) (Hd : real_lt real_zero d),
   sigT (fun r : Real =>
@@ -1041,7 +1043,7 @@ Proof.
              (RealSetoid.real_lt_id_r real_zero d real_zero Hdz Hd) with end).
 Qed.
 
-(* ---- 15. 四见证合并推论：正 p,q ⟹ 见证存在 ∧ H² ≤_B KL₂ 同束 ---- *)
+(* ---- 15. 四见证封装推论：正 p,q ⟹ 见证存在 ∧ H² ≤_B KL₂ 同束 ---- *)
 (*   （AttnSqrt 提取四正 witness + 主件直接组装——「四见证乘法免二次       *)
 (*     开方」端到端：全程只调一次 sqrt_exists/支，无再开方。）            *)
 

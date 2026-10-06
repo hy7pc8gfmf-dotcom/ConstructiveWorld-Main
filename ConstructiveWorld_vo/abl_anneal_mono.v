@@ -1,32 +1,36 @@
 (* ==========================================================================)
-   abl_anneal_mono.v — 退火静态前置：δ*(T) 与步数预算对温度 T 的单调面
-   使命：退火静态前置三件套——只做静态单调偏序面，退火动态调度不在本件。
-      【ANM-1 核件】δ*(T) 对 T 单调：T ≤ T'（同正温）⟹ δ*(T) ≤ δ*(T')，δ*(T) :=
-      e^{−c/T}、c := 2Δ 显式（锚点实拍：AttnDoeblin BoundedSoftmax 区 δ* := lo·lo、
-      lo := e^{−Δ/T}、δ* = e^{−2Δ/T}，:693 bs_minorization 区）。温度降 ⟹ δ* 降。
-      【ANM-2..4 衔接链】rate(T) := 1 − δ*(T) 随 T 升而降（乘法换向＋pow 单调）：
-      T ≤ T' ⟹ rate(T')ⁿ ≤ rate(T)ⁿ（S04 r_pow 口径）。
-      【ANM-5/6 静态步数面】预算传递件（「存在单调上界 k̃」形的构造性闭合）：
-      若 k 步静态界 (1−δ*(T))^k·TV0 ≤ budget 关住预算（冷端），则同一 k 在 T' ≥ T
-      （热端）亦关住。方向如实记录：温度升 ⟹ 步数降（k 对 T 反单调）；冷端
-      见证是热端见证；min-k 选择子反单调件不在本件（零使用计算器）。
-   依赖清单：本库 S01_BaseRing（RealInterfaceEnhanced：exp_neg 族单调字段
-      exp_neg_le_decr/exp_neg_decr、inv_pos_le_compat 反变、opp_le_compat、
-      le_mult_compat(_weak/_r)）；S04_RealExpLogConv（Fixpoint r_pow，RI 泛型）；
-      零 AttnDoeblin Require（第二 Section 按宿主 expf 接口逐形对应 drop-in：
-      temp/Delta/z/expf 五槽实例化 T := temp 即得 bs δ* 同物）。
-   对标行：AttnDoeblin BoundedSoftmax 区 :693 bs_minorization 坐标与 bs_lo_hi_eq
-      代数面；S04 L325 严格从弱登记；S04 r_pow 口径。
-   构造性注记：语句全 Set 层（le/lt 为接口 Set 值谓词；存在性用 sigT；无 Prop 层
-      or/exists/Not 语句面）；证明全 term-mode 组装（两处 nat 归纳例外用
-      induction/simpl，零 rewrite）；零承认词面、零经典逻辑、零新增公理——单调性
-      数据全取自接口字段（exp_neg_le_decr 等，由实例供给，与宿主 expf_mono_le
-      同地位）；无否定记号词，前提一律 forall 显式。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s
-      65532 && nice -19 rocq c -native-compiler no -Q
-      /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_0930 ""
-      abl_anneal_mono.v（池内平铺，并发 1＝单进程串行；验证＝EXIT=0＋PA 全 Closed）。
-   查重登记：顶层名 24 枚全 anm_ 前缀零重名，与库内既占前缀零撞零别名转发。
+   abl_anneal_mono.v —— 退火静态前置：δ*(T) 与步数预算对温度 T 的单调面（清单 A2）
+   使命: 按既定定理清单 A2（温度窗注意力面 §③A2）
+     落「退火静态前置」三件套——只做静态单调偏序面，退火动态调度留给停时线：
+     【ANM-1 核件】δ*(T) 对 T 单调：T ≤ T'（同正温）⟹ δ*(T) ≤ δ*(T')，其中
+       δ*(T) := e^{−c/T}、c := 2Δ = plus Delta Delta 显式（锚点实拍：AttnDoeblin
+       BoundedSoftmax 区 δ* := lo·lo、lo := e^{−Δ/T}、δ* = e^{−2Δ/T}，:693
+       bs_minorization 区；实参表勘正在案）。退火语义即：温度降 ⟹ δ* 降。
+     【ANM-2..4 衔接链】rate(T) := 1 − δ*(T) 随 T 升而降（乘法换向 + pow 单调）：
+       T ≤ T' ⟹ rate(T')ⁿ ≤ rate(T)ⁿ（S04 r_pow 口径）。
+     【ANM-5/6 静态步数面】预算传递件（「存在单调上界 k̃」形，即 S 报告 A2 存疑 4
+       预案的构造性闭合）：若 k 步静态界 (1−δ*(T))^k·TV0 ≤ budget 关住预算（冷端），
+       则同一 k 在 T' ≥ T（热端）亦关住。方向如实记录：本模型下温度升 ⟹ 步数降
+       （k 对 T 反单调）；冷端见证是热端见证。min-k 选择子的选择面反单调件待
+       k_select 单调面在册后一行衔接（BW 进行中件依令不依赖，本件零使用计算器）。
+   依赖: 本库 S01_BaseRing（RealInterfaceEnhanced：exp_neg 族单调字段
+     exp_neg_le_decr/exp_neg_decr、inv_pos_le_compat 反变、opp_le_compat、
+     le_mult_compat(_weak/_r)）；S04_RealExpLogConv（Fixpoint r_pow，RI 泛型）。
+     零 AttnDoeblin Require：第二 Section 按宿主 expf 接口逐形对应（drop-in：
+     以 AttnDoeblin 的 temp/Delta/z/expf 五槽实例化 T := temp 即得 bs δ* 同物）。
+     语出: 温度窗注意力面 §③A2 + §⑥存疑4；
+     相关件注记预读：AM（δ* 链实参表）、BH（Qinv 冻结——本件走 Real 接口层
+     inv_pos，零 Qinv 归一化，坑位不触）、AL（term-mode 全程零 rewrite）、
+     BB（编译配方与 q_scope 坑——本件无 Q 字面）、S 报告（A2 草案与存疑）。
+   构造性: 语句全 Set 层（le/lt 为接口 Set 值谓词；存在性用 sigT；无 Prop 载体
+     or/exists/Not 语句面）；证明全 term-mode 组装（唯一例外两处 nat 归纳用
+     induction/simpl，零 rewrite）；零承认词面、零经典逻辑、零新增公理——
+     全部单调性数据取自接口字段（exp_neg_le_decr 等，由实例供给，与宿主
+     expf_mono_le 同地位）；无否定记号词，前提一律 forall 显式。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no
+     -Q /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_0930 ""
+     abl_anneal_mono.v（池内平铺，道闸 1＝单进程串行，禁触缓存根写入面）。
    ========================================================================== *)
 
 Require Import S01_BaseRing.
@@ -74,7 +78,7 @@ Proof. exact (plus_positive Delta Delta Delta_pos Delta_pos). Qed.
 Lemma anm_two_Delta_nonneg : le zero anm_two_Delta.
 Proof. exact (lt_le_iff zero anm_two_Delta (inl anm_two_Delta_pos)). Qed.
 
-(* 正温倒数反变（inv_pos_le_compat 接口字段直落；零 Qinv 归一化） *)
+(* 正温倒数反变（inv_pos_le_compat 接口字段直落；零 Qinv 位，BH 坑不触） *)
 Lemma anm_inv_antitone : forall (T T' : R) (HT : lt zero T) (HT' : lt zero T'),
   le T T' -> le (inv_pos T' HT') (inv_pos T HT).
 Proof.
@@ -85,7 +89,7 @@ Qed.
 (* ===== ANM-1 核件：δ*(T) 对 T 单调（温度降 ⟹ δ* 降） =====
    链：T ≤ T' ⟹ 1/T' ≤ 1/T（倒数反变）⟹ 2Δ/T' ≤ 2Δ/T（乘正数保序）
        ⟹ e^{−2Δ/T} ≤ e^{−2Δ/T'}（exp_neg_le_decr 反单调）。
-   非平凡：负指数换向经倒数反变与 exp 反单调两级。 *)
+   非平凡：负指数换向经倒数反变与 exp 反单调两级；S 清单 A2 首件。 *)
 Theorem anm_dst_mono : forall (T T' : R) (HT : lt zero T) (HT' : lt zero T'),
   le T T' -> le (anm_dst T HT) (anm_dst T' HT').
 Proof.
@@ -129,8 +133,8 @@ Proof.
 Qed.
 
 (* rate(T) = 1 − δ*(T) ≥ 0：由 δ* ≤ 1 经 opp 反变＋加法弱保序；
-   注：严格形 0 < rate 需「严格从弱」加法产生子，接口层暂缺（S04 L325
-   登记），本件静态面只需弱形。 *)
+   注：严格形 0 < rate 需「严格从弱」加法产生子＝在册接口层结构墙
+   （S04 L325 墙族登记·RW-MIX 同款），本件静态面只需弱形——零墙使用。 *)
 Lemma anm_rate_nonneg : forall (T : R) (HT : lt zero T), le zero (anm_rate T HT).
 Proof.
   intros T HT. unfold anm_rate, minus.
@@ -154,7 +158,7 @@ Proof.
               (anm_dst_mono T T' HT HT' Hle))).
 Qed.
 
-(* 幂非负（le zero r ⟹ (r)^n ≥ 0；S04 r_pow 口径，弱形自足） *)
+(* 幂非负（le zero r ⟹ (r)^n ≥ 0；S04 r_pow 口径，弱形自足零墙） *)
 Lemma anm_rpow_nonneg : forall (r : R), le zero r ->
   forall n : nat, le zero (r_pow r n).
 Proof.
@@ -221,9 +225,9 @@ Proof.
             Hk).
 Qed.
 
-(* ===== ANM-6 sigT 形（「存在单调上界 k̃」形的构造性闭合） =====
+(* ===== ANM-6 sigT 形（「存在单调上界 k̃」形，S 报告 A2 存疑 4 预案） =====
    冷端有 k 步关住预算的见证 ⟹ 热端有同一 k 的见证——Set 层存在性传递，
-   零 k_select 使用。 *)
+   零 k_select 使用（BW 进行中计算器依令不依赖）。 *)
 Theorem anm_budget_transport_sigT : forall (T T' : R) (HT : lt zero T) (HT' : lt zero T'),
   le T T' -> forall (TV0 budget : R), le zero TV0 ->
   sigT (fun k : nat => le (mult (r_pow (anm_rate T HT) k) TV0) budget) ->
@@ -241,7 +245,7 @@ End AnmAnnealMono.
 (*   anm_e_lo(T) := expf(invT·(−Δ)) ＝ AttnDoeblin lo := expf(mult invT    *)
 (*   (opp Delta)) 的 T 参化；anm_e_dst(T) := lo·lo ＝ 宿主 delta_star      *)
 (*   同形。以 AttnDoeblin 的 temp/Delta/z/expf 五槽实例化 T := temp、      *)
-(*   expf 五字段同槽代入即与 bs_delta_star 逐字同物（替换面＝一处）。    *)
+(*   expf 五字段同槽提供即与 bs_delta_star 逐字同物（对应面＝一处替换）。  *)
 (* ============================================================ *)
 
 Section AnmExpfMirror.
@@ -267,7 +271,7 @@ Variable expf_plus : forall a b : R, Id (expf (plus a b)) (mult (expf a) (expf b
 Variable expf_mono_lt : forall a b : R, lt a b -> lt (expf a) (expf b).
 Variable expf_mono_le : forall a b : R, le a b -> le (expf a) (expf b).
 
-(* T 参化的 lo := e^{−Δ/T}（宿主逐形：mult invT (opp Delta) 参数同序） *)
+(* T 参化的 lo := e^{−Δ/T}（宿主逐形：mult invT (opp Delta) 参数位同序） *)
 Definition anm_e_lo (T : R) (HT : lt zero T) : R :=
   expf (mult (inv_pos T HT) (opp Delta)).
 
@@ -291,7 +295,7 @@ Qed.
 
 (* ===== ANM-7：lo(T) = e^{−Δ/T} 对 T 单调（锚点同形核件的 expf 版） =====
    链：倒数反变 ⟹ Δ/T' ≤ Δ/T（乘正 Δ）⟹ opp 换向 ⟹ invT·(−Δ) ≤ invT'·(−Δ)
-       ⟹ expf_mono_le。负因子换向以 opp_le_compat＋Id 换向链承载。 *)
+       ⟹ expf_mono_le。负因子换向以 opp_le_compat＋Id 推理步承载。 *)
 Theorem anm_e_lo_mono : forall (T T' : R) (HT : lt zero T) (HT' : lt zero T'),
   le T T' -> le (anm_e_lo T HT) (anm_e_lo T' HT').
 Proof.
@@ -339,7 +343,7 @@ Qed.
 End AnmExpfMirror.
 
 (* ============================================================ *)
-(* 审计口（逐条 PA；全 Closed 预期：零新增公理）                        *)
+(* G4 审计口（逐条 PA；全 Closed 预期：零新增公理）                      *)
 (* ============================================================ *)
 
 Print Assumptions anm_inv_antitone.
@@ -362,15 +366,15 @@ Print Assumptions anm_e_dst_mono.
 
 (* ============================================================ *)
 (* 红线取证块（四条逐条）                                                *)
-(* 1. Set 层零 Prop 语句：全部语句谓词取 RealInterface 的 Set 值 le/lt；   *)
-(*    存在性取 sigT（ANM-6）；无 or/exists/Not 层语句（S01 自定义          *)
+(* 1. Set 层零 Prop 载体：全部语句谓词取 RealInterface 的 Set 值 le/lt；   *)
+(*    存在性取 sigT（ANM-6）；无 or/exists/Not 载体语句（S01 自定义        *)
 (*    Set 层 Or 仅以 inl 证入口使用）。                                   *)
 (* 2. 非平凡：ANM-1 负指数两级换向链（倒数反变×exp 反单调）；ANM-5/6      *)
-(*    幂反单调×预算传递链；ANM-7 负因子乘法换向 Id 换向链——均多段构造，   *)
+(*    幂反单调×预算传递链；ANM-7 负因子乘法换向 Id 推理步——均多段构造，     *)
 (*    非库件重述（S01 temp_factor_antitone 为定 T 比损失轴，本件为定 Δ    *)
 (*    比温度轴，正交）。                                                 *)
 (* 3. 可提取：语句全 Set 型、零 Obj.magic、零 vm_compute；析取面全 Closed  *)
 (*    （上方 PA 十七条）。                                               *)
-(* 4. 零公理/零承认：承认式与公理式禁词词面零命中；PA 全 Closed under    *)
-(*    the global context。                                               *)
+(* 4. 零公理/零承认：承认式与经典逻辑词面全名单 grep    *)
+(*    零命中；PA 全 Closed under the global context。 *)
 (* ============================================================ *)

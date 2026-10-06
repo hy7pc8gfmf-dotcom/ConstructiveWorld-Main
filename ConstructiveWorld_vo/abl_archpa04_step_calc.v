@@ -1,32 +1,120 @@
 (* ==========================================================================)
    abl_archpa04_step_calc.v — 收敛计算器系列第十件（Arch_PA_04 收缩收敛面，
-   ap4_ 前缀，定量完备性矿脉表 K5 位）
-   使命: 为 Arch_PA_04.v（认证轨命题族集注与实例化承载）的收缩收敛面补齐
-     「精度到步数」Defined 计算器。宿主率 kappa := real_plus real_one (real_opp
-     delta) 即 1−delta 于三件语句面直书，率双证书根级在案；宿主自嵌 BudgetReal
-     全机（幂预算引擎/log 闭式预算/min 尾界）收敛面闭环，缺 Defined 计算器。
-     三段补齐: ①率抽取（ap4_rate_pos/ap4_rate_lt_one exact 直用宿主双证书）；
-     ②nat 定点档（真 Fixpoint: ap4_k_enum 有界燃料上取整衰减枚举＋正确性两半
-     ＋首破最小性见证两件＋严格衰减三件＋燃料充足性三件）；③实面 Real 承载
-     重述（全显式参数化，免 Section 证书槽重述）: 率承载 ap4_kappa＋幂反单调
-     NatLe 重述＋闭合 arch 步数读数两件＋宿主衰减链直用＋K 面主件两件＋sigT
-     模量见证＋端到端主定理双投影三件＋min 尾界三件＋log 闭式预算面两件（K5
-     面增量）。
-   语义边界: Real 面步数读数取 projT1 于宿主 Qed 闭合定理（读数不规约），可执行
-     面由 nat 定点档承载；严格档与 le 档语义分立（首破与首达读数可差一步）；宿主
-     抽象序列完整实例化需 detailed_balance/minorization 等接口前提，本件继承宿主边界。
-   依赖: S01_BaseRing（NatLe/NatLe_drop/NatLe_lift）；S02_CauchyComplete（Real/
-     real_lt/real_le/real_eq 系）；S07_RealSetoidExpLog（real_log/real_le_mult_compat）；
-     S14_B5BatchBlock（real_lt_le_bridge）；Arch_PA_04（率双证书/收缩收敛三件＋自嵌
-     BudgetReal 预算件）；PeanoNat/ZArith/QArith/Arith/Lia/Extraction。Require-only 零改动。
-   对标: mathlib 马尔可夫链混合时间界的构造性 Set 层柯西实数面对应物；同系列
-     dsc_/asc_/cmc_/mtc2_/atn_/cfc_/aic_/cw2_/p2c_ 的 K5 位补全。
-   构造性: 纯构造性/Set 层零 Prop（存在以 sigT、合取以 prod、nat 序界以 NatLe，
-     Prop 界只经 NatLe_drop 进证明体）；非平凡（ap4_k_enum 真 Fixpoint）；可提
-     取（Obj.magic=0 附加证）；零公理（尾 Print Assumptions 全 Closed 预期）。
-   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s
-     65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930
-     "" abl_archpa04_step_calc.v（池内执行）。
+   ap4_ 前缀，K 矿脉表 K5 位）
+   谱系: born-green 独立成件（非既有件改写；使命见下），
+     全件自含独立编译。
+   使命: 按定量完备性矿脉表 K5——Arch_PA_04.v（2338 行，认证轨命题族集注
+     与实例化承载）的收缩收敛面: 率 kappa := real_plus real_one (real_opp
+     delta) 即 1−delta 在 r_arch_pow_attn_real/tv_iter_decay_real/
+     attention_iterate_converges_real 三件语句面直书，率双证书 one_minus_
+     delta_pos_real/one_minus_delta_lt_one_real 根级在案；宿主自嵌 BudgetReal
+     全机（:1423-:2129，含 r_arch_pow_real bernoulli+real_arch 预算引擎/
+     real_pow_log_form/budget_cond_sufficient log 闭式预算/real_pow_anti_
+     mono/geo_tail_budget/budget_min_tail），收敛面三件全部闭环于宿主单文
+     件内（认证轨自含面）——端到端主定理 attention_iterate_converges_real
+     的步数 sigT 直经 r_arch_pow_attn_real，缺「精度到步数」Defined 计算器。
+     本件补齐三段:
+     率抽取（显式直用——ap4_rate_pos/ap4_rate_lt_one exact 直接引用宿主双证
+       书，零新增抽取步，同 cfc_rate_pos 先例）；
+     nat 定点档（真 Fixpoint，CQ 第九件范本滚转: ap4_ceil_div/ap4_iter/
+       ap4_pow_iter/ap4_k_enum 有界燃料上取整衰减枚举＋正确性两半＋首破
+       最小性见证两件＋严格衰减三件＋燃料充足性三件＋auto_half）；
+     实面 Real 载体平行形（K5 认证轨自含面直接使用，全显式参数化——宿主为闭
+       式定理，免 Section 证书参数位复制）: 率载体 ap4_kappa＋幂反单调 NatLe
+       重述（ap4_r_pow_anti_mono_set，宿主 BudgetReal.real_pow_anti_mono
+       的 Prop 序界 NatLe 化）＋闭合 arch 步数读数两件（ap4_arch_k/
+       ap4_arch_k_budget）＋宿主衰减链直接使用（ap4_tv_decay）＋K 面主件
+       （ap4_step_calc/ap4_step_calc_correct 均匀于全部 n ≥ N，NatLe 序界
+       面）＋sigT 模量见证（ap4_mixing_modulus_sigT）＋端到端主定理双投影
+       三件（ap4_conv_step_calc/_correct/_conv_modulus_sigT 零重放纯投影）
+       ＋min 尾界三件（ap4_min_tail_k/_correct/_modulus_sigT，宿主
+       BudgetReal.budget_min_tail 直接投影，(N <= Nat.min p q) Prop 序界
+       NatLe 重述）＋log 闭式预算面两件（ap4_log_pow_form/ap4_log_cond_
+       budget，宿主 BudgetReal.real_pow_log_form/budget_cond_sufficient 直
+       使用——系列前九件未涉的 K5 面增量）。
+   覆盖核验与定位记录: ①率显式性——kappa := 1−delta 三件语句面直书，双证
+       书根级在案，按任务令「显式直用」，零隐式抽取；②覆盖复核——CD 件
+       （cfc_，UpReqConcFin2 面）/CL 件（aic_，UpReqAttnIter 面）/CN 件
+       （cw2_，CW220_Extensions 面）/CQ 件（p2c_，p2a_AttnClimClose 面）
+       grep 实拍宿主均非本面（CN/CQ 报告明记 Arch_PA_04 仅列备选位未启
+       用），全池零 ap4_/abl_archpa04_step_calc 使用件——真缺口，本件就地
+       闭合，无转位（K 表待续位 K3(S06)/K9(UpTVDoeblin) 非本件任务位）；
+       ③K5 结论现档复核——「同 K4 同文（认证轨件，需保 Print Assumptions
+       自含面）」成立: attention_iterate_converges_real（:2292）步数 sigT
+       直经 r_arch_pow_attn_real（:2214，Qed 闭合定理直引自嵌
+       BudgetReal.r_arch_pow_real），无 Defined 计算器，结论确凿；本件按
+       结论要求全件自带 Print Assumptions 取证块（20 件），宿主自含面零触
+       碰。K5 面独有增量勘验: 宿主自嵌 BudgetReal 全机（非 Require 独立
+       UpBudgetReal）＝认证轨自含轨，本件 Part 1 全部锚点取 Arch_PA_04 自
+       含机（顶层五件＋内嵌 BudgetReal 模块限定使用）；log 闭式预算面
+       （real_pow_log_form/budget_cond_sufficient）为 CW220 面与
+       p2a 面清单所未涉，本件首发直接使用两件。
+   件名与前缀: abl_archpa04_step_calc.v，ap4_ 前缀（施工前全库 grep 防撞:
+     编译树 vo_local_world_unified_0930 与 abl_tmine04_pool 全池零命中）。
+   本件陈述（两段，37 个 ap4_ 常数）:
+     Part 2 nat 定点档（真 Fixpoint，语句面全 Set 载体）: ap4_ceil_div/
+       ap4_ceil_div_le/ap4_iter/ap4_iter_step_bound/ap4_pow_iter/ap4_pow_
+       iter_comm/ap4_pow_iter_exact_ge/ap4_k_enum（Nat.ltb 首破停机——严
+       格档）＋正确性两半（ap4_k_enum_correct 严格面 NatLe (S ·) 形/ap4_
+       k_enum_logface 精确面 x·p^N ≤ e·q^N）＋首破最小性见证两件（ap4_k_
+       enum_minimal 每早步 j 仍 ≥ e/ap4_k_enum_first_break sigT＋prod 打
+       包）＋严格衰减三件（ap4_iter_lt_decay/lt_half/lt_q）＋燃料充足性
+       三件（ap4_fuel_sufficient_gen/half/qbound）＋ap4_k_enum_auto_half。
+     Part 1 实面 Real 载体平行形（Arch_PA_04 收缩收敛面直接使用，18 件）:
+       率载体 ap4_kappa＋率抽取双证书（ap4_rate_pos/ap4_rate_lt_one）＋幂
+       反单调 NatLe 载体重述件（ap4_r_pow_anti_mono_set）＋闭合 arch 步数
+       读数两件（ap4_arch_k/ap4_arch_k_budget）＋宿主衰减链直接使用
+       （ap4_tv_decay）＋K 面主件两件（ap4_step_calc/ap4_step_calc_
+       correct）＋sigT 模量见证（ap4_mixing_modulus_sigT）＋端到端主定理
+       双投影三件（ap4_conv_step_calc/ap4_conv_step_correct/ap4_conv_
+       modulus_sigT）＋min 尾界三件（ap4_min_tail_k/ap4_min_tail_correct/
+       ap4_min_tail_modulus_sigT）＋log 闭式预算面两件（ap4_log_pow_form/
+       ap4_log_cond_budget）。
+   Set 载体纪律（语句面零 Prop）: 存在以 sigT、合取以 prod、nat 序界以
+     NatLe（S01 的 leb 判定型 Set 载体，NatLe_drop/NatLe_lift 双向桥）；
+     严格序界以 NatLe (S ·) 表达；实面比较以 S02 柯西实数面 real_lt/
+     real_le/real_eq（全 Set 型语句）；步数见证以 sigT nat。宿主
+     attention_iterate_converges_real/budget_min_tail 的 (N <= n)%nat/
+     (N <= Nat.min p q)%nat Prop 序界在本件语句面一律 NatLe 重述，Prop 界
+     只经 NatLe_drop 进证明体；假设位零 Hypothesis/零 Prop 型；零 not/~/
+     <> 书写面。
+   fail-loud 记录: Real 面步数读数（ap4_arch_k/ap4_step_calc/ap4_conv_
+     step_calc/ap4_min_tail_k）取 projT1 于宿主 Qed 闭合定理，读数不规约
+     （同系列 arch 槽口径；本面 arch 由宿主全证闭合，无接口槽）；可执行
+     面由 Part 2 nat 定点档承载（真 Fixpoint，Obj.magic=0 附加证）；tv_seq
+     为宿主主定理同款抽象 Real 序列（每步收缩 Hstep 显式前提——宿主覆盖
+     面注记原文: 抽象 Section 世界的 TV/iterate 对象整体 Real 实例化需
+     detailed_balance/minorization 等接口前提整体消解，天级工程不属宿主
+     范围，本件继承宿主边界不扩 scope）；燃料充足性限衰减域（half 域
+     2·p ≤ q、E ≥ 2；qbound 域 q ≤ E、任意 p<q——严格版预算位）；严格档
+     与 le 档语义分立: 首破「x < e」与首达「x ≤ e」读数可差一步（烟
+     测实拍: 同数据严格档 11、le 档 10，各自正确于本档语义）；宿主自嵌
+     BudgetReal 模块的 Import 不传递（透传 Require 不导出），
+     本件平行形面一律 BudgetReal. 全限定使用。
+   依赖: S01_BaseRing（NatLe/NatLe_drop/NatLe_lift）；S02_CauchyComplete
+     （Real/real_lt/real_le/real_eq/real_mult/real_plus/real_opp/real_one/
+     real_zero/real_const/real_le_lt_trans/real_eq_lt_lt/real_mult_comm）；
+     S07_RealSetoidExpLog（real_log/real_le_mult_compat）；S14_B5BatchBlock
+     （real_lt_le_bridge）；Arch_PA_04（one_minus_delta_pos_real/one_minus_
+     delta_lt_one_real/r_arch_pow_attn_real/tv_iter_decay_real/attention_
+     iterate_converges_real＋自嵌 BudgetReal.real_pow/real_pow_anti_mono/
+     real_pow_log_form/budget_cond_sufficient/budget_min_tail/
+     cwe_real_pow_pos）；PeanoNat/ZArith/QArith/Arith/Lia/Extraction。全部
+     Require-only 零改动，Live/注册面/缓存根零触碰（宿主 .vo 在编译树实
+     测 Require 绿）。
+   对标: mathlib 马尔可夫链混合时间界（几何收缩显式迭代预算）的构造性 Set
+     层柯西实数面对应物；同系列 dsc_/asc_/cmc_/mtc2_/atn_/cfc_/aic_/cw2_/
+     p2c_ 的 K 表 K5 位补全。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；序谓词均
+     Set 层值；nat 面算术不消入实面目标）；非平凡（ap4_k_enum 为真
+     Fixpoint 首破枚举）；可提取（Separate Extraction Obj.magic=0 附加
+     证）；零公理（尾 Print Assumptions 全 Closed 预期）。
+   工艺红线: term-mode 全显式实参；数值定装（Eval vm_compute 烟测入日志）；
+     注释内禁右括号星杠字面。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q
+     vo_local_world_unified_0930 "" 沙箱/现役/abl_tmine04_pool/archpa04_
+     calc/abl_archpa04_step_calc.v（ConstructiveWorld 根内执行）。
    ========================================================================== *)
 
 From Stdlib Require Import PeanoNat.
@@ -39,10 +127,10 @@ Require Import Arch_PA_04.
 From Stdlib Require Import Arith.Arith.
 From Stdlib Require Import Lia.
 (* ============================================================ *)
-(* Part 2：收缩率定点枚举解算器（真 Fixpoint/严格档/Set 承载）——          *)
+(* Part 2：收缩率定点枚举解算器（真 Fixpoint/严格档/Set 载体）——          *)
 (*   CL 第六件范本滚转（aic_ 系经 cw2_ 系 rename ap4_ 系），宿主无关。     *)
 (*   收缩率 kappa=p/q（0<p<q）、初值 A、预算 E 的定点表示，首破枚举 N 使    *)
-(*   powIter N A < E（严格）。序界全走 NatLe Set 承载，严格序界以          *)
+(*   powIter N A < E（严格）。序界全走 NatLe Set 载体，严格序界以          *)
 (*   NatLe (S ·) 表达。本段含首破最小性见证两件与燃料充足性三件。          *)
 (* ============================================================ *)
 
@@ -118,7 +206,7 @@ Proof.
 Qed.
 
 (* 正确性（首破严格面）：燃料内可达，枚举返回的 N 步处上取整值 < e
-   （NatLe (S ·) e 严格序界承载）。可达见证为 sigT＋prod＋NatLe 全 Set 承载。 *)
+   （NatLe (S ·) e 严格序界载体）。可达见证为 sigT＋prod＋NatLe 全 Set 载体。 *)
 Theorem ap4_k_enum_correct : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (ap4_pow_iter p q x k)) e))) ->
@@ -152,7 +240,7 @@ Proof.
         exact IH.
 Qed.
 
-(* 首破最小性见证（CL 新数学滚转范本）：燃料内可达，则对每个早于返回
+(* 首破最小性见证（承首破新数学）：燃料内可达，则对每个早于返回
    步数 N 的步 j（S j ≤ N），第 j 步上取整值仍 ≥ e——枚举读数是首个跌破
    预算的步。 *)
 Theorem ap4_k_enum_minimal : forall fuel p q x e,
@@ -195,8 +283,8 @@ Proof.
         simpl. rewrite <- (ap4_pow_iter_comm p q x j'). exact IH.
 Qed.
 
-(* 首破见证合并：燃料内可达，则枚举读数 N 携带双证书——第 N 步跌破预算
-   （严格）＋每个早步仍保预算。sigT＋prod＋forall nat 全 Set 承载。 *)
+(* 首破见证封装：燃料内可达，则枚举读数 N 携带双证书——第 N 步跌破预算
+   （严格）＋每个早步仍保预算。sigT＋prod＋forall nat 全 Set 载体。 *)
 Theorem ap4_k_enum_first_break : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (ap4_pow_iter p q x k)) e))) ->
@@ -299,8 +387,8 @@ Proof.
 Qed.
 
 (* 燃料充足性（泛形·严格版）：凡预算位及以上走步严格递降，则 fuel := x
-   必产首破步（结论 NatLe (S ·) 严格序界承载）。结构归纳，见证 sigT＋
-   prod＋NatLe 全 Set 承载。 *)
+   必产首破步（结论 NatLe (S ·) 严格序界载体）。结构归纳，见证 sigT＋
+   prod＋NatLe 全 Set 载体。 *)
 Theorem ap4_fuel_sufficient_gen : forall fuel p q x E,
   NatLe x fuel ->
   (forall y : nat, NatLe E y ->
@@ -397,25 +485,25 @@ Eval vm_compute in (ap4_k_enum 50 1 2 1000 5).
 Eval vm_compute in (ap4_k_enum 50 3 4 50 4).
 
 (* ============================================================ *)
-(* Part 1：实面 Real 承载映像（Arch_PA_04 收缩收敛面＋自嵌 BudgetReal 全机  *)
+(* Part 1：实面 Real 载体平行形（Arch_PA_04 收缩收敛面＋自嵌 BudgetReal 全机  *)
 (*   直接使用——率 kappa := ap4_kappa delta := real_plus real_one (real_opp  *)
-(*   delta) 即 1−delta，宿主三件语句面显式直书。率双证书 exact 直接使用宿主  *)
-(*   根级出节件；幂反单调支以 NatLe Set 承载重述；闭合 arch 槽步数读数     *)
+(*   delta) 即 1−delta，宿主三件语句面显式直书。率双证书 exact 直接引用宿主  *)
+(*   根级出节件；幂反单调腿以 NatLe Set 载体重述；闭合 arch 槽步数读数     *)
 (*   （宿主 r_arch_pow_attn_real 为已证定理，无诚实接口槽）；宿主衰减链直  *)
 (*   使用；K 面主件（均匀于全部 n ≥ N 的几何衰减，NatLe 序界面）＋sigT 模  *)
 (*   量见证；端到端主定理双投影三件（零重放纯投影）；min 尾界三件（宿主    *)
-(*   BudgetReal.budget_min_tail 直接使用）；log 闭式预算面两件（宿主         *)
+(*   BudgetReal.budget_min_tail 直接引用）；log 闭式预算面两件（宿主         *)
 (*   BudgetReal.real_pow_log_form/budget_cond_sufficient 直接使用——系列前   *)
 (*   九件未涉的 K5 面增量）。全显式参数化——宿主为闭式定理，免 Section 证  *)
-(*   书槽映像。宿主自嵌 BudgetReal 模块 Import 不传递，本件一律 BudgetReal.*)
-(*   全限定使用（TLW1038 短名遮蔽卡处方）。                                *)
+(*   参数位复制。宿主自嵌 BudgetReal 模块 Import 不传递，本件一律 BudgetReal.*)
+(*   全限定使用。                                                          *)
 (* ============================================================ *)
 
-(* 率的承载定义（1−delta；宿主语句面同形直书） *)
+(* 率的载体定义（1−delta；宿主语句面同形直书） *)
 Definition ap4_kappa (delta : Real) : Real :=
   real_plus real_one (real_opp delta).
 
-(* ===== 率抽取双证书（显式直用，exact 直接使用宿主根级证书——零新增抽取步） *)
+(* ===== 率抽取双证书（显式直用，exact 直接引用宿主根级证书——零新增抽取步） *)
 
 Lemma ap4_rate_pos : forall delta : Real,
   real_lt delta real_one -> real_lt real_zero (ap4_kappa delta).
@@ -429,7 +517,7 @@ Proof.
   intros delta Hd. exact (one_minus_delta_lt_one_real delta Hd).
 Qed.
 
-(* ===== 幂反单调支的 Set 承载重述（宿主 BudgetReal.real_pow_anti_mono 的  *)
+(* ===== 幂反单调腿的 Set 载体重述（宿主 BudgetReal.real_pow_anti_mono 的  *)
 (*   Prop 序界 (p <= q)%nat 面在本件语句面以 NatLe 重述；Prop 界只经       *)
 (*   NatLe_drop 进证明体，零 Prop 消入 Set。） ============================ *)
 
@@ -490,7 +578,7 @@ Qed.
 (* ===== K 面主件：精度到步数计算器＋均匀几何衰减正确性 ================== *)
 (*   ap4_step_calc: 预算 eps 下以 tv₀ 为幅位的闭合 arch 读数（projT1）；   *)
 (*   ap4_step_calc_correct: 对全部 n ≥ N（NatLe 序界），tv_seq n < eps——   *)
-(*   衰减链支＋NatLe 幂反单调支＋arch 预算支，real_le_lt_trans 双段换轨，  *)
+(*   衰减链腿＋NatLe 幂反单调腿＋arch 预算腿，real_le_lt_trans 双段换轨，  *)
 (*   链幂以 real_mult_comm 对齐宿主 arch 结论的乘序。 ==================== *)
 
 Definition ap4_step_calc (delta : Real) (Hd1 : real_lt real_zero delta)
@@ -546,7 +634,7 @@ Proof.
                HN).
 Qed.
 
-(* sigT 合并（均匀几何衰减模量见证型；宿主主定理结论面的 NatLe 承载形） *)
+(* sigT 封装（均匀几何衰减模量见证型；宿主主定理结论面的 NatLe 载体形） *)
 Theorem ap4_mixing_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (tv_seq : nat -> Real)
@@ -565,7 +653,7 @@ Proof.
 Defined.
 
 (* ===== 端到端主定理双投影（零重放纯投影: 步数读数 projT1、均匀收缩正确  *)
-(*   性 projT2 经 NatLe_drop 桥、sigT 合并——宿主 attention_iterate_       *)
+(*   性 projT2 经 NatLe_drop 桥、sigT 封装——宿主 attention_iterate_       *)
 (*   converges_real 的 (N <= n)%nat Prop 序界只经 NatLe_drop 进证明体） == *)
 
 Definition ap4_conv_step_calc (delta : Real) (Hd1 : real_lt real_zero delta)
@@ -597,7 +685,7 @@ Proof.
   exact (HN n (NatLe_drop _ _ Hn)).
 Qed.
 
-(* sigT 合并（端到端均匀几何衰减模量见证型） *)
+(* sigT 封装（端到端均匀几何衰减模量见证型） *)
 Theorem ap4_conv_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (tv_seq : nat -> Real)
@@ -616,7 +704,7 @@ Proof.
 Defined.
 
 (* ===== 论文 4 定理 4.10 min 尾界三件（宿主 BudgetReal.budget_min_tail    *)
-(*   直接使用投影: 步数读数 projT1＋NatLe 序界正确性＋sigT 合并——(N <=      *)
+(*   直接投影: 步数读数 projT1＋NatLe 序界正确性＋sigT 封装——(N <=      *)
 (*   Nat.min p q)%nat Prop 序界在本件语句面一律 NatLe 重述） ============== *)
 
 Definition ap4_min_tail_k (delta : Real) (Hd1 : real_lt real_zero delta)
@@ -643,7 +731,7 @@ Proof.
   exact (HN p q (NatLe_drop _ _ Hpq)).
 Qed.
 
-(* sigT 合并（min 尾界模量见证型） *)
+(* sigT 封装（min 尾界模量见证型） *)
 Theorem ap4_min_tail_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (a : Real) (Ha : real_lt real_zero a) (eps : Real)
@@ -662,7 +750,7 @@ Defined.
 (* ============================================================ *)
 (* K5 独有增量：log 闭式预算面两件（宿主 BudgetReal.real_pow_log_form /    *)
 (*   budget_cond_sufficient 直接使用——log 模量方程实面形与预算条件充分性     *)
-(*   的均匀读出面；系列前九件映像清单未涉。语句面全 Set real_lt/real_eq    *)
+(*   的均匀读出面；系列前九件清单未涉。语句面全 Set real_lt/real_eq    *)
 (*   形，零 Prop。） ====================================================== *)
 
 From Stdlib Require Import ZArith.

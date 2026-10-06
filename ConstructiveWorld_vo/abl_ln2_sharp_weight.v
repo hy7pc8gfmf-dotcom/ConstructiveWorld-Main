@@ -1,10 +1,47 @@
 (* ===================================================================== *)
-(*  abl_ln2_sharp_weight.v —— ln2 无理性链·⑤锐权衰减 (1+t) 变体件 *)
-(*  使命: Beukers 被积锐权 (1+t) 变体的衰减不等式核（有理求和版）。勘定: 库内无 Real 积分机（PolyIntegral 头注自认「库内无现成积分基建」，其 pint_integral 为 Q 系数多项式的逐项定积分机），故降档「有理求和版」交付：有限和容器与 lnt 求和容器同构。数学内容: 锐权项 w(n,k) := u(n,k)+ũ(n,k)，u=lnt_pterm=C(n+k,n)/((k+1)·2^{k+1})，ũ:=C(n+k,n)/((k+2)·2^{k+1})——即 ∫₀¹(1+t)·(t/2)^k dt 的逐项 Q 编码（归一化），权升一阶（+t 肢）而衰减率仍几何: ①ũ ≤ u（一阶权被吸收，1/(k+2) ≤ 1/(k+1)）⟹ u ≤ w ≤ 2u（(1+t) ≤ 2 在积分域有界化的 Q 面形式）；②同窗 2n ≤ k+4 内 w(n,k+j) ≤ 2·w(n,k)·(3/4)^j（几何核吸收，率 ρ=3/4 不变）；③尾项控制 Σ_{i<d} w(n,M+1+i) ≤ 8·w(n,M+1)（常数 4 的倍增）；④加法隙形；⑤峰值档 w(n,k) ≤ 2^n（2^{n−1} 的倍增）；⑥组合终形 lnw_wgap_geo: 尾隙 ≤ 2^{n+3}·(3/4)^{SM−2n}（C(n)·ρ^M 终形，ρ=3/4 不变、C 常数倍增）。诚实判定: lnw_wratio_refuted34——纯 w 比率在精确窗界 n=3,k=2 处 R=27/35 ≈ 0.771 > 3/4（vm_compute 判定），证成「常数 2 吸收」配方为必需而非冗余。pint 对接口: lnw_wcore/lnw_pint_wcore——权核 (1/(k+1)+1/(k+2))/2^{k+1} 与 PolyIntegral Q 级逐项定积分 ∫₀¹(1+t)·(1/2^{k+1})·t^k dt 的 QeqT 焊接（积分读数的库内构造性承载）；lnw_wterm_core——C(n+k,n) 因子外提恒等式。 *)
-(*  依赖: Stdlib QArith/List/Arith/ZArith/Lia；S01_BaseRing S02_CauchyComplete S03_QExp PolyIntegral PadeErrorIntegral BeukersLists BeukersVariant PintMono PsQReindex；前置池拷贝 abl_ln2_tail_bound（lnt_pterm/lnt_pterm_pow/lnt_pterm_tail/lnt_pterm_peak＋工器件 lnt_leT'_eq_r/lnt_qle_mul_cancel_r/lnt_Qmult_le_compat_l/lnt_qinv_mul_cancel/lnt_qneq_of_eq0/lnt_pow2_pos/lnt_pow_pos_le/lnt_sum_le/lnt_sum_scale/lnt_sum_range 直接使用——链序池内平铺 Require）。 *)
-(*  对标: Beukers 1979 ln2 无理性证明的锐权变体（|A_n·X−B_n| ≤ θ^n 上界肢的衰减预算——β 级数已机证无一致几何比率，衰减预算必走 (1+t) 变体权函数）；PolyIntegral pint_integral_pow_poly 的积分读数；Ln2Bridge ln2b_escape_of_supply 供给前提 θ 档的权侧对应件。 *)
-(*  构造性: 纯构造性、零承认件；语句面全 Set（QeqT/QltT/QleT'），nat 层核全 lia/ring 显式展开；Qeq/Qle/Qlt 支撑引理仅 Prop 面作推理；==-重写一律限于 == 目标内、QleT' 目标换形走 lnt_leT'_eq_l/r 传送；文尾 Print Assumptions 全 Closed＋独立提取验证。 *)
-(*  编译配方: rocq c -native-compiler no -Q vo_local_world_unified_0930 ""（编译目录 ln2_weight/，并发限 ≤1，链序 tail_bound → sharp_weight）。 *)
+(*  abl_ln2_sharp_weight.v —— ln2 无理性链·⑤锐权衰减 (1+t) 变体件          *)
+(*  使命: BT 诚实边界清单路线⑤——Beukers 被积锐权 (1+t) 变体的衰减      *)
+(*        不等式核（有理求和版）。fail-loud 勘定: 库内无 Real 积分机        *)
+(*        （T 件勘定＋PolyIntegral 头注自认「库内无现成积分基础设施」，其       *)
+(*        pint_integral 为 Q 系数多项式的逐项定积分机），故按任务指令降档     *)
+(*        「有理求和版」交付：有限和容器与 lnt 求和容器同构。数学内容:      *)
+(*        锐权项 w(n,k) := u(n,k)+ũ(n,k)，u=lnt_pterm=C(n+k,n)/((k+1)·    *)
+(*        2^{k+1})，ũ:=C(n+k,n)/((k+2)·2^{k+1})——即 ∫₀¹(1+t)·(t/2)^k dt  *)
+(*        的逐项 Q 编码（AP 归一化），权升一阶（+t 肢）而衰减率仍几何:     *)
+(*        ①ũ ≤ u（一阶权被吸收，1/(k+2) ≤ 1/(k+1)）⟹ u ≤ w ≤ 2u          *)
+(*        （(1+t) ≤ 2 在积分域有界化的 Q 面形式）；②同窗 2n ≤ k+4 内      *)
+(*        w(n,k+j) ≤ 2·w(n,k)·(3/4)^j（几何核吸收，率 ρ=3/4 不变）；       *)
+(*        ③尾项控制 Σ_{i<d} w(n,M+1+i) ≤ 8·w(n,M+1)（AP 常数 4 的倍增）；  *)
+(*        ④加法隙形；⑤峰值档 w(n,k) ≤ 2^n（AP 2^{n−1} 的倍增）；          *)
+(*        ⑥组合终形 lnw_wgap_geo: 尾隙 ≤ 2^{n+3}·(3/4)^{SM−2n}            *)
+(*        （C(n)·ρ^M 终形，ρ=3/4 不变、C 常数倍增）。诚实锚:               *)
+(*        lnw_wratio_refuted34——纯 w 比率在精确窗界 n=3,k=2 处 R=27/35     *)
+(*        ≈ 0.771 > 3/4（vm_compute 判定），证成「常数 2 吸收」配方为       *)
+(*        必需而非冗余。pint 对接口: lnw_wcore/lnw_pint_wcore——权核         *)
+(*        (1/(k+1)+1/(k+2))/2^{k+1} 与 PolyIntegral Q 级逐项定积分          *)
+(*        ∫₀¹(1+t)·(1/2^{k+1})·t^k dt 的 QeqT 焊接（积分读数的库内          *)
+(*        构造性承载）；lnw_wterm_core——C(n+k,n) 因子外提恒等式。          *)
+(*  依赖: Stdlib QArith/List/Arith/ZArith/Lia；S01_BaseRing S02_Cauchy-    *)
+(*        Complete S03_QExp PolyIntegral PadeErrorIntegral BeukersLists     *)
+(*        BeukersVariant PintMono PsQReindex；前置池拷贝 abl_ln2_tail_     *)
+(*        bound（lnt_pterm/lnt_pterm_pow/lnt_pterm_tail/lnt_pterm_peak     *)
+(*        ＋工器件 lnt_leT'_eq_r/lnt_qle_mul_cancel_r/lnt_Qmult_le_compat_ *)
+(*        l/lnt_qinv_mul_cancel/lnt_qneq_of_eq0/lnt_pow2_pos/lnt_pow_pos_  *)
+(*        le/lnt_sum_le/lnt_sum_scale/lnt_sum_range 直接使用——链序池内     *)
+(*        平铺 Require）。                                                 *)
+(*  对标: Beukers 1979 ln2 无理性证明的锐权变体（REV20 论文3 路线⑤:        *)
+(*        |A_n·X−B_n| ≤ θ^n 上界肢的衰减预算——AP 已机证 β 级数无一致       *)
+(*        几何比率，衰减预算必走 (1+t) 变体权函数，BT 诚实边界清单③之      *)
+(*        ⑤上界肢配套）；PolyIntegral pint_integral_pow_poly 的积分读数;    *)
+(*        Ln2Bridge ln2b_escape_of_supply 供给前提 θ 档的权侧备料。         *)
+(*  构造性: 纯构造性、零承认件；语句面全 Set（QeqT/QltT/QleT'），nat 层核   *)
+(*        全 lia/ring 显式展开；Qeq/Qle/Qlt 支撑引理仅 Prop 面作推理；      *)
+(*        ==-重写一律限于 == 目标内、QleT' 目标换形走 lnt_leT'_eq_l/r       *)
+(*        传送（坑卡 AP#⑦/BT#3）；文尾 Print Assumptions 全 Closed＋       *)
+(*        独立提取闭合（四件套）。                                         *)
+(*  编译配方: <Live 工具链 opam live>/bin/rocq c -native-compiler no -Q     *)
+(*        vo_local_world_unified_0930 ""（独占沙箱池 ln2_weight/，道闸≤1，  *)
+(*        链序 tail_bound → sharp_weight）。                               *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -32,7 +69,7 @@ Lemma lnw_q8_le0 : QleT' 0 (8 # 1)%Q.
 Proof. apply lnw_qZ_le0. lia. Qed.
 
 (** 除数单调核：0<a、d1≤d2、0<d1、0<p ⟹ a/d2p ≤ a/d1p（Qinv 全程免归一化——
-    除正消元形：双侧乘正 M=(d1·p)·(d2·p) 后对消）。 *)
+    坑卡 BH#1 的除正消元形：双侧乘正 M=(d1·p)·(d2·p) 后对消）。 *)
 Lemma lnw_qinv_den_le : forall (a d1 d2 p : Q),
   Qlt 0 a -> Qle d1 d2 -> Qlt 0 d1 -> Qlt 0 p ->
   Qle (a * Qinv (d2 * p)) (a * Qinv (d1 * p)).
@@ -81,11 +118,11 @@ Definition lnw_uterm (n k : nat) : Q :=
      ((Z.of_nat (Datatypes.S (Datatypes.S k)) # 1) *
         q_pow (2 # 1)%Q (Datatypes.S k)))%Q.
 
-(* 锐权项：(1+t)·(t/2)^k 逐项积分的 Q 编码（归一化下）。 *)
+(* 锐权项：(1+t)·(t/2)^k 逐项积分的 Q 编码（AP 归一化下）。 *)
 Definition lnw_wterm (n k : nat) : Q :=
   (lnt_pterm n k + lnw_uterm n k)%Q.
 
-(* bkC 严格正的 Z 桥（Nat2Z.inj_lt 本环境为 iff 形，取 proj1） *)
+(* bkC 严格正的 Z 桥（Nat2Z.inj_lt 本环境为 iff 形，取 proj1——坑卡 BD#1 变体） *)
 Lemma lnw_zpos_of_bkC : forall n k : nat, (0 < Z.of_nat (bkC (n + k) n))%Z.
 Proof.
   intros n k.
@@ -116,7 +153,7 @@ Proof.
   - apply lnt_pow2_pos.
 Qed.
 
-(** 核心②锐权正性（下游链支）：0 < w(n,k)。 *)
+(** 核心②锐权正性（下游链腿）：0 < w(n,k)。 *)
 Theorem lnw_wterm_pos : forall n k : nat, QltT 0 (lnw_wterm n k).
 Proof.
   intros n k. apply qltT_leT'_ltT with (y := lnw_uterm n k).
@@ -162,7 +199,7 @@ Qed.
 (** 核心⑤幂式档：2n ≤ k+4 ⟹ w(n,k+j) ≤ 2·w(n,k)·(3/4)^j。
     配方：w(k+j) ≤ 2·u(k+j) ≤ 2·u(k)·ρ^j ≤ 2·w(k)·ρ^j——三步全使用前置件
     （lnw_wterm_le2 / lnt_pterm_pow / lnw_wterm_ge），衰减率 ρ=3/4 与
-    lnt 同窗同率，仅常数倍增（权升一阶的代价显式记为因子 2）。 *)
+    lnt 同窗同率，仅常数倍增（权升一阶的代价显式核算为 2）。 *)
 Theorem lnw_wterm_pow : forall (n k j : nat),
   2 * n <= k + 4 ->
   QleT' (lnw_wterm n (k + j))
@@ -223,7 +260,7 @@ Proof.
     + apply QleT'_to_Qle. apply lnw_wterm_tail. exact H.
 Qed.
 
-(** 核心⑧绝对峰值档（锐权版）：1 ≤ n ⟹ w(n,k) ≤ 2^n（2^{n−1} 的倍增）。 *)
+(** 核心⑧绝对峰值档（锐权版）：1 ≤ n ⟹ w(n,k) ≤ 2^n（AP 2^{n−1} 的倍增）。 *)
 Theorem lnw_wterm_peak : forall n k : nat,
   1 <= n -> QleT' (lnw_wterm n k) (q_pow (2 # 1)%Q n).
 Proof.
@@ -245,7 +282,7 @@ Proof.
 Qed.
 
 (** 核心⑨组合终形（C(n)·ρ^M，锐权版）：1 ≤ n、2n ≤ M+1 ⟹
-    尾隙 ≤ 2^{n+3}·(3/4)^{SM−2n}——ρ=3/4 不变，C 从 2^{n+1} 倍增至
+    尾隙 ≤ 2^{n+3}·(3/4)^{SM−2n}——ρ=3/4 不变，C 从 AP 的 2^{n+1} 倍增至
     2^{n+3}（尾项 8/4 与峰值 2/1 两笔倍增的显式合成）。 *)
 Theorem lnw_wgap_geo : forall (n M d : nat),
   1 <= n -> 2 * n <= M + 1 ->
@@ -305,7 +342,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C pint 对接口与诚实边界判定：积分读数的 Q 层承载＋纯比率反例                 *)
+(* §C pint 对接口与诚实锚：积分读数的 Q 层承载＋纯比率反例                 *)
 (* ============================================================ *)
 
 (* 权核：(1/(k+1)+1/(k+2))/2^{k+1} = ∫₀¹(1+t)·(1/2^{k+1})·t^k dt 的
@@ -350,24 +387,24 @@ Proof.
   ring.
 Qed.
 
-(** 数值判定①：w(0,0) == 3/4（= 1/2 + 1/4，vm_compute 判定）。 *)
+(** 数值锚①：w(0,0) == 3/4（= 1/2 + 1/4，vm_compute 判定）。 *)
 Theorem lnw_anchor_w00 : QeqT (lnw_wterm 0 0) (3 # 4)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(** 数值判定②：w(2,2) == 7/16（= 1/4 + 3/16，vm_compute 判定）。 *)
+(** 数值锚②：w(2,2) == 7/16（= 1/4 + 3/16，vm_compute 判定）。 *)
 Theorem lnw_anchor_w22 : QeqT (lnw_wterm 2 2) (7 # 16)%Q.
 Proof. apply qeq_imp_qeqT. vm_compute. reflexivity. Qed.
 
-(** 诚实边界判定：锐权纯比率档在精确窗界被机器证伪——
+(** 诚实锚（fail-loud）：锐权纯比率档在精确窗界被机器证伪——
     n=3、k=2（窗界 2n=k+4=6）处 w(3,3)/w(3,2) = 27/35 ≈ 0.771 > 3/4。
     故 (1+t) 变体的一致几何率必须带常数吸收（核心⑤的 2·配方为必需
-    而非冗余）——与 β 级数反例判定（lnt_beta_rho_refuted34）同型的
-    改换通道判定件。 *)
+    而非冗余）——与 AP β 级数反例锚（lnt_beta_rho_refuted34）同型
+    的改靶判定件。 *)
 Theorem lnw_wratio_refuted34 : QltT ((3 # 4)%Q * lnw_wterm 3 2)%Q (lnw_wterm 3 3).
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §D 假设审计与独立提取（构造性验证位）                        *)
+(* §D 假设审计与独立提取（born-green 四件套闭合位）                        *)
 (* ============================================================ *)
 
 Print Assumptions lnw_qinv_den_le.

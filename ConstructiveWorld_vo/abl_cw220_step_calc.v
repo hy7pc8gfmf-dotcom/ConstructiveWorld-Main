@@ -1,32 +1,92 @@
 (* ==========================================================================)
    abl_cw220_step_calc.v — 收敛计算器系列第八件（CW220_Extensions 收缩收敛面，
-   cw2_ 前缀，定量完备性矿脉表 CW220 位）
-   使命: 为 CW220_Extensions.v（史前层件，BudgetReal＋UpArchAttn 两区）的收缩
-     收敛面补齐「精度到步数」Defined 计算器。宿主率 kappa := 1−delta 语句面显
-     式在案：率双证书/闭合 arch 主件 r_arch_pow_attn_real（全证闭合，非接口假
-     设）/几何衰减链 tv_iter_decay_real/端到端主定理/论文 4 定理 4.10 尾界
-     budget_min_tail，缺 Defined 计算器。三段补齐: ①率抽取（cw2_rate_pos/
-     cw2_rate_lt_one exact 直用宿主双证书）；②nat 定点档（真 Fixpoint: cw2_
-     k_enum 有界燃料上取整衰减枚举＋正确性两半＋首破最小性见证两件＋严格衰
-     减三件＋燃料充足性三件）；③实面 Real 承载重述——闭合 arch 槽步数读数
-     cw2_arch_k/cw2_step_calc（arch 槽由宿主全证闭合，无诚实接口槽）＋宿主主
-     定理 Prop 序界 NatLe Set 承载重述＋sigT 模量见证三件＋端到端双投影三件
-     ＋4.10 尾界三件。
-   语义边界: Real 面步数读数取 projT1 于宿主 Qed 闭合定理（读数不规约），可执
-     行面由 nat 定点档承载；严格档与 le 档语义分立（同数据严格档 11、le 档 10，
-     各自正确于本档语义）；宿主完整实例化需天级工程，本件继承宿主边界。
-   依赖: S01_BaseRing（NatLe 系）；S02_CauchyComplete；S07_RealSetoidExpLog
-     （real_le_mult_compat）；S14_B5BatchBlock（real_lt_le_bridge）；
-     CW220_Extensions（率双证书/收缩收敛三件＋BudgetReal 预算件）；PeanoNat/
-     Lia/Arith。Require-only 零改动。
-   对标: mathlib 马尔可夫链混合时间界的构造性 Set 层柯西实数面对应物；同系列
-     dsc_/asc_/cmc_/mtc2_/atn_/cfc_/aic_ 的 CW220 面补全。
-   构造性: 纯构造性/Set 层零 Prop（存在以 sigT、合取以 prod、nat 序界以 NatLe，
-     Prop 界只经 NatLe_drop 进证明体）；非平凡（cw2_k_enum 真 Fixpoint）；可提
-     取（Obj.magic=0 附加证）；零公理（尾 Print Assumptions 全 Closed 预期）。
-   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s
-     65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930
-     "" abl_cw220_step_calc.v（池内执行）。
+   cw2_ 前缀）
+   使命: 按定量完备性矿脉表 K 表——CW220_Extensions.v 的收缩收敛面（史前层
+     件 1663 行，勘其依赖 S01-S15 直连；BudgetReal＋UpArchAttn 两区:
+     率 kappa := real_plus real_one (real_opp delta) 即 1−delta 语句面显式在
+     案，率双证书 one_minus_delta_pos_real/one_minus_delta_lt_one_real、闭合
+     arch 主件 r_arch_pow_attn_real（经 bernoulli_pow＋real_arch 全证闭合，
+     非接口假设）、几何衰减链 tv_iter_decay_real、端到端主定理 attention_
+     iterate_converges_real、论文 4 定理 4.10 尾界 budget_min_tail）缺「精度
+     到步数」Defined 计算器。本件补齐三段:
+     率抽取（显式直用——cw2_rate_pos/cw2_rate_lt_one exact 直接使用宿主双证书，
+       零新增抽取步，同 cfc_rate_pos 先例）；
+     nat 定点档（真 Fixpoint，CL 第六件范本滚转: cw2_ceil_div/cw2_iter/
+       cw2_pow_iter/cw2_k_enum 有界燃料上取整衰减枚举＋正确性两半＋首破
+       最小性见证两件＋严格衰减三件＋燃料充足性三件＋auto_half）；
+     实面 Real 载体平行形（本件 K 面增量）: 闭合 arch 槽步数读数 cw2_arch_k/
+       cw2_step_calc——系列首见 arch 槽由宿主全证闭合、无诚实接口槽（CL 面
+       arch_pow_i 为 Variable 槽，本面 r_arch_pow_attn_real 为已证定理）；
+       宿主主定理 Prop 序界 (N <= n) 面在本件语句面以 NatLe Set 载体重述
+       （cw2_step_calc_correct/cw2_conv_step_correct/cw2_min_tail_correct，
+       Prop 界只经 NatLe_drop 进证明体）；sigT 模量见证三件（cw2_mixing_
+       modulus_sigT/cw2_conv_modulus_sigT/cw2_min_tail_modulus_sigT）。
+   覆盖核验与定位记录: ①率显式性——kappa := 1−delta 在 r_arch_pow_attn_real/
+       tv_iter_decay_real/attention_iterate_converges_real 三件语句面直书，
+       双证书根级在案，按任务令「显式直用」，零隐式抽取；②覆盖复核——CD
+       件（cfc_，UpReqConcFin2 面）标注 CW220_Extensions「备选位无需启用」、
+       CL 件（aic_，UpReqAttnIter 面）标注「留后续增量」、CF 件（tvc_）宿主
+       非本面，全池 grep 零 cw2_/abl_cw220 使用件——真缺口，本件就地闭合，
+       无转位（备选位 p2a_AttnClimClose/Arch_PA_04/S06 无需启用）。
+   件名与前缀: abl_cw220_step_calc.v，cw2_ 前缀（施工前全库 grep 防撞:
+     编译树 vo_local_world_unified_0930 与 abl_tmine04_pool 全池零命中）。
+   本件陈述（两段，33 个 cw2_ 常数）:
+     Part 2 nat 定点档（真 Fixpoint，语句面全 Set 载体）: cw2_ceil_div/
+       cw2_ceil_div_le/cw2_iter/cw2_iter_step_bound/cw2_pow_iter/cw2_pow_
+       iter_comm/cw2_pow_iter_exact_ge/cw2_k_enum（Nat.ltb 首破停机——严格
+       档）＋正确性两半（cw2_k_enum_correct 严格面 NatLe (S ·) 形/cw2_k_
+       enum_logface 精确面 x·p^N ≤ e·q^N）＋首破最小性见证两件（cw2_k_enum_
+       minimal 每早步 j 仍 ≥ e/cw2_k_enum_first_break sigT＋prod 封装）＋
+       严格衰减三件（cw2_iter_lt_decay/lt_half/lt_q）＋燃料充足性三件
+       （cw2_fuel_sufficient_gen/half/qbound）＋cw2_k_enum_auto_half。
+     Part 1 实面 Real 载体平行形（CW220 收缩收敛面直接使用，全显式参数化——
+       宿主为闭式定理，免 CL 面 22 槽 Section 复制）: 率抽取双证书（cw2_
+       rate_pos/cw2_rate_lt_one）＋幂反单调 NatLe 载体重述件（cw2_r_pow_
+       anti_mono_set）＋闭合 arch 步数读数两件（cw2_arch_k/cw2_arch_k_
+       budget）＋宿主衰减链直接使用件（cw2_tv_decay）＋K 面主件两件（cw2_
+       step_calc/cw2_step_calc_correct，均匀于全部 n ≥ N 的几何衰减，NatLe
+       序界面）＋sigT 模量见证（cw2_mixing_modulus_sigT）＋端到端主定理双
+       投影三件（cw2_conv_step_calc/cw2_conv_step_correct/cw2_conv_modulus_
+       sigT，零重放纯投影）＋论文 4.10 尾界三件（cw2_min_tail_k/cw2_min_
+       tail_correct/cw2_min_tail_modulus_sigT）。
+   Set 载体纪律（语句面零 Prop）: 存在以 sigT、合取以 prod、nat 序界以
+     NatLe（S01 的 leb 判定型 Set 载体，NatLe_drop/NatLe_lift 双向桥）；严
+     格序界以 NatLe (S ·) 表达；实面比较以 S02 柯西实数面 real_lt/real_le/
+     real_eq（全 Set 型语句）；步数见证以 sigT nat。宿主 attention_iterate_
+     converges_real/budget_min_tail 的 (N <= n)%nat/(N <= Nat.min p q)%nat
+     Prop 序界在本件语句面一律 NatLe 重述，Prop 界只经 NatLe_drop 进证明
+     体；假设位零 Hypothesis/零 Prop 型；零 not/~/<> 书写面。
+   fail-loud 记录: Real 面步数读数（cw2_arch_k/cw2_step_calc/cw2_conv_step_
+     calc/cw2_min_tail_k）取 projT1 于宿主 Qed 闭合定理，读数不规约（同系
+     列 arch 槽口径；本面 arch 由宿主全证闭合，无接口槽——较 CL 面少一诚
+     实槽）；可执行面由 Part 2 nat 定点档承载（真 Fixpoint，Obj.magic=0 附
+     加证）；tv_seq 为宿主主定理同款抽象 Real 序列（每步收缩 Hstep 显式前
+     提——宿主覆盖面注记原文: 注意力语义对象完整实例化需天级工程，本件继
+     承宿主边界不扩scope）；燃料充足性限衰减域（half 域 2·p ≤ q、E ≥ 2；
+     qbound 域 q ≤ E、任意 p<q——严格版预算位）；严格档与 le 档语义分立:
+     首破「x < e」与首达「x ≤ e」读数可差一步（烟测实拍: 同数据严格
+     档 11、le 档 10，各自正确于本档语义）。
+   依赖: S01_BaseRing（NatLe/NatLe_drop/NatLe_lift）；S02_CauchyComplete
+     （Real/real_lt/real_le/real_eq/real_mult/real_eq_lt_lt/real_le_lt_
+     trans/real_mult_comm）；S07_RealSetoidExpLog（real_le_mult_compat）；
+     S14_B5BatchBlock（real_lt_le_bridge）；CW220_Extensions（one_minus_
+     delta_pos_real/one_minus_delta_lt_one_real/r_arch_pow_attn_real/tv_
+     iter_decay_real/attention_iterate_converges_real＋Import BudgetReal:
+     real_pow/real_pow_anti_mono/budget_min_tail）；PeanoNat/Lia/Arith。
+     全部 Require-only 零改动，Live/注册面/缓存根零触碰（史前层件依赖 AA
+     在册 S01-S15 直连，CW220_Extensions.vo 在树实测 Require 绿）。
+   对标: mathlib 马尔可夫链混合时间界（几何收缩显式迭代预算）的构造性 Set
+     层柯西实数面对应物；同系列 dsc_/asc_/cmc_/mtc2_/atn_/cfc_/aic_ 的 K 表
+     CW220 面补全。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；序谓词均 Set
+     层值；nat 面算术不消入实面目标）；非平凡（cw2_k_enum 为真 Fixpoint 首
+     破枚举）；可提取（Separate Extraction Obj.magic=0 附加证）；零公理（尾
+     Print Assumptions 全 Closed 预期）。
+   工艺红线: term-mode 全显式实参；数值定装（Eval vm_compute 烟测入日志）；
+     注释内禁右括号星杠字面。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q
+     vo_local_world_unified_0930 "" abl_cw220_step_calc.v（池内执行）。
    ========================================================================== *)
 
 From Stdlib Require Import PeanoNat.
@@ -41,10 +101,10 @@ From Stdlib Require Import Arith.Arith.
 From Stdlib Require Import Lia.
 
 (* ============================================================ *)
-(* Part 2：收缩率定点枚举解算器（真 Fixpoint/严格档/Set 承载）——          *)
+(* Part 2：收缩率定点枚举解算器（真 Fixpoint/严格档/Set 载体）——          *)
 (*   CL 第六件范本滚转（aic_ 系 rename cw2_ 系），宿主无关。收缩率         *)
 (*   kappa=p/q（0<p<q）、初值 A、预算 E 的定点表示，首破枚举 N 使           *)
-(*   powIter N A < E（严格）。序界全走 NatLe Set 承载，严格序界以          *)
+(*   powIter N A < E（严格）。序界全走 NatLe Set 载体，严格序界以          *)
 (*   NatLe (S ·) 表达。本段含首破最小性见证两件与燃料充足性三件。          *)
 (* ============================================================ *)
 
@@ -120,7 +180,7 @@ Proof.
 Qed.
 
 (* 正确性（首破严格面）：燃料内可达，枚举返回的 N 步处上取整值 < e
-   （NatLe (S ·) e 严格序界承载）。可达见证为 sigT＋prod＋NatLe 全 Set 承载。 *)
+   （NatLe (S ·) e 严格序界载体）。可达见证为 sigT＋prod＋NatLe 全 Set 载体。 *)
 Theorem cw2_k_enum_correct : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (cw2_pow_iter p q x k)) e))) ->
@@ -154,7 +214,7 @@ Proof.
         exact IH.
 Qed.
 
-(* 首破最小性见证（CL 新数学滚转范本）：燃料内可达，则对每个早于返回
+(* 首破最小性见证（承首破新数学）：燃料内可达，则对每个早于返回
    步数 N 的步 j（S j ≤ N），第 j 步上取整值仍 ≥ e——枚举读数是首个跌破
    预算的步。 *)
 Theorem cw2_k_enum_minimal : forall fuel p q x e,
@@ -197,8 +257,8 @@ Proof.
         simpl. rewrite <- (cw2_pow_iter_comm p q x j'). exact IH.
 Qed.
 
-(* 首破见证合并：燃料内可达，则枚举读数 N 携带双证书——第 N 步跌破预算
-   （严格）＋每个早步仍保预算。sigT＋prod＋forall nat 全 Set 承载。 *)
+(* 首破见证封装：燃料内可达，则枚举读数 N 携带双证书——第 N 步跌破预算
+   （严格）＋每个早步仍保预算。sigT＋prod＋forall nat 全 Set 载体。 *)
 Theorem cw2_k_enum_first_break : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (cw2_pow_iter p q x k)) e))) ->
@@ -301,8 +361,8 @@ Proof.
 Qed.
 
 (* 燃料充足性（泛形·严格版）：凡预算位及以上走步严格递降，则 fuel := x
-   必产首破步（结论 NatLe (S ·) 严格序界承载）。结构归纳，见证 sigT＋
-   prod＋NatLe 全 Set 承载。 *)
+   必产首破步（结论 NatLe (S ·) 严格序界载体）。结构归纳，见证 sigT＋
+   prod＋NatLe 全 Set 载体。 *)
 Theorem cw2_fuel_sufficient_gen : forall fuel p q x E,
   NatLe x fuel ->
   (forall y : nat, NatLe E y ->
@@ -399,16 +459,16 @@ Eval vm_compute in (cw2_k_enum 50 1 2 1000 5).
 Eval vm_compute in (cw2_k_enum 50 3 4 50 4).
 
 (* ============================================================ *)
-(* Part 1：实面 Real 承载映像（CW220_Extensions 收缩收敛面直接使用）——      *)
+(* Part 1：实面 Real 载体平行形（CW220_Extensions 收缩收敛面直接使用）——      *)
 (*   率 kappa := cw2_kappa delta := real_plus real_one (real_opp delta)    *)
 (*   即 1−delta，语句面显式直书。率双证书 exact 直接使用宿主根级出节件；      *)
-(*   幂反单调支以 NatLe Set 承载重述；闭合 arch 槽步数读数（宿主全证闭     *)
+(*   幂反单调腿以 NatLe Set 载体重述；闭合 arch 槽步数读数（宿主全证闭     *)
 (*   合，无诚实接口槽）；宿主衰减链直接使用；K 面主件（均匀几何衰减 NatLe    *)
 (*   面）＋sigT 模量见证；端到端主定理双投影三件（零重放纯投影）；论文     *)
-(*   4.10 尾界三件。全显式参数化——宿主为闭式定理，免 Section 证书槽映像。 *)
+(*   4.10 尾界三件。全显式参数化——宿主为闭式定理，免 Section 证书参数位复制。 *)
 (* ============================================================ *)
 
-(* 率的承载定义（1−delta；宿主语句面同形直书） *)
+(* 率的载体定义（1−delta；宿主语句面同形直书） *)
 Definition cw2_kappa (delta : Real) : Real :=
   real_plus real_one (real_opp delta).
 
@@ -426,7 +486,7 @@ Proof.
   intros delta Hd. exact (one_minus_delta_lt_one_real delta Hd).
 Qed.
 
-(* ===== 幂反单调支的 Set 承载重述（宿主 BudgetReal.real_pow_anti_mono 的   *)
+(* ===== 幂反单调腿的 Set 载体重述（宿主 BudgetReal.real_pow_anti_mono 的   *)
 (*   Prop 序界 (p <= q)%nat 面在本件语句面以 NatLe 重述；Prop 界只经        *)
 (*   NatLe_drop 进证明体，零 Prop 消入 Set。） ============================ *)
 
@@ -484,7 +544,7 @@ Qed.
 (* ===== K 面主件：精度到步数计算器＋均匀几何衰减正确性 ================== *)
 (*   cw2_step_calc: 预算 eps 下以 tv₀ 为幅位的闭合 arch 读数（projT1）；   *)
 (*   cw2_step_calc_correct: 对全部 n ≥ N（NatLe 序界），tv_seq n < eps——   *)
-(*   衰减链支＋NatLe 幂反单调支＋arch 预算支，real_le_lt_trans 双段换轨，  *)
+(*   衰减链腿＋NatLe 幂反单调腿＋arch 预算腿，real_le_lt_trans 双段换轨，  *)
 (*   链幂以 real_mult_comm 对齐宿主 arch 结论的乘序。 ==================== *)
 
 Definition cw2_step_calc (delta : Real) (Hd1 : real_lt real_zero delta)
@@ -533,7 +593,7 @@ Proof.
                HN).
 Qed.
 
-(* sigT 合并（均匀几何衰减模量见证型；宿主主定理结论面的 NatLe 承载形） *)
+(* sigT 封装（均匀几何衰减模量见证型；宿主主定理结论面的 NatLe 载体形） *)
 Theorem cw2_mixing_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (tv_seq : nat -> Real)
@@ -552,7 +612,7 @@ Proof.
 Defined.
 
 (* ===== 端到端主定理双投影（零重放纯投影: 步数读数 projT1、均匀收缩正确  *)
-(*   性 projT2 经 NatLe_drop 桥、sigT 合并——宿主 attention_iterate_       *)
+(*   性 projT2 经 NatLe_drop 桥、sigT 封装——宿主 attention_iterate_       *)
 (*   converges_real 的 (N <= n)%nat Prop 序界只经 NatLe_drop 进证明体） == *)
 
 Definition cw2_conv_step_calc (delta : Real) (Hd1 : real_lt real_zero delta)
@@ -584,7 +644,7 @@ Proof.
   exact (HN n (NatLe_drop _ _ Hn)).
 Qed.
 
-(* sigT 合并（端到端均匀几何衰减模量见证型） *)
+(* sigT 封装（端到端均匀几何衰减模量见证型） *)
 Theorem cw2_conv_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (tv_seq : nat -> Real)
@@ -627,7 +687,7 @@ Proof.
            p q (NatLe_drop _ _ Hpq)).
 Qed.
 
-(* sigT 合并（4.10 尾界模量见证型） *)
+(* sigT 封装（4.10 尾界模量见证型） *)
 Theorem cw2_min_tail_modulus_sigT : forall (delta : Real)
   (Hd1 : real_lt real_zero delta) (Hd2 : real_lt delta real_one)
   (a : Real) (Ha : real_lt real_zero a) (eps : Real)

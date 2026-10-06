@@ -1,14 +1,14 @@
 (* ============================================================ *)
 (* abl_div_tv_kl_channel.v                                        *)
 (* 模块名：abl_div_tv_kl_channel                                   *)
-(* 数学使命：f-散度海峡汇合件（成桥系列第 5 件）——两点 TV²-KL 双向    *)
+(* 数学使命：f-散度海峡闭合件（成桥接件单第 5 件）——两点 TV²-KL 双向    *)
 (*   夹逼通道：下臂 TV² ≤_B KL₂（pnk2_pinsker_one 的壹倍运输两点形）+  *)
 (*   上臂 KL₂ ≤_B 贰·TV²/m（逆 Pinsker 两点形：件 2 主件 dkc_kl2_le_cs  *)
 (*   与件 1d div2_cs_le_tvsq_over_m 经 real_le_b_trans 一钉合流）+     *)
-(*   夹逼合并件与四件合订通道链（TV²≤KL₂≤χ²≤贰·TV²/m 逐段引用）+      *)
-(*   贰·inv(肆)==捌 ¼ 档常数桥（P 草案「无条件版」修正为 q∈[¼,¾] 条件档，  *)
-(*   见头注构造性注记）+ Doeblin 窗衔接位（陈述级挂点：minorization    *)
-(*   迭代质量下臂 m_k 证书由后续使用方供给，本件申报窗口形状并闭合）。 *)
+(*   夹逼封装件与四件合订通道链（TV²≤KL₂≤χ²≤贰·TV²/m 逐段引用）+      *)
+(*   贰·inv(肆)==捌 ¼ 档常数桥（P 草案「无条件版」订正为 q∈[¼,¾] 条件档，  *)
+(*   见头注构造性注记）+ Doeblin 窗接入位（陈述级挂点：minorization    *)
+(*   迭代质量下臂 m_k 证书由候补件供给，本件申报窗口形状并闭合）。    *)
 (* 依赖清单：件 1 abl_div_chisq_twopoint（div2_cs/div2_cs_le_tvsq_    *)
 (*   over_m/d2_two/d2_four/d2_four_pos/d2_ring_eq）、件 2             *)
 (*   abl_div_kl_chisq_twopoint（dkc_kl2_le_cs 主件）、PinskerTwoPoint  *)
@@ -16,9 +16,9 @@
 (*   one 下臂原件）、UpRealLeB/UpRealLeB2（real_le_b/real_le_b_trans、 *)
 (*   UpRealLeB3（leb3_eq_l/eq_r 运输件族）、S01/S02/S03/S07/S08 基座。 *)
 (* 构造性注记：全件 Set 层出口；非严格序一律 Bishop 形 real_le_b（零 Or  *)
-(*   形平方非负位；Hne/Hmq/Hmq1 沿前件既定 Or/le 形证书随行）；合并与   *)
-(*   窗衔接用嵌套 sigT 装载（And 不载 Set 分量）；零承认式语句、零经典   *)
-(*   公理、全部 Qed 闭合。修正说明：P 草案件 5 草案「无条件版 m:=¼ 即     *)
+(*   形平方非负位；Hne/Hmq/Hmq1 沿前件既定 Or/le 形证书随行）；封装与   *)
+(*   窗接入用嵌套 sigT 装载（And 不载 Set 分量）；零承认式语句、零经典   *)
+(*   公理、全部 Qed 闭合。订正在案：P 草案件 5 草案「无条件版 m:=¼ 即     *)
 (*   KL₂ ≤ 捌·TV² 无条件」不成立——q 可任意接近零时一致正 m 不存在       *)
 (*   （反例 p=½、q=10⁻⁴：KL₂≈3.91 > 捌·TV²≈2.00），本件按实况交付       *)
 (*   条件档（壹/肆 ≤ q ≤ 叁/肆 双质量证书），m 语义与件 1d 实文统一。    *)
@@ -72,7 +72,7 @@ Proof.
 Qed.
 
 (* ---- 2. 上臂（逆 Pinsker 两点形）：KL₂ ≤_B 贰·TV²/m ---- *)
-(*   两已闭臂一钉汇合：件 2 主件（KL₂ ≤_B χ²）+ 件 1d 条件上臂          *)
+(*   两已闭臂一钉闭合：件 2 主件（KL₂ ≤_B χ²）+ 件 1d 条件上臂          *)
 (*   （χ² ≤_B 贰·TV²/m）经 real_le_b_trans 合流——零新分析。m 语义与    *)
 (*   件 1d 实文逐字统一（同一最小质量证书位 Hm/Hmq/Hmq1）。             *)
 
@@ -113,7 +113,7 @@ Proof.
   exact (dtv_kl2_le_tvsq_over_m p q m Hp Hq Hp1 Hq1 Hm Hmq Hmq1 eps Heps).
 Qed.
 
-(* ---- 4. 夹逼合并件：TV² ≤_B KL₂ ≤_B 贰·TV²/m（嵌套 sigT 装载） ---- *)
+(* ---- 4. 夹逼封装件：TV² ≤_B KL₂ ≤_B 贰·TV²/m（嵌套 sigT 装载） ---- *)
 
 Definition dtv_sandwich : Set :=
   forall (p q m : Real)
@@ -182,7 +182,7 @@ Proof.
 Qed.
 
 (* ---- 6. ¼ 档：贰·inv(肆)==捌 常数桥与捌·TV² 条件上臂 ---- *)
-(*   修正说明（头注）：P 草案「无条件版」不成立；本档实为 q∈[¼,¾]        *)
+(*   订正在案（头注）：P 草案「无条件版」不成立；本档实为 q∈[¼,¾]        *)
 (*   条件档（壹/肆 ≤ q 且 壹/肆 ≤ 壹−q 双质量证书），常数档样例。        *)
 
 Definition dtv_quarter : Real := real_inv_pos d2_four d2_four_pos.
@@ -218,7 +218,7 @@ Proof.
 Qed.
 
 (* 全变量形缩放换算小件：a·(T·J) == (a·J)·T
-   （环闭原子位复合项避开——沿用先例 AX 同款：全变量形独立纯环件，
+   （环闭原子位复合项避开——AX 定式同款：全变量形独立纯环件，
      调用位以复合项直取代参；J 取 inv 项时环内为不透明原子。） *)
 Lemma dtv_swap_scale : forall (a T J : Real),
   real_eq (real_mult a (real_mult T J))
@@ -267,8 +267,8 @@ Proof.
       * apply real_eq_refl.
 Qed.
 
-(* ---- 7. Doeblin 窗衔接位（陈述级挂点，接入后续使用方） ---- *)
-(*   窗形：使用方供 Doeblin minorization 迭代质量下臂 m_k 的两点逐坐标    *)
+(* ---- 7. Doeblin 窗接入位（陈述级挂点，接入施工候补件） ---- *)
+(*   窗形：候补件供 Doeblin minorization 迭代质量下臂 m_k 的两点逐坐标    *)
 (*   证书（0<m_k、m_k≤q、m_k≤壹−q；m_k:=壹−(壹−δ)^k 的显式迭代代数在     *)
 (*   tvd_/doe_ 面，本件不内置），即得三窗口同束：下臂 TV²≤_B KL₂、上臂     *)
 (*   KL₂≤_B 贰·TV²/m_k、χ²≤_B 贰·TV²/m_k——UpReqDoeblinEntropy「Pinsker  *)

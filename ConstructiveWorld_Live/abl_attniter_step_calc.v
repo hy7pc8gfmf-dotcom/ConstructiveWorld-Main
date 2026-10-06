@@ -1,32 +1,77 @@
 (* ==========================================================================)
-   abl_attniter_step_calc.v — 收敛计算器系列第六件（UpReqAttnIter 收缩迭代面，aic_ 前缀）
-   使命：UpReqAttnIter.v 的 agq_ 收缩迭代链（率证书在案、主定理 2 agq_tv_iter 语句面显式率 req_r_pow
-      omd n、主定理 3 的 sigT N 走 arch_pow_i 阿基米德坑）缺「精度到步数」Defined 计算器。本件补齐
-      三段：率抽取（omd := req_minus one delta）直使用宿主出节双证书；nat 定点档首破严格档＋首破
-      最小性见证两件；req 实面逐形对应 Section（证书子集 22 槽，Prop 序界面 NatLe Set 形重述）。
-   对标行：mathlib 马尔可夫链混合时间界（Doeblin minorization 几何收缩）的构造性 Set 层 req 面对应物；
-      UpReqAttnIter.v §ReqAttnIter 证书面；同系列 dsc_/asc_/cmc_/mtc2_ 体例。
-   三段主面：Part 2 nat 定点档（真 Fixpoint，语句面全 Set 形：aic_ceil_div/aic_iter/aic_pow_iter/aic_k_enum
-      严格首破枚举＋correct/logface 两正确性＋首破最小性见证两件＋严格衰减三件＋燃料充足性三件＋
-      auto_half）；Part 1 req 实面对应（率抽取双证书＋幂单调 Set 形重述＋诚实 arch 槽计算器＋主定理 2
-      直使用＋主件 step_calc(_correct)＋模量 sigT＋端到端双投影三件）。
-   Set 形纪律：语句面零 Prop——存在以 sigT、合取以 prod、nat 序界以 NatLe（NatLe_drop/NatLe_lift 双向桥）；
-      严格序界以 NatLe (S ·) 表达；宿主 (N <= n) Prop 界在对应面以 NatLe 重述，Prop 界只经 NatLe_drop
-      进证明体；假设位零 Hypothesis/零 Prop 型（证书槽均 Set 值语句）。
-   已知边界：主机 arch_pow_i 证书槽为诚实接口参数位（构造性居住而无算法内容，同系列边界口径），可执行
-      面由 Part 2 nat 定点档承载（真 Fixpoint，Obj.magic=0 附加证）；任意实数率的实面 ceil 构造性桥库内
-      确缺，有理数据实面桥由系列前件各 Part 3 在役承载；燃料充足性限衰减域（half 域 2·p ≤ q、E ≥ 2；
-      qbound 域 q ≤ E、任意 p<q）；严格档与 le 档语义分立，读数可差一步（各自正确）。
-   依赖清单：S01_BaseRing（NatLe/NatLe_drop/NatLe_lift）；S07_RealSetoidExpLog（类与 Import 模块）；
-      UpReqAlgebra（req_minus）；UpReqSampling（req_r_pow）；UpReqAttnIter（agq_ 证书族：omd_pos/
-      omd_lt_one/r_pow_dec_iter/tv_nonneg/tv_iter/iterate_converges/boltzmann_dist_i/tv_i/
-      attention_iter_i）；PeanoNat/Lia/Arith。全部 Require-only 零改动。
-   构造性注记：纯构造性/Set 层零 Prop 语句面（nat 面算术不消入实面目标）；非平凡（aic_k_enum 为真
-      Fixpoint 首破枚举）；可提取（Separate Extraction Obj.magic=0 附加证）；零公理（尾 PA 全 Closed
-      预期）。工艺红线：term-mode 全显式实参；Eval vm_compute 烟测入日志；注释内禁右括号星杠字面。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c
-      -native-compiler no -Q vo_local_world_unified_0930 "" abl_attniter_step_calc.v（池内执行）。
-   查重登记：顶层名 31 枚全 aic_ 新前缀，与宿主 agq_ 族、系列 asc_/dsc_/cmc_/mtc2_ 前缀零撞零交。
+   abl_attniter_step_calc.v — 收敛计算器系列第六件（UpReqAttnIter 收缩迭代面，
+   aic_ 前缀）
+   使命: 按定量完备性矿脉表 K7——UpReqAttnIter.v 的 agq_ 收缩迭代链（率证书
+     agq_omd_pos/agq_omd_lt_one 在案、主定理 2 agq_tv_iter 语句面显式率
+     req_r_pow omd n、主定理 3 agq_iterate_converges 的 sigT N 走 arch_pow_i
+     阿基米德坑）缺「精度到步数」Defined 计算器。本件补齐三段:
+     率抽取（omd := req_minus one delta，即 1−δ）直接使用宿主出节双证书；
+     nat 定点档首破严格档（BW 严格 ltb 档与 CD Set 载体 NatLe 档的合流）并
+     新增首破最小性见证两件（BQ/BW 边界 4「枚举器最小性未证」的 nat 面闭合）；
+     req 实面对应形 Section（宿主证书子集同形对应 22 槽，agq_tv_iter/agq_iterate_
+     converges 出节件直接使用，主机 Prop 序界 (N <= n) 面以 NatLe Set 载体重述
+     ——本件 K7 面 Set 载体增量）。
+   件名与前缀: abl_attniter_step_calc.v，aic_ 前缀（施工前全库 grep 防撞:
+     编译树 vo_local_world_unified_0930 与 abl_tmine04_pool 全池零命中）。
+   覆盖核验: BW 件（abl_attn_step_calc，AttnDoeblin Id 层面 K8）与 CD 件
+     （abl_mixchain_step_calc，MixTimeChain 面 K11/W7）grep agq_/UpReqAttnIter
+     均零命中——矿脉表 K7「半定量，arch_pow_i 坑」结论现档复核仍成立（宿主
+     本体 grep calc/projT1 零命中），本件就地闭合 K7，无转位（备选位
+     UpReqConcFin2/CW220_Extensions 留后续增量）。
+   本件陈述（三段，31 个 aic_ 常数）:
+     Part 2 nat 定点档（真 Fixpoint，语句面全 Set 载体）: aic_ceil_div/
+       aic_iter/aic_pow_iter/aic_k_enum（有界燃料上取整衰减枚举，Nat.ltb
+       首破停机——严格档）＋正确性两半（aic_k_enum_correct 严格面 NatLe
+       (S ·) 形 / aic_k_enum_logface 精确面 x·p^N ≤ e·q^N）＋首破最小性
+       见证两件（aic_k_enum_minimal 每早步 j 仍 ≥ e / aic_k_enum_first_
+       break  sigT＋prod 封装——首破新数学）＋严格衰减三件（aic_iter_lt_
+       decay/lt_half/lt_q）＋燃料充足性三件（aic_fuel_sufficient_gen/half/
+       qbound，严格版结论）＋aic_k_enum_auto_half。
+     Part 1 req 实面对应形（Section AicAttnIterCalc，宿主证书子集 22 槽）:
+       率抽取双证书（aic_rate_pos/aic_rate_lt_one，exact 直接使用宿主出节件，
+       出节实参序经检验确定: agq_omd_pos 无 delta_pos、agq_omd_lt_one 有
+       delta_pos—— discharge 最小化分立，如实登记）＋幂单调 Set 载体
+       重述件（aic_r_pow_dec_iter_set，宿主 Prop 序界面 NatLe 化）＋诚实
+       arch 槽计算器两件（aic_arch_k/aic_arch_k_budget）＋宿主主定理 2
+       直接使用件（aic_tv_iter_proj）＋K7 主件两件（aic_step_calc/
+       aic_step_calc_correct，均匀于全部 n ≥ N 的 TV 收缩，NatLe 序界面）
+       ＋sigT 模量见证（aic_mixing_modulus_sigT）＋端到端主定理 3 双投影
+       三件（aic_conv_step_calc/aic_conv_step_correct/aic_conv_modulus_
+       sigT，零重放纯投影）。
+   Set 载体纪律（语句面零 Prop）: 存在以 sigT、合取以 prod、nat 序界以
+     NatLe（S01 的 leb 判定型 Set 载体，NatLe_drop/NatLe_lift 双向桥）；
+     严格序界以 NatLe (S ·) 表达；实面比较以 req 面 lt/le（RealInterface
+     EnhancedSetoid 类字段，Set 层值）；步数见证以 sigT nat。语句面零 Prop
+     版存在/合取/序界（宿主 agq_iterate_converges 的 (N <= n) Prop 界在本
+     件对应形面以 NatLe 重述，Prop 界只经 NatLe_drop 进证明体）；假设位零
+     Hypothesis/零 Prop 型（证书槽均 Set 值语句）；零 not/~/<> 书写面。
+   fail-loud 记录: 主机 arch_pow_i 证书槽为诚实接口参数位（构造性居住而
+     无算法内容，同系列 BW/CD 边界口径），可执行面由 Part 2 nat 定点档
+     承载（真 Fixpoint，Obj.magic=0 附加证）；任意实数率的实面 ceil 构造性
+     桥库内确缺（系列结论不变），有理数据实面桥由系列前件（dsc_/asc_/cmc_/
+     mtc2_ 各 Part 3）在役承载，本件不重复滚转；燃料充足性限衰减域（half
+     域 2·p ≤ q、E ≥ 2；qbound 域 q ≤ E、任意 p<q——严格版预算位比 CD
+     le 档抬一档）；严格档与 le 档语义分立: 首破「x < e」与首达「x ≤ e」
+     读数可差一步（烟测实拍: kappa=3/4、A=50、E=4 严格档读 11，CD le 档
+     同数据读 10，各自正确于本档语义）。
+   依赖: S01_BaseRing（NatLe/NatLe_drop/NatLe_lift）；S07_RealSetoidExpLog
+     （RealInterfaceEnhancedSetoid 类，Import RealInterfaceEnhancedMod）；
+     UpReqAlgebra（req_minus）；UpReqSampling（req_r_pow）；UpReqAttnIter
+     （agq_omd_pos/agq_omd_lt_one/agq_r_pow_dec_iter/agq_tv_nonneg/agq_tv_
+     iter/agq_iterate_converges/boltzmann_dist_i/tv_i/attention_iter_i）；
+     PeanoNat/Lia/Arith。全部 Require-only 零改动，Live/注册面/缓存根零
+     触碰。
+   对标: mathlib 马尔可夫链混合时间界（Doeblin minorization 几何收缩）的
+     构造性 Set 层 req 面对应物；同系列 dsc_/asc_/cmc_/mtc2_ 的 K7 面补全。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；序谓词均
+     Set 层值；nat 面算术不消入实面目标）；非平凡（aic_k_enum 为真
+     Fixpoint 首破枚举）；可提取（Separate Extraction Obj.magic=0 附加证）；
+     零公理（尾 Print Assumptions 全 Closed 预期）。
+   工艺红线: term-mode 全显式实参；数值定装（Eval vm_compute 烟测入日志）；
+     注释内禁右括号星杠字面。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q
+     vo_local_world_unified_0930 "" abl_attniter_step_calc.v（池内执行）。
    ========================================================================== *)
 
 From Stdlib Require Import List.
@@ -42,9 +87,9 @@ From Stdlib Require Import Lia.
 Import RealInterfaceEnhancedMod.
 
 (* ============================================================ *)
-(* Part 2：收缩率定点枚举解算器（真 Fixpoint/首破严格档/Set 形）        *)
+(* Part 2：收缩率定点枚举解算器（真 Fixpoint/首破严格档/Set 载体）      *)
 (*   收缩率 kappa=p/q（0<p<q）、初值 A、预算 E 的定点表示，首破枚举 N    *)
-(*   使 powIter N A < E（严格）。序界全走 NatLe Set 形，严格序界以        *)
+(*   使 powIter N A < E（严格）。序界全走 NatLe Set 载体，严格序界以      *)
 (*   NatLe (S ·) 表达。本段含首破最小性见证两件与燃料充足性三件。        *)
 (* ============================================================ *)
 
@@ -120,7 +165,7 @@ Proof.
 Qed.
 
 (* 正确性（首破严格面）：燃料内可达，枚举返回的 N 步处上取整值 < e
-   （NatLe (S ·) e 严格序界形）。可达见证为 sigT＋prod＋NatLe 全 Set 形。 *)
+   （NatLe (S ·) e 严格序界载体）。可达见证为 sigT＋prod＋NatLe 全 Set 载体。 *)
 Theorem aic_k_enum_correct : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (aic_pow_iter p q x k)) e))) ->
@@ -154,9 +199,9 @@ Proof.
         exact IH.
 Qed.
 
-(* 首破最小性见证（本件新数学）：燃料内可达，则对每个早于返回步数 N 的
+(* 首破最小性见证（首破新数学）：燃料内可达，则对每个早于返回步数 N 的
    步 j（S j ≤ N），第 j 步上取整值仍 ≥ e——枚举读数是首个跌破预算的步。
-   （「枚举器最小性未证」边界的 nat 面闭合件。） *)
+   （BQ 边界 4/BW 边界 4「枚举器最小性未证」的 nat 面闭合件。） *)
 Theorem aic_k_enum_minimal : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (aic_pow_iter p q x k)) e))) ->
@@ -197,9 +242,9 @@ Proof.
         simpl. rewrite <- (aic_pow_iter_comm p q x j'). exact IH.
 Qed.
 
-(* 首破见证封装（本件新数学）：燃料内可达，则枚举读数 N 携带双证书——
+(* 首破见证封装（首破新数学）：燃料内可达，则枚举读数 N 携带双证书——
    第 N 步跌破预算（严格）＋每个早步仍保预算。sigT＋prod＋forall nat 全
-   Set 形。 *)
+   Set 载体。 *)
 Theorem aic_k_enum_first_break : forall fuel p q x e,
   (sigT (fun k : nat =>
     prod (NatLe k fuel) (NatLe (Datatypes.S (aic_pow_iter p q x k)) e))) ->
@@ -302,8 +347,8 @@ Proof.
 Qed.
 
 (* 燃料充足性（泛形·严格版）：凡预算位及以上走步严格递降，则 fuel := x
-   必产首破步（结论 NatLe (S ·) 严格序界形）。结构归纳，见证 sigT＋
-   prod＋NatLe 全 Set 形。 *)
+   必产首破步（结论 NatLe (S ·) 严格序界载体）。结构归纳，见证 sigT＋
+   prod＋NatLe 全 Set 载体。 *)
 Theorem aic_fuel_sufficient_gen : forall fuel p q x E,
   NatLe x fuel ->
   (forall y : nat, NatLe E y ->
@@ -401,13 +446,13 @@ Eval vm_compute in (aic_k_enum 50 1 2 1000 5).
 Eval vm_compute in (aic_k_enum 50 3 4 50 4).
 
 (* ============================================================ *)
-(* Part 1：req 实面逐形对应（UpReqAttnIter §ReqAttnIter 证书子集 22 槽）——   *)
-(*   率 omd := req_minus one delta（即 1−δ）。率双证书 exact 直使用宿主      *)
-(*   出节件（出节签名经 Check @ 直接钉死：agq_omd_pos 五参无 delta_pos、    *)
-(*   agq_omd_lt_one 五参有 delta_pos——discharge 最小化分立）；幂单调支      *)
-(*   以 NatLe Set 形重述；诚实 arch 槽计算器；宿主主定理 2 直使用；         *)
-(*   主件（均匀 TV 收缩 NatLe 面）＋sigT 模量见证；端到端主定理 3           *)
-(*   双投影三件（零重放纯投影）。                                           *)
+(* Part 1：req 实面对应形（UpReqAttnIter §ReqAttnIter 证书子集 22 槽）——   *)
+(*   率 omd := req_minus one delta（即 1−δ）。率双证书 exact 直接使用宿主    *)
+(*   出节件（出节签名经 Check @ 检验确定：agq_omd_pos 五参无 delta_pos、  *)
+(*   agq_omd_lt_one 五参有 delta_pos——discharge 最小化分立）；幂单调腿    *)
+(*   以 NatLe Set 载体重述；诚实 arch 槽计算器；宿主主定理 2 直接使用；      *)
+(*   K7 主件（均匀 TV 收缩 NatLe 面）＋sigT 模量见证；端到端主定理 3      *)
+(*   双投影三件（零重放纯投影）。                                          *)
 (* ============================================================ *)
 
 Section AicAttnIterCalc.
@@ -417,7 +462,7 @@ Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 Variable S : Set.
 Variable sumf : (S -> R) -> R.
 
-(* ---- 求和与 abs 诚实接口（宿主证书子集逐形对应，逐位同型） ---- *)
+(* ---- 求和与 abs 诚实接口（宿主证书子集对应形，逐位同型） ---- *)
 Variable sum_ext :
   forall f g : S -> R, (forall s : S, req (f s) (g s)) -> req (sumf f) (sumf g).
 Variable sum_linear :
@@ -464,14 +509,14 @@ Variable abs_ge_zero_i : forall a : R, le zero a -> req (abs a) a.
 Variable p_steady_i :
   forall s' : S,
     req (sumf (fun s : S => mult (bdist s) (transition s s'))) (bdist s').
-(* 几何击穿诚实接口槽（宿主 arch_pow_i 逐位对应；幂底换 req_r_pow omd） *)
+(* 几何击穿诚实接口槽（宿主 arch_pow_i 同形对应；幂底换 req_r_pow omd） *)
 Variable arch_pow_i :
   forall (a : R), lt zero a -> forall eps : R, lt zero eps ->
     sigT (fun N : nat => lt (mult a (req_r_pow (req_minus one delta) N)) eps).
 
-(* ===== 率抽取双证书（exact 直使用宿主出节件；出节实参经直接钉死：      *)
+(* ===== 率抽取双证书（exact 直接使用宿主出节件；出节实参经检验确定：      *)
 (*   agq_omd_pos 五参（无 delta_pos）、agq_omd_lt_one 五参（有 delta_pos） *)
-(*   ——同一节两主证书出节参数面分立，使用前逐件 Check @ 钉序。 ========== *)
+(*   ——同一节两主证书出节参数面分立，使用前逐件 Check @ 确定序。 ========== *)
 
 Lemma aic_rate_pos : lt zero omd.
 Proof.
@@ -483,7 +528,7 @@ Proof.
   exact (agq_omd_lt_one delta delta_pos lt_plus_compat_le_lt_i).
 Qed.
 
-(* ===== 幂单调支的 Set 形重述（宿主 agq_r_pow_dec_iter 的 Prop 序界面   *)
+(* ===== 幂单调腿的 Set 载体重述（宿主 agq_r_pow_dec_iter 的 Prop 序界面   *)
 (*   (m <= n)%nat 在本件语句面以 NatLe 重述；Prop 界只经 NatLe_drop 进证明 *)
 (*   体，零 Prop 消入 Set。） ============================================ *)
 
@@ -508,7 +553,7 @@ Proof.
   intros a Ha eps Heps. exact (projT2 (arch_pow_i a Ha eps Heps)).
 Qed.
 
-(* ===== 宿主主定理 2 直使用（收缩脊柱读出面：率 req_r_pow omd n 显式在   *)
+(* ===== 宿主主定理 2 直接使用（收缩脊柱读出面：率 req_r_pow omd n 显式在   *)
 (*   语句面） =========================================================== *)
 
 Theorem aic_tv_iter_proj : forall (n : nat) (mu : S -> R),
@@ -526,8 +571,8 @@ Qed.
 (* ===== K7 主件：精度到步数计算器＋均匀收缩正确性 ======================= *)
 (*   aic_step_calc：TV0 := tv(mu0,p) > 0 的 arch 槽读数（projT1）；       *)
 (*   aic_step_calc_correct：对全部 n ≥ N（NatLe 序界），迭代 TV 严格低于   *)
-(*   预算 eps——agq_iterate_converges 同链 NatLe 重述（agq_tv_iter 支＋   *)
-(*   NatLe 幂单调支＋arch 预算支，le_lt_trans 双段换轨）。 ================ *)
+(*   预算 eps——agq_iterate_converges 同链 NatLe 重述（agq_tv_iter 腿＋    *)
+(*   NatLe 幂单调腿＋arch 预算腿，le_lt_trans 双段换轨）。 ================ *)
 
 Definition aic_step_calc (mu0 : S -> R) (Hmu : req (sumf mu0) one)
   (eps : R) (Heps : lt zero eps) (Htv0 : lt zero (tv_i S sumf mu0 bdist))
@@ -554,7 +599,7 @@ Proof.
                (mult_comm (req_r_pow omd N) (tv_i S sumf mu0 bdist)) HN).
 Qed.
 
-(* sigT 封装（均匀 TV 收缩模量见证型；宿主主定理 3 结论面的 NatLe 形） *)
+(* sigT 封装（均匀 TV 收缩模量见证型；宿主主定理 3 结论面的 NatLe 载体形） *)
 Theorem aic_mixing_modulus_sigT : forall (mu0 : S -> R)
   (Hmu : req (sumf mu0) one) (eps : R) (Heps : lt zero eps)
   (Htv0 : lt zero (tv_i S sumf mu0 bdist)),

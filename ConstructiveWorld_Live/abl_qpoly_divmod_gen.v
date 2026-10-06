@@ -1,32 +1,44 @@
 (* ===================================================================== *)
-(*  模块名：abl_qpoly_divmod_gen —— Q 多项式带余除法【一般形】引擎——ln2    *)
-(*    路线③第二段：任意次数除数（真首项非零＋度≥1）的长除法构造性版。      *)
-(* 使命：闭合前件登记接口 qpd_divmod_gen_type p q 容器（照用其形状：       *)
-(*    sigT 封装（商表, 余表）＋双正确性肢：①等式肢 ∀x, QeqT (eval p x)     *)
-(*    (eval q x · eval 商 x + eval 余 x)；②度肢 qpd_deglt 余 q（Id bool    *)
-(*    可判定面）。交付 qpg_divmod_gen : forall p q, qpg_divisor_ok q ->   *)
-(*    qpd_divmod_gen_type p q。                                            *)
-(* 路线（经典长除法构造性版）：按首项系数消去递归——商系数 c = lead p /     *)
-(*    lead q（Qdiv 在册）；p − c·x^k·q 顶位相消归零，截去顶位得 p1，        *)
-(*    deg p1 严格递减；燃料 = length p，真结构 Fixpoint（可提取）。         *)
-(*    终止性＝长度度量；正确性＝归纳步环等式（全变量形纯环小件直取）。     *)
-(* 诚实边界：除数前提升为 qpg_divisor_ok q＝①deg q ≥ 1（Id bool 面：      *)
-(*    ltb 0 (deg q) = true，度肢自动排除常除数）②lead q ≠ 0（Qcompare     *)
-(*    Set 面：真首项非零）。理由：头=常数项稠密表下 listdeg ≠ 真度（尾零   *)
-(*    例 q=[1;2;0] listdeg=2 而真度=1，lead=0），首项消去须真首项非零方可  *)
-(*    除；原登记「deg q ≥ 1」单前提对本引擎不足，此为诚实扩题，容器面零改  *)
-(*    动。切片边界：本件闭合递归引擎＋存在性肢；唯一性肢 §5 只登记不施工。 *)
-(* 依赖清单：Stdlib QArith/Qring/Qfield/List/Arith/ZArith/Lia/Extraction； *)
-(*    S01_BaseRing S02_CauchyComplete PolyIntegral（池外在册件）；前件     *)
-(*    abl_qpoly_divmod（用其 qpd_divmod_gen_pred/type 容器与度肢三件）。   *)
-(* 对标：abl_qpoly_divmod（线性综合除法首件）；PolyIntegral pint_*；BT/AE  *)
-(*    诚实边界路线③。                                                     *)
-(* 构造性注记：纯构造性、零承认件；语句面全 Set（sigT＋S01.And＋S02.QeqT＋  *)
-(*    S01.Id 面），Qeq==仅证内推理脚手架；环闭全走「全变量形纯环小件」模式  *)
-(*    （前件 §1 同款）。                                                   *)
-(* 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&        *)
-(*    ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q <world> ""  *)
-(*    本件（先编前件 abl_qpoly_divmod；单进程串行）。                       *)
+(*  五字段指针｜使命：Q 多项式带余除法【一般形】引擎——ln2 路线③第二段      *)
+(*    （CK）。闭合件 CC 登记的接口 qpd_divmod_gen_type：任意次数除数     *)
+(*    （真首项非零＋度≥1）的长除法构造性版。依赖：Stdlib QArith/Qring/      *)
+(*    Qfield/List/Arith/ZArith/Lia/Extraction；S01_BaseRing                *)
+(*    S02_CauchyComplete PolyIntegral（池外世界树在册件）；前件             *)
+(*    abl_qpoly_divmod（池内 CC 首件，使用其 qpd_divmod_gen_pred/type       *)
+(*    容器与 qpd_eval_add/qpd_eval_cons/qpd_deglt 度肢）。 构造性：纯构造   *)
+(*    性、零承认件；语句面全 Set（sigT＋S01.And＋S02.QeqT＋S01.Id 面），   *)
+(*    Qeq==仅证内推理脚手架；环闭全走「全变量形纯环小件」模式（坑卡         *)
+(*    AL/AX，前件 §1 同款）。 编译配方：source Live/toolchain/env.sh &&    *)
+(*    unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c           *)
+(*    -native-compiler no -Q vo_local_world_unified_0930 ""                *)
+(*    abl_qpoly_divmod_gen.v（先编前件 abl_qpoly_divmod.v；道闸≤1＝单进程  *)
+(*    串行）。 对标：CC abl_qpoly_divmod（线性综合除法首件）；PolyIntegral  *)
+(*    pint_*（Q 系数列表先例）；BT §诚实边界路线③；AE §3.3 路线③。        *)
+(* ===================================================================== *)
+(*  abl_qpoly_divmod_gen.v —— Q 层多项式除法引擎·一般形（第二段）           *)
+(*                                                                        *)
+(*  使命：闭合 CC 登记的 qpd_divmod_gen_type p q 容器（照用其形状：         *)
+(*    sigT 封装（商表, 余表）＋双正确性肢                                  *)
+(*      ①等式肢 ∀x, QeqT (eval p x) (eval q x · eval 商 x + eval 余 x)      *)
+(*      ②度肢   qpd_deglt 余 q（Id bool 可判定面）                          *)
+(*    交付 qpg_divmod_gen : forall p q, qpg_divisor_ok q ->                *)
+(*                            qpd_divmod_gen_type p q。                    *)
+(*                                                                        *)
+(*  路线（经典长除法构造性版）：按首项系数消去递归——                       *)
+(*    商系数 c = lead p / lead q（Q 层 Qdiv，在册）；p − c·x^k·q 顶位相消   *)
+(*    归零，截去顶位得 p1，deg p1 = deg p − 1 严格递减；燃料 = length p，   *)
+(*    真结构 Fixpoint（nat 燃料递归，非平凡算法体，可提取）。终止性＝长度   *)
+(*    度量；正确性＝归纳步环等式（全变量形纯环小件直取）。                 *)
+(*                                                                        *)
+(*  与 CC 接口 diff（诚实边界）：除数前提升为 qpg_divisor_ok q ＝           *)
+(*    ①deg q ≥ 1（Id bool 面：ltb 0 (deg q) = true——度肢自动排除常除数）  *)
+(*    ②lead q ≠ 0（Qcompare Set 面：真首项非零）。理由：头=常数项稠密表    *)
+(*    下 listdeg ≠ 真度（尾零例 q=[1;2;0] listdeg=2 而真度=1，lead=0），   *)
+(*    首项消去须真首项非零方可除；任务指令「deg q ≥ 1」单前提对本引擎不足，  *)
+(*    此为表示法层面诚实扩题，容器面与 CC 登记零改动。                     *)
+(*                                                                        *)
+(*  首件策略（45 分钟切片）：本件闭合「递归引擎＋存在性肢」；唯一性肢       *)
+(*    （商余唯一）§5 只登记不施工。                                        *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qring QArith.Qfield.
@@ -56,7 +68,7 @@ Definition qpg_leadne0 (q : list Q) : Set :=
 Definition qpg_divisor_ok (q : list Q) : Set :=
   And (qpg_degge1 q) (qpg_leadne0 q).
 
-(* Id bool 面反演：由 Id true b 取布尔等式 *)
+(* Id bool 面使用：由 Id true b 取布尔等式 *)
 Lemma qpg_id_true_inv : forall b : bool, @Id bool true b -> b = true.
 Proof. intros b H. destruct H. reflexivity. Qed.
 
@@ -141,7 +153,7 @@ Lemma qpg_ring_shift_edge : forall h x c : Q,
   h + x * 0 == (h + x * 0) - x * 1 * (c * 0).
 Proof. intros h x c. ring. Qed.
 
-(* Qeq 移项：b == a − x ⟹ a == x + b *)
+(* Qeq 迁移：b == a − x ⟹ a == x + b *)
 Lemma qpg_qeq_move : forall a b x : Q, b == a - x -> a == x + b.
 Proof. intros a b x H. rewrite H. ring. Qed.
 
@@ -629,7 +641,7 @@ Lemma qpg_smokeE_r :
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §7 收束：提取面 + Print Assumptions 逐条取证                    *)
+(* §7 闭合：提取面 + Print Assumptions（红线四条逐条 PA）          *)
 (* ============================================================ *)
 
 Separate Extraction qpg_engine qpg_shift_sub qpg_align_sub qpg_remlast
@@ -667,4 +679,4 @@ Print Assumptions qpg_smokeD.
 Print Assumptions qpg_smokeE_q.
 Print Assumptions qpg_smokeE_r.
 
-(* 多项式除法引擎一般形终（纯构造性出生） *)
+(* CK·多项式除法引擎一般形终（born-green 目标） *)

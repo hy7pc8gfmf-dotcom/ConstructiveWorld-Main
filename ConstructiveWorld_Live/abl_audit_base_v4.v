@@ -1,32 +1,40 @@
 (* ===================================================================== *)
-(*  abl_audit_base_v4.v —— 审计承载扩容 v4·链式复合承载件 *)
+(*  abl_audit_base_v4.v —— 审计载体扩容 v4·链式复合载体件                    *)
 (* ===================================================================== *)
-(*  使命: Z 裸奔面 Top3 行两名的链式复合闭合（前档登记「只完成前半段原料」 *)
-(*        「三链汇合留待并件」，本件即汇合位）。承载语句两件: *)
-(*        ① abd_tv_contraction_twice_orbit——单步 TV 收缩主定理与保持性二件 *)
-(*          （attention_step_normalized/attention_step_nonneg）的两次迭代复 *)
-(*          合推论沿轨道点一般形: 对任意归一化非负 w， *)
-(*          tv(step(step w), p_attn) ≤ (1−δ)·(1−δ)·tv(w, p_attn)； *)
-(*        ② abd_iterate_converges_via_twice——两次迭代复合再接收敛主定理 *)
-(*          （attention_iterate_converges）的链式复合件: 同一见证 N 下，n 步 *)
-(*          迭代 TV 距 < eps（收敛面）且 2+n 步迭代 TV 距 ≤ (1−δ)²·eps（复 *)
-(*          合面），二面单语句并载。Top4 行（boltzmann_normalized/ *)
-(*          boltzmann_dist_temp_normalized）经核实已由 v2 件使用＋直审双覆盖， *)
-(*          本件不重复供给，仅登记对账。 *)
-(*  依赖: S01–S06（BaseRing/CauchyComplete/QExp/RealExpLogConv/AlignmentGRPO/ *)
-(*        DiffSamplingGibbs，-Q 预编译树只读引用）；文尾 Stdlib Extraction *)
-(*        （出口舱）。 *)
-(*  对标: 审计承载扩容系列 v1–v3 同口径链式复合件（v2 件 boltzmann 对）。 *)
-(*  构造性: 零承认语句、零经典逻辑、零 Prop 承载: 语句面存在/见证全 sigT（Set *)
-(*        层），合取用 S01.And（:= A*B，Set 层），比较全 Id/le/lt（Set 型），无 *)
-(*        exists/Prop 连词、无否定形书写；节内 Variable 位与定理前提位全 Set *)
-(*        型；证明体全 exact/apply 显式项直交。 *)
-(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s *)
-(*        65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_ *)
-(*        unified_0930 "" abl_audit_base_v4.v（独占池）。 *)
-(*  核实注: 链上五主签名以 repl Check 实拍为准逐一调形（收敛件带 Hltc/Hlec/ *)
-(*        Hdecay 前提，收缩件仅带 Hd1，保持件不带 Hmin/Hdb）；abd_ 前缀全树 *)
-(*        grep 零命中。 *)
+(*  使命: Z 裸奔面 Top3 行两名的链式复合闭合（Z §④候选 1 的 S06 链施工件：    *)
+(*        BX 登记候选 1「只完成前半段原料」、BZ 登记「三链闭合留待并件」，     *)
+(*        本件即闭合位）。载体语句两件，链式三定理一线复合：                  *)
+(*        ① abd_tv_contraction_twice_orbit——单步 TV 收缩主定理               *)
+(*          （attention_tv_contraction）×保持性二件                          *)
+(*          （attention_step_normalized/attention_step_nonneg）的两次迭代    *)
+(*          复合推论沿轨道点一般形：对任意归一化非负 w，                     *)
+(*          tv(step(step w), p_attn) ≤ (1−δ)·(1−δ)·tv(w, p_attn)；           *)
+(*        ② abd_iterate_converges_via_twice——两次迭代复合再接收敛主定理      *)
+(*          （attention_iterate_converges）的链式复合件：同一见证 N 下，      *)
+(*          n 步迭代 TV 距 < eps（收敛面）且 2+n 步迭代 TV 距                *)
+(*          ≤ (1−δ)²·eps（复合面），二面单语句并载。                         *)
+(*        Top4 行（S04 boltzmann_normalized/boltzmann_dist_temp_normalized） *)
+(*        经核验已由 v2 件使用＋直审双覆盖（abb_boltzmann_pair_mass_two），   *)
+(*        本件不重复供给，仅登记核对。                                       *)
+(*  依赖: S01_BaseRing S02_CauchyComplete S03_QExp S04_RealExpLogConv        *)
+(*        S05_AlignmentGRPO S06_DiffSamplingGibbs（-Q 预编译树只读引用）；    *)
+(*        文尾 Stdlib Extraction（出口舱）。                                 *)
+(*  构造性: 零承认语句、零经典逻辑、零 Prop 载体：语句面存在/见证全 sigT      *)
+(*        （Set 层），合取用 S01_BaseRing.And（:= A*B，Set 层），             *)
+(*        比较全 Id/le/lt（Set 型），无 exists/Prop 连词、无否定形书写；      *)
+(*        节内 Variable 位与定理前提位全 Set 型（Id/le/lt/sigT 面）；        *)
+(*        证明体全 exact/apply 显式项直交，两次复合段沿 v2 件已验链形。       *)
+(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&        *)
+(*        ulimit -s 65532 && nice -19 rocq c -native-compiler no             *)
+(*        -Q vo_local_world_unified_0930 "" abl_audit_base_v4.v              *)
+(*        （独占池 audit_base_v4/，道闸≤1，单件无池内链序）。                 *)
+(*  核验注: ①链上五主签名以检验 Check 实拍为准逐一调形——                    *)
+(*        attention_iterate_converges 带 Hltc/Hlec 双加法兼容前提与 Hdecay    *)
+(*        几何衰减见证前提；attention_tv_contraction 仅带 Hd1 不带 Hd0；      *)
+(*        attention_step_normalized 不带 Hmin/Hdb。②iterate 系 S01 自有      *)
+(*        Fixpoint（按 n 归纳，S 侧 = f (iterate f n' x)），故               *)
+(*        iterate f (2+n) x ≡ f (f (iterate f n x)) 定义性成立，             *)
+(*        复合面轨道换位经转换检查直交。③abd_ 前缀全树 grep 零命中。          *)
 (* ===================================================================== *)
 
 Require Import S01_BaseRing.
@@ -37,7 +45,7 @@ Require Import S05_AlignmentGRPO.
 Require Import S06_DiffSamplingGibbs.
 
 (* ============================================================ *)
-(* §1 承载语句舱·复合第一段                                       *)
+(* §1 载体语句舱·复合第一段                                       *)
 (*    单步 TV 收缩 × 保持性二件 ⟹ 两次迭代复合（轨道点一般形）      *)
 (* ============================================================ *)
 
@@ -89,7 +97,7 @@ Variable Hswap : forall f : S -> S -> R,
      (sum_over_S (fun s' : S => sum_over_S (fun s : S => f s s'))).
 Variable Habs : forall a : R, le zero a -> Id (abs a) a.
 
-(* 承载件一：两次迭代复合（轨道点一般形）。对任意归一化非负 w，两次       *)
+(* 载体件一：两次迭代复合（轨道点一般形）。对任意归一化非负 w，两次       *)
 (* 注意力步后的 TV 距以 (1−δ)² 因子收缩——单步收缩主定理沿中态            *)
 (* （step w）与起点 w 各行使一次，中态的归一化/非负由保持性二件供给。      *)
 Theorem abd_tv_contraction_twice_orbit :
@@ -130,17 +138,17 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 承载语句舱·复合第二段                                       *)
-(*    两次迭代复合（承载件一）再接收敛主定理——链式汇合件            *)
+(* §2 载体语句舱·复合第二段                                       *)
+(*    两次迭代复合（载体件一）再接收敛主定理——链式闭合件            *)
 (*    （使用 attention_iterate_converges ＋ n 步保持性二件          *)
 (*      iterate_attention_normalized/iterate_attention_nonneg）    *)
 (* ============================================================ *)
 
-(* 承载件二：同一见证 N 下二面并载——                              *)
+(* 载体件二：同一见证 N 下二面并载——                              *)
 (*   收敛面：n ≥ N 时 tv(iterate n mu0, p_attn) < eps               *)
 (*   （收敛主定理输出原样入位）；                                   *)
 (*   复合面：n ≥ N 时 tv(iterate (2+n) mu0, p_attn)                *)
-(*             ≤ (1−δ)·(1−δ)·eps——承载件一沿轨道点                  *)
+(*             ≤ (1−δ)·(1−δ)·eps——载体件一沿轨道点                  *)
 (*   w := iterate n mu0 行使（其归一化/非负由 n 步保持性二件供给），  *)
 (*   再以 0 < 1−δ 两级放缩到 eps。二面证体即链式三定理一线。          *)
 Theorem abd_iterate_converges_via_twice :
@@ -175,7 +183,7 @@ Proof.
   split.
   - (* 收敛面：收敛主定理输出原样入位 *)
     exact (HconvN n Hn0).
-  - (* 复合面：承载件一沿轨道点行使，再两级放缩到 eps                    *)
+  - (* 复合面：载体件一沿轨道点行使，再两级放缩到 eps                    *)
     apply (le_trans _
             (mult (minus one delta)
                   (mult (minus one delta)
@@ -208,12 +216,12 @@ Qed.
 End AbdTvTwiceOrbit.
 
 (* ============================================================ *)
-(* §3 尾舱·假设审计（链上六面跨件直审＋本件两承载自审）              *)
+(* §3 尾舱·假设审计（链上六面跨件直审＋本件两载体自审）              *)
 (*    判读判据：八条全输出 Closed under the global context。         *)
 (*    前 6 条＝S06 收敛链六面（单步收缩/单步保持性二件/收敛主定理/    *)
 (*    n 步保持性二件）的跨件追审——其中六面此前全树直审为 0（Top3 行）；*)
-(*    后 2 条＝本件两承载自审。承载件二的假设面沿传递依赖自动包含     *)
-(*    承载件一与链上六面的公理面并集（复合审计单调性，Z §④候选 1）。  *)
+(*    后 2 条＝本件两载体自审。载体件二的假设面沿传递依赖自动包含     *)
+(*    载体件一与链上六面的公理面并集（复合审计单调性，Z §④候选 1）。  *)
 (* ============================================================ *)
 
 Print Assumptions S06_DiffSamplingGibbs.attention_tv_contraction.
@@ -226,7 +234,7 @@ Print Assumptions abd_tv_contraction_twice_orbit.
 Print Assumptions abd_iterate_converges_via_twice.
 
 (* ============================================================ *)
-(* §4 出口舱：承载兼任提取端口（G3：提取面零魔数）                   *)
+(* §4 出口舱：载体兼任提取端口（G3：提取面零魔数）                   *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

@@ -3383,58 +3383,58 @@ Definition ng_abl_c1_lohi : NewGreenFace :=
   "[abl_c1_lohi.v: UpAblP7_LoHiSqueeze keyed 23 pending parameters discharged one by one]" "L354:me5247e56".
 (* ng_abl_Pr_core_01 —— abl_Pr_core_01.v：素数域基件一（素性判定·最小素因子·分解存在） *)
 Definition ng_abl_Pr_core_01 : NewGreenFace :=
-  MkNewGreenFace "abl_Pr_core_01.v" 326 26 20261005
-  "[abl_Pr_core_01.v: primality test, least prime factor and factorization existence over nat]" "L326:m1b211def".
+  MkNewGreenFace "abl_Pr_core_01.v" 326 26 20261006
+  "[abl_Pr_core_01.v: primality test, least prime factor and factorization existence over nat]" "L326:m6a49be7b".
 
 (* ng_abl_qpoly_divmod —— abl_qpoly_divmod.v：Q 层多项式线性综合除法引擎 *)
 Definition ng_abl_qpoly_divmod : NewGreenFace :=
-  MkNewGreenFace "abl_qpoly_divmod.v" 352 42 20261005
-  "[abl_qpoly_divmod.v: linear synthetic division engine for dense-list polynomials over Q]" "L352:m7c36262b".
+  MkNewGreenFace "abl_qpoly_divmod.v" 355 42 20261006
+  "[abl_qpoly_divmod.v: linear synthetic division engine for dense-list polynomials over Q]" "L355:mf812c657".
 
 (* ng_abl_Pr_enum_02 —— abl_Pr_enum_02.v：素数域基件二（枚举面） *)
 Definition ng_abl_Pr_enum_02 : NewGreenFace :=
-  MkNewGreenFace "abl_Pr_enum_02.v" 582 40 20261005
-  "[abl_Pr_enum_02.v: prime enumeration face]" "L582:m8b22a8f7".
+  MkNewGreenFace "abl_Pr_enum_02.v" 596 40 20261006
+  "[abl_Pr_enum_02.v: prime enumeration face]" "L596:m3c37509f".
 
 (* ng_abl_Pr_euclid_03 —— abl_Pr_euclid_03.v：素数域基件三（欧几里得型语句） *)
 Definition ng_abl_Pr_euclid_03 : NewGreenFace :=
-  MkNewGreenFace "abl_Pr_euclid_03.v" 182 21 20261005
-  "[abl_Pr_euclid_03.v: Euclid-type statements]" "L182:m46a32b17".
+  MkNewGreenFace "abl_Pr_euclid_03.v" 196 21 20261006
+  "[abl_Pr_euclid_03.v: Euclid-type statements]" "L196:mf0bae6da".
 
 (* ng_abl_redischarge_pr01_sb —— abl_redischarge_pr01_sb.v：Pr_core_01 使用端再消解桥 sb *)
 Definition ng_abl_redischarge_pr01_sb : NewGreenFace :=
-  MkNewGreenFace "abl_redischarge_pr01_sb.v" 104 12 20261005
-  "[abl_redischarge_pr01_sb.v: redischarge bridge consuming Pr_core_01]" "L104:m02c19831".
+  MkNewGreenFace "abl_redischarge_pr01_sb.v" 107 12 20261006
+  "[abl_redischarge_pr01_sb.v: redischarge bridge consuming Pr_core_01]" "L107:m1fa589b4".
 
 (* ng_abl_qpoly_divmod_gen —— abl_qpoly_divmod_gen.v：Q 多项式一般除法接口与线性桥 *)
 Definition ng_abl_qpoly_divmod_gen : NewGreenFace :=
-  MkNewGreenFace "abl_qpoly_divmod_gen.v" 671 56 20261005
-  "[abl_qpoly_divmod_gen.v: general division interface for Q polynomials with linear bridge]" "L671:m5bdaf9ff".
+  MkNewGreenFace "abl_qpoly_divmod_gen.v" 683 56 20261006
+  "[abl_qpoly_divmod_gen.v: general division interface for Q polynomials with linear bridge]" "L683:m8a78d5fa".
 
 (* ng_abl_Pr_lcmdecomp_04 —— abl_Pr_lcmdecomp_04.v：素数域基件四（lcm 分解） *)
 Definition ng_abl_Pr_lcmdecomp_04 : NewGreenFace :=
-  MkNewGreenFace "abl_Pr_lcmdecomp_04.v" 517 38 20261005
-  "[abl_Pr_lcmdecomp_04.v: lcm decomposition]" "L517:m4dced684".
+  MkNewGreenFace "abl_Pr_lcmdecomp_04.v" 566 38 20261006
+  "[abl_Pr_lcmdecomp_04.v: lcm decomposition]" "L566:mf2a41e78".
 
 (* ng_abl_Pr_lcm_eq —— abl_Pr_lcm_eq.v：lcm 方程层 *)
 Definition ng_abl_Pr_lcm_eq : NewGreenFace :=
-  MkNewGreenFace "abl_Pr_lcm_eq.v" 414 17 20261005
-  "[abl_Pr_lcm_eq.v: lcm equation layer]" "L414:mf3c78d6f".
+  MkNewGreenFace "abl_Pr_lcm_eq.v" 450 17 20261006
+  "[abl_Pr_lcm_eq.v: lcm equation layer]" "L450:mdd53fd8b".
 
 (* ng_abl_sumd_strict —— abl_sumd_strict.v：sumd 严格不等式面 *)
 Definition ng_abl_sumd_strict : NewGreenFace :=
-  MkNewGreenFace "abl_sumd_strict.v" 110 6 20261005
-  "[abl_sumd_strict.v: strict sum-of-distance inequalities]" "L110:m61cab793".
+  MkNewGreenFace "abl_sumd_strict.v" 111 6 20261006
+  "[abl_sumd_strict.v: strict sum-of-distance inequalities]" "L111:m4b284b24".
 
 (* ng_abl_prop_carrier —— abl_prop_carrier.v：Pr 域命题汇入承载层 *)
 Definition ng_abl_prop_carrier : NewGreenFace :=
-  MkNewGreenFace "abl_prop_carrier.v" 249 19 20261005
-  "[abl_prop_carrier.v: proposition joining layer for the prime domain]" "L249:mbd6923e0".
+  MkNewGreenFace "abl_prop_carrier.v" 272 19 20261006
+  "[abl_prop_carrier.v: proposition joining layer for the prime domain]" "L272:m5a5e6709".
 
 (* ng_abl_redischarge_sumd_inst —— abl_redischarge_sumd_inst.v：sumd 实例化再消解 *)
 Definition ng_abl_redischarge_sumd_inst : NewGreenFace :=
-  MkNewGreenFace "abl_redischarge_sumd_inst.v" 104 8 20261005
-  "[abl_redischarge_sumd_inst.v: sumd instance redischarge]" "L104:m84fe1801".
+  MkNewGreenFace "abl_redischarge_sumd_inst.v" 107 8 20261006
+  "[abl_redischarge_sumd_inst.v: sumd instance redischarge]" "L107:mca157cfa".
 
 (* ng_abl_div_chisq_twopoint —— abl_div_chisq_twopoint.v：两点卡方散度面 *)
 Definition ng_abl_div_chisq_twopoint : NewGreenFace :=
@@ -3443,73 +3443,73 @@ Definition ng_abl_div_chisq_twopoint : NewGreenFace :=
 
 (* ng_abl_div_kl_chisq_twopoint —— abl_div_kl_chisq_twopoint.v：KL 与卡方散度关系 *)
 Definition ng_abl_div_kl_chisq_twopoint : NewGreenFace :=
-  MkNewGreenFace "abl_div_kl_chisq_twopoint.v" 796 14 20261005
-  "[abl_div_kl_chisq_twopoint.v: KL versus chi-square relation]" "L796:m8b68b7d5".
+  MkNewGreenFace "abl_div_kl_chisq_twopoint.v" 796 14 20261006
+  "[abl_div_kl_chisq_twopoint.v: KL versus chi-square relation]" "L796:m12652899".
 
 (* ng_abl_div_hellinger_twopoint —— abl_div_hellinger_twopoint.v：Hellinger 散度关系 *)
 Definition ng_abl_div_hellinger_twopoint : NewGreenFace :=
-  MkNewGreenFace "abl_div_hellinger_twopoint.v" 1102 16 20261005
-  "[abl_div_hellinger_twopoint.v: Hellinger divergence relations]" "L1102:m977dacfa".
+  MkNewGreenFace "abl_div_hellinger_twopoint.v" 1104 16 20261006
+  "[abl_div_hellinger_twopoint.v: Hellinger divergence relations]" "L1104:m845d14a6".
 
 (* ng_abl_div_tv_kl_channel —— abl_div_tv_kl_channel.v：全变差到 KL 信道不等式 *)
 Definition ng_abl_div_tv_kl_channel : NewGreenFace :=
-  MkNewGreenFace "abl_div_tv_kl_channel.v" 330 16 20261005
-  "[abl_div_tv_kl_channel.v: total variation to KL channel inequality]" "L330:m4618ea19".
+  MkNewGreenFace "abl_div_tv_kl_channel.v" 330 16 20261006
+  "[abl_div_tv_kl_channel.v: total variation to KL channel inequality]" "L330:md237e7a2".
 
 (* ng_abl_div_fdiv2_skeleton —— abl_div_fdiv2_skeleton.v：f-散度骨架 *)
 Definition ng_abl_div_fdiv2_skeleton : NewGreenFace :=
-  MkNewGreenFace "abl_div_fdiv2_skeleton.v" 1907 64 20261005
-  "[abl_div_fdiv2_skeleton.v: f-divergence skeleton]" "L1907:mda23aa0c".
+  MkNewGreenFace "abl_div_fdiv2_skeleton.v" 1962 64 20261006
+  "[abl_div_fdiv2_skeleton.v: f-divergence skeleton]" "L1962:m49e36ddd".
 
 (* ng_abl_redischarge_fdiv2_half —— abl_redischarge_fdiv2_half.v：f-散度半界再消解 *)
 Definition ng_abl_redischarge_fdiv2_half : NewGreenFace :=
-  MkNewGreenFace "abl_redischarge_fdiv2_half.v" 341 17 20261005
-  "[abl_redischarge_fdiv2_half.v: f-divergence half-bound redischarge]" "L341:m3b5a8656".
+  MkNewGreenFace "abl_redischarge_fdiv2_half.v" 349 17 20261006
+  "[abl_redischarge_fdiv2_half.v: f-divergence half-bound redischarge]" "L349:mf9a95cdd".
 
 (* ng_abl_kv_sat_drift —— abl_kv_sat_drift.v：KV 饱和漂移面 *)
 Definition ng_abl_kv_sat_drift : NewGreenFace :=
-  MkNewGreenFace "abl_kv_sat_drift.v" 1522 48 20261005
-  "[abl_kv_sat_drift.v: KV saturation drift]" "L1522:m6f5df05d".
+  MkNewGreenFace "abl_kv_sat_drift.v" 1522 48 20261006
+  "[abl_kv_sat_drift.v: KV saturation drift]" "L1522:mad3ca3b8".
 
 (* ng_abl_redischarge_kv_bool2 —— abl_redischarge_kv_bool2.v：KV bool2 再消解 *)
 Definition ng_abl_redischarge_kv_bool2 : NewGreenFace :=
-  MkNewGreenFace "abl_redischarge_kv_bool2.v" 258 18 20261005
-  "[abl_redischarge_kv_bool2.v: KV bool2 redischarge]" "L258:mbc6bbaf5".
+  MkNewGreenFace "abl_redischarge_kv_bool2.v" 261 18 20261006
+  "[abl_redischarge_kv_bool2.v: KV bool2 redischarge]" "L261:m21cace78".
 
 (* ng_abl_attn_step_calc —— abl_attn_step_calc.v：attention 步进计算器 *)
 Definition ng_abl_attn_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_attn_step_calc.v" 574 56 20261005
-  "[abl_attn_step_calc.v: attention step calculator]" "L574:mf084bd08".
+  MkNewGreenFace "abl_attn_step_calc.v" 605 56 20261006
+  "[abl_attn_step_calc.v: attention step calculator]" "L605:me0d94ee0".
 
 (* ng_abl_concmix_step_calc —— abl_concmix_step_calc.v：concmix 步进计算器 *)
 Definition ng_abl_concmix_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_concmix_step_calc.v" 684 70 20261005
-  "[abl_concmix_step_calc.v: concmix step calculator]" "L684:m073dfa0e".
+  MkNewGreenFace "abl_concmix_step_calc.v" 712 70 20261006
+  "[abl_concmix_step_calc.v: concmix step calculator]" "L712:m39eab8b4".
 
 (* ng_abl_dyn_step_calc —— abl_dyn_step_calc.v：dyn 步进计算器 *)
 Definition ng_abl_dyn_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_dyn_step_calc.v" 504 49 20261005
-  "[abl_dyn_step_calc.v: dyn step calculator]" "L504:m117c3a36".
+  MkNewGreenFace "abl_dyn_step_calc.v" 518 49 20261006
+  "[abl_dyn_step_calc.v: dyn step calculator]" "L518:mbeb6bc91".
 
 (* ng_abl_mixlog_switch —— abl_mixlog_switch.v：mixlog 开关面 *)
 Definition ng_abl_mixlog_switch : NewGreenFace :=
-  MkNewGreenFace "abl_mixlog_switch.v" 335 28 20261005
-  "[abl_mixlog_switch.v: mixlog switch face]" "L335:mfbac309f".
+  MkNewGreenFace "abl_mixlog_switch.v" 335 28 20261006
+  "[abl_mixlog_switch.v: mixlog switch face]" "L335:m96ced02a".
 
 (* ng_abl_anneal_mono —— abl_anneal_mono.v：退火单调性 *)
 Definition ng_abl_anneal_mono : NewGreenFace :=
-  MkNewGreenFace "abl_anneal_mono.v" 377 50 20261005
-  "[abl_anneal_mono.v: annealing monotonicity]" "L377:m860d181a".
+  MkNewGreenFace "abl_anneal_mono.v" 381 50 20261006
+  "[abl_anneal_mono.v: annealing monotonicity]" "L381:me7c91310".
 
 (* ng_abl_archpa04_step_calc —— abl_archpa04_step_calc.v：archpa04 步进计算器 *)
 Definition ng_abl_archpa04_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_archpa04_step_calc.v" 734 37 20261005
-  "[abl_archpa04_step_calc.v: archpa04 step calculator]" "L734:mc9505cc5".
+  MkNewGreenFace "abl_archpa04_step_calc.v" 822 37 20261006
+  "[abl_archpa04_step_calc.v: archpa04 step calculator]" "L822:m053094b6".
 
 (* ng_abl_attniter_step_calc —— abl_attniter_step_calc.v：attention 迭代步进计算器 *)
 Definition ng_abl_attniter_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_attniter_step_calc.v" 637 59 20261005
-  "[abl_attniter_step_calc.v: attention-iteration step calculator]" "L637:m654138a0".
+  MkNewGreenFace "abl_attniter_step_calc.v" 682 59 20261006
+  "[abl_attniter_step_calc.v: attention-iteration step calculator]" "L682:mce514227".
 
 (* ng_abl_concfin_step_calc —— abl_concfin_step_calc.v：concfin 步进计算器 *)
 Definition ng_abl_concfin_step_calc : NewGreenFace :=
@@ -3518,18 +3518,18 @@ Definition ng_abl_concfin_step_calc : NewGreenFace :=
 
 (* ng_abl_cw220_step_calc —— abl_cw220_step_calc.v：cw220 步进计算器 *)
 Definition ng_abl_cw220_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_cw220_step_calc.v" 671 35 20261005
-  "[abl_cw220_step_calc.v: cw220 step calculator]" "L671:m2de3e82a".
+  MkNewGreenFace "abl_cw220_step_calc.v" 731 35 20261006
+  "[abl_cw220_step_calc.v: cw220 step calculator]" "L731:m4ca9d9bb".
 
 (* ng_abl_mixchain_step_calc —— abl_mixchain_step_calc.v：mixchain 步进计算器 *)
 Definition ng_abl_mixchain_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_mixchain_step_calc.v" 765 60 20261005
-  "[abl_mixchain_step_calc.v: mixchain step calculator]" "L765:m87c5e0f6".
+  MkNewGreenFace "abl_mixchain_step_calc.v" 811 60 20261006
+  "[abl_mixchain_step_calc.v: mixchain step calculator]" "L811:m11515481".
 
 (* ng_abl_p2a_step_calc —— abl_p2a_step_calc.v：p2a 步进计算器 *)
 Definition ng_abl_p2a_step_calc : NewGreenFace :=
-  MkNewGreenFace "abl_p2a_step_calc.v" 748 38 20261005
-  "[abl_p2a_step_calc.v: p2a step calculator]" "L748:m92d5eaba".
+  MkNewGreenFace "abl_p2a_step_calc.v" 824 38 20261006
+  "[abl_p2a_step_calc.v: p2a step calculator]" "L824:me27ca2a6".
 
 (* ng_abl_tvd_step_calc —— abl_tvd_step_calc.v：TVD 步进计算器 *)
 Definition ng_abl_tvd_step_calc : NewGreenFace :=
@@ -3538,83 +3538,83 @@ Definition ng_abl_tvd_step_calc : NewGreenFace :=
 
 (* ng_abl_dtpt_dep_supply —— abl_dtpt_dep_supply.v：DTPT 依赖面具名供给 *)
 Definition ng_abl_dtpt_dep_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_dep_supply.v" 72 2 20261005
-  "[abl_dtpt_dep_supply.v: named dependency supply for DTPT]" "L72:m4a0d4ad2".
+  MkNewGreenFace "abl_dtpt_dep_supply.v" 149 2 20261006
+  "[abl_dtpt_dep_supply.v: named dependency supply for DTPT]" "L149:mfa3c034f".
 
 (* ng_abl_dtpt_dig_supply —— abl_dtpt_dig_supply.v：DTPT 数字面具名供给 *)
 Definition ng_abl_dtpt_dig_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_dig_supply.v" 225 22 20261005
-  "[abl_dtpt_dig_supply.v: named digit supply for DTPT]" "L225:mb07d569c".
+  MkNewGreenFace "abl_dtpt_dig_supply.v" 289 22 20261006
+  "[abl_dtpt_dig_supply.v: named digit supply for DTPT]" "L289:m24e8a71e".
 
 (* ng_abl_dtpt_bridge_dig_supply —— abl_dtpt_bridge_dig_supply.v：DTPT 桥数字面具名供给 *)
 Definition ng_abl_dtpt_bridge_dig_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_bridge_dig_supply.v" 150 10 20261005
-  "[abl_dtpt_bridge_dig_supply.v: named bridge-digit supply for DTPT]" "L150:mb30a4694".
+  MkNewGreenFace "abl_dtpt_bridge_dig_supply.v" 227 10 20261006
+  "[abl_dtpt_bridge_dig_supply.v: named bridge-digit supply for DTPT]" "L227:me1fda2c6".
 
 (* ng_abl_dtpt_rot_bridge_supply —— abl_dtpt_rot_bridge_supply.v：DTPT 旋转桥具名供给 *)
 Definition ng_abl_dtpt_rot_bridge_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_rot_bridge_supply.v" 159 12 20261005
-  "[abl_dtpt_rot_bridge_supply.v: named rotation-bridge supply for DTPT]" "L159:m89b36f81".
+  MkNewGreenFace "abl_dtpt_rot_bridge_supply.v" 245 12 20261006
+  "[abl_dtpt_rot_bridge_supply.v: named rotation-bridge supply for DTPT]" "L245:m8e3cf5e2".
 
 (* ng_abl_dtpt_truth_supply —— abl_dtpt_truth_supply.v：DTPT 真值面具名供给 *)
 Definition ng_abl_dtpt_truth_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_truth_supply.v" 258 24 20261005
-  "[abl_dtpt_truth_supply.v: named truth supply for DTPT]" "L258:m909bfbe8".
+  MkNewGreenFace "abl_dtpt_truth_supply.v" 311 24 20261006
+  "[abl_dtpt_truth_supply.v: named truth supply for DTPT]" "L311:m43af8ee5".
 
 (* ng_abl_dtpt_yellow_supply —— abl_dtpt_yellow_supply.v：DTPT 黄束面具名供给 *)
 Definition ng_abl_dtpt_yellow_supply : NewGreenFace :=
-  MkNewGreenFace "abl_dtpt_yellow_supply.v" 106 5 20261005
-  "[abl_dtpt_yellow_supply.v: named yellow supply for DTPT]" "L106:madf20097".
+  MkNewGreenFace "abl_dtpt_yellow_supply.v" 161 5 20261006
+  "[abl_dtpt_yellow_supply.v: named yellow supply for DTPT]" "L161:m23196fe4".
 
 (* ng_abl_ln2_numer_int —— abl_ln2_numer_int.v：ln2 数值积分面 *)
 Definition ng_abl_ln2_numer_int : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_numer_int.v" 557 32 20261005
-  "[abl_ln2_numer_int.v: numerical integral face for ln 2]" "L557:m49d37160".
+  MkNewGreenFace "abl_ln2_numer_int.v" 583 32 20261006
+  "[abl_ln2_numer_int.v: numerical integral face for ln 2]" "L583:mc57c4869".
 
 (* ng_abl_ln2_tail_bound —— abl_ln2_tail_bound.v：ln2 尾项界 *)
 Definition ng_abl_ln2_tail_bound : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_tail_bound.v" 755 33 20261005
-  "[abl_ln2_tail_bound.v: tail bound for ln 2]" "L755:m93deaaa3".
+  MkNewGreenFace "abl_ln2_tail_bound.v" 757 33 20261006
+  "[abl_ln2_tail_bound.v: tail bound for ln 2]" "L757:m796ba11a".
 
 (* ng_abl_ln2_ireal —— abl_ln2_ireal.v：ln2 实数视图整合 *)
 Definition ng_abl_ln2_ireal : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_ireal.v" 712 42 20261005
-  "[abl_ln2_ireal.v: real-view integration for ln 2]" "L712:mc2c7f2e9".
+  MkNewGreenFace "abl_ln2_ireal.v" 745 42 20261006
+  "[abl_ln2_ireal.v: real-view integration for ln 2]" "L745:m5fbfc134".
 
 (* ng_abl_ln2_sharp_weight —— abl_ln2_sharp_weight.v：ln2 锐权重 *)
 Definition ng_abl_ln2_sharp_weight : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_sharp_weight.v" 394 23 20261005
-  "[abl_ln2_sharp_weight.v: sharp weights for ln 2]" "L394:mcb5729c2".
+  MkNewGreenFace "abl_ln2_sharp_weight.v" 431 23 20261006
+  "[abl_ln2_sharp_weight.v: sharp weights for ln 2]" "L431:ma31c4599".
 
 (* ng_abl_ln2_assembly —— abl_ln2_assembly.v：ln2 合成面 *)
 Definition ng_abl_ln2_assembly : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_assembly.v" 299 22 20261005
-  "[abl_ln2_assembly.v: assembly face for ln 2]" "L299:mf6826204".
+  MkNewGreenFace "abl_ln2_assembly.v" 323 22 20261006
+  "[abl_ln2_assembly.v: assembly face for ln 2]" "L323:m46807cba".
 
 (* ng_abl_ln2_qpoly_consume —— abl_ln2_qpoly_consume.v：ln2 多项式链使用端 *)
 Definition ng_abl_ln2_qpoly_consume : NewGreenFace :=
-  MkNewGreenFace "abl_ln2_qpoly_consume.v" 504 62 20261005
-  "[abl_ln2_qpoly_consume.v: polynomial-chain consumer for ln 2]" "L504:md52bed26".
+  MkNewGreenFace "abl_ln2_qpoly_consume.v" 531 62 20261006
+  "[abl_ln2_qpoly_consume.v: polynomial-chain consumer for ln 2]" "L531:me66ff6a1".
 
 (* ng_abl_diffbridge_incr —— abl_diffbridge_incr.v：差分桥增量 *)
 Definition ng_abl_diffbridge_incr : NewGreenFace :=
-  MkNewGreenFace "abl_diffbridge_incr.v" 403 13 20261005
-  "[abl_diffbridge_incr.v: difference-bridge increments]" "L403:m9a8b739f".
+  MkNewGreenFace "abl_diffbridge_incr.v" 408 13 20261006
+  "[abl_diffbridge_incr.v: difference-bridge increments]" "L408:m92d43265".
 
 (* ng_abl_diffreal_family —— abl_diffreal_family.v：差分实数族 *)
 Definition ng_abl_diffreal_family : NewGreenFace :=
-  MkNewGreenFace "abl_diffreal_family.v" 472 6 20261005
-  "[abl_diffreal_family.v: difference real family]" "L472:m6a5a12e1".
+  MkNewGreenFace "abl_diffreal_family.v" 480 6 20261006
+  "[abl_diffreal_family.v: difference real family]" "L480:m36230cee".
 
 (* ng_abl_pint_realview —— abl_pint_realview.v：pint 实数视图 *)
 Definition ng_abl_pint_realview : NewGreenFace :=
-  MkNewGreenFace "abl_pint_realview.v" 155 6 20261005
-  "[abl_pint_realview.v: pint real view]" "L155:medc0c659".
+  MkNewGreenFace "abl_pint_realview.v" 167 6 20261006
+  "[abl_pint_realview.v: pint real view]" "L167:m18255b8d".
 
 (* ng_abl_normconv_real —— abl_normconv_real.v：实数范数收敛面 *)
 Definition ng_abl_normconv_real : NewGreenFace :=
-  MkNewGreenFace "abl_normconv_real.v" 626 35 20261005
-  "[abl_normconv_real.v: norm convergence over reals]" "L626:m936700f6".
+  MkNewGreenFace "abl_normconv_real.v" 651 35 20261006
+  "[abl_normconv_real.v: norm convergence over reals]" "L651:mfd9c50a2".
 
 (* ng_abl_tvd_stationary —— abl_tvd_stationary.v：TVD 平稳分布 *)
 Definition ng_abl_tvd_stationary : NewGreenFace :=
@@ -3623,48 +3623,48 @@ Definition ng_abl_tvd_stationary : NewGreenFace :=
 
 (* ng_abl_sqrtf_tail —— abl_sqrtf_tail.v：平方根尾项界 *)
 Definition ng_abl_sqrtf_tail : NewGreenFace :=
-  MkNewGreenFace "abl_sqrtf_tail.v" 1016 80 20261005
-  "[abl_sqrtf_tail.v: square-root tail bound]" "L1016:mc69620bb".
+  MkNewGreenFace "abl_sqrtf_tail.v" 1024 80 20261006
+  "[abl_sqrtf_tail.v: square-root tail bound]" "L1024:m07034a50".
 
 (* ng_abl_p7_lower_band —— abl_p7_lower_band.v：P7 下界带 *)
 Definition ng_abl_p7_lower_band : NewGreenFace :=
-  MkNewGreenFace "abl_p7_lower_band.v" 130 22 20261005
-  "[abl_p7_lower_band.v: P7 lower band]" "L130:m33cb0873".
+  MkNewGreenFace "abl_p7_lower_band.v" 130 22 20261006
+  "[abl_p7_lower_band.v: P7 lower band]" "L130:mf235bdf6".
 
 (* ng_abl_mixrational_wide —— abl_mixrational_wide.v：宽域有理混合 *)
 Definition ng_abl_mixrational_wide : NewGreenFace :=
-  MkNewGreenFace "abl_mixrational_wide.v" 146 2 20261005
-  "[abl_mixrational_wide.v: wide rational mixing]" "L146:mf031dfd9".
+  MkNewGreenFace "abl_mixrational_wide.v" 140 2 20261006
+  "[abl_mixrational_wide.v: wide rational mixing]" "L140:m3255daf4".
 
 (* ng_abl_audit_base_v1 —— abl_audit_base_v1.v：审计基座 v1 *)
 Definition ng_abl_audit_base_v1 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v1.v" 205 4 20261005
-  "[abl_audit_base_v1.v: audit base v1]" "L205:m3447a8c3".
+  MkNewGreenFace "abl_audit_base_v1.v" 193 4 20261006
+  "[abl_audit_base_v1.v: audit base v1]" "L193:m95b18218".
 
 (* ng_abl_audit_base_v2 —— abl_audit_base_v2.v：审计基座 v2 *)
 Definition ng_abl_audit_base_v2 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v2.v" 201 32 20261005
-  "[abl_audit_base_v2.v: audit base v2]" "L201:m06fc05bb".
+  MkNewGreenFace "abl_audit_base_v2.v" 200 32 20261006
+  "[abl_audit_base_v2.v: audit base v2]" "L200:m230d6659".
 
 (* ng_abl_audit_base_v3 —— abl_audit_base_v3.v：审计基座 v3 *)
 Definition ng_abl_audit_base_v3 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v3.v" 127 4 20261005
-  "[abl_audit_base_v3.v: audit base v3]" "L127:mbf8c4a22".
+  MkNewGreenFace "abl_audit_base_v3.v" 124 4 20261006
+  "[abl_audit_base_v3.v: audit base v3]" "L124:m86195041".
 
 (* ng_abl_audit_base_v4 —— abl_audit_base_v4.v：审计基座 v4 *)
 Definition ng_abl_audit_base_v4 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v4.v" 234 31 20261005
-  "[abl_audit_base_v4.v: audit base v4]" "L234:m8ed246dd".
+  MkNewGreenFace "abl_audit_base_v4.v" 242 31 20261006
+  "[abl_audit_base_v4.v: audit base v4]" "L242:mbf9fd047".
 
 (* ng_abl_audit_base_v5 —— abl_audit_base_v5.v：审计基座 v5 *)
 Definition ng_abl_audit_base_v5 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v5.v" 243 10 20261005
-  "[abl_audit_base_v5.v: audit base v5]" "L243:m0a261e6f".
+  MkNewGreenFace "abl_audit_base_v5.v" 268 10 20261006
+  "[abl_audit_base_v5.v: audit base v5]" "L268:m13c18f7a".
 
 (* ng_abl_audit_base_v6 —— abl_audit_base_v6.v：审计基座 v6 *)
 Definition ng_abl_audit_base_v6 : NewGreenFace :=
-  MkNewGreenFace "abl_audit_base_v6.v" 200 8 20261005
-  "[abl_audit_base_v6.v: audit base v6]" "L200:m6b61760b".
+  MkNewGreenFace "abl_audit_base_v6.v" 230 8 20261006
+  "[abl_audit_base_v6.v: audit base v6]" "L230:m5fb57283".
 
 (* ng_abl_Pr_bertrand —— abl_Pr_bertrand.v：Bertrand 假设构造性见证件 *)
 Definition ng_abl_Pr_bertrand : NewGreenFace :=
@@ -3770,4 +3770,44 @@ Definition ng_abl_loeb_d3_prf2 : NewGreenFace :=
 Definition ng_abl_loeb_d3_prf2b : NewGreenFace :=
   MkNewGreenFace "abl_loeb_d3_prf2b.v" 631 18 20261006
   "[abl_loeb_d3_prf2b.v: Formula2 certificate layer 2, dPrf2 decoder and code-level replay]" "L631:m48291590".
+
+(* ng_abl_audit_base_v9 —— abl_audit_base_v9.v：审计 v9·LW0PiIrrational π 塔抽样直审件 *)
+Definition ng_abl_audit_base_v9 : NewGreenFace :=
+  MkNewGreenFace "abl_audit_base_v9.v" 230 4 20261006
+  "[abl_audit_base_v9.v: audit v9, direct sampling audit of the LW0PiIrrational pi tower]" "L230:mbb54ea31".
+
+(* ng_abl_audit_base_v10 —— abl_audit_base_v10.v：审计 v10·S04_RealExpLogConv 直审闭合件 *)
+Definition ng_abl_audit_base_v10 : NewGreenFace :=
+  MkNewGreenFace "abl_audit_base_v10.v" 252 5 20261006
+  "[abl_audit_base_v10.v: audit v10, direct closure audit of S04_RealExpLogConv]" "L252:md9806baa".
+
+(* ng_abl_e_irrational2 —— abl_e_irrational2.v：e 无理性第二段施工（层 1＋层 2 连体首装） *)
+Definition ng_abl_e_irrational2 : NewGreenFace :=
+  MkNewGreenFace "abl_e_irrational2.v" 489 24 20261006
+  "[abl_e_irrational2.v: irrationality of e stage 2, layers 1 and 2 joint first installation]" "L489:mda3b0d28".
+
+(* ng_abl_ln2_integmachine_bridge —— abl_ln2_integmachine_bridge.v：LW2IntegMachine 到 ln2 路线四桥接件 *)
+Definition ng_abl_ln2_integmachine_bridge : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_integmachine_bridge.v" 222 8 20261006
+  "[abl_ln2_integmachine_bridge.v: bridge from LW2IntegMachine to ln2 route 4]" "L222:m7eb320bd".
+
+(* ng_abl_Pr_erdos_core —— abl_Pr_erdos_core.v：素数域第 8 件·Erdos 路线首段核心引理件 *)
+Definition ng_abl_Pr_erdos_core : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_erdos_core.v" 828 38 20261006
+  "[abl_Pr_erdos_core.v: prime domain piece 8, core lemmas of the Erdos route first stage]" "L828:md9c76597".
+
+(* ng_abl_Pr_erdos_theta —— abl_Pr_erdos_theta.v：素数域第 9 件·Erdos 路线第二段桥接件 *)
+Definition ng_abl_Pr_erdos_theta : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_erdos_theta.v" 249 12 20261006
+  "[abl_Pr_erdos_theta.v: prime domain piece 9, bridge of the Erdos route second stage]" "L249:m9d324e33".
+
+(* ng_abl_Pr_recip_sum —— abl_Pr_recip_sum.v：素数倒数和发散·Euler 路线层 1 闭合件 *)
+Definition ng_abl_Pr_recip_sum : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_recip_sum.v" 349 10 20261006
+  "[abl_Pr_recip_sum.v: divergence of the sum of prime reciprocals, Euler route layer 1 closure]" "L349:m23d38468".
+
+(* ng_abl_niven_isomorphism —— abl_niven_isomorphism.v：三塔同构·五段式抽象机器与两实例装配 *)
+Definition ng_abl_niven_isomorphism : NewGreenFace :=
+  MkNewGreenFace "abl_niven_isomorphism.v" 558 9 20261006
+  "[abl_niven_isomorphism.v: three-tower isomorphism, Niven-Hermite five-segment abstract machine with two instantiations]" "L558:m3dee4878".
 

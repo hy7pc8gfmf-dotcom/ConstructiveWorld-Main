@@ -1,32 +1,60 @@
 (* ==========================================================================)
    abl_concmix_step_calc.v — 收敛计算器滚转第三件（ConcMixSelFeed 面，cmc_ 前缀）
-   使命：把 ConcMixSelFeed 收缩收敛面的步数见证升格为 mtg_k_calc 式可提取计算器。现档实锤：
-      ConcMixSelFeed.v 本体（300 行）为零收缩件的 cms_ 接口转接层，收缩收敛面在供给链
-      UpReqConcMixSel.v 的 cmk_attention_mixing_time（头注自注「cb1_mixing_cert 闭合件」位）
-      ——率显式在案：kappa := omd := one − delta_star，delta_star = lo·lo，lo =
-      rsq_exp_pos_fn(invT·opp Delta) 即 e^(−Δ/T) 的 req 面形，双证书 cmk_omd_pos/cmk_ds_omd_lt_one
-      导出在役——按「率显式在案则直接定点档」执行。
-   对标行：UpReqConcMixSel.v cmk_attention_mixing_time 证书面（cmk_omd_pos/cmk_ds_omd_lt_one/
-      cmk_k_select/cmk_scale/cmk_r_pow）；mtg_k_calc 同构体例。
-   三段主面：Part 2 nat 定点档（cmc_ceil_div/cmc_iter/cmc_pow_iter/cmc_k_enum 枚举＋correct/logface
-      两正确性＋严格衰减三件＋燃料充足性三件）；Part 3 实面桥（幂分裂＋逆唯一＋嵌入桥＋有理数据
-      实面正确性 cmc_enum_real_correct）；Part 1 req 实面对应（率抽取双证书＋率面/具体计算器＋
-      TV 双投影＋两 sigT 封装）。
-   已知边界：实数 log 到 nat ceil 的构造性桥库内确缺，实面以有理数据 kappa:=p/q 闭合（有界精度档），
-      任意实数 kappa 的 ceil 计算器仍为开放目标；燃料充足性见证限衰减域（half 域 2·p ≤ q 任意
-      E ≥ 1；qbound 域 E ≥ q−1 任意 p<q；p/q→1 且 E<q−1 时上取整走步可停滞）。
-   依赖清单：S01_BaseRing–S04_RealExpLogConv（RealInterfaceEnhanced 面/lt_le_iff/le_id_l 等在役）；
-      Arch_PA_02（nat_to_R/nat_to_R_mult_hom）；UpReqAlgebra（req_minus/req_two_pos）；UpReqSampling
-      （rsq_exp_pos_fn/k_titer/rsq_bs_list_sum）；UpReqConcMixSel（cmk_attention_mixing_time/
-      cmk_k_select/cmk_scale/cmk_r_pow/cmk_omd_pos/cmk_ds_omd_lt_one）；Stdlib Arith/Lia。Require-only 零改动。
-   构造性注记：纯构造性/Set 层零 Prop 语句面（步数见证 nat 面 sigT；误差谓词 lt/le 为接口 Set 层值）；
-      非平凡（cmc_k_enum 为真 Fixpoint 上取整枚举）；可提取（Separate Extraction Obj.magic=0 附加证）；
-      零公理（尾 Print Assumptions 全 Closed 预期）。头注 Not 字面仅宿主接口位 enum_nonempty 一处
-      （S01_BaseRing.Not，UpReqConcMixSel 同文原样对应）。工艺红线：零 not/~/<> 书写（宿主接口位除外）；
-      term-mode 全显式实参；vm_compute 烟测入日志；先 simpl 露 if；nat le 不消入 Set。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c
-      -native-compiler no -Q vo_local_world_unified_0930 "" abl_concmix_step_calc.v（池内执行）。
-   查重登记：顶层名全 cmc_ 新前缀，施工前 grep 全库零命中。
+   谱系: born-green 独立成件（非既有件改写；使命见下）。
+   使命: 按 K 矿脉表与任务项——把 ConcMixSelFeed 收缩收敛面的步数见证升格为
+     mtg_k_calc 式可提取计算器。现档重拍实锤: ConcMixSelFeed.v 本体（300 行，
+     与 Live 同文）为零收缩件的 cms_ 接口转接层，其收缩收敛面在供给链
+     UpReqConcMixSel.v 的 cmk_attention_mixing_time（ConcMixSelFeed 头注自注
+     「cb1_mixing_cert 闭合件」位）——率显式在案: kappa := omd := one − delta_star,
+     delta_star = lo·lo, lo = rsq_exp_pos_fn(invT·opp Delta) 即 e^(-Delta/T) 的
+     req 面形，双证书 cmk_omd_pos/cmk_ds_omd_lt_one 导出在役——按首件策略
+     A 支「率显式在案则直接定点档」执行，抽取步骤记录于头注与本注释尾。
+   件名与前缀: abl_concmix_step_calc.v，cmc_ 前缀（施工前 grep 防撞：全库零命中）。
+   本件陈述（三段）:
+     Part 2 nat 定点档（真 Fixpoint）: cmc_ceil_div/cmc_iter/cmc_pow_iter/
+       cmc_k_enum（有界燃料衰减枚举，x 走上取整乘步 x·p/q 直到落入预算 E）＋
+       正确性两半（cmc_k_enum_correct 上取整面 / cmc_k_enum_logface 精确面
+       x·p^N ≤ E·q^N，即 log 模量方程 nat 形）＋【本件新增·BQ 诚实边界4
+       的闭合】cmc_iter_lt_decay/cmc_iter_lt_half/cmc_iter_lt_q 严格衰减
+       三件＋cmc_fuel_sufficient_gen/half/qbound 燃料充足性见证（调用侧
+       Hterm 由 cmc_fuel_sufficient_half/qbound 自动供给，cmc_k_enum_auto）
+     Part 3 实面桥: 幂分裂定律（cmc_rpow_mult/cmc_nat_r_pow/cmc_rpow_inv）
+       ＋逆唯一（cmc_inv_unique/cmc_mult_one_l）＋nat 单调嵌入桥
+       （cmc_nat_le_embed/cmc_nat_le_plus_aux）＋cmc_enum_real_correct
+       （有理数据 kappa:=p/q 上枚举读数的实面 le 正确性，零 arch 依赖）。
+     Part 1 req 实面对应形（UpReqConcMixSel CmkMixTime 证书子集同形对应）:
+       cmc_rate_pos/cmc_rate_lt_one（率抽取: kappa := cmc_omd 双证书直接使用
+       宿主导出件）＋cmc_rate_step_calc/cmc_rate_step_calc_correct（mtg_k_calc
+       同构通用率面计算器）＋cmc_omd_step_calc/cmc_omd_step_calc_correct
+       （抽取率上的具体计算器）＋cmc_mix_step_calc/cmc_mix_step_tv_correct
+       （宿主 cmk_attention_mixing_time 的 projT1/projT2 双投影，TV 收缩面
+       正确性）＋cmc_mixing_modulus_sigT/cmc_omd_modulus_sigT（sigT 封装）。
+   诚实边界记录: ConcMixSelFeed.v 本体零收缩主件（K 表只列其「计算器缺位
+     负判据」位），滚转目标按任务项「或 grep 收缩/converge 形主件」条款落至
+     供给链闭合件 cmk_attention_mixing_time——现档实拍已记 attn 报告；
+     实数 log 到 nat ceil 的构造性桥库内确缺（同 BQ 结论），实面正确性以
+     有理数据 kappa:=p/q 闭合（有界精度档），任意实数 kappa 的 ceil 计算
+     器仍为开放矿脉；燃料充足性见证限衰减域（half 域 2·p ≤ q 任意 E ≥ 1，
+     qbound 域 E ≥ q−1 任意 p<q；p/q 逼近 1 且 E < q−1 时上取整走步可停滞，
+     属宿主几何率显式面之外的定点档诚实边界，已记 attn 报告）。
+   依赖: S01_BaseRing–S04_RealExpLogConv（RealInterfaceEnhanced 面/lt_le_iff/
+     le_id_l 等在役）；Arch_PA_02（nat_to_R/nat_to_R_mult_hom）；UpReqAlgebra
+     （req_minus/req_two_pos）；UpReqSampling（rsq_exp_pos_fn/k_titer/
+     rsq_bs_list_sum）；UpReqConcMixSel（cmk_attention_mixing_time/cmk_k_select/
+     cmk_scale/cmk_r_pow/cmk_omd_pos/cmk_ds_omd_lt_one 均在役）；Stdlib
+     Arith/Lia。Require-only 零改动，Live/注册面/缓存根零触碰。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；误差谓词 lt/le
+     为接口 Set 层值）；非平凡（cmc_k_enum 为真 Fixpoint 上取整枚举）；
+     可提取（Separate Extraction Obj.magic=0 附加证，照 BF/BQ 模式）；零公理
+     （尾 Print Assumptions 全 Closed 预期）。头注 Not 字面仅宿主接口位
+     enum_nonempty 一处（S01_BaseRing.Not，UpReqConcMixSel 同文原样对应）。
+   工艺红线: 零 not/~/<> 书写（宿主接口位除外）；零 Qeq 坑（本件零 Q）；
+     term-mode 全显式实参（BN 坑卡）；数值定装（BB 坑卡：vm_compute 烟测
+     入日志）；坑卡八条操作卡照 BQ（注释禁 literal 右括号星杠/先 simpl 露
+     if/term-mode id 链/nat le 不消入 Set）。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q
+     vo_local_world_unified_0930 "" abl_concmix_step_calc.v（池内执行）。
    ========================================================================== *)
 
 Require Import S07_RealSetoidExpLog.
@@ -46,7 +74,7 @@ From Stdlib Require Import Lia.
 (*   模量方程 log(a·kappa^N) ≤ log eps 的 nat 面：以 kappa=p/q（0<p<q）、 *)
 (*   初值 a=A、预算 eps=E 的公共尺度定点表示，枚举 N 使 A·p^N ≤ E·q^N。  *)
 (*   枚举器用上取整衰减步（ceil 除法保上界方向）。本段含燃料充足性       *)
-(*   见证三件（诚实边界4 的闭合，本件新增）。                             *)
+(*   见证三件（BQ 件诚实边界4 的闭合，本件新增）。                       *)
 (* ============================================================ *)
 
 (* ceil 整除：上取整 (a+q−1)/q（q ≥ 1），上取整保上界方向 *)
@@ -156,7 +184,7 @@ Proof.
   - apply (Nat.mul_le_mono_r _ _ (q ^ cmc_k_enum fuel p q x e)). exact H1.
 Qed.
 
-(* ---------- 本件新增：严格衰减与燃料充足性（诚实边界4 闭合） ---------- *)
+(* ---------- 本件新增：严格衰减与燃料充足性（BQ 诚实边界4 闭合） ---------- *)
 
 (* 衰减核：x·p + q ≤ x·q 时上取整走步严格递降（floor 判据 d·q ≤ a < x·q） *)
 Lemma cmc_iter_lt_decay : forall p q x,
@@ -311,7 +339,7 @@ Proof.
 Qed.
 
 (* 幂对乘法的分裂：r_pow(a·b,n) == r_pow(a,n)·r_pow(b,n)（库缺，本件补；
-   Id 面 rewrite 匹配不可靠，全链 term-mode） *)
+   Id 面 rewrite 匹配不可靠（BQ 坑卡5），全链 term-mode） *)
 Lemma cmc_rpow_mult : forall (a b : R) (n : nat),
   Id (r_pow (mult a b) n) (mult (r_pow a n) (r_pow b n)).
 Proof.
@@ -340,7 +368,7 @@ Proof.
 Qed.
 
 (* 幂对逆的分裂：r_pow(inv x,n) == inv(r_pow x,n)（逆唯一性归纳；
-   逆的正性证书 Hp 作显式槽——防 Qed 不透明常数上的换形） *)
+   逆的正性证书 Hp 作显式槽——防 Qed 不透明常数上的换形，BQ 坑卡7） *)
 Lemma cmc_rpow_inv : forall (x : R) (Hx : lt zero x) (n : nat) (Hp : lt zero (r_pow x n)),
   Id (r_pow (inv_pos x Hx) n) (inv_pos (r_pow x n) Hp).
 Proof.
@@ -379,7 +407,7 @@ Proof.
                                 (inv_pos_correct x Hx))))))))).
 Qed.
 
-(* nat ≤ 到实面 le 嵌入单调桥（库缺，本件滚转）。
+(* nat ≤ 到实面 le 嵌入单调桥（库缺，BQ 补、本件滚转）。
    消除纪律：nat ≤ 是 Prop 归纳、不得消入 Set 目标——走 Set 层 nat 归纳
    （加法辅助件）＋Nat.leb 判定分支＋差值等式 replace，零 Prop 消除。 *)
 Lemma cmc_nat_le_plus_aux : forall n m : nat, le (nat_to_R m) (nat_to_R (n + m)%nat).
@@ -488,7 +516,7 @@ Qed.
 End CmcEnumReal.
 
 (* ============================================================ *)
-(* Part 1：req 实面逐形对应（UpReqConcMixSel CmkMixTime 证书子集对应）——   *)
+(* Part 1：req 实面对应形（UpReqConcMixSel CmkMixTime 证书子集同形对应）——    *)
 (*   mtg_k_calc 同构计算器＋率抽取件＋sigT 封装。Import 置本段前。        *)
 (* ============================================================ *)
 
@@ -498,7 +526,7 @@ Section CmcMixStepCalc.
 
 Context {R : Set} {RIS : RealInterfaceEnhancedSetoid R}.
 
-(* 诚实接口（CmkMixTime 证书全集原样对应，实参序经 Check @ 直接钉死） *)
+(* 诚实接口（CmkMixTime 证书全集原样对应，实参序经 Check @ 检验确定） *)
 Variable lt_plus_compat_lt_le : forall a b c d : R,
   lt a b -> le c d -> lt (plus a c) (plus b d).
 
@@ -541,7 +569,7 @@ Let cmc_tv (mu nu : S0 -> R) : R :=
 Let cmc_titer (n : nat) (mu : S0 -> R) : S0 -> R :=
   k_titer S0 sumf enum enum_nonempty temp temp_pos Delta z z_lb sum_eq_list n mu.
 
-(* ===== 率抽取件（率显式在案，直使用宿主导出证书） ==== *)
+(* ===== 率抽取件（首件策略 A 支：率显式在案，直接使用宿主导出证书） ==== *)
 (*   lo = rsq_exp_pos_fn(invT·opp Delta)（req 面 e^(−Δ/T) 形），          *)
 (*   kappa := cmc_omd := one − lo·lo（CmkMixTime 证明体内第二行原样）。   *)
 

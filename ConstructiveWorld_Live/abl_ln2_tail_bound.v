@@ -1,31 +1,33 @@
 (* ===================================================================== *)
 (*  abl_ln2_tail_bound.v —— ln2 无理性链·Beukers 通道收敛桥+几何尾界件      *)
-(*  使命: 「几何衰减不等式本体」的纯不等式核。机器实算判定：Beukers β 级数   *)
-(*        bv_term 的 m-尾**无**一致几何比率（R(m) = (n+m+1)(n+2m+1)(n+2m+2)  *)
-(*        /((m+1)(3n+2m+3)(3n+2m+4)) → 1；lnt_beta_rho_refuted34/1516 在    *)
-(*        n=0,m=30 处 R=1891/2016>15/16>3/4 双点判定），故初版草案「尾和 ≤   *)
-(*        C(n)·ρ^M」在 β 级数上不成立、须另择通道。真几何档建于 (2−t) 归一   *)
-(*        化极点级数尾对象 u(n,k) = C(n+k,n)/((k+1)·2^{k+1})（逐项积分       *)
-(*        ∫₀¹(t/2)^k dt = 1/((k+1)2^{k+1}），有限 M 换序恒等式的尾项控制件）:*)
-(*        一致比率 u(n,k+1)/u(n,k) = (n+k+1)/(2(k+2)) ≤ 3/4 ⟺ 2n ≤ k+4，    *)
+(*  使命: 「几何衰减不等式本体」的纯不等式核——Beukers 通道收敛桥最小步。    *)
+(*        勘定（本件实算 fail-loud）: Beukers β 级数 bv_term 的 m-尾**无**  *)
+(*        一致几何比率（比率 R(m) = (n+m+1)(n+2m+1)(n+2m+2)/((m+1)(3n+2m+3) *)
+(*        (3n+2m+4)) → 1；机器锚 lnt_beta_rho_refuted34/1516 在 n=0,m=30    *)
+(*        处 R=1891/2016>15/16>3/4 双锚否证），故 AE 草案「尾和 ≤ C(n)·ρ^M」*)
+(*        在 β 级数上不成立、须改靶。真几何档建于 (2−t) 归一化极点级数尾     *)
+(*        对象 u(n,k) = C(n+k,n)/((k+1)·2^{k+1})（SupplyAssembly 1−t/2 形   *)
+(*        展开的逐项积分族，AE §3.2.3：∫₀¹(t/2)^k dt = 1/((k+1)2^{k+1})，   *)
+(*        为路线③有限 M 换序恒等式的尾项控制件＝本件交付核）：一致比率      *)
+(*        u(n,k+1)/u(n,k) = (n+k+1)/(2(k+2)) ≤ 3/4 ⟺ 2n ≤ k+4（精确窗口）， *)
 (*        由此闭合 比率档 lnt_pterm_ratio → 幂式档 lnt_pterm_pow → 几何部分  *)
-(*        和 lnt_geo_partial → 部分和隙 Cauchy 模量 lnt_pterm_gap → 峰值档  *)
-(*        lnt_pterm_peak → 组合终形 lnt_gap_geo：尾隙 ≤ 2^{n+1}·(3/4)^{SM−2n}*)
-(*        （C(n)·ρ^M 形，ρ=3/4）。β 侧交付: 精确交叉比率恒等式 lnt_bv_cross  *)
-(*        （rx_term_decayQ 单调档定量升级，供下游亏量账）＋亏量显式全正展开  *)
-(*        lnt_deficit_pos（n≤m 窗）。                                        *)
+(*        和 lnt_geo_partial → 部分和隙 Cauchy 模量 lnt_pterm_gap → 绝对峰值 *)
+(*        档 lnt_pterm_peak → 组合终形 lnt_gap_geo：尾隙 ≤ 2^{n+1}·         *)
+(*        (3/4)^{S M−2n}（C(n)·ρ^M 形，ρ=3/4）。β 侧交付: 精确交叉比率恒等式 *)
+(*        lnt_bv_cross（rx_term_decayQ 单调档的定量升级，供下游亏量账）＋    *)
+(*        亏量显式全正展开 lnt_deficit_pos（n≤m 窗）。                      *)
 (*  依赖: Stdlib QArith/List/Arith/ZArith/Lia；S01_BaseRing S02_Cauchy-    *)
 (*        Complete S03_QExp PolyIntegral PadeErrorIntegral BeukersLists     *)
 (*        BeukersVariant PintMono PsQReindex（rx_bkC_ratio/rx_Qlt_Z1 使用）。*)
-(*  对标: Beukers 1979 ln2 无理性积分证明的级数尾控制（论文 3 附录 E        *)
+(*  对标: Beukers 1979 ln2 无理性积分证明的级数尾控制（REV20 论文3附录E     *)
 (*        开放项(b) 收敛桥的输入侧核件）；PsQReindex rx_term_decayQ 的      *)
-(*        几何率升级；Ln2Bridge ln2b_escape_of_supply 前提的改型对应件。     *)
+(*        几何率升级；Ln2Bridge ln2b_escape_of_supply 供给前提的改型备料。   *)
 (*  构造性: 纯构造性、零承认件；语句面全 Set（QeqT/QltT/QleT'），nat 层核   *)
 (*        全 lia/ring 显式展开；Qeq/Qle/Qlt 支撑引理仅 Prop 面作推理；      *)
 (*        ==-重写一律限于 == 目标内、Qle 目标换形走 qeq_le/Qle_trans 显式   *)
-(*        传送；文尾 Print Assumptions 全 Closed＋独立提取验证。            *)
-(*  编译配方: rocq c -native-compiler no -Q vo_local_world_unified_0930     *)
-(*        ""（编译目录 ln2_tail/，并发限 1）。                               *)
+(*        传送；文尾 Print Assumptions 全 Closed＋独立提取闭合。             *)
+(*  编译配方: <Live 工具链 opam live>/bin/rocq c -native-compiler no -Q     *)
+(*        vo_local_world_unified_0930 ""（独占沙箱池 ln2_tail/，道闸≤1）。   *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -630,7 +632,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §C β 级数（bv_term）侧：精确交叉比率恒等式＋几何比率反例机器判定         *)
+(* §C β 级数（bv_term）侧：精确交叉比率恒等式＋几何比率反例机器锚         *)
 (* ============================================================ *)
 
 (** 精确交叉比率恒等式（rx_term_decayQ 单调档的定量升级）：
@@ -715,22 +717,22 @@ Proof.
     rewrite Hkey. ring.
 Qed.
 
-(** 机器反例判定①：n=0,m=30 处 β 级数比率 R=1891/2016≈0.938 > 3/4
+(** 机器反例锚①：n=0,m=30 处 β 级数比率 R=1891/2016≈0.938 > 3/4
     ——「峰后一致比率 ρ=3/4」在 β 级数上被机器证伪。 *)
 Theorem lnt_beta_rho_refuted34 : QltT ((3 # 4)%Q * bv_term 0 30)%Q (bv_term 0 31).
 Proof. vm_compute. reflexivity. Qed.
 
-(** 机器反例判定②：同点 R > 15/16——任何固定 ρ<1 的一致比率档在 β 级数
-    上不存在（初版草案的 ρ^M 档不成立，改用极点级数尾对象）。 *)
+(** 机器反例锚②：同点 R > 15/16——任何固定 ρ<1 的一致比率档在 β 级数
+    上不存在（AE 路线①草案 ρ^M 须改靶至极点级数尾对象）。 *)
 Theorem lnt_beta_rho_refuted1516 : QltT ((15 # 16)%Q * bv_term 0 30)%Q (bv_term 0 31).
 Proof. vm_compute. reflexivity. Qed.
 
-(** 极点级数正例判定：n=2 窗内比率档 ≤ 3/4（机器复核）。 *)
+(** 极点级数正锚：n=2 窗内比率档 ≤ 3/4（机器复核）。 *)
 Theorem lnt_pterm_anchor2 : QleT' (lnt_pterm 2 3) ((3 # 4)%Q * lnt_pterm 2 2).
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §D 假设审计与独立提取（构造性验证位）                      *)
+(* §D 假设审计与独立提取（born-green 闭合位）                            *)
 (* ============================================================ *)
 
 Print Assumptions lnt_deficit_pos.

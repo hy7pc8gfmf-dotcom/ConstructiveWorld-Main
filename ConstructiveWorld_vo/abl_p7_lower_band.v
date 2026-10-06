@@ -10,10 +10,10 @@
 (*        反单调与正性、mult_positive、le_mult_compat_r）；AttnDoeblin       *)
 (*        （基座：bs_Zrow_le 行和上界／bs_Zrow_pos 行和正性／               *)
 (*        bs_factor_ge_lo 因子下界／bs_kernel 核／Zrow 行和／nat_to_R）；    *)
-(*        P7BoundedSoftmaxDeep（在册上带件；其正性证书 p7d_nR_pos／      *)
+(*        P7BoundedSoftmaxDeep（与在册上带件同构；其正性证书 p7d_nR_pos／    *)
 (*        p7d_lo_pos／p7d_hi_pos 在本件复用）。                              *)
 (*  对标: AttnDoeblin 主件体内下界组装链条的转写级导出；P7BoundedSoftmaxDeep *)
-(*        段七上带定理的对应下带形式。                                           *)
+(*        段七上带定理的逐肢对应。                                           *)
 (*  构造性: 纯构造性、零承认件；链式装配全 Qed 闭合；语句面零经典选择、      *)
 (*        零弃证；文尾取证两件全 Closed（可提取面与在册上带件同标准）。      *)
 (*  编译配方: rocq c -native-compiler no -Q <现役统一世界树> ""（独占沙箱）。 *)
@@ -51,7 +51,7 @@ Let nR := AttnDoeblin.nat_to_R (length enum).
 Let lo := expf (mult invT (opp Delta)).
 Let hi := expf (mult invT Delta).
 
-(* 正性三证书：nR 正性复用在册上带件同款证书；lo/hi 正性为指数正性直引 *)
+(* 正性三证书：nR 正性复用对应在册上带件同款证书；lo/hi 正性为指数正性直引 *)
 Lemma p7d_lb_nR_pos : lt zero nR.
 Proof. exact (p7d_nR_pos enum enum_nonempty sum_eq_list). Qed.
 
@@ -63,8 +63,8 @@ Proof. exact (p7d_hi_pos temp temp_pos Delta expf expf_pos). Qed.
 
 (* ===== 核值下带·一般形 =====
    链条：行和 ≤ N·hi（bs_Zrow_le） ⟹ 倒数反单调（inv_pos_le_compat）
-   ⟹ lo 乘入（le_mult_compat_r）；另一支 行和倒数作因子时核 ≥ lo·行和倒数
-   （bs_factor_ge_lo 逐点下界）；两支 le_trans 闭合。 *)
+   ⟹ lo 乘入（le_mult_compat_r）；另一肢 行和倒数作因子时核 ≥ lo·行和倒数
+   （bs_factor_ge_lo 逐点下界）；两肢 le_trans 闭合。 *)
 Theorem p7d_kernel_ge_lo_over_nRhi : forall (s s' : S) (HnRhi : lt zero (mult nR hi)),
   le (mult lo (inv_pos (mult nR hi) HnRhi))
      (AttnDoeblin.bs_kernel enum enum_nonempty temp temp_pos Delta

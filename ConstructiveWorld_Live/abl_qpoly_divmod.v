@@ -1,7 +1,18 @@
 (* ===================================================================== *)
-(*  模块名：abl_qpoly_divmod —— Q 层多项式带余除法引擎首件——ln2 路线③      *)
-(*    （S6 恒等式支）唯一无在册先例的代数件的最小可行基座。                  *)
-(* 使命：按诚实边界清单，闭合 ln2 路线③「多项式除法引擎」的首件档位——       *)
+(*  五字段指针｜使命：Q 层多项式带余除法引擎首件——ln2 路线③（S6 恒等式肢）  *)
+(*    唯一无在册先例的代数件的最小可行基座。 依赖：Stdlib QArith/Qring/     *)
+(*    Qfield/List/Arith/ZArith/Extraction；S01_BaseRing S02_CauchyComplete *)
+(*    PolyIntegral（池外世界树在册件）。 构造性：纯构造性、零承认件；语句面  *)
+(*    全 Set（sigT/And/S02.QeqT/S01.Id 度谓词），Qeq==仅证内推理脚手架； *)
+(*    环闭全走「全变量形纯环小件」模式（坑卡 AL/AX）。 编译配方：source      *)
+(*    Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 &&   *)
+(*    nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930    *)
+(*    "" abl_qpoly_divmod.v（道闸≤1＝单进程串行）。 对标：PolyIntegral      *)
+(*    pint_*（Q 系数列表先例）；BT §诚实边界路线③除法引擎；AE §3.3 路线③。 *)
+(* ===================================================================== *)
+(*  abl_qpoly_divmod.v —— Q 层多项式除法引擎·首件                           *)
+(*                                                                        *)
+(*  使命：按 BT 诚实边界清单，闭合 ln2 路线③「多项式除法引擎」的首件档位——   *)
 (*    Q 系数稠密列表多项式（头=常数项，循库内 PolyIntegral 先例）的          *)
 (*    【线性除数带余除法（综合除法）】引擎：                                *)
 (*      qpd_synth a p : list Q * Q —— p ÷ (x+a) 的（商列表, 余数标量），     *)
@@ -10,23 +21,15 @@
 (*        ①等式肢 ∀x, QeqT (eval p x) (eval (x+a) x · eval 商 x + 余数)      *)
 (*        ②度肢   qpd_deglt 余式列表 (x+a)（Id bool 面，可判定）             *)
 (*    一般除法形【只登记不施工】：qpd_divmod_gen_type 留接口；               *)
-(*    线性→一般桥 qpd_lin_to_gen 已通（线性引擎经一般接口即接入）。          *)
-(* 诚实边界：①一般形引擎不施工——头=常数项表示下一般长除法须自尾（最高次）   *)
+(*    线性→一般桥 qpd_lin_to_gen 已通（线性引擎经一般接口即使用）。          *)
+(*                                                                        *)
+(*  诚实边界：①一般形引擎不施工——头=常数项表示下一般长除法须自尾（最高次）   *)
 (*    剥项，非结构递归；线性综合除法恰是头结构递归的最大可闭合切片，此为      *)
 (*    表示法层面的真限制，非证明技巧欠缺。②商列表允许尾随零（稠密表示，      *)
 (*    求值语义不受影响，烟测如实呈现）。③qpd_lead 的非平凡引理（如幂单项     *)
 (*    首一性）只登记不施工。④使用前瞻（只登记不施工）：AE 路线③ Beukers     *)
 (*    恒等式 tⁿ(1−t)ⁿ == P_n·(1−t/2)^{n+1} + Σd_j(1−t/2)^{n+1−j} 的除法      *)
 (*    位，本件一般接口 qpd_divmod_gen_type 即其使用面。                     *)
-(* 依赖清单：Stdlib QArith/Qring/Qfield/List/Arith/ZArith/Extraction；      *)
-(*    S01_BaseRing S02_CauchyComplete PolyIntegral（池外世界树在册件）。     *)
-(* 对标：PolyIntegral pint_*（Q 系数列表先例）；BT 诚实边界路线③除法引擎；  *)
-(*    AE §3.3 路线③。                                                     *)
-(* 构造性注记：纯构造性、零承认件；语句面全 Set（sigT/And/S02.QeqT/S01.Id   *)
-(*    度谓词），Qeq==仅证内推理脚手架；环闭全走「全变量形纯环小件」模式。    *)
-(* 编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&         *)
-(*    ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q             *)
-(*    <world> "" 本件（单进程串行）。                                       *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs QArith.Qring QArith.Qfield.
@@ -37,7 +40,7 @@ Require Import S01_BaseRing S02_CauchyComplete PolyIntegral.
 Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §0 表示与度支持件（全 Set 面）                                 *)
+(* §0 载体与度支持件（全 Set 面）                                 *)
 (*    多项式 = list Q 稠密系数表，头=常数项（PolyIntegral 先例）； *)
 (*    度约定：deg [] = 0（零多项式按度 0 记，度肢由可判定 Id 面    *)
 (*    诚实承载，不虚报 −∞ 惯例）。                                *)
@@ -253,7 +256,7 @@ Definition qpd_divmod_gen_pred (p q : list Q) (w : list Q * list Q) : Set :=
 Definition qpd_divmod_gen_type (p q : list Q) : Set :=
   sigT (qpd_divmod_gen_pred p q).
 
-(* 桥：线性引擎产出经一般接口即接入（余数标量升为常多项式 [r]） *)
+(* 桥：线性引擎产出经一般接口即使用（余数标量升为常多项式 [r]） *)
 Lemma qpd_lin_to_gen_sound : forall (a : Q) (p : list Q),
   qpd_divmod_gen_pred p (a :: 1 :: nil)
     (fst (qpd_synth a p), snd (qpd_synth a p) :: nil).
@@ -271,7 +274,7 @@ Definition qpd_lin_to_gen (a : Q) (p : list Q) : qpd_divmod_gen_type p (a :: 1 :
 
 (* ============================================================ *)
 (* §5 数值烟测（BF 模式：vm_compute 零公设定装，实例小形）         *)
-(*    基准例：(x²+1) ÷ (x+1) ⟹ 商 x−1 余 2                       *)
+(*    基准例：(x²+1) ÷ (x+1) ⟹ 商 x−1 余 2（任务指令指定）          *)
 (* ============================================================ *)
 
 (* 烟测 0：空表边例——0 ÷ (x+3) = 商 0 余 0 *)
@@ -283,7 +286,7 @@ Proof.
   - cbn [qpd_synth snd]. apply Qeq_refl.
 Qed.
 
-(* 烟测 1（基准例）：(x²+1) ÷ (x+1) ⟹ 商 [−1;1;0]（=x−1，稠密含尾零）余 2 *)
+(* 烟测 1（任务指令基准）：(x²+1) ÷ (x+1) ⟹ 商 [−1;1;0]（=x−1，稠密含尾零）余 2 *)
 Lemma qpd_smoke1_q :
   fst (projT1 (qpd_pdivmod_lin_wit 1 (1 :: 0 :: 1 :: nil)))
   = (-1) :: 1 :: 0 :: nil.
@@ -323,7 +326,7 @@ Lemma qpd_smoke3_r :
 Proof. vm_compute. reflexivity. Qed.
 
 (* ============================================================ *)
-(* §6 收束：提取面 + Print Assumptions 逐条取证                   *)
+(* §6 闭合：提取面 + Print Assumptions（红线四条逐条 PA）          *)
 (* ============================================================ *)
 
 Separate Extraction qpd_synth qpd_mul_lin.
@@ -348,4 +351,4 @@ Print Assumptions qpd_smoke2_r.
 Print Assumptions qpd_smoke3_q.
 Print Assumptions qpd_smoke3_r.
 
-(* 多项式除法引擎首件终（纯构造性出生） *)
+(* CC·多项式除法引擎首件终（born-green 目标） *)

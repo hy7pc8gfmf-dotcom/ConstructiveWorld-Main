@@ -1,21 +1,9 @@
 (* ==========================================================================)
-   abl_audit_base_v1.v — 基座裸奔位独立审计卷第一件（甲形态·零级联）
-   使命：形式化四命题 aba_qlt_eps_sub／aba_cauchy_limit_raw／aba_const_seq_
-      convergent／aba_gibbs_softmax_explicit——以两条轻量使用面实例定理真行使
-      裸奔主定理 S02 real_cauchy_complete（裸奔 Top #1，入度 493 零直审）与
-      S06 attention_is_gibbs（裸奔 Top #2，论文 2 主张核心），尾舱对两裸奔
-      主定理做跨件 qualified 直审（Print Assumptions 追审型，Z 规格书 2.1/2.4
-      口径）。
-   依赖清单：S01_BaseRing／S02_CauchyComplete／S03_QExp／S04_RealExpLogConv／
-      S05_AlignmentGRPO／S06_DiffSamplingGibbs（Require 全链透传）＋Stdlib
-      （QArith、List、Bool、Arith、Setoid、Morphisms）。
-   对标行：Z 规格书 2.1/2.4 直审口径；S02 直审卷族体例（v2/v3 同族）。
-   构造性注记：全件 Qed 闭合、零承认词面、无经典逻辑；语句面全 Set 层
-      （sigT／And／QltT／real_lt／Id 均 Set 型），零 Prop 泄露。
-   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q <缓存根> ""，
-      nice 限载（AL/AS 池内配方）；验证＝EXIT=0＋Print Assumptions 全 Closed。
-   查重登记：顶层名 4 枚全 aba_ 新前缀，与 v2 abb_／v3 abc_ 及库内既有顶层名
-      零撞零别名转发；六条 Print Assumptions 只读直审，上游宿主零字节不动。
+   abl_audit_base_v1.v -- 基座面裸奔位独立审计载体件（甲形态·零级联）
+   使命：本件形式化以下命题族：aba_qlt_eps_sub、aba_cauchy_limit_raw、aba_const_seq_convergent、aba_gibbs_softmax_explicit——以两条轻量使用面载体定理真使用裸奔主定理 S02 real_cauchy_complete（裸奔 Top #1，入度 493 零直审）与 S06 attention_is_gibbs（裸奔 Top #2，论文 2 主张核心），尾舱对两裸奔主定理做跨件 qualified 直审（Print Assumptions 追审型载体，Z 规格书 2.1/2.4 口径）。
+   依赖：S01_BaseRing、S02_CauchyComplete、S03_QExp、S04_RealExpLogConv、S05_AlignmentGRPO、S06_DiffSamplingGibbs（Require 全链透传）＋Stdlib（QArith、List、Bool、Arith、Setoid、Morphisms）。
+   构造性：全件 Qed 闭合、零承认词面、无经典逻辑；语句面以 Set 层承载（sigT／And／QltT／real_lt／Id 均 Set 型），零 Prop 泄露。
+   编译配方：Rocq 9.1 直调 coqc -native-compiler no -q -Q <缓存根> ""，nice 限载（照池内既有配方）。
    ========================================================================== *)
 
 Require Import S01_BaseRing.
@@ -30,7 +18,7 @@ From Stdlib Require Import Setoid Morphisms.
 
 (* ============================================================ *)
 (* §1 裸奔位一（S02 real_cauchy_complete）使用面包装            *)
-(*   实例定理把完备性主定理的结论从 real_lim 包装层降到          *)
+(*   载体定理把完备性主定理的结论从 real_lim 包装层降到          *)
 (*   原始 eps/N 双向夹逼形（dist 收敛包装），并给出常值列        *)
 (*   这一具体应用实例——两条均直引主定理本体现闭合。            *)
 (* ============================================================ *)
@@ -58,7 +46,7 @@ Proof.
   unfold S02_CauchyComplete.QltT, Qlt_bool. rewrite Hcmp. reflexivity.
 Qed.
 
-(* 实例件一：柯西完备性的原始 eps/N 形包装（dist 收敛包装）。     *)
+(* 载体件一：柯西完备性的原始 eps/N 形包装（dist 收敛包装）。     *)
 (*   从柯西假设直接取得极限 l 及其双向 eps/N 夹逼——语句面不再    *)
 (*   出现 real_lim 包装层，下游拿到的即是逐 eps 见证形。          *)
 Theorem aba_cauchy_limit_raw :
@@ -87,10 +75,10 @@ Proof.
   exact (S02_CauchyComplete.real_cauchy_complete u Hcau).
 Qed.
 
-(* 实例件二：完备性的具体应用实例——常值实数列收敛。             *)
+(* 载体件二：完备性的具体应用实例——常值实数列收敛。             *)
 (*   把主定理实例化到 u := fun _ => real_const q，柯西假设以     *)
 (*   N := 0、阈值 eps/2 显式见证（逐点差恒 q + (−q)，            *)
-(*   projT1 逐点展开照 S02:982 判例），真行使主定理本体。         *)
+(*   projT1 逐点展开照 S02:982 判例），真使用主定理本体。         *)
 Theorem aba_const_seq_convergent :
   forall (q : Q),
     sigT (fun l : S02_CauchyComplete.Real =>
@@ -129,10 +117,10 @@ Qed.
 
 (* ============================================================ *)
 (* §2 裸奔位二（S06 attention_is_gibbs）使用面特化              *)
-(*   实例定理把「softmax = Boltzmann 记号形」特化到原始接口      *)
+(*   载体定理把「softmax = Boltzmann 记号形」特化到原始接口      *)
 (*   基元形：softmax z s == e^(−z_s) · Z^(−1)（Gibbs 规范式），  *)
 (*   语句面不再出现 boltzmann_dist_attn／boltzmann_factor／     *)
-(*   Z_thermo 等 S06 节内缩写——真行使主定理本体。               *)
+(*   Z_thermo 等 S06 节内缩写——真使用主定理本体。               *)
 (* ============================================================ *)
 
 Theorem aba_gibbs_softmax_explicit :
@@ -193,8 +181,8 @@ Qed.
 (* 尾舱：公理审计面（跨件 qualified 直审 ＋ 自审）               *)
 (*   判读判据：以下 6 条输出均须为 Closed under the global       *)
 (*   context。前三条为对上游裸奔主定理的直审（Z 规格书跨件追审   *)
-(*   形态——裸奔 Top #1/#2 主张就此进入随编译自动核验面）；       *)
-(*   后三条为对本件实例语句的自审（PA≥1 下限之上）。             *)
+(*   形态——裸奔 Top #1/#2 主张就此进入随编译自动复核面）；       *)
+(*   后三条为对本件载体语句的自审（PA≥1 下限之上）。             *)
 (* ============================================================ *)
 Print Assumptions S02_CauchyComplete.real_cauchy_complete.
 Print Assumptions S06_DiffSamplingGibbs.attention_is_gibbs.

@@ -1,32 +1,46 @@
 (* ==========================================================================)
-   abl_dyn_step_calc.v — 熵梯度 dynamics 收敛的步数计算器首件（dsc_ 前缀）
-   使命：把 S04:1128 dynamics_converges 的纯定性收敛 (ExistsT lim) 升级为 mtg_k_calc 式
-      可提取步数见证。率材料取自亲兄弟件 S04:893 iterate_cauchy_explicit_N 的 log 模量方程
-      (log(a·κ^N) ≤ log eps，a := |η|·|g(x₀)|·1/(1−κ))。
-   五件主陈述：①dsc_step_calc——mtg_k_calc 同构 Defined 计算器：projT1(iterate_cauchy_
-      explicit_N)，精度 eps → 步数 nat。②dsc_step_calc_log_budget／dsc_step_calc_cauchy_
-      correct——正确性两半：log 模量方程半（le (log(a·κ^N)) (log eps)）＋柯西半（∀m,n≥N,
-      metric<eps），全 Set 形陈述。③dsc_cauchy_modulus_sigT——sigT 封装 {N | ∀m,n≥N,
-      metric(x_m,x_n)<eps}。④dsc_limit_rate_witness——组合器（lim＋cauchy ⟹ 到极限的率见证）：
-      sigT N, ∀n≥N, metric(x_n, E_star) < eps（使用 lim_metric_approx 证书）。
-      ⑤Part 2 nat 面：log 模量方程定点枚举解算器 dsc_k_enum（真 Fixpoint/ceil 形：
-      dsc_ceil_div=⌈·/·⌉，dsc_iter=x·p/q 上取整衰减步）＋两正确性（correct 上取整面 /
-      logface 精确面＝x·p^N≤e·q^N）；Part 3 实面桥 dsc_nat_le_embed＋幂定律 4 件＋
-      dsc_enum_real_correct（定点档在具体有理数据上的实面 le 正确性）。
-   已知边界：实数 log→nat ceil 的构造性桥不在库（r_arch_pow 为 Variable、库无 r_pow_mult/nat
-      单调桥——本件已补 nat_to_R 同态使用面），故按有界精度档：nat 计算器以定点枚举承载
-      （真 Fixpoint，提取 Obj.magic=0），实面由 dsc_enum_real_correct 以有理数据 κ:=p/q 闭合；
-      S04 iterate_cauchy_explicit_N 之 N 走 r_arch_pow 证书（非计算性）。
-   依赖清单：S01_BaseRing–S04_RealExpLogConv（iterate_cauchy_explicit_N/one_minus_kappa_pos/
-      r_pow_pos/lt_id_r/le_id_l/le_id_r/lt_le_iff/le_plus_compat/half_pos/half_twice/two_pos/
-      one_pos 均在役）；Arch_PA_02（nat_to_R/nat_to_R_mult_hom）；Stdlib Arith/Lia。Require-only 零改动。
-   构造性注记：纯构造性/Set 层零 Prop 语句面（步数见证 nat 面 sigT；误差谓词 real_lt/real_le
-      Set 层）；非平凡（dsc_k_enum 为真 Fixpoint，ceil 枚举非平凡归纳）；可提取（Separate
-      Extraction Obj.magic=0 附加证）；零公理（尾 Print Assumptions 全 Closed 预期）。工艺红线：
-      零 not/~/<> 书写；term-mode 全显式实参；Eval 烟测定装入日志。
-   编译配方：source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19
-      rocq c -native-compiler no -Q vo_local_world_unified_0930 "" abl_dyn_step_calc.v（池内执行）。
-   查重登记：顶层名全 dsc_ 新前缀，施工前 grep 全库零命中。
+   abl_dyn_step_calc.v — BQ·熵梯度 dynamics 收敛的步数计算器首件（dsc_ 前缀）
+   卷次: ConstructiveWorld BQ 卷（tmine04，45 分钟切片，born-green 交付）
+   使命: 按 K 头号矿脉 K1/K14——把 S04:1128 dynamics_converges 的纯定性收敛
+     (ExistsT lim) 升级为 mtg_k_calc 式可提取步数见证；率材料照 K 勘定取自
+     亲兄弟件 S04:893 iterate_cauchy_explicit_N 的 log 模量方程
+     (log(a·κ^N) ≤ log eps，a := |η|·|g(x₀)|·1/(1−κ))。
+   件名与前缀: abl_dyn_step_calc.v，dsc_ 前缀（施工前 grep 防撞：全库零命中）。
+   五件陈述（本片闭合）:
+     1. dsc_step_calc —— mtg_k_calc 同构 Defined 计算器：projT1(iterate_cauchy_
+        explicit_N)，精度 eps → 步数 nat（K14 升格面）。
+     2. dsc_step_calc_log_budget / dsc_step_calc_cauchy_correct —— 正确性两半：
+        log 模量方程半（le (log(a·κ^N)) (log eps)）＋柯西半（∀m,n≥N, metric<eps），
+        全 Set 形陈述。
+     3. dsc_cauchy_modulus_sigT —— sigT 封装 {N | ∀m,n≥N, metric(x_m,x_n)<eps}。
+     4. dsc_limit_rate_witness —— K1 组合器（lim＋cauchy ⟹ 到极限的率见证）：
+        sigT N, ∀n≥N, metric(x_n, E_star) < eps，使用 lim_metric_approx 证书
+        （K1 勘定的「lim＋cauchy ⟹ 到极限距离受率闭合」surfacing 面）。
+     5. Part 2 nat 面：log 模量方程的定点枚举解算器 dsc_k_enum（真 Fixpoint/
+        ceil 形：dsc_ceil_div=⌈·/·⌉，dsc_iter=x·p/q 上取整衰减步）＋两正确性
+        （dsc_k_enum_correct 上取整面 / dsc_k_enum_logface 精确面=x·p^N≤e·q^N，
+        即 log 模量方程的 nat 形）；Part 3 实面桥 dsc_nat_le_embed＋幂定律
+        （dsc_r_pow_mult/dsc_nat_r_pow/dsc_r_pow_inv/dsc_inv_unique）＋
+        dsc_enum_real_correct（定点档计算器在具体有理数据上的实面 le 正确性）。
+   fail-loud 记录: 实数 log→nat ceil 的构造性桥不在库（r_arch_pow 为 Variable、
+     库无 r_pow_mult/nat 单调桥——本件已补 nat_to_R 同态使用面），故按任务指令
+     降档「有界精度档」：nat 计算器以定点枚举承载（真 Fixpoint，提取 Obj.magic
+     =0），实面由 dsc_enum_real_correct 以有理数据 κ:=p/q 闭合；S04 的
+     iterate_cauchy_explicit_N 之 N 走 r_arch_pow 证书（非计算性），以诚实
+     边界登记于 attn 报告。
+   依赖: S01_BaseRing–S04_RealExpLogConv（iterate_cauchy_explicit_N/
+     one_minus_kappa_pos/r_pow_pos/lt_id_r/le_id_l/le_id_r/lt_le_iff/
+     le_plus_compat/half_pos/half_twice/two_pos/one_pos 均在役）；Arch_PA_02
+     （nat_to_R/nat_to_R_mult_hom）；Stdlib Arith/Lia。Require-only 零改动。
+   构造性: 纯构造性/Set 层零 Prop 载体（步数见证 nat 面 sigT；误差谓词 real_lt/
+     real_le Set 层）；非平凡（dsc_k_enum 为真 Fixpoint，ceil 枚举非平凡归纳）；
+     可提取（Separate Extraction Obj.magic=0 附加证，照 BF 模式）；零公理
+     （尾 Print Assumptions 全 Closed 预期）。
+   工艺红线: 零 not/~/<> 书写；Qeq 面（本件 nat 面不用 Q，零 Qeq 坑）；term-
+     mode 全显式实参（BN 坑卡）；数值定装（BB 坑卡：Eval 烟测入日志）。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no
+     -Q vo_local_world_unified_0930 "" abl_dyn_step_calc.v（池内执行）。
    ========================================================================== *)
 
 Require Import S01_BaseRing.
@@ -151,12 +165,12 @@ Proof.
   - apply (Nat.mul_le_mono_r _ _ (q ^ dsc_k_enum fuel p q x e)). exact H1.
 Qed.
 
-(* 定点档烟测：κ=7/10、A=1000、E=10 的衰减枚举，日志面证据 *)
+(* 定点档烟测（BB 数值定装）：κ=7/10、A=1000、E=10 的衰减枚举，日志面证据 *)
 Eval vm_compute in (dsc_k_enum 50 7 10 1000 10).
 
 (* ============================================================ *)
 (* Part 1 + Part 3：实面（RI 泛型 Section，S04 ConvergenceCauchy      *)
-(* 证书子集逐形对应）——mtg_k_calc 同构计算器＋组合器＋实面桥。         *)
+(* 证书子集对应形）——mtg_k_calc 同构计算器＋K1 组合器＋实面桥。          *)
 (* ============================================================ *)
 
 Section DscDynStepCalc.
@@ -177,7 +191,7 @@ Let minus := @minus RI.
 Let lim := @lim RI.
 Let metric := @metric RI.
 
-(* 诚实接口证书（S04:308-839 在役 Variable 子集，签名经实拍直接对齐） *)
+(* 诚实接口证书（S04:308-839 在役 Variable 子集，签名经检验实拍对齐） *)
 Variable entropy_gradient : R -> R.
 Variable dynamics : R -> R.
 Variable eta : R.
@@ -310,7 +324,7 @@ Proof.
 Qed.
 
 (* 幂对乘法的分裂：r_pow(a·b,n) == r_pow(a,n)·r_pow(b,n)（库缺，本件补；
-   注：库内 Id 面 rewrite 匹配不可靠（mult_one 实锤），全链 term-mode） *)
+   注：库内 Id 面 rewrite 匹配不可靠（mult_one 检验实锤），全链 term-mode） *)
 Lemma dsc_r_pow_mult : forall (a b : R) (n : nat),
   Id (r_pow (mult a b) n) (mult (r_pow a n) (r_pow b n)).
 Proof.

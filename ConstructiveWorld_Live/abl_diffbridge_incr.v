@@ -1,21 +1,24 @@
 (* ==========================================================================)
-   abl_diffbridge_incr.v — HasIncr ↔ RealDifferentiable 互译桥（AI 脸归一系列 ①-B）
-   使命: 双可微谓词互译——增量形（HasIncr，abl_arctan_diff_16 的 eps-线性
-     近似形，总函数面）与记录形（RealDifferentiable，S08，rdf+rdf_correct
+   abl_diffbridge_incr.v — HasIncr ↔ RealDifferentiable 互译桥（AI 互译件单 ①-B）
+   使命: 双可微谓词互译——增量形（HasIncr，abl_arctan_diff_16:54 eps-线性
+     近似形，总函数面）与记录形（RealDifferentiable，S08:3247，rdf+rdf_correct
      eps 形，正性前提部分函数面）的双向互译桥，谓词归一防再分裂。
      五件陈述：
        0. HasIncrPos——带前提变体（对齐件）：与 rdf_correct 逐字同构
-          （多出 Hx : 0<x 谓词索引与 Hxh : 0<x+h 域前提槽），两侧锚点共用面。
+          （多出 Hx : 0<x 谓词索引与 Hxh : 0<x+h 域前提参数位），两侧锚点共用面。
        1. dbi_realdiff_hasincrpos——记录→增量供给（rdf_correct 直取）。
        2. dbi_hasincrpos_realdiff——增量供给→记录构造（projT1 逐点
-          sigT 选择，Set 层合法；Record 无 ext 槽，粘合无外延性障碍）。
+          sigT 选择，Set 层合法；Record 无 ext 参数位，粘合无外延性障碍）。
        3. dbi_hasincr_incrpos / dbi_incrpos_hasincr——总函数面 HasIncr 与
           带前提面互接（前者弃 Hxh 直通；后者 δ 取 real_min δ₀ (x/2)
-          域核算保 x+h 正，Q 层逐点会计）。
+          域记录保 x+h 正，Q 层逐点会计）。
        4. dbi_realdiff_hasincr / dbi_hasincr_realdiff——两端到端组合
           （正域逐点增量供给 ⟺ 正域化记录）。
-   依赖: S01_BaseRing–S11_TP3B5；abl_arctan_diff_16（HasIncr 定义＋
-     abl9_qscale_pos/abl9_min_lt_l/abl9_min_lt_r 骨架件，Require-only 零改动）；
+   目标全句（本片闭合）：互译两定理（AI ①-B 草案名 realdiff_hasincr /
+     hasincrpos_realdiff 之 dbi_ 前缀形）＋总形两端到端，全句见上四组。
+   依赖: S01_BaseRing–S11_TP3B5；abl_arctan_diff_16（HasIncr 定义 +
+     abl9_qscale_pos/abl9_min_lt_l/abl9_min_lt_r 三骨架件，Require-only
+     零改动——治理裁项按「Require 最小」保守路线，原件未动一字）；
      S08 RealDifferentiable Record；S03 real_abs_proj；S07 real_min_pos；
      S10 real_le_eq_l；Stdlib QArith、List、Setoid、Lia。
    构造性: 纯构造性（全链 Qed 真构造，零承认式语句）；Set 层零 Prop 泄露
@@ -23,10 +26,12 @@
      逐点 sigT 投影，非经典选择）；非平凡（dbi_abs_lt_half_add_pos 为
      Q 层逐点会计真构造：半点域界 −|h_n| ≤ h_n、半·x_n ≤ x_n 装配）；
      可提取（尾 Print Assumptions，判据 Closed）。
-   工艺红线: Qeq 换形全数以 qeq_le 桥＋== 目标内 rewrite 闭合，Qeq
-     rewrite 零离开 == 目标；real_eq 侧 term-mode 显式实参；零 not/~/<> 书写。
-   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit
-     -s 65532 && nice -19 rocq c -native-compiler no -Q <缓存根> "" 本件（池内执行）。
+   书写纪律（全称自证，grep 自证）: Qeq 换形全数以 qeq_le 桥＋== 目标
+     内 rewrite 闭合，Qeq rewrite 零离开 == 目标；
+     real_eq 侧 term-mode 显式实参；零 not/~/<> 书写。
+   编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&
+     ulimit -s 65532 && nice -19 rocq c -native-compiler no
+     -Q vo_local_world_unified_0930 "" abl_diffbridge_incr.v（池内执行）。
    ========================================================================== *)
 
 Require Import S01_BaseRing.
@@ -182,7 +187,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* 5. 域核算小件：半点域界（δ 取 x/2 保 x+h 正的逐点会计）            *)
+(* 5. 域条件小件：半点域界（δ 取 x/2 保 x+h 正的逐点会计）            *)
 (* ============================================================ *)
 Lemma dbi_halfx_pos : forall x : Real,
   real_lt real_zero x ->
@@ -193,7 +198,7 @@ Proof.
   - exact Hx.
 Qed.
 
-(* |h| < x/2 且 0 < x ⟹ 0 < x + h（逐点 Q 账：严支 e0 < 半·x_n−|h_n|  *)
+(* |h| < x/2 且 0 < x ⟹ 0 < x + h（逐点 Q 账：严格肢 e0 < 半·x_n−|h_n|  *)
 (*   原项直通（QltT→Qlt→Qlt_le_trans），字面弱链以 qeq_le 桥装配：      *)
 (*   Mn−An ≤ 半·x_n−|h_n| ≤ x_n−|h_n| ≤ x_n+h_n == 右端投影差）         *)
 Lemma dbi_abs_lt_half_add_pos : forall (x h : Real),
@@ -259,7 +264,7 @@ Proof.
       - apply qeq_le. exact Hsplit. }
     assert (Hneg : Qle (Qopp (Qabs (projT1 h n))) (projT1 h n))
       by (apply dbi_q_opp_abs_le).
-    (* 字面弱链装配（四步三桥） *)
+    (* 字面弱链装配（四肢三桥） *)
     assert (Heq1 : (projT1 (real_mult (real_const (1#2)) x) n
                     - projT1 (real_abs h) n
                     == ((1#2) * projT1 x n - Qabs (projT1 h n)))%Q).
@@ -284,7 +289,7 @@ Proof.
     assert (Hb2 : Qle (projT1 x n + projT1 h n)
                       (projT1 (real_plus x h) n - projT1 real_zero n)%Q)
       by (apply qeq_le; apply Qeq_sym; exact Hrhs).
-    (* 严支原项直通 ＋ 弱链合流 *)
+    (* 严格肢原项直通 ＋ 弱链合流 *)
     apply Qlt_to_QltT.
     apply (Qlt_le_trans e0 (projT1 (real_mult (real_const (1#2)) x) n
                               - projT1 (real_abs h) n)%Q).
@@ -327,7 +332,7 @@ Proof.
 Qed.
 
 (* 6b. HasIncrPos（总化函数）⟹ HasIncr：δ 取 real_min δ₀ (x/2)——     *)
-(*     |h|<x/2 保 x+h 正（域核算），x/2 由 dbi_halfx_pos +            *)
+(*     |h|<x/2 保 x+h 正（域条件记录），x/2 由 dbi_halfx_pos +        *)
 (*     dbi_abs_lt_half_add_pos 承担。                                  *)
 Lemma dbi_incrpos_hasincr :
   forall (f : Real -> Real) (x a : Real) (Hx : real_lt real_zero x),

@@ -1,33 +1,32 @@
-(* ==========================================================================)
-   abl_audit_base_v2.v — S06／S04 裸奢单点独立审计卷第二件
-   使命：S06 单步 TV 收缩主定理（attention_tv_contraction，裸奔面 Top3）与 S04
-      Boltzmann 归一化主定理（boltzmann_normalized／boltzmann_dist_temp_normalized，
-      Top4 同行两名一并使用）的真使用面特化承载＋尾舱 Print Assumptions 跨件
-      追审直审（Z 报告 §2 四舱制、§3.3 Top10 排位口径）。实例语句均为新语句
-      非空壳：①abb_tv_contraction_twice——单步收缩经保持性引理
-      （attention_step_normalized／attention_step_nonneg）两次迭代的复合推论，
-      界 (1−δ)²·TV(mu)；②abb_boltzmann_pair_mass_two——基温与温度 t 两族分布
-      逐点相加后的总概率质量恒等式（=2，两归一化事实的 sum_over_S_add 包装）。
-   依赖清单：S01_BaseRing／S02_CauchyComplete／S03_QExp／S04_RealExpLogConv／
-      S05_AlignmentGRPO／S06_DiffSamplingGibbs（-Q 预编译树只读引用）＋文尾
-      Stdlib Extraction（出口舱）。
-   对标行：Z 报告 §2 四舱制规格与 §3.3 裸奔面 Top10 排位表；S02 直审卷族体例
-      （v1/v3 同族）。
-   构造性注记：零承认语句、零经典逻辑、语句面全 Set 层（Id／le／lt／sigT 面）；
-      证明体全 id_trans／id_cong／exact 显式链，无 tactic 猜测面；文尾六条
-      Print Assumptions（新件两条＋跨件追审上游四条）＋Separate Extraction
-      出口舱闭合。
-   编译配方（独占沙箱池 audit_base_v2/，池内并发≤1，单件无池内链序）：<Live
-      工具链 opam live>/bin/rocq c -native-compiler no -Q
-      vo_local_world_unified_0930 ""；验证＝EXIT=0＋日志零真错＋Print
-      Assumptions 全 Closed＋.vo 新于 .v。
-   实测注：两上游主定理出 Section 后全参化（sum_pos_preserved／D／D_pos／
-      energy／transition／行随机／细致平衡／delta／低界／四则兼容／求和交换／
-      abs 兼容），本件语句按检验实录签名调形，与 Z 报告行文无出入；顶层陈述须
-      Section+Context 类参包裹（裸顶层类参 evar 不闭包）。
-   查重登记：顶层名 2 枚全 abb_ 新前缀，与 v1 aba_／v3 abc_ 及库内既有顶层名
-      零撞零别名转发；Print Assumptions 只读直审，上游宿主零字节不动。
-   ========================================================================== *)
+(* ===================================================================== *)
+(*  abl_audit_base_v2.v —— 审计载体扩容 v2·甲形态闭合第二件                 *)
+(*  定性: 认证载体件（Z 报告 §2 规格书四舱制）——裸奢单点独立审计载体：      *)
+(*        S06 单步 TV 收缩主定理与 S04 Boltzmann 归一化主定理的真使用面      *)
+(*        特化承载＋尾舱 Print Assumptions 直审（跨件追审型）。             *)
+(*  使命: 闭合 Z 报告 §3.3 裸奔面 Top10 次排位两行——Top3                    *)
+(*        attention_tv_contraction、Top4 boltzmann_normalized 与             *)
+(*        boltzmann_dist_temp_normalized（同行两名一并使用）。载体语句为     *)
+(*        新语句非空壳: ①abb_tv_contraction_twice——单步收缩经保持性引理     *)
+(*        （attention_step_normalized/attention_step_nonneg）的两次迭代     *)
+(*        复合推论，界 (1−δ)²·TV(mu)；②abb_boltzmann_pair_mass_two——       *)
+(*        基温与温度 t 两族 Boltzmann 分布逐点相加后的总概率质量恒等式       *)
+(*        （=2，两归一化事实的 sum_over_S_add 包装）。                       *)
+(*  依赖: S01_BaseRing S02_CauchyComplete S03_QExp S04_RealExpLogConv       *)
+(*        S05_AlignmentGRPO S06_DiffSamplingGibbs（-Q 预编译树只读引用）；   *)
+(*        文尾 Stdlib Extraction（出口舱）。                                *)
+(*  构造性: 零承认语句、零经典逻辑、语句面全 Set 层（Id/le/lt/sigT 面）；    *)
+(*        证明体全 id_trans/id_cong/exact 显式链，无 tactic 猜测面；         *)
+(*        文尾六条 Print Assumptions（新件两条+跨件追审上游四条）＋          *)
+(*        Separate Extraction 出口舱闭合。                                  *)
+(*  编译配方: <Live 工具链 opam live>/bin/rocq c -native-compiler no        *)
+(*        -Q vo_local_world_unified_0930 ""（独占沙箱池 audit_base_v2/，    *)
+(*        道闸≤1，单件无池内链序）。                                        *)
+(*  核验注: 两上游主定理出 Section 后全参化（sum_pos_preserved/D/D_pos/     *)
+(*        energy/transition/行随机/细致平衡/delta/低界/四则兼容/求和交换/   *)
+(*        abs 兼容），本件语句按检验实拍签名调形，与 Z 报告行文无出入；      *)
+(*        顶层陈述须 Section+Context 类参包裹（检验一核验：裸顶层类参       *)
+(*        evar 不闭包）。                                                   *)
+(* ===================================================================== *)
 
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -37,7 +36,7 @@ Require Import S05_AlignmentGRPO.
 Require Import S06_DiffSamplingGibbs.
 
 (* ============================================================ *)
-(* §1 实例语句舱·Top3 位：TV 单步收缩的两次迭代复合推论             *)
+(* §1 载体语句舱·Top3 位：TV 单步收缩的两次迭代复合推论             *)
 (*    （使用 S06.attention_tv_contraction ＋ 保持性二件）           *)
 (* ============================================================ *)
 
@@ -123,7 +122,7 @@ Qed.
 End AbbTvTwice.
 
 (* ============================================================ *)
-(* §2 实例语句舱·Top4 位：两温族概率质量包装                       *)
+(* §2 载体语句舱·Top4 位：两温族概率质量包装                       *)
 (*    （使用 S04.boltzmann_normalized 与 boltzmann_dist_temp_normalized） *)
 (* ============================================================ *)
 
@@ -193,7 +192,7 @@ Print Assumptions S04_RealExpLogConv.boltzmann_normalized.
 Print Assumptions S04_RealExpLogConv.boltzmann_dist_temp_normalized.
 
 (* ============================================================ *)
-(* §4 出口舱：实例定理兼任提取端口（零 Obj.magic）                  *)
+(* §4 出口舱：载体兼任提取端口（G3：零 Obj.magic）                  *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

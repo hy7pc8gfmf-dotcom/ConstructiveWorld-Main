@@ -1,13 +1,39 @@
 (* ===================================================================== *)
-(*  abl_ln2_numer_int.v —— ln2 无理性链·真分子族整化核件 *)
-(*  使命: sa_supply_rem' 改型下「改型分子 B·L_n 的整除供给」——定理草案 bvp_lcm_int 的闭合（最小核件）：改型分子 B_n := L_n·p_n ∈ Z 的整性见证直证（p_n := bv_p n 为 BeukersVariant 的 Laurent 闭式真分子，L_n := hl_lcm_upto n）。数学内容: bv_p n = −Σ_{j<S(2n), j≠n} c_j·(2^{j−n}−1)/(j−n)，其中 *)
-(*        (i) j<n 段: c_j = (−1)^{n+j}·2^{n−j}·T_j（T_j = Σ_{a≤j} C(n,a)·C(n,j−a)·2^a ∈ Z，2 幂因子逐项提出），与 (2^{−d}−1)/(−d) = (2^d−1)/(d·2^d) 相乘后 2^d 恰好对消 ⟹ T_j·(2^d−1)/d； *)
-(*        (ii) j>n 段: c_j = (−1)^{n+j}·S_j（S_j = Σ_{d≤a≤n} C(n,a)·C(n,j−a)·2^{a−d} ∈ Z 直接整），项为 S_j·(2^d−1)/d； *)
-(*        (iii) 两段分母 d = |j−n| ∈ [1,n] 全被 L_n 整除（hl_lcm_divide_all），故 L_n·bv_p n = ±Σ (L_n/d)·U_j·(2^d−1) ∈ Z。谐和形先例 pi_Pn_int 为同型模板（Ln2Integrality 全套 pi_ 工具直接使用）。另交付 A 侧平凡肢 L_n·q̃_n ∈ Z（bk_Qmul_nat 一步）与改型分子对 (A·L_n, B·L_n) 的合成交付面 lni_supply_pair（sa_supply_rem' 改型参数化 A_n := L_n·q̃_n、B_n := L_n·p_n 的 Z 面整备，合成前置件）；θ 档预算另见 abl_ln2_tail_bound（lnt_gap_geo）。 *)
-(*  依赖: Stdlib QArith/List/Arith/ZArith/Lia；S01_BaseRing S02_CauchyComplete S03_QExp BeukersLists HansonLcm BeukersVariant Ln2Integrality（与检验件 abl_ln2_numer_probe.v 同一导入形态）。 *)
-(*  对标: Ln2Integrality pi_Pn_int（谐和变体整化主件——本件为其真分子族对应物，被机器证伪判定③否证的 2 幂归一形的唯一可行替代，TrueNumerator 判定 r₃=2096/3 非整）；Ln2Bridge ln2b_escape_of_supply 前提的 sa_supply_rem' 改型对应件；abl_SupplyRemRefuted_07 证伪后的重构。 *)
-(*  构造性: 全件 Qed、零承认、零经典逻辑；主件语句面 sigT/QeqT（Set 层），nat/Z 支撑引理仅作推理；见证全显式（Z 级有限和 lni_zsum 承载），可提取；Qeq 改写一律避开 Qminus/Qopp 嵌位（Qmult/Qplus 下改写有 pi_hsum_spec 先例背书，Qopp 传送走自证 lni_Qopp_cong/lni_QoppZ 数值路线）；文尾 Print Assumptions 取证块全 Closed（验收证据之一）。 *)
-(*  编译配方: source <toolchain>/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && 编译目录 ln2_numer/ && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930 "" 本件；并发限 1；编译通过后清理本件 .vo/.glob（abl_ln2_numer_probe.v 产物保留）。 *)
+(*  abl_ln2_numer_int.v —— ln2 无理性链·真分子族整化核件（AE 攻击路线②）     *)
+(*  使命: sa_supply_rem' 改型下「改型分子 B·L_n 的整除供给」——AE 报告       *)
+(*        _tmine04_AE §3.3 路线②定理草案 bvp_lcm_int 的闭合（最小核件）：   *)
+(*        改型分子 B_n := L_n·p_n ∈ Z 的整性见证直证（p_n := bv_p n 为       *)
+(*        BeukersVariant 的 Laurent 闭式真分子，L_n := hl_lcm_upto n）。     *)
+(*        数学内容: bv_p n = −Σ_{j<S(2n), j≠n} c_j·(2^{j−n}−1)/(j−n)，其中   *)
+(*        (i) j<n 段: c_j = (−1)^{n+j}·2^{n−j}·T_j（T_j = Σ_{a≤j} C(n,a)·   *)
+(*        C(n,j−a)·2^a ∈ Z，2 幂因子逐项提出），与 (2^{−d}−1)/(−d) =          *)
+(*        (2^d−1)/(d·2^d) 相乘后 2^d 恰好对消 ⟹ T_j·(2^d−1)/d；             *)
+(*        (ii) j>n 段: c_j = (−1)^{n+j}·S_j（S_j = Σ_{d≤a≤n} C(n,a)·         *)
+(*        C(n,j−a)·2^{a−d} ∈ Z 直接整），项为 S_j·(2^d−1)/d；                *)
+(*        (iii) 两段分母 d = |j−n| ∈ [1,n] 全被 L_n 整除（hl_lcm_divide_all）， *)
+(*        故 L_n·bv_p n = ±Σ (L_n/d)·U_j·(2^d−1) ∈ Z。谐和形先例 pi_Pn_int   *)
+(*        为同型模板（Ln2Integrality 全套 pi_ 工器直接使用）。               *)
+(*        另交付 A 侧平凡肢 L_n·q̃_n ∈ Z（bk_Qmul_nat 一步）与改型分子对       *)
+(*        (A·L_n, B·L_n) 的合成交给面 lni_supply_pair（sa_supply_rem' 改型   *)
+(*        参数化 A_n := L_n·q̃_n、B_n := L_n·p_n 的 Z 面整备，AE §3.3 路线③  *)
+(*        装配前置件）；θ 档预算另见 abl_ln2_tail_bound（lnt_gap_geo）。     *)
+(*  依赖: Stdlib QArith/List/Arith/ZArith/Lia；S01_BaseRing S02_Cauchy-     *)
+(*        Complete S03_QExp BeukersLists HansonLcm BeukersVariant           *)
+(*        Ln2Integrality（与复活检验件 abl_ln2_numer_probe.v 同一导入形态）。*)
+(*  对标: Ln2Integrality pi_Pn_int（谐和变体整化主件——本件为其真分子族      *)
+(*        对应物，否定性见证③否证的 2 幂归一形的唯一活路，TrueNumerator 锚     *)
+(*        r₃=2096/3 非整）；Ln2Bridge ln2b_escape_of_supply 供给前提的       *)
+(*        sa_supply_rem' 改型备料；abl_SupplyRemRefuted_07 证伪后的重装。    *)
+(*  构造性: 全件 Qed、零承认、零经典逻辑；主件语句面 sigT/QeqT（Set 层），   *)
+(*        nat/Z 支撑引理仅作推理；见证全显式（Z 级有限和 lni_zsum 承载），   *)
+(*        可提取；Qeq 改写一律避开 Qminus/Qopp 嵌位（坑卡 BB#1——Qmult/      *)
+(*        Qplus 下改写有 pi_hsum_spec 先例背书，Qopp 传送走自证             *)
+(*        lni_Qopp_cong/lni_QoppZ 数值路线）；文尾 Print Assumptions        *)
+(*        取证块全 Closed（四关证据之一）。                                 *)
+(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&       *)
+(*        ulimit -s 65532 && 独占池 ln2_numer/ && nice -19 rocq c           *)
+(*        -native-compiler no -Q vo_local_world_unified_0930 "" 本件；      *)
+(*        cpu_guard 道闸 ≤1。绿后清本件 .vo/.glob（检验件 .vo/.glob 保留）。 *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith Lists.List Arith.Arith ZArith.ZArith Lia.
@@ -324,7 +350,7 @@ Proof.
                     ((Z.of_nat (hl_lcm_upto n) # 1) * (/ ((Z.of_nat (n - j)) # 1))))%Q.
     { ring. }
     rewrite Hdiv2, Hsub1. reflexivity. }
-  (* 合成 *)
+  (* 装配 *)
   assert (Hcore : ((Z.of_nat (hl_lcm_upto n) # 1) *
                     (bv_c n j * ((bv_q2 (Z.of_nat j - Z.of_nat n)%Z - 1%Q) /
                                  ((Z.of_nat j - Z.of_nat n)%Z # 1))))%Q
@@ -410,7 +436,7 @@ Proof.
                     ((Z.of_nat (hl_lcm_upto n) # 1) * (/ ((Z.of_nat (j - n)) # 1))))%Q.
     { ring. }
     rewrite Hdiv2, Hsub1. reflexivity. }
-  (* 合成 *)
+  (* 装配 *)
   assert (Hcore : ((Z.of_nat (hl_lcm_upto n) # 1) *
                     (bv_c n j * ((bv_q2 (Z.of_nat j - Z.of_nat n)%Z - 1%Q) /
                                  ((Z.of_nat j - Z.of_nat n)%Z # 1))))%Q
@@ -504,8 +530,8 @@ Proof.
   apply qeq_imp_qeqT. apply bk_Qmul_nat.
 Qed.
 
-(* 改型分子对合成交付：(A·L_n, B·L_n) ∈ Z×Z —— sa_supply_rem' 改型参数化
-   （A_n := L_n·q̃_n、B_n := L_n·p_n 的 Z 面整备） *)
+(* 改型分子对合成交给：(A·L_n, B·L_n) ∈ Z×Z —— sa_supply_rem' 改型参数化
+   （A_n := L_n·q̃_n、B_n := L_n·p_n，AE §3.3 路线③ 装配的 Z 面整备） *)
 Theorem lni_supply_pair : forall n : nat,
   sigT (fun z : Z =>
     sigT (fun w : Z =>
@@ -519,7 +545,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 数值判定组（vm_compute 精确判定；与检验件 lni_probe1 同源：L₃·p₃=262）   *)
+(* §5 数值锚组（vm_compute 精确判定；与检验件 lni_probe1 同源：L₃·p₃=262）   *)
 (* ============================================================ *)
 
 Theorem lni_lbvp_anchor0 : QeqT (lni_lbvp 0) 0%Q.

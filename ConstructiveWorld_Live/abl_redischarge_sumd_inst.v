@@ -1,25 +1,28 @@
 (* ============================================================ *)
-(* 模块名：abl_redischarge_sumd_inst —— 再次消解件 3：abl_sumd_strict *)
-(*   实例化消解＋dsu_neg Set 层升级                                 *)
-(* 使命：①前件泛型严格和单调（正性基准形）在典范参数下的零参数       *)
+(* 模块名：abl_redischarge_sumd_inst —— abl_sumd_strict 实例化        *)
+(*   消解＋dsu_neg 的 Set 层伴随载体件                                *)
+(* 数学使命：①前件泛型严格和单调（正性前提形）在典范参数下的零参数   *)
 (*   闭式推论：R 取 S02 Real 层（在役实例 RealEnhancedReal 复用，      *)
-(*   S07:8596）、承载集 S := unit、enum := tt::nil（最小非空枚举），   *)
+(*   S07:8596）、载体 S := unit、enum := tt::nil（最小非空枚举），     *)
 (*   出 dsu_sum_lt_pos_u1／dsu_list_sum_lt_cons_u1 零 Section 参数    *)
-(*   闭式；②Set 层升级：dsu_neg (P:Prop):Prop 增 Set 层伴随           *)
-(*   dsu_neg_sb:={P}+{P->False}（sumbool，Set 类）判定件——否定以      *)
-(*   sumbool 承载，并给出表非空的具体判定件 dsu_list_ne_sb            *)
-(*   （cons 肢否定数据自持，本安装无 Not，零 not/~/<> 书写）。         *)
+(*   闭式；②载体升级：dsu_neg (P:Prop):Prop 增 Set 层伴随             *)
+(*   dsu_neg_sb :={P}+{P->False}（sumbool，Set 类）判定件——           *)
+(*   否定以 sumbool 承载，并给出表非空的具体判定件 dsu_list_ne_sb      *)
+(*   （cons 肢否定数据自持；本安装无 Not，零 not/~/<> 书写）。         *)
 (*   前件 Prop 定义 dsu_neg 原文保留（伴随为增量，零源文改动）。       *)
 (* 依赖清单：前件 abl_sumd_strict（本池拷贝链编：dsu_neg／             *)
 (*   dsu_sum_lt_pos／dsu_list_sum_lt_cons）；UpReqSumD（sumd 机器）；  *)
 (*   S07_RealSetoidExpLog（RealInterfaceEnhancedSetoid＋               *)
 (*   RealEnhancedReal 在役实例）；纯 Stdlib sumbool/List。             *)
-(* 构造性注记：零承认／零经典逻辑；新增判定面全 Set 表示（sumbool）；   *)
+(* 构造性注记：零承认／零经典逻辑；新增判定面全 Set 载体（sumbool）；   *)
 (*   dsu_list_ne_sb Defined 出口保可提取（判定读数 vm_compute 可算）；  *)
-(*   实例化推论为真消解（泛型定理直接调用，非重证非折算）。            *)
-(* 编译配方：source <toolchain>/env.sh && unset COQLIB ROCQLIB &&       *)
-(*   ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q         *)
-(*   <world> "" abl_sumd_strict.v（先）&& 同配方编本件（后）。          *)
+(*   实例化推论为真消解（泛型定理直接使用，非重证非折算）。            *)
+(* 编译配方：标准配方，本池链编                                        *)
+(*   source /Users/apple/Desktop/ConstructiveWorld/Live/toolchain/     *)
+(*   env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && cd <池>       *)
+(*   && nice -19 rocq c -native-compiler no -Q                          *)
+(*   /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_0930 *)
+(*   "" abl_sumd_strict.v（先）&& 同配方本件（后）。                    *)
 (* ============================================================ *)
 
 Require Import UpReqSumD.
@@ -29,7 +32,7 @@ Import ListNotations.
 Import RealInterfaceEnhancedMod.
 Require Import abl_sumd_strict.
 
-(* ---- §1 dsu_neg 的 Set 层伴随（sumbool 表示，Set 类） ---- *)
+(* ---- §1 dsu_neg 的 Set 层伴随（sumbool 载体，Set 类） ---- *)
 (*   P 的否定数据以 sumbool 承载：右肢即 P -> False（dsu_neg 同形），   *)
 (*   左肢为肯定肢（判定件语义完整面）。                                  *)
 Definition dsu_neg_sb (P : Prop) : Set := {P} + {P -> False}.
@@ -63,7 +66,7 @@ Proof.
   - exact I.
 Qed.
 
-(* ---- §3 主件实例化消解：unit 单点承载集、tt::nil 最小非空枚举 ---- *)
+(* ---- §3 主件实例化消解：unit 单点载体、tt::nil 最小非空枚举 ---- *)
 (*   R 取 S02 Real（RealEnhancedReal 在役实例自动装填）；                *)
 (*   非空前提由 dsu_neg 直证（tt::nil = [] 空消去）。                    *)
 Theorem dsu_sum_lt_pos_u1 : forall f g : unit -> S02_CauchyComplete.Real,

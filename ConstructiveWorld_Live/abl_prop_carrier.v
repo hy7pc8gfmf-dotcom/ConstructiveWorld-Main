@@ -1,29 +1,52 @@
 (* ============================================================ *)
-(* 模块名：abl_prop_carrier —— Prop 旗标补齐件（审计旗标 Prop 缩写补齐 sumbool/sigT Set 层伴随件） *)
-(* 使命：对已交付件审计旗标逐位补齐 Set 层表示（原 Prop 定义保留为 spec 记号位，前件零源文改动）： *)
-(*   ①旗标一（plm_pairwise_coprime）：补 plm_pairwise_coprime_sb，判定器   *)
-(*   plm_pw_cop_bool 走逐对 gcd=1 bool 链（对角对与跨对同链受检），        *)
-(*   sound／complete 双向闭合；连带主定理伴随闭式推论位                    *)
-(*   plm_coprime_prod_dvd_closed（sigT：整除证书或否定数据）。             *)
-(*   ②旗标二：补 plm/lcm 侧使用形 plm_prime_sb——直连 redischarge 池件     *)
-(*   abl_redischarge_pr01_sb 的 pr_prime_sb（真调用重导出，非重证），附    *)
-(*   lcm 侧三分闭式推论 plm_prime_gcd_1_closed（sigT/option bool 标签）。  *)
-(*   ③旗标三（dsu_neg 系）：勘查已覆盖——abl_redischarge_sumd_inst 已给    *)
-(*   dsu_list_ne_sb，本件如实跳过，不重复补位。                            *)
-(* 依赖清单（本池拷贝链编，前件零改动）：abl_Pr_core_01 → abl_Pr_euclid_03 *)
-(*   → abl_Pr_lcmdecomp_04（plm_pairwise_coprime／plm_coprime_prod_dvd／  *)
-(*   plm_prime_gcd_1）→ abl_redischarge_pr01_sb（pr_prime_sb 系）→ 本件；  *)
-(*   HansonLcm 经缓存根 -Q 只读引用；纯 Stdlib（Arith.Arith／List 等）。   *)
-(* 构造性注记：零承认／零经典逻辑；新增语句面全 Set 表示（sumbool／sigT）， *)
-(*   否定一律 P -> False 自持（本安装无 Not，全件零否定记号书写）；判定件  *)
-(*   plm_pairwise_coprime_sb／plm_prime_sb 皆 Defined 出口保可提取；闭式  *)
-(*   推论位 Qed（逻辑闭合位，表示仍在 sumbool）；数值烟测表长 ≤3、元素 ≤5。 *)
-(* 诚实边界：宿主 plm_pairwise_coprime 为全对形（含对角 gcd x x = x），该   *)
-(*   谓词仅对全 1 表为真——判定链忠实复刻宿主定义语义（对角在链内显式受检）， *)
-(*   不放大不缩水；旗标三已覆盖位零触碰，不补全等式分解枚举表（宿主未竟位）。 *)
-(* 编译配方：source <toolchain>/env.sh && unset COQLIB ROCQLIB &&           *)
-(*   ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q <world> ""   *)
-(*   前四件依次链编后编本件（末位加 -Q <缓存根> "" -Q . ""）；绿判=EXIT=0。 *)
+(* abl_prop_carrier.v —— CI·Prop 载体补齐（再次消解令    *)
+(*   执行件：审计旗标 Prop 缩写补齐 sumbool/sigT Set 载体伴随件）      *)
+(*  使命: 对已交付件审计旗标逐位补齐 Set 载体（原 Prop 定义保留为     *)
+(*   spec 记号位，前件零源文改动）：                                  *)
+(*   ①旗标一（abl_Pr_lcmdecomp_04.v:185 plm_pairwise_coprime）：      *)
+(*   补 plm_pairwise_coprime_sb : forall l,                           *)
+(*   {plm_pairwise_coprime l}+{plm_pairwise_coprime_neg l}            *)
+(*   （neg 以 P -> False 自持）；判定器 plm_pw_cop_bool 走逐对 gcd=1   *)
+(*   bool 链（头部对全表 forallb：对角对 gcd x x 与跨对 gcd x y 同链  *)
+(*   受检——宿主定义含 x=y 全对），sound／complete 双向闭合；连带登记  *)
+(*   主定理 plm_coprime_prod_dvd 的伴随闭式推论位                     *)
+(*   plm_coprime_prod_dvd_closed（sigT 载体：整除证书或否定数据）。    *)
+(*   ②旗标二（pr_prime／pr_prime_neg 系）：补 plm/lcm 侧使用形        *)
+(*   plm_prime_sb : forall p, {pr_prime p}+{pr_prime_neg p}——直连     *)
+(*   redischarge 池件 abl_redischarge_pr01_sb 的 pr_prime_sb（真使用   *)
+(*   重导出，非重证），附 lcm 侧三分闭式推论 plm_prime_gcd_1_closed   *)
+(*   （sigT/option bool 标签承载；真使用宿主 plm_prime_gcd_1）。       *)
+(*   ③旗标三（dsu_neg 系／dsu_list_ne_sb）：核验已覆盖——BP          *)
+(*   abl_redischarge_sumd_inst.v §2 已给 dsu_list_ne_sb（Defined 出   *)
+(*   口＋§4 vm_compute 烟测），本件如实跳过，不重复补位（fail-loud）。 *)
+(*  依赖（链）: 本池拷贝链编，前件零改动：abl_Pr_core_01（pr_prime／  *)
+(*   pr_prime_bool／spec 双向）→ abl_Pr_euclid_03 →                   *)
+(*   abl_Pr_lcmdecomp_04（plm_pairwise_coprime／plm_coprime_prod_dvd  *)
+(*   ／plm_prime_gcd_1）→ abl_redischarge_pr01_sb（pr_prime_sb／      *)
+(*   pr_prime_neg／pr_prime_sb_mirror）→ 本件；HansonLcm 经缓存根      *)
+(*   -Q 只读引用；纯 Stdlib（Arith.Arith／List／Bool／Lia）。          *)
+(*  构造性: 零承认／零经典逻辑；新增语句面全 Set 载体（sumbool／  *)
+(*   sigT），否定一律 P -> False 自持（本安装无 Not，照 E 卡 §一.1／   *)
+(*   §二.8，全件零否定记号书写，含证明内部）；判定件                   *)
+(*   plm_pairwise_coprime_sb／plm_prime_sb 皆 Defined 出口保可提取，   *)
+(*   判定读数 vm_compute 直算；闭式推论位 Qed（逻辑闭合位，载体仍在    *)
+(*   sumbool）；数值烟测小实例表长 ≤3、元素 ≤5（CZR14 大数值 Qed 墙    *)
+(*   纪律）。                                                         *)
+(* 【诚实边界】宿主 plm_pairwise_coprime 为全对形（含对角：            *)
+(*   gcd x x = x），故该谓词仅对全 1 表为真——判定链忠实对应宿主定义   *)
+(*   语义（对角在链内显式受检），不放大不缩水；[2;3] 判右肢即此语义    *)
+(*   的直算实证（宿主头注「重复元自被排除」的判定面落地）。旗标三      *)
+(*   已覆盖位零触碰；本件不补全等式分解枚举表（宿主登记未竟位）。      *)
+(*  编译配方: 标准配方，本池链编，道闸 1 串行（绿判：EXIT=0｜       *)
+(*   无 Error 行｜魔数 436f712100015ff4｜.vo 新于 .v｜尾 Print         *)
+(*   Assumptions 全 Closed）                                          *)
+(*   source /Users/apple/Desktop/ConstructiveWorld/Live/toolchain/    *)
+(*   env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && cd <池>      *)
+(*   && nice -19 rocq c -native-compiler no -Q                        *)
+(*   /Users/apple/Desktop/ConstructiveWorld/vo_local_world_unified_   *)
+(*   0930 "" abl_Pr_core_01.v && 同配方依次 abl_Pr_euclid_03.v／      *)
+(*   abl_Pr_lcmdecomp_04.v／abl_redischarge_pr01_sb.v && 同配方本件   *)
+(*   （末位，-Q <缓存根> "" -Q . ""）。                                *)
 (* ============================================================ *)
 
 From Stdlib Require Import Arith.Arith List Bool Lia.
@@ -119,7 +142,7 @@ Proof.
 Qed.
 
 (* §1.4 否定自持（P -> False 原定义形，本安装无 Not）＋sumbool 判定
-   伴随（Set 表示；Defined 出口保可提取——真消解，非折算件） *)
+   伴随（Set 载体；Defined 出口保可提取——真消解，非折算件） *)
 Definition plm_pairwise_coprime_neg (l : list nat) : Prop :=
   plm_pairwise_coprime l -> False.
 
@@ -149,7 +172,7 @@ Proof.
 Qed.
 
 (* §1.6 主定理伴随闭式推论位：逐点整除在手，判定件左肢经主定理
-   收出整除证书，右肢出否定数据——sigT 式全 Set 表示闭式 *)
+   收出整除证书，右肢出否定数据——sigT 式全 Set 载体闭式 *)
 Theorem plm_coprime_prod_dvd_closed : forall (l : list nat) (c : nat),
   (forall x : nat, In x l -> Nat.divide x c) ->
   {Nat.divide (fold_right Nat.mul 1 l) c} + {plm_pairwise_coprime_neg l}.
@@ -162,11 +185,11 @@ Qed.
 (* ---- §2 旗标二：pr_prime 系的 plm/lcm 侧使用形 ---- *)
 
 (* 直连 redischarge 池件 pr01_sb 的 pr_prime_sb／pr_prime_neg：
-   plm 侧重导出（真调用，非重证；透明直定义保可提取透传） *)
+   plm 侧使用重导出（真使用，非重证；透明直定义保可提取透传） *)
 Definition plm_prime_sb (p : nat) : {pr_prime p} + {pr_prime_neg p} :=
   pr_prime_sb p.
 
-(* 读数一致性（透传 pr_prime_sb_mirror） *)
+(* 读数一致对应（透传 pr_prime_sb_mirror） *)
 Theorem plm_prime_sb_mirror : forall p : nat,
   match plm_prime_sb p with
   | left _ => pr_prime_bool p = true
@@ -176,7 +199,7 @@ Proof. intros p. exact (pr_prime_sb_mirror p). Qed.
 
 (* lcm 侧闭式推论位：双判定件＋相异前提 ⟹ 三分闭式（sigT 承载，
    option bool 标签：None 肢=gcd 证书；Some true=对 p 的否定数据；
-   Some false=对 q 的否定数据——真调用宿主 plm_prime_gcd_1） *)
+   Some false=对 q 的否定数据——真使用宿主 plm_prime_gcd_1） *)
 Theorem plm_prime_gcd_1_closed : forall p q : nat,
   (p = q -> False) ->
   {e : option bool &

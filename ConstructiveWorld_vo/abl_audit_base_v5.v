@@ -1,32 +1,57 @@
 (* ===================================================================== *)
-(*  abl_audit_base_v5.v —— 审计承载扩容 v5·S12 引擎正确性面直审闭合件 *)
+(*  abl_audit_base_v5.v —— 审计载体扩容 v5·S12 引擎正确性面直审闭合件        *)
 (* ===================================================================== *)
-(*  使命: S12 引擎正确性面（50 Fixpoint 算法大陆的引擎正确性主定理族）的甲形 *)
-(*        态直审闭合: 对五引擎正确性主定理各铸一条轻量真行使承载（使用＝证明 *)
-(*        体真实行使上游定理非空壳），共五承载八使用点—— *)
-(*        ① abe_grad_half_two_step 梯度下降收敛界的 1/2 步长两步实例＋精确等 *)
-(*          式面并载；② abe_consensus_iter_split 共识迭代长度分账引理的迭代 *)
-(*          分裂复合形（NatLe/Id 包装）；③ abe_consensus_bounded_one 共识收 *)
-(*          敛主定理 eps:=real_one 具体实例 sigT 形；④ abe_uf_self_union_and_ *)
-(*          pair 并查集合并幂等一般形与实例并载；⑤ abe_viterbi_concrete_ *)
-(*          matched 维特比调形行使（上游主定理语句面为「前提→True」空壳， *)
-(*          fail-loud 登记；降档对函数本体作三个具体小实例计算行使）；⑥ abe_ *)
-(*          beam_rerun_no_regress 束搜索最优性主定理＋辅助引理双重使用（重扫 *)
-(*          不回退且最优性保持，比较接口 cmp 沿参数面 Set 层显式量化，接口层 *)
-(*          禁硬证）。 *)
-(*  依赖: S01_BaseRing S02_CauchyComplete S12_B5RecycleSF（-Q 预编译树只读引 *)
-(*        用）；Stdlib（QArith/List/Arith/Lia/Extraction 出口舱）。 *)
-(*  对标: 审计承载扩容系列 v4 同口径直审件；S12 引擎正确性面五主定理。 *)
-(*  构造性: 零承认语句、零经典逻辑、零 Prop 承载: 语句面合取全 S01.And，等同全 *)
-(*        S01.Id，存在/见证全 sigT，nat 序前提全 S01.NatLe，比较全 real_le/ *)
-(*        real_lt/QleT'/QId（Set 型）；无 exists/Prop 连词、无否定形书写；内 *)
-(*        部辅助件系 stdlib eq 使用桥，非承载语句；证明体全 exact/apply/cbn 显 *)
-(*        式项直交。 *)
-(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB && ulimit -s *)
-(*        65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_ *)
-(*        unified_0930 "" abl_audit_base_v5.v（独占池）。 *)
-(*  核实注: 五引擎主定理出口签名以 repl Check 实拍为准（四件顶层面零节参，sf_beam_search_optimal *)
-(*        首参为显式比较接口；空壳件登记不使用；abe_ 前缀全树 grep 零命中）。 *)
+(*  使命: Z 裸奔 Top（S12 引擎正确性面 1/113：50 Fixpoint 算法大陆的引擎     *)
+(*        正确性主定理族）的甲形态直审闭合。本件 Require S12_B5RecycleSF，    *)
+(*        对五引擎正确性主定理各铸一条轻量真使用载体（使用＝证明体真实行使   *)
+(*        上游定理非空壳），共五载体八使用点：                              *)
+(*        ① abe_grad_half_two_step——梯度下降 n 步收敛界主定理               *)
+(*          （sf_grad_descent_convergence）在步长 1/2、n=2 的具体实例收敛    *)
+(*          面与精确等式面（sf_grad_descent_cost_eq）单语句并载；            *)
+(*        ② abe_consensus_iter_split——共识迭代长度分账引理                  *)
+(*          （sf_consensus_iter_len）的迭代分裂复合形：k1+k2 两段迭代后      *)
+(*          长度账 (L−k1−k2)+k1+k2=L，Set 层 NatLe/Id 包装；                 *)
+(*        ③ abe_consensus_bounded_one——共识收敛主定理                       *)
+(*          （sf_consensus_converges）在 eps:=real_one 的具体实例 sigT 形；  *)
+(*        ④ abe_uf_self_union_and_pair——并查集合并幂等主定理                *)
+(*          （sf_uf_union_idempotent_same_root）的一般形（x 自并为恒等）      *)
+(*          与具体实例（uf=[(1,0)] 合并 1,0 表不变）并载；                   *)
+(*        ⑤ abe_viterbi_concrete_matched——维特比正确性调形使用：Z 报告点名   *)
+(*          维特比，核验 sf_viterbi_matches 语句面为「前提→True」空壳        *)
+(*          （E856 空壳前科同族，fail-loud 登记调形），降档对维特比函数       *)
+(*          本体（sf_viterbi+sf_vec_hash）作三个具体小实例计算使用：         *)
+(*          观测命中得路径、观测不中空路径、两步贪心各取当步命中态           *)
+(*          （双态表＝空向量｜单零分量向量，沿 sf_vec_hash 0/1 摘要）；       *)
+(*        ⑥ abe_beam_rerun_no_regress——束搜索最优性主定理                   *)
+(*          （sf_beam_search_optimal）与辅助引理（sf_beam_aux_correct）      *)
+(*          双使用：以首轮结果为种子的复核不回退（能量≤首轮结果）且最优性    *)
+(*          对候选面保持（能量≤任一候选），全比较接口 cmp 沿 S12 出口       *)
+(*          参数面 Set 层（S01.Or:=A+B）显式量化（LPO 墙族沿 S12 自注登记，  *)
+(*          接口层禁硬证，本件沿参数面使用不实例化）。                      *)
+(*  依赖: S01_BaseRing S02_CauchyComplete S12_B5RecycleSF                   *)
+(*        （-Q 预编译树 vo_local_world_unified_0930 只读引用）；             *)
+(*        Stdlib（QArith/List/Arith/Lia/Extraction 出口舱）。                *)
+(*  构造性: 零承认语句、零经典逻辑、零 Prop 载体：语句面合取全 S01.And       *)
+(*        （:=A*B，Set 层），等同全 S01.Id（Set 层），存在/见证全 sigT       *)
+(*        （Set 层），nat 序前提全 S01.NatLe（:=Id(Qeq_bool 面) 同族 Set 层）， *)
+(*        比较全 real_le/real_lt/QleT'/QId（Set 型）；无 exists/Prop 连词、  *)
+(*        无否定形书写；内部辅助件 abe_consensus_iter_add/abe_eq_id 系       *)
+(*        stdlib eq 使用管件（上游 iter_len 出口为 stdlib eq 形的必经桥），  *)
+(*        非载体语句。证明体全 exact/apply/cbn 显式项直交。                  *)
+(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&        *)
+(*        ulimit -s 65532 && nice -19 rocq c -native-compiler no             *)
+(*        -Q vo_local_world_unified_0930 "" <池>/abl_audit_base_v5.v          *)
+(*        （独占池 audit_base_v5/，道闸 ≤1，单件无池内链序）。                *)
+(*  核验注: ①五引擎主定理出口签名以 rocq repl Check 实拍为准——           *)
+(*        sf_grad_descent_convergence/sf_consensus_iter_len/                *)
+(*        sf_consensus_converges/sf_uf_union_idempotent_same_root 四件       *)
+(*        顶层面零节参；sf_beam_search_optimal 首参为显式全比较接口          *)
+(*        cmp（S12 SFPathEnergy 节 Variable 出节）；sf_viterbi_matches        *)
+(*        出口为「前提→True」空壳实拍（本件登记不使用）。②sf_step_half       *)
+(*        与 sf_step_half_bounds 为 S12 自带具体实例件，本件直接使用其       *)
+(*        And 结构（proj1/proj2 喂收敛主定理前提槽）。③abe_ 前缀全树        *)
+(*        grep 零命中。④sf_vec_hash：nil→0、非空→1（演示级摘要），          *)
+(*        维特比具体实例沿此可全计算化。                                    *)
 (* ===================================================================== *)
 
 Require Import S01_BaseRing.
@@ -39,7 +64,7 @@ From Stdlib Require Import Lia.
 Local Open Scope Q_scope.
 
 (* ============================================================ *)
-(* §0 内部管件舱（stdlib eq 使用桥，非承载语句）                    *)
+(* §0 内部管件舱（stdlib eq 使用桥，非载体语句）                    *)
 (* ============================================================ *)
 
 (* stdlib eq → Set 层 Id 桥（上游 iter_len 出口为 stdlib eq 形的必经转换）。 *)
@@ -69,8 +94,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §1 承载一·梯度下降：n 步收敛界主定理的 1/2 步长两步具体实例        *)
-(*    （收敛面 QleT' ＋ 精确等式面 QId 单语句并载，双重使用）          *)
+(* §1 载体一·梯度下降：n 步收敛界主定理的 1/2 步长两步具体实例        *)
+(*    （收敛面 QleT' ＋ 精确等式面 QId 单语句并载，双使用）          *)
 (* ============================================================ *)
 
 Theorem abe_grad_half_two_step :
@@ -94,7 +119,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §2 承载二·共识迭代（甲）：迭代分裂复合形——长度分账引理双重使用        *)
+(* §2 载体二·共识迭代（甲）：迭代分裂复合形——长度分账引理双使用        *)
 (*    前提 Set 层 NatLe，结论 Set 层 Id。                             *)
 (* ============================================================ *)
 
@@ -116,7 +141,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §3 承载三·共识迭代（乙）：收敛主定理在 eps:=real_one 的具体实例     *)
+(* §3 载体三·共识迭代（乙）：收敛主定理在 eps:=real_one 的具体实例     *)
 (*    （sigT 见证 Set 层；0<1 前提 Set 层 real_lt 显式保留）。         *)
 (* ============================================================ *)
 
@@ -134,8 +159,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 承载四·并查集：合并幂等主定理的一般形（自并恒等）与             *)
-(*    具体实例（uf=[(1,0)] 合并 1,0 根同为 0 表不变）并载，双重使用。    *)
+(* §4 载体四·并查集：合并幂等主定理的一般形（自并恒等）与             *)
+(*    具体实例（uf=[(1,0)] 合并 1,0 根同为 0 表不变）并载，双使用。    *)
 (* ============================================================ *)
 
 Theorem abe_uf_self_union_and_pair :
@@ -152,10 +177,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §5 承载五·维特比：函数本体具体小实例计算行使（调形闭合）            *)
-(*    Z 报告点名维特比正确性；核实主定理 sf_viterbi_matches 语句面    *)
-(*    为「前提→True」空壳（空壳前科同族，登记不使用——使用空壳        *)
-(*    即空壳行使，禁）。降档对引擎函数本体（sf_viterbi+sf_vec_hash）  *)
+(* §5 载体五·维特比：函数本体具体小实例计算使用（调形闭合）            *)
+(*    Z 报告点名维特比正确性；核验主定理 sf_viterbi_matches 语句面    *)
+(*    为「前提→True」空壳（E856 前科同族，登记不使用——使用空壳        *)
+(*    即空壳使用，禁）。降档对引擎函数本体（sf_viterbi+sf_vec_hash）  *)
 (*    作三个具体小实例：命中得路径／不中空路径／两步贪心各取命中态，   *)
 (*    全计算化 born-green（这才是「路径与观察匹配」的真内容供给）。     *)
 (* ============================================================ *)
@@ -179,7 +204,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 承载六·束搜索：最优性主定理＋辅助引理双重使用——重扫不回退且       *)
+(* §6 载体六·束搜索：最优性主定理＋辅助引理双使用——复核不回退且       *)
 (*    最优性保持。全比较接口 cmp 沿 S12 出口参数面显式量化            *)
 (*    （S01.Or:=A+B Set 层；LPO 墙族沿 S12 自注登记，接口层禁硬证，    *)
 (*    本件沿参数面使用不实例化）。                                    *)
@@ -199,8 +224,8 @@ Theorem abe_beam_rerun_no_regress :
                  (sf_path_energy p)).
 Proof.
   intros cmp cands seed p Hin. split.
-  - (* 重扫不回退：辅助引理以「首轮结果 bs 及其能量」为新种子实例化， *)
-    (* proj1 翼（E 重扫 ≤ E bs）；sf_beam_search 展开形定义性吻合。      *)
+  - (* 复核不回退：辅助引理以「首轮结果 bs 及其能量」为新种子实例化， *)
+    (* proj1 翼（E 复核 ≤ E bs）；sf_beam_search 展开形定义性吻合。      *)
     exact (abe_and_l _ _ (sf_beam_aux_correct cmp cands
                    (sf_beam_search cmp cands seed))).
   - (* 最优性保持：主定理以种子:=首轮结果实例化，InT p cands 原样入位。 *)
@@ -209,10 +234,10 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §7 尾舱·假设审计（S12 引擎面八主定理跨件直审＋本件六承载自审）      *)
+(* §7 尾舱·假设审计（S12 引擎面八主定理跨件直审＋本件六载体自审）      *)
 (*    判读判据：十四条全输出 Closed under the global context。         *)
 (*    前 8 条＝S12 引擎正确性面主定理族的跨件追审（引擎面此前全树      *)
-(*    PA 直审缺位，Z 裸奔 Top 本体）；后 6 条＝本件六承载自审。        *)
+(*    PA 直审缺位，Z 裸奔 Top 本体）；后 6 条＝本件六载体自审。        *)
 (*    注：Require 闭包含 Lqa（Q 域 nra/lra 供给面），coqchk 环境公理   *)
 (*    面沿 CT1B 判例与逐定理 PA 定检分账，非本件引入。                 *)
 (* ============================================================ *)
@@ -233,7 +258,7 @@ Print Assumptions abe_viterbi_concrete_matched.
 Print Assumptions abe_beam_rerun_no_regress.
 
 (* ============================================================ *)
-(* §8 出口舱：承载兼任提取端口（G3：提取面零魔数）                     *)
+(* §8 出口舱：载体兼任提取端口（G3：提取面零魔数）                     *)
 (* ============================================================ *)
 
 From Stdlib Require Import Extraction.

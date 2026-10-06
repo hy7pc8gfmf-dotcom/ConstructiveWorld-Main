@@ -2,7 +2,7 @@
 (*  abl_kv_sat_drift.v —— T1：KV 逐出漂移界的 Doeblin 饱和形（独立导出件）  *)
 (*  使命: 逐出行随机核 K + keep 掩码的逐出核 K_ev 的 n 步 TV 漂移           *)
 (*        D(K_ev^n μ, K^n μ) 满足 Doeblin 饱和双支界（构造性 min-glb）：    *)
-(*        支一（线性望远镜，既有）：D ≤ n·c + ε（引用 UpKVDrift_P2 已证     *)
+(*        支一（线性望远镜，既有）：D ≤ n·c + ε（使用 UpKVDrift_P2 金砖     *)
 (*        kv_drift_bound）；支二（几何饱和板，本件新数学）：                *)
 (*        D ≤ c/δ + ε——δ-minorization（δ·U ≤ K）经零质量投影吸收后的       *)
 (*        单步收缩 D(Kμ,Kν) ≤ (1−δ)·D(μ,ν) + ε 与饱和板代数                *)
@@ -14,12 +14,12 @@
 (*        ①零质量投影吸收（δU 项被 Σ(μ−ν)=0 精确吸收，免除残差除法——       *)
 (*        不以 (1−δ) 作分母，δ=1 支零支化，较 UpTVDoeblin tv_r_kernel       *)
 (*        配方更简）；②单步收缩与三砖合流单步配对界；③饱和板代数。         *)
-(*  对标: AC 量化域 T1 主件（KV 量化域 §③T1）；                            *)
+(*  对标: AC 勘定 T1 主件（_tmine04_AC_KV量化域 §③T1）；                   *)
 (*        UpTVDoeblin tv_doeblin_contraction 收缩配方在第二世界（Tok 词表   *)
-(*        逐出核）的重演；G14 线性界的饱和后继。                            *)
+(*        逐出核）的重演；G14 线性界的饱和后继。                  *)
 (*  构造性: 纯构造性、零公理/零弃证/零经典逻辑；语句全 Set 层               *)
 (*        （real_eq/real_lt/real_le/Id/InT/sigT/And）；文尾 Print           *)
-(*        Assumptions 主件全 Closed + Extraction 验证。                     *)
+(*        Assumptions 主件全 Closed + Extraction 检验。                     *)
 (*  编译配方: SW2 全字面环境（COQLIB/ROCQLIB 置空），Rocq 9.1               *)
 (*        rocq c -native-compiler no -Q <统一世界树> ""（独占沙箱池）。     *)
 (* ===================================================================== *)
@@ -1471,10 +1471,10 @@ Proof.
                  kvs_board eps0 kvs_board_eq (real_eq_refl _)).
 Qed.
 
-(* ===================== 主定理：Doeblin 饱和形 ===========================
+(* ===================== 主定理：Doeblin 饱和形 ========================
    双支 And（构造性 min-glb：min 定义展开双支的宿主口径——库内无 Real 层
    total min，双支同时成立即 "D ≤ min(n·c, c/δ)" 的全部构造性内容）：
-   支一（线性望远镜，已证件 kv_drift_bound 导出引用）：D ≤ n·c + ε；
+   支一（线性望远镜，金砖 kv_drift_bound 导出使用）：D ≤ n·c + ε；
    支二（几何饱和板，本件新数学）：D ≤ c/δ + ε——n→∞ 有界，线性界的
    几何紧化。 *)
 Theorem kvs_drift_sat : forall (n : nat) (mu : Tok -> Real) (eps : Real),
@@ -1511,7 +1511,7 @@ Qed.
 
 End KVSatDrift.
 
-(* ===================== 取证与提取验证（可提取红线） ===================== *)
+(* ===================== 取证与提取检验（可提取红线） ===================== *)
 Print Assumptions kvs_step_contract.
 Print Assumptions kvs_step_pair.
 Print Assumptions kvs_drift_board.

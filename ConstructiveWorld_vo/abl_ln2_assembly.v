@@ -1,10 +1,34 @@
 (* ===================================================================== *)
-(*  abl_ln2_assembly.v —— ln2 无理性链·sa_supply_rem' 改型链级合成件 *)
-(*  使命: 把三积木接为链级 sigT 见证件——BD 的改型分子对 lni_supply_pair（B_n:=L_n·p_n 整除供给）、BH 的 Ireal_n 本体（lnr_Ireal/lnr_lineL）与 AP 的几何尾界 lnt_gap_geo（经 lnr_gap_modulus 承载化），焊接成单链级定理 lna_supply_chain_core：改型供给前提 A_n:=L_n·q̃_n、B_n:=L_n·p_n 在 n 实例下的 Z 见证（sigT）＋supply×Ireal 线面对接＋Ireal×尾界绝对值形模量＋承载集正性，六肢一线。另交付：两两对接引理（lna_supply_pair_dock / lna_ireal_tail_dock(0)）、改型 rem 接口 lna_supply_rem' 的两段式装配（sa_supply_assemble 改型对应形，B 侧已由 BD 见证实际填充——原 sa_supply_rem 任意 B 侧已不再悬空）、规范 A 面 lna_Aface 与三头肢（θ=4/5<1、0<|A_n|、0<clo_n）、n=1 数值判定（实算勘正后 A_1=3、B_1=4#2，经链面换算核验）。诚实边界：⑤上界肢（θ^n 衰减，需 S6 恒等式支＋锐权衰减）与④下界肢（clo≤|A·X−B|，需 ri_identity_leg 本证）不在三积木内，lna_supply_rem' 如实以两 real 肢为剩余前提，不虚报无条件形。 *)
-(*  依赖: Stdlib QArith/Qabs/Arith/ZArith/Lia；S01_BaseRing S02_CauchyComplete S03_QExp；BeukersLists HansonLcm BeukersVariant Ln2Escape Ln2Bridge RealIdentity UpReqLn2Irrational；池内链序前件 abl_ln2_tail_bound → abl_ln2_numer_int → abl_ln2_ireal。 *)
-(*  对标: SupplyAssembly sa_supply_rem（SupplyAssembly.v:219-223，原参数化 A=2^{n+1}q̃_n/θ=1/2，已被 abl_SupplyRemRefuted_07 机器证伪）的改型重构；Ln2Bridge ln2i_pade_supply 五肢面。 *)
-(*  构造性: 纯构造性、零承认件；语句面全 Set（sigT/S01.And/QeqT/QleT'/QltT/real_eq/real_lt/real_le）；Z 见证经 projT1 投影取函数形（Set 面，可提取）；Qeq/Qle 支撑件仅 Prop 面作推理；文尾 Print Assumptions 全 Closed＋Separate Extraction 验证。 *)
-(*  编译配方: source <toolchain>/env.sh && unset COQLIB ROCQLIB && ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q vo_local_world_unified_0930 ""（链序：tail_bound→numer_int→ireal→本件；并发限 1=单进程串行）。 *)
+(*  abl_ln2_assembly.v —— ln2 无理性链·sa_supply_rem' 改型装配件            *)
+(*  使命: 把三积木接为链级 sigT 见证件——BD 的改型分子对 lni_supply_pair     *)
+(*        （B_n:=L_n·p_n 整除供给）、BH 的 Ireal_n 本体（lnr_Ireal/lnr_lineL）*)
+(*        与 AP 的几何尾界 lnt_gap_geo（经 lnr_gap_modulus 承载化），焊接成  *)
+(*        单链级定理 lna_supply_chain_core：改型供给前提 A_n:=L_n·q̃_n、      *)
+(*        B_n:=L_n·p_n 在 n 实例下的 Z 见证（sigT）＋supply×Ireal 线面对接    *)
+(*        ＋Ireal×尾界绝对值形模量＋载体正性，六肢一线。另交付：两两对接      *)
+(*        引理（lna_supply_pair_dock / lna_ireal_tail_dock(0)）、改型 rem    *)
+(*        接口 lna_supply_rem' 的两段式装配（sa_supply_assemble 改型对应形，   *)
+(*        B 侧已由 BD 见证实际填充——原 sa_supply_rem 任意 B 侧已不再悬空）、 *)
+(*        规范 A 面 lna_Aface 与三头肢（θ=4/5<1、0<|A_n|、0<clo_n）、        *)
+(*        n=1 数值锚（实算勘正后 A_1=3、B_1=4#2，经链面换算登记）。          *)
+(*        诚实边界：⑤上界肢（θ^n 衰减，需 S6 恒等式腿＋锐权衰减）与④下界肢  *)
+(*        （clo≤|A·X−B|，需 ri_identity_leg 本证）不在三积木内，lna_supply_  *)
+(*        rem' 如实以两 real 肢为剩余前提，不虚报无条件形。                  *)
+(*  依赖: Stdlib QArith/Qabs/Arith/ZArith/Lia；S01_BaseRing S02_Cauchy-    *)
+(*        Complete S03_QExp；BeukersLists HansonLcm BeukersVariant Ln2Escape*)
+(*        Ln2Bridge RealIdentity UpReqLn2Irrational；池内链序前件           *)
+(*        abl_ln2_tail_bound → abl_ln2_numer_int → abl_ln2_ireal。          *)
+(*  对标: SupplyAssembly sa_supply_rem（SupplyAssembly.v:219-223，原参数化  *)
+(*        A=2^{n+1}q̃_n/θ=1/2，已被 abl_SupplyRemRefuted_07 机器证伪）的改型  *)
+(*        重装；AE §3.3 路线③装配指令；Ln2Bridge ln2i_pade_supply 五肢面。   *)
+(*  构造性: 纯构造性、零承认件；语句面全 Set（sigT/S01.And/QeqT/QleT'/      *)
+(*        QltT/real_eq/real_lt/real_le）；Z 见证经 projT1 投影取函数形       *)
+(*        （Set 面，可提取）；Qeq/Qle 支撑件仅 Prop 面作推理；文尾           *)
+(*        Print Assumptions 全 Closed＋Separate Extraction 闭合（四件套）。  *)
+(*  编译配方: source Live/toolchain/env.sh && unset COQLIB ROCQLIB &&      *)
+(*        ulimit -s 65532 && nice -19 rocq c -native-compiler no -Q        *)
+(*        vo_local_world_unified_0930 ""（链序：tail_bound→numer_int→      *)
+(*        ireal→本件；道闸≤1=单进程串行）。                                 *)
 (* ===================================================================== *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs Arith.Arith ZArith.ZArith Lia.
@@ -19,7 +43,7 @@ Require Import abl_ln2_ireal.
 Open Scope nat_scope.
 
 (* ============================================================ *)
-(* §0 QeqT 传送微桥（链面判定换算用）                                      *)
+(* §0 QeqT 传送微桥（链面锚换算用）                                      *)
 (* ============================================================ *)
 
 Lemma lna_qeqT_sym : forall a b : Q, QeqT a b -> QeqT b a.
@@ -114,7 +138,7 @@ Proof.
     - apply (Qplus_le_compat (lnr_psum p M) (lnr_psum p (M + d))
                              (- lnr_psum p M)%Q (- lnr_psum p M)%Q
                              Hmono (Qle_refl ((- lnr_psum p M)%Q))). }
-  (* QleT'（Id 面）内禁 Qeq rewrite——经 lnt_leT'_eq_l 传送 *)
+  (* QleT'（Id 面）内禁 Qeq rewrite（坑卡 AU#1）——经 lnt_leT'_eq_l 传送 *)
   apply (lnt_leT'_eq_l (lnr_psum p (M + d) - lnr_psum p M)%Q
                        (Qabs (lnr_psum p (M + d) - lnr_psum p M)%Q)
                        (lnr_gapbound p M)).
@@ -144,8 +168,8 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §4 改型 θ 档/承载集与三头肢（对应 supply 五肢之①②③在改型参数化下）        *)
-(*     θ' := 4/5（θ 档预算）；clo'_n := lne_B n/2^{n+1}（(1+t) 变体）   *)
+(* §4 改型 θ 档/载体与三头肢（对应 supply 五肢之①②③在改型参数化下）        *)
+(*     θ' := 4/5（AE 路线③预算）；clo'_n := lne_B n/2^{n+1}（(1+t) 变体）   *)
 (* ============================================================ *)
 
 Definition lna_theta_mod : Q := (4 # 5)%Q.
@@ -188,7 +212,7 @@ Definition lna_supply_rem' : Set :=
     And (ln2b_line_lower lna_Amod B lna_clo_mod)
         (ln2b_line_upper lna_Amod B lna_theta_mod)).
 
-(* 两段式装配：仅余两 real 肢前提（S6 恒等式支＋锐权衰减到货处）——
+(* 两段式装配：仅余两 real 肢前提（S6 恒等式腿＋锐权衰减到货处）——
    B 侧已实际填充 lna_Bmod，非任意 B 悬接口 *)
 Theorem lna_supply_rem'_assemble :
   And (ln2b_line_lower lna_Amod lna_Bmod lna_clo_mod)
@@ -199,9 +223,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §6 链级合成件本体：改型供给前提 n 实例 sigT 见证件（六肢一线）            *)
+(* §6 链级装配件本体：改型供给前提 n 实例 sigT 见证件（六肢一线）            *)
 (*     ①A 侧 Z 闭合 ②B 侧 Z 闭合 ③supply×Ireal 线面对接                    *)
-(*     ④Ireal 承载集严格正 ⑤Ireal×尾界模量（p≥1 几何档） ⑥（p=0 档）          *)
+(*     ④Ireal 载体严格正 ⑤Ireal×尾界模量（p≥1 几何档） ⑥（p=0 档）          *)
 (* ============================================================ *)
 
 Theorem lna_supply_chain_core :
@@ -233,9 +257,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §7 数值判定组（n=1 实例，经链面换算核验；vm_compute 判定）                  *)
+(* §7 数值锚组（n=1 实例，经链面换算登记；vm_compute 判定）                  *)
 (*     实算勘正基线：L_1=hl_lcm_upto 1=1、q̃_1=3、p_1=bv_p 1=4#2             *)
-(*     ⟹ A_1=3、B_1=4#2（BH 判定组同源）；链面新增：BD Z 见证与 3/4#2 的换算   *)
+(*     ⟹ A_1=3、B_1=4#2（BH 锚组同源）；链面新增：BD Z 见证与 3/4#2 的换算   *)
 (* ============================================================ *)
 
 Theorem lna_A1_anchor : QeqT (3 # 1)%Q ((lna_Amod 1) # 1)%Q.
@@ -252,7 +276,7 @@ Proof.
   - apply lna_lB_z.
 Qed.
 
-(* 链级模量实例判定：p=M=1、d=1 处 |S_2 − S_1| ≤ g(1,1)=4 的承载形态实例 *)
+(* 链级模量实例锚：p=M=1、d=1 处 |S_2 − S_1| ≤ g(1,1)=4 的承载体现形 *)
 Theorem lna_tail1_anchor :
   QleT' (Qabs (lnr_psum 1 (1 + 1) - lnr_psum 1 1)%Q) (lnr_gapbound 1 1).
 Proof.
@@ -260,9 +284,9 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* §8 陈述级挂点说明（S6 余量，不虚报闭合）                                 *)
+(* §8 陈述级挂点回执（S6 余量，不虚报闭合）                                 *)
 (*     ri_identity_leg 本证（有限 M 换序恒等式）与锐权衰减件为链外缺口；     *)
-(*     BH 迁移件保证：本证到货于 lnr_Ireal 面后，任意取形 I 即得该支。         *)
+(*     BH 迁移件保证：本证到货于 lnr_Ireal 面后，任意取形 I 即得腿。         *)
 (* ============================================================ *)
 
 Theorem lna_leg_transfer_hook : forall (I : ri_Iface),
@@ -271,7 +295,7 @@ Theorem lna_leg_transfer_hook : forall (I : ri_Iface),
 Proof. exact lnr_identity_leg_transfer. Qed.
 
 (* ============================================================ *)
-(* 可提取验证（Set 层 witness 面：改型分子对 Z 函数＋规范 A 面＋θ/clo）      *)
+(* 可提取闭合（Set 层 witness 面：改型分子对 Z 函数＋规范 A 面＋θ/clo）      *)
 (* ============================================================ *)
 
 Separate Extraction lna_Amod lna_Bmod lna_Aface lna_theta_mod lna_clo_mod.
