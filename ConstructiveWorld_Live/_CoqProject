@@ -631,3 +631,11 @@ uabd_supply_S13_expf_plus.v
 uabd_supply_S13_expf_mono_le.v
 uabda_g13_evict_discharge.v
 uabda_up01_discharge.v
+UpAblP7_LoHiSqueeze.v
+Arch_Up_02.v
+Arch_PA_03.v
+Arch_PA_01.v
+Arch_SumEqL_01.v
+Arch_UpAbl_02.v
+Arch_ToyR_01.v
+Arch_ToyR_03.v

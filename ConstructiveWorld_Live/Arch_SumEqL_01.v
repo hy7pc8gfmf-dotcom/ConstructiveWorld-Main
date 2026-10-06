@@ -135,7 +135,7 @@ Context {SS : StateSpace RI}.
 Context {SO : SumOver RI SS}.
 Local Existing Instance RI_base.
 
-Let le := @le RI.
+Let le := @S01_BaseRing.le RI.
 
 (* §1 Form A 重述桥 · AttnDoeblin 三使用位                            *)
 (*    （机 = AttnDoeblin.bs_list_sum，改喂件 = idt_slot_attdoeblin） *)
@@ -148,7 +148,7 @@ Lemma sef_attn_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (AttnDoeblin.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
   intros en g a Hle.
-  exact (le_id_r a (AttnDoeblin.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_attdoeblin en g)) Hle).
+  exact (S01_BaseRing.le_id_r a (AttnDoeblin.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_attdoeblin en g)) Hle).
 Qed.
 
 (* —— 使用位 AttnDoeblin:629（bs_Zrow_le 骨架）——
@@ -157,7 +157,7 @@ Lemma sef_attn_zrow_le : forall (en : list S) (g : S -> R) (b : R),
   le (AttnDoeblin.bs_list_sum g en) b -> le (idt_sumf en g) b.
 Proof.
   intros en g b Hle.
-  exact (le_id_l (idt_sumf en g) (AttnDoeblin.bs_list_sum g en) b                 (idt_slot_attdoeblin en g) Hle).
+  exact (S01_BaseRing.le_id_l (idt_sumf en g) (AttnDoeblin.bs_list_sum g en) b                 (idt_slot_attdoeblin en g) Hle).
 Qed.
 
 (* —— 使用位 AttnDoeblin:673（bs_Unif_norm 骨架）——
@@ -177,14 +177,14 @@ Lemma sef_s13_zrow_ge : forall (en : list S) (g : S -> R) (a : R),
   le a (S13_NLiveAudit.bs_list_sum g en) -> le a (idt_sumf en g).
 Proof.
   intros en g a Hle.
-  exact (le_id_r a (S13_NLiveAudit.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_s13 en g)) Hle).
+  exact (S01_BaseRing.le_id_r a (S13_NLiveAudit.bs_list_sum g en) (idt_sumf en g)                   (id_sym (idt_slot_s13 en g)) Hle).
 Qed.
 
 Lemma sef_s13_zrow_le : forall (en : list S) (g : S -> R) (b : R),
   le (S13_NLiveAudit.bs_list_sum g en) b -> le (idt_sumf en g) b.
 Proof.
   intros en g b Hle.
-  exact (le_id_l (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en) b                 (idt_slot_s13 en g) Hle).
+  exact (S01_BaseRing.le_id_l (idt_sumf en g) (S13_NLiveAudit.bs_list_sum g en) b                 (idt_slot_s13 en g) Hle).
 Qed.
 
 Lemma sef_s13_unif_norm : forall (en : list S) (g : S -> R) (b : R),

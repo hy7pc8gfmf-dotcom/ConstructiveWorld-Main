@@ -32,6 +32,7 @@ Import ListNotations.
 From Stdlib Require Import QArith.Qring.
 Import RealInterfaceEnhancedMod.
 Local Open Scope nat_scope.
+Import Datatypes.
 
 (* ========== M3.0 基础定义 ========== *)
 
@@ -1363,11 +1364,11 @@ Inductive slm_nle (n : nat) : nat -> Set :=
 | slm_nle_n : slm_nle n n
 | slm_nle_S : forall m : nat, slm_nle n m -> slm_nle n (S m).
 
-Ltac tidE H :=
+Ltac slmTidE H :=
   pose proof (match H in slm_tid _ a b return a = b with slm_tid_refl _ _ => eq_refl end) as HE.
 
 (* bool 恒等矛盾关闭器：H1 : slm_tid bool X true、H2 : slm_tid bool X false *)
-Ltac tid_kill H1 H2 :=
+Ltac slmTidKill H1 H2 :=
   pose proof (match H1 in slm_tid _ a b return a = b with slm_tid_refl _ _ => eq_refl end) as KE1;
   pose proof (match H2 in slm_tid _ a b return a = b with slm_tid_refl _ _ => eq_refl end) as KE2;
   rewrite KE1 in KE2; discriminate KE2.
@@ -1388,7 +1389,7 @@ Proof.
   intros a m. revert a. induction m as [| m1 IH]; intros a H.
   - destruct a as [| a1].
     + apply slm_tid_refl.
-    + change (slm_tid bool false true) in H. tidE H. discriminate HE.
+    + change (slm_tid bool false true) in H. slmTidE H. discriminate HE.
   - destruct a as [| a1].
     + apply slm_tid_refl.
     + exact (IH a1 H).
@@ -1406,7 +1407,7 @@ Definition slm_nle_leb (b a : nat) (H : slm_nle a b) : slm_tid bool (Nat.leb a b
   slm_nle_lebF a b H.
 
 (* slm_nle -> nat ≤ 提取（仅证明内部推理用） *)
-Ltac nleP H :=
+Ltac slmNleP H :=
   let HN := fresh "HNle" in
   pose proof
     (proj1 (Nat.leb_le _ _)
@@ -1434,7 +1435,7 @@ Proof.
   induction b as [| b1 IB]; intros a H.
   - destruct a as [| a1].
     + apply slm_nle_n.
-    + change (slm_tid bool false true) in H. tidE H. discriminate HE.
+    + change (slm_tid bool false true) in H. slmTidE H. discriminate HE.
   - destruct a as [| a1].
     + apply slm_nle_0.
     + exact (slm_nle_SS a1 b1 (IB a1 H)).
@@ -1490,7 +1491,7 @@ Qed.
 Lemma slm_to_nat_abs_pos : forall n : Z,
   slm_tid bool (Z.eqb n 0) false -> slm_nle (S O) (Z.to_nat (Z.abs n)).
 Proof.
-  intros n H. tidE H.
+  intros n H. slmTidE H.
   assert (Hne : n <> 0) by (intro Hc; rewrite Hc in HE; discriminate HE).
   apply (slm_zle_to_nle_S 0 (Z.abs n)).
   - apply Z.le_refl.
@@ -1523,7 +1524,7 @@ Qed.
 (* slm_tid bool true false 荒谬件（bool 判定矛盾的合法消去，可关任意 Type 目标） *)
 Lemma tid_bool_tf_absurd : forall P : Type, slm_tid bool true false -> P.
 Proof.
-  intros P H. tidE H. discriminate HE.
+  intros P H. slmTidE H. discriminate HE.
 Qed.
 
 (* pos 结论构造桥：(0 < a)%Z → slm_tid bool (Z.ltb 0 a) true *)

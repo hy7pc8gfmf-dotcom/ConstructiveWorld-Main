@@ -294,6 +294,11 @@ Context {RI0 : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO0 : DecidableOrder RI0}.
 
+Let R := @S01_BaseRing.R RI0.
+Let le := @S01_BaseRing.le RI0.
+Let zero := @S01_BaseRing.zero RI0.
+Let abs := @S01_BaseRing.abs RI0.
+
 Theorem uabd2_ali_abs_ge_zero_id_pair :
   forall a : R, le zero a -> Id (abs a) a.
 Proof.

@@ -43,6 +43,7 @@ Open Scope Q_scope.
 Import DTPT.DTPT.
 Import DTPT_Entropy.DTPT_Entropy.
 Import DTPT_Rotation.DTPT_Rotation.
+Import Datatypes.
 
 Module DTPT_Bridge_Dep.
 
@@ -1388,6 +1389,7 @@ Proof.
 Qed.
 
 (* §2 阶乘序结构（支撑件 1：n! 单调正，≥ max(1, n)）               *)
+Local Notation q_fact := S03_QExp.q_fact.
 
 Lemma eoe_fact_ge_one : forall k : nat, Qle (1%Q) (q_fact k).
 Proof.

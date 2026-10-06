@@ -91,11 +91,11 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
 Let R := @R RI.
-Let zero := @zero RI.
-Let one := @one RI.
-Let mult := @mult RI.
-Let inv_pos := @inv_pos RI.
-Let lt := @lt RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let mult := @S01_BaseRing.mult RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let lt := @S01_BaseRing.lt RI.
 
 Theorem abl_UpFirewall_inv_pos_lt_compat : forall a b : R, forall Ha : lt zero a, forall Hb : lt zero b,
   lt a b -> lt (inv_pos b Hb) (inv_pos a Ha).
@@ -118,7 +118,8 @@ Context {DO0 : DecidableOrder RI0}.
 
 Theorem uabT13_fw_lpc :
   forall a b c d : @S01_BaseRing.R RI0,
-    lt a b -> le c d -> lt (plus a c) (plus b d).
+    @S01_BaseRing.lt RI0 a b -> @S01_BaseRing.le RI0 c d ->
+    @S01_BaseRing.lt RI0 (@S01_BaseRing.plus RI0 a c) (@S01_BaseRing.plus RI0 b d).
 Proof.
   intros a b c d Hab Hcd.
   exact (@fa53_lt_plus_compat_lt_le_dec RI0 DO0 a b c d Hab Hcd).

@@ -307,6 +307,7 @@ Print Assumptions uahlc_omd_bounded_one.
 Print Assumptions uahlc_lo_one_hi_full.
 (* ================= §5 zsf_sigmig2_Z_align_a_pos 族 ================= *)
 Import RealInterfaceEnhancedMod.
+Import Datatypes.
 
 Theorem zsf_sigmig2_Z_align_a_pos :
   forall (R : Set) (RIS : RealInterfaceEnhancedSetoid R) (S : Set) (enum : list S)

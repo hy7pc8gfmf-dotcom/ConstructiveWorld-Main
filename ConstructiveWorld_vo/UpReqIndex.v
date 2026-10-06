@@ -2350,9 +2350,10 @@ Definition ng_UpAblEps66Sum : NewGreenFace :=
 Definition ng_UpAblEps66Body : NewGreenFace :=
   MkNewGreenFace "UpAblEps66Body.v" 213 3 20260920 "R95 paper-1 ablation (X2): theorem 6.6 body 11-slot swap, flag_closed zero-honest-interface version, four-gate green" "L213:m678c4c".
 
-(* ng_UpAblP7_LoHiSqueeze —— UpAblP7_LoHiSqueeze.v：colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green *)
+(* ng_UpAblP7_LoHiSqueeze —— UpAblP7_LoHiSqueeze.v：LoHiSqueeze 消融族（lhs/uahl 界族·lo<1<hi 与 delta-star/omd 有界） *)
 Definition ng_UpAblP7_LoHiSqueeze : NewGreenFace :=
-  MkNewGreenFace "UpAblP7_LoHiSqueeze.v" 269 7 20260920 "colleague PA7: LoHiSqueeze 15-theorem full ablation batch, four-gate green" "L276:m0c319c".
+  MkNewGreenFace "UpAblP7_LoHiSqueeze.v" 360 11 20261006
+  "LoHiSqueeze ablation family: lhs/uahl bounds (lo<1<hi, delta-star and omd bounded)" "L360:mcf0f1729".
 
 (* ng_UpAblP7_Package —— UpAblP7_Package.v：colleague PA7: package assembly consuming six sibling pieces, four-gate green *)
 Definition ng_UpAblP7_Package : NewGreenFace :=
@@ -3881,3 +3882,39 @@ Definition ng_uabda_up01_discharge : NewGreenFace :=
   MkNewGreenFace "uabda_up01_discharge.v" 111 4 20261006
   "Arch_Up_01 assumption discharge cross-check, four theorems" "L111:m87030a62".
 
+(* ========================================================================== *)
+
+(* ng_Arch_Up_02 —— Arch_Up_02.v：m3 马尔可夫三阶族（状态/KL/κ/rpow/π 序列与几何步） *)
+Definition ng_Arch_Up_02 : NewGreenFace :=
+  MkNewGreenFace "Arch_Up_02.v" 2127 123 20261006
+  "m3 third-order Markov family: states, KL list, kappa, rpow, pi sequence and geometric steps" "L2127:meb45818e".
+
+(* ng_Arch_PA_03 —— Arch_PA_03.v：DTPT 桥依赖集族（rotc 取代/单调配位/覆盖集族） *)
+Definition ng_Arch_PA_03 : NewGreenFace :=
+  MkNewGreenFace "Arch_PA_03.v" 2360 73 20261006
+  "DTPT bridge dep set family: rotation supersession, monotonicity and coverage set lemmas" "L2360:m8f508d10".
+
+(* ng_Arch_PA_01 —— Arch_PA_01.v：UabT1 防火墙和族与 uabd1s4 离散化族 *)
+Definition ng_Arch_PA_01 : NewGreenFace :=
+  MkNewGreenFace "Arch_PA_01.v" 624 32 20261006
+  "UabT1 firewall sum extensions and uabd1s4 discretization family" "L624:m918053ed".
+
+(* ng_Arch_SumEqL_01 —— Arch_SumEqL_01.v：sem_sum_eq_list 语义槽与消解族（八名与 ToyR_03 同族重证） *)
+Definition ng_Arch_SumEqL_01 : NewGreenFace :=
+  MkNewGreenFace "Arch_SumEqL_01.v" 236 16 20261006
+  "sem_sum_eq_list semantic slots and slot write-off family (eight names shared with Arch_ToyR_03)" "L236:m67ff3326".
+
+(* ng_Arch_UpAbl_02 —— Arch_UpAbl_02.v：UabT2a 兼容槽族与防火墙逆正弱单调供给 *)
+Definition ng_Arch_UpAbl_02 : NewGreenFace :=
+  MkNewGreenFace "Arch_UpAbl_02.v" 155 7 20261006
+  "UabT2a compatibility slots and firewall inv-pos lt-compat supply" "L155:ma5724b39".
+
+(* ng_Arch_ToyR_01 —— Arch_ToyR_01.v：fa52 DPO 具体实例族（EDP/熵差前提不可满足与奖励散布） *)
+Definition ng_Arch_ToyR_01 : NewGreenFace :=
+  MkNewGreenFace "Arch_ToyR_01.v" 507 24 20261006
+  "fa52 DPO concrete instance family: EDP/entropy-difference premises unsat and reward spread" "L507:mfe49b7f1".
+
+(* ng_Arch_ToyR_03 —— Arch_ToyR_03.v：sem_sum_eq_list 语义槽全族与 Uahl* 独立重证（fa56b 传输） *)
+Definition ng_Arch_ToyR_03 : NewGreenFace :=
+  MkNewGreenFace "Arch_ToyR_03.v" 1488 61 20261006
+  "sem_sum_eq_list full slot family and Uahl independent re-proofs with fa56b transport" "L1488:mda9a2fa2".

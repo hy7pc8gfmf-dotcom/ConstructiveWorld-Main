@@ -145,12 +145,36 @@ Variable S : Set.
 Variable enum : list S.
 
 Let R        := @R RI.
-Let zero     := @zero RI.
-Let one      := @one RI.
-Let plus     := @plus RI.
-Let mult     := @mult RI.
-Let le       := @le RI.
-Let lt       := @lt RI.
+Let zero     := @S01_BaseRing.zero RI.
+Let one      := @S01_BaseRing.one RI.
+Let plus     := @S01_BaseRing.plus RI.
+Let mult     := @S01_BaseRing.mult RI.
+Let le       := @S01_BaseRing.le RI.
+Let lt       := @S01_BaseRing.lt RI.
+Let opp      := @S01_BaseRing.opp RI.
+Let abs      := @S01_BaseRing.abs RI.
+Let inv_pos  := @S01_BaseRing.inv_pos RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_comm := @S01_BaseRing.plus_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let mult_one := @S01_BaseRing.mult_one RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let lt_trans := @S01_BaseRing.lt_trans RI.
+Let lt_id_l := @S01_BaseRing.lt_id_l RI.
+Let lt_mult_compat := @S01_BaseRing.lt_mult_compat RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_id_r := @S01_BaseRing.le_id_r RI.
+Let lt_le_iff := @S01_BaseRing.lt_le_iff RI.
+Let abs_pos := @S01_BaseRing.abs_pos RI.
+Let inv_pos_pos := @S01_BaseRing.inv_pos_pos RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let lt_id_r := @S01_BaseRing.lt_id_r RI.
+Let mult_positive := @S01_BaseRing.mult_positive RI.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let plus_positive := @S01_BaseRing.plus_positive RI.
 
 (* ============ 槽VI：J 消去器 + list 判别核 + 非空构造族 =========== *)
 (* Id 的依赖匹配消去（本载体首用 J 规则；fa51/fa56 只用过            *)
@@ -353,6 +377,38 @@ Section UahlPair.
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 
+Let R := @R RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let plus := @S01_BaseRing.plus RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp := @S01_BaseRing.opp RI.
+Let abs := @S01_BaseRing.abs RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let lt := @S01_BaseRing.lt RI.
+Let le := @S01_BaseRing.le RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_comm := @S01_BaseRing.plus_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let mult_one := @S01_BaseRing.mult_one RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let lt_trans := @S01_BaseRing.lt_trans RI.
+Let lt_id_l := @S01_BaseRing.lt_id_l RI.
+Let lt_mult_compat := @S01_BaseRing.lt_mult_compat RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_id_r := @S01_BaseRing.le_id_r RI.
+Let lt_le_iff := @S01_BaseRing.lt_le_iff RI.
+Let abs_pos := @S01_BaseRing.abs_pos RI.
+Let inv_pos_pos := @S01_BaseRing.inv_pos_pos RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let lt_id_r := @S01_BaseRing.lt_id_r RI.
+Let mult_positive := @S01_BaseRing.mult_positive RI.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let plus_positive := @S01_BaseRing.plus_positive RI.
+
 Variable temp : R.
 Variable temp_pos : lt zero temp.
 Variable Delta : R.
@@ -413,6 +469,38 @@ Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
 
+Let R := @R RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let plus := @S01_BaseRing.plus RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp := @S01_BaseRing.opp RI.
+Let abs := @S01_BaseRing.abs RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let lt := @S01_BaseRing.lt RI.
+Let le := @S01_BaseRing.le RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_comm := @S01_BaseRing.plus_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let mult_one := @S01_BaseRing.mult_one RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let lt_trans := @S01_BaseRing.lt_trans RI.
+Let lt_id_l := @S01_BaseRing.lt_id_l RI.
+Let lt_mult_compat := @S01_BaseRing.lt_mult_compat RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_id_r := @S01_BaseRing.le_id_r RI.
+Let lt_le_iff := @S01_BaseRing.lt_le_iff RI.
+Let abs_pos := @S01_BaseRing.abs_pos RI.
+Let inv_pos_pos := @S01_BaseRing.inv_pos_pos RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let lt_id_r := @S01_BaseRing.lt_id_r RI.
+Let mult_positive := @S01_BaseRing.mult_positive RI.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let plus_positive := @S01_BaseRing.plus_positive RI.
+
 Variable temp : R.
 Variable temp_pos : lt zero temp.
 Variable Delta : R.
@@ -456,6 +544,38 @@ Section UahlSbInst.
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
+
+Let R := @R RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let plus := @S01_BaseRing.plus RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp := @S01_BaseRing.opp RI.
+Let abs := @S01_BaseRing.abs RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let lt := @S01_BaseRing.lt RI.
+Let le := @S01_BaseRing.le RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_comm := @S01_BaseRing.plus_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let mult_one := @S01_BaseRing.mult_one RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let lt_trans := @S01_BaseRing.lt_trans RI.
+Let lt_id_l := @S01_BaseRing.lt_id_l RI.
+Let lt_mult_compat := @S01_BaseRing.lt_mult_compat RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_id_r := @S01_BaseRing.le_id_r RI.
+Let lt_le_iff := @S01_BaseRing.lt_le_iff RI.
+Let abs_pos := @S01_BaseRing.abs_pos RI.
+Let inv_pos_pos := @S01_BaseRing.inv_pos_pos RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let lt_id_r := @S01_BaseRing.lt_id_r RI.
+Let mult_positive := @S01_BaseRing.mult_positive RI.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let plus_positive := @S01_BaseRing.plus_positive RI.
 
 Variable expf : R -> R.
 Variable expf_pos : forall x : R, lt zero (expf x).
@@ -506,6 +626,38 @@ Section UahlHalf.
 Context {RI : RealInterfaceEnhanced}.
 Local Existing Instance RI_base.
 Context {DO : DecidableOrder RI}.
+
+Let R := @R RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one := @S01_BaseRing.one RI.
+Let plus := @S01_BaseRing.plus RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp := @S01_BaseRing.opp RI.
+Let abs := @S01_BaseRing.abs RI.
+Let inv_pos := @S01_BaseRing.inv_pos RI.
+Let lt := @S01_BaseRing.lt RI.
+Let le := @S01_BaseRing.le RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_comm := @S01_BaseRing.plus_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let mult_one := @S01_BaseRing.mult_one RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let lt_trans := @S01_BaseRing.lt_trans RI.
+Let lt_id_l := @S01_BaseRing.lt_id_l RI.
+Let lt_mult_compat := @S01_BaseRing.lt_mult_compat RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_id_r := @S01_BaseRing.le_id_r RI.
+Let lt_le_iff := @S01_BaseRing.lt_le_iff RI.
+Let abs_pos := @S01_BaseRing.abs_pos RI.
+Let inv_pos_pos := @S01_BaseRing.inv_pos_pos RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let lt_id_r := @S01_BaseRing.lt_id_r RI.
+Let mult_positive := @S01_BaseRing.mult_positive RI.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let plus_positive := @S01_BaseRing.plus_positive RI.
 
 Let half := inv_pos (plus one one) two_pos.
 Let half2 := mult half half.
@@ -783,16 +935,25 @@ Local Existing Instance RI_base.
 Let SSR  : StateSpace RI := @RealSelfSS (@RI_base RI).
 Let S    := @S RI SSR.
 Let R    := @R RI.
-Let zero := @zero RI.
-Let one  := @one RI.
-Let plus := @plus RI.
-Let mult := @mult RI.
-Let opp  := @opp RI.
-Let le   := @le RI.
-Let lt   := @lt RI.
+Let zero := @S01_BaseRing.zero RI.
+Let one  := @S01_BaseRing.one RI.
+Let plus := @S01_BaseRing.plus RI.
+Let mult := @S01_BaseRing.mult RI.
+Let opp  := @S01_BaseRing.opp RI.
+Let le   := @S01_BaseRing.le RI.
+Let lt   := @S01_BaseRing.lt RI.
 Let splus := @splus RI SSR.
 Let sopp  := @sopp RI SSR.
 Let clim  := @clim RI SSR.
+Let mult_zero := @S01_BaseRing.mult_zero RI.
+Let le_refl := @S01_BaseRing.le_refl RI.
+Let one_pos := @S01_BaseRing.one_pos RI.
+Let mult_comm := @S01_BaseRing.mult_comm RI.
+Let plus_assoc := @S01_BaseRing.plus_assoc RI.
+Let plus_opp := @S01_BaseRing.plus_opp RI.
+Let plus_zero := @S01_BaseRing.plus_zero RI.
+Let le_id_l := @S01_BaseRing.le_id_l RI.
+Let le_mult_compat_weak := @S01_BaseRing.le_mult_compat_weak RI.
 
 (* 参数位节面：Q P : Set、Hamiltonian : Q -> P -> R、potential : Q -> R、
    force_physical : Q -> Q、inj_Q_S : Q -> S、grad : (Q -> R) -> Q -> S。
@@ -963,7 +1124,7 @@ Proof.
                  (opp (plus m0 (of_nat_R t))) (ppa_macro_loss m0)).
   - exact (id_cong (fun z => opp z)
              (ppa_iterate_macro_step of_nat_R H0 Hstep t m0)).
-  - exact (@opp_le_compat RI m0 (plus m0 (of_nat_R t))
+  - exact (@S01_BaseRing.opp_le_compat RI m0 (plus m0 (of_nat_R t))
              (le_plus_nonneg_r m0 (of_nat_R t) (Hnn t))).
 Qed.
 
@@ -975,7 +1136,7 @@ Proof.
   apply (le_id_l (ppa_macro_loss (ppa_macro_dynamics m))
                  (opp (plus m one)) (ppa_macro_loss m)).
   - exact id_refl.
-  - exact (@opp_le_compat RI m (plus m one)
+  - exact (@S01_BaseRing.opp_le_compat RI m (plus m one)
              (le_plus_nonneg_r m one (fa51_lt_le zero one one_pos))).
 Qed.
 

@@ -528,6 +528,7 @@ abl_dtd_core2.v#R153-96422d
 abl_dtb_bridge.v#R153-7ecdc4
 abl_tbase_tempsum_feed.v#R153-8a6de3
 abl_tbe_invpos.v#R153-bad974
+UpAblP7_LoHiSqueeze.v#R161-cf0f17
 abl_c1_lohi.v#R153-e5247e
 abl_Pr_core_01.v#R157-6a49be
 abl_qpoly_divmod.v#R157-f812c6
@@ -630,3 +631,10 @@ uabda_g13_evict_discharge.v#R159-0c733f
 uabda_up01_discharge.v#R159-87030a
 uabd_supply_S13_expf_plus.v#R159-7f4eca
 uabd_supply_S13_expf_mono_le.v#R159-70f608
+Arch_Up_02.v#R161-eb4581
+Arch_PA_03.v#R161-8f508d
+Arch_PA_01.v#R161-918053
+Arch_SumEqL_01.v#R161-67ff33
+Arch_UpAbl_02.v#R161-a5724b
+Arch_ToyR_01.v#R161-fe49b7
+Arch_ToyR_03.v#R161-da9a2f
