@@ -14,8 +14,8 @@
 (*                                                                          *)
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
-(*       三、结构分组对账（lg_ 32 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 340 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
+(*       四、新绿件登记面（ng_ 576 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -3158,7 +3158,7 @@ Definition ng_LW2SepTransport : NewGreenFace :=
   MkNewGreenFace "LW2SepTransport.v" 140 5 20261002
   "universal separation transport kernel: transports real_lt along real_eq consuming any bridge as a black-box modulus source at an explicit budget, with k-factor arithmetic kernel lw2t_qinv_pos and lw2t_k_inv2_le; the k factor is bridge-internal and stays out of the statement face; auxiliary statement lw2t_k_inv2_le concludes in stdlib Qle (Prop), consumed proof-internally only at L64, declared here" "L140:m68170f".
 
-(* ng_LW5SepComplexity —— LW5SepComplexity.v：分离复杂度层（pi 有理包络列窗族 eps_n:=1/(n+1)·M_n:=2*pie_modulus(eps_n/2)+1 上 bool 分离判定器 lw5n_sep_dec＋最小分离窗阶 lw5n_nsep：结构递归有界搜索 lw5n_find＋显式预算 lw5n_bnd〔足用性不主张如实注记〕＋最小性特征 lw5n_nsep_minimal；窗族合法性＋入窗近距正确性＋搜索机件包在卷；增长律三档语句面以注记承载闭证属后续；结论位 nat 序四件（nsep_bound/nsep_least 上界＋shape_lower/shape_band 之 m<8·n0+9 下界序）照头注「特此如实注记」内嵌申报·候验证挂起；辅助 Qle/Qlt 语句仅脚手架；绿证＝607 记录 EXIT=0＋PA 双发 50/50 Closed＋coqchk -o 公理位 none，608 十三补丁属 219 面零碰本件，.vo ba4c1f8a 魔数 436f7121 0001 5ff4 在盘） *)
+(* ng_LW5SepComplexity —— LW5SepComplexity.v：分离复杂度层（pi 有理包络列窗族 eps_n:=1/(n+1)·M_n:=2*pie_modulus(eps_n/2)+1 上 bool 分离判定器 lw5n_sep_dec＋最小分离窗阶 lw5n_nsep：结构递归有界搜索 lw5n_find＋显式预算 lw5n_bnd〔足用性不主张如实注记〕＋最小性特征 lw5n_nsep_minimal；窗族合法性＋入窗近距正确性＋搜索机件包在卷；增长律三档语句面以注记承载闭证属后续；结论位 nat 序四件（nsep_bound/nsep_least 上界＋shape_lower/shape_band 之 m<8·n0+9 下界序）照头注「特此如实注记」内嵌申报·候验证挂起；辅助 Qle/Qlt 语句仅脚手架；绿证＝607 记录 EXIT=0＋PA 双发 50/50 Closed＋coqchk -o 公理位 none，608 十三补丁属 219 面零碰本件，.vo 2d9209e9 魔数 436f7121 0001 5ff4 在盘） *)
 Definition ng_LW5SepComplexity : NewGreenFace :=
   MkNewGreenFace "LW5SepComplexity.v" 1083 58 20261002
   "separation complexity layer: rational envelope window family of pi (eps_n := 1/(n+1), M_n := 2*pie_modulus(eps_n/2)+1) carrying bool separation decider lw5n_sep_dec and minimal window rank lw5n_nsep via structurally recursive bounded search lw5n_find and explicit budget lw5n_bnd with minimality characterized by lw5n_nsep_minimal; window legality, near-boundary correctness and search machinery included; growth-law three-tier statements stay in annotations with closed proofs as future work; four conclusion-position nat-order bounds (nsep_bound, nsep_least upper bounds plus shape_lower/shape_band lower order m < 8*n0+9) honestly declared per the module header annotation as pending-verification ledger, auxiliary Qle/Qlt statements scaffolding only" "L1083:m063c27".
