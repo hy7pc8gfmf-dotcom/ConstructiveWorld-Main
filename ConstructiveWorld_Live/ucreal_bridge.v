@@ -31,7 +31,7 @@ Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
 Require Import S03_QExp.
 Require Import S10_KVQuantTrig.
-Require Import LW0LeibSeparation.
+Require Import Local.LW0LeibSeparation.
 Require Import LW0MLicBridge.
 
 (* ================================================================== *)
