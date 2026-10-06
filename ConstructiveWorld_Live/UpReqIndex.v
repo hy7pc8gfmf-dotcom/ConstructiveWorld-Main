@@ -3297,10 +3297,10 @@ Definition ng_LW2TrigBridge : NewGreenFace :=
   MkNewGreenFace "LW2TrigBridge.v" 254 12 20261004
   "interchange between the two constructive representations of pi, the geometric zero representation and the Leibniz series sum, over the trigonometric endpoint values: transcription of the endpoint values across the two representations, the real-level double-angle identities for sine and cosine, and a single zero-premise statement linking the half-angle zero, the arctangent of one, and the Leibniz value of pi" "L254:m1b84e1".
 
-(* ng_LW0LeibSeparation —— LW0LeibSeparation.v：Leibniz 级数 π 的有理层构造性分离界库（岸界与半量弹药链＋端点帽复合传输；主语句 leibsep_q_kernel_gate_carrier：显式端点帽 s t 前提＋P1/P2 具体端点形，双岸矛盾件 leibsep_false_branch_contra 显参传递装配分离证书）；PA=59 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+(* ng_LW0LeibSeparation —— LW0LeibSeparation.v：Leibniz 级数 π 的有理层构造性分离界库（岸界与半量弹药链＋端点帽复合传输；主语句 leibsep_q_kernel_gate_carrier：显式端点帽 s t 前提＋P1/P2 具体端点形，双岸矛盾件 leibsep_false_branch_contra 显参传递装配分离证书；终形批新增：leibsep_pi_rational_unconditional 与 leibsep_q_kernel 双旗舰无前提闭式定理——π 强无理显式正距离分离 sigT 见证形）；PA=61 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW0LeibSeparation : NewGreenFace :=
-  MkNewGreenFace "LW0LeibSeparation.v" 4025 108 20261004
-  "constructive rational-layer separation bounds for the Leibniz series of pi: shore bounds with the half-quantity arsenal, and the kernel gate carrier lemma taking explicit endpoint caps s and t as premises together with concrete P1 and P2 endpoint forms, assembling the two-sided separation certificate by direct argument passing into the contradiction lemma" "L4025:m473267".
+  MkNewGreenFace "LW0LeibSeparation.v" 5723 108 20261006
+  "constructive rational-layer separation bounds for the Leibniz series of pi: shore bounds with the half-quantity arsenal, the kernel gate carrier lemma taking explicit endpoint caps s and t as premises together with concrete P1 and P2 endpoint forms, assembling the two-sided separation certificate by direct argument passing into the contradiction lemma, and the terminal unconditional forms leibsep_pi_rational_unconditional with leibsep_q_kernel giving the premise-free explicit positive-distance separation witness for every rational" "L5723:meb42d3".
 
 (* ng_LW2Binom —— LW2Binom.v：nat 面二项式系数工具组与 Z 桥（主件 lw2_binom：Pascal 递归构造的非负二项式系数，三条定义方程 reflexivity 可验；配套非负性布尔形 lw2_binom_nonneg、正性引理 lw2_fact_pos、零支 lw2_binom_above、对角 lw2_binom_diag、加法交换承载 lw2_mul_left_comm、阶乘刻画 lw2_binom_fact；Z 面符号因子方程 lw2_zsign_even/lw2_zsign_odd 与 Z 因子取用方程 lw2_binom_Z）；主语句 lw2_binom；PA=9 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_LW2Binom : NewGreenFace :=
@@ -3840,4 +3840,44 @@ Definition ng_abl_loeb_d3_nofix : NewGreenFace :=
 Definition ng_abl_loeb_d3_spec : NewGreenFace :=
   MkNewGreenFace "abl_loeb_d3_spec.v" 463 18 20261006
   "[abl_loeb_d3_spec.v: nu-2 spectral band classifier over the Box2 certificate layer]" "L463:mee10c439".
+
+(* ng_uabd_supply_S05_Z_align_pos —— uabd_supply_S05_Z_align_pos.v：Z_align 正性一般形供给 *)
+Definition ng_uabd_supply_S05_Z_align_pos : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_S05_Z_align_pos.v" 38 1 20261006
+  "Z_align positivity from sum positivity, general interface form" "L38:m37fa372a".
+
+(* ng_uabd_supply_S05_Z_align_pos_unit —— uabd_supply_S05_Z_align_pos_unit.v：单点实例闭合形 Z_align 正性（双定理） *)
+Definition ng_uabd_supply_S05_Z_align_pos_unit : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_S05_Z_align_pos_unit.v" 53 2 20261006
+  "unit-instance closed Z_align positivity pair" "L53:mc26a507c".
+
+(* ng_uabd_supply_UpReqDist_group_size_pos —— uabd_supply_UpReqDist_group_size_pos.v：req 域组长正性与 InT 覆盖见证（双定理） *)
+Definition ng_uabd_supply_UpReqDist_group_size_pos : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_UpReqDist_group_size_pos.v" 76 2 20261006
+  "req-domain group size positivity and InT cover witness" "L76:mea5ad18c".
+
+(* ng_uabd_supply_S08_kl_term_equiv —— uabd_supply_S08_kl_term_equiv.v：KL 项等价换向供给 *)
+Definition ng_uabd_supply_S08_kl_term_equiv : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_S08_kl_term_equiv.v" 41 1 20261006
+  "KL term equivalence symmetry" "L41:m29bcb887".
+
+(* ng_uabd_supply_S13_expf_plus —— uabd_supply_S13_expf_plus.v：expf 加性（expf:=c1_expf 实例） *)
+Definition ng_uabd_supply_S13_expf_plus : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_S13_expf_plus.v" 36 1 20261006
+  "expf additivity at c1_expf instance" "L36:m7f4eca65".
+
+(* ng_uabd_supply_S13_expf_mono_le —— uabd_supply_S13_expf_mono_le.v：expf 弱单调（expf:=c1_expf 实例） *)
+Definition ng_uabd_supply_S13_expf_mono_le : NewGreenFace :=
+  MkNewGreenFace "uabd_supply_S13_expf_mono_le.v" 38 1 20261006
+  "expf weak monotonicity at c1_expf instance" "L38:m70f60862".
+
+(* ng_uabda_g13_evict_discharge —— uabda_g13_evict_discharge.v：G13 逐出族实例世界消解（四定理，含 req 层两点世界无条件形） *)
+Definition ng_uabda_g13_evict_discharge : NewGreenFace :=
+  MkNewGreenFace "uabda_g13_evict_discharge.v" 102 4 20261006
+  "G13 eviction-family instance-world discharge, four theorems" "L102:m0c975b77".
+
+(* ng_uabda_up01_discharge —— uabda_up01_discharge.v：Arch_Up_01 接口假设消解形对拍件（四定理） *)
+Definition ng_uabda_up01_discharge : NewGreenFace :=
+  MkNewGreenFace "uabda_up01_discharge.v" 111 4 20261006
+  "Arch_Up_01 assumption discharge cross-check, four theorems" "L111:m2978a29b".
 

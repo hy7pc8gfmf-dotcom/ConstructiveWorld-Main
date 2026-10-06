@@ -29,6 +29,7 @@
    LW2TrigBridge.v :132｜S10_KVQuantTrig.v :3038/:8559｜S02_CauchyComplete.v :465/:534/:929。 *)
 
 From Stdlib Require Import QArith.QArith QArith.Qabs.
+From Stdlib Require Import QArith.Qminmax.
 From Stdlib Require Import Lia ZArith.
 Require Import S01_BaseRing.
 Require Import S02_CauchyComplete.
@@ -4023,3 +4024,1700 @@ Qed.
 
 Print Assumptions qlt0_plus.
 Print Assumptions leibsep_q_kernel_gate_carrier.
+
+(* Tail-chain install: unconditional-form statements lifted verbatim from
+   the frozen slots (case a-prime tail-chain style); the frozen comment
+   shells above are preserved untouched. *)
+
+From Stdlib Require Import Lqa.
+Notation S973 := (1 + (121 # 18) + (73205 # 5364))%Q.
+
+(* Adjacent-difference lower bound for the W band (ratio bound 25/27 form). *)
+Lemma leibsep_Wb01_diff_lower : forall (b q : Q) (n : nat),
+  QleT' 0 b -> QltT 0 q -> QleT' q (10 # 3) -> (2 <= n)%nat ->
+  QleT' (lw0_Wb b q n 0 * (2 # 27))%Q
+        (lw0_Wb b q n 0 - lw0_Wb b q n 1)%Q.
+Proof.
+  intros b q n Hb0 Hq Hq103 Hn.
+  pose proof (lw0_Wb_ratio_bound b q n 0 Hb0 Hq Hq103 Hn) as Hratio.
+  assert (Hq0 : QleT' 0 q) by (apply lw0_QltT_le; exact Hq).
+  apply Qle_to_QleT'.
+  assert (Heq : (lw0_Wb b q n 0 * (2 # 27))%Q ==
+                (lw0_Wb b q n 0 - lw0_Wb b q n 0 * (25 # 27))%Q) by ring.
+  rewrite Heq.
+  apply QleT'_to_Qle in Hratio.
+  lra.
+Qed.
+
+Lemma lw62_qdiv_den_id : forall x y z : Q,
+  Qlt 0 y -> Qlt 0 z -> (x / y == x * z * (/ (y * z)))%Q.
+Proof.
+  intros x y z Hy Hz.
+  assert (Hz0 : (~ z == 0)%Q)
+    by (intro Hc; apply (Qlt_not_eq 0 z Hz); symmetry; exact Hc).
+  unfold Qdiv.
+  rewrite (Qinv_mult_distr y z), <- (Qmult_assoc x z (/ y * / z)),
+          (Qmult_assoc z (/ y) (/ z)), (Qmult_comm z (/ y)),
+          <- (Qmult_assoc (/ y) z (/ z)), (Qmult_inv_r z Hz0), Qmult_1_r.
+  reflexivity.
+Qed.
+
+Lemma lw62_qdiv_le : forall a b c d : Q,
+  Qlt 0 b -> Qlt 0 d -> Qle (a * d) (c * b) -> Qle (a / b) (c / d).
+Proof.
+  intros a b c d Hb Hd Hle.
+  assert (Hbd : Qlt 0 (b * d)%Q) by (apply Qmult_lt_0_compat; assumption).
+  assert (Hinv : Qle 0 (/ (b * d))%Q).
+  { apply Qlt_le_weak. apply Qinv_lt_0_compat. exact Hbd. }
+  assert (Hdb : Qlt 0 (d * b)%Q) by (apply Qmult_lt_0_compat; [exact Hd | exact Hb]).
+  assert (Heq1 : (a / b)%Q == (a * d * (/ (b * d)))%Q)
+    by (apply lw62_qdiv_den_id; assumption).
+  assert (Heq2 : (c / d)%Q == (c * b * (/ (b * d)))%Q).
+  { rewrite (Qmult_comm b d).
+    apply lw62_qdiv_den_id; assumption. }
+  rewrite Heq1. apply (Qle_trans _ (c * b * (/ (b * d)))%Q).
+  - apply Qmult_le_compat_r; assumption.
+  - rewrite Heq2. apply Qle_refl.
+Qed.
+
+Lemma lw62_qdiv_nonneg : forall a b : Q,
+  QleT' 0 a -> Qlt 0 b -> QleT' 0 (a / b).
+Proof.
+  intros a b Ha Hb. apply Qle_to_QleT'. unfold Qdiv.
+  apply (Qle_trans _ (0 * / b)%Q).
+  - rewrite Qmult_0_l. apply Qle_refl.
+  - apply Qmult_le_compat_r.
+    + exact (QleT'_to_Qle _ _ Ha).
+    + apply Qlt_le_weak. apply Qinv_lt_0_compat. exact Hb.
+Qed.
+
+Lemma lw95_mul0 : forall x y : Q,
+  Qle 0 x -> Qle 0 y -> Qle 0 (x * y).
+Proof.
+  intros x y Hx Hy.
+  apply (Qle_trans 0 (0 * y) (x * y)).
+  - rewrite Qmult_0_l. apply Qle_refl.
+  - apply Qmult_le_compat_r; assumption.
+Qed.
+
+Lemma lw95_mul_le_compat : forall w x y z : Q,
+  Qle 0 w -> Qle w x -> Qle 0 y -> Qle y z -> Qle (w * y) (x * z).
+Proof.
+  intros w x y z Hw0 Hwx Hy0 Hyz.
+  apply (Qle_trans (w * y) (x * y) (x * z)).
+  - apply Qmult_le_compat_r; assumption.
+  - rewrite (Qmult_comm x y), (Qmult_comm x z).
+    apply Qmult_le_compat_r;
+      [exact Hyz | exact (Qle_trans 0 w x Hw0 Hwx)].
+Qed.
+
+Section TailScale.
+Variable q : Q.
+
+Let tq : Q := Qabs q.
+Definition tsl (m : nat) : Q :=
+  (2 * (q_pow tq (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m)))%Q)%Q.
+Definition tcl (m : nat) : Q :=
+  (2 * (q_pow tq (2 * m) / q_fact (2 * m))%Q)%Q.
+
+Lemma lw95_qpow_nonneg : forall (x : Q) (m : nat),
+  Qle 0 x -> Qle 0 (q_pow x m).
+Proof.
+  intros x m Hx. induction m as [|m IHm].
+  - change (q_pow x 0) with 1%Q. lra.
+  - rewrite q_pow_succ. apply lw95_mul0; assumption.
+Qed.
+
+Lemma lw95_qfact_mono : forall (d i : nat), Qle (q_fact i) (q_fact (i + d)%nat).
+Proof.
+  induction d as [|d IHd]; intros i.
+  - rewrite <- plus_n_O. apply Qle_refl.
+  - rewrite <- (plus_n_Sm i d).
+    apply (Qle_trans (q_fact i) (q_fact (i + d)%nat)
+                     (q_fact (Datatypes.S (i + d)))).
+    + apply IHd.
+    + pose proof (q_fact_succ (i + d)%nat) as Hs.
+      rewrite Hs.
+      apply (Qle_trans _ (1 * q_fact (i + d)) _).
+      * rewrite Qmult_1_l. apply Qle_refl.
+      * apply Qmult_le_compat_r.
+        -- unfold Qle. simpl. lia.
+        -- apply Qlt_le_weak. apply q_fact_pos.
+Qed.
+
+Lemma lw95_qfact_le : forall (a b : nat), (a <= b)%nat -> Qle (q_fact a) (q_fact b).
+Proof.
+  intros a b Hle.
+  assert (Heq : (a + (b - a))%nat = b) by lia.
+  rewrite <- Heq.
+  apply lw95_qfact_mono.
+Qed.
+
+(* ---------- 常用正性事实 ---------- *)
+
+Lemma lw62_q30_pos : Qlt 0 (30 # 1)%Q.
+Proof. compute. reflexivity. Qed.
+
+Lemma lw62_qinv30_pos : Qlt 0 (1 # 30)%Q.
+Proof. compute. reflexivity. Qed.
+
+(* ---------- 平方与绝对值帮手 ---------- *)
+
+(* 整数平方非负（Z 层符号三分）。 *)
+Lemma lw62_zsquare_nonneg : forall n : Z, (0 <= n * n)%Z.
+Proof.
+  intros n.
+  assert (Htri : (n = 0 \/ 0 < n \/ n < 0)%Z) by lia.
+  destruct Htri as [H0 | Hrest].
+  - rewrite H0. apply Z.le_refl.
+  - destruct Hrest as [Hpos | Hneg].
+    + apply Z.mul_nonneg_nonneg; apply Z.lt_le_incl; exact Hpos.
+    + assert (Hnn : (0 <= - n)%Z) by lia.
+      replace (n * n)%Z with ((- n) * (- n))%Z by ring.
+      apply Z.mul_nonneg_nonneg; assumption.
+Qed.
+
+(* 平方因子的非负性：x*x 至少为 0。 *)
+Lemma lw62_sq_nonneg : forall x : Q, Qle 0 (x * x).
+Proof.
+  intros [nx dx]. unfold Qle. simpl.
+  rewrite Z.mul_1_r.
+  apply lw62_zsquare_nonneg.
+Qed.
+
+(* 幂的绝对值恒等式：|x^k| = |x|^k。 *)
+Lemma lw62_qpow_abs : forall (B : Q) (k : nat),
+  Qabs (q_pow B k) == q_pow (Qabs B) k.
+Proof.
+  intros B k. induction k as [|k IHk].
+  - reflexivity.
+  - rewrite q_pow_succ, q_pow_succ, Qabs_Qmult, IHk. reflexivity.
+Qed.
+
+(* ---------- 自然数嵌入与幂的算术帮手 ---------- *)
+
+Lemma lw62_qofnat_nonneg : forall k : nat, QleT' 0 (lw0_q_of_nat k).
+Proof.
+  induction k as [|k IHk].
+  - apply qeq_leT'. reflexivity.
+  - apply Qle_to_QleT'.
+    pose proof (QleT'_to_Qle _ _ IHk).
+    rewrite lw0_q_of_nat_succ.
+    lra.
+Qed.
+
+(* 自然数嵌入的加法下界：lw0_q_of_nat a 不超过 lw0_q_of_nat (a+b)。 *)
+Lemma lw62_qofnat_ge_add : forall (a b : nat),
+  QleT' (lw0_q_of_nat a) (lw0_q_of_nat (a + b)%nat).
+Proof.
+  intros a b. induction b as [|b IHb].
+  - rewrite Nat.add_0_r. apply qleT'_refl.
+  - replace (a + Datatypes.S b)%nat with (Datatypes.S (a + b)) by lia.
+    apply Qle_to_QleT'.
+    rewrite lw0_q_of_nat_succ.
+    pose proof (QleT'_to_Qle _ _ IHb).
+    lra.
+Qed.
+
+Lemma lw62_qofnat_mono : forall (a b : nat), (a <= b)%nat ->
+  QleT' (lw0_q_of_nat a) (lw0_q_of_nat b).
+Proof.
+  intros a b Hle.
+  replace b with (a + (b - a))%nat by lia.
+  exact (lw62_qofnat_ge_add a (b - a)).
+Qed.
+
+Lemma lw62_qpow_even_nonneg : forall (x : Q) (j : nat),
+  QleT' 0 (q_pow x (2 * j)%nat).
+Proof.
+  intros x j. induction j as [|j IHj].
+  - apply Qle_to_QleT'. compute. intro Hc. discriminate Hc.
+  - replace (2 * Datatypes.S j)%nat
+      with (Datatypes.S (Datatypes.S (2 * j))) by lia.
+    apply Qle_to_QleT'.
+    rewrite q_pow_succ, q_pow_succ.
+    rewrite (Qmult_assoc x x (q_pow x (2 * j))).
+    apply lw95_mul0.
+    + apply lw62_sq_nonneg.
+    + apply QleT'_to_Qle. exact IHj.
+Qed.
+
+Lemma lw62_qpow_add : forall (x : Q) (n m : nat),
+  q_pow x (n + m)%nat == q_pow x n * q_pow x m.
+Proof.
+  intros x n m. induction n as [|n IHn].
+  - cbn [q_pow]. rewrite Nat.add_0_l, Qmult_1_l. reflexivity.
+  - replace (Datatypes.S n + m)%nat with (Datatypes.S (n + m)) by lia.
+    rewrite q_pow_succ, q_pow_succ, IHn. ring.
+Qed.
+
+
+Fixpoint lw62_rsum (r : Q) (n : nat) : Q :=
+  match n with
+  | 0%nat => 1%Q
+  | Datatypes.S m => lw62_rsum r m + q_pow r (Datatypes.S m)
+  end.
+
+Lemma lw62_rsum_tele : forall (r : Q) (n : nat),
+  (lw62_rsum r n * (1 - r))%Q == (1 - q_pow r (Datatypes.S n))%Q.
+Proof.
+  intros r n. induction n as [|n IHn].
+  - cbn [lw62_rsum q_pow]. ring.
+  - simpl lw62_rsum. rewrite Qmult_plus_distr_l. rewrite IHn.
+    rewrite q_pow_succ, q_pow_succ, q_pow_succ. ring.
+Qed.
+
+Lemma lw62_rsum_nonneg : forall (r : Q) (n : nat),
+  Qle 0 r -> Qle 0 (lw62_rsum r n).
+Proof.
+  intros r n Hr. induction n as [|n IHn].
+  - cbn [lw62_rsum]. lra.
+  - simpl lw62_rsum. apply (Qle_trans _ (0 + 0)%Q).
+    + rewrite Qplus_0_r. apply Qle_refl.
+    + apply Qplus_le_compat.
+      * exact IHn.
+      * apply lw95_mul0.
+        -- exact Hr.
+        -- apply lw95_qpow_nonneg. exact Hr.
+Qed.
+
+(* 系数恒等式：24*30^m 不超过 (2m+4)!（B 自由）。 *)
+Lemma lw62_georatio : forall m : nat,
+  QleT' ((24 # 1) * q_pow (30 # 1) m)%Q (q_fact (2 * m + 4)%nat).
+Proof.
+  induction m as [|m IHm].
+  - apply Qle_to_QleT'. compute. intro Hc. discriminate Hc.
+  - apply Qle_to_QleT'.
+    replace (2 * Datatypes.S m + 4)%nat
+      with (Datatypes.S (Datatypes.S (2 * m + 4))) by lia.
+    rewrite q_fact_succ, q_fact_succ.
+    apply (Qle_trans _ ((30 # 1) * ((24 # 1) * q_pow (30 # 1) m))%Q).
+    + rewrite q_pow_succ. apply qeq_imp_qle. ring.
+    + apply (Qle_trans _ ((30 # 1) * q_fact (2 * m + 4))%Q).
+      * rewrite (Qmult_comm (30 # 1) ((24 # 1) * q_pow (30 # 1) m)),
+                (Qmult_comm (30 # 1) (q_fact (2 * m + 4))).
+        apply Qmult_le_compat_r.
+        -- apply QleT'_to_Qle. exact IHm.
+        -- apply Qlt_le_weak. apply lw62_q30_pos.
+      * rewrite Qmult_assoc.
+        apply (lw95_mul_le_compat (30 # 1)
+                 ((Z.of_nat (Datatypes.S (Datatypes.S (2 * m + 4))) # 1)
+                  * (Z.of_nat (Datatypes.S (2 * m + 4)) # 1))
+                 (q_fact (2 * m + 4)) (q_fact (2 * m + 4))).
+        -- apply Qlt_le_weak. apply lw62_q30_pos.
+        -- apply (Qle_trans _ ((6 # 1) * (5 # 1))%Q).
+           ++ compute. intro Hc. discriminate Hc.
+           ++ apply (lw95_mul_le_compat (6 # 1)
+                       (Z.of_nat (Datatypes.S (Datatypes.S (2 * m + 4))) # 1)
+                       (5 # 1)
+                       (Z.of_nat (Datatypes.S (2 * m + 4)) # 1)).
+              ** unfold Qle. cbn [Qnum Qden]. lia.
+              ** unfold Qle. cbn [Qnum Qden]. lia.
+              ** unfold Qle. cbn [Qnum Qden]. lia.
+              ** unfold Qle. cbn [Qnum Qden]. lia.
+        -- apply Qlt_le_weak. apply q_fact_pos.
+        -- apply Qle_refl.
+Qed.
+
+(* 幂的严格正性闭包（正底数）。 *)
+Lemma lw65_qpow_pos : forall (x : Q) (k : nat), Qlt 0 x -> Qlt 0 (q_pow x k).
+Proof.
+  intros x k Hx. induction k as [|k IHk].
+  - change (q_pow x 0) with 1%Q. compute. reflexivity.
+  - rewrite q_pow_succ. apply Qmult_lt_0_compat; assumption.
+Qed.
+
+(* 积的幂分裂。 *)
+Lemma lw65_qpow_mul : forall (u v : Q) (k : nat),
+  q_pow (u * v) k == (q_pow u k * q_pow v k)%Q.
+Proof.
+  intros u v k. induction k as [|k IHk].
+  - reflexivity.
+  - rewrite q_pow_succ, (q_pow_succ u k), (q_pow_succ v k), IHk. ring.
+Qed.
+
+(* 幂的底 1 消去。 *)
+Lemma lw65_qpow_one : forall k : nat, q_pow (1 # 1)%Q k == (1 # 1)%Q.
+Proof.
+  intros k. induction k as [|k IHk].
+  - reflexivity.
+  - rewrite (q_pow_succ (1 # 1)%Q k), IHk. apply Qmult_1_l.
+Qed.
+
+(* 幂的倒数配消：x^k * (1/x)^k = 1（x 非零）。 *)
+Lemma lw65_qpow_inv_pair : forall (x : Q) (k : nat),
+  (~ x == 0)%Q -> q_pow x k * q_pow (/ x) k == 1%Q.
+Proof.
+  intros x k Hx0. induction k as [|k IHk].
+  - reflexivity.
+  - rewrite (q_pow_succ x k), (q_pow_succ (/ x) k).
+    rewrite <- (Qmult_assoc x (q_pow x k) (/ x * q_pow (/ x) k)).
+    rewrite (Qmult_comm (q_pow x k) (/ x * q_pow (/ x) k)).
+    rewrite <- (Qmult_assoc (/ x) (q_pow (/ x) k) (q_pow x k)).
+    rewrite (Qmult_assoc x (/ x) (q_pow (/ x) k * q_pow x k)).
+    rewrite (Qmult_inv_r x Hx0), Qmult_1_l.
+    rewrite (Qmult_comm (q_pow (/ x) k) (q_pow x k)).
+    exact IHk.
+Qed.
+
+(* 正分母下"除变乘"的序引入器：a/b ≤ c 当且仅当链经 a ≤ c*b。 *)
+Lemma lw65_qdiv_le_prod : forall a b c : Q,
+  Qlt 0 b -> Qle a (c * b) -> Qle (a / b) c.
+Proof.
+  intros a b c Hb Hle. unfold Qdiv.
+  assert (Hz : (~ b == 0)%Q)
+    by (intro Hc; apply (Qlt_not_eq 0 b Hb); symmetry; exact Hc).
+  apply (Qle_trans _ ((c * b) * / b)%Q).
+  - apply Qmult_le_compat_r.
+    + exact Hle.
+    + apply Qlt_le_weak. apply Qinv_lt_0_compat. exact Hb.
+  - rewrite <- (Qmult_assoc c b (/ b)), (Qmult_inv_r b Hz), Qmult_1_r.
+    apply Qle_refl.
+Qed.
+
+(* 逐项占优：B^(2n+6)/(2n+6)! 不超过 (B^4/24)*(B^2/30)^(n+1)。 *)
+Lemma lw62_item_dom : forall (B : Q) (n : nat),
+  Qle (q_pow B (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))
+       / q_fact (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))%nat)%Q
+      (B * B * B * B * (1 # 24)
+       * q_pow (B * B * (1 # 30)) (Datatypes.S n))%Q.
+Proof.
+  intros B n.
+  assert (Hgeo := lw62_georatio (Datatypes.S n)).
+  assert (Hid : (2 * Datatypes.S n + 4)%nat
+              = (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))%nat) by lia.
+  rewrite Hid in Hgeo.
+  assert (Ha : q_pow B (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))%nat
+             == (B * B * B * B * q_pow B (2 * Datatypes.S n))%Q).
+  { assert (H4 : q_pow B (2 * 2)%nat == (B * B * B * B)%Q).
+    { replace (2 * 2)%nat with 4%nat by lia.
+      cbn [q_pow]. ring. }
+    replace (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))%nat
+      with (2 * 2 + 2 * Datatypes.S n)%nat by lia.
+    rewrite lw62_qpow_add, H4. reflexivity. }
+  assert (HW : q_pow B (2 * Datatypes.S n)%nat
+             == (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n))%Q).
+  { replace (2 * Datatypes.S n)%nat
+      with (Datatypes.S n + Datatypes.S n)%nat by lia.
+    apply lw62_qpow_add. }
+  assert (Hpsplit : q_pow (B * B * (1 # 30))%Q (Datatypes.S n)
+                 == (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n)
+                     * q_pow (1 # 30)%Q (Datatypes.S n))%Q).
+  { rewrite lw65_qpow_mul, (lw65_qpow_mul B B (Datatypes.S n)). reflexivity. }
+  assert (Hne30 : (~ (30 # 1) == 0)%Q).
+  { intro Hc. apply (Qlt_not_eq 0 (30 # 1) lw62_q30_pos). symmetry. exact Hc. }
+  assert (Hp130 : q_pow (30 # 1)%Q (Datatypes.S n) * q_pow (1 # 30)%Q (Datatypes.S n)
+                == 1%Q).
+  { change (q_pow (1 # 30)%Q (Datatypes.S n))
+      with (q_pow (/ (30 # 1))%Q (Datatypes.S n)).
+    exact (lw65_qpow_inv_pair (30 # 1) (Datatypes.S n) Hne30). }
+  assert (H24 : ((1 # 24) * (24 # 1))%Q == 1%Q) by reflexivity.
+  assert (Hpair : ((24 # 1) * q_pow (30 # 1)%Q (Datatypes.S n)
+                   * ((1 # 24) * q_pow (1 # 30)%Q (Datatypes.S n)))%Q == 1%Q).
+  { rewrite <- (Qmult_assoc (24 # 1) (q_pow (30 # 1) (Datatypes.S n))
+                  ((1 # 24) * q_pow (1 # 30) (Datatypes.S n))).
+    rewrite (Qmult_assoc (q_pow (30 # 1) (Datatypes.S n)) (1 # 24)
+                         (q_pow (1 # 30) (Datatypes.S n))).
+    rewrite (Qmult_comm (q_pow (30 # 1) (Datatypes.S n)) (1 # 24)).
+    rewrite <- (Qmult_assoc (1 # 24) (q_pow (30 # 1) (Datatypes.S n))
+                            (q_pow (1 # 30) (Datatypes.S n))).
+    rewrite (Qmult_assoc (24 # 1) (1 # 24)
+                         (q_pow (30 # 1) (Datatypes.S n)
+                          * q_pow (1 # 30) (Datatypes.S n))).
+    rewrite H24, Hp130. apply Qmult_1_l. }
+  assert (Htgt
+    : (B * B * B * B * (1 # 24)
+       * (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n)
+          * q_pow (1 # 30) (Datatypes.S n)))
+      * q_fact (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))
+      == (B * B * B * B)
+         * ((1 # 24) * q_pow (1 # 30) (Datatypes.S n)
+            * q_fact (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))
+            * (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n)))).
+  { ring. }
+  rewrite Ha, Hpsplit, HW.
+  apply lw65_qdiv_le_prod.
+  - apply q_fact_pos.
+  - rewrite Htgt.
+    apply (lw95_mul_le_compat (B * B * B * B) (B * B * B * B)
+             (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n))
+             ((1 # 24) * q_pow (1 # 30) (Datatypes.S n)
+              * q_fact (2 * Datatypes.S (Datatypes.S (Datatypes.S n)))
+              * (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n)))).
+    + apply (Qle_trans _ ((B * B) * (B * B))%Q).
+      * apply lw95_mul0; [apply lw62_sq_nonneg | apply lw62_sq_nonneg].
+      * apply qeq_imp_qle. ring.
+    + apply Qle_refl.
+    + apply lw62_sq_nonneg.
+    + apply (Qle_trans _ ((1 # 1)
+                * (q_pow B (Datatypes.S n) * q_pow B (Datatypes.S n)))%Q).
+      * rewrite Qmult_1_l. apply Qle_refl.
+      * apply Qmult_le_compat_r.
+        -- apply (Qle_trans _ (((24 # 1) * q_pow (30 # 1) (Datatypes.S n))
+                               * ((1 # 24) * q_pow (1 # 30) (Datatypes.S n)))%Q).
+           ++ rewrite Hpair. apply Qle_refl.
+           ++ rewrite (Qmult_comm ((1 # 24) * q_pow (1 # 30) (Datatypes.S n)
+                                  ) (q_fact (2 * Datatypes.S (Datatypes.S (Datatypes.S n))))).
+              apply Qmult_le_compat_r.
+              ** exact (QleT'_to_Qle _ _ Hgeo).
+              ** apply lw95_mul0.
+                 --- unfold Qle. cbn [Qnum Qden]. lia.
+                 --- apply lw95_qpow_nonneg. unfold Qle. cbn [Qnum Qden]. lia.
+        -- apply lw62_sq_nonneg.
+Qed.
+
+(* 一步展开（定义性），保语句面语法形稳定。 *)
+Lemma lw62_abssum_S : forall (B : Q) (n : nat),
+  leibsep_abssum B (Datatypes.S n)
+  == leibsep_abssum B n
+     + q_pow B (2 * Datatypes.S n) / q_fact (2 * Datatypes.S n)%nat.
+Proof. intros B n. reflexivity. Qed.
+
+(* 和的非负性（偶幂逐项非负）。 *)
+Lemma lw62_abssum_nonneg : forall (B : Q) (n : nat),
+  Qle 0 (leibsep_abssum B n).
+Proof.
+  intros B n. induction n as [|n IHn].
+  - compute. intro Hc. discriminate Hc.
+  - rewrite (lw62_abssum_S B n).
+    pose proof (QleT'_to_Qle _ _ (lw62_qdiv_nonneg
+                    (q_pow B (2 * Datatypes.S n)) (q_fact (2 * Datatypes.S n))
+                    (lw62_qpow_even_nonneg B (Datatypes.S n))
+                    (q_fact_pos (2 * Datatypes.S n)))) as Hterm.
+    lra.
+Qed.
+
+(* 相邻单调：和增加的项非负。 *)
+Lemma lw62_abssum_step_mono : forall (B : Q) (k : nat),
+  QleT' (leibsep_abssum B k) (leibsep_abssum B (Datatypes.S k)).
+Proof.
+  intros B k. apply Qle_to_QleT'.
+  rewrite (lw62_abssum_S B k).
+  pose proof (QleT'_to_Qle _ _ (lw62_qdiv_nonneg
+                  (q_pow B (2 * Datatypes.S k)) (q_fact (2 * Datatypes.S k))
+                  (lw62_qpow_even_nonneg B (Datatypes.S k))
+                  (q_fact_pos (2 * Datatypes.S k)))) as Hterm.
+  lra.
+Qed.
+
+(* 指标单调：起点小则和不减。 *)
+Lemma lw62_abssum_mono : forall (B : Q) (n m : nat),
+  (n <= m)%nat -> QleT' (leibsep_abssum B n) (leibsep_abssum B m).
+Proof.
+  intros B n m Hle. induction m as [|m IHm].
+  - assert (Hn : n = 0%nat) by lia. subst n. apply qleT'_refl.
+  - destruct (Nat.eq_dec n (Datatypes.S m)) as [Heq|Hne].
+    + rewrite Heq. apply qleT'_refl.
+    + assert (Hnm : (n <= m)%nat) by lia.
+      apply (qleT'_trans _ (leibsep_abssum B m)).
+      * exact (IHm Hnm).
+      * apply lw62_abssum_step_mono.
+Qed.
+
+(* 平移归纳：abssum B (n+2) 不超过 1 + B^2/2 + (B^4/24)·几何部分和。 *)
+Lemma lw62_abssum_shift : forall (B : Q) (n : nat),
+  QleT' (leibsep_abssum B (Datatypes.S (Datatypes.S n)))
+        ((1 + B * B * (1 # 2)
+          + B * B * B * B * (1 # 24)
+            * lw62_rsum (B * B * (1 # 30)) n)%Q).
+Proof.
+  intros B n. induction n as [|n IHn].
+  - assert (HL : leibsep_abssum B (Datatypes.S (Datatypes.S 0))%nat
+               == (1 + B * B * (1 # 2) + B * B * B * B * (1 # 24))%Q).
+    { cbn [leibsep_abssum q_pow q_fact]. unfold Qdiv. cbn. ring. }
+    apply Qle_to_QleT'.
+    rewrite HL.
+    change (lw62_rsum (B * B * (1 # 30)) 0) with 1%Q.
+    lra.
+  - apply Qle_to_QleT'.
+    rewrite (lw62_abssum_S B (Datatypes.S (Datatypes.S n))).
+    apply (Qle_trans
+             _ ((1 + B * B * (1 # 2)
+                 + B * B * B * B * (1 # 24)
+                   * lw62_rsum (B * B * (1 # 30)) n
+                 + (B * B * B * B * (1 # 24)
+                    * q_pow (B * B * (1 # 30)) (Datatypes.S n)))%Q)).
+    + apply Qplus_le_compat.
+      * exact (QleT'_to_Qle _ _ IHn).
+      * exact (lw62_item_dom B n).
+    + apply qeq_imp_qle. cbn [lw62_rsum]. ring.
+Qed.
+
+(* ---------- 常数包络（几何占优出口件） ---------- *)
+
+Lemma lw62_abssum_env : forall (B : Q) (n : nat),
+  QleT' (Qabs B) ((11 # 3)%Q) ->
+  QleT' (leibsep_abssum B n) ((1 + (121 # 18) + (73205 # 5364))%Q).
+Proof.
+  intros B n HB.
+  apply (qleT'_trans _ (leibsep_abssum B (Datatypes.S (Datatypes.S n)))).
+  - apply lw62_abssum_mono. lia.
+  - apply (qleT'_trans _ ((1 + B * B * (1 # 2)
+            + B * B * B * B * (1 # 24)
+              * lw62_rsum (B * B * (1 # 30)) n)%Q)).
+    + apply lw62_abssum_shift.
+    + apply Qle_to_QleT'.
+      assert (HB2 : Qle (B * B) ((121 # 9))%Q).
+      { apply (Qle_trans _ (Qabs B * Qabs B)%Q).
+        - apply qeq_le. rewrite <- Qabs_Qmult.
+          symmetry. apply Qabs_pos. apply lw62_sq_nonneg.
+        - apply (lw95_mul_le_compat (Qabs B) (11 # 3) (Qabs B) (11 # 3));
+            [apply Qabs_nonneg | exact (QleT'_to_Qle _ _ HB)
+            | apply Qabs_nonneg | exact (QleT'_to_Qle _ _ HB)]. }
+      assert (HB4 : Qle (B * B * B * B) ((14641 # 81))%Q).
+      { apply (Qle_trans _ ((121 # 9) * (121 # 9))%Q).
+        - apply (Qle_trans _ ((B * B) * (B * B))%Q).
+          + apply qeq_imp_qle. ring.
+          + apply (lw95_mul_le_compat (B * B) (121 # 9) (B * B) (121 # 9));
+              [apply lw62_sq_nonneg | exact HB2 | apply lw62_sq_nonneg | exact HB2].
+        - apply qeq_le. ring. }
+      assert (Hr149 : Qle (lw62_rsum (B * B * (1 # 30)) n) ((270 # 149))%Q).
+      { assert (Hte : Qle (lw62_rsum (B * B * (1 # 30)) n
+                           * (1 - B * B * (1 # 30)))%Q 1%Q).
+        { rewrite (lw62_rsum_tele (B * B * (1 # 30)) n).
+          assert (Hp : Qle 0 (q_pow (B * B * (1 # 30)) (Datatypes.S n))).
+          { apply lw95_qpow_nonneg. apply lw95_mul0;
+              [apply lw62_sq_nonneg | apply Qlt_le_weak; apply lw62_qinv30_pos]. }
+          lra. }
+        assert (H1m : Qle ((149 # 270)) (1 - B * B * (1 # 30))%Q).
+        { assert (Hb30 : Qle (B * B * (1 # 30)) ((121 # 270))%Q).
+          { apply (Qle_trans _ ((121 # 9) * (1 # 30))%Q).
+            - apply (lw95_mul_le_compat (B * B) (121 # 9) (1 # 30) (1 # 30));
+                [apply lw62_sq_nonneg | exact HB2
+                | apply Qlt_le_weak; apply lw62_qinv30_pos | apply Qle_refl].
+            - apply qeq_le. ring. }
+          lra. }
+        assert (Hrs : Qle (lw62_rsum (B * B * (1 # 30)) n * (149 # 270))%Q 1%Q).
+        { apply (Qle_trans _ (lw62_rsum (B * B * (1 # 30)) n
+                                * (1 - B * B * (1 # 30)))%Q).
+          - rewrite (Qmult_comm (lw62_rsum (B * B * (1 # 30)) n) (149 # 270)),
+                    (Qmult_comm (lw62_rsum (B * B * (1 # 30)) n)
+                                (1 - B * B * (1 # 30))).
+            apply Qmult_le_compat_r.
+            + exact H1m.
+            + apply lw62_rsum_nonneg. apply lw95_mul0;
+                [apply lw62_sq_nonneg | apply Qlt_le_weak; apply lw62_qinv30_pos].
+          - exact Hte. }
+        lra. }
+      assert (H2 : Qle (B * B * (1 # 2)) ((121 # 18))%Q).
+      { apply (Qle_trans _ ((121 # 9) * (1 # 2))%Q).
+        - apply (lw95_mul_le_compat (B * B) (121 # 9) (1 # 2) (1 # 2));
+            [apply lw62_sq_nonneg | exact HB2 | apply Qlt_le_weak; compute; reflexivity
+            | apply Qle_refl].
+        - apply qeq_le. ring. }
+      assert (H4r : Qle (B * B * B * B * (1 # 24)
+                         * lw62_rsum (B * B * (1 # 30)) n) ((73205 # 5364))%Q).
+      { apply (Qle_trans _ ((14641 # 81) * (1 # 24) * (270 # 149))%Q).
+        - apply (lw95_mul_le_compat
+                   (B * B * B * B * (1 # 24))
+                   ((14641 # 81) * (1 # 24))
+                   (lw62_rsum (B * B * (1 # 30)) n) (270 # 149)).
+          + apply lw95_mul0.
+            * apply (Qle_trans _ ((B * B) * (B * B))%Q).
+              -- apply lw95_mul0; [apply lw62_sq_nonneg | apply lw62_sq_nonneg].
+              -- apply qeq_imp_qle. ring.
+            * apply Qlt_le_weak; compute; reflexivity.
+          + apply (lw95_mul_le_compat (B * B * B * B) (14641 # 81) (1 # 24) (1 # 24)).
+            * apply (Qle_trans _ ((B * B) * (B * B))%Q).
+              -- apply lw62_sq_nonneg.
+              -- apply qeq_imp_qle. ring.
+            * exact HB4.
+            * apply Qlt_le_weak; compute; reflexivity.
+            * apply Qle_refl.
+          + apply lw62_rsum_nonneg. apply lw95_mul0;
+              [apply lw62_sq_nonneg | apply Qlt_le_weak; apply lw62_qinv30_pos].
+          + exact Hr149.
+        - apply qeq_le. ring. }
+      apply Qplus_le_compat.
+      * apply Qplus_le_compat.
+        -- apply Qle_refl.
+        -- exact H2.
+      * exact H4r.
+Qed.
+
+(* ---------- 余弦面 ---------- *)
+
+(* 逐项支配：B 的奇幂项不超过 |B| 的同幂项（符号自由）。 *)
+Lemma lw62_cos_term_dom : forall (B : Q) (m : nat),
+  Qle (q_pow B (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m))%nat)%Q
+      (q_pow (Qabs B) (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m))%nat)%Q.
+Proof.
+  intros B m. unfold Qdiv.
+  apply Qmult_le_compat_r.
+  - apply QleT'_to_Qle.
+    apply (qleT'_trans _ (Qabs (q_pow B (Datatypes.S (2 * m))))).
+    + apply leibsep_abs_ge_self.
+    + apply qeq_leT'. apply lw62_qpow_abs.
+  - apply Qlt_le_weak. apply Qinv_lt_0_compat. apply q_fact_pos.
+Qed.
+
+(* 余弦和的符号自由支配：cos 和 B n 不超过 cos 和 |B| n。 *)
+Lemma lw62_abssum_cos_dom : forall (B : Q) (n : nat),
+  Qle (leibsep_abssum_cos B n) (leibsep_abssum_cos (Qabs B) n).
+Proof.
+  intros B n. induction n as [|n IHn].
+  - simpl leibsep_abssum_cos. apply Qle_refl.
+  - simpl leibsep_abssum_cos.
+    apply Qplus_le_compat.
+    + exact IHn.
+    + apply lw62_cos_term_dom.
+Qed.
+
+(* 余弦面逐项支配：abssum_cos B n 不超过 B*abssum B n（B 非负）。
+   同位配对以加强命题（当前和＋下一奇幂项 ≤ B*abssum）作归纳桥梁。 *)
+Lemma lw62_abssum_cos_le : forall (B : Q) (n : nat),
+  Qle 0 B -> Qle (leibsep_abssum_cos B n) (B * leibsep_abssum B n)%Q.
+Proof.
+  intros B n HB.
+  assert (Haux : forall m : nat,
+    Qle (leibsep_abssum_cos B m
+         + q_pow B (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m))%nat)%Q
+        (B * leibsep_abssum B m)%Q).
+  { intro m. induction m as [|m IHm].
+    - apply qeq_imp_qle. cbn [leibsep_abssum_cos leibsep_abssum q_pow q_fact].
+      unfold Qdiv. cbn. ring.
+    - simpl leibsep_abssum_cos.
+      apply (Qle_trans _ ((B * leibsep_abssum B m
+                           + q_pow B (Datatypes.S (2 * Datatypes.S m))
+                             / q_fact (2 * Datatypes.S m)%nat))%Q).
+      + apply Qplus_le_compat.
+        * exact IHm.
+        * apply (lw62_qdiv_le (q_pow B (Datatypes.S (2 * Datatypes.S m)))
+                              (q_fact (Datatypes.S (2 * Datatypes.S m)))
+                              (q_pow B (Datatypes.S (2 * Datatypes.S m)))
+                              (q_fact (2 * Datatypes.S m))).
+          -- apply q_fact_pos.
+          -- apply q_fact_pos.
+          -- rewrite (Qmult_comm (q_pow B (Datatypes.S (2 * Datatypes.S m)))
+                                 (q_fact (2 * Datatypes.S m))),
+                     (Qmult_comm (q_pow B (Datatypes.S (2 * Datatypes.S m)))
+                                 (q_fact (Datatypes.S (2 * Datatypes.S m)))).
+             apply Qmult_le_compat_r.
+             ++ apply lw95_qfact_le. lia.
+             ++ apply lw95_qpow_nonneg. exact HB.
+      + apply qeq_imp_qle. rewrite (lw62_abssum_S B m).
+        rewrite q_pow_succ. unfold Qdiv. ring. }
+  apply (Qle_trans _ (leibsep_abssum_cos B n
+                      + q_pow B (Datatypes.S (2 * n)) / q_fact (Datatypes.S (2 * n))%nat)%Q).
+  - apply (Qle_trans _ (leibsep_abssum_cos B n + 0)%Q).
+    + apply qeq_le. rewrite Qplus_0_r. reflexivity.
+    + apply Qplus_le_compat; [apply Qle_refl |].
+      apply (QleT'_to_Qle 0 (q_pow B (Datatypes.S (2 * n))
+                             / q_fact (Datatypes.S (2 * n))%nat)%Q).
+      apply lw62_qdiv_nonneg.
+      * apply Qle_to_QleT'. apply lw95_qpow_nonneg. exact HB.
+      * apply q_fact_pos.
+  - apply Haux.
+Qed.
+
+Lemma lw62_abssum_cos_env : forall (B : Q) (n : nat),
+  QleT' (Qabs B) ((11 # 3)%Q) ->
+  QleT' (leibsep_abssum_cos B n)
+        ((11 # 3) * (1 + (121 # 18) + (73205 # 5364)))%Q.
+Proof.
+  intros B n HB.
+  apply (qleT'_trans _ (leibsep_abssum_cos (Qabs B) n)).
+  - apply Qle_to_QleT'. apply lw62_abssum_cos_dom.
+  - apply Qle_to_QleT'.
+    apply (Qle_trans _ (Qabs B * leibsep_abssum (Qabs B) n)%Q).
+    + apply lw62_abssum_cos_le. apply Qabs_nonneg.
+    + apply (lw95_mul_le_compat (Qabs B) (11 # 3)
+               (leibsep_abssum (Qabs B) n)
+               (1 + (121 # 18) + (73205 # 5364))).
+      * apply Qabs_nonneg.
+      * exact (QleT'_to_Qle _ _ HB).
+      * apply lw62_abssum_nonneg.
+      * assert (Henv : QleT' (leibsep_abssum (Qabs B) n)
+                         (1 + (121 # 18) + (73205 # 5364))).
+        { apply (lw62_abssum_env (Qabs B) n).
+          apply (qleT'_trans _ (Qabs B)).
+          - apply qeq_leT'. apply Qabs_pos, Qabs_nonneg.
+          - exact HB. }
+        exact (QleT'_to_Qle _ _ Henv).
+Qed.
+
+
+Lemma lw1131_abssum_cos_nonneg : forall (B : Q) (n : nat),
+  Qle 0 B -> Qle 0 (leibsep_abssum_cos B n).
+Proof.
+  intros B n HB. induction n as [| n IHn].
+  - simpl. apply Qle_refl.
+  - simpl leibsep_abssum_cos.
+    apply (Qle_trans 0 (leibsep_abssum_cos B n)
+             (leibsep_abssum_cos B n
+              + B * q_pow B (n + (n + 0))
+                / ((Z.pos (PosDef.Pos.of_succ_nat (n + (n + 0))) # 1)
+                   * q_fact (n + (n + 0))))%Q); [exact IHn |].
+    apply (Qle_trans (leibsep_abssum_cos B n)
+             (leibsep_abssum_cos B n + 0)%Q
+             (leibsep_abssum_cos B n
+              + B * q_pow B (n + (n + 0))
+                / ((Z.pos (PosDef.Pos.of_succ_nat (n + (n + 0))) # 1)
+                   * q_fact (n + (n + 0))))%Q).
+    * rewrite Qplus_0_r. apply Qle_refl.
+    * apply (Qplus_le_compat (leibsep_abssum_cos B n) (leibsep_abssum_cos B n) 0
+               (B * q_pow B (n + (n + 0))
+                / ((Z.pos (PosDef.Pos.of_succ_nat (n + (n + 0))) # 1)
+                   * q_fact (n + (n + 0))))%Q).
+      -- apply Qle_refl.
+      -- apply QleT'_to_Qle.
+         apply (lw62_qdiv_nonneg _ ((Z.pos (PosDef.Pos.of_succ_nat (n + (n + 0))) # 1)
+                                    * q_fact (n + (n + 0)))%Q).
+         { apply Qle_to_QleT'. apply Qmult_le_0_compat.
+           - exact HB.
+           - apply lw95_qpow_nonneg. exact HB. }
+         { apply Qmult_lt_0_compat.
+           - pose proof (Pos2Z.is_pos (PosDef.Pos.of_succ_nat (n + (n + 0)))) as Hpp.
+             unfold Qlt. cbn [Qnum Qden]. lia.
+           - apply q_fact_pos. }
+Qed.
+
+Lemma sin_slot_eps0 : forall (eps0 : Q) (N2 Nt : nat) (dtail : Q),
+  QltT 0 eps0 -> QltT 0 dtail ->
+  (forall m : nat, (N2 <= m)%nat ->
+     QleT' (Qabs ((projT1 real_pi_geom m - q)%Q)) eps0) ->
+  QleT' (Qabs q + eps0) ((11 # 3)%Q) ->
+  (forall j : nat, (Nat.max N2 (Nat.max Nt 4) <= j)%nat ->
+     QleT' (2 * q_pow tq 2)
+           (lw0_q_of_nat (Datatypes.S (2 * j))
+            * lw0_q_of_nat (Datatypes.S (Datatypes.S (2 * j))))%Q) ->
+  (forall m : nat, (Nt <= m)%nat -> QleT' (tsl m) dtail) ->
+  sigT (fun M2 : nat => forall m : nat, (M2 <= m)%nat ->
+    QleT' (Qabs (qpoly_eval (lw0_sin_qp m) q))
+          ((eps0 * S973 + dtail + dtail)%Q)).
+Proof.
+  intros eps0 N2 Nt dtail Heps0 Hdt Hband HB113 HR Htail.
+  destruct (pi_geom_sin_pi_zero dtail Hdt) as [N1 HN1].
+  exists (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1).
+  assert (HmM : (Nat.max N2 (Nat.max Nt 4)
+                 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat) by apply Nat.le_max_l.
+  assert (HmN1 : (N1 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat) by apply Nat.le_max_r.
+  assert (HmN2 : (N2 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat).
+  { apply (Nat.le_trans N2 (Nat.max N2 (Nat.max Nt 4))
+             (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1));
+      [apply Nat.le_max_l | exact HmM]. }
+  assert (HmNt : (Nt <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat).
+  { apply (Nat.le_trans Nt (Nat.max Nt 4)
+             (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)).
+    - apply Nat.le_max_l.
+    - apply (Nat.le_trans (Nat.max Nt 4)
+              (Nat.max N2 (Nat.max Nt 4))
+              (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)).
+      + apply Nat.le_max_r.
+      + exact HmM. }
+  pose proof (Hband (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) HmN2) as Hbx2.
+  intros m Hm.
+  assert (HB0 : QleT' 0 (Qabs q + eps0)%Q).
+  { apply (qleT'_trans 0%Q ((0 + 0)%Q) ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. ring.
+    - apply qleT'_plus_compat.
+      + apply Qle_to_QleT'. apply Qabs_nonneg.
+      + apply lw0_QltT_le. exact Heps0. }
+  assert (Hpos2 : Qlt 0 (Qabs q + eps0)%Q).
+  { apply (Qlt_le_trans 0 eps0 (Qabs q + eps0)%Q).
+    - exact (QltT_to_Qlt 0 eps0 Heps0).
+    - apply (Qle_trans eps0 ((0 + eps0)%Q) (Qabs q + eps0)%Q).
+      + rewrite Qplus_0_l. apply Qle_refl.
+      + apply Qplus_le_compat; [apply Qabs_nonneg | apply Qle_refl]. }
+  assert (Habsabs : Qabs (Qabs q + eps0) == (Qabs q + eps0)%Q)
+    by (apply Qabs_pos; apply Qlt_le_weak; exact Hpos2).
+  assert (HBq : QleT' (Qabs q) (Qabs q + eps0)%Q).
+  { apply (qleT'_trans (Qabs q) ((Qabs q + 0)%Q) ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. ring.
+    - apply qleT'_plus_compat.
+      + apply qleT'_refl.
+      + apply lw0_QltT_le. exact Heps0. }
+  assert (HBx : QleT' (Qabs (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                      (Qabs q + eps0)%Q).
+  { apply (qleT'_trans (Qabs (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                       (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q + q)%Q))
+                       ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. apply Qabs_wd. ring.
+    - apply (qleT'_trans
+              (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q + q)%Q))
+              ((Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q)
+                + Qabs q)%Q)
+              ((Qabs q + eps0)%Q)).
+      + apply Qle_to_QleT'. apply Qabs_triangle.
+      + apply (qleT'_trans
+                ((Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q)
+                  + Qabs q)%Q)
+                ((eps0 + Qabs q)%Q)
+                ((Qabs q + eps0)%Q)).
+        * apply qleT'_plus_compat; [exact Hbx2 | apply qleT'_refl].
+        * apply qeq_leT'. ring. }
+  assert (Hr2 : forall j : nat,
+            (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 <= j)%nat ->
+            QleT' (2 * q_pow tq 2)
+                  (lw0_q_of_nat (Datatypes.S (2 * j))
+                   * lw0_q_of_nat (Datatypes.S (Datatypes.S (2 * j))))%Q).
+  { intros j Hj. apply HR. exact (Nat.le_trans _ _ _ HmM Hj). }
+  assert (Hex : sigT (fun D : nat =>
+              m = (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 + D)%nat)).
+  { exists (m - Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat.
+    rewrite Nat.add_comm. symmetry. apply Nat.sub_add. exact Hm. }
+  destruct Hex as [D HD]. subst m.
+  apply (qleT'_trans
+          (Qabs (qpoly_eval (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 + D)) q))
+          (Qabs (qpoly_eval (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)) q)
+           + 2 * (q_pow tq (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                  / q_fact (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+          ((eps0 * S973 + dtail + dtail)%Q)).
+  - exact (leibsep_sin_qp_tail_stable q (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) D Hr2).
+  - apply (qleT'_trans
+            (Qabs (qpoly_eval (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)) q)
+             + 2 * (q_pow tq (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                    / q_fact (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+            (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+             * leibsep_abssum (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+             + dtail
+             + 2 * (q_pow tq (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                    / q_fact (Datatypes.S (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+            ((eps0 * S973 + dtail + dtail)%Q)).
+    + apply qleT'_plus_compat.
+      * apply (qleT'_trans
+                (Qabs (qpoly_eval (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)) q))
+                (Qabs ((sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                        - sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                          (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+                 + Qabs (sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                           (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))))
+                ((Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+                 * leibsep_abssum (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                 + dtail)%Q)).
+             ** apply (qleT'_trans
+                       (Qabs (qpoly_eval (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)) q))
+                       (Qabs ((sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                               - sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                              + sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+                       ((Qabs ((sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                               - sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+                         + Qabs (sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                   (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))))%Q)).
+                -- apply qeq_leT'.
+                   apply Qabs_wd.
+                   rewrite (lw0_sin_qp_eval (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q). ring.
+                -- apply Qle_to_QleT'.
+                   exact (Qabs_triangle
+                           (sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                            - sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                              (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                           (sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                              (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))).
+             ** apply Qle_to_QleT'.
+                apply Qplus_le_compat.
+                -- exact (QleT'_to_Qle _ _
+                            (leibsep_sin_partial_lipschitz q
+                               (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                               (Qabs q + eps0)%Q (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                               HB0 HBq HBx)).
+                -- apply Qlt_le_weak.
+                   apply (leibsep_qlt_wd2
+                           (Qabs (projT1 (cauchy_real_sin real_pi_geom)
+                                    (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                  - projT1 real_zero (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                           dtail
+                           (Qabs (sin_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                    (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))))
+                           dtail).
+                   ++ apply Qabs_wd. rewrite real_sin_proj.
+                      cbn [projT1 real_zero]. ring.
+                   ++ apply Qeq_refl.
+                   ++ apply QltT_to_Qlt.
+                      exact (HN1 (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (NatLe_lift _ _ HmN1)).
+      * apply qleT'_refl.
+    + apply qleT'_plus_compat.
+      * apply (qleT'_trans
+                ((Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+                  * leibsep_abssum (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                  + dtail)%Q)
+                (eps0 * S973 + dtail)%Q).
+        -- apply qleT'_plus_compat.
+           ++ apply Qle_to_QleT'.
+              apply (lw95_mul_le_compat
+                       (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q))
+                       eps0
+                       (leibsep_abssum (Qabs q + eps0)
+                          (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                       S973).
+              ** apply Qabs_nonneg.
+              ** apply QleT'_to_Qle.
+                 apply (qleT'_trans
+                         (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q))
+                         (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q))
+                         eps0).
+                 *** apply qeq_leT'.
+                     rewrite <- (Qabs_opp (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q).
+                     apply Qabs_wd. ring.
+                 *** exact Hbx2.
+              ** apply lw62_abssum_nonneg.
+              ** apply QleT'_to_Qle. apply lw62_abssum_env.
+                 apply (qleT'_trans (Qabs (Qabs q + eps0)) (Qabs q + eps0) ((11 # 3)%Q)).
+                 *** apply qeq_leT'. exact Habsabs.
+                 *** exact HB113.
+           ++ apply qleT'_refl.
+        -- apply qleT'_refl.
+      * apply (Htail (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) HmNt).
+Qed.
+
+Lemma cos_slot_eps0 : forall (eps0 : Q) (N2 Nt : nat) (dtail : Q),
+  QltT 0 eps0 -> QltT 0 dtail ->
+  (forall m : nat, (N2 <= m)%nat ->
+     QleT' (Qabs ((projT1 real_pi_geom m - q)%Q)) eps0) ->
+  QleT' (Qabs q + eps0) ((11 # 3)%Q) ->
+  (forall j : nat, (Nat.max N2 (Nat.max Nt 4) <= j)%nat ->
+     QleT' (2 * q_pow tq 2)
+           (lw0_q_of_nat (Datatypes.S (2 * j))
+            * lw0_q_of_nat (Datatypes.S (Datatypes.S (2 * j))))%Q) ->
+  (forall m : nat, (Nt <= m)%nat -> QleT' (tcl m) dtail) ->
+  sigT (fun M2 : nat => forall m : nat, (M2 <= m)%nat ->
+    QleT' (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp m)) q + (1 # 1)%Q))
+          ((eps0 * ((11 # 3)%Q * S973) + dtail + dtail)%Q)).
+Proof.
+  intros eps0 N2 Nt dtail Heps0 Hdt Hband HB113 HR Htail.
+  destruct (pi_geom_cos_pi_neg_one dtail Hdt) as [N1 HN1].
+  exists (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1).
+  assert (HmM : (Nat.max N2 (Nat.max Nt 4)
+                 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat) by apply Nat.le_max_l.
+  assert (HmN1 : (N1 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat) by apply Nat.le_max_r.
+  assert (HmN2 : (N2 <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat).
+  { apply (Nat.le_trans N2 (Nat.max N2 (Nat.max Nt 4))
+             (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1));
+      [apply Nat.le_max_l | exact HmM]. }
+  assert (HmNt : (Nt <= Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat).
+  { apply (Nat.le_trans Nt (Nat.max Nt 4)
+             (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)).
+    - apply Nat.le_max_l.
+    - apply (Nat.le_trans (Nat.max Nt 4)
+              (Nat.max N2 (Nat.max Nt 4))
+              (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)).
+      + apply Nat.le_max_r.
+      + exact HmM. }
+  pose proof (Hband (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) HmN2) as Hbx2.
+  intros m Hm.
+  assert (HB0 : QleT' 0 (Qabs q + eps0)%Q).
+  { apply (qleT'_trans 0%Q ((0 + 0)%Q) ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. ring.
+    - apply qleT'_plus_compat.
+      + apply Qle_to_QleT'. apply Qabs_nonneg.
+      + apply lw0_QltT_le. exact Heps0. }
+  assert (Hpos2 : Qlt 0 (Qabs q + eps0)%Q).
+  { apply (Qlt_le_trans 0 eps0 (Qabs q + eps0)%Q).
+    - exact (QltT_to_Qlt 0 eps0 Heps0).
+    - apply (Qle_trans eps0 ((0 + eps0)%Q) (Qabs q + eps0)%Q).
+      + rewrite Qplus_0_l. apply Qle_refl.
+      + apply Qplus_le_compat; [apply Qabs_nonneg | apply Qle_refl]. }
+  assert (Habsabs : Qabs (Qabs q + eps0) == (Qabs q + eps0)%Q)
+    by (apply Qabs_pos; apply Qlt_le_weak; exact Hpos2).
+  assert (HBq : QleT' (Qabs q) (Qabs q + eps0)%Q).
+  { apply (qleT'_trans (Qabs q) ((Qabs q + 0)%Q) ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. ring.
+    - apply qleT'_plus_compat.
+      + apply qleT'_refl.
+      + apply lw0_QltT_le. exact Heps0. }
+  assert (HBx : QleT' (Qabs (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                      (Qabs q + eps0)%Q).
+  { apply (qleT'_trans (Qabs (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                       (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q + q)%Q))
+                       ((Qabs q + eps0)%Q)).
+    - apply qeq_leT'. apply Qabs_wd. ring.
+    - apply (qleT'_trans
+              (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q + q)%Q))
+              ((Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q)
+                + Qabs q)%Q)
+              ((Qabs q + eps0)%Q)).
+      + apply Qle_to_QleT'. apply Qabs_triangle.
+      + apply (qleT'_trans
+                ((Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q)
+                  + Qabs q)%Q)
+                ((eps0 + Qabs q)%Q)
+                ((Qabs q + eps0)%Q)).
+        * apply qleT'_plus_compat; [exact Hbx2 | apply qleT'_refl].
+        * apply qeq_leT'. ring. }
+  assert (Hr2 : forall j : nat,
+            (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 <= j)%nat ->
+            QleT' (2 * q_pow tq 2)
+                  (lw0_q_of_nat (Datatypes.S (2 * j))
+                   * lw0_q_of_nat (Datatypes.S (Datatypes.S (2 * j))))%Q).
+  { intros j Hj. apply HR. exact (Nat.le_trans _ _ _ HmM Hj). }
+  assert (Hex : sigT (fun D : nat =>
+              m = (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 + D)%nat)).
+  { exists (m - Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)%nat.
+    rewrite Nat.add_comm. symmetry. apply Nat.sub_add. exact Hm. }
+  destruct Hex as [D HD]. subst m.
+  apply (qleT'_trans
+          (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1 + D))) q + (1 # 1)%Q))
+          (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))) q + (1 # 1)%Q)
+           + 2 * (q_pow tq (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                  / q_fact (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+          ((eps0 * ((11 # 3)%Q * S973) + dtail + dtail)%Q)).
+  - exact (leibsep_cos_qp_deriv_tail_stable q (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) D Hr2).
+  - apply (qleT'_trans
+            (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))) q + (1 # 1)%Q)
+             + 2 * (q_pow tq (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                    / q_fact (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+            (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+             * leibsep_abssum_cos (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+             + dtail
+             + 2 * (q_pow tq (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                    / q_fact (2 * Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+            ((eps0 * ((11 # 3)%Q * S973) + dtail + dtail)%Q)).
+    + apply qleT'_plus_compat.
+      * apply (qleT'_trans
+                (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))) q + (1 # 1)%Q))
+                (Qabs ((cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                        - cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                          (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+                 + Qabs (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                           (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                         + (1 # 1)%Q))
+                ((Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+                 * leibsep_abssum_cos (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                 + dtail)%Q)).
+             ** apply (qleT'_trans
+                       (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))) q + (1 # 1)%Q))
+                       (Qabs ((cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                               - cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                              + (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                   (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                                 + (1 # 1)%Q))%Q)
+                       ((Qabs ((cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                               - cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))%Q)
+                         + Qabs (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                   (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                                 + (1 # 1)%Q))%Q)).
+                -- apply qeq_leT'.
+                   apply Qabs_wd.
+                   rewrite (lw0_sin_qp_deriv_eval (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q). ring.
+                -- apply Qle_to_QleT'.
+                   exact (Qabs_triangle
+                           (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) q
+                            - cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                              (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                           (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                              (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                            + (1 # 1)%Q)).
+             ** apply Qle_to_QleT'.
+                apply Qplus_le_compat.
+                -- exact (QleT'_to_Qle _ _
+                            (leibsep_cos_partial_lipschitz q
+                               (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                               (Qabs q + eps0)%Q (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                               HB0 HBq HBx)).
+                -- apply Qlt_le_weak.
+                   apply (leibsep_qlt_wd2
+                           (Qabs (projT1 (cauchy_real_cos real_pi_geom)
+                                    (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                  - projT1 (real_const (-1)%Q) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)))
+                           dtail
+                           (Qabs (cos_partial (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                    (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                                  + (1 # 1)%Q))
+                           dtail).
+                   ++ apply Qabs_wd. rewrite real_cos_proj. rewrite real_const_proj. ring.
+                   ++ apply Qeq_refl.
+                   ++ apply QltT_to_Qlt.
+                      exact (HN1 (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                                 (NatLe_lift _ _ HmN1)).
+      * apply qleT'_refl.
+    + apply qleT'_plus_compat.
+      * apply (qleT'_trans
+                ((Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q)
+                  * leibsep_abssum_cos (Qabs q + eps0) (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1)
+                  + dtail)%Q)
+                (eps0 * ((11 # 3)%Q * S973) + dtail)%Q).
+        -- apply qleT'_plus_compat.
+           ++ apply Qle_to_QleT'.
+              apply (lw95_mul_le_compat
+                       (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q))
+                       eps0
+                       (leibsep_abssum_cos (Qabs q + eps0)
+                          (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))
+                       ((11 # 3)%Q * S973)).
+              ** apply Qabs_nonneg.
+              ** apply QleT'_to_Qle.
+                 apply (qleT'_trans
+                         (Qabs ((q - projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1))%Q))
+                         (Qabs ((projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q))
+                         eps0).
+                 *** apply qeq_leT'.
+                     rewrite <- (Qabs_opp (projT1 real_pi_geom (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) - q)%Q).
+                     apply Qabs_wd. ring.
+                 *** exact Hbx2.
+              ** apply lw1131_abssum_cos_nonneg.
+                 exact (QleT'_to_Qle _ _ HB0).
+              ** apply QleT'_to_Qle. apply lw62_abssum_cos_env.
+                 apply (qleT'_trans (Qabs (Qabs q + eps0)) (Qabs q + eps0) ((11 # 3)%Q)).
+                 *** apply qeq_leT'. exact Habsabs.
+                 *** exact HB113.
+           ++ apply qleT'_refl.
+        -- apply qleT'_refl.
+      * apply (Htail (Nat.max (Nat.max N2 (Nat.max Nt 4)) N1) HmNt).
+Qed.
+
+
+Lemma caps_scaled : forall (eps0 : Q) (N0 Nv : nat),
+  QltT 0 eps0 ->
+  QleT' eps0 ((1 # 3)%Q) ->
+  (forall n : nat, NatLe N0 n ->
+     QltT eps0 (projT1 (real_const (10 / 3)) n - projT1 real_pi_geom n)%Q) ->
+  (forall n : nat, (Nv <= n)%nat -> QltT (lw0m_e n) (eps0 * (1 # 4))%Q) ->
+  leibsep_gate_open q (Nat.max Nv 1) (eps0 * (1 # 8))%Q = false ->
+  sigT (fun s : Q => sigT (fun t : Q => sigT (fun M0 : nat =>
+    And (forall m : nat, (M0 <= m)%nat ->
+           QleT' (Qabs (qpoly_eval (lw0_sin_qp m) q)) s)
+        (And (forall m : nat, (M0 <= m)%nat ->
+               QleT' (Qabs (qpoly_eval (qpoly_deriv (lw0_sin_qp m)) q + (1 # 1)%Q)) t)
+        (And (QleT' 0 s)
+             (And (QleT' 0 t)
+                  (And (QleT' s (eps0 * (S973 + (1 # 4))%Q)%Q)
+                       (QleT' t (eps0 * ((11 # 3)%Q * S973 + (1 # 4))%Q)%Q)))))))).
+Proof.
+  intros eps0 N0 Nv Heps0 HE13 HN0 HNv Hgate.
+  assert (HNw1 : (1 <= Nat.max Nv 1)%nat) by lia.
+  assert (Hc8ltT : QltT 0 (eps0 * (1 # 8))%Q).
+  { apply Qlt_to_QltT.
+    apply (Qmult_lt_0_compat eps0 (1 # 8)%Q).
+    - apply QltT_to_Qlt. exact Heps0.
+    - compute. reflexivity. }
+  assert (Htq0 : QleT' 0 tq).
+  { apply Qle_to_QleT'. apply Qabs_nonneg. }
+  assert (Hc113 : QleT' (Qabs q) ((11 # 3)%Q)).
+  { apply (qleT'_trans (Qabs q) (Qabs q + eps0) ((11 # 3)%Q)).
+    - apply (qleT'_trans (Qabs q) (Qabs q + 0)%Q (Qabs q + eps0)%Q).
+      + apply (qeq_leT' (Qabs q) (Qabs q + 0)%Q). ring.
+      + apply qleT'_plus_compat; [apply qleT'_refl | apply lw0_QltT_le; exact Heps0].
+    - pose proof (leibsep_shore_q_le_ten_thirds q eps0 N0 Nv Heps0 HN0 HNv Hgate) as Hq103.
+      pose proof (leibsep_shore_q_pos q eps0 N0 Nv Heps0 HN0 HNv Hgate) as Hq.
+      assert (Hqa : (Qabs q)%Q == q).
+      { apply Qabs_pos. apply Qlt_le_weak. apply QltT_to_Qlt. exact Hq. }
+      assert (HB113 : QleT' (Qabs q + eps0) ((11 # 3)%Q)).
+      { apply (qleT'_trans (Qabs q + eps0) (q + eps0) ((11 # 3)%Q)).
+        - apply (qleT'_plus_compat (Qabs q) q eps0 eps0).
+          + apply (qeq_leT' (Qabs q) q). exact Hqa.
+          + apply qleT'_refl.
+        - apply (qleT'_trans (q + eps0) ((10 # 3)%Q + (1 # 3)%Q) ((11 # 3)%Q)).
+          + apply qleT'_plus_compat; [exact Hq103 | exact HE13].
+          + apply qeq_leT'. ring. }
+      exact HB113. }
+  destruct (leibsep_closedband_of_gate_false q (Nat.max Nv 1)
+             (eps0 * (1 # 8))%Q (eps0 * (1 # 8))%Q (eps0 * (1 # 8))%Q
+             HNw1 Hgate Hc8ltT Hc8ltT) as [N2 HN2].
+  pose proof (leibsep_shore_W_le (lw0m_e (Nat.max Nv 1)) eps0
+              (HNv (Nat.max Nv 1) (Nat.le_max_l Nv 1))) as HWle.
+  assert (HbandE : forall m : nat, (N2 <= m)%nat ->
+            QleT' (Qabs ((projT1 real_pi_geom m - q)%Q)) eps0).
+  { intros m Hm.
+    exact (qleT'_trans _ _ _ (HN2 m (NatLe_lift N2 m Hm)) HWle). }
+  pose proof (leibsep_shore_q_le_ten_thirds q eps0 N0 Nv Heps0 HN0 HNv Hgate) as Hq103.
+  pose proof (leibsep_shore_q_pos q eps0 N0 Nv Heps0 HN0 HNv Hgate) as Hq.
+  assert (HB113 : QleT' (Qabs q + eps0) ((11 # 3)%Q)).
+  { assert (Hqa : (Qabs q)%Q == q).
+    { apply Qabs_pos. apply Qlt_le_weak. apply QltT_to_Qlt. exact Hq. }
+    apply (qleT'_trans (Qabs q + eps0) (q + eps0) ((11 # 3)%Q)).
+    - apply (qleT'_plus_compat (Qabs q) q eps0 eps0).
+      + apply (qeq_leT' (Qabs q) q). exact Hqa.
+      + apply qleT'_refl.
+    - apply (qleT'_trans (q + eps0) ((10 # 3)%Q + (1 # 3)%Q) ((11 # 3)%Q)).
+      + apply qleT'_plus_compat; [exact Hq103 | exact HE13].
+      + apply qeq_leT'. ring. }
+  assert (Hab4 : QleT' (Qabs q) (lw0_q_of_nat 4)).
+  { assert (Habsq : Qabs q == q).
+    { apply Qabs_pos. apply Qlt_le_weak. apply QltT_to_Qlt. exact Hq. }
+    apply (qleT'_trans (Qabs q) q (lw0_q_of_nat 4)).
+    - apply qeq_leT'. exact Habsq.
+    - apply (qleT'_trans q (10 / 3)%Q (lw0_q_of_nat 4)).
+      + exact Hq103.
+      + change (lw0_q_of_nat 4) with (4 # 1)%Q.
+        apply Qle_to_QleT'. compute. discriminate. }
+  assert (Heps16 : QltT 0 (eps0 * (1 # 16))%Q).
+  { apply Qlt_to_QltT.
+    apply (Qmult_lt_0_compat eps0 (1 # 16)%Q).
+    - apply QltT_to_Qlt. exact Heps0.
+    - compute. reflexivity. }
+  destruct (lw0_pitB_conv_t_vanish tq (eps0 * (1 # 16))%Q Htq0 Heps16) as [Msin [Hbnd Hvan]].
+  assert (HtaillS : forall m : nat, (Msin <= m)%nat -> QleT' (tsl m) (eps0 * (1 # 8))%Q).
+  { intros m Hm. specialize (Hvan m Hm). unfold tsl.
+    apply Qle_to_QleT'.
+    apply (leibsep_qle_wd2 (2 * (q_pow tq (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m)))%Q)
+                           (2 * (eps0 * (1 # 16))%Q)%Q
+                           (2 * (q_pow tq (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m)))%Q)
+                           (eps0 * (1 # 8))%Q).
+    - apply Qeq_refl.
+    - ring.
+    - rewrite (Qmult_comm 2 (q_pow tq (Datatypes.S (2 * m)) / q_fact (Datatypes.S (2 * m)))%Q).
+      rewrite (Qmult_comm 2 (eps0 * (1 # 16))%Q).
+      apply Qmult_le_compat_r.
+      + apply Qlt_le_weak. apply QltT_to_Qlt. exact Hvan.
+      + unfold Qle. cbn [Qnum Qden]. lia. }
+  assert (HtaillC : forall m : nat, (Datatypes.S Msin <= m)%nat ->
+            QleT' (tcl m) (eps0 * (1 # 8))%Q).
+  { intros m Hm. destruct m as [| j]. { exfalso. lia. }
+    assert (Hj : (Msin <= j)%nat) by lia.
+    specialize (Hvan j Hj).
+    unfold tcl.
+    replace (2 * Datatypes.S j)%nat
+      with (Datatypes.S (Datatypes.S (2 * j)))%nat by lia.
+    assert (E1 : (q_pow tq (Datatypes.S (Datatypes.S (2 * j)))
+                  / q_fact (Datatypes.S (Datatypes.S (2 * j))))%Q
+                 == ((q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))
+                     * (tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1)))%Q).
+    { rewrite (q_pow_succ tq (Datatypes.S (2 * j))).
+      rewrite (q_fact_succ (Datatypes.S (2 * j))).
+      unfold Qdiv.
+      rewrite Qinv_mult_distr.
+      ring.
+      all: try (apply Qlt_not_eq; apply q_fact_pos). }
+    assert (HpowN : forall n : nat, Qle 0 (q_pow tq n)).
+    { intro n. induction n as [| n IHn].
+      - cbn [q_pow]. unfold Qle. cbn [Qnum Qden]. lia.
+      - rewrite (q_pow_succ tq n). apply Qmult_le_0_compat.
+        + exact (QleT'_to_Qle _ _ Htq0).
+        + exact IHn. }
+    assert (Hd1 : Qle (tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1)) (1 # 1)%Q).
+    { apply (lw62_qdiv_le tq (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1) (1 # 1) (1 # 1)).
+      - unfold Qlt. cbn [Qnum Qden]. lia.
+      - unfold Qlt. cbn [Qnum Qden]. lia.
+      - rewrite Qmult_1_r, Qmult_1_l.
+        apply (Qle_trans _ (lw0_q_of_nat (Datatypes.S Msin))).
+        + exact (QleT'_to_Qle _ _ Hbnd).
+        + unfold lw0_q_of_nat, Qle. cbn [Qnum Qden]. lia. }
+    assert (HXd : Qle 0 (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))).
+    { apply QleT'_to_Qle.
+      apply (lw62_qdiv_nonneg (q_pow tq (Datatypes.S (2 * j))) (q_fact (Datatypes.S (2 * j)))).
+      - apply Qle_to_QleT'. apply HpowN.
+      - apply q_fact_pos. }
+    assert (HX1 : Qle ((tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1))
+                       * (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j))))%Q
+                      (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))%Q).
+    { apply (Qle_trans _ ((1 # 1)%Q
+                           * (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))%Q)%Q).
+      - apply Qmult_le_compat_r.
+        + exact Hd1.
+        + exact HXd.
+      - rewrite Qmult_1_l. apply Qle_refl. }
+    apply Qle_to_QleT'.
+    rewrite E1.
+    apply Qlt_le_weak.
+    assert (Heq8 : (eps0 * (1 # 8))%Q == (eps0 * (1 # 16))%Q * (2 # 1)) by ring.
+    rewrite Heq8.
+    rewrite (Qmult_comm (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))
+                        (tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1))).
+    rewrite (Qmult_comm 2 (tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1)
+                           * (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j))))%Q).
+    apply (Qmult_lt_compat_r (tq / (Z.of_nat (Datatypes.S (Datatypes.S (2 * j))) # 1)
+                              * (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j))))%Q
+                             (eps0 * (1 # 16))%Q (2 # 1)).
+    - vm_compute. reflexivity.
+    - apply (Qle_lt_trans _ (q_pow tq (Datatypes.S (2 * j)) / q_fact (Datatypes.S (2 * j)))%Q).
+      + exact HX1.
+      + exact (QltT_to_Qlt _ _ Hvan). }
+  assert (HRr : forall j : nat, (Nat.max N2 (Nat.max (Datatypes.S Msin) 4) <= j)%nat ->
+            QleT' (2 * q_pow tq 2)
+                  (lw0_q_of_nat (Datatypes.S (2 * j))
+                   * lw0_q_of_nat (Datatypes.S (Datatypes.S (2 * j))))%Q).
+  { intros j Hj. apply (leibsep_ratio_slot q 4 Hab4 j).
+    exact (Nat.le_trans 4 (Nat.max (Datatypes.S Msin) 4) j
+             (Nat.le_max_r (Datatypes.S Msin) 4)
+             (Nat.le_trans (Nat.max (Datatypes.S Msin) 4)
+                           (Nat.max N2 (Nat.max (Datatypes.S Msin) 4)) j
+                           (Nat.le_max_r N2 (Nat.max (Datatypes.S Msin) 4)) Hj)). }
+  destruct (sin_slot_eps0 eps0 N2 (Datatypes.S Msin) (eps0 * (1 # 8))%Q
+              Heps0 Hc8ltT HbandE HB113 HRr
+              (fun m Hm => HtaillS m
+                 (Nat.le_trans Msin (Datatypes.S Msin) m
+                    (Nat.le_succ_diag_r Msin) Hm))) as [M2s HM2s].
+  destruct (cos_slot_eps0 eps0 N2 (Datatypes.S Msin) (eps0 * (1 # 8))%Q
+              Heps0 Hc8ltT HbandE HB113 HRr HtaillC) as [M2c HM2c].
+  exists (eps0 * (S973 + (1 # 4))%Q)%Q.
+  exists (eps0 * ((11 # 3)%Q * S973 + (1 # 4))%Q)%Q.
+  exists (Nat.max M2s M2c).
+  split.
+  - intros m Hm.
+    apply (qleT'_trans _ (eps0 * S973 + eps0 * (1 # 8) + eps0 * (1 # 8))%Q).
+    + exact (HM2s m
+               (Nat.le_trans M2s (Nat.max M2s M2c) m (Nat.le_max_l M2s M2c) Hm)).
+    + apply qeq_leT'. ring.
+  - split.
+    + intros m Hm.
+      apply (qleT'_trans _
+               (eps0 * ((11 # 3)%Q * S973) + eps0 * (1 # 8) + eps0 * (1 # 8))%Q).
+      * exact (HM2c m
+                 (Nat.le_trans M2c (Nat.max M2s M2c) m (Nat.le_max_r M2s M2c) Hm)).
+      * apply qeq_leT'. ring.
+    + split.
+      * apply Qle_to_QleT'.
+        apply (Qmult_le_0_compat eps0 (S973 + (1 # 4))%Q).
+        -- apply Qlt_le_weak. apply QltT_to_Qlt. exact Heps0.
+        -- lra.
+      * split.
+        -- apply Qle_to_QleT'.
+           apply (Qmult_le_0_compat eps0 ((11 # 3)%Q * S973 + (1 # 4))%Q).
+           ++ apply Qlt_le_weak. apply QltT_to_Qlt. exact Heps0.
+           ++ lra.
+        -- split.
+           ++ apply qleT'_refl.
+           ++ apply qleT'_refl.
+Qed.
+
+(* ---------- 件六：复合量缩放闭恰（960 件一结构逐字复刻） ---------- *)
+
+Lemma lw1131_C_le_eps0K : forall (eps0 s t BF BFd : Q) (n : nat),
+  QleT' 0 s -> QleT' 0 t ->
+  QleT' (Qabs (qpoly_eval (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n) q)) BF ->
+  QleT' (Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n)) q)) BFd ->
+  QleT' s (eps0 * (S973 + (1 # 4))%Q)%Q ->
+  QleT' t (eps0 * ((11 # 3)%Q * S973 + (1 # 4))%Q)%Q ->
+  QleT' (Qabs (qpoly_eval (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n) q) * t
+         + Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n)) q) * s
+         + eps0 * (1 # 8))%Q
+        (eps0 * (BF * ((11 # 3)%Q * S973 + (1 # 4)) + BFd * (S973 + (1 # 4)) + (1 # 8)))%Q.
+Proof.
+  intros eps0 s t BF BFd n Hs0 Ht0 HF HFd Hscap Htcap.
+  apply Qle_to_QleT'.
+  assert (HBF0 : Qle 0 BF).
+  { apply (Qle_trans 0 (Qabs (qpoly_eval (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n) q)) BF).
+    - apply Qabs_nonneg.
+    - exact (QleT'_to_Qle _ _ HF). }
+  assert (Hterm1 : Qle (Qabs (qpoly_eval (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n) q) * t)
+                       (BF * (eps0 * ((11 # 3)%Q * S973 + (1 # 4)))%Q)).
+  { apply (Qle_trans _ (BF * t%Q)).
+    - apply (lw95_mul_le_compat
+               (Qabs (qpoly_eval (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n) q)) BF t t).
+      + apply Qabs_nonneg.
+      + exact (QleT'_to_Qle _ _ HF).
+      + exact (QleT'_to_Qle _ _ Ht0).
+      + apply Qle_refl.
+    - apply (lw95_mul_le_compat BF BF t (eps0 * ((11 # 3)%Q * S973 + (1 # 4)))%Q).
+      + exact HBF0.
+      + apply Qle_refl.
+      + exact (QleT'_to_Qle _ _ Ht0).
+      + exact (QleT'_to_Qle _ _ Htcap). }
+  assert (HBFD0 : Qle 0 BFd).
+  { apply (Qle_trans 0 (Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n)) q)) BFd).
+    - apply Qabs_nonneg.
+    - exact (QleT'_to_Qle _ _ HFd). }
+  assert (Hterm2 : Qle (Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n)) q) * s)
+                       (BFd * (eps0 * (S973 + (1 # 4)))%Q)).
+  { apply (Qle_trans _ (BFd * s%Q)).
+    - apply (lw95_mul_le_compat
+               (Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q (Zpos (Qden q) # 1)%Q n) n)) q)) BFd s s).
+      + apply Qabs_nonneg.
+      + exact (QleT'_to_Qle _ _ HFd).
+      + exact (QleT'_to_Qle _ _ Hs0).
+      + apply Qle_refl.
+    - apply (lw95_mul_le_compat BFd BFd s (eps0 * (S973 + (1 # 4)))%Q).
+      + exact HBFD0.
+      + apply Qle_refl.
+      + exact (QleT'_to_Qle _ _ Hs0).
+      + exact (QleT'_to_Qle _ _ Hscap). }
+  assert (Hring : (BF * (eps0 * ((11 # 3)%Q * S973 + (1 # 4)))%Q
+                   + BFd * (eps0 * (S973 + (1 # 4)))%Q + eps0 * (1 # 8))%Q
+                  == (eps0 * (BF * ((11 # 3)%Q * S973 + (1 # 4))
+                              + BFd * (S973 + (1 # 4)) + (1 # 8)))%Q) by ring.
+  apply (Qle_trans _ (BF * (eps0 * ((11 # 3)%Q * S973 + (1 # 4)))%Q
+                      + BFd * (eps0 * (S973 + (1 # 4)))%Q + eps0 * (1 # 8))%Q).
+  - apply Qplus_le_compat.
+    + apply Qplus_le_compat; [exact Hterm1 | exact Hterm2].
+    + apply Qle_refl.
+  - rewrite Hring. apply Qle_refl.
+Qed.
+End TailScale.
+
+
+(* ============================================================ *)
+(* Final-form section: unconditional q-kernel and the pi flag      *)
+(* theorem (statement faces lifted verbatim from the frozen slots).*)
+(* ============================================================ *)
+
+Lemma lw1190_div_mul_cancel : forall a b : Q, ~ b == 0 -> (a / b) * b == a.
+Proof.
+  intros a b Hb. unfold Qdiv. field. exact Hb.
+Qed.
+
+Lemma lw1190_qmin_glb_le : forall a b c : Q, Qle c a -> Qle c b -> Qle c (Qmin a b).
+Proof.
+  intros a b c H1 H2.
+  destruct (Q.min_spec a b) as [[_ Heq] | [_ Heq]]; rewrite Heq.
+  - exact H1.
+  - exact H2.
+Qed.
+
+Theorem leibsep_q_kernel :
+  forall q : Q,
+    sigT (fun c : Q => And (QltT 0 c)
+      (sigT (fun N : nat => forall m : nat, NatLe N m ->
+        QltT c (Qabs ((lw0m_xL m - q)%Q))))).
+Proof.
+  intros q.
+  destruct real_pi_geom_lt_ten_thirds as [eg [Hegp [N0g HN0g]]].
+  destruct real_pi_leibniz_lt_ten_thirds as [el [Help [N0l HN0l]]].
+  destruct real_pi_leibniz_gt_three as [e3 [He3p [N3 HN3]]].
+  pose proof (QltT_to_Qlt 0 eg Hegp) as Hegp'.
+  pose proof (QltT_to_Qlt 0 el Help) as Help'.
+  pose proof (QltT_to_Qlt 0 e3 He3p) as He3p'.
+  set (b0 := (Z.pos (Qden q) # 1)%Q).
+  set (n_sel := (lw0_n_select (10 * lw0_pi_d0_of b0) 0 + 1)%nat).
+  set (BF := Qabs (qpoly_eval (lw0_F (lw0_niven_f q b0 n_sel) n_sel) q)).
+  set (BFd := Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q b0 n_sel) n_sel)) q)).
+  set (K := (BF * ((11 # 3)%Q * S973 + (1 # 4)) + BFd * (S973 + (1 # 4)) + (1 # 8))%Q).
+  assert (Hb0 : QltT 0 b0).
+  { apply Qlt_to_QltT. unfold b0, Qlt. cbn. reflexivity. }
+  assert (HBF0 : Qle 0 BF) by (apply Qabs_nonneg).
+  assert (HBFd0 : Qle 0 BFd) by (apply Qabs_nonneg).
+  assert (Hns2 : (2 <= n_sel)%nat) by (unfold n_sel, lw0_n_select; lia).
+  assert (HK1 : Qle (1 # 8) K).
+  { unfold K. assert (Hc1 : Qle 0 ((11 # 3)%Q * S973 + (1 # 4))%Q).
+    { assert (Hp : Qlt 0 ((11 # 3)%Q * S973 + (1 # 4))%Q)
+        by (unfold S973; vm_compute; reflexivity).
+      apply Qlt_le_weak. exact Hp. }
+    assert (Hc2 : Qle 0 (S973 + (1 # 4))%Q).
+    { assert (Hp : Qlt 0 (S973 + (1 # 4))%Q) by (unfold S973; vm_compute; reflexivity).
+      apply Qlt_le_weak. exact Hp. }
+    unfold S973.
+    assert (Hp1 : Qle 0 (BF * ((11 # 3)%Q * S973 + (1 # 4))%Q)%Q).
+    { apply Qmult_le_0_compat; assumption. }
+    assert (Hp2 : Qle 0 (BFd * (S973 + (1 # 4))%Q)%Q).
+    { apply Qmult_le_0_compat; [exact HBFd0 | exact Hc2]. }
+    apply (Qle_trans (1 # 8)
+             ((1 # 8)%Q + (BF * ((11 # 3)%Q * S973 + (1 # 4))
+                           + BFd * (S973 + (1 # 4)))%Q)%Q K).
+    - apply QleT'_to_Qle.
+      apply (qleT'_plus_nonneg_rT (1 # 8)%Q
+               (BF * ((11 # 3)%Q * S973 + (1 # 4)) + BFd * (S973 + (1 # 4)))%Q).
+      apply Qle_to_QleT'.
+      apply (Qplus_le_compat 0%Q (BF * ((11 # 3)%Q * S973 + (1 # 4))%Q)%Q 0%Q
+               (BFd * (S973 + (1 # 4))%Q)%Q).
+      + exact Hp1.
+      + exact Hp2.
+    - unfold K. apply QleT'_to_Qle. apply qeq_leT'. ring. }
+  assert (HKpos : Qlt 0 K).
+  { apply (Qlt_le_trans 0 (1 # 8) K).
+    - vm_compute. reflexivity.
+    - exact HK1. }
+  assert (HK0 : Qle 0 K) by (apply Qlt_le_weak; exact HKpos).
+  assert (Hinv : Qle 0 ((1 # 2)%Q / K)).
+  { apply Qlt_le_weak. apply (Qmult_lt_0_compat (1 # 2) (/ K)).
+    - vm_compute. reflexivity.
+    - apply Qinv_lt_0_compat. exact HKpos. }
+  pose (eps1 := Qmin eg (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K)))).
+  assert (Hep1lt : Qlt 0 eps1).
+  { apply (Q.min_glb_lt _ _ 0); [exact Hegp' |].
+    apply (Q.min_glb_lt _ _ 0); [exact Help' |].
+    apply (Q.min_glb_lt _ _ 0).
+    - vm_compute. reflexivity.
+    - apply (Qmult_lt_0_compat (1 # 2) (/ K)).
+      + vm_compute. reflexivity.
+      + apply Qinv_lt_0_compat. exact HKpos. }
+  assert (Hep1eg : Qle eps1 eg).
+  { apply (Q.min_glb_l eg (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) eps1).
+    apply Qle_refl. }
+  assert (Hep1el : Qle eps1 el).
+  { apply (Qle_trans _ (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) _).
+    - apply (Q.min_glb_r eg (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) eps1).
+      apply Qle_refl.
+    - apply (Q.min_glb_l el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))
+                    (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K)))).
+      apply Qle_refl. }
+  assert (Hep1e3 : Qle eps1 (1 # 3)%Q).
+  { apply (Qle_trans _ (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) _).
+    - apply (Q.min_glb_r eg (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) eps1).
+      apply Qle_refl.
+    - apply (Qle_trans _ (Qmin (1 # 3)%Q ((1 # 2)%Q / K)) _).
+      + apply (Q.min_glb_r el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))
+                      (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K)))).
+        apply Qle_refl.
+      + apply (Q.min_glb_l (1 # 3)%Q ((1 # 2)%Q / K)
+                    (Qmin (1 # 3)%Q ((1 # 2)%Q / K))).
+        apply Qle_refl. }
+  assert (Hep1inv : Qle eps1 ((1 # 2)%Q / K)).
+  { apply (Qle_trans _ (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) _).
+    - apply (Q.min_glb_r eg (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))) eps1).
+      apply Qle_refl.
+    - apply (Qle_trans _ (Qmin (1 # 3)%Q ((1 # 2)%Q / K)) _).
+      + apply (Q.min_glb_r el (Qmin (1 # 3)%Q ((1 # 2)%Q / K))
+                      (Qmin el (Qmin (1 # 3)%Q ((1 # 2)%Q / K)))).
+        apply Qle_refl.
+      + apply (Q.min_glb_r (1 # 3)%Q ((1 # 2)%Q / K)
+                    (Qmin (1 # 3)%Q ((1 # 2)%Q / K))).
+        apply Qle_refl. }
+  assert (Hep1q4 : QltT 0 (eps1 * (1 # 4))%Q) by (apply Qlt_to_QltT; lra).
+  destruct (lw0m_vanish_pi (eps1 * (1 # 4))%Q Hep1q4) as [Nv1 HNv1].
+  set (N1 := Nat.max 1 (Nat.max Nv1 (Nat.max N3 N0l))).
+  assert (HN1b : (Nat.max N3 N0l <= N1)%nat)
+    by (apply (Nat.le_trans (Nat.max N3 N0l) (Nat.max Nv1 (Nat.max N3 N0l)) N1);
+        [apply Nat.le_max_r | apply Nat.le_max_r]).
+  assert (HNN3 : (N3 <= N1)%nat)
+    by (apply (Nat.le_trans N3 (Nat.max N3 N0l) N1); [apply Nat.le_max_l | exact HN1b]).
+  assert (HNN0l : (N0l <= N1)%nat)
+    by (apply (Nat.le_trans N0l (Nat.max N3 N0l) N1); [apply Nat.le_max_r | exact HN1b]).
+  assert (HNv1N : QltT (lw0m_e N1) (eps1 * (1 # 4))%Q).
+  { apply (HNv1 N1). apply (Nat.max_lub_l Nv1 (Nat.max N3 N0l)). apply Nat.le_max_r. }
+  pose proof (QltT_to_Qlt _ _ HNv1N) as HNv1N'.
+  assert (HN1 : (1 <= N1)%nat) by apply Nat.le_max_l.
+  destruct (leibsep_gate_open q N1 (eps1 * (1 # 8))%Q) eqn:E1.
+  - (* gate true: guarded kernel direct (1131 assembly true leg, verbatim) *)
+    assert (Hc0 : QltT 0 (2 * (eps1 * (1 # 8)))%Q) by (apply Qlt_to_QltT; lra).
+    assert (Hguard : QltT (lw0m_e N1 + 2 * (eps1 * (1 # 8))%Q)
+                          (Qabs ((lw0m_xL N1 - q)%Q)))
+      by (apply leibsep_gate_open_true; exact E1).
+    destruct (leibsep_q_kernel_guarded q N1 (eps1 * (1 # 8))%Q HN1 Hguard) as [M HM].
+    exists (2 * (eps1 * (1 # 8)))%Q. split; [exact Hc0 |].
+    exists M. exact HM.
+  - (* gate false: band location, Wb shrink, second gate split, carrier *)
+    assert (Hwin : QleT' (Qabs ((lw0m_xL N1 - q)%Q))
+                         (lw0m_e N1 + 2 * (eps1 * (1 # 8))%Q))
+      by (apply leibsep_gate_open_false; exact E1).
+    pose proof (QleT'_to_Qle _ _ Hwin) as Hwin'.
+    assert (Hx3 : QltT e3 ((lw0m_xL N1 - 3)%Q)).
+    { pose proof (HN3 N1 (NatLe_lift _ _ HNN3)) as H0. exact H0. }
+    pose proof (QltT_to_Qlt _ _ Hx3) as Hx3'.
+    assert (HxL : QltT el ((10 # 3)%Q - lw0m_xL N1)%Q).
+    { pose proof (HN0l N1 (NatLe_lift _ _ HNN0l)) as H0. exact H0. }
+    pose proof (QltT_to_Qlt _ _ HxL) as HxL'.
+    pose proof (leibsep_qabs_le_two (lw0m_xL N1 - q)
+                  (lw0m_e N1 + 2 * (eps1 * (1 # 8)))%Q Hwin') as Htwo.
+    destruct Htwo as [Hshore1T Hshore2T].
+    pose proof (QleT'_to_Qle _ _ Hshore1T) as Hshore1.
+    pose proof (QleT'_to_Qle _ _ Hshore2T) as Hshore2.
+    assert (Hq0 : Qlt 0 q) by lra.
+    assert (HQ103 : Qle q (10 # 3)%Q) by lra.
+    assert (HQ0t : QltT 0 q) by (apply Qlt_to_QltT; exact Hq0).
+    assert (HQ103T : QleT' q (10 # 3)%Q) by (apply Qle_to_QleT'; exact HQ103).
+    pose proof (leibsep_Wb01_diff_lower b0 q n_sel (lw0_QltT_le b0 Hb0) HQ0t HQ103T Hns2) as HWbd.
+    assert (HWb0 : QltT 0 (lw0_Wb b0 q n_sel 0)) by (apply lw0_Wb_pos; assumption).
+    pose proof (QltT_to_Qlt _ _ HWb0) as HWb0'.
+    pose (WING := (q_fact n_sel * (lw0_Wb b0 q n_sel 0 * (2 # 27))%Q)%Q).
+    assert (HX : Qlt 0 WING).
+    { unfold WING. apply Qmult_lt_0_compat.
+      - apply q_fact_pos.
+      - apply Qmult_lt_0_compat.
+        + exact HWb0'.
+        + vm_compute. reflexivity. }
+    assert (Hinv2 : Qlt 0 (WING / (2 * K)%Q)).
+    { apply (Qmult_lt_0_compat WING (/ (2 * K)%Q)).
+      - exact HX.
+      - apply Qinv_lt_0_compat. apply (Qlt_le_trans 0 (1 # 8) (2 * K)).
+        + vm_compute. reflexivity.
+        + lra. }
+    pose (eps2 := Qmin eps1 (WING / (2 * K)%Q)).
+    assert (Hep2lt : Qlt 0 eps2).
+    { apply (Q.min_glb_lt _ _ 0); [exact Hep1lt | exact Hinv2]. }
+  assert (Hep2le1 : Qle eps2 eps1).
+  { apply (Q.min_glb_l eps1 (WING / (2 * K)%Q) eps2). apply Qle_refl. }
+  assert (Hep2leW : Qle eps2 (WING / (2 * K)%Q)).
+  { apply (Q.min_glb_r eps1 (WING / (2 * K)%Q) eps2). apply Qle_refl. }
+    assert (Hep2e3 : QleT' eps2 (1 # 3)%Q).
+    { apply Qle_to_QleT'. apply (Qle_trans eps2 eps1 (1 # 3)); [exact Hep2le1 | exact Hep1e3]. }
+    assert (HEp2 : QltT 0 eps2) by (apply Qlt_to_QltT; exact Hep2lt).
+    assert (HN0g2 : forall n : nat, NatLe N0g n ->
+               QltT eps2 (projT1 (real_const (10 / 3)) n - projT1 real_pi_geom n)).
+    { intros n Hn. apply Qlt_to_QltT. apply (Qle_lt_trans eps2 eg _).
+      - apply (Qle_trans eps2 eps1 eg Hep2le1 Hep1eg).
+      - apply QltT_to_Qlt. exact (HN0g n Hn). }
+    assert (Hep2q4 : QltT 0 (eps2 * (1 # 4))%Q) by (apply Qlt_to_QltT; lra).
+    destruct (lw0m_vanish_pi (eps2 * (1 # 4))%Q Hep2q4) as [Nv2 HNv2].
+    set (N2 := Nat.max Nv2 1).
+    assert (HN21 : (1 <= N2)%nat) by apply Nat.le_max_r.
+    destruct (leibsep_gate_open q N2 (eps2 * (1 # 8))%Q) eqn:E2.
+    + (* second gate true: same true leg at the shrunk eps2 *)
+      assert (Hc0 : QltT 0 (2 * (eps2 * (1 # 8)))%Q) by (apply Qlt_to_QltT; lra).
+      assert (Hguard : QltT (lw0m_e N2 + 2 * (eps2 * (1 # 8))%Q)
+                            (Qabs ((lw0m_xL N2 - q)%Q)))
+        by (apply leibsep_gate_open_true; exact E2).
+      destruct (leibsep_q_kernel_guarded q N2 (eps2 * (1 # 8))%Q HN21 Hguard) as [M HM].
+      exists (2 * (eps2 * (1 # 8)))%Q. split; [exact Hc0 |].
+      exists M. exact HM.
+    + (* second gate false: caps chain then the carrier black box *)
+      destruct (caps_scaled q eps2 N0g Nv2 HEp2 Hep2e3 HN0g2 HNv2 E2)
+        as [s [t [M0 [Hs [Ht [Hs0 [Ht0 [Hscap Htcap]]]]]]]].
+      assert (HCle : QleT'
+               (Qabs (qpoly_eval (lw0_F (lw0_niven_f q b0 n_sel) n_sel) q) * t
+                + Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q b0 n_sel) n_sel)) q) * s
+                + eps2 * (1 # 8))%Q
+               (eps2 * (BF * ((11 # 3)%Q * S973 + (1 # 4))
+                         + BFd * (S973 + (1 # 4)) + (1 # 8)))%Q)
+        by exact (lw1131_C_le_eps0K q eps2 s t BF BFd n_sel Hs0 Ht0
+                    (qleT'_refl BF) (qleT'_refl BFd) Hscap Htcap).
+      assert (Hcan : ((1 # 2)%Q / K) * K == (1 # 2)%Q)
+        by (apply lw1190_div_mul_cancel; intro Hz; apply (Qlt_not_eq 0 K HKpos);
+            apply Qeq_sym; exact Hz).
+      assert (HK1' : QleT' (eps2 * K) (1 # 2)%Q).
+      { apply Qle_to_QleT'.
+        pose proof (lw95_mul_le_compat eps2 ((1 # 2)%Q / K) K K
+                      (Qlt_le_weak 0 eps2 Hep2lt)
+                      (Qle_trans eps2 eps1 ((1 # 2)%Q / K) Hep2le1 Hep1inv)
+                      HK0 (Qle_refl K)) as Hmul.
+        rewrite <- Hcan. exact Hmul. }
+      assert (HtwoK : Qlt 0 (2 * K)%Q) by lra.
+      assert (Hcan2 : (WING / (2 * K)%Q) * K == WING * (1 # 2)%Q)
+        by (unfold Qdiv; field; intro Hz; apply (Qlt_not_eq 0 K HKpos);
+            apply Qeq_sym; exact Hz).
+      assert (HWle : Qle WING (q_fact n_sel * (lw0_Wb b0 q n_sel 0 - lw0_Wb b0 q n_sel 1))).
+      { pose proof (QleT'_to_Qle _ _ HWbd) as HWbd'.
+        unfold WING.
+        rewrite (Qmult_comm (q_fact n_sel)).
+        rewrite (Qmult_comm (q_fact n_sel)).
+        apply (Qmult_le_compat_r (lw0_Wb b0 q n_sel 0 * (2 # 27))%Q _ (q_fact n_sel)).
+        - exact HWbd'.
+        - apply Qlt_le_weak. apply q_fact_pos. }
+      assert (HP2 : QltT
+               (Qabs (qpoly_eval (lw0_F (lw0_niven_f q b0 n_sel) n_sel) q) * t
+                + Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q b0 n_sel) n_sel)) q) * s
+                + eps2 * (1 # 8))%Q
+               (q_fact n_sel * (lw0_Wb b0 q n_sel 0 - lw0_Wb b0 q n_sel 1))).
+      { apply Qlt_to_QltT. apply (Qle_lt_trans _ (eps2 * K) _).
+        - exact (QleT'_to_Qle _ _ HCle).
+        - pose proof (lw95_mul_le_compat eps2 (WING / (2 * K)%Q) K K
+                        (Qlt_le_weak 0 eps2 Hep2lt) Hep2leW HK0 (Qle_refl K)) as Hmul2.
+          rewrite Hcan2 in Hmul2.
+          assert (Hhalf : Qlt (WING * (1 # 2))%Q WING) by lra.
+          apply (Qlt_le_trans _ WING _).
+          + apply (Qle_lt_trans _ (WING * (1 # 2))%Q _).
+            * exact Hmul2.
+            * exact Hhalf.
+          + exact HWle. }
+      assert (HP1 : QleT'
+               (Qabs (qpoly_eval (lw0_F (lw0_niven_f q b0 n_sel) n_sel) q) * t
+                + Qabs (qpoly_eval (qpoly_deriv (lw0_F (lw0_niven_f q b0 n_sel) n_sel)) q) * s
+                + eps2 * (1 # 8))%Q
+               (1 # 2)%Q).
+      { apply (qleT'_trans _ (eps2 * K)%Q).
+        - exact HCle.
+        - exact HK1'. }
+      exact (leibsep_q_kernel_gate_carrier q eps2 N0g Nv2 s t M0 HEp2 HN0g2 HNv2 Hs Ht HP1 HP2).
+Qed.
+
+Theorem leibsep_pi_rational_unconditional :
+  forall a b : Q,
+    QltT 0 (Qabs b) ->
+    sigT (fun c : Q => And (QltT 0 c)
+            (real_lt (real_const c)
+               (real_metric real_pi_geom (real_const (a / b))))).
+Proof.
+  intros a b Hb.
+  destruct (leibsep_q_kernel (a / b)%Q) as [c [Hc0 [N HN]]].
+  pose proof (QltT_to_Qlt _ _ Hc0) as Hc0'.
+  assert (Hc8 : QltT 0 (c * (1 # 8))%Q) by (apply Qlt_to_QltT; lra).
+  destruct (lw0m_vanish_pi (c * (1 # 8))%Q Hc8) as [N0 HN0].
+  set (N1 := Nat.max N (Nat.max N0 1)).
+  assert (HN01 : (1 <= N1)%nat)
+    by (apply (Nat.le_trans 1 (Nat.max N0 1) N1); [apply Nat.le_max_r | apply Nat.le_max_r]).
+  assert (HN0N1 : QltT (lw0m_e N1) (c * (1 # 8))%Q).
+  { apply (HN0 N1). apply (Nat.max_lub_l N0 1). apply Nat.le_max_r. }
+  pose proof (QltT_to_Qlt _ _ HN0N1) as HN0N1'.
+  pose proof (QltT_to_Qlt _ _ (HN N1 (NatLe_lift _ _ (Nat.le_max_l N (Nat.max N0 1))))) as HkN1.
+  apply (leibsep_pi_sep_alpha_guarded a b N1 (c * (1 # 4))%Q Hb HN01).
+  + apply Qlt_to_QltT. lra.
+  + apply Qlt_to_QltT. lra.
+Qed.
+
+Print Assumptions leibsep_q_kernel.
+Print Assumptions leibsep_pi_rational_unconditional.
+
