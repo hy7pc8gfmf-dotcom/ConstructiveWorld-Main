@@ -617,3 +617,9 @@ abl_Pr_erdos_core.v
 abl_Pr_erdos_theta.v
 abl_Pr_recip_sum.v
 abl_niven_isomorphism.v
+abl_ln2_growth_budget.v
+abl_ln2_transfer_limb.v
+abl_ln2_theta_total.v
+abl_Pr_factgrowth_bridge.v
+abl_loeb_d3_nofix.v
+abl_loeb_d3_spec.v

@@ -3811,3 +3811,33 @@ Definition ng_abl_niven_isomorphism : NewGreenFace :=
   MkNewGreenFace "abl_niven_isomorphism.v" 558 9 20261006
   "[abl_niven_isomorphism.v: three-tower isomorphism, Niven-Hermite five-segment abstract machine with two instantiations]" "L558:m3dee4878".
 
+(* ng_abl_ln2_growth_budget —— abl_ln2_growth_budget.v：ln2 链·L_n 增长预算供给模块 *)
+Definition ng_abl_ln2_growth_budget : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_growth_budget.v" 319 15 20261006
+  "[abl_ln2_growth_budget.v: growth budget supply module for the ln2 chain, L_n bounds]" "L319:m71f5c62a".
+
+(* ng_abl_ln2_transfer_limb —— abl_ln2_transfer_limb.v：ln2 链·逐点到积分传送与交替裂分肢 *)
+Definition ng_abl_ln2_transfer_limb : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_transfer_limb.v" 346 14 20261006
+  "[abl_ln2_transfer_limb.v: pointwise-to-integral transfer and alternating split limb]" "L346:m18fd7a14".
+
+(* ng_abl_ln2_theta_total —— abl_ln2_theta_total.v：ln2 链·theta^n 终界装配件 *)
+Definition ng_abl_ln2_theta_total : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_theta_total.v" 874 24 20261006
+  "[abl_ln2_theta_total.v: theta-to-the-n terminal bound assembly for the ln2 chain]" "L874:m223b0905".
+
+(* ng_abl_Pr_factgrowth_bridge —— abl_Pr_factgrowth_bridge.v：素数域·LW0FactGrowth 桥接件 *)
+Definition ng_abl_Pr_factgrowth_bridge : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_factgrowth_bridge.v" 216 9 20261006
+  "[abl_Pr_factgrowth_bridge.v: bridge to LW0FactGrowth for the prime domain line]" "L216:m4f902bed".
+
+(* ng_abl_loeb_d3_nofix —— abl_loeb_d3_nofix.v：Loeb D3·盒谓词不动点不存在性 *)
+Definition ng_abl_loeb_d3_nofix : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3_nofix.v" 529 28 20261006
+  "[abl_loeb_d3_nofix.v: fixed-point non-existence for the box predicate in provability algebra]" "L529:m6723b2c0".
+
+(* ng_abl_loeb_d3_spec —— abl_loeb_d3_spec.v：Loeb D3 使用面·nu2 谱带分类器乘 Box2 凭证层 *)
+Definition ng_abl_loeb_d3_spec : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3_spec.v" 463 18 20261006
+  "[abl_loeb_d3_spec.v: nu-2 spectral band classifier over the Box2 certificate layer]" "L463:mee10c439".
+
