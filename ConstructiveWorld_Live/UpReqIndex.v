@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 578 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 580 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4028,7 +4028,15 @@ Definition ng_AblZ2Valbridge : NewGreenFace :=
 Definition ng_NsepFindGeneric : NewGreenFace :=
   MkNewGreenFace "NsepFindGeneric.v" 216 7 20261007
   "decoder-parameterized generic minimal separation-index search: nsep_find probes dec from n upward under fuel returning the budget endpoint, with the ub/hit/min characteristic theorem triple and the budgeted runner nsep_first giving bound/hit/least/minimal corollaries valid for any boolean separation decider and any budget; pi-side instance lw5n_sep_dec and a sqrt(2) Newton instance built in" "L216:ma226ef".
-(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件（级数项 1/(k+1)²、部分和族 z2s_ps M = Σ_{k<M} 1/(k+1)²、零权 Beta 项恒等 z2s_term k == zb2_term 0 k、部分和与闭式项和桥 z2s_ps (S M) == zb2_Isum 0 M、t:=xy 双变量截断展开实例与余项分离序面、有理数值例 49/36·与 abl_z2_truncfam 同族参数化）；PA=12 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件二代（级数项 1/(k+1)²、部分和族 z2s_ps M=Σ_{k<M} 1/(k+1)²、伸缩分裂恒等式 1/j==1/(j+1)+1/(j(j+1))、项严格递减不变量及其 N 步形、几何尾界 ps(S M+N)<ps(S M)+1/(S M)、有界性 ∀M ps M<2、显式速率 Cauchy 模量 z2s_half_idx n=2ⁿ−1、数值锚 1/8；零权 Beta 项恒等与 t:=xy 双变量截断展开实例沿旧代保留）；PA=28 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_AblZ2sPs : NewGreenFace :=
-  MkNewGreenFace "abl_z2s_ps.v" 238 17 20261007
-  "zeta(2) partial-sum series carrier: term 1/(k+1)^2, partial-sum family z2s_ps M = sum over k<M of 1/(k+1)^2, zero-weight Beta term identity z2s_term k == zb2_term 0 k, bridge z2s_ps (S M) == zb2_Isum 0 M from partial sums to the closed-form term sum, truncated expansion two-variable instance at t:=xy with rim separation order face, rational instance 49/36; same-family parameterization with abl_z2_truncfam" "L238:me98d42".
+  MkNewGreenFace "abl_z2s_ps.v" 523 37 20261007
+  "zeta(2) partial-sum series carrier, second generation: term 1/(k+1)^2, partial-sum family z2s_ps M = sum over k<M of 1/(k+1)^2, telescoping splitting identity 1/j == 1/(j+1) + 1/(j*(j+1)), strictly decreasing invariant with its N-step form, geometric tail bound ps(S M+N) < ps(S M) + 1/(S M), boundedness forall M, ps M < 2, explicit-rate Cauchy modulus via z2s_half_idx n = 2^n - 1, numerical anchor 1/8; zero-weight Beta term identity and the t:=xy two-variable truncated expansion instance retained from the first generation" "L523:m41387f".
+(* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证砖的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；1369 代 460 行正本之上 append 11 主语句、旧面逐字零改动）；PA=37 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblLntTruncfam : NewGreenFace :=
+  MkNewGreenFace "abl_lnt_truncfam.v" 674 37 20261007
+  "ln2 witness brick integration and decay faces: truncation-family remainder carried by an explicit upper-bound constant, with decay carried by the closed-form constant c(n)=1/((2n+1)*C(2n,n)); eleven main statements appended with the prior 460-line generation preserved verbatim" "L674:m4a8616".
+(* ng_NsepFirstSufficiency —— NsepFirstSufficiency.v：预算足用性一般定理（预算化最小分离索引搜索 nsep_first 的输出与实际首中步数的足用关系，判定器参数化一般形、对任意 bool 判定器与任意预算成立；含 false 面提取补件与耗尽停止刻画）；PA=11 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_NsepFirstSufficiency : NewGreenFace :=
+  MkNewGreenFace "NsepFirstSufficiency.v" 243 11 20261007
+  "budget-sufficiency general theorem: the output of the budgeted minimal separation-index search nsep_first relates sufficiently to the actual first-hit step, parameterized over any boolean decider and any budget, with false-face extraction lemmas and the exhausted-stop characterization" "L243:m852e49".
