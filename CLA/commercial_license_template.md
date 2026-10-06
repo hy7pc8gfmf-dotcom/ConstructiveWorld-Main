@@ -255,6 +255,8 @@
 
 *（被授权方对以下模块的改进受第 6 条互惠义务约束，授权方可根据版本更新调整本清单）*
 
+> **注（2026-10-06 现势）：** 下表为 220 版时代快照，仅示互惠条款的适用方式；现势模块面以注册序 `order.txt`（662 行）为权威引用面，本表不构成对当前模块面的完整列举。
+
 | 模块 | 组件 | 说明 |
 |------|------|------|
 | 基座（信任缓存） | CW_ConstructiveWorld_219 | 219 基座 .vo 信任缓存；已吸收 UpStepKL、UpLogMono、AttnDoeblin、AttnHardLimit218、AttnSqrt、UpFEP、UpPPO、UpGRPO219、UpExtras219 |

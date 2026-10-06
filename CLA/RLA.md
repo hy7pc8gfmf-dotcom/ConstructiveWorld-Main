@@ -22,6 +22,10 @@
 - **C.** 本系统源码与 .vo 信任缓存按 Apache License 2.0 自由使用；授权方未来从模块提取并发布的可执行运行时组件不适用 Apache 2.0 商业授权。
 - **D.** 被授权方希望获得运行时组件的使用授权。
 
+**边界声明（Boundary Statement·2026-10-06）** Apache-2.0 主许可已授予任何人对公开源面（含其提取产物 .ml/.mli）的提取、使用与商业化权利；本协议（RLA 轨）的可授权范围限于：① 官方受支持/带担保的分发与维护服务；② 未来非公开资产与增量技术服务。本协议不构成对已公开源面的追溯性商业化限制。
+
+*（Boundary Statement: the Apache-2.0 master license already grants every recipient the right to extract from, use, and commercialize the public source face, including its extraction products (.ml/.mli). The RLA track only covers (i) officially supported and warranted distribution and maintenance services and (ii) future non-public assets and incremental technical services; it imposes no retroactive commercial restriction on the public source face.）*
+
 ---
 
 ## 第 1 条 — 定义
@@ -31,6 +35,8 @@
 | 组件 | 类型 | 说明 |
 |------|------|------|
 | （暂无已发布组件） | Coq Extraction 提取的 OCaml 可执行检查器 | 首次提取发布时登记（如模块级反射检查器可执行文件） |
+
+**状态登记（2026-10-06）：** 本仓现存 Coq Extraction 提取产物（.ml/.mli）属公开审计对象，按源件许可（Apache License 2.0）随源码发布，不属于运行时组件；本表保持为空，直至首次单独发布可执行运行时组件时在此登记。
 
 **注：** `ConstructiveWorld_vo/` 内的 .vo 信任缓存为本系统开发依赖，随 Apache License 2.0 自由使用，不属于运行时组件，不受本协议约束。
 

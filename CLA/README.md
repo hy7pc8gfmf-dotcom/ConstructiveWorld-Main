@@ -8,6 +8,8 @@ All contributors to ConstructiveWorld-Main must sign a Contributor License Agree
 |------|---------|
 | `ICLA.md` | 个人贡献者（独立开发者、学生、自由职业者） |
 | `CCLA.md` | 实体组织（公司、机构、团队）及其雇员 |
+| `RLA.md` | 运行时组件（提取件）被授权方——未来单独发布的可执行检查器 |
+| `commercial_license_template.md` | 商业许可谈判对手方（谈判起点模板） |
 
 ## 签署流程
 
@@ -30,6 +32,14 @@ ConstructiveWorld-Main 采用 **Apache 2.0（公开版）+ 商业许可（企业
 - 贡献者的代码也可以被纳入商业许可版本（授权给付费客户）
 - 贡献者保留自己代码的版权（只授予使用权，不转让所有权）
 - 项目免受专利索赔风险
+
+## RLA 轨边界声明（2026-10-06）
+
+Apache-2.0 主许可已授予任何人对公开源面（含其提取产物 .ml/.mli）的提取、使用与商业化权利；RLA 轨的可授权范围限于：① 官方受支持/带担保的分发与维护服务；② 未来非公开资产与增量技术服务。RLA 不构成对已公开源面的追溯性商业化限制。详见根目录 `NOTICE.md` 边界声明一节。
+
+## 上游双栖登记（2026-10-06）
+
+`ConstructiveCauchyRealsSep.v`（构造性 Cauchy 实数逃逸窗分离引擎）已提交上游 rocq-prover/stdlib（PR #313，评审中）：上游收录副本按 stdlib 许可（LGPL-2.1）走；本仓及沙箱播种的同源副本仍为 Apache-2.0，权利义务不变——同源双栖、两证并存。登记全文见根目录 `NOTICE.md` 第 2 节。
 
 ## 协议的法律效力
 

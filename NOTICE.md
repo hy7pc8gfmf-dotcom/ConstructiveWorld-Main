@@ -29,8 +29,9 @@ development dependencies and are freely usable under Apache 2.0 — the RLA
 covers future OCaml executable checkers and runtime components extracted
 from the project modules via Coq Extraction.
 
-No such component has been published as of this NOTICE. Each component
-will be registered in the table below upon its first release.
+No such component has been published as of this NOTICE (status verified
+2026-10-06). Each component will be registered in the table below upon its
+first release.
 
 | Component | Source | Status |
 |-----------|--------|--------|
@@ -41,6 +42,40 @@ The Apache 2.0 license covers the source code and the .vo trust caches
 commercial use (embedding in products, SaaS, production environments) of
 future extracted executable runtime components.
 Contact 168888@live.cn for inquiries.
+
+Boundary statement (registered 2026-10-06): the Apache-2.0 master grant
+already gives every recipient the right to extract from, use, and
+commercialize the public source face, including its extraction products
+(.ml/.mli), which are published in this repository as audit artifacts under
+Apache-2.0. The RLA track is limited to (i) officially supported and
+warranted distribution and maintenance services, and (ii) future non-public
+assets and incremental technical services; it imposes no retroactive
+commercial restriction on the public source face.
+
+==========================================================================
+2. UPSTREAM DUAL-TRACK SOURCES — SAME SOURCE, TWO LICENSES (REGISTERED 2026-10-06)
+==========================================================================
+
+`ConstructiveCauchyRealsSep.v` (the escape-window separation engine for
+the constructive Cauchy reals, 221 lines, md5
+291780525a1654fec408fedba9d35558) is a dual-track (dual-habitat) piece:
+
+- The upstream copy has been submitted to the Rocq/Coq standard library as
+  PR rocq-prover/stdlib#313 (branch `creal-escape-window-engine`, fork
+  lineage ac219d6 -> 2a5eb5d; open as of 2026-10-06). Upon upstream
+  acceptance, that upstream copy is governed by the standard library's own
+  license (LGPL-2.1), and upstream modifications made from the merge onward
+  belong to the upstream project under its contribution terms.
+- Copies of the same source held or later included in this repository —
+  together with sandbox/vendor copies seeded from the same md5 anchor —
+  remain under Apache-2.0, with all rights and obligations unchanged.
+  (As of registration, no same-named tracked file exists in this
+  repository; the piece circulates via the upstream PR branch and the
+  seeded vendor copies.)
+
+Same source, two licenses — one per distribution channel. Neither
+registration modifies the other's terms. See the boundary statement above
+for the RLA track's scope.
 
 ==========================================================================
 THIRD-PARTY DEPENDENCIES
