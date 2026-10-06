@@ -3666,3 +3666,108 @@ Definition ng_abl_audit_base_v6 : NewGreenFace :=
   MkNewGreenFace "abl_audit_base_v6.v" 200 8 20261005
   "[abl_audit_base_v6.v: audit base v6]" "L200:m6b61760b".
 
+(* ng_abl_Pr_bertrand —— abl_Pr_bertrand.v：Bertrand 假设构造性见证件 *)
+Definition ng_abl_Pr_bertrand : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_bertrand.v" 386 8 20261006
+  "[abl_Pr_bertrand.v: constructive witness forms of Bertrand's postulate]" "L386:m95b1e92e".
+
+(* ng_abl_audit_base_v5b —— abl_audit_base_v5b.v：审计 v5b·S12 余位矿直审闭合件 *)
+Definition ng_abl_audit_base_v5b : NewGreenFace :=
+  MkNewGreenFace "abl_audit_base_v5b.v" 380 8 20261006
+  "[abl_audit_base_v5b.v: audit v5b, direct closure of the S12 remainder-mining face]" "L380:m897af9bc".
+
+(* ng_abl_audit_base_v7 —— abl_audit_base_v7.v：审计 v7·G10 可证性自靠面直审闭合件 *)
+Definition ng_abl_audit_base_v7 : NewGreenFace :=
+  MkNewGreenFace "abl_audit_base_v7.v" 232 5 20261006
+  "[abl_audit_base_v7.v: audit v7, direct audit of the G10 provability self-reliance face]" "L232:m5f098369".
+
+(* ng_abl_audit_base_v8 —— abl_audit_base_v8.v：审计 v8·G05_LogSmall 孤立岛 log 引擎面 *)
+Definition ng_abl_audit_base_v8 : NewGreenFace :=
+  MkNewGreenFace "abl_audit_base_v8.v" 306 6 20261006
+  "[abl_audit_base_v8.v: audit v8, G05_LogSmall isolated-island log engine face]" "L306:mbf84b4a5".
+
+(* ng_abl_hermite_setface —— abl_hermite_setface.v：LW2Hermite 插值机核心恒等式面重述件 *)
+Definition ng_abl_hermite_setface : NewGreenFace :=
+  MkNewGreenFace "abl_hermite_setface.v" 448 22 20261006
+  "[abl_hermite_setface.v: LW2Hermite core identity face, Set-carrier restatement]" "L448:m6d497226".
+
+(* ng_abl_lipschitz_bridge —— abl_lipschitz_bridge.v：Lipschitz 桥接件 *)
+Definition ng_abl_lipschitz_bridge : NewGreenFace :=
+  MkNewGreenFace "abl_lipschitz_bridge.v" 1335 50 20261006
+  "[abl_lipschitz_bridge.v: Lipschitz bridge for the diff-sampling line]" "L1335:m202f6cd6".
+
+(* ng_abl_ln2_qpoly_gen —— abl_ln2_qpoly_gen.v：ln2 链路线三·一般 n 三肢推广件 *)
+Definition ng_abl_ln2_qpoly_gen : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_qpoly_gen.v" 544 30 20261006
+  "[abl_ln2_qpoly_gen.v: general-n three-limb generalization on the ln2 line]" "L544:m39c89abc".
+
+(* ng_abl_ln2_reorder —— abl_ln2_reorder.v：ln2 链·有限 M 换序恒等式件 *)
+Definition ng_abl_ln2_reorder : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_reorder.v" 404 18 20261006
+  "[abl_ln2_reorder.v: finite-M reordering identity for the ln2 chain]" "L404:ma37a1a79".
+
+(* ng_abl_ln2_theta_upper —— abl_ln2_theta_upper.v：ln2 链·theta=4/5 上界肢二次衰减核 *)
+Definition ng_abl_ln2_theta_upper : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_theta_upper.v" 653 20 20261006
+  "[abl_ln2_theta_upper.v: Q-layer quadratic decay core for the theta 4/5 upper limb]" "L653:m21a34f63".
+
+(* ng_abl_loeb_d3 —— abl_loeb_d3.v：Loeb 主定理 D3·HBL 导出条件构造性形式化 *)
+Definition ng_abl_loeb_d3 : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3.v" 499 15 20261006
+  "[abl_loeb_d3.v: constructive formalization of the HBL derived conditions for Loeb D3]" "L499:mf491bcc3".
+
+(* ng_abl_niven_hermite_skeleton —— abl_niven_hermite_skeleton.v：Niven-Hermite 无理性五段式泛型骨架件 *)
+Definition ng_abl_niven_hermite_skeleton : NewGreenFace :=
+  MkNewGreenFace "abl_niven_hermite_skeleton.v" 241 6 20261006
+  "[abl_niven_hermite_skeleton.v: generic five-segment skeleton of the Niven-Hermite irrationality proofs]" "L241:m1b123e65".
+
+(* ng_abl_qpoly_lwbridge —— abl_qpoly_lwbridge.v：LW0QPoly 到本地 qpd 除法线桥接件 *)
+Definition ng_abl_qpoly_lwbridge : NewGreenFace :=
+  MkNewGreenFace "abl_qpoly_lwbridge.v" 215 6 20261006
+  "[abl_qpoly_lwbridge.v: bridge from LW0QPoly to the local qpd division line]" "L215:ma5267978".
+
+(* ng_abl_s06_step_calc —— abl_s06_step_calc.v：S06 步进计算件 *)
+Definition ng_abl_s06_step_calc : NewGreenFace :=
+  MkNewGreenFace "abl_s06_step_calc.v" 726 24 20261006
+  "[abl_s06_step_calc.v: S06 step calculations]" "L726:m671e8166".
+
+(* ng_abl_ln2_qpoly_gen_fix —— abl_ln2_qpoly_gen_fix.v：提取 magic 消解件·bool 判定器 *)
+Definition ng_abl_ln2_qpoly_gen_fix : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_qpoly_gen_fix.v" 142 3 20261006
+  "[abl_ln2_qpoly_gen_fix.v: magic-zero resolution for the qpoly_gen piece via a bool decider]" "L142:m5ed794ba".
+
+(* ng_abl_ln2_reorder_assembly —— abl_ln2_reorder_assembly.v：ln2 链·Ireal 校正装配件 *)
+Definition ng_abl_ln2_reorder_assembly : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_reorder_assembly.v" 468 12 20261006
+  "[abl_ln2_reorder_assembly.v: Ireal correction assembly for the ln2 chain]" "L468:m784c48cc".
+
+(* ng_abl_ln2_theta_rehook —— abl_ln2_theta_rehook.v：ln2 链·theta=4/5 上肢回接装配件 *)
+Definition ng_abl_ln2_theta_rehook : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_theta_rehook.v" 445 12 20261006
+  "[abl_ln2_theta_rehook.v: theta 4/5 upper-limb rehook and constant update assembly]" "L445:m7997ddf8".
+
+(* ng_abl_loeb_d3_ext —— abl_loeb_d3_ext.v：Loeb D3 层 2·编码往返＋对角组装＋盒盲边界 *)
+Definition ng_abl_loeb_d3_ext : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3_ext.v" 469 18 20261006
+  "[abl_loeb_d3_ext.v: Loeb D3 layer 2, formula coding round-trip, diagonal assembly, box-blindness bound]" "L469:m107fe70e".
+
+(* ng_abl_ln2_bsum_cauchy —— abl_ln2_bsum_cauchy.v：ln2 链·lns_bsum Cauchy 见证 Cb 槽闭合件 *)
+Definition ng_abl_ln2_bsum_cauchy : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_bsum_cauchy.v" 656 15 20261006
+  "[abl_ln2_bsum_cauchy.v: closure of the lns_bsum Cauchy witness Cb slot]" "L656:m9084eb03".
+
+(* ng_abl_ln2_assembly2 —— abl_ln2_assembly2.v：ln2 链·第二段装配回接件 *)
+Definition ng_abl_ln2_assembly2 : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_assembly2.v" 435 11 20261006
+  "[abl_ln2_assembly2.v: second-stage assembly rehook for the ln2 chain]" "L435:m20585eed".
+
+(* ng_abl_loeb_d3_prf2 —— abl_loeb_d3_prf2.v：Formula2 凭证层第一段·Prf2 归纳系统 *)
+Definition ng_abl_loeb_d3_prf2 : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3_prf2.v" 227 7 20261006
+  "[abl_loeb_d3_prf2.v: Formula2 certificate layer 1, Prf2 induction system and gnPrf2 coding]" "L227:m3db7766b".
+
+(* ng_abl_loeb_d3_prf2b —— abl_loeb_d3_prf2b.v：Formula2 凭证层第二段·dPrf2 解码器＋码级重演 *)
+Definition ng_abl_loeb_d3_prf2b : NewGreenFace :=
+  MkNewGreenFace "abl_loeb_d3_prf2b.v" 631 18 20261006
+  "[abl_loeb_d3_prf2b.v: Formula2 certificate layer 2, dPrf2 decoder and code-level replay]" "L631:m48291590".
+
