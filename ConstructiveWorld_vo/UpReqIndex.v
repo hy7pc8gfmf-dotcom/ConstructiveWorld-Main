@@ -3964,3 +3964,22 @@ Definition ng_U5cInstE : NewGreenFace :=
 Definition ng_UcrealBridge : NewGreenFace :=
   MkNewGreenFace "ucreal_bridge.v" 515 4 20261006
   "adapter layer from the library constructive reals to the standard library ConstructiveCauchyReals.CReal: the pointwise conversion transports the Cauchy property through a monotone modulus envelope with absolute-value index sampling and builds the uniform bound via Qbound_ltabs_ZExp2, equality compatibility is delivered as a Set-layer uniform closeness statement, real_lt transports to CRealLt, and the pi irrational separation theorem is restated with a CRealLt conclusion under the same four premises" "L515:m9e24e8".
+(* ng_ALn2ConvCore —— abl_ln2_conv_core.v：ln2 逼近链的算术卷积基建件（分离核 cc_sep_div 与整数 heart 间隔下界；Bernoulli 显式带窗 n₀ := 8·⌊v⌋；两歧卷积引擎 cc_engine 对任意基准实数 X 与整系数线性形式 |aX−b| 在四条显式前提下按可判定两歧分给出正分离常数 c 与终归指标 K，两常数皆封闭 Q 项）；PA=13 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ALn2ConvCore : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_conv_core.v" 666 13 20261006
+  "arithmetic convolution infrastructure for the ln2 approximation chain: an explicit separation core for distinct rationals, a closed-form Bernoulli window with index n0 = 8*floor(v), and a two-case convolution engine that under four explicit premises delivers, via a decidable case split, a positive separation constant c and an eventual index K with c <= |u/v - x_k| for all k >= K, both constants closed rational terms" "L666:m561a19".
+
+(* ng_ALn2ConvMesh —— abl_ln2_conv_mesh.v：卷积核与基准列 ln2i_x 的全形组装件（n! ≤ nⁿ 增长估计、档位估计、规范分子对正性与线对象定义面同一；供给型语句 cm_supply 承载三肢不等式与唯一未竟项，分离常数终件 cm_bound 直调两歧引擎完成；cm_pade_of_supply 五肢折三肢纯投影；数值锚组）；PA=11 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ALn2ConvMesh : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_conv_mesh.v" 233 11 20261006
+  "full-shape assembly joining the convolution kernel with the ln2 base sequence: the unconditional growth estimate n! <= n^n, budget estimates, positivity of the normalized numerator pair together with definitional identity of the line object, a supply-carrier statement carrying three inequality limbs and a single outstanding item, a terminal separation-constant piece delegating to the two-case engine, a pure-projection supply adapter, and a numeric anchor group" "L233:mc53845".
+
+(* ng_ALn2Final —— abl_ln2_final.v：ln2 终装配件（lnt5_uniform_separation 将分离常数对分子族一致化；lnt5_irrational_final 给出 ln2 不等于任一有理数的 Set 面终定理；供给条件形零新增悬置假设）；PA=16 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ALn2Final : NewGreenFace :=
+  MkNewGreenFace "abl_ln2_final.v" 473 16 20261006
+  "final assembly for ln2: the uniform separation theorem normalizes the separation constant against the numerator family, and the terminal Set-layer statement certifies that ln2 differs from every rational, with supply-conditional forms carrying zero newly suspended assumptions" "L473:mbde319".
+
+(* ng_APrEulerProd —— abl_Pr_euler_prod.v：素数域 Euler 乘积公式有限版全量闭合件（pze_O1：σ(L)·∏(p−1) ≤ L·∏p 上半压界；pze_euler_harm：∏(p−1)·H_n ≤ ∏p 调和级数被素数乘积压住的终点形；Set 面差量见证 pze_euler_gap 全透明可提取；提取真机 n=1..12 数值全中）；PA=15 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_APrEulerProd : NewGreenFace :=
+  MkNewGreenFace "abl_Pr_euler_prod.v" 982 15 20261006
+  "full closure of the finite Euler product formula in the prime domain: the upper squeeze bounding sigma(L) times the product of (p-1) by L times the product of primes, the Euler-Harmonic transfer certifying that the product of (p-1) dominates the harmonic number, an extractable Set-layer gap witness, and machine-verified numerals for n = 1..12 through the extraction face" "L982:md43580".
