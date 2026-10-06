@@ -639,3 +639,5 @@ Arch_SumEqL_01.v
 Arch_UpAbl_02.v
 Arch_ToyR_01.v
 Arch_ToyR_03.v
+LW0MLicBridge.v
+uacm_pi_strong_sep_combo.v

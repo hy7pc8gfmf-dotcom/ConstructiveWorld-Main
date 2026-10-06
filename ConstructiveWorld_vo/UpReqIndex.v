@@ -3161,7 +3161,7 @@ Definition ng_LW2SepTransport : NewGreenFace :=
 (* ng_LW5SepComplexity —— LW5SepComplexity.v：分离复杂度层（pi 有理包络列窗族 eps_n:=1/(n+1)·M_n:=2*pie_modulus(eps_n/2)+1 上 bool 分离判定器 lw5n_sep_dec＋最小分离窗阶 lw5n_nsep：结构递归有界搜索 lw5n_find＋显式预算 lw5n_bnd〔足用性不主张如实注记〕＋最小性特征 lw5n_nsep_minimal；窗族合法性＋入窗近距正确性＋搜索机件包在卷；增长律三档语句面以注记承载闭证属后续；结论位 nat 序四件（nsep_bound/nsep_least 上界＋shape_lower/shape_band 之 m<8·n0+9 下界序）照头注「特此如实注记」内嵌申报·候验证挂起；辅助 Qle/Qlt 语句仅脚手架；绿证＝607 记录 EXIT=0＋PA 双发 50/50 Closed＋coqchk -o 公理位 none，608 十三补丁属 219 面零碰本件，.vo ba4c1f8a 魔数 436f7121 0001 5ff4 在盘） *)
 Definition ng_LW5SepComplexity : NewGreenFace :=
   MkNewGreenFace "LW5SepComplexity.v" 1083 58 20261002
-  "separation complexity layer: rational envelope window family of pi (eps_n := 1/(n+1), M_n := 2*pie_modulus(eps_n/2)+1) carrying bool separation decider lw5n_sep_dec and minimal window rank lw5n_nsep via structurally recursive bounded search lw5n_find and explicit budget lw5n_bnd with minimality characterized by lw5n_nsep_minimal; window legality, near-boundary correctness and search machinery included; growth-law three-tier statements stay in annotations with closed proofs as future work; four conclusion-position nat-order bounds (nsep_bound, nsep_least upper bounds plus shape_lower/shape_band lower order m < 8*n0+9) honestly declared per the module header annotation as pending-verification ledger, auxiliary Qle/Qlt statements scaffolding only" "L1083:me505e5".
+  "separation complexity layer: rational envelope window family of pi (eps_n := 1/(n+1), M_n := 2*pie_modulus(eps_n/2)+1) carrying bool separation decider lw5n_sep_dec and minimal window rank lw5n_nsep via structurally recursive bounded search lw5n_find and explicit budget lw5n_bnd with minimality characterized by lw5n_nsep_minimal; window legality, near-boundary correctness and search machinery included; growth-law three-tier statements stay in annotations with closed proofs as future work; four conclusion-position nat-order bounds (nsep_bound, nsep_least upper bounds plus shape_lower/shape_band lower order m < 8*n0+9) honestly declared per the module header annotation as pending-verification ledger, auxiliary Qle/Qlt statements scaffolding only" "L1083:m063c27".
 
 (* ng_abl_tail_supply_65 —— abl_tail_supply_65.v：tsp_sum6 求和六性质件（尾百供给第二批·F1 六性质 28 槽实例闭形＋F9 inv_one_inv 双槽＋F12 fold 两方程＋PA 审计段；tmw/frd/tsi/slc/PA_04/sumL 六族使用喂形；决议141 尾百供给第二批纳入之新件落点） *)
 Definition ng_abl_tail_supply_65 : NewGreenFace :=
@@ -3918,3 +3918,13 @@ Definition ng_Arch_ToyR_01 : NewGreenFace :=
 Definition ng_Arch_ToyR_03 : NewGreenFace :=
   MkNewGreenFace "Arch_ToyR_03.v" 1488 61 20261006
   "sem_sum_eq_list full slot family and Uahl independent re-proofs with fa56b transport" "L1488:mda9a2fa2".
+
+(* ng_LW0MLicBridge —— LW0MLicBridge.v：M0+ 母判据适配三槽供给件（槽 1 tail 供给 lw0m_tail_bounded_pi＝lic_tail_bounded 实例＋槽 2 vanish 供给 lw0m_vanish_pi＝lic_vanish 实例＋real_metric 同余件 lw0m_metric_congr；统一窗 lw0m_e n := 5 * pie_mag n 三槽共享·lw0m_xL n := lp_four * lp_odd n 为窗距守卫形采样点）；PA=3 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_LW0MLicBridge : NewGreenFace :=
+  MkNewGreenFace "LW0MLicBridge.v" 87 3 20261006
+  "three-slot supply piece adapting the M0+ master-criterion interfaces: the tail slot lw0m_tail_bounded_pi instantiates lic_tail_bounded, the vanish slot lw0m_vanish_pi instantiates lic_vanish, and lw0m_metric_congr carries the real_metric congruence, with the shared uniform window lw0m_e n = 5 * pie_mag n and the sample point lw0m_xL n = lp_four * lp_odd n" "L87:mc214b9".
+
+(* ng_UacmPiStrongSepCombo —— uacm_pi_strong_sep_combo.v：pi_geom 对每一非零分母有理数的显式正距离分离组合件（lw5n 窗族 bool 出窗判定器 lw5n_sep_dec 与最小分离窗阶 lw5n_nsep 同守卫形分离定理 leibsep_pi_sep_alpha_guarded 在 Q 层合成：出窗事实经换算引理〔包络采样点 lw0m_xL 含入窗内＋统一窗 lw0m_e 消没〕转化为窗距守卫前提，产出 sigT 显式分离见证 0<c<|pi_geom−a/b|；命中前提 leiblw_Id (lw5n_sep_dec …) true 系 Set 层 bool 恒等假设位·如实承载最小分离窗阶搜索的预算足用性问题；附 q:=3 vm_compute 实算样例）；PA=5 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_UacmPiStrongSepCombo : NewGreenFace :=
+  MkNewGreenFace "uacm_pi_strong_sep_combo.v" 265 5 20261006
+  "explicit positive-distance separation of pi_geom from every rational with nonzero denominator: the lw5n window-family boolean out-of-window decider and the minimal separation index are composed with the guarded separation theorem at the rational layer through conversion lemmas (envelope sample point contained in the window and uniform window vanish), yielding a sigT separation witness under a computable gate hypothesis, with a vm_compute sample instance at q = 3" "L265:m9820f2".
