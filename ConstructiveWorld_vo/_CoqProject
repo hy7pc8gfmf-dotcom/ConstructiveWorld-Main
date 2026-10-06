@@ -641,3 +641,6 @@ Arch_ToyR_01.v
 Arch_ToyR_03.v
 LW0MLicBridge.v
 uacm_pi_strong_sep_combo.v
+u4a_budget_flip.v
+ucreal_bridge.v
+u6a_dammroze_quant.v

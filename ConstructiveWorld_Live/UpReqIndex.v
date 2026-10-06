@@ -3928,3 +3928,19 @@ Definition ng_LW0MLicBridge : NewGreenFace :=
 Definition ng_UacmPiStrongSepCombo : NewGreenFace :=
   MkNewGreenFace "uacm_pi_strong_sep_combo.v" 265 5 20261006
   "explicit positive-distance separation of pi_geom from every rational with nonzero denominator: the lw5n window-family boolean out-of-window decider and the minimal separation index are composed with the guarded separation theorem at the rational layer through conversion lemmas (envelope sample point contained in the window and uniform window vanish), yielding a sigT separation witness under a computable gate hypothesis, with a vm_compute sample instance at q = 3" "L265:m9820f2".
+
+(* ng_U4aBudgetFlip —— u4a_budget_flip.v：cos 零点唯一性定理的 eps/4 预算变体族（加细窗前提 31/20 < w < 2 下闭合：u4a_pi_leibniz_gt_31_10 以 Leibniz 奇对部分和十三项直构 31/10 < pi_leibniz（4·lp_odd 12 ≈ 3.10315 > 31/10 + 1/1000）；逆界两档 u4a_inv_dist_strict/wide 显式放大因子 60/31 与 120/61；u4a_unique_widened_eps4 于加细窗以终界 (120/61)·(eps/2) = 60·eps/61 < eps 闭合唯一性；u4a_pi_unique_eps4 给出 pi_leibniz/2 顶点应用形 w_leibniz == cos_pi_half）；PA=10 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U4aBudgetFlip : NewGreenFace :=
+  MkNewGreenFace "u4a_budget_flip.v" 408 10 20261006
+  "eps/4 budget variant family of the cosine-zero uniqueness theorem: under the refined window premise 31/20 < w < 2, two-level inverse bounds with explicit amplification factors 60/31 and 120/61 close the uniqueness proof with the final budget 60*eps/61 < eps, grounded in the thirteen-term Leibniz partial-sum lower bound 31/10 < pi_leibniz, with the vertex instantiation w_leibniz == cos_pi_half at pi_leibniz/2" "L408:ma776f3".
+
+(* ng_UcrealBridge —— ucreal_bridge.v：库构造实数到标准库 ConstructiveCauchyReals.CReal 的适配层（ucreal_of_real 逐点转换经单调模量包络与负指标绝对值取样传输柯西性质，收敛模量自库侧柯西见证构造；一致界以 1 + |u 0| 配 Qbound_ltabs_ZExp2 构造；ucreal_eq_seq_compat 以 Set 层一致贴近形交付等式兼容；ucreal_lt_compat 运输 real_lt 至 CRealLt，见证指标 min s0 (−N) 同时达成取样深度与细阈值；ucreal_pi_sep_guarded 将 leibsep_pi_sep_alpha_guarded 同前提四槽定理复述为 CRealLt 结论形）；PA=4 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_UcrealBridge : NewGreenFace :=
+  MkNewGreenFace "ucreal_bridge.v" 515 4 20261006
+  "adapter layer from the library constructive reals to the standard library ConstructiveCauchyReals.CReal: the pointwise conversion transports the Cauchy property through a monotone modulus envelope with absolute-value index sampling and builds the uniform bound via Qbound_ltabs_ZExp2, equality compatibility is delivered as a Set-layer uniform closeness statement, real_lt transports to CRealLt, and the pi irrational separation theorem is restated with a CRealLt conclusion under the same four premises" "L515:mdca710".
+
+(* ng_U6aDammrozeQuant —— u6a_dammroze_quant.v：Gregory-Leibniz 部分和族的逐指标正距分离（对每个指标 n 给出显式正有理证书 c_n := 2·(pie_mag n − pie_mag (S n))（闭式 4/((2n+1)(2n+3))，正性 u6a_cert_pos 机械证）；u6a_even_sep/u6a_odd_sep 两翼合取给出 c_n < |pi − G_n| 逐 n 成立，并附每个部分和位于 pi 哪一侧的侧信息；等式桥 4·S_{n+2} − 4·S_n == 2·c_n 恰取等，经 Qeq→qeq_le 入生成元面 pie_real_lower_gen/pie_real_upper_gen 假设）；PA=2 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U6aDammrozeQuant : NewGreenFace :=
+  MkNewGreenFace "u6a_dammroze_quant.v" 228 2 20261006
+  "per-index positive-distance separation for the Gregory-Leibniz partial-sum family: an explicit positive rational certificate 4/((2n+1)(2n+3)) for every index n, the two wings certifying c_n < |pi - G_n| for all n together with the side information of which side of pi each partial sum lies on, with the two-step-difference bridge entering the generator lemmas as an exact equality hypothesis" "L228:md2d929".
+
