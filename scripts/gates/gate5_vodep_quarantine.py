@@ -29,6 +29,17 @@
    盘上文件名与册名不符时 name_mismatch=true 亮出（改名投毒检测）。
 5. fail-loud：命中 exit 1；无可扫面／树无效／对照失效／黑名单空／扫描出错
    （面不完整）一律 exit 2；exit 0 必须是「扫全＋对照过＋零命中」三件齐。
+6. 构造性实数岛上下文豁免（20261006 校准，run #201 判例）：stdlib 构造性零公理
+   实数库——Stdlib.Reals.Cauchy.ConstructiveCauchyReals、
+   Stdlib.Reals.Abstract.ConstructiveReals 及同子树 QExtra/ConstructiveExtra 等
+   ——其路径串必嵌路径段 Reals，撞硬 token Reals（该 token 本意拦 Stdlib.Reals.*
+   经典实数毒面）。机械判据（双机制，真 born vo 字节实勘校准）：①Reals 命中所在
+   连续路径串（仅 [A-Za-z0-9_./\\] 字符）内含岛名全词；②叶先序长度前缀段列表
+   编码下命中左向紧邻段（word1，gap≤4 结构字节）∈ 岛名 ∪ 构造子树段
+   {Cauchy,Abstract}。任一成立 → 降为信息档（exempted_island 计数单列，判定
+   透明）；右向禁跨 gap（相邻条目 digest 屏障防串豁）；其余一切 Reals 命中
+   （ClassicalDedekindReals/Rbase/Raxioms/Lra 等路径段、裸路径段）照硬。
+   digest 层不适用本豁免——毒 digest 仍一票咬合。
 
 用法：
   python gate5_vodep_quarantine.py [--tree DIR]... [--blacklist FILE]
@@ -47,6 +58,21 @@ TOKEN_RES = {
     t: re.compile(rb"(?<![A-Za-z0-9_])" + t.encode() + rb"(?![A-Za-z0-9_])")
     for t in ALL_TOKENS
 }
+# 设计要点 6：构造性实数岛具名与连续路径串字符类（岛豁免仅作用于 token Reals）。
+# 真字节校准（run #201 同源 born vo 实勘 20261006）：.vo 依赖面存两种形——
+# ①点形/斜杠形连续串（Stdlib.Reals.Cauchy.ConstructiveCauchyReals）；②叶先序
+# 长度前缀段列表（ConstructiveCauchyReals·Cauchy·Reals·Stdlib，段间 1-2 结构
+# 字节）。构造族子树＝Stdlib.Reals.{Cauchy,Abstract}.*（QExtra/ConstructiveExtra
+# 亦居 Cauchy 目录，装机实勘），子树段名单列 SEG 判据；其余一切 Reals 命中照硬。
+CONSTRUCTIVE_ISLANDS = ["ConstructiveCauchyReals", "ConstructiveReals"]
+CONSTRUCTIVE_SUBTREE_SEGS = ["Cauchy", "Abstract"]
+ISLAND_RES = [
+    (t, re.compile(rb"(?<![A-Za-z0-9_])" + t.encode() + rb"(?![A-Za-z0-9_])"))
+    for t in CONSTRUCTIVE_ISLANDS
+]
+RUN_CHAR_RE = re.compile(rb"[A-Za-z0-9_./\\]")
+WORD_RE = re.compile(rb"[A-Za-z0-9_]+")
+MAX_SEG_GAP = 4  # 段间结构字节上限（实测 1-2；digest 屏障 16 字节必超限断走）
 SCAN_SUFFIXES = (".vo", ".vos", ".vok")
 MAX_FILE_BYTES = 512 * 1024 * 1024  # 单件 IO 安全帽，超出计 ERR（fail-loud）
 
@@ -87,17 +113,69 @@ def blobs_of(path):
     return blobs
 
 
+def reals_island_name(blob, start, end):
+    """Reals 命中处的构造性实数岛上下文判定：命中返回豁免理由（岛名/子树段），
+    否则 None（照硬）。双机制（真字节校准见设计要点 6）：
+    ①连续路径串——命中两侧 [A-Za-z0-9_./\\] 极大串内含岛名全词（点形/斜杠形）；
+    ②左向分段邻域——叶先序段列表编码下，自命中左向以 ≤MAX_SEG_GAP 个非字母
+      字节为 gap 逐段读词（仅读 word1），word1∈岛名∪构造子树段（Cauchy/
+      Abstract）→ 豁免。右向禁跨 gap 读词：相邻依赖条目以 16 字节 digest 为
+      屏障，跨屏障读词构成串豁风险（防御纵深底线）。"""
+    lo = start
+    while lo > 0 and RUN_CHAR_RE.match(blob[lo - 1 : lo]):
+        lo -= 1
+    hi = end
+    n = len(blob)
+    while hi < n and RUN_CHAR_RE.match(blob[hi : hi + 1]):
+        hi += 1
+    run = blob[lo:hi]
+    for name, res in ISLAND_RES:
+        if res.search(run):
+            return name
+    # ②左向分段邻域：word1=紧邻段（该条目的叶段，叶先序编码实测）
+    pos = start
+    gap = 0
+    while pos > 0 and gap <= MAX_SEG_GAP and not WORD_RE.match(blob[pos - 1 : pos]):
+        pos -= 1
+        gap += 1
+    if 0 < gap <= MAX_SEG_GAP and pos > 0:
+        wend = pos
+        while wend > 0 and WORD_RE.match(blob[wend - 1 : wend]):
+            wend -= 1
+        word1 = blob[wend:pos]
+        if word1 in CONSTRUCTIVE_ISLANDS:
+            return word1.decode("ascii")
+        if word1 in [s.encode("ascii") for s in CONSTRUCTIVE_SUBTREE_SEGS]:
+            return "Reals/" + word1.decode("ascii")
+    return None
+
+
 def scan_tokens(path):
-    """返回 (命中 token 集合, err 或 None)。"""
+    """返回 (硬/软命中 token 集合, 岛豁免记录列表, err 或 None)。
+
+    token Reals 逐出现处分类：含岛上下文的出现处降为信息档（记入 exempted），
+    任一无岛上下文的出现处即令该 token 照硬入 hits。其余 token 判据不变。"""
     try:
         hits = set()
+        exempted = []
         for b in blobs_of(path):
             for t in ALL_TOKENS:
-                if t not in hits and TOKEN_RES[t].search(b):
+                if t in hits:
+                    continue
+                if t == "Reals":
+                    for m in TOKEN_RES[t].finditer(b):
+                        island = reals_island_name(b, m.start(), m.end())
+                        if island is None:
+                            hits.add(t)
+                            break
+                        rec = {"token": t, "island": island}
+                        if rec not in exempted:
+                            exempted.append(rec)
+                elif TOKEN_RES[t].search(b):
                     hits.add(t)
-        return hits, None
+        return hits, exempted, None
     except Exception as e:  # OSError/EOFError/MemoryError 等——fail-loud 记账
-        return set(), str(e)[:80]
+        return set(), [], str(e)[:80]
 
 
 def md5_of(path):
@@ -150,6 +228,7 @@ def scan_tree(tree, blacklist, strict_psatz):
     token_hits = []   # 硬命中（strict 时含 Psatz）
     soft_hits = []    # Psatz 信息档
     digest_hits = []
+    island_exempt = []  # Reals 命中而上下文属构造性实数岛——信息档（设计要点 6）
     for dp, dn, fn in os.walk(tree):
         for name in sorted(fn):
             if not name.endswith(SCAN_SUFFIXES):
@@ -165,7 +244,7 @@ def scan_tree(tree, blacklist, strict_psatz):
                                    "name_mismatch": None, "err": str(e)})
                 continue
             files += 1
-            hits, err = scan_tokens(path)
+            hits, exempted, err = scan_tokens(path)
             if err:
                 errors += 1
                 token_hits.append({"file": rel, "token": "<SCAN-ERROR>", "digest": None,
@@ -185,6 +264,10 @@ def scan_tree(tree, blacklist, strict_psatz):
                             "blacklist_name": blacklist[digest],
                             "name_mismatch": os.path.basename(path) != blacklist[digest],
                         })
+            for rec in exempted:
+                if rec["token"] not in hits:  # 同件同 token 已有硬出现处则豁免不作数
+                    island_exempt.append({"file": rel, "token": rec["token"],
+                                          "island": rec["island"], "digest": digest})
             for t in sorted(hits):
                 rec = {"file": rel, "token": t, "digest": digest,
                        "name_mismatch": None, "err": None}
@@ -194,7 +277,7 @@ def scan_tree(tree, blacklist, strict_psatz):
                     soft_hits.append(rec)
     return {"files": files, "errors": errors,
             "token_hits": token_hits, "soft_hits": soft_hits,
-            "digest_hits": digest_hits}
+            "digest_hits": digest_hits, "island_exempt": island_exempt}
 
 
 def main():
@@ -218,9 +301,11 @@ def main():
     report = {
         "scan_time": now, "tool": "gate5_vodep_quarantine",
         "hard_tokens": HARD_TOKENS, "soft_tokens": SOFT_TOKENS,
+        "constructive_islands": CONSTRUCTIVE_ISLANDS,
         "strict_psatz": args.strict_psatz, "trees": {}, "control": {},
         "blacklist": {}, "total_files": 0, "total_errors": 0,
         "total_token_hits": 0, "total_soft_hits": 0, "total_digest_hits": 0,
+        "exempted_island": 0,
     }
     exit_code = 0
     fatal = None
@@ -244,7 +329,7 @@ def main():
             report["control"] = {"path": cpath, "status": "CONTROL-ABSENT"}
             fatal = "control-absent"
         else:
-            hits, err = scan_tokens(cpath)
+            hits, _exempted, err = scan_tokens(cpath)
             ok = CONTROL_TOKEN in hits and err is None
             report["control"] = {"path": cpath, "status": "CONTROL-SELF-HIT-PASS" if ok
                                  else "CONTROL-SELF-HIT-FAIL", "tokens": sorted(hits),
@@ -274,10 +359,13 @@ def main():
                      ("total_token_hits", None), ("total_soft_hits", None),
                      ("total_digest_hits", None)):
             report[k] += res[t] if t is not None else len(res[k.replace("total_", "")])
+        report["exempted_island"] += len(res["island_exempt"])
         status = ("HIT(检疫咬合)" if res["token_hits"] or res["digest_hits"]
                   else "PASS(洁净)" if res["errors"] == 0 else "INCOMPLETE(扫描出错,不可判绿)")
         print(f"[gate5] 树={tree}  可扫件={res['files']}  硬命中={len(res['token_hits'])}  "
-              f"软命中(Psatz信息档)={len(res['soft_hits'])}  digest命中={len(res['digest_hits'])}  "
+              f"软命中(Psatz信息档)={len(res['soft_hits'])}  "
+              f"岛豁免(构造性岛上下文信息档)={len(res['island_exempt'])}  "
+              f"digest命中={len(res['digest_hits'])}  "
               f"出错={res['errors']}  判定={status}  扫描时点={now}")
         for h in res["token_hits"]:
             print(f"  HIT {tree}{os.sep}{h['file']}  token={h['token']}"
@@ -286,6 +374,9 @@ def main():
             print(f"  DIGEST-HIT {tree}{os.sep}{h['file']}  md5={h['digest']}"
                   f"  册名={h['blacklist_name']}"
                   + ("  [改名投毒:name_mismatch]" if h["name_mismatch"] else ""))
+        for h in res["island_exempt"]:
+            print(f"  exempt-island {tree}{os.sep}{h['file']}  token={h['token']}"
+                  f"  island={h['island']}（构造性岛上下文→信息档非硬命中）")
         for h in res["soft_hits"]:
             print(f"  soft {tree}{os.sep}{h['file']}  token={h['token']}（信息档非硬命中）")
         if res["token_hits"] or res["digest_hits"]:
@@ -305,7 +396,8 @@ def main():
     if exit_code == 0:
         print(f"[gate5] GATE5-VERDICT: CLEAN exit 0（扫 {report['total_files']} 件＋"
               f"硬 token 0 命中＋digest 0 命中＋对照 SELF-HIT 过；"
-              f"Psatz 信息档 {report['total_soft_hits']} 件已记录）")
+              f"Psatz 信息档 {report['total_soft_hits']} 件＋构造性岛上下文豁免 "
+              f"{report['exempted_island']} 件已记录）")
     elif exit_code == 1:
         print(f"[gate5] GATE5-VERDICT: HIT exit 1（硬命中 {total_hit} 处——检疫咬合，"
               "处置循 VO-RES-CLEAN 纪律：删毒代＋净源重编消费者闭包＋Axioms=<none> 复证）")
