@@ -642,3 +642,8 @@ LW0MLicBridge.v#R162-c214b9
 uacm_pi_strong_sep_combo.v#R162-9820f2
 u4a_budget_flip.v#R163-a776f3
 u6a_dammroze_quant.v#R163-d2d929
+u5c_bridge.v#R164-b1aeba
+u5c_inst_sqrt2.v#R164-c234f6
+u5c_inst_sqrt3.v#R164-2b5a6c
+u5c_inst_e.v#R164-31b911
+ucreal_bridge.v#R163-9e24e8

@@ -3939,3 +3939,28 @@ Definition ng_U6aDammrozeQuant : NewGreenFace :=
   MkNewGreenFace "u6a_dammroze_quant.v" 228 2 20261006
   "per-index positive-distance separation for the Gregory-Leibniz partial-sum family: an explicit positive rational certificate 4/((2n+1)(2n+3)) for every index n, the two wings certifying c_n < |pi - G_n| for all n together with the side information of which side of pi each partial sum lies on, with the two-step-difference bridge entering the generator lemmas as an exact equality hypothesis" "L228:md2d929".
 
+(* ng_U5cBridge —— u5c_bridge.v：无理性判据的通用分离层（逃逸点显式参数形 u5c_escape_to_dist：单参数族 x/e 同时承担尾控、逃逸窗与窗宽消失三职时，任一有理数 q 在某 n0 ≥ 1 处满足 e(n0) < |q − x(n0)|，则极限与 q 之间存在 Q 层正分离常数 c := (|q − x(n0)| − e(n0))/2；附 u5c_criterion_from_window：存在型窗见证无损还原为显式逃逸点装配，主判据 lic_irrational_criterion 与显式点两入口汇聚同一构造）；PA=2 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cBridge : NewGreenFace :=
+  MkNewGreenFace "u5c_bridge.v" 147 2 20261006
+  "generic separation layer for the constructive irrationality criterion with an explicit escape point: when a one-parameter family x/e carries the tail bound, the escape window and the window vanishing at once, every rational q escaping the window e(n0) at some index n0 >= 1 admits a positive rational separation constant c = (|q - x(n0)| - e(n0))/2 toward the limit, and the existential window witness of the master criterion is recovered losslessly as an explicit-point assembly" "L147:mb1aeba".
+
+(* ng_U5cInstSqrt2 —— u5c_inst_sqrt2.v：√2 无理分离的显式逃逸点装配件（ir2_escape 窗见证解构出显式逃逸点 n0，经通用分离引理 u5c_escape_to_dist 得 Q 层正分离常数，结论形与在树 lic 判据逐字同构，检验显式点入口对二次无理型实例适用）；PA=1 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cInstSqrt2 : NewGreenFace :=
+  MkNewGreenFace "u5c_inst_sqrt2.v" 42 1 20261006
+  "explicit escape-point assembly of the irrationality separation for the square root of two: the window witness is destructed into an explicit escape point and the generic separation lemma yields the positive rational separation constant, with the conclusion shape matching the in-tree criterion word for word" "L42:mc234f6".
+
+(* ng_U5cInstSqrt3 —— u5c_inst_sqrt3.v：√3 无理分离的显式逃逸点装配件（is3_escape 窗见证解构出显式逃逸点 n0，经通用分离引理 u5c_escape_to_dist 得 Q 层正分离常数，结论形与在树 lic 判据逐字同构）；PA=1 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cInstSqrt3 : NewGreenFace :=
+  MkNewGreenFace "u5c_inst_sqrt3.v" 42 1 20261006
+  "explicit escape-point assembly of the irrationality separation for the square root of three: the window witness is destructed into an explicit escape point and the generic separation lemma yields the positive rational separation constant, with the conclusion shape matching the in-tree criterion word for word" "L42:m2b5a6c".
+
+(* ng_U5cInstE —— u5c_inst_e.v：e 无理分离的显式逃逸点装配件（lic_witness_e 窗见证解构出显式逃逸点 n0（1/n0! < |q − x(n0)|），经通用分离引理 u5c_escape_to_dist 得 Q 层正分离常数，检验显式点入口对指数型实例适用）；PA=1 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cInstE : NewGreenFace :=
+  MkNewGreenFace "u5c_inst_e.v" 44 1 20261006
+  "explicit escape-point assembly of the irrationality separation for e: the factorial-scale window witness is destructed into an explicit escape point and the generic separation lemma yields the positive rational separation constant, checking that the explicit-point entry applies to the exponential-type instance" "L44:m31b911".
+
+
+(* ng_UcrealBridge —— ucreal_bridge.v：库构造实数到标准库 ConstructiveCauchyReals.CReal 的适配层（ucreal_of_real 逐点转换经单调模量包络与负指标绝对值取样传输柯西性质，收敛模量自库侧柯西见证构造；一致界以 1 + |u 0| 配 Qbound_ltabs_ZExp2 构造；ucreal_eq_seq_compat 以 Set 层一致贴近形交付等式兼容；ucreal_lt_compat 运输 real_lt 至 CRealLt，见证指标 min s0 (−N) 同时达成取样深度与细阈值；ucreal_pi_sep_guarded 将 leibsep_pi_sep_alpha_guarded 同前提四槽定理复述为 CRealLt 结论形）；PA=4 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_UcrealBridge : NewGreenFace :=
+  MkNewGreenFace "ucreal_bridge.v" 515 4 20261006
+  "adapter layer from the library constructive reals to the standard library ConstructiveCauchyReals.CReal: the pointwise conversion transports the Cauchy property through a monotone modulus envelope with absolute-value index sampling and builds the uniform bound via Qbound_ltabs_ZExp2, equality compatibility is delivered as a Set-layer uniform closeness statement, real_lt transports to CRealLt, and the pi irrational separation theorem is restated with a CRealLt conclusion under the same four premises" "L515:m9e24e8".
