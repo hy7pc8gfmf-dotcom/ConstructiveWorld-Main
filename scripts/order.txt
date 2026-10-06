@@ -654,3 +654,9 @@ abl_Pr_euler_prod.v#R165-d43580
 abl_e_irrational.v#R166-69dd8e
 abl_Pr_sigma_mul.v#R166-e73fe4
 abl_Pr_val_inj.v#R166-8874ae
+abl_z2_pointwise.v#R167-c0b163
+abl_z2_truncfam.v#R167-e8382a
+abl_z2_itg_carrier.v#R167-01942f
+abl_z2_decay.v#R167-441d88
+abl_z2_dub3.v#R167-b8c78c
+abl_z2_valbridge.v#R167-e81cc9

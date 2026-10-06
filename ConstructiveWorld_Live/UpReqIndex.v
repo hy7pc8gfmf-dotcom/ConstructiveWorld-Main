@@ -3998,3 +3998,29 @@ Definition ng_AblPrSigmaMul : NewGreenFace :=
 Definition ng_AblPrValInj : NewGreenFace :=
   MkNewGreenFace "abl_Pr_val_inj.v" 291 11 20261006
   "injectivity certificate for prime exponent vectors: a prime power divides a product of distinct prime powers only if the prime occurs in the list with at least that exponent, with a coprime gaussian elimination core and list-membership transport companions" "L291:m8874ae".
+
+(* ng_AblZ2Pointwise —— abl_z2_pointwise.v：ζ(2) Beukers 二重积分被积族的逐点控制面（N := x(1−x)y(1−y) 在闭方格上 10N ≤ 1−xy、4N ≤ (1−xy)²、复合形 4·10ⁿ·Nⁿ⁺¹ ≤ (1−xy)ⁿ⁺²；Set 层序结构 zb2_id/zb2_qle 自立，非线性不等式全以显式平方分解证书完成，零自动化战术）；PA=31 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2Pointwise : NewGreenFace :=
+  MkNewGreenFace "abl_z2_pointwise.v" 738 31 20261006
+  "pointwise exponential control face for the Beukers 1979 double-integral integrand family of zeta(2): on the closed unit square the family N = x(1-x)y(1-y) satisfies 10N <= 1-xy, 4N <= (1-xy)^2 and the composed decay 4*10^n*N^(n+1) <= (1-xy)^(n+2), delivered with a self-standing Set-layer order structure (zb2_id/zb2_qle) and explicit square-decomposition certificates without automation tactics" "L738:mc0b163".
+(* ng_AblZ2Truncfam —— abl_z2_truncfam.v：Taylor 截断族（几何级数与二项阶系数的部分和母恒等式 zb2_ps/zb2_psu/zb2_pq，Pascal 步·平移恒等式·母恒等式·非负性与单位点检验 zb2_ps_anchor1，截断展开的显式有理证书）；PA=8 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2Truncfam : NewGreenFace :=
+  MkNewGreenFace "abl_z2_truncfam.v" 319 8 20261006
+  "Taylor truncation family for the Beukers zeta(2) integral: partial-sum master identities over geometric series and binomial coefficients (zb2_ps/zb2_psu/zb2_pq) with the Pascal step, shift identity, master identity, nonnegativity bounds and the unit-point check zb2_ps_anchor1, giving explicit rational certificates for the truncation expansion" "L319:me8382a".
+(* ng_AblZ2ItgCarrier —— abl_z2_itg_carrier.v：迭代积分承载机（段列 zb2_segl 经两次单积分化归有理项表 zb2_Isum，段求值 zb2_beval_segl、长度转换 zb2_di_l_segl、项正性 zb2_term_pos 与积分和正性 zb2_Isum_pos）；PA=5 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2ItgCarrier : NewGreenFace :=
+  MkNewGreenFace "abl_z2_itg_carrier.v" 219 5 20261006
+  "iterated-integral carrier machine for the Beukers zeta(2) family: the segment list zb2_segl evaluated by two single integrations reduces to the rational term table zb2_Isum, with segment evaluation (zb2_beval_segl), length conversion (zb2_di_l_segl), term positivity (zb2_term_pos) and integral-sum positivity (zb2_Isum_pos)" "L219:m01942f".
+(* ng_AblZ2Decay —— abl_z2_decay.v：逐点衰减与竞争判定面（承载面按 (1/4)(1/10)^m 衰减；显式分离器 zb2_dc_sep_small 在整性与积分桥前提显式承载下对 m ≥ 8 给 d²·I < 1，零排中律）；PA=16 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2Decay : NewGreenFace :=
+  MkNewGreenFace "abl_z2_decay.v" 438 16 20261006
+  "pointwise decay and competition verdict face: the carrier decays as (1/4)(1/10)^m and the explicit separator zb2_dc_sep_small yields d^2 * I < 1 for all m >= 8 under the integrality and integral-bridge premises carried explicitly, with no excluded middle anywhere" "L438:m441d88".
+(* ng_AblZ2Dub3 —— abl_z2_dub3.v：Hanson 1972 路线 Sylvester 序列基础段（稠密取整不等式 1 + Σ_j⌊s/a_{j+1}⌋ ≤ s 对一切 k、一切 s ≥ 1 成立 z2d_sylv_floor_t，乘法放大证书＋可执行序列机 z2d_sylv_P/z2d_sylv_a/z2d_sylv_sum）；PA=11 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2Dub3 : NewGreenFace :=
+  MkNewGreenFace "abl_z2_dub3.v" 235 11 20261006
+  "Sylvester-sequence foundation segment of the Hanson 1972 route for lcm(1..n) <= 3^n: the dense floor inequality 1 + sum_j floor(s/a_{j+1}) <= s holds for all k and all s >= 1 (z2d_sylv_floor_t), proved by the multiplicative amplification certificate with explicit computable sequence machines" "L235:mb8c78c".
+(* ng_AblZ2Valbridge —— abl_z2_valbridge.v：Hanson 链赋值桥 B(n) ∣ C(n)（C(n) := n!/∏_i⌊n/a_i⌋!；Legendre 和恒等式·嵌套除法·逐层比较三步证 hl_lcm_upto n 整除 C(n)，Prop 面 z2v_lcm_dvd_C 与 Set 面 z2v_lcm_dvd_C_t 双形，赋值机 z2v_leg/z2v_cnt/z2v_pc/z2v_den/z2v_lsum/z2v_C 皆可执行）；PA=29 Closed；提取 .ml Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_AblZ2Valbridge : NewGreenFace :=
+  MkNewGreenFace "abl_z2_valbridge.v" 710 29 20261006
+  "valuation bridge B(n) | C(n) of the Hanson chain: for C(n) := n!/prod_i floor(n/a_i)! the Legendre-sum identity, nested division and layer-wise comparison prove lcm(1..n) divides C(n) in both the Prop face (z2v_lcm_dvd_C) and the Set face (z2v_lcm_dvd_C_t), with executable valuation machines z2v_leg/z2v_cnt/z2v_pc/z2v_den/z2v_lsum/z2v_C" "L710:me81cc9".
+

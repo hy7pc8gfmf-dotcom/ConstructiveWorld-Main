@@ -655,3 +655,9 @@ abl_Pr_euler_prod.v
 abl_e_irrational.v
 abl_Pr_sigma_mul.v
 abl_Pr_val_inj.v
+abl_z2_pointwise.v
+abl_z2_truncfam.v
+abl_z2_itg_carrier.v
+abl_z2_decay.v
+abl_z2_dub3.v
+abl_z2_valbridge.v
