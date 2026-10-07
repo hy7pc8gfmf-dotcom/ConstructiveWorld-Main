@@ -4024,15 +4024,15 @@ Definition ng_AblZ2Valbridge : NewGreenFace :=
   MkNewGreenFace "abl_z2_valbridge.v" 710 29 20261006
   "valuation bridge B(n) | C(n) of the Hanson chain: for C(n) := n!/prod_i floor(n/a_i)! the Legendre-sum identity, nested division and layer-wise comparison prove lcm(1..n) divides C(n) in both the Prop face (z2v_lcm_dvd_C) and the Set face (z2v_lcm_dvd_C_t), with executable valuation machines z2v_leg/z2v_cnt/z2v_pc/z2v_den/z2v_lsum/z2v_C" "L710:me81cc9".
 
-(* ng_NsepFindGeneric —— NsepFindGeneric.v：判定器参数化的通用最小分离索引搜索（nsep_find 自 n 起逐阶试 bool 判定器 dec、燃料尽返回预算端点 n；特征定理三件 ub/hit/min＋预算化运行 nsep_first 之 bound/hit/least/minimal 四推论，对任意判定器与任意预算成立，与具体窗族解耦；π 侧实例=lw5n_sep_dec，√2 Newton 序列实例 ir2_sep_dec 内置）；PA=7 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+(* ng_NsepFindGeneric —— NsepFindGeneric.v：判定器参数化的通用最小分离索引搜索（nsep_find 自 n 起逐阶试 bool 判定器 dec、预算耗尽返回端点 n；特征定理三件 ub/hit/min＋预算化运行 nsep_first 之 bound/hit/least/minimal 四推论，对任意判定器与任意预算成立，与具体窗口族解耦；π 侧实例=lw5n_sep_dec，√2 Newton 序列实例 ir2_sep_dec 内置）；PA=7 Closed；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_NsepFindGeneric : NewGreenFace :=
   MkNewGreenFace "NsepFindGeneric.v" 216 7 20261007
   "decoder-parameterized generic minimal separation-index search: nsep_find probes dec from n upward under fuel returning the budget endpoint, with the ub/hit/min characteristic theorem triple and the budgeted runner nsep_first giving bound/hit/least/minimal corollaries valid for any boolean separation decider and any budget; pi-side instance lw5n_sep_dec and a sqrt(2) Newton instance built in" "L216:ma226ef".
-(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件三代（二代级数面沿旧代保留：级数项、部分和族 z2s_ps、伸缩分裂恒等式、项递减不变量、几何尾界、有界性、显式速率 Cauchy 模量 z2s_half_idx、数值锚 1/8、零权 Beta 项恒等与 t:=xy 双变量截断展开实例；三代新增 Beukers 二重积分装配面：整值判据 z2i_allZq 以 Z 余数索引承载、最小公倍伸缩与幂和表、逐点控制到积分和的过渡 z2t_Isum_le_weight 显式取用衰减前提 (1/4)(1/10)^m、分离推论 z2t_sep_small_core、单调积分内核以显式前提隔离于 z2t_di_l_le、数值锚 59/1200 与 439/176400）；PA=74 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件第三期扩展（既有级数面保留：级数项、部分和族 z2s_ps、伸缩分裂恒等式、项递减不变量、几何尾界、有界性、显式速率 Cauchy 模量 z2s_half_idx、数值锚 1/8、零权 Beta 项恒等与 t:=xy 双变量截断展开实例；本期新增 Beukers 二重积分装配面：整值判据 z2i_allZq 以 Z 余数索引承载、最小公倍伸缩与幂和表、逐点控制到积分和的过渡 z2t_Isum_le_weight 显式取用衰减前提 (1/4)(1/10)^m、分离推论 z2t_sep_small_core、单调积分内核以显式前提隔离于 z2t_di_l_le、数值锚 59/1200 与 439/176400）；PA=74 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_AblZ2sPs : NewGreenFace :=
   MkNewGreenFace "abl_z2s_ps.v" 1338 86 20261007
   "zeta(2) partial-sum series carrier, third generation: the second-generation series face retained verbatim (term 1/(k+1)^2, partial-sum family z2s_ps, telescoping identity, decreasing invariant, geometric tail bound, boundedness, explicit-rate Cauchy modulus z2s_half_idx, anchor 1/8, zero-weight Beta identity and the t:=xy truncated-expansion instance), extended by the Beukers 1979 double-integral assembly: the integrality carrier z2i_allZq indexed by Z remainders with lcm scaling and power-sum tables, the pointwise-to-integral-sum transition z2t_Isum_le_weight consuming the explicit decay premise (1/4)(1/10)^m, the separation corollary z2t_sep_small_core, and the monotone-integral step carried as an explicit premise in z2t_di_l_le; numerical anchors 59/1200 and 439/176400" "L1338:ma16c44".
-(* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证砖的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；1394 代 674 行现势之上纯 append 15 主语句（cmp 前 29670 字节前缀恒等·旧面逐字零改动））；PA=52 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证件的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；在 674 行既有版本之上追加 15 条主语句（新增语句置于文件尾部，既有语句面逐字不变））；PA=52 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none               *)
 Definition ng_AblLntTruncfam : NewGreenFace :=
   MkNewGreenFace "abl_lnt_truncfam.v" 1046 52 20261007
   "ln2 witness brick integration and decay faces: truncation-family remainder carried by an explicit upper-bound constant, with decay carried by the closed-form constant c(n)=1/((2n+1)*C(2n,n)); fifteen main statements appended with the prior 674-line generation preserved verbatim" "L1046:m69cc1dd5".
@@ -4040,24 +4040,24 @@ Definition ng_AblLntTruncfam : NewGreenFace :=
 Definition ng_NsepFirstSufficiency : NewGreenFace :=
   MkNewGreenFace "NsepFirstSufficiency.v" 243 11 20261007
   "budget-sufficiency general theorem: the output of the budgeted minimal separation-index search nsep_first relates sufficiently to the actual first-hit step, parameterized over any boolean decider and any budget, with false-face extraction lemmas and the exhausted-stop characterization" "L243:m852e49".
-(* ng_Lw4cPiLicGate —— Lw4cPiLicGate.v：π LIC 门供给模块（逃逸窗供给 escape_of_supply 与 find_escape、门数据 (n, c0) 取量与窗宽换算 lw4p_pi_gate_supply、单步升格 lw4p_pi_lic_face_of_gate、判定引理 licdec_true）；PA=4 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_Lw4cPiLicGate —— Lw4cPiLicGate.v：π LIC 检验供给模块（逃逸窗口供给 escape_of_supply 与 find_escape、检验数据 (n,c0) 与窗口宽换算 lw4p_pi_gate_supply、单步升级 lw4p_pi_lic_face_of_gate、判定引理 licdec_true）；PA=4 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none*)
 Definition ng_Lw4cPiLicGate : NewGreenFace :=
   MkNewGreenFace "Lw4cPiLicGate.v" 241 4 20261007
   "pi gate supply carrier: escape-window supply with the gate-data (n, c0) extraction and window-width conversion, one-step promotion to the lic face via lw4p_pi_lic_face_of_gate, and the licdec_true decision lemma" "L241:md82636".
-(* ng_Lw0LeibEscapeAt —— Lw0LeibEscapeAt.v：逃逸窗定点首砖（独立新件取用 Local.LW0LeibSeparation 内核：leibsep_q_kernel 正距离与 lw0m_vanish_pi 消失面在合流指标 N1 处给出的 leibsep_escape_window_at，案三 lic 接口形）；PA=1 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_Lw0LeibEscapeAt —— Lw0LeibEscapeAt.v：逃逸窗口定点首个语句（独立新件取用 Local.LW0LeibSeparation 内核：leibsep_q_kernel 正距离与 lw0m_vanish_pi 消失面在合流指标 N1 处给出的 leibsep_escape_window_at，lic 接口形）；PA=1 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_Lw0LeibEscapeAt : NewGreenFace :=
   MkNewGreenFace "Lw0LeibEscapeAt.v" 64 1 20261007
   "escape-window-at first brick: an independent lemma consuming the Local LW0LeibSeparation kernel, closing the case-three lic interface via the q-kernel positive distance and the vanish face at an explicit confluence index" "L64:mdf5141".
-(* ng_EpiOrFaces —— EpiOrFaces.v：门形谱低形承载模块（§7 基础四件＋§11 分支与配对面十一件＋§12 AA23 四件套槽登记；缺口三槽 res_cl/twk_e/epi_cond_from_meas 以显式前提承载、终形语句面逐字不动）；PA=19 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_EpiOrFaces —— EpiOrFaces.v：形态谱低形承载模块（§7 基础四件＋§11 分支与配对面十一件＋§12 显式前提登记；缺口三前提位 res_cl/twk_e/epi_cond_from_meas 以显式前提承载、终形语句面逐字不动）；PA=19 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none    *)
 Definition ng_EpiOrFaces : NewGreenFace :=
   MkNewGreenFace "EpiOrFaces.v" 439 19 20261007
   "gate-face spectrum low-form carrier: sections 7, 11 and 12 with the AA23 four-piece slot-registration set; the three gap slots are carried explicitly per the explicit-assumption craft with the terminal-form statement face frozen verbatim" "L439:m1323e3".
-(* ng_Lw4cPiLicFaceNonempty —— Lw4cPiLicFaceNonempty.v：π 对照面无条件非空件（自逃逸窗首砖 witness 经 lw4p_pi_gate_supply 取量与 lw4p_pi_lic_face_of_gate 单步升格构造 lw4c_pi_lic_face 见证、对照面 π 支自此有无条件见证）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_Lw4cPiLicFaceNonempty —— Lw4cPiLicFaceNonempty.v：π 对照面无条件非空件（自逃逸窗口首件 witness 经 lw4p_pi_gate_supply 取量与 lw4p_pi_lic_face_of_gate 单步升级构造 lw4c_pi_lic_face 见证、对照面 π 支自此有无条件见证）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none*)
 Definition ng_Lw4cPiLicFaceNonempty : NewGreenFace :=
   MkNewGreenFace "Lw4cPiLicFaceNonempty.v" 74 2 20261007
   "unconditional nonemptiness of the pi lic contrast face: a witness constructed from the escape-window-at brick via the gate supply and the one-step promotion, giving the face an unconditional witness on the pi side" "L74:m292c85".
 
-(* ng_U5cInstSqrt5 —— u5c_inst_sqrt5.v：√5 无理分离的显式逃逸点装配件（is5 序列窗见证 is5_escape 解构出显式逃逸点 n0，经通用分离引理 u5c_escape_to_dist 单步兑现 Q 层正分离常数，结论形与在树 lic 判据逐字同构，主语句 u5c_sqrt5_criterion_escape_pt 为闭式定量形；√2/√3/e 兄弟件同构族，判据上游对标 UpReqSqrt3Irrational）；PA=1 Closed（主语句）；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none *)
+(* ng_U5cInstSqrt5 —— u5c_inst_sqrt5.v：√5 无理分离的显式逃逸点装配件（is5 序列窗口见证 is5_escape 解构出显式逃逸点 n0，经通用分离引理 u5c_escape_to_dist 单步实现 Q 层正分离常数，结论形与在树 lic 判据逐字同构，主语句 u5c_sqrt5_criterion_escape_pt 为闭式定量形；√2/√3/e 同族实例，判据对标 UpReqSqrt3Irrational）；PA=1 Closed（主语句）；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none    *)
 Definition ng_U5cInstSqrt5 : NewGreenFace :=
   MkNewGreenFace "u5c_inst_sqrt5.v" 1305 31 20261007
   "explicit escape-point assembly for the irrationality of sqrt(5): the is5 series window witness is5_escape is destructed into an explicit escape point n0 and the generic separation lemma u5c_escape_to_dist delivers a positive Q-layer separation constant in one step, with the conclusion shaped verbatim as the in-tree lic criterion and the main statement u5c_sqrt5_criterion_escape_pt in closed quantitative form; same family as the sqrt2/sqrt3/e instances after UpReqSqrt3Irrational" "L1305:m264688".

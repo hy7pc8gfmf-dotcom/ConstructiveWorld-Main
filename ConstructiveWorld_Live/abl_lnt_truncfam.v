@@ -466,7 +466,7 @@ Print Assumptions lnt_rem_abs.
 
 (* §11.0 积分面（PolyIntegral 基建档）：衰减核 t^{M+1} 在 [0,1] 上的积分
    质量显式等于 1/(M+2)。库内积分基建于多项式档（pint_integral，
-   ∫x^k = 1/(k+1) 正确性锚在案）；有理函数被积函数不在其定义域，故衰减
+   ∫x^k = 1/(k+1) 正确性引用在案）；有理函数被积函数不在定义域，故衰减
    面按「积分=显式上界常数」处理：以闭式常数 c(n) = (n!)²/(2n+1)! 直接
    承载（§11.1-§11.2），免积分构造。 *)
 Lemma lnt_kernel_mass : forall M : nat,
@@ -602,7 +602,7 @@ Proof.
     + rewrite IH. ring.
 Qed.
 
-(* 预算：cfac n = 1/cden n ≤ (1/2)ⁿ（双逆反序：D₂ ≤ D ⟹ 1/D ≤ 1/D₂）。 *)
+(* 上界：cfac n = 1/cden n ≤ (1/2)ⁿ（双逆反序：D₂ ≤ D ⟹ 1/D ≤ 1/D₂）。 *)
 Lemma lnt_cfac_budget : forall n : nat,
   QleT' (lnt_cfac n) (q_pow (1 # 2)%Q n).
 Proof.
@@ -677,7 +677,7 @@ Print Assumptions lnt_cfac_budget.
 (* §13 供给面预形（θ 对齐・t=1 整数承载桥・下界序列显式化）                 *)
 (* ============================================================ *)
 
-(* θ 预算对齐：截断族预算面 (1/2)ⁿ 对齐供给面档位 (4/5)ⁿ（幂单调）。 *)
+(* θ 上界对齐：截断族上界面 (1/2)ⁿ 对齐供给面档位 (4/5)ⁿ（幂单调）。 *)
 Lemma lnt_theta_align : forall n : nat,
   QleT' (q_pow (1 # 2)%Q n) (q_pow (4 # 5)%Q n).
 Proof.
@@ -712,7 +712,7 @@ Proof.
   - rewrite Nat.pow_succ_r'. lia.
 Qed.
 
-(* 下界序列显式化：cfac n ≤ 1/(n+1)。链：预算面 cfac n ≤ (1/2)ⁿ
+(* 下界序列显式化：cfac n ≤ 1/(n+1)。链：上界面 cfac n ≤ (1/2)ⁿ
    （lnt_cfac_budget）＋(1/2)ⁿ = 1/2ⁿ（乘积恒等桥）＋双逆反序
    （n+1 ≤ 2ⁿ ⟹ 1/2ⁿ ≤ 1/(n+1)，两端正性）。 *)
 Lemma lnt_cfac_le_inv : forall n : nat,

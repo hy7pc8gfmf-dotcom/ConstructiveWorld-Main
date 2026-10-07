@@ -16,7 +16,7 @@
 (*         如 √2），而 e·π 的代数见证本身是开放问题——两向均需新数学输入； *)
 (*         该论证属元层级，不在本件形式化范围内。                         *)
 (*   证书可得性：e 支由 lic_e_irrational_criterion 直接给出（epi_irr_e）； *)
-(*   π 支与 e·π、e+π 的证书在数学上尚属开放问题，本件如实留空。           *)
+(*   π 支与 e·π、e+π 的证书在数学上尚属开放问题，本件显式留空。           *)
 (* 依赖：S01_BaseRing；S02_CauchyComplete；S03_QExp；SumInvFactEscape；   *)
 (*   S10_KVQuantTrig；UpReqIrrationalCriterion。                          *)
 (* 对标：lic_e_irrational_criterion 结论面；UpReqLpoEquiv 的 rLPO 语句面  *)
@@ -165,7 +165,7 @@ Proof.
   { apply NatLe_lift. apply Nat.le_max_r. }
   pose proof (Hsep _ Hle0) as HsN.
   pose proof (H1 _ Hle1) as H1N.
-  (* Qeq 重写不入 QltT 语境（无 Proper 实例；同 lic 母定理本体形）：
+  (* Qeq 重写不入 QltT 语境（无 Proper 实例；同 lic 源定理本体形）：
      投影换形经 lic_qltt_comp_r 于 Qeq 平面完成。 *)
   assert (HsT : QltT e0 ((Qabs ((projT1 X (max N0 N1) - q)%Q) - c)%Q)).
   { apply (lic_qltt_comp_r
@@ -252,7 +252,7 @@ Proof.
   intros ec w hr. exact (epi_irr_not_ratface sumR (ec w) hr).
 Qed.
 
-(* 剩余蕴含面的 Set 层语句形。其 inhabitedness 的数学现状（如实记录）：
+(* 剩余蕴含面的 Set 层语句形。其 inhabitedness 的数学现状（显式记录）：
    两面现皆无成员——(a强) 到 (c强) 需对任一代数见证产出 e+π 强无理证书；
    (c强) 到 (a强) 在 e·π 无代数见证时为空真、不产出分支数据；
    强无理与代数性相容（如 √2 兼二者），见证存在性本身为开放问题。 *)
@@ -416,11 +416,11 @@ Proof.
            (epi_trans_weak_closure_conj res_cl twk_e)).
 Qed.
 
-(* 分支选择面（L3）的反向障碍注记：供给→获解方向全量机检闭合——
-   析取见证即一支的完全有效无理证明（§10 分支机直连）。供给面
+(* 分支选择面的反向障碍注记：供给→获解方向全量机器验证闭合——  
+   析取见证即一支完全有效无理证明（§10 分支提取直连）。供给面
    自身的构造性成员资格为当代开放问题：e·π、e+π 无理性两支皆
    开放，判定原理族对单实例析取双向不通（单实例不含全称原理的
-   代入位，逃逸窗供给即开放问题本身）——机检不可达系数学现状
+   代入位，逃逸窗口供给即开放问题）—机器验证不可达系数学现状
    使然，非工程失败。开放状态随三项触发条件重估：（一）e·π 或
    e+π 的无理性获证（经典证明亦可，给出构造化入口）；（二）
    Mahler 型有效测度在库；（三）发现 e·π 有理（与 e 超越性可

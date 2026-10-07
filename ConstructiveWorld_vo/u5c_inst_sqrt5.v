@@ -9,7 +9,7 @@
 (************************************************************************)
 (* 五字段指针｜使命：√5（Newton 序列 X = lim x(n)，x(0)=9/4、
    x(n+1) = (x(n) + 5/x(n))/2）的无理性分离定理——逃逸点显式装配版。
-   对任意有理数 q，取逃逸窗见证 is5_escape q 的显式逃逸点 n0
+   对任意有理数 q，取逃逸窗口见证 is5_escape q 显式逃逸点 n0
    （e(n0) < |q − x(n0)|，e(n) = (x(n)² − 5)/2），由通用分离引理
    u5c_escape_to_dist 得 Q 层正分离常数 c := (|q − x(n0)| − e(n0))/2 使
    real_const c < |√5 − q|。装配实例与 u5c_inst_sqrt3 逐条同构；种子取 9/4
@@ -318,7 +318,7 @@ Definition is5_e (n : nat) : Q := (1 # 2) * is5_delta n.
 Lemma is5_x1 : is5_x 1 == (161 # 72).
 Proof. reflexivity. Qed.
 
-(* 5j² ≤ 2^{j+8}（is3_pow7sq 同构：供 q²<5 支 5·den² ≤ qp(SN) 严格窗） *)
+(* 5j² ≤ 2^{j+8}（is3_pow7sq 同构：供 q²<5 支 5·den² ≤ qp(SN) 严格窗口）*)
 Lemma is5_step5 : forall j : nat, (3 <= j)%nat -> (10 * j + 5 <= 5 * j * j)%nat.
 Proof.
   induction j as [|j IH]; intro Hj.
@@ -506,7 +506,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S4：误差窗衰减（δ ≤ 1/16；δ(Sn) ≤ δn/192；e_n ≤ 1/2^{n+1}）        *)
+(* S4：误差窗口衰减（δ ≤ 1/16；δ(Sn) ≤ δn/192；e_n ≤ 1/2^{n+1}）       *)
 (* ============================================================ *)
 
 Lemma is5_delta_step : forall n : nat, (1 <= n)%nat -> Qle (is5_delta n) (1#16) ->
@@ -826,7 +826,7 @@ Proof.
 Qed.
 
 (* ============================================================ *)
-(* S6：母定理三前件实例（尾控/窗宽消失/逃逸窗）                          *)
+(* S6：源定理三前件实例（尾控/窗口宽消失/逃逸窗口）                        *)
 (* ============================================================ *)
 
 Definition is5_tail : lic_tail_bounded is5_x is5_e.
@@ -1182,7 +1182,7 @@ Proof.
               ** reflexivity.
               ** apply (is5_delta_ge0 (Z.to_nat a + Z.to_nat (Z.pos b) + 1)).
               ** exact Hbnd.
-           ++ (* 5 < q² 且 q ≤ 9/4：N := den(q) + 8，窗 4/13（x_N 自下方追上 q） *)
+           ++ (* 5 < q² 且 q ≤ 9/4：N := den(q) + 8，窗口 4/13（x_N 自下方追上 q）*)
               pose proof (lic_qlt_bool_false_le (9#4) q H94b) as H94.
               destruct q as [a b].
               assert (Hb0 : (0 < Z.pos b)%Z) by apply Pos2Z.is_pos.
