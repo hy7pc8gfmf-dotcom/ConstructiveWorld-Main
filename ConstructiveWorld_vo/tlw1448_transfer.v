@@ -79,6 +79,6 @@ Print Assumptions tlw1448_margin_transfer.
 Print Assumptions tlw1448_kernel_dist_ck.
 Print Assumptions tlw1448_Bexp.
 
-(* ---- 提取探针（Obj.magic 计数如实登记）---- *)
+(* ---- 提取检验（Obj.magic 计数如实登记）---- *)
 From Stdlib Require Import Extraction.
 Extraction "tlw1448_transfer_ext.ml" tlw1448_ck tlw1448_Bexp.

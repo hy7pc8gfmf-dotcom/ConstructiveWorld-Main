@@ -86,6 +86,6 @@ Print Assumptions tlw1448_nsep_rebase_bound.
 Print Assumptions tlw1448_nsep_rebase_hit.
 Print Assumptions tlw1448_nsep_rebase_least.
 
-(* ---- 提取探针（Obj.magic 应为 0）---- *)
+(* ---- 提取检验（Obj.magic 应为 0）---- *)
 From Stdlib Require Import Extraction.
 Extraction "tlw1448_rebase_ext.ml" tlw1448_bexp tlw1448_nsep_rebase.

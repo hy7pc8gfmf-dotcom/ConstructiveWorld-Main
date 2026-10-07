@@ -109,6 +109,6 @@ Print Assumptions tlw1459_fold_closed.
 Print Assumptions tlw1459_fold_closed_leiblw.
 Print Assumptions tlw1459_band.
 
-(* ---- 提取探针（Obj.magic 计数如实登记；ck 走 projT1 路径为观察点）---- *)
+(* ---- 提取检验（Obj.magic 计数如实登记；ck 走 projT1 路径为观察点）---- *)
 From Stdlib Require Import Extraction.
 Extraction "tlw1459_fold_ext.ml" tlw1448_ck tlw1448_Bexp tlw1459_fold_closed.

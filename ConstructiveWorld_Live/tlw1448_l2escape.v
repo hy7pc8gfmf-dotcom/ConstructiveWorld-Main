@@ -6,7 +6,7 @@
 (*   lw5n_sep_dec q n0 = true。证法三步：包络模量界 pie_modulus_bound   *)
 (*   给 4·pie_mag(pie_modulus(c/2)) < c/2；Q 算术桥给窗族 eps_{n0} =     *)
 (*   1/(n0+1) < c；lw1m_dist_outwin（入窗则近距、窗宽小于距离则必出窗）  *)
-(*   收口。此即增长律闭合定理的上界供给（闭合定理与双向带合成另件）。     *)
+(*   即完成证明。此即增长律闭合定理的上界供给（闭合定理与双向带合成另件）。     *)
 (*                                                                    *)
 (* 依赖清单：Stdlib QArith/List/Bool/Arith/Setoid/Morphisms/Lia/Qminmax；*)
 (*   S01_BaseRing S02_CauchyComplete S03_QExp PiEnvelope LW0MLicBridge  *)
@@ -98,6 +98,6 @@ Definition tlw1448_l2_order (q : Q) (c : Q) : nat :=
 (* ---- 假设审计（应 Closed）---- *)
 Print Assumptions tlw1448_l2_escape.
 
-(* ---- 提取探针（Obj.magic 计数如实登记）---- *)
+(* ---- 提取检验（Obj.magic 计数如实登记）---- *)
 From Stdlib Require Import Extraction.
 Extraction "tlw1448_l2escape_ext.ml" tlw1448_l2_order lw5n_sep_dec.
