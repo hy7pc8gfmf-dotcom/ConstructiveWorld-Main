@@ -664,3 +664,7 @@ NsepFindGeneric.v#R168-a226ef
 abl_z2s_ps.v#R169-41387f
 abl_lnt_truncfam.v#R169-4a8616
 NsepFirstSufficiency.v#R169-852e49
+Lw4cPiLicGate.v#R170-d82636
+Lw0LeibEscapeAt.v#R170-df5141
+EpiOrFaces.v#R170-1323e3
+Lw4cPiLicFaceNonempty.v#R170-292c85

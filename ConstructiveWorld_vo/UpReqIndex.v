@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 580 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 584 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4040,3 +4040,19 @@ Definition ng_AblLntTruncfam : NewGreenFace :=
 Definition ng_NsepFirstSufficiency : NewGreenFace :=
   MkNewGreenFace "NsepFirstSufficiency.v" 243 11 20261007
   "budget-sufficiency general theorem: the output of the budgeted minimal separation-index search nsep_first relates sufficiently to the actual first-hit step, parameterized over any boolean decider and any budget, with false-face extraction lemmas and the exhausted-stop characterization" "L243:m852e49".
+(* ng_Lw4cPiLicGate —— Lw4cPiLicGate.v：π LIC 门供给模块（逃逸窗供给 escape_of_supply 与 find_escape、门数据 (n, c0) 取量与窗宽换算 lw4p_pi_gate_supply、单步升格 lw4p_pi_lic_face_of_gate、判定引理 licdec_true）；PA=4 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_Lw4cPiLicGate : NewGreenFace :=
+  MkNewGreenFace "Lw4cPiLicGate.v" 241 4 20261007
+  "pi gate supply carrier: escape-window supply with the gate-data (n, c0) extraction and window-width conversion, one-step promotion to the lic face via lw4p_pi_lic_face_of_gate, and the licdec_true decision lemma" "L241:md82636".
+(* ng_Lw0LeibEscapeAt —— Lw0LeibEscapeAt.v：逃逸窗定点首砖（独立新件取用 Local.LW0LeibSeparation 内核：leibsep_q_kernel 正距离与 lw0m_vanish_pi 消失面在合流指标 N1 处给出的 leibsep_escape_window_at，案三 lic 接口形）；PA=1 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_Lw0LeibEscapeAt : NewGreenFace :=
+  MkNewGreenFace "Lw0LeibEscapeAt.v" 64 1 20261007
+  "escape-window-at first brick: an independent lemma consuming the Local LW0LeibSeparation kernel, closing the case-three lic interface via the q-kernel positive distance and the vanish face at an explicit confluence index" "L64:mdf5141".
+(* ng_EpiOrFaces —— EpiOrFaces.v：门形谱低形承载模块（§7 基础四件＋§11 分支与配对面十一件＋§12 AA23 四件套槽登记；缺口三槽 res_cl/twk_e/epi_cond_from_meas 以显式前提承载、终形语句面逐字不动）；PA=19 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_EpiOrFaces : NewGreenFace :=
+  MkNewGreenFace "EpiOrFaces.v" 439 19 20261007
+  "gate-face spectrum low-form carrier: sections 7, 11 and 12 with the AA23 four-piece slot-registration set; the three gap slots are carried explicitly per the explicit-assumption craft with the terminal-form statement face frozen verbatim" "L439:m1323e3".
+(* ng_Lw4cPiLicFaceNonempty —— Lw4cPiLicFaceNonempty.v：π 对照面无条件非空件（自逃逸窗首砖 witness 经 lw4p_pi_gate_supply 取量与 lw4p_pi_lic_face_of_gate 单步升格构造 lw4c_pi_lic_face 见证、对照面 π 支自此有无条件见证）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_Lw4cPiLicFaceNonempty : NewGreenFace :=
+  MkNewGreenFace "Lw4cPiLicFaceNonempty.v" 74 2 20261007
+  "unconditional nonemptiness of the pi lic contrast face: a witness constructed from the escape-window-at brick via the gate supply and the one-step promotion, giving the face an unconditional witness on the pi side" "L74:m292c85".
