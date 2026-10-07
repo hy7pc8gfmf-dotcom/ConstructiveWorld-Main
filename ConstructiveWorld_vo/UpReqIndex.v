@@ -4032,10 +4032,10 @@ Definition ng_NsepFindGeneric : NewGreenFace :=
 Definition ng_AblZ2sPs : NewGreenFace :=
   MkNewGreenFace "abl_z2s_ps.v" 1338 86 20261007
   "zeta(2) partial-sum series carrier, third generation: the second-generation series face retained verbatim (term 1/(k+1)^2, partial-sum family z2s_ps, telescoping identity, decreasing invariant, geometric tail bound, boundedness, explicit-rate Cauchy modulus z2s_half_idx, anchor 1/8, zero-weight Beta identity and the t:=xy truncated-expansion instance), extended by the Beukers 1979 double-integral assembly: the integrality carrier z2i_allZq indexed by Z remainders with lcm scaling and power-sum tables, the pointwise-to-integral-sum transition z2t_Isum_le_weight consuming the explicit decay premise (1/4)(1/10)^m, the separation corollary z2t_sep_small_core, and the monotone-integral step carried as an explicit premise in z2t_di_l_le; numerical anchors 59/1200 and 439/176400" "L1338:ma16c44".
-(* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证砖的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；1369 代 460 行正本之上 append 11 主语句、旧面逐字零改动）；PA=37 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证砖的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；1394 代 674 行现势之上纯 append 15 主语句（cmp 前 29670 字节前缀恒等·旧面逐字零改动））；PA=52 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_AblLntTruncfam : NewGreenFace :=
-  MkNewGreenFace "abl_lnt_truncfam.v" 674 37 20261007
-  "ln2 witness brick integration and decay faces: truncation-family remainder carried by an explicit upper-bound constant, with decay carried by the closed-form constant c(n)=1/((2n+1)*C(2n,n)); eleven main statements appended with the prior 460-line generation preserved verbatim" "L674:m4a8616".
+  MkNewGreenFace "abl_lnt_truncfam.v" 1046 52 20261007
+  "ln2 witness brick integration and decay faces: truncation-family remainder carried by an explicit upper-bound constant, with decay carried by the closed-form constant c(n)=1/((2n+1)*C(2n,n)); fifteen main statements appended with the prior 674-line generation preserved verbatim" "L1046:m69cc1dd5".
 (* ng_NsepFirstSufficiency —— NsepFirstSufficiency.v：预算足用性一般定理（预算化最小分离索引搜索 nsep_first 的输出与实际首中步数的足用关系，判定器参数化一般形、对任意 bool 判定器与任意预算成立；含 false 面提取补件与耗尽停止刻画）；PA=11 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_NsepFirstSufficiency : NewGreenFace :=
   MkNewGreenFace "NsepFirstSufficiency.v" 243 11 20261007

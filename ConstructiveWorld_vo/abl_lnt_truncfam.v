@@ -672,3 +672,375 @@ Print Assumptions lnt_cden_Qpos.
 Print Assumptions lnt_cfac_pos.
 Print Assumptions lnt_qpow_half_inv.
 Print Assumptions lnt_cfac_budget.
+
+(* ============================================================ *)
+(* §13 供给面预形（θ 对齐・t=1 整数承载桥・下界序列显式化）                 *)
+(* ============================================================ *)
+
+(* θ 预算对齐：截断族预算面 (1/2)ⁿ 对齐供给面档位 (4/5)ⁿ（幂单调）。 *)
+Lemma lnt_theta_align : forall n : nat,
+  QleT' (q_pow (1 # 2)%Q n) (q_pow (4 # 5)%Q n).
+Proof.
+  intro n. apply Qle_to_QleT'. apply (q_pow_mono (1 # 2) (4 # 5) n).
+  - unfold Qle. cbn [Qnum Qden]. lia.
+  - unfold Qle. cbn [Qnum Qden]. lia.
+Qed.
+
+(* t=1 档整数承载桥：q_pow 2 n 与 2ⁿ 的 Q 像逐点恒等（母恒等式在 t=1
+   取值时 (1+1)^{n+1}·B(n,M,1) + (−1)^{M+1}·Q(n,M,1) = 1 即整系数
+   Bezout 面，本桥把左端幂归位到 Z 像承载）。 *)
+Lemma lnt_qpow_two_Z : forall n : nat,
+  q_pow (1 + 1)%Q n == ((Z.of_nat (2 ^ n)) # 1)%Q.
+Proof.
+  intro n. induction n as [| n IH].
+  - reflexivity.
+  - rewrite (q_pow_succ (1 + 1) n).
+    replace ((Z.of_nat (2 ^ Datatypes.S n)) # 1)%Q
+      with ((2 # 1) * ((Z.of_nat (2 ^ n)) # 1))%Q.
+    + rewrite IH. ring.
+    + replace (Z.of_nat (2 ^ Datatypes.S n))%Z
+        with (2 * Z.of_nat (2 ^ n))%Z.
+      * reflexivity.
+      * rewrite Nat.pow_succ_r'. rewrite Nat2Z.inj_mul. reflexivity.
+Qed.
+
+(* 2ⁿ 的线性下界：n + 1 ≤ 2ⁿ（下界序列显式化的 nat 面引擎）。 *)
+Lemma lnt_pow2_ge_lin : forall n : nat, (Datatypes.S n <= 2 ^ n)%nat.
+Proof.
+  intro n. induction n as [| n IH].
+  - cbn. lia.
+  - rewrite Nat.pow_succ_r'. lia.
+Qed.
+
+(* 下界序列显式化：cfac n ≤ 1/(n+1)。链：预算面 cfac n ≤ (1/2)ⁿ
+   （lnt_cfac_budget）＋(1/2)ⁿ = 1/2ⁿ（乘积恒等桥）＋双逆反序
+   （n+1 ≤ 2ⁿ ⟹ 1/2ⁿ ≤ 1/(n+1)，两端正性）。 *)
+Lemma lnt_cfac_le_inv : forall n : nat,
+  QleT' (lnt_cfac n) (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q).
+Proof.
+  intro n. apply Qle_to_QleT'. unfold lnt_cfac.
+  assert (HD1pos : Qlt 0 ((Z.of_nat (Datatypes.S n)) # 1)%Q).
+  { unfold Qlt. cbn [Qnum Qden]. lia. }
+  assert (HD1ne : ~ (((Z.of_nat (Datatypes.S n)) # 1)%Q == 0%Q)).
+  { intro He. apply (Qlt_not_eq 0 ((Z.of_nat (Datatypes.S n)) # 1)%Q).
+    - exact HD1pos.
+    - apply Qeq_sym. exact He. }
+  assert (EinvD1 : ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                   * Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q == 1%Q)
+    by (apply Qmult_inv_r; exact HD1ne).
+  assert (HDcpos : Qlt 0 ((Z.of_nat (lnt_cden n)) # 1)%Q).
+  { apply QltT_to_Qlt. apply lnt_cden_Qpos. }
+  assert (HDcne : ~ (((Z.of_nat (lnt_cden n)) # 1)%Q == 0%Q)).
+  { intro He. apply (Qlt_not_eq 0 ((Z.of_nat (lnt_cden n)) # 1)%Q).
+    - exact HDcpos.
+    - apply Qeq_sym. exact He. }
+  assert (EinvDc : ((Z.of_nat (lnt_cden n)) # 1)%Q
+                   * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q == 1%Q)
+    by (apply Qmult_inv_r; exact HDcne).
+  assert (Hle : Qle ((Z.of_nat (Datatypes.S n)) # 1)
+                    ((Z.of_nat (lnt_cden n)) # 1)%Q).
+  { unfold Qle. cbn [Qnum Qden].
+    assert (Hl := lnt_pow2_ge_lin n).
+    assert (Hc := lnt_cden_ge_pow2 n). lia. }
+  assert (Hpr : Qle 0 (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                        * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q)).
+  { apply Qmult_le_0_compat.
+    - apply Qlt_le_weak. apply Qinv_lt_0_compat. exact HD1pos.
+    - apply Qlt_le_weak. apply Qinv_lt_0_compat. exact HDcpos. }
+  assert (Hmul := Qmult_le_compat_r ((Z.of_nat (Datatypes.S n)) # 1)
+                    ((Z.of_nat (lnt_cden n)) # 1)
+                    (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                     * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q) Hle Hpr).
+  apply (Qle_trans (Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q)
+           (((Z.of_nat (Datatypes.S n)) # 1)%Q
+             * (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q))%Q).
+  - apply qeq_imp_qle.
+    rewrite (Qmult_assoc ((Z.of_nat (Datatypes.S n)) # 1)
+              (Qinv ((Z.of_nat (Datatypes.S n)) # 1))
+              (Qinv ((Z.of_nat (lnt_cden n)) # 1))).
+    rewrite EinvD1. ring.
+  - apply (Qle_trans (((Z.of_nat (Datatypes.S n)) # 1)%Q
+             * (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q))%Q
+           (((Z.of_nat (lnt_cden n)) # 1)%Q
+             * (Qinv ((Z.of_nat (Datatypes.S n)) # 1)%Q
+                * Qinv ((Z.of_nat (lnt_cden n)) # 1)%Q))%Q).
+    + exact Hmul.
+    + apply qeq_imp_qle.
+      rewrite (Qmult_comm (Qinv ((Z.of_nat (Datatypes.S n)) # 1))
+                (Qinv ((Z.of_nat (lnt_cden n)) # 1))).
+      rewrite (Qmult_assoc ((Z.of_nat (lnt_cden n)) # 1)
+                (Qinv ((Z.of_nat (lnt_cden n)) # 1))
+                (Qinv ((Z.of_nat (Datatypes.S n)) # 1))).
+      rewrite EinvDc. ring.
+Qed.
+
+(* ============================================================ *)
+(* §14 尾舱续：§13 主语句公理面自检                                      *)
+(* ============================================================ *)
+
+Print Assumptions lnt_theta_align.
+Print Assumptions lnt_qpow_two_Z.
+Print Assumptions lnt_pow2_ge_lin.
+Print Assumptions lnt_cfac_le_inv.
+Require Import UpReqLn2Irrational.
+
+(* ============================================================ *)
+(* §15 t=1 档 Bezout 面（截断恒等式右端与 ln2 级数列的代数主体）            *)
+(* ============================================================ *)
+
+(* 幂的单元面：1^m = 1（t=1 取值的幂归位）。 *)
+Lemma lnt_qpow_one : forall m : nat, q_pow 1 m == 1.
+Proof.
+  intro m. induction m as [| m IH].
+  - reflexivity.
+  - rewrite (q_pow_succ 1 m). rewrite IH. ring.
+Qed.
+
+(* 奇档 Bezout 面：2^{n+1}·B(n,2k+1,1) + Q(n,2k+1,1) = 1（Z 像承载形）。
+   母恒等式在 t=1 的取值：(−1)^{2k+2} = 1 且 2^{n+1} 归位整数像；
+   即截断值 B(n,2k+1,1) = (1 − Q)/2^{n+1} 的整数 Bezout 关系。 *)
+Lemma lnt_bezout_odd : forall (n k : nat),
+  ((Z.of_nat (2 ^ Datatypes.S n)) # 1) * lnt_ps n (Datatypes.S k + k) 1
+  + lnt_pq n (Datatypes.S k + k) 1 == 1.
+Proof.
+  intros n k.
+  assert (E := lnt_master n (Datatypes.S k + k) 1).
+  rewrite (lnt_qpow_two_Z (Datatypes.S n)) in E.
+  replace (Datatypes.S (Datatypes.S k + k))%nat
+    with (Datatypes.S k + Datatypes.S k)%nat in E by lia.
+  rewrite (lnt_qpow_opp_even 1 (Datatypes.S k)) in E.
+  rewrite (lnt_qpow_one (Datatypes.S k + Datatypes.S k)) in E.
+  rewrite (Qmult_1_l (lnt_pq n (Datatypes.S k + k) 1)) in E.
+  exact E.
+Qed.
+
+(* 偶档 Bezout 面：2^{n+1}·B(n,2k,1) − Q(n,2k,1) = 1（(−1)^{2k+1} = −1）。
+   两档合读：截断值恒为分母 2^{n+1} 的既约分数胚。 *)
+Lemma lnt_bezout_even : forall (n k : nat),
+  ((Z.of_nat (2 ^ Datatypes.S n)) # 1) * lnt_ps n (k + k) 1
+  + (0 - lnt_pq n (k + k) 1) == 1.
+Proof.
+  intros n k.
+  assert (E := lnt_master n (k + k) 1).
+  rewrite (lnt_qpow_two_Z (Datatypes.S n)) in E.
+  rewrite (lnt_qpow_opp_odd 1 k) in E.
+  rewrite (lnt_qpow_one (Datatypes.S (k + k))) in E.
+  assert (Em : ((0 - 1) * lnt_pq n (k + k) 1)%Q
+               == (0 - lnt_pq n (k + k) 1)) by ring.
+  rewrite Em in E. exact E.
+Qed.
+
+(* 右端统一绝对值面：|1 − 2^{n+1}·B(n,M,1)| = Q(n,M,1)（全体 M·Z 像形，
+   符号随 M 奇偶的交替在绝对值内消解）。 *)
+Lemma lnt_rem_abs_one : forall (n M : nat),
+  Qabs (1 - ((Z.of_nat (2 ^ Datatypes.S n)) # 1) * lnt_ps n M 1)
+  == lnt_pq n M 1.
+Proof.
+  intros n M.
+  assert (E := lnt_rem_abs n M 1 Qle_0_1).
+  rewrite (lnt_qpow_two_Z (Datatypes.S n)) in E.
+  rewrite (lnt_qpow_one (Datatypes.S M)) in E.
+  rewrite (Qmult_1_l (lnt_pq n M 1)) in E.
+  exact E.
+Qed.
+
+(* 右端显式间隙下界：Q(n,M,1) ≥ 1（余项族在 t=1 的常值项承载，
+   逐项非负归纳——截断值与 2^{n+1} 倍数相差至少 1 的整数间隙面）。 *)
+Lemma lnt_pq_one_ge1 : forall (n M : nat), QleT' 1 (lnt_pq n M 1).
+Proof.
+  intro n. induction n as [| n IH]; intro M.
+  - unfold lnt_pq. unfold zb2_pq. cbn [bk_psQ q_pow]. rewrite Nat.add_0_r.
+    replace (Z.of_nat (bkC M 0) # 1) with (1 # 1)%Q
+      by (rewrite zb2_bkC_zero; reflexivity).
+    apply (zb2_qleT'_wd_r 1 ((1 # 1) * 1)%Q 1).
+    + ring.
+    + apply qleT'_refl.
+  - apply (zb2_qleT'_wd_r
+             ((lnt_pq n M 1
+               + (Z.of_nat (bkC (M + Datatypes.S n) (Datatypes.S n)) # 1)
+                 * q_pow (1 + 1) (Datatypes.S n))%Q)
+             (lnt_pq (Datatypes.S n) M 1) 1).
+    + exact (Qeq_sym _ _ (lnt_pq_step n M 1)).
+    + apply Qle_to_QleT'.
+      apply (Qplus_le_compat 1 (lnt_pq n M 1) 0
+               ((Z.of_nat (bkC (M + Datatypes.S n) (Datatypes.S n)) # 1)
+                * q_pow (1 + 1) (Datatypes.S n))).
+      * exact (QleT'_to_Qle 1 (lnt_pq n M 1) (IH M)).
+      * apply Qmult_le_0_compat.
+        -- apply QleT'_to_Qle. apply zb2_bkC_Q_nonneg.
+        -- assert (H01 : Qle 0 ((1 + 1)%Q)).
+           ++ unfold Qle. cbn [Qnum Qden Qplus Qmult]. lia.
+           ++ exact (q_pow_nonneg (1 + 1) (Datatypes.S n) H01).
+Qed.
+
+(* 级数列第 k 投影的标度传送：|2^{n+1}·x_k − 2^{n+1}·B(n,M,1)|
+   = 2^{n+1}·|x_k − B(n,M,1)|（x_k = ln2i_x k 为 ln2 的级数部分和列）。
+   截断值 B(n,M,1) 与级数列在同一 2 幂标度下的绝对值分裂面，
+   为线投影 |A·x − B| 形的供给侧准备。 *)
+Lemma lnt_ln2i_proj_gap : forall (n M k : nat),
+  Qabs (((Z.of_nat (2 ^ Datatypes.S n)) # 1) * ln2i_x k
+        - ((Z.of_nat (2 ^ Datatypes.S n)) # 1) * lnt_ps n M 1)
+  == ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+     * Qabs ((ln2i_x k - lnt_ps n M 1)%Q).
+Proof.
+  intros n M k.
+  assert (Ha : Qle 0 ((Z.of_nat (2 ^ Datatypes.S n)) # 1)).
+  { pose proof (ln2i_powZ_pos (Datatypes.S n)) as Hp.
+    unfold Qle. cbn [Qnum Qden]. lia. }
+  transitivity (Qabs (((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+                      * (ln2i_x k - lnt_ps n M 1)%Q))%Q.
+  - apply (Qabs_wd (((Z.of_nat (2 ^ Datatypes.S n)) # 1) * ln2i_x k
+                    - ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+                      * lnt_ps n M 1)%Q
+                   (((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+                    * (ln2i_x k - lnt_ps n M 1))%Q).
+    ring.
+  - rewrite (Qabs_Qmult ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+              ((ln2i_x k - lnt_ps n M 1)%Q)).
+    rewrite (Qabs_pos ((Z.of_nat (2 ^ Datatypes.S n)) # 1) Ha).
+    reflexivity.
+Qed.
+
+(* ============================================================ *)
+(* §16 尾舱续：§15 主语句公理面自检                                      *)
+(* ============================================================ *)
+
+Print Assumptions lnt_qpow_one.
+Print Assumptions lnt_bezout_odd.
+Print Assumptions lnt_bezout_even.
+Print Assumptions lnt_rem_abs_one.
+Print Assumptions lnt_pq_one_ge1.
+Print Assumptions lnt_ln2i_proj_gap.
+Require Import Ln2Bridge.
+
+(* ============================================================ *)
+(* §17 real_le 终归 slack 形传送桥与截断调剂对线投影对接件                  *)
+(* ============================================================ *)
+
+(* 余项族的整承载见证：Q(n,M,1) 恒为分母 1 的有理数（Z 见证，Set 层 sigT）。
+   归纳面：常值项为 1，逐项 (bkC·2^{n+1}) 皆整值，分母 1 的有理数对加法
+   与乘法封闭（Qmake 算术展开即合）。 *)
+Lemma lnt_pq_zpair : forall (n M : nat),
+  sigT (fun j : Z => lnt_pq n M 1 == (j # 1)%Q).
+Proof.
+  intro n. induction n as [| n IH]; intro M.
+  - exists 1%Z. unfold lnt_pq. unfold zb2_pq. cbn [bk_psQ q_pow].
+    rewrite Nat.add_0_r.
+    replace (Z.of_nat (bkC M 0) # 1) with (1 # 1)%Q
+      by (rewrite zb2_bkC_zero; reflexivity).
+    ring.
+  - destruct (IH M) as [j Hj].
+    exists (j + Z.of_nat (bkC (M + Datatypes.S n) (Datatypes.S n))
+              * Z.of_nat (2 ^ Datatypes.S n))%Z.
+    rewrite (lnt_pq_step n M 1). rewrite Hj.
+    rewrite (lnt_qpow_two_Z (Datatypes.S n)).
+    unfold Qplus, Qmult, Qeq. cbn [Qnum Qden Pos.mul]. lia.
+Qed.
+
+(* real_le 终归 slack 形传送桥（上界方向）：若线投影读数对常数幂的
+   距离终归一致地大于正数 e，则 real_le 取严格分离支（real_lt 编码的
+   直接装配）。这是 Q 层终归面到 real_le 语句的最后一跳。 *)
+Lemma lnt_line_upper_slack : forall (A B : nat -> Z) (n : nat) (th e : Q) (N : nat),
+  QltT 0 e ->
+  (forall k : nat, NatLe N k ->
+    QltT e ((q_pow th n
+             - Qabs (((A n) # 1)%Q * ln2i_x k - ((B n) # 1)%Q))%Q)) ->
+  real_le (ln2b_line A B n) (real_const (q_pow th n)).
+Proof.
+  intros A B n th e N He0 Hface.
+  left. unfold real_lt. exists e. split.
+  - exact He0.
+  - exists N. intros k Hk.
+    apply Qlt_to_QltT.
+    rewrite (real_const_proj (q_pow th n) k).
+    rewrite (ln2b_line_pt A B n k).
+    exact (QltT_to_Qlt _ _ (Hface k Hk)).
+Qed.
+
+(* real_le 终归 slack 形传送桥（下界方向）：若线投影读数对常数 c 的
+   越出量终归一致地大于正数 e，则 c ≤ 线取严格分离支。 *)
+Lemma lnt_line_lower_slack : forall (A B : nat -> Z) (n : nat) (c e : Q) (N : nat),
+  QltT 0 e ->
+  (forall k : nat, NatLe N k ->
+    QltT e ((Qabs (((A n) # 1)%Q * ln2i_x k - ((B n) # 1)%Q) - c)%Q)) ->
+  real_le (real_const c) (ln2b_line A B n).
+Proof.
+  intros A B n c e N He0 Hface.
+  left. unfold real_lt. exists e. split.
+  - exact He0.
+  - exists N. intros k Hk.
+    apply Qlt_to_QltT.
+    rewrite (real_const_proj c k).
+    rewrite (ln2b_line_pt A B n k).
+    exact (QltT_to_Qlt _ _ (Hface k Hk)).
+Qed.
+
+(* 奇档线投影恒等：截断调剂对 (2^{n+1}, 1−j)（j 为 Q(n,2k+1,1) 的整
+   见证）的线投影读数恰为标度传送形 2^{n+1}·|x_k − B(n,2k+1,1)|。
+   链：Bezout 面 2^{n+1}·B + Q = 1 与整见证换算出 (1−j)#1 == 2^{n+1}·B，
+   再由标度传送面闭合。 *)
+Lemma lnt_line_truncdock_proj_odd : forall (n k : nat) (j : Z),
+  lnt_pq n (Datatypes.S k + k) 1 == (j # 1)%Q ->
+  projT1 (ln2b_line (fun _ : nat => (Z.of_nat (2 ^ Datatypes.S n))%Z)
+                    (fun _ : nat => (1 - j)%Z) (Datatypes.S k + k)) k
+  == ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+     * Qabs ((ln2i_x k - lnt_ps n (Datatypes.S k + k) 1)%Q).
+Proof.
+  intros n k j Hj.
+  assert (Ept := ln2b_line_pt (fun _ : nat => (Z.of_nat (2 ^ Datatypes.S n))%Z)
+                              (fun _ : nat => (1 - j)%Z)
+                              (Datatypes.S k + k) k).
+  cbv beta in Ept. rewrite Ept.
+  assert (Ebez := lnt_bezout_odd n k). rewrite Hj in Ebez.
+  assert (E2 : ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+               * lnt_ps n (Datatypes.S k + k) 1 == (1 - (j # 1))%Q).
+  { transitivity ((((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+                   * lnt_ps n (Datatypes.S k + k) 1 + (j # 1))%Q
+                  - (j # 1))%Q.
+    - ring.
+    - rewrite Ebez. ring. }
+  assert (Ebr : (((1 - j)%Z) # 1)%Q == (1 - (j # 1))%Q)
+    by (unfold Qminus, Qopp, Qplus, Qeq; cbn [Qnum Qden Pos.mul]; lia).
+  rewrite Ebr. rewrite <- E2.
+  exact (lnt_ln2i_proj_gap n (Datatypes.S k + k) k).
+Qed.
+
+(* 偶档线投影恒等：截断调剂对 (2^{n+1}, 1+j)（j 为 Q(n,2k,1) 的整见证）
+   的线投影读数恰为标度传送形 2^{n+1}·|x_k − B(n,2k,1)|（Bezout 偶档
+   2^{n+1}·B − Q = 1 换算 (1+j)#1 == 2^{n+1}·B）。 *)
+Lemma lnt_line_truncdock_proj_even : forall (n k : nat) (j : Z),
+  lnt_pq n (k + k) 1 == (j # 1)%Q ->
+  projT1 (ln2b_line (fun _ : nat => (Z.of_nat (2 ^ Datatypes.S n))%Z)
+                    (fun _ : nat => (1 + j)%Z) (k + k)) k
+  == ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+     * Qabs ((ln2i_x k - lnt_ps n (k + k) 1)%Q).
+Proof.
+  intros n k j Hj.
+  assert (Ept := ln2b_line_pt (fun _ : nat => (Z.of_nat (2 ^ Datatypes.S n))%Z)
+                              (fun _ : nat => (1 + j)%Z) (k + k) k).
+  cbv beta in Ept. rewrite Ept.
+  assert (Ebez := lnt_bezout_even n k). rewrite Hj in Ebez.
+  assert (E2 : ((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+               * lnt_ps n (k + k) 1 == (1 + (j # 1))%Q).
+  { transitivity ((((Z.of_nat (2 ^ Datatypes.S n)) # 1)
+                   * lnt_ps n (k + k) 1 + (0 - (j # 1)))%Q
+                  + (j # 1))%Q.
+    - ring.
+    - rewrite Ebez. ring. }
+  assert (Ebr : (((1 + j)%Z) # 1)%Q == (1 + (j # 1))%Q)
+    by (unfold Qminus, Qopp, Qplus, Qeq; cbn [Qnum Qden Pos.mul]; lia).
+  rewrite Ebr. rewrite <- E2.
+  exact (lnt_ln2i_proj_gap n (k + k) k).
+Qed.
+
+(* ============================================================ *)
+(* §18 尾舱续：§17 主语句公理面自检                                      *)
+(* ============================================================ *)
+
+Print Assumptions lnt_pq_zpair.
+Print Assumptions lnt_line_upper_slack.
+Print Assumptions lnt_line_lower_slack.
+Print Assumptions lnt_line_truncdock_proj_odd.
+Print Assumptions lnt_line_truncdock_proj_even.
