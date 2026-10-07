@@ -647,6 +647,7 @@ u5c_bridge.v
 u5c_inst_sqrt2.v
 u5c_inst_sqrt3.v
 u5c_inst_e.v
+u5c_inst_sqrt5.v
 ucreal_bridge.v
 abl_ln2_conv_core.v
 abl_ln2_conv_mesh.v

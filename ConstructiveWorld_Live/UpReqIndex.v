@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 584 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 585 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4028,10 +4028,10 @@ Definition ng_AblZ2Valbridge : NewGreenFace :=
 Definition ng_NsepFindGeneric : NewGreenFace :=
   MkNewGreenFace "NsepFindGeneric.v" 216 7 20261007
   "decoder-parameterized generic minimal separation-index search: nsep_find probes dec from n upward under fuel returning the budget endpoint, with the ub/hit/min characteristic theorem triple and the budgeted runner nsep_first giving bound/hit/least/minimal corollaries valid for any boolean separation decider and any budget; pi-side instance lw5n_sep_dec and a sqrt(2) Newton instance built in" "L216:ma226ef".
-(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件二代（级数项 1/(k+1)²、部分和族 z2s_ps M=Σ_{k<M} 1/(k+1)²、伸缩分裂恒等式 1/j==1/(j+1)+1/(j(j+1))、项严格递减不变量及其 N 步形、几何尾界 ps(S M+N)<ps(S M)+1/(S M)、有界性 ∀M ps M<2、显式速率 Cauchy 模量 z2s_half_idx n=2ⁿ−1、数值锚 1/8；零权 Beta 项恒等与 t:=xy 双变量截断展开实例沿旧代保留）；PA=28 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+(* ng_AblZ2sPs —— abl_z2s_ps.v：ζ(2) 部分和级数承载件三代（二代级数面沿旧代保留：级数项、部分和族 z2s_ps、伸缩分裂恒等式、项递减不变量、几何尾界、有界性、显式速率 Cauchy 模量 z2s_half_idx、数值锚 1/8、零权 Beta 项恒等与 t:=xy 双变量截断展开实例；三代新增 Beukers 二重积分装配面：整值判据 z2i_allZq 以 Z 余数索引承载、最小公倍伸缩与幂和表、逐点控制到积分和的过渡 z2t_Isum_le_weight 显式取用衰减前提 (1/4)(1/10)^m、分离推论 z2t_sep_small_core、单调积分内核以显式前提隔离于 z2t_di_l_le、数值锚 59/1200 与 439/176400）；PA=74 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none */
 Definition ng_AblZ2sPs : NewGreenFace :=
-  MkNewGreenFace "abl_z2s_ps.v" 523 37 20261007
-  "zeta(2) partial-sum series carrier, second generation: term 1/(k+1)^2, partial-sum family z2s_ps M = sum over k<M of 1/(k+1)^2, telescoping splitting identity 1/j == 1/(j+1) + 1/(j*(j+1)), strictly decreasing invariant with its N-step form, geometric tail bound ps(S M+N) < ps(S M) + 1/(S M), boundedness forall M, ps M < 2, explicit-rate Cauchy modulus via z2s_half_idx n = 2^n - 1, numerical anchor 1/8; zero-weight Beta term identity and the t:=xy two-variable truncated expansion instance retained from the first generation" "L523:m41387f".
+  MkNewGreenFace "abl_z2s_ps.v" 1338 86 20261007
+  "zeta(2) partial-sum series carrier, third generation: the second-generation series face retained verbatim (term 1/(k+1)^2, partial-sum family z2s_ps, telescoping identity, decreasing invariant, geometric tail bound, boundedness, explicit-rate Cauchy modulus z2s_half_idx, anchor 1/8, zero-weight Beta identity and the t:=xy truncated-expansion instance), extended by the Beukers 1979 double-integral assembly: the integrality carrier z2i_allZq indexed by Z remainders with lcm scaling and power-sum tables, the pointwise-to-integral-sum transition z2t_Isum_le_weight consuming the explicit decay premise (1/4)(1/10)^m, the separation corollary z2t_sep_small_core, and the monotone-integral step carried as an explicit premise in z2t_di_l_le; numerical anchors 59/1200 and 439/176400" "L1338:ma16c44".
 (* ng_AblLntTruncfam —— abl_lnt_truncfam.v：ln2 见证砖的积分面与衰减面（截断族余项的积分承载＝显式上界常数路线；衰减以闭式常数 c(n)=1/((2n+1)·C(2n,n)) 承载；1369 代 460 行正本之上 append 11 主语句、旧面逐字零改动）；PA=37 Closed；提取 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
 Definition ng_AblLntTruncfam : NewGreenFace :=
   MkNewGreenFace "abl_lnt_truncfam.v" 674 37 20261007
@@ -4056,3 +4056,8 @@ Definition ng_EpiOrFaces : NewGreenFace :=
 Definition ng_Lw4cPiLicFaceNonempty : NewGreenFace :=
   MkNewGreenFace "Lw4cPiLicFaceNonempty.v" 74 2 20261007
   "unconditional nonemptiness of the pi lic contrast face: a witness constructed from the escape-window-at brick via the gate supply and the one-step promotion, giving the face an unconditional witness on the pi side" "L74:m292c85".
+
+(* ng_U5cInstSqrt5 —— u5c_inst_sqrt5.v：√5 无理分离的显式逃逸点装配件（is5 序列窗见证 is5_escape 解构出显式逃逸点 n0，经通用分离引理 u5c_escape_to_dist 单步兑现 Q 层正分离常数，结论形与在树 lic 判据逐字同构，主语句 u5c_sqrt5_criterion_escape_pt 为闭式定量形；√2/√3/e 兄弟件同构族，判据上游对标 UpReqSqrt3Irrational）；PA=1 Closed（主语句）；提取 .ml/.mli Obj.magic=0/0；coqchk -o 模块复核 Axioms: none */
+Definition ng_U5cInstSqrt5 : NewGreenFace :=
+  MkNewGreenFace "u5c_inst_sqrt5.v" 1305 31 20261007
+  "explicit escape-point assembly for the irrationality of sqrt(5): the is5 series window witness is5_escape is destructed into an explicit escape point n0 and the generic separation lemma u5c_escape_to_dist delivers a positive Q-layer separation constant in one step, with the conclusion shaped verbatim as the in-tree lic criterion and the main statement u5c_sqrt5_criterion_escape_pt in closed quantitative form; same family as the sqrt2/sqrt3/e instances after UpReqSqrt3Irrational" "L1305:m264688".
