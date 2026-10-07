@@ -670,3 +670,6 @@ Lw4cPiLicGate.v
 Lw0LeibEscapeAt.v
 EpiOrFaces.v
 Lw4cPiLicFaceNonempty.v
+mach_fold_q.v
+mach_atan_addsub.v
+mach_fold_chain.v

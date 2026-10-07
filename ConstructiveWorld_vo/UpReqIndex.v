@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 585 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 588 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4061,3 +4061,15 @@ Definition ng_Lw4cPiLicFaceNonempty : NewGreenFace :=
 Definition ng_U5cInstSqrt5 : NewGreenFace :=
   MkNewGreenFace "u5c_inst_sqrt5.v" 1305 31 20261007
   "explicit escape-point assembly for the irrationality of sqrt(5): the is5 series window witness is5_escape is destructed into an explicit escape point n0 and the generic separation lemma u5c_escape_to_dist delivers a positive Q-layer separation constant in one step, with the conclusion shaped verbatim as the in-tree lic criterion and the main statement u5c_sqrt5_criterion_escape_pt in closed quantitative form; same family as the sqrt2/sqrt3/e instances after UpReqSqrt3Irrational" "L1305:m264688".
+(* ng_MachFoldQ —— mach_fold_q.v：π/4 的 Machin 表示 Q 层折叠验算件与组装定义面（差角变换核 (5/12−1/239)/(1+(5/12)·(1/239)) = 1183/2873 与和角变换核 (5/12+1183/2873)/(1−(5/12)·(1183/2873)) = 1 的封闭分数验算、tan 倍角形 2·(1/5)/(1−(1/5)²) = 5/12、折叠链中间分数逐项验算、值域检 0 < 1/239 < 5/12 < 1 与 w < 1、u·w < 1（QltT 形）、结构分解 28561 = 13⁴、逐点界件 mach_pt_bound_of_lt 与 1/5、1/239 两实例、组装定义面 mach_atan_one_fifth/mach_atan_1_239/mach_pi_quarter）；PA=3 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_MachFoldQ : NewGreenFace :=
+  MkNewGreenFace "mach_fold_q.v" 296 3 20261007
+  "Q-layer closed-fraction verification and assembly definitions for the Machin representation of pi/4: the difference-angle kernel (5/12-1/239)/(1+(5/12)*(1/239)) = 1183/2873 and the sum-angle kernel (5/12+1183/2873)/(1-(5/12)*(1183/2873)) = 1 verified by computation, the double-angle form 2*(1/5)/(1-(1/5)^2) = 5/12, midpoint fraction checks, QltT range certificates 0 < 1/239 < 5/12 < 1 with w < 1 and u*w < 1, the decomposition 28561 = 13^4, pointwise bound lemmas on the unit domain, and the real-layer assembly mach_pi_quarter = 4*arctan(1/5) - arctan(1/239)" "L296:mfd4994".
+(* ng_MachAtanAddsub —— mach_atan_addsub.v：arctan 差角与和角引理实数层（mach_atan_sub：0 < v < u < 1 时 arctan u − arctan v = arctan((u−v)/(1+u·v))；mach_atan_add：u、v ∈ (0,1) 且第五前提 u+v+u·v ≤ 1 时 arctan u + arctan v = arctan((u+v)/(1−u·v))，边界商恰为 1 时前提恰可满足；前提以 QltT/QleT' Set 形承载、界证书经 mach_pt_bound_of_lt/of_le 逐点直取；配套 Q 层有理运算件群与 sin 零点唯一性间隙挤压件 mach_sin_zero_uniq）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_MachAtanAddsub : NewGreenFace :=
+  MkNewGreenFace "mach_atan_addsub.v" 1626 2 20261007
+  "real-layer arctan subtraction and addition lemmas: for 0 < v < u < 1, arctan u - arctan v equals arctan of the difference-angle quotient, and for u, v in the open unit interval satisfying the fifth premise u+v+u*v <= 1 (exactly admitting a boundary quotient of one), arctan u + arctan v equals arctan of the sum-angle quotient; premises are carried as QltT/QleT' Set-form certificates via pointwise bounds, with Q-arithmetic companions and a sine-zero uniqueness squeeze lemma" "L1626:md7a10f".
+(* ng_MachFoldChain —— mach_fold_chain.v：Machin 折叠定理与 Leibniz 值桥（mach_fold_chain：4·arctan(1/5) − arctan(1/239) = arctan(1)，经倍角、差角、和角三次 arctan 引理实例化与 Q 层换形件五段链组装，arctan_one_real 为中间值连接对象；mach_edge_one：4·mach_pi_quarter 与 Leibniz 顶点 cauchy_real_pi_leibniz 的实相等值桥）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_MachFoldChain : NewGreenFace :=
+  MkNewGreenFace "mach_fold_chain.v" 288 2 20261007
+  "Machin folding theorem and the Leibniz value bridge: mach_fold_chain proves 4*arctan(1/5) - arctan(1/239) = arctan(1) via three arctan-lemma instantiations (doubling, difference and sum) assembled as a five-step chain with Q-layer shape conversions, arctan_one_real serving as the intermediate value connector, and mach_edge_one lifts the identity to real equality between 4*mach_pi_quarter and the Leibniz vertex cauchy_real_pi_leibniz" "L288:m0fadc2".
