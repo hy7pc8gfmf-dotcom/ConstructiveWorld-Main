@@ -20,7 +20,7 @@
    条件形·搜索组件替换为换基搜索器）；tlw1703_nsep_minimal_bexp.v（命中
    前提的无条件供给）；tlw1459_fold.v :42（闭合定理·命中存在性之根）。
    构造性注记：全 Set/Type 层；零 Axiom/Admitted；零经典逻辑；结论位承载
-   于 sigT/And:=prod/QltT/real_lt；证明体为供给-消去-直取的簿记合成链
+   于 sigT/And:=prod/QltT/real_lt；证明体为供给-消去-直取的记录合成链
    （命中供给→守卫包消去→守卫形分离定理直取）；提取面 Obj.magic=0；
    文末 Print Assumptions Closed。
    编译配方：coqc -native-compiler no -q -Q . "" tlw1703_uacm_combo_unconditional.v

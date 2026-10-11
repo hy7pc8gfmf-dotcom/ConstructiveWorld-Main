@@ -7,7 +7,7 @@
    无条件停在预算基内的最小命中级——预算基内存在命中由闭合定理
    tlw1459_fold_closed_leiblw 供给，命中、预算上界、最小性（下方无命中）、
    搜索停点四支合一；并给出与原语句面同形的刻画定理（预算前提换为 Bexp 基）
-   与命中前提的无条件供给件。
+   与命中前提的无条件供给定理。
    依赖清单：Stdlib QArith/Bool/Arith/Lia；S01_BaseRing（NatLe/NatLe_lift/
    NatLe_drop）；LW0LeibWindow（leiblw_Id/leiblw_id_intro/leiblw_id_inv）；
    LW5SepComplexity（lw5n_sep_dec/lw5n_find）；tlw1448_rebase（tlw1448_bexp/
@@ -92,9 +92,9 @@ Proof.
     rewrite Ht in Hmin. inversion Hmin.
 Qed.
 
-(* 命中前提的无条件供给件：组合件 uacm_pi_strong_sep_combo 的命中前提
+(* 命中前提的无条件供给定理：组合件 uacm_pi_strong_sep_combo 的命中前提
    （lw5n_sep_dec (a/b) (lw5n_nsep (a/b)) 出 true 的假设位）在换基搜索器与
-   显式预算基上由闭合定理直接供给，簿记形（逐行取自主定理输入链） *)
+   显式预算基上由闭合定理直接供给，记录形（逐行取自主定理输入链） *)
 Theorem tlw1703_rebase_hit_unconditional : forall q : Q,
   leiblw_Id (lw5n_sep_dec q (tlw1448_nsep_rebase tlw1448_ck q)) true.
 Proof.
