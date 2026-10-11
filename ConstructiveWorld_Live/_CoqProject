@@ -681,3 +681,6 @@ LW2MetricCompat.v
 ucreal_pi_sep_uncond.v
 tlw1703_nsep_minimal_bexp.v
 tlw1703_uacm_combo_unconditional.v
+tlw1728R2_r2_res1_moment.v
+tlw1738_r2_res1_decay.v
+tlw1463_pade_r29_faces.v
