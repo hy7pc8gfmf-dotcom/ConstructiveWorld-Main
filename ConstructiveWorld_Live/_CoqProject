@@ -677,3 +677,7 @@ tlw1448_rebase.v
 tlw1448_transfer.v
 tlw1448_l2escape.v
 tlw1459_fold.v
+LW2MetricCompat.v
+ucreal_pi_sep_uncond.v
+tlw1703_nsep_minimal_bexp.v
+tlw1703_uacm_combo_unconditional.v
