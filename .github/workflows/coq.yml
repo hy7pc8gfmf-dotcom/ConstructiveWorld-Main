@@ -11,8 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # ── Windows 认证 job（原文保留，认证语义不变）────────────────────────────
   coq-build:
-    name: Rocq 9.1 build + coqchk (self-hosted local trust cache)
+    name: Rocq 9.1 build + coqchk (self-hosted local trust cache, Windows)
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v5
@@ -219,3 +220,145 @@ jobs:
           eval "$(opam env)"
           cd releases
           coqc -async-proofs off -Q . "" CW_ConstructiveWorld_220.v
+
+  # ── macOS 观察档 job（20261012 双平台适配新增）────────────────────────────
+  # 设计：显式双 job 而非 matrix——steps.shell 关键字不支持表达式，Windows 侧
+  # 硬编码 Git Bash 路径与 mac 侧默认 bash 无法在同一 step 内分叉。
+  # continue-on-error: true（观察档）：mac 侧红不染 run 结论，Windows 认证语义
+  # 不变；mac 侧三段式全绿后再摘观察档升双平台独立认证。
+  # mac 信任缓存=本机独立目录（不与既有树混写），镜像删除播种+构建后镜像导出
+  # 自举：首轮空缓存=全量冷编（≈1.5-2h，自托管无时长墙），次轮起吃指纹 SKIP。
+  # 工具链 shim 层（runner 侧盘面 /Users/apple/actions-runner/mac_rocq/）：
+  #   bin/coqc → rocq c（9.1 正形）；bin/coqchk → rocqchk（banner=Chicken 9.1.0
+  #   与 gate2 咬合）；lib/coq → 9.1 真库 symlink——仓库 build.sh/coqchk_all.sh
+  #   的路径推导 case（*/bin/coqc）自然咬合，仓库脚本零改动。
+  coq-build-macos:
+    name: Rocq 9.1 build + coqchk (self-hosted macOS, observation)
+    runs-on: [self-hosted, macOS]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: gate1 poison-token guard (pre-build fail-fast)
+        shell: bash -e {0}
+        run: |
+          python3 scripts/gates/gate1_poison_guard.py \
+            --tree ConstructiveWorld_Live --tree ConstructiveWorld_vo \
+            --json gate1_ci.json --text
+
+      - name: gate4 comment guard (pre-build, exit1=red exit2=yellow artifact-only)
+        shell: bash -e {0}
+        run: |
+          set +e
+          python3 scripts/gates/gate4_comment_guard.py \
+            --tree ConstructiveWorld_Live --tree ConstructiveWorld_vo \
+            --json gate4_report.json
+          rc=$?
+          set -e
+          if [ "$rc" -eq 1 ]; then
+            echo "GATE4-RED: comment-guard hard violations — see gate4_report.json artifact"
+            exit 1
+          elif [ "$rc" -eq 2 ]; then
+            echo "GATE4-YELLOW: review-only findings — artifact-collected, not red"
+            exit 0
+          elif [ "$rc" -eq 0 ]; then
+            echo "GATE4-GREEN: all comment checks passed"
+          else
+            echo "GATE4-UNEXPECTED-EXIT rc=$rc — fail-loud, treat as red"
+            exit 1
+          fi
+
+      - name: gate3 cross-tree require-face diff
+        if: always()
+        shell: bash -e {0}
+        run: |
+          python3 scripts/gates/gate3_cross_tree_diff.py \
+            --tree-a ConstructiveWorld_Live --tree-b ConstructiveWorld_vo \
+            --json gate3_ci.json
+
+      - name: Seed trust cache from local vo tree (macOS dedicated cache)
+        shell: bash -e {0}
+        run: |
+          # 镜像删除播种（同 Windows 步语义），源=mac 独立信任缓存目录；
+          # 首轮目录空=全量冷编（自托管无时长墙），由构建后导出步自举后续轮 SKIP。
+          rm -f ConstructiveWorld_vo/*.vo 2>/dev/null || true
+          cp /Users/apple/vo_ci_cache_mac/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
+          mkdir -p ConstructiveWorld_vo/Local
+          rm -f ConstructiveWorld_vo/Local/*.vo 2>/dev/null || true
+          cp /Users/apple/vo_ci_cache_mac/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
+          echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
+
+      - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
+        shell: bash -e {0}
+        run: |
+          # 温控协议 mac 形：cpu_guard.sh v3（pmset 温控门+队列梯度，本机原生）。
+          bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
+            bash /Users/apple/actions-runner/cw_build.sh
+
+      - name: gate5 vo-binary quarantine (pre-coqchk, token+digest, control-calibrated)
+        if: always()
+        shell: bash -e {0}
+        run: |
+          set +e
+          python3 scripts/gates/gate5_vodep_quarantine.py \
+            --tree ConstructiveWorld_vo \
+            --json gate5_vodep_report.json
+          rc=$?
+          set -e
+          if [ "$rc" -eq 1 ]; then
+            echo "GATE5-RED: poison token/digest hit in .vo/.vos/.vok binary layer — HIT list above; disposition per VO-RES-CLEAN (purge poison gen + rebuild consumer closure from clean source + Axioms=<none> recheck)"
+            exit 1
+          elif [ "$rc" -eq 2 ]; then
+            echo "GATE5-NOSCANNABLE: no scannable surface / tree missing / control SELF-HIT failed — treat as red (fail-loud, gate2 GATE-BANNER-ABSENT precedent; upstream red cause first)"
+            exit 1
+          elif [ "$rc" -eq 0 ]; then
+            echo "GATE5-GREEN: vo binary layer clean (hard token 0-hit + digest 0-hit + control SELF-HIT pass; Psatz soft counts in gate5_vodep_report.json)"
+          else
+            echo "GATE5-UNEXPECTED-EXIT rc=$rc — fail-loud, treat as red"
+            exit 1
+          fi
+
+      - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
+        shell: bash -e {0}
+        run: |
+          bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
+            bash /Users/apple/actions-runner/cw_chk.sh
+
+      - name: gate2 axioms sentinel (block-state-machine, fail-loud)
+        if: always()
+        shell: bash -e {0}
+        run: |
+          if [ ! -f ConstructiveWorld_vo/_chk_all.log ]; then
+            echo "GATE-BANNER-ABSENT: _chk_all.log 不在盘——coqchk 未产出日志（上游 gate4/build 夭折连带，红因看上游步），非 COQLIB 代际失守"
+            exit 1
+          fi
+          grep -q "Welcome to Chicken 9.1.0" ConstructiveWorld_vo/_chk_all.log \
+            || { echo "GATE-BANNER-FAIL: coqchk 代际非 9.1（COQLIB 钉代失守，log 不可作公理判据）"; exit 1; }
+          python3 scripts/gates/gate2_axioms_parser.py \
+            ConstructiveWorld_vo/_chk_all.log --json gate2_verdict.json
+
+      - name: Export trust cache (mirror, bootstrap future SKIP)
+        if: success()
+        shell: bash -e {0}
+        run: |
+          # 构建绿后镜像导出本机信任缓存（仅 *.vo，排除 _*.log 等工作文件），
+          # 次轮播种步吃真镜像 → 指纹 SKIP 生效。
+          mkdir -p /Users/apple/vo_ci_cache_mac/Local
+          rm -f /Users/apple/vo_ci_cache_mac/*.vo /Users/apple/vo_ci_cache_mac/Local/*.vo 2>/dev/null || true
+          find ConstructiveWorld_vo -maxdepth 1 -name '*.vo' -exec cp {} /Users/apple/vo_ci_cache_mac/ \;
+          find ConstructiveWorld_vo/Local -maxdepth 1 -name '*.vo' -exec cp {} /Users/apple/vo_ci_cache_mac/Local/ \; 2>/dev/null || true
+          echo "exported $(ls /Users/apple/vo_ci_cache_mac/*.vo 2>/dev/null | wc -l) .vo to mac trust cache"
+
+      - name: Upload coqchk logs (macOS)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coqchk-logs-macos
+          path: |
+            ConstructiveWorld_vo/_chk_*.log
+            gate1_ci.json
+            gate3_ci.json
+            gate2_verdict.json
+            gate4_report.json
