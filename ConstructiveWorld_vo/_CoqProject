@@ -684,3 +684,4 @@ tlw1703_uacm_combo_unconditional.v
 tlw1728R2_r2_res1_moment.v
 tlw1738_r2_res1_decay.v
 tlw1463_pade_r29_faces.v
+tlw1463_pade_table.v
