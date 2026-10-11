@@ -688,3 +688,5 @@ tlw1463_pade_table.v
 tlw1729_negform.v
 ucreal_eq_real_to_creal.v
 ucreal_eq_creal_to_real.v
+pdt_tan_table.v
+tlw1703_unif_tight_instantiation.v
