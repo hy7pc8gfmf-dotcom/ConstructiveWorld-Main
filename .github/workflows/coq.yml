@@ -380,6 +380,10 @@ jobs:
         if: always()
         shell: bash -e {0}
         run: |
+          # SW2 全字面双 export：gate5 对照组定位须 COQLIB/ROCQLIB 指 9.1 安装库（mac launchd 双 unset，
+          # CONTROL_BASES 三路缺二；供给其要求之校准样=环境供给，非动闸逻辑）。
+          export COQLIB="/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/lib/coq"
+          export ROCQLIB="/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/lib/coq"
           set +e
           python3 scripts/gates/gate5_vodep_quarantine.py \
             --tree ConstructiveWorld_vo \
