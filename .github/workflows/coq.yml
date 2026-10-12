@@ -400,6 +400,7 @@ jobs:
           fi
 
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
+        if: always()  # mac 观察档语义：gate5 CONTROL-ABSENT（对照组缺席）系预期登记项，不得 skip 认证步
         shell: bash -e {0}
         run: |
           ulimit -s 65532 || true
