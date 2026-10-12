@@ -290,27 +290,83 @@ jobs:
           cp /Users/apple/vo_ci_cache_mac/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
-      - name: Bootstrap out-of-registry sources (dark-mine pre-compile, macOS cold cache only)
+      - name: Bootstrap cold cache in coqdep dependency order (macOS cold cache only)
         shell: bash -e {0}
         run: |
-          # 仓库 vo 镜像含在册外 .v（order.txt 不列，46 枚）：Windows 侧经本地缓存播种
-          # .vo 掩盖；macOS 空缓存冷编需先行编译之，消费者方可寻获。迭代编译至无进展
-          # （≤5 轮），单件失败容忍（其依赖可能在后续轮就绪）。
+          # 仓库 vo 镜像 737 源中 46 枚在册外（order.txt 不列），且 order.txt 拓扑与真实
+          # coqdep 依赖序存在漂移。Windows 侧由本地信任缓存全量播种 .vo 掩盖一切
+          # （build 全 SKIP，序缺陷从不显影）；macOS 空缓存冷编时 build.sh 的访问序
+          # 先于依赖 .vo 产出，级联约 140 件 "Cannot find a physical path bound to
+          # logical path"（run#232 attempt1 / #233 attempt2 两轮实证）。
+          # 本步以 coqdep 真依赖序预编全部缺失/陈旧 .vo（Kahn 拓扑排序，环余量按
+          # 名序追加并告警），随后 build.sh 吃指纹 SKIP 走全绿，认证语义不变。
+          # 单件失败容忍（终审在 build.sh 与 coqchk）；逐件编译经 cpu_guard 包裹
+          # （温控协议同款）。预编日志落 /tmp，不污染 vo 树。
           cd ConstructiveWorld_vo
-          export COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
-          for pass in 1 2 3 4 5; do
-            PROG=0
-            comm -23 <(ls *.v | sort) <(sed 's/#.*//' order.txt | grep '\.v$' | sort) > /tmp/_dark.txt
-            while IFS= read -r f; do
-              v="${f%.v}.vo"
-              if [ ! -f "$v" ] || [ "$v" -ot "$f" ]; then
-                bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 1800 -- "$COQC" -native-compiler no -Q . "" "$f" > "_dark_${f%.v}.log" 2>&1 && PROG=$((PROG+1)) || true
-              fi
-            done < /tmp/_dark.txt
-            echo "pass $pass: $PROG newly compiled"
-            [ "$PROG" -eq 0 ] && break
-          done
-          echo "dark-mine bootstrap done: $(comm -23 <(ls *.v | sort) <(sed 's/#.*//' order.txt | grep '\.v$' | sort) | while read f; do [ -f "${f%.v}.vo" ] && echo x; done | wc -l | tr -d ' ') vo in place"
+          COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
+          ROCQ=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
+          find . -name '*.v' | sed 's|^\./||' | sort > /tmp/_cw_allv.txt
+          "$ROCQ" dep -Q . "" $(cat /tmp/_cw_allv.txt) > /tmp/_cw_deps.txt 2>/dev/null || true
+          if [ ! -s /tmp/_cw_deps.txt ]; then echo "WARN: coqdep produced no output — falling back to name order"; fi
+          python3 - <<'PYEOF'
+          from collections import defaultdict, deque
+          allv = [l.strip() for l in open('/tmp/_cw_allv.txt') if l.strip()]
+          allset = set(allv)
+          deps = defaultdict(set)
+          for line in open('/tmp/_cw_deps.txt'):
+              if ':' not in line:
+                  continue
+              left, right = line.split(':', 1)
+              vt = [t for t in left.split() if t.endswith('.vo')]
+              if not vt:
+                  continue
+              src = vt[0][:-3] + '.v'
+              if src.startswith('./'):
+                  src = src[2:]
+              if src not in allset:
+                  continue
+              for t in right.split():
+                  if t.endswith('.vo') and not t.startswith('/'):
+                      d = t[:-3] + '.v'
+                      if d.startswith('./'):
+                          d = d[2:]
+                      if d != src and d in allset:
+                          deps[src].add(d)
+          indeg = {f: len(deps[f]) for f in allv}
+          rdeps = defaultdict(list)
+          for f, ds in deps.items():
+              for d in ds:
+                  rdeps[d].append(f)
+          q = deque(sorted(f for f in allv if indeg[f] == 0))
+          order = []
+          while q:
+              f = q.popleft()
+              order.append(f)
+              for c in sorted(rdeps[f]):
+                  indeg[c] -= 1
+                  if indeg[c] == 0:
+                      q.append(c)
+          rest = sorted(set(allv) - set(order))
+          if rest:
+              print("WARN: dependency cycle among %d files, appended in name order, first few: %s" % (len(rest), rest[:8]))
+              order += rest
+          pos = {f: i for i, f in enumerate(order)}
+          viol = sum(1 for f in order for d in deps.get(f, ()) if pos[d] > pos[f])
+          print("coqdep topo: %d files, %d order violations" % (len(order), viol))
+          open('/tmp/_cw_order.txt', 'w').write('\n'.join(order) + '\n')
+          PYEOF
+          n=0; fails=0; skips=0
+          while IFS= read -r f; do
+            v="${f%.v}.vo"
+            if [ -f "$v" ] && [ "$v" -nt "$f" ]; then skips=$((skips+1)); continue; fi
+            if bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 1800 -- "$COQC" -native-compiler no -Q . "" "$f" > "/tmp/_cw_pre_${f//\//_}.log" 2>&1; then
+              n=$((n+1))
+            else
+              fails=$((fails+1))
+              echo "PRECOMPILE-FAILED: $f (log /tmp/_cw_pre_${f//\//_}.log)"
+            fi
+          done < /tmp/_cw_order.txt
+          echo "cold-cache bootstrap: $n precompiled, $skips skipped(fresh), $fails failed — build.sh is the final judge"
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: bash -e {0}
