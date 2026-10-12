@@ -290,6 +290,28 @@ jobs:
           cp /Users/apple/vo_ci_cache_mac/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
+      - name: Bootstrap out-of-registry sources (dark-mine pre-compile, macOS cold cache only)
+        shell: bash -e {0}
+        run: |
+          # 仓库 vo 镜像含在册外 .v（order.txt 不列，46 枚）：Windows 侧经本地缓存播种
+          # .vo 掩盖；macOS 空缓存冷编需先行编译之，消费者方可寻获。迭代编译至无进展
+          # （≤5 轮），单件失败容忍（其依赖可能在后续轮就绪）。
+          cd ConstructiveWorld_vo
+          export COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
+          for pass in 1 2 3 4 5; do
+            PROG=0
+            comm -23 <(ls *.v | sort) <(sed 's/#.*//' order.txt | grep '\.v$' | sort) > /tmp/_dark.txt
+            while IFS= read -r f; do
+              v="${f%.v}.vo"
+              if [ ! -f "$v" ] || [ "$v" -ot "$f" ]; then
+                bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 1800 -- "$COQC" -native-compiler no -Q . "" "$f" > "_dark_${f%.v}.log" 2>&1 && PROG=$((PROG+1)) || true
+              fi
+            done < /tmp/_dark.txt
+            echo "pass $pass: $PROG newly compiled"
+            [ "$PROG" -eq 0 ] && break
+          done
+          echo "dark-mine bootstrap done: $(comm -23 <(ls *.v | sort) <(sed 's/#.*//' order.txt | grep '\.v$' | sort) | while read f; do [ -f "${f%.v}.vo" ] && echo x; done | wc -l | tr -d ' ') vo in place"
+
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: bash -e {0}
         run: |
