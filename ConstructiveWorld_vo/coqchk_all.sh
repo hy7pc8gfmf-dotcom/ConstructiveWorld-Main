@@ -11,7 +11,12 @@ case "$K" in
 esac
 # 认证面=登记库件；`_` 前缀探针/暂态 .vo 不入认证闭包（CI#46 教训：
 # 杂散 _z3_g3.vo 陈旧 digest 撕裂全树认证——Inconsistent assumptions over UpReqAlign4）
-MODULES=$(for f in *.vo; do case "$f" in _*) continue;; esac; basename "$f" .vo; done | tr '\n' ' ')
+# bash-3.2-safe: case-in-$() one-liner requires bash>=4 (Windows Git Bash OK, macOS /bin/bash 3.2 parse-fails)
+MODULES=""
+for f in *.vo; do
+  case "$f" in _*) continue;; esac
+  MODULES="$MODULES $(basename "$f" .vo)"
+done
 [ -n "$MODULES" ] || { echo "no .vo found"; exit 1; }
 echo "coqchk batch: $(echo $MODULES | wc -w) modules (shared closure)"
 "$K" -o -Q . "" $MODULES > "_chk_all.log" 2>&1
