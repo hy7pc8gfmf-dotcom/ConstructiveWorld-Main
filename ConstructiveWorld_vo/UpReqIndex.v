@@ -15,7 +15,7 @@
 (* 结构：一、迁移宇宙注册面（idx_ 48 条）                                   *)
 (*       二、活动面计数（af_ 124 条）                                       *)
 (*       三、结构分组对账（lg_ 31 条与结构不变量引理）                      *)
-(*       四、新绿件登记面（ng_ 592 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
+(*       四、新绿件登记面（ng_ 615 条，尾列元数据口径 L<行数>:m<md5 前 6>） *)
 (*       五、统计常量与对账引理                                             *)
 (* 维护：仅允许整批追加条目并同步统计字面值，保持对账引理闭合。             *)
 (* ========================================================================= *)
@@ -4089,3 +4089,147 @@ Definition ng_Tlw1448L2Escape : NewGreenFace :=
 Definition ng_Tlw1459Fold : NewGreenFace :=
   MkNewGreenFace "tlw1459_fold.v" 114 3 20261008
   "growth-law closure: tlw1459_fold_closed gives for every q a sigT witness n0 with lw5n_sep_dec q n0 hitting true and n0 <= tlw1448_Bexp q, in both Id and leiblw_Id forms via the twin tlw1459_fold_closed_leiblw, and the band theorem tlw1459_band bounds the hitting index of every q inside the cell interval by the band S m <= 8 * n0 + 9 with tlw1448_nsep_rebase tlw1448_ck q <= n0 <= tlw1448_Bexp q" "L114:m34c459".
+(* ng_ 第三轨续写：tdm225 适配波 23 件逐件实测登记（append-only；前五波十三件 order 在册而 ng_ 面未登记为既有滞后，候补波，不在本块）。 *)
+(* 口径：ng_lines=wc -l 实测；ng_qed=剥块注释 token 级 \bQed\. 实测（行级 grep -c 双口径逐件相等）；ng_meta=登记时点快照。 *)
+
+(* ---------- 测度族 15 件（u5c_ 闭式测度族·gapA 已裁定剔除首批） ---------- *)
+(* ng_U5cAuxNatpow —— u5c_aux_natpow.v：测度族 nat 幂辅助件（幂展开与 Q 层换算辅助引理族）；PA=8 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cAuxNatpow : NewGreenFace :=
+  MkNewGreenFace "u5c_aux_natpow.v" 178 10 20261012
+  "nat-power auxiliary lemmas for the closed-form measure family" "L178:mc12e12".
+(* ng_U5cDmEMeasureQcore —— u5c_dm_e_measure_qcore.v：e 族闭式分离常元 q 核（c=1/(4b(b+7)!) 闭式分离常数 sigT 承载）；PA=5 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cDmEMeasureQcore : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_e_measure_qcore.v" 1114 42 20261012
+  "e-family closed-form measure q-core with explicit separation constant" "L1114:md9be3e".
+(* ng_U5cDmEscapeToDistAny —— u5c_dm_escape_to_dist_any.v：逃逸点到任意距离换算件；PA=1 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cDmEscapeToDistAny : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_escape_to_dist_any.v" 132 1 20261012
+  "escape-point to arbitrary-distance conversion face" "L132:m9ef95b".
+(* ng_U5cDmEscapeWindow —— u5c_dm_escape_window.v：逃逸窗口件（dmew_e_bnd/dmew_Qinv_1p/dmew_delta_pow_inv 显式 Q 层界，现势结论面 QeqT/QleT' 形——片 3b 两红件适配所对之面）；PA=4 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cDmEscapeWindow : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_escape_window.v" 409 9 20261012
+  "escape-window supply with explicit Q-layer bounds dmew_e_bnd, dmew_Qinv_1p and dmew_delta_pow_inv" "L409:m002e06".
+(* ng_U5cLn2Gap1Convbinom —— u5c_ln2_gap1_convbinom.v：ln2 线 gap-1 闭式二项式换算件；PA=101 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cLn2Gap1Convbinom : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_gap1_convbinom.v" 974 76 20261012
+  "ln2 gap-one closed binomial conversion face" "L974:m7d84c0".
+(* ng_U5cLn2Gap2Bridge —— u5c_ln2_gap2_bridge.v：ln2 线 gap-2 桥面（gapB 绿）；PA=8 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cLn2Gap2Bridge : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_gap2_bridge.v" 194 7 20261012
+  "ln2 gap-two bridge face" "L194:mef33e0".
+(* ng_U5cZeta2GapB —— u5c_zeta2_gapB.v：ζ(2) gapB 面（gapA 剔除首批候 abl_zeta2 池面终态后按刷新工单补录）；PA=20 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cZeta2GapB : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_gapB.v" 409 20 20261012
+  "zeta(2) gap-B face; gap-A excluded from the first batch by adjudication" "L409:m9a5feb".
+(* ng_U5cAuxNatpowDischarge —— u5c_aux_natpow_discharge.v：nat 幂辅助 discharge 面；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cAuxNatpowDischarge : NewGreenFace :=
+  MkNewGreenFace "u5c_aux_natpow_discharge.v" 73 2 20261012
+  "discharge face for the nat-power auxiliary family" "L73:m76a784".
+(* ng_U5cDmEscapeDischarge —— u5c_dm_escape_discharge.v：逃逸 discharge 面（Defined 透明闭合×2）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cDmEscapeDischarge : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_escape_discharge.v" 74 0 20261012
+  "escape discharge face with two transparent Defined closings" "L74:me2dd5f".
+(* ng_U5cDmInstanceDischarge —— u5c_dm_instance_discharge.v：实例 discharge 面（片 3b 三式外科桥接前向适配现势 window 面，语句面零触碰）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cDmInstanceDischarge : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_instance_discharge.v" 81 2 20261012
+  "instance discharge face forward-adapted to the current escape-window statement face" "L81:m8300a9".
+(* ng_U5cSqrt2ClosedMeasure —— u5c_sqrt2_closed_measure.v：√2 闭式测度（分离常元 1/(12b²)·片 3b Qeq 桥适配绿）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cSqrt2ClosedMeasure : NewGreenFace :=
+  MkNewGreenFace "u5c_sqrt2_closed_measure.v" 407 5 20261012
+  "sqrt(2) closed-form measure with separation constant one over twelve b squared" "L407:ma9b383".
+(* ng_U5cSqrt3ClosedMeasure —— u5c_sqrt3_closed_measure.v：√3 闭式测度；PA=3 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cSqrt3ClosedMeasure : NewGreenFace :=
+  MkNewGreenFace "u5c_sqrt3_closed_measure.v" 931 22 20261012
+  "sqrt(3) closed-form measure face" "L931:m6a84e1".
+(* ng_U5cSqrt5ClosedMeasure —— u5c_sqrt5_closed_measure.v：√5 闭式测度（分离常元 1/(16b²)）；PA=2 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cSqrt5ClosedMeasure : NewGreenFace :=
+  MkNewGreenFace "u5c_sqrt5_closed_measure.v" 1066 26 20261012
+  "sqrt(5) closed-form measure with separation constant one over sixteen b squared" "L1066:mb529ce".
+(* ng_U5cLn2Assembly —— u5c_ln2_assembly.v：ln2 线组装件；PA=8 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cLn2Assembly : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_assembly.v" 179 4 20261012
+  "ln2 line assembly face" "L179:m8619ca".
+(* ng_U5cLn2Seam4 —— u5c_ln2_seam4.v：ln2 线 seam-4 收尾件；PA=7 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cLn2Seam4 : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_seam4.v" 180 6 20261012
+  "ln2 line seam-four closure face" "L180:m0449d8".
+
+(* ---------- 素数域 4 件（u5c_pr_ 线） ---------- *)
+(* ng_U5cPrBertrandClose —— u5c_pr_bertrand_close.v：Bertrand 全强度闭合件（u5c_bertrand_full 主语句；2764 行卷面终态清洗版 2679 行）；PA=35 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cPrBertrandClose : NewGreenFace :=
+  MkNewGreenFace "u5c_pr_bertrand_close.v" 2679 133 20261012
+  "full-strength Bertrand postulate closure with master statement u5c_bertrand_full" "L2679:m47b294".
+(* ng_U5cPrMertensNat —— u5c_pr_mertens_nat.v：Mertens 反向 nat 发散证书（pzs_prime_recip_diverge）；PA=9 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cPrMertensNat : NewGreenFace :=
+  MkNewGreenFace "u5c_pr_mertens_nat.v" 901 37 20261012
+  "Mertens-type reciprocal prime divergence certificate on nat" "L901:m163307".
+(* ng_U5cPrLcmAbsorb —— u5c_pr_lcm_absorb.v：lcm 吸收面（plw_maxpow；内嵌 Separate Extraction 编译期执行绿）；PA=13 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cPrLcmAbsorb : NewGreenFace :=
+  MkNewGreenFace "u5c_pr_lcm_absorb.v" 724 33 20261012
+  "lcm absorption face plw_maxpow with embedded Separate Extraction" "L724:mff4017".
+(* ng_U5cPrLcmDivide —— u5c_pr_lcm_divide.v：lcm 整除面（plw_ispw；内嵌 Separate Extraction 编译期执行绿）；PA=16 Closed；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cPrLcmDivide : NewGreenFace :=
+  MkNewGreenFace "u5c_pr_lcm_divide.v" 1270 63 20261012
+  "lcm divide face plw_ispw with embedded Separate Extraction" "L1270:maa9c56".
+
+(* ---------- 提取驱动 4 件（zz_ 前缀照录·裁定 2） ---------- *)
+(* ng_U5cExt —— u5c_ext.v：bertrand 公理审计与提取驱动（四主语句 Print Assumptions＋Separate Extraction u5c_bertrand_full；零语句定义件）；PA=4 Closed；coqchk -o 模块复核 Axioms: none *)
+Definition ng_U5cExt : NewGreenFace :=
+  MkNewGreenFace "u5c_ext.v" 16 0 20261012
+  "extraction driver: axiom audit of u5c_pr_bertrand_close via four Print Assumptions plus Separate Extraction of u5c_bertrand_full; zero statements" "L16:m17652a".
+(* ng_ZzU5cExtract —— zz_u5c_extract.v：mertens 主语句直提驱动件（零语句定义件）；PA=0（纯提取件）；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ZzU5cExtract : NewGreenFace :=
+  MkNewGreenFace "zz_u5c_extract.v" 13 0 20261012
+  "pure extraction driver for the mertens master statement; zero statements" "L13:me1acda".
+(* ng_ZzPrrunExtMert —— zz_prrun_ext_mert.v：mertens 线 RunAlive 提取面驱动（pzs_prime_recip_diverge/pzs_rsum/pzs_B＋pr_prime_bool）；PA=0（纯提取件）；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ZzPrrunExtMert : NewGreenFace :=
+  MkNewGreenFace "zz_prrun_ext_mert.v" 18 0 20261012
+  "RunAlive extraction driver for the mertens line; zero statements" "L18:med2bbc".
+(* ng_ZzPrrunExtLcm —— zz_prrun_ext_lcm.v：lcm 线 RunAlive 提取面驱动（plw_maxpow/HansonLcm.hl_binom/hl_lcm_upto＋pr_prime_bool）；PA=0（纯提取件）；提取面 Obj.magic=0；coqchk -o 模块复核 Axioms: none *)
+Definition ng_ZzPrrunExtLcm : NewGreenFace :=
+  MkNewGreenFace "zz_prrun_ext_lcm.v" 20 0 20261012
+  "RunAlive extraction driver for the lcm line; zero statements" "L20:m2a01e7".
+
+(* ---------- V33 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV33 : list NewGreenFace :=
+  cons ng_U5cAuxNatpow
+  (cons ng_U5cDmEMeasureQcore
+  (cons ng_U5cDmEscapeToDistAny
+  (cons ng_U5cDmEscapeWindow
+  (cons ng_U5cLn2Gap1Convbinom
+  (cons ng_U5cLn2Gap2Bridge
+  (cons ng_U5cZeta2GapB
+  (cons ng_U5cAuxNatpowDischarge
+  (cons ng_U5cDmEscapeDischarge
+  (cons ng_U5cDmInstanceDischarge
+  (cons ng_U5cSqrt2ClosedMeasure
+  (cons ng_U5cSqrt3ClosedMeasure
+  (cons ng_U5cSqrt5ClosedMeasure
+  (cons ng_U5cLn2Assembly
+  (cons ng_U5cLn2Seam4
+  (cons ng_U5cPrBertrandClose
+  (cons ng_U5cPrMertensNat
+  (cons ng_U5cPrLcmAbsorb
+  (cons ng_U5cPrLcmDivide
+  (cons ng_U5cExt
+  (cons ng_ZzU5cExtract
+  (cons ng_ZzPrrunExtMert
+  (cons ng_ZzPrrunExtLcm
+  nil)))))))))))))))))))))).
+
+(* 续写统计：23 件 / 行数和 12042 / 闭合和 498（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV33Pieces  : nat := 23.
+Definition NewGreenV33LineSum : nat := 12042.
+Definition NewGreenV33QedSum  : nat := 498.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV33Pieces_matches : NewGreenV33Pieces = cnt_ng NewGreenListV33.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV33LineSum_matches : NewGreenV33LineSum = sum_ng_lines NewGreenListV33.
+Proof. reflexivity. Qed.
+
+(* 闭合和 = 字面值 *)
+Lemma NewGreenV33QedSum_matches : NewGreenV33QedSum = sum_ng_qed NewGreenListV33.
+Proof. reflexivity. Qed.
