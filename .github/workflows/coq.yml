@@ -372,6 +372,7 @@ jobs:
         shell: bash -e {0}
         run: |
           # 温控协议 mac 形：cpu_guard.sh v3（pmset 温控门+队列梯度，本机原生）。
+          ulimit -s 65532 || true
           bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
             bash /Users/apple/actions-runner/cw_build.sh
 
@@ -401,6 +402,7 @@ jobs:
       - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
         shell: bash -e {0}
         run: |
+          ulimit -s 65532 || true
           bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
             bash /Users/apple/actions-runner/cw_chk.sh
 
