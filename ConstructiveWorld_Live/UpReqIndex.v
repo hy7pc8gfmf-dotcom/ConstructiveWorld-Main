@@ -4446,3 +4446,50 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV36QedSum_matches : NewGreenV36QedSum = sum_ng_qed NewGreenListV36.
 Proof. reflexivity. Qed.
+(* ---------- V37 批（登记 5 件） ---------- *)
+(* ng_DigMachine -- dig_machine.v: 双积分组机 sup 证书与逐点衰减复合面及载体族界与竞争判定 m >= 4（61/676 档） *)
+Definition ng_DigMachine : NewGreenFace :=
+  MkNewGreenFace "dig_machine.v" 788 21 20261014
+  "double-integral group machine with sup certificate, composite pointwise decay, family bound and competition verdict at m >= 4" "L788:md322f4".
+(* ng_GclCoefficient -- gcl_coefficient.v: V4 对称化组论系数层与 tight 逐点改进证书 24N <= 1+x+y-2xy（N/Tavg <= 1/12） *)
+Definition ng_GclCoefficient : NewGreenFace :=
+  MkNewGreenFace "gcl_coefficient.v" 484 25 20261014
+  "group-theoretic coefficient layer with V4 symmetrization and tight pointwise improvement certificate N/Tavg <= 1/12" "L484:m1d7c8d".
+(* ng_U5cZeta2A1Sign11 -- u5c_zeta2_a1_sign11.v: zeta2 前缀界族 1/11 参数档重铸与显式命名前提逐点封顶证书 *)
+Definition ng_U5cZeta2A1Sign11 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_a1_sign11.v" 308 12 20261014
+  "zeta(2) prefix-bound machine at the 1/11 parameter tier with explicitly named premise pointwise cap certificate" "L308:mf1c724".
+(* ng_U5cLn2S4fill -- u5c_ln2_s4fill.v: ln2 ④缝内容位填充与正典见证销案 Hid 参数位及焊链验收 *)
+Definition ng_U5cLn2S4fill : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_s4fill.v" 274 10 20261014
+  "ln2 seam-4 content fill turning the Hid parameter slot into a theorem by canonical witness with weld-chain acceptance" "L274:m97770a".
+(* ng_U5cDmE2MeasureQcore -- u5c_dm_e2_measure_qcore.v: e2=exp(2) 测度实例 CaseB 闭式支与条件形装配件及 CaseA 死窗在机否定件 *)
+Definition ng_U5cDmE2MeasureQcore : NewGreenFace :=
+  MkNewGreenFace "u5c_dm_e2_measure_qcore.v" 1112 43 20261014
+  "measure-instance piece for exp(2) with CaseB closed-form branch, conditional measure, and in-machine negative certificate for the CaseA window" "L1112:m51f012".
+
+(* ---------- V37 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV37 : list NewGreenFace :=
+  cons ng_DigMachine
+  (cons ng_GclCoefficient
+  (cons ng_U5cZeta2A1Sign11
+  (cons ng_U5cLn2S4fill
+  (cons ng_U5cDmE2MeasureQcore
+  nil)))).
+
+(* 续写统计：5 件 / 行数和 2966 / 闭合数和 111（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV37Pieces  : nat := 5.
+Definition NewGreenV37LineSum : nat := 2966.
+Definition NewGreenV37QedSum  : nat := 111.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV37Pieces_matches : NewGreenV37Pieces = cnt_ng NewGreenListV37.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV37LineSum_matches : NewGreenV37LineSum = sum_ng_lines NewGreenListV37.
+Proof. reflexivity. Qed.
+
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV37QedSum_matches : NewGreenV37QedSum = sum_ng_qed NewGreenListV37.
+Proof. reflexivity. Qed.

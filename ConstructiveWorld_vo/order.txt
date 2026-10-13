@@ -741,3 +741,8 @@ b1_linform_machine.v#R184-d7d28a
 b1_extract.v#R184-620cbb
 b1_extract4.v#R184-d67bff
 a1_mu0_general.v#R184-4eefa5
+dig_machine.v#R185-d322f4
+gcl_coefficient.v#R185-1d7c8d
+u5c_zeta2_a1_sign11.v#R185-f1c724
+u5c_ln2_s4fill.v#R185-97770a
+u5c_dm_e2_measure_qcore.v#R185-51f012

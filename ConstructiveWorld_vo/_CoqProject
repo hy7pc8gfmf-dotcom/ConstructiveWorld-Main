@@ -742,3 +742,8 @@ b1_linform_machine.v
 b1_extract.v
 b1_extract4.v
 a1_mu0_general.v
+dig_machine.v
+gcl_coefficient.v
+u5c_zeta2_a1_sign11.v
+u5c_ln2_s4fill.v
+u5c_dm_e2_measure_qcore.v
