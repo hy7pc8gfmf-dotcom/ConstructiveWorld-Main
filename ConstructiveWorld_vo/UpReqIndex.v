@@ -4358,3 +4358,91 @@ Proof. reflexivity. Qed.
 (* 闭合和 = 字面值 *)
 Lemma NewGreenV35QedSum_matches : NewGreenV35QedSum = sum_ng_qed NewGreenListV35.
 Proof. reflexivity. Qed.
+
+(* ---------- V36 批（登记 13 件） ---------- *)
+(* ng_AblDmw2PointwiseSharp -- abl_dmw2_pointwise_sharp.v: Beukers 被积族逐点层锐化主不等式 11N <= 1-xy 与复合控制面 *)
+Definition ng_AblDmw2PointwiseSharp : NewGreenFace :=
+  MkNewGreenFace "abl_dmw2_pointwise_sharp.v" 696 32 20261014
+  "pointwise linear control sharpened to 11N <= 1-xy with composite face" "L696:m1eeea6".
+(* ng_B1KernelPointwise -- b1_kernel_pointwise.v: 逐点衰减核 theta 1/4 与 theta 5/24 双档有理短证书 *)
+Definition ng_B1KernelPointwise : NewGreenFace :=
+  MkNewGreenFace "b1_kernel_pointwise.v" 331 24 20261014
+  "pointwise decay kernel with rational short certificates at theta 1/4 and 5/24" "L331:ma3791b".
+(* ng_B1TruncMaster -- b1_trunc_master.v: 截断母恒等式 (1-t)^(n+1) A + t^(M+1) P = 1 对 t 无条件与 arctan 换档实例 *)
+Definition ng_B1TruncMaster : NewGreenFace :=
+  MkNewGreenFace "b1_trunc_master.v" 345 21 20261014
+  "truncation master identity unconditional in t with arctan retuned instance" "L345:m8a59ac".
+(* ng_AblDmw2SharpenDecay -- abl_dmw2_sharpen_decay.v: 锐权族界 (1/4)(1/11)^m 与竞争判定 m >= 5 及条件分离面 *)
+Definition ng_AblDmw2SharpenDecay : NewGreenFace :=
+  MkNewGreenFace "abl_dmw2_sharpen_decay.v" 478 21 20261014
+  "sharpened weight family bound (1/4)(1/11)^m with competition verdict at m >= 5" "L478:m76f5a9".
+(* ng_AblZ3ItgCarrier -- abl_z3_itg_carrier.v: 三重积分承载与段值闭式 C(n+m,n)·B(n+m,n)^3 *)
+Definition ng_AblZ3ItgCarrier : NewGreenFace :=
+  MkNewGreenFace "abl_z3_itg_carrier.v" 263 9 20261014
+  "triple-integral carrier with closed-form segment values" "L263:m761528".
+(* ng_AblZ3Pointwise -- abl_z3_pointwise.v: Beukers 被积族三变量逐点衰减 40N <= T 线性控制与平方控制及复合机 *)
+Definition ng_AblZ3Pointwise : NewGreenFace :=
+  MkNewGreenFace "abl_z3_pointwise.v" 312 7 20261014
+  "three-variable pointwise decay on the Beukers integrand family" "L312:m53afa6".
+(* ng_AblZ3Decay -- abl_z3_decay.v: 三次重排整性分离 weight_cub 与竞争判定 m >= 5 及 sep3_small 主件 *)
+Definition ng_AblZ3Decay : NewGreenFace :=
+  MkNewGreenFace "abl_z3_decay.v" 541 18 20261014
+  "cubic integrality separation with competition verdict at m >= 5" "L541:m622a8c".
+(* ng_B1CarrierBeta -- b1_carrier_beta.v: 迭代载体单积分 Beta 闭式精确值与不超过 1 的衰减肢及 rho 部分和承载 *)
+Definition ng_B1CarrierBeta : NewGreenFace :=
+  MkNewGreenFace "b1_carrier_beta.v" 216 13 20261014
+  "iterated carrier with single-integral Beta closed form and decay limb" "L216:mcad0a6".
+(* ng_B1DenomControl -- b1_denom_control.v: 奇清分母双控 2^n·n! 读形与 sigT 乘子见证 *)
+Definition ng_B1DenomControl : NewGreenFace :=
+  MkNewGreenFace "b1_denom_control.v" 141 9 20261014
+  "odd-clearing denominator control with extractable sigT multiplier witness" "L141:m24f12b".
+(* ng_B1LinformMachine -- b1_linform_machine.v: Euler arctan 连分式收敛子上的 pi 系数整值线性形式机与行列式恒等式 *)
+Definition ng_B1LinformMachine : NewGreenFace :=
+  MkNewGreenFace "b1_linform_machine.v" 444 33 20261014
+  "integer linear form machine on Euler arctan continued-fraction convergents" "L444:md7d28a".
+(* ng_B1Extract -- b1_extract.v: b1 spine 四件九个常量的分离提取驱动（零语句件） *)
+Definition ng_B1Extract : NewGreenFace :=
+  MkNewGreenFace "b1_extract.v" 20 0 20261014
+  "extraction driver for the four spine pieces; zero statements" "L20:m620cbb".
+(* ng_B1Extract4 -- b1_extract4.v: 线性形式机五个常量的分离提取驱动（零语句件） *)
+Definition ng_B1Extract4 : NewGreenFace :=
+  MkNewGreenFace "b1_extract4.v" 15 0 20261014
+  "extraction driver for the linear form machine; zero statements" "L15:md67bff".
+(* ng_A1Mu0General -- a1_mu0_general.v: mu0 >= 2 全参数泛化测度面与三桥零迁移回归及统一闭式证书接口 *)
+Definition ng_A1Mu0General : NewGreenFace :=
+  MkNewGreenFace "a1_mu0_general.v" 173 6 20261014
+  "mu0-general measure face with three zero-migration regression bridges and closed-certificate interface" "L173:m4eefa5".
+
+(* ---------- V36 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV36 : list NewGreenFace :=
+  cons ng_AblDmw2PointwiseSharp
+  (cons ng_B1KernelPointwise
+  (cons ng_B1TruncMaster
+  (cons ng_AblDmw2SharpenDecay
+  (cons ng_AblZ3ItgCarrier
+  (cons ng_AblZ3Pointwise
+  (cons ng_AblZ3Decay
+  (cons ng_B1CarrierBeta
+  (cons ng_B1DenomControl
+  (cons ng_B1LinformMachine
+  (cons ng_B1Extract
+  (cons ng_B1Extract4
+  (cons ng_A1Mu0General
+  nil)))))))))))).
+
+(* 续写统计：13 件 / 行数和 3975 / 闭合数和 193（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV36Pieces  : nat := 13.
+Definition NewGreenV36LineSum : nat := 3975.
+Definition NewGreenV36QedSum  : nat := 193.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV36Pieces_matches : NewGreenV36Pieces = cnt_ng NewGreenListV36.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV36LineSum_matches : NewGreenV36LineSum = sum_ng_lines NewGreenListV36.
+Proof. reflexivity. Qed.
+
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV36QedSum_matches : NewGreenV36QedSum = sum_ng_qed NewGreenListV36.
+Proof. reflexivity. Qed.

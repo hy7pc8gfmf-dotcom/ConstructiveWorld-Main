@@ -728,3 +728,16 @@ piu1888_growth_quant_lemma.v#R182-3b31c8
 piu1905_sodd_lower.v#R183-2ca4b2
 piu1909_K_assembly.v#R183-2f123e
 piu1909_sall_upper.v#R183-5de989
+abl_dmw2_pointwise_sharp.v#R184-1eeea6
+b1_kernel_pointwise.v#R184-a3791b
+b1_trunc_master.v#R184-8a59ac
+abl_dmw2_sharpen_decay.v#R184-76f5a9
+abl_z3_itg_carrier.v#R184-761528
+abl_z3_pointwise.v#R184-53afa6
+abl_z3_decay.v#R184-622a8c
+b1_carrier_beta.v#R184-cad0a6
+b1_denom_control.v#R184-24f12b
+b1_linform_machine.v#R184-d7d28a
+b1_extract.v#R184-620cbb
+b1_extract4.v#R184-d67bff
+a1_mu0_general.v#R184-4eefa5

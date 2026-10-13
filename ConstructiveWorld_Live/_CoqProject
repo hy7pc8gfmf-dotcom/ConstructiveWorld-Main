@@ -729,3 +729,16 @@ piu1888_growth_quant_lemma.v
 piu1905_sodd_lower.v
 piu1909_K_assembly.v
 piu1909_sall_upper.v
+abl_dmw2_pointwise_sharp.v
+b1_kernel_pointwise.v
+b1_trunc_master.v
+abl_dmw2_sharpen_decay.v
+abl_z3_itg_carrier.v
+abl_z3_pointwise.v
+abl_z3_decay.v
+b1_carrier_beta.v
+b1_denom_control.v
+b1_linform_machine.v
+b1_extract.v
+b1_extract4.v
+a1_mu0_general.v
