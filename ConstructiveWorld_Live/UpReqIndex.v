@@ -4575,3 +4575,30 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV38QedSum_matches : NewGreenV38QedSum = sum_ng_qed NewGreenListV38.
 Proof. reflexivity. Qed.
+(* ---------- V39 batch (1 piece registered) ---------- *)
+(* ng_Piu1932TightBoundInstantiated -- piu1932_tight_bound_instantiated.v: 幂率型紧上界的实例化收尾 (定义幂率深度型 kernel margin 族 ck_alpha(C0,alpha,q) = C0/h(q)^alpha、margin 换形填充一致型收尾件证书前提位四支(HC0_pos/Hcrt_pos/Hcrt_dist/Hcert_pow)、l2_escape 实例化与 antitone/Q 算术收尾: 停点 <= S(S(ceil((8/C0)*h^alpha))) 后继加一形) *)
+Definition ng_Piu1932TightBoundInstantiated : NewGreenFace :=
+  MkNewGreenFace "piu1932_tight_bound_instantiated.v" 195 9 20261014
+  "instanced closing of the uniform-type tight upper bound: the power-law depth kernel margin family ck_alpha(C0,alpha,q) = C0/h(q)^alpha fills the four certificate premises of the conditional uniform closing piece via margin reshaping, and the l2_escape instantiation with antitone and Q-arithmetic closing yields stop point <= S(S(ceil((8/C0)*h^alpha)))" "L195:ma443d4".
+
+(* ---------- V39 batch statistics (whole-batch append: list, constants and lemmas written atomically in one block) ---------- *)
+Definition NewGreenListV39 : list NewGreenFace :=
+  cons ng_Piu1932TightBoundInstantiated
+  nil.
+
+(* 续写统计：1 件 / 行数和 195 / 闭合和 9（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV39Pieces  : nat := 1.
+Definition NewGreenV39LineSum : nat := 195.
+Definition NewGreenV39QedSum  : nat := 9.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV39Pieces_matches : NewGreenV39Pieces = cnt_ng NewGreenListV39.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV39LineSum_matches : NewGreenV39LineSum = sum_ng_lines NewGreenListV39.
+Proof. reflexivity. Qed.
+
+(* 闭合和 = 字面值 *)
+Lemma NewGreenV39QedSum_matches : NewGreenV39QedSum = sum_ng_qed NewGreenListV39.
+Proof. reflexivity. Qed.
