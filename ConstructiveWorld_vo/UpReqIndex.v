@@ -4233,3 +4233,91 @@ Proof. reflexivity. Qed.
 (* 闭合和 = 字面值 *)
 Lemma NewGreenV33QedSum_matches : NewGreenV33QedSum = sum_ng_qed NewGreenListV33.
 Proof. reflexivity. Qed.
+
+(* ---------- V34 批（20261013 登记 13 件） ---------- *)
+(* ng_LeibsepNselHCoupling -- leibsep_nsel_h_coupling.v: Niven 选取级 n_sel 对有理高度 h 的闭式化 (n_sel = 20h+23、2n_sel+2 = 40h+48) + Qden 单调肢与 h=2..12 精确对照表 *)
+Definition ng_LeibsepNselHCoupling : NewGreenFace :=
+  MkNewGreenFace "leibsep_nsel_h_coupling.v" 145 12 20261013
+  "closed form of the Niven selection index n_sel against rational height h: n_sel = 20h+23 and 2n_sel+2 = 40h+48, with Qden monotonicity limb and the exact table for h = 2..12" "L145:m897d13".
+(* ng_LeibsepBandDomain -- leibsep_band_domain.v: kernel 门1 假支带域面 (带域谓词 35/12 < q < 41/12、前提参数位承载的成员核、valve_R1/valve_closed 阀形接口经互译恒等式、Qred 归位肢) *)
+Definition ng_LeibsepBandDomain : NewGreenFace :=
+  MkNewGreenFace "leibsep_band_domain.v" 254 12 20261013
+  "band domain face of the kernel gate first false branch: band predicate 35/12 < q < 41/12, membership core carried by explicit premise slots, valve interfaces valve_R1 and valve_closed connected through translation identities, and the Qred relocation limb" "L254:m3ae384".
+(* ng_LeibsepBandCkAssembly -- leibsep_band_ck_assembly.v: 带域一致型逐点装配 (带域与阀形前提下见证下界 1/((h+1)*(2n_sel+2)!) <= wit_i 全链、经 2n_sel+2 = 40h+48 的高度坐标终定理、tlw1448_ck 对接肢) *)
+Definition ng_LeibsepBandCkAssembly : NewGreenFace :=
+  MkNewGreenFace "leibsep_band_ck_assembly.v" 586 17 20261013
+  "band-consistent pointwise assembly of the margin chain: witness lower bound 1/((h+1)*(2n_sel+2)!) <= wit_i under band and valve premises with the four certificate premises, the height-coordinate master theorem via 2n_sel+2 = 40h+48, and the tlw1448_ck interface limb" "L586:mdb477f".
+(* ng_Piu1886Kbounds -- piu1886_kbounds.v: Niven 交错和多项式 F 与 F' 在 q 端点的 Q 层闭式界 kappa1/kappa0 (逐项绝对值有限和) + 正性肢与单调有限和提升肢 *)
+Definition ng_Piu1886Kbounds : NewGreenFace :=
+  MkNewGreenFace "piu1886_kbounds.v" 465 31 20261013
+  "closed Q-layer bounds kappa1 and kappa0 of the Niven alternating-sum polynomial F and its derivative at the endpoint q, given as finite sums of termwise absolute endpoint values, with positivity and monotone finite-sum lifting limbs" "L465:m97857c".
+(* ng_Piu1890CarrierRecast -- piu1890_carrier_recast.v: kernel 门控承载内链显式重建 (K 组合量上界入 K <= Kcap 接合肢、门真支见证与链内下界 1/den <= c 语句面承载、交错和端点闭式) *)
+Definition ng_Piu1890CarrierRecast : NewGreenFace :=
+  MkNewGreenFace "piu1890_carrier_recast.v" 294 11 20261013
+  "explicit recast of the kernel gate carrier inner chain: admission limb for the composite upper bound of K into K <= Kcap, gate-true branch witness with the chain lower bound 1/den <= c in the statement face, and closed forms of the alternating sum at the q endpoint" "L294:m17183b".
+(* ng_Piu1879GaplitRelease -- piu1879_gaplit_release.v: kernel 证书界 e3 = 1/100 与 el = 1/60 的字面释放 (S10 real_pi_leibniz 原字面) + 承载肢 4/((h+1)*q_fact(40h+48)) <= 1/60 双参数位覆盖 *)
+Definition ng_Piu1879GaplitRelease : NewGreenFace :=
+  MkNewGreenFace "piu1879_gaplit_release.v" 143 4 20261013
+  "literal release of the kernel certificate bounds e3 = 1/100 and el = 1/60 from the S10 real_pi_leibniz faces, with the cert bearing limb 4/((h+1)*q_fact(40h+48)) <= 1/60 covering both parameter positions" "L143:m80e545".
+(* ng_Piu1880ValveQchain -- piu1880_valve_qchain.v: 阀分母 (h+1)*(2n_sel+2)! 的高度坐标 (h+1)*(40h+48)! Q 层换算链 (后继形、阶乘 Q 化、单调双肢、正性肢与 K-cap 接入接口) *)
+Definition ng_Piu1880ValveQchain : NewGreenFace :=
+  MkNewGreenFace "piu1880_valve_qchain.v" 245 12 20261013
+  "Q-layer conversion chain of the valve denominator (h+1)*(2n_sel+2)! in height coordinates (h+1)*(40h+48)!: successor form, factorial Q-lift, both monotonicity limbs, positivity, and the K-cap admission interface" "L245:ma27e1c".
+(* ng_Piu1880EgelRelease -- piu1880_egel_release.v: kernel eps1-min 链 eg/el 两支的闭式选取释放 (带域前提下 eg = el = WING/(2K)、阀形传递肢与四支放行) *)
+Definition ng_Piu1880EgelRelease : NewGreenFace :=
+  MkNewGreenFace "piu1880_egel_release.v" 142 4 20261013
+  "explicit release of the eg and el slots of the kernel eps1-min chain: closed selection eg = el = WING/(2K) under the band premise, with the valve transport limb and the four-branch admission of the eps1-min arm" "L142:m584ccd".
+(* ng_Piu1891EggeomRelease -- piu1891_eggeom_release.v: cos_pi_half 与 5/3 分离的显式字面见证 (一致界 C = 8、窗级 N = 10、eps = 1/3200) 并提升至 real_pi_geom 与 10/3 的分离形 *)
+Definition ng_Piu1891EggeomRelease : NewGreenFace :=
+  MkNewGreenFace "piu1891_eggeom_release.v" 174 5 20261013
+  "explicit literal witness separating cos_pi_half from 5/3 with uniform bound C = 8, window stage N = 10 and eps = 1/3200, lifted to the real_pi_geom separation of pi from 10/3" "L174:m8ac9ea".
+(* ng_Piu1887PiLUniformWindow -- piu1887_piL_uniform_window.v: pi_L 投影序列 xL 的统一逃逸窗 (显式可计算窗级 n0 = max Nk (pie_modulus (eps*(1/10)))) 经内核窗前提实例化 *)
+Definition ng_Piu1887PiLUniformWindow : NewGreenFace :=
+  MkNewGreenFace "piu1887_piL_uniform_window.v" 130 5 20261013
+  "uniform escape window of the pi_L projection sequence xL with the explicit computable window stage n0 = max Nk (pie_modulus (eps*(1/10))), instantiated from the kernel window premise" "L130:m2ae5d1".
+(* ng_Piu1901LeibsepQKernelClosed -- piu1901_leibsep_q_kernel_closed.v: Leibniz pi_L 分离内核证书的语句面闭合 (tdm225 主语句 sigT 见证的 pi_L 对应形、eps2 链经内核定义链与窗级合成钉定) *)
+Definition ng_Piu1901LeibsepQKernelClosed : NewGreenFace :=
+  MkNewGreenFace "piu1901_leibsep_q_kernel_closed.v" 490 4 20261013
+  "statement-face closure of the Leibniz pi_L separation kernel certificate: the sigT witness of the tdm225 master statement in its pi_L correspondence, with the eps2 chain pinned by the kernel definition chain and the window-stage composition" "L490:m67a45c".
+(* ng_Piu1904Mu2Certificate -- piu1904_mu2_certificate.v: pi 幂率测度框架的数值证书闭合包装 (逐 q 闭合证书填装 lw1m_b_cert_face 接口位、统一逃逸窗与内核闭合见证拼合、测度 mu = 2/C = 2 显式选取) *)
+Definition ng_Piu1904Mu2Certificate : NewGreenFace :=
+  MkNewGreenFace "piu1904_mu2_certificate.v" 163 5 20261013
+  "numeric certificate wrapper of the pi power measure framework: per-q closure witness filling the lw1m_b_cert_face interface, joining the uniform escape window with the kernel closure witness, with the measure mu = 2/C = 2 selected explicitly" "L163:m449297".
+(* ng_Piu1888GrowthQuantLemma -- piu1888_growth_quant_lemma.v: pi 分离核载荷尺度 T0 = (2n)!/n! 的定量核心 (步进恒等式 qfact(2*(S n))*qfact n = 2*(2n+1)*qfact(2*n)*qfact(S n)) + 倍增单调肢、正性配套与除法转移引理 *)
+Definition ng_Piu1888GrowthQuantLemma : NewGreenFace :=
+  MkNewGreenFace "piu1888_growth_quant_lemma.v" 335 19 20261013
+  "quantitative core of the pi separation kernel load scale T0 = (2n)!/n!: the step equidistribution identity qfact(2*(S n))*qfact n = 2*(2n+1)*qfact(2*n)*qfact(S n), with the doubling monotonicity 2*T0 n <= T0 (S n), positivity kit and division transfer lemma" "L335:m3b31c8".
+
+(* ---------- V34 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV34 : list NewGreenFace :=
+  cons ng_LeibsepNselHCoupling
+  (cons ng_LeibsepBandDomain
+  (cons ng_LeibsepBandCkAssembly
+  (cons ng_Piu1886Kbounds
+  (cons ng_Piu1890CarrierRecast
+  (cons ng_Piu1879GaplitRelease
+  (cons ng_Piu1880ValveQchain
+  (cons ng_Piu1880EgelRelease
+  (cons ng_Piu1891EggeomRelease
+  (cons ng_Piu1887PiLUniformWindow
+  (cons ng_Piu1901LeibsepQKernelClosed
+  (cons ng_Piu1904Mu2Certificate
+  (cons ng_Piu1888GrowthQuantLemma
+  nil)))))))))))).
+
+(* 续写统计：13 件 / 行数和 3566 / 闭合和 141（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV34Pieces  : nat := 13.
+Definition NewGreenV34LineSum : nat := 3566.
+Definition NewGreenV34QedSum  : nat := 141.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV34Pieces_matches : NewGreenV34Pieces = cnt_ng NewGreenListV34.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV34LineSum_matches : NewGreenV34LineSum = sum_ng_lines NewGreenListV34.
+Proof. reflexivity. Qed.
+
+(* 闭合和 = 字面值 *)
+Lemma NewGreenV34QedSum_matches : NewGreenV34QedSum = sum_ng_qed NewGreenListV34.
+Proof. reflexivity. Qed.

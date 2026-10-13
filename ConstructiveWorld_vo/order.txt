@@ -712,3 +712,16 @@ u5c_ext.v#R181-17652a
 zz_u5c_extract.v#R181-e1acda
 zz_prrun_ext_mert.v#R181-ed2bbc
 zz_prrun_ext_lcm.v#R181-2a01e7
+leibsep_nsel_h_coupling.v#R182-897d13
+leibsep_band_domain.v#R182-3ae384
+leibsep_band_ck_assembly.v#R182-db477f
+piu1886_kbounds.v#R182-97857c
+piu1890_carrier_recast.v#R182-17183b
+piu1879_gaplit_release.v#R182-80e545
+piu1880_valve_qchain.v#R182-a27e1c
+piu1880_egel_release.v#R182-584ccd
+piu1891_eggeom_release.v#R182-8ac9ea
+piu1887_piL_uniform_window.v#R182-2ae5d1
+piu1901_leibsep_q_kernel_closed.v#R182-67a45c
+piu1904_mu2_certificate.v#R182-449297
+piu1888_growth_quant_lemma.v#R182-3b31c8

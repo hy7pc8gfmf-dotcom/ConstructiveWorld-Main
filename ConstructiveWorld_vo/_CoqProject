@@ -713,3 +713,16 @@ u5c_ext.v
 zz_u5c_extract.v
 zz_prrun_ext_mert.v
 zz_prrun_ext_lcm.v
+leibsep_nsel_h_coupling.v
+leibsep_band_domain.v
+leibsep_band_ck_assembly.v
+piu1886_kbounds.v
+piu1890_carrier_recast.v
+piu1879_gaplit_release.v
+piu1880_valve_qchain.v
+piu1880_egel_release.v
+piu1891_eggeom_release.v
+piu1887_piL_uniform_window.v
+piu1901_leibsep_q_kernel_closed.v
+piu1904_mu2_certificate.v
+piu1888_growth_quant_lemma.v
