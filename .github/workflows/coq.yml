@@ -213,14 +213,6 @@ jobs:
             gate2_verdict.json
             gate4_report.json
 
-      - name: Merged single-file build (retired with CW220 megafile; kept disabled for history)
-        if: false
-        continue-on-error: true
-        run: |
-          eval "$(opam env)"
-          cd releases
-          coqc -async-proofs off -Q . "" CW_ConstructiveWorld_220.v
-
   # ── macOS 观察档 job（20261012 双平台适配新增）────────────────────────────
   # 设计：显式双 job 而非 matrix——steps.shell 关键字不支持表达式，Windows 侧
   # 硬编码 Git Bash 路径与 mac 侧默认 bash 无法在同一 step 内分叉。
