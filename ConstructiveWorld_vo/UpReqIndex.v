@@ -4493,3 +4493,85 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV37QedSum_matches : NewGreenV37QedSum = sum_ng_qed NewGreenListV37.
 Proof. reflexivity. Qed.
+(* ---------- V38 批（登记 12 件） ---------- *)
+(* ng_U5cZeta2GapA -- u5c_zeta2_gapA.v: zeta2 尾段缺口件比率基建与部分和前缀封顶及对接形实例入口 *)
+Definition ng_U5cZeta2GapA : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_gapA.v" 507 18 20261014
+  "zeta(2) gap-piece ratio infrastructure with prefix sum cap at the threshold window and docking instance entry" "L507:meae140".
+(* ng_U5cZeta2A1Sign -- u5c_zeta2_a1_sign.v: zeta2 单调性符号面与显式命名前提逐点封顶证书双供 *)
+Definition ng_U5cZeta2A1Sign : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_a1_sign.v" 314 12 20261014
+  "zeta(2) monotonicity sign face with explicitly named premise pointwise cap certificate" "L314:mdbc4d1".
+(* ng_U5cZeta2A2Tail -- u5c_zeta2_a2_tail.v: zeta2 收敛尾界机 1/10 档与 DOCK 终句全称 M 实例 *)
+Definition ng_U5cZeta2A2Tail : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_a2_tail.v" 415 8 20261014
+  "zeta(2) convergent tail machine at the 1/10 tier with DOCK final clause instance for all M" "L415:mbc0fa3".
+(* ng_U5cZeta2Sup -- u5c_zeta2_sup.v: zeta2 行内右缘下降链与逐点封顶到全窗归约的 sup 基座 *)
+Definition ng_U5cZeta2Sup : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_sup.v" 499 15 20261014
+  "zeta(2) sup base with in-row right-edge fall chain and pointwise cap to whole-window reduction" "L499:m8b0845".
+(* ng_U5cZeta2Sup2 -- u5c_zeta2_sup2.v: zeta2 m=8 无条件全窗闭合与带族证书机及 Z 二进制层数值件 *)
+Definition ng_U5cZeta2Sup2 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_sup2.v" 494 28 20261014
+  "zeta(2) unconditional whole-window closure at m=8 with band family certificate machine and Z-binary numeric pieces" "L494:m587270".
+(* ng_U5cZeta2Band -- u5c_zeta2_band.v: zeta2 Hpw 无窗终界正本（行比率恒等式+same-k 迁移+cap 合拢 1/10 档） *)
+Definition ng_U5cZeta2Band : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_band.v" 359 7 20261014
+  "zeta(2) window-free Hpw final bound via row-ratio identity, same-k transfer and cap-chain closure at the 1/10 tier" "L359:ma3fb9b".
+(* ng_U5cZeta2A2Tail11 -- u5c_zeta2_a2_tail11.v: zeta2 尾界 DOCK 终句 1/11 档重铸与合账折算 2/11 *)
+Definition ng_U5cZeta2A2Tail11 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_a2_tail11.v" 404 8 20261014
+  "zeta(2) tail DOCK final clause recast at the 1/11 tier with budget conversion to 2/11" "L404:m7f6277".
+(* ng_U5cZeta2Assembly11 -- u5c_zeta2_assembly11.v: zeta2 供给链全链装配 1/11 档与 sigT 见证填充 *)
+Definition ng_U5cZeta2Assembly11 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta2_assembly11.v" 203 5 20261014
+  "zeta(2) supply-chain full assembly at the 1/11 tier with sigT witness filling and sharpened separation limb" "L203:m7f6439".
+(* ng_AblZ3Tail -- abl_z3_tail.v: zeta3 立方收敛尾界机（比率律立方版+交叉步+前缀界+对接终句 1/40 档） *)
+Definition ng_AblZ3Tail : NewGreenFace :=
+  MkNewGreenFace "abl_z3_tail.v" 649 16 20261014
+  "zeta(3) cubic convergent tail machine with cubic ratio law, cross step, prefix bound and docking final clause at 1/40" "L649:m1bdf48".
+(* ng_U5cZeta3Assembly -- u5c_zeta3_assembly.v: zeta3 供给链全链装配与见证化（Defined 透明分母 d 嵌入） *)
+Definition ng_U5cZeta3Assembly : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly.v" 206 7 20261014
+  "zeta(3) supply-chain full assembly with witness inhabitance and transparent Defined denominator embedding" "L206:mc66852".
+(* ng_AblZ3Hws -- abl_z3_hws.v: Hws 裂项步档恒等式独立消解与前提 II 单残位形及峰值引擎件 *)
+Definition ng_AblZ3Hws : NewGreenFace :=
+  MkNewGreenFace "abl_z3_hws.v" 175 7 20261014
+  "independent resolution of the Hws telescoping step identity with single-residue premise-II form and peak engine pieces" "L175:md7035d".
+(* ng_U5cZeta3Assembly2 -- u5c_zeta3_assembly2.v: zeta3 装配槽四前提收缩为三（Hws 放行件） *)
+Definition ng_U5cZeta3Assembly2 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly2.v" 73 0 20261014
+  "zeta(3) assembly slot contraction from four premises to three with the Hws slot permanently released" "L73:m9370e4".
+
+(* ---------- V38 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV38 : list NewGreenFace :=
+  cons ng_U5cZeta2GapA
+  (cons ng_U5cZeta2A1Sign
+  (cons ng_U5cZeta2A2Tail
+  (cons ng_U5cZeta2Sup
+  (cons ng_U5cZeta2Sup2
+  (cons ng_U5cZeta2Band
+  (cons ng_U5cZeta2A2Tail11
+  (cons ng_U5cZeta2Assembly11
+  (cons ng_AblZ3Tail
+  (cons ng_U5cZeta3Assembly
+  (cons ng_AblZ3Hws
+  (cons ng_U5cZeta3Assembly2
+  nil))))))))))).
+
+(* 续写统计：12 件 / 行数和 4298 / 闭合数和 131（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV38Pieces  : nat := 12.
+Definition NewGreenV38LineSum : nat := 4298.
+Definition NewGreenV38QedSum  : nat := 131.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV38Pieces_matches : NewGreenV38Pieces = cnt_ng NewGreenListV38.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV38LineSum_matches : NewGreenV38LineSum = sum_ng_lines NewGreenListV38.
+Proof. reflexivity. Qed.
+
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV38QedSum_matches : NewGreenV38QedSum = sum_ng_qed NewGreenListV38.
+Proof. reflexivity. Qed.
