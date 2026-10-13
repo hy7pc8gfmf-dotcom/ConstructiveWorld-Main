@@ -4234,7 +4234,7 @@ Proof. reflexivity. Qed.
 Lemma NewGreenV33QedSum_matches : NewGreenV33QedSum = sum_ng_qed NewGreenListV33.
 Proof. reflexivity. Qed.
 
-(* ---------- V34 批（20261013 登记 13 件） ---------- *)
+(* ---------- V34 批（登记 13 件） ---------- *)
 (* ng_LeibsepNselHCoupling -- leibsep_nsel_h_coupling.v: Niven 选取级 n_sel 对有理高度 h 的闭式化 (n_sel = 20h+23、2n_sel+2 = 40h+48) + Qden 单调肢与 h=2..12 精确对照表 *)
 Definition ng_LeibsepNselHCoupling : NewGreenFace :=
   MkNewGreenFace "leibsep_nsel_h_coupling.v" 145 12 20261013
