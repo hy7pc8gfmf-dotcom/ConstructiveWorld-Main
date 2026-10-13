@@ -726,3 +726,6 @@ piu1887_piL_uniform_window.v
 piu1901_leibsep_q_kernel_closed.v
 piu1904_mu2_certificate.v
 piu1888_growth_quant_lemma.v
+piu1905_sodd_lower.v
+piu1909_K_assembly.v
+piu1909_sall_upper.v

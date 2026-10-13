@@ -4321,3 +4321,40 @@ Proof. reflexivity. Qed.
 (* 闭合和 = 字面值 *)
 Lemma NewGreenV34QedSum_matches : NewGreenV34QedSum = sum_ng_qed NewGreenListV34.
 Proof. reflexivity. Qed.
+(* ---------- V35 batch (3 pieces registered) ---------- *)
+(* ng_Piu1905SoddLower -- piu1905_sodd_lower.v: 奇侧坐标交错和的非相消下界 (Sodd >= (62125/82944)*T0、带域 35/12 <= q <= 41/12、n >= 3、相邻奇项递减与交错和非相消地板) *)
+Definition ng_Piu1905SoddLower : NewGreenFace :=
+  MkNewGreenFace "piu1905_sodd_lower.v" 955 39 20261013
+  "non-vanishing lower bound of the odd-coordinate alternating sum: Sodd >= (62125/82944)*T0 over the band 35/12 <= q <= 41/12 with n >= 3, via adjacent odd-term decrease and the alternating-sum non-vanishing floor" "L955:m2ca4b2".
+(* ng_Piu1909KAssembly -- piu1909_K_assembly.v: 分离核载量 K 坐标装配 (Kmodel = |b^n*sev_full|*C1 + |b^n*sodd_full|*C2 + 1/8、C1=105410/1341、C2=9664/447) 及下界 C2*(62125/82944)*(b^n*T0 n) <= Kmodel *)
+Definition ng_Piu1909KAssembly : NewGreenFace :=
+  MkNewGreenFace "piu1909_K_assembly.v" 204 5 20261013
+  "coordinate assembly of the separation kernel load K: Kmodel = |b^n*sev_full|*C1 + |b^n*sodd_full|*C2 + 1/8 with C1 = 105410/1341 and C2 = 9664/447, and the lower bound C2*(62125/82944)*(b^n*T0 n) <= Kmodel" "L204:m2f123e".
+(* ng_Piu1909SallUpper -- piu1909_sall_upper.v: 正向截和上界肢 (sall(q,n,n) = sum_{{m=0}}^{n} T(q,n,m) <= (337697/6048)*T0 n、带域 35/12 <= q <= 41/12、n >= 3) *)
+Definition ng_Piu1909SallUpper : NewGreenFace :=
+  MkNewGreenFace "piu1909_sall_upper.v" 1269 37 20261013
+  "forward truncated-sum upper limb: sall(q,n,n), the sum of T(q,n,m) over m = 0..n, is at most (337697/6048)*T0 n over the band 35/12 <= q <= 41/12 with n >= 3" "L1269:m5de989".
+
+(* ---------- V35 batch statistics (whole-batch append: list, constants and lemmas written atomically in one block) ---------- *)
+Definition NewGreenListV35 : list NewGreenFace :=
+  cons ng_Piu1905SoddLower
+  (cons ng_Piu1909KAssembly
+  (cons ng_Piu1909SallUpper
+  nil)).
+
+(* 续写统计：3 件 / 行数和 2428 / 闭合和 81（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV35Pieces  : nat := 3.
+Definition NewGreenV35LineSum : nat := 2428.
+Definition NewGreenV35QedSum  : nat := 81.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV35Pieces_matches : NewGreenV35Pieces = cnt_ng NewGreenListV35.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV35LineSum_matches : NewGreenV35LineSum = sum_ng_lines NewGreenListV35.
+Proof. reflexivity. Qed.
+
+(* 闭合和 = 字面值 *)
+Lemma NewGreenV35QedSum_matches : NewGreenV35QedSum = sum_ng_qed NewGreenListV35.
+Proof. reflexivity. Qed.
