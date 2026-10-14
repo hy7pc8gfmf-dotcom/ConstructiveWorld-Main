@@ -4575,21 +4575,27 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV38QedSum_matches : NewGreenV38QedSum = sum_ng_qed NewGreenListV38.
 Proof. reflexivity. Qed.
-(* ---------- V39 batch (1 piece registered) ---------- *)
-(* ng_Piu1932TightBoundInstantiated -- piu1932_tight_bound_instantiated.v: 幂率型紧上界的实例化收尾 (定义幂率深度型 kernel margin 族 ck_alpha(C0,alpha,q) = C0/h(q)^alpha、margin 换形填充一致型收尾件证书前提位四支(HC0_pos/Hcrt_pos/Hcrt_dist/Hcert_pow)、l2_escape 实例化与 antitone/Q 算术收尾: 停点 <= S(S(ceil((8/C0)*h^alpha))) 后继加一形) *)
-Definition ng_Piu1932TightBoundInstantiated : NewGreenFace :=
-  MkNewGreenFace "piu1932_tight_bound_instantiated.v" 195 9 20261014
-  "instanced closing of the uniform-type tight upper bound: the power-law depth kernel margin family ck_alpha(C0,alpha,q) = C0/h(q)^alpha fills the four certificate premises of the conditional uniform closing piece via margin reshaping, and the l2_escape instantiation with antitone and Q-arithmetic closing yields stop point <= S(S(ceil((8/C0)*h^alpha)))" "L195:ma443d4".
 
-(* ---------- V39 batch statistics (whole-batch append: list, constants and lemmas written atomically in one block) ---------- *)
+(* ---------- V39 批（登记 2 件） ---------- *)
+(* ng_GclFamsym -- gcl_famsym.v: 对称化截断族 Fam 槽供件与插槽双前提机内消去（零前提分离实例） *)
+Definition ng_GclFamsym : NewGreenFace :=
+  MkNewGreenFace "gcl_famsym.v" 615 22 20261014
+  "symmetric truncated family carrier with both slot premises discharged in-machine and unconditional separation instance" "L615:m9e61f7".
+(* ng_GclIsumsym -- gcl_isumsym.v: Isum^sym 积分值序列与闭式和一致及 Hanson 分母链供给链装配 *)
+Definition ng_GclIsumsym : NewGreenFace :=
+  MkNewGreenFace "gcl_isumsym.v" 716 39 20261014
+  "integral value sequence with closed-form Beta sum coincidence and Hanson denominator supply-chain assembly" "L716:m9f6a64".
+
+(* ---------- V39 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
 Definition NewGreenListV39 : list NewGreenFace :=
-  cons ng_Piu1932TightBoundInstantiated
-  nil.
+  cons ng_GclFamsym
+  (cons ng_GclIsumsym
+  nil).
 
-(* 续写统计：1 件 / 行数和 195 / 闭合和 9（字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV39Pieces  : nat := 1.
-Definition NewGreenV39LineSum : nat := 195.
-Definition NewGreenV39QedSum  : nat := 9.
+(* 续写统计：2 件 / 行数和 1331 / 闭合数和 61（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV39Pieces  : nat := 2.
+Definition NewGreenV39LineSum : nat := 1331.
+Definition NewGreenV39QedSum  : nat := 61.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV39Pieces_matches : NewGreenV39Pieces = cnt_ng NewGreenListV39.
@@ -4599,6 +4605,215 @@ Proof. reflexivity. Qed.
 Lemma NewGreenV39LineSum_matches : NewGreenV39LineSum = sum_ng_lines NewGreenListV39.
 Proof. reflexivity. Qed.
 
-(* 闭合和 = 字面值 *)
+(* 闭合数和 = 字面值 *)
 Lemma NewGreenV39QedSum_matches : NewGreenV39QedSum = sum_ng_qed NewGreenListV39.
+Proof. reflexivity. Qed.
+(* ---------- V40 批（登记 14 件） ---------- *)
+(* ng_U5cLn2ThetaSlot -- u5c_ln2_theta_slot.v: ln2 θ 槽件（预算折叠恒等式与 4/5 带宽比较自足承载·预算桥义务定理） *)
+Definition ng_U5cLn2ThetaSlot : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_theta_slot.v" 329 18 20261014
+  "ln2 theta slot piece feeding the supply chain premise row" "L329:m6af0c3".
+(* ng_U5cLn2Witness -- u5c_ln2_witness.v: ln2 witness 件（clo_n 下界见证函数·正性·锚形迁移肢与双验收面） *)
+Definition ng_U5cLn2Witness : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_witness.v" 240 7 20261014
+  "ln2 witness carrier with explicit premise row for the supply face" "L240:ma18778".
+(* ng_U5cN54OtSpectrum -- u5c_n54_ot_spectrum.v: 统一逃逸窗致胜谓词 UWin 三态谱与全-b 钉定谱学（对数档上界/库窗线性对照/loglog 下界/无穷档/sqrt5 首锚） *)
+Definition ng_U5cN54OtSpectrum : NewGreenFace :=
+  MkNewGreenFace "u5c_n54_ot_spectrum.v" 364 7 20261014
+  "three-state spectrum of the unified escape-window winning predicate UWin with pinning anchor" "L364:mcb0683".
+(* ng_U5cLn2S5cSupply -- u5c_ln2_s5c_supply.v: 五层供给面条件 inhabited（六肢逐位填充·Hrho/Hbudget 两位显式前提在语句位·诚实接口·缺口单调收缩账在卷） *)
+Definition ng_U5cLn2S5cSupply : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_s5c_supply.v" 502 12 20261014
+  "five-layer supply-face condition inhabited with six-limb filling under two explicit gap premises" "L502:mb5f365".
+(* ng_U5cLn2S5dShape -- u5c_ln2_s5d_shape.v: ln2 实例刻形（s5d_bq 冻结定义位·B 整性障碍机锚） *)
+Definition ng_U5cLn2S5dShape : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_s5d_shape.v" 161 5 20261014
+  "ln2 instance shaping with frozen bq definition row" "L161:mda1a90".
+(* ng_U5cLn2S5eHbint -- u5c_ln2_s5e_hbint.v: Hbint 整性肢主定理（sigT/Set 承载·QeqT 构造链收尾非 solver） *)
+Definition ng_U5cLn2S5eHbint : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_s5e_hbint.v" 592 4 20261014
+  "hbint integrality limb flagship with QeqT construction chain verdict" "L592:m4008b9".
+(* ng_U5cLn2S6Confluence -- u5c_ln2_s6_confluence.v: 六肢合流强化 s6_supply_inhabited_strong（s6_Bz := projT1 (s5e_hbint n) 构造消解·零自由参数·两位显式前提同 s5c） *)
+Definition ng_U5cLn2S6Confluence : NewGreenFace :=
+  MkNewGreenFace "u5c_ln2_s6_confluence.v" 142 4 20261014
+  "six-limb confluence strengthened canonical instance with constructed Bz witness family" "L142:mb5248b".
+(* ng_FibMachine -- fib_machine.v: Fibonacci 族机（fibpair/fibp/fibz 正性承载与零前提分离证书 fib_family_sep） *)
+Definition ng_FibMachine : NewGreenFace :=
+  MkNewGreenFace "fib_machine.v" 337 15 20261014
+  "fibonacci family machine with positivity carrier and zero-premise separation certificate" "L337:m3695ac".
+(* ng_FibNormGap -- fib_norm_gap.v: sqrt5 整隙全称件（4a²−4ab−4b² 范数形整隙与黄金比极限交错括界） *)
+Definition ng_FibNormGap : NewGreenFace :=
+  MkNewGreenFace "fib_norm_gap.v" 255 13 20261014
+  "sqrt5 norm-gap universal piece with alternating bracket of the golden-ratio limit" "L255:m0b8eae".
+(* ng_FibQdomain -- fib_qdomain.v: 全有理域装配（一般非平方 D 整隙零前提闭式＋三主语句零前提·Q 平方隙） *)
+Definition ng_FibQdomain : NewGreenFace :=
+  MkNewGreenFace "fib_qdomain.v" 312 21 20261014
+  "rational-domain assembly with three zero-premise main statements" "L312:mc12b9b".
+(* ng_U5cZ3M2pLedger -- u5c_z3_m2p_ledger.v: M2' 账本件（锚点账本方程主定理＋证书机＋反局部窗证书＋基座 [1,10]＋HM2 槽接口·残位 n>=11 依既有勘定留残·诚实注记） *)
+Definition ng_U5cZ3M2pLedger : NewGreenFace :=
+  MkNewGreenFace "u5c_z3_m2p_ledger.v" 550 19 20261014
+  "M2-prime ledger with anchor equation flagship and base closure on the reachable segment" "L550:mabb9ae".
+(* ng_U5cZeta3Assembly3 -- u5c_zeta3_assembly3.v: 装配槽 4→3→2 收束（HM2 位一次代入＋基座 [5,9] 分段闭合·Defined 透明双主件） *)
+Definition ng_U5cZeta3Assembly3 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly3.v" 109 3 20261014
+  "assembly slot 4-to-2 collapse by one-shot M2 substitution with segmented base closure" "L109:m6177fd".
+(* ng_B5Machine -- b5_machine.v: sqrt2 非半整隙机（证书基量/整值整隙/恒等链/边距分支核/窗口自举五层·件内终形 b5_sqrt2_nonhalf 零前提） *)
+Definition ng_B5Machine : NewGreenFace :=
+  MkNewGreenFace "b5_machine.v" 1056 14 20261014
+  "sqrt2 non-half gap machine with in-file zero-premise terminal form b5_sqrt2_nonhalf" "L1056:mfac709".
+(* ng_U5cN54rPellTower -- u5c_n54r_pell_tower.v: Pell 塔 S0-S5 全语句面（wden 双塔与 delta 精确塔＋入窗核＋下界正典 7 基＋恰等排除核＋双端 loglog 终形·八点差分 RunAlive 在卷） *)
+Definition ng_U5cN54rPellTower : NewGreenFace :=
+  MkNewGreenFace "u5c_n54r_pell_tower.v" 948 16 20261014
+  "pell tower with double-sided loglog terminal shape and runalive differential anchors" "L948:mc5ce16".
+
+(* ---------- V40 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV40 : list NewGreenFace :=
+  cons ng_U5cLn2ThetaSlot
+  (cons ng_U5cLn2Witness
+  (cons ng_U5cN54OtSpectrum
+  (cons ng_U5cLn2S5cSupply
+  (cons ng_U5cLn2S5dShape
+  (cons ng_U5cLn2S5eHbint
+  (cons ng_U5cLn2S6Confluence
+  (cons ng_FibMachine
+  (cons ng_FibNormGap
+  (cons ng_FibQdomain
+  (cons ng_U5cZ3M2pLedger
+  (cons ng_U5cZeta3Assembly3
+  (cons ng_B5Machine
+  (cons ng_U5cN54rPellTower
+  nil))))))))))))).
+(* 续写统计：14 件 / 行数和 5897 / 闭合数和 158（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV40Pieces  : nat := 14.
+Definition NewGreenV40LineSum : nat := 5897.
+Definition NewGreenV40QedSum  : nat := 158.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV40Pieces_matches : NewGreenV40Pieces = cnt_ng NewGreenListV40.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV40LineSum_matches : NewGreenV40LineSum = sum_ng_lines NewGreenListV40.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV40QedSum_matches : NewGreenV40QedSum = sum_ng_qed NewGreenListV40.
+Proof. reflexivity. Qed.
+(* ---------- V41 batch (1 piece registered) ---------- *)
+(* ng_Piu1932TightBoundInstantiated -- piu1932_tight_bound_instantiated.v: 幂率型紧上界的实例化收尾 (定义幂率深度型 kernel margin 族 ck_alpha(C0,alpha,q) = C0/h(q)^alpha、margin 换形填充一致型收尾件证书前提位四支(HC0_pos/Hcrt_pos/Hcrt_dist/Hcert_pow)、l2_escape 实例化与 antitone/Q 算术收尾: 停点 <= S(S(ceil((8/C0)*h^alpha))) 后继加一形) *)
+Definition ng_Piu1932TightBoundInstantiated : NewGreenFace :=
+  MkNewGreenFace "piu1932_tight_bound_instantiated.v" 195 9 20261014
+  "instanced closing of the uniform-type tight upper bound: the power-law depth kernel margin family ck_alpha(C0,alpha,q) = C0/h(q)^alpha fills the four certificate premises of the conditional uniform closing piece via margin reshaping, and the l2_escape instantiation with antitone and Q-arithmetic closing yields stop point <= S(S(ceil((8/C0)*h^alpha)))" "L195:ma443d4".
+
+(* ---------- V41 batch statistics (whole-batch append: list, constants and lemmas written atomically in one block) ---------- *)
+Definition NewGreenListV41 : list NewGreenFace :=
+  cons ng_Piu1932TightBoundInstantiated
+  nil.
+
+(* 续写统计：1 件 / 行数和 195 / 闭合和 9（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV41Pieces  : nat := 1.
+Definition NewGreenV41LineSum : nat := 195.
+Definition NewGreenV41QedSum  : nat := 9.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV41Pieces_matches : NewGreenV41Pieces = cnt_ng NewGreenListV41.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV41LineSum_matches : NewGreenV41LineSum = sum_ng_lines NewGreenListV41.
+Proof. reflexivity. Qed.
+
+(* 闭合和 = 字面值 *)
+Lemma NewGreenV41QedSum_matches : NewGreenV41QedSum = sum_ng_qed NewGreenListV41.
+Proof. reflexivity. Qed.
+(* ---------- V42 批（登记 8 件·π 族前沿波 5） ---------- *)
+(* ---------- 前置批 2 件（B4 链闭包必需补录） ---------- *)
+(* ng_Zb3pHpw -- zb3p_hpw.v: Hpw 闭合主件（zb3r_Hpw_closed 零前提 QleT' 上界·闭式透明提取·PA=10） *)
+Definition ng_Zb3pHpw : NewGreenFace :=
+  MkNewGreenFace "zb3p_hpw.v" 478 10 20261014
+  "hpw closed carrier with zero-premise qle upper bound and transparent closed-form extraction" "L478:m96ee5c".
+(* ng_Zb3jBase15 -- zb3j_base15.v: [1,15] Hanson 段闭合（主语句 z2v_C n ≤ 3^n 有界形·G 折回四因子截断面·z2v_C 直算 fact 一元界诚实登记维持·PA=6） *)
+Definition ng_Zb3jBase15 : NewGreenFace :=
+  MkNewGreenFace "zb3j_base15.v" 183 6 20261014
+  "hanson segment closure on one-to-fifteen with bounded c-step machine chain" "L183:m8e1948".
+(* ---------- ζ3 装配收缩 2 件 ---------- *)
+(* ng_U5cZeta3Assembly4 -- u5c_zeta3_assembly4.v: 装配 2→1 收缩（M2′ 全称形＋NatLe 5 m ⟹ supply_chain·唯一残位＝M2′ 全称形诚实注记·[5,9] 段 base 零前提·PA=2） *)
+Definition ng_U5cZeta3Assembly4 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly4.v" 77 2 20261014
+  "assembly two-to-one collapse under the universal m2-prime premise with base segment closure" "L77:m33e79d".
+(* ng_U5cZeta3Assembly5 -- u5c_zeta3_assembly5.v: 装配零前提段 [5,9]→[5,14]（M2′ 位 [1,15] 有界形一次代入·[16,42] 档一元表示界内不可达归档＋n ≥ 43 熵段留残诚实注记·PA=2） *)
+Definition ng_U5cZeta3Assembly5 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly5.v" 83 2 20261014
+  "zero-premise assembly segment expansion to fourteen by bounded one-shot substitution" "L83:m7769d5".
+(* ---------- 周期类收敛子族 4 件 ---------- *)
+(* ng_PellFamily -- pell_family.v: 周期一类 D=m²+1 单参数收敛子族（√2/√5 旧单例并入为成员特例·sharp 精确等号＋sep 分离证书＋pell_norm 一般 D 版 Cassini·sep 两位显式前提 k ≠ 0、1 ≤ m 诚实接口·PA=19） *)
+Definition ng_PellFamily : NewGreenFace :=
+  MkNewGreenFace "pell_family.v" 415 19 20261014
+  "period-one convergent family with sharp equality and separation certificates under two explicit premises" "L415:me85f88".
+(* ng_D3Family -- d3_family.v: 周期 2 类 D=3 收敛子族（quad 四不变式常数形·锐度常元 1·零前提 Closed·PA=25） *)
+Definition ng_D3Family : NewGreenFace :=
+  MkNewGreenFace "d3_family.v" 370 25 20261014
+  "period-two class family for d equals three with constant norm quad invariants" "L370:mcd31e9".
+(* ng_D6Family -- d6_family.v: 周期 2 类 D=6 收敛子族（与 d3 同构仅常数异·锐度常元 2·零前提 Closed·PA=25） *)
+Definition ng_D6Family : NewGreenFace :=
+  MkNewGreenFace "d6_family.v" 365 25 20261014
+  "period-two class family for d equals six with sharpness constant two" "L365:mc56784".
+(* ng_D13Family -- d13_family.v: 周期 5 类 D=13 收敛子族（quad ±4/±1 双流交替形＋det 内芯·锐度常元 5·族成员=√13 第 5k+4 收敛子·零前提 Closed·PA=26） *)
+Definition ng_D13Family : NewGreenFace :=
+  MkNewGreenFace "d13_family.v" 388 26 20261014
+  "period-five class family for d equals thirteen with alternating norm stream" "L388:m0e43d4".
+
+(* ---------- V42 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV42 : list NewGreenFace :=
+  cons ng_Zb3pHpw
+  (cons ng_Zb3jBase15
+  (cons ng_U5cZeta3Assembly4
+  (cons ng_U5cZeta3Assembly5
+  (cons ng_PellFamily
+  (cons ng_D3Family
+  (cons ng_D6Family
+  (cons ng_D13Family
+  nil))))))).
+(* 续写统计：8 件 / 行数和 2359 / 闭合数和 115（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV42Pieces  : nat := 8.
+Definition NewGreenV42LineSum : nat := 2359.
+Definition NewGreenV42QedSum  : nat := 115.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV42Pieces_matches : NewGreenV42Pieces = cnt_ng NewGreenListV42.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV42LineSum_matches : NewGreenV42LineSum = sum_ng_lines NewGreenListV42.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV42QedSum_matches : NewGreenV42QedSum = sum_ng_qed NewGreenListV42.
+Proof. reflexivity. Qed.
+(* ---------- V43 批（登记 2 件·π 族前沿波 6） ---------- *)
+(* ---------- 前置件 1 件（cf_bridge 闭包必需补录） ---------- *)
+(* ng_SharpConst -- sharp_const.v: 谱刻画首定理（sc_general/sc_general_alt/sc_row2_general/sc_row2_general_alt 四一般形 ∀ 任意 2×2 整数矩阵＋sc_T1/sc_T1_B1 与 sc_T2/sc_T2_Babs 两显式类级化＋D=13 row2 实例档＋pell/d3/d6/d13 四代族三重收件零前提 Closed）；PA=38 Closed（31 主件＋7 smoke 编译实测）；Lia import 行例外登记（d3/d6/d13 母版先例形·正文零使用·冻结类禁抹）；谱刻画余位（CF 构造性连接）由同批 cf_bridge 兑现 *)
+Definition ng_SharpConst : NewGreenFace :=
+  MkNewGreenFace "sharp_const.v" 431 38 20261014
+  "general sharpness constant theorems for arbitrary integer matrices with class level T one and T two coverage and a d thirteen instance recovering four family generations" "L431:m024ca3".
+(* ---------- CF 构造面桥主件 1 件 ---------- *)
+(* ng_CfBridge -- cf_bridge.v: CF 构造面桥（cfC_q＝块积 (2,1) 元＝分母流第二分量＝q_{T−1}＋cf1_lin 矩阵幂 Q 层 T 归纳＋cfA/cfB/cfC/cfD_cons 块递推四件＋cf_det＝(−1)^T T 奇偶判据面＋cf_bridge_even/odd 两档＋全谱重收 rec_dD_row2/den ×27 件·总表 53 位机内使用全覆盖·谱理论线三段闭合）；PA=68 Closed（桥定理群 14 件＋54 重收件 编译实测）；Obj.magic=0；D=34 单向判据守护（det 全走 T 奇偶形·禁同余 iff 形·禁抹）；重收 den=Z.eqb 执行面锚（执行面由 vm_compute 承担） *)
+Definition ng_CfBridge : NewGreenFace :=
+  MkNewGreenFace "cf_bridge.v" 669 68 20261014
+  "continued fraction construction face bridge proving the block product second row entry equals the denominator stream component with full spectrum twenty seven piece recovery" "L669:m367147".
+
+(* ---------- V43 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV43 : list NewGreenFace :=
+  cons ng_SharpConst
+  (cons ng_CfBridge
+  nil).
+(* 续写统计：2 件 / 行数和 1100 / 闭合数和 106（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV43Pieces  : nat := 2.
+Definition NewGreenV43LineSum : nat := 1100.
+Definition NewGreenV43QedSum  : nat := 106.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV43Pieces_matches : NewGreenV43Pieces = cnt_ng NewGreenListV43.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV43LineSum_matches : NewGreenV43LineSum = sum_ng_lines NewGreenListV43.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV43QedSum_matches : NewGreenV43QedSum = sum_ng_qed NewGreenListV43.
 Proof. reflexivity. Qed.
