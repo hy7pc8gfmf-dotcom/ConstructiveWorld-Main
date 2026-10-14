@@ -784,3 +784,5 @@ pell_family.v
 d3_family.v
 d6_family.v
 d13_family.v
+sharp_const.v
+cf_bridge.v

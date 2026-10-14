@@ -4786,3 +4786,34 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV42QedSum_matches : NewGreenV42QedSum = sum_ng_qed NewGreenListV42.
 Proof. reflexivity. Qed.
+(* ---------- V43 批（登记 2 件·π 族前沿波 6） ---------- *)
+(* ---------- 前置件 1 件（cf_bridge 闭包必需补录） ---------- *)
+(* ng_SharpConst -- sharp_const.v: 谱刻画首定理（sc_general/sc_general_alt/sc_row2_general/sc_row2_general_alt 四一般形 ∀ 任意 2×2 整数矩阵＋sc_T1/sc_T1_B1 与 sc_T2/sc_T2_Babs 两显式类级化＋D=13 row2 实例档＋pell/d3/d6/d13 四代族三重收件零前提 Closed）；PA=38 Closed（31 主件＋7 smoke 编译实测）；Lia import 行例外登记（d3/d6/d13 母版先例形·正文零使用·冻结类禁抹）；谱刻画余位（CF 构造性连接）由同批 cf_bridge 兑现 *)
+Definition ng_SharpConst : NewGreenFace :=
+  MkNewGreenFace "sharp_const.v" 431 38 20261014
+  "general sharpness constant theorems for arbitrary integer matrices with class level T one and T two coverage and a d thirteen instance recovering four family generations" "L431:m024ca3".
+(* ---------- CF 构造面桥主件 1 件 ---------- *)
+(* ng_CfBridge -- cf_bridge.v: CF 构造面桥（cfC_q＝块积 (2,1) 元＝分母流第二分量＝q_{T−1}＋cf1_lin 矩阵幂 Q 层 T 归纳＋cfA/cfB/cfC/cfD_cons 块递推四件＋cf_det＝(−1)^T T 奇偶判据面＋cf_bridge_even/odd 两档＋全谱重收 rec_dD_row2/den ×27 件·总表 53 位机内使用全覆盖·谱理论线三段闭合）；PA=68 Closed（桥定理群 14 件＋54 重收件 编译实测）；Obj.magic=0；D=34 单向判据守护（det 全走 T 奇偶形·禁同余 iff 形·禁抹）；重收 den=Z.eqb 执行面锚（执行面由 vm_compute 承担） *)
+Definition ng_CfBridge : NewGreenFace :=
+  MkNewGreenFace "cf_bridge.v" 669 68 20261014
+  "continued fraction construction face bridge proving the block product second row entry equals the denominator stream component with full spectrum twenty seven piece recovery" "L669:m367147".
+
+(* ---------- V43 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV43 : list NewGreenFace :=
+  cons ng_SharpConst
+  (cons ng_CfBridge
+  nil).
+(* 续写统计：2 件 / 行数和 1100 / 闭合数和 106（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV43Pieces  : nat := 2.
+Definition NewGreenV43LineSum : nat := 1100.
+Definition NewGreenV43QedSum  : nat := 106.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV43Pieces_matches : NewGreenV43Pieces = cnt_ng NewGreenListV43.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV43LineSum_matches : NewGreenV43LineSum = sum_ng_lines NewGreenListV43.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV43QedSum_matches : NewGreenV43QedSum = sum_ng_qed NewGreenListV43.
+Proof. reflexivity. Qed.
