@@ -4871,3 +4871,35 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV44QedSum_matches : NewGreenV44QedSum = sum_ng_qed NewGreenListV44.
 Proof. reflexivity. Qed.
+
+(* ================= V45 批（登记 2 件·π 族前沿波 8）（整批追加纪律：清单/常量/引理同块原子写入） ================= *)
+(* ---------- Q(i) 残数算术组机层 1 件 ---------- *)
+(* ng_Zzm1Gauss -- zzm1_gauss.v: Z[i] 高斯整数基座（Record gz 律二字段位 Set·六运算 gz_add/neg/sub/mul/conj/eqb＋gz_pow/zpow＋除法自由形 gz_im_neg_frac (−Im[e^j], norm^j) gcd 免除·对照件 im_neg_power 直译）＋Set 层单态等词 zzId 四向回注件（true/bool eq_rect 双向/from_eq/Qeqb_refl）＋基座引理 10 条（norm 乘性 lagrange·conj 乘性·gz_pow_conj 全件形式·幂性·步进·eqb 完备/自反）＋norm 锚 20/40/5；PA=6 Closed（born-in-tree 编译实测）；ng_qed=18（grep-token 双口径相等·清洗稿实测）；零 Axiom·零 solver·全语句 Set 承载（ZZM1 回执 born 终态表核对一致·本批 born-in-tree 重编 rc=0 为权威绿） *)
+Definition ng_Zzm1Gauss : NewGreenFace :=
+  MkNewGreenFace "zzm1_gauss.v" 227 18 20261015
+  "gaussian integer base ring with set level equality re-injection six operations and gcd free division form" "L227:m233f24".
+(* ---------- Q(i) 残数算术组机层 2 桥 ---------- *)
+(* ng_Zzm1bLinformBridge -- zzm1b_linform_bridge.v: 围道离散化线性形式桥（生成器单源发射）：zz_sumf 索引有限和＋zz_phat 多项式部＋zz_princ 主部（红笔①符号笔由 zz_bite_r_1 vm_compute false fail-loud 拦截后核对一致）＋zz_linform_r/zz_linform_s 双通道（s 通道 (A₀+B₀)/8 口径）＋zz_res 残数项 Record＋sigT 正典承载 zz_linform_sig＋实例（层 3 读出接口位·切片 4 使用）；PA=13 Closed（born-in-tree 编译实测）；ng_qed=34（grep-token 双口径相等·清洗稿实测）；忠实性披露（律五·ZZM1 回执原样入册）：「zz_linform = REALFORM I_n/(2i) 的 Q 读出」复分析面＝对照域认证在卷（float 围道 Simpson↔Fractions 一致 8.5e−16 n=1..6）非 Coq 义务；33 数值锚系数表＝对照认证域 certified 字面量供件（切片 2-3 换机内提取）；μ(π) 判死面不涉本件（组机承载面·非竞争判定件） *)
+Definition ng_Zzm1bLinformBridge : NewGreenFace :=
+  MkNewGreenFace "zzm1b_linform_bridge.v" 290 34 20261015
+  "contour discretization linear form bridge with residue record and canonical sigT carrier" "L290:m3c5a2b".
+
+(* ---------- V45 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
+Definition NewGreenListV45 : list NewGreenFace :=
+  cons ng_Zzm1Gauss
+  (cons ng_Zzm1bLinformBridge
+  nil).
+(* 续写统计：2 件 / 行数和 517 / 闭合数和 52（ng_qed 口径·清洗稿实测字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV45Pieces  : nat := 2.
+Definition NewGreenV45LineSum : nat := 517.
+Definition NewGreenV45QedSum  : nat := 52.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV45Pieces_matches : NewGreenV45Pieces = cnt_ng NewGreenListV45.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV45LineSum_matches : NewGreenV45LineSum = sum_ng_lines NewGreenListV45.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV45QedSum_matches : NewGreenV45QedSum = sum_ng_qed NewGreenListV45.
+Proof. reflexivity. Qed.

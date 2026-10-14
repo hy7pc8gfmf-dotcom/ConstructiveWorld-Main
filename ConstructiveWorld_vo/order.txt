@@ -791,3 +791,5 @@ d41_family.v#R191-f7e787
 d7_family.v#R191-bcd74f
 d14_family.v#R191-f0edff
 abl_dmdnf2_oddlcm.v#R191-6218b9
+zzm1_gauss.v#R192-233f24
+zzm1b_linform_bridge.v#R192-3c5a2b

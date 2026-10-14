@@ -792,3 +792,5 @@ d41_family.v
 d7_family.v
 d14_family.v
 abl_dmdnf2_oddlcm.v
+zzm1_gauss.v
+zzm1b_linform_bridge.v
