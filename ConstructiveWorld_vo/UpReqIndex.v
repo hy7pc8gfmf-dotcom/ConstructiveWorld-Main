@@ -4817,3 +4817,57 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV43QedSum_matches : NewGreenV43QedSum = sum_ng_qed NewGreenListV43.
 Proof. reflexivity. Qed.
+
+(* ================= V44 批（登记 6 件·π 族前沿波 7）（整批追加纪律：清单/常量/引理同块原子写入） ================= *)
+(* ---------- 组论系数层完成主件 1 件 ---------- *)
+(* ng_GclCert -- gcl_cert.v: ③肢 CM 梯终程（ppi/ppi2 乘法形升阶乘闭式＋Leibniz 角点消除 leib_core＋glb 卷积＋CM 组装）→主语句 gcl_Isum_sym_ge0 零前提在卷＋④肢 binometric 引理（gcl_bins_main＋gcl_binom_bound Σ_{k≤M}C(m+1+k,m+1)(4/9)^k ≤ (9/5)^(m+2)）＋装配主件 gcl_supply_sym_weld3（③消解版·供给链五肢之③零前提化·⑤肢焊装链解锁）；PA=8 Closed（编译实测）；ng_qed=69（grep-token 双口径计数）；Lia import 行例外登记（d3/d6/d13/sharp_const 母版先例形·正文线性算术使用·构造性由第五证 coqchk 零全局假设兜底·冻结类禁抹）；④肢 D_0 界与 Hanson 熵残位在句如实（由同批 gcl_hent 窗件部分兑现·全称形熵三档归档·复审条件随件文书在卷） *)
+Definition ng_GclCert : NewGreenFace :=
+  MkNewGreenFace "gcl_cert.v" 1149 69 20261015
+  "CM filtering ladder closing limb three with zero premise Isum symmetry nonnegativity plus binometric partial sum bound and weld three supply chain assembly" "L1149:m10c692".
+(* ---------- Hanson 熵有界窗消去件 1 件 ---------- *)
+(* ng_GclHent -- gcl_hent.v: Hanson 熵前提的有界窗消去（m∈[3,8]·gcl_hanson_win 九叶 destruct＋h3 整除→上界桥＋窗锚六点 n=4..9）＋主语句 gcl_supply_sym_weld3_win（weld3 逐字使用·熵前提位零改动消去·前提三→二）；PA=3 Closed（编译实测）；ng_qed=10（双口径计数）；窗右界 9 与 h3 断点 n=9 如实登记（全称形熵三档归档·复审条件随件文书在卷） *)
+Definition ng_GclHent : NewGreenFace :=
+  MkNewGreenFace "gcl_hent.v" 159 10 20261015
+  "Hanson entropy bounded window elimination for m between three and eight with weld three window consumer" "L159:m34e42e".
+(* ---------- Pell 型周期族三件（谱线扩张补全） ---------- *)
+(* ng_D41Family -- d41_family.v: 周期 3 双族 D=41（norm_quad 5/±1/6/±1＋det＋family_sep/sharp＋q_square_sharp 零前提·双族 ±1 交替机内实存·谱线 T=3 档·x²≡−1 (mod 41) 见证 9·32）；PA=26 Closed；ng_qed=31（双口径计数） *)
+Definition ng_D41Family : NewGreenFace :=
+  MkNewGreenFace "d41_family.v" 402 31 20261015
+  "period three Pell type family for d forty one with norm quadruple determinant sharpness and separation theorems" "L402:mf7e787".
+(* ng_D7Family -- d7_family.v: 周期 4 单族 D=7（norm_quad 1/−3/−2/−1＋det=3 锐度常元＋family_sep/sharp＋q_square_sharp·4 步块矩阵 [[14,3],[9,2]]·+1 单族判据 x²≡−1 (mod 7) 无解第五次验证）；PA=25 Closed（19 主＋6 smoke）；ng_qed=30（双口径计数） *)
+Definition ng_D7Family : NewGreenFace :=
+  MkNewGreenFace "d7_family.v" 377 30 20261015
+  "period four Pell type family for d seven with norm quadruple determinant sharpness and separation theorems" "L377:mbcd74f".
+(* ng_D14Family -- d14_family.v: 周期 4 单族 D=14（norm_quad 1/−5/−3/−1＋det=4＋family_sep/sharp＋q_square_sharp·4 步块矩阵 [[27,4],[20,3]]·+1 单族判据第六次验证）；PA=25 Closed；ng_qed=30（双口径计数） *)
+Definition ng_D14Family : NewGreenFace :=
+  MkNewGreenFace "d14_family.v" 377 30 20261015
+  "period four Pell type family for d fourteen with norm quadruple determinant sharpness and separation theorems" "L377:mf0edff".
+(* ---------- odd-lcm 分母承载件 1 件 ---------- *)
+(* ng_Dnf2Oddlcm -- abl_dmdnf2_oddlcm.v: odd-lcm 分母承载（oddlcm/od_prod 可执行 Fixpoint）＋见证接口主语句 dnf2_trunc_odd_clear（覆盖端 2n+1→2n+2M+1）＋oddlcm≤od_prod≤fact 增长界＋执行锚三件；PA=4 Closed（编译实测）；ng_qed=12（双口径计数）；μ(π) 换核路线量化裁定不成·三档归档（c_new 实约简 3.0020/真值 1.8876/Hanson 引档 2.2201 全超门槛 1.568616）——路线不成≠件红·承载面照登记；紧载体猜想 D|2^(n+M)·oddlcm 独立复算 96 点未入证（无 Hypothesis 位·红线②洁净）；born-in-tree 同源重编绿=伴随窗件并播解锁实证 *)
+Definition ng_Dnf2Oddlcm : NewGreenFace :=
+  MkNewGreenFace "abl_dmdnf2_oddlcm.v" 176 12 20261015
+  "odd least common multiple denominator carrier with witness multiplier interface and growth bounds" "L176:m6218b9".
+
+(* ---------- V44 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
+Definition NewGreenListV44 : list NewGreenFace :=
+  cons ng_GclCert
+  (cons ng_GclHent
+  (cons ng_D41Family
+  (cons ng_D7Family
+  (cons ng_D14Family
+  (cons ng_Dnf2Oddlcm
+  nil))))).
+(* 续写统计：6 件 / 行数和 2640 / 闭合数和 182（ng_qed 口径·清洗稿字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV44Pieces  : nat := 6.
+Definition NewGreenV44LineSum : nat := 2640.
+Definition NewGreenV44QedSum  : nat := 182.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV44Pieces_matches : NewGreenV44Pieces = cnt_ng NewGreenListV44.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV44LineSum_matches : NewGreenV44LineSum = sum_ng_lines NewGreenListV44.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV44QedSum_matches : NewGreenV44QedSum = sum_ng_qed NewGreenListV44.
+Proof. reflexivity. Qed.
