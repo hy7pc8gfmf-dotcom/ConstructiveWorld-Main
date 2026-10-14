@@ -4575,3 +4575,36 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV38QedSum_matches : NewGreenV38QedSum = sum_ng_qed NewGreenListV38.
 Proof. reflexivity. Qed.
+
+(* ---------- V39 批（登记 2 件） ---------- *)
+(* ng_GclFamsym -- gcl_famsym.v: 对称化截断族 Fam 槽供件与插槽双前提机内消去（零前提分离实例） *)
+Definition ng_GclFamsym : NewGreenFace :=
+  MkNewGreenFace "gcl_famsym.v" 615 22 20261014
+  "symmetric truncated family carrier with both slot premises discharged in-machine and unconditional separation instance" "L615:m9e61f7".
+(* ng_GclIsumsym -- gcl_isumsym.v: Isum^sym 积分值序列与闭式和一致及 Hanson 分母链供给链装配 *)
+Definition ng_GclIsumsym : NewGreenFace :=
+  MkNewGreenFace "gcl_isumsym.v" 716 39 20261014
+  "integral value sequence with closed-form Beta sum coincidence and Hanson denominator supply-chain assembly" "L716:m9f6a64".
+
+(* ---------- V39 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV39 : list NewGreenFace :=
+  cons ng_GclFamsym
+  (cons ng_GclIsumsym
+  nil).
+
+(* 续写统计：2 件 / 行数和 1331 / 闭合数和 61（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV39Pieces  : nat := 2.
+Definition NewGreenV39LineSum : nat := 1331.
+Definition NewGreenV39QedSum  : nat := 61.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV39Pieces_matches : NewGreenV39Pieces = cnt_ng NewGreenListV39.
+Proof. reflexivity. Qed.
+
+(* 行数和 = 字面值 *)
+Lemma NewGreenV39LineSum_matches : NewGreenV39LineSum = sum_ng_lines NewGreenListV39.
+Proof. reflexivity. Qed.
+
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV39QedSum_matches : NewGreenV39QedSum = sum_ng_qed NewGreenListV39.
+Proof. reflexivity. Qed.
