@@ -4724,3 +4724,65 @@ Proof. reflexivity. Qed.
 (* 闭合和 = 字面值 *)
 Lemma NewGreenV41QedSum_matches : NewGreenV41QedSum = sum_ng_qed NewGreenListV41.
 Proof. reflexivity. Qed.
+(* ---------- V42 批（登记 8 件·π 族前沿波 5） ---------- *)
+(* ---------- 前置批 2 件（B4 链闭包必需补录） ---------- *)
+(* ng_Zb3pHpw -- zb3p_hpw.v: Hpw 闭合主件（zb3r_Hpw_closed 零前提 QleT' 上界·闭式透明提取·PA=10） *)
+Definition ng_Zb3pHpw : NewGreenFace :=
+  MkNewGreenFace "zb3p_hpw.v" 478 10 20261014
+  "hpw closed carrier with zero-premise qle upper bound and transparent closed-form extraction" "L478:m96ee5c".
+(* ng_Zb3jBase15 -- zb3j_base15.v: [1,15] Hanson 段闭合（主语句 z2v_C n ≤ 3^n 有界形·G 折回四因子截断面·z2v_C 直算 fact 一元界诚实登记维持·PA=6） *)
+Definition ng_Zb3jBase15 : NewGreenFace :=
+  MkNewGreenFace "zb3j_base15.v" 183 6 20261014
+  "hanson segment closure on one-to-fifteen with bounded c-step machine chain" "L183:m8e1948".
+(* ---------- ζ3 装配收缩 2 件 ---------- *)
+(* ng_U5cZeta3Assembly4 -- u5c_zeta3_assembly4.v: 装配 2→1 收缩（M2′ 全称形＋NatLe 5 m ⟹ supply_chain·唯一残位＝M2′ 全称形诚实注记·[5,9] 段 base 零前提·PA=2） *)
+Definition ng_U5cZeta3Assembly4 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly4.v" 77 2 20261014
+  "assembly two-to-one collapse under the universal m2-prime premise with base segment closure" "L77:m33e79d".
+(* ng_U5cZeta3Assembly5 -- u5c_zeta3_assembly5.v: 装配零前提段 [5,9]→[5,14]（M2′ 位 [1,15] 有界形一次代入·[16,42] 档一元表示界内不可达归档＋n ≥ 43 熵段留残诚实注记·PA=2） *)
+Definition ng_U5cZeta3Assembly5 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly5.v" 83 2 20261014
+  "zero-premise assembly segment expansion to fourteen by bounded one-shot substitution" "L83:m7769d5".
+(* ---------- 周期类收敛子族 4 件 ---------- *)
+(* ng_PellFamily -- pell_family.v: 周期一类 D=m²+1 单参数收敛子族（√2/√5 旧单例并入为成员特例·sharp 精确等号＋sep 分离证书＋pell_norm 一般 D 版 Cassini·sep 两位显式前提 k ≠ 0、1 ≤ m 诚实接口·PA=19） *)
+Definition ng_PellFamily : NewGreenFace :=
+  MkNewGreenFace "pell_family.v" 415 19 20261014
+  "period-one convergent family with sharp equality and separation certificates under two explicit premises" "L415:me85f88".
+(* ng_D3Family -- d3_family.v: 周期 2 类 D=3 收敛子族（quad 四不变式常数形·锐度常元 1·零前提 Closed·PA=25） *)
+Definition ng_D3Family : NewGreenFace :=
+  MkNewGreenFace "d3_family.v" 370 25 20261014
+  "period-two class family for d equals three with constant norm quad invariants" "L370:mcd31e9".
+(* ng_D6Family -- d6_family.v: 周期 2 类 D=6 收敛子族（与 d3 同构仅常数异·锐度常元 2·零前提 Closed·PA=25） *)
+Definition ng_D6Family : NewGreenFace :=
+  MkNewGreenFace "d6_family.v" 365 25 20261014
+  "period-two class family for d equals six with sharpness constant two" "L365:mc56784".
+(* ng_D13Family -- d13_family.v: 周期 5 类 D=13 收敛子族（quad ±4/±1 双流交替形＋det 内芯·锐度常元 5·族成员=√13 第 5k+4 收敛子·零前提 Closed·PA=26） *)
+Definition ng_D13Family : NewGreenFace :=
+  MkNewGreenFace "d13_family.v" 388 26 20261014
+  "period-five class family for d equals thirteen with alternating norm stream" "L388:m0e43d4".
+
+(* ---------- V42 批统计（整批追加纪律：清单/常量/引理同块原子写入） ---------- *)
+Definition NewGreenListV42 : list NewGreenFace :=
+  cons ng_Zb3pHpw
+  (cons ng_Zb3jBase15
+  (cons ng_U5cZeta3Assembly4
+  (cons ng_U5cZeta3Assembly5
+  (cons ng_PellFamily
+  (cons ng_D3Family
+  (cons ng_D6Family
+  (cons ng_D13Family
+  nil))))))).
+(* 续写统计：8 件 / 行数和 2359 / 闭合数和 115（字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV42Pieces  : nat := 8.
+Definition NewGreenV42LineSum : nat := 2359.
+Definition NewGreenV42QedSum  : nat := 115.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV42Pieces_matches : NewGreenV42Pieces = cnt_ng NewGreenListV42.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV42LineSum_matches : NewGreenV42LineSum = sum_ng_lines NewGreenListV42.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV42QedSum_matches : NewGreenV42QedSum = sum_ng_qed NewGreenListV42.
+Proof. reflexivity. Qed.

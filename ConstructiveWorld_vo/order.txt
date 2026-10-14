@@ -775,3 +775,11 @@ u5c_zeta3_assembly3.v#R188-6177fd
 b5_machine.v#R188-fac709
 u5c_n54r_pell_tower.v#R188-c5ce16
 piu1932_tight_bound_instantiated.v#R187-a443d4
+zb3p_hpw.v#R189-96ee5c
+u5c_zeta3_assembly4.v#R189-33e79d
+zb3j_base15.v#R189-8e1948
+u5c_zeta3_assembly5.v#R189-7769d5
+pell_family.v#R189-e85f88
+d3_family.v#R189-cd31e9
+d6_family.v#R189-c56784
+d13_family.v#R189-0e43d4
