@@ -761,3 +761,17 @@ abl_z3_hws
 u5c_zeta3_assembly2
 gcl_famsym.v
 gcl_isumsym.v
+u5c_ln2_theta_slot.v
+u5c_ln2_witness.v
+u5c_n54_ot_spectrum.v
+u5c_ln2_s5c_supply.v
+u5c_ln2_s5d_shape.v
+u5c_ln2_s5e_hbint.v
+u5c_ln2_s6_confluence.v
+fib_machine.v
+fib_norm_gap.v
+fib_qdomain.v
+u5c_z3_m2p_ledger.v
+u5c_zeta3_assembly3.v
+b5_machine.v
+u5c_n54r_pell_tower.v
