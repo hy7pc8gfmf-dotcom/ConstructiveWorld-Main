@@ -802,8 +802,3 @@ gcl_full.v
 d519a2_cert.v
 u5c_n1_affine_transform.v
 zzm2_qpoly.v
-gcl_birat.v
-gcl_hent3.v
-z3k_measure_adapter.v
-z3k_supply_face.v
-z3k_measure_readout.v
