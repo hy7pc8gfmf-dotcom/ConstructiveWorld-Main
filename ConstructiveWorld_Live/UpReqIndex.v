@@ -4903,3 +4903,98 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV45QedSum_matches : NewGreenV45QedSum = sum_ng_qed NewGreenListV45.
 Proof. reflexivity. Qed.
+(* ================= V46 批（登记 13 件·π 族前沿续波）（整批追加纪律：清单/常量/引理同块原子写入） ================= *)
+(* ---------- [16,42] 段 Z 换岸正本 1 件 ---------- *)
+(* ng_Zb3zBase42 -- zb3z_base42.v: C 值序界全段闭合 [1,42]：§0 Z 换岸三件正典化（zb3z_Zcmp inj_le 承载 nat ≤ ↔ Z.leb true 双向＋zb3z_inj_mul/inj_pow 3^n 免一元物化过岸＋Ltac zb3z_Zcmp_tac 后向渡岸）＋验收锚 zb3z_anchor41（C(41)=1.84e19 因子化 3456·3675·2431·437·899·1517 ≤ 3^41 Z-lift）＋§1 G 折返 27 档（zb3m_G_ext 折回＋zb3m_a4_gt42 锚·27/27 预嵌）＋§2 链节机械件（zb3z_pos_mul 积正性／zb3z_gear 累积恒等式步进齿轮／zb3z_link15 Z 桥终站拆封）＋§3 块化 10 块逐块累积（切点=对照域比值谷点配方·[16][17,18][19,22][23,24][25,28][29,30][31,34][35,36][37,40][41,42]·27 点全闭非仅端点）＋§4 主语句 zb3z_base42：∀n∈[1,42] z2v_C n ≤ 3^n（[1,15] 肢直取 zb3j_base15 零重述）＋§5 Set 面出口 zb3z_HM2_face_42（NatLe 承载）；PA=19 Closed（born-in-tree 编译实测）；ng_qed=46（grep-token 双口径相等·清洗稿实测）；诚实接口：z2v_C 直算仍撞 fact 一元墙·判定义务由 Prop 链式累积＋Z 比较面承担（zb3j 同款披露） *)
+Definition ng_Zb3zBase42 : NewGreenFace :=
+  MkNewGreenFace "zb3z_base42.v" 697 46 20261016
+  "z shore crossing base closing value order bound one through forty two with canonical comparison and block accumulation" "L697:m27890b".
+(* ---------- 装配面扩展件 2 件 ---------- *)
+(* ng_Zeta3Assembly7 -- u5c_zeta3_assembly7.v: 装配面 base42 一次代入零重述：u5c_zeta3_assembly7（HM2 面 [1,42] 有界形＋NatLe 5 m＋NatLe m 41 ⟹ supply_chain·assembly2 槽形一次代入）＋u5c_zeta3_assembly7_base（零前提）——零前提供给段 [5,9]→[5,14]→[5,15]→[5,41]；新扩展段 m ∈ [16,41] 全由 Z 换岸链（zb3z_blk1..blk10·C(41) 锚在卷）无条件供给；缺口账：m ≥ 42 段残余仅剩 n ≥ 43 熵段（多件工程判定维持·勿单件窗强攻）；首发即绿零红笔；PA=2 Closed（born-in-tree 编译实测）；ng_qed=0（grep-token 双口径相等·两主语句 Defined 透明收尾无 Qed 打点·清洗稿实测） *)
+Definition ng_Zeta3Assembly7 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly7.v" 85 0 20261016
+  "assembly extension substituting base forty two face lifting zero premise supply segment to five through forty one" "L85:mf1828a".
+(* ng_Zeta3Assembly6 -- u5c_zeta3_assembly6.v: 装配面 base15 一次代入＋HM2@16 一档新铸：u5c_zeta3_assembly6（HM2 面 [1,15] 升 [1,16] 有界形·S m ∈ [6,16] 档一次代入）＋u5c_zeta3_assembly6_base（零前提·零前提供给段 [5,14]→[5,15]）＋zb3p_C16_eq_2C15（C 步进机＋G(16,16)=8 折回＋乘数对齐 16=8·2＋取消⟹ C(16)=2·C(15)=2162160 全符号零 vm_compute）＋zb3p_C16_le_3pow16（三跳全符号·Nat.pow_succ_r' 免 3^14 一元物化）＋zb3p_HM2_face_16（zb3j_HM2_face_15 正本＋16 档新铸·Nat.eq_dec 构造二分）；PA=6 Closed（born-in-tree 编译实测）；ng_qed=4（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_Zeta3Assembly6 : NewGreenFace :=
+  MkNewGreenFace "u5c_zeta3_assembly6.v" 154 4 20261016
+  "assembly extension lifting bounded face to one through sixteen with symbolic step and zero premise base form" "L154:m0037d2".
+(* ---------- Hanson 熵窗右扩件 1 件 ---------- *)
+(* ng_GclHent2 -- gcl_hent2.v: Hanson 熵前提有界窗消去向右扩展三档 m∈[3,8]→[3,11]（n=S m∈[4,12]）：§A 脚手架 pow3_add/lcm_step_le（Hanson 阶梯递推 L(S n) ≤ L(n)·(S n)·变量层单步展开）＋§B 新窗三点 win_10/11/12（n=10=h3 偶桥 k=5 补点 L(10) ≤ C(10,5)·5!=30240 ≤ 3·3^9；n=11/12=阶梯链＋唯一吸收锚 L(10)=2520·零数值等式 Qed 打点规避分钟级 kernel conv 坑）＋§C 主语句 I win2＋win2_t（Set 面 hl_le_t 承载）＋§D 主语句 II weld3_win2（sigT·Set·覆盖域 8→11·前提三→二）；冻结 gcl_hent 零字节触碰真零重做；真墙档维持（全称形 Hanson 熵三档归档·右界 n=12 为本世界一元内核可达端非数学边界）；PA=3 Closed（born-in-tree 编译实测）；ng_qed=8（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_GclHent2 : NewGreenFace :=
+  MkNewGreenFace "gcl_hent2.v" 193 8 20261016
+  "hanson entropy bounded window right extension to eleven with ladder recurrence and weld three window consumer" "L193:mcb5a87".
+(* ---------- 供给链全额装配主件 1 件 ---------- *)
+(* ng_GclFull -- gcl_full.v: 供给链装配全额版：主语句 gcl_supply_sym_weld3_full : forall m, 3 ≤ m → m ≤ 8 → gcl_supply_sym m m——weld3 三前提全消（唯一前提=窗界·五肢零残位·⑤肢由冻结件 gcl_sep_generic 零改动焊接）＝μ_lib 8.64 档全额入账窗 [3,8] 内首个零残位机内区段；④族界消解四段链：gcl_Isum_sym_le_D0（滤波单调链·零前提对一切 m·M）＋gcl_D0_le_bins（u 衰减＋逐项界）＋gcl_binom_bound（前批 born 件零改动使用）＋gcl_u0_weight_win（单项式窗点六叶·m=9 仍真 m=10 破=本链硬界如实）；u 衰减定理边界 k ≤ m+3（逐点比率 ≤ 2/3·越界失效在句如实）；PA=6 Closed（born-in-tree 编译实测）；ng_qed=15（grep-token 双口径相等·清洗稿实测）；anchor M:=m 档·全称 M 需超几何收敛闭式和另案（真 D_0 收敛远小于每-k 界） *)
+Definition ng_GclFull : NewGreenFace :=
+  MkNewGreenFace "gcl_full.v" 451 15 20261016
+  "full supply chain assembly with zero residual premises inside window and four stage family bound elimination" "L451:m18ca99".
+(* ---------- 1/14 逐点改进证书 1 件 ---------- *)
+(* ng_D519a2Cert -- d519a2_cert.v: 1/14 精确逐点改进证书（θ(3)=1/14 档·Ψ₃=3+s−2p 纯轨道正组合·σ=7/8 非循环）：主语句 d519_N_le_14 : forall x y : Q, 0 ≤ x ≤ 1 → 0 ≤ y ≤ 1 → QleT' (56·x·(1−x)·y·(1−y)) (3+x+y−2·x·y)——GCL 1/12 档之上 genuine 逐点改进；语句面八位全 Set 承载（QleT'×5＋QeqT×3）＋Qeq 桥两位（d519_psi3_eq/d519_u_fact·池冻结件同款桥形如实申报）；证明面全 algebra 链：四基 a=x(1−y),b=y(1−x),c=(1−x)(1−y),d=xy（ab=cd=N·σ+τ=1）＋AM-GM×2＋双分支闭式分解（σ≤1/2：3+σ−14σ²==(1−2σ)(7σ+3)；σ>1/2：4−τ−14τ²==(1−2τ)(7τ+4)）——免微积分免归纳零经典逻辑末步 exact 非 solver；验收锚 56·N(1/2,1/2)==7/2 tight 于 τ-不动点（对照域精确值逐行）；u 分解式常数 3/14（转抄滑 3/28 经精确复算校正·对照域反证在卷）；μ_lib 账面不动（1/14 勘形 μ≈5.973 不穿 5.0193784·禁施工引用照守）；PA=8 Closed（born-in-tree 编译实测）；ng_qed=11（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_D519a2Cert : NewGreenFace :=
+  MkNewGreenFace "d519a2_cert.v" 356 11 20261016
+  "pointwise improvement certificate fifty six n at most three plus s minus two p with pure algebraic two branch proof" "L356:m71f9f2".
+(* ---------- 仿射变换族钉定常元件 1 件 ---------- *)
+(* ng_N1AffineTransform -- u5c_n1_affine_transform.v: N1 仿射三族成库：平移 k（常元 1/(12b²) 逐字不变）／数乘 k（↦1/(12·k·b²)）／倒数 1/x（a ≤ 0 档常元 1/4·n₀=1 统一窗；a=p>0 档常元 1/(36·p·b)·双窗·ρ 两案）四定理全定义（n1_shift_measure/n1_scale_measure/n1_inv_nonpos_measure/n1_inv_pos_measure）；PA=4 Closed（born-in-tree 编译实测·四定理全 Closed under the global context）；ng_qed=29（grep-token 双口径相等·清洗稿实测）；前批条件槽转正：born 于前批冻结窗后·本批凭全数绿判收束移交账升正式件（六伤全愈终收版 1058 行） *)
+Definition ng_N1AffineTransform : NewGreenFace :=
+  MkNewGreenFace "u5c_n1_affine_transform.v" 1058 29 20261016
+  "affine transform family pinned constants shift scale and inverse with unified windows" "L1058:m6dd37f".
+(* ---------- Q-多项式层 1 件 ---------- *)
+(* ng_Zzm2Qpoly -- zzm2_qpoly.v: Q(i) 残数算术组机切片 2·Q-多项式层（单源生成器发射·禁手改数值字面量）：§0 Qpoly 承载（list Q·index=幂次·head=常数项）＋plq_eqb＋§1 八件算术全 Defined（pdrop0/ptrim 反转归一·padd/pscal/pmul/ppow·psub_align/plast/pdroplast·pdiv_go 度差结构递归长除·pdivmod 商余主入口免负幂·pshift_go 扫描线·pshift_gen/pshift 移位一般式）＋字面锚×13＋族域 n=1..6 全一致锚×42（机器 pdivmod 商与前批 zzm1b certified zz_pq 表逐位一致·商余恒等式 padd(pmul(q,den),rem)=num 机内判定）＝切片 3 Laurent A_j/B_j 供件面；PA=13 Closed（born-in-tree 编译实测）；ng_qed=55（grep-token 双口径相等·清洗稿实测）；零 Axiom·零 solver（头注纪律面）＋Obj.magic=0 提取零失名（池账承继） *)
+Definition ng_Zzm2Qpoly : NewGreenFace :=
+  MkNewGreenFace "zzm2_qpoly.v" 385 55 20261016
+  "q polynomial layer eight arithmetic operations with pseudo division and shift general form and fifty five anchors" "L385:m9a4516".
+
+(* ---------- 双有理对称化证书件 1 件 ---------- *)
+(* ng_GclBirat -- gcl_birat.v: 双有理对合族八元雅可比加权轨道平均对称化证书层（0.0803 档）：三层结构（§G 基量层 Qinv 机械五件＋雅可比分子精确计算；§S 求和层八元加权轨道和诚实形＋清扫多项式形＋中央/zoom 双锚 vm_compute 机内判定；§A 证书层 AM-GM 供件＋解析核显式命名前提 Hcore 槽位＋主语句 gcl_sup_avg_birat＋Q 系数正典形接口 gcl_birat_cert）；验收锚三路一致：中心 (1/2,1/2) 比=1203/15220、zoom (529/960,905/1920) 比=0.0802985480（十位窗双侧 Qle_bool 承载）；对照域 400 精确点逐点一致在卷；PA=11 Closed（born-in-tree 编译实测）；ng_qed=25（grep-token 双口径相等·清洗稿实测）；诚实接口：解析核 Pcore 非负性以显式前提在装（消解路径=平方和/AM-GM 分解·bAMGM 供件已 born） *)
+Definition ng_GclBirat : NewGreenFace :=
+  MkNewGreenFace "gcl_birat.v" 320 25 20261016
+  "birational involution eight orbit jacobian weighted average symmetrized certificate layer with zoom anchor" "L320:maff5d8".
+(* ---------- Hanson 熵窗右扩件 R3 1 件 ---------- *)
+(* ng_GclHent3 -- gcl_hent3.v: Hanson 熵 nat 化窗扩展：焊装链覆盖域 [3,11]→[3,20]（n=S m∈[4,21]）：合数跳步吸收链（全跳吸收×6＋半吸收×1＋纯阶梯步×3·链界 232792560 < 3^19 < 3^21）＋幂裂因统一锚 3^7=2187 全字面＋九新窗点 win_13..21＋主语句 gcl_hanson_win3/_t 与 gcl_supply_sym_weld3_win3（熵前提窗内消去·覆盖域 11→20）；win_4..12 十二点逐字使用冻结件装配零重做；诚实边界：全称形 Hanson 熵归档墙界维持（四复审条件随墙）；PA=3 Closed（born-in-tree 编译实测）；ng_qed=36（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_GclHent3 : NewGreenFace :=
+  MkNewGreenFace "gcl_hent3.v" 389 36 20261016
+  "hanson entropy window extension to twenty with composite skip absorption chain and weld three coverage twenty" "L389:m2c0bef".
+(* ---------- ζ(3) 测度适配器三语句面 3 件 ---------- *)
+(* ng_Z3kMeasureAdapter -- z3k_measure_adapter.v: ζ(3) 逐 q 闭式测度适配器主件：把 (1/4)(1/40)^m 尾界＋d ≤ 3^(m+1) 分母增长翻译为显式 (C₀,α) 无理性测度证书（消隐面＋供给面 ⟹ sigT(C₀ = 3/8, α = 5149/1250 = 4.1192 ≥ 4)）；窗账 W(j) = [2·40^j, 2·40^(j+1)]（j ∈ [4,13] 连续无缝·Q₀ = 5120000·窗底方向校正后正典形）；d 侧零前提供给段 [5,14]（zb3j_HM2_face_15＋z2d_lcm_le_3pow 同源链）；p 位＝语句显式残位槽（上游工程如实）；PA=15 Closed（born-in-tree 编译实测）；ng_qed=35（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_Z3kMeasureAdapter : NewGreenFace :=
+  MkNewGreenFace "z3k_measure_adapter.v" 1002 35 20261016
+  "zeta three per q closed form measure adapter with explicit c zero alpha irrationality certificate" "L1002:mfd7d4a".
+(* ng_Z3kSupplyFace -- z3k_supply_face.v: 供给语句面（D 侧零前提＋p 位残槽正典形）：∀m∈[5,14] ∃(p d) 1 ≤ d ∧ d ≤ 3^(m+1) ∧ 线性形式面（p 位以显式假设承载·零 Axiom 零 Parameter 零 Admitted 零经典）；d 侧独立出口 z3k2r_supply_face_dside 零前提（u5c_zeta3_assembly5 零前提供给段同源）；PA=2 Closed（born-in-tree 编译实测）；ng_qed=1（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_Z3kSupplyFace : NewGreenFace :=
+  MkNewGreenFace "z3k_supply_face.v" 58 1 20261016
+  "supply statement face d side zero premise segment five through fourteen with p slot honest carrier" "L58:m273a37".
+(* ng_Z3kMeasureReadout -- z3k_measure_readout.v: μ(ζ(3)) ≤ α 显式证书读数面：sigT(C₀ = 1/4, α = 5149/1250) 正典形（C₀ > 0 ∧ α = 5149/1250 ∧ α ≥ 4 ∧ θ 层逐窗逃逸面·窗指标 born 段 [4,13] 并集 [2·40^4, 2·40^14]）；α 精确账逐字（27^1399 ≤ 40^1250 对照域在卷·α 值禁推算逐字照录）；Q 层无 q^α 运算以 q⁻⁴ 正典形承载（α ≥ 4 保证 ⟹ μ ≤ α）；PA=1 Closed（born-in-tree 编译实测）；ng_qed=2（grep-token 双口径相等·清洗稿实测） *)
+Definition ng_Z3kMeasureReadout : NewGreenFace :=
+  MkNewGreenFace "z3k_measure_readout.v" 66 2 20261016
+  "measure readout face explicit certificate mu zeta three at most four point one one nine two canonical form" "L66:m3d40dd".
+
+(* ---------- V46 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
+Definition NewGreenListV46 : list NewGreenFace :=
+ cons ng_Zb3zBase42
+ (cons ng_Zeta3Assembly7
+ (cons ng_Zeta3Assembly6
+ (cons ng_GclHent2
+ (cons ng_GclFull
+ (cons ng_D519a2Cert
+ (cons ng_N1AffineTransform
+ (cons ng_Zzm2Qpoly
+ (cons ng_GclBirat
+ (cons ng_GclHent3
+ (cons ng_Z3kMeasureAdapter
+ (cons ng_Z3kSupplyFace
+ (cons ng_Z3kMeasureReadout
+ nil)))))))))))).
+(* 续写统计：13 件 / 行数和 5214 / 闭合数和 267（ng_qed 口径·清洗稿实测字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV46Pieces  : nat := 13.
+Definition NewGreenV46LineSum : nat := 5214.
+Definition NewGreenV46QedSum  : nat := 267.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV46Pieces_matches : NewGreenV46Pieces = cnt_ng NewGreenListV46.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV46LineSum_matches : NewGreenV46LineSum = sum_ng_lines NewGreenListV46.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV46QedSum_matches : NewGreenV46QedSum = sum_ng_qed NewGreenListV46.
+Proof. reflexivity. Qed.

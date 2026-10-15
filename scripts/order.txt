@@ -793,3 +793,16 @@ d14_family.v#R191-f0edff
 abl_dmdnf2_oddlcm.v#R191-6218b9
 zzm1_gauss.v#R192-233f24
 zzm1b_linform_bridge.v#R192-3c5a2b
+zb3z_base42.v#R193-27890b
+u5c_zeta3_assembly7.v#R193-f1828a
+u5c_zeta3_assembly6.v#R193-0037d2
+gcl_hent2.v#R193-cb5a87
+gcl_full.v#R193-18ca99
+d519a2_cert.v#R193-71f9f2
+u5c_n1_affine_transform.v#R193-6dd37f
+zzm2_qpoly.v#R193-9a4516
+gcl_birat.v#R193-aff5d8
+gcl_hent3.v#R193-2c0bef
+z3k_measure_adapter.v#R193-fd7d4a
+z3k_supply_face.v#R193-273a37
+z3k_measure_readout.v#R193-3d40dd

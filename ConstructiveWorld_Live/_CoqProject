@@ -794,3 +794,16 @@ d14_family.v
 abl_dmdnf2_oddlcm.v
 zzm1_gauss.v
 zzm1b_linform_bridge.v
+zb3z_base42.v
+u5c_zeta3_assembly7.v
+u5c_zeta3_assembly6.v
+gcl_hent2.v
+gcl_full.v
+d519a2_cert.v
+u5c_n1_affine_transform.v
+zzm2_qpoly.v
+gcl_birat.v
+gcl_hent3.v
+z3k_measure_adapter.v
+z3k_supply_face.v
+z3k_measure_readout.v
