@@ -326,7 +326,9 @@ Proof.
   { apply Bool.andb_true_iff in H. destruct H as [_ H2]. exact H2. }
   pose proof (Z2Nat.id m Hm0) as Hzm.
   destruct (Z.eq_dec m 0) as [Hmz | Hmnz].
-  - subst m. rewrite Z.mod_0_r. apply Z.eqb_neq. lia.
+  - subst m. replace (Z.of_nat k mod 0) with (Z.of_nat k)
+      by (destruct (Z.of_nat k); reflexivity).
+    apply Z.eqb_neq. lia.
   - assert (He2 : (2 <= Z.to_nat m)%nat) by lia.
     assert (He3 : (Z.to_nat m <= k - 1)%nat) by lia.
     pose proof (zz_nodiv_upto_spec (Z.of_nat k) (k - 1)%nat Hnod

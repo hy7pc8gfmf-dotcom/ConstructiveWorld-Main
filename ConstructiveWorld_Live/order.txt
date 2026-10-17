@@ -804,7 +804,7 @@ zzm2_qpoly.v#R193-9a4516
 piu_mu_criterion.v#R194-dc5b47
 piu_zz_constants.v#R194-6cd82e
 piu_zz_gauss_pair.v#R194-0e9d50
-piu_zz_padic_clearing.v#R194-eb527d
+piu_zz_padic_clearing.v#R194-e8b18a
 piu_zz_poincare_engine.v#R194-7c0ac4
 piu_zz_jury_cubic.v#R194-9866fe
 piu_zz_poincare_L1.v#R194-785fd1
