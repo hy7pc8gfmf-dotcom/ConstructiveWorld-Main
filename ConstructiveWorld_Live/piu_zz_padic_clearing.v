@@ -29,6 +29,7 @@
 From Stdlib Require Import ZArith.
 From Stdlib Require Import NArith.
 From Stdlib Require Import QArith.
+From Stdlib Require Import Znumtheory.
 (* 配方偏差登记：「只 Require stdlib ZArith/NArith/QArith」
    的意图=禁树内件接触（B01 世界建成）。Lia 系 stdlib micromega 件，
    零树依赖，Rocq 9.1 的 ZArith 不再默认出口 lia——此处补入属 stdlib
@@ -585,10 +586,10 @@ Proof.
 Qed.
 
 Lemma zz_lcm_prod : forall a b : Z,
-  Z.coprime a b -> 0 <= a -> 0 <= b -> Z.lcm a b = a * b.
+  Z.gcd a b = 1 -> 0 <= a -> 0 <= b -> Z.lcm a b = a * b.
 Proof.
   intros a b Hcop Ha Hb. unfold Z.lcm.
-  unfold Z.coprime in Hcop. rewrite Hcop. rewrite Z.div_1_r.
+  rewrite Hcop. rewrite Z.div_1_r.
   rewrite Z.abs_eq by nia.
   reflexivity.
 Qed.
@@ -602,17 +603,20 @@ Proof.
   - cbn [zz_prodf]. rewrite Z.gcd_1_l. apply Z.eqb_refl.
   - cbn [zz_prodf]. destruct (zz_in_Pn n (S K)) eqn:E.
     + apply (proj2 (Z.eqb_eq _ _)).
-      assert (Hrest : Z.coprime (zz_prodf n K) q).
-      { unfold Z.coprime. apply (proj1 (Z.eqb_eq _ _)). apply IH.
+      assert (Hrest : Z.gcd (zz_prodf n K) q = 1).
+      { apply (proj1 (Z.eqb_eq _ _)). apply IH.
         intros k Hk Hinp. apply Hh.
         -- apply BidT_intro. apply (proj2 (Nat.leb_le k (S K))).
            apply BidT_elim in Hk. apply (proj1 (Nat.leb_le k K)) in Hk. lia.
         -- exact Hinp. }
-      assert (Hsk : Z.coprime (Z.of_nat (S K)) q).
-      { unfold Z.coprime. apply (proj1 (Z.eqb_eq _ _)). apply Hh.
+      assert (Hsk : Z.gcd (Z.of_nat (S K)) q = 1).
+      { apply (proj1 (Z.eqb_eq _ _)). apply Hh.
         -- apply BidT_intro. apply (proj2 (Nat.leb_le (S K) (S K))). lia.
         -- apply BidT_intro. exact E. }
-      exact (Z.coprime_mul_l _ _ _ Hrest Hsk).
+      apply (proj2 (Zgcd_1_rel_prime _ _)). apply rel_prime_sym.
+      apply (rel_prime_mult q).
+      -- apply rel_prime_sym. apply (proj1 (Zgcd_1_rel_prime _ _)). exact Hrest.
+      -- apply rel_prime_sym. apply (proj1 (Zgcd_1_rel_prime _ _)). exact Hsk.
     + apply IH. intros k Hk Hinp. apply Hh.
       * apply BidT_intro. apply (proj2 (Nat.leb_le k (S K))).
         apply BidT_elim in Hk. apply (proj1 (Nat.leb_le k K)) in Hk. lia.
@@ -643,49 +647,73 @@ Proof.
       assert (Hpb : zz_primeb (S K) = true).
       { unfold zz_in_Pn in E. apply Bool.andb_true_iff in E.
         destruct E as [Epb _]. exact Epb. }
-      assert (Hpk : Z.prime (Z.of_nat (S K))).
+      assert (Hpk : prime (Z.of_nat (S K))).
       { pose proof (zz_primeb_prime (S K) Hpb) as Hltb.
         apply (proj1 (Nat.ltb_lt 1 (S K))) in Hltb.
-        split.
+        apply prime_intro.
         - lia.
-        - intros m Hm1 Hmd.
-          exfalso.
-          assert (Hm0 : (0 <= m)%Z) by lia.
-          pose proof (proj2 (Z.mod_divide (Z.of_nat (S K)) m ltac:(lia)) Hmd) as Hmod0.
-          pose proof (zz_primeb_spec (S K) Hpb m Hm0 ltac:(lia) ltac:(lia)) as Hb.
-          rewrite Hmod0 in Hb. discriminate Hb. }
+        - intros m Hm.
+        apply (proj1 (Zgcd_1_rel_prime _ _)).
+          destruct (Z.eq_dec (Z.gcd m (Z.of_nat (S K))) 1) as [Hg | Hgne].
+          + exact Hg.
+          + exfalso.
+            pose proof (Z.gcd_divide_l m (Z.of_nat (S K))) as Hgd1.
+            pose proof (Z.gcd_divide_r m (Z.of_nat (S K))) as Hgd2.
+            pose proof (Z.gcd_nonneg m (Z.of_nat (S K))) as Hgn.
+            assert (Hgz : Z.gcd m (Z.of_nat (S K)) <> 0).
+            { intro H0. rewrite H0 in Hgd1.
+              destruct Hgd1 as [q Hq]. rewrite Z.mul_0_r in Hq. lia. }
+            assert (Hg2 : (2 <= Z.gcd m (Z.of_nat (S K)))%Z) by lia.
+            assert (Hgle : (Z.gcd m (Z.of_nat (S K)) <= m)%Z)
+              by (apply (Z.divide_pos_le _ m); [lia | exact Hgd1]).
+            assert (Hglt : (Z.gcd m (Z.of_nat (S K)) < Z.of_nat (S K))%Z) by lia.
+            pose proof (zz_primeb_spec (S K) Hpb (Z.gcd m (Z.of_nat (S K))) Hgn Hglt Hgne) as Hb.
+            rewrite (proj2 (Z.mod_divide (Z.of_nat (S K)) (Z.gcd m (Z.of_nat (S K))) Hgz) Hgd2) in Hb.
+            discriminate Hb. }
       assert (Hcop : Z.eqb (Z.gcd (zz_prodf n K) (Z.of_nat (S K))) 1 = true).
       { apply zz_prodf_coprime.
         intros k Hk Hinp. apply BidT_elim in Hk.
         apply (proj1 (Nat.leb_le k K)) in Hk.
         apply (proj2 (Z.eqb_eq _ _)).
-        assert (Hcp : Z.coprime (Z.of_nat (S K)) (Z.of_nat k)).
-        { apply (Z.coprime_prime_l (Z.of_nat (S K)) (Z.of_nat k)).
-          - exact Hpk.
+        assert (Hcp : Z.gcd (Z.of_nat (S K)) (Z.of_nat k) = 1).
+        { apply (proj2 (Zgcd_1_rel_prime _ _)).
+          apply (prime_rel_prime (Z.of_nat (S K)) Hpk (Z.of_nat k)).
           - intro Hd.
             assert (Hpbk : zz_primeb k = true).
             { apply BidT_elim in Hinp. unfold zz_in_Pn in Hinp.
               apply Bool.andb_true_iff in Hinp. destruct Hinp as [Hpbin _].
               exact Hpbin. }
-            assert (Hqk : Z.prime (Z.of_nat k)).
+            assert (Hqk : prime (Z.of_nat k)).
             { pose proof (zz_primeb_prime k Hpbk) as Hltb.
               apply (proj1 (Nat.ltb_lt 1 k)) in Hltb.
-              split.
+              apply prime_intro.
               - lia.
-              - intros m Hm1 Hmd.
-                exfalso.
-                assert (Hm0 : (0 <= m)%Z) by lia.
-                pose proof (proj2 (Z.mod_divide (Z.of_nat k) m ltac:(lia)) Hmd) as Hmod0.
-                pose proof (zz_primeb_spec k Hpbk m Hm0 ltac:(lia) ltac:(lia)) as Hb.
-                rewrite Hmod0 in Hb. discriminate Hb. }
-            pose proof (Z.divide_prime_prime (Z.of_nat (S K)) (Z.of_nat k)
+              - intros m Hm.
+              apply (proj1 (Zgcd_1_rel_prime _ _)).
+                destruct (Z.eq_dec (Z.gcd m (Z.of_nat k)) 1) as [Hg | Hgne].
+                + exact Hg.
+                + exfalso.
+                  pose proof (Z.gcd_divide_l m (Z.of_nat k)) as Hgd1.
+                  pose proof (Z.gcd_divide_r m (Z.of_nat k)) as Hgd2.
+                  pose proof (Z.gcd_nonneg m (Z.of_nat k)) as Hgn.
+                  assert (Hgz : Z.gcd m (Z.of_nat k) <> 0).
+                  { intro H0. rewrite H0 in Hgd1.
+                    destruct Hgd1 as [q Hq]. rewrite Z.mul_0_r in Hq. lia. }
+                  assert (Hg2 : (2 <= Z.gcd m (Z.of_nat k))%Z) by lia.
+                  assert (Hgle : (Z.gcd m (Z.of_nat k) <= m)%Z)
+                    by (apply (Z.divide_pos_le _ m); [lia | exact Hgd1]).
+                  assert (Hglt : (Z.gcd m (Z.of_nat k) < Z.of_nat k)%Z) by lia.
+                  pose proof (zz_primeb_spec k Hpbk (Z.gcd m (Z.of_nat k)) Hgn Hglt Hgne) as Hb.
+                  rewrite (proj2 (Z.mod_divide (Z.of_nat k) (Z.gcd m (Z.of_nat k)) Hgz) Hgd2) in Hb.
+                  discriminate Hb. }
+            pose proof (prime_div_prime (Z.of_nat (S K)) (Z.of_nat k)
                           Hpk Hqk Hd) as Heq.
             apply Nat2Z.inj in Heq. lia. }
-        unfold Z.coprime in Hcp. rewrite Z.gcd_comm in Hcp. exact Hcp. }
+        rewrite Z.gcd_comm. exact Hcp. }
       assert (Hlcm : Z.lcm (zz_prodf n K) (Z.of_nat (S K)) =
                      zz_prodf n K * Z.of_nat (S K)).
       { apply zz_lcm_prod.
-        - unfold Z.coprime. apply (proj1 (Z.eqb_eq _ _)). exact Hcop.
+        - apply (proj1 (Z.eqb_eq _ _)). exact Hcop.
         - apply (proj1 (Z.leb_le 0 (zz_prodf n K))). apply zz_prodf_nonneg.
         - apply Nat2Z.is_nonneg. }
       assert (Hp : (0 < zz_prodf n K)%Z).
@@ -789,17 +817,29 @@ Proof.
     { apply BidT_elim in Hinp. unfold zz_in_Pn in Hinp.
       apply Bool.andb_true_iff in Hinp. destruct Hinp as [Hpb _].
       exact Hpb. }
-    assert (Hprime : Z.prime (Z.of_nat k)).
+    assert (Hprime : prime (Z.of_nat k)).
     { pose proof (zz_primeb_prime k Hpbk) as Hltb.
       apply (proj1 (Nat.ltb_lt 1 k)) in Hltb.
-      split.
+      apply prime_intro.
       - lia.
-      - intros m Hm1 Hmd.
-        exfalso.
-        assert (Hm0 : (0 <= m)%Z) by lia.
-        pose proof (proj2 (Z.mod_divide (Z.of_nat k) m ltac:(lia)) Hmd) as Hmod0.
-        pose proof (zz_primeb_spec k Hpbk m Hm0 ltac:(lia) ltac:(lia)) as Hb.
-        rewrite Hmod0 in Hb. discriminate Hb. }
+      - intros m Hm.
+      apply (proj1 (Zgcd_1_rel_prime _ _)).
+        destruct (Z.eq_dec (Z.gcd m (Z.of_nat k)) 1) as [Hg | Hgne].
+        + exact Hg.
+        + exfalso.
+          pose proof (Z.gcd_divide_l m (Z.of_nat k)) as Hgd1.
+          pose proof (Z.gcd_divide_r m (Z.of_nat k)) as Hgd2.
+          pose proof (Z.gcd_nonneg m (Z.of_nat k)) as Hgn.
+          assert (Hgz : Z.gcd m (Z.of_nat k) <> 0).
+          { intro H0. rewrite H0 in Hgd1.
+            destruct Hgd1 as [q Hq]. rewrite Z.mul_0_r in Hq. lia. }
+          assert (Hg2 : (2 <= Z.gcd m (Z.of_nat k))%Z) by lia.
+          assert (Hgle : (Z.gcd m (Z.of_nat k) <= m)%Z)
+            by (apply (Z.divide_pos_le _ m); [lia | exact Hgd1]).
+          assert (Hglt : (Z.gcd m (Z.of_nat k) < Z.of_nat k)%Z) by lia.
+          pose proof (zz_primeb_spec k Hpbk (Z.gcd m (Z.of_nat k)) Hgn Hglt Hgne) as Hb.
+          rewrite (proj2 (Z.mod_divide (Z.of_nat k) (Z.gcd m (Z.of_nat k)) Hgz) Hgd2) in Hb.
+          discriminate Hb. }
     assert (HkL : (Z.of_nat k | zz_lcm_range (4 * n)%nat)%Z).
     { assert (Hk1 : (1 <= k)%nat) by lia.
       assert (Hk2 : (k <= 4 * n)%nat).
@@ -823,14 +863,15 @@ Proof.
         pose proof (proj2 (Z.mod_divide (Z.of_nat j) (Z.of_nat k) ltac:(lia)) Hd)
           as Hmod0.
         rewrite Hmod0 in Hjeq. discriminate Hjeq. }
-      assert (Hcop : Z.coprime (Z.of_nat k) (Z.of_nat j)).
-      { apply Z.coprime_prime_l.
+      assert (Hcop : Z.gcd (Z.of_nat k) (Z.of_nat j) = 1).
+      { apply (proj2 (Zgcd_1_rel_prime _ _)).
+        apply prime_rel_prime.
         - exact Hprime.
         - exact Hnkdj. }
       assert (Hkw : (Z.of_nat k | w)%Z).
       { apply (Z.gauss (Z.of_nat k) (Z.of_nat j) w).
         + rewrite <- Hjw. exact HkL.
-        + unfold Z.coprime in Hcop. exact Hcop. }
+        + exact Hcop. }
       assert (Hkne : Z.of_nat k <> 0) by lia.
       assert (Hmodw : w mod Z.of_nat k = 0).
       { apply (proj2 (Z.mod_divide w (Z.of_nat k) Hkne)). exact Hkw. }
