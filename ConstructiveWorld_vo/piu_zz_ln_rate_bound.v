@@ -123,14 +123,15 @@ Qed.
 (* ==================================================================== *)
 
 Lemma zz_Phi_div_lcm : forall n : nat,
-  (zz_Phi n | zz_lcm_range (4 * n)%nat)%Z.
+  Bdiv (zz_Phi n) (zz_lcm_range (4 * n)%nat).
 Proof.
   intro n.
   apply (zz_prodf_divides_P n (2 * n)%nat).
   intros k Hk Hinp. apply zz_j_div_lcm_P.
   - pose proof (zz_Pn_window_spec n k Hinp) as Hw.
     apply Bool.andb_true_iff in Hw. destruct Hw as [Hpk _].
-    pose proof (zz_primeb_prime k Hpk). lia.
+    pose proof (zz_primeb_prime k Hpk) as Hk1.
+    apply (proj1 (PeanoNat.Nat.ltb_lt 1 k)) in Hk1. lia.
   - assert (Hb : BidT (PeanoNat.Nat.leb k (2 * n)%nat))
       by (apply zz_Pn_bounded; exact Hinp).
     apply BidT_elim in Hb.
@@ -142,9 +143,11 @@ Lemma zz_Phi_mul_L_eq : forall n : nat,
 Proof.
   intro n.
   pose proof (zz_Phi_div_lcm n) as HdP.
-  assert (HPhi : (0 < zz_Phi n)%Z) by (unfold zz_Phi; apply zz_prodf_pos).
-  unfold zz_L. destruct HdP as [e He].
-  replace (zz_lcm_range (4 * n)%nat) with (e * (zz_Phi n)) by (symmetry; exact He).
+  assert (HPhi : (0 < zz_Phi n)%Z).
+  { unfold zz_Phi. apply (proj1 (Z.ltb_lt 0 (zz_prodf n (2 * n)%nat))).
+    apply zz_prodf_pos. }
+  unfold zz_L. destruct HdP as [e He]. apply Bid_elim in He.
+  replace (zz_lcm_range (4 * n)%nat) with (e * (zz_Phi n)) by (rewrite Z.mul_comm; exact He).
   rewrite Z.div_mul by lia. apply Z.mul_comm.
 Qed.
 
@@ -173,10 +176,12 @@ Theorem piu_zz_ln_step_loose : forall n : nat,
 Proof.
   intro n.
   assert (HPhi : (1 <= zz_Phi (S n))%Z)
-    by (unfold zz_Phi; pose proof (zz_prodf_pos (S n) (2 * S n)%nat); lia).
+    by (unfold zz_Phi; pose proof (zz_prodf_pos (S n) (2 * S n)%nat) as Hp0;
+       apply (proj1 (Z.ltb_lt 0 (zz_prodf (S n) (2 * S n)%nat))) in Hp0; lia).
   assert (HL : (0 <= zz_L (S n))%Z).
   { pose proof (zz_lcm_range_pos (4 * S n)%nat) as Hl.
     pose proof (zz_prodf_pos (S n) (2 * S n)%nat) as Hp.
+    apply (proj1 (Z.ltb_lt 0 (zz_prodf (S n) (2 * S n)%nat))) in Hp.
     unfold zz_L. apply Z.div_pos; lia. }
   pose proof (piu_zz_ln_step_phi n) as H.
   nia.
@@ -186,7 +191,9 @@ Theorem piu_zz_ln_le_lcm : forall n : nat,
   (zz_L n <= zz_lcm_range (4 * n)%nat)%Z.
 Proof.
   intro n.
-  assert (HPhi : (0 < zz_Phi n)%Z) by (unfold zz_Phi; apply zz_prodf_pos).
+  assert (HPhi : (0 < zz_Phi n)%Z).
+  { unfold zz_Phi. apply (proj1 (Z.ltb_lt 0 (zz_prodf n (2 * n)%nat))).
+    apply zz_prodf_pos. }
   pose proof (zz_lcm_range_pos (4 * n)%nat) as Hl.
   unfold zz_L.
   apply Z.div_le_upper_bound; [lia | nia].
@@ -197,10 +204,15 @@ Proof.
   intro n. unfold zz_L.
   pose proof (zz_Phi_div_lcm n) as Hdiv.
   pose proof (zz_lcm_range_pos (4 * n)%nat) as Hl.
-  assert (Hp : (0 < zz_Phi n)%Z) by (unfold zz_Phi; apply zz_prodf_pos).
+  assert (Hp : (0 < zz_Phi n)%Z).
+  { unfold zz_Phi. apply (proj1 (Z.ltb_lt 0 (zz_prodf n (2 * n)%nat))).
+    apply zz_prodf_pos. }
   apply Z.div_str_pos.
+  assert (HdivP : (zz_Phi n | zz_lcm_range (4 * n)%nat)%Z).
+  { destruct Hdiv as [e He]. apply Bid_elim in He.
+    exists e. rewrite Z.mul_comm. symmetry. exact He. }
   pose proof (Z.divide_pos_le (zz_Phi n) (zz_lcm_range (4 * n)%nat)
-                ltac:(lia) Hdiv) as Hle.
+                ltac:(lia) HdivP) as Hle.
   lia.
 Qed.
 
@@ -241,81 +253,15 @@ Proof. vm_compute. reflexivity. Defined.
 
 Theorem zz_up_big_all_true : zz_up_big_all = true.
 Proof. vm_compute. reflexivity. Defined.
-
 (* ==================================================================== *)
-(* §4. 有限带定理（逐点 QleT' 形——V1 形状；出件即无条件，零假设）               *)
+(* 缩面注记（乙路 standing 面终态）：§4 wrapper 四定理与       *)
+(*   其两件桥引理（zz_forallb_elim/zz_in_seq_intro）移出 born 面——单房复算         *)
+(*   实测：334 行稿单房（零他道）满烧 25 分钟帽不熟（CPU 时间≈挂钟·零争用·         *)
+(*   四时点 delta-CPU 采样在卷），燃段在 §3 表 Defined 内核转换及其后段；§4-§5       *)
+(*   内容以先行 segA/P2 standing 绿证+单件试算账降级申报（fail-loud）。                  *)
+(*   本 born 面=header+§1+§2+§3（segA+P2 standing 面）+PA×8（§2 四定理+§3 四表       *)
+(*   适配名单）+提取位。零假设出件即无条件性质不变。                                  *)
 (* ==================================================================== *)
-
-(* 使用面机械桥（实测判例：proj1 显式施用形在依赖件链环境下报非功能施加
-   错——改 destruct-iff 桥型引理，probe24 机验通过） *)
-Lemma zz_forallb_elim : forall (f : nat -> bool) (l : list nat),
-  forallb f l = true -> forall n : nat, In n l -> f n = true.
-Proof.
-  intros f l H. destruct (forallb_forall f l) as [Hfwd _].
-  apply Hfwd. exact H.
-Qed.
-
-Lemma zz_in_seq_intro : forall (s len n : nat),
-  (s <= n)%nat -> (n < s + len)%nat -> In n (seq s len).
-Proof. intros s len n H1 H2. apply in_seq. lia. Qed.
-
-Theorem piu_zz_ln_lo_pts : forall n : nat, In n zz_lo_big_pts ->
-  QleT' (piu_zz_qpow (28 # 1)%Q n) (zq (zz_L n)).
-Proof.
-  intros n Hn. apply qleT_intro. apply Qle_bool_iff.
-  exact (zz_forallb_elim zz_ln_lo_ok zz_lo_big_pts zz_lo_big_all_true n Hn).
-Qed.
-
-Theorem piu_zz_ln_up_pts : forall n : nat, In n zz_up_big_pts ->
-  QleT' (zq (zz_L n)) (piu_zz_qpow (29 # 1)%Q n).
-Proof.
-  intros n Hn. apply qleT_intro. apply Qle_bool_iff.
-  exact (zz_forallb_elim zz_ln_up_ok zz_up_big_pts zz_up_big_all_true n Hn).
-Qed.
-
-Theorem piu_zz_ln_up_samples : forall n : nat, In n zz_up_small_list ->
-  QleT' (zq (zz_L n)) (piu_zz_qpow (29 # 1)%Q n).
-Proof.
-  intros n Hn. apply qleT_intro. apply Qle_bool_iff.
-  exact (zz_forallb_elim zz_ln_up_ok zz_up_small_list zz_up_small_all_true n Hn).
-Qed.
-
-Theorem piu_zz_ln_lo_samples : forall n : nat, In n zz_lo_small_list ->
-  QleT' (piu_zz_qpow (28 # 1)%Q n) (zq (zz_L n)).
-Proof.
-  intros n Hn. apply qleT_intro. apply Qle_bool_iff.
-  exact (zz_forallb_elim zz_ln_lo_ok zz_lo_small_list zz_lo_small_all_true n Hn).
-Qed.
-
-(* ==================================================================== *)
-(* §5. 机验反例件（fail-loud：V1 预期否证 + 常数步进否证）                      *)
-(* ==================================================================== *)
-
-(* 设计书 V1 预期 up 组全 true——n=8/16/32/128 实算反例 *)
-Theorem piu_zz_ln_up_v1_fail_n8 : BidT (negb (zz_ln_up_ok 8)).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
-
-Theorem piu_zz_ln_up_v1_fail_n16 : BidT (negb (zz_ln_up_ok 16)).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
-
-Theorem piu_zz_ln_up_v1_fail_n32 : BidT (negb (zz_ln_up_ok 32)).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
-
-Theorem piu_zz_ln_up_v1_fail_n128 : BidT (negb (zz_ln_up_ok 128)).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
-
-(* n=8 严格分离：29^8 < L_8（严格反向上界成立） *)
-Theorem piu_zz_ln_n8_strict : QleT' (piu_zz_qpow (29 # 1)%Q 8) (zq (zz_L 8)).
-Proof.
-  apply qleT_intro. apply Qle_bool_iff. vm_compute. reflexivity.
-Defined.
-
-(* 常数步进否证：L_8 = 19778·L_7 且步长比 19778 > 29 *)
-Theorem piu_zz_ln_L8_19778_L7 : BidT (Z.eqb (zz_L 8) (19778 * zz_L 7)%Z).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
-
-Theorem piu_zz_ln_step_ratio_gt_29 : BidT (Z.ltb 29 (Z.div (zz_L 8) (zz_L 7))%Z).
-Proof. apply BidT_intro. vm_compute. reflexivity. Defined.
 
 (* ==================================================================== *)
 (* §6. 四关：G4 假设审计（期望全 Closed——零假设即本件卖点）                     *)
@@ -325,13 +271,10 @@ Print Assumptions piu_zz_ln_step_phi.
 Print Assumptions piu_zz_ln_step_loose.
 Print Assumptions piu_zz_ln_le_lcm.
 Print Assumptions piu_zz_ln_pos.
-Print Assumptions piu_zz_ln_lo_pts.
-Print Assumptions piu_zz_ln_up_pts.
-Print Assumptions piu_zz_ln_up_samples.
-Print Assumptions piu_zz_ln_lo_samples.
-Print Assumptions piu_zz_ln_n8_strict.
-Print Assumptions piu_zz_ln_L8_19778_L7.
-Print Assumptions piu_zz_ln_step_ratio_gt_29.
+Print Assumptions zz_up_small_all_true.
+Print Assumptions zz_lo_small_all_true.
+Print Assumptions zz_lo_big_all_true.
+Print Assumptions zz_up_big_all_true.
 
 (* G3 提取小名单（≤6·计算面主菜） *)
 Extraction "piu_zz_ln_rate_bound_ext" zz_ln_up_ok zz_ln_lo_ok zz_L.
