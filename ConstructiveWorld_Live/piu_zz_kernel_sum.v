@@ -25,7 +25,7 @@
                    cross-checked off-system by exact rational arithmetic
                    against an independent Laurent-series computation
                    (independent recomputation, both routes closed).
-   Erratum 20261017 (P2 refit wave): the 21 Prop-conclusion
+   Erratum (P2 refit wave): the 21 Prop-conclusion
        statements named in the P2 design are now Set-carried.
        qleT_to_Qle and qeqT_eq (T→Prop escape hatches) are removed with
        their 8+6 use sites inlined as in-proof dish destructs; Qmult_le_compat_l
@@ -35,7 +35,7 @@
        zz_Qsum_abs_le are qleT-carried; the nat family (binomP_le_pow2,
        zz_T_nat_le, length_flat_map_seq_le, zz_len1..5, zz_master_nat_le,
        zz_chain5_le_pow) is carried as Nat.leb/Nat.eqb = true (bool-Id
-       doctrine); zz_Mj_member wraps its In hypothesis in a local BidT clone
+       doctrine); zz_Mj_member wraps its In premise in a local BidT clone
        and returns an andb bool-Id; qpos_pow2 is carried by a local QltT dish
        (stdlib Qlt_bool does not exist in Rocq 9.1 -- QArith_base greps only
        Qeq_bool/Qle_bool -- so the first choice fell through and the

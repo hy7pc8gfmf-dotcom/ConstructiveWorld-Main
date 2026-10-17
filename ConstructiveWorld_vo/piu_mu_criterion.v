@@ -19,11 +19,11 @@
      语句面取整数幂形 (此标准库 QArith 的幂运算为整数指数,
      有理指数幂不在其面), 幂函数在正性域上保序故测度语义不变。
    依赖清单: Stdlib QArith, Qring, ZArith, Arith, Lia, Lqa;
-     Lia/Lqa 仅用于桥接引理与辅助簿记步, 主定理收尾为显式
+     Lia/Lqa 仅用于桥接引理与辅助换算步, 主定理收尾为显式
      不等式链合成, 非求解器。
    构造性注记: 有名语句与前提位全 Set 承载 (piu_mu_QleT/
      piu_mu_QltT/piu_mu_QeqT/piu_mu_ZleT/piu_mu_NleT/piu_mu_and2/
-     piu_mu_and3/sigT); 体内 Prop 推导合法; 定义透明; 无 Axiom/Admitted/
+     piu_mu_and3/sigT); 体内 Prop 推导合法; 定义透明; 无未证假设出口与
      Abort; 非可判定前提 (Hp/Hcoef/Hval/Htri/Hesc 的界与逃逸
      下标供给) 以显式 Set 形前提逐条披露。
    编译配方: rocq c -native-compiler no -q -Q . "" piu_mu_criterion.v

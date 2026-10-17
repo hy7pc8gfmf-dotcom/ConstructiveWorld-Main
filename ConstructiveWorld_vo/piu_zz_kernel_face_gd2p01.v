@@ -15,10 +15,10 @@
   （QArith/ZArith/Lia/Qring/Qabs）。
 
   构造性：全语句 Set 承载（qltT/qnzT 仿照 qeqT/qleT 先例）；零
-  Axiom/Admitted/Parameter；数据全透明可计算（qpow/bcoef/kernel 均 vm_compute
+  未证假设出口；数据全透明可计算（qpow/bcoef/kernel 均 vm_compute
   可归约）。
 
-  勘误：G6R 点名的 19 条 Q 面 Prop 结论语句
+  订正：G6R 点名的 19 条 Q 面 Prop 结论语句
   全数消解为 Set 承载（前提面一律保持原文，仅结论换岸）：
   qltT_to_Qlt（T→Prop 逃逸口）除名，同 kernel_sum qleT_to_Qle/qeqT_eq 律；
   qnzT_neq 改形「qeqT 见证 → Empty_set」（Not 载体）；

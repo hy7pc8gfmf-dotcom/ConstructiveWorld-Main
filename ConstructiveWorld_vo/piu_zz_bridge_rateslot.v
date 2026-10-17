@@ -49,14 +49,14 @@
      Local.LW0LeibSeparation（leibsep_metric_pi_transport）、
      piu1932_tight_bound_instantiated（ck_alpha 与 Q 桥型引理）、
      piu_mu_criterion（piu_mu_Qinv_nonneg 复用）。
-   构造性注记: 零 Axiom/Admitted/Parameter/Conjecture/Abort；接口槽
+   构造性注记: 零未证假设出口；接口槽
      （piu_zz_Hmu_criterion）系 Section 内显式 Hypothesis·Set 承载
      （real_lt=sigT），出节即定理显式参数非公理——红线律口径
      （宅风判例=K01 mock 同款）；证内 Q 线性不等式步以 lia/lra 承担
      （辅助代数步·stdlib 例外用法·piu1904/piu_mu_criterion 同口径于此
      申报）；数值见证（π>3 列级见证 Nw=40 与折半链两枚）全部
      vm_compute 字面闭合零承认。
-   v2.1 注记: halving_rate_rel 结论 Qle→QleT'（qleT 系载体）；
+   注记: halving_rate_rel 结论 Qle→QleT'（qleT 系载体）；
      piu_zz_bridge_real 新形四处迁移位（abs_lt_upper QltT 出口/nat_hpow_qpow QeqT 出口/
      hpow_ge1 bool-Id 出口 ×2）。
    编译配方: rocq c -native-compiler no -q -Q . "" piu_zz_bridge_rateslot.v
