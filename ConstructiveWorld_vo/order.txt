@@ -804,7 +804,7 @@ zzm2_qpoly.v#R193-9a4516
 piu_mu_criterion.v#R194-dc5b47
 piu_zz_constants.v#R194-6cd82e
 piu_zz_gauss_pair.v#R194-0e9d50
-piu_zz_padic_clearing.v#R194-e8b18a
+piu_zz_padic_clearing.v#R194-927ee9
 piu_zz_poincare_engine.v#R194-7c0ac4
 piu_zz_jury_cubic.v#R194-9866fe
 piu_zz_poincare_L1.v#R194-785fd1
@@ -812,7 +812,8 @@ piu_zz_kernel_sum.v#R194-0c44b7
 piu_zz_kernel_face_gd2p01.v#R194-8aca61
 piu_zz_jury_l2a_gd2q01.v#R194-afad66
 piu_zz_jury_l2a2_gd2q02.v#R194-7f9307
-piu_zz_ln_rate_bound.v#R194-5921d7
+piu_zz_ln_rate_bound.v#R194-e2ad1b
 piu_zz_bridge_real.v#R194-3eafd3
 piu_zz_bridge_rateslot.v#R194-5bf2f4
 piu1932_uncond_zz.v#R194-61baed
+piu_zz_tau_enclosure.v#R194-3a9624

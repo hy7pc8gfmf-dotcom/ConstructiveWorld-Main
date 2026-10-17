@@ -54,56 +54,69 @@ Require Import piu_zz_poincare_engine piu_zz_padic_clearing.
 (* ==================================================================== *)
 
 Lemma zz_lcm_pos : forall a b : Z,
-  (0 < a)%Z -> (0 < b)%Z -> (0 < Z.lcm a b)%Z.
+  (0 <? a) = true -> (0 <? b) = true -> (0 <? Z.lcm a b) = true.
 Proof.
   intros a b Ha Hb.
+  apply (proj1 (Z.ltb_lt 0 a)) in Ha.
+  apply (proj1 (Z.ltb_lt 0 b)) in Hb.
+  apply (proj2 (Z.ltb_lt 0 (Z.lcm a b))).
   pose proof (Z.lcm_nonneg a b) as Hnn.
   assert (Hne : Z.lcm a b <> 0%Z).
   { intro H0. apply Z.lcm_eq_0 in H0. destruct H0; lia. }
   lia.
 Qed.
 
-Lemma zz_lcm_range_pos : forall K : nat, (0 < zz_lcm_range K)%Z.
+Lemma zz_lcm_range_pos : forall K : nat, (0 <? zz_lcm_range K) = true.
 Proof.
   induction K as [|K IH].
-  - cbn [zz_lcm_range]. lia.
-  - cbn [zz_lcm_range]. apply zz_lcm_pos; [exact IH | lia].
+  - cbn [zz_lcm_range]. apply (proj2 (Z.ltb_lt _ _)). lia.
+  - cbn [zz_lcm_range]. apply zz_lcm_pos;
+      [exact IH | apply (proj2 (Z.ltb_lt _ _)); lia].
 Qed.
 
 Lemma zz_lcm_le_mul : forall a b : Z,
-  (0 < a)%Z -> (0 < b)%Z -> (Z.lcm a b <= a * b)%Z.
+  (0 <? a) = true -> (0 <? b) = true -> (Z.lcm a b <=? a * b) = true.
 Proof.
   intros a b Ha Hb.
+  apply (proj1 (Z.ltb_lt 0 a)) in Ha.
+  apply (proj1 (Z.ltb_lt 0 b)) in Hb.
+  apply (proj2 (Z.leb_le (Z.lcm a b) (a * b))).
   apply (Z.divide_pos_le (Z.lcm a b) (a * b) ltac:(lia)).
   apply Z.lcm_least; unfold Z.divide; [exists b | exists a]; ring.
 Qed.
 
 Lemma zz_lcm_range_succ_le : forall K : nat,
-  (zz_lcm_range (S K) <= zz_lcm_range K * (Z.of_nat K + 1))%Z.
+  (zz_lcm_range (S K) <=? zz_lcm_range K * (Z.of_nat K + 1)) = true.
 Proof.
   intro K. cbn [zz_lcm_range].
   replace (Z.of_nat (S K)) with (Z.of_nat K + 1) by lia.
-  apply zz_lcm_le_mul; [apply zz_lcm_range_pos | lia].
+  apply zz_lcm_le_mul;
+    [apply zz_lcm_range_pos | apply (proj2 (Z.ltb_lt 0 (Z.of_nat K + 1))); lia].
 Qed.
 
 Lemma zz_lcm_range_add4_le : forall K : nat,
-  (zz_lcm_range (K + 4) <= zz_lcm_range K
-     * (Z.of_nat K + 1) * (Z.of_nat K + 2) * (Z.of_nat K + 3) * (Z.of_nat K + 4))%Z.
+  (zz_lcm_range (K + 4) <=? zz_lcm_range K
+     * (Z.of_nat K + 1) * (Z.of_nat K + 2) * (Z.of_nat K + 3) * (Z.of_nat K + 4)) = true.
 Proof.
   intro K.
+  apply (proj2 (Z.leb_le _ _)).
   assert (S1 : (zz_lcm_range (K + 1) <= zz_lcm_range K * (Z.of_nat K + 1))%Z).
   { pose proof (zz_lcm_range_succ_le K) as H.
+    apply (proj1 (Z.leb_le _ _)) in H.
     replace (S K)%nat with (K + 1)%nat in H by lia. exact H. }
   assert (S2 : (zz_lcm_range (K + 2) <= zz_lcm_range (K + 1) * (Z.of_nat K + 2))%Z).
   { pose proof (zz_lcm_range_succ_le (K + 1)) as H.
+    apply (proj1 (Z.leb_le _ _)) in H.
     replace (S (K + 1))%nat with (K + 2)%nat in H by lia.
     replace (Z.of_nat (K + 1) + 1) with (Z.of_nat K + 2) in H by lia. exact H. }
   assert (S3 : (zz_lcm_range (K + 3) <= zz_lcm_range (K + 2) * (Z.of_nat K + 3))%Z).
   { pose proof (zz_lcm_range_succ_le (K + 2)) as H.
+    apply (proj1 (Z.leb_le _ _)) in H.
     replace (S (K + 2))%nat with (K + 3)%nat in H by lia.
     replace (Z.of_nat (K + 2) + 1) with (Z.of_nat K + 3) in H by lia. exact H. }
   assert (S4 : (zz_lcm_range (K + 4) <= zz_lcm_range (K + 3) * (Z.of_nat K + 4))%Z).
   { pose proof (zz_lcm_range_succ_le (K + 3)) as H.
+    apply (proj1 (Z.leb_le _ _)) in H.
     replace (S (K + 3))%nat with (K + 4)%nat in H by lia.
     replace (Z.of_nat (K + 3) + 1) with (Z.of_nat K + 4) in H by lia. exact H. }
   transitivity (((zz_lcm_range (K + 1) * (Z.of_nat K + 2)) * (Z.of_nat K + 3)) * (Z.of_nat K + 4)).
@@ -152,11 +165,12 @@ Proof.
 Qed.
 
 Theorem piu_zz_ln_step_phi : forall n : nat,
-  (zz_L (S n) * zz_Phi (S n) <=
+  (zz_L (S n) * zz_Phi (S n) <=?
    zz_L n * zz_Phi n * (Z.of_nat (4 * n) + 1) * (Z.of_nat (4 * n) + 2)
-     * (Z.of_nat (4 * n) + 3) * (Z.of_nat (4 * n) + 4))%Z.
+     * (Z.of_nat (4 * n) + 3) * (Z.of_nat (4 * n) + 4)) = true.
 Proof.
   intro n.
+  apply (proj2 (Z.leb_le _ _)).
   assert (E1 : (zz_Phi (S n) * zz_L (S n) = zz_lcm_range (4 * S n)%nat)%Z)
     by apply zz_Phi_mul_L_eq.
   assert (E2 : (zz_Phi n * zz_L n = zz_lcm_range (4 * n)%nat)%Z)
@@ -165,45 +179,54 @@ Proof.
   rewrite (Z.mul_comm (zz_L (S n)) (zz_Phi (S n))), E1.
   apply Z.le_trans with (zz_lcm_range (4 * n)%nat * (Z.of_nat (4 * n) + 1)
     * (Z.of_nat (4 * n) + 2) * (Z.of_nat (4 * n) + 3) * (Z.of_nat (4 * n) + 4)).
-  - apply zz_lcm_range_add4_le.
+  - apply (proj1 (Z.leb_le _ _)).
+    apply zz_lcm_range_add4_le.
   - rewrite (Z.mul_comm (zz_L n) (zz_Phi n)), E2. apply Z.le_refl.
 Qed.
 
 Theorem piu_zz_ln_step_loose : forall n : nat,
-  (zz_L (S n) <=
+  (zz_L (S n) <=?
    zz_L n * zz_Phi n * (Z.of_nat (4 * n) + 1) * (Z.of_nat (4 * n) + 2)
-     * (Z.of_nat (4 * n) + 3) * (Z.of_nat (4 * n) + 4))%Z.
+     * (Z.of_nat (4 * n) + 3) * (Z.of_nat (4 * n) + 4)) = true.
 Proof.
   intro n.
+  apply (proj2 (Z.leb_le _ _)).
   assert (HPhi : (1 <= zz_Phi (S n))%Z)
     by (unfold zz_Phi; pose proof (zz_prodf_pos (S n) (2 * S n)%nat) as Hp0;
        apply (proj1 (Z.ltb_lt 0 (zz_prodf (S n) (2 * S n)%nat))) in Hp0; lia).
   assert (HL : (0 <= zz_L (S n))%Z).
   { pose proof (zz_lcm_range_pos (4 * S n)%nat) as Hl.
+    apply (proj1 (Z.ltb_lt 0 _)) in Hl.
     pose proof (zz_prodf_pos (S n) (2 * S n)%nat) as Hp.
     apply (proj1 (Z.ltb_lt 0 (zz_prodf (S n) (2 * S n)%nat))) in Hp.
     unfold zz_L. apply Z.div_pos; lia. }
   pose proof (piu_zz_ln_step_phi n) as H.
+  apply (proj1 (Z.leb_le _ _)) in H.
   nia.
 Qed.
 
 Theorem piu_zz_ln_le_lcm : forall n : nat,
-  (zz_L n <= zz_lcm_range (4 * n)%nat)%Z.
+  (zz_L n <=? zz_lcm_range (4 * n)%nat) = true.
 Proof.
   intro n.
   assert (HPhi : (0 < zz_Phi n)%Z).
   { unfold zz_Phi. apply (proj1 (Z.ltb_lt 0 (zz_prodf n (2 * n)%nat))).
     apply zz_prodf_pos. }
   pose proof (zz_lcm_range_pos (4 * n)%nat) as Hl.
+  apply (proj1 (Z.ltb_lt 0 _)) in Hl.
+  apply (proj2 (Z.leb_le _ _)).
   unfold zz_L.
   apply Z.div_le_upper_bound; [lia | nia].
 Qed.
 
-Theorem piu_zz_ln_pos : forall n : nat, (0 < zz_L n)%Z.
+Theorem piu_zz_ln_pos : forall n : nat, (0 <? zz_L n) = true.
 Proof.
-  intro n. unfold zz_L.
+  intro n.
+  apply (proj2 (Z.ltb_lt 0 (zz_L n))).
+  unfold zz_L.
   pose proof (zz_Phi_div_lcm n) as Hdiv.
   pose proof (zz_lcm_range_pos (4 * n)%nat) as Hl.
+  apply (proj1 (Z.ltb_lt 0 _)) in Hl.
   assert (Hp : (0 < zz_Phi n)%Z).
   { unfold zz_Phi. apply (proj1 (Z.ltb_lt 0 (zz_prodf n (2 * n)%nat))).
     apply zz_prodf_pos. }

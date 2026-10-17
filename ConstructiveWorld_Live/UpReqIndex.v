@@ -4969,3 +4969,102 @@ Proof. reflexivity. Qed.
 (* 闭合数和 = 字面值 *)
 Lemma NewGreenV46QedSum_matches : NewGreenV46QedSum = sum_ng_qed NewGreenListV46.
 Proof. reflexivity. Qed.
+
+(* ================= V47 批（登记 15 件·π 族 ZZ/装配链注册波）（整批追加纪律：清单/常量/引理同块原子写入） ================= *)
+(* ng_PiuMuCriterion -- piu_mu_criterion.v: 幂测度判据线性形；零假设出口；PA=7 Closed（born-in-tree 编译实测）；ng_qed=8（grep-token·清洗稿实测） *)
+Definition ng_PiuMuCriterion : NewGreenFace :=
+  MkNewGreenFace "piu_mu_criterion.v" 281 8 20261016
+  "irrational measure criterion linear form with coefficient and value bounds finite verification" "L281:mdc5b47".
+(* ng_PiuZzConstants -- piu_zz_constants.v: 常数档案件；数值面 vm_compute 出口；PA 检查 0 打点（件内无 Print Assumptions 出口·编译绿判在账）；ng_qed=59（grep-token·清洗稿实测） *)
+Definition ng_PiuZzConstants : NewGreenFace :=
+  MkNewGreenFace "piu_zz_constants.v" 556 59 20261016
+  "zeilberger zudilin route rational skeleton constants with closed form computational shape" "L556:m6cd82e".
+(* ng_PiuZzGaussPair -- piu_zz_gauss_pair.v: 高斯有理数对载体；gz_inv 全定义零对零返回；PA=24 Closed（born-in-tree 编译实测）；ng_qed=24（grep-token·清洗稿实测） *)
+Definition ng_PiuZzGaussPair : NewGreenFace :=
+  MkNewGreenFace "piu_zz_gauss_pair.v" 266 24 20261016
+  "gauss rational pairs algebraic carrier over rationals for discrete kernel bookkeeping" "L266:m0e9d50".
+(* ng_PiuZzPadicClearing -- piu_zz_padic_clearing.v: p-adic 清整；A_j 本体与渐近式留接续面如实；PA=10 Closed（born-in-tree 编译实测）；ng_qed=35（grep-token·清洗稿实测） *)
+Definition ng_PiuZzPadicClearing : NewGreenFace :=
+  MkNewGreenFace "piu_zz_padic_clearing.v" 927 35 20261016
+  "padic clearing lemmas with valuation clearing factor bounds and lcm divisibility propagation" "L927:m927ee9".
+(* ng_PiuZzPoincareEngine -- piu_zz_poincare_engine.v: 根限引擎一段；率面假设位显式保留；PA=10 Closed（born-in-tree 编译实测）；ng_qed=9（grep-token·清洗稿实测） *)
+Definition ng_PiuZzPoincareEngine : NewGreenFace :=
+  MkNewGreenFace "piu_zz_poincare_engine.v" 371 9 20261016
+  "poincare root limit engine for recurrence part one with monotone comparison" "L371:m7c0ac4".
+(* ng_PiuZzJuryCubic -- piu_zz_jury_cubic.v: Jury 判据核；半径 25000 实例；PA=39 Closed（born-in-tree 编译实测）；ng_qed=39（grep-token·清洗稿实测） *)
+Definition ng_PiuZzJuryCubic : NewGreenFace :=
+  MkNewGreenFace "piu_zz_jury_cubic.v" 902 39 20261016
+  "third order schur jury criterion over rationals with radius instance at twenty five thousand" "L902:m9866fe".
+(* ng_PiuZzPoincareL1 -- piu_zz_poincare_L1.v: 根限引擎二段子引理；PA=33 Closed（born-in-tree 编译实测）；ng_qed=38（grep-token·清洗稿实测） *)
+Definition ng_PiuZzPoincareL1 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_poincare_L1.v" 719 38 20261016
+  "poincare engine part two sub lemmas of the root limit program" "L719:m785fd1".
+(* ng_PiuZzKernelSum -- piu_zz_kernel_sum.v: ZZ 式(5) 系数载体；样本 -2392/8000 档案值；PA=50 Closed（born-in-tree 编译实测）；ng_qed=51（grep-token·清洗稿实测） *)
+Definition ng_PiuZzKernelSum : NewGreenFace :=
+  MkNewGreenFace "piu_zz_kernel_sum.v" 1127 51 20261016
+  "discrete multiple sum carrier for partial fraction coefficients with crude size bound" "L1127:m0c44b7".
+(* ng_PiuZzKernelFaceGd2p01 -- piu_zz_kernel_face_gd2p01.v: 核面 L∞ 双出口件；PA=26 Closed（born-in-tree 编译实测）；ng_qed=26（grep-token·清洗稿实测） *)
+Definition ng_PiuZzKernelFaceGd2p01 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_kernel_face_gd2p01.v" 678 26 20261016
+  "kernel face linfinity bound with bcoef arithmetic and dual exit registration" "L678:m8aca61".
+(* ng_PiuZzJuryL2aGd2q01 -- piu_zz_jury_l2a_gd2q01.v: L2a 结式面切片一；PA=12 Closed（born-in-tree 编译实测）；ng_qed=12（grep-token·清洗稿实测） *)
+Definition ng_PiuZzJuryL2aGd2q01 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_jury_l2a_gd2q01.v" 249 12 20261016
+  "L2a alpha resultant face of third order jury criterion slice with six eval lemmas" "L249:mafad66".
+(* ng_PiuZzJuryL2a2Gd2q02 -- piu_zz_jury_l2a2_gd2q02.v: L2a 续切片；域外方向注记如实；PA=16 Closed（born-in-tree 编译实测）；ng_qed=16（grep-token·清洗稿实测） *)
+Definition ng_PiuZzJuryL2a2Gd2q02 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_jury_l2a2_gd2q02.v" 380 16 20261016
+  "L2a continuation slice alternating toolkit quadratic bridge and common root bridge" "L380:m7f9307".
+(* ng_PiuZzLnRateBound -- piu_zz_ln_rate_bound.v: 率面有限点定理+机验反例；尾段率型假设保持最小诚实位不隐藏；PA=8 Closed（born-in-tree 编译实测）；ng_qed=11（grep-token·清洗稿实测） *)
+Definition ng_PiuZzLnRateBound : NewGreenFace :=
+  MkNewGreenFace "piu_zz_ln_rate_bound.v" 303 11 20261016
+  "L n rate type finite point verification with step ratio counterexamples and honest residual" "L303:me2ad1b".
+(* ng_PiuZzBridgeReal -- piu_zz_bridge_real.v: real 层桥；μ 证书为显式函数参数非公理；PA=9 Closed（born-in-tree 编译实测）；ng_qed=20（grep-token·清洗稿实测） *)
+Definition ng_PiuZzBridgeReal : NewGreenFace :=
+  MkNewGreenFace "piu_zz_bridge_real.v" 421 20 20261016
+  "real layer mu certificate to distance form tail bridge with halving chain" "L421:m3eafd3".
+(* ng_PiuZzBridgeRateslot -- piu_zz_bridge_rateslot.v: v2 率槽桥；v1/v2 非等价改名如实；PA=10 Closed（born-in-tree 编译实测）；ng_qed=6（grep-token·清洗稿实测） *)
+Definition ng_PiuZzBridgeRateslot : NewGreenFace :=
+  MkNewGreenFace "piu_zz_bridge_rateslot.v" 252 6 20261016
+  "rate slot version two merged bridge with precombined halving threshold" "L252:m5bf2f4".
+(* ng_Piu1932UncondZz -- piu1932_uncond_zz.v: 装配正件；唯一前提=率面 μ 证书（Set 承载）出节即显式参数；PA=5 Closed（born-in-tree 编译实测）；ng_qed=7（grep-token·清洗稿实测） *)
+Definition ng_Piu1932UncondZz : NewGreenFace :=
+  MkNewGreenFace "piu1932_uncond_zz.v" 127 7 20261016
+  "route b assembly main piece unconditional power rate tight upper bound instantiation" "L127:m61baed".
+(* ng_PiuZzTauEnclosure -- piu_zz_tau_enclosure.v: τ 有理夹包；PNT 假设位 §D 两条 Section 参数化出节全称化；样点带 V1 up 全 false/lo 全 true 如实（N0 领地在样点带外）；PA=3 Closed（born-in-tree 编译实测）；ng_qed=76（grep-token·清洗稿实测） *)
+Definition ng_PiuZzTauEnclosure : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure.v" 1198 76 20261016
+  "tau enclosure rational sandwich carrier with face low and nonzero source lemma over rationals" "L1198:m3a9624".
+(* ---------- V47 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
+Definition NewGreenListV47 : list NewGreenFace :=
+ cons ng_PiuMuCriterion
+ (cons ng_PiuZzConstants
+ (cons ng_PiuZzGaussPair
+ (cons ng_PiuZzPadicClearing
+ (cons ng_PiuZzPoincareEngine
+ (cons ng_PiuZzJuryCubic
+ (cons ng_PiuZzPoincareL1
+ (cons ng_PiuZzKernelSum
+ (cons ng_PiuZzKernelFaceGd2p01
+ (cons ng_PiuZzJuryL2aGd2q01
+ (cons ng_PiuZzJuryL2a2Gd2q02
+ (cons ng_PiuZzLnRateBound
+ (cons ng_PiuZzBridgeReal
+ (cons ng_PiuZzBridgeRateslot
+ (cons ng_Piu1932UncondZz
+ (cons ng_PiuZzTauEnclosure
+ nil))))))))))))))).
+(* 续写统计：16 件 / 行数和 8757 / 闭合数和 437（ng_qed 口径·清洗稿实测字面值；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV47Pieces  : nat := 16.
+Definition NewGreenV47LineSum : nat := 8757.
+Definition NewGreenV47QedSum  : nat := 437.
+
+(* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
+Lemma NewGreenV47Pieces_matches : NewGreenV47Pieces = cnt_ng NewGreenListV47.
+Proof. reflexivity. Qed.
+(* 行数和 = 字面值 *)
+Lemma NewGreenV47LineSum_matches : NewGreenV47LineSum = sum_ng_lines NewGreenListV47.
+Proof. reflexivity. Qed.
+(* 闭合数和 = 字面值 *)
+Lemma NewGreenV47QedSum_matches : NewGreenV47QedSum = sum_ng_qed NewGreenListV47.
+Proof. reflexivity. Qed.
