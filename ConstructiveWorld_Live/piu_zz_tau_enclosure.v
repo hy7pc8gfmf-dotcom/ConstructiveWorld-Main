@@ -1,8 +1,16 @@
+(* 五字段指针｜模块：piu_zz_tau_enclosure。使命：深水债② t1 τ 面/LOW 面/非零源
+   文献常数有理夹包诚实体——τ 窗口闭合主证书件。依赖：piu_zz_poincare_engine
+   （qpow/tau_pref/tau_step_k/mono/mul/powbase 单调链）、piu_zz_padic_clearing
+   （zz_L/zz_Phi/zz_lcm_range 窗口积）、Stdlib QArith/ZArith/Arith/PArith/Lia/List。
+   构造性：全树内闭合或引用池内 born 件；PNT 假设位=§D 两条（Section 参数化，
+   出节全称化）；近期四引理证明体谱界分步链重构（语句面逐字节未动）。
+   编译配方: rocq c -native-compiler no -q -Q . "" piu_zz_tau_enclosure.v
+   以下为 born 修理登记史注： *)
 (* piu_zz_tau_enclosure.v — 深水债② t1 铸造：τ 面/LOW 面/非零源的
-   文献常数有理夹包诚实体。born 席 GD2T02，照 GD2T01 设计书语句面施工。
+   文献常数有理夹包诚实体。铸件 GD2铸造登记，照 GD2设计书语句面施工。
    供给来源标注随行；PNT 假设位=§D 两条（Section 参数化，出节全称化），
-   其余全树内闭合或消费池内 born 件（engine/padic_clearing）。
-   born 修理登记（C 条款·语句形批量修，详见 _tgedan2_T02_夹包铸造回执）：
+   其余全树内闭合或引用池内 born 件（engine/padic_clearing）。
+   born 修理登记（C 条款·语句形批量修，详见 _tgedan2_铸造登记_夹包铸造回执）：
    W1 设计书 §二 613 步链系 8356/5120000 减法伤（实差 3356/5120000=1/1525.6）
       → k:=1526，even/odd 守卫 1226/1839→3052/4578，n0zz 4000→9200；
    W2 Vieta 接口被除数 (512#27)/(27x)=512/(729x) 与 §二 口径 512/(27x) 不符
@@ -11,7 +19,7 @@
    W4 c2fac_even 补 1≤m 前提（m=0 时 nat 减法截断为假）；
    W5 tau_face 守卫 n0zz≤n→N0≤n（n0zz 入 max 见证；eventual 形自洽）；
    W6 wq_pos 结论 QltT' 不在 engine 载体动物园 → 改 QneqT（非零本体形）。
-   W9 qinv_anti·E1 assoc 方向伤（T03 探针 p1-p4 定谳：E1 ←assoc 无匹配位红、
+   W9 qinv_anti·E1 assoc 方向伤（修理登记 验证 p1-p4 判定：E1 ←assoc 无匹配位红、
       E2 原链本绿；修=E1 改正向 Qmult_assoc 一记号，E2 不动）。
    本环境 Q 侧无 boolean 比较记号（Qlt_bool 不存在）：B1a/B1b 采 Qcompare ?= Lt 形。 *)
 
@@ -251,7 +259,7 @@ Proof.
   rewrite E1, E2. exact Hle.
 Qed.
 
-(* W10 供给补铸（T03）：piu_zz_qdiv_anti 全树原无定义，由 §B' 两调用点反推
+(* W10 供给补铸（修理登记）：piu_zz_qdiv_anti 全树原无定义，由 §B' 两调用点反推
    签名铸出（0<c<=x 时正 a 反单调）；调用点 1 第 2 弹原证 0<=x 系设计伤，
    同步改证 0<c。 *)
 Lemma piu_zz_qdiv_anti : forall a x c : Q, (0 < a)%Q -> (0 < c)%Q -> (c <= x)%Q ->
@@ -269,7 +277,7 @@ Proof.
 Qed.
 
 (* ================================================================== *)
-(* §A 常数面（选取理由=T01 设计书 §二 收口总表；n0zz 见 W1 修理登记）    *)
+(* §A 常数面（选取理由=设计书 §二 闭合总表；n0zz 见 W1 修理登记）    *)
 (* ================================================================== *)
 
 Section PiuzzTauEnclosure.
@@ -302,7 +310,7 @@ Proof. vm_compute. reflexivity. Qed.
 Lemma piu_zz_rho_l_win : (86436 * (27 * 21900) <? 512 * 100000000)%Z = true.
 Proof. vm_compute. reflexivity. Qed.
 
-(* B4 三件【V0 首验✓】τ 收口裕度 *)
+(* B4 三件【V0 首验✓】τ 闭合裕度 *)
 Lemma piu_zz_tau_margin : (9 * 142129 <=? 8 * 160000)%Z = true.
 Proof. vm_compute. reflexivity. Qed.
 Lemma piu_zz_tau_step : (5116644 <? 5120000)%Z = true.
@@ -544,7 +552,7 @@ Proof.
   exact Hgoal.
 Qed.
 
-(* B5 两件【V0 首验✓】LOW 收口 *)
+(* B5 两件【V0 首验✓】LOW 闭合 *)
 Lemma piu_zz_low_margin : (100000000 <=? 50 * (8232 * 8232))%Z = true.
 Proof. vm_compute. reflexivity. Qed.
 Lemma piu_zz_rho_l_above_cage : (13 * 10000 <? 294 * 800)%Z = true.
@@ -552,7 +560,7 @@ Proof. vm_compute. reflexivity. Qed.
 
 (* ================================================================== *)
 (* §B' Vieta 消去接口（纯 Q 蕴含形；W2/W3 修形：
-       |N1|^2 = 512/(27·x) 即 (512#27)/x，x>0 与窗口由消费侧证书自带）   *)
+       |N1|^2 = 512/(27·x) 即 (512#27)/x，x>0 与窗口由引用侧证书自带）   *)
 (* ================================================================== *)
 
 Lemma piu_zz_rho_u_sq : QeqT (piu_zz_qpow piu_zz_rho_u 2) ((169) # 160000)%Q.
@@ -598,7 +606,7 @@ Proof.
 Qed.
 
 (* ================================================================== *)
-(* §C 簿记面（纯 Q/nat 闭合）                                           *)
+(* §C 辅助面（纯 Q/nat 闭合）                                           *)
 (* ================================================================== *)
 
 Definition piu_zz_fl (n : nat) : nat := Nat.div (5 * n) 2.
@@ -812,7 +820,7 @@ Proof.
   - apply piu_zz_qpow_Qeq. apply qeqT_intro. ring.
 Qed.
 
-(* τ 偶收口核（W1：守卫 3052=2·1526） *)
+(* τ 偶闭合核（W1：守卫 3052=2·1526） *)
 Lemma piu_zz_tau_even_core : forall m : nat, (3052 <= m)%nat ->
   QleT' (piu_zz_c2fac (2 * m)%nat * piu_zz_qpow piu_zz_lam_u (2 * m)%nat
          * piu_zz_qpow piu_zz_rho_u (2 * m)%nat)
@@ -1207,11 +1215,11 @@ Hypothesis HLn_rate_up : { N0 : nat & forall n : nat, (N0 <= n)%nat ->
   QleT' (zq (zz_L n)) (piu_zz_qpow piu_zz_lam_u n) }.
 Hypothesis HLn_rate_lo : { N0 : nat & forall n : nat, (N0 <= n)%nat ->
   QleT' (piu_zz_qpow piu_zz_lam_l n) (zq (zz_L n)) }.
-(* 共享令：HLn_rate_up 系全战役唯一 L_n 上率假设——σ 面（s1/s2 席）
-   Require 本包消费，禁另立。 *)
+(* 共享令：HLn_rate_up 系全工程唯一 L_n 上率假设——σ 面（s1/s2 两路）
+   Require 本包引用，禁另立。 *)
 
 (* ================================================================== *)
-(* §E 引擎接口槽（按 T01 设计书异常#1 发形令：单面 cage 两件新形）       *)
+(* §E 引擎接口槽（按 设计书异常#1 发形令：单面 cage 两件新形）       *)
 (* ================================================================== *)
 
 Definition piu_zz_eventual_le (r : Q) (mag : nat -> Q) : Set :=
@@ -1233,7 +1241,7 @@ Proof.
 Qed.
 
 (* ================================================================== *)
-(* §F 主交付：τ 面 / LOW 面 / 渐近非零（mag 抽象；E 侧载体债=①/桥席，
+(* §F 主交付：τ 面 / LOW 面 / 渐近非零（mag 抽象；E 侧载体债=①/衔接件，
    本包全部输出对任意 mag : nat -> Q 有效；W5：守卫 N0≤n，n0zz 入见证）  *)
 (* ================================================================== *)
 
@@ -1364,7 +1372,7 @@ Qed.
 
 (* ================================================================== *)
 (* §V 样点带（V1：真值冻结；设计书「up 全 true」系机外预估伤——
-   8/16/32/128 红，照 V1 条上报不换样不改假设；扩样 256/512/1024 为本席
+   8/16/32/128 红，照 V1 条上报不换样不改假设；扩样 256/512/1024 本件
    增测（响亮登记）：up 全 false、lo 全 true——N0 领地在样点带之外）     *)
 (* ================================================================== *)
 
@@ -1396,7 +1404,7 @@ Proof. vm_compute. reflexivity. Qed.
 End PiuzzTauEnclosure.
 
 (* ================================================================== *)
-(* 审计段：Print Assumptions 四关之 G4 + 数据级提取探针（G3）            *)
+(* 审计段：Print Assumptions 四关之 G4 + 数据级提取验证（G3）            *)
 (* ================================================================== *)
 
 Print Assumptions piu_zz_tau_face.
