@@ -186,7 +186,21 @@ NTOT=$(tr '\037' '\n' < "$WORK/layers.txt" | grep -c '\.v$' || true)
 [ "${NTOT:-0}" -eq "$NALL" ] || { echo "PBLD-TOTAL-MISMATCH: layers_total=$NTOT sources=$NALL —— fail-loud"; exit 2; }
 
 # ④ 逐层并行编译（缺失/在失效集才编；无 base 时按 mtime 指纹回退）
+# lane 体落盘为脚本文件（20261019 mac 判例：多行单引号内联 bash -c 经 BSD xargs -I{}
+# 截断→"line 7: unexpected end of file" 整层零编；文件形双平台同源零引号 dance）
 : > /tmp/_pbld_fail.txt
+cat > "$WORK/lane.sh" <<'LANE'
+#!/bin/bash
+f="$1"
+log="/tmp/_pbld_$(printf '%s' "$f" | tr '/' '_').log"
+if "$COQC_BIN_LANE" -native-compiler no -q -Q . "" "$f" > "$log" 2>&1; then
+  echo "OK $f"
+else
+  echo "FAIL $f" >> /tmp/_pbld_fail.txt
+fi
+LANE
+export COQC_BIN_LANE="$COQC_BIN"
+chmod +x "$WORK/lane.sh" 2>/dev/null || true
 nbuilt=0; nskip=0; nfail=0; layer_i=0
 while IFS= read -r layer; do
   [ -n "$layer" ] || continue
@@ -207,14 +221,7 @@ while IFS= read -r layer; do
   done
   [ -n "$todo" ] || continue
   echo "$todo" | tr ' ' '\n' | grep -v '^$' | \
-    xargs -P "$JOBS" -I{} bash -c '
-      f="{}"; v="${f%.v}.vo"
-      log="/tmp/_pbld_${f//\//_}.log"
-      if "'"$COQC_BIN"'" -native-compiler no -q -Q . "" "$f" > "$log" 2>&1; then
-        echo "OK $f"
-      else
-        echo "FAIL $f" | tee -a /tmp/_pbld_fail.txt
-      fi' | while read -r st f; do echo "  [L$layer_i] $st $f"; done
+    xargs -P "$JOBS" -I{} "$WORK/lane.sh" {} | while read -r st f; do echo "  [L$layer_i] $st $f"; done
 done < "$WORK/layers.txt"
 # 计数直读（E-STAGING-R84-GATECHAIN 教义：管道计数短路坑规避——独立统计）
 nf=$(grep -c '^FAIL' /tmp/_pbld_fail.txt 2>/dev/null || true)
