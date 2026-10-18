@@ -86,6 +86,20 @@ jobs:
             --tree-a ConstructiveWorld_Live --tree-b ConstructiveWorld_vo \
             --json gate3_ci.json
 
+      # 20261019 跨机 vo 信任缓存起步同步（四基准④内联半环；常驻半环=vo_sync_watch）：
+      # 起步先拉对侧最近绿 run 的 artifact 镜像合并进本地缓存 → 新增件本轮即可 SKIP。
+      # fail-open（continue-on-error）：网络窗抖动/artifact 缺席只降增强不红主链——
+      # 缺件由 parallel_build 补编，正确性不依赖本步。
+      - name: Sync cross-machine vo trust cache (one-shot, fail-open)
+        continue-on-error: true
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          export SYNC_ARTIFACT=vo-trust-cache-macos
+          export SYNC_CACHE_DIR=/d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo
+          bash scripts/vo_sync_once.sh
+
       # 本地信任缓存播种：自托管 runner 的检出目录是全新的，
       # 从固定 vo 树复制 .vo 让 build.sh 吃指纹 SKIP（.vo 新于 .v 即跳）。
       # 工具链=本机 Rocq Platform 9.1~2026.01（与该 vo 树 .vo 同源；PROBE91 实证 201 面 9.1 全绿。
@@ -106,10 +120,20 @@ jobs:
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           # 20261018 并行编译切换：scripts/parallel_build.sh 依赖分层+层内 xargs -P 并行 coqc
-          # （指纹 SKIP 语义不变·缺失/陈旧件才编·红件 fail-loud）。温控 cpu_guard.ps1 包裹同前。
-          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_build.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
+          # 20261019 v2 修订：PBLD_AUTO_BASE=1 代差失效（最近绿 run→git diff 变面→反向闭包
+          # 删陈旧代 .vo 重编——跨机推送下变件陈旧 .vo 靠 mtime 判"新鲜"是撕裂源）＋
+          # 零层/总数/注册面覆盖三断言（run#267 layers=0 零编译假绿教训）＋Windows python
+          # 相对路径修复。温控 cpu_guard.ps1 包裹同前。
+          export PBLD_AUTO_BASE=1
+          # 20261019 set1557：去 -CoreN 钉核（v3 guard -CoreN=单核位掩码——3 并行道挤 1 核
+          # =并行反慢于串行；§R2 v2.0 处方=重载窗浮动亲和·热控由 LoadLimit 占空+TempLimit 承担）
+          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_build.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200
+          # 终审双保险：vo 树 build.sh 按 order 拓扑逐件走（全 SKIP+EXIT=0 预期·秒级）
+          bash ConstructiveWorld_vo/build.sh
           # repair_tear 已摘除（2026-09-19 run#85 红 run 根因，fail-loud 存档）：镜像播种语义下
           # （上一步 rm+cp 即本地信任缓存真镜像），repair_tear 的 mtime 启发式对字母序 cp 落盘
           # 时差（G→U 跨分钟，远超 v2.2 的 5s 容差）误撕 → dep-missing 级联删除 → build 按检出
@@ -180,9 +204,12 @@ jobs:
       - name: coqchk full-tree certification (parallel root-grouped, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
-          # 20261018 强制并行：CHK_JOBS 显式钉 3（根分组均衡装箱·组数=并行度·禁退化为单遍）
-          export CHK_JOBS=3
-          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400 -CoreN 2
+          # 20261018 强制并行：CHK_JOBS 显式钉 4（均衡分组装箱·组数=并行度·禁退化为单遍）
+          # 20261019 set1557：去 -CoreN 钉核（同 Build 步——多组并行禁单核钉死）
+          # 20261019 用户温控修法令：编译可占 4-8 核·温控包裹不减（LoadLimit 占空+TL98 照全）——
+          # lane 数按授权带下沿 4 设计（mac 观察档同款）
+          export CHK_JOBS=4
+          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400
 
       # 20261018 跨机 vo 信任缓存通道：绿后上传全树 .vo artifact，对侧
       # vo_sync_watch（scripts/vo_sync_watch.ps1 常驻计划任务）自动下载合并本地缓存，
@@ -288,6 +315,17 @@ jobs:
             --tree-a ConstructiveWorld_Live --tree-b ConstructiveWorld_vo \
             --json gate3_ci.json
 
+      # 20261019 跨机 vo 信任缓存起步同步（同 Windows 步语义；对侧 artifact=windows）
+      - name: Sync cross-machine vo trust cache (one-shot, fail-open, macOS)
+        continue-on-error: true
+        shell: bash -e {0}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          export SYNC_ARTIFACT=vo-trust-cache-windows
+          export SYNC_CACHE_DIR=/Users/apple/vo_ci_cache_mac
+          bash scripts/vo_sync_once.sh
+
       - name: Seed trust cache from local vo tree (macOS dedicated cache)
         shell: bash -e {0}
         run: |
@@ -302,14 +340,19 @@ jobs:
 
       - name: Bootstrap cold cache in coqdep dependency order (macOS cold cache only)
         shell: bash -e {0}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           # 20261018 并行编译切换：原内联串行 Kahn 预编（while-read 单线）退役——
           # scripts/parallel_build.sh 同源 Kahn 分层+层内 xargs -P 并行 coqc（冷编 1.5-2h→~35-45min）。
+          # 20261019 v2 修订：PBLD_AUTO_BASE 代差失效＋三断言＋相对路径 python（同 Windows 步）。
           # 指纹 SKIP 语义与「build.sh 终审」双保险口径不变；日志落 /tmp/_pbld_*.log。
           cd ConstructiveWorld_vo
           export COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
           export CHK_ROCQDEP=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
-          export BLDJ_JOBS=3
+          # 20261019 用户温控修法令：编译可占 4-8 核·温控包裹不减——BLDJ_JOBS 钉授权带下沿 4
+          export BLDJ_JOBS=4
+          export PBLD_AUTO_BASE=1
           bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
             bash "$GITHUB_WORKSPACE/scripts/parallel_build.sh"
 

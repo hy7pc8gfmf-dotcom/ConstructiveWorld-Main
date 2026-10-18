@@ -1,19 +1,34 @@
 #!/bin/bash
-# parallel_build.sh — 全树构建·依赖分层并行版（20261018 双机同源）
+# parallel_build.sh — 全树构建·依赖分层并行版 v2（20261019 set1557 修订）
+#
+# v1→v2 修订缘由（run#267 双红根因）：
+#   R1 Windows python /tmp 路径修复：v1 的 heredoc Python 以 POSIX 绝对路径
+#      open('/tmp/...')——Windows 原生 python 将其解析为 <盘>:\tmp\...（cwd 盘），
+#      与 MSYS bash 的 /tmp（%TEMP%）不同址 → FileNotFoundError → 分层输出 0 字节
+#      → layers=0 零编译假绿（run#267 Build 步实证）。v2 全部 Python 数据面走
+#      cwd 相对路径（_pbld_tmp/），Windows/macOS 双形同源。
+#   R2 代差失效（跨机推送一致性）：PBLD_CHANGED_SINCE=<base sha> 时按 git diff
+#      收集变面 → coqdep 反向闭包 → 删陈旧代 .vo 四件套后重编。变件陈旧 .vo 靠
+#      mtime 指纹判"新鲜"是跨机推送下的撕裂源（.vo 烧录旧代 digest 而 .v 已换代）。
+#      无 base 时回退纯 mtime 指纹（同机推送语义）。
+#   R3 fail-loud 三断言（run#267 layers=0 假绿教训）：分层零行=exit 2；分层总数
+#      != 源清单=exit 2；order.txt 注册面缺源/缺 .vo=exit 1。禁静默降级。
 #
 # 原理：rocq dep 生成依赖图 → Kahn 拓扑分层（层内模块互不依赖）→ 逐层并行：
 # 层内缺失/陈旧 .vo 的件经 xargs -P 并行 coqc（层间必须串行——依赖在先层落盘）。
-# 指纹 SKIP 语义不变（.vo 新于 .v 即跳）；本脚本只预编缺失/陈旧件，终审 build 面
-# 由 yml 后续 Build 步（build.sh/cw_build）承担——双保险口径与 mac Bootstrap 先例一致。
+# 终审 build 面（ConstructiveWorld_vo/build.sh，order 拓扑逐件走）由 yml 后续步承担。
 #
 # 环境变量：COQC（coqc 路径，Windows 默认 Rocq-Platform 9.1 推导·mac 侧 yml 步显式
 # export mac_rocq shim）/ CHK_ROCQDEP（rocq 路径覆盖）/ BLDJ_JOBS（并行度，默认 3）/
-# PYTHON。fail-loud：任何件编译红 → 红件清单落 /tmp/_pbld_fail.txt + exit 1。
+# PYTHON / PBLD_CHANGED_SINCE（base sha，代差失效）/ PBLD_AUTO_BASE=1（CI 内联
+# 自动探测最近绿 run head 作 base，需 GITHUB_TOKEN）/ GITHUB_TOKEN。
+# fail-loud：任何件编译红 → 红件清单落 /tmp/_pbld_fail.txt + exit 1。
 set -u
 cd "$(dirname "$0")/../ConstructiveWorld_vo" || { echo "PBLD-PWD-FAIL"; exit 2; }
 COQC_BIN="${COQC:-C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe}"
 JOBS="${BLDJ_JOBS:-3}"
-PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null 2>&1 || PY=python
+PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null 2>&1 || { PY=python; command -v "$PY" >/dev/null 2>&1 || PY=py; }
+command -v "$PY" >/dev/null 2>&1 || { echo "PBLD-NO-PYTHON: python3/python/py 全缺席"; exit 2; }
 
 # SW2 同源导出（与 coqchk_all.sh/parallel_chk.sh 同协议）
 case "$COQC_BIN" in
@@ -26,19 +41,103 @@ case "$COQC_BIN" in
 esac
 ROCQDEP="${CHK_ROCQDEP:-$ROCQDEP}"
 
-# ① 全源清单+依赖图（`_` 前缀暂态件排除）
-find . -maxdepth 1 -name '*.v' ! -name '_*' | sed 's|^\./||' | sort > /tmp/_pbld_allv.txt
-NALL=$(wc -l < /tmp/_pbld_allv.txt)
-"$ROCQDEP" dep -Q . "" $(cat /tmp/_pbld_allv.txt) > /tmp/_pbld_deps.txt 2>/dev/null || true
+# 工作区：cwd 相对路径（R1——Windows python 可 open 的唯一定址形）
+WORK="_pbld_tmp"
+rm -rf "$WORK"; mkdir -p "$WORK"
 
-# ② Kahn 分层：层=入度零批次的逐波剥离（层内并行安全）
-"$PY" - <<'PYEOF' > /tmp/_pbld_layers.txt
+# ① 全源清单+依赖图（`_` 前缀暂态件排除）
+find . -maxdepth 1 -name '*.v' ! -name '_*' | sed 's|^\./||' | sort > "$WORK/allv.txt"
+NALL=$(wc -l < "$WORK/allv.txt")
+[ "$NALL" -gt 0 ] || { echo "PBLD-NO-SOURCES"; exit 2; }
+"$ROCQDEP" dep -Q . "" $(cat "$WORK/allv.txt") > "$WORK/deps.txt" 2>/dev/null || true
+[ -s "$WORK/deps.txt" ] || echo "PBLD-WARN-EMPTYDEP: rocq dep 零输出（依赖图空·分层退化名单层——fail-loud 留痕）"
+
+# ② 代差失效面（R2）：base sha → 变面 .v → 反向闭包 → 删陈旧代 .vo
+BASE="${PBLD_CHANGED_SINCE:-}"
+if [ -z "$BASE" ] && [ "${PBLD_AUTO_BASE:-0}" = "1" ] && [ -n "${GITHUB_TOKEN:-}" ] && command -v git >/dev/null 2>&1; then
+  API="https://api.github.com/repos/${GITHUB_REPOSITORY:-}/actions/runs?branch=main&status=success&per_page=1"
+  BASE=$(curl -s -m 20 -H "Authorization: token $GITHUB_TOKEN" "$API" | "$PY" -c "import json,sys
+try: print(json.load(sys.stdin)['workflow_runs'][0]['head_sha'])
+except Exception: print('')" 2>/dev/null || true)
+  [ "${BASE:-}" = "$(git rev-parse HEAD 2>/dev/null)" ] && BASE=""
+fi
+: > "$WORK/invalidate.txt"
+if [ -n "$BASE" ] && { git cat-file -e "$BASE" 2>/dev/null || git fetch --depth=1 -q origin "$BASE" 2>/dev/null; }; then
+  if git diff --name-only "$BASE" HEAD --relative > "$WORK/rawdiff.txt" 2>/dev/null; then
+    grep '\.v$' "$WORK/rawdiff.txt" 2>/dev/null | sed 's|.*/||' | sort -u > "$WORK/changed.txt" || : > "$WORK/changed.txt"
+    "$PY" - "$WORK/allv.txt" "$WORK/deps.txt" "$WORK/changed.txt" > "$WORK/invalidate.txt" <<'PYEOF'
+import sys
+from collections import defaultdict
+allv_f, deps_f, changed_f = sys.argv[1], sys.argv[2], sys.argv[3]
+allv = [l.strip() for l in open(allv_f, encoding='utf-8', errors='replace') if l.strip()]
+allset = set(a[:-2] for a in allv)  # 裸模块名归一（allv 为 .v 文件名形——两名册混用即静默零命中，run 内实证）
+rdeps = defaultdict(set)
+for line in open(deps_f, encoding='utf-8', errors='replace'):
+    if ':' not in line:
+        continue
+    left, right = line.split(':', 1)
+    vt = [t for t in left.split() if t.endswith('.vo')]
+    if not vt:
+        continue
+    src = vt[0].replace('\\', '/').split('/')[-1][:-3]
+    if src not in allset:
+        continue
+    for t in right.split():
+        if t.endswith('.vo') and not t.startswith('/'):
+            d = t.replace('\\', '/').split('/')[-1][:-3]
+            if d != src and d in allset:
+                rdeps[d].add(src)
+changed = [l.strip() for l in open(changed_f, encoding='utf-8', errors='replace') if l.strip()]
+inv = set(); st = []
+for c in changed:
+    m = c[:-2] if c.endswith('.v') else c
+    if m in allset:
+        st.append(m)
+if changed and not st:
+    sys.stderr.write('PBLD-GEN-ANOMALY: changed=%d 但无一命中源清单（名册归一断言红）\n' % len(changed))
+    sys.exit(3)
+in_tree = len(st)
+while st:
+    x = st.pop()
+    if x in inv:
+        continue
+    inv.add(x)
+    st.extend(rdeps.get(x, ()))
+sys.stderr.write('PBLD-GEN-INVALIDATE: changed=%d in-tree-changed=%d reverse-closure=%d of %d\n'
+                 % (len(changed), in_tree, len(inv), len(allv)))
+for m in sorted(inv):
+    print(m)
+PYEOF
+    genrc=$?
+    [ "$genrc" -eq 0 ] || { echo "PBLD-GEN-PY-FAIL: 失效面 python rc=$genrc —— fail-loud"; exit 2; }
+    NINV=$(wc -l < "$WORK/invalidate.txt")
+    echo "PBLD-GEN: base=$BASE invalidate_set=$NINV"
+    while IFS= read -r m; do
+      [ -n "$m" ] || continue
+      for ext in vo vos vok glob; do rm -f "${m}.${ext}" 2>/dev/null || true; done
+    done < "$WORK/invalidate.txt"
+  else
+    echo "PBLD-GEN: git diff 失败（base 非祖先/浅历史缺对象）——回退 mtime 指纹模式（fail-loud 留痕）"
+    BASE=""
+  fi
+else
+  if [ -n "$BASE" ]; then
+    echo "PBLD-GEN: git fetch base 失败（网络窗）——回退 mtime 指纹模式（fail-loud 留痕）"
+    BASE=""
+  else
+    echo "PBLD-GEN: no base（mtime 指纹模式——同机推送语义）"
+  fi
+fi
+
+# ③ Kahn 分层：层=入度零批次的逐波剥离（层内并行安全）
+"$PY" - "$WORK/allv.txt" "$WORK/deps.txt" > "$WORK/layers.txt" <<'PYEOF'
+import sys
 from collections import defaultdict, deque
-import os
-allv = [l.strip() for l in open('/tmp/_pbld_allv.txt') if l.strip()]
+allv_f, deps_f = sys.argv[1], sys.argv[2]
+allv = [l.strip() for l in open(allv_f, encoding='utf-8', errors='replace') if l.strip()]
 allset = set(allv)
 deps = defaultdict(set)
-for line in open('/tmp/_pbld_deps.txt'):
+for line in open(deps_f, encoding='utf-8', errors='replace'):
     if ':' not in line:
         continue
     left, right = line.split(':', 1)
@@ -53,10 +152,10 @@ for line in open('/tmp/_pbld_deps.txt'):
             d = t.replace('\\', '/').split('/')[-1][:-3] + '.v'
             if d != src and d in allset:
                 deps[src].add(d)
-indeg = {f: len(deps[f] & allset) for f in allv}
+indeg = {f: len(deps[f]) for f in allv}
 rdeps = defaultdict(list)
 for f, ds in deps.items():
-    for d in ds & allset:
+    for d in ds:
         rdeps[d].append(f)
 q = deque(sorted(f for f in allv if indeg[f] == 0))
 placed = set()
@@ -74,51 +173,68 @@ while q:
                 q.append(c)
 rest = sorted(allset - placed)
 if rest:
-    print("WARN-DEP-CYCLE %d" % len(rest), __import__('sys').stderr)
+    sys.stderr.write("PBLD-WARN-DEPCYCLE: %d 件环余量按名序追加尾层\n" % len(rest))
     layers.append(rest)
 for layer in layers:
     print('\x1f'.join(layer))
 PYEOF
 
-# ③ 逐层并行编译（缺失/陈旧才编——指纹 SKIP 语义保持）
+# ③a fail-loud 断言一：分层零行（python 崩溃/空输入——run#267 假绿教训，禁静默 PASS）
+[ -s "$WORK/layers.txt" ] || { echo "PBLD-NO-LAYERS: 分层输出 0 字节（python 分层崩或空输入）——fail-loud"; exit 2; }
+# ③b fail-loud 断言二：分层总数 == 源清单总数
+NTOT=$(tr '\037' '\n' < "$WORK/layers.txt" | grep -c '\.v$' || true)
+[ "${NTOT:-0}" -eq "$NALL" ] || { echo "PBLD-TOTAL-MISMATCH: layers_total=$NTOT sources=$NALL —— fail-loud"; exit 2; }
+
+# ④ 逐层并行编译（缺失/在失效集才编；无 base 时按 mtime 指纹回退）
 : > /tmp/_pbld_fail.txt
-nbuilt=0; nskip=0; layer_i=0
+nbuilt=0; nskip=0; nfail=0; layer_i=0
 while IFS= read -r layer; do
   [ -n "$layer" ] || continue
   layer_i=$((layer_i+1))
   todo=""
   for f in $(printf '%s' "$layer" | tr '\037' ' '); do
-    v="${f%.v}.vo"
-    if [ -f "$v" ] && [ "$v" -nt "$f" ]; then nskip=$((nskip+1)); continue; fi
+    m="${f%.v}"
+    if [ -f "${m}.vo" ]; then
+      if [ -n "$BASE" ]; then
+        # 代差失效模式：.vo 在盘且不在失效集 → SKIP（源字节与 base 代一致·层级 induction 保持）
+        if ! grep -qxF "$m" "$WORK/invalidate.txt" 2>/dev/null; then nskip=$((nskip+1)); continue; fi
+      else
+        # mtime 回退模式（v1 语义）
+        if [ "${m}.vo" -nt "$f" ]; then nskip=$((nskip+1)); continue; fi
+      fi
+    fi
     todo="$todo $f"
   done
   [ -n "$todo" ] || continue
   echo "$todo" | tr ' ' '\n' | grep -v '^$' | \
     xargs -P "$JOBS" -I{} bash -c '
-      f="{}"
-      log="/tmp/_pbld_$(basename "$f" .v).log"
+      f="{}"; v="${f%.v}.vo"
+      log="/tmp/_pbld_${f//\//_}.log"
       if "'"$COQC_BIN"'" -native-compiler no -q -Q . "" "$f" > "$log" 2>&1; then
         echo "OK $f"
       else
-        echo "FAIL $f"
-        echo "$f" >> /tmp/_pbld_fail.txt
+        echo "FAIL $f" | tee -a /tmp/_pbld_fail.txt
       fi' | while read -r st f; do echo "  [L$layer_i] $st $f"; done
-done
-# ④ 完备性断言（20261019 缺口教义：产出 vo 数 vs 源数·差即 fail-loud 列缺件）
-MISS=0
-: > /tmp/_pbld_missing.txt
-while IFS= read -r f; do
-  [ -f "${f%.v}.vo" ] || { echo "${f%.v}" >> /tmp/_pbld_missing.txt; MISS=$((MISS+1)); }
-done < /tmp/_pbld_allv.txt
-nf=$(grep -c . /tmp/_pbld_fail.txt 2>/dev/null || true)
-echo "parallel_build: layers=$layer_i total=$NALL skip_or_fresh=$nskip red_files=${nf:-0} missing_vo=$MISS"
+done < "$WORK/layers.txt"
+# 计数直读（E-STAGING-R84-GATECHAIN 教义：管道计数短路坑规避——独立统计）
+nf=$(grep -c '^FAIL' /tmp/_pbld_fail.txt 2>/dev/null || true)
+[ "${nf:-0}" -eq 0 ] || nfail=$nf
+echo "parallel_build: layers=$layer_i total=$NALL compiled_or_invalidated=$((NTOT-nskip)) skip=$nskip fail=${nfail:-0}"
 
-if [ "${nf:-0}" -eq 0 ] && [ "$MISS" -eq 0 ]; then
+# ④a fail-loud 断言三：order.txt 注册面覆盖（缺源/缺 .vo 即红——禁漏件门）
+covfail=0
+while IFS= read -r line; do
+  f=$(printf '%s' "$line" | sed 's/#.*//' | tr -d '\r' | tr -d ' ')
+  case "$f" in *.v) ;; *) continue ;; esac
+  if [ ! -f "$f" ]; then echo "PBLD-COV-MISSING-SRC: 注册面 $f 源缺席"; covfail=1; continue; fi
+  if [ ! -f "${f%.v}.vo" ]; then echo "PBLD-COV-NO-VO: 注册面 $f 编译产物缺席"; covfail=1; fi
+done < order.txt
+[ "$covfail" -eq 0 ] || { echo "PBLD-COVERAGE-FAIL: 注册面覆盖断言红（清单见上）——fail-loud"; exit 1; }
+
+if [ "${nfail:-0}" -eq 0 ]; then
   echo "PARALLEL_BUILD_PASS"
   exit 0
 fi
 echo "PARALLEL_BUILD_FAIL — red files:"
-cat /tmp/_pbld_fail.txt 2>/dev/null
-echo "missing .vo (count=$MISS):"
-head -40 /tmp/_pbld_missing.txt
+cat /tmp/_pbld_fail.txt
 exit 1
