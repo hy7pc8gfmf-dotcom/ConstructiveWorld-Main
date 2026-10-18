@@ -82,7 +82,7 @@ PYEOF
 
 # ③ 逐层并行编译（缺失/陈旧才编——指纹 SKIP 语义保持）
 : > /tmp/_pbld_fail.txt
-nbuilt=0; nskip=0; nfail=0; layer_i=0
+nbuilt=0; nskip=0; layer_i=0
 while IFS= read -r layer; do
   [ -n "$layer" ] || continue
   layer_i=$((layer_i+1))
@@ -95,24 +95,30 @@ while IFS= read -r layer; do
   [ -n "$todo" ] || continue
   echo "$todo" | tr ' ' '\n' | grep -v '^$' | \
     xargs -P "$JOBS" -I{} bash -c '
-      f="{}"; v="${f%.v}.vo"
-      log="/tmp/_pbld_${f//\//_}.log"
+      f="{}"
+      log="/tmp/_pbld_$(basename "$f" .v).log"
       if "'"$COQC_BIN"'" -native-compiler no -q -Q . "" "$f" > "$log" 2>&1; then
         echo "OK $f"
       else
-        echo "FAIL $f" | tee -a /tmp/_pbld_fail.txt
+        echo "FAIL $f"
+        echo "$f" >> /tmp/_pbld_fail.txt
       fi' | while read -r st f; do echo "  [L$layer_i] $st $f"; done
 done
-# 计数直读（E-STAGING-R84-GATECHAIN 教义：管道计数短路坑规避——独立统计）
-nb=$(ls /tmp/_pbld_*.log 2>/dev/null | wc -l)
-nf=$(grep -c '^FAIL' /tmp/_pbld_fail.txt 2>/dev/null || true)
-[ "${nf:-0}" -eq 0 ] || nfail=$nf
-echo "parallel_build: layers=$layer_i total=$NALL compiled_logs=$nb skip_or_fresh≈$nskip fail=${nfail:-0}"
+# ④ 完备性断言（20261019 缺口教义：产出 vo 数 vs 源数·差即 fail-loud 列缺件）
+MISS=0
+: > /tmp/_pbld_missing.txt
+while IFS= read -r f; do
+  [ -f "${f%.v}.vo" ] || { echo "${f%.v}" >> /tmp/_pbld_missing.txt; MISS=$((MISS+1)); }
+done < /tmp/_pbld_allv.txt
+nf=$(grep -c . /tmp/_pbld_fail.txt 2>/dev/null || true)
+echo "parallel_build: layers=$layer_i total=$NALL skip_or_fresh=$nskip red_files=${nf:-0} missing_vo=$MISS"
 
-if [ "${nfail:-0}" -eq 0 ]; then
+if [ "${nf:-0}" -eq 0 ] && [ "$MISS" -eq 0 ]; then
   echo "PARALLEL_BUILD_PASS"
   exit 0
 fi
 echo "PARALLEL_BUILD_FAIL — red files:"
-cat /tmp/_pbld_fail.txt
+cat /tmp/_pbld_fail.txt 2>/dev/null
+echo "missing .vo (count=$MISS):"
+head -40 /tmp/_pbld_missing.txt
 exit 1

@@ -97,10 +97,10 @@ jobs:
           # 治本（E-STAGING-P9）：runner 侧 _work 检出目录持久非易失，
           # 旧版纯 cp 只增不改，陈旧 .vo 跨轮幸存 → coqchk digest 撕裂单件红。
           # 改为镜像删除语义：先清空再播种，保证 _work vo 树 = 本地信任缓存的真镜像。
-          rm -f ConstructiveWorld_vo/*.vo 2>/dev/null || true
+          rm -f ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/*.vos ConstructiveWorld_vo/*.vok 2>/dev/null || true  # 20261019 扩清 .vos/.vok 残留（叶子件 "searching for .vos" 撕裂根除）
           cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
           mkdir -p ConstructiveWorld_vo/Local
-          rm -f ConstructiveWorld_vo/Local/*.vo 2>/dev/null || true
+          rm -f ConstructiveWorld_vo/Local/*.vo ConstructiveWorld_vo/Local/*.vos ConstructiveWorld_vo/Local/*.vok 2>/dev/null || true
           cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
@@ -293,10 +293,10 @@ jobs:
         run: |
           # 镜像删除播种（同 Windows 步语义），源=mac 独立信任缓存目录；
           # 首轮目录空=全量冷编（自托管无时长墙），由构建后导出步自举后续轮 SKIP。
-          rm -f ConstructiveWorld_vo/*.vo 2>/dev/null || true
+          rm -f ConstructiveWorld_vo/*.vo ConstructiveWorld_vo/*.vos ConstructiveWorld_vo/*.vok 2>/dev/null || true  # 20261019 扩清 .vos/.vok 残留（叶子件 "searching for .vos" 撕裂根除）
           cp /Users/apple/vo_ci_cache_mac/*.vo ConstructiveWorld_vo/ 2>/dev/null || true
           mkdir -p ConstructiveWorld_vo/Local
-          rm -f ConstructiveWorld_vo/Local/*.vo 2>/dev/null || true
+          rm -f ConstructiveWorld_vo/Local/*.vo ConstructiveWorld_vo/Local/*.vos ConstructiveWorld_vo/Local/*.vok 2>/dev/null || true
           cp /Users/apple/vo_ci_cache_mac/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
