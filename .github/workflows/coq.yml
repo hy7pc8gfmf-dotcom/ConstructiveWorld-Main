@@ -120,26 +120,18 @@ jobs:
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          # 20261018 并行编译切换：scripts/parallel_build.sh 依赖分层+层内 xargs -P 并行 coqc
-          # 20261019 v2 修订：PBLD_AUTO_BASE=1 代差失效（最近绿 run→git diff 变面→反向闭包
-          # 删陈旧代 .vo 重编——跨机推送下变件陈旧 .vo 靠 mtime 判"新鲜"是撕裂源）＋
-          # 零层/总数/注册面覆盖三断言（run#267 layers=0 零编译假绿教训）＋Windows python
-          # 相对路径修复。温控 cpu_guard.ps1 包裹同前。
-          export PBLD_AUTO_BASE=1
-          # 20261019 set1557：去 -CoreN 钉核（v3 guard -CoreN=单核位掩码——3 并行道挤 1 核
-          # =并行反慢于串行；§R2 v2.0 处方=重载窗浮动亲和·热控由 LoadLimit 占空+TempLimit 承担）
-          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_build.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200
-          # 终审双保险：vo 树 build.sh 按 order 拓扑逐件走（全 SKIP+EXIT=0 预期·秒级）
-          bash ConstructiveWorld_vo/build.sh
+          # 温控协议已入库（仓库根 cpu_guard.ps1）：CPU 负载>LoadLimit(60%) 自动错峰冷却，绑核 CoreN 2 避免热集中。
+          # 20261019 用户令：并行 build 三连红（#267 假绿/#269 卡 S10/#270 卡 36min）——build 面回退本
+          # proven 串行版（#263 双机全绿·指纹跳过实测 1.6h）·并行 build 退实验田另勘（scripts/parallel_build.sh
+          # v2 留树：代差失效/三断言/lane 文件形俱在）；并行 coqchk（K=4）保留＝时长墙正解·与 build 解耦。
           # repair_tear 已摘除（2026-09-19 run#85 红 run 根因，fail-loud 存档）：镜像播种语义下
           # （上一步 rm+cp 即本地信任缓存真镜像），repair_tear 的 mtime 启发式对字母序 cp 落盘
           # 时差（G→U 跨分钟，远超 v2.2 的 5s 容差）误撕 → dep-missing 级联删除 → build 按检出
           # HEAD 源重编，与本地按 M 态工作树源编译的种子 .vo 撞 digest
           # （Inconsistent assumptions over PhysPredAblation）。播种即真镜像，无需自愈；
           # 真撕裂由 coqchk 步 fail-loud 暴露、按「本地先全绿」教义本地治愈后重推。
+          pwsh -File cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_build.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
 
       # S7/PA4+PB6：全树模块计数自动化——六维计数（全树 .v／Live_X 顶层／UpAbl 顶层／
       # attn 沙箱／order 行数／提交面数）三口径分列（注册面/侧树顶层/沙箱）；
@@ -340,21 +332,81 @@ jobs:
 
       - name: Bootstrap cold cache in coqdep dependency order (macOS cold cache only)
         shell: bash -e {0}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          # 20261018 并行编译切换：原内联串行 Kahn 预编（while-read 单线）退役——
-          # scripts/parallel_build.sh 同源 Kahn 分层+层内 xargs -P 并行 coqc（冷编 1.5-2h→~35-45min）。
-          # 20261019 v2 修订：PBLD_AUTO_BASE 代差失效＋三断言＋相对路径 python（同 Windows 步）。
-          # 指纹 SKIP 语义与「build.sh 终审」双保险口径不变；日志落 /tmp/_pbld_*.log。
+          # 仓库 vo 镜像 737 源中 46 枚在册外（order.txt 不列），且 order.txt 拓扑与真实
+          # coqdep 依赖序存在漂移。Windows 侧由本地信任缓存全量播种 .vo 掩盖一切
+          # （build 全 SKIP，序缺陷从不显影）；macOS 空缓存冷编时 build.sh 的访问序
+          # 先于依赖 .vo 产出，级联约 140 件 "Cannot find a physical path bound to
+          # logical path"（run#232 attempt1 / #233 attempt2 两轮实证）。
+          # 本步以 coqdep 真依赖序预编全部缺失/陈旧 .vo（Kahn 拓扑排序，环余量按
+          # 名序追加并告警），随后 build.sh 吃指纹 SKIP 走全绿，认证语义不变。
+          # 单件失败容忍（终审在 build.sh 与 coqchk）；逐件编译经 cpu_guard 包裹
+          # （温控协议同款）。预编日志落 /tmp，不污染 vo 树。
           cd ConstructiveWorld_vo
-          export COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
-          export CHK_ROCQDEP=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
-          # 20261019 用户温控修法令：编译可占 4-8 核·温控包裹不减——BLDJ_JOBS 钉授权带下沿 4
-          export BLDJ_JOBS=4
-          export PBLD_AUTO_BASE=1
-          bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
-            bash "$GITHUB_WORKSPACE/scripts/parallel_build.sh"
+          COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
+          ROCQ=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
+          find . -name '*.v' | sed 's|^\./||' | sort > /tmp/_cw_allv.txt
+          "$ROCQ" dep -Q . "" $(cat /tmp/_cw_allv.txt) > /tmp/_cw_deps.txt 2>/dev/null || true
+          if [ ! -s /tmp/_cw_deps.txt ]; then echo "WARN: coqdep produced no output — falling back to name order"; fi
+          python3 - <<'PYEOF'
+          from collections import defaultdict, deque
+          allv = [l.strip() for l in open('/tmp/_cw_allv.txt') if l.strip()]
+          allset = set(allv)
+          deps = defaultdict(set)
+          for line in open('/tmp/_cw_deps.txt'):
+              if ':' not in line:
+                  continue
+              left, right = line.split(':', 1)
+              vt = [t for t in left.split() if t.endswith('.vo')]
+              if not vt:
+                  continue
+              src = vt[0][:-3] + '.v'
+              if src.startswith('./'):
+                  src = src[2:]
+              if src not in allset:
+                  continue
+              for t in right.split():
+                  if t.endswith('.vo') and not t.startswith('/'):
+                      d = t[:-3] + '.v'
+                      if d.startswith('./'):
+                          d = d[2:]
+                      if d != src and d in allset:
+                          deps[src].add(d)
+          indeg = {f: len(deps[f]) for f in allv}
+          rdeps = defaultdict(list)
+          for f, ds in deps.items():
+              for d in ds:
+                  rdeps[d].append(f)
+          q = deque(sorted(f for f in allv if indeg[f] == 0))
+          order = []
+          while q:
+              f = q.popleft()
+              order.append(f)
+              for c in sorted(rdeps[f]):
+                  indeg[c] -= 1
+                  if indeg[c] == 0:
+                      q.append(c)
+          rest = sorted(set(allv) - set(order))
+          if rest:
+              print("WARN: dependency cycle among %d files, appended in name order, first few: %s" % (len(rest), rest[:8]))
+              order += rest
+          pos = {f: i for i, f in enumerate(order)}
+          viol = sum(1 for f in order for d in deps.get(f, ()) if pos[d] > pos[f])
+          print("coqdep topo: %d files, %d order violations" % (len(order), viol))
+          open('/tmp/_cw_order.txt', 'w').write('\n'.join(order) + '\n')
+          PYEOF
+          n=0; fails=0; skips=0
+          while IFS= read -r f; do
+            v="${f%.v}.vo"
+            if [ -f "$v" ] && [ "$v" -nt "$f" ]; then skips=$((skips+1)); continue; fi
+            if bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 1800 -- "$COQC" -native-compiler no -Q . "" "$f" > "/tmp/_cw_pre_${f//\//_}.log" 2>&1; then
+              n=$((n+1))
+            else
+              fails=$((fails+1))
+              echo "PRECOMPILE-FAILED: $f (log /tmp/_cw_pre_${f//\//_}.log)"
+            fi
+          done < /tmp/_cw_order.txt
+          echo "cold-cache bootstrap: $n precompiled, $skips skipped(fresh), $fails failed — build.sh is the final judge"
 
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: bash -e {0}
@@ -399,7 +451,8 @@ jobs:
           ulimit -s 65532 || true
           export COQCHK=/Users/apple/actions-runner/mac_rocq/bin/coqchk
           export CHK_ROCQDEP=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
-          export CHK_JOBS=3
+          # 20261019 用户温控修法令：并行 coqchk 双侧 K=4（授权带下沿·包裹不减）
+          export CHK_JOBS=4
           bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 14400 -- \
             bash scripts/parallel_chk.sh
 
