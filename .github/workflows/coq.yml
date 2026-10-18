@@ -172,11 +172,26 @@ jobs:
             exit 1
           fi
 
-      - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
+      # 20261018 并行认证切换：单遍全模块共享闭包（cw_chk.cmd→coqchk_all.sh）CPU 串行
+      # 3h04m 基线/4h23m 未竟实证；改 scripts/parallel_chk.sh 根分组均衡 K 路并行
+      # （历史判例守线：逐件 O(n²) 已否决——本版按依赖顶根闭包装箱，组内共享闭包、
+      # 组间重复仅基座；日志合并 _chk_all.log 对 gate2 零改动）。回退=单 commit revert。
+      - name: coqchk full-tree certification (parallel root-grouped, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
-          # 温控协议（仓库根 cpu_guard.ps1）同样包裹 coqchk：负载过高时错峰，不叠加高负载任务。
-          pwsh -File cpu_guard.ps1 -Command "cmd /c D:\actions-runner\cw_chk.cmd" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 7200 -CoreN 2
+          pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400 -CoreN 2
+
+      # 20261018 跨机 vo 信任缓存通道：绿后上传全树 .vo artifact，对侧
+      # vo_sync_watch（scripts/vo_sync_watch.ps1 常驻计划任务）自动下载合并本地缓存，
+      # 实现「一侧新增模块推送 CI、对侧自动本地化+认证」闭环。
+      - name: Upload vo trust cache (cross-machine sync)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vo-trust-cache-windows
+          path: |
+            ConstructiveWorld_vo/*.vo
+            ConstructiveWorld_vo/Local/*.vo
 
       # 闸② Axioms 段哨兵：块状态机解析（禁裸 grep——裸 -i error 假配 84 行／-i axiom
       # 假配 2213 行，E422/AX-MATRIX 实证；状态机段外假匹配结构性不可能）。
@@ -395,13 +410,27 @@ jobs:
             exit 1
           fi
 
-      - name: coqchk full-tree certification (shared-closure single pass, thermal-guarded)
+      # 20261018 并行认证切换（同 Windows 步；mac 侧 COQCHK=mac_rocq shim 协议承 cw_chk.sh）
+      - name: coqchk full-tree certification (parallel root-grouped, thermal-guarded)
         if: always()  # mac 观察档语义：gate5 CONTROL-ABSENT（对照组缺席）系预期登记项，不得 skip 认证步
         shell: bash -e {0}
         run: |
           ulimit -s 65532 || true
-          bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 7200 -- \
-            bash /Users/apple/actions-runner/cw_chk.sh
+          export COQCHK=/Users/apple/actions-runner/mac_rocq/bin/coqchk
+          export CHK_ROCQDEP=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
+          export CHK_JOBS=3
+          bash /Users/apple/Desktop/ConstructiveWorld/cpu_guard.sh -MaxWaitSec 14400 -- \
+            bash scripts/parallel_chk.sh
+
+      # 20261018 跨机 vo 信任缓存通道（mac 侧产物；Windows 侧 vo_sync_watch.ps1 自动消费）
+      - name: Upload vo trust cache (cross-machine sync, macOS)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vo-trust-cache-macos
+          path: |
+            ConstructiveWorld_vo/*.vo
+            ConstructiveWorld_vo/Local/*.vo
 
       - name: gate2 axioms sentinel (block-state-machine, fail-loud)
         if: always()

@@ -426,6 +426,12 @@ Definition lw5n_dlt (q : Q) : Q :=
 
 Definition lw5n_bnd (q : Q) : nat := Datatypes.S (pie_modulus (lw5n_dlt q)).
 
+(* 展开方程：find 单步（结构转换面；使用位以 rewrite 取件，免整段 simpl 归一化） *)
+Lemma lw5n_find_S : forall (q : Q) (n f : nat),
+  lw5n_find q n (Datatypes.S f) =
+  (if lw5n_sep_dec q n then n else lw5n_find q (Datatypes.S n) f)%nat.
+Proof. intros q n f. reflexivity. Qed.
+
 Definition lw5n_nsep (q : Q) : nat := lw5n_find q 0 (lw5n_bnd q).
 
 (* 搜索上界：find 不越 n + fuel *)
@@ -434,7 +440,7 @@ Lemma lw5n_find_ub : forall (q : Q) (fuel n : nat),
 Proof.
   intros q fuel. induction fuel as [|f IH]; intros n.
   - simpl. lia.
-  - simpl. destruct (lw5n_sep_dec q n).
+  - rewrite lw5n_find_S. destruct (lw5n_sep_dec q n).
     + lia.
     + specialize (IH (Datatypes.S n)). lia.
 Qed.
@@ -450,7 +456,7 @@ Proof.
   - assert (Heq : n = n0) by lia. subst n0. simpl.
     split; [exact Hhit|].
     apply leiblw_id_eq. apply Nat.leb_le. lia.
-  - simpl. destruct (lw5n_sep_dec q n) eqn:E.
+  - rewrite lw5n_find_S. destruct (lw5n_sep_dec q n) eqn:E.
     + split.
       * rewrite E. apply leiblw_id_intro.
       * apply leiblw_id_eq. apply Nat.leb_le. lia.
@@ -470,8 +476,8 @@ Proof.
   intros q fuel. induction fuel as [|f IH]; intros n m Hn1 Hlt.
   - simpl in Hlt. lia.
   - simpl. destruct (lw5n_sep_dec q n) eqn:E.
-    + simpl in Hlt. rewrite E in Hlt. cbn in Hlt. lia.
-    + simpl in Hlt. rewrite E in Hlt. cbn in Hlt.
+    + rewrite lw5n_find_S in Hlt. rewrite E in Hlt. cbn in Hlt. lia.
+    + rewrite lw5n_find_S in Hlt. rewrite E in Hlt. cbn in Hlt.
       destruct (Nat.eq_dec n m) as [Heq|Hne].
       * subst m. rewrite E. apply leiblw_id_intro.
       * apply (IH (Datatypes.S n) m); lia.
@@ -560,7 +566,7 @@ Definition lw5n_cell_lo (m : nat) : Q := (4 * pie_partial (2 * m + 2))%Q.
 
 From Stdlib Require Import Extraction.
 
-Eval vm_compute in (lw5n_lo 0, (lw5n_hi 0, lw5n_nsep (22 # 7)%Q)).
+Eval vm_compute in (lw5n_lo 0, lw5n_hi 0).
 Eval vm_compute in (lw5n_lo 3, (lw5n_hi 3, lw5n_nsep (19 # 6)%Q)).
 
 Separate Extraction lw5n_sep_dec lw5n_find lw5n_nsep lw5n_bnd lw5n_lo lw5n_hi.

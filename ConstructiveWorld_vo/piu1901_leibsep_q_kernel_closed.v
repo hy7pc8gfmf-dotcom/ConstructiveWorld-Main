@@ -293,6 +293,7 @@ Proof.
   assert (Hep2e3 : QleT' eps2 (1 # 3)%Q).
   { apply Qle_to_QleT'. apply (Qle_trans eps2 eps1 (1 # 3)); [exact Hep2le1 | exact Hep1e3]. }
   assert (HEp2 : QltT 0 eps2) by (apply Qlt_to_QltT; exact Hep2lt).
+  assert (Heps2id : piu1901_eps2 q eg el == eps2) by reflexivity.
   assert (Hep2q8 : Qlt 0 (eps2 * (1 # 8))%Q).
   { apply (Qmult_lt_0_compat eps2 (1 # 8));
       [exact Hep2lt | vm_compute; reflexivity]. }
@@ -331,7 +332,7 @@ Proof.
     exists (eps2 * (1 # 8))%Q.
     split; [exact Hc0T |].
     split.
-    + apply qeq_imp_qeqT. reflexivity.
+    + apply qeq_imp_qeqT. rewrite Heps2id. reflexivity.
     + split; [exact Hdist | exact Hwin].
   - (* 门一假支：岸定位链与 eps2 收缩，门二再分 *)
     assert (Hwin : QleT' (Qabs ((lw0m_xL N1 - q)%Q))
@@ -368,7 +369,7 @@ Proof.
       exists (eps2 * (1 # 8))%Q.
       split; [exact Hc0T |].
       split.
-      * apply qeq_imp_qeqT. reflexivity.
+      * apply qeq_imp_qeqT. rewrite Heps2id. reflexivity.
       * split; [exact Hdist | exact Hwin2].
     + (* 门二假支：caps 链上限合成后矛盾机消去 *)
       destruct (caps_scaled q eps2 N0g Nv2 HEp2 Hep2e3 HN0g2 HNv2 E2)
