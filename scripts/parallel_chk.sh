@@ -143,6 +143,7 @@ for gi, g in enumerate(groups):
         uni |= clmemo[m]
     sys.stderr.write('PCHK-PACK: group=%d listed=%d closure_union=%d argv_chars=%d\n'
                      % (gi + 1, len(g), len(uni), sum(len(m) + 1 for m in g)))
+sys.stdout.reconfigure(newline='\n')  # 20261019 CRLF 定谳：禁 Windows 文本模式把组行写成 \r\n（源侧根治）
 for g in groups:
     print('\x1f'.join(sorted(g)))
 PYEOF
@@ -164,10 +165,28 @@ if [ "${CHK_TREE_COPY:-0}" = "1" ]; then
     LANE_ARR+=("$WORK/vo_g$c")
   done
 fi
+# ③c 扫描疏引流（20261019 万相归一定谳：全部并发失败=coqchk 开「刚写完的 .vo」撞
+# Defender 排他扫描窗——build 后 23 fresh/copies 1700 fresh 两源同病·顺序单发恒过=窗已过）。
+# lane 发射前对全部待开文件做读开放直至洁净（Defender 按文件+版本缓存扫描结果·读尽即排空）。
+if [ "${CHK_TREE_COPY:-0}" = "1" ] && [ -n "${LANE_ARR[*]:-}" ]; then
+  for pass in 1 2 3 4; do
+    miss=0
+    for d in "${LANE_ARR[@]}"; do
+      while IFS= read -r f; do
+        head -c 16 "$f" >/dev/null 2>&1 || { miss=$((miss+1)); sleep 1; }
+      done < <(find "$d" -name '*.vo' 2>/dev/null)
+    done
+    echo "PCHK scan-drain pass=$pass pending=$miss"
+    [ "$miss" -eq 0 ] && break
+  done
+fi
 i=0
 while IFS= read -r grp; do
   [ -n "$grp" ] || continue
-  mods=$(printf '%s' "$grp" | tr '\037' ' ')
+  # 20261019 CRLF 定谳：groups.txt 行尾 \r 黏在末位件名上→coqchk Cannot find library(名\r)
+  # （Windows Python 文本模式写 \n→\r\n·mac POSIX 无此翻译故同版无恙·CI att1-3 三连红恒为各
+  #  lane 末位参即铁证）——此处连同 \037 一并翻译为空格，消费侧兜底。
+  mods=$(printf '%s' "$grp" | tr '\037\r' '  ')
   nm=$(printf '%s' "$mods" | wc -w | tr -d ' ')
   echo "PCHK group $((i+1)): $nm modules"
   if [ "${PCHK_PACK_ONLY:-0}" = "1" ]; then i=$((i+1)); continue; fi
@@ -185,6 +204,25 @@ done < "$WORK/groups.txt"
 NGRP=$i
 [ "$NGRP" -gt 0 ] || { echo "PCHK-NO-LANES: 零可用组——fail-loud"; exit 2; }
 if [ "${PCHK_PACK_ONLY:-0}" = "1" ]; then echo "PCHK_PACK_ONLY: $NGRP groups packed — dry exit 0"; exit 0; fi
+wait
+
+# ③d lane 单次重试（扫描窗残余/瞬态自愈——真伤恒红 fail-loud 不变）
+retry_done=0
+for j in $(seq 0 $((NGRP-1))); do
+  rc=$(cat "$WORK/g$j.rc" 2>/dev/null || echo 1)
+  if [ "$rc" -ne 0 ] && [ "$retry_done" -eq 0 ]; then
+    retry_done=1
+    echo "PCHK retry: group $((j+1)) rc=$rc — single retry after 60s settle"
+    sleep 60
+    ldir="${LANE_ARR[$j]:-}"
+    mods=$(sed -n "$((j+1))p" "$WORK/groups.txt" | tr '\037\r' '  ')
+    if [ -n "$ldir" ] && [ -d "$ldir" ]; then
+      ( export USER="lane$$-r$j" USERNAME="lane$$-r$j"; cd "$ldir" && "$K" -o -Q . "" $mods > "$WORK/g$j.log" 2>&1; echo $? > "$WORK/g$j.rc" ) &
+    else
+      ( export USER="lane$$-r$j" USERNAME="lane$$-r$j"; "$K" -o -Q . "" $mods > "$WORK/g$j.log" 2>&1; echo $? > "$WORK/g$j.rc" ) &
+    fi
+  fi
+done
 wait
 
 # ④ 日志按组序合并（gate2 兼容）+ fail-loud 终审
