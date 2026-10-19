@@ -42,7 +42,7 @@ case "$K" in
 esac
 ROCQDEP="${CHK_ROCQDEP:-$ROCQDEP}"
 
-WORK="_pchk_tmp"
+WORK="$PWD/_pchk_tmp_$$"   # 实例唯一＋绝对化（lane cd 进副本后相对 WORK 即失配——att 链实证）
 rm -rf "$WORK"; mkdir -p "$WORK"
 
 # ① 认证面清单（`_` 前缀探针/暂态 .vo 不入闭包——CI#46 教训）
@@ -150,6 +150,20 @@ PYEOF
 [ -s "$WORK/groups.txt" ] || { echo "PCHK-NO-GROUPS: 分组输出 0 字节（python 崩或空输入）——fail-loud"; exit 2; }
 
 # ③ K 路并行（组数=并行度）
+# ③a Windows 并发共载缺陷对策（20261019 att1-3 三连实证：同树 4 并发 coqchk 全灭——
+# mmap 共载竞态两型：CI 面 Cannot find library（文件在盘魔数正·单发复现 CLEAN）/本地面
+# intern 中静默 rc1；顺序单发/全组单发皆 CLEAN·mac POSIX 侧同版无恙）——CHK_TREE_COPY=1
+# 时每 lane 先复制独立 vo 副本再验（断共享·保并行度；副本目录 _pchk_tmp/vo_gN 下划线守卫域）。
+LANE_ARR=()
+if [ "${CHK_TREE_COPY:-0}" = "1" ]; then
+  echo "PCHK: materializing per-lane vo copies (Windows concurrent-mmap defect countermeasure)"
+  for c in $(seq 0 $((JOBS-1))); do
+    rm -rf "$WORK/vo_g$c"; mkdir -p "$WORK/vo_g$c"
+    cp ./*.vo "$WORK/vo_g$c"/ 2>/dev/null || true
+    if [ -d Local ]; then mkdir -p "$WORK/vo_g$c/Local"; cp Local/*.vo "$WORK/vo_g$c/Local"/ 2>/dev/null || true; fi
+    LANE_ARR+=("$WORK/vo_g$c")
+  done
+fi
 i=0
 while IFS= read -r grp; do
   [ -n "$grp" ] || continue
@@ -157,7 +171,15 @@ while IFS= read -r grp; do
   nm=$(printf '%s' "$mods" | wc -w | tr -d ' ')
   echo "PCHK group $((i+1)): $nm modules"
   if [ "${PCHK_PACK_ONLY:-0}" = "1" ]; then i=$((i+1)); continue; fi
-  ( "$K" -o -Q . "" $mods > "/tmp/_pchk_g$i.log" 2>&1; echo $? > "/tmp/_pchk_g$i.rc" ) &
+  ldir="${LANE_ARR[$i]:-}"
+  # 20261019 并发失效对策三件：错峰启动（45s/lane——通道建立窗错开）＋实例域用户隔离
+  # （USER/USERNAME 进 lane 环境——通道名可能含用户域）＋独立副本（CHK_TREE_COPY）。
+  # 实测组合：四 lane 共存全程推进（旧配置秒死窗不复现）。
+  if [ -n "$ldir" ] && [ -d "$ldir" ]; then
+    ( sleep $((i*45)); export USER="lane$$-$i" USERNAME="lane$$-$i"; cd "$ldir" && "$K" -o -Q . "" $mods > "$WORK/g$i.log" 2>&1; echo $? > "$WORK/g$i.rc" ) &
+  else
+    ( sleep $((i*45)); export USER="lane$$-$i" USERNAME="lane$$-$i"; "$K" -o -Q . "" $mods > "$WORK/g$i.log" 2>&1; echo $? > "$WORK/g$i.rc" ) &
+  fi
   i=$((i+1))
 done < "$WORK/groups.txt"
 NGRP=$i
@@ -169,9 +191,9 @@ wait
 : > _chk_all.log
 rc_total=0
 for j in $(seq 0 $((NGRP-1))); do
-  rc=$(cat "/tmp/_pchk_g$j.rc" 2>/dev/null || echo 1)
+  rc=$(cat "$WORK/g$j.rc" 2>/dev/null || echo 1)
   [ "$rc" -eq 0 ] || rc_total=1
-  cat "/tmp/_pchk_g$j.log" >> _chk_all.log 2>/dev/null || rc_total=1
+  cat "$WORK/g$j.log" >> _chk_all.log 2>/dev/null || rc_total=1
 done
 grep -q "Modules were successfully checked" _chk_all.log || rc_total=1
 tail -5 _chk_all.log
@@ -179,5 +201,5 @@ if [ "$rc_total" -eq 0 ]; then
   echo "COQCHK_ALL_PASS (parallel, $NGRP groups, $NMOD modules)"
   exit 0
 fi
-echo "COQCHK_FAIL (parallel; merged=_chk_all.log, per-group=/tmp/_pchk_g*.log)"
+echo "COQCHK_FAIL (parallel; merged=_chk_all.log, per-group=$WORK/g*.log)"
 exit 1

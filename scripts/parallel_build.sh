@@ -42,7 +42,7 @@ esac
 ROCQDEP="${CHK_ROCQDEP:-$ROCQDEP}"
 
 # 工作区：cwd 相对路径（R1——Windows python 可 open 的唯一定址形）
-WORK="_pbld_tmp"
+WORK="_pbld_tmp_$$"   # 实例唯一（同 parallel_chk 多写者互踩定谳）
 rm -rf "$WORK"; mkdir -p "$WORK"
 
 # ① 全源清单+依赖图（`_` 前缀暂态件排除）
@@ -188,18 +188,18 @@ NTOT=$(tr '\037' '\n' < "$WORK/layers.txt" | grep -c '\.v$' || true)
 # ④ 逐层并行编译（缺失/在失效集才编；无 base 时按 mtime 指纹回退）
 # lane 体落盘为脚本文件（20261019 mac 判例：多行单引号内联 bash -c 经 BSD xargs -I{}
 # 截断→"line 7: unexpected end of file" 整层零编；文件形双平台同源零引号 dance）
-: > /tmp/_pbld_fail.txt
+: > "$WORK/fail.txt"
 cat > "$WORK/lane.sh" <<'LANE'
 #!/bin/bash
 f="$1"
-log="/tmp/_pbld_$(printf '%s' "$f" | tr '/' '_').log"
+log="$WORK/lane_$(printf '%s' "$f" | tr '/' '_').log"
 if "$COQC_BIN_LANE" -native-compiler no -q -Q . "" "$f" > "$log" 2>&1; then
   echo "OK $f"
 else
-  echo "FAIL $f" >> /tmp/_pbld_fail.txt
+  echo "FAIL $f" >> "$WORK/fail.txt"
 fi
 LANE
-export COQC_BIN_LANE="$COQC_BIN"
+export COQC_BIN_LANE="$COQC_BIN" WORK
 chmod +x "$WORK/lane.sh" 2>/dev/null || true
 nbuilt=0; nskip=0; nfail=0; layer_i=0
 while IFS= read -r layer; do
@@ -224,7 +224,7 @@ while IFS= read -r layer; do
     xargs -P "$JOBS" -I{} "$WORK/lane.sh" {} | while read -r st f; do echo "  [L$layer_i] $st $f"; done
 done < "$WORK/layers.txt"
 # 计数直读（E-STAGING-R84-GATECHAIN 教义：管道计数短路坑规避——独立统计）
-nf=$(grep -c '^FAIL' /tmp/_pbld_fail.txt 2>/dev/null || true)
+nf=$(grep -c "^FAIL" "$WORK/fail.txt" 2>/dev/null || true)
 [ "${nf:-0}" -eq 0 ] || nfail=$nf
 echo "parallel_build: layers=$layer_i total=$NALL compiled_or_invalidated=$((NTOT-nskip)) skip=$nskip fail=${nfail:-0}"
 
