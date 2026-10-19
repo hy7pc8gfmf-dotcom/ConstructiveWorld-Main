@@ -188,6 +188,7 @@ fi
 echo "::endgroup::"
 echo "::group::PCHK 4/4 K-lane certification"
 i=0
+LANE_PIDS=()
 while IFS= read -r grp; do
   [ -n "$grp" ] || continue
   # 20261019 CRLF 定谳：groups.txt 行尾 \r 黏在末位件名上→coqchk Cannot find library(名\r)
@@ -206,6 +207,9 @@ while IFS= read -r grp; do
   else
     ( sleep $((i*45)); export USER="lane$$-$i" USERNAME="lane$$-$i"; "$K" -o -Q . "" $mods > "$WORK/g$i.log" 2>&1; echo $? > "$WORK/g$i.rc" ) &
   fi
+  # 20261019 死锁修：定向收 lane PID——裸 wait 会把监视器子壳（永循环）一并等死＝
+  # coqchk 步永久假死（桩件实测 t=338s 心跳不歇·wait 不归）。下同 ③d 重试段。
+  LANE_PIDS+=($!)
   i=$((i+1))
 done < "$WORK/groups.txt"
 echo "::endgroup::"
@@ -243,7 +247,7 @@ MON_T0=$(date +%s); MON_PREV=0
   done
 ) &
 MON_PID=$!
-wait
+wait "${LANE_PIDS[@]}"
 kill "$MON_PID" 2>/dev/null || true
 wait "$MON_PID" 2>/dev/null || true
 
@@ -264,7 +268,7 @@ for j in $(seq 0 $((NGRP-1))); do
     fi
   fi
 done
-wait
+wait "${LANE_PIDS[@]}"
 
 # ④ 日志按组序合并（gate2 兼容）+ fail-loud 终审
 : > _chk_all.log
