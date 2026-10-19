@@ -208,6 +208,11 @@ jobs:
           # 控制台实时日志流（各 lane checking 行数＋末模块＋rc 收割·lane 完结即时播报·宕机
           # 时刻精确到 30s）＋::group:: 四阶段折叠＋lane 失败 ::error:: 注记＋Step Summary 终表。
           # 心跳频率可调 PCHK_MON_SEC；合并日志 _chk_all.log 口径零污染（心跳只走控制台）。
+          # 20261020 双实例互踩定谳（39267194332 被并发取消后 bash 进程树漏杀→僵尸实例
+          # 与新轮并行互踩：僵尸 g3 22:58 被撞死·新轮 build 饿到未及自证被取消）——发射前
+          # 清场：杀残存 coqchk 与 parallel_chk 壳（concurrency 组保证同刻至多一轮合法在飞）。
+          taskkill //IM coqchk.exe //F 2>/dev/null || true
+          powershell -NoProfile -Command 'Get-CimInstance Win32_Process -Filter "Name=''bash.exe''" | Where-Object { $_.CommandLine -like "*parallel_chk*" -and $_.CommandLine -notlike "*Win32_Process*" } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }' || true
           pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400
 
       # 20261018 跨机 vo 信任缓存通道：绿后上传全树 .vo artifact，对侧
