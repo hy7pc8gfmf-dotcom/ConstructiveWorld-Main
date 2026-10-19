@@ -45,6 +45,7 @@ ROCQDEP="${CHK_ROCQDEP:-$ROCQDEP}"
 WORK="$PWD/_pchk_tmp_$$"   # 实例唯一＋绝对化（lane cd 进副本后相对 WORK 即失配——att 链实证）
 rm -rf "$WORK"; mkdir -p "$WORK"
 
+echo "::group::PCHK 1/4 module list + coverage assertion"
 # ① 认证面清单（`_` 前缀探针/暂态 .vo 不入闭包——CI#46 教训）
 : > "$WORK/mods.txt"
 for f in *.vo; do
@@ -70,6 +71,8 @@ while IFS= read -r line; do
 done < order.txt
 [ "$covfail" -eq 0 ] || { echo "PCHK-COVERAGE-FAIL: 注册面覆盖断言红——fail-loud"; exit 2; }
 
+echo "::endgroup::"
+echo "::group::PCHK 2/4 dependency graph + balanced packing"
 # ② 依赖图 → 均衡分组
 "$ROCQDEP" dep -Q . "" $(ls *.v 2>/dev/null | grep -v '^_') > "$WORK/deps.txt" 2>/dev/null || true
 [ -s "$WORK/deps.txt" ] || echo "PCHK-WARN-EMPTYDEP: rocq dep 零输出（闭包退化=每组仅列模块——fail-loud 留痕）"
@@ -150,6 +153,8 @@ PYEOF
 [ $? -eq 0 ] || { echo "PCHK-PACK-FAIL: 装箱断言红（见上方 stderr 诊断）——fail-loud"; exit 2; }
 [ -s "$WORK/groups.txt" ] || { echo "PCHK-NO-GROUPS: 分组输出 0 字节（python 崩或空输入）——fail-loud"; exit 2; }
 
+echo "::endgroup::"
+echo "::group::PCHK 3/4 per-lane vo copies + scan-drain"
 # ③ K 路并行（组数=并行度）
 # ③a Windows 并发共载缺陷对策（20261019 att1-3 三连实证：同树 4 并发 coqchk 全灭——
 # mmap 共载竞态两型：CI 面 Cannot find library（文件在盘魔数正·单发复现 CLEAN）/本地面
@@ -180,6 +185,8 @@ if [ "${CHK_TREE_COPY:-0}" = "1" ] && [ -n "${LANE_ARR[*]:-}" ]; then
     [ "$miss" -eq 0 ] && break
   done
 fi
+echo "::endgroup::"
+echo "::group::PCHK 4/4 K-lane certification"
 i=0
 while IFS= read -r grp; do
   [ -n "$grp" ] || continue
@@ -201,10 +208,44 @@ while IFS= read -r grp; do
   fi
   i=$((i+1))
 done < "$WORK/groups.txt"
+echo "::endgroup::"
 NGRP=$i
 [ "$NGRP" -gt 0 ] || { echo "PCHK-NO-LANES: 零可用组——fail-loud"; exit 2; }
 if [ "${PCHK_PACK_ONLY:-0}" = "1" ]; then echo "PCHK_PACK_ONLY: $NGRP groups packed — dry exit 0"; exit 0; fi
+
+# ③b 活性仪表盘（20261019 假死定谳反制·用户令「环节显式表达」）：lane 静默期每
+# PCHK_MON_SEC（默认30）s 向控制台打单行心跳——elapsed／各 lane checking 行数＋末模块／
+# rc 收割数；lane 完结即时播报里程碑。只写控制台，不进 lane 日志与合并日志（gate2
+# 口径零污染）。mac bash 3.2 兼容（纯 POSIX 形）。宕机/卡死时刻可由心跳断流精确到 30s。
+echo "[PCHK-MON] $NGRP lanes launched — heartbeat every ${PCHK_MON_SEC:-30}s (console only; lane logs = WORK/g*.log)"
+MON_T0=$(date +%s); MON_PREV=0
+(
+  while :; do
+    sleep "${PCHK_MON_SEC:-30}"
+    el=$(( $(date +%s) - MON_T0 ))
+    rcdone=0; line=""
+    for k in $(seq 0 $((NGRP-1))); do
+      if [ -f "$WORK/g$k.rc" ]; then
+        rcdone=$((rcdone+1))
+        line="$line g$k=DONE(rc=$(cat "$WORK/g$k.rc"))"
+      else
+        lc=$(grep -c 'checking' "$WORK/g$k.log" 2>/dev/null)
+        lc=${lc:-0}
+        lm=$(tail -n 1 "$WORK/g$k.log" 2>/dev/null | sed 's/.*checking cst://;s/^[[:space:]]*//' | cut -c1-42)
+        line="$line g$k:${lc}L:${lm}"
+      fi
+    done
+    echo "[PCHK-MON t=${el}s]${line} (done=${rcdone}/${NGRP})"
+    if [ "$rcdone" -gt "$MON_PREV" ]; then
+      echo "[PCHK-MON] milestone: ${rcdone}/${NGRP} lanes finished at t=${el}s"
+      MON_PREV=$rcdone
+    fi
+  done
+) &
+MON_PID=$!
 wait
+kill "$MON_PID" 2>/dev/null || true
+wait "$MON_PID" 2>/dev/null || true
 
 # ③d lane 单次重试（扫描窗残余/瞬态自愈——真伤恒红 fail-loud 不变）
 retry_done=0
@@ -230,11 +271,32 @@ wait
 rc_total=0
 for j in $(seq 0 $((NGRP-1))); do
   rc=$(cat "$WORK/g$j.rc" 2>/dev/null || echo 1)
-  [ "$rc" -eq 0 ] || rc_total=1
+  if [ "$rc" -eq 0 ]; then
+    rc_total=$rc_total
+  else
+    rc_total=1
+    # lane 失败直进 run 摘要注记（20261019 假死反制：失败面无需开日志即见）
+    echo "::error::PCHK lane g$j FAILED (rc=$rc) — last module: $(tail -n 1 "$WORK/g$j.log" 2>/dev/null | sed 's/.*checking cst://;s/^[[:space:]]*//' | cut -c1-60)"
+  fi
   cat "$WORK/g$j.log" >> _chk_all.log 2>/dev/null || rc_total=1
 done
 grep -q "Modules were successfully checked" _chk_all.log || rc_total=1
 tail -5 _chk_all.log
+# ④a Step Summary 终表（run 摘要页直读每 lane 状态——环节显式表达收口）
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -w "$GITHUB_STEP_SUMMARY" ]; then
+  {
+    echo "### coqchk certification (parallel K=$NGRP, $NMOD modules listed)"
+    echo ""
+    echo "| lane | status | checking lines |"
+    echo "|---|---|---|"
+    for j in $(seq 0 $((NGRP-1))); do
+      rc=$(cat "$WORK/g$j.rc" 2>/dev/null || echo 1)
+      lc=$(grep -c 'checking' "$WORK/g$j.log" 2>/dev/null); lc=${lc:-0}
+      if [ "$rc" -eq 0 ]; then st="PASS"; else st="FAIL(rc=$rc)"; fi
+      echo "| g$j | $st | $lc |"
+    done
+  } >> "$GITHUB_STEP_SUMMARY"
+fi
 if [ "$rc_total" -eq 0 ]; then
   echo "COQCHK_ALL_PASS (parallel, $NGRP groups, $NMOD modules)"
   exit 0

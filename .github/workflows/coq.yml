@@ -204,6 +204,10 @@ jobs:
           # 20261019 set1557：CHK_TREE_COPY=1——每 lane 独立 vo 副本（Windows 并发 coqchk mmap
           # 共载竞态对策：att1-3 三连实证同树 4 并发全灭/单发复现 CLEAN·副本断共享保并行度）
           export CHK_TREE_COPY=1
+          # 20261019 活性仪表盘（假死定谳反制·用户令「环节显式表达」）：脚本内置 30s 心跳直打
+          # 控制台实时日志流（各 lane checking 行数＋末模块＋rc 收割·lane 完结即时播报·宕机
+          # 时刻精确到 30s）＋::group:: 四阶段折叠＋lane 失败 ::error:: 注记＋Step Summary 终表。
+          # 心跳频率可调 PCHK_MON_SEC；合并日志 _chk_all.log 口径零污染（心跳只走控制台）。
           pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400
 
       # 20261018 跨机 vo 信任缓存通道：绿后上传全树 .vo artifact，对侧
