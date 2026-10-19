@@ -201,6 +201,9 @@ jobs:
           # 20261019 用户温控修法令：编译可占 4-8 核·温控包裹不减（LoadLimit 占空+TL98 照全）——
           # lane 数按授权带下沿 4 设计（mac 观察档同款）
           export CHK_JOBS=4
+          # 20261019 set1557：CHK_TREE_COPY=1——每 lane 独立 vo 副本（Windows 并发 coqchk mmap
+          # 共载竞态对策：att1-3 三连实证同树 4 并发全灭/单发复现 CLEAN·副本断共享保并行度）
+          export CHK_TREE_COPY=1
           pwsh -File cpu_guard.ps1 -Command "bash scripts/parallel_chk.sh" -LoadLimit 60 -CoolSec 5 -MaxWaitSec 14400
 
       # 20261018 跨机 vo 信任缓存通道：绿后上传全树 .vo artifact，对侧
