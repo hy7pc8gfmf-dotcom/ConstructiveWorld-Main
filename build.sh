@@ -5,7 +5,7 @@ C="C:\Rocq-Platform~9.1~2026.01\bin\coqc.exe"
 fail=0
 for f in $(grep -v '^-' _CoqProject | grep '\.v$'); do
   if [ ! -f "${f%.v}.vo" ]; then
-    "$C" -Q . "" "$f" > "_${f%.v}.build.log" 2>&1
+    "$C" -noglob -Q . "" "$f" > "_${f%.v}.build.log" 2>&1
     e=$?
     echo "$f EXIT=$e"
     [ $e -ne 0 ] && { fail=1; tail -4 "_${f%.v}.build.log"; }
