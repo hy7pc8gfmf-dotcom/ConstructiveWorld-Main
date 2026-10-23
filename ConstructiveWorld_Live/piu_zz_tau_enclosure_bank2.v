@@ -1,9 +1,10 @@
 (* piu_zz_tau_enclosure_bank2.v — piu_zz_tau_enclosure 模块分解第 2 段（共四段）。
    使命：zz_in_Pn 逐点判定表第 1025–1536 条（piu_zz_inPn_1024_513 … piu_zz_inPn_1024_1024），供 zz_Phi 字面值链
-   逐点消费；每条引理由 unfold 后单点计算或最小素因子试除见证自证。
-   依赖：piu_zz_tau_enclosurepiu_zz_tau_enclosure_bank1（前置链）、piu_zz_poincare_engine
+   逐点引用；每条引理由 unfold 后单点计算或最小素因子试除见证自证。
+   依赖：piu_zz_tau_enclosure_bank1（前置链）、piu_zz_poincare_engine
    （zz_in_Pn/zz_primeb）、piu_zz_padic_clearing、
    Stdlib QArith/ZArith/Arith/PArith/Lia/List。
+   对标：piu_zz_tau_enclosure 原单件（ 六 片 split, statements byte-equivalent).
    构造性：全部语句为 bool 等式，闭式自证，零假设、零公理。
    编译配方: coqc -native-compiler no -q -Q . "" piu_zz_tau_enclosure_bank2.v *)
 Require Export piu_zz_tau_enclosure_bank1.

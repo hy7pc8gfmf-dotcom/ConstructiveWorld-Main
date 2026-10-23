@@ -1,9 +1,10 @@
-(* piu_zz_tau_enclosure.v — 消费面：zz_Phi / zz_L / qpow 字面值链、
+(* piu_zz_tau_enclosure.v — 引用面：zz_Phi / zz_L / qpow 字面值链、
    带样点（piu_zz_band_*）与审计段（Print Assumptions + Extraction）。
-   使命：消费四段 zz_in_Pn 逐点表与 base 段字面值，闭合 τ 面数值链。
+   使命：引用四段 zz_in_Pn 逐点表与 base 段字面值，闭合 τ 面数值链。
    依赖：piu_zz_tau_enclosure_bank4（Require Export 链末前件，传递覆盖
    bank1..bank3 与 base）、piu_zz_poincare_engine、piu_zz_padic_clearing、
    Stdlib QArith/ZArith/Arith/PArith/Lia/List。
+   对标：piu_zz_tau_enclosure 原单件（ 六 片 split, statements byte-equivalent).
    构造性：本片语句零假设、零公理；三主定理出节全称化形位于 base 段。
    编译配方: coqc -native-compiler no -q -Q . "" piu_zz_tau_enclosure.v *)
 Require Export piu_zz_tau_enclosure_bank4.
