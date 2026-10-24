@@ -201,6 +201,9 @@ jobs:
           # 20261019 set1557：去 -CoreN 钉核（同 Build 步——多组并行禁单核钉死）
           # 20261019 用户温控修法令：编译可占 4-8 核·温控包裹不减（LoadLimit 占空+TL98 照全）——
           # lane 数按授权带下沿 4 设计（mac 观察档同款）
+          # 20261024 #290 PCHK-PACK-FAIL 根治：PY=${PYTHON:-python3} 在 runner bash 解析到
+          # WindowsApps 商店桩（python3.exe stub：静默无输出）——显式钉真实 python。
+          export PYTHON="C:\Program Files\Python313\python.exe"
           export CHK_JOBS=4
           # 20261019 set1557：CHK_TREE_COPY=1——每 lane 独立 vo 副本（Windows 并发 coqchk mmap
           # 共载竞态对策：att1-3 三连实证同树 4 并发全灭/单发复现 CLEAN·副本断共享保并行度）
