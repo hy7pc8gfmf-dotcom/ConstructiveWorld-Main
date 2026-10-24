@@ -821,4 +821,3 @@ piu_zz_tau_enclosure_bank1.v#R194-1c004a
 piu_zz_tau_enclosure_bank2.v#R194-286df0
 piu_zz_tau_enclosure_bank3.v#R194-3ae97b
 piu_zz_tau_enclosure_bank4.v#R194-a62e3a
-piu_zz_tau_enclosure.v#R194-0e797d
