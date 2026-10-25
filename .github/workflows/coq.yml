@@ -15,7 +15,10 @@ jobs:
   coq-build:
     name: Rocq 9.1 build + coqchk (self-hosted local trust cache, Windows)
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 480
+    # 20261025 tau 十七片落装：无壳 hb 实件 128 条内核复算实证 ~10min/枚（KB22 沙箱双跑
+    # 10h15m/2 道·主仓 R5 同款 4 组实测预测 10-12h）——480min 墙对首验 tau 闭包确定性不足，
+    # 提至 960（与落装同波捎带·KB6 地雷二合规·本注记即实测依据）。
+    timeout-minutes: 960
     steps:
       - uses: actions/checkout@v5
         with:

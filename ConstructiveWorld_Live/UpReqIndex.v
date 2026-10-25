@@ -5031,10 +5031,98 @@ Definition ng_PiuZzBridgeRateslot : NewGreenFace :=
 Definition ng_Piu1932UncondZz : NewGreenFace :=
   MkNewGreenFace "piu1932_uncond_zz.v" 127 7 20261016
   "route b assembly main piece unconditional power rate tight upper bound instantiation" "L127:m61baed".
-(* ng_PiuZzTauEnclosure -- piu_zz_tau_enclosure.v: τ 有理夹包；PNT 假设位 §D 两条 Section 参数化出节全称化；样点带 V1 up 全 false/lo 全 true 如实（N0 领地在样点带外）；PA=3 Closed（born-in-tree 编译实测）；ng_qed=76（grep-token·清洗稿实测） *)
+(* ng_PiuZzTauEnclosureBase -- piu_zz_tau_enclosure_base.v: τ 有理夹包十七片终形·基座片（定义与有理数辅助引理群＋§D 两条 Section 参数化出节全称化假设槽·链首）；PA=<应用前必填：new_About 实测检验>；ng_qed=85（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureBase : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_base.v" 1499 85 20261024
+  "tau enclosure base definitions and rational helper lemmas of the seventeen piece split" "L1499:m417fe3".
+(* ng_PiuZzTauEnclosureBank1 -- piu_zz_tau_enclosure_bank1.v: τ 夹包十七片终形·一号库片（§V 样点带第 1 段）；PA=<应用前必填：new_About 实测检验>；ng_qed=731（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureBank1 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_bank1.v" 5166 731 20261024
+  "tau enclosure proof bank one segment of the seventeen piece split" "L5166:m6021ea".
+(* ng_PiuZzTauEnclosureBank2 -- piu_zz_tau_enclosure_bank2.v: τ 夹包十七片终形·二号库片（§V 样点带第 2 段）；PA=<应用前必填：new_About 实测检验>；ng_qed=569（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureBank2 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_bank2.v" 4382 569 20261024
+  "tau enclosure proof bank two segment of the seventeen piece split" "L4382:m342d62".
+(* ng_PiuZzTauEnclosureBank3 -- piu_zz_tau_enclosure_bank3.v: τ 夹包十七片终形·三号库片（§V 样点带第 3 段）；PA=<应用前必填：new_About 实测检验>；ng_qed=512（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureBank3 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_bank3.v" 4108 512 20261024
+  "tau enclosure proof bank three segment of the seventeen piece split" "L4108:m806772".
+(* ng_PiuZzTauEnclosureBank4 -- piu_zz_tau_enclosure_bank4.v: τ 夹包十七片终形·四号库片（§V 样点带第 4 段）；PA=<应用前必填：new_About 实测检验>；ng_qed=957（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureBank4 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_bank4.v" 6266 957 20261024
+  "tau enclosure proof bank four segment of the seventeen piece split" "L6266:m6796d3".
+(* ng_PiuZzTauEnclosureHead -- piu_zz_tau_enclosure_head.v: τ 夹包十七片终形·头片（α 区 zz_Phi 256/512 字面值链）；PA=<应用前必填：new_About 实测检验>；ng_qed=3（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureHead : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_head.v" 808 3 20261024
+  "tau enclosure head literal chain of the seventeen piece split" "L808:me3b91d".
+(* ng_PiuZzTauHbWave1 -- piu_zz_tau_hb_wave1.v: Hb 升格波 1（512 段 Hb0-Hb15·16 条 piu_zz_hb_512_* 引理·语句证明体逐字保留）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave1 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave1.v" 382 16 20261024
+  "tau enclosure hb promotion wave one segment of the seventeen piece split" "L382:m2d4e30".
+(* ng_PiuZzTauHbWave2 -- piu_zz_tau_hb_wave2.v: Hb 升格波 2（512 段 Hb16-Hb31）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave2 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave2.v" 382 16 20261024
+  "tau enclosure hb promotion wave two segment of the seventeen piece split" "L382:m7845ad".
+(* ng_PiuZzTauHbWave3a -- piu_zz_tau_hb_wave3a.v: Hb 升格波 3 四季拆分之 a（1024 段 Hb0-Hb3）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave3a : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave3a.v" 106 4 20261024
+  "tau enclosure hb promotion wave three a quarter segment of the seventeen piece split" "L106:m220c8a".
+(* ng_PiuZzTauHbWave3b -- piu_zz_tau_hb_wave3b.v: Hb 升格波 3 四季拆分之 b（1024 段 Hb4-Hb7）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave3b : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave3b.v" 106 4 20261024
+  "tau enclosure hb promotion wave three b quarter segment of the seventeen piece split" "L106:m09d392".
+(* ng_PiuZzTauHbWave3c -- piu_zz_tau_hb_wave3c.v: Hb 升格波 3 四季拆分之 c（1024 段 Hb8-Hb11）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave3c : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave3c.v" 106 4 20261024
+  "tau enclosure hb promotion wave three c quarter segment of the seventeen piece split" "L106:m8741b5".
+(* ng_PiuZzTauHbWave3d -- piu_zz_tau_hb_wave3d.v: Hb 升格波 3 四季拆分之 d（1024 段 Hb12-Hb15）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave3d : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave3d.v" 106 4 20261024
+  "tau enclosure hb promotion wave three d quarter segment of the seventeen piece split" "L106:mc589e0".
+(* ng_PiuZzTauHbWave4a -- piu_zz_tau_hb_wave4a.v: Hb 升格波 4 四季拆分之 a（1024 段 Hb16-Hb19）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave4a : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave4a.v" 106 4 20261025
+  "tau enclosure hb promotion wave four a quarter segment of the seventeen piece split" "L106:m1a4b45".
+(* ng_PiuZzTauHbWave4b -- piu_zz_tau_hb_wave4b.v: Hb 升格波 4 四季拆分之 b（1024 段 Hb20-Hb23）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave4b : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave4b.v" 106 4 20261025
+  "tau enclosure hb promotion wave four b quarter segment of the seventeen piece split" "L106:m540324".
+(* ng_PiuZzTauHbWave4c -- piu_zz_tau_hb_wave4c.v: Hb 升格波 4 四季拆分之 c（1024 段 Hb24-Hb27）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave4c : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave4c.v" 106 4 20261025
+  "tau enclosure hb promotion wave four c quarter segment of the seventeen piece split" "L106:me15bf5".
+(* ng_PiuZzTauHbWave4d -- piu_zz_tau_hb_wave4d.v: Hb 升格波 4 四季拆分之 d（1024 段 Hb28-Hb31）；PA=<应用前必填：new_About 实测检验>；ng_qed=4（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave4d : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave4d.v" 106 4 20261025
+  "tau enclosure hb promotion wave four d quarter segment of the seventeen piece split" "L106:md4a412".
+(* ng_PiuZzTauHbWave5 -- piu_zz_tau_hb_wave5.v: Hb 升格波 5（1024 段 Hb32-Hb47）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave5 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave5.v" 382 16 20261024
+  "tau enclosure hb promotion wave five segment of the seventeen piece split" "L382:me19590".
+(* ng_PiuZzTauHbWave6 -- piu_zz_tau_hb_wave6.v: Hb 升格波 6（1024 段 Hb48-Hb63）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave6 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave6.v" 382 16 20261024
+  "tau enclosure hb promotion wave six segment of the seventeen piece split" "L382:m5c6cda".
+(* ng_PiuZzTauHbWave7 -- piu_zz_tau_hb_wave7.v: Hb 升格波 7（1024 段 Hb64-Hb79）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave7 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave7.v" 382 16 20261024
+  "tau enclosure hb promotion wave seven segment of the seventeen piece split" "L382:m442ea0".
+(* ng_PiuZzTauHbWave8 -- piu_zz_tau_hb_wave8.v: Hb 升格波 8（1024 段 Hb80-Hb95）；PA=<应用前必填：new_About 实测检验>；ng_qed=16（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauHbWave8 : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_hb_wave8.v" 382 16 20261024
+  "tau enclosure hb promotion wave eight segment of the seventeen piece split" "L382:m1d0e8e".
+(* ng_PiuZzTauEnclosurePhi1024Slim -- piu_zz_tau_enclosure_phi1024_slim.v: τ 夹包十七片终形·φ1024 组合片（zzPhi_1024 巨证体·96 处 assert 换实例化 piu_zz_hb_1024_0..95·余逐字节等；无壳改形：Require 直挂 wave3a-d/wave4a-d 八行·伞名绝迹）；PA=<应用前必填：new_About 实测检验>；ng_qed=2（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosurePhi1024Slim : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_phi1024_slim.v" 428 2 20261025
+  "tau enclosure phi1024 slim composition with hb instantiation of the seventeen piece split" "L428:m821933".
+(* ng_PiuZzTauEnclosureLiterals -- piu_zz_tau_enclosure_literals.v: τ 夹包十七片终形·字面值片（γ 区 zzL×3＋qpow_u/l×6·Require head＋slim）；PA=<应用前必填：new_About 实测检验>；ng_qed=9（grep-token·落装稿实测·双口径相等） *)
+Definition ng_PiuZzTauEnclosureLiterals : NewGreenFace :=
+  MkNewGreenFace "piu_zz_tau_enclosure_literals.v" 74 9 20261024
+  "tau enclosure literals zone of the seventeen piece split" "L74:md38f2c".
+(* ng_PiuZzTauEnclosure -- piu_zz_tau_enclosure.v: τ 夹包十七片终形·链末棒（原名牌·承原册行定位）: δ+ε 区样点带与审计段（up/lo ok×6＋band×4＋Print Assumptions×3＋Extraction×1）；PNT 假设位 §D 两条居 base 片 Section 参数化出节全称化（非公理化）；样点带 V1 up 全 false/lo 全 true 如实（N0 领地在样点带外）；旧册行 PA=3 系 494c8738 旧巨件证词·锚件已不存在·禁沿用；PA=<应用前必填：new_About 实测检验>；ng_qed=10（grep-token·落装稿实测·双口径相等） *)
 Definition ng_PiuZzTauEnclosure : NewGreenFace :=
-  MkNewGreenFace "piu_zz_tau_enclosure.v" 1198 76 20261016
-  "tau enclosure rational sandwich carrier with face low and nonzero source lemma over rationals" "L1198:m3a9624".
+  MkNewGreenFace "piu_zz_tau_enclosure.v" 98 10 20261024
+  "tau enclosure rational sandwich carrier with face low and nonzero source lemma over rationals" "L98:mb09c02".
 (* ---------- V47 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
 Definition NewGreenListV47 : list NewGreenFace :=
  cons ng_PiuMuCriterion
@@ -5052,12 +5140,41 @@ Definition NewGreenListV47 : list NewGreenFace :=
  (cons ng_PiuZzBridgeReal
  (cons ng_PiuZzBridgeRateslot
  (cons ng_Piu1932UncondZz
+ (cons ng_PiuZzTauEnclosureBase
+ (cons ng_PiuZzTauEnclosureBank1
+ (cons ng_PiuZzTauEnclosureBank2
+ (cons ng_PiuZzTauEnclosureBank3
+ (cons ng_PiuZzTauEnclosureBank4
+ (cons ng_PiuZzTauEnclosureHead
+ (cons ng_PiuZzTauHbWave1
+ (cons ng_PiuZzTauHbWave2
+ (cons ng_PiuZzTauHbWave3a
+ (cons ng_PiuZzTauHbWave3b
+ (cons ng_PiuZzTauHbWave3c
+ (cons ng_PiuZzTauHbWave3d
+ (cons ng_PiuZzTauHbWave4a
+ (cons ng_PiuZzTauHbWave4b
+ (cons ng_PiuZzTauHbWave4c
+ (cons ng_PiuZzTauHbWave4d
+ (cons ng_PiuZzTauHbWave5
+ (cons ng_PiuZzTauHbWave6
+ (cons ng_PiuZzTauHbWave7
+ (cons ng_PiuZzTauHbWave8
+ (cons ng_PiuZzTauEnclosurePhi1024Slim
+ (cons ng_PiuZzTauEnclosureLiterals
  (cons ng_PiuZzTauEnclosure
- nil))))))))))))))).
-(* 续写统计：16 件 / 行数和 8757 / 闭合数和 437（ng_qed 口径·清洗稿实测字面值；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV47Pieces  : nat := 16.
-Definition NewGreenV47LineSum : nat := 8757.
-Definition NewGreenV47QedSum  : nat := 437.
+ nil))))))))))))))))))))))))))))))))))))).
+(* ---------- 十七片终形辅助名注记（KB13R 按 KB12/KB15 核勘代拟·KB20 无壳形制修订：wave4 拆四季·伞退役·slim 直挂八季） ---------- *)
+(* 本批 wave 行承载 128 条升格辅助引理名：piu_zz_hb_512_0..31（wave1/2 各 16）＋
+   piu_zz_hb_1024_0..95（wave3a-d＋wave4a-d 各 4＋wave5-8 各 16·无壳直挂四季）——系 consumer
+   原件 32+96=128 个匿名 assert (HbN : stmt) 块的机械升格，语句/证明体逐字保留（KB12 静态
+   复核 128/128·KB15 独立交叉审计两法一致·64 名落袋 vo 可见性实测检验全过）。名字面判据演进：
+   原 2,912 定义性名零丢失＋辅助名增量 128＝终形 3,040 名；语句多集 3,044 位恒等、原 42 位
+   零丢失（KB12 审计·KB15 复核）。落地后逐行 PA 占位以 new_About 实测检验填注（仅注释面）。 *)
+(* 续写统计：38 件 / 行数和 33528 / 闭合数和 3367（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV47Pieces  : nat := 38.
+Definition NewGreenV47LineSum : nat := 33528.
+Definition NewGreenV47QedSum  : nat := 3367.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV47Pieces_matches : NewGreenV47Pieces = cnt_ng NewGreenListV47.
