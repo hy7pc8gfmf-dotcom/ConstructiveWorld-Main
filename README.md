@@ -7,24 +7,25 @@
 
 ## 1. 库概述
 
-- **规模**：662 个在册模块（注册序 `order.txt`，662 行）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
+- **规模**：841 个在册模块（注册序 `order.txt`，841 行）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
 - **纯构造性**：全库不使用 `Axiom`/`Admitted`/经典逻辑；内核级 `coqchk -o` 复核口径为 `Axioms: <none>`。
 - **Set 层 `sigT` 显式见证**：存在型结论一律给出可计算见证（有理数端点、近似根等），不停留于命题层。
 - **可提取**：以 `Separate Extraction` 生成目标语言代码并机械检查 `Obj.magic` 计数为零（计数非零即示 Prop 层内容泄入提取面）。
 - **「率即算法」范式**：可执行件（`Defined` 计算器）与其正确性证书（`Qed` 证明）同体共存——定理与程序是同一件东西的两面。
 - **双支柱现状**：第一支柱为 π 的构造性强无理闭合（主件 `LW0PiIrrational.v`）；第二支柱为五常数族——√2、√3、e、ln 2 的构造性无理性分离件已批量在册（#R164 起，`u5c_*`／`abl_ln2_*` 件族），ζ(2) 无理性方向的 Beukers 法机械件族（整除/衰减/计数）已在册·闭式定理装配进行中（`abl_z2_*` 件族·#R167）。其通用逃逸窗判据引擎已提交上游标准库 rocq-prover/stdlib（Issue #312／PR #313，新增 `ConstructiveCauchyRealsSep.v`），现处维护者评审阶段。
+- **tau 封闭链支柱（#R194 战役）**：τ 的上下界封闭链（`piu_zz_tau_enclosure` 件族）已按无壳 18 片终形落装（`8df6c9f`）：zzPhi_256／512／1024 上下界封闭，原巨件 128 个匿名断言块升格为独立引理 `piu_zz_hb_512_0..31`／`piu_zz_hb_1024_0..95`，内核级 `coqchk` 4 组并行全树复核 ALL_PASS 且 `Axioms: <none>`（本地双线实证；工程志见 §5）。
 
 ## 2. 版本与认证记录
 
 | 项 | 值 |
 |---|---|
-| 库版本 | `bb7d52e1`（`main` 分支） |
-| CI 认证 | run #208（head `bb7d52e1`，全树编译＋`coqchk` 全树内核复核通过） |
-| 公理审计 | `coqchk -o` 全库复核，`Axioms: <none>` |
-| 注册序 | `order.txt` 662 行；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
+| 库版本 | `8df6c9f`（`main` 分支，2026-10-26） |
+| CI 认证 | run 40224150700（head `8df6c9f`）：**认证中（in flight）**——本地双线 `coqchk` 已 ALL_PASS，判定预计当日；上一轮全绿 run #291（head `8e93893`，2026-10-24，全树编译＋`coqchk` 全树内核复核通过，系此前一段未竟连红——均系基建/runner 域而非模块域——之后的首次全树认证） |
+| 公理审计 | `coqchk -o` 全库复核，`Axioms: <none>`（CI 侧由 gate2 块状态机哨兵解析判定） |
+| 注册序 | `order.txt` 841 行；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
 | 许可 | Apache-2.0（见 `LICENSE`） |
 
-持续集成（`.github/workflows/coq.yml`）在每次推送时执行：gate1 毒 token 守卫 → gate4 注释哨兵 → gate3 跨树 diff → 全树编译 → gate5 vo 二进制检疫 → `coqchk` 全树内核复核 → gate2 公理哨兵（解析 `coqchk` 日志判定 `Axioms: <none>`）。哨兵脚本位于 `scripts/gates/`。
+持续集成（`.github/workflows/coq.yml`）在每次推送时执行（Windows 认证 job；另有 macOS 观察档 job，continue-on-error 不染认证结论）：gate1 毒 token 守卫 → gate4 注释哨兵 → gate3 跨树 diff → 跨机 vo 信任缓存起步同步（fail-open）→ 全树编译（温控包裹·指纹跳过）→ gate5 vo 二进制检疫 → `coqchk` 全树内核复核（4 组根分组并行·树副本隔离装箱·时长墙 960 分钟）→ gate2 公理哨兵（块状态机解析 `coqchk` 日志判定 `Axioms: <none>`，代际钉 Chicken 9.1.0）。哨兵脚本位于 `scripts/gates/`，并行认证脚本为 `scripts/parallel_chk.sh`。
 
 ## 3. 环境前置
 
@@ -53,30 +54,42 @@ coqchk -silent -Q . "" <逻辑库名>.<件名>
 - 第 ① 步按 `order.txt` 行序逐件执行即满足依赖序；单件失败先行解决再续。
 - 四步覆盖注册面全部在册件，主件 `LW0PiIrrational.v` 已在注册序内，无须独立配方。
 
-## 5. 仓库布局
+## 5. tau 封闭链工程志（#R194 战役）
+
+第三支柱的封闭链主件原为单体巨件 `piu_zz_tau_enclosure.v`（24,636 行，β 区单引理证明体 2,317 行）。consumer 片含 96 段 assertion 巨带与提取物化区，单体编译在 64GB 主机上两轮实证于物化区 95% 处 OOM——单体编译是死路，拆分是唯一出路。战役要点：
+
+- **拆分工程学**：机械拆分以语句边界为上限；巨件内 128 个匿名 `assert (HbN : stmt)` 块升格为独立引理 `piu_zz_hb_512_0..31`／`piu_zz_hb_1024_0..95`（语句与证明体逐字保留、块间零依赖边）。
+- **无壳形制**：禁用 Export 伞壳，实件直连；tail 片沿用原名牌 `piu_zz_tau_enclosure` 原位承接旧导入路径（`Require Export` head＋slim＋literals 三路传递覆盖 3,040 名面），全树零下游消费面不受扰动。
+- **检查点化与并行农场**：各片独立进程检查点化——单片红只重编该片，无壳并行实测约 30min/片（单体约 30h）；CI 侧 `scripts/parallel_chk.sh` 按 4 组根分组装箱、树副本隔离并行认证。
+- **零漂移名面**：定义性语句名面 2,912 名零丢失零改名＋128 辅助名入册＝终形 3,040 名；语句多集 3,044 位恒等；Tier-2 导入面全量单入口 Check 零错；提取差分双基线字节等同。
+- **双线内核认证**：本地 `coqchk` 双线（沙箱双跑 10h15m＋主仓 4 组并行 10h23m）ALL_PASS、`Axioms: <none>` ×4、gate2 CLEAN。
+
+落装世系：六片拆分 `10e14f9` → 五片先行认证波 `8205e21`（consumer 片因 OOM 风险缓装）→ consumer 无壳 18 片终形落装 `8df6c9f`（`order.txt` tau 区 5→23 行）。技术细节见各 commit message 与 `.github/workflows/coq.yml` 步注。
+
+## 6. 仓库布局
 
 | 路径 | 内容 |
 |---|---|
-| `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（663 行，`-Q . ""`） |
+| `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（820 行，`-Q . ""`） |
 | `ConstructiveWorld_vo/` | 产物树：与源树同构，另含 `.vo`/`.glob`/`.vos`/`.vok` 编译产物 |
-| `order.txt` | 注册序（两树及 `scripts/` 各一份，内容一致），权威引用面 |
-| `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（663 行，`-Q . ""`） |
+| `order.txt` | 注册序（双树各一份，841 行，内容一致；`scripts/` 留有维护用历史副本 803 行，止于 R193 波未随 R194 同步），权威引用面 |
+| `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（820 行，`-Q . ""`） |
 | `scripts/` | 注册序维护脚本与 `scripts/gates/` 哨兵（毒 token 守卫、公理解析、跨树 diff、注释哨兵、vo 依赖检疫） |
 | `.github/workflows/coq.yml` | CI 全树驱动（编译＋`coqchk`＋哨兵） |
 | `docs/` | 设计与规划文档 |
 | `releases/` | 历史单文件合并版（220 版，见附录） |
 
-## 6. 许可与引用
+## 7. 许可与引用
 
 - **许可**：Apache-2.0。提取产物（`.ml`/`.mli`）与源件同许可。
 - **引用锚**：引用库内语句时，建议以「件名＋`order.txt` 行号＋批次指纹」定位，例如主件为 `LW0PiIrrational.v`，`order.txt` :476，`#R150-40656c`。批次指纹随注册批固化，可用于核对所引版本。
 
-## 7. 公开范围与例外
+## 8. 公开范围与例外
 
 引用面所在件全量公开。显式例外仅两类：
 
 1. **1 件下划线探针件 `_twc_probe.v`**：不在注册序内，维持禁止引用口径，不参与配套论文引用面。
-2. **在册外差集件**：树内存在而未列入 `order.txt` 的源件（现 45 件，不含前述探针件）；其去留随仓库公开前置批次的裁定结果在此登记。当前注册序（662 行）为唯一权威引用面，未在册件不构成库的引用承诺。
+2. **在册外差集件**：树内存在而未列入 `order.txt` 的源件（现 45 件，不含前述探针件）；其去留随仓库公开前置批次的裁定结果在此登记。当前注册序（841 行）为唯一权威引用面，未在册件不构成库的引用承诺。
 
 ## 附录：220 版历史说明（2026-09-07/08）
 
