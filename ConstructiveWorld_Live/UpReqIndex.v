@@ -5123,6 +5123,10 @@ Definition ng_PiuZzTauEnclosureLiterals : NewGreenFace :=
 Definition ng_PiuZzTauEnclosure : NewGreenFace :=
   MkNewGreenFace "piu_zz_tau_enclosure.v" 98 10 20261024
   "tau enclosure rational sandwich carrier with face low and nonzero source lemma over rationals" "L98:mb09c02".
+(* ng_Piu1930DomfaceNegative -- piu1930_domface_negative.v: 带域参量化单调失配负定理（带内既约点供给序随乘子线性·约化高度恒定·固定预算槽全族不可居）；零假设出口；PA=11 Closed（编译实测）；ng_qed=20（grep-token 实测） *)
+Definition ng_Piu1930DomfaceNegative : NewGreenFace :=
+  MkNewGreenFace "piu1930_domface_negative.v" 400 20 20261027
+  "band parameterized monotone supply mismatch negative theorem for reduced band points with fixed height" "L400:m40e413".
 (* ---------- V47 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
 Definition NewGreenListV47 : list NewGreenFace :=
  cons ng_PiuMuCriterion
@@ -5163,7 +5167,8 @@ Definition NewGreenListV47 : list NewGreenFace :=
  (cons ng_PiuZzTauEnclosurePhi1024Slim
  (cons ng_PiuZzTauEnclosureLiterals
  (cons ng_PiuZzTauEnclosure
- nil))))))))))))))))))))))))))))))))))))).
+ (cons ng_Piu1930DomfaceNegative
+ nil)))))))))))))))))))))))))))))))))))))).
 (* ---------- 十七片终形辅助名注记（KB13R 按 KB12/KB15 核勘代拟·KB20 无壳形制修订：wave4 拆四季·伞退役·slim 直挂八季） ---------- *)
 (* 本批 wave 行承载 128 条升格辅助引理名：piu_zz_hb_512_0..31（wave1/2 各 16）＋
    piu_zz_hb_1024_0..95（wave3a-d＋wave4a-d 各 4＋wave5-8 各 16·无壳直挂四季）——系 consumer
@@ -5171,10 +5176,10 @@ Definition NewGreenListV47 : list NewGreenFace :=
    复核 128/128·KB15 独立交叉审计两法一致·64 名落袋 vo 可见性实测检验全过）。名字面判据演进：
    原 2,912 定义性名零丢失＋辅助名增量 128＝终形 3,040 名；语句多集 3,044 位恒等、原 42 位
    零丢失（KB12 审计·KB15 复核）。落地后逐行 PA 占位以 new_About 实测检验填注（仅注释面）。 *)
-(* 续写统计：38 件 / 行数和 33528 / 闭合数和 3367（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV47Pieces  : nat := 38.
-Definition NewGreenV47LineSum : nat := 33528.
-Definition NewGreenV47QedSum  : nat := 3367.
+(* 续写统计：39 件 / 行数和 33928 / 闭合数和 3387（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV47Pieces  : nat := 39.
+Definition NewGreenV47LineSum : nat := 33928.
+Definition NewGreenV47QedSum  : nat := 3387.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV47Pieces_matches : NewGreenV47Pieces = cnt_ng NewGreenListV47.
