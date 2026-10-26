@@ -21,7 +21,7 @@ REPO="${REPO:-hy7pc8gfmf-dotcom/ConstructiveWorld-Main}"
 ARTIFACT="${SYNC_ARTIFACT:?SYNC_ARTIFACT required}"
 CACHE_DIR="${SYNC_CACHE_DIR:?SYNC_CACHE_DIR required}"
 STATE="${SYNC_STATE_FILE:-$CACHE_DIR/.vo_sync_last_run}"
-mkdir -p "$CACHE_DIR" 2>/dev/null || { echo "VO_SYNC_ONCE: cache dir 不可建——fail-open exit 0"; exit 0; }
+mkdir -p "$CACHE_DIR" 2>/dev/null || { echo "VO_SYNC_ONCE: cache dir not creatable - fail-open exit 0"; exit 0; }
 PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null 2>&1 || { PY=python; command -v "$PY" >/dev/null 2>&1 || PY=py; }
 command -v "$PY" >/dev/null 2>&1 || PY=""
 
@@ -39,7 +39,7 @@ except Exception: print(0)" 2>/dev/null || echo 0)
 LAST=0; [ -f "$STATE" ] && LAST=$(cat "$STATE" 2>/dev/null || echo 0)
 case "${RUN:-0}" in ''|*[!0-9]*) RUN=0 ;; esac
 if [ "${RUN:-0}" -le "${LAST:-0}" ]; then
-  echo "VO_SYNC_ONCE: 无更新绿 run（$RUN <= $LAST）——skip"
+  echo "VO_SYNC_ONCE: no fresh green run ($RUN <= $LAST) - skip"
   exit 0
 fi
 
@@ -52,14 +52,14 @@ except Exception:
     print(0)" 2>/dev/null || echo 0)
 case "${AID:-0}" in ''|*[!0-9]*) AID=0 ;; esac
 if [ "${AID:-0}" -eq 0 ]; then
-  echo "VO_SYNC_ONCE: run $RUN 无 $ARTIFACT（对侧未绿/未上传）——mark-seen（fail-open）"
+  echo "VO_SYNC_ONCE: run $RUN has no $ARTIFACT (peer not green or not uploaded) - mark-seen (fail-open)"
   echo "$RUN" > "$STATE" 2>/dev/null || true
   exit 0
 fi
 
 TMP=$(mktemp -d)
 if [ -z "$TOKEN" ]; then
-  echo "VO_SYNC_ONCE: 无 token 不可下载 artifact——fail-open（观察模式不落 state）"
+  echo "VO_SYNC_ONCE: no token, artifact download skipped - fail-open (observe mode, state not written)"
   rm -rf "$TMP"; exit 0
 fi
 if curl -sL -m 600 -H "Authorization: token $TOKEN" \
@@ -72,7 +72,7 @@ if curl -sL -m 600 -H "Authorization: token $TOKEN" \
   echo "VO_SYNC_ONCE: run $RUN synced $N .vo -> $CACHE_DIR"
   echo "$RUN" > "$STATE" 2>/dev/null || true
 else
-  echo "VO_SYNC_ONCE: 下载/解压失败——fail-open（下轮重试）"
+  echo "VO_SYNC_ONCE: download or extract failed - fail-open (retry next round)"
 fi
 rm -rf "$TMP"
 exit 0
