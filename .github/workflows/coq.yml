@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      macos_only:
+        description: 'Run macOS observation job only (skip Windows cert job)'
+        type: boolean
+        default: false
 
 concurrency:
   group: cw-main-ci
@@ -14,6 +19,10 @@ jobs:
   # ── Windows 认证 job（原文保留，认证语义不变）────────────────────────────
   coq-build:
     name: Rocq 9.1 build + coqchk (self-hosted local trust cache, Windows)
+    # 20261026 mac-side pilot lane: workflow_dispatch with macos_only=true
+    # skips the Windows cert job so mac-side revisions can be validated
+    # without occupying the Windows self-hosted runner. Push/PR unchanged.
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.macos_only != true }}
     runs-on: [self-hosted, Windows]
     # 20261025 tau 十七片落装：无壳 hb 实件 128 条内核复算实证 ~10min/枚（KB22 沙箱双跑
     # 10h15m/2 道·主仓 R5 同款 4 组实测预测 10-12h）——480min 墙对首验 tau 闭包确定性不足，
@@ -364,7 +373,12 @@ jobs:
           cd ConstructiveWorld_vo
           COQC=/Users/apple/actions-runner/mac_rocq/bin/coqc
           ROCQ=/Users/apple/Desktop/ConstructiveWorld/Live/toolchain/opam/live901/bin/rocq
-          find . -name '*.v' | sed 's|^\./||' | sort > /tmp/_cw_allv.txt
+          # 20261026 revision: enumerate only the order.txt registered face
+          # (was: find . over 887 sources incl. 46 off-register pieces that
+          # build.sh never compiles — off-register cold-compile was pure wall
+          # time and included stack-heavy extraction pieces). Skip and
+          # fail-open semantics unchanged.
+          cut -d'#' -f1 ../ConstructiveWorld_Live/order.txt | tr -d ' \r' | grep '\.v$' | sort > /tmp/_cw_allv.txt
           "$ROCQ" dep -Q . "" $(cat /tmp/_cw_allv.txt) > /tmp/_cw_deps.txt 2>/dev/null || true
           if [ ! -s /tmp/_cw_deps.txt ]; then echo "WARN: coqdep produced no output — falling back to name order"; fi
           python3 - <<'PYEOF'
