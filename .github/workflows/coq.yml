@@ -293,6 +293,11 @@ jobs:
     name: Rocq 9.1 build + coqchk (self-hosted macOS, observation)
     runs-on: [self-hosted, macOS]
     continue-on-error: true
+    # 20261027 user decree: suspended this window - Apple-side mac observation
+    # kept failing on Main (runner/env face, not content); the Windows
+    # certification face is unchanged and unaffected. Reinstate by deleting
+    # the if-line below once the mac side stabilizes.
+    if: false
     steps:
       - uses: actions/checkout@v5
         with:
