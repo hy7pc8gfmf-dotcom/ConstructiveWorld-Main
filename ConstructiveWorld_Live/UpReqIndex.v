@@ -5127,6 +5127,14 @@ Definition ng_PiuZzTauEnclosure : NewGreenFace :=
 Definition ng_Piu1930DomfaceNegative : NewGreenFace :=
   MkNewGreenFace "piu1930_domface_negative.v" 400 20 20261027
   "band parameterized monotone supply mismatch negative theorem for reduced band points with fixed height" "L400:m40e413".
+(* ng_PiuZzMuAssembly -- piu_zz_mu_assembly.v: 实层率面接口件（点距证书到率形 real_lt 的转换·判据数据 κ=35831808／τ=2·τ 次幂消去引理）；本件语句面不使用判据数据 σ（下游件钉面取 σ=12）；PA=6 Closed（编译实测）；ng_qed=7（grep-token 实测） *)
+Definition ng_PiuZzMuAssembly : NewGreenFace :=
+  MkNewGreenFace "piu_zz_mu_assembly.v" 194 7 20261027
+  "real layer rate form interface adapters for the pi irrationality measure certificate with criterion data pins and tau power cancellation" "L194:m12798c".
+(* ng_PiuZzECarrier -- piu_zz_e_carrier.v: E 侧线性形条件式 mu 证书链（六显式前提 Hp/Htri/Hcoef/Hesc/Hcage/Hexit 到率形 real_lt 终形·判据数据 σ=12／τ=2／κ=35831808）；PA=6 Closed（审计件编译实测）；ng_qed=33（grep-token 实测） *)
+Definition ng_PiuZzECarrier : NewGreenFace :=
+  MkNewGreenFace "piu_zz_e_carrier.v" 761 33 20261027
+  "conditional mu certificate chain over the e side linear form with six explicit premises closing the rate form real layer goal" "L761:mf22b5b".
 (* ---------- V47 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
 Definition NewGreenListV47 : list NewGreenFace :=
  cons ng_PiuMuCriterion
@@ -5168,7 +5176,9 @@ Definition NewGreenListV47 : list NewGreenFace :=
  (cons ng_PiuZzTauEnclosureLiterals
  (cons ng_PiuZzTauEnclosure
  (cons ng_Piu1930DomfaceNegative
- nil)))))))))))))))))))))))))))))))))))))).
+ (cons ng_PiuZzMuAssembly
+ (cons ng_PiuZzECarrier
+ nil)))))))))))))))))))))))))))))))))))))))).
 (* ---------- 十七片终形辅助名注记（KB13R 按 KB12/KB15 核勘代拟·KB20 无壳形制修订：wave4 拆四季·伞退役·slim 直挂八季） ---------- *)
 (* 本批 wave 行承载 128 条升格辅助引理名：piu_zz_hb_512_0..31（wave1/2 各 16）＋
    piu_zz_hb_1024_0..95（wave3a-d＋wave4a-d 各 4＋wave5-8 各 16·无壳直挂四季）——系 consumer
@@ -5176,10 +5186,10 @@ Definition NewGreenListV47 : list NewGreenFace :=
    复核 128/128·KB15 独立交叉审计两法一致·64 名落袋 vo 可见性实测检验全过）。名字面判据演进：
    原 2,912 定义性名零丢失＋辅助名增量 128＝终形 3,040 名；语句多集 3,044 位恒等、原 42 位
    零丢失（KB12 审计·KB15 复核）。落地后逐行 PA 占位以 new_About 实测检验填注（仅注释面）。 *)
-(* 续写统计：39 件 / 行数和 33928 / 闭合数和 3387（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV47Pieces  : nat := 39.
-Definition NewGreenV47LineSum : nat := 33928.
-Definition NewGreenV47QedSum  : nat := 3387.
+(* 续写统计：41 件 / 行数和 34883 / 闭合数和 3427（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20 ＋mu_assembly 与 e_carrier 两件追加 955/40；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV47Pieces  : nat := 41.
+Definition NewGreenV47LineSum : nat := 34883.
+Definition NewGreenV47QedSum  : nat := 3427.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV47Pieces_matches : NewGreenV47Pieces = cnt_ng NewGreenListV47.

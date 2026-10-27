@@ -840,3 +840,5 @@ piu_zz_tau_enclosure_phi1024_slim.v#R194-821933
 piu_zz_tau_enclosure_literals.v#R194-d38f2c
 piu_zz_tau_enclosure.v#R194-b09c02
 piu1930_domface_negative.v#R195-40e413
+piu_zz_mu_assembly.v#R196-12798c
+piu_zz_e_carrier.v#R197-f22b5b

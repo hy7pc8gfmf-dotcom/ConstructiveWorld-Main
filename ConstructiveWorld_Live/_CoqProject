@@ -819,3 +819,5 @@ piu_zz_bridge_rateslot.v
 piu1932_uncond_zz.v
 piu_zz_tau_enclosure.v
 piu1930_domface_negative.v
+piu_zz_mu_assembly.v
+piu_zz_e_carrier.v
