@@ -3,6 +3,8 @@
 [![Coq CI](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml/badge.svg?branch=main)](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23717747.svg)](https://doi.org/10.5281/zenodo.23717747)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
+> 📐 **构造世界结构志 / Architecture monograph**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) —— 八域全域地图 · 依赖分层拓扑（实测 9,571 边·最大深度 28） · 注册十波演进时间线 · 四支柱谱系 · 构造塔叙事（「构造一切可构造」：万物皆算法的类型论实现）。
+
 本仓库是论文《π 的构造性强无理：零公理判据与显式搜索上界》（*Constructive Strong Irrationality of π*；预印本 [figshare DOI 10.6084/m9.figshare.34134429](https://doi.org/10.6084/m9.figshare.34134429)）的**主张面工件仓**（π_geom 顶点强无理分离定理 `leibsep_pi_rational_unconditional` 及其全部认证引用件；冻结面 tag `v1.0-pi-separation`，Zenodo DOI [10.5281/zenodo.23717747](https://doi.org/10.5281/zenodo.23717747)），同时是 ConstructiveWorld 构造性数学库的主干：全库在 Set 层以 `sigT` 显式见证给出存在型结论，不引入任何公理，且整链可提取。
 
 ## 1. 库概述
