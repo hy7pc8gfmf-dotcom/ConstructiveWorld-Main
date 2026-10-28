@@ -365,7 +365,7 @@ graph BT
 
 1. **README 注册数滞后**：README §1/§2 称 `order.txt` 841 行，实测 **844 行**。差额 3 件为 `piu1930_domface_negative.v`（#R195）、`piu_zz_mu_assembly.v`（#R196）、`piu_zz_e_carrier.v`（#R197）——README 撰写后新增，README 未随之更新。
 2. **在册外差集件数漂移**：README §8 称 45 件（另 1 件探针 `_twc_probe.v`），实测树内未在册 `.v` 共 **49 件**（含探针）。README 登记口径「随公开前置批次裁定」，本档以 2026-10-28 实测为准。
-3. **任务书件名无对应**：摸底任务书所称「`piu_zz_ec_mu_cond` 六前提链」在树与注册序中**均无此件名**。实测 μ 证书链的实际件名为 `piu_mu_criterion.v`（判据）→ `piu_zz_mu_assembly.v`（速率形装配）→ `piu_zz_e_carrier.v`（E 侧载体与条件 μ 证书链·件头自述「from the explicit premise group to the rate-form real-layer certificate」）。本档按实勘件名记载，任务书名称疑为该链的内部代称。
+3. **命名口径注记**：既有内部登记文书曾以「`piu_zz_ec_mu_cond` 六前提链」指称该证书链；此名在树与注册序中**均无对应文件**。实测 μ 证书链的实际件名为 `piu_mu_criterion.v`（判据）→ `piu_zz_mu_assembly.v`（速率形装配）→ `piu_zz_e_carrier.v`（E 侧载体与条件 μ 证书链·件头自述「from the explicit premise group to the rate-form real-layer certificate」）。本档按实勘件名记载；该名指 `piu_zz_e_carrier.v` 内 Section EC 的前提面定理链，非独立文件。
 4. **双树漂移**：`ConstructiveWorld_vo/` 根比 `ConstructiveWorld_Live/` 根多 5 个 `.v`：`LW3Z2SqSqueeze.v`、`_b1328_probe_bridge.v`、`_probe1460a.v`、`_probe1460f.v`、`_probe1460q.v`。CI 有 gate3 跨树 diff 哨兵把守（README §2），本档如实登记当日差集。
 5. **Local 边口径**：`Local/LW0LeibSeparation.v` 被其他件以裸名 Require 时，本统计的文件面匹配（按根名）无法命中 `Local/` 路径键，该 1 件的被依赖边归入 Stdlib 桶；对总量影响不超过 1 条边，方向为低估。
 6. **散件簇口径**：§3.8 的散件三簇（热力学-KL/π 支撑/实数工具）为文件名关键词匹配的近似分类，非精确语义分类；族级（§4）统计为精确前缀匹配。
