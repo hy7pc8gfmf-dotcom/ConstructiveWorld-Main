@@ -131,6 +131,26 @@ jobs:
           cp /d/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo/Local/*.vo ConstructiveWorld_vo/Local/ 2>/dev/null || true
           echo "seeded (mirror-deleted stale) $(ls ConstructiveWorld_vo/*.vo 2>/dev/null | wc -l) .vo"
 
+
+      # 20261028 内存窗卫兵（软性·report-only·零阻断）：本机与多门巨炮共用一个内存池
+      # （commit 限额 ~128GB）。#301 实证：commit 水位 >89% 时 coqchk 被页出抖动拖至
+      # 15.7h（清洁基线 3-5h）。本步在重相位前轮询 commit free（>30GB 即过·至多 10 分
+      # 钟·不到也照常推进）——把内存水位显式化进 CI 日志·为 CHK_JOBS 调优留数据。
+      # CHK_JOBS 维持 4：并行度加速只在内存余量充裕时有效·内存紧时越多道越抖
+      # （#301 反例）·升档候内存窗常态化后另评。
+      - name: RAM guard (report commit headroom before heavy phase)
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        run: |
+          set +e
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            FREE=$(powershell -NoProfile -Command "[math]::Round((Get-CimInstance Win32_OperatingSystem).FreeVirtualMemory/1MB,1)")
+            echo "RAM guard round ${i}: commit free ${FREE} GB"
+            OK=$(powershell -NoProfile -Command "if ((Get-CimInstance Win32_OperatingSystem).FreeVirtualMemory/1MB -gt 30) { 'yes' } else { 'no' }")
+            if [ "$OK" = "yes" ]; then echo "RAM guard: headroom OK"; break; fi
+            sleep 60
+          done
+          exit 0
+
       - name: Build full tree (order topology, fingerprint skip, thermal-guarded)
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
