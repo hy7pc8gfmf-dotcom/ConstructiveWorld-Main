@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "ConstructiveWorld-Main: zero-axiom constructive mathematics library (frozen artifact v1.0-pi-separation)"
+version: v1.0-pi-separation
+doi: 10.5281/zenodo.23717747
+license: Apache-2.0
+repository-code: "https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main"
+authors:
+  - family-names: Wang
+    given-names: Baojun
+    orcid: "https://orcid.org/0009-0001-4240-9045"
+  - family-names: Zu
+    given-names: Guangzhao
+  - family-names: Xia
+    given-names: Wanlan
+  - family-names: Zeng
+    given-names: Boyuan
+  - family-names: Zhou
+    given-names: Zhinong
+  - family-names: Gao
+    given-names: Xuefeng
+keywords:
+  - rocq
+  - coq
+  - constructive-mathematics
+  - formalization-of-mathematics
+  - irrationality
