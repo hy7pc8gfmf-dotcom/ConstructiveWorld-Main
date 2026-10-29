@@ -3,13 +3,24 @@
 [![Coq CI](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml/badge.svg?branch=main)](https://github.com/hy7pc8gfmf-dotcom/ConstructiveWorld-Main/actions/workflows/coq.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23717747.svg)](https://doi.org/10.5281/zenodo.23717747)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
+## 作者与贡献者（Authors）
+
+| 作者 | ORCID |
+|---|---|
+| Baojun Wang | [0009-0001-4240-9045](https://orcid.org/0009-0001-4240-9045) |
+| Guangzhao Zu | [0009-0006-7811-6638](https://orcid.org/0009-0006-7811-6638) |
+| Wanlan Xia | [0009-0008-7359-044X](https://orcid.org/0009-0008-7359-044X) |
+| Baiyuan Zeng | [0009-0005-9811-5598](https://orcid.org/0009-0005-9811-5598) |
+| Zhinong Zhou | [0009-0001-3206-5824](https://orcid.org/0009-0001-3206-5824) |
+| Xuefeng Gao | [0009-0007-9904-1599](https://orcid.org/0009-0007-9904-1599) |
+
 > 📐 **构造世界结构志 / Architecture monograph**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) —— 八域全域地图 · 依赖分层拓扑（实测 9,571 边·最大深度 28） · 注册十波演进时间线 · 四支柱谱系 · 构造塔叙事（「构造一切可构造」：万物皆算法的类型论实现）。
 
 本仓库是论文《π 的构造性强无理：零公理判据与显式搜索上界》（*Constructive Strong Irrationality of π*；预印本 [figshare DOI 10.6084/m9.figshare.34134429](https://doi.org/10.6084/m9.figshare.34134429)）的**主张面工件仓**（π_geom 顶点强无理分离定理 `leibsep_pi_rational_unconditional` 及其全部认证引用件；冻结面 tag `v1.0-pi-separation`，Zenodo DOI [10.5281/zenodo.23717747](https://doi.org/10.5281/zenodo.23717747)），同时是 ConstructiveWorld 构造性数学库的主干：全库在 Set 层以 `sigT` 显式见证给出存在型结论，不引入任何公理，且整链可提取。
 
 ## 1. 库概述
 
-- **规模**：844 个在册模块（注册序 `order.txt`，844 行·2026-10-28 实测；随注册演进而增长，以现势为准）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
+- **规模**：846 个在册模块（注册序 `order.txt`，846 行·2026-10-28 实测；随注册演进而增长，以现势为准）。注册序是库的权威引用面：每个在册件一行，形如 `S01_BaseRing.v#R0-d66910`，`#` 之后为注册批次指纹。
 - **纯构造性**：全库不使用 `Axiom`/`Admitted`/经典逻辑；内核级 `coqchk -o` 复核口径为 `Axioms: <none>`。
 - **Set 层 `sigT` 显式见证**：存在型结论一律给出可计算见证（有理数端点、近似根等），不停留于命题层。
 - **可提取**：以 `Separate Extraction` 生成目标语言代码并机械检查 `Obj.magic` 计数为零（计数非零即示 Prop 层内容泄入提取面）。
@@ -24,7 +35,7 @@
 | 库版本 | `49e3f13`（`main` 分支，2026-10-28 实测；随注册演进而前进） |
 | CI 认证 | **run #301**（id 40467659226，head `49e3f13`）：**success**（2026-10-28 收口，15.7 小时全树磨程；全树编译＋`coqchk` 全树内核复核通过，承载 `#R195`–`#R197` 三注册面的云端认证升格）。上一轮全绿 run #291（head `8e93893`，2026-10-24） |
 | 公理审计 | `coqchk -o` 全库复核，`Axioms: <none>`（CI 侧由 gate2 块状态机哨兵解析判定） |
-| 注册序 | `order.txt` 844 行（2026-10-28 实测）；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
+| 注册序 | `order.txt` 846 行（2026-10-28 实测）；主件 `LW0PiIrrational.v` 位于 ：476（批次指纹 `#R150-40656c`） |
 | 许可 | Apache-2.0（见 `LICENSE`） |
 
 持续集成（`.github/workflows/coq.yml`）在每次推送时执行（Windows 认证 job；macOS 观察档 job 自 2026-10-27 起暂停（Apple 侧 runner/环境面问题，Windows 认证面不变；恢复＝删除 if 行））：gate1 毒 token 守卫 → gate4 注释哨兵 → gate3 跨树 diff → 跨机 vo 信任缓存起步同步（fail-open）→ 全树编译（温控包裹·指纹跳过）→ gate5 vo 二进制检疫 → `coqchk` 全树内核复核（4 组根分组并行·树副本隔离装箱·时长墙 960 分钟）→ gate2 公理哨兵（块状态机解析 `coqchk` 日志判定 `Axioms: <none>`，代际钉 Chicken 9.1.0）。哨兵脚本位于 `scripts/gates/`，并行认证脚本为 `scripts/parallel_chk.sh`。
@@ -74,7 +85,7 @@ coqchk -silent -Q . "" <逻辑库名>.<件名>
 |---|---|
 | `ConstructiveWorld_Live/` | 源码树：全树 `.v` 源件＋`order.txt`＋`_CoqProject`（823 行，`-Q . ""`） |
 | `ConstructiveWorld_vo/` | 产物树：与源树同构，另含 `.vo`/`.glob`/`.vos`/`.vok` 编译产物 |
-| `order.txt` | 注册序（双树各一份，844 行，内容一致；`scripts/` 留有维护用历史副本 803 行，止于 R193 波未随 R194 同步），权威引用面 |
+| `order.txt` | 注册序（双树各一份，846 行，内容一致；`scripts/` 留有维护用历史副本 803 行，止于 R193 波未随 R194 同步），权威引用面 |
 | `_CoqProject` | 根级清单：220 版时代历史版（存史备查，见文件头注记）；现役清单为双树 `_CoqProject`（823 行，`-Q . ""`） |
 | `scripts/` | 注册序维护脚本与 `scripts/gates/` 哨兵（毒 token 守卫、公理解析、跨树 diff、注释哨兵、vo 依赖检疫） |
 | `.github/workflows/coq.yml` | CI 全树驱动（编译＋`coqchk`＋哨兵） |
