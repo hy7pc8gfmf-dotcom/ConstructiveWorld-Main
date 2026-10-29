@@ -844,3 +844,5 @@ piu_zz_mu_assembly.v#R196-12798c
 piu_zz_e_carrier.v#R197-f22b5b
 NsepBudgetExhaustion.v#R199-4f7495
 NsepBudgetVerify.v#R200-e45ad5
+u5c_quad_uniform_escape.v#R201-762127
+u5c_quad_demo_sqrt7.v#R202-bc7066

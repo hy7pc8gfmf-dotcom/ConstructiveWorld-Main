@@ -696,6 +696,8 @@ u5c_aux_natpow.v
 u5c_dm_e_measure_qcore.v
 u5c_dm_escape_to_dist_any.v
 u5c_dm_escape_window.v
+u5c_quad_uniform_escape.v
+u5c_quad_demo_sqrt7.v
 u5c_ln2_gap1_convbinom.v
 u5c_ln2_gap2_bridge.v
 u5c_zeta2_gapB.v
