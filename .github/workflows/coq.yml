@@ -236,7 +236,10 @@ jobs:
           # 20261024 #290 PCHK-PACK-FAIL 根治：PY=${PYTHON:-python3} 在 runner bash 解析到
           # WindowsApps 商店桩（python3.exe stub：静默无输出）——显式钉真实 python。
           export PYTHON="C:\Program Files\Python313\python.exe"
-          export CHK_JOBS=4
+          export CHK_JOBS=12
+          # 20261029 C-path: K=12 own-mode cost-weighted packing (cost_table.json
+          # + parallel_chk v3 own branch; study doc 20261029; first live furnace)
+          export CHK_PACK_MODE=own
           # 20261019 set1557：CHK_TREE_COPY=1——每 lane 独立 vo 副本（Windows 并发 coqchk mmap
           # 共载竞态对策：att1-3 三连实证同树 4 并发全灭/单发复现 CLEAN·副本断共享保并行度）
           export CHK_TREE_COPY=1
