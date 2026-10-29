@@ -1,4 +1,8 @@
 #!/bin/bash
+# 20261029: resolve the script dir ONCE at top (pre-cd) with a Windows-Python
+# friendly mixed path (cygpath -m); line-52's cd $VO_DIR breaks any later
+# relative $0 resolution (cost_table.json MISSING precedent -> count fallback).
+SCRIPT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && { command -v cygpath >/dev/null 2>&1 && cygpath -m "$PWD" || pwd; })"
 # parallel_chk_v3.sh — cost-weighted packing + adaptive-K hook (sandbox copy;
 # canonical scripts/parallel_chk.sh v2 stays untouched). v3 deltas over v2:
 #   1) Cost weighting: packing reads module -> coqchk-seconds from cost_table.json
@@ -86,7 +90,7 @@ fi
 # Default sits next to this script; override with CHK_COST_TABLE. A missing or
 # unusable table is not fatal: the packer falls back to weight 1 (= v2 count
 # packing) with a loud PCHK-COST-TABLE-* line on stderr.
-COST_TABLE="${CHK_COST_TABLE:-$(dirname "$0")/cost_table.json}"
+COST_TABLE="${CHK_COST_TABLE:-$SCRIPT_DIR/cost_table.json}"
 export CHK_COST_TABLE="$COST_TABLE"
 PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null 2>&1 || { PY=python; command -v "$PY" >/dev/null 2>&1 || PY=py; }
 command -v "$PY" >/dev/null 2>&1 || { echo "PCHK-NO-PYTHON: python3/python/py 全缺席"; exit 2; }
@@ -219,11 +223,16 @@ items = sorted(((ccost[m], m) for m in allm), reverse=True)
 loads = [0] * K
 groups = [[] for _ in range(K)]
 assigned = set()
+PACK_MODE = os.environ.get('CHK_PACK_MODE', 'closure')
 for sz, m in items:
     if m in assigned:
         continue
-    S = (clmemo[m] - assigned) | {m}
-    scost = sum(mcost(x) for x in S)  # v3: closure cost = sum of member costs
+    if PACK_MODE == 'own':
+        S = {m}
+        scost = mcost(m)
+    else:
+        S = (clmemo[m] - assigned) | {m}
+        scost = sum(mcost(x) for x in S)  # v3: closure cost = sum of member costs
     best = -1; bestload = None
     for i in range(K):
         nl = loads[i] + scost
