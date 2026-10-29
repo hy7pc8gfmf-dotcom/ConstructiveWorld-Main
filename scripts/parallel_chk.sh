@@ -1,4 +1,24 @@
 #!/bin/bash
+# parallel_chk_v3.sh — cost-weighted packing + adaptive-K hook (sandbox copy;
+# canonical scripts/parallel_chk.sh v2 stays untouched). v3 deltas over v2:
+#   1) Cost weighting: packing reads module -> coqchk-seconds from cost_table.json
+#      (env CHK_COST_TABLE, default: next to this script). Module missing from the
+#      table = median default; table missing/unusable = fail-open weight 1, which
+#      degrades CAP/LPT exactly back to the v2 count-based packing. Closure cost =
+#      sum of member costs; CAP = ceil(total_cost/K*1.15); items sorted by closure
+#      cost descending (LPT) and dropped onto the cost-lightest lane. The closure
+#      same-lane invariant line  S = (clmemo[m] - assigned) | {m}  is verbatim v2.
+#   2) Adaptive K: if env CHK_HEADROOM_FILE (RAM-guard drop file holding free-RAM
+#      headroom in bytes) is set, K = clamp(4, tier, 8) with tier 8 at >=24 GiB,
+#      6 at >=8 GiB, else 4; missing/unparseable file = fail-open K=4. Variable
+#      unset = v2 behavior (CHK_JOBS, default 3). No workflow yml change needed.
+#   3) PCHK-PACK lines now also print per-lane cost_s (the listed-count metric is
+#      kept for old-caliber comparison); PCHK-PACK-SUM prints mode, K, total cost,
+#      predicted makespan (max lane cost), median default and per-lane costs.
+#   4) VO_DIR hook (env CHK_VO_DIR) so this sandbox copy can be pointed at the
+#      real vo tree; the default resolves exactly like v2.
+# All comments on changed lines are English; every untouched v2 line (including
+# its Chinese comments) is byte-identical to the canonical script.
 # parallel_chk.sh — 全树内核认证·均衡分组并行版 v2（20261019 set1557 修订）
 #
 # v1→v2 修订缘由（run#267 Windows coqchk 红根因）：
@@ -25,9 +45,49 @@
 # 环境变量：COQCHK / CHK_JOBS（并行度）/ CHK_ROCQDEP / PYTHON / PCHK_PACK_ONLY=1
 # （仅装箱打印组形即退·调试旗标）。
 set -u
-cd "$(dirname "$0")/../ConstructiveWorld_vo" || { echo "PCHK-PWD-FAIL"; exit 2; }
+# v3: VO_DIR hook — this sandbox copy lives outside ConstructiveWorld-Main/scripts,
+# so the vo tree can be given explicitly; when unset the default path resolves
+# exactly like v2 (script's parent dir + /ConstructiveWorld_vo).
+VO_DIR="${CHK_VO_DIR:-$(dirname "$0")/../ConstructiveWorld_vo}"
+cd "$VO_DIR" || { echo "PCHK-PWD-FAIL"; exit 2; }
 K="${COQCHK:-C:/Rocq-Platform~9.1~2026.01/bin/coqchk.exe}"
 JOBS="${CHK_JOBS:-3}"
+# --- BEGIN pchk_pick_k (v3 adaptive-K hook; extracted verbatim by the dry-run self-test) ---
+# CHK_HEADROOM_FILE: drop file of the RAM guard holding free-RAM headroom in bytes
+# (first content must be a plain decimal integer; whitespace/CR/LF tolerated; the
+# report-only RAM guard in coq.yml does not drop a file yet, so the parser defines
+# the drop-file convention). Tier table chosen here (no repo convention exists):
+#   headroom >= 24 GiB -> 8 | >= 8 GiB -> 6 | else 4, then clamp(4, K, 8).
+# Missing/unparseable file -> fail-open K=4. Variable unset -> v2 behavior.
+pchk_pick_k() {
+  local f="$1" raw gib tier
+  [ -n "$f" ] || { echo 4; return 0; }
+  [ -f "$f" ] || { echo 4; return 0; }                 # missing file -> fail-open
+  raw=$(tr -d ' \t\r\n' < "$f" | head -c 32)
+  case "$raw" in ''|*[!0-9]*) echo 4; return 0 ;; esac # unparseable -> fail-open
+  [ "${#raw}" -le 12 ] || { echo 4; return 0; }        # absurd magnitude -> fail-open
+  gib=$(( raw / 1073741824 ))
+  if [ "$gib" -ge 24 ]; then tier=8
+  elif [ "$gib" -ge 8 ]; then tier=6
+  else tier=4
+  fi
+  [ "$tier" -lt 4 ] && tier=4                          # clamp(4, tier, 8)
+  [ "$tier" -gt 8 ] && tier=8
+  echo "$tier"
+  return 0
+}
+# --- END pchk_pick_k ---
+if [ -n "${CHK_HEADROOM_FILE:-}" ]; then
+  HK=$(pchk_pick_k "$CHK_HEADROOM_FILE")
+  echo "PCHK-HEADROOM: file=${CHK_HEADROOM_FILE} -> K=${HK} (adaptive hook; CHK_JOBS/default was ${JOBS})" >&2
+  JOBS="$HK"
+fi
+# v3: cost table (module -> coqchk seconds) consumed by the packing python below.
+# Default sits next to this script; override with CHK_COST_TABLE. A missing or
+# unusable table is not fatal: the packer falls back to weight 1 (= v2 count
+# packing) with a loud PCHK-COST-TABLE-* line on stderr.
+COST_TABLE="${CHK_COST_TABLE:-$(dirname "$0")/cost_table.json}"
+export CHK_COST_TABLE="$COST_TABLE"
 PY="${PYTHON:-python3}"; command -v "$PY" >/dev/null 2>&1 || { PY=python; command -v "$PY" >/dev/null 2>&1 || PY=py; }
 command -v "$PY" >/dev/null 2>&1 || { echo "PCHK-NO-PYTHON: python3/python/py 全缺席"; exit 2; }
 
@@ -77,7 +137,7 @@ echo "::group::PCHK 2/4 dependency graph + balanced packing"
 "$ROCQDEP" dep -Q . "" $(ls *.v 2>/dev/null | grep -v '^_') > "$WORK/deps.txt" 2>/dev/null || true
 [ -s "$WORK/deps.txt" ] || echo "PCHK-WARN-EMPTYDEP: rocq dep 零输出（闭包退化=每组仅列模块——fail-loud 留痕）"
 CHK_JOBS="$JOBS" "$PY" - "$WORK/mods.txt" "$WORK/deps.txt" > "$WORK/groups.txt" <<'PYEOF'
-import sys, os, math
+import sys, os, math, json, statistics
 from collections import defaultdict
 mods_f, deps_f = sys.argv[1], sys.argv[2]
 allm = [l.strip() for l in open(mods_f, encoding='utf-8', errors='replace') if l.strip()]
@@ -110,11 +170,52 @@ def closure(m):
 clmemo = {m: closure(m) for m in allm}
 N = len(allm)
 K = max(1, int(os.environ.get('CHK_JOBS', '3')))
+# v3: the adaptive-K hook (see pchk_pick_k in the bash side) tiers CHK_JOBS
+# before this process starts, so the python K line stays verbatim v2.
 if N > 200 and K < 2:
     sys.stderr.write('PCHK-DEGENERATE: NMOD=%d 但 CHK_JOBS=%d（退化单遍禁）\n' % (N, K))
     sys.exit(2)
-CAP = math.ceil(N / K * 1.15)
-items = sorted(((len(clmemo[m]), m) for m in allm), reverse=True)
+# --- v3 cost weighting -----------------------------------------------
+# Cost table: {"modules": {module: coqchk seconds}, ...} as produced by
+# mine_cost_table.py. A module missing from the table defaults to the median
+# (the table's own recorded median_all_valid_s when present, else the median of
+# the table values). A missing/unusable TABLE is fail-open: every weight = 1,
+# which degrades CAP/LPT exactly to the v2 count-based packing.
+COST_TABLE_PATH = os.environ.get('CHK_COST_TABLE', '')
+cost = {}
+MED = 1
+cost_mode = 'count-fallback(weight=1)'
+if COST_TABLE_PATH and os.path.isfile(COST_TABLE_PATH):
+    try:
+        with open(COST_TABLE_PATH, encoding='utf-8') as fh:
+            _doc = json.load(fh)
+        _tbl = {m: int(s) for m, s in (_doc.get('modules') or {}).items()
+                if isinstance(s, (int, float)) and s > 0}
+        if _tbl:
+            cost = _tbl
+            _med = (_doc.get('sources') or {}).get('src2_mtime_diff', {}).get('median_all_valid_s')
+            if isinstance(_med, (int, float)) and _med > 0:
+                MED = int(round(_med))
+            else:
+                MED = int(round(statistics.median(_tbl.values())))
+            cost_mode = 'cost-table(seconds)'
+        else:
+            sys.stderr.write('PCHK-COST-TABLE-EMPTY: no usable entries in %s -> count fallback (weight=1)\n'
+                             % COST_TABLE_PATH)
+    except Exception as exc:
+        sys.stderr.write('PCHK-COST-TABLE-BROKEN: %s (%s) -> count fallback (weight=1)\n'
+                         % (COST_TABLE_PATH, exc))
+else:
+    sys.stderr.write('PCHK-COST-TABLE-MISSING: %s -> count fallback (weight=1)\n' % COST_TABLE_PATH)
+def mcost(m):
+    return cost.get(m, MED)
+TOTAL = sum(mcost(m) for m in allm)
+# v3: capacity moves from module count to cost seconds (v2: CAP = ceil(N/K*1.15)).
+CAP = math.ceil(TOTAL / K * 1.15)
+# v3: LPT ordering moves from closure size to closure cost (ties break by module
+# name, same tuple shape as v2).
+ccost = {m: sum(mcost(x) for x in clmemo[m]) for m in allm}
+items = sorted(((ccost[m], m) for m in allm), reverse=True)
 loads = [0] * K
 groups = [[] for _ in range(K)]
 assigned = set()
@@ -122,30 +223,39 @@ for sz, m in items:
     if m in assigned:
         continue
     S = (clmemo[m] - assigned) | {m}
+    scost = sum(mcost(x) for x in S)  # v3: closure cost = sum of member costs
     best = -1; bestload = None
     for i in range(K):
-        nl = loads[i] + len(S)
+        nl = loads[i] + scost
         if nl <= CAP and (bestload is None or nl < bestload):
             best = i; bestload = nl
     if best < 0:
         best = min(range(K), key=lambda i: loads[i])
     groups[best].extend(sorted(S))
-    loads[best] += len(S)
+    loads[best] += scost
     assigned.update(S)
 for m in sorted(allset - assigned):
     i = min(range(K), key=lambda i: loads[i])
     groups[i].append(m)
-    loads[i] += 1
+    loads[i] += mcost(m)  # v3: cost, not count
     assigned.add(m)
 if assigned != allset:
     sys.stderr.write('PCHK-UNION-BROKEN: 并集覆盖断言红 assigned=%d allset=%d\n' % (len(assigned), len(allset)))
+    sys.exit(2)
+if sum(loads) != TOTAL:
+    sys.stderr.write('PCHK-COST-SUM-BROKEN: lane costs %d != total %d\n' % (sum(loads), TOTAL))
     sys.exit(2)
 for gi, g in enumerate(groups):
     uni = set()
     for m in g:
         uni |= clmemo[m]
-    sys.stderr.write('PCHK-PACK: group=%d listed=%d closure_union=%d argv_chars=%d\n'
-                     % (gi + 1, len(g), len(uni), sum(len(m) + 1 for m in g)))
+    gcost = sum(mcost(m) for m in g)
+    # v3: cost_s added (new caliber); listed = module count (old caliber, kept).
+    sys.stderr.write('PCHK-PACK: group=%d listed=%d closure_union=%d cost_s=%d argv_chars=%d\n'
+                     % (gi + 1, len(g), len(uni), gcost, sum(len(m) + 1 for m in g)))
+# v3: summary line — makespan = max lane cost (predicted packing horizon).
+sys.stderr.write('PCHK-PACK-SUM: mode=%s K=%d total_cost_s=%d makespan_cost_s=%d median_default_s=%d lane_costs=%s\n'
+                 % (cost_mode, K, TOTAL, max(loads), MED, ','.join(str(x) for x in loads)))
 sys.stdout.reconfigure(newline='\n')  # 20261019 CRLF 定谳：禁 Windows 文本模式把组行写成 \r\n（源侧根治）
 for g in groups:
     print('\x1f'.join(sorted(g)))
