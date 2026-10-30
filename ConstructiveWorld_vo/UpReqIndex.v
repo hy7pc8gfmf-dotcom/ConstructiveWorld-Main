@@ -5151,6 +5151,42 @@ Definition ng_U5cQuadUniformEscape : NewGreenFace :=
 Definition ng_U5cQuadDemoSqrt7 : NewGreenFace :=
   MkNewGreenFace "u5c_quad_demo_sqrt7.v" 175 3 20261029
   "sqrt-7 demonstration instance closing the uniform escape family by one parameter call with a Set-level nonsquare witness and pure-conversion sample certificates" "L175:mbc7066".
+(* ng_PiuZzPntWindow —— piu_zz_pnt_window.v: 窗覆盖件（半开窗 (3n/(3k+2), 2n/(2k+1)] 内素数 p 之分数部 {n/p} ∈ [1/2, 2/3) 故属 Zeilberger-Zudilin 窗集 P_n（节点 B1）＋窗位推论 3n < p^2·保守窗被保留时恒成立）；PA=4 Closed（编译实测）；ng_qed=4（Qed 闭合实测） *)
+Definition ng_PiuZzPntWindow : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_window.v" 135 4 20261030
+  "window coverage of the kept prime set P_n via fractional-part boolean membership with the window-position corollary" "L135:m1f1571".
+(* ng_PiuZzPntWinsum —— piu_zz_pnt_winsum.v: 窗和证书件（每窗密度项 1/((2k+1)(3k+2))＝窗宽比 2/(2k+1)−3/(3k+2) 之正性/单调递减/伸缩族 1/(4k(k+1)) 上控＋显式 K=150 数值证书喂 Phi_n 下界（节点 B2））；PA=5 Closed（编译实测）；ng_qed=9（Qed 闭合实测） *)
+Definition ng_PiuZzPntWinsum : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_winsum.v" 156 9 20261030
+  "window-sum density certificates with positivity, monotone decrease and telescoping majoration feeding the explicit K=150 numeric slot" "L156:m0f5802".
+(* ng_PiuZzPntQexp —— piu_zz_pnt_qexp.v: Q 指数证书机件（Taylor 部分和非负参单调＋数值锚 exp_partial 40 (20) < 664*1000*1000 喂 eps0=1/6600 常量归一步（ln(6.64e8) ≥ 20 因 e^20 < 6.64e8 且 20^3 = 8000 ≥ 6600）＋Taylor 余项几何上控 0 ≤ x < n+2 面）；PA=6 Closed（编译实测）；ng_qed=30（Qed 闭合实测） *)
+Definition ng_PiuZzPntQexp : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_qexp.v" 681 30 20261030
+  "Q-exponential certificate machinery: Taylor partial-sum monotonicity, the e^20 numeric anchor and geometric remainder majoration for the Dusart normalization slot" "L681:m78d0c3".
+(* ng_PiuZzPntLcmpow —— piu_zz_pnt_lcmpow.v: lcm 幂刻画件（素数幂 p^e ≤ N 整除 lcm(1..N)（B3.1）＋相异素数幂 Set 承载 bool 面互素（B3.2）＋m ≥ 2 素因子存在与素数精确幂剥离（B3.3）＋psi 折叠 zz_psi N 吸收 [1,N] 全体故 lcm(1..N) | zz_psi N（B3.4））；PA=10 Closed（编译实测）；ng_qed=37（Qed 闭合实测） *)
+Definition ng_PiuZzPntLcmpow : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_lcmpow.v" 807 37 20261030
+  "power characterization of lcm(1..N): prime-power divisibility, boolean-face coprimality, prime-factor stripping and the psi-fold absorption lcm | zz_psi N" "L807:mee004a".
+(* ng_PiuZzPntPhi —— piu_zz_pnt_phi.v: Phi_n 下界件（窗端点 b_k = 2n/(2k+1)、a_k = 3n/(3k+2) 布尔窗成员 discharge 窗集条件＋保守窗宽和下控 n*(322/500) − 302＋窗素积整除 Phi_n＋窗不相交蕴窗积两两互素＋Taylor 部分和积式装配 zz_pnt_phi_lower 下控 zq(Phi_n)·每窗 θ 含量显式全称保持）；PA=4 Closed（编译实测）；ng_qed=28（Qed 闭合实测） *)
+Definition ng_PiuZzPntPhi : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_phi.v" 697 28 20261030
+  "Phi_n lower bound: boolean window membership, width-sum domination n*(322/500)-302, per-window prime-product divisibility, pairwise coprimality and the assembled Taylor-product face zz_pnt_phi_lower" "L697:me75ea3".
+(* ng_PiuZzPntIpow —— piu_zz_pnt_ipow.v: 整数幂证书机件（nat 幂与精确分裂 (F/p)^M = F^M/p^M bool 恒等式＋floor 三明治 floor(a/p) ≤ a/p ≤ floor(a/p)+1 与配套 ceiling 三明治（C = ceil(e^{rD}) 证书面）＋相对损失 x*(D−1)/D ≤ floor(x)（x ≥ D ≥ 2·D = 10^4 预算面）＋幂级实例 x^M*(D−1)/D ≤ floor(x^M)（节点 B5.4））；PA=4 Closed（编译实测）；ng_qed=23（Qed 闭合实测） *)
+Definition ng_PiuZzPntIpow : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_ipow.v" 386 23 20261030
+  "integer-power certificate machinery: exact rational-power split, floor and ceiling sandwiches for the C=ceil(e^{rD}) face and relative-loss bounds at the D=10^4 budget face" "L386:m354448".
+(* ng_PiuZzPntPsi —— piu_zz_pnt_psi.v: psi-素阶乘分裂件（折叠 zz_psi_prod N k 有界于 pec_prim N × pec_prim(zz_iroot 2 N)^(k−1)·全折叠 zz_psi N = zz_psi_prod N (log2 N) 三面可计算上控：因子化素阶乘面／单幂面 4^(2*N*log2 N)／消费面 pec_prim N * 4^(2*sqrt(N)*(log2 N − 1))·装配阶段据此把解析输入隔离于首素阶乘因子）；PA=4 Closed（编译实测）；ng_qed=7（Qed 闭合实测） *)
+Definition ng_PiuZzPntPsi : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_psi.v" 239 7 20261030
+  "psi-versus-primorial split: the root-primorial fold bounded by pec_prim faces isolating the analytic input on the leading primorial factor" "L239:m1d6a25".
+(* ng_PiuZzPntRateup —— piu_zz_pnt_rateup.v: 装配脊柱件（L_n = lcm(1..4n)/Phi_n 终局上率面：born 链面组有理式 L_n ≤ Psi(4n)/Phi_n＋自两枚显式 Set 承载 eventual 槽（A lcm 侧 Psi(4n) ≤ 55^n eventual·解析 θ 输入居后；B 分母侧 (19/10)^n ≤ Phi_n eventual·窗素积下界居后）装配 sigT 终面 { N0 : nat & forall n >= N0, QleT' (zq (zz_L n)) ((29#1)^n) }）；PA=1 Closed（编译实测）；ng_qed=11（Qed 闭合实测） *)
+Definition ng_PiuZzPntRateup : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_rateup.v" 272 11 20261030
+  "assembly spine: the eventual upper rate face for L_n assembled from two explicit Set-carried eventual slots into the sigT certificate QleT' (zq (zz_L n)) ((29#1)^n)" "L272:m6172ac".
+(* ng_PiuZzPntAssembly —— piu_zz_pnt_assembly.v: PNT 侧总装件（五 born 件成表 lcmpow/window/winsum/ipow/phi＋两 L_n 率槽与窗 θ 槽 Section 显式参化取用（诚实 PNT 级假设面·零 discharge 零 axiom）·交付乘性分解面 zq(zz_L n)·zq(zz_Phi n) ≤ zq(psi(4n))（B3.4 与 zz_L 整除代数积式分解）＋Phi 下界面 θ 槽再输出＋τ/LOW 面槽参实例化·出节六面 Print Assumptions 全 Closed）；PA=6 Closed（编译实测）；ng_qed=6（Qed 闭合实测） *)
+Definition ng_PiuZzPntAssembly : NewGreenFace :=
+  MkNewGreenFace "piu_zz_pnt_assembly.v" 181 6 20261030
+  "PNT-side total assembly: five born pieces tabulated, rate and window-theta slots carried as explicit Section parameters never discharged, delivering the multiplicative decomposition zq(zz_L n)*zq(zz_Phi n) <= zq(psi(4n)) with six Closed assumption faces" "L181:maf3472".
 (* ---------- V47 批统计（整批追加纪律：清单/常量/引理同块原子写入·ng_qed 口径） ---------- *)
 Definition NewGreenListV47 : list NewGreenFace :=
  cons ng_PiuMuCriterion
@@ -5198,7 +5234,16 @@ Definition NewGreenListV47 : list NewGreenFace :=
  (cons ng_NsepBudgetVerify
  (cons ng_U5cQuadUniformEscape
  (cons ng_U5cQuadDemoSqrt7
- nil)))))))))))))))))))))))))))))))))))))))))))).
+ (cons ng_PiuZzPntWindow
+ (cons ng_PiuZzPntWinsum
+ (cons ng_PiuZzPntQexp
+ (cons ng_PiuZzPntLcmpow
+ (cons ng_PiuZzPntPhi
+ (cons ng_PiuZzPntIpow
+ (cons ng_PiuZzPntPsi
+ (cons ng_PiuZzPntRateup
+ (cons ng_PiuZzPntAssembly
+ nil))))))))))))))))))))))))))))))))))))))))))))))))))))).
 (* ---------- 十七片终形辅助名注记（KB13R 按 KB12/KB15 核勘代拟·KB20 无壳形制修订：wave4 拆四季·伞退役·slim 直挂八季） ---------- *)
 (* 本批 wave 行承载 128 条升格辅助引理名：piu_zz_hb_512_0..31（wave1/2 各 16）＋
    piu_zz_hb_1024_0..95（wave3a-d＋wave4a-d 各 4＋wave5-8 各 16·无壳直挂四季）——系 consumer
@@ -5206,10 +5251,10 @@ Definition NewGreenListV47 : list NewGreenFace :=
    复核 128/128·KB15 独立交叉审计两法一致·64 名落袋 vo 可见性实测检验全过）。名字面判据演进：
    原 2,912 定义性名零丢失＋辅助名增量 128＝终形 3,040 名；语句多集 3,044 位恒等、原 42 位
    零丢失（KB12 审计·KB15 复核）。落地后逐行 PA 占位以 new_About 实测检验填注（仅注释面）。 *)
-(* 续写统计：45 件 / 行数和 36569 / 闭合数和 3476（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20 ＋mu_assembly 与 e_carrier 两件追加 955/40＋NsepBudgetExhaustion 常量化改形与 NsepBudgetVerify 拆件双件追加 256/13（主体 164/8＋验证块 92/5）＋u5c_quad_uniform_escape 参数化件与 u5c_quad_demo_sqrt7 演示件双件追加 1430/36（主体 1255/33＋演示 175/3）；一致性由下方等式引理编译期核对）。 *)
-Definition NewGreenV47Pieces  : nat := 45.
-Definition NewGreenV47LineSum : nat := 36569.
-Definition NewGreenV47QedSum  : nat := 3476.
+(* 续写统计：54 件 / 行数和 40123 / 闭合数和 3631（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20 ＋mu_assembly 与 e_carrier 两件追加 955/40＋NsepBudgetExhaustion 常量化改形与 NsepBudgetVerify 拆件双件追加 256/13（主体 164/8＋验证块 92/5）＋u5c_quad_uniform_escape 参数化件与 u5c_quad_demo_sqrt7 演示件双件追加 1430/36（主体 1255/33＋演示 175/3）＋KB57 PNT 消费链九件追加 3554/155（window 135/4＋winsum 156/9＋qexp 681/30＋lcmpow 807/37＋phi 697/28＋ipow 386/23＋psi 239/7＋rateup 272/11＋assembly 181/6·依赖序 window→winsum→qexp→lcmpow→phi→ipow→psi→rateup→assembly）；一致性由下方等式引理编译期核对）。 *)
+Definition NewGreenV47Pieces  : nat := 54.
+Definition NewGreenV47LineSum : nat := 40123.
+Definition NewGreenV47QedSum  : nat := 3631.
 
 (* 清单件数 = 字面值（增删清单而忘改字面值即爆 G2） *)
 Lemma NewGreenV47Pieces_matches : NewGreenV47Pieces = cnt_ng NewGreenListV47.

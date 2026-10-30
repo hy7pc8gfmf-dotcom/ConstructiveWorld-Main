@@ -846,3 +846,12 @@ NsepBudgetExhaustion.v#R199-4f7495
 NsepBudgetVerify.v#R200-e45ad5
 u5c_quad_uniform_escape.v#R201-762127
 u5c_quad_demo_sqrt7.v#R202-bc7066
+piu_zz_pnt_window.v#R203-1f1571
+piu_zz_pnt_winsum.v#R204-0f5802
+piu_zz_pnt_qexp.v#R205-78d0c3
+piu_zz_pnt_lcmpow.v#R206-ee004a
+piu_zz_pnt_phi.v#R207-e75ea3
+piu_zz_pnt_ipow.v#R208-354448
+piu_zz_pnt_psi.v#R209-1d6a25
+piu_zz_pnt_rateup.v#R210-6172ac
+piu_zz_pnt_assembly.v#R211-af3472

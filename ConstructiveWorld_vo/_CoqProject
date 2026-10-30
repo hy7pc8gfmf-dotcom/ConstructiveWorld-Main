@@ -825,3 +825,12 @@ piu_zz_tau_enclosure.v
 piu1930_domface_negative.v
 piu_zz_mu_assembly.v
 piu_zz_e_carrier.v
+piu_zz_pnt_window.v
+piu_zz_pnt_winsum.v
+piu_zz_pnt_qexp.v
+piu_zz_pnt_lcmpow.v
+piu_zz_pnt_phi.v
+piu_zz_pnt_ipow.v
+piu_zz_pnt_psi.v
+piu_zz_pnt_rateup.v
+piu_zz_pnt_assembly.v
