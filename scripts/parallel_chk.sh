@@ -120,6 +120,26 @@ done
 NMOD=$(wc -l < "$WORK/mods.txt")
 [ "$NMOD" -gt 0 ] || { echo "PCHK-NO-MODS"; exit 2; }
 
+# ①b 认证继承跳过清单（ATT-RECON 20261029·CHK_SKIP_FILE 非空文件时启用）：
+# 清单=对账步按档案 cw.attest/v1 逐件 sha256 对照现树的命中件（unchanged，仅顶层）。
+# 语义：该件字节与上次 coqchk 全绿运行所验内容全等 → 认证凭哈希继承，本轮免列
+# （偏离必检由对账步把守：哈希不匹配者不在清单，照常送检）。
+# 未知项守卫：清单含 mods.txt 之外模块 = 配置错，fail-loud exit 2（禁静默吞）。
+# 清单缺省（未设 CHK_SKIP_FILE 或空文件）= v2 行为逐字节不变（全量送检）。
+SKIP_N=0
+if [ -n "${CHK_SKIP_FILE:-}" ] && [ -s "$CHK_SKIP_FILE" ]; then
+  comm -23 <(sort -u "$CHK_SKIP_FILE") <(sort -u "$WORK/mods.txt") > "$WORK/skip_unknown.txt"
+  if [ -s "$WORK/skip_unknown.txt" ]; then
+    echo "PCHK-SKIP-UNKNOWN: 跳过清单含认证面外模块: $(tr '\n' ' ' < "$WORK/skip_unknown.txt" | cut -c1-200)——fail-loud"
+    exit 2
+  fi
+  grep -vxFf "$CHK_SKIP_FILE" "$WORK/mods.txt" > "$WORK/mods_kept.txt"
+  SKIP_N=$(grep -c . "$CHK_SKIP_FILE")
+  mv "$WORK/mods_kept.txt" "$WORK/mods.txt"
+  echo "PCHK-ATTEST-SKIP: inherited=$SKIP_N sent_to_chk=$((NMOD-SKIP_N)) total=$NMOD"
+  NMOD=$((NMOD-SKIP_N))
+fi
+
 # ①a 注册面覆盖断言（禁漏件门：order.txt 全注册 .v 须有 .vo 且入认证面）
 # 子目录注册行（Local/*，order L478 R160 判例）：build 面自编自管（build.sh 逐件走）·
 # 认证面 membership 断言仅约束顶层（历史 coqchk_all 顶层 glob 语义）——Local 件经
@@ -131,6 +151,7 @@ while IFS= read -r line; do
   case "$f" in */*) continue ;; esac
   m="${f%.v}"
   if [ ! -f "${m}.vo" ]; then echo "PCHK-COV-NO-VO: 注册面 $f 无 .vo（先修 build）"; covfail=1; continue; fi
+  if [ -n "${CHK_SKIP_FILE:-}" ] && [ -f "$CHK_SKIP_FILE" ] && grep -qxF "$m" "$CHK_SKIP_FILE"; then continue; fi  # ATT-RECON: 命中继承件视同已覆盖（.vo 在盘断言上行仍照跑）
   grep -qxF "$m" "$WORK/mods.txt" || { echo "PCHK-COV-EXCLUDED: 注册面 $m 未入认证面"; covfail=1; }
 done < order.txt
 [ "$covfail" -eq 0 ] || { echo "PCHK-COVERAGE-FAIL: 注册面覆盖断言红——fail-loud"; exit 2; }
@@ -404,6 +425,21 @@ for j in $(seq 0 $((NGRP-1))); do
   cat "$WORK/g$j.log" >> _chk_all.log 2>/dev/null || rc_total=1
 done
 grep -q "Modules were successfully checked" _chk_all.log || rc_total=1
+
+# ④b 认证附页（ATT-RECON 20261029）：跳过清单落 _chk_all.log 附页留痕——gate2 认证态
+# 分支的档案覆盖断言以本附页为日志侧正本（与 attest_reconcile.json 逐项对账）。
+# 附页行形（ATTEST-SKIP*/=== 边界行）经 gate2 块状态机 scope 纪律结构性不入 Axioms 段
+# （沙箱负证实测：附页注入前后判定全等；真公理仍 DIRTY——附页不可掩毒）。
+if [ "${SKIP_N:-0}" -gt 0 ] && [ -n "${CHK_SKIP_FILE:-}" ] && [ -f "$CHK_SKIP_FILE" ]; then
+  {
+    echo ""
+    echo "=== ATTEST-SKIP APPENDIX BEGIN (cw.attest/v1) ==="
+    echo "ATTEST-SKIP-COUNT $SKIP_N"
+    echo "ATTEST-ARCHIVE ${CHK_ATTEST_SHA256:-none}"
+    while IFS= read -r m; do [ -n "$m" ] && echo "ATTEST-SKIP $m"; done < "$CHK_SKIP_FILE"
+    echo "=== ATTEST-SKIP APPENDIX END ==="
+  } >> _chk_all.log
+fi
 tail -5 _chk_all.log
 # ④a Step Summary 终表（run 摘要页直读每 lane 状态——环节显式表达收口）
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ] && [ -w "$GITHUB_STEP_SUMMARY" ]; then

@@ -222,6 +222,37 @@ jobs:
             exit 1
           fi
 
+      # ── 认证对账步（ATT-RECON 20261029·cw.attest/v1）────────────────────────
+      # coqchk 前对账：现树逐件 sha256+size 对照认证档案 scripts/gates/cw_attest.json
+      # （对账口径与沙箱对账器 coqchk_delta_check.py 同源：四类判定
+      # unchanged/changed/added/removed·mtime 等任何 stat 元数据一律不入判——
+      # 偏离必检的判据只有内容本身）。
+      #   命中（unchanged）→ 入跳过清单 _attest_skip.txt：该件字节=上次 coqchk 全绿
+      #   运行所验内容（档案 generated_by=coqchk green run·建档律第1条），认证凭哈希
+      #   继承，本轮免列；未命中（changed/added/removed）→ 不入清单，正常送 coqchk
+      #   （偏离必检律）。
+      # 跳过面 v1 如实收窄（宁强勿弱）：仅顶层模块；Local/ 件维持依赖闭包核验现状。
+      # 红只增不减（降速不降强律）：档案缺席/坏档/自洽破 → 清单置空=本轮全量 coqchk
+      # （认证态分支不启用）；现树 vo 不可读 → exit 2 fail-loud 红。
+      # 留痕：清单经 CHK_SKIP_FILE 交 coqchk 步并入 _chk_all.log 附页（gate2 认证态
+      # 分支档案覆盖断言的日志侧正本）；attest_reconcile.json 随 coqchk-logs 出证。
+      - name: attest reconcile (archive-hit -> skip list, miss -> coqchk, cw.attest/v1)
+        shell: C:/Progra~1/Git/bin/bash.exe -e {0}
+        run: |
+          set +e
+          python scripts/gates/attest_reconcile.py \
+            --tree ConstructiveWorld_vo \
+            --attest scripts/gates/cw_attest.json \
+            --skip-out ConstructiveWorld_vo/_attest_skip.txt \
+            --json attest_reconcile.json
+          rc=$?
+          set -e
+          case "$rc" in
+            0) echo "ATT-RECON-OK: skip list ready ($(grep -c . ConstructiveWorld_vo/_attest_skip.txt) modules inherited)" ;;
+            3) echo "ATT-RECON-NOARCHIVE: 档案缺席/坏档/自洽破——本轮全量 coqchk（降速不降强）" ;;
+            *) echo "ATT-RECON-FAIL rc=$rc — fail-loud, treat as red"; exit 1 ;;
+          esac
+
       # 20261018 并行认证切换：单遍全模块共享闭包（cw_chk.cmd→coqchk_all.sh）CPU 串行
       # 3h04m 基线/4h23m 未竟实证；改 scripts/parallel_chk.sh 根分组均衡 K 路并行
       # （历史判例守线：逐件 O(n²) 已否决——本版按依赖顶根闭包装箱，组内共享闭包、
@@ -236,10 +267,16 @@ jobs:
           # 20261024 #290 PCHK-PACK-FAIL 根治：PY=${PYTHON:-python3} 在 runner bash 解析到
           # WindowsApps 商店桩（python3.exe stub：静默无输出）——显式钉真实 python。
           export PYTHON="C:\Program Files\Python313\python.exe"
-          export CHK_JOBS=12
-          # 20261029 C-path: K=12 own-mode cost-weighted packing (cost_table.json
-          # + parallel_chk v3 own branch; study doc 20261029; first live furnace)
-          export CHK_PACK_MODE=own
+          # 20261029 ATT-RECON 接线：对账步产物交 parallel_chk 免列继承件；档案指纹
+          # 随附页入 _chk_all.log 留痕（gate2 认证态断言对账用）。绝对路径=parallel_chk
+          # 会 cd 进 VO_DIR，相对路径即失配（att 链实证同坑）。
+          export CHK_SKIP_FILE="$PWD/ConstructiveWorld_vo/_attest_skip.txt"
+          export CHK_ATTEST_SHA256="$("$PYTHON" -c "import json,io;d=json.load(io.open('attest_reconcile.json',encoding='utf-8'));print(d.get('archive_tree_sha256') or 'none')" 2>/dev/null || echo none)"
+          export CHK_JOBS=4
+          # 20261030 装箱回退（C-path 撤除）：own-mode K=12 cost-weighted packing
+          # （cost_table.json + parallel_chk v3 own branch）实测 28h+ cancelled，对照
+          # K=4 基线 14h15m——每道全闭包重验物理墙，非调参可救；CHK_JOBS 回退 4，
+          # own 装箱模式导出随 C-path 一并撤除。
           # 20261019 set1557：CHK_TREE_COPY=1——每 lane 独立 vo 副本（Windows 并发 coqchk mmap
           # 共载竞态对策：att1-3 三连实证同树 4 并发全灭/单发复现 CLEAN·副本断共享保并行度）
           export CHK_TREE_COPY=1
@@ -274,7 +311,11 @@ jobs:
       # log 缺失≠代际失守：gate4/build 夭折时 coqchk 被 skipped、无日志可查——
       # 分支报 GATE-BANNER-ABSENT 指向上游红因（E-STAGING-R135GATE-1 连带红不指控下游域），
       # 仍 exit 1 保持红（禁降档），仅诊断文案分流。
-      - name: gate2 axioms sentinel (block-state-machine, fail-loud)
+      # 20261029 ATT-RECON 认证态分支：部分日志 + 档案覆盖断言全备 = 可判绿
+      # （gate2_attest_gate.py 裁 ATTESTED_CLEAN）；断言缺一即红（禁降档）。
+      # FULL 模式（跳过清单空）语义与旧版逐字节等价；parser 1/2/3（DIRTY/
+      # NO_AXIOMS_SECTION/LOG_INCOMPLETE）两态一律红。banner 代际钉前置不变。
+      - name: gate2 axioms sentinel (block-state-machine, fail-loud; attest branch)
         if: always()
         shell: C:/Progra~1/Git/bin/bash.exe -e {0}
         run: |
@@ -284,8 +325,26 @@ jobs:
           fi
           grep -q "Welcome to Chicken 9.1.0" ConstructiveWorld_vo/_chk_all.log \
             || { echo "GATE-BANNER-FAIL: coqchk 代际非 9.1（COQLIB 钉代失守，log 不可作公理判据）"; exit 1; }
+          set +e
           python scripts/gates/gate2_axioms_parser.py \
             ConstructiveWorld_vo/_chk_all.log --json gate2_verdict.json
+          parser_rc=$?
+          python scripts/gates/gate2_attest_gate.py \
+            --log ConstructiveWorld_vo/_chk_all.log \
+            --parser-json gate2_verdict.json \
+            --reconcile-json attest_reconcile.json \
+            --json gate2_attest.json
+          gate_rc=$?
+          set -e
+          if [ "$gate_rc" -ne 0 ]; then
+            echo "GATE2-ATTEST-RED: 认证态覆盖断言不备（gate2_attest.json reasons 列明）——red，禁降档"
+            exit 1
+          fi
+          if [ "$parser_rc" -ne 0 ]; then
+            echo "GATE2-AXIOMS-RED: parser exit $parser_rc（DIRTY/NO_AXIOMS_SECTION/LOG_INCOMPLETE 一律红）"
+            exit 1
+          fi
+          echo "GATE2-GREEN: verdict=$(python -c "import json,io;print(json.load(io.open('gate2_attest.json',encoding='utf-8'))['verdict'])" 2>/dev/null || echo UNKNOWN)"
 
       - name: Upload coqchk logs
         if: always()
@@ -300,4 +359,6 @@ jobs:
             gate3_ci.json
             gate2_verdict.json
             gate4_report.json
+            attest_reconcile.json
+            gate2_attest.json
 
