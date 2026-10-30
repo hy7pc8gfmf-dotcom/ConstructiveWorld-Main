@@ -5175,7 +5175,7 @@ Definition ng_PiuZzPntPhi : NewGreenFace :=
 Definition ng_PiuZzPntIpow : NewGreenFace :=
   MkNewGreenFace "piu_zz_pnt_ipow.v" 386 23 20261030
   "integer-power certificate machinery: exact rational-power split, floor and ceiling sandwiches for the C=ceil(e^{rD}) face and relative-loss bounds at the D=10^4 budget face" "L386:m354448".
-(* ng_PiuZzPntPsi —— piu_zz_pnt_psi.v: psi-素阶乘分裂件（折叠 zz_psi_prod N k 有界于 pec_prim N × pec_prim(zz_iroot 2 N)^(k−1)·全折叠 zz_psi N = zz_psi_prod N (log2 N) 三面可计算上控：因子化素阶乘面／单幂面 4^(2*N*log2 N)／消费面 pec_prim N * 4^(2*sqrt(N)*(log2 N − 1))·装配阶段据此把解析输入隔离于首素阶乘因子）；PA=4 Closed（编译实测）；ng_qed=7（Qed 闭合实测） *)
+(* ng_PiuZzPntPsi —— piu_zz_pnt_psi.v: psi-素阶乘分裂件（折叠 zz_psi_prod N k 有界于 pec_prim N × pec_prim(zz_iroot 2 N)^(k−1)·全折叠 zz_psi N = zz_psi_prod N (log2 N) 三面可计算上控：因子化素阶乘面／单幂面 4^(2*N*log2 N)／下游面 pec_prim N * 4^(2*sqrt(N)*(log2 N − 1))·装配阶段据此把解析输入隔离于首素阶乘因子）；PA=4 Closed（编译实测）；ng_qed=7（Qed 闭合实测） *)
 Definition ng_PiuZzPntPsi : NewGreenFace :=
   MkNewGreenFace "piu_zz_pnt_psi.v" 239 7 20261030
   "psi-versus-primorial split: the root-primorial fold bounded by pec_prim faces isolating the analytic input on the leading primorial factor" "L239:m1d6a25".
@@ -5183,7 +5183,7 @@ Definition ng_PiuZzPntPsi : NewGreenFace :=
 Definition ng_PiuZzPntRateup : NewGreenFace :=
   MkNewGreenFace "piu_zz_pnt_rateup.v" 272 11 20261030
   "assembly spine: the eventual upper rate face for L_n assembled from two explicit Set-carried eventual slots into the sigT certificate QleT' (zq (zz_L n)) ((29#1)^n)" "L272:m6172ac".
-(* ng_PiuZzPntAssembly —— piu_zz_pnt_assembly.v: PNT 侧总装件（五 born 件成表 lcmpow/window/winsum/ipow/phi＋两 L_n 率槽与窗 θ 槽 Section 显式参化取用（诚实 PNT 级假设面·零 discharge 零 axiom）·交付乘性分解面 zq(zz_L n)·zq(zz_Phi n) ≤ zq(psi(4n))（B3.4 与 zz_L 整除代数积式分解）＋Phi 下界面 θ 槽再输出＋τ/LOW 面槽参实例化·出节六面 Print Assumptions 全 Closed）；PA=6 Closed（编译实测）；ng_qed=6（Qed 闭合实测） *)
+(* ng_PiuZzPntAssembly —— piu_zz_pnt_assembly.v: PNT 侧集成件（五 born 件成表 lcmpow/window/winsum/ipow/phi＋两 L_n 率槽与窗 θ 槽 Section 显式参化取用（诚实 PNT 级假设面·零 discharge 零 axiom）·交付乘性分解面 zq(zz_L n)·zq(zz_Phi n) ≤ zq(psi(4n))（B3.4 与 zz_L 整除代数积式分解）＋Phi 下界面 θ 槽再输出＋τ/LOW 面槽参实例化·出节六面 Print Assumptions 全 Closed）；PA=6 Closed（编译实测）；ng_qed=6（Qed 闭合实测） *)
 Definition ng_PiuZzPntAssembly : NewGreenFace :=
   MkNewGreenFace "piu_zz_pnt_assembly.v" 181 6 20261030
   "PNT-side total assembly: five born pieces tabulated, rate and window-theta slots carried as explicit Section parameters never discharged, delivering the multiplicative decomposition zq(zz_L n)*zq(zz_Phi n) <= zq(psi(4n)) with six Closed assumption faces" "L181:maf3472".
@@ -5251,7 +5251,7 @@ Definition NewGreenListV47 : list NewGreenFace :=
    复核 128/128·KB15 独立交叉审计两法一致·64 名落袋 vo 可见性实测检验全过）。名字面判据演进：
    原 2,912 定义性名零丢失＋辅助名增量 128＝终形 3,040 名；语句多集 3,044 位恒等、原 42 位
    零丢失（KB12 审计·KB15 复核）。落地后逐行 PA 占位以 new_About 实测检验填注（仅注释面）。 *)
-(* 续写统计：54 件 / 行数和 40123 / 闭合数和 3631（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20 ＋mu_assembly 与 e_carrier 两件追加 955/40＋NsepBudgetExhaustion 常量化改形与 NsepBudgetVerify 拆件双件追加 256/13（主体 164/8＋验证块 92/5）＋u5c_quad_uniform_escape 参数化件与 u5c_quad_demo_sqrt7 演示件双件追加 1430/36（主体 1255/33＋演示 175/3）＋KB57 PNT 消费链九件追加 3554/155（window 135/4＋winsum 156/9＋qexp 681/30＋lcmpow 807/37＋phi 697/28＋ipow 386/23＋psi 239/7＋rateup 272/11＋assembly 181/6·依赖序 window→winsum→qexp→lcmpow→phi→ipow→psi→rateup→assembly）；一致性由下方等式引理编译期核对）。 *)
+(* 续写统计：54 件 / 行数和 40123 / 闭合数和 3631（ng_qed 口径·无壳形制落装重算 KB20：v2 21 册行 25934/3006 基础上 −wave3 伞 13/0 −wave4 单体 382/16 ＋四季 4×106/4 ＋slim 直挂 422→428；净 +35/+0 ＋domface 负定理单件追加 400/20 ＋mu_assembly 与 e_carrier 两件追加 955/40＋NsepBudgetExhaustion 常量化改形与 NsepBudgetVerify 拆件双件追加 256/13（主体 164/8＋验证块 92/5）＋u5c_quad_uniform_escape 参数化件与 u5c_quad_demo_sqrt7 演示件双件追加 1430/36（主体 1255/33＋演示 175/3）＋KB57 PNT 下游链九件追加 3554/155（window 135/4＋winsum 156/9＋qexp 681/30＋lcmpow 807/37＋phi 697/28＋ipow 386/23＋psi 239/7＋rateup 272/11＋assembly 181/6·依赖序 window→winsum→qexp→lcmpow→phi→ipow→psi→rateup→assembly）；一致性由下方等式引理编译期核对）。 *)
 Definition NewGreenV47Pieces  : nat := 54.
 Definition NewGreenV47LineSum : nat := 40123.
 Definition NewGreenV47QedSum  : nat := 3631.

@@ -7,8 +7,8 @@
       (real_lt (real_const c) (real_metric <Newton seq of sqrt d>
       (real_const q)))), with the non-square premise carried at Set level
       by u5c_quad_nonsq d := Id (Z.eqb (Z.sqrt d * Z.sqrt d) d) false.
-      This demo instantiates the whole family at d = 7 by ONE parameter
-      call.  The only new mathematical content is the explicit Set-level
+      This demo instantiates the whole family at d = 7 by ONE explicit
+      instantiation call.  The only new mathematical content is the explicit Set-level
       non-square carrier u5c_nonsq7 (Z.sqrt 7 = 2, 2*2 = 4 <> 7); the
       escape statement itself is consumed read-only from P1.  Contrast:
       the pool artifact u5c_inst_sqrt5.v reached the same shape for d = 5
@@ -26,12 +26,12 @@
       All consumed files are require-only; this piece adds no axioms and
       no classical logic.
    3. Benchmark lines: u5c_quad_uniform_escape.v quadratic_uniform_escape
-      (consumed mother theorem, one parameter call at d = 7);
+      (consumed mother theorem, one-argument instantiation at d = 7);
       u5c_inst_sqrt5.v u5c_sqrt5_criterion_escape_pt (manual
       copy-adaptation contrast, NOT consumed); u5c_quad_margin_closed
       (P1 four-branch margin core) consumed at the feasible window index
       n0 = 3 for the certified numeric table.
-   4. Constructive notes: the statement face is entirely Set-carried
+   4. Constructivity: the statement face is entirely Set-carried
       (Id / sigT / And / QltT / QleT'), zero new Prop axioms.  u5c_nonsq7
       : u5c_quad_nonsq 7 is closed by id_refl up to conversion
       (Z.eqb (Z.sqrt 7 * Z.sqrt 7) 7 computes to false); u5c_demo7_escape
@@ -52,7 +52,7 @@
         q = 2 (branch 2: 0 < q and q^2 = 4 < 7):
           margin 0.0797... < |x_7(3) - 2| = 241/368 = 0.6548...
           (true |sqrt 7 - 2| = 0.6457...).
-   5. Compile recipe:
+   5. Build:
       C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe -native-compiler no -q
         -Q D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo ""
         -Q D:/ComplexAnalysis/attn/kb58_work_20261029 ""
@@ -74,8 +74,8 @@ From Stdlib Require Import QArith.QArith QArith.Qabs ZArith.ZArith
    constructor closes the definition up to conversion (vm_compute face). *)
 Definition u5c_nonsq7 : u5c_quad_nonsq 7%positive := id_refl.
 
-(* S2. The one-parameter call: the first quadratic instance obtained by
-   plain parameter application.  No sequence, no decay lemma, no window:
+(* S2. The one-argument call: the first quadratic instance obtained by
+   plain application of the P1 artifact.  No sequence, no decay lemma, no window:
    the entire escape statement for sqrt 7 is inherited from P1. *)
 Definition u5c_demo7_escape : forall q : Q,
   sigT (fun c : Q => And (QltT 0 c)

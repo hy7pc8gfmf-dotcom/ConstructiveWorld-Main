@@ -22,7 +22,7 @@
       blueprint) and u5c_sqrt2_closed_measure_q; u5c_dm_escape_window.v
       dmew_e_bnd (uniform window bound); UpReqSqrt3Irrational.v ir2_gap_lower
       (generalized here to u5c_quad_gap_lower), ir2_tail, ir2_vanish.
-   4. Constructive notes: the statement face is entirely Set-carried
+   4. Constructivity: the statement face is entirely Set-carried
       (sigT / And / QltT / Id), zero new Prop axioms, zero classical logic.
       The non-square premise is the Set-level boolean identity
       u5c_quad_nonsq d := Id (Z.eqb (sqrt d * sqrt d) d) false (extractable).
@@ -35,7 +35,7 @@
       uniform window index n0 = 2*d + 2*b + K_d (K_d = 4d+8) in nat powers
       of 4.  Proof bodies use Prop reasoning where the pool convention does
       (Qle chains, Z discreteness); all witness-bearing statements stay Set.
-   5. Compile recipe:
+   5. Build:
       C:/Rocq-Platform~9.1~2026.01/bin/coqc.exe -native-compiler no -q
         -Q D:/ComplexAnalysis/ConstructiveWorld-Main/ConstructiveWorld_vo ""
         -Q D:/ComplexAnalysis/attn/kb58_work_20261029 "" u5c_quad_uniform_escape.v
