@@ -1,5 +1,5 @@
-ConstructiveWorld-Main — 构造世界模块化形式化库（841 个在册模块）
-Copyright 2026 王宝军、夏挽岚（通讯作者 xiawanlan33@163.com）、祖光照、周志农、高雪峰 & Contributors
+ConstructiveWorld-Main — 构造世界模块化形式化库（857 个在册模块·2026-10-31 实测·随注册演进增长）
+Copyright 2026 王宝军、祖光照、夏挽岚（通讯作者 xiawanlan33@163.com）、曾栢源（Baiyuan Zeng）、周志农、高雪峰 & Contributors
 
 ==========================================================================
 SOURCE CODE LICENSE
