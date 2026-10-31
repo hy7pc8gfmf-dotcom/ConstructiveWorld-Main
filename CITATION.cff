@@ -11,14 +11,19 @@ authors:
     orcid: "https://orcid.org/0009-0001-4240-9045"
   - family-names: Zu
     given-names: Guangzhao
+    orcid: "https://orcid.org/0009-0006-7811-6638"
   - family-names: Xia
     given-names: Wanlan
+    orcid: "https://orcid.org/0009-0008-7359-044X"
   - family-names: Zeng
-    given-names: Boyuan
+    given-names: Baiyuan
+    orcid: "https://orcid.org/0009-0005-9811-5598"
   - family-names: Zhou
     given-names: Zhinong
+    orcid: "https://orcid.org/0009-0001-3206-5824"
   - family-names: Gao
     given-names: Xuefeng
+    orcid: "https://orcid.org/0009-0007-9904-1599"
 keywords:
   - rocq
   - coq
