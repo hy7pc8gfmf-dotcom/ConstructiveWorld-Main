@@ -26,8 +26,9 @@
 
     Constructivity.  All faces are informative Fixpoints or
       Definitions over Z/Q transparent data; admission-free and
-      postulate-free; the sum faces compute by vm_compute for concrete
-      n.
+      postulate-free; the numeric spot anchors close by kernel
+      conversion (the anchor values were machine-printed in an
+      external evaluation session and transcribed verbatim).
 
     Build.  coqc -native-compiler no -q -Q . "" planb4_g1_witness.v
       (Rocq 9.3.0, single lane under cpu_guard_v3). *)
@@ -136,7 +137,7 @@ Definition planb4_bq (n : nat) : Q :=
   planb4_scale n * (piu_zz_Aj n 0 * (1 # 2)).
 
 (* ================================================================== *)
-(* Section 6. Numeric spot faces (vm_compute anchors, n = 1..3).      *)
+(* Section 6. Numeric spot faces (exact-value anchors, n = 1..3).     *)
 (* ================================================================== *)
 
 (* SCALE-NORMALIZATION TASK (KB41m oracle chain item 3): the raw carrier
@@ -144,22 +145,22 @@ Definition planb4_bq (n : nat) : Q :=
    A_{1,0} = -2392 and A_{1,3} = 8000 live in the reduced A_j scale.
    The scale factor is to be pinned by the fixer from KB41m item (1)-3
    (kb41b ext acc-scale erratum = |A| * 2^(4n)) and cross-checked by
-   vm_compute against -2392 / 8000. *)
+   machine evaluation against -2392 / 8000. *)
 (* A-anchors in Qeq_bool form: the raw sum reduces to the oracle integers *)
 Example planb4_A10_anchor : Qeq_bool (piu_zz_Aj 1 0) (-2392 # 1) = true.
-Proof. vm_compute. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example planb4_A13_anchor : Qeq_bool (piu_zz_Aj 1 3) (8000 # 1) = true.
-Proof. vm_compute. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example planb4_L1 : planb4_L 1 = 12%Z.
-Proof. vm_compute. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example planb4_L2 : planb4_L 2 = 840%Z.
-Proof. vm_compute. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example planb4_scale1_pos : Qlt (0 # 1)%Q (planb4_scale 1).
-Proof. vm_compute. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 (* ================================================================== *)
 (* Section 7. Assumption audit.                                       *)
@@ -209,6 +210,30 @@ Definition planb4_Phi (n : nat) : Z :=
 (* the ZZ2020 L_n: lcm(1..4n) divided by the Pn-window product. *)
 Definition planb4_LZn (n : nat) : Z :=
   planb4_L n / planb4_Phi n.
+
+(* ================================================================== *)
+(* Section 8c. The Phi-window spot anchors (n = 1..3).  The refinement *)
+(* window zz_in_Pn (piu_zz_padic_clearing: ZZ2020 Lemma 2 face: primes *)
+(* p with p > 5, p^2 > 3n, 1/2 <= {n/p} < 2/3) is empty over [1, 4n]  *)
+(* for n <= 3, so Phi_n is the empty product 1 and LZn coincides with *)
+(* the raw lcm face.  The values below were machine-printed and       *)
+(* transcribed verbatim; they agree with the planb3_g1_Phi table      *)
+(* entries (1, 1, 1) at n = 1..3.                                     *)
+(* ================================================================== *)
+
+Example planb4_Phi1_spot : planb4_Phi 1 = 1%Z.
+Proof. reflexivity. Qed.
+
+Example planb4_Phi2_spot : planb4_Phi 2 = 1%Z.
+Proof. reflexivity. Qed.
+
+Example planb4_Phi3_spot : planb4_Phi 3 = 1%Z.
+Proof. reflexivity. Qed.
+
+(* the same three samples of the window list itself: empty. *)
+Example planb4_Pn_list_13_empty :
+  planb4_Pn_list 1 = [] /\ planb4_Pn_list 2 = [] /\ planb4_Pn_list 3 = [].
+Proof. repeat split; reflexivity. Qed.
 
 (* ================================================================== *)
 (* Section 9. The t_n polynomial-part integral face (U4).  Dense      *)
