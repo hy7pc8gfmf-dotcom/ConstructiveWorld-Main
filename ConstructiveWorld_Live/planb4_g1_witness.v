@@ -209,3 +209,97 @@ Definition planb4_Phi (n : nat) : Z :=
 (* the ZZ2020 L_n: lcm(1..4n) divided by the Pn-window product. *)
 Definition planb4_LZn (n : nat) : Z :=
   planb4_L n / planb4_Phi n.
+
+(* ================================================================== *)
+(* Section 9. The t_n polynomial-part integral face (U4).  Dense      *)
+(* Q-coefficient lists (index = power of x); long division in Q; the  *)
+(* contour monomial integrals run in Gaussian-Q; t_n is the real      *)
+(* component of the accumulated integral (the imaginary component     *)
+(* vanishes by conjugate symmetry of the segment).                    *)
+(* ================================================================== *)
+
+Definition planb4_list_last (a : list Q) : Q :=
+  match rev a with
+  | [] => 0%Q
+  | x :: _ => x
+  end.
+
+Fixpoint planb4_pad2 (a b : list Q) : list Q :=
+  match a, b with
+  | [], _ => b
+  | _, [] => a
+  | a0 :: a', b0 :: b' => (a0 + b0)%Q :: planb4_pad2 a' b'
+  end.
+
+Fixpoint planb4_pmul (a b : list Q) : list Q :=
+  match a with
+  | [] => []
+  | a0 :: a' =>
+      planb4_pad2 (map (fun b0 => a0 * b0)%Q b) (0%Q :: planb4_pmul a' b)
+  end.
+
+Fixpoint planb4_ppow (a : list Q) (k : nat) : list Q :=
+  match k with
+  | O => (1 # 1)%Q :: []
+  | S k' => planb4_pmul a (planb4_ppow a k')
+  end.
+
+Definition planb4_shift (c : Q) (k : nat) (a : list Q) : list Q :=
+  repeat c k ++ map (fun x => c * x)%Q a.
+
+Definition planb4_psub_aligned (a b : list Q) : list Q :=
+  let gap := (length a - length b)%nat in
+  let pad := repeat 0%Q gap in
+  planb4_pad2 a (map (fun x => (- x)%Q) (pad ++ b)).
+
+Fixpoint planb4_pdiv_loop (a b : list Q) (fuel : nat) : list Q :=
+  match fuel with
+  | O => []
+  | S f =>
+      if Nat.ltb (length a) (length b)
+      then []
+      else
+        let c := (planb4_list_last a / planb4_list_last b)%Q in
+        let shifted := planb4_shift c ((length a - length b)%nat) b in
+        let a' := planb4_psub_aligned a shifted in
+        c :: planb4_pdiv_loop a' b f
+  end.
+
+Definition planb4_pdiv (a b : list Q) : list Q :=
+  planb4_pdiv_loop a b (length a).
+
+(* N(x) = 5 * x^(2n) * (x^4 + 6 x^2 + 25)^(2n). *)
+Definition planb4_N (n : nat) : list Q :=
+  let base := planb4_ppow ((25 # 1)%Q :: (0 # 1)%Q :: (6 # 1)%Q :: (0 # 1)%Q
+                           :: (1 # 1)%Q :: []) (2 * n) in
+  map (fun x => (5 # 1)%Q * x)%Q (repeat 0%Q (2 * n) ++ base).
+
+(* D(x) = (25 - x^2)^(3n+1). *)
+Definition planb4_D (n : nat) : list Q :=
+  planb4_ppow ((25 # 1)%Q :: (0 # 1)%Q :: ((-1) # 1)%Q :: []) (3 * n + 1).
+
+(* the polynomial part P_n (quotient of N by D). *)
+Definition planb4_P (n : nat) : list Q :=
+  planb4_pdiv (planb4_N n) (planb4_D n).
+
+(* Gaussian-Q monomial contour integral over t in [-1, 1]:
+   int_k := (A - B) * (-i) / (k + 1),
+   A = (-1+2i)^(k+1),  B = (-1-2i)^(k+1). *)
+Definition planb4_int_k (k : nat) : Q * Q :=
+  let A := gzq_pow (((-1) # 1)%Q, (2 # 1)%Q) (S k) in
+  let B := gzq_pow (((-1) # 1)%Q, ((-2) # 1)%Q) (S k) in
+  let d := gzq_add A (gzq_mul (((-1) # 1)%Q, (0 # 1)%Q) B) in
+  gzq_mul d (((0 # 1)%Q, Qdiv (((-1) # 1)%Q) ((Z.of_nat (S k) # 1)%Q))).
+
+(* index-safe accumulation: t_n = sum over the quotient coeffs of       *)
+(* (q_k * 2) * int_k, accumulated outermost-first. *)
+Fixpoint planb4_tn_acc (qs : list Q) (k : nat) : Q * Q :=
+  match qs with
+  | [] => ((0 # 1)%Q, (0 # 1)%Q)
+  | q0 :: qs' =>
+      let acc := planb4_tn_acc qs' (S k) in
+      gzq_add (gzq_mul ((q0 * (2 # 1)%Q)%Q, (0 # 1)%Q) (planb4_int_k k)) acc
+  end.
+
+Definition planb4_tn (n : nat) : Q :=
+  fst (planb4_tn_acc (planb4_P n) 0).
