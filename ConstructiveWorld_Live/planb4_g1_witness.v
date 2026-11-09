@@ -38,6 +38,7 @@ From Stdlib Require Import ZArith.
 From Stdlib Require Import List.
 From Stdlib Require Import Lia.
 Require Import piu_zz_kernel_sum.
+Require Import piu_zz_padic_clearing.
 
 Import ListNotations.
 
@@ -57,22 +58,22 @@ Definition planb4_L (n : nat) : Z := planb4_lcm_upto (4 * n).
 Definition gzq (re im : Q) : Q * Q := (re, im).
 
 Definition gzq_add (x y : Q * Q) : Q * Q :=
-  (fst x + fst y, snd x + snd y).
+  ((fst x + fst y)%Q, (snd x + snd y)%Q).
 
 Definition gzq_mul (x y : Q * Q) : Q * Q :=
-  (fst x * fst y - snd x * snd y, fst x * snd y + snd x * fst y).
+  ((fst x * fst y - snd x * snd y)%Q, (fst x * snd y + snd x * fst y)%Q).
 
 Fixpoint gzq_pow (x : Q * Q) (k : nat) {struct k} : Q * Q :=
   match k with
-  | O => (1 # 1, 0 # 1)
+  | O => ((1 # 1)%Q, (0 # 1)%Q)
   | S k' => gzq_mul x (gzq_pow x k')
   end.
 
 (* the half-pair base for the (4+2i) channel: (4+2i)/2 = (2, 1). *)
-Definition planb4_base41 : Q * Q := (2, 1).
+Definition planb4_base41 : Q * Q := ((2 # 1)%Q, (1 # 1)%Q).
 
 (* the half-pair base for the (6+2i) channel: (6+2i)/2 = (3, 1). *)
-Definition planb4_base61 : Q * Q := (3, 1).
+Definition planb4_base61 : Q * Q := ((3 # 1)%Q, (1 # 1)%Q).
 
 Definition planb4_Im (x : Q * Q) : Q := snd x.
 
@@ -157,7 +158,7 @@ Proof. vm_compute. reflexivity. Qed.
 Example planb4_L2 : planb4_L 2 = 840%Z.
 Proof. vm_compute. reflexivity. Qed.
 
-Example planb4_scale1_pos : 0 < planb4_scale 1.
+Example planb4_scale1_pos : Qlt (0 # 1)%Q (planb4_scale 1).
 Proof. vm_compute. reflexivity. Qed.
 
 (* ================================================================== *)
@@ -191,3 +192,20 @@ Print Assumptions planb4_scale1_pos.
 (* 8n = 10n, deg D = 6n + 2, 10n < 6n + 2 iff n < 0.5 -- FAILS; the    *)
 (* quotient is NON-zero).  The quotient coeffs are computed by the     *)
 (* textbook long division on nat-indexed Z coeff lists. *)
+
+
+(* ================================================================== *)
+(* Section 8b. The Pn prime-window product face and the ZZ2020 L_n.   *)
+(* ================================================================== *)
+
+(* the Pn prime-window index list: p in [1, 4n] with zz_in_Pn n p. *)
+Definition planb4_Pn_list (n : nat) : list nat :=
+  filter (fun p => zz_in_Pn n p) (seq 1 (4 * n)).
+
+(* Phi_n := the product of the Pn-window primes (empty window = 1). *)
+Definition planb4_Phi (n : nat) : Z :=
+  fold_right (fun p acc => acc * Z.of_nat p) 1%Z (planb4_Pn_list n).
+
+(* the ZZ2020 L_n: lcm(1..4n) divided by the Pn-window product. *)
+Definition planb4_LZn (n : nat) : Z :=
+  planb4_L n / planb4_Phi n.
