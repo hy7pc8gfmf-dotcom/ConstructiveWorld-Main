@@ -51,7 +51,9 @@ on:
 concurrency:
   # 20261105 换基（改点②）：与 9.1 炉组 cw-main-ci 隔离——双炉互不取消；组内 cancel-in-progress 仅及本组。
   group: cw-main-ci-93
-  cancel-in-progress: true
+  # 20261114 user order: queue, never cancel - a later push must not
+  # take an in-flight furnace down; runs drain serially in order.
+  cancel-in-progress: false
 
 jobs:
   # ── Windows 认证 job（9.3 炉·与 9.1 炉 coq.yml 并存；认证语义同构·改点详见文件头注）────────

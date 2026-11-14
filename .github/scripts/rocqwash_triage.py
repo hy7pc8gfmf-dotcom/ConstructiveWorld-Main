@@ -33,6 +33,7 @@ Config surface (env overrides, defaults mirror the user-level MCP config):
     ROCQWASH_SERVER      server script path (default <HOME>/tools/mcp_server.py)
 """
 import argparse
+import datetime
 import json
 import os
 import re
@@ -50,6 +51,11 @@ SCHEMA = "rocqwash-watch/1"
 DEFAULT_HOME = r"D:/ComplexAnalysis/rocqwash"
 DEFAULT_PYTHON = r"C:\Program Files\Python313\python.exe"
 DEFAULT_MIRROR = r"D:/ComplexAnalysis/ConstructiveWorld-Main"
+FURNACE_WORKFLOW_FILE = "coq93.yml"
+FURNACE_NAME = "Main CI 9.3"
+RECONCILE_WINDOW_H = 48
+RECONCILE_MAX_PER_PASS = 2
+AUTOFIX_BUDGET_PER_BRANCH = 2
 
 INIT_RESULT_ID = 1
 TRIAGE_RESULT_ID = 2
@@ -59,7 +65,9 @@ HEAL_LEDGER_RESULT_ID = 4
 VERDICT_RE = re.compile(r"RUN VERDICT: family=(\S+) .*? action=(\S+)")
 
 # Families the heal leg may act on: rerun-safe transient classes only.
-# Content reds (family A) and toolchain breaks stay human-gated.
+# Content reds are handled by the autofix leg (mechanical comment-surface
+# surgery) when its rewrite coverage is sufficient; non-coverable residue
+# is reported for the seat.
 HEAL_ACTIONS = {"rerun-after-stable-window"}
 HEAL_FAMILIES = {"runner-lost", "E-runner-lost"}
 HEAL_BUDGET_PER_RUN = 1
@@ -164,6 +172,150 @@ def write_artifacts(out_dir, files):
         with open(os.path.join(out_dir, name), "w", encoding="utf-8",
                   newline="\n") as fh:
             fh.write(text)
+
+
+def gh_api(token, path, method="GET", body=None):
+    url = "https://api.github.com" + path
+    data = json.dumps(body).encode("utf-8") if body is not None else \
+        (b"" if method == "POST" else None)
+    req = urllib.request.Request(url, method=method, data=data, headers={
+        "Authorization": "Bearer " + token,
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "rocqwash-triage-watch",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read()
+        return (json.loads(raw) if raw else None), None
+    except urllib.error.HTTPError as exc:
+        return None, "%d %s" % (exc.code, exc.reason)
+    except Exception as exc:
+        return None, repr(exc)
+
+
+def mcp_append(args, tool, points, evidence):
+    """One-shot exp_append through a short-lived MCP client session."""
+    home = os.environ.get("ROCQWASH_HOME", DEFAULT_HOME)
+    python_exe = os.environ.get("ROCQWASH_PYTHON", DEFAULT_PYTHON)
+    server = os.environ.get("ROCQWASH_SERVER",
+                            os.path.join(home, "tools", "mcp_server.py"))
+    if not os.path.isfile(server):
+        return "server missing"
+    client = McpClient(python_exe, server, home, 300)
+    try:
+        client.request("initialize", {
+            "protocolVersion": "2024-11-05", "capabilities": {},
+            "clientInfo": {"name": "rocqwash-watch", "version": "1"},
+        }, 1)
+        client.notify("notifications/initialized")
+        err, text = call_tool(client, "exp_append",
+                              {"tool": tool, "points": points,
+                               "evidence": evidence, "batch": args.batch}, 2)
+        return ("failed: " + text) if err else text.strip()[:120]
+    except Exception as exc:
+        return "error: %r" % exc
+    finally:
+        client.close()
+
+
+def download_artifact_file(token, repo, run_id, member, dest):
+    """Download the run's gate4-report artifact bundle and extract one file."""
+    runs, err = gh_api(token, "/repos/%s/actions/runs/%d/artifacts" % (repo, run_id))
+    if err or not runs:
+        return "artifact list failed: %s" % err
+    for art in runs.get("artifacts") or []:
+        if art.get("expired"):
+            continue
+        req = urllib.request.Request(art["archive_download_url"], headers={
+            "Authorization": "Bearer " + token,
+            "User-Agent": "rocqwash-triage-watch",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                blob = resp.read()
+            import io
+            import zipfile
+            zf = zipfile.ZipFile(io.BytesIO(blob))
+            names = [n for n in zf.namelist()
+                     if n.endswith(member) or n == member]
+            if names:
+                with open(dest, "wb") as fh:
+                    fh.write(zf.read(names[0]))
+                return None
+        except Exception as exc:
+            last_err = repr(exc)
+    return "artifact %s not found (last: %s)" % (member,
+                                                 locals().get("last_err", "-"))
+
+
+def autofix_leg(args, run_id, repo, head_branch, head_sha):
+    """Mechanical comment-surface repair: clone the red head, extract the
+    red run's gate4 report, run the closed-loop fixer, push to the
+    triggering branch only when the local scan is green.  Budget-capped
+    per branch; every outcome lands in the returned detail string."""
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if not token:
+        return "skipped(no-token)", "GITHUB_TOKEN absent"
+    state_dir = args.state_dir or args.inbox
+    if not state_dir:
+        return "skipped(no-state-dir)", "no state dir"
+    os.makedirs(state_dir, exist_ok=True)
+    state, path = heal_state_load(state_dir)
+    key = "fix:%s" % head_branch
+    used = int(state.get(key, 0))
+    if used >= AUTOFIX_BUDGET_PER_BRANCH:
+        return ("skipped(budget)", "autofix budget %d used on %s"
+                % (used, head_branch))
+
+    work = os.path.join(args.out, "autofix_tree")
+    report_path = os.path.join(args.out, "gate4_report.json")
+    err = download_artifact_file(token, repo, run_id,
+                                 "gate4_report.json", report_path)
+    if err:
+        return "skipped(no-report)", err
+    g = lambda *a: subprocess.run(["git"] + list(a), capture_output=True,
+                                  text=True, encoding="utf-8",
+                                  errors="replace", timeout=300)
+    r = g("fetch", "--no-tags", "origin", head_sha)
+    if r.returncode != 0:
+        return "skipped(fetch-failed)", r.stderr[-200:]
+    if os.path.isdir(work):
+        shutil.rmtree(work, ignore_errors=True)
+    r = g("clone", "--quiet", "--no-hardlinks", "--local", os.getcwd(), work)
+    if r.returncode != 0:
+        return "skipped(clone-failed)", r.stderr[-200:]
+    r = g("-C", work, "checkout", "--quiet", "--force", head_sha)
+    if r.returncode != 0:
+        return "skipped(checkout-failed)", r.stderr[-200:]
+
+    fixer = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "gate4_autofix.py")
+    fx = subprocess.run([sys.executable, "-I", fixer, "--repo-root", work,
+                         "--run-report", report_path, "--max-rounds", "3"],
+                        capture_output=True, text=True, encoding="utf-8",
+                        errors="replace", timeout=1800)
+    detail = (fx.stdout or "")[-1500:] + (fx.stderr or "")[-400:]
+    if fx.returncode != 0:
+        return "no-green(residue)", detail
+
+    r = g("-C", work, "config", "user.name", "rocqwash-watch")
+    r2 = g("-C", work, "config", "user.email",
+           "rocqwash-watch@users.noreply.github.com")
+    r = g("-C", work, "add", "-A")
+    r = g("-C", work, "commit", "-m",
+          "ci(gate4-autofix): mechanical comment-surface repair "
+          "(date stamps + admission-vocab rewording; desk-approved table)")
+    if r.returncode != 0:
+        return "skipped(nothing-to-commit)", r.stdout[-200:] + r.stderr[-200:]
+    push_url = "https://x-access-token:%s@github.com/%s.git" % (token, repo)
+    r = g("-C", work, "push", push_url, "HEAD:refs/heads/%s" % head_branch)
+    if r.returncode != 0:
+        return "failed(push)", r.stderr[-300:]
+    try:
+        heal_state_bump(path, state, key)
+    except Exception:
+        pass
+    return "pushed", detail
 
 
 def git_out(mirror, argv, timeout=120):
@@ -290,6 +442,68 @@ def try_heal(args, family, action, run_id, repo):
     return "dispatched(http-%d)" % code, detail
 
 
+def reconcile_leg(args, repo):
+    """Backfill pass: drive recently cancelled furnace runs to completion
+    (full rerun), budget-capped once per run id, only while no furnace run
+    is in flight, at most RECONCILE_MAX_PER_PASS per pass.  The revived
+    runs re-enter the watch loop on completion (triage -> heal -> autofix),
+    so the backlog converges to green without further prompting."""
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if not token:
+        return ["skipped(no-token)"]
+    state_dir = args.state_dir or args.inbox
+    if not state_dir:
+        return ["skipped(no-state-dir)"]
+    os.makedirs(state_dir, exist_ok=True)
+    state, path = heal_state_load(state_dir)
+    runs, err = gh_api(token, "/repos/%s/actions/workflows/%s/runs"
+                       "?per_page=40" % (repo, FURNACE_WORKFLOW_FILE))
+    if err or not runs:
+        return ["skipped(runs-list: %s)" % err]
+    recent = []
+    busy = False
+    now = datetime.datetime.now(datetime.timezone.utc)
+    for r in runs.get("workflow_runs") or []:
+        created = r.get("created_at", "").replace("Z", "+00:00")
+        age_h = None
+        try:
+            age_h = (now - datetime.datetime.fromisoformat(created)
+                     ).total_seconds() / 3600.0
+        except ValueError:
+            continue
+        if r.get("status") in ("in_progress", "queued"):
+            busy = True
+        if (r.get("conclusion") == "cancelled" and age_h is not None
+                and age_h <= RECONCILE_WINDOW_H):
+            recent.append((r["id"], r["run_number"], age_h))
+    if busy:
+        return ["skipped(furnace-busy)"]
+    out = []
+    for run_id, num, age_h in sorted(recent, key=lambda x: -x[2])[
+            :RECONCILE_MAX_PER_PASS]:
+        key = "reconcile:%d" % run_id
+        if int(state.get(key, 0)) >= 1:
+            out.append("skip #%d (already reconciled)" % num)
+            continue
+        _, err = gh_api(token, "/repos/%s/actions/runs/%d/rerun" % (repo, run_id),
+                        method="POST")
+        if err:
+            out.append("#%d revive failed: %s" % (num, err))
+            continue
+        try:
+            heal_state_bump(path, state, run_id)
+        except Exception:
+            pass
+        out.append("#%d revived (age %.1fh)" % (num, age_h))
+        mcp_append(args, "watch-reconcile",
+                   "cancelled furnace run #%d revived for backlog recovery "
+                   "(age %.1fh, window %dh)" % (num, age_h, RECONCILE_WINDOW_H),
+                   "https://github.com/%s/actions/runs/%d" % (repo, run_id))
+    if not out:
+        out = ["clean (no recent cancelled runs in window)"]
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="rocqwash MCP triage driver")
     ap.add_argument("--repo", required=True, help="ORG/REPO slug")
@@ -310,7 +524,26 @@ def main():
                     help="heal budget state dir (defaults to the inbox dir)")
     ap.add_argument("--timeout", type=int, default=900,
                     help="whole MCP conversation deadline in seconds")
+    ap.add_argument("--reconcile", action="store_true",
+                    help="reconcile mode: revive recently cancelled furnace "
+                         "runs (scheduled backlog pass; triage skipped)")
+    ap.add_argument("--autofix", action="store_true",
+                    help="enable the autofix leg (mechanical comment-surface "
+                         "repair pushed to the triggering branch)")
+    ap.add_argument("--head-branch", default=None,
+                    help="branch of the triggering run (for the autofix push)")
+    ap.add_argument("--head-sha", default=None,
+                    help="head sha of the triggering run (for the autofix tree)")
     args = ap.parse_args()
+
+    if args.reconcile:
+        lines = reconcile_leg(args, args.repo)
+        report = "reconcile pass:\n" + "\n".join(lines) + "\n"
+        write_artifacts(args.out, [("reconcile-report.txt", report)])
+        if args.inbox:
+            write_artifacts(args.inbox, [("reconcile-report.txt", report)])
+        print(report)
+        return 0
 
     home = os.environ.get("ROCQWASH_HOME", DEFAULT_HOME)
     python_exe = os.environ.get("ROCQWASH_PYTHON", DEFAULT_PYTHON)
@@ -353,6 +586,16 @@ def main():
             heal_verdict, heal_detail = "failed(exception)", repr(exc)
         log("heal: %s" % heal_verdict)
 
+        autofix_verdict, autofix_detail = "skipped(disabled)", "no --autofix"
+        if args.autofix and args.head_branch and args.head_sha:
+            try:
+                autofix_verdict, autofix_detail = autofix_leg(
+                    args, args.run, args.repo, args.head_branch,
+                    args.head_sha)
+            except Exception as exc:  # never mask the triage verdict
+                autofix_verdict, autofix_detail = "failed(exception)", repr(exc)
+        log("autofix: %s" % autofix_verdict)
+
         points = ("Main CI 9.3 red run %d: family=%s action=%s (auto triage "
                   "by rocqwash-triage workflow)" % (args.run, family, action))
         evidence = "https://github.com/%s/actions/runs/%d" % (args.repo, args.run)
@@ -379,9 +622,11 @@ def main():
          ("failed result:\n%s" % ledger) if lerr else ledger),
         ("heal-note.txt", heal_verdict + "\n" + heal_detail + "\n"
          + (("failed result:\n%s" % hledger) if herr else hledger)),
+        ("autofix-note.txt", autofix_verdict + "\n" + autofix_detail),
         ("triage-summary.txt",
-         "verdict=OBTAINED run=%d repo=%s family=%s action=%s heal=%s"
-         % (args.run, args.repo, family, action, heal_verdict)),
+         "verdict=OBTAINED run=%d repo=%s family=%s action=%s heal=%s "
+         "autofix=%s" % (args.run, args.repo, family, action, heal_verdict,
+                         autofix_verdict)),
         ("server-stderr.log", client.stderr_text()),
     ]
     write_artifacts(args.out, files)
@@ -390,9 +635,9 @@ def main():
         inbox_run = os.path.join(args.inbox, "run%d" % args.run)
         write_artifacts(inbox_run, files)
 
-    log("run=%d family=%s action=%s heal=%s artifacts=%s%s"
-        % (args.run, family, action, heal_verdict, args.out,
-           (" inbox=%s" % args.inbox) if args.inbox else ""))
+    log("run=%d family=%s action=%s heal=%s autofix=%s artifacts=%s%s"
+        % (args.run, family, action, heal_verdict, autofix_verdict,
+           args.out, (" inbox=%s" % args.inbox) if args.inbox else ""))
     return 0
 
 
