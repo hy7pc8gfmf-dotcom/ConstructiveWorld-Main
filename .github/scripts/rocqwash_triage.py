@@ -218,23 +218,45 @@ def mcp_append(args, tool, points, evidence):
         client.close()
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 def download_artifact_file(token, repo, run_id, member, dest):
-    """Download the run's gate4-report artifact bundle and extract one file."""
+    """Download the run's gate4-report artifact bundle and extract one file.
+    The archive endpoint 302s to a signed blob URL: first hop carries the
+    token, second hop must be header-less (same dance as the job-log
+    fetch; forwarding the token to blob storage yields 401 Azure)."""
     runs, err = gh_api(token, "/repos/%s/actions/runs/%d/artifacts" % (repo, run_id))
     if err or not runs:
         return "artifact list failed: %s" % err
+    import io
+    import zipfile
+    opener = urllib.request.build_opener(_NoRedirect)
+    last_err = "-"
     for art in runs.get("artifacts") or []:
         if art.get("expired"):
             continue
-        req = urllib.request.Request(art["archive_download_url"], headers={
-            "Authorization": "Bearer " + token,
-            "User-Agent": "rocqwash-triage-watch",
-        })
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
-                blob = resp.read()
-            import io
-            import zipfile
+            req = urllib.request.Request(art["archive_download_url"], headers={
+                "Authorization": "Bearer " + token,
+                "User-Agent": "rocqwash-triage-watch",
+            })
+            loc = None
+            try:
+                with opener.open(req, timeout=120) as resp:
+                    blob = resp.read()
+            except urllib.error.HTTPError as e302:
+                if e302.code in (301, 302, 303, 307):
+                    loc = e302.headers.get("Location")
+                else:
+                    raise
+            if loc:
+                req2 = urllib.request.Request(loc, headers={
+                    "User-Agent": "rocqwash-triage-watch"})
+                with urllib.request.urlopen(req2, timeout=180) as r2:
+                    blob = r2.read()
             zf = zipfile.ZipFile(io.BytesIO(blob))
             names = [n for n in zf.namelist()
                      if n.endswith(member) or n == member]
@@ -244,8 +266,7 @@ def download_artifact_file(token, repo, run_id, member, dest):
                 return None
         except Exception as exc:
             last_err = repr(exc)
-    return "artifact %s not found (last: %s)" % (member,
-                                                 locals().get("last_err", "-"))
+    return "artifact %s not found (last: %s)" % (member, last_err)
 
 
 def autofix_leg(args, run_id, repo, head_branch, head_sha):
