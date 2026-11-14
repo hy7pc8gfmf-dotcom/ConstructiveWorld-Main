@@ -587,13 +587,27 @@ def main():
         log("heal: %s" % heal_verdict)
 
         autofix_verdict, autofix_detail = "skipped(disabled)", "no --autofix"
-        if args.autofix and args.head_branch and args.head_sha:
-            try:
-                autofix_verdict, autofix_detail = autofix_leg(
-                    args, args.run, args.repo, args.head_branch,
-                    args.head_sha)
-            except Exception as exc:  # never mask the triage verdict
-                autofix_verdict, autofix_detail = "failed(exception)", repr(exc)
+        if args.autofix:
+            if not (args.head_branch and args.head_sha):
+                token = os.environ.get("GITHUB_TOKEN", "")
+                info, err = gh_api(token, "/repos/%s/actions/runs/%d"
+                                   % (args.repo, args.run)) if token else \
+                    (None, "no-token")
+                if info and not err:
+                    args.head_branch = args.head_branch or info.get(
+                        "head_branch")
+                    args.head_sha = args.head_sha or info.get("head_sha")
+            if args.head_branch and args.head_sha:
+                try:
+                    autofix_verdict, autofix_detail = autofix_leg(
+                        args, args.run, args.repo, args.head_branch,
+                        args.head_sha)
+                except Exception as exc:  # never mask the triage verdict
+                    autofix_verdict, autofix_detail = \
+                        "failed(exception)", repr(exc)
+            else:
+                autofix_verdict, autofix_detail = \
+                    "skipped(no-head)", err or "head unknown"
         log("autofix: %s" % autofix_verdict)
 
         points = ("Main CI 9.3 red run %d: family=%s action=%s (auto triage "
