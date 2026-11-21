@@ -1207,4 +1207,3 @@ planb4_calib_chain_host_n38.v#R233-6caa9a
 planb4_calib_chain_host_n39.v#R233-693ee7
 planb4_calib_chain_host_n40.v#R233-043ca0
 planb4_g1_calibwin_b2.v#R233-22ed96
-sl4_w2_survey_band.v#R233-96091e
